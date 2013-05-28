@@ -37,9 +37,9 @@ public:
     virtual void purge() { }
 
 protected:
-    virtual void createFaceSelector() = 0;
-    virtual void createAcousticPathFinder() = 0;
-    virtual void createAcousticModel() = 0;
+    //virtual void createFaceSelector() = 0;
+    //virtual void createAcousticPathFinder() = 0;
+    //virtual void createAcousticModel() = 0;
 };
 
 #endif // __TY_SOLVERINTERFACE__
