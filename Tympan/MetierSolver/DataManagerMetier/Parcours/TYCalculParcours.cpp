@@ -113,12 +113,20 @@ void TYCalculParcours::AjouterSegment(double* ptA, double* ptB, bool isInfra, bo
     //On enregistre les coordonnees des 2 nouveaux points:
     TYPointParcours* p1 = &(geo->_ListePoint[geo->_nNbPointTotal]);
     p1->isInfra = isInfra;  p1->isEcran = isEcran;
-    p1->x = ptA[_indexXInOut]; p1->y = ptA[_indexYInOut]; p1->z = ptA[_indexZInOut]; p1->Identifiant = geo->_nNbPointTotal;
+    p1->x = ptA[_indexXInOut]; 
+	p1->y = ptA[_indexYInOut]; 
+	p1->z = ptA[_indexZInOut]; 
+	p1->_abcisse = TYPointParcours::AbscisseCurviligneCarreSurSR(_geoSR->_ListePoint[0], _geoSR->_ListePoint[1], *p1);
+	p1->Identifiant = geo->_nNbPointTotal;
     geo->_nNbPointTotal++;
 
     TYPointParcours* p2 = &(geo->_ListePoint[geo->_nNbPointTotal]);
     p2->isInfra = isInfra;  p2->isEcran = isEcran;
-    p2->x = ptB[_indexXInOut]; p2->y = ptB[_indexYInOut]; p2->z = ptB[_indexZInOut]; p2->Identifiant = geo->_nNbPointTotal;
+    p2->x = ptB[_indexXInOut]; 
+	p2->y = ptB[_indexYInOut]; 
+	p2->z = ptB[_indexZInOut]; 
+	p2->_abcisse = TYPointParcours::AbscisseCurviligneCarreSurSR(_geoSR->_ListePoint[0], _geoSR->_ListePoint[1], *p2);
+	p2->Identifiant = geo->_nNbPointTotal;
     geo->_nNbPointTotal++;
 
     //On ajoute une polyligne a geo:
@@ -136,11 +144,13 @@ void TYCalculParcours::AjouterSegmentSR(double* ptA, double* ptB)
 {
     assert(_geoSR->_nNbPointTotal == 0);
     assert(_geoSR->_nNbPolylines == 0);
-    //On fait ici le choix du systeme de coordonnee:
+    
+	//On fait ici le choix du systeme de coordonnee:
     double dDeltaX = fabs(ptA[0] - ptB[0]);
     double dDeltaY = fabs(ptA[1] - ptB[1]);
     InitChangementVariable2D3D(dDeltaX < dDeltaY);
-    //InitChangementVariable2D3D(ptA[0] == ptB[0]);
+
+	//InitChangementVariable2D3D(ptA[0] == ptB[0]);
     AjouterSegment(ptA, ptB, false, false, _geoSR);
 }
 
@@ -210,7 +220,10 @@ bool TYCalculParcours::CalculTrajet(TYSetGeometriqueParcours& geoCourant, bool b
     //A partir de maintenant, on ne traite plus qu'un seul cote
     //bool bCoteGauche = true;
     //3.4.1 Ramener les points traversant la frontiere sur la frontiere
-    int* IndexePointsFrontiere = new int[geoCourant._nNbPointTotal];
+//    int* IndexePointsFrontiere = new int[geoCourant._nNbPointTotal];
+
+	// Tableau de pointeurs sur des TYPointParcours
+    TYPointParcours **IndexePointsFrontiere = new TYPointParcours*[geoCourant._nNbPointTotal];
     int NbPointsFrontiere = 0;
     //=>Construire un tableau donnant directement la propriete "intersection"
     bool* EstUnPointIntersectant = new bool[geoCourant._nNbPointTotal];

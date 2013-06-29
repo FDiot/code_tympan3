@@ -52,10 +52,10 @@ public:
     int _nNbPolylineAllouee;
     int _nNbPointTotal;
 
-    static TYPointParcours* _ListePointQSort;//static pour acces d'une fonction C de quicksort
-    static TYPointParcours* _SrceQSort;//static pour acces d'une fonction C de quicksort
-    static TYPointParcours* _DestQSort;//static pour acces d'une fonction C de quicksort
-    static QMutex _mutex;
+    //static TYPointParcours* _ListePointQSort;//static pour acces d'une fonction C de quicksort
+    //static TYPointParcours* _SrceQSort;//static pour acces d'une fonction C de quicksort
+    //static TYPointParcours* _DestQSort;//static pour acces d'une fonction C de quicksort
+    //static QMutex _mutex;
 
     TYSetGeometriqueParcours() { Init();}
     ~TYSetGeometriqueParcours() { Clean();}
@@ -73,14 +73,14 @@ public:
     int SupressionPolylignesRedondantes();
     void SeparationDroiteGauche(bool* PointsAGauche, bool* PointsADroite, TYSetGeometriqueParcours& geoGauche, TYSetGeometriqueParcours& geoDroite);
     void MarquePointsADroiteEtAGauche(TYPointParcours& Srce, TYPointParcours& Dest, bool*& PointsAGauche, bool*& PointsADroite);
-    void RamenerPointsTraversantLaFrontiere(TYPointParcours& Srce, TYPointParcours& Dest, int* IndexePointsFrontiere, int& NbPointsFrontiere, bool* EstUnPointIntersectant, bool bCoteGauche, bool* PointsAGauche, bool* PointsADroite);
+    void RamenerPointsTraversantLaFrontiere(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours **IndexePointsFrontiere, int& NbPointsFrontiere, bool* EstUnPointIntersectant, bool bCoteGauche, bool* PointsAGauche, bool* PointsADroite);
     bool ListerPointsConnexes(Connexite* Connexes);
     void AffichePolylignes();
 
-    bool PremierePasse(TYPointParcours& Srce, TYPointParcours& Dest, int* IndexePointsFrontiere, int NbPointsFrontiere, bool* EstUnPointIntersectant, Connexite* Connexes, TYSetGeometriqueParcours& geoPremierePasse);
+    bool PremierePasse(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours **IndexePointsFrontiere, int NbPointsFrontiere, bool* EstUnPointIntersectant, Connexite* Connexes, TYSetGeometriqueParcours& geoPremierePasse);
     bool SecondePasse(TYSetGeometriqueParcours& geoPremierePasse, TYSetGeometriqueParcours& geoSecondePasse, bool bTrajetsAGaucheDeSR, TYPointParcours** & pTableauEC, int& nbPtsEC);
 
-    void TriePointsIntersectionSuivantSR(TYPointParcours& Srce, TYPointParcours& Dest, int* IndexePointsFrontiere, int NbPointsFrontiere);
+    void TriePointsIntersectionSuivantSR(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours **IndexePointsFrontiere, int NbPointsFrontiere);
     bool AjoutePointALaPolyLigne(int indexPolyligne, TYPointParcours& P);
     int AjouteLesPointsComprisEntre(TYSetGeometriqueParcours& geoPolySource, int nIndexePoly, int nIndexeNbPremierPointAAjouter, int nIndexeDernierPointAAjouter);
     int ParcourtPolyligneAPartirDe(int IndexPointRacine, TYPolyligneParcours*& PolyligneRacine, bool* EstUnPointIntersectant, TYSetGeometriqueParcours& geoPremierePasse);
@@ -96,13 +96,16 @@ public:
         }
         return nNbRefPoint;
     }
+
     //Calcul l'enveloppe convexe d'un tableau de point ["TableauDePoints"/nNbPoints], sachant que les premiers de ce tableaux sont les plus bas;
     //le resultat figure dans TableauDePointsECOut; ne nombre renvoye est celui de l'enveloppe convexe.
     //Attention ! Les tableaux doivent etre alloues !
     static int  EnveloppeConvexeLes2PremiersPointsEtant(TYPointParcours** TableauDePoints, int nNbPoints, TYPointParcours** TableauDePointsECOut, bool bPremiersPointsLesPlusHauts);
-    //La selection comprend SR:
+    
+	//La selection comprend SR:
     int     SelectionnePointsEntreSetRetDuCoteDeSR(TYSetGeometriqueParcours* geoSR, TYPointParcours** TableauDePoints, int nNbPoints);
-    //N'est utilise que pour les trajets verticaux
+    
+	//N'est utilise que pour les trajets verticaux
     void    CreerTrajetAPartirDuneListeDePointsTriee(TYPointParcours** TableauDePoints, int nNbPoints, bool bSens, bool bGardeIdentifiant);
 
     bool AppartienneMemePolyligne(TYPointParcours* a, TYPointParcours* b, TYPointParcours* c);
