@@ -42,7 +42,7 @@ TYAcousticModel::TYAcousticModel(TYSolver& solver)
       _pTopographie(NULL),
       _solver(solver)
 {
-    _absoNulle = OSpectre::getEmptyLinSpectre(1.0);
+    _absoNulle = OSpectreComplex( TYComplex(1.0, 0.0) );
     _absoNulle.setType(SPECTRE_TYPE_ABSO); // Spectre d'absorption
 }
 
@@ -111,7 +111,7 @@ void TYAcousticModel::init(const TYSiteNode& site, const TYCalcul& calcul)
 }
 
 
-void TYAcousticModel::compute(TYSIntersection* tabIntersect, OSegment3D& rayon, TYTrajet& trajet, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight)
+void TYAcousticModel::compute(const TYSIntersection* tabIntersect, const OSegment3D& rayon, TYTrajet& trajet, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight)
 {
     bool vertical = true, horizontal = false;
 
@@ -1047,7 +1047,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
     return res;
 }
 
-void TYAcousticModel::computeCheminReflexion(TYSIntersection* tabIntersect, const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const
+void TYAcousticModel::computeCheminReflexion(const TYSIntersection* tabIntersect, const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const
 {
     if (! _useReflex) { return; }
 
@@ -1330,7 +1330,7 @@ OSpectre TYAcousticModel::limAttDiffraction(const OSpectre& sNC, const OSpectre&
 }
 
 
-void TYAcousticModel::addCheminToTrajet(TYTabChemin& TabChemin, TYTrajet& trajet) const
+void TYAcousticModel::addCheminToTrajet(const TYTabChemin& TabChemin, TYTrajet& trajet) const
 {
     int j;
 
@@ -1341,7 +1341,7 @@ void TYAcousticModel::addCheminToTrajet(TYTabChemin& TabChemin, TYTrajet& trajet
     }
 }
 
-void TYAcousticModel::addCheminDirectToTrajet(TYTabChemin& TabChemin, TYTrajet& trajet) const
+void TYAcousticModel::addCheminDirectToTrajet(const TYTabChemin& TabChemin, TYTrajet& trajet) const
 {
     // On fixe l'atmosphere de chaque chemin et on ajoute celui-ci au trajet
     for (unsigned int j = 0 ; j < TabChemin.size() ; j++)
