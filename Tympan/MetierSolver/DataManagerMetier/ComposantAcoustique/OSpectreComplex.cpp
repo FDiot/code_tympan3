@@ -34,6 +34,14 @@ OSpectreComplex::OSpectreComplex() : OSpectre()
     }
 }
 
+OSpectreComplex::OSpectreComplex(const TYComplex& defaultValue) : OSpectre(defaultValue.real())
+{
+    for (unsigned int i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
+    {
+		_phase[i] = defaultValue.imag();
+    }
+}
+
 OSpectreComplex::OSpectreComplex(const OSpectreComplex& other)
 {
     *this = other;
