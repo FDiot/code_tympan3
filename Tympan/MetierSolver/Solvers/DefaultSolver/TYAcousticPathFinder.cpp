@@ -40,7 +40,7 @@ void TYAcousticPathFinder::init(TYCalcul& calcul)
     _bCalcTrajetHorizontaux = calcul.getCalculTrajetsHorizontaux();
 }
 
-void TYAcousticPathFinder::computePath(TYSIntersection* tabIntersect, OSegment3D& rayon, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight, unsigned int nNbTrajet)
+void TYAcousticPathFinder::computePath(const TYSIntersection* tabIntersect, const OSegment3D& rayon, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight, unsigned int nNbTrajet)
 {
     bool dessus = true, lateral = false;
 
@@ -53,7 +53,7 @@ void TYAcousticPathFinder::computePath(TYSIntersection* tabIntersect, OSegment3D
     computeParcoursLateraux(tabIntersect, rayon, lateral, ptsLeft, ptsRight, nNbTrajet);
 }
 
-bool TYAcousticPathFinder::computeParcoursLateraux(TYSIntersection* tabIntersect, OSegment3D& rayon, const bool& dessus, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight, unsigned int nNbTrajet) const
+bool TYAcousticPathFinder::computeParcoursLateraux(const TYSIntersection* tabIntersect, const OSegment3D& rayon, const bool& dessus, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight, unsigned int nNbTrajet) const
 {
     // Si on est en trajet lateral non demande par le calcul
     if (!_bCalcTrajetHorizontaux && !dessus) { return false; }
@@ -75,7 +75,7 @@ bool TYAcousticPathFinder::computeParcoursLateraux(TYSIntersection* tabIntersect
     TYTabPoint3D ptsTemp;
 
     // Creation du segment SR
-    Parcours.AjouterSegmentSR(rayon._ptA._value, rayon._ptB._value);
+    Parcours.AjouterSegmentSR( const_cast<double*>(rayon._ptA._value), const_cast<double*>(rayon._ptB._value) );
 
     for (unsigned int i = 0 ; i < nbFaces; i++)
     {
