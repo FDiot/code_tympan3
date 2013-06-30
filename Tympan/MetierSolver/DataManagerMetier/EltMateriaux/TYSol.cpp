@@ -210,7 +210,7 @@ TYVegetation* TYSol::useVegetation(bool state /*= true*/)
 
 OSpectreComplex TYSol::abso(const double& angle, const double& rR, const TYAtmosphere& Atmo) const
 {
-    if (_bMiroir) { return OSpectreComplex::getCplxSpectre(1.0); }
+    if (_bMiroir) { return OSpectreComplex( TYComplex(1.0,0.0) ); }
 
     OSpectreComplex abso ;
 
