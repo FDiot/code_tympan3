@@ -1,0 +1,2379 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!-- edited with XML Spy v4.4 U (http://www.xmlspy.com) by Isabelle Fournier (EDF R&D) -->
+<!DOCTYPE ressource>
+<!-- $Id: Language.xml,v 1.1 2008/01/21 10:46:10 thomasso Exp $ -->
+<RESSOURCE>
+	<class name="TYApplication">
+		<message>
+			<string id="id_language" value="french"/>
+		</message>
+	</class>
+	<class name="TYMainWindow">
+		<message>
+			<string id="id_caption" value="Code_TYMPAN"/>
+			<string id="id_help_index_path" value="doc/index.html"/>
+			<string id="id_menu_file" value="Fichier"/>
+			<string id="id_menuitem_new" value="Nouveau..."/>
+			<string id="id_menuitem_newprojet" value="Nouveau Projet"/>
+			<string id="id_menuitem_newsite" value="Nouveau Site"/>
+			<string id="id_menuitem_newmachine" value="Nouvelle Machine"/>
+			<string id="id_menuitem_newbatiment" value="Nouvelle construction"/>
+			<string id="id_menuitem_createnew" value="Autre élément..."/>
+			<string id="id_menuitem_open" value="Ouvrir..."/>
+			<string id="id_menuitem_close" value="Fermer"/>
+			<string id="id_menuitem_save" value="Enregistrer"/>
+			<string id="id_menuitem_saveas" value="Enregistrer sous..."/>
+			<string id="id_menuitem_saveas_noresult" value="Enregistrer sans les résultats..."/>
+			<string id="id_menuitem_saveall" value="Tout enregistrer"/>
+			<string id="id_menuitem_plugin" value="Gestionnaire de plug-ins..."/>
+			<string id="id_menuitem_getlib" value="Ouvrir de la bibliothèque"/>
+			<string id="id_menuitem_exportvrml" value="Export VRML (3D)..."/>
+			<string id="id_menuitem_print" value="Imprimer..."/>
+			<string id="id_menuitem_quit" value="Quitter"/>
+			<string id="id_menu_tools" value="Outils"/>
+			<string id="id_menuitem_show_spectremngr" value="Gestionnaire de Spectres"/>
+			<string id="id_menuitem_show_maillagemngr" value="Gestionnaire de Récepteurs surfaciques"/>
+			<string id="id_menuitem_show_pythonconsole" value="Console Python"/>
+			<string id="id_menuitem_show_biblio" value="Bibliothèque"/>
+			<string id="id_menuitem_show_output" value="Fenêtre Messages"/>
+			<string id="id_menuitem_importer" value="Importer"/>
+			<string id="id_menu_edit" value="Edition"/>
+			<string id="id_menuitem_cut" value="Couper"/>
+			<string id="id_menuitem_copy" value="Copier"/>
+			<string id="id_menuitem_paste" value="Coller"/>
+			<string id="id_menuitem_undo" value="Annuler"/>
+			<string id="id_menuitem_undo_na" value="Annuler : Non disponible"/>
+			<string id="id_menuitem_undo_name" value="Annuler : %1"/>
+			<string id="id_menuitem_redo" value="Rétablir"/>
+			<string id="id_menuitem_redo_na" value="Rétablir : Non disponible"/>
+			<string id="id_menuitem_redo_name" value="Rétablir : %1"/>
+			<string id="id_menuitem_edit_curcalcul" value="Propriétés du calcul courant"/>
+			<string id="id_menuitem_go_curcalcul" value="Lance le calcul courant"/>
+			<string id="id_menuitem_prefdlg" value="Préférences"/>
+			<string id="id_menu_windows" value="Fenêtres"/>
+			<string id="id_menuitem_cascade" value="Cascade"/>
+			<string id="id_menuitem_tile" value="Mosaïque"/>
+			<string id="id_menuitem_views" value="Vues"/>
+			<string id="id_menuitem_toolbars" value="Outils"/>
+			<string id="id_menu_help" value="Aide"/>
+			<string id="id_menuitem_help" value="Aide"/>
+			<string id="id_menuitem_about" value="A propos de Code_TYMPAN..."/>
+			<string id="id_toolbar_file" value="Fichier"/>
+			<string id="id_toolbar_window" value="Fenêtres"/>
+			<string id="id_toolbar_calculacoustic" value="Calcul courant"/>
+			<string id="id_toolbar_modeler" value="Modeleur"/>
+			<string id="id_toolbar_topo" value="Topographie"/>
+			<string id="id_toolbar_infra" value="Infrastructure"/>
+			<string id="id_toolbar_calcul" value="Récepteurs surfaciques"/>
+			<string id="id_toolbar_batiment" value="Construction"/>
+			<string id="id_toolbar_machine" value="Machine"/>
+			<string id="id_toolbar_Face" value="Face"/>
+			<string id="id_toolbar_projet" value="Gestion de Projet"/>
+			<string id="id_toolbar_site" value="Gestion de Sites"/>
+			<string id="id_toolbar_output" value="Messages"/>
+			<string id="id_toolbar_database" value="Bibliothèque"/>
+			<string id="id_status_ready" value="Prêt"/>
+			<string id="id_status_load_settings" value="Chargement des Préférences..."/>
+			<string id="id_status_save_settings" value="Sauvegarde des Préférences..."/>
+			<string id="id_status_exportvrml" value="Exporter la scène en VRML"/>
+			<string id="id_status_undo" value="Annule la dernière action"/>
+			<string id="id_status_redo" value="Refait la dernière action annulée"/>
+			<string id="id_status_cut" value="Couper"/>
+			<string id="id_status_copy" value="Copier"/>
+			<string id="id_status_paste" value="Coller"/>
+			<string id="id_status_show_spectremngr" value="Gestionnaire de Spectres"/>
+			<string id="id_status_show_maillagemngr" value="Gestionnaire de Récepteurs surfaciques"/>
+			<string id="id_status_show_biblio" value="Bibliothèque d'éléments"/>
+			<string id="id_status_show_importer" value="Convertisseur de données Code_TYMPAN II vers Code_TYMPAN 3"/>
+			<string id="id_status_edit_curcalcul" value="Propriétés du calcul courant"/>
+			<string id="id_status_go_curcalcul" value="Lance le calcul courant"/>
+			<string id="id_status_file_ro" value="[Lecture seule]"/>
+			<string id="id_file_not_saved" value="Un élément n'a pas été sauvegardé, désirez vous le sauvegarder ?"/>
+			<string id="id_file_exist" value="Le nom de fichier sélectionné existe déja. Désirez vous l'écraser ?"/>
+			<string id="id_file_cannot_be_clear" value="Le fichier ne peut pas être écrasé"/>
+			<string id="id_nothingtoexport" value="Aucun élément à exporter."/>
+			<string id="id_export_ok" value="L'élément a été correctement exporté dans le fichier : '%1'"/>
+			<string id="id_export_failed" value="L'élément n'a pas pu être exporté dans le fichier : '%1'"/>
+			<string id="id_msg_importer_ok" value="Exécution de l'Importer... Ok"/>
+			<string id="id_msg_solver_out" value="Le solveur affecté au calcul par défaut n'est pas disponible. Voulez vous utiliser le solveur courant ? Si non, le calcul sera bloqué."/>
+			<string id="id_msg_importer_fail" value="L'éxécution de l'Importer a échoué !"/>
+			<string id="id_title_pythonconsole_window" value="Console Python"/>
+			<string id="id_about_msg" value="&lt;qt type=page&gt;&lt;nobr&gt;&lt;h3&gt;%1 %2 - %3 - Copyright %4&lt;/h3&gt;
+&lt;b&gt;Date de compilation : &lt;/b&gt;%5 - %6&lt;hr&gt;
+&lt;b&gt;Licence  : %7&lt;hr&gt;
+&lt;b&gt;Voir : %8&lt;hr&gt;
+&lt;b&gt;Limite de validité  : &lt;/b&gt;%9&gt;"/>
+		</message>
+		<picture>
+			<image id="id_logo_about" value="Logo Code_TYMPAN_ about.jpg"/>
+			<image id="id_icon_new" value="document.png"/>
+			<image id="id_icon_open" value="fileopen.png"/>
+			<image id="id_icon_save" value="filesave.png"/>
+			<image id="id_icon_saveall" value="saveAll.png"/>
+			<image id="id_icon_plugin" value="plugin.png"/>
+			<image id="id_icon_undo" value="undo.png"/>
+			<image id="id_icon_redo" value="redo.png"/>
+			<image id="id_icon_del" value="del.png"/>
+			<image id="id_icon_cut" value="cut.png"/>
+			<image id="id_icon_copy" value="copy.png"/>
+			<image id="id_icon_paste" value="paste.png"/>
+			<image id="id_icon_print" value="fileprint.png"/>
+			<image id="id_icon_importxml" value="fromXML.png"/>
+			<image id="id_icon_exportxml" value="toXML.png"/>
+			<image id="id_icon_pythonconsole" value="pythonConsole.png"/>
+			<image id="id_icon_show_spectremngr" value="spMng.png"/>
+			<image id="id_icon_show_maillagemngr" value="maillageMng.png"/>
+			<image id="id_icon_show_biblio" value="bdd.png"/>
+			<image id="id_icon_show_output" value="output.png"/>
+			<image id="id_icon_edit_curcalcul" value="property.png"/>
+			<image id="id_icon_go_curcalcul" value="calculer.png"/>
+			<image id="id_icon_prefdlg" value="edition.png"/>
+			<image id="id_icon_importer" value="importer.png"/>
+		</picture>
+	</class>
+	<class name="TYDOMErrorHandler"/>
+	<class name="TYCalculManager">
+		<message>
+			<string id="id_msg_go_calcul" value="Lancement du calcul..."/>
+			<string id="id_msg_calcul_done" value="Calcul terminé."/>
+			<string id="id_msg_calcul_failed" value="Le calcul a échoué !"/>
+			<string id="id_msg_go_updateacoustic" value="Lancement de la répartition acoustique..."/>
+			<string id="id_msg_updateacoustic_done" value="Répartition acoustique terminée."/>
+			<string id="id_msg_updateacoustic_failed" value="La répartition acoustique a échoué !"/>
+			<string id="id_msg_del_resultat" value="Cette action rend invalide le résultat actuel, voulez-vous continuer ?"/>
+			<string id="id_msg_op_failed" value="Calcul bloqué : Opération impossible"/>
+		</message>
+	</class>
+	<class name="TYMessageManager">
+		<message>
+			<string id="id_level_debug" value="Debug : "/>
+			<string id="id_level_bench" value="Bench : "/>
+			<string id="id_level_info" value=""/>
+			<string id="id_level_warning" value="Avertissement : "/>
+			<string id="id_level_error" value="Erreur : "/>
+			<string id="id_level_fatal" value="Erreur Fatale : "/>
+		</message>
+	</class>
+	<class name="TYProgressManager">
+		<message>
+			<string id="id_caption" value="Code_TYMPAN"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+		</message>
+	</class>
+	<class name="TYModelerToolbar">
+		<message>
+			<string id="id_menuitem_camera" value="Caméra"/>
+			<string id="id_menuitem_camerafly" value="Fly Caméra"/>
+			<string id="id_menuitem_camerazone" value="Zone de zoom"/>
+			<string id="id_menuitem_camerastep" value="Caméra pas à pas"/>
+			<string id="id_menuitem_distance" value="Distance"/>
+			<string id="id_menuitem_moving" value="Déplacement"/>
+			<string id="id_menuitem_rotation" value="Rotation"/>
+			<string id="id_menuitem_edition" value="Edition"/>
+		</message>
+		<picture>
+			<image id="id_icon_distance" value="distance.png"/>
+			<image id="id_icon_moving" value="moving.png"/>
+			<image id="id_icon_camera" value="camera.png"/>
+			<image id="id_icon_camerafly" value="camerafly.png"/>
+			<image id="id_icon_camerazone" value="loupe.png"/>
+			<image id="id_icon_camerastep" value="cameraStep.png"/>
+			<image id="id_icon_rotation" value="rotation.png"/>
+			<image id="id_icon_edition" value="selection.png"/>
+		</picture>
+	</class>
+	<class name="TYTopoToolbar">
+		<message>
+			<string id="id_menuitem_echelle" value="Echelle"/>
+			<string id="id_menuitem_ptref" value="Point de référence"/>
+			<string id="id_menuitem_orientation" value="Orientation"/>
+			<string id="id_menuitem_emprise" value="Emprise"/>
+			<string id="id_menuitem_crbniv" value="Courbe de niveau"/>
+			<string id="id_menuitem_ter" value="Terrain"/>
+			<string id="id_menuitem_veg" value="Végétation"/>
+			<string id="id_menuitem_planeau" value="Plan d'eau"/>
+			<string id="id_menuitem_crseau" value="Cours d'eau"/>
+		</message>
+		<picture>
+			<image id="id_icon_echelle" value="echelle.png"/>
+			<image id="id_icon_ptref" value="ptRef.png"/>
+			<image id="id_icon_orientation" value="orientation.png"/>
+			<image id="id_icon_emprise" value="emprise.png"/>
+			<image id="id_icon_crbniv" value="crbNiv.png"/>
+			<image id="id_icon_ter" value="terrain.png"/>
+			<image id="id_icon_veg" value="arbre.png"/>
+			<image id="id_icon_planeau" value="planEau.png"/>
+			<image id="id_icon_crseau" value="crsEau.png"/>
+		</picture>
+	</class>
+	<class name="TYInfraToolbar">
+		<message>
+			<string id="id_menuitem_srcponct" value="Source"/>
+			<string id="id_menuitem_recept" value="Récepteur ponctuel"/>
+			<string id="id_menuitem_route" value="Route"/>
+			<string id="id_menuitem_route_deblai" value="Route avec déblai/remblai"/>
+			<string id="id_menuitem_reseau" value="Réseau électrique"/>
+			<string id="id_menuitem_etage" value="Construction (étage ou écran)"/>
+			<string id="id_menuitem_machine" value="Machine"/>
+			<string id="id_menuitem_batiment" value="Construction"/>
+			<string id="id_menuitem_ecran" value="Ecran"/>
+			<string id="id_menuitem_site" value="Site"/>
+			<string id="id_menuitem_silos" value="Silos"/>
+		</message>
+		<picture>
+			<image id="id_icon_srcponct" value="src.png"/>
+			<image id="id_icon_recept" value="micro.png"/>
+			<image id="id_icon_route" value="route.png"/>
+			<image id="id_icon_route_deblai" value="route.png"/>
+			<image id="id_icon_reseau" value="reseau.png"/>
+			<image id="id_icon_etage" value="etage.png"/>
+			<image id="id_icon_machine" value="machine.png"/>
+			<image id="id_icon_batiment" value="batiment.png"/>
+			<image id="id_icon_ecran" value="ecran.png"/>
+			<image id="id_icon_site" value="site.png"/>
+			<image id="id_icon_silos" value="silos.png"/>
+		</picture>
+	</class>
+	<class name="TYCalculToolbar">
+		<message>
+			<string id="id_menuitem_recept" value="Récepteur ponctuel"/>
+			<string id="id_menuitem_mailrect" value="Récepteur rectangulaire"/>
+			<string id="id_menuitem_maillin" value="Récepteur linéaire"/>
+			<string id="id_menuitem_mailvert" value="Récepteur vertical"/>
+			<string id="id_menuitem_boundarynoisemap" value="Récepteur surface accoustique"/>
+		</message>
+		<picture>
+			<image id="id_icon_recept" value="micro.png"/>
+			<image id="id_icon_mailrect" value="mRect.png"/>
+			<image id="id_icon_maillin" value="mLin.png"/>
+			<image id="id_icon_mailvert" value="mVert.png"/>
+			<image id="id_icon_boundarynoisemap" value="mBound.png"/>
+		</picture>
+	</class>
+	<class name="TYMachineToolbar">
+		<message>
+			<string id="id_menuitem_box" value="Boîte"/>
+			<string id="id_menuitem_cyl" value="Cylindre"/>
+			<string id="id_menuitem_semicyl" value="Demi-cylindre"/>
+		</message>
+		<picture>
+			<image id="id_icon_box" value="boite.png"/>
+			<image id="id_icon_cyl" value="cylindre.png"/>
+			<image id="id_icon_semicyl" value="demiCylindre.png"/>
+		</picture>
+	</class>
+	<class name="TYFaceToolbar">
+		<message>
+			<string id="id_menuitem_bouche" value="Bouche de ventilation"/>
+			<string id="id_menuitem_cheminee" value="Cheminée"/>
+			<string id="id_menuitem_fenetre" value="Fenêtre"/>
+		</message>
+		<picture>
+			<image id="id_icon_bouche" value="boucheVentil.png"/>
+			<image id="id_icon_cheminee" value="boucheCheminee.png"/>
+			<image id="id_icon_fenetre" value="fenetre.png"/>
+		</picture>
+	</class>
+	<class name="TYBatimentToolbar">
+		<message>
+			<string id="id_menuitem_etage" value="Etage"/>
+			<string id="id_menuitem_silos" value="Silos"/>
+			<string id="id_menuitem_machine" value="Machine"/>
+			<string id="id_menuitem_srcponct" value="Source"/>
+		</message>
+		<picture>
+			<image id="id_icon_etage" value="etage.png"/>
+			<image id="id_icon_silos" value="silos.png"/>
+			<image id="id_icon_machine" value="machine.png"/>
+			<image id="id_icon_srcponct" value="src.png"/>
+		</picture>
+	</class>
+	<class name="TYResultatTreeDialog">
+		<message>
+			<string id="id_caption" value="Contribution de puissance"/>
+			<string id="id_column_element_type" value="Type"/>
+			<string id="id_column_element_name" value="Nom"/>
+			<string id="id_column_puissance_dba" value="dBA"/>
+			<string id="id_column_puissance_dblin" value="dBZ"/>
+			<string id="id_close_button" value="Fermer"/>
+		</message>
+	</class>
+	<class name="TYSpectreManager">
+		<message>
+			<string id="id_caption" value="Gestionnaire de Spectres"/>
+			<string id="id_show" value="Dessiner/Effacer"/>
+			<string id="id_rem" value="Supprimer"/>
+			<string id="id_save" value="Enregistrer"/>
+			<string id="id_sumarith" value="Somme arithmétique"/>
+			<string id="id_sumenerg" value="Somme énergétique"/>
+			<string id="id_substarith" value="Soustraction arithmétique"/>
+			<string id="id_substenerg" value="Soustraction énergétique"/>
+			<string id="id_multcoef" value="Multiplication"/>
+			<string id="id_msg_getcoeff" value="Coefficient"/>
+		</message>
+	</class>
+	<class name="TYDrawSpectres">
+		<message>
+			<string id="id_caption" value="Visualisateur de Spectres"/>
+			<string id="id_abscisse" value="Fréquence"/>
+			<string id="id_print" value="Imprimer"/>
+			<string id="id_close" value="Fermer"/>
+			<string id="id_fit" value="Fit"/>
+		</message>
+	</class>
+	<class name="TYMaillageManager">
+		<message>
+			<string id="id_caption" value="Gestionnaire de récepteurs surfaciques"/>
+			<string id="id_show" value="Dessiner/Effacer"/>
+			<string id="id_rem" value="Supprimer"/>
+			<string id="id_save" value="Enregistrer"/>
+			<string id="id_sumarith" value="Somme arithmétique"/>
+			<string id="id_sumenerg" value="Somme énergétique"/>
+			<string id="id_substarith" value="Soustraction arithmétique"/>
+			<string id="id_substenerg" value="Soustraction énergétique"/>
+			<string id="id_multcoef" value="Multiplication"/>
+			<string id="id_msg_getcoeff" value="Coefficient"/>
+		</message>
+	</class>
+	<class name="TYMaillageModelerFrame">
+		<message>
+			<string id="id_caption" value="Modeleur récepteurs surfaciques"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+		</message>
+	</class>
+	<class name="TYPreferenceDialog">
+		<message>
+			<string id="id_caption" value="Préférences"/>
+			<string id="id_tab_import_dxf" value="Import DXF"/>
+			<string id="id_frame_dxf_bd_topo" value="BD TOPO"/>
+			<string id="id_frame_dxf_tympan" value="Format Code_TYMPAN"/>
+			<string id="id_label_dxf_bdt_dist_min_pts" value="Distance minimale entre 2 points d'une polyligne"/>
+			<string id="id_label_dxf_bdt_haut_min_bat" value="Hauteur minimale des batiments"/>
+			<string id="id_label_dxf_tym_dist_min_pts" value="Distance minimale entre 2 points d'une polyligne"/>
+			<string id="id_label_dxf_tym_haut_def_bat" value="Hauteur par défaut des batiments"/>
+			<string id="id_label_dxf_tym_haut_def_mach" value="Hauteur par défaut des machines"/>
+			<string id="id_label_dxf_tym_haut_def_nrj" value="Hauteur par défaut des réseaux électriques"/>
+			<string id="id_label_dxf_tym_larg_def_nrj" value="Largeur par défaut des réseaux électriques"/>
+			<string id="id_label_dxf_tym_larg_def_rout" value="Largeur par défaut des routes"/>
+			<string id="id_label_dxf_tym_larg_def_cours_eau" value="Largeur par défaut des cours d'eau"/>
+			<string id="id_tab_general" value="Général"/>
+			<string id="id_histo" value="Historique"/>
+			<string id="id_label_histo_size" value="Nombre d'étapes conservées : "/>
+			<string id="id_thread" value="Parallélisation"/>
+			<string id="id_label_thread" value="Nombre de calculs simultanés : "/>
+			<string id="id_biblio" value="Bibliothèque"/>
+			<string id="id_label_biblio_path" value="Répertoire de la bibliothèque : "/>
+			<string id="id_biblio_user" value="Serveur Bibliothèque utilisateur"/>
+			<string id="id_biblio_general" value="Serveur Bibliothèque générale"/>
+			<string id="id_label_biblio" value="Hôte : "/>
+			<string id="id_label_biblio_login" value="Login : "/>
+			<string id="id_label_biblio_pwd" value="Mot de passe : "/>
+			<string id="id_tab_geometry" value="Géométrie"/>
+			<string id="id_grid" value="Propriétés des grilles"/>
+			<string id="id_site" value="Site"/>
+			<string id="id_batiment" value="Construction"/>
+			<string id="id_machine" value="Machine"/>
+			<string id="id_face" value="Face"/>
+			<string id="id_maillage" value="Récepteur surfacique"/>
+			<string id="id_label_nb_face_cylinder" value="Nombre de face (résolution) pour les cylindres : "/>
+			<string id="id_label_dimx_grid" value="Dimension en X : "/>
+			<string id="id_label_dimy_grid" value="Dimension en Y : "/>
+			<string id="id_label_step_grid" value="Pas : "/>
+			<string id="id_label_step_grid_magn" value="Pas de la grille magnétique : "/>
+			<string id="id_label_seuil_dist_nulle" value="Seuil à partir duquel une distance est considérée comme nulle : "/>
+			<string id="id_label_def_dimx" value="Dimension de la zone de travail par défault en X : "/>
+			<string id="id_label_def_dimy" value="Dimension de la zone de travail par défault en Y : "/>
+			<string id="id_crbniv" value="Courbes de niveau"/>
+			<string id="id_label_dist_min_pts_crbniv" value="Seuil de distance minimale entre 2 points : "/>
+			<string id="id_label_delaunay_tolerance" value="Tolérance pour la triangulation de Delaunay : "/>
+			<string id="id_geometry" value="Géométrie"/>
+			<string id="id_topography" value="Topographie"/>
+			<string id="id_renderer" value="Environnement 3D"/>
+			<string id="id_machine" value="Machines"/>
+			<string id="id_batiment" value="Constructions"/>
+			<string id="id_bouche_color" value="Bouches/Cheminées"/>
+			<string id="id_infrastructure" value="Infrastructure"/>
+			<string id="id_opacity" value="Opacité"/>
+			<string id="id_label_def_h_mur" value="Hauteur des murs par défault : "/>
+			<string id="id_label_def_w_ecran" value="Epaisseur des écrans par défault : "/>
+			<string id="id_Ecran" value="Constructions"/>
+			<string id="id_mouse_button_functions" value="Fonctions attachées à la souris"/>
+			<string id="id_mouse_button_functions_sht" value="Fonctions attachées à la souris (touche Shift enfoncée)"/>
+			<string id="id_left_button" value="Bouton gauche  : "/>
+			<string id="id_right_button" value="Bouton droit  : "/>
+			<string id="id_middle_button" value="Bouton central : "/>
+			<string id="id_2D" value="2D"/>
+			<string id="id_3D" value="3D"/>
+			<string id="id_step" value="Facteur du Zoom sur la molette (0 pour désactiver)"/>
+			<string id="id_zoom" value="Zoom"/>
+			<string id="id_rotate" value="Rotation"/>
+			<string id="id_translate" value="Translation"/>
+			<string id="id_roll" value="Roulis"/>
+			<string id="id_camera_step_title" value="Caméra pas à pas"/>
+			<string id="id_camera_step" value="Pas de déplacement"/>
+			<string id="id_clair" value="Clair"/>
+			<string id="id_sombre" value="Sombre"/>
+			<string id="id_luminosite" value="Luminosité de la scène"/>
+			<string id="id_picking" value="Sélection des objets"/>
+			<string id="id_precision" value="Précision (en mètres) :"/>
+			<string id="id_background_color" value="Fond"/>
+			<string id="id_police_color" value="Police"/>
+			<string id="id_grid_color" value="Grille"/>
+			<string id="id_terrain_color" value="Terrains"/>
+			<string id="id_planeau_color" value="Plans d'eau"/>
+			<string id="id_crseau_color" value="Cours d'eau"/>
+			<string id="id_crbniv_color" value="Courbes de niveau"/>
+			<string id="id_veg_color" value="Végétations"/>
+			<string id="id_route_color" value="Routes"/>
+			<string id="id_mur_color" value="Murs"/>
+			<string id="id_ecran_color" value="Ecrans"/>
+			<string id="id_restransp_color" value="Réseaux de transport"/>
+			<string id="id_dalle_color" value="Dalles"/>
+			<string id="id_box_color" value="Cubes"/>
+			<string id="id_cylindre_color" value="Cylindres"/>
+			<string id="id_subrect_color" value="Sous-éléments"/>
+			<string id="id_alti_color_map" value="Couleurs de l'altimétrie"/>
+			<string id="id_tab_3d" value="3D"/>
+			<string id="id_atm_opacity" value="Altimétrie : "/>
+			<string id="id_win_opacity" value="Fenêtres : "/>
+			<string id="id_maillage_opacity" value="Récepteurs surfaciques : "/>
+			<string id="id_label_view_only_highlight" value="Boîte englobante seulement lors du déplacement d'objets"/>
+			<string id="id_label_center_on_locate" value="Centrer la scène lors de la localisation d'un objet"/>
+			<string id="id_wireframe" value="Déplacement de la caméra"/>
+			<string id="id_label_wireframe_on_moving_camera" value="Mode fils de fer lors du déplacement de la caméra"/>
+			<string id="id_tab_colors" value="Couleurs"/>
+			<string id="id_tab_acoustic" value="Acoustique"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_apply_btn" value="Appliquer"/>
+			<string id="id_usesol_label" value="Sol"/>
+			<string id="id_useatmosphere_label" value="Atmosphere"/>
+			<string id="id_usevegetation_label" value="Végétation"/>
+			<string id="id_useecran_label" value="Ecran"/>
+			<string id="id_usereflexion_label" value="Reflexion"/>
+			<string id="id_interference_label" value="Interférences"/>
+			<string id="id_paramh_label" value="h1 (Conditions favorables -ISO 9613-)"/>
+			<string id="id_distancesrmin_label" value="Distance Source-Récepteur minimale"/>
+			<string id="id_expansgeo_label" value="Expansion géometrique"/>
+			<string id="id_condfav_label" value="Conditions favorables"/>
+			<string id="id_default_param_calcul" value="Paramètres de calcul par défault"/>
+			<string id="id_default_sol" value="Sol par défault"/>
+			<string id="id_default_atmo" value="Atmosphère par défault"/>
+			<string id="id_pression_label" value="Pression"/>
+			<string id="id_temperature_label" value="Température"/>
+			<string id="id_hygrometrie_label" value="Hygrométrie"/>
+			<string id="id_vitvent_label" value="Vitesse du vent"/>
+			<string id="id_dirvent_label" value="Direction du vent"/>
+			<string id="id_unite_pression" value="Pa"/>
+			<string id="id_unite_temp" value="°C"/>
+			<string id="id_unite_hygro" value="%"/>
+			<string id="id_unite_vitvent" value="m/s"/>
+			<string id="id_unite_dirvent" value="°"/>
+			<string id="id_resistivite_label" value="Résistivité"/>
+			<string id="id_epaisseur_label" value="Epaisseur"/>
+			<string id="id_unite_resistivite" value="kRayl"/>
+			<string id="id_unite_epaisseur" value="m"/>
+			<string id="id_edit_spectre_sol" value="Impédance"/>
+			<string id="id_edit_spectre_atmo" value="Impédance"/>
+			<string id="id_edit_resistivite" value="Résistivité"/>
+			<string id="id_default_materiau" value="Matériau de construction"/>
+			<string id="id_masse_vol_label" value="Masse volumique"/>
+			<string id="id_unite_masse_vol" value="kg/m3"/>
+			<string id="id_edit_spectre_abso" value="Absorption"/>
+			<string id="id_edit_spectre_att" value="Attenuation"/>
+			<string id="id_default_maillage" value="Récepteur surfacique par défaut"/>
+			<string id="id_edit_maillage" value="Récepteur surfacique"/>
+			<string id="id_typeexpans_2pi" value="2pi"/>
+			<string id="id_typeexpans_4pi" value="4pi"/>
+			<string id="id_label_source_size" value="Taille des sources (mètres)"/>
+			<string id="id_label_pointcontrol_size" value="Taille des récepteurs(mètres)"/>
+			<string id="id_group_calcul_name" value="Calcul"/>
+			<string id="id_group_source_name" value="Sources"/>
+			<string id="id_pointcontrol_color" value="Couleur des récepteurs"/>
+			<string id="id_sourceponct_color" value="Couleur des sources"/>
+			<string id="id_choose_btn" value="Choisir"/>
+			<string id="id_label_workdir_path" value="Répertoire"/>
+			<string id="id_workdir" value="Répertoire de travail"/>
+		</message>
+	</class>
+	<class name="TYLibraryWidget">
+		<message>
+			<string id="id_caption" value="Liste des élements"/>
+			<string id="id_delete_box_caption" value="Effacer la séléction ?"/>
+			<string id="id_delete_box_text" value="Etes-vous sûr de vouloir effacer définitivement '%1' ?"/>
+			<string id="id_delete_box_yes" value="Oui"/>
+			<string id="id_delete_box_no" value="Non"/>
+			<string id="id_delete_ok" value="L'élément '%1' a été correctement supprimé de la bibliothèque !"/>
+			<string id="id_delete_failed" value="L'élément '%1' n'a pas pu être supprimé de la bibliothèque !"/>
+		</message>
+	</class>
+	<class name="TYAddLibraryDialog">
+		<message>
+			<string id="id_caption" value="Exporter dans la bibliothèque"/>
+			<string id="id_ok_btn" value="Enregistrer"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_name_label" value="Nom du fichier"/>
+			<string id="id_box_caption" value="Ecraser le fichier ?"/>
+			<string id="id_box_text" value="Etes-vous sûr de vouloir écraser '%1' ?"/>
+			<string id="id_box_yes" value="Oui"/>
+			<string id="id_box_no" value="Non"/>
+			<string id="id_export_ok" value="L'élément '%1' a été correctement exporté dans la bibliothèque !"/>
+			<string id="id_export_failed" value="L'élément '%1' n'a pas pu être exporté dans la bibliothèque !"/>
+		</message>
+	</class>
+	<class name="TYGetLibraryDialog">
+		<message>
+			<string id="id_caption" value="Importer depuis la bibliothèque"/>
+			<string id="id_ok_btn" value="Ouvrir"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_box_caption" value="Importer le(s) fichiers ?"/>
+			<string id="id_box_text" value="Etes-vous sûr de vouloir importer le(s) fichier(s) sélectionné(s) ?"/>
+			<string id="id_box_yes" value="Oui"/>
+			<string id="id_box_no" value="Non"/>
+		</message>
+	</class>
+	<class name="TYPluginDialog">
+		<message>
+			<string id="id_caption" value="Gestionnaire de plug-ins"/>
+			<string id="id_ok_btn" value="Ok"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_name" value="Nom"/>
+			<string id="id_author" value="Auteur"/>
+			<string id="id_version" value="Version"/>
+			<string id="id_description" value="Description"/>
+			<string id="id_uuid" value="UUID"/>
+			<string id="id_filename" value="Fichier"/>
+		</message>
+	</class>
+	<class name="TYCreateElementDialog">
+		<message>
+			<string id="id_caption" value="Nouvel élément"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+		</message>
+	</class>
+	<class name="TYOpenElementDialog">
+		<message>
+			<string id="id_caption" value="Ouvrir..."/>
+			<string id="id_open_btn" value="Ouvrir"/>
+			<string id="id_bdd_btn" value="Sauvegarde en BDD"/>
+			<string id="id_close_btn" value="Fermer"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_savebox_caption" value="Sauvegarde"/>
+			<string id="id_savebdd_ok" value="L'élément a été correctement sauvegardé en BDD."/>
+			<string id="id_savebdd_failed" value="L'élément n'a pas pu être sauvegardé en BDD."/>
+			<string id="id_setascurprojet_text" value="Définir le nouveau projet comme projet courant et fermer le projet actuel ?
+Choisissez Non pour simplement ouvrir le nouveau projet dans un modeleur."/>
+			<string id="id_addsitetocurprojet_text" value="Définir le nouveau site comme site courant du projet courant et fermer le site actuel ?
+Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
+			<string id="id_setascursite_text" value="Définir le nouveau site comme site courant et fermer le site actuel ?
+Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
+			<string id="id_savebox_caption" value="Sauvegarde"/>
+			<string id="id_savebox_text" value="Sauvegarder l'élément en BDD ou exporter dans un fichier XML ?"/>
+			<string id="id_bdd_btn" value="Sauvegarde en BDD"/>
+			<string id="id_xml_btn" value="Export XML"/>
+			<string id="id_savebdd_ok" value="L'élément a été correctement sauvegardé en BDD."/>
+			<string id="id_savebdd_failed" value="L'élément n'a pas pu être sauvegardé en BDD."/>
+			<string id="id_export_ok" value="L'élément a été correctement exporté dans le fichier : '%1'"/>
+			<string id="id_export_failed" value="L'élément n'a pas pu être exporté dans le fichier : '%1'"/>
+		</message>
+	</class>
+	<class name="TYPrintDialog">
+		<message>
+			<string id="id_printer" value="Impression"/>
+			<string id="id_projet" value="Projet"/>
+			<string id="id_calcul" value="Calcul"/>
+			<string id="id_date" value="Date"/>
+			<string id="id_auteur" value="Auteur"/>
+			<string id="id_comment" value="Commentaires"/>
+			<string id="id_nom" value="Nom"/>
+			<string id="id_en_tete" value="En tête"/>
+			<string id="id_pied_page" value="Pied de page"/>
+			<string id="id_titre" value="Titre"/>
+			<string id="id_cancel" value="Annuler"/>
+			<string id="id_print" value="Imprimer"/>
+			<string id="id_setup" value="Paramètres"/>
+			<string id="id_machine" value="Machine"/>
+			<string id="id_batiment" value="Construction"/>
+			<string id="id_site" value="Site"/>
+			<string id="id_categorie" value="Catégorie"/>
+			<string id="id_dim" value="Dimensions"/>
+			<string id="id_model" value="Modèle"/>
+			<string id="id_constr" value="Constructeur"/>
+		</message>
+	</class>
+	<class name="TYSiteFrame">
+		<message>
+			<string id="id_column_site" value="Site"/>
+			<string id="id_column_name" value="Nom"/>
+			<string id="id_contextmenu_export_xml" value="Export XML"/>
+			<string id="id_contextmenu_modeler" value="Modeleur"/>
+			<string id="id_contextmenu_submenu_add" value="Ajouter"/>
+			<string id="id_contextmenu_submenu_export" value="Sauvegarder"/>
+			<string id="id_contextmenu_addelmt_xml" value="Lire XML"/>
+			<string id="id_contextmenu_import_lib" value="Importer depuis la bibliothèque"/>
+			<string id="id_contextmenu_export_lib" value="Exporter dans la bibliothèque"/>
+			<string id="id_contextmenu_newelmt" value="Nouveau"/>
+			<string id="id_contextmenu_machine" value="Machine"/>
+			<string id="id_contextmenu_addmachine_xml" value="Lire machine XML"/>
+			<string id="id_contextmenu_newmachine" value="Nouvelle machine"/>
+			<string id="id_contextmenu_batiment" value="Construction"/>
+			<string id="id_contextmenu_addbatiment_xml" value="Lire construction XML"/>
+			<string id="id_contextmenu_newbatiment" value="Nouvelle construction"/>
+			<string id="id_contextmenu_source" value="Source"/>
+			<string id="id_contextmenu_newsource" value="Nouvelle source"/>
+			<string id="id_contextmenu_addsource_xml" value="Lire source XML"/>
+			<string id="id_contextmenu_site" value="Site"/>
+			<string id="id_contextmenu_newsite" value="Nouveau site"/>
+			<string id="id_contextmenu_site_xml" value="Lire site XML"/>
+			<string id="id_contextmenu_calculer" value="Calculer"/>
+			<string id="id_contextmenu_highlight" value="Localiser"/>
+			<string id="id_contextmenu_properties" value="Propriétés"/>
+			<string id="id_contextmenu_delete" value="Supprimer"/>
+			<string id="id_contextmenu_addelement" value="Lire élément BDD"/>
+			<string id="id_contextmenu_addelement_xml" value="Lire élément XML"/>
+			<string id="id_contextmenu_selectall" value="Tout sélectionner"/>
+			<string id="id_contextmenu_unselectall" value="Tout désélectionner"/>
+			<string id="id_export_ok" value="L'élément a été correctement exporté dans le fichier : '%1'"/>
+			<string id="id_export_failed" value="L'élément n'a pas pu être exporté dans le fichier : '%1'"/>
+			<string id="id_warning_suppr" value="Êtes-vous sûr de vouloir supprimer '%1'"/>
+			<string id="id_info_suppr" value="L'élément a été supprimé"/>
+			<string id="id_warning_notsuppr" value="L'élément n'a pu être supprimé"/>
+			<string id="id_list_sites_item" value="Sites"/>
+			<string id="id_list_sources_item" value="Sources"/>
+			<string id="id_list_courbes_item" value="Courbes de niveaux"/>
+			<string id="id_list_crseau_item" value="Cours d'eau"/>
+			<string id="id_list_planeau_item" value="Plans d'eau"/>
+			<string id="id_list_terrains_item" value="Terrains"/>
+			<string id="id_defterrain_item" value="Terrain par défaut"/>
+			<string id="id_contextmenu_DMax" value="Init distance max"/>
+			<string id="id_ecran_item" value="Ecran"/>
+			<string id="id_list_restransps_item" value="Réseaux de transport"/>
+			<string id="id_list_routes_item" value="Routes"/>
+			<string id="id_list_machines_item" value="Machines"/>
+			<string id="id_list_batiments_item" value="Constructions"/>
+			<string id="id_context_menu_position" value="Position"/>
+			<string id="id_context_menu_rotation" value="Rotation"/>
+			<string id="id_contextmenu_export_csv" value="Export EXCEL (CSV)"/>
+		</message>
+		<picture>
+			<image id="id_icon_check" value="check.png"/>
+			<image id="id_icon_no_check" value="nocheck.png"/>
+			<image id="id_icon_editeelt" value="property.png"/>
+			<image id="id_icon_del" value="del.png"/>
+			<image id="id_icon_duplicate" value="copy.png"/>
+			<image id="id_icon_calcul" value="calculer.png"/>
+			<image id="id_icon_new" value="document.png"/>
+			<image id="id_icon_open" value="fileopen.png"/>
+			<image id="id_icon_export" value="toXML.png"/>
+			<image id="id_icon_import_lib" value="fromXML.png"/>
+			<image id="id_icon_export_lib" value="toXML.png"/>
+			<image id="id_icon_modeler" value="3D.png"/>
+			<image id="id_icon_save" value="filesave.png"/>
+		</picture>
+	</class>
+	<class name="TYProjetFrame">
+		<message>
+			<string id="id_column_projet" value="Projet"/>
+			<string id="id_column_solver" value="Solveur"/>
+			<string id="id_column_name" value="Nom"/>
+			<string id="id_list_maillages_item" value="Récepteurs surfaciques"/>
+			<string id="id_list_pointscontrol_item" value="Récepteurs ponctuels"/>
+			<string id="id_contextmenu_export" value="Exporter"/>
+			<string id="id_contextmenu_export_spectre" value="Exporter le spectre"/>
+			<string id="id_contextmenu_setas_spectre" value="Positionner le spectre dans ..."/>
+			<string id="id_contextmenu_setas_maillage" value="Positionner le récepteur surfacique dans ..."/>
+			<string id="id_contextmenu_modeler" value="Modeleur"/>
+			<string id="id_contextmenu_properties" value="Propriétés"/>
+			<string id="id_contextmenu_duplicatecalcul" value="Dupliquer"/>
+			<string id="id_contextmenu_gocalcul" value="Exécuter"/>
+			<string id="id_contextmenu_addcalcul" value="Nouveau calcul"/>
+			<string id="id_contextmenu_addptcontrol" value="Nouveau récepteur ponctuel"/>
+			<string id="id_contextmenu_remptcontrol" value="Supprimer"/>
+			<string id="id_contextmenu_dupptcontrol" value="Dupliquer"/>
+			<string id="id_contextmenu_delete" value="Supprimer"/>
+			<string id="id_contextmenu_remmaillage" value="Supprimer"/>
+			<string id="id_contextmenu_exportcsv" value="Export CSV"/>
+			<string id="id_contextmenu_highlight" value="Localiser"/>
+			<string id="id_contextmenu_setascurcalcul" value="Définir comme calcul courant"/>
+			<string id="id_contextmenu_remcalculresults" value="Supprimer les résultats"/>
+			<string id="id_contextmenu_remcalculresult" value="Supprimer le résultat"/>
+			<string id="id_contextmenu_changesiteroot" value="Lire site racine XML"/>
+			<string id="id_export_ok" value="L'élément a été correctement exporté dans le fichier : '%1'"/>
+			<string id="id_export_failed" value="L'élément n'a pas pu être exporté dans le fichier : '%1'"/>
+			<string id="id_warning_suppr" value="Êtes-vous sûr de vouloir supprimer '%1'"/>
+			<string id="id_info_suppr" value="L'élément a été supprimé"/>
+			<string id="id_warning_def_calc_suppr" value="Le calcul par défaut ne peut être supprimé"/>
+			<string id="id_warning_notsuppr" value="'%1' n'a pu être supprimé"/>
+			<string id="id_list_calculs_item" value="Calculs"/>
+			<string id="id_contextmenu_ptactif" value="Actif"/>
+			<string id="id_contextmenu_ptinactif" value="Inactif"/>
+			<string id="id_contextmenu_ptlocked" value="Bloqué"/>
+			<string id="id_contextmenu_highlight" value="Localiser"/>
+			<string id="id_menu_gospectresmanager" value="Lancer le manager de spectres"/>
+			<string id="id_contextmenu_selectAllPts" value="Tout sélectionner"/>
+			<string id="id_contextmenu_unselectAllPts" value="Tout déselectionner"/>
+			<string id="id_Etats_item" value="Etats"/>
+		</message>
+		<picture>
+			<image id="id_icon_check" value="check.png"/>
+			<image id="id_icon_no_check" value="nocheck.png"/>
+			<image id="id_icon_editeelt" value="property.png"/>
+			<image id="id_icon_del" value="del.png"/>
+			<image id="id_icon_duplicate" value="copy.png"/>
+			<image id="id_icon_calcul" value="calculer.png"/>
+			<image id="id_icon_bin" value="bin.png"/>
+			<image id="id_icon_export" value="toXML.png"/>
+			<image id="id_icon_import" value="fromXML.png"/>
+			<image id="id_icon_modeler" value="3D.png"/>
+			<image id="id_icon_pythonconsole" value="pythonConsole.png"/>
+			<image id="id_icon_pythonconsole_used" value="pythonConsoleUsed.png"/>
+			<image id="id_icon_pythonconsole_used_mine" value="pythonConsoleUsedMine.png"/>
+		</picture>
+	</class>
+	<class name="TYSpectresManagerFrame">
+		<message>
+			<string id="id_groupbox_slots" value="Slots de spectres et de recepteurs surfaciques"/>
+			<string id="id_groupbox_pythonconsole" value="Console python"/>
+		</message>
+		<picture>
+			<image id="id_icon_pythonconsole" value="pythonConsole.png"/>
+			<image id="id_icon_pythonconsole_used" value="pythonConsoleUsed.png"/>
+			<image id="id_icon_pythonconsole_used_mine" value="pythonConsoleUsedMine.png"/>
+		</picture>
+	</class>
+	<class name="TYModelerFrame">
+		<message>
+			<string id="id_fit_btn" value="Recadrer la vue"/>
+			<string id="id_grid_btn" value="Grille et axes"/>
+			<string id="id_snapgrid_btn" value="Grille magnétique et angles entiers"/>
+			<string id="id_setcameracoordinates_btn" value="Spécifier les coordonnées de la caméra"/>
+			<string id="id_screenshot_btn" value="Capture d'écran dans une image..."/>
+			<string id="id_copy_btn" value="Capture d'écran dans le presse-papier"/>
+			<string id="id_editelt_btn" value="Propriétés de l'élément édité..."/>
+			<string id="id_show_source_btn" value="Afficher/Masquer les sources"/>
+			<string id="id_show_rays_btn" value="Afficher/Masquer les rayons du calcul"/>
+			<string id="id_show_normals_btn" value="Afficher/Masquer les normales"/>
+			<string id="id_show_plafond_btn" value="Afficher/Masquer le plafond des batiments"/>
+			<string id="id_show_scale_btn" value="Afficher/Masquer l'échelle"/>
+			<string id="id_copy_btn" value="Capture d'écran dans le presse-papier"/>
+			<string id="id_top_view" value="Dessus"/>
+			<string id="id_left_view" value="Gauche"/>
+			<string id="id_front_view" value="Face"/>
+			<string id="id_3d_view" value="Perspective"/>
+			<string id="id_free_view" value="Mobile"/>
+			<string id="id_points_mode" value="Points"/>
+			<string id="id_wireframe_mode" value="Fils de fer"/>
+			<string id="id_surface_mode" value="Surface"/>
+			<string id="id_flat_mode" value="Flat"/>
+			<string id="id_gouraud_mode" value="Gouraud"/>
+			<string id="id_phong_mode" value="Phong"/>
+			<string id="id_print_nom_projet" value="Nom du projet :"/>
+			<string id="id_print_auteur_projet" value="Auteur :"/>
+			<string id="id_print_date_creation" value="Date de création :"/>
+			<string id="id_print_date_modif" value="Date de modification :"/>
+			<string id="id_print_comment" value="Commentaires :"/>
+			<string id="id_print_nom_calcul" value="Nom du calcul :"/>
+			<string id="id_print_nom_batiment" value="Nom de la construction :"/>
+			<string id="id_print_nom_machine" value="Nom de la machine :"/>
+			<string id="id_print_nom_site" value="Nom du site :"/>
+			<string id="id_print_dimx_site" value="Dimension en X :"/>
+			<string id="id_print_dimy_site" value="Dimension en Y :"/>
+			<string id="id_print_constr" value="Constructeur :"/>
+			<string id="id_print_model" value="Modèle :"/>
+			<string id="id_print_cat" value="Catégorie :"/>
+			<string id="id_warning_close" value="Voulez-vous enregistrer les modifications apportées à l'élément %1 ?"/>
+		</message>
+		<picture>
+			<image id="id_icon_editeelt_btn" value="property.png"/>
+			<image id="id_icon_grid_btn" value="grille.png"/>
+			<image id="id_icon_snapgrid_btn" value="grilleMagnetique.png"/>
+			<image id="id_icon_setcameracoordinates_btn" value="setCameraCoordinates.png"/>
+			<image id="id_icon_screenshot_btn" value="screenshot.png"/>
+			<image id="id_icon_copy_btn" value="copy.png"/>
+			<image id="id_icon_source" value="showSrcs.png"/>
+			<image id="id_icon_rays" value="showRays.png"/>
+			<image id="id_icon_normals" value="showNormals.png"/>
+			<image id="id_icon_plafond" value="showPlafond.png"/>
+			<image id="id_icon_show_scale_btn" value="showScale.png"/>
+			<image id="id_icon_fit_btn" value="fit.png"/>
+			<image id="id_font_bold" value="fonts/TimesNewRoman_10pt_bold.glf"/>
+			<image id="id_font" value="fonts/TimesNewRoman_10pt_standard.glf"/>
+		</picture>
+	</class>
+	<class name="TYBatimentModelerFrame">
+		<message>
+			<string id="id_caption" value="Modeleur Construction"/>
+			<string id="id_calcul_btn" value="Calculer"/>
+		</message>
+		<picture>
+			<image id="id_icon_calculalti_btn" value="calculer.png"/>
+		</picture>
+	</class>
+	<class name="TYMachineModelerFrame">
+		<message>
+			<string id="id_caption" value="Modeleur Machine"/>
+		</message>
+		<picture>
+			<image id="id_icon_calcul_btn" value="calculer.png"/>
+		</picture>
+	</class>
+	<class name="TYFaceModelerFrame">
+		<message>
+			<string id="id_caption" value="Modeleur Face"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+		</message>
+	</class>
+	<class name="TYSiteModelerFrame">
+		<message>
+			<string id="id_caption" value="Modeleur Site"/>
+			<string id="id_show_crbniv_btn" value="Afficher/Masquer les courbes de niveaux"/>
+			<string id="id_show_altimetrie_btn" value="Afficher/Masquer l'altimétrie"/>
+			<string id="id_show_imagesite_btn" value="Afficher/Masquer l'image du site"/>
+			<string id="id_calculalti_btn" value="Mettre à jour l'altimétrie"/>
+			<string id="id_msg_calculalti" value="Calcul de l'altimétrie à partir des courbes de niveau..."/>
+			<string id="id_msg_updatealtiinfra" value="Mise à jour de l'altitude des éléments d'infrastructure..."/>
+			<string id="id_surface_maillage_mode" value="Carte"/>
+			<string id="id_lines_maillage_mode" value="Isophones"/>
+			<string id="id_mixed_maillage_mode" value="Combiné"/>
+			<string id="id_render_maillage_mode" value="Mode de rendu des récepteurs surfaciques"/>
+			<string id="id_none_select_maillage" value="Aucun"/>
+			<string id="id_select_maillage" value="Sélection d'un récepteur surfacique"/>
+		</message>
+		<picture>
+			<image id="id_icon_crbniv" value="showCrbNiv.png"/>
+			<image id="id_icon_altimetrie" value="showAltimetrie.png"/>
+			<image id="id_icon_imagesite" value="showImageSite.png"/>
+			<image id="id_icon_calculalti_btn" value="calculer.png"/>
+			<image id="id_icon_scale" value="echelle.png"/>
+		</picture>
+	</class>
+	<class name="TYCameraStepEditor">
+		<message>
+			<string id="id_caption" value="Déplacements caméra"/>
+			<string id="id_translation" value="Translation"/>
+			<string id="id_rotation" value="Rotation"/>
+			<string id="id_zoom" value="Zoom"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_step" value="Pas : "/>
+		</message>
+		<picture>
+			<image id="id_icon_arrow_left" value="arrowLft.png"/>
+			<image id="id_icon_arrow_right" value="arrowRgt.png"/>
+			<image id="id_icon_arrow_up" value="arrowUp.png"/>
+			<image id="id_icon_arrow_down" value="arrowDwn.png"/>
+			<image id="id_icon_more" value="more.png"/>
+			<image id="id_icon_less" value="less.png"/>
+		</picture>
+	</class>
+	<class name="TYPolyLineEditor">
+		<message>
+			<string id="id_output_dist" value="%1 m"/>
+		</message>
+	</class>
+	<class name="TYEtageEditor">
+		<message>
+			<string id="id_caption" value="Etage / Ecran"/>
+			<string id="id_msg_etage_invalid" value="L'étage ne peut pas être construit, le contour est invalide."/>
+			<string id="id_hauteur_label" value="Hauteur des murs : "/>
+			<string id="id_hauteur_sol_label" value="Hauteur au sol : "/>
+			<string id="id_epaisseur_ecran_label" value="Epaisseur (écrans) : "/>
+			<string id="id_bat_label" value="Etage"/>
+			<string id="id_ecran_label" value="Ecran"/>
+			<string id="id_action_addetage" value="Nouvelle construction"/>
+			<string id="id_action_addecran" value="Nouvel écran"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+		</message>
+	</class>
+	<class name="TYPickEditor">
+		<message>
+			<string id="id_popup_siteroot" value="Site Parent"/>
+			<string id="id_popup_calculer" value="Calculer"/>
+			<string id="id_popup_modeleur" value="Modeleur"/>
+			<string id="id_popup_editface" value="Editer"/>
+			<string id="id_popup_dimension" value="Dimensions"/>
+			<string id="id_popup_position" value="Position"/>
+			<string id="id_popup_rotation" value="Rotation"/>
+			<string id="id_popup_hauteur" value="Hauteur"/>
+			<string id="id_popup_epaisseur" value="Epaisseur"/>
+			<string id="id_popup_duplicate" value="Dupliquer"/>
+			<string id="id_popup_remove" value="Supprimer"/>
+			<string id="id_msg_gethauteur" value="Entrer la nouvelle hauteur pour cet étage : "/>
+			<string id="id_msg_gethauteur_ecran" value="Entrer la nouvelle hauteur pour cet écran : "/>
+			<string id="id_msg_getepaisseur_ecran" value="Entrer la nouvelle épaisseur pour cet écran : "/>
+			<string id="id_x_label" value="X"/>
+			<string id="id_y_label" value="Y"/>
+			<string id="id_z_label" value="Z"/>
+			<string id="id_concatenate_checkbox" value="Concaténer les rotations"/>
+			<string id="id_sizex_label" value="X"/>
+			<string id="id_sizey_label" value="Y"/>
+			<string id="id_sizez_label" value="Z"/>
+			<string id="id_diameter_label" value="Diamètre"/>
+			<string id="id_hauteur_label" value="Hauteur"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_action_remvol" value="Suppression de l'élément"/>
+			<string id="id_action_addvol" value="Ajout de l'élément"/>
+			<string id="id_action_remmachine" value="Suppression de la machine"/>
+			<string id="id_action_addmachine" value="Ajout de la machine"/>
+			<string id="id_action_remmaillage" value="Suppression du récepteur surfacique"/>
+			<string id="id_action_addmaillage" value="Ajout du récepteur surfacique"/>
+			<string id="id_action_remptcontrol" value="Suppression du récepteur ponctuel"/>
+			<string id="id_action_addptcontrol" value="Ajout du récepteur ponctuel"/>
+			<string id="id_action_remsitenode" value="Suppression du site imbriqué"/>
+			<string id="id_action_addsitenode" value="Ajout du site imbriqué"/>
+			<string id="id_action_remelttopo" value="Suppression de l'élément de topographie"/>
+			<string id="id_action_addelttopo" value="Ajout de l'élément de topographie"/>
+			<string id="id_action_remeltinfra" value="Suppression de l'élément d'infrastructure"/>
+			<string id="id_action_addeltinfra" value="Ajout de l'élément d'infrastructure"/>
+			<string id="id_action_setposition" value="Déplacer l'élément"/>
+			<string id="id_action_setrotation" value="Oriente l'élément"/>
+			<string id="id_action_resizebox" value="Redimensionner la boîte"/>
+			<string id="id_action_resizecyl" value="Redimensionner le cylindre"/>
+			<string id="id_action_resizesemicyl" value="Redimensionner le demi-cylindre"/>
+			<string id="id_popup_normales" value="Inverser les normales"/>
+		</message>
+		<picture>
+			<image id="id_icon_editeelt" value="property.png"/>
+			<image id="id_icon_moving" value="moving.png"/>
+			<image id="id_icon_rotation" value="rotation.png"/>
+			<image id="id_icon_del" value="del.png"/>
+			<image id="id_icon_duplicate" value="copy.png"/>
+			<image id="id_icon_calcul" value="calculer.png"/>
+		</picture>
+	</class>
+	<class name="TYFaceModelerPickEditor">
+		<message>
+			<string id="id_popup_dimension" value="Dimensions"/>
+			<string id="id_popup_position" value="Position"/>
+			<string id="id_popup_remove" value="Supprimer"/>
+			<string id="id_sizex_label" value="X"/>
+			<string id="id_sizey_label" value="Y"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_action_remface" value="Suppression de la Sous-Face"/>
+			<string id="id_action_resizeface" value="Redimensionner la Sous-Face"/>
+			<string id="id_warning_size_not_ok" value="Une ou plusieurs dimensions saisies sont nulles. Les valeurs initiales ont été conservées."/>
+		</message>
+	</class>
+	<class name="TYDistanceEditor">
+		<message>
+			<string id="id_output_dist" value="Distance : %1 m"/>
+		</message>
+	</class>
+	<class name="TYPositionEditor">
+		<message>
+			<string id="id_pos_info" value="(%1, %2, %3)"/>
+			<string id="id_angle_info" value="%1°"/>
+			<string id="id_action_moveptetage" value="Edition de l'étage"/>
+			<string id="id_action_moveptaccline" value="Edition du point"/>
+			<string id="id_action_moveptcrbniv" value="Edition de la courbe de niveau"/>
+			<string id="id_action_moveptplaneau" value="Edition du plan d'eau"/>
+			<string id="id_action_moveptterrain" value="Edition du terrain"/>
+			<string id="id_action_movesrcponct" value="Déplacement de la source"/>
+			<string id="id_action_orientsrcponct" value="Orientation de la source"/>
+			<string id="id_action_movepointcontrol" value="Déplacement du récepteur ponctuel"/>
+			<string id="id_action_movegeonode" value="Déplacement de l'élément"/>
+			<string id="id_action_rotategeonode" value="Rotation de l'élément"/>
+		</message>
+	</class>
+	<class name="TYCameraZoneEditor">
+		<message>
+			<string id="id_size_info" value="(%1, %2)"/>
+		</message>
+	</class>
+	<class name="TYBoxEditor">
+		<message>
+			<string id="id_size_info" value="(%1, %2)"/>
+			<string id="id_action_addbox" value="Nouvelle boîte"/>
+		</message>
+	</class>
+	<class name="TYRectangleEditor">
+		<message>
+			<string id="id_size_info" value="(%1, %2)"/>
+			<string id="id_caption" value="Face"/>
+			<string id="id_msg_bouche_cheminee" value="Souhaitez-vous construire une bouche de ventilation ou une cheminée ?"/>
+			<string id="id_bouche_btn" value="Bouche"/>
+			<string id="id_cheminee_btn" value="Cheminée"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+		</message>
+	</class>
+	<class name="TYCylinderEditor">
+		<message>
+			<string id="id_diameter_info" value="Diamètre : %1 m"/>
+			<string id="id_action_addcyl" value="Nouveau cylindre"/>
+		</message>
+	</class>
+	<class name="TYSemiCylinderEditor">
+		<message>
+			<string id="id_diameter_info" value="Diamètre : %1 m"/>
+			<string id="id_action_addsemicyl" value="Nouveau demi-cylindre"/>
+		</message>
+	</class>
+	<class name="TYCourbeNiveauEditor">
+		<message>
+			<string id="id_msg_getaltitude" value="Entrer l'altitude pour cette courbe de niveau :"/>
+			<string id="id_action_addcrbniv" value="Nouvelle courbe de niveau"/>
+		</message>
+	</class>
+	<class name="TYCoursEauEditor">
+		<message>
+			<string id="id_action_addcrseau" value="Nouveau cours d'eau"/>
+		</message>
+	</class>
+	<class name="TYReseauTransportEditor">
+		<message>
+			<string id="id_action_addrestrans" value="Nouveau réseau électrique"/>
+		</message>
+	</class>
+	<class name="TYRouteEditor">
+		<message>
+			<string id="id_action_addroute" value="Nouvelle route"/>
+		</message>
+	</class>
+	<class name="TYRouteDeblaiEditor">
+		<message>
+			<string id="id_action_addroutedeblai" value="Nouvelle route avec calcul de déblai"/>
+		</message>
+	</class>
+	<class name="TYSolEditor">
+		<message>
+			<string id="id_action_addsol" value="Nouveau sol"/>
+		</message>
+	</class>
+	<class name="TYSourseEditor">
+		<message>
+			<string id="id_action_addsource" value="Nouvelle source"/>
+		</message>
+	</class>
+	<class name="TYVegetationEditor">
+		<message>
+			<string id="id_action_addvegetation" value="Nouvelle forêt"/>
+		</message>
+	</class>
+	<class name="TYPlanEauEditor">
+		<message>
+			<string id="id_msg_getaltitude" value="Entrer l'altitude pour ce plan d'eau :"/>
+			<string id="id_action_addplaneau" value="Nouveau plan d'eau"/>
+		</message>
+	</class>
+	<class name="TYEchelleEditor">
+		<message>
+			<string id="id_action_setechelle" value="Echelle du site"/>
+		</message>
+	</class>
+	<class name="TYPointRefEditor">
+		<message>
+			<string id="id_action_setptref" value="Point de référence du site"/>
+		</message>
+	</class>
+	<class name="TYOrientationEditor">
+		<message>
+			<string id="id_action_setorientation" value="Orientation du site"/>
+		</message>
+	</class>
+	<class name="TYEmpriseEditor">
+		<message>
+			<string id="id_action_setemprise" value="Emprise du site"/>
+		</message>
+	</class>
+	<class name="TYSilosEditor">
+		<message>
+			<string id="id_diameter_info" value="Diamètre : %1 m"/>
+			<string id="id_action_addcyl" value="Nouveau cylindre"/>
+		</message>
+	</class>
+	<class name="TYRectangularMaillageEditor">
+		<message>
+			<string id="id_size_info" value="(%1, %2)"/>
+			<string id="id_caption" value="Récepteur surfacique rectangulaire"/>
+			<string id="id_hauteur_label" value="Hauteur au sol : "/>
+			<string id="id_densitex_label" value="Densité de points en X (points par mètres) : "/>
+			<string id="id_densitey_label" value="Densité de points en Y (points par mètres) : "/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_action_addrectmaillage" value="Nouveau récepteur surfacique rectangulaire"/>
+			<string id="id_warning_no_curcalcul" value="Un récepteur surfacique rectangulaire ne peut être ajouté qu'à un calcul actif dans un projet."/>
+		</message>
+	</class>
+	<class name="TYVerticalMaillageEditor">
+		<message>
+			<string id="id_size_info" value="Largeur : %1 m"/>
+			<string id="id_caption" value="Récepteur surfacique vertical"/>
+			<string id="id_hauteursol_label" value="Hauteur au sol : "/>
+			<string id="id_hauteur_label" value="Hauteur du maillage : "/>
+			<string id="id_densitex_label" value="Densité de points en X (points par mètres) : "/>
+			<string id="id_densitey_label" value="Densité de points en Y (points par mètres) : "/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_action_addrectmaillage" value="Nouveau récepteur surfacique vertical"/>
+			<string id="id_warning_no_curcalcul" value="Un récepteur surfacique vertical ne peut être ajouté qu'à un calcul actif dans un projet."/>
+		</message>
+	</class>
+	<class name="TYLinearMaillageEditor">
+		<message>
+			<string id="id_output_dist" value="Distance : %1 m"/>
+			<string id="id_caption" value="Récepteur linéaire"/>
+			<string id="id_hauteur_label" value="Hauteur au sol : "/>
+			<string id="id_densite_label" value="Densité de points (points par mètres) : "/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_action_addlinearmaillage" value="Nouveau récepteur linéaire"/>
+			<string id="id_warning_no_curcalcul" value="Un récepteur linéaire ne peut être ajouté qu'à un calcul actif dans un projet."/>
+		</message>
+	</class>
+	<class name="TYBoundaryNoiseMapEditor">
+		<message>
+			<string id="id_caption" value="Récepteur accoustique"/>
+			<string id="id_height_label" value="Hauteur : "/>
+			<string id="id_thickness_label" value="Epaisseur (en mètres) : "/>
+			<string id="id_closed_label" value="Polyline fermée : "/>
+			<string id="id_density_label" value="Densité de points (points par mètres) : "/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_action_add_boundarynoisemap" value="Nouveau récepteur accoustique"/>
+			<string id="id_warning_no_curcalcul" value="Un récepteur de surface accoustique ne peut être ajouté qu'à un calcul actif dans un projet."/>
+			<string id="id_msg_boundarynoisemap_invalid" value="Boundary Noise Map invalide : intersection détectée."/>
+		</message>
+	</class>
+	<class name="TYPointCalculEditor">
+		<message>
+			<string id="id_msg_gethauteur" value="Entrez la hauteur au sol pour ce récepteur ponctuel : "/>
+			<string id="id_action_addptcalcul" value="Nouveau récepteur ponctuel"/>
+			<string id="id_warning_no_curcalcul" value="Un récepteur ponctuel ne peut être ajouté qu'à un calcul actif dans un projet."/>
+		</message>
+	</class>
+	<class name="TYSourceEditor">
+		<message>
+			<string id="id_msg_gethauteur" value="Entrez la hauteur au sol pour cette source ponctuelle : "/>
+			<string id="id_action_addsource" value="Nouvelle source ponctuelle"/>
+		</message>
+	</class>
+	<class name="TYDataBaseEditor">
+		<message>
+			<string id="id_action_addmachine" value="Ajout de la machine"/>
+			<string id="id_action_addeltinfra" value="Ajout de l'élément d'infrastructure"/>
+			<string id="id_action_addsitenode" value="Ajout d'un site imbriqué"/>
+		</message>
+	</class>
+	<class name="TYDataBaseFrame">
+		<message>
+			<string id="id_database" value="Bibliothèques"/>
+			<string id="id_bdd_TympanUser" value="Utilisateur"/>
+			<string id="id_bdd_TympanGeneral" value="Générale"/>
+			<string id="id_del" value="Supprimer"/>
+			<string id="id_new" value="Nouveau"/>
+			<string id="id_duplicate" value="Dupliquer"/>
+			<string id="id_modeler" value="Modeleur"/>
+			<string id="id_properties" value="Propriétés"/>
+			<string id="id_setascurrentproject" value="Projet courant"/>
+			<string id="id_setascurrentsite" value="Site courant"/>
+			<string id="id_importxml" value="Import XML"/>
+			<string id="id_exportxml" value="Export XML"/>
+			<string id="id_current_project" value="Projet courant"/>
+			<string id="id_list" value="Type "/>
+			<string id="id_dialog_password" value="Saisie du mot de passe administrateur"/>
+			<string id="id_text_password" value="
+				Entrez le mot de passe administrateur pour modifier la base de données générale.
+
+			"/>
+			<string id="id_access_denied" value="Le mot de passe est incorrect."/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_warning_suppr" value="Êtes-vous sûr de vouloir supprimer ce(s) élément(s)"/>
+			<string id="id_error_connection" value="La connection à la base de données a échoué."/>
+			<string id="id_error_save" value="La sauvegarde en base de données a échoué."/>
+		</message>
+		<picture>
+			<image id="id_icon_database" value="dataBase.png"/>
+			<image id="id_icon_importxml" value="fromXML.png"/>
+			<image id="id_icon_exportxml" value="toXML.png"/>
+			<image id="id_icon_del" value="del.png"/>
+			<image id="id_icon_duplicate" value="copy.png"/>
+			<image id="id_icon_modeler" value="3D.png"/>
+		</picture>
+	</class>
+	<class name="TYColorInterfaceWidget">
+		<message>
+			<string id="id_color_label" value="Couleur"/>
+		</message>
+	</class>
+	<class name="TYElementWidget">
+		<message>
+			<string id="id_name_label" value="Nom"/>
+			<string id="id_id_label" value="ID"/>
+			<string id="id_parent" value="parent"/>
+		</message>
+	</class>
+	<class name="TYWidget">
+		<message>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_apply_btn" value="Appliquer"/>
+		</message>
+	</class>
+	<class name="TYAtmosphereWidget">
+		<message>
+			<string id="id_pression_label" value="Pression"/>
+			<string id="id_temperature_label" value="Température"/>
+			<string id="id_hygrometrie_label" value="Hygrométrie"/>
+			<string id="id_vitvent_label" value="Vitesse du vent"/>
+			<string id="id_dirvent_label" value="Direction du vent"/>
+			<string id="id_unite_pression" value="Pa"/>
+			<string id="id_unite_temp" value="°C"/>
+			<string id="id_unite_hygro" value="%"/>
+			<string id="id_unite_vitvent" value="m/s"/>
+			<string id="id_unite_dirvent" value="°"/>
+			<string id="id_classe_meteo_label" value="Choix de la classe météo"/>
+			<string id="id_nb_classe_meteo" value="5"/>
+			<string id="id_classe_meteo0" value="Day time, no clouds"/>
+			<string id="id_classe_meteo1" value="Day time, medium cloud cover"/>
+			<string id="id_classe_meteo2" value="Day time, heavy cloud cover"/>
+			<string id="id_classe_meteo3" value="Night time, medium to heavy cloud cover"/>
+			<string id="id_classe_meteo4" value="Night time, medium few or no clouds"/>
+			<string id="id_meteo_A_label" value="[A] Linear sound speed gradient"/>
+			<string id="id_meteo_B_label" value="[B] Logarithmic sound speed gradient"/>
+			<string id="id_meteo_C_label" value="[C] Turbulence strength"/>
+			<string id="id_meteo_D_label" value="[D] Displacement height"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_get_from_bdd" value="Import BDD"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_msg_apply" value="Appliquer les modifications pour que le spectre soit à jour ?"/>
+		</message>
+	</class>
+	<class name="TYMateriauConstructionWidget">
+		<message>
+			<string id="id_massevol_label" value="Masse volumique"/>
+			<string id="id_unite_massvol" value="kg/m3"/>
+			<string id="id_spectretransm" value="Isolement brut (valeur absolue)"/>
+			<string id="id_spectreabs" value="Absorption Sabine"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_get_from_bdd" value="Import BDD"/>
+			<string id="id_get_from_xml" value="Import XML"/>
+		</message>
+	</class>
+	<class name="TYSolWidget">
+		<message>
+			<string id="id_resistivite_label" value="Résistivité"/>
+			<string id="id_epaisseur_label" value="Epaisseur"/>
+			<string id="id_unite_resistivite" value="kRayl"/>
+			<string id="id_unite_epaisseur" value="m"/>
+			<string id="id_vegetactive_label" value="Végétation active"/>
+			<string id="id_spectreimp" value="Spectre d'impédance"/>
+			<string id="id_vegetation" value="Végétation"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_edit_resistivite" value="Choisir..."/>
+			<string id="id_get_from_bdd" value="Import BDD"/>
+		</message>
+	</class>
+	<class name="TYSolResistanceDialog">
+		<message>
+			<string id="id_neigefraiche" value="Neige fraiche"/>
+			<string id="id_neigedure" value="Neige dure"/>
+			<string id="id_gazon" value="Gazon"/>
+			<string id="id_sablecompacte" value="Sable compacté"/>
+			<string id="id_guarrigue" value="Guarrigue"/>
+			<string id="id_asphalte" value="Asphalte"/>
+			<string id="id_terrecompactee" value="Terre compactée"/>
+			<string id="id_solherbeux" value="Sol herbeux"/>
+			<string id="id_solpave" value="Sol pavé"/>
+			<string id="id_terrevegetale" value="Terre végétale"/>
+			<string id="id_resistance" value="Résistance à l'écoulement"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+		</message>
+	</class>
+	<class name="TYVegetationWidget">
+		<message>
+			<string id="id_hauteur_label" value="Hauteur"/>
+			<string id="id_unite_hauteur" value="m"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_get_from_bdd" value="Import BDD"/>
+		</message>
+	</class>
+	<class name="TYDirectiviteWidget">
+		<message>
+			<string id="id_hauteur_label" value="Hauteur"/>
+			<string id="id_tabangleval_box" value="Tableau"/>
+			<string id="id_theta" value="Theta"/>
+			<string id="id_phi" value="Phi"/>
+			<string id="id_value" value="Valeur"/>
+			<string id="id_tabangleval" value="Liste des angles"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_add" value="Ajouter"/>
+			<string id="id_del" value="Supprimer"/>
+		</message>
+	</class>
+	<class name="TYTraficWidget">
+		<message>
+			<string id="id_debitvl_label" value="Debit VL"/>
+			<string id="id_debitpl_label" value="Debit PL"/>
+			<string id="id_unite_debit" value="v/h"/>
+		</message>
+	</class>
+	<class name="TYBoxWidget">
+		<message>
+			<string id="id_sizeX_label" value="Longeur"/>
+			<string id="id_sizeY_label" value="Largeur"/>
+			<string id="id_sizeZ_label" value="Hauteur"/>
+			<string id="id_position" value="Position"/>
+			<string id="id_unite_size" value="m"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYPointWidget">
+		<message>
+			<string id="id_position" value="Position"/>
+			<string id="id_x_label" value="X"/>
+			<string id="id_y_label" value="Y"/>
+			<string id="id_z_label" value="Z"/>
+		</message>
+	</class>
+	<class name="TYPolygonWidget">
+		<message>
+			<string id="id_pts" value="Contour"/>
+			<string id="id_pt" value="Point"/>
+			<string id="id_x" value="X"/>
+			<string id="id_y" value="Y"/>
+			<string id="id_z" value="Z"/>
+		</message>
+	</class>
+	<class name="TYRectangleWidget">
+		<message>
+			<string id="id_x" value="X"/>
+			<string id="id_y" value="Y"/>
+			<string id="id_z" value="Z"/>
+		</message>
+	</class>
+	<class name="TYRepereWidget">
+		<message>
+			<string id="id_origine" value="Origine"/>
+			<string id="id_veci" value="VecI"/>
+			<string id="id_vecj" value="VecJ"/>
+			<string id="id_veck" value="VecK"/>
+			<string id="id_x_label" value="X"/>
+			<string id="id_y_label" value="Y"/>
+			<string id="id_z_label" value="Z"/>
+		</message>
+	</class>
+	<class name="TYSegmentWidget">
+		<message>
+			<string id="id_x" value="X"/>
+			<string id="id_y" value="Y"/>
+			<string id="id_z" value="Z"/>
+		</message>
+	</class>
+	<class name="TYSurfaceInterfaceWidget">
+		<message>
+			<string id="id_aire_label" value="Aire"/>
+		</message>
+	</class>
+	<class name="TYVolumeInterfaceWidget">
+		<message>
+			<string id="id_volume_label" value="Volume"/>
+			<string id="id_unite_volume" value="m3"/>
+			<string id="id_surface_label" value="Surface"/>
+			<string id="id_unite_surface" value="m2"/>
+		</message>
+	</class>
+	<class name="TYAttenuateurWidget">
+		<message>
+			<string id="id_type_label" value="Type"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_get_from_bdd" value="Import BDD"/>
+		</message>
+	</class>
+	<class name="TYSpectreWidget">
+		<message>
+			<string id="id_type_label" value="Type"/>
+			<string id="id_rq_label" value="Remarque"/>
+			<string id="id_tabfreqcplx_box" value="Spectre"/>
+			<string id="id_freq" value="Fréquence"/>
+			<string id="id_courbe" value="Courbe"/>
+			<string id="id_im" value="Partie Imaginaire"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_histogramme" value="Histogramme"/>
+			<string id="id_tableau" value="Tableau"/>
+			<string id="id_ordonnee" value="dB"/>
+			<string id="id_abscisse" value="Fréquence"/>
+			<string id="id_add_to_spectre_manager" value="Gestionnaire de Spectres"/>
+			<string id="id_print" value="Imprimer"/>
+			<string id="id_import_csv" value="Import Excel (CSV)"/>
+			<string id="id_export_csv" value="Export Excel (CSV)"/>
+			<string id="id_invalid_spectre" value="SPECTRE INVALIDE"/>
+			<string id="id_get_from_bdd" value="Import BDD"/>
+			<string id="id_spectre_type_att" value="Atténuation"/>
+			<string id="id_spectre_type_abso" value="Absorption"/>
+			<string id="id_spectre_type_lw" value="Puissance"/>
+			<string id="id_spectre_type_lp" value="Pression"/>
+			<string id="id_spectre_type_autre" value="Autre"/>
+			<string id="id_radiobutton_octave" value="Octave"/>
+			<string id="id_radiobutton_tiers" value="Tiers d'octave"/>
+			<string id="id_keep_in_bdd" value="Conserver ce spectre en bibliothèque"/>
+			<string id="id_fit" value="Zoom"/>
+			<string id="id_warning_file_not_ok" value="Format de fichier non correct, risque de décalage en fréquence, voulez vous continuer ?"/>
+			<string id="id_spectre_histo_dbA" value="dBA"/>
+			<string id="id_spectre_histo_dbZ" value="dBZ"/>
+		</message>
+	</class>
+	<class name="TYSourceWidget">
+		<message>
+			<string id="id_tabspectre_box" value="Régimes"/>
+			<string id="id_spectre" value="Spectre"/>
+			<string id="id_nouveauregime" value="Nouveau régime"/>
+			<string id="id_currentregime" value="Régime courant"/>
+			<string id="id_supprregime" value="Supprimer"/>
+			<string id="id_regime" value="Régime"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_button_spectre" value="Voir spectre"/>
+		</message>
+		<picture>
+			<image id="id_icon_check" value="check.png"/>
+			<image id="id_icon_no_check" value="nocheck.png"/>
+		</picture>
+	</class>
+	<class name="TYSourceLineicWidget">
+		<message>
+			<string id="id_densitessrcs_label" value="Densité de sources : 1 source tout les "/>
+			<string id="id_unite_densite_srcs" value="mètres"/>
+			<string id="id_srcscor_label" value="Sources correlées"/>
+			<string id="id_tabsrc_box" value="Sources"/>
+			<string id="id_source" value="Source"/>
+			<string id="id_tabsrc" value="Liste des sources"/>
+			<string id="id_property" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYSourcePonctuelleWidget">
+		<message>
+			<string id="id_type_raynt_label" value="Type de rayonnement"/>
+			<string id="id_type_label" value="Source utilisateur"/>
+			<string id="id_position" value="Position"/>
+			<string id="id_att" value="Atténuateur"/>
+			<string id="id_tabdir_box" value="Directivités"/>
+			<string id="id_dir" value="Directivité"/>
+			<string id="id_tabdir" value="Liste des directivités"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_property" value="Propriétés"/>
+			<string id="id_get_from_bdd" value="Import BDD"/>
+			<string id="id_hauteur_label" value="Hauteur au sol"/>
+			<string id="id_spherique" value="Sphérique"/>
+			<string id="id_hemispherique" value="Hémisphérique"/>
+			<string id="id_solide" value="Angle solide"/>
+			<string id="id_forcee" value="Utilisateur"/>
+			<string id="id_israyonnant_label" value="Rayonnant"/>
+			<string id="id_useatt_label" value="Atténuateur"/>
+			<string id="id_select_regime" value="Choix du régime"/>
+			<string id="id_nouveau" value="Nouveau"/>
+			<string id="id_supprimer" value="Supprimer"/>
+			<string id="id_objet_label" value="Forme"/>
+			<string id="id_objet_cube" value="Cube"/>
+			<string id="id_objet_pyramide" value="Pyramide"/>
+			<string id="id_objet_sphere" value="Sphère"/>
+			<string id="id_objet_etoile" value="Etoile"/>
+		</message>
+	</class>
+	<class name="TYSourceSurfacicWidget">
+		<message>
+			<string id="id_srcscor_label" value="Sources correlées"/>
+			<string id="id_densitessrcsV_label" value="Densité V de sources : 1 source tout les "/>
+			<string id="id_densitessrcsH_label" value="Densité H de sources : 1 source tout les "/>
+			<string id="id_unite_densite_srcs" value="mètres"/>
+			<string id="id_tabsrc_box" value="Sources"/>
+			<string id="id_source" value="Source"/>
+			<string id="id_tabsrc" value="Liste des sources"/>
+			<string id="id_property" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYAcousticLineWidget">
+		<message>
+			<string id="id_largeur_label" value="Largeur"/>
+			<string id="id_unite_largeur" value="m"/>
+			<string id="id_srclin" value="Source lineique"/>
+			<string id="id_tabpt_box" value="Points"/>
+			<string id="id_point" value="Point"/>
+			<string id="id_tabpt" value="Liste des points"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_select_regime" value="Choix du régime"/>
+			<string id="id_nouveau" value="Nouveau"/>
+			<string id="id_supprimer" value="Supprimer"/>
+			<string id="id_useatt_label" value="Atténuateur"/>
+			<string id="id_israyonnant_label" value="Rayonnante"/>
+			<string id="id_select_regime" value="Choix du régime"/>
+			<string id="id_supprimer" value="Supprimer"/>
+			<string id="id_nouveau" value="Nouveau"/>
+			<string id="id_densitessrcs_label" value="Densite sources"/>
+			<string id="id_unite_densite_srcs" value="mètre/source"/>
+			<string id="id_puissance_calculee" value="Puissance calculée"/>
+			<string id="id_puissance_imposee" value="Puissance mesurée"/>
+			<string id="id_type_distribution" value="Type de distribution"/>
+		</message>
+	</class>
+	<class name="TYAcousticPolygonWidget">
+		<message>
+			<string id="id_polygon" value="Polygone"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYAcousticInterfaceWidget">
+		<message>
+			<string id="id_curregime_label" value="Régime courant"/>
+			<string id="id_densitessrcsV_label" value="Densité sources V  "/>
+			<string id="id_densitessrcsH_label" value="Densité sources H  "/>
+			<string id="id_unite_densite_srcs" value="mètre/source"/>
+			<string id="id_isactive_label" value="Réflexion"/>
+			<string id="id_israyonnant_label" value="Rayonnante"/>
+			<string id="id_useatt_label" value="Atténuateur"/>
+			<string id="id_att" value="Atténuateur"/>
+			<string id="id_tabspectre_box" value="Régimes"/>
+			<string id="id_spectre" value="Spectre"/>
+			<string id="id_nouveauregime" value="Nouveau régime"/>
+			<string id="id_currentregime" value="Régime courant"/>
+			<string id="id_supprregime" value="Supprimer"/>
+			<string id="id_regime" value="Régime"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_button_spectre" value="Voir spectre"/>
+			<string id="id_type_distribution" value="Type de distribution"/>
+			<string id="id_puissance_calculee" value="Puissance calculée"/>
+			<string id="id_puissance_imposee" value="Puissance mesurée"/>
+			<string id="id_regime" value="Régime"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_select_regime" value="Choix du régime"/>
+			<string id="id_nouveau" value="Nouveau"/>
+			<string id="id_supprimer" value="Supprimer"/>
+		</message>
+		<picture>
+			<image id="id_icon_check" value="check.png"/>
+			<image id="id_icon_no_check" value="nocheck.png"/>
+		</picture>
+	</class>
+	<class name="TYAcousticBoxWidget">
+		<message>
+			<string id="id_face1" value="Face 1"/>
+			<string id="id_face2" value="Face 2"/>
+			<string id="id_face3" value="Face 3"/>
+			<string id="id_face4" value="Face 4"/>
+			<string id="id_face5" value="Face 5"/>
+			<string id="id_face6" value="Face 6"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_nom" value="Nom"/>
+			<string id="id_emission" value="Rayonnant"/>
+			<string id="id_title_dimensions" value="Dimensions"/>
+		</message>
+	</class>
+	<class name="TYAcousticCircleWidget">
+		<message>
+			<string id="id_msg_header" value="Gestionnaire XML"/>
+			<string id="id_msg_location" value="Dans le fichier : %1, ligne %2, colonne %3"/>
+			<string id="id_msg_message" value="Message : %1"/>
+		</message>
+		<message>
+			<string id="id_type_label" value="Type"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYAcousticCylinderWidget">
+		<message>
+			<string id="id_enveloppe" value="Enveloppe"/>
+			<string id="id_circtop" value="Disque supérieur"/>
+			<string id="id_circbottom" value="Disque inférieur"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_title_dimensions" value="Dimensions"/>
+			<string id="id_diameter_label" value="Diamètre"/>
+			<string id="id_hauteur_label" value="Hauteur"/>
+		</message>
+	</class>
+	<class name="TYAcousticRectangleWidget">
+		<message>
+			<string id="id_type_label" value="Type"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYBoucheSurfaceWidget">
+		<message>
+			<string id="id_source_bafflee" value="Source bafflée"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_title_dimensions" value="Dimensions"/>
+			<string id="id_warning_size_not_ok" value="Une ou plusieurs dimensions saisies sont nulles. Les valeurs initiales ont été conservées."/>
+		</message>
+	</class>
+	<class name="TYChemineeSurfaceWidget">
+		<message>
+			<string id="id_source_cheminee" value="Source cheminée"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_title_dimensions" value="Dimensions"/>
+			<string id="id_warning_size_not_ok" value="Une ou plusieurs dimensions saisies sont nulles. Les valeurs initiales ont été conservées."/>
+		</message>
+	</class>
+	<class name="TYAcousticSemiCircleWidget">
+		<message>
+			<string id="id_type_label" value="Type"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYAcousticSemiCylinderWidget">
+		<message>
+			<string id="id_rect" value="Rectangle"/>
+			<string id="id_enveloppe" value="Enveloppe"/>
+			<string id="id_circtop" value="Demi-disque supérieur"/>
+			<string id="id_circbottom" value="Demi-disque inférieur"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_title_dimensions" value="Dimensions"/>
+			<string id="id_diameter_label" value="Diamètre"/>
+			<string id="id_hauteur_label" value="Hauteur"/>
+		</message>
+	</class>
+	<class name="TYAcousticRectangleNodeWidget">
+		<message>
+			<string id="id_nbcol_label" value="Nb colonnes"/>
+			<string id="id_nbrow_label" value="Nb lignes"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYAcousticSurfaceWidget">
+		<message>
+			<string id="id_srcSurf" value="Source surfacique"/>
+			<string id="id_mat" value="Matériau"/>
+			<string id="id_rect" value="Rectangle"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYAcousticSurfaceNodeWidget">
+		<message>
+			<string id="id_rect" value="Rectangle"/>
+			<string id="id_tabaccsurf_box" value="Sous faces"/>
+			<string id="id_tabsrcsurf" value="Liste des sources"/>
+			<string id="id_nom" value="Nom"/>
+			<string id="id_emission" value="Rayonnant"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_property" value="Propriétés"/>
+			<string id="id_delete_surf" value="Supprimer"/>
+		</message>
+	</class>
+	<class name="TYAcousticVolumeWidget">
+		<message>
+			<string id="id_mat" value="Matériau"/>
+			<string id="id_paroi" value="Paroi"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYAcousticVolumeNodeWidget">
+		<message>
+			<string id="id_type_label" value="Type"/>
+			<string id="id_tabaccvol_box" value="Volumes acoustiques"/>
+			<string id="id_accvol" value="Volume acoustique"/>
+			<string id="id_tabaccvol" value="Liste des volumes"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_property" value="Propriétés"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_nom" value="Nom"/>
+			<string id="id_emission" value="Rayonnant"/>
+			<string id="id_delete" value="Supprimer"/>
+			<string id="id_attention" value="Attention!"/>
+			<string id="id_are_you_sure" value="Etes vous sûr de vouloir supprimer ce volume ?"/>
+			<string id="id_button_oui" value="Oui"/>
+			<string id="id_button_non" value="Non"/>
+		</message>
+	</class>
+	<class name="TYBatimentWidget">
+		<message>
+			<string id="id_type_label" value="Type"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYFaceSetWidget">
+		<message>
+			<string id="id_caption" value="Objet facetisé"/>
+			<string id="id_volume_label" value="Volume"/>
+			<string id="id_unite_volume" value="m3"/>
+			<string id="id_surface_label" value="Surface"/>
+			<string id="id_unite_surface" value="m2"/>
+		</message>
+	</class>
+	<class name="TYAcousticFaceSetWidget">
+		<message>
+			<string id="id_caption" value="Objet facetisé acoustique"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_repere" value="Repère"/>
+			<string id="id_property" value="Propriétés"/>
+			<string id="id_mat" value="Matériau"/>
+		</message>
+	</class>
+	<class name="TYEcranWidget">
+		<message>
+			<string id="id_caption" value="Ecran Mince"/>
+			<string id="id_property" value="Propriétés"/>
+			<string id="id_hauteur_label" value="Hauteur"/>
+			<string id="id_epaisseur_label" value="Epaisseur"/>
+		</message>
+	</class>
+	<class name="TYEtageWidget">
+		<message>
+			<string id="id_closed_label" value="Ferme"/>
+			<string id="id_plafond" value="Plafond"/>
+			<string id="id_sol" value="Sol"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_tabmachinerepere_box" value="Machines/Sources"/>
+			<string id="id_tabmachinerepere" value="Liste des machines"/>
+			<string id="id_machine" value="Machine"/>
+			<string id="id_source" value="Source"/>
+			<string id="id_tabmurrepere_box" value="Murs"/>
+			<string id="id_tabmurrepere" value="Liste des murs"/>
+			<string id="id_atmo_box" value="Atmosphere"/>
+			<string id="id_mur" value="Mur"/>
+			<string id="id_repere" value="Repère"/>
+			<string id="id_property" value="Propriétés"/>
+			<string id="id_type_reverb" value="Calcul du champ réverbéré"/>
+			<string id="id_reverb_sabine" value="Sabine"/>
+			<string id="id_reverb_kuttruff" value="Kuttruff"/>
+			<string id="id_reverb_button" value="Champ réverbéré"/>
+			<string id="id_tr_button" value="TR"/>
+			<string id="id_contextmenu_delete" value="Supprimer"/>
+			<string id="id_nom" value="Nom"/>
+			<string id="id_emission" value="Rayonnant"/>
+			<string id="id_emission" value="Emission"/>
+			<string id="id_attenuateur" value="Atténuateur"/>
+			<string id="id_regime" value="Régime"/>
+			<string id="id_etat_machine" value="Machines"/>
+			<string id="id_etat_source" value="Sources"/>
+			<string id="id_tabmurs_box" value="Liste des murs"/>
+			<string id="id_ok_btn" value="Ok"/>
+			<string id="id_prop_acous" value="Acoustique"/>
+			<string id="id_opt_sources" value="Machines/Sources"/>
+			<string id="id_opt_murs" value="Murs"/>
+			<string id="id_title_dimensions" value="Dimensions"/>
+			<string id="id_hauteur_label" value="Hauteur"/>
+		</message>
+	</class>
+	<class name="TYMachineWidget">
+		<message>
+			<string id="id_categorie_label" value="Catégorie"/>
+			<string id="id_constructeur_label" value="Constructeur"/>
+			<string id="id_modele_label" value="Modèle"/>
+			<string id="id_comment_label" value="Commentaires"/>
+		</message>
+	</class>
+	<class name="TYMurWidget">
+		<message>
+			<string id="id_paroi" value="Paroi"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_useEtage_label" value="Paroi par défaut de l'étage"/>
+		</message>
+	</class>
+	<class name="TYMurElementWidget">
+		<message>
+			<string id="id_paroi" value="Paroi"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_title_dimensions" value="Dimensions"/>
+			<string id="id_warning_size_not_ok" value="Une ou plusieurs dimensions saisies sont nulles. Les valeurs initiales ont été conservées."/>
+		</message>
+	</class>
+	<class name="TYPaletteWidget">
+		<message>
+			<string id="id_noise_level" value="Niveau de bruit"/>
+			<string id="id_valeurs" value="Valeurs"/>
+			<string id="id_valuemin" value="Limite Min"/>
+			<string id="id_valuemax" value="Max"/>
+			<string id="id_nbcolor" value="Nombre de couleurs"/>
+			<string id="id_newentry" value="Nouv. couleur"/>
+			<string id="id_delete_sel" value="Suppr. selection"/>
+			<string id="id_editarray" value="Échelle de couleurs"/>
+			<string id="id_editarraycol0" value="Borne sup."/>
+			<string id="id_editarraycol1" value="Couleur"/>
+			<string id="id_editarrayInfinity" value="et plus"/>
+			<string id="id_reset" value="Palette par défaut"/>
+			<string id="id_lookuptableview" value="Visualisation"/>
+			<string id="id_saveload" value="Fichier"/>
+			<string id="id_load" value="Importer"/>
+			<string id="id_save" value="Exporter"/>
+			<string id="id_export_ok" value="L'élément a été correctement exporté dans le fichier : '%1'"/>
+			<string id="id_export_failed" value="L'élément n'a pas pu être exporté dans le fichier : '%1'"/>
+			<string id="id_file_exist" value="Le nom de fichier sélectionné existe déja. Désirez vous l'écraser ?"/>
+			<string id="id_file_cannot_be_clear" value="Le fichier ne peut pas être écrasé"/>
+			<string id="id_import_ok" value="L'élément a été correctement importé depuis le fichier : '%1'"/>
+			<string id="id_import_failed" value="L'élément n'a pas pu être importé depuis le fichier : '%1'"/>
+			<string id="id_linear" value="Créer palette linéaire"/>
+		</message>
+	</class>
+	<class name="TYParoiWidget">
+		<message>
+			<string id="id_epaisseur_label" value="Epaisseur"/>
+			<string id="id_unite_epaisseur" value="m"/>
+			<string id="id_orientation" value="Orientation"/>
+			<string id="id_matstruct" value="Isolement brut (valeur absolue)"/>
+			<string id="id_matface1" value="Absorption Sabine face intérieure"/>
+			<string id="id_matface2" value="Absorption Sabine face extérieure"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_get_from_bdd" value="Import BDD"/>
+			<string id="id_get_from_xml" value="Import XML"/>
+		</message>
+	</class>
+	<class name="TYDalleWidget">
+		<message>
+			<string id="id_polygon" value="Forme"/>
+			<string id="id_paroi" value="Paroi"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_useEtage_label" value="Paroi par défaut de l'étage"/>
+		</message>
+	</class>
+	<class name="TYRouteWidget">
+		<message>
+			<string id="id_vitmoy_label" value="Vitesse moyenne"/>
+			<string id="id_traficjour" value="Trafic de jour"/>
+			<string id="id_traficnuit" value="Trafic de nuit"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_fluide" value="Trafic fluide"/>
+			<string id="id_pulse" value="Trafic pulsé"/>
+			<string id="id_unite_vitessemoyenne" value="km/h"/>
+			<string id="id_debitvl_label" value="Debit VL"/>
+			<string id="id_debitpl_label" value="Debit PL"/>
+			<string id="id_unite_debit" value="v/h"/>
+		</message>
+	</class>
+	<class name="TYRouteDeblaiWidget">
+		<message>
+			<string id="id_vitmoyvl_label" value="Vitesse moyenne VL"/>
+			<string id="id_traficjour" value="Trafic de jour"/>
+			<string id="id_traficnuit" value="Trafic de nuit"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_fluide" value="Trafic fluide"/>
+			<string id="id_pulse" value="Trafic pulsé"/>
+			<string id="id_unite_vitessemoyenne" value="km/h"/>
+			<string id="id_debitvl_label" value="Debit VL"/>
+			<string id="id_debitpl_label" value="Debit PL"/>
+			<string id="id_unite_debit" value="v/h"/>
+		</message>
+	</class>
+	<class name="TYReseauTransportWidget">
+		<message>
+			<string id="id_nbbrins_label" value="Nombre de brins"/>
+			<string id="id_tension_label" value="Tension"/>
+			<string id="id_unite_tension" value="V"/>
+			<string id="id_puissance_label" value="Puissance"/>
+			<string id="id_unite_puissance" value="W"/>
+			<string id="id_hautmoy_label" value="Hauteur moyenne"/>
+			<string id="id_unite_hauteurmoyenne" value="m"/>
+		</message>
+	</class>
+	<class name="TYAltimetrieWidget">
+		<message>
+			<string id="id_sol" value="Sol"/>
+			<string id="id_tabpolygon_box" value="Faces"/>
+			<string id="id_polygon" value="Face"/>
+			<string id="id_tabpolygon" value="Liste des faces"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYTerrainWidget">
+		<message>
+			<string id="id_geometrie" value="Geométrie"/>
+			<string id="id_sol" value="Sol"/>
+			<string id="id_tabpt_box" value="Points"/>
+			<string id="id_point" value="Point"/>
+			<string id="id_x" value="X"/>
+			<string id="id_y" value="Y"/>
+			<string id="id_z" value="Z"/>
+			<string id="id_tabpt" value="Liste des points"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYPlanEauWidget">
+		<message>
+			<string id="id_altitude_label" value="Altitude"/>
+			<string id="id_unite_altitude" value="m"/>
+			<string id="id_distmax_label" value="distance max entre 2 points"/>
+			<string id="id_use_default_label" value="utiliser distance par défaut"/>
+			<string id="id_default_button" value="Défaut"/>
+		</message>
+	</class>
+	<class name="TYCourbeNiveauWidget">
+		<message>
+			<string id="id_altitude_label" value="Altitude"/>
+			<string id="id_unite_altitude" value="m"/>
+			<string id="id_distmax_label" value="distance max entre 2 points"/>
+			<string id="id_use_default_label" value="utiliser distance par défaut"/>
+			<string id="id_default_button" value="Défaut"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_tabpt_box" value="Points"/>
+			<string id="id_point" value="Point"/>
+			<string id="id_x" value="X"/>
+			<string id="id_y" value="Y"/>
+			<string id="id_z" value="Z"/>
+			<string id="id_tabpt" value="Liste des points"/>
+		</message>
+	</class>
+	<class name="TYCoursEauWidget">
+		<message>
+			<string id="id_type_label" value="Type"/>
+			<string id="id_spectreatt" value="Spectre d'atténuation"/>
+			<string id="id_tabpt_box" value="Points"/>
+			<string id="id_point" value="Point"/>
+			<string id="id_tabpt" value="Liste des points"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYInfrastructureWidget">
+		<message>
+			<string id="id_tabmachinerepere_box" value="Machines"/>
+			<string id="id_machine" value="Machine"/>
+			<string id="id_tabbatimentrepere_box" value="Constructions"/>
+			<string id="id_batiment" value="Constructions"/>
+			<string id="id_tabrestransprepere_box" value="Réseaux électriques"/>
+			<string id="id_restransp" value="Réseau électrique"/>
+			<string id="id_tabrouterepere_box" value="Routes"/>
+			<string id="id_route" value="Route"/>
+			<string id="id_route_deblai" value="Route"/>
+			<string id="id_tabsource_box" value="Sources"/>
+			<string id="id_source" value="Source"/>
+			<string id="id_property" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYSiteNodeWidget">
+		<message>
+			<string id="id_caption" value="Site"/>
+			<string id="id_root_label" value="Racine"/>
+			<string id="id_tabsiterepere_box" value="Sites"/>
+			<string id="id_tabsiterepere" value="Liste des sites"/>
+			<string id="id_site" value="Site"/>
+			<string id="id_repere" value="Repère"/>
+			<string id="id_property" value="Propriétés"/>
+			<string id="id_emprise_label" value="Utiliser l'emprise comme courbe de niveau"/>
+			<string id="id_alti_emprise" value="Altitude de l'emprise"/>
+			<string id="id_SIG" value="Système d'information géographique"/>
+			<string id="id_system_coord" value="Repère"/>
+			<string id="id_SIG_X" value="X"/>
+			<string id="id_SIG_Y" value="Y"/>
+			<string id="id_echelle_label" value="Echelle"/>
+			<string id="id_unite_echelle" value=""/>
+			<string id="id_topofile_label" value="Image de fond"/>
+			<string id="id_infra" value="Infrastructure"/>
+			<string id="id_topo" value="Topographie"/>
+			<string id="id_tabsrc_box" value="Sources"/>
+			<string id="id_src" value="Source"/>
+			<string id="id_tabsrc" value="Liste des sources"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_use_topo_file" value="Image de fond"/>
+			<string id="id_select_topo_file" value="Parcourir..."/>
+		</message>
+	</class>
+	<class name="TYTopographieWidget">
+		<message>
+			<string id="id_altimetrie" value="Altimetrie"/>
+			<string id="id_terraindef" value="Terrain par défault"/>
+			<string id="id_tabcrseaurepere_box" value="Cours d'eau"/>
+			<string id="id_crseau" value="Cours d'eau"/>
+			<string id="id_tabplaneaurepere_box" value="Plan d'eau"/>
+			<string id="id_planeau" value="Plan d'eau"/>
+			<string id="id_tabcrbnivrepere_box" value="Courbes de niveau"/>
+			<string id="id_crbniv" value="Courbe"/>
+			<string id="id_tabterrainrepere_box" value="Terrains"/>
+			<string id="id_terrain" value="Terrain"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_property" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYMaillageWidget">
+		<message>
+			<string id="id_valeurs" value="Valeurs"/>
+			<string id="id_datavalmin" value="Valeur (en dB) Min"/>
+			<string id="id_datavalmax" value="Max"/>
+			<string id="id_hauteur" value="Hauteur"/>
+			<string id="id_unite_hauteur" value="m"/>
+			<string id="id_nbpoint" value="Nombre de points"/>
+			<string id="id_datatype" value="Type des données"/>
+			<string id="id_palette" value="Palette"/>
+			<string id="id_dba" value="dBA"/>
+			<string id="id_dblin" value="dBZ"/>
+			<string id="id_datafreq" value="Fréquence"/>
+			<string id="id_edit_palette" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYLinearMaillageWidget">
+		<message>
+			<string id="id_longueur" value="Longueur (m)"/>
+			<string id="id_segment" value="Segment"/>
+			<string id="id_densite" value="Densité"/>
+			<string id="id_densite_unit" value="Points/m"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYBoundaryNoiseMapWidget">
+		<message>
+			<string id="id_polyline" value="Polyligne"/>
+			<string id="id_density" value="Densité"/>
+			<string id="id_density_unit" value="Points/m"/>
+			<string id="id_thickness" value="Epaisseur"/>
+			<string id="id_closed" value="Polyligne fermée"/>
+			<string id="id_properties_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYRectangularMaillageWidget">
+		<message>
+			<string id="id_surface" value="Surface (m²)"/>
+			<string id="id_rectangle" value="Rectangle"/>
+			<string id="id_densite_x" value="Densité en X"/>
+			<string id="id_densite_y" value="Densité en Y"/>
+			<string id="id_densite_unit" value="points/m"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+		</message>
+	</class>
+	<class name="TYPointCalculWidget">
+		<message>
+			<string id="id_spectre" value="Spectre"/>
+			<string id="id_spectre_calcul" value="Calcul concerné"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_etat" value="Etat"/>
+			<string id="id_actif" value="Actif"/>
+			<string id="id_inactif" value="Inactif"/>
+			<string id="id_locked" value="Bloqué"/>
+			<string id="id_showresultattreedialog_button" value="Voir les contributions de puissance..."/>
+		</message>
+	</class>
+	<class name="TYPointControlWidget">
+		<message>
+			<string id="id_hauteur" value="Hauteur"/>
+			<string id="id_objet_label" value="Forme"/>
+			<string id="id_objet_cube" value="Cube"/>
+			<string id="id_objet_pyramide" value="Pyramide"/>
+			<string id="id_objet_sphere" value="Sphère"/>
+			<string id="id_objet_etoile" value="Etoile"/>
+			<string id="id_SIG" value="Système d'information géographique"/>
+			<string id="id_repere" value="Repère"/>
+			<string id="id_choixSIG" value="Choix SIG"/>
+			<string id="id_tympan" value="Code_TYMPAN"/>
+			<string id="id_sigle_SIG" value="SIG"/>
+		</message>
+	</class>
+	<class name="TYProjetWidget">
+		<message>
+			<string id="id_auteur_label" value="Auteur"/>
+			<string id="id_comment_label" value="Commentaires"/>
+			<string id="id_datecreation_label" value="Date de création"/>
+			<string id="id_datemodif_label" value="Date de modification"/>
+			<string id="id_site" value="Site"/>
+			<string id="id_curcalcul" value="Calcul courant"/>
+			<string id="id_proprietes_button" value="Propriétés"/>
+			<string id="id_tabcalcul_box" value="Calculs"/>
+			<string id="id_tabCalcul_box" value="Liste des calculs"/>
+			<string id="id_calcul" value="Calcul"/>
+			<string id="id_property" value="Propriétés"/>
+			<string id="id_distMax_label" value="Seuil de distance minimale entre deux points"/>
+			<string id="id_delaunay_label" value="Tolérence pour la triangulation de Delaunay"/>
+			<string id="id_useDefault_label" value="Utiliser les préférences utilisateur"/>
+			<string id="id_default_button" value="Défaut"/>
+		</message>
+	</class>
+	<class name="TYCalculWidget">
+		<message>
+			<string id="id_auteur_label" value="Auteur"/>
+			<string id="id_comment_label" value="Commentaires"/>
+			<string id="id_datecreation_label" value="Date de création"/>
+			<string id="id_datemodif_label" value="Date de modification"/>
+			<string id="id_num_label" value="Numéro"/>
+			<string id="id_usesol_reel_label" value="Sol réel"/>
+			<string id="id_usesol_refl_label" value="Sol réflechissant"/>
+			<string id="id_sol_local" value="Local"/>
+			<string id="id_sol_etendu" value="Etendu"/>
+			<string id="id_label_sol_calc" value="Type de calcul"/>
+			<string id="id_nb_sol_calc" value="2"/>
+			<string id="id_sol_calc0" value="Sol local"/>
+			<string id="id_sol_calc1" value="Sol moyen"/>
+			<string id="id_type_calcul_trajet" value="Type de calcul des trajets"/>
+			<string id="id_calcul_energetique" value="Calcul énergétique"/>
+			<string id="id_calcul_interference" value="Calcul interférences"/>
+			<string id="id_calc_method_label" value="Méthode de calcul"/>
+			<string id="id_nb_calc_method" value="2"/>
+			<string id="id_calc_method0" value="Code_TYMPAN 3.3"/>
+			<string id="id_calc_method1" value="HARMONOISE"/>
+			<string id="id_useatmosphere_label" value="Atmosphère"/>
+			<string id="id_usevegetation_label" value="Végétation"/>
+			<string id="id_useecran_label" value="Ecran"/>
+			<string id="id_parcours_lateraux" value="Diffractions latérales"/>
+			<string id="id_usereflexion_label" value="Réflexion"/>
+			<string id="id_interference_label" value="Interférence"/>
+			<string id="id_distancesrmin" value="Distance [SR] minimale"/>
+			<string id="id_paramh_label" value="h1 (Conditions favorables -ISO 9613-)"/>
+			<string id="id_expansgeo_label" value="Expansion géométrique"/>
+			<string id="id_condfav_label" value="Conditions favorables"/>
+			<string id="id_condhomo_label" value="Conditions homogènes"/>
+			<string id="id_atmosphere" value="Atmosphère"/>
+			<string id="id_resultat" value="Résultat"/>
+			<string id="id_maillage" value="Récepteurs surfaciques"/>
+			<string id="id_map_box" value="Etats"/>
+			<string id="id_sources" value="Listes des sources"/>
+			<string id="id_parois" value="Liste des parois"/>
+			<string id="id_atts" value="Liste des atténuateurs"/>
+			<string id="id_use" value="OK"/>
+			<string id="id_etat" value="Active"/>
+			<string id="id_proprietes" value="Propriétés"/>
+			<string id="id_activer" value="Activer"/>
+			<string id="id_desactiver" value="Desactiver"/>
+			<string id="id_etat_batiment" value="Constructions"/>
+			<string id="id_etat_machine" value="Machines"/>
+			<string id="id_etat_source" value="Sources"/>
+			<string id="id_etat_source_lin" value="Routes/Réseaux"/>
+			<string id="id_etat_calcul" value="Etat calcul"/>
+			<string id="id_actif" value="Calculé"/>
+			<string id="id_locked" value="Mesuré"/>
+			<string id="id_nom" value="Nom"/>
+			<string id="id_emission" value="Emission"/>
+			<string id="id_attenuateur" value="Atténuateur"/>
+			<string id="id_regime" value="Régime"/>
+			<string id="id_reflexion" value="Réflexion"/>
+			<string id="id_pts_ctrl" value="Récepteur ponctuel"/>
+			<string id="id_new_linear_maillage" value="Nouveau récepteur linéaire"/>
+			<string id="id_new_rectangular_maillage" value="Nouveau récepteur surfacique rectangulaire"/>
+			<string id="id_del_maillage" value="Supprimer"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+			<string id="id_freqmin" value="Fréquence minimale"/>
+			<string id="id_freqmax" value="Fréquence maximale"/>
+			<string id="id_typeexpans_2pi" value="2pi"/>
+			<string id="id_typeexpans_4pi" value="4pi"/>
+			<string id="id_opt_calc" value="Paramètres"/>
+			<string id="id_opt_meteo" value="Météo"/>
+			<string id="id_info_calc" value="Infos"/>
+			<string id="id_nom_pc" value="Nom"/>
+			<string id="id_pos_x" value="X"/>
+			<string id="id_pos_y" value="Y"/>
+			<string id="id_pos_h" value="H"/>
+			<string id="id_actif" value="Actif"/>
+			<string id="id_opt_pc" value="Récepteurs ponctuels"/>
+			<string id="id_opt_maillage" value="Récepteurs surfaciques"/>
+			<string id="id_cell_posx" value="%1"/>
+			<string id="id_cell_posy" value="%1"/>
+			<string id="id_cell_posh" value="%1"/>
+			<string id="id_popup_select_all" value="Tout sélectionner"/>
+			<string id="id_popup_unselect_all" value="Tout désélectionner"/>
+			<string id="id_storeglobalmatrix_label" value="Conserver les résultats partiels"/>
+			<string id="id_etat_title" value="Etats"/>
+		</message>
+	</class>
+	<class name="TYResultatWidget">
+		<message>
+			<string id="id_radiobutton_db_a" value="dBA"/>
+			<string id="id_radiobutton_db_lin" value="dBZ"/>
+			<string id="id_radiobutton_db_freq" value="dB(f)"/>
+			<string id="id_radiobutton_noop" value="Pas d'operation"/>
+			<string id="id_radiobutton_delta" value="Différence"/>
+			<string id="id_radiobutton_emergence" value="Emergence"/>
+			<string id="id_radiobutton_ambiant" value="Bruit ambiant"/>
+			<string id="id_subst_calcul_none" value="Aucun"/>
+			<string id="id_subst_calcul" value="Calcul à comparer"/>
+			<string id="id_button_quit" value="Quitter"/>
+			<string id="id_cell_dblin" value="%1"/>
+			<string id="id_cell_dba" value="%1"/>
+			<string id="id_cell_na" value="NA"/>
+			<string id="id_export_global" value="Export EXCEL(CSV)"/>
+			<string id="id_export_spectres" value="Export spectres (CSV)"/>
+			<string id="id_print" value="Imprimer"/>
+			<string id="id_popup_see_source" value="Voir Source"/>
+			<string id="id_popup_see_recepteur" value="Voir Récepteur"/>
+			<string id="id_popup_see_spectre" value="Voir Spectre"/>
+			<string id="id_popup_see_contrib" value="Voir contributions"/>
+			<string id="id_popup_send_spectre" value="Ajouter au Gestionnaire de Spectres"/>
+			<string id="id_entete_synthese" value="Synthèse"/>
+			<string id="id_label_contribution" value="Seuil de contribution en dB :"/>
+		</message>
+	</class>
+	<class name="DisplayName">
+		<message>
+			<string id="TYElement" value="Elément"/>
+			<string id="TYAcousticSurface" value="Surface acoustique"/>
+			<string id="TYAcousticCircle" value="Cercle acoustique"/>
+			<string id="TYAcousticRectangle" value="Sous-face"/>
+			<string id="TYBoucheSurface" value="Bouche de ventilation"/>
+			<string id="TYChemineeSurface" value="Cheminée"/>
+			<string id="TYMurElement" value="Fenêtre"/>
+			<string id="TYAcousticSemiCircle" value="Demi-cercle acoustique"/>
+			<string id="TYAcousticPolygon" value="Polygone acoustique"/>
+			<string id="TYAcousticSurfaceNode" value="Face"/>
+			<string id="TYAcousticRectangleNode" value="Face"/>
+			<string id="TYMur" value="Mur"/>
+			<string id="TYAcousticVolume" value="Volume acoustique"/>
+			<string id="TYAcousticBox" value="Boîte acoustique"/>
+			<string id="TYAcousticCylinder" value="Cylindre acoustique"/>
+			<string id="TYAcousticSemiCylinder" value="Demi-cylindre acoustique"/>
+			<string id="TYEtage" value="Etage"/>
+			<string id="TYAcousticVolumeNode" value="Ensemble de volumes"/>
+			<string id="TYBatiment" value="Construction"/>
+			<string id="TYMachine" value="Machine"/>
+			<string id="TYAltimetrie" value="Altimétrie"/>
+			<string id="TYAttenuateur" value="Atténuateur"/>
+			<string id="TYBox" value="Boîte"/>
+			<string id="TYCalcul" value="Calcul"/>
+			<string id="TYCourbeNiveau" value="Courbe de niveau"/>
+			<string id="TYDirectivite" value="Directivité"/>
+			<string id="TYGeometryNode" value="Noeud de géométrie"/>
+			<string id="TYInfrastructure" value="Infrastructure"/>
+			<string id="TYMaillage" value="Récepteur surfacique"/>
+			<string id="TYRectangularMaillage" value="Récepteur surfacique rectangulaire"/>
+			<string id="TYLinearMaillage" value="Récepteur linéaire"/>
+			<string id="TYBoundaryNoiseMap" value="Récepteur accoustique"/>
+			<string id="TYMateriauConstruction" value="Matériau de construction"/>
+			<string id="TYPalette" value="Palette"/>
+			<string id="TYParoi" value="Paroi"/>
+			<string id="TYPoint" value="Point"/>
+			<string id="TYPointCalcul" value="Point de calcul"/>
+			<string id="TYPointControl" value="Récepteur ponctuel"/>
+			<string id="TYPolygon" value="Polygone"/>
+			<string id="TYDalle" value="Dalle"/>
+			<string id="TYProjet" value="Projet"/>
+			<string id="TYRectangle" value="Rectangle"/>
+			<string id="TYRepere" value="Repère"/>
+			<string id="TYResultat" value="Résultat"/>
+			<string id="TYSegment" value="Segment"/>
+			<string id="TYSite" value="Site"/>
+			<string id="TYSiteNode" value="Site"/>
+			<string id="TYSol" value="Sol"/>
+			<string id="TYSource" value="Source"/>
+			<string id="TYSourceLineic" value="Source linéique"/>
+			<string id="TYSourcePonctuelle" value="Source ponctuelle"/>
+			<string id="TYUserSourcePonctuelle" value="Source ponctuelle"/>
+			<string id="TYSourceBafflee" value="Source bafflée"/>
+			<string id="TYSourceCheminee" value="Source cheminée"/>
+			<string id="TYSourceSurfacic" value="Source surfacique"/>
+			<string id="TYAcousticLine" value="Ligne acoustique"/>
+			<string id="TYCoursEau" value="Cours d'eau"/>
+			<string id="TYReseauTransport" value="Réseau électrique"/>
+			<string id="TYRoute" value="Route"/>
+			<string id="TYRouteDeblai" value="Route Déblai"/>
+			<string id="TYSpectre" value="Spectre"/>
+			<string id="TYTerrain" value="Terrain"/>
+			<string id="TYPlanEau" value="Plan d'eau"/>
+			<string id="TYTopographie" value="Topographie"/>
+			<string id="TYTrafic" value="Trafic"/>
+			<string id="TYVegetation" value="Végétation"/>
+			<string id="TYAtmosphere" value="Atmosphère"/>
+			<string id="TYEcran" value="Ecran mince"/>
+			<string id="TYAcousticFaceSet" value="Objet facétisé acoustique"/>
+			<string id="TYFaceSet" value="Objet facétisé"/>
+			<string id="TYRegime" value="Régime"/>
+			<string id="TYScalarBar" value="Barre de légende"/>
+			<string id="TYUserSrcRegime" value="Régime"/>
+		</message>
+	</class>
+	<class name="TYPositionDialog">
+		<message>
+			<string id="id_caption" value="Position"/>
+			<string id="id_x_label" value="X"/>
+			<string id="id_y_label" value="Y"/>
+			<string id="id_z_label" value="Z"/>
+			<string id="id_h_label" value="H"/>
+			<string id="id_ok_btn" value="Valider"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+		</message>
+	</class>
+	<class name="TYRotationDialog">
+		<message>
+			<string id="id_caption" value="Rotation"/>
+			<string id="id_x_label" value="X"/>
+			<string id="id_y_label" value="Y"/>
+			<string id="id_z_label" value="Z"/>
+			<string id="id_concatenate_checkbox" value="Concaténer les rotations"/>
+			<string id="id_ok_btn" value="Valider"/>
+			<string id="id_cancel_btn" value="Annuler"/>
+		</message>
+	</class>
+	<class name="TYElementGraphic">
+		<picture>
+			<image id="id_font" value="fonts/TimesNewRoman_10pt_standard.glf"/>
+		</picture>
+	</class>
+	<class name="TYAltimetrieGraphic">
+		<picture>
+			<image id="id_terrain_0" value="textures/terrain0.bmp"/>
+			<image id="id_terrain_1" value="textures/terrain1.bmp"/>
+			<image id="id_terrain_2" value="textures/terrain2.bmp"/>
+			<image id="id_terrain_3" value="textures/terrain3.bmp"/>
+			<image id="id_terrain_4" value="textures/terrain4.bmp"/>
+			<image id="id_terrain_5" value="textures/terrain5.bmp"/>
+			<image id="id_terrain_6" value="textures/terrain6.bmp"/>
+			<image id="id_terrain_7" value="textures/terrain7.bmp"/>
+			<image id="id_terrain_8" value="textures/terrain8.bmp"/>
+			<image id="id_terrain_9" value="textures/terrain9.bmp"/>
+		</picture>
+	</class>
+	<class name="TYTerrainGraphic">
+		<picture>
+			<image id="id_terrain_0" value="textures/terrain0.bmp"/>
+			<image id="id_terrain_1" value="textures/terrain1.bmp"/>
+			<image id="id_terrain_2" value="textures/terrain2.bmp"/>
+			<image id="id_terrain_3" value="textures/terrain3.bmp"/>
+			<image id="id_terrain_4" value="textures/terrain4.bmp"/>
+			<image id="id_terrain_5" value="textures/terrain5.bmp"/>
+			<image id="id_terrain_6" value="textures/terrain6.bmp"/>
+			<image id="id_terrain_7" value="textures/terrain7.bmp"/>
+			<image id="id_terrain_8" value="textures/terrain8.bmp"/>
+			<image id="id_terrain_9" value="textures/terrain9.bmp"/>
+		</picture>
+	</class>
+	<class name="TYPaletteGraphic">
+		<picture>
+			<image id="id_font" value="fonts/TimesNewRoman_10pt_standard.glf"/>
+		</picture>
+	</class>
+	<class name="TYPanelGraphic">
+		<picture>
+			<image id="id_font" value="fonts/TimesNewRoman_10pt_standard.glf"/>
+		</picture>
+	</class>
+	<class name="TYAbstractSceneEditor">
+		<picture>
+			<image id="id_font" value="fonts/TimesNewRoman_10pt_standard.glf"/>
+		</picture>
+	</class>
+	<class name="TYRenderWindow">
+		<picture>
+			<image id="id_font" value="fonts/TimesNewRoman_10pt_standard.glf"/>
+		</picture>
+	</class>
+	<class name="TYConsole">
+		<message>
+			<string id="id_option_error" value="Option inconnue"/>
+			<string id="id_arg_error" value="Argument manquant"/>
+			<string id="id_console_help0" value="Utilisation : "/>
+			<string id="id_console_help1" value="  TympanConsole.exe [-h (--help)]|[-i (--input) FileData.xml [-o (--output) FileResults.xml] [-s (--solver) NameSolver]]"/>
+			<string id="id_console_help2" value="  -h (--help) : Affichage de l'aide"/>
+			<string id="id_console_help3" value="  -i (--input) FileData.xml : Fichier d'entree"/>
+			<string id="id_console_help4" value="  -o (--output) FileResults.xml (optionnel) : Fichier de data modifie avec les resultats (par defaut modification de FileData.xml)."/>
+			<string id="id_console_help5" value="  -s (--solver) NameSolver (optionnel) : Solver utilise (par defaut : defaultSolver)."/>
+			<string id="id_console_help_help" value="Affichage de l'aide"/>
+			<string id="id_console_input_help" value="Fichier d'entree"/>
+			<string id="id_console_output_help" value="Fichier de sortie"/>
+			<string id="id_console_solver_help" value="Nom du solver"/>
+			<string id="id_open_error" value="Impossible d'ouvrir le fichier"/>
+			<string id="id_plugins_error" value="Impossible de charger les plugins"/>
+			<string id="id_plugin_error" value="Plugin inexistant"/>
+			<string id="id_input_error" value="Fichier d'entree manquant [-i (--input) fichier]"/>
+			<string id="id_project_error" value="Fichier d'entree invalide : projet manquant"/>
+			<string id="id_calcul_error" value="Fichier d'entree invalide : calcul manquant"/>
+			<string id="id_go_calcul" value="Lancement du calcul..."/>
+			<string id="id_calcul_done" value="Calcul termine."/>
+			<string id="id_calcul_failed" value="Le calcul a echoue!"/>
+		</message>
+	</class>
+	<class name="TYSetCameraCoordinates">
+		<message>
+			<string id="id_caption" value="Coordonnées de la caméra"/>
+			<string id="id_maintext" value="Choisir les coordonnées de la caméra :"/>
+			<string id="id_coordX" value="Coordonnée X :"/>
+			<string id="id_coordY" value="Coordonnée Y :"/>
+			<string id="id_coordZ" value="Coordonnée Z :"/>
+			<string id="id_oktext" value="OK"/>
+			<string id="id_canceltext" value="Annuler"/>
+		</message>
+	</class>
+</RESSOURCE>
