@@ -50,9 +50,9 @@ void TYTask::main()
 
     // Recupere les pointeur sur la source ponctuelle et le point de calcul
 	TYSourcePonctuelle* pSrc = NULL;
-	if (pSrcGeoNode) { pSrc = TYSourcePonctuelle::safeDownCast(pSrcGeoNode->getElement()); }
+	if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
 
-    TYPointCalcul* pPointCalc = TYPointCalcul::safeDownCast(_trajet.getPointCalcul()->getElement());
+    TYPointCalcul* pPointCalc = dynamic_cast<TYPointCalcul*>(_trajet.getPointCalcul()->getElement());
 	if ( !(pSrc && pPointCalc) ) { return; }
 
     // Construction du rayon SR

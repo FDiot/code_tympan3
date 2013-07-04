@@ -156,7 +156,8 @@ void TYAcousticModel::compute(const TYSIntersection* tabIntersect, const OSegmen
 
 void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const
 {
-    TYSourcePonctuelle* pSrc = TYSourcePonctuelle::safeDownCast(pSrcGeoNode->getElement());
+    TYSourcePonctuelle* pSrc = NULL;
+	if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
 
     TYTabEtape tabEtapes;
 
@@ -169,7 +170,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const TYSource
     TYChemin chemin1;
 
     etape1._pt = rayon._ptA;
-    etape1._Absorption = pSrc->lwApparenteSrcDest(rayon * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo);
+	if (pSrc) { etape1._Absorption = pSrc->lwApparenteSrcDest(rayon * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo); }
 
     chemin1.setType(CHEMIN_DIRECT);
 
@@ -211,7 +212,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const TYSource
     double rr = seg1.longueur();
 
     // Directivite de la source
-    etape2._Absorption = pSrc->lwApparenteSrcDest(seg1 * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo);
+	if (pSrc) { etape2._Absorption = pSrc->lwApparenteSrcDest(seg1 * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo); }
 
     tabEtapes.push_back(etape2); // Ajout de l'etape avant reflexion
 
@@ -259,8 +260,8 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const TYSo
         ET DE UN (CONDITIONS NORMALES) A TROIS (CONDITIONS FAVORABLES) TRAJETS
         REFLECHIS
     */
-
-    TYSourcePonctuelle* pSrc = TYSourcePonctuelle::safeDownCast(pSrcGeoNode->getElement());
+	TYSourcePonctuelle* pSrc = NULL;
+	if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
     TYTerrain* pTerrain = NULL;
     TYSol* pSol = NULL;
 
@@ -373,7 +374,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const TYSo
 
             rr = seg.longueur();  // Longueur du chemin reflechi
 
-            etape._Absorption = pSrc->lwApparenteSrcDest(rayon * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo);
+			if (pSrc) { etape._Absorption = pSrc->lwApparenteSrcDest(rayon * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo); }
 
             tabEtapes.push_back(etape);
 
@@ -434,7 +435,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const TYSo
             seg = OSegment3D(rayon._ptA, ptReflex);
             rr = seg.longueur(); // Longueur du chemin reflechi
 
-            etape._Absorption = pSrc->lwApparenteSrcDest(rayon * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo);
+			if (pSrc) { etape._Absorption = pSrc->lwApparenteSrcDest(rayon * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo); }
 
             tabEtapes.push_back(etape);
 
@@ -478,7 +479,8 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const TYSo
 
 void TYAcousticModel::computeCheminAvecVeg(const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, const OSegment3D& penteMoyenne, TYTabChemin& TabChemin, double distance) const
 {
-    TYSourcePonctuelle* pSrc = TYSourcePonctuelle::safeDownCast(pSrcGeoNode->getElement());
+	TYSourcePonctuelle* pSrc = NULL;
+	if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
     double longueur = 0.0;
     OSegment3D seg;
 
@@ -501,7 +503,7 @@ void TYAcousticModel::computeCheminAvecVeg(const OSegment3D& rayon, const TYSour
     TYEtape Etape;
 
     Etape._pt = rayon._ptA;
-    Etape._Absorption = pSrc->lwApparenteSrcDest(rayon * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo);
+	if (pSrc) { Etape._Absorption = pSrc->lwApparenteSrcDest(rayon * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo); }
 
     // On rentre dans la foret, loup y es tu ?
     OPoint3D ext;
@@ -840,7 +842,8 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
        ========================================================================================= */
     bool res = true;
 
-    TYSourcePonctuelle* pSrc = TYSourcePonctuelle::safeDownCast(pSrcGeoNode->getElement());
+	TYSourcePonctuelle* pSrc = NULL;
+	if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
 
     TYSol* pSol = NULL;
 
@@ -852,7 +855,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
     // === CONSTRUCTION DU TRAJET DIRECT ptDebut-ptFin
     EtapeCourante._pt = ptDebut;
 
-    if (fromSource == true) // Si on part d'une source, on tient compte de la directivite de celle-ci
+    if ( fromSource && pSrc ) // Si on part d'une source, on tient compte de la directivite de celle-ci
     {
         EtapeCourante._Absorption = pSrc->lwApparenteSrcDest(segDirect * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo);
     }
@@ -957,7 +960,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
 
         rr = seg.longueur();
 
-        if (fromSource == true) // Si on part d'une source, on tient compte de la directivite de celle-ci
+        if ( fromSource && pSrc ) // Si on part d'une source, on tient compte de la directivite de celle-ci
         {
             EtapeCourante._Absorption = pSrc->lwApparenteSrcDest(seg * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo); // Directivite de la source
         }
@@ -1049,9 +1052,10 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
 
 void TYAcousticModel::computeCheminReflexion(const TYSIntersection* tabIntersect, const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const
 {
-    if (! _useReflex) { return; }
+    if (!_useReflex) { return; }
 
-    TYSourcePonctuelle* pSrc = TYSourcePonctuelle::safeDownCast(pSrcGeoNode->getElement());
+    TYSourcePonctuelle* pSrc = NULL;
+	if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
     //  int expGeo = _pCalcul->getExpansGeo();
 
     OSegment3D segInter;
@@ -1129,7 +1133,7 @@ void TYAcousticModel::computeCheminReflexion(const TYSIntersection* tabIntersect
                 rayonTmp = rayon * SI.matInv;
 
                 pSurfaceGeoNode = SI.pSurfGeoNode;
-                pSurface = TYAcousticSurface::safeDownCast(pSurfaceGeoNode->getElement());
+				if (pSurfaceGeoNode) { pSurface = dynamic_cast<TYAcousticSurface*>(pSurfaceGeoNode->getElement()); }
 
                 if (pSurface == NULL) { continue; } // Si la face n'est pas d'infrastructure on passe a la suivante
 
@@ -1140,7 +1144,8 @@ void TYAcousticModel::computeCheminReflexion(const TYSIntersection* tabIntersect
 					SpectreAbso = SpectreAbso.mult(-1.0).sum(1.0); // coeff reflex = 1 - coefAbso
 				}
 
-                TYAcousticCylinder* pCyl = TYAcousticCylinder::safeDownCast(SI.pSurfGeoNode->getParent());
+				TYAcousticCylinder* pCyl = NULL;
+				if (pSurfaceGeoNode) { pCyl = dynamic_cast<TYAcousticCylinder*>(pSurfaceGeoNode->getParent()); }
 
                 //
                 // Reflexion sur un cylindre, d'apres ISO9613-2
@@ -1164,7 +1169,7 @@ void TYAcousticModel::computeCheminReflexion(const TYSIntersection* tabIntersect
 
                 TYEtape Etape;
                 Etape._pt = rayon._ptA;
-                Etape._Absorption = pSrc->lwApparenteSrcDest(segMontant * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo);
+				if (pSrc) { Etape._Absorption = pSrc->lwApparenteSrcDest(segMontant * pSrcGeoNode->getMatrix().getInvert(), *_pAtmo, _expGeo); }
 
                 tabEtapes.push_back(Etape);
 
@@ -1352,7 +1357,9 @@ void TYAcousticModel::addCheminDirectToTrajet(const TYTabChemin& TabChemin, TYTr
 
 bool TYAcousticModel::solve(TYTrajet& trajet)
 {
-    TYSourcePonctuelle* pSrc = TYSourcePonctuelle::safeDownCast(trajet.getSourcePonctuelle()->getElement());
+    TYSourcePonctuelleGeoNode *pSrcGeoNode = trajet.getSourcePonctuelle();
+	TYSourcePonctuelle* pSrc = NULL;
+	if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
 
 
     const double PIM4 = 4.0 * M_PI;
@@ -1395,11 +1402,11 @@ bool TYAcousticModel::solve(TYTrajet& trajet)
 TYMateriauConstruction* TYAcousticModel::getMateriauFace(TYAcousticSurface* pSurf, const OSegment3D& seg) const
 {
     TYMateriauConstruction* mat = NULL;
-    TYMurElement* pMurElem = TYMurElement::safeDownCast(pSurf);
+    TYMurElement* pMurElem = dynamic_cast<TYMurElement*>(pSurf);
 
-    if (pMurElem != NULL) // Cas d'une face de bi¿½timent ou d'un ecran
+    if (pMurElem) // Cas d'une face de bi¿½timent ou d'un ecran
     {
-        TYMur* pMur = TYMur::safeDownCast(pMurElem->getParent());
+        TYMur* pMur = dynamic_cast<TYMur*>(pMurElem->getParent());
 
         OVector3D normale = pSurf->normal();
         OVector3D rayon(seg._ptA, seg._ptB);
@@ -1417,12 +1424,13 @@ TYMateriauConstruction* TYAcousticModel::getMateriauFace(TYAcousticSurface* pSur
     {
         TYElement* pParentSurface = pSurf->getParent();
         TYAcousticVolume* pVolParentSurface = NULL;
-        while (pParentSurface && !(pParentSurface->inherits("TYAcousticVolume")))
+//        while (pParentSurface && !(pParentSurface->inherits("TYAcousticVolume")))
+        while ( pParentSurface && !( dynamic_cast<TYAcousticVolume*>(pParentSurface) ) )
         {
             pParentSurface = pParentSurface->getParent();
         }
 
-        pVolParentSurface = (TYAcousticVolume*)pParentSurface;
+        pVolParentSurface = dynamic_cast<TYAcousticVolume*>(pParentSurface);
         mat = pVolParentSurface->getMateriau();
     }
 
