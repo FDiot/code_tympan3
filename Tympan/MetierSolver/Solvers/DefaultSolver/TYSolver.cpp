@@ -245,19 +245,19 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
         _tabPolygon[i].isInfra = true;
 
         // Recuperation des information du polygon
-        if (pPoly = TYAcousticPolygon::safeDownCast(tabFaces[i]->getElement()))
+        if (pPoly = dynamic_cast<TYAcousticPolygon*>(tabFaces[i]->getElement()))
         {
             _tabPolygon[i].tabPoint = pPoly->getOContour();
         }
-        else if (pRect = TYAcousticRectangle::safeDownCast(tabFaces[i]->getElement()))
+        else if (pRect = dynamic_cast<TYAcousticRectangle*>(tabFaces[i]->getElement()))
         {
             _tabPolygon[i].tabPoint = pRect->getOContour();
         }
-        else if (pCircle = TYAcousticCircle::safeDownCast(tabFaces[i]->getElement()))
+        else if (pCircle = dynamic_cast<TYAcousticCircle*>(tabFaces[i]->getElement()))
         {
             _tabPolygon[i].tabPoint = pCircle->getOContour();
         }
-        else if (pSemiCircle = TYAcousticSemiCircle::safeDownCast(tabFaces[i]->getElement()))
+        else if (pSemiCircle = dynamic_cast<TYAcousticSemiCircle*>(tabFaces[i]->getElement()))
         {
             _tabPolygon[i].tabPoint = pSemiCircle->getOContour();
         }
@@ -303,7 +303,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
         _tabPolygon[i].isInfra = false;
 
         // Recuperation du tableau des points formant le contour
-        TYAcousticPolygon* pPoly = TYAcousticPolygon::safeDownCast(tabFaces[i]->getElement());
+        TYAcousticPolygon* pPoly = dynamic_cast<TYAcousticPolygon*>(tabFaces[i]->getElement());
 
         if (pPoly)
         {
