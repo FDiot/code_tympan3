@@ -941,14 +941,14 @@ void TYResultat::saveValue(const std::string& filename, const int& affichage, do
         switch (affichage)
         {
             case 1 :
-                ofs << "dB(Lin)" << ';';
+                ofs << "dBZ" << ';';
                 break;
             case 2 :
                 ofs << "dB(" << freq << "Hz)" << ';';
                 break;
             case 0 :
             default :
-                ofs << "dB(A)" << ';';
+                ofs << "dBA" << ';';
         }
 
         ofs << "LW" << ';';
