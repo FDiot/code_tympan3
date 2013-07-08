@@ -1158,6 +1158,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
     TYTabLPPointCalcul& tabpoint = pMaillage->getPtsCalcul();
 
     bool cancel = false;
+	bool bNoPbAlti = true; // Permet de tester si tous les points sont altimétrisés correctement.
 
     if (pMaillage->getComputeAlti()) // Cas des maillages rectangulaires et lineaires horizontaux
     {
@@ -1181,7 +1182,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
             pt._z = 0;
 
             // Recherche de l'altitude
-            pAlti->updateAltitude(pt);
+            bNoPbAlti &= pAlti->updateAltitude(pt); 
 
             // Retour au repere d'origine
             pt = matrixinv * pt;
@@ -1207,7 +1208,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
         pt._z = 0.0;
 
         // Recherche de l'altitude
-        pAlti->updateAltitude(pt);
+        bNoPbAlti &= pAlti->updateAltitude(pt);
 
         // Ajout de l'offset en Z
         pt._z += pMaillage->getHauteur();
@@ -1225,6 +1226,17 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
 
         modified = true;
     }
+
+	if (!bNoPbAlti) // Certains point pas altimetrises
+	{
+		OMessageManager::get()->info("************************************************************");
+		OMessageManager::get()->info("*                    ATTENTION !                           *");
+		OMessageManager::get()->info("* Certains récepteurs sont hors de la zone altimétrisée.   *");
+		OMessageManager::get()->info("* Leur altitude est fixée à -10000 m                       *");
+		OMessageManager::get()->info("* Veuillez modifier la cartographie ou la topographie      *");
+		OMessageManager::get()->info("* pour qu'ils puissent être correctement altimétrisés      *");
+		OMessageManager::get()->info("************************************************************");
+	}
 
 
     // Done
