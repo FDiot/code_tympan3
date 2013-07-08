@@ -344,13 +344,10 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                 // Duplication
                 duplicateCalcul = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_contextmenu_duplicatecalcul"));
 
-                // Suppression (si le calcul est actif)
-                if (((TYCalcul*) eltItem->getElement().getRealPointer())->getState() == TYCalcul::Actif)
-                {
-                    delCalcul = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_contextmenu_delete"));
-                    pMenu->addSeparator();
-                    TYElement::setIsSavedOk(true);
-                }
+                pMenu->addSeparator();
+                delCalcul = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_contextmenu_delete"));
+                pMenu->addSeparator();
+                TYElement::setIsSavedOk(true);
             }
             // Projet
             else if (eltItem->getElement()->inherits("TYProjet"))
