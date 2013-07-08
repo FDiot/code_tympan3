@@ -837,29 +837,29 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
     if (pCalcul != NULL)
     {
         ofs << "Calcul" << ';';
-        ofs << "Atmosphere" << ';';
+        ofs << "Atmosphère" << ';';
         ofs << "Sol" << ';';
         ofs << "Trajets horizontaux" << ';';
-        ofs << "Vegetation" << ';';
+        ofs << "Végétation" << ';';
         ofs << "Ecran" << ';';
-        ofs << "Reflexion" << ';';
+        ofs << "Réflexion" << ';';
         ofs << "Conditions" << ';';
         ofs << "H1" << ';';
         ofs << "Calcul" << ';';
         ofs << "Distance [SR] minimale" << ';';
-        ofs << "Frequence minimale" << ';';
-        ofs << "Frequence maximale" << ';';
+        ofs << "Fréquence minimale" << ';';
+        ofs << "Fréquence maximale" << ';';
         ofs << '\n';
 
         ofs << pCalcul->getName().toStdString() << ';';
         ofs << pCalcul->getUseAtmosphere() << ';';
         if (pCalcul->getUseSol())
         {
-            ofs << "reel" << ';';
+            ofs << "réel" << ';';
         }
         else
         {
-            ofs << "reflechissant" << ';';
+            ofs << "réfléchissant" << ';';
         }
         ofs << pCalcul->getCalculTrajetsHorizontaux() << ';';
         ofs << pCalcul->getUseVegetation() << ';';
@@ -871,16 +871,16 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
         }
         else
         {
-            ofs << "Homogenes" << ';';
+            ofs << "Homogènes" << ';';
         }
         ofs << pCalcul->getParamH() << ';';
         if (pCalcul->getInterference())
         {
-            ofs << "Interferences" << ';';
+            ofs << "Interférences" << ';';
         }
         else
         {
-            ofs << "Energetique" << ';';
+            ofs << "Energétique" << ';';
         }
         ofs << pCalcul->getDistanceSRMin() << ';';
         ofs << pCalcul->getFreqMinFreq() << ';';
