@@ -237,7 +237,7 @@
 	<class name="TYCalculToolbar">
 		<message>
 			<string id="id_menuitem_recept" value="Receiver"/>
-			<string id="id_menuitem_mailrect" value="Rectangular Map"/>
+			<string id="id_menuitem_mailrect" value="Horizontal Map"/>
 			<string id="id_menuitem_maillin" value="Linear Map"/>
 			<string id="id_menuitem_mailvert" value="Vertical Map"/>
 			<string id="id_menuitem_boundarynoisemap" value="Boundary Noise Map"/>
@@ -1135,7 +1135,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_action_add_boundarynoisemap" value="New Boundary Noise Map"/>
 			<string id="id_warning_no_curcalcul" value="A Map can only be added to an active calculation."/>
 			<string id="id_msg_boundarynoisemap_invalid" value="Invalid Boundary Noise Map : intersection detected."/>
-        </message>
+		</message>
 	</class>
 	<class name="TYPointCalculEditor">
 		<message>
@@ -1563,7 +1563,6 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_nom" value="Name"/>
 			<string id="id_emission" value="Radiating"/>
 			<string id="id_title_dimensions" value="Dimensions"/>
-
 		</message>
 	</class>
 	<class name="TYAcousticCircleWidget">

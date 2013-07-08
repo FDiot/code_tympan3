@@ -237,10 +237,10 @@
 	<class name="TYCalculToolbar">
 		<message>
 			<string id="id_menuitem_recept" value="Récepteur ponctuel"/>
-			<string id="id_menuitem_mailrect" value="Récepteur rectangulaire"/>
+			<string id="id_menuitem_mailrect" value="Récepteur surfacique horizontal"/>
 			<string id="id_menuitem_maillin" value="Récepteur linéaire"/>
-			<string id="id_menuitem_mailvert" value="Récepteur vertical"/>
-			<string id="id_menuitem_boundarynoisemap" value="Récepteur surface accoustique"/>
+			<string id="id_menuitem_mailvert" value="Récepteur surfacique vertical"/>
+			<string id="id_menuitem_boundarynoisemap" value="Récepteur surfacique en bande"/>
 		</message>
 		<picture>
 			<image id="id_icon_recept" value="micro.png"/>
