@@ -1370,7 +1370,7 @@ void TYMainWindow::close()
 {
     if (TYElement::getIsSavedOk() == true) // Si un element a ete modifie, il faut sauvegarder
     {
-        switch (QMessageBox::warning(this, "Attention", TR("id_file_not_saved"), QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel))
+        switch (QMessageBox::warning(this, "Attention", TR("id_file_not_saved"), QMessageBox::Yes, QMessageBox::No))
         {
             case QMessageBox::Yes:
                 if (_pSaveAction->isEnabled())
@@ -1386,9 +1386,9 @@ void TYMainWindow::close()
             case QMessageBox::No:
                 _closeAndQuit = true;
                 break;
-            case QMessageBox::Cancel:
-                _closeAndQuit = false;
-                break;
+            //case QMessageBox::Cancel:
+            //    _closeAndQuit = false;
+            //    break;
         }
     }
 
