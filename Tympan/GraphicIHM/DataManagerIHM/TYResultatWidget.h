@@ -173,7 +173,7 @@ private :
     TYSpectre getPuissanceElem(TYElement* pElement);
 
     /// Affichage du contenu de la cellule
-    void affichageCellule(const int& row, const int& col);
+    void affichageCellule(const int& row, const int& col, TYCalcul *pCalcOp = NULL);
 
     /// Creation du contenu d'une cellule
     QString getValueMsg(const int& row, const int& col, OSpectre& spectre);

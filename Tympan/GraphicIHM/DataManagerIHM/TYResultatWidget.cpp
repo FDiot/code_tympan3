@@ -345,9 +345,9 @@ TYCalcul* TYResultatWidget::getSelectedSubstCalcul()
 {
     if (_pElement->getParent()->getParent()->isA("TYProjet"))
     {
-        int calcul = _comboBoxSubstCalcul->currentIndex();
-        if (calcul >= 0)
+        if (!_radioButtonNoOp->isChecked())
         {
+			int calcul = _comboBoxSubstCalcul->currentIndex();
             TYProjet* pProjet = TYProjet::safeDownCast(getElement()->getParent()->getParent());
             return pProjet->getListCalcul()[calcul];
         }
@@ -627,11 +627,12 @@ void TYResultatWidget::updateTable()
     findMaxima();
 
     // Boucle sur les lignes et les colonnes pour afficher le tableau
+	TYCalcul *pCalcOp = getSelectedSubstCalcul();
     for (unsigned int row = 0; row < _nbLignes; row++)
     {
         for (unsigned int col = 1; col < _nbColonnes; col++)
         {
-            affichageCellule(row, col);
+            affichageCellule(row, col, pCalcOp);
         }
     }
 }
@@ -795,13 +796,12 @@ void TYResultatWidget::slotContributionLineEditChanged()
     updateTable();
 }
 
-void TYResultatWidget::affichageCellule(const int& row, const int& col)
+void TYResultatWidget::affichageCellule(const int& row, const int& col, TYCalcul *pCalcOp)
 {
     TYCalcul* pCalcul = TYCalcul::safeDownCast(getElement()->getParent());
-    TYCalcul* pSubstCalcul = getSelectedSubstCalcul();
 
     OSpectre spectre1 = getSpectre(row, col, pCalcul);
-    OSpectre spectre2 = getSpectre(row, col, pSubstCalcul);
+    OSpectre spectre2 = getSpectre(row, col, pCalcOp);
 
     bool bValid = spectre2.isValid(); // Permettra de griser la cellule si non valide
     QTableWidgetItem* pItem = NULL;
