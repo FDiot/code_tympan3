@@ -2,13 +2,13 @@
   \brief This file provides the declaration of the relations between each entity
   of the solver data model.
 
-  For instance, there is one or more \c tympan::AcousticSurface linked with a \c
+  For instance, there is one or more \c tympan::AcousticTriangle linked with a \c
   tympan::SiteElement with the relation \c tympan::surface_of_rdef.
 
   You have to declare smart pointers of each instance of a specific type as:
   \code
-  AcousticSurface::pointer surf_a(new AcousticSurface(Vector));
-  AcousticSurface::pointer surf_b(new AcousticSurface(Vector));
+  AcousticTriangle::pointer surf_a(new AcousticTriangle(Vector));
+  AcousticTriangle::pointer surf_b(new AcousticTriangle(Vector));
   SiteElement::pointer element(new SiteElement(uid));
   \endcode
 
@@ -43,47 +43,57 @@ using std::string;
 namespace tympan
 {
 
-/// Type of 'has_node' relation.
-struct has_node_rtype {};
-/// Relation between 0..n acoustic surfaces and a \c Node
-typedef RelationDefinition < has_node_rtype,
-        AcousticSurface,
-        Node > surface_has_node;
+/// Type of 'has_node_0' relation : first vertex of a face
+struct has_node_0_rtype {};
+typedef RelationDefinition < has_node_0_rtype,
+        AcousticTriangle,
+        Node > has_node_0;
+/// Type of 'has_node_1' relation : second vertex of a face
+struct has_node_1_rtype {};
+typedef RelationDefinition < has_node_1_rtype,
+        AcousticTriangle,
+        Node > has_node_1;
+/// Type of 'has_node_2' relation : third vertex of a face
+struct has_node_2_rtype {};
+typedef RelationDefinition < has_node_2_rtype,
+        AcousticTriangle,
+        Node > has_node_2;
 
 /// Type of 'edge_of' relation.
 struct edge_of_rtype {};
-/// Relation between 0..n diffraction edges and an \c AcousticSurface.
+/// Relation between 0..n diffraction edges and an \c AcousticTriangle.
 typedef RelationDefinition < edge_of_rtype,
         DiffractionEdge,
-        AcousticSurface > edge_of_rdef;
+        AcousticTriangle > edge_of_rdef;
 
 /// Type of 'building_made_of' relation.
 struct building_made_of_rtype {};
 /// Relation between 0..n acoustic surfaces and an \c AcousticBuildingMaterial.
 typedef RelationDefinition < building_made_of_rtype,
-        AcousticSurface,
+        AcousticTriangle,
         AcousticBuildingMaterial > building_made_of_rdef;
 
 /// Type of 'ground_made_of' relation.
 struct ground_made_of_rtype {};
 /// Relation between 0..n acoustic surfaces and an \c AcousticGroundMaterial.
 typedef RelationDefinition < ground_made_of_rtype,
-        AcousticSurface,
+        AcousticTriangle,
         AcousticGroundMaterial > ground_made_of_rdef;
 
 /// Type of 'surface_of' relation.
 struct surface_of_rtype {};
 /// Relation between 0..n acoustic surfaces and an \c SiteElement.
 typedef RelationDefinition < surface_of_rtype,
-        AcousticSurface,
+        AcousticTriangle,
         SiteElement > surface_of_rdef;
 
-/// Type of 'site_receptor' relation.
-struct site_receptor_rtype {};
-/// Relation between a site receptor and 0..n \c AcousticReceptor.
-typedef RelationDefinition < site_receptor_rtype,
-        SiteAcousticReceptor,
-        AcousticReceptor > site_receptor_rdef;
+/// Type of 'from_user_receptor' relation.
+struct from_user_receptor_rtype {};
+/// Relation between a site receptor via a \c SiteElement and 0..n \c AcousticReceptor.
+typedef RelationDefinition < from_user_receptor_rtype,
+        AcousticReceptor,
+        SiteElement
+         > from_user_receptor_rdef;
 
 /// Type of 'to_receptor' relation.
 struct to_receptor_rtype {};
@@ -98,13 +108,6 @@ struct receptor_rtype {};
 typedef RelationDefinition < receptor_rtype,
         GlobalContribution,
         AcousticReceptor > receptor_rdef;
-
-/// Type of 'user_source' relation.
-struct user_source_rtype {};
-/// Relation between 0..1 source and 0..1 \c SiteUserAcousticSource.
-typedef RelationDefinition < user_source_rtype,
-        AcousticSource,
-        SiteUserAcousticSource > user_source_rdef;
 
 /// Type of 'from_source' relation.
 struct from_source_rtype {};
@@ -134,19 +137,19 @@ typedef RelationDefinition < next_event_rtype,
         AcousticEvent,
         AcousticEvent > newt_event_rdef;
 
-/// Type of 'from_surface' relation.
-struct from_surface_rtype {};
-/// Relation between 1..n acoustic sources and 0..1 \c AcousticSurface.
-typedef RelationDefinition < from_surface_rtype,
+/// Type of 'from_element' relation.
+struct from_element_rtype {};
+/// Relation between 1..n acoustic sources and 0..1 \c SiteElement
+typedef RelationDefinition < from_element_rtype,
         AcousticSource,
-        AcousticSurface > from_surface_rdef;
+        SiteElement > from_element_rdef;
 
 /// Type of 'surface' relation.
 struct surface_rtype {};
-/// Relation between 0..n acoustic events and 0..1 \c AcousticSurface.
+/// Relation between 0..n acoustic events and 0..1 \c AcousticTriangle.
 typedef RelationDefinition < surface_rtype,
         AcousticEvent,
-        AcousticSurface > surface_rdef;
+        AcousticTriangle > surface_rdef;
 
 /// Type of 'frequencies' relation.
 struct frequencies_rtype {};
@@ -208,7 +211,7 @@ typedef RelationDefinition<site_rtype, AcousticProblem, Site> site_rdef;
 // This statement must appear in the same namespace as the original template definition
 /*
 extern template class RelationDefinition < tympan::has_node_rtype,
-       tympan::AcousticSurface,
+       tympan::AcousticTriangle,
        tympan::Node >;
 */ // Does not work well on MSVC
 #endif /* TYMPAN__RELATIONS_H__INCLUDED */

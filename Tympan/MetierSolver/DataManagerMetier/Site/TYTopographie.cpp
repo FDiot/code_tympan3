@@ -1002,14 +1002,41 @@ LPTYCourbeNiveauGeoNode TYTopographie::findCrbNiv(const LPTYCourbeNiveau pCrbNiv
 
     return NULL;
 }
+
+void TYTopographie::computeAltimetricTriangulation(
+		std::deque<OPoint3D>& points,
+		std::deque<OTriangle>& triangles,
+		bool use_emprise_as_level_curve)
+{
+	// On fait le calcul seulement si cela est necessaire !
+	if (!_pAltimetrie->getIsGeometryModified()) {
+		return;
+	}
+
+	// we instanciate an AltimetryBuilder
+	if (p_alti_builder.get()!=NULL)
+	{
+		std::cerr <<  "WARNING "<< __FILE__ << " l. " << __LINE__ << " : ";
+		std::cerr << "An altimetry builder should NOT have been constructed yet : we force clean it !" << std::endl;
+	}
+	p_alti_builder.reset(new tympan::AltimetryBuilder());
+
+	// We ask it to process this topography
+	p_alti_builder->process(*this, use_emprise_as_level_curve);
+	p_alti_builder->insertMaterialPolygonsInTriangulation();
+
+	//Fill points and triangle
+	p_alti_builder->exportMesh(points, triangles);
+
+	std::cerr << "Mise a jour altimetrie (Triangulation):  "
+			<< number_of_vertices() <<" points et "
+			<< number_of_faces()<<" triangles."<<std::endl;
+
+	setIsGeometryModified(true); // For compatibility (XXX to be checked)
+}
 //
 //void TYTopographie::computeAltimetrie()
 //{
-//  // On fait le calcul seulement si cela est necessaire !
-//  if (!_pAltimetrie->getIsGeometryModified()) {
-//      return;
-//  }
-//
 //  double distanceMax = 200.0;
 //
 //#if TY_USE_IHM
@@ -1031,12 +1058,11 @@ LPTYCourbeNiveauGeoNode TYTopographie::findCrbNiv(const LPTYCourbeNiveau pCrbNiv
 //
 //  // Construction de l'altimetrie
 //  _pAltimetrie->compute(collectPointsForAltimetrie(distanceMax), delaunay);
-//
-//  setIsGeometryModified(true);
 //}
 
-//TYTabPoint TYTopographie::collectPointsForAltimetrie(const double& distanceMax, bool bEmpriseAsCrbNiv /* = false */ ) const
-TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv /* = false */) const
+/* is being replaced by AltymetryBuilder::process
+//TYTabPoint TYTopographie::collectPointsForAltimetrie(const double& distanceMax, bool bEmpriseAsCrbNiv) const
+TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv) const
 {
     TYTabPoint pts;
 
@@ -1157,6 +1183,8 @@ TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv /* = 
 
     return pts;
 }
+*/
+
 
 bool TYTopographie::penteMoy(const OSegment3D& seg, OSegment3D& penteMoy) const
 {
@@ -1581,3 +1609,17 @@ int compareTerrains(const void* elem1, const void* elem2)
     int sgn = int(res / fabs(res));
     return (sgn);
 }
+
+const tympan::AltimetryBuilder& TYTopographie::getAltimetryBuilder() const
+{ return *p_alti_builder; }
+
+unsigned TYTopographie::number_of_vertices() const
+{ return p_alti_builder->number_of_vertices(); }
+
+unsigned TYTopographie::number_of_faces() const
+{ return p_alti_builder->number_of_faces(); }
+
+void TYTopographie::exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles)
+{ p_alti_builder->exportMesh(points, triangles); }
+
+

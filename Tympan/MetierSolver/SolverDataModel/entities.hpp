@@ -20,6 +20,40 @@ using std::string;
 namespace tympan
 {
 
+/**
+ * @brief factory for any Entity
+ *
+ * TODO to be moved into Yams++
+ *
+ * @tparam EntityT the class of the entity to be created
+ * @return a (smart) pointer to new new, default constructed, entity of class \c EntityT
+ */
+template<class EntityT>
+typename EntityT::pointer
+make()
+{
+	return typename  EntityT::pointer(new EntityT());
+}
+
+
+//! Simple representation of an UUID (Universal Unique Identifier).
+/*! Do the correspondance between \c TYElement uuid and the uuid of schema
+    solver entities. It can match with a \c QUuid (UUID from Qt) and thus with a
+    \c TYUUID (aka \c OGenID).
+ */
+struct binary_uuid {
+    union {
+        struct {
+            unsigned int   data1;
+            unsigned short data2;
+            unsigned short data3;
+            unsigned char  data4[8];
+        } s;
+        unsigned char t[16];
+    };
+};
+
+
 /// XXX \todo Add the entity 'Atmosphere' with attr: pression, temperature,
 /// hygrometry (\note can find these values in the TYCalcul instead of TYSite).
 
@@ -32,6 +66,10 @@ public:
     virtual ~Node() {};
 
     Point p;
+
+private:
+    /// @brief private copy constructor to avoid copying Nodes
+    Node(const Node&);
 };
 
 class DiffractionEdge:
@@ -45,27 +83,50 @@ public:
     Point p2;
     /// Angle (radian).
     double angle;
-
-
 };
 
-/* The surface_has_node relation is supposed to have cardinality 3..n
- * and the normal given has attribute is supposed to be one of the
- * two possible unit normal vector for the triangle.
- * Those constraints can't be formaly expressed in the schema.
- */
-class AcousticSurface:
-    public Entity<AcousticSurface>
+class AcousticTriangle:
+    public Entity<AcousticTriangle>
 {
 public:
-    AcousticSurface() {};
-    // AcousticSurface(const Vector& normal_);
-    virtual ~AcousticSurface() {};
+    virtual ~AcousticTriangle() {};
 
-    // XXX Normal should be computed by the solver. It's only relevant to have a
-    // normal on the triangle surface after a Delaunay triangulation (not
-    // before).
-    // Vector normal;
+    /**
+     * @brief Factory for an \c AcousticTriangle from three \c Node
+     *
+     * In order to have a canonical representation of triangles,
+     * the order of the three points can be rotated, but the surface orientation
+     * is preserved.
+     *
+     * @param p1 a node
+     * @param p2 an other node
+     * @param p3 an third node
+     * @return a new instance od AcousticTriangle
+     */
+    static AcousticTriangle::pointer
+    make_triangle(
+    		const Node::pointer& p1,
+    		const Node::pointer& p2,
+    		const Node::pointer& p3);
+
+    /**
+     * @brief Factory for an \c AcousticTriangle from three \c Node
+     *
+     * In order to have a canonical representation of triangles,
+     * the order of the three points can be rotated, but the surface orientation
+     * is preserved.
+     *
+     * @param points a C array of three \c Node::pointer
+     * @return a new instance od AcousticTriangle
+     */
+    static AcousticTriangle::pointer
+    make_triangle(Node::pointer (* const points)[3]);
+
+// TODO the make() generic factory needs to be moved into Yams++ for this to be possible
+// protected:
+    // This constructor does not build a valid face,
+    // Please use the factory functions make_triangle instead.
+    AcousticTriangle() {};
 };
 
 class AcousticBuildingMaterial:
@@ -172,23 +233,12 @@ class SiteElement:
     public Entity<SiteElement>
 {
 public:
-    SiteElement(const string& id_);
+    SiteElement(const binary_uuid& uid_);
     virtual ~SiteElement() {};
 
-    string id;
-    // XXX Add an attribute which will be a ref. to a \c TYElement??
-    // Other attributes? How do you define a \c SiteElement?
+    binary_uuid uid;
 };
 
-class SiteUserAcousticSource:
-    public Entity<SiteUserAcousticSource>
-{
-public:
-    SiteUserAcousticSource(unsigned int id_);
-    virtual ~SiteUserAcousticSource() {};
-
-    unsigned int id;
-};
 
 class SiteAcousticReceptor:
     public Entity<SiteAcousticReceptor>

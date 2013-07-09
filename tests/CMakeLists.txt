@@ -42,6 +42,12 @@ find_package (Threads)
 
 set(TYMPAN_CTEST_ENV )
 
+# XXX It should be possible to make this much lighter
+set (TYMPAN_MODULES
+  tympan_solver_data_model
+  tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
+  tympan_tools_metier tympan_tools_graphics tympan_tools)
+
 include_directories(.)
 add_subdirectory(test_utils)
 

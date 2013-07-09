@@ -9,6 +9,16 @@
 
 #include "relations.hpp"
 
-template class RelationDefinition < tympan::has_node_rtype,
-         tympan::AcousticSurface,
+template class RelationDefinition < tympan::has_node_0_rtype,
+         tympan::AcousticTriangle,
          tympan::Node >;
+
+template class RelationDefinition < tympan::has_node_1_rtype,
+         tympan::AcousticTriangle,
+         tympan::Node >;
+
+template class RelationDefinition < tympan::has_node_2_rtype,
+         tympan::AcousticTriangle,
+         tympan::Node >;
+
+

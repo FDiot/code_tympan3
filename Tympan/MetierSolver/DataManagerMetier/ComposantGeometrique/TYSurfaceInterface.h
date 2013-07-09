@@ -23,10 +23,12 @@
 #ifndef __TY_SURFACEINTERFACE__
 #define __TY_SURFACEINTERFACE__
 
+#include <deque>
 
 class OSegment3D;
 class OPoint3D;
 class OPlan;
+class OTriangle;
 
 /**
  * Classe abstraite qui offre une interface utilisable par des composants
@@ -144,7 +146,25 @@ public:
      */
     virtual void inverseNormale() {};
 
+
     //@}
+
+    /**
+     * @brief Export the surface as a triangular mesh
+     *
+     * NB : This function expect empty deques and will clear the deque passed.
+     *
+     * CAUTION This method will be made PURE virtual (TODO). As a  measure
+     * easing transition, the base implementation raises an assert for now.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     */
+    void
+    exportMesh(
+    		std::deque<OPoint3D>& points,
+    		std::deque<OTriangle>& triangles) const /* = 0 */;
+
 };
 
 

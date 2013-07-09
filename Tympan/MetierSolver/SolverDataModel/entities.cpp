@@ -8,6 +8,8 @@
 
 #include "entities.hpp"
 
+#include "relations.hpp"
+
 namespace tympan
 {
 
@@ -44,12 +46,8 @@ AcousticProblem::AcousticProblem(
 
 
 SiteElement::SiteElement(
-    const string& id_
-) : id(id_) {}
-
-SiteUserAcousticSource::SiteUserAcousticSource(
-    unsigned int id_
-) : id(id_) {}
+    const binary_uuid& uid_
+) : uid(uid_) {}
 
 SiteAcousticReceptor::SiteAcousticReceptor(
     unsigned int id_
@@ -71,6 +69,48 @@ DirectivityCoefficient::DirectivityCoefficient(
 Frequency::Frequency(
     double value_
 ) : value(value_) {}
+
+
+/**
+ * @brief provide arbitrary order over Nodes
+ * @param lhs pointer to the left hand side node
+ * @param rhs pointer to the right hand side node
+ * @return the strict (lexical) order of \c lhs relative to \c rhs
+ */
+bool operator<(Node::pointer lhs, Node::pointer rhs)
+{
+	for(unsigned int k=0; k<3; k++)
+		if (lhs->p._value[k] < rhs->p._value[k])
+			return true;
+	return false;
+}
+
+AcousticTriangle::pointer
+AcousticTriangle::make_triangle(
+		const Node::pointer& p1, const Node::pointer& p2, const Node::pointer& p3)
+{
+	Node::pointer tab[3] = {p1, p2, p3};
+	return make_triangle(&tab);
+}
+
+AcousticTriangle::pointer
+AcousticTriangle::make_triangle(Node::pointer (* const points)[3])
+{
+	AcousticTriangle::pointer surf = make<AcousticTriangle>();
+	Node::pointer tab[3];
+
+	// We determine the index k0 of the "smallest" of the three vertices
+	Node::pointer * const begin = &(*points)[0];
+	Node::pointer * const end = &(*points)[3];
+	const unsigned k0 = std::min_element(begin, end) - begin;
+	// We fill the tab array starting from k0
+	for(unsigned int k=k0; k<k0+3; k++)
+		tab[k%3] = (*points)[k];
+	surf->add<has_node_0>(tab[0]);
+	surf->add<has_node_1>(tab[1]);
+	surf->add<has_node_2>(tab[2]);
+	return surf;
+}
 
 
 // XXX Copy/paste these methods to the \c AcousticGroundMaterial See

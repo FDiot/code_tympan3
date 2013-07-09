@@ -13,16 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TY_ALTIMETRIE__
 #define __TY_ALTIMETRIE__
 
+#include <deque>
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
@@ -79,12 +73,39 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
+//  XXX is being refactored to enable plugin back AltimetryBuilder result.
+//    /**
+//     * Calcul l'altimetrie a partir d'une collection de points.
+//     * L'altimetrie est le resultat de la triangulation de Delaunay calculee
+//     * a partir des points passes.
+//     *
+//     * @param points Les points pour calculer l'altimetrie.
+//     */
+//    virtual void compute(const TYTabPoint& points, const double& delaunay);
+
+//  XXX Is being replaced by the new triangulation builder
+//      from the SolverDataModel component
+//    /**
+//     * Calcul l'altimetrie a partir d'une collection de points et de segments.
+//     * L'altimetrie est le resultat de la triangulation de Delaunay contrainte calculee
+//     * a partir des points passes et des segments.
+//     *
+//     */
+//    void computeWithConstraint(OConstraintDelaunayMaker& oConstraintDelaunayMaker);
 
     /**
-     * \brief Calcul l'altimetrie a partir d'une collection de points. L'altimetrie est le resultat de la triangulation de Delaunay calculee a partir des points passes.
-     * \param points Les points pour calculer l'altimetrie.
+     * @brief plug back triangulation providfed by the TYTopographie
+     *
+     * This function expect to be passed the deques of points and triangles
+     * computed by TYTopographie::computeAltimetricTriangulation, which itself
+     * calls the new tympan::AltimetryBuilder.
+     *
+     * @param points the vertices of the triangulation
+     * @param triangles the faces of the triangulation
      */
-    virtual void compute(const TYTabPoint& points, const double& delaunay);
+    void plugBackTriangulation(
+    		const std::deque<OPoint3D>& points,
+    		std::deque<OTriangle>& triangles);
 
     /**
      * Set/Get de la liste des faces.
@@ -122,13 +143,17 @@ public:
     LPTYPolygon getFace(int index) { return _listFaces[index]; }
 
     /**
-     * \brief Retourne l'altitude d'un point donné. Si le point est hors de la zone dans laquelle l'altimétrie est définie, la valeur retournée vaut -1E-5
-     * \return false si l'altitude du point n'a pu etre determinee
+     * Calcule l'altitude d'un point de l'espace.
+     * La coordonee Z du point est mise a jour si le point est situe dans
+     * la zone de definition de l'altimetrie.
+     *
+     * @return <code>false</code> si l'altitude du point n'a pu etre
+     *         determinee; <code>false</code> sinon.
      */
 	double altitude(const OPoint3D& pt);
 
     /**
-     * \brief Modifie l'altitude d'un point donné. Si le point est hors de la zone dans laquelle l'altimétrie est définie, la valeur z du point est mise a -1E-5
+     * \brief Modifie l'altitude d'un point donnï¿½. Si le point est hors de la zone dans laquelle l'altimï¿½trie est dï¿½finie, la valeur z du point est mise a -1E-5
      * \return false si l'altitude du point n'a pu etre determinee
      */
     bool updateAltitude(OPoint3D& pt) const;
@@ -145,7 +170,8 @@ public:
     double HauteurMoyenne(TYTabPoint& pts);
 
     /**
-     * Retourne la premiere (ordre de parsing du tableau passes en arguments) hauteur positive ou nulle des points ptsIn.
+     * Retourne la premiere (ordre de parsing du tableau passes en arguments)
+     * hauteur positive ou nulle des points ptsIn.
      */
     double PremiereHauteurPositiveOuNulle(TYTabPoint& ptsIn);
 

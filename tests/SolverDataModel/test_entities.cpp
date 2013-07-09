@@ -24,7 +24,7 @@ TEST(BasicInstanciationTests, dummy) {
 	Point p2(0, 1, 2);
 	double angle = 1.2;
 	DiffractionEdge edge(p1, p2, angle);
-	AcousticSurface surf();
+	AcousticTriangle surf();
 	// XXX relation edge_of ?
 	AcousticBuildingMaterial("béton");
 	// XXX relation made_of
@@ -35,7 +35,7 @@ TEST(BasicInstanciationTests, acoustic_diffraction_edge)
 {
     // Normal vector for an acoustic surface.
     double x=1., y=1., z=0.;
-    AcousticSurface::pointer p_surface(new AcousticSurface());
+    AcousticTriangle::pointer p_surface(new AcousticTriangle());
 
     // Diffraction edge.
     double a_x=0., a_y=0., a_z=0.;
@@ -58,7 +58,7 @@ TEST(BasicInstanciationTests, acoustic_diffraction_edge)
     edge_of_rdef::subject_view::type& edge_of = edge_of_rdef::by<subject>();
     EXPECT_EQ(edge_of.count(p_diff_edge), 1);
 
-    // Object view view, i.e. viewed from an 'AcousticSurface'.
+    // Object view view, i.e. viewed from an 'AcousticTriangle'.
     edge_of_rdef::object_view::type& contains = edge_of_rdef::by<object>();
     EXPECT_EQ(contains.count(p_surface), 3);
 
@@ -69,6 +69,25 @@ TEST(BasicInstanciationTests, acoustic_diffraction_edge)
                      (edge == p_diff_edge_3) );
 
     // Loop on the single acoustic surface related to a specific diffraction edge.
-    BOOST_FOREACH(AcousticSurface::pointer surf, p_diff_edge->iter<edge_of_rdef>())
+    BOOST_FOREACH(AcousticTriangle::pointer surf, p_diff_edge->iter<edge_of_rdef>())
         EXPECT_TRUE( (surf == p_surface) );
+}
+
+
+TEST(BasicInstanciationTests, acousticSurfaceCreation) {
+	Point p1(0, 1, 0);
+	Point p2(0, 1, 2);
+	Point p3(0, 0, 0);
+
+	Node::pointer n1( new Node(p1) );
+	Node::pointer n2( new Node(p2) );
+	Node::pointer n3( new Node(p3) );
+
+	AcousticTriangle::pointer surf =
+			AcousticTriangle::make_triangle(n1, n2, n3);
+	// TODO This is just a complicated way to get the one point
+	// the Yams++ interface needs to be improved to handle 1 cardinalities.
+	Node::pointer node0 (*boost::begin(surf->iter<has_node_0>()));
+	ASSERT_EQ(n3->p, node0->p);
+	ASSERT_EQ(n3, node0);
 }

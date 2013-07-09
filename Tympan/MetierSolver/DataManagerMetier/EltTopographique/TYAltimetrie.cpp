@@ -223,63 +223,54 @@ int TYAltimetrie::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYAltimetrie::compute(const TYTabPoint& points, const double& delaunay)//virtual
+
+void TYAltimetrie::plugBackTriangulation(
+		const std::deque<OPoint3D>& vertices,
+		std::deque<OTriangle>& triangles)
 {
-    //#if TY_USE_IHM
-    unsigned int i = 0, j = 0;
-    TYPoint pt;
-
-    ODelaunayMaker oDelaunayMaker(delaunay);
-
-    OMessageManager::get()->info("Mise a jour altimetrie (Triangulation)...");
-    //set des vertex
-    unsigned int nbOfPts = static_cast<uint32>(points.size());
-    for (i = 0; i < nbOfPts; i++)
-    {
-        oDelaunayMaker.addVertex(points[i]);
-    }
-
-    //generate
-    oDelaunayMaker.compute();
-
-    //get mesh
-    QList<OTriangle> triangles = oDelaunayMaker.getFaces();
-    QList<OPoint3D> vertexes = oDelaunayMaker.getVertex();
-
-    unsigned long nbTriangles = triangles.count();
-
-    OMessageManager::get()->info("Mise a jour altimetrie (Triangulation):  %d points en entree --> %d triangles en sortie.", nbOfPts, nbTriangles);
+	const unsigned nbTriangles = triangles.size();
+	unsigned i; // Index over triangles
+	unsigned j; // Index over {0, 1, 2} for vertices of triangles
 
     // Purge de la liste des faces
     _listFaces.clear();
     // Reserve le nombre d'emplacements pour les triangles
     _listFaces.reserve(nbTriangles);
 
-    triangle* mesh = new triangle[nbTriangles];
+    /*
+     * This section seems to have two functions :
+     *  - getting the actual coordinates of the vertices (from their indices)
+     *  - computing their bonding box
+     *  both of which can be better fullfiled by a preprocessing from the AltimetryBuilder
+     *
+     *  TODO suppress the mesh and access directly to triangles holding BOTH
+     *  their indices and vertices (by reference instead of by value ?)
+     *
+     *  XXX What is the sorting for ?
+     */
+    // triangle* mesh = new triangle[nbTriangles]; // mesh seems pointless
     for (i = 0; i < nbTriangles; i++)
     {
-        // On recupere le triangle
-        OTriangle oTriangle = triangles[i];
+        // We fetch the ith triqngle
+        OTriangle& oTriangle = triangles[i];
 
-        mesh[i].pts[0][0] = vertexes[oTriangle._p1]._x;
-        mesh[i].pts[0][1] = vertexes[oTriangle._p1]._y;
-        mesh[i].pts[0][2] = vertexes[oTriangle._p1]._z;
+        // mesh[i].pts[0][0] = vertices[oTriangle._p1]._x;
+        // mesh[i].pts[0][1] = vertices[oTriangle._p1]._y;
+        // mesh[i].pts[0][2] = vertices[oTriangle._p1]._z;
         // compute global bounding box by adding each points
-        _bbox.Enlarge(mesh[i].pts[0][0], mesh[i].pts[0][1], mesh[i].pts[0][2]);
-        mesh[i].pts[1][0] = vertexes[oTriangle._p2]._x;
-        mesh[i].pts[1][1] = vertexes[oTriangle._p2]._y;
-        mesh[i].pts[1][2] = vertexes[oTriangle._p2]._z;
-        // compute global bounding box by adding each points
-        _bbox.Enlarge(mesh[i].pts[1][0], mesh[i].pts[1][1], mesh[i].pts[1][2]);
-        mesh[i].pts[2][0] = vertexes[oTriangle._p3]._x;
-        mesh[i].pts[2][1] = vertexes[oTriangle._p3]._y;
-        mesh[i].pts[2][2] = vertexes[oTriangle._p3]._z;
-        // compute global bounding box by adding each points
-        _bbox.Enlarge(mesh[i].pts[2][0], mesh[i].pts[2][1], mesh[i].pts[2][2]);
+        // _bbox.Enlarge(mesh[i].pts[0][0], mesh[i].pts[0][1], mesh[i].pts[0][2]);
+	// The big block above is advantageoulsy replaced by the two lines below
+        oTriangle._A = vertices[oTriangle._p1];
+        _bbox.Enlarge(oTriangle._A);
+	// The same for the two other vertices of the triangle
+        oTriangle._B = vertices[oTriangle._p2];
+        _bbox.Enlarge(oTriangle._B);
+        oTriangle._C = vertices[oTriangle._p3];
+        _bbox.Enlarge(oTriangle._C);
     }
 
-    OMessageManager::get()->info("Mise a jour altimetrie (Tri des faces)...");
-    qsort(mesh, nbTriangles, sizeof(triangle), compareTriangle);
+    // OMessageManager::get()->info("Mise a jour altimetrie (Tri des faces)...");
+    // qsort(mesh, nbTriangles, sizeof(triangle), compareTriangle);
 
     // Definition du tableau de faces.
     TYTabPoint tabPt;
@@ -326,14 +317,17 @@ void TYAltimetrie::compute(const TYTabPoint& points, const double& delaunay)//vi
     int ipmin, ipmax, iqmin, iqmax;
     for (i = 0; i < nbTriangles; i++)
     {
+        // On recupere le triangle
+        OTriangle& oTriangle = triangles[i];
+
         tabPt.clear();
         tabPt.resize(3);
         for (j = 0; j < 3; j++)
         {
-            point._x = mesh[i].pts[j][0];
-            point._y = mesh[i].pts[j][1];
-            point._z = mesh[i].pts[j][2];
-            tabPt[j] = point;
+//            point._x = mesh[i].pts[j][0];
+//            point._y = mesh[i].pts[j][1];
+//            point._z = mesh[i].pts[j][2];
+            tabPt[j] = oTriangle.vertex(j);
         }
 
         // create a new face and add it the face lists
@@ -351,9 +345,10 @@ void TYAltimetrie::compute(const TYTabPoint& points, const double& delaunay)//vi
             ipmin = ipmax = iqmin = iqmax = -1;
             for (j = 0; j < 3; j++)
             {
-                p = (mesh[i].pts[j][0] - _bbox._min._x) / _gridDX;
-                q = (mesh[i].pts[j][1] - _bbox._min._y) / _gridDY;
-
+//                p = (mesh[i].pts[j][0] - _bbox._min._x) / _gridDX;
+//                q = (mesh[i].pts[j][1] - _bbox._min._y) / _gridDY;
+                p = (oTriangle.vertex(j)._x - _bbox._min._x) / _gridDX;
+                q = (oTriangle.vertex(j)._y - _bbox._min._y) / _gridDY;
                 if ((int)p > ipmax) { ipmax = (int) p; }
                 if ((int)q > iqmax) { iqmax = (int) q; }
                 if (((int)p < ipmin) || (ipmin == -1)) { ipmin = (int) p; }
@@ -374,9 +369,14 @@ void TYAltimetrie::compute(const TYTabPoint& points, const double& delaunay)//vi
 
     setIsGeometryModified(false);
 
-    delete[] mesh; // free allocated memory
+    //delete[] mesh; // free allocated memory
     //#endif // TY_USE_IHM
+
 }
+
+// The method compute is obsolete and thus commented out
+// Asignificant part of it has been moved into the plugBackTriangulation method
+// void TYAltimetrie::compute(const TYTabPoint& points, const double& delaunay)//virtual
 
 int compareTriangle(const void* elem1, const void* elem2)
 {
@@ -747,7 +747,7 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
 bool TYAltimetrie::updateAltitude(OPoint3D& pt) const
 {
 	pt = projection(pt);
-
+	// XXX What is this hard-coded -1.E5 ? Is this meant to represent an unspecified/out of scope altitude ?
 	if ( pt._z == -1.E5 ) { return false; }
 
     return true;

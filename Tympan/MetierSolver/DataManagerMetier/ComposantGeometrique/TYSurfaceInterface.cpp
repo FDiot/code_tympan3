@@ -132,3 +132,10 @@ int TYSurfaceInterface::intersectsPlan(const OPlan& plan, OSegment3D& seg) const
 
     return res;
 }
+
+
+void TYSurfaceInterface::exportMesh(
+		std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles) const
+{
+	assert(false && "Must be implemented in derived classes");
+}

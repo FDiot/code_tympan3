@@ -397,7 +397,8 @@ class TYSiteNode: public TYElement
      * Collecte l'ensemble des points necessaires a la generation
      * de l'altimetrie pour les site imbriques.
      */
-    virtual TYTabPoint collectPointsForAltimetrie() const;
+    // XXX The process is being rewritten and this function removed
+    // virtual TYTabPoint collectPointsForAltimetrie() const;
 
     /**
      * Get du parametre de triangulation de Delaunay

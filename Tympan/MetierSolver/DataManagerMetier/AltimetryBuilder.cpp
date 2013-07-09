@@ -9,6 +9,7 @@
  */
 
 #include <strstream>
+#include <limits>
 
 #include <CGAL/intersections.h>
 
@@ -16,19 +17,31 @@
 #include <boost/bind.hpp>
 
 
-#include "Tympan/MetierSolver/SolverDataModel/AltimetryBuilder.hpp"
-
+#include "Tympan/MetierSolver/DataManagerMetier/AltimetryBuilder.hpp"
+#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
 namespace tympan
 {
 
-const double unspecified_altitude = -1000.0;
+const double unspecified_altitude = std::numeric_limits<double>::quiet_NaN();
 
 
-MaterialPolygon::MaterialPolygon(const TYTerrain& terrain)
+MaterialPolygon::MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix) :
+		material( terrain.getSol() )
 {
-    //TODO
+	BOOST_FOREACH(const TYPoint& point, terrain.getListPoints())
+		CGAL_Polygon::push_back( to_cgal_transform(matrix, point) );
+	assert(terrain.getListPoints().empty() || this->is_simple());
 }
+
+MaterialPolygon::MaterialPolygon(const TYTabPoint& contour, material_t ground, const OMatrix& matrix):
+		material(ground)
+{
+	BOOST_FOREACH(const TYPoint& point, contour)
+		CGAL_Polygon::push_back( to_cgal_transform(matrix, point) );
+	assert(contour.empty() || this->is_simple());
+}
+
 
 AltimetryBuilder::AltimetryBuilder()
 {
@@ -41,32 +54,81 @@ AltimetryBuilder::~AltimetryBuilder()
 // Main methods
 
 void
-AltimetryBuilder::process(TYTopographie& topography)
+AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_curve)
 {
+	// This should be compared to the old method 'TYTopographie::collectPointsForAltimetrie'
+
     // No need to handle the 'emprise' it is implicitely handled by the merging
     // of the sub-sites, which is expected to be done before entering this method.
-    BOOST_FOREACH(LPTYCourbeNiveauGeoNode p_geo_node, topography.getListCrbNiv())
+	// XXX This seems no to be exact
+	TYTabCourbeNiveauGeoNode& level_curves = topography.getListCrbNiv();
+	// If we don't have any level curve we force the emprise to become one.
+	if (level_curves.empty())
+		process_emprise(topography, true);
+	else
+		process_emprise(topography, use_emprise_as_level_curve);
+
+    BOOST_FOREACH(LPTYCourbeNiveauGeoNode p_geo_node, level_curves)
     {
+        // Handle the elements' transform
+    	p_geo_node->updateMatrix();
+        const OMatrix& matrix = p_geo_node->getMatrix();
         TYCourbeNiveau* p_curve =
             TYCourbeNiveau::safeDownCast(p_geo_node->getElement());
-        process(*p_curve);
+        process(*p_curve, matrix);
     }
+
+    BOOST_FOREACH(LPTYTerrainGeoNode p_geo_node, topography.getListPlanEau())
+    {
+        TYPlanEau* p_water =
+        		TYPlanEau::safeDownCast(p_geo_node->getElement());
+    	p_geo_node->updateMatrix();
+        const OMatrix& matrix = p_geo_node->getMatrix();
+        // This assumes the _pCrbNiv is up to date (XXX to be checked)
+        process(*p_water->getCrbNiv(), matrix); // Process the underlying level curve
+        process(*p_water, matrix); // TYPlanEau inherits from TYTerain
+    }
+
     BOOST_FOREACH(LPTYTerrainGeoNode p_geo_node, topography.getListTerrain())
     {
         TYTerrain* p_ground =
             TYTerrain::safeDownCast(p_geo_node->getElement());
-        process(*p_ground);
+    	p_geo_node->updateMatrix();
+        const OMatrix& matrix = p_geo_node->getMatrix();
+        process(*p_ground, matrix);
     }
 }
 
 void
-AltimetryBuilder::process(const TYTerrain& zone_terrain)
+AltimetryBuilder::process_emprise(TYTopographie& topography, bool as_level_curve)
 {
-    material_polygons.push_back(new MaterialPolygon(zone_terrain));
+	TYTabPoint& ty_tab_points = topography.getEmprise();
+	// If required, we process the emprise as a level curve
+    if (as_level_curve)
+    {
+    	/* cf. AltimetryBuilder::process(TYCourbeNiveau&, bool)*/
+        // Fetch parent TYSite altitude
+        TYSiteNode* pSiteNode = TYSiteNode::safeDownCast(topography.getParent());
+        assert(pSiteNode && "This TYTopographie is expected to have a TYSiteNode as parent.");
+        double alti = pSiteNode->getAltiEmprise();
+        addAsConstraint(
+        		ty_tab_points | transformed(boost::bind(to_cgal_info, alti, _1)),
+        		true);
+    }
+    // and we process it as a default terrain
+    material_polygons.push_back(new MaterialPolygon(
+    		ty_tab_points, topography.getDefTerrain()->getSol() ));
 }
 
 void
-AltimetryBuilder::process(TYCourbeNiveau& courbe_niveau, bool closed)
+AltimetryBuilder::process(const TYTerrain& zone_terrain, const OMatrix& matrix)
+{
+    // Pass the GeoNode transform to MaterialPolygon
+    material_polygons.push_back(new MaterialPolygon(zone_terrain, matrix));
+}
+
+void
+AltimetryBuilder::process(TYCourbeNiveau& courbe_niveau, const OMatrix& matrix, bool closed)
 {
     TYTabPoint& ty_tab_points = courbe_niveau.getListPoints();
     double alti = courbe_niveau.getAltitude();
@@ -76,8 +138,9 @@ AltimetryBuilder::process(TYCourbeNiveau& courbe_niveau, bool closed)
      * (This is akin to using itertools in Python)
      *
      * Cf. doc for boost::bind and  boost::range */
+
     addAsConstraint(
-        ty_tab_points | transformed(boost::bind(to_cgal_info, alti, _1)),
+        ty_tab_points | transformed(boost::bind(to_cgal_info, alti, matrix, _1)),
         closed);
 }
 
@@ -87,7 +150,7 @@ AltimetryBuilder::computeAltitude(const CGAL_Point& p)
 	// Query the triangulation for the location of p
 	CDT::Face_handle fh = alti_cdt.locate(p);
 	if(alti_cdt.is_infinite(fh))
-		throw AlgorithmicError();
+		return unspecified_altitude;
 	// We rely on CGAL intersection computation in 3D between the triangle
 	// and a vertical line going through p
 	double x[3], y[3], z[3];
@@ -243,8 +306,15 @@ AltimetryBuilder::labelFaces()
     }
 }
 
+void
+AltimetryBuilder::exportToDataModel(SolverDataModelBuilder& model)
+{
+	// TODO
+	assert( false && "Not implemented yet" );
+}
+
 std::pair<unsigned, unsigned>
-AltimetryBuilder::count_edges()
+AltimetryBuilder::count_edges() const
 {
     unsigned edges = 0;
     unsigned constrained = 0;
@@ -259,6 +329,48 @@ AltimetryBuilder::count_edges()
         }
     }
     return std::make_pair(edges, constrained);
+}
+
+void AltimetryBuilder::exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles) const
+{
+	assert(points.size()==0 &&
+		   "Output arguments 'points' is expected to be initially empty");
+	assert(triangles.size()==0 &&
+			"Output arguments 'triangles' is expected to be initially empty");
+
+	// boost::unordered_map<CDT::Vertex_handle, unsigned> handle_to_index;
+	std::map<CDT::Vertex_handle, unsigned> handle_to_index;
+
+	for(CDT::Finite_vertices_iterator vit = cdt.finite_vertices_begin();
+		vit	!= cdt.finite_vertices_end(); ++vit)
+	{
+		const unsigned i = points.size();
+		Point p = from_cgal(vit);
+		points.push_back(p);
+		const bool ok = handle_to_index.insert( std::make_pair(vit, i) ).second;
+		assert(ok && "Vertex handle should be unique.");
+	}
+
+	// Handle triangles
+	for(CDT::Finite_faces_iterator fit = cdt.finite_faces_begin();
+		fit	!= cdt.finite_faces_end(); ++fit)
+	{
+		material_t material = fit->info().material;
+		// Build an OTriangle from 3 indices
+		unsigned i[3], j;
+		for(j=0; j<3; ++j)
+			i[j] = handle_to_index[fit->vertex(j)];
+		// Store it and update its associated OPoints
+		triangles.push_back(OTriangle(i[0], i[1], i[2]));
+		OTriangle& tri = triangles.back();
+		for(j=0; j<3; ++j)
+		{
+			tri.vertex(j) = points[i[j]];
+			assert( tri.vertex(j)== from_cgal(fit->vertex(j)));
+		}
+	}
+	assert( points.size() == number_of_vertices());
+	assert( triangles.size() == number_of_faces());
 }
 
 // Vizualization helpers
@@ -329,7 +441,7 @@ AltimetryBuilder::addFacesInfo(QGraphicsScene* scene) const
 	{
 		std::stringstream txt;
 		material_t material = fit->info().material;
-		txt << material[0]; // First character of the material name
+		txt << material->getName().at(0).toAscii(); // First character of the material name
 		drawText(scene, CGAL::centroid(cdt.triangle(fit)), txt.str() );
 	}
 

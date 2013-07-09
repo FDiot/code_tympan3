@@ -501,7 +501,22 @@ void TYSiteNode::loadTopoFile()
 
     OMessageManager::get()->info("Mise a jour altimetrie...");
 
-    _pTopographie->getAltimetrie()->compute(collectPointsForAltimetrie(), getDelaunay());
+    /* XXX This is the place where plug the AltimetryBuilder into.
+     * Once the compute method has been split in triangulation and acceleration
+     * one can
+     *  1. pass the topographical elements to the AltimetryBuilder
+     *  2. get from it a table of points and triangles vertices
+     *  3. put that into the accelerating structure
+     *
+     */
+
+    // _pTopographie->getAltimetrie()->compute(collectPointsForAltimetrie(), getDelaunay());
+
+	std::deque<OPoint3D> points;
+	std::deque<OTriangle> triangles;
+	_pTopographie->computeAltimetricTriangulation(points, triangles, getUseEmpriseAsCrbNiv());
+	_pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles);
+
 
     setIsGeometryModified(false);  // L'altimetrie est a jour
 
@@ -834,6 +849,8 @@ void TYSiteNode::updateAcoustique(const bool& force)
     }
 }
 
+// XXX The process is being rewritten and this function removed
+/*
 TYTabPoint TYSiteNode::collectPointsForAltimetrie() const
 {
     TYTabPoint points;
@@ -869,6 +886,9 @@ TYTabPoint TYSiteNode::collectPointsForAltimetrie() const
 
     // Collecte des sites childs
     TYTabSiteNodeGeoNode sites = collectSites(false);
+
+    // Remove the points of the outter site which lie within the inner site.
+    // This (buggy) feature is to be disabled awaiting better specification.
 
     for (i = 0; i < ptsOfThisSite.size(); i++)
     {
@@ -910,6 +930,7 @@ TYTabPoint TYSiteNode::collectPointsForAltimetrie() const
 
     return points;
 }
+*/
 
 double TYSiteNode::getDelaunay()
 {
@@ -974,19 +995,19 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
                     OMatrix matriceEtage = pBatiment->getTabAcousticVol().at(j)->getMatrix();
                     if (pEtage)
                     {
-                        //Ri¿½cupi¿½ration des faces des murs
+                        //Riï¿½ï¿½cupiï¿½ï¿½ration des faces des murs
                         for (unsigned int k = 0; k < pEtage->getTabMur().size(); k++)
                         {
                             TYMur* mur = TYMur::safeDownCast(pEtage->getTabMur().at(k)->getElement());
                             OMatrix matriceMur = pEtage->getTabMur().at(k)->getMatrix();
                             if (mur)
                             {
-                                file << "Ri¿½cupi¿½ration d'un mur rectangulaire." << endl;
+                                file << "Riï¿½ï¿½cupiï¿½ï¿½ration d'un mur rectangulaire." << endl;
                                 TYAcousticRectangle* pRect = TYAcousticRectangle::safeDownCast(mur->getTabAcousticSurf().at(0)->getElement());
                                 if (pRect)
                                 {
                                     //Conversion de la face du mur en AcousticSurfaceGeoNode
-                                    file << "Ri¿½cupi¿½ration d'un rectangle." << endl;
+                                    file << "Riï¿½ï¿½cupiï¿½ï¿½ration d'un rectangle." << endl;
                                     file << "Ajout de la face " << compteurFace  << ", etage " << j << ", batiment " << i << endl;
                                     LPTYAcousticSurfaceGeoNode newNode = LPTYAcousticSurfaceGeoNode(new TYAcousticSurfaceGeoNode(pRect, matriceEtage * matriceMur));
                                     tabTmp.push_back(newNode);
@@ -1296,13 +1317,13 @@ bool TYSiteNode::update(TYElement* pElem)
 
     if (pElem->inherits("TYSourcePonctuelle"))
     {
-        return true; // Pas de mise i¿½ jour ni¿½cessaire
+        return true; // Pas de mise iï¿½ï¿½ jour niï¿½ï¿½cessaire
     }
-    else if (pElem->inherits("TYAcousticLine")) // Cas 1 : un objet de type source lini¿½ique
+    else if (pElem->inherits("TYAcousticLine")) // Cas 1 : un objet de type source liniï¿½ï¿½ique
     {
         TYAcousticLine::safeDownCast(pElem)->updateAcoustic(true);
     }
-    else // Autres cas, recherche de parent et traitement approprii¿½
+    else // Autres cas, recherche de parent et traitement appropriiï¿½ï¿½
     {
         TYElement* pParent = pElem; // On commencera par tester l'objet lui-meme
         do
@@ -1310,13 +1331,13 @@ bool TYSiteNode::update(TYElement* pElem)
             if (pParent->inherits("TYAcousticVolumeNode"))
             {
                 ret = TYAcousticVolumeNode::safeDownCast(pParent)->updateAcoustic(true);
-                break; // On a trouvi¿½, on peut sortir
+                break; // On a trouviï¿½ï¿½, on peut sortir
             }
             else if (pParent->inherits("TYSiteNode"))
             {
                 TYSiteNode::safeDownCast(pParent)->update();
                 ret = true;
-                break; // On a trouvi¿½, on peut sortir
+                break; // On a trouviï¿½ï¿½, on peut sortir
             }
 
             pParent = pParent->getParent();
@@ -1347,7 +1368,7 @@ void TYSiteNode::update(const bool& force) // Force = false
         if (pSite && pSite->isInCurrentCalcul()) { pSite->update(force); }
     }
 
-    // Si le site est dans un projet, on altimi¿½trise les points de controle
+    // Si le site est dans un projet, on altimiï¿½ï¿½trise les points de controle
     if (_pProjet)
     {
         TYCalcul* pCalcul = _pProjet->getCurrentCalcul()._pObj;
@@ -1525,7 +1546,7 @@ void TYSiteNode::appendSite(LPTYSiteNode pSiteFrom, const OMatrix& matrix, LPTYS
     LPTYTopographie pTopoFrom = pSiteFrom->getTopographie();
     LPTYTopographie pTopoTo = pSiteTo->getTopographie();
 
-    // BUG #0008309 : Courbe de niveau pas prise en compte dans l'altimi¿½trie
+    // BUG #0008309 : Courbe de niveau pas prise en compte dans l'altimiï¿½ï¿½trie
     if (pSiteFrom->getUseEmpriseAsCrbNiv())
     {
         pTopoTo->addCrbNiv(new TYCourbeNiveau(pTopoFrom->getEmprise(), pSiteFrom->getAltiEmprise()));

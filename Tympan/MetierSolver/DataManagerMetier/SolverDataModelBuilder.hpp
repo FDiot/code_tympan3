@@ -13,16 +13,44 @@
 
 #include <deque>
 
+#include <QtCore/qhash.h>
+
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
 
 // Solver data model header files.
-#include "entities.hpp"
-#include "relations.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/relations.hpp"
 
 
 namespace tympan
 {
+
+//! Useful UUID (Universal Unique Identifier) adapter.
+/*! Make a bridge between \c tympan::binary_uuid from the solver schema and \c
+ TYUUID.
+
+ \note that TYUUID contains a 'quid' attribute which is Qt Uuid type (i.e. \c
+ QUuid).
+ */
+class UuidAdapter
+{
+public:
+    UuidAdapter(const TYUUID& rhs);
+    //! Allow conversion to \c TYUUID.
+    operator TYUUID () const;
+
+    //! Get the Uuid.
+    binary_uuid getUuid() const { return uuid; }
+
+private:
+    //! Do not allow to build.
+    UuidAdapter() {};
+
+    //! Store unsigned char[16] in a way to easily share data with a \c QUuid.
+    binary_uuid uuid;
+};
+
 
 class SolverDataModelBuilder
 {
@@ -51,15 +79,25 @@ public:
      */
     void setGeometricEntities(LPTYSiteNode site_ptr);
 
-    //! Fill the \c acoustic_surfaces attribute.
-    /*! Create & relate an \c tympan::AcousticSurface with a \c
+    //! Fill the \c acoustic_triangles attribute.
+    /*! Create & relate an \c tympan::AcousticTriangle with a \c
         tympan::SiteElement. Update the relation \c tympan::surface_has_node'
         relation.
      \param element_uid the unique \c TYElement ID (from QUuid to QString).
      \param point_list List of points related to the surface.
      */
-    void setAcousticSurface(const string& element_uid,
-                            const TYTabPoint& point_list);
+    void setAcousticTriangle(const TYAcousticSurface* pSurf);
+
+
+    //! Update some relations related to \c tympan::AcousticSpectrum.
+    /*! Update relations \c tympan::frequency_rdef and \c tympan::sample_of_rdef
+        between a \c tympan::AcousticSpectrum and \c tympan::Frequency & \c
+        tympan::SpectrumSample.
+      \param ty_spectrum A spectrum from a Tympan site
+      \param spectrum_ptr The entity 'spectrum' from the solver data model.
+     */
+    void updateSpectrumRelations(const TYSpectre* ty_spectrum_ptr,
+                                 const AcousticSpectrum::pointer spectrum_ptr);
 
     //! Set the frequencies.
     /*! Note that the frequencies are stored in a static attribute in Tympan
@@ -74,34 +112,29 @@ public:
     //! Update ground surface.
     /*! \warning Not implemented yet. Complete arguments. Link it with:
           - AcousticSpectrum
-          - AcousticSurface
+          - AcousticTriangle
      */
     void setAcousticBuildMaterial();
 
     //! Update the \c tympan::AcousticSource
-    /*! \warning Not implemented yet. Complete input args (if necessary). Link
+    /*! \todo Complete input args (if necessary). Link
         it with:
-           - AcousticSurface
+           - AcousticTriangle
            - AcousticSpectrum
            - SiteUserAcousticSource
            - GlobalContribution (solver output?)
            - AcousticPath (solver output)
-           - DefaultSolverSourceDirectivity
+           - DefaultSolverSourceDirectivity (not yet)
      */
     void setAcousticSource(LPTYSiteNode site_ptr);
 
     //! Update the \c tympan::AcousticReceptor
-    /*! \warning Not implemented yet. Complete input args (if necessary). Link
-        it with:
-           - AcousticSurface
-           - AcousticSpectrum
-           - SiteUserAcousticSource
-           - GlobalContribution (solver output?)
-           - AcousticPath (solver output)
+    /*! \todo Complete input args (if necessary). Link it with \c
+        tympan::SiteElement which corresponds to a 'SiteAcousticReceptor( (do
+        not occur in the schema) by the relation 'receptor'.
      \param site_ptr A pointer to a \c TYSiteNode.
      */
     void setAcousticReceptor(LPTYSiteNode site_ptr);
-
 
     //! Update the \c tympan::DiffractionEdge entity.
     /*! \warning Not implemented yet. Complete arguments. Link it with a \c
@@ -117,18 +150,27 @@ public:
      */
     void setDirectivityCoefficient();
 
+
+    /**
+     * @brief Maps a \c TYPoint as a \c tympan::Node
+     * @param point the \c TYPoint to be mapped
+     * @return a smart pointer to the corresponding Node (created on the fly if needed)
+     */
+    Node::pointer node_for(const TYPoint& point); // TODO
+
     ////////////////
     // Attributes //
     ////////////////
 
-    //! Stores the entity \c tympan::Site (root & childs).
-    // std::deque<boost::shared_ptr<Site> > sites;
+    //! Is frequencies table loaded from the static table for a single a \c
+    //! TYCalcul.
+    bool is_frequency;
 
     //! Stores all nodes of a site.
     std::deque<boost::shared_ptr<Node> > nodes;
 
-    //! Stores all \c tympan::AcousticSurface of a site.
-    std::deque<boost::shared_ptr<AcousticSurface> > acoustic_surfaces;
+    //! Stores all \c tympan::AcousticTriangle of a site.
+    std::deque<boost::shared_ptr<AcousticTriangle> > acoustic_triangles;
 
     //! Stores \c tympan::SpectrumSample.
     std::deque<boost::shared_ptr<SpectrumSample> > spectrum_samples;
@@ -136,14 +178,7 @@ public:
     //! Stores \c tympan::Frequency.
     std::deque<boost::shared_ptr<Frequency> > frequencies;
 
-    //! Is frequencies table loaded from the static table for a single a \c
-    //! TYCalcul.
-    bool is_frequency;
-
-    //! According to the data model, the \c tympan::SpectrumSample is unique.
-    // \warning XXX use a deque container. Remove if from the
-    // SolverDataModelBuilder constructor! See 'setAcousticBuildMaterial' which
-    // updates/uses this entity.
+    //! Stores \c tympan::AcousticSpectrum.
     std::deque<boost::shared_ptr<AcousticSpectrum> > acoustic_spectrums;
 
     //! Stores \c tympan::AcousticSource.
@@ -151,7 +186,24 @@ public:
 
     //! Stores \c tympan::AcousticReceptor.
     std::deque<boost::shared_ptr<AcousticReceptor> > acoustic_receptors;
-};
+
+protected:
+    //! Stores a mapping from \c TYPoint-s' uuid to \c tympan::Node::pointer-s
+    //XXX Do we want a Node::pointer or a weak pointer ? This is safer...
+    QHash<TYUUID, Node::pointer> pointsUID_to_Nodes;
+    QHash<TYUUID, SiteElement::pointer> elementsUID_to_SiteElement;
+
+#ifdef NDEBUG
+    void assertConsistency_pointsUID_to_Nodes(const TYPoint& point) {};
+#else
+    void assertConsistency_pointsUID_to_Nodes(const TYPoint& point);
+#endif // DEBUG
+}; // class SolverDataModelBuilder
 
 } /* namespace tympan */
+
+bool operator == (const TYPoint& point, const tympan::Node::pointer& node);
+inline bool operator == (const tympan::Node::pointer& node, const TYPoint& point)
+{ return point==node; };
+
 #endif /* TYMPAN__SOLVER_DATA_MODEL_BUILDER_HPP__INCLUDED */

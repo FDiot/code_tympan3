@@ -19,8 +19,9 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
-#include "Tympan/MetierSolver/SolverDataModel/site_functions.hpp"
+#include "Tympan/MetierSolver/DataManagerMetier/site_functions.hpp"
 
+#include "test_utils/ProjectLoader.hpp"
 
 using namespace tympan;
 
@@ -28,40 +29,18 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-// Fixture which loads a 'TYSite' from a XML file.
-// XXX \todo Do not load the site for every test.
-// To use this fixture, use 'TEST_F' (instead of 'TEST').
+/* This Fixture loads a project from an XML project file */
 class BuildingFromSiteFixture: public ::testing::Test
 {
 public:
     // static void SetUpTestCase()
     virtual void SetUp()
     {
-        xml_filename = QString("tiny_site.xml");
-        // Load XML file.
-        int is_loaded = xmlManager.load(xml_filename, elements);
-        EXPECT_EQ(is_loaded, 1);
-
-        // Retrieve project.
-        unsigned int i;
-        for (i = 0; i < elements.size(); ++i)
-        {
-            LPTYElement elt = elements[i];
-            if (std::strcmp(elt->getClassName(), "TYProjet") == 0)
-            {
-                project = static_cast<TYProjet*>(elt.getRealPointer());
-                break;
-            }
-        }
-        // Project should exist.
-        EXPECT_TRUE(project);
-        // Update site node.
-        project->getSite()->update();
+    	const char filename[] = "../data/tiny_site.xml";
+    	load_project_from_file(filename, project);
+    	assert_loaded_project(project);
     }
 
-    QString xml_filename;
-    TYXMLManager xmlManager;
-    TYElementCollection elements;
     LPTYProjet project;
 };
 
@@ -74,9 +53,9 @@ TEST_F(BuildingFromSiteFixture, check_size)
 
     // Get the number of points.
     unsigned int points_number = total_point_number(site_ptr);
-    EXPECT_EQ(points_number, 17);
+    EXPECT_EQ(17, points_number); //XXX Check the reference value
 
     // Get the number of surfaces (without 'ecran' by default).
     unsigned int surfaces_number = get_acoustic_surface_number(site_ptr);
-    EXPECT_EQ(surfaces_number, 22);
+    EXPECT_EQ(22, surfaces_number); //XXX Check the reference value
 }

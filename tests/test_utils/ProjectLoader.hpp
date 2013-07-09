@@ -37,5 +37,43 @@ void load_project_from_file(const char * filename, LPTYProjet& project);
  */
 void assert_loaded_project(const LPTYProjet& project);
 
+/**
+ * @brief Assert some assumptions on the current computation in a loaded project
+ * @param project the project to be asserted.
+ */
+void assert_current_computation_project(const LPTYProjet& project);
+
+/**
+ * @brief Extract some caracteristic counts for the altimetry
+ * @param project the TYMPAN project
+ * @param nb_triangles Output arg for the number of triangles
+ * @param nb_vertices Output arg for the number of vertices
+ * @param nb_edges Output arg for the total number of edges
+ * @param nb_constrained_edges utput arg for the number of constrained edges
+ */
+void get_altimetry_numbers(LPTYProjet project,
+		unsigned& nb_triangles, unsigned& b_vertices,
+		unsigned& nb_edges, unsigned& nb_constrained_edges);
+
+
 } /* namespace tympan */
+
+// Cf. http://code.google.com/p/googletest/wiki/AdvancedGuide#How_to_Write_Value-Parameterized_Tests
+/*
+class LoadProjectFixture: public ::testing::WithParamInterface<const char*>
+{
+public:
+    // static void SetUpTestCase()
+    virtual void SetUp()
+    {
+    	const char* filename = GetParam();
+    	tympan::load_project_from_file(filename, project);
+    	tympan::assert_loaded_project(project);
+    }
+
+    LPTYProjet project;
+};
+*/
+
+
 #endif /* TYMPAN__PROJECTLOADER_HPP__INCLUDED */
