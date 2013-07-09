@@ -32,14 +32,13 @@ option( CGAL_DONT_OVERRIDE_CMAKE_FLAGS
         TRUE
       )
 
-## We are disabling CGAL in the engineering version of Code_TYMPAN 4.x.
-# find_package(CGAL COMPONENTS Qt4 REQUIRED)
-# if(CGAL_USE_FILE)
-#   message(STATUS "  ## including CGAL_USE_FILE at " "${CGAL_USE_FILE}")
-#   include(${CGAL_USE_FILE})
-# else(CGAL_USE_FILE)
-#   message(WARNING "  ## CGAL_USE_FILE is not set hence the configuration for CGAL might be incomplete")
-# endif(CGAL_USE_FILE)
+find_package(CGAL COMPONENTS Qt4 REQUIRED)
+if(CGAL_USE_FILE)
+  message(STATUS "  ## including CGAL_USE_FILE at " "${CGAL_USE_FILE}")
+  include(${CGAL_USE_FILE})
+else(CGAL_USE_FILE)
+  message(WARNING "  ## CGAL_USE_FILE is not set hence the configuration for CGAL might be incomplete")
+endif(CGAL_USE_FILE)
 
 if(WIN32)
   # Tries to put pre-built GMP and MPFR in the PATH

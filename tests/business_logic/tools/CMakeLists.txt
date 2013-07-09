@@ -3,7 +3,7 @@ file (GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp )
 # XXX It should be possible to make TYMPAN_MODULES much lighter
 set(TYMPAN_MODULES
   tympan_dm_metier tympan_dm_graphics tympan_dm_ihm tympan_dm_core
-  #tympan_solver_data_model
+  tympan_solver_data_model
   tympan_tools_metier tympan_tools_graphics tympan_tools
 )
 
