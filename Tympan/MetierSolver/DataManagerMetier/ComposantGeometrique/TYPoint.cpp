@@ -200,7 +200,7 @@ int TYPoint::fromXML(DOM_Element domElement)
         seg._ptB = points[i];
         dist = seg.longueur();
 
-        if (dist < TYSEUILCONFONDUS) { continue; } // iï¿½ï¿½limination du point en doublon
+        if (dist < TYSEUILCONFONDUS) { continue; } // i¿½limination du point en doublon
 
         // Si les points sont trop eloignes...
         if (dist > distanceMax)
@@ -222,6 +222,15 @@ int TYPoint::fromXML(DOM_Element domElement)
     if (pointAdded) { retTab = checkPointsMaxDistance(retTab, distanceMax); }
 
     return retTab;
+}
+
+/*static*/ TYTabPoint TYPoint::checkPointsMaxDistance(const TYPoint& point1, const TYPoint& point2, const double& distanceMax)
+{
+	TYTabPoint tabPoints;
+	tabPoints.push_back(point1);
+	tabPoints.push_back(point2);
+
+	return checkPointsMaxDistance(tabPoints, distanceMax);
 }
 
 /*static*/ TYTabPoint TYPoint::checkPointsMaxDistance(const TYTabPoint& points)

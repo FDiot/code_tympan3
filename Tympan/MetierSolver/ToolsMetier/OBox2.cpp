@@ -22,6 +22,18 @@
 OBox2::OBox2()
 {
     _min._x = _min._y = _min._z = _max._x = _max._y = _max._z = 0;
+	_center = OPoint3D(_max._x/2, _max._y/2, _max._z/2);
+	_length = _max._x/2;
+	_height = _max._z/2;
+	_width = _max._y/2;
+	_A = _min;
+	_B = OPoint3D(0, _width, 0);
+	_C = OPoint3D(_length, _width, 0);
+	_D = OPoint3D(_length, 0, 0);
+	_E = OPoint3D(_length, 0, _height);
+	_F = OPoint3D(0, 0, _height);
+	_G = OPoint3D(0, _width, _height);
+	_H = _max;
     _repere = ORepere3D();
 }
 
@@ -30,8 +42,18 @@ OBox2::OBox2(const OBox2& box)
     _min = box._min;
     _max = box._max;
     _repere = box._repere;
-	_A = _min;
-	_H = _max;
+	_center = OPoint3D(_max._x/2, _max._y/2, _max._z/2);
+	_length = _max._x/2;
+	_height = _max._z/2;
+	_width = _max._y/2;
+	_A = box._min;
+	_B = OPoint3D(0, _width, 0);
+	_C = OPoint3D(_length, _width, 0);
+	_D = OPoint3D(_length, 0, 0);
+	_E = OPoint3D(_length, 0, _height);
+	_F = OPoint3D(0, 0, _height);
+	_G = OPoint3D(0, _width, _height);
+	_H = box._max;
 }
 
 OBox2::OBox2(const OBox& box, const ORepere3D& repere)
@@ -39,8 +61,18 @@ OBox2::OBox2(const OBox& box, const ORepere3D& repere)
     _min = box._min;
     _max = box._max;
     _repere = repere;
-	_A = _min;
-	_H = _max;
+	_center = OPoint3D(_max._x/2, _max._y/2, _max._z/2);
+	_length = _max._x/2;
+	_height = _max._z/2;
+	_width = _max._y/2;
+	_A = box._min;
+	_B = OPoint3D(0, _width, 0);
+	_C = OPoint3D(_length, _width, 0);
+	_D = OPoint3D(_length, 0, 0);
+	_E = OPoint3D(_length, 0, _height);
+	_F = OPoint3D(0, 0, _height);
+	_G = OPoint3D(0, _width, _height);
+	_H = box._max;
 }
 
 OBox2::OBox2(const OCoord3D& min, const OCoord3D& max, const ORepere3D& repere)
@@ -48,7 +80,17 @@ OBox2::OBox2(const OCoord3D& min, const OCoord3D& max, const ORepere3D& repere)
     _min = min;
     _max = max;
     _repere = repere;
+	_center = OPoint3D(_max._x/2, _max._y/2, _max._z/2);
+	_length = _max._x/2;
+	_height = _max._z/2;
+	_width = _max._y/2;
 	_A = _min;
+	_B = OPoint3D(0, _width, 0);
+	_C = OPoint3D(_length, _width, 0);
+	_D = OPoint3D(_length, 0, 0);
+	_E = OPoint3D(_length, 0, _height);
+	_F = OPoint3D(0, 0, _height);
+	_G = OPoint3D(0, _width, _height);
 	_H = _max;
 }
 
@@ -76,6 +118,15 @@ OBox2& OBox2::operator=(const OBox2& box)
     {
         _min = box._min;
         _max = box._max;
+		_A = box._min;
+		_B = OPoint3D(box._min._x, box._max._y, box._min._z);
+		_C = OPoint3D(box._max._x, box._max._y, box._min._z);
+		_D = OPoint3D(box._max._x, box._min._y, box._min._z);
+		_E = OPoint3D(box._max._x, box._min._y, box._max._z);
+		_F = OPoint3D(box._min._x, box._min._y, box._max._z);
+		_G = OPoint3D(box._min._x, box._max._y, box._max._z);
+		_H = box._max;
+		_center = OPoint3D(box._max._x/2, box._max._y/2, box._max._z/2);
         _repere = box._repere;
     }
     return *this;
@@ -88,6 +139,15 @@ bool OBox2::operator==(const OBox2& box) const
         if (_min != box._min) { return false; }
         if (_max != box._max) { return false; }
         if (_repere != box._repere) { return false; }
+		if (_A != box._min) { return false; }
+		if (_B != OPoint3D(box._min._x, box._max._y, box._min._z)) { return false; }
+		if (_C != OPoint3D(box._max._x, box._max._y, box._min._z)) { return false; }
+		if (_D != OPoint3D(box._max._x, box._min._y, box._min._z)) { return false; }
+		if (_E != OPoint3D(box._max._x, box._min._y, box._max._z)) { return false; }
+		if (_F != OPoint3D(box._min._x, box._min._y, box._max._z)) { return false; }
+		if (_G != OPoint3D(box._min._x, box._max._y, box._max._z)) { return false; }
+		if (_H != box._max) { return false; }
+		if (_center != OPoint3D(box._max._x/2, box._max._y/2, box._max._z/2)) { return false; }
     }
     return true;
 }
@@ -157,14 +217,14 @@ void OBox2::BoxRotationOzOy(double alpha, double theta)
 	OVector3D OHf = GetRotationOzOy(alpha, theta, OH);
 
 	//It changes the box properties
-	_A.setCoords(OAf._x, OAf._y, OAf._z);
-	_B.setCoords(OBf._x, OBf._y, OBf._z);
-	_C.setCoords(OCf._x, OCf._y, OCf._z);
-	_D.setCoords(ODf._x, ODf._y, ODf._z);
-	_E.setCoords(OEf._x, OEf._y, OEf._z);
-	_F.setCoords(OFf._x, OFf._y, OFf._z);
-	_G.setCoords(OGf._x, OGf._y, OGf._z);
-	_H.setCoords(OHf._x, OHf._y, OHf._z);
+	_A.setCoords(OAf._x + _center._x, OAf._y + _center._y, OAf._z + _center._z);
+	_B.setCoords(OBf._x + _center._x, OBf._y + _center._y, OBf._z + _center._z);
+	_C.setCoords(OCf._x + _center._x, OCf._y + _center._y, OCf._z + _center._z);
+	_D.setCoords(ODf._x + _center._x, ODf._y + _center._y, ODf._z + _center._z);
+	_E.setCoords(OEf._x + _center._x, OEf._y + _center._y, OEf._z + _center._z);
+	_F.setCoords(OFf._x + _center._x, OFf._y + _center._y, OFf._z + _center._z);
+	_G.setCoords(OGf._x + _center._x, OGf._y + _center._y, OGf._z + _center._z);
+	_H.setCoords(OHf._x + _center._x, OHf._y + _center._y, OHf._z + _center._z);
 	_min = _A;
 	_max = _H;
 }
@@ -255,10 +315,31 @@ void OBox2::Enlarge(const OBox2& box)
 */
 void OBox2::Translate(const OPoint3D& vectorTranslate)
 {
-    _min._x += vectorTranslate._x;
-    _min._y += vectorTranslate._y;
-    _min._z += vectorTranslate._z;
-    _max._x += vectorTranslate._x;
-    _max._y += vectorTranslate._y;
-    _max._z += vectorTranslate._z;
+	_center._x += vectorTranslate._x;
+	_center._y += vectorTranslate._y;
+	_center._z += vectorTranslate._z;
+    _A._x += vectorTranslate._x;
+    _A._y += vectorTranslate._y;
+    _A._z += vectorTranslate._z;
+    _H._x += vectorTranslate._x;
+    _H._y += vectorTranslate._y;
+    _H._z += vectorTranslate._z;
+    _B._x += vectorTranslate._x;
+    _B._y += vectorTranslate._y;
+    _B._z += vectorTranslate._z;
+	_C._x += vectorTranslate._x;
+    _C._y += vectorTranslate._y;
+    _C._z += vectorTranslate._z;
+    _D._x += vectorTranslate._x;
+    _D._y += vectorTranslate._y;
+    _D._z += vectorTranslate._z;
+    _E._x += vectorTranslate._x;
+    _E._y += vectorTranslate._y;
+    _E._z += vectorTranslate._z;
+    _F._x += vectorTranslate._x;
+    _F._y += vectorTranslate._y;
+    _F._z += vectorTranslate._z;
+	_G._x += vectorTranslate._x;
+    _G._y += vectorTranslate._y;
+    _G._z += vectorTranslate._z;
 }

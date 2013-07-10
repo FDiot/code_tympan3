@@ -414,7 +414,7 @@ class TYSiteNode: public TYElement
     void getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const;
     void getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const;
 
-    /// Get/Set du choix du systeme de repere du SIG
+	/// Get/Set du choix du systeme de repere du SIG
     int getSIGType() { return _SIGType; }
     const int getSIGType() const { return _SIGType; }
     void setSIGType(int SIGType) { _SIGType = (systemSIG) SIGType; }

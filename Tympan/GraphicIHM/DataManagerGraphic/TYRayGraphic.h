@@ -32,7 +32,7 @@
 #include "TYElementGraphic.h"
 
 class TYRay;
-struct TYRayEvent;
+class TYRayEvent;
 
 /**
  * Classe graphique pour representer un rayon

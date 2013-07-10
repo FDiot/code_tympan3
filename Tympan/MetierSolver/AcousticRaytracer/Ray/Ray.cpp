@@ -13,8 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */ 
  
-#include "Ray.h"
+#include <cassert>
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/event.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
+#include "Ray.h"
 
 void Ray::computeLongueur()
 {
@@ -143,4 +145,30 @@ std::vector<unsigned int> Ray::getPrimitiveHistory()
 
     result.push_back(((Recepteur*)recepteur)->getId());
     return result;
+}
+
+signature Ray::getSignature(const typeevent& typeEv)
+{
+	// The source id is stored in 12 bits, receptor is stored in 20 bits
+	unsigned int SR = source->getId(), SD = 0;
+	assert(SR < 4096);
+	SR = SR << 20;
+	unsigned int R = (static_cast<Recepteur*>(recepteur))->getId();
+	assert(R < 1048576);
+
+	SR += R;
+
+	for (unsigned int i=0; i<events.size(); i++)
+	{
+		SD = SD << 1;
+
+		if ( events.at(i)->getType() == DIFFRACTION) { SD++; }
+	}
+
+	if (typeEv == SPECULARREFLEXION) 
+	{
+		SD = core_mathlib::buildComplementaryBitSet(getNbEvents(), SD);
+	}
+
+	return std::make_pair(SR, SD);
 }

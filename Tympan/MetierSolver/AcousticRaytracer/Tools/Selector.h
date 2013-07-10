@@ -59,7 +59,7 @@ struct CompareToKey
         {
             return false;
         }
-        //La list avec la plus grande taille est superieure a l'autre
+        //La liste avec la plus grande taille est superieure a l'autre
         if (list1.size() < list2.size())
         {
             return true;

@@ -136,12 +136,13 @@ void TYCalculParcours::AjouterSegmentSR(double* ptA, double* ptB)
 {
     assert(_geoSR->_nNbPointTotal == 0);
     assert(_geoSR->_nNbPolylines == 0);
-    //On fait ici le choix du systeme de coordonnee:
+    
+	//On fait ici le choix du systeme de coordonnee:
     double dDeltaX = fabs(ptA[0] - ptB[0]);
     double dDeltaY = fabs(ptA[1] - ptB[1]);
     InitChangementVariable2D3D(dDeltaX < dDeltaY);
-    //InitChangementVariable2D3D(ptA[0] == ptB[0]);
-    AjouterSegment(ptA, ptB, false, false, _geoSR);
+
+	AjouterSegment(ptA, ptB, false, false, _geoSR);
 }
 
 void TYCalculParcours::PointTrajetGauche(int i, double* pt)
@@ -346,7 +347,6 @@ int TYCalculParcours::Traite(
         int nNbPointsSelectiones = _geoImporterDXF->SelectionnePointsEntreSetRetDuCoteDeSR(_geoSR, TableauDePointsSelectionnes, _geoImporterDXF->_nNbPointTotal);
 
         TYPointParcours** TableauDePointsEC = new TYPointParcours*[nNbPointsSelectiones];
-        //int nNbPointsEC = TYSetGeometriqueParcours::EnveloppeConvexeLes2PremiersPointsEtantLesPlusBas(TableauDePointsSelectionnes, nNbPointsSelectiones, TableauDePointsEC);
 
         int nNbPointsEC;
         bool bWrong = false;

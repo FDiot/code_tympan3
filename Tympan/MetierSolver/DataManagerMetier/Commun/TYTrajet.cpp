@@ -45,6 +45,19 @@ TYTrajet::~TYTrajet()
     _pPtCalcul = NULL;
 }
 
+void TYTrajet::reset()
+{
+    _chemins.clear();
+    _cheminsDirect.clear();
+
+	for (unsigned int i = 0; i<_tabRays.size(); i++)
+	{
+		delete _tabRays[i];
+		_tabRays[i] = NULL;
+	}
+}
+
+
 TYTrajet& TYTrajet::operator=(const TYTrajet& other)
 {
     if (this != &other)
@@ -77,13 +90,6 @@ bool TYTrajet::operator==(const TYTrajet& other) const
 bool TYTrajet::operator!=(const TYTrajet& other) const
 {
     return !operator==(other);
-}
-
-
-void TYTrajet::reset()
-{
-    _chemins.clear();
-    _cheminsDirect.clear();
 }
 
 void TYTrajet::addChemin(const TYChemin& chemin)

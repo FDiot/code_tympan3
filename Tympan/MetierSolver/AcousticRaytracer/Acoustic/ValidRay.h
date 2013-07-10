@@ -19,6 +19,10 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Shape.h"
 
+/*!
+* \namespace ValidRay
+* \brief Cet espace de nom regroupe l'ensemble des fonctions nécessaires à la validation d'un rayon.
+*/
 namespace ValidRay
 {
 

@@ -47,18 +47,6 @@ public:
     R3(const R& a, const R& b, const R& c) : x(a), y(b), z(c) {}
     R3(const R3& a, const R3& b): x(b.x - a.x), y(b.y - a.y), z(b.z - a.z) {}                          // coordonnees du vecteur ab
 
-    // le constucteur par defaut est inutile
-    /*
-    R3 (const R3 & a) : x(a.x), y(a.y), z(a.z) { cout << "  const par copy " << endl;}
-    R3 ( R3 & a) : x(a.x), y(a.y), z(a.z) { cout << "  const pas const  par copy " << endl; }
-    */
-
-    // rappel les operateurs definis dans une classe ont un parametre cache qui est la classe elle meme (*this)
-
-    // les operateurs affectation
-
-    //R3 &  operator =(R3 & P)  {x = P.x; y = P.y; z = P.z;return *this;}
-
     // les autres operateurs d'affectation
     R3&   operator += (const R3& P) {x += P.x; y += P.y; z += P.z; return *this;}
     R3&   operator -= (const R3& P) {x -= P.x; y -= P.y; z -= P.z; return *this;}
@@ -99,7 +87,6 @@ public:
     R mult(const R3& Q) {return Q.x * x + Q.y * y + Q.z * z;}
 
     static const int  d = 3; // utilisation:  R3::d  (n'ajoute pas de memoire)
-
 };
 
 inline std::ostream& operator <<(std::ostream& f, const R3& P)
@@ -132,7 +119,16 @@ inline std::vector<R3> operator + (const std::vector<R3>& u, const std::vector<R
     return result;
 }
 
+/*!
+ * \fn OPoint3D R3ToOPoint3D(const R3& p)
+ * \brief convertit un R3 en OPoint3D
+ */
 inline OPoint3D R3toOPoint3D(const R3& P) { return OPoint3D(P.x, P.y, P.z); }
+
+/*!
+ * \fn R3 OPoint3DToR3(const TYPoint& p)
+ * \brief convertit un OPoint3D en R3
+ */
 inline R3 OPoint3DtoR3(const OPoint3D& P) { return R3(P._x, P._y, P._z); }
 
 #endif

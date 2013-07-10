@@ -29,7 +29,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
 
 TYTopographieGraphic::TYTopographieGraphic(TYTopographie* pElement) :
-    TYElementGraphic(pElement)
+    TYElementGraphic(pElement), _showAlti(true)
 {
     // Pour materialiser l'emprise
     _pEmpriseGraphic = new TYPolyLineGraphic(true);
@@ -130,9 +130,13 @@ void TYTopographieGraphic::display(GLenum mode /*= GL_RENDER*/)
 
     // Altimetrie
     TYTopographie* pTYTopographie = getElement();
-    LPTYAltimetrie altimetrie =  pTYTopographie->getAltimetrie();
-    LPTYElementGraphic ElementGraphic = altimetrie->getGraphicObject();
-    ElementGraphic->display(mode);
+
+	if (_showAlti)
+	{
+		LPTYAltimetrie altimetrie =  pTYTopographie->getAltimetrie();
+		LPTYElementGraphic ElementGraphic = altimetrie->getGraphicObject();
+		ElementGraphic->display(mode);
+	}
 
     // Plans d'eau
     TYTabPlanEauGeoNode* pTabPlanEau = &getElement()->getListPlanEau();

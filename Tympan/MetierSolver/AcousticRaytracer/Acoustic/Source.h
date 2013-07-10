@@ -23,10 +23,12 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 
+#include <iostream>
+#include "Tympan\MetierSolver\AcousticRaytracer\global.h"
+
 //#ifdef USE_QT
 //  #include "SourceGraphic.h"
 //#endif
-
 
 class Source : public Base
 {
@@ -102,7 +104,21 @@ public:
         //}
         else
         {
-            r = vec3(sampler->getSample());
+			// At the moment, two possibilities are available:
+			// You may want a random direction, in that case uncomment
+			// "" but if you prefer to use 
+			// the deterministic version, 
+			// "r = vec3(sampler->Discretisation(nbRayLeft));"
+			// is the one to choose.
+			switch(globalDiscretization)
+			{
+				case 0 :
+					r = vec3(sampler->getSample());
+					break;
+				case 1 :
+					r = vec3(sampler->Discretisation(nbRayLeft, globalN1, globalNbRaysPerSource, globalRayAsked));
+					break;
+			}
         }
         //std::cout<<"Renvoie d'une nouvelle direction."<<std::endl;
         return true;
@@ -123,6 +139,7 @@ protected:
     Sampler* sampler;
     int nbRayLeft;
     int initialRayCount;
+	int indice; // Knows which ray we are working on.
     unsigned int initialTargetCount;
     unsigned int targetCount;
     std::vector<vec3> directions;

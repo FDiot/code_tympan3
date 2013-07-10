@@ -75,6 +75,7 @@ public:
 	 * \param repere Local coordinate system from the box center
 	 * \param min The minimum point i.e. the one on the left bottom corner.
 	 * \param max The maximum point i.e. the one on the right upper corner.
+	 * \param A(0,0,0) B(0,1,0) C(1,1,0) D(1,0,0) E(1,0,1) F(0,0,1) G(0,1,1) H(1,1,1)
 	*/
 	OBox2(const ORepere3D repere, const OCoord3D& A, const OCoord3D& B, const OCoord3D& C, 
 			const OCoord3D& D, const OCoord3D& E, const OCoord3D& F, const OCoord3D& G, 
@@ -117,7 +118,6 @@ public:
 	 *\param N is the corner we want the coordinates of.
 	 */
 	OPoint3D BoxCoord(int N) const;
-
 
 	/**
 	 *\fn OVector3D getRotationOzOy(double alpha, double theta, OVector3D V);

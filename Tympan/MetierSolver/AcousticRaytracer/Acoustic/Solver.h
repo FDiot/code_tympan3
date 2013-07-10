@@ -59,7 +59,7 @@ public:
 
     /*!
     * \fn initGlobalValues()
-    * \brief Initialise les valeures glboales pour la simulation. Definie aussi bien les valeurs de la simulation que du solver.
+    * \brief Initialise les valeures globales pour la simulation. Definie aussi bien les valeurs de la simulation que du solver.
     */
     virtual void initGlobalValues()
     {

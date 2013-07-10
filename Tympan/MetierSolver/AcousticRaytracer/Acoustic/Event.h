@@ -25,16 +25,6 @@
 #include <vector>
 #include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 
-//#ifdef USE_QT
-//  #include "EventGraphic.h"
-//#endif
-
-//enum typeevent {
-//  SPECULARREFLEXION = 0,
-//    DIFFRACTION,
-//  REFRACTION
-//};
-
 enum typeevent
 {
     SPECULARREFLEXION = 0,
@@ -147,6 +137,12 @@ public:
    * \warning Doit etre redefini par les classes heritant de Event
    */
     virtual int getType() { return type; }
+
+	/*!
+	 * \fn virtual void setType()
+	 * \brief Added by DTh to make possible simple test of rays
+	 */
+	virtual void setType( const typeevent &_type) { type = _type; }
 
     virtual double getAngle() { return 0.0; }
 

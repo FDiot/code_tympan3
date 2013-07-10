@@ -56,10 +56,16 @@ public:
 
     void setBackgroundImage(QString sTopoFileName, int semiX, int semiY, TYPoint ptPosition, OVector3D bgOrientation);
     void unsetBackgroundImage();
+
+	void showAlti(bool show = true) { _showAlti = show; }
+
     // Membres
 protected:
     ///Objet graphic pour materialiser l'emprise.
     LPTYPolyLineGraphic _pEmpriseGraphic;
+
+	/// boolean to switch altimetrie view on/off
+	bool _showAlti;
 };
 
 

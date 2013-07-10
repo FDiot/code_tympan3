@@ -46,11 +46,11 @@ unsigned int MaterialManager::registerNewMaterial(Material* m)
 
 void MaterialManager::print()
 {
-    std::cout << "Description de la table des materiaux." << std::endl;
+    //std::cout << "Description de la table des materiaux." << std::endl;
     unsigned int compteur = 0;
     for (std::map<unsigned int, Material*>::iterator it = materials.begin(); it != materials.end(); it++)
     {
-        std::cout << "Materiau " << compteur << " : " << it->second->getName() << std::endl;
+        //std::cout << "Materiau " << compteur << " : " << it->second->getName() << std::endl;
         //#ifdef USE_QT
         //      std::cout<<"Couleur : ("<<it->second->r<<","<<it->second->g<<","<<it->second->b<<")"<<std::endl;
         //#endif

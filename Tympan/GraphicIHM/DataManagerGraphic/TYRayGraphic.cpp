@@ -52,46 +52,28 @@ void TYRayGraphic::getRayEventColor(TYRayEvent& e, float& r, float& g, float& b)
     switch (e.type)
     {
         case TYSOURCE:
-            r = 182; g = 102; b = 210; // violet; r=255; g=255; b=0; // jaune;
+            r=255; g=255; b=0;  // jaune;
             break;
+
         case TYDIFFRACTION:
-            r = 49; g = 140; b = 231; // bleu; r=0; g=0; b=255; // bleu;
-            /*if (_lastRayEventType == TYDIFFRACTION)
-            {
-                if (_repeatRayEventCount==0)
-                {
-                    r=1; g=215; b=88; // vert ;r=0; g=255; b=0; // vert
-                }
-                _repeatRayEventCount = (_repeatRayEventCount+1)%2;
-            }
-            else
-            {
-                _repeatRayEventCount = 0;
-            }*/
+            r = 49; g = 140; b = 231; // bleu
             break;
+
         case TYREFLEXION:
-            r = 255; g = 0; b = 0; // rouge;
-            /*if (_lastRayEventType == TYREFLEXION)
-            {
-                if (_repeatRayEventCount==0)
-                {
-                    r=255; g=128; b=0; // orange
-                }
-                _repeatRayEventCount = (_repeatRayEventCount+1)%2;
-            }
-            else
-            {
-                _repeatRayEventCount = 0;
-            }*/
+            r = 255; g = 0; b = 0; // rouge
             break;
+
+        case TYREFLEXIONSOL:
+            r=255; g=128; b=0; // orange
+
         case TYREFRACTION :
-            r = 0, g = 0, b = 255; // bleu
+            r=1; g=215; b=88; // vert
             break;
+
         case TYRECEPTEUR:
-            r = 255; g = 110; b = 180; //rose r=255; g=255; b=0; // jaune;
+            r = 255; g = 110; b = 180; //rose
             break;
     }
-
 }
 
 void TYRayGraphic::display(GLenum mode /*= GL_RENDER*/)
@@ -122,22 +104,22 @@ void TYRayGraphic::display(GLenum mode /*= GL_RENDER*/)
         for (unsigned int j = 0; j < pRay->getEvents().size(); j++)
         {
             float r, g, b;
-            TYRayEvent e = pRay->getEvents().at(j);
+            TYRayEvent* e = pRay->getEvents().at(j);
 
             if (j != 0)
             {
                 // 2nd point du segment
-                TYPoint pt(e.pos);
+                TYPoint pt(e->pos);
                 glVertex3f(pt._x, pt._y, pt._z);
             }
 
-            getRayEventColor(e, r, g, b);
+            getRayEventColor(*e, r, g, b);
             glColor3f(r, g, b);
-            _lastRayEventType = e.type;
-            _lastRayEventPos = e.pos;
+            _lastRayEventType = e->type;
+            _lastRayEventPos = e->pos;
 
             // 1er point du segment
-            TYPoint pt(e.pos);
+            TYPoint pt(e->pos);
             glVertex3f(pt._x, pt._y, pt._z);
         }
 

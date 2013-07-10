@@ -13,9 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */ 
  
-#include "TYANIME3DRayTracerParameters.h"
-
-//#include "ValidationEvenement.h"
+#include "TYANIME3DRayTracerSetup.h"
 
 #include <iostream>
 #include <fstream>
@@ -28,7 +26,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/ReflectionSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
 
-void TYANIME3DRayTracerParameters::initGlobalValues()
+void TYANIME3DRayTracerSetup::initGlobalValues()
 {
     ////////////////////////////
     // General Values
@@ -39,7 +37,10 @@ void TYANIME3DRayTracerParameters::initGlobalValues()
     globalAccelerator = 3;              //Choix de la structure acceleratrice. 0 : BruteForce, 1 : GridAccelerator, 2 : BVH, 3 : KdTree, other : GridAccelerator
     globalMaxTreeDepth = 12;            //Profondeur maximale autorisee pour le BVH ou KdTree.
     globalUseSol = true;                // Utilisation du sol pour les reflexions
-    globalKeepDebugRay = false;     //Permet de conserver les rayons qui ont ete invalides pendant la propagation.
+    globalKeepDebugRay = false;			//Permet de conserver les rayons qui ont ete invalides pendant la propagation.
+	globalDiscretization = 1;			//Permet de choisir entre des rayons aléatoires: 0 ou déterministes: 1 (discretisation source)
+	globalN1 = 0;						//Longitude : nbr of parts
+	globalRayAsked = 0;					// Nbr of rays initially asked by the user
 
     ////////////////////////////
     // NMPB value
@@ -74,14 +75,19 @@ void TYANIME3DRayTracerParameters::initGlobalValues()
     globalAnalyticGradV = 0.15f;    // Gradient vertical de vitesse de vent
     globalAnalyticC0 = 340.0f;      // Celerite du son initiale
     globalAnalyticTypeTransfo = 1;  // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-//    globalRestitModifiedGeom = 1;   // Indique si l'on souhaite recuperer la geometrie transformee
+	globalRestitModifiedGeom = 1;   // Indique si l'on souhaite recuperer la geometrie transformee
     globalOverSampleD = 3;          // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
+
+    /////////////////////////
+    // ANIME3D Extensions
+    /////////////////////////
+    globalUseFresnelArea = false;       // take into account the fresnel area 
 
     // Chargement des parametres de calcul
     loadParameters();
 }
 
-bool TYANIME3DRayTracerParameters::loadParameters()
+bool TYANIME3DRayTracerSetup::loadParameters()
 {
     bool bRes = true;
     const char fileName[31] = "ANIME3DRayTracerParameters.txt";
@@ -98,6 +104,17 @@ bool TYANIME3DRayTracerParameters::loadParameters()
 
     //Nombre de rayons lances par les sources
     if (params.getline(ligne, 132)) { globalNbRaysPerSource = getParam(ligne); }
+
+	//Permet de choisir entre des rayons aléatoires: 0 ou déterministes: 1 (discretisation source)
+    if (params.getline(ligne, 132)) { globalDiscretization = getParam(ligne); }
+
+	// Permet de recalculer le nombre de rayons reellement lances quand la methode
+	// de la discretisation est choisie
+	if (globalDiscretization == 1)
+	{
+		globalRayAsked = globalNbRaysPerSource;
+		globalNbRaysPerSource = getRealRayNbr(globalNbRaysPerSource, globalN1);
+	}
 
     //Diametre de la sphere representant le recepteur
     if (params.getline(ligne, 132)) { globalSizeReceiver = getParam(ligne); }
@@ -175,24 +192,27 @@ bool TYANIME3DRayTracerParameters::loadParameters()
     if (params.getline(ligne, 132)) { globalAnalyticTypeTransfo = getParam(ligne); }
 
     // Indique si l'on souhaite recuperer la geometrie transformee
-//    if (params.getline(ligne, 132)) { globalRestitModifiedGeom = getParam(ligne); }
+    if (params.getline(ligne, 132)) { globalRestitModifiedGeom = getParam(ligne); }
 
     // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
     if (params.getline(ligne, 132)) { globalOverSampleD = getParam(ligne); }
+
+    // Prise en compte (ou non) de la zone de Fresnel
+    if (params.getline(ligne, 132)) { globalUseFresnelArea = getParam(ligne); }
 
     params.close();
 
     return bRes;
 }
 
-bool TYANIME3DRayTracerParameters::postTreatmentScene(Scene* scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs)
+bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs)
 {
 	selectorManagerValidation.addSelector(new LengthSelector<Ray>(globalMaxLength));
     //  selectorManagerIntersection.addSelector(new LengthSelector<Ray>(globalMaxLength));
 	//
     selectorManagerIntersection.addSelector(new DiffractionSelector<Ray>(globalMaxDiffraction));
     selectorManagerIntersection.addSelector(new ReflectionSelector<Ray>(globalMaxReflexion, globalUseSol));
-    //  selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));
+	selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));
 
     // Ajoute des cylindres sur les arretes diffractantes
     PostTreatment::constructEdge(scene);
@@ -200,7 +220,7 @@ bool TYANIME3DRayTracerParameters::postTreatmentScene(Scene* scene, std::vector<
     return true;
 }
 
-bool TYANIME3DRayTracerParameters::valideIntersection(Ray* r, Intersection* inter)
+bool TYANIME3DRayTracerSetup::valideIntersection(Ray* r, Intersection* inter)
 {
     if (r->events.size() > static_cast<unsigned int>(globalMaxProfondeur)) { return false; }
 
@@ -223,13 +243,13 @@ bool TYANIME3DRayTracerParameters::valideIntersection(Ray* r, Intersection* inte
     return (isValid && selectorManagerIntersection.appendData(r));
 }
 
-bool TYANIME3DRayTracerParameters::valideRayon(Ray* r)
+bool TYANIME3DRayTracerSetup::valideRayon(Ray* r)
 {
     selectorManagerValidation.appendData(r);
     return true;
 }
 
-bool TYANIME3DRayTracerParameters::invalidRayon(Ray* r)
+bool TYANIME3DRayTracerSetup::invalidRayon(Ray* r)
 {
     if (!globalKeepDebugRay)
     {
@@ -243,17 +263,7 @@ bool TYANIME3DRayTracerParameters::invalidRayon(Ray* r)
     return true;
 }
 
-/*void TYANIME3DRayTracerParameters::clean()
-{
-    while(!valid_rays.empty())
-    {
-        Ray *r = valid_rays.back();
-        valid_rays.pop_back();
-        delete r;
-    }
-}*/
-
-void TYANIME3DRayTracerParameters::finish()
+void TYANIME3DRayTracerSetup::finish()
 {
     std::map<unsigned long long int, Ray*> selectedData = selectorManagerValidation.getSelectedData();
 
@@ -263,4 +273,31 @@ void TYANIME3DRayTracerParameters::finish()
     }
 
     return;
+}
+
+//Function that gives back de real number of ray sent when discretization is chosen
+int TYANIME3DRayTracerSetup::getRealRayNbr(int totalRayNbr, int& n1)
+{
+	int finalRayNbr = 0;
+	double N = totalRayNbr; // Is the number asked by the user, comes from the .txt file.
+	double theta = M_PI/2; // We're working on a sphere
+	double phi = 2*M_PI;
+	n1 = 0; // longitude : nbr of parts
+	int n2 = 0;  // latitude : nbr of parts, function of n1
+	double thetaCalcul;
+	vec3 result;
+
+	n1 = floor (M_PI * sqrt(N)/8 + 0.5);
+	n1 = 2*n1;
+	for(int i = 1; i <= n1 ;i++)
+	{
+		std::vector <double> thetaPts;
+		thetaPts.reserve(n1);
+		thetaCalcul = ( n1 - 2*i +1) * theta / n1 ;
+		thetaPts.push_back(thetaCalcul);
+		n2 = floor ( N * (  sin( (thetaCalcul) + theta /n1 ) - sin( (thetaCalcul) - theta / n1 )  ) / 2  +0.5 );
+		finalRayNbr += n2;
+	}
+
+	return finalRayNbr;
 }

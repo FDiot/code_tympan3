@@ -26,11 +26,11 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 
-OSpectreComplex::OSpectreComplex() : OSpectre()
+OSpectreComplex::OSpectreComplex(const double &defModule, const double &defPhase) : OSpectre(defModule)
 {
     for (unsigned int i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        _phase[i] = 0.0;
+        _phase[i] = defPhase;
     }
 }
 
@@ -103,8 +103,44 @@ OSpectreComplex OSpectreComplex::operator + (const OSpectreComplex& spectre) con
 
     for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        s._module[i] = this->_module[i] + spectre._module[i];
-        s._phase[i] = this->_phase[i] + spectre._phase[i];
+        s._module[i] = _module[i] + spectre._module[i];
+        s._phase[i] = _phase[i] + spectre._phase[i];
+    }
+    return s;
+}
+
+OSpectreComplex OSpectreComplex::operator * (const OSpectreComplex& spectre) const
+{
+	// Produit de deux complexes en module/phase
+	//  = produit des modules et somme des phases
+    OSpectreComplex s;
+
+    // Recopie de l'empreinte du spectre
+    s._etat = _etat;
+    s._type = _type;
+
+    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
+    {
+        s._module[i] = _module[i] * spectre._module[i];
+        s._phase[i] = _phase[i] + spectre._phase[i];
+    }
+    return s;
+}
+
+OSpectreComplex OSpectreComplex::operator / (const OSpectreComplex& spectre) const
+{
+	// Produit de deux complexes en module/phase
+	//  = rapport des modules et difference des phases
+    OSpectreComplex s;
+
+    // Recopie de l'empreinte du spectre
+    s._etat = _etat;
+    s._type = _type;
+
+    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
+    {
+        s._module[i] = _module[i] / spectre._module[i];
+        s._phase[i] = _phase[i] - spectre._phase[i];
     }
     return s;
 }
@@ -229,6 +265,21 @@ OSpectreComplex OSpectreComplex::sumComplex(const OSpectreComplex& spectre) cons
     {
         s._module[i] = this->_module[i] + spectre._module[i];
         s._phase[i] = this->_phase[i] + spectre._phase[i];
+    }
+    return s;
+}
+
+OSpectreComplex OSpectreComplex::sumComplex(const OSpectre& spectre) const
+{
+    OSpectreComplex s;
+
+    // Recopie de l'empreinte du spectre
+    s._etat = _etat;
+    s._type = _type;
+
+    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
+    {
+		s._module[i] = this->_module[i] + spectre.getTabValReel()[i];
     }
     return s;
 }

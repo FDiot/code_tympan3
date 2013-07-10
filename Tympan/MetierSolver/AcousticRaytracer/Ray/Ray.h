@@ -29,6 +29,7 @@ using namespace std;
 //  #include "RayGraphic.h"
 //#endif
 
+typedef std::pair<unsigned int, unsigned int> signature;
 
 class Ray : public Base
 {
@@ -95,18 +96,24 @@ public:
     double getLongueur() {return longueur;}
 
     /*!
-    * \fn double getDiff()
+    * \fn unsigned int getDiff()
     * \brief Renvoie le nombre de diffractions realisees par le rayon parcourue par le rayon
     * \return Nombre de diffractions realisees par le rayon.
     */
     unsigned int getDiff() { return nbDiffraction; }
 
     /*!
-    * \fn double getReflex()
+    * \fn unsigned int getReflex()
     * \brief Renvoie le nombre de reflexions realisees par le rayon parcourue par le rayon
     * \return Nombre de reflexions realisees par le rayon.
     */
     unsigned int getReflex() { return nbReflexion; }
+
+	/*!
+	 * \fn unsigned int getNbEvents(); 
+	 * \brief Return the total number of events
+	 */
+	unsigned int getNbEvents() { return nbDiffraction + nbDiffraction; }
 
     /*!
     * \fn double getEvents()
@@ -138,6 +145,12 @@ public:
     * \return Pointeur vers le recepteur rayon. Renvoie NULL si le rayon n'a pas de recepteur associe
     */
     void* getRecepteur() { return recepteur; }
+
+	/*!
+	 * \fn signature getSignature(const typeevent& ev = SPECULARREFLEXION);
+	 * \brief Compute the signature (i.e. std::pair<unsigned int, unsigned int>) of the ray)
+	 */
+	signature getSignature(const typeevent& typeEv = SPECULARREFLEXION);
 
 public:
     vec3 position;                              /*!< Point de depart du rayon */

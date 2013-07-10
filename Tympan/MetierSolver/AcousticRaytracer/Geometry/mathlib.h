@@ -1096,6 +1096,31 @@ inline decimal ClosestDistanceBetweenDotAndTriangle(
 
     return (decimal) fabs(fSqrDist);
 }
+
+/*
+ * \brief binary operation
+ */
+
+/*!
+ * \fn unsigned int buildBitSet(const unsigned int length)
+ * \brief build a bit sequence set to 1, for length bits
+ */
+inline unsigned int buildBitSet(const unsigned short& length)
+{
+	unsigned int res = 1;
+	for (unsigned short i=0; i<length-1; i++, res++) { res = res << 1; }
+	return res;
+}
+
+/*
+ * \fn sequence buildComplementaryBitSet(const unsigned& int length, const unsigned int& bitSet )
+ * \brief build the bit sequence repesenting complementary of bitset, taking account of is real useful length
+ */
+inline unsigned int buildComplementaryBitSet(const unsigned int& length, const unsigned int& bitSet)
+{
+	return  (bitSet ^ buildBitSet(length));
+}
+
 }; //fin namespace
 using namespace core_mathlib;
 #endif // __HMATHLIB__

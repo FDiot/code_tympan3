@@ -108,6 +108,8 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
 
     _typeSaisieMeteo = 0;
 
+	_bSaveRay = true;
+
     _nbThread = 4;
 
 #if TY_USE_IHM

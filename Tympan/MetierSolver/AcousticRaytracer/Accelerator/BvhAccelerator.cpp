@@ -158,7 +158,7 @@ BvhAccelerator::BvhAccelerator(std::vector<Shape*>* _initialMesh,
     else if (sm == "equal") { splitMethod = SPLIT_EQUAL_COUNTS; }
     else
     {
-        std::cout << "BVH split method " << sm.c_str() << " unknown.  Using \"sah\"." << std::endl;
+        //std::cout << "BVH split method " << sm.c_str() << " unknown.  Using \"sah\"." << std::endl;
         splitMethod = SPLIT_SAH;
     }
 
@@ -466,7 +466,7 @@ bool BvhAccelerator::build()
                                         primitives.size(), &totalNodes,
                                         orderedPrims);
     primitives.swap(orderedPrims);
-    std::cout << "BVH created with " << totalNodes << " nodes for " << (int)primitives.size() << " primitives (" << float(totalNodes * sizeof(LinearBVHNode)) / (1024.f * 1024.f) << " MB)" << std::endl;
+    //std::cout << "BVH created with " << totalNodes << " nodes for " << (int)primitives.size() << " primitives (" << float(totalNodes * sizeof(LinearBVHNode)) / (1024.f * 1024.f) << " MB)" << std::endl;
 
     // Compute representation of depth-first traversal of BVH tree
     nodes = (LinearBVHNode*)malloc(totalNodes * sizeof(LinearBVHNode));

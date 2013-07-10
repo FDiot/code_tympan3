@@ -17,9 +17,8 @@
 #define _TYRAY_
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"          //Importation des TYPoint et TYTabPoint
-#include "TYPointControl.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
+
+#include <vector>
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRayGraphic.h"
@@ -28,34 +27,57 @@
 enum TY_RAY_EVENT
 {
     TY_NO_TYPE = 0,
-    TYDIFFRACTION,
-    TYREFLEXION,
-    TYREFRACTION,
-    TYSOURCE,
-    TYRECEPTEUR
+    TYDIFFRACTION = 1,
+    TYREFLEXION = 2,
+    TYREFLEXIONSOL = 4,
+    TYREFRACTION = 8,
+    TYSOURCE = 16,
+    TYRECEPTEUR = 32, 
+	TY_ALL_TYPE = TYDIFFRACTION | TYREFLEXION | TYREFLEXIONSOL | TYREFRACTION | TYSOURCE | TYRECEPTEUR
 };
 
-struct TYRayEvent
+class TYRayEvent
 {
+/*!
+* \class TYRayEvent
+* \brief This class store data and provide functions to manipulate event in the acoustic context
+* \author Projet_Tympan
+*/
+
 public:
-	TYRayEvent() {}
-    TYRayEvent(const TYPoint& pt, const double& ang=0.0, const double& angtheta=0.0, const TY_RAY_EVENT& ev = TY_NO_TYPE, const int& idF1=0, const int& idF2=0);
-    TYPoint pos;        /*!< Position de l'evenement */
-    double angle;       /*!< Angle d'incidence du rayon  (pour l'angle de tir - plan x,z -)*/
-    double angletheta;  /*!< Angle de tir sur un plan horizontal (x,y) */
-    TY_RAY_EVENT type;  /*!< Type d'evenement */
-    int idFace1;        /*!< identifiant de la face sur laquelle a lieu l'evenement (reflexion & diffraction)*/
-	int idFace2;		/*!< identifiant de la face sur laquelle a lieu l'evenement (diffraction seulement)*/
+	TYRayEvent();
+
+    TYRayEvent(const OPoint3D& pt);
+
+	TYRayEvent(const TYRayEvent& ev);
+
+	~TYRayEvent();
+
+	TYRayEvent& operator=(const TYRayEvent& other);
+
+	OPoint3D pos;			/*!< Position de l'evenement */
+	double distNextEvent;	/*!< Distance between this event and the next one in TYRay's list of events */
+	double distEndEvent;	/*!< Distance between this event and the next event needed for calculating (for ex. reflexion after a diffraction) */
+    double distPrevNext;	/*!< Distance between event-1 and event +1 */
+	double angle;			/*!< Angle d'incidence du rayon  (pour l'angle de tir - plan x,z -)*/
+    double angletheta;		/*!< Angle de tir sur un plan horizontal (x,y) */
+    TY_RAY_EVENT type;		/*!< Type d'evenement */
+    int idFace1;			/*!< identifiant de la face sur laquelle a lieu l'evenement (reflexion & diffraction)*/
+	int idFace2;			/*!< identifiant de la face sur laquelle a lieu l'evenement (diffraction seulement)*/
+	TYRayEvent *previous;	/*!< Pointer to the previous event in TYRay's list of events*/
+	TYRayEvent *next;		/*!< Pointer to the next event in TYRay's list of events*/
+	TYRayEvent *endEvent;	/*!< Pointer to the next event in TYRay's list of events needed for calculating (for ex. reflexion after a diffraction) */
 };
 
-typedef std::vector<TYRayEvent> TYTabRayEvent;
+typedef std::vector<TYRayEvent*> TYTabRayEvent;
+class TYPointCalcul;
+class TYSourcePonctuelle;
 
 /*!
 * \file TYRay.h
 * \class TYRay
-* \brief Classe di申crivant un rayon acoustique gi申ri申 par un lancer de rayon. Cette classe doit permettre la modi申lisation de rayons pour l'affichage de Tympan.
+* \brief Classe decrivant un rayon acoustique gere par un lancer de rayon. Cette classe doit permettre la modelisation de rayons pour l'affichage de Tympan.
 * \todo : ajout des listes de diffractions/reflexions
-* \author Projet_Tympan
 * \author Projet_Tympan
 */
 class TYRay: public TYElement
@@ -67,18 +89,17 @@ public:
 
     /*!
     * \fn TYRay()
-    * \brief Constructeur par di申faut
+    * \brief Constructeur par defaut
     */
     TYRay();
 
     /*!
     * \fn TYRay(TYSourcePonctuelle *_sourceP, TYPointControl *_recepP, TYTabPoint &_polyligne)
     * \brief Construction d'un rayon avec une source, un recepteur et une liste de positions d'i申vi申nements acoustiques (ri申flexion, diffraction, etc...)
-    * \warning Hypothi申se : Le premier point de la polyligne correspond i申 la position de la source en coordonni申es globales et le dernier point de la polyligne
-    * correspond i申 la position du recepteur en coordonni申es globales. Si ces conditions ne sont pas respecti申es, la fonction renvoie un rayon vide equivalent i申 TYRay()
+    * \warning Hypothese : Le premier point de la polyligne correspond i申 la position de la source en coordonni申es globales et le dernier point de la polyligne
+    * correspond a la position du recepteur en coordonni申es globales. Si ces conditions ne sont pas respecti申es, la fonction renvoie un rayon vide equivalent i申 TYRay()
     */
-    //  TYRay(TYSourcePonctuelle *_sourceP, TYPointControl *_recepP, std::vector<TYRayEvent> &_events);
-    TYRay(TYSourcePonctuelle* _sourceP, TYPointCalcul* _recepP, std::vector<TYRayEvent> &_events);
+    TYRay(TYSourcePonctuelle* _sourceP, TYPointCalcul* _recepP, std::vector<TYRayEvent*> &_events);
 
     /*!
     * \fn TYRay( const TYRay &ray)
@@ -86,29 +107,63 @@ public:
     */
     TYRay(const TYRay& ray);
 
+	// Destructor
+	~TYRay();
+    
+	/*!
+	 * \fn void cleanEventsTab();
+	 * \brief clean tab of events
+	 */
+	void cleanEventsTab();
+
+	/*!
+	 * \fn TYRay& operator=(const TYRay& other)
+	 * \brief equal operator
+	 */
+	virtual TYRay& operator=(const TYRay& other);
+
+	/*!
+	 * \fn bool deepCopy(TYRay *pOther)
+	 * \brief Deep copy of a ray mainly the events tab
+	 */
+	bool deepCopy(TYRay *pOther);
+
     /*!
     * \fn void setSource(TYSourcePonctuelle *_source TYPoint &globalPosition)
-    * \brief Place la source du rayon. Le premier point de la polyligne est mis i申 jour
+    * \brief Place la source du rayon. Le premier point de la polyligne est mis a jour
     */
     void setSource(TYSourcePonctuelle* _source, TYPoint& globalPosition);
+
+    /*!
+    * \fn void setSource(TYSourcePonctuelle *_source)
+    * \brief Place la source du rayon.
+    */
+    void setSource(TYSourcePonctuelle* source) { _source = source; }
+    
+    
     /*!
     * \fn TYSourcePonctuelle* getSource()
-    * \brief Ri申cupi申ration de la source du rayon
+    * \brief Recuperation de la source du rayon
     */
     TYSourcePonctuelle* getSource() {return _source;}
 
     /*!
     * \fn void setRecepteur(TYPointControl *_recep TYPoint &globalPosition)
-    * \brief Place le recepteur du rayon. Le dernier point de la polyligne est mis i申 jour
+    * \brief Place le recepteur du rayon. Le dernier point de la polyligne est mis a jour
     */
-    //  void setRecepteur(TYPointControl *_recep, TYPoint &globalPosition);
     void setRecepteur(TYPointCalcul* _recep, TYPoint& globalPosition);
 
     /*!
-    * \fn TYPointControl* getRecepteur()
-    * \brief Ri申cupi申ration du recepteur du rayon
+    * \fn void setRecepteur(TYPointCalcul *)
+    * \brief Place le recepteur du rayon. Le dernier point de la polyligne est mis a jour
     */
-    //  TYPointControl* getRecepteur(){return _recepteur;}
+    void setRecepteur(TYPointCalcul* recep) { _recepteur = recep; }
+    
+    
+    /*!
+    * \fn TYPointControl* getRecepteur()
+    * \brief Recuperation du recepteur du rayon
+    */
     TYPointCalcul* getRecepteur() {return _recepteur;}
 
     /*!
@@ -138,28 +193,65 @@ public:
 
     /*!
     * \fn void addEvent(Event &_event)
-    * \brief Ajoute un evenement i申 la liste des i申vi申nements du rayon
+    * \brief Ajoute un evenement a la liste des evenements du rayon
     */
-    void addEvent(TYRayEvent& event) {_events.push_back(event);}
+    void addEvent(TYRayEvent* TYEvent) {_events.push_back(TYEvent);}
 
     /*!
     * \fn std::vector<Event>& getEvents()
     * \brief Renvoie la liste des i申vi申nements rencontri申s par le rayon
     */
     TYTabRayEvent& getEvents() {return _events;}
+    const TYTabRayEvent& getEvents() const { return _events; }
 
     /*!
     * \fn void setTabPoint(TYTabPoint &_tabPoint)
     * \brief Place le tableau de point correspondant au parcours du rayon.
-    * \warning Le premier TYRayEvent doit toujours correspondre i申 la source et sa position globale et le dernier point doit toujours correspondre i申 un ri申cepteur et sa position globale du
+    * \warning Le premier TYRayEvent doit toujours correspondre a la source et sa position globale et le dernier point doit toujours correspondre a un recepteur et sa position globale du
     */
-    void setTabEvent(TYTabRayEvent& _tabEvent);
+	void setEvents(TYTabRayEvent& tabEvents) { _events = tabEvents; }
 
-    /*!
-    * \fn TYTabRayEvent getTabEvent()
-    * \brief Renvoie le tableau de points correspondant au parcours du rayon incluant la source et le recepteur
-    */
-    TYTabRayEvent getTabEvent() {return _events;}
+	/*!
+	 * \fn vector<unsigned int> getIndexOfEvents(const int& eventType)
+	 * \brief return a tab of indexes of events of the same type in a ray
+	 *        you can merge two types of events (ex. TYREFLEXION | TYRECEPTEUR) 
+			  vector returned count all events of the two types
+	 */
+	std::vector<int> getIndexOfEvents(const int& eventType) const;
+
+	/*!
+	 * \fn unsigned int getNbEventType(const TY_RAY_EVENT& eventType)
+	 * \brief return the number of events of a type
+	 */
+	unsigned int getNbEventType(const TY_RAY_EVENT& eventType) { return getIndexOfEvents(eventType).size(); }
+
+
+	/*!
+	 * \fn void copyEvents(TY_RAY_EVENT eventType);
+	 * \brief copy only events matching eventType to _events tab
+	 */
+	void copyEvents(const TYRay *tyRay, TY_RAY_EVENT eventType);
+
+	/*!
+	 * \fn void setNextDistance(const TY_RAY_EVENT& eventType);
+	 * \brief Compute distance between events of the type "eventType"
+	 *        and set distNextEvent to each event matching enventType
+	 */
+	void setNextDistance(TY_RAY_EVENT eventType);
+
+	/*!
+	 * \fn void setEndDistance(const TY_RAY_EVENT& endEventType);
+	 * \brief Compute distance between each events and next event 
+	 *		  of type "eventType"and set distEndEvent to each event
+	 */
+	void setEndDistance(const TY_RAY_EVENT& endEventType);
+
+	/*!
+	 * \fn void setAngles(TY_RAY_EVENT eventType)
+	 * \brief Compute angles of incoming ray segment at event point
+	 */
+	void setAngles(TY_RAY_EVENT eventType);
+
 
     /*!
     * \fn double getNbrReflexions()
@@ -174,14 +266,14 @@ public:
     int getNbrDiffractions();
 
     /*!
-    * \fn double getSize()
-    * \brief Renvoie la taille du rayon
+    * \fn double getLength()
+    * \brief Return total length of the ray taking account of all events
     */
-    double getSize();
+    double getLength();
 
     /*!
     * \fn double getDistanceSR()
-    * \brief Renvoie la distance source/recepteur du rayon
+    * \brief Renvoie la distance source-recepteur du rayon
     */
     double getDistanceSR() const;
 
@@ -199,13 +291,13 @@ public:
 
     /*!
     * \fn TYPoint& getPosSourceGlobal()
-    * \brief Get de la position de la source dans le repi申re global
+    * \brief Get de la position de la source dans le repere global
     */
     TYPoint& getPosSourceGlobal() { return _posSourceGlobal; }
 
     /*!
     * \fn void setPosReceptGlobal(const OPoint3D& pos)
-    * \brief Set de la position du recepteur dans le repi申re global
+    * \brief Set de la position du recepteur dans le repere global
     */
     void setPosReceptGlobal(const OPoint3D& pos) { _posReceptGlobal = pos; }
 
@@ -215,7 +307,11 @@ public:
     */
     TYPoint& getPosReceptGlobal() { return _posReceptGlobal; }
 
-
+	 /*!
+     * \fn void overSampleTYRay(TYRay* tyRay);
+     * \brief Rajoute des evenements aux rayons de type TYRay
+     */
+    void overSample(const double& dMin);
 
 protected:
     /*!< Identifiant du rayon */
@@ -225,17 +321,15 @@ protected:
     TYSourcePonctuelle* _source;
 
     /*!< Pointeur vers le recepteur du rayon */
-    //  TYPointControl* _recepteur;
     TYPointCalcul* _recepteur;
 
     TYPoint _posSourceGlobal;
     TYPoint _posReceptGlobal;
 
-    /*!< Vecteurs d'evenements contenant la liste des evenements du rayon associi申s i申 leurs positions.*/
+    /*!< Vecteurs d'evenements contenant la liste des evenements du rayon associe et leurs positions.*/
     TYTabRayEvent _events;
 };
-
-///Smart Pointer sur TYRay
+//Smart Pointer sur TYRay
 typedef SmartPtr<TYRay> LPTYRay;
 
 typedef std::vector<LPTYRay> TYTabRay;

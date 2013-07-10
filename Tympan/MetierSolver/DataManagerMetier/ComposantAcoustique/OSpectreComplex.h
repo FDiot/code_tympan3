@@ -39,7 +39,7 @@ public:
     /**
      * Constructeur par defaut.
      */
-    OSpectreComplex();
+    OSpectreComplex(const double &defModule = TY_SPECTRE_DEFAULT_VALUE, const double &defPhase = 0.0);
 
     /**
      * Constructeur par copie.
@@ -62,24 +62,30 @@ public:
     virtual ~OSpectreComplex();
 
     /// Operateur d'affectation
-    OSpectreComplex& operator= (const OSpectreComplex& other);
+    virtual OSpectreComplex& operator= (const OSpectreComplex& other);
 
     /// Operateur d'egalite
-    bool operator== (const OSpectreComplex& other) const;
+    virtual bool operator== (const OSpectreComplex& other) const;
 
     /// Operateur d'inegalite
-    bool operator != (const OSpectreComplex& other) const;
+    virtual bool operator != (const OSpectreComplex& other) const;
 
     /// Somme de deux spectres complexes
-    OSpectreComplex operator + (const OSpectreComplex& spectre) const;
+    virtual OSpectreComplex operator + (const OSpectreComplex& spectre) const;
+
+	// Produit de deux spectres complexesen module/phase
+    virtual OSpectreComplex operator * (const OSpectreComplex& spectre) const;
+
+	// Rapport de deux spectres complexes en module/phase
+    virtual OSpectreComplex operator / (const OSpectreComplex& spectre) const;
 
     /// Set/Get du tableau des valeurs reelles
     virtual double* getTabValReel() { return _module; }
     virtual const double* getTabValReel() const {return _module; }
 
     /// Set/Get du tableau des valeurs imaginaires
-    double* getTabValImag() { return _phase; }
-    const double* getTabValImag() const { return _phase; }
+    virtual double* getTabValImag() { return _phase; }
+    virtual const double* getTabValImag() const { return _phase; }
 
     /**
      * Attribution d'une valeur complexe au tableau Frequence/Complexe.
@@ -107,49 +113,43 @@ public:
      *
      * @return La valeur imaginaire du complexe correspondant.
      */
-    double getValueImag(float freq, bool* pValid = 0);
+    virtual double getValueImag(float freq, bool* pValid = 0);
 
     /**
      * Attribution de la phase a un spectre.
      * @param Un OSpectre.
      */
-    void setPhase(const OSpectre& spectre);
+    virtual void setPhase(const OSpectre& spectre);
 
     /**
      * Attribution de la phase a un spectre.
      * @param Un double.
      */
-    void setPhase(const double& valeur = 0.0);
+    virtual void setPhase(const double& valeur = 0.0);
 
     /**
      * Lecture de la phase d'un spectre.
      * @return Un TYSpectre.
      */
-    OSpectre getPhase() const;
+    virtual OSpectre getPhase() const;
 
     /**
     * \fn OSpectre getModule() const
     * \brief get du module du spectre
     */
-    OSpectre getModule() const;
+    virtual OSpectre getModule() const;
 
     /// Conversion en module/phase
-    OSpectreComplex toModulePhase() const;
+    virtual OSpectreComplex toModulePhase() const;
 
     /// Conversion en module/phase
-    OSpectreComplex toReelImaginaire() const;
+    virtual OSpectreComplex toReelImaginaire() const;
 
     /// Somme le spectre en complexe avec un autre spectre complexe
-    OSpectreComplex sumComplex(const OSpectreComplex& spectre) const;
+    virtual OSpectreComplex sumComplex(const OSpectreComplex& spectre) const;
 
     /// Somme d'un spectre complexe avec un spectre "normal"
-    OSpectreComplex sumComplex(const OSpectre& spectre) const;
-
-    /// Sommation energetique de deux spectres en 1/3 d'octave.
-    TYSpectre sumdB(const TYSpectre& spectre) const;
-
-    /// Soustraction energetique de deux spectres en 1/3 d'octave.
-    TYSpectre substdB(const TYSpectre& spectre) const;
+    virtual OSpectreComplex sumComplex(const OSpectre& spectre) const;
 
     // === FONCTIONS MEMBRES STATIQUES
 

@@ -633,10 +633,10 @@ bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax)
 	for (size_t i=0 ; i<4 ; i++)
 	{
 		res &= getGridIndices(pts[i], iXY);
-		iXY[0] < minX ? iXY[0] : minX;
-		iXY[0] < maxX ? iXY[0] : maxX;
-		iXY[1] < minY ? iXY[1] : minY;
-		iXY[1] < maxY ? iXY[1] : maxY;
+		minX = iXY[0] < minX ? iXY[0] : minX;
+		maxX = iXY[0] > maxX ? iXY[0] : maxX;
+		minY = iXY[1] < minY ? iXY[1] : minY;
+		maxY = iXY[1] > maxY ? iXY[1] : maxY;
 	}
 
 	iMinMax[0] = minX;
@@ -740,7 +740,7 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
             i++;
         }
     }
-
+    
 	return ptTest;
 }
 

@@ -23,7 +23,6 @@
 #include <string>
 
 
-
 Lancer::Lancer() : sources(NULL), recepteurs(NULL), Meteo(meteo()), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(20)
 {
     initialAngleTheta = 0.0;                /*!<  angle de tir initial selon theta */

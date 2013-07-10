@@ -84,14 +84,9 @@ class OSpectre
     // Methodes
 public:
     /**
-     * Constructeur par defaut.
-     */
-    OSpectre();
-
-    /**
      * Constructeur par defaut avec une valeur par defaut
      */
-    OSpectre(double defaultValue);
+    OSpectre(const double &defaultValue = TY_SPECTRE_DEFAULT_VALUE);
 
     /**
      * Constructeur a partir d'un tableau de valeurs (besoin pour harmonoise)
@@ -159,7 +154,7 @@ public:
     virtual const TYSpectreEtat getEtat() {return _etat;};
 
     /// Force l'etat du spectre (a utiliser avec prudence ...)
-    void setEtat(TYSpectreEtat etat) { _etat = etat; }
+    virtual void setEtat(TYSpectreEtat etat) { _etat = etat; }
 
     /// Set/Get du tableau des valeurs reelles
     virtual double* getTabValReel() { return _module; }
@@ -299,7 +294,7 @@ public:
     virtual const double sigma() const;
 
     // Conversion en spectre "leger"
-    void toSpectreLeger(TYSpectreLeger& spectre) const;
+    virtual void toSpectreLeger(TYSpectreLeger& spectre) const;
 
     // initialisation des valeurs reelles a partir d'un spectre "leger"
     virtual void fromSpectreLeger(const TYSpectreLeger& spectre);

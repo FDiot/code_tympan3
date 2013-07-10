@@ -314,7 +314,13 @@ void TYSiteNodeGraphic::display(GLenum mode /*=GL_RENDER*/)
         ((TYTopographieGraphic*)((TYElementGraphic*)getElement()->getTopographie()->getGraphicObject()))->unsetBackgroundImage();
     }
 
-    getElement()->getTopographie()->getGraphicObject()->display(mode);
+    // vieaw of altimetry for the current site (i.e. main site on the display)
+	TYSiteNode* pSiteNode = getElement();
+	if (pSiteNode->getRoot())
+	{
+		static_cast<TYTopographieGraphic*>(pSiteNode->getTopographie()->getGraphicObject().getRealPointer())->showAlti(true);
+	}
+	getElement()->getTopographie()->getGraphicObject()->display(mode);
     getElement()->getInfrastructure()->getGraphicObject()->display(mode);
     // Sites childs
     TYSiteNode* pTYSiteNode = getElement();//az++
@@ -327,6 +333,8 @@ void TYSiteNodeGraphic::display(GLenum mode /*=GL_RENDER*/)
         // Le site n'est affichi¿½ que s'il est dans le calcul courant
         if (TabSite.at(i)->getElement()->isInCurrentCalcul())
         {
+			TYSiteNode* pSubSite = TYSiteNode::safeDownCast(TabSite.at(i)->getElement());
+			static_cast<TYTopographieGraphic*>(pSubSite->getTopographie()->getGraphicObject().getRealPointer())->showAlti(false);
             TabSite.at(i)->getGraphicObject()->display(mode);   //az++
         }
     }//az++

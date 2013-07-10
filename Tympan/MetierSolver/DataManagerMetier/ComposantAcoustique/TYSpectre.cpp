@@ -34,7 +34,7 @@ OPROTOINST(TYSpectre);
 // Precision d'ecriture des resultats dans les fichiers XML
 int TYSpectre::_XMLprecision = 1;
 
-TYSpectre::TYSpectre() : OSpectre()
+TYSpectre::TYSpectre(const double &defaultValue) : OSpectre(defaultValue)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -100,6 +100,7 @@ bool TYSpectre::operator==(const TYSpectre& other) const
 {
     if (this != &other)
     {
+        if (_valid != other._valid) { return false; }
         if (TYElement::operator !=(other)) { return false; }
         if (OSpectre::operator != (other)) { return false; }
         if (_isReadOnly != other._isReadOnly) { return false; }
@@ -580,195 +581,6 @@ const float TYSpectre::getFreqNorm(int freqIndex)
 
     return -1.0;
 }
-
-/// Conversion en dB.
-//TYSpectre TYSpectre::toDB() const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::toDB();
-//    return s;
-//}
-//
-///// Conversion en grandeur physique.
-//TYSpectre TYSpectre::toGPhy() const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::toGPhy();
-//    return s;
-//}
-
-///// Sommation arithmetique de deux spectres en 1/3 d'octave.
-//TYSpectre TYSpectre::sum(const TYSpectre& spectre) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::sum(spectre);
-//    return s;
-//}
-//
-///// Ajoute une valeur constante a l'ensemble du spectre
-//TYSpectre TYSpectre::sum(const double& valeur) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::sum(valeur);
-//    return s;
-//}
-//
-///// Sommation energetique de deux spectres en 1/3 d'octave.
-//TYSpectre TYSpectre::sumdB(const TYSpectre& spectre) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::sumdB(spectre);
-//    return s;
-//}
-
-///// Soustraction arithmetique de deux spectres en 1/3 d'octave.
-//TYSpectre TYSpectre::subst(const TYSpectre& spectre) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::subst(spectre);
-//    return s;
-//}
-//
-///// soustrait une valeur constante a l'ensemble du spectre
-//TYSpectre TYSpectre::subst(const double& valeur) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::subst(valeur);
-//    return s;
-//}
-//
-///// Soustraction energetique de deux spectres en 1/3 d'octave.
-//TYSpectre TYSpectre::substdB(const TYSpectre& spectre) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::substdB(spectre);
-//    return s;
-//}
-
-///// multiplication de deux spectres terme a terme.
-//TYSpectre TYSpectre::mult(const TYSpectre& spectre) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::mult(spectre);
-//    return s;
-//}
-//
-///// Multiplication d'un spectre par un scalaire.
-//TYSpectre TYSpectre::mult(const double& coefficient) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::mult(coefficient);
-//    return s;
-//}
-//
-///// division de deux spectres terme a terme.
-//TYSpectre TYSpectre::div(const TYSpectre& spectre) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::div(spectre);
-//    return s;
-//}
-//
-///// Division d'un spectre par une constante.
-//TYSpectre TYSpectre::div(const double& coefficient) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::div(coefficient);
-//    return s;
-//}
-
-///// Division d'une constante par un spectre.
-//TYSpectre TYSpectre::invMult(const double& coefficient/* = 1.0*/) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::invMult(coefficient);
-//    return s;
-//}
-//
-///// Eleve un spectre a une puissance.
-//TYSpectre TYSpectre::power(const double& puissance) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::power(puissance);
-//    return s;
-//}
-//
-///// Calcule le log base n d'un spectre (n=10 par defaut).
-//TYSpectre TYSpectre::log(const double& base/* = 10.0*/) const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::log(base);
-//    return s;
-//}
-//
-///// calcule 10^spectre pour chaque terme du spectre.
-//TYSpectre TYSpectre::tenPow() const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::tenPow();
-//    return s;
-//}
-
-///// calcule la racine carree d'un spectre.
-//TYSpectre TYSpectre::racine() const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::racine();
-//    return s;
-//}
-//
-///// calcul le sin de la partie reelle du spectre
-//TYSpectre TYSpectre::sin() const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::sin();
-//    return s;
-//}
-//
-///// calcul le cos de la partie reelle du spectre
-//TYSpectre TYSpectre::cos() const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::cos();
-//    return s;
-//}
-//
-///// calcul le tan de la partie reelle du spectre
-//TYSpectre TYSpectre::tan() const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::tan();
-//    return s;
-//}
-//
-///// Retourne le spectre en valeur absolues
-//TYSpectre TYSpectre::abs() const
-//{
-//    TYSpectre s = (TYSpectre) * this;
-//    s.deepCopy(this, false);
-//    s = OSpectre::abs();
-//    return s;
-//}
 
 TYSpectre TYSpectre::getEmptyLinSpectre(const double& valInit/*= 1.0E-20*/)
 {

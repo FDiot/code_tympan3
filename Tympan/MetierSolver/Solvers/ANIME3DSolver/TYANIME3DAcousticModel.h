@@ -12,21 +12,6 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */ 
- 
-/*
-* Copyright (c) 2011 EDF. All Rights Reserved.
-* All Rights Reserved. No part of this software and its documentation may
-* be used, copied, modified, distributed and transmitted, in any form or by
-* any means, without the prior written permission of EDF.
-* EDF-R&D Dpartement AMA - 1, avenue du gnral de Gaulle, 92141 CLAMART
-*/
-
-/**
- * \file TYANIME3DAcousticModel.h
- * \brief Le modle acoustique de la methode ANIME3D (header)
- * \author Projet_Tympan
- * \date 04 avril 2011
- */
 
 #ifndef __TYANIME3DACOUSTICMODEL__
 #define __TYANIME3DACOUSTICMODEL__
@@ -43,7 +28,6 @@
 #include <fstream>
 #include <iomanip>
 
-#include "TYANIME3DAcousticPathFinder.h"
 #include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
 
 ///Type pour les valeurs complexes
@@ -68,28 +52,7 @@ typedef std::vector<Ray*> TabRays;
 typedef std::vector<TYRay> TYTabRays;
 
 ///Type pour les tableaux d'evenements
-typedef std::vector<TYRayEvent> TYTabRayEvent;
-
-//Structure permettant de stocker les informations de Tympan dans un format aisement convertible
-//Les infos idFace, idBuilding, idEtage, spectreAbsoMat, G ne sont pas obligatoires.
-//De meme, il est possible de rajouter des informations lors de la collecte pour repondre a un besoin d'une methode acoustique
-//Exemple : le dev peut choisir de conserver la resistivite plutot que le G.
-struct TYStructSurfIntersect
-{
-    TYAcousticSurfaceGeoNode* pSurfGeoNode; //Geonode de la surface
-    OMatrix matInv;                         // Matrice inverse pour les faces d'infrastructure
-    TYTabPoint tabPoint;                    // Tableau de point utilise pour la preselection
-    bool isEcran;                           // Est un ecran
-    bool isInfra;                           // Face d'infrastructure
-    OVector3D normal;                       //Normale de la surface
-    QList<OTriangle> triangles;             //Ensemble des triangles contenus dans la surface apres triangulation
-    QList<OPoint3D> realVertex;              //Ensemble des vertex de la surface en coordonn�es globales.
-    int idFace;                             //Indice de la face
-    int idBuilding;                         //Indice du building dans TYSite
-    int idEtage;                            //Indice de l'etage
-    double* spectreAbso;			        //Spectre d'absorption
-    double G;                               //Coefficient d'impedance
-};
+typedef std::vector<TYRayEvent*> TYTabRayEvent;
 
 class OBox2;
 
@@ -101,9 +64,9 @@ class TYANIME3DAcousticModel : public TYAcousticModelInterface
 {
 public:
     /// constructeurs
-	TYANIME3DAcousticModel();
+	//TYANIME3DAcousticModel();
 
-	TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TabRays* tabRayons, TYStructSurfIntersect* tabStruct);
+	TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TYTabRay &tabRayons, TYStructSurfIntersect* tabStruct);
 
     /// destructeur
     virtual ~TYANIME3DAcousticModel();
@@ -112,39 +75,37 @@ public:
      * \fn computeAcousticModel(TYCalcul & calcul, TYSiteNode & site)
      * \brief calcul complet lie au modele acoustique ANIME3D
      */
-    OTab2DSpectreComplex ComputeAcousticModel(TYCalcul& calcul, const TYSiteNode& site);
+    OTab2DSpectreComplex ComputeAcousticModel();
 
     /**
      * \fn void ComputePressionAcoustEff(TYCalcul & calcul, const TYSiteNode & site)
      * \brief calcul de la pression acoustique efficace par rayon et par frequence
      */
-    void ComputePressionAcoustEff(TYCalcul& calcul, const TYSiteNode& site);
+    void ComputePressionAcoustEff();
 
     /**
      *\fn  void ComputePressionAcoustTotalLevel(TYCalcul & calcul, const TYSiteNode & site)
      *\brief calcul de la pression quadratique totale pour un couple source/recepteur - calcul avec coherence partielle
      */
-    OTab2DSpectreComplex ComputePressionAcoustTotalLevel(TYCalcul& calcul, const TYSiteNode& site);
-
-
-    /*!
-    * \fn LPTYRay convertRaytoTYRay()
-    * \brief convertion du rayon en rayon TYMPAN
-    */
-    //LPTYRay convertRaytoTYRay(Ray *r, TYCalcul &calcul, const TYSiteNode &site);
+    OTab2DSpectreComplex ComputePressionAcoustTotalLevel();
 
 	/**
-     * \fn void init(TYCalcul & calcul);
-     * \brief initialisation du calcul
-     */
-    void init(TYCalcul&, const TYSiteNode&, TabRays*, TYStructSurfIntersect*);
+    * \fn double getSize(int rayNbr)
+    * \brief Renvoie la taille du rayon corrigee
+    */
+    double getSize2(int rayNbr);
+
+	/**
+    * \fn double getDistance()
+    * \brief Returns the distance between two points of pathLengthMatrix
+    */
+    double getDistance(int rayNbr, int indice);
 
 protected:
-  
 
     /**
      * \fn void ComputeAbsAtm();
-     * \brief calcul de l'absorption atmosphrique
+     * \brief calcul de l'absorption atmospherique
      */
     void ComputeAbsAtm();
 
@@ -158,22 +119,76 @@ protected:
      * \fn OBox ComputeFrenelArea(TYCalcul & calcul,TYSiteNode & site, TYRay & ray)
      * \brief calcul des triangles de la zone de Fresnel
      */
-    OBox2 ComputeFrenelArea(TYRay* ray, double angle, double distPrefPsuiv, OPoint3D Pref);
+    OBox2 ComputeFrenelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice);
 
     /**
-     * \fn OTabDouble ComputeFrenelWeighting(TYCalcul & calcul, TYSiteNode & site);
+     * \fn 	OTabDouble ComputeFrenelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
      * \brief calcul des ponderations de Fresnel associees a la zone de Fresnel
      */
-    OTabDouble ComputeFrenelWeighting(TYRay* ray, double angle, double distPrefPsuiv, OPoint3D Pref);
+	OTabDouble ComputeFrenelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
 
-
-	//TYMateriauConstruction TYANIME3DAcousticModel::getMateriauFace(Shape* pSurf, const vec3& seg) const;
+	/**
+	 * \fn 	std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
+	 * \brief Computes triangulation inside the bounding box
+	 * \brief Needs 4 points which are the box corners' projection on the ground
+	 */
+	std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
 
 	 /**
      * \fn void ComputeAbsDiff(TYCalcul & calcul, const TYSiteNode & site)
      * \brief calcul de l'absorption par diffraction
      */
-    void ComputeAbsDiff(TYCalcul& calcul, const TYSiteNode& site);
+    void ComputeAbsDiff();
+
+	/**
+	* \fn OVector3D getRotationOz(double alpha, OVector3D V)
+	* \brief Returns the vector after a rotation around z axis
+	* \ x -> xprime. Both of these vectors will be given in the
+	* \ original base.
+	*/
+	OVector3D getRotationOz(double alpha, OVector3D V);
+
+	/**
+	* \fn OVector3D getRotationOzBase2(double alpha, OVector3D V)
+	* \brief Returns the vector after a rotation around z axis 
+	* \ and gives back the coordinates of xprime or yprime in the 
+	*\ new basis Bprime.
+	*/
+	OVector3D getRotationOzBase2(double alpha, OVector3D V);
+
+	/**
+	* \fn OVector3D getRotationOy(double alpha, OVector3D V)
+	* \brief Returns the vector after a rotation around z axis
+	*/
+	OVector3D getRotationOy(double alpha, OVector3D V);
+
+	/**
+	* \fn OVector3D getRotationOyBase2(double alpha, OVector3D V)
+	* \brief Returns the vector after a rotation around y axis 
+	* \ and gives back the coordinates of xprime or zprime in the 
+	*\ new basis Bprime.
+	*/
+	OVector3D getRotationOyBase2(double alpha, OVector3D V);
+
+	/**
+	* \fn OVector3D getRotationOzOy(double alpha, double theta, OVector3D V)
+	* \brief Returns the vector after 2 rotations around z axis and
+	* \y axis. It gives the coordinates of xsecond, ysecond and zsecond in the 
+	*\ first basis B.
+	*/
+	OVector3D getRotationOzOy(double alpha, double theta, OVector3D V);
+
+protected :
+
+	// Test : vector de triangles
+	std::vector<OTriangle> _oTriangles;
+	//std::vector<OPoint3D>& _oVertex;
+	QList<OTriangle> triangles;
+
+	TYAltimetrie* _alti;
+
+	TYCalcul& _calcul;
+	const TYSiteNode& _site;
 
     /// tableau des pressions acoustiques efficaces par rayon
     OTabSpectreComplex _pressAcoustEff;
@@ -190,14 +205,8 @@ protected:
     /// nbr de rayons
     int _nbRays;
 
-    /// tableau de l'ensemble des rayons
-    TabRays* _tabRays;
-
     /// tableau de l'ensemble des rayons TYMPAN
-    TYTabRay _tabTYRays;
-
-    /// la methode de recherche de chemins acoustiques
-    //TYANIME3DAcousticPathFinder _acoustPathFinder;
+    TYTabRay& _tabTYRays;
 
 	TYStructSurfIntersect* _tabSurfIntersect; /*!< Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face */
 
@@ -221,10 +230,18 @@ protected:
 
 	/// le tableau de sources de la scene 
 	TYTabSourcePonctuelleGeoNode _tabSources;
+    
+    /// vitesse du son
+	double _c;	
 
-	double _c;	// vitesse du son
-	OSpectre _K;	// nombre d'onde
-	OSpectre _lambda;	// longueur d'onde
+        /// nombre d'onde
+	OSpectre _K;	
+
+	/// longueur d'onde
+    OSpectre _lambda;	
+    
+    /// take into account the fresnel area 
+    bool _useFresnelArea;
 };
 
 #endif // __TYANIME3DACOUSTICMODEL__

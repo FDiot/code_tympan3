@@ -35,6 +35,7 @@ public:
     virtual ~Sampler() { }
 
     virtual vec3 getSample() { return vec3(0.0, 0.0, 0.0); }
+	virtual vec3 Discretisation(int indice, int n1, int Nreal, int Nasked) { return vec3(0.0, 0.0, 0.0); }
     virtual bool isAcceptableSample(vec3 v) { return false; }
     virtual void init() {}
 };
