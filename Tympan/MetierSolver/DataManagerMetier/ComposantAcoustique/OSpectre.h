@@ -116,10 +116,10 @@ public:
     virtual bool operator != (const OSpectre& other) const;
 
     /// operateur de multiplication par un Spectre
-    virtual OSpectre operator * (const OSpectre& spectre) const;
+    OSpectre operator * (const OSpectre& spectre) const;
 
     /// operateur de multiplication par un coeff de type double
-    virtual OSpectre operator * (const double& coefficient) const;
+    OSpectre operator * (const double& coefficient) const;
 
     /// Operateur d'addition pour ajouter une valeur constante a l'ensemble du spectre
     virtual OSpectre operator + (const double& valeur) const;

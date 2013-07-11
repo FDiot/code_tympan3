@@ -74,7 +74,13 @@ public:
     virtual OSpectreComplex operator + (const OSpectreComplex& spectre) const;
 
 	// Produit de deux spectres complexesen module/phase
-    virtual OSpectreComplex operator * (const OSpectreComplex& spectre) const;
+    OSpectreComplex operator * (const OSpectreComplex& spectre) const;
+
+	/// Operateur de multiplication d'un spectre complexe par un coeff de type double
+    OSpectreComplex operator * (const double& coefficient) const;
+
+    /// Multiplication d'un spectre complexe par un scalaire.
+    OSpectreComplex multi(const double& coefficient) const;
 
 	// Rapport de deux spectres complexes en module/phase
     virtual OSpectreComplex operator / (const OSpectreComplex& spectre) const;

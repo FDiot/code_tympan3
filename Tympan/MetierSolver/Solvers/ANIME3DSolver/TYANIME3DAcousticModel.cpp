@@ -90,14 +90,11 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
     bool NoReflex = true;
     TYMur mur;
     int idBatiment = 0, idFace = 0;
-	OSpectreComplex spectreAbs;
 	double sizeRay = 0.0;
 	int indice = 0;
     bool OK = FALSE;
 	int rayNbr = 0; // Gives the ray number at step i we have to look for inside pathLengthMatrix
 	int reflIndice = 0; // Gives the number at which refl occurs
-    OTabSpectreComplex tabCoefRefl; // tableau des coeff de reflexion sur les terrains
-    OSpectreComplex coefRefl;       // coefficients de reflexion
     LPTYRay tyRay;                  // rayon TYMPAN
     OPoint3D Prefl, Pprec, Psuiv;    //pt de reflexion, pt precedent et suivant
     TYTabRayEvent events;           // liste des evenements
@@ -105,9 +102,17 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
     int nbFacesFresnel;             // nbr de faces contenues dans la zone de Fresnel
 	TYTabPoint3D triangleCentre;	// Contains all triangles centres
 
-    OSpectreComplex one = OSpectreComplex(OSpectre(1.0));
-    OSpectreComplex prod = one;
-    OSpectreComplex sum = OSpectreComplex(OSpectre(0.0));
+
+
+//    OSpectreComplex coefRefl;       // coefficients de reflexion
+	OSpectreComplex spectreAbs;
+    OSpectreComplex one;
+    OSpectreComplex prod;
+    OSpectreComplex sum;
+    OSpectreComplex prod1;
+    OSpectreComplex sum1;
+	OSpectreComplex pond;
+//    OTabSpectreComplex tabCoefRefl; // tableau des coeff de reflexion sur les terrains
 
     for (int i = 0; i < _nbRays; i++) // boucle sur les rayons
     {
@@ -115,9 +120,18 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 		sizeRay = _tabTYRays[i]->getLength();
 
 		rayNbr = i;
-
+		one = OSpectreComplex(OSpectre(1.0));
+		prod = one;
+		prod1 = one;
+		sum = OSpectreComplex(OSpectre(0.0));
+		sum1 = OSpectreComplex(OSpectre(0.0));
+		pond = OSpectreComplex(OSpectre(0.0));
+		
 		for(int j = 0; j < tabRefl.size(); j++)
 		{
+			// Initialisation des spectres
+			spectreAbs = OSpectreComplex(OSpectre(0.0));
+
 			Prefl = _tabTYRays[i]->getEvents().at(tabRefl[j])->pos;
 			Pprec = _tabTYRays[i]->getEvents().at(tabRefl[j])->previous->pos;
 			Psuiv = _tabTYRays[i]->getEvents().at(tabRefl[j])->next->pos;
@@ -131,6 +145,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
             {
 				angle = _tabTYRays[i]->getEvents().at(tabRefl[j])->angle;
 				spectreAbs = _topo.terrainAt(Prefl)->getSol()->abso(angle, sizeRay, _atmos);
+				spectreAbs.getEtat();
 			}
             else
 			{
@@ -145,27 +160,35 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 					std::cout<< "We start using Fresnel Area on the ground" << std::endl;
 					tabPondFresnel = ComputeFrenelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
 					nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
+					//nbFacesFresnel = 1;
 					std::cout << "il y a N ponderations : " << nbFacesFresnel << std::endl;
-				
+					
+					sum = OSpectreComplex(OSpectre(0.0));
+					
 					for(int k = 0; k < nbFacesFresnel; k++)
 					{ // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
 						spectreAbs = _topo.terrainAt(triangleCentre[k])->getSol()->abso(angle, sizeRay, _atmos);
-						sum = sum + spectreAbs * tabPondFresnel[k]; // calcul du coeff de reflexion moy en ponderant avec les materiaux
-					    prod = prod * sum;
+						spectreAbs.getEtat();
+						pond = spectreAbs * tabPondFresnel[k];
+						sum = sum + pond; // calcul du coeff de reflexion moy en ponderant avec les materiaux
 					}	
+					prod = prod * sum;
 				}
 				else
 				{
-					std::cout<< "We start using Fresnel Area not on the ground" << std::endl;
+					std::cout<< "We start using Fresnel Area on a building" << std::endl;
 					tabPondFresnel = ComputeFrenelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
 					nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
 					std::cout << "il y a N ponderations : " << nbFacesFresnel << std::endl;
 				
+					sum = OSpectreComplex(OSpectre(0.0));
+
 					for(int k = 0; k < nbFacesFresnel; k++)
 					{ // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
-						sum = sum + spectreAbs * tabPondFresnel[k]; // calcul du coeff de reflexion moy en ponderant avec les materiaux
-					    prod = prod * sum;
+						pond = spectreAbs * tabPondFresnel[k];
+						sum = sum + pond;	// calcul du coeff de reflexion moy en ponderant avec les materiaux
 					}
+					prod = prod * sum;
 				}
 
 			}
