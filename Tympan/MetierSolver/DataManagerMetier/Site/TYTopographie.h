@@ -506,7 +506,7 @@ protected:
     OColor _empriseColor;
 
     /// Liste des terrains tries (on fait expres un tableau a part pour ne pas perturber le terrain par defaut)
-    LPTYTerrainGeoNode* _pSortedTerrains;
+    TYTerrainGeoNode **_pSortedTerrains;
 
     /// Seuils confondus
     double _seuilConfondus;
