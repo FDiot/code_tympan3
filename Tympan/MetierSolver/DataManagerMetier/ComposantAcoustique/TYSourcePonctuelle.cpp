@@ -18,6 +18,7 @@
  */
 
 
+#include <typeinfo>
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -270,7 +271,7 @@ OSpectre TYSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const TYA
             // Rmq : la position de la source est exprime dans le repere du support
             while (pParent)
             {
-                pSupport = TYAcousticSurface::safeDownCast(pParent);
+                pSupport = dynamic_cast<TYAcousticSurface*>(pParent);
                 if (pSupport) { break; }
 
                 pParent = pParent->getParent();
@@ -291,7 +292,7 @@ OSpectre TYSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const TYA
             // Recherche du volume (de type AcousticVolume) parent (direct ou non)
             while (pParent)
             {
-                pVolParent = TYAcousticVolume::safeDownCast(pParent);
+                pVolParent = dynamic_cast<TYAcousticVolume*>(pParent);
                 if (pVolParent) { break; }
 
                 pParent = pParent->getParent();
@@ -305,11 +306,16 @@ OSpectre TYSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const TYA
                 matrix.invert();
 
                 // Traitement selon cas
-                if (pVolParent->getParent() && pVolParent->getParent()->isA("TYMachine"))
+				TYElement *pElement = pVolParent->getParent();
+				TYMachine *pMachine = NULL;
+				TYEtage *pEtage = NULL;
+				if (pElement)  { pMachine = dynamic_cast<TYMachine*>(pElement); }
+				if (!pMachine) { pEtage = dynamic_cast<TYEtage*>(pElement); } 
+                if (pMachine)
                 {
                     s = (calcDirectiviteMachine(pVolParent, pSupport, matrix, seg, Atmo)).racine();
                 }
-                else if (pVolParent->isA("TYEtage"))
+                else if (pEtage)
                 {
                     s = (calcDirectiviteEtage(pVolParent, pSupport, matrix, seg, Atmo)).racine();
                 }
@@ -359,20 +365,24 @@ OSpectre TYSourcePonctuelle::calcDirectiviteMachine(const TYAcousticVolume* pVol
     // On construit le vecteur indiquant l'exterieur du volume
     OVector3D extVolume(centre, seg._ptA);
 
-    if ((pSupport == NULL) || ((pVolume->inherits("TYAcousticCylinder")) || (pVolume->inherits("TYAcousticSemiCylinder"))))
+	// Tentative pour eviter le mecanisme de RTTI de Code_TYMPAN (OPrototype)
+	TYAcousticVolume *pVolTemp = const_cast<TYAcousticVolume*>(pVolume);
+	TYAcousticCylinder *pCyl = dynamic_cast<TYAcousticCylinder*>(pVolTemp);
+	TYAcousticSemiCylinder *pSCyl = NULL;
+	if (!pCyl) { pSCyl = dynamic_cast<TYAcousticSemiCylinder*>(pVolTemp); }
+
+    if ((pSupport == NULL) || ( pCyl || pSCyl ) )
     {
         normale = OVector3D(centre, seg._ptA);
 
-        if (pVolume->inherits("TYAcousticCylinder"))
+        if (pCyl)
         {
-            TYAcousticCylinder* pCyl = (TYAcousticCylinder*)pVolume;
-            if (pCyl) { a = pCyl->getDiameter(); }
+            a = pCyl->getDiameter();
         }
-        else if (pVolume->inherits("TYAcousticSemiCylinder"))
+        else if (pSCyl)
         {
-            TYAcousticSemiCylinder* pSemiCyl = (TYAcousticSemiCylinder*)pVolume;
-            double diag = pSemiCyl->getDiameter();
-            if (pSemiCyl) { a = sqrt(diag * diag + (diag / 2) * (diag / 2)); }
+            double diag = pSCyl->getDiameter();
+            a = sqrt(diag * diag + (diag / 2) * (diag / 2));
         }
     }
     else if (pSupport != NULL)
@@ -384,20 +394,19 @@ OSpectre TYSourcePonctuelle::calcDirectiviteMachine(const TYAcousticVolume* pVol
         if (extVolume.scalar(normale) < 0.0) { normale = normale * (-1); }
 
         // Si pVolume est un cylindre ou un semicylindre
-        if (pVolume->inherits("TYAcousticCylinder"))
+        if (pCyl)
         {
-            TYAcousticCylinder* pCyl = (TYAcousticCylinder*)pVolume;
-            if (pCyl) { a = pCyl->getDiameter(); }
+            a = pCyl->getDiameter();
         }
-        else if (pVolume->inherits("TYAcousticSemiCylinder"))
+        else if (pSCyl)
         {
-            TYAcousticSemiCylinder* pSemiCyl = (TYAcousticSemiCylinder*)pVolume;
-            double diag = pSemiCyl->getDiameter();
-            if (pSemiCyl) { a = sqrt(diag * diag + (diag / 2) * (diag / 2)); }
+            double diag = pSCyl->getDiameter();
+            a = sqrt(diag * diag + (diag / 2) * (diag / 2));
         }
         else
         {
-            TYAcousticRectangle* pRectangle = (TYAcousticRectangle*)pSupport;
+			TYAcousticSurface* pTempSurf = const_cast<TYAcousticSurface*>(pSupport);
+            TYAcousticRectangle* pRectangle = dynamic_cast<TYAcousticRectangle*>(pTempSurf);
             if (pRectangle) { a = pRectangle->getBoundingRect()->getDiagSize(); }
         }
     }
@@ -445,20 +454,24 @@ OSpectre TYSourcePonctuelle::calcDirectiviteEtage(const TYAcousticVolume* pVolum
     // On construit le vecteur indiquant l'exterieur du volume
     OVector3D extVolume(centre, seg._ptA);
 
-    if ((pSupport == NULL) && ((pVolume->inherits("TYAcousticCylinder")) || (pVolume->inherits("TYAcousticSemiCylinder"))))
+	// Tentative pour eviter le mecanisme de RTTI de Code_TYMPAN (OPrototype)
+	TYAcousticVolume *pVolTemp = const_cast<TYAcousticVolume*>(pVolume);
+	TYAcousticCylinder *pCyl = dynamic_cast<TYAcousticCylinder*>(pVolTemp);
+	TYAcousticSemiCylinder *pSCyl = NULL;
+	if (!pCyl) { pSCyl = dynamic_cast<TYAcousticSemiCylinder*>(pVolTemp); }
+
+    if ((pSupport == NULL) && ( pCyl || pSCyl) )
     {
         normale = OVector3D(centre, seg._ptA);
 
-        if (pVolume->inherits("TYAcousticCylinder"))
+        if (pCyl)
         {
-            TYAcousticCylinder* pCyl = (TYAcousticCylinder*) pVolume;
-            if (pCyl) { a = pCyl->getDiameter(); }
+            a = pCyl->getDiameter();
         }
-        else if (pVolume->inherits("TYAcousticSemiCylinder"))
+        else if (pSCyl)
         {
-            TYAcousticSemiCylinder* pSemiCyl = (TYAcousticSemiCylinder*) pVolume;
-            double diag = pSemiCyl->getDiameter();
-            if (pSemiCyl) { a = sqrt(diag * diag + (diag / 2) * (diag / 2)); }
+            double diag = pSCyl->getDiameter();
+            a = sqrt(diag * diag + (diag / 2) * (diag / 2));
         }
     }
     else if (pSupport != NULL)
@@ -467,30 +480,20 @@ OSpectre TYSourcePonctuelle::calcDirectiviteEtage(const TYAcousticVolume* pVolum
         // On change le sens de la normale s'il n'est pas dirige dans le meme sens que l'axe centre du volume/source
         if (extVolume.scalar(normale) < 0.0) { normale = normale * (-1); }
 
-        //      if (pSupport->inherits("TYAcousticPolygon"))
-        //      {
-        ////            normale = pSupport->normal() * -1;
-        //      }
-        //      else
-        //      {
-        //          normale = pSupport->normal();
-        //      }
-
         // Si pVolume est un cylindre ou un semicylindre
-        if (pVolume->inherits("TYAcousticCylinder"))
+        if (pCyl)
         {
-            TYAcousticCylinder* pCyl = (TYAcousticCylinder*) pVolume;
             if (pCyl) { a = pCyl->getDiameter(); }
         }
-        else if (pVolume->inherits("TYAcousticSemiCylinder"))
+        else if (pSCyl)
         {
-            TYAcousticSemiCylinder* pSemiCyl = (TYAcousticSemiCylinder*) pVolume;
-            double diag = pSemiCyl->getDiameter();
-            if (pSemiCyl) { a = sqrt(diag * diag + (diag / 2) * (diag / 2)); }
+            double diag = pSCyl->getDiameter();
+            a = sqrt(diag * diag + (diag / 2) * (diag / 2));
         }
         else
         {
-            TYAcousticRectangle* pRectangle = (TYAcousticRectangle*) pSupport;
+			TYAcousticSurface* pTempSurf = const_cast<TYAcousticSurface*>(pSupport);
+            TYAcousticRectangle* pRectangle = dynamic_cast<TYAcousticRectangle*>(pTempSurf);
             if (pRectangle) { a = pRectangle->getBoundingRect()->getDiagSize(); }
         }
     }
