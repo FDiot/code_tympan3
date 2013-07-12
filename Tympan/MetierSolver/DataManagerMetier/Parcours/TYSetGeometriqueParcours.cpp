@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <assert.h>
+//#include <assert.h>
 
 #include "Tympan/MetierSolver/ToolsMetier/OGeometrie.h"
 #include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
@@ -50,8 +50,8 @@ int compareTYPolyligneParcours(const void* p1, const void* p2)
     TYPolyligneParcours* P2 = (TYPolyligneParcours*)p2;
     int indexPointPoly1 = P1->indexePoint1();
     int indexPointPoly2 = P2->indexePoint1();
-    assert(indexPointPoly1 >= 0);
-    assert(indexPointPoly2 >= 0);
+    //assert(indexPointPoly1 >= 0);
+    //assert(indexPointPoly2 >= 0);
     //Si les 2 premiers indexes sont egaux, on regarde les suivants:
     if (indexPointPoly1 == indexPointPoly2)
     {
@@ -109,11 +109,11 @@ int TYSetGeometriqueParcours::SupressionPolylignesRedondantes()
     int indexPoint1, indexPoint2, i, j;
     for (i = 0; i < _nNbPolylines; i++)
     {
-        assert(_ListePolylines[i].nombreDePoint() == 2);
+        //assert(_ListePolylines[i].nombreDePoint() == 2);
         indexPoint1 = _ListePolylines[i].indexePoint1();
         indexPoint2 = _ListePolylines[i].indexePoint2();
-        assert(indexPoint1 >= 0);
-        assert(indexPoint2 >= 0);
+        //assert(indexPoint1 >= 0);
+        //assert(indexPoint2 >= 0);
         if (indexPoint1 > indexPoint2)
         {
             //Swap
@@ -218,7 +218,7 @@ void TYSetGeometriqueParcours::RamenerPointsTraversantLaFrontiere(TYPointParcour
     {
         //1. Recherche des segments traversant [SR]
         //Attention !! On considere que les polylignes ne sont que des segments (nb point = 2).
-        assert(2 == _ListePolylines[i].nombreDePoint());
+        //assert(2 == _ListePolylines[i].nombreDePoint());
         //Indexe du point dans la liste de point:
         indexePoint1 = _ListePolylines[i].indexePoint1();
         indexePoint2 = _ListePolylines[i].indexePoint2();
@@ -465,8 +465,8 @@ void TYSetGeometriqueParcours::TriePointsIntersectionSuivantSR(TYPointParcours& 
 
 bool TYSetGeometriqueParcours::AjoutePointALaPolyLigne(int indexPolyligne, TYPointParcours& P)
 {
-    assert(_ListePolylines);
-    assert(_ListePoint);
+    //assert(_ListePolylines);
+    //assert(_ListePoint);
     //Enregistrement du point:
     _ListePoint[_nNbPointTotal] = P;
     _ListePolylines[indexPolyligne].ajoutePoint(_ListePolylines[indexPolyligne].nombreDePoint(), &(_ListePoint[_nNbPointTotal]));
@@ -529,7 +529,7 @@ bool TYSetGeometriqueParcours::ListerPointsConnexes(Connexite* Connexes)
     int indexePoint;
     for (i = 0; i < _nNbPolylines; i++)
     {
-        assert(_ListePolylines[i].nombreDePoint() == 2);
+        //assert(_ListePolylines[i].nombreDePoint() == 2);
         for (j = 0; j < _ListePolylines[i].nombreDePoint(); j++)
         {
             indexePoint = _ListePolylines[i].indexePoint(j);
@@ -553,7 +553,7 @@ bool TYSetGeometriqueParcours::ListerPointsConnexes(Connexite* Connexes)
         //_PolyligneP0 & _PolyligneP1 pointent imperativement:
         //- sur une autre polyligne que la courante
         //- sur 2 polylignes differentes (sauf si aucune polyligne voisine)
-        assert(_ListePolylines[i].nombreDePoint() == 2);
+        //assert(_ListePolylines[i].nombreDePoint() == 2);
         //Creons des alias de type tableau sur les voisines _PolyligneP0 & _PolyligneP1
         TYPolyligneParcours** pPolylignesVoisines[2];
         pPolylignesVoisines[0] = &(_ListePolylines[i]._PolyligneP0);
@@ -562,7 +562,7 @@ bool TYSetGeometriqueParcours::ListerPointsConnexes(Connexite* Connexes)
 
         for (j = 0; j < 2; j++) //test enleve pour tester que pPolylignesVoisines[j] vaut bien NULL
         {
-            assert((*pPolylignesVoisines[j]) == NULL);//l'initialisation devrait etre deja faite
+            //assert((*pPolylignesVoisines[j]) == NULL);//l'initialisation devrait etre deja faite
             //On s'occupe des segments connexes au point j du segment courant
             int IndexePj = _ListePolylines[i].indexePoint(j);
             //Premier segment connexe
@@ -593,7 +593,7 @@ bool TYSetGeometriqueParcours::ListerPointsConnexes(Connexite* Connexes)
         bool bP0P1PointentSurMemePolyligne = (_ListePolylines[i]._PolyligneP0 == _ListePolylines[i]._PolyligneP1);
         bool bAssert = bP0P1PointentSurMemePolyligne ? (_ListePolylines[i]._PolyligneP0 == NULL) : true;
 
-        assert(bAssert);
+        //assert(bAssert);
         if (!bAssert)
         {
             bAssert = true;
@@ -816,7 +816,7 @@ bool TYSetGeometriqueParcours::intersects(TYPointParcours& P1, TYPointParcours& 
     int indexPoint2In = P2.Identifiant;
     for (int i = 0; i < _nNbPolylines; i++)
     {
-        assert(_ListePolylines[i].nombreDePoint() == 2);
+        //assert(_ListePolylines[i].nombreDePoint() == 2);
         int indexPoint1 = _ListePolylines[i].indexePoint1();
         int indexPoint2 = _ListePolylines[i].indexePoint2();
 
@@ -1060,10 +1060,10 @@ void TYSetGeometriqueParcours::CreerTrajetAPartirDuneListeDePointsTriee(TYPointP
     {
         return;
     }
-    assert(_ListePolylines == NULL);
-    assert(_ListePoint == NULL);
-    assert(_nNbPolylines == 0);
-    assert(_nNbPointTotal == 0);
+    //assert(_ListePolylines == NULL);
+    //assert(_ListePoint == NULL);
+    //assert(_nNbPolylines == 0);
+    //assert(_nNbPointTotal == 0);
 
     //1. Creer les points
     _ListePoint     = new TYPointParcours[nNbPoints];
