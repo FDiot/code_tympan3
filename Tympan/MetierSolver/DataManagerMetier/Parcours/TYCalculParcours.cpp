@@ -35,7 +35,7 @@
 
 #include "Tympan/MetierSolver/ToolsMetier/OGeometrie.h"
 #include "Tympan/Tools/OMessageManager.h"
-#include <assert.h>
+//#include <assert.h>
 
 int nNbAbandonsParPointNuples = 0;
 
@@ -136,14 +136,14 @@ void TYCalculParcours::AjouterSegment(double* ptA, double* ptB, bool isInfra, bo
 
 void TYCalculParcours::AjouterSegmentCoupe(double* ptA, double* ptB, bool isInfra, bool isEcran)
 {
-    assert(_geoSR->_nNbPolylines <= _nNbSegMax);
+    //assert(_geoSR->_nNbPolylines <= _nNbSegMax);
     AjouterSegment(ptA, ptB, isInfra, isEcran, _geoImporterDXF);
 }
 
 void TYCalculParcours::AjouterSegmentSR(double* ptA, double* ptB)
 {
-    assert(_geoSR->_nNbPointTotal == 0);
-    assert(_geoSR->_nNbPolylines == 0);
+    //assert(_geoSR->_nNbPointTotal == 0);
+    //assert(_geoSR->_nNbPolylines == 0);
     
 	//On fait ici le choix du systeme de coordonnee:
     double dDeltaX = fabs(ptA[0] - ptB[0]);
@@ -166,7 +166,7 @@ void TYCalculParcours::PointTrajetDroite(int i, double* pt)
 
 void TYCalculParcours::PointTrajet(int i, double* pt, TYSetGeometriqueParcours* geo)
 {
-    assert(i < geo->_nNbPointTotal);
+    //assert(i < geo->_nNbPointTotal);
     pt[_indexXInOut] = geo->_ListePoint[i].x;
     pt[_indexYInOut] = geo->_ListePoint[i].y;
     pt[_indexZInOut] = geo->_ListePoint[i].z;
@@ -272,7 +272,7 @@ int TYCalculParcours::Traite(
 {
     // Preparation des donnees
     //1. Le segment SR doit etre present
-    assert(NULL != _geoSR);
+    //assert(NULL != _geoSR);
     if (NULL == _geoSR->_ListePoint)
     {
         OMessageManager::get()->format(MSG_DEBUG, "Pas de Points detectes pour Source-Recepteur\n");
