@@ -646,5 +646,5 @@ OSpectreComplex TYSol::calculQ(const double& angle, const double& rR, const TYAt
     OSpectreComplex w  = calculW(Zs, rR, angle, Atmo);
     OSpectreComplex fW = calculFw(w);
 
-    return calculQ(angle, rP, fW);
+	return calculQ(angle, rP, fW).toModulePhase();
 }
