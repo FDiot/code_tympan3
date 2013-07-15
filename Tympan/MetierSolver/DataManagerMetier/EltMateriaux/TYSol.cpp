@@ -127,6 +127,8 @@ bool TYSol::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
         _pVegetation->deepCopy(pOtherSol->_pVegetation, copyId);
     }
 
+	calculZc(); // Compute _pImpedance spectrum
+
     return true;
 }
 
