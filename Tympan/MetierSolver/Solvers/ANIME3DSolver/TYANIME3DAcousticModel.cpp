@@ -145,6 +145,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
             {
 				angle = _tabTYRays[i]->getEvents().at(tabRefl[j])->angle;
 				spectreAbs = _topo.terrainAt(Prefl)->getSol()->abso(angle, sizeRay, _atmos);
+				double resistivite = _topo.terrainAt(Prefl)->getSol()->getResistivite();
 				spectreAbs.getEtat();
 			}
             else
