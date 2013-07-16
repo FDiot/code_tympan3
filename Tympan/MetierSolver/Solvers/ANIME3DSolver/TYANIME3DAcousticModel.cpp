@@ -129,6 +129,8 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 		sum = OSpectreComplex(OSpectre(0.0));
 		sum1 = OSpectreComplex(OSpectre(0.0));
 		pond = OSpectreComplex(OSpectre(0.0));
+
+		TYSol* pSol = NULL;
 		
 		for(int j = 0; j < tabRefl.size(); j++)
 		{
@@ -147,7 +149,10 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 			if (_tabTYRays[i]->getEvents().at(tabRefl[j])->type == TYREFLEXIONSOL) 
             {
 				angle = _tabTYRays[i]->getEvents().at(tabRefl[j])->angle;
-				spectreAbs = _topo.terrainAt(Prefl)->getSol()->abso(angle, sizeRay, _atmos);
+
+				pSol = _topo.terrainAt(Prefl)->getSol();
+				pSol->calculNombreDOnde(_atmos);
+				spectreAbs = pSol->abso(angle, sizeRay, _atmos);
 				double resistivite = _topo.terrainAt(Prefl)->getSol()->getResistivite();
 				spectreAbs.getEtat();
 			}
@@ -171,7 +176,9 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 					
 					for(int k = 0; k < nbFacesFresnel; k++)
 					{ // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
-						spectreAbs = _topo.terrainAt(triangleCentre[k])->getSol()->abso(angle, sizeRay, _atmos);
+						pSol = _topo.terrainAt(triangleCentre[k])->getSol();
+						pSol->calculNombreDOnde(_atmos);
+						spectreAbs = pSol->abso(angle, sizeRay, _atmos);
 						spectreAbs.getEtat();
 						pond = spectreAbs * tabPondFresnel[k];
 						sum = sum + pond; // calcul du coeff de reflexion moy en ponderant avec les materiaux
@@ -783,7 +790,7 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff()
 
 	OSpectre phase; // phase du nombre complexe _pressAcoustEff[i] pour chq i
     OSpectre mod;   // module du nombre complexe _pressAcoustEff[i] pour chq i
-    const double rhoc = 400.0;   // kg/m^2/s
+	const double rhoc = _atmos.getImpedanceSpecifique(); //400.0;   // kg/m^2/s
     double c1;      // constante du calcul
     OPoint3D S, P0; // pt de la source et pt du 1er evenement
     OSegment3D seg; // premier segment du rayon
@@ -851,7 +858,7 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
     OSpectre mod;		    // module et module au carre
 	const OSpectre K2 = _K*_K;				// nombre d'onde au carre
  
-	double incerRel = 0.1;  // incertitude relative sur la taille du rayon au carree
+	double incerRel = 0.001;  // incertitude relative sur la taille du rayon au carree
     double cst = (pow(2., 1. / 6.) - pow(2., -1. / 6.)) * (pow(2., 1. / 6.) - pow(2., -1. / 6.)) / 3.0 + incerRel * incerRel; // constante pour la definition du facteur de coherence
 	//double dSR;				// distance source/recepteur
 	double totalRayLength;
@@ -893,11 +900,13 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
                     //C = (K2 * dSR * dSR * (-1) * cst).exp();
 					C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
 
-                    sum1 = sum1 + _pressAcoustEff[k] * C;
+                    sum1 = sum1 + (_pressAcoustEff[k] * C) * (_pressAcoustEff[k] * C);
                     sum2 = sum2 + mod * mod * (un - C*C);
                 }
             }
-			tabPressionAcoust[i][j] = sum1*sum1 + sum2;
+
+			// Be carefull sum of p²!= p² of sum (previously was sum1 * sum1 + sum2)
+			tabPressionAcoust[i][j] = sum1 + sum2;
         }
     }
     return tabPressionAcoust;
