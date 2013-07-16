@@ -678,7 +678,7 @@ void TYANIME3DAcousticPathFinder::angleCompute(TYRay *tyRay)
 		for (unsigned j=1; j<tabEvent.size()-1; j++)
 		{
 			// Path length correction for distance from one event to next event needed for calculus
-			tabEvent.at(j)->distNextEvent = angleCorrection(tabEvent.at(j)->previous, tabEvent.at(j), tabEvent.at(j)->next);
+			tabEvent.at(j)->angle = angleCorrection(tabEvent.at(j)->previous, tabEvent.at(j), tabEvent.at(j)->next);
 		}
 }
 
@@ -735,6 +735,11 @@ double TYANIME3DAcousticPathFinder::angleCorrection(const TYRayEvent *ev1, TYRay
 
 	OVector3D vec1(points[1], points[0]);
 	OVector3D vec2(points[1], points[2]);
-	
+
+#ifdef _DEBUG
+	double angle = vec1.angle(vec2);
+	double angleComp = (M_PI - vec1.angle(vec2)) / 2.;
+#endif
+
 	return (M_PI - vec1.angle(vec2)) / 2.;
 }

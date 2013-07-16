@@ -117,7 +117,10 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
     for (int i = 0; i < _nbRays; i++) // boucle sur les rayons
     {
 		std::vector<int> tabRefl = _tabTYRays[i]->getIndexOfEvents(TYREFLEXION | TYREFLEXIONSOL);
-		sizeRay = _tabTYRays[i]->getLength();
+
+		// Be carefull, "sizeRay" must be length covered by the ray traveling from event before reflexion 
+		// to event after reflexion passing by reflexion point
+		sizeRay = _tabTYRays[i]->getLength(); 
 
 		rayNbr = i;
 		one = OSpectreComplex(OSpectre(1.0));
