@@ -900,13 +900,13 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
                     //C = (K2 * dSR * dSR * (-1) * cst).exp();
 					C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
 
-                    sum1 = sum1 + (_pressAcoustEff[k] * C) * (_pressAcoustEff[k] * C);
+                    sum1 = sum1 + _pressAcoustEff[k] * C;
                     sum2 = sum2 + mod * mod * (un - C*C);
                 }
             }
 
-			// Be carefull sum of p²!= p² of sum (previously was sum1 * sum1 + sum2)
-			tabPressionAcoust[i][j] = sum1 + sum2;
+			// Be carefull sum of p²!= p² of sum
+			tabPressionAcoust[i][j] = sum1*sum1 + sum2;
         }
     }
     return tabPressionAcoust;
