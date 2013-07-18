@@ -17,16 +17,7 @@
 #ifndef __TY_ANIME3DSOLVER__
 #define __TY_ANIME3DSOLVER__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
-
-#include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
 
 class TYANIME3DAcousticModel;
 class TYANIME3DAcousticPathFinder;

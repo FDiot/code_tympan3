@@ -13,10 +13,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */ 
  
-#include "TYANIME3DRayTracerSetup.h"
-
 #include <iostream>
 #include <fstream>
+#include <cstdlib>
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/ValidRay.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/PostTreatment.h"
@@ -24,7 +23,12 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/LengthSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/ReflectionSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Solver.h"
+
+#include "TYANIME3DRayTracerSetup.h"
 
 void TYANIME3DRayTracerSetup::initGlobalValues()
 {

@@ -13,38 +13,51 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/Tools/TYProgressManager.h"
-
-#include "Tympan/MetierSolver/AcousticRaytracer/global.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangulate.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangle.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
-
-#include "Tympan/MetierSolver/AnalyticRayTracer/R3.h"
-#include "Tympan/MetierSolver/AnalyticRayTracer/RayCourb.h"
-#include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
-#include "Tympan/MetierSolver/AnalyticRayTracer/Lancer.h"
-
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYChemin.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
-
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <cmath>
 #include <vector>
 
-#include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
+#include "Tympan/Tools/TYProgressManager.h"
+
+#include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
+#include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
+
+#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
+
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+
+#include "Tympan/MetierSolver/AcousticRaytracer/global.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangulate.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangle.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/FaceSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/LengthSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/ReflectionSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
 
+#include "Tympan/MetierSolver/AnalyticRayTracer/R3.h"
+#include "Tympan/MetierSolver/AnalyticRayTracer/RayCourb.h"
+#include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
+#include "Tympan/MetierSolver/AnalyticRayTracer/Lancer.h"
+
+//#include "TYANIME3DSiteNode.h"
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DRayTracerSetup.h"
 #include "TYANIME3DAcousticModel.h"
 #include "TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DFaceSelector.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 
 typedef std::vector<TYTrajet> TabTrajet;
 

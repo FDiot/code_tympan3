@@ -12,10 +12,27 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */ 
-#include "Tympan/MetierSolver/AcousticRaytracer/global.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
+
+#include <map>
+#include <list>
+#include <vector>
+#include <string>
+#include <fstream>
+#include <iomanip>
+
+#include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
+
+#include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+
+#include "Tympan/MetierSolver/AcousticRaytracer/global.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangulate.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"
 
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DAcousticModel.h"

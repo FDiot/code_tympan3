@@ -13,10 +13,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */ 
 
+#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
+
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/FaceSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/LengthSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/ReflectionSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"

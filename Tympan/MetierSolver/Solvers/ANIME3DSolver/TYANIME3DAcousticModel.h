@@ -16,19 +16,7 @@
 #ifndef __TYANIME3DACOUSTICMODEL__
 #define __TYANIME3DACOUSTICMODEL__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
-
 // Pour l'utilisation de la librairie standard STL.
-#include <map>
-#include <list>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <iomanip>
-
-#include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
 
 ///Type pour les valeurs complexes
 typedef std::complex<double> OComplex;
