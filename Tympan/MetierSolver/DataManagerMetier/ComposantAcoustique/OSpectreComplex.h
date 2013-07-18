@@ -76,6 +76,9 @@ public:
 	// Produit de deux spectres complexesen module/phase
     OSpectreComplex operator * (const OSpectreComplex& spectre) const;
 
+	// Computes the operation between a complex spectrum times a spectrum
+    OSpectreComplex operator * (const OSpectre& spectre) const;
+
 	/// Operateur de multiplication d'un spectre complexe par un coeff de type double
     OSpectreComplex operator * (const double& coefficient) const;
 
