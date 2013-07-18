@@ -871,6 +871,7 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
     OSpectre C;         // facteur de coherence et son carre
     OSpectre un = OSpectre(1.0);
     OSpectreComplex sum1;	//somme partielle
+    OSpectreComplex sum3;
     OSpectre sum2;			//somme partielle
     OSpectre mod;		    // module et module au carre
 	const OSpectre K2 = _K*_K;				// nombre d'onde au carre
@@ -899,7 +900,11 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
         for (int j = 0; j < nbRecepteurs; j++) // boucle sur les recepteurs
         {
 			sum1 = OSpectreComplex(OSpectre(0.0), OSpectre(0.0));
-            sum2 = OSpectreComplex(OSpectre(0.0), OSpectre(0.0));      
+            sum2 = OSpectreComplex(OSpectre(0.0), OSpectre(0.0));
+
+			// TEST
+			sum3 = OSpectreComplex(OSpectre(0.0), OSpectre(0.0));
+			//
 
             for (int k = 0; k < _nbRays; k++) // boucle sur les rayons allant de la source au recepteur
             {
@@ -915,15 +920,17 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
 					totalRayLength = _tabTYRays[k]->getLength();
                     mod = (_pressAcoustEff[k]).getModule();
                     //C = (K2 * dSR * dSR * (-1) * cst).exp();
-					C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
-
-                    sum1 = sum1 + _pressAcoustEff[k] * C;
+					//TRUE ONE//C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
+					C = 1.0;
+					//sum1 = _pressAcoustEff[k] * C;
+					sum3 = _pressAcoustEff[k] * C;
+					sum1 = sum1 + sum3;
                     sum2 = sum2 + mod * mod * (un - C*C);
                 }
             }
-
 			// Be carefull sum of p²!= p² of sum
-			tabPressionAcoust[i][j] = sum1*sum1 + sum2;
+			sum1 = sum1.getModule() * sum1.getModule();
+			tabPressionAcoust[i][j] = sum1 + sum2;
         }
     }
     return tabPressionAcoust;

@@ -101,10 +101,34 @@ OSpectreComplex OSpectreComplex::operator + (const OSpectreComplex& spectre) con
     s._etat = _etat;
     s._type = _type;
 
+	//WIP // A complex number is defined as z = a + ib
+	double a1 = 0.0; // This is the original one
+	double b1 = 0.0;
+	double a2 = 0.0; // This is the one we add
+	double b2 = 0.0;
+	double a3 = 0.0; // This is the returned complex number i.e. the result
+	double b3 = 0.0;
+	double cos3 = 0.0;
+	//
+
     for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        s._module[i] = _module[i] + spectre._module[i];
-        s._phase[i] = _phase[i] + spectre._phase[i];
+        // WIP
+		a1 = _module[i]*std::cos(_phase[i]);
+		b1 = _module[i]*std::sin(_phase[i]);
+		
+		a2 = spectre._module[i]*std::cos(spectre._phase[i]);
+		b2 = spectre._module[i]*std::sin(spectre._phase[i]);
+
+		a3 = a1 + a2;
+		b3 = b1 + b2;
+
+		s._module[i] = std::sqrt( a3*a3 + b3*b3);
+		cos3 = a3 / s._module[i];
+		s._phase[i] = std::acos(cos3);
+		//
+		//s._module[i] = _module[i] + spectre._module[i];
+  //      s._phase[i] = _phase[i] + spectre._phase[i];
     }
     return s;
 }
@@ -125,6 +149,24 @@ OSpectreComplex OSpectreComplex::operator * (const OSpectreComplex& spectre) con
         s._phase[i] = _phase[i] + spectre._phase[i];
     }
     return s;
+}
+
+OSpectreComplex OSpectreComplex::operator * (const OSpectre& spectre) const
+{
+	// Produit de deux complexes en module/phase
+	//  = produit des modules et somme des phases
+    OSpectreComplex s;
+
+    // Recopie de l'empreinte du spectre
+    s._etat = _etat;
+    s._type = _type;
+
+    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
+    {
+		s._module[i] = _module[i] * (spectre.getTabValReel())[i];
+        s._phase[i] = _phase[i];
+    }
+    return s;	
 }
 
 OSpectreComplex OSpectreComplex::operator * (const double& coefficient) const
