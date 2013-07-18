@@ -63,11 +63,11 @@ class TYSiteNode: public TYElement
     virtual ~TYSiteNode();
 
     ///Operateur =.
-    TYSiteNode& operator=(const TYSiteNode& other);
+    virtual TYSiteNode& operator=(const TYSiteNode& other);
     ///Operateur ==.
-    bool operator==(const TYSiteNode& other) const;
+    virtual bool operator==(const TYSiteNode& other) const;
     ///Operateur !=.
-    bool operator!=(const TYSiteNode& other) const;
+    virtual bool operator!=(const TYSiteNode& other) const;
 
     virtual bool deepCopy(const TYElement* pOther, bool copyId = true);
 
