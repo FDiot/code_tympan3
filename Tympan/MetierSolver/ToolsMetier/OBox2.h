@@ -56,8 +56,9 @@ public:
      * \brief Constructor from a box and its local coordinate system
      * \param box The box define in the local coordinate system
      * \param repere The global coordinate system of the box
+	 * \param centre Is the box centre, this point is the middle of [S'R]
      */
-    OBox2(const OBox& box, const ORepere3D& repere);
+    OBox2(const OBox& box, const ORepere3D& repere, const OPoint3D& centre);
 
     /**
      * \fn OBox2(const OCoord3D& min,const OCoord3D & max, ORepere3D & repere)

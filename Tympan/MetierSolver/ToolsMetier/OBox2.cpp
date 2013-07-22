@@ -56,12 +56,12 @@ OBox2::OBox2(const OBox2& box)
 	_H = box._max;
 }
 
-OBox2::OBox2(const OBox& box, const ORepere3D& repere)
+OBox2::OBox2(const OBox& box, const ORepere3D& repere, const OPoint3D& centre)
 {
     _min = box._min;
     _max = box._max;
     _repere = repere;
-	_center = OPoint3D(_max._x/2, _max._y/2, _max._z/2);
+	_center = OPoint3D(centre._x, centre._y, centre._z);
 	_length = _max._x/2;
 	_height = _max._z/2;
 	_width = _max._y/2;
