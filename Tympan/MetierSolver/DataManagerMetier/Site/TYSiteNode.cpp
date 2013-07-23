@@ -28,6 +28,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 #include "Tympan/Tools/TYProgressManager.h"
+#include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/Tools/OMessageManager.h"
 
 
@@ -43,6 +44,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 OPROTOINST(TYSiteNode);
+
+#define TR(id) OLocalizator::getString("OMessageManager", (id))
 
 /*static*/ const std::string& TYSiteNode::getTopoFilePath()
 {
@@ -533,6 +536,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
 #endif // TY_USE_IHM
 
     bool cancel = false;
+	bool bNoPbAlti = true;
 
     // Mise a jour de l'altitude pour les points des routes
     for (j = 0; j < _pInfrastructure->getListRoute().size() && !cancel; j++)
@@ -561,7 +565,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
             pt._z = 0.0;
 
             // Recherche de l'altitude
-            pAlti->updateAltitude(pt);
+            bNoPbAlti &= pAlti->updateAltitude(pt);
 
             // Prise en compte de la hauteur par rapport au sol
             pt._z += hauteur;
@@ -599,7 +603,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
             pt._z = 0.0;
 
             // Recherche de l'altitude
-            pAlti->updateAltitude(pt);
+            bNoPbAlti &= pAlti->updateAltitude(pt);
 
             // Ajout de la hauteur du reseau de transport
             pt._z += hauteur;
@@ -640,7 +644,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         pt._z = 0.0;
 
         // Recherche de l'altitude
-        pAlti->updateAltitude(pt);
+        bNoPbAlti &= pAlti->updateAltitude(pt);
 
         ORepere3D repere = pBatGeoNode->getRepere();
 
@@ -682,7 +686,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         pt._z = 0.0;
 
         // Recherche de l'altitude
-        pAlti->updateAltitude(pt);
+        bNoPbAlti &= pAlti->updateAltitude(pt);
 
         ORepere3D repere = pMachineGeoNode->getRepere();
 
@@ -718,7 +722,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         pt._z = 0.0;
 
         // Recherche de l'altitude
-        pAlti->updateAltitude(pt);
+        bNoPbAlti &= pAlti->updateAltitude(pt);
 
         // Ajout de la hauteur
         pt._z += pSrc->getHauteur();
@@ -756,7 +760,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
             pt._z = 0.0;
 
             // Recherche de l'altitude
-            pAlti->updateAltitude(pt);
+            bNoPbAlti &= pAlti->updateAltitude(pt);
 
             // Retour au repere d'origine
             pCrsEau->getTabPoint()[i] = matrixinv * pt;
@@ -790,7 +794,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
             pt._z = 0.0;
 
             // Recherche de l'altitude
-            pAlti->updateAltitude(pt);
+            bNoPbAlti &= pAlti->updateAltitude(pt);
 
             // Retour au repere d'origine
             pTerrain->getListPoints()[i] = matrixinv * pt;
@@ -804,6 +808,9 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
 #if TY_USE_IHM
     TYProgressManager::stepToEnd();
 #endif // TY_USE_IHM
+
+	// Warning if an object is not correctly altimetrized
+	if (!bNoPbAlti) { OMessageManager::get()->info(TR("msg_pbalti")); }
 
     if (modified)
     {

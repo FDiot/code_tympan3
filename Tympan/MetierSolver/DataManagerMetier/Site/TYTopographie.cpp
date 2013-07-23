@@ -26,6 +26,8 @@
 
 OPROTOINST(TYTopographie);
 
+#define TR(id) OLocalizator::getString("OMessageManager", (id))
+
 // Declaration de la fonction utilisee par qsort pour le tri des terrains
 static int compareTerrains(const void* elem1, const void* elem2);
 
