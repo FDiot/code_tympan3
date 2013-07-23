@@ -2376,4 +2376,9 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_canceltext" value="Annuler"/>
 		</message>
 	</class>
+	<class name="OMessageManager">
+		<message>
+			<string id="msg_pbalti" value="ATTENTION !!!  Certains objets sont hors de la zone altimétrisée... Leur altitude est fixée à -10000 m"/>
+		</message>
+	</class>
 </RESSOURCE>
