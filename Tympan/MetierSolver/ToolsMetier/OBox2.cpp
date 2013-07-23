@@ -21,31 +21,79 @@
 
 OBox2::OBox2()
 {
-    _min._x = _min._y = _min._z = _max._x = _max._y = _max._z = 0;
-	_center = OPoint3D(_max._x/2, _max._y/2, _max._z/2);
-	_length = _max._x/2;
-	_height = _max._z/2;
-	_width = _max._y/2;
-	_A = _min;
-	_B = OPoint3D(0, _width, 0);
-	_C = OPoint3D(_length, _width, 0);
-	_D = OPoint3D(_length, 0, 0);
-	_E = OPoint3D(_length, 0, _height);
-	_F = OPoint3D(0, 0, _height);
-	_G = OPoint3D(0, _width, _height);
-	_H = _max;
-    _repere = ORepere3D();
+ //   _min._x = _min._y = _min._z = _max._x = _max._y = _max._z = 0;
+	//_center = OPoint3D(_max._x/2, _max._y/2, _max._z/2);
+	//_length = _max._x/2;
+	//_height = _max._z/2;
+	//_width = _max._y/2;
+	//_A = _min;
+	//_B = OPoint3D(0, _width, 0);
+	//_C = OPoint3D(_length, _width, 0);
+	//_D = OPoint3D(_length, 0, 0);
+	//_E = OPoint3D(_length, 0, _height);
+	//_F = OPoint3D(0, 0, _height);
+	//_G = OPoint3D(0, _width, _height);
+	//_H = _max;
+	_repere = ORepere3D();
+	_min = OPoint3D(0, 0, 0);
+	_max = OPoint3D(0, 0, 0);
+	_center = OPoint3D(0, 0, 0);
+	_A = OPoint3D(0, 0, 0);
+	_B = OPoint3D(0, 0, 0);
+	_C = OPoint3D(0, 0, 0);
+	_D = OPoint3D(0, 0, 0);
+	_E = OPoint3D(0, 0, 0);
+	_F = OPoint3D(0, 0, 0);
+	_G = OPoint3D(0, 0, 0);
+	_H = OPoint3D(0, 0, 0);
+	_length = 0;
+	_height = 0;
+	_width = 0;
 }
 
 OBox2::OBox2(const OBox2& box)
 {
+ //   _min = box._min;
+ //   _max = box._max;
+ //   _repere = box._repere;
+	//_center = box._center;
+	//_length = box._max._x/2;
+	//_height = box._max._z/2;
+	//_width = box._max._y/2;
+	//_A = box._min;
+	//_B = OPoint3D(0, _width, 0);
+	//_C = OPoint3D(_length, _width, 0);
+	//_D = OPoint3D(_length, 0, 0);
+	//_E = OPoint3D(_length, 0, _height);
+	//_F = OPoint3D(0, 0, _height);
+	//_G = OPoint3D(0, _width, _height);
+	//_H = box._max;
+	_min = box._min;
+	_max = box._max;
+	_repere = box._repere;
+	_center = box._center;
+	_A = box._A;
+	_B = box._B;
+	_C = box._C;
+	_D = box._D;
+	_E = box._E;
+	_F = box._F;
+	_G = box._G;
+	_H = box._H;
+	_length = box._length;
+	_height = box._height;
+	_width = box._width;
+}
+
+OBox2::OBox2(const OBox& box, const ORepere3D& repere)
+{
     _min = box._min;
     _max = box._max;
-    _repere = box._repere;
-	_center = OPoint3D(_max._x/2, _max._y/2, _max._z/2);
-	_length = _max._x/2;
-	_height = _max._z/2;
-	_width = _max._y/2;
+    _repere = repere;
+	_center = OPoint3D(box._max._x/2, box._max._y/2, box._max._z/2);
+	_length = box._max._x/2;
+	_height = box._max._z/2;
+	_width = box._max._y/2;
 	_A = box._min;
 	_B = OPoint3D(0, _width, 0);
 	_C = OPoint3D(_length, _width, 0);
@@ -56,7 +104,7 @@ OBox2::OBox2(const OBox2& box)
 	_H = box._max;
 }
 
-OBox2::OBox2(const OBox& box, const ORepere3D& repere, const OPoint3D& centre)
+OBox2::OBox2(const OBox2& box, const ORepere3D& repere, const OPoint3D& centre)
 {
     _min = box._min;
     _max = box._max;
@@ -118,19 +166,20 @@ OBox2& OBox2::operator=(const OBox2& box)
     {
         _min = box._min;
         _max = box._max;
-		_A = box._min;
-		_B = OPoint3D(box._min._x, box._max._y, box._min._z);
-		_C = OPoint3D(box._max._x, box._max._y, box._min._z);
-		_D = OPoint3D(box._max._x, box._min._y, box._min._z);
-		_E = OPoint3D(box._max._x, box._min._y, box._max._z);
-		_F = OPoint3D(box._min._x, box._min._y, box._max._z);
-		_G = OPoint3D(box._min._x, box._max._y, box._max._z);
-		_H = box._max;
-		_center = OPoint3D(box._max._x/2, box._max._y/2, box._max._z/2);
+		_A = box._A;
+		_B = box._B;
+		_C = box._C;
+		_D = box._D;
+		_E = box._E;
+		_F = box._F;
+		_G = box._G;
+		_H = box._H;
+		_center = box._center;
         _repere = box._repere;
     }
     return *this;
 }
+
 
 bool OBox2::operator==(const OBox2& box) const
 {
