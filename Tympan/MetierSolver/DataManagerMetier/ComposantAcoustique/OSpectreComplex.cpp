@@ -25,6 +25,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/Tools/OMessageManager.h"
+#include <complex>
 
 OSpectreComplex::OSpectreComplex(const double &defModule, const double &defPhase) : OSpectre(defModule)
 {
@@ -101,34 +102,19 @@ OSpectreComplex OSpectreComplex::operator + (const OSpectreComplex& spectre) con
     s._etat = _etat;
     s._type = _type;
 
-	//WIP // A complex number is defined as z = a + ib
-	double a1 = 0.0; // This is the original one
-	double b1 = 0.0;
-	double a2 = 0.0; // This is the one we add
-	double b2 = 0.0;
-	double a3 = 0.0; // This is the returned complex number i.e. the result
-	double b3 = 0.0;
-	double cos3 = 0.0;
-	//
+	// A complex number is defined as z = a + ib
+	std::complex<double> z1; // This is the original one
+	std::complex<double> z2; // This is the one we add
+	std::complex<double> z3; // This is the returned complex number i.e. the result
 
     for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        // WIP
-		a1 = _module[i]*std::cos(_phase[i]);
-		b1 = _module[i]*std::sin(_phase[i]);
-		
-		a2 = spectre._module[i]*std::cos(spectre._phase[i]);
-		b2 = spectre._module[i]*std::sin(spectre._phase[i]);
+		z1 = std::polar(_module[i], _phase[i]);
+		z2 = std::polar(spectre._module[i], spectre._phase[i]);
+		z3 = z1 + z2;
 
-		a3 = a1 + a2;
-		b3 = b1 + b2;
-
-		s._module[i] = std::sqrt( a3*a3 + b3*b3);
-		cos3 = a3 / s._module[i];
-		s._phase[i] = std::acos(cos3);
-		//
-		//s._module[i] = _module[i] + spectre._module[i];
-  //      s._phase[i] = _phase[i] + spectre._phase[i];
+		s._module[i] = std::abs(z3);
+		s._phase[i] = std::arg(z3);
     }
     return s;
 }
