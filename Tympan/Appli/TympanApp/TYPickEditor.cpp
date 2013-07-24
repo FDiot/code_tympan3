@@ -1467,6 +1467,15 @@ void TYPickEditor::showPopupMenu(LPTYElementCollection pElts)
 
                 pCopy->setRepere(repere);
 
+				LPTYCalcul pCalc = NULL;
+				TYSiteNode *pSite = NULL;
+				pSite = dynamic_cast<TYSiteNode*>( pCopy->getElement() ) ;
+				if (getTYApp()->getCurProjet() && pSite)
+				{
+						pCalc = getTYApp()->getCurProjet()->getCurrentCalcul();
+						if (pCalc) { pCalc->getCalculElements(pSite); }
+				}
+
                 // Update Graphic
                 pCopy->updateGraphicTree();
 

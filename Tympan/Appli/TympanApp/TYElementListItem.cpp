@@ -226,7 +226,7 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
 
             }
         }
-        else if (_pElement->isInCurrentCalcul() != state)
+        else if ( _pCurrentCalcul->isInSelection(_pElement) != state )
         {
             if (getTYApp()->getCalculManager()->askForResetResultat())
             {
