@@ -21,19 +21,6 @@
 
 OBox2::OBox2()
 {
- //   _min._x = _min._y = _min._z = _max._x = _max._y = _max._z = 0;
-	//_center = OPoint3D(_max._x/2, _max._y/2, _max._z/2);
-	//_length = _max._x/2;
-	//_height = _max._z/2;
-	//_width = _max._y/2;
-	//_A = _min;
-	//_B = OPoint3D(0, _width, 0);
-	//_C = OPoint3D(_length, _width, 0);
-	//_D = OPoint3D(_length, 0, 0);
-	//_E = OPoint3D(_length, 0, _height);
-	//_F = OPoint3D(0, 0, _height);
-	//_G = OPoint3D(0, _width, _height);
-	//_H = _max;
 	_repere = ORepere3D();
 	_min = OPoint3D(0, 0, 0);
 	_max = OPoint3D(0, 0, 0);
@@ -53,21 +40,6 @@ OBox2::OBox2()
 
 OBox2::OBox2(const OBox2& box)
 {
- //   _min = box._min;
- //   _max = box._max;
- //   _repere = box._repere;
-	//_center = box._center;
-	//_length = box._max._x/2;
-	//_height = box._max._z/2;
-	//_width = box._max._y/2;
-	//_A = box._min;
-	//_B = OPoint3D(0, _width, 0);
-	//_C = OPoint3D(_length, _width, 0);
-	//_D = OPoint3D(_length, 0, 0);
-	//_E = OPoint3D(_length, 0, _height);
-	//_F = OPoint3D(0, 0, _height);
-	//_G = OPoint3D(0, _width, _height);
-	//_H = box._max;
 	_min = box._min;
 	_max = box._max;
 	_repere = box._repere;
@@ -91,9 +63,9 @@ OBox2::OBox2(const OBox& box, const ORepere3D& repere)
     _max = box._max;
     _repere = repere;
 	_center = OPoint3D(box._max._x/2, box._max._y/2, box._max._z/2);
-	_length = box._max._x/2;
-	_height = box._max._z/2;
-	_width = box._max._y/2;
+	_length = box._max._x;
+	_height = box._max._z;
+	_width = box._max._y;
 	_A = box._min;
 	_B = OPoint3D(0, _width, 0);
 	_C = OPoint3D(_length, _width, 0);
@@ -110,17 +82,17 @@ OBox2::OBox2(const OBox2& box, const ORepere3D& repere, const OPoint3D& centre)
     _max = box._max;
     _repere = repere;
 	_center = OPoint3D(centre._x, centre._y, centre._z);
-	_length = _max._x/2;
-	_height = _max._z/2;
-	_width = _max._y/2;
-	_A = box._min;
-	_B = OPoint3D(0, _width, 0);
-	_C = OPoint3D(_length, _width, 0);
-	_D = OPoint3D(_length, 0, 0);
-	_E = OPoint3D(_length, 0, _height);
-	_F = OPoint3D(0, 0, _height);
-	_G = OPoint3D(0, _width, _height);
-	_H = box._max;
+	_length = box._max._x;
+	_height = box._max._z;
+	_width = box._max._y;
+	_A = box._A;
+	_B = box._B;
+	_C = box._C;
+	_D = box._D;
+	_E = box._E;
+	_F = box._F;
+	_G = box._G;
+	_H = box._H;
 }
 
 OBox2::OBox2(const OCoord3D& min, const OCoord3D& max, const ORepere3D& repere)
@@ -239,7 +211,7 @@ OVector3D OBox2::GetRotationOzOy(double alpha, double theta, OVector3D V)
 	// Computes the calculations
 	Vfinal._x = cosA*cosB*V._x - sinA*V._y - cosA*sinB*V._z;
 	Vfinal._y = sinA*cosB*V._x + cosA*V._y - sinA*sinB*V._z;
-	Vfinal._z = sinB*V._x + cosB*V._z;
+	Vfinal._z = +sinB*V._x + cosB*V._z;
 	return Vfinal;	
 }
 
