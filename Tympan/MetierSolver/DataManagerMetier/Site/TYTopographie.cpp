@@ -96,7 +96,11 @@ TYTopographie::TYTopographie(const TYTopographie& other)
 
 TYTopographie::~TYTopographie()
 {
-    purge();
+    if (_pSortedTerrains)
+    {
+        delete [] _pSortedTerrains;
+        _pSortedTerrains = NULL;
+    }
 }
 
 TYTopographie& TYTopographie::operator=(const TYTopographie& other)
