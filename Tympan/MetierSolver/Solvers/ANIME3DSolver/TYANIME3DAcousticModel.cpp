@@ -602,7 +602,7 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 		// Final step : New ORepere3D
 		ORepere3D r = ORepere3D(O, x2, y2, z0);
 		fresnelArea.BoxRotationOzOy(alpha, 0.0);
-	    fresnelArea = OBox2(fresnelArea, r);
+	    fresnelArea = OBox2(fresnelArea, r, O);
 		return fresnelArea;
 	}
 
@@ -621,8 +621,11 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 
 		// Final step : New ORepere3D
 		ORepere3D r = ORepere3D(O, x2, y0, z2); 
+		fresnelArea._center._x = O._x;
+		fresnelArea._center._y = O._y;
+		fresnelArea._center._z = O._z;
 		fresnelArea.BoxRotationOzOy(0.0, theta);
-	    fresnelArea = OBox2(fresnelArea, r);
+	    fresnelArea = OBox2(fresnelArea, r, O);
 		return fresnelArea;
 	}
 
@@ -672,7 +675,7 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 		// Final step : New ORepere3D
 		ORepere3D r = ORepere3D(O,x2b0 ,y1b0, z2b0); 
 		fresnelArea.BoxRotationOzOy(alpha, theta);
-	    fresnelArea = OBox2(fresnelArea, r);
+	    fresnelArea = OBox2(fresnelArea, r, O);
 
 		return fresnelArea;
 	}
@@ -920,8 +923,9 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
 					totalRayLength = _tabTYRays[k]->getLength();
                     mod = (_pressAcoustEff[k]).getModule();
                     //C = (K2 * dSR * dSR * (-1) * cst).exp();
-					//TRUE ONE//C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
-					C = 1.0;
+					//TRUE ONE
+					C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
+					//C = 1.0;
 					//sum1 = _pressAcoustEff[k] * C;
 					sum3 = _pressAcoustEff[k] * C;
 					sum1 = sum1 + sum3;
