@@ -110,6 +110,13 @@ public:
      */
     void setCheckState(int column, Qt::CheckState state);
 
+private:
+	/**
+     * \fn void updateChilds()
+     * \brief update child status
+     */
+	void updateChilds();
+
 protected:
     void initItem(LPTYElement pElement, LPTYCalcul pCalcul, const QStringList& labels = QStringList(), bool checkable = false);
 
