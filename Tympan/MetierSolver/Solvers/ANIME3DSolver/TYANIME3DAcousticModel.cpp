@@ -924,8 +924,8 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
                     mod = (_pressAcoustEff[k]).getModule();
                     //C = (K2 * dSR * dSR * (-1) * cst).exp();
 					//TRUE ONE
-					C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
-					//C = 1.0;
+					//C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
+					C = 1.0;
 					//sum1 = _pressAcoustEff[k] * C;
 					sum3 = _pressAcoustEff[k] * C;
 					sum1 = sum1 + sum3;
