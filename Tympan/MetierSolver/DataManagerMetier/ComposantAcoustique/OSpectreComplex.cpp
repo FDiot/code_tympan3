@@ -165,7 +165,7 @@ OSpectreComplex OSpectreComplex::operator * (const double& coefficient) const
     for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
         s._module[i] = _module[i] * coefficient;
-        s._phase[i] = _phase[i] * coefficient;
+        s._phase[i] = _phase[i];// * coefficient;
     }
 
     return s;
@@ -181,7 +181,7 @@ OSpectreComplex OSpectreComplex::multi(const double& coefficient) const
     for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
         s._module[i] = _module[i] * coefficient;
-        s._phase[i] = _phase[i] * coefficient;
+        s._phase[i] = _phase[i]; // * coefficient;
     }
 
     return s;
