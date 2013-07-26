@@ -265,7 +265,7 @@ bool TYFaceSelector::testIntersect2D(const TYStructSurfIntersect& SI, TYSInterse
 bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourante, TYSIntersection& Intersect, OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3, const int& indice) const
 {
     bool bRes = false;
-    const OMatrix& matrixinv = FaceCourante.matInv;
+    const OMatrix matrixinv = FaceCourante.matInv;
     TYAcousticSurfaceGeoNode* pSurfaceGeoNode = FaceCourante.pSurfGeoNode;
 	
 	TYAcousticSurface* pSurface = NULL;
