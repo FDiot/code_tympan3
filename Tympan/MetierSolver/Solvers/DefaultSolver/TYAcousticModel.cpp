@@ -70,7 +70,7 @@ void TYAcousticModel::init(const TYSiteNode& site, const TYCalcul& calcul)
 
 
     // Definit l'atmosphere courante du site
-    _pAtmo = calcul.getAtmosphere();
+	_pAtmo = calcul.getAtmosphere()._pObj;
 
 
     // Calcul avec prise en compte des ecrans
@@ -103,7 +103,7 @@ void TYAcousticModel::init(const TYSiteNode& site, const TYCalcul& calcul)
 
 
     // Topographie du site
-    _pTopographie = site.getTopographie();
+	_pTopographie = site.getTopographie()._pObj;
 
 
     // Coefficient multiplicateur pour le calcul des reflexions supplementaires en condition favorable
@@ -234,7 +234,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const TYSource
 		if (!pTerrain) { pTerrain = _pTopographie->getDefTerrain(); }
 		if (pTerrain) 
         {
-            pSol = pTerrain->getSol();
+			pSol = pTerrain->getSol();
 			if (pSol) { etape3._Absorption = pSol->abso(angleA, rr, *_pAtmo); }
         }
     }
@@ -394,7 +394,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const TYSo
 				if (!pTerrain) { pTerrain = _pTopographie->getDefTerrain(); }
                 if (pTerrain) // Une zone de terrain a ete definie
                 {
-                    pSol = pTerrain->getSol();
+					pSol = pTerrain->getSol();
 					if (pSol) { etape._Absorption = pSol->abso(angle, rr, *_pAtmo); }
                 }
             }
@@ -456,7 +456,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const TYSo
 				if (!pTerrain) { pTerrain = _pTopographie->getDefTerrain(); }
                 if (pTerrain) // Une zone de terrain a ete definie
                 {
-                    pSol = pTerrain->getSol();
+					pSol = pTerrain->getSol();
 					if (pSol) { etape._Absorption = pSol->abso(angle, rr, *_pAtmo); }
                 }
             }
@@ -988,7 +988,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
 			if (!pTerrain) { pTerrain = _pTopographie->getDefTerrain(); }
             if (pTerrain) // Une zone de terrain a ete definie
             {
-                pSol = pTerrain->getSol();
+				pSol = pTerrain->getSol();
 				if (pSol) { EtapeCourante._Absorption = pSol->abso(angleA, rr, *_pAtmo); }
             }
         }
@@ -1030,7 +1030,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
 			if (!pTerrain) { pTerrain = _pTopographie->getDefTerrain(); }
             if (pTerrain) // Une zone de terrain a ete definie
             {
-                pSol = pTerrain->getSol();
+				pSol = pTerrain->getSol();
 				if (pSol) { EtapeCourante._Absorption = pSol->abso(angleA, rr, *_pAtmo); }
             }
         }
