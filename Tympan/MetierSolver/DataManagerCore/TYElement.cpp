@@ -348,7 +348,7 @@ bool TYElement::operator != (const TYElement& other) const
 
 bool TYElement::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
-    assert(pOther);
+//    assert(pOther);
 
     if (!pOther) { return false; }
 
