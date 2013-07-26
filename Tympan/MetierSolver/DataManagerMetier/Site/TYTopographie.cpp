@@ -1177,8 +1177,8 @@ bool TYTopographie::penteMoy(const OSegment3D& seg, OSegment3D& penteMoy) const
 
     // Recuperation des altitudes correspondant aux extremites du segment
     ptA._z = ptB._z = 0.0; // Mise a 0 au cas oi�� les points ne soient pas sur l'alti
-    bool resu = _pAltimetrie->updateAltitude(ptA);
-    resu &= _pAltimetrie->updateAltitude(ptB);
+	bool resu = _pAltimetrie._pObj->updateAltitude(ptA);
+	resu &= _pAltimetrie._pObj->updateAltitude(ptB);
 
     penteMoy = OSegment3D(ptA, ptB);
     return resu;
@@ -1242,8 +1242,8 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
 
     while ((i < _listPlanEau.size()) && (pFound == NULL))
     {
-        pPlanEau = dynamic_cast<TYPlanEau*>(_listPlanEau.at(i)->getElement());
-        const OMatrix &mat = _listPlanEau.at(i)->getMatrix();
+		pPlanEau = dynamic_cast<TYPlanEau*>(_listPlanEau.at(i)._pObj->getElement());
+		const OMatrix &mat = _listPlanEau.at(i)._pObj->getMatrix();
 
         nbPts = pPlanEau->getListPoints().size();
         if (!nbPts)
@@ -1551,7 +1551,7 @@ void TYTopographie::setDefTerrain(int defTerrainIdx)
 TYTerrain* TYTopographie::getDefTerrain()
 {
     assert(_DefTerrainIdx < _listTerrain.size()); // Securite
-    return dynamic_cast<TYTerrain*>(_listTerrain[_DefTerrainIdx]->getElement());
+	return dynamic_cast<TYTerrain*>(_listTerrain[_DefTerrainIdx]._pObj->getElement());
 }
 
 void TYTopographie::sortTerrains()
@@ -1568,11 +1568,11 @@ void TYTopographie::sortTerrains()
 
     for (size_t i = 0; i < nbTerrains; i++)
     {
-		_pSortedTerrains[i] = _listTerrain[i].getRealPointer();
+		_pSortedTerrains[i] = _listTerrain[i]._pObj;
     }
 
     // 3. Tri du tableau
-    qsort(_pSortedTerrains, nbTerrains, sizeof(LPTYTerrainGeoNode), compareTerrains);
+    qsort(_pSortedTerrains, nbTerrains, sizeof(TYTerrainGeoNode*), compareTerrains);
 }
 
 int compareTerrains(const void* elem1, const void* elem2)
