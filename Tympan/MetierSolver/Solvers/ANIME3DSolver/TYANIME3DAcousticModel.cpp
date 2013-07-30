@@ -170,6 +170,8 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 				pSol = _topo.terrainAt(Prefl)->getSol();
 				pSol->calculNombreDOnde(_atmos);
 				spectreAbs = pSol->abso(angle, sizeRay, _atmos);
+				// Pour tester en interférences, mettre Q = 1
+				//spectreAbs = one;
 				double resistivite = _topo.terrainAt(Prefl)->getSol()->getResistivite();
 				spectreAbs.getEtat();
 			}
@@ -196,6 +198,8 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 						pSol = _topo.terrainAt(triangleCentre[k])->getSol();
 						pSol->calculNombreDOnde(_atmos);
 						spectreAbs = pSol->abso(angle, sizeRay, _atmos);
+						// Pour tester en interférences, mettre Q = 1
+						//spectreAbs = one;
 						spectreAbs.getEtat();
 						pond = spectreAbs * tabPondFresnel[k];
 						sum = sum + pond; // calcul du coeff de reflexion moy en ponderant avec les materiaux
@@ -487,6 +491,9 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	Pprec = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->previous->pos;
 	Psuiv = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->next->pos;
 
+	std::cout << "Coordonnees du point de reflexion " << std::endl;
+	std::cout << Prefl._x << " " << Prefl._y << " " << Prefl._z << std::endl;
+
 	double distPrefPsuiv = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->distNextEvent;
 	double dr = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->previous->distNextEvent + distPrefPsuiv;
 	double dd = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->distPrevNext;
@@ -527,6 +534,9 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	OPoint3D SIm = P.symPtPlan(Pprec);
 	double dSImR = SIm.distFrom(Psuiv);
 
+	std::cout << "Coordonnees de la source image " << std::endl;
+	std::cout << SIm._x << " " << SIm._y << " " << SIm._z << std::endl;
+
     // Dimensions de la boite de Fresnel : on choisit de prendre la + grande boite
 	// grd cote de la boite
 	// (lF + dSImR).valMax(); 
@@ -536,6 +546,9 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	// On fixe une frequence de 100 Hz pour etudier de plus pres la boite
 	double L = lF.getValueReal(100.f) + dSImR;                  
 	double l = sqrt(lF.getValueReal(100.f)*(lF.getValueReal(100.f)+2.*dSImR));
+	//double L = 4.0;
+	//double l = 2.0;
+
 
 	// On choisit de fixer la longueur de la boite a S'R
 	// et sa largeur a 0.5*S'R en attendant de mieux dimensionner.
@@ -679,6 +692,7 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 
 		return fresnelArea;
 	}
+
 }
 
 OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre)
@@ -691,6 +705,12 @@ OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(double angle, OPoint3D
 	std::cout << "Dans ComputeFrenelWeighting :" << std::endl;
 	// And bb was born
 	OBox2 fresnelArea = ComputeFrenelArea(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice);
+
+	std::cout << "Coordonnees des 4 sommets hauts de la boite " << std::endl;
+	std::cout << "E = " << fresnelArea._E._x << " " << fresnelArea._E._y << " " << fresnelArea._E._z << std::endl;
+	std::cout << "F = " << fresnelArea._F._x << " " << fresnelArea._F._y << " " << fresnelArea._F._z << std::endl;
+	std::cout << "G = " << fresnelArea._G._x << " " << fresnelArea._G._y << " " << fresnelArea._G._z << std::endl;
+	std::cout << "H = " << fresnelArea._H._x << " " << fresnelArea._H._y << " " << fresnelArea._H._z << std::endl;
 
 	// fE/fF/fG/fH are the faces under the box corners E/F/G/H
 	LPTYPolygon fE = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._E);
@@ -710,6 +730,12 @@ OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(double angle, OPoint3D
 	OPoint3D fProj = fPlane.projPtPlan(fresnelArea._F);
 	OPoint3D gProj = gPlane.projPtPlan(fresnelArea._G);
 	OPoint3D hProj = hPlane.projPtPlan(fresnelArea._H);
+
+	std::cout << "Coordonnees des 4 projetes des sommets hauts de la boite " << std::endl;
+	std::cout << "eProj = " << eProj._x << " " << eProj._y << " " << eProj._z << std::endl;
+	std::cout << "fProj = " << fProj._x << " " << fProj._y << " " << fProj._z << std::endl;
+	std::cout << "gProj = " << gProj._x << " " << gProj._y << " " << gProj._z << std::endl;
+	std::cout << "hProj = " << hProj._x << " " << hProj._y << " " << hProj._z << std::endl;
 
 	// We get back the points inside the zone
 	TYTabPoint pointsInside;
@@ -880,7 +906,8 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
 	const OSpectre K2 = _K*_K;				// nombre d'onde au carre
  
 	double incerRel = 0.001;  // incertitude relative sur la taille du rayon au carree
-    double cst = (pow(2., 1. / 6.) - pow(2., -1. / 6.)) * (pow(2., 1. / 6.) - pow(2., -1. / 6.)) / 3.0 + incerRel * incerRel; // constante pour la definition du facteur de coherence
+    //double incerRel = 0.0;
+	double cst = (pow(2., 1. / 6.) - pow(2., -1. / 6.)) * (pow(2., 1. / 6.) - pow(2., -1. / 6.)) / 3.0 + incerRel * incerRel; // constante pour la definition du facteur de coherence
 	//double dSR;				// distance source/recepteur
 	double totalRayLength;
 
@@ -924,8 +951,8 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
                     mod = (_pressAcoustEff[k]).getModule();
                     //C = (K2 * dSR * dSR * (-1) * cst).exp();
 					//TRUE ONE
-					//C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
-					C = 1.0;
+					C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
+					//C = 1.0;
 					//sum1 = _pressAcoustEff[k] * C;
 					sum3 = _pressAcoustEff[k] * C;
 					sum1 = sum1 + sum3;
