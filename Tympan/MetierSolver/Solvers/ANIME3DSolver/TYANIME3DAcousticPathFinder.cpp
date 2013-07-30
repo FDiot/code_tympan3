@@ -640,6 +640,9 @@ void TYANIME3DAcousticPathFinder::sampleAndCorrection()
 		// Récupération des distances aux évènements pertinents
 		endLenghtCompute(tmpTYRay);
 
+		// Distance entre évènement précédent et suivant
+		prevNextLengthCompute(tmpTYRay);
+
 		// Récupération des angles
 		angleCompute(tmpTYRay);
 
