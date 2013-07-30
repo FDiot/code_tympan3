@@ -166,6 +166,13 @@ protected:
 	*/
 	OVector3D getRotationOzOy(double alpha, double theta, OVector3D V);
 
+private : 
+	/*
+	 * \fn OSpectre computeFc(const double& dd, const double& dr);
+	 * \brief compute transition frequency spectrum fc
+	 */
+	OSpectre computeFc(const double& dd, const double& dr);
+
 protected :
 
 	// Test : vector de triangles

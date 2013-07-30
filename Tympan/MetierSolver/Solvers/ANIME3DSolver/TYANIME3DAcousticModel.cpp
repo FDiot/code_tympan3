@@ -193,8 +193,10 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 					
 					for(int k = 0; k < nbFacesFresnel; k++)
 					{ // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
+						OPoint3D pt = triangleCentre[k];
 						pSol = _topo.terrainAt(triangleCentre[k])->getSol();
 						pSol->calculNombreDOnde(_atmos);
+						std::cout << "sol n : " << k << "resistivite = " << pSol->getResistivite() << std::endl;
 						spectreAbs = pSol->abso(angle, sizeRay, _atmos);
 						spectreAbs.getEtat();
 						pond = spectreAbs * tabPondFresnel[k];
@@ -491,6 +493,12 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	double dr = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->previous->distNextEvent + distPrefPsuiv;
 	double dd = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->distPrevNext;
 
+	// Calcul de Fc ne prenant en compte que la différence de marche
+	OSpectre f = OSpectre::getOSpectreFreqExact(); //frequence
+	OSpectre fc = computeFc(dd, dr);
+
+/*
+	// Version initiale du calcul de fc prenant en compte le sol réel
 	OSpectre f = OSpectre::getOSpectreFreqExact(); //frequence
 	std::cout << "f = " << f.valMax() << std::endl;
     OSpectreComplex Q = _topo.terrainAt(Prefl)->getSol()->calculQ(angle, distPrefPsuiv, _atmos) ; // coeff de reflexion du sol au pt de reflexion
@@ -503,15 +511,20 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	std::cout << "fmin = " << fmin.valMax() << std::endl;
 	std::cout << "fmax = " << fmax.valMax() << std::endl;
 	std::cout << "fc = " << fc.valMax() << std::endl;
+*/
 
-    //const OSpectre F = (OSpectre(1.0)-((f*f).div(fc*fc)).exp(1.0))*32.0; // parametre de l'ellipsoide de Fresnel F_{\lambda} via la formule definie dans la publie de D. van Maercke et J. Defrance (CSTB-2007)
+	// F fixe a 1 pour eviter une boite trop grande a basse freq
+	const OSpectre F = OSpectre(1.0); 
+/*
+	// Calcul de F officiel
+	const OSpectre F = (OSpectre(1.0)-((f*f).div(fc*fc)).exp(1.0))*32.0; // parametre de l'ellipsoide de Fresnel F_{\lambda} via la formule definie dans la publie de D. van Maercke et J. Defrance (CSTB-2007)
  
 	OSpectre A = (fc*fc)*-1;
 	OSpectre B = f*f;
 	OSpectre C = B.div(A);
-	//const OSpectre F = (OSpectre(1.0)-(C.exp()))*32;
-	// F fixe a 1 pour eviter une boite trop grande a basse freq
-	const OSpectre F = OSpectre(1.0); 
+	const OSpectre F = (OSpectre(1.0)-(C.exp()))*32;
+*/
+
 	
 	//OSpectre lF = _lambda * F;	// produit lambda*Flbd
 	// lF fixe a lambda/2
@@ -679,6 +692,35 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 
 		return fresnelArea;
 	}
+}
+
+
+OSpectre TYANIME3DAcousticModel::computeFc(const double& dd, const double& dr)
+{
+	OSpectre FMin, FMax, fc;
+	OSpectre PhiN = _atmos.getKAcoust() * (dr-dd);
+	OSpectre Phi0Min(M_PI/2);
+	OSpectre Phi0Max(M_PI);
+	OSpectre freq = OSpectre::getOSpectreFreqExact(); 
+
+	for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT-1; i++)
+	{
+		double fn = freq.getTabValReel()[i];
+		double fnp1 = freq.getTabValReel()[i+1];
+		double phin = PhiN.getTabValReel()[i];
+		double phinp1 = PhiN.getTabValReel()[i+1];
+		double phi0 = Phi0Min.getTabValReel()[i];
+		FMin.getTabValReel()[i] = fn + ( (phi0-phin) / (phinp1-phin) ) * (fnp1 - fn);
+		phi0 = Phi0Max.getTabValReel()[i];
+		FMax.getTabValReel()[i] = fn + ( (phi0-phin) / (phinp1-phin) ) * (fnp1 - fn);
+	}
+
+	fc = (FMin * FMax).sqrt();
+
+	// Last value is the same as the previous one
+	fc.getTabValReel()[TY_SPECTRE_DEFAULT_NB_ELMT-1] = fc.getTabValReel()[TY_SPECTRE_DEFAULT_NB_ELMT-2];
+
+	return fc;
 }
 
 OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre)
