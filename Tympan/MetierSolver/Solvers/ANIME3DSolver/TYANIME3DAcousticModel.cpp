@@ -104,7 +104,7 @@ void TYANIME3DAcousticModel::ComputeAbsAtm()
 void TYANIME3DAcousticModel::ComputeAbsRefl()
 {
     double angle = 0.0; // angle d'incidence de l'onde acoustique
-    bool NoReflex = true;
+    bool Reflex = false; // Is there any reflection? By default, no.
     TYMur mur;
     int idBatiment = 0, idFace = 0;
 	double sizeRay = 0.0;
@@ -160,25 +160,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 			idFace = _tabTYRays[i]->getEvents().at(tabRefl[j])->idFace1;
 
 			reflIndice = tabRefl[j];
-			NoReflex = false; // There is at least one reflection
-
-			// Cas particulier d'une reflexion sur le sol
-			if (_tabTYRays[i]->getEvents().at(tabRefl[j])->type == TYREFLEXIONSOL) 
-            {
-				angle = _tabTYRays[i]->getEvents().at(tabRefl[j])->angle;
-
-				pSol = _topo.terrainAt(Prefl)->getSol();
-				pSol->calculNombreDOnde(_atmos);
-				spectreAbs = pSol->abso(angle, sizeRay, _atmos);
-				// Pour tester en interférences, mettre Q = 1
-				//spectreAbs = one;
-				double resistivite = _topo.terrainAt(Prefl)->getSol()->getResistivite();
-				spectreAbs.getEtat();
-			}
-            else
-			{
-				spectreAbs = _tabSurfIntersect[idFace].spectreAbso;  // Recuperation du spectre d'absorption
-			}
+			Reflex = true; // There is at least one reflection
 
 			// Avec ponderation de Fresnel :
             if(_useFresnelArea)
@@ -186,6 +168,8 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 				if (_tabTYRays[i]->getEvents().at(tabRefl[j])->type == TYREFLEXIONSOL) 
 				{
 					std::cout<< "We start using Fresnel Area on the ground" << std::endl;
+					triangleCentre.clear();
+					tabPondFresnel.clear();
 					tabPondFresnel = ComputeFrenelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
 					nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
 					//nbFacesFresnel = 1;
@@ -211,6 +195,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 				else
 				{
 					std::cout<< "We start using Fresnel Area on a building" << std::endl;
+					triangleCentre.clear();
 					tabPondFresnel = ComputeFrenelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
 					nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
 					std::cout << "il y a N ponderations : " << nbFacesFresnel << std::endl;
@@ -224,15 +209,32 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 					}
 					prod = prod * sum;
 				}
-
+				std::cout<< "End of Fresnel Area" << std::endl;
 			}
+
 			else
-			{ 
+			{
+				// Cas particulier d'une reflexion sur le sol
+				if (_tabTYRays[i]->getEvents().at(tabRefl[j])->type == TYREFLEXIONSOL) 
+				{
+					angle = _tabTYRays[i]->getEvents().at(tabRefl[j])->angle;
+
+					pSol = _topo.terrainAt(Prefl)->getSol();
+					pSol->calculNombreDOnde(_atmos);
+					spectreAbs = pSol->abso(angle, sizeRay, _atmos);
+					// Pour tester en interférences, mettre Q = 1
+					//spectreAbs = one;
+					double resistivite = _topo.terrainAt(Prefl)->getSol()->getResistivite();
+					spectreAbs.getEtat();
+				}
+				else
+				{
+					spectreAbs = _tabSurfIntersect[idFace].spectreAbso;  // Recuperation du spectre d'absorption
+				}
 				prod = spectreAbs; 
 			}
-			std::cout<< "End of Fresnel Area" << std::endl;
     	}
-		if(NoReflex==false) 
+		if(Reflex==true) 
 		_absRefl[i] = prod;
 	}
 }
@@ -559,8 +561,8 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	// On fixe une frequence de 100 Hz pour etudier de plus pres la boite
 	double L = lF.getValueReal(100.f) + dSImR;                  
 	double l = sqrt(lF.getValueReal(100.f)*(lF.getValueReal(100.f)+2.*dSImR));
-	//double L = 4.0;
-	//double l = 2.0;
+	//double L = dd;
+	//double l = 5.0;
 
 
 	// On choisit de fixer la longueur de la boite a S'R
