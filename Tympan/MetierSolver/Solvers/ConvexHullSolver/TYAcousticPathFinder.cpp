@@ -403,9 +403,12 @@ void TYAcousticPathFinder::buildDiffractedRays(TYTabPoint3D& pts, OSegment3D& ra
 	ray1->setIdentifiant(static_cast<int>(vertical));
 
 	// On duplique sur tous les autres rayons
-	TYRay *ray2 = new TYRay(*ray1); // rayon avec une réflexion avant
-	TYRay *ray3 = new TYRay(*ray1); // rayon avec une réflexion après
-	TYRay *ray4 = new TYRay(*ray1); // rayon avec deux réflexions (avant et après)
+	TYRay *ray2 = new TYRay(); // rayon avec une réflexion avant
+	ray2->addEvent( new TYRayEvent(*rayEvent1) );
+	TYRay *ray3 = new TYRay(); // rayon avec une réflexion après
+	ray3->addEvent( new TYRayEvent(*rayEvent1) );
+	TYRay *ray4 = new TYRay(); // rayon avec deux réflexions (avant et après)
+	ray4->addEvent( new TYRayEvent(*rayEvent1) );
 
 	// Pour les rayons 2 et 3 (une seule réflexion), on utilise la position de la source image
 	ray2->setPosSourceGlobal(ptSym);
@@ -417,7 +420,7 @@ void TYAcousticPathFinder::buildDiffractedRays(TYTabPoint3D& pts, OSegment3D& ra
 
 	//Rayons avec une réflexion avant
 	ray2->addEvent(rayEvent2);
-	ray4->addEvent(rayEvent2);
+	ray4->addEvent( new TYRayEvent(*rayEvent2) );
 
 	// Ajout des évènements diffraction
 	addDiffractionPointsToTyRay(pts, ray1);
@@ -431,15 +434,15 @@ void TYAcousticPathFinder::buildDiffractedRays(TYTabPoint3D& pts, OSegment3D& ra
 
 	//Rayons avec une réflexion après
 	ray3->addEvent(rayEvent3);
-	ray4->addEvent(rayEvent3);
+	ray4->addEvent( new TYRayEvent(*rayEvent3) );
 
 	// On clot tous les rayons
 	TYRayEvent *rayEvent4 = new TYRayEvent(rayon._ptB);
 	rayEvent4->type = TYRECEPTEUR;
 	ray1->addEvent(rayEvent4);
-	ray2->addEvent(rayEvent4);
-	ray3->addEvent(rayEvent4);
-	ray4->addEvent(rayEvent4);
+	ray2->addEvent( new TYRayEvent(*rayEvent4) );
+	ray3->addEvent( new TYRayEvent(*rayEvent4) );
+	ray4->addEvent( new TYRayEvent(*rayEvent4) );
 
 	// On ajoute les rayons au tableau des rayons
 	tabRays.push_back(ray1);
