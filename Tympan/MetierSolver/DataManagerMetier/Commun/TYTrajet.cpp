@@ -52,9 +52,11 @@ void TYTrajet::reset()
 
 	for (unsigned int i = 0; i<_tabRays.size(); i++)
 	{
-		delete _tabRays[i];
+		if (_tabRays[i]) { delete _tabRays[i]; }
 		_tabRays[i] = NULL;
 	}
+
+	_tabRays.clear();
 }
 
 

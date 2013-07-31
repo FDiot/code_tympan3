@@ -148,7 +148,9 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
 		{
 			for (unsigned j=0; j<tabTrajets[i].getTabRays().size(); j++)
 			{
-				calcul.addRay(new TYRay(*(tabTrajets[i].getTabRays()[j])));
+				LPTYRay pRay = new TYRay();
+				pRay->deepCopy(tabTrajets[i].getTabRays()[j]); 
+				calcul.addRay(pRay);
 			}
 		}
 	}
