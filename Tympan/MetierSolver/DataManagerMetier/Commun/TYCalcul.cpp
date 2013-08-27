@@ -1613,8 +1613,6 @@ bool TYCalcul::go()
 
 		TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(getSolverId());
 
-       	if (_maillages.size()>0) { _nbThread = 1; } // Security big bumber of points causes fails during computing in multithread
-
 		ret = pSolver->solve(*pMergeSite, *this);
 
         pSolver->purge();
