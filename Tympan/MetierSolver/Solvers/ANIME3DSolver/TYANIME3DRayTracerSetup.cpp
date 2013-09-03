@@ -37,7 +37,8 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     ////////////////////////////
     globalMaxProfondeur = 2;            //Nombre d'evenements autorises pour un rayon, globalMaxProfondeur inclu
     globalNbRaysPerSource = 80000;      //Nombre de rayons lances par les sources
-    globalSizeReceiver = 5.0f;          //Diametre de la sphere representant le recepteur
+	globalDiscretization = 1;			// Choix random = 0 ou discretisation = 1
+	globalSizeReceiver = 5.0f;          //Diametre de la sphere representant le recepteur
     globalAccelerator = 3;              //Choix de la structure acceleratrice. 0 : BruteForce, 1 : GridAccelerator, 2 : BVH, 3 : KdTree, other : GridAccelerator
     globalMaxTreeDepth = 12;            //Profondeur maximale autorisee pour le BVH ou KdTree.
     globalUseSol = true;                // Utilisation du sol pour les reflexions
