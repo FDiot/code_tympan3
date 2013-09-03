@@ -1546,7 +1546,8 @@ bool TYCalcul::go()
     OMessageManager::get()->info("Mise a jour du Site");
 
     // Fusion des sites
-    LPTYSiteNode pMergeSite = pProjet->getSite()->merge();
+    //LPTYSiteNode pMergeSite = pProjet->getSite()->merge();
+    LPTYSiteNode pMergeSite = pProjet->getSite();
 
     pMergeSite->update(true);
     pMergeSite->getTopographie()->sortTerrains(); // Tri des terrains par ordre croissant des surfaces
