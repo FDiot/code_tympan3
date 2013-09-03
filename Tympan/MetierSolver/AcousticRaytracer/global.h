@@ -69,5 +69,6 @@ extern double globalOverSampleD;            // [0 +[ (0 pas de surechantillonnag
 extern double globalWindDirection;			// Direction du vent (un vent a 0 est dirige du nord vers le sud)
 
 extern bool globalUseFresnelArea;		// take into account the fresnel area
+extern float globalAnime3DSigma;		// incertitude relative sur la taille du rayon au carree
 
 #endif
