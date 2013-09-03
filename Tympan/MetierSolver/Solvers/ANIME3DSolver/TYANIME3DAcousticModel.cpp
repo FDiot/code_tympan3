@@ -948,7 +948,7 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
     OSpectre mod;		    // module et module au carre
 	const OSpectre K2 = _K*_K;				// nombre d'onde au carre
  
-	double incerRel = 0.001;  // incertitude relative sur la taille du rayon au carree
+	double incerRel = globalAnime3DSigma;  // incertitude relative sur la taille du rayon au carree
     //double incerRel = 0.0;
 	double cst = (pow(2., 1. / 6.) - pow(2., -1. / 6.)) * (pow(2., 1. / 6.) - pow(2., -1. / 6.)) / 3.0 + incerRel * incerRel; // constante pour la definition du facteur de coherence
 	//double dSR;				// distance source/recepteur

@@ -87,6 +87,7 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     // ANIME3D Extensions
     /////////////////////////
     globalUseFresnelArea = false;       // take into account the fresnel area 
+	globalAnime3DSigma = 0.0f;		// valeur de l'incertitude relative pour la calcul de la pression acoustique
 
     // Chargement des parametres de calcul
     loadParameters();
@@ -204,6 +205,9 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 
     // Prise en compte (ou non) de la zone de Fresnel
     if (params.getline(ligne, 132)) { globalUseFresnelArea = getParam(ligne); }
+
+	// valeur de l'incertitude relative pour la calcul de la pression acoustique
+	if (params.getline(ligne, 132)) { globalAnime3DSigma = getParam(ligne); }
 
     params.close();
 
