@@ -231,6 +231,7 @@ void TYAtmosphereWidget::updateContent()
     _lineEditHygrometrie->setText(num.setNum(getElement()->getHygrometrie(), 'f', 2));
     _lineEditNomSpectre->setText(getElement()->getSpectreAtt().getName());
 
+#define TY_RECHERCHE 1
 
 #ifdef TY_RECHERCHE
     double A, B, C, D;
