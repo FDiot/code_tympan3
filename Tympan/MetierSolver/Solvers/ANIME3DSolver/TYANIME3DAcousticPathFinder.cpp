@@ -764,10 +764,23 @@ double TYANIME3DAcousticPathFinder::angleCorrection(const TYRayEvent *ev1, TYRay
 void TYANIME3DAcousticPathFinder::tyRayCorrection(TYRay *tyRay)
 {
 	TYTabRayEvent& tabEvents = tyRay->getEvents();
-	for (unsigned int i=0 ; i<tabEvents.size() ; i++)
+
+	// Repositionnement des elements du rayon
+	for (unsigned i=0; i<tabEvents.size(); i++)
 	{
 		R3 point = OPoint3DtoR3(tabEvents[i]->pos);
-		point = _curveRayTracing.fonction_h_inverse(point);
+		point = _curveRayTracing.fonction_h(point);
 		tabEvents[i]->pos = R3toOPoint3D(point);
+	}
+
+	tyRay->overSample(globalOverSampleD);
+
+	TYTabRayEvent& tabEvents2 = tyRay->getEvents();
+
+	for (unsigned int i=0 ; i<tabEvents2.size() ; i++)
+	{
+		R3 point = OPoint3DtoR3(tabEvents2[i]->pos);
+		point = _curveRayTracing.fonction_h_inverse(point);
+		tabEvents2[i]->pos = R3toOPoint3D(point);
 	}
 }

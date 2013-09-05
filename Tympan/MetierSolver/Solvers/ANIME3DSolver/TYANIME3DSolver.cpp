@@ -149,7 +149,6 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
 	{
 		for (unsigned int i=0; i<_tabRay.size(); i++)
 		{
-			_tabRay[i]->overSample(globalOverSampleD);
 			apf.tyRayCorrection(_tabRay[i]);
 		}
 	}
