@@ -60,7 +60,8 @@ public:
     static bool _gVisible;
 
 protected:
-    void getRayEventColor(TYRayEvent& e, float& r, float& g, float& b);
+    void getRayEventColor(TYRayEvent& e);
+	float _r, _g, _b; // current color of ray
 
     int _lastRayEventType;                  /*!< Type du dernier evenement du rayon affiche */
     TYPoint _lastRayEventPos;               /*!< Position du dernier evenement du rayon affiche */
