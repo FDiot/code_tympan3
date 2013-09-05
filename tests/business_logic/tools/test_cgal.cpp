@@ -11,6 +11,7 @@
 #include <cstdlib>
 
 #include "gtest/gtest.h"
+#include "test_utils/prettyprint.hpp"
 
 #include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
 
