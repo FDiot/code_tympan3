@@ -28,6 +28,12 @@ public:
 
 	bool exec();
 
+	/*!
+	 * \fn void TYRayCorrection(TYRay& tyRay)
+	 * \brief Curve TYRay with respect to meteo influence
+	 *		  This is only for watching curved rays on screen
+	 */
+	void tyRayCorrection(TYRay *tyRay);
 
 private :
     /*!
