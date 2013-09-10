@@ -30,7 +30,7 @@ MaterialPolygon::MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix
 		material( terrain.getSol() )
 {
 	BOOST_FOREACH(const TYPoint& point, terrain.getListPoints())
-		CGAL_Polygon::push_back( to_cgal_transform(matrix, point) );
+		CGAL_Polygon::push_back( to_cgal2_transform(matrix, point) );
 	assert(terrain.getListPoints().empty() || this->is_simple());
 }
 
@@ -38,7 +38,7 @@ MaterialPolygon::MaterialPolygon(const TYTabPoint& contour, material_t ground, c
 		material(ground)
 {
 	BOOST_FOREACH(const TYPoint& point, contour)
-		CGAL_Polygon::push_back( to_cgal_transform(matrix, point) );
+		CGAL_Polygon::push_back( to_cgal2_transform(matrix, point) );
 	assert(contour.empty() || this->is_simple());
 }
 
@@ -112,7 +112,7 @@ AltimetryBuilder::process_emprise(TYTopographie& topography, bool as_level_curve
         assert(pSiteNode && "This TYTopographie is expected to have a TYSiteNode as parent.");
         double alti = pSiteNode->getAltiEmprise();
         addAsConstraint(
-        		ty_tab_points | transformed(boost::bind(to_cgal_info, alti, _1)),
+        		ty_tab_points | transformed(boost::bind(to_cgal2_info, alti, _1)),
         		true);
     }
     // and we process it as a default terrain
@@ -133,14 +133,14 @@ AltimetryBuilder::process(TYCourbeNiveau& courbe_niveau, const OMatrix& matrix, 
     TYTabPoint& ty_tab_points = courbe_niveau.getListPoints();
     double alti = courbe_niveau.getAltitude();
     /* We build a boost::Range of CGAL points on the fly  by calling
-     * to_cgal_info(alti, p) for each point p in ty_tab_points,
+     * to_cgal2_info(alti, p) for each point p in ty_tab_points,
      * and we pass this range to addAsConstraint.
      * (This is akin to using itertools in Python)
      *
      * Cf. doc for boost::bind and  boost::range */
 
     addAsConstraint(
-        ty_tab_points | transformed(boost::bind(to_cgal_info, alti, matrix, _1)),
+        ty_tab_points | transformed(boost::bind(to_cgal2_info, alti, matrix, _1)),
         closed);
 }
 
@@ -156,20 +156,20 @@ AltimetryBuilder::computeAltitude(const CGAL_Point& p)
 	double x[3], y[3], z[3];
 	for(int i=0; i<3; i++)
 	{
-		Gt::Point_2 q = fh->vertex(i)->point();
+		CGAL_Gt::Point_2 q = fh->vertex(i)->point();
 		x[i] = q.x();
 		y[i] = q.y();
 		z[i] = fh->vertex(i)->info().altitude;
 	}
-	Gt::Triangle_3 tri3(
-			Gt::Point_3(x[0], y[0], z[0]),
-			Gt::Point_3(x[1], y[1], z[1]),
-			Gt::Point_3(x[2], y[2], z[2]));
-	Gt::Line_3 line(Gt::Point_3(p.x(), p.y(), 0), Gt::Vector_3(0, 0, 1));
+	CGAL_Gt::Triangle_3 tri3(
+			CGAL_Gt::Point_3(x[0], y[0], z[0]),
+			CGAL_Gt::Point_3(x[1], y[1], z[1]),
+			CGAL_Gt::Point_3(x[2], y[2], z[2]));
+	CGAL_Gt::Line_3 line(CGAL_Gt::Point_3(p.x(), p.y(), 0), CGAL_Gt::Vector_3(0, 0, 1));
 
     CGAL::Object result = CGAL::intersection(tri3, line);
     // We check that the intersection is actually a point as it should
-    if (const Gt::Point_3 *ip = CGAL::object_cast<Gt::Point_3>(&result))
+    if (const CGAL_Gt::Point_3 *ip = CGAL::object_cast<CGAL_Gt::Point_3>(&result))
     {
         assert( std::max(fabs(ip->x()-p.x()), fabs(ip->y()-p.y())) <= 1e-3 );
         return ip->z();
@@ -472,4 +472,3 @@ AltimetryBuilder::buildView(double xmin, double ymin, double xmax, double ymax)
 
 
 } /* namespace tympan */
-

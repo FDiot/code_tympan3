@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -24,6 +24,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
+#include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
 #include "TYRectangle.h"
 #include "TYPolygon.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
@@ -747,4 +748,25 @@ void TYPolygon::inverseNormale()
     updateNormal();
 }
 
+void TYPolygon::exportMesh(
+		std::deque<OPoint3D>& points,
+                std::deque<OTriangle>& triangles) const
+{
+    using namespace tympan;
 
+    assert(points.size()==0 &&
+           "Output arguments 'points' is expected to be initially empty");
+    assert(triangles.size()==0 &&
+           "Output arguments 'triangles' is expected to be initially empty");
+
+    // We build a polygon in the plane (aka 2D) so as to be able to triangulate it
+    CGAL_Plane plane( to_cgal(_plan) );
+    CGAL_Polygon poly;
+    BOOST_FOREACH(const OPoint3D& op, _pts)
+    {
+        // CHECKME the .to_2d method implement an *affine* transform - NOT an isometry
+        poly.push_back( plane.to_2d(plane.projection( to_cgal(op))) );
+    }
+
+    assert(false && "Do actually triangulate the (potentially concave) polygon");
+}

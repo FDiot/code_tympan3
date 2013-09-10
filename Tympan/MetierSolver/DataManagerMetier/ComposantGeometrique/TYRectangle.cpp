@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -27,7 +27,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 #include "Tympan/Tools/OMessageManager.h"
-
+#include "Tympan/MetierSolver/ToolsMetier/OTriangle.h"
 
 OPROTOINST(TYRectangle);
 
@@ -678,3 +678,25 @@ void TYRectangle::inverseNormale()
     _normale = normal();
 }
 
+void TYRectangle::exportMesh(
+		std::deque<OPoint3D>& points,
+                std::deque<OTriangle>& triangles) const
+{
+    assert(points.size()==0 &&
+           "Output arguments 'points' is expected to be initially empty");
+    assert(triangles.size()==0 &&
+           "Output arguments 'triangles' is expected to be initially empty");
+
+    // exports the point to the mesh
+    for(int i=0; i<4; ++i)
+        points.push_back( _pts[i] );
+    // exports triangle (0, 1, 2)
+    OTriangle tri(_pts[0], _pts[1], _pts[2]); // This uselessly copy points
+    tri._p1=0; tri._p2=1; tri._p3=2;
+    triangles.push_back( tri );
+    // exports triangle (0, 2, 3)
+    tri._p1=0; tri._A=_pts[0];
+    tri._p2=2; tri._B=_pts[2];
+    tri._p3=3; tri._C=_pts[3];
+    triangles.push_back( tri );
+}

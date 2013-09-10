@@ -9,7 +9,7 @@ include (ExternalProject)
 # Add the Google Test project as an external project.
 ExternalProject_Add(GTest
   URL ${TYMPAN_3RDPARTY_GTEST}
-  SOURCE_DIR "${PROJECT_SOURCE_DIR}/3rdparty/gtest"
+  SOURCE_DIR "${PROJECT_SOURCE_DIR}/3rdparty/gtest-1.6.0"
 
   # Configuration step. GTest doc said "Use shared (DLL) run-time lib even when
   # Google Test is built as static lib."
