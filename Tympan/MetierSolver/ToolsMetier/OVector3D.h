@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -127,11 +127,20 @@ public:
 
     /**
      * \fn OVector3D operator*(const OVector3D& vector) const;
-     * \brief Multiplication.
+     *
+     * \brief
+     * XXX meaningless componentwise multiplication whereas a dot
+     * product would have been expected.
      *
      * \param vector The object reference with which this object is multiplicated.
      */
     OVector3D operator*(const OVector3D& vector) const;
+
+    /**
+     * \brief dot product (assuming an orthonormal reference frame)
+     */
+    double dot(const OVector3D& v)
+    { return _x*v._x + _y*v._y + _z*v._z; }
 
     /**
      * \fn OVector3D operator*(const double a) const;

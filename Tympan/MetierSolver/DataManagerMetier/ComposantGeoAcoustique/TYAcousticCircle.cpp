@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -285,6 +285,8 @@ TYTabPoint TYAcousticCircle::getContour(int n /*=-1*/) const
 
 TYTabPoint3D TYAcousticCircle::getOContour(int n) const
 {
+    // TODO This is a mere duplicate of the getContour method and
+    // needs to be factorized
     TYTabPoint3D tab;
 
     if (n == -1)
@@ -417,4 +419,32 @@ void TYAcousticCircle::setDiameter(double diameter)
     _pBoundingRect->_pts[3] = vecPtCenter + (vecOP3 * (norm / normOP3));
 
     setIsGeometryModified(true);
+}
+
+void TYAcousticCircle::exportMesh(
+		std::deque<OPoint3D>& points,
+                std::deque<OTriangle>& triangles) const
+{
+    assert(points.size()==0 &&
+           "Output arguments 'points' is expected to be initially empty");
+    assert(triangles.size()==0 &&
+           "Output arguments 'triangles' is expected to be initially empty");
+
+    int resolution = TYDEFAULTRESOLUTIONIONCIRCLE;
+#if TY_USE_IHM
+    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "ResolutionCircle"))
+        resolution = TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "ResolutionCircle");
+    else
+        TYPreferenceManager::setInt(TYDIRPREFERENCEMANAGER, "ResolutionCircle", resolution);
+#endif // TY_USE_IHM
+
+    TYTabPoint3D poly = getOContour(resolution);
+    OPoint3D center = getCenter();
+    points.push_back(center);
+    for(int i=0; i<resolution; ++i)
+    {
+        points.push_back(poly[i]);
+        OTriangle tri(center, poly[i], poly[(i+1)%resolution]);
+        tri._p1=0; tri._p2=i+1; tri._p3=(i+1)%resolution+1;
+    }
 }

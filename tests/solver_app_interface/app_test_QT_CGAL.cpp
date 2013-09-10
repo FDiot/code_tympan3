@@ -51,27 +51,27 @@ int main(int argc, char **argv)
 	def_mat->setName("default");
 
 	MaterialPolygon* grass_poly = new MaterialPolygon(grass1 |
-					transformed(boost::bind(to_cgal, _1)),
+					transformed(boost::bind(to_cgal2, _1)),
 					grass_mat);
 	MaterialPolygon* contour_poly =	new MaterialPolygon(contour |
-					transformed(boost::bind(to_cgal, _1)),
+					transformed(boost::bind(to_cgal2, _1)),
 					def_mat);
 
 	AltimetryBuilder builder;
 	builder.addAsConstraint(contour |
-			transformed(boost::bind(to_cgal_info, _1)),
+			transformed(boost::bind(to_cgal2_info, _1)),
 			true);
 	builder.addAsConstraint(curveB |
-			transformed(boost::bind(to_cgal_info, _1)),
+			transformed(boost::bind(to_cgal2_info, _1)),
 			true);
 //	builder.addAsConstraint(curveC |
-//			transformed(boost::bind(to_cgal_info, _1)),
+//			transformed(boost::bind(to_cgal2_info, _1)),
 //			true);
 	builder.addAsConstraint(curveC1 |
-			transformed(boost::bind(to_cgal_info, _1)),
+			transformed(boost::bind(to_cgal2_info, _1)),
 			true);
 	builder.addAsConstraint(curveC2 |
-			transformed(boost::bind(to_cgal_info, _1)),
+			transformed(boost::bind(to_cgal2_info, _1)),
 			true);
 
 	builder.material_polygons.push_back(contour_poly); contour_poly = NULL;

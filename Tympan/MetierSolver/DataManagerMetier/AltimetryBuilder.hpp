@@ -32,12 +32,7 @@
 using boost::adaptors::transformed;
 
 // CGAL related Includes
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
-#include <CGAL/Triangulation_face_base_with_info_2.h>
-#include <CGAL/Triangulation_vertex_base_with_info_2.h>
-#include <CGAL/Constrained_Delaunay_triangulation_2.h>
-#include <CGAL/Polygon_2.h>
-#include <CGAL/Polygon_2_algorithms.h>
+#include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
 #include <CGAL/centroid.h>
 
 // Forward declaration for the benefit of TYAltimetrie and TYTopographie
@@ -83,11 +78,6 @@ class SolverDataModelBuilder;
 namespace tympan
 {
 
-// From CGAL manuel Section 37.8
-// http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Triangulation_2/Chapter_main.html#Section_37.8
-typedef CGAL::Exact_predicates_inexact_constructions_kernel        K;
-typedef K Gt; /* Geometric Traits */
-typedef CGAL::Polygon_2<Gt>                                        CGAL_Polygon;
 
 /** @brief an alias to LPTYSol for representing a ground material */
 typedef LPTYSol material_t;
@@ -171,14 +161,15 @@ struct VertexInfo
 /* Please refer to the following example in CGAL doc for meaning of those typedef
 http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Triangulation_2/Chapter_main.html#Subsection_37.8.2
 */
-typedef CGAL::Triangulation_vertex_base_with_info_2<VertexInfo, Gt>Vbb;
-typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo, Gt>    Fbb;
-typedef CGAL::Constrained_triangulation_face_base_2<Gt, Fbb>       Fb;
+typedef CGAL::Triangulation_vertex_base_with_info_2<VertexInfo, CGAL_Gt>Vbb;
+typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo, CGAL_Gt>    Fbb;
+typedef CGAL::Constrained_triangulation_face_base_2<CGAL_Gt, Fbb>       Fb;
 typedef CGAL::Triangulation_data_structure_2<Vbb, Fb>              TDS;
 typedef CGAL::Exact_predicates_tag                                 Itag;
 /// \c CDT is the type of the main CGAL object to build the triangulation.
-typedef CGAL::Constrained_Delaunay_triangulation_2<Gt, TDS, Itag>  CDT;
-typedef CDT::Point                                                 CGAL_Point;
+typedef CGAL::Constrained_Delaunay_triangulation_2<CGAL_Gt, TDS, Itag>  CDT;
+// typedef CDT::Point                                                 CGAL_Point;
+typedef CGAL_Point2 CGAL_Point;
 
 
 /**
@@ -188,7 +179,7 @@ typedef CDT::Point                                                 CGAL_Point;
  */
 inline
 CGAL_Point
-to_cgal(const OPoint3D& p)
+to_cgal2(const OPoint3D& p)
 { return CGAL_Point(p._x, p._y); }
 
 /**
@@ -199,7 +190,7 @@ to_cgal(const OPoint3D& p)
  */
 inline
 CGAL_Point
-to_cgal_transform(const OMatrix& matrix, OPoint3D p)
+to_cgal2_transform(const OMatrix& matrix, OPoint3D p)
 {
 	p = matrix * p;
 	return CGAL_Point(p._x, p._y);
@@ -213,10 +204,10 @@ to_cgal_transform(const OMatrix& matrix, OPoint3D p)
  */
 inline
 std::pair<CGAL_Point, VertexInfo>
-to_cgal_info(double alti, OPoint3D& p)
+to_cgal2_info(double alti, OPoint3D& p)
 {
 	p._z = alti;
-	return std::make_pair(to_cgal(p), VertexInfo(alti));
+	return std::make_pair(to_cgal2(p), VertexInfo(alti));
 }
 
 /**
@@ -227,10 +218,10 @@ to_cgal_info(double alti, OPoint3D& p)
  */
 inline
 std::pair<CGAL_Point, VertexInfo>
-to_cgal_info(double alti, const OMatrix& matrix, OPoint3D& p)
+to_cgal2_info(double alti, const OMatrix& matrix, OPoint3D& p)
 {
 	p._z = alti;
-	return std::make_pair(to_cgal_transform(matrix, p), VertexInfo(alti));
+	return std::make_pair(to_cgal2_transform(matrix, p), VertexInfo(alti));
 }
 
 
@@ -241,8 +232,8 @@ to_cgal_info(double alti, const OMatrix& matrix, OPoint3D& p)
  */
 inline
 std::pair<CGAL_Point, VertexInfo>
-to_cgal_info(const OPoint3D& p)
-{ return std::make_pair(to_cgal(p), VertexInfo(p._z)); }
+to_cgal2_info(const OPoint3D& p)
+{ return std::make_pair(to_cgal2(p), VertexInfo(p._z)); }
 
 
 /**

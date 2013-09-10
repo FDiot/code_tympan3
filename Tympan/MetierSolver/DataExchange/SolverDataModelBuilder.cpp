@@ -43,11 +43,13 @@ UuidAdapter::operator TYUUID() const
 SolverDataModelBuilder::SolverDataModelBuilder(SolverModel& model_):
 		model(model_)
 {
+    // We store a simple reference to the model this builder is responsible to update.
 }
 
 SolverDataModelBuilder::~SolverDataModelBuilder()
 {
-
+    // The simple reference to the model is forgotten but we DO NOT touch to the model
+    // as the whole point of the builder is to... build it !
 }
 
 
@@ -217,7 +219,7 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurface* pSurf)
     // TYPoints to Node in the correct way.)
 
 
-    //Walk trough the node of a triangle.
+    // Walk trough the node of a triangle.
     // Create all nodes related to the triangle.
     std::vector<node_idx> map_to_model(points.size(), 0);
     size_t i = 0;
@@ -228,6 +230,7 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurface* pSurf)
 
     BOOST_FOREACH(const OTriangle& tri, triangles)
     {
+        // Assert consistency of the OPoint3D given in the mesh
     	assert(tri._A == points[tri._p1]);
     	assert(tri._B == points[tri._p2]);
     	assert(tri._C == points[tri._p3]);
@@ -236,10 +239,11 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurface* pSurf)
     			map_to_model[tri._p2],
     			map_to_model[tri._p3]);
 
-        // Link surface with SiteElement.
+        // Associate the triangle with the UUID of the element it belongs to
         model.triangle(tri_idx).uuid = element_uid.getUuid();
     }
 
+    // XXX What is still supposed to be implement
     assert(false && "Not implemented yet");
 }
 
@@ -420,4 +424,3 @@ void SolverDataModelBuilder::setAcousticReceptor(LPTYSiteNode site_ptr)
 } /* namespace tympan */
 
 // bool operator == (const TYPoint& point, const tympan::Node::pointer& node)
-

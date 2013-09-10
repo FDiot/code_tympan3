@@ -7,7 +7,6 @@
  * @author Anthony Truchet <anthony.truchet@logilab.fr>
  *
  */
-
 #ifndef TYMPAN__SOLVER_DATA_MODEL_BUILDER_HPP__INCLUDED
 #define TYMPAN__SOLVER_DATA_MODEL_BUILDER_HPP__INCLUDED
 

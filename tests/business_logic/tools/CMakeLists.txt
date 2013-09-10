@@ -18,7 +18,7 @@ foreach (testfile ${TESTS_SRC})
   add_dependencies (${basename} tympan_solver_data_model tympan_tools_metier GTest )
 
   # 'CMAKE_THREAD_LIBS_INIT' can be empty on Windows.
-  target_link_libraries (${basename} gtest_main gtest ${CMAKE_THREAD_LIBS_INIT}
+  target_link_libraries (${basename} test_utils gtest_main gtest ${CMAKE_THREAD_LIBS_INIT}
     ${TYMPAN_MODULES})
 
   add_test (${basename} ${basename})
