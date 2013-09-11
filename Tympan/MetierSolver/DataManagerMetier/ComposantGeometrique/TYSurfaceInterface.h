@@ -29,6 +29,8 @@ class OSegment3D;
 class OPoint3D;
 class OPlan;
 class OTriangle;
+class TYGeometryNode;
+
 
 /**
  * Classe abstraite qui offre une interface utilisable par des composants
@@ -150,20 +152,23 @@ public:
     //@}
 
     /**
-     * @brief Export the surface as a triangular mesh
+     * @brief Exports the surface as a triangular mesh inglobal reference frame
      *
      * NB : This function expect empty deques and will clear the deque passed.
      *
-     * CAUTION This method will be made PURE virtual (TODO). As a  measure
-     * easing transition, the base implementation raises an assert for now.
+     * This method is semantically PURE virtual and should actually
+     * be, but the OPROTO system does not permit that. This is a dirty
+     * workaround.
      *
      * @param points output argument filled with the vertices of the triangulation
      * @param triangles output argument filled with the faces of the triangulation
      */
-    void
+    virtual void
     exportMesh(
     		std::deque<OPoint3D>& points,
-    		std::deque<OTriangle>& triangles) const /* = 0 */;
+    		std::deque<OTriangle>& triangles,
+                const TYGeometryNode& geonode
+    ) const /* = 0 */;
 
 };
 

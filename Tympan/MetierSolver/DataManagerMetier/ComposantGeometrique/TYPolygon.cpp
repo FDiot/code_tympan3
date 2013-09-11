@@ -24,10 +24,12 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
 #include "TYRectangle.h"
 #include "TYPolygon.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
+
+#include "TYGeometryNode.h"
 
 #include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/Tools/OChrono.h"
@@ -750,7 +752,8 @@ void TYPolygon::inverseNormale()
 
 void TYPolygon::exportMesh(
 		std::deque<OPoint3D>& points,
-                std::deque<OTriangle>& triangles) const
+                std::deque<OTriangle>& triangles,
+                const TYGeometryNode& geonode) const
 {
     using namespace tympan;
 
@@ -759,14 +762,33 @@ void TYPolygon::exportMesh(
     assert(triangles.size()==0 &&
            "Output arguments 'triangles' is expected to be initially empty");
 
+    // NB The triangulation happen in the local r/ frame
     // We build a polygon in the plane (aka 2D) so as to be able to triangulate it
     CGAL_Plane plane( to_cgal(_plan) );
     CGAL_Polygon poly;
     BOOST_FOREACH(const OPoint3D& op, _pts)
     {
-        // CHECKME the .to_2d method implement an *affine* transform - NOT an isometry
+        // CHECKME the .to_2d method implement an unspecified *affine*
+        // transform - NOT an isometry
         poly.push_back( plane.to_2d(plane.projection( to_cgal(op))) );
+        // export the point with the same index as its 2D alter-ego
+        // will have within `poly` and in the global r/ frame
+        points.push_back(geonode.globalToLocal(op));
     }
-
-    assert(false && "Do actually triangulate the (potentially concave) polygon");
+    PolygonTriangulator triangulator(poly);
+    // Use information from triangulator.vertice_handles and the triangulation itself.
+    // to level-up from 2D CGAL representation to our 3D OPoints world
+    std::deque<PolygonTriangulator::Tri_indices> tri_indices;
+    triangulator.exportTrianglesIndices(tri_indices);
+    BOOST_FOREACH(const PolygonTriangulator::Tri_indices& tri_idx, tri_indices)
+    {
+        OTriangle tri(tri_idx[0], tri_idx[1], tri_idx[2]);
+        for(unsigned i=0; i<3; ++i)
+        {
+            // Points' coordinate are already in global r/ frame
+            const OPoint3D& p = points[tri_idx[i]];
+            tri.vertex(i)=p;
+        }
+        triangles.push_back(tri);
+    }
 }

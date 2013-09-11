@@ -680,23 +680,27 @@ void TYRectangle::inverseNormale()
 
 void TYRectangle::exportMesh(
 		std::deque<OPoint3D>& points,
-                std::deque<OTriangle>& triangles) const
+                std::deque<OTriangle>& triangles,
+                const TYGeometryNode& geonode) const
 {
     assert(points.size()==0 &&
            "Output arguments 'points' is expected to be initially empty");
     assert(triangles.size()==0 &&
            "Output arguments 'triangles' is expected to be initially empty");
 
-    // exports the point to the mesh
+    // exports the point to the mesh, converting to global r/ frame
     for(int i=0; i<4; ++i)
-        points.push_back( _pts[i] );
+        points.push_back(geonode.localToGlobal(_pts[i]));
     // exports triangle (0, 1, 2)
-    OTriangle tri(_pts[0], _pts[1], _pts[2]); // This uselessly copy points
-    tri._p1=0; tri._p2=1; tri._p3=2;
+    OTriangle tri(0, 1, 2);
+     // Use already converted to globalr/ frame points
+    tri._A=points[0];
+    tri._B=points[1];
+    tri._C=points[2];
     triangles.push_back( tri );
     // exports triangle (0, 2, 3)
-    tri._p1=0; tri._A=_pts[0];
-    tri._p2=2; tri._B=_pts[2];
-    tri._p3=3; tri._C=_pts[3];
+    tri._p1=0; tri._A=points[0];
+    tri._p2=2; tri._B=points[2];
+    tri._p3=3; tri._C=points[3];
     triangles.push_back( tri );
 }

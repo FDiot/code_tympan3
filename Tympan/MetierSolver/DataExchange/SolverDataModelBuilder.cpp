@@ -80,8 +80,7 @@ void SolverDataModelBuilder::setGeometricEntities(LPTYSiteNode site_ptr)
     // Faces d'infrastructure
     TYAcousticSurface* pSurf = NULL;
 
-    std::cout << " # Nb of building faces: " << nb_building_faces << std::endl;
-
+   
     // 'face_list' can contain topography elements. Not relevant here.
     for (unsigned int i = 0 ; i < nb_building_faces ; i++)
     {
@@ -193,39 +192,32 @@ void SolverDataModelBuilder::assertConsistency_pointsUID_to_Nodes(const TYPoint&
 #endif // NDEBUG not defined
 */
 
-//XXX
-void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurface* pSurf)
+void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode& acoust_surf_geo)
 {
+    const TYAcousticSurface* pSurf = acoust_surf_geo.getElement(); //XXX
     TYElement* element = pSurf->getParent();
     // The uid for SiteElement (parent of an acoustic surface, i.e. the
     // geometric volume).
-    TYUUID ty_uid(element->getID());
-    UuidAdapter element_uid(ty_uid);
-//    if (!elementsUID_to_SiteElement.contains(ty_uid))
-//    {
-//        SiteElement::pointer element_ptr(new SiteElement(element_uid.getUuid()));
-//        elementsUID_to_SiteElement.insert(ty_uid, element_ptr);
-//    }
+    UuidAdapter element_uid(element->getID());
 
     // Get building material.
     LPTYMateriauConstruction material_ptr = pSurf->getMateriau();
-    setAcousticBuildMaterial(material_ptr);
+    setAcousticBuildMaterial(material_ptr); // XXX work needed here
 
-    std::deque<OPoint3D> points;
-    std::deque<OTriangle> triangles;
-    pSurf->exportMesh(points, triangles);
-    // TODO Use the triangulating interface of TYSurfaceInterface to get triangles
+    // Use the triangulating interface of TYSurfaceInterface to get triangles
     // and convert them to Nodes and AcousticTriangles (beware of mapping
     // TYPoints to Node in the correct way.)
-
+    std::deque<OPoint3D> points;
+    std::deque<OTriangle> triangles;
+    pSurf->exportMesh(points, triangles, acoust_surf_geo );
 
     // Walk trough the node of a triangle.
     // Create all nodes related to the triangle.
-    std::vector<node_idx> map_to_model(points.size(), 0);
+    std::vector<node_idx> map_to_model_node_idx(points.size(), 0);
     size_t i = 0;
     BOOST_FOREACH(const Point& point, points)
     {
-    	map_to_model[i] = model.make_node(point);
+    	map_to_model_node_idx[i] = model.make_node(point);
     }
 
     BOOST_FOREACH(const OTriangle& tri, triangles)
@@ -235,16 +227,15 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurface* pSurf)
     	assert(tri._B == points[tri._p2]);
     	assert(tri._C == points[tri._p3]);
     	triangle_idx tri_idx = model.make_triangle(
-    			map_to_model[tri._p1],
-    			map_to_model[tri._p2],
-    			map_to_model[tri._p3]);
+    			map_to_model_node_idx[tri._p1],
+    			map_to_model_node_idx[tri._p2],
+    			map_to_model_node_idx[tri._p3]);
 
         // Associate the triangle with the UUID of the element it belongs to
         model.triangle(tri_idx).uuid = element_uid.getUuid();
     }
 
-    // XXX What is still supposed to be implement
-    assert(false && "Not implemented yet");
+    assert(false && "Material not implemented yet");
 }
 
 

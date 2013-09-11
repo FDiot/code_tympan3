@@ -62,3 +62,33 @@ CGAL_Point3 cgal_origin(2, 3, 4);
 CGAL_Point3 proj( CP.projection(cgal_origin));
 EXPECT_NEAR(0, (proj-cgal_origin).squared_length(), 1e-20 );
 }
+
+TEST(geometry_tools, triangulator)
+{
+using namespace tympan;
+
+// This is a dart-like concave quadrangle
+CGAL_Point2 points[] = { CGAL_Point2(0,0), CGAL_Point2(5,0), CGAL_Point2(1,1), CGAL_Point2(0.5,6)};
+CGAL_Polygon poly(points, points+4);
+
+PolygonTriangulator triangulator(poly);
+
+EXPECT_EQ(4, triangulator.triangulation().number_of_vertices()); // Finite vetices
+EXPECT_EQ(3, triangulator.triangulation().number_of_faces()); // Finite faces
+std::deque<PolygonTriangulator::Triangle> triangles;
+triangulator.exportTriangles(triangles);
+EXPECT_EQ(2, triangles.size());
+
+std::deque<PolygonTriangulator::Tri_indices> tri_indices;
+triangulator.exportTrianglesIndices(tri_indices);
+EXPECT_EQ(2, tri_indices.size());
+
+// Now assert consistency on first triangle
+PolygonTriangulator::Triangle tri(triangles.front());
+for(unsigned i=0; i<3; ++i)
+{
+    unsigned pt_idx = tri_indices.front()[i];
+    EXPECT_EQ(poly[pt_idx], tri[i]);
+}
+
+}

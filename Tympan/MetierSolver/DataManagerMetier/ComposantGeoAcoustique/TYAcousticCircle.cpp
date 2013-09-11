@@ -30,6 +30,7 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 
 OPROTOINST(TYAcousticCircle);
 
@@ -423,7 +424,8 @@ void TYAcousticCircle::setDiameter(double diameter)
 
 void TYAcousticCircle::exportMesh(
 		std::deque<OPoint3D>& points,
-                std::deque<OTriangle>& triangles) const
+                std::deque<OTriangle>& triangles,
+                const TYGeometryNode& geonode) const
 {
     assert(points.size()==0 &&
            "Output arguments 'points' is expected to be initially empty");
@@ -439,12 +441,16 @@ void TYAcousticCircle::exportMesh(
 #endif // TY_USE_IHM
 
     TYTabPoint3D poly = getOContour(resolution);
-    OPoint3D center = getCenter();
+    OPoint3D center = geonode.localToGlobal(getCenter());
     points.push_back(center);
-    for(int i=0; i<resolution; ++i)
+    points.push_back(geonode.localToGlobal(poly[0]));
+    for(int i=1; i<resolution; ++i)
     {
-        points.push_back(poly[i]);
-        OTriangle tri(center, poly[i], poly[(i+1)%resolution]);
-        tri._p1=0; tri._p2=i+1; tri._p3=(i+1)%resolution+1;
+        // poly[i] (local) become points[i+1] (global)
+        points.push_back(geonode.localToGlobal(poly[i]));
+        OTriangle tri(center, points[i], points[i+1]);
+        tri._p1=0; tri._p2=i; tri._p3=i+1;
     }
+    OTriangle tri(center, points[resolution], points[1]);
+    tri._p1=0; tri._p2=resolution; tri._p3=1;
 }

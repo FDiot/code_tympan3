@@ -135,7 +135,9 @@ int TYSurfaceInterface::intersectsPlan(const OPlan& plan, OSegment3D& seg) const
 
 
 void TYSurfaceInterface::exportMesh(
-		std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles) const
+    std::deque<OPoint3D>& points,
+    std::deque<OTriangle>& triangles,
+    const TYGeometryNode& geonode) const
 {
-    assert(false && "Must be implemented in derived classes");
+    assert(false && "OPROTO does not support pure virtual methods");
 }
