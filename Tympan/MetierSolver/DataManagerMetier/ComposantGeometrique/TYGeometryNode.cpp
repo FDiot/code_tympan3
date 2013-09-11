@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -256,7 +256,7 @@ int TYGeometryNode::fromXML(DOM_Element domElement)
             // problem here with count
             // nodeTmp = nodeTmp.nextSibling();
 
-            // Au cas oi¿½ nbChild soit faux (trop grand)
+            // Au cas oi nbChild soit faux (trop grand)
             if (nodeTmp.isNull())
             {
                 break;
@@ -395,8 +395,12 @@ bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     return true;
 }
 
+// XXX There seems to be excessive complexity around updateMatrix and updateRepere :
+// setMAtrix->setPrivateMatrix->updateRepere->_repere.set(_matrix)
 void TYGeometryNode::updateMatrix()
 {
+    // FIXME Why this double copy of matrices while it looks like
+    // _repere.getMatChangeRep(_matrix) would be simpler and more efficient ?
     OMatrix matrix;
 
     _repere.getMatChangeRep(matrix);
@@ -516,10 +520,10 @@ LPTYElementGraphic TYGeometryNode::getGraphicObject()
 }
 #endif // TY_USE_IHM
 
+// CHECKME Why is this not in setMatrix
 void TYGeometryNode::setPrivateMatrix(const OMatrix& matrix)
 {
     _matrix = matrix;
     updateRepere();
     _bIdentity = false;
 }
-

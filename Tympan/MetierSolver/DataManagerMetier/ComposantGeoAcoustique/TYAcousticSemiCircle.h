@@ -129,10 +129,11 @@ public:
      * @param points output argument filled with the vertices of the triangulation
      * @param triangles output argument filled with the faces of the triangulation
      */
-    void
+    virtual void
     exportMesh(
     		std::deque<OPoint3D>& points,
-    		std::deque<OTriangle>& triangles) const;
+    		std::deque<OTriangle>& triangles,
+                const TYGeometryNode& geonode) const;
 
 
     // Membres

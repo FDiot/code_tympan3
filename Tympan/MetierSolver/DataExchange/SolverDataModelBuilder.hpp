@@ -69,14 +69,11 @@ public:
      */
     void setGeometricEntities(LPTYSiteNode site_ptr);
 
-    //! Fill the \c acoustic_triangles attribute.
-    /*! Create & relate an \c tympan::AcousticTriangle with a \c
-        tympan::SiteElement. Update the relation \c tympan::surface_has_node'
-        relation.
-     \param element_uid the unique \c TYElement ID (from QUuid to QString).
-     \param point_list List of points related to the surface.
+    /**
+     *
+     *
      */
-    void setAcousticTriangle(const TYAcousticSurface* pSurf);
+    void setAcousticTriangle(const TYAcousticSurfaceGeoNode& acoust_surf_geo);
 
 
 //    //! Update some relations related to \c tympan::AcousticSpectrum.
@@ -104,7 +101,7 @@ public:
           - AcousticSpectrum
           - AcousticTriangle
      */
-    void setAcousticBuildMaterial();
+    // void setAcousticGroundMaterial();
 
     //! Update the \c tympan::AcousticSource
     /*! \todo Complete input args (if necessary). Link

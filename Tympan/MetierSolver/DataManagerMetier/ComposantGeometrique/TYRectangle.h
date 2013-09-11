@@ -269,7 +269,8 @@ public:
     void
     exportMesh(
     		std::deque<OPoint3D>& points,
-    		std::deque<OTriangle>& triangles) const;
+    		std::deque<OTriangle>& triangles,
+                const TYGeometryNode& geonode) const;
 
 
     // Membres

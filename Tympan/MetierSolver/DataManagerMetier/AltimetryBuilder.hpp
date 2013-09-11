@@ -21,6 +21,9 @@
 #include <functional>
 #include <algorithm>
 
+// CGAL related Includes
+#include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
+
 #include <boost/ptr_container/ptr_deque.hpp>
 // http://www.boost.org/doc/libs/1_52_0/libs/ptr_container/doc/examples.html
 #include <boost/foreach.hpp>
@@ -31,9 +34,6 @@
 #include <boost/range/adaptor/transformed.hpp>
 using boost::adaptors::transformed;
 
-// CGAL related Includes
-#include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
-#include <CGAL/centroid.h>
 
 // Forward declaration for the benefit of TYAltimetrie and TYTopographie
 namespace tympan {

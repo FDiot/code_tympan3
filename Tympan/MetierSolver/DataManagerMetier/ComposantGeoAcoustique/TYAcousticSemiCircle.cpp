@@ -26,6 +26,8 @@
 #include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
 
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
+
 #include "Tympan/Tools/TYProgressManager.h"
 
 #include "Tympan/Tools/OMessageManager.h"
@@ -410,7 +412,8 @@ void TYAcousticSemiCircle::setDiameter(double diameter)
 
 void TYAcousticSemiCircle::exportMesh(
 		std::deque<OPoint3D>& points,
-                std::deque<OTriangle>& triangles) const
+                std::deque<OTriangle>& triangles,
+                const TYGeometryNode& geonode) const
 {
     assert(points.size()==0 &&
            "Output arguments 'points' is expected to be initially empty");
@@ -425,14 +428,18 @@ void TYAcousticSemiCircle::exportMesh(
         TYPreferenceManager::setInt(TYDIRPREFERENCEMANAGER, "ResolutionCircle", resolution);
 #endif // TY_USE_IHM
 
-    TYTabPoint3D poly = getOContour(resolution);
-    OPoint3D center = getCenter();
+    TYTabPoint3D poly = getOContour(resolution); // local r/ frame
+    OPoint3D center = geonode.localToGlobal(getCenter()); // converted early to global r/ frame
     points.push_back(center);
     assert( resolution = poly.size() && "Inconsistency in contour size");
-    for(int i=0; i<resolution; ++i)
+    // poly[0] (local) becomes points[1] (global)
+    points.push_back(geonode.localToGlobal(poly[0]));
+    for(int i=1; i<resolution; ++i) // resolution points -> resolution-1 triangles
     {
-        points.push_back(poly[i]);
-        OTriangle tri(center, poly[i], poly[(i+1)%resolution]);
-        tri._p1=0; tri._p2=i+1; tri._p3=(i+1)%resolution+1;
+        // poly[i] (local) becomes points[i+1] (global)
+        points.push_back(geonode.localToGlobal(poly[i]));
+        // Use only global coordinates
+        OTriangle tri(center, points[i], points[(i%resolution)+1]);
+        tri._p1=0; tri._p2=i; tri._p3=(i%resolution)+1;
     }
 }
