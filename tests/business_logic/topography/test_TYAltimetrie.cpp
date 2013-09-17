@@ -7,6 +7,7 @@
  */
 
 #include <cstdlib>
+#include <deque>
 
 #include "gtest/gtest.h"
 #include "Tympan/MetierSolver/ToolsMetier/OGeometrie.h"
@@ -47,12 +48,17 @@ TYAltimetrie* buildAltimetry(void)
 	}
 
 	// Création de l'altimetrie
-	pAlti->compute(pTopo->collectPointsForAltimetrie(false), 1.E-5);
+	std::deque<OPoint3D> points;
+	std::deque<OTriangle> triangles;
+	// the false argument for use_emprise_as_level_curve is required
+	// because in this test the TYTopographie has no TYSiteNode as parent.
+	pTopo->computeAltimetricTriangulation(points, triangles, false);
+	pAlti->plugBackTriangulation(points, triangles);
+
+	//compute(pTopo->collectPointsForAltimetrie(false), 1.E-5);
 
 	return pAlti;
 }
-
-// Disable broken test, please fix it.
 
 TEST(AltitudePtTest, dumpenv) {
 	// Create altimetry
@@ -76,4 +82,3 @@ TEST(AltitudePtTest, dumpenv) {
 	bRes = pAlti->updateAltitude(pt);
 	ASSERT_FALSE(bRes);
 }
-

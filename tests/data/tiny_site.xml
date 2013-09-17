@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
 <Tympan>
- <Version>3.8.0 - EDF - EDF-00000000</Version>
+ <Version>3.9.0 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
  <Projet id="{c2e53f83-aa12-4d39-8b59-b5c66e503cb9}" name="Projet 0">
   <auteur></auteur>
   <dateCreation>2001-10-01</dateCreation>
@@ -32,7 +32,7 @@
     <ListCrbNiv>
      <GeometryNode id="{85c5261e-a45a-493c-899b-74db645a1f53}" name="">
       <hauteur>0.000</hauteur>
-      <Repere id="{b6baa8ce-9a1a-477d-af8a-1cf799e1ed2b}" name="Repère 28">
+      <Repere id="{b6baa8ce-9a1a-477d-af8a-1cf799e1ed2b}" name="RepÃ¨re 28">
        <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
@@ -51,7 +51,7 @@
      </GeometryNode>
      <GeometryNode id="{8d9773db-492f-4117-b7d9-10f9bee56e4f}" name="">
       <hauteur>0.000</hauteur>
-      <Repere id="{713beccc-77aa-445d-acb1-15c7751484af}" name="Repère 30">
+      <Repere id="{713beccc-77aa-445d-acb1-15c7751484af}" name="RepÃ¨re 30">
        <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
@@ -71,7 +71,7 @@
     <ListTerrain>
      <GeometryNode id="{d1110aab-da2b-4704-b335-a3a19456ce68}" name="">
       <hauteur>0.000</hauteur>
-      <Repere id="{8520a28a-ce92-41c5-9337-8eddbf66d8b5}" name="Repère 0">
+      <Repere id="{8520a28a-ce92-41c5-9337-8eddbf66d8b5}" name="RepÃ¨re 0">
        <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
@@ -88,35 +88,12 @@
        <nbPoints>0</nbPoints>
       </Terrain>
      </GeometryNode>
-     <GeometryNode id="{26e10c2f-0baf-4958-a2d5-8842677ff5e3}" name="">
-      <hauteur>0.000</hauteur>
-      <Repere id="{555b2b03-6939-4dbd-9eb0-91031c7f8b74}" name="Repère 2">
-       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
-       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
-       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
-       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
-      </Repere>
-      <Terrain id="{2a6083e0-018e-4efd-a485-ea7e9959572d}" name="Terrain 1">
-       <Color g="0.333333" r="0.666667" b="1"/>
-       <Sol id="{bcd5307f-bc2a-4019-a208-9b8add74ae29}" name="Sol 2">
-        <resistivite>20000</resistivite>
-        <epaisseur>1</epaisseur>
-        <active>0</active>
-        <miroir>0</miroir>
-       </Sol>
-       <nbPoints>4</nbPoints>
-       <Point x="-50.000" y="30.000" z="2.000"/>
-       <Point x="-50.000" y="-25.000" z="-0.242"/>
-       <Point x="-20.000" y="-25.000" z="-1.000"/>
-       <Point x="-20.000" y="30.000" z="0.360"/>
-      </Terrain>
-     </GeometryNode>
     </ListTerrain>
     <ListCrsEau/>
     <ListPlanEau>
      <GeometryNode id="{d4e3e2b6-3658-4f73-9ee6-ab2d4ec26f11}" name="">
       <hauteur>0.000</hauteur>
-      <Repere id="{16af47b3-1321-449a-bce3-8829c707fe17}" name="Repère 29">
+      <Repere id="{16af47b3-1321-449a-bce3-8829c707fe17}" name="RepÃ¨re 29">
        <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
@@ -142,7 +119,7 @@
       </PlanEau>
      </GeometryNode>
     </ListPlanEau>
-    <Altimetrie id="{4acdacd7-2cde-4097-ae24-f1b314b08f8b}" name="Altimétrie 0"/>
+    <Altimetrie id="{4acdacd7-2cde-4097-ae24-f1b314b08f8b}" name="AltimÃ©trie 0"/>
     <DefaultTerrain>0</DefaultTerrain>
    </Topographie>
    <Infrastructure id="{2242b597-9dbf-4a06-a83e-871e26d27c61}" name="Infrastructure 0">
@@ -195,7 +172,7 @@
     <RegimeAccNode accVolNodeId="{c2e53f83-aa12-4d39-8b59-b5c66e503cb9}" state="0"/>
     <RegimeAccNode accVolNodeId="{2242b597-9dbf-4a06-a83e-871e26d27c61}" state="0"/>
    </RegimeAccNode>
-   <Atmosphere id="{320824ed-cb6c-41ab-ab86-4c4e5e7fed17}" name="Atmosphère 0">
+   <Atmosphere id="{320824ed-cb6c-41ab-ab86-4c4e5e7fed17}" name="AtmosphÃ¨re 0">
     <pression>101325</pression>
     <temperature>20</temperature>
     <hygrometrie>70</hygrometrie>
@@ -213,10 +190,11 @@
      <freqTab form="0">0.00001 0.00001 0.00001 0.00002 0.00004 0.00006 0.00009 0.00014 0.00022 0.00034 0.00052 0.00078 0.00113 0.00160 0.00216 0.00280 0.00348 0.00419 0.00498 0.00592 0.00718 0.00902 0.01180 0.01613 0.02291 0.03358 0.05035 0.07662 0.11751 0.18053 0.27624</freqTab>
     </Spectre>
    </Atmosphere>
-   <Resultat id="{bdcc2673-f1a9-4354-a692-351fdbfd5d75}" name="Résultat 0">
+   <Resultat id="{bdcc2673-f1a9-4354-a692-351fdbfd5d75}" name="RÃ©sultat 0">
     <ListSources/>
     <ListRecepteurs/>
     <ListSpectres/>
+    <ListLw/>
    </Resultat>
   </Calcul>
  </Projet>
