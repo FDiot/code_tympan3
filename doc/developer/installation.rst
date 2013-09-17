@@ -54,8 +54,8 @@ Major dependencies
 The following dependencies are a bigger deal as their are likely to be
 already installed in your development environment in a system-wide
 way. If you are running a Linux box, the best way to get them is
-through your distribution package manager. If you are running a Linux
-box, your would be best by running the dedicated installers.
+through your distribution package manager. If you are running a
+Windows box, your would be best by running the dedicated installers.
 
 More details are given in further section on an OS and variant basis.
 

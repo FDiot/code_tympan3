@@ -15,7 +15,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/SolverDataModelBuilder.hpp"
+#include "Tympan/MetierSolver/DataExchange/SolverDataModelBuilder.hpp"
 
 #include "test_utils/ProjectLoader.hpp"
 

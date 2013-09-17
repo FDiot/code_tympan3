@@ -63,6 +63,7 @@ set_property(TEST test_example PROPERTY ENVIRONMENT "${LD_VARNAME}=${ADD_PATH_ST
 file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
+add_subdirectory(DataExchange)
 add_subdirectory(business_logic)
 add_subdirectory(gui)
 add_subdirectory(io)

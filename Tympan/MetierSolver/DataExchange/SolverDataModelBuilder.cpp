@@ -10,7 +10,7 @@
 #include <boost/foreach.hpp>
 
 #include <cassert>
-#include "Tympan/MetierSolver/DataManagerMetier/SolverDataModelBuilder.hpp"
+#include "Tympan/MetierSolver/DataExchange/SolverDataModelBuilder.hpp"
 
 namespace tympan
 {
