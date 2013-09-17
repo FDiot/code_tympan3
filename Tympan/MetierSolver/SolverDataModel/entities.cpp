@@ -13,10 +13,6 @@
 namespace tympan
 {
 
-Node::Node(
-    const Point& p_
-) : p(p_) {}
-
 DiffractionEdge::DiffractionEdge(
     const Point& p1_, const Point& p2_, double angle_
 ) : p1(p1_), p2(p2_), angle(angle_) {}
@@ -58,59 +54,10 @@ Site::Site(
 ) : id(id_) {}
 
 
-SpectrumSample::SpectrumSample(
-    double modulus_, const string& type_, double phase_
-) : modulus(modulus_), type(type_), phase(phase_) {}
-
 DirectivityCoefficient::DirectivityCoefficient(
     double value_, double theta_, double phi_, bool solid_angle_
 ) : value(value_), theta(theta_), phi(phi_), solid_angle(solid_angle_) {}
 
-Frequency::Frequency(
-    double value_
-) : value(value_) {}
-
-
-/**
- * @brief provide arbitrary order over Nodes
- * @param lhs pointer to the left hand side node
- * @param rhs pointer to the right hand side node
- * @return the strict (lexical) order of \c lhs relative to \c rhs
- */
-bool operator<(Node::pointer lhs, Node::pointer rhs)
-{
-	for(unsigned int k=0; k<3; k++)
-		if (lhs->p._value[k] < rhs->p._value[k])
-			return true;
-	return false;
-}
-
-AcousticTriangle::pointer
-AcousticTriangle::make_triangle(
-		const Node::pointer& p1, const Node::pointer& p2, const Node::pointer& p3)
-{
-	Node::pointer tab[3] = {p1, p2, p3};
-	return make_triangle(&tab);
-}
-
-AcousticTriangle::pointer
-AcousticTriangle::make_triangle(Node::pointer (* const points)[3])
-{
-	AcousticTriangle::pointer surf = make<AcousticTriangle>();
-	Node::pointer tab[3];
-
-	// We determine the index k0 of the "smallest" of the three vertices
-	Node::pointer * const begin = &(*points)[0];
-	Node::pointer * const end = &(*points)[3];
-	const unsigned k0 = std::min_element(begin, end) - begin;
-	// We fill the tab array starting from k0
-	for(unsigned int k=k0; k<k0+3; k++)
-		tab[k%3] = (*points)[k];
-	surf->add<has_node_0>(tab[0]);
-	surf->add<has_node_1>(tab[1]);
-	surf->add<has_node_2>(tab[2]);
-	return surf;
-}
 
 
 // XXX Copy/paste these methods to the \c AcousticGroundMaterial See

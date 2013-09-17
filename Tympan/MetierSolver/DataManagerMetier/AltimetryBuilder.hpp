@@ -56,8 +56,10 @@ class SolverDataModelBuilder;
 #undef max // XXX
 
 // Tympan includes solver side
-#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
-#include "Tympan/MetierSolver/SolverDataModel/relations.hpp"
+//#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
+//#include "Tympan/MetierSolver/SolverDataModel/relations.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/data_model_common.hpp"
+
 
 #define TY_USE_CGAL_QT_IFACE 1
 #ifndef TY_USE_CGAL_QT_IFACE
@@ -527,14 +529,14 @@ public:
     	return OPoint3D(p.x(), p.y(), i.altitude);
     }
 
-    /**
-     * @brief Conversion from a CGAL Vertex_handle to solver data-model Node entity
-     * @param vh the CGAL vertex handle
-     * @return coordinates of \c vh as a tympan point
-     */
-    Node::pointer
-    to_solver_node(const CDT::Vertex_handle& vh)
-    { return Node::pointer(new Node(from_cgal(vh))); }
+//    /**
+//     * @brief Conversion from a CGAL Vertex_handle to solver data-model Node entity
+//     * @param vh the CGAL vertex handle
+//     * @return coordinates of \c vh as a tympan point
+//     */
+//    Node::pointer
+//    to_solver_node(const CDT::Vertex_handle& vh)
+//    { return Node::pointer(new Node(from_cgal(vh))); }
 
 
     /**
