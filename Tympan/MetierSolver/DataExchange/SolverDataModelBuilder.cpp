@@ -71,10 +71,9 @@ void SolverDataModelBuilder::setGeometricEntities(LPTYSiteNode site_ptr)
     // Have to link to \c AcousticTriangle with relation \c surface_has_node
     unsigned int nb_building_faces = 0;
     // XXX Maybe swith to 'true'.
-    bool with_ecran = false;
     TYTabAcousticSurfaceGeoNode face_list;
     std::vector<bool> estUnIndexDeFaceEcran;
-    site_ptr->getListFaces(with_ecran, face_list, nb_building_faces,
+    site_ptr->getListFaces(true, face_list, nb_building_faces,
                            estUnIndexDeFaceEcran);
 
     // Faces d'infrastructure
@@ -217,7 +216,7 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode&
     size_t i = 0;
     BOOST_FOREACH(const Point& point, points)
     {
-    	map_to_model_node_idx[i] = model.make_node(point);
+    	map_to_model_node_idx[i++] = model.make_node(point);
     }
 
     BOOST_FOREACH(const OTriangle& tri, triangles)
@@ -235,7 +234,7 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode&
         model.triangle(tri_idx).uuid = element_uid.getUuid();
     }
 
-    assert(false && "Material not implemented yet");
+    // TODO Material not implemented yet
 }
 
 

@@ -693,7 +693,7 @@ void TYRectangle::exportMesh(
         points.push_back(geonode.localToGlobal(_pts[i]));
     // exports triangle (0, 1, 2)
     OTriangle tri(0, 1, 2);
-     // Use already converted to globalr/ frame points
+     // Use already converted to global r/ frame points
     tri._A=points[0];
     tri._B=points[1];
     tri._C=points[2];

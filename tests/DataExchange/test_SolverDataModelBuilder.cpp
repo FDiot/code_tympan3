@@ -22,26 +22,13 @@
 using namespace tympan;
 
 
-
-/* This Fixture loads a project from an XML project file */
-class BuildingFromSiteFixture: public ::testing::Test
+// TODO Factor out the fixture into ProjectLoader
+TEST_F(BuildingFromSiteFixture, check_triangles)
 {
-public:
-    // static void SetUpTestCase()
-    virtual void SetUp()
-    {
-    	const char filename[] = "../data/tiny_site.xml";
-    	load_project_from_file(filename, project);
-    	assert_loaded_project(project);
-    }
+    load_file("../data/tiny_site.xml");
 
-    LPTYProjet project;
-};
-
-// TODO FActor out the fixture into ProjectLoader
-TEST_F(BuildingFromSiteFixture, check_size)
-{
-	SolverModel model;
-	SolverDataModelBuilder builder(model);
-	builder.walkTroughtSite(project->getSite());
+    SolverModel model;
+    SolverDataModelBuilder builder(model);
+    builder.walkTroughtSite(project->getSite());
+    model.export_triangles_soup("export_check_triangles");
 }

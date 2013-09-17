@@ -29,25 +29,13 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-/* This Fixture loads a project from an XML project file */
-class BuildingFromSiteFixture: public ::testing::Test
-{
-public:
-    // static void SetUpTestCase()
-    virtual void SetUp()
-    {
-    	const char filename[] = "../data/tiny_site.xml";
-    	load_project_from_file(filename, project);
-    	assert_loaded_project(project);
-    }
-
-    LPTYProjet project;
-};
-
 // Check the size of a few elements such as the number of points, surfaces,
 // etc. from site described by a XML file.
 TEST_F(BuildingFromSiteFixture, check_size)
 {
+
+    load_file("../data/tiny_site.xml");
+
     // Get a pointer to the TYSiteNode.
     LPTYSiteNode site_ptr = project->getSite();
 
