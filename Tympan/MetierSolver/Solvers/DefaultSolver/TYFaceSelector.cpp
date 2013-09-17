@@ -43,7 +43,7 @@ void TYFaceSelector::selectFaces(TYSIntersection* tabIntersect, const TYSourcePo
     buildPlans(plan, rayon);
 
     // Recuperation de la source ponctuelle
-    TYSourcePonctuelle* pSrc = TYSourcePonctuelle::safeDownCast(pSrcGeoNode->getElement());
+    TYSourcePonctuelle* pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement());
 
     TYAcousticSurfaceGeoNode* pSurfaceGeoNode = NULL;
     TYAcousticSurface* pSurface = NULL;
@@ -265,11 +265,11 @@ bool TYFaceSelector::testIntersect2D(const TYStructSurfIntersect& SI, TYSInterse
 bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourante, TYSIntersection& Intersect, OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3, const int& indice) const
 {
     bool bRes = false;
-    const OMatrix& matrixinv = FaceCourante.matInv;
+    const OMatrix matrixinv = FaceCourante.matInv;
     TYAcousticSurfaceGeoNode* pSurfaceGeoNode = FaceCourante.pSurfGeoNode;
 	
 	TYAcousticSurface* pSurface = NULL;
-	if (pSurfaceGeoNode) { pSurface = TYAcousticSurface::safeDownCast(pSurfaceGeoNode->getElement()); }
+	if (pSurfaceGeoNode) { pSurface = dynamic_cast<TYAcousticSurface*>(pSurfaceGeoNode->getElement()); }
 
     OSegment3D segInter;
 
@@ -300,7 +300,8 @@ bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourant
 
 TYAcousticSurface* TYFaceSelector::getActiveSurface(const TYAcousticSurfaceGeoNode* pSurfaceGeoNode, const TYSourcePonctuelle* pSrc) const
 {
-    TYAcousticSurface* pSurface = TYAcousticSurface::safeDownCast(pSurfaceGeoNode->getElement());
+	if (!pSurfaceGeoNode || !pSrc) { return NULL; }
+    TYAcousticSurface* pSurface = dynamic_cast<TYAcousticSurface*>(pSurfaceGeoNode->getElement());
 
 	TYElement* pParentSurface = NULL;
 	if (pSurface) 
@@ -313,10 +314,10 @@ TYAcousticSurface* TYFaceSelector::getActiveSurface(const TYAcousticSurfaceGeoNo
 	}
 
     // Face d'altimetrie ne peut etre parente d'une source !
-    if (pParentSurface && pParentSurface->inherits("TYAltimetrie"))
-    {
-        return pSurface;
-    }
+    //if (pParentSurface && pParentSurface->inherits("TYAltimetrie"))
+    //{
+    //    return pSurface;
+    //}
 
     TYElement* pParentSrc = pSrc->getParent();
 
@@ -331,7 +332,7 @@ TYAcousticSurface* TYFaceSelector::getActiveSurface(const TYAcousticSurfaceGeoNo
 
     short i = 0;
 
-    while (pParentSurface && !(pVolParentSurface = TYAcousticVolume::safeDownCast(pParentSurface)) && (i++ < 12))
+    while (pParentSurface && !(pVolParentSurface = dynamic_cast<TYAcousticVolume*>(pParentSurface)) && (i++ < 12))
     {
         pParentSurface = pParentSurface->getParent();
     }
@@ -343,7 +344,7 @@ TYAcousticSurface* TYFaceSelector::getActiveSurface(const TYAcousticSurfaceGeoNo
 
     i = 0;
 
-    while (pParentSrc && !(pVolParentSrc = TYAcousticVolume::safeDownCast(pParentSrc)) && (i++ < 12))
+    while (pParentSrc && !(pVolParentSrc = dynamic_cast<TYAcousticVolume*>(pParentSrc)) && (i++ < 12))
     {
         pParentSrc = pParentSrc->getParent();
     }

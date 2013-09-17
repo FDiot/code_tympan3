@@ -34,6 +34,7 @@
 
 #include "Tympan/Tools/TYProgressManager.h"
 
+#include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/Tools/OMessageManager.h"
 
 #if defined(WIN32)
@@ -50,6 +51,7 @@ static char THIS_FILE[] = __FILE__;
 
 OPROTOINST(TYCalcul);
 
+#define TR(id) OLocalizator::getString("OMessageManager", (id))
 
 TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
 {
@@ -528,7 +530,7 @@ int TYCalcul::fromXML(DOM_Element domElement)
     int retVal = -1;
     LPTYMaillageGeoNode pMaillageGeoNode = new TYMaillageGeoNode(NULL, this);
 
-    // CLM-NT33: Compatibiltiï¿½ï¿½ ancien format XML
+    // CLM-NT33: CompatibiltitÃ© ancien format XML
     LPTYPointControl pPointControl = new TYPointControl();
     TYProjet* pProjet = getProjet();
 
@@ -667,8 +669,8 @@ int TYCalcul::fromXML(DOM_Element domElement)
         // Atmosphere
         _pAtmosphere->callFromXMLIfEqual(elemCur);
 
-        // CLM-NT33: Compatibilitiï¿½ï¿½ avec ancien format XML
-        // Points de contriï¿½ï¿½le
+        // CLM-NT33: CompatibilititÃ© avec ancien format XML
+        // Points de controle
         if (elemCur.nodeName() == "PointsControl")
         {
             DOM_Element elemCur2;
@@ -895,7 +897,7 @@ void TYCalcul::addToSelection(TYElement* pElt, bool recursif /*=true*/)
             // Si un objet est ajoute son parent l'est forcemment
             addToSelection(pElt->getParent(), false);
 
-            // Si c'est un site on ajoute pas systiï¿½ï¿½matiquement tous les enfants
+            // Si c'est un site on n'ajoute pas systÃ©matiquement tous les enfants
             recursif = false;
         }
         else if (pElt->inherits("TYAcousticVolumeNode"))
@@ -975,7 +977,7 @@ bool TYCalcul::remToSelection(TYElement* pElt, bool recursif /*=true*/)
         // On informe l'element qu'ils ne sont plua dans le calcul
         pElt->setInCurrentCalcul(false, false, false);
 
-        //  On diï¿½ï¿½sactive ses enfants
+        //  On dÃ©sactive ses enfants
         TYElementCollection childs;
         pElt->getChilds(childs, false);
 
@@ -989,7 +991,7 @@ bool TYCalcul::remToSelection(TYElement* pElt, bool recursif /*=true*/)
         ret = true;
     }
 
-    // Si c'est un siteNode, on fait une mise iï¿½ï¿½ jour de l'altimiï¿½ï¿½trie
+    // Si c'est un siteNode, on fait une mise Ã  jour de l'altimÃ©trie
     if (pElt->inherits("TYSiteNode"))
     {
         // Dans ce cas, on remonte au site racine et on fait l'update de tout
@@ -1158,7 +1160,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
     TYTabLPPointCalcul& tabpoint = pMaillage->getPtsCalcul();
 
     bool cancel = false;
-	bool bNoPbAlti = true; // Permet de tester si tous les points sont altimétrisés correctement.
+	bool bNoPbAlti = true; // Permet de tester si tous les points sont altimtriss correctement.
 
     if (pMaillage->getComputeAlti()) // Cas des maillages rectangulaires et lineaires horizontaux
     {
@@ -1229,13 +1231,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
 
 	if (!bNoPbAlti) // Certains point pas altimetrises
 	{
-		OMessageManager::get()->info("************************************************************");
-		OMessageManager::get()->info("*                    ATTENTION !                           *");
-		OMessageManager::get()->info("* Certains récepteurs sont hors de la zone altimétrisée.   *");
-		OMessageManager::get()->info("* Leur altitude est fixée à -10000 m                       *");
-		OMessageManager::get()->info("* Veuillez modifier la cartographie ou la topographie      *");
-		OMessageManager::get()->info("* pour qu'ils puissent être correctement altimétrisés      *");
-		OMessageManager::get()->info("************************************************************");
+		OMessageManager::get()->info(TR("msg_pbalti"));
 	}
 
 
@@ -1289,11 +1285,11 @@ void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
     TYInfrastructure* pInfra = pSite->getInfrastructure();
     TYTabAcousticVolumeNodeGeoNode tabVolNodeGeoNode;
 
-    // On commence par recuperer la liste des machines et des biï¿½ï¿½timents
-    // Biï¿½ï¿½timents
+    // On commence par recuperer la liste des machines et des btiments
+    // Batiments
     for (j = 0; j < static_cast<int>(pInfra->getListBatiment().size()); j++)
     {
-        // Si ce biï¿½ï¿½timent est actif pour le calcul
+        // Si ce batiment est actif pour le calcul
         if (TYBatiment::safeDownCast(pInfra->getBatiment(j)->getElement())->isInCurrentCalcul())
         {
             tabVolNodeGeoNode.push_back((LPTYAcousticVolumeNodeGeoNode&) pInfra->getListBatiment()[j]);
@@ -1543,7 +1539,8 @@ bool TYCalcul::go()
     // Creation de la liste des recepteurs
     OMessageManager::get()->info("Mise a jour du Site");
 
-    // XXX While in the first step assert that there is no sub-site.
+    // NB This is the place to assert the "no sub-site assumption" 
+    // required by some variant of the software
 
     // Fusion des sites
     LPTYSiteNode pMergeSite = pProjet->getSite()->merge();
@@ -1555,7 +1552,7 @@ bool TYCalcul::go()
     // Actualisation de l'altimetrie des recepteurs (securite)
     pProjet->updateAltiRecepteurs(pMergeSite->getTopographie()->getAltimetrie());
 
-    pMergeSite->init(this); // XXX Check what it does
+    pMergeSite->init(this); // TODO document what's going on here
 
     TYNameManager::get()->enable(false);
 
@@ -1621,10 +1618,6 @@ bool TYCalcul::go()
 
         // XXX ... and pass the SolverDataModel built here.
         
-        // XXX This is a hack to workaround a furtive bug linked to multi threading issues
-        // Security big bumber of points causes fails during computing in multithread
-       	if (_maillages.size()>0) { _nbThread = 1; } 
-
 		ret = pSolver->solve(*pMergeSite, *this);
 
         pSolver->purge();
@@ -1687,11 +1680,10 @@ bool TYCalcul::go()
 
     TYNameManager::get()->enable(true);
 
-    setIsAcousticModified(true); // Les donniï¿½ï¿½es acoustiques ont iï¿½ï¿½tiï¿½ï¿½ actualisiï¿½ï¿½es
+    setIsAcousticModified(true); // Les donnÃ©es acoustiques ont Ã©tÃ© actualisÃ©es
 
     // Restaure default number of thread (sorry this is not clean)
-    // Linked with upper modification (change number of thread to 1 when using map  
-	if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
+    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
     {
         _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
     }

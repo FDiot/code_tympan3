@@ -108,7 +108,7 @@ int TYSurfaceInterface::intersectsPlan(const OPlan& plan, OSegment3D& seg) const
     // Pour chaque segment composant le contour
     for (size_t i = 0; i < nbPts; i++)
     {
-        if (((OPlan*)&plan)->intersectsSegment(contour[i], contour[(i + 1) % nbPts], ptIntersec) == INTERS_OUI)
+        if ( plan.intersectsSegment(contour[i], contour[(i + 1) % nbPts], ptIntersec) == INTERS_OUI)
         {
             if (!ptAFind)
             {

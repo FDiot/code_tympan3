@@ -115,7 +115,7 @@ public:
     /**
      * Set/Get de la paroi.
      */
-    TYParoi* getParoi() const { return _pParoi; }
+	TYParoi* getParoi() const { return _pParoi._pObj; }
 
     /**
      * Set/Get de la paroi.

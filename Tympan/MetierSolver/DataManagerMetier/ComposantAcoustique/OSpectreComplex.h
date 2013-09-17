@@ -41,7 +41,12 @@ public:
      */
     OSpectreComplex();
 
-    /**
+     /**
+     * Constructeur par defaut avec une valeur par defaut
+     */
+    OSpectreComplex(const TYComplex& defaultValue);
+
+	/**
      * Constructeur par copie.
      */
     OSpectreComplex(const OSpectreComplex& other);

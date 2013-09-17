@@ -31,6 +31,7 @@ struct TYPointParcours
     double x;
     double y;
     double z;
+	double _abcisse; //  Abscisse curviligne sur SR
     int Identifiant;
     bool isInfra;
     bool isEcran;
