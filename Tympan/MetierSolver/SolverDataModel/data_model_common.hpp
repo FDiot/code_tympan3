@@ -18,6 +18,9 @@ namespace tympan
 {
 typedef OPoint3D   Point;
 typedef OVector3D  Vector;
+
+typedef std::deque<Point> nodes_pool_t;
+typedef size_t node_idx;
 } //namespace tympan
 
 
@@ -35,6 +38,8 @@ protected:
 	BaseEntity() {};
 
 public:
+	virtual ~BaseEntity() {};
+
 //    virtual tympan::shared_ptr<BaseEntity> ptr_any() = 0;
 //    virtual tympan::shared_ptr<BaseEntity const> ptr_any() const = 0;
 //

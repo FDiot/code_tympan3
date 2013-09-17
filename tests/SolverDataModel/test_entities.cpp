@@ -12,10 +12,6 @@
 
 #include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
 #include "Tympan/MetierSolver/SolverDataModel/relations.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/model.hpp"
 
 using namespace tympan;
-
-
-TEST(BasicInstanciationTests, dummy) {
-
-}
