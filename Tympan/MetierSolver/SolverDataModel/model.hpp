@@ -9,6 +9,7 @@
 #ifndef TYMPAN__MODEL_H__INCLUDED
 #define TYMPAN__MODEL_H__INCLUDED
 
+#include <string>
 
 #include "data_model_common.hpp"
 #include "entities.hpp"
@@ -20,25 +21,25 @@ class SolverModel
 {
 public:
 
-	SolverModel(){};
-	virtual ~SolverModel(){};
+    SolverModel(){};
+    virtual ~SolverModel(){};
 
     /**
      * @brief Maps a \c TYPoint or \c OPoint3D as a \c node_ref
      * @param point the \c TYPoint  or \c OPoint3D to be mapped
      * @return a smart pointer to the corresponding Node (created on the fly if needed)
      */
-	node_idx make_node(const Point&);
-	node_idx make_node(double x, double y, double z)
-	{return make_node(Point(x, y, z)); }
+    node_idx make_node(const Point&);
+    node_idx make_node(double x, double y, double z)
+    {return make_node(Point(x, y, z)); }
 
-	triangle_idx make_triangle(node_idx n1, node_idx n2, node_idx n3);
+    triangle_idx make_triangle(node_idx n1, node_idx n2, node_idx n3);
 
-	size_t num_points() const //TODO move to implementation file
-	{ return  all_nodes.size(); }
+    size_t num_points() const //TODO move to implementation file
+    { return  all_nodes.size(); }
 
-	size_t num_triangles() const //TODO move to implementation file
-		{ return  all_triangles.size(); }
+    size_t num_triangles() const //TODO move to implementation file
+    { return  all_triangles.size(); }
 
     AcousticTriangle& triangle(triangle_idx tri_idx)
     { return all_triangles[tri_idx]; }
@@ -46,7 +47,21 @@ public:
     const AcousticTriangle& triangle(triangle_idx tri_idx) const
     { return all_triangles[tri_idx]; }
 
-// TODO
+    Point & node(node_idx idx)
+    { return all_nodes[idx]; }
+
+    const Point& node(node_idx idx) const
+    { return all_nodes[idx]; }
+
+    /**
+     * @brief Exports the triangle soup as a series of text files
+     *
+     * This methods is intented for validation and debugging purposes,
+     * but not serious serialisation of the SovlerDataModel.
+     *
+     * @param filename base name of the files to be written.
+     */
+    void export_triangles_soup(const std::string& filename); // IMPLEMENTME
 
 public: // XXX Could / should be protected but this complicates testing
 

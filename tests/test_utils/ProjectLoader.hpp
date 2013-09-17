@@ -58,22 +58,25 @@ void get_altimetry_numbers(LPTYProjet project,
 
 } /* namespace tympan */
 
-// Cf. http://code.google.com/p/googletest/wiki/AdvancedGuide#How_to_Write_Value-Parameterized_Tests
-/*
-class LoadProjectFixture: public ::testing::WithParamInterface<const char*>
+/* This Fixture loads a project from an XML project file */
+class BuildingFromSiteFixture: public ::testing::Test
 {
+
 public:
     // static void SetUpTestCase()
-    virtual void SetUp()
+
+    // Load the project file `filename` into the `project` member
+    virtual void load_file(const char filename[])
     {
-    	const char* filename = GetParam();
-    	tympan::load_project_from_file(filename, project);
-    	tympan::assert_loaded_project(project);
+        using namespace tympan;
+        project = LPTYProjet(); // a way to explicitely release the smart pointer
+        load_project_from_file(filename, project); // This output to `project`
+        assert_loaded_project(project);
     }
+
+    // virtual void SetUp() {}
 
     LPTYProjet project;
 };
-*/
-
 
 #endif /* TYMPAN__PROJECTLOADER_HPP__INCLUDED */
