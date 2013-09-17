@@ -26,6 +26,8 @@
 
 OPROTOINST(TYTopographie);
 
+#define TR(id) OLocalizator::getString("OMessageManager", (id))
+
 // Declaration de la fonction utilisee par qsort pour le tri des terrains
 static int compareTerrains(const void* elem1, const void* elem2);
 
@@ -94,7 +96,11 @@ TYTopographie::TYTopographie(const TYTopographie& other)
 
 TYTopographie::~TYTopographie()
 {
-    purge();
+    if (_pSortedTerrains)
+    {
+        delete [] _pSortedTerrains;
+        _pSortedTerrains = NULL;
+    }
 }
 
 TYTopographie& TYTopographie::operator=(const TYTopographie& other)
@@ -374,7 +380,7 @@ int TYTopographie::fromXML(DOM_Element domElement)
         LPTYTerrain pTerrain = NULL;
         for (i = 0; i < _listTerrain.size(); i++)
         {
-            pTerrain = TYTerrain::safeDownCast(_listTerrain[i]->getElement());
+            pTerrain = dynamic_cast<TYTerrain*>(_listTerrain[i]->getElement());
 
             // Si taille de la liste de point = 0
             if (pTerrain && pTerrain->getListPoints().size() == 0)
@@ -485,7 +491,7 @@ bool TYTopographie::addPlanEau(LPTYPlanEauGeoNode pPlanEauGeoNode)
 {
     assert(pPlanEauGeoNode);
 
-    LPTYPlanEau pPlanEau = TYPlanEau::safeDownCast(pPlanEauGeoNode->getElement());
+    TYPlanEau* pPlanEau = dynamic_cast<TYPlanEau*>(pPlanEauGeoNode->getElement());
 
     assert(pPlanEau);
 
@@ -542,7 +548,7 @@ bool TYTopographie::remPlanEau(const LPTYPlanEau pPlanEau)
 
     for (ite = _listPlanEau.begin(); ite != _listPlanEau.end(); ite++)
     {
-        if (TYPlanEau::safeDownCast((*ite)->getElement()) == pPlanEau)
+        if (dynamic_cast<TYPlanEau*>((*ite)->getElement()) == pPlanEau)
         {
             //#if TY_USE_IHM
             //          (*ite)->remFromAllRenderer();
@@ -604,7 +610,7 @@ LPTYPlanEauGeoNode TYTopographie::findPlanEau(const LPTYPlanEau pPlanEau)
 
     for (ite = _listPlanEau.begin(); ite != _listPlanEau.end(); ite++)
     {
-        if (TYPlanEau::safeDownCast((*ite)->getElement()) == pPlanEau)
+        if (dynamic_cast<TYPlanEau*>((*ite)->getElement()) == pPlanEau)
         {
             return (*ite);
         }
@@ -617,7 +623,7 @@ bool TYTopographie::addCrsEau(LPTYCoursEauGeoNode pCoursEauGeoNode)
 {
     assert(pCoursEauGeoNode);
 
-    LPTYCoursEau pCoursEau = TYCoursEau::safeDownCast(pCoursEauGeoNode->getElement());
+    LPTYCoursEau pCoursEau = dynamic_cast<TYCoursEau*>(pCoursEauGeoNode->getElement());
 
     assert(pCoursEau);
 
@@ -668,7 +674,7 @@ bool TYTopographie::remCrsEau(const LPTYCoursEau pCoursEau)
 
     for (ite = _listCrsEau.begin(); ite != _listCrsEau.end(); ite++)
     {
-        if (TYCoursEau::safeDownCast((*ite)->getElement()) == pCoursEau)
+        if (dynamic_cast<TYCoursEau*>((*ite)->getElement()) == pCoursEau)
         {
             //#if TY_USE_IHM
             //          (*ite)->remFromAllRenderer();
@@ -691,7 +697,7 @@ bool TYTopographie::remCrsEau(QString idCrsEau)
 
     for (ite = _listCrsEau.begin(); ite != _listCrsEau.end(); ite++)
     {
-        if (TYCoursEau::safeDownCast((*ite)->getElement())->getID().toString() == idCrsEau)
+        if (dynamic_cast<TYCoursEau*>((*ite)->getElement())->getID().toString() == idCrsEau)
         {
             //#if TY_USE_IHM
             //          (*ite)->remFromAllRenderer();
@@ -720,7 +726,7 @@ LPTYCoursEauGeoNode TYTopographie::findCrsEau(const LPTYCoursEau pCrsEau)
 
     for (ite = _listCrsEau.begin(); ite != _listCrsEau.end(); ite++)
     {
-        if (TYCoursEau::safeDownCast((*ite)->getElement()) == pCrsEau)
+        if (dynamic_cast<TYCoursEau*>((*ite)->getElement()) == pCrsEau)
         {
             return (*ite);
         }
@@ -733,7 +739,7 @@ bool TYTopographie::addTerrain(LPTYTerrainGeoNode pTerGeoNode)
 {
     assert(pTerGeoNode);
 
-    LPTYTerrain pTerrain = TYTerrain::safeDownCast(pTerGeoNode->getElement());
+    TYTerrain* pTerrain = dynamic_cast<TYTerrain*>(pTerGeoNode->getElement());
 
     assert(pTerrain);
 
@@ -762,7 +768,7 @@ bool TYTopographie::remTerrain(const LPTYTerrainGeoNode pTerGeoNode)
     unsigned int terrainNbr = 0;
 
     TYTabTerrainGeoNode::iterator ite;
-    LPTYTerrain pTerrain = TYTerrain ::safeDownCast(pTerGeoNode->getElement());
+    TYTerrain* pTerrain = dynamic_cast<TYTerrain*>(pTerGeoNode->getElement());
 
     for (ite = _listTerrain.begin(); ite != _listTerrain.end(); ite++)
     {
@@ -797,7 +803,7 @@ bool TYTopographie::remTerrain(const LPTYTerrain pTer)
 
     for (ite = _listTerrain.begin(); ite != _listTerrain.end(); ite++)
     {
-        if (TYTerrain::safeDownCast((*ite)->getElement()) == pTer)
+        if (dynamic_cast<TYTerrain*>((*ite)->getElement()) == pTer)
         {
             if ((*ite) == _listTerrain[_DefTerrainIdx]) { return false; }
 
@@ -862,7 +868,7 @@ LPTYTerrainGeoNode TYTopographie::findTerrain(const LPTYTerrain pTerrain)
 
     for (ite = _listTerrain.begin(); ite != _listTerrain.end(); ite++)
     {
-        if (TYTerrain::safeDownCast((*ite)->getElement()) == pTerrain)
+        if (dynamic_cast<TYTerrain*>((*ite)->getElement()) == pTerrain)
         {
             return (*ite);
         }
@@ -875,7 +881,7 @@ bool TYTopographie::addCrbNiv(LPTYCourbeNiveauGeoNode pCrbNivGeoNode)
 {
     assert(pCrbNivGeoNode);
 
-    LPTYCourbeNiveau pCourbeNiv = TYCourbeNiveau::safeDownCast(pCrbNivGeoNode->getElement());
+    TYCourbeNiveau* pCourbeNiv = dynamic_cast<TYCourbeNiveau*>(pCrbNivGeoNode->getElement());
 
     assert(pCourbeNiv);
 
@@ -932,7 +938,7 @@ bool TYTopographie::remCrbNiv(const LPTYCourbeNiveau pCrbNiv)
 
     for (ite = _listCrbNiv.begin(); ite != _listCrbNiv.end(); ite++)
     {
-        if (TYCourbeNiveau::safeDownCast((*ite)->getElement()) == pCrbNiv)
+		if ( dynamic_cast<TYCourbeNiveau*>((*ite)->getElement()) == pCrbNiv.getRealPointer() )
         {
             //#if TY_USE_IHM
             //          (*ite)->remFromAllRenderer();
@@ -994,7 +1000,7 @@ LPTYCourbeNiveauGeoNode TYTopographie::findCrbNiv(const LPTYCourbeNiveau pCrbNiv
 
     for (ite = _listCrbNiv.begin(); ite != _listCrbNiv.end(); ite++)
     {
-        if (TYCourbeNiveau::safeDownCast((*ite)->getElement()) == pCrbNiv)
+		if (dynamic_cast<TYCourbeNiveau*>((*ite)->getElement()) == pCrbNiv.getRealPointer())
         {
             return (*ite);
         }
@@ -1079,7 +1085,7 @@ TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv) cons
         //      if (_emprise.size())
         //      {
         // On recupere l'altitude du site parent
-        TYSiteNode* pSiteNode = TYSiteNode::safeDownCast(const_cast<TYElement*>(this->getParent()));
+        TYSiteNode* pSiteNode = dynamic_cast<TYSiteNode*>(const_cast<TYElement*>(this->getParent()));
         assert(pSiteNode);
         altitude = pSiteNode->getAltiEmprise();
         TYCourbeNiveau* pCourbeNiv = new TYCourbeNiveau(_emprise, altitude);
@@ -1114,7 +1120,7 @@ TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv) cons
     // Extraction des points des courbes de niveau.
     for (i = 0; i < nbCrbs; i++)
     {
-        LPTYCourbeNiveau pCourbeNiv = TYCourbeNiveau::safeDownCast(_listCrbNiv[i]->getElement());
+        TYCourbeNiveau* pCourbeNiv = dynamic_cast<TYCourbeNiveau*>(_listCrbNiv[i]->getElement());
         // Si la courbe de niveau possede une distMax propre, elle est prise en compte
         distMax = pCourbeNiv->getDistMax();
         altitude = pCourbeNiv->getAltitude();
@@ -1150,7 +1156,7 @@ TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv) cons
     // Extraction des points des plans d'eau.
     for (i = 0; i < _listPlanEau.size(); i++)
     {
-        LPTYPlanEau pPlanEau = TYPlanEau::safeDownCast(_listPlanEau[i]->getElement());
+        TYPlanEau* pPlanEau = dynamic_cast<TYPlanEau*>(_listPlanEau[i]->getElement());
 
         tabPt = pPlanEau->getCrbNiv()->getListPoints();
         altitude = pPlanEau->getAltitude();
@@ -1199,8 +1205,8 @@ bool TYTopographie::penteMoy(const OSegment3D& seg, OSegment3D& penteMoy) const
 
     // Recuperation des altitudes correspondant aux extremites du segment
     ptA._z = ptB._z = 0.0; // Mise a 0 au cas oi�� les points ne soient pas sur l'alti
-    bool resu = _pAltimetrie->updateAltitude(ptA);
-    resu &= _pAltimetrie->updateAltitude(ptB);
+	bool resu = _pAltimetrie._pObj->updateAltitude(ptA);
+	resu &= _pAltimetrie._pObj->updateAltitude(ptB);
 
     penteMoy = OSegment3D(ptA, ptB);
     return resu;
@@ -1222,7 +1228,7 @@ LPTYTerrain TYTopographie::solMoy(const OSegment3D& seg, const TYAtmosphere& atm
     tabPtrTerSeg = sols(seg);
     size_t nbSols = tabPtrTerSeg.size();
 
-    if (nbSols == 0) { return TYTerrain::safeDownCast(_listTerrain[_DefTerrainIdx]->getElement()); }
+    if (nbSols == 0) { return dynamic_cast<TYTerrain*>(_listTerrain[_DefTerrainIdx]->getElement()); }
 
     for (unsigned int  i = 0; i < nbSols; i++)
     {
@@ -1264,8 +1270,8 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
 
     while ((i < _listPlanEau.size()) && (pFound == NULL))
     {
-        pPlanEau = TYPlanEau::safeDownCast(_listPlanEau.at(i)->getElement());
-        const OMatrix &mat = _listPlanEau.at(i)->getMatrix();
+		pPlanEau = dynamic_cast<TYPlanEau*>(_listPlanEau.at(i)._pObj->getElement());
+		const OMatrix &mat = _listPlanEau.at(i)._pObj->getMatrix();
 
         nbPts = pPlanEau->getListPoints().size();
         if (!nbPts)
@@ -1307,7 +1313,7 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
 
     while ((i < nbTerrain) && (pFound == NULL))
     {
-        pTerrain = TYTerrain::safeDownCast(_pSortedTerrains[i]->getElement());
+        pTerrain = dynamic_cast<TYTerrain*>(_pSortedTerrains[i]->getElement());
         const OMatrix &mat = _pSortedTerrains[i]->getMatrix();
 
         nbPts = pTerrain->getListPoints().size();
@@ -1457,7 +1463,7 @@ void TYTopographie::updateSol(const TYAtmosphere& atmo)
 
     for (unsigned int i = 0 ; i < _listTerrain.size() ; i++)
     {
-        terrain = TYTerrain::safeDownCast(_listTerrain[i]->getElement());
+        terrain = dynamic_cast<TYTerrain*>(_listTerrain[i]->getElement());
         if (terrain->isA("TYPlanEau"))
         {
             continue;
@@ -1483,7 +1489,7 @@ double TYTopographie::getTopoSize(OSegment3D& segDiagonale)
     TYTabCourbeNiveauGeoNode::iterator ite;
     for (ite = _listCrbNiv.begin(); ite != _listCrbNiv.end(); ite++)
     {
-        TYCourbeNiveau* pCourbe = TYCourbeNiveau::safeDownCast((*ite)->getElement());
+        TYCourbeNiveau* pCourbe = dynamic_cast<TYCourbeNiveau*>((*ite)->getElement());
         TYTabPoint tabPoint = pCourbe->getListPoints();
 
         for (unsigned int i = 0 ; i < tabPoint.size(); i++)
@@ -1554,7 +1560,7 @@ void TYTopographie::setDefTerrain(int defTerrainIdx)
 {
     if (_listTerrain.size() == 0) { return; }
     //  assert( _listTerrain.size());
-    LPTYTerrain pTerrain = getDefTerrain(); //TYTerrain::safeDownCast(_listTerrain[_DefTerrainIdx]->getElement());
+    TYTerrain* pTerrain = getDefTerrain();
 
     LPTYSol pSol = getTerrain(defTerrainIdx)->getSol();
     if ((defTerrainIdx > 0) && (defTerrainIdx < _listTerrain.size()))
@@ -1573,7 +1579,7 @@ void TYTopographie::setDefTerrain(int defTerrainIdx)
 TYTerrain* TYTopographie::getDefTerrain()
 {
     assert(_DefTerrainIdx < _listTerrain.size()); // Securite
-    return TYTerrain::safeDownCast(_listTerrain[_DefTerrainIdx]->getElement());
+	return dynamic_cast<TYTerrain*>(_listTerrain[_DefTerrainIdx]._pObj->getElement());
 }
 
 void TYTopographie::sortTerrains()
@@ -1586,24 +1592,24 @@ void TYTopographie::sortTerrains()
     }
     // 2. Generation du tableau des terrains
     size_t nbTerrains = _listTerrain.size();
-    _pSortedTerrains = new LPTYTerrainGeoNode[nbTerrains];
+    _pSortedTerrains = new TYTerrainGeoNode*[nbTerrains];
 
     for (size_t i = 0; i < nbTerrains; i++)
     {
-        _pSortedTerrains[i] = _listTerrain[i];
+		_pSortedTerrains[i] = _listTerrain[i]._pObj;
     }
 
     // 3. Tri du tableau
-    qsort(_pSortedTerrains, nbTerrains, sizeof(LPTYTerrainGeoNode), compareTerrains);
+    qsort(_pSortedTerrains, nbTerrains, sizeof(TYTerrainGeoNode*), compareTerrains);
 }
 
 int compareTerrains(const void* elem1, const void* elem2)
 {
-    LPTYTerrainGeoNode pTerrainNode = *((LPTYTerrainGeoNode*) elem1);
-    TYTerrain* Terrain1 = TYTerrain::safeDownCast(pTerrainNode->getElement());
+    TYTerrainGeoNode *pTerrainNode = *((TYTerrainGeoNode**) elem1);
+    TYTerrain *Terrain1 = dynamic_cast<TYTerrain*>(pTerrainNode->getElement());
 
-    pTerrainNode = *((LPTYTerrainGeoNode*)  elem2);
-    TYTerrain* Terrain2 = TYTerrain::safeDownCast(pTerrainNode->getElement());
+    pTerrainNode = *((TYTerrainGeoNode**)  elem2);
+    TYTerrain* Terrain2 = dynamic_cast<TYTerrain*>(pTerrainNode->getElement());
 
     double res = Terrain1->surface() - Terrain2->surface();
     int sgn = int(res / fabs(res));

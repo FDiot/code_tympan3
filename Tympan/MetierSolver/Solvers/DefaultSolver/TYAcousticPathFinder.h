@@ -34,14 +34,14 @@ public:
     TYAcousticPathFinder(TYSolver& solver);
     virtual ~TYAcousticPathFinder();
 
-    virtual void computePath(TYSIntersection* tabIntersect, OSegment3D& rayon, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight, unsigned int nNbTrajet);
+    virtual void computePath(const TYSIntersection* tabIntersect, const OSegment3D& rayon, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight, unsigned int nNbTrajet);
     virtual void init(TYCalcul& calcul);
 
 private :
     // Reference sur le solver
     TYSolver& _solver;
 
-    bool computeParcoursLateraux(TYSIntersection* tabIntersect, OSegment3D& rayon, const bool& dessus, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight, unsigned int nNbTrajet) const;
+    bool computeParcoursLateraux(const TYSIntersection* tabIntersect, const OSegment3D& rayon, const bool& dessus, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight, unsigned int nNbTrajet) const;
 
     // Faut il calculer les trajets horizontaux
     bool _bCalcTrajetHorizontaux;

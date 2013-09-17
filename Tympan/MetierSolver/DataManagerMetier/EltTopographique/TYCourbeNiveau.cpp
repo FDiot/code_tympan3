@@ -255,10 +255,6 @@ void TYCourbeNiveau::applyAlitudeToPoints()
     }
 }
 
-TYTabPoint TYCourbeNiveau::getPointsCheckDistance()
-{
-    return TYPoint::checkPointsMaxDistance(_listPoints);
-}
 
 /*static*/ double TYCourbeNiveau::setDefaultDistMax()
 {

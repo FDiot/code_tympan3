@@ -357,8 +357,7 @@ void TYAcousticSurface::setIsRayonnant(bool rayonnant, bool recursif)
     {
         // Si une face rayonne son parent rayonne
         TYAcousticSurfaceNode* pSurfNode = TYAcousticSurfaceNode::safeDownCast(this->getParent());
-        assert(pSurfNode);
-        pSurfNode->setIsRayonnant(rayonnant, recursif);
+		if (pSurfNode) { pSurfNode->setIsRayonnant(rayonnant, recursif); }
     }
 }
 

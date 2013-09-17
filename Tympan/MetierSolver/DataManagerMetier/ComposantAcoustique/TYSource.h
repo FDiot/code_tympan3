@@ -80,12 +80,12 @@ public:
     /**
      * Set/Get du spectre.
      */
-    virtual TYSpectre* getSpectre(int regime = -1) const { return _pSpectre; }
+	virtual TYSpectre* getSpectre(int regime = -1) const { return _pSpectre._pObj; }
 
     /**
      * Get/Set du Spectre (independemment d'un eventuel attenuateur) - utilise par le widget -
      */
-    virtual TYSpectre* getCurrentSpectre() const { return _pSpectre ; }
+	virtual TYSpectre* getCurrentSpectre() const { return _pSpectre._pObj ; }
 
 
     /**

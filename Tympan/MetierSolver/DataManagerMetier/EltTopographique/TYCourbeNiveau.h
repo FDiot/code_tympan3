@@ -150,12 +150,6 @@ public:
     void applyAlitudeToPoints();
 
     /**
-     * Retourn un nouveau tableau de points contenant en plus des points d'origine
-     * de nouveaux points entre les points trop eloignes.
-     */
-    TYTabPoint getPointsCheckDistance();
-
-    /**
      * Fonction d'initialisation de la valeur de distance max par defaut pour les courbes
      */
     static double setDefaultDistMax();

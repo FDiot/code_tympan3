@@ -870,7 +870,7 @@ bool TYAcousticBox::findAcousticSurface(const TYAcousticSurface* pAccSurf, OMatr
 
         for (unsigned int j = 0; j < tabTmp.size(); j++)
         {
-            if (TYAcousticSurface::safeDownCast(tabTmp[j]->getElement()) == pAccSurf)
+			if (TYAcousticSurface::safeDownCast(tabTmp[j]._pObj->getElement()) == pAccSurf)
             {
                 if (pMatrix)
                 {

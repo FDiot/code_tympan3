@@ -1481,6 +1481,8 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
         pSite->setRoot(false); // Le site ajoute n'est pas racine
 
         pSiteNode->addSiteNode(pSite);
+		if (_pCurrentCalcul) { _pCurrentCalcul->getCalculElements(pSite); }
+
         pSiteNode->updateGraphicTree();
         pSiteNode->setIsGeometryModified(true);
     }
