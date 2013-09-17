@@ -11,7 +11,7 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/SolverDataModelBuilder.hpp"
+#include "Tympan/MetierSolver/DataExchange/SolverDataModelBuilder.hpp"
 
 
 using std::cout;
