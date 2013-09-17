@@ -19,6 +19,51 @@ namespace tympan
 /// XXX \todo Add the entity 'Atmosphere' with attr: pression, temperature,
 /// hygrometry (\note can find these values in the TYCalcul instead of TYSite).
 
+class AcousticMaterialBase:
+    public virtual BaseEntity
+{
+
+}; // class AcousticMaterialBase
+
+class AcousticBuildingMaterial:
+    public virtual BaseEntity, public AcousticMaterialBase
+{
+public:
+    AcousticBuildingMaterial();
+    AcousticBuildingMaterial(const string& name_);
+    virtual ~AcousticBuildingMaterial() {};
+
+    string name;
+};
+
+class AcousticGroundMaterial:
+    public virtual BaseEntity, public AcousticMaterialBase
+{
+public:
+    AcousticGroundMaterial(const string& name_, double resistivity_);
+    virtual ~AcousticGroundMaterial() {};
+
+    string name;
+    /// XXX \todo put SI unit.
+    double resistivity;
+};
+
+
+class AcousticTriangle :
+    public virtual BaseEntity
+{
+public:
+    AcousticTriangle(node_idx n1, node_idx n2, node_idx n3 );
+
+    node_idx n[3];
+
+    shared_ptr<AcousticMaterialBase> made_of;
+    binary_uuid uuid;
+};
+
+typedef std::deque<AcousticTriangle> triangle_pool_t;
+typedef size_t triangle_idx;
+
 class DiffractionEdge:
     public virtual BaseEntity
 {
@@ -33,28 +78,6 @@ public:
 };
 
 
-class AcousticBuildingMaterial:
-    public virtual BaseEntity
-{
-public:
-    AcousticBuildingMaterial();
-    AcousticBuildingMaterial(const string& name_);
-    virtual ~AcousticBuildingMaterial() {};
-
-    string name;
-};
-
-class AcousticGroundMaterial:
-    public virtual BaseEntity
-{
-public:
-    AcousticGroundMaterial(const string& name_, double resistivity_);
-    virtual ~AcousticGroundMaterial() {};
-
-    string name;
-    /// XXX \todo put SI unit.
-    double resistivity;
-};
 
 // XXX Add some method to easy use & get freq. and spectrum attributes. See
 // class \c OSpectre.

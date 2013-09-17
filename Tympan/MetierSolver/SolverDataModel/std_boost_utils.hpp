@@ -35,6 +35,7 @@ using std::string;
 #include <set>
 
 #include <boost/tr1/unordered_set.hpp>
+#include "boost/tuple/tuple.hpp"
 
 // Import some names which could come either from std:: std::tr1 or boost:: into tympan::
 namespace tympan {
