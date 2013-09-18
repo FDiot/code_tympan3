@@ -59,7 +59,6 @@ TYMaillageWidget::TYMaillageWidget(TYMaillage* pElement, QWidget* _pParent /*=NU
 {
     Q_ASSERT(pElement);
     _pElement = pElement;
-    bool ok;
     _dataFreq = 16.0;
 
     _elmW = new TYElementWidget(pElement, this);

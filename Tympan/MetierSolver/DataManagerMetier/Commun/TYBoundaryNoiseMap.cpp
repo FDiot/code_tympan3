@@ -140,7 +140,7 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
     bool spectreIsOk = false;
     bool nbPointsIsOk = false;
 
-    unsigned int i, j;
+    unsigned int i;
     int nbPoints = 0;
     TYPoint pt;
 

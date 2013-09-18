@@ -159,6 +159,9 @@ void TYElementListItem::updateContent()
 
             pParentItem = pParentItem->parent();
         }
+
+		// Mise à jour des enfant aussi ...
+		updateChilds();
     }
 }
 
@@ -226,7 +229,7 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
 
             }
         }
-        else if (_pElement->isInCurrentCalcul() != state)
+        else if ( _pCurrentCalcul->isInSelection(_pElement) != state )
         {
             if (getTYApp()->getCalculManager()->askForResetResultat())
             {
@@ -235,13 +238,26 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
                     _pElement->setIsAcousticModified(true);
                     _pElement->getParent()->setIsAcousticModified(true);
                     _pCurrentCalcul->addToSelection(_pElement, true);
+
+
                 }
                 else
                 {
                     _pCurrentCalcul->remToSelection(_pElement, true);
                 }
 
-                if (UpdateModelers)
+				if ( _pElement->isA("TYSiteNode") )
+				{
+					TYSiteNode* pSite = dynamic_cast<TYSiteNode*>( _pElement.getRealPointer() );
+					LPTYCalcul pCalc = NULL;
+					if (getTYApp()->getCurProjet() && pSite)
+					{
+							pCalc = getTYApp()->getCurProjet()->getCurrentCalcul();
+							if (pCalc) { pCalc->getCalculElements(pSite); }
+					}
+				}
+				
+				if (UpdateModelers)
                 {
                     if (_pElement->getParent())
                     {
@@ -276,4 +292,30 @@ void TYElementListItem::setCheckState(int column, Qt::CheckState state)
 
         QTreeWidgetItem::setCheckState(column, state);
     }
+}
+
+void TYElementListItem::updateChilds()
+{
+	int  nbchilds = this->childCount();
+	for (int i = 0; i < nbchilds; i++)
+	{
+		TYElementListItem *childItem = (TYElementListItem*) child(i);
+        TYElement* pChkElt = childItem->getElement();
+		bool bInCurrentCalcul = false;
+        if (pChkElt && childItem->isCheckable())
+        {
+            if (_pCurrentCalcul)
+            {
+                bInCurrentCalcul = _pCurrentCalcul->isInSelection(pChkElt);
+            }
+            else
+            {
+                bInCurrentCalcul = pChkElt->isInCurrentCalcul();
+            }
+
+            childItem->QTreeWidgetItem::setCheckState(0, bInCurrentCalcul ? Qt::Checked : Qt::Unchecked);
+		}
+
+		childItem->updateChilds();
+	}
 }

@@ -678,7 +678,7 @@ bool TYAcousticCylinder::findAcousticSurface(const TYAcousticSurface* pAccSurf, 
 {
     bool ret = false;
 
-    if (((LPTYAcousticSurface&) _pCircBottom == pAccSurf) || ((LPTYAcousticSurface&) _pCircTop == pAccSurf))
+	if (((TYAcousticSurface*) _pCircBottom._pObj == pAccSurf) || ((TYAcousticSurface*) _pCircTop._pObj == pAccSurf))
     {
         // Pas de changement de repere pour ces surfaces
         ret = true;

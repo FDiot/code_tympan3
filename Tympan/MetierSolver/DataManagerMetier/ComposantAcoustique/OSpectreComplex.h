@@ -41,7 +41,12 @@ public:
      */
     OSpectreComplex(const double &defModule = TY_SPECTRE_DEFAULT_VALUE, const double &defPhase = 0.0);
 
-    /**
+     /**
+     * Constructeur par defaut avec une valeur par defaut
+     */
+    OSpectreComplex(const TYComplex& defaultValue);
+
+	/**
      * Constructeur par copie.
      */
     OSpectreComplex(const OSpectreComplex& other);

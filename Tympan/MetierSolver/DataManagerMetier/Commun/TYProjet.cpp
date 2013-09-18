@@ -24,6 +24,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
+#include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/Tools/OMessageManager.h"
 
 #if defined(WIN32)
@@ -39,6 +40,8 @@ static char THIS_FILE[] = __FILE__;
 
 
 OPROTOINST(TYProjet);
+
+#define TR(id) OLocalizator::getString("OMessageManager", (id))
 
 bool TYProjet::gSaveValues = true;
 
@@ -445,7 +448,7 @@ bool TYProjet::updateAltiPointControle(TYPointControl* pPtControl, const TYAltim
     assert(pPtControl);
     assert(pAlti);
 
-    bool modified = false;
+    bool modified = true;
 
     // On va modifier le point de contrele (l'altitude seulement)
     // (Utile pour l'update du GraphicObject du maillage)
@@ -459,14 +462,12 @@ bool TYProjet::updateAltiPointControle(TYPointControl* pPtControl, const TYAltim
     pt._z = 0.0;
 
     // Recherche de l'altitude
-    pAlti->updateAltitude(pt);
+    modified = pAlti->updateAltitude(pt);
 
     // Ajout de l'offset en Z
     pt._z += pPtControl->getHauteur();
 
     pPtControl->_z = pt._z;
-
-    modified = true;
 
     // Le point est maintenant up to date
     pPtControl->setIsGeometryModified(false);
@@ -490,14 +491,18 @@ bool TYProjet::updateAltiRecepteurs(const TYAltimetrie* pAlti)
     unsigned int i;
     for (i = 0; i < _pointsControl.size(); i++)
     {
-        modified = updateAltiPointControle(getPointControl(i), pAlti);
+        modified &= updateAltiPointControle(getPointControl(i), pAlti);
     }
 
     // Mise a jour de l'altitude pour les recepteurs du calcul
     getCurrentCalcul()->updateAltiRecepteurs(pAlti);
 
     // Done
-    if (modified)
+	if (!modified) 
+	{ 
+		OMessageManager::get()->info(TR("msg_pbalti")); 
+	}
+	else
     {
         setIsGeometryModified(true);
     }
