@@ -2030,16 +2030,16 @@ bool TYEtage::findAcousticSurface(const TYAcousticSurface* pAccSurf, OMatrix* pM
     for (unsigned int i = 0; (i < _tabMur.size()) && !ret; i++)
     {
         // Mur elements pour ce mur
-        TYTabAcousticSurfaceGeoNode& tabTmp = TYMur::safeDownCast(_tabMur[i]->getElement())->getTabAcousticSurf();
+		TYTabAcousticSurfaceGeoNode& tabTmp = TYMur::safeDownCast(_tabMur[i]._pObj->getElement())->getTabAcousticSurf();
 
         for (unsigned int j = 0; j < tabTmp.size(); j++)
         {
-            if (TYAcousticSurface::safeDownCast(tabTmp[j]->getElement()) == pAccSurf)
+			if (TYAcousticSurface::safeDownCast(tabTmp[j]._pObj->getElement()) == pAccSurf)
             {
                 if (pMatrix)
                 {
                     // Mise a jour de la matrice
-                    *pMatrix = *pMatrix * _tabMur[i]->getMatrix() * tabTmp[j]->getMatrix();
+					*pMatrix = *pMatrix * _tabMur[i]._pObj->getMatrix() * tabTmp[j]._pObj->getMatrix();
                 }
 
                 // Surf trouvee

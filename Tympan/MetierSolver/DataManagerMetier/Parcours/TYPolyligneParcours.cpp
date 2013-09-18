@@ -26,7 +26,7 @@
 
 #include "Tympan/MetierSolver/ToolsMetier/GlobalMacros.h"
 #include <stdio.h>
-#include <assert.h>
+//#include <assert.h>
 
 TYPolyligneParcours::TYPolyligneParcours()
 {
@@ -56,30 +56,30 @@ void TYPolyligneParcours::desallouer()
 void TYPolyligneParcours::ajouteSegment(TYPointParcours* p1, TYPointParcours* p2)
 {
     //Pour l'instant, cette fonction est tres simplifiee (on considere qu'on n'a pas encore de points):
-    assert(_nNbPoint == 0);
-    assert(_PtrPoints == NULL);
+    //assert(_nNbPoint == 0);
+    //assert(_PtrPoints == NULL);
     allouer(2);
     ajoutePoint(0, p1);
     ajoutePoint(1, p2);
     bool bverifieNaturePolylignes = verifieNaturePolylignes();
-    assert(bverifieNaturePolylignes);
+    //assert(bverifieNaturePolylignes);
 }
 
 bool TYPolyligneParcours::isInfra()
 {
-    assert(_nNbPoint == 2);
+    //assert(_nNbPoint == 2);
     return (_PtrPoints[0]->isInfra && _PtrPoints[1]->isInfra);
 }
 
 bool TYPolyligneParcours::isEcran()
 {
-    assert(_nNbPoint == 2);
+    //assert(_nNbPoint == 2);
     return (_PtrPoints[0]->isEcran && _PtrPoints[1]->isEcran);
 }
 
 bool TYPolyligneParcours::verifieNaturePolylignes()
 {
-    assert(_nNbPoint == 2);
+    //assert(_nNbPoint == 2);
     bool isInfra0 = _PtrPoints[0]->isInfra;
     bool isInfra1 = _PtrPoints[1]->isInfra;
     bool isEcran0 = _PtrPoints[0]->isEcran;
@@ -101,7 +101,7 @@ bool TYPolyligneParcours::verifieNaturePolylignes()
 
 bool TYPolyligneParcours::estSurUnParcourFermee()
 {
-    assert(_nNbPoint == 2);
+    //assert(_nNbPoint == 2);
     if (_PolyligneP1 == _PolyligneP0 == NULL)
     {
         return estFermee();
@@ -124,7 +124,7 @@ bool TYPolyligneParcours::estSurUnParcourFermee()
 int TYPolyligneParcours::indexePointSuivant(int IndexPoint, TYPolyligneParcours*& PolyligneSuivante)
 {
     //Verifications
-    assert(_nNbPoint == 2);
+    //assert(_nNbPoint == 2);
     bool bAssert = !polylignesVoisinesPointentSurLaMemePolyligne();
     if (bAssert)
     {
@@ -132,7 +132,7 @@ int TYPolyligneParcours::indexePointSuivant(int IndexPoint, TYPolyligneParcours*
     }
     //Cherchons l'index du prochain point; il ne doit pas etre egal a l'indexe courant
     int IndexPointSuivant = autrePointDuSegment(IndexPoint);
-    assert(IndexPointSuivant >= 0);
+    //assert(IndexPointSuivant >= 0);
     //Trouver la polyligne suivante
     PolyligneSuivante = polyligneSuivante(IndexPointSuivant);//point suivant, partage par la prochaine polyligne
 
@@ -141,7 +141,7 @@ int TYPolyligneParcours::indexePointSuivant(int IndexPoint, TYPolyligneParcours*
 
 bool TYPolyligneParcours::polylignesVoisinesPointentSurLaMemePolyligne()
 {
-    assert(_nNbPoint == 2); //_PolyligneP0 & _PolyligneP1 sont relatives aux points P0 & P1
+    //assert(_nNbPoint == 2); //_PolyligneP0 & _PolyligneP1 sont relatives aux points P0 & P1
     if (_PolyligneP0 == _PolyligneP1)
     {
         if (_PolyligneP0 != NULL)
@@ -154,7 +154,7 @@ bool TYPolyligneParcours::polylignesVoisinesPointentSurLaMemePolyligne()
 
 int TYPolyligneParcours::autrePointDuSegment(int    IndexPoint)
 {
-    assert(_nNbPoint == 2); //_PolyligneP0 & _PolyligneP1 sont relatives aux points P0 & P1
+    //assert(_nNbPoint == 2); //_PolyligneP0 & _PolyligneP1 sont relatives aux points P0 & P1
     if (IndexPoint == _PtrPoints[0]->Identifiant)
     {
         return _PtrPoints[1]->Identifiant;
@@ -196,7 +196,7 @@ bool TYPolyligneParcours::estFermee()
 
 int TYPolyligneParcours::indexePoint(int i)
 {
-    assert(_nNbPoint > 0);
+    //assert(_nNbPoint > 0);
     return _PtrPoints[i]->Identifiant;
 }
 

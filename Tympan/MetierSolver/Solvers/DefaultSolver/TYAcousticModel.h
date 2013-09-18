@@ -36,7 +36,7 @@ public:
     TYAcousticModel(TYSolver& solver);
     virtual ~TYAcousticModel();
 
-    virtual void compute(TYSIntersection* tabIntersect, OSegment3D& rayon, TYTrajet& trajet, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight);
+    virtual void compute(const TYSIntersection* tabIntersect, const OSegment3D& rayon, TYTrajet& trajet, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight);
     void init(const TYSiteNode& site, const TYCalcul& calcul);
 
     /**
@@ -66,7 +66,7 @@ public:
      * @param tabChemin La liste des chemins generes par la reflexion.
      * @param tabFaces Ensemble des faces du site.
      */
-    void computeCheminReflexion(TYSIntersection* tabIntersect, const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const;
+    void computeCheminReflexion(const TYSIntersection* tabIntersect, const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const;
 
     /**
      * Calcule les spectres d'attenuation caracteristiques de la vegetation
@@ -160,12 +160,12 @@ public:
     /**
      * Ajoute les chemins calcules au tableau des chemins du trajet
      */
-    void addCheminToTrajet(TYTabChemin& TabChemin, TYTrajet& trajet) const;
+    void addCheminToTrajet(const TYTabChemin& TabChemin, TYTrajet& trajet) const;
 
     /**
      *
      */
-    void addCheminDirectToTrajet(TYTabChemin& TabChemin, TYTrajet& trajet) const;
+    void addCheminDirectToTrajet(const TYTabChemin& TabChemin, TYTrajet& trajet) const;
 
     /**
      * Ajoute le trajet direct a chacun des chemins.
@@ -198,7 +198,7 @@ private:
     TYAtmosphere* _pAtmo;
     TYTopographie* _pTopographie;
     OSpectre _lambda;
-    OSpectre _absoNulle;
+    OSpectreComplex _absoNulle;
 
 
     // Reference sur le solver

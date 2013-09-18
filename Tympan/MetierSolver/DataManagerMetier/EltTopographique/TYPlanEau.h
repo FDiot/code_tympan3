@@ -110,11 +110,11 @@ public:
     /**
      * Set/Get de la liste de points.
      */
-    virtual TYTabPoint& getListPoints() { return _pCrbNiv->getListPoints(); }
+	virtual TYTabPoint& getListPoints() { return _pCrbNiv._pObj->getListPoints(); }
     /**
      * Set/Get de la liste de points.
      */
-    virtual const TYTabPoint& getListPoints() const { return _pCrbNiv->getListPoints(); }
+	virtual const TYTabPoint& getListPoints() const { return _pCrbNiv._pObj->getListPoints(); }
     /**
      * Set/Get de la liste de points.
      */

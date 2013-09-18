@@ -34,6 +34,7 @@
 
 #include "Tympan/Tools/TYProgressManager.h"
 
+#include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/Tools/OMessageManager.h"
 
 #if defined(WIN32)
@@ -50,6 +51,7 @@ static char THIS_FILE[] = __FILE__;
 
 OPROTOINST(TYCalcul);
 
+#define TR(id) OLocalizator::getString("OMessageManager", (id))
 
 TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
 {
@@ -1231,13 +1233,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
 
 	if (!bNoPbAlti) // Certains point pas altimetrises
 	{
-		OMessageManager::get()->info("************************************************************");
-		OMessageManager::get()->info("*                    ATTENTION !                           *");
-		OMessageManager::get()->info("* Certains récepteurs sont hors de la zone altimétrisée.   *");
-		OMessageManager::get()->info("* Leur altitude est fixée à -10000 m                       *");
-		OMessageManager::get()->info("* Veuillez modifier la cartographie ou la topographie      *");
-		OMessageManager::get()->info("* pour qu'ils puissent être correctement altimétrisés      *");
-		OMessageManager::get()->info("************************************************************");
+		OMessageManager::get()->info(TR("msg_pbalti"));
 	}
 
 
@@ -1619,8 +1615,6 @@ bool TYCalcul::go()
         pInfos = NULL;
 
 		TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(getSolverId());
-
-       	if (_maillages.size()>0) { _nbThread = 1; } // Security big bumber of points causes fails during computing in multithread
 
 		ret = pSolver->solve(*pMergeSite, *this);
 
