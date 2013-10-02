@@ -28,7 +28,7 @@ needs_sphinx = '1.0'
 extensions = ['sphinx.ext.todo']
 
 # This option, False by default, switch on the display of ToDo (lists)
-todo_include_todos = True
+todo_include_todos = False
 
 # For MathJax from
 # https://bitbucket.org/kevindunn/sphinx-extension-mathjax/wiki/Home

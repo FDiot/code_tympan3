@@ -4,7 +4,7 @@
  Tools
 =======
 
-:authors: Anthony Truchet <anthony.truchet@logilab.fr>
+.. :authors: Anthony Truchet <anthony.truchet@logilab.fr>
           Damien Garaud <damien.garaud@logilab.fr>
 
 This section provides some introduction to using third-party tools or

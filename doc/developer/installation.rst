@@ -12,14 +12,11 @@ Overview
 Downloading
 -----------
 
-For now, the source code is available from a restricted access
-Mercurial_ repository [#]_ and the development is handled to an
-associated forge [#]_.
+For now, you can download the source_ code of last version of Code_TYMPAN. 
+A Mercurial_ repository will be soon available on Bitbucket_.
 
-.. todo:: link to the future project public forge and repository
-
-.. [#] https://extranet.logilab.fr/static/TYMPAN/hg/CodeTympan
-.. [#] https://extranet.logilab.fr/project/CodeTympan/
+.. _source: http://code-tympan.org/index.php/download/download-code-tympan-3-9/summary/1-download-code-tympan-software/4-download-code-tympan-3-9-sources
+.. _Bitbucket: https://bitbucket.org/
 .. _Mercurial: http://mercurial.selenic.com/
 
 The project also requires some third party dependencies (see below for
