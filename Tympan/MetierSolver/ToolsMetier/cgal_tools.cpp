@@ -58,7 +58,7 @@ const PolygonTriangulator::Vertex_handle& PolygonTriangulator::vertex_handle(uns
 
 void PolygonTriangulator::exportTriangles(std::deque<PolygonTriangulator::Triangle>& triangles) const
 {
-    assert(triangles.size()==0 && 'triangles output arguments expected to be empty');
+    assert(triangles.size()==0 && "triangles output arguments expected to be empty");
     for(CDT::Finite_faces_iterator it = cdt.finite_faces_begin();
         it !=  cdt.finite_faces_end(); ++ it)
     {
@@ -80,7 +80,7 @@ void PolygonTriangulator::exportTriangles(std::deque<PolygonTriangulator::Triang
 void PolygonTriangulator::exportTrianglesIndices(std::deque<Tri_indices>& triangles) const
 {
 
-    assert(triangles.size()==0 && 'triangles output arguments expected to be empty');
+    assert(triangles.size()==0 && "triangles output arguments expected to be empty");
     for(CDT::Finite_faces_iterator it = cdt.finite_faces_begin();
         it !=  cdt.finite_faces_end(); ++ it)
     {

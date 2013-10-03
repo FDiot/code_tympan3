@@ -423,7 +423,7 @@ TYGeometryNode* TYGeometryNode::GetGeoNode(TYElement* pElement)
     return NULL;
 }
 
-TYGeometryNode* TYGeometryNode::GetGeoNodeParent()
+TYGeometryNode* TYGeometryNode::GetGeoNodeParent() const
 {
     //1. Element pointe par le GeoNode:
     TYElement* pElement = getElement();
@@ -459,7 +459,7 @@ void TYGeometryNode::GetGeoNodeParentList(TYListPtrGeoNode& GetGeoNodeParents)
     }
 }
 
-OMatrix TYGeometryNode::localToGlobal()
+OMatrix TYGeometryNode::localToGlobal() const 
 {
     TYGeometryNode* pParent = GetGeoNodeParent();
     OMatrix matrix = _matrix;
@@ -473,17 +473,17 @@ OMatrix TYGeometryNode::localToGlobal()
     return matrix;
 }
 
-OMatrix TYGeometryNode::globalToLocal()
+OMatrix TYGeometryNode::globalToLocal() const 
 {
     return localToGlobal().getInvert();
 }
 
-OCoord3D TYGeometryNode::localToGlobal(const OCoord3D& point)
+OCoord3D TYGeometryNode::localToGlobal(const OCoord3D& point) const
 {
     return localToGlobal() * point;
 }
 
-OCoord3D TYGeometryNode::globalToLocal(const OCoord3D& point)
+OCoord3D TYGeometryNode::globalToLocal(const OCoord3D& point) const 
 {
     return globalToLocal() * point;
 }
