@@ -25,13 +25,12 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/Tools/OMessageManager.h"
-#include <complex>
 
-OSpectreComplex::OSpectreComplex(const double &defModule, const double &defPhase) : OSpectre(defModule)
+OSpectreComplex::OSpectreComplex() : OSpectre()
 {
     for (unsigned int i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        _phase[i] = defPhase;
+        _phase[i] = 0.0;
     }
 }
 
@@ -110,104 +109,10 @@ OSpectreComplex OSpectreComplex::operator + (const OSpectreComplex& spectre) con
     s._etat = _etat;
     s._type = _type;
 
-	// A complex number is defined as z = a + ib
-	std::complex<double> z1; // This is the original one
-	std::complex<double> z2; // This is the one we add
-	std::complex<double> z3; // This is the returned complex number i.e. the result
-
     for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-		z1 = std::polar(_module[i], _phase[i]);
-		z2 = std::polar(spectre._module[i], spectre._phase[i]);
-		z3 = z1 + z2;
-
-		s._module[i] = std::abs(z3);
-		s._phase[i] = std::arg(z3);
-    }
-    return s;
-}
-
-OSpectreComplex OSpectreComplex::operator * (const OSpectreComplex& spectre) const
-{
-	// Produit de deux complexes en module/phase
-	//  = produit des modules et somme des phases
-    OSpectreComplex s;
-
-    // Recopie de l'empreinte du spectre
-    s._etat = _etat;
-    s._type = _type;
-
-    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-        s._module[i] = _module[i] * spectre._module[i];
-        s._phase[i] = _phase[i] + spectre._phase[i];
-    }
-    return s;
-}
-
-OSpectreComplex OSpectreComplex::operator * (const OSpectre& spectre) const
-{
-	// Produit de deux complexes en module/phase
-	//  = produit des modules et somme des phases
-    OSpectreComplex s;
-
-    // Recopie de l'empreinte du spectre
-    s._etat = _etat;
-    s._type = _type;
-
-    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-		s._module[i] = _module[i] * (spectre.getTabValReel())[i];
-        s._phase[i] = _phase[i];
-    }
-    return s;	
-}
-
-OSpectreComplex OSpectreComplex::operator * (const double& coefficient) const
-{
-    OSpectreComplex s;
-
-    // Recopie de l'empreinte du spectre
-    s._etat = _etat; s._type = _type;
-
-    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-        s._module[i] = _module[i] * coefficient;
-        s._phase[i] = _phase[i];// * coefficient;
-    }
-
-    return s;
-}
-
-OSpectreComplex OSpectreComplex::multi(const double& coefficient) const
-{
-    OSpectreComplex s;
-
-    // Recopie de l'empreinte du spectre
-    s._etat = _etat; s._type = _type;
-
-    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-        s._module[i] = _module[i] * coefficient;
-        s._phase[i] = _phase[i]; // * coefficient;
-    }
-
-    return s;
-}
-OSpectreComplex OSpectreComplex::operator / (const OSpectreComplex& spectre) const
-{
-	// Produit de deux complexes en module/phase
-	//  = rapport des modules et difference des phases
-    OSpectreComplex s;
-
-    // Recopie de l'empreinte du spectre
-    s._etat = _etat;
-    s._type = _type;
-
-    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-        s._module[i] = _module[i] / spectre._module[i];
-        s._phase[i] = _phase[i] - spectre._phase[i];
+        s._module[i] = this->_module[i] + spectre._module[i];
+        s._phase[i] = this->_phase[i] + spectre._phase[i];
     }
     return s;
 }
@@ -332,21 +237,6 @@ OSpectreComplex OSpectreComplex::sumComplex(const OSpectreComplex& spectre) cons
     {
         s._module[i] = this->_module[i] + spectre._module[i];
         s._phase[i] = this->_phase[i] + spectre._phase[i];
-    }
-    return s;
-}
-
-OSpectreComplex OSpectreComplex::sumComplex(const OSpectre& spectre) const
-{
-    OSpectreComplex s;
-
-    // Recopie de l'empreinte du spectre
-    s._etat = _etat;
-    s._type = _type;
-
-    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-		s._module[i] = this->_module[i] + spectre.getTabValReel()[i];
     }
     return s;
 }

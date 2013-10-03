@@ -39,7 +39,7 @@ public:
     /**
      * Constructeur par defaut.
      */
-    OSpectreComplex(const double &defModule = TY_SPECTRE_DEFAULT_VALUE, const double &defPhase = 0.0);
+    OSpectreComplex();
 
      /**
      * Constructeur par defaut avec une valeur par defaut
@@ -67,39 +67,24 @@ public:
     virtual ~OSpectreComplex();
 
     /// Operateur d'affectation
-    virtual OSpectreComplex& operator= (const OSpectreComplex& other);
+    OSpectreComplex& operator= (const OSpectreComplex& other);
 
     /// Operateur d'egalite
-    virtual bool operator== (const OSpectreComplex& other) const;
+    bool operator== (const OSpectreComplex& other) const;
 
     /// Operateur d'inegalite
-    virtual bool operator != (const OSpectreComplex& other) const;
+    bool operator != (const OSpectreComplex& other) const;
 
     /// Somme de deux spectres complexes
-    virtual OSpectreComplex operator + (const OSpectreComplex& spectre) const;
-
-	// Produit de deux spectres complexesen module/phase
-    OSpectreComplex operator * (const OSpectreComplex& spectre) const;
-
-	// Computes the operation between a complex spectrum times a spectrum
-    OSpectreComplex operator * (const OSpectre& spectre) const;
-
-	/// Operateur de multiplication d'un spectre complexe par un coeff de type double
-    OSpectreComplex operator * (const double& coefficient) const;
-
-    /// Multiplication d'un spectre complexe par un scalaire.
-    OSpectreComplex multi(const double& coefficient) const;
-
-	// Rapport de deux spectres complexes en module/phase
-    virtual OSpectreComplex operator / (const OSpectreComplex& spectre) const;
+    OSpectreComplex operator + (const OSpectreComplex& spectre) const;
 
     /// Set/Get du tableau des valeurs reelles
     virtual double* getTabValReel() { return _module; }
     virtual const double* getTabValReel() const {return _module; }
 
     /// Set/Get du tableau des valeurs imaginaires
-    virtual double* getTabValImag() { return _phase; }
-    virtual const double* getTabValImag() const { return _phase; }
+    double* getTabValImag() { return _phase; }
+    const double* getTabValImag() const { return _phase; }
 
     /**
      * Attribution d'une valeur complexe au tableau Frequence/Complexe.
@@ -127,43 +112,49 @@ public:
      *
      * @return La valeur imaginaire du complexe correspondant.
      */
-    virtual double getValueImag(float freq, bool* pValid = 0);
+    double getValueImag(float freq, bool* pValid = 0);
 
     /**
      * Attribution de la phase a un spectre.
      * @param Un OSpectre.
      */
-    virtual void setPhase(const OSpectre& spectre);
+    void setPhase(const OSpectre& spectre);
 
     /**
      * Attribution de la phase a un spectre.
      * @param Un double.
      */
-    virtual void setPhase(const double& valeur = 0.0);
+    void setPhase(const double& valeur = 0.0);
 
     /**
      * Lecture de la phase d'un spectre.
      * @return Un TYSpectre.
      */
-    virtual OSpectre getPhase() const;
+    OSpectre getPhase() const;
 
     /**
     * \fn OSpectre getModule() const
     * \brief get du module du spectre
     */
-    virtual OSpectre getModule() const;
+    OSpectre getModule() const;
 
     /// Conversion en module/phase
-    virtual OSpectreComplex toModulePhase() const;
+    OSpectreComplex toModulePhase() const;
 
     /// Conversion en module/phase
-    virtual OSpectreComplex toReelImaginaire() const;
+    OSpectreComplex toReelImaginaire() const;
 
     /// Somme le spectre en complexe avec un autre spectre complexe
-    virtual OSpectreComplex sumComplex(const OSpectreComplex& spectre) const;
+    OSpectreComplex sumComplex(const OSpectreComplex& spectre) const;
 
     /// Somme d'un spectre complexe avec un spectre "normal"
-    virtual OSpectreComplex sumComplex(const OSpectre& spectre) const;
+    OSpectreComplex sumComplex(const OSpectre& spectre) const;
+
+    /// Sommation energetique de deux spectres en 1/3 d'octave.
+    TYSpectre sumdB(const TYSpectre& spectre) const;
+
+    /// Soustraction energetique de deux spectres en 1/3 d'octave.
+    TYSpectre substdB(const TYSpectre& spectre) const;
 
     // === FONCTIONS MEMBRES STATIQUES
 

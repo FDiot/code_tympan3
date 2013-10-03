@@ -84,9 +84,14 @@ class OSpectre
     // Methodes
 public:
     /**
+     * Constructeur par defaut.
+     */
+    OSpectre();
+
+    /**
      * Constructeur par defaut avec une valeur par defaut
      */
-    OSpectre(const double &defaultValue = TY_SPECTRE_DEFAULT_VALUE);
+    OSpectre(double defaultValue);
 
     /**
      * Constructeur a partir d'un tableau de valeurs (besoin pour harmonoise)
@@ -116,10 +121,10 @@ public:
     virtual bool operator != (const OSpectre& other) const;
 
     /// operateur de multiplication par un Spectre
-    OSpectre operator * (const OSpectre& spectre) const;
+    virtual OSpectre operator * (const OSpectre& spectre) const;
 
     /// operateur de multiplication par un coeff de type double
-    OSpectre operator * (const double& coefficient) const;
+    virtual OSpectre operator * (const double& coefficient) const;
 
     /// Operateur d'addition pour ajouter une valeur constante a l'ensemble du spectre
     virtual OSpectre operator + (const double& valeur) const;
@@ -154,8 +159,9 @@ public:
     virtual const TYSpectreEtat getEtat() {return _etat;};
 
     /// Force l'etat du spectre (a utiliser avec prudence ...)
-    virtual void setEtat(TYSpectreEtat etat) { _etat = etat; }
+    void setEtat(TYSpectreEtat etat) { _etat = etat; }
 
+    /// XXX These are the modulus to put into the solver model
     /// Set/Get du tableau des valeurs reelles
     virtual double* getTabValReel() { return _module; }
     virtual const double* getTabValReel() const {return _module; }
@@ -294,7 +300,7 @@ public:
     virtual const double sigma() const;
 
     // Conversion en spectre "leger"
-    virtual void toSpectreLeger(TYSpectreLeger& spectre) const;
+    void toSpectreLeger(TYSpectreLeger& spectre) const;
 
     // initialisation des valeurs reelles a partir d'un spectre "leger"
     virtual void fromSpectreLeger(const TYSpectreLeger& spectre);
@@ -321,7 +327,7 @@ public:
      *
      * @return Le tableau des frequences exactes.
      */
-    static OTabFreq getTabFreqExact();
+    static OTabFreq getTabFreqExact(); // XXX These are the frequencies to use in solver
 
 	/**
      * \fn OSpectre getOSpectreFreqExact()
