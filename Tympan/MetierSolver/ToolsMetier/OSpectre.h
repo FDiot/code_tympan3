@@ -161,6 +161,7 @@ public:
     /// Force l'etat du spectre (a utiliser avec prudence ...)
     void setEtat(TYSpectreEtat etat) { _etat = etat; }
 
+    /// XXX These are the modulus to put into the solver model
     /// Set/Get du tableau des valeurs reelles
     virtual double* getTabValReel() { return _module; }
     virtual const double* getTabValReel() const {return _module; }
@@ -326,7 +327,7 @@ public:
      *
      * @return Le tableau des frequences exactes.
      */
-    static OTabFreq getTabFreqExact();
+    static OTabFreq getTabFreqExact(); // XXX These are the frequencies to use in solver
 
 	/**
      * \fn OSpectre getOSpectreFreqExact()
