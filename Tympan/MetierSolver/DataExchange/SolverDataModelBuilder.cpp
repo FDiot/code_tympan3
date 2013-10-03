@@ -193,7 +193,7 @@ void SolverDataModelBuilder::assertConsistency_pointsUID_to_Nodes(const TYPoint&
 
 void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode& acoust_surf_geo)
 {
-    const TYAcousticSurface* pSurf = acoust_surf_geo.getElement(); //XXX
+    const TYAcousticSurface* pSurf = dynamic_cast<TYAcousticSurface*> ( acoust_surf_geo.getElement() ); //XXX
     TYElement* element = pSurf->getParent();
     // The uid for SiteElement (parent of an acoustic surface, i.e. the
     // geometric volume).
