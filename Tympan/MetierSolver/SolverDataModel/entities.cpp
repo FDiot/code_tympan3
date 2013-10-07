@@ -24,7 +24,7 @@ DiffractionEdge::DiffractionEdge(
 
 AcousticBuildingMaterial::AcousticBuildingMaterial(
     const string& name_,
-    const AcousticSpectrum& spectrum_
+    const Spectrum& spectrum_
 ) : AcousticMaterialBase(name_), spectrum(spectrum_) {}
 
 AcousticGroundMaterial::AcousticGroundMaterial(

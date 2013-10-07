@@ -103,14 +103,6 @@ public:
 
     // TODO Check what need to be handled related to diffraction edges.
 
-
-    /**
-     * @brief Maps a \c TYPoint as a \c tympan::Node
-     * @param point the \c TYPoint to be mapped
-     * @return a smart pointer to the corresponding Node (created on the fly if needed)
-     */
-    // Node::pointer node_for(const TYPoint& point); // TODO
-
 protected:
 
     static
