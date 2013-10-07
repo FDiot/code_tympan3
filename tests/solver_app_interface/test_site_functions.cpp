@@ -43,7 +43,7 @@ TEST_F(BuildingFromSiteFixture, check_size)
     unsigned int points_number = total_point_number(site_ptr);
     EXPECT_EQ(14, points_number);
 
-    // Get the number of surfaces (without 'ecran' by default).
+    // Get the number of surfaces ('ecran' is obsoleted).
     unsigned int surfaces_number = get_acoustic_surface_number(site_ptr);
-    EXPECT_EQ(22, surfaces_number);
+    EXPECT_EQ(28, surfaces_number);
 }

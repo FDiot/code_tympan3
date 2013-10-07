@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,15 +11,18 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
 
 
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <cassert>
+
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -961,10 +964,15 @@ double TYSiteNode::getDelaunay()
 
 //az++ (revoir les faces des ecrans; il vaudrait mieux en ajouter proprement):
 // tableau d'index des faces ecrans
+// According to ticket https://extranet.logilab.fr/ticket/1459658 the notion
+// of ecran is obsolete
+// TODO remove cleanly related stuff
 vector<bool> EstUnIndexDeFaceEcran;
 
 void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const
 {
+    assert(useEcran && "The useEcran option is obsolete and should always be true before being removed.");
+
     std::ofstream file;
     file.open("logsChargement.txt", ios::out | ios::trunc);
     file << "Chargement de la liste des faces." << endl;
@@ -1156,6 +1164,7 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
 
 void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const
 {
+    assert(useEcran && "The useEcran option is obsolete and should always be true before being removed.");
     EstUnIndexDeFaceEcran.clear();
 
     unsigned int j, i;

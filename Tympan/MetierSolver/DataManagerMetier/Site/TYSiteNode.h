@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -291,7 +291,7 @@ class TYSiteNode: public TYElement
     void setListSiteNode(const TYTabSiteNodeGeoNode& list) { _listSiteNode = list; setIsGeometryModified(true); }
 
     /**
-     * Initialise l'iøΩtat "isInCurrentCalcul" des enfants d'un projet
+     * Initialise l'√©tat "isInCurrentCalcul" des enfants d'un projet
      */
     virtual void setChildsNotInCurrentCalcul();
 
@@ -347,7 +347,7 @@ class TYSiteNode: public TYElement
     virtual bool addToCalcul();
 
     /**
-     * Supprime tous les iøΩliøΩments d'un site du calcul
+     * Supprime tous les √©l√©ments d'un site du calcul
      */
     virtual bool remFromCalcul();
 
@@ -387,7 +387,7 @@ class TYSiteNode: public TYElement
     void update(const bool& force = false);
 
     /**
-     * Recherche le parent "miøΩtier" d'un iøΩlement et le met iøΩ jour
+     * Recherche le parent "m√©tier" d'un √©lement et le met √© jour
      * @param pElem Pointeur sur un objet de type TYElement
      */
     bool update(TYElement* pElem);
@@ -408,8 +408,8 @@ class TYSiteNode: public TYElement
     /**
      * Cree la liste des faces des elements du site.
      *
-     * @param useEcran Indique si les faces des machines et biøΩtiments doivent
-     *                 etre prises en compte.
+     * @param useEcran Indique si les faces des machines et b√¢timents doivent
+     *                 etre prises en compte OBSOLETE MUST BE TRUE.
      *
      */
     void getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const;
@@ -484,7 +484,7 @@ protected:
     ///Position.
     TYPoint _position;
 
-    /// Nombre de faces de l'infrastructure (machines, biøΩtiments, etc ...)
+    /// Nombre de faces de l'infrastructure (machines, b√¢timents, etc ...)
     unsigned int _nbFaceInfra;
 
     unsigned int _nbFaces; // Nombre de faces total
