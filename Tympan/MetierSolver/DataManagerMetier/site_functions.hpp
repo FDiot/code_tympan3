@@ -41,8 +41,7 @@ inline std::auto_ptr<std::deque<OPoint3D> > all_point(LPTYSiteNode site_ptr)
     std::vector<LPTYAcousticSurfaceGeoNode>. Moreover, \c
     TYAcousticSurfaceGeoNode is also a typdef of \c TYGeometryNode.
  */
-std::vector<LPTYAcousticSurfaceGeoNode> get_acoustic_surfaces(LPTYSiteNode site_ptr,
-                                                              bool with_ecran = false);
+std::vector<LPTYAcousticSurfaceGeoNode> get_acoustic_surfaces(LPTYSiteNode site_ptr);
 
 
 //! Get the number of acoustic surfaces.
@@ -55,7 +54,7 @@ inline unsigned int get_acoustic_surface_number(LPTYSiteNode site_ptr)
 //! Get the number of acoustic surfaces with 'ecran'.
 inline unsigned int get_acoustic_surface_number_with_ecran(LPTYSiteNode site_ptr)
 {
-    return get_acoustic_surfaces(site_ptr, true).size();
+    return get_acoustic_surfaces(site_ptr).size();
 };
 
 
