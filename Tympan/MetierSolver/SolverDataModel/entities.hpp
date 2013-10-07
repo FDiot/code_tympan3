@@ -19,17 +19,14 @@ namespace tympan
 /// XXX \todo Add the entity 'Atmosphere' with attr: pression, temperature,
 /// hygrometry (\note can find these values in the TYCalcul instead of TYSite).
 
-// XXX Add some method to easy use & get freq. and spectrum attributes. See
-// class \c OSpectre.
+// NB For now an AcousticSpectrum simply IS a OSpectreComplex
 class AcousticSpectrum:
-    public virtual BaseEntity
+        public virtual BaseEntity,
+        public Spectrum
 {
 public:
-    AcousticSpectrum() {};
+    AcousticSpectrum(const Spectrum& spectrum) : Spectrum(spectrum) {};
     virtual ~AcousticSpectrum() {};
-
-    // XXX How do you define a \c AcousticSpectrum ?
-    // XXX Add some attr?
 };
 
 class AcousticMaterialBase:
@@ -40,11 +37,15 @@ public:
     string name;
 }; // class AcousticMaterialBase
 
+// TODO Or use boost pointers container ?
+typedef shared_ptr<AcousticMaterialBase> material_ptr_t;
+typedef std::deque<material_ptr_t> material_pool_t;
+
 class AcousticBuildingMaterial:
     public virtual BaseEntity, public AcousticMaterialBase
 {
 public:
-    AcousticBuildingMaterial(const string& name_, const AcousticSpectrum& spectrum);
+    AcousticBuildingMaterial(const string& name_, const Spectrum& spectrum);
     virtual ~AcousticBuildingMaterial() {};
 
     AcousticSpectrum spectrum;
@@ -76,9 +77,6 @@ public:
 
 typedef std::deque<AcousticTriangle> triangle_pool_t;
 typedef size_t triangle_idx;
-// TODO Or use boost pointers container ?
-typedef shared_ptr<AcousticMaterialBase> material_ptr_t;
-typedef std::deque<material_ptr_t> material_pool_t;
 
 class DiffractionEdge:
     public virtual BaseEntity

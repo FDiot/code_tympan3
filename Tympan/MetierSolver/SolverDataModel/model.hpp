@@ -77,7 +77,7 @@ public:
      * @param the absorption spectrum (TO BE PRECISED)
      * @return a shared_ptr to the corresponding AcousticBuildingMaterial instance
      */
-    material_ptr_t make_material(const string& name, const AcousticSpectrum& spectrum);
+    material_ptr_t make_material(const string& name, const Spectrum& spectrum);
 
     /**
      * @brief Exports the triangle soup as a series of text files

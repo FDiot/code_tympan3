@@ -161,10 +161,9 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode&
     // Get the building material for the surface.
     LPTYMateriauConstruction p_build_mat = pSurf->getMateriau();
     const TYSpectre& ty_spectre = p_build_mat->getSpectreAbso();
-    AcousticSpectrum spectrum; // TODO initialize from ty_spectre
     material_ptr_t p_mat = model.make_material(
         to_std(p_build_mat->getName()),
-        spectrum);
+        ty_spectre);
 
     // Set the UUID of the site element and the material of the surface
     unsigned tri_idx = 0;

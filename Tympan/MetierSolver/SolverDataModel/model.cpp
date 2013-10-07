@@ -82,7 +82,7 @@ material_ptr_t SolverModel::make_material(const string& name, double resistivity
     return p_mat;
 }
 
-material_ptr_t SolverModel::make_material(const string& name, const AcousticSpectrum& spectrum)
+material_ptr_t SolverModel::make_material(const string& name, const Spectrum& spectrum)
 {
     material_ptr_t p_mat = tympan::static_pointer_cast<AcousticMaterialBase>(
         tympan::make_shared<AcousticBuildingMaterial>(name, spectrum));
