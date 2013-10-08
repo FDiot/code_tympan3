@@ -108,7 +108,6 @@ class TYSiteNode: public TYElement
 
     /// Get/Set de l'altitude associee a la courbe de niveau
     void setAltiEmprise(const double& altiEmprise) { _altiEmprise = altiEmprise; }
-    double getAltiEmprise() { return _altiEmprise; }
     const double getAltiEmprise() const { return _altiEmprise; }
 
     /**

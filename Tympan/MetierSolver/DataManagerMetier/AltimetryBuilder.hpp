@@ -240,7 +240,18 @@ to_cgal2_info(const OPoint3D& p)
 /**
  * @brief Exception class to represent an algorithmic error and/or invalid data.
  */
-class AlgorithmicError : public std::exception {};
+struct AlgorithmicError :
+        public std::exception
+{
+    AlgorithmicError() throw() {}
+    AlgorithmicError(const char* msg_) : msg(msg_) {}
+    virtual ~AlgorithmicError() throw() {}
+
+    virtual const char * what() const throw() { return msg.c_str(); }
+
+protected:
+    const string msg;
+};
 
 
 /// @brief Test fixture used to test the AltimetryBuilder
