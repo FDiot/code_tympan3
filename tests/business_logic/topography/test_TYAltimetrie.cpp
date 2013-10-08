@@ -30,11 +30,12 @@ TYAltimetrie* buildAltimetry(void)
 	TYTopographie *pTopo = new TYTopographie();
 	TYAltimetrie *pAlti = new TYAltimetrie();
 	TYCourbeNiveau* pCrb = NULL;
-	double x = -200.0, yMin = -200.0, yMax = +200.0, z = 0;
-	for (unsigned int i = 0; i <= 40; i++)
+        // Those dimension match with the default emprise
+	const double xMin = -200.0, xMax = 200.0, yMin = -200.0, yMax = +200.0;
+        double z;
+	for (double x = xMin; x <= xMax; x += 10.)
 	{
 		// Construction de courbes de niveau
-		x += 10;
 		z = x < -50. ? 0 : 3*x + 150;
 		z = x > +50. ? 300. : z;
 		pCrb = new TYCourbeNiveau();
@@ -42,11 +43,11 @@ TYAltimetrie* buildAltimetry(void)
 		pCrb->addPoint(x, yMax, z);
 		pCrb->setAltitude(z);
 		pCrb->setDistMax(10.0);
-		
+
 		// Ajout de la courbe de niveau à la topographie
 		pTopo->addCrbNiv(pCrb);
 	}
-	
+
 	// Création de l'altimetrie
 	std::deque<OPoint3D> points;
 	std::deque<OTriangle> triangles;
@@ -68,11 +69,11 @@ TEST(AltitudePtTest, dumpenv) {
 	OPoint3D pt(-70., 0., 0.);
 	bool bRes = pAlti->updateAltitude(pt);
 	ASSERT_TRUE(pt._z == 0.0);
-	
+
 	pt._x = 0.;
 	bRes = pAlti->updateAltitude(pt);
 	ASSERT_TRUE(pt._z == 150.0);
-	
+
 	pt._x = 70.;
 	bRes = pAlti->updateAltitude(pt);
 	ASSERT_TRUE(pt._z == 300.0);

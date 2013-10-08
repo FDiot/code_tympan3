@@ -152,11 +152,29 @@ AltimetryBuilder::process(TYCourbeNiveau& courbe_niveau, const OMatrix& matrix, 
 double
 AltimetryBuilder::computeAltitude(const CGAL_Point& p)
 {
-	// Query the triangulation for the location of p
-	CDT::Face_handle fh = alti_cdt.locate(p);
-	if(alti_cdt.is_infinite(fh))
-		return unspecified_altitude;
-	// We rely on CGAL intersection computation in 3D between the triangle
+    // Query the triangulation for the location of p
+    CDT::Locate_type lt;
+    int li;
+    CDT::Face_handle fh = alti_cdt.locate(p,lt, li);
+    switch(lt)
+    {
+    case CDT::VERTEX:
+        // The point IS a vertex of the known altimetry triangulation
+        return fh->vertex(li)->info().altitude;
+    case CDT::EDGE:
+        // We test that the face is a finite face or we change for the opposite face
+        // (which must be finite) then we fall back on the finite face case
+        if (alti_cdt.is_infinite(fh))
+        {
+            fh = fh->neighbor(li) ;
+            if (alti_cdt.is_infinite(fh))
+                throw AlgorithmicError("AltimetryBuilder::computeAltitude: degenerate triangulation");
+        } // no break : we DO want to fall back on the finite face case
+
+    case CDT::FACE:
+    {
+        // This is the simple case of an inner/finite face
+        // We rely on CGAL intersection computation in 3D between the triangle
 	// and a vertical line going through p
 	double x[3], y[3], z[3];
 	for(int i=0; i<3; i++)
@@ -172,15 +190,28 @@ AltimetryBuilder::computeAltitude(const CGAL_Point& p)
 			CGAL_Gt::Point_3(x[2], y[2], z[2]));
 	CGAL_Gt::Line_3 line(CGAL_Gt::Point_3(p.x(), p.y(), 0), CGAL_Gt::Vector_3(0, 0, 1));
 
-    CGAL::Object result = CGAL::intersection(tri3, line);
-    // We check that the intersection is actually a point as it should
-    if (const CGAL_Gt::Point_3 *ip = CGAL::object_cast<CGAL_Gt::Point_3>(&result))
-    {
+        CGAL::Object result = CGAL::intersection(tri3, line);
+        // We check that the intersection is actually a point as it should
+        const CGAL_Gt::Point_3 *ip = CGAL::object_cast<CGAL_Gt::Point_3>(&result);
+        if (!ip)
+            throw AlgorithmicError("Geometrical inconsistency !");
+        // We assert the (x,y) coordinate of the intersection match those of the point
         assert( std::max(fabs(ip->x()-p.x()), fabs(ip->y()-p.y())) <= 1e-3 );
         return ip->z();
     }
-    else
-    	throw AlgorithmicError();
+    case CDT::OUTSIDE_CONVEX_HULL:
+        // The point passed is outside the convex hull of the points
+        // of all the level curves : it is not possible to give it
+        // a significant altitude : please adjust your `emprise`
+        OMessageManager::get()->warning(
+            "%s : The point at (%lf, %lf) is outside the convex hull of point of known altitude : returning NaN",
+            "AltimetryBuilder::computeAltitude", p.x(), p.y());
+        return unspecified_altitude;
+
+    case CDT::OUTSIDE_AFFINE_HULL:
+        throw AlgorithmicError("This should never happen (is the altimetry empty or in 1D ?)");
+    }
+    throw AlgorithmicError("The above switch should be exhaustive !");
 }
 
 void
