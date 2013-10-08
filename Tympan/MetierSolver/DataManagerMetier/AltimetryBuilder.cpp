@@ -21,6 +21,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/AltimetryBuilder.hpp"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
+
 namespace tympan
 {
 
@@ -339,7 +340,6 @@ void AltimetryBuilder::exportMesh(
 	assert(!p_materials || p_materials->size()==0 &&
                "Output arguments '*p_materials' is expected to be initially empty");
 
-	// boost::unordered_map<CDT::Vertex_handle, unsigned> handle_to_index;
 	std::map<CDT::Vertex_handle, unsigned> handle_to_index;
 
 	for(CDT::Finite_vertices_iterator vit = cdt.finite_vertices_begin();
@@ -455,7 +455,6 @@ AltimetryBuilder::addVerticesInfo(QGraphicsScene* scene) const
 			txt << alti;
 		drawText(scene, p, txt.str() );
 	}
-
 }
 
 void

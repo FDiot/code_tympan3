@@ -511,18 +511,8 @@ public:
     {
 		const CDT::Point& p = vh->point();
 		const VertexInfo& i = vh->info();
-    	return OPoint3D(p.x(), p.y(), i.altitude);
+    	return Point(p.x(), p.y(), i.altitude);
     }
-
-//    /**
-//     * @brief Conversion from a CGAL Vertex_handle to solver data-model Node entity
-//     * @param vh the CGAL vertex handle
-//     * @return coordinates of \c vh as a tympan point
-//     */
-//    Node::pointer
-//    to_solver_node(const CDT::Vertex_handle& vh)
-//    { return Node::pointer(new Node(from_cgal(vh))); }
-
 
     /**
      * @brief Export the altimetry as a triangular mesh

@@ -240,29 +240,22 @@ void TYAltimetrie::plugBackTriangulation(
     /*
      * This section seems to have two functions :
      *  - getting the actual coordinates of the vertices (from their indices)
-     *  - computing their bonding box
+     *  - computing their bounding box
      *  both of which can be better fullfiled by a preprocessing from the AltimetryBuilder
      *
      *  TODO suppress the mesh and access directly to triangles holding BOTH
      *  their indices and vertices (by reference instead of by value ?)
      *
-     *  XXX What is the sorting for ?
+     *  TODO What is the sorting for ?
      */
-    // triangle* mesh = new triangle[nbTriangles]; // mesh seems pointless
     for (i = 0; i < nbTriangles; i++)
     {
-        // We fetch the ith triqngle
+        // We fetch the ith triangle
         OTriangle& oTriangle = triangles[i];
 
-        // mesh[i].pts[0][0] = vertices[oTriangle._p1]._x;
-        // mesh[i].pts[0][1] = vertices[oTriangle._p1]._y;
-        // mesh[i].pts[0][2] = vertices[oTriangle._p1]._z;
         // compute global bounding box by adding each points
-        // _bbox.Enlarge(mesh[i].pts[0][0], mesh[i].pts[0][1], mesh[i].pts[0][2]);
-	// The big block above is advantageoulsy replaced by the two lines below
         oTriangle._A = vertices[oTriangle._p1];
         _bbox.Enlarge(oTriangle._A);
-	// The same for the two other vertices of the triangle
         oTriangle._B = vertices[oTriangle._p2];
         _bbox.Enlarge(oTriangle._B);
         oTriangle._C = vertices[oTriangle._p3];
@@ -324,9 +317,6 @@ void TYAltimetrie::plugBackTriangulation(
         tabPt.resize(3);
         for (j = 0; j < 3; j++)
         {
-//            point._x = mesh[i].pts[j][0];
-//            point._y = mesh[i].pts[j][1];
-//            point._z = mesh[i].pts[j][2];
             tabPt[j] = oTriangle.vertex(j);
         }
 
@@ -345,8 +335,6 @@ void TYAltimetrie::plugBackTriangulation(
             ipmin = ipmax = iqmin = iqmax = -1;
             for (j = 0; j < 3; j++)
             {
-//                p = (mesh[i].pts[j][0] - _bbox._min._x) / _gridDX;
-//                q = (mesh[i].pts[j][1] - _bbox._min._y) / _gridDY;
                 p = (oTriangle.vertex(j)._x - _bbox._min._x) / _gridDX;
                 q = (oTriangle.vertex(j)._y - _bbox._min._y) / _gridDY;
                 if ((int)p > ipmax) { ipmax = (int) p; }
@@ -368,10 +356,6 @@ void TYAltimetrie::plugBackTriangulation(
     }
 
     setIsGeometryModified(false);
-
-    //delete[] mesh; // free allocated memory
-    //#endif // TY_USE_IHM
-
 }
 
 // The method compute is obsolete and thus commented out
@@ -564,9 +548,9 @@ unsigned int TYAltimetrie::getPointsInBox(const OPoint3D& pt0, const OPoint3D& p
 {
 	unsigned int pointCount = 0;
 	OPoint3D pts[4];
-	pts[0] = pt0; 
-	pts[1] = pt1; 
-	pts[2] = pt2; 
+	pts[0] = pt0;
+	pts[1] = pt1;
+	pts[2] = pt2;
 	pts[3] = pt3;
 
 	unsigned int iMinMax[4];
