@@ -15,8 +15,9 @@
 
 #include <boost/foreach.hpp>
 #include <boost/bind.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
 
-
+#include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/MetierSolver/DataManagerMetier/AltimetryBuilder.hpp"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
@@ -24,6 +25,9 @@ namespace tympan
 {
 
 const double unspecified_altitude = std::numeric_limits<double>::quiet_NaN();
+
+bool is_valid_altitude(double alti)
+{ return !boost::math::isnan(alti); } // Could and should use std::isnan in C++ '11
 
 
 MaterialPolygon::MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix) :
@@ -201,9 +205,8 @@ AltimetryBuilder::insertMaterialPolygonsInTriangulation()
             vit != cdt.vertices_end(); ++vit)
 	{
 		CGAL_Point p = vit->point();
-		if(vit->info().altitude != unspecified_altitude)
-                    continue;
-		vit->info().altitude = computeAltitude(p);
+		if( !is_valid_altitude(vit->info().altitude) )
+                    vit->info().altitude = computeAltitude(p);
 	}
 }
 
@@ -343,7 +346,27 @@ void AltimetryBuilder::exportMesh(
 		vit	!= cdt.finite_vertices_end(); ++vit)
 	{
 		const unsigned i = points.size();
-		Point p = from_cgal(vit);
+                // TODO Should extract this in a dedicated method - cf. ticket #1469664
+		Point p = this->from_cgal(vit);
+                if (!is_valid_altitude(p._z))
+                {
+                    OMessageManager::get()->error(
+                        "%s : Invalid altitude for point %d (%lf, %lf, %lf)\n",
+                        "AltimetryBuilder::exportMesh", i,  p._x, p._y, p._z);
+                    // Try to recompute the altitude even if is
+                    // supposedly computed on the fly and this late
+                    // attempt is likely pointless.
+                    double alti = computeAltitude(vit->point());
+                    if (!is_valid_altitude(alti)){
+                        OMessageManager::get()->info(
+                            "This might be a point of the `emprise` "
+                            "while the latter is not considered as a level curve.\n");
+                        throw AlgorithmicError();
+                    }
+                    else
+                        p._z = alti;
+                }
+
 		points.push_back(p);
 		const bool ok = handle_to_index.insert( std::make_pair(vit, i) ).second;
 		assert(ok && "Vertex handle should be unique.");
@@ -426,7 +449,7 @@ AltimetryBuilder::addVerticesInfo(QGraphicsScene* scene) const
 		CDT::Point p = vit->point();
 		std::stringstream txt;
 		double alti = vit->info().altitude;
-		if (alti==unspecified_altitude)
+		if (!is_valid_altitude(alti))
 			txt << "-";
 		else
 			txt << alti;

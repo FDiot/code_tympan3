@@ -78,6 +78,7 @@ class SolverDataModelBuilder;
 namespace tympan
 {
 
+bool is_valid_altitude(double alti);
 
 /** @brief an alias to LPTYSol for representing a ground material */
 typedef LPTYSol material_t;
