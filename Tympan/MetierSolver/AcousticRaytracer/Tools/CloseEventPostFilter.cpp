@@ -38,7 +38,7 @@ unsigned int closeEventPostFilter::Process()
 		
 		if (events->size() < 2) { it++; continue; }
 
-		for (int i=0 ; i<events->size()-1 ; i++)
+		for (unsigned int i=0 ; i<events->size()-1 ; i++)
 		{
 			QSharedPointer<Event> ev1 = events->at(i);
 			QSharedPointer<Event> ev2 = events->at(i+1);

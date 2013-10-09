@@ -156,7 +156,7 @@ void TYPalette::resetcolorMapFromColors(
 void TYPalette::clear()
 {
 	_colorMap.clear();
-	_colorMap.insert(_colorMap.end(), std::make_pair(0.0, OColor::BLACK));
+	_colorMap.insert(_colorMap.end(), std::make_pair(0.0f, OColor::BLACK));
 	_colorMap.insert(_colorMap.end(), std::make_pair(infinity, OColor::WHITE));
 }
 

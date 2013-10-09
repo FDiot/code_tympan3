@@ -128,11 +128,11 @@ public:
     virtual void getChilds(TYElementCollection& childs, bool recursif = true);
 
     /**
-     * Get de l'element.
+     * Get of the element.
      *
-     * @return Un smart pointer sur l'element.
+     * @return A real pointer on the element.
      */
-    TYElement* getElement() const { return _pElement; }
+	TYElement* getElement() const { return _pElement._pObj; }
 
     /**
      * Set de l'element (smart pointer).
