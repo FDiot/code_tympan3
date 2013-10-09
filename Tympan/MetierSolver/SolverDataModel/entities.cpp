@@ -13,20 +13,23 @@
 namespace tympan
 {
 
+AcousticMaterialBase::AcousticMaterialBase(
+    const string& name_
+) : name(name_) {}
+
+
 DiffractionEdge::DiffractionEdge(
     const Point& p1_, const Point& p2_, double angle_
 ) : p1(p1_), p2(p2_), angle(angle_) {}
 
 AcousticBuildingMaterial::AcousticBuildingMaterial(
-) : name("") {}
-
-AcousticBuildingMaterial::AcousticBuildingMaterial(
-    const string& name_
-) : name(name_) {}
+    const string& name_,
+    const AcousticSpectrum& spectrum_
+) : AcousticMaterialBase(name_), spectrum(spectrum_) {}
 
 AcousticGroundMaterial::AcousticGroundMaterial(
     const string& name_, double resistivity_
-) : name(name_), resistivity(resistivity_) {}
+) : AcousticMaterialBase(name_), resistivity(resistivity_) {}
 
 AcousticReceptor::AcousticReceptor(
     const Point& point_

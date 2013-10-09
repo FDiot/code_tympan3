@@ -71,12 +71,15 @@ void SolverDataModelBuilder::processAltimetry(LPTYSiteNode site_ptr)
     unsigned tri_idx = 0;
     BOOST_FOREACH(const OTriangle& tri, triangles)
     {
-        model.triangle(tri_idx).uuid = element_uid.getUuid();
-        // TODO set the material here
+        AcousticTriangle& ac_tri =  model.triangle(tri_idx);
+        ac_tri.uuid = element_uid.getUuid();
+        const LPTYSol p_sol = materials[tri_idx];
+        material_ptr_t p_mat = model.make_material(
+            to_std(p_sol->getName()),
+            p_sol->getResistivite());
+        ac_tri.made_of = p_mat;
         ++tri_idx;
     }
-
-    assert(false && "XXX Not Implemented yet");
 }
 
 
@@ -164,14 +167,20 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode&
 
     // XXX Work In Progress here
     // Get building material.
-    LPTYMateriauConstruction material_ptr = pSurf->getMateriau();
-    // TODO Material not implemented yet
-    setAcousticBuildMaterial(material_ptr);
+    LPTYMateriauConstruction p_build_mat = pSurf->getMateriau();
+    const TYSpectre& ty_spectre = p_build_mat->getSpectreAbso();
+    AcousticSpectrum spectrum; // TODO initialize from ty_spectre
+    material_ptr_t p_mat = model.make_material(
+        to_std(p_build_mat->getName()),
+        spectrum);
+
     // Set, for all triangles, the UUID and set the material
     unsigned tri_idx = 0;
     BOOST_FOREACH(const OTriangle& tri, triangles)
     {
-        model.triangle(tri_idx).uuid = element_uid.getUuid();
+        AcousticTriangle& ac_tri =  model.triangle(tri_idx);
+        ac_tri.uuid = element_uid.getUuid();
+        ac_tri.made_of = p_mat;
         ++tri_idx;
     }
 }
