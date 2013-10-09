@@ -306,13 +306,6 @@ AltimetryBuilder::labelFaces()
     }
 }
 
-void
-AltimetryBuilder::exportToDataModel(SolverDataModelBuilder& model)
-{
-	// TODO
-	assert( false && "Not implemented yet" );
-}
-
 std::pair<unsigned, unsigned>
 AltimetryBuilder::count_edges() const
 {
@@ -331,12 +324,17 @@ AltimetryBuilder::count_edges() const
     return std::make_pair(edges, constrained);
 }
 
-void AltimetryBuilder::exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles) const
+void AltimetryBuilder::exportMesh(
+    std::deque<OPoint3D>& points,
+    std::deque<OTriangle>& triangles,
+    std::deque<material_t>* p_materials) const
 {
 	assert(points.size()==0 &&
-		   "Output arguments 'points' is expected to be initially empty");
+               "Output arguments 'points' is expected to be initially empty");
 	assert(triangles.size()==0 &&
-			"Output arguments 'triangles' is expected to be initially empty");
+               "Output arguments 'triangles' is expected to be initially empty");
+	assert(!p_materials || p_materials->size()==0 &&
+               "Output arguments '*p_materials' is expected to be initially empty");
 
 	// boost::unordered_map<CDT::Vertex_handle, unsigned> handle_to_index;
 	std::map<CDT::Vertex_handle, unsigned> handle_to_index;
@@ -355,22 +353,26 @@ void AltimetryBuilder::exportMesh(std::deque<OPoint3D>& points, std::deque<OTria
 	for(CDT::Finite_faces_iterator fit = cdt.finite_faces_begin();
 		fit	!= cdt.finite_faces_end(); ++fit)
 	{
-		material_t material = fit->info().material;
-		// Build an OTriangle from 3 indices
-		unsigned i[3], j;
-		for(j=0; j<3; ++j)
-			i[j] = handle_to_index[fit->vertex(j)];
-		// Store it and update its associated OPoints
-		triangles.push_back(OTriangle(i[0], i[1], i[2]));
-		OTriangle& tri = triangles.back();
-		for(j=0; j<3; ++j)
-		{
-			tri.vertex(j) = points[i[j]];
-			assert( tri.vertex(j)== from_cgal(fit->vertex(j)));
-		}
+            if(p_materials) {
+		const material_t& material = fit->info().material;
+                p_materials->push_back(material);
+            }
+            // Build an OTriangle from 3 indices
+            unsigned i[3], j;
+            for(j=0; j<3; ++j)
+                i[j] = handle_to_index[fit->vertex(j)];
+            // Store it and update its associated OPoints
+            triangles.push_back(OTriangle(i[0], i[1], i[2]));
+            OTriangle& tri = triangles.back();
+            for(j=0; j<3; ++j)
+            {
+                tri.vertex(j) = points[i[j]];
+                assert( tri.vertex(j)== from_cgal(fit->vertex(j)));
+            }
 	}
 	assert( points.size() == number_of_vertices());
 	assert( triangles.size() == number_of_faces());
+	assert( !p_materials || p_materials->size() == number_of_faces());
 }
 
 // Vizualization helpers

@@ -147,7 +147,22 @@ public:
     // Node::pointer node_for(const TYPoint& point); // TODO
 
 protected:
-    //! Stores a mapping from \c TYPoint-s' uuid to \c tympan::Node::pointer-s
+
+    /**
+     * @brief Creates the data model entities for a triangle soup.
+     * @param points The points of the mesh.
+     * @param triangles The triangles of the mesh.
+     * @return void
+     *
+     * Creates nodes and AcousticTriangles in the \c model to
+     * represent the mesh given as arguments.
+     */
+    void
+    processMesh(
+        const std::deque<OPoint3D>& points,
+        const std::deque<OTriangle>& triangles);
+
+protected:
     SolverModel& model;
 }; // class SolverDataModelBuilder
 

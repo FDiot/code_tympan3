@@ -1140,6 +1140,11 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
     //EstUnIndexDeFaceEcran n'est pas a affecter, car les faces d'infrastructures sont separees de celles de l'alti,
     //donc sachant ou commence les faces d'alti, le test "est un ecran" n'a pas de sens pour ces dernieres
 
+
+    // WIP here : the materials {c/sh}ould be stored in the TYAcousticPolygon
+    //            and thus be stored or exracted from the Altimetry ?
+    //            or is this data pulling from the solver to be replaced by data
+    //            pushing from the site to the model
     TYTabLPPolygon& listFacesAlti = _pTopographie->getAltimetrie()->getListFaces();
     unsigned int nbFacesAlti = static_cast<uint32>(listFacesAlti.size());
 

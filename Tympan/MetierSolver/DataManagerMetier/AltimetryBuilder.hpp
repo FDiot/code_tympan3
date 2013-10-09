@@ -345,13 +345,6 @@ public:
     process_emprise(TYTopographie& topography, bool as_level_curve = true);
 
     /**
-     * @brief Export the triangulation into a data model
-     * @param model the data model builder through which the export is done
-     */
-    void
-    exportToDataModel(SolverDataModelBuilder& model);
-
-    /**
      * @brief Add \c points_range as elements of the triangulation
      *
      * PointRange must satisfy the requirement for the boost Range concept
@@ -537,8 +530,11 @@ public:
      *
      * @param points output argument filled with the vertices of the triangulation
      * @param triangles output argument filled with the faces of the triangulation
+     * @param p_materials optional output argument filled with the materials of the faces
      */
-    void exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles) const;
+    void exportMesh(std::deque<OPoint3D>& points,
+                    std::deque<OTriangle>& triangles,
+                    std::deque<material_t>* p_materials=NULL) const;
 
 protected:
     /**
