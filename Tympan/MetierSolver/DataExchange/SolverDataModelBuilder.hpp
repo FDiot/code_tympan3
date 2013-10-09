@@ -12,6 +12,7 @@
 #include <deque>
 
 #include <QtCore/qhash.h>
+#include <QString>
 
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
@@ -147,6 +148,12 @@ public:
     // Node::pointer node_for(const TYPoint& point); // TODO
 
 protected:
+
+    static
+    const std::string&
+    to_std(const QString& qstr)
+    { return std::string(qstr.toUtf8().constData()); } // NB : This does incur copy
+
 
     /**
      * @brief Creates the data model entities for a triangle soup.

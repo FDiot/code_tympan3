@@ -74,6 +74,22 @@ triangle_idx SolverModel::make_triangle(node_idx n1, node_idx n2, node_idx n3)
     return all_triangles.size() - 1;
 }
 
+material_ptr_t SolverModel::make_material(const string& name, double resistivity)
+{
+    material_ptr_t p_mat = tympan::static_pointer_cast<AcousticMaterialBase>(
+        tympan::make_shared<AcousticGroundMaterial>(name, resistivity) );
+    all_materials.push_back(p_mat);
+    return p_mat;
+}
+
+material_ptr_t SolverModel::make_material(const string& name, const AcousticSpectrum& spectrum)
+{
+    material_ptr_t p_mat = tympan::static_pointer_cast<AcousticMaterialBase>(
+        tympan::make_shared<AcousticBuildingMaterial>(name, spectrum));
+    all_materials.push_back(p_mat);
+    return p_mat;
+}
+
 
 void  SolverModel::export_triangles_soup(const std::string& filename)
 {

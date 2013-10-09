@@ -53,6 +53,32 @@ public:
     const Point& node(node_idx idx) const
     { return all_nodes[idx]; }
 
+
+    size_t num_materials() const //TODO move to implementation file
+    { return  all_materials.size(); }
+
+    const AcousticMaterialBase& material(size_t mat_idx) const
+    { return *all_materials[mat_idx]; }
+
+    AcousticMaterialBase& material(size_t mat_idx)
+    { return *all_materials[mat_idx]; }
+
+    /**
+     * @brief Push a representation of a ground material into the model
+     * @param name the name of the material
+     * @param resistivity the resistivity of the ground, expressed in kRayls (TO BE CONFIRMED)
+     * @return a shared_ptr to the corresponding AcousticGroundMaterial instance
+     */
+    material_ptr_t make_material(const string& name, double resistivity);
+
+    /**
+     * @brief Push a representation of a building material into the model
+     * @param name the name of the material
+     * @param the absorption spectrum (TO BE PRECISED)
+     * @return a shared_ptr to the corresponding AcousticBuildingMaterial instance
+     */
+    material_ptr_t make_material(const string& name, const AcousticSpectrum& spectrum);
+
     /**
      * @brief Exports the triangle soup as a series of text files
      *
@@ -80,8 +106,9 @@ public: // XXX Could / should be protected but this complicates testing
 
 protected: // data members
 
-	nodes_pool_t all_nodes;
-	triangle_pool_t all_triangles;
+    nodes_pool_t all_nodes;
+    triangle_pool_t all_triangles;
+    material_pool_t all_materials;
 };  // class SolverModel
 
 

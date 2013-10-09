@@ -19,21 +19,35 @@ namespace tympan
 /// XXX \todo Add the entity 'Atmosphere' with attr: pression, temperature,
 /// hygrometry (\note can find these values in the TYCalcul instead of TYSite).
 
+// XXX Add some method to easy use & get freq. and spectrum attributes. See
+// class \c OSpectre.
+class AcousticSpectrum:
+    public virtual BaseEntity
+{
+public:
+    AcousticSpectrum() {};
+    virtual ~AcousticSpectrum() {};
+
+    // XXX How do you define a \c AcousticSpectrum ?
+    // XXX Add some attr?
+};
+
 class AcousticMaterialBase:
     public virtual BaseEntity
 {
-
+public:
+    AcousticMaterialBase(const string& name_);
+    string name;
 }; // class AcousticMaterialBase
 
 class AcousticBuildingMaterial:
     public virtual BaseEntity, public AcousticMaterialBase
 {
 public:
-    AcousticBuildingMaterial();
-    AcousticBuildingMaterial(const string& name_);
+    AcousticBuildingMaterial(const string& name_, const AcousticSpectrum& spectrum);
     virtual ~AcousticBuildingMaterial() {};
 
-    string name;
+    AcousticSpectrum spectrum;
 };
 
 class AcousticGroundMaterial:
@@ -43,7 +57,6 @@ public:
     AcousticGroundMaterial(const string& name_, double resistivity_);
     virtual ~AcousticGroundMaterial() {};
 
-    string name;
     /// XXX \todo put SI unit.
     double resistivity;
 };
@@ -63,6 +76,9 @@ public:
 
 typedef std::deque<AcousticTriangle> triangle_pool_t;
 typedef size_t triangle_idx;
+// TODO Or use boost pointers container ?
+typedef shared_ptr<AcousticMaterialBase> material_ptr_t;
+typedef std::deque<material_ptr_t> material_pool_t;
 
 class DiffractionEdge:
     public virtual BaseEntity
@@ -76,22 +92,6 @@ public:
     /// Angle (radian).
     double angle;
 };
-
-
-
-// XXX Add some method to easy use & get freq. and spectrum attributes. See
-// class \c OSpectre.
-class AcousticSpectrum:
-    public virtual BaseEntity
-{
-public:
-    AcousticSpectrum() {};
-    virtual ~AcousticSpectrum() {};
-
-    // XXX How do you define a \c AcousticSpectrum ?
-    // XXX Add some attr?
-};
-
 
 class AcousticSource:
     public virtual BaseEntity
