@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
+*/
 
 #ifndef __TY_TOPOGRAPHIE__
 #define __TY_TOPOGRAPHIE__
@@ -509,8 +509,10 @@ public:
      *
      * @param points output argument filled with the vertices of the triangulation
      * @param triangles output argument filled with the faces of the triangulation
+     * @param p_materials optionnal output argument filled with the materials of the faces
+     *
      */
-    void exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles);
+    void exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>* p_materials=NULL);
 
 private :
 
