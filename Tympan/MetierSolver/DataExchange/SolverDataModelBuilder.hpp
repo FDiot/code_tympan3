@@ -78,32 +78,8 @@ public:
     void setAcousticTriangle(const TYAcousticSurfaceGeoNode& acoust_surf_geo);
 
 
-//    //! Update some relations related to \c tympan::AcousticSpectrum.
-//    /*! Update relations \c tympan::frequency_rdef and \c tympan::sample_of_rdef
-//        between a \c tympan::AcousticSpectrum and \c tympan::Frequency & \c
-//        tympan::SpectrumSample.
-//      \param ty_spectrum A spectrum from a Tympan site
-//      \param spectrum_ptr The entity 'spectrum' from the solver data model.
-//     */
-//    void updateSpectrumRelations(const TYSpectre* ty_spectrum_ptr,
-//                                 const AcousticSpectrum::pointer spectrum_ptr);
-
-    //! Set the frequencies.
-    /*! Note that the frequencies are stored in a static attribute in Tympan
-        (there is one frequencies table for a single computation).
-     \param freq_tab The table with frequencies values.
-    */
-    void setFrequencyTab(const OTabFreq& freq_tab);
-
     //! Update material, spectrum and frequencies information.
     void setAcousticBuildMaterial(LPTYMateriauConstruction material_ptr);
-
-    //! Update ground surface.
-    /*! \warning Not implemented yet. Complete arguments. Link it with:
-          - AcousticSpectrum
-          - AcousticTriangle
-     */
-    // void setAcousticGroundMaterial();
 
     //! Update the \c tympan::AcousticSource
     /*! \todo Complete input args (if necessary). Link
@@ -125,19 +101,7 @@ public:
      */
     void processAcousticReceptors(LPTYSiteNode site_ptr);
 
-    //! Update the \c tympan::DiffractionEdge entity.
-    /*! \warning Not implemented yet. Complete arguments. Link it with a \c
-        AcousticBuildingMaterial.
-        \note For now, the DiffractionEdge is handled by the Solver.
-     */
-    void setDiffractionEdge();
-
-    //! Update the \c tympan::DirectivityCoefficient entity.
-    /*! \warning Not implemented yet. Complete arguments. Link it with a \c
-        tympan::SpectrumSample.
-        \note For now, we can avoid the DiffractionEdge.
-     */
-    void setDirectivityCoefficient();
+    // TODO Check what need to be handled related to diffraction edges.
 
 
     /**

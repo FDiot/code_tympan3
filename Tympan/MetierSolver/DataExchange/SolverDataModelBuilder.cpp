@@ -56,7 +56,7 @@ SolverDataModelBuilder::~SolverDataModelBuilder()
 void SolverDataModelBuilder::processAltimetry(LPTYSiteNode site_ptr)
 {
     /* We do NOT use the list of faces in the Altimetry : this is a legacy
-     * datastructure : it provides polygons without materials.
+     * data-structure which provides polygons without their materials.
      */
     std::deque<OPoint3D> points;
     std::deque<OTriangle> triangles;
@@ -67,7 +67,7 @@ void SolverDataModelBuilder::processAltimetry(LPTYSiteNode site_ptr)
     p_topo->exportMesh(points, triangles, &materials);
 
     processMesh(points, triangles);
-    // Set, for all triangles, the UUID and set the material
+    // Set the UUID of the topography and the material of each triangle
     unsigned tri_idx = 0;
     BOOST_FOREACH(const OTriangle& tri, triangles)
     {
@@ -85,15 +85,11 @@ void SolverDataModelBuilder::processAltimetry(LPTYSiteNode site_ptr)
 
 void SolverDataModelBuilder::walkTroughtSite(LPTYSiteNode site_ptr)
 {
-    // TODO Implement it.
-    // TODO There should be some error handling here...
-
+    // TODO There should be some error handling in here...
     processAltimetry(site_ptr);
     processInfrastructure(site_ptr);
-    processAcousticSources(site_ptr);
-    //processAcousticReceptors(site_ptr);
-
-
+    // processAcousticSources(site_ptr); // TODO Dummy implementation for now
+    // processAcousticReceptors(site_ptr);// TODO Dummy implementation for now
 }
 
 
@@ -102,25 +98,22 @@ void SolverDataModelBuilder::processInfrastructure(LPTYSiteNode site_ptr)
 {
 
     // Get \c AcousticTriangle.
-    // Have to link to \c AcousticTriangle with relation \c surface_has_node
     unsigned int nb_building_faces = 0;
-    // XXX Maybe swith to 'true'.
     TYTabAcousticSurfaceGeoNode face_list;
-    std::vector<bool> estUnIndexDeFaceEcran;
+    std::vector<bool> estUnIndexDeFaceEcran; // The notion of `faceEcran` is obsolete now
     site_ptr->getListFaces(true, face_list, nb_building_faces,
                            estUnIndexDeFaceEcran);
 
     // Faces d'infrastructure
     TYAcousticSurface* pSurf = NULL;
 
-
-    // 'face_list' can contain topography elements. Not relevant here.
     for (unsigned int i = 0 ; i < nb_building_faces ; i++)
     {
+        // 'face_list' can contain topography elements. Not relevant here.
     	if (pSurf = TYAcousticSurface::safeDownCast(face_list[i]->getElement()))
     		setAcousticTriangle(pSurf);
     	else
-    		continue; // type de face non identifiee
+    		continue; // The face was not an acoustic surface, it is ignored.
     }
 }
 
@@ -128,12 +121,12 @@ void SolverDataModelBuilder::processMesh(
     const std::deque<OPoint3D>& points,
     const std::deque<OTriangle>& triangles)
 {
-    // Create all nodes related to the triangle.
+    // Create all nodes related to the triangles.
     std::vector<node_idx> map_to_model_node_idx(points.size(), 0);
     size_t i = 0;
     BOOST_FOREACH(const Point& point, points)
     {
-    	map_to_model_node_idx[i++] = model.make_node(point);
+    	map_to_model_node_idx[i++] = model.make_node(point); // add the points
     }
 
     BOOST_FOREACH(const OTriangle& tri, triangles)
@@ -142,6 +135,7 @@ void SolverDataModelBuilder::processMesh(
     	assert(tri._A == points[tri._p1]);
     	assert(tri._B == points[tri._p2]);
     	assert(tri._C == points[tri._p3]);
+        // add the triangles
     	triangle_idx tri_idx = model.make_triangle(
     			map_to_model_node_idx[tri._p1],
     			map_to_model_node_idx[tri._p2],
@@ -162,11 +156,9 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode&
     std::deque<OPoint3D> points;
     std::deque<OTriangle> triangles;
     pSurf->exportMesh(points, triangles, acoust_surf_geo );
-
     processMesh(points, triangles);
 
-    // XXX Work In Progress here
-    // Get building material.
+    // Get the building material for the surface.
     LPTYMateriauConstruction p_build_mat = pSurf->getMateriau();
     const TYSpectre& ty_spectre = p_build_mat->getSpectreAbso();
     AcousticSpectrum spectrum; // TODO initialize from ty_spectre
@@ -174,7 +166,7 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode&
         to_std(p_build_mat->getName()),
         spectrum);
 
-    // Set, for all triangles, the UUID and set the material
+    // Set the UUID of the site element and the material of the surface
     unsigned tri_idx = 0;
     BOOST_FOREACH(const OTriangle& tri, triangles)
     {
@@ -184,19 +176,6 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode&
         ++tri_idx;
     }
 }
-
-void SolverDataModelBuilder::setFrequencyTab(const OTabFreq& freq_tab)
-{
-//    OTabFreq::const_iterator freq_it = freq_tab.begin();
-//    for (; freq_it != freq_tab.end(); ++freq_it)
-//    {
-//        double value = *freq_it;
-//        Frequency::pointer freq_ptr(new Frequency(value));
-//        // Fill the dedicated container.
-//        frequencies.push_back(freq_ptr);
-//    }
-}
-
 
 void SolverDataModelBuilder::setAcousticBuildMaterial(LPTYMateriauConstruction material_ptr)
 {
