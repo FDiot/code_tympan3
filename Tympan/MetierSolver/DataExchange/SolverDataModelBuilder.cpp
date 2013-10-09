@@ -52,19 +52,28 @@ SolverDataModelBuilder::~SolverDataModelBuilder()
     // as the whole point of the builder is to... build it !
 }
 
+void SolverDataModelBuilder::processAltimetry(LPTYSiteNode site_ptr)
+{
+    // TODO : to be implemented.
+}
+
 
 void SolverDataModelBuilder::walkTroughtSite(LPTYSiteNode site_ptr)
 {
     // TODO Implement it.
+    // TODO There should be some error handling here...
 
-    // Acoustic geometries.
-    setGeometricEntities(site_ptr);
-    // Acoustic source.
-    setAcousticSource(site_ptr);
+    processAltimetry(site_ptr);
+    processInfrastructure(site_ptr);
+    processAcousticSources(site_ptr);
+    //processAcousticReceptors(site_ptr);
+
+
 }
 
 
-void SolverDataModelBuilder::setGeometricEntities(LPTYSiteNode site_ptr)
+
+void SolverDataModelBuilder::processInfrastructure(LPTYSiteNode site_ptr)
 {
 
     // Get \c AcousticTriangle.
@@ -79,7 +88,7 @@ void SolverDataModelBuilder::setGeometricEntities(LPTYSiteNode site_ptr)
     // Faces d'infrastructure
     TYAcousticSurface* pSurf = NULL;
 
-   
+
     // 'face_list' can contain topography elements. Not relevant here.
     for (unsigned int i = 0 ; i < nb_building_faces ; i++)
     {
@@ -87,113 +96,13 @@ void SolverDataModelBuilder::setGeometricEntities(LPTYSiteNode site_ptr)
     		setAcousticTriangle(pSurf);
     	else
     		continue; // type de face non identifiee
-
-        // XXX Refactor all this big switch by calling a (virtual) method in the
-        // base TYSurfaceInterface class
-        /*
-
-        if (pPoly = TYAcousticPolygon::safeDownCast(face_list[i]->getElement()))
-        {
-            // List of points of the surface.
-            TYTabPoint tabPoint = pPoly->getContour();
-            // Get the volume (and its ID) which contains the surface.
-            TYElement* element = pPoly->getParent();
-            uid = element->getStringID().toStdString();
-            setAcousticTriangle(uid, tabPoint);
-            // Get building material.
-            LPTYMateriauConstruction material_ptr = pPoly->getMateriau();
-            setAcousticBuildMaterial(material_ptr);
-        }
-        else if (pRect = TYAcousticRectangle::safeDownCast(face_list[i]->getElement()))
-        {
-            TYTabPoint tabPoint = pPoly->getContour();
-            TYElement* element = pPoly->getParent();
-            uid = element->getStringID().toStdString();
-            setAcousticTriangle(uid, tabPoint);
-            // Get building material.
-            LPTYMateriauConstruction material_ptr = pPoly->getMateriau();
-            setAcousticBuildMaterial(material_ptr);
-        }
-        else if (pCircle = TYAcousticCircle::safeDownCast(face_list[i]->getElement()))
-        {
-            TYTabPoint tabPoint = pPoly->getContour();
-            TYElement* element = pPoly->getParent();
-            uid = element->getStringID().toStdString();
-            setAcousticTriangle(uid, tabPoint);
-            // Get building material.
-            LPTYMateriauConstruction material_ptr = pPoly->getMateriau();
-            setAcousticBuildMaterial(material_ptr);
-        }
-        else if (pSemiCircle = TYAcousticSemiCircle::safeDownCast(face_list[i]->getElement()))
-        {
-            TYTabPoint tabPoint = pPoly->getContour();
-            TYElement* element = pPoly->getParent();
-            uid = element->getStringID().toStdString();
-            setAcousticTriangle(uid, tabPoint);
-            // Get building material.
-            LPTYMateriauConstruction material_ptr = pPoly->getMateriau();
-            setAcousticBuildMaterial(material_ptr);
-        }
-        else
-        {
-            continue; // type de face non identifiee
-        }
-        */
     }
 }
 
-/*
-Node::pointer SolverDataModelBuilder::node_for(const TYPoint& point)
-{
-	const TYUUID uid = point.getID();
-	QHash<TYUUID, Node::pointer>::iterator i = pointsUID_to_Nodes.find(uid);
-	if (i != pointsUID_to_Nodes.end() )
-	{
-		// The point already exists
-		return i.value();
-	}
-	else
-	{
-		// First time we encounter this point
-		Node::pointer node = Node::pointer( new tympan::Node(point));
-		pointsUID_to_Nodes.insert(uid, node);
-		return node;
-	}
-	assertConsistency_pointsUID_to_Nodes(point);
-}
-*/
-/*
-#ifndef NDEBUG
-void SolverDataModelBuilder::assertConsistency_pointsUID_to_Nodes(const TYPoint& point)
-{
-	const TYUUID uid = point.getID();
-	bool found = false;
-	// For each entry in the map...
-	QHashIterator<TYUUID, Node::pointer> i(pointsUID_to_Nodes);
-	while (i.hasNext()) {
-		i.next();
-		const Node::pointer node = i.value();
-		if (i.key() == uid) // The current entry matches the point
-		{
-			// We check the point is not present multiple times
-			assert( found==false && "The point's UID has been found multiple times" );
-			found=true;
-			// We check the coordinates match
-			assert(node==point);
-		}
-		else
-		{
-			// We check that the coordinates do NOT match
-			assert(!(node==point));
-		}
-	}
-}
-#endif // NDEBUG not defined
-*/
 
 void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode& acoust_surf_geo)
 {
-    const TYAcousticSurface* pSurf = dynamic_cast<TYAcousticSurface*> ( acoust_surf_geo.getElement() ); //XXX
+    const TYAcousticSurface* pSurf = dynamic_cast<TYAcousticSurface*> ( acoust_surf_geo.getElement() );
     TYElement* element = pSurf->getParent();
     // The uid for SiteElement (parent of an acoustic surface, i.e. the
     // geometric volume).
@@ -201,7 +110,8 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode&
 
     // Get building material.
     LPTYMateriauConstruction material_ptr = pSurf->getMateriau();
-    setAcousticBuildMaterial(material_ptr); // XXX work needed here
+    // TODO Material not implemented yet
+    setAcousticBuildMaterial(material_ptr);
 
     // Use the triangulating interface of TYSurfaceInterface to get triangles
     // and convert them to Nodes and AcousticTriangles (beware of mapping
@@ -233,10 +143,7 @@ void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode&
         // Associate the triangle with the UUID of the element it belongs to
         model.triangle(tri_idx).uuid = element_uid.getUuid();
     }
-
-    // TODO Material not implemented yet
 }
-
 
 void SolverDataModelBuilder::setFrequencyTab(const OTabFreq& freq_tab)
 {
@@ -251,49 +158,10 @@ void SolverDataModelBuilder::setFrequencyTab(const OTabFreq& freq_tab)
 }
 
 
-//void SolverDataModelBuilder::updateSpectrumRelations(
-//    const TYSpectre* ty_spectrum_ptr,
-//    const AcousticSpectrum::pointer acoustic_spectrum_ptr)
-//{
-//    typedef deque<boost::shared_ptr<Frequency> > frequency_container;
-//
-//    // Freq. range (static table in Tympan). \note frequencies table is unique
-//    // for a single computation (and static in a \c OSpectre instance). That is
-//    // why there is the 'is_frequency' attr.
-//    OTabFreq freq_tab = ty_spectrum_ptr->getTabFreqExact();
-//    if (!is_frequency)
-//    {
-//        setFrequencyTab(freq_tab);
-//        is_frequency = true;
-//    }
-//
-//    // Loop on 'tab_modulus'. Get 'modules' and type of spectrum sample.
-//    const double* tab_modulus = ty_spectrum_ptr->getTabValReel();
-//    // XXX Clarify the different available 'types' of spectrum.
-//    string type = "third-octave";
-//    for (int i = 0; i < ty_spectrum_ptr->getNbValues(); ++i)
-//    {
-//        double modulus = tab_modulus[i];
-//        SpectrumSample::pointer
-//            sample_ptr(new SpectrumSample(modulus, type));
-//
-//        // Link the \c tympan::SpectrumSample with all frequencies via
-//        // \c tympan::frequency_rdef.
-//        frequency_container::const_iterator freq_it = frequencies.begin();
-//        for (; freq_it != frequencies.end(); ++freq_it) {
-//            sample_ptr->add<frequency_rdef>(*freq_it);
-//        }
-//
-//        // Link the spectrum sample with the single \c tympan::AcousticSpectrum via
-//        // \c tympan::sample_of_rdef.
-//        sample_ptr->add<sample_of_rdef>(acoustic_spectrum_ptr);
-//    }
-//}
-
-
 void SolverDataModelBuilder::setAcousticBuildMaterial(LPTYMateriauConstruction material_ptr)
 {
-//    std::cout << " # setAcousticBuildMaterial #" << std::endl;
+    // TODO is a kind of registry needed for Materials ? Cf. ticket #1469657
+
 //    // Building material.
 //    AcousticBuildingMaterial::pointer
 //        build_mat_ptr(new AcousticBuildingMaterial());
@@ -306,13 +174,10 @@ void SolverDataModelBuilder::setAcousticBuildMaterial(LPTYMateriauConstruction m
 //
 //    // Link AcousticBuildingMaterial with a \c AcousticSpectrum.
 //    build_mat_ptr->add<reflection_spectrum_rdef>(acoustic_spectrum_ptr);
-//
-//    // Update relations between freq. & samples.
-//    updateSpectrumRelations(&ty_spectrum, acoustic_spectrum_ptr);
 }
 
 
-void SolverDataModelBuilder::setAcousticSource(LPTYSiteNode site_ptr)
+void SolverDataModelBuilder::processAcousticSources(LPTYSiteNode site_ptr)
 {
 //    // Need project and calcul to get all source points.
 //    LPTYInfrastructure infrastructure_ptr = site_ptr->getInfrastructure();
@@ -370,7 +235,7 @@ void SolverDataModelBuilder::setAcousticSource(LPTYSiteNode site_ptr)
 //    }
 }
 
-void SolverDataModelBuilder::setAcousticReceptor(LPTYSiteNode site_ptr)
+void SolverDataModelBuilder::processAcousticReceptors(LPTYSiteNode site_ptr)
 {
 //    // Need project and calcul to get all receptors.
 //    LPTYInfrastructure infrastructure_ptr = site_ptr->getInfrastructure();

@@ -1,6 +1,5 @@
 /**
  * @file SolverDataModelBuilder.hpp
- *
  * @brief The \c SolverDataModelBuilder is responsible to build a solver data
  *        model from a site.
  *
@@ -67,7 +66,9 @@ public:
         according to the relation definitions.
       \param site_ptr A pointer to a \c TYSideNode.
      */
-    void setGeometricEntities(LPTYSiteNode site_ptr);
+    void processInfrastructure(LPTYSiteNode site_ptr);
+
+    void processAltimetry(LPTYSiteNode site_ptr);
 
     /**
      *
@@ -113,7 +114,7 @@ public:
            - AcousticPath (solver output)
            - DefaultSolverSourceDirectivity (not yet)
      */
-    void setAcousticSource(LPTYSiteNode site_ptr);
+    void processAcousticSources(LPTYSiteNode site_ptr);
 
     //! Update the \c tympan::AcousticReceptor
     /*! \todo Complete input args (if necessary). Link it with \c
@@ -121,7 +122,7 @@ public:
         not occur in the schema) by the relation 'receptor'.
      \param site_ptr A pointer to a \c TYSiteNode.
      */
-    void setAcousticReceptor(LPTYSiteNode site_ptr);
+    void processAcousticReceptors(LPTYSiteNode site_ptr);
 
     //! Update the \c tympan::DiffractionEdge entity.
     /*! \warning Not implemented yet. Complete arguments. Link it with a \c
