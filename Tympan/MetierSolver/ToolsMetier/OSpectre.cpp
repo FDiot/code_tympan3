@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -979,8 +979,7 @@ bool OSpectre::isTonalite()const
     return false;
 }
 
-
-unsigned int OSpectre::getNbValues()
+unsigned int OSpectre::getNbValues()const
 {
     unsigned int nbFreq = TY_SPECTRE_DEFAULT_NB_ELMT;
 
@@ -996,21 +995,3 @@ unsigned int OSpectre::getNbValues()
 
     return nbFreq;
 }
-
-const unsigned int OSpectre::getNbValues()const
-{
-    unsigned int nbFreq = TY_SPECTRE_DEFAULT_NB_ELMT;
-
-    switch (_form)
-    {
-        case SPECTRE_FORM_OCT:
-            nbFreq = 9;
-            break;
-        default:
-            nbFreq = TY_SPECTRE_DEFAULT_NB_ELMT;
-            break;
-    }
-
-    return nbFreq;
-}
-
