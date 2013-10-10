@@ -1,6 +1,6 @@
 set(MODULE_NAME tympan_qt_app)
 
-file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h)
+file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h *.hpp)
 # Some problematic / unused source files to be removed
 # list(REMOVE_ITEM ${MODULE_NAME}_SRCS )
 
