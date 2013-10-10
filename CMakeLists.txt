@@ -15,10 +15,6 @@ endif(${CMAKE_VERSION} VERSION_GREATER 2.8.4)
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 include(tympan-platform)
 
-# Options related to Yams++: using development or release versions.
-option(TYMPAN_USE_DEVEL_YAMS
-  "Use the devel version of Yams++ instead of a release version." OFF)
-
 # Configure where to fetch 3rd party dependencies
 # Please cf. the file "3rdparty/README"
 set(TYMPAN_3RDPARTY_GTEST "${CMAKE_SOURCE_DIR}/3rdparty/gtest-1.6.0.zip"
@@ -29,13 +25,6 @@ set(TYMPAN_3RDPARTY_DIME "${CMAKE_SOURCE_DIR}/3rdparty/dime-137851b034f6.zip"
 
 set(TYMPAN_3RDPARTY_DIME_MD5  "8d144a016b3fb1cb1ac606d39ec7fccb"
     CACHE STRING "Checksum for the TYMPAN_3RDPARTY_DIME archive.")
-
-set(TYMPAN_3RDPARTY_YAMS  "${CMAKE_SOURCE_DIR}/3rdparty/yams++-0.1.1.zip"
-  CACHE STRING "Where to fetch the external project Yams++")
-
-set(TYMPAN_3RDPARTY_YAMS_MD5  "d787b484d4588bbc6e52bbda05d16cd4"
-    CACHE STRING "Checksum for the TYMPAN_3RDPARTY_YAMS archive.")
-
 
 ## If you are having trouble getting CMake find boost you probably want to set
 # set(Boost_DEBUG TRUE)
