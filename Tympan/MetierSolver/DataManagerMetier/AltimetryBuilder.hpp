@@ -379,7 +379,7 @@ public:
      * @return the altitude of \c p or \c unspecified_altitude if \c p is out-of-scope
      */
     double
-    computeAltitude(const CGAL_Point& p);
+    computeAltitude(const CGAL_Point& p) const;
 
     /**
      * @brief Auxilliary method used to insert points into the triangulation

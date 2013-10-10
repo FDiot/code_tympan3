@@ -150,7 +150,7 @@ AltimetryBuilder::process(TYCourbeNiveau& courbe_niveau, const OMatrix& matrix, 
 }
 
 double
-AltimetryBuilder::computeAltitude(const CGAL_Point& p)
+AltimetryBuilder::computeAltitude(const CGAL_Point& p) const 
 {
     // Query the triangulation for the location of p
     CDT::Locate_type lt;
