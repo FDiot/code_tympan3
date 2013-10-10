@@ -61,17 +61,17 @@ AltimetryBuilder::~AltimetryBuilder()
 void
 AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_curve)
 {
-	// This should be compared to the old method 'TYTopographie::collectPointsForAltimetrie'
+    // This should be compared to the old method 'TYTopographie::collectPointsForAltimetrie'
 
     // No need to handle the 'emprise' it is implicitely handled by the merging
     // of the sub-sites, which is expected to be done before entering this method.
-	// XXX This seems no to be exact
-	TYTabCourbeNiveauGeoNode& level_curves = topography.getListCrbNiv();
-	// If we don't have any level curve we force the emprise to become one.
-	if (level_curves.empty())
-		process_emprise(topography, true);
-	else
-		process_emprise(topography, use_emprise_as_level_curve);
+    // XXX This seems no to be exact
+    TYTabCourbeNiveauGeoNode& level_curves = topography.getListCrbNiv();
+    // If we don't have any level curve we force the emprise to become one.
+    if (level_curves.empty())
+        process_emprise(topography, true);
+    else
+        process_emprise(topography, use_emprise_as_level_curve);
 
     BOOST_FOREACH(LPTYCourbeNiveauGeoNode p_geo_node, level_curves)
     {
@@ -83,13 +83,13 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
         process(*p_curve, matrix);
     }
 
-    BOOST_FOREACH(LPTYTerrainGeoNode p_geo_node, topography.getListPlanEau())
+    BOOST_FOREACH(LPTYPlanEauGeoNode p_geo_node, topography.getListPlanEau())
     {
         TYPlanEau* p_water =
-        		TYPlanEau::safeDownCast(p_geo_node->getElement());
+            TYPlanEau::safeDownCast(p_geo_node->getElement());
     	p_geo_node->updateMatrix();
         const OMatrix& matrix = p_geo_node->getMatrix();
-        // This assumes the _pCrbNiv is up to date (XXX to be checked)
+        // This assumes the _pCrbNiv is up to date (TODO to be checked)
         process(*p_water->getCrbNiv(), matrix); // Process the underlying level curve
         process(*p_water, matrix); // TYPlanEau inherits from TYTerain
     }
