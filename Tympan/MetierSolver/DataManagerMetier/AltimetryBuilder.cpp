@@ -230,7 +230,7 @@ AltimetryBuilder::insertMaterialPolygonsInTriangulation()
     }
     if (!cdt.is_valid())
     {
-        throw AlgorithmicError();
+        throw AlgorithmicError("AltimetryBuilder::insertMaterialPolygonsInTriangulation: invalid triangulation");
     }
     // Give an altitude to the points inserted as intersections of contraints.
 	for(CDT::Vertex_iterator vit = cdt.vertices_begin();
@@ -247,7 +247,7 @@ AltimetryBuilder::indexFacesMaterial()
 {
     if (cdt.number_of_faces() == 0)
     {
-        throw AlgorithmicError();
+        throw AlgorithmicError("AltimetryBuilder::indexFacesMaterial: empty triangulation");
     }
     unsigned N_poly = material_polygons.size();
     poly_to_faces.resize(N_poly);
@@ -318,7 +318,7 @@ AltimetryBuilder::labelFaces()
 {
     if (face_to_poly.size() == 0)
     {
-        throw AlgorithmicError();
+        throw AlgorithmicError("AltimetryBuilder::labelFaces: empty triangulation");
     }
     // For each face in the triangulation
     for (CDT::Finite_faces_iterator f_it = cdt.finite_faces_begin();
@@ -389,10 +389,7 @@ void AltimetryBuilder::exportMesh(
                     // attempt is likely pointless.
                     double alti = computeAltitude(vit->point());
                     if (!is_valid_altitude(alti)){
-                        OMessageManager::get()->info(
-                            "This might be a point of the `emprise` "
-                            "while the latter is not considered as a level curve.\n");
-                        throw AlgorithmicError();
+                        throw AlgorithmicError("AltimetryBuilder::exportMesh: unable to compute a valid altitude");
                     }
                     else
                         p._z = alti;
