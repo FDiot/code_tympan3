@@ -1020,11 +1020,6 @@ void TYTopographie::computeAltimetricTriangulation(
 	}
 
 	// we instanciate an AltimetryBuilder
-	if (p_alti_builder.get()!=NULL)
-	{
-		std::cerr <<  "WARNING "<< __FILE__ << " l. " << __LINE__ << " : ";
-		std::cerr << "An altimetry builder should NOT have been constructed yet : we force clean it !" << std::endl;
-	}
 	p_alti_builder.reset(new tympan::AltimetryBuilder());
 
 	// We ask it to process this topography
