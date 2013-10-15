@@ -126,7 +126,10 @@ void SolverDataModelBuilder::processMesh(
     size_t i = 0;
     BOOST_FOREACH(const Point& point, points)
     {
-    	map_to_model_node_idx[i++] = model.make_node(point); // add the points
+        if(tympan::is_valid_altitude(point._z))
+            map_to_model_node_idx[i++] = model.make_node(point); // add the points
+        else
+            throw tympan::AlgorithmicError("SolverDataModelBuilder::processMesh: invalid altitude while exporting a point");
     }
 
     BOOST_FOREACH(const OTriangle& tri, triangles)

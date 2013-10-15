@@ -388,11 +388,9 @@ void AltimetryBuilder::exportMesh(
                     // supposedly computed on the fly and this late
                     // attempt is likely pointless.
                     double alti = computeAltitude(vit->point());
-                    if (!is_valid_altitude(alti)){
-                        throw AlgorithmicError("AltimetryBuilder::exportMesh: unable to compute a valid altitude");
-                    }
-                    else
-                        p._z = alti;
+                    // NB Raising an exception here in case the altitude would still be invalid
+                    // is tempting but a bit too strong : let the caller check as
+                    // invalid altitudes seems to be better handled at the caller's level.
                 }
 
 		points.push_back(p);
