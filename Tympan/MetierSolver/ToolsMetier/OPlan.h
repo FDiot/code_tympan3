@@ -232,10 +232,16 @@ public:
      * \brief Check whether the plane is valid.
      *
      * a OPlan object can be invalid, i.e. not actually represent a
-     * plane, in case the normal vector (\c _a, \c _b, \c _c) is
-     * null. This is the case when a OPlam is default constructed.
+     * plane, in case two cases :
+     *  - the normal vector (\c _a, \c _b, \c _c) is null.
+     *    This is the case when a OPlan is default constructed.
+     *  - the normal vector, the origin, ... has not component which is NaN
+     *    This can happend when points with NaN component are used.
      */
     bool is_valid();
+    bool is_null();
+    bool is_NaN();
+
 
     /**
      * \fn double angle(const OPlan& plan);
