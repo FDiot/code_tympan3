@@ -20,6 +20,8 @@
 
 #include <cassert>
 
+#include <boost/math/special_functions/fpclassify.hpp>
+
 #include "OPlan.h"
 #include "OGeometrie.h"
 
@@ -120,8 +122,22 @@ void OPlan::set(const OPoint3D& pt, const OVector3D& normale)
     update_explicit_repr();
 }
 
+
+bool OPlan::is_null()
+{
+return _a==0 && _b==0 && _c==0;
+}
+
+bool OPlan::is_NaN()
+{
+    return (boost::math::isnan(_a) || boost::math::isnan(_b) ||
+            boost::math::isnan(_c) || boost::math::isnan(_d) );
+}
+
 bool OPlan::is_valid()
-{ return _a!=0 || _b!=0 || _c!=0; }
+{
+    return !is_NaN() && !is_null();
+}
 
 #define ___XBH_VERSION
 #ifdef ___XBH_VERSION
@@ -348,8 +364,10 @@ bool OPlan::isOrthogonal(const OPlan& plan)
 void OPlan::update_explicit_repr( OVector3D hint /* = OVector3D(1, 1, 1) */ )
 {
     // We check the plane is valid
-    // assert(is_valid()); // This is too strong, invalid planes are crated by TYRectangles e.g.
-    if(!is_valid())
+    // assert(is_valid()); // This is too strong, null planes are crated by TYRectangles e.g.
+    // 'Proper' null planes are silently ignored and planes built from NaN rejected
+    assert(!is_NaN() && "Trying to build a plane from NaN values !");
+    if(is_null())
         return;
 
     // The origin of the plane is the projection on the plane of the 3D origin.
