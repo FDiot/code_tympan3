@@ -1,6 +1,6 @@
 /**
- * \file test_examples.cpp
- * \test Various examples of testing and utils to debug testing environment
+ * \file test_environment.cpp
+ * \test Some debuging of the testing environment
  *
  *  Created on: 6 nov. 2012
  *      Author: Anthony Truchet <anthony.truchet@logilab.fr>
@@ -14,10 +14,9 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-TEST(ExampleTest, dumpenv) {
+TEST(PathTest, dumpenv) {
 
     char* path = std::getenv("PATH");
     ASSERT_FALSE(path==NULL);
     cerr << "PATH = " << path << endl;
 }
-

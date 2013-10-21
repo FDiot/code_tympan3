@@ -141,11 +141,10 @@ there are other resources:
   - The reference book `Mastering CMake
     <http://www.cmake.org/cmake/help/book.html>`_
 
-  - The `online documentation
-    <http://www.cmake.org/cmake/help/documentation.html>`_ with a `tutorial
-    <http://www.cmake.org/cmake/help/cmake_tutorial.html>`_, a `Wiki
-    <http://www.cmake.org/Wiki/CMake>`_ and a `FAQ
-    <http://www.cmake.org/Wiki/CMake_FAQ>`_.
+  - The `online documentation <http://www.cmake.org/cmake/help/documentation.html>`_ with the
+    `cmake tutorial <http://www.cmake.org/cmake/help/cmake_tutorial.html>`_,
+    a `Wiki <http://www.cmake.org/Wiki/CMake>`_ and a
+    `FAQ <http://www.cmake.org/Wiki/CMake_FAQ>`_.
 
 .. _CMake: http://www.cmake.org/
 
