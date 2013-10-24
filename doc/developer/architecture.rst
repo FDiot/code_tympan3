@@ -1,0 +1,210 @@
+.. _dev-architecture:
+
+Architecture
+============
+
+This part deals with the description of the Code_TYMPAN architecture. Each
+section represents a part of the code: GUI, tools, etc. and describes how the
+code is organized:
+
+  - main organization of the code and the different part ;
+  - some dependencies between these different parts ;
+  - what kind of objects you will find in the different part ;
+  - the present and the future of the Code_TYMPAN architecture.
+
+Code_TYMPAN is made of different parts: core & tools, business logic, graphical
+user interface and solvers.
+
+.. note::
+
+   A refactoring is planned. Read the section `Future Architecture`_ about this
+   issue.
+
+The schema of the current architecture:
+
+.. figure:: ../_static/built_resources/SourcesCurrentArch.png
+   :align: center
+   :alt: Current architecture schema
+
+   Current architecture schema
+
+.. todo:: write a legend for the previous schema
+
+.. note::
+
+   The main Code_TYMPAN executable to launch the application is in the
+   ``Appli/TympanApp`` directory. Other directories are dedicated to build
+   libraries or plugins (for the solvers).
+
+
+Core and Tools
+--------------
+
+See the ``Tools`` directory and some sub-directories in ``MetierSolver``:
+
+  - ``DataManagerCore``: the main base class ``TYElement`` used for every
+    business logic object. Also implement an interface for the solvers and some
+    XML tools in order to export/import a Code_TYMPAN study ;
+  - ``ToolsMetier`` common objects used by the `Business Logic`_ objects: point,
+    vector, matrix, etc.
+
+
+Business Logic
+--------------
+
+.. note::
+
+   *Business Logic* is the part of the code which is not technical. Deal with
+   "real life" models: buildings, machine, fields, etc.
+
+See the different sub-directories in ``MetierSolver/DataManagerMetier``:
+
+  - ``DataManagerMetier``: objects which describe a site, acoustic objects
+    (sources, receptor, paths), materials, machines, etc.
+  - ``SolverDataModel``: the current work which describes a data model for the
+    solvers. This is a part of the `Future Architecture`_;
+
+For now, the splitting between the business logic objects and the `Graphical User
+Interface`_ is not clear. In other words, you can have a strong dependency
+between ``MetierSolver/DataManagerMetier`` and graphical widgets described in
+``GraphicIHM/DataManagerIHM``. One of the objectives described in the section
+`Future Architecture`_ is to split these parts.
+
+
+Graphical User Interface
+------------------------
+
+See in ``GraphicIHM`` and its three sub-directories:
+
+ - ``ToolsGraphic`` common tools and objects used for the GUI ;
+ - ``DataManagerIHM`` widgets such as buttons, boxes and some widgets dedicated
+   to a specific business logic objets such as a building, a field, a spectrum,
+   etc. ;
+ - ``DataManagerGraphic`` 3D representation of business logic objecst such as a
+   building, a machine, etc.
+
+Rendering
+`````````
+
+The OpenGL API is used to render the scene geometry. The application uses immediate mode and 
+display lists, these methods are from an old specification of OpenGL and are now deprecated.
+When immediate mode is used, the server (GPU) wait for the client (CPU) to send the geometry.
+This method is slow because the GPU has to wait for all the data to be transferred.
+The rendering function of each business logic object is located in ``GraphicIHM/DataManagerGraphic`` 
+and simple geometry rendering can be found at ``GraphicIHM/ToolsGraphic``.
+
+In order to make the rendering faster, the OpenGL commands can be compiled and store on the GPU.
+That way, the CPU simply has to tell the GPU to render this display list instead of sending the 
+geometry on each frame. The use of displayList can be found at ``Appli/TympanApp/TYOpenGLRenderer.cpp``.
+It simply encapsulates all the rendering function (immediate mode) of the scene.
+
+The modern way to render things in OpenGL relies on the use of VBO's (Vertex Buffer Object). The idea is 
+to store the geometry on the GPU as compact arrays (of vertices, indices, normals, ...). One advantage over 
+the display list is that you can access these buffers and edit the data in a dynamic way, whereas display 
+lists are static, in a sense that when the geometry changes you have to recompile/send the whole display 
+list again.
+
+The matrix management of the application relies on the OpenGL matrices, by using functions such as 
+glRotate(), glTranslate(), ... Additionally, the matrix management of OpenGL features a stack of 
+matrices (glPushMatrix(), glPopMatrix()).
+The goal of OpenGL is to take advantages of the "**GPU**", but all the functions that implies matrix 
+operations are done on the "**CPU**", they are now deprecated and should be done by the application 
+itself and not the OpenGL API. There exists many libraries that features matrix management (CGAL? Qt?).
+
+Picking
+```````
+
+The picking is entirely done on the GPU by using a name stack and a selection buffer.
+This method rely on OpenGL deprecated functions and the steps are as followed:.
+
+ #. We define a small "*picking window*"(5 pixel width) and we enter selection mode 
+    (a mode where the resulting rendering won't be displayed).
+ #. We give a "*name*" (an integer) to each object we are willing to pick/draw.
+ #. The objects are then rendered. If a primitive falls inside the "*picking window*", a "*hit*" occurs.
+ #. For each "*hit*", the primitive with the smallest z-value (the closest one) is chosen.
+
+The algorithm is located in the ``Appli/TympanApp/TYElementPicker.cpp`` file.
+
+.. note::
+
+   Actually, numerous names can be given to a primitive, that's the reason why a stack is used.
+   It enables the programmer to pick objects as an hierarchical structure.
+
+There are two principal different ways of doing picking :
+
+  - color picking ;
+  - ray intersection.
+
+The color picking uses entirely the GPU once again. We render every objects with an unique 
+color, then we read the color of the pixel under the mouse. This technique is straighforward and should 
+be simple to implement, however we can't get the coordinate of the intersection point.
+
+The other method consists of a ray that we cast on the scene, and then perform ray-intersection 
+test against the object of our scene. Usually, the ray go through an acceleration structure (e.g. grid, 
+octree, k-d tree, etc), before being tested with the bounding box of the object. This method usually 
+run on the CPU and is independant of the rendering API. It is easy to know the exact intersection 
+point between our ray and the picked object.
+
+.. note::
+
+   It might be possible to re-use the acceleration structures from ``MetierSolver/AcousticRaytracer/Accelerator`` for the ray-intersection method.
+
+Solvers
+-------
+
+All directories in ``MetierSolver/Solvers`` and
+``MetierSolver/AcousticRaytracer``. The sub-directories in ``AcousticRaytracer``
+is dedicated to the solver named *Simple Ray Solver* but does not occur in the
+``Solvers`` directory.
+
+
+Future Architecture
+-------------------
+
+One proposes to improve the current architecture in order to clearly split
+independent features. For instance, the business logic should not have a
+dependency on the graphical user interface (as previously described). Moreover,
+the separation between core/tools and the business logic is not clear. The main
+idea is to split:
+
+  - the graphical user interface ;
+  - business logic ;
+  - several solvers: Default, ANIME3D, Simple Ray Solver, etc.
+
+Some tasks have already been started:
+
+ #. Make a data model for the solver part, i.e. create objects such acoustic
+    sources, triangles related to a material, a spectrum, etc. in order to
+    define a model used by any solver. These objecs are built from a specific
+    site.
+ #. Change the core simulation workflow in order to have a clear separation
+    between the business logic and the solvers. In other words, data from site
+    to the computation and then the graphical user interface will be provided by
+    a few data files.
+
+Here a schema about the splitting between site elements and the computation ---
+separate the business logic related to a site with the way to solve the acoustic
+problem. A computation needs triangles with materials from a site triangulation,
+acoustic sources/receptors and an altimetry.
+
+.. figure:: ../_static/built_resources/SiteBDM.png
+   :align: center
+   :alt: Target architecture schema
+
+   Proposal of the futur architecture
+
+
+About the future architecture, take a look at the following schema.
+
+.. figure:: ../_static/built_resources/SourcesTargetArch.png
+   :align: center
+   :alt: Target architecture schema
+
+   Proposal of the futur architecture
+
+.. note::
+
+   This is just a proposal for the future architecture. It may be modified
+   later.
+
+.. todo:: write a legend for the two previous schemas
