@@ -54,8 +54,7 @@ TEST_F(BuildingFromSiteFixture, DISABLED_check_base)
 
     // TODO : how to test the altitude of a point ? or access a
     // triangle at some place ?
-
-    // TODO Work In Progress
+    // TODO to be completed: cf. ticket #1468184
 
     // Note spatial accelerating structure in solver data model ? :
     // cf. http://www.cs.ubc.ca/research/flann/ or check CGAL meshes...
@@ -75,7 +74,7 @@ TEST_F(BuildingFromSiteFixture, check_base_known_bad_results)
     EXPECT_EQ(5, model.num_triangles());
 }
 
-TEST_F(BuildingFromSiteFixture, check_ground)
+TEST_F(BuildingFromSiteFixture, DISABLED_check_ground)
 {
     load_file("../data/solver_export/ground_materials.xml");
 
@@ -86,11 +85,6 @@ TEST_F(BuildingFromSiteFixture, check_ground)
     EXPECT_EQ(3, model.num_materials());
     // FIXME the default material is replicated once per triangle.
 
-    // EXPECT_EQ(6, model.num_points());
-    // TODO Not sure `how many ?` is relevant : find a better test
-
-    // How to test the altitude of a point ? or access a
-    // triangle at some place ?
     // TODO to be completed: cf. ticket #1468184
 }
 
