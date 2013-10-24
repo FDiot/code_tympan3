@@ -52,10 +52,19 @@ the correctness of data export to the solver data model.
     5m. The point (0, 0) should thus have altitude 10m and default
     material (*Sol 0* whose resistivity is 20000 kRay).
 
-    .. note:: todo
+    .. note:: **TODO** implement the check
 
-              Implement this test.
+``ground_material.xml``
 
+    A site base upon ``base.xml``. It adds a new ground material as an upper
+    left triangle and a new piece of water in the upper middle at
+    altitude 12m.
+
+    .. note:: No automated test is implemented for now, but a visual
+              display reveals ticket [1471928]_ and *may be* a case
+              for ticket [609910]_
+
+              **TODO** implement a check
 
 Misc files
 ==========
@@ -68,3 +77,9 @@ Misc files
 ``*palette.xml``
 
     Those file are use by the unit tests for the TYPalette(Widget)
+
+
+.. References
+
+.. [1471928] https://extranet.logilab.fr/ticket/1471928
+.. [609910] https://extranet.logilab.fr/ticket/609910
