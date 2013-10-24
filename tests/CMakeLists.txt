@@ -44,7 +44,7 @@ set(TYMPAN_CTEST_ENV )
 
 # XXX It should be possible to make this much lighter
 set (TYMPAN_MODULES
-  tympan_solver_data_model
+  tympan_data_exchange tympan_solver_data_model
   tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
   tympan_tools_metier tympan_tools_graphics tympan_tools)
 
@@ -63,9 +63,8 @@ set_property(TEST test_example PROPERTY ENVIRONMENT "${LD_VARNAME}=${ADD_PATH_ST
 file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-add_subdirectory(DataExchange)
 add_subdirectory(business_logic)
 add_subdirectory(gui)
 add_subdirectory(io)
 add_subdirectory(SolverDataModel)
-add_subdirectory(solver_app_interface)
+add_subdirectory(data_exchange)
