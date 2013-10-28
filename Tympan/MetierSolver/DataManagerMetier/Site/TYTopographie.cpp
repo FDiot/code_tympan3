@@ -1026,6 +1026,15 @@ void TYTopographie::computeAltimetricTriangulation(
 	p_alti_builder->process(*this, use_emprise_as_level_curve);
 	p_alti_builder->insertMaterialPolygonsInTriangulation();
 
+        // We do update the materials
+        p_alti_builder->indexFacesMaterial();
+        // There should be a actual default ground material in the app
+        // But actually the default material in TYTerrain happens to be
+        // a new default constructed TYSol. So we do the same.
+        // TODO cf https://extranet.logilab.fr/ticket/1481980
+        LPTYSol def_mat( new TYSol() );
+        p_alti_builder->labelFaces(def_mat);
+
 	//Fill points and triangle
 	p_alti_builder->exportMesh(points, triangles);
 
@@ -1621,4 +1630,6 @@ unsigned TYTopographie::number_of_faces() const
 { return p_alti_builder->number_of_faces(); }
 
 void TYTopographie::exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>* p_materials)
-{ p_alti_builder->exportMesh(points, triangles, p_materials); }
+{
+    p_alti_builder->exportMesh(points, triangles, p_materials);
+}
