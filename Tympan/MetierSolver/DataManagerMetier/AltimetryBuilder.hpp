@@ -129,9 +129,10 @@ public:
 struct FaceInfo
 {
     FaceInfo():
-        material(new TYSol()) {}
+        material(NULL) {}
     FaceInfo(const material_t mat):
         material(mat) {}
+    bool is_valid() const { return material!=NULL; }
     material_t material;
 };
 
@@ -446,7 +447,7 @@ public:
      * material : ie the material of the most specific MaterialPolygon.
      */
     void
-    labelFaces();
+    labelFaces(material_t default_material);
 
     /**
      * @brief Insert a point and a constraint into the triangulation

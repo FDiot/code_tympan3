@@ -79,7 +79,7 @@ int main(int argc, char **argv)
 	builder.insertMaterialPolygonsInTriangulation();
 
 	builder.indexFacesMaterial();
-	builder.labelFaces();
+	builder.labelFaces(def_mat);
 
 	std::cout<< builder.cdt;
 

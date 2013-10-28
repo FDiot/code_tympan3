@@ -120,9 +120,9 @@ AltimetryBuilder::process_emprise(TYTopographie& topography, bool as_level_curve
         		ty_tab_points | transformed(boost::bind(to_cgal2_info, alti, _1)),
         		true);
     }
-    // and we process it as a default terrain
-    material_polygons.push_back(new MaterialPolygon(
-    		ty_tab_points, topography.getDefTerrain()->getSol() ));
+    // We purposefully do not process the land-take as a default
+    // terrain area. Indeed, un most cases, it will be impoossible to
+    // compute the z-coordinates for the resulting triangles.
 }
 
 void
@@ -314,7 +314,7 @@ bool AltimetryBuilder::poly_comparator::operator()(face_to_material_poly_t::valu
 
 
 void
-AltimetryBuilder::labelFaces()
+AltimetryBuilder::labelFaces(material_t default_material)
 {
     if (face_to_poly.size() == 0)
     {
@@ -337,7 +337,8 @@ AltimetryBuilder::labelFaces()
         material_polygon_handle_t poly_h = min_p_it->second;
         // Extract the associated material.
         material_t mater = material_polygons[poly_h].material;
-        face_h->info().material = mater;
+        face_h->info().material = mater==NULL ? default_material : mater;
+        assert(face_h->info().material != NULL);
     }
 }
 
@@ -405,6 +406,7 @@ void AltimetryBuilder::exportMesh(
 		fit	!= cdt.finite_faces_end(); ++fit)
 	{
             if(p_materials) {
+                assert(fit->info().is_valid() && "No valid material assigned to this face");
 		const material_t& material = fit->info().material;
                 p_materials->push_back(material);
             }
@@ -493,7 +495,10 @@ AltimetryBuilder::addFacesInfo(QGraphicsScene* scene) const
 	{
 		std::stringstream txt;
 		material_t material = fit->info().material;
-		txt << material->getName().at(0).toAscii(); // First character of the material name
+                if (material==NULL)
+                    txt << "!";
+                else
+                    txt << material->getName().at(0).toAscii(); // First character of the material name
 		drawText(scene, CGAL::centroid(cdt.triangle(fit)), txt.str() );
 	}
 

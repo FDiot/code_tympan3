@@ -68,7 +68,6 @@ class TYTopographie: public TYElement
     TY_EXT_GRAPHIC_DECL(TYTopographie)
 
     // Methodes
-    // friend class tympan::AltimetryBuilder; // XXX required ?
 
 public:
     /**
@@ -409,14 +408,6 @@ public:
     		std::deque<OPoint3D>& points,
     		std::deque<OTriangle>& triangles,
     		bool use_emprise_as_level_curve = true);
-
-    /**
-     * Collecte l'ensemble des points necessaires a la generation
-     * de l'altimetrie. Version 1D
-     */
-    // TYTabPoint collectPointsForAltimetrie(bool bEmpriseAsCrbNiv = false) const;
-    // XXX The altimetry building process is being rewritten and this function replaced
-
 
     /**
      * Calcule la pente moyenne pour le segment donne.
