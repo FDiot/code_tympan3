@@ -31,20 +31,26 @@ bool is_valid_altitude(double alti)
 { return !boost::math::isnan(alti); } // Could and should use std::isnan in C++ '11
 
 
-MaterialPolygon::MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix) :
-		material( terrain.getSol() )
+MaterialPolygon::MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix)
+    throw(tympan::InvalidDataError)
+    : material( terrain.getSol() )
 {
-	BOOST_FOREACH(const TYPoint& point, terrain.getListPoints())
-		CGAL_Polygon::push_back( to_cgal2_transform(matrix, point) );
-	assert(terrain.getListPoints().empty() || this->is_simple());
+    if (terrain.getListPoints().size()<=2)
+        throw tympan::InvalidDataError("Invalid TYTerrain");
+    BOOST_FOREACH(const TYPoint& point, terrain.getListPoints())
+        CGAL_Polygon::push_back( to_cgal2_transform(matrix, point) );
+    assert(this->is_simple());
 }
 
-MaterialPolygon::MaterialPolygon(const TYTabPoint& contour, material_t ground, const OMatrix& matrix):
-		material(ground)
+MaterialPolygon::MaterialPolygon(const TYTabPoint& contour, material_t ground, const OMatrix& matrix)
+    throw(tympan::InvalidDataError)
+    : material(ground)
 {
-	BOOST_FOREACH(const TYPoint& point, contour)
-		CGAL_Polygon::push_back( to_cgal2_transform(matrix, point) );
-	assert(contour.empty() || this->is_simple());
+    if (contour.size()<=2)
+        throw tympan::InvalidDataError("Invalid TYTerrain");
+    BOOST_FOREACH(const TYPoint& point, contour)
+        CGAL_Polygon::push_back( to_cgal2_transform(matrix, point) );
+    assert(this->is_simple());
 }
 
 
@@ -80,7 +86,17 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
         const OMatrix& matrix = p_geo_node->getMatrix();
         TYCourbeNiveau* p_curve =
             TYCourbeNiveau::safeDownCast(p_geo_node->getElement());
-        process(*p_curve, matrix);
+        try{
+            process(*p_curve, matrix);
+        }
+        catch (tympan::InvalidDataError& error)
+        {
+            OMessageManager::get()->warning(
+                "Invalid level curve is ignored in building the Altimetry : %s (%s)",
+                p_geo_node->getElement()->getName().toUtf8().data(),
+                error.what() );
+
+        }
     }
 
     BOOST_FOREACH(LPTYPlanEauGeoNode p_geo_node, topography.getListPlanEau())
@@ -90,8 +106,17 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
     	p_geo_node->updateMatrix();
         const OMatrix& matrix = p_geo_node->getMatrix();
         // This assumes the _pCrbNiv is up to date (TODO to be checked)
-        process(*p_water->getCrbNiv(), matrix); // Process the underlying level curve
-        process(*p_water, matrix); // TYPlanEau inherits from TYTerain
+        try{
+            process(*p_water->getCrbNiv(), matrix); // Process the underlying level curve
+            process(*p_water, matrix); // TYPlanEau inherits from TYTerain
+        }
+        catch (tympan::InvalidDataError& error)
+        {
+            OMessageManager::get()->warning(
+                "Invalid water piece is ignored in building the Altimetry : %s (%s)",
+                p_geo_node->getElement()->getName().toUtf8().data(),
+                error.what() );
+        }
     }
 
     BOOST_FOREACH(LPTYTerrainGeoNode p_geo_node, topography.getListTerrain())
@@ -100,15 +125,24 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
             TYTerrain::safeDownCast(p_geo_node->getElement());
     	p_geo_node->updateMatrix();
         const OMatrix& matrix = p_geo_node->getMatrix();
-        process(*p_ground, matrix);
+        try{
+            process(*p_ground, matrix);
+        }
+        catch (tympan::InvalidDataError& error)
+        {
+            OMessageManager::get()->warning(
+                "Invalid ground material area is ignored in building the Altimetry : %s (%s)",
+                p_geo_node->getElement()->getName().toUtf8().data(),
+                error.what() );
+        }
     }
 }
 
 void
 AltimetryBuilder::process_emprise(TYTopographie& topography, bool as_level_curve)
 {
-	TYTabPoint& ty_tab_points = topography.getEmprise();
-	// If required, we process the emprise as a level curve
+    TYTabPoint& ty_tab_points = topography.getEmprise();
+    // If required, we process the emprise as a level curve
     if (as_level_curve)
     {
     	/* cf. AltimetryBuilder::process(TYCourbeNiveau&, bool)*/
@@ -136,6 +170,8 @@ void
 AltimetryBuilder::process(TYCourbeNiveau& courbe_niveau, const OMatrix& matrix, bool closed)
 {
     TYTabPoint& ty_tab_points = courbe_niveau.getListPoints();
+    if (ty_tab_points.empty())
+        throw tympan::InvalidDataError("Empty TYCourbeNiveau");
     double alti = courbe_niveau.getAltitude();
     /* We build a boost::Range of CGAL points on the fly  by calling
      * to_cgal2_info(alti, p) for each point p in ty_tab_points,
@@ -263,6 +299,7 @@ AltimetryBuilder::indexFacesMaterial()
         {
             // Test whether the Face is in the polygon
             const CGAL_Polygon& poly = material_polygons[i_poly];
+            assert(poly.size()>2 && "No invalid polygons should reach this point.");
             switch (poly.bounded_side(center))
             {
                 case CGAL::ON_UNBOUNDED_SIDE:
@@ -316,10 +353,6 @@ bool AltimetryBuilder::poly_comparator::operator()(face_to_material_poly_t::valu
 void
 AltimetryBuilder::labelFaces(material_t default_material)
 {
-    if (face_to_poly.size() == 0)
-    {
-        throw AlgorithmicError("AltimetryBuilder::labelFaces: empty triangulation");
-    }
     // For each face in the triangulation
     for (CDT::Finite_faces_iterator f_it = cdt.finite_faces_begin();
          f_it != cdt.finite_faces_end();
@@ -328,17 +361,28 @@ AltimetryBuilder::labelFaces(material_t default_material)
     	// Extract the range of material polygon (handles) containing the face f_it
         std::pair<face_to_material_poly_t::iterator, face_to_material_poly_t::iterator> p =
             face_to_poly.equal_range(f_it);
-        // Creates a comparator function object to compare polygons for inclusion
-        poly_comparator cmp(*this);
-        // Search for the minimal - ie most specific - polygon amoung them
-        face_to_material_poly_t::iterator min_p_it = std::min_element(p.first, p.second, cmp);
-        assert( min_p_it != p.second && "This should never happen.");
-        face_handle_t face_h = min_p_it->first;
-        material_polygon_handle_t poly_h = min_p_it->second;
-        // Extract the associated material.
-        material_t mater = material_polygons[poly_h].material;
-        face_h->info().material = mater==NULL ? default_material : mater;
-        assert(face_h->info().material != NULL);
+        // Check for no material polygon enclosing current face
+        if (p.first == p.second) // Test for some empty range
+        {
+            // In this case assign the default material
+            f_it->info().material = default_material;
+        }
+        else
+        {
+            // Creates a comparator function object to compare polygons for inclusion
+            poly_comparator cmp(*this);
+            // Search for the minimal - ie most specific - polygon amoung them
+            face_to_material_poly_t::iterator min_p_it = std::min_element(p.first, p.second, cmp);
+            assert( min_p_it != p.second && "This should never happen.");
+            assert( min_p_it->first ==  static_cast<face_handle_t>(f_it));
+            material_polygon_handle_t poly_h = min_p_it->second;
+            // Extract the associated material.
+            material_t mater = material_polygons[poly_h].material;
+            // Handle the case where no valid material has been associated to the material polygon
+            f_it->info().material = mater==NULL ? default_material : mater;
+        }
+        // Finally assert material is valid however
+        assert(f_it->info().material != NULL);
     }
 }
 

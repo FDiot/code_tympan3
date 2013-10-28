@@ -86,6 +86,43 @@ typedef LPTYSol material_t;
 /// @brief A constant representing yet unspecified altitude
 extern const double unspecified_altitude;
 
+
+/**
+ * @brief Exception class to represent an algorithmic error.
+ */
+struct AlgorithmicError :
+        public std::exception
+{
+    AlgorithmicError() throw() {}
+    AlgorithmicError(const char* msg_) : msg(msg_) {}
+    virtual ~AlgorithmicError() throw() {}
+
+    virtual const char * what() const throw() { return msg.c_str(); }
+
+protected:
+    const string msg;
+};
+
+
+/**
+ * @brief Exception class to represent invalid data.
+ *
+ * \todo Add a way to reference TYElement (by ptr or uuid)
+ */
+struct InvalidDataError :
+        public std::exception
+{
+    InvalidDataError() throw() {}
+    InvalidDataError(const char* msg_) : msg(msg_) {}
+    virtual ~InvalidDataError() throw() {}
+
+    virtual const char * what() const throw() { return msg.c_str(); }
+
+protected:
+    const string msg;
+};
+
+
 /**
  * @brief Adaptor for \c TYTerrain
  */
@@ -99,7 +136,8 @@ public:
      * @param terrain the TYTerrain to be adapted
      * @param matrix transform from the GeoNode holding \c terrain (default to identity)
      */
-    MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix=OMatrix());
+    MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix=OMatrix())
+        throw(tympan::InvalidDataError);
 
     /**
      * @brief Build a \c MaterialPolygon from a material and a polygon
@@ -107,7 +145,8 @@ public:
      * @param ground the ground material inside the polygon
      * @param matrix the transform from the GeoNode holding \c terrain (default to identity)
      */
-    MaterialPolygon(const TYTabPoint& contour, material_t ground, const OMatrix& matrix=OMatrix());
+    MaterialPolygon(const TYTabPoint& contour, material_t ground, const OMatrix& matrix=OMatrix())
+        throw(tympan::InvalidDataError);
 
     template <class InputRange>
     MaterialPolygon(InputRange poly, const material_t& material_):
@@ -236,23 +275,6 @@ inline
 std::pair<CGAL_Point, VertexInfo>
 to_cgal2_info(const OPoint3D& p)
 { return std::make_pair(to_cgal2(p), VertexInfo(p._z)); }
-
-
-/**
- * @brief Exception class to represent an algorithmic error and/or invalid data.
- */
-struct AlgorithmicError :
-        public std::exception
-{
-    AlgorithmicError() throw() {}
-    AlgorithmicError(const char* msg_) : msg(msg_) {}
-    virtual ~AlgorithmicError() throw() {}
-
-    virtual const char * what() const throw() { return msg.c_str(); }
-
-protected:
-    const string msg;
-};
 
 
 /// @brief Test fixture used to test the AltimetryBuilder
