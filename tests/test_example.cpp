@@ -18,12 +18,13 @@ double my_add_feature(double a, double b)
 
 TEST(ExampleTest, addonint) {
     // This macro handles the check and the reporting
-    EXPECT_EQUAL(5, my_add_feature(2, 3));
+    EXPECT_EQ(5, my_add_feature(2, 3));
 }
 
-TEST(ExampleTest, purposefulfail) {
+// the test name starting with DISABLED tells GTest it has to disable this test.
+TEST(ExampleTest, DISABLED_purposefulfail) {
     // This macro handles the check and the reporting
-    EXPECT_EQUAL(0, my_add_feature(2, 3));
+    EXPECT_EQ(0, my_add_feature(2, 3));
 }
 
 // TODO provide richer examples by need
