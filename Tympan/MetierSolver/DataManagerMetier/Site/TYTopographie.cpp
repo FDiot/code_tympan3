@@ -1025,6 +1025,8 @@ void TYTopographie::computeAltimetricTriangulation(
 	// We ask it to process this topography
 	p_alti_builder->process(*this, use_emprise_as_level_curve);
 	p_alti_builder->insertMaterialPolygonsInTriangulation();
+        if (p_alti_builder->number_of_faces() == 0)
+            return;
 
         // We do update the materials
         p_alti_builder->indexFacesMaterial();
