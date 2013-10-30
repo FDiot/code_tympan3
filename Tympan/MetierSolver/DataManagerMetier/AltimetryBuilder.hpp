@@ -88,6 +88,11 @@ extern const double unspecified_altitude;
 typedef tympan::logic_error AlgorithmicError;
 typedef tympan::invalid_data InvalidDataError;
 
+typedef boost::error_info<struct tag_elements_implied,
+                          std::deque<LPTYElement> > elements_implied_errinfo;
+typedef boost::error_info<struct tag_elements_implied,
+                          OPoint3D> position_errinfo;
+
 /**
  * @brief Adaptor for \c TYTerrain
  */
@@ -120,11 +125,16 @@ public:
         assert(this->is_simple());
     }
 
+    const LPTYTerrain& getOriginalTerrain() const {return p_origin_elem;}
+
     std::string material_name()
     { return material->getName().toStdString(); }
 
     CGAL_Polygon::Vertex_iterator begin() const { return vertices_begin(); }
     CGAL_Polygon::Vertex_iterator end() const {return vertices_end();}
+
+protected:
+    LPTYTerrain p_origin_elem;
 };
 
 /**
@@ -419,13 +429,13 @@ public:
      */
     struct NonComparablePolygons : tympan::invalid_data
     {
-        material_polygon_handle_t p1, p2;
-        face_set_t intersect;
+        const material_polygon_handle_t p1, p2;
+        const face_set_t intersect;
 
         NonComparablePolygons(
             material_polygon_handle_t p1_,
             material_polygon_handle_t p2_,
-            face_set_t intersect_
+            const face_set_t& intersect_
         ) DO_NOT_THROW
         : tympan::invalid_data("AltimetryBuilder: incomparable polygons"),
           p1(p1_), p2(p2_), intersect(intersect_) {}

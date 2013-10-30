@@ -12,7 +12,7 @@
 
 #include <cassert>
 #include <exception>
-#include <ostream>
+#include <deque>
 
 #include <boost/exception/all.hpp>
 #include <boost/tuple/tuple.hpp>
@@ -50,17 +50,15 @@ struct invalid_data: /*virtual*/ std::runtime_error, virtual tympan::exception {
  */
 
 /// The tag for retrieving the source file name
-typedef boost::error_info<struct tag_source_file_name, const char*> source_file_name;
+typedef boost::error_info<struct tag_source_file_name, const char*> source_file_name_errinfo;
 /// The tag for retrieving the source line number
-typedef boost::error_info<struct tag_source_line_num, unsigned> source_line_num;
+typedef boost::error_info<struct tag_source_line_num, unsigned> source_line_num_errinfo;
 /// The tuple packing source file name and line num into a source_loc
-typedef boost::tuple<source_file_name, source_line_num> source_loc;
-
-
+typedef boost::tuple<source_file_name_errinfo, source_line_num_errinfo> source_loc_errinfo;
 
 } //namespace tympan
 
 /// This macro build a \c source_loc object to be attached to a \c tympan::Exception
-#define tympan_source_loc  (tympan::source_loc( __FILE__, __LINE__))
+#define tympan_source_loc  (tympan::source_loc_errinfo( __FILE__, __LINE__))
 
 #endif // TYMPAN__EXCEPTIONS_HPP__INCLUDED
