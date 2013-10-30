@@ -39,6 +39,8 @@ TEST(exceptions, simple_logic) {
     catch(...) {
         FAIL() << "a tympan::exception which is not, also, a std::logic_error was thrown";
     }
+    // Check that std::exception is NOT an ambiguous base
+    ASSERT_THROW(throw_logic_default_constructed(), std::exception);
 }
 
 TEST(exceptions, source_localized) {
