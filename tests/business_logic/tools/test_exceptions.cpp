@@ -15,6 +15,7 @@
 #include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
 
 static unsigned test_exceptions_source_line_no;
+static const char * test_exceptions_func_name;
 
 void throw_logic_default_constructed()
 {
@@ -23,6 +24,7 @@ void throw_logic_default_constructed()
 
 void throw_invalid_data_localized()
 {
+    test_exceptions_func_name = BOOST_CURRENT_FUNCTION;
     test_exceptions_source_line_no = __LINE__;
     throw tympan::invalid_data("This is bad") << tympan_source_loc;
 }
@@ -46,6 +48,7 @@ TEST(exceptions, simple_logic) {
 TEST(exceptions, source_localized) {
     using tympan::source_file_name_errinfo;
     using tympan::source_line_num_errinfo;
+    using tympan::function_name_errinfo;
     using boost::get_error_info;
 
     ASSERT_THROW(throw_invalid_data_localized(), tympan::exception);
@@ -59,13 +62,19 @@ TEST(exceptions, source_localized) {
             EXPECT_STREQ(__FILE__, *p_filename);
         }
         else
-            FAIL() << "We could not extract 'source_file_name' from the exception";
+            FAIL() << "We could not extract 'source_file_name_errinfo' from the exception";
+        if( const char * const* p_funcname = get_error_info<function_name_errinfo>(exc) )
+        {
+            EXPECT_STREQ(test_exceptions_func_name, *p_funcname);
+        }
+        else
+            FAIL() << "We could not extract 'function_name_errinfo' from the exception";
         if( unsigned const* p_linenum = get_error_info<source_line_num_errinfo>(exc) )
         {
             EXPECT_EQ(test_exceptions_source_line_no+1, *p_linenum);
         }
         else
-            FAIL() << "We could not extract 'source_line_num' from the exception";
+            FAIL() << "We could not extract 'source_line_num_errinfo' from the exception";
     }
     catch(...) {
         FAIL() << "a tympan::exception which is not, also, a std::runtime_error was thrown";
