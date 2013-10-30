@@ -23,6 +23,7 @@
 
 // CGAL related Includes
 #include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
+#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
 
 #include <boost/ptr_container/ptr_deque.hpp>
 // http://www.boost.org/doc/libs/1_52_0/libs/ptr_container/doc/examples.html

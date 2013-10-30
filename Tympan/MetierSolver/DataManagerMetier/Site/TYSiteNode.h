@@ -362,12 +362,23 @@ class TYSiteNode: public TYElement
     void updateSol();
 
     /**
+     * This method mainly calls \c do_updateAltimetrie and handle exceptions
+     * be capturing them and returning a success status.
+     *
+     * \return weather the update succeeded
+     */
+    virtual bool updateAltimetrie(const bool& force = false);
+
+protected:
+    /**
      * Mise a jour de l'altimetrie.
      * Dans TYSite, cette methode appelle essentiellement 'computeAltimetrie' de
      * TYTopographie, mais elle peut etre surchargee pour des besoins specifiques
      * lors du calcul de l'altimetrie.
      */
-    virtual void updateAltimetrie(const bool& force = false);
+    virtual void do_updateAltimetrie(const bool& force = false);
+
+public:
 
     /**
      * Mise a jour de l'altitude pour les elements de l'infrastructure.
