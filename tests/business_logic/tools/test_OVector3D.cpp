@@ -19,8 +19,8 @@ using std::endl;
 
 TEST(sum, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(2.0, 3.0, 4.0);
-	OPoint3D pt2 = OPoint3D(1.0, 2.0, 3.0);
+	OPoint3D p1 = OPoint3D(2.0, 3.0, 4.0);
+	OPoint3D p2 = OPoint3D(1.0, 2.0, 3.0);
 	
 	OVector3D v1(p1), v2(p2);
 	
@@ -34,8 +34,8 @@ TEST(sum, dumpenv) {
 
 TEST(subst, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(2.0, 3.0, 4.0);
-	OPoint3D pt2 = OPoint3D(1.0, 2.0, 3.0);
+	OPoint3D p1 = OPoint3D(2.0, 3.0, 4.0);
+	OPoint3D p2 = OPoint3D(1.0, 2.0, 3.0);
 	
 	
 	OVector3D v1(p1), v2(p2);
@@ -50,8 +50,8 @@ TEST(subst, dumpenv) {
 
 TEST(prod1, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(2.0, 3.0, 4.0);
-	OPoint3D pt2 = OPoint3D(1.0, 2.0, 3.0);
+	OPoint3D p1 = OPoint3D(2.0, 3.0, 4.0);
+	OPoint3D p2 = OPoint3D(1.0, 2.0, 3.0);
 	
 	
 	OVector3D v1(p1), v2(p2);
@@ -66,8 +66,8 @@ TEST(prod1, dumpenv) {
 
 TEST(prod2, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(2.0, 3.0, 4.0);
-	double coef = 2.0;
+	OPoint3D p1 = OPoint3D(2.0, 3.0, 4.0);
+	double a = 2.0;
 	
 	OVector3D v1(p1);
 	
@@ -81,13 +81,13 @@ TEST(prod2, dumpenv) {
 
 TEST(cross, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(2.0, 4.0, 3.0);
-	OPoint3D pt2 = OPoint3D(2.0, 2.0, 2.0);
+	OPoint3D p1 = OPoint3D(2.0, 4.0, 3.0);
+	OPoint3D p2 = OPoint3D(2.0, 2.0, 2.0);
 		
 	OVector3D v1(p1), v2(p2);
 	
 	// Calcul du produit vectoriel
-	OVector3D v3 = v1.cross(v2;
+	OVector3D v3 = v1.cross(v2);
 
 	ASSERT_TRUE(v3._x ==  2.0);
 	ASSERT_TRUE(v3._y ==  2.0);
@@ -96,8 +96,8 @@ TEST(cross, dumpenv) {
 
 TEST(scalar, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(2.0, 3.0, 4.0);
-	OPoint3D pt2 = OPoint3D(1.0, 2.0, 3.0);
+	OPoint3D p1 = OPoint3D(2.0, 3.0, 4.0);
+	OPoint3D p2 = OPoint3D(1.0, 2.0, 3.0);
 	
 	
 	OVector3D v1(p1), v2(p2);
@@ -110,7 +110,7 @@ TEST(scalar, dumpenv) {
 
 TEST(norme, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(3.0, 4.0, 0.0);
+	OPoint3D p1 = OPoint3D(3.0, 4.0, 0.0);
 	
 	OVector3D v1(p1);
 	
@@ -122,9 +122,9 @@ TEST(norme, dumpenv) {
 
 TEST(normal, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(3.0, 2.0, 3.0);
-	OPoint3D pt2 = OPoint3D(4.0, 2.0, 3.0);
-	OPoint3D pt3 = OPoint3D(3.0, 3.0, 3.0);
+	OPoint3D p1 = OPoint3D(3.0, 2.0, 3.0);
+	OPoint3D p2 = OPoint3D(4.0, 2.0, 3.0);
+	OPoint3D p3 = OPoint3D(3.0, 3.0, 3.0);
 	
 	OVector3D v1(p1), v2(p2), v3(p3);
 	
@@ -138,35 +138,35 @@ TEST(normal, dumpenv) {
 
 TEST(normalize, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(3.0, 4.0, 0.0);
+	OPoint3D p1 = OPoint3D(3.0, 4.0, 0.0);
 	
 	OVector3D v1(p1);
 	
 	// Calcul de la soustraction
-	OVector3D v2 = v1.normalize();
+	v1.normalize();
 
-	ASSERT_TRUE(v2._x == (3.0 / 5.0) );
-	ASSERT_TRUE(v2._y == (4.0 / 5.0) );
-	ASSERT_TRUE(v2._z == 0.0 );
+	ASSERT_TRUE(v1._x == (3.0 / 5.0) );
+	ASSERT_TRUE(v1._y == (4.0 / 5.0) );
+	ASSERT_TRUE(v1._z == 0.0 );
 }
 
 TEST(invert, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(3.0, -4.0, 5.0);
+	OPoint3D p1 = OPoint3D(3.0, -4.0, 5.0);
 	
 	OVector3D v1(p1);
 	
 	// Calcul du vecteur inverse
-	OVector3D v2 = v1.invert();
+	v1.invert();
 
-	ASSERT_TRUE(v2._x == -3.0 );
-	ASSERT_TRUE(v2._y ==  4.0 );
-	ASSERT_TRUE(v2._z == -5.0 );
+	ASSERT_TRUE(v1._x == -3.0 );
+	ASSERT_TRUE(v1._y ==  4.0 );
+	ASSERT_TRUE(v1._z == -5.0 );
 }
 TEST(angle, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D(  sqrt(2.0)/2.0, sqrt(2.0)/2.0, 0.0 );
-	OPoint3D pt2 = OPoint3D( -sqrt(2.0)/2.0, sqrt(2.0)/2.0, 0.0 );
+	OPoint3D p1 = OPoint3D(  sqrt(2.0)/2.0, sqrt(2.0)/2.0, 0.0 );
+	OPoint3D p2 = OPoint3D( -sqrt(2.0)/2.0, sqrt(2.0)/2.0, 0.0 );
 	
 	OVector3D v1(p1), v2(p2);
 	
@@ -178,7 +178,7 @@ TEST(angle, dumpenv) {
 
 TEST(rotOz, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D( sqrt(2.0)/2.0, 0.0, sqrt(2.0)/2.0 );
+	OPoint3D p1 = OPoint3D( sqrt(2.0)/2.0, 0.0, sqrt(2.0)/2.0 );
 	double alpha = M_PI;
 	
 	OVector3D v1(p1);
@@ -193,7 +193,7 @@ TEST(rotOz, dumpenv) {
 
 TEST(rotOy, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D( sqrt(2.0)/2.0, 0.0, sqrt(2.0)/2.0 );
+	OPoint3D p1 = OPoint3D( sqrt(2.0)/2.0, 0.0, sqrt(2.0)/2.0 );
 	double alpha = M_PI;
 	
 	OVector3D v1(p1);
@@ -208,7 +208,7 @@ TEST(rotOy, dumpenv) {
 
 TEST(rotOzBase2, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D( sqrt(2.0)/2.0, 0.0, sqrt(2.0)/2.0 );
+	OPoint3D p1 = OPoint3D( sqrt(2.0)/2.0, 0.0, sqrt(2.0)/2.0 );
 	double alpha = M_PI;
 	
 	OVector3D v1(p1);
@@ -223,7 +223,7 @@ TEST(rotOzBase2, dumpenv) {
 
 TEST(rotOyBase2, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D( sqrt(2.0)/2.0, 0.0, sqrt(2.0)/2.0 );
+	OPoint3D p1 = OPoint3D( sqrt(2.0)/2.0, 0.0, sqrt(2.0)/2.0 );
 	double alpha = M_PI;
 	
 	OVector3D v1(p1);
@@ -238,7 +238,7 @@ TEST(rotOyBase2, dumpenv) {
 
 TEST(rotOzOy, dumpenv) {
 	// Création des vecteurs
-	OPoint3D pt1 = OPoint3D( sqrt(2.0)/2.0, 0.0, sqrt(2.0)/2.0 );
+	OPoint3D p1 = OPoint3D( sqrt(2.0)/2.0, 0.0, sqrt(2.0)/2.0 );
 	double alpha = M_PI, theta = M_PI/2;
 	
 	OVector3D v1(p1);
