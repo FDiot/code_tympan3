@@ -80,7 +80,7 @@ public:
 };
 
 class AcousticGroundMaterial:
-    public Entity<AcousticGroundMaterial>
+    public virtual BaseEntity
 {
 public:
     AcousticGroundMaterial(const string& name_, double resistivity_);
@@ -94,7 +94,7 @@ public:
 // XXX Add some method to easy use & get freq. and spectrum attributes. See
 // class \c OSpectre.
 class AcousticSpectrum:
-    public Entity<AcousticSpectrum>
+    public virtual BaseEntity
 {
 public:
     AcousticSpectrum() {};
@@ -106,7 +106,7 @@ public:
 
 
 class AcousticSource:
-    public Entity<AcousticSource>
+    public virtual BaseEntity
 {
 public:
     AcousticSource() {};
@@ -116,7 +116,7 @@ public:
 };
 
 class AcousticReceptor:
-    public Entity<AcousticReceptor>
+    public virtual BaseEntity
 {
 public:
     AcousticReceptor(const Point& point_);
@@ -126,7 +126,7 @@ public:
 };
 
 class AcousticEvent:
-    public Entity<AcousticEvent>
+    public virtual BaseEntity
 {
 public:
     AcousticEvent(const string& event_type_, const Point& point_);
@@ -138,7 +138,7 @@ public:
 };
 
 class AcousticPath:
-    public Entity<AcousticPath>
+    public virtual BaseEntity
 {
 public:
     AcousticPath() {};
@@ -148,7 +148,7 @@ public:
 };
 
 class AcousticProblem:
-    public Entity<AcousticProblem>
+    public virtual BaseEntity
 {
 public:
     AcousticProblem(const string& name_);
@@ -159,7 +159,7 @@ public:
 
 
 class GlobalContribution:
-    public Entity<GlobalContribution>
+    public virtual BaseEntity
 {
 public:
     GlobalContribution() {};
@@ -169,7 +169,7 @@ public:
 };
 
 class SiteElement:
-    public Entity<SiteElement>
+    public virtual BaseEntity
 {
 public:
     SiteElement(const string& id_);
@@ -191,7 +191,7 @@ public:
 };
 
 class SiteAcousticReceptor:
-    public Entity<SiteAcousticReceptor>
+    public virtual BaseEntity
 {
 public:
     SiteAcousticReceptor(unsigned int id_);
@@ -200,7 +200,8 @@ public:
     unsigned int id;
 };
 
-class Site: public Entity<Site>
+class Site:
+    public virtual BaseEntity
 {
 public:
     Site(unsigned int id_);
@@ -209,25 +210,7 @@ public:
     unsigned int id;
 };
 
-
-//! A sample of a spectrum. One spectrum sample for each frequency value.
-class SpectrumSample:
-    public Entity<SpectrumSample>
-{
-public:
-    SpectrumSample(double modulus_, const string& type_, double phase_=0.);
-    virtual ~SpectrumSample() {};
-
-    /// Modulus.
-    double modulus;
-    /// Phase. For now, set to zero.
-    double phase;
-    /// Representation type: third octave, nth octave, etc.
-    string type;
-};
-
-class DirectivityCoefficient:
-    public Entity<DirectivityCoefficient>
+class DirectivityCoefficient
 {
 public:
     DirectivityCoefficient(double value_, double theta_, double phi_,
@@ -240,17 +223,6 @@ public:
     // XXX not sure for the type below.
     bool solid_angle;
 };
-
-class Frequency:
-    public Entity<Frequency>
-{
-public:
-    Frequency(double value_);
-    virtual ~Frequency() {};
-
-    double value;
-};
-
 
 } /* namespace tympan */
 

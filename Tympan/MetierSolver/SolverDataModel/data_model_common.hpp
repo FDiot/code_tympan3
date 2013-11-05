@@ -9,9 +9,8 @@
 #ifndef TYMPAN__DATA_MODEL_COMMON_HPP__INCLUDED
 #define TYMPAN__DATA_MODEL_COMMON_HPP__INCLUDED
 
-#include <boost/config.hpp>
 
-#include "yams/utils.hh"
+#include "std_boost_utils.hpp"
 
 #include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
@@ -22,37 +21,48 @@ typedef OVector3D  Vector;
 } //namespace tympan
 
 
-namespace tympan
-{
+namespace tympan {
 
 /**
- * @brief A classical Singleton Design pattern
+ * @brief The base of all entity classes.
  *
- * The intended use is \code
-class OnlyOne : public Singleton<OnlyOne>
-{
-// Make OnlyOne Ctor/Dtor accessible by Singleton<OnlyOne>
-friend class Singleton<OnlyOne>;
-//... your singleton class
-};
-\endcode
- *
- * @tparam The type of the Singleton - must be default constructible
+ * This class is \em required to be \em virtually inherited by all
+ * entity classes. It provide some convenient dynamic access and cast method.
  */
-template<typename T> class Singleton
+class BaseEntity
 {
+protected:
+	BaseEntity() {};
+
 public:
-    static T& Instance()
-    {
-        static std::auto_ptr<T> theSingleInstance(new T());
-        return theSingleInstance;
-    }
-private:
-    Singleton() {}
-    Singleton(Singleton const&);      // Don't Implement
-    void operator=(Singleton const&); // Don't implement
+//    virtual tympan::shared_ptr<BaseEntity> ptr_any() = 0;
+//    virtual tympan::shared_ptr<BaseEntity const> ptr_any() const = 0;
+//
+//    template <class T>
+//    tympan::shared_ptr<T> ptr()
+//    { return boost::dynamic_pointer_cast<T>(ptr_any()); }
+//
+//    template <class T>
+//    tympan::shared_ptr<T const> ptr() const
+//    { return boost::dynamic_pointer_cast<T const>(ptr_any()); }
 };
 
+//! Simple representation of an UUID (Universal Unique Identifier).
+/*! Do the correspondance between \c TYElement uuid and the uuid of schema
+    solver entities. It can match with a \c QUuid (UUID from Qt) and thus with a
+    \c TYUUID (aka \c OGenID).
+ */
+struct binary_uuid {
+    union {
+        struct {
+            unsigned int   data1;
+            unsigned short data2;
+            unsigned short data3;
+            unsigned char  data4[8];
+        } s;
+        unsigned char t[16];
+    };
+};
 
 
 } /* namespace tympan */
