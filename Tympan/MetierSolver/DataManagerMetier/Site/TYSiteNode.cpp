@@ -539,9 +539,7 @@ void TYSiteNode::loadTopoFile()
 
     OMessageManager::get()->info("Mise a jour altimetrie...");
 
-    /* XXX This is the place where plug the AltimetryBuilder into.
-     * Once the compute method has been split in triangulation and acceleration
-     * one can
+    /* This is the place where plug the AltimetryBuilder into :
      *  1. pass the topographical elements to the AltimetryBuilder
      *  2. get from it a table of points and triangles vertices
      *  3. put that into the accelerating structure
