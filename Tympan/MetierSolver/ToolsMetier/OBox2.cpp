@@ -364,3 +364,154 @@ void OBox2::Translate(const OPoint3D& vectorTranslate)
     _G._y += vectorTranslate._y;
     _G._z += vectorTranslate._z;
 }
+
+OBox2 OBox2::boxRotation(const OPoint3D& O, const OPoint3D& P2)
+{
+	OBox2 box, boxIn = *this;
+
+    //3/ Changement de repere pour faire pivoter la boite
+	// The aim here is to make a rotation of the bounding box
+	// We want its main axis to be aligned with Vector v2 i.e. [OPsuiv].
+	// We have to keep in mind that axes are defined from the bottom left corner
+	// of the box.
+	// This step is a bit tricky : one has to keep in mind in
+	// which plane(s) the rotation(s) occur(s).
+	// 3D rotation : 2 rotations around two different axes 
+	// (pay attention to get the right ones!);
+	// 2D rotation : only one movement => define the right axis.
+	// Let x1, y1, z1 and x2, y2, z2 be the vectors after the first rotation
+	// and the second one, respectively expressed in the new basis B1 and B2. 
+	// Let xf, yf, zf be the final vectors given to the box, i.e. x2,y2 and z2
+	// in B0.
+
+	// Let I be the point at coordinate(L, l/2, l/2)
+	// This point will be useful to create a vector from the box centre to I
+	// This is a way of creating an axis within the box in order to compute 
+	// the angle between the box main axis and vector v2
+	OPoint3D I = OPoint3D(this->_H._x, O._y, O._z);
+
+	// Let v1 be the vector between the box centre (O) and I
+	// Let v2 be the vector between the box centre (O) and Psuiv
+	OVector3D v1 = OVector3D(O,I);
+    OVector3D v2 = OVector3D(O,P2);
+
+	v2.normalize();
+	v1.normalize();
+
+	if (v1._z == 0 && v2._z == 0)
+	{
+		// When v1 and v2 are in xOy plane only
+		return this->rotInXOYOnly(v1, v2, O, P2);
+	}
+	else if (v1._y == 0 && v2._y == 0)
+	{
+		// When v1 and v2 are in xOz plane only
+		return this->rotInXOZOnly(v1, v2, O, P2);
+	}
+	else
+	{
+		// When it's a 3d rotation, things get a little more "funny".
+		return this->rot3D(v1, v2, O, P2);
+	}
+
+	return box;
+}
+
+OBox2 OBox2::rotInXOYOnly(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2)
+{
+	OBox2 box = *this;
+	OVector3D x0 = v1;
+
+	// Creates a basis with 3 vectors x0, y0 and z0.
+	// x0 -> x2, y0 -> y2 and z0 remains the same.
+	OVector3D y0 = OCoord3D(0.0,1.0,0.0);
+	OVector3D z0 = OCoord3D(0.0,0.0,1.0);
+	double alpha = v1.angle(v2);
+	OVector3D x2 = x0.getRotationOzOy(alpha, 0.0);
+	OVector3D y2 = y0.getRotationOzOy(alpha, 0.0);
+	x2.normalize();
+	y2.normalize();
+
+	// Final step : New ORepere3D
+	ORepere3D r = ORepere3D(O, x2, y2, z0);
+	box.BoxRotationOzOy(alpha, 0.0);
+	
+	return OBox2(box, r, O);
+}
+
+OBox2 OBox2::rotInXOZOnly(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2)
+{
+	OBox2 box = *this;
+	OVector3D x0 = v1;
+
+	// Creates a basis with 3 vectors x0, y0 and z0.
+	// x0 -> x2, z0 -> z2 and y0 remains the same.
+	OVector3D y0 = OCoord3D(0.0,1.0,0.0);
+	OVector3D z0 = OCoord3D(0.0,0.0,1.0);
+	double theta = v1.angle(v2);
+	OVector3D x2 = x0.getRotationOzOy(0.0, theta);
+	OVector3D z2 = z0.getRotationOzOy(0.0, theta);
+	x2.normalize();
+	z2.normalize();
+
+	// Final step : New ORepere3D
+	ORepere3D r = ORepere3D(O, x2, y0, z2); 
+	box._center._x = O._x;
+	box._center._y = O._y;
+	box._center._z = O._z;
+	box.BoxRotationOzOy(0.0, theta);
+	
+	return OBox2(box, r, O);
+}
+
+OBox2 OBox2::rot3D(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2)
+{
+	// 2 steps needed : always a first rotation around Z axis to get Ox
+	// just "under" v2 and then a rotation around Y depending on the angle.
+	// Second step : rotate vectors x' and z' around Oy axis : x'' is now
+	// aligned with vector v2.
+	// Let's call them x0, x1, and x2.
+	// Between the two rotations, (x1, y1, z1) have to become a new basis B1.
+
+	OBox2 box = *this;
+	OVector3D x0 = v1;
+
+	// First step is to perform a rotation around Oz axis : 
+	// Vectors x and y will change and become x' and y', respectively.
+	OVector3D y0 = OCoord3D(0.0,1.0,0.0);
+	OVector3D z0 = OCoord3D(0.0,0.0,1.0);
+
+	// Construction du projete en supposant un sol plat
+	const OCoord3D proj = OCoord3D(P2._x, P2._y, 0.0);
+
+	// Vector from the bb center to proj
+	OVector3D O2H = OVector3D(O,proj);
+	double alpha = v1.angle(O2H);
+
+	OVector3D x1b0 = x0.getRotationOz(alpha);
+	OVector3D y1b0 = y0.getRotationOz(alpha);
+
+	// This step defines x1, y1 and z1 as a new basis B1.
+	OVector3D x1b1 = x1b0.getRotationOzBase2(alpha);
+	OVector3D y1b1 = y1b0.getRotationOzBase2(alpha);
+	x1b1.normalize();
+	y1b1.normalize();
+	
+	// Second step
+	// Returns the angle necessary to perform the rotation around OY axis
+	double theta = O2H.angle(v2);
+
+	OVector3D x2b1 = x1b1.getRotationOy(theta);
+	OVector3D z2b1 = z0.getRotationOy(theta);
+
+	// x2 , y2 and z2 in B0
+	OVector3D x2b0 = x0.getRotationOzOy(alpha, theta);
+	OVector3D z2b0 = z0.getRotationOzOy(0.0, theta);
+
+	// Final step : New ORepere3D
+	ORepere3D r = ORepere3D(O,x2b0 ,y1b0, z2b0); 
+	box.BoxRotationOzOy(alpha, theta);
+	    
+	return OBox2(box, r, O);
+}
+
