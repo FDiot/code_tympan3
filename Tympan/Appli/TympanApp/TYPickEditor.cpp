@@ -1028,6 +1028,7 @@ void TYPickEditor::showPopupMenu(LPTYElementCollection pElts)
             pRemovedEltParent = pTopo;
 
             // On altimetrise aussi le sous-site (si s'en est un !)
+            // XXX See ticket https://extranet.logilab.fr/ticket/1484188
             if (pSiteParent && !pSiteParent->getRoot()) { pSiteParent->updateAltimetrie(true); }
 
             // On met a jour l'altimetrie globale du site

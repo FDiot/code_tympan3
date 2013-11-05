@@ -1404,6 +1404,8 @@ bool TYSiteNode::update(TYElement* pElem)
 
 void TYSiteNode::update(const bool& force) // Force = false
 {
+    // XXX See ticket https://extranet.logilab.fr/ticket/1484188
+
     // Mise a jour de l'altimetrie du site principal
     updateAltimetrie(force);
 

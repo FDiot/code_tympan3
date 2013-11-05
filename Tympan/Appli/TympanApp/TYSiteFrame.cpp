@@ -827,6 +827,7 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
                     if (pSiteParent)   // Non NULL uniquement pour les courbes de niveau et les plan d'eau
                     {
                         // On altimetrise aussi le sous-site (si s'en est un !)
+                        // XXX See ticket https://extranet.logilab.fr/ticket/1484188
                         if (!pSiteParent->getRoot()) { pSiteParent->updateAltimetrie(true); }
 
                         // On met a jour l'altimetrie globale du site
