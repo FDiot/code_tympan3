@@ -22,6 +22,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 #include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
 #include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
+#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAltimetrieWidget.h"
@@ -154,7 +155,9 @@ public:
 	double altitude(const OPoint3D& pt);
 
     /**
-     * \brief Modifie l'altitude d'un point donn�. Si le point est hors de la zone dans laquelle l'altim�trie est d�finie, la valeur z du point est mise a -1E-5
+     * \brief Modifie l'altitude d'un point donn�. Si le point est hors de la zone dans laquelle l'altim�trie est d�finie, la valeur z du point est mise a \c TYAltimetry::invalid_altitude
+     *
+     *
      * \return false si l'altitude du point n'a pu etre determinee
      */
     bool updateAltitude(OPoint3D& pt) const;
@@ -163,7 +166,7 @@ public:
      * \brief Calcule les coordonnees de la projection au sol d'un point de l'espace
      * \return les coordonnees du pt d'intersection
      */
-	OPoint3D projection(const OPoint3D& pt) const;
+    OPoint3D projection(const OPoint3D& pt) const;
 
     /**
      * Retourne la hauteur moyenne des points passes en arguments.
