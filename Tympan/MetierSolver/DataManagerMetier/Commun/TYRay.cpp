@@ -220,22 +220,6 @@ double TYRay::getLength()
 	}
 
 	return length;
-
-    //const OPoint3D S = *_source->getPos();
-
-    //double coord[3];
-    //_recepteur->getCoords(coord);
-    //const OPoint3D R = OPoint3D(coord);
-
-    //int i;
-    //double raySize = 0.0; // initialisation
-
-    //for (i = 0; i < _events.size() - 1; i++)
-    //{
-    //    raySize += _events[i]->pos.distFrom(_events[i + 1]->pos);    // distance entre Pi et Pi+1
-    //}
-
-    //return raySize;
 }
 
 std::vector<int> TYRay::getIndexOfEvents(const int& eventType) const 
