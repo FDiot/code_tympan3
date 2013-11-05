@@ -239,6 +239,7 @@ void TYPickEditor::slotMouseLeave()
     }
 }
 
+// TODO : What's this monster ?!? Circa 1300 lines of code full of if ?!?
 void TYPickEditor::showPopupMenu(LPTYElementCollection pElts)
 {
     if (!pElts)
