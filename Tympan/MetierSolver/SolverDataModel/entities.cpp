@@ -11,10 +11,6 @@
 namespace tympan
 {
 
-Node::Node(
-    const Point& p_
-) : p(p_) {}
-
 DiffractionEdge::DiffractionEdge(
     const Point& p1_, const Point& p2_, double angle_
 ) : p1(p1_), p2(p2_), angle(angle_) {}
