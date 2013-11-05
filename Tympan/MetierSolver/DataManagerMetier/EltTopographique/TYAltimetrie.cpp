@@ -20,6 +20,8 @@
 #include <stdlib.h>
 #include <cassert>
 
+#include <boost/current_function.hpp>
+
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OBox.h"
 #include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
@@ -674,13 +676,25 @@ void TYAltimetrie::getFacesinIndices(unsigned int& minX, unsigned int& maxX, uns
 OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
 {
     OPoint3D ptTest(pt);
-    ptTest._z = -1.E5;
+    ptTest._z = invalid_altitude;
 
-    if (_gridSX == 0) { return ptTest; } // aucune face dans l'objet altimetrie...
-    if (_pSortedFaces == NULL) { return ptTest; } // Sanity Check...
-    if (!_bbox.isInside2D(pt)) { return ptTest; } //si le point n'est pas dans les bornes de l'altimetrie
+    if (_gridSX == 0)  // aucune face dans l'objet altimetrie...
+    {
+        // This is supposed to be an error case isn't it ? Then we should NOT return SILENTLY.
+        // but raising this exception seems to causes regression in some cases...
+        // TODO reactivate the exception and fix the regression
+        // throw tympan::logic_error("No face in accelerating structure of the altimetry") << tympan_source_loc;
+        return ptTest;
+    }
+    // A sanity check has to be represented by an assert, not a if silencing a failure.
+    assert(_pSortedFaces != NULL && "Sanity Check..." );
+    // XXX Inappropriate test : the border of altimetry is NOT a rectangle but a polygon
+    if (!_bbox.isInside2D(pt)) //si le point n'est pas dans les bornes de l'altimetrie
+    {
+        return ptTest;
+    }
 
-    double M_DOUBLE_INFINITE = 100000.0f;
+    double M_DOUBLE_INFINITE = 100000.0f; // TODO use standard C macro or C++ traits instead
     double p, q;
     int pi, qi;
 
@@ -732,9 +746,12 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
 bool TYAltimetrie::updateAltitude(OPoint3D& pt) const
 {
 	pt = projection(pt);
-	// XXX What is this hard-coded -1.E5 ? Is this meant to represent an unspecified/out of scope altitude ?
-	if ( pt._z == -1.E5 ) { return false; }
-
+	if ( pt._z == invalid_altitude ) {
+            OMessageManager::get()->warning(
+                "%s Invalid altitude for point at (%f, %f)",
+                BOOST_CURRENT_FUNCTION, pt._x, pt._y);
+            return false;
+        }
     return true;
 }
 
