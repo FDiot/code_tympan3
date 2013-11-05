@@ -186,6 +186,31 @@ public:
 	 */
 	void BoxRotationOzOy(double alpha, double theta);
 
+	/**
+	 * fn OBox2 boxRotation(const OVector3D& v1, const OVector3D& v2)
+	 * brief return a box rotated by two vectors
+	 */
+	OBox2 boxRotation(const OPoint3D& O, const OPoint3D& P2);
+
+private:
+	/**
+	 * fn OBox2 rotInXOYOnly(const OVector3D& v1, const OVector3D& v2)
+	 * brief return a box rotated by two vectors
+	 */
+	OBox2 rotInXOYOnly(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2);
+
+	/**
+	 * fn OBox2 rotInXOZOnly(const OVector3D& v1, const OVector3D& v2)
+	 * brief return a box rotated by two vectors
+	 */
+	OBox2 rotInXOZOnly(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2);
+
+	/**
+	 * fn OBox2 rot3D(const OVector3D& v1, const OVector3D& v2)
+	 * brief return a box rotated by two vectors
+	 */
+	OBox2 rot3D(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2);
+
 public:
     ORepere3D _repere;
 	OPoint3D _center;
