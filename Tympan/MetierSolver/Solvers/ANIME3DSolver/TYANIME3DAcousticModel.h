@@ -77,17 +77,6 @@ public:
      */
     OTab2DSpectreComplex ComputePressionAcoustTotalLevel();
 
-	/**
-    * \fn double getSize(int rayNbr)
-    * \brief Renvoie la taille du rayon corrigee
-    */
-    double getSize2(int rayNbr);
-
-	/**
-    * \fn double getDistance()
-    * \brief Returns the distance between two points of pathLengthMatrix
-    */
-    double getDistance(int rayNbr, int indice);
 
 protected:
 
@@ -128,43 +117,7 @@ protected:
      */
     void ComputeAbsDiff();
 
-	/**
-	* \fn OVector3D getRotationOz(double alpha, OVector3D V)
-	* \brief Returns the vector after a rotation around z axis
-	* \ x -> xprime. Both of these vectors will be given in the
-	* \ original base.
-	*/
-	OVector3D getRotationOz(double alpha, OVector3D V);
 
-	/**
-	* \fn OVector3D getRotationOzBase2(double alpha, OVector3D V)
-	* \brief Returns the vector after a rotation around z axis 
-	* \ and gives back the coordinates of xprime or yprime in the 
-	*\ new basis Bprime.
-	*/
-	OVector3D getRotationOzBase2(double alpha, OVector3D V);
-
-	/**
-	* \fn OVector3D getRotationOy(double alpha, OVector3D V)
-	* \brief Returns the vector after a rotation around z axis
-	*/
-	OVector3D getRotationOy(double alpha, OVector3D V);
-
-	/**
-	* \fn OVector3D getRotationOyBase2(double alpha, OVector3D V)
-	* \brief Returns the vector after a rotation around y axis 
-	* \ and gives back the coordinates of xprime or zprime in the 
-	*\ new basis Bprime.
-	*/
-	OVector3D getRotationOyBase2(double alpha, OVector3D V);
-
-	/**
-	* \fn OVector3D getRotationOzOy(double alpha, double theta, OVector3D V)
-	* \brief Returns the vector after 2 rotations around z axis and
-	* \y axis. It gives the coordinates of xsecond, ysecond and zsecond in the 
-	*\ first basis B.
-	*/
-	OVector3D getRotationOzOy(double alpha, double theta, OVector3D V);
 
 private : 
 	/*
