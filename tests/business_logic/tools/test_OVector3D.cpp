@@ -186,9 +186,9 @@ TEST(rotOz, dumpenv) {
 	// Calcul du vecteur tourné par Oz
 	OVector3D v2 = v1.getRotationOz(alpha);
 
-	ASSERT_TRUE(v2._x == ( -sqrt(2.0)/2.0 ) );
-	ASSERT_TRUE(v2._y == ( 0.0 ) );
-	ASSERT_TRUE(v2._z == (  sqrt(2.0)/2.0 ) );
+	ASSERT_TRUE( ABS(v2._x - ( -sqrt(2.0)/2.0 ) ) < 1.0E-6) ; //(v2._x == ( -sqrt(2.0)/2.0 ) );
+	ASSERT_TRUE( ABS(v2._y) < 1.0E-6  );
+	ASSERT_TRUE( ABS( v2._z - (  sqrt(2.0)/2.0 ) ) < 1.0E-6 ); // v2._z == (  sqrt(2.0)/2.0 ) );
 }
 
 TEST(rotOy, dumpenv) {
@@ -201,9 +201,9 @@ TEST(rotOy, dumpenv) {
 	// Calcul du vecteur tourné par Oz
 	OVector3D v2 = v1.getRotationOy(alpha);
 
-	ASSERT_TRUE(v2._x == ( -sqrt(2.0)/2.0 ) );
-	ASSERT_TRUE(v2._y == ( 0.0 ) );
-	ASSERT_TRUE(v2._z == ( -sqrt(2.0)/2.0 ) );
+	ASSERT_TRUE( ABS( v2._x - ( -sqrt(2.0)/2.0 ) ) < 1.0E-6 );
+	ASSERT_TRUE( ABS( v2._y) < 1.0E-6 );
+	ASSERT_TRUE( ABS( v2._z - ( -sqrt(2.0)/2.0 ) ) < 1.0E-6 );
 }
 
 TEST(rotOzBase2, dumpenv) {
@@ -214,11 +214,11 @@ TEST(rotOzBase2, dumpenv) {
 	OVector3D v1(p1);
 	
 	// Calcul du vecteur tourné par Oz
-	OVector3D v2 = v1.getRotationOz(alpha);
+	OVector3D v2 = v1.getRotationOzBase2(alpha);
 
-	ASSERT_TRUE(v2._x == ( -sqrt(2.0)/2.0 ) );
-	ASSERT_TRUE(v2._y == ( 0.0 ) );
-	ASSERT_TRUE(v2._z == (  sqrt(2.0)/2.0 ) );
+	ASSERT_TRUE( ABS( v2._x - ( -sqrt(2.0)/2.0 ) ) < 1.0E-6 );
+	ASSERT_TRUE( ABS( v2._y ) < 1.0E-6 );
+	ASSERT_TRUE( ABS( v2._z - (  sqrt(2.0)/2.0 ) ) < 1.0E-6 );
 }
 
 TEST(rotOyBase2, dumpenv) {
@@ -229,11 +229,11 @@ TEST(rotOyBase2, dumpenv) {
 	OVector3D v1(p1);
 	
 	// Calcul du vecteur tourné par Oz
-	OVector3D v2 = v1.getRotationOy(alpha);
+	OVector3D v2 = v1.getRotationOyBase2(alpha);
 
-	ASSERT_TRUE(v2._x == ( -sqrt(2.0)/2.0 ) );
-	ASSERT_TRUE(v2._y == ( 0.0 ) );
-	ASSERT_TRUE(v2._z == ( -sqrt(2.0)/2.0 ) );
+	ASSERT_TRUE( ABS( v2._x - ( -sqrt(2.0)/2.0 ) ) < 1.0E-6 );
+	ASSERT_TRUE( ABS( v2._y ) < 1.0E-6 );
+	ASSERT_TRUE( ABS( v2._z - ( -sqrt(2.0)/2.0 ) ) < 1.0E-6 );
 }
 
 TEST(rotOzOy, dumpenv) {
@@ -244,10 +244,10 @@ TEST(rotOzOy, dumpenv) {
 	OVector3D v1(p1);
 	
 	// Calcul du vecteur tourné par Oz puis Oy
-	OVector3D v2 = v1.getRotationOy(alpha);
+	OVector3D v2 = v1.getRotationOzOy(alpha, theta);
 
-	ASSERT_TRUE(v2._x == ( sqrt(2.0)/2.0 ) );
-	ASSERT_TRUE(v2._y == ( 0.0 ) );
-	ASSERT_TRUE(v2._z == ( sqrt(2.0)/2.0 ) );
+	ASSERT_TRUE( ABS( v2._x - ( sqrt(2.0)/2.0 ) ) < 1.0E-6 );
+	ASSERT_TRUE( ABS( v2._y ) < 1.0E-6 );
+	ASSERT_TRUE( ABS( v2._z - ( sqrt(2.0)/2.0 ) ) < 1.0E-6 );
 }
 
