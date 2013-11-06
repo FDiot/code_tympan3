@@ -19,61 +19,56 @@
 #include "OBox2.h"
 #include <math.h>
 
-OBox2::OBox2()
+OBox2::OBox2() :	OBox(), 
+					_repere( ORepere3D() ),
+					_center( 0.0, 0.0, 0.0 ),
+					_A( 0.0, 0.0, 0.0 ),
+					_B( 0.0, 0.0, 0.0 ),
+					_C( 0.0, 0.0, 0.0 ),
+					_D( 0.0, 0.0, 0.0 ),
+					_E( 0.0, 0.0, 0.0 ),
+					_F( 0.0, 0.0, 0.0 ),
+					_G( 0.0, 0.0, 0.0 ),
+					_H( 0.0, 0.0, 0.0 ),
+					_length( 0.0 ),
+					_height( 0.0 ),
+					_width( 0.0 )
 {
-	_repere = ORepere3D();
-	_min = OPoint3D(0, 0, 0);
-	_max = OPoint3D(0, 0, 0);
-	_center = OPoint3D(0, 0, 0);
-	_A = OPoint3D(0, 0, 0);
-	_B = OPoint3D(0, 0, 0);
-	_C = OPoint3D(0, 0, 0);
-	_D = OPoint3D(0, 0, 0);
-	_E = OPoint3D(0, 0, 0);
-	_F = OPoint3D(0, 0, 0);
-	_G = OPoint3D(0, 0, 0);
-	_H = OPoint3D(0, 0, 0);
-	_length = 0;
-	_height = 0;
-	_width = 0;
 }
 
 OBox2::OBox2(const OBox2& box)
 {
-	_min = box._min;
-	_max = box._max;
-	_repere = box._repere;
-	_center = box._center;
-	_A = box._A;
-	_B = box._B;
-	_C = box._C;
-	_D = box._D;
-	_E = box._E;
-	_F = box._F;
-	_G = box._G;
-	_H = box._H;
-	_length = box._length;
-	_height = box._height;
-	_width = box._width;
+	*this = box;
 }
 
-OBox2::OBox2(const OBox& box, const ORepere3D& repere)
+OBox2::OBox2(const OBox& box)
 {
+    _repere = ORepere3D();
+
     _min = box._min;
     _max = box._max;
-    _repere = repere;
-	_center = OPoint3D(box._max._x/2, box._max._y/2, box._max._z/2);
-	_length = box._max._x;
-	_height = box._max._z;
-	_width = box._max._y;
-	_A = box._min;
-	_B = OPoint3D(0, _width, 0);
-	_C = OPoint3D(_length, _width, 0);
-	_D = OPoint3D(_length, 0, 0);
-	_E = OPoint3D(_length, 0, _height);
-	_F = OPoint3D(0, 0, _height);
-	_G = OPoint3D(0, _width, _height);
-	_H = box._max;
+
+	double minX = _min._x, minY = _min._y, minZ = _min._z;
+	double maxX = _max._x, maxY = _max._y, maxZ = _max._z;
+
+	_center = OPoint3D(		( maxX - minX ) / 2.0 + minX,
+							( maxY - minY ) / 2.0 + minY,
+							( maxZ - minZ ) / 2.0 + minZ   );
+							
+	_length = maxX - minX;
+	_width  = maxY - minY;
+	_height = maxZ - minZ;
+
+	_A = OPoint3D( minX, minY, minZ );
+	_B = OPoint3D( minX, maxY, minZ );
+	_C = OPoint3D( maxX, maxY, minZ );
+	_D = OPoint3D( maxX, minY, minZ );
+	_E = OPoint3D( maxX, minY, maxZ );
+	_F = OPoint3D( minX, minY, maxZ );
+	_G = OPoint3D( minX, maxY, maxZ );
+	_H = OPoint3D( maxX, maxY, maxZ );
+
+	_repere._origin = _A;
 }
 
 OBox2::OBox2(const OBox2& box, const ORepere3D& repere, const OPoint3D& centre)
@@ -99,8 +94,9 @@ OBox2& OBox2::operator=(const OBox2& box)
 {
     if (this != &box)
     {
-        _min = box._min;
-        _max = box._max;
+		OBox::operator=(box); 
+        _repere = box._repere;
+		_center = box._center;
 		_A = box._A;
 		_B = box._B;
 		_C = box._C;
@@ -109,9 +105,11 @@ OBox2& OBox2::operator=(const OBox2& box)
 		_F = box._F;
 		_G = box._G;
 		_H = box._H;
-		_center = box._center;
-        _repere = box._repere;
+		_length = box._length;
+		_height = box._height;
+		_width = box._width;
     }
+
     return *this;
 }
 
@@ -123,15 +121,18 @@ bool OBox2::operator==(const OBox2& box) const
         if (_min != box._min) { return false; }
         if (_max != box._max) { return false; }
         if (_repere != box._repere) { return false; }
-		if (_A != box._min) { return false; }
-		if (_B != OPoint3D(box._min._x, box._max._y, box._min._z)) { return false; }
-		if (_C != OPoint3D(box._max._x, box._max._y, box._min._z)) { return false; }
-		if (_D != OPoint3D(box._max._x, box._min._y, box._min._z)) { return false; }
-		if (_E != OPoint3D(box._max._x, box._min._y, box._max._z)) { return false; }
-		if (_F != OPoint3D(box._min._x, box._min._y, box._max._z)) { return false; }
-		if (_G != OPoint3D(box._min._x, box._max._y, box._max._z)) { return false; }
-		if (_H != box._max) { return false; }
-		if (_center != OPoint3D(box._max._x/2, box._max._y/2, box._max._z/2)) { return false; }
+		if (_center != box._center) { return false; }
+		if (_A != box._A) { return false; }
+		if (_B != box._B) { return false; }
+		if (_C != box._C) { return false; }
+		if (_D != box._D) { return false; }
+		if (_E != box._E) { return false; }
+		if (_F != box._F) { return false; }
+		if (_G != box._G) { return false; }
+		if (_H != box._H) { return false; }
+		if (_length != box._length) { return false; }
+		if (_height != box._height) { return false; }
+		if (_width != box._width) { return false; }
     }
     return true;
 }
@@ -198,35 +199,16 @@ bool OBox2::isInside2D(const OPoint3D& pt) const
 	return OBox::isInside2D(point2);
 }
 
-void OBox2::Translate(const OPoint3D& vectorTranslate)
+void OBox2::Translate(const OVector3D& vect)
 {
-	_center._x += vectorTranslate._x;
-	_center._y += vectorTranslate._y;
-	_center._z += vectorTranslate._z;
-    _A._x += vectorTranslate._x;
-    _A._y += vectorTranslate._y;
-    _A._z += vectorTranslate._z;
-    _H._x += vectorTranslate._x;
-    _H._y += vectorTranslate._y;
-    _H._z += vectorTranslate._z;
-    _B._x += vectorTranslate._x;
-    _B._y += vectorTranslate._y;
-    _B._z += vectorTranslate._z;
-	_C._x += vectorTranslate._x;
-    _C._y += vectorTranslate._y;
-    _C._z += vectorTranslate._z;
-    _D._x += vectorTranslate._x;
-    _D._y += vectorTranslate._y;
-    _D._z += vectorTranslate._z;
-    _E._x += vectorTranslate._x;
-    _E._y += vectorTranslate._y;
-    _E._z += vectorTranslate._z;
-    _F._x += vectorTranslate._x;
-    _F._y += vectorTranslate._y;
-    _F._z += vectorTranslate._z;
-	_G._x += vectorTranslate._x;
-    _G._y += vectorTranslate._y;
-    _G._z += vectorTranslate._z;
+	_center = _center + vect;
+	_A = _A + vect;
+	_B = _B + vect;
+	_C = _C + vect;
+	_D = _D + vect;
+	_E = _E + vect;
+	_F = _F + vect;
+	_G = _G + vect;
 }
 
 OBox2 OBox2::boxRotation(const OPoint3D& O, const OPoint3D& P2)
