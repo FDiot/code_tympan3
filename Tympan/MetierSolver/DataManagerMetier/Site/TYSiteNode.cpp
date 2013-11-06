@@ -499,7 +499,39 @@ void TYSiteNode::loadTopoFile()
     setIsGeometryModified(true);
 }
 
-/*virtual*/ void TYSiteNode::updateAltimetrie(const bool& force) // force = false
+/*virtual*/ bool TYSiteNode::updateAltimetrie(const bool& force) // force = false
+{
+    ostringstream msg;
+    OMessageManager& logger =  *OMessageManager::get();
+    try {
+        do_updateAltimetrie(force);
+        return true;
+    }
+    catch(const tympan::AltimetryBuilder::NonComparablePolygons& exc)
+    {
+        logger.error("Invalid ground material polygons prevented to update the altimetry");
+        // TODO move here reporting code from AltimetryBuilder
+        msg << boost::diagnostic_information(exc);
+        logger.debug(msg.str().c_str());
+        return false;
+    }
+    catch(const tympan::invalid_data& exc)
+    {
+        msg << boost::diagnostic_information(exc);
+        logger.error("Invalid data prevented to update the altimetry (set log level to debug for diagnosic)");
+        logger.debug(msg.str().c_str());
+        return false;
+    }
+    catch(const tympan::exception& exc)
+    {
+        msg << boost::diagnostic_information(exc);
+        logger.error("An error prevented to update the altimetry (set log level to debug for diagnosic)");
+        logger.debug(msg.str().c_str());
+        return false;
+    }
+}
+
+/*virtual*/ void TYSiteNode::do_updateAltimetrie(const bool& force) // force = false
 {
     if (!getIsGeometryModified() && !force) { return; } //L'altimetrie est a jour
 

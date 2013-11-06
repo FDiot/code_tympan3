@@ -4,7 +4,7 @@ Documentation for Developers
 ============================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    installation
    architecture
@@ -12,4 +12,5 @@ Documentation for Developers
    tools
    testing
    contribute
-
+   ongoingwork
+   api

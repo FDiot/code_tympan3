@@ -23,6 +23,7 @@
 
 // CGAL related Includes
 #include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
+#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
 
 #include <boost/ptr_container/ptr_deque.hpp>
 // http://www.boost.org/doc/libs/1_52_0/libs/ptr_container/doc/examples.html
@@ -125,7 +126,7 @@ public:
         assert(this->is_simple());
     }
 
-    const LPTYTerrain& getOriginalTerrain() const {return p_origin_elem;}
+    const TYTerrain* getOriginalTerrain() const {return p_origin_elem;}
 
     std::string material_name()
     { return material->getName().toStdString(); }
@@ -134,7 +135,7 @@ public:
     CGAL_Polygon::Vertex_iterator end() const {return vertices_end();}
 
 protected:
-    LPTYTerrain p_origin_elem;
+    const TYTerrain* p_origin_elem;
 };
 
 /**
@@ -377,7 +378,7 @@ public:
      * @return the altitude of \c p or \c unspecified_altitude if \c p is out-of-scope
      */
     double
-    computeAltitude(const CGAL_Point& p);
+    computeAltitude(const CGAL_Point& p) const;
 
     /**
      * @brief Auxilliary method used to insert points into the triangulation
