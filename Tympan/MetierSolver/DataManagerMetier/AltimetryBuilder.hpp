@@ -126,7 +126,7 @@ public:
         assert(this->is_simple());
     }
 
-    const LPTYTerrain& getOriginalTerrain() const {return p_origin_elem;}
+    const TYTerrain* getOriginalTerrain() const {return p_origin_elem;}
 
     std::string material_name()
     { return material->getName().toStdString(); }
@@ -135,7 +135,7 @@ public:
     CGAL_Polygon::Vertex_iterator end() const {return vertices_end();}
 
 protected:
-    LPTYTerrain p_origin_elem;
+    const TYTerrain* p_origin_elem;
 };
 
 /**
@@ -378,7 +378,7 @@ public:
      * @return the altitude of \c p or \c unspecified_altitude if \c p is out-of-scope
      */
     double
-    computeAltitude(const CGAL_Point& p);
+    computeAltitude(const CGAL_Point& p) const;
 
     /**
      * @brief Auxilliary method used to insert points into the triangulation

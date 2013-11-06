@@ -1,4 +1,4 @@
-/**
+ /**
  * @file AltimetryBuilder.cpp
  *
  * @brief The \c AltimetryBuilder is responsible to build a altimetry compatilbe
@@ -34,7 +34,7 @@ bool is_valid_altitude(double alti)
 MaterialPolygon::MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix)
     throw(tympan::InvalidDataError)
     : material( terrain.getSol() )
-    , p_origin_elem(&terrain) // should be correct because ref count is embedded into TYElements
+    , p_origin_elem(&terrain)
 {
     if (terrain.getListPoints().size()<=2)
         throw tympan::InvalidDataError("Invalid TYTerrain");
@@ -188,7 +188,7 @@ AltimetryBuilder::process(TYCourbeNiveau& courbe_niveau, const OMatrix& matrix, 
 }
 
 double
-AltimetryBuilder::computeAltitude(const CGAL_Point& p)
+AltimetryBuilder::computeAltitude(const CGAL_Point& p) const
 {
     // Query the triangulation for the location of p
     CDT::Locate_type lt;
@@ -393,10 +393,10 @@ AltimetryBuilder::labelFaces(material_t default_material)
 
                 // Enrich the exception with the implied TYElements
                 std::deque<LPTYElement> elements;
-                const LPTYTerrain& elem1 = material_polygons[exc.p1].getOriginalTerrain();
-                const LPTYTerrain& elem2 = material_polygons[exc.p2].getOriginalTerrain();
-                elements.push_back(elem1);
-                elements.push_back(elem2);
+                const TYTerrain* elem1 = material_polygons[exc.p1].getOriginalTerrain();
+                const TYTerrain* elem2 = material_polygons[exc.p2].getOriginalTerrain();
+                elements.push_back(const_cast<TYTerrain*>(elem1));
+                elements.push_back(const_cast<TYTerrain*>(elem2));
                 exc << elements_implied_errinfo(elements);
 
                 // Report here anyhow
