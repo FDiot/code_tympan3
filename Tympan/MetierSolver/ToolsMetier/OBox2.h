@@ -55,9 +55,8 @@ public:
      * \fn OBox2(const OBox & box, ORepere3D & repere)
      * \brief Constructor from a box and its local coordinate system
      * \param box The box define in the local coordinate system
-     * \param repere The global coordinate system of the box
      */
-    OBox2(const OBox& box, const ORepere3D& repere);
+    OBox2(const OBox& box);
 
 private : // Set private for security seems to an "af hoc" adaptation and is used only by an internal member function
 	/**
@@ -126,7 +125,7 @@ public :
      * \brief Translate this box
      * \param vector translation.
      */
-    virtual void Translate(const OPoint3D& vectorTranslate);
+    virtual void Translate(const OVector3D& vect);
 
 	/**
 	 * fn OBox2 boxRotation(const OVector3D& v1, const OVector3D& v2)
