@@ -9,9 +9,7 @@
 #define TYMPAN__PRETTYPRINT_HPP__INCLUDED
 
 #include <cstring>
-#include <iostream>
-
-#include "gtest/gtest.h"
+#include <ostream>
 
 #include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
@@ -20,8 +18,11 @@
 
 // Beware : Stuff::operator<< must be defined in the same namespace as Stuff
 
-// For GTest related pretty-printing plese see :
+// For GTest related pretty-printing please see :
 // http://code.google.com/p/googletest/wiki/AdvancedGuide#Teaching_Google_Test_How_to_Print_Your_Values
+
+// For boost::exception diagnostic please see:
+// http://www.boost.org/doc/libs/1_54_0/libs/exception/doc/diagnostic_information.html
 
 namespace tympan {
 
