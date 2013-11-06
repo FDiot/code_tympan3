@@ -391,6 +391,8 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	// On fixe une frequence de 100 Hz pour etudier de plus pres la boite
 	double L = lF.getValueReal(100.f) + dSImR;                  
 	double l = sqrt(lF.getValueReal(100.f)*(lF.getValueReal(100.f)+2.*dSImR));
+	double h = l; // hauteur = largeur (ajouté pour la lisibilité du code)
+
 	//double L = dd;
 	//double l = 5.0;
 
@@ -404,16 +406,17 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	std::cout << "L = " << L << " l = " << l << std::endl;
 
     // Boite de Fresnel placee a l'origine du repere
-    OBox box = OBox(OCoord3D(0,0,0),OCoord3D(L,l,l));
-	ORepere3D repere; 
-	fresnelArea = OBox2(box, repere);
+    OBox box = OBox( OCoord3D( 0, 0, 0 ), OCoord3D( L, l, l ) );
+	fresnelArea = OBox2(box);
 
     // Translation au pt O milieu du segment [SIm R]
-	OPoint3D O = OPoint3D(0.5*(SIm._x + Psuiv._x), 0.5*(SIm._y + Psuiv._y), 0.5*(SIm._z + Psuiv._z)); 
-	const OPoint3D vt = OPoint3D(O._x-(0.5*L), O._y-(0.5*l), O._z-(0.5*l)); // Translation depuis le centre
-	fresnelArea.Translate(vt); // translation de la zone de Fresnel
+	OPoint3D O( 0.5 * ( SIm._x + Psuiv._x ), 0.5 * ( SIm._y + Psuiv._y ), 0.5 * ( SIm._z + Psuiv._z ) );
+
+	const OVector3D vt( ( O._x - (0.5*L) ), ( O._y - ( 0.5*l ) ), ( O._z - ( 0.5*h ) ) ); // Translation depuis le centre
 	
-	return fresnelArea.boxRotation(O, Psuiv); // Voir la définition de boxRotation : devrai être fersnelArea.boxRotation(...)
+	fresnelArea.Translate( vt ); // translation de la zone de Fresnel
+	
+	return fresnelArea.boxRotation( O, Psuiv ); // Voir la définition de boxRotation : devrai être fersnelArea.boxRotation(...)
 }
 
 
