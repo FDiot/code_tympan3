@@ -53,6 +53,7 @@ static int compareTriangle(const void* elem1, const void* elem2);
 
 OPROTOINST(TYAltimetrie);
 
+const double TYAltimetrie::invalid_altitude = -1E5;
 
 TYAltimetrie::TYAltimetrie()
 {
