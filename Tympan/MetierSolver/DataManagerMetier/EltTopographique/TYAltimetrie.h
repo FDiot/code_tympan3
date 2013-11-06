@@ -42,6 +42,7 @@ class TYAltimetrie: public TYElement
 
     // Methodes
 public:
+    static const double invalid_altitude;
     /**
      * Constructeur.
      */

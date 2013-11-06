@@ -50,10 +50,8 @@ class SolverDataModelBuilder;
 
 #undef max // XXX
 
-// Tympan includes solver side
-//#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
-//#include "Tympan/MetierSolver/SolverDataModel/relations.hpp"
 #include "Tympan/MetierSolver/SolverDataModel/data_model_common.hpp"
+#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
 
 
 #define TY_USE_CGAL_QT_IFACE 1
@@ -86,42 +84,14 @@ typedef LPTYSol material_t;
 /// @brief A constant representing yet unspecified altitude
 extern const double unspecified_altitude;
 
+// Transitional typedef
+typedef tympan::logic_error AlgorithmicError;
+typedef tympan::invalid_data InvalidDataError;
 
-/**
- * @brief Exception class to represent an algorithmic error.
- */
-struct AlgorithmicError :
-        public std::exception
-{
-    AlgorithmicError() throw() {}
-    AlgorithmicError(const char* msg_) : msg(msg_) {}
-    virtual ~AlgorithmicError() throw() {}
-
-    virtual const char * what() const throw() { return msg.c_str(); }
-
-protected:
-    const string msg;
-};
-
-
-/**
- * @brief Exception class to represent invalid data.
- *
- * \todo Add a way to reference TYElement (by ptr or uuid)
- */
-struct InvalidDataError :
-        public std::exception
-{
-    InvalidDataError() throw() {}
-    InvalidDataError(const char* msg_) : msg(msg_) {}
-    virtual ~InvalidDataError() throw() {}
-
-    virtual const char * what() const throw() { return msg.c_str(); }
-
-protected:
-    const string msg;
-};
-
+typedef boost::error_info<struct tag_elements_implied,
+                          std::deque<LPTYElement> > elements_implied_errinfo;
+typedef boost::error_info<struct tag_elements_implied,
+                          OPoint3D> position_errinfo;
 
 /**
  * @brief Adaptor for \c TYTerrain
@@ -155,11 +125,16 @@ public:
         assert(this->is_simple());
     }
 
+    const LPTYTerrain& getOriginalTerrain() const {return p_origin_elem;}
+
     std::string material_name()
     { return material->getName().toStdString(); }
 
     CGAL_Polygon::Vertex_iterator begin() const { return vertices_begin(); }
     CGAL_Polygon::Vertex_iterator end() const {return vertices_end();}
+
+protected:
+    LPTYTerrain p_origin_elem;
 };
 
 /**
@@ -452,14 +427,21 @@ public:
      * @ brief exception class raised by \c poly_comparator in case polygons
      * are not comparable.
      */
-    struct NonComparablePolygons
+    struct NonComparablePolygons : tympan::invalid_data
     {
-        material_polygon_handle_t p1, p2;
-        face_set_t intersect;
-        NonComparablePolygons(material_polygon_handle_t p1_, material_polygon_handle_t p2_, face_set_t intersect_)
-            : p1(p1_), p2(p2_), intersect(intersect_) {}
-    };
+        const material_polygon_handle_t p1, p2;
+        const face_set_t intersect;
 
+        NonComparablePolygons(
+            material_polygon_handle_t p1_,
+            material_polygon_handle_t p2_,
+            const face_set_t& intersect_
+        ) DO_NOT_THROW
+        : tympan::invalid_data("AltimetryBuilder: incomparable polygons"),
+          p1(p1_), p2(p2_), intersect(intersect_) {}
+
+        ~NonComparablePolygons() DO_NOT_THROW {};
+    };
 
     /**
      * @brief Label each face with its material.
