@@ -39,11 +39,13 @@ TEST(exceptions, simple_logic) {
     catch(...) {
         FAIL() << "a tympan::exception which is not, also, a std::logic_error was thrown";
     }
+    // Check that std::exception is NOT an ambiguous base
+    ASSERT_THROW(throw_logic_default_constructed(), std::exception);
 }
 
 TEST(exceptions, source_localized) {
-    using tympan::source_file_name;
-    using tympan::source_line_num;
+    using tympan::source_file_name_errinfo;
+    using tympan::source_line_num_errinfo;
     using boost::get_error_info;
 
     ASSERT_THROW(throw_invalid_data_localized(), tympan::exception);
@@ -52,13 +54,13 @@ TEST(exceptions, source_localized) {
     }
     catch(const std::runtime_error& exc)  {
         EXPECT_STREQ("This is bad", exc.what());
-        if( const char * const* p_filename = get_error_info<source_file_name>(exc) )
+        if( const char * const* p_filename = get_error_info<source_file_name_errinfo>(exc) )
         {
             EXPECT_STREQ(__FILE__, *p_filename);
         }
         else
             FAIL() << "We could not extract 'source_file_name' from the exception";
-        if( unsigned const* p_linenum = get_error_info<source_line_num>(exc) )
+        if( unsigned const* p_linenum = get_error_info<source_line_num_errinfo>(exc) )
         {
             EXPECT_EQ(test_exceptions_source_line_no+1, *p_linenum);
         }

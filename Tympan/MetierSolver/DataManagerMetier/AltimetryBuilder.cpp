@@ -34,6 +34,7 @@ bool is_valid_altitude(double alti)
 MaterialPolygon::MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix)
     throw(tympan::InvalidDataError)
     : material( terrain.getSol() )
+    , p_origin_elem(&terrain) // should be correct because ref count is embedded into TYElements
 {
     if (terrain.getListPoints().size()<=2)
         throw tympan::InvalidDataError("Invalid TYTerrain");
@@ -45,6 +46,7 @@ MaterialPolygon::MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix
 MaterialPolygon::MaterialPolygon(const TYTabPoint& contour, material_t ground, const OMatrix& matrix)
     throw(tympan::InvalidDataError)
     : material(ground)
+    , p_origin_elem(NULL)
 {
     if (contour.size()<=2)
         throw tympan::InvalidDataError("Invalid TYTerrain");
@@ -372,14 +374,47 @@ AltimetryBuilder::labelFaces(material_t default_material)
             // Creates a comparator function object to compare polygons for inclusion
             poly_comparator cmp(*this);
             // Search for the minimal - ie most specific - polygon amoung them
-            face_to_material_poly_t::iterator min_p_it = std::min_element(p.first, p.second, cmp);
-            assert( min_p_it != p.second && "This should never happen.");
-            assert( min_p_it->first ==  static_cast<face_handle_t>(f_it));
-            material_polygon_handle_t poly_h = min_p_it->second;
-            // Extract the associated material.
-            material_t mater = material_polygons[poly_h].material;
-            // Handle the case where no valid material has been associated to the material polygon
-            f_it->info().material = mater==NULL ? default_material : mater;
+            try {
+                face_to_material_poly_t::iterator min_p_it = std::min_element(p.first, p.second, cmp);
+                assert( min_p_it != p.second && "This should never happen.");
+                assert( min_p_it->first ==  static_cast<face_handle_t>(f_it));
+                material_polygon_handle_t poly_h = min_p_it->second;
+                // Extract the associated material.
+                material_t mater = material_polygons[poly_h].material;
+                // Handle the case where no valid material has been associated to the material polygon
+                f_it->info().material = mater==NULL ? default_material : mater;
+            }
+            catch  (const NonComparablePolygons& exc)
+            {
+                // Enrich the exception with the geographical position
+                const CGAL_Point& center = CGAL::centroid(cdt.triangle(f_it));
+                OPoint3D position(center.x(), center.y(), unspecified_altitude);
+                exc << position_errinfo(position);
+
+                // Enrich the exception with the implied TYElements
+                std::deque<LPTYElement> elements;
+                const LPTYTerrain& elem1 = material_polygons[exc.p1].getOriginalTerrain();
+                const LPTYTerrain& elem2 = material_polygons[exc.p2].getOriginalTerrain();
+                elements.push_back(elem1);
+                elements.push_back(elem2);
+                exc << elements_implied_errinfo(elements);
+
+                // Report here anyhow
+                OMessageManager::get()->error(
+                    "%s : No single most specific material polygon for current face at (%f, %f)",
+                    "AltimetryBuilder::labelFaces", center.x(), center.y());
+                OMessageManager::get()->error(
+                    "%s : one possible material is '%s' from element %s",
+                    "AltimetryBuilder::labelFaces",
+                    elem1->getName().toUtf8().data(),
+                    elem1->getStringID().toUtf8().data());
+                OMessageManager::get()->error(
+                    "%s : another possible one is '%s' from element %s",
+                    "AltimetryBuilder::labelFaces",
+                    elem2->getName().toUtf8().data(),
+                    elem2->getStringID().toUtf8().data());
+                throw;
+            }
         }
         // Finally assert material is valid however
         assert(f_it->info().material != NULL);
