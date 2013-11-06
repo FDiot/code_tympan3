@@ -23,6 +23,9 @@ if(WIN32)
   endif(NOT MSVC)
   # Code_TYMPAN uses a lot of 'unsecure' functions like vsprintf
   add_definitions(/DUSE_STANDARD_FILE_FUNCTIONS /D_CRT_SECURE_NO_WARNINGS)
+  # The `throw()` compiler specification triggers an annoying warning in VS2010
+  # (standard and C++'11 problems inside) but they are required in custom exception classes
+  add_definitions(/wd4290)
   set(SYS_NATIVE_WIN TRUE)
 else(WIN32)
   if(NOT (UNIX AND CMAKE_COMPILER_IS_GNUCXX))
