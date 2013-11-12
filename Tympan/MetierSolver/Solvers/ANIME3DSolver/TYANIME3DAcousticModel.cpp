@@ -180,6 +180,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 						std::cout << "sol n : " << k << "resistivite = " << pSol->getResistivite() << std::endl;
 
 						spectreAbs = pSol->abso(angle, sizeRay, _atmos);
+// TO DO : S'assurer que la somme des pondérations de Fresnel égale 1
 						pond = spectreAbs * tabPondFresnel[k];
 						sum = sum + pond; // calcul du coeff de reflexion moy en ponderant avec les materiaux
 					}
@@ -276,9 +277,9 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
 			diffIdx = tabDiff[j]; // Index de l'evenement diffraction courant
 			TYRayEvent *currentEv = currentRay->getEvents().at(diffIdx); // Evenement courant
 
-			precDiff = currentEv->previous->distNextEvent;
-			diffEnd = currentEv->distEndEvent;
-			precEnd = currentEv->previous->distEndEvent;
+			precDiff = currentEv->previous->distNextEvent; // Distance de l'évenement précedent à la diffraction
+			diffEnd = currentEv->distEndEvent; // de la diffraction à l'évènement pertinent suivant (recepteur ou reflexion)
+			precEnd = currentEv->previous->distEndEvent; // Chemin sans diffraction
 
 			vDiffPrec = OVector3D( currentEv->pos, currentEv->previous->pos );
 			vDiffSuiv = OVector3D( currentEv->pos, currentEv->next->pos );
@@ -297,18 +298,18 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
 
 			delta = signe * ( precDiff + diffEnd - precEnd );
 			kDelta = _K * delta;
-            nbF = _lambda.invMult( 2.0 * delta );
+            nbF = _lambda.invMult( 2.0 * delta ); // 2 * delta / lambda
 			
 			if( delta > ( _lambda.div(20) ).valMax() )
 			{
-				mod = (((nbF * 20.0 + 3.0)).sqrt()).inv();
+				mod = (((nbF * 20.0 + 3.0)).sqrt()).inv(); // 1 / sqrt(20 * nbF + 3)
 			}
 			else
 			{
 				mod = 1;
 			}
 
-            absArrete = OSpectreComplex(mod, kDelta);
+            absArrete = OSpectreComplex(mod, kDelta);// (1 / sqrt(20 * nbF + 3)) exp(j * k * delta)
             prod = prod * absArrete;
 		}
 
@@ -337,7 +338,14 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	OSpectre fc = computeFc(dd, dr);
 
 /*
+MIS EN COMMENTAIRE POUR VALIDATION ULTERIEURE
+
+	// Calcul de F lambda officiel (equations 10 à 15 de H-T63-2010-01193-FR)
+	// parametre de l'ellipsoide de Fresnel F_{\lambda} via la formule definie dans la publie de D. van Maercke et J. Defrance (CSTB-2007)
 	// Version initiale du calcul de fc prenant en compte le sol réel
+
+	// Le spectre Q sert à récupérer la phase du trajet réflechi
+
 	OSpectre f = OSpectre::getOSpectreFreqExact(); //frequence
 	std::cout << "f = " << f.valMax() << std::endl;
     OSpectreComplex Q = _topo.terrainAt(Prefl)->getSol()->calculQ(angle, distPrefPsuiv, _atmos) ; // coeff de reflexion du sol au pt de reflexion
@@ -350,13 +358,8 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	std::cout << "fmin = " << fmin.valMax() << std::endl;
 	std::cout << "fmax = " << fmax.valMax() << std::endl;
 	std::cout << "fc = " << fc.valMax() << std::endl;
-*/
 
-	// F fixe a 1 pour eviter une boite trop grande a basse freq
-	const OSpectre F = OSpectre(1.0); 
-/*
-	// Calcul de F officiel
-	const OSpectre F = (OSpectre(1.0)-((f*f).div(fc*fc)).exp(1.0))*32.0; // parametre de l'ellipsoide de Fresnel F_{\lambda} via la formule definie dans la publie de D. van Maercke et J. Defrance (CSTB-2007)
+	const OSpectre F = (OSpectre(1.0)-((f*f).div(fc*fc)).exp(1.0))*32.0; 
  
 	OSpectre A = (fc*fc)*-1;
 	OSpectre B = f*f;
@@ -364,8 +367,9 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	const OSpectre F = (OSpectre(1.0)-(C.exp()))*32;
 */
 
+	// F fixe a 1 pour eviter une boite trop grande a basse freq
+	const OSpectre F = OSpectre(1.0); 
 	
-	//OSpectre lF = _lambda * F;	// produit lambda*Flbd
 	// lF fixe a lambda/2
 	OSpectre lF = _lambda.div(2.0)*F;
 
@@ -376,50 +380,39 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 	int reflFace =  _tabTYRays[rayNbr]->getEvents().at(reflIndice)->idFace1;
 	TYAcousticSurface *face = TYAcousticSurface::safeDownCast(_tabSurfIntersect[reflFace].pSurfGeoNode->getElement());	
 	OPlan P = face->getPlan();
-	OPoint3D SIm = P.symPtPlan(Pprec);
-	double dSImR = SIm.distFrom(Psuiv);
+	OPoint3D SIm = P.symPtPlan(Pprec); // Point image du point précedent la reflexion
+	double dSImR = SIm.distFrom(Psuiv); // Distance de la source image au point suivant la reflexion
 
 	std::cout << "Coordonnees de la source image " << std::endl;
 	std::cout << SIm._x << " " << SIm._y << " " << SIm._z << std::endl;
 
-    // Dimensions de la boite de Fresnel : on choisit de prendre la + grande boite
-	// grd cote de la boite
-	// (lF + dSImR).valMax(); 
-	// petit cote de la boite == hauteur ici
-	//((lF*(lF + 2.*dSImR)).sqrt()).valMax();
 
-	// On fixe une frequence de 100 Hz pour etudier de plus pres la boite
-	double L = lF.getValueReal(100.f) + dSImR;                  
-	double l = sqrt(lF.getValueReal(100.f)*(lF.getValueReal(100.f)+2.*dSImR));
+	// On fixe une frequence de travail
+// TO DO : mettre freq en paramètre utilisateur
+	float freq = 500.0f;
+	double L = 2 * lF.getValueReal(freq) + dSImR;                  
+	double l = sqrt( lF.getValueReal(freq) * ( lF.getValueReal(freq) + 2.*dSImR ) );
 	double h = l; // hauteur = largeur (ajouté pour la lisibilité du code)
 
-	//double L = dd;
-	//double l = 5.0;
-
-
-	// On choisit de fixer la longueur de la boite a S'R
-	// et sa largeur a 0.5*S'R en attendant de mieux dimensionner.
-	// Cela permet de tester la boite et l'algorithme de ponderation
-	//double L = dSImR;
-	//double l = 0.5*dSImR;
 	
 	std::cout << "L = " << L << " l = " << l << std::endl;
 
     // Boite de Fresnel placee a l'origine du repere
-    OBox box = OBox( OCoord3D( 0, 0, 0 ), OCoord3D( L, l, l ) );
+    OBox box = OBox( OCoord3D( 0, 0, 0 ), OCoord3D( L, l, h ) );
 	fresnelArea = OBox2(box);
 
     // Translation au pt O milieu du segment [SIm R]
 	OPoint3D O( 0.5 * ( SIm._x + Psuiv._x ), 0.5 * ( SIm._y + Psuiv._y ), 0.5 * ( SIm._z + Psuiv._z ) );
 
-	const OVector3D vt( ( O._x - (0.5*L) ), ( O._y - ( 0.5*l ) ), ( O._z - ( 0.5*h ) ) ); // Translation depuis le centre
+	// Deplace le centre de la boite au centre du segment S'P (P = point suivant la réflexion)
+	const OVector3D vt( ( O._x - (0.5*L) ), ( O._y - ( 0.5*l ) ), ( O._z - ( 0.5*h ) ) ); 
+	fresnelArea.Translate( vt );
 	
-	fresnelArea.Translate( vt ); // translation de la zone de Fresnel
-	
+// TO DO : S'assurer que la rotation s'effectue dans le bon repère
 	return fresnelArea.boxRotation( O, Psuiv ); // Voir la définition de boxRotation : devrai être fersnelArea.boxRotation(...)
 }
 
-
+// TO DO : Vérifier que c'est la méthode mise en commentaire dans computeFresnelArea
 OSpectre TYANIME3DAcousticModel::computeFc(const double& dd, const double& dr)
 {
 	OSpectre FMin, FMax, fc;
@@ -465,24 +458,45 @@ OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(double angle, OPoint3D
 	std::cout << "G = " << fresnelArea._G._x << " " << fresnelArea._G._y << " " << fresnelArea._G._z << std::endl;
 	std::cout << "H = " << fresnelArea._H._x << " " << fresnelArea._H._y << " " << fresnelArea._H._z << std::endl;
 
+
+	// Remplacer par l'intersection des segments FG, EH, AB, CD
+	// avec le plan de la face sur laquelle se trouve le point de réflexion.
+	OSegment3D AB(fresnelArea._A, fresnelArea._B);
+	OSegment3D CD(fresnelArea._C, fresnelArea._D);
+	OSegment3D FG(fresnelArea._F, fresnelArea._G);
+	OSegment3D EH(fresnelArea._E, fresnelArea._H);
+
+	LPTYPolygon faceRefl = (*_topo.getAltimetrie()).getFaceUnder(Prefl);
+
+	// Calcul de l'intersection des segments avec le plan de la face de reflexion
+	OPlan refPlan = faceRefl->getPlan();
+
+	OPoint3D eProj, fProj, gProj, hProj;
+	refPlan.intersectsSegment(AB._ptA, AB._ptB, eProj);
+	refPlan.intersectsSegment(CD._ptA, CD._ptB, fProj);
+	refPlan.intersectsSegment(EH._ptA, EH._ptB, gProj);
+	refPlan.intersectsSegment(FG._ptA, FG._ptB, hProj);
+
+// ANCIENNE VERSION (PROJECTION DES POINT DU "HAUT" DE LA BOITE
 	// fE/fF/fG/fH are the faces under the box corners E/F/G/H
-	LPTYPolygon fE = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._E);
-	LPTYPolygon fF = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._F);
-	LPTYPolygon fG = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._G);
-	LPTYPolygon fH = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._H);
+	//LPTYPolygon fE = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._E);
+	//LPTYPolygon fF = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._F);
+	//LPTYPolygon fG = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._G);
+	//LPTYPolygon fH = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._H);
 
 	// Defines 4 planes from the 4 surfaces
-	OPlan ePlane = fE->plan();
-	OPlan fPlane = fF->plan();
-	OPlan gPlane = fG->plan();
-	OPlan hPlane = fH->plan();
+	//OPlan ePlane = fE->plan();
+	//OPlan fPlane = fF->plan();
+	//OPlan gPlane = fG->plan();
+	//OPlan hPlane = fH->plan();
 
 	// These are the four projections onto the planes defined previously
 	// This is a way of taking into account the ground altitude
-	OPoint3D eProj = ePlane.projPtPlan(fresnelArea._E);
-	OPoint3D fProj = fPlane.projPtPlan(fresnelArea._F);
-	OPoint3D gProj = gPlane.projPtPlan(fresnelArea._G);
-	OPoint3D hProj = hPlane.projPtPlan(fresnelArea._H);
+	//OPoint3D eProj = ePlane.projPtPlan(fresnelArea._E);
+	//OPoint3D fProj = fPlane.projPtPlan(fresnelArea._F);
+	//OPoint3D gProj = gPlane.projPtPlan(fresnelArea._G);
+	//OPoint3D hProj = hPlane.projPtPlan(fresnelArea._H);
+// FIN ANCIENNE VERSION
 
 	std::cout << "Coordonnees des 4 projetes des sommets hauts de la boite " << std::endl;
 	std::cout << "eProj = " << eProj._x << " " << eProj._y << " " << eProj._z << std::endl;
@@ -616,9 +630,11 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff()
 		wSource = (*source->getSpectre()).toGPhy();
 
         prodAbs = _absAtm[i] * _absRefl[i] * _absDiff[i];
-
-        mod = ((directivite * wSource * rhoc) * (1. / c1)).sqrt() * prodAbs;
-		phase = _K.mult(_tabTYRays[i]->getLength());
+		
+		// module = dir * W * rhoC / (4 * PI * R²) * produit (reflex, diffraction, atmos)
+        mod = ((directivite * wSource * rhoc) * (1. / c1)).sqrt() * prodAbs; 
+		// phase = exp(j K *L)
+		phase = _K.mult(_tabTYRays[i]->getLength()); 
 
         _pressAcoustEff[i] = OSpectreComplex(mod, phase);
 	}
