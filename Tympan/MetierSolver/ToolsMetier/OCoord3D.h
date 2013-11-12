@@ -18,9 +18,11 @@
  *
  *
  */
+#include "OGeometrie.h"
 
 #ifndef __O_COORD_3D__
 #define __O_COORD_3D__
+
 
 /**
  * \file OCoord3D.h
@@ -28,6 +30,7 @@
  * \brief The 3D coordinate class.
  * \author Projet_Tympan
  */
+
 class OVector3D;
 
 class OCoord3D

@@ -254,5 +254,9 @@ public:
 	OVector3D getRotationOzOy(double alpha, double theta);
 };
 
+inline OCoord3D operator + (const OCoord3D& coord, const OVector3D& vect)
+{
+	return OCoord3D( coord._x + vect._x, coord._y + vect._y, coord._z + vect._z );
+}
 
 #endif // __O_VECTOR_3D__
