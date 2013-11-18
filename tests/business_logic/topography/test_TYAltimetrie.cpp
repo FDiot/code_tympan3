@@ -63,27 +63,30 @@ TYAltimetrie* buildSlopeAltimetry(void)
 	return pAlti;
 }
 
+static  const double precision = 1e-6;
+
 TEST(TYAltimetryTest, update_point_altitude) {
-	// Create altimetry
-	TYAltimetrie* pAlti = buildSlopeAltimetry();
 
-	// TEST POSITIF : Les points sont dans l'espace défini par l'altimétrie
-	OPoint3D pt(-70., 0., 0.);
-	bool bRes = pAlti->updateAltitude(pt);
-	EXPECT_DOUBLE_EQ(pt._z, 0.0);
+    // Create altimetry
+    TYAltimetrie* pAlti = buildSlopeAltimetry();
 
-	pt._x = 0.;
-	bRes = pAlti->updateAltitude(pt);
-	EXPECT_DOUBLE_EQ(150.0, pt._z);
+    // TEST POSITIF : Les points sont dans l'espace défini par l'altimétrie
+    OPoint3D pt(-70., 0., 0.);
+    bool bRes = pAlti->updateAltitude(pt);
+    EXPECT_NEAR(0.0, pt._z, precision);
 
-	pt._x = 70.;
-	bRes = pAlti->updateAltitude(pt);
-	EXPECT_DOUBLE_EQ(300.0, pt._z);
+    pt._x = 0.;
+    bRes = pAlti->updateAltitude(pt);
+    EXPECT_NEAR(150.0, pt._z, precision);
 
-	// TEST NEGATIF : Le point est hors zone
-	pt._x = -500;
-	bRes = pAlti->updateAltitude(pt);
-	EXPECT_FALSE(bRes);
+    pt._x = 70.;
+    bRes = pAlti->updateAltitude(pt);
+    EXPECT_NEAR(300.0, pt._z, precision);
+
+    // TEST NEGATIF : Le point est hors zone
+    pt._x = -500;
+    bRes = pAlti->updateAltitude(pt);
+    EXPECT_FALSE(bRes);
 }
 
 static const double level_curve_A_alti = 10.0;
@@ -115,7 +118,6 @@ LPTYSiteNode buildSiteSimpleAltimetry(void)
 
 
 TEST(TYAltimetryTest, site_add_terrain) {
-
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     LPTYTopographie pTopo = pSite->getTopographie();
     LPTYAltimetrie pAlti = pTopo->getAltimetrie();
@@ -124,8 +126,7 @@ TEST(TYAltimetryTest, site_add_terrain) {
     ASSERT_TRUE(pSite->updateAltimetrie(true));
     OPoint3D pt(10.0, 10.0, 0.0);
     EXPECT_TRUE(pAlti->updateAltitude(pt));
-    EXPECT_DOUBLE_EQ(level_curve_A_alti, pt._z);
+    EXPECT_NEAR(level_curve_A_alti, pt._z, precision);
 
     // Check altitude of an outer point
-
 }
