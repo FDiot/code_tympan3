@@ -89,11 +89,6 @@ extern const double unspecified_altitude;
 typedef tympan::logic_error AlgorithmicError;
 typedef tympan::invalid_data InvalidDataError;
 
-typedef boost::error_info<struct tag_elements_implied,
-                          std::deque<LPTYElement> > elements_implied_errinfo;
-typedef boost::error_info<struct tag_elements_implied,
-                          OPoint3D> position_errinfo;
-
 /**
  * @brief Adaptor for \c TYTerrain
  */
