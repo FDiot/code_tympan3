@@ -750,7 +750,7 @@ bool TYAltimetrie::updateAltitude(OPoint3D& pt) const
 	pt = projection(pt);
 	if ( pt._z == invalid_altitude ) {
             OMessageManager::get()->warning(
-                "%s Invalid altitude for point at (%f, %f)",
+                "%s Could not compute valid altitude for point at (%f, %f)",
                 BOOST_CURRENT_FUNCTION, pt._x, pt._y);
             return false;
         }
