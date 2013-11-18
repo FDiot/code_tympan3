@@ -64,17 +64,19 @@ TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNod
 	_atmos = *(calcul.getAtmosphere());
 
 	// deepcopy is used instead of classical assignation to avoid problem with pointer
-	_topo.deepCopy(site.getTopographie());
-	TYSiteNode* pSiteParent = static_cast<TYSiteNode*>(&(const_cast<TYSiteNode&>(site)));
-	_topo.setParent(static_cast<TYElement*>(pSiteParent));
-	// need to call "sortTerrain()" to have a correct identification of terrain when needed
-	_topo.sortTerrains();
+	//_topo.deepCopy(site.getTopographie());
+	//TYSiteNode* pSiteParent = static_cast<TYSiteNode*>(&(const_cast<TYSiteNode&>(site)));
+	//_topo.setParent(static_cast<TYElement*>(pSiteParent));
+	//// need to call "sortTerrain()" to have a correct identification of terrain when needed
+	//_topo.sortTerrains();
+
+	_topo = const_cast<TYSiteNode&>(site).getTopographie().getRealPointer();
 
 	// _alti parameter initialized
-	_alti = _topo.getAltimetrie().getRealPointer();
+	_alti = _topo->getAltimetrie().getRealPointer();
 
-    _listeTerrains = _topo.getListTerrain(); 
-    _listeTriangles = (*_topo.getAltimetrie()).getListFaces();  
+    _listeTerrains = _topo->getListTerrain(); 
+    _listeTriangles = (*_topo->getAltimetrie()).getListFaces();  
 
     TYMapElementTabSources mapElementSources = calcul.getResultat()->getMapEmetteurSrcs();
     calcul.getAllSources(mapElementSources, _tabSources);
@@ -174,7 +176,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 					for(int k = 0; k < nbFacesFresnel; k++)
 					{ 
 						// boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
-						pSol = _topo.terrainAt(triangleCentre[k])->getSol();
+						pSol = _topo->terrainAt(triangleCentre[k])->getSol();
 						pSol->calculNombreDOnde(_atmos);
 
 						std::cout << "sol n : " << k << "resistivite = " << pSol->getResistivite() << std::endl;
@@ -215,7 +217,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 				// Cas particulier d'une reflexion sur le sol
 				if (ray->getEvents().at(reflIndice)->type == TYREFLEXIONSOL) 
 				{
-					pSol = _topo.terrainAt(Prefl)->getSol();
+					pSol = _topo->terrainAt(Prefl)->getSol();
 					pSol->calculNombreDOnde(_atmos);
 					spectreAbs = pSol->abso(angle, sizeRay, _atmos);
 				}
@@ -466,7 +468,7 @@ OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(double angle, OPoint3D
 	OSegment3D FG(fresnelArea._F, fresnelArea._G);
 	OSegment3D EH(fresnelArea._E, fresnelArea._H);
 
-	LPTYPolygon faceRefl = (*_topo.getAltimetrie()).getFaceUnder(Prefl);
+	LPTYPolygon faceRefl = (*_topo->getAltimetrie()).getFaceUnder(Prefl);
 
 	// Calcul de l'intersection des segments avec le plan de la face de reflexion
 	OPlan refPlan = faceRefl->getPlan();
