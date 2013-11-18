@@ -24,6 +24,13 @@
 #include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
 #include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
 
+namespace tympan {
+typedef boost::error_info<struct tag_elements_implied,
+                          std::deque<LPTYElement> > elements_implied_errinfo;
+typedef boost::error_info<struct tag_position,
+                          OPoint3D> position_errinfo;
+} // namespace tympan
+
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAltimetrieWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAltimetrieGraphic.h"
