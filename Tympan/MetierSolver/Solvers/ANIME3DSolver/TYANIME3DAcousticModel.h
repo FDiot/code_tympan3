@@ -162,7 +162,7 @@ protected :
 	TYAtmosphere _atmos; 
 
 	/// la topographie du site
-	TYTopographie _topo;
+	TYTopographie *_topo;
 
 	/// la liste des terrains du site
 	TYTabTerrainGeoNode _listeTerrains; 
