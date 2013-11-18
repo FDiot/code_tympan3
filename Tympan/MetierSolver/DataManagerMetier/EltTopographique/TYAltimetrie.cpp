@@ -692,7 +692,11 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
         return ptTest;
     }
 
-    double M_DOUBLE_INFINITE = 100000.0f; // TODO use standard C macro or C++ traits instead
+    const double M_DOUBLE_INFINITE = 1e6; // CAUTION ! Numerical instability:
+    // One could prefer using `std::numeric_limits<double>::infinity()` or
+    // `std::numeric_limits<double>::max()` but both cause the call to
+    // pFace->intersects(...) below to fail silently
+    // Using this big but no too big ad hoc 1E6 seems OK...
     double p, q;
     int pi, qi;
 

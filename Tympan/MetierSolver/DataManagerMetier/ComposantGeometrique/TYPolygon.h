@@ -85,9 +85,12 @@ public:
     virtual TYTabPoint getContour(int n = -1) const;
 	virtual TYTabPoint3D getOContour(int n = -1) const;
 
+    // TODO Check and tests those methods for numerical stability
     virtual int intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const;
     virtual int intersects(const OSegment3D& seg, OPoint3D& pt) const;
     virtual int intersects(const OSegment3D& seg, OPoint3D& pt, bool insideTest) const;
+
+    //XXX This method is not numerically stable !
     virtual int intersects(const OPoint3D& pt) const;
 
     /**
