@@ -682,9 +682,7 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
     {
         // This is supposed to be an error case isn't it ? Then we should NOT return SILENTLY.
         // but raising this exception seems to causes regression in some cases...
-        // TODO reactivate the exception and fix the regression
-        // throw tympan::logic_error("No face in accelerating structure of the altimetry") << tympan_source_loc;
-        return ptTest;
+        throw tympan::logic_error("No face in accelerating structure of the altimetry") << tympan_source_loc;
     }
     // A sanity check has to be represented by an assert, not a if silencing a failure.
     assert(_pSortedFaces != NULL && "Sanity Check..." );
