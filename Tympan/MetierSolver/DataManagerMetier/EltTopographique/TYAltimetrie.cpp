@@ -603,43 +603,25 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
     OPoint3D ptTest(pt);
     ptTest._z = invalid_altitude;
 
-    if ((_gridDX == 0) || (_gridDY == 0))
-    {
-        // This is supposed to be an error case isn't it ? Then we should NOT return SILENTLY.
-        // but raising this exception seems to causes regression in some cases...
-        throw tympan::logic_error("No face in accelerating structure of the altimetry") << tympan_source_loc;
-    }
-    // A sanity check has to be represented by an assert, not a if silencing a failure.
-    assert(_pSortedFaces != NULL && "Sanity Check..." );
-    // XXX Inappropriate test : the border of altimetry is NOT a rectangle but a polygon
-    if (!_bbox.isInside2D(pt)) //si le point n'est pas dans les bornes de l'altimetrie
-    {
-        return ptTest;
-    }
-
     const double M_DOUBLE_INFINITE = 1e6; // CAUTION ! Numerical instability:
     // One could prefer using `std::numeric_limits<double>::infinity()` or
     // `std::numeric_limits<double>::max()` but both cause the call to
     // pFace->intersects(...) below to fail silently
     // Using this big but no too big ad hoc 1E6 seems OK...
-    double p, q;
-    int pi, qi;
 
-    p = (pt._x - _bbox._min._x) / _gridDX;
-    q = (pt._y - _bbox._min._y) / _gridDY;
-    pi = floor(p);
-    qi = floor(q);
-
-    if ((pi < 0) || (qi < 0) || (pi >= _gridSX) || (qi >= _gridSY))
+    grid_index idx;
+    if (!getGridIndices(pt, idx))
     {
-        throw tympan::logic_error("Invalid grid coordinates") << tympan_source_loc;
-    }  // sanity check
+        // Early termination with invalid altitude generaly due to
+        // pt being out the geometrical scope of the altimetry.
+        return ptTest;
+    }
 
     int i = 0;
     int size = 0;
     OSegment3D segTest;
     TYPolygon* pFace = NULL;
-    TYTabLPPolygon* pDivRef = &(_pSortedFaces[pi][qi]);
+    TYTabLPPolygon* pDivRef = &(_pSortedFaces[idx.pi][idx.qi]);
 
     if (pDivRef != NULL) // sanity check
     {
