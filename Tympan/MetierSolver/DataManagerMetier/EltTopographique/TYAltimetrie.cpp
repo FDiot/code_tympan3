@@ -17,7 +17,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <cassert>
 
 #include <boost/current_function.hpp>
@@ -60,41 +60,19 @@ const double TYAltimetrie::invalid_altitude = -1E5;
 TYAltimetrie::TYAltimetrie()
 {
     _name = TYNameManager::get()->generateName(getClassName());
-
-    _pSortedFaces = NULL;
-    _gridSX = 0;
-    _gridSY = 0;
-    _gridDX = 0.0f;
-    _gridDY = 0.0f;
+    initNullGrid();
 }
 
 TYAltimetrie::TYAltimetrie(const TYAltimetrie& other)
 {
-    _gridSX = 0;
-    _gridSY = 0;
-    _gridDX = 0.0f;
-    _gridDY = 0.0f;
-    _pSortedFaces = NULL;
+    initNullGrid();
     *this = other;
 }
 
 TYAltimetrie::~TYAltimetrie()
 {
     _listFaces.clear();
-
-    if ((_gridSX != 0) && (_gridSY != 0))
-    {
-        // clear existing grid
-        for (int k = 0; k < _gridSX; k++)
-        {
-            for (int l = 0; l < _gridSY; l++)
-            {
-                _pSortedFaces[k][l].clear();
-            }
-            delete[] _pSortedFaces[k];
-        }
-        delete[] _pSortedFaces;
-    }
+    clearAcceleratingGrid();
 }
 
 TYAltimetrie& TYAltimetrie::operator=(const TYAltimetrie& other)
@@ -104,34 +82,7 @@ TYAltimetrie& TYAltimetrie::operator=(const TYAltimetrie& other)
         TYElement::operator =(other);
         _listFaces = other._listFaces;
         _bbox = other._bbox;
-        _gridSX = other._gridSX;
-        _gridSY = other._gridSY;
-        _gridDX = other._gridDX;
-        _gridDY = other._gridDY;
-
-        if ((_gridSX != 0) && (_gridSY != 0))
-        {
-            int k;
-            // clear existing grid
-            for (k = 0; k < _gridSX; k++)
-            {
-                for (int l = 0; l < _gridSY; l++)
-                {
-                    _pSortedFaces[k][l].clear();
-                }
-                delete[] _pSortedFaces[k];
-            }
-            delete[] _pSortedFaces;
-            _pSortedFaces = new TYTabLPPolygon*[_gridSX];
-            for (k = 0; k < _gridSX; k++)
-            {
-                _pSortedFaces[k] = new TYTabLPPolygon[_gridSY];
-                for (int l = 0; l < _gridSY; l++)
-                {
-                    _pSortedFaces[k][l] = other._pSortedFaces[k][l];
-                }
-            }
-        }
+        copyAcceleratingGrid(other);
     }
     return *this;
 }
@@ -155,7 +106,8 @@ bool TYAltimetrie::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
     if (!TYElement::deepCopy(pOther, copyId)) { return false; }
 
-    TYAltimetrie* pOtherAlt = (TYAltimetrie*) pOther;
+    const TYAltimetrie* pOtherAlt = dynamic_cast<const TYAltimetrie*>(pOther);
+    assert(pOtherAlt && "The TYElement given was no TYAltimetry.");
 
     _listFaces.clear();
 
@@ -167,43 +119,21 @@ bool TYAltimetrie::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     }
 
     _bbox = pOtherAlt->_bbox;
-    _gridSX = pOtherAlt->_gridSX;
-    _gridSY = pOtherAlt->_gridSY;
-    _gridDX = pOtherAlt->_gridDX;
-    _gridDY = pOtherAlt->_gridDY;
 
-    TYPolygon* pPolygon = NULL;
-    if ((_gridSX != 0) && (_gridSY != 0))
-    {
-        // clear existing grid (if exist)
-        if (_pSortedFaces != NULL)
+    copyAcceleratingGrid(*pOtherAlt);
+    for (int k = 0; k < _gridSX; k++)
+        for (int l = 0; l < _gridSY; l++)
         {
-            for (int k = 0; k < _gridSX; k++)
+            unsigned nbFaces = _pSortedFaces[k][l].size();
+            _pSortedFaces[k][l].reserve(nbFaces);
+            for (unsigned int m = 0; m < nbFaces; m++)
             {
-                for (int l = 0; l < _gridSY; l++)
-                {
-                    _pSortedFaces[k][l].clear();
-                }
-                delete[] _pSortedFaces[k];
-            }
-            delete[] _pSortedFaces;
-        }
-
-        _pSortedFaces = new TYTabLPPolygon*[_gridSX];
-        for (int k = 0; k < _gridSX; k++)
-        {
-            _pSortedFaces[k] = new TYTabLPPolygon[_gridSY];
-            for (int l = 0; l < _gridSY; l++)
-            {
-                for (unsigned int m = 0; m < pOtherAlt->_pSortedFaces[k][l].size(); m++)
-                {
-                    pPolygon = new TYPolygon(*(pOtherAlt->_pSortedFaces[k][l]).at(m));
-                    _pSortedFaces[k][l].push_back(pPolygon);
-                }
+                TYPolygon* pPolygon = _pSortedFaces[k][l].at(m).getRealPointer();
+                // We break the sharing of the TYPolygon with other
+                LPTYPolygon pNewPoly = new TYPolygon(*pPolygon);
+                _pSortedFaces[k][l].push_back(pNewPoly);
             }
         }
-    }
-
     return true;
 }
 
@@ -274,37 +204,14 @@ void TYAltimetrie::plugBackTriangulation(
 
     TYPoint point;
 
-    if ((_gridSX != 0) && (_gridSY != 0))
-    {
-        // clear existing grid
-        for (int k = 0; k < _gridSX; k++)
-        {
-            for (int l = 0; l < _gridSY; l++)
-            {
-                _pSortedFaces[k][l].clear();
-            }
-            delete[] _pSortedFaces[k];
-        }
-        delete[] _pSortedFaces;
-    }
 
+    clearAcceleratingGrid();
     // compute density
     float fsx = GRID_STEP((double)nbTriangles);
     _gridSX = _gridSY = (int) fsx;
     _gridDX = (_bbox._max._x - _bbox._min._x) / _gridSX;
     _gridDY = (_bbox._max._y - _bbox._min._y) / _gridSY;
-
-    // On initialise la grille de tri des triangles
-    _pSortedFaces = new TYTabLPPolygon*[_gridSX];
-    for (int k = 0; k < _gridSX; k++)
-    {
-        _pSortedFaces[k] = new TYTabLPPolygon[_gridSY];
-        for (int l = 0; l < _gridSY; l++)
-        {
-            _pSortedFaces[k][l].clear();
-            _pSortedFaces[k][l].reserve(10);
-        }
-    }
+    initAcceleratingGrid(10);
 
     OBox bb;
 
@@ -678,7 +585,7 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
     OPoint3D ptTest(pt);
     ptTest._z = invalid_altitude;
 
-    if (_gridSX == 0)  // aucune face dans l'objet altimetrie...
+    if ((_gridDX == 0) || (_gridDY == 0))
     {
         // This is supposed to be an error case isn't it ? Then we should NOT return SILENTLY.
         // but raising this exception seems to causes regression in some cases...
@@ -700,14 +607,15 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
     double p, q;
     int pi, qi;
 
-    if ((_gridDX == 0) || (_gridDY == 0)) { return ptTest; }  // sanity check
-
     p = (pt._x - _bbox._min._x) / _gridDX;
     q = (pt._y - _bbox._min._y) / _gridDY;
     pi = (int) p;
     qi = (int) q;
 
-    if ((pi < 0) || (qi < 0) || (pi >= _gridSX) || (qi >= _gridSY)) { return ptTest; }  // sanity check
+    if ((pi < 0) || (qi < 0) || (pi >= _gridSX) || (qi >= _gridSY))
+    {
+        throw tympan::logic_error("Invalid grid coordinates") << tympan_source_loc;
+    }  // sanity check
 
     int i = 0;
     int size = 0;
@@ -741,8 +649,7 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
             i++;
         }
     }
-
-	return ptTest;
+    return ptTest;
 }
 
 bool TYAltimetrie::updateAltitude(OPoint3D& pt) const
@@ -836,4 +743,68 @@ TYTabPoint TYAltimetrie::altSup(const TYPoint& pt) const
     }
 
     return tabPoint;
+}
+
+void TYAltimetrie::initNullGrid()
+{
+    // Initialisation of members
+    _pSortedFaces = NULL;
+    _gridSX = 0;
+    _gridSY = 0;
+    _gridDX = 0.0f;
+    _gridDY = 0.0f;
+}
+
+void TYAltimetrie::clearAcceleratingGrid()
+{
+    // clear existing grid
+    if (_pSortedFaces)
+    {
+        for (int k = 0; k < _gridSX; k++)
+        {
+            for (int l = 0; l < _gridSY; l++)
+            {
+                _pSortedFaces[k][l].clear();
+            }
+            delete[] _pSortedFaces[k];
+        }
+        delete[] _pSortedFaces;
+    }
+    initNullGrid();
+}
+
+void TYAltimetrie::initAcceleratingGrid(unsigned to_be_reserved)
+{
+    assert(_pSortedFaces==NULL && "The accelerating grid must have been cleared.");
+    assert(_gridSX && _gridSY && "The size of the grid must be positive.");
+
+    _pSortedFaces = new TYTabLPPolygon*[_gridSX];
+    for (int k = 0; k < _gridSX; k++)
+    {
+        _pSortedFaces[k] = new TYTabLPPolygon[_gridSY];
+        for (int l = 0; l < _gridSY; l++)
+        {
+             _pSortedFaces[k][l].reserve(to_be_reserved);
+        }
+    }
+
+}
+
+void TYAltimetrie::copyAcceleratingGrid(const TYAltimetrie& other)
+{
+    clearAcceleratingGrid();
+
+    _gridSX = other._gridSX;
+    _gridSY = other._gridSY;
+    _gridDX = other._gridDX;
+    _gridDY = other._gridDY;
+    initAcceleratingGrid();
+
+    for (int k = 0; k < _gridSX; k++)
+        for (int l = 0; l < _gridSY; l++)
+        {
+            // This is a copy of a STL vector/deque of SmartPtr
+            _pSortedFaces[k][l] = other._pSortedFaces[k][l];
+        }
+
 }

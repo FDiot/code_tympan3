@@ -211,6 +211,8 @@ public:
 	 */
 	unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon);
 
+
+protected:
 	/**
 	 * \brief Select indices of faces to test
 	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
@@ -247,14 +249,29 @@ protected:
     /// Bounding Box 2D de l'altimetrie
     OBox             _bbox;
 
+
+// The members below handle the accelerating grid : this could / should be a disctinc class
+
+    /// \brief Initilise the grid related attributes for a null grid
+    void initNullGrid();
+
+    /// \brief clean the accelerating structure
+    void clearAcceleratingGrid();
+
+    /// \brief initialise the accelerating structure given current _bbox and _gridS{XY}
+    void initAcceleratingGrid(unsigned to_be_reserved=0);
+
+    /// \brief Clear the grid and reinitialise it as a copy of \c other
+    void copyAcceleratingGrid(const TYAltimetrie& other);
+
     /// Tableau ordonne des faces
     TYTabLPPolygon** _pSortedFaces;
 
-    /// Bornes de la grille des faces
-    int _gridSX;
-    int _gridSY;
+    /// Size along each dimension of the accelerating grid
+    unsigned _gridSX;
+    unsigned _gridSY;
 
-    /// Pas de la grille des faces
+    /// Step along each dimension of the accelerating grid
     double _gridDX;
     double _gridDY;
 };
