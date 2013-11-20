@@ -199,13 +199,7 @@ void TYAltimetrie::plugBackTriangulation(
     // OMessageManager::get()->info("Mise a jour altimetrie (Tri des faces)...");
     // qsort(mesh, nbTriangles, sizeof(triangle), compareTriangle);
 
-    // Definition du tableau de faces.
-    TYTabPoint tabPt;
-    tabPt.reserve(3); // Ce sont des triangles
-
-    TYPoint point;
-
-
+    // Reset the grid to its new size
     clearAcceleratingGrid();
     // compute density
     float fsx = grid_step(nbTriangles);
@@ -216,63 +210,51 @@ void TYAltimetrie::plugBackTriangulation(
     _gridDY = (_bbox._max._y - _bbox._min._y) / _gridSY;
     initAcceleratingGrid(10);
 
-    OBox bb;
-
-    LPTYPolygon pPolygon = NULL;
     for (i = 0; i < nbTriangles; i++)
     {
-        // On recupere le triangle
+        // Making a TYPolygon from the OTriangle
         OTriangle& oTriangle = triangles[i];
-
-        tabPt.clear();
+        // Definition du tableau de faces.
+        TYTabPoint tabPt;
         tabPt.resize(3);
         for (j = 0; j < 3; j++)
-        {
             tabPt[j] = oTriangle.vertex(j);
-        }
+        LPTYPolygon pPolygon = new TYPolygon(tabPt);
+        assert(pPolygon != NULL);
 
-        // create a new face and add it the face lists
-        pPolygon = new TYPolygon(tabPt);
+        pPolygon->setConvex(true);
+        pPolygon->setParent(this);
+        _listFaces.push_back(pPolygon);
 
-        if (pPolygon != NULL)
+        // On rempli la grille de tri des triangles
+        // On trouve les min, max des indices des carres intersectes par le
+        // triangle sur la grille.
+        unsigned int ipmin, ipmax, iqmin, iqmax;
+        ipmin = iqmin = std::numeric_limits<unsigned int>::max();
+        ipmax = iqmax = std::numeric_limits<unsigned int>::min(); // Yes : zero for unsigned
+        for (j = 0; j < 3; j++)
         {
-            pPolygon->setConvex(true);
-            pPolygon->setParent(this);
-            _listFaces.push_back(pPolygon);
-
-            // On rempli la grille de tri des triangles
-            // On trouve les min, max des indices des carres intersectes par le
-            // triangle sur la grille.
-            unsigned int ipmin, ipmax, iqmin, iqmax;
-            ipmin = iqmin = std::numeric_limits<unsigned int>::max();
-            ipmax = iqmax = std::numeric_limits<unsigned int>::min(); // Yes : zero for unsigned
-            for (j = 0; j < 3; j++)
+            grid_index idx;
+            if (!getGridIndices(oTriangle.vertex(j), idx))
             {
+                throw tympan::logic_error("Point out of the altimetry's bounding box")
+                    << tympan_source_loc << tympan::position_errinfo(oTriangle.vertex(j));
+            };
 
-                grid_index idx;
-                if (!getGridIndices(oTriangle.vertex(j), idx))
-                {
-                    throw tympan::logic_error("Point out of the altimetry's bounding box")
-                        << tympan_source_loc << tympan::position_errinfo(oTriangle.vertex(j));
-                };
+            if (idx.pi > ipmax) { ipmax = idx.pi; }
+            if (idx.qi > iqmax) { iqmax = idx.qi; }
+            if (idx.pi < ipmin) { ipmin = idx.pi; }
+            if (idx.qi < iqmin) { iqmin = idx.qi; }
 
-                if (idx.pi > ipmax) { ipmax = idx.pi; }
-                if (idx.qi > iqmax) { iqmax = idx.qi; }
-                if (idx.pi < ipmin) { ipmin = idx.pi; }
-                if (idx.qi < iqmin) { iqmin = idx.qi; }
-
-            }
-            // Pour chacun des carres, on affecte le triangle
-            // Todo: Optim: faire le test d'intersection carre/trianle avant d'ajouter.
-            for (int k = ipmin; k <= ipmax; k++)
-                for (int l = iqmin; l <= iqmax; l++)
-                {
-                    if ((k >= 0) && (l >= 0) && (k < _gridSX) && (l < _gridSY))
-                    {
-                        _pSortedFaces[k][l].push_back(pPolygon);
-                    }
-                }
         }
+        // Pour chacun des carres, on affecte le triangle
+        // Todo: Optim: faire le test d'intersection carre/trianle avant d'ajouter.
+        for (int k = ipmin; k <= ipmax; k++)
+            for (int l = iqmin; l <= iqmax; l++)
+            {
+                assert((k >= 0) && (l >= 0) && (k < _gridSX) && (l < _gridSY));
+                _pSortedFaces[k][l].push_back(pPolygon);
+            }
     }
 
     setIsGeometryModified(false);
