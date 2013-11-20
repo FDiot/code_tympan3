@@ -162,6 +162,8 @@ TEST(TYAltimetryTest, dummy_grid) {
     EXPECT_DOUBLE_EQ(TYAltimetrie::invalid_altitude, pt._z);
 }
 
+
+
 TEST(TYAltimetryTest, simple_terrain) {
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     LPTYTopographie pTopo = pSite->getTopographie();
