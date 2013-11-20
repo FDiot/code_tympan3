@@ -220,6 +220,7 @@ public:
 
 protected:
     FRIEND_TEST(TYAltimetryTest, dummy_grid);
+    FRIEND_TEST(TYAltimetryTest, simple_grid);
     FRIEND_TEST(TYAltimetryTest, simple_terrain);
 	/**
 	 * \brief Select indices of faces to test
