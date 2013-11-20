@@ -22,6 +22,10 @@
 #include <cmath>
 #include <limits>
 
+#undef min
+#undef max
+#include <algorithm>
+
 #include <boost/current_function.hpp>
 
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
@@ -241,11 +245,10 @@ void TYAltimetrie::plugBackTriangulation(
                     << tympan_source_loc << tympan::position_errinfo(oTriangle.vertex(j));
             };
 
-            if (idx.pi > ipmax) { ipmax = idx.pi; }
-            if (idx.qi > iqmax) { iqmax = idx.qi; }
-            if (idx.pi < ipmin) { ipmin = idx.pi; }
-            if (idx.qi < iqmin) { iqmin = idx.qi; }
-
+            ipmax = max(ipmax, idx.pi);
+            iqmax = max(iqmax, idx.qi);
+            ipmin = min(ipmin, idx.pi);
+            iqmin = min(iqmin, idx.qi);
         }
         // Pour chacun des carres, on affecte le triangle
         // Todo: Optim: faire le test d'intersection carre/trianle avant d'ajouter.
@@ -279,10 +282,8 @@ int compareTriangle(const void* elem1, const void* elem2)
     x22 = tr2->pts[1][0];
     x23 = tr2->pts[2][0];
 
-    x1min = x11 > x12 ? x12 : x11;
-    x1min = x1min > x13 ? x13 : x1min;
-    x2min = x21 > x22 ? x22 : x21;
-    x2min = x2min > x23 ? x23 : x2min;
+    x1min = min(x11, min(x12, x13));
+    x2min = min(x21, min(x22, x23));
 
     return floor(x1min - x2min);
 }
