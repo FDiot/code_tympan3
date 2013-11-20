@@ -247,13 +247,24 @@ void TYAltimetrie::plugBackTriangulation(
             ipmin = ipmax = iqmin = iqmax = -1;
             for (j = 0; j < 3; j++)
             {
+
+                grid_index idx;
+                if (!getGridIndices(oTriangle.vertex(j), idx))
+                {
+                    throw tympan::logic_error("Point out of the altimetry's bounding box")
+                        << tympan_source_loc << tympan::position_errinfo(oTriangle.vertex(j));
+                };
+
+                // XXX This is legacy code for debugging
                 p = (oTriangle.vertex(j)._x - _bbox._min._x) / _gridDX;
                 q = (oTriangle.vertex(j)._y - _bbox._min._y) / _gridDY;
-                // Those (int) are going to be factored out in a forthcoming commit.
-                if ((int)p > ipmax) { ipmax = (int) p; }
-                if ((int)q > iqmax) { iqmax = (int) q; }
-                if (((int)p < ipmin) || (ipmin == -1)) { ipmin = (int) p; }
-                if (((int)q < iqmin) || (iqmin == -1)) { iqmin = (int) q; }
+                assert( ((int)p) == idx.pi && ((int)q) == idx.qi && "Behaviour changed XXX" );
+
+                if (idx.pi > ipmax) { ipmax = idx.pi; }
+                if (idx.qi > iqmax) { iqmax = idx.qi; }
+                if ((idx.pi < ipmin) || (ipmin == -1)) { ipmin = idx.pi; }
+                if ((idx.qi < iqmin) || (iqmin == -1)) { iqmin = idx.qi; }
+
             }
             // Pour chacun des carres, on affecte le triangle
             // Todo: Optim: faire le test d'intersection carre/trianle avant d'ajouter.
