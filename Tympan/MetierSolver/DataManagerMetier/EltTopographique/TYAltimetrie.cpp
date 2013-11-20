@@ -206,6 +206,14 @@ void TYAltimetrie::plugBackTriangulation(
 
     // Reset the grid to its new size
     clearAcceleratingGrid();
+
+    if(nbTriangles==0)
+    {
+        // TODO Is this a logic_error, invalid_data or a do-nothing degenerate case ?
+        // For now we throw after having cleaned the data structure.
+        throw tympan::invalid_data("Empty triangulation") << tympan_source_loc;
+    }
+
     // compute density
     float fsx = grid_step(nbTriangles);
     _gridSX = _gridSY = ceil(fsx);
