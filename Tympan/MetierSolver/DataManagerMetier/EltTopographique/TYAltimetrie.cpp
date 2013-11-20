@@ -513,11 +513,15 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY)
     pi = floor(p);
     qi = floor(q);
 
+    // In case pt lies on the top-most (resp. right-most) border of the bounding box
+    // p could be exactly _gridSX (resp. q exactly _gridSY) and this needs clipping.
+    pi = min(pi, _gridSX-1);
+    qi = min(qi, _gridSY-1);
+
     assert((pi >= 0) && (qi >= 0) && (pi < _gridSX) && (qi < _gridSY));
 
     indXY.pi = pi;
     indXY.qi = qi;
-
     return true;
 }
 
