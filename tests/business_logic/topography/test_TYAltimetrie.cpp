@@ -134,6 +134,27 @@ LPTYTerrain addTerrainToSimpleSite(LPTYSiteNode pSite)
     return pTerrain;
 }
 
+static const double level_curve_B_alti = 20.0;
+
+LPTYCourbeNiveau addHillToSimpleSite(LPTYSiteNode pSite)
+{
+
+    #define NB_POINTS_LEVEL_CURVE 5
+    LPTYCourbeNiveau pCrb = new TYCourbeNiveau();
+    // Initialise the level curve
+    double level_curve_x[NB_POINTS_LEVEL_CURVE] = {    0,    0,  100,  100,    0};
+    double level_curve_y[NB_POINTS_LEVEL_CURVE] = { -140,   50,   50, -140, -140};
+    for(unsigned i=0; i<NB_POINTS_LEVEL_CURVE; ++i)
+        pCrb->addPoint(level_curve_x[i], level_curve_y[i]);
+    pCrb->setAltitude(level_curve_B_alti);
+    #undef NB_POINTS_LEVEL_CURVE
+
+    // Add the level curve and updates the altimetry
+    pSite->getTopographie()->addCrbNiv(pCrb);
+    return pCrb;
+}
+
+
 TEST(TYAltimetryTest, dummy_grid) {
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     LPTYTopographie pTopo = pSite->getTopographie();
@@ -164,17 +185,17 @@ TEST(TYAltimetryTest, dummy_grid) {
 
 
 
-TEST(TYAltimetryTest, simple_terrain) {
+TEST(TYAltimetryTest, simple_grid) {
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     LPTYTopographie pTopo = pSite->getTopographie();
     LPTYAltimetrie pAlti = pTopo->getAltimetrie();
-    LPTYTerrain pTerrain = addTerrainToSimpleSite(pSite);
+    LPTYCourbeNiveau pHill = addHillToSimpleSite(pSite);
 
     // Update the altimetry and check the altitude of an inner point
     ASSERT_TRUE(pSite->updateAltimetrie(true));
 
-    // 8 triangles should give a 2x2 accelerating grid
-    EXPECT_EQ(8, pAlti->getListFaces().size());
+    // 10 triangles should give a 2x2 accelerating grid
+    EXPECT_EQ(10, pAlti->getListFaces().size());
     EXPECT_EQ(2, pAlti->_gridSX);
     EXPECT_EQ(2, pAlti->_gridSY);
 
@@ -196,13 +217,41 @@ TEST(TYAltimetryTest, simple_terrain) {
     EXPECT_EQ(1, idx.pi);
     EXPECT_EQ(0, idx.qi);
 
-    // Check altitude in the middle of the terrain
+    // Check altitude in the middle of the hill
     OPoint3D pt(10.0, 10.0, 0.0);
     EXPECT_TRUE(pAlti->updateAltitude(pt));
-    EXPECT_NEAR(level_curve_A_alti, pt._z, precision);
+    EXPECT_NEAR(level_curve_B_alti, pt._z, precision);
+
+    // Check altitude on the flank of the hill
+    pt.setCoords(50.0, 100.0, 0.0);
+    EXPECT_TRUE(pAlti->updateAltitude(pt));
+    EXPECT_NEAR( (level_curve_A_alti + level_curve_B_alti)/2, pt._z, precision);
 
     // Check altitude of an outer point
     pt.setCoords(180.0, 180.0, 0.0);
     EXPECT_FALSE(pAlti->updateAltitude(pt));
     EXPECT_DOUBLE_EQ(TYAltimetrie::invalid_altitude, pt._z);
+}
+
+TEST(TYAltimetryTest, simple_terrain) {
+    LPTYSiteNode pSite = buildSiteSimpleAltimetry();
+    LPTYTopographie pTopo = pSite->getTopographie();
+    LPTYAltimetrie pAlti = pTopo->getAltimetrie();
+
+    // Update the altimetry and check the altitude of an inner point
+    ASSERT_TRUE(pSite->updateAltimetrie(true));
+
+    // Check altitude in the middle of the future terrain
+    OPoint3D pt(10.0, 10.0, 0.0);
+    EXPECT_TRUE(pAlti->updateAltitude(pt));
+    EXPECT_NEAR(level_curve_A_alti, pt._z, precision);
+
+    LPTYTerrain pTerrain = addTerrainToSimpleSite(pSite);
+    // Update the altimetry and check the altitude of an inner point
+    ASSERT_TRUE(pSite->updateAltimetrie(true));
+
+    // Check again
+    pt.setCoords(10.0, 10.0, 0.0);
+    EXPECT_TRUE(pAlti->updateAltitude(pt));
+    EXPECT_NEAR(level_curve_A_alti, pt._z, precision);
 }
