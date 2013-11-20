@@ -46,9 +46,9 @@ TEST(exceptions, simple_logic) {
 }
 
 TEST(exceptions, source_localized) {
-    using tympan::source_file_name_errinfo;
-    using tympan::source_line_num_errinfo;
-    using tympan::function_name_errinfo;
+    using ::boost::throw_file;
+    using ::boost::throw_line;
+    using ::boost::throw_function;
     using boost::get_error_info;
 
     ASSERT_THROW(throw_invalid_data_localized(), tympan::exception);
@@ -57,24 +57,24 @@ TEST(exceptions, source_localized) {
     }
     catch(const std::runtime_error& exc)  {
         EXPECT_STREQ("This is bad", exc.what());
-        if( const char * const* p_filename = get_error_info<source_file_name_errinfo>(exc) )
+        if( const char * const* p_filename = get_error_info<throw_file>(exc) )
         {
             EXPECT_STREQ(__FILE__, *p_filename);
         }
         else
-            FAIL() << "We could not extract 'source_file_name_errinfo' from the exception";
-        if( const char * const* p_funcname = get_error_info<function_name_errinfo>(exc) )
+            FAIL() << "We could not extract 'throw_file' from the exception";
+        if( const char * const* p_funcname = get_error_info<throw_function>(exc) )
         {
             EXPECT_STREQ(test_exceptions_func_name, *p_funcname);
         }
         else
-            FAIL() << "We could not extract 'function_name_errinfo' from the exception";
-        if( unsigned const* p_linenum = get_error_info<source_line_num_errinfo>(exc) )
+            FAIL() << "We could not extract 'throw_function' from the exception";
+        if( unsigned const* p_linenum = get_error_info<throw_line>(exc) )
         {
             EXPECT_EQ(test_exceptions_source_line_no+1, *p_linenum);
         }
         else
-            FAIL() << "We could not extract 'source_line_num_errinfo' from the exception";
+            FAIL() << "We could not extract 'throw_line' from the exception";
     }
     catch(...) {
         FAIL() << "a tympan::exception which is not, also, a std::runtime_error was thrown";
