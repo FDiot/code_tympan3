@@ -27,6 +27,7 @@
 #include <algorithm>
 
 #include <boost/current_function.hpp>
+#include <boost/foreach.hpp>
 
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OBox.h"
@@ -615,33 +616,22 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
     int size = 0;
     OSegment3D segTest;
     TYPolygon* pFace = NULL;
-    TYTabLPPolygon* pDivRef = &(_pSortedFaces[idx.pi][idx.qi]);
+    TYTabLPPolygon& divRef = _pSortedFaces[idx.pi][idx.qi];
 
-    if (pDivRef != NULL) // sanity check
+    BOOST_FOREACH(const LPTYPolygon& pFace, divRef)
     {
-        size = static_cast<int>(pDivRef->size());
-
-        while (i < size)
+        if (IsInsideFace(pFace->getPoints(), ptTest))
         {
-            pFace = pDivRef->at(i);
+            segTest._ptA = ptTest;
+            segTest._ptB = ptTest;
+            segTest._ptA._z = +M_DOUBLE_INFINITE;
+            segTest._ptB._z = -M_DOUBLE_INFINITE;
 
-            if (pFace != NULL)
+            if (pFace->intersects(segTest, ptTest, false) == INTERS_OUI)
             {
-                if (IsInsideFace(pFace->getPoints(), ptTest))
-                {
-                    segTest._ptA = ptTest;
-                    segTest._ptB = ptTest;
-                    segTest._ptA._z = +M_DOUBLE_INFINITE;
-                    segTest._ptB._z = -M_DOUBLE_INFINITE;
-
-                    if (pFace->intersects(segTest, ptTest, false) == INTERS_OUI)
-                    {
-                        assert(ptTest._z != invalid_altitude && "Successful intersection expected");
-                        return ptTest;
-                    }
-                }
+                assert(ptTest._z != invalid_altitude && "Successful intersection expected");
+                return ptTest;
             }
-            i++;
         }
     }
     assert(ptTest._z == invalid_altitude && "invalid_altitude expected to denote failure");
