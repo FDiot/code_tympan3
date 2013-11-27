@@ -74,6 +74,10 @@ typedef SmartPtr<TYPluginManager> LPTYPluginManager;
  * @author Projet_Tympan
  *
  */
+
+// UUID of the Default Solver
+#define DEFAULT_SOLVER_UUID "{A98B320C-44C4-47a9-B689-1DD352DAA8B2}"
+
 class TYPluginManager : public IRefCount
 {
 public:
