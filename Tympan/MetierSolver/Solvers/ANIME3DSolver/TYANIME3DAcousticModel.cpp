@@ -105,7 +105,7 @@ void TYANIME3DAcousticModel::ComputeAbsAtm()
 
 void TYANIME3DAcousticModel::ComputeAbsRefl()
 {
-    double angle = 0.0, sizeRay = 0.0; // incidence angle of acoustic wave, lenght for events computation
+    double angle = 0.0, rd = 0.0, rr = 0.0; // incidence angle of acoustic wave, lenght for events computation
     int idFace = 0, rayNbr = 0, reflIndice = 0, nbFacesFresnel=0;
 
 	TYRay* ray = NULL;
@@ -136,7 +136,6 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
 		// Initialisation des spectres
 		prod = one;
-		prod1 = one;
 		sum = zero;
 		sum1 = zero;
 		pond = zero;
@@ -147,16 +146,25 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 		{
 			reflIndice = tabRefl[j];
 
-			angle = ray->getEvents().at(reflIndice)->angle;
-			sizeRay = ray->getEvents().at(reflIndice)->distPrevNext;
-
-			// Initialisation des spectres
-			spectreAbs = OSpectreComplex(OSpectre(0.0));
-
 			Prefl = ray->getEvents().at(reflIndice)->pos;
 			Pprec = ray->getEvents().at(reflIndice)->previous->pos;
 			Psuiv = ray->getEvents().at(reflIndice)->next->pos;
 			idFace = ray->getEvents().at(reflIndice)->idFace1;
+			angle = ray->getEvents().at(reflIndice)->angle;
+
+			// Longueur du trajet reflechi
+			rd = ray->getEvents().at(reflIndice)->distPrevNext;
+			// Longueur du trajet direct
+			rr = Pprec.distFrom(Prefl) + Prefl.distFrom(Psuiv);
+
+			std::cout << "Position de la reflexion : X = " << Prefl._x << " Y = " << Prefl._y << " Z = " << Prefl._z << std::endl;
+			std::cout << "Angle d'incidence du rayon = " << angle << std::endl;
+			std::cout << "Longueur du rayon direct = " << rd << std::endl;
+			std::cout << "Longueur du rayon reflechi = " << rr << std::endl;
+
+			// Initialisation des spectres
+			spectreAbs = OSpectreComplex(OSpectre(0.0));
+
 
             if(_useFresnelArea) // Avec ponderation de Fresnel
             { 		
@@ -181,13 +189,13 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
 						std::cout << "sol n : " << k << "resistivite = " << pSol->getResistivite() << std::endl;
 
-						spectreAbs = pSol->abso(angle, sizeRay, _atmos);
+						spectreAbs = pSol->abso(angle, rr, _atmos);
 // TO DO : S'assurer que la somme des pondérations de Fresnel égale 1
 						pond = spectreAbs * tabPondFresnel[k];
 						sum = sum + pond; // calcul du coeff de reflexion moy en ponderant avec les materiaux
 					}
 
-					prod = prod * sum;
+					prod = prod * sum * ( rd / rr );
 				}
 				else // Reflexion sur une construction
 				{
@@ -215,16 +223,21 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 			else // not use Fresnel Area
 			{
 				// Cas particulier d'une reflexion sur le sol
+				std::cout<< "We are not using Fresnel Area on the ground" << std::endl;
 				if (ray->getEvents().at(reflIndice)->type == TYREFLEXIONSOL) 
 				{
 					pSol = _topo->terrainAt(Prefl)->getSol();
+					std::cout << "Impedance sol = " << pSol->getResistivite() << std::endl;
 					pSol->calculNombreDOnde(_atmos);
-					spectreAbs = pSol->abso(angle, sizeRay, _atmos);
+					spectreAbs = pSol->abso(angle, rr, _atmos);
+					spectreAbs = spectreAbs * ( rd / rr );
+					std::cout << "A 500 Hz, Q = " << spectreAbs.getModule().getValueReal(500) << std::endl;
 				}
 				else
 				{
 					spectreAbs = _tabSurfIntersect[idFace].spectreAbso;  // Recuperation du spectre d'absorption
 				}
+// ATTENTION ! : Il semble qu'on ne tienne compte que d'une seule reflexion : La derniere.
 				prod = spectreAbs; 
 			}
     	}
@@ -324,6 +337,7 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OP
 {
     OBox2 fresnelArea;  // boundingBox de l'ellispsoide de Fresnel
 
+// TO DO : Why don't we pass directly the current ray instead of accessing it by its indice in the ray vector ?
 	Prefl = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->pos;
 	Pprec = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->previous->pos;
 	Psuiv = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->next->pos;
