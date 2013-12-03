@@ -209,6 +209,8 @@ void TYAltimetrie::plugBackTriangulation(
     // compute density
     float fsx = grid_step(nbTriangles);
     _gridSX = _gridSY = ceil(fsx);
+    assert(_gridSX > 0);
+    assert(_gridSY > 0);
     _gridDX = (_bbox._max._x - _bbox._min._x) / _gridSX;
     _gridDY = (_bbox._max._y - _bbox._min._y) / _gridSY;
     initAcceleratingGrid(10);
@@ -493,21 +495,36 @@ unsigned int TYAltimetrie::getPointsInBox(const OPoint3D& pt0, const OPoint3D& p
 
 bool TYAltimetrie::getGridIndices(const OPoint3D& pt, unsigned int* indXY)
 {
-    if (_gridSX == 0) { return false; } // aucune face dans l'objet altimetrie...
-    if (_pSortedFaces == NULL) { return false; } // Sanity Check...
-    if (!_bbox.isInside2D(pt)) { return false; } //si le point n'est pas dans les bornes de l'altimetrie
+
+    if ((_gridDX == 0) || (_gridDY == 0))
+    {
+        // This is supposed to be an error case isn't it ? Then we should NOT return SILENTLY.
+        // but raising this exception seem to causes regression in some cases...
+        throw tympan::logic_error("No face in accelerating structure of the altimetry") << tympan_source_loc;
+    }
+    // A sanity check has to be represented by an assert, not an if silencing a failure.
+    assert(_pSortedFaces != NULL && "Sanity Check..." );
+
+    if (!_bbox.isInside2D(pt)) //si le point n'est pas dans la bounding box de l'altimetrie
+    {
+        return false;
+        // The return above preserves legacy behaviour but the exception below should be prefered
+        /*
+        throw tympan::logic_error("Point out of the altimetry's bounding box")
+            << tympan_source_loc << tympan::position_errinfo(pt);
+        */
+    }
 
     double p, q;
     int pi, qi;
-
-    if ((_gridDX == 0) || (_gridDY == 0)) { return false; }  // sanity check
-
+    assert(_gridDX != 0);
+    assert(_gridDY != 0);
     p = (pt._x - _bbox._min._x) / _gridDX;
     q = (pt._y - _bbox._min._y) / _gridDY;
     pi = floor(p);
     qi = floor(q);
 
-    if ((pi < 0) || (qi < 0) || (pi >= _gridSX) || (qi >= _gridSY)) { return false; }  // sanity check
+    assert((pi >= 0) && (qi >= 0) && (pi < _gridSX) && (qi < _gridSY));
 
 	indXY[0] = pi;
 	indXY[1] = qi;
@@ -643,13 +660,15 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
 
                     if (pFace->intersects(segTest, ptTest, false) == INTERS_OUI)
                     {
-						break;
+                        assert(ptTest._z != invalid_altitude && "Successful intersection expected");
+                        return ptTest;
                     }
                 }
             }
             i++;
         }
     }
+    assert(ptTest._z == invalid_altitude && "invalid_altitude expected to denote failure");
     return ptTest;
 }
 
