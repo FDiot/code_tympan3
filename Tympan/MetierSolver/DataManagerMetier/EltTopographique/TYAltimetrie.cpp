@@ -20,6 +20,7 @@
 #include <cstdlib>
 #include <cassert>
 #include <cmath>
+#include <limits>
 
 #include <boost/current_function.hpp>
 
@@ -218,8 +219,6 @@ void TYAltimetrie::plugBackTriangulation(
     OBox bb;
 
     LPTYPolygon pPolygon = NULL;
-    double p, q;
-    int ipmin, ipmax, iqmin, iqmax;
     for (i = 0; i < nbTriangles; i++)
     {
         // On recupere le triangle
@@ -244,7 +243,9 @@ void TYAltimetrie::plugBackTriangulation(
             // On rempli la grille de tri des triangles
             // On trouve les min, max des indices des carres intersectes par le
             // triangle sur la grille.
-            ipmin = ipmax = iqmin = iqmax = -1;
+            unsigned int ipmin, ipmax, iqmin, iqmax;
+            ipmin = iqmin = std::numeric_limits<unsigned int>::max();
+            ipmax = iqmax = std::numeric_limits<unsigned int>::min(); // Yes : zero for unsigned
             for (j = 0; j < 3; j++)
             {
 
@@ -255,15 +256,10 @@ void TYAltimetrie::plugBackTriangulation(
                         << tympan_source_loc << tympan::position_errinfo(oTriangle.vertex(j));
                 };
 
-                // XXX This is legacy code for debugging
-                p = (oTriangle.vertex(j)._x - _bbox._min._x) / _gridDX;
-                q = (oTriangle.vertex(j)._y - _bbox._min._y) / _gridDY;
-                assert( ((int)p) == idx.pi && ((int)q) == idx.qi && "Behaviour changed XXX" );
-
                 if (idx.pi > ipmax) { ipmax = idx.pi; }
                 if (idx.qi > iqmax) { iqmax = idx.qi; }
-                if ((idx.pi < ipmin) || (ipmin == -1)) { ipmin = idx.pi; }
-                if ((idx.qi < iqmin) || (iqmin == -1)) { iqmin = idx.qi; }
+                if (idx.pi < ipmin) { ipmin = idx.pi; }
+                if (idx.qi < iqmin) { iqmin = idx.qi; }
 
             }
             // Pour chacun des carres, on affecte le triangle
@@ -527,7 +523,7 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY)
     }
 
     double p, q;
-    int pi, qi;
+    unsigned pi, qi;
     assert(_gridDX != 0);
     assert(_gridDY != 0);
     p = (pt._x - _bbox._min._x) / _gridDX;
