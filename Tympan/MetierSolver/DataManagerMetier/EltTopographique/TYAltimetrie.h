@@ -214,6 +214,10 @@ public:
 	unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon);
 
 
+
+    /** \brief Integer coordinates into the grid */
+    struct grid_index { unsigned pi, qi; } ;
+
 protected:
     FRIEND_TEST(TYAltimetryTest, dummy_grid);
     FRIEND_TEST(TYAltimetryTest, simple_terrain);
@@ -221,7 +225,7 @@ protected:
 	 * \brief Select indices of faces to test
 	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
 	 */
-	bool getGridIndices(const OPoint3D& pt, unsigned int* indXY);
+	bool getGridIndices(const OPoint3D& pt, grid_index& indXY);
 
 	/**
 	 * \brief Select indices of faces to test

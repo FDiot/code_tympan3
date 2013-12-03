@@ -390,10 +390,10 @@ inline bool TYAltimetrie::IsInsideFace(const TYTabPoint& pts, OPoint3D& pt) cons
 LPTYPolygon TYAltimetrie::getFaceUnder(OPoint3D pt)
 {
 	// Recherche des indices de la grilles qui incluent les sommets de la boite
-	unsigned int iMinMax[2];
-	bool test = getGridIndices(pt, iMinMax);
+        grid_index idx;
+	bool test = getGridIndices(pt, idx);
 	if (!test) return 0;
-	unsigned int pi = iMinMax[0], qi = iMinMax[1];
+	unsigned int pi = idx.pi, qi = idx.qi;
 
 	TYTabLPPolygon* pDivRef = &(_pSortedFaces[pi][qi]);
     TYPolygon* pFace = NULL;
@@ -493,7 +493,7 @@ unsigned int TYAltimetrie::getPointsInBox(const OPoint3D& pt0, const OPoint3D& p
 	return pointCount;
 }
 
-bool TYAltimetrie::getGridIndices(const OPoint3D& pt, unsigned int* indXY)
+bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY)
 {
 
     if ((_gridDX == 0) || (_gridDY == 0))
@@ -526,8 +526,8 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, unsigned int* indXY)
 
     assert((pi >= 0) && (qi >= 0) && (pi < _gridSX) && (qi < _gridSY));
 
-	indXY[0] = pi;
-	indXY[1] = qi;
+    indXY.pi = pi;
+    indXY.qi = qi;
 
 	return true;
 }
@@ -539,17 +539,17 @@ bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax)
 	unsigned int minY = 65535;
 	unsigned int maxY = 0;
 
-	// Test des quatre points et récupération des indices
-	unsigned int iXY[2];
-	bool res = true;
-	for (size_t i=0 ; i<4 ; i++)
-	{
-		res &= getGridIndices(pts[i], iXY);
-		iXY[0] < minX ? iXY[0] : minX;
-		iXY[0] < maxX ? iXY[0] : maxX;
-		iXY[1] < minY ? iXY[1] : minY;
-		iXY[1] < maxY ? iXY[1] : maxY;
-	}
+    // Test des quatre points et récupération des indices
+    grid_index iXY;
+    bool res = true;
+    for (size_t i=0 ; i<4 ; i++)
+    {
+        res &= getGridIndices(pts[i], iXY);
+        iXY.pi < minX ? iXY.pi : minX;
+        iXY.pi < maxX ? iXY.pi : maxX; // XXX This seems bad
+        iXY.qi < minY ? iXY.qi : minY;
+        iXY.qi < maxY ? iXY.qi : maxY; // XXX This seems bad
+    }
 
 	iMinMax[0] = minX;
 	iMinMax[1] = maxX;
