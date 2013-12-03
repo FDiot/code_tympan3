@@ -528,10 +528,10 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY)
 
 bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax)
 {
-    unsigned int minX = 65535;
-    unsigned int maxX = 0;
-    unsigned int minY = 65535;
-    unsigned int maxY = 0;
+    unsigned minX = std::numeric_limits<unsigned>::max();
+    unsigned maxX = std::numeric_limits<unsigned>::min();
+    unsigned minY = std::numeric_limits<unsigned>::max();
+    unsigned maxY = std::numeric_limits<unsigned>::min();
 
     // Test des quatre points et récupération des indices
     grid_index iXY;
@@ -539,10 +539,10 @@ bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax)
     for (size_t i=0 ; i<4 ; i++)
     {
         res &= getGridIndices(pts[i], iXY);
-        iXY.pi < minX ? iXY.pi : minX;
-        iXY.pi < maxX ? iXY.pi : maxX; // XXX This seems bad
-        iXY.qi < minY ? iXY.qi : minY;
-        iXY.qi < maxY ? iXY.qi : maxY; // XXX This seems bad
+        minX = min(minX, iXY.pi);
+        minY = min(minY, iXY.qi);
+        maxX = max(maxX, iXY.pi);
+        maxY = max(maxY, iXY.qi);
     }
 
     iMinMax[0] = minX;
