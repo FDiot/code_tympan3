@@ -208,7 +208,7 @@ void TYAltimetrie::plugBackTriangulation(
     clearAcceleratingGrid();
     // compute density
     float fsx = grid_step(nbTriangles);
-    _gridSX = _gridSY = (int) fsx;
+    _gridSX = _gridSY = ceil(fsx);
     _gridDX = (_bbox._max._x - _bbox._min._x) / _gridSX;
     _gridDY = (_bbox._max._y - _bbox._min._y) / _gridSY;
     initAcceleratingGrid(10);
@@ -247,6 +247,7 @@ void TYAltimetrie::plugBackTriangulation(
             {
                 p = (oTriangle.vertex(j)._x - _bbox._min._x) / _gridDX;
                 q = (oTriangle.vertex(j)._y - _bbox._min._y) / _gridDY;
+                // Those (int) are going to be factored out in a forthcoming commit.
                 if ((int)p > ipmax) { ipmax = (int) p; }
                 if ((int)q > iqmax) { iqmax = (int) q; }
                 if (((int)p < ipmin) || (ipmin == -1)) { ipmin = (int) p; }
@@ -292,7 +293,7 @@ int compareTriangle(const void* elem1, const void* elem2)
     x2min = x21 > x22 ? x22 : x21;
     x2min = x2min > x23 ? x23 : x2min;
 
-    return (int)(x1min - x2min);
+    return floor(x1min - x2min);
 }
 
 bool TYAltimetrie::addFace(LPTYPolygon pFace)
@@ -503,8 +504,8 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, unsigned int* indXY)
 
     p = (pt._x - _bbox._min._x) / _gridDX;
     q = (pt._y - _bbox._min._y) / _gridDY;
-    pi = (int) p;
-    qi = (int) q;
+    pi = floor(p);
+    qi = floor(q);
 
     if ((pi < 0) || (qi < 0) || (pi >= _gridSX) || (qi >= _gridSY)) { return false; }  // sanity check
 
@@ -609,8 +610,8 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
 
     p = (pt._x - _bbox._min._x) / _gridDX;
     q = (pt._y - _bbox._min._y) / _gridDY;
-    pi = (int) p;
-    qi = (int) q;
+    pi = floor(p);
+    qi = floor(q);
 
     if ((pi < 0) || (qi < 0) || (pi >= _gridSX) || (qi >= _gridSY))
     {
