@@ -19,6 +19,7 @@
 
 #include <cstdlib>
 #include <cassert>
+#include <cmath>
 
 #include <boost/current_function.hpp>
 
@@ -44,8 +45,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 #endif
 
-
-#define GRID_STEP(x)    sqrt(x) / 2.0f
+static inline double grid_step(double nb_triangles) {return sqrt(nb_triangles)/2;}
 
 struct triangle
 {
@@ -207,7 +207,7 @@ void TYAltimetrie::plugBackTriangulation(
 
     clearAcceleratingGrid();
     // compute density
-    float fsx = GRID_STEP((double)nbTriangles);
+    float fsx = grid_step(nbTriangles);
     _gridSX = _gridSY = (int) fsx;
     _gridDX = (_bbox._max._x - _bbox._min._x) / _gridSX;
     _gridDY = (_bbox._max._y - _bbox._min._y) / _gridSY;
