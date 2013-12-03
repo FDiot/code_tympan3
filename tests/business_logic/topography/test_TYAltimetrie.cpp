@@ -146,10 +146,10 @@ TEST(TYAltimetryTest, dummy_grid) {
     EXPECT_EQ(1, pAlti->_gridSX);
     EXPECT_EQ(1, pAlti->_gridSY);
 
-    unsigned idx[2];
+    TYAltimetrie::grid_index idx;
     ASSERT_TRUE(pAlti->getGridIndices(OPoint3D(-10, 10, 0), idx));
-    EXPECT_EQ(0, idx[0]);
-    EXPECT_EQ(0, idx[1]);
+    EXPECT_EQ(0, idx.pi);
+    EXPECT_EQ(0, idx.qi);
 
     // Check the altitude of an inner point
     OPoint3D pt(10.0, 10.0, 0.0);
@@ -177,22 +177,22 @@ TEST(TYAltimetryTest, simple_terrain) {
     EXPECT_EQ(2, pAlti->_gridSY);
 
     // Check getGridIndices in the four quadrants
-    unsigned idx[2];
+    TYAltimetrie::grid_index idx;
     ASSERT_TRUE(pAlti->getGridIndices(OPoint3D(-10, -10, 0), idx));
-    EXPECT_EQ(0, idx[0]);
-    EXPECT_EQ(0, idx[1]);
+    EXPECT_EQ(0, idx.pi);
+    EXPECT_EQ(0, idx.qi);
 
     ASSERT_TRUE(pAlti->getGridIndices(OPoint3D(-10, 10, 0), idx));
-    EXPECT_EQ(0, idx[0]);
-    EXPECT_EQ(1, idx[1]);
+    EXPECT_EQ(0, idx.pi);
+    EXPECT_EQ(1, idx.qi);
 
     ASSERT_TRUE(pAlti->getGridIndices(OPoint3D(10, 10, 0), idx));
-    EXPECT_EQ(1, idx[0]);
-    EXPECT_EQ(1, idx[1]);
+    EXPECT_EQ(1, idx.pi);
+    EXPECT_EQ(1, idx.qi);
 
     ASSERT_TRUE(pAlti->getGridIndices(OPoint3D(10, -10, 0), idx));
-    EXPECT_EQ(1, idx[0]);
-    EXPECT_EQ(0, idx[1]);
+    EXPECT_EQ(1, idx.pi);
+    EXPECT_EQ(0, idx.qi);
 
     // Check altitude in the middle of the terrain
     OPoint3D pt(10.0, 10.0, 0.0);
