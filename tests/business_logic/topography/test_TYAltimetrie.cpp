@@ -10,25 +10,23 @@
 #include <deque>
 
 #include "gtest/gtest.h"
+
 #include "Tympan/MetierSolver/ToolsMetier/OGeometrie.h"
 #include "Tympan/MetierSolver/ToolsMetier/OCoord3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OBox.h"
+
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYCourbeNiveau.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
 
-//using std::cout;
-//using std::cerr;
-//using std::endl;
-
 TYAltimetrie* buildSlopeAltimetry(void)
 {
-	// Création de la topographie
+	// Creating the topography
 	TYTopographie *pTopo = new TYTopographie();
 	TYAltimetrie *pAlti = new TYAltimetrie();
 	TYCourbeNiveau* pCrb = NULL;
@@ -37,7 +35,7 @@ TYAltimetrie* buildSlopeAltimetry(void)
         double z;
 	for (double x = xMin; x <= xMax; x += 10.)
 	{
-		// Construction de courbes de niveau
+                // Building the level curves
 		z = x < -50. ? 0 : 3*x + 150;
 		z = x > +50. ? 300. : z;
 		pCrb = new TYCourbeNiveau();
@@ -46,11 +44,11 @@ TYAltimetrie* buildSlopeAltimetry(void)
 		pCrb->setAltitude(z);
 		pCrb->setDistMax(10.0);
 
-		// Ajout de la courbe de niveau à la topographie
+		// Adding the level curve to the topography
 		pTopo->addCrbNiv(pCrb);
 	}
 
-	// Création de l'altimetrie
+	// Creating the altimetry
 	std::deque<OPoint3D> points;
 	std::deque<OTriangle> triangles;
 	// the false argument for use_emprise_as_level_curve is required
@@ -70,7 +68,7 @@ TEST(TYAltimetryTest, update_point_altitude) {
     // Create altimetry
     TYAltimetrie* pAlti = buildSlopeAltimetry();
 
-    // TEST POSITIF : Les points sont dans l'espace défini par l'altimétrie
+    // Positive tests : Points lie in the convex hull of the altimetry
     OPoint3D pt(-70., 0., 0.);
     bool bRes = pAlti->updateAltitude(pt);
     EXPECT_NEAR(0.0, pt._z, precision);
@@ -83,7 +81,7 @@ TEST(TYAltimetryTest, update_point_altitude) {
     bRes = pAlti->updateAltitude(pt);
     EXPECT_NEAR(300.0, pt._z, precision);
 
-    // TEST NEGATIF : Le point est hors zone
+    // Negative test : points lie outside
     pt._x = -500;
     bRes = pAlti->updateAltitude(pt);
     EXPECT_FALSE(bRes);
@@ -116,17 +114,93 @@ LPTYSiteNode buildSiteSimpleAltimetry(void)
     return pSite;
 }
 
+LPTYTerrain addTerrainToSimpleSite(LPTYSiteNode pSite)
+{
+    #define NB_POINTS_TERRAIN 4
+    double terrain_x[NB_POINTS_TERRAIN] = {    0,    0,  100,  100};
+    double terrain_y[NB_POINTS_TERRAIN] = { -150,   50,   50, -150};
 
-TEST(TYAltimetryTest, site_add_terrain) {
+    LPTYTerrain pTerrain = new TYTerrain();
+    for(unsigned i=0; i<NB_POINTS_TERRAIN; ++i)
+        pTerrain->getListPoints().push_back(TYPoint(terrain_x[i], terrain_y[i], -100));
+    LPTYSol pSol = new TYSol();
+    pSol->setName("grass");
+    pSol->setResistivite(3.14); // NB This is a dummy value
+    pTerrain->setSol(pSol);
+    #undef NB_POINTS_TERRAIN
+
+    pSite->getTopographie()->addTerrain(pTerrain);
+
+    return pTerrain;
+}
+
+TEST(TYAltimetryTest, dummy_grid) {
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     LPTYTopographie pTopo = pSite->getTopographie();
     LPTYAltimetrie pAlti = pTopo->getAltimetrie();
 
-    // Update the altimetry and check the altitude of an inner point
+    // Update the altimetry
     ASSERT_TRUE(pSite->updateAltimetrie(true));
+
+    // 2 triangles should give a 1x1 accelerating grid
+    EXPECT_EQ(1, pAlti->_gridSX);
+    EXPECT_EQ(1, pAlti->_gridSY);
+
+    unsigned idx[2];
+    ASSERT_TRUE(pAlti->getGridIndices(OPoint3D(-10, 10, 0), idx));
+    EXPECT_EQ(0, idx[0]);
+    EXPECT_EQ(0, idx[1]);
+
+    // Check the altitude of an inner point
     OPoint3D pt(10.0, 10.0, 0.0);
     EXPECT_TRUE(pAlti->updateAltitude(pt));
     EXPECT_NEAR(level_curve_A_alti, pt._z, precision);
 
     // Check altitude of an outer point
+    pt.setCoords(180.0, 180.0, 0.0);
+    EXPECT_FALSE(pAlti->updateAltitude(pt));
+    EXPECT_DOUBLE_EQ(TYAltimetrie::invalid_altitude, pt._z);
+}
+
+TEST(TYAltimetryTest, simple_terrain) {
+    LPTYSiteNode pSite = buildSiteSimpleAltimetry();
+    LPTYTopographie pTopo = pSite->getTopographie();
+    LPTYAltimetrie pAlti = pTopo->getAltimetrie();
+    LPTYTerrain pTerrain = addTerrainToSimpleSite(pSite);
+
+    // Update the altimetry and check the altitude of an inner point
+    ASSERT_TRUE(pSite->updateAltimetrie(true));
+
+    // 8 triangles should give a 2x2 accelerating grid
+    EXPECT_EQ(8, pAlti->getListFaces().size());
+    EXPECT_EQ(2, pAlti->_gridSX);
+    EXPECT_EQ(2, pAlti->_gridSY);
+
+    // Check getGridIndices in the four quadrants
+    unsigned idx[2];
+    ASSERT_TRUE(pAlti->getGridIndices(OPoint3D(-10, -10, 0), idx));
+    EXPECT_EQ(0, idx[0]);
+    EXPECT_EQ(0, idx[1]);
+
+    ASSERT_TRUE(pAlti->getGridIndices(OPoint3D(-10, 10, 0), idx));
+    EXPECT_EQ(0, idx[0]);
+    EXPECT_EQ(1, idx[1]);
+
+    ASSERT_TRUE(pAlti->getGridIndices(OPoint3D(10, 10, 0), idx));
+    EXPECT_EQ(1, idx[0]);
+    EXPECT_EQ(1, idx[1]);
+
+    ASSERT_TRUE(pAlti->getGridIndices(OPoint3D(10, -10, 0), idx));
+    EXPECT_EQ(1, idx[0]);
+    EXPECT_EQ(0, idx[1]);
+
+    // Check altitude in the middle of the terrain
+    OPoint3D pt(10.0, 10.0, 0.0);
+    EXPECT_TRUE(pAlti->updateAltitude(pt));
+    EXPECT_NEAR(level_curve_A_alti, pt._z, precision);
+
+    // Check altitude of an outer point
+    pt.setCoords(180.0, 180.0, 0.0);
+    EXPECT_FALSE(pAlti->updateAltitude(pt));
+    EXPECT_DOUBLE_EQ(TYAltimetrie::invalid_altitude, pt._z);
 }

@@ -18,6 +18,8 @@
 
 #include <deque>
 
+#include <gtest/gtest_prod.h>
+
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 #include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
@@ -213,6 +215,8 @@ public:
 
 
 protected:
+    FRIEND_TEST(TYAltimetryTest, dummy_grid);
+    FRIEND_TEST(TYAltimetryTest, simple_terrain);
 	/**
 	 * \brief Select indices of faces to test
 	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
