@@ -96,13 +96,13 @@ set_property(DIRECTORY ${PROJECT_SOURCE_DIR} APPEND PROPERTY COMPILE_DEFINITIONS
 
 if(MSVC)
   # Put here Visual Studio specific stuff
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}"
-       CACHE STRING "MS VC Compiler Flags for All Builds")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 endif(MSVC)
 if(CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -frounding-math")
-  # XXX -Wall would be FAR better than -fpermissive -w -Winvalid-pch
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -w -Winvalid-pch")
+  # The objective is to get rid of all the -Wno-xxx
+  set(IGNORED_WARNINGS "-Wno-sign-compare -Wno-unknown-pragmas -Wno-comment -Wno-unused-variable")
+  set(WARNINGS_SETTINGS "-Wall ${IGNORED_WARNINGS} -Winvalid-pch")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++03 -frounding-math ${WARNINGS_SETTINGS}")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 # NB: add_definitions(...)
