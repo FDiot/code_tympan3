@@ -648,9 +648,9 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff()
         prodAbs = _absAtm[i] * _absRefl[i] * _absDiff[i];
 		
 		// module = dir * W * rhoC / (4 * PI * R²) * produit (reflex, diffraction, atmos)
-        mod = ((directivite * wSource * rhoc) * (1. / c1)).sqrt() * prodAbs; 
+		mod = ((directivite * wSource * rhoc) * (1. / c1)).sqrt() * prodAbs.getModule(); 
 		// phase = exp(j K *L)
-		phase = _K.mult(_tabTYRays[i]->getLength()); 
+		phase = _K.mult(_tabTYRays[i]->getLength()) + prodAbs.getPhase(); 
 
         _pressAcoustEff[i] = OSpectreComplex(mod, phase);
 	}
