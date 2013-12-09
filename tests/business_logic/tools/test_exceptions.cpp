@@ -69,7 +69,7 @@ TEST(exceptions, source_localized) {
         }
         else
             FAIL() << "We could not extract 'throw_function' from the exception";
-        if( unsigned const* p_linenum = get_error_info<throw_line>(exc) )
+        if( const int * const p_linenum = get_error_info<throw_line>(exc) )
         {
             EXPECT_EQ(test_exceptions_source_line_no+1, *p_linenum);
         }

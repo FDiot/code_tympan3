@@ -123,7 +123,7 @@ public:
      *
      */
     void
-    PolygonTriangulator::exportTrianglesIndices(std::deque<Tri_indices>& triangles) const;
+    exportTrianglesIndices(std::deque<Tri_indices>& triangles) const;
 
 
 protected:

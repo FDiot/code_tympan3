@@ -152,6 +152,7 @@ public:
      * Retourne une face de la liste des faces.
      */
     LPTYPolygon getFace(int index) { return _listFaces[index]; }
+    const TYPolygon* getFace(int index) const { return _listFaces[index]; }
 
     /**
      * Calcule l'altitude d'un point de l'espace.
@@ -226,19 +227,19 @@ protected:
 	 * \brief Select indices of faces to test
 	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
 	 */
-	bool getGridIndices(const OPoint3D& pt, grid_index& indXY);
+	bool getGridIndices(const OPoint3D& pt, grid_index& indXY) const;
 
 	/**
 	 * \brief Select indices of faces to test
 	 * \fn bool getGridIndices(const OPoint3D* pts, int* indXY)
 	 */
-	bool getGridIndices(const OPoint3D* pts, unsigned int* iMinMax);
+	bool getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) const;
 
 	/**
 	 * \brief Select indices of faces to test
 	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
 	 */
-	bool getGridIndices(const OBox2 &box, unsigned int* iMinMax);
+	bool getGridIndices(const OBox2 &box, unsigned int* iMinMax) const;
 
 
 	/**
