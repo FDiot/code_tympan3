@@ -492,7 +492,7 @@ unsigned int TYAltimetrie::getPointsInBox(const OPoint3D& pt0, const OPoint3D& p
     return pointCount;
 }
 
-bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY)
+bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY) const
 {
 
     if ((_gridDX == 0) || (_gridDY == 0))
@@ -535,7 +535,7 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY)
     return true;
 }
 
-bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax)
+bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) const
 {
     unsigned minX = std::numeric_limits<unsigned>::max();
     unsigned maxX = std::numeric_limits<unsigned>::min();
@@ -562,7 +562,7 @@ bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax)
     return res;
 }
 
-bool TYAltimetrie::getGridIndices(const OBox2 &box, unsigned int* iMinMax)
+bool TYAltimetrie::getGridIndices(const OBox2 &box, unsigned int* iMinMax) const
 {
     OPoint3D pts[4];
 
