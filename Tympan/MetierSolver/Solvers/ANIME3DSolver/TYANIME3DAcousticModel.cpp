@@ -168,8 +168,8 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
                     tabPondFresnel = ComputeFrenelWeighting(tyRay, angle, Pref.distFrom(Psuiv), Pref);  // calcul des ponderations de Frenel
                     nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
 
-                    for(l=0; l<nbFacesFresnel; l++) // boucle sur les faces = intersection plan de l'objet intersectiøΩ / ellipsoide de Fresnel
-                        sum = sum + coefRefl * tabPondFresnel[l]; // calcul du coeff de reflexion moy en ponderant avec les matiøΩriaux
+                    for(l=0; l<nbFacesFresnel; l++) // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
+                        sum = sum + coefRefl * tabPondFresnel[l]; // calcul du coeff de reflexion moy en ponderant avec les mat√©riaux
 
                     prod = prod * sum;
                 }
@@ -187,7 +187,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 //    TYMateriauConstruction mat;
 //    TYMurElement* pMurElem = TYMurElement::safeDownCast(pSurf);
 //
-//    if (pMurElem != NULL) // Cas d'une face de biøΩtiment ou d'un ecran
+//    if (pMurElem != NULL) // Cas d'une face de b√¢timent ou d'un ecran
 //    {
 //        TYMur* pMur = TYMur::safeDownCast(pMurElem->getParent());
 //
@@ -392,6 +392,9 @@ OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(TYRay* ray, double ang
     // recuperation des triangles et des sommets de la topo
     //LPTYTopographie topo = site.getTopographie();
     //const TYTabLPPolygon listeTriangles = (*topo->getAltimetrie()).getListFaces();
+
+    // XXX Altimetry refactoring impacts here.
+
     TYTabPoint listeSommets = _topo.collectPointsForAltimetrie();
 
 	// We check if the box is entirely in one triangle
@@ -676,7 +679,7 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputeAcousticModel(TYCalcul& calc
 
     ComputeAbsAtm();
 
-    ComputeAbsRefl();  // methode a† debugger
+    ComputeAbsRefl();  // m√©thode √† debugger
 
     //ComputeAbsDiff(calcul, site);
 

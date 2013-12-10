@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -161,14 +161,13 @@ public:
     /// Force l'etat du spectre (a utiliser avec prudence ...)
     void setEtat(TYSpectreEtat etat) { _etat = etat; }
 
+    /// XXX These are the modulus to put into the solver model
     /// Set/Get du tableau des valeurs reelles
     virtual double* getTabValReel() { return _module; }
     virtual const double* getTabValReel() const {return _module; }
 
     /// Nombre de valeurs dans le spectre
-    virtual unsigned int getNbValues();
-
-    virtual const unsigned int getNbValues() const ;
+    virtual unsigned int getNbValues() const ;
 
     /**
      * Initialisation d'un spectre a une valeur.
@@ -326,7 +325,7 @@ public:
      *
      * @return Le tableau des frequences exactes.
      */
-    static OTabFreq getTabFreqExact();
+    static OTabFreq getTabFreqExact(); // XXX These are the frequencies to use in solver
 
 	/**
      * \fn OSpectre getOSpectreFreqExact()
@@ -360,6 +359,7 @@ public:
 protected:
 
     // ==== MEMBRES STATIQUES
+    // CAUTION Check how those static members behave in shared libraries
 
     ///Tableau des frequences en Hz centrales normalisees en tiers d'octave.
     static const float _freqNorm[];

@@ -530,7 +530,7 @@ int TYCalcul::fromXML(DOM_Element domElement)
     int retVal = -1;
     LPTYMaillageGeoNode pMaillageGeoNode = new TYMaillageGeoNode(NULL, this);
 
-    // CLM-NT33: CompatibiltiøΩ ancien format XML
+    // CLM-NT33: Compatibiltit√© ancien format XML
     LPTYPointControl pPointControl = new TYPointControl();
     TYProjet* pProjet = getProjet();
 
@@ -669,8 +669,8 @@ int TYCalcul::fromXML(DOM_Element domElement)
         // Atmosphere
         _pAtmosphere->callFromXMLIfEqual(elemCur);
 
-        // CLM-NT33: CompatibilitiøΩ avec ancien format XML
-        // Points de contriøΩle
+        // CLM-NT33: Compatibilitit√© avec ancien format XML
+        // Points de controle
         if (elemCur.nodeName() == "PointsControl")
         {
             DOM_Element elemCur2;
@@ -897,7 +897,7 @@ void TYCalcul::addToSelection(TYElement* pElt, bool recursif /*=true*/)
             // Si un objet est ajoute son parent l'est forcemment
             addToSelection(pElt->getParent(), false);
 
-            // Si c'est un site on ajoute pas systiøΩmatiquement tous les enfants
+            // Si c'est un site on n'ajoute pas syst√©matiquement tous les enfants
             recursif = false;
         }
         else if (pElt->inherits("TYAcousticVolumeNode"))
@@ -977,7 +977,7 @@ bool TYCalcul::remToSelection(TYElement* pElt, bool recursif /*=true*/)
         // On informe l'element qu'ils ne sont plua dans le calcul
         pElt->setInCurrentCalcul(false, false, false);
 
-        //  On diøΩsactive ses enfants
+        //  On d√©sactive ses enfants
         TYElementCollection childs;
         pElt->getChilds(childs, false);
 
@@ -991,7 +991,7 @@ bool TYCalcul::remToSelection(TYElement* pElt, bool recursif /*=true*/)
         ret = true;
     }
 
-    // Si c'est un siteNode, on fait une mise iøΩ jour de l'altimiøΩtrie
+    // Si c'est un siteNode, on fait une mise √† jour de l'altim√©trie
     if (pElt->inherits("TYSiteNode"))
     {
         // Dans ce cas, on remonte au site racine et on fait l'update de tout
@@ -1160,7 +1160,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
     TYTabLPPointCalcul& tabpoint = pMaillage->getPtsCalcul();
 
     bool cancel = false;
-	bool bNoPbAlti = true; // Permet de tester si tous les points sont altimÈtrisÈs correctement.
+	bool bNoPbAlti = true; // Permet de tester si tous les points sont altimtriss correctement.
 
     if (pMaillage->getComputeAlti()) // Cas des maillages rectangulaires et lineaires horizontaux
     {
@@ -1285,11 +1285,11 @@ void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
     TYInfrastructure* pInfra = pSite->getInfrastructure();
     TYTabAcousticVolumeNodeGeoNode tabVolNodeGeoNode;
 
-    // On commence par recuperer la liste des machines et des biøΩtiments
-    // BiøΩtiments
+    // On commence par recuperer la liste des machines et des btiments
+    // Batiments
     for (j = 0; j < static_cast<int>(pInfra->getListBatiment().size()); j++)
     {
-        // Si ce biøΩtiment est actif pour le calcul
+        // Si ce batiment est actif pour le calcul
         if (TYBatiment::safeDownCast(pInfra->getBatiment(j)->getElement())->isInCurrentCalcul())
         {
             tabVolNodeGeoNode.push_back((LPTYAcousticVolumeNodeGeoNode&) pInfra->getListBatiment()[j]);
@@ -1539,9 +1539,11 @@ bool TYCalcul::go()
     // Creation de la liste des recepteurs
     OMessageManager::get()->info("Mise a jour du Site");
 
+    // NB This is the place to assert the "no sub-site assumption" 
+    // required by some variant of the software
+
     // Fusion des sites
     LPTYSiteNode pMergeSite = pProjet->getSite()->merge();
-
     pMergeSite->update(true);
     pMergeSite->getTopographie()->sortTerrains(); // Tri des terrains par ordre croissant des surfaces
     pMergeSite->updateAcoustique(true);
@@ -1550,7 +1552,7 @@ bool TYCalcul::go()
     // Actualisation de l'altimetrie des recepteurs (securite)
     pProjet->updateAltiRecepteurs(pMergeSite->getTopographie()->getAltimetrie());
 
-    pMergeSite->init(this);
+    pMergeSite->init(this); // TODO document what's going on here
 
     TYNameManager::get()->enable(false);
 
@@ -1593,6 +1595,7 @@ bool TYCalcul::go()
     OMessageManager::get()->info("Selection des trajets actifs");
     buildValidTrajects(sources, recepteurs); // Supprime les points trop proches d'une sources
 
+    // XXX Instantiate and call the SolverDataModelBuilder here ...
     if (isCalculPossible(static_cast<int>(sources.size()), static_cast<int>(recepteurs.size()), pMergeSite))
     {
         OMessageManager::get()->info("Calcul en cours...");
@@ -1613,6 +1616,8 @@ bool TYCalcul::go()
 
 		TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(getSolverId());
 
+        // XXX ... and pass the SolverDataModel built here.
+        
 		ret = pSolver->solve(*pMergeSite, *this);
 
         pSolver->purge();
@@ -1675,10 +1680,10 @@ bool TYCalcul::go()
 
     TYNameManager::get()->enable(true);
 
-    setIsAcousticModified(true); // Les donniøΩes acoustiques ont iøΩtiøΩ actualisiøΩes
+    setIsAcousticModified(true); // Les donn√©es acoustiques ont √©t√© actualis√©es
 
-    // (Re) init default number of thread (sorry this is not clean)
-	if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
+    // Restaure default number of thread (sorry this is not clean)
+    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
     {
         _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
     }

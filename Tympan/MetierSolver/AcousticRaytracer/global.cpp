@@ -62,6 +62,7 @@ double globalAnalyticGradC;     // Gradient vertical de celerite
 double globalAnalyticGradV;     // Gradient vertical de vitesse de vent
 double globalAnalyticC0;        // Celerite du son initiale
 int globalAnalyticTypeTransfo;  // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-//bool globalRestitModifiedGeom;  // Indique si l'on souhaite recuperer la geometrie transformee
+// Desactivated while refactoring the altimetry computation :
+// bool globalRestitModifiedGeom;  // Indique si l'on souhaite recuperer la geometrie transformee
 double globalOverSampleD;       // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
 double globalWindDirection;		// Direction du vent (un vent a 0 est dirige du nord vers le sud)
