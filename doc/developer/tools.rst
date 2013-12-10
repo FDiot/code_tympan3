@@ -52,8 +52,6 @@ logilab
     Logilab and only Logilab's developers are supposed to commit to
     it, except for specifically coordinated tasks.
 
-
-
     Thus this branch is intended to cherry-pick build system evolutions,
     bug-fixes for the common parts, architectural changes,
     documentation... The typical work-flow is as follows:
@@ -73,8 +71,11 @@ logilab
           problem, Bod calls Alice and they solve it together.
 
 v4.x.y(-zzz)
-    will be the release (and maintenance) branch for the release of
-    Code_TYMPAN version 4.x.y (variant zzz).
+    would be the release and maintenance branch for the release of
+    Code_TYMPAN version 4.x.y (variant zzz) for future public and
+    maintained releases. Simple milestones releases, which marks the
+    end of an agile iteration but not a significant version are not
+    given a dedicated branch. Instead they are simply tagged.
 
 Of course other feature branches can be added by need.
 
@@ -140,11 +141,10 @@ there are other resources:
   - The reference book `Mastering CMake
     <http://www.cmake.org/cmake/help/book.html>`_
 
-  - The `online documentation
-    <http://www.cmake.org/cmake/help/documentation.html>`_ with a `tutorial
-    <http://www.cmake.org/cmake/help/cmake_tutorial.html>`_, a `Wiki
-    <http://www.cmake.org/Wiki/CMake>`_ and a `FAQ
-    <http://www.cmake.org/Wiki/CMake_FAQ>`_.
+  - The `online documentation <http://www.cmake.org/cmake/help/documentation.html>`_ with the
+    `cmake tutorial <http://www.cmake.org/cmake/help/cmake_tutorial.html>`_,
+    a `Wiki <http://www.cmake.org/Wiki/CMake>`_ and a
+    `FAQ <http://www.cmake.org/Wiki/CMake_FAQ>`_.
 
 .. _CMake: http://www.cmake.org/
 
@@ -189,11 +189,14 @@ Best Practices
 * Do not build a project in the source directory.
 
 * Do not add a manual path to look for a dependency library or to find a source
-  file.
+  file : instead edit the said path in the GUI (or code *reliable*
+  auto-detection in case you are a seasoned CMakeLists' developer).
 
-* CMake language is not case sensitive. ``VARIABLE_NAME`` or ``variable_name``
-  are the same variable. Please try to follow the existed convention in reading
-  some ``CmakeLists.txt``.
+* CMake language is not case-sensitive for identifiers, but is for
+  some optional arguments names within commands. ``VARIABLE_NAME`` or
+  ``variable_name`` are the same variable but ``FILE(EXISTS ...)``
+  will be ok whereas ``FILE(exists ...)`` will **not**. Please try to
+  follow the existed convention in reading some ``CmakeLists.txt``.
 
 * Create a ``CMakeLists.txt`` file for each directory. Use ``add_subdirectory``
   command to execute the CMake file in this directory.
@@ -204,14 +207,12 @@ Best Practices
 
      message (STATUS "Your message: " ${VARIABLE})
 
-* ``ccmake .`` or ``cmake-gui .`` in the building directory to display all CMake
-  variables of the current building project.
+* ``ccmake .`` or ``cmake-gui .`` in the building directory to display
+  and edit all CMake variables of the current building project.
 
 * ``cmake --build <building_dir>`` to launch compilation, whatever the
   environment. Very useful when you would like to compile on Windows without
   launching Visual Studio.
-
-.. todo:: Other CMake best practices?
 
 Documentation
 =============
@@ -226,17 +227,17 @@ Build the documentation
 
 #. First generate the XML output of Code_TYMPAN code source with `Doxygen`_::
 
-       cd doc/doxygen
-       doxygen
+      cd doc/doxygen
+      doxygen
 
    .. note::
 
-      Later, we'll modify the generation of the HTML documenation to discard
-      this step.
+      Later, we might modify the generation of the HTML documentation
+      to discard this step.
 
 #. Go to the root source documentation directory and::
 
-       make html
+      make html
 
 #. See the results in the ``_build/html/`` directory and opening the file
    ``index.html`` with your favorite Web browser.
@@ -250,7 +251,7 @@ Build the documentation
 .. note::
 
    The tools used to display maths equations properly is `MathJax`_, a
-   JavaScript library which pretty renders equations written in LaTeX.
+   JavaScript library which prettily renders equations written in LaTeX.
 
 
 Useful directives
@@ -286,39 +287,6 @@ Take a look at the `Sphinx`_ and `reStructuredText`_ websites.
 .. _MathJax: http://www.mathjax.org/
 
 
-Yams++
-======
-
-`Yams++`_ is a tool developed by Logilab to facilitate building
-applications around *explicit data models* based upon an *Entity -
-Relationship* modelling. Yams++ principle is that many scientific
-applications benefit hugely from being *data-centred* : the
-computations then appear as a processing of input data into result
-data.
-
-In this workflow the developer first identifies *Entity Types*
-representing the various kinds of business objects he has to deal with,
-each carrying some *data attributes*. Then he identifies the *Relation
-Types* between those *entities*. This modelling is then expressed in a
-declarative way, thus enabling to largely automate a number of
-error-prone and fastidious tasks such as serialization or GUI
-building.
-
-For now Yams++ is a *Still In Development* project and provides a
-minimal set of features, which is going to grow as requested by
-Code_TYMPAN.
-
-The current modelling is expressed through templates in the
-``entities.[hc]pp`` and ``relations.[hc]pp`` files, which rely on the
-``yams/yams.hh`` template library.
-
-Please refer to the Yams++ documentation for more details and some
-examples.
-
-.. _Yams++: No public Web site *yet*
-
-.. todo:: Link to the project website and documentation once it is online.
-
 C++ idioms
 ==========
 
@@ -327,7 +295,7 @@ some good practices, nice (template) libraries and *well identified
 idioms* can improve development efficiency and code base
 maintainability.
 
-In this section we highlight some of such idioms and tools which are
+In this section, we highlight some of such idioms and tools which are
 used (or to be used) in Code_TYMPAN. Anyhow we strongly recommend
 C++ developers to have a look at some the following books:
 
@@ -338,21 +306,27 @@ Practical and motivated idioms
 Complete introduction of the language
   Bjarne Stroustrup, Addison-Wesley, *C++, the language*
 
-Advanced topics around templates
-  David Abrahams and Aleksey Gurtovoy, Addison-Wesley, *C++ template
-  metaprogramming*
-
 Some powerful techniques are exposed to the developer through
 *relatively* simple interfaces by Boost_ or the STL_, such as the
 standard smart pointers or the ranges concept and the *foreach loops*
 for example.
 
-.. todo::
+.. note:: Further resources
 
-   - Cite some good **introductory** C++ books
+   Here are some useful inline resources regarding C++
+
+   - `Introductory online C++ course <OpenClassRoomsCpp>`_ with
+     corresponding printed book, in french
+   - cplusplus.com `tutorial <_cplusplus_tutorial>`_ or `reference
+     <cplusplus_reference>`_
+   - Google hands-on, practical online course  https://developers.google.com/edu/c++/
 
 .. _Boost: http://www.boost.org/
 .. _STL: http://en.cppreference.com/w/
+
+.. _OpenClassRoomsCpp: http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-096-introduction-to-c-january-iap-2011/
+.. _cplusplus_tutorial: http://www.cplusplus.com/doc/tutorial/
+.. _cplusplus_reference: http://www.cplusplus.com/reference/
 
 Smart Pointers
 --------------
@@ -447,3 +421,8 @@ http://www.boost.org/doc/libs/1_53_0/libs/range/doc/html/index.html
     Official documentation for Boost  *range concept* which goes along
     so well with *foreach loops*.
 
+**Beware** : *Ranges* are a very powerful but quite advanced - and
+thus pitfall prone - C++ technique. Please resort to it only if you
+know what you are doing, otherwise just transforming the data by-hand
+and storing the result in some container is likely to be a far easier
+and cleaner way...

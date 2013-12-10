@@ -23,6 +23,7 @@
 
 // CGAL related Includes
 #include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
+#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
 
 #include <boost/ptr_container/ptr_deque.hpp>
 // http://www.boost.org/doc/libs/1_52_0/libs/ptr_container/doc/examples.html
@@ -50,10 +51,8 @@ class SolverDataModelBuilder;
 
 #undef max // XXX
 
-// Tympan includes solver side
-//#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
-//#include "Tympan/MetierSolver/SolverDataModel/relations.hpp"
 #include "Tympan/MetierSolver/SolverDataModel/data_model_common.hpp"
+#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
 
 
 #define TY_USE_CGAL_QT_IFACE 1
@@ -86,6 +85,10 @@ typedef LPTYSol material_t;
 /// @brief A constant representing yet unspecified altitude
 extern const double unspecified_altitude;
 
+// Transitional typedef
+typedef tympan::logic_error AlgorithmicError;
+typedef tympan::invalid_data InvalidDataError;
+
 /**
  * @brief Adaptor for \c TYTerrain
  */
@@ -99,7 +102,8 @@ public:
      * @param terrain the TYTerrain to be adapted
      * @param matrix transform from the GeoNode holding \c terrain (default to identity)
      */
-    MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix=OMatrix());
+    MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix=OMatrix())
+        throw(tympan::InvalidDataError);
 
     /**
      * @brief Build a \c MaterialPolygon from a material and a polygon
@@ -107,7 +111,8 @@ public:
      * @param ground the ground material inside the polygon
      * @param matrix the transform from the GeoNode holding \c terrain (default to identity)
      */
-    MaterialPolygon(const TYTabPoint& contour, material_t ground, const OMatrix& matrix=OMatrix());
+    MaterialPolygon(const TYTabPoint& contour, material_t ground, const OMatrix& matrix=OMatrix())
+        throw(tympan::InvalidDataError);
 
     template <class InputRange>
     MaterialPolygon(InputRange poly, const material_t& material_):
@@ -116,11 +121,16 @@ public:
         assert(this->is_simple());
     }
 
+    const TYTerrain* getOriginalTerrain() const {return p_origin_elem;}
+
     std::string material_name()
     { return material->getName().toStdString(); }
 
     CGAL_Polygon::Vertex_iterator begin() const { return vertices_begin(); }
     CGAL_Polygon::Vertex_iterator end() const {return vertices_end();}
+
+protected:
+    const TYTerrain* p_origin_elem;
 };
 
 /**
@@ -129,9 +139,10 @@ public:
 struct FaceInfo
 {
     FaceInfo():
-        material(new TYSol()) {}
+        material(NULL) {}
     FaceInfo(const material_t mat):
         material(mat) {}
+    bool is_valid() const { return material!=NULL; }
     material_t material;
 };
 
@@ -235,23 +246,6 @@ inline
 std::pair<CGAL_Point, VertexInfo>
 to_cgal2_info(const OPoint3D& p)
 { return std::make_pair(to_cgal2(p), VertexInfo(p._z)); }
-
-
-/**
- * @brief Exception class to represent an algorithmic error and/or invalid data.
- */
-struct AlgorithmicError :
-        public std::exception
-{
-    AlgorithmicError() throw() {}
-    AlgorithmicError(const char* msg_) : msg(msg_) {}
-    virtual ~AlgorithmicError() throw() {}
-
-    virtual const char * what() const throw() { return msg.c_str(); }
-
-protected:
-    const string msg;
-};
 
 
 /// @brief Test fixture used to test the AltimetryBuilder
@@ -429,14 +423,21 @@ public:
      * @ brief exception class raised by \c poly_comparator in case polygons
      * are not comparable.
      */
-    struct NonComparablePolygons
+    struct NonComparablePolygons : tympan::invalid_data
     {
-        material_polygon_handle_t p1, p2;
-        face_set_t intersect;
-        NonComparablePolygons(material_polygon_handle_t p1_, material_polygon_handle_t p2_, face_set_t intersect_)
-            : p1(p1_), p2(p2_), intersect(intersect_) {}
-    };
+        const material_polygon_handle_t p1, p2;
+        const face_set_t intersect;
 
+        NonComparablePolygons(
+            material_polygon_handle_t p1_,
+            material_polygon_handle_t p2_,
+            const face_set_t& intersect_
+        ) DO_NOT_THROW
+        : tympan::invalid_data("AltimetryBuilder: incomparable polygons"),
+          p1(p1_), p2(p2_), intersect(intersect_) {}
+
+        ~NonComparablePolygons() DO_NOT_THROW {};
+    };
 
     /**
      * @brief Label each face with its material.
@@ -446,7 +447,7 @@ public:
      * material : ie the material of the most specific MaterialPolygon.
      */
     void
-    labelFaces();
+    labelFaces(material_t default_material);
 
     /**
      * @brief Insert a point and a constraint into the triangulation
