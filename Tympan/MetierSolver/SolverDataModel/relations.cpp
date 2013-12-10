@@ -8,7 +8,3 @@
 */
 
 #include "relations.hpp"
-
-template class RelationDefinition < tympan::has_node_rtype,
-         tympan::AcousticSurface,
-         tympan::Node >;

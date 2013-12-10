@@ -21,6 +21,10 @@
 #include <functional>
 #include <algorithm>
 
+// CGAL related Includes
+#include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
+#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
+
 #include <boost/ptr_container/ptr_deque.hpp>
 // http://www.boost.org/doc/libs/1_52_0/libs/ptr_container/doc/examples.html
 #include <boost/foreach.hpp>
@@ -31,15 +35,12 @@
 #include <boost/range/adaptor/transformed.hpp>
 using boost::adaptors::transformed;
 
-// CGAL related Includes
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
-#include <CGAL/Triangulation_face_base_with_info_2.h>
-#include <CGAL/Triangulation_vertex_base_with_info_2.h>
-#include <CGAL/Constrained_Delaunay_triangulation_2.h>
-#include <CGAL/Polygon_2.h>
-#include <CGAL/Polygon_2_algorithms.h>
-#include <CGAL/centroid.h>
 
+// Forward declaration for the benefit of TYAltimetrie and TYTopographie
+namespace tympan {
+class AltimetryBuilder;
+class SolverDataModelBuilder;
+}
 
 // Tympan includes site side
 #include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
@@ -50,9 +51,9 @@ using boost::adaptors::transformed;
 
 #undef max // XXX
 
-// Tympan includes solver side
-#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
-#include "Tympan/MetierSolver/SolverDataModel/relations.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/data_model_common.hpp"
+#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
+
 
 #define TY_USE_CGAL_QT_IFACE 1
 #ifndef TY_USE_CGAL_QT_IFACE
@@ -76,17 +77,17 @@ using boost::adaptors::transformed;
 namespace tympan
 {
 
-// From CGAL manuel Section 37.8
-// http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Triangulation_2/Chapter_main.html#Section_37.8
-typedef CGAL::Exact_predicates_inexact_constructions_kernel        K;
-typedef K Gt; /* Geometric Traits */
-typedef CGAL::Polygon_2<Gt>                                        CGAL_Polygon;
+bool is_valid_altitude(double alti);
 
-//XXX replace with a TYSol*
-typedef std::string material_t;
+/** @brief an alias to LPTYSol for representing a ground material */
+typedef LPTYSol material_t;
 
 /// @brief A constant representing yet unspecified altitude
 extern const double unspecified_altitude;
+
+// Transitional typedef
+typedef tympan::logic_error AlgorithmicError;
+typedef tympan::invalid_data InvalidDataError;
 
 /**
  * @brief Adaptor for \c TYTerrain
@@ -96,7 +97,22 @@ class MaterialPolygon: public CGAL_Polygon
 public:
     material_t material;
 
-    MaterialPolygon(const TYTerrain& terrain); // XXX
+    /**
+     * @brief Build a \c MaterialPolygon from a \c TYTerrain
+     * @param terrain the TYTerrain to be adapted
+     * @param matrix transform from the GeoNode holding \c terrain (default to identity)
+     */
+    MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix=OMatrix())
+        throw(tympan::InvalidDataError);
+
+    /**
+     * @brief Build a \c MaterialPolygon from a material and a polygon
+     * @param contour a list of TYPoint representing the polygon
+     * @param ground the ground material inside the polygon
+     * @param matrix the transform from the GeoNode holding \c terrain (default to identity)
+     */
+    MaterialPolygon(const TYTabPoint& contour, material_t ground, const OMatrix& matrix=OMatrix())
+        throw(tympan::InvalidDataError);
 
     template <class InputRange>
     MaterialPolygon(InputRange poly, const material_t& material_):
@@ -105,8 +121,16 @@ public:
         assert(this->is_simple());
     }
 
+    const TYTerrain* getOriginalTerrain() const {return p_origin_elem;}
+
+    std::string material_name()
+    { return material->getName().toStdString(); }
+
     CGAL_Polygon::Vertex_iterator begin() const { return vertices_begin(); }
     CGAL_Polygon::Vertex_iterator end() const {return vertices_end();}
+
+protected:
+    const TYTerrain* p_origin_elem;
 };
 
 /**
@@ -115,7 +139,10 @@ public:
 struct FaceInfo
 {
     FaceInfo():
-        material("default") {}
+        material(NULL) {}
+    FaceInfo(const material_t mat):
+        material(mat) {}
+    bool is_valid() const { return material!=NULL; }
     material_t material;
 };
 
@@ -146,70 +173,79 @@ struct VertexInfo
 /* Please refer to the following example in CGAL doc for meaning of those typedef
 http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Triangulation_2/Chapter_main.html#Subsection_37.8.2
 */
-typedef CGAL::Triangulation_vertex_base_with_info_2<VertexInfo, Gt>Vbb;
-typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo, Gt>    Fbb;
-typedef CGAL::Constrained_triangulation_face_base_2<Gt, Fbb>       Fb;
+typedef CGAL::Triangulation_vertex_base_with_info_2<VertexInfo, CGAL_Gt>Vbb;
+typedef CGAL::Triangulation_face_base_with_info_2<FaceInfo, CGAL_Gt>    Fbb;
+typedef CGAL::Constrained_triangulation_face_base_2<CGAL_Gt, Fbb>       Fb;
 typedef CGAL::Triangulation_data_structure_2<Vbb, Fb>              TDS;
 typedef CGAL::Exact_predicates_tag                                 Itag;
 /// \c CDT is the type of the main CGAL object to build the triangulation.
-typedef CGAL::Constrained_Delaunay_triangulation_2<Gt, TDS, Itag>  CDT;
-typedef CDT::Point                                                 CGAL_Point;
+typedef CGAL::Constrained_Delaunay_triangulation_2<CGAL_Gt, TDS, Itag>  CDT;
+// typedef CDT::Point                                                 CGAL_Point;
+typedef CGAL_Point2 CGAL_Point;
 
 
 /**
  * @brief Conversion from a Tympan point to a CGAL point
- * @param p
- * @return
+ * @param p a \c OPoint3D
+ * @return a \c CGAL_Point (2D) with  same x and y coordinates
  */
 inline
 CGAL_Point
-to_cgal(const OPoint3D& p)
+to_cgal2(const OPoint3D& p)
 { return CGAL_Point(p._x, p._y); }
 
 /**
+ * @brief Conversion from a Tympan point to a CGAL point, applying a transformation before
+ * @param matrix a transform to be applied to \c p before conversion
+ * @param p  a \c OPoint3D
+ * @return a \c CGAL_Point (2D) with  same x and y coordinates as \c matrix * \c p
+ */
+inline
+CGAL_Point
+to_cgal2_transform(const OMatrix& matrix, OPoint3D p)
+{
+	p = matrix * p;
+	return CGAL_Point(p._x, p._y);
+}
+
+
+/**
  * @brief Conversion from a Tympan point to a CGAL point, setting the altitude
- * @param p
- * @return
+ * @param p  a \c OPoint3D
+ * @return a pair of a 2D \c CGAL_Point and a \c VertexInfo holding the altitude.
  */
 inline
 std::pair<CGAL_Point, VertexInfo>
-to_cgal_info(double alti, OPoint3D& p)
+to_cgal2_info(double alti, OPoint3D& p)
 {
 	p._z = alti;
-	return std::make_pair(to_cgal(p), VertexInfo(alti));
+	return std::make_pair(to_cgal2(p), VertexInfo(alti));
 }
 
 /**
- * @brief Conversion from a Tympan point to a CGAL point using its altitude
- * @param p
- * @return
+ * @brief Conversion from a Tympan point to a CGAL point,
+ * @param matrix a transform to be applied to \c p before conversion
+ * @param p  a \c OPoint3D
+ * @return  a pair of a 2D \c CGAL_Point and a \c VertexInfo holding the altitude.
  */
 inline
 std::pair<CGAL_Point, VertexInfo>
-to_cgal_info(const OPoint3D& p)
-{ return std::make_pair(to_cgal(p), VertexInfo(p._z)); }
+to_cgal2_info(double alti, const OMatrix& matrix, OPoint3D& p)
+{
+	p._z = alti;
+	return std::make_pair(to_cgal2_transform(matrix, p), VertexInfo(alti));
+}
 
 
 /**
- * @brief Conversion from a CGAL point to a Tympan point
- * @param p
- * @return
+ * @brief Conversion from a Tympan point to a CGAL point using its altitude
+ * @param p  a \c OPoint3D
+ * @return a pair of a 2D \c CGAL_Point and a \c VertexInfo holding the altitude.
  */
 inline
-OPoint3D
-from_cgal(const CGAL_Point& p)
-{ return OPoint3D(p.x(), p.y(), unspecified_altitude); }
-
-inline
-Node::pointer
-to_solver_node(const CGAL_Point& p)
-{ return Node::pointer(new Node(from_cgal(p))); }
-
-
-/**
- * @brief Exception class to represent an algorithmic error and/or invalid data.
- */
-class AlgorithmicError : public std::exception {};
+std::pair<CGAL_Point, VertexInfo>
+to_cgal2_info(const OPoint3D& p)
+{ return std::make_pair(to_cgal2(p), VertexInfo(p._z)); }
 
 
 /// @brief Test fixture used to test the AltimetryBuilder
@@ -253,9 +289,11 @@ public:
     virtual
     ~AltimetryBuilder();
 
-    //XXX We should properly handle a simple state machine.
+    //TODO We should properly handle a simple state machine.
 
     // Main methods
+
+    friend class SolverDataModelBuilder;
 
     /**
      * @brief Insert the stored material polygons into the triangulation
@@ -274,9 +312,10 @@ public:
     /**
      * @brief Walk through a TYTopograpy and process all its elements
      * @param topography ref. to a TYTopography to be processed.
+     * @param use_emprise_as_level_curve if the emprise should be use as a level curve.
      */
     void
-    process(TYTopographie& topography);
+    process(TYTopographie& topography, bool use_emprise_as_level_curve = true);
 
     /**
      * @brief Take \a ground_area into account.
@@ -284,10 +323,11 @@ public:
      * Adapt \a ground_area into a \c MaterialPolygon and store it for later
      * processing by \c insertMaterialPolygonsInTriangulation().
      *
+     * @param matrix a transform to be applied to \c ground_area before processing
      * @param ground_area ref. to a \c TYTerrain to be processed.
      */
     void
-    process(const TYTerrain& ground_area);
+    process(const TYTerrain& ground_area, const OMatrix& matrix=OMatrix());
 
     /**
      * @brief Take \a level_curve into account.
@@ -295,11 +335,20 @@ public:
      * This method immediately adds the \a level_curve as contraints to the
      * triangulaiton
      *
+     * @param matrix a transform to be applied to \c ground_area before processing
+     * @param closed if true the last point will be linked to the first
      * @param level_curve ref. to a level curve to be processed.
      */
     void
-    process(TYCourbeNiveau& level_curve, bool closed = false);
+    process(TYCourbeNiveau& level_curve, const OMatrix& matrix=OMatrix(), bool closed = false);
 
+    /**
+     * @brief Processes the emprise
+     * @param topography
+     * @param as_level_curve
+     */
+    void
+    process_emprise(TYTopographie& topography, bool as_level_curve = true);
 
     /**
      * @brief Add \c points_range as elements of the triangulation
@@ -321,10 +370,10 @@ public:
     /**
      * @brief Compute altitudes from the alti_cdt triangulation and vertices info
      * @param p a 2D point
-     * @return the altitude of \c p
+     * @return the altitude of \c p or \c unspecified_altitude if \c p is out-of-scope
      */
     double
-    computeAltitude(const CGAL_Point& p);
+    computeAltitude(const CGAL_Point& p) const;
 
     /**
      * @brief Auxilliary method used to insert points into the triangulation
@@ -344,6 +393,11 @@ public:
      */
     void
     indexFacesMaterial();
+
+    /* TODO
+     * Provide triangulation refinement following :
+     * http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Mesh_2/Chapter_main.html
+     */
 
     /**
      * @brief This is a test for inclusion between polygons \a p1 and \a p2
@@ -369,14 +423,21 @@ public:
      * @ brief exception class raised by \c poly_comparator in case polygons
      * are not comparable.
      */
-    struct NonComparablePolygons
+    struct NonComparablePolygons : tympan::invalid_data
     {
-        material_polygon_handle_t p1, p2;
-        face_set_t intersect;
-        NonComparablePolygons(material_polygon_handle_t p1_, material_polygon_handle_t p2_, face_set_t intersect_)
-            : p1(p1_), p2(p2_), intersect(intersect_) {}
-    };
+        const material_polygon_handle_t p1, p2;
+        const face_set_t intersect;
 
+        NonComparablePolygons(
+            material_polygon_handle_t p1_,
+            material_polygon_handle_t p2_,
+            const face_set_t& intersect_
+        ) DO_NOT_THROW
+        : tympan::invalid_data("AltimetryBuilder: incomparable polygons"),
+          p1(p1_), p2(p2_), intersect(intersect_) {}
+
+        ~NonComparablePolygons() DO_NOT_THROW {};
+    };
 
     /**
      * @brief Label each face with its material.
@@ -386,14 +447,7 @@ public:
      * material : ie the material of the most specific MaterialPolygon.
      */
     void
-    labelFaces();
-
-    /**
-     * @brief Counts the number of (constrained) edges
-     * @return a pair (#edges, #constrained edges)
-     */
-    std::pair<unsigned, unsigned>
-    count_edges();
+    labelFaces(material_t default_material);
 
     /**
      * @brief Insert a point and a constraint into the triangulation
@@ -438,6 +492,53 @@ public:
     std::deque<CDT::Vertex_handle>
     insert_range(PointRange points_range);
 
+    /**
+     * @brief Counts the number of (constrained) edges
+     * @return a pair (#edges, #constrained edges)
+     */
+    std::pair<unsigned, unsigned>
+    count_edges() const;
+
+    /**
+     * @brief Get number of vertices
+     * @return number of vertices (aka points) of the altimetry
+     */
+    unsigned number_of_vertices() const
+    { return cdt.number_of_vertices(); }
+
+    /**
+     * @brief Get number of faces
+     * @return number of faces (aka triangles) of the altimetry
+     */
+    unsigned number_of_faces() const
+    { return cdt.number_of_faces(); }
+
+    /**
+     * @brief Conversion from a CGAL Vertex_handle to a Tympan point
+     * @param vh the CGAL vertex handle
+     * @return coordinates of \c vh as a tympan point
+     */
+    Point
+    from_cgal(const CDT::Vertex_handle& vh) const
+    {
+		const CDT::Point& p = vh->point();
+		const VertexInfo& i = vh->info();
+    	return Point(p.x(), p.y(), i.altitude);
+    }
+
+    /**
+     * @brief Export the altimetry as a triangular mesh
+     *
+     * This function expect empty deques and will clear the deque passed.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     * @param p_materials optional output argument filled with the materials of the faces
+     */
+    void exportMesh(std::deque<OPoint3D>& points,
+                    std::deque<OTriangle>& triangles,
+                    std::deque<material_t>* p_materials=NULL) const;
+
 protected:
     /**
      * @brief Helper function object to compare material polygons for inclusion.
@@ -473,13 +574,13 @@ public:
     static QGraphicsSimpleTextItem*
     drawText(QGraphicsScene* scene,
     		const CGAL_Point& pos, const std::string& text, double scale=0.03);
-    		
-    void 
+
+    void
     addVerticesInfo(QGraphicsScene* scene) const;
-    
-    void 
+
+    void
     addFacesInfo(QGraphicsScene* scene) const;
-    
+
     std::pair<QGraphicsView*, QGraphicsScene*>
     buildView(double xmin, double ymin, double xmax, double ymax);
 

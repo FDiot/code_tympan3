@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -23,10 +23,14 @@
 #ifndef __TY_SURFACEINTERFACE__
 #define __TY_SURFACEINTERFACE__
 
+#include <deque>
 
 class OSegment3D;
 class OPoint3D;
 class OPlan;
+class OTriangle;
+class TYGeometryNode;
+
 
 /**
  * Classe abstraite qui offre une interface utilisable par des composants
@@ -144,7 +148,28 @@ public:
      */
     virtual void inverseNormale() {};
 
+
     //@}
+
+    /**
+     * @brief Exports the surface as a triangular mesh inglobal reference frame
+     *
+     * NB : This function expect empty deques and will clear the deque passed.
+     *
+     * This method is semantically PURE virtual and should actually
+     * be, but the OPROTO system does not permit that. This is a dirty
+     * workaround.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     */
+    virtual void
+    exportMesh(
+    		std::deque<OPoint3D>& points,
+    		std::deque<OTriangle>& triangles,
+                const TYGeometryNode& geonode
+    ) const /* = 0 */;
+
 };
 
 
