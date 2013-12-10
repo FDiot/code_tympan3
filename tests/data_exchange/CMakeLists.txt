@@ -1,9 +1,3 @@
-# CMakeLists for test cases with GoogleTest framework.
-# TODO (dag) This integrative test whicjh requires the whole app should
-#            be moved into a dedicated subdirectory.
-#            The macro to compile a test could be factored-out above and used below
-
-# Find all CPP test files.
 file (GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp )
 
 # Main loop for all CPP test files.
@@ -14,11 +8,12 @@ foreach (testfile ${TESTS_SRC})
   set_property(TARGET ${basename} PROPERTY FOLDER ${CURRENT_FOLDER})
 
   # add_dependencies (${basename} GTest tympan_dm_metier)
-  add_dependencies (${basename} GTest test_utils ${TYMPAN_MODULES} )
 
   # 'CMAKE_THREAD_LIBS_INIT' can be empty on Windows.
-  target_link_libraries (${basename} gtest_main gtest test_utils ${CMAKE_THREAD_LIBS_INIT}
-    ${TYMPAN_MODULES})
+  target_link_libraries (${basename}
+    gtest_main gtest ${CMAKE_THREAD_LIBS_INIT} test_utils
+    ${TYMPAN_MODULES}
+    )
 
   add_test (${basename} ${basename})
   set_property(TEST ${basename} PROPERTY ENVIRONMENT

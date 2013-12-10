@@ -18,10 +18,20 @@
 
 #include <deque>
 
+#include <gtest/gtest_prod.h>
+
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 #include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
 #include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
+#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
+
+namespace tympan {
+typedef boost::error_info<struct tag_elements_implied,
+                          std::deque<LPTYElement> > elements_implied_errinfo;
+typedef boost::error_info<struct tag_position,
+                          OPoint3D> position_errinfo;
+} // namespace tympan
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAltimetrieWidget.h"
@@ -42,6 +52,7 @@ class TYAltimetrie: public TYElement
 
     // Methodes
 public:
+    static const double invalid_altitude;
     /**
      * Constructeur.
      */
@@ -141,6 +152,7 @@ public:
      * Retourne une face de la liste des faces.
      */
     LPTYPolygon getFace(int index) { return _listFaces[index]; }
+    const TYPolygon* getFace(int index) const { return _listFaces[index]; }
 
     /**
      * Calcule l'altitude d'un point de l'espace.
@@ -153,7 +165,9 @@ public:
 	double altitude(const OPoint3D& pt);
 
     /**
-     * \brief Modifie l'altitude d'un point donn�. Si le point est hors de la zone dans laquelle l'altim�trie est d�finie, la valeur z du point est mise a -1E-5
+     * \brief Modifie l'altitude d'un point donn�. Si le point est hors de la zone dans laquelle l'altim�trie est d�finie, la valeur z du point est mise a \c TYAltimetry::invalid_altitude
+     *
+     *
      * \return false si l'altitude du point n'a pu etre determinee
      */
     bool updateAltitude(OPoint3D& pt) const;
@@ -162,7 +176,7 @@ public:
      * \brief Calcule les coordonnees de la projection au sol d'un point de l'espace
      * \return les coordonnees du pt d'intersection
      */
-	OPoint3D projection(const OPoint3D& pt) const;
+    OPoint3D projection(const OPoint3D& pt) const;
 
     /**
      * Retourne la hauteur moyenne des points passes en arguments.
@@ -200,23 +214,32 @@ public:
 	 */
 	unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon);
 
+
+
+    /** \brief Integer coordinates into the grid */
+    struct grid_index { unsigned pi, qi; } ;
+
+protected:
+    FRIEND_TEST(TYAltimetryTest, dummy_grid);
+    FRIEND_TEST(TYAltimetryTest, simple_grid);
+    FRIEND_TEST(TYAltimetryTest, simple_terrain);
 	/**
 	 * \brief Select indices of faces to test
 	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
 	 */
-	bool getGridIndices(const OPoint3D& pt, unsigned int* indXY);
+	bool getGridIndices(const OPoint3D& pt, grid_index& indXY) const;
 
 	/**
 	 * \brief Select indices of faces to test
 	 * \fn bool getGridIndices(const OPoint3D* pts, int* indXY)
 	 */
-	bool getGridIndices(const OPoint3D* pts, unsigned int* iMinMax);
+	bool getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) const;
 
 	/**
 	 * \brief Select indices of faces to test
 	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
 	 */
-	bool getGridIndices(const OBox2 &box, unsigned int* iMinMax);
+	bool getGridIndices(const OBox2 &box, unsigned int* iMinMax) const;
 
 
 	/**
@@ -236,14 +259,29 @@ protected:
     /// Bounding Box 2D de l'altimetrie
     OBox             _bbox;
 
+
+// The members below handle the accelerating grid : this could / should be a disctinc class
+
+    /// \brief Initilise the grid related attributes for a null grid
+    void initNullGrid();
+
+    /// \brief clean the accelerating structure
+    void clearAcceleratingGrid();
+
+    /// \brief initialise the accelerating structure given current _bbox and _gridS{XY}
+    void initAcceleratingGrid(unsigned to_be_reserved=0);
+
+    /// \brief Clear the grid and reinitialise it as a copy of \c other
+    void copyAcceleratingGrid(const TYAltimetrie& other);
+
     /// Tableau ordonne des faces
     TYTabLPPolygon** _pSortedFaces;
 
-    /// Bornes de la grille des faces
-    int _gridSX;
-    int _gridSY;
+    /// Size along each dimension of the accelerating grid
+    unsigned _gridSX;
+    unsigned _gridSY;
 
-    /// Pas de la grille des faces
+    /// Step along each dimension of the accelerating grid
     double _gridDX;
     double _gridDY;
 };

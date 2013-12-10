@@ -7,7 +7,7 @@
 
 #include "gtest/gtest.h"
 
-#include "test_utils/prettyprint.hpp"
+#include "Tympan/MetierSolver/ToolsMetier/prettyprint.hpp"
 
 using std::cout;
 using std::endl;
@@ -19,6 +19,5 @@ TEST(TestTestUtils, pp_base_geom) {
 
     OPoint3D p1(1,2,3);
     out << p1;
-    cout << out.str() << endl;
     EXPECT_STREQ("OPoint3D(1, 2, 3)", out.str().c_str());
 }

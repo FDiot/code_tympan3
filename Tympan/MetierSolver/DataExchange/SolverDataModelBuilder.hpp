@@ -106,7 +106,7 @@ public:
 protected:
 
     static
-    const std::string&
+    const std::string
     to_std(const QString& qstr)
     { return std::string(qstr.toUtf8().constData()); } // NB : This does incur copy
 

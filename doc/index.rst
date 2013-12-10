@@ -26,8 +26,6 @@ and display some results.
 
    user/index
    developer/index
-   appendices
-
 
 Indices and tables
 ==================
@@ -35,4 +33,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
