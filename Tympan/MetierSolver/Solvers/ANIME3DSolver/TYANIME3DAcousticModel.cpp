@@ -315,7 +315,7 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
 			kDelta = _K * delta;
             nbF = _lambda.invMult( 2.0 * delta ); // 2 * delta / lambda
 			
-			if( delta > ( _lambda.div(20) ).valMax() )
+			if(true) // DTn 20131220 pour forcer l'operation( delta > ( _lambda.div(20) ).valMax() )
 			{
 				mod = (((nbF * 20.0 + 3.0)).sqrt()).inv(); // 1 / sqrt(20 * nbF + 3)
 			}
@@ -468,7 +468,13 @@ OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(double angle, OPoint3D
 	// And bb was born
 	OBox2 fresnelArea = ComputeFrenelArea(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice);
 
-	std::cout << "Coordonnees des 4 sommets hauts de la boite " << std::endl;
+	std::cout << "Coordonnees des 8 sommets de la boite " << std::endl;
+	std::cout << "A = " << fresnelArea._A._x << " " << fresnelArea._A._y << " " << fresnelArea._A._z << std::endl;
+	std::cout << "B = " << fresnelArea._B._x << " " << fresnelArea._B._y << " " << fresnelArea._B._z << std::endl;
+	std::cout << "C = " << fresnelArea._C._x << " " << fresnelArea._C._y << " " << fresnelArea._C._z << std::endl;
+	std::cout << "D = " << fresnelArea._D._x << " " << fresnelArea._D._y << " " << fresnelArea._D._z << std::endl;
+
+
 	std::cout << "E = " << fresnelArea._E._x << " " << fresnelArea._E._y << " " << fresnelArea._E._z << std::endl;
 	std::cout << "F = " << fresnelArea._F._x << " " << fresnelArea._F._y << " " << fresnelArea._F._z << std::endl;
 	std::cout << "G = " << fresnelArea._G._x << " " << fresnelArea._G._y << " " << fresnelArea._G._z << std::endl;
