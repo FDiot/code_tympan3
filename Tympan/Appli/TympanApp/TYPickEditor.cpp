@@ -1542,6 +1542,9 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
 {
     assert(pGeoNode);
 
+	// Recuperation de la hauteur de l'element
+	double hauteur = pGeoNode->getHauteur();
+
     //On doit presenter la position de l'origine du GeoNode selectionne.
     //Cette position doit etre dans le repere du modeler frame.
     TYElement* pRootTYElement = _pModeler->getElement();
@@ -1566,6 +1569,9 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
         // Affectation de la nouvelle origine au geonode
         pTempGeoNode->getRepere()._origin = oldZero;
     }
+
+	// Affectation de la hauteur au geoNode temporaire
+	pTempGeoNode->setHauteur(hauteur);
 
     // Affiche la boite de dialogue
     TYPositionDialog* pDlg = new TYPositionDialog(pTempGeoNode, _pModeler);
