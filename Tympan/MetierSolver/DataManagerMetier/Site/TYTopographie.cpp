@@ -1014,12 +1014,8 @@ void TYTopographie::computeAltimetricTriangulation(
 		std::deque<OTriangle>& triangles,
 		bool use_emprise_as_level_curve)
 {
-	// On fait le calcul seulement si cela est necessaire !
-	if (!_pAltimetrie->getIsGeometryModified()) {
-		return;
-	}
 
-	// we instanciate an AltimetryBuilder
+        // we instanciate an AltimetryBuilder
 	p_alti_builder.reset(new tympan::AltimetryBuilder());
 
 	// We ask it to process this topography
