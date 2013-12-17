@@ -54,7 +54,8 @@ public:
     /// constructeurs
 	//TYANIME3DAcousticModel();
 
-	TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TYTabRay &tabRayons, TYStructSurfIntersect* tabStruct);
+	TYANIME3DAcousticModel(	TYCalcul& calcul, const TYSiteNode& site, TYTabRay &tabRayons, TYStructSurfIntersect* tabStruct, 
+							TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs );
 
     /// destructeur
     virtual ~TYANIME3DAcousticModel();
@@ -171,14 +172,14 @@ protected :
     TYTabLPPolygon _listeTriangles;  
 
 	/// la liste des triangles de la topo
-    TYTabLPPolygon _listeTrianglesBox;  
+    TYTabLPPolygon _listeTrianglesBox; 
 
-	/// le tableau de recepteurs de la scene
-	TYTabPointCalculGeoNode _tabRecepteur;
+	/*!< List of sources used by the solver */
+    TYTabSourcePonctuelleGeoNode& _tabSources;
 
-	/// le tableau de sources de la scene 
-	TYTabSourcePonctuelleGeoNode _tabSources;
-    
+	/*!< List of receptors used by the solver */
+	TYTabPointCalculGeoNode& _tabRecepteurs;
+   
     /// vitesse du son
 	double _c;	
 

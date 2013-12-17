@@ -45,11 +45,15 @@
 //{ 
 //}
 
-TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TYTabRay &tabRayons, TYStructSurfIntersect* tabStruct) :
+TYANIME3DAcousticModel::TYANIME3DAcousticModel(	TYCalcul& calcul, const TYSiteNode& site, 
+												TYTabRay &tabRayons, TYStructSurfIntersect* tabStruct, 
+												TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs ) :
 																									_calcul(calcul),
 																									_site(site),
 																									_tabSurfIntersect(tabStruct),
-																									_tabTYRays(tabRayons)
+																									_tabTYRays(tabRayons),
+																									_tabSources(tabSources),
+																									_tabRecepteurs(tabRecepteurs)
 {
     _nbRays = _tabTYRays.size();
 
@@ -79,8 +83,6 @@ TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNod
     _listeTriangles = (*_topo->getAltimetrie()).getListFaces();  
 
     TYMapElementTabSources mapElementSources = calcul.getResultat()->getMapEmetteurSrcs();
-    calcul.getAllSources(mapElementSources, _tabSources);
-    calcul.getAllRecepteurs(_tabRecepteur);
 
 	_c = _atmos.getVitSon();  
 	_K = _atmos.getKAcoust();  
@@ -680,7 +682,7 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
 	double totalRayLength;
 
     const int nbSources    = _tabSources.size();           // nbr de sources de la scene
-    const int nbRecepteurs = _tabRecepteur.size();         // nbr de recepteurs de la scene
+    const int nbRecepteurs = _tabRecepteurs.size();         // nbr de recepteurs de la scene
 
 	TYSourcePonctuelle* source = NULL;
 	TYPointCalcul* recept = NULL;
@@ -704,8 +706,13 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
 				source = _tabTYRays[k]->getSource();
 				recept = _tabTYRays[k]->getRecepteur();
 
+#ifdef _DEBUG
+	TYElement* pTmpSource = _tabSources[i]->getElement();
+	TYElement* pTmpRecept = _tabRecepteurs[j]->getElement();
+#endif
+
 				// test si la source est celle en cours idem pour recepteur
-				if (source == (TYSourcePonctuelle*)(_tabSources[i]->getElement()) && recept == (TYPointCalcul*)(_tabRecepteur[j]->getElement()))   
+				if (source == (TYSourcePonctuelle*)(_tabSources[i]->getElement()) && recept == (TYPointCalcul*)(_tabRecepteurs[j]->getElement()))   
                 {
 					totalRayLength = _tabTYRays[k]->getLength();
                     mod = (_pressAcoustEff[k]).getModule();

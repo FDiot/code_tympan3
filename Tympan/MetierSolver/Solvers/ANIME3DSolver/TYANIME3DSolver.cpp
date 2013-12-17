@@ -114,7 +114,7 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
     // Calculs acoustiques sur les rayons via la methode ANIME3D
     ////////////////////////////////////////////////////////////
 
-	TYANIME3DAcousticModel aam(calcul, site, _tabRay, _tabPolygon);
+	TYANIME3DAcousticModel aam(calcul, site, _tabRay, _tabPolygon, _tabSources, _tabRecepteurs);
 
     // calcul de la matrice de pression totale pour chaque couple (S,R)
     OTab2DSpectreComplex tabSpectre = aam.ComputeAcousticModel();
