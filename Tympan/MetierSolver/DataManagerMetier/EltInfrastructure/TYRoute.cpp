@@ -50,7 +50,7 @@ TYRoute::TYRoute(): _vitMoy(80),
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
-    float r = 138.0f, g = 138.0f, b = 138.0f;
+    float r = 80.0f, g = 80.0f, b = 80.0f;
 
 #if TY_USE_IHM
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "TYRouteGraphicColor"))
