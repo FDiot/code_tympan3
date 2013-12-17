@@ -425,6 +425,10 @@ void TYCalculWidget::updateContent()
 		solverName = (*iter)->getPlugin()->getName();//->filename;
         _comboSolver->insertItem(i, solverName);
 
+#ifdef _DEBUG		
+		OGenID loopId = (*iter)->getPlugin()->getUUID();
+#endif
+
 		if ((*iter)->getPlugin()->getUUID() == currentId) { currentSolverIndex = i; }
     }
 

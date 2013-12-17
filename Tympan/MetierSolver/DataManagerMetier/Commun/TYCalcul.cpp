@@ -1632,21 +1632,14 @@ bool TYCalcul::go()
 
             ret = _pResultat->cumulSpectres(_tabTrajets);
 
-            // Suppression des points de maillage de la matrice
-            for (i = 0; i < _maillages.size(); i++)
-            {
-                if (getMaillage(i)->getState() == TYMaillage::Inactif) { continue; }
-                TYTabLPPointCalcul& tabPoints = getMaillage(i)->getPtsCalcul();
-                for (unsigned int k = 0 ; k < tabPoints.size() ; k++)
-                {
-                    // Le test suivant empeche la "suppression" de points qui n'ont pas ete introduit
-                    // dans la matrice du fait que celle-ci est construite sur la base des trajets valides
-                    // qui n'inclue pas les points inactifs
-                    if (tabPoints[k]->getEtat(this) == false) { continue; }
-                    _pResultat->remSpectres(tabPoints[k]);
-                }
-            }
-
+			// Suppression des points de maillage de la matrice
+			for (unsigned int i=0; i< recepteurs.size(); i++)
+			{
+				if ( recepteurs[i]->getElement()->getParent()->inherits( "TYMaillage" ) )
+				{
+					_pResultat->remSpectres( static_cast<TYPointCalcul*>( recepteurs[i]->getElement() ) );
+				}
+			}
         }
     }
     else
