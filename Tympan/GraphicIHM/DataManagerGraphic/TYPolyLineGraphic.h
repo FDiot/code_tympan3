@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYPolyLineGraphic.h
  * \brief Representation graphique d'une polyligne (fichier header)
@@ -48,6 +48,10 @@ class TYPolyLineGraphic : public TYElementGraphic
 
     // Methodes
 public:
+    /// Default line width in screen pixels
+    /// (cf OpenGL doc for more details of meaning when coupled with anti-aliasing)
+    static const unsigned int default_width_px = 2;
+
     TYPolyLineGraphic(bool closed = false);
     virtual ~TYPolyLineGraphic();
 
@@ -63,6 +67,8 @@ public:
 protected:
     TYTabPoint _tabPts;
     bool _closed;
+
+    GLfloat width; ///< Line width - cf OpenGL doc for exact meaning
 };
 
 
