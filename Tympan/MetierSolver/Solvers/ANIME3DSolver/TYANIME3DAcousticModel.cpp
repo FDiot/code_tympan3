@@ -493,13 +493,14 @@ OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(double angle, OPoint3D
 	LPTYPolygon faceRefl = (*_topo->getAltimetrie()).getFaceUnder(Prefl);
 
 	// Calcul de l'intersection des segments avec le plan de la face de reflexion
-	OPlan refPlan = faceRefl->getPlan();
+	OPlan refPlan(faceRefl->getPoint(0), faceRefl->getPoint(1), faceRefl->getPoint(2)); //->getPlan();
 
 	OPoint3D eProj, fProj, gProj, hProj;
 	refPlan.intersectsSegment(AB._ptA, AB._ptB, eProj);
 	refPlan.intersectsSegment(CD._ptA, CD._ptB, fProj);
 	refPlan.intersectsSegment(EH._ptA, EH._ptB, gProj);
 	refPlan.intersectsSegment(FG._ptA, FG._ptB, hProj);
+
 
 // ANCIENNE VERSION (PROJECTION DES POINT DU "HAUT" DE LA BOITE
 	// fE/fF/fG/fH are the faces under the box corners E/F/G/H
