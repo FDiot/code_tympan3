@@ -33,6 +33,13 @@
 #endif
 
 
+///Noeud geometrique de type TYRoute.
+typedef TYGeometryNode TYRouteGeoNode;
+///Smart Pointer sur TYRouteGeoNode.
+typedef SmartPtr<TYRouteGeoNode> LPTYRouteGeoNode;
+///Collection de noeuds geometriques de type TYRoute.
+typedef std::vector<LPTYRouteGeoNode> TYTabRouteGeoNode;
+
 /**
  * Comprend les proprietes acoustiques et geometriques d'une route.
  *
@@ -129,6 +136,14 @@ public:
      */
     virtual void distriSrcs();
 
+    /**
+     * \brief Required the road to update its altitude after altimetry changed
+     *
+     * \param alti the altimetry the altitude must be updated from
+     * \param the GeoNode associated with this Road
+     * \return whether the update succeeded.
+     */
+    virtual bool updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode );
 
 protected:
     /**
@@ -172,14 +187,5 @@ protected:
     // Hauteur des sources par rapport a la route
     double _offSet;
 };
-
-
-///Noeud geometrique de type TYRoute.
-typedef TYGeometryNode TYRouteGeoNode;
-///Smart Pointer sur TYRouteGeoNode.
-typedef SmartPtr<TYRouteGeoNode> LPTYRouteGeoNode;
-///Collection de noeuds geometriques de type TYRoute.
-typedef std::vector<LPTYRouteGeoNode> TYTabRouteGeoNode;
-
 
 #endif // __TY_ROUTE__
