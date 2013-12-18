@@ -90,6 +90,29 @@ OBox2::OBox2(const OBox2& box, const ORepere3D& repere, const OPoint3D& centre)
 	_H = box._H;
 }
 
+OBox2::OBox2(const double& length, const double& width, const double& height) :
+										_length( length ),
+										_height( width ),
+										_width( height ), 
+										_center( OPoint3D( 0.0, 0.0, 0.0 ) )
+{
+	double	minX = -_length / 2.0, 
+			minY = -_width / 2.0,
+			minZ = -_height / 2.0,
+			maxX = minX + _length,
+			maxY = minY + _width,
+			maxZ = minZ + _height;
+
+	_A = _min = OPoint3D( minX, minY, minZ );
+	_B =		OPoint3D( minX, maxY, minZ );
+	_C =		OPoint3D( maxX, maxY, minZ ); 
+	_D =		OPoint3D( maxX, minY, minZ );
+	_E =		OPoint3D( maxX, minY, maxZ );
+	_F =		OPoint3D( minX, minY, maxZ );
+	_G =		OPoint3D( minX, maxY, maxZ );
+	_H = _max = OPoint3D( maxX, maxY, maxZ );
+}
+
 OBox2& OBox2::operator=(const OBox2& box)
 {
     if (this != &box)
@@ -395,4 +418,24 @@ OBox2 OBox2::rot3D(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, 
 	    
 	return OBox2(box, r, O);
 }
+
+void OBox2::moveAndRotate(const OPoint3D& origin, const OVector3D& vec)
+{
+	_center = origin;
+	_repere = ORepere3D(origin, vec);
+
+	OMatrix mat;
+
+	_repere.getMatChangeRep(mat);
+
+	_A = mat * _A;
+	_B = mat * _B;
+	_C = mat * _C;
+	_D = mat * _D;
+	_E = mat * _E;
+	_F = mat * _F;
+	_G = mat * _G;
+	_H = mat * _H;
+}
+
 
