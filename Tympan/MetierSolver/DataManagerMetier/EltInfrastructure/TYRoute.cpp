@@ -458,15 +458,9 @@ bool TYRoute::updateAcoustic(const bool& force) //force = false
 void TYRoute::distriSrcs()
 {
     TYAcousticLine::distriSrcs();
-
-    TYTabLPSourcePonctuelle tabSrcs = _pSrcLineic->getSrcs();
-
-    LPTYPoint pPos = NULL;
-
     // Ajout d'un offset a la hauteur des sources
-    for (unsigned int i = 0; i < tabSrcs.size(); i++)
+    for (unsigned int i = 0; i < _pSrcLineic->getNbSrcs(); i++)
     {
-        pPos = tabSrcs[i]->getPos();
-        pPos->_z += _offSet;
+        _pSrcLineic->getSrc(i)->getPos()->_z += _offSet;
     }
 }
