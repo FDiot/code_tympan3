@@ -462,36 +462,32 @@ bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNod
     assert(pGeoNode->getElement() == static_cast<TYElement*>(this) &&
            "Inconsistent arguments : the geoNode passed must point on `this` !");
 
-
-    // Matrice pour la position de cette element
+    // Transform representing this element pose relative to the world
     const OMatrix& matrix = pGeoNode->getMatrix();
     OMatrix matrixinv = matrix.getInvert();
 
-    // Hauteur par rapport au sol
+    // Road heigth relative to the ground
     double hauteur = pGeoNode->getHauteur();
 
+    // Positionning of the road defining points at the specified
+    // height above the ground (NB this created tunnels and bridges)
     for (size_t i = 0; i < this->getTabPoint().size(); i++)
     {
-        // Passage au repere du site
+        // Transform to site frame pose
         OPoint3D pt = matrix * this->getTabPoint()[i];
 
-        // Init
-        pt._z = 0.0;
-
-        // Recherche de l'altitude
+        // Init the point at ground altitude
         ok &= alti.updateAltitude(pt);
-        // TODO handle / report the problem
+        // NB updateAltitude already report possibel problems
 
-        // Prise en compte de la hauteur par rapport au sol
+        // Add the heigth relative to the ground
         pt._z += hauteur;
 
-        // Retour au repere d'origine
+        // Transform back from site frame pose
         this->getTabPoint()[i] = matrixinv * pt;
-
     }
 
     this->setIsGeometryModified(false);
-
     return true;
 }
 
