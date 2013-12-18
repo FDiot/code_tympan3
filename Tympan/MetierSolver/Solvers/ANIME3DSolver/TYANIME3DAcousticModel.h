@@ -94,16 +94,16 @@ protected:
     void ComputeAbsRefl();
 
     /**
-     * \fn OBox ComputeFrenelArea(TYCalcul & calcul,TYSiteNode & site, TYRay & ray)
+     * \fn OBox ComputeFresnelArea(TYCalcul & calcul,TYSiteNode & site, TYRay & ray)
      * \brief calcul des triangles de la zone de Fresnel
      */
-    OBox2 ComputeFrenelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice);
+    OBox2 ComputeFresnelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice);
 
     /**
-     * \fn 	OTabDouble ComputeFrenelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
+     * \fn 	OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
      * \brief calcul des ponderations de Fresnel associees a la zone de Fresnel
      */
-	OTabDouble ComputeFrenelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
+	OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
 
 	/**
 	 * \fn 	std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
