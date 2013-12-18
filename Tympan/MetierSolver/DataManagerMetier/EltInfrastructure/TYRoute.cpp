@@ -449,8 +449,12 @@ bool TYRoute::updateAcoustic(const bool& force) //force = false
         _tabRegimes[1].setSpectre(traficNuit);
     }
 
-    // Distribution des sources et affectation de la puissance acoustique
-    TYAcousticLine::updateAcoustic(force);
+    // NB : The sources are expected to have already been created during
+    //      before calling updateAltitudes, called before thsi method
+    //      So we do not want to call distriSrcs();
+
+    // Affectation de la puissance aux sources
+    setSrcsLw();
 
     return true;
 }
@@ -487,19 +491,40 @@ bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNod
         this->getTabPoint()[i] = matrixinv * pt;
     }
 
+    // We create sources along the acoustic line...
+    // and then project them on the altimetry and add the required offset
+    // Note this is distriSrcs(const TYAltimetrie&) NOT base class distriSrcs()
+    distriSrcs(alti, pGeoNode);
+
     this->setIsGeometryModified(false);
     return true;
 }
 
 
-void TYRoute::distriSrcs()
+void TYRoute::distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
 {
+    assert(pGeoNode->getElement() == static_cast<TYElement*>(this) &&
+           "Inconsistent arguments : the geoNode passed must point on `this` !");
+
     TYAcousticLine::distriSrcs();
-    // Ajout d'un offset a la hauteur des sources
+
+    // Transform representing this element pose relative to the world
+    const OMatrix& matrix = pGeoNode->getMatrix();
+    OMatrix matrixinv = matrix.getInvert();
+    // Road heigth relative to the ground
+    double hauteur = pGeoNode->getHauteur();
+
     for (unsigned int i = 0; i < _pSrcLineic->getNbSrcs(); i++)
     {
-        // Consider aligning the altitude on the altimetry first
-        // TODO How to get access to it ?
-        _pSrcLineic->getSrc(i)->getPos()->_z += _offSet;
+        LPTYSourcePonctuelle pSrc=_pSrcLineic->getSrc(i);
+        // Transform to site frame pose
+        OPoint3D pt = matrix * (*pSrc->getPos());
+        alti.updateAltitude(pt);
+        // NB updateAltitude already report possibel problems
+        // Add the heigth relative to the ground
+        pt._z += hauteur;
+
+        // Transform back from site frame pose
+        *pSrc->getPos() = matrixinv * pt;
     }
 }
