@@ -176,7 +176,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
 					triangleCentre.clear();
 					tabPondFresnel.clear();
-					tabPondFresnel = ComputeFrenelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
+					tabPondFresnel = ComputeFresnelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
 					nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
 
 					std::cout << "il y a N ponderations : " << nbFacesFresnel << std::endl;
@@ -204,7 +204,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 					std::cout<< "We start using Fresnel Area on a building" << std::endl;
 
 					triangleCentre.clear();
-					tabPondFresnel = ComputeFrenelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
+					tabPondFresnel = ComputeFresnelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
 					nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
 					
 					std::cout << "il y a N ponderations : " << nbFacesFresnel << std::endl;
@@ -335,7 +335,7 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
 }
 
 // calcul de la zone de Fresnel pour une diffraction donnee - Approximation : zone = boite englobante de l'ellipsoide de Fresnel
-OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice)
+OBox2 TYANIME3DAcousticModel::ComputeFresnelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice)
 {
     OBox2 fresnelArea;  // boundingBox de l'ellispsoide de Fresnel
 
@@ -416,18 +416,29 @@ MIS EN COMMENTAIRE POUR VALIDATION ULTERIEURE
 	std::cout << "L = " << L << " l = " << l << std::endl;
 
     // Boite de Fresnel placee a l'origine du repere
-    OBox box = OBox( OCoord3D( 0, 0, 0 ), OCoord3D( L, l, h ) );
-	fresnelArea = OBox2(box);
+//    OBox box = OBox( OCoord3D( 0, 0, 0 ), OCoord3D( L, l, h ) );
+	fresnelArea = OBox2(L, l, h); // DTn uses new constructor of a box centered on 0, 0, 0
 
-    // Translation au pt O milieu du segment [SIm R]
+    // Definition de la nouvelle position du centre de la boite // Translation au pt O milieu du segment [SIm R]
 	OPoint3D O( 0.5 * ( SIm._x + Psuiv._x ), 0.5 * ( SIm._y + Psuiv._y ), 0.5 * ( SIm._z + Psuiv._z ) );
 
+	// DTn : define a new vector to change box orientation 
+	OVector3D vecO(O, Psuiv);
+
+	// DTn : Move and rotate box
+	fresnelArea.moveAndRotate(O, vecO);
+
+	return fresnelArea;
+
+/*
+	DTn commented to use new OBox manipulator I defined (20131218)
 	// Deplace le centre de la boite au centre du segment S'P (P = point suivant la réflexion)
 	const OVector3D vt( ( O._x - (0.5*L) ), ( O._y - ( 0.5*l ) ), ( O._z - ( 0.5*h ) ) ); 
 	fresnelArea.Translate( vt );
 	
 // TO DO : S'assurer que la rotation s'effectue dans le bon repère
 	return fresnelArea.boxRotation( O, Psuiv ); // Voir la définition de boxRotation : devrai être fersnelArea.boxRotation(...)
+*/
 }
 
 // TO DO : Vérifier que c'est la méthode mise en commentaire dans computeFresnelArea
@@ -459,16 +470,20 @@ OSpectre TYANIME3DAcousticModel::computeFc(const double& dd, const double& dr)
 	return fc;
 }
 
-OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre)
+OTabDouble TYANIME3DAcousticModel::ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre)
 {
     OTabDouble tabPond;				// tableau des ponderation de Fresnel
     OTabDouble tabSurface;			// tableau des surfaces des triangles de la zone de Fresnel
     double surfaceTot = 0.0;		// somme des surfaces des triangles de la zone de Fresnel
 	const double delaunay = 1e-6;	// Parameter needed to compute triangulation
 
-	std::cout << "Dans ComputeFrenelWeighting :" << std::endl;
+	std::cout << "Dans ComputeFresnelWeighting :" << std::endl;
 	// And bb was born
-	OBox2 fresnelArea = ComputeFrenelArea(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice);
+	OBox2 fresnelArea = ComputeFresnelArea(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice);
+
+	std::cout << "Coordonnees de l'origine de la boite " << std::endl;
+	std::cout << "Center = " << fresnelArea._center._x << " " << fresnelArea._center._y << " " << fresnelArea._center._z << std::endl;
+
 
 	std::cout << "Coordonnees des 8 sommets de la boite " << std::endl;
 	std::cout << "A = " << fresnelArea._A._x << " " << fresnelArea._A._y << " " << fresnelArea._A._z << std::endl;
