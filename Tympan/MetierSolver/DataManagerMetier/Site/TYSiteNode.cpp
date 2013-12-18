@@ -561,6 +561,8 @@ void TYSiteNode::loadTopoFile()
     TYNameManager::get()->enable(true);
 }
 
+// TODO : Split the huge method based on the type of infrastructure
+// See https://extranet.logilab.fr/ticket/1508248
 void TYSiteNode::updateAltiInfra(const bool& force) // force = false
 {
     TYNameManager::get()->enable(false);
@@ -595,36 +597,11 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
 #endif // TY_USE_IHM
 
         // La route
+        LPTYRouteGeoNode pGeoNode = _pInfrastructure->getListRoute()[j];
         TYRoute* pRoute = _pInfrastructure->getRoute(j);
 
-        // Matrice pour la position de cette element
-        OMatrix matrix = _pInfrastructure->getListRoute()[j]->getMatrix();
-        OMatrix matrixinv = matrix.getInvert();
-
-        // Hauteur par rapport au sol
-        double hauteur = _pInfrastructure->getListRoute()[j]->getHauteur();
-
-        for (i = 0; i < pRoute->getTabPoint().size(); i++)
-        {
-            // Passage au repere du site
-            pt = matrix * pRoute->getTabPoint()[i];
-
-            // Init
-            pt._z = 0.0;
-
-            // Recherche de l'altitude
-            bNoPbAlti &= pAlti->updateAltitude(pt);
-
-            // Prise en compte de la hauteur par rapport au sol
-            pt._z += hauteur;
-
-            // Retour au repere d'origine
-            pRoute->getTabPoint()[i] = matrixinv * pt;
-
-            modified = true;
-        }
-
-        pRoute->setIsGeometryModified(false);
+        bNoPbAlti &= pRoute->updateAltitudes(*pAlti, pGeoNode);
+        modified = true; // As long as there is a road, it will be updated anyways.
     }
 
     // Mise a jour de l'altitude pour les points des reseaux transport

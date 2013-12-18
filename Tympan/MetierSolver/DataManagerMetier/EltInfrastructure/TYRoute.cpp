@@ -455,12 +455,55 @@ bool TYRoute::updateAcoustic(const bool& force) //force = false
     return true;
 }
 
+bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
+{
+    bool ok = true;
+
+    assert(pGeoNode->getElement() == static_cast<TYElement*>(this) &&
+           "Inconsistent arguments : the geoNode passed must point on `this` !");
+
+
+    // Matrice pour la position de cette element
+    const OMatrix& matrix = pGeoNode->getMatrix();
+    OMatrix matrixinv = matrix.getInvert();
+
+    // Hauteur par rapport au sol
+    double hauteur = pGeoNode->getHauteur();
+
+    for (size_t i = 0; i < this->getTabPoint().size(); i++)
+    {
+        // Passage au repere du site
+        OPoint3D pt = matrix * this->getTabPoint()[i];
+
+        // Init
+        pt._z = 0.0;
+
+        // Recherche de l'altitude
+        ok &= alti.updateAltitude(pt);
+        // TODO handle / report the problem
+
+        // Prise en compte de la hauteur par rapport au sol
+        pt._z += hauteur;
+
+        // Retour au repere d'origine
+        this->getTabPoint()[i] = matrixinv * pt;
+
+    }
+
+    this->setIsGeometryModified(false);
+
+    return true;
+}
+
+
 void TYRoute::distriSrcs()
 {
     TYAcousticLine::distriSrcs();
     // Ajout d'un offset a la hauteur des sources
     for (unsigned int i = 0; i < _pSrcLineic->getNbSrcs(); i++)
     {
+        // Consider aligning the altitude on the altimetry first
+        // TODO How to get access to it ?
         _pSrcLineic->getSrc(i)->getPos()->_z += _offSet;
     }
 }
