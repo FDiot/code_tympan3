@@ -132,11 +132,6 @@ public:
     virtual bool updateAcoustic(const bool& force = false);
 
     /**
-     * Distribution des sources
-     */
-    virtual void distriSrcs();
-
-    /**
      * \brief Required the road to update its altitude after altimetry changed
      *
      * \param alti the altimetry the altitude must be updated from
@@ -145,11 +140,20 @@ public:
      */
     virtual bool updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode );
 
+private:
+    virtual void distriSrcs()
+    {assert(false && "You must use distriSrcs(const TYAltimetrie&) for roads");}
+
 protected:
     /**
      * Calcul de la pente moyenne de la route
      */
     double calculPenteMoyenne();
+
+    /**
+     * Distribution des sources
+     */
+    virtual void distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode);
 
     /*
      * Calcul de EVL
