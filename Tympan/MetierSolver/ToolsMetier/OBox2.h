@@ -58,6 +58,12 @@ public:
      */
     OBox2(const OBox& box);
 
+	/**
+	 * \fn OBox2(const double& length, const double& width, const double& height); 
+	 * \brief build a box centered on [0, 0, 0] from its length, width and height
+	 */
+	OBox2(const double& length, const double& width, const double& height);
+
 private : // Set private for security seems to an "af hoc" adaptation and is used only by an internal member function
 	/**
      * \fn OBox2(const OBox & box, ORepere3D & repere)
@@ -140,6 +146,11 @@ public :
 	 */
 	void BoxRotationOzOy(double alpha, double theta);
 
+	/**
+	 * \fn void moveAndRotate(const OPoint3D& origin, const OVector3D& vec);
+	 * \brief Move and rotate the box
+	 */
+	void moveAndRotate(const OPoint3D& origin, const OVector3D& vec);
 
 
 private:
