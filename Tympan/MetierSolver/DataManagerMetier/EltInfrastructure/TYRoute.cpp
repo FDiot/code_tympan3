@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -53,7 +53,7 @@ TYRoute::TYRoute(): _vitMoy(80),
     float r = 138.0f, g = 138.0f, b = 138.0f;
 
 #if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "TYRouteGraphicColorR"))
+    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "TYRouteGraphicColor"))
     {
         TYPreferenceManager::getColor(TYDIRPREFERENCEMANAGER, "TYRouteGraphicColor", r, g, b);
     }
