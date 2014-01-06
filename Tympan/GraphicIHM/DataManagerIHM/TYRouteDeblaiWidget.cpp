@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -129,11 +129,11 @@ void TYRouteDeblaiWidget::updateContent()
     _elmW->updateContent();
 
     _lineEditVitMoy->setText(QString().setNum(getElement()->getVitMoy(), 'f', 2));
-    _pLineEditDebitPLJour->setText(QString().setNum(getElement()->getTraficJour()->getDebitPL()));
-    _pLineEditDebitVLJour->setText(QString().setNum(getElement()->getTraficJour()->getDebitVL()));
-    _pLineEditDebitPLNuit->setText(QString().setNum(getElement()->getTraficNuit()->getDebitPL()));
-    _pLineEditDebitVLNuit->setText(QString().setNum(getElement()->getTraficNuit()->getDebitVL()));
     _comboBoxTrafic->setCurrentIndex(getElement()->getModeCalc());
+    _pLineEditDebitPLJour->setText(QString().setNum(getElement()->getTraficJour().getDebitPL()));
+    _pLineEditDebitVLJour->setText(QString().setNum(getElement()->getTraficJour().getDebitVL()));
+    _pLineEditDebitPLNuit->setText(QString().setNum(getElement()->getTraficNuit().getDebitPL()));
+    _pLineEditDebitVLNuit->setText(QString().setNum(getElement()->getTraficNuit().getDebitVL()));
 }
 
 void TYRouteDeblaiWidget::apply()
@@ -142,10 +142,10 @@ void TYRouteDeblaiWidget::apply()
 
     getElement()->setVitMoy(_lineEditVitMoy->text().toDouble());
     getElement()->setModeCalc(_comboBoxTrafic->currentIndex());
-    getElement()->getTraficJour()->setDebitPL(_pLineEditDebitPLJour->text().toDouble());
-    getElement()->getTraficJour()->setDebitVL(_pLineEditDebitVLJour->text().toDouble());
-    getElement()->getTraficNuit()->setDebitPL(_pLineEditDebitPLNuit->text().toDouble());
-    getElement()->getTraficNuit()->setDebitVL(_pLineEditDebitVLNuit->text().toDouble());
+    getElement()->getTraficJour().setDebitPL(_pLineEditDebitPLJour->text().toDouble());
+    getElement()->getTraficJour().setDebitVL(_pLineEditDebitVLJour->text().toDouble());
+    getElement()->getTraficNuit().setDebitPL(_pLineEditDebitPLNuit->text().toDouble());
+    getElement()->getTraficNuit().setDebitVL(_pLineEditDebitVLNuit->text().toDouble());
 
     emit modified();
 }

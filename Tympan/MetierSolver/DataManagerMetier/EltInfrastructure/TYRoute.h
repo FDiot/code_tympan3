@@ -99,7 +99,8 @@ public:
     /**
      * Set/Get du trafic de jour.
      */
-    const LPTYTrafic getTraficJour() const { return _pTraficJour; }
+    const TYTrafic& getTraficJour() const { return traffic_regimes[Day]; }
+    TYTrafic& getTraficJour() { return traffic_regimes[Day]; }
 
     /**
      * Set/Get du trafic de jour.
@@ -109,7 +110,8 @@ public:
     /**
      * Set/Get du trafic de nuit.
      */
-    const LPTYTrafic getTraficNuit() const { return _pTraficNuit; }
+    const TYTrafic& getTraficNuit() const { return traffic_regimes[Night]; }
+    TYTrafic& getTraficNuit() { return traffic_regimes[Night]; }
 
     /**
      * Set/Get du trafic de nuit.
