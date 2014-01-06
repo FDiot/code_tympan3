@@ -154,6 +154,12 @@ private:
     virtual void distriSrcs()
     {assert(false && "You must use distriSrcs(const TYAltimetrie&) for roads");}
 
+    /**
+     * \brief internally set the RoadTraffic's array of RoadTrafficComponents
+     *        according to the given regime.
+     */
+    void setRoadTrafficArrayForRegime(enum TrafficRegimes regime);
+
 protected:
 
     RoadTrafficComponent& getRoadTrafficComponent(

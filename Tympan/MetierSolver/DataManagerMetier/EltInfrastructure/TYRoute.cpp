@@ -83,10 +83,7 @@ TYRoute::TYRoute(): _vitMoy(80),
     _tabRegimes[0].setName("Jour"); // TODO i18n
     _tabRegimes[1].setName("Nuit"); // TODO i18n
 
-    // TODO Proper handling of TYTrafic and regimes will come later
-    //      for now we are just introducing the new data model from NMPB2008
-    road_traffic.nbComponents= TYTrafic::NB_VEHICULE_TYPES; // LV & HGV
-    road_traffic.traffic = &traffic_regimes[Day].arr[0];
+    setRoadTrafficArrayForRegime(Day);
 }
 
 TYRoute::TYRoute(const TYRoute& other)
@@ -386,4 +383,10 @@ const RoadTrafficComponent& TYRoute::getRoadTrafficComponent(enum TrafficRegimes
 {
     assert(regime < NB_TRAFFIC_REGIMES);
     return traffic_regimes[regime].arr[vehic_type-1];
+}
+
+void TYRoute::setRoadTrafficArrayForRegime(enum TrafficRegimes regime)
+{
+    road_traffic.nbComponents = TYTrafic::NB_VEHICULE_TYPES; // LV & HGV
+    road_traffic.traffic = &traffic_regimes[regime].arr[0];
 }
