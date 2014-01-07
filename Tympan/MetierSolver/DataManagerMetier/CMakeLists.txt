@@ -6,7 +6,9 @@ link_directories(${NMPB2008_LIBRARY_DIR})
 
 file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h *.hpp)
 # Some problematic / unused source files to be removed
-#list(REMOVE_ITEM ${MODULE_NAME}_SRCS)
+list(REMOVE_ITEM ${MODULE_NAME}_SRCS
+  EltInfrastructure/TYRouteDeblai.cpp EltInfrastructure/TYRouteDeblai.h
+  )
 
 set_precompiled_header(${MODULE_NAME} CXX
   ${CMAKE_CURRENT_SOURCE_DIR}/TYPHMetier.h ${MODULE_NAME}_PCH_SRCS)
