@@ -150,11 +150,13 @@ DOM_Element TYRoute::toXML(DOM_Element& domElement)
 {
     DOM_Element domNewElem = TYAcousticLine::toXML(domElement);
 
-    TYXMLTools::addElementIntValue(domNewElem, "modeCalcul", _modeCalcul);
-    TYXMLTools::addElementDoubleValue(domNewElem, "vitMoy", _vitMoy);
+    // TODO update serialisation : cf. https://extranet.logilab.fr/ticket/1512503
 
-    _pTraficJour->toXML(domNewElem);
-    _pTraficNuit->toXML(domNewElem);
+    // TYXMLTools::addElementIntValue(domNewElem, "modeCalcul", _modeCalcul);
+    // TYXMLTools::addElementDoubleValue(domNewElem, "vitMoy", _vitMoy);
+
+    // _pTraficJour->toXML(domNewElem);
+    // _pTraficNuit->toXML(domNewElem);
 
     return domNewElem;
 }
@@ -163,34 +165,36 @@ int TYRoute::fromXML(DOM_Element domElement)
 {
     TYAcousticLine::fromXML(domElement);
 
-    bool modeCalculOk = false;
-    bool vitMoyOk = false;
-    bool traficJourFound = false;
-    bool traficNuitFound = false;
-    DOM_Element elemCur;
-    QDomNodeList childs = domElement.childNodes();
-    for (unsigned int i = 0; i < childs.length(); i++)
-    {
-        elemCur = childs.item(i).toElement();
-        TYXMLTools::getElementBoolValue(elemCur, "modeCalcul", _modeCalcul, modeCalculOk);
-        TYXMLTools::getElementDoubleValue(elemCur, "vitMoy", _vitMoy, vitMoyOk);
+    // TODO update serialisation: cf. https://extranet.logilab.fr/ticket/1512503
 
-        if (!traficJourFound)
-        {
-            traficJourFound = _pTraficJour->callFromXMLIfEqual(elemCur);
-        }
-        else if (!traficNuitFound)
-        {
-            traficNuitFound = _pTraficNuit->callFromXMLIfEqual(elemCur);
-        }
-    }
+    // bool modeCalculOk = false;
+    // bool vitMoyOk = false;
+    // bool traficJourFound = false;
+    // bool traficNuitFound = false;
+    // DOM_Element elemCur;
+    // QDomNodeList childs = domElement.childNodes();
+    // for (unsigned int i = 0; i < childs.length(); i++)
+    // {
+    //     elemCur = childs.item(i).toElement();
+    //     TYXMLTools::getElementBoolValue(elemCur, "modeCalcul", _modeCalcul, modeCalculOk);
+    //     TYXMLTools::getElementDoubleValue(elemCur, "vitMoy", _vitMoy, vitMoyOk);
 
-    if (_tabRegimes.size() == 1) // Cas d'un ancien fichier "sans regime"
-    {
-        addRegime(buildRegime()); // On rajoute un regime
-        _tabRegimes[0].setName("Jour");
-        _tabRegimes[1].setName("Nuit");
-    }
+    //     if (!traficJourFound)
+    //     {
+    //         traficJourFound = _pTraficJour->callFromXMLIfEqual(elemCur);
+    //     }
+    //     else if (!traficNuitFound)
+    //     {
+    //         traficNuitFound = _pTraficNuit->callFromXMLIfEqual(elemCur);
+    //     }
+    // }
+
+    // if (_tabRegimes.size() == 1) // Cas d'un ancien fichier "sans regime"
+    // {
+    //     addRegime(buildRegime()); // On rajoute un regime
+    //     _tabRegimes[0].setName("Jour");
+    //     _tabRegimes[1].setName("Nuit");
+    // }
 
     return 1;
 }
