@@ -22,9 +22,13 @@ set(TYMPAN_3RDPARTY_GTEST "${CMAKE_SOURCE_DIR}/3rdparty/gtest-1.6.0.zip"
 
 set(TYMPAN_3RDPARTY_DIME "${CMAKE_SOURCE_DIR}/3rdparty/dime-137851b034f6.zip"
   CACHE STRING "Where to fetch the external project Dime")
-
 set(TYMPAN_3RDPARTY_DIME_MD5  "8d144a016b3fb1cb1ac606d39ec7fccb"
     CACHE STRING "Checksum for the TYMPAN_3RDPARTY_DIME archive.")
+
+set(TYMPAN_3RDPARTY_NMPB2008 "${CMAKE_SOURCE_DIR}/3rdparty/NMPB2008.zip"
+  CACHE STRING "Where to fetch the external project NMBP2008")
+set(TYMPAN_3RDPARTY_NMPB2008_MD5  "00ef9956ed550e55c440968558dfc5e2"
+    CACHE STRING "Checksum for the TYMPAN_3RDPARTY_NMPB2008 archive.")
 
 ## If you are having trouble getting CMake find boost you probably want to set
 # set(Boost_DEBUG TRUE)
@@ -60,4 +64,3 @@ if (TYMPAN_BUILD_TEST)
 endif (TYMPAN_BUILD_TEST)
 
 include(tympan-install)
-
