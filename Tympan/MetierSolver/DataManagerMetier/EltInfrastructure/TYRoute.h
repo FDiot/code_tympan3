@@ -118,15 +118,8 @@ public:
      */
     //  void setTraficNuit(const LPTYTrafic pTrafic);
 
-    /*
-     * Set/Get du mode de calcul
-     */
-    bool getModeCalc() { return _modeCalcul; }
-
-    /*
-     * Set/Get du mode de calcul
-     */
-    void setModeCalc(const bool mode = true) { _modeCalcul = mode; }
+    // TODO in NMPB08 `mode calcul` is obsoleted. 
+    //      Is now represented by the RoadFlowType at RoadTrafficComponent level.
 
     /*
      * Calcul du spectre de la route en prenant en compte sont trafic
@@ -191,8 +184,6 @@ protected:
     LPTYTrafic _pTraficJour; // TODO  ongoing replacement
     ///Trafic de nuit
     LPTYTrafic _pTraficNuit; // TODO  ongoing replacement
-    /// Mode de calcul FLUIDE(true)/PULSE(false)
-    bool _modeCalcul; // TODO  ongoing replacement
     ///Spectre du bruit routier normalise pondere A (utilise par compute spectre)
 
 

@@ -31,7 +31,6 @@ OPROTOINST(TYRoute);
 
 
 TYRoute::TYRoute(): _vitMoy(80),
-    _modeCalcul(true),
     _offSet(0.05)
 {
     _name = TYNameManager::get()->generateName(getClassName());
@@ -101,7 +100,6 @@ TYRoute& TYRoute::operator=(const TYRoute& other)
     {
         TYAcousticLine::operator =(other);
         _vitMoy = other._vitMoy;
-        _modeCalcul = other._modeCalcul;
         _pTraficJour = other._pTraficJour;
         _pTraficNuit = other._pTraficNuit;
     }
@@ -114,7 +112,6 @@ bool TYRoute::operator==(const TYRoute& other) const
     {
         if (TYAcousticLine::operator !=(other)) { return false; }
         if (_vitMoy != other._vitMoy) { return false; }
-        if (_modeCalcul != other._modeCalcul) { return false; }
         if (_pTraficJour != other._pTraficJour) { return false; }
         if (_pTraficNuit != other._pTraficNuit) { return false; }
     }
@@ -133,7 +130,6 @@ bool TYRoute::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     TYRoute* pOtherRoute = (TYRoute*) pOther;
 
     _vitMoy = pOtherRoute->_vitMoy;
-    _modeCalcul = pOtherRoute->_modeCalcul;
 
     _pTraficJour->deepCopy(pOtherRoute->_pTraficJour, copyId);
     _pTraficNuit->deepCopy(pOtherRoute->_pTraficNuit, copyId);
