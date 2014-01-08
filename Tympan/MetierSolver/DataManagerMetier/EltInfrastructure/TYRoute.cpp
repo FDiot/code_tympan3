@@ -30,7 +30,7 @@
 OPROTOINST(TYRoute);
 
 
-TYRoute::TYRoute(): _vitMoy(80),
+TYRoute::TYRoute():
     _offSet(0.05)
 {
     _name = TYNameManager::get()->generateName(getClassName());
@@ -65,21 +65,21 @@ TYRoute::TYRoute(): _vitMoy(80),
 
     _regimeChangeAble = false;
 
-    _pTraficJour = new TYTrafic();
-    _pTraficJour->setParent(this);
-
-    _pTraficNuit = new TYTrafic();
-    _pTraficNuit->setParent(this);
+    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    {
+        traffic_regimes[i].setParent(this);
+        // On rajoute un ieme regime (un premier a ete construit par TYAcousticLine)
+        if (i>0) addRegime(buildRegime());
+    }
 
     _largeur = 3.5;
 
     _typeDistribution = TY_PUISSANCE_CALCULEE;
 
-    // On rajoute un deuxieme regime (un premier a ete construit par TYAcousticLine)
-    addRegime(buildRegime());
 
     // On nomme les regimes
     _tabRegimes[0].setName("Jour"); // TODO i18n
+    _tabRegimes[1].setName("Soir"); // TODO i18n
     _tabRegimes[1].setName("Nuit"); // TODO i18n
 
     setRoadTrafficArrayForRegime(Day);
@@ -99,9 +99,12 @@ TYRoute& TYRoute::operator=(const TYRoute& other)
     if (this != &other)
     {
         TYAcousticLine::operator =(other);
-        _vitMoy = other._vitMoy;
-        _pTraficJour = other._pTraficJour;
-        _pTraficNuit = other._pTraficNuit;
+        road_traffic = other.road_traffic;
+        for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+        {
+            traffic_regimes[i] = other.traffic_regimes[i];
+        }
+        setRoadTrafficArrayForRegime(Day);
     }
     return *this;
 }
@@ -111,9 +114,11 @@ bool TYRoute::operator==(const TYRoute& other) const
     if (this != &other)
     {
         if (TYAcousticLine::operator !=(other)) { return false; }
-        if (_vitMoy != other._vitMoy) { return false; }
-        if (_pTraficJour != other._pTraficJour) { return false; }
-        if (_pTraficNuit != other._pTraficNuit) { return false; }
+        // road_traffic = other.road_traffic; // XXX
+        for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+        {
+            if(traffic_regimes[i] != other.traffic_regimes[i]) { return false; };
+        }
     }
     return true;
 }
@@ -127,12 +132,15 @@ bool TYRoute::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
     if (!TYAcousticLine::deepCopy(pOther, copyId)) { return false; }
 
-    TYRoute* pOtherRoute = (TYRoute*) pOther;
+    const TYRoute* pOtherRoute = dynamic_cast<const TYRoute*>(pOther);
+    assert(pOtherRoute && "Invalid cast to TYRoute*");
 
-    _vitMoy = pOtherRoute->_vitMoy;
-
-    _pTraficJour->deepCopy(pOtherRoute->_pTraficJour, copyId);
-    _pTraficNuit->deepCopy(pOtherRoute->_pTraficNuit, copyId);
+    road_traffic = pOtherRoute->road_traffic;
+    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    {
+        traffic_regimes[i].deepCopy(&pOtherRoute->traffic_regimes[i], copyId);
+    }
+    setRoadTrafficArrayForRegime(Day);
 
     return true;
 }
@@ -195,11 +203,12 @@ int TYRoute::fromXML(DOM_Element domElement)
     return 1;
 }
 
-TYSpectre TYRoute::computeSpectre(const LPTYTrafic regime)
+TYSpectre TYRoute::computeSpectre(enum TrafficRegimes regime)
 {
     TYSpectre s;
 
     double penteMoy = calculPenteMoyenne();
+    TYTrafic& trafic = traffic_regimes[regime];
 
     // TODO Do actually call here the RoadEmissionNMPB08 library
 
@@ -281,16 +290,14 @@ bool TYRoute::updateAcoustic(const bool& force) //force = false
 {
     if (_typeDistribution == TY_PUISSANCE_CALCULEE)
     {
-        // Calcul des spectres correspondant aux regimes jours et nuit
-        TYSpectre traficJour = computeSpectre(_pTraficJour);
-        TYSpectre traficNuit = computeSpectre(_pTraficNuit);
-
-        traficJour.setType(SPECTRE_TYPE_LW);
-        traficNuit.setType(SPECTRE_TYPE_LW);
-
-        // Affectation des regimes
-        _tabRegimes[0].setSpectre(traficJour);
-        _tabRegimes[1].setSpectre(traficNuit);
+        for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+        {
+            // Calcul des spectres correspondant aux regimes jours et nuit
+            TYSpectre spectrum = computeSpectre(static_cast<enum TrafficRegimes>(i));
+            spectrum.setType(SPECTRE_TYPE_LW);
+            // Affectation des regimes
+            _tabRegimes[i].setSpectre(spectrum);
+        }
     }
 
     // NB : The sources are expected to have already been created during

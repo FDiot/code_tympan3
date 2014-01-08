@@ -86,15 +86,20 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
+    // TODO/WIP The speed is modelised at the RoadTrafficComponent in NMPB08
     /**
      * Set/Get de la vitesse moyenne.
      */
-    double getVitMoy() const { return _vitMoy; }
+    double getVitMoy() const { return getTraficJour().lv.trafficSpeed; }
 
+    // TODO/WIP The speed is modelised at the RoadTrafficComponent in NMPB08
     /**
      * Set/Get de la vitesse moyenne.
      */
-    void setVitMoy(double vit) { _vitMoy = vit; }
+    void setVitMoy(double vit) {
+       getTraficJour().lv.trafficSpeed = vit;
+       getTraficNuit().hgv.trafficSpeed = vit;
+    }
 
     /**
      * Set/Get du trafic de jour.
@@ -118,13 +123,13 @@ public:
      */
     //  void setTraficNuit(const LPTYTrafic pTrafic);
 
-    // TODO in NMPB08 `mode calcul` is obsoleted. 
+    // TODO in NMPB08 `mode calcul` is obsoleted.
     //      Is now represented by the RoadFlowType at RoadTrafficComponent level.
 
     /*
      * Calcul du spectre de la route en prenant en compte sont trafic
      */
-    TYSpectre computeSpectre(const LPTYTrafic regime);
+    TYSpectre computeSpectre(enum TrafficRegimes regime);
 
     /**
      * Mise a jour des caracteristiques acoustiques de la route
@@ -177,15 +182,6 @@ protected:
 
     RoadTraffic road_traffic;
     TYTrafic traffic_regimes[NB_TRAFFIC_REGIMES];
-
-    ///Vitesse Moyenne
-    double _vitMoy; // TODO  ongoing replacement
-    ///Trafic de jour
-    LPTYTrafic _pTraficJour; // TODO  ongoing replacement
-    ///Trafic de nuit
-    LPTYTrafic _pTraficNuit; // TODO  ongoing replacement
-    ///Spectre du bruit routier normalise pondere A (utilise par compute spectre)
-
 
     // Hauteur des sources par rapport a la route
     double _offSet;
