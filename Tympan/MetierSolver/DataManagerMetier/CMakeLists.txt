@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 set(MODULE_NAME tympan_dm_metier)
 
-#include_directories(${NMPB2008_INCLUDE_DIR}) # Already done at top level
-link_directories(${NMPB2008_LIBRARY_DIR})
-
 file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h *.hpp)
 # Some problematic / unused source files to be removed
 list(REMOVE_ITEM ${MODULE_NAME}_SRCS
@@ -21,6 +18,6 @@ if(LOGILAB_USE_PRECOMPILED_HEADER)
 endif(LOGILAB_USE_PRECOMPILED_HEADER)
 add_dependencies(${MODULE_NAME} NMPB2008 tympan_tools_metier tympan_solver_data_model tympan_tools tympan_dm_core tympan_tools_graphics)
 
-target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${CGAL_LIBRARIES} tympan_tools_metier tympan_solver_data_model tympan_tools tympan_dm_core tympan_tools_graphics)
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${CGAL_LIBRARIES} RoadEmissionNMPB2008 tympan_tools_metier tympan_solver_data_model tympan_tools tympan_dm_core tympan_tools_graphics)
 
 install_tympan_component(${MODULE_NAME})
