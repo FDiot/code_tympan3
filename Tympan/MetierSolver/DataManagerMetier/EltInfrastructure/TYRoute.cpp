@@ -205,23 +205,24 @@ int TYRoute::fromXML(DOM_Element domElement)
 
 TYSpectre TYRoute::computeSpectre(enum TrafficRegimes regime)
 {
-    TYSpectre s;
-
     double penteMoy = calculPenteMoyenne();
-    TYTrafic& trafic = traffic_regimes[regime];
+    // TODO use mean declivity in some way or another !
 
-    // TODO Do actually call here the RoadEmissionNMPB08 library
+    // This updates the road_traffic to point to the array of RoadTrafficComponents
+    // corresponding to the selected regime.
+    setRoadTrafficArrayForRegime(regime);
 
-    // Mise en spectre
-    double valeur = 0.0;
-    for (unsigned int i = 0 ; i < s.getNbValues() ; i++)
-    {
-        // TODO Convert here the results from the RoadEmissionNMPB08 library
-        //      insto the TYSpectre representation of Code_TYMPAN
-        s.getTabValReel()[i] = valeur;
-    }
+    // TODO check whether Spectrum_3oct_lin or Spectrum_3oct_A is the right one (TM)
+    double * tab = NMPB08_Lwm(&road_traffic, Spectrum_3oct_lin);
 
-    return s;
+    // This initialise `s` with the 18 values provided in `tab`
+    // Because the 1st frequency provided by NMPB08 is 100Hz whereas 100Hz
+    // is the 9th frequency in Code_TYMPAN representation the offset is 8
+    // Both spectrum uses 3rd octave as frequency steps and the common
+    // higest frequency is 5000Hz.
+    OSpectre s(tab, 18, 8);
+
+    return TYSpectre(s);
 }
 
 double TYRoute::calculPenteMoyenne()
