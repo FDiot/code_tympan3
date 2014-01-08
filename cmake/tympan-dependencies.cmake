@@ -126,13 +126,25 @@ ExternalProject_Add(Dime
 
 # Get some properties from Dime project.
 ExternalProject_Get_Property (Dime SOURCE_DIR BINARY_DIR)
-
 # SOURCE_DIR is related to the Dime project.
 include_directories (${SOURCE_DIR}/include)
-
 # BINARY_DIR is related to the Dime project.
 link_directories (${BINARY_DIR}/src)
 
+
+# Add the NMPB2008 library 3rd party as an external project.
+ExternalProject_Add(NMPB2008
+  URL "${TYMPAN_3RDPARTY_NMPB2008}"
+  # URL_MD5 "${TYMPAN_3RDPARTY_DIME_MD5}"
+  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+  BUILD_IN_SOURCE 0
+)
+# Get some properties from NMPB2008 project.
+ExternalProject_Get_Property(NMPB2008 INSTALL_DIR)
+# INSTALL_DIR is now related to the NMPB2008 project.
+set(NMPB2008_INSTALL_DIR ${INSTALL_DIR})
+set(NMPB2008_INCLUDE_DIR ${NMPB2008_INSTALL_DIR}/include)
+set(NMPB2008_LIBRARY_DIR ${NMPB2008_INSTALL_DIR}/lib)
 
 message(STATUS "  ## TYMPAN_3RDPARTY_DLL_DIRS: " "${TYMPAN_3RDPARTY_DLL_DIRS}")
 message(STATUS "  ## TYMPAN_3RDPARTY_DLL_NATIVE_DIRS: " "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
