@@ -37,6 +37,7 @@ add_subdirectory(test_utils)
 add_executable(test_example test_example.cpp)
 set_property(TARGET test_example PROPERTY FOLDER ${CURRENT_FOLDER})
 
+add_dependencies(test_example GTest)
 target_link_libraries(test_example gtest_main gtest ${CMAKE_THREAD_LIBS_INIT})
 add_test(test_example test_example)
 set_property(TEST test_example PROPERTY ENVIRONMENT "${LD_VARNAME}=${ADD_PATH_STRING}")
