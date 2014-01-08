@@ -32,6 +32,7 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRouteGraphic.h"
 #endif
 
+#include "RoadEmissionNMPB08.h"
 
 ///Noeud geometrique de type TYRoute.
 typedef TYGeometryNode TYRouteGeoNode;
@@ -177,6 +178,9 @@ protected:
 
     // Membres
 protected:
+
+    RoadTraffic road_traffic;
+    // TODO / WIP Replace that with RoadTraffic from RoadEmissionNMPB08
     ///Vitesse Moyenne
     double _vitMoy;
     ///Trafic de jour
