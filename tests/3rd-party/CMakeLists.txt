@@ -1,8 +1,5 @@
 file (GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp )
 
-include_directories(${NMPB2008_INCLUDE_DIR})
-link_directories(${NMPB2008_LIBRARY_DIR})
-
 # Main loop for all CPP test files.
 foreach (testfile ${TESTS_SRC})
   get_filename_component (basename ${testfile} NAME_WE)
