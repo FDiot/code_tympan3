@@ -89,15 +89,15 @@ vector<R3> Lancer::EqRay(const vector<R3>& y0, const meteo& Meteo)              
     R3 Dc = R3();
     R c = Meteo.cLin(y0[0], Dc);
 
-    map<pair<int, int>, double> Jv;
+    map<pair<int, int>, R> Jv;
     R3 v = Meteo.vent(y0[0], Jv);
 
     // definition de s (normale normalisee selon la celerite effective) et de Omega
     R3 s = y0[1];
-    R omega = 1 - (v, s);
+    R omega = 1 - (v * s);
 
     // on calcule les coordonnees
-    y.push_back(c * c / omega * s + v);
+    y.push_back( (s * (c * c / omega) ) + v ); //(c * c / omega * s + v)
 
     // on calcule les normales
     n.x = - omega / c * Dc.x - Jv[make_pair(1, 1)] * s.x - Jv[make_pair(1, 2)] * s.y - Jv[make_pair(1, 3)] * s.z;
@@ -135,12 +135,12 @@ R3 Lancer::intersection(const R3& S, const R3& R, const R3* A, int& reflexion, c
     R3 I;
     int test = 0;
     reflexion = 2;
-    R3 u = SR / SR.norme(); // u : Vecteur directeur du trajet SR
+	R3 u = SR / SR.length(); // u : Vecteur directeur du trajet SR
 
     // Premier test : on calcule u.n
     // Si le produit scalaire est positif ou nul, on ne rencontrera pas la face (on est respectivement en sens inverse ou parallele).
 
-    double tmp = u.mult(nExt_plan);
+    double tmp = u * nExt_plan; //u.mult(nExt_plan);
 
     if (tmp >= 0)
     {
@@ -150,7 +150,7 @@ R3 Lancer::intersection(const R3& S, const R3& R, const R3* A, int& reflexion, c
     }
 
     // Deuxieme test : on regarde si le rayon va dans la direction du plan
-
+	
     R3 A1 = A[0];
     R3 A2 = A[1];
     R3 A3 = A[2];
@@ -159,9 +159,9 @@ R3 Lancer::intersection(const R3& S, const R3& R, const R3* A, int& reflexion, c
     R3 SA2(S, A2);
     R3 SA3(S, A3);
 
-    double uu1 = u.mult(SA1);
-    double uu2 = u.mult(SA2);
-    double uu3 = u.mult(SA3);
+    double uu1 = u * SA1;
+    double uu2 = u * SA2;
+    double uu3 = u * SA3;
 
     if ((uu1 < 0) && (uu2 < 0) && (uu3 < 0))
     {
@@ -172,9 +172,9 @@ R3 Lancer::intersection(const R3& S, const R3& R, const R3* A, int& reflexion, c
 
     // Troisieme test : on regarde si le produit scalaire entre u et chaque normale des 3 faces du tetraedre SA1A2A3 est negatif, c'est-a-dire si notre rayon entre dans le tetraedre.
 
-    double u1 = u.mult(SA1 ^ SA2);
-    double u2 = u.mult(SA2 ^ SA3);
-    double u3 = u.mult(SA3 ^ SA1);
+    double u1 = u * (SA1 ^ SA2);
+    double u2 = u * (SA2 ^ SA3);
+    double u3 = u * (SA3 ^ SA1);
 
     if ((u1 >= 0) || (u2 >= 0) || (u3 >= 0))
     {
@@ -187,7 +187,7 @@ R3 Lancer::intersection(const R3& S, const R3& R, const R3* A, int& reflexion, c
 
     // Dernier test : on regarde si on arrive sur la face
 
-    double l = SA1.mult(nExt_plan);
+    double l = SA1 * nExt_plan;
     l = l / tmp;
 
     // On calcule la longueur l du trajet SI ou I est le point d'impact sur la face
@@ -195,7 +195,7 @@ R3 Lancer::intersection(const R3& S, const R3& R, const R3* A, int& reflexion, c
 
     if (test != 0)
     {
-        if (l > SR.norme())
+        if (l > SR.length())
         {
             // Le trajet ne rencontre pas la face, il s'arrete avant ...
             reflexion = 0;
@@ -205,7 +205,7 @@ R3 Lancer::intersection(const R3& S, const R3& R, const R3* A, int& reflexion, c
         {
             // Le point d'intersection a pour coordonnees S+l*u
             reflexion = 1;
-            I = S + l * u;
+            I = S + (u * l);
         }
     }
 
@@ -257,12 +257,12 @@ RayCourb Lancer::RK4(const vector<R3>& y0, const vector<R3*>& plan, const R3& so
         int r, rmin;
         bool premiere = 1;                                    // variable boolenne pour savoir si on a deja rencontre un objet ou pas
 
-        k1 = h * EqRay(yAct, Meteo);
-        k2 = h * EqRay(yAct + 0.5 * k1, Meteo);
-        k3 = h * EqRay(yAct + 0.5 * k2, Meteo);
-        k4 = h * EqRay(yAct + k3, Meteo);
+        k1 = EqRay(yAct, Meteo) * h;
+        k2 = EqRay(yAct + k1 * 0.5, Meteo) * h;
+        k3 = EqRay(yAct + k2 * 0.5, Meteo) * h;
+        k4 = EqRay(yAct + k3, Meteo);
 
-        ySuiv = yAct + 1. / 6. * (k1 + 2 * k2 + 2 * k3 + k4);
+        ySuiv = yAct + ( ( k1 + k2 * 2. + k3 * 2. + k4 ) * ( 1. / 6. ) );
 
         // reflexions: on boucle sur tous les objets existants
         for (r = 0; static_cast<unsigned int>(r) < plan.size(); ++r)
@@ -273,7 +273,7 @@ RayCourb Lancer::RK4(const vector<R3>& y0, const vector<R3*>& plan, const R3& so
 
             // on determine la normale exterieure n a ce plan
             n = u ^ v;
-            n = n / n.norme();
+            n = n / n.length();
 
             // on calcule le point d'intersection entre le rayon et l'objet
             I = intersection(yAct[0], ySuiv[0], plan[r], intersec, n, yAct[1]);
@@ -320,10 +320,10 @@ RayCourb Lancer::RK4(const vector<R3>& y0, const vector<R3*>& plan, const R3& so
             ySuiv[0] = Imin;
 
             // on calcule le cosinus de l'angle forme par le rayon qui arrive et la normale n
-            R cos_angle = - nmin.mult(yAct[1] / yAct[1].norme());
+            R cos_angle = ( -nmin ) * ( yAct[1] / yAct[1].length() );
 
             // enfin, on calcule la normale du rayon reflechi
-            ySuiv[1] = yAct[1] + 2 * cos_angle * nmin * yAct[1].norme();
+            ySuiv[1] = yAct[1] + nmin * yAct[1].length() * cos_angle * 2.;
 
             y.rencontre.insert(pair<int, int>(cpt_tps, rmin));
         }
@@ -382,10 +382,10 @@ void Lancer::RemplirMat()
                 R3 nMax(cos(finalAnglePhi * PI / 180.0), 0,  sin(finalAnglePhi * PI / 180.0));
 
 				// angle de variation des rayons
-                R alpha = -acos(nMin.mult(nMax));
+                R alpha = -acos( nMin * nMax );
 
 				// angle entre l'axe des y et nMin
-                R phi = acos(nMin.mult(R3(0, 0, 1))); 
+                R phi = acos( nMin * R3(0, 0, 1) ); 
                 R theta = initialAngleTheta * PI / 180.0;
                 n0 = R3(sin(phi + k * alpha / nbRay) * cos(theta), sin(theta) * sin(phi + k * alpha / nbRay), cos(phi + k * alpha / nbRay));
             }
@@ -411,9 +411,9 @@ void Lancer::RemplirMat()
                 n0 = R3(cos(theta) * cos(phi), cos(phi) * sin(theta), sin(phi));
             }
 
-            n0 = n0 / n0.norme();
+            n0 = n0 / n0.length();
 
-            s0 = n0 / (Meteo.cLin(source, grad) + (Meteo.vent(source, jacob), n0));
+            s0 = n0 / ( Meteo.cLin( source, grad ) + ( Meteo.vent( source, jacob ) * n0 ) );
             y0.push_back(s0);
 
             // on resoud l'equation par la methode de runge-kutta d'ordre 4

@@ -23,12 +23,13 @@
 #include <map>
 #include <iostream>
 
+#include "R3.h"
 #include "meteo.h"
 
 using namespace std;
 
-typedef double R;
-class R3;
+//typedef double R;
+//class R3;
 
 class RayCourb
 {

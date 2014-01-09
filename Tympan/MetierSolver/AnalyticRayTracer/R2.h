@@ -22,6 +22,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
+#include "../AcousticRaytracer/Geometry/mathlib.h"
 
 // Definition de la class R2
 //  sans compilation separe toute les fonctions
@@ -31,8 +32,10 @@
 // remarque la fonction abort est definie dans
 // #include <cstdlib>
 
-typedef double R;
+typedef decimal R;
+typedef vec2 R2;
 
+/*
 // The class R2
 class R2
 {
@@ -88,5 +91,5 @@ public:
     friend  std::istream& operator >>(std::istream& f,  R2& P)
     { f >>  P.x >>  P.y  ; return f; }
 };
-
+*/
 #endif

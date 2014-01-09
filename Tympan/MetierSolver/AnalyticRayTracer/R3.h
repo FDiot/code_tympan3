@@ -26,15 +26,18 @@
 #include <cassert>
 #include <cstdlib>
 #include <iostream>
-#include "R2.h"
 #include <vector>
+#include "R2.h"
 #include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
 
-typedef double R;
+//typedef double R;
 
 #define EPSILON 0.000001
 #define PI (4*atan(1.0))
 
+typedef vec3 R3;
+
+/*
 class R3
 {
 
@@ -118,6 +121,7 @@ inline std::vector<R3> operator + (const std::vector<R3>& u, const std::vector<R
     for (unsigned int i = 0; i < v.size(); ++i) { result.push_back(u[i] + v[i]); }
     return result;
 }
+*/
 
 /*!
  * \fn OPoint3D R3ToOPoint3D(const R3& p)
