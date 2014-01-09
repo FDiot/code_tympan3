@@ -22,7 +22,7 @@
 #define __METEO_H
 
 #include <map>
-#include "../AcousticRaytracer/Geometry"
+#include "../AcousticRaytracer/Geometry/mathlib.h"
 
 /*! \class meteo
 * \brief classe representant les donnees meteo relatives au calcul.

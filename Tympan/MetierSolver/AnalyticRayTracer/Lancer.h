@@ -27,7 +27,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
-#include "../AcousticRaytracer/Geometry"
+#include "../AcousticRaytracer/Geometry/mathlib.h"
 #include "meteo.h"
 
 

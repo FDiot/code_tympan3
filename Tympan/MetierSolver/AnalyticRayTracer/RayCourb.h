@@ -23,10 +23,8 @@
 #include <map>
 #include <iostream>
 
-#include "R3.h"
 #include "meteo.h"
 
-class vec3;
 using namespace std;
 
 //typedef double R;

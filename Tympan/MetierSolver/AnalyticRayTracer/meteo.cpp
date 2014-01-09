@@ -49,7 +49,7 @@ vec3 meteo::vent(const vec3& P, std::map<std::pair<int, int>, decimal> &jacob) c
     // calcul du vent : on a une fonction lineaire fonction de la coordonnee z du point
     vec3 v;
 
-	double angle = -(PI/2.0) - (windDirection * PI /180.0);
+	double angle = -(M_PI/2.0) - (windDirection * M_PI /180.0);
 	double DVx = cos(angle) * gradV;
 	double DVy = sin(angle) * gradV;
 

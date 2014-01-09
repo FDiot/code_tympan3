@@ -47,8 +47,13 @@ typedef float decimal;
 #ifndef M_PI
 #define M_PI                (decimal)3.141592653589793238462643383279       /*!< PI */
 #endif
+
 #define M_PIDIV2            (decimal)1.570796326794896619231321691639       /*!< PI / 2 */
+
+#ifndef M_2PI
 #define M_2PI               (decimal)6.283185307179586476925286766559       /*!< 2 * PI */
+#endif
+
 #define M_PI2               (decimal)9.869604401089358618834490999876       /*!< PI au carre */
 #define M_PIDIV180          (decimal)0.01745329251994329576923690768488     /*!< PI / 180 */
 #define M_180DIVPI          (decimal)57.295779513082320876798154814105      /*!< 180 / PI */
