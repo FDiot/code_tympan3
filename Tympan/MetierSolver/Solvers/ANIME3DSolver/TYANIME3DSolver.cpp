@@ -47,7 +47,6 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
 
-#include "Tympan/MetierSolver/AnalyticRayTracer/R3.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/RayCourb.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/Lancer.h"

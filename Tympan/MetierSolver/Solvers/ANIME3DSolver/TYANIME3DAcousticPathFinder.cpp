@@ -213,7 +213,7 @@ TYPoint TYANIME3DAcousticPathFinder::computePosGlobalPoint(const TYGeometryNode*
 }
 
 
-void TYANIME3DAcousticPathFinder::appendSourceToAnalyticRayTracer(vector<R3>& tabR3Sources)
+void TYANIME3DAcousticPathFinder::appendSourceToAnalyticRayTracer(vector<vec3>& tabR3Sources)
 {
     //Nettoyage du tableau des sources
     tabR3Sources.clear();
@@ -225,7 +225,7 @@ void TYANIME3DAcousticPathFinder::appendSourceToAnalyticRayTracer(vector<R3>& ta
     {
 		OPoint3D globalPos = computePosGlobalPoint(_tabSources.at(i));
 
-        R3 pos = R3(globalPos._x, globalPos._y, globalPos._z);
+        vec3 pos = vec3(globalPos._x, globalPos._y, globalPos._z);
 
         tabR3Sources.push_back(pos);
 
@@ -233,7 +233,7 @@ void TYANIME3DAcousticPathFinder::appendSourceToAnalyticRayTracer(vector<R3>& ta
     }
 }
 
-void TYANIME3DAcousticPathFinder::appendRecepteurToAnalyticRayTracer(vector<R3>& tabR3Recept)
+void TYANIME3DAcousticPathFinder::appendRecepteurToAnalyticRayTracer(vector<vec3>& tabR3Recept)
 {
     // Nettoyage du tableau des recepteurs
     tabR3Recept.clear();
@@ -246,7 +246,7 @@ void TYANIME3DAcousticPathFinder::appendRecepteurToAnalyticRayTracer(vector<R3>&
     {
 		OPoint3D pos = computePosGlobalPoint(_tabRecepteurs.at(i));
 
-        R3 unPoint(pos._x, pos._y, pos._z);
+        vec3 unPoint(pos._x, pos._y, pos._z);
         tabR3Recept.push_back(unPoint);
     }
 }
@@ -272,7 +272,7 @@ vec3 TYANIME3DAcousticPathFinder::modifGeom(const vec3& point)
 {
     if (!globalUseMeteo) { return point; } // Aucune action si pas meteo
 
-    R3 mPoint(point.x, point.y, point.z);
+    vec3 mPoint(point.x, point.y, point.z);
     mPoint = _curveRayTracing.fonction_h(mPoint);
 
     return vec3(mPoint.x, mPoint.y, mPoint.z);
@@ -598,11 +598,11 @@ void TYANIME3DAcousticPathFinder::convertRayEventToTYRayEvent(const QSharedPoint
 void TYANIME3DAcousticPathFinder::calculeAngleTirRayon(TYRay* tyRay)
 {
     TYTabRayEvent& tabEvent = tyRay->getEvents();
-	R3 P0 = OPoint3DtoR3(tabEvent[0]->pos);
-    R3 P1 = OPoint3DtoR3(tabEvent[1]->pos);
-    R3 v0(P0, P1);
-    R3 v1(v0);
-    R3 v2(v0);
+	vec3 P0 = OPoint3Dtovec3(tabEvent[0]->pos);
+    vec3 P1 = OPoint3Dtovec3(tabEvent[1]->pos);
+    vec3 v0(P0, P1);
+    vec3 v1(v0);
+    vec3 v2(v0);
     v1.z = 0;
     v2.y = 0;
     v0.normalize();
@@ -610,14 +610,14 @@ void TYANIME3DAcousticPathFinder::calculeAngleTirRayon(TYRay* tyRay)
     v2.normalize();
 
     // Angle phi
-    double result = v0.mult(v1);
+    double result = v0 * v1;
     int sign = v0.z > 0 ?  1 : -1;
-    R angle = ::acos(result) * sign;
+    double angle = ::acos(result) * sign;
 
     tabEvent[0]->angle = angle;
 
     // Angle theta
-    result = v0.mult(v2);
+    result = v0 * v2;
     sign = v0.y > 0 ?  1 : -1;
     angle = ::acos(result) * sign;
     angle = v0.x < 0 ? M_PI - angle : angle;
@@ -706,9 +706,9 @@ void TYANIME3DAcousticPathFinder::eventPosCompute(TYRay *tyRay)
 		// Boucle sur tous les évènements du rayon
 		for (unsigned i=0; i<tabEvent.size(); i++)
 		{
-			R3 point = OPoint3DtoR3(tabEvent[i]->pos);
+			vec3 point = OPoint3Dtovec3(tabEvent[i]->pos);
 			point = _curveRayTracing.fonction_h_inverse(point);
-			tabEvent[i]->pos = R3toOPoint3D(point);
+			tabEvent[i]->pos = vec3toOPoint3D(point);
 		}
 }
 
@@ -720,9 +720,9 @@ double TYANIME3DAcousticPathFinder::lengthCorrection(TYRayEvent *ev1, const TYRa
 	// Useful for lengths & angles
 	for (int i=0; i<tabPoint.size(); i++)
 	{
-		R3 point = OPoint3DtoR3(tabPoint[i]);
+		vec3 point = OPoint3Dtovec3(tabPoint[i]);
 		point = _curveRayTracing.fonction_h_inverse(point);
-		tabPoint[i] = R3toOPoint3D(point);
+		tabPoint[i] = vec3toOPoint3D(point);
 	}
 
 	double length = 0.;
@@ -745,9 +745,9 @@ double TYANIME3DAcousticPathFinder::angleCorrection(const TYRayEvent *ev1, TYRay
 	OPoint3D points[3] = { tabPoint1.at(tabPoint1.size()-2), tabPoint1.at(tabPoint1.size()-1), tabPoint2.at(1) };
 	for (int i=0; i<3; i++)
 	{
-		R3 point = OPoint3DtoR3(points[i]);
+		vec3 point = OPoint3Dtovec3(points[i]);
 		point = _curveRayTracing.fonction_h_inverse(point);
-		points[i] = R3toOPoint3D(point);
+		points[i] = vec3toOPoint3D(point);
 	}
 
 	OVector3D vec1(points[1], points[0]);
@@ -768,9 +768,9 @@ void TYANIME3DAcousticPathFinder::tyRayCorrection(TYRay *tyRay)
 	// Repositionnement des elements du rayon
 	for (unsigned i=0; i<tabEvents.size(); i++)
 	{
-		R3 point = OPoint3DtoR3(tabEvents[i]->pos);
+		vec3 point = OPoint3Dtovec3(tabEvents[i]->pos);
 		point = _curveRayTracing.fonction_h(point);
-		tabEvents[i]->pos = R3toOPoint3D(point);
+		tabEvents[i]->pos = vec3toOPoint3D(point);
 	}
 
 	tyRay->overSample(globalOverSampleD);
@@ -779,8 +779,8 @@ void TYANIME3DAcousticPathFinder::tyRayCorrection(TYRay *tyRay)
 
 	for (unsigned int i=0 ; i<tabEvents2.size() ; i++)
 	{
-		R3 point = OPoint3DtoR3(tabEvents2[i]->pos);
+		vec3 point = OPoint3Dtovec3(tabEvents2[i]->pos);
 		point = _curveRayTracing.fonction_h_inverse(point);
-		tabEvents2[i]->pos = R3toOPoint3D(point);
+		tabEvents2[i]->pos = vec3toOPoint3D(point);
 	}
 }
