@@ -55,7 +55,7 @@ void Transfo::purge()
 
     for (unsigned int i = 0; i < planTransfo.size(); i++)
     {
-        R3* plan = planTransfo[i];
+        vec3* plan = planTransfo[i];
         if (planTransfo[i]) { delete [] planTransfo[i]; }
         planTransfo[i] = NULL;
     }
@@ -88,11 +88,11 @@ void Transfo::Init()
 }
 
 
-R Transfo::distance_max()
+decimal Transfo::distance_max()
 {
-    R result = 0;
+    decimal result = 0;
 
-    R3 src, rcpt;
+    vec3 src, rcpt;
 
     for (unsigned int nr = 0; nr < recepteurs.size(); ++nr)
     {
@@ -107,7 +107,7 @@ R Transfo::distance_max()
 
 void Transfo::createTemps()
 {
-    R T = 0.0;
+    decimal T = 0.0;
     do
     {
         temps.push_back(T);
@@ -133,7 +133,7 @@ void Transfo::createShot()
     shot.run();
 }
 
-void Transfo::RemplirSurf(vector<R3>& vectSurf_Interp)
+void Transfo::RemplirSurf(vector<vec3>& vectSurf_Interp)
 {
     vectSurf_Interp.reserve(nbRay * shot.temps.size() + 10);
 
@@ -141,22 +141,22 @@ void Transfo::RemplirSurf(vector<R3>& vectSurf_Interp)
     {
         for (unsigned int j = 0; j < shot.MatRes[0][i].coord.size(); ++j)                         // boucle sur les points du rayon
         {
-			R3 point(shot.MatRes[0][i].coord[j].x, shot.MatRes[0][i].coord[j].y, shot.MatRes[0][i].coord[j].z);
+			vec3 point(shot.MatRes[0][i].coord[j].x, shot.MatRes[0][i].coord[j].y, shot.MatRes[0][i].coord[j].z);
 			vectSurf_Interp.push_back(point);
 		}
 	}
 }
 
-R3 Transfo::fonction_h(const R3& P)
+vec3 Transfo::fonction_h(const vec3& P)
 {
     // c'est notre fonction h(x,y) qui transforme notre geometrie
 
-    R3 R(P);
+    vec3 R(P);
 
     // On cherche a quel triangle de Surf_Interp le point P appartient.
     // Un point P appartient au triangle ABC si l'aire signee des triangles ABP, BCP et CAP est positive.
 
-    R3* TabTriangle = new R3[3];
+    vec3* TabTriangle = new vec3[3];
 
     for (int i = 0; i < Liste_triangles.size(); ++i)
     {
@@ -168,9 +168,9 @@ R3 Transfo::fonction_h(const R3& P)
         OPoint3D v2 = list_vertex[Liste_triangles[i]._p2];
         OPoint3D v3 = list_vertex[Liste_triangles[i]._p3];
 
-		TabTriangle[0] = R3(v1._x, v1._y, v1._z);
-        TabTriangle[1] = R3(v2._x, v2._y, v2._z);
-        TabTriangle[2] = R3(v3._x, v3._y, v3._z);
+		TabTriangle[0] = vec3(v1._x, v1._y, v1._z);
+        TabTriangle[1] = vec3(v2._x, v2._y, v2._z);
+        TabTriangle[2] = vec3(v3._x, v3._y, v3._z);
 
         if (IsInTriangle(P, TabTriangle))
         {
@@ -185,16 +185,16 @@ R3 Transfo::fonction_h(const R3& P)
 }
 
 
-R3 Transfo::fonction_h_inverse(const R3& P)
+vec3 Transfo::fonction_h_inverse(const vec3& P)
 {
     // Fonction inverse de la fonction h.
 
-    R3 R(P);
+    vec3 R(P);
 
     // On cherche a quel triangle de Surf_Interp le point P appartient.
     // Un point P appartient au triangle ABC si l'aire signee des triangles ABP, BCP et CAP est positive.
     
-    R3* TabTriangle = new R3[3];
+    vec3* TabTriangle = new vec3[3];
 
     for (int i = 0; i < Liste_triangles.size(); ++i)
     {
@@ -205,9 +205,9 @@ R3 Transfo::fonction_h_inverse(const R3& P)
         OPoint3D v2 = list_vertex[Liste_triangles[i]._p2];
         OPoint3D v3 = list_vertex[Liste_triangles[i]._p3];
 
-		TabTriangle[0] = R3(v1._x, v1._y, v1._z);
-        TabTriangle[1] = R3(v2._x, v2._y, v2._z);
-        TabTriangle[2] = R3(v3._x, v3._y, v3._z);
+		TabTriangle[0] = vec3(v1._x, v1._y, v1._z);
+        TabTriangle[1] = vec3(v2._x, v2._y, v2._z);
+        TabTriangle[2] = vec3(v3._x, v3._y, v3._z);
 
         if (IsInTriangle(P, TabTriangle))
         {
@@ -225,7 +225,7 @@ R3 Transfo::fonction_h_inverse(const R3& P)
 
 void Transfo::trianguleNappe()
 {
-     vector<R3> vectSurf_Interp;  // vector qui contient les coordonnees des points dans l'ordre (coord de P1, coord de P2, ...)
+     vector<vec3> vectSurf_Interp;  // vector qui contient les coordonnees des points dans l'ordre (coord de P1, coord de P2, ...)
 	 RemplirSurf(vectSurf_Interp);
 
 	// 1- On creer nos triangles de Delaunay
@@ -234,7 +234,7 @@ void Transfo::trianguleNappe()
 
 	for (unsigned int i=0; i<vectSurf_Interp.size(); i++)
 	{
-        R3 point(vectSurf_Interp[i].x, vectSurf_Interp[i].y, vectSurf_Interp[i].z);
+        vec3 point(vectSurf_Interp[i].x, vectSurf_Interp[i].y, vectSurf_Interp[i].z);
 		oDelaunayMaker.addVertex(OPoint3D(point.x, point.y, point.z));
 	}
 
@@ -272,7 +272,7 @@ void Transfo::Transfo_Geom1()
         // On boucle sur les triangles du plan de depart
         // On construit le nouveau triangle (triangleT) que l'on va mettre dans planTransfo
 
-        R3* triangleT = new R3[3];
+        vec3* triangleT = new vec3[3];
         triangleT[0] = planDepart[it][0];
         triangleT[1] = planDepart[it][1];
         triangleT[2] = planDepart[it][2];
@@ -309,7 +309,7 @@ void Transfo::TransfoR1()
     methode = 1;
 
     // on commence par transformer notre espace
-    vector<R3*>::iterator it;
+    vector<vec3*>::iterator it;
 
 }
 
@@ -342,25 +342,25 @@ void Transfo::Transformer()
 
 void Transfo::setSrcForMapping(unsigned int& sourceIdx)
 {
-    R3 src = shot.sources[sourceIdx];
+    vec3 src = shot.sources[sourceIdx];
     shot.sources.clear();
     shot.sources.push_back(src);
 }
 
-bool IsInTriangle(const R3& P, const R3* triangle)  // R2:: ?
+bool IsInTriangle(const vec3& P, const vec3* triangle)  // R2:: ?
 {
-    R2 A(triangle[0].x, triangle[0].y);
-    R2 B(triangle[1].x, triangle[1].y);
-    R2 C(triangle[2].x, triangle[2].y);
-    R2 Q(P.x, P.y);
+    vec2 A(triangle[0].x, triangle[0].y);
+    vec2 B(triangle[1].x, triangle[1].y);
+    vec2 C(triangle[2].x, triangle[2].y);
+    vec2 Q(P.x, P.y);
 
-    R resultat1 = area(A, B, Q);
+    decimal resultat1 = area(A, B, Q);
     if (resultat1 < 0) { return false; }
 
-    R resultat2 = area(B, C, Q);
+    decimal resultat2 = area(B, C, Q);
     if (resultat2 < 0) { return false; }
 
-    R resultat3 = area(C, A, Q);
+    decimal resultat3 = area(C, A, Q);
     if (resultat3 < 0) { return false; }
 
     return true;

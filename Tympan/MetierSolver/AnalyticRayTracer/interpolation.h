@@ -14,19 +14,19 @@
 */ 
  
 #include <cmath>
-#include "R3.h"
+
 
 //-------------------------------------------------------------------------------------------------------------------------------------------//
 //
 //-------------------------------------------------------------------------------------------------------------------------------------------//
 
-double interpo(const R3* triangle, R3 P)
+double interpo(const vec3* triangle, vec3 P)
 {
     // rend la coordonnee P.z
 
-    const R3& A = triangle[0];
-    const R3& B = triangle[1];
-    const R3& C = triangle[2];
+    const vec3& A = triangle[0];
+    const vec3& B = triangle[1];
+    const vec3& C = triangle[2];
 
     double del = (B.x - A.x) * (C.y - A.y) - (C.x - A.x) * (B.y - A.y);
 

@@ -31,11 +31,11 @@ meteo::~meteo()
 {
 }
 
-double meteo::cLin(const R3& P, R3& grad) const
+double meteo::cLin(const vec3& P, vec3& grad) const
 {
 
     // calcul de la celerite
-    R c = gradC * P.z + c0;
+    decimal c = gradC * P.z + c0;
 
     // calcul du gradient
     grad.z = gradC;
@@ -43,11 +43,11 @@ double meteo::cLin(const R3& P, R3& grad) const
     return c;
 };
 
-R3 meteo::vent(const R3& P, std::map<std::pair<int, int>, R> &jacob) const
+vec3 meteo::vent(const vec3& P, std::map<std::pair<int, int>, decimal> &jacob) const
 {
 
     // calcul du vent : on a une fonction lineaire fonction de la coordonnee z du point
-    R3 v;
+    vec3 v;
 
 	double angle = -(PI/2.0) - (windDirection * PI /180.0);
 	double DVx = cos(angle) * gradV;

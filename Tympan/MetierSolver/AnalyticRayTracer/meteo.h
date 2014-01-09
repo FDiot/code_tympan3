@@ -22,7 +22,7 @@
 #define __METEO_H
 
 #include <map>
-#include "R3.h"
+#include "../AcousticRaytracer/Geometry"
 
 /*! \class meteo
 * \brief classe representant les donnees meteo relatives au calcul.
@@ -74,20 +74,20 @@ public:
     void setC0(const double& c) { c0 = c; }
 
     /*!
-    * \fn R cLin(const R3& P, const meteo& Meteo, R3& grad)
+    * \fn decimal cLin(const vec3& P, const meteo& Meteo, vec3& grad)
     * \brief Prend en compte la temperature pour le point P
     * \param P Position du rayon
 	* \param grad gradient selon z (veleur modifiee) 
     */
- 	double cLin(const R3& P, R3& grad) const;
+ 	double cLin(const vec3& P, vec3& grad) const;
 
     /*!
-    * \fn R3 vent(const R3& P, map<pair<int, int>, R> &jacob)
+    * \fn vec3 vent(const vec3& P, map<pair<int, int>, decimal> &jacob)
     * \brief Prend en compte le vent pour le point P
     * \param P Position du rayon
 	* \param jacob : jacobien (veleur modifiee) 
     */	
-	R3 vent(const R3& P, std::map<std::pair<int, int>, R> &jacob) const;
+	vec3 vent(const vec3& P, std::map<std::pair<int, int>, decimal> &jacob) const;
 
     /*!
      *  \brief Destructeur

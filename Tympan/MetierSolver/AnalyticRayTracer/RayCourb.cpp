@@ -14,13 +14,13 @@
 */ 
  
 #include "RayCourb.h"
-#include "R3.h"
+#include "../AcousticRaytracer/Geometry"
 
 RayCourb::RayCourb() : nbReflex(0)
 {
 }
 
-RayCourb::RayCourb(const R3& a) : nbReflex(0)
+RayCourb::RayCourb(const vec3& a) : nbReflex(0)
 {
     this->coord.insert(coord.begin(), a);
 }
@@ -71,7 +71,7 @@ RayCourb RayCourb::operator + (const RayCourb& P)const
 }
 
 
-RayCourb RayCourb::operator * (R c)const
+RayCourb RayCourb::operator * (decimal c)const
 {
     /* Multiplication d'un rayon par un reel : on multiplie les coordonnees des points et celles des normales. Les reflexions (nombre et position) ne sont pas modifiees. */
 
@@ -93,7 +93,7 @@ RayCourb RayCourb::operator * (R c)const
 }
 
 
-RayCourb RayCourb::operator / (R c)const
+RayCourb RayCourb::operator / (decimal c)const
 {
     /* Division d'un rayon par un reel : on divise les coordonnees des points et celles des normales. Les reflexions (nombre et position) ne sont pas modifiees. */
 
@@ -115,11 +115,11 @@ RayCourb RayCourb::operator / (R c)const
 }
 
 
-vector<R3> RayCourb::operator[](int i)
+vector<vec3> RayCourb::operator[](int i)
 {
     /* l'operateur [int i] sur un rayon, rend un vecteur contenant les coordonnees du point et de sa normale a la position i */
 
-    vector<R3> result;
+    vector<vec3> result;
     result.clear();                  // on s'assure qu'il est vide
 
     result.push_back(coord[i]);
@@ -134,11 +134,11 @@ RayCourb::~RayCourb()
 }
 
 //
-//R cLin(const R3& P, const meteo& Meteo, R3& grad)
+//decimal cLin(const vec3& P, const meteo& Meteo, vec3& grad)
 //{
 //
 //    // calcul de la celerite
-//    R c = Meteo.gradC * P.z + Meteo.c0;
+//    decimal c = Meteo.gradC * P.z + Meteo.c0;
 //
 //    // calcul du gradient
 //    grad.z = Meteo.gradC;
@@ -147,11 +147,11 @@ RayCourb::~RayCourb()
 //};
 //
 //
-//R3 vent(const R3& P, const meteo& Meteo, map<pair<int, int>, R> &jacob)
+//vec3 vent(const vec3& P, const meteo& Meteo, map<pair<int, int>, decimal> &jacob)
 //{
 //
 //    // calcul du vent : on a une fonction lineaire fonction de la coordonnee z du point
-//    R3 v;
+//    vec3 v;
 //
 //	double angleVent = 90.0;
 //	double PI =355.0 / 113.0;
@@ -202,7 +202,7 @@ void show(const char* s, const T& l, const char* separateur = "")
     cout << endl ;
 }
 
-RayCourb operator*(const R& c, const RayCourb& P)
+RayCourb operator*(const decimal& c, const RayCourb& P)
 {
     /* Multiplication d'un rayon par un reel : on multiplie les coordonnees des points et celles des normales. Les reflexions (nombre et position) ne sont pas modifiees. */
 

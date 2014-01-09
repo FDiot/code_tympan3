@@ -27,7 +27,7 @@
 #include <vector>
 #include <map>
 #include <iostream>
-#include "R3.h"
+#include "../AcousticRaytracer/Geometry"
 #include "meteo.h"
 
 
@@ -47,19 +47,19 @@ public:
 
     // Donnees membres :
 
-    vector<R3> sources;                 /*!< vector contenant les sources */
-    vector<R3> recepteurs;              /*!<  vector contenant les recepteurs */
-    vector<R3*> plan;                   /*!<  "liste" des objets definis par 3 points */
+    vector<vec3> sources;                 /*!< vector contenant les sources */
+    vector<vec3> recepteurs;              /*!<  vector contenant les recepteurs */
+    vector<vec3*> plan;                   /*!<  "liste" des objets definis par 3 points */
     meteo Meteo;                        /*!<  meteo */
 
-    R h;                                /*!<  pas de discretisation */
-    R TMax;                             /*!<  temps de propagation maximal */
-    vector<R> temps;                    /*!<  [0:h:temps_max] vecteur des temps ou l'on resouds */
-    R dmax;                             /*!<  distance maximale parcourue par les rayons */
-    R initialAngleTheta;                /*!<  angle de tir initial selon theta */
-    R finalAngleTheta;                  /*!<  angle de tir final selon theta */
-    R initialAnglePhi;                  /*!<  angle de tir initial selon phi */
-    R finalAnglePhi;                    /*!<  angle de tir final selon phi */
+    decimal h;                                /*!<  pas de discretisation */
+    decimal TMax;                             /*!<  temps de propagation maximal */
+    vector<decimal> temps;                    /*!<  [0:h:temps_max] vecteur des temps ou l'on resouds */
+    decimal dmax;                             /*!<  distance maximale parcourue par les rayons */
+    decimal initialAngleTheta;                /*!<  angle de tir initial selon theta */
+    decimal finalAngleTheta;                  /*!<  angle de tir final selon theta */
+    decimal initialAnglePhi;                  /*!<  angle de tir initial selon phi */
+    decimal finalAnglePhi;                    /*!<  angle de tir final selon phi */
 
     unsigned int nbRay;                 /*!<  nombre de rayons que l'on lance */
     unsigned int launchType;            /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
@@ -79,7 +79,7 @@ public:
      */
     Lancer();
     Lancer(Lancer& L);
-    Lancer(vector<R3> sources, vector<R3> recepteurs, vector<R3*> plan, meteo Meteo, R h, R TmpMax, vector<R> temps, R dmax, unsigned int nbRay);
+    Lancer(vector<vec3> sources, vector<vec3> recepteurs, vector<vec3*> plan, meteo Meteo, decimal h, decimal TmpMax, vector<decimal> temps, decimal dmax, unsigned int nbRay);
 
     /*!
      *  \brief Destructeur
@@ -126,25 +126,25 @@ public:
     void setDMax(const double& DistMax) { dmax = DistMax; }
 
     /*!
-    * \fn void setTimeStep(const R& tt)
+    * \fn void setTimeStep(const decimal& tt)
     * \brief Modification du pas de temps
     * \param tt nouveau pas de discretisation du temps
     */
-    void setTimeStep(const R& tt) { h = tt; }
+    void setTimeStep(const decimal& tt) { h = tt; }
 
     /*!
-    * \fn void setTriangle(R3* triangle)
+    * \fn void setTriangle(vec3* triangle)
     * \brief Ajoute des triangles (objets) a la geometrie
-    * \param triangle tableau de R3, represente l'objet que l'on desire ajouter a la geometrie
+    * \param triangle tableau de vec3, represente l'objet que l'on desire ajouter a la geometrie
     */
-    void setTriangle(R3* triangle) { plan.push_back(triangle); }
+    void setTriangle(vec3* triangle) { plan.push_back(triangle); }
 
     /*!
-    * \fn R distance_max()
+    * \fn decimal distance_max()
     * \brief Calcul de la distance maximale entre les sources et les recepteurs
     * \return rend la distance maximale
     */
-    R distance_max();
+    decimal distance_max();
 
     /*!
     * \fn void createTemps()
@@ -153,16 +153,16 @@ public:
     void createTemps();
 
     /*!
-    * \fn vector<R3> EqRay(vector<R3> y0, meteo Meteo)
+    * \fn vector<vec3> EqRay(vector<vec3> y0, meteo Meteo)
     * \brief Fonction definissant l'equation eikonale
     * \param y0 vecteur initial
     * \param Meteo meteo du probleme
     * \return rend un point du rayon sous la forme (position, normale)
     */
-    vector<R3> EqRay(const vector<R3>& y0, const meteo& Meteo);
+    vector<vec3> EqRay(const vector<vec3>& y0, const meteo& Meteo);
 
     /*!
-    * \fn R3 intersection(R3 S, R3 R, R3*A, int &reflexion, R3 nExt_plan, R3 SR)
+    * \fn vec3 intersection(vec3 S, vec3 R, vec3*A, int &reflexion, vec3 nExt_plan, vec3 SR)
     * \brief Calcule le point d'intersection entre un plan et une droite
     * \param S source
     * \param R recepteur
@@ -172,17 +172,17 @@ public:
     * \param SR vecteur source-recepteur
     * \return rend le point d'intersection entre le plan A et la droite SR.
     */
-    R3 intersection(const R3& S, const R3& R, const R3* A, int& reflexion, const R3& nExt_plan, const R3& SR);
+    vec3 intersection(const vec3& S, const vec3& R, const vec3* A, int& reflexion, const vec3& nExt_plan, const vec3& SR);
 
     /*!
-    * \fn RayCourb RK4(vector<R3> y0, vector<R3*> plan, R3 source)
+    * \fn RayCourb RK4(vector<vec3> y0, vector<vec3*> plan, vec3 source)
     * \brief Algorithme de Runge-Kutta d'ordre 4
     * \param y0 vecteur initial
     * \param plan geometrie
     * \param S source
     * \return rend un rayon (liste de points de l'espace)
     */
-    RayCourb RK4(const vector<R3>& y0, const vector<R3*>& plan, const R3& source);
+    RayCourb RK4(const vector<vec3>& y0, const vector<vec3*>& plan, const vec3& source);
 
     /*!
     * \fn void RemplirMat()
@@ -197,21 +197,21 @@ public:
     void run() { createTemps(); RemplirMat(); }
 
     /*!
-     * \fn loadRayFile(vector<R3>& tableau_norm)
+     * \fn loadRayFile(vector<vec3>& tableau_norm)
      * \brief Chargement d'un fichier definissant les angles de depart des rayons
      */
-    void loadRayFile(vector<R3>& tableau_norm);
+    void loadRayFile(vector<vec3>& tableau_norm);
 
 	/*!
-	 * \fn traveledDistance(vector<R3>& vec)
+	 * \fn traveledDistance(vector<vec3>& vec)
 	 * \brief Calcule la distance parcourue sur le plan horizontale depuis la source jusqu'au point courant
-	 * \param vector<R3&> vec
+	 * \param vector<vec3&> vec
 	 */
-	double traveledDistance(const vector<R3>& vec, const R3& source)  { return (vec[0].x - source.x) * (vec[0].x - source.x) + (vec[0].y - source.y) * (vec[0].y - source.y); }
+	double traveledDistance(const vector<vec3>& vec, const vec3& source)  { return (vec[0].x - source.x) * (vec[0].x - source.x) + (vec[0].y - source.y) * (vec[0].y - source.y); }
 };
 
 /*!
-* \fn R angle_depart(R a, R c, R d, R h)
+* \fn decimal angle_depart(decimal a, decimal c, decimal d, decimal h)
 * \brief Calcul l'angle avec lequel le rayon doit etre lance afin de parcourir au minimum la distance d
 * \param a gradient de celerite
 * \param c celerite au sol
@@ -219,6 +219,6 @@ public:
 * \param h hauteur de la source
 * \return rend l'angle du lancer de rayon.
 */
-R angle_depart(const R& a, const R& c, const R& d, const R& h);
+decimal angle_depart(const decimal& a, const decimal& c, const decimal& d, const decimal& h);
 
 #endif // __LANCER_H
