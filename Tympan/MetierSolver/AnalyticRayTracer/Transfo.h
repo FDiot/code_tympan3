@@ -39,18 +39,18 @@ public:
     // Donnees membres :
 
     unsigned int source;                                       /*!< Indice de la source dans le tableau des source du lancer */
-    vector<R3> recepteurs;                                     /*!< la liste de recepteurs */
+    vector<vec3> recepteurs;                                     /*!< la liste de recepteurs */
     meteo Meteo;                                               /*!< meteo */
     unsigned int nbRay;                                        /*!< nombre de rayons que l'on lance */
-    R dmax;                                                    /*!< distance maximale parcourue par les rayons */
-    R h;                                                       /*!< pas de discretisation */
-    R TMax;                                                    /*!< temps de propagation maximal */
-    vector<R> temps;                                           /*!< [0:h:temps_max] vecteur des temps ou l'on resouds */
+    decimal dmax;                                                    /*!< distance maximale parcourue par les rayons */
+    decimal h;                                                       /*!< pas de discretisation */
+    decimal TMax;                                                    /*!< temps de propagation maximal */
+    vector<decimal> temps;                                           /*!< [0:h:temps_max] vecteur des temps ou l'on resouds */
 
     Lancer shot;                                               /*!< notre lancer sans reflexion */
 
-    vector<R3*> planDepart;                                    /*!< l'espace de depart */
-    vector<R3*> planTransfo;                                   /*!< l'espace transforme */
+    vector<vec3*> planDepart;                                    /*!< l'espace de depart */
+    vector<vec3*> planTransfo;                                   /*!< l'espace transforme */
     vector<RayCourb*> MatRes;                                  /*!< matrice contenant les rayons droits */
     vector<RayCourb*> MatTransfo;                              /*!< tableau contenant les rayons droits transformes */
 
@@ -104,11 +104,11 @@ public:
     void setDMax(const double& DistMax) { dmax = DistMax; }
 
     /*!
-    * \fn void setTimeStep(const R& tt)
+    * \fn void setTimeStep(const decimal& tt)
     * \brief Modification du pas de temps.
     * \param tt nouveau pas de discretisation du temps
     */
-    void setTimeStep(const R& tt) { h = tt; }
+    void setTimeStep(const decimal& tt) { h = tt; }
 
     /*!
     * \fn void setMethode(const unsigned int& meth)
@@ -118,11 +118,11 @@ public:
     void setMethode(const unsigned int& meth) {methode = meth;}
 
     /*!
-    * \fn R distance_max()
+    * \fn decimal distance_max()
     * \brief Calcul de la distance maximale entre les sources et les recepteurs.
     * \return rend la distance maximale
     */
-    R distance_max();
+    decimal distance_max();
 
     /*!
     * \fn void createTemps()
@@ -141,7 +141,7 @@ public:
     * \brief Remplissage de Surf_Interp qui contient tous les points de notre lancer
        par ordre croissant des x puis des y.
     */
-    void RemplirSurf(vector<R3>& vectSurf_Interp);
+    void RemplirSurf(vector<vec3>& vectSurf_Interp);
 
     /*!
     * \fn Transfo_Geom1()
@@ -176,24 +176,24 @@ public:
     QList<OTriangle>& getNappe() { return Liste_triangles; }
 
     /* Fonction qui met dans le tableau Tableau les 4 points voisins du point P se trouvant entre x(i) et x(i+1) */
-    //  void find_voisin(R3 P, map< pair<double, double>, double > plan, R3* Tableau);
+    //  void find_voisin(vec3 P, map< pair<double, double>, double > plan, vec3* Tableau);
 
     /*!
-    * \fn R3 fonction_h (R3 P)
+    * \fn vec3 fonction_h (vec3 P)
     * \brief fonction de transformation.
     * \param P point que l'on desire transformer
     * \return rend les coordonnees du point transforme.
     */
-    R3 fonction_h(const R3& P);
+    vec3 fonction_h(const vec3& P);
 
     /*!
-    * \fn R3 fonction_h_inverse (R3 P, QList<OTriangle> Liste_triangles)
+    * \fn vec3 fonction_h_inverse (vec3 P, QList<OTriangle> Liste_triangles)
     * \brief fonction inverse de la fonction de transformation.
     * \param P point que l'on desire transformer
     * \param Liste_triangles liste des triangles de la geometrie
     * \return rend les coordonnees du point transforme (point de l'espace original).
     */
-    R3 fonction_h_inverse(const R3& P);
+    vec3 fonction_h_inverse(const vec3& P);
 
     /**
      * Force le choix de la source pour le lancer de rayons
@@ -201,6 +201,6 @@ public:
     void setSrcForMapping(unsigned int& sourceIdx);
 };
 
-bool IsInTriangle(const R3& P, const R3* triangle);
+bool IsInTriangle(const vec3& P, const vec3* triangle);
 
 #endif //__TRANSFO_H

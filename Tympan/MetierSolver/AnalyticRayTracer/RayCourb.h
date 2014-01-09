@@ -26,6 +26,7 @@
 #include "R3.h"
 #include "meteo.h"
 
+class vec3;
 using namespace std;
 
 //typedef double R;
@@ -35,8 +36,8 @@ class RayCourb
 {
 public:
     // donnees membres
-    vector<R3> coord;                            /*!< vecteur de R3 contenant les coordonnees des points du rayon */
-    vector<R3> normale;                          /*!< vecteur de R3 contenant les coordonnees des normales du rayon */
+    vector<vec3> coord;                            /*!< vecteur de vec3 contenant les coordonnees des points du rayon */
+    vector<vec3> normale;                          /*!< vecteur de vec3 contenant les coordonnees des normales du rayon */
     int nbReflex;                                /*!< nombre de reflexions */
     vector<int> position;                        /*!< liste des indices des points ou il y a une reflexion (le numero du pas de temps) */
     map<int, int> rencontre;                     /*!< couple (pas de temps, numero de la face rencontree) */
@@ -48,7 +49,7 @@ public:
      *
      */
     RayCourb();
-    RayCourb(const R3& a);
+    RayCourb(const vec3& a);
     RayCourb(const RayCourb& r);
 
     /*!
@@ -81,20 +82,20 @@ public:
     * \brief Operateur mathematiques
     */
     RayCourb operator + (const RayCourb& P)const;
-    RayCourb operator * (R c)const;
-    RayCourb operator / (R c)const;
+    RayCourb operator * (decimal c)const;
+    RayCourb operator / (decimal c)const;
 
     /*!
-    * \fn vector<R3> operator[](int i)
+    * \fn vector<vec3> operator[](int i)
     * \brief Operateur tableau
     */
-    vector<R3> operator[](int i);
+    vector<vec3> operator[](int i);
 };
 
-RayCourb operator*(const R& c, const RayCourb& P);
+RayCourb operator*(const decimal& c, const RayCourb& P);
 
-R cLin(const R3& P, const meteo& Meteo, R3& grad);
+decimal cLin(const vec3& P, const meteo& Meteo, vec3& grad);
 
-R3 vent(const R3& P, const meteo& Meteo, map<pair<int, int>, R> &jacob);
+vec3 vent(const vec3& P, const meteo& Meteo, map<pair<int, int>, decimal> &jacob);
 
 #endif //__RAYCOURB_H
