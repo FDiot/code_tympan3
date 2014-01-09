@@ -33,8 +33,6 @@ using namespace std;
 class RayCourb;
 class Lancer;
 
-typedef double R;
-
 class Transfo
 {
 public:

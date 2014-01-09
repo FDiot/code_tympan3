@@ -213,8 +213,8 @@ RayCourb operator*(const R& c, const RayCourb& P)
 
     for (unsigned int i = 0; i < P.coord.size(); ++i)
     {
-        result.coord[i] = c * P.coord[i];
-        result.normale[i] = c * P.normale[i];
+        result.coord[i] = P.coord[i] * c;
+        result.normale[i] = P.normale[i] * c;
     }
 
     result.position = P.position;
