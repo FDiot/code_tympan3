@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
+<Tympan>
+ <Version></Version>
+ <Palette id="{1260f5d3-082d-4555-be68-118c3ac72ca0}" name="Palette 0">
+  <valueMin>40</valueMin>
+  <valueMax>75</valueMax>
+  <lookupTable nbColors="9">1273364735 1425998079 3523179263 4294922495 4294902015 4289331455 4283695359 3791651071 2818572543</lookupTable>
+ </Palette>
+</Tympan>
