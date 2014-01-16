@@ -258,17 +258,33 @@ inline std::vector<vec3> operator + (const std::vector<vec3>& _u, const std::vec
     return res;
 }
 
+// Version double
+inline std::vector<dvec3> operator * (const std::vector<dvec3>& _v, const decimal& _a)
+{
+    std::vector<dvec3> res ;
+	BOOST_FOREACH(dvec3 vec, _v) { res.push_back(vec * _a); }
+    return res;
+}
+
+inline std::vector<dvec3> operator + (const std::vector<dvec3>& _u, const std::vector<dvec3>& _v)
+{
+    assert(_u.size() == _v.size());
+    std::vector<dvec3> res;
+    for (unsigned int i = 0; i < _v.size(); ++i) { res.push_back( _u[i] + _v[i] ); }
+    return res;
+}
+
 /*!
  * \fn OPoint3D vec3ToOPoint3D(const vec3& p)
  * \brief convertit un vec3 en OPoint3D
  */
-inline OPoint3D vec3toOPoint3D( const vec3& _v ) { return OPoint3D( _v.x, _v.y, _v.z ); }
+inline OPoint3D vec3toOPoint3D( const vec3& _v ) { return OPoint3D( static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z) ); }
 
 /*!
  * \fn vec3 OPoint3DTovec3(const OPoint3D& _p)
  * \brief convertit un OPoint3D en vec3
  */
-inline vec3 OPoint3Dtovec3( const OPoint3D& _p ) { return vec3( _p._x, _p._y, _p._z ); }
+inline vec3 OPoint3Dtovec3( const OPoint3D& _p ) { return vec3( static_cast<float>(_p._x), static_cast<float>(_p._y), static_cast<float>(_p._z) ); }
 
 /*****************************************************************************/
 /*                                                                           */
