@@ -256,10 +256,10 @@ RayCourb Lancer::RK4(const vector<vec3>& y0, const vector<vec3*>& plan, const ve
         int r, rmin;
         bool premiere = 1;                                    // variable boolenne pour savoir si on a deja rencontre un objet ou pas
 
-        k1 = EqRay(yAct, Meteo) * h;
-        k2 = EqRay(yAct + k1 * 0.5, Meteo) * h;
-        k3 = EqRay(yAct + k2 * 0.5, Meteo) * h;
-        k4 = EqRay(yAct + k3, Meteo);
+        k1 = EqRay(yAct, Meteo) * h;				// k1 = h * EqRay(yAct, Meteo);
+        k2 = EqRay(yAct + k1 * 0.5, Meteo) * h;		// k2 = h * EqRay(yAct + 0.5 * k1, Meteo);
+        k3 = EqRay(yAct + k2 * 0.5, Meteo) * h;		// k3 = h * EqRay(yAct + 0.5 * k2, Meteo);
+        k4 = EqRay(yAct + k3, Meteo) * h;			// k4 = h * EqRay(yAct + k3, Meteo);
 
         ySuiv = yAct + ( ( k1 + k2 * 2. + k3 * 2. + k4 ) * ( 1. / 6. ) );
 
