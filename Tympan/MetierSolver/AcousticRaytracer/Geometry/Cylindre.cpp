@@ -36,7 +36,7 @@ Cylindre::Cylindre(Shape* _p1, Shape* _p2 , std::vector<vec3>* _vertices, unsign
     hauteur = segment.length();
 
     localRepere = Repere(X, Y, Z, vertices->at(localVertices.at(0)));
-    angleOuverture = 2 * M_PI;
+    angleOuverture = static_cast<decimal> (2 * M_PI);
 
     material = p1->getMaterial();
 
