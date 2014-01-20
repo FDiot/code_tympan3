@@ -55,6 +55,9 @@ class TYRoute: public TYAcousticLine
 
     // Methodes
 public:
+
+    enum TrafficRegimes { Day, Evening, Night, NB_TRAFFIC_REGIMES} ;
+
     /**
      * Constructeur.
      */
@@ -141,11 +144,18 @@ public:
      */
     virtual bool updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode );
 
+    const RoadTrafficComponent& getRoadTrafficComponent(
+        enum TrafficRegimes regime, enum RoadVehicleType vehic_type) const;
+
 private:
     virtual void distriSrcs()
     {assert(false && "You must use distriSrcs(const TYAltimetrie&) for roads");}
 
 protected:
+
+    RoadTrafficComponent& getRoadTrafficComponent(
+        enum TrafficRegimes regime, enum RoadVehicleType vehic_type);
+
     /**
      * Calcul de la pente moyenne de la route
      */
@@ -180,7 +190,8 @@ protected:
 protected:
 
     RoadTraffic road_traffic;
-    // TODO / WIP Replace that with RoadTraffic from RoadEmissionNMPB08
+    TYTrafic traffic_regimes[NB_TRAFFIC_REGIMES];
+
     ///Vitesse Moyenne
     double _vitMoy;
     ///Trafic de jour
