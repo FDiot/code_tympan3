@@ -420,3 +420,79 @@ void TYRoute::updateComputedDeclivity()
 
     road_traffic.ramp = penteMoy; // TODO assert units
 }
+
+// table C1
+const TYRoute::note77_tables TYRoute::note77_lower_bounds = {
+// Link motorways
+    {
+        // Long distance function
+        {7000, 1300, 16},
+        // Regional roads
+        {7000,  500,  6}
+    },
+// Intercity roads
+    {
+        // Long distance function
+        {2500,  300,  8},
+        // Regional roads
+        {2500,  250,  5}
+    }
+};
+// table C1
+const TYRoute::note77_tables TYRoute::note77_upper_bounds=
+{
+// Link motorways
+    {
+        // Long distance function
+        {70000, 13500, 36},
+        // Regional roads
+        {93000, 14000, 34}
+    },
+// Intercity roads
+    {
+        // Long distance function
+        {22500, 5000, 34},
+        // Regional roads
+        {22000, 2500, 17}
+    }
+};
+// table C2
+const TYRoute::note77_tables TYRoute::note77_hourly_HGV_coeff = {
+// Link motorways
+    {
+        // Long distance function
+        {20, 20, 39},
+        // Regional roads
+        {17, 28,  50}
+    },
+// Intercity roads
+    {
+        // Long distance function
+        {17, 27, 51},
+        // Regional roads
+        {16, 34, 73}
+    }
+};
+// table C2
+const TYRoute::note77_tables TYRoute::note77_hourly_LV_coeff = {
+// Link motorways
+    {
+        // Long distance function
+        {17, 19,  82},
+        // Regional roads
+        {17, 18, 100}
+    },
+// Intercity roads
+    {
+        // Long distance function
+        {17, 19, 110},
+        // Regional roads
+        {17, 19, 120}
+    }
+};
+
+bool  TYRoute::setFromAADT(double aadt_hgv, double aadt_lv,
+                           TYRoute::RoadType road_type, TYRoute::RoadFunction road_function)
+{
+
+}

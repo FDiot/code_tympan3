@@ -124,6 +124,31 @@ public:
      */
     //  void setTraficNuit(const LPTYTrafic pTrafic);
 
+
+    enum RoadType {Intercity, Motorway};
+    enum RoadFunction {Regional, LongDistance};
+
+    /**
+     * \brief Apply Note77 from Setra to estimate trafic from AADT and road kind.
+     *
+     * Annual Average Daily Traffic for both HGV and LV can be used to estimate
+     * traffic as long as the kind of the road is identified. This approach is
+     * described in Setra Note 77 (french) or appendix C from the guide
+     * `Road Noise Prediction`.
+     *
+     * This method implements this approach and sets the road traffic if successful.
+     * If the argument in the scope of application of the Note77 the method succeed
+     * and update the traffic. Otherwise it fails and does not modifyt the road.
+     *
+     * \param aadt_hgv AADT for the HGV
+     * \param aadt_lv  AADT for the LV
+     * \param road_type The type (motor way or intercity)
+     * \param road_function The function of the road (long distance or regional)
+     * \return whether the call succeded.
+     */
+    bool setFromAADT(double aadt_hgv, double aadt_lv,
+                     RoadType road_type, RoadFunction road_function);
+
     // TODO in NMPB08 `mode calcul` is obsoleted.
     //      Is now represented by the RoadFlowType at RoadTrafficComponent level.
 
@@ -194,6 +219,13 @@ protected:
 
     // Hauteur des sources par rapport a la route
     double _offSet;
+
+    typedef double note77_tables[2][2][3];
+    static const note77_tables note77_lower_bounds; // table C1
+    static const note77_tables note77_upper_bounds; // table C1
+    static const note77_tables note77_hourly_HGV_coeff; // table C2
+    static const note77_tables note77_hourly_LV_coeff; // table C2
 };
+
 
 #endif // __TY_ROUTE__
