@@ -34,6 +34,7 @@
 
 #include "RoadEmissionNMPB08.h"
 
+
 ///Noeud geometrique de type TYRoute.
 typedef TYGeometryNode TYRouteGeoNode;
 ///Smart Pointer sur TYRouteGeoNode.
@@ -166,22 +167,6 @@ protected:
      */
     virtual void distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode);
 
-    /*
-     * Calcul de EVL
-     *
-     * @param plat booleen quit est varie pour une route plate
-     * @return valeur de EVL
-     */
-    double calculEVL(bool plat = true);
-
-    /*
-     * Calcul de EVL
-     *
-     * @param plat booleen quit est varie pour une route plate
-     * @return valeur de EVL
-     */
-    double calculEPL(bool plat = true);
-
     /// Get/Set de l'offset des sources de la route
     double getOffSet() { return _offSet; }
     void setOffSet(const double& offSet) { _offSet = offSet; }
@@ -193,15 +178,15 @@ protected:
     TYTrafic traffic_regimes[NB_TRAFFIC_REGIMES];
 
     ///Vitesse Moyenne
-    double _vitMoy;
+    double _vitMoy; // TODO  ongoing replacement
     ///Trafic de jour
-    LPTYTrafic _pTraficJour;
+    LPTYTrafic _pTraficJour; // TODO  ongoing replacement
     ///Trafic de nuit
-    LPTYTrafic _pTraficNuit;
+    LPTYTrafic _pTraficNuit; // TODO  ongoing replacement
     /// Mode de calcul FLUIDE(true)/PULSE(false)
-    bool _modeCalcul;
+    bool _modeCalcul; // TODO  ongoing replacement
     ///Spectre du bruit routier normalise pondere A (utilise par compute spectre)
-    static const float _tabR[];
+
 
     // Hauteur des sources par rapport a la route
     double _offSet;

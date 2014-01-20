@@ -29,19 +29,6 @@
 
 OPROTOINST(TYRoute);
 
-const float TYRoute::_tabR[] = { /*   16*/ -200.0, /*   20  */ -200.0,
-                                 /*   25*/ -200.0, /*   31.5*/ -200.0, /*   40*/ -200.0,
-                                 /*   50*/ -200.0, /*   63  */ -200.0, /*   80*/ -200.0,
-                                 /*  100*/ -014.0, /*  125  */ -014.0, /*  160*/ -014.0,
-                                 /*  200*/ -010.0, /*  250  */ -010.0, /*  315*/ -010.0,
-                                 /*  400*/ -007.0, /*  500  */ -007.0, /*  630*/ -007.0,
-                                 /*  800*/ -004.0, /* 1000  */ -004.0, /* 1250*/ -004.0,
-                                 /* 1600*/ -007.0, /* 2000  */ -007.0, /* 2500*/ -007.0,
-                                 /* 3150*/ -012.0, /* 4000  */ -012.0, /* 5000*/ -012.0,
-                                 /* 6300*/ -200.0, /* 8000  */ -200.0, /*10000*/ -200.0,
-                                 /*12500*/ -200.0, /*16000  */ -200.0
-                               };
-
 
 TYRoute::TYRoute(): _vitMoy(80),
     _modeCalcul(true),
@@ -93,8 +80,8 @@ TYRoute::TYRoute(): _vitMoy(80),
     addRegime(buildRegime());
 
     // On nomme les regimes
-    _tabRegimes[0].setName("Jour");
-    _tabRegimes[1].setName("Nuit");
+    _tabRegimes[0].setName("Jour"); // TODO i18n
+    _tabRegimes[1].setName("Nuit"); // TODO i18n
 
     // TODO Proper handling of TYTrafic and regimes will come later
     //      for now we are just introducing the new data model from NMPB2008
@@ -211,165 +198,20 @@ int TYRoute::fromXML(DOM_Element domElement)
     return 1;
 }
 
-double TYRoute::calculEVL(bool plat /*=true*/)
-{
-    double valEVL;
-    if (plat)           // Terrain plat
-    {
-        if (_modeCalcul)    // ecoulement fluide
-        {
-            if (_vitMoy < 44.0)     // Balayage des differentes plages de vitesse
-            {
-                valEVL = 29.4;
-            }
-            else
-            {
-                valEVL = 0.139 * _vitMoy + 23.27;
-            }
-        }
-        else                // ecoulement pulse
-        {
-            if (_vitMoy <= 40.0)    // Balayage des differentes plages de vitesse
-            {
-                valEVL = -0.14 * _vitMoy + 36.8;
-            }
-            else if (_vitMoy <= 53.0)
-            {
-                valEVL = 31.2;
-            }
-            else
-            {
-                valEVL = 0.139 * _vitMoy + 23.27;
-            }
-        }
-    }
-    else                // Terrain en pente : dans ce cas, pas de calcul en ecoulement pulse
-    {
-        if (_vitMoy <= 20.0)
-        {
-            valEVL = -0.047 * 20.0 + 35.8;
-        }
-        else if (_vitMoy <= 43.0)
-        {
-            valEVL = -0.047 * _vitMoy + 35.8;
-        }
-        else if (_vitMoy <= 80.0)
-        {
-            valEVL = 0.032 * _vitMoy + 32.4;
-        }
-        else
-        {
-            valEVL = 0.139 * _vitMoy + 23.27;
-        }
-    }
-
-    return valEVL;
-}
-
-double TYRoute::calculEPL(bool plat /*=true*/)
-{
-    double valEPL;
-
-    if (plat)           // Terrain plat : Pas d'ecoulement pulse pour les camions
-    {
-        if (_vitMoy <= 20.0)        // Balayage des differentes plages de vitesse
-        {
-            valEPL = -0.12 * 20.0 + 49.6;
-        }
-        else if (_vitMoy <= 51.0)
-        {
-            valEPL = -0.12 * _vitMoy + 49.6;
-        }
-        else if (_vitMoy <= 70.0)
-        {
-            valEPL = 43.0;
-        }
-        else if (_vitMoy <= 100.0)
-        {
-            valEPL = 0.1 * _vitMoy + 36.0;
-        }
-        else
-        {
-            valEPL = 0.1 * 100.0 + 36.0;
-
-        }
-    }
-    else                // Terrain en pente : dans ce cas, pas de calcul en ecoulement pulse
-    {
-        if (_vitMoy <= 20.0)
-        {
-            valEPL = -0.129 * 20 + 49.6;
-        }
-        else if (_vitMoy <= 51.0)
-        {
-            valEPL = -0.129 * _vitMoy + 49.6;
-        }
-        else if (_vitMoy <= 70.0)
-        {
-            valEPL = 43.0;
-        }
-        else if (_vitMoy <= 100.0)
-        {
-            valEPL = 0.1 * _vitMoy + 36.0;
-        }
-        else
-        {
-            valEPL = 0.1 * 100.0 + 36.0;
-        }
-    }
-
-
-    return valEPL;
-}
-
 TYSpectre TYRoute::computeSpectre(const LPTYTrafic regime)
 {
     TYSpectre s;
 
     double penteMoy = calculPenteMoyenne();
 
-    // Calcul de EVL et EPL
-
-
-    // On calcule d'abord sur terrain plat
-    double evlPlat  = calculEVL(true);
-    double eplPlat  = calculEPL(true);
-    double evlPente = 0.0;
-    double eplPente = 0.0;
-
-    // Puis sur terrain en pente (si necessaire)
-    if (penteMoy >= 0.02)
-    {
-        evlPente = calculEVL(false); // Voitures
-        eplPente = calculEPL(false); // Camions
-    }
-    else
-    {
-        evlPente = evlPlat;
-        eplPente = eplPlat;
-    }
-
-    // Calcul de LAWi
-    double debitVLdB = 10 * log10(regime->getDebitVL());
-    double debitPLdB = 10 * log10(regime->getDebitPL());
-    double longdB = 0.0; // Pour la lisibilite = 10 * log10(1.0) : longueur de reference = 1 metre
-
-    double partVLPlat  = pow(10.0, (evlPlat + debitVLdB) / 10.0) ;
-    double partPLPlat  = pow(10.0, (eplPlat + debitPLdB) / 10.0) ;
-    double lAWiPlat    = partVLPlat + partPLPlat ;
-
-    double partVLPente = pow(10.0, (evlPente + debitVLdB) / 10.0);
-    double partPLPente = pow(10.0, (eplPente + debitPLdB) / 10.0);
-    double lAWiPente   = partVLPente + partPLPente;
-
-    // LAWi = moyenne (en energie) de LAWi sur le plat et LAWi sur une pente)
-    double lAWi = 10 * log10((lAWiPlat + lAWiPente) / 2.0) + 20.0 + longdB;
+    // TODO Do actually call here the RoadEmissionNMPB08 library
 
     // Mise en spectre
     double valeur = 0.0;
     for (unsigned int i = 0 ; i < s.getNbValues() ; i++)
     {
-        valeur = lAWi + _tabR[i] - 10 * log10(3.0);
+        // TODO Convert here the results from the RoadEmissionNMPB08 library
+        //      insto the TYSpectre representation of Code_TYMPAN
         s.getTabValReel()[i] = valeur;
     }
 
