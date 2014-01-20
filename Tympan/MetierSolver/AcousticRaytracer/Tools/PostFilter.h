@@ -30,7 +30,7 @@ public:
 	~postFilter() {}
 	
 	/*!
-	 * \fn unsigned int Traite();
+	 * \fn unsigned int Process();
 	 * \brief apply a filter to the group of valid rays found by ray tracing
 	 * \return number of rays suppressed
 	 */

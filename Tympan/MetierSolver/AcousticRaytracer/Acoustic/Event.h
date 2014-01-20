@@ -64,11 +64,11 @@ public:
     virtual bool isDiffuse() { return false; }
 
 	/*!
-   * \fn vec3* getPosition()
-   * \brief Renvoie un pointeur vers le point d'impact de l'evenement.
-   * \return Adresse du vecteur decrivant le point d'impact
-   */
-    vec3 getPosition() { return pos; }
+	 * \fn const vec3& getPosition() const
+	 * \brief Renvoie une référence vers le point d'impact de l'evenement.
+	 * \return Adresse du vecteur decrivant le point d'impact
+	*/
+    const vec3& getPosition() const { return pos; }
 
 	/*!
     * \fn void setPosition(vec3 &_pos)
@@ -145,6 +145,14 @@ public:
 	virtual void setType( const typeevent &_type) { type = _type; }
 
     virtual double getAngle() { return 0.0; }
+
+	/*!
+    * \fn const decimal distance(const Event &other) const
+    * \brief Return distance from another event
+    * \param other : event from which distance must be measured
+    */
+	const decimal distance(const Event &other) const { return this->pos.distance( other.getPosition() ); }
+
 
 protected:
     vec3 pos;			/*!< Point d'impact de l'evenement */
