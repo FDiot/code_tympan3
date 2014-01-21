@@ -24,11 +24,15 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "TYRoute.h"
+
+#include <limits>
+
 #include "Tympan/Tools/OMessageManager.h"
 
 
 OPROTOINST(TYRoute);
 
+const double TYRoute::undefined_declivity = std::numeric_limits<double>::quiet_NaN();
 
 TYRoute::TYRoute():
     _offSet(0.05)
@@ -205,12 +209,11 @@ int TYRoute::fromXML(DOM_Element domElement)
 
 TYSpectre TYRoute::computeSpectre(enum TrafficRegimes regime)
 {
-    double penteMoy = calculPenteMoyenne();
-    // TODO use mean declivity in some way or another !
-
     // This updates the road_traffic to point to the array of RoadTrafficComponents
     // corresponding to the selected regime.
     setRoadTrafficArrayForRegime(regime);
+
+    updateComputedDeclivity();
 
     // TODO check whether Spectrum_3oct_lin or Spectrum_3oct_A is the right one (TM)
     double * tab = NMPB08_Lwm(&road_traffic, Spectrum_3oct_lin);
@@ -227,7 +230,12 @@ TYSpectre TYRoute::computeSpectre(enum TrafficRegimes regime)
 
 double TYRoute::calculPenteMoyenne()
 {
+    // TODO cf https://extranet.logilab.fr/ticket/1513440
+    // Iter on the _listSrcPonct (sources) instead of _tabPoint (2d geometry)
+
     size_t nbPoint = _tabPoint.size();
+    if(nbPoint<2) // Declivity is undefined
+        return undefined_declivity;
     double* XTemp = new double [nbPoint]; // sert a ramener les points repartis sur une surface sur une droite
     double X  = 0.0;
     double Z  = 0.0;
@@ -348,6 +356,8 @@ bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNod
     // Note this is distriSrcs(const TYAltimetrie&) NOT base class distriSrcs()
     distriSrcs(alti, pGeoNode);
 
+    updateComputedDeclivity();
+
     this->setIsGeometryModified(false);
     return true;
 }
@@ -397,4 +407,16 @@ void TYRoute::setRoadTrafficArrayForRegime(enum TrafficRegimes regime)
 {
     road_traffic.nbComponents = TYTrafic::NB_VEHICULE_TYPES; // LV & HGV
     road_traffic.traffic = &traffic_regimes[regime].arr[0];
+}
+
+void TYRoute::updateComputedDeclivity()
+{
+    double penteMoy = calculPenteMoyenne();
+    // TODO Solve the following model incinsitency :
+    // cf https://extranet.logilab.fr/ticket/1513437
+    // There is only one RoadTraffic for a TYRoute for now
+    // Thus only one declivity for both lanes of a road,
+    // which by definition have opposite declivity !
+
+    road_traffic.ramp = penteMoy; // TODO assert units
 }

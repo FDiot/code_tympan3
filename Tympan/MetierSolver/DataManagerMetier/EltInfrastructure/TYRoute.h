@@ -56,6 +56,7 @@ class TYRoute: public TYAcousticLine
 
     // Methodes
 public:
+    static const double undefined_declivity;
 
     enum TrafficRegimes { Day, Evening, Night, NB_TRAFFIC_REGIMES} ;
 
@@ -164,9 +165,17 @@ protected:
         enum TrafficRegimes regime, enum RoadVehicleType vehic_type);
 
     /**
-     * Calcul de la pente moyenne de la route
+     * \brief Calcul de la pente moyenne de la route
      */
     double calculPenteMoyenne();
+
+    /**
+     * \brief update the mean declivity from the current source distribution.
+     *
+     * NB Do ensure that \c distriSrcs(const TYAltimetrie&) has been called
+     * since last geometry or altimetry changes.
+     */
+    void updateComputedDeclivity();
 
     /**
      * Distribution des sources
