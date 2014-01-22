@@ -491,8 +491,43 @@ const TYRoute::note77_tables TYRoute::note77_hourly_LV_coeff = {
     }
 };
 
+
+static bool inline is_in(double val, double min, double max)
+{return min <= val && val <= max; }
+
+bool  TYRoute::note77_check_validity(
+    double aadt_hgv, double aadt_lv,
+    TYRoute::RoadType road_type, TYRoute::RoadFunction road_function)
+{
+    const double aadt_total = aadt_lv + aadt_hgv;
+    // TODO Use propoer loggin to report validity violations
+    return ( is_in(aadt_total,
+                   note77_lower_bounds[road_type][road_function][0],
+                   note77_upper_bounds[road_type][road_function][0]) &&
+             is_in(aadt_hgv,
+                   note77_lower_bounds[road_type][road_function][1],
+                   note77_upper_bounds[road_type][road_function][1]) &&
+             is_in(aadt_hgv / aadt_total * 100,
+                 note77_lower_bounds[road_type][road_function][0],
+                   note77_upper_bounds[road_type][road_function][0]) );
+}
+
+
 bool  TYRoute::setFromAADT(double aadt_hgv, double aadt_lv,
                            TYRoute::RoadType road_type, TYRoute::RoadFunction road_function)
 {
+    if  (!note77_check_validity(aadt_hgv, aadt_lv, road_type, road_function))
+        return false;
 
+    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    {
+        enum TrafficRegimes regime = static_cast<TrafficRegimes>(i);
+        RoadTrafficComponent& traffic_lv  = getRoadTrafficComponent(regime, VehicleType_VL);
+        traffic_lv.trafficFlow = // Compute hourly traffic
+            aadt_lv  / note77_hourly_LV_coeff[road_type][road_function][regime];
+        RoadTrafficComponent& traffic_hgv = getRoadTrafficComponent(regime, VehicleType_PL);
+        traffic_hgv.trafficFlow =  // Compute hourly traffic
+            aadt_hgv / note77_hourly_HGV_coeff[road_type][road_function][regime];
+    }
+    return true;
 }

@@ -220,6 +220,11 @@ protected:
     // Hauteur des sources par rapport a la route
     double _offSet;
 
+private:
+
+    bool note77_check_validity(double aadt_hgv, double aadt_lv,
+                               RoadType road_type, RoadFunction road_function);
+
     typedef double note77_tables[2][2][3];
     static const note77_tables note77_lower_bounds; // table C1
     static const note77_tables note77_upper_bounds; // table C1
