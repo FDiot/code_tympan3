@@ -157,30 +157,96 @@ std::string TYRoute::toString() const
 DOM_Element TYRoute::toXML(DOM_Element& domElement)
 {
     DOM_Element domNewElem = TYAcousticLine::toXML(domElement);
+    // NB DOM_Element is actually a QDomElement
 
-    // TODO update serialisation : cf. https://extranet.logilab.fr/ticket/1512503
 
-    // TYXMLTools::addElementIntValue(domNewElem, "modeCalcul", _modeCalcul);
-    // TYXMLTools::addElementDoubleValue(domNewElem, "vitMoy", _vitMoy);
+    // Serialise the RoadTraffic attribute
+    domNewElem.setAttribute("surfaceType", road_traffic.surfaceType);
+    domNewElem.setAttribute("ramp", road_traffic.ramp);
+    domNewElem.setAttribute("surfaceAge", road_traffic.surfaceAge);
 
-    // _pTraficJour->toXML(domNewElem);
-    // _pTraficNuit->toXML(domNewElem);
+    // Serialise each of the regimes
+    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    {
+        traffic_regimes[i].toXML(domNewElem);
+    }
 
     return domNewElem;
 }
 
 int TYRoute::fromXML(DOM_Element domElement)
 {
+    // NB DOM_Element is actually a QDomElement
     TYAcousticLine::fromXML(domElement);
+    QDomNodeList children = domElement.childNodes();
 
     // TODO update serialisation: cf. https://extranet.logilab.fr/ticket/1512503
 
-    // bool modeCalculOk = false;
-    // bool vitMoyOk = false;
-    // bool traficJourFound = false;
-    // bool traficNuitFound = false;
+    // TODO Deserialise the RoadTraffic attribute
+
+    QString s;
+    bool ok;
+
+    // Deserialise the RoadTraffic attribute surfaceType
+    s = domElement.attribute("surfaceType", QString());
+    if(s.isEmpty()) // Attribute not found
+    {
+        OMessageManager::get()->error(
+            "Can not read the road `surfaceType` attribute for element %s.",
+            str_qt2c(getStringID()));
+        return 0;
+    }
+    unsigned surfType = s.toUInt(&ok);
+    if(!ok)
+    {
+        OMessageManager::get()->error(
+            "Integer expected for attribute `surfaceType` on element %s, not %s",
+            str_qt2c(getStringID()), str_qt2c(s));
+        return 0;
+    }
+    road_traffic.surfaceType = static_cast<RoadSurfaceType>(surfType);
+
+    // Deserialise the RoadTraffic attribute ramp
+    s = domElement.attribute("ramp", QString());
+    if(s.isEmpty()) // Attribute not found
+    {
+        OMessageManager::get()->error(
+            "Can not read the road `ramp` attribute for element %s.",
+            str_qt2c(getStringID()));
+        return 0;
+    }
+    double tmp_d = s.toDouble(&ok);
+    if(!ok)
+    {
+        OMessageManager::get()->error(
+            "Floating point number expected for attribute `ramp` on element %s, not %s",
+            str_qt2c(getStringID()), str_qt2c(s));
+        return 0;
+    }
+    road_traffic.ramp = tmp_d;
+
+    // Deserialise the RoadTraffic attribute surfaceAge
+    s = domElement.attribute("surfaceAge", QString());
+    if(s.isEmpty()) // Attribute not found
+    {
+        OMessageManager::get()->error(
+            "Can not read the road `surfaceAge` attribute for element %s.",
+            str_qt2c(getStringID()));
+        return 0;
+    }
+    tmp_d = s.toUInt(&ok);
+    if(!ok)
+    {
+        OMessageManager::get()->error(
+            "Integer expected for attribute `surfaceAge` on element %s, not %s",
+            str_qt2c(getStringID()), str_qt2c(s));
+        return 0;
+    }
+    road_traffic.surfaceAge = tmp_d;
+
+
+
     // DOM_Element elemCur;
-    // QDomNodeList childs = domElement.childNodes();
     // for (unsigned int i = 0; i < childs.length(); i++)
     // {
     //     elemCur = childs.item(i).toElement();
