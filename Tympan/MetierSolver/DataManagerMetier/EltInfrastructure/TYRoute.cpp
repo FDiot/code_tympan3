@@ -24,27 +24,17 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "TYRoute.h"
+
+#include <limits>
+
 #include "Tympan/Tools/OMessageManager.h"
 
 
 OPROTOINST(TYRoute);
 
-const float TYRoute::_tabR[] = { /*   16*/ -200.0, /*   20  */ -200.0,
-                                 /*   25*/ -200.0, /*   31.5*/ -200.0, /*   40*/ -200.0,
-                                 /*   50*/ -200.0, /*   63  */ -200.0, /*   80*/ -200.0,
-                                 /*  100*/ -014.0, /*  125  */ -014.0, /*  160*/ -014.0,
-                                 /*  200*/ -010.0, /*  250  */ -010.0, /*  315*/ -010.0,
-                                 /*  400*/ -007.0, /*  500  */ -007.0, /*  630*/ -007.0,
-                                 /*  800*/ -004.0, /* 1000  */ -004.0, /* 1250*/ -004.0,
-                                 /* 1600*/ -007.0, /* 2000  */ -007.0, /* 2500*/ -007.0,
-                                 /* 3150*/ -012.0, /* 4000  */ -012.0, /* 5000*/ -012.0,
-                                 /* 6300*/ -200.0, /* 8000  */ -200.0, /*10000*/ -200.0,
-                                 /*12500*/ -200.0, /*16000  */ -200.0
-                               };
+const double TYRoute::undefined_declivity = std::numeric_limits<double>::quiet_NaN();
 
-
-TYRoute::TYRoute(): _vitMoy(80),
-    _modeCalcul(true),
+TYRoute::TYRoute():
     _offSet(0.05)
 {
     _name = TYNameManager::get()->generateName(getClassName());
@@ -79,22 +69,24 @@ TYRoute::TYRoute(): _vitMoy(80),
 
     _regimeChangeAble = false;
 
-    _pTraficJour = new TYTrafic();
-    _pTraficJour->setParent(this);
-
-    _pTraficNuit = new TYTrafic();
-    _pTraficNuit->setParent(this);
+    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    {
+        traffic_regimes[i].setParent(this);
+        // On rajoute un ieme regime (un premier a ete construit par TYAcousticLine)
+        if (i>0) addRegime(buildRegime());
+    }
 
     _largeur = 3.5;
 
     _typeDistribution = TY_PUISSANCE_CALCULEE;
 
-    // On rajoute un deuxieme regime (un premier a ete construit par TYAcousticLine)
-    addRegime(buildRegime());
 
     // On nomme les regimes
-    _tabRegimes[0].setName("Jour");
-    _tabRegimes[1].setName("Nuit");
+    _tabRegimes[0].setName("Jour"); // TODO i18n
+    _tabRegimes[1].setName("Soir"); // TODO i18n
+    _tabRegimes[1].setName("Nuit"); // TODO i18n
+
+    setRoadTrafficArrayForRegime(Day);
 }
 
 TYRoute::TYRoute(const TYRoute& other)
@@ -111,10 +103,12 @@ TYRoute& TYRoute::operator=(const TYRoute& other)
     if (this != &other)
     {
         TYAcousticLine::operator =(other);
-        _vitMoy = other._vitMoy;
-        _modeCalcul = other._modeCalcul;
-        _pTraficJour = other._pTraficJour;
-        _pTraficNuit = other._pTraficNuit;
+        road_traffic = other.road_traffic;
+        for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+        {
+            traffic_regimes[i] = other.traffic_regimes[i];
+        }
+        setRoadTrafficArrayForRegime(Day);
     }
     return *this;
 }
@@ -124,10 +118,11 @@ bool TYRoute::operator==(const TYRoute& other) const
     if (this != &other)
     {
         if (TYAcousticLine::operator !=(other)) { return false; }
-        if (_vitMoy != other._vitMoy) { return false; }
-        if (_modeCalcul != other._modeCalcul) { return false; }
-        if (_pTraficJour != other._pTraficJour) { return false; }
-        if (_pTraficNuit != other._pTraficNuit) { return false; }
+        // road_traffic = other.road_traffic; // XXX
+        for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+        {
+            if(traffic_regimes[i] != other.traffic_regimes[i]) { return false; };
+        }
     }
     return true;
 }
@@ -141,13 +136,15 @@ bool TYRoute::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
     if (!TYAcousticLine::deepCopy(pOther, copyId)) { return false; }
 
-    TYRoute* pOtherRoute = (TYRoute*) pOther;
+    const TYRoute* pOtherRoute = dynamic_cast<const TYRoute*>(pOther);
+    assert(pOtherRoute && "Invalid cast to TYRoute*");
 
-    _vitMoy = pOtherRoute->_vitMoy;
-    _modeCalcul = pOtherRoute->_modeCalcul;
-
-    _pTraficJour->deepCopy(pOtherRoute->_pTraficJour, copyId);
-    _pTraficNuit->deepCopy(pOtherRoute->_pTraficNuit, copyId);
+    road_traffic = pOtherRoute->road_traffic;
+    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    {
+        traffic_regimes[i].deepCopy(&pOtherRoute->traffic_regimes[i], copyId);
+    }
+    setRoadTrafficArrayForRegime(Day);
 
     return true;
 }
@@ -161,11 +158,13 @@ DOM_Element TYRoute::toXML(DOM_Element& domElement)
 {
     DOM_Element domNewElem = TYAcousticLine::toXML(domElement);
 
-    TYXMLTools::addElementIntValue(domNewElem, "modeCalcul", _modeCalcul);
-    TYXMLTools::addElementDoubleValue(domNewElem, "vitMoy", _vitMoy);
+    // TODO update serialisation : cf. https://extranet.logilab.fr/ticket/1512503
 
-    _pTraficJour->toXML(domNewElem);
-    _pTraficNuit->toXML(domNewElem);
+    // TYXMLTools::addElementIntValue(domNewElem, "modeCalcul", _modeCalcul);
+    // TYXMLTools::addElementDoubleValue(domNewElem, "vitMoy", _vitMoy);
+
+    // _pTraficJour->toXML(domNewElem);
+    // _pTraficNuit->toXML(domNewElem);
 
     return domNewElem;
 }
@@ -174,206 +173,69 @@ int TYRoute::fromXML(DOM_Element domElement)
 {
     TYAcousticLine::fromXML(domElement);
 
-    bool modeCalculOk = false;
-    bool vitMoyOk = false;
-    bool traficJourFound = false;
-    bool traficNuitFound = false;
-    DOM_Element elemCur;
-    QDomNodeList childs = domElement.childNodes();
-    for (unsigned int i = 0; i < childs.length(); i++)
-    {
-        elemCur = childs.item(i).toElement();
-        TYXMLTools::getElementBoolValue(elemCur, "modeCalcul", _modeCalcul, modeCalculOk);
-        TYXMLTools::getElementDoubleValue(elemCur, "vitMoy", _vitMoy, vitMoyOk);
+    // TODO update serialisation: cf. https://extranet.logilab.fr/ticket/1512503
 
-        if (!traficJourFound)
-        {
-            traficJourFound = _pTraficJour->callFromXMLIfEqual(elemCur);
-        }
-        else if (!traficNuitFound)
-        {
-            traficNuitFound = _pTraficNuit->callFromXMLIfEqual(elemCur);
-        }
-    }
+    // bool modeCalculOk = false;
+    // bool vitMoyOk = false;
+    // bool traficJourFound = false;
+    // bool traficNuitFound = false;
+    // DOM_Element elemCur;
+    // QDomNodeList childs = domElement.childNodes();
+    // for (unsigned int i = 0; i < childs.length(); i++)
+    // {
+    //     elemCur = childs.item(i).toElement();
+    //     TYXMLTools::getElementBoolValue(elemCur, "modeCalcul", _modeCalcul, modeCalculOk);
+    //     TYXMLTools::getElementDoubleValue(elemCur, "vitMoy", _vitMoy, vitMoyOk);
 
-    if (_tabRegimes.size() == 1) // Cas d'un ancien fichier "sans regime"
-    {
-        addRegime(buildRegime()); // On rajoute un regime
-        _tabRegimes[0].setName("Jour");
-        _tabRegimes[1].setName("Nuit");
-    }
+    //     if (!traficJourFound)
+    //     {
+    //         traficJourFound = _pTraficJour->callFromXMLIfEqual(elemCur);
+    //     }
+    //     else if (!traficNuitFound)
+    //     {
+    //         traficNuitFound = _pTraficNuit->callFromXMLIfEqual(elemCur);
+    //     }
+    // }
+
+    // if (_tabRegimes.size() == 1) // Cas d'un ancien fichier "sans regime"
+    // {
+    //     addRegime(buildRegime()); // On rajoute un regime
+    //     _tabRegimes[0].setName("Jour");
+    //     _tabRegimes[1].setName("Nuit");
+    // }
 
     return 1;
 }
 
-double TYRoute::calculEVL(bool plat /*=true*/)
+TYSpectre TYRoute::computeSpectre(enum TrafficRegimes regime)
 {
-    double valEVL;
-    if (plat)           // Terrain plat
-    {
-        if (_modeCalcul)    // ecoulement fluide
-        {
-            if (_vitMoy < 44.0)     // Balayage des differentes plages de vitesse
-            {
-                valEVL = 29.4;
-            }
-            else
-            {
-                valEVL = 0.139 * _vitMoy + 23.27;
-            }
-        }
-        else                // ecoulement pulse
-        {
-            if (_vitMoy <= 40.0)    // Balayage des differentes plages de vitesse
-            {
-                valEVL = -0.14 * _vitMoy + 36.8;
-            }
-            else if (_vitMoy <= 53.0)
-            {
-                valEVL = 31.2;
-            }
-            else
-            {
-                valEVL = 0.139 * _vitMoy + 23.27;
-            }
-        }
-    }
-    else                // Terrain en pente : dans ce cas, pas de calcul en ecoulement pulse
-    {
-        if (_vitMoy <= 20.0)
-        {
-            valEVL = -0.047 * 20.0 + 35.8;
-        }
-        else if (_vitMoy <= 43.0)
-        {
-            valEVL = -0.047 * _vitMoy + 35.8;
-        }
-        else if (_vitMoy <= 80.0)
-        {
-            valEVL = 0.032 * _vitMoy + 32.4;
-        }
-        else
-        {
-            valEVL = 0.139 * _vitMoy + 23.27;
-        }
-    }
+    // This updates the road_traffic to point to the array of RoadTrafficComponents
+    // corresponding to the selected regime.
+    setRoadTrafficArrayForRegime(regime);
 
-    return valEVL;
-}
+    updateComputedDeclivity();
 
-double TYRoute::calculEPL(bool plat /*=true*/)
-{
-    double valEPL;
+    // TODO check whether Spectrum_3oct_lin or Spectrum_3oct_A is the right one (TM)
+    double * tab = NMPB08_Lwm(&road_traffic, Spectrum_3oct_lin);
 
-    if (plat)           // Terrain plat : Pas d'ecoulement pulse pour les camions
-    {
-        if (_vitMoy <= 20.0)        // Balayage des differentes plages de vitesse
-        {
-            valEPL = -0.12 * 20.0 + 49.6;
-        }
-        else if (_vitMoy <= 51.0)
-        {
-            valEPL = -0.12 * _vitMoy + 49.6;
-        }
-        else if (_vitMoy <= 70.0)
-        {
-            valEPL = 43.0;
-        }
-        else if (_vitMoy <= 100.0)
-        {
-            valEPL = 0.1 * _vitMoy + 36.0;
-        }
-        else
-        {
-            valEPL = 0.1 * 100.0 + 36.0;
+    // This initialise `s` with the 18 values provided in `tab`
+    // Because the 1st frequency provided by NMPB08 is 100Hz whereas 100Hz
+    // is the 9th frequency in Code_TYMPAN representation the offset is 8
+    // Both spectrum uses 3rd octave as frequency steps and the common
+    // higest frequency is 5000Hz.
+    OSpectre s(tab, 18, 8);
 
-        }
-    }
-    else                // Terrain en pente : dans ce cas, pas de calcul en ecoulement pulse
-    {
-        if (_vitMoy <= 20.0)
-        {
-            valEPL = -0.129 * 20 + 49.6;
-        }
-        else if (_vitMoy <= 51.0)
-        {
-            valEPL = -0.129 * _vitMoy + 49.6;
-        }
-        else if (_vitMoy <= 70.0)
-        {
-            valEPL = 43.0;
-        }
-        else if (_vitMoy <= 100.0)
-        {
-            valEPL = 0.1 * _vitMoy + 36.0;
-        }
-        else
-        {
-            valEPL = 0.1 * 100.0 + 36.0;
-        }
-    }
-
-
-    return valEPL;
-}
-
-TYSpectre TYRoute::computeSpectre(const LPTYTrafic regime)
-{
-    TYSpectre s;
-
-    double penteMoy = calculPenteMoyenne();
-
-    // Calcul de EVL et EPL
-
-
-    // On calcule d'abord sur terrain plat
-    double evlPlat  = calculEVL(true);
-    double eplPlat  = calculEPL(true);
-    double evlPente = 0.0;
-    double eplPente = 0.0;
-
-    // Puis sur terrain en pente (si necessaire)
-    if (penteMoy >= 0.02)
-    {
-        evlPente = calculEVL(false); // Voitures
-        eplPente = calculEPL(false); // Camions
-    }
-    else
-    {
-        evlPente = evlPlat;
-        eplPente = eplPlat;
-    }
-
-    // Calcul de LAWi
-    double debitVLdB = 10 * log10(regime->getDebitVL());
-    double debitPLdB = 10 * log10(regime->getDebitPL());
-    double longdB = 0.0; // Pour la lisibilite = 10 * log10(1.0) : longueur de reference = 1 metre
-
-    double partVLPlat  = pow(10.0, (evlPlat + debitVLdB) / 10.0) ;
-    double partPLPlat  = pow(10.0, (eplPlat + debitPLdB) / 10.0) ;
-    double lAWiPlat    = partVLPlat + partPLPlat ;
-
-    double partVLPente = pow(10.0, (evlPente + debitVLdB) / 10.0);
-    double partPLPente = pow(10.0, (eplPente + debitPLdB) / 10.0);
-    double lAWiPente   = partVLPente + partPLPente;
-
-    // LAWi = moyenne (en energie) de LAWi sur le plat et LAWi sur une pente)
-    double lAWi = 10 * log10((lAWiPlat + lAWiPente) / 2.0) + 20.0 + longdB;
-
-    // Mise en spectre
-    double valeur = 0.0;
-    for (unsigned int i = 0 ; i < s.getNbValues() ; i++)
-    {
-        valeur = lAWi + _tabR[i] - 10 * log10(3.0);
-        s.getTabValReel()[i] = valeur;
-    }
-
-    return s;
+    return TYSpectre(s);
 }
 
 double TYRoute::calculPenteMoyenne()
 {
+    // TODO cf https://extranet.logilab.fr/ticket/1513440
+    // Iter on the _listSrcPonct (sources) instead of _tabPoint (2d geometry)
+
     size_t nbPoint = _tabPoint.size();
+    if(nbPoint<2) // Declivity is undefined
+        return undefined_declivity;
     double* XTemp = new double [nbPoint]; // sert a ramener les points repartis sur une surface sur une droite
     double X  = 0.0;
     double Z  = 0.0;
@@ -437,16 +299,14 @@ bool TYRoute::updateAcoustic(const bool& force) //force = false
 {
     if (_typeDistribution == TY_PUISSANCE_CALCULEE)
     {
-        // Calcul des spectres correspondant aux regimes jours et nuit
-        TYSpectre traficJour = computeSpectre(_pTraficJour);
-        TYSpectre traficNuit = computeSpectre(_pTraficNuit);
-
-        traficJour.setType(SPECTRE_TYPE_LW);
-        traficNuit.setType(SPECTRE_TYPE_LW);
-
-        // Affectation des regimes
-        _tabRegimes[0].setSpectre(traficJour);
-        _tabRegimes[1].setSpectre(traficNuit);
+        for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+        {
+            // Calcul des spectres correspondant aux regimes jours et nuit
+            TYSpectre spectrum = computeSpectre(static_cast<enum TrafficRegimes>(i));
+            spectrum.setType(SPECTRE_TYPE_LW);
+            // Affectation des regimes
+            _tabRegimes[i].setSpectre(spectrum);
+        }
     }
 
     // NB : The sources are expected to have already been created during
@@ -496,6 +356,8 @@ bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNod
     // Note this is distriSrcs(const TYAltimetrie&) NOT base class distriSrcs()
     distriSrcs(alti, pGeoNode);
 
+    updateComputedDeclivity();
+
     this->setIsGeometryModified(false);
     return true;
 }
@@ -527,4 +389,145 @@ void TYRoute::distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
         // Transform back from site frame pose
         *pSrc->getPos() = matrixinv * pt;
     }
+}
+
+RoadTrafficComponent& TYRoute::getRoadTrafficComponent(enum TrafficRegimes regime, enum RoadVehicleType vehic_type)
+{
+    assert(regime < NB_TRAFFIC_REGIMES);
+    return traffic_regimes[regime].arr[vehic_type-1];
+}
+
+const RoadTrafficComponent& TYRoute::getRoadTrafficComponent(enum TrafficRegimes regime, enum RoadVehicleType vehic_type) const
+{
+    assert(regime < NB_TRAFFIC_REGIMES);
+    return traffic_regimes[regime].arr[vehic_type-1];
+}
+
+void TYRoute::setRoadTrafficArrayForRegime(enum TrafficRegimes regime)
+{
+    road_traffic.nbComponents = TYTrafic::NB_VEHICULE_TYPES; // LV & HGV
+    road_traffic.traffic = &traffic_regimes[regime].arr[0];
+}
+
+void TYRoute::updateComputedDeclivity()
+{
+    double penteMoy = calculPenteMoyenne();
+    // TODO Solve the following model incinsitency :
+    // cf https://extranet.logilab.fr/ticket/1513437
+    // There is only one RoadTraffic for a TYRoute for now
+    // Thus only one declivity for both lanes of a road,
+    // which by definition have opposite declivity !
+
+    road_traffic.ramp = penteMoy; // TODO assert units
+}
+
+// table C1
+const TYRoute::note77_tables TYRoute::note77_lower_bounds = {
+// Link motorways
+    {
+        // Long distance function
+        {7000, 1300, 16},
+        // Regional roads
+        {7000,  500,  6}
+    },
+// Intercity roads
+    {
+        // Long distance function
+        {2500,  300,  8},
+        // Regional roads
+        {2500,  250,  5}
+    }
+};
+// table C1
+const TYRoute::note77_tables TYRoute::note77_upper_bounds=
+{
+// Link motorways
+    {
+        // Long distance function
+        {70000, 13500, 36},
+        // Regional roads
+        {93000, 14000, 34}
+    },
+// Intercity roads
+    {
+        // Long distance function
+        {22500, 5000, 34},
+        // Regional roads
+        {22000, 2500, 17}
+    }
+};
+// table C2
+const TYRoute::note77_tables TYRoute::note77_hourly_HGV_coeff = {
+// Link motorways
+    {
+        // Long distance function
+        {20, 20, 39},
+        // Regional roads
+        {17, 28,  50}
+    },
+// Intercity roads
+    {
+        // Long distance function
+        {17, 27, 51},
+        // Regional roads
+        {16, 34, 73}
+    }
+};
+// table C2
+const TYRoute::note77_tables TYRoute::note77_hourly_LV_coeff = {
+// Link motorways
+    {
+        // Long distance function
+        {17, 19,  82},
+        // Regional roads
+        {17, 18, 100}
+    },
+// Intercity roads
+    {
+        // Long distance function
+        {17, 19, 110},
+        // Regional roads
+        {17, 19, 120}
+    }
+};
+
+
+static bool inline is_in(double val, double min, double max)
+{return min <= val && val <= max; }
+
+bool  TYRoute::note77_check_validity(
+    double aadt_hgv, double aadt_lv,
+    TYRoute::RoadType road_type, TYRoute::RoadFunction road_function)
+{
+    const double aadt_total = aadt_lv + aadt_hgv;
+    // TODO Use propoer loggin to report validity violations
+    return ( is_in(aadt_total,
+                   note77_lower_bounds[road_type][road_function][0],
+                   note77_upper_bounds[road_type][road_function][0]) &&
+             is_in(aadt_hgv,
+                   note77_lower_bounds[road_type][road_function][1],
+                   note77_upper_bounds[road_type][road_function][1]) &&
+             is_in(aadt_hgv / aadt_total * 100,
+                 note77_lower_bounds[road_type][road_function][0],
+                   note77_upper_bounds[road_type][road_function][0]) );
+}
+
+
+bool  TYRoute::setFromAADT(double aadt_hgv, double aadt_lv,
+                           TYRoute::RoadType road_type, TYRoute::RoadFunction road_function)
+{
+    if  (!note77_check_validity(aadt_hgv, aadt_lv, road_type, road_function))
+        return false;
+
+    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    {
+        enum TrafficRegimes regime = static_cast<TrafficRegimes>(i);
+        RoadTrafficComponent& traffic_lv  = getRoadTrafficComponent(regime, VehicleType_VL);
+        traffic_lv.trafficFlow = // Compute hourly traffic
+            aadt_lv  / note77_hourly_LV_coeff[road_type][road_function][regime];
+        RoadTrafficComponent& traffic_hgv = getRoadTrafficComponent(regime, VehicleType_PL);
+        traffic_hgv.trafficFlow =  // Compute hourly traffic
+            aadt_hgv / note77_hourly_HGV_coeff[road_type][road_function][regime];
+    }
+    return true;
 }
