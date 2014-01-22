@@ -40,6 +40,9 @@
 namespace core_mathlib
 {
 typedef float decimal;
+
+typedef unsigned int bitSet; /*!< used to manage set of elements*/
+
 #ifndef EPSILON
 #define EPSILON             (decimal)0.000001                       /*!< Approximation lors de la comparaison de 2 decimal */
 #endif

@@ -149,26 +149,45 @@ std::vector<unsigned int> Ray::getPrimitiveHistory()
 
 signature Ray::getSignature(const typeevent& typeEv)
 {
-	// The source id is stored in 12 bits, receptor is stored in 20 bits
-	unsigned int SR = source->getId(), SD = 0;
-	assert(SR < 4096);
-	SR = SR << 20;
-	unsigned int R = (static_cast<Recepteur*>(recepteur))->getId();
-	assert(R < 1048576);
+	bitSet SR = getSRBitSet(source->getId(), (static_cast<Recepteur*>(recepteur))->getId());
+	bitSet SD = getEventsBitSet(typeEv);
 
-	SR += R;
+	return std::make_pair(SR, SD);
+}
 
-	for (unsigned int i=0; i<events.size(); i++)
+bitSet Ray::getEventsBitSet(const typeevent& typeEv)
+{
+	bitSet SD = 0;
+	for (size_t i=0; i<events.size(); i++)
 	{
 		SD = SD << 1;
 
-		if ( events.at(i)->getType() == DIFFRACTION) { SD++; }
+		if ( events.at(i)->getType() == typeEv) { SD++; }
 	}
 
-	if (typeEv == SPECULARREFLEXION) 
+	return SD;
+}
+
+decimal Ray::coveredDistance(const unsigned int& current_indice, unsigned int initial_indice, const bool &from_source) const
+{
+	vec3 start_pos;
+	decimal distance = 0.;
+
+	if (from_source)
 	{
-		SD = core_mathlib::buildComplementaryBitSet(getNbEvents(), SD);
+		start_pos =  source->getPosition();
+		initial_indice = 0; // in this case we start from the the first event
+		distance = distance + start_pos.distance( events.at(0)->getPosition() ); 
 	}
 
-	return std::make_pair(SR, SD);
+	vec3 pos1, pos2;
+	for (unsigned int i = initial_indice; i < current_indice; i++)
+	{
+		pos1 = events.at(i)->getPosition();
+		pos2 = events.at(i+1)->getPosition();
+
+		distance = distance + ( pos1.distance( pos2 ) );
+	}
+
+	return distance;
 }
