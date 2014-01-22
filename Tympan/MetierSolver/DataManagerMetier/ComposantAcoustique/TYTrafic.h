@@ -48,7 +48,7 @@ class TYTrafic: public TYElement
 
     friend class TYRoute;
 
-    enum VehiculeTypes {LV /*Light Vehicules*/, HGV /*Heavy Goods Vehicules*/, NB_VEHICULE_TYPES};
+    enum VehiculeTypes {LV /*Light Vehicules*/, HGV /*Heavy Goods Vehicules*/, NB_VEHICLE_TYPES};
 
     // Methodes
 public:
@@ -112,7 +112,7 @@ protected:
             RoadTrafficComponent hgv;
         };
 
-        RoadTrafficComponent arr[NB_VEHICULE_TYPES];
+        RoadTrafficComponent arr[NB_VEHICLE_TYPES];
     };
 
 };

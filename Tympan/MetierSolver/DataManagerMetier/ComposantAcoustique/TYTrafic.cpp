@@ -34,7 +34,7 @@ TYTrafic::TYTrafic()
 
     lv.vehicleType = VehicleType_VL;
     hgv.vehicleType = VehicleType_PL;
-    for(unsigned i=0; i<NB_VEHICULE_TYPES; ++i)
+    for(unsigned i=0; i<NB_VEHICLE_TYPES; ++i)
     {
         arr[i].flowType = FlowType_CONST;
         arr[i].trafficFlow = 0;
@@ -56,7 +56,7 @@ TYTrafic& TYTrafic::operator=(const TYTrafic& other)
     if (this != &other)
     {
         TYElement::operator =(other);
-        for(unsigned i=0; i<NB_VEHICULE_TYPES; ++i)
+        for(unsigned i=0; i<NB_VEHICLE_TYPES; ++i)
         {
             arr[i].flowType = other.arr[i].flowType;
             arr[i].trafficFlow = other.arr[i].trafficFlow;
@@ -71,7 +71,7 @@ bool TYTrafic::operator==(const TYTrafic& other) const
     if (this != &other)
     {
         if (TYElement::operator !=(other)) { return false; }
-        for(unsigned i=0; i<NB_VEHICULE_TYPES; ++i)
+        for(unsigned i=0; i<NB_VEHICLE_TYPES; ++i)
         {
             if( arr[i].flowType != other.arr[i].flowType)  {return false;};
             if( arr[i].trafficFlow != other.arr[i].trafficFlow) {return false;};
