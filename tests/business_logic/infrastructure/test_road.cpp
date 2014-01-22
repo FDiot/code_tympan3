@@ -4,6 +4,8 @@
 
 #include "gtest/gtest.h"
 
+#include <QtXml>
+
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
@@ -42,9 +44,29 @@ LPTYSiteNode buildFlatSiteSimpleRoad(void)
 
 TEST(TestRoads, basic_flat_road_creation) {
 
-    LPTYSiteNode pSite = buildFlatSiteSimpleRoad();
-    LPTYInfrastructure pInfra = pSite->getInfrastructure();
+LPTYSiteNode pSite = buildFlatSiteSimpleRoad();
+LPTYInfrastructure pInfra = pSite->getInfrastructure();
 
-    ASSERT_EQ(1, pInfra->getListRoute().size());
-    LPTYRoute pRoad = TYRoute::safeDownCast(pInfra->getListRoute()[0]->getElement());
+ASSERT_EQ(1, pInfra->getListRoute().size());
+LPTYRoute pRoad = TYRoute::safeDownCast(pInfra->getListRoute()[0]->getElement());
+}
+
+
+TEST(TestRoads, xml_roundtrip)
+{
+LPTYRoute pRoad = new TYRoute();
+
+pRoad->road_traffic.surfaceType = RoadSurface_DR1;
+
+QDomDocument doc_xml;
+DOM_Element parent_xml = doc_xml.createElement("whatever");
+DOM_Element road_xml = pRoad->toXML(parent_xml);
+
+LPTYRoute pLoadedRoad = new TYRoute();
+ASSERT_NE(RoadSurface_DR1, pLoadedRoad->road_traffic.surfaceType);
+DOM_Element loaded_xml;
+int status = pLoadedRoad->fromXML(road_xml);
+
+ASSERT_EQ(1, status);
+EXPECT_EQ(RoadSurface_DR1, pLoadedRoad->road_traffic.surfaceType);
 }

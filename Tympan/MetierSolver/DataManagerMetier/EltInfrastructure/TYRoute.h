@@ -23,6 +23,7 @@
 #ifndef __TY_ROUTE__
 #define __TY_ROUTE__
 
+#include "gtest/gtest_prod.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYTrafic.h"
@@ -50,6 +51,9 @@ typedef std::vector<LPTYRouteGeoNode> TYTabRouteGeoNode;
  */
 class TYRoute: public TYAcousticLine
 {
+
+    FRIEND_TEST(TestRoads, xml_roundtrip);
+
     OPROTOSUPERDECL(TYRoute, TYAcousticLine)
     TY_EXTENSION_DECL(TYRoute)
     TY_EXT_GRAPHIC_DECL(TYRoute)
