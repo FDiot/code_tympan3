@@ -57,6 +57,8 @@ TEST(TestRoads, xml_roundtrip)
 LPTYRoute pRoad = new TYRoute();
 
 pRoad->road_traffic.surfaceType = RoadSurface_DR1;
+pRoad->road_traffic.surfaceAge = 10;
+pRoad->road_traffic.ramp = 0.3;
 
 QDomDocument doc_xml;
 DOM_Element parent_xml = doc_xml.createElement("whatever");
@@ -68,5 +70,7 @@ DOM_Element loaded_xml;
 int status = pLoadedRoad->fromXML(road_xml);
 
 ASSERT_EQ(1, status);
-EXPECT_EQ(RoadSurface_DR1, pLoadedRoad->road_traffic.surfaceType);
+EXPECT_EQ(pRoad->road_traffic.surfaceType, pLoadedRoad->road_traffic.surfaceType);
+EXPECT_EQ(pRoad->road_traffic.ramp,        pLoadedRoad->road_traffic.ramp);
+EXPECT_EQ(pRoad->road_traffic.surfaceAge,  pLoadedRoad->road_traffic.surfaceAge);
 }
