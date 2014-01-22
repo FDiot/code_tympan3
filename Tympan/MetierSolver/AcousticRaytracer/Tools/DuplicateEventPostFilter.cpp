@@ -52,15 +52,29 @@ unsigned int duplicateEventPostFilter::Process()
 		{
 			if ( (*iterR).second.size() <= 1 ) { continue; }
 
-			// third filter to separate different diffractions (sharing same shapes)
-			sequenceMap sm = buildSequenceMap( (*iterR).first, (*iterR).second, DIFFRACTION );
+			// loop under residual rays to test similarities
+			vector<Ray*>& tab = ( (*iterR).second );
 
-			// On boucle sur cette nouvelle série
-			sequenceMap::iterator iterSM;
-			for (iterSM = sm.begin(); iterSM != sm.end(); iterSM++)
+			Ray* r = NULL;
+			vector<Ray*>::iterator iter1, iter2;
+			// Compare Ray two by two
+			for (iter1 = tab.begin(); iter1 != tab.end(); ++iter1)
 			{
-				if ( (*iterSM).second.size() <= 1) { continue; }
+				for (iter2 = iter1+1; iter2 != tab.end(); ++iter2)
+				{
 
+					r = compareRays( (*iter1), (*(iter2)) );
+
+					if (r == NULL) continue;
+					if ( r == (*iter1) ) 
+					{
+						cleanTab(tab, iter1);
+					}
+					else
+					{
+						cleanTab(tab, iter2);
+					}
+				}
 			}
 		}
 

@@ -29,7 +29,13 @@ using namespace std;
 //  #include "RayGraphic.h"
 //#endif
 
-typedef std::pair<unsigned int, unsigned int> signature;
+/*!
+ * brief : signature describes a ray by a pair of unsigend int. The first one gives the source number (in the range 0-4095)
+ *         and the receptor the receptor number (in the range 0-1048576) as a bit field.
+ *         The second one decribe the sequences of events by their types (user could decide what 1 represent, may be REFLEXION 
+ *         or DIFFRACTION)
+ */
+typedef std::pair<bitSet, bitSet> signature;
 
 class Ray : public Base
 {
@@ -93,7 +99,7 @@ public:
     * \brief Renvoie la distance parcourue par le rayon
     * \return Distance parcourue par le rayon.
     */
-    double getLongueur() {return longueur;}
+    double getLongueur() const {return longueur;}
 
     /*!
     * \fn unsigned int getDiff()
@@ -116,11 +122,19 @@ public:
 	unsigned int getNbEvents() { return nbDiffraction + nbDiffraction; }
 
     /*!
-    * \fn double getEvents()
+    * \fn std::vector<QSharedPointer<Event> >* getEvents()
     * \brief Renvoie le tableau des evenements rencontres par le rayon
     * \return Tableau des evenements rencontres par le rayon.
     */
     std::vector<QSharedPointer<Event> >* getEvents() { return &events; }
+
+	/*!
+    * \fn const std::vector<QSharedPointer<Event> >* getEvents() const
+    * \brief Renvoie le tableau des evenements rencontres par le rayon
+    * \return Tableau des evenements rencontres par le rayon.
+    */
+    const std::vector<QSharedPointer<Event> >* getEvents() const { return &events; }
+
     /*!
     * \fn float distanceSourceRecepteur()
     * \brief Calcul la distance entre une source et un recepteur
@@ -151,6 +165,56 @@ public:
 	 * \brief Compute the signature (i.e. std::pair<unsigned int, unsigned int>) of the ray)
 	 */
 	signature getSignature(const typeevent& typeEv = SPECULARREFLEXION);
+
+	/*!
+	 * \fn decimal getThick( const decimal& distance, const decimal& angle, const unsigned int& nb_rays, bool diffraction = false) const;
+	 * \brief Compute thickness of the ray after covering a distance distance for spherical or diffraction source
+	 */
+	inline decimal getThickness( const decimal& distance, const decimal& angle, const unsigned int& nb_rays, bool diffraction = false) const
+	{
+		if (diffraction)
+		{
+			return M_2PI * angle * distance / nb_rays; 
+		}
+			
+		return 2. * distance * sqrt( angle / M_PI ); 
+	}
+
+	/*!
+	 * \fn decimal getSolidAngle(decimal initial_solid_angle, unsigned int nb_rays);
+	 * \brief Compute solid angle associated with the ray
+	 */
+	inline decimal getSolidAngle(decimal initial_solid_angle, unsigned int nb_rays) const
+	{
+		unsigned int nbRays = source->getNbRayLeft();
+		return initial_solid_angle / nb_rays;
+	}
+
+	/*!
+	 * \fn bitSet getSRBitSet(const unsigned& int source_id, const unsigned int & receptor_id);
+	 * \brief compute the bitSet associated with a source and a receptor
+	 */
+	inline bitSet getSRBitSet(const unsigned int& source_id, const unsigned int & receptor_id)
+	{
+		// The source id is stored in 12 bits, receptor is stored in 20 bits
+		assert( (source_id < 4096) && (receptor_id < 1048576) );
+		bitSet SR = source_id;
+		SR = SR << 20;
+		return SR += receptor_id;
+	}
+
+	/*!
+	 * \fn bitSet getEventsBitSet(const typeevent& typeEv);
+	 * \brief compute the bitSet associated with a list of events of type evType
+	 */
+	bitSet getEventsBitSet(const typeevent& typeEv);
+
+	/*!
+	 * \fn decimal coveredDistance(unsigned int current_indice, unsigned int initial_indice = 0);
+	 * \brief Gives the distance covered by the ray between two events
+	 *        by default from the source
+	 */
+	decimal coveredDistance(const unsigned int& current_indice, unsigned int initial_indice = 0, const bool &from_source = true) const;
 
 public:
     vec3 position;                              /*!< Point de depart du rayon */
