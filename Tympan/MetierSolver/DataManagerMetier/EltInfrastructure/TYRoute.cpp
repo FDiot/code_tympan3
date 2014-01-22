@@ -471,7 +471,7 @@ const RoadTrafficComponent& TYRoute::getRoadTrafficComponent(enum TrafficRegimes
 
 void TYRoute::setRoadTrafficArrayForRegime(enum TrafficRegimes regime)
 {
-    road_traffic.nbComponents = TYTrafic::NB_VEHICULE_TYPES; // LV & HGV
+    road_traffic.nbComponents = TYTrafic::NB_VEHICLE_TYPES; // LV & HGV
     road_traffic.traffic = &traffic_regimes[regime].arr[0];
 }
 
