@@ -30,8 +30,6 @@ float globalSampleGround2D;     //Echantillonage sur sol pour la description de 
 int globalRayTracingOrder;      //[0-2]Sens de traitement des rayon source-recepteur ou inverse (0 = SR / 1 =RS / 2 = auto)
 float globalAnalyticAnglePhi;   // Angle de tir vertical (phi) des rayons
 int globalDiscretization;		//Permet de choisir entre des rayons aléatoires ou déterministes (discretisation source)
-int globalN1;					//Longitude : nbr of parts
-int globalRayAsked;		// Nbr of rays initially asked by the user
 
 ////////////////////////////
 // Reflexion

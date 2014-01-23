@@ -104,22 +104,9 @@ public:
         //}
         else
         {
-			// At the moment, two possibilities are available:
-			// You may want a random direction, in that case uncomment
-			// "" but if you prefer to use 
-			// the deterministic version, 
-			// "r = vec3(sampler->Discretisation(nbRayLeft));"
-			// is the one to choose.
-			switch(globalDiscretization)
-			{
-				case 0 :
-					r = vec3(sampler->getSample());
-					break;
-				case 1 :
-					r = vec3(sampler->Discretisation(nbRayLeft, globalN1, globalNbRaysPerSource, globalRayAsked));
-					break;
-			}
+			r = vec3(sampler->getSample());
         }
+
         //std::cout<<"Renvoie d'une nouvelle direction."<<std::endl;
         return true;
     }

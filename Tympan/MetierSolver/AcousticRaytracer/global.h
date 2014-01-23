@@ -27,8 +27,6 @@ extern int globalMaxTreeDepth;          //Profondeur maximale autorisee pour le 
 extern bool globalUseSol;               //Utilisation du sol (ou pas -cas NMPB-)
 extern bool globalKeepDebugRay;         //Permet de conserver les rayons qui ont ete invalides pendant la propagation.
 extern int globalDiscretization;		//Permet de choisir entre des rayons aléatoires ou déterministes (discretisation source)
-extern int globalN1;					//Longitude : nbr of parts
-extern int globalRayAsked;				// Nbr of rays initially asked by the user
 
 ////////////////////////////
 // NMPB value
