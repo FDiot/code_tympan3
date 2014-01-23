@@ -30,8 +30,10 @@
 class UniformSphericSampler: public Sampler
 {
 public:
-    UniformSphericSampler(const unsigned int nbRays = 0) :	Sampler(nbRays), 
-															n1(0)
+    UniformSphericSampler( const unsigned int& nbRays = 0, 
+						   const decimal& Theta = (decimal) M_PIDIV2, 
+						   const decimal& Phi = (decimal) M_2PI		) :	Sampler(nbRays, Theta, Phi), 
+																		n1(0)
 	{ 
 		init(); 
 	}

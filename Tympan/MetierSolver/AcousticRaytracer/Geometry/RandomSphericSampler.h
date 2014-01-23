@@ -30,7 +30,12 @@ class RandomSphericSampler: public Sampler
 {
 
 public:
-    RandomSphericSampler(const unsigned int nbRays = 0) : Sampler(nbRays) { init(); }
+    RandomSphericSampler( const unsigned int& nbRays = 0, 
+						  const decimal& Theta = (decimal) M_PIDIV2, 
+						  const decimal& Phi = (decimal) M_2PI		) :	Sampler(nbRays, Theta, Phi)
+	{ 
+		init(); 
+	}
 
     RandomSphericSampler(const RandomSphericSampler& other) : Sampler(other) 
 	{
