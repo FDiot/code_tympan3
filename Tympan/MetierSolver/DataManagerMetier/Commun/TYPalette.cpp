@@ -37,18 +37,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-QString xml2qstring( const QDomNode& node )
-{
-	QString msg; QTextStream str(&msg);
-	node.save(str, 0);
-	return msg;
-}
-
-#define xml2cstring(nodeexpr) xml2qstring((nodeexpr)).toLocal8Bit().data()
-
-#define debugXml(expr) qDebug()<< #expr << xml2qstring((expr))
-
-
 OPROTOINST(TYPalette);
 
 
