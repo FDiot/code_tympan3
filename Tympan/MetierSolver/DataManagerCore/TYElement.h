@@ -30,9 +30,11 @@
 #pragma warning( disable : 4275 4800 4355 4273 4786 4018 4503)
 #endif
 
+#ifndef _NDEBUG
+#include <QDebug>
+#endif // _NDEBUG
+
 #include "Tympan/Tools/TYConfigure.h"
-
-
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYElementWidget.h"
@@ -633,5 +635,29 @@ private:
     static uint64 ty_destroyed_counter;
     static uint64 ty_regen_id_counter;
 };
+
+// Some simple auxilliary fonction to help debugging and reporting
+
+inline const char* str_qt2c(const QString& qstr)
+{ return qstr.toLocal8Bit().data(); } // TODO Clarifiy consistency wrt Local8Bit vs Utf8
+
+inline QString xml2qstring(const QDomNode& node)
+{
+	QString msg; QTextStream str(&msg);
+	node.save(str, 0);
+	return msg;
+}
+
+inline  const char* xml2cstring(const QDomNode& node)
+{ return str_qt2c(xml2qstring(node)); }
+
+#ifndef _NDEBUG
+inline QDebug _debugXml(const char* expr, const QDomNode& node)
+{ return qDebug()<< expr << xml2qstring((node)); }
+
+#define debugXml(expr) _debugXml(#expr, (expr))
+#else // _NDEBUG
+#define debugXml(expr) ((void)0)
+#endif // _NDEBUG
 
 #endif // __TY_ELEMENT__
