@@ -44,8 +44,6 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     globalUseSol = true;                // Utilisation du sol pour les reflexions
     globalKeepDebugRay = false;			//Permet de conserver les rayons qui ont ete invalides pendant la propagation.
 	globalDiscretization = 1;			//Permet de choisir entre des rayons aléatoires: 0 ou déterministes: 1 (discretisation source)
-	globalN1 = 0;						//Longitude : nbr of parts
-	globalRayAsked = 0;					// Nbr of rays initially asked by the user
 
     ////////////////////////////
     // NMPB value
@@ -114,14 +112,6 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 
 	//Permet de choisir entre des rayons aléatoires: 0 ou déterministes: 1 (discretisation source)
     if (params.getline(ligne, 132)) { globalDiscretization = getParam(ligne); }
-
-	// Permet de recalculer le nombre de rayons reellement lances quand la methode
-	// de la discretisation est choisie
-	if (globalDiscretization == 1)
-	{
-		globalRayAsked = globalNbRaysPerSource;
-		globalNbRaysPerSource = getRealRayNbr(globalNbRaysPerSource, globalN1);
-	}
 
     //Diametre de la sphere representant le recepteur
     if (params.getline(ligne, 132)) { globalSizeReceiver = getParam(ligne); }
@@ -286,31 +276,4 @@ void TYANIME3DRayTracerSetup::finish()
     }
 
     return;
-}
-
-//Function that gives back de real number of ray sent when discretization is chosen
-int TYANIME3DRayTracerSetup::getRealRayNbr(int totalRayNbr, int& n1)
-{
-	int finalRayNbr = 0;
-	double N = totalRayNbr; // Is the number asked by the user, comes from the .txt file.
-	double theta = M_PI/2; // We're working on a sphere
-	double phi = 2*M_PI;
-	n1 = 0; // longitude : nbr of parts
-	int n2 = 0;  // latitude : nbr of parts, function of n1
-	double thetaCalcul;
-	vec3 result;
-
-	n1 = floor (M_PI * sqrt(N)/8 + 0.5);
-	n1 = 2*n1;
-	for(int i = 1; i <= n1 ;i++)
-	{
-		std::vector <double> thetaPts;
-		thetaPts.reserve(n1);
-		thetaCalcul = ( n1 - 2*i +1) * theta / n1 ;
-		thetaPts.push_back(thetaCalcul);
-		n2 = floor ( N * (  sin( (thetaCalcul) + theta /n1 ) - sin( (thetaCalcul) - theta / n1 )  ) / 2  +0.5 );
-		finalRayNbr += n2;
-	}
-
-	return finalRayNbr;
 }

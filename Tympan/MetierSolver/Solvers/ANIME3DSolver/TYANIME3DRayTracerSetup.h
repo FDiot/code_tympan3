@@ -122,7 +122,6 @@ private:
         const char* bidon = str.c_str();
         return std::atof(bidon);
     }
-	int getRealRayNbr(int totalRayNbr, int& n1);
 };
 
 #endif //TYANIME3DRAYTRACERSETUP_H

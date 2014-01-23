@@ -35,6 +35,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/RandomSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
 
 
@@ -410,7 +411,17 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
     for (unsigned int i = 0; i < sources.size(); i++)
     {
         Source source;
-        source.setSampler(new UniformSphericSampler());
+		switch(globalDiscretization)
+		{
+			case 0 :
+				source.setSampler(new RandomSphericSampler(globalNbRaysPerSource));
+				break;
+			case 1 :
+				source.setSampler(new UniformSphericSampler(globalNbRaysPerSource));
+				globalNbRaysPerSource = dynamic_cast<UniformSphericSampler*>( source.getSampler() )->getRealNbRays();
+				break;
+		}
+
         source.setPosition(sources[i]);
         source.setInitialRayCount(globalNbRaysPerSource);
         source.setId(idSource);
