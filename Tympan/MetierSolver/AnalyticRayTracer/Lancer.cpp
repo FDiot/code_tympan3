@@ -20,6 +20,9 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Latitude2DSampler.h"
+#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Longitude2DSampler.h"
+#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\UniformSphericSampler.h"
 
 
 Lancer::Lancer() : sources(NULL), recepteurs(NULL), Meteo(meteo()), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(20)
@@ -355,7 +358,29 @@ void Lancer::RemplirMat()
     RayCourb* tab = NULL;
     vector<vec3> tableau_norm;
 
-    if (launchType == 4) { loadRayFile(tableau_norm); }
+	Sampler *sampler = NULL;
+	switch(launchType)
+	{
+	case 1 : // Tir horizontal
+		sampler = new Latitude2DSampler(nbRay);
+		dynamic_cast<Latitude2DSampler*>(sampler)->setStartTheta(initialAngleTheta);
+		dynamic_cast<Latitude2DSampler*>(sampler)->setStartPhi(initialAnglePhi);
+		dynamic_cast<Latitude2DSampler*>(sampler)->setEndPhi(finalAnglePhi);
+		break;
+	case 2 : // Tir vertical
+		sampler = new Longitude2DSampler(nbRay);
+		dynamic_cast<Longitude2DSampler*>(sampler)->setStartTheta(initialAngleTheta);
+		dynamic_cast<Longitude2DSampler*>(sampler)->setEndTheta(finalAngleTheta);
+		dynamic_cast<Longitude2DSampler*>(sampler)->setStartPhi(initialAnglePhi);
+		break;
+	case 3 : // Tir sur une sphere
+		sampler = new UniformSphericSampler(nbRay);
+		break; 
+	default :
+		return; // do nothing
+	}
+
+//    if (launchType == 4) { loadRayFile(tableau_norm); }
 
     for (unsigned int ns = 0; ns < sources.size(); ++ns)
     {
@@ -369,34 +394,34 @@ void Lancer::RemplirMat()
             // on definit nos normales de depart de chaque rayon
             if (launchType == 1) // Plan horizontal
             {
-                decimal Phi = initialAnglePhi * M_PI / 180.0;
-				decimal startTheta = initialAngleTheta * M_PI /180;
-				decimal endTheta = finalAngleTheta * M_PI / 180;
-                decimal theta = startTheta + k * (endTheta - startTheta) / nbRay;
-                n0 = vec3(cos(Phi) * cos(theta), cos(Phi) * sin(theta), sin(Phi));
+                decimal Theta = initialAngleTheta * M_PI / 180.0;
+				decimal startPhi = initialAnglePhi * M_PI /180;
+				decimal endPhi = finalAnglePhi * M_PI / 180;
+                decimal Phi = startPhi + k * (endPhi - startPhi) / nbRay;
+                n0 = vec3(cos(Theta) * cos(Phi), cos(Theta) * sin(Phi), sin(Theta));
             }
             else if (launchType == 2) // Plan vertical
             {
-                vec3 nMin(cos(initialAnglePhi * M_PI / 180.0), 0, sin(initialAnglePhi * M_PI / 180.0));
-                vec3 nMax(cos(finalAnglePhi * M_PI / 180.0), 0,  sin(finalAnglePhi * M_PI / 180.0));
+                vec3 nMin(cos(initialAngleTheta * M_PI / 180.0), 0, sin(initialAngleTheta * M_PI / 180.0));
+                vec3 nMax(cos(finalAngleTheta * M_PI / 180.0), 0,  sin(finalAngleTheta * M_PI / 180.0));
 
 				// angle de variation des rayons
                 decimal alpha = -acos( nMin * nMax );
 
 				// angle entre l'axe des y et nMin
-                decimal phi = acos( nMin * vec3(0, 0, 1) ); 
-                decimal theta = initialAngleTheta * M_PI / 180.0;
-                n0 = vec3(sin(phi + k * alpha / nbRay) * cos(theta), sin(theta) * sin(phi + k * alpha / nbRay), cos(phi + k * alpha / nbRay));
+                decimal Theta = acos( nMin * vec3(0, 0, 1) ); 
+                decimal Phi = initialAnglePhi * M_PI / 180.0;
+                n0 = vec3(sin(Theta + k * alpha / nbRay) * cos(Phi),  sin(Theta + k * alpha / nbRay) * sin(Phi), cos(Theta + k * alpha / nbRay));
             }
 			else if  (launchType == 3)
 			{
 				decimal U = static_cast<double>(::rand()) / static_cast<double>(RAND_MAX);
 				decimal V = static_cast<double>(::rand()) / static_cast<double>(RAND_MAX);
 
-				decimal theta = ::acos(2. * U - 1.);
-				decimal phi = 2 * M_PI * V;
+				decimal Phi = ::acos(2. * U - 1.);
+				decimal Theta = 2 * M_PI * V;
 
-				n0 = vec3( sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta) );
+				n0 = vec3( sin(Phi) * cos(Theta), sin(Phi) * sin(Theta), cos(Phi) );
 			}
             else if (launchType == 4) // initials vectors are in a file
             {
