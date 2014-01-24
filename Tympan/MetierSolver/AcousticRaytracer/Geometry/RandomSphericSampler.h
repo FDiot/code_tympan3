@@ -32,7 +32,8 @@ class RandomSphericSampler: public Sampler
 public:
     RandomSphericSampler( const unsigned int& nbRays = 0, 
 						  const decimal& Theta = (decimal) M_PIDIV2, 
-						  const decimal& Phi = (decimal) M_2PI		) :	Sampler(nbRays, Theta, Phi)
+						  const decimal& Phi = (decimal) M_2PI		) :	Sampler(nbRays, Theta, Phi), 
+																		_graine(3)
 	{ 
 		init(); 
 	}

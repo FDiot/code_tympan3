@@ -18,6 +18,14 @@
 
 #include "mathlib.h"
 
+/*!
+ * \brief	Sampler class and derivate describe ray generator used in AcousticRayTracer
+ *			In these classes : 
+ *					+ theta is the polar angle where 0 is on equatorius
+ *					+ phi is the equatorial angle
+ *			by default ray are sent on a sphere
+ */
+
 class Sampler
 {
 public:
