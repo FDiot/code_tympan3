@@ -176,7 +176,7 @@ public:
     virtual bool updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode );
 
     const RoadTrafficComponent& getRoadTrafficComponent(
-        enum TrafficRegimes regime, enum RoadVehicleType vehic_type) const;
+        enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type) const;
 
 private:
     virtual void distriSrcs()
@@ -191,7 +191,7 @@ private:
 protected:
 
     RoadTrafficComponent& getRoadTrafficComponent(
-        enum TrafficRegimes regime, enum RoadVehicleType vehic_type);
+          enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type);
 
     /**
      * \brief Calcul de la pente moyenne de la route

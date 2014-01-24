@@ -453,16 +453,14 @@ void TYRoute::distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
     }
 }
 
-RoadTrafficComponent& TYRoute::getRoadTrafficComponent(enum TrafficRegimes regime, enum RoadVehicleType vehic_type)
+RoadTrafficComponent& TYRoute::getRoadTrafficComponent(enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type)
 {
-    assert(regime < NB_TRAFFIC_REGIMES);
-    return traffic_regimes[regime].arr[vehic_type-1];
+    return traffic_regimes[regime].arr[vehic_type];
 }
 
-const RoadTrafficComponent& TYRoute::getRoadTrafficComponent(enum TrafficRegimes regime, enum RoadVehicleType vehic_type) const
+const RoadTrafficComponent& TYRoute::getRoadTrafficComponent(enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type) const
 {
-    assert(regime < NB_TRAFFIC_REGIMES);
-    return traffic_regimes[regime].arr[vehic_type-1];
+    return traffic_regimes[regime].arr[vehic_type];
 }
 
 void TYRoute::setRoadTrafficArrayForRegime(enum TrafficRegimes regime)
@@ -584,10 +582,10 @@ bool  TYRoute::setFromAADT(double aadt_hgv, double aadt_lv,
     for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
     {
         enum TrafficRegimes regime = static_cast<TrafficRegimes>(i);
-        RoadTrafficComponent& traffic_lv  = getRoadTrafficComponent(regime, VehicleType_VL);
+        RoadTrafficComponent& traffic_lv  = getRoadTrafficComponent(regime, TYTrafic::LV);
         traffic_lv.trafficFlow = // Compute hourly traffic
             aadt_lv  / note77_hourly_LV_coeff[road_type][road_function][regime];
-        RoadTrafficComponent& traffic_hgv = getRoadTrafficComponent(regime, VehicleType_PL);
+        RoadTrafficComponent& traffic_hgv = getRoadTrafficComponent(regime, TYTrafic::HGV);
         traffic_hgv.trafficFlow =  // Compute hourly traffic
             aadt_hgv / note77_hourly_HGV_coeff[road_type][road_function][regime];
     }
