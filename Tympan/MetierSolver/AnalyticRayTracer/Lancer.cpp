@@ -375,6 +375,7 @@ void Lancer::RemplirMat()
 		break;
 	case 3 : // Tir sur une sphere
 		sampler = new UniformSphericSampler(nbRay);
+		nbRay = dynamic_cast<UniformSphericSampler*>(sampler)->getRealNbRays();
 		break; 
 	default :
 		return; // do nothing
@@ -391,49 +392,50 @@ void Lancer::RemplirMat()
 
         for (unsigned int k = 0; k < nbRay; ++k)
         {
-            // on definit nos normales de depart de chaque rayon
-            if (launchType == 1) // Plan horizontal
-            {
-                decimal Theta = initialAngleTheta * M_PI / 180.0;
-				decimal startPhi = initialAnglePhi * M_PI /180;
-				decimal endPhi = finalAnglePhi * M_PI / 180;
-                decimal Phi = startPhi + k * (endPhi - startPhi) / nbRay;
-                n0 = vec3(cos(Theta) * cos(Phi), cos(Theta) * sin(Phi), sin(Theta));
-            }
-            else if (launchType == 2) // Plan vertical
-            {
-                vec3 nMin(cos(initialAngleTheta * M_PI / 180.0), 0, sin(initialAngleTheta * M_PI / 180.0));
-                vec3 nMax(cos(finalAngleTheta * M_PI / 180.0), 0,  sin(finalAngleTheta * M_PI / 180.0));
+			n0 = sampler->getSample();
+			//// on definit nos normales de depart de chaque rayon
+   //         if (launchType == 1) // Plan horizontal
+   //         {
+   //             decimal Theta = initialAngleTheta * M_PI / 180.0;
+			//	decimal startPhi = initialAnglePhi * M_PI /180;
+			//	decimal endPhi = finalAnglePhi * M_PI / 180;
+   //             decimal Phi = startPhi + k * (endPhi - startPhi) / nbRay;
+   //             n0 = vec3(cos(Theta) * cos(Phi), cos(Theta) * sin(Phi), sin(Theta));
+   //         }
+   //         else if (launchType == 2) // Plan vertical
+   //         {
+   //             vec3 nMin(cos(initialAngleTheta * M_PI / 180.0), 0, sin(initialAngleTheta * M_PI / 180.0));
+   //             vec3 nMax(cos(finalAngleTheta * M_PI / 180.0), 0,  sin(finalAngleTheta * M_PI / 180.0));
 
-				// angle de variation des rayons
-                decimal alpha = -acos( nMin * nMax );
+			//	// angle de variation des rayons
+   //             decimal alpha = -acos( nMin * nMax );
 
-				// angle entre l'axe des y et nMin
-                decimal Theta = acos( nMin * vec3(0, 0, 1) ); 
-                decimal Phi = initialAnglePhi * M_PI / 180.0;
-                n0 = vec3(sin(Theta + k * alpha / nbRay) * cos(Phi),  sin(Theta + k * alpha / nbRay) * sin(Phi), cos(Theta + k * alpha / nbRay));
-            }
-			else if  (launchType == 3)
-			{
-				decimal U = static_cast<double>(::rand()) / static_cast<double>(RAND_MAX);
-				decimal V = static_cast<double>(::rand()) / static_cast<double>(RAND_MAX);
+			//	// angle entre l'axe des y et nMin
+   //             decimal Theta = acos( nMin * vec3(0, 0, 1) ); 
+   //             decimal Phi = initialAnglePhi * M_PI / 180.0;
+   //             n0 = vec3(sin(Theta + k * alpha / nbRay) * cos(Phi),  sin(Theta + k * alpha / nbRay) * sin(Phi), cos(Theta + k * alpha / nbRay));
+   //         }
+			//else if  (launchType == 3)
+			//{
+			//	decimal U = static_cast<double>(::rand()) / static_cast<double>(RAND_MAX);
+			//	decimal V = static_cast<double>(::rand()) / static_cast<double>(RAND_MAX);
 
-				decimal Phi = ::acos(2. * U - 1.);
-				decimal Theta = 2 * M_PI * V;
+			//	decimal Phi = ::acos(2. * U - 1.);
+			//	decimal Theta = 2 * M_PI * V;
 
-				n0 = vec3( sin(Phi) * cos(Theta), sin(Phi) * sin(Theta), cos(Phi) );
-			}
-            else if (launchType == 4) // initials vectors are in a file
-            {
-                vec3 angle = tableau_norm[k];
-                decimal phi = angle.x;
-                decimal theta = angle.y;
+			//	n0 = vec3( sin(Phi) * cos(Theta), sin(Phi) * sin(Theta), cos(Phi) );
+			//}
+   //         else if (launchType == 4) // initials vectors are in a file
+   //         {
+   //             vec3 angle = tableau_norm[k];
+   //             decimal phi = angle.x;
+   //             decimal theta = angle.y;
 
-                //vec3 SR (source, recepteurs[0]);
-                //SR.z = 0;
-                //decimal phi = acos((SR/SR.norme()).mult(vec3(1,0,0)));
-                n0 = vec3(cos(theta) * cos(phi), cos(phi) * sin(theta), sin(phi));
-            }
+   //             //vec3 SR (source, recepteurs[0]);
+   //             //SR.z = 0;
+   //             //decimal phi = acos((SR/SR.norme()).mult(vec3(1,0,0)));
+   //             n0 = vec3(cos(theta) * cos(phi), cos(phi) * sin(theta), sin(phi));
+   //         }
 
             n0 = n0 / n0.length();
 
@@ -456,6 +458,9 @@ void Lancer::RemplirMat()
     }
     assert(MatRes.size() == sources.size());
 
+	delete sampler;
+	sampler = NULL;
+
     if (wantOutFile)
     {
         // on sauvegarde nos resultats dans un fichier .txt.
@@ -476,6 +481,7 @@ void Lancer::RemplirMat()
             }
         }
     }
+
 }
 
 
