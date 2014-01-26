@@ -33,6 +33,7 @@ public:
     UniformSphericSampler( const unsigned int& nbRays = 0, 
 						   const decimal& Theta = (decimal) M_PIDIV2, 
 						   const decimal& Phi = (decimal) M_2PI		) :	Sampler(nbRays, Theta, Phi), 
+																		real_nb_rays(0),
 																		n1(0)
 	{ 
 		init(); 
@@ -40,13 +41,15 @@ public:
 
     UniformSphericSampler(const UniformSphericSampler& other) : Sampler(other)
 	{
-		n1 = other.n1;
+		real_nb_rays = 0; 
+		n1 = 0;
 		init();
 	}
     
 	UniformSphericSampler(UniformSphericSampler* sampler) : Sampler(sampler)
 	{
-		n1 = sampler->n1;
+		real_nb_rays = 0; 
+		n1 = 0;
 		init();
 	}
 
@@ -79,7 +82,7 @@ public:
 
 		for( unsigned int i = 1; i <= n1 ;i++)
 		{
-			thetaCalcul = ( n1 - 2*i +1) * theta / n1 ;
+			thetaCalcul = computeThetaCalcul(i);
 			n2 = computeN2(thetaCalcul);
 			real_nb_rays += n2;
 		}
@@ -94,6 +97,11 @@ private :
 	{ 	
 		n1 = static_cast<unsigned int>( std::floor (M_PI * std::sqrt( static_cast<double>(nb_rays) ) / 8. + 0.5) );
 		n1 = 2 * n1;
+	}
+
+	inline decimal computeThetaCalcul(const unsigned int& i)
+	{
+		return ( n1 - 2 * i + 1 ) * theta / n1 ;
 	}
 
 	inline unsigned int computeN2(const decimal& thetaCalcul)
@@ -114,7 +122,7 @@ private :
 
 		for(unsigned int i = 1; i <= n1 ;i++)
 		{
-			thetaCalcul = ( n1 - 2 * i + 1 ) * theta / n1 ;
+			thetaCalcul = computeThetaCalcul(i);
 			n2 = computeN2(thetaCalcul);
 				
 			for(unsigned int j = 1; j <= n2 ; j++)
