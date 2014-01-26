@@ -73,7 +73,7 @@ public:
     virtual vec3 getSample()
     {
 		// angle entre l'axe des y et nMin
-		decimal Theta = std::asin( _nMin * vec3(0, 0, 1) ) * _deltaTheta * _i;
+		decimal Theta = std::asin( _nMin * vec3(0, 0, 1) ) + _deltaTheta * _i;
 		_i++;
 	
         vec3 result;
@@ -85,11 +85,11 @@ public:
     virtual bool isAcceptableSample(vec3 v) { return true; }
     virtual void init() 
 	{ 
-		vec3 _nMin(cos(_startTheta), 0, sin(_startTheta));
+		_nMin = vec3(cos(_startTheta), 0, sin(_startTheta));
 		vec3 nMax(cos(_endTheta), 0,  sin(_endTheta));
 
 		// angle de variation des rayons
-		_deltaTheta = -std::acos( _nMin * nMax ) / nb_rays;
+		_deltaTheta = std::acos( _nMin * nMax ) / (nb_rays-1);
 		
 		_i = 0; 
 	}

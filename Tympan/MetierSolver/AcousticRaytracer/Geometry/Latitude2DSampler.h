@@ -81,7 +81,7 @@ public:
     }
 
     virtual bool isAcceptableSample(vec3 v) { return true; }
-    virtual void init() { _deltaPhi = (_endPhi - _startPhi) / nb_rays; _i = 0; }
+    virtual void init() { _deltaPhi = (_endPhi - _startPhi) / (nb_rays-1); _i = 0; }
 
 	void setStartTheta(const decimal& startTheta) { _startTheta = startTheta * M_PIDIV180; init(); }
 	unsigned int getStartTheta() const { return _startTheta * M_180DIVPI; }
