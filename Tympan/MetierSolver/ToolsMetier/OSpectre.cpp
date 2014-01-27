@@ -74,7 +74,7 @@ OSpectre::OSpectre(const double* valeurs, const short& nbVal, const short& decal
     // D'abord on initialise les valeurs
     for (i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        _module[i] = 0.0;
+        _module[i] = _defaultValue;
     }
 
     unsigned int maxInd = (unsigned int)(nbVal + decalage) < TY_SPECTRE_DEFAULT_NB_ELMT ? nbVal : TY_SPECTRE_DEFAULT_NB_ELMT;
@@ -979,24 +979,6 @@ bool OSpectre::isTonalite()const
     return false;
 }
 
-
-unsigned int OSpectre::getNbValues()
-{
-    unsigned int nbFreq = TY_SPECTRE_DEFAULT_NB_ELMT;
-
-    switch (_form)
-    {
-        case SPECTRE_FORM_OCT:
-            nbFreq = 9;
-            break;
-        default:
-            nbFreq = TY_SPECTRE_DEFAULT_NB_ELMT;
-            break;
-    }
-
-    return nbFreq;
-}
-
 const unsigned int OSpectre::getNbValues()const
 {
     unsigned int nbFreq = TY_SPECTRE_DEFAULT_NB_ELMT;
@@ -1013,4 +995,3 @@ const unsigned int OSpectre::getNbValues()const
 
     return nbFreq;
 }
-
