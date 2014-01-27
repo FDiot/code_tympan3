@@ -26,6 +26,8 @@
 
 #ifndef UNIFORM_SPHERIC_SAMPLER
 #define UNIFORM_SPHERIC_SAMPLER
+
+using namespace std;
                                  
 class UniformSphericSampler: public Sampler
 {
@@ -77,15 +79,7 @@ public:
 	{
 		computeN1(); 
 
-		decimal thetaCalcul = 0.;
-		unsigned int n2 = 0;  // latitude : nbr of parts, function of n1
-
-		for( unsigned int i = 1; i <= n1 ;i++)
-		{
-			thetaCalcul = computeThetaCalcul(i);
-			n2 = computeN2(thetaCalcul);
-			real_nb_rays += n2;
-		}
+		computeTrueNbRays();
 
 		BuildStack();
 	}
@@ -95,18 +89,31 @@ public:
 private :
 	inline void computeN1() 
 	{ 	
-		n1 = static_cast<unsigned int>( std::floor (M_PI * std::sqrt( static_cast<double>(nb_rays) ) / 8. + 0.5) );
+		n1 = static_cast<unsigned int>( floor( M_PI * sqrt( static_cast<decimal>(nb_rays) ) / 8. + 0.5 ) );
 		n1 = 2 * n1;
 	}
 
-	inline decimal computeThetaCalcul(const unsigned int& i)
+	inline decimal computeThetaCalcul(unsigned int i)
 	{
-		return ( n1 - 2 * i + 1 ) * theta / n1 ;
+		return static_cast<decimal>( static_cast<int>(n1) - 2 * static_cast<int>(i) + 1 ) * theta / static_cast<decimal>(n1) ;
 	}
 
 	inline unsigned int computeN2(const decimal& thetaCalcul)
 	{
-		return static_cast<unsigned int>( std::floor ( nb_rays * (  std::sin( thetaCalcul + theta /n1 ) - std::sin( thetaCalcul - theta / n1 )  ) / 2.  + 0.5 ) );
+		return static_cast<unsigned int>( floor( nb_rays * (  sin( thetaCalcul + theta /n1 ) - sin( thetaCalcul - theta / n1 )  ) / 2.  + 0.5 ) );
+	}
+
+	inline void computeTrueNbRays()
+	{
+		decimal thetaCalcul = 0.;
+		unsigned int n2 = 0;  // latitude : nbr of parts, function of n1
+
+		for( unsigned int i = 1; i <= n1 ;i++)
+		{
+			thetaCalcul = computeThetaCalcul(i);
+			n2 = computeN2(thetaCalcul);
+			real_nb_rays += n2;
+		}
 	}
 
 	/*!
