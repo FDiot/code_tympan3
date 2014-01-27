@@ -29,13 +29,19 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 
+#include <boost/math/special_functions/fpclassify.hpp>
+
+bool TYRoute::is_valid_declivity(double decli)
+{ return !boost::math::isnan(decli); } // Could and should use std::isnan in C++ '11
+
 
 OPROTOINST(TYRoute);
 
 const double TYRoute::undefined_declivity = std::numeric_limits<double>::quiet_NaN();
 
 TYRoute::TYRoute():
-    _offSet(0.05)
+    _offSet(0.05),
+    computed_declivity(false)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -109,6 +115,7 @@ TYRoute& TYRoute::operator=(const TYRoute& other)
             traffic_regimes[i] = other.traffic_regimes[i];
         }
         setRoadTrafficArrayForRegime(Day);
+        computed_declivity = other.computed_declivity;
     }
     return *this;
 }
@@ -471,14 +478,20 @@ void TYRoute::setRoadTrafficArrayForRegime(enum TrafficRegimes regime)
 
 void TYRoute::updateComputedDeclivity()
 {
-    double penteMoy = calculPenteMoyenne();
-    // TODO Solve the following model incinsitency :
-    // cf https://extranet.logilab.fr/ticket/1513437
-    // There is only one RoadTraffic for a TYRoute for now
-    // Thus only one declivity for both lanes of a road,
-    // which by definition have opposite declivity !
+    if(!computed_declivity)
+        return;
 
-    road_traffic.ramp = penteMoy; // TODO assert units
+    double penteMoy = calculPenteMoyenne();
+
+    if(is_valid_declivity(penteMoy)) {
+        road_traffic.ramp = penteMoy; // TODO assert units
+    }
+    else
+    {
+        OMessageManager::get()->error(
+            "Can not compute declivity for road %s.",
+            str_qt2c(getStringID()));
+    }
 }
 
 // table C1

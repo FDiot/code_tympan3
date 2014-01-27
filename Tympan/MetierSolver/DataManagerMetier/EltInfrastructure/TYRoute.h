@@ -178,6 +178,12 @@ public:
     const RoadTrafficComponent& getRoadTrafficComponent(
         enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type) const;
 
+    /** @brief If true, the mean declivity of the read is computed from the altimetry
+     *
+     * Default to false, i.e. the déclivity specified by the used is kept.
+     */
+    bool computed_declivity;
+
 private:
     virtual void distriSrcs()
     {assert(false && "You must use distriSrcs(const TYAltimetrie&) for roads");}
@@ -195,14 +201,23 @@ protected:
 
     /**
      * \brief Calcul de la pente moyenne de la route
+     *
+     * \return the computed declivity or \c undefined_declivity
+     *         if it could not not be computed
      */
     double calculPenteMoyenne();
+
+
+    /// @brief Check that the declivity is valid, i.e. is not  \c undefined_declivity
+    static bool is_valid_declivity(double decli);
 
     /**
      * \brief update the mean declivity from the current source distribution.
      *
      * NB Do ensure that \c distriSrcs(const TYAltimetrie&) has been called
      * since last geometry or altimetry changes.
+     *
+     * In case the computed declivity is not valid, report an error and let it unchanged
      */
     void updateComputedDeclivity();
 
