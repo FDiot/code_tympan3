@@ -30,3 +30,16 @@
 {
     return os << "OPlan(" << p._a << ", " << p._b << ", " << p._c << ", " << p._d << ")";
 }
+
+::std::ostream& operator<<(::std::ostream& os, const OSpectre& s)
+{
+    os << "Spectrum["
+       << "type=" << s.getType()
+       << ", state=" << s.getEtat()
+       << "]" << std::endl ;
+    os << "        (";
+    for(unsigned i=0; i<s.getNbValues(); ++i)
+        os << s.getTabValReel()[i] <<", ";
+    os << ")" << std::endl;
+    return os;
+}
