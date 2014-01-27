@@ -24,6 +24,7 @@
 #include "Ray/Ray.h"
 #include "Tools/PostFilter.h"
 #include "Tools/CloseEventPostFilter.h"
+#include "Tools/FermatPostFilter.h"
 
 #include "DefaultEngine.h"
 #include "Tympan/Tools/TYProgressManager.h"
