@@ -109,8 +109,8 @@ public:
 			d1 = r1->coveredDistance(i); // distance parcourue depuis la source
 			d2 = r2->coveredDistance(i); // idem
 
-			e1 = r1->getThickness( d1, r1->getSolidAngle( static_cast<decimal>(M_2PI), 1), 1 ); // thickness of the Ray r1 at event ev1
-			e2 = r2->getThickness( d2, r2->getSolidAngle( static_cast<decimal>(M_2PI), 1), 1 ); // thickness of the Ray r2 at event ev2
+			e1 = r1->getThickness( d1, r1->getSolidAngle(), 1 ); // thickness of the Ray r1 at event ev1
+			e2 = r2->getThickness( d2, r2->getSolidAngle(), 1 ); // thickness of the Ray r2 at event ev2
 
 			e = min(e1, e2); // Thickness of the shortest ray
 			dR = d2 - d1; 

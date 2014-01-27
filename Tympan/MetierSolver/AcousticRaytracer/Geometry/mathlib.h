@@ -57,6 +57,10 @@ typedef unsigned int bitSet; /*!< used to manage set of elements*/
 #define M_2PI               (decimal)6.283185307179586476925286766559       /*!< 2 * PI */
 #endif
 
+#ifndef M_4PI
+#define M_4PI				(decimal)12.566370614359172953850573533118		/*!< 4 * PI */
+#endif
+
 #define M_PI2               (decimal)9.869604401089358618834490999876       /*!< PI au carre */
 #define M_PIDIV180          (decimal)0.01745329251994329576923690768488     /*!< PI / 180 */
 #define M_180DIVPI          (decimal)57.295779513082320876798154814105      /*!< 180 / PI */

@@ -14,6 +14,8 @@
 */ 
  
 #include <cassert>
+#include <vector>
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/event.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Ray.h"
@@ -80,6 +82,48 @@ void Ray::computeLongueur()
                 longueur += posLastEvent.distance(posRecepteur);
             }
             return;
+            break;
+    }
+}
+
+decimal Ray::computeTrueLength( vec3& closestPoint )
+{
+    if (source == NULL || recepteur == NULL)
+    {
+        std::cerr << "Erreur : rayon without source or receptor computeTrueLength" << endl;
+        return 0.;
+    }
+
+	decimal longueur = 0.;
+	vec3 posSource = vec3(source->getPosition());
+    vec3 posRecep = vec3(((Recepteur*)(recepteur))->getPosition());
+	vec3 posLastEvent = vec3(events.back()->getPosition());
+	vec3 current(0., 0., 0.), previous(0., 0., 0.);
+    switch (events.size())
+    {
+        case 0: // Chemin direct source-recepteur
+            longueur = posSource.distance(posRecep);
+			closestPoint = posRecep;
+            return longueur;
+
+			break;
+
+        default:
+            longueur = 0;
+			previous = source->getPosition();
+
+			// Compute distance from source to the last event
+			for (std::vector< QSharedPointer<Event> > :: iterator iter = events.begin(); iter != events.end(); ++iter)
+			{
+				current = (*iter)->getPosition();
+				longueur += current.distance(previous);
+				previous = current;
+			}
+
+			// Compute distance from the last event to the nearest point from receptor
+			closestPoint = posRecep.closestPointOnLine(posLastEvent, finalPosition); 
+			return ( longueur += closestPoint.distance(posLastEvent) );
+
             break;
     }
 }

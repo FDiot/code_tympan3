@@ -94,6 +94,12 @@ public:
     */
     void computeLongueur();
 
+	/*!
+	 * \fn decimal computeTrueLength(vec3& nearestPoint);
+	 * \brief Compute ray lenfth from source to the nearest point of the receptor
+	 */
+	decimal computeTrueLength(vec3& closestPoint);
+
     /*!
     * \fn double getLongueur()
     * \brief Renvoie la distance parcourue par le rayon
@@ -167,10 +173,10 @@ public:
 	signature getSignature(const typeevent& typeEv = SPECULARREFLEXION);
 
 	/*!
-	 * \fn decimal getThick( const decimal& distance, const decimal& angle, const unsigned int& nb_rays, bool diffraction = false) const;
+	 * \fn decimal getThick( const decimal& distance, const decimal& solid_angle, const unsigned int& nb_rays, bool diffraction = false) const;
 	 * \brief Compute thickness of the ray after covering a distance distance for spherical or diffraction source
 	 */
-	inline decimal getThickness( const decimal& distance, const decimal& angle, const unsigned int& nb_rays, bool diffraction = false) const
+	inline decimal getThickness( const decimal& distance, const decimal& angle, const unsigned int& nb_rays = 1, bool diffraction = false) const
 	{
 		if (diffraction)
 		{
@@ -184,10 +190,10 @@ public:
 	 * \fn decimal getSolidAngle(decimal initial_solid_angle, unsigned int nb_rays);
 	 * \brief Compute solid angle associated with the ray
 	 */
-	inline decimal getSolidAngle(decimal initial_solid_angle, unsigned int nb_rays) const
+	inline decimal getSolidAngle(decimal initial_solid_angle = M_4PI) const
 	{
-		unsigned int nbRays = source->getNbRayLeft();
-		return initial_solid_angle / nb_rays;
+		unsigned int nb_rays = source->getInitialRayCount();
+		return initial_solid_angle / static_cast<decimal>(nb_rays);
 	}
 
 	/*!
