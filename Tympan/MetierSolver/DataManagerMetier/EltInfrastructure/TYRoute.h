@@ -53,6 +53,7 @@ class TYRoute: public TYAcousticLine
 {
 
     FRIEND_TEST(TestRoads, xml_roundtrip);
+    FRIEND_TEST(TestRoads, computeSpectreHalvedTraffic);
 
     OPROTOSUPERDECL(TYRoute, TYAcousticLine)
     TY_EXTENSION_DECL(TYRoute)
@@ -243,6 +244,23 @@ private:
 
     bool note77_check_validity(double aadt_hgv, double aadt_lv,
                                RoadType road_type, RoadFunction road_function);
+
+    /**
+     * @brief This helper class halves and restore the traffic flow of the road
+     *
+     * Because the traffic flow is halved as part of the emission computation
+     * and *must* be restored whatever happens we use an helper class which
+     * halves the traffic on construction and restore it on destruction.
+     * This is akin to the RAII idiom or the context managers in Python.
+     */
+    class TrafficHalfer
+    {
+    public:
+        TrafficHalfer(TYRoute& road);
+        ~TrafficHalfer();
+    private:
+        TYRoute& road;
+    };
 
     typedef double note77_tables[2][2][3];
     static const note77_tables note77_lower_bounds; // table C1

@@ -26,6 +26,7 @@
 #include "TYRoute.h"
 
 #include <limits>
+#include <cmath>
 
 #include "Tympan/Tools/OMessageManager.h"
 
@@ -284,17 +285,30 @@ TYSpectre TYRoute::computeSpectre(enum TrafficRegimes regime)
 
     updateComputedDeclivity();
 
-    // TODO check whether Spectrum_3oct_lin or Spectrum_3oct_A is the right one (TM)
-    double * tab = NMPB08_Lwm(&road_traffic, Spectrum_3oct_lin);
+    // Handle a simplified model of traffic wrt to the declivity
+    // Cf. https://extranet.logilab.fr/ticket/1513437
 
-    // This initialise `s` with the 18 values provided in `tab`
+    // Half the global traffic to get the flow for only one roadway
+    TrafficHalfer halves_the_traffic(*this);
+
+    double * tab;
+    tab = NMPB08_Lwm(&road_traffic, Spectrum_3oct_lin);
+    OSpectre s_one_way(tab, 18, 8);
+    s_one_way.setType(SPECTRE_TYPE_LW);
+    // NB: This initialise `s_one_way` with the 18 values provided in `tab`
     // Because the 1st frequency provided by NMPB08 is 100Hz whereas 100Hz
     // is the 9th frequency in Code_TYMPAN representation the offset is 8
     // Both spectrum uses 3rd octave as frequency steps and the common
     // higest frequency is 5000Hz.
-    OSpectre s(tab, 18, 8);
 
-    return TYSpectre(s);
+    // Coinsider the opposite road_way which differ by opposite declivity
+    road_traffic.ramp *= -1.0;
+    tab = NMPB08_Lwm(&road_traffic, Spectrum_3oct_lin);
+    OSpectre s_other_way(tab, 18, 8);
+    s_other_way.setType(SPECTRE_TYPE_LW);
+
+    // NB : The original traffic is restored on destroyuing the halves_the_traffic helper
+    return s_one_way.sumdB(s_other_way);
 }
 
 double TYRoute::calculPenteMoyenne()
@@ -603,4 +617,34 @@ bool  TYRoute::setFromAADT(double aadt_hgv, double aadt_lv,
             aadt_hgv / note77_hourly_HGV_coeff[road_type][road_function][regime];
     }
     return true;
+}
+
+
+TYRoute::TrafficHalfer::TrafficHalfer(TYRoute& road_) :
+    road(road_)
+{
+    for(unsigned j=0; j<NB_TRAFFIC_REGIMES; ++j)
+    {
+        enum TrafficRegimes regime = static_cast<TrafficRegimes>(j);
+        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+        {
+            enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
+            road.getRoadTrafficComponent(regime, vehicle_type).trafficFlow /= 2.0;
+        }
+    }
+}
+
+TYRoute::TrafficHalfer::~TrafficHalfer()
+{
+    // Restore the traffic
+    for(unsigned j=0; j<NB_TRAFFIC_REGIMES; ++j)
+    {
+        enum TrafficRegimes regime = static_cast<TrafficRegimes>(j);
+        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+        {
+            enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
+            road.getRoadTrafficComponent(regime, vehicle_type).trafficFlow *= 2.0;
+        }
+    }
+    road.road_traffic.ramp = std::fabs(road.road_traffic.ramp);
 }

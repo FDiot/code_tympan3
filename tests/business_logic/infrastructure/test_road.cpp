@@ -11,9 +11,13 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYTrafic.h"
-
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
 
+#include "Tympan/MetierSolver/ToolsMetier/prettyprint.hpp"
+
+#include <iostream>
+
+using namespace std;
 
 LPTYSiteNode buildFlatSiteSimpleRoad(void)
 {
@@ -129,3 +133,37 @@ TEST(TestTraffic, equality)
     ASSERT_TRUE(*pReloadedTraffic == *pTraffic) <<
         "Invalid pre-existing operator== on TYTraffic";
 } // TEST(TestTraffic, equality)
+
+
+TEST(TestRoads, computeSpectreHalvedTraffic)
+{
+LPTYRoute pRoad = new TYRoute();
+
+pRoad->road_traffic.surfaceType = RoadSurface_DR1;
+pRoad->road_traffic.surfaceAge = 10;
+pRoad->road_traffic.ramp = 30;
+
+RoadTrafficComponent& lv_rtc =
+    pRoad->getRoadTrafficComponent(TYRoute::Day, TYTrafic::LV);
+lv_rtc.trafficFlow = 2000; // vehicle / hour
+lv_rtc.trafficSpeed = 100; // km / hour
+lv_rtc.flowType = FlowType_CONST;
+RoadTrafficComponent& hgv_rtc =
+    pRoad->getRoadTrafficComponent(TYRoute::Day, TYTrafic::HGV);
+hgv_rtc.trafficFlow = 0; // vehicle / hour
+hgv_rtc.trafficSpeed = 80; // km / hour
+hgv_rtc.flowType = FlowType_CONST;
+
+EXPECT_EQ(2000, lv_rtc.trafficFlow);
+EXPECT_EQ(30, pRoad->road_traffic.ramp);
+
+TYSpectre spectrum = pRoad->computeSpectre(TYRoute::Day);
+
+// NB This reference value has been computed from the CEREMA website:
+// http://213.215.52.146/RoadEmissionNMPB08
+EXPECT_NEAR(87.64, spectrum.valGlobDBA(), 0.1);
+
+EXPECT_EQ(2000, lv_rtc.trafficFlow);
+EXPECT_EQ(30, pRoad->road_traffic.ramp);
+
+} // TEST(TestRoads, computeSpectreHalvedTraffic)
