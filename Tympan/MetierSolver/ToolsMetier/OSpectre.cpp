@@ -74,7 +74,7 @@ OSpectre::OSpectre(const double* valeurs, const short& nbVal, const short& decal
     // D'abord on initialise les valeurs
     for (i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        _module[i] = 0.0;
+        _module[i] = _defaultValue;
     }
 
     unsigned int maxInd = (unsigned int)(nbVal + decalage) < TY_SPECTRE_DEFAULT_NB_ELMT ? nbVal : TY_SPECTRE_DEFAULT_NB_ELMT;
