@@ -1,9 +1,18 @@
 //! \test test_road.cpp
 
 
+#include <iostream>
+#include <fstream>
+
+#include <boost/math/special_functions/fpclassify.hpp>
+
 #include "gtest/gtest.h"
 
+#include "test_utils/misc.hpp"
+
 #include <QtXml>
+#include <QDir>
+
 
 #include "Tympan/Tools/OSmartPtr.h"
 
@@ -14,8 +23,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
 
 #include "Tympan/MetierSolver/ToolsMetier/prettyprint.hpp"
-
-#include <iostream>
 
 using namespace std;
 
@@ -163,3 +170,54 @@ EXPECT_EQ(2000, lv_rtc.trafficFlow);
 EXPECT_EQ(30, pRoad->ramp());
 
 } // TEST(TestRoads, computeSpectreHalvedTraffic)
+
+
+LPTYRoute functionnalResults_initRoadFromRow(const deque<double>& row)
+{
+    LPTYRoute pRoad = new TYRoute();
+
+    pRoad->setSurfaceType(static_cast<RoadSurfaceType>(row[0]));
+    pRoad->setSurfaceAge(row[1]);
+    pRoad->setRamp(row[2]);
+
+    pRoad->setRoadTrafficComponent(
+        TYRoute::Day,  TYTrafic::HGV, row[3], 80 /* km/h */);
+    pRoad->setRoadTrafficComponent(
+        TYRoute::Day,  TYTrafic::LV, row[4], 120 /* km/h */);
+    return pRoad;
+}
+
+inline const char * const qt2c_str(const QString& str)
+{ return str.toLocal8Bit().data(); }
+
+TEST(TestRoads, functionnalResults)
+{
+    const double precision = 0.15; // in dB
+
+    // Locate CSV data file
+    const QDir data_dir("../../data/");
+    const QString data_file_name = data_dir.absoluteFilePath(
+        "dataRoadEmissionNMPB2008.csv");
+    ASSERT_TRUE(QFile::exists(data_file_name)) <<
+        "Can not load test data file : " << qt2c_str(data_file_name);
+    ifstream file(qt2c_str(data_file_name));
+    string header;
+    getline(file, header); // Read and check the header line
+    EXPECT_EQ("Surface type,Age,Declivity,HGV,LV,% HGV,global,dB(A)", header);
+    deque<deque<double> > table = readCsvAsTableOf<double>(file);
+    ASSERT_EQ(32, table.size());
+
+    unsigned row_num = 0;
+    BOOST_FOREACH(const deque<double>& row, table)
+    {
+        ++row_num;
+        LPTYRoute pRoad = functionnalResults_initRoadFromRow(row);
+        TYSpectre spectrum = pRoad->computeSpectre(TYRoute::Day);
+        const double& loaded_ref = row[7];
+        double global_dBA = spectrum.valGlobDBA();
+        EXPECT_TRUE(boost::math::isfinite(global_dBA)) << spectrum << endl;
+        EXPECT_NEAR(loaded_ref, global_dBA, precision) <<
+            "Incorrect results for the row #" << row_num << " (header is #0)"
+            " of the test data file : " << qt2c_str(data_file_name);
+    }
+}
