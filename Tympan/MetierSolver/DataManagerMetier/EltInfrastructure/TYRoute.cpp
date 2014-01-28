@@ -474,12 +474,12 @@ void TYRoute::distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
     }
 }
 
-RoadTrafficComponent& TYRoute::getRoadTrafficComponent(enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type)
+RoadTrafficComponent& TYRoute::accessRoadTrafficComponent(enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type)
 {
     return traffic_regimes[regime].arr[vehic_type];
 }
 
-const RoadTrafficComponent& TYRoute::getRoadTrafficComponent(enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type) const
+const RoadTrafficComponent& TYRoute::getNMPB08RoadTrafficComponent(enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type) const
 {
     return traffic_regimes[regime].arr[vehic_type];
 }
@@ -609,10 +609,10 @@ bool  TYRoute::setFromAADT(double aadt_hgv, double aadt_lv,
     for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
     {
         enum TrafficRegimes regime = static_cast<TrafficRegimes>(i);
-        RoadTrafficComponent& traffic_lv  = getRoadTrafficComponent(regime, TYTrafic::LV);
+        RoadTrafficComponent& traffic_lv  = accessRoadTrafficComponent(regime, TYTrafic::LV);
         traffic_lv.trafficFlow = // Compute hourly traffic
             aadt_lv  / note77_hourly_LV_coeff[road_type][road_function][regime];
-        RoadTrafficComponent& traffic_hgv = getRoadTrafficComponent(regime, TYTrafic::HGV);
+        RoadTrafficComponent& traffic_hgv = accessRoadTrafficComponent(regime, TYTrafic::HGV);
         traffic_hgv.trafficFlow =  // Compute hourly traffic
             aadt_hgv / note77_hourly_HGV_coeff[road_type][road_function][regime];
     }
@@ -629,7 +629,7 @@ TYRoute::TrafficHalfer::TrafficHalfer(TYRoute& road_) :
         for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
         {
             enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
-            road.getRoadTrafficComponent(regime, vehicle_type).trafficFlow /= 2.0;
+            road.accessRoadTrafficComponent(regime, vehicle_type).trafficFlow /= 2.0;
         }
     }
 }
@@ -643,8 +643,41 @@ TYRoute::TrafficHalfer::~TrafficHalfer()
         for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
         {
             enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
-            road.getRoadTrafficComponent(regime, vehicle_type).trafficFlow *= 2.0;
+            road.accessRoadTrafficComponent(regime, vehicle_type).trafficFlow *= 2.0;
         }
     }
     road.road_traffic.ramp = std::fabs(road.road_traffic.ramp);
+}
+
+const RoadTraffic& TYRoute::getNMBP08RoadTraffic(enum TrafficRegimes regime)
+{
+    setRoadTrafficArrayForRegime(regime);
+    return road_traffic;
+}
+
+
+void TYRoute::setSurfaceType(RoadSurfaceType type)
+{
+    road_traffic.surfaceType = type;
+}
+
+void TYRoute::setSurfaceAge(double age)
+{
+    road_traffic.surfaceAge = age;
+}
+
+void TYRoute::setRamp(double ramp)
+{
+    road_traffic.ramp = ramp;
+}
+
+void TYRoute::setRoadTrafficComponent(
+    enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type,
+    double flow, double speed, RoadFlowType type)
+{
+    RoadTrafficComponent& rtc =
+        accessRoadTrafficComponent(regime, vehic_type);
+    rtc.trafficFlow = flow; // vehicle / hour
+    rtc.trafficSpeed = speed; // km / hour
+    rtc.flowType = type;
 }

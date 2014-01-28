@@ -53,7 +53,6 @@ class TYRoute: public TYAcousticLine
 {
 
     FRIEND_TEST(TestRoads, xml_roundtrip);
-    FRIEND_TEST(TestRoads, computeSpectreHalvedTraffic);
 
     OPROTOSUPERDECL(TYRoute, TYAcousticLine)
     TY_EXTENSION_DECL(TYRoute)
@@ -167,7 +166,7 @@ public:
      */
     virtual bool updateAcoustic(const bool& force = false);
 
-    /**
+     /**
      * \brief Required the road to update its altitude after altimetry changed
      *
      * \param alti the altimetry the altitude must be updated from
@@ -176,8 +175,53 @@ public:
      */
     virtual bool updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode );
 
-    const RoadTrafficComponent& getRoadTrafficComponent(
+    const RoadTrafficComponent& getNMPB08RoadTrafficComponent(
         enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type) const;
+
+    // NB : can not be const qualified because it is required to switch regime
+    const RoadTraffic& getNMBP08RoadTraffic(enum TrafficRegimes regime);
+
+    /*!
+     * \brief Getter for the road surface type
+     */
+    RoadSurfaceType surfaceType() const {return road_traffic.surfaceType;} ;
+    /*!
+     * \brief Getter for the surface age
+     */
+    double surfaceAge() const {return road_traffic.surfaceAge;} ;
+
+    /*!
+     * \brief Getter for the ramp in percent ( > 0 if rise, < 0 if down)
+     */
+    double ramp() const {return road_traffic.ramp;} ;
+
+    /*!
+     * \brief Setter for the road surface type
+     */
+    void setSurfaceType(RoadSurfaceType type);
+    /*!
+     * \brief Setter for the surface age
+     */
+    void setSurfaceAge(double age);
+    /*!
+     * \brief Setter for the ramp in percent ( > 0 if rise, < 0 if down)
+     */
+    void setRamp(double ramp);
+
+    /**
+     * \brief Set the traffic parameter for a given regime and type of vehicles
+     *
+     * \param regime regimeto set the traffic for : Day, Evening or Night to be set
+     * \param vehic_type type to set the traffic for : light vehicles (LV) or heavy
+     *        good vehicles (HGV) to be set
+     * \param flow the vehicle flow in vehicle per hour
+     * \param speed the mean speed of the vehicles in km per hour
+     * \param the type of flow as specified by the NMPB08 library
+     *        (default to constant speed)
+     */
+    void setRoadTrafficComponent(
+        enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type,
+        double flow, double speed, RoadFlowType type = FlowType_CONST);
 
     /** @brief If true, the mean declivity of the read is computed from the altimetry
      *
@@ -197,7 +241,7 @@ private:
 
 protected:
 
-    RoadTrafficComponent& getRoadTrafficComponent(
+    RoadTrafficComponent& accessRoadTrafficComponent(
           enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type);
 
     /**
