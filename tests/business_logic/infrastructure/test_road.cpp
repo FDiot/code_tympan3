@@ -139,23 +139,19 @@ TEST(TestRoads, computeSpectreHalvedTraffic)
 {
 LPTYRoute pRoad = new TYRoute();
 
-pRoad->road_traffic.surfaceType = RoadSurface_DR1;
-pRoad->road_traffic.surfaceAge = 10;
-pRoad->road_traffic.ramp = 30;
+pRoad->setSurfaceType(RoadSurface_DR1);
+pRoad->setSurfaceAge(10);
+pRoad->setRamp(30);
 
-RoadTrafficComponent& lv_rtc =
-    pRoad->getRoadTrafficComponent(TYRoute::Day, TYTrafic::LV);
-lv_rtc.trafficFlow = 2000; // vehicle / hour
-lv_rtc.trafficSpeed = 100; // km / hour
-lv_rtc.flowType = FlowType_CONST;
-RoadTrafficComponent& hgv_rtc =
-    pRoad->getRoadTrafficComponent(TYRoute::Day, TYTrafic::HGV);
-hgv_rtc.trafficFlow = 0; // vehicle / hour
-hgv_rtc.trafficSpeed = 80; // km / hour
-hgv_rtc.flowType = FlowType_CONST;
+pRoad->setRoadTrafficComponent(TYRoute::Day, TYTrafic::LV,
+                             2000, 100);
+pRoad->setRoadTrafficComponent(TYRoute::Day, TYTrafic::HGV,
+                             0, 80);
+const RoadTrafficComponent& lv_rtc =
+    pRoad->getNMPB08RoadTrafficComponent(TYRoute::Day, TYTrafic::LV);
 
 EXPECT_EQ(2000, lv_rtc.trafficFlow);
-EXPECT_EQ(30, pRoad->road_traffic.ramp);
+EXPECT_EQ(30, pRoad->ramp());
 
 TYSpectre spectrum = pRoad->computeSpectre(TYRoute::Day);
 
@@ -164,6 +160,6 @@ TYSpectre spectrum = pRoad->computeSpectre(TYRoute::Day);
 EXPECT_NEAR(87.64, spectrum.valGlobDBA(), 0.1);
 
 EXPECT_EQ(2000, lv_rtc.trafficFlow);
-EXPECT_EQ(30, pRoad->road_traffic.ramp);
+EXPECT_EQ(30, pRoad->ramp());
 
 } // TEST(TestRoads, computeSpectreHalvedTraffic)
