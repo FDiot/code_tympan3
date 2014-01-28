@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -92,7 +92,7 @@ bool TYAcousticLine::operator==(const TYAcousticLine& other) const
 {
     if (this != &other)
     {
-        if (TYElement::operator !=(other)) { return false; }
+        // TODO See ticket https://extranet.logilab.fr/ticket/1522889
         if (_largeur != other._largeur) { return false; }
         if (_pSrcLineic != other._pSrcLineic) { return false; }
         if (!(_tabPoint == other._tabPoint)) { return false; }
@@ -103,7 +103,6 @@ bool TYAcousticLine::operator==(const TYAcousticLine& other) const
         if (_regimeChangeAble != other._regimeChangeAble) { return false; }
         if (_useAtt != other._useAtt) { return false; }
         if (_pAtt != other._pAtt) { return false; }
-        if (_pSrcLineic != other._pSrcLineic) { return false; }
     }
 
     return true;

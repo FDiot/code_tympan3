@@ -70,7 +70,6 @@ bool TYTrafic::operator==(const TYTrafic& other) const
 {
     if (this != &other)
     {
-        if (TYElement::operator !=(other)) { return false; }
         for(unsigned i=0; i<NB_VEHICLE_TYPES; ++i)
         {
             if( arr[i].flowType != other.arr[i].flowType)  {return false;};

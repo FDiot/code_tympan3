@@ -12,6 +12,9 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYTrafic.h"
 
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
+
+
 LPTYSiteNode buildFlatSiteSimpleRoad(void)
 {
     // Creating the site and getting the topography
@@ -88,4 +91,30 @@ ASSERT_NE(LPTYRoute(), pLoadedRoad); // Success of saveAndReload
 EXPECT_EQ(pRoad->road_traffic.surfaceType, pLoadedRoad->road_traffic.surfaceType);
 EXPECT_EQ(pRoad->road_traffic.ramp,        pLoadedRoad->road_traffic.ramp);
 EXPECT_EQ(pRoad->road_traffic.surfaceAge,  pLoadedRoad->road_traffic.surfaceAge);
+// NB: The pre-existing operator== can not be trusted to be consistent
+// with XML round trip or test for equality (and not identity)
+// See ticket https://extranet.logilab.fr/ticket/1522889
+}
+
+// This test is disabled because it is know to fail
+// See https://extranet.logilab.fr/ticket/1522889
+TEST(TestAcousticLine, DISABLED_equality)
+{
+    LPTYAcousticLine pAcLine = new TYAcousticLine();
+    LPTYAcousticLine pReloadedAcLine  = saveAndReload(pAcLine);
+    ASSERT_NE(LPTYAcousticLine(), pReloadedAcLine);
+
+    ASSERT_TRUE(*pReloadedAcLine == *pAcLine) <<
+        "Invalid pre-existing operator== on TYAcousticLine";
+
+}
+
+TEST(TestTraffic, equality)
+{
+    LPTYTrafic pTraffic = new TYTrafic();
+    LPTYTrafic pReloadedTraffic  = saveAndReload(pTraffic);
+    ASSERT_NE(LPTYTrafic(), pReloadedTraffic);
+
+    ASSERT_TRUE(*pReloadedTraffic == *pTraffic) <<
+        "Invalid pre-existing operator== on TYTraffic";
 }
