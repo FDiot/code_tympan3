@@ -99,7 +99,7 @@ public:
      * nbVal  ==> Nombre de valeurs dans le tableau
      * decalage ==> decalage en frequence par rapport a la bande standard TYMPAN (16-16000)
      */
-    OSpectre(const double* valeurs, const short& nbVal, const short& decalage);
+    OSpectre(const double* valeurs, unsigned nbVal, unsigned decalage);
 
     /**
      * Constructeur par copie.
