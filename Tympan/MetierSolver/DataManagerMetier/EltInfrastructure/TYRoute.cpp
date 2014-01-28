@@ -118,7 +118,10 @@ bool TYRoute::operator==(const TYRoute& other) const
     if (this != &other)
     {
         if (TYAcousticLine::operator !=(other)) { return false; }
-        // road_traffic = other.road_traffic; // XXX
+        if (road_traffic.surfaceType != other.road_traffic.surfaceType) { return false; }
+        if (road_traffic.surfaceAge != other.road_traffic.surfaceAge) { return false; }
+        if (road_traffic.ramp != other.road_traffic.ramp) { return false; }
+        if (road_traffic.nbComponents != other.road_traffic.nbComponents) { return false; }
         for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
         {
             if(traffic_regimes[i] != other.traffic_regimes[i]) { return false; };
