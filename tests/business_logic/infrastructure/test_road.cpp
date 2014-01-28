@@ -43,15 +43,17 @@ LPTYSiteNode buildFlatSiteSimpleRoad(void)
 }
 
 
-TEST(TestRoads, basic_flat_road_creation) {
-
+TEST(TestRoads, basic_flat_road_creation)
+{
 LPTYSiteNode pSite = buildFlatSiteSimpleRoad();
 LPTYInfrastructure pInfra = pSite->getInfrastructure();
 
 ASSERT_EQ(1, pInfra->getListRoute().size());
 LPTYRoute pRoad = TYRoute::safeDownCast(pInfra->getListRoute()[0]->getElement());
-}
+} // TEST(TestRoads, basic_flat_road_creation)
 
+
+// TODO This utility template could be factored-out for future use
 template<class ElType>
 SmartPtr<ElType> saveAndReload(SmartPtr<ElType> original,
                                DOM_Element* p_xml=NULL)
@@ -103,7 +105,8 @@ for(unsigned i=0; i<TYRoute::NB_TRAFFIC_REGIMES; ++i)
 // NB: The pre-existing operator== can not be trusted to be consistent
 // with XML round trip or test for equality (and not identity)
 // See ticket https://extranet.logilab.fr/ticket/1522889
-}
+
+} // TEST(TestRoads, xml_roundtrip)
 
 // This test is disabled because it is know to fail
 // See https://extranet.logilab.fr/ticket/1522889
@@ -115,8 +118,7 @@ TEST(TestAcousticLine, DISABLED_equality)
 
     ASSERT_TRUE(*pReloadedAcLine == *pAcLine) <<
         "Invalid pre-existing operator== on TYAcousticLine";
-
-}
+} // TEST(TestAcousticLine, DISABLED_equality)
 
 TEST(TestTraffic, equality)
 {
@@ -126,4 +128,4 @@ TEST(TestTraffic, equality)
 
     ASSERT_TRUE(*pReloadedTraffic == *pTraffic) <<
         "Invalid pre-existing operator== on TYTraffic";
-}
+} // TEST(TestTraffic, equality)
