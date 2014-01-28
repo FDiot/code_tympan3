@@ -99,7 +99,7 @@ public:
      * nbVal  ==> Nombre de valeurs dans le tableau
      * decalage ==> decalage en frequence par rapport a la bande standard TYMPAN (16-16000)
      */
-    OSpectre(const double* valeurs, const short& nbVal, const short& decalage);
+    OSpectre(const double* valeurs, unsigned nbVal, unsigned decalage);
 
     /**
      * Constructeur par copie.
@@ -168,8 +168,6 @@ public:
 
     /// Nombre de valeurs dans le spectre
     virtual unsigned int getNbValues();
-
-    virtual const unsigned int getNbValues() const ;
 
     /**
      * Initialisation d'un spectre a une valeur.
@@ -361,6 +359,7 @@ public:
 protected:
 
     // ==== MEMBRES STATIQUES
+// CAUTION Check how those static members behave in shared libraries
 
     ///Tableau des frequences en Hz centrales normalisees en tiers d'octave.
     static const float _freqNorm[];
