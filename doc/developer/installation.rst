@@ -20,9 +20,7 @@ A Mercurial_ repository will be soon available on Bitbucket_.
 .. _Mercurial: http://mercurial.selenic.com/
 
 The project also requires some third party dependencies (see below for
-more details) and an auxiliary project for handling data model :
-Yams++. For now Yams is not (yet) fully released but is available to
-Code_TYMPAN developer as a specific custom pre-release.
+more details).
 
 Those dependencies are divided into heavy, potentially system-wide,
 dependencies and lighter dependencies which can easily be
@@ -35,15 +33,6 @@ Those dependencies are to be downloaded as a companion source package
 and unzipped into the ``3rdparty`` directory. Please refer to the
 ``3rdparty/README`` file which provide the exact URL for your current
 version of Code_TYMPAN.
-
-In case where you would like to have a recent version ot the Yams++ library
-dependency, you can set the CMake variable ``TYMPAN_USE_DEVEL_YAMS`` to ``ON``
-and specify the source directory of Yams++ with the CMake variable
-``TYMPAN_3RDPARTY_YAMS``. Please, carry it out in a **new building
-directory**. When you change the Yams++ source file, you would like to recompile
-it from Code_TYMPAN building directory. To do so, you have to remove the
-``3rdparty/Stamp/Yams/Yams-done`` file to carry out a new build of Yams++ in
-``3rdparty/Build/Yams``.
 
 Major dependencies
 ------------------
