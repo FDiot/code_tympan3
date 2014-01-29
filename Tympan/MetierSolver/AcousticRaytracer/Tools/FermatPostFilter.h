@@ -34,22 +34,28 @@ public:
 	virtual unsigned int Process() 
 	{
 		decimal ray_length = 0.0;
+		unsigned int suppressed = 0;
 
 		// Pour chaque rayon
-		for (unsigned int i = 0; i < _tabRay->size(); i++)
+		std::vector<Ray*>::iterator iter = _tabRay->begin();
+		while( iter != _tabRay->end() )
 		{
 			vec3 closestPoint;
-			Ray *ray = _tabRay->at(i);
+			Ray *ray = (*iter);
 			decimal trueLength = ray->computeTrueLength(closestPoint);
 			decimal epaisseur = ray->getThickness( trueLength, ray->getSolidAngle() );
 			decimal closestDistance = static_cast<Recepteur*> ( ray->getRecepteur() )->getPosition().distance(closestPoint);
-			if ( closestDistance > (epaisseur /2.) )
+			if ( closestDistance >= (epaisseur /2.) )
 			{
-				// TO DO : suppression du rayon
+				iter = _tabRay->erase(iter);
+				suppressed ++;
+				continue;
 			}
+
+			iter++;
 		}
 
-		return 0; 
+		return suppressed; 
 	}
 
 protected:
