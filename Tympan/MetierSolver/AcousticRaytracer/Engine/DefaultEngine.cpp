@@ -180,6 +180,11 @@ bool DefaultEngine::process()
 				// Post filtering of the rays
 				closeEventPostFilter cepf(getSolver()->getValidRays());
 				unsigned int suppressed = cepf.Process();
+
+				fermatPostFilter fpf(getSolver()->getValidRays());
+				suppressed += fpf.Process();
+
+
                 return true;
             }
         }
