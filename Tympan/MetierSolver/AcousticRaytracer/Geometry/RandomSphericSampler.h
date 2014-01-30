@@ -62,10 +62,10 @@ public:
     {
         decimal U = (decimal)rand() / (decimal)RAND_MAX;
         decimal V = (decimal)rand() / (decimal)RAND_MAX;
-        decimal theta = acos(2. * U - 1.) - M_PIDIV2;
-        decimal phi = M_2PI * V;
+        decimal thetaCalcul = acos(2. * U - 1.) - _theta;
+        decimal phiCalcul = _phi * V;
         vec3 result;
-        Tools::fromRadianToCarthesien(theta, phi, result);
+        Tools::fromRadianToCarthesien(thetaCalcul, phiCalcul, result);
         result.normalize();
 
         return result;
