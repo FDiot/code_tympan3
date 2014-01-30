@@ -89,7 +89,7 @@ public:
 		vec3 nMax(cos(_endTheta), 0,  sin(_endTheta));
 
 		// angle de variation des rayons
-		_deltaTheta = std::acos( _nMin * nMax ) / (nb_rays-1);
+		_deltaTheta = std::acos( _nMin * nMax ) / (_nb_rays-1);
 		
 		_i = 0; 
 	}

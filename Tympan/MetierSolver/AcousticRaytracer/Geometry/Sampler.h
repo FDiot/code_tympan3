@@ -31,25 +31,25 @@ class Sampler
 public:
     Sampler( const unsigned int& nbRays = 0, 
 			 const decimal& Theta = (decimal) M_PIDIV2, 
-			 const decimal& Phi = (decimal) M_2PI		) : nb_rays( nbRays ),
-															theta( Theta ),
-															phi( Phi )
+			 const decimal& Phi = (decimal) M_2PI		) : _nb_rays( nbRays ),
+															_theta( Theta ),
+															_phi( Phi )
 	{ }
 
     Sampler(const Sampler& other)
 	{ 
-		theta = other.theta;
-		phi = other.phi;
+		_theta = other._theta;
+		_phi = other._phi;
 
-		nb_rays = other.nb_rays; 
+		_nb_rays = other._nb_rays; 
 	}
 
     Sampler(Sampler* sampler) 
 	{ 
-		theta = sampler->theta;
-		phi = sampler->phi;
+		_theta = sampler->_theta;
+		_phi = sampler->_phi;
 
-		nb_rays = sampler->nb_rays; 
+		_nb_rays = sampler->_nb_rays; 
 	}
 
     virtual Sampler* Clone()
@@ -64,19 +64,19 @@ public:
     virtual bool isAcceptableSample(vec3 v) { return false; }
     virtual void init() {}
 
-	virtual unsigned int getNbRays() const { return nb_rays; }
-	virtual void setNbRays(const unsigned int& nbRays) { nb_rays = nbRays; init(); }
+	virtual unsigned int getNbRays() const { return _nb_rays; }
+	virtual void setNbRays(const unsigned int& nbRays) {_nb_rays = nbRays; init(); }
 
-	decimal getTheta() const { return theta; }
-	void setTheta(const decimal& Theta) { theta = Theta; init(); }
+	decimal getTheta() const { return _theta; }
+	void setTheta(const decimal& Theta) { _theta = Theta; init(); }
 
-	decimal getPhi() const { return phi; }
-	void setPhi(const decimal& Phi) { phi = Phi ; init(); }
+	decimal getPhi() const { return _phi; }
+	void setPhi(const decimal& Phi) { _phi = Phi ; init(); }
 
 protected :
-	unsigned int nb_rays; /*! Number of rays to lauch */
-	decimal theta;		  /*! global equatorial angle */
-	decimal phi;		  /*! global polar angle */
+	unsigned int _nb_rays; /*! Number of rays to lauch */
+	decimal _theta;		  /*! global equatorial angle */
+	decimal _phi;		  /*! global polar angle */
 };
 
 #endif

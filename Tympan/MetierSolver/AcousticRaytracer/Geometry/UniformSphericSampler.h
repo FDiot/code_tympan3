@@ -14,6 +14,7 @@
 */ 
  
 // Rajout de libraires pour creation fichier externe de sortie
+#include <limits>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -35,27 +36,37 @@ public:
     UniformSphericSampler( const unsigned int& nbRays = 0, 
 						   const decimal& Theta = (decimal) M_PIDIV2, 
 						   const decimal& Phi = (decimal) M_2PI		) :	Sampler(nbRays, Theta, Phi), 
-																		real_nb_rays(0),
-																		n1(0)
+																		_real_nb_rays(0),
+																		_n1(1),
+																		_n2(1),
+																		_thetaCalcul(0.),
+																		_i(1),
+																		_j(1)
 	{ 
 		init(); 
 	}
 
     UniformSphericSampler(const UniformSphericSampler& other) : Sampler(other)
 	{
-		real_nb_rays = 0; 
-		n1 = 0;
+		_real_nb_rays = 0; 
+		_n1 = 1;
+		_n2 = 1;
+		_i = 1;
+		_j = 1;
+		_thetaCalcul = 0.;
 		init();
 	}
     
 	UniformSphericSampler(UniformSphericSampler* sampler) : Sampler(sampler)
 	{
-		real_nb_rays = 0; 
-		n1 = 0;
+		_real_nb_rays = 0; 
+		_n1 = 1;
+		_n2 = 1;
+		_i = 1;
+		_j = 1;
+		_thetaCalcul = 0.;
 		init();
 	}
-
-
 
     virtual Sampler* Clone()
     {
@@ -65,94 +76,76 @@ public:
 
     virtual ~UniformSphericSampler() { }
 
-    virtual vec3 getSample()
-    {
-		vec3 res = points.top();
-		points.pop();
+	virtual vec3 getSample()
+	{
+		vec3 res(0., 0., 0.);
+		if (_i > _n1) return res;
+
+		if ( _j > _n2 ) 
+		{
+			computeThetaCalcul(++_i);
+			computeN2();
+			_j = 1;
+		}
+
+		decimal phiCalcul = _j * ( _phi / _n2 );
+
+		_j++;
+
+		Tools::fromRadianToCarthesien(_thetaCalcul, phiCalcul, res);
+		res.normalize();
 
 		return res;
-    }
+	}
 
     virtual bool isAcceptableSample(vec3 v) { return true; }
 
     virtual void init() 
 	{
-		computeN1(); 
+		computeN1();
 
 		computeTrueNbRays();
 
-		BuildStack();
+		computeThetaCalcul(_i);
+
+		computeN2();
 	}
 
-	unsigned int getRealNbRays() const { return real_nb_rays; }
+	unsigned int getRealNbRays() const { return _real_nb_rays; }
 
 private :
 	inline void computeN1() 
 	{ 	
-		n1 = static_cast<unsigned int>( floor( M_PI * sqrt( static_cast<decimal>(nb_rays) ) / 8. + 0.5 ) );
-		n1 = 2 * n1;
+		_n1 = static_cast<unsigned int>( floor( M_PI * sqrt( static_cast<decimal>(_nb_rays) ) / 8. + 0.5 ) );
+		_n1 = 2 * _n1;
 	}
 
-	inline decimal computeThetaCalcul(unsigned int i)
+	inline void computeThetaCalcul(unsigned int i)
 	{
-		return static_cast<decimal>( static_cast<int>(n1) - 2 * static_cast<int>(i) + 1 ) * theta / static_cast<decimal>(n1) ;
+		_thetaCalcul =  static_cast<decimal>( static_cast<int>(_n1) - 2 * static_cast<int>(i) + 1 ) * _theta / static_cast<decimal>(_n1) ;
 	}
 
-	inline unsigned int computeN2(const decimal& thetaCalcul)
+	inline void computeN2()
 	{
-		return static_cast<unsigned int>( floor( nb_rays * (  sin( thetaCalcul + theta /n1 ) - sin( thetaCalcul - theta / n1 )  ) / 2.  + 0.5 ) );
+		_n2 = static_cast<unsigned int>( floor( _nb_rays * (  sin( _thetaCalcul + _theta /_n1 ) - sin( _thetaCalcul - _theta / _n1 )  ) / 2.  + 0.5 ) );
 	}
 
 	inline void computeTrueNbRays()
 	{
-		decimal thetaCalcul = 0.;
-		unsigned int n2 = 0;  // latitude : nbr of parts, function of n1
-
-		for( unsigned int i = 1; i <= n1 ;i++)
+		for( unsigned int i = 1; i <= _n1 ;i++)
 		{
-			thetaCalcul = computeThetaCalcul(i);
-			n2 = computeN2(thetaCalcul);
-			real_nb_rays += n2;
+			computeThetaCalcul(i);
+			computeN2();
+			_real_nb_rays += _n2;
 		}
 	}
 
-	/*!
-	 * \fn void BuildStack()
-	 * \brief Build stack that store the initial directions of rays
-	 */
-	void BuildStack()
-	{
-		unsigned int n2 = 0;
-		decimal thetaCalcul;
-		decimal phiCalcul;
-		vec3 result;
-
-		for(unsigned int i = 1; i <= n1 ;i++)
-		{
-			thetaCalcul = computeThetaCalcul(i);
-			n2 = computeN2(thetaCalcul);
-				
-			for(unsigned int j = 1; j <= n2 ; j++)
-			{		
-				phiCalcul = j * ( phi / n2 );
-
-				vec3 result;
-				Tools::fromRadianToCarthesien(thetaCalcul, phiCalcul, result);
-				result.normalize();
-
-				points.push(result);
-			}
-		}	
-	}
-
 private :
-	/*!
-	 * \brief points store every single points in memory
-	 */
-	std::stack< vec3, std::deque<vec3> > points;
-
-	unsigned int real_nb_rays;  /*! Real number of rays lauched */
-	unsigned int n1;			/*! number of ray along equatorius */
+	unsigned int _real_nb_rays;  /*!< Real number of rays lauched */
+	unsigned int _n1;			/*!< number of slices  */
+	unsigned int _n2;			/*!< number of rays along a specific slice */
+	decimal _thetaCalcul;		/*!< current angle along a longitude */
+	unsigned int _i, _j;		/*!< current indices */
 };
 
 #endif
