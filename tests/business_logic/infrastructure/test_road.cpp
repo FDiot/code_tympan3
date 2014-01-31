@@ -176,7 +176,7 @@ LPTYRoute functionnalResults_initRoadFromRow(const deque<double>& row)
 {
     LPTYRoute pRoad = new TYRoute();
 
-    pRoad->setSurfaceType(static_cast<RoadSurfaceType>(row[0]));
+    pRoad->setSurfaceType(static_cast<RoadSurfaceType>((int)row[0]));
     pRoad->setSurfaceAge(row[1]);
     pRoad->setRamp(row[2]);
 
