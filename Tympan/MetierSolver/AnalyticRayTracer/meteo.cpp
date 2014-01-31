@@ -45,7 +45,6 @@ double meteo::cLin(const vec3& P, vec3& grad) const
 
 vec3 meteo::vent(const vec3& P, std::map<std::pair<int, int>, decimal> &jacob) const
 {
-
     // calcul du vent : on a une fonction lineaire fonction de la coordonnee z du point
     vec3 v;
 
@@ -57,19 +56,9 @@ vec3 meteo::vent(const vec3& P, std::map<std::pair<int, int>, decimal> &jacob) c
     v.y = DVy * P.z;
     v.z = 0;
 
-
-
-    //v.x = 0.5 * Meteo.gradV * P.z;
-    //v.y = 0.5 * Meteo.gradV * P.z;
-    //v.z = 0;
-
     // calcul de la jacobienne
     jacob[std::make_pair(1, 3)] = DVx;
     jacob[std::make_pair(2, 3)] = DVy;
-
-
-    //jacob[make_pair(1, 3)] = 0.5 * Meteo.gradV;
-    //jacob[make_pair(2, 3)] = 0.5 * Meteo.gradV;
 
     return v;
 }

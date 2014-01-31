@@ -35,8 +35,6 @@ using namespace std;
 
 class RayCourb;
 
-// typedef double R;
-
 /*! \class Lancer
 * \brief classe representant un lancer de rayons courbes
 */

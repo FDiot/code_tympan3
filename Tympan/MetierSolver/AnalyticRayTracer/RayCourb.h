@@ -27,8 +27,6 @@
 
 using namespace std;
 
-//typedef double R;
-//class R3;
 
 class RayCourb
 {
