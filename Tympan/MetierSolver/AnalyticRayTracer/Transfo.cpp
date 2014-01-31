@@ -15,7 +15,6 @@
  
 #include "RayCourb.h"
 #include "Transfo.h"
-#include "interpolation.h"
 #include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
 
 #include <map>
@@ -230,7 +229,6 @@ void Transfo::trianguleNappe()
 
 	// 1- On creer nos triangles de Delaunay
     ODelaunayMaker oDelaunayMaker(1e-5);
-    //OPoint3D oVertex;
 
 	for (unsigned int i=0; i<vectSurf_Interp.size(); i++)
 	{
@@ -345,6 +343,28 @@ void Transfo::setSrcForMapping(unsigned int& sourceIdx)
     vec3 src = shot.sources[sourceIdx];
     shot.sources.clear();
     shot.sources.push_back(src);
+}
+
+
+double Transfo::interpo(const vec3* triangle, vec3 P)
+{
+    // rend la coordonnee P.z
+
+    const vec3& A = triangle[0];
+    const vec3& B = triangle[1];
+    const vec3& C = triangle[2];
+
+    double del = (B.x - A.x) * (C.y - A.y) - (C.x - A.x) * (B.y - A.y);
+
+    double a = ((B.x - P.x) * (C.y - P.y) - (C.x - P.x) * (B.y - P.y)) / del;
+    double b = ((C.x - P.x) * (A.y - P.y) - (A.x - P.x) * (C.y - P.y)) / del;
+    double c = ((A.x - P.x) * (B.y - P.y) - (B.x - P.x) * (A.y - P.y)) / del;
+
+    //  P.z = a*A.z + b*B.z + c*C.z;
+
+    //  return P.z;
+
+    return a * A.z + b * B.z + c * C.z;
 }
 
 bool IsInTriangle(const vec3& P, const vec3* triangle)  // R2:: ?

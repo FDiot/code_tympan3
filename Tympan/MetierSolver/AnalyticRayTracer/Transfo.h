@@ -199,6 +199,12 @@ public:
      * Force le choix de la source pour le lancer de rayons
     */
     void setSrcForMapping(unsigned int& sourceIdx);
+
+	/*!
+	 * \fn double interpo(const vec3* triangle, vec3 P);
+	 * \brief return z position of point (P) inside a triangle
+	 */
+	double interpo(const vec3* triangle, vec3 P);
 };
 
 bool IsInTriangle(const vec3& P, const vec3* triangle);

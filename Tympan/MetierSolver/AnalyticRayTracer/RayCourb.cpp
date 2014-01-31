@@ -133,57 +133,6 @@ RayCourb::~RayCourb()
 {
 }
 
-//
-//decimal cLin(const vec3& P, const meteo& Meteo, vec3& grad)
-//{
-//
-//    // calcul de la celerite
-//    decimal c = Meteo.gradC * P.z + Meteo.c0;
-//
-//    // calcul du gradient
-//    grad.z = Meteo.gradC;
-//
-//    return c;
-//};
-//
-//
-//vec3 vent(const vec3& P, const meteo& Meteo, map<pair<int, int>, decimal> &jacob)
-//{
-//
-//    // calcul du vent : on a une fonction lineaire fonction de la coordonnee z du point
-//    vec3 v;
-//
-//	double angleVent = 90.0;
-//	double PI =355.0 / 113.0;
-//
-//	double angle = -(PI/2.0) - (angleVent * PI /180.0);
-//	double DVx = cos(angle) * Meteo.gradV;
-//	double DVy = sin(angle) * Meteo.gradV;
-//
-//    v.x = DVx * P.z;
-//    v.y = DVy * P.z;
-//    v.z = 0;
-//
-//
-//
-//    //v.x = 0.5 * Meteo.gradV * P.z;
-//    //v.y = 0.5 * Meteo.gradV * P.z;
-//    //v.z = 0;
-//
-//    // calcul de la jacobienne
-//    jacob[make_pair(1, 3)] = DVx;
-//    jacob[make_pair(2, 3)] = DVy;
-//
-//
-//    //jacob[make_pair(1, 3)] = 0.5 * Meteo.gradV;
-//    //jacob[make_pair(2, 3)] = 0.5 * Meteo.gradV;
-//
-//    return v;
-//}
-
-
-/* L'operateur << et la fonction show sont extraits du cours d'Informatique Scientifique enseigne en Master 1 a l'Universite Pierre et Marie Curie par Frederic Hecht et Ionut Danaila*/
-
 template<typename A, typename B>
 ostream& operator<<(ostream& f, pair<A, B> ab)
 {
@@ -221,26 +170,3 @@ RayCourb operator*(const decimal& c, const RayCourb& P)
 
     return result;
 }
-
-//int main(){
-//  int n = 3;
-//  R3 recep(500,0,2), source(0,0,2);
-//  meteo Meteo(0.5,0.5,340);
-//
-//  R3 grad;
-//  cout<<"grad : "<<grad.x<<", "<<grad.y<<", "<<grad.z<<endl;
-//
-//  double cele = cLin(source, Meteo, grad);
-//  cout<<"grad : "<<grad<<endl;
-//
-//  map<pair<int,int>,double> jacob;
-//  for(int i=0; i<n; ++i)
-//      for(int j=0; j<n; ++j)
-//          jacob[make_pair(i,j)] = 0;
-//
-//  R3 mon_vent = vent(source, Meteo, jacob);
-//  cout<<"vent : "<<mon_vent<<endl;
-//  show("jacobienne",jacob);
-//
-//  return 0;
-//}
