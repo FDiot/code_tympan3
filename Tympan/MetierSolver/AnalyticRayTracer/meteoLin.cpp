@@ -15,42 +15,29 @@
  
 #include <cmath>
 
-#include "meteo.h"
+#include "meteoLin.h"
 
-meteo::meteo()
-{
-    gradC = 0.5;
-    gradV = 0.5;
-    c0 = 340;
-	windDirection = 0.0;
-}
 
-meteo::meteo(const double& gradC, const double& gradV, const double& windDir, const double& c0) : gradC(gradC), gradV(gradV), windDirection(windDir), c0(c0) {} ;
-
-meteo::~meteo()
-{
-}
-
-double meteo::cLin(const vec3& P, vec3& grad) const
+double meteoLin::cTemp(const vec3& P, vec3& grad) const
 {
 
     // calcul de la celerite
-    decimal c = gradC * P.z + c0;
+    decimal c = grad_C * P.z + c0;
 
     // calcul du gradient
-    grad.z = gradC;
+    grad.z = grad_C;
 
     return c;
 };
 
-vec3 meteo::vent(const vec3& P, std::map<std::pair<int, int>, decimal> &jacob) const
+vec3 meteoLin::cWind(const vec3& P, std::map<std::pair<int, int>, decimal> &jacob) const
 {
     // calcul du vent : on a une fonction lineaire fonction de la coordonnee z du point
     vec3 v;
 
-	double angle = -(M_PI/2.0) - (windDirection * M_PI /180.0);
-	double DVx = cos(angle) * gradV;
-	double DVy = sin(angle) * gradV;
+	double angle = -M_PIDIV2 - wind_angle;
+	double DVx = cos(angle) * grad_V;
+	double DVy = sin(angle) * grad_V;
 
     v.x = DVx * P.z;
     v.y = DVy * P.z;
