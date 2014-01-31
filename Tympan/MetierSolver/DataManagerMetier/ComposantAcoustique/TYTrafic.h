@@ -115,6 +115,16 @@ protected:
         RoadTrafficComponent arr[NB_VEHICLE_TYPES];
     };
 
+private:
+    /**
+     * \brief Auxilliary methods used to read a RoadTrafficComponent from XML
+     *
+     * \param domElement the XML element to read from
+     * \param rtc output argument referencing the RoadTrafficComponent to initialize
+     * \return 1 in case of success and 0 in case of failure
+     */
+    int fromXML_TrafficComponent(DOM_Element domElement, RoadTrafficComponent& rtc);
+
 };
 
 

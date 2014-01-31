@@ -91,6 +91,15 @@ ASSERT_NE(LPTYRoute(), pLoadedRoad); // Success of saveAndReload
 EXPECT_EQ(pRoad->road_traffic.surfaceType, pLoadedRoad->road_traffic.surfaceType);
 EXPECT_EQ(pRoad->road_traffic.ramp,        pLoadedRoad->road_traffic.ramp);
 EXPECT_EQ(pRoad->road_traffic.surfaceAge,  pLoadedRoad->road_traffic.surfaceAge);
+
+for(unsigned i=0; i<TYRoute::NB_TRAFFIC_REGIMES; ++i)
+{
+    // For some obscure reason GTest does not find the operator==
+    // so we can not use EXPECT_EQ as usual.
+    // EXPECT_EQ(pLoadedRoad->traffic_regimes[i], pRoad->traffic_regimes[i]);
+    EXPECT_TRUE(pLoadedRoad->traffic_regimes[i] == pRoad->traffic_regimes[i]);
+}
+
 // NB: The pre-existing operator== can not be trusted to be consistent
 // with XML round trip or test for equality (and not identity)
 // See ticket https://extranet.logilab.fr/ticket/1522889
