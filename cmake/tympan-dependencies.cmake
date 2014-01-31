@@ -149,6 +149,17 @@ set(NMPB2008_LIBRARY_DIR ${NMPB2008_INSTALL_DIR}/lib)
 include_directories(${NMPB2008_INCLUDE_DIR})
 link_directories(${NMPB2008_LIBRARY_DIR})
 
+if(MSVC)
+  # It is required to install the prebuilt NMPB08 DLL on windows
+  # along the executable and under the name `RoadEmissionNMPB.dll`
+  install(FILES ${NMPB2008_INSTALL_DIR}/RoadEmissionNMPB2008.dll
+    DESTINATION . RENAME RoadEmissionNMPB.dll )
+else()
+  set(filename ${CMAKE_SHARED_LIBRARY_PREFIX}RoadEmissionNMPB2008${CMAKE_SHARED_LIBRARY_SUFFIX})
+  install(FILES ${NMPB2008_INSTALL_DIR}/lib/${filename} DESTINATION lib)
+  set(filename)
+endif(MSVC)
+
 message(STATUS "  ## TYMPAN_3RDPARTY_DLL_DIRS: " "${TYMPAN_3RDPARTY_DLL_DIRS}")
 message(STATUS "  ## TYMPAN_3RDPARTY_DLL_NATIVE_DIRS: " "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
 message(STATUS "  ## Boost_INCLUDE_DIRS: " "${Boost_INCLUDE_DIRS}")

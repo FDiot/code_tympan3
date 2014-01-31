@@ -27,7 +27,7 @@ set(TYMPAN_3RDPARTY_DIME_MD5  "8d144a016b3fb1cb1ac606d39ec7fccb"
 
 set(TYMPAN_3RDPARTY_NMPB2008 "${CMAKE_SOURCE_DIR}/3rdparty/NMPB2008.zip"
   CACHE STRING "Where to fetch the external project NMBP2008")
-set(TYMPAN_3RDPARTY_NMPB2008_MD5  "00ef9956ed550e55c440968558dfc5e2"
+set(TYMPAN_3RDPARTY_NMPB2008_MD5  "f781b9a41d930b1f9947d13d10d3897c"
     CACHE STRING "Checksum for the TYMPAN_3RDPARTY_NMPB2008 archive.")
 
 ## If you are having trouble getting CMake find boost you probably want to set
