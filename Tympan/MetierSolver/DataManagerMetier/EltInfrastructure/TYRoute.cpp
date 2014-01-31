@@ -181,11 +181,6 @@ int TYRoute::fromXML(DOM_Element domElement)
 {
     // NB DOM_Element is actually a QDomElement
     TYAcousticLine::fromXML(domElement);
-    QDomNodeList children = domElement.childNodes();
-
-    // TODO update serialisation: cf. https://extranet.logilab.fr/ticket/1512503
-
-    // TODO Deserialise the RoadTraffic attribute
 
     QString s;
     bool ok;
@@ -247,32 +242,30 @@ int TYRoute::fromXML(DOM_Element domElement)
     }
     road_traffic.surfaceAge = tmp_d;
 
+    // Deserialise the traffic for the regimes
+    QDomNodeList children = domElement.elementsByTagName("Trafic");
+    if (children.size() != NB_TRAFFIC_REGIMES)
+    {
+         OMessageManager::get()->error(
+            "Loading TYRoute element %s, "
+            "%u TYTrafic child elements were found but %u were expected",
+            str_qt2c(getStringID()), children.size(), NB_TRAFFIC_REGIMES);
+        return 0;
+    }
 
+    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    {
+        QDomElement elem = children.item(i).toElement();
+        if (elem.isNull())
+        {
+            debugXml(children.item(i));
+            return 0;
+        }
+        traffic_regimes[i].fromXML(elem);
+    }
 
-    // DOM_Element elemCur;
-    // for (unsigned int i = 0; i < childs.length(); i++)
-    // {
-    //     elemCur = childs.item(i).toElement();
-    //     TYXMLTools::getElementBoolValue(elemCur, "modeCalcul", _modeCalcul, modeCalculOk);
-    //     TYXMLTools::getElementDoubleValue(elemCur, "vitMoy", _vitMoy, vitMoyOk);
-
-    //     if (!traficJourFound)
-    //     {
-    //         traficJourFound = _pTraficJour->callFromXMLIfEqual(elemCur);
-    //     }
-    //     else if (!traficNuitFound)
-    //     {
-    //         traficNuitFound = _pTraficNuit->callFromXMLIfEqual(elemCur);
-    //     }
-    // }
-
-    // if (_tabRegimes.size() == 1) // Cas d'un ancien fichier "sans regime"
-    // {
-    //     addRegime(buildRegime()); // On rajoute un regime
-    //     _tabRegimes[0].setName("Jour");
-    //     _tabRegimes[1].setName("Nuit");
-    // }
-
+    // TODO : handle ascendant compatibility (out-of-scope for now)
+    // Cf. https://extranet.logilab.fr/ticket/1521703
     return 1;
 }
 
