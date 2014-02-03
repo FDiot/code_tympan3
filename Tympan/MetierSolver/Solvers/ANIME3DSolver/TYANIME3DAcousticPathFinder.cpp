@@ -34,6 +34,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
+#include "Tympan/MetierSolver/AnalyticRayTracer/meteoLin.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/RandomSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
@@ -89,10 +90,10 @@ bool TYANIME3DAcousticPathFinder::exec()
         _curveRayTracing.setTMax(globalAnalyticTMax);
         _curveRayTracing.setTimeStep(globalAnalyticH);
         _curveRayTracing.setNbRay(globalAnalyticNbRay);
-        _curveRayTracing.Meteo.setGradC(globalAnalyticGradC);
-        _curveRayTracing.Meteo.setGradV(globalAnalyticGradV);
-		_curveRayTracing.Meteo.setWindDirection(globalWindDirection);
-        _curveRayTracing.Meteo.setC0(globalAnalyticC0);
+        dynamic_cast<meteoLin*>(_curveRayTracing.shot._weather)->setGradC(globalAnalyticGradC);
+        dynamic_cast<meteoLin*>(_curveRayTracing.shot._weather)->setGradV(globalAnalyticGradV);
+		_curveRayTracing.shot._weather->setWindAngle(globalWindDirection);
+        _curveRayTracing.shot._weather->setC0(globalAnalyticC0);
         _curveRayTracing.setMethode(globalAnalyticTypeTransfo);
 		_curveRayTracing.shot.launchType = 1;									// Indique que l'on tire les rayons sur un plan horizontal
         _curveRayTracing.shot.initialAnglePhi = globalAnalyticAnglePhi;		// Angle de tir vertical (phi) des rayons
@@ -100,8 +101,6 @@ bool TYANIME3DAcousticPathFinder::exec()
         // Choix de la source
         _curveRayTracing.source = 0;
         _curveRayTracing.setSrcForMapping(_curveRayTracing.source);
-
-        _curveRayTracing.recepteurs = _curveRayTracing.shot.recepteurs;
 
         // Transformation de la geometrie
         _curveRayTracing.Transformer();

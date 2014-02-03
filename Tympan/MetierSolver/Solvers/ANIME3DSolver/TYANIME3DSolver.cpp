@@ -155,7 +155,7 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
 	calcul.setTabRays(_tabRay);
 
 // BEGIN : COMPLEMENTS "DECORATIFS"
- //   if (globalRestitModifiedGeom) { restitModifiedAlti(site); }
+    if (globalRestitModifiedGeom) { restitModifiedAlti(site, apf); }
 
  //   // Exportation des donnees des rayons dans un fichier texte pour comparaison
  //   exportRays(calcul);
@@ -175,25 +175,25 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
     return true;
 }
 
-//
-//void TYANIME3DSolver::restitModifiedAlti(const TYSiteNode& site)
-//{
-//    // Recuperation de l'altimetrie du site
-//    const TYTopographie* pTopo = site.getTopographie().getRealPointer();
-//    TYAltimetrie* pAlti = pTopo->getAltimetrie();
-//
-//    // Recuperation de la scene de calcul
-//    vector<vec3>* tabvertex = _rayTracing.getScene()->getVertices();
-//
-//    // Remplissage du tableau de points
-//    TYTabPoint tabPts;
-//	tabPts.reserve(tabvertex->size());
-//    for (unsigned int i = 0; i < tabvertex->size(); i++)
-//        tabPts.push_back(TYPoint(tabvertex->at(i).x, tabvertex->at(i).y, tabvertex->at(i).z));
-//
-//    // Recalcul de la triangulation de l'altimetrie
-//    pAlti->compute(tabPts, 1.E-5);
-//}
+
+void TYANIME3DSolver::restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcousticPathFinder& pathFinder)
+{
+    // Recuperation de l'altimetrie du site
+    const TYTopographie* pTopo = site.getTopographie().getRealPointer();
+    TYAltimetrie* pAlti = pTopo->getAltimetrie();
+
+    // Recuperation de la scene de calcul
+    vector<vec3>* tabvertex = pathFinder.getRayTracer().getScene()->getVertices();
+
+    // Remplissage du tableau de points
+    TYTabPoint tabPts;
+	tabPts.reserve(tabvertex->size());
+    for (unsigned int i = 0; i < tabvertex->size(); i++)
+        tabPts.push_back(TYPoint(tabvertex->at(i).x, tabvertex->at(i).y, tabvertex->at(i).z));
+
+    // Recalcul de la triangulation de l'altimetrie
+    pAlti->compute(tabPts, 1.E-5);
+}
 
 //struct pairComparator
 //{

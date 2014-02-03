@@ -35,6 +35,8 @@ public:
 	 */
 	void tyRayCorrection(TYRay *tyRay);
 
+	Simulation& getRayTracer() { return _rayTracing; }
+
 private :
     /*!
      * \fn unsigned int getTabsSAndR(const TYSite& site, TYCalcul& calcul, vector<OCoord3D>& sources, vector<OCoord3D>& recepteurs)
