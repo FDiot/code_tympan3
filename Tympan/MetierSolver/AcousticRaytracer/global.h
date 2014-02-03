@@ -56,7 +56,7 @@ extern double globalAnalyticDMax;       // Distance de propagation maximale des 
 extern double globalAnalyticTMax;       // Temps de propagation maximal des rayons courbes
 extern double globalAnalyticH;          // Pas de temps de calcul pour la propagation des rayons courbes
 extern int globalAnalyticNbRay;         // Nombre de rayons tires pour le lancer de rayons courbes
-extern float globalAnalyticAnglePhi;    // Angle de tir vertical (phi) des rayons
+extern float globalAnalyticAngleTheta;    // Angle de tir vertical (theta) des rayons
 
 extern double globalAnalyticGradC;      // Gradient vertical de celerite
 extern double globalAnalyticGradV;      // Gradient vertical de vitesse de vent
