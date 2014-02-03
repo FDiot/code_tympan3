@@ -73,6 +73,7 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     globalAnalyticTMax = 3.0f;          // Temps de propagation maximal des rayons courbes
     globalAnalyticH = 0.01f;            // Pas de temps de calcul pour la propagation des rayons courbes
     globalAnalyticNbRay = 10;           // Nombre de rayons tires pour le lancer de rayons courbes
+	globalAnalyticAngleTheta = 0.;		// Angle de tir vertical (theta) des rayons
 
     globalAnalyticGradC = 0.1f;     // Gradient vertical de celerite
     globalAnalyticGradV = 0.15f;    // Gradient vertical de vitesse de vent
@@ -80,6 +81,7 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     globalAnalyticTypeTransfo = 1;  // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
 	globalRestitModifiedGeom = 1;   // Indique si l'on souhaite recuperer la geometrie transformee
     globalOverSampleD = 3;          // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
+	globalWindDirection = 0.;		    // Direction du vent (un vent a 0 est dirige du nord vers le sud)
 
     /////////////////////////
     // ANIME3D Extensions
@@ -176,6 +178,9 @@ bool TYANIME3DRayTracerSetup::loadParameters()
     // Nombre de rayons tires pour le lancer de rayons courbes
     if (params.getline(ligne, 132)) { globalAnalyticNbRay = getParam(ligne); }
 
+	// Angle de tir vertical (theta) des rayons	
+	if (params.getline(ligne, 132)) { globalAnalyticAngleTheta = getParam(ligne); }	
+
     // Gradient vertical de celerite
     if (params.getline(ligne, 132)) { globalAnalyticGradC = getParam(ligne); }
 
@@ -193,6 +198,9 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 
     // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
     if (params.getline(ligne, 132)) { globalOverSampleD = getParam(ligne); }
+
+	// Direction du vent (un vent a 0 est dirige du nord vers le sud)	
+	if (params.getline(ligne, 132)) { globalWindDirection = getParam(ligne); }		    
 
     // Prise en compte (ou non) de la zone de Fresnel
     if (params.getline(ligne, 132)) { globalUseFresnelArea = getParam(ligne); }
