@@ -36,6 +36,7 @@
 #include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/meteoLin.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
+#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Latitude2DSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/RandomSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
 
@@ -78,7 +79,7 @@ bool TYANIME3DAcousticPathFinder::exec()
     if (globalUseMeteo)
     {
 	    // Creation du lancer de rayons courbes
-		_curveRayTracing.Init();
+		_curveRayTracing.clear();
 
 		// Recuperation des sources et des recepteurs
         appendSourceToAnalyticRayTracer(_curveRayTracing.shot.sources);
@@ -95,8 +96,11 @@ bool TYANIME3DAcousticPathFinder::exec()
 		_curveRayTracing.shot._weather->setWindAngle(globalWindDirection);
         _curveRayTracing.shot._weather->setC0(globalAnalyticC0);
         _curveRayTracing.setMethode(globalAnalyticTypeTransfo);
-		_curveRayTracing.shot.launchType = 1;									// Indique que l'on tire les rayons sur un plan horizontal
-        _curveRayTracing.shot.initialAnglePhi = globalAnalyticAnglePhi;		// Angle de tir vertical (phi) des rayons
+		_curveRayTracing.shot.setLaunchType(1);									// Indique que l'on tire les rayons sur un plan horizontal
+
+		dynamic_cast<Latitude2DSampler*>( _curveRayTracing.shot.getSampler() )->setStartTheta( globalAnalyticAngleTheta );
+        
+		_curveRayTracing.shot.initialAngleTheta = globalAnalyticAngleTheta;		// Angle de tir vertical (theta) des rayons
 
         // Choix de la source
         _curveRayTracing.source = 0;
