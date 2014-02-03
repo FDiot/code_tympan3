@@ -36,29 +36,6 @@ class Lancer;
 class Transfo
 {
 public:
-    // Donnees membres :
-
-    unsigned int source;                                       /*!< Indice de la source dans le tableau des source du lancer */
-    vector<vec3> recepteurs;                                     /*!< la liste de recepteurs */
-    meteo Meteo;                                               /*!< meteo */
-    unsigned int nbRay;                                        /*!< nombre de rayons que l'on lance */
-    decimal dmax;                                                    /*!< distance maximale parcourue par les rayons */
-    decimal h;                                                       /*!< pas de discretisation */
-    decimal TMax;                                                    /*!< temps de propagation maximal */
-    vector<decimal> temps;                                           /*!< [0:h:temps_max] vecteur des temps ou l'on resouds */
-
-    Lancer shot;                                               /*!< notre lancer sans reflexion */
-
-    vector<vec3*> planDepart;                                    /*!< l'espace de depart */
-    vector<vec3*> planTransfo;                                   /*!< l'espace transforme */
-    vector<RayCourb*> MatRes;                                  /*!< matrice contenant les rayons droits */
-    vector<RayCourb*> MatTransfo;                              /*!< tableau contenant les rayons droits transformes */
-
-    int methode;                                               /*!< entier definissant la methode de transformation utilisee */
-
-    QList<OTriangle> Liste_triangles;                           /*!< Liste des triangles de la nappe interpolee */
-	QList<OPoint3D> list_vertex;									/*!< Liste des vertex de la triangulation */
-
 
     // Constructeurs :
     Transfo();
@@ -67,6 +44,10 @@ public:
 
     // Destructeur :
     ~Transfo();
+
+	
+	void setRecepteurs(const vector<vec3>& R) { shot.recepteurs = R; }
+	void setMeteo(const meteo *Meteo) { shot.setMeteo(Meteo); }
 
     /*!
      * \fn void purge()
@@ -205,6 +186,31 @@ public:
 	 * \brief return z position of point (P) inside a triangle
 	 */
 	double interpo(const vec3* triangle, vec3 P);
+
+public :
+   // Donnees membres :
+
+    unsigned int source;                                       /*!< Indice de la source dans le tableau des source du lancer */
+    unsigned int nbRay;                                        /*!< nombre de rayons que l'on lance */
+    decimal dmax;                                                    /*!< distance maximale parcourue par les rayons */
+    decimal h;                                                       /*!< pas de discretisation */
+    decimal TMax;                                                    /*!< temps de propagation maximal */
+    vector<decimal> temps;                                           /*!< [0:h:temps_max] vecteur des temps ou l'on resouds */
+
+    Lancer shot;                                               /*!< notre lancer sans reflexion */
+
+    vector<vec3*> planDepart;                                    /*!< l'espace de depart */
+    vector<vec3*> planTransfo;                                   /*!< l'espace transforme */
+    vector<RayCourb*> MatRes;                                  /*!< matrice contenant les rayons droits */
+    vector<RayCourb*> MatTransfo;                              /*!< tableau contenant les rayons droits transformes */
+
+    int methode;                                               /*!< entier definissant la methode de transformation utilisee */
+
+    QList<OTriangle> Liste_triangles;                           /*!< Liste des triangles de la nappe interpolee */
+	QList<OPoint3D> list_vertex;									/*!< Liste des vertex de la triangulation */
+
+
+
 };
 
 bool IsInTriangle(const vec3& P, const vec3* triangle);
