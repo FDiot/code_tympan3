@@ -29,7 +29,7 @@ Transfo::Transfo() : source(0), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nb
 }
 
 
-Transfo::Transfo(Lancer& L) : source(0), planDepart(L.plan), h(L.h), TMax(L.TMax), temps(L.temps), dmax(L.dmax), nbRay(L.nbRay), shot(L)
+Transfo::Transfo(Lancer& L) : source(0), planDepart(L._plan), h(L.h), TMax(L.TMax), temps(L.temps), dmax(L.dmax), nbRay(L.nbRay), shot(L)
 {
 }
 
@@ -79,9 +79,9 @@ void Transfo::purge()
     Liste_triangles.clear();
 }
 
-void Transfo::Init()
+void Transfo::clear()
 {
-    shot.Init();
+    shot.clear();
     purge();
 }
 

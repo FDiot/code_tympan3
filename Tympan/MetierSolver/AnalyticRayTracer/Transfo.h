@@ -61,7 +61,7 @@ public:
     * \fn void Init()
     * \brief Efface tous les tableaux.
     */
-    void Init();
+    void clear();
 
     /*!
     * \fn void setNbRay(const unsigned int& nb)
