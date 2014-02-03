@@ -28,7 +28,7 @@ bool globalKeepDebugRay;        //Permet de conserver les rayons qui ont ete inv
 float globalMaxLength;          //Longueur maximale autorisee pour un rayon, globalMaxLength inclu
 float globalSampleGround2D;     //Echantillonage sur sol pour la description de la topographie 2D sous le rayon. (NMPB)
 int globalRayTracingOrder;      //[0-2]Sens de traitement des rayon source-recepteur ou inverse (0 = SR / 1 =RS / 2 = auto)
-float globalAnalyticAnglePhi;   // Angle de tir vertical (phi) des rayons
+float globalAnalyticAngleTheta;   // Angle de tir vertical (theta) des rayons
 int globalDiscretization;		//Permet de choisir entre des rayons aléatoires ou déterministes (discretisation source)
 
 ////////////////////////////
