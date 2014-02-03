@@ -24,17 +24,17 @@
 using namespace std;
 
 
-Transfo::Transfo() : source(0), recepteurs(NULL), Meteo(meteo()), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(1), planDepart(NULL), planTransfo(NULL)
+Transfo::Transfo() : source(0), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(1), planDepart(NULL), planTransfo(NULL)
 {
 }
 
 
-Transfo::Transfo(Lancer& L) : source(0), recepteurs(L.recepteurs), planDepart(L.plan), Meteo(L.Meteo), h(L.h), TMax(L.TMax), temps(L.temps), dmax(L.dmax), nbRay(L.nbRay), shot(L)
+Transfo::Transfo(Lancer& L) : source(0), planDepart(L.plan), h(L.h), TMax(L.TMax), temps(L.temps), dmax(L.dmax), nbRay(L.nbRay), shot(L)
 {
 }
 
 
-Transfo::Transfo(Transfo& r) :  source(r.source), recepteurs(r.recepteurs), Meteo(r.Meteo), nbRay(r.nbRay), dmax(r.dmax), h(r.h), TMax(r.TMax), temps(r.temps), shot(r.shot), planDepart(r.planDepart), planTransfo(r.planTransfo), MatRes(r.MatRes), MatTransfo(r.MatTransfo), methode(r.methode)
+Transfo::Transfo(Transfo& r) :  source(r.source), nbRay(r.nbRay), dmax(r.dmax), h(r.h), TMax(r.TMax), temps(r.temps), shot(r.shot), planDepart(r.planDepart), planTransfo(r.planTransfo), MatRes(r.MatRes), MatTransfo(r.MatTransfo), methode(r.methode)
 {
 }
 
@@ -71,7 +71,6 @@ void Transfo::purge()
         MatTransfo[i] = NULL;
     }
 
-    recepteurs.clear();
     temps.clear();
     planDepart.clear();
     planTransfo.clear();
@@ -87,21 +86,21 @@ void Transfo::Init()
 }
 
 
-decimal Transfo::distance_max()
-{
-    decimal result = 0;
-
-    vec3 src, rcpt;
-
-    for (unsigned int nr = 0; nr < recepteurs.size(); ++nr)
-    {
-        src = shot.sources[source];
-        rcpt = recepteurs[nr];
-        result = max(result, sqrt((rcpt.x - src.x) * (rcpt.x - src.x) + (rcpt.y - src.y) * (rcpt.y - src.y) + (rcpt.z - src.z) * (rcpt.z - src.z)));
-    }
-
-    return result;
-}
+//decimal Transfo::distance_max()
+//{
+//    decimal result = 0;
+//
+//    vec3 src, rcpt;
+//
+//    for (unsigned int nr = 0; nr < recepteurs.size(); ++nr)
+//    {
+//        src = shot.sources[source];
+//        rcpt = recepteurs[nr];
+//        result = max(result, sqrt((rcpt.x - src.x) * (rcpt.x - src.x) + (rcpt.y - src.y) * (rcpt.y - src.y) + (rcpt.z - src.z) * (rcpt.z - src.z)));
+//    }
+//
+//    return result;
+//}
 
 
 void Transfo::createTemps()
@@ -118,12 +117,7 @@ void Transfo::createTemps()
 
 void Transfo::createShot()
 {
-    shot.Meteo.setC0(Meteo.c0);
-    shot.Meteo.setGradC(Meteo.gradC);
-    shot.Meteo.setGradV(Meteo.gradV);
-	shot.Meteo.setWindDirection(Meteo.windDirection);
     setSrcForMapping(source);
-    shot.recepteurs = recepteurs;
     shot.setNbRay(nbRay);
     shot.setTMax(TMax);
     shot.setDMax(dmax);

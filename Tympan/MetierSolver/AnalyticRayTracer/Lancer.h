@@ -42,55 +42,19 @@ class RayCourb;
 class Lancer
 {
 public:
-
-    // Donnees membres :
-
-    vector<vec3> sources;                 /*!< vector contenant les sources */
-    vector<vec3> recepteurs;              /*!<  vector contenant les recepteurs */
-    vector<vec3*> plan;                   /*!<  "liste" des objets definis par 3 points */
-    meteo Meteo;                        /*!<  meteo */
-
-    decimal h;                                /*!<  pas de discretisation */
-    decimal TMax;                             /*!<  temps de propagation maximal */
-    vector<decimal> temps;                    /*!<  [0:h:temps_max] vecteur des temps ou l'on resouds */
-    decimal dmax;                             /*!<  distance maximale parcourue par les rayons */
-    decimal initialAngleTheta;                /*!<  angle de tir initial selon theta */
-    decimal finalAngleTheta;                  /*!<  angle de tir final selon theta */
-    decimal initialAnglePhi;                  /*!<  angle de tir initial selon phi */
-    decimal finalAnglePhi;                    /*!<  angle de tir final selon phi */
-
-    unsigned int nbRay;                 /*!<  nombre de rayons que l'on lance */
-    unsigned int launchType;            /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
-    bool wantOutFile;                   /*!<  true if outputfile wanted */
-    string ray_fileName;                /*!<  filename of file containing angles of rays */
-    string out_fileName;                /*!<  filename of the output file */
-
-
-    vector<RayCourb*> MatRes;           /*!<  tableau contenant les rayons obtenus pour chaque source */
-
-
-    /*!
-     *  \brief Constructeur
-     *
-     *  Constructeurs de la classe Lancer par defaut, par copie et par passage d'arguments
-     *
-     */
     Lancer();
     Lancer(Lancer& L);
-    Lancer(vector<vec3> sources, vector<vec3> recepteurs, vector<vec3*> plan, meteo Meteo, decimal h, decimal TmpMax, vector<decimal> temps, decimal dmax, unsigned int nbRay);
+    Lancer(vector<vec3> sources, vector<vec3> recepteurs, vector<vec3*> plan, meteo *Meteo, decimal h, decimal TmpMax, vector<decimal> temps, decimal dmax, unsigned int nbRay);
 
-    /*!
-     *  \brief Destructeur
-     *
-     *  Destructeur de la classe Lancer
-     */
     ~Lancer();
 
-    //--------------------------------------------------------------------------------------------------------//
+	//--------------------------------------------------------------------------------------------------------//
     // Fonctions membres :
     //--------------------------------------------------------------------------------------------------------//
 
-    /*!
+	void setMeteo(const meteo* Meteo) { _weather = const_cast<meteo*>(Meteo); }
+
+	/*!
     * \fn void purgeMatRes()
     * \brief Libere la memoire occupee par MatRes
     */
@@ -154,10 +118,9 @@ public:
     * \fn vector<vec3> EqRay(vector<vec3> y0, meteo Meteo)
     * \brief Fonction definissant l'equation eikonale
     * \param y0 vecteur initial
-    * \param Meteo meteo du probleme
     * \return rend un point du rayon sous la forme (position, normale)
     */
-    vector<vec3> EqRay(const vector<vec3>& y0, const meteo& Meteo);
+    vector<vec3> EqRay(const vector<vec3>& y0);
 
     /*!
     * \fn vec3 intersection(vec3 S, vec3 R, vec3*A, int &reflexion, vec3 nExt_plan, vec3 SR)
@@ -206,6 +169,32 @@ public:
 	 * \param vector<vec3&> vec
 	 */
 	double traveledDistance(const vector<vec3>& vec, const vec3& source)  { return (vec[0].x - source.x) * (vec[0].x - source.x) + (vec[0].y - source.y) * (vec[0].y - source.y); }
+
+public :
+    // Donnees membres :
+
+    vector<vec3> sources;                 /*!< vector contenant les sources */
+    vector<vec3> recepteurs;              /*!<  vector contenant les recepteurs */
+    vector<vec3*> plan;                   /*!<  "liste" des objets definis par 3 points */
+    meteo *_weather;                        /*!<  meteo */
+
+    decimal h;                                /*!<  pas de discretisation */
+    decimal TMax;                             /*!<  temps de propagation maximal */
+    vector<decimal> temps;                    /*!<  [0:h:temps_max] vecteur des temps ou l'on resouds */
+    decimal dmax;                             /*!<  distance maximale parcourue par les rayons */
+    decimal initialAngleTheta;                /*!<  angle de tir initial selon theta */
+    decimal finalAngleTheta;                  /*!<  angle de tir final selon theta */
+    decimal initialAnglePhi;                  /*!<  angle de tir initial selon phi */
+    decimal finalAnglePhi;                    /*!<  angle de tir final selon phi */
+
+    unsigned int nbRay;                 /*!<  nombre de rayons que l'on lance */
+    unsigned int launchType;            /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
+    bool wantOutFile;                   /*!<  true if outputfile wanted */
+    string ray_fileName;                /*!<  filename of file containing angles of rays */
+    string out_fileName;                /*!<  filename of the output file */
+
+
+    vector<RayCourb*> MatRes;           /*!<  tableau contenant les rayons obtenus pour chaque source */
 };
 
 /*!

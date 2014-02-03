@@ -13,7 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */ 
  
-#include "meteo.h"
+#include "meteoLin.h"
 #include "RayCourb.h"
 #include "Lancer.h"
 #include <iostream>
@@ -25,12 +25,13 @@
 #include "Tympan\MetierSolver\AcousticRaytracer\Geometry\UniformSphericSampler.h"
 
 
-Lancer::Lancer() : sources(NULL), recepteurs(NULL), Meteo(meteo()), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(20)
+Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(20)
 {
-    initialAngleTheta = 0.0;                /*!<  angle de tir initial selon theta */
+    _weather = new meteoLin();
+	initialAngleTheta = 0.0;                /*!<  angle de tir initial selon theta */
     finalAngleTheta = 360.0;                  /*!<  angle de tir final selon theta */
     initialAnglePhi = 0.0;                  /*!<  angle de tir initial selon phi */
-    finalAnglePhi = 45.0;                    /*!<  angle de tir final selon phi */
+    finalAnglePhi = 360.0;                    /*!<  angle de tir final selon phi */
 
     launchType = 1;            /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
     wantOutFile = true;                   /*!<  true if outputfile wanted */
@@ -42,7 +43,7 @@ Lancer::Lancer(Lancer& L)
 	sources = L.sources;
 	recepteurs = L.recepteurs;
 	plan = L.plan;
-	Meteo = L.Meteo;
+	_weather = L._weather;
 	h = L.h;
 	TMax = L.TMax; 
 	temps = L.temps;
@@ -60,8 +61,8 @@ Lancer::Lancer(Lancer& L)
 }
 
 
-Lancer::Lancer(vector<vec3> sources, vector<vec3> recepteurs, vector<vec3*> plan, meteo Meteo, decimal h, decimal TmpMax, vector<decimal> temps, decimal dmax, unsigned int nbRay) :
-    sources(sources), recepteurs(recepteurs), plan(plan), Meteo(Meteo), h(h), TMax(TmpMax), temps(temps), dmax(dmax), nbRay(nbRay)
+Lancer::Lancer(vector<vec3> sources, vector<vec3> recepteurs, vector<vec3*> plan, meteo* Meteo, decimal h, decimal TmpMax, vector<decimal> temps, decimal dmax, unsigned int nbRay) :
+    sources(sources), recepteurs(recepteurs), plan(plan), _weather(Meteo), h(h), TMax(TmpMax), temps(temps), dmax(dmax), nbRay(nbRay)
 {
     RemplirMat();
 }
@@ -82,17 +83,17 @@ void Lancer::purgeMatRes()
     MatRes.clear();
 }
 
-vector<vec3> Lancer::EqRay(const vector<vec3>& y0, const meteo& Meteo)                       // Fonction definissant le probleme a resoudre
+vector<vec3> Lancer::EqRay(const vector<vec3>& y0)                       // Fonction definissant le probleme a resoudre
 {
     vector<vec3> y;
     vec3 n;
 
     // calcul des variables de celerite et de son gradient, de la vitesse du vent et de sa derive
     vec3 Dc = vec3();
-    decimal c = Meteo.cLin(y0[0], Dc);
+    decimal c = dynamic_cast<meteoLin*>(_weather)->cTemp(y0[0], Dc);
 
     map<pair<int, int>, decimal> Jv;
-    vec3 v = Meteo.vent(y0[0], Jv);
+    vec3 v = dynamic_cast<meteoLin*>(_weather)->cWind(y0[0], Jv);
 
     // definition de s (normale normalisee selon la celerite effective) et de Omega
     vec3 s = y0[1];
@@ -259,10 +260,10 @@ RayCourb Lancer::RK4(const vector<vec3>& y0, const vector<vec3*>& plan, const ve
         int r, rmin;
         bool premiere = 1;                                    // variable boolenne pour savoir si on a deja rencontre un objet ou pas
 
-        k1 = EqRay(yAct, Meteo) * h;				// k1 = h * EqRay(yAct, Meteo);
-        k2 = EqRay(yAct + k1 * 0.5, Meteo) * h;		// k2 = h * EqRay(yAct + 0.5 * k1, Meteo);
-        k3 = EqRay(yAct + k2 * 0.5, Meteo) * h;		// k3 = h * EqRay(yAct + 0.5 * k2, Meteo);
-        k4 = EqRay(yAct + k3, Meteo) * h;			// k4 = h * EqRay(yAct + k3, Meteo);
+        k1 = EqRay(yAct) * h;				// k1 = h * EqRay(yAct, Meteo);
+        k2 = EqRay(yAct + k1 * 0.5) * h;		// k2 = h * EqRay(yAct + 0.5 * k1, Meteo);
+        k3 = EqRay(yAct + k2 * 0.5) * h;		// k3 = h * EqRay(yAct + 0.5 * k2, Meteo);
+        k4 = EqRay(yAct + k3) * h;			// k4 = h * EqRay(yAct + k3, Meteo);
 
         ySuiv = yAct + ( ( k1 + k2 * 2. + k3 * 2. + k4 ) * ( 1. / 6. ) );
 
@@ -394,7 +395,7 @@ void Lancer::RemplirMat()
 
             n0 = n0 / n0.length();
 
-            s0 = n0 / ( Meteo.cLin( source, grad ) + ( Meteo.vent( source, jacob ) * n0 ) );
+            s0 = n0 / ( dynamic_cast<meteoLin*>(_weather)->cTemp( source, grad ) + ( dynamic_cast<meteoLin*>(_weather)->cWind( source, jacob ) * n0 ) );
             y0.push_back(s0);
 
             // on resoud l'equation par la methode de runge-kutta d'ordre 4
@@ -419,8 +420,12 @@ void Lancer::RemplirMat()
     {
         // on sauvegarde nos resultats dans un fichier .txt.
         ostringstream nom_var;
-        nom_var << "MatRes_C" << Meteo.gradC << "_V" << Meteo.gradV << "_D" << dmax << ".txt" << ends;
-        ofstream fic_out(nom_var.str().c_str());
+		nom_var << "MatRes_C" << dynamic_cast<meteoLin*>(_weather)->getGradC() 
+				<< "_V" << dynamic_cast<meteoLin*>(_weather)->getGradV() 
+				<< "_D" << dmax 
+				<< ".txt" << ends;
+        
+		ofstream fic_out(nom_var.str().c_str());
 
         for (unsigned int i = 0; i < MatRes.size(); i++)
         {
