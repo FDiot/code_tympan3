@@ -28,6 +28,7 @@
 #include <map>
 #include <iostream>
 #include "../AcousticRaytracer/Geometry/mathlib.h"
+#include "../AcousticRaytracer/Geometry/Sampler.h"
 #include "meteo.h"
 
 
@@ -44,7 +45,7 @@ class Lancer
 public:
     Lancer();
     Lancer(Lancer& L);
-    Lancer(vector<vec3> sources, vector<vec3> recepteurs, vector<vec3*> plan, meteo *Meteo, decimal h, decimal TmpMax, vector<decimal> temps, decimal dmax, unsigned int nbRay);
+    //Lancer(vector<vec3> sources, vector<vec3> recepteurs, vector<vec3*> plan, meteo *Meteo, decimal h, decimal TmpMax, vector<decimal> temps, decimal dmax, unsigned int nbRay);
 
     ~Lancer();
 
@@ -61,10 +62,10 @@ public:
     void purgeMatRes();
 
     /*!
-    * \fn void Init()
+    * \fn void clear()
     * \brief Efface tous les tableaux
     */
-    void Init() { sources.clear(); recepteurs.clear(); plan.clear(); temps.clear(); purgeMatRes(); }
+    void clear() { sources.clear(); recepteurs.clear(); _plan.clear(); temps.clear(); purgeMatRes(); }
 
     /*!
     * \fn void setNbRay(const unsigned int& nb)
@@ -99,7 +100,7 @@ public:
     * \brief Ajoute des triangles (objets) a la geometrie
     * \param triangle tableau de vec3, represente l'objet que l'on desire ajouter a la geometrie
     */
-    void setTriangle(vec3* triangle) { plan.push_back(triangle); }
+    void setTriangle(vec3* triangle) { _plan.push_back(triangle); }
 
     /*!
     * \fn decimal distance_max()
@@ -133,7 +134,9 @@ public:
     * \param SR vecteur source-recepteur
     * \return rend le point d'intersection entre le plan A et la droite SR.
     */
-    vec3 intersection(const vec3& S, const vec3& R, const vec3* A, int& reflexion, const vec3& nExt_plan, const vec3& SR);
+    vec3 valideIntersection(const vec3& S, const vec3& R, const vec3* A, int& reflexion, const vec3& nExt_plan, const vec3& SR);
+
+	void intersection(const unsigned int& timer, RayCourb& current, vector<vec3>& Y_t0, vector<vec3>& Y_t1);
 
     /*!
     * \fn RayCourb RK4(vector<vec3> y0, vector<vec3*> plan, vec3 source)
@@ -143,7 +146,7 @@ public:
     * \param S source
     * \return rend un rayon (liste de points de l'espace)
     */
-    RayCourb RK4(const vector<vec3>& y0, const vector<vec3*>& plan, const vec3& source);
+    RayCourb RK4(const vector<vec3>& y0);
 
     /*!
     * \fn void RemplirMat()
@@ -164,19 +167,36 @@ public:
     void loadRayFile(vector<vec3>& tableau_norm);
 
 	/*!
-	 * \fn traveledDistance(vector<vec3>& vec)
-	 * \brief Calcule la distance parcourue sur le plan horizontale depuis la source jusqu'au point courant
-	 * \param vector<vec3&> vec
+	 * \fn void setSampler(Sampler* generator);
+	 * \brief set ray generator
 	 */
-	double traveledDistance(const vector<vec3>& vec, const vec3& source)  { return (vec[0].x - source.x) * (vec[0].x - source.x) + (vec[0].y - source.y) * (vec[0].y - source.y); }
+	void setSampler( Sampler *generator ) { _sampler = generator; }
+
+	/*!
+	 * \fn Sampler* getSampler(Sampler* generator);
+	 * \brief get ray generator for modification 
+	 */
+	Sampler* getSampler() { return _sampler; } 
+
+	/*!
+	 * \fn void setLauchType(const unsigned int &launchType)
+	 * \brief define how rays will be created;
+	 */
+	void setLaunchType(const unsigned int &launchType) { _launchType = launchType; init(); }
+
+private :
+	void init();
+
+	void save(); /*!< save rays to a file */
 
 public :
     // Donnees membres :
 
     vector<vec3> sources;                 /*!< vector contenant les sources */
     vector<vec3> recepteurs;              /*!<  vector contenant les recepteurs */
-    vector<vec3*> plan;                   /*!<  "liste" des objets definis par 3 points */
+    vector<vec3*> _plan;                   /*!<  "liste" des objets definis par 3 points */
     meteo *_weather;                        /*!<  meteo */
+	Sampler *_sampler;						/*!< ray generator */
 
     decimal h;                                /*!<  pas de discretisation */
     decimal TMax;                             /*!<  temps de propagation maximal */
@@ -188,7 +208,7 @@ public :
     decimal finalAnglePhi;                    /*!<  angle de tir final selon phi */
 
     unsigned int nbRay;                 /*!<  nombre de rayons que l'on lance */
-    unsigned int launchType;            /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
+    unsigned int _launchType;            /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
     bool wantOutFile;                   /*!<  true if outputfile wanted */
     string ray_fileName;                /*!<  filename of file containing angles of rays */
     string out_fileName;                /*!<  filename of the output file */
