@@ -98,7 +98,7 @@ protected:
      *\fn void restitModifiedAlti(TYSiteNode& site)
      *\brief Restitue au site la topographie (et infrastructure) transformee
      */
-//    void restitModifiedAlti(const TYSiteNode& site);
+    void restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcousticPathFinder& pathFinder);
 
 	/*!
      * \fn exportRays(TYCalcul& calcul)
