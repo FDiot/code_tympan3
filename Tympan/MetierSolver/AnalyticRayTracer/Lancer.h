@@ -27,8 +27,8 @@
 #include <vector>
 #include <map>
 #include <iostream>
-#include "../AcousticRaytracer/Geometry/mathlib.h"
-#include "../AcousticRaytracer/Geometry/Sampler.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
 #include "meteo.h"
 #include "Step.h"
 
@@ -49,7 +49,6 @@ class Lancer
 public:
     Lancer();
     Lancer(Lancer& L);
-    //Lancer(vector<vec3> sources, vector<vec3> recepteurs, vector<vec3*> plan, meteo *Meteo, decimal h, decimal TmpMax, vector<decimal> temps, decimal dmax, unsigned int nbRay);
 
     ~Lancer();
 
