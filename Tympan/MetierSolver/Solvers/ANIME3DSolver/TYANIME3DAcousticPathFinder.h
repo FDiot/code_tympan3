@@ -51,17 +51,17 @@ private :
      */
     TYPoint computePosGlobalPoint(const TYGeometryNode* pNode);
 
-    /*!
-    * \fn void appendSourceToAnalyticRayTracer(TYCalcul &calcul, unsigned int nbRayons)
-    * \brief Ajoute les sources ponctuelles actives a la simulation
-    */
-    void appendSourceToAnalyticRayTracer(vector<vec3>& tabSources);
+    ///*!
+    //* \fn void appendSourceToAnalyticRayTracer(TYCalcul &calcul, unsigned int nbRayons)
+    //* \brief Ajoute les sources ponctuelles actives a la simulation
+    //*/
+    //void appendSourceToAnalyticRayTracer(vector<vec3>& tabSources);
 
-    /*!
-    * \fn void appendRecepteurToAnalyticRayTracer(TYCalcul& calcul, vector<vec3>& tabRecepteurs)
-    * \brief Ajoute les recepteurs poncutels actifs a la simulation
-    */
-    void appendRecepteurToAnalyticRayTracer(vector<vec3>& tabRecepteurs);
+    ///*!
+    //* \fn void appendRecepteurToAnalyticRayTracer(TYCalcul& calcul, vector<vec3>& tabRecepteurs)
+    //* \brief Ajoute les recepteurs poncutels actifs a la simulation
+    //*/
+    //void appendRecepteurToAnalyticRayTracer(vector<vec3>& tabRecepteurs);
 
     /*!
      * \fn void transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)

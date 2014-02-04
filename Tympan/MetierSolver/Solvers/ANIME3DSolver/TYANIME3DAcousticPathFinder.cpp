@@ -82,11 +82,10 @@ bool TYANIME3DAcousticPathFinder::exec()
 		_curveRayTracing.clear();
 
 		// Recuperation des sources et des recepteurs
-        appendSourceToAnalyticRayTracer(_curveRayTracing.shot.sources);
-        appendRecepteurToAnalyticRayTracer(_curveRayTracing.shot.recepteurs);
+        //appendSourceToAnalyticRayTracer(_curveRayTracing.shot.sources);
+        //appendRecepteurToAnalyticRayTracer(_curveRayTracing.shot.recepteurs);
 
         // Parametrage du lancer
-        //_curveRayTracing.shot.dmax = _curveRayTracing.shot.distance_max(); // On prend le recepteur le plus eloigne
         _curveRayTracing.setDMax(globalAnalyticDMax);
         _curveRayTracing.setTMax(globalAnalyticTMax);
         _curveRayTracing.setTimeStep(globalAnalyticH);
@@ -103,11 +102,10 @@ bool TYANIME3DAcousticPathFinder::exec()
 		_curveRayTracing.shot.initialAngleTheta = globalAnalyticAngleTheta;		// Angle de tir vertical (theta) des rayons
 
         // Choix de la source
-        _curveRayTracing.source = 0;
-        _curveRayTracing.setSrcForMapping(_curveRayTracing.source);
+        _curveRayTracing.setSource( sources[0] ); // At this time source is the firs one
 
         // Transformation de la geometrie
-        _curveRayTracing.Transformer();
+        _curveRayTracing.buildInterpolationSurface();
 
         // Positionnement des sources et des recepteurs
         transformSEtR(sources, recepteurs);
@@ -217,43 +215,43 @@ TYPoint TYANIME3DAcousticPathFinder::computePosGlobalPoint(const TYGeometryNode*
 }
 
 
-void TYANIME3DAcousticPathFinder::appendSourceToAnalyticRayTracer(vector<vec3>& tabR3Sources)
-{
-    //Nettoyage du tableau des sources
-    tabR3Sources.clear();
-
-    //Conversion des sources Tympan en source lancer de rayons
-    int idSource = 0;
-    TYSourcePonctuelle* sourceP = NULL;
-    for (unsigned int i = 0; i < _tabSources.size(); i++)
-    {
-		OPoint3D globalPos = computePosGlobalPoint(_tabSources.at(i));
-
-        vec3 pos = vec3(globalPos._x, globalPos._y, globalPos._z);
-
-        tabR3Sources.push_back(pos);
-
-        idSource++;
-    }
-}
-
-void TYANIME3DAcousticPathFinder::appendRecepteurToAnalyticRayTracer(vector<vec3>& tabR3Recept)
-{
-    // Nettoyage du tableau des recepteurs
-    tabR3Recept.clear();
-
-    //Ajout des recepteurs
-    unsigned int idRecepteur = 0;
-
-    //Conversion du recepteur Tympan en recepteur lancer de rayons
-    for (unsigned int i = 0; i < _tabRecepteurs.size(); i++)
-    {
-		OPoint3D pos = computePosGlobalPoint(_tabRecepteurs.at(i));
-
-        vec3 unPoint(pos._x, pos._y, pos._z);
-        tabR3Recept.push_back(unPoint);
-    }
-}
+//void TYANIME3DAcousticPathFinder::appendSourceToAnalyticRayTracer(vector<vec3>& tabR3Sources)
+//{
+//    //Nettoyage du tableau des sources
+//    tabR3Sources.clear();
+//
+//    //Conversion des sources Tympan en source lancer de rayons
+//    int idSource = 0;
+//    TYSourcePonctuelle* sourceP = NULL;
+//    for (unsigned int i = 0; i < _tabSources.size(); i++)
+//    {
+//		OPoint3D globalPos = computePosGlobalPoint(_tabSources.at(i));
+//
+//        vec3 pos = vec3(globalPos._x, globalPos._y, globalPos._z);
+//
+//        tabR3Sources.push_back(pos);
+//
+//        idSource++;
+//    }
+//}
+//
+//void TYANIME3DAcousticPathFinder::appendRecepteurToAnalyticRayTracer(vector<vec3>& tabR3Recept)
+//{
+//    // Nettoyage du tableau des recepteurs
+//    tabR3Recept.clear();
+//
+//    //Ajout des recepteurs
+//    unsigned int idRecepteur = 0;
+//
+//    //Conversion du recepteur Tympan en recepteur lancer de rayons
+//    for (unsigned int i = 0; i < _tabRecepteurs.size(); i++)
+//    {
+//		OPoint3D pos = computePosGlobalPoint(_tabRecepteurs.at(i));
+//
+//        vec3 unPoint(pos._x, pos._y, pos._z);
+//        tabR3Recept.push_back(unPoint);
+//    }
+//}
 
 
 void TYANIME3DAcousticPathFinder::transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
