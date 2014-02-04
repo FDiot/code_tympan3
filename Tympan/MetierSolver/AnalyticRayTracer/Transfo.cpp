@@ -132,9 +132,9 @@ void Transfo::RemplirSurf(vector<vec3>& vectSurf_Interp)
 
     for (unsigned int i = 0; i < nbRay; ++i)                                                      // boucle sur les rayons lances
     {
-        for (unsigned int j = 0; j < shot.MatRes[0][i].coord.size(); ++j)                         // boucle sur les points du rayon
+        for (unsigned int j = 0; j < shot.MatRes[0][i].etapes.size(); ++j)                         // boucle sur les points du rayon
         {
-			vec3 point(shot.MatRes[0][i].coord[j].x, shot.MatRes[0][i].coord[j].y, shot.MatRes[0][i].coord[j].z);
+			vec3 point(shot.MatRes[0][i].etapes[j].pos.x, shot.MatRes[0][i].etapes[j].pos.y, shot.MatRes[0][i].etapes[j].pos.z);
 			vectSurf_Interp.push_back(point);
 		}
 	}
