@@ -30,22 +30,35 @@ double meteoLin::cTemp(const vec3& P, vec3& grad) const
     return c;
 };
 
-vec3 meteoLin::cWind(const vec3& P, std::map<std::pair<int, int>, decimal> &jacob) const
+vec3 meteoLin::cWind(const vec3& P) const
 {
     // calcul du vent : on a une fonction lineaire fonction de la coordonnee z du point
     vec3 v;
 
-	double angle = -M_PIDIV2 - wind_angle;
-	double DVx = cos(angle) * grad_V;
-	double DVy = sin(angle) * grad_V;
+	const double& DVx = jacob_matrix[0][2];
+	const double& DVy = jacob_matrix[1][2];
 
     v.x = DVx * P.z;
     v.y = DVy * P.z;
     v.z = 0;
 
-    // calcul de la jacobienne
-    jacob[std::make_pair(1, 3)] = DVx;
-    jacob[std::make_pair(2, 3)] = DVy;
-
     return v;
+}
+
+void meteoLin::init()
+{
+	double angle = -M_PIDIV2 - wind_angle;
+	double DVx = cos(angle) * grad_V;
+	double DVy = sin(angle) * grad_V;
+
+	for(unsigned short i=0; i<3; i++)
+	{
+		for(unsigned short j=0; j<3; j++)
+		{
+			jacob_matrix[i][j] = 0.;
+		}
+	}
+
+	jacob_matrix[0][2] = DVx;
+	jacob_matrix[1][2] = DVy;
 }

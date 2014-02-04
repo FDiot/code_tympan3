@@ -20,6 +20,7 @@
 #include <sstream>
 #include <fstream>
 #include <string>
+#include <array>
 #include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Latitude2DSampler.h"
 #include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Longitude2DSampler.h"
 #include "Tympan\MetierSolver\AcousticRaytracer\Geometry\UniformSphericSampler.h"
@@ -121,8 +122,9 @@ Step Lancer::EqRay(const Step& y0)                       // Fonction definissant
     vec3 Dc = vec3();
     decimal c = dynamic_cast<meteoLin*>(_weather)->cTemp(y0.pos, Dc);
 
-    map<pair<int, int>, decimal> Jv;
-    vec3 v = dynamic_cast<meteoLin*>(_weather)->cWind(y0.pos, Jv);
+    //map<pair<int, int>, decimal> Jv;
+	const array< array<double, 3>, 3 >& Jv = dynamic_cast<meteoLin*>(_weather)->getJacobMatrix();
+    vec3 v = dynamic_cast<meteoLin*>(_weather)->cWind(y0.pos);
 
     // definition de s (normale normalisee selon la celerite effective) et de Omega
     vec3 s = y0.norm;
@@ -132,13 +134,22 @@ Step Lancer::EqRay(const Step& y0)                       // Fonction definissant
     y.pos = ( (s * (c * c / omega) ) + v ); //(c * c / omega * s + v)
 
     // on calcule les normales
-    n.x = - omega / c * Dc.x - Jv[make_pair(1, 1)] * s.x - Jv[make_pair(1, 2)] * s.y - Jv[make_pair(1, 3)] * s.z;
-    n.y = - omega / c * Dc.y - Jv[make_pair(2, 1)] * s.x - Jv[make_pair(2, 2)] * s.y - Jv[make_pair(2, 3)] * s.z;
-    n.z = - omega / c * Dc.z - Jv[make_pair(3, 1)] * s.x - Jv[make_pair(3, 2)] * s.y - Jv[make_pair(3, 3)] * s.z;
+    //n.x = - omega / c * Dc.x - Jv[make_pair(1, 1)] * s.x - Jv[make_pair(1, 2)] * s.y - Jv[make_pair(1, 3)] * s.z;
+    //n.y = - omega / c * Dc.y - Jv[make_pair(2, 1)] * s.x - Jv[make_pair(2, 2)] * s.y - Jv[make_pair(2, 3)] * s.z;
+    //n.z = - omega / c * Dc.z - Jv[make_pair(3, 1)] * s.x - Jv[make_pair(3, 2)] * s.y - Jv[make_pair(3, 3)] * s.z;
 
-    n.x += (Jv[make_pair(1, 2)] - Jv[make_pair(2, 1)]) * s.y + (Jv[make_pair(1, 3)] - Jv[make_pair(3, 1)]) * s.z;
-    n.y += (Jv[make_pair(2, 3)] - Jv[make_pair(3, 2)]) * s.z + (Jv[make_pair(2, 1)] - Jv[make_pair(1, 2)]) * s.x;
-    n.z += (Jv[make_pair(3, 1)] - Jv[make_pair(1, 3)]) * s.x + (Jv[make_pair(3, 2)] - Jv[make_pair(2, 3)]) * s.y;
+    //n.x += (Jv[make_pair(1, 2)] - Jv[make_pair(2, 1)]) * s.y + (Jv[make_pair(1, 3)] - Jv[make_pair(3, 1)]) * s.z;
+    //n.y += (Jv[make_pair(2, 3)] - Jv[make_pair(3, 2)]) * s.z + (Jv[make_pair(2, 1)] - Jv[make_pair(1, 2)]) * s.x;
+    //n.z += (Jv[make_pair(3, 1)] - Jv[make_pair(1, 3)]) * s.x + (Jv[make_pair(3, 2)] - Jv[make_pair(2, 3)]) * s.y;
+
+    n.x = - omega / c * Dc.x - Jv[0][0] * s.x - Jv[0][1] * s.y - Jv[0][2] * s.z;
+    n.y = - omega / c * Dc.y - Jv[1][0] * s.x - Jv[1][1] * s.y - Jv[1][2] * s.z;
+    n.z = - omega / c * Dc.z - Jv[2][0] * s.x - Jv[2][1] * s.y - Jv[2][2] * s.z;
+
+    n.x += (Jv[0][1] - Jv[1][0]) * s.y + (Jv[0][2] - Jv[2][0]) * s.z;
+    n.y += (Jv[1][2] - Jv[2][1]) * s.z + (Jv[1][0] - Jv[0][1]) * s.x;
+    n.z += (Jv[2][0] - Jv[0][2]) * s.x + (Jv[2][1] - Jv[1][2]) * s.y;
+
 
     y.norm = n;
 
@@ -214,7 +225,7 @@ void Lancer::RemplirMat()
 
     assert(nbRay > 0);  // on verifie que l'on souhaite bien lancer au moins un rayon.
     vec3 grad, s0, n0;
-    map< pair<int, int>, decimal > jacob;
+    //map< pair<int, int>, decimal > jacob;
     Step y0;
 
     RayCourb* tab = NULL;
@@ -230,7 +241,7 @@ void Lancer::RemplirMat()
         {
 			n0 = _sampler->getSample();
 
-            s0 = n0 / ( dynamic_cast<meteoLin*>(_weather)->cTemp( source, grad ) + ( dynamic_cast<meteoLin*>(_weather)->cWind( source, jacob ) * n0 ) );
+            s0 = n0 / ( dynamic_cast<meteoLin*>(_weather)->cTemp( source, grad ) + ( dynamic_cast<meteoLin*>(_weather)->cWind( source ) * n0 ) );
             y0.norm = s0;
 
             // on resoud l'equation par la methode de runge-kutta d'ordre 4

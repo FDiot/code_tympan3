@@ -39,8 +39,7 @@ public:
 	meteo() : c0(340.), wind_angle(0.) {}
 
 	meteo(const double& windAngle, const double& sound_speed) : c0(sound_speed), 
-															    wind_angle( RADIANS(windAngle) )
-	{}
+															    wind_angle( RADIANS(windAngle) ) {}
 
 	~meteo() {}
 
@@ -56,9 +55,14 @@ public:
 	 * \fn void setWindAngle(const double& windAngle)
 	 * \brief define wind angle 0 means wind from north to south
 	 */
-	virtual void setWindAngle(const double& windAngle) { wind_angle = RADIANS(windAngle); }
+	virtual void setWindAngle(const double& windAngle) { wind_angle = RADIANS(windAngle); init(); }
 	virtual double getWindAngle() const { return DEGRES(wind_angle); }
 
+	/*!
+	 * \fn void init()
+	 * \brief init parameters as needed
+	 */
+	virtual void init() {}
 
 protected:
     double c0;				/*!< sound speed for z = 0 */
