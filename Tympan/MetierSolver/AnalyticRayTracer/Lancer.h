@@ -30,11 +30,15 @@
 #include "../AcousticRaytracer/Geometry/mathlib.h"
 #include "../AcousticRaytracer/Geometry/Sampler.h"
 #include "meteo.h"
+#include "Step.h"
 
 
 using namespace std;
 
 class RayCourb;
+
+
+
 
 /*! \class Lancer
 * \brief classe representant un lancer de rayons courbes
@@ -121,7 +125,7 @@ public:
     * \param y0 vecteur initial
     * \return rend un point du rayon sous la forme (position, normale)
     */
-    vector<vec3> EqRay(const vector<vec3>& y0);
+    Step EqRay(const Step& y0);
 
     /*!
     * \fn vec3 intersection(vec3 S, vec3 R, vec3*A, int &reflexion, vec3 nExt_plan, vec3 SR)
@@ -136,7 +140,7 @@ public:
     */
     vec3 valideIntersection(const vec3& S, const vec3& R, const vec3* A, int& reflexion, const vec3& nExt_plan, const vec3& SR);
 
-	void intersection(const unsigned int& timer, RayCourb& current, vector<vec3>& Y_t0, vector<vec3>& Y_t1);
+	void intersection(const unsigned int& timer, RayCourb& current, Step& Y_t0, Step& Y_t1);
 
     /*!
     * \fn RayCourb RK4(vector<vec3> y0, vector<vec3*> plan, vec3 source)
@@ -146,7 +150,7 @@ public:
     * \param S source
     * \return rend un rayon (liste de points de l'espace)
     */
-    RayCourb RK4(const vector<vec3>& y0);
+    RayCourb RK4(const Step& y0);
 
     /*!
     * \fn void RemplirMat()

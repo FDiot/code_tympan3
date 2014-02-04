@@ -112,24 +112,24 @@ void Lancer::purgeMatRes()
     MatRes.clear();
 }
 
-vector<vec3> Lancer::EqRay(const vector<vec3>& y0)                       // Fonction definissant le probleme a resoudre
+Step Lancer::EqRay(const Step& y0)                       // Fonction definissant le probleme a resoudre
 {
-    vector<vec3> y;
+	Step y;
     vec3 n;
 
     // calcul des variables de celerite et de son gradient, de la vitesse du vent et de sa derive
     vec3 Dc = vec3();
-    decimal c = dynamic_cast<meteoLin*>(_weather)->cTemp(y0[0], Dc);
+    decimal c = dynamic_cast<meteoLin*>(_weather)->cTemp(y0.pos, Dc);
 
     map<pair<int, int>, decimal> Jv;
-    vec3 v = dynamic_cast<meteoLin*>(_weather)->cWind(y0[0], Jv);
+    vec3 v = dynamic_cast<meteoLin*>(_weather)->cWind(y0.pos, Jv);
 
     // definition de s (normale normalisee selon la celerite effective) et de Omega
-    vec3 s = y0[1];
+    vec3 s = y0.norm;
     decimal omega = 1 - (v * s);
 
     // on calcule les coordonnees
-    y.push_back( (s * (c * c / omega) ) + v ); //(c * c / omega * s + v)
+    y.pos = ( (s * (c * c / omega) ) + v ); //(c * c / omega * s + v)
 
     // on calcule les normales
     n.x = - omega / c * Dc.x - Jv[make_pair(1, 1)] * s.x - Jv[make_pair(1, 2)] * s.y - Jv[make_pair(1, 3)] * s.z;
@@ -140,14 +140,14 @@ vector<vec3> Lancer::EqRay(const vector<vec3>& y0)                       // Fonc
     n.y += (Jv[make_pair(2, 3)] - Jv[make_pair(3, 2)]) * s.z + (Jv[make_pair(2, 1)] - Jv[make_pair(1, 2)]) * s.x;
     n.z += (Jv[make_pair(3, 1)] - Jv[make_pair(1, 3)]) * s.x + (Jv[make_pair(3, 2)] - Jv[make_pair(2, 3)]) * s.y;
 
-    y.push_back(n);
+    y.norm = n;
 
     return y;
 }
 
 
 
-RayCourb Lancer::RK4(const vector<vec3>& y0)
+RayCourb Lancer::RK4(const Step& y0)
 {
     /*
     Pour une source donnee, a chaque pas de temps :
@@ -166,15 +166,14 @@ RayCourb Lancer::RK4(const vector<vec3>& y0)
     y.setSize(temps.size() + 10);
 
     /* on definit deux vectors : un  "actuel" et un "suivant" car la methode de Runge-Kutta est une methode de resolution explicite a un pas de temps */
-    vector<vec3> yAct(y0);
-    vector<vec3> ySuiv;
+    Step yAct(y0);
+    Step ySuiv;
 
-    vector<vec3> k1, k2, k3, k4;                            // variables intermediaires pour la resolution de l'algorithme de Runge-Kutta
+    Step k1, k2, k3, k4;                            // variables intermediaires pour la resolution de l'algorithme de Runge-Kutta
     int cpt_tps = 0;                                      // compteur de temps
 
     // Les premieres valeurs correspondent a notre source.
-    y.coord.push_back(yAct[0]);
-    y.normale.push_back(yAct[1]);
+	y.etapes.push_back(yAct);
 
     // on remplit le reste avec notre fonction EqRay qui definit notre probleme
 	decimal d2Max = dmax * dmax;
@@ -197,14 +196,12 @@ RayCourb Lancer::RK4(const vector<vec3>& y0)
 		intersection(cpt_tps, y, yAct, ySuiv);
 
         // on remplit maintenant notre rayon
-        y.coord.push_back(ySuiv[0]);
-        y.normale.push_back(ySuiv[1]);
+		y.etapes.push_back(ySuiv);
 
         // on met a jour nos variables
-		travel_length += ySuiv[0].distance(yAct[0]); // distance parcourue par le rayon
+		travel_length += ySuiv.pos.distance(yAct.pos); // distance parcourue par le rayon
 
         yAct = ySuiv;
-        ySuiv.clear();
         cpt_tps++;
     }
 
@@ -218,32 +215,26 @@ void Lancer::RemplirMat()
     assert(nbRay > 0);  // on verifie que l'on souhaite bien lancer au moins un rayon.
     vec3 grad, s0, n0;
     map< pair<int, int>, decimal > jacob;
-    vector<vec3> y0;
+    Step y0;
 
     RayCourb* tab = NULL;
     vector<vec3> tableau_norm;
 
     for (unsigned int ns = 0; ns < sources.size(); ++ns)
     {
-        vec3 source = sources[ns];
-        y0.clear();
-        y0.push_back(source);
+        vec3& source = sources[ns];
+        y0.pos = source;
         tab = new RayCourb[nbRay];
 
         for (unsigned int k = 0; k < nbRay; ++k)
         {
 			n0 = _sampler->getSample();
 
-            n0 = n0 / n0.length();
-
             s0 = n0 / ( dynamic_cast<meteoLin*>(_weather)->cTemp( source, grad ) + ( dynamic_cast<meteoLin*>(_weather)->cWind( source, jacob ) * n0 ) );
-            y0.push_back(s0);
+            y0.norm = s0;
 
             // on resoud l'equation par la methode de runge-kutta d'ordre 4
             tab[k] = RK4(y0);
-
-            // on efface notre normale de depart. (le point de depart reste la source)
-            y0.erase(y0.begin() + 1);
         }
 
         MatRes.push_back(tab);
@@ -364,9 +355,9 @@ vec3 Lancer::valideIntersection(const vec3& S, const vec3& R, const vec3* A, int
     return I;
 }
 
-void Lancer::intersection(const unsigned int& timer, RayCourb& current, vector<vec3>& Y_t0, vector<vec3>& Y_t1)
+void Lancer::intersection(const unsigned int& timer, RayCourb& current, Step& Y_t0, Step& Y_t1)
 {
-    vec3 Imin(Y_t0[0]), n, nmin;
+    vec3 Imin(Y_t0.pos), n, nmin;
     decimal Dmin = 0.;
     int r, rmin;
     bool premiere = 1;                                    // variable boolenne pour savoir si on a deja rencontre un objet ou pas
@@ -385,11 +376,11 @@ void Lancer::intersection(const unsigned int& timer, RayCourb& current, vector<v
         n = n / n.length();
 
         // on calcule le point d'intersection entre le rayon et l'objet
-        I = valideIntersection(Y_t0[0], Y_t1[0], _plan[r], intersec, n, Y_t0[1]);
+        I = valideIntersection(Y_t0.pos, Y_t1.pos, _plan[r], intersec, n, Y_t0.norm);
 
         if (intersec == 1) // si on a trouve un point d'intersection entre notre rayon et notre face r
         {
-            decimal DI = sqrt((Y_t0[0].x - I.x) * (Y_t0[0].x - I.x) + (Y_t0[0].y - I.y) * (Y_t0[0].y - I.y) + (Y_t0[0].z - I.z) * (Y_t0[0].z - I.z));
+            decimal DI = sqrt((Y_t0.pos.x - I.x) * (Y_t0.pos.x - I.x) + (Y_t0.pos.y - I.y) * (Y_t0.pos.y - I.y) + (Y_t0.pos.z - I.z) * (Y_t0.pos.z - I.z));
 
             if (premiere == 0) // si ce n'est pas la premiere reflexion que l'on rencontre
             {
@@ -415,7 +406,7 @@ void Lancer::intersection(const unsigned int& timer, RayCourb& current, vector<v
         intersec = 2;
     }
 
-    if ((Imin.x != Y_t0[0].x) || (Imin.y != Y_t0[0].y) || (Imin.z != Y_t0[0].z))   // si c'est le cas, cela signifie que notre rayon rencontre quelque chose
+    if ((Imin.x != Y_t0.pos.x) || (Imin.y != Y_t0.pos.y) || (Imin.z != Y_t0.pos.z))   // si c'est le cas, cela signifie que notre rayon rencontre quelque chose
     {
         // on incremente le nombre de reflexions
         current.nbReflex++;
@@ -424,13 +415,13 @@ void Lancer::intersection(const unsigned int& timer, RayCourb& current, vector<v
         current.position.push_back(timer);
 
         // la "source" du rayon suivant est notre point d'intersection
-        Y_t1[0] = Imin;
+        Y_t1.pos = Imin;
 
         // on calcule le cosinus de l'angle forme par le rayon qui arrive et la normale n
-        decimal cos_angle = ( -nmin ) * ( Y_t0[1] / Y_t0[1].length() );
+        decimal cos_angle = ( -nmin ) * ( Y_t0.norm / Y_t0.norm.length() );
 
         // enfin, on calcule la normale du rayon reflechi
-        Y_t1[1] = Y_t0[1] + nmin * Y_t0[1].length() * cos_angle * 2.;
+        Y_t1.norm = Y_t0.norm + nmin * Y_t0.norm.length() * cos_angle * 2.;
 
         current.rencontre.insert(pair<int, int>(timer, rmin));
     }
@@ -515,10 +506,11 @@ void Lancer::save()
     {
         for (unsigned int j = 0; j < nbRay; ++j)
         {
-            for (unsigned int k = 0; k < MatRes[i][j].coord.size(); ++k)
+            for (unsigned int k = 0; k < MatRes[i][j].etapes.size(); ++k)
             {
-                fic_out << MatRes[i][j].coord[k].x << " " << MatRes[i][j].coord[k].y << " " << MatRes[i][j].coord[k].z << endl;
-                fic_out << endl;
+                fic_out << MatRes[i][j].etapes[k].pos.x << " " 
+						<< MatRes[i][j].etapes[k].pos.y << " " 
+						<< MatRes[i][j].etapes[k].pos.z << endl;
             }
 
             fic_out << endl << endl;
