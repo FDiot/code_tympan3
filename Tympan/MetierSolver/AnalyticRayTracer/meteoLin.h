@@ -19,6 +19,7 @@
 */
 
 #include <map>
+#include <array>
 #include "../AcousticRaytracer/Geometry/mathlib.h"
 #include "meteo.h"
 
@@ -28,6 +29,9 @@
 /*! \class meteoLin
 *   \brief class to define linear gradiant for wind and temperature.
 */
+
+using namespace std;
+
 class meteoLin : public meteo
 {
 public:
@@ -40,7 +44,10 @@ public:
 	meteoLin() : meteo() {}
     meteoLin(const double& windAngle, const double& sound_speed, const double& gradC = 0., const double& gradV = 0.) : meteo(windAngle, sound_speed), 
 																													   grad_C(gradC),
-																													   grad_V(gradV) {}
+																													   grad_V(gradV)
+	{
+		init();
+	}
 
     /*!
      *  \brief Destructeur
@@ -63,7 +70,7 @@ public:
     * \brief Modifie la valeur de la vitesse du vent
     * \param g nouvelle valeur que l'on souhaite attribuer a notre vent
     */
-    void setGradV(const double& g) { grad_V = g; }
+    void setGradV(const double& g) { grad_V = g; init(); }
 	double getGradV() const { return grad_V; }
 
     /*!
@@ -80,11 +87,21 @@ public:
     * \param P Position du rayon
 	* \param jacob : jacobien (veleur modifiee) 
     */	
-	vec3 cWind(const vec3& P, std::map<std::pair<int, int>, decimal> &jacob) const;
+	vec3 cWind(const vec3& P) const;
+
+	/*!
+	 * \fn const double** getJacobMatrix()
+	 * \brief Get the jacobian matrix
+	 */
+	virtual const array< array<double, 3>, 3 >&  getJacobMatrix() { return jacob_matrix; }
+
+	virtual void init();
 
 private:
     double grad_C;      /*!< gradient de la celerite */
     double grad_V;      /*!< gradient du vent */
+
+	array< array<double, 3>, 3 > jacob_matrix;
 };
 
 #endif //__METEO_LIN_H
