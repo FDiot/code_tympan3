@@ -20,7 +20,7 @@
 
 #include <map>
 #include <array>
-#include "../AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 #include "meteo.h"
 
 #ifndef __METEO_LIN_H
