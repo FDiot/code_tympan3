@@ -58,7 +58,7 @@ public:
         }
         selectors.clear();
 
-        if (!isDeletable)
+        if (!isDeletable())
         {
             selectedData.clear();
         }
