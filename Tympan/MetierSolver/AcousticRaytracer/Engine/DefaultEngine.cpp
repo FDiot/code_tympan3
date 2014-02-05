@@ -293,16 +293,38 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
     for (unsigned int i = 0; i < recepteurs->size(); i++)
     {
         Intersection result;
+		bool b_valid = true;
         if (recepteurs->at(i).intersectionRecepteur(r->position, r->direction, tmin, result))
         {
-            //Cas ou le rayon touche un recepteur
-            Ray* valide_ray = new Ray(r);
-            valide_ray->constructId = rayCounter;
-            rayCounter++;
-            valide_ray->recepteur = (&(recepteurs->at(i)));
-            valide_ray->finalPosition = valide_ray->position + valide_ray->direction * result.t;
-            valide_ray->computeLongueur();
-            solver->valideRayon(valide_ray);
+			// Boucle sur les primitives trouvees
+			for (std::list<Intersection>::iterator it = foundPrims.begin(); it != foundPrims.end(); it++)
+			{
+				// d1 = Calcul de la distance de la primitive au dernier évènement
+				vec3 impact = r->position + r->direction * (*it).t;
+				decimal d1 = impact.distance(r->position);
+
+				// d2 = Calcul de la distance du recepteur au dernier evenement
+				impact = r->position + r->direction * result.t;
+				decimal d2 = impact.distance(r->position);
+
+				// Si d2 > d1 (l'obstacle est avant le recepteur) --> Le rayon n'est pas valide et on sort de la boucle
+				if(d2 > d1) 
+				{ 
+					b_valid = false; 
+					break; 
+				}
+			}
+					
+			if ( !b_valid ) { continue; } // Le rayon n'est pa valide 
+
+			//Cas ou le rayon touche un recepteur (sans obstacle)
+			Ray* valide_ray = new Ray(r);
+			valide_ray->constructId = rayCounter;
+			rayCounter++;
+			valide_ray->recepteur = (&(recepteurs->at(i)));
+			valide_ray->finalPosition = valide_ray->position + valide_ray->direction * result.t;
+			valide_ray->computeLongueur();
+			solver->valideRayon(valide_ray);
         }
     }
 
