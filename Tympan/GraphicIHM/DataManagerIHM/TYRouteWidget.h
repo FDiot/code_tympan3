@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYRouteWidget.h
  * \brief outil IHM pour une route (fichier header)
@@ -29,25 +29,16 @@
 
 
 #include "TYWidget.h"
-//Added by qt3to4:
-#include <QGridLayout>
-#include <QLabel>
 
 class TYRoute;
-class QLineEdit;
-class QGridLayout;
-class QLabel;
-class QGroupBox;
-class QPushButton;
 class TYAcousticLineWidget;
-class QCheckBox;
-class QComboBox;
 
 /**
  * \class TYRouteWidget
  * \brief objet IHM pour une route
  */
-class TYRouteWidget : public TYWidget
+class TYRouteWidget
+    : public TYWidget /* TYWidget is a typedef to QWidget*/
 {
     Q_OBJECT
 
@@ -70,24 +61,7 @@ public slots:
     virtual void apply();
 
 
-    // Membres
 protected:
-    QGroupBox* _groupBox;
-    QLabel* _labelVitMoy;
-    QLineEdit* _lineEditVitMoy;
-    QLabel* _labelTrafic;
-    QComboBox* _comboBoxTrafic;
-    QGroupBox* _groupBoxTraficJour;
-    QLineEdit* _pLineEditDebitPLJour;
-    QLineEdit* _pLineEditDebitVLJour;
-    QGroupBox* _groupBoxTraficNuit;
-    QLineEdit* _pLineEditDebitPLNuit;
-    QLineEdit* _pLineEditDebitVLNuit;
-
-    QGridLayout* _routeLayout;
-    QGridLayout* _groupBoxLayout;
-    QGridLayout* _groupBoxTraficJourLayout;
-    QGridLayout* _groupBoxTraficNuitLayout;
 
     TYAcousticLineWidget* _elmW;
 };
