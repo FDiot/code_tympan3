@@ -20,7 +20,9 @@
 #ifndef __O_SPECTRE__
 #define __O_SPECTRE__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include <vector>
+#include <map>
+
 
 ///Type de spectre.
 enum TYSpectreType { SPECTRE_TYPE_ATT, SPECTRE_TYPE_ABSO, SPECTRE_TYPE_LW, SPECTRE_TYPE_LP, SPECTRE_TYPE_AUTRE };
@@ -167,7 +169,7 @@ public:
     virtual const double* getTabValReel() const {return _module; }
 
     /// Nombre de valeurs dans le spectre
-    virtual unsigned int getNbValues();
+    virtual unsigned int getNbValues() const;
 
     /**
      * Initialisation d'un spectre a une valeur.
@@ -359,7 +361,7 @@ public:
 protected:
 
     // ==== MEMBRES STATIQUES
-// CAUTION Check how those static members behave in shared libraries
+    // CAUTION Check how those static members behave in shared libraries
 
     ///Tableau des frequences en Hz centrales normalisees en tiers d'octave.
     static const float _freqNorm[];
