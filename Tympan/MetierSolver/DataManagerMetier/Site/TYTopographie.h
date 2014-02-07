@@ -465,7 +465,9 @@ public:
     /// Tri des terrains par surface decroissante
     void sortTerrains();
 
-    // Accessor a la couleur de l'emprise
+    /**
+     * sget couleur de l'emprise
+     */
     void setEmpriseColor(const OColor& color) { _empriseColor = color; };
     OColor getEmpriseColor() const { return _empriseColor; };
 

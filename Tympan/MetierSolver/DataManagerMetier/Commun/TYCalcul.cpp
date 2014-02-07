@@ -17,8 +17,6 @@
  *
  */
 
-
-
 #ifdef _MSC_VER
 #   pragma warning (disable : 4786)
 #endif
@@ -952,9 +950,7 @@ void TYCalcul::addToSelection(TYElement* pElt, bool recursif /*=true*/)
 bool TYCalcul::remToSelection(TYUUID id)
 {
     _elementSelection.remove(id);
-
     setIsGeometryModified(true);
-
     return true;
 }
 
@@ -1541,11 +1537,9 @@ bool TYCalcul::go()
 
     // Fusion des sites
     LPTYSiteNode pMergeSite = pProjet->getSite()->merge();
-
     pMergeSite->update(true);
     pMergeSite->getTopographie()->sortTerrains(); // Tri des terrains par ordre croissant des surfaces
     pMergeSite->updateAcoustique(true);
-
 
     // Actualisation de l'altimetrie des recepteurs (securite)
     pProjet->updateAltiRecepteurs(pMergeSite->getTopographie()->getAltimetrie());
@@ -1577,7 +1571,6 @@ bool TYCalcul::go()
 #endif
 
     OMessageManager::get()->info("Recuperation de la liste des sources");
-
     TYMapElementTabSources& mapElementSources = _pResultat->getMapEmetteurSrcs();
     pMergeSite->getInfrastructure()->getAllSrcs(this, mapElementSources);
 
@@ -1642,7 +1635,6 @@ bool TYCalcul::go()
         ret = false;
     }
 
-
     if (ret)
     {
         OMessageManager::get()->info("Finalisation des resultats (post-traitement)...");
@@ -1674,9 +1666,9 @@ bool TYCalcul::go()
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
     {
         _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
-    }
+      }
     else
-    {
+      {
         TYPreferenceManager::setUInt(TYDIRPREFERENCEMANAGER, "NbThread", static_cast<unsigned long>(_nbThread));
     }
 

@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 /* ==============================================================================
@@ -61,13 +58,14 @@ class TYCalcul: public TYElement
     TY_EXTENSION_DECL(TYCalcul)
     TY_EXT_GRAPHIC_DECL(TYCalcul)
 
-
 public:
     /**
      * \fn enum Constants
      * brief Constantes liees au calcul.
      *
-     * Le nombre de couples sources recepteurs est limite a 2 exposant 32. Le nombre total de bits utilises pour representer un couple source recepteur ne doit pas depasser 32.
+     * Le nombre de couples sources recepteurs est limite a 2 exposant 32. Le
+     * nombre total de bits utilises pour representer un couple source recepteur
+     * ne doit pas depasser 32.
      *
      */
     enum Constants
@@ -129,7 +127,7 @@ public:
     void purge();
 
     /**
-     * Vide le résultat de ce calcul
+     * Vide le resultat de ce calcul
      */
     void clearResult();
 
@@ -143,7 +141,7 @@ public:
      * \brief Get du numero
      * \return _numero
      */
-    int getNumero() const { return _numero;}
+    int getNumero() const { return _numero; }
 
     /**
      * \fn void setNumero(int num)
@@ -167,10 +165,10 @@ public:
     /**
      * fn QString getDateCreation()
      *    void setDateCreation(const QString& date)
-     * \brifeSet/Get de la date de creation.
+     * \brief Set/Get de la date de creation.
      * \return _dateCreation
      */
-    QString getDateCreation() const { return _dateCreation;}
+    QString getDateCreation() const { return _dateCreation; }
     void setDateCreation(const QString& date) { _dateCreation = date; }
 
     /**
@@ -178,7 +176,8 @@ public:
      * \brief Get de la date de modification.
      * \return _dateModif
      */
-    QString getDateModif() const { return _dateModif;}
+    QString getDateModif() const { return _dateModif; }
+
     /**
      * fn void setDateModif(const QString& date)
      * \brief Set de la date de modification.
@@ -191,6 +190,7 @@ public:
      * \return _comment
      */
     QString getComment() const { return _comment; }
+
     /**
      * \fn void setComment(const QString& comment)
      * \brief Set des commentaires.
@@ -216,12 +216,12 @@ public:
      * \return _upTodate
      */
     bool getIsUpTodate() const { return _upTodate; }
+
     /**
      * \fn  void setUseSol(bool use)
      * \brief Set de l'etat calcul a jour ou non par rapport a l'infrastructure.
      */
     void setIsUpTodate(bool upTodate) { _upTodate = upTodate; }
-
 
     /**
      * \fn  bool getUseSol()
@@ -229,6 +229,7 @@ public:
      * \return _useSol
      */
     bool getUseSol() const { return _useSol; }
+
     /**
      * \fn  void setUseSol(bool use)
      * \brief Set du test de la prise ou non en compte du sol.
@@ -241,6 +242,7 @@ public:
      *\return _anechoic
      */
     bool getUseAnechoic() { return _anechoic; }
+
     /**
      *\fn void setUseAnechoic(const bool anechoic = false)
      *\brief Set des conditions anechoiques (true) ou semi-anechoique (false = default)
@@ -622,7 +624,8 @@ public:
     /**
      * \fn bool isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSite pMergeSite)
      *\brief verification des calculs
-     *   Verifie que le calcul est possible:- au moins une source,- au moins un recepteur,- pas de depassement du max de sources et de recepteurs
+     *   Verifie que le calcul est possible: au moins une source, au moins un
+     *   recepteur, pas de depassement du max de sources et de recepteurs.
      */
     bool isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSiteNode pMergeSite);
 
@@ -702,8 +705,8 @@ public:
     std::vector<TYTrajet>& getTabTrajet() { return _tabTrajets; }
 
     /**
-     * \fn void setState(int state)
-     * \brief Set de l'etat du calcul.
+     * \fn void setModifiable(bool modify)
+     * \brief Set attribut modifiable
      */
     void setState(int state);
 
@@ -822,21 +825,21 @@ public:
 
     unsigned short getTypeSaisieMeteo() const { return _typeSaisieMeteo; }
 
-    unsigned int getNbTHread() const {return _nbThread;}
+    unsigned int getNbTHread() const { return _nbThread; }
 
     /*!
     * \fn void addRay(LPTYRay &ray)
     * \brief Ajoute un rayon issue du lancer de rayon convertie au format Tympan.
     * \param ray : Référence vers un rayon Tympan à ajouter
     */
-    void addRay(LPTYRay& ray) { _tabRays.push_back(ray);}
+    void addRay(LPTYRay& ray) { _tabRays.push_back(ray); }
 
     /*!
     * \fn TYTabRay getAllRays()
     * \brief Renvoie un tableau contenant tous les rayons trouvés par le lancer de rayons.
     * \return Renvoie le tableau de rayons Tympan
     */
-    TYTabRay& getAllRays() { return _tabRays;}
+    TYTabRay& getAllRays() { return _tabRays; }
 
 
     /*!
@@ -844,14 +847,14 @@ public:
     * \brief Ajoute une arête de diffraction générée par le lancer de rayons.
     * \param : Référence vers une arête Tympan à ajouter.
     */
-    void addAcousticEdge(TYAcousticEdge& edge) { _tabEdges.push_back(edge);}
+    void addAcousticEdge(TYAcousticEdge& edge) { _tabEdges.push_back(edge); }
 
     /*!
     * \fn TYTabAcousticEdge getAllAcousticEdges()
     * \brief Renvoie un tableau contenant l'ensemble des arêtes de diffractions générées par le lancer de rayon.
     * \return Renvoie le tableau d'arêtes Tympan.
     */
-    TYTabAcousticEdge& getAllAcousticEdges() { return _tabEdges;}
+    TYTabAcousticEdge& getAllAcousticEdges() { return _tabEdges; }
 
 protected:
     /**
