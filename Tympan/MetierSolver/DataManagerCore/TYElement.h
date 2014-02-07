@@ -84,10 +84,20 @@ typedef  std::map<TYUUID, TYElement*> TYElementContainer;
     }
 #endif
 
-#else
+#define TY_EXTENSION_DECL_ONLY(classname) \
+    public: \
+    virtual TYEditWidget* getEditWidget() ;
+
+#define TY_EXTENSION_INST(classname) \
+    TYEditWidget* classname::getEditWidget() {  \
+        return new classname##Widget(this); \
+    }
+
+#else // TY_USE_IHM
 
 #define TY_EXTENSION_DECL(classname)
-
+#define TY_EXTENSION_DECL_ONLY(classname)
+#define TY_EXTENSION_INST(classname)
 #endif // TY_USE_IHM
 
 
