@@ -43,7 +43,6 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     globalMaxTreeDepth = 12;            //Profondeur maximale autorisee pour le BVH ou KdTree.
     globalUseSol = true;                // Utilisation du sol pour les reflexions
     globalKeepDebugRay = false;			//Permet de conserver les rayons qui ont ete invalides pendant la propagation.
-	globalDiscretization = 1;			//Permet de choisir entre des rayons aléatoires: 0 ou déterministes: 1 (discretisation source)
 
     ////////////////////////////
     // NMPB value
@@ -68,7 +67,7 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     globalNbRayWithDiffraction = 200;   // Nombre de rayons relance lors d'un evenement diffraction
     globalRayTracingOrder = 0;          // [0-2]Sens de traitement des rayons source-recepteur ou inverse (0 = SR / 1 =RS / 2 = auto)
 
-    globalUseMeteo = true;              // Prise en compte (ou non) de la meteo
+    globalUseMeteo = false;              // Prise en compte (ou non) de la meteo
     globalAnalyticDMax = 2000.0f;       // Distance de propagation maximale des rayons courbes
     globalAnalyticTMax = 3.0f;          // Temps de propagation maximal des rayons courbes
     globalAnalyticH = 0.01f;            // Pas de temps de calcul pour la propagation des rayons courbes
@@ -79,7 +78,7 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     globalAnalyticGradV = 0.15f;    // Gradient vertical de vitesse de vent
     globalAnalyticC0 = 340.0f;      // Celerite du son initiale
     globalAnalyticTypeTransfo = 1;  // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-	globalRestitModifiedGeom = 1;   // Indique si l'on souhaite recuperer la geometrie transformee
+	globalRestitModifiedGeom = 0;   // Indique si l'on souhaite recuperer la geometrie transformee
     globalOverSampleD = 3;          // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
 	globalWindDirection = 0.;		    // Direction du vent (un vent a 0 est dirige du nord vers le sud)
 

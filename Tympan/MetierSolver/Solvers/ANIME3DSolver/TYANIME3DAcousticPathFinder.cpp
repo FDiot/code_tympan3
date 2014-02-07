@@ -45,6 +45,8 @@
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DAcousticPathFinder.h"
 
+//#define _USE_METEO_
+
 
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize, 
 														 TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs, 
@@ -75,7 +77,8 @@ bool TYANIME3DAcousticPathFinder::exec()
     vector<vec3> recepteurs;
     unsigned int sens = getTabsSAndR(sources, recepteurs);
 
-    // Definition des objets de lancer de rayons courbes
+#ifdef _USE_METEO_
+	// Definition des objets de lancer de rayons courbes
     if (globalUseMeteo)
     {
 	    // Creation du lancer de rayons courbes
@@ -110,6 +113,7 @@ bool TYANIME3DAcousticPathFinder::exec()
         // Positionnement des sources et des recepteurs
         transformSEtR(sources, recepteurs);
     }
+#endif //_USE_METEO_
 
     //Ajout des triangles a l'objet Scene de _rayTracing
     appendTriangleToScene();
@@ -310,6 +314,8 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
         {
             unsigned int a, b, c;
             double coord[3];
+
+#ifdef _USE_METEO_
             _tabPolygon[i].tabPoint[0].getCoords(coord);
             pos = modifGeom(vec3(coord[0], coord[1], coord[2]));
             scene->addVertex(pos, a);
@@ -321,7 +327,20 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
             _tabPolygon[i].tabPoint[2].getCoords(coord);
             pos = modifGeom(vec3(coord[0], coord[1], coord[2]));
             scene->addVertex(pos, c);
+#else
+            _tabPolygon[i].tabPoint[0].getCoords(coord);
+            pos = vec3(coord[0], coord[1], coord[2]);
+            scene->addVertex(pos, a);
 
+            _tabPolygon[i].tabPoint[1].getCoords(coord);
+            pos = vec3(coord[0], coord[1], coord[2]);
+            scene->addVertex(pos, b);
+
+            _tabPolygon[i].tabPoint[2].getCoords(coord);
+            pos = vec3(coord[0], coord[1], coord[2]);
+            scene->addVertex(pos, c);
+
+#endif
             Triangle* face;
             if (_tabPolygon[i].isEcran || _tabPolygon[i].isInfra)
             {
@@ -350,6 +369,7 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
             {
                 unsigned int a, b, c;
 
+#ifdef _USE_METEO_
                 coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p1);
                 pos = modifGeom(vec3(coord._x, coord._y, coord._z));
                 scene->addVertex(pos, a);
@@ -361,6 +381,20 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
                 coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p3);
                 pos = modifGeom(vec3(coord._x, coord._y, coord._z));
                 scene->addVertex(pos, c);
+#else
+				coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p1);
+                pos = vec3(coord._x, coord._y, coord._z);
+                scene->addVertex(pos, a);
+
+                coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p2);
+                pos = vec3(coord._x, coord._y, coord._z);
+                scene->addVertex(pos, b);
+
+                coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p3);
+                pos = vec3(coord._x, coord._y, coord._z);
+                scene->addVertex(pos, c);
+
+#endif //_USE_METEO_
 
                 Triangle* face;
                 if (_tabPolygon[i].isEcran || _tabPolygon[i].isInfra)
