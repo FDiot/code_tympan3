@@ -32,6 +32,8 @@
 TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
+    setupUi(this); // Initialise the QT Designer generated UI base
+
     updateContent();
 }
 
