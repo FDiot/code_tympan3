@@ -42,8 +42,16 @@ class Event : public Base
     //#endif
 
 public:
-    Event(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL):
-        Base(), pos(position), from(incomingDirection), nbResponseLeft(0), sampler(NULL), shape(_shape) { name = "unknown event"; }
+    Event( const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL ) :
+			Base(), 
+			pos(position), 
+			from(incomingDirection), 
+			nbResponseLeft(0), 
+			sampler(NULL), 
+			shape(_shape) 
+	{ 
+		name = "unknown event"; 
+	}
 
     Event(const Event& other) : Base(other)
     {
@@ -93,7 +101,7 @@ public:
 
     bool isReponseLeft() { return nbResponseLeft > 0; }
     int getNbResponseLeft() { return nbResponseLeft; }
-    void setNbResponseLeft(int _nbResponseLeft) { nbResponseLeft = _nbResponseLeft; }
+    virtual void setNbResponseLeft(int _nbResponseLeft) { nbResponseLeft = _nbResponseLeft; }
 
 	/*!
    * \fn Shape* getShape()

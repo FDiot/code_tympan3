@@ -90,14 +90,15 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
     from.normalize();
 
     Diffraction* newEvent = new Diffraction(realImpact, from, (Cylindre*)(inter->p));
-    vec3 newDir;
+    newEvent->setNbResponseLeft(globalNbRayWithDiffraction);
+    
+	vec3 newDir;
     if (newEvent->getResponse(newDir))
     {
         r->position = realImpact;
         r->direction = newDir;
         r->events.push_back(QSharedPointer<Event>(newEvent));
         //          newEvent->setNbResponseLeft(200);
-        newEvent->setNbResponseLeft(globalNbRayWithDiffraction);
         r->nbDiffraction += 1;
 
         return true;
