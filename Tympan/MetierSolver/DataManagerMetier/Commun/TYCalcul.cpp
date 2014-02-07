@@ -1538,7 +1538,7 @@ bool TYCalcul::go()
     // Fusion des sites
     LPTYSiteNode pMergeSite = pProjet->getSite()->merge();
     pMergeSite->update(true);
-    pMergeSite->getTopographie()->sortTerrains(); // Tri des terrains par ordre croissant des surfaces
+    pMergeSite->getTopographie()->sortTerrainsBySurface();
     pMergeSite->updateAcoustique(true);
 
     // Actualisation de l'altimetrie des recepteurs (securite)

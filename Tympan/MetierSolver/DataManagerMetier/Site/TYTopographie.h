@@ -462,8 +462,10 @@ public:
      */
     double getTopoSize(OSegment3D& segDiagonale);
 
-    /// Tri des terrains par surface decroissante
-    void sortTerrains();
+    /**
+     * Tri des terrains par surface decroissante
+     */
+    void sortTerrainsBySurface();
 
     /**
      * sget couleur de l'emprise
