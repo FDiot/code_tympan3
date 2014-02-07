@@ -53,6 +53,7 @@ if (TYMPAN_USE_IHM)
 endif(TYMPAN_USE_IHM)
 
 include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_BINARY_DIR})
 
 # Recurse intro main sources directory
 add_subdirectory(Tympan)
