@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TYNAMEMANAGER__
