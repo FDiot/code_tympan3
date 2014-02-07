@@ -1509,8 +1509,7 @@ LPTYSiteNode TYSiteNode::merge()
         appendSite(pSiteTmp, pSiteNodeGeoNode->getMatrix(), pSite);
     }
 
-    // Copie du terrain par defaut
-    pSite->getTopographie()->sortTerrains(); // Tri des terrains par ordre croissant des surfaces
+    pSite->getTopographie()->sortTerrainsBySurface();
     pSite->setProjet(_pProjet);
 
     return pSite;
