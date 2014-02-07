@@ -30,13 +30,19 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 
-#include <boost/math/special_functions/fpclassify.hpp>
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYRouteWidget.h"
+#endif
 
-bool TYRoute::is_valid_declivity(double decli)
-{ return !boost::math::isnan(decli); } // Could and should use std::isnan in C++ '11
+#include <boost/math/special_functions/fpclassify.hpp>
 
 
 OPROTOINST(TYRoute);
+TY_EXTENSION_INST(TYRoute);
+
+
+bool TYRoute::is_valid_declivity(double decli)
+{ return !boost::math::isnan(decli); } // Could and should use std::isnan in C++ '11
 
 const double TYRoute::undefined_declivity = std::numeric_limits<double>::quiet_NaN();
 
