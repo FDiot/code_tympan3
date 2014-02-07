@@ -19,8 +19,14 @@
 
 bool Diffraction::getResponse(vec3& r, bool force)
 {
+    //decimal tetha = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
+	decimal tetha = angleOuverture - nbResponseLeft * delta_theta;
+    if (tetha > angleOuverture / 2.)
+    {
+        tetha += (2 * M_PI - angleOuverture);
+    }    
 
-    //std::cout<<"Generation dune reponse de diffraction."<<nbResponseLeft<<" left."<<std::endl;
+	//std::cout<<"Generation dune reponse de diffraction."<<nbResponseLeft<<" left."<<std::endl;
     if (!force)
     {
         nbResponseLeft--;
@@ -37,11 +43,7 @@ bool Diffraction::getResponse(vec3& r, bool force)
         return true;
     }
 
-    decimal tetha = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
-    if (tetha > angleOuverture / 2.)
-    {
-        tetha += (2 * M_PI - angleOuverture);
-    }
+
 
 
     vec3 localResponse;

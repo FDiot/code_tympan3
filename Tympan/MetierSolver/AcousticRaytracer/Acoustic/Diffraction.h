@@ -39,13 +39,23 @@ class Diffraction : public Event
 public:
 
     Diffraction(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Cylindre* c = NULL):
-        Event(position, incomingDirection, (Shape*)(c)) { name = "unknown diffraction"; nbResponseLeft = 200; type = DIFFRACTION; buildRepere(); computeAngle();}
+				Event(position, incomingDirection, (Shape*)(c)) 
+	{ 
+		name = "unknown diffraction"; 
+		nbResponseLeft = 200; 
+		type = DIFFRACTION; 
+		buildRepere(); 
+		computeAngle();
+
+		computeDTheta();
+	}
 
     Diffraction(const Diffraction& other) : Event(other)
     {
         type = DIFFRACTION;
         buildRepere();
         computeAngle();
+		computeDTheta();
     }
 
     virtual ~Diffraction()
@@ -53,11 +63,13 @@ public:
 
     }
 
-    virtual bool getResponse(vec3& r, bool force = false);
+    virtual void setNbResponseLeft(int _nbResponseLeft) { nbResponseLeft = _nbResponseLeft; computeDTheta(); }
+
+	virtual bool getResponse(vec3& r, bool force = false);
 
     virtual bool isAcceptableResponse(vec3& test);
 
-    void setAngleOuverture(decimal angle) { angleOuverture = angle; }
+    void setAngleOuverture(decimal angle) { angleOuverture = angle; computeDTheta(); }
     decimal getAngleOuverture() { return angleOuverture; }
 
     virtual bool generateResponse(std::vector<vec3>& responses, unsigned int nbResponses);
@@ -71,12 +83,14 @@ protected:
 
     void buildRepere();
     void computeAngle();
+	void computeDTheta() { delta_theta = angleOuverture / static_cast<decimal>(nbResponseLeft); }
 
     Repere localRepere;
 
-    decimal angleOuverture;
-    decimal angleArrive;
+    decimal angleOuverture;			/*!< Aperture angle of the cone*/
+    decimal angleArrive;			/*!< incident ray angle*/
 
+	decimal delta_theta;			/*!< angle step betwwen two rays to send */
 };
 
 #endif

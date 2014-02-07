@@ -177,13 +177,15 @@ bool DefaultEngine::process()
                 //}
 // END
 
+//#define _USE_FILTERS_
+#ifdef _USE_FILTERS_
 				// Post filtering of the rays
 				closeEventPostFilter cepf(getSolver()->getValidRays());
 				unsigned int suppressed = cepf.Process();
 
 				fermatPostFilter fpf(getSolver()->getValidRays());
 				suppressed += fpf.Process();
-
+#endif //_USE_FILTERS_
 
                 return true;
             }
