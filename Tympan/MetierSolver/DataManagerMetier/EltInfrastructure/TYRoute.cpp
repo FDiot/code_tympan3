@@ -45,7 +45,6 @@ bool TYRoute::is_valid_declivity(double decli)
 { return !boost::math::isnan(decli); } // Could and should use std::isnan in C++ '11
 
 const double TYRoute::undefined_declivity = std::numeric_limits<double>::quiet_NaN();
-
 TYRoute::TYRoute():
     _offSet(0.05),
     computed_declivity(false)
