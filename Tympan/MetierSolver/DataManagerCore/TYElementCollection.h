@@ -29,8 +29,6 @@
 
 /**
  * Collection d'elements de base des composants et elements metiers.
- *
- * @author Projet_Tympan
  */
 class TYElementCollection : public IRefCount, public std::vector<LPTYElement>
 {

@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_COURBENIVEAU__
@@ -35,9 +32,6 @@
 
 /**
  * Permet de creer une altimetrie.
- *
- * @author Projet_Tympan
- *
  */
 class TYCourbeNiveau: public TYElement, public TYColorInterface
 {

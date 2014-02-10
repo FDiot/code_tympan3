@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_GEOMETRY_NODE__
 #define __TY_GEOMETRY_NODE__
-
 
 #if _MSC_VER > 1000
 #pragma once
@@ -37,15 +33,12 @@
 #include "TYRepere.h"
 #include "Tympan/MetierSolver/ToolsMetier/OMatrix.h"
 
-
 /**
  * Template pour la gestion des noeuds de geometrie.
  * Un repere est associe a un element geometrique.
  * Une matrice mis a jour a chaque fois que le repere est
  * modifie permet de gagner du temps sur les calculs de
  * changement de repere.
- *
- * @author Projet_Tympan
  */
 ///Map de TYElement pour la gestion de la hierarchie des GeoNode:.
 class TYGeometryNode;

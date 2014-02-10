@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_CHEMINEE_SURFACE__
@@ -38,8 +35,6 @@
  * de type source cheminee (TYSourceCheminee).
  * Cette source est conservee dans la source surfacique de la
  * super classe TYAcousticSurface, a l'index 0.
- *
- * @author Projet_Tympan
  */
 class TYChemineeSurface: public TYAcousticRectangle
 {

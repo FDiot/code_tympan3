@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_SOL__
@@ -33,9 +30,6 @@
 
 /**
  * Classe de definition d'un sol.
- *
- * @author Projet_Tympan
- *
  */
 class TYSol: public TYElement
 {

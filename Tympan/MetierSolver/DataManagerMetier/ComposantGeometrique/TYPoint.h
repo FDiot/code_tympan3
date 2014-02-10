@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_POINT__
 #define __TY_POINT__
-
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 //#include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
@@ -31,12 +27,8 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYPointWidget.h"
 #endif
 
-
 /**
  * Classe de definition d'un point.
- *
- * @author Projet_Tympan
- *
  */
 //class TYPoint: public TYElement, public TYColorInterface, public OPoint3D
 class TYPoint: public TYElement, public OPoint3D

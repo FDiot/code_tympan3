@@ -35,9 +35,6 @@
 
 /**
  * Comprend les proprietes acoustiques et geometriques d'une machine.
- *
- * @author Projet_Tympan
- *
  */
 class TYMachine: public TYAcousticVolumeNode
 {

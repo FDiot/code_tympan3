@@ -8,13 +8,9 @@
  *
  */
 
-
 /**
  * TYDXFBDTopoImporter.cpp : Definit le point d'entree pour l'import des fichiers DXF au format BD-TOPO.
- *
- * @author Arnaud Zirnheld
  */
-
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4786 4275 4503)//az++ : 4503; cf OPreferenceManager.h qui fait la meme chose; concerne les map et les xtree de la stl, utilises par le Preference manager

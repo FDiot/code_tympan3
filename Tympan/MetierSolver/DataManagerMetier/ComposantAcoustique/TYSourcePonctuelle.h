@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_SOURCEPONCTUELLE__
 #define __TY_SOURCEPONCTUELLE__
-
 
 #include "TYSpectre.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
@@ -36,7 +32,6 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSourcePonctuelleWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSourcePonctuelleGraphic.h"
 #endif
-
 
 ///Tableau associatif Regime/Directivite.
 typedef std::map<int, TYDirectivite> TYMapRegimeDirectivite;
@@ -56,9 +51,6 @@ class OSegment3D;
 
 /**
  * Classe de definition d'une source ponctuelle.
- *
- * @author Projet_Tympan
- *
  */
 class TYSourcePonctuelle: public TYSource, public TYColorInterface
 {

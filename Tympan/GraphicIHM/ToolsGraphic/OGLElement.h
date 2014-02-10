@@ -26,8 +26,6 @@
 
 /**
  * Classe de liste d'objets OGL a afficher
- *
- * @author Projet_Tympan.
  */
 class OGLElement
 {

@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_SOURCE__
@@ -39,9 +36,6 @@ typedef std::map<int, LPTYSpectre> TYMapRegimeSpectre;
 
 /**
  * Classe de base des sources.
- *
- * @author Projet_Tympan
- *
  */
 class TYSource: public TYElement
 {

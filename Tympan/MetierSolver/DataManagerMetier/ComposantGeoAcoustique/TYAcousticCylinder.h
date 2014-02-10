@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICCYLINDER__
@@ -35,9 +32,6 @@
 
 /**
  * Permet de creer des volumes acoustiques cylindriques.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticCylinder: public TYAcousticVolume
 {

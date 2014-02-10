@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_SOURCE_CHEMINEE__
@@ -50,8 +47,6 @@ class OSegment3D;
  * d'un cylindre representant une cheminee.
  * Un cercle acoustique est associee a cette source, il
  * correspond a la face sur laquelle se trouve la source.
- *
- * @author Projet_Tympan
  */
 class TYSourceCheminee: public TYSourcePonctuelle
 {

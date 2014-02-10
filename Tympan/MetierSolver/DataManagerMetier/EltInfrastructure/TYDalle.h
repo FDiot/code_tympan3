@@ -35,9 +35,6 @@
 /**
  * Classe de definition d'une dalle.
  * Pour la representation des sols et plafonds.
- *
- * @author Projet_Tympan
- *
  */
 class TYDalle: public TYAcousticPolygon
 {

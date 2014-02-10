@@ -70,9 +70,6 @@ typedef SmartPtr<TYPluginManager> LPTYPluginManager;
 
 /**
  * Gestionnaire de plug-ins.
- *
- * @author Projet_Tympan
- *
  */
 
 // UUID of the Default Solver

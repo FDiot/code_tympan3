@@ -16,12 +16,6 @@
 /**
  * \file OSplashScreen.h
  * \brief Splash screen widget (fichier header)
- * \author Projet_Tympan
- *
- *
- *
- *
- *
  */
 
 #ifndef __O_SPLASH_SCREEN__
@@ -36,8 +30,6 @@
 
 /**
  * Splash screen widget.
- *
- * @author Projet_Tympan
  */
 class OSplashScreen : public QWidget
 {

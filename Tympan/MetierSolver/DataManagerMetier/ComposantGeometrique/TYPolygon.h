@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_POLYGON__
 #define __TY_POLYGON__
-
 
 #include "TYRepere.h"
 #include "TYSurfaceInterface.h"
@@ -32,12 +28,8 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPolygonGraphic.h"
 #endif
 
-
 /**
  * Classe de definition d'un polygone.
- *
- * @author Projet_Tympan
- *
  */
 class TYPolygon: public TYElement, public TYSurfaceInterface
 {

@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_SOURCESURFACIC__
@@ -34,9 +31,6 @@
 
 /**
  * Classe de definition d'une source surfacique.
- *
- * @author Projet_Tympan
- *
  */
 class TYSourceSurfacic: public TYSource
 {

@@ -29,9 +29,6 @@ class TYImageManager;
 
 /**
  * Class definition une image.
- *
- * @author Projet_Tympan
- *
  */
 class OImage
 {

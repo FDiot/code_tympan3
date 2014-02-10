@@ -648,7 +648,6 @@ protected:
 /**
  * \class TYMovePointEtageAction
  * \brief Action de deplacement d'un point d'un etage
- * @author Projet_Tympan
  */
 class TYMovePointEtageAction : public TYModelerAction
 {

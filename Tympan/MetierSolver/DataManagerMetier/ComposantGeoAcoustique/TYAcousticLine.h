@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICLINE__
@@ -37,9 +34,6 @@
 
 /**
 * Permet de creer de elements acoustiques lineaires.
-*
-* @author Projet_Tympan
-*
 */
 class TYAcousticLine: public TYSource, public TYColorInterface
 {

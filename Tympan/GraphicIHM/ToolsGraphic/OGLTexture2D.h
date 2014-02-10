@@ -27,9 +27,6 @@
 
 /**
  * Classe pour la gestion des textures 2D OpengGL.
- *
- * @author Projet_Tympan
- *
  */
 class OGLTexture2D : public OGLTexture
 {

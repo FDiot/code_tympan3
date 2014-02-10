@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICINTERFACE__
@@ -32,9 +29,6 @@
 
 /**
  * Classe abstraite permettant de constituer des elements acoustiques.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticInterface
 {

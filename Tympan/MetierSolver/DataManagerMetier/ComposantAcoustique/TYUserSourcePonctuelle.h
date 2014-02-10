@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_USER_SOURCEPONCTUELLE__
@@ -35,9 +32,6 @@
 
 /**
  * Classe de definition d'une source ponctuelle.
- *
- * @author Projet_Tympan
- *
  */
 class TYUserSourcePonctuelle: public TYSourcePonctuelle
 {

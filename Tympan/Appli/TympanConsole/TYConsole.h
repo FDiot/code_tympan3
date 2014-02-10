@@ -29,10 +29,6 @@
 
 /**
  * Classe pour la gestion des arguments passe en mode console
- *
- * @author Projet_Tympan
- * @author Projet_Tympan
- *
  */
 class TYConsole
 {

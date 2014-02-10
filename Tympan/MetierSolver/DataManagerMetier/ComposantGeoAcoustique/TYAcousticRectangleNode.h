@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICRECTANGLENODE__
 #define __TY_ACOUSTICRECTANGLENODE__
-
 
 #include "TYAcousticSurfaceNode.h"
 
@@ -36,9 +32,6 @@ typedef std::vector<LPTYRectangle> TYTabLPRectangle;
 
 /**
  * Composee d'un ou plusieurs rectangles acoustiques.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticRectangleNode: public TYAcousticSurfaceNode
 {

@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTIC_POLYGON__
@@ -36,9 +33,6 @@
 /**
  * Classe de definition d'un polygon acoustique.
  * La partie geometrie est deleguee a un TYPolygon membre.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticPolygon: public TYAcousticSurface
 {

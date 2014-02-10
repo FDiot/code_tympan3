@@ -15,11 +15,7 @@
 
 /*
  *
- *
- *
- *
  */
-
 
 #ifndef __O_SINGLETON__
 #define __O_SINGLETON__
@@ -27,7 +23,6 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-
 
 /**
  * If you wrap a non-class with the SmartPtr class, you will receive
@@ -52,8 +47,6 @@
  * A Singleton Pattern class which uses template.
  * This implementation use Smart Pointer to avoid
  * memory leak.
- *
- * @author Projet_Tympan
  */
 template <class T >
 class OSingleton

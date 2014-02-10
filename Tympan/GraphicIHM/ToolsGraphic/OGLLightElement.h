@@ -33,9 +33,6 @@ class OGLLight;
 
 /**
  * Classe de light en tant qu'elemement
- *
- *
- * @author Projet_Tympan.
  */
 class OGLLightElement : public OGLElement
 {

@@ -148,9 +148,6 @@ typedef class OGenID TYUUID;
 
 /**
  * Classe de base des composants et elements metiers.
- *
- * @author Projet_Tympan
- *
  */
 class TYElement : public IRefCount, public OPrototype
 {

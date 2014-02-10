@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICSEMICYLINDER__
@@ -37,9 +34,6 @@
 
 /**
  * Permet de creer des volumes acoustiques semi-cylindriques.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticSemiCylinder: public TYAcousticVolume
 {

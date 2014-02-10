@@ -15,18 +15,12 @@
 
 /*
  *
- *
- *
- *
  */
-
 
 #ifndef __O_MSG__
 #define __O_MSG__
 
-
 #include <time.h>
-
 
 #define MSG_DEBUG   0x0001
 #define MSG_BENCH   0x0002
@@ -39,10 +33,6 @@
 
 /**
  * Classe utilitaire pour la gestion des messages.
- *
- * @author Projet_Tympan
- * @author Projet_Tympan
- *
  */
 class OMsg
 {

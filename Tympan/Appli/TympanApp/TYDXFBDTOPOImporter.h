@@ -6,10 +6,6 @@
  *
  * EDF-R&D Departement AMA - 1, avenue du general de Gaulle, 92141 CLAMART
  *
- *
- *
- * $Id: TYDXFBDTOPOImporter.h,v 1.2 2008/02/13 08:04:58 thomasso Exp $
- *
  */
 
 #ifndef __TY_DXF_BDTOPO_IMPORTER__
@@ -20,10 +16,9 @@
 #include "TYDXFImporter.h"
 
 /**
- * Classe singleton permettant d'importer des donnees DXF au format BD-TOPO dans des objets metiers Tympan.
- * cf descriptif de livraison "BD-TOPO Vision 1.2", Edition 2 Mars 1999
- *
- * @author Arnaud Zirnheld
+ * Classe singleton permettant d'importer des donnees DXF au format BD-TOPO dans
+ * des objets metiers Tympan. cf descriptif de livraison "BD-TOPO Vision 1.2",
+ * Edition 2 Mars 1999
  */
 class TYDXFBDTopoImporter  :    public TYDXFImporter
 {

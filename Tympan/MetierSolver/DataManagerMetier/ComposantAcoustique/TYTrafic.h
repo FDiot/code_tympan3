@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_TRAFIC__
@@ -33,10 +30,6 @@
 
 /**
  * Structure de trafic routier.
- *
- * @author Projet_Tympan
- * @author Projet_Tympan
- *
  */
 class TYTrafic: public TYElement
 {

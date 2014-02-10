@@ -41,8 +41,6 @@ class QComboBox;
 
 /**
  * Widget pour la classe TYRouteDeblai.
- *
- * @author Projet_Tympan
  */
 class TYRouteDeblaiWidget : public TYWidget
 {

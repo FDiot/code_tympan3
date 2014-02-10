@@ -30,8 +30,6 @@ class TYTrajet;
 
 /**
  * Tâche d'une collection de thread pour le solveur Tympan
- *
- * @author Projet_Tympan
  */
 class TYTask : public OTask
 {

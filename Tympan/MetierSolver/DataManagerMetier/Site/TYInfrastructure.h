@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_INFRASTRUCTURE__
 #define __TY_INFRASTRUCTURE__
-
 
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYBatiment.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYReseauTransport.h"
@@ -35,12 +31,8 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYInfrastructureGraphic.h"
 #endif
 
-
 /**
  * Centralise les elements d'infrastructure.
- *
- * @author Projet_Tympan
- *
  */
 class TYInfrastructure: public TYElement
 {

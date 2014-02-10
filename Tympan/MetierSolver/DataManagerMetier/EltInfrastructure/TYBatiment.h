@@ -34,9 +34,6 @@
 
 /**
  * Classe batiment.
- *
- * @author Projet_Tympan
- *
  */
 class TYBatiment: public TYAcousticVolumeNode
 {
