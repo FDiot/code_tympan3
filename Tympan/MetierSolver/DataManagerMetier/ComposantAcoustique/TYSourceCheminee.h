@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -89,17 +89,17 @@ public:
     /**
      * Set/Get du rectangle acoustique associe a cette source.
      */
-//    void setAcousticRectangle(LPTYAcousticRectangle pAcousticRectangle) ;
+    //    void setAcousticRectangle(LPTYAcousticRectangle pAcousticRectangle) ;
     void setAcousticRectangle(LPTYRectangle pAcousticRectangle) ;
     /**
      * Set/Get du rectangle acoustique associe a cette source.
      */
-//    LPTYAcousticRectangle getAcousticRectangle() { return _pAcousticRectangle; }
+    //    LPTYAcousticRectangle getAcousticRectangle() { return _pAcousticRectangle; }
     LPTYRectangle getAcousticRectangle() { return _pAcousticRectangle; }
     /**
      * Set/Get du rectangle acoustique associe a cette source.
      */
-//    const LPTYAcousticRectangle getAcousticRectangle() const { return _pAcousticRectangle; }
+    //    const LPTYAcousticRectangle getAcousticRectangle() const { return _pAcousticRectangle; }
     const LPTYRectangle getAcousticRectangle() const { return _pAcousticRectangle; }
 
     /**
@@ -124,7 +124,7 @@ private:
     // Membres
 protected:
     ///Le rectangle acoustique associe a cette source.
-//    LPTYAcousticRectangle _pAcousticRectangle;
+    //    LPTYAcousticRectangle _pAcousticRectangle;
     LPTYRectangle _pAcousticRectangle;
 
 private:

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -938,7 +938,7 @@ bool TYTopographie::remCrbNiv(const LPTYCourbeNiveau pCrbNiv)
 
     for (ite = _listCrbNiv.begin(); ite != _listCrbNiv.end(); ite++)
     {
-		if ( dynamic_cast<TYCourbeNiveau*>((*ite)->getElement()) == pCrbNiv.getRealPointer() )
+        if (dynamic_cast<TYCourbeNiveau*>((*ite)->getElement()) == pCrbNiv.getRealPointer())
         {
             //#if TY_USE_IHM
             //          (*ite)->remFromAllRenderer();
@@ -1000,7 +1000,7 @@ LPTYCourbeNiveauGeoNode TYTopographie::findCrbNiv(const LPTYCourbeNiveau pCrbNiv
 
     for (ite = _listCrbNiv.begin(); ite != _listCrbNiv.end(); ite++)
     {
-		if (dynamic_cast<TYCourbeNiveau*>((*ite)->getElement()) == pCrbNiv.getRealPointer())
+        if (dynamic_cast<TYCourbeNiveau*>((*ite)->getElement()) == pCrbNiv.getRealPointer())
         {
             return (*ite);
         }
@@ -1177,8 +1177,8 @@ bool TYTopographie::penteMoy(const OSegment3D& seg, OSegment3D& penteMoy) const
 
     // Recuperation des altitudes correspondant aux extremites du segment
     ptA._z = ptB._z = 0.0; // Mise a 0 au cas oi�� les points ne soient pas sur l'alti
-	bool resu = _pAltimetrie._pObj->updateAltitude(ptA);
-	resu &= _pAltimetrie._pObj->updateAltitude(ptB);
+    bool resu = _pAltimetrie._pObj->updateAltitude(ptA);
+    resu &= _pAltimetrie._pObj->updateAltitude(ptB);
 
     penteMoy = OSegment3D(ptA, ptB);
     return resu;
@@ -1234,7 +1234,7 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
     TYElement* pFound = NULL;
     OPoint3D testPt = pt;
     testPt._z = 0;
-    OPoint3D *pts1 = NULL, *pts2 = NULL;
+    OPoint3D* pts1 = NULL, *pts2 = NULL;
 
     // On cherche d'abord dans la liste des plans d'eau
     TYPlanEau* pPlanEau = NULL;
@@ -1242,8 +1242,8 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
 
     while ((i < _listPlanEau.size()) && (pFound == NULL))
     {
-		pPlanEau = dynamic_cast<TYPlanEau*>(_listPlanEau.at(i)._pObj->getElement());
-		const OMatrix &mat = _listPlanEau.at(i)._pObj->getMatrix();
+        pPlanEau = dynamic_cast<TYPlanEau*>(_listPlanEau.at(i)._pObj->getElement());
+        const OMatrix& mat = _listPlanEau.at(i)._pObj->getMatrix();
 
         nbPts = pPlanEau->getListPoints().size();
         if (!nbPts)
@@ -1261,7 +1261,7 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
         }
 
 #if TY_USE_IHM
-//        if (OGeometrie::pointInPolygonRayCasting(testPt, pts1, static_cast<int>(nbPts) , TYPolygon(pPlanEau->getListPoints()).normal(), box) == 1)
+        //        if (OGeometrie::pointInPolygonRayCasting(testPt, pts1, static_cast<int>(nbPts) , TYPolygon(pPlanEau->getListPoints()).normal(), box) == 1)
         if (OGeometrie::pointInPolygonRayCasting(testPt, pts1, static_cast<int>(nbPts)) == 1)
 #else
         if (OGeometrie::pointInPolygonAngleSum(testPt, pts, nbPts))
@@ -1286,7 +1286,7 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
     while ((i < nbTerrain) && (pFound == NULL))
     {
         pTerrain = dynamic_cast<TYTerrain*>(_pSortedTerrains[i]->getElement());
-        const OMatrix &mat = _pSortedTerrains[i]->getMatrix();
+        const OMatrix& mat = _pSortedTerrains[i]->getMatrix();
 
         nbPts = pTerrain->getListPoints().size();
         if (!nbPts)
@@ -1304,7 +1304,7 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
         }
 
 #if TY_USE_IHM
-//        if (OGeometrie::pointInPolygonRayCasting(testPt, pts2, static_cast<int>(nbPts), TYPolygon(pTerrain->getListPoints()).normal(), box) == 1)
+        //        if (OGeometrie::pointInPolygonRayCasting(testPt, pts2, static_cast<int>(nbPts), TYPolygon(pTerrain->getListPoints()).normal(), box) == 1)
         if (OGeometrie::pointInPolygonRayCasting(testPt, pts2, static_cast<int>(nbPts)) == 1)
 #else
         if (OGeometrie::pointInPolygonAngleSum(testPt, pts, static_cast<int>(nbPts)))
@@ -1551,7 +1551,7 @@ void TYTopographie::setDefTerrain(int defTerrainIdx)
 TYTerrain* TYTopographie::getDefTerrain()
 {
     assert(_DefTerrainIdx < _listTerrain.size()); // Securite
-	return dynamic_cast<TYTerrain*>(_listTerrain[_DefTerrainIdx]._pObj->getElement());
+    return dynamic_cast<TYTerrain*>(_listTerrain[_DefTerrainIdx]._pObj->getElement());
 }
 
 void TYTopographie::sortTerrains()
@@ -1568,7 +1568,7 @@ void TYTopographie::sortTerrains()
 
     for (size_t i = 0; i < nbTerrains; i++)
     {
-		_pSortedTerrains[i] = _listTerrain[i]._pObj;
+        _pSortedTerrains[i] = _listTerrain[i]._pObj;
     }
 
     // 3. Tri du tableau
@@ -1577,8 +1577,8 @@ void TYTopographie::sortTerrains()
 
 int compareTerrains(const void* elem1, const void* elem2)
 {
-    TYTerrainGeoNode *pTerrainNode = *((TYTerrainGeoNode**) elem1);
-    TYTerrain *Terrain1 = dynamic_cast<TYTerrain*>(pTerrainNode->getElement());
+    TYTerrainGeoNode* pTerrainNode = *((TYTerrainGeoNode**) elem1);
+    TYTerrain* Terrain1 = dynamic_cast<TYTerrain*>(pTerrainNode->getElement());
 
     pTerrainNode = *((TYTerrainGeoNode**)  elem2);
     TYTerrain* Terrain2 = dynamic_cast<TYTerrain*>(pTerrainNode->getElement());

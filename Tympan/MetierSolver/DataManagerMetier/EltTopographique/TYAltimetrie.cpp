@@ -492,108 +492,108 @@ inline bool TYAltimetrie::IsInsideFace(const TYTabPoint& pts, OPoint3D& pt) cons
 
 LPTYPolygon TYAltimetrie::getFaceUnder(OPoint3D pt)
 {
-	// Recherche des indices de la grilles qui incluent les sommets de la boite
-	unsigned int iMinMax[2];
-	bool test = getGridIndices(pt, iMinMax);
-	if (!test) return 0;
-	unsigned int pi = iMinMax[0], qi = iMinMax[1];
+    // Recherche des indices de la grilles qui incluent les sommets de la boite
+    unsigned int iMinMax[2];
+    bool test = getGridIndices(pt, iMinMax);
+    if (!test) { return 0; }
+    unsigned int pi = iMinMax[0], qi = iMinMax[1];
 
-	TYTabLPPolygon* pDivRef = &(_pSortedFaces[pi][qi]);
+    TYTabLPPolygon* pDivRef = &(_pSortedFaces[pi][qi]);
     TYPolygon* pFace = NULL;
 
     if (pDivRef != NULL) // sanity check
     {
-		for (size_t i = 0; i < pDivRef->size(); i++)
-		{
+        for (size_t i = 0; i < pDivRef->size(); i++)
+        {
             pFace = pDivRef->at(i);
 
             if (pFace != NULL)
             {
                 if (IsInsideFace(pFace->getPoints(), pt))
                 {
-					return pFace;
-				}
-			}
-		}
-	}
+                    return pFace;
+                }
+            }
+        }
+    }
 
-	return pFace;
+    return pFace;
 }
 
 
 unsigned int TYAltimetrie::getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPolygon)
 {
-	// Recherche des indices de la grilles qui incluent les sommets de la boite
-	unsigned int iMinMax[4];
-	bool test = getGridIndices(box, iMinMax);
-	if (!test) return 0;
+    // Recherche des indices de la grilles qui incluent les sommets de la boite
+    unsigned int iMinMax[4];
+    bool test = getGridIndices(box, iMinMax);
+    if (!test) { return 0; }
 
-	// Récupération des faces correspondantes
-	TYTabLPPolygon faces;
-	getFacesinIndices(iMinMax[0], iMinMax[1], iMinMax[2], iMinMax[3], faces);
+    // Récupération des faces correspondantes
+    TYTabLPPolygon faces;
+    getFacesinIndices(iMinMax[0], iMinMax[1], iMinMax[2], iMinMax[3], faces);
 
-	// Test des points des faces par rapport à la box
-	// Si au moins un point de la face est dans la box, la face est mise dans la liste
-	unsigned int faceCount = 0; // Compteur de faces
-	for (size_t i = 0 ; i < faces.size() ; i++)
-	{
-		TYTabPoint& pts = faces[i]->getPoints();
-		for (size_t y = 0 ; y < pts.size(); y++)
-		{
-			if ( box.isInside(pts[y]) )
-			{
-				tabPolygon.push_back(faces[i]);
-				faceCount++;
-				continue;
-			}
-		}
-	}
+    // Test des points des faces par rapport à la box
+    // Si au moins un point de la face est dans la box, la face est mise dans la liste
+    unsigned int faceCount = 0; // Compteur de faces
+    for (size_t i = 0 ; i < faces.size() ; i++)
+    {
+        TYTabPoint& pts = faces[i]->getPoints();
+        for (size_t y = 0 ; y < pts.size(); y++)
+        {
+            if (box.isInside(pts[y]))
+            {
+                tabPolygon.push_back(faces[i]);
+                faceCount++;
+                continue;
+            }
+        }
+    }
 
-	if (faceCount == 0) // Aucune face trouvée
-	{
-		for (size_t i = 0 ; i < faces.size() ; i++)
-		{
-			tabPolygon.push_back(faces[i]);
-		}
-	}
+    if (faceCount == 0) // Aucune face trouvée
+    {
+        for (size_t i = 0 ; i < faces.size() ; i++)
+        {
+            tabPolygon.push_back(faces[i]);
+        }
+    }
 
-	return  faceCount;
+    return  faceCount;
 }
 
 unsigned int TYAltimetrie::getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPoints)
 {
-	unsigned int pointCount = 0;
-	OPoint3D pts[4];
-	pts[0] = pt0; 
-	pts[1] = pt1; 
-	pts[2] = pt2; 
-	pts[3] = pt3;
+    unsigned int pointCount = 0;
+    OPoint3D pts[4];
+    pts[0] = pt0;
+    pts[1] = pt1;
+    pts[2] = pt2;
+    pts[3] = pt3;
 
-	unsigned int iMinMax[4];
+    unsigned int iMinMax[4];
 
-	bool test = getGridIndices(pts, iMinMax);
-	if (!test) return 0;
+    bool test = getGridIndices(pts, iMinMax);
+    if (!test) { return 0; }
 
-	// Récupération des faces correspondantes
-	TYTabLPPolygon faces;
-	getFacesinIndices(iMinMax[0], iMinMax[1], iMinMax[2], iMinMax[3], faces);
+    // Récupération des faces correspondantes
+    TYTabLPPolygon faces;
+    getFacesinIndices(iMinMax[0], iMinMax[1], iMinMax[2], iMinMax[3], faces);
 
-	// Test des points des faces par rapport à la box
-	// Si le point est dans le périmètre, il est ajouté à la liste
-	for (size_t i = 0 ; i < faces.size() ; i++)
-	{
-		TYTabPoint& ptsFaces = faces[i]->getPoints();
-		for (size_t y = 0 ; y < ptsFaces.size(); y++)
-		{
-			if ( OGeometrie::pointInPolygonRayCasting(ptsFaces[y], pts, 4) )
-			{
-				tabPoints.push_back(ptsFaces[y]);
-				pointCount++;
-			}
-		}
-	}
+    // Test des points des faces par rapport à la box
+    // Si le point est dans le périmètre, il est ajouté à la liste
+    for (size_t i = 0 ; i < faces.size() ; i++)
+    {
+        TYTabPoint& ptsFaces = faces[i]->getPoints();
+        for (size_t y = 0 ; y < ptsFaces.size(); y++)
+        {
+            if (OGeometrie::pointInPolygonRayCasting(ptsFaces[y], pts, 4))
+            {
+                tabPoints.push_back(ptsFaces[y]);
+                pointCount++;
+            }
+        }
+    }
 
-	return pointCount;
+    return pointCount;
 }
 
 bool TYAltimetrie::getGridIndices(const OPoint3D& pt, unsigned int* indXY)
@@ -614,76 +614,76 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, unsigned int* indXY)
 
     if ((pi < 0) || (qi < 0) || (pi >= _gridSX) || (qi >= _gridSY)) { return false; }  // sanity check
 
-	indXY[0] = pi;
-	indXY[1] = qi;
+    indXY[0] = pi;
+    indXY[1] = qi;
 
-	return true;
+    return true;
 }
 
 bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax)
 {
-	unsigned int minX = 65535;
-	unsigned int maxX = 0;
-	unsigned int minY = 65535;
-	unsigned int maxY = 0;
+    unsigned int minX = 65535;
+    unsigned int maxX = 0;
+    unsigned int minY = 65535;
+    unsigned int maxY = 0;
 
-	// Test des quatre points et récupération des indices
-	unsigned int iXY[2];
-	bool res = true;
-	for (size_t i=0 ; i<4 ; i++)
-	{
-		res &= getGridIndices(pts[i], iXY);
-		iXY[0] < minX ? iXY[0] : minX;
-		iXY[0] < maxX ? iXY[0] : maxX;
-		iXY[1] < minY ? iXY[1] : minY;
-		iXY[1] < maxY ? iXY[1] : maxY;
-	}
+    // Test des quatre points et récupération des indices
+    unsigned int iXY[2];
+    bool res = true;
+    for (size_t i = 0 ; i < 4 ; i++)
+    {
+        res &= getGridIndices(pts[i], iXY);
+        iXY[0] < minX ? iXY[0] : minX;
+        iXY[0] < maxX ? iXY[0] : maxX;
+        iXY[1] < minY ? iXY[1] : minY;
+        iXY[1] < maxY ? iXY[1] : maxY;
+    }
 
-	iMinMax[0] = minX;
-	iMinMax[1] = maxX;
-	iMinMax[2] = minY;
-	iMinMax[3] = maxY;
+    iMinMax[0] = minX;
+    iMinMax[1] = maxX;
+    iMinMax[2] = minY;
+    iMinMax[3] = maxY;
 
-	return res;
+    return res;
 }
 
-bool TYAltimetrie::getGridIndices(const OBox2 &box, unsigned int* iMinMax)
+bool TYAltimetrie::getGridIndices(const OBox2& box, unsigned int* iMinMax)
 {
-	OPoint3D pts[4];
+    OPoint3D pts[4];
 
-	for (size_t i=1, j=0 ; i<5 ; i++, j++)
-	{
-		pts[j] = box.BoxCoord(i);
-	}
+    for (size_t i = 1, j = 0 ; i < 5 ; i++, j++)
+    {
+        pts[j] = box.BoxCoord(i);
+    }
 
-	return getGridIndices(pts, iMinMax);
+    return getGridIndices(pts, iMinMax);
 }
 
 
 void TYAltimetrie::getFacesinIndices(unsigned int& minX, unsigned int& maxX, unsigned int& minY, unsigned int& maxY, TYTabLPPolygon& faces)
 {
-	map <LPTYPolygon, int> mapFaces;
-	TYTabLPPolygon* pDivRef = NULL;
+    map <LPTYPolygon, int> mapFaces;
+    TYTabLPPolygon* pDivRef = NULL;
 
-	//Utilisation d'un map pour filtrer les faces
-	for (unsigned int i = minX ; i <= maxX ; i++)
-	{
-		for (unsigned int j = minY; j <= maxY ; j++)
-		{
-			pDivRef = &(_pSortedFaces[i][j]);
-			for (size_t k = 0; k < pDivRef->size(); k++)
-			{
-				mapFaces[pDivRef->at(k)] = i*j*k;
-			}
-		}
-	}
+    //Utilisation d'un map pour filtrer les faces
+    for (unsigned int i = minX ; i <= maxX ; i++)
+    {
+        for (unsigned int j = minY; j <= maxY ; j++)
+        {
+            pDivRef = &(_pSortedFaces[i][j]);
+            for (size_t k = 0; k < pDivRef->size(); k++)
+            {
+                mapFaces[pDivRef->at(k)] = i * j * k;
+            }
+        }
+    }
 
-	//Remplissage du tableau
-	map <LPTYPolygon, int>::iterator it;
-	for (it = mapFaces.begin(); it != mapFaces.end(); it++)
-	{
-		faces.push_back(it->first);
-	}
+    //Remplissage du tableau
+    map <LPTYPolygon, int>::iterator it;
+    for (it = mapFaces.begin(); it != mapFaces.end(); it++)
+    {
+        faces.push_back(it->first);
+    }
 }
 
 OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
@@ -733,7 +733,7 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
 
                     if (pFace->intersects(segTest, ptTest, false) == INTERS_OUI)
                     {
-						break;
+                        break;
                     }
                 }
             }
@@ -741,21 +741,21 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
         }
     }
 
-	return ptTest;
+    return ptTest;
 }
 
 bool TYAltimetrie::updateAltitude(OPoint3D& pt) const
 {
-	pt = projection(pt);
+    pt = projection(pt);
 
-	if ( pt._z == -1.E5 ) { return false; }
+    if (pt._z == -1.E5) { return false; }
 
     return true;
 }
 
 double TYAltimetrie::altitude(const OPoint3D& pt)
 {
-	return projection(pt)._z;
+    return projection(pt)._z;
 }
 
 double TYAltimetrie::HauteurMoyenne(TYTabPoint& pts)

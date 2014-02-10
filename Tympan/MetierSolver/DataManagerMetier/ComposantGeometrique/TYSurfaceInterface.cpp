@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -108,8 +108,8 @@ int TYSurfaceInterface::intersectsPlan(const OPlan& plan, OSegment3D& seg) const
     // Pour chaque segment composant le contour
     for (size_t i = 0; i < nbPts; i++)
     {
-//        if (((OPlan*)&plan)->intersectsSegment(contour[i], contour[(i + 1) % nbPts], ptIntersec) == INTERS_OUI)
-        if ( plan.intersectsSegment(contour[i], contour[(i + 1) % nbPts], ptIntersec) == INTERS_OUI)
+        //        if (((OPlan*)&plan)->intersectsSegment(contour[i], contour[(i + 1) % nbPts], ptIntersec) == INTERS_OUI)
+        if (plan.intersectsSegment(contour[i], contour[(i + 1) % nbPts], ptIntersec) == INTERS_OUI)
         {
             if (!ptAFind)
             {

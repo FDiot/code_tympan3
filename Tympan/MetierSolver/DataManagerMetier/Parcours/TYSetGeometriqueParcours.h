@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -64,23 +64,23 @@ public:
 
     void AllouerPolylignes(int nNbPolylineAllouee)
     {
-		_nNbPolylineAllouee = nNbPolylineAllouee; 
-		_ListePolylines = new TYPolyligneParcours[nNbPolylineAllouee];
-	};
+        _nNbPolylineAllouee = nNbPolylineAllouee;
+        _ListePolylines = new TYPolyligneParcours[nNbPolylineAllouee];
+    };
     bool PolylignesInfraFermees();
     int MergePointsDoubles();
     int SupprimeLesPointsDoubles();
     int SupressionPolylignesRedondantes();
     void SeparationDroiteGauche(bool* PointsAGauche, bool* PointsADroite, TYSetGeometriqueParcours& geoGauche, TYSetGeometriqueParcours& geoDroite);
     void MarquePointsADroiteEtAGauche(TYPointParcours& Srce, TYPointParcours& Dest, bool*& PointsAGauche, bool*& PointsADroite);
-    void RamenerPointsTraversantLaFrontiere(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours **IndexePointsFrontiere, int& NbPointsFrontiere, bool* EstUnPointIntersectant, bool bCoteGauche, bool* PointsAGauche, bool* PointsADroite);
+    void RamenerPointsTraversantLaFrontiere(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours** IndexePointsFrontiere, int& NbPointsFrontiere, bool* EstUnPointIntersectant, bool bCoteGauche, bool* PointsAGauche, bool* PointsADroite);
     bool ListerPointsConnexes(Connexite* Connexes);
     void AffichePolylignes();
 
-    bool PremierePasse(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours **IndexePointsFrontiere, int NbPointsFrontiere, bool* EstUnPointIntersectant, Connexite* Connexes, TYSetGeometriqueParcours& geoPremierePasse);
+    bool PremierePasse(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours** IndexePointsFrontiere, int NbPointsFrontiere, bool* EstUnPointIntersectant, Connexite* Connexes, TYSetGeometriqueParcours& geoPremierePasse);
     bool SecondePasse(TYSetGeometriqueParcours& geoPremierePasse, TYSetGeometriqueParcours& geoSecondePasse, bool bTrajetsAGaucheDeSR, TYPointParcours** & pTableauEC, int& nbPtsEC);
 
-    void TriePointsIntersectionSuivantSR(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours **IndexePointsFrontiere, int NbPointsFrontiere);
+    void TriePointsIntersectionSuivantSR(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours** IndexePointsFrontiere, int NbPointsFrontiere);
     bool AjoutePointALaPolyLigne(int indexPolyligne, TYPointParcours& P);
     int AjouteLesPointsComprisEntre(TYSetGeometriqueParcours& geoPolySource, int nIndexePoly, int nIndexeNbPremierPointAAjouter, int nIndexeDernierPointAAjouter);
     int ParcourtPolyligneAPartirDe(int IndexPointRacine, TYPolyligneParcours*& PolyligneRacine, bool* EstUnPointIntersectant, TYSetGeometriqueParcours& geoPremierePasse);
@@ -101,11 +101,11 @@ public:
     //le resultat figure dans TableauDePointsECOut; ne nombre renvoye est celui de l'enveloppe convexe.
     //Attention ! Les tableaux doivent etre alloues !
     static int  EnveloppeConvexeLes2PremiersPointsEtant(TYPointParcours** TableauDePoints, int nNbPoints, TYPointParcours** TableauDePointsECOut, bool bPremiersPointsLesPlusHauts);
-    
-	//La selection comprend SR:
+
+    //La selection comprend SR:
     int     SelectionnePointsEntreSetRetDuCoteDeSR(TYSetGeometriqueParcours* geoSR, TYPointParcours** TableauDePoints, int nNbPoints);
-    
-	//N'est utilise que pour les trajets verticaux
+
+    //N'est utilise que pour les trajets verticaux
     void    CreerTrajetAPartirDuneListeDePointsTriee(TYPointParcours** TableauDePoints, int nNbPoints, bool bSens, bool bGardeIdentifiant);
 
     bool AppartienneMemePolyligne(TYPointParcours* a, TYPointParcours* b, TYPointParcours* c);

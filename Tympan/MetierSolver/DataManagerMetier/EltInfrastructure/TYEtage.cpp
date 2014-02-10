@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -2030,16 +2030,16 @@ bool TYEtage::findAcousticSurface(const TYAcousticSurface* pAccSurf, OMatrix* pM
     for (unsigned int i = 0; (i < _tabMur.size()) && !ret; i++)
     {
         // Mur elements pour ce mur
-		TYTabAcousticSurfaceGeoNode& tabTmp = TYMur::safeDownCast(_tabMur[i]._pObj->getElement())->getTabAcousticSurf();
+        TYTabAcousticSurfaceGeoNode& tabTmp = TYMur::safeDownCast(_tabMur[i]._pObj->getElement())->getTabAcousticSurf();
 
         for (unsigned int j = 0; j < tabTmp.size(); j++)
         {
-			if (TYAcousticSurface::safeDownCast(tabTmp[j]._pObj->getElement()) == pAccSurf)
+            if (TYAcousticSurface::safeDownCast(tabTmp[j]._pObj->getElement()) == pAccSurf)
             {
                 if (pMatrix)
                 {
                     // Mise a jour de la matrice
-					*pMatrix = *pMatrix * _tabMur[i]._pObj->getMatrix() * tabTmp[j]._pObj->getMatrix();
+                    *pMatrix = *pMatrix * _tabMur[i]._pObj->getMatrix() * tabTmp[j]._pObj->getMatrix();
                 }
 
                 // Surf trouvee
@@ -2237,7 +2237,7 @@ OSpectre TYEtage::champDirect(const OPoint3D& unPoint)
 {
     OSpectre s = OSpectre::getEmptyLinSpectre();
     OSpectre sTemp = OSpectre::getEmptyLinSpectre();
-	TYAtmosphere atmos;
+    TYAtmosphere atmos;
 
     unsigned int i, j;
     double distance;
@@ -2332,7 +2332,7 @@ void TYEtage::calculChampReverbere()
 void TYEtage::calculChampRevSabine()
 {
     unsigned int i, j;
-	TYAtmosphere atmos;
+    TYAtmosphere atmos;
 
     // Effet de salle ((4.Rho.C / (alpha.S))-(4/S) - Tr.C.AbsoATm)
     _reverb = TYSpectre::getEmptyLinSpectre(4.0); // Spectre initialise a la valeur 4
@@ -2387,7 +2387,7 @@ void TYEtage::calculChampRevKuttruff()
 {
     _reverb = TYSpectre::getEmptyLinSpectre();
     OSpectre sTemp;
-	TYAtmosphere atmos;
+    TYAtmosphere atmos;
 
     OPoint3D unPoint; // DT 20060520 juste pour que ca compile (le point devrait etre passe en parametre
 
@@ -2678,7 +2678,7 @@ TYSpectre TYEtage::getPuissanceRayonnee(LPTYAcousticSurface pCurrentSurf, const 
     TYSpectre s = TYSpectre::getEmptyLinSpectre();
     OSpectre spectreAtt;
     OPoint3D posSrc;
-	TYAtmosphere atmos;
+    TYAtmosphere atmos;
 
     // Une sous-face de mur doit etre de type MurElement
     LPTYMurElement pMurElt = TYMurElement::safeDownCast(pCurrentSurf);

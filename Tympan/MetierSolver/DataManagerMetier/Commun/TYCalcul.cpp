@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -1160,7 +1160,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
     TYTabLPPointCalcul& tabpoint = pMaillage->getPtsCalcul();
 
     bool cancel = false;
-	bool bNoPbAlti = true; // Permet de tester si tous les points sont altimétrisés correctement.
+    bool bNoPbAlti = true; // Permet de tester si tous les points sont altimétrisés correctement.
 
     if (pMaillage->getComputeAlti()) // Cas des maillages rectangulaires et lineaires horizontaux
     {
@@ -1184,7 +1184,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
             pt._z = 0;
 
             // Recherche de l'altitude
-            bNoPbAlti &= pAlti->updateAltitude(pt); 
+            bNoPbAlti &= pAlti->updateAltitude(pt);
 
             // Retour au repere d'origine
             pt = matrixinv * pt;
@@ -1229,10 +1229,10 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
         modified = true;
     }
 
-	if (!bNoPbAlti) // Certains point pas altimetrises
-	{
-		OMessageManager::get()->info(TR("msg_pbalti"));
-	}
+    if (!bNoPbAlti) // Certains point pas altimetrises
+    {
+        OMessageManager::get()->info(TR("msg_pbalti"));
+    }
 
 
     // Done
@@ -1611,9 +1611,9 @@ bool TYCalcul::go()
         delete pInfos;
         pInfos = NULL;
 
-		TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(getSolverId());
+        TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(getSolverId());
 
-		ret = pSolver->solve(*pMergeSite, *this);
+        ret = pSolver->solve(*pMergeSite, *this);
 
         pSolver->purge();
 
@@ -1627,14 +1627,14 @@ bool TYCalcul::go()
 
             ret = _pResultat->cumulSpectres(_tabTrajets);
 
-			// Suppression des points de maillage de la matrice
-			for (unsigned int i=0; i< recepteurs.size(); i++)
-			{
-				if ( recepteurs[i]->getElement()->getParent()->inherits( "TYMaillage" ) )
-				{
-					_pResultat->remSpectres( static_cast<TYPointCalcul*>( recepteurs[i]->getElement() ) );
-				}
-			}
+            // Suppression des points de maillage de la matrice
+            for (unsigned int i = 0; i < recepteurs.size(); i++)
+            {
+                if (recepteurs[i]->getElement()->getParent()->inherits("TYMaillage"))
+                {
+                    _pResultat->remSpectres(static_cast<TYPointCalcul*>(recepteurs[i]->getElement()));
+                }
+            }
         }
     }
     else
@@ -1671,7 +1671,7 @@ bool TYCalcul::go()
     setIsAcousticModified(true); // Les donni¿½es acoustiques ont i¿½ti¿½ actualisi¿½es
 
     // (Re) init default number of thread (sorry this is not clean)
-	if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
+    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
     {
         _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
     }
@@ -1679,8 +1679,8 @@ bool TYCalcul::go()
     {
         TYPreferenceManager::setUInt(TYDIRPREFERENCEMANAGER, "NbThread", static_cast<unsigned long>(_nbThread));
     }
-	
-	return ret;
+
+    return ret;
 }
 
 void TYCalcul::getCalculElements(LPTYSiteNode pSite)

@@ -84,64 +84,70 @@ AltimetryBuilder::process(TYCourbeNiveau& courbe_niveau, bool closed)
 double
 AltimetryBuilder::computeAltitude(const CGAL_Point& p)
 {
-	// Query the triangulation for the location of p
-	CDT::Face_handle fh = alti_cdt.locate(p);
-	if(alti_cdt.is_infinite(fh))
-		throw AlgorithmicError();
-	// We rely on CGAL intersection computation in 3D between the triangle
-	// and a vertical line going through p
-	double x[3], y[3], z[3];
-	for(int i=0; i<3; i++)
-	{
-		Gt::Point_2 q = fh->vertex(i)->point();
-		x[i] = q.x();
-		y[i] = q.y();
-		z[i] = fh->vertex(i)->info().altitude;
-	}
-	Gt::Triangle_3 tri3(
-			Gt::Point_3(x[0], y[0], z[0]),
-			Gt::Point_3(x[1], y[1], z[1]),
-			Gt::Point_3(x[2], y[2], z[2]));
-	Gt::Line_3 line(Gt::Point_3(p.x(), p.y(), 0), Gt::Vector_3(0, 0, 1));
+    // Query the triangulation for the location of p
+    CDT::Face_handle fh = alti_cdt.locate(p);
+    if (alti_cdt.is_infinite(fh))
+    {
+        throw AlgorithmicError();
+    }
+    // We rely on CGAL intersection computation in 3D between the triangle
+    // and a vertical line going through p
+    double x[3], y[3], z[3];
+    for (int i = 0; i < 3; i++)
+    {
+        Gt::Point_2 q = fh->vertex(i)->point();
+        x[i] = q.x();
+        y[i] = q.y();
+        z[i] = fh->vertex(i)->info().altitude;
+    }
+    Gt::Triangle_3 tri3(
+        Gt::Point_3(x[0], y[0], z[0]),
+        Gt::Point_3(x[1], y[1], z[1]),
+        Gt::Point_3(x[2], y[2], z[2]));
+    Gt::Line_3 line(Gt::Point_3(p.x(), p.y(), 0), Gt::Vector_3(0, 0, 1));
 
     CGAL::Object result = CGAL::intersection(tri3, line);
     // We check that the intersection is actually a point as it should
-    if (const Gt::Point_3 *ip = CGAL::object_cast<Gt::Point_3>(&result))
+    if (const Gt::Point_3* ip = CGAL::object_cast<Gt::Point_3>(&result))
     {
-        assert( std::max(fabs(ip->x()-p.x()), fabs(ip->y()-p.y())) <= 1e-3 );
+        assert(std::max(fabs(ip->x() - p.x()), fabs(ip->y() - p.y())) <= 1e-3);
         return ip->z();
     }
     else
-    	throw AlgorithmicError();
+    {
+        throw AlgorithmicError();
+    }
 }
 
 void
 AltimetryBuilder::insertMaterialPolygonsInTriangulation()
 {
-	// Do check that alti_cdt is clear
-	assert(alti_cdt.number_of_vertices() == 0 &&
-			"Altitude can't be modified afterwards");
-	// We copy the current triangulation, which will be used to compute alitudes
+    // Do check that alti_cdt is clear
+    assert(alti_cdt.number_of_vertices() == 0 &&
+           "Altitude can't be modified afterwards");
+    // We copy the current triangulation, which will be used to compute alitudes
     alti_cdt = cdt;
-    BOOST_FOREACH(MaterialPolygon& poly, material_polygons)
+    BOOST_FOREACH(MaterialPolygon & poly, material_polygons)
     {
-    	addAsConstraint(poly |
-    		transformed( boost::bind(&AltimetryBuilder::build_point_info, this, _1)),
-    		true);
+        addAsConstraint(poly |
+                        transformed(boost::bind(&AltimetryBuilder::build_point_info, this, _1)),
+                        true);
     }
     if (!cdt.is_valid())
     {
         throw AlgorithmicError();
     }
     // Give an altitude to the points inserted as intersections of contraints.
-	for(CDT::Vertex_iterator vit = cdt.vertices_begin();
-            vit != cdt.vertices_end(); ++vit)
-	{
-		CGAL_Point p = vit->point();
-		if(vit->info().altitude != unspecified_altitude)
-                    continue;
-		vit->info().altitude = computeAltitude(p);
-	}
+    for (CDT::Vertex_iterator vit = cdt.vertices_begin();
+         vit != cdt.vertices_end(); ++vit)
+    {
+        CGAL_Point p = vit->point();
+        if (vit->info().altitude != unspecified_altitude)
+        {
+            continue;
+        }
+        vit->info().altitude = computeAltitude(p);
+    }
 }
 
 void
@@ -227,14 +233,14 @@ AltimetryBuilder::labelFaces()
          f_it != cdt.finite_faces_end();
          ++f_it)
     {
-    	// Extract the range of material polygon (handles) containing the face f_it
+        // Extract the range of material polygon (handles) containing the face f_it
         std::pair<face_to_material_poly_t::iterator, face_to_material_poly_t::iterator> p =
             face_to_poly.equal_range(f_it);
         // Creates a comparator function object to compare polygons for inclusion
         poly_comparator cmp(*this);
         // Search for the minimal - ie most specific - polygon amoung them
         face_to_material_poly_t::iterator min_p_it = std::min_element(p.first, p.second, cmp);
-        assert( min_p_it != p.second && "This should never happen.");
+        assert(min_p_it != p.second && "This should never happen.");
         face_handle_t face_h = min_p_it->first;
         material_polygon_handle_t poly_h = min_p_it->second;
         // Extract the associated material.
@@ -296,42 +302,46 @@ AltimetryBuilder::addPolygonToScene(QGraphicsScene* scene, const CGAL_Polygon& p
 QGraphicsSimpleTextItem*
 AltimetryBuilder::drawText(QGraphicsScene* scene, const CGAL_Point& pos, const std::string& text, double scale)
 {
-	QGraphicsSimpleTextItem* item = scene->addSimpleText(
-			QString::fromStdString(text));
-	item->setPos(pos.x(), pos.y());
-	item->setScale(scale);
-	return item;
+    QGraphicsSimpleTextItem* item = scene->addSimpleText(
+                                        QString::fromStdString(text));
+    item->setPos(pos.x(), pos.y());
+    item->setScale(scale);
+    return item;
 }
 
 void
 AltimetryBuilder::addVerticesInfo(QGraphicsScene* scene) const
 {
-	for(CDT::Finite_vertices_iterator vit = cdt.finite_vertices_begin();
-		vit	!= cdt.finite_vertices_end(); ++vit)
-	{
-		CDT::Point p = vit->point();
-		std::stringstream txt;
-		double alti = vit->info().altitude;
-		if (alti==unspecified_altitude)
-			txt << "-";
-		else
-			txt << alti;
-		drawText(scene, p, txt.str() );
-	}
+    for (CDT::Finite_vertices_iterator vit = cdt.finite_vertices_begin();
+         vit != cdt.finite_vertices_end(); ++vit)
+    {
+        CDT::Point p = vit->point();
+        std::stringstream txt;
+        double alti = vit->info().altitude;
+        if (alti == unspecified_altitude)
+        {
+            txt << "-";
+        }
+        else
+        {
+            txt << alti;
+        }
+        drawText(scene, p, txt.str());
+    }
 
 }
 
 void
 AltimetryBuilder::addFacesInfo(QGraphicsScene* scene) const
 {
-	for(CDT::Finite_faces_iterator fit = cdt.finite_faces_begin();
-		fit	!= cdt.finite_faces_end(); ++fit)
-	{
-		std::stringstream txt;
-		material_t material = fit->info().material;
-		txt << material[0]; // First character of the material name
-		drawText(scene, CGAL::centroid(cdt.triangle(fit)), txt.str() );
-	}
+    for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin();
+         fit != cdt.finite_faces_end(); ++fit)
+    {
+        std::stringstream txt;
+        material_t material = fit->info().material;
+        txt << material[0]; // First character of the material name
+        drawText(scene, CGAL::centroid(cdt.triangle(fit)), txt.str());
+    }
 
 }
 
@@ -351,7 +361,7 @@ AltimetryBuilder::buildView(double xmin, double ymin, double xmax, double ymax)
     view->setRenderHint(QPainter::Antialiasing);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->fitInView(xmin, ymin, xmax, ymax,Qt::KeepAspectRatio);
+    view->fitInView(xmin, ymin, xmax, ymax, Qt::KeepAspectRatio);
     return std::make_pair(view, scene);
 }
 

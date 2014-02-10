@@ -643,9 +643,9 @@ inline const char* str_qt2c(const QString& qstr)
 
 inline QString xml2qstring(const QDomNode& node)
 {
-	QString msg; QTextStream str(&msg);
-	node.save(str, 0);
-	return msg;
+    QString msg; QTextStream str(&msg);
+    node.save(str, 0);
+    return msg;
 }
 
 inline  const char* xml2cstring(const QDomNode& node)
@@ -653,7 +653,7 @@ inline  const char* xml2cstring(const QDomNode& node)
 
 #ifndef _NDEBUG
 inline QDebug _debugXml(const char* expr, const QDomNode& node)
-{ return qDebug()<< expr << xml2qstring((node)); }
+{ return qDebug() << expr << xml2qstring((node)); }
 
 #define debugXml(expr) _debugXml(#expr, (expr))
 #else // _NDEBUG

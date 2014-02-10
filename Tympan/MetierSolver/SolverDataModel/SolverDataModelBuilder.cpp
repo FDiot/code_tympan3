@@ -165,7 +165,7 @@ void SolverDataModelBuilder::setAcousticBuildMaterial(LPTYMateriauConstruction m
     std::cout << " # setAcousticBuildMaterial #" << std::endl;
     // Building material.
     boost::shared_ptr<AcousticBuildingMaterial>
-        build_mat_ptr(new AcousticBuildingMaterial());
+    build_mat_ptr(new AcousticBuildingMaterial());
 
     // Spectrum from the \c TYMateriauConstruction.
     const TYSpectre& ty_spectrum = material_ptr->getSpectreAbso();
@@ -196,7 +196,7 @@ void SolverDataModelBuilder::setAcousticBuildMaterial(LPTYMateriauConstruction m
     {
         double modulus = tab_modulus[i];
         boost::shared_ptr<SpectrumSample> sample_ptr(new SpectrumSample(modulus,
-                                                                 type));
+                                                                        type));
 
         // Link the \c tympan::SpectrumSample with all frequencies via
         // \c tympan::frequency_rdef.

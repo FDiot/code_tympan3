@@ -379,7 +379,7 @@ int TYRectangularMaillage::getIndexPtCalcul(int x, int y) const
     return x + y * _nbPointsX;
 }
 
-void TYRectangularMaillage::getDimensions(int &x, int &y) const
+void TYRectangularMaillage::getDimensions(int& x, int& y) const
 {
     unsigned long longx, longy;
     OVector3D stepx, stepy;

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -37,9 +37,9 @@ const float OColor::equality_threshold = 1e3 * std::numeric_limits<float>::epsil
 bool OColor::operator==(const OColor& c) const
 {
     return (float_eq(r, c.r) &&
-    		float_eq(g, c.g) &&
-    		float_eq(b, c.b) &&
-    		float_eq(a, c.a) );
+            float_eq(g, c.g) &&
+            float_eq(b, c.b) &&
+            float_eq(a, c.a));
 }
 
 

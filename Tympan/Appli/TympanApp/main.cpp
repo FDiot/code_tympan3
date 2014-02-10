@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file main.cpp
  * \brief fichier principal de lancement de l'application Tympan en mode IHM
@@ -106,7 +106,7 @@ static int tyMain(int argc, char** argv)
         tyApp.close();
     }
     OMessageManager::get()->debug("Counters : TYElements created %u, deleted %u and ID generated %u",
-    		TYElement::getConstructorCount(), TYElement::getDestructorCount(), TYElement::getIdGenerationCount());
+                                  TYElement::getConstructorCount(), TYElement::getDestructorCount(), TYElement::getIdGenerationCount());
     qInstallMsgHandler(old_handler);
 
     // return code

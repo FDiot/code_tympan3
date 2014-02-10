@@ -75,13 +75,13 @@ TYMateriauConstruction* get_material(TYTabAcousticSurfaceGeoNode surfaces)
             }
 
             pVolParentSurface = (TYAcousticVolume*)pParentSurface;
-             mat = pVolParentSurface->getMateriau();
+            mat = pVolParentSurface->getMateriau();
         }
         // cout << "mat.getMasseVol(): " << mat.getMasseVol() << endl;
         // Spectrum.
         // OSpectre SpectreAbso = mat.getSpectreAbsoEyring();
-		return mat;
+        return mat;
     }
-	return NULL;
+    return NULL;
 };
 } // namespace 'tympan'

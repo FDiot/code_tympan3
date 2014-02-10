@@ -225,7 +225,7 @@ void TYOpenElementDialog::openBDTopo()
     DirectoryName = QDir::convertSeparators(DirectoryName);
 
     DirectoryName = QFileDialog::getExistingDirectory(
-        this, TR("Choose a directory"), DirectoryName);
+                        this, TR("Choose a directory"), DirectoryName);
 
 
     if (!DirectoryName.isEmpty())
