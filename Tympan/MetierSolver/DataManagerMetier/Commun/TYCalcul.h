@@ -218,7 +218,7 @@ public:
     bool getIsUpTodate() const { return _upTodate; }
 
     /**
-     * \fn  void setUseSol(bool use)
+     * \fn  void setIsUpTodate(bool upTodate)
      * \brief Set de l'etat calcul a jour ou non par rapport a l'infrastructure.
      */
     void setIsUpTodate(bool upTodate) { _upTodate = upTodate; }
