@@ -29,7 +29,8 @@
 
 // #include "Tympan/MetierSolver/DataManagerMetier/SolverDataModelBuilder.hpp"
 
-namespace tympan {
+namespace tympan
+{
 class UuidAdapter;
 } // namespace tympan
 

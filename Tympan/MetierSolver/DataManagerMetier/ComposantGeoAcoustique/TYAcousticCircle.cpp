@@ -423,34 +423,38 @@ void TYAcousticCircle::setDiameter(double diameter)
 }
 
 void TYAcousticCircle::exportMesh(
-		std::deque<OPoint3D>& points,
-                std::deque<OTriangle>& triangles,
-                const TYGeometryNode& geonode) const
+    std::deque<OPoint3D>& points,
+    std::deque<OTriangle>& triangles,
+    const TYGeometryNode& geonode) const
 {
-    assert(points.size()==0 &&
+    assert(points.size() == 0 &&
            "Output arguments 'points' is expected to be initially empty");
-    assert(triangles.size()==0 &&
+    assert(triangles.size() == 0 &&
            "Output arguments 'triangles' is expected to be initially empty");
 
     int resolution = TYDEFAULTRESOLUTIONIONCIRCLE;
 #if TY_USE_IHM
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "ResolutionCircle"))
+    {
         resolution = TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "ResolutionCircle");
+    }
     else
+    {
         TYPreferenceManager::setInt(TYDIRPREFERENCEMANAGER, "ResolutionCircle", resolution);
+    }
 #endif // TY_USE_IHM
 
     TYTabPoint3D poly = getOContour(resolution);
     OPoint3D center = geonode.localToGlobal(getCenter());
     points.push_back(center);
     points.push_back(geonode.localToGlobal(poly[0]));
-    for(int i=1; i<resolution; ++i)
+    for (int i = 1; i < resolution; ++i)
     {
         // poly[i] (local) become points[i+1] (global)
         points.push_back(geonode.localToGlobal(poly[i]));
-        OTriangle tri(center, points[i], points[i+1]);
-        tri._p1=0; tri._p2=i; tri._p3=i+1;
+        OTriangle tri(center, points[i], points[i + 1]);
+        tri._p1 = 0; tri._p2 = i; tri._p3 = i + 1;
     }
     OTriangle tri(center, points[resolution], points[1]);
-    tri._p1=0; tri._p2=resolution; tri._p3=1;
+    tri._p1 = 0; tri._p2 = resolution; tri._p3 = 1;
 }

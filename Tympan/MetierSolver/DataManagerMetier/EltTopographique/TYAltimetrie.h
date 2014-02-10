@@ -26,11 +26,12 @@
 #include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
 #include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
 
-namespace tympan {
-typedef boost::error_info<struct tag_elements_implied,
-                          std::deque<LPTYElement> > elements_implied_errinfo;
-typedef boost::error_info<struct tag_position,
-                          OPoint3D> position_errinfo;
+namespace tympan
+{
+typedef boost::error_info < struct tag_elements_implied,
+        std::deque<LPTYElement> > elements_implied_errinfo;
+typedef boost::error_info < struct tag_position,
+        OPoint3D > position_errinfo;
 } // namespace tympan
 
 #if TY_USE_IHM
@@ -84,25 +85,25 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-//  XXX is being refactored to enable plugin back AltimetryBuilder result.
-//    /**
-//     * Calcul l'altimetrie a partir d'une collection de points.
-//     * L'altimetrie est le resultat de la triangulation de Delaunay calculee
-//     * a partir des points passes.
-//     *
-//     * @param points Les points pour calculer l'altimetrie.
-//     */
-//    virtual void compute(const TYTabPoint& points, const double& delaunay);
+    //  XXX is being refactored to enable plugin back AltimetryBuilder result.
+    //    /**
+    //     * Calcul l'altimetrie a partir d'une collection de points.
+    //     * L'altimetrie est le resultat de la triangulation de Delaunay calculee
+    //     * a partir des points passes.
+    //     *
+    //     * @param points Les points pour calculer l'altimetrie.
+    //     */
+    //    virtual void compute(const TYTabPoint& points, const double& delaunay);
 
-//  XXX Is being replaced by the new triangulation builder
-//      from the SolverDataModel component
-//    /**
-//     * Calcul l'altimetrie a partir d'une collection de points et de segments.
-//     * L'altimetrie est le resultat de la triangulation de Delaunay contrainte calculee
-//     * a partir des points passes et des segments.
-//     *
-//     */
-//    void computeWithConstraint(OConstraintDelaunayMaker& oConstraintDelaunayMaker);
+    //  XXX Is being replaced by the new triangulation builder
+    //      from the SolverDataModel component
+    //    /**
+    //     * Calcul l'altimetrie a partir d'une collection de points et de segments.
+    //     * L'altimetrie est le resultat de la triangulation de Delaunay contrainte calculee
+    //     * a partir des points passes et des segments.
+    //     *
+    //     */
+    //    void computeWithConstraint(OConstraintDelaunayMaker& oConstraintDelaunayMaker);
 
     /**
      * @brief plug back triangulation providfed by the TYTopographie
@@ -115,8 +116,8 @@ public:
      * @param triangles the faces of the triangulation
      */
     void plugBackTriangulation(
-    		const std::deque<OPoint3D>& points,
-    		std::deque<OTriangle>& triangles);
+        const std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles);
 
     /**
      * Set/Get de la liste des faces.
@@ -258,7 +259,7 @@ protected:
     OBox             _bbox;
 
 
-// The members below handle the accelerating grid : this could / should be a disctinc class
+    // The members below handle the accelerating grid : this could / should be a disctinc class
 
     /// \brief Initilise the grid related attributes for a null grid
     void initNullGrid();
@@ -267,7 +268,7 @@ protected:
     void clearAcceleratingGrid();
 
     /// \brief initialise the accelerating structure given current _bbox and _gridS{XY}
-    void initAcceleratingGrid(unsigned to_be_reserved=0);
+    void initAcceleratingGrid(unsigned to_be_reserved = 0);
 
     /// \brief Clear the grid and reinitialise it as a copy of \c other
     void copyAcceleratingGrid(const TYAltimetrie& other);

@@ -38,7 +38,8 @@ using std::string;
 #include "boost/tuple/tuple.hpp"
 
 // Import some names which could come either from std:: std::tr1 or boost:: into tympan::
-namespace tympan {
+namespace tympan
+{
 
 using boost::shared_ptr;
 using boost::weak_ptr;

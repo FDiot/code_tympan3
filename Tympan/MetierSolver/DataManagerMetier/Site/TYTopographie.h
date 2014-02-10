@@ -399,9 +399,9 @@ public:
      * @param triangles output argument filled with the faces of the triangulation
      */
     void computeAltimetricTriangulation(
-    		std::deque<OPoint3D>& points,
-    		std::deque<OTriangle>& triangles,
-    		bool use_emprise_as_level_curve = true);
+        std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles,
+        bool use_emprise_as_level_curve = true);
 
     /**
      * Calcule la pente moyenne pour le segment donne.
@@ -499,7 +499,7 @@ public:
      * @param p_materials optionnal output argument filled with the materials of the faces
      *
      */
-    void exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>* p_materials=NULL);
+    void exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>* p_materials = NULL);
 
 private :
 

@@ -125,13 +125,13 @@ void OPlan::set(const OPoint3D& pt, const OVector3D& normale)
 
 bool OPlan::is_null()
 {
-return _a==0 && _b==0 && _c==0;
+    return _a == 0 && _b == 0 && _c == 0;
 }
 
 bool OPlan::is_NaN()
 {
     return (boost::math::isnan(_a) || boost::math::isnan(_b) ||
-            boost::math::isnan(_c) || boost::math::isnan(_d) );
+            boost::math::isnan(_c) || boost::math::isnan(_d));
 }
 
 bool OPlan::is_valid()
@@ -361,14 +361,16 @@ bool OPlan::isOrthogonal(const OPlan& plan)
     return false;
 }
 
-void OPlan::update_explicit_repr( OVector3D hint /* = OVector3D(1, 1, 1) */ )
+void OPlan::update_explicit_repr(OVector3D hint /* = OVector3D(1, 1, 1) */)
 {
     // We check the plane is valid
     // assert(is_valid()); // This is too strong, null planes are crated by TYRectangles e.g.
     // 'Proper' null planes are silently ignored and planes built from NaN rejected
     assert(!is_NaN() && "Trying to build a plane from NaN values !");
-    if(is_null())
+    if (is_null())
+    {
         return;
+    }
 
     // The origin of the plane is the projection on the plane of the 3D origin.
     OVector3D N(_a, _b, _c);
@@ -379,17 +381,19 @@ void OPlan::update_explicit_repr( OVector3D hint /* = OVector3D(1, 1, 1) */ )
     {
         hint = OVector3D(0, 1, 0);
         if (N.dot(hint) > 0.9) // Test for near colinearity
+        {
             hint = OVector3D(0, 1, 0);
+        }
     }
     // Solve l.N belonging to the plane to find an origin
-    double l = - _d / ( _a*N._x + _b*N._y + _c*N._z);
-    OPoint3D origin( N*l );
+    double l = - _d / (_a * N._x + _b * N._y + _c * N._z);
+    OPoint3D origin(N * l);
     // orthogonal component of the hint vector
     double h = hint.dot(N);
-    OVector3D U(hint - h* N);
+    OVector3D U(hint - h * N);
     U.normalize();
-    assert( fabs(N.dot(U)) < 0.001 ) ; // Check validity of the construction
-    OVector3D V( N.cross(U) );
-    assert( fabs(V.norme()-1.0) < 0.01 ) ; // Check validity of the construction
+    assert(fabs(N.dot(U)) < 0.001) ;   // Check validity of the construction
+    OVector3D V(N.cross(U));
+    assert(fabs(V.norme() - 1.0) < 0.01) ; // Check validity of the construction
     rframe.set(origin, U, V, N);
 }

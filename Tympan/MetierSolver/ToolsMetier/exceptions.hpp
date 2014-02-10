@@ -33,13 +33,15 @@ namespace tympan
 struct exception: /* virtual std::exception,*/ virtual boost::exception {};
 
 /// The base exception class for internal logic / algorithmic errors
-struct logic_error: /*virtual*/ std::logic_error, virtual tympan::exception {
+struct logic_error: /*virtual*/ std::logic_error, virtual tympan::exception
+{
     logic_error() : std::logic_error("Code_TYMPAN internal logic error") {};
     logic_error(const std::string& desc) : std::logic_error(desc) {};
 };
 
 /// The base exception class for errors due to invalid data
-struct invalid_data: /*virtual*/ std::runtime_error, virtual tympan::exception {
+struct invalid_data: /*virtual*/ std::runtime_error, virtual tympan::exception
+{
     invalid_data() : std::runtime_error("Code_TYMPAN invalid data encountered") {};
     invalid_data(const std::string& desc) : std::runtime_error(desc) {};
 };
@@ -57,9 +59,9 @@ struct invalid_data: /*virtual*/ std::runtime_error, virtual tympan::exception {
 
 /// This macro build a \c source_loc object to be attached to a \c tympan::Exception
 #define tympan_source_loc  \
-        ::boost::throw_function(BOOST_CURRENT_FUNCTION) <<\
-        ::boost::throw_file(__FILE__) <<\
-        ::boost::throw_line((int)__LINE__)
+    ::boost::throw_function(BOOST_CURRENT_FUNCTION) <<\
+                                                    ::boost::throw_file(__FILE__) <<\
+                                                    ::boost::throw_line((int)__LINE__)
 
 
 #endif // TYMPAN__EXCEPTIONS_HPP__INCLUDED

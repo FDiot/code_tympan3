@@ -47,18 +47,18 @@ protected:
     BaseEntity() {};
 
 public:
-	virtual ~BaseEntity() {};
+    virtual ~BaseEntity() {};
 
-//    virtual tympan::shared_ptr<BaseEntity> ptr_any() = 0;
-//    virtual tympan::shared_ptr<BaseEntity const> ptr_any() const = 0;
-//
-//    template <class T>
-//    tympan::shared_ptr<T> ptr()
-//    { return boost::dynamic_pointer_cast<T>(ptr_any()); }
-//
-//    template <class T>
-//    tympan::shared_ptr<T const> ptr() const
-//    { return boost::dynamic_pointer_cast<T const>(ptr_any()); }
+    //    virtual tympan::shared_ptr<BaseEntity> ptr_any() = 0;
+    //    virtual tympan::shared_ptr<BaseEntity const> ptr_any() const = 0;
+    //
+    //    template <class T>
+    //    tympan::shared_ptr<T> ptr()
+    //    { return boost::dynamic_pointer_cast<T>(ptr_any()); }
+    //
+    //    template <class T>
+    //    tympan::shared_ptr<T const> ptr() const
+    //    { return boost::dynamic_pointer_cast<T const>(ptr_any()); }
 };
 
 //! Simple representation of an UUID (Universal Unique Identifier).

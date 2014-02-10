@@ -51,7 +51,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 #endif
 
-static inline double grid_step(double nb_triangles) {return sqrt(nb_triangles)/2;}
+static inline double grid_step(double nb_triangles) {return sqrt(nb_triangles) / 2;}
 
 struct triangle
 {
@@ -207,7 +207,7 @@ void TYAltimetrie::plugBackTriangulation(
     // Reset the grid to its new size
     clearAcceleratingGrid();
 
-    if(nbTriangles==0)
+    if (nbTriangles == 0)
     {
         // TODO Is this a logic_error, invalid_data or a do-nothing degenerate case ?
         // For now we throw after having cleaned the data structure.
@@ -231,7 +231,9 @@ void TYAltimetrie::plugBackTriangulation(
         TYTabPoint tabPt;
         tabPt.resize(3);
         for (j = 0; j < 3; j++)
+        {
             tabPt[j] = oTriangle.vertex(j);
+        }
         LPTYPolygon pPolygon = new TYPolygon(tabPt);
         assert(pPolygon != NULL);
 
@@ -251,7 +253,7 @@ void TYAltimetrie::plugBackTriangulation(
             if (!getGridIndices(oTriangle.vertex(j), idx))
             {
                 throw tympan::logic_error("Point out of the altimetry's bounding box")
-                    << tympan_source_loc << tympan::position_errinfo(oTriangle.vertex(j));
+                        << tympan_source_loc << tympan::position_errinfo(oTriangle.vertex(j));
             };
 
             ipmax = max(ipmax, idx.pi);
@@ -391,7 +393,7 @@ LPTYPolygon TYAltimetrie::getFaceUnder(OPoint3D pt)
     // Recherche des indices de la grilles qui incluent les sommets de la boite
     grid_index idx;
     bool test = getGridIndices(pt, idx);
-    if (!test) return 0;
+    if (!test) { return 0; }
     unsigned int pi = idx.pi, qi = idx.qi;
 
     TYTabLPPolygon* pDivRef = &(_pSortedFaces[pi][qi]);
@@ -422,7 +424,7 @@ unsigned int TYAltimetrie::getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPo
     // Recherche des indices de la grilles qui incluent les sommets de la boite
     unsigned int iMinMax[4];
     bool test = getGridIndices(box, iMinMax);
-    if (!test) return 0;
+    if (!test) { return 0; }
 
     // Récupération des faces correspondantes
     TYTabLPPolygon faces;
@@ -468,7 +470,7 @@ unsigned int TYAltimetrie::getPointsInBox(const OPoint3D& pt0, const OPoint3D& p
     unsigned int iMinMax[4];
 
     bool test = getGridIndices(pts, iMinMax);
-    if (!test) return 0;
+    if (!test) { return 0; }
 
     // Récupération des faces correspondantes
     TYTabLPPolygon faces;
@@ -502,7 +504,7 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY) const
         throw tympan::logic_error("No face in accelerating structure of the altimetry") << tympan_source_loc;
     }
     // A sanity check has to be represented by an assert, not an if silencing a failure.
-    assert(_pSortedFaces != NULL && "Sanity Check..." );
+    assert(_pSortedFaces != NULL && "Sanity Check...");
 
     if (!_bbox.isInside2D(pt)) //si le point n'est pas dans la bounding box de l'altimetrie
     {
@@ -525,8 +527,8 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY) const
 
     // In case pt lies on the top-most (resp. right-most) border of the bounding box
     // p could be exactly _gridSX (resp. q exactly _gridSY) and this needs clipping.
-    pi = min(pi, _gridSX-1);
-    qi = min(qi, _gridSY-1);
+    pi = min(pi, _gridSX - 1);
+    qi = min(qi, _gridSY - 1);
 
     assert((pi >= 0) && (qi >= 0) && (pi < _gridSX) && (qi < _gridSY));
 
@@ -548,7 +550,7 @@ bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) co
 
     bool res = true;
 
-    for (size_t i=0 ; i<4 ; i++)
+    for (size_t i = 0 ; i < 4 ; i++)
     {
         res &= getGridIndices(pts[i], iXY);
         minX = min(minX, iXY.pi);
@@ -565,11 +567,11 @@ bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) co
     return res;
 }
 
-bool TYAltimetrie::getGridIndices(const OBox2 &box, unsigned int* iMinMax) const
+bool TYAltimetrie::getGridIndices(const OBox2& box, unsigned int* iMinMax) const
 {
     OPoint3D pts[4];
 
-    for (size_t i=1, j=0 ; i<5 ; i++, j++)
+    for (size_t i = 1, j = 0 ; i < 5 ; i++, j++)
     {
         pts[j] = box.BoxCoord(i);
     }
@@ -591,7 +593,7 @@ void TYAltimetrie::getFacesinIndices(unsigned int& minX, unsigned int& maxX, uns
             pDivRef = &(_pSortedFaces[i][j]);
             for (size_t k = 0; k < pDivRef->size(); k++)
             {
-                mapFaces[pDivRef->at(k)] = i*j*k;
+                mapFaces[pDivRef->at(k)] = i * j * k;
             }
         }
     }
@@ -629,7 +631,7 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
     TYPolygon* pFace = NULL;
     TYTabLPPolygon& divRef = _pSortedFaces[idx.pi][idx.qi];
 
-    BOOST_FOREACH(const LPTYPolygon& pFace, divRef)
+    BOOST_FOREACH(const LPTYPolygon & pFace, divRef)
     {
         if (IsInsideFace(pFace->getPoints(), ptTest))
         {
@@ -652,7 +654,8 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
 bool TYAltimetrie::updateAltitude(OPoint3D& pt) const
 {
     pt = projection(pt);
-    if ( pt._z == invalid_altitude ) {
+    if (pt._z == invalid_altitude)
+    {
         OMessageManager::get()->warning(
             "%s Could not compute valid altitude for point at (%f, %f)",
             BOOST_CURRENT_FUNCTION, pt._x, pt._y);
@@ -772,7 +775,7 @@ void TYAltimetrie::clearAcceleratingGrid()
 
 void TYAltimetrie::initAcceleratingGrid(unsigned to_be_reserved)
 {
-    assert(_pSortedFaces==NULL && "The accelerating grid must have been cleared.");
+    assert(_pSortedFaces == NULL && "The accelerating grid must have been cleared.");
     assert(_gridSX && _gridSY && "The size of the grid must be positive.");
 
     _pSortedFaces = new TYTabLPPolygon*[_gridSX];

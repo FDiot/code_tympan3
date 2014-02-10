@@ -1535,7 +1535,7 @@ bool TYCalcul::go()
     // Creation de la liste des recepteurs
     OMessageManager::get()->info("Mise a jour du Site");
 
-    // NB This is the place to assert the "no sub-site assumption" 
+    // NB This is the place to assert the "no sub-site assumption"
     // required by some variant of the software
 
     // Fusion des sites
@@ -1669,9 +1669,9 @@ bool TYCalcul::go()
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
     {
         _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
-      }
+    }
     else
-      {
+    {
         TYPreferenceManager::setUInt(TYDIRPREFERENCEMANAGER, "NbThread", static_cast<unsigned long>(_nbThread));
     }
 

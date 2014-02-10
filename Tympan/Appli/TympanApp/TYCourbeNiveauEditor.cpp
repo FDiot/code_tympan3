@@ -119,7 +119,7 @@ void TYCourbeNiveauEditor::endCourbeNiveau()
             TYProjet* pProjet = getTYApp()->getCurProjet();
             if (pProjet)
             {
-                // XXX See ticket https://extranet.logilab.fr/ticket/1484188 
+                // XXX See ticket https://extranet.logilab.fr/ticket/1484188
                 pProjet->getSite()->updateAltimetrie(true);
                 pProjet->getSite()->updateAltiInfra(true);
                 pProjet->updateAltiRecepteurs();

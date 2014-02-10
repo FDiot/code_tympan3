@@ -16,14 +16,14 @@
 ::std::ostream& operator<<(::std::ostream& os, const OVector3D& v)
 {
     return os << "OVector3D"
-              << static_cast<const OCoord3D&>(v);
+           << static_cast<const OCoord3D&>(v);
 }
 
 
 ::std::ostream& operator<<(::std::ostream& os, const OPoint3D& v)
 {
     return os << "OPoint3D"
-              << static_cast<const OCoord3D&>(v);
+           << static_cast<const OCoord3D&>(v);
 }
 
 ::std::ostream& operator<<(::std::ostream& os, const OPlan& p)
