@@ -32,14 +32,13 @@ option( CGAL_DONT_OVERRIDE_CMAKE_FLAGS
         TRUE
       )
 
-## We are disabling CGAL in the engineering version of Code_TYMPAN 4.x.
-# find_package(CGAL COMPONENTS Qt4 REQUIRED)
-# if(CGAL_USE_FILE)
-#   message(STATUS "  ## including CGAL_USE_FILE at " "${CGAL_USE_FILE}")
-#   include(${CGAL_USE_FILE})
-# else(CGAL_USE_FILE)
-#   message(WARNING "  ## CGAL_USE_FILE is not set hence the configuration for CGAL might be incomplete")
-# endif(CGAL_USE_FILE)
+find_package(CGAL COMPONENTS Qt4 REQUIRED)
+if(CGAL_USE_FILE)
+  message(STATUS "  ## including CGAL_USE_FILE at " "${CGAL_USE_FILE}")
+  include(${CGAL_USE_FILE})
+else(CGAL_USE_FILE)
+  message(WARNING "  ## CGAL_USE_FILE is not set hence the configuration for CGAL might be incomplete")
+endif(CGAL_USE_FILE)
 
 if(WIN32)
   # Tries to put pre-built GMP and MPFR in the PATH
@@ -73,12 +72,26 @@ include_directories(${Boost_INCLUDE_DIRS})
 # This is useless but harmless if we link statically with Boost.
 list(APPEND TYMPAN_3RDPARTY_DLL_DIRS  ${Boost_LIBRARY_DIRS})
 
-# Yams++ dependency.
 # Load the module to add an external project.
 include (ExternalProject)
 # Set default 'ExternalProject' root directory.
 set_directory_properties(PROPERTIES EP_BASE ${PROJECT_BINARY_DIR}/3rdparty)
 
+# Add the Google Test project as an external project.
+ExternalProject_Add(GTest
+  URL ${TYMPAN_3RDPARTY_GTEST}
+  SOURCE_DIR "${PROJECT_SOURCE_DIR}/3rdparty/gtest-1.6.0"
+
+  # Configuration step. GTest doc said "Use shared (DLL) run-time lib even when
+  # Google Test is built as static lib."
+  CMAKE_ARGS -Dgtest_force_shared_crt=ON
+  # Installation step. Disable install step.
+  INSTALL_COMMAND ""
+)
+ExternalProject_Get_Property (GTest SOURCE_DIR BINARY_DIR)
+# SOURCE_DIR is related to the GTest project.
+include_directories (${SOURCE_DIR}/include)
+#NB Adding GTest include in the non-test tree is to enable gtest_prod.h
 ## We now process this 3rd party list of directories according to
 ## http://www.mail-archive.com/cmake@cmake.org/msg21493.html
 
@@ -132,4 +145,3 @@ message(STATUS "  ## GMP_MPFR_DIR : " "${GMP_MPFR_DIR}" )
 message(STATUS "  ## CGAL_LIBRARIES    : " ${CGAL_LIBRARIES})
 message(STATUS "  ## QT_LIBRARIES      : " ${QT_LIBRARIES})
 message(STATUS "  ## OPENGL_LIBRARIES  : " ${OPENGL_LIBRARIES})
-

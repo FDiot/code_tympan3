@@ -227,11 +227,12 @@ protected:
     */
     void appendSourceToAnalyticRayTracer(const TYSiteNode& site, TYCalcul& calcul, vector<R3>& tabSources);
 
-    /*!
-     *\fn void restitModifiedAlti(TYSiteNode& site)
-     *\brief Restitue au site la topographie (et infrastructure) transformee
-     */
-    void restitModifiedAlti(const TYSiteNode& site);
+    // Desactivated while refactoring the altimetry computation
+    //    /*!
+    //     *\fn void restitModifiedAlti(TYSiteNode& site)
+    //     *\brief Restitue au site la topographie (et infrastructure) transformee
+    //     */
+    //    void restitModifiedAlti(const TYSiteNode& site); // XXX Problem for refactoring altimetry computation
 
     /*!
      * \fn vec3 modifGeom(const vec3&)

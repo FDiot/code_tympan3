@@ -27,11 +27,18 @@
 
 #include <quuid.h>
 
+// #include "Tympan/MetierSolver/DataManagerMetier/SolverDataModelBuilder.hpp"
+
+namespace tympan {
+class UuidAdapter;
+} // namespace tympan
+
 class OGenID
 {
 	friend size_t qHash(const OGenID& uid);
 private:
     QUuid quid;
+    friend class tympan::UuidAdapter;
 
 public:
     OGenID();
@@ -53,33 +60,21 @@ public:
     bool operator <(const OGenID& other) const;
 };
 
-inline OGenID::OGenID()
-{
+inline OGenID::OGenID() {}
+inline OGenID::~OGenID() {}
 
-}
+inline OGenID::OGenID(const OGenID& other) :
+    quid(other.quid) {}
 
-inline OGenID::OGenID(const OGenID& other)
-{
-    quid = other.quid;
-}
-
-inline OGenID::OGenID(const QString& id)
-{
-    quid = QUuid(id);
-}
+inline OGenID::OGenID(const QString& id) :
+    quid(id) {}
 
 inline OGenID& OGenID::operator =(const OGenID& other)
 {
-
     quid = other.quid;
-
     return *this;
 }
 
-inline OGenID::~OGenID()
-{
-
-}
 
 inline void OGenID::GenUniqueID()
 {

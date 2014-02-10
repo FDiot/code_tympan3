@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -85,9 +85,12 @@ public:
     virtual TYTabPoint getContour(int n = -1) const;
 	virtual TYTabPoint3D getOContour(int n = -1) const;
 
+    // TODO Check and tests those methods for numerical stability
     virtual int intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const;
     virtual int intersects(const OSegment3D& seg, OPoint3D& pt) const;
     virtual int intersects(const OSegment3D& seg, OPoint3D& pt, bool insideTest) const;
+
+    //XXX This method is not numerically stable !
     virtual int intersects(const OPoint3D& pt) const;
 
     /**
@@ -179,10 +182,26 @@ public:
 
     virtual void inverseNormale();
 
+    /**
+     * @brief Export the surface as a triangular mesh
+     *
+     * NB : This function expect empty deques and will clear the deque passed.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     */
+    void
+    exportMesh(
+    		std::deque<OPoint3D>& points,
+    		std::deque<OTriangle>& triangles,
+                const TYGeometryNode& geonode) const;
+
+
+
     // Membres
 private:
     ///Sommets.
-    TYTabPoint      _pts;
+    TYTabPoint      _pts; // TODO change this to TYTabPoint3D
 
     OPlan           _plan;
 

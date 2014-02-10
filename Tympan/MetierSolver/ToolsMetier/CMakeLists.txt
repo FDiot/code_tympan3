@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 set(MODULE_NAME tympan_tools_metier)
 
-file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h)
+file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h *.hpp)
 
 # Those objects are also used by Solvers and as such need to be build as PIC
 # Once the solvers will be independents modules / executable this directory

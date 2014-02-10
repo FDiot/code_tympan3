@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -108,7 +108,6 @@ class TYSiteNode: public TYElement
 
     /// Get/Set de l'altitude associee a la courbe de niveau
     void setAltiEmprise(const double& altiEmprise) { _altiEmprise = altiEmprise; }
-    double getAltiEmprise() { return _altiEmprise; }
     const double getAltiEmprise() const { return _altiEmprise; }
 
     /**
@@ -291,7 +290,7 @@ class TYSiteNode: public TYElement
     void setListSiteNode(const TYTabSiteNodeGeoNode& list) { _listSiteNode = list; setIsGeometryModified(true); }
 
     /**
-     * Initialise l'iøΩtat "isInCurrentCalcul" des enfants d'un projet
+     * Initialise l'√©tat "isInCurrentCalcul" des enfants d'un projet
      */
     virtual void setChildsNotInCurrentCalcul();
 
@@ -347,7 +346,7 @@ class TYSiteNode: public TYElement
     virtual bool addToCalcul();
 
     /**
-     * Supprime tous les iøΩliøΩments d'un site du calcul
+     * Supprime tous les √©l√©ments d'un site du calcul
      */
     virtual bool remFromCalcul();
 
@@ -363,12 +362,23 @@ class TYSiteNode: public TYElement
     void updateSol();
 
     /**
+     * This method mainly calls \c do_updateAltimetrie and handle exceptions
+     * be capturing them and returning a success status.
+     *
+     * \return weather the update succeeded
+     */
+    virtual bool updateAltimetrie(const bool& force = false);
+
+protected:
+    /**
      * Mise a jour de l'altimetrie.
      * Dans TYSite, cette methode appelle essentiellement 'computeAltimetrie' de
      * TYTopographie, mais elle peut etre surchargee pour des besoins specifiques
      * lors du calcul de l'altimetrie.
      */
-    virtual void updateAltimetrie(const bool& force = false);
+    virtual void do_updateAltimetrie(const bool& force = false);
+
+public:
 
     /**
      * Mise a jour de l'altitude pour les elements de l'infrastructure.
@@ -387,7 +397,7 @@ class TYSiteNode: public TYElement
     void update(const bool& force = false);
 
     /**
-     * Recherche le parent "miøΩtier" d'un iøΩlement et le met iøΩ jour
+     * Recherche le parent "m√©tier" d'un √©lement et le met √© jour
      * @param pElem Pointeur sur un objet de type TYElement
      */
     bool update(TYElement* pElem);
@@ -397,7 +407,8 @@ class TYSiteNode: public TYElement
      * Collecte l'ensemble des points necessaires a la generation
      * de l'altimetrie pour les site imbriques.
      */
-    virtual TYTabPoint collectPointsForAltimetrie() const;
+    // XXX The process is being rewritten and this function removed
+    // virtual TYTabPoint collectPointsForAltimetrie() const;
 
     /**
      * Get du parametre de triangulation de Delaunay
@@ -407,8 +418,8 @@ class TYSiteNode: public TYElement
     /**
      * Cree la liste des faces des elements du site.
      *
-     * @param useEcran Indique si les faces des machines et biøΩtiments doivent
-     *                 etre prises en compte.
+     * @param useEcran Indique si les faces des machines et b√¢timents doivent
+     *                 etre prises en compte OBSOLETE MUST BE TRUE.
      *
      */
     void getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const;
@@ -483,7 +494,7 @@ protected:
     ///Position.
     TYPoint _position;
 
-    /// Nombre de faces de l'infrastructure (machines, biøΩtiments, etc ...)
+    /// Nombre de faces de l'infrastructure (machines, b√¢timents, etc ...)
     unsigned int _nbFaceInfra;
 
     unsigned int _nbFaces; // Nombre de faces total

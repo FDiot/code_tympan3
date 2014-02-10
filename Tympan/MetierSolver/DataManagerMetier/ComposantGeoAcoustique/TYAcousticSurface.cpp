@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -242,41 +242,49 @@ bool TYAcousticSurface::updateAcoustic(const bool& force) // force = false
 
 double TYAcousticSurface::surface() const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->surface();
 }
 
 OVector3D TYAcousticSurface::normal() const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->normal();
 }
 
 OPlan TYAcousticSurface::plan() const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->plan();
 }
 
 TYTabPoint TYAcousticSurface::getContour(int n /*=-1*/) const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->getContour(n);
 }
 
 TYTabPoint3D TYAcousticSurface::getOContour(int n /*=-1*/) const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->getOContour(n);
 }
 
 int TYAcousticSurface::intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->intersects(pSurf, seg);
 }
 
 int TYAcousticSurface::intersects(const OSegment3D& seg, OPoint3D& pt) const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->intersects(seg, pt);
 }
 
 int TYAcousticSurface::intersects(const OPoint3D& pt) const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->intersects(pt);
 }
 
