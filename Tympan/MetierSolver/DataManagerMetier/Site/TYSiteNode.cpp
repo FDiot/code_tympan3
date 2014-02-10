@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,15 +11,18 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
 
 
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <cassert>
+
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -496,7 +499,39 @@ void TYSiteNode::loadTopoFile()
     setIsGeometryModified(true);
 }
 
-/*virtual*/ void TYSiteNode::updateAltimetrie(const bool& force) // force = false
+/*virtual*/ bool TYSiteNode::updateAltimetrie(const bool& force) // force = false
+{
+    ostringstream msg;
+    OMessageManager& logger =  *OMessageManager::get();
+    try {
+        do_updateAltimetrie(force);
+        return true;
+    }
+    catch(const tympan::AltimetryBuilder::NonComparablePolygons& exc)
+    {
+        logger.error("Invalid ground material polygons prevented to update the altimetry");
+        // TODO move here reporting code from AltimetryBuilder
+        msg << boost::diagnostic_information(exc);
+        logger.debug(msg.str().c_str());
+        return false;
+    }
+    catch(const tympan::invalid_data& exc)
+    {
+        msg << boost::diagnostic_information(exc);
+        logger.error("Invalid data prevented to update the altimetry (set log level to debug for diagnosic)");
+        logger.debug(msg.str().c_str());
+        return false;
+    }
+    catch(const tympan::exception& exc)
+    {
+        msg << boost::diagnostic_information(exc);
+        logger.error("An error prevented to update the altimetry (set log level to debug for diagnosic)");
+        logger.debug(msg.str().c_str());
+        return false;
+    }
+}
+
+/*virtual*/ void TYSiteNode::do_updateAltimetrie(const bool& force) // force = false
 {
     if (!getIsGeometryModified() && !force) { return; } //L'altimetrie est a jour
 
@@ -504,7 +539,20 @@ void TYSiteNode::loadTopoFile()
 
     OMessageManager::get()->info("Mise a jour altimetrie...");
 
-    _pTopographie->getAltimetrie()->compute(collectPointsForAltimetrie(), getDelaunay());
+    /* This is the place where plug the AltimetryBuilder into :
+     *  1. pass the topographical elements to the AltimetryBuilder
+     *  2. get from it a table of points and triangles vertices
+     *  3. put that into the accelerating structure
+     *
+     */
+
+    // _pTopographie->getAltimetrie()->compute(collectPointsForAltimetrie(), getDelaunay());
+
+	std::deque<OPoint3D> points;
+	std::deque<OTriangle> triangles;
+	_pTopographie->computeAltimetricTriangulation(points, triangles, getUseEmpriseAsCrbNiv());
+	_pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles);
+
 
     setIsGeometryModified(false);  // L'altimetrie est a jour
 
@@ -536,7 +584,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
 #endif // TY_USE_IHM
 
     bool cancel = false;
-	bool bNoPbAlti = true;
+    bool bNoPbAlti = true;
 
     // Mise a jour de l'altitude pour les points des routes
     for (j = 0; j < _pInfrastructure->getListRoute().size() && !cancel; j++)
@@ -841,6 +889,8 @@ void TYSiteNode::updateAcoustique(const bool& force)
     }
 }
 
+// XXX The process is being rewritten and this function removed
+/*
 TYTabPoint TYSiteNode::collectPointsForAltimetrie() const
 {
     TYTabPoint points;
@@ -876,6 +926,9 @@ TYTabPoint TYSiteNode::collectPointsForAltimetrie() const
 
     // Collecte des sites childs
     TYTabSiteNodeGeoNode sites = collectSites(false);
+
+    // Remove the points of the outter site which lie within the inner site.
+    // This (buggy) feature is to be disabled awaiting better specification.
 
     for (i = 0; i < ptsOfThisSite.size(); i++)
     {
@@ -917,6 +970,7 @@ TYTabPoint TYSiteNode::collectPointsForAltimetrie() const
 
     return points;
 }
+*/
 
 double TYSiteNode::getDelaunay()
 {
@@ -940,10 +994,15 @@ double TYSiteNode::getDelaunay()
 
 //az++ (revoir les faces des ecrans; il vaudrait mieux en ajouter proprement):
 // tableau d'index des faces ecrans
+// According to ticket https://extranet.logilab.fr/ticket/1459658 the notion
+// of ecran is obsolete
+// TODO remove cleanly related stuff
 vector<bool> EstUnIndexDeFaceEcran;
 
 void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const
 {
+    assert(useEcran && "The useEcran option is obsolete and should always be true before being removed.");
+
     std::ofstream file;
     file.open("logsChargement.txt", ios::out | ios::trunc);
     file << "Chargement de la liste des faces." << endl;
@@ -981,19 +1040,19 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
                     OMatrix matriceEtage = pBatiment->getTabAcousticVol().at(j)->getMatrix();
                     if (pEtage)
                     {
-                        //RiøΩcupiøΩration des faces des murs
+                        //R√©cup√©ration des faces des murs
                         for (unsigned int k = 0; k < pEtage->getTabMur().size(); k++)
                         {
                             TYMur* mur = TYMur::safeDownCast(pEtage->getTabMur().at(k)->getElement());
                             OMatrix matriceMur = pEtage->getTabMur().at(k)->getMatrix();
                             if (mur)
                             {
-                                file << "RiøΩcupiøΩration d'un mur rectangulaire." << endl;
+                                file << "R√©cup√©ration d'un mur rectangulaire." << endl;
                                 TYAcousticRectangle* pRect = TYAcousticRectangle::safeDownCast(mur->getTabAcousticSurf().at(0)->getElement());
                                 if (pRect)
                                 {
                                     //Conversion de la face du mur en AcousticSurfaceGeoNode
-                                    file << "RiøΩcupiøΩration d'un rectangle." << endl;
+                                    file << "R√©cup√©ration d'un rectangle." << endl;
                                     file << "Ajout de la face " << compteurFace  << ", etage " << j << ", batiment " << i << endl;
                                     LPTYAcousticSurfaceGeoNode newNode = LPTYAcousticSurfaceGeoNode(new TYAcousticSurfaceGeoNode(pRect, matriceEtage * matriceMur));
                                     tabTmp.push_back(newNode);
@@ -1111,6 +1170,11 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
     //EstUnIndexDeFaceEcran n'est pas a affecter, car les faces d'infrastructures sont separees de celles de l'alti,
     //donc sachant ou commence les faces d'alti, le test "est un ecran" n'a pas de sens pour ces dernieres
 
+
+    // WIP here : the materials {c/sh}ould be stored in the TYAcousticPolygon
+    //            and thus be stored or exracted from the Altimetry ?
+    //            or is this data pulling from the solver to be replaced by data
+    //            pushing from the site to the model
     TYTabLPPolygon& listFacesAlti = _pTopographie->getAltimetrie()->getListFaces();
     unsigned int nbFacesAlti = static_cast<uint32>(listFacesAlti.size());
 
@@ -1135,6 +1199,7 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
 
 void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const
 {
+    assert(useEcran && "The useEcran option is obsolete and should always be true before being removed.");
     EstUnIndexDeFaceEcran.clear();
 
     unsigned int j, i;
@@ -1303,13 +1368,13 @@ bool TYSiteNode::update(TYElement* pElem)
 
     if (pElem->inherits("TYSourcePonctuelle"))
     {
-        return true; // Pas de mise iøΩ jour niøΩcessaire
+        return true; // Pas de mise √† jour n√©cessaire
     }
-    else if (pElem->inherits("TYAcousticLine")) // Cas 1 : un objet de type source liniøΩique
+    else if (pElem->inherits("TYAcousticLine")) // Cas 1 : un objet de type source lin√©ique
     {
         TYAcousticLine::safeDownCast(pElem)->updateAcoustic(true);
     }
-    else // Autres cas, recherche de parent et traitement appropriiøΩ
+    else // Autres cas, recherche de parent et traitement appropri√©
     {
         TYElement* pParent = pElem; // On commencera par tester l'objet lui-meme
         do
@@ -1317,13 +1382,13 @@ bool TYSiteNode::update(TYElement* pElem)
             if (pParent->inherits("TYAcousticVolumeNode"))
             {
                 ret = TYAcousticVolumeNode::safeDownCast(pParent)->updateAcoustic(true);
-                break; // On a trouviøΩ, on peut sortir
+                break; // On a trouv√©, on peut sortir
             }
             else if (pParent->inherits("TYSiteNode"))
             {
                 TYSiteNode::safeDownCast(pParent)->update();
                 ret = true;
-                break; // On a trouviøΩ, on peut sortir
+                break; // On a trouv√©, on peut sortir
             }
 
             pParent = pParent->getParent();
@@ -1337,6 +1402,8 @@ bool TYSiteNode::update(TYElement* pElem)
 
 void TYSiteNode::update(const bool& force) // Force = false
 {
+    // XXX See ticket https://extranet.logilab.fr/ticket/1484188
+
     // Mise a jour de l'altimetrie du site principal
     updateAltimetrie(force);
 
@@ -1354,7 +1421,7 @@ void TYSiteNode::update(const bool& force) // Force = false
         if (pSite && pSite->isInCurrentCalcul()) { pSite->update(force); }
     }
 
-    // Si le site est dans un projet, on altimiøΩtrise les points de controle
+    // Si le site est dans un projet, on altim√©trise les points de controle
     if (_pProjet)
     {
         TYCalcul* pCalcul = _pProjet->getCurrentCalcul()._pObj;
@@ -1532,7 +1599,7 @@ void TYSiteNode::appendSite(LPTYSiteNode pSiteFrom, const OMatrix& matrix, LPTYS
     LPTYTopographie pTopoFrom = pSiteFrom->getTopographie();
     LPTYTopographie pTopoTo = pSiteTo->getTopographie();
 
-    // BUG #0008309 : Courbe de niveau pas prise en compte dans l'altimiøΩtrie
+    // TODO BUG #0008309 : Courbe de niveau pas prise en compte dans l'altim√©trie
     if (pSiteFrom->getUseEmpriseAsCrbNiv())
     {
         pTopoTo->addCrbNiv(new TYCourbeNiveau(pTopoFrom->getEmprise(), pSiteFrom->getAltiEmprise()));

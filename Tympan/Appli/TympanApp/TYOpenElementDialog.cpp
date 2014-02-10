@@ -333,6 +333,7 @@ void TYOpenElementDialog::openElement(LPTYElement pElt)
             LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElt);
             if (pSite)
             {
+                // XXX See ticket https://extranet.logilab.fr/ticket/1484188
                 getTYApp()->setCurSiteNode(pSite);
                 pSite->updateAltimetrie();
             }

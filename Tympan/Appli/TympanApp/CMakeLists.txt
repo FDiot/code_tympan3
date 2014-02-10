@@ -1,6 +1,6 @@
 set(MODULE_NAME tympan_qt_app)
 
-file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h)
+file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h *.hpp)
 # Some problematic / unused source files to be removed
 # list(REMOVE_ITEM ${MODULE_NAME}_SRCS )
 
@@ -39,7 +39,8 @@ qt4_wrap_cpp(${MODULE_NAME}_MOC_SRCS ${${MODULE_NAME}_MOC_HDRS})
 
 # Beware: those "modules" aka libraries must be given in reverse dependency order
 # XXX Check whether tympan_acoustic_raytracer must be linked here or in solver modules
-set(TYMPAN_MODULES  tympan_acoustic_raytracer tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
+set(TYMPAN_MODULES  tympan_acoustic_raytracer tympan_solver_data_model
+                    tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
 		    tympan_tools_metier tympan_tools_graphics
 		    tympan_tools
 )

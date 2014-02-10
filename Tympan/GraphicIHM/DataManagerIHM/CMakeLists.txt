@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 set(MODULE_NAME tympan_dm_ihm)
 
-file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h)
+file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h *.hpp)
 
 # Headers requiring MOC pre-processing...
 file(GLOB ${MODULE_NAME}_MOC_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h )
