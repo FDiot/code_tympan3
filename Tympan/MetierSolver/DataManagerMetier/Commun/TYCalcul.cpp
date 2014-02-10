@@ -1544,7 +1544,7 @@ bool TYCalcul::go()
     // Actualisation de l'altimetrie des recepteurs (securite)
     pProjet->updateAltiRecepteurs(pMergeSite->getTopographie()->getAltimetrie());
 
-    pMergeSite->init(this);
+    pMergeSite->setAtmosphere(getAtmosphere());
 
     TYNameManager::get()->enable(false);
 

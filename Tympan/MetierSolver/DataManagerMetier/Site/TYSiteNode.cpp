@@ -1243,9 +1243,9 @@ void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& 
 
 }
 
-void TYSiteNode::init(const LPTYCalcul& pCalcul)
+void TYSiteNode::setAtmosphere(const LPTYAtmosphere& pAtmosphere)
 {
-    _pTopographie->updateSol(*pCalcul->getAtmosphere());
+    _pTopographie->updateSol(*pAtmosphere);
 }
 
 void TYSiteNode::setChildsNotInCurrentCalcul()
