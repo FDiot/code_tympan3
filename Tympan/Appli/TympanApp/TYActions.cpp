@@ -16,17 +16,11 @@
 /**
  * \file TYActions.cpp
  * \brief action qui necessite l'acces au modeler
- *
- *
  */
-
-
-
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-
 
 TYAddAccSurfToAccSurfNodeAction::TYAddAccSurfToAccSurfNodeAction(LPTYAcousticSurfaceGeoNode pAccSurfGeoNode,
                                                                  LPTYAcousticSurfaceNode pAccSurfNode,
@@ -438,14 +432,14 @@ TYAddElementToTopoAction::TYAddElementToTopoAction(SmartPtr<TYGeometryNode > pEl
                                                    TYModelerFrame* pModeler, const QString& actionName)
     : TYModelerAction(pModeler, actionName), _pElementGeoNode(pElementGeoNode), _pTopo(pTopo)
 {
-    if (_pTopo) { _pTopo->addRef(); }
+    if (_pTopo) { _pTopo->incRef(); }
 }
 
 TYAddElementToTopoAction::TYAddElementToTopoAction(LPTYElement pElement, LPTYTopographie pTopo,
                                                    TYModelerFrame* pModeler, const QString& actionName)
     : TYModelerAction(pModeler, actionName), _pTopo(pTopo)
 {
-    if (_pTopo) { _pTopo->addRef(); }
+    if (_pTopo) { _pTopo->incRef(); }
 
     if (pElement->isA("TYCourbeNiveau"))
     {

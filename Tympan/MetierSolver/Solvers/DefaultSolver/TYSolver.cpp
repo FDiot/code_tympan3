@@ -17,7 +17,6 @@
  *
  */
 
-
 #include "Tympan/MetierSolver/ToolsMetier/OThreadPool.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
 #include "TYSolver.h"
@@ -51,7 +50,7 @@ TYSolver::~TYSolver()
     if (_tabPolygon)
         for (size_t i = 0; i < _tabPolygonSize; ++i)
         {
-            _tabPolygon[i].pSurfGeoNode->release();
+            _tabPolygon[i].pSurfGeoNode->decRef();
         }
 
     if (_faceSelector)
@@ -82,7 +81,7 @@ void TYSolver::purge()
     {
         for (size_t i = 0; i < _tabPolygonSize; i++)
         {
-            _tabPolygon[i].pSurfGeoNode->release();
+            _tabPolygon[i].pSurfGeoNode->decRef();
         }
     }
 
@@ -196,7 +195,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
         for (size_t i = 0; i < _tabPolygonSize; ++i)
             if (_tabPolygon[i].pSurfGeoNode)
             {
-                _tabPolygon[i].pSurfGeoNode->release();
+                _tabPolygon[i].pSurfGeoNode->decRef();
             }
         delete [] _tabPolygon;
         _tabPolygonSize = 0;
@@ -238,7 +237,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
 
         // Incrementation manuel du compteur de reference
         // Necessaire pour la non destruction du pointeur
-        _tabPolygon[i].pSurfGeoNode->addRef();
+        _tabPolygon[i].pSurfGeoNode->incRef();
 
         _tabPolygon[i].matInv = tabFaces[i]->getMatrix().getInvert();
         _tabPolygon[i].isEcran = estUnIndexDeFaceEcran[i];
@@ -296,7 +295,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
 
         // Incrementation manuel du compteur de reference
         // Necessaire pour la non destruction du pointeur
-        _tabPolygon[i].pSurfGeoNode->addRef();
+        _tabPolygon[i].pSurfGeoNode->incRef();
 
         _tabPolygon[i].matInv = OMatrix();
         _tabPolygon[i].isEcran = false;
