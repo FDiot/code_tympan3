@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_FACESET__
 #define __TY_FACESET__
-
 
 #include "TYRepere.h"
 #include "TYVolumeInterface.h"
@@ -34,9 +30,6 @@
 
 /**
  * Classe de definition d'un volume decrit sous forme d'un ensemble de facettes.
- *
- * @author Projet_Tympan
- *
  */
 class TYFaceSet: public TYElement, public TYVolumeInterface
 {

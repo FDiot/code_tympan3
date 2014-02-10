@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICRECTANGLE__
@@ -38,9 +35,6 @@ class OSegment3D;
 
 /**
  * Permet de creer des surfaces acoustiques rectangulaires.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticRectangle: public TYAcousticSurface
 {

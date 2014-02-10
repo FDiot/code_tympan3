@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_REGIME__
@@ -38,9 +35,6 @@
 
 /**
  * Classe pour definir les differents regimes d'un element du calcul.
- *
- * @author Projet_Tympan
- *
  */
 class TYRegime : public TYElement
 {

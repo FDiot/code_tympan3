@@ -33,8 +33,6 @@ class OGLGrid;
 
 /**
  * Classe pour la grille OGL
- *
- * @author Projet_Tympan.
  */
 class OGLGridElement : public OGLElement
 {

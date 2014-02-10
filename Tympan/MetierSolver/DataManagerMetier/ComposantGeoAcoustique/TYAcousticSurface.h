@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICSURFACE__
@@ -39,9 +36,6 @@
 
 /**
  * Permet de creer de elements acoustiques surfaciques.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticSurface: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYSurfaceInterface
 {

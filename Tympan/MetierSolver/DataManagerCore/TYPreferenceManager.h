@@ -38,8 +38,6 @@ class TYSpectre;
  * Classe statique pour la gestion des preferences dans Tympan.
  * Cette classe statique instancie un objet de type OPreferenceManager
  * et offre une interface statique pour une utilisation simple.
- *
- * @author Projet_Tympan
  */
 class TYPreferenceManager
 {

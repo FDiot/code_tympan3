@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_DIRECTIVITE__
@@ -72,10 +69,6 @@ typedef std::vector<TYDirectiviteAnglesValue> TYDirectiviteAnglesValueTab;
 
 /**
  * Classe pour definir la directivite d'une source acoustique ponctuelle.
- *
- * @author Projet_Tympan
- * @author Projet_Tympan
- *
  */
 class TYDirectivite: public TYElement
 {

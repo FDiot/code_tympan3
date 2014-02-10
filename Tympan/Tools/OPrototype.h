@@ -15,15 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
-
 
 #ifndef __O_PROTOTYPE__
 #define __O_PROTOTYPE__
-
 
 /////////////////////////////////////////////////////////////
 // Definition de macros pour la creation de nouveaux types
@@ -244,11 +239,6 @@ static const int PROTOTYPE_MAX_NB = 256;
  * necessaire de reprendre le modele ci-dessus pour chaque nouvelle
  * classe derivee de Prototype. Par contre les macros offrent un
  * moyen alternatif simple pour la creation de ce type de classe.
- *
- *
- * @author Projet_Tympan
- * @version 1.0 - 11/04/02
- *
  */
 class OPrototype
 {

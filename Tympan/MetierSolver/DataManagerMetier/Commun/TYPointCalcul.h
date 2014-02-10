@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_POINTCALCUL__
@@ -32,17 +29,10 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYPointCalculWidget.h"
 #endif
 
-
 /**
  * \file TYPointCalcul.h
  * \class TYPointCalcul
  * \brief  Classe de definition d'un point de calcul.C'est une classe derivee a TYPoint avec en plus un spectrepour contenir le resultat du calcul.
- * \author Projet_Tympan
- * \version v 1.1
- * \date 2008/01/21
- *
- *
- * @author Projet_Tympan
  */
 class TYPointCalcul: public TYPoint
 {

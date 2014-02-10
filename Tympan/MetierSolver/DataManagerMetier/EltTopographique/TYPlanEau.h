@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_PLAN_EAU__
@@ -38,9 +35,6 @@
  * Un plan d'eau est un terrain particulier, chaque points constituant la
  * delimitation ont a meme altitude.
  * Les plans d'eau sont pris en compte pour la generation de l'altimetrie.
- *
- * @author Projet_Tympan
- *
  */
 class TYPlanEau: public TYTerrain
 {

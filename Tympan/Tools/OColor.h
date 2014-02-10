@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __O_COLOR__
@@ -33,9 +30,6 @@
 
 /**
  * Classe definition un objet couleur.
- *
- * @author Projet_Tympan
- *
  */
 class OColor
 {

@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICSURFACENODE__
@@ -42,9 +39,6 @@
 
 /**
  * Composee d'une ou plusieurs surfaces acoustiques..
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticSurfaceNode: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYSurfaceInterface
 {

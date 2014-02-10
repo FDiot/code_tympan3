@@ -37,9 +37,6 @@ class OSegment3D;
 
 /**
  * Classe representant un ecran mince
- *
- * @author Projet_Tympan
- *
  */
 class TYEcran: public TYAcousticFaceSet
 {
@@ -93,7 +90,6 @@ public:
      * because TYEcran has always an horizontal lower face, that is not the case for any TYFaceSet
      */
     virtual int isInside(const TYPoint& pt) const;
-
 
     void setacousticFacesPourCalcul(bool bPourCalculTrajet);
 

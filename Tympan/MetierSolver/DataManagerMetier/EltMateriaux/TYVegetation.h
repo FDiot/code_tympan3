@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_VEGETATION__
@@ -34,9 +31,6 @@
 
 /**
  * Classe de definition d'une vegetation.
- *
- * @author Projet_Tympan
- *
  */
 class TYVegetation: public TYElement
 {

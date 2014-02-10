@@ -37,8 +37,6 @@ struct TYRayEvent;
 /**
  * Classe graphique pour representer un rayon
  * utilise par le calcul.
- *
- * @author Projet_Tympan
  */
 class TYRayGraphic : public TYElementGraphic
 {

@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ATMOSPHERE__
@@ -41,9 +38,6 @@
 
 /**
  * Classe de definition d'une atmosphere.
- *
- * @author Projet_Tympan
- * @author Projet_Tympan
  */
 class TYAtmosphere: public TYElement
 {

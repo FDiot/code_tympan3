@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_SPECTRE__
@@ -35,9 +32,6 @@ typedef std::vector<float> TYTabFreq;
 
 /**
  * Permet de stocker des valeurs de puissance accoustique pour differentes frequences.
- *
- * @author Projet_Tympan
- *
  */
 class TYSpectre: public TYElement, public OSpectre
 {

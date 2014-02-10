@@ -35,9 +35,6 @@
 
 /**
  * Comprend les proprietes acoustiques et geometriques d'un element de mur.
- *
- * @author Projet_Tympan
- *
  */
 class TYMurElement: public TYAcousticRectangle
 {

@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_TOPOGRAPHIE__
 #define __TY_TOPOGRAPHIE__
-
 
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYPlanEau.h"
@@ -34,7 +30,6 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYTopographieWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYTopographieGraphic.h"
 #endif
-
 
 ///Structure contenant un segment et un terrain.
 typedef struct
@@ -57,13 +52,8 @@ typedef struct
     short nbPts;            // Nombre de points dans le tableau
 } TYStructElemPts;
 
-
-
 /**
  * Centralise les elements de topographie.
- *
- * @author Projet_Tympan
- *
  */
 class TYTopographie: public TYElement
 {

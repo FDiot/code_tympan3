@@ -34,8 +34,6 @@ class OGLRectangle;
 
 /**
  * Classe de rectangle OGL
- *
- * @author Projet_Tympan.
  */
 class OGLRectangleElement : public OGLElement
 {

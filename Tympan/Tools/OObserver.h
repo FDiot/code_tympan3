@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __O_OBSERVER__
@@ -27,8 +24,6 @@
 
 /**
  * Classe abstraite Observer du pattern Observer.
- *
- * @author Projet_Tympan
  * @see     OSubject
  */
 class OObserver

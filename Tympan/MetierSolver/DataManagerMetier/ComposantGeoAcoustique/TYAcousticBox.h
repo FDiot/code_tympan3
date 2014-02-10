@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICBOX__
@@ -35,9 +32,6 @@
 
 /**
  * Permet des creer des boites acoustiques.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticBox: public TYAcousticVolume
 {

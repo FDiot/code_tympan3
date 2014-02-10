@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_SEGMENT__
 #define __TY_SEGMENT__
-
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
@@ -33,16 +29,11 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSegmentGraphic.h"
 #endif
 
-
 // TYRectangle.h est inclu a la fin de la declaration de TYSegment.
 class TYRectangle;
 
-
 /**
  * Classe de definition d'un segment.
- *
- * @author Projet_Tympan
- *
  */
 class TYSegment: public TYElement, public TYColorInterface
 {

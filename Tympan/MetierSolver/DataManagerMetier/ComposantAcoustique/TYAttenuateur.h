@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ATTENUATEUR__
@@ -33,9 +30,6 @@
 
 /**
  * Classe de definition d'un attenuateur.
- *
- * @author Projet_Tympan
- *
  */
 class TYAttenuateur: public TYElement
 {

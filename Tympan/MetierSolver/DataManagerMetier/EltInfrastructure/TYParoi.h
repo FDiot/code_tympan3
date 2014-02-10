@@ -34,9 +34,6 @@
 
 /**
  * Comprend les proprietes acoustiques et geometriques d'une paroi.
- *
- * @author Projet_Tympan
- *
  */
 class TYParoi: public TYElement
 {

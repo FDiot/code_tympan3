@@ -15,22 +15,16 @@
 
 /*
  *
- *
- *
- *
  */
-
 
 #ifndef __O_MESSAGE_MANAGER__
 #define __O_MESSAGE_MANAGER__
-
 
 #include "OSmartPtr.h"
 
 #include <iostream>
 #include <time.h>
 #include <qstring.h>
-
 
 #define MSG_DEBUG   0x0001
 #define MSG_BENCH   0x0002
@@ -53,9 +47,6 @@ typedef SmartPtr<OMessageManager> LPOMessageManager;
  * les methodes format() et output(), pour respectivement
  * modifier le formatage des messages et les rediriger.
  * Reprise du code C de Pascal Mobuchon.
- *
- * @author Projet_Tympan
- * @author Projet_Tympan
  */
 class OMessageManager : public IRefCount
 {

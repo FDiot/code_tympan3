@@ -30,9 +30,6 @@
 
 /**
  * Classe pour la gestion de l'import et l'export des elements Tympan en XML.
- *
- * @author Projet_Tympan
- *
  */
 class TYXMLManager
 {

@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __O_SIZEMANAGER__
@@ -36,9 +33,6 @@ typedef SmartPtr<OSizeManager> LPOSizeManager;
  * aux donnees de la fenetre notamment pour OpenGL.
  * Il serait bien que les donnees relatives a la taille soit, par la suite,
  * plus accessible.
- *
- * @author Projet_Tympan
- *
  */
 class OSizeManager : public IRefCount
 {

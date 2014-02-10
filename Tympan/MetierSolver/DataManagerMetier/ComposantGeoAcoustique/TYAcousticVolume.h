@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICVOLUME__
@@ -37,9 +34,6 @@
 
 /**
  * Permet de creer de elements acoustiques volumiques.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticVolume: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYVolumeInterface
 {

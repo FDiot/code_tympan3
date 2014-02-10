@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ROUTE_DEBLAI__
@@ -37,9 +34,6 @@
 
 /**
  * Comprend les proprietes acoustiques et geometriques d'une route de deblai.
- *
- * @author Projet_Tympan
- *
  */
 class TYRouteDeblai: public TYRoute, public TYContrainte
 {

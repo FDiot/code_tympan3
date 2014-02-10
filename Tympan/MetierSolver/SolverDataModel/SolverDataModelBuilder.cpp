@@ -2,9 +2,6 @@
  * @file SolverDataModelBuilder.cpp
  *
  * @brief Implementation of how to build a solver data model from a site.
- *
- * @author Anthony Truchet <anthony.truchet@logilab.fr>
- *
  */
 
 #include <boost/foreach.hpp>

@@ -40,9 +40,6 @@ class OSegment3D;
 
 /**
  * Centralise les elements d'un etage.
- *
- * @author Projet_Tympan
- *
  */
 class TYEtage: public TYAcousticVolume
 {

@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_BOUCHE_SURFACE__
@@ -38,8 +35,6 @@
  * de type source bafflee (TYSourceBafflee).
  * Cette source est conservee dans la source surfacique de la
  * super classe TYAcousticSurface, a l'index 0.
- *
- * @author Projet_Tympan
  */
 class TYBoucheSurface: public TYAcousticRectangle
 {

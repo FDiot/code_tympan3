@@ -46,9 +46,6 @@ typedef SmartPtr<TYImageManager> LPTYImageManager;
 
 /**
  * Gestionnaire d'image.
- *
- * @author Projet_Tympan
- *
  */
 class TYImageManager : public IRefCount
 {

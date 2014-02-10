@@ -34,8 +34,6 @@ class OGLLine;
 
 /**
  * Classe de ligne OGL
- *
- * @author Projet_Tympan.
  */
 class OGLLineElement : public OGLElement
 {

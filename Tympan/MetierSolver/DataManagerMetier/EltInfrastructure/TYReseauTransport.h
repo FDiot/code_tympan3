@@ -34,9 +34,6 @@
 
 /**
  * Comprend les proprietes acoustiques et geometriques d'un reseau de transport.
- *
- * @author Projet_Tympan
- *
  */
 class TYReseauTransport: public TYAcousticLine
 {

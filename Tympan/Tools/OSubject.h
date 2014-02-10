@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __O_SUBJECT__
@@ -39,8 +36,6 @@ typedef vector<OObserver*> OTabPtrObserver;
 
 /**
  * Classe abstraite Subject du pattern Observer.
- *
- * @author Projet_Tympan
  * @see     OObserver
  */
 class OSubject

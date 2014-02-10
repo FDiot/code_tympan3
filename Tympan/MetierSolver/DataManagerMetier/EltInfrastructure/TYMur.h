@@ -38,9 +38,6 @@ class OSegment3D;
 
 /**
  * Comprend les proprietes acoustiques et geometriques d'un mur.
- *
- * @author Projet_Tympan
- *
  */
 class TYMur: public TYAcousticRectangleNode
 {
@@ -137,6 +134,7 @@ public:
     TYMateriauConstruction* getMateriau();
 
     // Membres
+
 protected:
     /**
      * La paroi pour l'ensemble des elements de mur (TYMurElement) de contruction

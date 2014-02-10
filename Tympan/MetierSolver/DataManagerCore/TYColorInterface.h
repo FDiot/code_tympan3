@@ -26,9 +26,6 @@
 
 /**
  * Classe abstraite permettant d'ajouter une couleur a un objet.
- *
- * @author Projet_Tympan
- *
  */
 class TYColorInterface
 {

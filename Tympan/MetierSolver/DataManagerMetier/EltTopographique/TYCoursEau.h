@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_COURSEAU__
@@ -34,9 +31,6 @@
 
 /**
  * Classe de definition du chemin d'un cours d'eau et de ses proprietes acoustiques.
- *
- * @author Projet_Tympan
- *
  */
 class TYCoursEau: public TYAcousticLine
 {

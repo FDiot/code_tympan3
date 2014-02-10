@@ -15,23 +15,16 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_USER_SRC_REGIME__
 #define __TY_USER_SRC_REGIME__
-
 
 #include "TYRegime.h"
 #include "TYDirectivite.h"
 
 /**
  * Classe pour definir les differents regimes d'une source ponctuelle.
- *
- * @author Projet_Tympan
- *
  */
 class TYUserSrcRegime : public TYRegime
 {

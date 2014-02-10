@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_SOURCELINEIC__
@@ -34,9 +31,6 @@
 
 /**
  * Classe de definition d'une source lineique.
- *
- * @author Projet_Tympan
- *
  */
 class TYSourceLineic: public TYSource
 {

@@ -16,10 +16,6 @@
 /**
  * \file TYTopoToolbar.h
  * \brief Barre d'outils topographie (fichier header)
- * \author Projet_Tympan
- *
- *
- *
  */
 
 #ifndef __TY_TOPO_TOOLBAR__

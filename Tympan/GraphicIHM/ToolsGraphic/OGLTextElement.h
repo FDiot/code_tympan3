@@ -32,8 +32,6 @@
 class OGLFont;
 /**
  * Classe Text OGL
- *
- * @author Projet_Tympan.
  */
 class OGLTextElement : public OGLElement
 {

@@ -35,8 +35,6 @@ class OGLFont;
 
 /**
  * Classe de scalarBar OGL
- *
- * @author Projet_Tympan.
  */
 class OGLScalarBarElement : public OGLElement
 {

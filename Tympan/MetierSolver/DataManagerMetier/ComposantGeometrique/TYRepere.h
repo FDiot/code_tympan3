@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_REPERE__
 #define __TY_REPERE__
-
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "TYPoint.h"
@@ -31,12 +27,8 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYRepereWidget.h"
 #endif
 
-
 /**
  * Classe de definition d'un repere.
- *
- * @author Projet_Tympan
- *
  */
 class TYRepere: public TYElement, public ORepere3D
 {

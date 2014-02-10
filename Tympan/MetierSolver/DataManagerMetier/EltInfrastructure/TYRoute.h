@@ -23,7 +23,6 @@
 #ifndef __TY_ROUTE__
 #define __TY_ROUTE__
 
-
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYTrafic.h"
 
@@ -35,9 +34,6 @@
 
 /**
  * Comprend les proprietes acoustiques et geometriques d'une route.
- *
- * @author Projet_Tympan
- *
  */
 class TYRoute: public TYAcousticLine
 {

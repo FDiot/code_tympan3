@@ -34,8 +34,6 @@ class OGLSphere;
 
 /**
  * Classe de sphere OGL
- *
- * @author Projet_Tympan.
  */
 class OGLSphereElement : public OGLElement
 {

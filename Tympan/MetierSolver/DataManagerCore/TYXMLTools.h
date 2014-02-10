@@ -30,9 +30,6 @@
 
 /**
  * Methodes outils pour XML.
- *
- * @author Projet_Tympan
- *
  */
 class TYXMLTools
 {

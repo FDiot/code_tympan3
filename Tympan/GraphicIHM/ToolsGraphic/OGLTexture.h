@@ -32,9 +32,6 @@
 #include "Tympan/Tools/OSmartPtr.h"
 /**
  * Interface pour la gestion des textures OpengGL.
- *
- * @author Projet_Tympan
- *
  */
 class OGLTexture : public IRefCount
 {

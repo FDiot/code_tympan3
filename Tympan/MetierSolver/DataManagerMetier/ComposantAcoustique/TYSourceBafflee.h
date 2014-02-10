@@ -15,18 +15,13 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_SOURCE_BAFFLEE__
 #define __TY_SOURCE_BAFFLEE__
 
-
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticRectangle.h"
 #include "TYSourcePonctuelle.h"
-
 
 // nombre de valeurs de ka dans le tableau
 #ifdef NB_KA
@@ -51,8 +46,6 @@ class OSegment3D;
  * Ce type de source correspond aux bouches de ventilation.
  * Un rectangle acoustique est associee a cette source, il
  * correspond a la face sur laquelle se trouve la source.
- *
- * @author Projet_Tympan
  */
 class TYSourceBafflee: public TYSourcePonctuelle
 {

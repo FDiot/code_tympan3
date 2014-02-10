@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICVOLUMENODE__
@@ -35,9 +32,6 @@
 
 /**
  * Composee d'un ou plusieurs volumes acoustiques..
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticVolumeNode: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYVolumeInterface
 {

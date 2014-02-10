@@ -15,8 +15,6 @@
 
 /*
  *
- *
- *
  */
 
 #ifndef __TY_CONFIGURE__
@@ -95,8 +93,6 @@ typedef unsigned long long uint64;
  * Configuration du projet Tympan.
  * Ce fichier permet de preciser quelle API systeme est utilisee ou pas
  * pour l'IHM, le graphique (3D et/ou 2D) et l'impression.
- *
- * @author Projet_Tympan
  */
 
 ///Nom de la categorie pour la sauvegarde des preferences.
