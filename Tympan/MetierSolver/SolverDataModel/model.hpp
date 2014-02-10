@@ -21,8 +21,8 @@ class SolverModel
 {
 public:
 
-    SolverModel(){};
-    virtual ~SolverModel(){};
+    SolverModel() {};
+    virtual ~SolverModel() {};
 
     /**
      * @brief Maps a \c TYPoint or \c OPoint3D as a \c node_ref
@@ -47,7 +47,7 @@ public:
     const AcousticTriangle& triangle(triangle_idx tri_idx) const
     { return all_triangles[tri_idx]; }
 
-    Point & node(node_idx idx)
+    Point& node(node_idx idx)
     { return all_nodes[idx]; }
 
     const Point& node(node_idx idx) const
@@ -91,18 +91,18 @@ public:
 
 public: // XXX Could / should be protected but this complicates testing
 
-/*
-	// Comparison utilities
-	static bool equal_to (const node_idx & lhs, const node_idx & rhs)
-	{ return *lhs == *rhs; };
-	static bool equal_to (const Point& point, const node_idx & pnode)
-	{ return point == *pnode; }
-	static bool equal_to (const node_idx & pnode, const Point& point)
-	{ return equal_to(point, pnode); };
+    /*
+        // Comparison utilities
+        static bool equal_to (const node_idx & lhs, const node_idx & rhs)
+        { return *lhs == *rhs; };
+        static bool equal_to (const Point& point, const node_idx & pnode)
+        { return point == *pnode; }
+        static bool equal_to (const node_idx & pnode, const Point& point)
+        { return equal_to(point, pnode); };
 
-	static bool less_than (const node_idx & lhs, const node_idx & rhs);
-	static bool less_than (const Point& lhs, const Point& rhs);
-*/
+        static bool less_than (const node_idx & lhs, const node_idx & rhs);
+        static bool less_than (const Point& lhs, const Point& rhs);
+    */
 
 protected: // data members
 

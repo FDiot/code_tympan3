@@ -29,8 +29,8 @@ inline unsigned int total_point_number(LPTYSiteNode site_ptr)
 inline std::auto_ptr<std::deque<OPoint3D> > all_point(LPTYSiteNode site_ptr)
 {
     // TYTabPoint tab_points = site_ptr->collectPointsForAltimetrie();
-	std::auto_ptr<std::deque<OPoint3D> > p_points( new std::deque<OPoint3D>() );
-	std::deque<OTriangle> triangles;
+    std::auto_ptr<std::deque<OPoint3D> > p_points(new std::deque<OPoint3D>());
+    std::deque<OTriangle> triangles;
     site_ptr->getTopographie()->exportMesh(*p_points, triangles);
     return p_points;
 };

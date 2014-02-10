@@ -168,8 +168,10 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
                     tabPondFresnel = ComputeFrenelWeighting(tyRay, angle, Pref.distFrom(Psuiv), Pref);  // calcul des ponderations de Frenel
                     nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
 
-                    for(l=0; l<nbFacesFresnel; l++) // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
-                        sum = sum + coefRefl * tabPondFresnel[l]; // calcul du coeff de reflexion moy en ponderant avec les matériaux
+                    for (l = 0; l < nbFacesFresnel; l++) // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
+                    {
+                        sum = sum + coefRefl * tabPondFresnel[l];    // calcul du coeff de reflexion moy en ponderant avec les matériaux
+                    }
 
                     prod = prod * sum;
                 }

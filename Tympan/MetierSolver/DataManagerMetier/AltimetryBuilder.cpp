@@ -1,12 +1,12 @@
- /**
- * @file AltimetryBuilder.cpp
- *
- * @brief The \c AltimetryBuilder is responsible to build a altimetry compatilbe
- *        with the groud material
- *
- * @author Anthony Truchet <anthony.truchet@logilab.fr>
- *
- */
+/**
+* @file AltimetryBuilder.cpp
+*
+* @brief The \c AltimetryBuilder is responsible to build a altimetry compatilbe
+*        with the groud material
+*
+* @author Anthony Truchet <anthony.truchet@logilab.fr>
+*
+*/
 
 #include <strstream>
 #include <limits>
@@ -32,26 +32,30 @@ bool is_valid_altitude(double alti)
 
 
 MaterialPolygon::MaterialPolygon(const TYTerrain& terrain, const OMatrix& matrix)
-    throw(tympan::InvalidDataError)
-    : material( terrain.getSol() )
+throw(tympan::InvalidDataError)
+    : material(terrain.getSol())
     , p_origin_elem(&terrain)
 {
-    if (terrain.getListPoints().size()<=2)
+    if (terrain.getListPoints().size() <= 2)
+    {
         throw tympan::InvalidDataError("Invalid TYTerrain");
-    BOOST_FOREACH(const TYPoint& point, terrain.getListPoints())
-        CGAL_Polygon::push_back( to_cgal2_transform(matrix, point) );
+    }
+    BOOST_FOREACH(const TYPoint & point, terrain.getListPoints())
+    CGAL_Polygon::push_back(to_cgal2_transform(matrix, point));
     assert(this->is_simple());
 }
 
 MaterialPolygon::MaterialPolygon(const TYTabPoint& contour, material_t ground, const OMatrix& matrix)
-    throw(tympan::InvalidDataError)
+throw(tympan::InvalidDataError)
     : material(ground)
     , p_origin_elem(NULL)
 {
-    if (contour.size()<=2)
+    if (contour.size() <= 2)
+    {
         throw tympan::InvalidDataError("Invalid TYTerrain");
-    BOOST_FOREACH(const TYPoint& point, contour)
-        CGAL_Polygon::push_back( to_cgal2_transform(matrix, point) );
+    }
+    BOOST_FOREACH(const TYPoint & point, contour)
+    CGAL_Polygon::push_back(to_cgal2_transform(matrix, point));
     assert(this->is_simple());
 }
 
@@ -77,18 +81,23 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
     TYTabCourbeNiveauGeoNode& level_curves = topography.getListCrbNiv();
     // If we don't have any level curve we force the emprise to become one.
     if (level_curves.empty())
+    {
         process_emprise(topography, true);
+    }
     else
+    {
         process_emprise(topography, use_emprise_as_level_curve);
+    }
 
     BOOST_FOREACH(LPTYCourbeNiveauGeoNode p_geo_node, level_curves)
     {
         // Handle the elements' transform
-    	p_geo_node->updateMatrix();
+        p_geo_node->updateMatrix();
         const OMatrix& matrix = p_geo_node->getMatrix();
         TYCourbeNiveau* p_curve =
             TYCourbeNiveau::safeDownCast(p_geo_node->getElement());
-        try{
+        try
+        {
             process(*p_curve, matrix);
         }
         catch (tympan::InvalidDataError& error)
@@ -96,7 +105,7 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
             OMessageManager::get()->warning(
                 "Invalid level curve is ignored in building the Altimetry : %s (%s)",
                 p_geo_node->getElement()->getName().toUtf8().data(),
-                error.what() );
+                error.what());
 
         }
     }
@@ -105,10 +114,11 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
     {
         TYPlanEau* p_water =
             TYPlanEau::safeDownCast(p_geo_node->getElement());
-    	p_geo_node->updateMatrix();
+        p_geo_node->updateMatrix();
         const OMatrix& matrix = p_geo_node->getMatrix();
         // This assumes the _pCrbNiv is up to date (TODO to be checked)
-        try{
+        try
+        {
             process(*p_water->getCrbNiv(), matrix); // Process the underlying level curve
             process(*p_water, matrix); // TYPlanEau inherits from TYTerain
         }
@@ -117,7 +127,7 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
             OMessageManager::get()->warning(
                 "Invalid water piece is ignored in building the Altimetry : %s (%s)",
                 p_geo_node->getElement()->getName().toUtf8().data(),
-                error.what() );
+                error.what());
         }
     }
 
@@ -125,9 +135,10 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
     {
         TYTerrain* p_ground =
             TYTerrain::safeDownCast(p_geo_node->getElement());
-    	p_geo_node->updateMatrix();
+        p_geo_node->updateMatrix();
         const OMatrix& matrix = p_geo_node->getMatrix();
-        try{
+        try
+        {
             process(*p_ground, matrix);
         }
         catch (tympan::InvalidDataError& error)
@@ -135,7 +146,7 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
             OMessageManager::get()->warning(
                 "Invalid ground material area is ignored in building the Altimetry : %s (%s)",
                 p_geo_node->getElement()->getName().toUtf8().data(),
-                error.what() );
+                error.what());
         }
     }
 }
@@ -147,14 +158,14 @@ AltimetryBuilder::process_emprise(TYTopographie& topography, bool as_level_curve
     // If required, we process the emprise as a level curve
     if (as_level_curve)
     {
-    	/* cf. AltimetryBuilder::process(TYCourbeNiveau&, bool)*/
+        /* cf. AltimetryBuilder::process(TYCourbeNiveau&, bool)*/
         // Fetch parent TYSite altitude
         TYSiteNode* pSiteNode = TYSiteNode::safeDownCast(topography.getParent());
         assert(pSiteNode && "This TYTopographie is expected to have a TYSiteNode as parent.");
         double alti = pSiteNode->getAltiEmprise();
         addAsConstraint(
-        		ty_tab_points | transformed(boost::bind(to_cgal2_info, alti, _1)),
-        		true);
+            ty_tab_points | transformed(boost::bind(to_cgal2_info, alti, _1)),
+            true);
     }
     // We purposefully do not process the land-take as a default
     // terrain area. Indeed, un most cases, it will be impoossible to
@@ -173,7 +184,9 @@ AltimetryBuilder::process(TYCourbeNiveau& courbe_niveau, const OMatrix& matrix, 
 {
     TYTabPoint& ty_tab_points = courbe_niveau.getListPoints();
     if (ty_tab_points.empty())
+    {
         throw tympan::InvalidDataError("Empty TYCourbeNiveau");
+    }
     double alti = courbe_niveau.getAltitude();
     /* We build a boost::Range of CGAL points on the fly  by calling
      * to_cgal2_info(alti, p) for each point p in ty_tab_points,
@@ -193,61 +206,65 @@ AltimetryBuilder::computeAltitude(const CGAL_Point& p) const
     // Query the triangulation for the location of p
     CDT::Locate_type lt;
     int li;
-    CDT::Face_handle fh = alti_cdt.locate(p,lt, li);
-    switch(lt)
+    CDT::Face_handle fh = alti_cdt.locate(p, lt, li);
+    switch (lt)
     {
-    case CDT::VERTEX:
-        // The point IS a vertex of the known altimetry triangulation
-        return fh->vertex(li)->info().altitude;
-    case CDT::EDGE:
-        // We test that the face is a finite face or we change for the opposite face
-        // (which must be finite) then we fall back on the finite face case
-        if (alti_cdt.is_infinite(fh))
-        {
-            fh = fh->neighbor(li) ;
+        case CDT::VERTEX:
+            // The point IS a vertex of the known altimetry triangulation
+            return fh->vertex(li)->info().altitude;
+        case CDT::EDGE:
+            // We test that the face is a finite face or we change for the opposite face
+            // (which must be finite) then we fall back on the finite face case
             if (alti_cdt.is_infinite(fh))
-                throw AlgorithmicError("AltimetryBuilder::computeAltitude: degenerate triangulation");
-        } // no break : we DO want to fall back on the finite face case
+            {
+                fh = fh->neighbor(li) ;
+                if (alti_cdt.is_infinite(fh))
+                {
+                    throw AlgorithmicError("AltimetryBuilder::computeAltitude: degenerate triangulation");
+                }
+            } // no break : we DO want to fall back on the finite face case
 
-    case CDT::FACE:
-    {
-        // This is the simple case of an inner/finite face
-        // We rely on CGAL intersection computation in 3D between the triangle
-	// and a vertical line going through p
-	double x[3], y[3], z[3];
-	for(int i=0; i<3; i++)
-	{
-		CGAL_Gt::Point_2 q = fh->vertex(i)->point();
-		x[i] = q.x();
-		y[i] = q.y();
-		z[i] = fh->vertex(i)->info().altitude;
-	}
-	CGAL_Gt::Triangle_3 tri3(
-			CGAL_Gt::Point_3(x[0], y[0], z[0]),
-			CGAL_Gt::Point_3(x[1], y[1], z[1]),
-			CGAL_Gt::Point_3(x[2], y[2], z[2]));
-	CGAL_Gt::Line_3 line(CGAL_Gt::Point_3(p.x(), p.y(), 0), CGAL_Gt::Vector_3(0, 0, 1));
+        case CDT::FACE:
+        {
+            // This is the simple case of an inner/finite face
+            // We rely on CGAL intersection computation in 3D between the triangle
+            // and a vertical line going through p
+            double x[3], y[3], z[3];
+            for (int i = 0; i < 3; i++)
+            {
+                CGAL_Gt::Point_2 q = fh->vertex(i)->point();
+                x[i] = q.x();
+                y[i] = q.y();
+                z[i] = fh->vertex(i)->info().altitude;
+            }
+            CGAL_Gt::Triangle_3 tri3(
+                CGAL_Gt::Point_3(x[0], y[0], z[0]),
+                CGAL_Gt::Point_3(x[1], y[1], z[1]),
+                CGAL_Gt::Point_3(x[2], y[2], z[2]));
+            CGAL_Gt::Line_3 line(CGAL_Gt::Point_3(p.x(), p.y(), 0), CGAL_Gt::Vector_3(0, 0, 1));
 
-        CGAL::Object result = CGAL::intersection(tri3, line);
-        // We check that the intersection is actually a point as it should
-        const CGAL_Gt::Point_3 *ip = CGAL::object_cast<CGAL_Gt::Point_3>(&result);
-        if (!ip)
-            throw AlgorithmicError("Geometrical inconsistency !");
-        // We assert the (x,y) coordinate of the intersection match those of the point
-        assert( std::max(fabs(ip->x()-p.x()), fabs(ip->y()-p.y())) <= 1e-3 );
-        return ip->z();
-    }
-    case CDT::OUTSIDE_CONVEX_HULL:
-        // The point passed is outside the convex hull of the points
-        // of all the level curves : it is not possible to give it
-        // a significant altitude : please adjust your `emprise`
-        OMessageManager::get()->warning(
-            "%s : The point at (%lf, %lf) is outside the convex hull of point of known altitude : returning NaN",
-            "AltimetryBuilder::computeAltitude", p.x(), p.y());
-        return unspecified_altitude;
+            CGAL::Object result = CGAL::intersection(tri3, line);
+            // We check that the intersection is actually a point as it should
+            const CGAL_Gt::Point_3* ip = CGAL::object_cast<CGAL_Gt::Point_3>(&result);
+            if (!ip)
+            {
+                throw AlgorithmicError("Geometrical inconsistency !");
+            }
+            // We assert the (x,y) coordinate of the intersection match those of the point
+            assert(std::max(fabs(ip->x() - p.x()), fabs(ip->y() - p.y())) <= 1e-3);
+            return ip->z();
+        }
+        case CDT::OUTSIDE_CONVEX_HULL:
+            // The point passed is outside the convex hull of the points
+            // of all the level curves : it is not possible to give it
+            // a significant altitude : please adjust your `emprise`
+            OMessageManager::get()->warning(
+                "%s : The point at (%lf, %lf) is outside the convex hull of point of known altitude : returning NaN",
+                "AltimetryBuilder::computeAltitude", p.x(), p.y());
+            return unspecified_altitude;
 
-    case CDT::OUTSIDE_AFFINE_HULL:
-        throw AlgorithmicError("This should never happen (is the altimetry empty or in 1D ?)");
+        case CDT::OUTSIDE_AFFINE_HULL:
+            throw AlgorithmicError("This should never happen (is the altimetry empty or in 1D ?)");
     }
     throw AlgorithmicError("The above switch should be exhaustive !");
 }
@@ -255,29 +272,31 @@ AltimetryBuilder::computeAltitude(const CGAL_Point& p) const
 void
 AltimetryBuilder::insertMaterialPolygonsInTriangulation()
 {
-	// Do check that alti_cdt is clear
-	assert(alti_cdt.number_of_vertices() == 0 &&
-			"Altitude can't be modified afterwards");
-	// We copy the current triangulation, which will be used to compute alitudes
+    // Do check that alti_cdt is clear
+    assert(alti_cdt.number_of_vertices() == 0 &&
+           "Altitude can't be modified afterwards");
+    // We copy the current triangulation, which will be used to compute alitudes
     alti_cdt = cdt;
-    BOOST_FOREACH(MaterialPolygon& poly, material_polygons)
+    BOOST_FOREACH(MaterialPolygon & poly, material_polygons)
     {
-    	addAsConstraint(poly |
-    		transformed( boost::bind(&AltimetryBuilder::build_point_info, this, _1)),
-    		true);
+        addAsConstraint(poly |
+                        transformed(boost::bind(&AltimetryBuilder::build_point_info, this, _1)),
+                        true);
     }
     if (!cdt.is_valid())
     {
         throw AlgorithmicError("AltimetryBuilder::insertMaterialPolygonsInTriangulation: invalid triangulation");
     }
     // Give an altitude to the points inserted as intersections of contraints.
-	for(CDT::Vertex_iterator vit = cdt.vertices_begin();
-            vit != cdt.vertices_end(); ++vit)
-	{
-		CGAL_Point p = vit->point();
-		if( !is_valid_altitude(vit->info().altitude) )
-                    vit->info().altitude = computeAltitude(p);
-	}
+    for (CDT::Vertex_iterator vit = cdt.vertices_begin();
+         vit != cdt.vertices_end(); ++vit)
+    {
+        CGAL_Point p = vit->point();
+        if (!is_valid_altitude(vit->info().altitude))
+        {
+            vit->info().altitude = computeAltitude(p);
+        }
+    }
 }
 
 void
@@ -301,7 +320,7 @@ AltimetryBuilder::indexFacesMaterial()
         {
             // Test whether the Face is in the polygon
             const CGAL_Polygon& poly = material_polygons[i_poly];
-            assert(poly.size()>2 && "No invalid polygons should reach this point.");
+            assert(poly.size() > 2 && "No invalid polygons should reach this point.");
             switch (poly.bounded_side(center))
             {
                 case CGAL::ON_UNBOUNDED_SIDE:
@@ -360,7 +379,7 @@ AltimetryBuilder::labelFaces(material_t default_material)
          f_it != cdt.finite_faces_end();
          ++f_it)
     {
-    	// Extract the range of material polygon (handles) containing the face f_it
+        // Extract the range of material polygon (handles) containing the face f_it
         std::pair<face_to_material_poly_t::iterator, face_to_material_poly_t::iterator> p =
             face_to_poly.equal_range(f_it);
         // Check for no material polygon enclosing current face
@@ -374,17 +393,18 @@ AltimetryBuilder::labelFaces(material_t default_material)
             // Creates a comparator function object to compare polygons for inclusion
             poly_comparator cmp(*this);
             // Search for the minimal - ie most specific - polygon amoung them
-            try {
+            try
+            {
                 face_to_material_poly_t::iterator min_p_it = std::min_element(p.first, p.second, cmp);
-                assert( min_p_it != p.second && "This should never happen.");
-                assert( min_p_it->first ==  static_cast<face_handle_t>(f_it));
+                assert(min_p_it != p.second && "This should never happen.");
+                assert(min_p_it->first ==  static_cast<face_handle_t>(f_it));
                 material_polygon_handle_t poly_h = min_p_it->second;
                 // Extract the associated material.
                 material_t mater = material_polygons[poly_h].material;
                 // Handle the case where no valid material has been associated to the material polygon
-                f_it->info().material = mater==NULL ? default_material : mater;
+                f_it->info().material = mater == NULL ? default_material : mater;
             }
-            catch  (const NonComparablePolygons& exc)
+            catch (const NonComparablePolygons& exc)
             {
                 // Enrich the exception with the geographical position
                 const CGAL_Point& center = CGAL::centroid(cdt.triangle(f_it));
@@ -444,67 +464,73 @@ void AltimetryBuilder::exportMesh(
     std::deque<OTriangle>& triangles,
     std::deque<material_t>* p_materials) const
 {
-	assert(points.size()==0 &&
-               "Output arguments 'points' is expected to be initially empty");
-	assert(triangles.size()==0 &&
-               "Output arguments 'triangles' is expected to be initially empty");
-	assert(!p_materials || p_materials->size()==0 &&
-               "Output arguments '*p_materials' is expected to be initially empty");
+    assert(points.size() == 0 &&
+           "Output arguments 'points' is expected to be initially empty");
+    assert(triangles.size() == 0 &&
+           "Output arguments 'triangles' is expected to be initially empty");
+    assert(!p_materials || p_materials->size() == 0 &&
+           "Output arguments '*p_materials' is expected to be initially empty");
 
-	std::map<CDT::Vertex_handle, unsigned> handle_to_index;
+    std::map<CDT::Vertex_handle, unsigned> handle_to_index;
 
-	for(CDT::Finite_vertices_iterator vit = cdt.finite_vertices_begin();
-		vit	!= cdt.finite_vertices_end(); ++vit)
-	{
-		const unsigned i = points.size();
-                // TODO Should extract this in a dedicated method - cf. ticket #1469664
-		Point p = this->from_cgal(vit);
-                if (!is_valid_altitude(p._z))
-                {
-                    OMessageManager::get()->error(
-                        "%s : Invalid altitude for point %d (%lf, %lf, %lf)\n",
-                        "AltimetryBuilder::exportMesh", i,  p._x, p._y, p._z);
-                    // Try to recompute the altitude even if is
-                    // supposedly computed on the fly and this late
-                    // attempt is likely pointless.
-                    double alti = computeAltitude(vit->point());
-                    if (!is_valid_altitude(alti)){
-                        throw AlgorithmicError("AltimetryBuilder::exportMesh: unable to compute a valid altitude");
-                    }
-                    else
-                        p._z = alti;
-                }
-
-		points.push_back(p);
-		const bool ok = handle_to_index.insert( std::make_pair(vit, i) ).second;
-		assert(ok && "Vertex handle should be unique.");
-	}
-
-	// Handle triangles
-	for(CDT::Finite_faces_iterator fit = cdt.finite_faces_begin();
-		fit	!= cdt.finite_faces_end(); ++fit)
-	{
-            if(p_materials) {
-                assert(fit->info().is_valid() && "No valid material assigned to this face");
-		const material_t& material = fit->info().material;
-                p_materials->push_back(material);
-            }
-            // Build an OTriangle from 3 indices
-            unsigned i[3], j;
-            for(j=0; j<3; ++j)
-                i[j] = handle_to_index[fit->vertex(j)];
-            // Store it and update its associated OPoints
-            triangles.push_back(OTriangle(i[0], i[1], i[2]));
-            OTriangle& tri = triangles.back();
-            for(j=0; j<3; ++j)
+    for (CDT::Finite_vertices_iterator vit = cdt.finite_vertices_begin();
+         vit != cdt.finite_vertices_end(); ++vit)
+    {
+        const unsigned i = points.size();
+        // TODO Should extract this in a dedicated method - cf. ticket #1469664
+        Point p = this->from_cgal(vit);
+        if (!is_valid_altitude(p._z))
+        {
+            OMessageManager::get()->error(
+                "%s : Invalid altitude for point %d (%lf, %lf, %lf)\n",
+                "AltimetryBuilder::exportMesh", i,  p._x, p._y, p._z);
+            // Try to recompute the altitude even if is
+            // supposedly computed on the fly and this late
+            // attempt is likely pointless.
+            double alti = computeAltitude(vit->point());
+            if (!is_valid_altitude(alti))
             {
-                tri.vertex(j) = points[i[j]];
-                assert( tri.vertex(j)== from_cgal(fit->vertex(j)));
+                throw AlgorithmicError("AltimetryBuilder::exportMesh: unable to compute a valid altitude");
             }
-	}
-	assert( points.size() == number_of_vertices());
-	assert( triangles.size() == number_of_faces());
-	assert( !p_materials || p_materials->size() == number_of_faces());
+            else
+            {
+                p._z = alti;
+            }
+        }
+
+        points.push_back(p);
+        const bool ok = handle_to_index.insert(std::make_pair(vit, i)).second;
+        assert(ok && "Vertex handle should be unique.");
+    }
+
+    // Handle triangles
+    for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin();
+         fit != cdt.finite_faces_end(); ++fit)
+    {
+        if (p_materials)
+        {
+            assert(fit->info().is_valid() && "No valid material assigned to this face");
+            const material_t& material = fit->info().material;
+            p_materials->push_back(material);
+        }
+        // Build an OTriangle from 3 indices
+        unsigned i[3], j;
+        for (j = 0; j < 3; ++j)
+        {
+            i[j] = handle_to_index[fit->vertex(j)];
+        }
+        // Store it and update its associated OPoints
+        triangles.push_back(OTriangle(i[0], i[1], i[2]));
+        OTriangle& tri = triangles.back();
+        for (j = 0; j < 3; ++j)
+        {
+            tri.vertex(j) = points[i[j]];
+            assert(tri.vertex(j) == from_cgal(fit->vertex(j)));
+        }
+    }
+    assert(points.size() == number_of_vertices());
+    assert(triangles.size() == number_of_faces());
+    assert(!p_materials || p_materials->size() == number_of_faces());
 }
 
 // Vizualization helpers
@@ -542,44 +568,52 @@ AltimetryBuilder::addPolygonToScene(QGraphicsScene* scene, const CGAL_Polygon& p
 QGraphicsSimpleTextItem*
 AltimetryBuilder::drawText(QGraphicsScene* scene, const CGAL_Point& pos, const std::string& text, double scale)
 {
-	QGraphicsSimpleTextItem* item = scene->addSimpleText(
-			QString::fromStdString(text));
-	item->setPos(pos.x(), pos.y());
-	item->setScale(scale);
-	return item;
+    QGraphicsSimpleTextItem* item = scene->addSimpleText(
+                                        QString::fromStdString(text));
+    item->setPos(pos.x(), pos.y());
+    item->setScale(scale);
+    return item;
 }
 
 void
 AltimetryBuilder::addVerticesInfo(QGraphicsScene* scene) const
 {
-	for(CDT::Finite_vertices_iterator vit = cdt.finite_vertices_begin();
-		vit	!= cdt.finite_vertices_end(); ++vit)
-	{
-		CDT::Point p = vit->point();
-		std::stringstream txt;
-		double alti = vit->info().altitude;
-		if (!is_valid_altitude(alti))
-			txt << "-";
-		else
-			txt << alti;
-		drawText(scene, p, txt.str() );
-	}
+    for (CDT::Finite_vertices_iterator vit = cdt.finite_vertices_begin();
+         vit != cdt.finite_vertices_end(); ++vit)
+    {
+        CDT::Point p = vit->point();
+        std::stringstream txt;
+        double alti = vit->info().altitude;
+        if (!is_valid_altitude(alti))
+        {
+            txt << "-";
+        }
+        else
+        {
+            txt << alti;
+        }
+        drawText(scene, p, txt.str());
+    }
 }
 
 void
 AltimetryBuilder::addFacesInfo(QGraphicsScene* scene) const
 {
-	for(CDT::Finite_faces_iterator fit = cdt.finite_faces_begin();
-		fit	!= cdt.finite_faces_end(); ++fit)
-	{
-		std::stringstream txt;
-		material_t material = fit->info().material;
-                if (material==NULL)
-                    txt << "!";
-                else
-                    txt << material->getName().at(0).toAscii(); // First character of the material name
-		drawText(scene, CGAL::centroid(cdt.triangle(fit)), txt.str() );
-	}
+    for (CDT::Finite_faces_iterator fit = cdt.finite_faces_begin();
+         fit != cdt.finite_faces_end(); ++fit)
+    {
+        std::stringstream txt;
+        material_t material = fit->info().material;
+        if (material == NULL)
+        {
+            txt << "!";
+        }
+        else
+        {
+            txt << material->getName().at(0).toAscii();    // First character of the material name
+        }
+        drawText(scene, CGAL::centroid(cdt.triangle(fit)), txt.str());
+    }
 
 }
 
@@ -599,7 +633,7 @@ AltimetryBuilder::buildView(double xmin, double ymin, double xmax, double ymax)
     view->setRenderHint(QPainter::Antialiasing);
     view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    view->fitInView(xmin, ymin, xmax, ymax,Qt::KeepAspectRatio);
+    view->fitInView(xmin, ymin, xmax, ymax, Qt::KeepAspectRatio);
     return std::make_pair(view, scene);
 }
 

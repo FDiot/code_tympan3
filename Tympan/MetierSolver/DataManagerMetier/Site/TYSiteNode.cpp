@@ -494,11 +494,12 @@ void TYSiteNode::loadTopoFile()
 {
     ostringstream msg;
     OMessageManager& logger =  *OMessageManager::get();
-    try {
+    try
+    {
         do_updateAltimetrie(force);
         return true;
     }
-    catch(const tympan::AltimetryBuilder::NonComparablePolygons& exc)
+    catch (const tympan::AltimetryBuilder::NonComparablePolygons& exc)
     {
         logger.error("Invalid ground material polygons prevented to update the altimetry");
         // TODO move here reporting code from AltimetryBuilder
@@ -506,14 +507,14 @@ void TYSiteNode::loadTopoFile()
         logger.debug(msg.str().c_str());
         return false;
     }
-    catch(const tympan::invalid_data& exc)
+    catch (const tympan::invalid_data& exc)
     {
         msg << boost::diagnostic_information(exc);
         logger.error("Invalid data prevented to update the altimetry (set log level to debug for diagnosic)");
         logger.debug(msg.str().c_str());
         return false;
     }
-    catch(const tympan::exception& exc)
+    catch (const tympan::exception& exc)
     {
         msg << boost::diagnostic_information(exc);
         logger.error("An error prevented to update the altimetry (set log level to debug for diagnosic)");
@@ -539,10 +540,10 @@ void TYSiteNode::loadTopoFile()
 
     // _pTopographie->getAltimetrie()->compute(collectPointsForAltimetrie(), getDelaunay());
 
-	std::deque<OPoint3D> points;
-	std::deque<OTriangle> triangles;
-	_pTopographie->computeAltimetricTriangulation(points, triangles, getUseEmpriseAsCrbNiv());
-	_pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles);
+    std::deque<OPoint3D> points;
+    std::deque<OTriangle> triangles;
+    _pTopographie->computeAltimetricTriangulation(points, triangles, getUseEmpriseAsCrbNiv());
+    _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles);
 
 
     setIsGeometryModified(false);  // L'altimetrie est a jour
