@@ -151,12 +151,6 @@ public:
     /// Somme d'un spectre complexe avec un spectre "normal"
     OSpectreComplex sumComplex(const OSpectre& spectre) const;
 
-    /// Sommation energetique de deux spectres en 1/3 d'octave.
-    TYSpectre sumdB(const TYSpectre& spectre) const;
-
-    /// Soustraction energetique de deux spectres en 1/3 d'octave.
-    TYSpectre substdB(const TYSpectre& spectre) const;
-
     // === FONCTIONS MEMBRES STATIQUES
 
     /// Cree un spectre complexe
