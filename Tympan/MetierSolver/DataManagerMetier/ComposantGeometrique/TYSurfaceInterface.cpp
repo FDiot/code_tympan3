@@ -17,14 +17,11 @@
  *
  */
 
-
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
-
 
 int TYSurfaceInterface::intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const
 {
@@ -108,7 +105,7 @@ int TYSurfaceInterface::intersectsPlan(const OPlan& plan, OSegment3D& seg) const
     // Pour chaque segment composant le contour
     for (size_t i = 0; i < nbPts; i++)
     {
-        if ( plan.intersectsSegment(contour[i], contour[(i + 1) % nbPts], ptIntersec) == INTERS_OUI)
+        if (plan.intersectsSegment(contour[i], contour[(i + 1) % nbPts], ptIntersec) == INTERS_OUI)
         {
             if (!ptAFind)
             {

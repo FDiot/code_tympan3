@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,18 +11,18 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-TYRayEvent::TYRayEvent(const TYPoint& pt, const double& ang, const double& angtheta, const TY_RAY_EVENT& ev, const int& idF1, const int& idF2) : pos(pt), 
-																																				 angle(ang), 
-																																				 angletheta(angtheta), 
-																																				 type(ev), 
-																																				 idFace1(idF1),
-																																				 idFace2(idF2)
+TYRayEvent::TYRayEvent(const TYPoint& pt, const double& ang, const double& angtheta, const TY_RAY_EVENT& ev, const int& idF1, const int& idF2) : pos(pt),
+    angle(ang),
+    angletheta(angtheta),
+    type(ev),
+    idFace1(idF1),
+    idFace2(idF2)
 {
 }
 

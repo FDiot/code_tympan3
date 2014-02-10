@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICRECTANGLE__
@@ -38,8 +35,6 @@ class OSegment3D;
 
 /**
  * Permet de creer des surfaces acoustiques rectangulaires.
- *
- * @author Projet_Tympan
  *
  * NB The _pBoundingRect attribute, inherited from TYAcousticSurface
  * is used as the underlying rectangle to which surface related

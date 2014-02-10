@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  * Copyright (c) 2011 EDF. All Rights Reserved.
  * All Rights Reserved. No part of this software and its documentation may
@@ -65,11 +65,11 @@ public:
     * \brief Convertie les rayons du lancer de rayons en rayons Tympan et les ajoute dans le tableau contenu dans le calcul.
     * \return Renvoie vrai si l'ensemble des rayons ont bien ete ajoutes au calcul.
     */
-//    bool appendRayToTYCalcul(const TYSiteNode& site, TYCalcul& calcul);
+    //    bool appendRayToTYCalcul(const TYSiteNode& site, TYCalcul& calcul);
 
-//    Simulation* getSimulation() {return _simulation;}
+    //    Simulation* getSimulation() {return _simulation;}
 
-//    TabRays* getTabRays() {return _simulation->getSolver()->getValidRays();}
+    //    TabRays* getTabRays() {return _simulation->getSolver()->getValidRays();}
 
 private:
     //TYRayTracer* _rayTracer;

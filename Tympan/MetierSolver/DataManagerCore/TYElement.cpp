@@ -58,9 +58,9 @@ bool TYElement::_toSave = false;
 bool TYElement::_bRegenerateID = false;
 
 
-/*static*/ uint64 TYElement::ty_created_counter=0;
-/*static*/ uint64 TYElement::ty_destroyed_counter=0;
-/*static*/ uint64 TYElement::ty_regen_id_counter=0;
+/*static*/ uint64 TYElement::ty_created_counter = 0;
+/*static*/ uint64 TYElement::ty_destroyed_counter = 0;
+/*static*/ uint64 TYElement::ty_regen_id_counter = 0;
 
 TYElementContainer& TYElement::getInstances()
 {
@@ -218,7 +218,8 @@ TYElement::~TYElement()
 TYElement* TYElement::getInstance(TYUUID uuid)
 {
     TYElementContainer::const_iterator elt_it = getInstances().find(uuid);
-    if (elt_it != getInstances().end()) {
+    if (elt_it != getInstances().end())
+    {
         return elt_it->second;
     }
 
@@ -235,20 +236,24 @@ void TYElement::purgeInstances()
 
 const TYUUID& TYElement::getID() const
 {
-	if (hasNullID())
-		_uuid = newID();
+    if (hasNullID())
+    {
+        _uuid = newID();
+    }
 
-	return _uuid;
+    return _uuid;
 }
 
 void TYElement::setID(TYUUID id)
 {
     // If the _uuid is not NULL, we remove it from the map.
     bool was_registered = false;
-    if (!hasNullID()) {
+    if (!hasNullID())
+    {
         // size_t remove_count = getInstances().erase(_uuid);
         TYElementContainer::iterator it = getInstances().find(_uuid);
-        if (it != getInstances().end()) {
+        if (it != getInstances().end())
+        {
             getInstances().erase(it);
             was_registered = true;
         }
@@ -257,7 +262,8 @@ void TYElement::setID(TYUUID id)
     _uuid = id;
 
     // If the element was registered, we update the map (new insertion).
-    if (was_registered) {
+    if (was_registered)
+    {
         bool success = getInstances().insert(std::make_pair(_uuid, this)).second;
     }
 }
@@ -278,7 +284,8 @@ bool TYElement::testId(const TYUUID& id, const TYElement* pElem)
 
 void TYElement::addInstance()
 {
-    if (_logInstances) {
+    if (_logInstances)
+    {
         const TYUUID& uuid = getID(); // Could force the generation of the UUID.
         bool success = getInstances().insert(std::make_pair(uuid, this)).second;
     }
@@ -287,8 +294,10 @@ void TYElement::addInstance()
 
 void TYElement::remInstance()
 {
-    if(!hasNullID())
+    if (!hasNullID())
+    {
         getInstances().erase(getID());
+    }
 }
 
 
@@ -348,7 +357,7 @@ bool TYElement::operator != (const TYElement& other) const
 
 bool TYElement::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
-    if (!pOther) { return false; }
+    if (!pOther) { return false; }     // XXX assert(pOther);
 
     if (!pOther->inherits(getClassName())) { return false; }
 
@@ -646,5 +655,5 @@ std::string TYElement::getMetierName()
 
 /*static*/ uint64 TYElement::getIdGenerationCount()
 {
-	return ty_regen_id_counter;
+    return ty_regen_id_counter;
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYPreferenceDialog.cpp
  * \brief Table generale dans le dialog de la gestion des preferences
@@ -1531,17 +1531,19 @@ void TYPreferenceDialog::loadPreferences()
         pref = "PaletteDefault";
         if (TYPreferenceManager::exists(pref + "Min"))
         {
-        	OLookupTable legacyTable;
+            OLookupTable legacyTable;
             OColor color;
 
-        	const size_t nb_colors = TYPreferenceManager::getFloat(pref + "NbColors");
-        	const float valueMin = TYPreferenceManager::getFloat(pref + "Min");
-        	const float valueMax = TYPreferenceManager::getFloat(pref + "Max");
+            const size_t nb_colors = TYPreferenceManager::getFloat(pref + "NbColors");
+            const float valueMin = TYPreferenceManager::getFloat(pref + "Min");
+            const float valueMax = TYPreferenceManager::getFloat(pref + "Max");
 
-        	TYPalette* pPalette = ((AcoustiqueTab*)tabWidget->widget(3))->_pMaillage->getPalette();
-        	legacyTable.resize(nb_colors);
+            TYPalette* pPalette = ((AcoustiqueTab*)tabWidget->widget(3))->_pMaillage->getPalette();
+            legacyTable.resize(nb_colors);
             for (size_t i = 0; i < nb_colors; ++i)
+            {
                 TYPreferenceManager::getColor(pref + "Color" + QString(uintToStr(i).c_str()), color.r, color.g, color.b);
+            }
             pPalette->resetcolorMapFromColors(valueMin, valueMax, legacyTable);
 
         }
@@ -1957,7 +1959,7 @@ void TYPreferenceDialog::savePreferences()
     TYPalette::color_map_const_iter it = pPalette->getColorMap().begin();
     for (size_t i = 0; i < pPalette->getNbColors(); ++i)
     {
-    	assert( it != pPalette->getColorMap().end() && "getNbColors() should be the number of colors in the color map.");
+        assert(it != pPalette->getColorMap().end() && "getNbColors() should be the number of colors in the color map.");
         const OColor& color = it->second;
         TYPreferenceManager::setColor(pref + "Color" + QString(uintToStr(i).c_str()), color.r, color.g, color.b);
     }

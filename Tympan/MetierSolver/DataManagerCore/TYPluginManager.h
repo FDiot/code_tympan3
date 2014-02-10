@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -70,9 +70,6 @@ typedef SmartPtr<TYPluginManager> LPTYPluginManager;
 
 /**
  * Gestionnaire de plug-ins.
- *
- * @author Projet_Tympan
- *
  */
 
 // UUID of the Default Solver
@@ -137,7 +134,7 @@ public:
      \param directory Path to the dynamic library files (aka plugins) to load.
      \param with_graphical Is the graphical interface used?
      */
-    bool loadPlugins(const QString& directory, bool with_graphical=true);
+    bool loadPlugins(const QString& directory, bool with_graphical = true);
 
     //! Load plugins (aka solvers) from the Qt interface.
     bool loadPluginsGraphicMode(const QString& directory);
@@ -156,12 +153,12 @@ public:
 
     // Retourne les infos du solveur defini par uuid
     void getInfos(pluginInfos* pInfos, const OGenID& uuid) const;
-	
-	/// Retourne l'info demandee
+
+    /// Retourne l'info demandee
     QString getInfo(const QString& info);
 
-	/// Retourne l'info demandée sur un solveur spécifique
-	QString getInfo(const QString& info, const OGenID& uuid) const;
+    /// Retourne l'info demandée sur un solveur spécifique
+    QString getInfo(const QString& info, const OGenID& uuid) const;
 
     // Set current solver uuid
     void setCurrent(const OGenID& uuid);

@@ -356,8 +356,8 @@ class TYSiteNode: public TYElement
     virtual void init(const LPTYCalcul& pCalcul);
 
     /**
-     * Precalcul du nombre d'onde dans le sol des que les caracteristiques de l'atmosphere sont connus
-     * Fonction executees au lancement du calcul
+     * Precalcul du nombre d'onde dans le sol des que les caracteristiques de
+     * l'atmosphere sont connus. Fonction executees au lancement du calcul.
      */
     void updateSol();
 

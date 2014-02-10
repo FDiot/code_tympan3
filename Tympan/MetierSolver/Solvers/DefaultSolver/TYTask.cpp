@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -49,11 +49,11 @@ void TYTask::main()
     TYSourcePonctuelleGeoNode* pSrcGeoNode = _trajet.getSourcePonctuelle();
 
     // Recupere les pointeur sur la source ponctuelle et le point de calcul
-	TYSourcePonctuelle* pSrc = NULL;
-	if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
+    TYSourcePonctuelle* pSrc = NULL;
+    if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
 
     TYPointCalcul* pPointCalc = dynamic_cast<TYPointCalcul*>(_trajet.getPointCalcul()->getElement());
-	if ( !(pSrc && pPointCalc) ) { return; }
+    if (!(pSrc && pPointCalc)) { return; }
 
     // Construction du rayon SR
     OSegment3D rayon;
@@ -74,13 +74,13 @@ void TYTask::main()
     // On effectue les calculs acoustiques en utilisant les formules du modele acoustique
     _solver.getAcousticModel()->compute(_tabIntersect, rayon, _trajet, ptsTop, ptsLeft, ptsRight);
 
-	if (_tabIntersect)
+    if (_tabIntersect)
     {
         delete [] _tabIntersect;
     }
-	_tabIntersect = NULL;
+    _tabIntersect = NULL;
 
-	ptsTop.clear();
-	ptsLeft.clear();
-	ptsRight.clear();
+    ptsTop.clear();
+    ptsLeft.clear();
+    ptsRight.clear();
 }

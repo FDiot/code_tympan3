@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICSEMICIRCLE__
@@ -40,8 +37,6 @@ class OSegment3D;
  * Permet de creer des surfaces acoustiques semi-circulaires.
  * Les points 0 et 1 du rectangle associe correspondent au
  * "diametre de coupe" du demi-cercle.
- *
- * @author Projet_Tympan
  *
  * TOOD This code is mostly a copy-paste of the TYCircle class and
  * needs to be factored.

@@ -34,7 +34,7 @@ OSpectreComplex::OSpectreComplex(const TYComplex& defaultValue) : OSpectre(defau
 {
     for (unsigned int i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-		_phase[i] = defaultValue.imag();
+        _phase[i] = defaultValue.imag();
     }
 }
 

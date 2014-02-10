@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYUserSourcePonctuelleWidget.h
  * \brief outil IHM pour une source ponctuelle (fichier header)
@@ -113,13 +113,13 @@ public slots:
     /**
      * Changement du type de rayonnement de la source
      */
-//    void changeTypeRaynt(int typeRaynt);
+    //    void changeTypeRaynt(int typeRaynt);
 
 public:
     /**
      * Edite la widget de la directivite selectionnee.
      */
-//    void editDirectivite();
+    //    void editDirectivite();
 
     /**
      * Mise a jour du comboBox des regimes

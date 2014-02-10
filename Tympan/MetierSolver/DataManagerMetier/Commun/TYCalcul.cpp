@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,13 +11,11 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
-
-
 
 #ifdef _MSC_VER
 #   pragma warning (disable : 4786)
@@ -952,9 +950,7 @@ void TYCalcul::addToSelection(TYElement* pElt, bool recursif /*=true*/)
 bool TYCalcul::remToSelection(TYUUID id)
 {
     _elementSelection.remove(id);
-
     setIsGeometryModified(true);
-
     return true;
 }
 
@@ -1160,7 +1156,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
     TYTabLPPointCalcul& tabpoint = pMaillage->getPtsCalcul();
 
     bool cancel = false;
-	bool bNoPbAlti = true; // Permet de tester si tous les points sont altimtriss correctement.
+    bool bNoPbAlti = true; // Permet de tester si tous les points sont altimétrisés correctement.
 
     if (pMaillage->getComputeAlti()) // Cas des maillages rectangulaires et lineaires horizontaux
     {
@@ -1184,7 +1180,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
             pt._z = 0;
 
             // Recherche de l'altitude
-            bNoPbAlti &= pAlti->updateAltitude(pt); 
+            bNoPbAlti &= pAlti->updateAltitude(pt);
 
             // Retour au repere d'origine
             pt = matrixinv * pt;
@@ -1229,10 +1225,10 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
         modified = true;
     }
 
-	if (!bNoPbAlti) // Certains point pas altimetrises
-	{
-		OMessageManager::get()->info(TR("msg_pbalti"));
-	}
+    if (!bNoPbAlti) // Certains point pas altimetrises
+    {
+        OMessageManager::get()->info(TR("msg_pbalti"));
+    }
 
 
     // Done
@@ -1548,7 +1544,6 @@ bool TYCalcul::go()
     pMergeSite->getTopographie()->sortTerrains(); // Tri des terrains par ordre croissant des surfaces
     pMergeSite->updateAcoustique(true);
 
-
     // Actualisation de l'altimetrie des recepteurs (securite)
     pProjet->updateAltiRecepteurs(pMergeSite->getTopographie()->getAltimetrie());
 
@@ -1579,7 +1574,6 @@ bool TYCalcul::go()
 #endif
 
     OMessageManager::get()->info("Recuperation de la liste des sources");
-
     TYMapElementTabSources& mapElementSources = _pResultat->getMapEmetteurSrcs();
     pMergeSite->getInfrastructure()->getAllSrcs(this, mapElementSources);
 
@@ -1614,12 +1608,9 @@ bool TYCalcul::go()
         delete pInfos;
         pInfos = NULL;
 
-		TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(getSolverId());
-
+        TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(getSolverId());
         // XXX ... and pass the SolverDataModel built here.
-        
-		ret = pSolver->solve(*pMergeSite, *this);
-
+        ret = pSolver->solve(*pMergeSite, *this);
         pSolver->purge();
 
         // Cumul de la pression aux differents points de calcul
@@ -1632,21 +1623,20 @@ bool TYCalcul::go()
 
             ret = _pResultat->cumulSpectres(_tabTrajets);
 
-			// Suppression des points de maillage de la matrice
-			for (unsigned int i=0; i< recepteurs.size(); i++)
-			{
-				if ( recepteurs[i]->getElement()->getParent()->inherits( "TYMaillage" ) )
-				{
-					_pResultat->remSpectres( static_cast<TYPointCalcul*>( recepteurs[i]->getElement() ) );
-				}
-			}
+            // Suppression des points de maillage de la matrice
+            for (unsigned int i = 0; i < recepteurs.size(); i++)
+            {
+                if (recepteurs[i]->getElement()->getParent()->inherits("TYMaillage"))
+                {
+                    _pResultat->remSpectres(static_cast<TYPointCalcul*>(recepteurs[i]->getElement()));
+                }
+            }
         }
     }
     else
     {
         ret = false;
     }
-
 
     if (ret)
     {
@@ -1679,13 +1669,13 @@ bool TYCalcul::go()
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
     {
         _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
-    }
+      }
     else
-    {
+      {
         TYPreferenceManager::setUInt(TYDIRPREFERENCEMANAGER, "NbThread", static_cast<unsigned long>(_nbThread));
     }
-	
-	return ret;
+
+    return ret;
 }
 
 void TYCalcul::getCalculElements(LPTYSiteNode pSite)

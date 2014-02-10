@@ -93,8 +93,10 @@ bool TYBoundaryNoiseMap::deepCopy(const TYElement* pOther, bool copyId /*=true*/
 
     const TYBoundaryNoiseMap* pOtherMaillage =
         static_cast<const TYBoundaryNoiseMap*>(pOther);
-    if(!pOtherMaillage)
+    if (!pOtherMaillage)
+    {
         return false;
+    }
 
     _thickness = pOtherMaillage->_thickness;
     _closed = pOtherMaillage->_closed;
@@ -120,14 +122,18 @@ DOM_Element TYBoundaryNoiseMap::toXML(DOM_Element& domElement)
 
     size_t nbPoints = _tabPoint.size();
     for (size_t i = 0; i < nbPoints; ++i)
+    {
         _tabPoint[i].toXML(domNewElem);
+    }
 
     TYCalcul* pCalcul = TYCalcul::safeDownCast(getParent());
     if (TYProjet::gSaveValues)
     {
         nbPoints = _ptsCalcul.size();
         for (size_t i = 0; i < nbPoints; ++i)
+        {
             _ptsCalcul[i]->getSpectre()->toXML(domNewElem);
+        }
     }
 
     return domNewElem;
@@ -160,10 +166,14 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
 
         TYXMLTools::getElementIntValue(elemCur, "nbPoints", nbPoints, nbPointsIsOk);
         if (nbPointsIsOk)
+        {
             _tabPoint.reserve(nbPoints);
+        }
 
         if (pt.callFromXMLIfEqual(elemCur))
+        {
             _tabPoint.push_back(pt);
+        }
 
         // New version : if we encounter spectra
         if (pSpectre->callFromXMLIfEqual(elemCur))
@@ -176,15 +186,17 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
 
     clearResult();
 
-    if(nbPointsIsOk)
+    if (nbPointsIsOk)
     {
         // For each TYPointCalcul we set its spectrum value,
         // the array of spectra and TYPointCalcul should be matched together
         // because the position of TYPointCalcul are not stored
-        TYTabLPPointCalcul &ptsCalcul = getPtsCalcul();
+        TYTabLPPointCalcul& ptsCalcul = getPtsCalcul();
         size_t nbSpectre = std::min(tabSpectre.size(), ptsCalcul.size());
         for (i = 0; i < nbSpectre; ++i)
+        {
             ptsCalcul[i]->setSpectre(*(tabSpectre[i]));
+        }
     }
     delete pSpectre;
 
@@ -198,12 +210,18 @@ bool TYBoundaryNoiseMap::toXML(const std::string& sFilePath)
     int i = fileName.lastIndexOf('/');
     QDir fileDirectory = QDir(fileName.mid(0, i));
     if (!fileDirectory.exists())
+    {
         fileDirectory.mkdir(fileName.mid(0, i));
+    }
 
-    if(fileName.isEmpty())
+    if (fileName.isEmpty())
+    {
         return false;
+    }
     if (!fileName.endsWith(".xml"))
+    {
         fileName += ".xml";
+    }
 
     TYXMLManager xmlManager;
 
@@ -211,7 +229,9 @@ bool TYBoundaryNoiseMap::toXML(const std::string& sFilePath)
     xmlManager.addElement(this);
 
     if (xmlManager.save(fileName) == 0)
+    {
         bRet = true;
+    }
 
     return bRet;
 }
@@ -222,7 +242,9 @@ bool TYBoundaryNoiseMap::fromXML(const std::string& sFilePath)
     QString fileName = QString(sFilePath.c_str());
 
     if (fileName.isEmpty())
+    {
         return false;
+    }
 
     TYXMLManager xmlManager;
     TYElementCollection elements;
@@ -284,7 +306,7 @@ void TYBoundaryNoiseMap::clearResult()
 }
 
 // XXX Add some comments.
-void TYBoundaryNoiseMap::make(const TYTabPoint &tabPoint, double thickness, bool closed, double density)
+void TYBoundaryNoiseMap::make(const TYTabPoint& tabPoint, double thickness, bool closed, double density)
 {
     // Reset
     remAllPointCalcul();
@@ -298,7 +320,9 @@ void TYBoundaryNoiseMap::make(const TYTabPoint &tabPoint, double thickness, bool
 
     const size_t nbPoints = _tabPoint.size();
     for (size_t i = 0; i < nbPoints; ++i)
+    {
         _tabPoint[i]._z = _hauteur;
+    }
 
     double box_x_min = 0., box_x_max = 0., box_y_min = 0., box_y_max = 0.;
     computeBoundingBox(box_x_min, box_x_max, box_y_min, box_y_max);
@@ -308,7 +332,7 @@ void TYBoundaryNoiseMap::make(const TYTabPoint &tabPoint, double thickness, bool
     setIsGeometryModified(true);
 }
 
-void TYBoundaryNoiseMap::computeBoundingBox(double &box_x_min, double &box_x_max, double &box_y_min, double &box_y_max) const
+void TYBoundaryNoiseMap::computeBoundingBox(double& box_x_min, double& box_x_max, double& box_y_min, double& box_y_max) const
 {
     box_x_min = _tabPoint[0]._x;
     box_x_max = _tabPoint[0]._x;
@@ -357,7 +381,7 @@ void TYBoundaryNoiseMap::computePoints(double box_x_min, double box_x_max, doubl
     double current_y = 0.;
     const double squared_thick = _thickness * _thickness / 4.;
     const size_t length = _tabPoint.size();
-    const size_t nb_segment = _closed ? length: length - 1;
+    const size_t nb_segment = _closed ? length : length - 1;
 
     for (int i = 0; i < nb_points_x; ++i)
     {
@@ -368,7 +392,7 @@ void TYBoundaryNoiseMap::computePoints(double box_x_min, double box_x_max, doubl
             current_y = box_y_min + j * step_y;
             for (size_t k = 0; k < nb_segment; ++k)
             {
-                l = (k < length - 1) ? k+1 : 0;
+                l = (k < length - 1) ? k + 1 : 0;
                 double squared_distance =
                     compute_segment_point_square_distance(current_x, current_y,
                                                           _tabPoint[k]._x, _tabPoint[k]._y,
@@ -376,7 +400,7 @@ void TYBoundaryNoiseMap::computePoints(double box_x_min, double box_x_max, doubl
                 if (squared_distance <= squared_thick)
                 {
                     addPointCalcul(new TYPointCalcul(TYPoint(current_x, current_y, _hauteur)));
-                    _ptsIndices[index2D] = _ptsCalcul.size()-1;
+                    _ptsIndices[index2D] = _ptsCalcul.size() - 1;
                     break; //no need to test with other segments
                 }
             }
@@ -394,7 +418,7 @@ int TYBoundaryNoiseMap::getIndexPtCalcul(int x, int y) const
     return _ptsIndices[x * _nbPointsY + y];
 }
 
-void TYBoundaryNoiseMap::getDimensions(int &x, int &y) const
+void TYBoundaryNoiseMap::getDimensions(int& x, int& y) const
 {
     y = _nbPointsY;
     x = _ptsIndices.size() / y;

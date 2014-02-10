@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -90,7 +90,8 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
         plugin_data->pluginDllInstance =
             (LIB_HANDLE)LIB_LOAD(itfile->absoluteFilePath().toLocal8Bit().data());
 
-        if (plugin_data->pluginDllInstance) {
+        if (plugin_data->pluginDllInstance)
+        {
             // Retrieve methods via pointers to member functions of a plugin.
             plugin_data->startPlugin =
                 (TYPGStartPlugin)LIB_GETSYM(plugin_data->pluginDllInstance, "startPlugin");
@@ -99,7 +100,8 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
             plugin_data->stopPlugin =
                 (TYPGStopPlugin)LIB_GETSYM(plugin_data->pluginDllInstance, "stopPlugin");
         }
-        else {
+        else
+        {
             OMessageManager::get()->info(
                 "Unable to load the library file '%s'.",
                 itfile->absoluteFilePath().toUtf8().data());
@@ -109,7 +111,8 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
 
         // Check all pointers to methods.
         if (!plugin_data->startPlugin || !plugin_data->getPlugin ||
-            !plugin_data->stopPlugin) {
+            !plugin_data->stopPlugin)
+        {
             OMessageManager::get()->info(
                 "Unable to get methods from the plugin '%s'.",
                 itfile->absoluteFilePath().toUtf8().data());
@@ -119,7 +122,8 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
 
         // Start the plugin and add it to the list '_plugins'. True if success.
         bool success = startPlugin(plugin_data, with_graphical);
-        if (!success) {
+        if (!success)
+        {
             OMessageManager::get()->info(
                 "Unable to start the plugin from the file '%s'.",
                 itfile->absoluteFilePath().toUtf8().data());
@@ -136,11 +140,13 @@ bool TYPluginManager::startPlugin(TYPluginData* plugin_data, bool with_graphical
     plugin_data->startPlugin(!with_graphical);
 
     // If already exists in the list, stop and unload it.
-    if (exist(plugin_data->getPlugin()->getUUID())) {
+    if (exist(plugin_data->getPlugin()->getUUID()))
+    {
         plugin_data->stopPlugin();
         return false;
     }
-    else {
+    else
+    {
         _plugins.push_back(plugin_data);
         return true;
     }
@@ -169,11 +175,13 @@ bool TYPluginManager::loadPlugins(const QString& directory, bool with_graphical)
     createPlugins(plugin_file_list, with_graphical);
 
     // Check if there is unless the default plugin.
-    if (!exist(OGenID(QString(DEFAULT_SOLVER_UUID)))) {
+    if (!exist(OGenID(QString(DEFAULT_SOLVER_UUID))))
+    {
         OMessageManager::get()->info("WARNING: Default solver is not present !");
     }
 
-    if (_plugins.size() == 0) {
+    if (_plugins.size() == 0)
+    {
         OMessageManager::get()->info("No plugins found.");
         return false;
     }
@@ -231,12 +239,12 @@ void TYPluginManager::getInfos(pluginInfos* pInfos, const OGenID& uuid) const
 QString TYPluginManager::getInfo(const QString& info)
 {
     OGenID& uuid = _current;
-	return getInfo(info, uuid);
+    return getInfo(info, uuid);
 }
 
 QString TYPluginManager::getInfo(const QString& info, const OGenID& uuid) const
 {
-	pluginInfos* pInfos = new pluginInfos();
+    pluginInfos* pInfos = new pluginInfos();
 
     for (TYPluginList::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it)
     {

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -34,9 +34,6 @@
 
 /**
  * Comprend les proprietes acoustiques et geometriques d'une paroi.
- *
- * @author Projet_Tympan
- *
  */
 class TYParoi: public TYElement
 {
@@ -85,12 +82,12 @@ public:
     /**
      * Set/Get du materiau interne.
      */
-	TYMateriauConstruction* getMatStruct() { return _matStruct._pObj; }
+    TYMateriauConstruction* getMatStruct() { return _matStruct._pObj; }
 
     /**
      * Set/Get du materiau interne.
      */
-	const TYMateriauConstruction* getMatStruct() const { return _matStruct._pObj; }
+    const TYMateriauConstruction* getMatStruct() const { return _matStruct._pObj; }
 
     /**
      * Set/Get du materiau interne.
@@ -100,12 +97,12 @@ public:
     /**
      * Set/Get du materiau face 1.
      */
-	TYMateriauConstruction* getMatFace1() { return _matFace1._pObj; }
+    TYMateriauConstruction* getMatFace1() { return _matFace1._pObj; }
 
     /**
      * Set/Get du materiau face 1.
      */
-	const TYMateriauConstruction* getMatFace1() const { return _matFace1._pObj; }
+    const TYMateriauConstruction* getMatFace1() const { return _matFace1._pObj; }
 
     /**
      * Set/Get du materiau face 1.
@@ -115,12 +112,12 @@ public:
     /**
      * Set/Get du materiau face 2.
      */
-	TYMateriauConstruction* getMatFace2() { return _matFace2._pObj; }
+    TYMateriauConstruction* getMatFace2() { return _matFace2._pObj; }
 
     /**
      * Set/Get du materiau face 2.
      */
-	const TYMateriauConstruction* getMatFace2() const { return _matFace2._pObj; }
+    const TYMateriauConstruction* getMatFace2() const { return _matFace2._pObj; }
 
     /**
      * Set/Get du materiau face 2.

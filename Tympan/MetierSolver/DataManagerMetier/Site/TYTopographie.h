@@ -31,7 +31,6 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYTopographieGraphic.h"
 #endif
 
-
 ///Structure contenant un segment et un terrain.
 typedef struct
 {
@@ -53,13 +52,8 @@ typedef struct
     short nbPts;            // Nombre de points dans le tableau
 } TYStructElemPts;
 
-
-
 /**
  * Centralise les elements de topographie.
- *
- * @author Projet_Tympan
- *
  */
 class TYTopographie: public TYElement
 {
@@ -474,7 +468,9 @@ public:
     /// Tri des terrains par surface decroissante
     void sortTerrains();
 
-    // Accessor a la couleur de l'emprise
+    /**
+     * sget couleur de l'emprise
+     */
     void setEmpriseColor(const OColor& color) { _empriseColor = color; };
     OColor getEmpriseColor() const { return _empriseColor; };
 
@@ -532,7 +528,7 @@ protected:
     OColor _empriseColor;
 
     /// Liste des terrains tries (on fait expres un tableau a part pour ne pas perturber le terrain par defaut)
-    TYTerrainGeoNode **_pSortedTerrains;
+    TYTerrainGeoNode** _pSortedTerrains;
 
     /// Seuils confondus
     double _seuilConfondus;

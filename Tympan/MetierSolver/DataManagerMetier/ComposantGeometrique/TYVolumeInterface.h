@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,18 +11,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
 #ifndef __TY_VOLUMEINTERFACE__
 #define __TY_VOLUMEINTERFACE__
-
 
 class OSegment3D;
 
@@ -30,12 +26,8 @@ class OSegment3D;
 #include "TYPoint.h"
 #include "TYGeometryNode.h"
 
-
 /**
  * Classe abstraite qui offre une interface utilisable par des composants ayant des proprietes geometriques volumiques.
- *
- * @author Projet_Tympan
- *
  */
 class TYVolumeInterface
 {

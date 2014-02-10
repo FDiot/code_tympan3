@@ -324,7 +324,7 @@ void TYSiteModelerFrame::setRenderMaillageModeSlot(int mode)
             TYMaillage* pMaillage = pCalcul->getMaillage(i);
             TYElementGraphic* pMGraphic = pMaillage->getGraphicObject().getRealPointer();
 
-            if (TYRectangularMaillageGraphic *pRectGraphic = dynamic_cast<TYRectangularMaillageGraphic*>(pMGraphic))
+            if (TYRectangularMaillageGraphic* pRectGraphic = dynamic_cast<TYRectangularMaillageGraphic*>(pMGraphic))
             {
                 switch (mode)
                 {
@@ -342,7 +342,7 @@ void TYSiteModelerFrame::setRenderMaillageModeSlot(int mode)
                 pMaillage->updateGraphic();
                 updateNeeded = true;
             }
-            else if (TYBoundaryNoiseMapGraphic *pBoundGraphic = dynamic_cast<TYBoundaryNoiseMapGraphic*>(pMGraphic))
+            else if (TYBoundaryNoiseMapGraphic* pBoundGraphic = dynamic_cast<TYBoundaryNoiseMapGraphic*>(pMGraphic))
             {
                 switch (mode)
                 {

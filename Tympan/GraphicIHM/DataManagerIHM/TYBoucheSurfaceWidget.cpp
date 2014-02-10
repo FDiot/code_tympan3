@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYBoucheSurfaceWidget.cpp
  * \brief outil IHM pour une bouche de ventilation
@@ -124,13 +124,13 @@ void TYBoucheSurfaceWidget::apply()
     double sizeX = _dimensionsXLineEdit->text().toDouble();
     double sizeY = _dimensionsYLineEdit->text().toDouble();
 
-	if (sizeX <= 1E-4 || sizeY <= 1.E-4) // Eviter les surfaces nulles
-	{
-		QMessageBox::warning(this, "Tympan", TR("id_warning_size_not_ok"), QMessageBox::Yes);//, QMessageBox::No);
-		return;
-	}
-	
-	((TYRectangle*)_elmW->getElement()->getShape())->setSize(sizeX , sizeY);
+    if (sizeX <= 1E-4 || sizeY <= 1.E-4) // Eviter les surfaces nulles
+    {
+        QMessageBox::warning(this, "Tympan", TR("id_warning_size_not_ok"), QMessageBox::Yes);//, QMessageBox::No);
+        return;
+    }
+
+    ((TYRectangle*)_elmW->getElement()->getShape())->setSize(sizeX , sizeY);
 
     TYAcousticRectangleNode* pRectNode = TYAcousticRectangleNode::safeDownCast(getElement()->getParent());
     if (pRectNode) { pRectNode->updateGrid(); }

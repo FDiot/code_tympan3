@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_POLYGON__
 #define __TY_POLYGON__
-
 
 #include "TYRepere.h"
 #include "TYSurfaceInterface.h"
@@ -32,12 +28,8 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPolygonGraphic.h"
 #endif
 
-
 /**
  * Classe de definition d'un polygone.
- *
- * @author Projet_Tympan
- *
  */
 class TYPolygon: public TYElement, public TYSurfaceInterface
 {
@@ -83,7 +75,7 @@ public:
     virtual OVector3D normal() const;
     virtual OPlan plan() const;
     virtual TYTabPoint getContour(int n = -1) const;
-	virtual TYTabPoint3D getOContour(int n = -1) const;
+    virtual TYTabPoint3D getOContour(int n = -1) const;
 
     // TODO Check and tests those methods for numerical stability
     virtual int intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const;

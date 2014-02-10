@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
@@ -18,8 +17,6 @@
  *
  */
 
-
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -28,9 +25,7 @@
 #include "Tympan/MetierSolver/ToolsMetier/OBox.h"
 #include "Tympan/Tools/TYProgressManager.h"
 
-
 OPROTOINST(TYAcousticPolygon);
-
 
 TYAcousticPolygon::TYAcousticPolygon()
 {
@@ -203,7 +198,7 @@ void TYAcousticPolygon::distriSrcs()
                 TYSourcePonctuelle* pSrc = new TYSourcePonctuelle();
 
                 // Definition de sa position
-	            pos._z +=  offsetZ; // on decale les sources pour le lancer de rayon selon l'orientation de la normale
+                pos._z +=  offsetZ; // on decale les sources pour le lancer de rayon selon l'orientation de la normale
                 pSrc->setPos(new TYPoint(pos));
 
                 // Attribution du parent
@@ -251,7 +246,6 @@ TYTabPoint3D TYAcousticPolygon::getOContour(int n /*=-1*/) const
 {
     return _pPolygon->getOContour(n);
 }
-
 
 int TYAcousticPolygon::intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const
 {

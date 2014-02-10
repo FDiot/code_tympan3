@@ -217,9 +217,9 @@ bool TYApplication::init()
 #endif
 
     // TODO Check consistency of this coherent with the resources distribution.
-    if (!( (OLocalizator::setRessourceFile(ressourcePath + "Language.xml") == true)
-           ||(OLocalizator::setRessourceFile(ressourcePath + "Language_FR.xml") == true)
-           ||(OLocalizator::setRessourceFile(ressourcePath + "Language_EN.xml") == true)))
+    if (!((OLocalizator::setRessourceFile(ressourcePath + "Language.xml") == true)
+          || (OLocalizator::setRessourceFile(ressourcePath + "Language_FR.xml") == true)
+          || (OLocalizator::setRessourceFile(ressourcePath + "Language_EN.xml") == true)))
     {
 #ifndef _DEBUG
         _pSplash->hide();

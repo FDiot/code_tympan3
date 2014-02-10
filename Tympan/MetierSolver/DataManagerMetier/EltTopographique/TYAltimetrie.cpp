@@ -424,11 +424,11 @@ unsigned int TYAltimetrie::getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPo
     bool test = getGridIndices(box, iMinMax);
     if (!test) return 0;
 
-    // RÃ©cupÃ©ration des faces correspondantes
+    // Récupération des faces correspondantes
     TYTabLPPolygon faces;
     getFacesinIndices(iMinMax[0], iMinMax[1], iMinMax[2], iMinMax[3], faces);
 
-    // Test des points des faces par rapport Ã  la box
+    // Test des points des faces par rapport à la box
     // Si au moins un point de la face est dans la box, la face est mise dans la liste
     unsigned int faceCount = 0; // Compteur de faces
     for (size_t i = 0 ; i < faces.size() ; i++)
@@ -436,7 +436,7 @@ unsigned int TYAltimetrie::getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPo
         TYTabPoint& pts = faces[i]->getPoints();
         for (size_t y = 0 ; y < pts.size(); y++)
         {
-            if ( box.isInside(pts[y]) )
+            if (box.isInside(pts[y]))
             {
                 tabPolygon.push_back(faces[i]);
                 faceCount++;
@@ -445,7 +445,7 @@ unsigned int TYAltimetrie::getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPo
         }
     }
 
-    if (faceCount == 0) // Aucune face trouvÃ©e
+    if (faceCount == 0) // Aucune face trouvée
     {
         for (size_t i = 0 ; i < faces.size() ; i++)
         {
@@ -470,18 +470,18 @@ unsigned int TYAltimetrie::getPointsInBox(const OPoint3D& pt0, const OPoint3D& p
     bool test = getGridIndices(pts, iMinMax);
     if (!test) return 0;
 
-    // RÃ©cupÃ©ration des faces correspondantes
+    // Récupération des faces correspondantes
     TYTabLPPolygon faces;
     getFacesinIndices(iMinMax[0], iMinMax[1], iMinMax[2], iMinMax[3], faces);
 
-    // Test des points des faces par rapport Ã  la box
-    // Si le point est dans le pÃ©rimÃ¨tre, il est ajoutÃ© Ã  la liste
+    // Test des points des faces par rapport à la box
+    // Si le point est dans le périmètre, il est ajouté à la liste
     for (size_t i = 0 ; i < faces.size() ; i++)
     {
         TYTabPoint& ptsFaces = faces[i]->getPoints();
         for (size_t y = 0 ; y < ptsFaces.size(); y++)
         {
-            if ( OGeometrie::pointInPolygonRayCasting(ptsFaces[y], pts, 4) )
+            if (OGeometrie::pointInPolygonRayCasting(ptsFaces[y], pts, 4))
             {
                 tabPoints.push_back(ptsFaces[y]);
                 pointCount++;
@@ -532,6 +532,7 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY) const
 
     indXY.pi = pi;
     indXY.qi = qi;
+
     return true;
 }
 
@@ -542,9 +543,11 @@ bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) co
     unsigned minY = std::numeric_limits<unsigned>::max();
     unsigned maxY = std::numeric_limits<unsigned>::min();
 
-    // Test des quatre points et rÃ©cupÃ©ration des indices
+    // Test des quatre points et récupération des indices
     grid_index iXY;
+
     bool res = true;
+
     for (size_t i=0 ; i<4 ; i++)
     {
         res &= getGridIndices(pts[i], iXY);

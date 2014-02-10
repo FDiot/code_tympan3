@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,22 +11,17 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
 #ifndef __TY_SOURCE_BAFFLEE__
 #define __TY_SOURCE_BAFFLEE__
 
-
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticRectangle.h"
 #include "TYSourcePonctuelle.h"
-
 
 // nombre de valeurs de ka dans le tableau
 #ifdef NB_KA
@@ -51,8 +46,6 @@ class OSegment3D;
  * Ce type de source correspond aux bouches de ventilation.
  * Un rectangle acoustique est associee a cette source, il
  * correspond a la face sur laquelle se trouve la source.
- *
- * @author Projet_Tympan
  */
 class TYSourceBafflee: public TYSourcePonctuelle
 {
@@ -90,19 +83,19 @@ public:
     /**
      * Set/Get du rectangle acoustique associe a cette source.
      */
-//    void setAcousticRectangle(LPTYAcousticRectangle pAcousticRectangle) ;
+    //    void setAcousticRectangle(LPTYAcousticRectangle pAcousticRectangle) ;
     void setAcousticRectangle(LPTYRectangle pAcousticRectangle) ;
 
     /**
      * Set/Get du rectangle acoustique associe a cette source.
      */
-//    LPTYAcousticRectangle getAcousticRectangle() { return _pAcousticRectangle; }
+    //    LPTYAcousticRectangle getAcousticRectangle() { return _pAcousticRectangle; }
     LPTYRectangle getAcousticRectangle() { return _pAcousticRectangle; }
 
     /**
      * Set/Get du rectangle acoustique associe a cette source.
      */
-//    const LPTYAcousticRectangle getAcousticRectangle() const { return _pAcousticRectangle; }
+    //    const LPTYAcousticRectangle getAcousticRectangle() const { return _pAcousticRectangle; }
     const LPTYRectangle getAcousticRectangle() const { return _pAcousticRectangle; }
 
     /**
@@ -131,7 +124,7 @@ private:
     // Membres
 protected:
     ///Le rectangle acoustique associe a cette source.
-//    LPTYAcousticRectangle _pAcousticRectangle;
+    //    LPTYAcousticRectangle _pAcousticRectangle;
     LPTYRectangle _pAcousticRectangle;
 
 private:

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
 * Copyright (c) 2011 EDF. All Rights Reserved.
 * All Rights Reserved. No part of this software and its documentation may
@@ -87,7 +87,7 @@ struct TYStructSurfIntersect
     int idFace;                             //Indice de la face
     int idBuilding;                         //Indice du building dans TYSite
     int idEtage;                            //Indice de l'etage
-    double* spectreAbso;			        //Spectre d'absorption
+    double* spectreAbso;                    //Spectre d'absorption
     double G;                               //Coefficient d'impedance
 };
 
@@ -101,9 +101,9 @@ class TYANIME3DAcousticModel : public TYAcousticModelInterface
 {
 public:
     /// constructeurs
-	TYANIME3DAcousticModel();
+    TYANIME3DAcousticModel();
 
-	TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TabRays* tabRayons, TYStructSurfIntersect* tabStruct);
+    TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TabRays* tabRayons, TYStructSurfIntersect* tabStruct);
 
     /// destructeur
     virtual ~TYANIME3DAcousticModel();
@@ -133,14 +133,14 @@ public:
     */
     //LPTYRay convertRaytoTYRay(Ray *r, TYCalcul &calcul, const TYSiteNode &site);
 
-	/**
+    /**
      * \fn void init(TYCalcul & calcul);
      * \brief initialisation du calcul
      */
     void init(TYCalcul&, const TYSiteNode&, TabRays*, TYStructSurfIntersect*);
 
 protected:
-  
+
 
     /**
      * \fn void ComputeAbsAtm();
@@ -167,12 +167,12 @@ protected:
     OTabDouble ComputeFrenelWeighting(TYRay* ray, double angle, double distPrefPsuiv, OPoint3D Pref);
 
 
-	//TYMateriauConstruction TYANIME3DAcousticModel::getMateriauFace(Shape* pSurf, const vec3& seg) const;
+    //TYMateriauConstruction TYANIME3DAcousticModel::getMateriauFace(Shape* pSurf, const vec3& seg) const;
 
-	 /**
-     * \fn void ComputeAbsDiff(TYCalcul & calcul, const TYSiteNode & site)
-     * \brief calcul de l'absorption par diffraction
-     */
+    /**
+    * \fn void ComputeAbsDiff(TYCalcul & calcul, const TYSiteNode & site)
+    * \brief calcul de l'absorption par diffraction
+    */
     void ComputeAbsDiff(TYCalcul& calcul, const TYSiteNode& site);
 
     /// tableau des pressions acoustiques efficaces par rayon
@@ -199,32 +199,32 @@ protected:
     /// la methode de recherche de chemins acoustiques
     //TYANIME3DAcousticPathFinder _acoustPathFinder;
 
-	TYStructSurfIntersect* _tabSurfIntersect; /*!< Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face */
+    TYStructSurfIntersect* _tabSurfIntersect; /*!< Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face */
 
-	/// l'atmosphere
-	TYAtmosphere _atmos; 
+    /// l'atmosphere
+    TYAtmosphere _atmos;
 
-	/// la topographie du site
-	TYTopographie _topo;
+    /// la topographie du site
+    TYTopographie _topo;
 
-	/// la liste des terrains du site
-	TYTabTerrainGeoNode _listeTerrains; 
+    /// la liste des terrains du site
+    TYTabTerrainGeoNode _listeTerrains;
 
-	/// la liste des triangles de la topo
-    TYTabLPPolygon _listeTriangles;  
+    /// la liste des triangles de la topo
+    TYTabLPPolygon _listeTriangles;
 
-	/// la liste des triangles de la topo
-    TYTabLPPolygon _listeTrianglesBox;  
+    /// la liste des triangles de la topo
+    TYTabLPPolygon _listeTrianglesBox;
 
-	/// le tableau de recepteurs de la scene
-	TYTabPointCalculGeoNode _tabRecepteur;
+    /// le tableau de recepteurs de la scene
+    TYTabPointCalculGeoNode _tabRecepteur;
 
-	/// le tableau de sources de la scene 
-	TYTabSourcePonctuelleGeoNode _tabSources;
+    /// le tableau de sources de la scene
+    TYTabSourcePonctuelleGeoNode _tabSources;
 
-	double _c;	// vitesse du son
-	OSpectre _K;	// nombre d'onde
-	OSpectre _lambda;	// longueur d'onde
+    double _c;  // vitesse du son
+    OSpectre _K;    // nombre d'onde
+    OSpectre _lambda;   // longueur d'onde
 };
 
 #endif // __TYANIME3DACOUSTICMODEL__

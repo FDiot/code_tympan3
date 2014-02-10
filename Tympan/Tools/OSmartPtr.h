@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,15 +11,11 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
- *
- *
- *
  */
-
 
 #ifndef __SMART_PTR_H__
 #define __SMART_PTR_H__
@@ -27,7 +23,6 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-
 
 /**
  * If you wrap a non-class with the SmartPtr class, you will receive
@@ -52,8 +47,6 @@
  * This class implements the reference counting. When the
  * reference count drops down to 0 the referenced object
  * is freed.
- *
- * @author Projet_Tympan
  */
 class IRefCount
 {
@@ -110,9 +103,6 @@ protected:
  * This is the smart pointer template. It assumes that
  * the referenced object supports a reference count interface
  * via IRefCount.
- *
- * @author Projet_Tympan
- * @author Projet_Tympan
  */
 template <class T> class SmartPtr
 {

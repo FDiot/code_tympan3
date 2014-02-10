@@ -32,7 +32,8 @@ typedef size_t node_idx;
 } //namespace tympan
 
 
-namespace tympan {
+namespace tympan
+{
 
 /**
  * @brief The base of all entity classes.
@@ -43,7 +44,7 @@ namespace tympan {
 class BaseEntity
 {
 protected:
-	BaseEntity() {};
+    BaseEntity() {};
 
 public:
 	virtual ~BaseEntity() {};
@@ -65,9 +66,12 @@ public:
     solver entities. It can match with a \c QUuid (UUID from Qt) and thus with a
     \c TYUUID (aka \c OGenID).
  */
-struct binary_uuid {
-    union {
-        struct {
+struct binary_uuid
+{
+    union
+    {
+        struct
+        {
             unsigned int   data1;
             unsigned short data2;
             unsigned short data3;

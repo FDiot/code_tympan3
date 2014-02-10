@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,12 +11,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
@@ -33,9 +30,6 @@
 
 /**
  * Classe de definition d'un sol.
- *
- * @author Projet_Tympan
- *
  */
 class TYSol: public TYElement
 {
@@ -170,7 +164,7 @@ protected:
      *
      * @return w un OSpectreComplex
      */
-    OSpectreComplex calculW(const OSpectreComplex &Zs, const double rR, const double phi, const TYAtmosphere& atmos) const;
+    OSpectreComplex calculW(const OSpectreComplex& Zs, const double rR, const double phi, const TYAtmosphere& atmos) const;
 
 public:  //Temporairement
     /**
@@ -196,7 +190,7 @@ public:  //Temporairement
     bool getMiroir() { return _bMiroir; }
     const bool getMiroir() const { return _bMiroir; }
 
-	/**
+    /**
      * \fn calculQ(const double& angle, const double& rR, const TYAtmosphere& Atmo) const
      * \brief Calcul du coefficient de reflexion du sol en ondes spheriques
      * \param angle Angle d'incidence de l'onde acoustique
@@ -204,7 +198,7 @@ public:  //Temporairement
      * \param pAtmo atmosphere courante du calcul
      * \return Q OSpectreComplex
      */
-	OSpectreComplex calculQ(const double& angle, const double& rR, const TYAtmosphere& Atmo) const;
+    OSpectreComplex calculQ(const double& angle, const double& rR, const TYAtmosphere& Atmo) const;
 
 protected:
     /**
@@ -265,22 +259,22 @@ protected:
     ///Resistance a l'ecoulement.
     double _resistivite;
 
-	///Epaisseur du sol.
+    ///Epaisseur du sol.
     double _epaisseur;
-    
-	///Statut totalement reflechissant
+
+    ///Statut totalement reflechissant
     bool _bMiroir;
-    
-	///Spectre d'impedance caracteristique du sol.
+
+    ///Spectre d'impedance caracteristique du sol.
     OSpectreComplex _pImpedance;
-    
+
     ///Spectre de nombre d'onde
     OSpectreComplex _pNombreDOnde;
 
     ///Vegetation eventuelle.
     TYVegetation* _pVegetation;
 
-	///Etat d'utilisation de la vegetation.
+    ///Etat d'utilisation de la vegetation.
     bool _vegetActive;
 };
 

@@ -159,7 +159,7 @@ public:
      * \param x Dimension x
      * \param y Dimension y
      */
-    virtual void getDimensions(int &x, int &y) const;
+    virtual void getDimensions(int& x, int& y) const;
 
     // Membres
 protected:

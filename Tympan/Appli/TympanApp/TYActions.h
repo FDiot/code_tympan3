@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYActions.h
  * \brief fichier contenant differents types d'actions (fichier header)
@@ -648,7 +648,6 @@ protected:
 /**
  * \class TYMovePointEtageAction
  * \brief Action de deplacement d'un point d'un etage
- * @author Projet_Tympan
  */
 class TYMovePointEtageAction : public TYModelerAction
 {
@@ -1076,9 +1075,9 @@ public:
      * \param pModeler The modeler
      * \param actionName The action name
      */
-    TYMovePointPolyLineAction(LPTYElement pElt, TYTabPoint &polyLine, int ptId,
-                            const TYPoint& oldPos, const TYPoint& newPos,
-                            TYModelerFrame* pModeler, const QString& actionName);
+    TYMovePointPolyLineAction(LPTYElement pElt, TYTabPoint& polyLine, int ptId,
+                              const TYPoint& oldPos, const TYPoint& newPos,
+                              TYModelerFrame* pModeler, const QString& actionName);
     /**
      * Destructor.
      */
@@ -1104,7 +1103,7 @@ protected:
     /// The element which owns the edited polyline
     LPTYElement _pElt;
     /// The edited polyline
-    TYTabPoint &_polyLine;
+    TYTabPoint& _polyLine;
     /// Id of the point
     int _ptId;
     /// The old position of the point (undo)
@@ -1130,8 +1129,8 @@ public:
      * \param pModeler The modeler
      * \param actionName The action name
      */
-    TYInsertPointPolyLineAction(LPTYElement pElt, TYTabPoint &polyLine, int ptId,
-                              const TYPoint& pt, TYModelerFrame* pModeler, const QString& actionName);
+    TYInsertPointPolyLineAction(LPTYElement pElt, TYTabPoint& polyLine, int ptId,
+                                const TYPoint& pt, TYModelerFrame* pModeler, const QString& actionName);
     /**
      * Destructor.
      */
@@ -1151,7 +1150,7 @@ protected:
     /// The element which owns the edited polyline
     LPTYElement _pElt;
     /// The edited polyline
-    TYTabPoint &_polyLine;
+    TYTabPoint& _polyLine;
     /// Id of the point
     int _ptId;
     /// The new inserted point
@@ -1175,8 +1174,8 @@ public:
      * \param pModeler The modeler
      * \param actionName The action name
      */
-    TYRemovePointPolyLineAction(LPTYElement pElt, TYTabPoint &polyLine, int ptId,
-                              const TYPoint& pt, TYModelerFrame* pModeler, const QString& actionName);
+    TYRemovePointPolyLineAction(LPTYElement pElt, TYTabPoint& polyLine, int ptId,
+                                const TYPoint& pt, TYModelerFrame* pModeler, const QString& actionName);
     /**
      * Destructor.
      */
@@ -1196,7 +1195,7 @@ protected:
     /// The element which owns the edited polyline
     LPTYElement _pElt;
     /// The edited polyline
-    TYTabPoint &_polyLine;
+    TYTabPoint& _polyLine;
     /// Id of the point
     int _ptId;
     /// The new inserted point
