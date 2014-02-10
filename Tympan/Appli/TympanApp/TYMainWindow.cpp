@@ -181,7 +181,7 @@ TYMainWindow::TYMainWindow():
     QObject::connect(_pImportDXFBdTopoAction, SIGNAL(activated()), this,
                      SLOT(importFromBD_TOPO()));
 
-// XXX What does it do?
+    // XXX What does it do?
 #ifndef TY_USE_DXF
     // _pImportDXFBdTopoAction->setEnabled(false);
 #endif // TY_USE_DXF
@@ -1224,9 +1224,9 @@ void TYMainWindow::updateCurCalcul()
             if (QMessageBox::warning(this, "Tympan", TR("id_msg_solver_out"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
             {
                 // L'utilisateur accepte d'utiliser le solveur par defaut
-				_pProjetFrame->getProjet()->getCurrentCalcul()->setSolverId( OGenID( QString( DEFAULT_SOLVER_UUID ) ) );
-				_pProjetFrame->getProjet()->getCurrentCalcul()->setState(TYCalcul::Actif);
-				_pProjetFrame->getProjet()->setStatusSolver( true ); // On est ok sur le solveur 
+                _pProjetFrame->getProjet()->getCurrentCalcul()->setSolverId(OGenID(QString(DEFAULT_SOLVER_UUID)));
+                _pProjetFrame->getProjet()->getCurrentCalcul()->setState(TYCalcul::Actif);
+                _pProjetFrame->getProjet()->setStatusSolver(true);   // On est ok sur le solveur
             }
             else
             {
@@ -1389,9 +1389,9 @@ void TYMainWindow::close()
             case QMessageBox::No:
                 _closeAndQuit = true;
                 break;
-            //case QMessageBox::Cancel:
-            //    _closeAndQuit = false;
-            //    break;
+                //case QMessageBox::Cancel:
+                //    _closeAndQuit = false;
+                //    break;
         }
     }
 
@@ -1465,20 +1465,20 @@ TYElement* TYMainWindow::elementToSave()
         {
             pElement = ((TYModelerFrame*) pW)->getElement();
 
-			if ( pElement && pElement->inherits("TYAcousticVolume") ) { return pElement; }
+            if (pElement && pElement->inherits("TYAcousticVolume")) { return pElement; }
 
-			// Recherche d'un parent de type "acousticVolume"
-			TYElement *pParent = pElement->getParent();
-			while( pParent && !(pParent->inherits("TYAcousticVolumeNode")) )
-			{
-				pParent = pParent->getParent();
-			};
+            // Recherche d'un parent de type "acousticVolume"
+            TYElement* pParent = pElement->getParent();
+            while (pParent && !(pParent->inherits("TYAcousticVolumeNode")))
+            {
+                pParent = pParent->getParent();
+            };
 
-			if ( pParent && pParent->inherits("TYAcousticVolumeNode") ) { return pParent; }
+            if (pParent && pParent->inherits("TYAcousticVolumeNode")) { return pParent; }
         }
     }
 
-	return pElement;
+    return pElement;
 }
 
 bool TYMainWindow::save()
@@ -1487,22 +1487,22 @@ bool TYMainWindow::save()
 
     TYElement* pElement = elementToSave();
 
-	if (!pElement)
+    if (!pElement)
     {
         QMessageBox::warning(this, "Tympan", TR("id_nothingtoexport"));
-		return false;
+        return false;
     }
 
     QString dirName;
     QString fileName = getFileName("XML (*.xml)", dirName); // Recuperation du nom du fichier courant
 
-	bRet = save(dirName, fileName, pElement); // Sauvegarde effective de l'objet
+    bRet = save(dirName, fileName, pElement); // Sauvegarde effective de l'objet
 
-	if (bRet)
+    if (bRet)
     {
         QMessageBox::information(this, "Tympan", TR("id_export_ok").arg(fileName));
 
-		updateCurrentAppFile(dirName, fileName);
+        updateCurrentAppFile(dirName, fileName);
 
         // Indique que les TYElement sont ok (rien a sauvegarder)
         TYElement::setIsSavedOk(false);
@@ -1515,21 +1515,21 @@ bool TYMainWindow::save()
     return bRet;
 }
 
-bool TYMainWindow::save(QString dirName, QString &fileName, TYElement *pElement)
+bool TYMainWindow::save(QString dirName, QString& fileName, TYElement* pElement)
 {
-	// Controle des parametres
-	if (!pElement || fileName.isEmpty()) { return false; }
-	if (dirName.isEmpty())
-	{
-		dirName = getTYApp()->getCurrentDirName();
-	}
+    // Controle des parametres
+    if (!pElement || fileName.isEmpty()) { return false; }
+    if (dirName.isEmpty())
+    {
+        dirName = getTYApp()->getCurrentDirName();
+    }
 
-	bool bRet = false;
+    bool bRet = false;
 
-	formatFileName(fileName); // Ajoute l'extension si necessaire
+    formatFileName(fileName); // Ajoute l'extension si necessaire
 
-	// Creation du fichier XML
-	TYXMLManager xmlManager;
+    // Creation du fichier XML
+    TYXMLManager xmlManager;
 
     QString version(TY_CURRENT_RELEASE_);
     QString tiret(" - ");
@@ -1543,9 +1543,9 @@ bool TYMainWindow::save(QString dirName, QString &fileName, TYElement *pElement)
     xmlManager.createDoc(TY_PRODUCT_XMLTAG_, messageVersion); //TY_PRODUCT_VERSION_);
     xmlManager.addElement(pElement);
 
-	if (xmlManager.save(fileName) == 0) { return true; }
+    if (xmlManager.save(fileName) == 0) { return true; }
 
-	return bRet;
+    return bRet;
 }
 
 bool TYMainWindow::saveAs()
@@ -1554,33 +1554,33 @@ bool TYMainWindow::saveAs()
 
     TYElement* pElement = elementToSave();
 
-	if (!pElement)
+    if (!pElement)
     {
         QMessageBox::warning(this, "Tympan", TR("id_nothingtoexport"));
-		return false;
+        return false;
     }
 
     QString dirName;
     QString fileName = getFileName("XML (*.xml)", dirName, true);
 
 
-    if (testFile(fileName) )
+    if (testFile(fileName))
     {
         bRet = save(dirName, fileName, pElement); // On fait la sauvegarde en ecrasant l'ancienne version
 
-		if (bRet)
-		{
-			QMessageBox::information(this, "Tympan", TR("id_export_ok").arg(fileName));
+        if (bRet)
+        {
+            QMessageBox::information(this, "Tympan", TR("id_export_ok").arg(fileName));
 
-			updateCurrentAppFile(dirName, fileName);
+            updateCurrentAppFile(dirName, fileName);
 
-			// Indique que les TYElement sont ok (rien a sauvegarder)
-			TYElement::setIsSavedOk(false);
-		}
-		else
-		{
-			QMessageBox::warning(this, "Tympan", TR("id_export_failed").arg(fileName));
-		}
+            // Indique que les TYElement sont ok (rien a sauvegarder)
+            TYElement::setIsSavedOk(false);
+        }
+        else
+        {
+            QMessageBox::warning(this, "Tympan", TR("id_export_failed").arg(fileName));
+        }
     }
 
     return bRet;
@@ -1590,9 +1590,9 @@ bool TYMainWindow::saveAsNoResult()
 {
     bool bRet = false;
 
-	TYProjet* pProjet = getTYApp()->getCurProjet();
+    TYProjet* pProjet = getTYApp()->getCurProjet();
 
-    if ( !pProjet )
+    if (!pProjet)
     {
         QMessageBox::warning(this, "Tympan", TR("id_nothingtoexport"));
         return false;
@@ -1602,18 +1602,18 @@ bool TYMainWindow::saveAsNoResult()
     QString fileName = getFileName("XML (*.xml)", dirName, true);
 
     TYProjet::gSaveValues = false;
-    if ( testFile(fileName) )
+    if (testFile(fileName))
     {
         bRet = save(dirName, fileName, pProjet); // On fait la sauvegarde en ecrasant l'ancienne version
 
-		if (bRet)
-		{
-			QMessageBox::information(this, "Tympan", TR("id_export_ok").arg(fileName));
-		}
-		else
-		{
-			QMessageBox::warning(this, "Tympan", TR("id_export_failed").arg(fileName));
-		}
+        if (bRet)
+        {
+            QMessageBox::information(this, "Tympan", TR("id_export_ok").arg(fileName));
+        }
+        else
+        {
+            QMessageBox::warning(this, "Tympan", TR("id_export_failed").arg(fileName));
+        }
     }
 
     TYProjet::gSaveValues = true;
@@ -1630,29 +1630,29 @@ bool TYMainWindow::saveAs(LPTYElement pElement)
     QString dirName;
     QString fileName = getFileName("XML (*.xml)", dirName, true);
 
-	if ( testFile(fileName) )
-	{
-		bRet = save(dirName, fileName, pElement);
+    if (testFile(fileName))
+    {
+        bRet = save(dirName, fileName, pElement);
 
-		if (bRet)
-		{
-			QMessageBox::information(this, "Tympan", TR("id_export_ok").arg(fileName));
-		}
-		else
-		{
-			QMessageBox::warning(this, "Tympan", TR("id_export_failed").arg(fileName));
-		}
-	}
+        if (bRet)
+        {
+            QMessageBox::information(this, "Tympan", TR("id_export_ok").arg(fileName));
+        }
+        else
+        {
+            QMessageBox::warning(this, "Tympan", TR("id_export_failed").arg(fileName));
+        }
+    }
 
     return bRet;
 }
 
 void TYMainWindow::updateCurrentAppFile(const QString& dirName, const QString& fileName)
 {
-	getTYApp()->setCurrentDirName(dirName);
-	getTYApp()->setCurrentFileName(fileName);
+    getTYApp()->setCurrentDirName(dirName);
+    getTYApp()->setCurrentFileName(fileName);
 
-	setWindowTitle(TR("id_caption") + "-" + TY_CURRENT_RELEASE_ + " (" + TY_PRODUCT_PLATFORM_ + ") : " + fileName);
+    setWindowTitle(TR("id_caption") + "-" + TY_CURRENT_RELEASE_ + " (" + TY_PRODUCT_PLATFORM_ + ") : " + fileName);
 }
 
 
@@ -1785,7 +1785,7 @@ void TYMainWindow::importFromBD_TOPO()
 {
     // TYPreferenceDialog * pPrfDlg = new TYPreferenceDialog(this);
     // pPrfDlg->exec();
-    TYOpenElementDialog * pDlg = new TYOpenElementDialog(this);
+    TYOpenElementDialog* pDlg = new TYOpenElementDialog(this);
     pDlg->openBDTopo();
     pDlg->exec();
 }

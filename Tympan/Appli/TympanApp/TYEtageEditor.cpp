@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYEtageEditor.cpp
  * \brief Construit un etage a partir des points saisis
@@ -99,7 +99,7 @@ void TYEtageEditor::endEtage()
             {
                 TYSegment seg2(tabPts[j], tabPts[(j + 1) % nbPts]);
                 // Test if at least one vertex is in common
-                if ((seg1._ptA != seg2._ptA) && ( seg1._ptB != seg2._ptB) && (seg1._ptA != seg2._ptB) && (seg1._ptB != seg2._ptA))
+                if ((seg1._ptA != seg2._ptA) && (seg1._ptB != seg2._ptB) && (seg1._ptA != seg2._ptB) && (seg1._ptB != seg2._ptA))
                 {
                     // Test si il y a intersection
                     if (seg1.intersects(seg2, pt) != INTERS_NULLE)
@@ -357,7 +357,7 @@ void TYEtageEditor::endEtage()
         }
 
         // repasse en mode camera selection
-	// XXX The bug goes here
+        // XXX The bug goes here
         getTYMainWnd()->setDefaultCameraMode();
     }
 

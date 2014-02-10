@@ -365,7 +365,7 @@ void TYAcousticSurface::setIsRayonnant(bool rayonnant, bool recursif)
     {
         // Si une face rayonne son parent rayonne
         TYAcousticSurfaceNode* pSurfNode = TYAcousticSurfaceNode::safeDownCast(this->getParent());
-		if (pSurfNode) { pSurfNode->setIsRayonnant(rayonnant, recursif); }
+        if (pSurfNode) { pSurfNode->setIsRayonnant(rayonnant, recursif); }
     }
 }
 
@@ -377,7 +377,7 @@ void TYAcousticSurface::exportCSV(std::ofstream& ofs)
     // Export du nom de l'objet
     ofs << getName().toAscii().data() << '\n';
 
-	// Export du type de l'objet
-	ofs << toString() << '\n';
+    // Export du type de l'objet
+    ofs << toString() << '\n';
     TYAcousticInterface::exportCSV(ofs);
 }

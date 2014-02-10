@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTIC_POLYGON__
@@ -36,9 +33,6 @@
 /**
  * Classe de definition d'un polygon acoustique.
  * La partie geometrie est deleguee a un TYPolygon membre.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticPolygon: public TYAcousticSurface
 {
@@ -84,7 +78,7 @@ public:
     virtual OVector3D normal() const;
     virtual OPlan plan() const;
     virtual TYTabPoint getContour(int n = -1) const;
-	virtual TYTabPoint3D getOContour(int n = -1) const;
+    virtual TYTabPoint3D getOContour(int n = -1) const;
     virtual int intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const;
     virtual int intersects(const OSegment3D& seg, OPoint3D& pt) const;
     virtual int intersects(const OPoint3D& pt) const;

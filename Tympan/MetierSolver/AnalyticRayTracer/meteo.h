@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*!
 * \file meteo.h
 * \author Projet_Tympan
@@ -33,7 +33,7 @@ public:
     double gradC;      /*!< gradient de la celerite */
     double gradV;      /*!< gradient du vent */
     double c0;         /*!< celerite en z = 0 */
-	double windDirection;  /*!< angle du vent */
+    double windDirection;  /*!< angle du vent */
 
 
     /*!
@@ -59,7 +59,7 @@ public:
     */
     void setGradV(const double& g) { gradV = g; }
 
-	    /*!
+    /*!
     * \fn bool setGradV(const double& g)
     * \brief Modifie la valeur de la vitesse du vent
     * \param g nouvelle valeur que l'on souhaite attribuer a notre vent
@@ -77,17 +77,17 @@ public:
     * \fn R cLin(const R3& P, const meteo& Meteo, R3& grad)
     * \brief Prend en compte la temperature pour le point P
     * \param P Position du rayon
-	* \param grad gradient selon z (veleur modifiee) 
+    * \param grad gradient selon z (veleur modifiee)
     */
- 	double cLin(const R3& P, R3& grad) const;
+    double cLin(const R3& P, R3& grad) const;
 
     /*!
     * \fn R3 vent(const R3& P, map<pair<int, int>, R> &jacob)
     * \brief Prend en compte le vent pour le point P
     * \param P Position du rayon
-	* \param jacob : jacobien (veleur modifiee) 
-    */	
-	R3 vent(const R3& P, std::map<std::pair<int, int>, R> &jacob) const;
+    * \param jacob : jacobien (veleur modifiee)
+    */
+    R3 vent(const R3& P, std::map<std::pair<int, int>, R> &jacob) const;
 
     /*!
      *  \brief Destructeur

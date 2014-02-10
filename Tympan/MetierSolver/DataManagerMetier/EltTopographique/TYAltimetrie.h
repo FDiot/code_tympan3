@@ -162,7 +162,7 @@ public:
      * @return <code>false</code> si l'altitude du point n'a pu etre
      *         determinee; <code>false</code> sinon.
      */
-	double altitude(const OPoint3D& pt);
+    double altitude(const OPoint3D& pt);
 
     /**
      * \brief Modifie l'altitude d'un point donn�. Si le point est hors de la zone dans laquelle l'altim�trie est d�finie, la valeur z du point est mise a \c TYAltimetry::invalid_altitude
@@ -194,27 +194,25 @@ public:
      */
     TYTabPoint altSup(const TYPoint& pt) const;
 
-	/**
-	 * \brief Return the face under a point
-	 * \fn LPTYPolygon getFaceUnder(OPoint3D pt);
-	 */
-	LPTYPolygon getFaceUnder(OPoint3D pt);
+    /**
+     * \brief Return the face under a point
+     * \fn LPTYPolygon getFaceUnder(OPoint3D pt);
+     */
+    LPTYPolygon getFaceUnder(OPoint3D pt);
 
-	/**
-	 * \brief find a list of triangle partialy or totaly included in a box
-	 * \brief A return value equal 0 means all triangle near the boxes are included
-	 * \fn unsigned int getFacesInBox(OBox2 box, TYTabLPPolygon& tabPolygon)
-	 */
-	unsigned int getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPolygon);
+    /**
+     * \brief find a list of triangle partialy or totaly included in a box
+     * \brief A return value equal 0 means all triangle near the boxes are included
+     * \fn unsigned int getFacesInBox(OBox2 box, TYTabLPPolygon& tabPolygon)
+     */
+    unsigned int getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPolygon);
 
-	/**
-	 * \brief find a list of point included in a box defined by four points
-	 * \brief Value returned is the number of point
-	 * \fn unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon)
-	 */
-	unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon);
-
-
+    /**
+     * \brief find a list of point included in a box defined by four points
+     * \brief Value returned is the number of point
+     * \fn unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon)
+     */
+    unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon);
 
     /** \brief Integer coordinates into the grid */
     struct grid_index { unsigned pi, qi; } ;
@@ -223,30 +221,30 @@ protected:
     FRIEND_TEST(TYAltimetryTest, dummy_grid);
     FRIEND_TEST(TYAltimetryTest, simple_grid);
     FRIEND_TEST(TYAltimetryTest, simple_terrain);
-	/**
-	 * \brief Select indices of faces to test
-	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
-	 */
-	bool getGridIndices(const OPoint3D& pt, grid_index& indXY) const;
 
-	/**
-	 * \brief Select indices of faces to test
-	 * \fn bool getGridIndices(const OPoint3D* pts, int* indXY)
-	 */
-	bool getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) const;
+    /**
+     * \brief Select indices of faces to test
+     * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
+     */
+    bool getGridIndices(const OPoint3D& pt, grid_index& indXY) const;
 
-	/**
-	 * \brief Select indices of faces to test
-	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
-	 */
-	bool getGridIndices(const OBox2 &box, unsigned int* iMinMax) const;
+    /**
+     * \brief Select indices of faces to test
+     * \fn bool getGridIndices(const OPoint3D* pts, int* indXY)
+     */
+    bool getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) const;
 
+    /**
+     * \brief Select indices of faces to test
+     * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
+     */
+    bool getGridIndices(const OBox2& box, unsigned int* iMinMax) const;
 
-	/**
-	 * \brief Select faces in the interval minX, maxX, minY, maxY
-	 * \fn void getFacesinIndices(unsigned int& minX, unsigned int&maxX, unsigned int&minY, unsigned int&maxY, TYTabLPPolygon& faces);
-	 */
-	void getFacesinIndices(unsigned int& minX, unsigned int&maxX, unsigned int&minY, unsigned int&maxY, TYTabLPPolygon& faces);
+    /**
+     * \brief Select faces in the interval minX, maxX, minY, maxY
+     * \fn void getFacesinIndices(unsigned int& minX, unsigned int&maxX, unsigned int&minY, unsigned int&maxY, TYTabLPPolygon& faces);
+     */
+    void getFacesinIndices(unsigned int& minX, unsigned int& maxX, unsigned int& minY, unsigned int& maxY, TYTabLPPolygon& faces);
 
 private :
     inline bool IsInsideFace(const TYTabPoint& pts, OPoint3D& pt) const;

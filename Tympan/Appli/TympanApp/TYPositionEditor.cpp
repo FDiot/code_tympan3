@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYPositionEditor.cpp
  * \brief gestion de la position selon les modes 'moving', 'rotation', 'edition
@@ -675,7 +675,7 @@ void TYPositionEditor::initEditRoute(TYElement* pElt)
 
     if (_mode == Edition)
     {
-        TYTabPoint &pts = pRoute->getTabPoint();
+        TYTabPoint& pts = pRoute->getTabPoint();
         editPolyLine(pRoute, pts, false);
     }
     else
@@ -720,7 +720,7 @@ void TYPositionEditor::initEditResTrans(TYElement* pElt)
 
     if (_mode == Edition)
     {
-        TYTabPoint &pts = pResTrans->getTabPoint();
+        TYTabPoint& pts = pResTrans->getTabPoint();
         editPolyLine(pResTrans, pts, false);
     }
     else
@@ -768,7 +768,7 @@ void TYPositionEditor::initEditCrbNiv(TYElement* pElt)
 
     if (_mode == Edition)
     {
-        TYTabPoint &pts = pCrbNiv->getListPoints();
+        TYTabPoint& pts = pCrbNiv->getListPoints();
         editPolyLine(pCrbNiv, pts, false);
     }
     else
@@ -817,7 +817,7 @@ void TYPositionEditor::initEditCrsEau(TYElement* pElt)
 
     if (_mode == Edition)
     {
-        TYTabPoint &pts = pCrsEau->getTabPoint();
+        TYTabPoint& pts = pCrsEau->getTabPoint();
         editPolyLine(pCrsEau, pts, false, pParent->getAltimetrie());
     }
     else
@@ -865,7 +865,7 @@ void TYPositionEditor::initEditPlanEau(TYElement* pElt)
 
     if (_mode == Edition)
     {
-        TYTabPoint &pts = pPlanEau->getListPoints();
+        TYTabPoint& pts = pPlanEau->getListPoints();
         editPolyLine(pPlanEau, pts, true, pParent->getAltimetrie());
     }
     else
@@ -913,7 +913,7 @@ void TYPositionEditor::initEditTerrain(TYElement* pElt)
 
     if (_mode == Edition)
     {
-        TYTabPoint &pts = pTerrain->getListPoints();
+        TYTabPoint& pts = pTerrain->getListPoints();
         editPolyLine(pTerrain, pts, true, pParent->getAltimetrie());
     }
     else
@@ -1676,20 +1676,22 @@ bool TYPositionEditor::selectElement(TYElement* pElt)
     return stop;
 }
 
-void TYPositionEditor::editPolyLine(LPTYElement pElt, TYTabPoint &pts, bool closed, LPTYAltimetrie pAlti)
+void TYPositionEditor::editPolyLine(LPTYElement pElt, TYTabPoint& pts, bool closed, LPTYAltimetrie pAlti)
 {
     int ptIdToEdit = 0;
-    if(_keyAOn) // Insert a point
+    if (_keyAOn) // Insert a point
     {
         TYPoint ptInsert;
         insertNewPoint(pts, ptInsert, ptIdToEdit, pAlti);
         _pLastAction = new TYInsertPointPolyLineAction(pElt, pts, ptIdToEdit, ptInsert, _pModeler, TR("id_action_insertptpolyline"));
     }
-    else if(_keyDOn) // Delete a point
+    else if (_keyDOn) // Delete a point
     {
         size_t nbPts = pts.size();
-        if(nbPts<3 || (closed && nbPts<4))
+        if (nbPts < 3 || (closed && nbPts < 4))
+        {
             return;
+        }
         TYPoint ptDelete;
         deletePoint(pts, ptDelete, ptIdToEdit);
         _pLastAction = new TYRemovePointPolyLineAction(pElt, pts, ptIdToEdit, ptDelete, _pModeler, TR("id_action_delptpolyline"));
@@ -1709,7 +1711,7 @@ void TYPositionEditor::editPolyLine(LPTYElement pElt, TYTabPoint &pts, bool clos
     }
 }
 
-void TYPositionEditor::insertNewPoint(TYTabPoint &pts, TYPoint &newPoint, int &idInsert, LPTYAltimetrie pAlti)
+void TYPositionEditor::insertNewPoint(TYTabPoint& pts, TYPoint& newPoint, int& idInsert, LPTYAltimetrie pAlti)
 {
     idInsert = findClosestSegmentToMouse(pts);
     double ptProj[3];
@@ -1718,54 +1720,58 @@ void TYPositionEditor::insertNewPoint(TYTabPoint &pts, TYPoint &newPoint, int &i
 
     // Si la grille magnetique est activee
     if (_pModeler->getSnapGridActive())
+    {
         snapToGrid(newPoint._x, newPoint._y, newPoint._z);
+    }
 
     ++idInsert;
-    if(pAlti && !pAlti->altitude(newPoint))
+    if (pAlti && !pAlti->altitude(newPoint))
+    {
         newPoint._z = std::numeric_limits<double>::quiet_NaN();
-    pts.insert(pts.begin()+idInsert, newPoint);
+    }
+    pts.insert(pts.begin() + idInsert, newPoint);
 }
 
-void TYPositionEditor::deletePoint(TYTabPoint &pts, TYPoint &deletedPoint, int &idDelete)
+void TYPositionEditor::deletePoint(TYTabPoint& pts, TYPoint& deletedPoint, int& idDelete)
 {
     idDelete = findClosestPointToMouse(pts);
     deletedPoint = pts[idDelete];
     pts.erase(pts.begin() + idDelete);
 }
 
-int TYPositionEditor::findClosestSegmentToMouse(const TYTabPoint &pts)
+int TYPositionEditor::findClosestSegmentToMouse(const TYTabPoint& pts)
 {
     int idPt = 0;
     size_t nbPts = pts.size();
     double ptOnDisplay[3];
-    OVector3D pt(0,0,0);
-    const OMatrix &matrixNode = _pEditGeoNode->getMatrix();
+    OVector3D pt(0, 0, 0);
+    const OMatrix& matrixNode = _pEditGeoNode->getMatrix();
 
     std::vector<OVector3D> ptsDisplay;
     //We project on the display the points of our polyline
-    for(size_t i = 0; i<nbPts; ++i)
+    for (size_t i = 0; i < nbPts; ++i)
     {
         //Is the transformation really necessary?
         pt = matrixNode * pts[i];
         worldToDisplay(pt._x, pt._z, -pt._y, ptOnDisplay);
         ptsDisplay.push_back(OVector3D(ptOnDisplay[0], ptOnDisplay[1], 0.0));
     }
-    
+
     double distSqrMin = (std::numeric_limits<double>::max)();
     double distSqr = 0;
     double mx = _currentMousePos[0];
-    double my = _pInteractor->height() -_currentMousePos[1];
+    double my = _pInteractor->height() - _currentMousePos[1];
 
     //Find the closest line to our mouse position
     int j = 0;
-    for(size_t i = 0; i<nbPts; ++i)
+    for (size_t i = 0; i < nbPts; ++i)
     {
-        j = i<(nbPts-1) ? i+1 : 0;
-        const OVector3D &v = ptsDisplay[i];
-        const OVector3D &w = ptsDisplay[j];
+        j = i < (nbPts - 1) ? i + 1 : 0;
+        const OVector3D& v = ptsDisplay[i];
+        const OVector3D& w = ptsDisplay[j];
 
         distSqr = distSegmentSqr(mx, my, v._x, v._y, w._x, w._y);
-        if(distSqr<distSqrMin)
+        if (distSqr < distSqrMin)
         {
             distSqrMin = distSqr;
             idPt = i;
@@ -1774,25 +1780,25 @@ int TYPositionEditor::findClosestSegmentToMouse(const TYTabPoint &pts)
     return idPt;
 }
 
-int TYPositionEditor::findClosestPointToMouse(const TYTabPoint &pts)
+int TYPositionEditor::findClosestPointToMouse(const TYTabPoint& pts)
 {
     int ptId = -1;
     size_t nbPts = pts.size();
     double distSqrMin = (std::numeric_limits<double>::max)();
     double ptOnDisplay[3];
     double diffx = 0, diffy = 0, distSqr = 0;
-    OVector3D pt(0,0,0);
-    const OMatrix &matrixNode = _pEditGeoNode->getMatrix();
+    OVector3D pt(0, 0, 0);
+    const OMatrix& matrixNode = _pEditGeoNode->getMatrix();
 
-    for(size_t i = 0; i<nbPts; ++i)
+    for (size_t i = 0; i < nbPts; ++i)
     {
         // Is the transformation really necessary?
         pt = matrixNode * pts[i];
         worldToDisplay(pt._x, pt._z, -pt._y, ptOnDisplay);
         diffx = ptOnDisplay[0] - _currentMousePos[0];
         diffy = ptOnDisplay[1] - _pInteractor->height() + _currentMousePos[1];
-        distSqr = diffx*diffx+diffy*diffy;
-        if(distSqr<distSqrMin)
+        distSqr = diffx * diffx + diffy * diffy;
+        if (distSqr < distSqrMin)
         {
             distSqrMin = distSqr;
             ptId = i;
@@ -1803,18 +1809,26 @@ int TYPositionEditor::findClosestPointToMouse(const TYTabPoint &pts)
 
 double TYPositionEditor::distSegmentSqr(double mx, double my, double vx, double vy, double wx, double wy) const
 {
-    double l2 = (vx-wx)*(vx-wx) + (vy-wy)*(vy-wy) ;
+    double l2 = (vx - wx) * (vx - wx) + (vy - wy) * (vy - wy) ;
     if (l2 != 0)
     {
         double t = ((mx - vx) * (wx - vx) + (my - vy) * (wy - vy)) / l2;
-        if (t < 0) 
-            return (mx-vx)*(mx-vx) + (my-vy)*(my-vy);
+        if (t < 0)
+        {
+            return (mx - vx) * (mx - vx) + (my - vy) * (my - vy);
+        }
         else if (t > 1)
-            return (mx-wx)*(mx-wx) + (my-wy)*(my-wy);
+        {
+            return (mx - wx) * (mx - wx) + (my - wy) * (my - wy);
+        }
         else
-            return (mx-(vx+t*(wx-vx)))*(mx-(vx+t*(wx-vx))) + (my-(vy+t*(wy-vy)))*(my-(vy+t*(wy-vy)));
+        {
+            return (mx - (vx + t * (wx - vx))) * (mx - (vx + t * (wx - vx))) + (my - (vy + t * (wy - vy))) * (my - (vy + t * (wy - vy)));
+        }
     }
     else
-        return (mx-vx)*(mx-vx) + (my-vy)*(my-vy);
+    {
+        return (mx - vx) * (mx - vx) + (my - vy) * (my - vy);
+    }
 }
 

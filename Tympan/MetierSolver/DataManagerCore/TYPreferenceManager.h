@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -38,8 +38,6 @@ class TYSpectre;
  * Classe statique pour la gestion des preferences dans Tympan.
  * Cette classe statique instancie un objet de type OPreferenceManager
  * et offre une interface statique pour une utilisation simple.
- *
- * @author Projet_Tympan
  */
 class TYPreferenceManager
 {

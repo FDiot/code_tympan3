@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include "RayCourb.h"
 #include "Transfo.h"
 #include "interpolation.h"
@@ -122,7 +122,7 @@ void Transfo::createShot()
     shot.Meteo.setC0(Meteo.c0);
     shot.Meteo.setGradC(Meteo.gradC);
     shot.Meteo.setGradV(Meteo.gradV);
-	shot.Meteo.setWindDirection(Meteo.windDirection);
+    shot.Meteo.setWindDirection(Meteo.windDirection);
     setSrcForMapping(source);
     shot.recepteurs = recepteurs;
     shot.setNbRay(nbRay);
@@ -141,10 +141,10 @@ void Transfo::RemplirSurf(vector<R3>& vectSurf_Interp)
     {
         for (unsigned int j = 0; j < shot.MatRes[0][i].coord.size(); ++j)                         // boucle sur les points du rayon
         {
-			R3 point(shot.MatRes[0][i].coord[j].x, shot.MatRes[0][i].coord[j].y, shot.MatRes[0][i].coord[j].z);
-			vectSurf_Interp.push_back(point);
-		}
-	}
+            R3 point(shot.MatRes[0][i].coord[j].x, shot.MatRes[0][i].coord[j].y, shot.MatRes[0][i].coord[j].z);
+            vectSurf_Interp.push_back(point);
+        }
+    }
 }
 
 R3 Transfo::fonction_h(const R3& P)
@@ -164,11 +164,11 @@ R3 Transfo::fonction_h(const R3& P)
         //Si le point appartient a un triangle, on le transforme.
         //Sinon, le point n'est pas modifie (il est en dehors de la zone de transformation).
 
-		OPoint3D v1 = list_vertex[Liste_triangles[i]._p1];
+        OPoint3D v1 = list_vertex[Liste_triangles[i]._p1];
         OPoint3D v2 = list_vertex[Liste_triangles[i]._p2];
         OPoint3D v3 = list_vertex[Liste_triangles[i]._p3];
 
-		TabTriangle[0] = R3(v1._x, v1._y, v1._z);
+        TabTriangle[0] = R3(v1._x, v1._y, v1._z);
         TabTriangle[1] = R3(v2._x, v2._y, v2._z);
         TabTriangle[2] = R3(v3._x, v3._y, v3._z);
 
@@ -193,7 +193,7 @@ R3 Transfo::fonction_h_inverse(const R3& P)
 
     // On cherche a quel triangle de Surf_Interp le point P appartient.
     // Un point P appartient au triangle ABC si l'aire signee des triangles ABP, BCP et CAP est positive.
-    
+
     R3* TabTriangle = new R3[3];
 
     for (int i = 0; i < Liste_triangles.size(); ++i)
@@ -205,7 +205,7 @@ R3 Transfo::fonction_h_inverse(const R3& P)
         OPoint3D v2 = list_vertex[Liste_triangles[i]._p2];
         OPoint3D v3 = list_vertex[Liste_triangles[i]._p3];
 
-		TabTriangle[0] = R3(v1._x, v1._y, v1._z);
+        TabTriangle[0] = R3(v1._x, v1._y, v1._z);
         TabTriangle[1] = R3(v2._x, v2._y, v2._z);
         TabTriangle[2] = R3(v3._x, v3._y, v3._z);
 
@@ -217,33 +217,33 @@ R3 Transfo::fonction_h_inverse(const R3& P)
 
     }
 
-	delete [] TabTriangle; // Gestion memoire
-    
-	return R;
+    delete [] TabTriangle; // Gestion memoire
+
+    return R;
 }
 
 
 void Transfo::trianguleNappe()
 {
-     vector<R3> vectSurf_Interp;  // vector qui contient les coordonnees des points dans l'ordre (coord de P1, coord de P2, ...)
-	 RemplirSurf(vectSurf_Interp);
+    vector<R3> vectSurf_Interp;  // vector qui contient les coordonnees des points dans l'ordre (coord de P1, coord de P2, ...)
+    RemplirSurf(vectSurf_Interp);
 
-	// 1- On creer nos triangles de Delaunay
+    // 1- On creer nos triangles de Delaunay
     ODelaunayMaker oDelaunayMaker(1e-5);
     //OPoint3D oVertex;
 
-	for (unsigned int i=0; i<vectSurf_Interp.size(); i++)
-	{
+    for (unsigned int i = 0; i < vectSurf_Interp.size(); i++)
+    {
         R3 point(vectSurf_Interp[i].x, vectSurf_Interp[i].y, vectSurf_Interp[i].z);
-		oDelaunayMaker.addVertex(OPoint3D(point.x, point.y, point.z));
-	}
+        oDelaunayMaker.addVertex(OPoint3D(point.x, point.y, point.z));
+    }
 
     oDelaunayMaker.compute();
 
 
     // 2- On a notre liste de triangles
     Liste_triangles = oDelaunayMaker.getFaces();
-	list_vertex = oDelaunayMaker.getVertex();
+    list_vertex = oDelaunayMaker.getVertex();
 }
 
 void Transfo::Transfo_Geom1()

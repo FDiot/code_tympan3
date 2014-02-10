@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,18 +11,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
 #ifndef __TY_GEOMETRY_NODE__
 #define __TY_GEOMETRY_NODE__
-
 
 #if _MSC_VER > 1000
 #pragma once
@@ -37,15 +33,12 @@
 #include "TYRepere.h"
 #include "Tympan/MetierSolver/ToolsMetier/OMatrix.h"
 
-
 /**
  * Template pour la gestion des noeuds de geometrie.
  * Un repere est associe a un element geometrique.
  * Une matrice mis a jour a chaque fois que le repere est
  * modifie permet de gagner du temps sur les calculs de
  * changement de repere.
- *
- * @author Projet_Tympan
  */
 ///Map de TYElement pour la gestion de la hierarchie des GeoNode:.
 class TYGeometryNode;
@@ -132,7 +125,7 @@ public:
      *
      * @return A real pointer on the element.
      */
-	TYElement* getElement() const { return _pElement._pObj; }
+    TYElement* getElement() const { return _pElement._pObj; }
 
     /**
      * Set de l'element (smart pointer).

@@ -78,10 +78,10 @@ public slots:
     // Members
 protected:
     /// Density spin box.
-    QDoubleSpinBox *_pDensitySpinBox;
+    QDoubleSpinBox* _pDensitySpinBox;
 
     /// Density spin box.
-    QDoubleSpinBox *_pThicknessSpinBox;
+    QDoubleSpinBox* _pThicknessSpinBox;
 
     /// Closed check box (if the polyline is closed or pen).
     QCheckBox* _pClosedCheckBox;

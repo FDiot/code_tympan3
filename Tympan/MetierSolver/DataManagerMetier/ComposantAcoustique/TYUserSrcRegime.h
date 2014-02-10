@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,27 +11,20 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
 #ifndef __TY_USER_SRC_REGIME__
 #define __TY_USER_SRC_REGIME__
 
-
 #include "TYRegime.h"
 #include "TYDirectivite.h"
 
 /**
  * Classe pour definir les differents regimes d'une source ponctuelle.
- *
- * @author Projet_Tympan
- *
  */
 class TYUserSrcRegime : public TYRegime
 {

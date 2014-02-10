@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_TERRAIN__
@@ -36,9 +33,6 @@
 
 /**
  * Permet d'attribuer des proprietes acoustiques a une zone d'altimetrie.
- *
- * @author Projet_Tympan
- *
  */
 class TYTerrain: public TYElement, public TYColorInterface
 {
@@ -88,7 +82,6 @@ public:
      * Set/Get du materiau.
      */
     LPTYSol getSol() const { return _pSol;}
-
     LPTYSol getSol() { return _pSol._pObj; }
 
     /**

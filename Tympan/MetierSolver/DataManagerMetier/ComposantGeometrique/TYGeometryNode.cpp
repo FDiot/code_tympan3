@@ -371,9 +371,9 @@ bool TYGeometryNode::operator!=(const TYGeometryNode& other) const
 
 bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
-	TYGeometryNode* pOtherGeoNode = NULL;
-	if (pOther) { pOtherGeoNode = (TYGeometryNode*) pOther; }
-	if ( !pOtherGeoNode || pOtherGeoNode->getElement() ) { return false; }
+    TYGeometryNode* pOtherGeoNode = NULL;
+    if (pOther) { pOtherGeoNode = (TYGeometryNode*) pOther; }
+    if (!pOtherGeoNode || pOtherGeoNode->getElement()) { return false; }
 
     // Avant de faire la deep copy sur l'element il faut s'assurer
     // qu'ils sont de meme type

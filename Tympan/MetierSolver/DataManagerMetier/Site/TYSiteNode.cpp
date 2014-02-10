@@ -13,27 +13,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
-
 #include <cstdlib>
 #include <cassert>
-
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 #include "Tympan/Tools/TYProgressManager.h"
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/Tools/OMessageManager.h"
-
 
 #include <QDir>
 
@@ -857,8 +848,8 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
     TYProgressManager::stepToEnd();
 #endif // TY_USE_IHM
 
-	// Warning if an object is not correctly altimetrized
-	if (!bNoPbAlti) { OMessageManager::get()->info(TR("msg_pbalti")); }
+    // Warning if an object is not correctly altimetrized
+    if (!bNoPbAlti) { OMessageManager::get()->info(TR("msg_pbalti")); }
 
     if (modified)
     {
@@ -1026,7 +1017,7 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
             // Si ce batiment est actif pour le calcul
             LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
 
-			if (pBatiment && pBatiment->isInCurrentCalcul())
+            if (pBatiment && pBatiment->isInCurrentCalcul())
             {
                 tabTmp.clear();
 
@@ -1071,24 +1062,24 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
                         etages.push_back(j);
 
                     }
-					else
-					{
-						// try to cast as a screen (TYEcran)
-						LPTYEcran pEcran = TYEcran::safeDownCast(pBatiment->getAcousticVol(j));
+                    else
+                    {
+                        // try to cast as a screen (TYEcran)
+                        LPTYEcran pEcran = TYEcran::safeDownCast(pBatiment->getAcousticVol(j));
 
-						if (pEcran)
-						{
-							TYTabAcousticSurfaceGeoNode tabTmp2;
-							tabTmp2 = pEcran->acousticFaces();
-							for (unsigned k=0; k<tabTmp2.size(); k++)
-							{
-								tabTmp2[k]->setMatrix(matriceEtage * tabTmp2[k]->getMatrix());
-								tabTmp.push_back(tabTmp2[k]);
-								indices.push_back(std::pair<int, int>(compteurFace++, compteurInfra));
-								etages.push_back(j);
-							}
-						}
-					}
+                        if (pEcran)
+                        {
+                            TYTabAcousticSurfaceGeoNode tabTmp2;
+                            tabTmp2 = pEcran->acousticFaces();
+                            for (unsigned k = 0; k < tabTmp2.size(); k++)
+                            {
+                                tabTmp2[k]->setMatrix(matriceEtage * tabTmp2[k]->getMatrix());
+                                tabTmp.push_back(tabTmp2[k]);
+                                indices.push_back(std::pair<int, int>(compteurFace++, compteurInfra));
+                                etages.push_back(j);
+                            }
+                        }
+                    }
                 }
 
                 LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(0));
@@ -1106,7 +1097,7 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
                 //tabTmp = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement())->acousticFaces();
 
                 bool bEcran = false; // element de type TYEcran
-				// Next 3 lines commented, may be invalid (a building can't be a floor)
+                // Next 3 lines commented, may be invalid (a building can't be a floor)
                 //if (_pInfrastructure->getBatiment(i)->getElement()->isA("TYEcran"))
                 //{
                 //    bEcran = true;
@@ -1136,7 +1127,7 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
         {
             // Si cette machine est active pour le calcul
             LPTYMachine pMachine = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement());
-            if ( pMachine && pMachine->isInCurrentCalcul() )
+            if (pMachine && pMachine->isInCurrentCalcul())
             {
                 tabTmp.clear();
 
@@ -1215,14 +1206,14 @@ void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& 
         {
             // Si ce batiment est actif pour le calcul
             LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
-            if ( pBatiment && pBatiment->isInCurrentCalcul() )
+            if (pBatiment && pBatiment->isInCurrentCalcul())
             {
                 tabTmp.clear();
 
                 // Matrice de changement de repere pour ce batiment
                 OMatrix matrix = _pInfrastructure->getListBatiment()[i]->getMatrix();
 
-//                LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
+                //                LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
                 LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(0));
 
                 // Old Code_TYMPAN version could use a floor as a screen so, that case should be treated
@@ -1237,7 +1228,7 @@ void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& 
                 }
 
                 // L'ensemble des faces de ce batiment
-				tabTmp = pBatiment->acousticFaces();
+                tabTmp = pBatiment->acousticFaces();
 
                 bool bEcran = false; // element de type TYEcran
 
@@ -1263,7 +1254,7 @@ void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& 
         {
             // Si cette machine est active pour le calcul
             LPTYMachine pMachine = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement());
-            if ( pMachine && pMachine->isInCurrentCalcul() )
+            if (pMachine && pMachine->isInCurrentCalcul())
             {
                 tabTmp.clear();
 
@@ -1576,7 +1567,6 @@ LPTYSiteNode TYSiteNode::merge()
 
         LPTYSiteNode pSiteTmp = pSiteChild->merge();
 
-
         // On copie les elements du site enfant en prenant compte le changement de repere
         appendSite(pSiteTmp, pSiteNodeGeoNode->getMatrix(), pSite);
     }
@@ -1605,11 +1595,12 @@ void TYSiteNode::appendSite(LPTYSiteNode pSiteFrom, const OMatrix& matrix, LPTYS
         pTopoTo->addCrbNiv(new TYCourbeNiveau(pTopoFrom->getEmprise(), pSiteFrom->getAltiEmprise()));
     }
     // This scope is here to make p_ground local
-    {   // Add the 'emprise' as a Terrain with its defaultTErrain as Sol attribute.
-    	TYTerrain* p_ground = new TYTerrain();
-    	p_ground->setSol( pTopoFrom->getDefTerrain()->getSol() );
-    	p_ground->setListPoints( pTopoFrom->getEmprise() );
-    	pTopoTo->addTerrain(new TYTerrainGeoNode(p_ground, matrix));
+    {
+        // Add the 'emprise' as a Terrain with its defaultTErrain as Sol attribute.
+        TYTerrain* p_ground = new TYTerrain();
+        p_ground->setSol(pTopoFrom->getDefTerrain()->getSol());
+        p_ground->setListPoints(pTopoFrom->getEmprise());
+        pTopoTo->addTerrain(new TYTerrainGeoNode(p_ground, matrix));
     }
     for (i = 0; i < pTopoFrom->getListCrbNiv().size(); i++)
     {
@@ -1681,8 +1672,8 @@ void TYSiteNode::exportCSV(std::ofstream& ofs)
     // Export du nom de l'objet
     ofs << getName().toAscii().data() << '\n';
 
-	// Export du type de l'objet
-	ofs << toString() << '\n';
+    // Export du type de l'objet
+    ofs << toString() << '\n';
     // Export des donnees acoustiques
     TYElementCollection childs;
     getChilds(childs);

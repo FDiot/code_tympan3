@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_ACOUSTICCIRCLE__
@@ -37,9 +34,6 @@ class OPoint3D;
 
 /**
  * Permet de creer des surfaces acoustiques circulaires.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticCircle: public TYAcousticSurface
 {

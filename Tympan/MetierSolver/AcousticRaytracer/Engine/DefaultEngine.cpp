@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include <stack>
 #include <list>
 #include <algorithm>
@@ -154,7 +154,7 @@ bool DefaultEngine::process()
                 //std::cout << "Nombre d'intersection moyen avec les primitives : " << (double)totalIntersecPrimitive / (double)totalRay << endl;
                 //std::cout << "Calcul d'intersection par rapport au brut force : " << ((double) (((double)totalIntersecNode / (double)totalRay) + ((double)totalIntersecPrimitive / (double)totalRay)) / (double) (scene.getPrimitives()->size())) * 100;
 
-// BEGIN : DTn20130507 - Commented cause code under does nothing
+                // BEGIN : DTn20130507 - Commented cause code under does nothing
                 //vector<vector<unsigned int> > historique = std::vector<std::vector<unsigned int> >();
                 //for (unsigned int i = 0; i < solver->getValidRays()->size(); i++)
                 //{
@@ -174,11 +174,11 @@ bool DefaultEngine::process()
                 //    }
                 //    //std::cout << "]." << endl;
                 //}
-// END
+                // END
 
-				// Post filtering of the rays
-				closeEventPostFilter cepf(getSolver()->getValidRays());
-				unsigned int suppressed = cepf.Process();
+                // Post filtering of the rays
+                closeEventPostFilter cepf(getSolver()->getValidRays());
+                unsigned int suppressed = cepf.Process();
                 return true;
             }
         }

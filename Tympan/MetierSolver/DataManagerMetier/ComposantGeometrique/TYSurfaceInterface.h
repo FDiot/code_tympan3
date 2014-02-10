@@ -15,9 +15,6 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_SURFACEINTERFACE__
@@ -35,9 +32,6 @@ class TYGeometryNode;
 /**
  * Classe abstraite qui offre une interface utilisable par des composants
  * ayant des proprietes geometriques surfaciques.
- *
- * @author Projet_Tympan
- *
  */
 class TYSurfaceInterface
 {
@@ -94,7 +88,7 @@ public:
      */
     virtual TYTabPoint getContour(int n = -1) const = 0;
 
-	virtual TYTabPoint3D getOContour(int n = -1) const = 0;
+    virtual TYTabPoint3D getOContour(int n = -1) const = 0;
 
     /**
      * Test si le point se trouve a l'interieur de la surface, sur le

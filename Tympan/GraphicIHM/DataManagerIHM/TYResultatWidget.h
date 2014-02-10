@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYResultatWidget.h
  * \brief outil IHM pour un resultat (fichier header)
@@ -106,7 +106,7 @@ public:
 private:
     void updateComboSubstCalculs();
     TYCalcul* getSelectedSubstCalcul();
-	void updateHeaderLabel();
+    void updateHeaderLabel();
 
 public slots:
     virtual void updateContent();
@@ -173,7 +173,7 @@ private :
     TYSpectre getPuissanceElem(TYElement* pElement);
 
     /// Affichage du contenu de la cellule
-    void affichageCellule(const int& row, const int& col, TYCalcul *pCalcOp = NULL);
+    void affichageCellule(const int& row, const int& col, TYCalcul* pCalcOp = NULL);
 
     /// Creation du contenu d'une cellule
     QString getValueMsg(const int& row, const int& col, OSpectre& spectre);

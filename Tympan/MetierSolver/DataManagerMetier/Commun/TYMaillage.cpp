@@ -456,7 +456,7 @@ void TYMaillage::computeMesh(std::vector<MTriangle> &mesh) const
 {
     mesh.clear();
     TYCalcul* pCalcul = static_cast<TYCalcul*>(getParent());
-    const TYTabLPPointCalcul &ptsCalcul = getPtsCalcul();
+    const TYTabLPPointCalcul& ptsCalcul = getPtsCalcul();
     int nbPointsX = 0;
     int nbPointsY = 0;
     getDimensions(nbPointsX, nbPointsY);
@@ -470,42 +470,50 @@ void TYMaillage::computeMesh(std::vector<MTriangle> &mesh) const
     //    |  \ |
     //    |   \|
     //    1----2
-    for(int i = 0; i < nbPointsX - 1 ; ++i)
+    for (int i = 0; i < nbPointsX - 1 ; ++i)
     {
-        for(int j = 0; j < nbPointsY - 1 ; ++j)
+        for (int j = 0; j < nbPointsY - 1 ; ++j)
         {
             id1 = getIndexPtCalcul(i, j);
-            id2 = getIndexPtCalcul(i+1, j);
-            id3 = getIndexPtCalcul(i, j+1);
-            id4 = getIndexPtCalcul(i+1, j+1);
+            id2 = getIndexPtCalcul(i + 1, j);
+            id3 = getIndexPtCalcul(i, j + 1);
+            id4 = getIndexPtCalcul(i + 1, j + 1);
 
-            if(id1 < 0 || !ptsCalcul[id1]->getEtat(pCalcul))
+            if (id1 < 0 || !ptsCalcul[id1]->getEtat(pCalcul))
             {
                 // Higher right triangle
-                if(id2 >= 0 && id4 >= 0 && id3 >= 0)
-                    if(ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                if (id2 >= 0 && id4 >= 0 && id3 >= 0)
+                    if (ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                    {
                         mesh.push_back(computeTriangle(*ptsCalcul[id2], *ptsCalcul[id4], *ptsCalcul[id3]));
+                    }
             }
-            else if(id2 < 0 || !ptsCalcul[id2]->getEtat(pCalcul))
+            else if (id2 < 0 || !ptsCalcul[id2]->getEtat(pCalcul))
             {
                 // Higher left triangle
-                if(id1 >= 0 && id4 >= 0 && id3 >= 0)
-                    if(ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                if (id1 >= 0 && id4 >= 0 && id3 >= 0)
+                    if (ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                    {
                         mesh.push_back(computeTriangle(*ptsCalcul[id1], *ptsCalcul[id4], *ptsCalcul[id3]));
+                    }
             }
-            else if(id3 < 0 || !ptsCalcul[id3]->getEtat(pCalcul))
+            else if (id3 < 0 || !ptsCalcul[id3]->getEtat(pCalcul))
             {
                 // Lower right triangle
-                if(id1 >= 0 && id2 >= 0 && id4 >= 0)
-                    if(ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul))
+                if (id1 >= 0 && id2 >= 0 && id4 >= 0)
+                    if (ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul))
+                    {
                         mesh.push_back(computeTriangle(*ptsCalcul[id1], *ptsCalcul[id2], *ptsCalcul[id4]));
+                    }
             }
-            else if(id4 < 0 || !ptsCalcul[id4]->getEtat(pCalcul))
+            else if (id4 < 0 || !ptsCalcul[id4]->getEtat(pCalcul))
             {
                 // Lower left triangle
-                if(id1 >= 0 && id2 >= 0 && id3 >= 0)
-                    if(ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                if (id1 >= 0 && id2 >= 0 && id3 >= 0)
+                    if (ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                    {
                         mesh.push_back(computeTriangle(*ptsCalcul[id1], *ptsCalcul[id2], *ptsCalcul[id3]));
+                    }
             }
             else // We divide the square by two arbitrary triangles
             {
@@ -518,7 +526,7 @@ void TYMaillage::computeMesh(std::vector<MTriangle> &mesh) const
     }
 }
 
-MTriangle TYMaillage::computeTriangle(TYPointCalcul &pt1, TYPointCalcul &pt2, TYPointCalcul &pt3) const
+MTriangle TYMaillage::computeTriangle(TYPointCalcul& pt1, TYPointCalcul& pt2, TYPointCalcul& pt3) const
 {
     MTriangle tri;
     tri.pts[0].pt = pt1;
@@ -533,7 +541,7 @@ MTriangle TYMaillage::computeTriangle(TYPointCalcul &pt1, TYPointCalcul &pt2, TY
     return tri;
 }
 
-double TYMaillage::getSpectrumValue(TYPointCalcul &pt) const
+double TYMaillage::getSpectrumValue(TYPointCalcul& pt) const
 {
     switch (_dataType)
     {
@@ -559,7 +567,7 @@ void TYMaillage::computeIsoCurve(std::vector<MTriangle> &mesh, std::vector<MPoin
     int imask; // intersections mask
     TYPalette::values_type value;
     OColor color;
-    BOOST_FOREACH(boost::tie(value, color), _pPalette->getColorMap() )
+    BOOST_FOREACH(boost::tie(value, color), _pPalette->getColorMap())
     {
         origin._z = value;
         plane.set(up, origin);
@@ -567,19 +575,25 @@ void TYMaillage::computeIsoCurve(std::vector<MTriangle> &mesh, std::vector<MPoin
         for (size_t i = 0; i < nbTriangles; i++)
         {
             imask = 0;
-            const MTriangle &tri = mesh[i];
-            const MPoint &pt1 = tri.pts[0];
-            const MPoint &pt2 = tri.pts[1];
-            const MPoint &pt3 = tri.pts[2];
+            const MTriangle& tri = mesh[i];
+            const MPoint& pt1 = tri.pts[0];
+            const MPoint& pt2 = tri.pts[1];
+            const MPoint& pt3 = tri.pts[2];
 
-            if(computeIsoPoint(plane, pt1, pt2, mp1))
+            if (computeIsoPoint(plane, pt1, pt2, mp1))
+            {
                 imask += 1;
-            if(computeIsoPoint(plane, pt1, pt3, mp2))
+            }
+            if (computeIsoPoint(plane, pt1, pt3, mp2))
+            {
                 imask += 2;
-            if(computeIsoPoint(plane, pt2, pt3, mp3))
+            }
+            if (computeIsoPoint(plane, pt2, pt3, mp3))
+            {
                 imask += 4;
+            }
 
-            switch(imask)
+            switch (imask)
             {
                 case 0: break;
                 case 3: // the plane is intersected by the segment pt1-pt2 and pt1-pt3
@@ -598,7 +612,7 @@ void TYMaillage::computeIsoCurve(std::vector<MTriangle> &mesh, std::vector<MPoin
     }
 }
 
-bool TYMaillage::computeIsoPoint(const OHPlane3D &plane, const MPoint &pt1, const MPoint &pt2, MPoint &mp) const
+bool TYMaillage::computeIsoPoint(const OHPlane3D& plane, const MPoint& pt1, const MPoint& pt2, MPoint& mp) const
 {
     OVector3D a(pt1.pt._x, pt1.pt._y, pt1.scalar);
     OVector3D b(pt2.pt._x, pt2.pt._y, pt2.scalar);

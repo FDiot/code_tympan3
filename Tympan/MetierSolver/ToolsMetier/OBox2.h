@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -69,16 +69,16 @@ public:
 
     OBox2(const OCoord3D& min, const OCoord3D& max, const ORepere3D& repere);
 
-	/**
-	 * \fn OBox2(const ORepere3D, const OCoord3D& min, const OCoord3D& max); 
-	 * \brief Constructor : from a local coordinate system centered inside the box
-	 * \param repere Local coordinate system from the box center
-	 * \param min The minimum point i.e. the one on the left bottom corner.
-	 * \param max The maximum point i.e. the one on the right upper corner.
-	*/
-	OBox2(const ORepere3D repere, const OCoord3D& A, const OCoord3D& B, const OCoord3D& C, 
-			const OCoord3D& D, const OCoord3D& E, const OCoord3D& F, const OCoord3D& G, 
-			const OCoord3D& H); 
+    /**
+     * \fn OBox2(const ORepere3D, const OCoord3D& min, const OCoord3D& max);
+     * \brief Constructor : from a local coordinate system centered inside the box
+     * \param repere Local coordinate system from the box center
+     * \param min The minimum point i.e. the one on the left bottom corner.
+     * \param max The maximum point i.e. the one on the right upper corner.
+    */
+    OBox2(const ORepere3D repere, const OCoord3D& A, const OCoord3D& B, const OCoord3D& C,
+          const OCoord3D& D, const OCoord3D& E, const OCoord3D& F, const OCoord3D& G,
+          const OCoord3D& H);
 
 
     /**
@@ -107,26 +107,26 @@ public:
      */
     virtual bool operator!=(const OBox2& box) const { return !operator==(box);}
 
-	/** 
-	 *\fn OCoord3D BoxCoord(int N);
-	 *\brief Returns the coordinates of one of the box corner.
-	 *\ We consider that the first corner is the one on the bottom left side
-	 *\ and then we go clockwise, upper and the same.
-	 *\ N must be between 0 and 8, where 0 represents the box center.
-	 *\ 1(0,0,0) 2(0,1,0) 3(1,1,0) 4(1,0,0) 5(1,0,1) 6(0,0,1) 7(0,1,1) 8(1,1,1)
-	 *\param N is the corner we want the coordinates of.
-	 */
-	OPoint3D BoxCoord(int N) const;
+    /**
+     *\fn OCoord3D BoxCoord(int N);
+     *\brief Returns the coordinates of one of the box corner.
+     *\ We consider that the first corner is the one on the bottom left side
+     *\ and then we go clockwise, upper and the same.
+     *\ N must be between 0 and 8, where 0 represents the box center.
+     *\ 1(0,0,0) 2(0,1,0) 3(1,1,0) 4(1,0,0) 5(1,0,1) 6(0,0,1) 7(0,1,1) 8(1,1,1)
+     *\param N is the corner we want the coordinates of.
+     */
+    OPoint3D BoxCoord(int N) const;
 
 
-	/**
-	 *\fn OVector3D getRotationOzOy(double alpha, double theta, OVector3D V);
-	 *\brief Returns a vector after 2 rotations around Oz and Oy axis.
-	 *\param alpha is the first angle needed to rotate around Oz.
-	 *\param theta is the second angle needed to rotate around Oy.
-	 *\param V is the initial vector.
-	*/
-	OVector3D GetRotationOzOy(double alpha, double theta, OVector3D V);
+    /**
+     *\fn OVector3D getRotationOzOy(double alpha, double theta, OVector3D V);
+     *\brief Returns a vector after 2 rotations around Oz and Oy axis.
+     *\param alpha is the first angle needed to rotate around Oz.
+     *\param theta is the second angle needed to rotate around Oy.
+     *\param V is the initial vector.
+    */
+    OVector3D GetRotationOzOy(double alpha, double theta, OVector3D V);
 
     /**
      * \fn bool isInside(const OPoint3D& pt) const
@@ -170,27 +170,27 @@ public:
      */
     virtual void Translate(const OPoint3D& vectorTranslate);
 
-	/**
-	 *\fn void BoxRotationOzOy(const OBox2& box);
-	 *\brief Computes the box rotation around Oz and Oy (usual coordinates system).
-	 *\param box is an OBox2.
-	 */
-	void BoxRotationOzOy(double alpha, double theta);
+    /**
+     *\fn void BoxRotationOzOy(const OBox2& box);
+     *\brief Computes the box rotation around Oz and Oy (usual coordinates system).
+     *\param box is an OBox2.
+     */
+    void BoxRotationOzOy(double alpha, double theta);
 
 public:
     ORepere3D _repere;
-	OPoint3D _center;
-	OPoint3D _A;
-	OPoint3D _B;
-	OPoint3D _C;
-	OPoint3D _D;
-	OPoint3D _E;
-	OPoint3D _F;
-	OPoint3D _G;
-	OPoint3D _H;
-	double _length;
-	double _height;
-	double _width;
+    OPoint3D _center;
+    OPoint3D _A;
+    OPoint3D _B;
+    OPoint3D _C;
+    OPoint3D _D;
+    OPoint3D _E;
+    OPoint3D _F;
+    OPoint3D _G;
+    OPoint3D _H;
+    double _length;
+    double _height;
+    double _width;
 };
 
 #endif // __O_BOX2__

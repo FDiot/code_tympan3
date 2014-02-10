@@ -92,7 +92,7 @@ void TYRectangularMaillageGraphic::update(bool force /*=false*/)
 
 void TYRectangularMaillageGraphic::computeBoundingBox()
 {
-	// XXX safedownCast ???
+    // XXX safedownCast ???
     TYCalcul* pCalcul = static_cast<TYCalcul*>(getElement()->getParent());
 
     OBox reset;
@@ -245,9 +245,13 @@ void TYRectangularMaillageGraphic::displaySurface(GLenum mode) //GLenum mode = G
     int nbTriangles = _mesh.size();
 
     if (nbTriangles > 1000)
+    {
         inc = 1000;
+    }
     else
+    {
         inc = nbTriangles;
+    }
 
     bmin = 0;
     bmax += inc;
@@ -262,10 +266,10 @@ void TYRectangularMaillageGraphic::displaySurface(GLenum mode) //GLenum mode = G
         glBegin(GL_TRIANGLES);
         for (unsigned int i = bmin ; i < bmax; i++)
         {
-            const MTriangle &vtx = _mesh[i];
-            const MPoint &v1 = vtx.pts[0];
-            const MPoint &v2 = vtx.pts[1];
-            const MPoint &v3 = vtx.pts[2];
+            const MTriangle& vtx = _mesh[i];
+            const MPoint& v1 = vtx.pts[0];
+            const MPoint& v2 = vtx.pts[1];
+            const MPoint& v3 = vtx.pts[2];
 
             const OColor& color0 = pPalette->getColorFromValue(v1.scalar);
             glColor4f(color0.r, color0.g, color0.b, opacity);
@@ -323,12 +327,16 @@ void TYRectangularMaillageGraphic::displayLines(GLenum mode, bool invertColors)
     glBegin(GL_LINES);
     for (it = _isoCurve.begin(); it != _isoCurve.end(); it++)
     {
-        const MPoint &mp = *it;
-        const OColor &color = pPalette->getColorFromValue(mp.scalar);
+        const MPoint& mp = *it;
+        const OColor& color = pPalette->getColorFromValue(mp.scalar);
         if (invertColors)
+        {
             glColor4f(1.0f - color.r, 1.0f - color.g, 1.0f - color.b, opacity);
+        }
         else
+        {
             glColor4f(color.r, color.g, color.b, opacity);
+        }
         glVertex3f(mp.pt._x, mp.pt._y, mp.pt._z + 0.01); // 0.01 offset so that we can display the lines from top view
     }
     glEnd();

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #ifndef __TRANSFO_H
 #define __TRANSFO_H
 
@@ -59,7 +59,7 @@ public:
     int methode;                                               /*!< entier definissant la methode de transformation utilisee */
 
     QList<OTriangle> Liste_triangles;                           /*!< Liste des triangles de la nappe interpolee */
-	QList<OPoint3D> list_vertex;									/*!< Liste des vertex de la triangulation */
+    QList<OPoint3D> list_vertex;                                    /*!< Liste des vertex de la triangulation */
 
 
     // Constructeurs :

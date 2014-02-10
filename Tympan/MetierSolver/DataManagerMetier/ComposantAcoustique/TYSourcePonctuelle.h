@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,18 +11,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
 #ifndef __TY_SOURCEPONCTUELLE__
 #define __TY_SOURCEPONCTUELLE__
-
 
 #include "TYSpectre.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
@@ -36,7 +32,6 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSourcePonctuelleWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSourcePonctuelleGraphic.h"
 #endif
-
 
 ///Tableau associatif Regime/Directivite.
 typedef std::map<int, TYDirectivite> TYMapRegimeDirectivite;
@@ -56,9 +51,6 @@ class OSegment3D;
 
 /**
  * Classe de definition d'une source ponctuelle.
- *
- * @author Projet_Tympan
- *
  */
 class TYSourcePonctuelle: public TYSource, public TYColorInterface
 {

@@ -15,14 +15,10 @@
 
 /*
  *
- *
- *
- *
  */
 
 #ifndef __TY_RECTANGLE__
 #define __TY_RECTANGLE__
-
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "TYPoint.h"
@@ -35,12 +31,8 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangleGraphic.h"
 #endif
 
-
 /**
  * Classe de definition d'un rectangle.
- *
- * @author Projet_Tympan
- *
  */
 class TYRectangle: public TYElement, public TYSurfaceInterface
 {

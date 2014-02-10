@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*!
 * \file Lancer.h
 * \author Projet_Tympan
@@ -202,12 +202,12 @@ public:
      */
     void loadRayFile(vector<R3>& tableau_norm);
 
-	/*!
-	 * \fn traveledDistance(vector<R3>& vec)
-	 * \brief Calcule la distance parcourue sur le plan horizontale depuis la source jusqu'au point courant
-	 * \param vector<R3&> vec
-	 */
-	double traveledDistance(const vector<R3>& vec, const R3& source)  { return (vec[0].x - source.x) * (vec[0].x - source.x) + (vec[0].y - source.y) * (vec[0].y - source.y); }
+    /*!
+     * \fn traveledDistance(vector<R3>& vec)
+     * \brief Calcule la distance parcourue sur le plan horizontale depuis la source jusqu'au point courant
+     * \param vector<R3&> vec
+     */
+    double traveledDistance(const vector<R3>& vec, const R3& source)  { return (vec[0].x - source.x) * (vec[0].x - source.x) + (vec[0].y - source.y) * (vec[0].y - source.y); }
 };
 
 /*!

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #ifndef __TY_CONTRAINTE__
 #define __TY_CONTRAINTE__
 
@@ -52,10 +52,11 @@ public :
     /**
     * Ajoute un point fixe pour l'altimetrie
     */
-    void addPoint(TYPoint& point) {
-    	double coords[3];
-    	point.getCoords(coords);
-    	pointsAltimetrie.push_back(OPoint3D(coords[0], coords[1], coords[2]));
+    void addPoint(TYPoint& point)
+    {
+        double coords[3];
+        point.getCoords(coords);
+        pointsAltimetrie.push_back(OPoint3D(coords[0], coords[1], coords[2]));
     }
 
     /**
@@ -82,11 +83,12 @@ public :
     * Adjoute un segment � la Contrainte bas�e sur les vertex d�j� d�finis
     * warning : Les indices de vertex doivent �tre inf�rieur au nombre de vertex definis
     */
-    bool addConstraint(Edge& edge) {
-    	if (edge.first >= pointsAltimetrie.size() ||
-    		edge.second >= pointsAltimetrie.size()) { return false; }
-    	contraintes.push_back(edge);
-    	return true;
+    bool addConstraint(Edge& edge)
+    {
+        if (edge.first >= pointsAltimetrie.size() ||
+            edge.second >= pointsAltimetrie.size()) { return false; }
+        contraintes.push_back(edge);
+        return true;
     }
 
     /**
