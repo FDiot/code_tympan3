@@ -17,11 +17,9 @@
  *
  */
 
-
-
+#include <boost/foreach.hpp>
 
 #include "OSubject.h"
-
 
 void OSubject::attach(OObserver* pObserver)
 {
@@ -33,22 +31,20 @@ void OSubject::attach(OObserver* pObserver)
 
 bool OSubject::detach(OObserver* pObserver)
 {
-    OTabPtrObserver::iterator ite;
     bool ret = false;
 
     if (pObserver)
     {
-        for (ite = _observers.begin(); ite != _observers.end(); ite++)
+        BOOST_FOREACH(OObserver& obs, _observers)
         {
-            if (*ite == pObserver)
+            if (obs == pObserver)
             {
-                _observers.erase(ite);
+                _observers.erase(obs);
                 ret = true;
                 break;
             }
         }
     }
-
     return ret;
 }
 
