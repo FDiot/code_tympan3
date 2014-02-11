@@ -22,6 +22,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
+#include "TYRouteWidget.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
 
 #include "Tympan/Tools/OLocalizator.h"
