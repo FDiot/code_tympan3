@@ -343,7 +343,7 @@ public:
      * @param pref Le nom de la preference.
      * @param pWidget Le widget dont on souhaite conserve la geometrie.
      */
-    static void setGeometry(const QString& pref, const QWidget* pWidget);
+    static void saveGeometryToPreferences(const QString& pref, const QWidget* pWidget);
 
     /**
      * Charge et applique la position et la taille d'une fenetre.
@@ -351,7 +351,7 @@ public:
      * @param pref Le nom de la preference a rechercher.
      * @param pWidget Le widget dont on souhaite recupere la geometrie.
      */
-    static void getGeometry(const QString& pref, QWidget* pWidget);
+    static void loadGeometryFromPreferences(const QString& pref, QWidget* pWidget);
 
     /**
      * Sauvegarder les coordonnees en pixel d'un point.
@@ -802,5 +802,3 @@ private:
 
 
 #endif // __O_PREFERENCE_MANAGER__
-
-

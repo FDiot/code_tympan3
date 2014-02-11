@@ -320,13 +320,13 @@ void TYResultatTreeDialog::updateContent()
 void TYResultatTreeDialog::showEvent(QShowEvent* pEvent)
 {
     // On charge les settings
-    TYPreferenceManager::getGeometry(metaObject()->className(), this);
+    TYPreferenceManager::loadGeometryFromPreferences(metaObject()->className(), this);
 }
 
 void TYResultatTreeDialog::closeEvent(QCloseEvent* pEvent)
 {
     // On sauve les settings
-    TYPreferenceManager::setGeometry(metaObject()->className(), this);
+    TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
 
     QDialog::closeEvent(pEvent);
 }
