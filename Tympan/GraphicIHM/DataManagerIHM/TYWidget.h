@@ -28,7 +28,7 @@
 #define __TY_WIDGET__
 
 
-#include <qwidget.h>
+#include <QWidget>
 
 class QString;
 class TYElement;
