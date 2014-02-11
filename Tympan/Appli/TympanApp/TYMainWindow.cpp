@@ -522,7 +522,7 @@ bool TYMainWindow::loadSettings(const QString& fileName)
     res = TYPreferenceManager::read();
 
     // Apply settings
-    TYPreferenceManager::getGeometry(metaObject()->className(), this);
+    TYPreferenceManager::loadGeometryFromPreferences(metaObject()->className(), this);
 
     // Dock windows
     QObjectList objectsList = children();//dockWindows();
@@ -556,7 +556,7 @@ bool TYMainWindow::loadSettings(const QString& fileName)
             }
 
             // Geometry
-            TYPreferenceManager::getGeometry(key, pDockWnd);
+            TYPreferenceManager::loadGeometryFromPreferences(key, pDockWnd);
         }
     }
 
@@ -1891,7 +1891,7 @@ void TYMainWindow::closeEvent(QCloseEvent* pEvent)
     if (!_closeAndQuit) { return; } // Annulation de l'action
 
     // Main window
-    TYPreferenceManager::setGeometry(metaObject()->className(), this);
+    TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
 
     // Dock windows
     QObjectList objectsList = children();//dockWindows();
@@ -1912,7 +1912,7 @@ void TYMainWindow::closeEvent(QCloseEvent* pEvent)
             QString key = pDockWnd->objectName();
 
             // Geometry
-            TYPreferenceManager::setGeometry(key, pDockWnd);
+            TYPreferenceManager::saveGeometryToPreferences(key, pDockWnd);
         }
     }
 

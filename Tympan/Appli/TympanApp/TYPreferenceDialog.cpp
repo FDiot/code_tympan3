@@ -115,7 +115,7 @@ TYPreferenceDialog::TYPreferenceDialog(QWidget* parent, const char* name, Qt::WF
 
 int TYPreferenceDialog::exec()
 {
-    TYPreferenceManager::getGeometry(metaObject()->className(), this);
+    TYPreferenceManager::loadGeometryFromPreferences(metaObject()->className(), this);
 
     loadPreferences();
 
@@ -1992,6 +1992,6 @@ void TYPreferenceDialog::savePreferences()
 
 void TYPreferenceDialog::hideEvent(QHideEvent* pEvent)
 {
-    TYPreferenceManager::setGeometry(metaObject()->className(), this);
+    TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
 }
 
