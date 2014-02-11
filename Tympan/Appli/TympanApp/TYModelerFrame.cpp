@@ -1633,7 +1633,7 @@ void TYModelerFrame::showEvent(QShowEvent* pEvent)
 {
     if (_firstTimeShown)
     {
-        TYPreferenceManager::getGeometry(metaObject()->className(), this);
+        TYPreferenceManager::loadGeometryFromPreferences(metaObject()->className(), this);
         _firstTimeShown = false;
     }
     /*  _pView->getRenderer()->updateDisplayList();
@@ -1644,7 +1644,7 @@ void TYModelerFrame::showEvent(QShowEvent* pEvent)
 
 void TYModelerFrame::closeEvent(QCloseEvent* pEvent)
 {
-    TYPreferenceManager::setGeometry(metaObject()->className(), this);
+    TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
     pEvent->accept();
 
     // CLM-NT35 : Gestion du maximized et titre fenetre principal
