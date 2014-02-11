@@ -37,10 +37,8 @@
 
 
 TYPlanEauWidget::TYPlanEauWidget(TYPlanEau* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _terrainW = new TYTerrainWidget(pElement, this);
     _terrainW->setLayoutSpacing(0, 0);

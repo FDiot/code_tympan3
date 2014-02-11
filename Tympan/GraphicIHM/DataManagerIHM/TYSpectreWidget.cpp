@@ -62,7 +62,7 @@ using namespace Qt;
 
 
 TYSpectreWidget::TYSpectreWidget(TYSpectre* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
     // Par defaut precision prend la valeur affectee a la classe TYSpectre pour le stockage en XML
     _precision = TYSpectre::getXMLPrecision();
@@ -70,7 +70,6 @@ TYSpectreWidget::TYSpectreWidget(TYSpectre* pElement, QWidget* _pParent /*=NULL*
     QString num;
 
     // On utilise une copie du spectre associe a ce widget
-    _pElement = pElement;
 
     // Et on conserve ce spectre par ailleurs
     _pTmpSpectre = pElement;

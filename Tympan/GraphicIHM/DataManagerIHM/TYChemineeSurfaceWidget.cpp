@@ -38,10 +38,8 @@
 
 
 TYChemineeSurfaceWidget::TYChemineeSurfaceWidget(TYChemineeSurface* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     resize(300, 640);
     setWindowTitle(TR("id_caption"));

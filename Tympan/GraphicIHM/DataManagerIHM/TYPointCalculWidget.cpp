@@ -41,10 +41,8 @@
 
 
 TYPointCalculWidget::TYPointCalculWidget(TYPointCalcul* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
     unsigned short wLn = 0;
 
     resize(300, 200);

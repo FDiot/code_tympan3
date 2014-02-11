@@ -63,10 +63,8 @@ static char THIS_FILE[] = __FILE__;
 #define TR(id) OLocalizator::getString("TYPaletteWidget", (id))
 
 TYPaletteWidget::TYPaletteWidget(TYPalette* pElement, QWidget* _pParent /*=NULL*/)
-    : TYWidget(_pParent, NULL, Qt::Dialog)
+    : TYWidget(pElement, _pParent, NULL, Qt::Dialog)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     bool ok;
 

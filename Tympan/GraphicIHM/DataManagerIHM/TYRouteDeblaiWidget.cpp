@@ -35,12 +35,10 @@
 
 
 TYRouteDeblaiWidget::TYRouteDeblaiWidget(TYRouteDeblai* pElement, QWidget* _pParent):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
     QString num;
 
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _elmW = new TYAcousticLineWidget(pElement, this);
 

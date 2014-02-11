@@ -38,10 +38,8 @@
 
 
 TYDalleWidget::TYDalleWidget(TYDalle* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _accPolygonW = new TYAcousticPolygonWidget(pElement, this);
     _accPolygonW->hideMat();
