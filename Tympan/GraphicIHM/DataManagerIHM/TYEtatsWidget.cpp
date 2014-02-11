@@ -56,11 +56,9 @@ static char THIS_FILE[] = __FILE__;
 
 TYEtatsWidget::TYEtatsWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/): QDialog(_pParent)
 {
-    Q_ASSERT(pElement);
 
     this->setWindowTitle(TR("id_etat_title"));
 
-    _pElement = pElement;
 
     resize(400, 400);
 

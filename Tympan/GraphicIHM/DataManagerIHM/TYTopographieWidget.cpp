@@ -42,10 +42,8 @@
 
 
 TYTopographieWidget::TYTopographieWidget(TYTopographie* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _elmW = new TYElementWidget(pElement, this);
     resize(300, 797);

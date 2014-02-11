@@ -40,10 +40,8 @@
 
 
 TYRectangleWidget::TYRectangleWidget(TYRectangle* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _elmW = new TYElementWidget(pElement, this);
     _surfaceW = new TYSurfaceInterfaceWidget(pElement, this);

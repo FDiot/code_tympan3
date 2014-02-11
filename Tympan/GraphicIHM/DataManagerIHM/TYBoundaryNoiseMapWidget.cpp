@@ -49,10 +49,8 @@ static char THIS_FILE[] = __FILE__;
 #undef max
 
 TYBoundaryNoiseMapWidget::TYBoundaryNoiseMapWidget(TYBoundaryNoiseMap* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _maillageW = new TYMaillageWidget(pElement, this);
 

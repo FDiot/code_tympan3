@@ -64,13 +64,11 @@ static char THIS_FILE[] = __FILE__;
 
 
 TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
     QString num;
     short iln = 0; // Numero de ligne pour l'implantation des elements (evite de tout decaler a la main quand on insere un element
 
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     resize(300, 690);
     setWindowTitle(TR("id_caption"));
