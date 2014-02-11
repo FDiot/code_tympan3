@@ -115,7 +115,7 @@ TYDrawSpectres::TYDrawSpectres(QWidget* parent, const char* name, Qt::WFlags f):
     QWidget(parent, f)
 {
     // On recupere les settings
-    TYPreferenceManager::getGeometry(metaObject()->className(), this);
+    TYPreferenceManager::loadGeometryFromPreferences(metaObject()->className(), this);
 
     setWindowTitle(TR("id_caption"));
     resize(300, 400);
@@ -175,7 +175,7 @@ TYDrawSpectres::TYDrawSpectres(QWidget* parent, const char* name, Qt::WFlags f):
 TYDrawSpectres::~TYDrawSpectres()
 {
     // On sauve les settings
-    TYPreferenceManager::setGeometry(metaObject()->className(), this);
+    TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
 
     delete _printer;
     delete _painter;

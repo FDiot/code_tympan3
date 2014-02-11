@@ -62,7 +62,7 @@ TYWidget::~TYWidget()
     pDlg->setLayout(pLayout);
 
     // On recupere les settings
-    TYPreferenceManager::getGeometry(pMainWidget->metaObject()->className(), pDlg);
+    TYPreferenceManager::loadGeometryFromPreferences(pMainWidget->metaObject()->className(), pDlg);
 
     QPushButton* pButtonOK = new QPushButton(TR("id_ok_btn"), pDlg);
     pButtonOK->setDefault(true);
@@ -97,7 +97,7 @@ TYWidget::~TYWidget()
     }
 
     // On sauve les settings
-    TYPreferenceManager::setGeometry(pMainWidget->metaObject()->className(), pDlg);
+    TYPreferenceManager::saveGeometryToPreferences(pMainWidget->metaObject()->className(), pDlg);
 
     // Liberation de la memoire
     if (pParent)

@@ -116,7 +116,7 @@ bool TYPreferenceManager::exists(const QString& pref)
     return getInstance().exists(pref);
 }
 
-void TYPreferenceManager::setGeometry(const QString& pref, const QWidget* pWidget)
+void TYPreferenceManager::saveGeometryToPreferences(const QString& pref, const QWidget* pWidget)
 {
     Q_ASSERT(pWidget);
 
@@ -133,7 +133,7 @@ void TYPreferenceManager::setGeometry(const QString& pref, const QWidget* pWidge
     getInstance().setFrame(pref, pos.x(), pos.y(), size.width(), size.height());
 }
 
-void TYPreferenceManager::getGeometry(const QString& pref, QWidget* pWidget)
+void TYPreferenceManager::loadGeometryFromPreferences(const QString& pref, QWidget* pWidget)
 {
     Q_ASSERT(pWidget);
 

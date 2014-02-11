@@ -97,7 +97,7 @@ TYOpenElementDialog::TYOpenElementDialog(QWidget* parent, const char* name, Qt::
 
     QObject::connect(_pElementChoiceListBox, SIGNAL(itemSelectionChanged()), this, SLOT(updateFrame()));
 
-    TYPreferenceManager::getGeometry(metaObject()->className(), this);
+    TYPreferenceManager::loadGeometryFromPreferences(metaObject()->className(), this);
 
     _isReadOnly = false;
     _multiSelect = false;
@@ -110,7 +110,7 @@ TYOpenElementDialog::~TYOpenElementDialog()
     QObject::disconnect(_pOpenBtn, SIGNAL(clicked()), this, SLOT(openSelected()));
     QObject::disconnect(_pElementChoiceListBox, SIGNAL(itemSelectionChanged()), this, SLOT(updateFrame()));
 
-    TYPreferenceManager::setGeometry(metaObject()->className(), this);
+    TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
 }
 
 void TYOpenElementDialog::open()
@@ -440,5 +440,3 @@ void TYOpenElementDialog::setMultiSelect(const bool& b)
         _pElementChoiceListBox->setSelectionMode(QAbstractItemView::SingleSelection);
     }
 }
-
-
