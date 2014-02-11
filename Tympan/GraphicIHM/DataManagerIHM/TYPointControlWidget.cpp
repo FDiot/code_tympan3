@@ -40,10 +40,8 @@
 
 
 TYPointControlWidget::TYPointControlWidget(TYPointControl* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
     unsigned short pos = 0;
 
     _pPointBack = new TYPointControl();

@@ -36,10 +36,8 @@
 
 
 TYAcousticVolumeWidget::TYAcousticVolumeWidget(TYAcousticVolume* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent), _isColorModified(false)
+    TYWidget(pElement, _pParent), _isColorModified(false)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     resize(300, 425);
     setWindowTitle(TR("id_caption"));

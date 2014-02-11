@@ -36,8 +36,8 @@
 #define TR(id) OLocalizator::getString("TYWidget", (id))
 
 
-TYWidget::TYWidget(QWidget* parent, const char* name, Qt::WFlags f):
-    QWidget(parent, f)
+TYWidget::TYWidget(TYElement* pElement, QWidget* parent, const char* name, Qt::WFlags f):
+    QWidget(parent, f), _pElement(pElement)
 {
     setObjectName(QString(name));
     _locked = false;
@@ -49,8 +49,7 @@ TYWidget::~TYWidget()
 
 /*static*/ int TYWidget::edit(TYElement* pElement, QWidget* pParent /*=NULL*/)
 {
-    Q_ASSERT(pElement);
-
+    assert(pElement);
     QDialog* pDlg = new QDialog(pParent);
     pDlg->setModal(true);
     pDlg->setWindowTitle(getDisplayName(pElement));

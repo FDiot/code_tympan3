@@ -53,7 +53,7 @@ public:
      * Constructeur.
      * Il est identique a celui de la classe QWidget.
      */
-    TYWidget(QWidget* parent = 0, const char* name = 0, Qt::WFlags f = 0);
+    TYWidget(TYElement* pElement, QWidget* parent = 0, const char* name = 0, Qt::WFlags f = 0);
     /**
      * Destructeur.
      */

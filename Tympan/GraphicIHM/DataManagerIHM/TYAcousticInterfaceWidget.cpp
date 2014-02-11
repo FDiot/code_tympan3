@@ -45,13 +45,11 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticInterfaceWidget.h"
 
 TYAcousticInterfaceWidget::TYAcousticInterfaceWidget(TYAcousticInterface* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(dynamic_cast<TYElement*>(pElement), _pParent)
 {
     _bAddRemRegimeOk = false;
     _modified = false;
 
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     resize(300, 375);
     setWindowTitle(TR("id_caption"));
