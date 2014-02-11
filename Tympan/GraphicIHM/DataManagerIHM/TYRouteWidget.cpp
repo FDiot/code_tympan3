@@ -25,6 +25,8 @@
 #include "TYRouteWidget.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
 
+#include "RoadEmissionNMPB08.h"
+
 #include "Tympan/Tools/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYRouteWidget", (id))
 
@@ -41,6 +43,15 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     assert(qTabW && "Check name consistency with the UI file");
     qTabW->addTab(_elmW, "Source");
 
+    // Find the widget by name so that it is easy to access them
+    q_RoadSurfaceType_Combo = findChild<QComboBox*>("route_classe_revetement");
+    assert(q_RoadSurfaceType_Combo);
+    q_RoadSurfaceDraining_Check = findChild<QCheckBox*>("route_drainant");
+    assert(q_RoadSurfaceDraining_Check);
+    q_RoadSurfaceAge_Spin = findChild<QSpinBox*>("route_age");
+    assert(q_RoadSurfaceAge_Spin);
+
+    // Update the GUI from the data in the TYRoute instance.
     updateContent();
 }
 
@@ -50,6 +61,7 @@ TYRouteWidget::~TYRouteWidget()
 
 void TYRouteWidget::updateContent()
 {
+    update_road_surface();
     _elmW->updateContent();
 /*
     _lineEditVitMoy->setText(QString().setNum(getElement()->getVitMoy(), 'f', 2));
@@ -64,6 +76,7 @@ void TYRouteWidget::updateContent()
 void TYRouteWidget::apply()
 {
     _elmW->apply();
+    apply_road_surface();
 
     /*
     getElement()->setVitMoy(_lineEditVitMoy->text().toDouble());
@@ -75,4 +88,35 @@ void TYRouteWidget::apply()
 
     emit modified();
 */
+}
+
+void TYRouteWidget::apply_road_surface()
+{
+    TYRoute& road = *getElement();
+
+    int index = q_RoadSurfaceType_Combo->currentIndex();
+    if (q_RoadSurfaceDraining_Check->isChecked())
+        index += RoadSurface_DR1 - 1;
+    assert(index >= 0 && index < RoadSurface_UserDefined);
+    RoadSurfaceType surf_type = static_cast<RoadSurfaceType>(index);
+    road.setSurfaceType(surf_type);
+
+    int age = q_RoadSurfaceAge_Spin->value();
+    road.setSurfaceAge(age);
+}
+
+void TYRouteWidget::update_road_surface()
+{
+    TYRoute& road = *getElement();
+
+    int index = road.surfaceType();
+    assert(index >= 0 && index < RoadSurface_UserDefined);
+    if (index >= RoadSurface_DR1)
+    {
+        q_RoadSurfaceDraining_Check->setChecked(true);
+        index -= RoadSurface_DR1 + 1;
+    }
+    q_RoadSurfaceType_Combo->setCurrentIndex(index);
+
+    q_RoadSurfaceAge_Spin->setValue( road.surfaceAge() );
 }

@@ -67,6 +67,16 @@ public slots:
 protected:
 
     TYAcousticLineWidget* _elmW;
+
+    QComboBox* q_RoadSurfaceType_Combo;
+    QCheckBox* q_RoadSurfaceDraining_Check;
+    QSpinBox* q_RoadSurfaceAge_Spin;
+
+private:
+
+
+    void apply_road_surface();
+    void update_road_surface();
 };
 
 
