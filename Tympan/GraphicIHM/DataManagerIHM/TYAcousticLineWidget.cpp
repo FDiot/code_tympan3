@@ -40,10 +40,8 @@
 
 
 TYAcousticLineWidget::TYAcousticLineWidget(TYAcousticLine* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _elmW = new TYSourceWidget(pElement, this);
 

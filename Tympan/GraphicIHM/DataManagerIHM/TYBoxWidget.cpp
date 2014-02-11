@@ -38,12 +38,10 @@
 
 
 TYBoxWidget::TYBoxWidget(TYBox* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
     QString num;
 
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _elmW = new TYElementWidget(pElement, this);
     _colorW = new TYColorInterfaceWidget(pElement, this);

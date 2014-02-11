@@ -37,12 +37,10 @@
 
 
 TYRepereWidget::TYRepereWidget(TYRepere* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
     QString buf;
 
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     elmW = new TYElementWidget(getElement(), this);
 

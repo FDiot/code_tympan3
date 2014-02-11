@@ -39,10 +39,8 @@
 
 
 TYMurElementWidget::TYMurElementWidget(TYMurElement* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _elmW = new TYAcousticRectangleWidget(pElement, this);
     _elmW->setLayoutSpacing(0, 0);
