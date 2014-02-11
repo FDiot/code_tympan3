@@ -607,6 +607,11 @@
         <widget class="QComboBox" name="route_classe_revetement">
          <item>
           <property name="text">
+           <string>Défaut</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>R1</string>
           </property>
          </item>
@@ -618,11 +623,6 @@
          <item>
           <property name="text">
            <string>R3</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>personnalisé</string>
           </property>
          </item>
         </widget>
