@@ -1574,17 +1574,19 @@ bool TYCalcul::go()
     TYMapElementTabSources& mapElementSources = _pResultat->getMapEmetteurSrcs();
     pMergeSite->getInfrastructure()->getAllSrcs(this, mapElementSources);
 
-    TYTabSourcePonctuelleGeoNode sources; // Creation d'une collection des sources
+    OMessageManager::get()->info("Creation des sources");
+    TYTabSourcePonctuelleGeoNode sources;
     getAllSources(mapElementSources, sources);
 
     OMessageManager::get()->info("Selection des points de reception actifs");
+    selectActivePoint(pMergeSite);
 
-    selectActivePoint(pMergeSite); // Supprime les points a l'interieur des volumes
-    TYTabPointCalculGeoNode recepteurs; // Creation d'une collection de recepteurs
+    OMessageManager::get()->info("Creation des recepteurs");
+    TYTabPointCalculGeoNode recepteurs;
     getAllRecepteurs(recepteurs);
 
     OMessageManager::get()->info("Selection des trajets actifs");
-    buildValidTrajects(sources, recepteurs); // Supprime les points trop proches d'une sources
+    buildValidTrajects(sources, recepteurs);
 
     if (isCalculPossible(static_cast<int>(sources.size()), static_cast<int>(recepteurs.size()), pMergeSite))
     {
@@ -1613,6 +1615,7 @@ bool TYCalcul::go()
         // Cumul de la pression aux differents points de calcul
         if (ret) // Si l'etape precedente s'est mal passee, inutile de continuer
         {
+  	    OMessageManager::get()->info("Contruction matrice resultat");
             // Puisque le calcul est OK on va construire la matrice resultat
             _pResultat->buildSources(sources);
             _pResultat->buildRecepteurs(recepteurs);
@@ -1632,6 +1635,7 @@ bool TYCalcul::go()
     }
     else
     {
+        OMessageManager::get()->info("Calcul impossible: arrêt.");
         ret = false;
     }
 
