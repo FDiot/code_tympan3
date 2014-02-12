@@ -90,7 +90,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
     from.normalize();
 
     Diffraction* newEvent = new Diffraction(realImpact, from, (Cylindre*)(inter->p));
-    newEvent->setNbResponseLeft(globalNbRayWithDiffraction);
+    newEvent->setNbResponseLeft(globalNbRayWithDiffraction+1); // Attempt to correct problem 
     
 	vec3 newDir;
     if (newEvent->getResponse(newDir))
