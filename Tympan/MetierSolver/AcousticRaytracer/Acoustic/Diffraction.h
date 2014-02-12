@@ -83,7 +83,7 @@ protected:
 
     void buildRepere();
     void computeAngle();
-	void computeDTheta() { delta_theta = angleOuverture / static_cast<decimal>(nbResponseLeft); }
+	void computeDTheta() { delta_theta = angleOuverture / static_cast<decimal>(nbResponseLeft-1); }
 
     Repere localRepere;
 
