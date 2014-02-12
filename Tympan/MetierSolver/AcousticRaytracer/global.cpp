@@ -70,3 +70,4 @@ double globalWindDirection;		// Direction du vent (un vent a 0 est dirige du nor
 bool globalUseFresnelArea;		// take into account the fresnel area
 float globalAnime3DSigma;		// incertitude relative sur la taille du rayon au carree
 float globalAnime3DForceC;		// Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
+bool globalUsePostFilters;		// Utilisation (!=0) ou non (0) des filtres post lancer de rayons
