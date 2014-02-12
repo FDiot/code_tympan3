@@ -25,13 +25,13 @@
 #endif
 
 #include "OObserver.h"
-#include <vector>
+#include <set>
 
 using namespace std;
 
 
 ///Collection de reference de OObserver.
-typedef vector<OObserver*> OTabPtrObserver;
+typedef set<OObserver*> OTabPtrObserver;
 
 
 /**

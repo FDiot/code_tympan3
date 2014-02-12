@@ -25,7 +25,7 @@ void OSubject::attach(OObserver* pObserver)
 {
     if (pObserver)
     {
-        _observers.push_back(pObserver);
+        _observers.insert(pObserver);
     }
 }
 
@@ -35,15 +35,8 @@ bool OSubject::detach(OObserver* pObserver)
 
     if (pObserver)
     {
-        BOOST_FOREACH(OObserver& obs, _observers)
-        {
-            if (obs == pObserver)
-            {
-                _observers.erase(obs);
-                ret = true;
-                break;
-            }
-        }
+        _observers.erase(pObserver);
+        return true;
     }
     return ret;
 }
@@ -55,8 +48,8 @@ void OSubject::reset()
 
 void OSubject::notify()
 {
-    for (unsigned int i = 0; i < _observers.size(); i++)
+    BOOST_FOREACH(OObserver* obs, _observers)
     {
-        _observers.at(i)->update();
+        obs->update();
     }
 }
