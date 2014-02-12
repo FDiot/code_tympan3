@@ -46,8 +46,8 @@ bool TYRoute::is_valid_declivity(double decli)
 
 const double TYRoute::undefined_declivity = std::numeric_limits<double>::quiet_NaN();
 TYRoute::TYRoute():
-    _offSet(0.05),
-    computed_declivity(false)
+    computed_declivity(false),
+    _offSet(0.05)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
