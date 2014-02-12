@@ -88,6 +88,7 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     globalUseFresnelArea = false;       // take into account the fresnel area 
 	globalAnime3DSigma = 0.0f;		// valeur de l'incertitude relative pour la calcul de la pression acoustique
 	globalAnime3DForceC = 0.0f;		// Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
+	globalUsePostFilters = true;		// Utilisation (!=0) ou non (0) des filtres post lancer de rayons
 
     // Chargement des parametres de calcul
     loadParameters();
@@ -209,6 +210,9 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 
 	// Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
 	if (params.getline(ligne, 132)) { globalAnime3DForceC = getParam(ligne); }
+
+	// Utilisation (!=0) ou non (0) des filtres post lancer de rayons
+	if (params.getline(ligne, 132)) { globalUsePostFilters = getParam(ligne); }		
 	
     params.close();
 
