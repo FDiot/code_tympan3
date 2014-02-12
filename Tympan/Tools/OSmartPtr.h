@@ -65,7 +65,7 @@ public:
      *
      * @return The number of reference for this object.
      */
-    virtual int addRef() {  return m_refCount++; };
+    virtual int incRef() {  return m_refCount++; };
 
     /**
      * Decreases the reference count for this object.
@@ -74,7 +74,7 @@ public:
      *
      * @return The number of reference for this object.
      */
-    virtual int release()
+    virtual int decRef()
     {
         --m_refCount;
         if (!m_refCount)
@@ -120,7 +120,7 @@ public:
         _pObj = pObj;
         if (_pObj != 0)
         {
-            _pObj->addRef();
+            _pObj->incRef();
         }
     }
 
@@ -132,7 +132,7 @@ public:
         _pObj = ptr._pObj;
         if (_pObj != 0)
         {
-            _pObj->addRef();
+            _pObj->incRef();
         }
     }
 
@@ -144,7 +144,7 @@ public:
         _pObj = ptr._pObj;
         if (_pObj != 0)
         {
-            _pObj->addRef();
+            _pObj->incRef();
         }
     }
 
@@ -155,7 +155,7 @@ public:
     {
         if (_pObj != 0)
         {
-            if (!_pObj->release())
+            if (!_pObj->decRef())
             {
                 _pObj = 0;
             }
@@ -186,14 +186,14 @@ public:
         {
             if (_pObj != 0)
             {
-                _pObj->release();
+                _pObj->decRef();
             }
 
             _pObj = ptr._pObj;
 
             if (_pObj != 0)
             {
-                _pObj->addRef();
+                _pObj->incRef();
             }
         }
 
@@ -216,12 +216,12 @@ public:
     {
         if (pObj != 0)
         {
-            pObj->addRef();
+            pObj->incRef();
         }
 
         if (_pObj != 0)
         {
-            _pObj->release();
+            _pObj->decRef();
         }
 
         _pObj = pObj;
