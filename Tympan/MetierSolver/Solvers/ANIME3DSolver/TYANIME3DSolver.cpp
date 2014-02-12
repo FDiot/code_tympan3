@@ -260,7 +260,7 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
 
             tabSpectre[i][j] = sLP.toDB();  // conversion du tableau resultat en dB
 
-            tabRecepteurs[j]->addRef();  //pour pas que cet objet ne soit detruit
+            tabRecepteurs[j]->incRef();  //pour pas que cet objet ne soit detruit
 
             traj.setSourcePonctuelle(tabSources[i]);
             traj.setPointCalcul(tabRecepteurs[j]);
@@ -281,7 +281,7 @@ bool TYANIME3DSolver ::buildCalcStruct(const TYSiteNode& site, const TYCalcul& c
         for (size_t i = 0; i < _tabPolygonSize; ++i)
             if (_tabPolygon[i].pSurfGeoNode)
             {
-                _tabPolygon[i].pSurfGeoNode->release();
+                _tabPolygon[i].pSurfGeoNode->decRef();
             }
         delete [] _tabPolygon;
         _tabPolygonSize = 0;
@@ -329,7 +329,7 @@ bool TYANIME3DSolver ::buildCalcStruct(const TYSiteNode& site, const TYCalcul& c
 
         // Incrementation manuel du compteur de reference
         // Necessaire pour la non destruction du pointeur
-        _tabPolygon[i].pSurfGeoNode->addRef();
+        _tabPolygon[i].pSurfGeoNode->incRef();
 
         // Ajout de la matrice inverse
         _tabPolygon[i].matInv = tabFaces[i]->getMatrix().getInvert();
@@ -427,7 +427,7 @@ bool TYANIME3DSolver ::buildCalcStruct(const TYSiteNode& site, const TYCalcul& c
 
         // Incrementation manuel du compteur de reference
         // Necessaire pour la non destruction du pointeur
-        _tabPolygon[i].pSurfGeoNode->addRef();
+        _tabPolygon[i].pSurfGeoNode->incRef();
 
         _tabPolygon[i].matInv = OMatrix();
 
