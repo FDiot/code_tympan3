@@ -8,7 +8,7 @@
  *
  */
 
-#include <strstream>
+#include <sstream>
 #include <limits>
 
 #include <CGAL/intersections.h>

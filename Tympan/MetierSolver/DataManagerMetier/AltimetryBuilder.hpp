@@ -18,7 +18,6 @@
 #include <string>
 #include <cassert>
 #include <map>
-#include <functional>
 #include <algorithm>
 
 // CGAL related Includes
