@@ -22,32 +22,29 @@
 #include <math.h>
 #include "Sampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/UnitConverter.h"
+#include <boost/random/mersenne_twister.hpp>
+#include <boost/random/uniform_real.hpp>
 
 #ifndef RANDOM_SPHERIC_SAMPLER
 #define RANDOM_SPHERIC_SAMPLER
-                                 
+
 class RandomSphericSampler: public Sampler
 {
 
 public:
     RandomSphericSampler( const unsigned int& nbRays = 0, 
 						  const decimal& Theta = (decimal) M_PIDIV2, 
-						  const decimal& Phi = (decimal) M_2PI		) :	Sampler(nbRays, Theta, Phi), 
-																		_graine(3)
+						  const decimal& Phi = (decimal) M_2PI		) :	Sampler(nbRays, Theta, Phi),
+																		bounded_sampler(boost::uniform_real<>(0., 1.))
 	{ 
-		init(); 
 	}
 
-    RandomSphericSampler(const RandomSphericSampler& other) : Sampler(other) 
+    RandomSphericSampler(const RandomSphericSampler& other) : Sampler(other), bounded_sampler(other.bounded_sampler)
 	{
-		_graine = other._graine;
-		init();
 	}
     
-	RandomSphericSampler(RandomSphericSampler* sampler) : Sampler(sampler)
+	RandomSphericSampler(RandomSphericSampler* sampler) : Sampler(sampler), bounded_sampler(sampler->bounded_sampler)
 	{
-		_graine = sampler->_graine;
-		init();
 	}
 
     virtual Sampler* Clone()
@@ -60,10 +57,12 @@ public:
 
     virtual vec3 getSample()
     {
-        decimal U = (decimal)rand() / (decimal)RAND_MAX;
-        decimal V = (decimal)rand() / (decimal)RAND_MAX;
+		double U = bounded_sampler(random_generator);
+        double V = bounded_sampler(random_generator);
+
         decimal thetaCalcul = acos(2. * U - 1.) - _theta;
         decimal phiCalcul = _phi * V;
+
         vec3 result;
         Tools::fromRadianToCarthesien(thetaCalcul, phiCalcul, result);
         result.normalize();
@@ -72,13 +71,13 @@ public:
     }
 
     virtual bool isAcceptableSample(vec3 v) { return true; }
-    virtual void init() { _graine = 3; srand(_graine); }
-
-	void setGraine(unsigned int graine = 3) { _graine = graine; init(); }
-	unsigned int getGraine() const { return _graine; }
 
 private :
-	unsigned int _graine;
+	static boost::mt19937 random_generator;
+
+	boost::uniform_real<> bounded_sampler;
 };
+
+boost::mt19937 RandomSphericSampler::random_generator = boost::mt19937();
 
 #endif //RANDOM_SPHERIC_SAMPLER
