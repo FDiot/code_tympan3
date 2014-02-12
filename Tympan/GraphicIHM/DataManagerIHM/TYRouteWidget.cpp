@@ -51,6 +51,33 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     q_RoadSurfaceAge_Spin = findChild<QSpinBox*>("route_age");
     assert(q_RoadSurfaceAge_Spin);
 
+    // Get he widget for the traffic speed
+    q_RoadSpeed_Spin[TYRoute::Day][TYTrafic::LV] = findChild<QSpinBox*>("vitesse_vl_jour");
+    assert(q_RoadSpeed_Spin[TYRoute::Day][TYTrafic::LV]);
+    q_RoadSpeed_Spin[TYRoute::Evening][TYTrafic::LV] = findChild<QSpinBox*>("vitesse_vl_soir");
+    assert(q_RoadSpeed_Spin[TYRoute::Evening][TYTrafic::LV]);
+    q_RoadSpeed_Spin[TYRoute::Night][TYTrafic::LV] = findChild<QSpinBox*>("vitesse_vl_nuit");
+    assert(q_RoadSpeed_Spin[TYRoute::Night][TYTrafic::LV]);
+    q_RoadSpeed_Spin[TYRoute::Day][TYTrafic::HGV] = findChild<QSpinBox*>("vitesse_pl_jour");
+    assert(q_RoadSpeed_Spin[TYRoute::Day][TYTrafic::HGV]);
+    q_RoadSpeed_Spin[TYRoute::Evening][TYTrafic::HGV] = findChild<QSpinBox*>("vitesse_pl_soir");
+    assert(q_RoadSpeed_Spin[TYRoute::Evening][TYTrafic::HGV]);
+    q_RoadSpeed_Spin[TYRoute::Night][TYTrafic::HGV] = findChild<QSpinBox*>("vitesse_pl_nuit");
+    assert(q_RoadSpeed_Spin[TYRoute::Night][TYTrafic::HGV]);
+    // Get he widget for the traffic flow
+    q_RoadFlow_Spin[TYRoute::Day][TYTrafic::LV] = findChild<QSpinBox*>("periode_debit_vl_jour");
+    assert(q_RoadFlow_Spin[TYRoute::Day][TYTrafic::LV]);
+    q_RoadFlow_Spin[TYRoute::Evening][TYTrafic::LV] = findChild<QSpinBox*>("periode_debit_vl_soir");
+    assert(q_RoadFlow_Spin[TYRoute::Evening][TYTrafic::LV]);
+    q_RoadFlow_Spin[TYRoute::Night][TYTrafic::LV] = findChild<QSpinBox*>("periode_debit_vl_nuit");
+    assert(q_RoadFlow_Spin[TYRoute::Night][TYTrafic::LV]);
+    q_RoadFlow_Spin[TYRoute::Day][TYTrafic::HGV] = findChild<QSpinBox*>("periode_debit_pl_jour");
+    assert(q_RoadFlow_Spin[TYRoute::Day][TYTrafic::HGV]);
+    q_RoadFlow_Spin[TYRoute::Evening][TYTrafic::HGV] = findChild<QSpinBox*>("periode_debit_pl_soir");
+    assert(q_RoadFlow_Spin[TYRoute::Evening][TYTrafic::HGV]);
+    q_RoadFlow_Spin[TYRoute::Night][TYTrafic::HGV] = findChild<QSpinBox*>("periode_debit_pl_nuit");
+    assert(q_RoadFlow_Spin[TYRoute::Night][TYTrafic::HGV]);
+
     // Update the GUI from the data in the TYRoute instance.
     updateContent();
 }
@@ -61,33 +88,18 @@ TYRouteWidget::~TYRouteWidget()
 
 void TYRouteWidget::updateContent()
 {
-    update_road_surface();
     _elmW->updateContent();
-/*
-    _lineEditVitMoy->setText(QString().setNum(getElement()->getVitMoy(), 'f', 2));
-    _pLineEditDebitPLJour->setText(QString().setNum(getElement()->getTraficJour().getDebitPL()));
-    _pLineEditDebitVLJour->setText(QString().setNum(getElement()->getTraficJour().getDebitVL()));
-    _pLineEditDebitPLNuit->setText(QString().setNum(getElement()->getTraficNuit().getDebitPL()));
-    _pLineEditDebitVLNuit->setText(QString().setNum(getElement()->getTraficNuit().getDebitVL()));
-    // _comboBoxTrafic->setCurrentIndex(getElement()->getModeCalc()); // WIP replace with RoadFlowType
-*/
+    update_road_surface();
+    update_road_traffic();
 }
 
 void TYRouteWidget::apply()
 {
     _elmW->apply();
     apply_road_surface();
-
-    /*
-    getElement()->setVitMoy(_lineEditVitMoy->text().toDouble());
-    // getElement()->setModeCalc(_comboBoxTrafic->currentIndex());// WIP replace with RoadFlowType
-    getElement()->getTraficJour().setDebitPL(_pLineEditDebitPLJour->text().toDouble());
-    getElement()->getTraficJour().setDebitVL(_pLineEditDebitVLJour->text().toDouble());
-    getElement()->getTraficNuit().setDebitPL(_pLineEditDebitPLNuit->text().toDouble());
-    getElement()->getTraficNuit().setDebitVL(_pLineEditDebitVLNuit->text().toDouble());
+    apply_road_traffic();
 
     emit modified();
-*/
 }
 
 void TYRouteWidget::apply_road_surface()
@@ -119,4 +131,42 @@ void TYRouteWidget::update_road_surface()
     q_RoadSurfaceType_Combo->setCurrentIndex(index);
 
     q_RoadSurfaceAge_Spin->setValue( road.surfaceAge() );
+}
+
+void TYRouteWidget::apply_road_traffic()
+{
+    TYRoute& road = *getElement();
+
+    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
+    {
+        enum TYRoute::TrafficRegimes regime = static_cast<TYRoute::TrafficRegimes>(j);
+        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+        {
+            enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
+            int speed = q_RoadSpeed_Spin[regime][vehicle_type]->value();
+            int flow = q_RoadFlow_Spin[regime][vehicle_type]->value();
+            road.setRoadTrafficComponent(regime, vehicle_type, flow, speed /* TODO handle flow type */);
+        }
+    }
+
+}
+
+void TYRouteWidget::update_road_traffic()
+{
+    TYRoute& road = *getElement();
+
+    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
+    {
+        enum TYRoute::TrafficRegimes regime = static_cast<TYRoute::TrafficRegimes>(j);
+        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+        {
+            enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
+
+            const RoadTrafficComponent& rtc = road.getNMPB08RoadTrafficComponent(regime, vehicle_type);
+            q_RoadSpeed_Spin[regime][vehicle_type]->setValue(rtc.trafficSpeed);
+            q_RoadFlow_Spin[regime][vehicle_type]->setValue(rtc.trafficFlow);
+            /* TODO Handle rtc.flowType */
+        }
+    }
+
 }

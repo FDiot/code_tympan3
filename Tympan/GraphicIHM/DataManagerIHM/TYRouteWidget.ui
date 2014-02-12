@@ -145,13 +145,25 @@
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QSpinBox" name="periode_debit__pl_jour"/>
+             <widget class="QSpinBox" name="periode_debit_pl_jour">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="periode_debit_vl_jour"/>
+             <widget class="QSpinBox" name="periode_debit_vl_jour">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="3">
-             <widget class="QSpinBox" name="periode_debit_vl_nuit"/>
+             <widget class="QSpinBox" name="periode_debit_vl_nuit">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="2" column="0">
              <widget class="QLabel" name="label_17">
@@ -161,7 +173,11 @@
              </widget>
             </item>
             <item row="2" column="3">
-             <widget class="QSpinBox" name="periode_debit_pl_nuit"/>
+             <widget class="QSpinBox" name="periode_debit_pl_nuit">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_15">
@@ -171,7 +187,11 @@
              </widget>
             </item>
             <item row="1" column="2">
-             <widget class="QSpinBox" name="periode_debit_vl_soir"/>
+             <widget class="QSpinBox" name="periode_debit_vl_soir">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="0" column="1">
              <widget class="QLabel" name="label_20">
@@ -188,7 +208,11 @@
              </widget>
             </item>
             <item row="2" column="2">
-             <widget class="QSpinBox" name="periode_debit_pl_soir"/>
+             <widget class="QSpinBox" name="periode_debit_pl_soir">
+              <property name="maximum">
+               <number>10000</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="5">
              <spacer name="horizontalSpacer_4">
