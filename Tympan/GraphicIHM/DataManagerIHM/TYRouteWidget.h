@@ -89,12 +89,15 @@ protected:
     QPushButton* q_AADT_Push;
 
 
+    QButtonGroup * p_ModeCalcul_ButtonGroup;
+
 protected slots:
     void display_AADT_dialog();
+    void checkComputationMode(int);
+    void setSpeedBoxEnabled(bool enabled = true);
+    void setFlowBoxEnabled(bool enabled = true);
 
 private:
-
-
     void apply_road_surface();
     void update_road_surface();
     void apply_road_traffic();

@@ -86,6 +86,23 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     assert( QObject::connect( q_AADT_Push,      SIGNAL(clicked()),
                               this,             SLOT(display_AADT_dialog())) );
 
+    p_ModeCalcul_ButtonGroup = findChild<QButtonGroup*>("groupe_boutons_mode_calcul");
+    assert(p_ModeCalcul_ButtonGroup);
+    QRadioButton * q_check_box;
+    q_check_box = findChild<QRadioButton*>("radio_spectres");
+    assert(q_check_box);
+    p_ModeCalcul_ButtonGroup->setId(q_check_box, 0);
+    q_check_box = findChild<QRadioButton*>("radio_debits");
+    assert(q_check_box);
+    p_ModeCalcul_ButtonGroup->setId(q_check_box, 1);
+    q_check_box = findChild<QRadioButton*>("radio_tmja");
+    assert(q_check_box);
+    p_ModeCalcul_ButtonGroup->setId(q_check_box, 2);
+
+    checkComputationMode(1);
+    assert( QObject::connect( p_ModeCalcul_ButtonGroup, SIGNAL(buttonClicked(int)),
+                              this, SLOT(checkComputationMode(int))) );
+
     // Update the GUI from the data in the TYRoute instance.
     updateContent();
 }
@@ -232,4 +249,43 @@ void TYRouteWidget::display_AADT_dialog()
         else
             break; // Dialog canceled
     } // while(!ok)
+}
+
+void TYRouteWidget::setSpeedBoxEnabled(bool enabled)
+{
+    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
+        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+            q_RoadSpeed_Spin[j][i]->setEnabled(enabled);
+}
+
+void TYRouteWidget::setFlowBoxEnabled(bool enabled)
+{
+    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
+        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+            q_RoadFlow_Spin[j][i]->setEnabled(enabled);
+}
+
+void TYRouteWidget::checkComputationMode(int mode)
+{
+    switch(mode)
+    {
+    case 0: // Directly input spectrums
+        setSpeedBoxEnabled(false);
+        setFlowBoxEnabled(false);
+        q_AADT_Push->setEnabled(false);
+        break;
+    case 1: // Input flows and speeds
+        setSpeedBoxEnabled(true);
+        setFlowBoxEnabled(true);
+        q_AADT_Push->setEnabled(false);
+        break;
+    case 2: // Use note 77 to estimate traffic from the TMJA
+        setSpeedBoxEnabled(true);
+        setFlowBoxEnabled(false);
+        q_AADT_Push->setEnabled(true);
+        break;
+    default:
+        assert(false && "mode should be in 0..2");
+    }
+    update();
 }
