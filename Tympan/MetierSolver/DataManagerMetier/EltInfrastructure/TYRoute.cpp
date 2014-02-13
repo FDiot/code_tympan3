@@ -81,6 +81,9 @@ TYRoute::TYRoute():
 
     _regimeChangeAble = false;
 
+    road_traffic.surfaceType = RoadSurface_Default;
+    road_traffic.surfaceAge = 0.0;
+    road_traffic.ramp = 0.0;
     for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
     {
         traffic_regimes[i].setParent(this);
