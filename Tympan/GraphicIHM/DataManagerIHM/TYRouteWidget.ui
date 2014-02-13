@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>420</width>
+    <width>450</width>
     <height>620</height>
    </rect>
   </property>
@@ -24,7 +24,7 @@
     <rect>
      <x>9</x>
      <y>9</y>
-     <width>400</width>
+     <width>434</width>
      <height>600</height>
     </rect>
    </property>
@@ -41,7 +41,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="page_trafic">
     <attribute name="title">
@@ -57,6 +57,48 @@
         <enum>QFrame::Raised</enum>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QGroupBox" name="groupe_mode_calcul">
+          <property name="title">
+           <string>Détermination des spectres</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QRadioButton" name="radio_debits">
+             <property name="text">
+              <string>Débits horaires</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">groupe_boutons_mode_calcul</string>
+             </attribute>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radio_spectres">
+             <property name="text">
+              <string>Saisie directe</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">groupe_boutons_mode_calcul</string>
+             </attribute>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radio_tmja">
+             <property name="text">
+              <string>T.M.J.A.</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">groupe_boutons_mode_calcul</string>
+             </attribute>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
         <item>
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="2" column="1">
@@ -405,6 +447,9 @@
   </widget>
  </widget>
  <tabstops>
+  <tabstop>radio_debits</tabstop>
+  <tabstop>radio_spectres</tabstop>
+  <tabstop>radio_tmja</tabstop>
   <tabstop>periode_debit_vl_jour</tabstop>
   <tabstop>periode_debit_vl_soir</tabstop>
   <tabstop>periode_debit_vl_nuit</tabstop>
@@ -426,4 +471,7 @@
  </tabstops>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="groupe_boutons_mode_calcul"/>
+ </buttongroups>
 </ui>
