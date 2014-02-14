@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -28,26 +28,26 @@ int OTriangle::* OTriangle::indices_m_ptr[3] = {&OTriangle::_p1, &OTriangle::_p2
 
 OPoint3D& OTriangle::vertex(unsigned i)
 {
-	assert( i<3 && "Triangle vertex indices are 0, 1 or 2");
-	return this->*vertices_m_ptr[i];
+    assert(i < 3 && "Triangle vertex indices are 0, 1 or 2");
+    return this->*vertices_m_ptr[i];
 }
 
 const OPoint3D& OTriangle::vertex(unsigned i) const
 {
-	assert( i<3 && "Triangle vertex indices are 0, 1 or 2");
-	return this->*vertices_m_ptr[i];
+    assert(i < 3 && "Triangle vertex indices are 0, 1 or 2");
+    return this->*vertices_m_ptr[i];
 }
 
 int OTriangle::index(unsigned i) const
 {
-	assert( i<3 && "Triangle vertex indices are 0, 1 or 2");
-	return this->*indices_m_ptr[i];
+    assert(i < 3 && "Triangle vertex indices are 0, 1 or 2");
+    return this->*indices_m_ptr[i];
 }
 
 int& OTriangle::index(unsigned i)
 {
-	assert( i<3 && "Triangle vertex indices are 0, 1 or 2");
-	return this->*indices_m_ptr[i];
+    assert(i < 3 && "Triangle vertex indices are 0, 1 or 2");
+    return this->*indices_m_ptr[i];
 }
 
 OTriangle::OTriangle(int p1, int p2, int p3)
@@ -68,8 +68,8 @@ OTriangle::OTriangle(OPoint3D A, OPoint3D B, OPoint3D C)
     _A = A;
     _B = B;
     _C = C;
-     // Hope this segfault if used for indexing an array (i.e. should not create
-     // a \c OTriangle from OPoint3D without setting _p1, _p2 & _p3.
+    // Hope this segfault if used for indexing an array (i.e. should not create
+    // a \c OTriangle from OPoint3D without setting _p1, _p2 & _p3.
     _p1 = _p2 = _p3 = std::numeric_limits<unsigned>::max();
 }
 
@@ -79,7 +79,7 @@ OTriangle::~OTriangle()
 
 double OTriangle::getSurface()
 {
-	/*
+    /*
     // TODO : recuperation des sommets
 
     OPoint3D A, B, C; //sommets A, B, C du triangle
@@ -92,7 +92,7 @@ double OTriangle::getSurface()
     A = OPoint3D(xA, yA, zA);
     B = OPoint3D(xB, yB, zB);
     C = OPoint3D(xC, yC, zC);
-	*/
+    */
 
     // calcul des cotes :
     double c1 = _A.distFrom(_B);

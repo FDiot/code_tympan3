@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,22 +11,16 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYActions.cpp
  * \brief action qui necessite l'acces au modeler
- *
- *
  */
-
-
-
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-
 
 TYAddAccSurfToAccSurfNodeAction::TYAddAccSurfToAccSurfNodeAction(LPTYAcousticSurfaceGeoNode pAccSurfGeoNode,
                                                                  LPTYAcousticSurfaceNode pAccSurfNode,
@@ -438,16 +432,16 @@ TYAddElementToTopoAction::TYAddElementToTopoAction(SmartPtr<TYGeometryNode > pEl
                                                    TYModelerFrame* pModeler, const QString& actionName)
     : TYModelerAction(pModeler, actionName), _pElementGeoNode(pElementGeoNode), _pTopo(pTopo)
 {
-	if (_pTopo) { _pTopo->addRef(); }
+    if (_pTopo) { _pTopo->incRef(); }
 }
 
 TYAddElementToTopoAction::TYAddElementToTopoAction(LPTYElement pElement, LPTYTopographie pTopo,
                                                    TYModelerFrame* pModeler, const QString& actionName)
     : TYModelerAction(pModeler, actionName), _pTopo(pTopo)
 {
-	if (_pTopo) { _pTopo->addRef(); }
-	
-	if (pElement->isA("TYCourbeNiveau"))
+    if (_pTopo) { _pTopo->incRef(); }
+
+    if (pElement->isA("TYCourbeNiveau"))
     {
         _pElementGeoNode =  _pTopo->findCrbNiv((LPTYCourbeNiveau&) pElement);
     }
@@ -1508,9 +1502,9 @@ void TYRemSiteNodeToSiteNodeAction::redo()
 /***************************************************************************/
 
 
-TYMovePointPolyLineAction::TYMovePointPolyLineAction(LPTYElement pElt, TYTabPoint &polyLine, int ptId,
-                                                 const TYPoint& oldPos, const TYPoint& newPos,
-                                                 TYModelerFrame* pModeler, const QString& actionName)
+TYMovePointPolyLineAction::TYMovePointPolyLineAction(LPTYElement pElt, TYTabPoint& polyLine, int ptId,
+                                                     const TYPoint& oldPos, const TYPoint& newPos,
+                                                     TYModelerFrame* pModeler, const QString& actionName)
     : TYModelerAction(pModeler, actionName), _pElt(pElt), _polyLine(polyLine), _ptId(ptId), _oldPos(oldPos), _newPos(newPos)
 {
 }
@@ -1543,8 +1537,8 @@ void TYMovePointPolyLineAction::redo()
 /***************************************************************************/
 
 
-TYInsertPointPolyLineAction::TYInsertPointPolyLineAction(LPTYElement pElt, TYTabPoint &polyLine, int ptId,
-                                                 const TYPoint& pt,TYModelerFrame* pModeler, const QString& actionName)
+TYInsertPointPolyLineAction::TYInsertPointPolyLineAction(LPTYElement pElt, TYTabPoint& polyLine, int ptId,
+                                                         const TYPoint& pt, TYModelerFrame* pModeler, const QString& actionName)
     : TYModelerAction(pModeler, actionName), _pElt(pElt), _polyLine(polyLine), _ptId(ptId), _pt(pt)
 {
 }
@@ -1564,7 +1558,7 @@ void TYInsertPointPolyLineAction::undo()
 
 void TYInsertPointPolyLineAction::redo()
 {
-    _polyLine.insert(_polyLine.begin()+_ptId, _pt);
+    _polyLine.insert(_polyLine.begin() + _ptId, _pt);
 
     _pElt->setIsGeometryModified(true);
     _pElt->updateGraphic();
@@ -1574,8 +1568,8 @@ void TYInsertPointPolyLineAction::redo()
 /***************************************************************************/
 
 
-TYRemovePointPolyLineAction::TYRemovePointPolyLineAction(LPTYElement pElt, TYTabPoint &polyLine, int ptId,
-                                                 const TYPoint& pt,TYModelerFrame* pModeler, const QString& actionName)
+TYRemovePointPolyLineAction::TYRemovePointPolyLineAction(LPTYElement pElt, TYTabPoint& polyLine, int ptId,
+                                                         const TYPoint& pt, TYModelerFrame* pModeler, const QString& actionName)
     : TYModelerAction(pModeler, actionName), _pElt(pElt), _polyLine(polyLine), _ptId(ptId), _pt(pt)
 {
 }
@@ -1586,7 +1580,7 @@ TYRemovePointPolyLineAction::~TYRemovePointPolyLineAction()
 
 void TYRemovePointPolyLineAction::undo()
 {
-    _polyLine.insert(_polyLine.begin()+_ptId, _pt);
+    _polyLine.insert(_polyLine.begin() + _ptId, _pt);
 
     _pElt->setIsGeometryModified(true);
     _pElt->updateGraphic();

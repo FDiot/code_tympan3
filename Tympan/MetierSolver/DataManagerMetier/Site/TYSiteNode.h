@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,12 +11,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
@@ -352,13 +349,13 @@ class TYSiteNode: public TYElement
     virtual bool remFromCalcul();
 
     /**
-     * Initialise pour le calcul
+     * Donne atmosphere à utiliser pour topographie
      */
-    virtual void init(const LPTYCalcul& pCalcul);
+    virtual void setAtmosphere(const LPTYAtmosphere& pAtmosphere);
 
     /**
-     * Precalcul du nombre d'onde dans le sol des que les caracteristiques de l'atmosphere sont connus
-     * Fonction executees au lancement du calcul
+     * Precalcul du nombre d'onde dans le sol des que les caracteristiques de
+     * l'atmosphere sont connus. Fonction executees au lancement du calcul.
      */
     void updateSol();
 

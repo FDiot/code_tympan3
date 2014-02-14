@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -35,9 +35,6 @@
 /**
  * Classe de definition d'une dalle.
  * Pour la representation des sols et plafonds.
- *
- * @author Projet_Tympan
- *
  */
 class TYDalle: public TYAcousticPolygon
 {
@@ -94,12 +91,12 @@ public:
     bool isParoiLocked() { return _bParoiLocked; }
     const bool isParoiLocked() const { return _bParoiLocked; }
 
-	/**
+    /**
      * \fn  LPTYMateriauConstruction getMateriau()
-	 * \brief Surcharge de la methode getMateriau pour la dalle
+     * \brief Surcharge de la methode getMateriau pour la dalle
      * \return le materiau de construction de la dalle
-	 */
-	TYMateriauConstruction* getMateriau();
+     */
+    TYMateriauConstruction* getMateriau();
 
     // Membres
 protected:

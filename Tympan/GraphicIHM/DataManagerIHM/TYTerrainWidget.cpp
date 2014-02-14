@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYTerrainWidget.cpp
  * \brief outil IHM pour un terrain
@@ -38,12 +38,10 @@
 
 
 TYTerrainWidget::TYTerrainWidget(TYTerrain* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
     QString num;
 
-    Q_ASSERT(pElement);
-    _pElement = pElement;
     unsigned short lnW = 0;
 
     _elmW = new TYElementWidget(pElement, this);

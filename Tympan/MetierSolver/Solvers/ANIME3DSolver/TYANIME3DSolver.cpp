@@ -100,7 +100,7 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
     // Configuration du lancer de rayon geometriques (au debut pour initialiser les valeurs globales
 
     // Nettoyage de l'objet _rayTracing si il a ete utilise precedement
-	_rayTracing.clean();
+    _rayTracing.clean();
 
     // Ajout de la methode acoustique a la _rayTracing
     TYANIME3DRayTracerParameters* solver = new TYANIME3DRayTracerParameters();
@@ -128,7 +128,7 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
     //Construction de la scene pour le rayTracing
     ////////////////////////////////////////////
 
-	// Sources et recepteurs du lancer de rayons
+    // Sources et recepteurs du lancer de rayons
     vector<vec3> sources;
     vector<vec3> recepteurs;
     unsigned int sens = getTabsSAndR(site, calcul, sources, recepteurs);
@@ -149,8 +149,8 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
         lancer.Meteo.setGradV(globalAnalyticGradV);
         lancer.Meteo.setC0(globalAnalyticC0);
         lancer.setMethode(globalAnalyticTypeTransfo);
-		lancer.shot.launchType = 1;									// Indique que l'on tire les rayons sur un plan horizontal
-        lancer.shot.initialAnglePhi = globalAnalyticAnglePhi;		// Angle de tir vertical (phi) des rayons
+        lancer.shot.launchType = 1;                                 // Indique que l'on tire les rayons sur un plan horizontal
+        lancer.shot.initialAnglePhi = globalAnalyticAnglePhi;       // Angle de tir vertical (phi) des rayons
 
         // Choix de la source
         lancer.source = 0;
@@ -178,10 +178,10 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
     //Importation des recepteurs ponctuels actifs
     appendRecepteurToSimulation(recepteurs);
 
-	//Importation des sources ponctuelles actives
+    //Importation des sources ponctuelles actives
     appendSourceToSimulation(sources);
 
-	//Une fois la scene convertie, on peut la post-traiter (ajouter de l'information : arretes de diffractions par ex)
+    //Une fois la scene convertie, on peut la post-traiter (ajouter de l'information : arretes de diffractions par ex)
     _rayTracing.getSolver()->postTreatmentScene(_rayTracing.getScene(), _rayTracing.getSources(), _rayTracing.getRecepteurs());
 
     _rayTracing.getScene()->finish();
@@ -207,18 +207,18 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
 
     //  appendRayToTYCalcul(site, calcul, sens);  // pourkoi commente ??
 
-//    if (globalRestitModifiedGeom) { restitModifiedAlti(site); }
+    //    if (globalRestitModifiedGeom) { restitModifiedAlti(site); }
 
     // Exportation des donnees des rayons dans un fichier texte pour comparaison
     _tabRay = calcul.getAllRays();
 
-	////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////
     // Calculs acoustiques sur les rayons via la methode ANIME3D
     ////////////////////////////////////////////////////////////
 
-	_acousticModel = new TYANIME3DAcousticModel(calcul, site, _rayTracing.getSolver()->getValidRays(), _tabPolygon);
+    _acousticModel = new TYANIME3DAcousticModel(calcul, site, _rayTracing.getSolver()->getValidRays(), _tabPolygon);
 
-	//_acousticModel->init(calcul, site, _rayTracing.getSolver()->getValidRays(), _tabPolygon);  // methode a supprimer
+    //_acousticModel->init(calcul, site, _rayTracing.getSolver()->getValidRays(), _tabPolygon);  // methode a supprimer
 
     // calcul de la matrice de pression totale pour chaque couple (S,R)
     OTab2DSpectreComplex tabSpectre = _acousticModel->ComputeAcousticModel(calcul, site);
@@ -236,7 +236,7 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
 
     TabTrajet& trajets = calcul.getTabTrajet();  // recuperation du tableau de trajets
 
-	trajets.clear(); // nettoyage des trajets
+    trajets.clear(); // nettoyage des trajets
 
     TYTabPointCalculGeoNode    tabRecepteurs;
     TYTabSourcePonctuelleGeoNode tabSources;
@@ -247,27 +247,27 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
     calcul.getAllSources(mapElementSources, tabSources); // recuperation des sources
     calcul.getAllRecepteurs(tabRecepteurs); // recuperation des recepteurs
 
-	OSpectre sLP; // puissance de la source et spectre de pression pour chaque couple (S,R)
-	TYTrajet traj;
+    OSpectre sLP; // puissance de la source et spectre de pression pour chaque couple (S,R)
+    TYTrajet traj;
 
-	for(int i=0; i<tabSources.size(); i++) // boucle sur les sources
-	{
-		for(int j=0; j<tabRecepteurs.size(); j++) // boucle sur les recepteurs
-	   {
-			tabSpectre[i][j].setEtat(SPECTRE_ETAT_LIN);
-			sLP = tabSpectre[i][j];
-			sLP.setType(SPECTRE_TYPE_LP);
+    for (int i = 0; i < tabSources.size(); i++) // boucle sur les sources
+    {
+        for (int j = 0; j < tabRecepteurs.size(); j++) // boucle sur les recepteurs
+        {
+            tabSpectre[i][j].setEtat(SPECTRE_ETAT_LIN);
+            sLP = tabSpectre[i][j];
+            sLP.setType(SPECTRE_TYPE_LP);
 
-			tabSpectre[i][j] = sLP.toDB();  // conversion du tableau resultat en dB
+            tabSpectre[i][j] = sLP.toDB();  // conversion du tableau resultat en dB
 
-			tabRecepteurs[j]->addRef();  //pour pas que cet objet ne soit detruit
+            tabRecepteurs[j]->incRef();  //pour pas que cet objet ne soit detruit
 
-			traj.setSourcePonctuelle(tabSources[i]);
-			traj.setPointCalcul(tabRecepteurs[j]);
-			traj.setSpectre(tabSpectre[i][j]);
-			trajets.push_back(traj);
-		}
-	}
+            traj.setSourcePonctuelle(tabSources[i]);
+            traj.setPointCalcul(tabRecepteurs[j]);
+            traj.setSpectre(tabSpectre[i][j]);
+            trajets.push_back(traj);
+        }
+    }
     return true;
 }
 
@@ -281,7 +281,7 @@ bool TYANIME3DSolver ::buildCalcStruct(const TYSiteNode& site, const TYCalcul& c
         for (size_t i = 0; i < _tabPolygonSize; ++i)
             if (_tabPolygon[i].pSurfGeoNode)
             {
-                _tabPolygon[i].pSurfGeoNode->release();
+                _tabPolygon[i].pSurfGeoNode->decRef();
             }
         delete [] _tabPolygon;
         _tabPolygonSize = 0;
@@ -329,7 +329,7 @@ bool TYANIME3DSolver ::buildCalcStruct(const TYSiteNode& site, const TYCalcul& c
 
         // Incrementation manuel du compteur de reference
         // Necessaire pour la non destruction du pointeur
-        _tabPolygon[i].pSurfGeoNode->addRef();
+        _tabPolygon[i].pSurfGeoNode->incRef();
 
         // Ajout de la matrice inverse
         _tabPolygon[i].matInv = tabFaces[i]->getMatrix().getInvert();
@@ -427,7 +427,7 @@ bool TYANIME3DSolver ::buildCalcStruct(const TYSiteNode& site, const TYCalcul& c
 
         // Incrementation manuel du compteur de reference
         // Necessaire pour la non destruction du pointeur
-        _tabPolygon[i].pSurfGeoNode->addRef();
+        _tabPolygon[i].pSurfGeoNode->incRef();
 
         _tabPolygon[i].matInv = OMatrix();
 
@@ -453,8 +453,8 @@ bool TYANIME3DSolver ::buildCalcStruct(const TYSiteNode& site, const TYCalcul& c
         }
         pt.set(pt._x / (double)_tabPolygon[i].tabPoint.size(), pt._y / (double)_tabPolygon[i].tabPoint.size(), pt._z / (double)_tabPolygon[i].tabPoint.size());
 
-		TYSol* sol = site.getTopographie()->terrainAt(pt)->getSol();
-		TYAtmosphere& atmos = *calcul.getAtmosphere();
+        TYSol* sol = site.getTopographie()->terrainAt(pt)->getSol();
+        TYAtmosphere& atmos = *calcul.getAtmosphere();
 
         // indices de batiment, de face et d'etage =-1
         _tabPolygon[i].idBuilding = -1;
@@ -465,7 +465,7 @@ bool TYANIME3DSolver ::buildCalcStruct(const TYSiteNode& site, const TYCalcul& c
         _tabPolygon[i].G = min(pow(300.0 / sol->getResistivite(), 0.57), 1.0);  //Resistivite du sol capable de calculer le G
 
         //Spectre d'attenuation pour le sol ( calcule dans la methode acoustique car depend du rayon incident
-		_tabPolygon[i].spectreAbso = NULL;
+        _tabPolygon[i].spectreAbso = NULL;
 
         if (!_tabPolygon[i].tabPoint.empty())
         {
@@ -1135,7 +1135,7 @@ bool TYANIME3DSolver::appendRayToTYCalcul(const TYSiteNode& site, TYCalcul& calc
 
         }
     }
-    if (errorType) return false;
+    if (errorType) { return false; }
 
     return true;
 }
@@ -1427,10 +1427,10 @@ void TYANIME3DSolver::appendSourceToAnalyticRayTracer(const TYSiteNode& site, TY
 
 void TYANIME3DSolver::print()
 {
-	logger.write("LogsANIME3DSolver.txt");
+    logger.write("LogsANIME3DSolver.txt");
     ostringstream fic_out;
 
-	fic_out << "La simulation comporte" << _rayTracing.getRecepteurs().size() << "recepteurs et" << _rayTracing.getSources().size() << "sources." << ends;
+    fic_out << "La simulation comporte" << _rayTracing.getRecepteurs().size() << "recepteurs et" << _rayTracing.getSources().size() << "sources." << ends;
     fic_out << "La scene est compose de" << _rayTracing.getScene()->getShapes()->size() << "primitives." << ends;
 
     fic_out << _rayTracing.getSolver()->getValidRays()->size() << "rayons ont ete trouves" << ends;
@@ -1459,31 +1459,35 @@ void TYANIME3DSolver::print()
     }
 }
 
- TYPoint TYANIME3DSolver::computePosGlobalPoint(const TYGeometryNode* pNode)
+TYPoint TYANIME3DSolver::computePosGlobalPoint(const TYGeometryNode* pNode)
 {
-	TYPoint* pPoint;
-	if (pNode->getElement()->inherits("TYSourcePonctuelle"))
-		pPoint = TYSourcePonctuelle::safeDownCast(pNode->getElement())->getPos();
-	else
-		pPoint = TYPoint::safeDownCast(pNode->getElement());
+    TYPoint* pPoint;
+    if (pNode->getElement()->inherits("TYSourcePonctuelle"))
+    {
+        pPoint = TYSourcePonctuelle::safeDownCast(pNode->getElement())->getPos();
+    }
+    else
+    {
+        pPoint = TYPoint::safeDownCast(pNode->getElement());
+    }
 
-	return  pNode->getMatrix() * (*pPoint);
+    return  pNode->getMatrix() * (*pPoint);
 }
 
- TYPoint TYANIME3DSolver::R3ToTYPoint(const R3& p)
+TYPoint TYANIME3DSolver::R3ToTYPoint(const R3& p)
 {
-	TYPoint point;
-	point._x = p.x;
-	point._y = p.y;
-	point._z = p.z;
-	return point;
+    TYPoint point;
+    point._x = p.x;
+    point._y = p.y;
+    point._z = p.z;
+    return point;
 }
 
 R3 TYANIME3DSolver::TYPointToR3(const TYPoint& p)
 {
-	R3 point;
-	point.x = p._x;
-	point.y = p._y;
-	point.z = p._z;
-	return point;
+    R3 point;
+    point.x = p._x;
+    point.y = p._y;
+    point.z = p._z;
+    return point;
 }

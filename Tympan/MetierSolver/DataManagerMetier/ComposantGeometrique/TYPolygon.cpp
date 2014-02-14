@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -243,14 +243,14 @@ TYTabPoint TYPolygon::getContour(int /*n=-1*/) const
 TYTabPoint3D TYPolygon::getOContour(int /*n=-1*/) const
 {
     TYTabPoint3D pts;
-	const TYTabPoint& tabPts = getPoints();
+    const TYTabPoint& tabPts = getPoints();
 
-	for (unsigned int i = 0; i < tabPts.size(); i++)
-	{
-		pts.push_back(tabPts[i]);
-	}
+    for (unsigned int i = 0; i < tabPts.size(); i++)
+    {
+        pts.push_back(tabPts[i]);
+    }
 
-	return pts;
+    return pts;
 }
 
 
@@ -390,13 +390,17 @@ void TYPolygon::setPoints(const TYTabPoint& pts)
 bool TYPolygon::checkCoplanar() const
 {
     size_t nbPts = _pts.size();
-    if(nbPts<3)
-        return true;
-    OPlan plan(_pts[0], _pts[1], _pts[2]);
-    for(size_t i = 3; i < nbPts; ++i)
+    if (nbPts < 3)
     {
-        if(!plan.isInPlan(_pts[i]))
+        return true;
+    }
+    OPlan plan(_pts[0], _pts[1], _pts[2]);
+    for (size_t i = 3; i < nbPts; ++i)
+    {
+        if (!plan.isInPlan(_pts[i]))
+        {
             return false;
+        }
     }
     return true;
 }

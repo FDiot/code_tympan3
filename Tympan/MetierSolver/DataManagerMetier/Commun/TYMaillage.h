@@ -327,7 +327,7 @@ public:
     /**
      * \brief Compute the mesh
      *
-     * It simply loops over the calcul points and trianglulate them. The points are ordered regularly 
+     * It simply loops over the calcul points and trianglulate them. The points are ordered regularly
      * (at least from a topology point of view). The array of calcul points might be sparse, in that case
      * we only create a triangle if it's possible (i.e. tha 3 points are defined)
      *
@@ -342,20 +342,20 @@ public:
      * \param pt3 The point 3
      * \return The newly created triangle
      */
-    MTriangle computeTriangle(TYPointCalcul &pt1, TYPointCalcul &pt2, TYPointCalcul &pt3) const;
+    MTriangle computeTriangle(TYPointCalcul& pt1, TYPointCalcul& pt2, TYPointCalcul& pt3) const;
 
     /**
      * \brief Get the spectrum value of a calcul point
      * \param pt The point
      * \return The spectrum value
      */
-    double getSpectrumValue(TYPointCalcul &pt) const;
+    double getSpectrumValue(TYPointCalcul& pt) const;
 
     /**
      * \brief Compute the isocurve
      *
      * The function does several plane-triangle intersection in order to compute the new
-     * position of the isopoints. Before the test, the third coordinate of the points of the 
+     * position of the isopoints. Before the test, the third coordinate of the points of the
      * mesh are replaced by their spectrum value. For each new plane (on each step we gradually
      * increase its height), every triangles of the mesh are tested.
      *
@@ -367,7 +367,7 @@ public:
     /**
      * \brief Compute an isopoint by interpolating the value if the segment intersects the plane
      *
-     * An intersection test is performed between the plane and the segment. If there's an 
+     * An intersection test is performed between the plane and the segment. If there's an
      * intersection, the position of the isopoint is computed.
      *
      * \param plane The plane
@@ -376,7 +376,7 @@ public:
      * \param mp The isoPoint to update
      * \return True if the plane intersects the segment and the isoPoint has been calculated
      */
-    bool computeIsoPoint(const OHPlane3D &plane, const MPoint &pt1, const MPoint &pt2, MPoint &mp) const;
+    bool computeIsoPoint(const OHPlane3D& plane, const MPoint& pt1, const MPoint& pt2, MPoint& mp) const;
 
     /**
      * \brief Return the index (should be pure virtual)
@@ -391,7 +391,7 @@ public:
      * \param x Dimension x
      * \param y Dimension y
      */
-    virtual void getDimensions(int &x, int &y) const {}
+    virtual void getDimensions(int& x, int& y) const {}
 
     // Membres
 protected:

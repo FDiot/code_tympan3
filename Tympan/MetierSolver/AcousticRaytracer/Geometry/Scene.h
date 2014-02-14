@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #ifndef SCENE_H
 #define SCENE_H
 
@@ -29,15 +29,19 @@ struct compVec
 {
     bool operator()(const vec3& _v1, const vec3& _v2) const
     {
-    	if (fabs(_v1.x - _v2.x) > 0.001) {
-    		return _v1.x < _v2.x;
-    	}
-    	if (fabs(_v1.y - _v2.y) > 0.001) {
-    		return _v1.y < _v2.y;
-    	}
-    	if (fabs(_v1.z - _v2.z) > 0.001) {
-    		return _v1.z < _v2.z; }
-    	return false;
+        if (fabs(_v1.x - _v2.x) > 0.001)
+        {
+            return _v1.x < _v2.x;
+        }
+        if (fabs(_v1.y - _v2.y) > 0.001)
+        {
+            return _v1.y < _v2.y;
+        }
+        if (fabs(_v1.z - _v2.z) > 0.001)
+        {
+            return _v1.z < _v2.z;
+        }
+        return false;
     }
 };
 

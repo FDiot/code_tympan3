@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,12 +11,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
@@ -32,17 +29,10 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYPointCalculWidget.h"
 #endif
 
-
 /**
  * \file TYPointCalcul.h
  * \class TYPointCalcul
  * \brief  Classe de definition d'un point de calcul.C'est une classe derivee a TYPoint avec en plus un spectrepour contenir le resultat du calcul.
- * \author Projet_Tympan
- * \version v 1.1
- * \date 2008/01/21
- *
- *
- * @author Projet_Tympan
  */
 class TYPointCalcul: public TYPoint
 {

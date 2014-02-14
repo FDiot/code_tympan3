@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -26,8 +26,11 @@
 #include "TYRoute.h"
 #include "Tympan/Tools/OMessageManager.h"
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYRouteWidget.h"
+#endif
 
-OPROTOINST(TYRoute);
+
 
 const float TYRoute::_tabR[] = { /*   16*/ -200.0, /*   20  */ -200.0,
                                            /*   25*/ -200.0, /*   31.5*/ -200.0, /*   40*/ -200.0,
@@ -42,7 +45,8 @@ const float TYRoute::_tabR[] = { /*   16*/ -200.0, /*   20  */ -200.0,
                                            /*12500*/ -200.0, /*16000  */ -200.0
                                };
 
-
+OPROTOINST(TYRoute);
+TY_EXTENSION_INST(TYRoute);
 
 TYRoute::TYRoute(): _vitMoy(80),
     _modeCalcul(true),

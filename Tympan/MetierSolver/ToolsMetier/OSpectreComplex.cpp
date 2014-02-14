@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,18 +11,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
 
 
-
-
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
+#include "OSpectreComplex.h"
 
 #include "Tympan/Tools/OMessageManager.h"
 
@@ -38,7 +34,7 @@ OSpectreComplex::OSpectreComplex(const TYComplex& defaultValue) : OSpectre(defau
 {
     for (unsigned int i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-		_phase[i] = defaultValue.imag();
+        _phase[i] = defaultValue.imag();
     }
 }
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -73,8 +73,8 @@ public:
 
 private:
     //! A static table of \c OPoint3D.
-    static OPoint3D OTriangle::*vertices_m_ptr[3];
+    static OPoint3D OTriangle::* vertices_m_ptr[3];
     //! A static table of coordinate.
-    static int OTriangle::*indices_m_ptr[3];
+    static int OTriangle::* indices_m_ptr[3];
 };
 #endif //_O_TRIANGLE__

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,18 +11,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
 #ifndef __TY_PROGRESS_MANAGER__
 #define __TY_PROGRESS_MANAGER__
-
 
 #include "TYConfigure.h"
 
@@ -33,9 +29,6 @@
 
 /**
  * Boite de dialogue de progression.
- *
- * @author Projet_Tympan
- * @version $Revision: 1.1 $
  */
 class TYProgressDialog : public QProgressDialog
 {
@@ -86,9 +79,6 @@ public:
  * Affiche une boite de dialogue avec une barre de progression
  * pour indiquer l'avancement d'operations longues ou lentes.
  * Il est aussi possible d'annuler l'operation en cours.
- *
- * @author Projet_Tympan
- * @version $Revision: 1.1 $
  */
 class TYProgressManager
 {
@@ -188,9 +178,6 @@ class QWidget;
  * Cette classe ne fait rien dans le cas ou Tympan n'utilise
  * pas l'API Qt. Seule la declaration des methodes est faite
  * afin de satisfaire les appels correspondant depuis le DataManager.
- *
- * @author Projet_Tympan
- * @version $Revision: 1.1 $
  */
 class TYProgressManager
 {

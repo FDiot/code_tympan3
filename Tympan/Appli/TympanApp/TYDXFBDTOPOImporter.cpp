@@ -8,13 +8,9 @@
  *
  */
 
-
 /**
  * TYDXFBDTopoImporter.cpp : Definit le point d'entree pour l'import des fichiers DXF au format BD-TOPO.
- *
- * @author Arnaud Zirnheld
  */
-
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4786 4275 4503)//az++ : 4503; cf OPreferenceManager.h qui fait la meme chose; concerne les map et les xtree de la stl, utilises par le Preference manager
@@ -369,7 +365,7 @@ void TYDXFBDTopoImporter::importField(int nMaxTerrain, const dimeModel model[],
                 //pTopo->setDefTerrain(pTerrain);
                 if (!bRes) //Err
                 {
-		  Display("Impossible d'ajouter le terrain %s",   pTerrain->getName().toUtf8().data());
+                    Display("Impossible d'ajouter le terrain %s",   pTerrain->getName().toUtf8().data());
                     break;
                 }
             }
@@ -517,7 +513,8 @@ QString TYDXFBDTopoImporter::GetDXFFileNameFromBDTopoPrefixAndDirectory(const ch
     QFileInfoList file_list = dir.entryInfoList(input_list);
 
     QString res;
-    if (file_list.count()) {
+    if (file_list.count())
+    {
         // Just kept the first element.
         res = file_list.at(0).absoluteFilePath();
     }

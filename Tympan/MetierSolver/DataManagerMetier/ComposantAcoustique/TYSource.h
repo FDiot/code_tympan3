@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,12 +11,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
@@ -39,9 +36,6 @@ typedef std::map<int, LPTYSpectre> TYMapRegimeSpectre;
 
 /**
  * Classe de base des sources.
- *
- * @author Projet_Tympan
- *
  */
 class TYSource: public TYElement
 {
@@ -80,12 +74,12 @@ public:
     /**
      * Set/Get du spectre.
      */
-	virtual TYSpectre* getSpectre(int regime = -1) const { return _pSpectre._pObj; }
+    virtual TYSpectre* getSpectre(int regime = -1) const { return _pSpectre._pObj; }
 
     /**
      * Get/Set du Spectre (independemment d'un eventuel attenuateur) - utilise par le widget -
      */
-	virtual TYSpectre* getCurrentSpectre() const { return _pSpectre._pObj ; }
+    virtual TYSpectre* getCurrentSpectre() const { return _pSpectre._pObj ; }
 
 
     /**

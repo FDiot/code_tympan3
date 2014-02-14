@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYWidget.cpp
  * \brief outil IHM pour un objet metier de type TYElement
@@ -36,8 +36,8 @@
 #define TR(id) OLocalizator::getString("TYWidget", (id))
 
 
-TYWidget::TYWidget(QWidget* parent, const char* name, Qt::WFlags f):
-    QWidget(parent, f)
+TYWidget::TYWidget(TYElement* pElement, QWidget* parent, const char* name, Qt::WFlags f):
+    QWidget(parent, f), _pElement(pElement)
 {
     setObjectName(QString(name));
     _locked = false;
@@ -49,8 +49,7 @@ TYWidget::~TYWidget()
 
 /*static*/ int TYWidget::edit(TYElement* pElement, QWidget* pParent /*=NULL*/)
 {
-    Q_ASSERT(pElement);
-
+    assert(pElement);
     QDialog* pDlg = new QDialog(pParent);
     pDlg->setModal(true);
     pDlg->setWindowTitle(getDisplayName(pElement));
@@ -63,7 +62,7 @@ TYWidget::~TYWidget()
     pDlg->setLayout(pLayout);
 
     // On recupere les settings
-    TYPreferenceManager::getGeometry(pMainWidget->metaObject()->className(), pDlg);
+    TYPreferenceManager::loadGeometryFromPreferences(pMainWidget->metaObject()->className(), pDlg);
 
     QPushButton* pButtonOK = new QPushButton(TR("id_ok_btn"), pDlg);
     pButtonOK->setDefault(true);
@@ -98,7 +97,7 @@ TYWidget::~TYWidget()
     }
 
     // On sauve les settings
-    TYPreferenceManager::setGeometry(pMainWidget->metaObject()->className(), pDlg);
+    TYPreferenceManager::saveGeometryToPreferences(pMainWidget->metaObject()->className(), pDlg);
 
     // Liberation de la memoire
     if (pParent)

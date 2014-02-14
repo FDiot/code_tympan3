@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,11 +11,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
  *
  */
 
@@ -95,8 +93,6 @@ typedef unsigned long long uint64;
  * Configuration du projet Tympan.
  * Ce fichier permet de preciser quelle API systeme est utilisee ou pas
  * pour l'IHM, le graphique (3D et/ou 2D) et l'impression.
- *
- * @author Projet_Tympan
  */
 
 ///Nom de la categorie pour la sauvegarde des preferences.

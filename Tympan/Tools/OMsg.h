@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,22 +11,16 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
- *
- *
- *
  */
-
 
 #ifndef __O_MSG__
 #define __O_MSG__
 
-
 #include <time.h>
-
 
 #define MSG_DEBUG   0x0001
 #define MSG_BENCH   0x0002
@@ -39,10 +33,6 @@
 
 /**
  * Classe utilitaire pour la gestion des messages.
- *
- * @author Projet_Tympan
- * @author Projet_Tympan
- *
  */
 class OMsg
 {

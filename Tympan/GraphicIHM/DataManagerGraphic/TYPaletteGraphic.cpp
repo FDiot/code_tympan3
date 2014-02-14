@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYPaletteGraphic.cpp
  * \brief Representation d'une palette graphique
@@ -67,7 +67,7 @@ void TYPaletteGraphic::display(GLenum mode /*= GL_RENDER*/)
     LPTYPalette pPalette = getElement();
     assert(pPalette && "How the hell pPalette could be NULL ?!?");
 
-    if (pPalette->getNbColors()==0) { return; } // XXX Shouldn't this be an assert ?!?
+    if (pPalette->getNbColors() == 0) { return; } // XXX Shouldn't this be an assert ?!?
 
     if (_visible)
     {
@@ -95,7 +95,7 @@ void TYPaletteGraphic::display(GLenum mode /*= GL_RENDER*/)
         // Initialisation des variables de position
         double x = _posX;
         double y = _posY;
-        const double width_but_bounds = (_width * (1.0 - 2*relBoundSize));
+        const double width_but_bounds = (_width * (1.0 - 2 * relBoundSize));
         const double dy = _height;
 
         // On dessine un quad
@@ -105,17 +105,18 @@ void TYPaletteGraphic::display(GLenum mode /*= GL_RENDER*/)
         OColor color;
         TYPalette::values_type prev_value = - std::numeric_limits<TYPalette::values_type>::infinity();
         // On affiche chaque echellon
-        BOOST_FOREACH(boost::tie(value, color), pPalette->getColorMap() ) {
-        	// Handle specially first iteration
-        	const double dx =  boost::math::isinf(value - prev_value) ? relBoundSize * _width :
-        			(pPalette->normalize(value) - pPalette->normalize(prev_value)) * width_but_bounds;
-        	prev_value = value;
+        BOOST_FOREACH(boost::tie(value, color), pPalette->getColorMap())
+        {
+            // Handle specially first iteration
+            const double dx =  boost::math::isinf(value - prev_value) ? relBoundSize * _width :
+                               (pPalette->normalize(value) - pPalette->normalize(prev_value)) * width_but_bounds;
+            prev_value = value;
             glColor3fv(color);
             glVertex2d(x   , y);
             glVertex2d(x   , y - dy);
             glVertex2d(x + dx, y - dy);
             glVertex2d(x + dx, y);
-        	x += dx;
+            x += dx;
         }
 
         // Fin du quad

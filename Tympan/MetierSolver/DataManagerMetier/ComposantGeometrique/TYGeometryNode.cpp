@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -371,9 +371,9 @@ bool TYGeometryNode::operator!=(const TYGeometryNode& other) const
 
 bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
-	TYGeometryNode* pOtherGeoNode = NULL;
-	if (pOther) { pOtherGeoNode = (TYGeometryNode*) pOther; }
-	if ( !pOtherGeoNode || pOtherGeoNode->getElement() ) { return false; }
+    TYGeometryNode* pOtherGeoNode = NULL;
+    if (pOther) { pOtherGeoNode = (TYGeometryNode*) pOther; }
+    if (!pOtherGeoNode || pOtherGeoNode->getElement()) { return false; }
 
     // Avant de faire la deep copy sur l'element il faut s'assurer
     // qu'ils sont de meme type

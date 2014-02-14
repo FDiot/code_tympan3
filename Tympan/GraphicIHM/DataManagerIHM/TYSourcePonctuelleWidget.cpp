@@ -42,10 +42,8 @@
 
 
 TYSourcePonctuelleWidget::TYSourcePonctuelleWidget(TYSourcePonctuelle* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _elmW = new TYSourceWidget(pElement, this);
     _colorW = new TYColorInterfaceWidget(pElement, this);
@@ -108,13 +106,13 @@ TYSourcePonctuelleWidget::TYSourcePonctuelleWidget(TYSourcePonctuelle* pElement,
     _buttonGroupTypeRaynt->addButton(_pRadioButtonSpheric, 0);
     _pRadioButtonHemi = new QRadioButton(TR("id_hemispherique"));
     _buttonGroupTypeRaynt->addButton(_pRadioButtonHemi, 1);
-//    _pRadioButtonForce = new QRadioButton(TR("id_forcee"));
-//    _buttonGroupTypeRaynt->addButton(_pRadioButtonForce, 3);
+    //    _pRadioButtonForce = new QRadioButton(TR("id_forcee"));
+    //    _buttonGroupTypeRaynt->addButton(_pRadioButtonForce, 3);
 
     QGridLayout* groupBoxTypeRayntLayout = new QGridLayout();
     groupBoxTypeRayntLayout->addWidget(_pRadioButtonSpheric, 0, 0);
     groupBoxTypeRayntLayout->addWidget(_pRadioButtonHemi, 0, 1);
-//    groupBoxTypeRayntLayout->addWidget(_pRadioButtonForce, 0, 3);
+    //    groupBoxTypeRayntLayout->addWidget(_pRadioButtonForce, 0, 3);
 
     QGroupBox* groupBoxTypeRaynt = new QGroupBox();
     groupBoxTypeRaynt->setTitle(TR("id_type_raynt_label"));
@@ -160,7 +158,7 @@ void TYSourcePonctuelleWidget::updateContent()
     {
         _pRadioButtonSpheric->setEnabled(true);
         _pRadioButtonHemi->setEnabled(true);
-//        _pRadioButtonForce->setEnabled(false);
+        //        _pRadioButtonForce->setEnabled(false);
         switch (getElement()->getTypeRaynt())
         {
             case(0):
@@ -177,7 +175,7 @@ void TYSourcePonctuelleWidget::updateContent()
             //{
             //    _pRadioButtonForce->setChecked(true);
             //}
-//            break;
+            //            break;
         }
         _pLineEditHauteur->setEnabled(true);
         _pLineEditHauteur->setText(QString().setNum(getElement()->getHauteur()));
@@ -186,7 +184,7 @@ void TYSourcePonctuelleWidget::updateContent()
     {
         _pRadioButtonSpheric->setEnabled(false);
         _pRadioButtonHemi->setEnabled(false);
-//        _pRadioButtonForce->setEnabled(false);
+        //        _pRadioButtonForce->setEnabled(false);
         _pLineEditHauteur->setEnabled(false);
     }
 
@@ -210,7 +208,7 @@ void TYSourcePonctuelleWidget::apply()
 
     getElement()->setHauteur(_pLineEditHauteur->text().toDouble());
 
-//    getElement()->setTypeRaynt((TYTypeRaynt)_buttonGroupTypeRaynt->checkedId());
+    //    getElement()->setTypeRaynt((TYTypeRaynt)_buttonGroupTypeRaynt->checkedId());
 
     _pPointW->apply();
 

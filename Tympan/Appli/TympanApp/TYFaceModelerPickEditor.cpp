@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYFaceModelerPickEditor.cpp
  * \brief gestion du picking des faces
@@ -243,11 +243,11 @@ void TYFaceModelerPickEditor::showDimensionsDialog(TYRectangle* pRect, TYAcousti
             float sizeX = pXLineEdit->text().toDouble();
             float sizeY = pYLineEdit->text().toDouble();
 
-			if (sizeX <= 1E-4 || sizeY <= 1.E-4) // Eviter les surfaces nulles
-			{
-				QMessageBox::warning(_pModeler, "Tympan", TR("id_warning_size_not_ok"), QMessageBox::Yes);//, QMessageBox::No);
-				return;
-			}
+            if (sizeX <= 1E-4 || sizeY <= 1.E-4) // Eviter les surfaces nulles
+            {
+                QMessageBox::warning(_pModeler, "Tympan", TR("id_warning_size_not_ok"), QMessageBox::Yes);//, QMessageBox::No);
+                return;
+            }
 
             TYAction* pAction = new TYResizeRectAction(pRect, sizeX, sizeY, _pModeler, TR("id_action_resizeface"));
             _pModeler->getActionManager()->addAction(pAction);

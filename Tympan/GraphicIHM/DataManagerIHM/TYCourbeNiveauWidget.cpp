@@ -43,10 +43,8 @@
 
 
 TYCourbeNiveauWidget::TYCourbeNiveauWidget(TYCourbeNiveau* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
     _statusDMax = false;
 
     _elmW = new TYElementWidget(pElement, this);

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYResultatTreeDialog.cpp
  * \brief  Boite de dialogue pour la representation par une arborescence des elements contribuant au resultat d'un point de calcul
@@ -320,13 +320,13 @@ void TYResultatTreeDialog::updateContent()
 void TYResultatTreeDialog::showEvent(QShowEvent* pEvent)
 {
     // On charge les settings
-    TYPreferenceManager::getGeometry(metaObject()->className(), this);
+    TYPreferenceManager::loadGeometryFromPreferences(metaObject()->className(), this);
 }
 
 void TYResultatTreeDialog::closeEvent(QCloseEvent* pEvent)
 {
     // On sauve les settings
-    TYPreferenceManager::setGeometry(metaObject()->className(), this);
+    TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
 
     QDialog::closeEvent(pEvent);
 }

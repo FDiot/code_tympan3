@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,12 +11,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
@@ -36,9 +33,6 @@
 
 /**
  * Permet d'attribuer des proprietes acoustiques a une zone d'altimetrie.
- *
- * @author Projet_Tympan
- *
  */
 class TYTerrain: public TYElement, public TYColorInterface
 {
@@ -89,7 +83,7 @@ public:
      */
     LPTYSol getSol() const { return _pSol;}
 
-	TYSol* getSol() { return _pSol._pObj; }
+    TYSol* getSol() { return _pSol._pObj; }
 
     /**
      * Set/Get du materiau.

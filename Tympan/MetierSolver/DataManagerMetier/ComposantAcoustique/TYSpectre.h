@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,12 +11,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
@@ -24,7 +21,7 @@
 #define __TY_SPECTRE__
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
-#include "OSpectreComplex.h"
+#include "Tympan/MetierSolver/ToolsMetier/OSpectreComplex.h"
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSpectreWidget.h"
@@ -35,9 +32,6 @@ typedef std::vector<float> TYTabFreq;
 
 /**
  * Permet de stocker des valeurs de puissance accoustique pour differentes frequences.
- *
- * @author Projet_Tympan
- *
  */
 class TYSpectre: public TYElement, public OSpectre
 {
@@ -138,10 +132,10 @@ public:
 
     // ======== METHODES EQUIVALENTES A OSPECTRE POUR COMPATIBILITE PYTHON
     /// Conversion en dB.
-//    TYSpectre toDB() const;
+    //    TYSpectre toDB() const;
 
     /// Conversion en grandeur physique.
-//    TYSpectre toGPhy() const;
+    //    TYSpectre toGPhy() const;
 
     ///// Sommation arithmetique de deux spectres en 1/3 d'octave.
     //TYSpectre sum(const TYSpectre& spectre) const;

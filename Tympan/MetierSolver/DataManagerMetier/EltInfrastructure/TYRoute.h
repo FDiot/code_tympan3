@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -23,26 +23,22 @@
 #ifndef __TY_ROUTE__
 #define __TY_ROUTE__
 
-
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYTrafic.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRouteWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRouteGraphic.h"
 #endif
 
 
+
 /**
  * Comprend les proprietes acoustiques et geometriques d'une route.
- *
- * @author Projet_Tympan
- *
  */
 class TYRoute: public TYAcousticLine
 {
     OPROTOSUPERDECL(TYRoute, TYAcousticLine)
-    TY_EXTENSION_DECL(TYRoute)
+    TY_EXTENSION_DECL_ONLY(TYRoute)
     TY_EXT_GRAPHIC_DECL(TYRoute)
 
     // Methodes

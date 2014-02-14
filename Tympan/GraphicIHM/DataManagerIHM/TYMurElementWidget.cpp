@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYMurElementWidget.cpp
  * \brief outil IHM pour un element de mur
@@ -39,10 +39,8 @@
 
 
 TYMurElementWidget::TYMurElementWidget(TYMurElement* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _elmW = new TYAcousticRectangleWidget(pElement, this);
     _elmW->setLayoutSpacing(0, 0);
@@ -122,13 +120,13 @@ void TYMurElementWidget::apply()
     double sizeX = _dimensionsXLineEdit->text().toDouble();
     double sizeY = _dimensionsYLineEdit->text().toDouble();
 
-	if (sizeX <= 1E-4 || sizeY <= 1.E-4) // Eviter les surfaces nulles
-	{
-		QMessageBox::warning(this, "Tympan", TR("id_warning_size_not_ok"), QMessageBox::Yes);//, QMessageBox::No);
-		return;
-	}
-	
-	((TYRectangle*)_elmW->getElement()->getShape())->setSize(sizeX , sizeY);
+    if (sizeX <= 1E-4 || sizeY <= 1.E-4) // Eviter les surfaces nulles
+    {
+        QMessageBox::warning(this, "Tympan", TR("id_warning_size_not_ok"), QMessageBox::Yes);//, QMessageBox::No);
+        return;
+    }
+
+    ((TYRectangle*)_elmW->getElement()->getShape())->setSize(sizeX , sizeY);
     TYAcousticRectangleNode* pRectNode = TYAcousticRectangleNode::safeDownCast(getElement()->getParent());
     if (pRectNode) { pRectNode->updateGrid(); }
 

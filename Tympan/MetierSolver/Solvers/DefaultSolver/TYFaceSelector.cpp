@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -267,9 +267,9 @@ bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourant
     bool bRes = false;
     const OMatrix matrixinv = FaceCourante.matInv;
     TYAcousticSurfaceGeoNode* pSurfaceGeoNode = FaceCourante.pSurfGeoNode;
-	
-	TYAcousticSurface* pSurface = NULL;
-	if (pSurfaceGeoNode) { pSurface = dynamic_cast<TYAcousticSurface*>(pSurfaceGeoNode->getElement()); }
+
+    TYAcousticSurface* pSurface = NULL;
+    if (pSurfaceGeoNode) { pSurface = dynamic_cast<TYAcousticSurface*>(pSurfaceGeoNode->getElement()); }
 
     OSegment3D segInter;
 
@@ -300,18 +300,18 @@ bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourant
 
 TYAcousticSurface* TYFaceSelector::getActiveSurface(const TYAcousticSurfaceGeoNode* pSurfaceGeoNode, const TYSourcePonctuelle* pSrc) const
 {
-	if (!pSurfaceGeoNode || !pSrc) { return NULL; }
+    if (!pSurfaceGeoNode || !pSrc) { return NULL; }
     TYAcousticSurface* pSurface = dynamic_cast<TYAcousticSurface*>(pSurfaceGeoNode->getElement());
 
-	TYElement* pParentSurface = NULL;
-	if (pSurface) 
-	{ 
-		pParentSurface = pSurface->getParent(); 
-	}
-	else
-	{
-		return pSurface;
-	}
+    TYElement* pParentSurface = NULL;
+    if (pSurface)
+    {
+        pParentSurface = pSurface->getParent();
+    }
+    else
+    {
+        return pSurface;
+    }
 
     // Face d'altimetrie ne peut etre parente d'une source !
     //if (pParentSurface && pParentSurface->inherits("TYAltimetrie"))

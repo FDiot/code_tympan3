@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYModelerFrame.cpp
  * \brief Classe generique pour une fenetre de modeleur
@@ -1633,7 +1633,7 @@ void TYModelerFrame::showEvent(QShowEvent* pEvent)
 {
     if (_firstTimeShown)
     {
-        TYPreferenceManager::getGeometry(metaObject()->className(), this);
+        TYPreferenceManager::loadGeometryFromPreferences(metaObject()->className(), this);
         _firstTimeShown = false;
     }
     /*  _pView->getRenderer()->updateDisplayList();
@@ -1644,7 +1644,7 @@ void TYModelerFrame::showEvent(QShowEvent* pEvent)
 
 void TYModelerFrame::closeEvent(QCloseEvent* pEvent)
 {
-    TYPreferenceManager::setGeometry(metaObject()->className(), this);
+    TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
     pEvent->accept();
 
     // CLM-NT35 : Gestion du maximized et titre fenetre principal

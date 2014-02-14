@@ -106,11 +106,11 @@ public:
      * \param closed If the polyline is closed.
      * \param density Density of points (number of points per meter).
      */
-    virtual void make(const TYTabPoint &tabPoints,
+    virtual void make(const TYTabPoint& tabPoints,
                       double thickness,
                       bool closed,
                       double density = TY_MAILLAGE_DEFAULT_DENSITE
-                      );
+                     );
 
     /**
      * \fn void computeBoundingBox(double &box_x_min, double &box_x_max, double &box_y_min, double &box_y_max) const;
@@ -120,7 +120,7 @@ public:
      * \param box_y_min higher left coordinate.
      * \param box_y_max higher right coordinate.
      */
-    void computeBoundingBox(double &box_x_min, double &box_x_max, double &box_y_min, double &box_y_max) const;
+    void computeBoundingBox(double& box_x_min, double& box_x_max, double& box_y_min, double& box_y_max) const;
 
     /**
      * \fn void computePoints(double box_x_min, double box_x_max, double box_y_min, double box_y_max);
@@ -208,7 +208,7 @@ public:
      * \param x Dimension x
      * \param y Dimension y
      */
-    virtual void getDimensions(int &x, int &y) const;
+    virtual void getDimensions(int& x, int& y) const;
 
     /**
      * \brief Getter of _canBeClosed.

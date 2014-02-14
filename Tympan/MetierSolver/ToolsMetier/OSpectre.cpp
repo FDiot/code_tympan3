@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -23,6 +23,9 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
+
+#include <algorithm>
+
 #include "Tympan/Tools/OMessageManager.h"
 
 // Frequence de travail minimale
@@ -67,17 +70,17 @@ OSpectre::OSpectre(double defaultValue) : _valid(true), _type(SPECTRE_TYPE_ATT),
     }
 }
 
-OSpectre::OSpectre(const double* valeurs, const short& nbVal, const short& decalage)
+OSpectre::OSpectre(const double* valeurs, unsigned nbVal, unsigned decalage)
 {
     unsigned int i;
 
     // D'abord on initialise les valeurs
     for (i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        _module[i] = 0.0;
+        _module[i] = _defaultValue;
     }
 
-    unsigned int maxInd = (unsigned int)(nbVal + decalage) < TY_SPECTRE_DEFAULT_NB_ELMT ? nbVal : TY_SPECTRE_DEFAULT_NB_ELMT;
+    unsigned int maxInd = std::min(nbVal + decalage , TY_SPECTRE_DEFAULT_NB_ELMT);
     for (i = decalage ; i < maxInd; i++)
     {
         _module[i] = valeurs[i - decalage];
@@ -979,8 +982,7 @@ bool OSpectre::isTonalite()const
     return false;
 }
 
-
-unsigned int OSpectre::getNbValues()
+unsigned int OSpectre::getNbValues()const
 {
     unsigned int nbFreq = TY_SPECTRE_DEFAULT_NB_ELMT;
 
@@ -996,21 +998,3 @@ unsigned int OSpectre::getNbValues()
 
     return nbFreq;
 }
-
-const unsigned int OSpectre::getNbValues()const
-{
-    unsigned int nbFreq = TY_SPECTRE_DEFAULT_NB_ELMT;
-
-    switch (_form)
-    {
-        case SPECTRE_FORM_OCT:
-            nbFreq = 9;
-            break;
-        default:
-            nbFreq = TY_SPECTRE_DEFAULT_NB_ELMT;
-            break;
-    }
-
-    return nbFreq;
-}
-

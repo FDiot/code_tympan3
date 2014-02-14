@@ -32,8 +32,6 @@ struct DXFLimites
 
 /**
  * Classe singleton offrant des methodes de lecture de donnees DXF
- *
- * @author Arnaud Zirnheld
  */
 class TYDXFImporter
 {
@@ -114,8 +112,6 @@ protected:
 
 /**
  * Classe singleton offrant des methodes de lecture de donnees DXF
- *
- * @author Arnaud Zirnheld
  */
 class TYDXFImporter
 {

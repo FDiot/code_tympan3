@@ -1,14 +1,26 @@
+/*
+ * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
+
 /**
  * @file AltimetryBuilder.hpp
  *
- * @brief The \c AltimetryBuilder is responsible to build a altimetry compatilbe
+ * @brief The \c AltimetryBuilder is responsible to build a altimetry compatible
  *        with the groud material.
  *
  *\b NB This module heavily relies on CGAL to perform the underlying contrained
  * triangulations.
- *
- * @author Anthony Truchet <anthony.truchet@logilab.fr>
- *
  */
 
 #ifndef TYMPAN__ALTIMETRYBUILDER_HPP__INCLUDED
@@ -131,7 +143,7 @@ struct VertexInfo
         altitude(altitude_) {};
 
     VertexInfo(const VertexInfo& rhs) :
-    	altitude(rhs.altitude) {}
+        altitude(rhs.altitude) {}
 
     VertexInfo& operator=(const VertexInfo& rhs)
     {
@@ -175,8 +187,8 @@ inline
 std::pair<CGAL_Point, VertexInfo>
 to_cgal_info(double alti, OPoint3D& p)
 {
-	p._z = alti;
-	return std::make_pair(to_cgal(p), VertexInfo(alti));
+    p._z = alti;
+    return std::make_pair(to_cgal(p), VertexInfo(alti));
 }
 
 /**
@@ -316,7 +328,7 @@ public:
     template <class PointRange>
     void
     addAsConstraint(PointRange points_range,
-                         bool closed = false, bool linked = true);
+                    bool closed = false, bool linked = true);
 
     /**
      * @brief Compute altitudes from the alti_cdt triangulation and vertices info
@@ -404,12 +416,15 @@ public:
      */
     CDT::Vertex_handle
     insert(const CGAL_Point& p,
-    	   CDT::Vertex_handle vh0 = CDT::Vertex_handle() // Default to a NULL-like handle
-    ){
-    	CDT::Vertex_handle vh1 = cdt.insert(p);
-    	if(vh0 != CDT::Vertex_handle()) // If some contraint has been specified...
-    		cdt.insert_constraint(vh0, vh1);
-    	return vh1;
+           CDT::Vertex_handle vh0 = CDT::Vertex_handle() // Default to a NULL-like handle
+          )
+    {
+        CDT::Vertex_handle vh1 = cdt.insert(p);
+        if (vh0 != CDT::Vertex_handle()) // If some contraint has been specified...
+        {
+            cdt.insert_constraint(vh0, vh1);
+        }
+        return vh1;
     }
 
     /**
@@ -421,11 +436,12 @@ public:
      */
     CDT::Vertex_handle
     insert(const std::pair<CGAL_Point, VertexInfo>& p,
-    		CDT::Vertex_handle vh0 = CDT::Vertex_handle()
-    ){
-    	CDT::Vertex_handle vh1 = insert(p.first, vh0);
-    	vh1->info() = p.second;
-    	return vh1;
+           CDT::Vertex_handle vh0 = CDT::Vertex_handle()
+          )
+    {
+        CDT::Vertex_handle vh1 = insert(p.first, vh0);
+        vh1->info() = p.second;
+        return vh1;
     }
 
     /**
@@ -444,9 +460,9 @@ protected:
      */
     struct poly_comparator :
             std::binary_function <
-                face_to_material_poly_t::value_type&,
-                face_to_material_poly_t::value_type&,
-                bool >
+            face_to_material_poly_t::value_type&,
+            face_to_material_poly_t::value_type&,
+            bool >
     {
         AltimetryBuilder& parent;
 
@@ -472,14 +488,14 @@ public:
 
     static QGraphicsSimpleTextItem*
     drawText(QGraphicsScene* scene,
-    		const CGAL_Point& pos, const std::string& text, double scale=0.03);
-    		
-    void 
+             const CGAL_Point& pos, const std::string& text, double scale = 0.03);
+
+    void
     addVerticesInfo(QGraphicsScene* scene) const;
-    
-    void 
+
+    void
     addFacesInfo(QGraphicsScene* scene) const;
-    
+
     std::pair<QGraphicsView*, QGraphicsScene*>
     buildView(double xmin, double ymin, double xmax, double ymax);
 
@@ -498,36 +514,39 @@ template <class PointRange>
 std::deque<CDT::Vertex_handle>
 AltimetryBuilder::insert_range(PointRange points_range)
 {
-	std::deque<CDT::Vertex_handle> result;
-	BOOST_FOREACH(
-			typename boost::range_reference<const PointRange>::type point,
-			points_range) {
-		result.push_back(insert(point));
-	}
-	return result;
+    std::deque<CDT::Vertex_handle> result;
+    BOOST_FOREACH(
+        typename boost::range_reference<const PointRange>::type point,
+        points_range)
+    {
+        result.push_back(insert(point));
+    }
+    return result;
 }
 
 template <class PointRange>
 void
 AltimetryBuilder::addAsConstraint(const PointRange points_range, bool closed, bool linked)
 {
-	CDT::Vertex_handle prev_vertex; // Default contructed is analogous to NULL
-	BOOST_FOREACH(
-			typename boost::range_reference<const PointRange>::type current,
-			points_range)
-	{
-		CDT::Vertex_handle current_vertex = insert(current, prev_vertex);
-		if  (linked)
-			prev_vertex = current_vertex;
-	}
-        // If we link successive points with a constraint and we want a closed polygon
-        // (only relevant for polygon with strictly more than 2 vertices) then
-        // we add a constraint between the last point inserted and the first one.
-	if (linked && closed && (points_range.size() > 2) )
-	{
-            //XXX Should we check that the point is not inserted twice
-            CDT::Vertex_handle current_vertex = insert(*(points_range.begin()), prev_vertex);
-	}
+    CDT::Vertex_handle prev_vertex; // Default contructed is analogous to NULL
+    BOOST_FOREACH(
+        typename boost::range_reference<const PointRange>::type current,
+        points_range)
+    {
+        CDT::Vertex_handle current_vertex = insert(current, prev_vertex);
+        if (linked)
+        {
+            prev_vertex = current_vertex;
+        }
+    }
+    // If we link successive points with a constraint and we want a closed polygon
+    // (only relevant for polygon with strictly more than 2 vertices) then
+    // we add a constraint between the last point inserted and the first one.
+    if (linked && closed && (points_range.size() > 2))
+    {
+        //XXX Should we check that the point is not inserted twice
+        CDT::Vertex_handle current_vertex = insert(*(points_range.begin()), prev_vertex);
+    }
 }
 
 

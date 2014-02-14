@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYEtageWidget.cpp
  * \brief outil IHM pour un etage
@@ -47,10 +47,8 @@ using namespace Qt;
 
 
 TYEtageWidget::TYEtageWidget(TYEtage* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _elmW = new TYAcousticVolumeWidget(pElement, this);
 
@@ -675,7 +673,7 @@ void TYEtageWidget::applyToMurs()
 
 void TYEtageWidget::showReverb()
 {
-	static_cast<TYSpectre>(getElement()->getReverb().toDB()).edit(this);
+    static_cast<TYSpectre>(getElement()->getReverb().toDB()).edit(this);
 }
 
 void TYEtageWidget::showTR()

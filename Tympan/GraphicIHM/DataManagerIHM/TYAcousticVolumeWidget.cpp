@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYAcousticVolumeWidget.cpp
  * \brief outil IHM pour un volume acoustique
@@ -36,10 +36,8 @@
 
 
 TYAcousticVolumeWidget::TYAcousticVolumeWidget(TYAcousticVolume* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent), _isColorModified(false)
+    TYWidget(pElement, _pParent), _isColorModified(false)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     resize(300, 425);
     setWindowTitle(TR("id_caption"));

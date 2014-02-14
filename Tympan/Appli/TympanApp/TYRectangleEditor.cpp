@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYRectangleEditor.cpp
  * \brief gestion de l'edition d'un rectangle
@@ -164,7 +164,7 @@ void TYRectangleEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, 
                 snapToGrid(sizeX, sizeY, sizeZ);
             }
 
-			if (sizeX <= 0.0001 || sizeY <= 0.0001) return; // Securite : eviter les surfaces nulles.
+            if (sizeX <= 0.0001 || sizeY <= 0.0001) { return; } // Securite : eviter les surfaces nulles.
 
             // Position
             TYPoint org = OVector3D(OVector3D(pt0) + (OVector3D(pt2) - OVector3D(pt0)) * 0.5);

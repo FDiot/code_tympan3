@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,18 +11,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
 #ifndef __TY_TOPOGRAPHIE__
 #define __TY_TOPOGRAPHIE__
-
 
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYPlanEau.h"
@@ -34,7 +30,6 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYTopographieWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYTopographieGraphic.h"
 #endif
-
 
 ///Structure contenant un segment et un terrain.
 typedef struct
@@ -57,13 +52,8 @@ typedef struct
     short nbPts;            // Nombre de points dans le tableau
 } TYStructElemPts;
 
-
-
 /**
  * Centralise les elements de topographie.
- *
- * @author Projet_Tympan
- *
  */
 class TYTopographie: public TYElement
 {
@@ -472,10 +462,14 @@ public:
      */
     double getTopoSize(OSegment3D& segDiagonale);
 
-    /// Tri des terrains par surface decroissante
-    void sortTerrains();
+    /**
+     * Tri des terrains par surface decroissante
+     */
+    void sortTerrainsBySurface();
 
-    // Accessor a la couleur de l'emprise
+    /**
+     * sget couleur de l'emprise
+     */
     void setEmpriseColor(const OColor& color) { _empriseColor = color; };
     OColor getEmpriseColor() const { return _empriseColor; };
 
@@ -506,7 +500,7 @@ protected:
     OColor _empriseColor;
 
     /// Liste des terrains tries (on fait expres un tableau a part pour ne pas perturber le terrain par defaut)
-    TYTerrainGeoNode **_pSortedTerrains;
+    TYTerrainGeoNode** _pSortedTerrains;
 
     /// Seuils confondus
     double _seuilConfondus;
