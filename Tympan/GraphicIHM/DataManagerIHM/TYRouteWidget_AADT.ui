@@ -19,7 +19,7 @@
      <item>
       <widget class="QSpinBox" name="tmja_debit_vl">
        <property name="maximum">
-        <number>10000</number>
+        <number>100000</number>
        </property>
        <property name="singleStep">
         <number>100</number>
@@ -92,7 +92,7 @@
      <item>
       <widget class="QSpinBox" name="tmja_debit_pl">
        <property name="maximum">
-        <number>10000</number>
+        <number>100000</number>
        </property>
        <property name="singleStep">
         <number>100</number>
