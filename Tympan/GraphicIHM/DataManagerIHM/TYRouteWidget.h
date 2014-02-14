@@ -89,20 +89,27 @@ protected:
     QSpinBox*   q_RoadFlow_Spin[TYRoute::NB_TRAFFIC_REGIMES][TYTrafic::NB_VEHICLE_TYPES];
     QPushButton* q_AADT_Push;
 
-
     QButtonGroup * p_ModeCalcul_ButtonGroup;
+    QPushButton*   q_EditSpectre_Button[TYRoute::NB_TRAFFIC_REGIMES];
 
 protected slots:
     void display_AADT_dialog();
     void checkComputationMode(int);
     void setSpeedBoxEnabled(bool enabled = true);
     void setFlowBoxEnabled(bool enabled = true);
+    void setSpectresEditable(bool enabled = true);
+    void displaySpectrumDay() {displaySpectrum(TYRoute::Day);};
+    void displaySpectrumEvening() {displaySpectrum(TYRoute::Evening);};;
+    void displaySpectrumNight() {displaySpectrum(TYRoute::Night);};;
 
 private:
     void apply_road_surface();
     void update_road_surface();
     void apply_road_traffic();
     void update_road_traffic();
+
+    bool spectrum_read_only;
+    void displaySpectrum(TYRoute::TrafficRegimes);
 };
 
 
