@@ -24,6 +24,8 @@
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
+#undef min // Something defines a min macro on windows, which breaks std::min
+
 #include <algorithm>
 
 #include "Tympan/Tools/OMessageManager.h"
