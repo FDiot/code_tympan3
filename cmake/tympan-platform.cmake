@@ -96,7 +96,7 @@ set_property(DIRECTORY ${PROJECT_SOURCE_DIR} APPEND PROPERTY COMPILE_DEFINITIONS
 
 if(MSVC)
   # Put here Visual Studio specific stuff
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 endif(MSVC)
 if(CMAKE_COMPILER_IS_GNUCXX)
   # The objective is to get rid of all the -Wno-xxx
