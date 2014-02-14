@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -289,14 +289,20 @@ double TYSegment::lengthOfCurvedPath(const double& R)
     return angle * R;
 }
 
-bool TYSegment::unorderedIsEqual(const TYSegment &s1, const TYSegment &s2)
+bool TYSegment::unorderedIsEqual(const TYSegment& s1, const TYSegment& s2)
 {
     if (&s1 == &s2)
+    {
         return true;
-    if(s1._ptA == s2._ptA && s1._ptB == s2._ptB)
+    }
+    if (s1._ptA == s2._ptA && s1._ptB == s2._ptB)
+    {
         return true;
-    if(s1._ptA == s2._ptB && s1._ptB == s2._ptA)
+    }
+    if (s1._ptA == s2._ptB && s1._ptB == s2._ptA)
+    {
         return true;
+    }
     return false;
 }
 

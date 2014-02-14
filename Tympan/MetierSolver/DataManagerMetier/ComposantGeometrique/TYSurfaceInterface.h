@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,18 +11,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
 #ifndef __TY_SURFACEINTERFACE__
 #define __TY_SURFACEINTERFACE__
-
 
 class OSegment3D;
 class OPoint3D;
@@ -31,9 +27,6 @@ class OPlan;
 /**
  * Classe abstraite qui offre une interface utilisable par des composants
  * ayant des proprietes geometriques surfaciques.
- *
- * @author Projet_Tympan
- *
  */
 class TYSurfaceInterface
 {
@@ -90,7 +83,7 @@ public:
      */
     virtual TYTabPoint getContour(int n = -1) const = 0;
 
-	virtual TYTabPoint3D getOContour(int n = -1) const = 0;
+    virtual TYTabPoint3D getOContour(int n = -1) const = 0;
 
     /**
      * Test si le point se trouve a l'interieur de la surface, sur le

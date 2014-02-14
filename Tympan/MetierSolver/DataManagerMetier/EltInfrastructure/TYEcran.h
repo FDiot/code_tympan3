@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -37,9 +37,6 @@ class OSegment3D;
 
 /**
  * Classe representant un ecran mince
- *
- * @author Projet_Tympan
- *
  */
 class TYEcran: public TYAcousticFaceSet
 {
@@ -88,12 +85,11 @@ public:
 
     virtual TYTabAcousticSurfaceGeoNode acousticFaces();
 
-	/** 
-	 * This method defined in TYVolumeInterface is willingly implemented in TYEcran and not in TYFaceSet
-	 * because TYEcran has always an horizontal lower face, that is not the case for any TYFaceSet
-	 */
-	virtual int isInside(const TYPoint& pt) const;
-
+    /**
+     * This method defined in TYVolumeInterface is willingly implemented in TYEcran and not in TYFaceSet
+     * because TYEcran has always an horizontal lower face, that is not the case for any TYFaceSet
+     */
+    virtual int isInside(const TYPoint& pt) const;
 
     void setacousticFacesPourCalcul(bool bPourCalculTrajet);
 
@@ -104,10 +100,10 @@ public:
      */
     TYTabPoint getContour() const;
 
-	/**
-	 * Retourne le tableau des faces inférieurs d'un écran (s'il comporte plusieurs segments)
-	 */
-	TYTabLPPolygon getContours() const;
+    /**
+     * Retourne le tableau des faces inférieurs d'un écran (s'il comporte plusieurs segments)
+     */
+    TYTabLPPolygon getContours() const;
 
     /**
      * Etablie la hauteur des murs composant cet etage.

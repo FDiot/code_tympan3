@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -128,7 +128,7 @@ TYSourceBafflee::TYSourceBafflee()
 
     _type = TypeBouche;
 
-//	_pAcousticRectangle = new TYAcousticRectangle();
+    //  _pAcousticRectangle = new TYAcousticRectangle();
     _pAcousticRectangle = new TYRectangle();
 }
 
@@ -235,7 +235,7 @@ OSpectre TYSourceBafflee::lwApparenteSrcDest(const OSegment3D& seg, const TYAtmo
         return s;
     }
 
-//    OSpectre spectre_Ka = atmos.getKAcoust().mult(_pAcousticRectangle->getBoundingRect()->getCircleEqDiameter() / 2.0); // 1/2 longueur de la diagonale de la bouche
+    //    OSpectre spectre_Ka = atmos.getKAcoust().mult(_pAcousticRectangle->getBoundingRect()->getCircleEqDiameter() / 2.0); // 1/2 longueur de la diagonale de la bouche
     OSpectre spectre_Ka = atmos.getKAcoust().mult(_pAcousticRectangle->getCircleEqDiameter() / 2.0); // 1/2 longueur de la diagonale de la bouche
 
     OVector3D v3D = seg.toVector3D();

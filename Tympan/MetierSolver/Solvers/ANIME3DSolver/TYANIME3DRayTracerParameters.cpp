@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include "TYANIME3DRayTracerParameters.h"
 
 //#include "ValidationEvenement.h"
@@ -74,7 +74,7 @@ void TYANIME3DRayTracerParameters::initGlobalValues()
     globalAnalyticGradV = 0.15f;    // Gradient vertical de vitesse de vent
     globalAnalyticC0 = 340.0f;      // Celerite du son initiale
     globalAnalyticTypeTransfo = 1;  // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-//    globalRestitModifiedGeom = 1;   // Indique si l'on souhaite recuperer la geometrie transformee
+    //    globalRestitModifiedGeom = 1;   // Indique si l'on souhaite recuperer la geometrie transformee
     globalOverSampleD = 3;          // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
 
     // Chargement des parametres de calcul
@@ -175,7 +175,7 @@ bool TYANIME3DRayTracerParameters::loadParameters()
     if (params.getline(ligne, 132)) { globalAnalyticTypeTransfo = getParam(ligne); }
 
     // Indique si l'on souhaite recuperer la geometrie transformee
-//    if (params.getline(ligne, 132)) { globalRestitModifiedGeom = getParam(ligne); }
+    //    if (params.getline(ligne, 132)) { globalRestitModifiedGeom = getParam(ligne); }
 
     // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
     if (params.getline(ligne, 132)) { globalOverSampleD = getParam(ligne); }
@@ -187,9 +187,9 @@ bool TYANIME3DRayTracerParameters::loadParameters()
 
 bool TYANIME3DRayTracerParameters::postTreatmentScene(Scene* scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs)
 {
-	selectorManagerValidation.addSelector(new LengthSelector<Ray>(globalMaxLength));
+    selectorManagerValidation.addSelector(new LengthSelector<Ray>(globalMaxLength));
     //  selectorManagerIntersection.addSelector(new LengthSelector<Ray>(globalMaxLength));
-	//
+    //
     selectorManagerIntersection.addSelector(new DiffractionSelector<Ray>(globalMaxDiffraction));
     selectorManagerIntersection.addSelector(new ReflectionSelector<Ray>(globalMaxReflexion, globalUseSol));
     //  selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));

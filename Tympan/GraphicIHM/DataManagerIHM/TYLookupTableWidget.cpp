@@ -68,23 +68,24 @@ void TYLookupTableWidget::resizeEvent(QResizeEvent* e)
 void TYLookupTableWidget::drawPalette(QPainter* painter)
 {
     size_t nbColors = _palette->getNbColors();
-    if (nbColors==0) return;
+    if (nbColors == 0) { return; }
 
     const int bounds_width = 0.1  * _rectPal->width();
-    const int width_but_bounds = _rectPal->width() - 2*bounds_width;
+    const int width_but_bounds = _rectPal->width() - 2 * bounds_width;
 
     int x = 0;
     TYPalette::values_type prev_value = - std::numeric_limits<float>::infinity();
 
     TYPalette::values_type value;
     OColor color;
-    BOOST_FOREACH(boost::tie(value, color), _palette->getColorMap() ) {
-    	// Handle specially first and last iteration
-    	const int dx =  boost::math::isinf(value - prev_value) ? bounds_width :
-    			(_palette->normalize(value) - _palette->normalize(prev_value)) * width_but_bounds;
-    	prev_value = value;
-    	painter->fillRect(x, _rectPal->top(), x+dx, _rectPal->bottom(), toQColor(color));
-    	x += dx;
+    BOOST_FOREACH(boost::tie(value, color), _palette->getColorMap())
+    {
+        // Handle specially first and last iteration
+        const int dx =  boost::math::isinf(value - prev_value) ? bounds_width :
+                        (_palette->normalize(value) - _palette->normalize(prev_value)) * width_but_bounds;
+        prev_value = value;
+        painter->fillRect(x, _rectPal->top(), x + dx, _rectPal->bottom(), toQColor(color));
+        x += dx;
     }
 }
 
@@ -93,22 +94,24 @@ void TYLookupTableWidget::drawPalette(QPainter* painter)
 TYLabeledLookupTableWidget::TYLabeledLookupTableWidget(const TYPalette* palette, QWidget* parent, const char* name)
     : QWidget(parent)
 {
-	if (!parent)
-		parent = this;
+    if (!parent)
+    {
+        parent = this;
+    }
 
     QGridLayout* pPreviewLayout = new QGridLayout();
     parent->setLayout(pPreviewLayout);
 
-	p_scale = new TYLookupTableWidget(palette, this, name);
-	p_minBound = new QDoubleSpinBox();
-	p_maxBound = new QDoubleSpinBox();
+    p_scale = new TYLookupTableWidget(palette, this, name);
+    p_minBound = new QDoubleSpinBox();
+    p_maxBound = new QDoubleSpinBox();
 
-	p_minBound->setDecimals(1);
-	p_minBound->setReadOnly(true);
-	p_minBound->setButtonSymbols(QAbstractSpinBox::NoButtons);
-	p_maxBound->setDecimals(1);
-	p_maxBound->setReadOnly(true);
-	p_maxBound->setButtonSymbols(QAbstractSpinBox::NoButtons);
+    p_minBound->setDecimals(1);
+    p_minBound->setReadOnly(true);
+    p_minBound->setButtonSymbols(QAbstractSpinBox::NoButtons);
+    p_maxBound->setDecimals(1);
+    p_maxBound->setReadOnly(true);
+    p_maxBound->setButtonSymbols(QAbstractSpinBox::NoButtons);
 
     pPreviewLayout->addWidget(p_scale, 1, 0, 1, 3);
     pPreviewLayout->addWidget(p_minBound, 0, 0, Qt::AlignLeft);
@@ -122,9 +125,9 @@ TYLabeledLookupTableWidget::~TYLabeledLookupTableWidget() {}
 
 void TYLabeledLookupTableWidget::update(const TYPalette* palette)
 {
-	assert(p_scale->_palette == palette && "Inconsistent use of the update slot");
-	p_minBound->setValue(p_scale->_palette->getValueMin());
-	p_maxBound->setValue(p_scale->_palette->getValueMax());
-	p_scale->repaint();
-	QWidget::update();
+    assert(p_scale->_palette == palette && "Inconsistent use of the update slot");
+    p_minBound->setValue(p_scale->_palette->getValueMin());
+    p_maxBound->setValue(p_scale->_palette->getValueMax());
+    p_scale->repaint();
+    QWidget::update();
 }

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -20,7 +20,9 @@
 #ifndef __O_SPECTRE__
 #define __O_SPECTRE__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include <vector>
+#include <map>
+
 
 ///Type de spectre.
 enum TYSpectreType { SPECTRE_TYPE_ATT, SPECTRE_TYPE_ABSO, SPECTRE_TYPE_LW, SPECTRE_TYPE_LP, SPECTRE_TYPE_AUTRE };
@@ -99,7 +101,7 @@ public:
      * nbVal  ==> Nombre de valeurs dans le tableau
      * decalage ==> decalage en frequence par rapport a la bande standard TYMPAN (16-16000)
      */
-    OSpectre(const double* valeurs, const short& nbVal, const short& decalage);
+    OSpectre(const double* valeurs, unsigned nbVal, unsigned decalage);
 
     /**
      * Constructeur par copie.
@@ -161,14 +163,13 @@ public:
     /// Force l'etat du spectre (a utiliser avec prudence ...)
     void setEtat(TYSpectreEtat etat) { _etat = etat; }
 
+    /// XXX These are the modulus to put into the solver model
     /// Set/Get du tableau des valeurs reelles
     virtual double* getTabValReel() { return _module; }
     virtual const double* getTabValReel() const {return _module; }
 
     /// Nombre de valeurs dans le spectre
-    virtual unsigned int getNbValues();
-
-    virtual const unsigned int getNbValues() const ;
+    virtual unsigned int getNbValues() const ;
 
     /**
      * Initialisation d'un spectre a une valeur.
@@ -194,7 +195,7 @@ public:
      *
      * @return La valeur reelle du complexe correspondant.
      */
-   virtual  double getValueReal(float freq, bool* pValid = 0);
+    virtual  double getValueReal(float freq, bool* pValid = 0);
 
     /**
     * Recuperation d'un intervalle de valeurs reelles au tableau frequence/complexe
@@ -215,7 +216,7 @@ public:
     virtual OSpectre toDB() const;
 
     /// Conversion en grandeur physique.
-   virtual  OSpectre toGPhy() const;
+    virtual  OSpectre toGPhy() const;
 
     /// Sommation arithmetique de deux spectres en 1/3 d'octave.
     virtual OSpectre sum(const OSpectre& spectre) const;
@@ -326,14 +327,14 @@ public:
      *
      * @return Le tableau des frequences exactes.
      */
-    static OTabFreq getTabFreqExact();
+    static OTabFreq getTabFreqExact(); // XXX These are the frequencies to use in solver
 
-	/**
+    /**
      * \fn OSpectre getOSpectreFreqExact()
-	 * \brief Retourne le tableau des frequences exactes.
+     * \brief Retourne le tableau des frequences exactes.
      * \return Le tableau des frequences exactes.
      */
-	static OSpectre getOSpectreFreqExact();
+    static OSpectre getOSpectreFreqExact();
 
     /// Construction du tableau frequence/indice
     static std::map<float, int>  setMapFreqIndice();
@@ -360,6 +361,7 @@ public:
 protected:
 
     // ==== MEMBRES STATIQUES
+    // CAUTION Check how those static members behave in shared libraries
 
     ///Tableau des frequences en Hz centrales normalisees en tiers d'octave.
     static const float _freqNorm[];

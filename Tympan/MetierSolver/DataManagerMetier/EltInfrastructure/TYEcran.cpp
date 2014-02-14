@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -283,45 +283,45 @@ TYTabPoint TYEcran::getContour() const
 
 TYTabLPPolygon TYEcran::getContours() const
 {
-	// On récupère la liste des faces
-	TYTabLPPolygon tabFaces = this->faces();
+    // On récupère la liste des faces
+    TYTabLPPolygon tabFaces = this->faces();
 
-	// On recherche le plus bas
-	double minZ = 1.E12;
-	for (unsigned int i=0; i<tabFaces.size(); i++)
-	{
-		TYTabPoint tabPts = tabFaces[i]->getContour();
-		for (unsigned j=0; j<tabPts.size(); j++)
-		{
-			minZ = tabPts[j]._z < minZ ? tabPts[j]._z : minZ;
-		}
-	}
+    // On recherche le plus bas
+    double minZ = 1.E12;
+    for (unsigned int i = 0; i < tabFaces.size(); i++)
+    {
+        TYTabPoint tabPts = tabFaces[i]->getContour();
+        for (unsigned j = 0; j < tabPts.size(); j++)
+        {
+            minZ = tabPts[j]._z < minZ ? tabPts[j]._z : minZ;
+        }
+    }
 
-	// On recherche la face dont tous les points sont égals à minZ
-	unsigned int faceNumber = 0;
-	vector<unsigned int> listIndices;
-	bool faceOk = false;
-	for (unsigned int i=0; i<tabFaces.size(); i++)
-	{
-		TYTabPoint tabPts = tabFaces[i]->getContour();
-		faceOk = false;
-		for (unsigned j=0; j<tabPts.size(); j++)
-		{
-			if (tabPts[j]._z != minZ) { faceOk = false; break; }
-			faceOk=true;
-		}
+    // On recherche la face dont tous les points sont égals à minZ
+    unsigned int faceNumber = 0;
+    vector<unsigned int> listIndices;
+    bool faceOk = false;
+    for (unsigned int i = 0; i < tabFaces.size(); i++)
+    {
+        TYTabPoint tabPts = tabFaces[i]->getContour();
+        faceOk = false;
+        for (unsigned j = 0; j < tabPts.size(); j++)
+        {
+            if (tabPts[j]._z != minZ) { faceOk = false; break; }
+            faceOk = true;
+        }
 
-		if (faceOk) listIndices.push_back(i);
-	}
+        if (faceOk) { listIndices.push_back(i); }
+    }
 
-	// Construction du tableau de faces retourné
-	TYTabLPPolygon ret;
-	for (unsigned int i=0; i<listIndices.size(); i++)
-	{
-		ret.push_back(tabFaces[listIndices[i]]);
-	}
+    // Construction du tableau de faces retourné
+    TYTabLPPolygon ret;
+    for (unsigned int i = 0; i < listIndices.size(); i++)
+    {
+        ret.push_back(tabFaces[listIndices[i]]);
+    }
 
-	return ret;
+    return ret;
 }
 
 void TYEcran::setHauteur(double hauteur)
@@ -573,66 +573,66 @@ TYTabAcousticSurfaceGeoNode TYEcran::acousticFaces()
 
 int TYEcran::isInside(const TYPoint& pt) const
 {
-     int res = INTERS_NULLE;
+    int res = INTERS_NULLE;
     OPoint3D ptCopy(pt);
 
-	// Le test avec le volume englobant permet de tester si le pt
+    // Le test avec le volume englobant permet de tester si le pt
     // se trouve entre les plans du sol et du plafond,
     // et d'evite aussi des calculs inutiles...
     if (_volEnglob.isInside(pt) == INTERS_NULLE) { return res; }
 
-	TYTabLPPolygon tabFaces = getContours();
+    TYTabLPPolygon tabFaces = getContours();
 
-	double minZ = 0.0, maxZ = 0.0;
+    double minZ = 0.0, maxZ = 0.0;
 
-	// Pour toutes les faces
-	for (unsigned int i=0; i<tabFaces.size(); i++)
-	{
-		TYTabPoint tabPts = tabFaces[i]->getContour();
-		size_t nbPts = tabPts.size();
-		minZ = tabPts[0]._z;
-		maxZ = getHauteur() + minZ;
+    // Pour toutes les faces
+    for (unsigned int i = 0; i < tabFaces.size(); i++)
+    {
+        TYTabPoint tabPts = tabFaces[i]->getContour();
+        size_t nbPts = tabPts.size();
+        minZ = tabPts[0]._z;
+        maxZ = getHauteur() + minZ;
 
-		// On s'assure enfin que le point est compris dans la hauteur de l'écran
-		if ( (pt._z < minZ) || (pt._z > maxZ)) { return INTERS_NULLE; }
+        // On s'assure enfin que le point est compris dans la hauteur de l'écran
+        if ((pt._z < minZ) || (pt._z > maxZ)) { return INTERS_NULLE; }
 
-		if (nbPts >= 3)
-		{
-			// On pose tout au sol !
-			ptCopy._z = 0.0;
+        if (nbPts >= 3)
+        {
+            // On pose tout au sol !
+            ptCopy._z = 0.0;
 
-			// On se ramene a un plan (z=0), on teste si le pt est a l'interieur
-			// du polygone forme par le contour de l'etage
-			OPoint3D* pts = new OPoint3D[nbPts];
+            // On se ramene a un plan (z=0), on teste si le pt est a l'interieur
+            // du polygone forme par le contour de l'etage
+            OPoint3D* pts = new OPoint3D[nbPts];
 
-			for (size_t i = 0; i < nbPts; i++)
-			{
-				// Creation du polygone
-				pts[i] = tabPts[i];
+            for (size_t i = 0; i < nbPts; i++)
+            {
+                // Creation du polygone
+                pts[i] = tabPts[i];
 
-				// ... tout au sol !
-				pts[i]._z = 0.0;
-			}
+                // ... tout au sol !
+                pts[i]._z = 0.0;
+            }
 
-			LPTYPolygon pPoly = new TYPolygon(tabPts);
+            LPTYPolygon pPoly = new TYPolygon(tabPts);
 
-			OPoint3D ptMin, ptMax;
+            OPoint3D ptMin, ptMax;
 
-			OGeometrie::boundingBox(pts, static_cast<int>(nbPts), ptMin, ptMax);
+            OGeometrie::boundingBox(pts, static_cast<int>(nbPts), ptMin, ptMax);
 
-			OBox box(ptMin, ptMax);
+            OBox box(ptMin, ptMax);
 
-	#if TY_USE_IHM
-			res = OGeometrie::pointInPolygonRayCasting(ptCopy, pts, static_cast<int>(nbPts));
-	#else
-			res = OGeometrie::pointInPolygonAngleSum(ptCopy, pts, nbPts);
-	#endif
+#if TY_USE_IHM
+            res = OGeometrie::pointInPolygonRayCasting(ptCopy, pts, static_cast<int>(nbPts));
+#else
+            res = OGeometrie::pointInPolygonAngleSum(ptCopy, pts, nbPts);
+#endif
 
-			delete [] pts;
+            delete [] pts;
 
-			if (res) { break; } // Si on a trouvé au moins une face qui "matche" on sort de la boucle 
-		}
-	}
+            if (res) { break; } // Si on a trouvé au moins une face qui "matche" on sort de la boucle
+        }
+    }
 
     return res;
 }

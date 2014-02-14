@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,12 +11,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
@@ -37,9 +34,6 @@
 
 /**
  * Permet de creer de elements acoustiques volumiques.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticVolume: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYVolumeInterface
 {
@@ -150,7 +144,7 @@ public:
     /**
      * Set/Get du materiau de construction pour les faces de ce Volume.
      */
-	TYMateriauConstruction* getMateriau() const { return _pMateriau._pObj; }
+    TYMateriauConstruction* getMateriau() const { return _pMateriau._pObj; }
 
     /**
      * Set/Get du materiau de construction pour les faces de ce Volume.

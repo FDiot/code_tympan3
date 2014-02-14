@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,15 +11,11 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
- *
- *
- *
  */
-
 
 #ifndef __SMART_PTR_H__
 #define __SMART_PTR_H__
@@ -27,7 +23,6 @@
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-
 
 /**
  * If you wrap a non-class with the SmartPtr class, you will receive
@@ -52,8 +47,6 @@
  * This class implements the reference counting. When the
  * reference count drops down to 0 the referenced object
  * is freed.
- *
- * @author Projet_Tympan
  */
 class IRefCount
 {
@@ -72,7 +65,7 @@ public:
      *
      * @return The number of reference for this object.
      */
-    virtual int addRef() {  return m_refCount++; };
+    virtual int incRef() {  return m_refCount++; };
 
     /**
      * Decreases the reference count for this object.
@@ -81,7 +74,7 @@ public:
      *
      * @return The number of reference for this object.
      */
-    virtual int release()
+    virtual int decRef()
     {
         --m_refCount;
         if (!m_refCount)
@@ -110,9 +103,6 @@ protected:
  * This is the smart pointer template. It assumes that
  * the referenced object supports a reference count interface
  * via IRefCount.
- *
- * @author Projet_Tympan
- * @author Projet_Tympan
  */
 template <class T> class SmartPtr
 {
@@ -130,7 +120,7 @@ public:
         _pObj = pObj;
         if (_pObj != 0)
         {
-            _pObj->addRef();
+            _pObj->incRef();
         }
     }
 
@@ -142,7 +132,7 @@ public:
         _pObj = ptr._pObj;
         if (_pObj != 0)
         {
-            _pObj->addRef();
+            _pObj->incRef();
         }
     }
 
@@ -154,7 +144,7 @@ public:
         _pObj = ptr._pObj;
         if (_pObj != 0)
         {
-            _pObj->addRef();
+            _pObj->incRef();
         }
     }
 
@@ -165,7 +155,7 @@ public:
     {
         if (_pObj != 0)
         {
-            if (!_pObj->release())
+            if (!_pObj->decRef())
             {
                 _pObj = 0;
             }
@@ -196,14 +186,14 @@ public:
         {
             if (_pObj != 0)
             {
-                _pObj->release();
+                _pObj->decRef();
             }
 
             _pObj = ptr._pObj;
 
             if (_pObj != 0)
             {
-                _pObj->addRef();
+                _pObj->incRef();
             }
         }
 
@@ -226,12 +216,12 @@ public:
     {
         if (pObj != 0)
         {
-            pObj->addRef();
+            pObj->incRef();
         }
 
         if (_pObj != 0)
         {
-            _pObj->release();
+            _pObj->decRef();
         }
 
         _pObj = pObj;

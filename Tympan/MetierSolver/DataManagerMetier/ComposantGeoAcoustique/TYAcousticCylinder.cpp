@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -678,7 +678,7 @@ bool TYAcousticCylinder::findAcousticSurface(const TYAcousticSurface* pAccSurf, 
 {
     bool ret = false;
 
-	if (((TYAcousticSurface*) _pCircBottom._pObj == pAccSurf) || ((TYAcousticSurface*) _pCircTop._pObj == pAccSurf))
+    if (((TYAcousticSurface*) _pCircBottom._pObj == pAccSurf) || ((TYAcousticSurface*) _pCircTop._pObj == pAccSurf))
     {
         // Pas de changement de repere pour ces surfaces
         ret = true;
@@ -937,7 +937,7 @@ void TYAcousticCylinder::exportCSV(std::ofstream& ofs)
     // Export du nom de l'objet
     ofs << getName().toAscii().data() << '\n';
 
-	// Export du type de l'objet
+    // Export du type de l'objet
     ofs << toString() << '\n';
 
     // Export des donnees acoustiques

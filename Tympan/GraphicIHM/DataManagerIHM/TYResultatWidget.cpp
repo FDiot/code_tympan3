@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYResultatWidget.cpp
  * \brief outil IHM pour un resultat
@@ -63,10 +63,8 @@ static int compareRes(const void* elem1, const void* elem2);
 static int compareName(const void* elem1, const void* elem2);
 
 TYResultatWidget::TYResultatWidget(TYResultat* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
     _freq = 100;
     _choixOperation = 0;
     _max = NULL; // Tableau des maxima par colonne (initialise plus tard)
@@ -264,7 +262,7 @@ void TYResultatWidget::updateContent()
         _pTable->setVerticalHeaderItem(row, new QTableWidgetItem(QString().setNum(row)));
     }
 
-	updateHeaderLabel();
+    updateHeaderLabel();
 
     // L'entete de la colonne 1 indique que cette colonne donne acces a la puissance
     _pTable->setHorizontalHeaderItem(1, new QTableWidgetItem(QString("LW")));
@@ -290,15 +288,15 @@ void TYResultatWidget::updateHeaderLabel()
     {
         case DBLIN:
             _pTable->setHorizontalHeaderItem(0, new QTableWidgetItem(QString("dBZ")));
-			break;
+            break;
         case DBFREQ:
             strVal = QString("dB(") + QString("%1").arg(_freq) + QString(" Hz)");
-			_pTable->setHorizontalHeaderItem(0, new QTableWidgetItem(strVal));
-			break;
+            _pTable->setHorizontalHeaderItem(0, new QTableWidgetItem(strVal));
+            break;
         case DBA :
         default:
             _pTable->setHorizontalHeaderItem(0, new QTableWidgetItem(QString("dBA")));
-			break;
+            break;
     }
 }
 
@@ -347,7 +345,7 @@ TYCalcul* TYResultatWidget::getSelectedSubstCalcul()
     {
         if (!_radioButtonNoOp->isChecked())
         {
-			int calcul = _comboBoxSubstCalcul->currentIndex();
+            int calcul = _comboBoxSubstCalcul->currentIndex();
             TYProjet* pProjet = TYProjet::safeDownCast(getElement()->getParent()->getParent());
             return pProjet->getListCalcul()[calcul];
         }
@@ -580,7 +578,7 @@ void TYResultatWidget::changeAffichage(int select)
     }
 
     // Mets a jour le widget
-	updateHeaderLabel();
+    updateHeaderLabel();
     updateTable();
 }
 
@@ -627,7 +625,7 @@ void TYResultatWidget::updateTable()
     findMaxima();
 
     // Boucle sur les lignes et les colonnes pour afficher le tableau
-	TYCalcul *pCalcOp = getSelectedSubstCalcul();
+    TYCalcul* pCalcOp = getSelectedSubstCalcul();
     for (unsigned int row = 0; row < _nbLignes; row++)
     {
         for (unsigned int col = 1; col < _nbColonnes; col++)
@@ -796,7 +794,7 @@ void TYResultatWidget::slotContributionLineEditChanged()
     updateTable();
 }
 
-void TYResultatWidget::affichageCellule(const int& row, const int& col, TYCalcul *pCalcOp)
+void TYResultatWidget::affichageCellule(const int& row, const int& col, TYCalcul* pCalcOp)
 {
     TYCalcul* pCalcul = TYCalcul::safeDownCast(getElement()->getParent());
 
@@ -1002,7 +1000,7 @@ void TYResultatWidget::updateFreqList()
 void TYResultatWidget::setFrequency(int freq)
 {
     _freq = _comboBoxFreq->currentText().toFloat();
-	updateHeaderLabel();
+    updateHeaderLabel();
     updateTable();
 }
 

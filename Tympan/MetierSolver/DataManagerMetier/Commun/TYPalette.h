@@ -94,7 +94,7 @@ public:
 
     void clear();
 
-	static const values_type infinity;
+    static const values_type infinity;
 
     /**
      * \brief Get de la valeur min
@@ -236,7 +236,7 @@ public:
      * \brief Denormalize a value, ie convert a percentage to a value between min and max
      */
     values_type denormalize(values_type percent) const
-    { return getValueMin() + (getValueMax()-getValueMin()) * percent ;}
+    { return getValueMin() + (getValueMax() - getValueMin()) * percent ;}
 
     /**
      * \brief Normalize a value, ie convert a value between min and max to a percentage
@@ -247,13 +247,13 @@ public:
      * \brief Create a new TYPalette from an XML file Holding only one Palette
      * \return a Smart Pointer to the Palette newly created or NULL in case of failure
      */
-    static LPTYPalette loadPaletteFromFile(const QString &qFileName);
+    static LPTYPalette loadPaletteFromFile(const QString& qFileName);
 
     /**
      * \brief Save the Palette into a file with the name given
      * \return if the operation was succesful
      */
-    bool savePaletteToFile(const QString &qFileName);
+    bool savePaletteToFile(const QString& qFileName);
 
     /**
      * \brief Make a linear palette from a min/max couple

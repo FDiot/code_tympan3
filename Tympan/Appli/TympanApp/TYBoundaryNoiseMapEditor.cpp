@@ -73,18 +73,22 @@ TYBoundaryNoiseMapEditor::~TYBoundaryNoiseMapEditor()
 void TYBoundaryNoiseMapEditor::endBoundaryNoiseMap()
 {
     bool forceOpened = false;
-    if(!checkValidity(forceOpened))
+    if (!checkValidity(forceOpened))
+    {
         return;
+    }
     writeDebugMsg("Boundary Noise Map valid.");
     createPropertiesDlg(forceOpened);
 }
 
-bool TYBoundaryNoiseMapEditor::checkValidity(bool &forceOpened)
+bool TYBoundaryNoiseMapEditor::checkValidity(bool& forceOpened)
 {
     if (!_pModeler->askForResetResultat())
+    {
         return false;
+    }
 
-    const TYTabPoint &tabPts = this->getSavedPoints();
+    const TYTabPoint& tabPts = this->getSavedPoints();
     size_t nbPts = tabPts.size();
     if (nbPts < 3)
     {
@@ -95,21 +99,23 @@ bool TYBoundaryNoiseMapEditor::checkValidity(bool &forceOpened)
 
     // We test if the polyline doesn't intersect itself
     TYPoint ptInter;
-    for (size_t i = 0; i<nbPts; i++)
+    for (size_t i = 0; i < nbPts; i++)
     {
         TYSegment seg1(tabPts[i], tabPts[(i + 1) % nbPts]);
-        for (size_t j = 0; j<nbPts; j++)
+        for (size_t j = 0; j < nbPts; j++)
         {
             TYSegment seg2(tabPts[j], tabPts[(j + 1) % nbPts]);
             // Test if at least one vertex is in common
-            if ((seg1._ptA != seg2._ptA) && ( seg1._ptB != seg2._ptB) && (seg1._ptA != seg2._ptB) && (seg1._ptB != seg2._ptA))
+            if ((seg1._ptA != seg2._ptA) && (seg1._ptB != seg2._ptB) && (seg1._ptA != seg2._ptB) && (seg1._ptB != seg2._ptA))
             {
                 // Test if there's an intersection
                 if (seg1.intersects(seg2, ptInter) != INTERS_NULLE)
                 {
                     // If the intersection occurs between the extremal point of the array
                     if ((i == nbPts - 1) || (j == nbPts - 1))
+                    {
                         forceOpened = true;
+                    }
                     else
                     {
                         writeDebugMsg("BoundaryNoiseMap invalid.");
@@ -136,7 +142,7 @@ void TYBoundaryNoiseMapEditor::createPropertiesDlg(bool forceOpened)
     pLayout->addLayout(pEditLayout, 0, 0);
 
     // Height
-    QDoubleSpinBox *pHeightSpinBox = new QDoubleSpinBox();
+    QDoubleSpinBox* pHeightSpinBox = new QDoubleSpinBox();
     pHeightSpinBox->setRange(-std::numeric_limits<double>::max(), std::numeric_limits<double>::max());
     pHeightSpinBox->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);
     pHeightSpinBox->setFixedWidth(60);
@@ -147,16 +153,18 @@ void TYBoundaryNoiseMapEditor::createPropertiesDlg(bool forceOpened)
     // Thickness
     _pThicknessSpinBox = new QDoubleSpinBox();
     _pThicknessSpinBox->setRange(0.1, std::numeric_limits<double>::max());
-    _pThicknessSpinBox->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);	
+    _pThicknessSpinBox->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);
     _pThicknessSpinBox->setFixedWidth(60);
     pEditLayout->addWidget(new QLabel(TR("id_thickness_label")), 1, 0);
     pEditLayout->addWidget(_pThicknessSpinBox, 1, 1);
 
     // Closed
-    QCheckBox *pClosedCheckBox = new QCheckBox();
+    QCheckBox* pClosedCheckBox = new QCheckBox();
     pClosedCheckBox->setChecked(false);
-    if(forceOpened)
+    if (forceOpened)
+    {
         pClosedCheckBox->setDisabled(true);
+    }
     pEditLayout->addWidget(new QLabel(TR("id_closed_label")), 2, 0);
     pEditLayout->addWidget(pClosedCheckBox, 2, 1);
 
@@ -164,7 +172,7 @@ void TYBoundaryNoiseMapEditor::createPropertiesDlg(bool forceOpened)
     _pDensitySpinBox = new QDoubleSpinBox();
     _pDensitySpinBox->setFixedWidth(60);
     _pDensitySpinBox->setSingleStep(0.1);
-    _pDensitySpinBox->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);	
+    _pDensitySpinBox->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);
     pEditLayout->addWidget(new QLabel(TR("id_density_label")), 3, 0);
     pEditLayout->addWidget(_pDensitySpinBox, 3, 1);
 
@@ -198,7 +206,7 @@ void TYBoundaryNoiseMapEditor::createPropertiesDlg(bool forceOpened)
 
     if (ret == QDialog::Accepted)
         dialogConfirmed(pHeightSpinBox->value(), _pThicknessSpinBox->value(),
-            pClosedCheckBox->isChecked(), _pDensitySpinBox->value(), forceOpened);
+                        pClosedCheckBox->isChecked(), _pDensitySpinBox->value(), forceOpened);
 
     delete pEditLayout;
     delete pBtnLayout;
@@ -215,8 +223,10 @@ void TYBoundaryNoiseMapEditor::createPropertiesDlg(bool forceOpened)
 void TYBoundaryNoiseMapEditor::dialogConfirmed(double height, double thickness, bool closed, double density, bool forceOpened)
 {
     /// XXX Ticket #644892. Check if the polyline hasn't been deleted by the TYPolyLineEditor::close() function
-    if(this->getSavedPoints().empty())
+    if (this->getSavedPoints().empty())
+    {
         return;
+    }
     // We create the BoundaryNoiseMap entity
     TYSiteModelerFrame* pSiteModeler = (TYSiteModelerFrame*) _pModeler;
 
@@ -240,7 +250,7 @@ void TYBoundaryNoiseMapEditor::dialogConfirmed(double height, double thickness, 
 
             // Add action
             TYAction* pAction = new TYAddMaillageToCalculAction((LPTYMaillageGeoNode&) pBoundaryNoiseMapGeoNode,
-                    pSiteModeler->getProjet()->getCurrentCalcul(), _pModeler, TR("id_action_add_boundarynoisemap"));
+                                                                pSiteModeler->getProjet()->getCurrentCalcul(), _pModeler, TR("id_action_add_boundarynoisemap"));
             _pModeler->getActionManager()->addAction(pAction);
 
             // Compte the noise map altimetry

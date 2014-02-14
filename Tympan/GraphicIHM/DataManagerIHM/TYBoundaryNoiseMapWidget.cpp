@@ -49,17 +49,15 @@ static char THIS_FILE[] = __FILE__;
 #undef max
 
 TYBoundaryNoiseMapWidget::TYBoundaryNoiseMapWidget(TYBoundaryNoiseMap* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     _maillageW = new TYMaillageWidget(pElement, this);
 
     resize(300, 200);
     setWindowTitle(TR("id_caption"));
     QGridLayout* pBoundaryNoiseMapLayout = new QGridLayout();
-    setLayout(pBoundaryNoiseMapLayout );
+    setLayout(pBoundaryNoiseMapLayout);
 
     pBoundaryNoiseMapLayout ->addWidget(_maillageW, 0, 0);
 
@@ -70,21 +68,23 @@ TYBoundaryNoiseMapWidget::TYBoundaryNoiseMapWidget(TYBoundaryNoiseMap* pElement,
     // Thickness
     _pThicknessSpinBox = new QDoubleSpinBox(pGroupBox);
     _pThicknessSpinBox->setRange(0.1, std::numeric_limits<double>::max());
-    _pThicknessSpinBox->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);	
+    _pThicknessSpinBox->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);
     pGroupBoxLayout->addWidget(new QLabel(TR("id_thickness"), pGroupBox), 0, 0);
     pGroupBoxLayout->addWidget(_pThicknessSpinBox, 0, 1);
 
     // Closed or open polyline
     _pClosedCheckBox = new QCheckBox(pGroupBox);
-    if(!pElement->getCanBeClosed())
+    if (!pElement->getCanBeClosed())
+    {
         _pClosedCheckBox->setDisabled(true);
+    }
     pGroupBoxLayout->addWidget(new QLabel(TR("id_closed"), pGroupBox), 1, 0);
     pGroupBoxLayout->addWidget(_pClosedCheckBox, 1, 1);
 
     // Density
     _pDensitySpinBox = new QDoubleSpinBox(pGroupBox);
     _pDensitySpinBox->setSingleStep(0.1);
-    _pDensitySpinBox->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);	
+    _pDensitySpinBox->setCorrectionMode(QAbstractSpinBox::CorrectToNearestValue);
     pGroupBoxLayout->addWidget(new QLabel(TR("id_density"), pGroupBox), 2, 0);
     pGroupBoxLayout->addWidget(_pDensitySpinBox, 2, 1);
     pGroupBoxLayout->addWidget(new QLabel(TR("id_density_unit"), pGroupBox), 2, 2);
@@ -121,8 +121,10 @@ void TYBoundaryNoiseMapWidget::apply()
     double density = _pDensitySpinBox->value();
 
     // If something changed
-    if( getElement()->getThickness() != thickness || getElement()->isClosed() != closed || getElement()->getDensity() != density )
+    if (getElement()->getThickness() != thickness || getElement()->isClosed() != closed || getElement()->getDensity() != density)
+    {
         getElement()->make(getElement()->getTabPoint(), thickness, closed, density);
+    }
 
     emit modified();
 }

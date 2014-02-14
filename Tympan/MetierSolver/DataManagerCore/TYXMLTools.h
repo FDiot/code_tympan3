@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -30,9 +30,6 @@
 
 /**
  * Methodes outils pour XML.
- *
- * @author Projet_Tympan
- *
  */
 class TYXMLTools
 {
@@ -264,7 +261,7 @@ public:
      *
      * @return La valeur de l'attribut s'il a ete trouve, sinon 0.0.
      */
-    static double getElementAttributeToDouble(DOM_Element parentElem, DOMString attName, bool* ok=NULL);
+    static double getElementAttributeToDouble(DOM_Element parentElem, DOMString attName, bool* ok = NULL);
 
     /**
      * Retourne l'attribut portant le nom passe du noeud passe sous forme de <code>int</code>.
@@ -274,9 +271,9 @@ public:
      *
      * @return La valeur de l'attribut s'il a ete trouve, sinon 0.
      */
-    static int getElementAttributeToInt(DOM_Element parentElem, DOMString attName, bool* ok=NULL);
+    static int getElementAttributeToInt(DOM_Element parentElem, DOMString attName, bool* ok = NULL);
 
-    static unsigned getElementAttributeToUnsigned(DOM_Element parentElem, DOMString attName, bool* ok=NULL);
+    static unsigned getElementAttributeToUnsigned(DOM_Element parentElem, DOMString attName, bool* ok = NULL);
 };
 
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file YEtatsWidget.cpp
  * \brief objet IHM pour les etats
@@ -56,11 +56,9 @@ static char THIS_FILE[] = __FILE__;
 
 TYEtatsWidget::TYEtatsWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/): QDialog(_pParent)
 {
-    Q_ASSERT(pElement);
 
     this->setWindowTitle(TR("id_etat_title"));
 
-    _pElement = pElement;
 
     resize(400, 400);
 

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,12 +11,9 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
@@ -38,9 +35,6 @@ class OSegment3D;
 
 /**
  * Permet de creer des surfaces acoustiques rectangulaires.
- *
- * @author Projet_Tympan
- *
  */
 class TYAcousticRectangle: public TYAcousticSurface
 {
@@ -86,7 +80,7 @@ public:
     virtual OVector3D normal() const;
     virtual OPlan plan() const;
     virtual TYTabPoint getContour(int n = -1) const;
-	virtual TYTabPoint3D getOContour(int n = -1) const;
+    virtual TYTabPoint3D getOContour(int n = -1) const;
     virtual int intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const;
     virtual int intersects(const OSegment3D& seg, OPoint3D& pt) const;
 

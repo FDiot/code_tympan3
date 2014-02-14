@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,12 +11,11 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
-
 
 #include "Tympan/MetierSolver/ToolsMetier/OThreadPool.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
@@ -51,7 +50,7 @@ TYSolver::~TYSolver()
     if (_tabPolygon)
         for (size_t i = 0; i < _tabPolygonSize; ++i)
         {
-            _tabPolygon[i].pSurfGeoNode->release();
+            _tabPolygon[i].pSurfGeoNode->decRef();
         }
 
     if (_faceSelector)
@@ -82,7 +81,7 @@ void TYSolver::purge()
     {
         for (size_t i = 0; i < _tabPolygonSize; i++)
         {
-            _tabPolygon[i].pSurfGeoNode->release();
+            _tabPolygon[i].pSurfGeoNode->decRef();
         }
     }
 
@@ -196,7 +195,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
         for (size_t i = 0; i < _tabPolygonSize; ++i)
             if (_tabPolygon[i].pSurfGeoNode)
             {
-                _tabPolygon[i].pSurfGeoNode->release();
+                _tabPolygon[i].pSurfGeoNode->decRef();
             }
         delete [] _tabPolygon;
         _tabPolygonSize = 0;
@@ -234,11 +233,11 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
     for (i = 0 ; i < nbFacesInfra ; i++)
     {
         // Creation d'une structure de type TYStructSurfIntersect
-		_tabPolygon[i].pSurfGeoNode = tabFaces[i]._pObj;
+        _tabPolygon[i].pSurfGeoNode = tabFaces[i]._pObj;
 
         // Incrementation manuel du compteur de reference
         // Necessaire pour la non destruction du pointeur
-        _tabPolygon[i].pSurfGeoNode->addRef();
+        _tabPolygon[i].pSurfGeoNode->incRef();
 
         _tabPolygon[i].matInv = tabFaces[i]->getMatrix().getInvert();
         _tabPolygon[i].isEcran = estUnIndexDeFaceEcran[i];
@@ -292,11 +291,11 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
     for (i = nbFacesInfra ; i < tabFaces.size() ; i++)
     {
         // Creation d'une structure de type TYStructSurfIntersect
-		_tabPolygon[i].pSurfGeoNode = tabFaces[i]._pObj;
+        _tabPolygon[i].pSurfGeoNode = tabFaces[i]._pObj;
 
         // Incrementation manuel du compteur de reference
         // Necessaire pour la non destruction du pointeur
-        _tabPolygon[i].pSurfGeoNode->addRef();
+        _tabPolygon[i].pSurfGeoNode->incRef();
 
         _tabPolygon[i].matInv = OMatrix();
         _tabPolygon[i].isEcran = false;

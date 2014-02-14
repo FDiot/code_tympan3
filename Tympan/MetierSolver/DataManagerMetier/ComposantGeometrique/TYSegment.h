@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,18 +11,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
 #ifndef __TY_SEGMENT__
 #define __TY_SEGMENT__
-
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
@@ -33,16 +29,11 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSegmentGraphic.h"
 #endif
 
-
 // TYRectangle.h est inclu a la fin de la declaration de TYSegment.
 class TYRectangle;
 
-
 /**
  * Classe de definition d'un segment.
- *
- * @author Projet_Tympan
- *
  */
 class TYSegment: public TYElement, public TYColorInterface
 {
@@ -168,7 +159,7 @@ public:
      * \param s2 Segment 2.
      * \return True if the two segments are equal
      */
-     static bool unorderedIsEqual(const TYSegment &s1, const TYSegment &s2);
+    static bool unorderedIsEqual(const TYSegment& s1, const TYSegment& s2);
 
     // Membres
 public:

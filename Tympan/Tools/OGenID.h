@@ -29,7 +29,7 @@
 
 class OGenID
 {
-	friend size_t qHash(const OGenID& uid);
+    friend size_t qHash(const OGenID& uid);
 private:
     QUuid quid;
 
@@ -128,14 +128,14 @@ inline bool OGenID::operator <(const OGenID& other) const
  */
 inline size_t qHash(const QUuid& uuid)
 {
-    return uuid.data1 ^ uuid.data2 ^ (uuid.data3 << 16)
-     ^ ((uuid.data4[0] << 24) | (uuid.data4[1] << 16) | (uuid.data4[2] << 8) | uuid.data4[3])
-     ^ ((uuid.data4[4] << 24) | (uuid.data4[5] << 16) | (uuid.data4[6] << 8) | uuid.data4[7]);
+    return uuid.data1 ^ uuid.data2 ^(uuid.data3 << 16)
+           ^((uuid.data4[0] << 24) | (uuid.data4[1] << 16) | (uuid.data4[2] << 8) | uuid.data4[3])
+           ^((uuid.data4[4] << 24) | (uuid.data4[5] << 16) | (uuid.data4[6] << 8) | uuid.data4[7]);
 }
 
 
 inline size_t qHash(const OGenID& uid)
-{ return qHash( uid.quid); }
+{ return qHash(uid.quid); }
 
 #endif // __O_GEN_ID__
 

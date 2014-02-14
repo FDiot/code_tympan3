@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,19 +11,14 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
- *
- *
- *
  *
  */
 
-
 #ifndef __O_PROTOTYPE__
 #define __O_PROTOTYPE__
-
 
 /////////////////////////////////////////////////////////////
 // Definition de macros pour la creation de nouveaux types
@@ -244,11 +239,6 @@ static const int PROTOTYPE_MAX_NB = 256;
  * necessaire de reprendre le modele ci-dessus pour chaque nouvelle
  * classe derivee de Prototype. Par contre les macros offrent un
  * moyen alternatif simple pour la creation de ce type de classe.
- *
- *
- * @author Projet_Tympan
- * @version 1.0 - 11/04/02
- *
  */
 class OPrototype
 {

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -417,10 +417,10 @@ void TYAcousticBox::exportCSV(std::ofstream& ofs)
     // Export du nom de l'objet
     ofs << getName().toAscii().data() << '\n';
 
-	// Export du type de l'objet
+    // Export du type de l'objet
     ofs << toString() << '\n';
 
-	// Export des donnees acoustiques
+    // Export des donnees acoustiques
     TYAcousticInterface::exportCSV(ofs);
 
     for (int i = 0; i < 6 ; i++)
@@ -870,7 +870,7 @@ bool TYAcousticBox::findAcousticSurface(const TYAcousticSurface* pAccSurf, OMatr
 
         for (unsigned int j = 0; j < tabTmp.size(); j++)
         {
-			if (TYAcousticSurface::safeDownCast(tabTmp[j]._pObj->getElement()) == pAccSurf)
+            if (TYAcousticSurface::safeDownCast(tabTmp[j]._pObj->getElement()) == pAccSurf)
             {
                 if (pMatrix)
                 {

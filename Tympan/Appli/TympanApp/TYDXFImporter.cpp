@@ -1,18 +1,21 @@
 /*
- * Copyright (c) 2007 EDF. All Rights Reserved.
- * All Rights Reserved. No part of this software and its documentation may
- * be used, copied, modified, distributed and transmitted, in any form or by
- * any means, without the prior written permission of EDF.
- *
- * EDF-R&D Departement AMA - 1, avenue du general de Gaulle, 92141 CLAMART
- *
- */
-
+ * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+*/
 
 /**
- * TYDXFImporter.cpp : Definit le point d'entree pour l'import des fichiers DXF au format BD-TOPO.
- *
- * @author Arnaud Zirnheld
+ * TYDXFImporter.cpp : Definit le point d'entree pour l'import des fichiers DXF
+ * au format BD-TOPO.
  */
 
 #ifdef _MSC_VER
@@ -50,9 +53,11 @@ void TYDXFImporter::LoadFloatParam(const char* ParamName, double& dParam)
 bool TYDXFImporter::ReadDXF(dimeModel* model, const QString& DXFFileName)
 {
     if (!QFile::exists(DXFFileName))
+    {
         return false;
+    }
     const QByteArray ba = DXFFileName.toLocal8Bit();
-    const char *c_filename = ba.data();
+    const char* c_filename = ba.data();
     dimeInput in;
     if (!in.setFile(c_filename))
     {

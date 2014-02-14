@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYSourcePonctuelleWidget.h
  * \brief outil IHM pour une source ponctuelle  (fichier header)
@@ -81,7 +81,7 @@ signals:
     /**
      * Type de rayonnement modifie
      */
-//    void typeRayntChanged(int typeRaynt);
+    //    void typeRayntChanged(int typeRaynt);
 
 public slots:
     virtual void updateContent();
@@ -100,7 +100,7 @@ public slots:
     /**
      * Changement du type de rayonnement de la source
      */
-//    void changeTypeRaynt(int id);
+    //    void changeTypeRaynt(int id);
 
     /**
      * Changement la forme de l'objet a afficher
@@ -111,7 +111,7 @@ public slots:
 protected:
 
     QGroupBox* _groupBoxType;
-//    QLabel* _labelTypeRaynt;
+    //    QLabel* _labelTypeRaynt;
     QGroupBox* _groupBoxPosition;
 
     QPushButton* _pushButtonPosition;
@@ -125,7 +125,7 @@ protected:
     /// Bouton radio pour choisir le type de rayonnement
     QRadioButton* _pRadioButtonSpheric;
     QRadioButton* _pRadioButtonHemi;
-//    QRadioButton* _pRadioButtonForce;
+    //    QRadioButton* _pRadioButtonForce;
     QButtonGroup* _buttonGroupTypeRaynt;
 
     QGridLayout* _sourcePonctuelleLayout;
