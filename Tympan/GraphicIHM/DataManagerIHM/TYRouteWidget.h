@@ -84,6 +84,7 @@ protected:
     QComboBox*  q_RoadSurfaceType_Combo;
     QCheckBox*  q_RoadSurfaceDraining_Check;
     QSpinBox*   q_RoadSurfaceAge_Spin;
+    QComboBox*  q_RoadFlowType_Combo;
     QSpinBox*   q_RoadSpeed_Spin[TYRoute::NB_TRAFFIC_REGIMES][TYTrafic::NB_VEHICLE_TYPES];
     QSpinBox*   q_RoadFlow_Spin[TYRoute::NB_TRAFFIC_REGIMES][TYTrafic::NB_VEHICLE_TYPES];
     QPushButton* q_AADT_Push;

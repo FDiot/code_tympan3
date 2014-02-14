@@ -53,6 +53,8 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     assert(q_RoadSurfaceDraining_Check);
     q_RoadSurfaceAge_Spin = findChild<QSpinBox*>("route_age");
     assert(q_RoadSurfaceAge_Spin);
+    q_RoadFlowType_Combo = findChild<QComboBox*>("route_ecoulement");
+    assert(q_RoadFlowType_Combo);
 
     // Get he widget for the traffic speed
     q_RoadSpeed_Spin[TYRoute::Day][TYTrafic::LV] = findChild<QSpinBox*>("vitesse_vl_jour");
@@ -131,8 +133,9 @@ void TYRouteWidget::apply()
 void TYRouteWidget::apply_road_surface()
 {
     TYRoute& road = *getElement();
+    int index;
 
-    int index = q_RoadSurfaceType_Combo->currentIndex();
+    index = q_RoadSurfaceType_Combo->currentIndex();
     if (q_RoadSurfaceDraining_Check->isChecked())
         index += RoadSurface_DR1 - 1;
     assert(index >= 0 && index < RoadSurface_UserDefined);
@@ -146,8 +149,9 @@ void TYRouteWidget::apply_road_surface()
 void TYRouteWidget::update_road_surface()
 {
     TYRoute& road = *getElement();
+    int index;
 
-    int index = road.surfaceType();
+    index = road.surfaceType();
     assert(index >= 0 && index < RoadSurface_UserDefined);
     if (index >= RoadSurface_DR1)
     {
@@ -157,6 +161,21 @@ void TYRouteWidget::update_road_surface()
     q_RoadSurfaceType_Combo->setCurrentIndex(index);
 
     q_RoadSurfaceAge_Spin->setValue( road.surfaceAge() );
+
+    RoadFlowType flow_type =
+        road.getNMPB08RoadTrafficComponent(TYRoute::Day, TYTrafic::LV).flowType;
+
+    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
+    {
+        enum TYRoute::TrafficRegimes regime = static_cast<TYRoute::TrafficRegimes>(j);
+        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+        {
+            enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
+            assert(road.getNMPB08RoadTrafficComponent(regime, vehicle_type).flowType == flow_type
+                   && "The traffic flow type for all componenets are expected to be the same for now.");
+        }
+    }
+    q_RoadFlowType_Combo->setCurrentIndex(flow_type);
 }
 
 void TYRouteWidget::apply_road_traffic()
@@ -169,9 +188,13 @@ void TYRouteWidget::apply_road_traffic()
         for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
         {
             enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
+
             int speed = q_RoadSpeed_Spin[regime][vehicle_type]->value();
             int flow = q_RoadFlow_Spin[regime][vehicle_type]->value();
-            road.setRoadTrafficComponent(regime, vehicle_type, flow, speed /* TODO handle flow type */);
+            // NB : For now there is only one flow type for all traffic componenet in the GUI
+            int index = q_RoadFlowType_Combo->currentIndex();
+            RoadFlowType flow_type = static_cast<RoadFlowType>(index);
+            road.setRoadTrafficComponent(regime, vehicle_type, flow, speed, flow_type);
         }
     }
 }
