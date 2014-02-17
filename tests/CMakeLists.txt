@@ -42,7 +42,13 @@ target_link_libraries(test_example gtest_main gtest ${CMAKE_THREAD_LIBS_INIT})
 add_test(test_example test_example)
 set_property(TEST test_example PROPERTY ENVIRONMENT "${LD_VARNAME}=${ADD_PATH_STRING}")
 
+add_executable(print_environment test_environment.cpp)
+set_property(TARGET print_environment PROPERTY FOLDER ${CURRENT_FOLDER})
 
+add_dependencies(print_environment GTest)
+target_link_libraries(print_environment gtest_main gtest ${CMAKE_THREAD_LIBS_INIT})
+add_test(print_environment print_environment)
+set_property(TEST print_environment PROPERTY ENVIRONMENT "${LD_VARNAME}=${ADD_PATH_STRING}")
 
 file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
