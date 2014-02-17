@@ -21,21 +21,10 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 
 
-//#ifdef USE_QT
-//  #include "DiffractionGraphic.h"
-//#endif
-
-
 class Cylindre;
 
 class Diffraction : public Event
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Recepteur)
-    //  GRAPHIC_DECL(Diffraction)
-    //#endif
-
 public:
 
     Diffraction(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Cylindre* c = NULL):
@@ -63,7 +52,12 @@ public:
 
     }
 
-    virtual void setNbResponseLeft(int _nbResponseLeft) { nbResponseLeft = _nbResponseLeft; computeDTheta(); }
+    virtual void setNbResponseLeft(int _nbResponseLeft) 
+	{ 
+		nbResponseLeft = std::floor( std::abs( static_cast<decimal>(_nbResponseLeft-1) / M_2PI * angleOuverture * std::sin(angleArrive) ) + 0.5 );
+		nbResponseLeft = nbResponseLeft >= 4 ? nbResponseLeft : 4; // Limite le nombre à 4
+		computeDTheta(); 
+	}
 
 	virtual bool getResponse(vec3& r, bool force = false);
 
@@ -71,6 +65,7 @@ public:
 
     void setAngleOuverture(decimal angle) { angleOuverture = angle; computeDTheta(); }
     decimal getAngleOuverture() { return angleOuverture; }
+	decimal getDeltaTheta() const { return delta_theta; }
 
     virtual bool generateResponse(std::vector<vec3>& responses, unsigned int nbResponses);
     virtual bool generateTest(std::vector<vec3>& succededTest, std::vector<vec3>& failTest, unsigned int nbResponses);
@@ -83,7 +78,10 @@ protected:
 
     void buildRepere();
     void computeAngle();
-	void computeDTheta() { delta_theta = angleOuverture / static_cast<decimal>(nbResponseLeft-1); }
+	void computeDTheta() 
+	{
+		delta_theta = angleOuverture / static_cast<decimal>(nbResponseLeft); 
+	}
 
     Repere localRepere;
 

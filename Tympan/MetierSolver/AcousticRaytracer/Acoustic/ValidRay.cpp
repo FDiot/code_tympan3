@@ -90,7 +90,14 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
     from.normalize();
 
     Diffraction* newEvent = new Diffraction(realImpact, from, (Cylindre*)(inter->p));
+
+//#define _FIXED_DIFFRACTION_NBRAYS_
+#ifdef _FIXED_DIFFRACTION_NBRAYS_
     newEvent->setNbResponseLeft(globalNbRayWithDiffraction+1); // Attempt to correct problem 
+#else
+	unsigned int diff_nb_rays = std::floor( std::sqrt( static_cast<decimal>( r->getSource()->getSampler()->getNbRays() ) ) + 0.5 ) + 1;
+	newEvent->setNbResponseLeft(diff_nb_rays);
+#endif
     
 	vec3 newDir;
     if (newEvent->getResponse(newDir))
