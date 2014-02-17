@@ -95,8 +95,8 @@ decimal Ray::computeTrueLength( vec3& closestPoint )
     }
 
 	decimal longueur = 0.;
-	vec3 posSource = vec3(source->getPosition());
-    vec3 posRecep = vec3(((Recepteur*)(recepteur))->getPosition());
+	vec3 posSource = source->getPosition();
+    vec3 posRecep = static_cast<Recepteur*>(recepteur)->getPosition();
 	vec3 posLastEvent;
 	vec3 current(0., 0., 0.), previous(0., 0., 0.);
     switch (events.size())
@@ -129,6 +129,80 @@ decimal Ray::computeTrueLength( vec3& closestPoint )
     }
 
 	return 0.;
+}
+
+decimal Ray::computePertinentLength(vec3& closestPoint)
+{
+    if (source == NULL || recepteur == NULL)
+    {
+        std::cerr << "Erreur : rayon without source or receptor computeTrueLength" << endl;
+        return 0.;
+    }
+
+	decimal longueur = 0.;
+    vec3 posRecep = static_cast<Recepteur*>(recepteur)->getPosition();
+	vec3 posLastEvent;
+	vec3 current(0., 0., 0.), previous(0., 0., 0.);
+
+	Source *s = NULL;
+	Event *e = NULL;
+	Base *beginEvent = getLastPertinentEvent();
+
+    switch (events.size())
+    {
+        case 0: // Chemin direct source-recepteur
+			// needs only computing of full (true) length
+            return computeTrueLength(closestPoint);
+			break;
+
+		default:
+			s = dynamic_cast<Source*>(beginEvent);
+
+			// Compute distance from source to the last event
+			if (s)
+			{
+				// needs only computing of full (true) length
+				return computeTrueLength(closestPoint);
+			}
+			else
+			{
+				e = dynamic_cast<Event*>(beginEvent);
+				if (e) 
+				{
+					// compute legth from end of vector
+					std::vector< QSharedPointer<Event> >::reverse_iterator rit = events.rbegin();
+					previous = (*rit)->getPosition();
+					while ( ( rit != events.rend() ) && ( (*rit).data() != e ) )
+					{
+						rit++;
+						current = (*rit)->getPosition();
+						longueur += current.distance(previous);
+						previous = current;
+					}
+
+					// Compute distance from the last event to the nearest point from receptor
+					posLastEvent = vec3(events.back()->getPosition());
+					closestPoint = posRecep.closestPointOnLine(posLastEvent, finalPosition); 
+					return ( longueur += closestPoint.distance(posLastEvent) );
+				}
+			}
+
+			break;
+	}
+
+	return 0.;
+}
+
+Base* Ray::getLastPertinentEvent()
+{
+	Base* res = (Base*) source;
+
+	for (std::vector< QSharedPointer<Event> > :: iterator iter = events.begin(); iter != events.end(); ++iter)
+	{
+		if ( (*iter)->getType() == DIFFRACTION ) { res = (Base*) ( (*iter).data() ); }
+	}
+
+	return res;
 }
 
 float Ray::distanceSourceRecepteur()

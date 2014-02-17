@@ -20,6 +20,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Source.h"
 //#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Diffraction.h"
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
@@ -100,6 +101,20 @@ public:
 	 */
 	decimal computeTrueLength(vec3& closestPoint);
 
+	/*!
+	 * \fn decimal computePertinentLength(vec3& nearestPoint);
+	 * \brief Compute ray lenfth from last pertinent event (i.e. source or last diffraction 
+	 *        to the nearest point of the receptor
+	 */
+	decimal computePertinentLength(vec3& closestPoint);
+
+	/*!
+	 * \fn void* getLastPertinentEventPos() const;
+	 * \brief return the apointer to the last pertinent event influencing ray thickness
+	 *        may be source or last diffraction event
+	 */
+	Base* getLastPertinentEvent();
+
     /*!
     * \fn double getLongueur()
     * \brief Renvoie la distance parcourue par le rayon
@@ -176,24 +191,40 @@ public:
 	 * \fn decimal getThick( const decimal& distance, const decimal& solid_angle, const unsigned int& nb_rays, bool diffraction = false) const;
 	 * \brief Compute thickness of the ray after covering a distance distance for spherical or diffraction source
 	 */
-	inline decimal getThickness( const decimal& distance, const decimal& angle, const unsigned int& nb_rays = 1, bool diffraction = false) const
+	inline decimal getThickness( const decimal& distance)
 	{
-		if (diffraction)
+		bool diffraction(false);
+		decimal angle = getSolidAngle( diffraction );
+
+		if ( diffraction )
 		{
-			return M_2PI * angle * distance / nb_rays; 
+			return 2 * M_PI * angle * distance;
 		}
-			
+
 		return 2. * distance * sqrt( angle / M_PI ); 
 	}
 
 	/*!
-	 * \fn decimal getSolidAngle(decimal initial_solid_angle, unsigned int nb_rays);
-	 * \brief Compute solid angle associated with the ray
+	 * \fn decimal getSolidAngle( bool& diffraction)
+	 * \brief	Compute solid angle associated with the ray
+	 *			Set diffraction true if last pertinent event 
+	 *			is a diffraction
 	 */
-	inline decimal getSolidAngle(decimal initial_solid_angle = M_4PI) const
+	inline decimal getSolidAngle( bool& diffraction)
 	{
 		unsigned int nb_rays = source->getInitialRayCount();
-		return initial_solid_angle / static_cast<decimal>(nb_rays);
+
+		Base *last = getLastPertinentEvent();
+		Event *e = dynamic_cast<Event*>(last);
+
+		if ( e && ( e->getType() == DIFFRACTION ) )
+		{
+			diffraction = true;
+			return dynamic_cast<Diffraction*>(e)->getDeltaTheta();
+		}
+		
+		diffraction = false;
+		return M_4PI / static_cast<decimal>(nb_rays);
 	}
 
 	/*!

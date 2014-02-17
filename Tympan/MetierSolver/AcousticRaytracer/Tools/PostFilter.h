@@ -83,57 +83,57 @@ public:
 	 * \fn Ray* compareRays(const Ray* r1, const Ray* r2);
 	 * \brief Compare two rays events by events (must have same number of events)
 	 */
-	Ray* compareRays(const Ray* r1, const Ray* r2)
-	{
-		const std::vector<QSharedPointer<Event> > *evs1 = r1->getEvents();
-		const std::vector<QSharedPointer<Event> > *evs2 = r2->getEvents();
+	//Ray* compareRays(const Ray* r1, const Ray* r2)
+	//{
+	//	const std::vector<QSharedPointer<Event> > *evs1 = r1->getEvents();
+	//	const std::vector<QSharedPointer<Event> > *evs2 = r2->getEvents();
 
-		// 2 Rays must have the same events number
-		assert( evs1->size() == evs2->size() );
+	//	// 2 Rays must have the same events number
+	//	assert( evs1->size() == evs2->size() );
 
-		bool is_same(true);
+	//	bool is_same(true);
 
-		Event *ev1=NULL, *ev2=NULL;
-		decimal e1, e2, d1, d2; // epaisseurs des rayons & distances parcourues à l'évènement donné)
-		decimal e, d; // Epaisseur du rayon le plus court distance entre les 2 évènements
-		decimal dR = 0.;// distance difference between d1 and d2;
-		decimal p = 0.; // minimum distance allowed between 2 events
-		for(unsigned int i = 0; i < evs1->size(); ++i)
-		{
-			ev1 = evs1->at(i).data();
-			ev2 = evs2->at(i).data();
+	//	Event *ev1=NULL, *ev2=NULL;
+	//	decimal e1, e2, d1, d2; // epaisseurs des rayons & distances parcourues à l'évènement donné)
+	//	decimal e, d; // Epaisseur du rayon le plus court distance entre les 2 évènements
+	//	decimal dR = 0.;// distance difference between d1 and d2;
+	//	decimal p = 0.; // minimum distance allowed between 2 events
+	//	for(unsigned int i = 0; i < evs1->size(); ++i)
+	//	{
+	//		ev1 = evs1->at(i).data();
+	//		ev2 = evs2->at(i).data();
 
-			vec3 p1 = ev1->getPosition(), 
-				 p2 = ev2->getPosition();
+	//		vec3 p1 = ev1->getPosition(), 
+	//			 p2 = ev2->getPosition();
 
-			d1 = r1->coveredDistance(i); // distance parcourue depuis la source
-			d2 = r2->coveredDistance(i); // idem
+	//		d1 = r1->coveredDistance(i); // distance parcourue depuis la source
+	//		d2 = r2->coveredDistance(i); // idem
 
-			e1 = r1->getThickness( d1, r1->getSolidAngle(), 1 ); // thickness of the Ray r1 at event ev1
-			e2 = r2->getThickness( d2, r2->getSolidAngle(), 1 ); // thickness of the Ray r2 at event ev2
+	//		e1 = r1->getThickness( d1, r1->getSolidAngle(), 1 ); // thickness of the Ray r1 at event ev1
+	//		e2 = r2->getThickness( d2, r2->getSolidAngle(), 1 ); // thickness of the Ray r2 at event ev2
 
-			e = min(e1, e2); // Thickness of the shortest ray
-			dR = d2 - d1; 
-			p = minimum_distance(e, dR);
+	//		e = min(e1, e2); // Thickness of the shortest ray
+	//		dR = d2 - d1; 
+	//		p = minimum_distance(e, dR);
 
-			d = p1.distance(p2); // Distance between the two events
-			is_same &= ( d < (p + BARELY_EPSILON) );
-		}
+	//		d = p1.distance(p2); // Distance between the two events
+	//		is_same &= ( d < (p + BARELY_EPSILON) );
+	//	}
 
-		if (is_same)
-		{
-			if ( r1->getLongueur() > r2->getLongueur() )
-			{
-				return const_cast<Ray*>(r1);
-			}
-			else
-			{
-				return const_cast<Ray*>(r2);
-			}
-		}
-		
-		return NULL;
-	}
+	//	if (is_same)
+	//	{
+	//		if ( r1->getLongueur() > r2->getLongueur() )
+	//		{
+	//			return const_cast<Ray*>(r1);
+	//		}
+	//		else
+	//		{
+	//			return const_cast<Ray*>(r2);
+	//		}
+	//	}
+	//	
+	//	return NULL;
+	//}
 
 protected:
 	/*!
