@@ -12,7 +12,7 @@ foreach (testfile ${TESTS_SRC})
 
   # 'CMAKE_THREAD_LIBS_INIT' can be empty on Windows.
   target_link_libraries (${basename} test_utils gtest_main gtest ${CMAKE_THREAD_LIBS_INIT}
-    RoadEmissionNMPB2008 )
+    RoadEmissionNMPB)
 
   add_test (${basename} ${basename})
   set_property(TEST ${basename} PROPERTY ENVIRONMENT
