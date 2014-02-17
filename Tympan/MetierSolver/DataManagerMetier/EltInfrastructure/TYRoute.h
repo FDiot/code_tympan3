@@ -148,10 +148,13 @@ public:
      * \param aadt_lv  AADT for the LV
      * \param road_type The type (motor way or intercity)
      * \param road_function The function of the road (long distance or regional)
+     * \param out_msg A pointer a QString which will be cleared and filled
+     *                with diagnostic information if the validity check fails.
      * \return whether the call succeded.
      */
     bool setFromAADT(double aadt_hgv, double aadt_lv,
-                     RoadType road_type, RoadFunction road_function);
+                     RoadType road_type, RoadFunction road_function,
+                     QString* out_msg = NULL);
 
     // TODO in NMPB08 `mode calcul` is obsoleted.
     //      Is now represented by the RoadFlowType at RoadTrafficComponent level.
@@ -287,7 +290,8 @@ protected:
 private:
 
     bool note77_check_validity(double aadt_hgv, double aadt_lv,
-                               RoadType road_type, RoadFunction road_function);
+                               RoadType road_type, RoadFunction road_function,
+                               QString* out_msg = NULL );
 
     /**
      * @brief This helper class halves and restore the traffic flow of the road

@@ -376,7 +376,7 @@ void TYRoute::setTraficNuit(const LPTYTrafic pTrafic)
 {
     _pTraficNuit = pTrafic;
     _pTraficNuit->setParent(this);
-    TYSpectre aTYSpectre=computeSpectre(_pTraficNuit);
+    TYSpectre aTYSpectre=computeSpectre(_pTraficardNuit);
     _pSrcLineic->setRegime(aTYSpectre, 1); // calcul du spectre associe a ce regime
 
     this->distriSrcs(); //Distribution des sources sur la TYSourceLineic
@@ -587,28 +587,55 @@ const TYRoute::note77_tables TYRoute::note77_hourly_LV_coeff = {
 static bool inline is_in(double val, double min, double max)
 {return min <= val && val <= max; }
 
-bool  TYRoute::note77_check_validity(
+bool TYRoute::note77_check_validity(
     double aadt_hgv, double aadt_lv,
-    TYRoute::RoadType road_type, TYRoute::RoadFunction road_function)
+    TYRoute::RoadType road_type, TYRoute::RoadFunction road_function,
+    QString* out_msg)
 {
+    // TODO i18n when i18n will be properly handled by Qt
+
+    double min, max;
+    if(out_msg)
+        out_msg->clear();
+
     const double aadt_total = aadt_lv + aadt_hgv;
     // TODO Use propoer loggin to report validity violations
-    return ( is_in(aadt_total,
-                   note77_lower_bounds[road_type][road_function][0],
-                   note77_upper_bounds[road_type][road_function][0]) &&
-             is_in(aadt_hgv,
-                   note77_lower_bounds[road_type][road_function][1],
-                   note77_upper_bounds[road_type][road_function][1]) &&
-             is_in(aadt_hgv / aadt_total * 100,
-                 note77_lower_bounds[road_type][road_function][0],
-                   note77_upper_bounds[road_type][road_function][0]) );
+    const double hgv_percent = aadt_hgv / aadt_total * 100;
+
+    min = note77_lower_bounds[road_type][road_function][0];
+    max = note77_upper_bounds[road_type][road_function][0];
+    bool ok_total = is_in(aadt_total, min, max);
+    if(out_msg && !ok_total)
+        out_msg->append( QString::fromUtf8("TMJA total (%1) invalide : "
+                                           "doit être entre %2 et %3.\n")
+                         .arg(aadt_total).arg(min).arg(max));
+
+    min = note77_lower_bounds[road_type][road_function][1];
+    max = note77_upper_bounds[road_type][road_function][1];
+    bool ok_hgv = is_in(aadt_hgv, min, max);
+    if(out_msg && !ok_hgv)
+        out_msg->append( QString::fromUtf8("TMJA poids-lourds (%1) invalide : "
+                                           "doit être entre %2 et %3.\n")
+                         .arg(aadt_hgv).arg(min).arg(max));
+
+    min = note77_lower_bounds[road_type][road_function][2];
+    max = note77_upper_bounds[road_type][road_function][2];
+    bool ok_percent = is_in(hgv_percent, min, max);
+    if(out_msg && !ok_percent)
+        out_msg->append( QString::fromUtf8("Proportion de poids-lourds (%1) invalide : "
+                                           "doit être entre %2 et %3.\n")
+                         .arg(hgv_percent).arg(min).arg(max));
+
+    return ok_total && ok_hgv && ok_percent;
 }
 
 
 bool  TYRoute::setFromAADT(double aadt_hgv, double aadt_lv,
-                           TYRoute::RoadType road_type, TYRoute::RoadFunction road_function)
+                           TYRoute::RoadType road_type,
+                           TYRoute::RoadFunction road_function,
+                           QString* out_msg)
 {
-    if  (!note77_check_validity(aadt_hgv, aadt_lv, road_type, road_function))
+    if  (!note77_check_validity(aadt_hgv, aadt_lv, road_type, road_function, out_msg))
         return false;
 
     for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
