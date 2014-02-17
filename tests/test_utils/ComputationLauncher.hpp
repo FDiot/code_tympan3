@@ -35,7 +35,8 @@
 namespace tympan
 {
 
-class ComputationLauncher {
+class ComputationLauncher
+{
 
 public:
     //! Constructor.
@@ -64,7 +65,8 @@ public:
     /*! Get current computation. First one in the computation list by default.
       \return A pointer to the current \c TYCalcul.
      */
-    LPTYCalcul getCurrentComputation() const {
+    LPTYCalcul getCurrentComputation() const
+    {
         // First one in the computation list by default.
         return _current_computation;
     }

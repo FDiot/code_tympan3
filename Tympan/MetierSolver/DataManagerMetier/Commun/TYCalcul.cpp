@@ -1615,7 +1615,7 @@ bool TYCalcul::go()
         // Cumul de la pression aux differents points de calcul
         if (ret) // Si l'etape precedente s'est mal passee, inutile de continuer
         {
-  	    OMessageManager::get()->info("Contruction matrice resultat");
+            OMessageManager::get()->info("Contruction matrice resultat");
             // Puisque le calcul est OK on va construire la matrice resultat
             _pResultat->buildSources(sources);
             _pResultat->buildRecepteurs(recepteurs);
@@ -1670,9 +1670,9 @@ bool TYCalcul::go()
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
     {
         _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
-      }
+    }
     else
-      {
+    {
         TYPreferenceManager::setUInt(TYDIRPREFERENCEMANAGER, "NbThread", static_cast<unsigned long>(_nbThread));
     }
 

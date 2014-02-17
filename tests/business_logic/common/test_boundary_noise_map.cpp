@@ -9,7 +9,8 @@
 using std::cout;
 using std::endl;
 
-TEST(TestBoundaryNoiseMap, rectangular_polyline) {
+TEST(TestBoundaryNoiseMap, rectangular_polyline)
+{
 
     TYTabPoint table_points(4);
     const double z = 0.;
@@ -34,7 +35,8 @@ TEST(TestBoundaryNoiseMap, rectangular_polyline) {
     ASSERT_EQ(56, boundary_map.getPtsCalcul().size());
 }
 
-TEST(TestBoundaryNoiseMap, triangular_polyline) {
+TEST(TestBoundaryNoiseMap, triangular_polyline)
+{
 
     TYTabPoint table_points(3);
     const double z = 0.;

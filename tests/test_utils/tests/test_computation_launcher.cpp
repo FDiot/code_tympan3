@@ -18,12 +18,14 @@ using std::endl;
 
 // Test fixture which loads a project and create an instance of
 // 'ComputationLauncher'.
-class LauncherTestFixture: public ::testing::Test {
+class LauncherTestFixture: public ::testing::Test
+{
 public:
     LauncherTestFixture() :
         xml_filename(XML_TEST_FILE),
         launcher(xml_filename) {}
-    virtual void SetUp() {
+    virtual void SetUp()
+    {
     }
 
     char* xml_filename;
@@ -32,7 +34,8 @@ public:
 
 
 // Try to launch the default solver.
-TEST_F(LauncherTestFixture, default_solver) {
+TEST_F(LauncherTestFixture, default_solver)
+{
 
     ASSERT_GT(launcher.getComputationNumber(), (size_t)0);
     cout << "###  Number of computations: "
@@ -48,7 +51,8 @@ TEST_F(LauncherTestFixture, default_solver) {
 
 
 // Try to launch the simple ray solver.
-TEST_F(LauncherTestFixture, simple_ray_solver) {
+TEST_F(LauncherTestFixture, simple_ray_solver)
+{
     ASSERT_GT(launcher.getComputationNumber(), (size_t)0);
     cout << "###  Number of computations: "
          << launcher.getComputationNumber() << endl;
