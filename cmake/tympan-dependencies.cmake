@@ -103,17 +103,6 @@ else(WIN32)
   set(sep ":")
 endif(WIN32)
 
-list(REMOVE_DUPLICATES TYMPAN_3RDPARTY_DLL_DIRS)
-set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "")
-foreach(dir ${TYMPAN_3RDPARTY_DLL_DIRS})
-    FILE(TO_NATIVE_PATH  ${dir} nativedir)
-    set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}${sep}${nativedir}")
-endforeach(dir)
-# Remove the leading separator and then make a string again of the list
-list(REMOVE_AT TYMPAN_3RDPARTY_DLL_NATIVE_DIRS 0)
-set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
-
-
 # Add the Dime library 3rd party as an external project.
 ExternalProject_Add(Dime
   URL "${TYMPAN_3RDPARTY_DIME}"
@@ -159,6 +148,16 @@ else()
   install(FILES ${NMPB2008_INSTALL_DIR}/lib/${filename} DESTINATION lib)
   set(filename)
 endif(MSVC)
+
+list(REMOVE_DUPLICATES TYMPAN_3RDPARTY_DLL_DIRS)
+set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "")
+foreach(dir ${TYMPAN_3RDPARTY_DLL_DIRS})
+    FILE(TO_NATIVE_PATH  ${dir} nativedir)
+    set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}${sep}${nativedir}")
+endforeach(dir)
+# Remove the leading separator and then make a string again of the list
+list(REMOVE_AT TYMPAN_3RDPARTY_DLL_NATIVE_DIRS 0)
+set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
 
 message(STATUS "  ## TYMPAN_3RDPARTY_DLL_DIRS: " "${TYMPAN_3RDPARTY_DLL_DIRS}")
 message(STATUS "  ## TYMPAN_3RDPARTY_DLL_NATIVE_DIRS: " "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
