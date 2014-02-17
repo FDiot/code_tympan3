@@ -209,7 +209,8 @@ void TYRouteWidget::display_AADT_dialog()
                 static_cast<TYRoute::RoadFunction>(q_RoadFunction_Combo->currentIndex());
 
             TYRoute& road = *getElement();
-            ok = road.setFromAADT(hgv_aadt, lv_aadt, road_type, road_function);
+            QString msg;
+            ok = road.setFromAADT(hgv_aadt, lv_aadt, road_type, road_function, &msg);
 
             if(ok)
             {
@@ -219,13 +220,16 @@ void TYRouteWidget::display_AADT_dialog()
             else
             {
                 // TODO i18n when serious i18n based on Qt will be in place
+                msg.replace("\n", "<br/>");
                 QString text = QString::fromUtf8(
-                    "Les valeurs du TMJA spécifiées sont hors du domaine "
-                    "de validité de la <i>Note 77</i>. Merci de les rectifier");
-                QMessageBox::information(this, "TMJA invalide !", text,
+                      "<p>Les valeurs du TMJA spécifiées sont hors du domaine "
+                      "de validité de la <i>Note 77</i>. Merci de les rectifier :</p>");
+                QMessageBox::information(this, "TMJA invalide !", text + msg,
                                          QMessageBox::Ok|QMessageBox::Default,
                                          QMessageBox::NoButton, QMessageBox::NoButton);
             }
         }
+        else
+            break; // Dialog canceled
     } // while(!ok)
 }
