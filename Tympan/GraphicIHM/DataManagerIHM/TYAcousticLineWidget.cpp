@@ -171,7 +171,8 @@ TYAcousticLineWidget::TYAcousticLineWidget(TYAcousticLine* pElement, QWidget* _p
     //  connect(_checkBoxIsRayonnant,  SIGNAL(clicked()), this, SLOT(updateRayonnant()));
     connect(_checkBoxUseAtt, SIGNAL(clicked()), this, SLOT(useAttenuateur()));
     connect(_pushButtonSpectreAtt, SIGNAL(clicked()), this, SLOT(editAtt()));
-    connect(_pRadioButtonImposee, SIGNAL(clicked()), _elmW, SLOT(showSpectre()));
+    connect(_pRadioButtonImposee, SIGNAL(clicked()), this, SLOT(showSpectre()));
+	connect(_pRadioButtonCalculee, SIGNAL(clicked()), this, SLOT(setSpectreToReadOnly()));
 }
 
 TYAcousticLineWidget::~TYAcousticLineWidget()
@@ -250,7 +251,9 @@ void TYAcousticLineWidget::deleteRegime()
 
 void TYAcousticLineWidget::changeRegime(int regime)
 {
-    // Quand on change le nom d'un regime, le systeme considere qu'il s'agit
+	saveCurrentRegime(); // Save current before changing
+
+	// Quand on change le nom d'un regime, le systeme considere qu'il s'agit
     // d'un nouveau regime et le numero retourne est egal au nombre d'entree
     // dans la comboBox + 1. Identifier le bon regime pour qu'il n'ay ai pas
     // de probleme.
@@ -264,6 +267,31 @@ void TYAcousticLineWidget::changeRegime(int regime)
     getElement()->setRegimeName(nomRegime);
 
     updateFromCurrentRegime();
+}
+
+void TYAcousticLineWidget::saveCurrentRegime()
+{
+    bool status = true;
+    TYRegime& regime = getElement()->getRegimeNb(getElement()->getCurRegime());
+
+    regime._isRayonnant = _checkBoxIsRayonnant->isChecked();
+    regime._useAtt = _checkBoxUseAtt->isChecked();
+
+    if (_pRadioButtonCalculee->isChecked())
+    {
+        getElement()->setTypeDistribution(TYAcousticInterface::TY_PUISSANCE_CALCULEE);
+    }
+    else
+    {
+        getElement()->setTypeDistribution(TYAcousticInterface::TY_PUISSANCE_IMPOSEE);
+    }
+
+	regime._spectre = *( getElement()->getCurrentSpectre() );
+
+    if (regime._useAtt)
+    {
+        regime._pAtt = getElement()->getAtt();
+    }
 }
 
 void TYAcousticLineWidget::renameRegime(const QString& nom)
@@ -303,21 +331,40 @@ void TYAcousticLineWidget::updateFromCurrentRegime()
         _lineEditNomAtt->setText("");
     }
 
+	getElement()->getSpectre()->setIsReadOnly(false);
     if (getElement()->getTypeDistribution() == TYAcousticInterface::TY_PUISSANCE_CALCULEE)
     {
         _pRadioButtonCalculee->setChecked(true);
+		 getElement()->getSpectre()->setIsReadOnly(true);
     }
     else
     {
         _pRadioButtonImposee->setChecked(true);
+		 getElement()->getSpectre()->setIsReadOnly(false);
     }
 }
 
 void TYAcousticLineWidget::showSpectre()
 {
     LPTYSpectre spectre = getElement()->getSpectre();
+
+	if (_pRadioButtonCalculee->isChecked())
+    {
+        spectre->setIsReadOnly(true);
+    }
+
+    spectre->setIsReadOnly(false);
+
     spectre->edit(this);
 
+}
+
+void TYAcousticLineWidget::setSpectreToReadOnly()
+{
+	if (_pRadioButtonCalculee->isChecked())
+    {
+        getElement()->getSpectre()->setIsReadOnly(true);
+    }
 }
 
 void TYAcousticLineWidget::editAtt()
