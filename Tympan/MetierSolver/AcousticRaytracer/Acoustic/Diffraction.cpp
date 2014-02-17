@@ -33,7 +33,7 @@ bool Diffraction::getResponse(vec3& r, bool force)
 #else
 
 	// Distribution régulière des rayons entre angleOuverture/2 et -angleOuverture/2
-	decimal theta = ( (nbResponseLeft-1) * delta_theta) - (angleOuverture / 2.);
+	decimal theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
 
 #endif // __RANDOM__
 
