@@ -172,7 +172,7 @@ TYAcousticLineWidget::TYAcousticLineWidget(TYAcousticLine* pElement, QWidget* _p
     connect(_checkBoxUseAtt, SIGNAL(clicked()), this, SLOT(useAttenuateur()));
     connect(_pushButtonSpectreAtt, SIGNAL(clicked()), this, SLOT(editAtt()));
     connect(_pRadioButtonImposee, SIGNAL(clicked()), this, SLOT(showSpectre()));
-	connect(_pRadioButtonCalculee, SIGNAL(clicked()), this, SLOT(setSpectreToReadOnly()));
+    connect(_pRadioButtonCalculee, SIGNAL(clicked()), this, SLOT(setSpectreToReadOnly()));
 }
 
 TYAcousticLineWidget::~TYAcousticLineWidget()
@@ -251,9 +251,9 @@ void TYAcousticLineWidget::deleteRegime()
 
 void TYAcousticLineWidget::changeRegime(int regime)
 {
-	saveCurrentRegime(); // Save current before changing
+    saveCurrentRegime(); // Save current before changing
 
-	// Quand on change le nom d'un regime, le systeme considere qu'il s'agit
+    // Quand on change le nom d'un regime, le systeme considere qu'il s'agit
     // d'un nouveau regime et le numero retourne est egal au nombre d'entree
     // dans la comboBox + 1. Identifier le bon regime pour qu'il n'ay ai pas
     // de probleme.
@@ -286,7 +286,7 @@ void TYAcousticLineWidget::saveCurrentRegime()
         getElement()->setTypeDistribution(TYAcousticInterface::TY_PUISSANCE_IMPOSEE);
     }
 
-	regime._spectre = *( getElement()->getCurrentSpectre() );
+    regime._spectre = *(getElement()->getCurrentSpectre());
 
     if (regime._useAtt)
     {
@@ -331,16 +331,16 @@ void TYAcousticLineWidget::updateFromCurrentRegime()
         _lineEditNomAtt->setText("");
     }
 
-	getElement()->getSpectre()->setIsReadOnly(false);
+    getElement()->getSpectre()->setIsReadOnly(false);
     if (getElement()->getTypeDistribution() == TYAcousticInterface::TY_PUISSANCE_CALCULEE)
     {
         _pRadioButtonCalculee->setChecked(true);
-		 getElement()->getSpectre()->setIsReadOnly(true);
+        getElement()->getSpectre()->setIsReadOnly(true);
     }
     else
     {
         _pRadioButtonImposee->setChecked(true);
-		 getElement()->getSpectre()->setIsReadOnly(false);
+        getElement()->getSpectre()->setIsReadOnly(false);
     }
 }
 
@@ -348,7 +348,7 @@ void TYAcousticLineWidget::showSpectre()
 {
     LPTYSpectre spectre = getElement()->getSpectre();
 
-	if (_pRadioButtonCalculee->isChecked())
+    if (_pRadioButtonCalculee->isChecked())
     {
         spectre->setIsReadOnly(true);
     }
@@ -361,7 +361,7 @@ void TYAcousticLineWidget::showSpectre()
 
 void TYAcousticLineWidget::setSpectreToReadOnly()
 {
-	if (_pRadioButtonCalculee->isChecked())
+    if (_pRadioButtonCalculee->isChecked())
     {
         getElement()->getSpectre()->setIsReadOnly(true);
     }

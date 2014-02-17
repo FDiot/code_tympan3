@@ -14,10 +14,11 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-TEST(ExampleTest, dumpenv) {
+TEST(ExampleTest, dumpenv)
+{
 
     char* path = std::getenv("PATH");
-    ASSERT_FALSE(path==NULL);
+    ASSERT_FALSE(path == NULL);
     cerr << "PATH = " << path << endl;
 }
 

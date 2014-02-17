@@ -19,27 +19,28 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-TEST(BasicInstanciationTests, dummy) {
-	Point p1(0, 1, 0);
-	Point p2(0, 1, 2);
-	double angle = 1.2;
-	DiffractionEdge edge(p1, p2, angle);
-	AcousticSurface surf();
-	// XXX relation edge_of ?
-	AcousticBuildingMaterial("béton");
-	// XXX relation made_of
-	ASSERT_TRUE(true);
+TEST(BasicInstanciationTests, dummy)
+{
+    Point p1(0, 1, 0);
+    Point p2(0, 1, 2);
+    double angle = 1.2;
+    DiffractionEdge edge(p1, p2, angle);
+    AcousticSurface surf();
+    // XXX relation edge_of ?
+    AcousticBuildingMaterial("béton");
+    // XXX relation made_of
+    ASSERT_TRUE(true);
 }
 
 TEST(BasicInstanciationTests, acoustic_diffraction_edge)
 {
     // Normal vector for an acoustic surface.
-    double x=1., y=1., z=0.;
+    double x = 1., y = 1., z = 0.;
     AcousticSurface::pointer p_surface(new AcousticSurface());
 
     // Diffraction edge.
-    double a_x=0., a_y=0., a_z=0.;
-    double b_x=0., b_y=1., b_z=0.;
+    double a_x = 0., a_y = 0., a_z = 0.;
+    double b_x = 0., b_y = 1., b_z = 0.;
     Point a(a_x, a_y, a_y);
     Point b(b_x, b_y, b_z);
     double angle = 0.56;
@@ -64,11 +65,11 @@ TEST(BasicInstanciationTests, acoustic_diffraction_edge)
 
     // Loop on all diffraction edges related to a specific acoustic surface.
     BOOST_FOREACH(DiffractionEdge::pointer edge, p_surface->rev_iter<edge_of_rdef>())
-        EXPECT_TRUE( (edge == p_diff_edge)  ||
-                     (edge == p_diff_edge_2) ||
-                     (edge == p_diff_edge_3) );
+    EXPECT_TRUE((edge == p_diff_edge)  ||
+                (edge == p_diff_edge_2) ||
+                (edge == p_diff_edge_3));
 
     // Loop on the single acoustic surface related to a specific diffraction edge.
     BOOST_FOREACH(AcousticSurface::pointer surf, p_diff_edge->iter<edge_of_rdef>())
-        EXPECT_TRUE( (surf == p_surface) );
+    EXPECT_TRUE((surf == p_surface));
 }

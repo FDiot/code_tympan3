@@ -48,7 +48,7 @@ void OSubject::reset()
 
 void OSubject::notify()
 {
-    BOOST_FOREACH(OObserver* obs, _observers)
+    BOOST_FOREACH(OObserver * obs, _observers)
     {
         obs->update();
     }

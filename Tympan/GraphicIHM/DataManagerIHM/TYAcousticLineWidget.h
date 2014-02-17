@@ -102,13 +102,13 @@ public slots:
      */
     void changeRegime(int regime);
 
-	/*!
-	 * \fn void saveCurrentRegime();
-	 * \brief save current regime if changed
-	 */
-	void saveCurrentRegime();
-	
-	/**
+    /*!
+     * \fn void saveCurrentRegime();
+     * \brief save current regime if changed
+     */
+    void saveCurrentRegime();
+
+    /**
      * Renomme le regime
      */
     void renameRegime(const QString& nom);
@@ -118,11 +118,11 @@ public slots:
      */
     void showSpectre();
 
-	/*!
-	 * \fn void setSpectreToReadOnly();
-	 * \brief Set Spectre to read only when in calculated mode
-	 */
-	void setSpectreToReadOnly();
+    /*!
+     * \fn void setSpectreToReadOnly();
+     * \brief Set Spectre to read only when in calculated mode
+     */
+    void setSpectreToReadOnly();
 
     /**
      * Edite la widget de l'attenuateur.
