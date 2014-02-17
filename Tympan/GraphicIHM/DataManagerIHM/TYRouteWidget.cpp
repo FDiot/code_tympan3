@@ -32,7 +32,14 @@
 TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
-    setupUi(this); // Initialise the QT Designer generated UI base
+    // Initialise the QT Designer generated UI base
+    setupUi(this);
+
+    // Display the widget for pElement as an AcousticSource in an additional tab
+    _elmW = new TYAcousticLineWidget(pElement, this);
+    QTabWidget* qTabW =findChild<QTabWidget *>("tabWidget");
+    assert(qTabW && "Check name consistency with the UI file");
+    qTabW->addTab(_elmW, "Source");
 
     updateContent();
 }
@@ -43,9 +50,8 @@ TYRouteWidget::~TYRouteWidget()
 
 void TYRouteWidget::updateContent()
 {
-/*
     _elmW->updateContent();
-
+/*
     _lineEditVitMoy->setText(QString().setNum(getElement()->getVitMoy(), 'f', 2));
     _pLineEditDebitPLJour->setText(QString().setNum(getElement()->getTraficJour().getDebitPL()));
     _pLineEditDebitVLJour->setText(QString().setNum(getElement()->getTraficJour().getDebitVL()));
@@ -57,9 +63,9 @@ void TYRouteWidget::updateContent()
 
 void TYRouteWidget::apply()
 {
-/*
     _elmW->apply();
 
+    /*
     getElement()->setVitMoy(_lineEditVitMoy->text().toDouble());
     // getElement()->setModeCalc(_comboBoxTrafic->currentIndex());// WIP replace with RoadFlowType
     getElement()->getTraficJour().setDebitPL(_pLineEditDebitPLJour->text().toDouble());
