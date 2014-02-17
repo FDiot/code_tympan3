@@ -42,10 +42,10 @@ public:
 		{
 			vec3 closestPoint;
 			Ray *ray = (*iter);
-			decimal trueLength = ray->computeTrueLength(closestPoint);
-			decimal epaisseur = ray->getThickness( trueLength, ray->getSolidAngle() );
+			decimal trueLength = ray->computePertinentLength(closestPoint);
+			decimal epaisseur = ray->getThickness( trueLength);
 			decimal closestDistance = static_cast<Recepteur*> ( ray->getRecepteur() )->getPosition().distance(closestPoint);
-			if ( closestDistance >= (epaisseur /2.) )
+			if ( closestDistance >= ( epaisseur/2. ) ) 
 			{
 				iter = _tabRay->erase(iter);
 				suppressed ++;
