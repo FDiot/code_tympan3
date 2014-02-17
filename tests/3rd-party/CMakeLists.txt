@@ -16,5 +16,5 @@ foreach (testfile ${TESTS_SRC})
 
   add_test (${basename} ${basename})
   set_property(TEST ${basename} PROPERTY ENVIRONMENT
-             "${LD_VARNAME}=")
+             "${LD_VARNAME}=${ADD_PATH_STRING}")
 endforeach (testfile)
