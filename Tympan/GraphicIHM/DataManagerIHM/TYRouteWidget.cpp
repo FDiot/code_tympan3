@@ -22,6 +22,8 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
+#include <QMessageBox>
+
 #include "TYRouteWidget.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
 
@@ -41,7 +43,8 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     _elmW = new TYAcousticLineWidget(pElement, this);
     QTabWidget* qTabW =findChild<QTabWidget *>("tabWidget");
     assert(qTabW && "Check name consistency with the UI file");
-    qTabW->addTab(_elmW, "Source");
+    qTabW->insertTab(0, _elmW, "Source");
+    qTabW->setCurrentIndex(0);
 
     // Find the widget by name so that it is easy to access them
     q_RoadSurfaceType_Combo = findChild<QComboBox*>("route_classe_revetement");
@@ -78,6 +81,11 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     q_RoadFlow_Spin[TYRoute::Night][TYTrafic::HGV] = findChild<QSpinBox*>("periode_debit_pl_nuit");
     assert(q_RoadFlow_Spin[TYRoute::Night][TYTrafic::HGV]);
 
+    q_AADT_Push = findChild<QPushButton*>("bouton_tmja");
+    assert(q_AADT_Push);
+    assert( QObject::connect( q_AADT_Push,      SIGNAL(clicked()),
+                              this,             SLOT(display_AADT_dialog())) );
+
     // Update the GUI from the data in the TYRoute instance.
     updateContent();
 }
@@ -91,6 +99,7 @@ void TYRouteWidget::updateContent()
     _elmW->updateContent();
     update_road_surface();
     update_road_traffic();
+    QWidget::update();
 }
 
 void TYRouteWidget::apply()
@@ -148,7 +157,6 @@ void TYRouteWidget::apply_road_traffic()
             road.setRoadTrafficComponent(regime, vehicle_type, flow, speed /* TODO handle flow type */);
         }
     }
-
 }
 
 void TYRouteWidget::update_road_traffic()
@@ -168,5 +176,56 @@ void TYRouteWidget::update_road_traffic()
             /* TODO Handle rtc.flowType */
         }
     }
+}
 
+TYRouteWidget_AADT_Dialog::TYRouteWidget_AADT_Dialog(QWidget* _pParent)
+    : QDialog(_pParent)
+{
+    setupUi(this);
+}
+
+void TYRouteWidget::display_AADT_dialog()
+{
+    TYRouteWidget_AADT_Dialog dlg(this);
+    bool ok = false;
+    while(!ok){
+        int status = dlg.exec();
+        if(status==QDialog::Accepted)
+        {
+            QSpinBox* q_lv_Spin = findChild<QSpinBox*>("tmja_debit_vl");
+            assert(q_lv_Spin);
+            QSpinBox* q_hgv_Spin = findChild<QSpinBox*>("tmja_debit_pl");
+            assert(q_hgv_Spin);
+            QComboBox* q_RoadType_Combo = findChild<QComboBox*>("tmja_type_route");
+            assert(q_RoadType_Combo);
+            QComboBox* q_RoadFunction_Combo = findChild<QComboBox*>("tmja_fonction_route");
+            assert(q_RoadFunction_Combo);
+
+            double lv_aadt = q_lv_Spin->value();
+            double hgv_aadt = q_hgv_Spin->value();
+            TYRoute::RoadType road_type =
+                static_cast<TYRoute::RoadType>(q_RoadType_Combo->currentIndex());
+            TYRoute::RoadFunction road_function =
+                static_cast<TYRoute::RoadFunction>(q_RoadFunction_Combo->currentIndex());
+
+            TYRoute& road = *getElement();
+            ok = road.setFromAADT(hgv_aadt, lv_aadt, road_type, road_function);
+
+            if(ok)
+            {
+                // Do not forget to update the traffic to reflect the computed parameters
+                updateContent();
+            }
+            else
+            {
+                // TODO i18n when serious i18n based on Qt will be in place
+                QString text = QString::fromUtf8(
+                    "Les valeurs du TMJA spécifiées sont hors du domaine "
+                    "de validité de la <i>Note 77</i>. Merci de les rectifier");
+                QMessageBox::information(this, "TMJA invalide !", text,
+                                         QMessageBox::Ok|QMessageBox::Default,
+                                         QMessageBox::NoButton, QMessageBox::NoButton);
+            }
+        }
+    } // while(!ok)
 }
