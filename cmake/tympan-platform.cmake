@@ -96,7 +96,7 @@ set_property(DIRECTORY ${PROJECT_SOURCE_DIR} APPEND PROPERTY COMPILE_DEFINITIONS
 
 if(MSVC)
   # Put here Visual Studio specific stuff
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 endif(MSVC)
 if(CMAKE_COMPILER_IS_GNUCXX)
   # The objective is to get rid of all the -Wno-xxx
@@ -108,12 +108,14 @@ endif(CMAKE_COMPILER_IS_GNUCXX)
 # NB: add_definitions(...)
 # -DLINUX used only by Tympan/Appli/PyTympan/PyTympan.cpp
 # -DTYMPAN_PRECOMPILED_HEADERS sems not to be used
+set(TYMPAN_INSTALL_PLUGINS_Release plugins)
+set(TYMPAN_INSTALL_PLUGINS_Debug pluginsd)
 
 macro(install_tympan_plugin PLUGIN_NAME)
 install(TARGETS ${PLUGIN_NAME}
-        LIBRARY DESTINATION plugins  CONFIGURATIONS Release)
+        LIBRARY DESTINATION ${TYMPAN_INSTALL_PLUGINS_Release} CONFIGURATIONS Release)
 install(TARGETS ${PLUGIN_NAME}
-        LIBRARY DESTINATION pluginsd CONFIGURATIONS Debug)
+        LIBRARY DESTINATION ${TYMPAN_INSTALL_PLUGINS_Debug} CONFIGURATIONS Debug)
 endmacro(install_tympan_plugin)
 
 macro(install_tympan_component TARGET)

@@ -36,6 +36,7 @@
 /**
  * Classe pour definir les differents regimes d'un element du calcul.
  */
+
 class TYRegime : public TYElement
 {
     OPROTOSUPERDECL(TYRegime, TYElement)

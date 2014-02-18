@@ -14,7 +14,8 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-TEST(PathTest, dumpenv) {
+TEST(PathTest, dumpenv)
+{
 
     char* path = std::getenv("PATH");
     ASSERT_FALSE(path == NULL);

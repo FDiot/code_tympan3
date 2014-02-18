@@ -52,8 +52,8 @@ void assert_current_computation_project(const LPTYProjet& project);
  * @param nb_constrained_edges utput arg for the number of constrained edges
  */
 void get_altimetry_numbers(LPTYProjet project,
-		unsigned& nb_triangles, unsigned& b_vertices,
-		unsigned& nb_edges, unsigned& nb_constrained_edges);
+                           unsigned& nb_triangles, unsigned& b_vertices,
+                           unsigned& nb_edges, unsigned& nb_constrained_edges);
 
 
 } /* namespace tympan */

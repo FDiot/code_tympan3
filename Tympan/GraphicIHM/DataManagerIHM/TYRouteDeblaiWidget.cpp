@@ -127,11 +127,11 @@ void TYRouteDeblaiWidget::updateContent()
     _elmW->updateContent();
 
     _lineEditVitMoy->setText(QString().setNum(getElement()->getVitMoy(), 'f', 2));
-    _pLineEditDebitPLJour->setText(QString().setNum(getElement()->getTraficJour()->getDebitPL()));
-    _pLineEditDebitVLJour->setText(QString().setNum(getElement()->getTraficJour()->getDebitVL()));
-    _pLineEditDebitPLNuit->setText(QString().setNum(getElement()->getTraficNuit()->getDebitPL()));
-    _pLineEditDebitVLNuit->setText(QString().setNum(getElement()->getTraficNuit()->getDebitVL()));
-    _comboBoxTrafic->setCurrentIndex(getElement()->getModeCalc());
+    _pLineEditDebitPLJour->setText(QString().setNum(getElement()->getTraficJour().getDebitPL()));
+    _pLineEditDebitVLJour->setText(QString().setNum(getElement()->getTraficJour().getDebitVL()));
+    _pLineEditDebitPLNuit->setText(QString().setNum(getElement()->getTraficNuit().getDebitPL()));
+    _pLineEditDebitVLNuit->setText(QString().setNum(getElement()->getTraficNuit().getDebitVL()));
+    // _comboBoxTrafic->setCurrentIndex(getElement()->getModeCalc()); // WIP replace with RoadFlowType
 }
 
 void TYRouteDeblaiWidget::apply()
@@ -139,11 +139,11 @@ void TYRouteDeblaiWidget::apply()
     _elmW->apply();
 
     getElement()->setVitMoy(_lineEditVitMoy->text().toDouble());
-    getElement()->setModeCalc(_comboBoxTrafic->currentIndex());
-    getElement()->getTraficJour()->setDebitPL(_pLineEditDebitPLJour->text().toDouble());
-    getElement()->getTraficJour()->setDebitVL(_pLineEditDebitVLJour->text().toDouble());
-    getElement()->getTraficNuit()->setDebitPL(_pLineEditDebitPLNuit->text().toDouble());
-    getElement()->getTraficNuit()->setDebitVL(_pLineEditDebitVLNuit->text().toDouble());
+    // getElement()->setModeCalc(_comboBoxTrafic->currentIndex()); // WIP replace with RoadFlowType
+    getElement()->getTraficJour().setDebitPL(_pLineEditDebitPLJour->text().toDouble());
+    getElement()->getTraficJour().setDebitVL(_pLineEditDebitVLJour->text().toDouble());
+    getElement()->getTraficNuit().setDebitPL(_pLineEditDebitPLNuit->text().toDouble());
+    getElement()->getTraficNuit().setDebitVL(_pLineEditDebitVLNuit->text().toDouble());
 
     emit modified();
 }

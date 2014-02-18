@@ -426,11 +426,11 @@ unsigned int TYAltimetrie::getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPo
     bool test = getGridIndices(box, iMinMax);
     if (!test) { return 0; }
 
-    // Récupération des faces correspondantes
+    // Rcupration des faces correspondantes
     TYTabLPPolygon faces;
     getFacesinIndices(iMinMax[0], iMinMax[1], iMinMax[2], iMinMax[3], faces);
 
-    // Test des points des faces par rapport à la box
+    // Test des points des faces par rapport  la box
     // Si au moins un point de la face est dans la box, la face est mise dans la liste
     unsigned int faceCount = 0; // Compteur de faces
     for (size_t i = 0 ; i < faces.size() ; i++)
@@ -447,7 +447,7 @@ unsigned int TYAltimetrie::getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPo
         }
     }
 
-    if (faceCount == 0) // Aucune face trouvée
+    if (faceCount == 0) // Aucune face trouve
     {
         for (size_t i = 0 ; i < faces.size() ; i++)
         {
@@ -472,12 +472,12 @@ unsigned int TYAltimetrie::getPointsInBox(const OPoint3D& pt0, const OPoint3D& p
     bool test = getGridIndices(pts, iMinMax);
     if (!test) { return 0; }
 
-    // Récupération des faces correspondantes
+    // Rcupration des faces correspondantes
     TYTabLPPolygon faces;
     getFacesinIndices(iMinMax[0], iMinMax[1], iMinMax[2], iMinMax[3], faces);
 
-    // Test des points des faces par rapport à la box
-    // Si le point est dans le périmètre, il est ajouté à la liste
+    // Test des points des faces par rapport  la box
+    // Si le point est dans le primtre, il est ajout  la liste
     for (size_t i = 0 ; i < faces.size() ; i++)
     {
         TYTabPoint& ptsFaces = faces[i]->getPoints();
@@ -545,7 +545,7 @@ bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) co
     unsigned minY = std::numeric_limits<unsigned>::max();
     unsigned maxY = std::numeric_limits<unsigned>::min();
 
-    // Test des quatre points et récupération des indices
+    // Test des quatre points et rcupration des indices
     grid_index iXY;
 
     bool res = true;
