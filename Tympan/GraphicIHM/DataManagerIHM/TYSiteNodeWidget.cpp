@@ -44,12 +44,10 @@
 
 
 TYSiteNodeWidget::TYSiteNodeWidget(TYSiteNode* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
     unsigned short wPos = 0; // Position du widget
 
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     resize(300, 600);
     setWindowTitle(TR("id_caption"));

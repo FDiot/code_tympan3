@@ -40,10 +40,8 @@
 #define TR(id) OLocalizator::getString("TYColorInterfaceWidget", (id))
 
 TYColorInterfaceWidget::TYColorInterfaceWidget(TYColorInterface* pElement, QWidget* _pParent /*=0*/):
-    TYWidget(_pParent)
+    TYWidget(dynamic_cast<TYElement*>(pElement), _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
 
     resize(300, 40);
     setWindowTitle(TR("id_caption"));

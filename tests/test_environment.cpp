@@ -17,6 +17,6 @@ using std::endl;
 TEST(PathTest, dumpenv) {
 
     char* path = std::getenv("PATH");
-    ASSERT_FALSE(path==NULL);
+    ASSERT_FALSE(path == NULL);
     cerr << "PATH = " << path << endl;
 }

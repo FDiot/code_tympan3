@@ -119,12 +119,12 @@ TYCreateElementDialog::TYCreateElementDialog(QWidget* parent, const char* name, 
     pBtnLayout->addWidget(pButtonCancel);
 
 
-    TYPreferenceManager::getGeometry(metaObject()->className(), this);
+    TYPreferenceManager::loadGeometryFromPreferences(metaObject()->className(), this);
 }
 
 TYCreateElementDialog::~TYCreateElementDialog()
 {
-    TYPreferenceManager::setGeometry(metaObject()->className(), this);
+    TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
 }
 
 void TYCreateElementDialog::createElement(QString eltType)

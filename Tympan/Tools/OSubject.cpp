@@ -17,38 +17,27 @@
  *
  */
 
-
-
+#include <boost/foreach.hpp>
 
 #include "OSubject.h"
-
 
 void OSubject::attach(OObserver* pObserver)
 {
     if (pObserver)
     {
-        _observers.push_back(pObserver);
+        _observers.insert(pObserver);
     }
 }
 
 bool OSubject::detach(OObserver* pObserver)
 {
-    OTabPtrObserver::iterator ite;
     bool ret = false;
 
     if (pObserver)
     {
-        for (ite = _observers.begin(); ite != _observers.end(); ite++)
-        {
-            if (*ite == pObserver)
-            {
-                _observers.erase(ite);
-                ret = true;
-                break;
-            }
-        }
+        _observers.erase(pObserver);
+        return true;
     }
-
     return ret;
 }
 
@@ -59,8 +48,8 @@ void OSubject::reset()
 
 void OSubject::notify()
 {
-    for (unsigned int i = 0; i < _observers.size(); i++)
+    BOOST_FOREACH(OObserver * obs, _observers)
     {
-        _observers.at(i)->update();
+        obs->update();
     }
 }
