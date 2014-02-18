@@ -140,7 +140,7 @@ public:
      * \brief dot product (assuming an orthonormal reference frame)
      */
     double dot(const OVector3D& v)
-    { return _x*v._x + _y*v._y + _z*v._z; }
+    { return _x * v._x + _y * v._y + _z * v._z; }
 
     /**
      * \fn OVector3D operator*(const double a) const;

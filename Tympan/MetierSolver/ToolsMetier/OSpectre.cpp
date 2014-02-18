@@ -82,7 +82,7 @@ OSpectre::OSpectre(const double* valeurs, unsigned nbVal, unsigned decalage)
         _module[i] = _defaultValue;
     }
 
-    unsigned int maxInd = std::min(nbVal + decalage ,TY_SPECTRE_DEFAULT_NB_ELMT);
+    unsigned int maxInd = std::min(nbVal + decalage , TY_SPECTRE_DEFAULT_NB_ELMT);
     for (i = decalage ; i < maxInd; i++)
     {
         _module[i] = valeurs[i - decalage];

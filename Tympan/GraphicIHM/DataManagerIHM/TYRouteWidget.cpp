@@ -41,7 +41,7 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
 
     // Display the widget for pElement as an AcousticSource in an additional tab
     _elmW = new TYAcousticLineWidget(pElement, this);
-    QTabWidget* qTabW =findChild<QTabWidget *>("tabWidget");
+    QTabWidget* qTabW = findChild<QTabWidget*>("tabWidget");
     assert(qTabW && "Check name consistency with the UI file");
     qTabW->insertTab(0, _elmW, "Source");
     qTabW->setCurrentIndex(0);
@@ -85,12 +85,12 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
 
     q_AADT_Push = findChild<QPushButton*>("bouton_tmja");
     assert(q_AADT_Push);
-    assert( QObject::connect( q_AADT_Push,      SIGNAL(clicked()),
-                              this,             SLOT(display_AADT_dialog())) );
+    assert(QObject::connect(q_AADT_Push,      SIGNAL(clicked()),
+                            this,             SLOT(display_AADT_dialog())));
 
     p_ModeCalcul_ButtonGroup = findChild<QButtonGroup*>("groupe_boutons_mode_calcul");
     assert(p_ModeCalcul_ButtonGroup);
-    QRadioButton * q_check_box;
+    QRadioButton* q_check_box;
     q_check_box = findChild<QRadioButton*>("radio_spectres");
     assert(q_check_box);
     p_ModeCalcul_ButtonGroup->setId(q_check_box, 0);
@@ -103,21 +103,21 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
 
     q_EditSpectre_Button[TYRoute::Day] = findChild<QPushButton*>("bouton_spectre_jour");
     assert(q_EditSpectre_Button[TYRoute::Day]);
-    assert( QObject::connect( q_EditSpectre_Button[TYRoute::Day], SIGNAL(clicked()),
-                              this, SLOT(displaySpectrumDay())) );
+    assert(QObject::connect(q_EditSpectre_Button[TYRoute::Day], SIGNAL(clicked()),
+                            this, SLOT(displaySpectrumDay())));
     q_EditSpectre_Button[TYRoute::Evening] = findChild<QPushButton*>("bouton_spectre_soir");
     assert(q_EditSpectre_Button[TYRoute::Evening]);
-    assert( QObject::connect( q_EditSpectre_Button[TYRoute::Evening], SIGNAL(clicked()),
-                              this, SLOT(displaySpectrumEvening())) );
+    assert(QObject::connect(q_EditSpectre_Button[TYRoute::Evening], SIGNAL(clicked()),
+                            this, SLOT(displaySpectrumEvening())));
     q_EditSpectre_Button[TYRoute::Night] = findChild<QPushButton*>("bouton_spectre_nuit");
     assert(q_EditSpectre_Button[TYRoute::Night]);
-    assert( QObject::connect( q_EditSpectre_Button[TYRoute::Night], SIGNAL(clicked()),
-                              this, SLOT(displaySpectrumNight())) );
+    assert(QObject::connect(q_EditSpectre_Button[TYRoute::Night], SIGNAL(clicked()),
+                            this, SLOT(displaySpectrumNight())));
 
 
     checkComputationMode(1);
-    assert( QObject::connect( p_ModeCalcul_ButtonGroup, SIGNAL(buttonClicked(int)),
-                              this, SLOT(checkComputationMode(int))) );
+    assert(QObject::connect(p_ModeCalcul_ButtonGroup, SIGNAL(buttonClicked(int)),
+                            this, SLOT(checkComputationMode(int))));
 
     // Update the GUI from the data in the TYRoute instance.
     updateContent();
@@ -151,7 +151,9 @@ void TYRouteWidget::apply_road_surface()
 
     index = q_RoadSurfaceType_Combo->currentIndex();
     if (q_RoadSurfaceDraining_Check->isChecked())
+    {
         index += RoadSurface_DR1 - 1;
+    }
     assert(index >= 0 && index < RoadSurface_UserDefined);
     RoadSurfaceType surf_type = static_cast<RoadSurfaceType>(index);
     road.setSurfaceType(surf_type);
@@ -174,15 +176,15 @@ void TYRouteWidget::update_road_surface()
     }
     q_RoadSurfaceType_Combo->setCurrentIndex(index);
 
-    q_RoadSurfaceAge_Spin->setValue( road.surfaceAge() );
+    q_RoadSurfaceAge_Spin->setValue(road.surfaceAge());
 
     RoadFlowType flow_type =
         road.getNMPB08RoadTrafficComponent(TYRoute::Day, TYTrafic::LV).flowType;
 
-    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
+    for (unsigned j = 0; j < TYRoute::NB_TRAFFIC_REGIMES; ++j)
     {
         enum TYRoute::TrafficRegimes regime = static_cast<TYRoute::TrafficRegimes>(j);
-        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+        for (unsigned i = 0; i < TYTrafic::NB_VEHICLE_TYPES; ++i)
         {
             enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
             assert(road.getNMPB08RoadTrafficComponent(regime, vehicle_type).flowType == flow_type
@@ -196,10 +198,10 @@ void TYRouteWidget::apply_road_traffic()
 {
     TYRoute& road = *getElement();
 
-    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
+    for (unsigned j = 0; j < TYRoute::NB_TRAFFIC_REGIMES; ++j)
     {
         enum TYRoute::TrafficRegimes regime = static_cast<TYRoute::TrafficRegimes>(j);
-        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+        for (unsigned i = 0; i < TYTrafic::NB_VEHICLE_TYPES; ++i)
         {
             enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
 
@@ -217,10 +219,10 @@ void TYRouteWidget::update_road_traffic()
 {
     TYRoute& road = *getElement();
 
-    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
+    for (unsigned j = 0; j < TYRoute::NB_TRAFFIC_REGIMES; ++j)
     {
         enum TYRoute::TrafficRegimes regime = static_cast<TYRoute::TrafficRegimes>(j);
-        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+        for (unsigned i = 0; i < TYTrafic::NB_VEHICLE_TYPES; ++i)
         {
             enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
 
@@ -242,9 +244,10 @@ void TYRouteWidget::display_AADT_dialog()
 {
     TYRouteWidget_AADT_Dialog dlg(this);
     bool ok = false;
-    while(!ok){
+    while (!ok)
+    {
         int status = dlg.exec();
-        if(status==QDialog::Accepted)
+        if (status == QDialog::Accepted)
         {
             QSpinBox* q_lv_Spin = findChild<QSpinBox*>("tmja_debit_vl");
             assert(q_lv_Spin);
@@ -266,7 +269,7 @@ void TYRouteWidget::display_AADT_dialog()
             QString msg;
             ok = road.setFromAADT(hgv_aadt, lv_aadt, road_type, road_function, &msg);
 
-            if(ok)
+            if (ok)
             {
                 // Do not forget to update the traffic to reflect the computed parameters
                 updateContent();
@@ -276,73 +279,83 @@ void TYRouteWidget::display_AADT_dialog()
                 // TODO i18n when serious i18n based on Qt will be in place
                 msg.replace("\n", "<br/>");
                 QString text = QString::fromUtf8(
-                      "<p>Les valeurs du TMJA spécifiées sont hors du domaine "
-                      "de validité de la <i>Note 77</i>. Merci de les rectifier :</p>");
+                                   "<p>Les valeurs du TMJA spécifiées sont hors du domaine "
+                                   "de validité de la <i>Note 77</i>. Merci de les rectifier :</p>");
                 QMessageBox::information(this, "TMJA invalide !", text + msg,
-                                         QMessageBox::Ok|QMessageBox::Default,
+                                         QMessageBox::Ok | QMessageBox::Default,
                                          QMessageBox::NoButton, QMessageBox::NoButton);
             }
         }
         else
-            break; // Dialog canceled
+        {
+            break;    // Dialog canceled
+        }
     } // while(!ok)
 }
 
 void TYRouteWidget::setSpeedBoxEnabled(bool enabled)
 {
-    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
-        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+    for (unsigned j = 0; j < TYRoute::NB_TRAFFIC_REGIMES; ++j)
+        for (unsigned i = 0; i < TYTrafic::NB_VEHICLE_TYPES; ++i)
+        {
             q_RoadSpeed_Spin[j][i]->setEnabled(enabled);
+        }
 }
 
 void TYRouteWidget::setFlowBoxEnabled(bool enabled)
 {
-    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
-        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+    for (unsigned j = 0; j < TYRoute::NB_TRAFFIC_REGIMES; ++j)
+        for (unsigned i = 0; i < TYTrafic::NB_VEHICLE_TYPES; ++i)
+        {
             q_RoadFlow_Spin[j][i]->setEnabled(enabled);
+        }
 }
 
 void TYRouteWidget::setSpectresEditable(bool enabled)
 {
     TYRoute& road = *getElement();
     spectrum_read_only = !enabled;
-    for(unsigned j=0; j<TYRoute::NB_TRAFFIC_REGIMES; ++j)
+    for (unsigned j = 0; j < TYRoute::NB_TRAFFIC_REGIMES; ++j)
+    {
+        q_EditSpectre_Button[j]->setEnabled(enabled);
+        road.setCurRegime(j);
+        if (enabled)
         {
-            q_EditSpectre_Button[j]->setEnabled(enabled);
-            road.setCurRegime(j);
-            if(enabled)
-                road.setTypeDistribution(TYAcousticLine::TY_PUISSANCE_IMPOSEE);
-            else
-                road.setTypeDistribution(TYAcousticLine::TY_PUISSANCE_CALCULEE);
-            road.updateCurrentRegime();
+            road.setTypeDistribution(TYAcousticLine::TY_PUISSANCE_IMPOSEE);
         }
+        else
+        {
+            road.setTypeDistribution(TYAcousticLine::TY_PUISSANCE_CALCULEE);
+        }
+        road.updateCurrentRegime();
+    }
 }
 
 void TYRouteWidget::checkComputationMode(int mode)
 {
     TYRoute& road = *getElement();
-    switch(mode)
+    switch (mode)
     {
-    case 0: // Directly input spectrums
-        setSpeedBoxEnabled(false);
-        setFlowBoxEnabled(false);
-        setSpectresEditable(true);
-        q_AADT_Push->setEnabled(false);
-        break;
-    case 1: // Input flows and speeds
-        setSpeedBoxEnabled(true);
-        setFlowBoxEnabled(true);
-        setSpectresEditable(false);
-        q_AADT_Push->setEnabled(false);
-        break;
-    case 2: // Use note 77 to estimate traffic from the TMJA
-        setSpeedBoxEnabled(true);
-        setFlowBoxEnabled(false);
-        setSpectresEditable(false);
-        q_AADT_Push->setEnabled(true);
-        break;
-    default:
-        assert(false && "mode should be in 0..2");
+        case 0: // Directly input spectrums
+            setSpeedBoxEnabled(false);
+            setFlowBoxEnabled(false);
+            setSpectresEditable(true);
+            q_AADT_Push->setEnabled(false);
+            break;
+        case 1: // Input flows and speeds
+            setSpeedBoxEnabled(true);
+            setFlowBoxEnabled(true);
+            setSpectresEditable(false);
+            q_AADT_Push->setEnabled(false);
+            break;
+        case 2: // Use note 77 to estimate traffic from the TMJA
+            setSpeedBoxEnabled(true);
+            setFlowBoxEnabled(false);
+            setSpectresEditable(false);
+            q_AADT_Push->setEnabled(true);
+            break;
+        default:
+            assert(false && "mode should be in 0..2");
     }
 
     _elmW->updateContent();
@@ -352,7 +365,7 @@ void TYRouteWidget::displaySpectrum(TYRoute::TrafficRegimes regime)
 {
     TYRoute& road = *getElement();
 
-    assert(road.getNbRegimes()==3);
+    assert(road.getNbRegimes() == 3);
     road.setCurRegime(regime);
     TYSpectre* spectre = road.getCurrentSpectre();
     int ret = spectre->edit(this);

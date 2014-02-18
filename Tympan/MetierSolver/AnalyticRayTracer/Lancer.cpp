@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include "R3.h"
 #include "meteo.h"
 #include "RayCourb.h"
@@ -38,24 +38,24 @@ Lancer::Lancer() : sources(NULL), recepteurs(NULL), Meteo(meteo()), h(0.001), TM
 
 Lancer::Lancer(Lancer& L)
 {
-	sources = L.sources;
-	recepteurs = L.recepteurs;
-	plan = L.plan;
-	Meteo = L.Meteo;
-	h = L.h;
-	TMax = L.TMax; 
-	temps = L.temps;
-	dmax = L.dmax;
-	nbRay = L.nbRay; 
-	MatRes = L.MatRes;
+    sources = L.sources;
+    recepteurs = L.recepteurs;
+    plan = L.plan;
+    Meteo = L.Meteo;
+    h = L.h;
+    TMax = L.TMax;
+    temps = L.temps;
+    dmax = L.dmax;
+    nbRay = L.nbRay;
+    MatRes = L.MatRes;
 
-	initialAngleTheta = L.initialAngleTheta;
+    initialAngleTheta = L.initialAngleTheta;
     finalAngleTheta = L.finalAngleTheta;
-	initialAnglePhi = L.initialAnglePhi;
-	finalAnglePhi = L.finalAnglePhi;
+    initialAnglePhi = L.initialAnglePhi;
+    finalAnglePhi = L.finalAnglePhi;
 
-	launchType = L.launchType;
-	wantOutFile = L.wantOutFile;
+    launchType = L.launchType;
+    wantOutFile = L.wantOutFile;
 }
 
 
@@ -245,7 +245,7 @@ RayCourb Lancer::RK4(const vector<R3>& y0, const vector<R3*>& plan, const R3& so
     y.normale.push_back(yAct[1]);
 
     // on remplit le reste avec notre fonction EqRay qui definit notre probleme
-	R d2Max = dmax * dmax;
+    R d2Max = dmax * dmax;
 
     while ((static_cast<unsigned int>(cpt_tps) < temps.size()) && (traveledDistance(yAct, source) < d2Max))
     {
@@ -372,8 +372,8 @@ void Lancer::RemplirMat()
             if (launchType == 1) // Plan horizontal
             {
                 R Phi = initialAnglePhi * PI / 180.0;
-				R startTheta = initialAngleTheta * PI /180;
-				R endTheta = finalAngleTheta * PI / 180;
+                R startTheta = initialAngleTheta * PI / 180;
+                R endTheta = finalAngleTheta * PI / 180;
                 R theta = startTheta + k * (endTheta - startTheta) / nbRay;
                 n0 = R3(cos(Phi) * cos(theta), cos(Phi) * sin(theta), sin(Phi));
             }
@@ -382,24 +382,24 @@ void Lancer::RemplirMat()
                 R3 nMin(cos(initialAnglePhi * PI / 180.0), 0, sin(initialAnglePhi * PI / 180.0));
                 R3 nMax(cos(finalAnglePhi * PI / 180.0), 0,  sin(finalAnglePhi * PI / 180.0));
 
-				// angle de variation des rayons
+                // angle de variation des rayons
                 R alpha = -acos(nMin.mult(nMax));
 
-				// angle entre l'axe des y et nMin
-                R phi = acos(nMin.mult(R3(0, 0, 1))); 
+                // angle entre l'axe des y et nMin
+                R phi = acos(nMin.mult(R3(0, 0, 1)));
                 R theta = initialAngleTheta * PI / 180.0;
                 n0 = R3(sin(phi + k * alpha / nbRay) * cos(theta), sin(theta) * sin(phi + k * alpha / nbRay), cos(phi + k * alpha / nbRay));
             }
-			else if  (launchType == 3)
-			{
-				R U = static_cast<double>(::rand()) / static_cast<double>(RAND_MAX);
-				R V = static_cast<double>(::rand()) / static_cast<double>(RAND_MAX);
+            else if (launchType == 3)
+            {
+                R U = static_cast<double>(::rand()) / static_cast<double>(RAND_MAX);
+                R V = static_cast<double>(::rand()) / static_cast<double>(RAND_MAX);
 
-				R theta = ::acos(2. * U - 1.);
-				R phi = 2 * PI * V;
+                R theta = ::acos(2. * U - 1.);
+                R phi = 2 * PI * V;
 
-				n0 = R3( sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta) );
-			}
+                n0 = R3(sin(theta) * cos(phi), sin(theta) * sin(phi), cos(theta));
+            }
             else if (launchType == 4) // initials vectors are in a file
             {
                 R3 angle = tableau_norm[k];

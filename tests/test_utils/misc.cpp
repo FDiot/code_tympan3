@@ -22,11 +22,11 @@ deque<deque<string> > readCsvAsStringTable(istream& in)
     typedef tokenizer< escaped_list_separator<char> > Tokenizer;
     deque<deque<string> > table;
     string line;
-    while (getline(in,line))
+    while (getline(in, line))
     {
         deque<string> line_array;
         Tokenizer tok(line);
-        BOOST_FOREACH(const string& str_rec, tok)
+        BOOST_FOREACH(const string & str_rec, tok)
         {
             line_array.push_back(trim_copy(str_rec));
         }

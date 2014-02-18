@@ -29,7 +29,7 @@ namespace tympan
  * @param project Output argument : this pointer (expected to be NULL) will be
  *                make to refer to the loaded \c TYProjet.
  */
-void load_project_from_file(const char * filename, LPTYProjet& project);
+void load_project_from_file(const char* filename, LPTYProjet& project);
 
 /**
  * @brief Assert some assumptions on a loaded project (like no subsites...)
@@ -52,8 +52,8 @@ void assert_current_computation_project(const LPTYProjet& project);
  * @param nb_constrained_edges utput arg for the number of constrained edges
  */
 void get_altimetry_numbers(LPTYProjet project,
-		unsigned& nb_triangles, unsigned& b_vertices,
-		unsigned& nb_edges, unsigned& nb_constrained_edges);
+                           unsigned& nb_triangles, unsigned& b_vertices,
+                           unsigned& nb_edges, unsigned& nb_constrained_edges);
 
 
 } /* namespace tympan */

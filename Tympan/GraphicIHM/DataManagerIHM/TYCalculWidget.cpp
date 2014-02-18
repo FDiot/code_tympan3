@@ -409,29 +409,29 @@ void TYCalculWidget::updateContent()
 
 
     // Choix du type de calcul
-	OGenID currentId = getElement()->getSolverId(); // Id du solveur courant
+    OGenID currentId = getElement()->getSolverId(); // Id du solveur courant
 
     LPTYPluginManager pPlug = TYPluginManager::get();
     TYPluginManager::TYPluginList& plugList = pPlug->getPluginList();
     TYPluginManager::TYPluginList::iterator iter;
 
     QString solverName;
-	unsigned short i = 0, currentSolverIndex = 0;
-	OGenID id;
-    for (iter = plugList.begin(), i=0; iter != plugList.end(); iter++, i++)
+    unsigned short i = 0, currentSolverIndex = 0;
+    OGenID id;
+    for (iter = plugList.begin(), i = 0; iter != plugList.end(); iter++, i++)
     {
-		solverName = (*iter)->getPlugin()->getName();//->filename;
+        solverName = (*iter)->getPlugin()->getName();//->filename;
         _comboSolver->insertItem(i, solverName);
 
-#ifdef _DEBUG		
-		OGenID loopId = (*iter)->getPlugin()->getUUID();
+#ifdef _DEBUG
+        OGenID loopId = (*iter)->getPlugin()->getUUID();
 #endif
 
-		if ((*iter)->getPlugin()->getUUID() == currentId) { currentSolverIndex = i; }
+        if ((*iter)->getPlugin()->getUUID() == currentId) { currentSolverIndex = i; }
     }
 
     // On affiche le regime courant
-	_comboSolver->setCurrentIndex(currentSolverIndex);
+    _comboSolver->setCurrentIndex(currentSolverIndex);
 
     // Choix concernant le sol
     _pRadioButtonSolReflechissant->setChecked(!getElement()->getUseSol());
@@ -545,23 +545,23 @@ void TYCalculWidget::apply()
     getElement()->setComment(_lineEditComment->toPlainText());
     getElement()->setAuteur(_lineEditAuteur->text());
 
-// CHOIX DU SOLVEUR
+    // CHOIX DU SOLVEUR
     LPTYPluginManager pPlug = TYPluginManager::get();
     TYPluginManager::TYPluginList& plugList = pPlug->getPluginList();
     TYPluginManager::TYPluginList::iterator iter;
 
     QString solverName;
-	unsigned short i = 0, currentSolverIndex = 0;
-	unsigned short currentIndex = _comboSolver->currentIndex();
-	OGenID id;
-    for (i = 0, iter = plugList.begin(); i<=currentIndex; i++, iter++)
+    unsigned short i = 0, currentSolverIndex = 0;
+    unsigned short currentIndex = _comboSolver->currentIndex();
+    OGenID id;
+    for (i = 0, iter = plugList.begin(); i <= currentIndex; i++, iter++)
     {
-		id = (*iter)->getPlugin()->getUUID();
+        id = (*iter)->getPlugin()->getUUID();
     }
 
-	getElement()->setSolverId(id);
+    getElement()->setSolverId(id);
 
-// ==================
+    // ==================
 
     if (_pRadioButtonActif->isChecked())
     {

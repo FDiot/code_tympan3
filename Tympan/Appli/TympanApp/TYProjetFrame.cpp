@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYProjetFrame.cpp
  * \brief Frame pour la gestion de projet
@@ -84,7 +84,7 @@ TYProjetFrame::TYProjetFrame(QWidget* parent, const char* name, Qt::WFlags f):
     _pListView = new QTreeWidget(this);
     QStringList stringList;
     stringList.append(TR("id_column_projet"));
-	stringList.append(TR("id_column_solver"));
+    stringList.append(TR("id_column_solver"));
     _pListView->setColumnCount(2);
     _pListView->setHeaderLabels(stringList);
     _pListView->resizeColumnToContents(0);
@@ -921,10 +921,10 @@ void TYProjetFrame::doubleClic(QTreeWidgetItem* item, int column)
         {
             LPTYElement pElt = eltItem->getElement();
             if (pElt->edit(this) == QDialog::Accepted)
-			{
-				eltItem->updateContent();
-				pElt->updateGraphic();
-			}
+            {
+                eltItem->updateContent();
+                pElt->updateGraphic();
+            }
         }
     }
     else if (eltItem->text(0) == "Etats")

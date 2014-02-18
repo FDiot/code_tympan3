@@ -84,7 +84,7 @@ public:
     virtual OVector3D normal() const;
     virtual OPlan plan() const;
     virtual TYTabPoint getContour(int n = -1) const;
-	virtual TYTabPoint3D getOContour(int n = -1) const;
+    virtual TYTabPoint3D getOContour(int n = -1) const;
     virtual int intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const;
     virtual int intersects(const OSegment3D& seg, OPoint3D& pt) const;
     virtual int intersects(const OPoint3D& pt) const;
@@ -103,9 +103,9 @@ public:
     // Simple direct delegate
     virtual void
     exportMesh(
-    		std::deque<OPoint3D>& points,
-    		std::deque<OTriangle>& triangles,
-                const TYGeometryNode& geonode) const
+        std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles,
+        const TYGeometryNode& geonode) const
     { return _pPolygon->exportMesh(points, triangles, geonode); }
 
     // Membres

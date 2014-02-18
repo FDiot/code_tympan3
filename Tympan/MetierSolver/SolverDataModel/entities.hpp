@@ -21,8 +21,8 @@ namespace tympan
 
 // NB For now an AcousticSpectrum simply IS a OSpectreComplex
 class AcousticSpectrum:
-        public virtual BaseEntity,
-        public Spectrum
+    public virtual BaseEntity,
+    public Spectrum
 {
 public:
     AcousticSpectrum(const Spectrum& spectrum) : Spectrum(spectrum) {};
@@ -67,7 +67,7 @@ class AcousticTriangle :
     public virtual BaseEntity
 {
 public:
-    AcousticTriangle(node_idx n1, node_idx n2, node_idx n3 );
+    AcousticTriangle(node_idx n1, node_idx n2, node_idx n3);
 
     node_idx n[3];
 

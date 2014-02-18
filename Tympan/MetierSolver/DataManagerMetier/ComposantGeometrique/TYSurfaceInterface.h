@@ -94,7 +94,7 @@ public:
      */
     virtual TYTabPoint getContour(int n = -1) const = 0;
 
-	virtual TYTabPoint3D getOContour(int n = -1) const = 0;
+    virtual TYTabPoint3D getOContour(int n = -1) const = 0;
 
     /**
      * Test si le point se trouve a l'interieur de la surface, sur le
@@ -165,9 +165,9 @@ public:
      */
     virtual void
     exportMesh(
-    		std::deque<OPoint3D>& points,
-    		std::deque<OTriangle>& triangles,
-                const TYGeometryNode& geonode
+        std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles,
+        const TYGeometryNode& geonode
     ) const /* = 0 */;
 
 };

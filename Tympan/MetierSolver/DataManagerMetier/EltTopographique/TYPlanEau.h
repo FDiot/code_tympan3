@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -110,11 +110,11 @@ public:
     /**
      * Set/Get de la liste de points.
      */
-	virtual TYTabPoint& getListPoints() { return _pCrbNiv._pObj->getListPoints(); }
+    virtual TYTabPoint& getListPoints() { return _pCrbNiv._pObj->getListPoints(); }
     /**
      * Set/Get de la liste de points.
      */
-	virtual const TYTabPoint& getListPoints() const { return _pCrbNiv._pObj->getListPoints(); }
+    virtual const TYTabPoint& getListPoints() const { return _pCrbNiv._pObj->getListPoints(); }
     /**
      * Set/Get de la liste de points.
      */

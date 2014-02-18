@@ -101,9 +101,10 @@ public:
     /**
      * Set/Get de la vitesse moyenne.
      */
-    void setVitMoy(double vit) {
-       getTraficJour().lv.trafficSpeed = vit;
-       getTraficNuit().hgv.trafficSpeed = vit;
+    void setVitMoy(double vit)
+    {
+        getTraficJour().lv.trafficSpeed = vit;
+        getTraficNuit().hgv.trafficSpeed = vit;
     }
 
     /**
@@ -169,14 +170,14 @@ public:
      */
     virtual bool updateAcoustic(const bool& force = false);
 
-     /**
-     * \brief Required the road to update its altitude after altimetry changed
-     *
-     * \param alti the altimetry the altitude must be updated from
-     * \param the GeoNode associated with this Road
-     * \return whether the update succeeded.
-     */
-    virtual bool updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode );
+    /**
+    * \brief Required the road to update its altitude after altimetry changed
+    *
+    * \param alti the altimetry the altitude must be updated from
+    * \param the GeoNode associated with this Road
+    * \return whether the update succeeded.
+    */
+    virtual bool updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode);
 
     const RoadTrafficComponent& getNMPB08RoadTrafficComponent(
         enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type) const;
@@ -245,7 +246,7 @@ private:
 protected:
 
     RoadTrafficComponent& accessRoadTrafficComponent(
-          enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type);
+        enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type);
 
     /**
      * \brief Calcul de la pente moyenne de la route
@@ -291,7 +292,7 @@ private:
 
     bool note77_check_validity(double aadt_hgv, double aadt_lv,
                                RoadType road_type, RoadFunction road_function,
-                               QString* out_msg = NULL );
+                               QString* out_msg = NULL);
 
     /**
      * @brief This helper class halves and restore the traffic flow of the road

@@ -105,7 +105,8 @@ public:
     // Membres
 protected:
 
-    union {
+    union
+    {
         struct
         {
             RoadTrafficComponent lv;

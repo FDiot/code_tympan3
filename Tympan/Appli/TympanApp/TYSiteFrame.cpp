@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYSiteFrame.cpp
  * \brief Frame pour la gestion de site
@@ -1091,7 +1091,7 @@ void TYSiteFrame::openModeler(QTreeWidgetItem* item, int column)
         {
             LPTYElement pElt = eltItem->getElement();
             pElt->edit(this);
-			eltItem->updateContent();
+            eltItem->updateContent();
         }
     }
 
@@ -1188,17 +1188,17 @@ void TYSiteFrame::changePos(TYElement* pElement)
         pTempNode = NULL;
     }
 
-	// Si la machine est dans un batiment, il faut indiquer au batiment qu'il n'est plus a jour
-	TYElement* pParent = pElement->getParent();
-	if (pParent && pParent->isA("TYEtage"))
-	{
-		pParent = pParent->getParent();
-		if (pParent) 
-		{ 
-			pParent->setIsAcousticModified(true);
-			pParent->setIsGeometryModified(true);
-		}
-	}
+    // Si la machine est dans un batiment, il faut indiquer au batiment qu'il n'est plus a jour
+    TYElement* pParent = pElement->getParent();
+    if (pParent && pParent->isA("TYEtage"))
+    {
+        pParent = pParent->getParent();
+        if (pParent)
+        {
+            pParent->setIsAcousticModified(true);
+            pParent->setIsGeometryModified(true);
+        }
+    }
 }
 
 void TYSiteFrame::changeRotation(TYElement* pElement)
@@ -1482,7 +1482,7 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
         pSite->setRoot(false); // Le site ajoute n'est pas racine
 
         pSiteNode->addSiteNode(pSite);
-		if (_pCurrentCalcul) { _pCurrentCalcul->getCalculElements(pSite); }
+        if (_pCurrentCalcul) { _pCurrentCalcul->getCalculElements(pSite); }
 
         pSiteNode->updateGraphicTree();
         pSiteNode->setIsGeometryModified(true);

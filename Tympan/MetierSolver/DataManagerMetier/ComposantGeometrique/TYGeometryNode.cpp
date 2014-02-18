@@ -371,9 +371,9 @@ bool TYGeometryNode::operator!=(const TYGeometryNode& other) const
 
 bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
-	TYGeometryNode* pOtherGeoNode = NULL;
-	if (pOther) { pOtherGeoNode = (TYGeometryNode*) pOther; }
-	if ( !pOtherGeoNode || pOtherGeoNode->getElement() ) { return false; }
+    TYGeometryNode* pOtherGeoNode = NULL;
+    if (pOther) { pOtherGeoNode = (TYGeometryNode*) pOther; }
+    if (!pOtherGeoNode || pOtherGeoNode->getElement()) { return false; }
 
     // Avant de faire la deep copy sur l'element il faut s'assurer
     // qu'ils sont de meme type
@@ -459,7 +459,7 @@ void TYGeometryNode::GetGeoNodeParentList(TYListPtrGeoNode& GetGeoNodeParents)
     }
 }
 
-OMatrix TYGeometryNode::localToGlobal() const 
+OMatrix TYGeometryNode::localToGlobal() const
 {
     TYGeometryNode* pParent = GetGeoNodeParent();
     OMatrix matrix = _matrix;
@@ -473,7 +473,7 @@ OMatrix TYGeometryNode::localToGlobal() const
     return matrix;
 }
 
-OMatrix TYGeometryNode::globalToLocal() const 
+OMatrix TYGeometryNode::globalToLocal() const
 {
     return localToGlobal().getInvert();
 }
@@ -483,7 +483,7 @@ OCoord3D TYGeometryNode::localToGlobal(const OCoord3D& point) const
     return localToGlobal() * point;
 }
 
-OCoord3D TYGeometryNode::globalToLocal(const OCoord3D& point) const 
+OCoord3D TYGeometryNode::globalToLocal(const OCoord3D& point) const
 {
     return globalToLocal() * point;
 }

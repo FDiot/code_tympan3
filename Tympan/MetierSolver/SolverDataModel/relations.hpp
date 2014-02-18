@@ -13,7 +13,8 @@
 
 #include "entities.hpp"
 
-namespace tympan {
+namespace tympan
+{
 
 namespace bm = boost::bimaps;
 
@@ -29,10 +30,10 @@ public:
     // This is for '**' cardinality.
     // To implement '1*' use (unordered_)set_of
     typedef bm::bimap <
-        bm::unordered_multiset_of<subject_pointer>,
-        bm::unordered_multiset_of<object_pointer>,
-        bm::unordered_set_of_relation<>
-        > bimap_type;
+    bm::unordered_multiset_of<subject_pointer>,
+       bm::unordered_multiset_of<object_pointer>,
+       bm::unordered_set_of_relation<>
+       > bimap_type;
 
     typedef typename bimap_type::value_type relation;
     typedef typename bimap_type::left_map subject_view;

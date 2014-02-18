@@ -89,7 +89,7 @@ protected:
     QSpinBox*   q_RoadFlow_Spin[TYRoute::NB_TRAFFIC_REGIMES][TYTrafic::NB_VEHICLE_TYPES];
     QPushButton* q_AADT_Push;
 
-    QButtonGroup * p_ModeCalcul_ButtonGroup;
+    QButtonGroup* p_ModeCalcul_ButtonGroup;
     QPushButton*   q_EditSpectre_Button[TYRoute::NB_TRAFFIC_REGIMES];
 
 protected slots:

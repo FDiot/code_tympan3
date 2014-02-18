@@ -247,11 +247,11 @@ void TYSpectreWidget::apply()
     tableauToSpectre(_pTmpSpectre);
 
     // On repasse le spectre en Tiers d'octave si necessaire
-	if (_radioButtonOctave->isChecked())
-	{
-		_pTmpSpectre->setForm(SPECTRE_FORM_OCT);
-		*_pTmpSpectre = _pTmpSpectre->toTOct();
-	}
+    if (_radioButtonOctave->isChecked())
+    {
+        _pTmpSpectre->setForm(SPECTRE_FORM_OCT);
+        *_pTmpSpectre = _pTmpSpectre->toTOct();
+    }
 
     emit modified();
 }

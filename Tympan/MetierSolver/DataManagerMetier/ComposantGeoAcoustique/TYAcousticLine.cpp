@@ -594,8 +594,8 @@ void TYAcousticLine::exportCSV(std::ofstream& ofs)
     // Export du nom de l'objet
     ofs << getName().toAscii().data() << '\n';
 
-	// Export du type de l'objet
-	ofs << toString() << '\n';
+    // Export du type de l'objet
+    ofs << toString() << '\n';
     // Largeur de la ligne
     ofs << "Largeur : " << _largeur << " m\n";
 

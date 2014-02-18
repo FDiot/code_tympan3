@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  *
@@ -88,7 +88,7 @@ public:
     void clamp();
     OColor clampCopy() const;
 
-    bool operator==(const OColor &other) const;
+    bool operator==(const OColor& other) const;
 
     /**
      * Constantes
@@ -105,7 +105,8 @@ public:
 protected:
     static const float equality_threshold;
 
-    static bool float_eq(float a, float b, float epsilon = equality_threshold) {
+    static bool float_eq(float a, float b, float epsilon = equality_threshold)
+    {
         return (std::fabs(a - b) <= epsilon * std::max(std::fabs(a), std::fabs(b)));
     }
 };
@@ -158,9 +159,9 @@ inline OColor::operator const float* () const
 #if TY_USE_IHM
 #include <QColor>
 
-inline QColor toQColor (const OColor& color) {return QColor(color.r * 255.0f, color.g * 255.0f, color.b * 255.0f);}
+inline QColor toQColor(const OColor& color) {return QColor(color.r * 255.0f, color.g * 255.0f, color.b * 255.0f);}
 
-inline OColor toOColor (const QColor& color) {return OColor(color.red() / 255.0f, color.green() / 255.0f, color.blue() / 255.0f);}
+inline OColor toOColor(const QColor& color) {return OColor(color.red() / 255.0f, color.green() / 255.0f, color.blue() / 255.0f);}
 
 #endif // TY_USE_IHM
 

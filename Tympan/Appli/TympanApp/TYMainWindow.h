@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYMainWindow.h
  * \brief Fenetre principale de l'application Tympan (fichier header)
@@ -157,21 +157,21 @@ public slots:
     void open(std::vector<LPTYElement>& tabElem, const bool& bRegenerate = false);
 
     /**
-	 *
-	 */
-	bool save(QString dirName, QString &fileName, TYElement *pElement);
+     *
+     */
+    bool save(QString dirName, QString& fileName, TYElement* pElement);
 
-	/**
-	 *
-	 */
-	void formatFileName(QString &fileName) { if ( !fileName.endsWith(".xml") ) { fileName += ".xml"; } }
+    /**
+     *
+     */
+    void formatFileName(QString& fileName) { if (!fileName.endsWith(".xml")) { fileName += ".xml"; } }
 
-	/**
-	 *
-	 */
-	void updateCurrentAppFile(const QString& dirName, const QString& fileName);
+    /**
+     *
+     */
+    void updateCurrentAppFile(const QString& dirName, const QString& fileName);
 
-	/**
+    /**
      * Enregistre l'element de la fenetre activee.
      */
     bool save();
@@ -191,12 +191,12 @@ public slots:
      */
     bool saveAs(LPTYElement pElement);
 
-	/**
-	 *
-	 */
-	TYElement* elementToSave();
+    /**
+     *
+     */
+    TYElement* elementToSave();
 
-	/**
+    /**
      * Cree une copie du fichier passe en parametre
      */
     bool backupFile(const QString& fileName);
@@ -461,7 +461,7 @@ protected:
     QAction* _pExportXMLAction;
 
     /// Action pour importer un element depuis un fichier DXF BD-TOPO.
-    QAction * _pImportDXFBdTopoAction;
+    QAction* _pImportDXFBdTopoAction;
 
     ///Action pour imprimer.
     QAction* _pPrintAction;

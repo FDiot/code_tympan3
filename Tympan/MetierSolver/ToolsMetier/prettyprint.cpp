@@ -16,14 +16,14 @@
 ::std::ostream& operator<<(::std::ostream& os, const OVector3D& v)
 {
     return os << "OVector3D"
-              << static_cast<const OCoord3D&>(v);
+           << static_cast<const OCoord3D&>(v);
 }
 
 
 ::std::ostream& operator<<(::std::ostream& os, const OPoint3D& v)
 {
     return os << "OPoint3D"
-              << static_cast<const OCoord3D&>(v);
+           << static_cast<const OCoord3D&>(v);
 }
 
 ::std::ostream& operator<<(::std::ostream& os, const OPlan& p)
@@ -38,8 +38,10 @@
        << ", state=" << s.getEtat()
        << "]" << std::endl ;
     os << "        (";
-    for(unsigned i=0; i<s.getNbValues(); ++i)
-        os << s.getTabValReel()[i] <<", ";
+    for (unsigned i = 0; i < s.getNbValues(); ++i)
+    {
+        os << s.getTabValReel()[i] << ", ";
+    }
     os << ")" << std::endl;
     return os;
 }

@@ -32,7 +32,7 @@ std::deque<std::deque<T> > readCsvAsTableOf(std::istream& in)
     typedef tokenizer< escaped_list_separator<char> > Tokenizer;
     deque<deque<T> > table;
     string line;
-    while (getline(in,line))
+    while (getline(in, line))
     {
         deque<T> line_array;
         Tokenizer tok(line);

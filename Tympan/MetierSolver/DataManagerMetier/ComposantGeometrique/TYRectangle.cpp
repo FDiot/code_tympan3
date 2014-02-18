@@ -679,28 +679,30 @@ void TYRectangle::inverseNormale()
 }
 
 void TYRectangle::exportMesh(
-		std::deque<OPoint3D>& points,
-                std::deque<OTriangle>& triangles,
-                const TYGeometryNode& geonode) const
+    std::deque<OPoint3D>& points,
+    std::deque<OTriangle>& triangles,
+    const TYGeometryNode& geonode) const
 {
-    assert(points.size()==0 &&
+    assert(points.size() == 0 &&
            "Output arguments 'points' is expected to be initially empty");
-    assert(triangles.size()==0 &&
+    assert(triangles.size() == 0 &&
            "Output arguments 'triangles' is expected to be initially empty");
 
     // exports the point to the mesh, converting to global r/ frame
-    for(int i=0; i<4; ++i)
-        points.push_back( geonode.localToGlobal( _pts[i] ) );
+    for (int i = 0; i < 4; ++i)
+    {
+        points.push_back(geonode.localToGlobal(_pts[i]));
+    }
     // exports triangle (0, 1, 2)
     OTriangle tri(0, 1, 2);
-     // Use already converted to global r/ frame points
-    tri._A=points[0];
-    tri._B=points[1];
-    tri._C=points[2];
-    triangles.push_back( tri );
+    // Use already converted to global r/ frame points
+    tri._A = points[0];
+    tri._B = points[1];
+    tri._C = points[2];
+    triangles.push_back(tri);
     // exports triangle (0, 2, 3)
-    tri._p1=0; tri._A=points[0];
-    tri._p2=2; tri._B=points[2];
-    tri._p3=3; tri._C=points[3];
-    triangles.push_back( tri );
+    tri._p1 = 0; tri._A = points[0];
+    tri._p2 = 2; tri._B = points[2];
+    tri._p3 = 3; tri._C = points[3];
+    triangles.push_back(tri);
 }
