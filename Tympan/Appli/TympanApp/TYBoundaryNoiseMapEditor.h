@@ -68,10 +68,10 @@ public slots:
      * \param forceOpened If the user will have the choice between a closed/opened polyline.
      * \return True if the polyline can be created.
      */
-    bool checkValidity(bool &forceOpened);
-     /**
-     * \brief Create the properties dialog that will pop up once the user finishes the polyline creation.
-     */
+    bool checkValidity(bool& forceOpened);
+    /**
+    * \brief Create the properties dialog that will pop up once the user finishes the polyline creation.
+    */
     void createPropertiesDlg(bool forceOpened);
 
     /**
@@ -83,10 +83,10 @@ public slots:
 
 protected:
     /// Density spin box.
-    QDoubleSpinBox *_pDensitySpinBox;
+    QDoubleSpinBox* _pDensitySpinBox;
 
     /// Thickness spin box.
-    QDoubleSpinBox *_pThicknessSpinBox;
+    QDoubleSpinBox* _pThicknessSpinBox;
 };
 
 

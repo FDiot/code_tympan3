@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
+*/
 
 /**
  * \file TYINProAcousticModel.cpp
@@ -26,7 +26,7 @@
 
 
 TYANIME3DAcousticModel::TYANIME3DAcousticModel()
-{ 
+{
 }
 
 TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TabRays* tabRayons, TYStructSurfIntersect* tabStruct)
@@ -35,11 +35,11 @@ TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNod
 
     _nbRays = _tabTYRays.size();
 
-	_tabRays = tabRayons;
-	//_tabRays = simulation.getSolver()->getValidRays();
-	//    _tabRays = acoustPathFinder.getTabRays();
+    _tabRays = tabRayons;
+    //_tabRays = simulation.getSolver()->getValidRays();
+    //    _tabRays = acoustPathFinder.getTabRays();
 
-	_tabSurfIntersect = tabStruct;
+    _tabSurfIntersect = tabStruct;
 
     OSpectreComplex s1 = OSpectreComplex(OSpectre(1.0));
     OSpectreComplex s0 = OSpectreComplex(OSpectre(0.0));
@@ -49,19 +49,19 @@ TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNod
     _absRefl = OTabSpectreComplex(_nbRays, s1);
     _absDiff = OTabSpectreComplex(_nbRays, s1);
 
-	_atmos = *(calcul.getAtmosphere());
-	_topo = *site.getTopographie();        
+    _atmos = *(calcul.getAtmosphere());
+    _topo = *site.getTopographie();
 
-    _listeTerrains = _topo.getListTerrain(); 
-    _listeTriangles = (*_topo.getAltimetrie()).getListFaces();  
+    _listeTerrains = _topo.getListTerrain();
+    _listeTriangles = (*_topo.getAltimetrie()).getListFaces();
 
     TYMapElementTabSources mapElementSources = calcul.getResultat()->getMapEmetteurSrcs();
     calcul.getAllSources(mapElementSources, _tabSources);
     calcul.getAllRecepteurs(_tabRecepteur);
 
-	_c = _atmos.getVitSon();  
-	_K = _atmos.getKAcoust();  
-	_lambda = OSpectre::getLambda(_c); 
+    _c = _atmos.getVitSon();
+    _K = _atmos.getKAcoust();
+    _lambda = OSpectre::getLambda(_c);
 }
 
 TYANIME3DAcousticModel::~TYANIME3DAcousticModel()
@@ -85,23 +85,23 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
     Ray* ray;                   // rayon
     LPTYRay tyRay;              // rayon TYMPAN
-    
-	//TYPolygon face;             // face ou a lieu la reflexion
+
+    //TYPolygon face;             // face ou a lieu la reflexion
     OPoint3D Pref, Pprec, Psuiv;       //pt de reflexion, pt précédent et suivant
     TYTabRayEvent events;         // liste des evenements
-    
-	//OVector3D vInc, vNorm;             // vecteurs : normale à la face et vecteur de l'onde incidente reflechie
-    
-	OTabDouble tabPondFresnel;  // tableau des ponderations de Fresnel
+
+    //OVector3D vInc, vNorm;             // vecteurs : normale à la face et vecteur de l'onde incidente reflechie
+
+    OTabDouble tabPondFresnel;  // tableau des ponderations de Fresnel
     int nbFacesFresnel;         // nbr de faces contenues dans la zone de Fresnel
 
     OSpectreComplex one = OSpectreComplex(OSpectre(1.0));
     OSpectreComplex prod = one;
     OSpectreComplex sum = OSpectreComplex(OSpectre(0.0));
 
-    double d1 = 0.0;	// distance du pt de reflexion au point de l'évènement précédent
+    double d1 = 0.0;    // distance du pt de reflexion au point de l'évènement précédent
     double angle = 0.0; // angle d'incidence de l'onde acoustique
-	double sizeRay;		// taille du rayon
+    double sizeRay;     // taille du rayon
 
     int i, j, k, l, indice;
     i = 0; j = 0; k = 0; l = 0; indice = 0;
@@ -118,15 +118,15 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
     TYMur mur;
     int idBatiment = 0, idFace = 0;
     bool zoneFresnel = FALSE;
-	double* spectreAbs;
-	TYRayEvent ev;
+    double* spectreAbs;
+    TYRayEvent ev;
 
     for (i = 0; i < _nbRays; i++) // boucle sur les rayons
     {
-        ray = _tabRays->at(i);  
-		tyRay = _tabTYRays[i];  
+        ray = _tabRays->at(i);
+        tyRay = _tabTYRays[i];
         events = tyRay->getTabEvent();
-		sizeRay = tyRay->getSize();
+        sizeRay = tyRay->getSize();
 
         //rayFacesHistory     = ray->getFaceHistory();
         //rayParoisHistory    = ray->getBatimentHistory();
@@ -134,42 +134,44 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
         for (k = 0; k < ray->events.size(); k++) // boucle sur les evenements du rayon
         {
-			ev = events[k];
+            ev = events[k];
 
             if (ev.type == SPECULARREFLEXION) // cas d'une reflexion
             {
                 Pref  = ev.pos;   // pt de reflexion
                 Pprec = events[k - 1].pos; // pt precent la reflexion
-				Psuiv = events[k+1].pos;
+                Psuiv = events[k + 1].pos;
 
-				surfaceRefl = (ray->events.at(k))->getShape(); //surfaceRefl = (events.at(k))->getShape(); 
+                surfaceRefl = (ray->events.at(k))->getShape(); //surfaceRefl = (events.at(k))->getShape();
 
-            	idFace = surfaceRefl->getFaceId();
+                idFace = surfaceRefl->getFaceId();
 
-				 if (surfaceRefl->isSol())  // cas particulier d'une reflexion sur le sol (il faut remplir la struct _tabSurfIntersect)
-				 {
+                if (surfaceRefl->isSol())  // cas particulier d'une reflexion sur le sol (il faut remplir la struct _tabSurfIntersect)
+                {
 
-					//vec3 vecIncident = ray->events.at(k)->getIncomingDirection();
-					//vInc = OVector3D(Pref, Pprec); 
-					//vNorm = _tabSurfIntersect[idFace].normal;
+                    //vec3 vecIncident = ray->events.at(k)->getIncomingDirection();
+                    //vInc = OVector3D(Pref, Pprec);
+                    //vNorm = _tabSurfIntersect[idFace].normal;
 
-					 angle = ev.angle;   // v.angle(vNorm);     // arcos(v*n/|v|)
+                    angle = ev.angle;   // v.angle(vNorm);     // arcos(v*n/|v|)
 
-					 (_topo.terrainAt(Pref)->getSol()->abso(angle, sizeRay, _atmos)).getRangeValueReal(_tabSurfIntersect[idFace].spectreAbso, 18, 8);
-				 }
+                    (_topo.terrainAt(Pref)->getSol()->abso(angle, sizeRay, _atmos)).getRangeValueReal(_tabSurfIntersect[idFace].spectreAbso, 18, 8);
+                }
 
-				spectreAbs = _tabSurfIntersect[idFace].spectreAbso;  // recuperation du spectre d'absorption 
-				
-				coefRefl = (one - OSpectre(spectreAbs, 18, 8)).sqrt();  // = sqrt(1-alpha_E) + conversion du spectre de type double* en OSpectre
+                spectreAbs = _tabSurfIntersect[idFace].spectreAbso;  // recuperation du spectre d'absorption
+
+                coefRefl = (one - OSpectre(spectreAbs, 18, 8)).sqrt();  // = sqrt(1-alpha_E) + conversion du spectre de type double* en OSpectre
 
                 // Avec ponderation de Fresnel :
-                if(zoneFresnel)
+                if (zoneFresnel)
                 {
                     tabPondFresnel = ComputeFrenelWeighting(tyRay, angle, Pref.distFrom(Psuiv), Pref);  // calcul des ponderations de Frenel
                     nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
 
-                    for(l=0; l<nbFacesFresnel; l++) // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
-                        sum = sum + coefRefl * tabPondFresnel[l]; // calcul du coeff de reflexion moy en ponderant avec les matériaux
+                    for (l = 0; l < nbFacesFresnel; l++) // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
+                    {
+                        sum = sum + coefRefl * tabPondFresnel[l];    // calcul du coeff de reflexion moy en ponderant avec les matériaux
+                    }
 
                     prod = prod * sum;
                 }
@@ -178,7 +180,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
         if (!zoneFresnel) { prod = coefRefl; }
 
-        _absRefl[i] = prod * (tyRay->getDistanceSR() / sizeRay ); //(ray->distanceSourceRecepteur() / ray->getLongueur());
+        _absRefl[i] = prod * (tyRay->getDistanceSR() / sizeRay);  //(ray->distanceSourceRecepteur() / ray->getLongueur());
     }
 }
 
@@ -249,7 +251,7 @@ void TYANIME3DAcousticModel::ComputeAbsDiff(TYCalcul& calcul, const TYSiteNode& 
         tyRay = _tabTYRays[i];
         events = tyRay->getTabEvent();
         nbEvents = ray->events.size();
-        
+
         S = events.at(0).pos;
         R = events.at(nbEvents).pos;
 
@@ -316,28 +318,28 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(TYRay* tyRay, double angle, doub
 
     OBox2 fresnelArea;  // boundingBox de l'ellispsoide de Fresnel
 
-	double dSR = tyRay->getDistanceSR(); //rayon direct
+    double dSR = tyRay->getDistanceSR(); //rayon direct
     double dr = tyRay->getSize();      // rayon reflechi
 
-	OSpectre f = OSpectre::getOSpectreFreqExact(); //frequence
+    OSpectre f = OSpectre::getOSpectreFreqExact(); //frequence
     OSpectreComplex Q = _topo.terrainAt(Pref)->getSol()->calculQ(angle, distPrefPsuiv, _atmos) ; // coeff de reflexion du sol au pt de reflexion
-    
-    const double c1 = 0.5 * _c /(dSR - dr);  // cste de calcul
 
-	OSpectre phaseQdivPI = Q.getPhase().div(M_PI);
-	OSpectre fmin = (OSpectre(0.5) - phaseQdivPI)*c1;
-    OSpectre fmax = (OSpectre(1.0) - phaseQdivPI)*c1; 
+    const double c1 = 0.5 * _c / (dSR - dr); // cste de calcul
+
+    OSpectre phaseQdivPI = Q.getPhase().div(M_PI);
+    OSpectre fmin = (OSpectre(0.5) - phaseQdivPI) * c1;
+    OSpectre fmax = (OSpectre(1.0) - phaseQdivPI) * c1;
     OSpectre fc = (fmin * fmax).sqrt();      // frequence de transition
 
-    const OSpectre F = (OSpectre(1.0)-((f*f).div(fc*fc)).exp())*32.0; // parametre de l'ellipsoide de Fresnel F_{\lambda} via la formule définie dans la publi de D. van Maercke et J. Defrance (CSTB-2007)
-    
+    const OSpectre F = (OSpectre(1.0) - ((f * f).div(fc * fc)).exp()) * 32.0; // parametre de l'ellipsoide de Fresnel F_{\lambda} via la formule définie dans la publi de D. van Maercke et J. Defrance (CSTB-2007)
+
     //const double F = 0.5;
 
     // Construction de la bb de l'ellipsoide de Fresnel
     // 1/ boite dans le repere (Ox,Oy,Oz)
     TYPoint S = tyRay->getPosSourceGlobal();                  // source
     TYPoint R = tyRay->getPosReceptGlobal(); // recepteur
-    TYPoint SIm = OPoint3D(S._x,S._y,-S._z);                   // source image
+    TYPoint SIm = OPoint3D(S._x, S._y, -S._z);                 // source image
     double dSImR = SIm.distFrom(R);                             //distance source image/recepteur
 
     OSpectre lF = _lambda * F;                   // produit lambda*Flbd
@@ -345,22 +347,22 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(TYRay* tyRay, double angle, doub
     // Dimensions de la boite de Fresnel : on choisit de prendre la + grande boite
 
     double L = (lF + dSImR).valMax();                   // grd cote de la boite
-    double l = ((lF*(lF + 2.*dSImR)).sqrt()).valMax();  // petit cote de la boite == hauteur ici
+    double l = ((lF * (lF + 2.*dSImR)).sqrt()).valMax(); // petit cote de la boite == hauteur ici
 
     // boite de Fresnel placee a l'origine du repere
-    OBox box = OBox(OCoord3D(0,0,0),OCoord3D(L,l,l));
-	fresnelArea._length = L;
-	fresnelArea._width = l;
-	fresnelArea._height = l;
+    OBox box = OBox(OCoord3D(0, 0, 0), OCoord3D(L, l, l));
+    fresnelArea._length = L;
+    fresnelArea._width = l;
+    fresnelArea._height = l;
 
     // Translation au pt milieu du segment [SIm R]
-    OPoint3D O = OPoint3D(0.5*(SIm._x+R._x), 0.5*(SIm._y+R._y), 0.5*(SIm._z+R._z)); // O milieu de [SIm R]
-    const OPoint3D vt = OPoint3D(0.5*L-O._x, 0.5*l-O._y, 0.5*l-O._z);   // vecteur de translation
+    OPoint3D O = OPoint3D(0.5 * (SIm._x + R._x), 0.5 * (SIm._y + R._y), 0.5 * (SIm._z + R._z)); // O milieu de [SIm R]
+    const OPoint3D vt = OPoint3D(0.5 * L - O._x, 0.5 * l - O._y, 0.5 * l - O._z); // vecteur de translation
     box.Translate(vt);  // translation de la zone de Fresnel
 
     // 3/ changement de repere pour faire pivoter la boite
-    OVector3D v1 = OCoord3D(dSImR*0.5,0.0,0.0);
-    OVector3D v2 = OVector3D(O,R);
+    OVector3D v1 = OCoord3D(dSImR * 0.5, 0.0, 0.0);
+    OVector3D v2 = OVector3D(O, R);
     double alpha = v1.angle(v2);    // angle de la rotation
 
     //fresnelArea.GetGeoNode();
@@ -368,13 +370,13 @@ OBox2 TYANIME3DAcousticModel::ComputeFrenelArea(TYRay* tyRay, double angle, doub
     OVector3D vecI, vecJ, vecK;
     v2.normalize();
     vecI = v2;
-    vecJ = OVector3D(1.0,0.0,0.0);  // A changer !
-    vecK = OVector3D(0.0,1.0,0.0);  // A changer !
+    vecJ = OVector3D(1.0, 0.0, 0.0); // A changer !
+    vecK = OVector3D(0.0, 1.0, 0.0); // A changer !
     ORepere3D r = ORepere3D(O, vecI, vecJ, vecK); // le nouveau repere
 
     fresnelArea = OBox2(box, r);
 
-		
+
     return fresnelArea;
 }
 
@@ -397,98 +399,100 @@ OTabDouble TYANIME3DAcousticModel::ComputeFrenelWeighting(TYRay* ray, double ang
 
     TYTabPoint listeSommets = _topo.collectPointsForAltimetrie();
 
-	// We check if the box is entirely in one triangle
-	// In that case, no need to compute anything.
-	LPTYPolygon sE = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._E);
-	LPTYPolygon sF = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._F);
-	LPTYPolygon sG = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._G);
-	LPTYPolygon sH = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._H);
+    // We check if the box is entirely in one triangle
+    // In that case, no need to compute anything.
+    LPTYPolygon sE = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._E);
+    LPTYPolygon sF = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._F);
+    LPTYPolygon sG = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._G);
+    LPTYPolygon sH = (*_topo.getAltimetrie()).getFaceUnder(fresnelArea._H);
 
-	TYTabPoint ptsSE = sE->getPoints();
-	TYTabPoint ptsSF = sF->getPoints();
-	TYTabPoint ptsSG = sG->getPoints();
-	TYTabPoint ptsSH = sH->getPoints();
-	
-	OPoint3D centersE = sE->getCenter();
-	OPoint3D centersF = sF->getCenter();
-	OPoint3D centersG = sG->getCenter();
-	OPoint3D centersH = sH->getCenter();
+    TYTabPoint ptsSE = sE->getPoints();
+    TYTabPoint ptsSF = sF->getPoints();
+    TYTabPoint ptsSG = sG->getPoints();
+    TYTabPoint ptsSH = sH->getPoints();
 
-	//if (centersE == centersF && centersE == centersG && centersE == centersH)
-	//{
-		double boxSurf = fresnelArea._length * fresnelArea._width;
-	//	return tabPond;
-	//}
-	LPTYPolygon triangle;
-	TYTabLPPolygon triangleIn;
-	TYTabLPPolygon triangleOut;
-	//else
-	//{
-		// Gets all the triangles in/around the box
-		int count = (*_topo.getAltimetrie()).getFacesInBox(fresnelArea, _listeTrianglesBox);
+    OPoint3D centersE = sE->getCenter();
+    OPoint3D centersF = sF->getCenter();
+    OPoint3D centersG = sG->getCenter();
+    OPoint3D centersH = sH->getCenter();
 
-		for (int i=0; i<_listeTrianglesBox.size(); i++)
-		{
-			triangle = _listeTrianglesBox[i];
-			TYTabPoint sommets =  triangle->getPoints(); //Contient tous les sommets du triangle
-			for (int i=0; i< sommets.size(); i++)
-			{
-				int k = 0;
-				if(fresnelArea.isInside(sommets[i]));
-				{
-					k++;
-				}
-				if(k == 3)
-				{
-					triangleIn[i] = triangle;
-				}
-				else 
-				{	
-					triangleOut[i] = triangle;
-				}
-			}
-		}
-		// Computes total triangle surface inside the box
-		surfaceTot = 0.0;
-		int nbFaces = triangleIn.size();
+    //if (centersE == centersF && centersE == centersG && centersE == centersH)
+    //{
+    double boxSurf = fresnelArea._length * fresnelArea._width;
+    //  return tabPond;
+    //}
+    LPTYPolygon triangle;
+    TYTabLPPolygon triangleIn;
+    TYTabLPPolygon triangleOut;
+    //else
+    //{
+    // Gets all the triangles in/around the box
+    int count = (*_topo.getAltimetrie()).getFacesInBox(fresnelArea, _listeTrianglesBox);
 
-		for(int j=0; j<nbFaces; j++)
-		{
-			tabSurface[j]= triangleIn[j]->surface();
-			surfaceTot += tabSurface[j];
-		}
-		for(int j=0; j<nbFaces; j++)
-        tabPond[j] = tabSurface[j]/surfaceTot;
+    for (int i = 0; i < _listeTrianglesBox.size(); i++)
+    {
+        triangle = _listeTrianglesBox[i];
+        TYTabPoint sommets =  triangle->getPoints(); //Contient tous les sommets du triangle
+        for (int i = 0; i < sommets.size(); i++)
+        {
+            int k = 0;
+            if (fresnelArea.isInside(sommets[i])) { ; }
+            {
+                k++;
+            }
+            if (k == 3)
+            {
+                triangleIn[i] = triangle;
+            }
+            else
+            {
+                triangleOut[i] = triangle;
+            }
+        }
+    }
+    // Computes total triangle surface inside the box
+    surfaceTot = 0.0;
+    int nbFaces = triangleIn.size();
 
-		return tabPond;
+    for (int j = 0; j < nbFaces; j++)
+    {
+        tabSurface[j] = triangleIn[j]->surface();
+        surfaceTot += tabSurface[j];
+    }
+    for (int j = 0; j < nbFaces; j++)
+    {
+        tabPond[j] = tabSurface[j] / surfaceTot;
+    }
 
-		////TYTabPoint listeTrianglesFresnel; // liste des triangles de la zone de Fresnel
+    return tabPond;
+
+    ////TYTabPoint listeTrianglesFresnel; // liste des triangles de la zone de Fresnel
 
 
 
-		//k=0;
-		////for(i=0; i< listeSommets.size(); i++) // boucle sur les sommets des triangles de la topo
-		////{
-		////	if(fresnelArea.isInside(listeSommets[i]))
-		////	{
-		////		listeTrianglesFresnel[k] = listeSommets[i];
-		////		k++;
-		////	}
-		////}
-		////nbFacesFresnel = k;
+    //k=0;
+    ////for(i=0; i< listeSommets.size(); i++) // boucle sur les sommets des triangles de la topo
+    ////{
+    ////    if(fresnelArea.isInside(listeSommets[i]))
+    ////    {
+    ////        listeTrianglesFresnel[k] = listeSommets[i];
+    ////        k++;
+    ////    }
+    ////}
+    ////nbFacesFresnel = k;
 
-		////surfaceTot = 0.0;
-		////for(i=0; i<nbFacesFresnel; i++) // boucles sur les triangles situes dans la zone de Fresnel
-		////{
-		//	tabSurface[i] = _listeTriangles[i]->surface();   // calcul de la surface de la face
-		////	surfaceTot += tabSurface[i];
-		////}
+    ////surfaceTot = 0.0;
+    ////for(i=0; i<nbFacesFresnel; i++) // boucles sur les triangles situes dans la zone de Fresnel
+    ////{
+    //  tabSurface[i] = _listeTriangles[i]->surface();   // calcul de la surface de la face
+    ////    surfaceTot += tabSurface[i];
+    ////}
 
-		//for(i=0; i<nbFacesFresnel; i++)
-  //      tabPond[i] = tabSurface[i]/surfaceTot;
+    //for(i=0; i<nbFacesFresnel; i++)
+    //      tabPond[i] = tabSurface[i]/surfaceTot;
 
-		//return tabPond;
-	//}
+    //return tabPond;
+    //}
 }
 
 
@@ -498,7 +502,7 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff(TYCalcul& calcul, const TY
     double c1;      // constante du calcul
     //const double W0 = pow(10.0, -12.0);
 
-	OSpectre phase; // phase du nombre complexe _pressAcoustEff[i] pour chq i
+    OSpectre phase; // phase du nombre complexe _pressAcoustEff[i] pour chq i
     OSpectre mod;   // module du nombre complexe _pressAcoustEff[i] pour chq i
     double dSR;  // distance source recepteur
     OPoint3D S, P0; // pt de la source et pt du 1er evenement
@@ -511,65 +515,67 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff(TYCalcul& calcul, const TY
     for (int i = 0; i < _nbRays; i++) // boucle sur les rayons
     {
         tyRay = _tabTYRays[i];
-		source = tyRay->getSource();
-		TYTabRayEvent tabRayevent = tyRay->getTabEvent();
-		std::vector<int> reflexion_indices;	// Has indices where a reflexion occurs
-		int size = reflexion_indices.size();
-		double length = .0;
-		double begin = .0;
-		double end = .0;
-		double middle = .0;
+        source = tyRay->getSource();
+        TYTabRayEvent tabRayevent = tyRay->getTabEvent();
+        std::vector<int> reflexion_indices; // Has indices where a reflexion occurs
+        int size = reflexion_indices.size();
+        double length = .0;
+        double begin = .0;
+        double end = .0;
+        double middle = .0;
 
-		for(int j = 0; j < tabRayevent.size(); j++)
-		{
-			if(tabRayevent[j].type == TYREFLEXION || tabRayevent[j].type == TYREFLEXIONSOL)
-			{
-				reflexion_indices.push_back(j);
-			}
-		}
-		// First ray length (Source->1st refl)
-		if(reflexion_indices[0] == 1)
-		{
-			begin = _pathLengthMatrix[i][0]; 
-		}
-		else{
-			begin = tabRayevent[0].pos.distFrom(tabRayevent[reflexion_indices[0]].pos);
-		}
-		// Last ray length (last refl -> R)
-		if(reflexion_indices[size-1] == (tabRayevent.size())-2)
-		{
-			end = _pathLengthMatrix[i][reflexion_indices[size-1]]; 
-		}
-		else{
-			end = tabRayevent[reflexion_indices[size-1]].pos.distFrom(tabRayevent[tabRayevent.size()-1].pos);
-		}
+        for (int j = 0; j < tabRayevent.size(); j++)
+        {
+            if (tabRayevent[j].type == TYREFLEXION || tabRayevent[j].type == TYREFLEXIONSOL)
+            {
+                reflexion_indices.push_back(j);
+            }
+        }
+        // First ray length (Source->1st refl)
+        if (reflexion_indices[0] == 1)
+        {
+            begin = _pathLengthMatrix[i][0];
+        }
+        else
+        {
+            begin = tabRayevent[0].pos.distFrom(tabRayevent[reflexion_indices[0]].pos);
+        }
+        // Last ray length (last refl -> R)
+        if (reflexion_indices[size - 1] == (tabRayevent.size()) - 2)
+        {
+            end = _pathLengthMatrix[i][reflexion_indices[size - 1]];
+        }
+        else
+        {
+            end = tabRayevent[reflexion_indices[size - 1]].pos.distFrom(tabRayevent[tabRayevent.size() - 1].pos);
+        }
 
-		// Look up in pathlenghtmatrix to get the right distance
-		// Or compute the distance using the points coordinates
-		for(int k=0; k < size-1; k++)
-		{
-			double length = .0;
-			if(reflexion_indices[k+1] == reflexion_indices[k]+1 )
-			{
-				middle = _pathLengthMatrix[i][reflexion_indices[k]];
-			}
-			else
-			{
-				middle = tabRayevent[reflexion_indices[k]].pos.distFrom(tabRayevent[reflexion_indices[k+1]].pos);
-			}
-			length += middle;
-		}
-		// dSR is now the path distance with reflexions ONLY.
-		dSR = begin + end + length;
+        // Look up in pathlenghtmatrix to get the right distance
+        // Or compute the distance using the points coordinates
+        for (int k = 0; k < size - 1; k++)
+        {
+            double length = .0;
+            if (reflexion_indices[k + 1] == reflexion_indices[k] + 1)
+            {
+                middle = _pathLengthMatrix[i][reflexion_indices[k]];
+            }
+            else
+            {
+                middle = tabRayevent[reflexion_indices[k]].pos.distFrom(tabRayevent[reflexion_indices[k + 1]].pos);
+            }
+            length += middle;
+        }
+        // dSR is now the path distance with reflexions ONLY.
+        dSR = begin + end + length;
 
-		c1 = 4.0 * M_PI * dSR * dSR;
+        c1 = 4.0 * M_PI * dSR * dSR;
 
-		S  = *source->getPos();
-		P0 = (tyRay->getTabEvent())[1].pos;
+        S  = *source->getPos();
+        P0 = (tyRay->getTabEvent())[1].pos;
         seg = OSegment3D(S, P0);
-		
-		directivite = source->lwApparenteSrcDest(seg, _atmos);
-		wSource = (*source->getSpectre()).toGPhy(); // ou wSource = (*TYSourcePonctuelle::safeDownCast(_tabSources[i]->getElement())->getSpectre()).toGPhy(); // new !!
+
+        directivite = source->lwApparenteSrcDest(seg, _atmos);
+        wSource = (*source->getSpectre()).toGPhy(); // ou wSource = (*TYSourcePonctuelle::safeDownCast(_tabSources[i]->getElement())->getSpectre()).toGPhy(); // new !!
 
         prodAbs = _absAtm[i] * _absRefl[i] * _absDiff[i];
 
@@ -577,32 +583,34 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff(TYCalcul& calcul, const TY
         phase = _K.mult(tyRay->getSize());
 
         _pressAcoustEff[i] = OSpectreComplex(mod, phase);
-	}
+    }
 }
 
 OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel(TYCalcul& calcul, const TYSiteNode& site)
 {
     OSpectre C;         // facteur de coherence et son carre
     OSpectre un = OSpectre(1.0);
-    OSpectreComplex sum1;	//somme partielle
-    OSpectre sum2;			//somme partielle
-    OSpectre mod;		    // module et module au carre
-	const OSpectre K2 = _K*_K;				// nombre d'onde au carré
- 
-	double incerRel = 0.1;  // incertitude relative sur la taille du rayon au carree
+    OSpectreComplex sum1;   //somme partielle
+    OSpectre sum2;          //somme partielle
+    OSpectre mod;           // module et module au carre
+    const OSpectre K2 = _K * _K;            // nombre d'onde au carré
+
+    double incerRel = 0.1;  // incertitude relative sur la taille du rayon au carree
     double cst = (pow(2., 1. / 6.) - pow(2., -1. / 6.)) * (pow(2., 1. / 6.) - pow(2., -1. / 6.)) / 3.0 + incerRel * incerRel; // constante pour la definition du facteur de coherence
-	double dSR;				// distance source/recepteur
+    double dSR;             // distance source/recepteur
 
     const int nbSources    = _tabSources.size();           // nbr de sources de la scene
     const int nbRecepteurs = _tabRecepteur.size();         // nbr de recepteurs de la scene
 
-	TYSourcePonctuelle* source;
+    TYSourcePonctuelle* source;
     TYPointControl* recept;
 
     OTab2DSpectreComplex tabPressionAcoust(nbSources);
-	
-	for (int i = 0; i < nbSources; i++)
-		tabPressionAcoust[i].resize(nbRecepteurs);
+
+    for (int i = 0; i < nbSources; i++)
+    {
+        tabPressionAcoust[i].resize(nbRecepteurs);
+    }
 
     LPTYRay tyRay;
 
@@ -610,8 +618,8 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel(TYC
     {
         for (int j = 0; j < nbRecepteurs; j++) // boucle sur les recepteurs
         {
-			sum1 = OSpectreComplex(OSpectre(0.0), OSpectre(0.0));
-            sum2 = OSpectreComplex(OSpectre(0.0), OSpectre(0.0));      
+            sum1 = OSpectreComplex(OSpectre(0.0), OSpectre(0.0));
+            sum2 = OSpectreComplex(OSpectre(0.0), OSpectre(0.0));
 
             for (int k = 0; k < _nbRays; k++) // boucle sur les rayons allant de la source au recepteur
             {
@@ -627,11 +635,11 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel(TYC
                     C = (K2 * dSR * dSR * (-1) * cst).exp();
 
                     sum1 = sum1 + _pressAcoustEff[k] * C;
-                    sum2 = sum2 + mod * mod * (un - C*C);
+                    sum2 = sum2 + mod * mod * (un - C * C);
                 }
             }
-			OSpectreComplex res = sum1*sum1 + sum2;
-			tabPressionAcoust[i][j] = res;
+            OSpectreComplex res = sum1 * sum1 + sum2;
+            tabPressionAcoust[i][j] = res;
         }
     }
     return tabPressionAcoust;
@@ -643,11 +651,11 @@ void TYANIME3DAcousticModel::init(TYCalcul& calcul, const TYSiteNode& site, TabR
 
     _nbRays = _tabTYRays.size();
 
-	_tabRays = tabRayons;
-	//_tabRays = simulation.getSolver()->getValidRays();
-	//    _tabRays = acoustPathFinder.getTabRays();
+    _tabRays = tabRayons;
+    //_tabRays = simulation.getSolver()->getValidRays();
+    //    _tabRays = acoustPathFinder.getTabRays();
 
-	_tabSurfIntersect = tabStruct;
+    _tabSurfIntersect = tabStruct;
 
     OSpectreComplex s1 = OSpectreComplex(OSpectre(1.0));
     OSpectreComplex s0 = OSpectreComplex(OSpectre(0.0));
@@ -657,19 +665,19 @@ void TYANIME3DAcousticModel::init(TYCalcul& calcul, const TYSiteNode& site, TabR
     _absRefl = OTabSpectreComplex(_nbRays, s1);
     _absDiff = OTabSpectreComplex(_nbRays, s1);
 
-	_atmos = *(calcul.getAtmosphere());
-	_topo = *site.getTopographie();        
+    _atmos = *(calcul.getAtmosphere());
+    _topo = *site.getTopographie();
 
-    _listeTerrains = _topo.getListTerrain(); 
-    _listeTriangles = (*_topo.getAltimetrie()).getListFaces();  
+    _listeTerrains = _topo.getListTerrain();
+    _listeTriangles = (*_topo.getAltimetrie()).getListFaces();
 
     TYMapElementTabSources mapElementSources = calcul.getResultat()->getMapEmetteurSrcs();
     calcul.getAllSources(mapElementSources, _tabSources);
     calcul.getAllRecepteurs(_tabRecepteur);
 
-	_c = _atmos.getVitSon();  
-	_K = _atmos.getKAcoust();  
-	_lambda = OSpectre::getLambda(_c); 
+    _c = _atmos.getVitSon();
+    _K = _atmos.getKAcoust();
+    _lambda = OSpectre::getLambda(_c);
 
 }
 

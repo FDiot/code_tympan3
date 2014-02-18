@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include "RayCourb.h"
 #include "R3.h"
 
@@ -153,12 +153,12 @@ RayCourb::~RayCourb()
 //    // calcul du vent : on a une fonction lineaire fonction de la coordonnee z du point
 //    R3 v;
 //
-//	double angleVent = 90.0;
-//	double PI =355.0 / 113.0;
+//  double angleVent = 90.0;
+//  double PI =355.0 / 113.0;
 //
-//	double angle = -(PI/2.0) - (angleVent * PI /180.0);
-//	double DVx = cos(angle) * Meteo.gradV;
-//	double DVy = sin(angle) * Meteo.gradV;
+//  double angle = -(PI/2.0) - (angleVent * PI /180.0);
+//  double DVx = cos(angle) * Meteo.gradV;
+//  double DVy = sin(angle) * Meteo.gradV;
 //
 //    v.x = DVx * P.z;
 //    v.y = DVy * P.z;

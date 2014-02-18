@@ -370,7 +370,7 @@ void TYDXFBDTopoImporter::importField(int nMaxTerrain, const dimeModel model[],
                 //pTopo->setDefTerrain(pTerrain);
                 if (!bRes) //Err
                 {
-		  Display("Impossible d'ajouter le terrain %s",   pTerrain->getName().toUtf8().data());
+                    Display("Impossible d'ajouter le terrain %s",   pTerrain->getName().toUtf8().data());
                     break;
                 }
             }
@@ -518,7 +518,8 @@ QString TYDXFBDTopoImporter::GetDXFFileNameFromBDTopoPrefixAndDirectory(const ch
     QFileInfoList file_list = dir.entryInfoList(input_list);
 
     QString res;
-    if (file_list.count()) {
+    if (file_list.count())
+    {
         // Just kept the first element.
         res = file_list.at(0).absoluteFilePath();
     }

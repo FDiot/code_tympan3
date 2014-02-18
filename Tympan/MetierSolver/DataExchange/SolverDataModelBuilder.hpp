@@ -38,7 +38,7 @@ class UuidAdapter
 public:
     UuidAdapter(const TYUUID& rhs);
     //! Allow conversion to \c TYUUID.
-    operator TYUUID () const;
+    operator TYUUID() const;
 
     //! Get the Uuid.
     binary_uuid getUuid() const { return uuid; }

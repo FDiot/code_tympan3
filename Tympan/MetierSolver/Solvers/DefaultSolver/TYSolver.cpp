@@ -247,7 +247,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
     for (i = 0 ; i < nbFacesInfra ; i++)
     {
         // Creation d'une structure de type TYStructSurfIntersect
-		_tabPolygon[i].pSurfGeoNode = tabFaces[i]._pObj;
+        _tabPolygon[i].pSurfGeoNode = tabFaces[i]._pObj;
 
         // Incrementation manuel du compteur de reference
         // Necessaire pour la non destruction du pointeur
@@ -309,7 +309,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
     for (i = nbFacesInfra ; i < tabFaces.size() ; i++)
     {
         // Creation d'une structure de type TYStructSurfIntersect
-		_tabPolygon[i].pSurfGeoNode = tabFaces[i]._pObj;
+        _tabPolygon[i].pSurfGeoNode = tabFaces[i]._pObj;
 
         // Incrementation manuel du compteur de reference
         // Necessaire pour la non destruction du pointeur

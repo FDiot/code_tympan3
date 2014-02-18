@@ -53,9 +53,9 @@ double compute_segment_point_square_distance(double point_x, double point_y,
         else
         {
             return (point_x - (a_x + t * (b_x - a_x)))
-                * (point_x - (a_x + t * (b_x - a_x)))
-                + (point_y - (a_y + t * (b_y - a_y)))
-                * (point_y - (a_y + t * (b_y - a_y)));
+                   * (point_x - (a_x + t * (b_x - a_x)))
+                   + (point_y - (a_y + t * (b_y - a_y)))
+                   * (point_y - (a_y + t * (b_y - a_y)));
         }
     }
     return (point_x - a_x) * (point_x - a_x) + (point_y - a_y) * (point_y - a_y);

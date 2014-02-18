@@ -138,10 +138,10 @@ public:
 
     // ======== METHODES EQUIVALENTES A OSPECTRE POUR COMPATIBILITE PYTHON
     /// Conversion en dB.
-//    TYSpectre toDB() const;
+    //    TYSpectre toDB() const;
 
     /// Conversion en grandeur physique.
-//    TYSpectre toGPhy() const;
+    //    TYSpectre toGPhy() const;
 
     ///// Sommation arithmetique de deux spectres en 1/3 d'octave.
     //TYSpectre sum(const TYSpectre& spectre) const;

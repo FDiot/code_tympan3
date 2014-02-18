@@ -69,7 +69,7 @@ void TYBoundaryNoiseMapGraphic::update(bool force /*=false*/)
     // We hide the polyline
     _pPolyLineGraphic->setVisible(false);
 
-    TYBoundaryNoiseMap *boundaryNoiseMap = getElement();
+    TYBoundaryNoiseMap* boundaryNoiseMap = getElement();
 
     // And now... the mesh
     boundaryNoiseMap->computeMesh(_mesh);
@@ -86,7 +86,9 @@ void TYBoundaryNoiseMapGraphic::getChilds(TYListPtrTYElementGraphic& childs, boo
     TYElementGraphic* pTYElementGraphic = _pPolyLineGraphic;
     childs.push_back(pTYElementGraphic);
     if (recursive)
+    {
         pTYElementGraphic->getChilds(childs, recursive);
+    }
 }
 
 void TYBoundaryNoiseMapGraphic::computeBoundingBox()
@@ -94,8 +96,8 @@ void TYBoundaryNoiseMapGraphic::computeBoundingBox()
     _pPolyLineGraphic->computeBoundingBox();
     _boundingBox = OBox(_pPolyLineGraphic->GetBox());
     double offset = getElement()->getThickness() * 0.5;
-    OPoint3D &bb_min = _boundingBox._min;
-    OPoint3D &bb_max = _boundingBox._max;
+    OPoint3D& bb_min = _boundingBox._min;
+    OPoint3D& bb_max = _boundingBox._max;
     bb_min._x -= offset;
     bb_min._y -= offset;
     bb_max._x += offset;
@@ -110,11 +112,15 @@ void TYBoundaryNoiseMapGraphic::displayMixed(float opacity)
 
 void TYBoundaryNoiseMapGraphic::display(GLenum mode /*= GL_RENDER*/)
 {
-    if(_mesh.empty())
+    if (_mesh.empty())
+    {
         update();
+    }
 
     if (!_visible || getElement()->getState() == TYMaillage::Inactif)
+    {
         return;
+    }
 
     if (mode == GL_SELECT)
     {
@@ -126,9 +132,13 @@ void TYBoundaryNoiseMapGraphic::display(GLenum mode /*= GL_RENDER*/)
     float opacity = 1.f;
 #if TY_USE_IHM
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "MaillageOpacity"))
+    {
         opacity = TYPreferenceManager::getFloat(TYDIRPREFERENCEMANAGER, "MaillageOpacity");
+    }
     else
+    {
         TYPreferenceManager::setFloat(TYDIRPREFERENCEMANAGER, "MaillageOpacity", opacity);
+    }
 #endif // TY_USE_IHM
 
     switch (_Rendering)
@@ -148,7 +158,7 @@ void TYBoundaryNoiseMapGraphic::display(GLenum mode /*= GL_RENDER*/)
     }
 
     glColor3f(1.f, 0.f, 0.f);
-    if (mode == GL_SELECT) glPopName();
+    if (mode == GL_SELECT) { glPopName(); }
     if (_highlight)
     {
         if (_bFirstDisp)
@@ -176,10 +186,10 @@ void TYBoundaryNoiseMapGraphic::displaySurface(float opacity) //GLenum mode = GL
     glBegin(GL_TRIANGLES);
     for (size_t i = 0; i < nbTriangles; i++)
     {
-        const MTriangle &vtx = _mesh[i];
-        const MPoint &v1 = vtx.pts[0];
-        const MPoint &v2 = vtx.pts[1];
-        const MPoint &v3 = vtx.pts[2];
+        const MTriangle& vtx = _mesh[i];
+        const MPoint& v1 = vtx.pts[0];
+        const MPoint& v2 = vtx.pts[1];
+        const MPoint& v3 = vtx.pts[2];
 
         const OColor& color0 = pPalette->getColorFromValue(v1.scalar);
         glColor4f(color0.r, color0.g, color0.b, opacity);
@@ -206,14 +216,18 @@ void TYBoundaryNoiseMapGraphic::displayLines(float opacity, bool invertColors)
     size_t nbIsoCurve = _isoCurve.size();
 
     glBegin(GL_LINES);
-    for(size_t i = 0; i<nbIsoCurve; ++i)
+    for (size_t i = 0; i < nbIsoCurve; ++i)
     {
-        const MPoint &mp = _isoCurve[i];
-        const OColor &color = pPalette->getColorFromValue(mp.scalar);
+        const MPoint& mp = _isoCurve[i];
+        const OColor& color = pPalette->getColorFromValue(mp.scalar);
         if (invertColors)
+        {
             glColor4f(1.0f - color.r, 1.0f - color.g, 1.0f - color.b, opacity);
+        }
         else
+        {
             glColor4f(color.r, color.g, color.b, opacity);
+        }
         glVertex3f(mp.pt._x, mp.pt._y, mp.pt._z + 0.01); // 0.01 offset so that we can display the lines from top view
     }
     glEnd();

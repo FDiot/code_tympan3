@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYAcousticLineWidget.h
  * \brief Outil IHM pour une ligne acoustique (fichier header)
@@ -102,13 +102,13 @@ public slots:
      */
     void changeRegime(int regime);
 
-	/*!
-	 * \fn void saveCurrentRegime();
-	 * \brief save current regime if changed
-	 */
-	void saveCurrentRegime();
-	
-	/**
+    /*!
+     * \fn void saveCurrentRegime();
+     * \brief save current regime if changed
+     */
+    void saveCurrentRegime();
+
+    /**
      * Renomme le regime
      */
     void renameRegime(const QString& nom);
@@ -118,11 +118,11 @@ public slots:
      */
     void showSpectre();
 
-	/*!
-	 * \fn void setSpectreToReadOnly();
-	 * \brief Set Spectre to read only when in calculated mode
-	 */
-	void setSpectreToReadOnly();
+    /*!
+     * \fn void setSpectreToReadOnly();
+     * \brief Set Spectre to read only when in calculated mode
+     */
+    void setSpectreToReadOnly();
 
     /**
      * Edite la widget de l'attenuateur.

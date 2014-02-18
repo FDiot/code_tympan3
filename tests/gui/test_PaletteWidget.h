@@ -18,27 +18,27 @@
 
 class TYPaletteWidgetTests: public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 private slots:
-	void initTestCase();
-	void cleanupTestCase();
-	void init();
-	void cleanup();
+    void initTestCase();
+    void cleanupTestCase();
+    void init();
+    void cleanup();
 
-	void testShow();
+    void testShow();
 
 
 protected:
-	static QString ressourcePath;
+    static QString ressourcePath;
 
 private:
 
-	void initResources();
+    void initResources();
 
-	TYPaletteWidget* w;
-	LPTYPalette p;
+    TYPaletteWidget* w;
+    LPTYPalette p;
 
-	QMainWindow* main_w;
+    QMainWindow* main_w;
 };
 
 

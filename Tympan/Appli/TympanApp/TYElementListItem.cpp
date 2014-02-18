@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYElementListItem.cpp
  * \brief Frame pour les messages de retour
@@ -98,13 +98,13 @@ void TYElementListItem::updateContent()
 
         bool bInCurrentCalcul = false;
 
-		if (_pElement->isA("TYCalcul"))
-		{
-			// Nom du solveur utilisé par le calcul
-			OGenID currentId = TYCalcul::safeDownCast(_pElement)->getSolverId();
+        if (_pElement->isA("TYCalcul"))
+        {
+            // Nom du solveur utilisé par le calcul
+            OGenID currentId = TYCalcul::safeDownCast(_pElement)->getSolverId();
 
-			setText( 1, TYPluginManager::get()->getInfo("name", currentId) );
-		}
+            setText(1, TYPluginManager::get()->getInfo("name", currentId));
+        }
         else if (_pElement->inherits("TYPointCalcul"))
         {
             TYPointControl* pPoint = TYPointControl::safeDownCast(_pElement);
@@ -160,8 +160,8 @@ void TYElementListItem::updateContent()
             pParentItem = pParentItem->parent();
         }
 
-		// Mise à jour des enfant aussi ...
-		updateChilds();
+        // Mise à jour des enfant aussi ...
+        updateChilds();
     }
 }
 
@@ -229,7 +229,7 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
 
             }
         }
-        else if ( _pCurrentCalcul->isInSelection(_pElement) != state )
+        else if (_pCurrentCalcul->isInSelection(_pElement) != state)
         {
             if (getTYApp()->getCalculManager()->askForResetResultat())
             {
@@ -246,18 +246,18 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
                     _pCurrentCalcul->remToSelection(_pElement, true);
                 }
 
-				if ( _pElement->isA("TYSiteNode") )
-				{
-					TYSiteNode* pSite = dynamic_cast<TYSiteNode*>( _pElement.getRealPointer() );
-					LPTYCalcul pCalc = NULL;
-					if (getTYApp()->getCurProjet() && pSite)
-					{
-							pCalc = getTYApp()->getCurProjet()->getCurrentCalcul();
-							if (pCalc) { pCalc->getCalculElements(pSite); }
-					}
-				}
-				
-				if (UpdateModelers)
+                if (_pElement->isA("TYSiteNode"))
+                {
+                    TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(_pElement.getRealPointer());
+                    LPTYCalcul pCalc = NULL;
+                    if (getTYApp()->getCurProjet() && pSite)
+                    {
+                        pCalc = getTYApp()->getCurProjet()->getCurrentCalcul();
+                        if (pCalc) { pCalc->getCalculElements(pSite); }
+                    }
+                }
+
+                if (UpdateModelers)
                 {
                     if (_pElement->getParent())
                     {
@@ -296,12 +296,12 @@ void TYElementListItem::setCheckState(int column, Qt::CheckState state)
 
 void TYElementListItem::updateChilds()
 {
-	int  nbchilds = this->childCount();
-	for (int i = 0; i < nbchilds; i++)
-	{
-		TYElementListItem *childItem = (TYElementListItem*) child(i);
+    int  nbchilds = this->childCount();
+    for (int i = 0; i < nbchilds; i++)
+    {
+        TYElementListItem* childItem = (TYElementListItem*) child(i);
         TYElement* pChkElt = childItem->getElement();
-		bool bInCurrentCalcul = false;
+        bool bInCurrentCalcul = false;
         if (pChkElt && childItem->isCheckable())
         {
             if (_pCurrentCalcul)
@@ -314,8 +314,8 @@ void TYElementListItem::updateChilds()
             }
 
             childItem->QTreeWidgetItem::setCheckState(0, bInCurrentCalcul ? Qt::Checked : Qt::Unchecked);
-		}
+        }
 
-		childItem->updateChilds();
-	}
+        childItem->updateChilds();
+    }
 }

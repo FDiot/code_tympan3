@@ -26,11 +26,12 @@
 #include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
 #include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
 
-namespace tympan {
-typedef boost::error_info<struct tag_elements_implied,
-                          std::deque<LPTYElement> > elements_implied_errinfo;
-typedef boost::error_info<struct tag_position,
-                          OPoint3D> position_errinfo;
+namespace tympan
+{
+typedef boost::error_info < struct tag_elements_implied,
+        std::deque<LPTYElement> > elements_implied_errinfo;
+typedef boost::error_info < struct tag_position,
+        OPoint3D > position_errinfo;
 } // namespace tympan
 
 #if TY_USE_IHM
@@ -84,25 +85,25 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-//  XXX is being refactored to enable plugin back AltimetryBuilder result.
-//    /**
-//     * Calcul l'altimetrie a partir d'une collection de points.
-//     * L'altimetrie est le resultat de la triangulation de Delaunay calculee
-//     * a partir des points passes.
-//     *
-//     * @param points Les points pour calculer l'altimetrie.
-//     */
-//    virtual void compute(const TYTabPoint& points, const double& delaunay);
+    //  XXX is being refactored to enable plugin back AltimetryBuilder result.
+    //    /**
+    //     * Calcul l'altimetrie a partir d'une collection de points.
+    //     * L'altimetrie est le resultat de la triangulation de Delaunay calculee
+    //     * a partir des points passes.
+    //     *
+    //     * @param points Les points pour calculer l'altimetrie.
+    //     */
+    //    virtual void compute(const TYTabPoint& points, const double& delaunay);
 
-//  XXX Is being replaced by the new triangulation builder
-//      from the SolverDataModel component
-//    /**
-//     * Calcul l'altimetrie a partir d'une collection de points et de segments.
-//     * L'altimetrie est le resultat de la triangulation de Delaunay contrainte calculee
-//     * a partir des points passes et des segments.
-//     *
-//     */
-//    void computeWithConstraint(OConstraintDelaunayMaker& oConstraintDelaunayMaker);
+    //  XXX Is being replaced by the new triangulation builder
+    //      from the SolverDataModel component
+    //    /**
+    //     * Calcul l'altimetrie a partir d'une collection de points et de segments.
+    //     * L'altimetrie est le resultat de la triangulation de Delaunay contrainte calculee
+    //     * a partir des points passes et des segments.
+    //     *
+    //     */
+    //    void computeWithConstraint(OConstraintDelaunayMaker& oConstraintDelaunayMaker);
 
     /**
      * @brief plug back triangulation providfed by the TYTopographie
@@ -115,8 +116,8 @@ public:
      * @param triangles the faces of the triangulation
      */
     void plugBackTriangulation(
-    		const std::deque<OPoint3D>& points,
-    		std::deque<OTriangle>& triangles);
+        const std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles);
 
     /**
      * Set/Get de la liste des faces.
@@ -162,7 +163,7 @@ public:
      * @return <code>false</code> si l'altitude du point n'a pu etre
      *         determinee; <code>false</code> sinon.
      */
-	double altitude(const OPoint3D& pt);
+    double altitude(const OPoint3D& pt);
 
     /**
      * \brief Modifie l'altitude d'un point donn�. Si le point est hors de la zone dans laquelle l'altim�trie est d�finie, la valeur z du point est mise a \c TYAltimetry::invalid_altitude
@@ -194,25 +195,25 @@ public:
      */
     TYTabPoint altSup(const TYPoint& pt) const;
 
-	/**
-	 * \brief Return the face under a point
-	 * \fn LPTYPolygon getFaceUnder(OPoint3D pt);
-	 */
-	LPTYPolygon getFaceUnder(OPoint3D pt);
+    /**
+     * \brief Return the face under a point
+     * \fn LPTYPolygon getFaceUnder(OPoint3D pt);
+     */
+    LPTYPolygon getFaceUnder(OPoint3D pt);
 
-	/**
-	 * \brief find a list of triangle partialy or totaly included in a box
-	 * \brief A return value equal 0 means all triangle near the boxes are included
-	 * \fn unsigned int getFacesInBox(OBox2 box, TYTabLPPolygon& tabPolygon)
-	 */
-	unsigned int getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPolygon);
+    /**
+     * \brief find a list of triangle partialy or totaly included in a box
+     * \brief A return value equal 0 means all triangle near the boxes are included
+     * \fn unsigned int getFacesInBox(OBox2 box, TYTabLPPolygon& tabPolygon)
+     */
+    unsigned int getFacesInBox(const OBox2& box, TYTabLPPolygon& tabPolygon);
 
-	/**
-	 * \brief find a list of point included in a box defined by four points
-	 * \brief Value returned is the number of point
-	 * \fn unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon)
-	 */
-	unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon);
+    /**
+     * \brief find a list of point included in a box defined by four points
+     * \brief Value returned is the number of point
+     * \fn unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon)
+     */
+    unsigned int getPointsInBox(const OPoint3D& pt0, const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, TYTabPoint& tabPolygon);
 
 
 
@@ -223,30 +224,30 @@ protected:
     FRIEND_TEST(TYAltimetryTest, dummy_grid);
     FRIEND_TEST(TYAltimetryTest, simple_grid);
     FRIEND_TEST(TYAltimetryTest, simple_terrain);
-	/**
-	 * \brief Select indices of faces to test
-	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
-	 */
-	bool getGridIndices(const OPoint3D& pt, grid_index& indXY) const;
+    /**
+     * \brief Select indices of faces to test
+     * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
+     */
+    bool getGridIndices(const OPoint3D& pt, grid_index& indXY) const;
 
-	/**
-	 * \brief Select indices of faces to test
-	 * \fn bool getGridIndices(const OPoint3D* pts, int* indXY)
-	 */
-	bool getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) const;
+    /**
+     * \brief Select indices of faces to test
+     * \fn bool getGridIndices(const OPoint3D* pts, int* indXY)
+     */
+    bool getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) const;
 
-	/**
-	 * \brief Select indices of faces to test
-	 * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
-	 */
-	bool getGridIndices(const OBox2 &box, unsigned int* iMinMax) const;
+    /**
+     * \brief Select indices of faces to test
+     * \fn bool getGridIndices(const OPoint3D& pt, int* indXY)
+     */
+    bool getGridIndices(const OBox2& box, unsigned int* iMinMax) const;
 
 
-	/**
-	 * \brief Select faces in the interval minX, maxX, minY, maxY
-	 * \fn void getFacesinIndices(unsigned int& minX, unsigned int&maxX, unsigned int&minY, unsigned int&maxY, TYTabLPPolygon& faces);
-	 */
-	void getFacesinIndices(unsigned int& minX, unsigned int&maxX, unsigned int&minY, unsigned int&maxY, TYTabLPPolygon& faces);
+    /**
+     * \brief Select faces in the interval minX, maxX, minY, maxY
+     * \fn void getFacesinIndices(unsigned int& minX, unsigned int&maxX, unsigned int&minY, unsigned int&maxY, TYTabLPPolygon& faces);
+     */
+    void getFacesinIndices(unsigned int& minX, unsigned int& maxX, unsigned int& minY, unsigned int& maxY, TYTabLPPolygon& faces);
 
 private :
     inline bool IsInsideFace(const TYTabPoint& pts, OPoint3D& pt) const;
@@ -260,7 +261,7 @@ protected:
     OBox             _bbox;
 
 
-// The members below handle the accelerating grid : this could / should be a disctinc class
+    // The members below handle the accelerating grid : this could / should be a disctinc class
 
     /// \brief Initilise the grid related attributes for a null grid
     void initNullGrid();
@@ -269,7 +270,7 @@ protected:
     void clearAcceleratingGrid();
 
     /// \brief initialise the accelerating structure given current _bbox and _gridS{XY}
-    void initAcceleratingGrid(unsigned to_be_reserved=0);
+    void initAcceleratingGrid(unsigned to_be_reserved = 0);
 
     /// \brief Clear the grid and reinitialise it as a copy of \c other
     void copyAcceleratingGrid(const TYAltimetrie& other);

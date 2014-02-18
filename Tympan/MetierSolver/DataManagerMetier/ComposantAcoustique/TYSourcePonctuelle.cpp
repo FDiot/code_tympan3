@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -306,11 +306,11 @@ OSpectre TYSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const TYA
                 matrix.invert();
 
                 // Traitement selon cas
-				TYElement *pElement = pVolParent->getParent();
-				TYMachine *pMachine = NULL;
-				TYEtage *pEtage = NULL;
-				if (pElement)  { pMachine = dynamic_cast<TYMachine*>(pElement); }
-				if (!pMachine) { pEtage = dynamic_cast<TYEtage*>(pElement); } 
+                TYElement* pElement = pVolParent->getParent();
+                TYMachine* pMachine = NULL;
+                TYEtage* pEtage = NULL;
+                if (pElement)  { pMachine = dynamic_cast<TYMachine*>(pElement); }
+                if (!pMachine) { pEtage = dynamic_cast<TYEtage*>(pElement); }
                 if (pMachine)
                 {
                     s = (calcDirectiviteMachine(pVolParent, pSupport, matrix, seg, Atmo)).racine();
@@ -356,7 +356,7 @@ OSpectre TYSourcePonctuelle::calcDirectiviteMachine(const TYAcousticVolume* pVol
     double a = 1.0; //pVolume->getRayonSphere();
 
     // Centre de gravite du volume, passage dans le repere de la source
-//    const TYPoint& centre = matrix * pVolume->getCentreGravite();
+    //    const TYPoint& centre = matrix * pVolume->getCentreGravite();
     const OPoint3D centre = matrix * pVolume->getCentreGravite();
 
     // On teste si pSupport existe (tout sauf enveloppe cylindre et 1/2 cylindre)
@@ -365,13 +365,13 @@ OSpectre TYSourcePonctuelle::calcDirectiviteMachine(const TYAcousticVolume* pVol
     // On construit le vecteur indiquant l'exterieur du volume
     OVector3D extVolume(centre, seg._ptA);
 
-	// Tentative pour eviter le mecanisme de RTTI de Code_TYMPAN (OPrototype)
-	TYAcousticVolume *pVolTemp = const_cast<TYAcousticVolume*>(pVolume);
-	TYAcousticCylinder *pCyl = dynamic_cast<TYAcousticCylinder*>(pVolTemp);
-	TYAcousticSemiCylinder *pSCyl = NULL;
-	if (!pCyl) { pSCyl = dynamic_cast<TYAcousticSemiCylinder*>(pVolTemp); }
+    // Tentative pour eviter le mecanisme de RTTI de Code_TYMPAN (OPrototype)
+    TYAcousticVolume* pVolTemp = const_cast<TYAcousticVolume*>(pVolume);
+    TYAcousticCylinder* pCyl = dynamic_cast<TYAcousticCylinder*>(pVolTemp);
+    TYAcousticSemiCylinder* pSCyl = NULL;
+    if (!pCyl) { pSCyl = dynamic_cast<TYAcousticSemiCylinder*>(pVolTemp); }
 
-    if ((pSupport == NULL) || ( pCyl || pSCyl ) )
+    if ((pSupport == NULL) || (pCyl || pSCyl))
     {
         normale = OVector3D(centre, seg._ptA);
 
@@ -405,7 +405,7 @@ OSpectre TYSourcePonctuelle::calcDirectiviteMachine(const TYAcousticVolume* pVol
         }
         else
         {
-			TYAcousticSurface* pTempSurf = const_cast<TYAcousticSurface*>(pSupport);
+            TYAcousticSurface* pTempSurf = const_cast<TYAcousticSurface*>(pSupport);
             TYAcousticRectangle* pRectangle = dynamic_cast<TYAcousticRectangle*>(pTempSurf);
             if (pRectangle) { a = pRectangle->getBoundingRect()->getDiagSize(); }
         }
@@ -454,13 +454,13 @@ OSpectre TYSourcePonctuelle::calcDirectiviteEtage(const TYAcousticVolume* pVolum
     // On construit le vecteur indiquant l'exterieur du volume
     OVector3D extVolume(centre, seg._ptA);
 
-	// Tentative pour eviter le mecanisme de RTTI de Code_TYMPAN (OPrototype)
-	TYAcousticVolume *pVolTemp = const_cast<TYAcousticVolume*>(pVolume);
-	TYAcousticCylinder *pCyl = dynamic_cast<TYAcousticCylinder*>(pVolTemp);
-	TYAcousticSemiCylinder *pSCyl = NULL;
-	if (!pCyl) { pSCyl = dynamic_cast<TYAcousticSemiCylinder*>(pVolTemp); }
+    // Tentative pour eviter le mecanisme de RTTI de Code_TYMPAN (OPrototype)
+    TYAcousticVolume* pVolTemp = const_cast<TYAcousticVolume*>(pVolume);
+    TYAcousticCylinder* pCyl = dynamic_cast<TYAcousticCylinder*>(pVolTemp);
+    TYAcousticSemiCylinder* pSCyl = NULL;
+    if (!pCyl) { pSCyl = dynamic_cast<TYAcousticSemiCylinder*>(pVolTemp); }
 
-    if ((pSupport == NULL) && ( pCyl || pSCyl) )
+    if ((pSupport == NULL) && (pCyl || pSCyl))
     {
         normale = OVector3D(centre, seg._ptA);
 
@@ -492,7 +492,7 @@ OSpectre TYSourcePonctuelle::calcDirectiviteEtage(const TYAcousticVolume* pVolum
         }
         else
         {
-			TYAcousticSurface* pTempSurf = const_cast<TYAcousticSurface*>(pSupport);
+            TYAcousticSurface* pTempSurf = const_cast<TYAcousticSurface*>(pSupport);
             TYAcousticRectangle* pRectangle = dynamic_cast<TYAcousticRectangle*>(pTempSurf);
             if (pRectangle) { a = pRectangle->getBoundingRect()->getDiagSize(); }
         }

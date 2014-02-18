@@ -84,11 +84,11 @@ TYRoute::TYRoute():
     road_traffic.surfaceType = RoadSurface_Default;
     road_traffic.surfaceAge = 0.0;
     road_traffic.ramp = 0.0;
-    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    for (unsigned i = 0; i < NB_TRAFFIC_REGIMES; ++i)
     {
         traffic_regimes[i].setParent(this);
         // On rajoute un ieme regime (un premier a ete construit par TYAcousticLine)
-        if (i>0) addRegime(buildRegime());
+        if (i > 0) { addRegime(buildRegime()); }
     }
 
     _largeur = 3.5;
@@ -119,7 +119,7 @@ TYRoute& TYRoute::operator=(const TYRoute& other)
     {
         TYAcousticLine::operator =(other);
         road_traffic = other.road_traffic;
-        for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+        for (unsigned i = 0; i < NB_TRAFFIC_REGIMES; ++i)
         {
             traffic_regimes[i] = other.traffic_regimes[i];
         }
@@ -138,9 +138,9 @@ bool TYRoute::operator==(const TYRoute& other) const
         if (road_traffic.surfaceAge != other.road_traffic.surfaceAge) { return false; }
         if (road_traffic.ramp != other.road_traffic.ramp) { return false; }
         if (road_traffic.nbComponents != other.road_traffic.nbComponents) { return false; }
-        for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+        for (unsigned i = 0; i < NB_TRAFFIC_REGIMES; ++i)
         {
-            if(traffic_regimes[i] != other.traffic_regimes[i]) { return false; };
+            if (traffic_regimes[i] != other.traffic_regimes[i]) { return false; };
         }
     }
     return true;
@@ -159,7 +159,7 @@ bool TYRoute::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     assert(pOtherRoute && "Invalid cast to TYRoute*");
 
     road_traffic = pOtherRoute->road_traffic;
-    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    for (unsigned i = 0; i < NB_TRAFFIC_REGIMES; ++i)
     {
         traffic_regimes[i].deepCopy(&pOtherRoute->traffic_regimes[i], copyId);
     }
@@ -185,7 +185,7 @@ DOM_Element TYRoute::toXML(DOM_Element& domElement)
     domNewElem.setAttribute("surfaceAge", road_traffic.surfaceAge);
 
     // Serialise each of the regimes
-    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    for (unsigned i = 0; i < NB_TRAFFIC_REGIMES; ++i)
     {
         traffic_regimes[i].toXML(domNewElem);
     }
@@ -203,7 +203,7 @@ int TYRoute::fromXML(DOM_Element domElement)
 
     // Deserialise the RoadTraffic attribute surfaceType
     s = domElement.attribute("surfaceType", QString());
-    if(s.isEmpty()) // Attribute not found
+    if (s.isEmpty()) // Attribute not found
     {
         OMessageManager::get()->error(
             "Can not read the road `surfaceType` attribute for element %s.",
@@ -211,7 +211,7 @@ int TYRoute::fromXML(DOM_Element domElement)
         return 0;
     }
     unsigned surfType = s.toUInt(&ok);
-    if(!ok)
+    if (!ok)
     {
         OMessageManager::get()->error(
             "Integer expected for attribute `surfaceType` on element %s, not %s",
@@ -222,7 +222,7 @@ int TYRoute::fromXML(DOM_Element domElement)
 
     // Deserialise the RoadTraffic attribute ramp
     s = domElement.attribute("ramp", QString());
-    if(s.isEmpty()) // Attribute not found
+    if (s.isEmpty()) // Attribute not found
     {
         OMessageManager::get()->error(
             "Can not read the road `ramp` attribute for element %s.",
@@ -230,7 +230,7 @@ int TYRoute::fromXML(DOM_Element domElement)
         return 0;
     }
     double tmp_d = s.toDouble(&ok);
-    if(!ok)
+    if (!ok)
     {
         OMessageManager::get()->error(
             "Floating point number expected for attribute `ramp` on element %s, not %s",
@@ -241,7 +241,7 @@ int TYRoute::fromXML(DOM_Element domElement)
 
     // Deserialise the RoadTraffic attribute surfaceAge
     s = domElement.attribute("surfaceAge", QString());
-    if(s.isEmpty()) // Attribute not found
+    if (s.isEmpty()) // Attribute not found
     {
         OMessageManager::get()->error(
             "Can not read the road `surfaceAge` attribute for element %s.",
@@ -249,7 +249,7 @@ int TYRoute::fromXML(DOM_Element domElement)
         return 0;
     }
     tmp_d = s.toUInt(&ok);
-    if(!ok)
+    if (!ok)
     {
         OMessageManager::get()->error(
             "Integer expected for attribute `surfaceAge` on element %s, not %s",
@@ -262,14 +262,14 @@ int TYRoute::fromXML(DOM_Element domElement)
     QDomNodeList children = domElement.elementsByTagName("Trafic");
     if (children.size() != NB_TRAFFIC_REGIMES)
     {
-         OMessageManager::get()->error(
+        OMessageManager::get()->error(
             "Loading TYRoute element %s, "
             "%u TYTrafic child elements were found but %u were expected",
             str_qt2c(getStringID()), children.size(), NB_TRAFFIC_REGIMES);
         return 0;
     }
 
-    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    for (unsigned i = 0; i < NB_TRAFFIC_REGIMES; ++i)
     {
         QDomElement elem = children.item(i).toElement();
         if (elem.isNull())
@@ -299,7 +299,7 @@ TYSpectre TYRoute::computeSpectre(enum TrafficRegimes regime)
     // Half the global traffic to get the flow for only one roadway
     TrafficHalfer halves_the_traffic(*this);
 
-    double * tab;
+    double* tab;
     tab = NMPB08_Lwm(&road_traffic, Spectrum_3oct_lin);
     OSpectre s_one_way(tab, 18, 8);
     s_one_way.setType(SPECTRE_TYPE_LW);
@@ -325,8 +325,10 @@ double TYRoute::calculPenteMoyenne()
     // Iter on the _listSrcPonct (sources) instead of _tabPoint (2d geometry)
 
     size_t nbPoint = _tabPoint.size();
-    if(nbPoint<2) // Declivity is undefined
+    if (nbPoint < 2) // Declivity is undefined
+    {
         return undefined_declivity;
+    }
     double* XTemp = new double [nbPoint]; // sert a ramener les points repartis sur une surface sur une droite
     double X  = 0.0;
     double Z  = 0.0;
@@ -390,7 +392,7 @@ bool TYRoute::updateAcoustic(const bool& force) //force = false
 {
     if (_typeDistribution == TY_PUISSANCE_CALCULEE)
     {
-        for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+        for (unsigned i = 0; i < NB_TRAFFIC_REGIMES; ++i)
         {
             // Calcul des spectres correspondant aux regimes jours et nuit
             TYSpectre spectrum = computeSpectre(static_cast<enum TrafficRegimes>(i));
@@ -469,7 +471,7 @@ void TYRoute::distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
 
     for (unsigned int i = 0; i < _pSrcLineic->getNbSrcs(); i++)
     {
-        LPTYSourcePonctuelle pSrc=_pSrcLineic->getSrc(i);
+        LPTYSourcePonctuelle pSrc = _pSrcLineic->getSrc(i);
         // Transform to site frame pose
         OPoint3D pt = matrix * (*pSrc->getPos());
         alti.updateAltitude(pt);
@@ -500,12 +502,15 @@ void TYRoute::setRoadTrafficArrayForRegime(enum TrafficRegimes regime)
 
 void TYRoute::updateComputedDeclivity()
 {
-    if(!computed_declivity)
+    if (!computed_declivity)
+    {
         return;
+    }
 
     double penteMoy = calculPenteMoyenne();
 
-    if(is_valid_declivity(penteMoy)) {
+    if (is_valid_declivity(penteMoy))
+    {
         road_traffic.ramp = penteMoy; // TODO assert units
     }
     else
@@ -517,15 +522,16 @@ void TYRoute::updateComputedDeclivity()
 }
 
 // table C1
-const TYRoute::note77_tables TYRoute::note77_lower_bounds = {
-// Link motorways
+const TYRoute::note77_tables TYRoute::note77_lower_bounds =
+{
+    // Link motorways
     {
         // Long distance function
         {7000, 1300, 16},
         // Regional roads
         {7000,  500,  6}
     },
-// Intercity roads
+    // Intercity roads
     {
         // Long distance function
         {2500,  300,  8},
@@ -534,16 +540,16 @@ const TYRoute::note77_tables TYRoute::note77_lower_bounds = {
     }
 };
 // table C1
-const TYRoute::note77_tables TYRoute::note77_upper_bounds=
+const TYRoute::note77_tables TYRoute::note77_upper_bounds =
 {
-// Link motorways
+    // Link motorways
     {
         // Long distance function
         {70000, 13500, 36},
         // Regional roads
         {93000, 14000, 34}
     },
-// Intercity roads
+    // Intercity roads
     {
         // Long distance function
         {22500, 5000, 34},
@@ -552,15 +558,16 @@ const TYRoute::note77_tables TYRoute::note77_upper_bounds=
     }
 };
 // table C2
-const TYRoute::note77_tables TYRoute::note77_hourly_HGV_coeff = {
-// Link motorways
+const TYRoute::note77_tables TYRoute::note77_hourly_HGV_coeff =
+{
+    // Link motorways
     {
         // Long distance function
         {20, 20, 39},
         // Regional roads
         {17, 28,  50}
     },
-// Intercity roads
+    // Intercity roads
     {
         // Long distance function
         {17, 27, 51},
@@ -569,15 +576,16 @@ const TYRoute::note77_tables TYRoute::note77_hourly_HGV_coeff = {
     }
 };
 // table C2
-const TYRoute::note77_tables TYRoute::note77_hourly_LV_coeff = {
-// Link motorways
+const TYRoute::note77_tables TYRoute::note77_hourly_LV_coeff =
+{
+    // Link motorways
     {
         // Long distance function
         {17, 19,  82},
         // Regional roads
         {17, 18, 100}
     },
-// Intercity roads
+    // Intercity roads
     {
         // Long distance function
         {17, 19, 110},
@@ -598,8 +606,10 @@ bool TYRoute::note77_check_validity(
     // TODO i18n when i18n will be properly handled by Qt
 
     double min, max;
-    if(out_msg)
+    if (out_msg)
+    {
         out_msg->clear();
+    }
 
     const double aadt_total = aadt_lv + aadt_hgv;
     // TODO Use propoer loggin to report validity violations
@@ -608,26 +618,26 @@ bool TYRoute::note77_check_validity(
     min = note77_lower_bounds[road_type][road_function][0];
     max = note77_upper_bounds[road_type][road_function][0];
     bool ok_total = is_in(aadt_total, min, max);
-    if(out_msg && !ok_total)
-        out_msg->append( QString::fromUtf8("TMJA total (%1) invalide : "
-                                           "doit être entre %2 et %3.\n")
-                         .arg(aadt_total).arg(min).arg(max));
+    if (out_msg && !ok_total)
+        out_msg->append(QString::fromUtf8("TMJA total (%1) invalide : "
+                                          "doit être entre %2 et %3.\n")
+                        .arg(aadt_total).arg(min).arg(max));
 
     min = note77_lower_bounds[road_type][road_function][1];
     max = note77_upper_bounds[road_type][road_function][1];
     bool ok_hgv = is_in(aadt_hgv, min, max);
-    if(out_msg && !ok_hgv)
-        out_msg->append( QString::fromUtf8("TMJA poids-lourds (%1) invalide : "
-                                           "doit être entre %2 et %3.\n")
-                         .arg(aadt_hgv).arg(min).arg(max));
+    if (out_msg && !ok_hgv)
+        out_msg->append(QString::fromUtf8("TMJA poids-lourds (%1) invalide : "
+                                          "doit être entre %2 et %3.\n")
+                        .arg(aadt_hgv).arg(min).arg(max));
 
     min = note77_lower_bounds[road_type][road_function][2];
     max = note77_upper_bounds[road_type][road_function][2];
     bool ok_percent = is_in(hgv_percent, min, max);
-    if(out_msg && !ok_percent)
-        out_msg->append( QString::fromUtf8("Proportion de poids-lourds (%1) invalide : "
-                                           "doit être entre %2 et %3.\n")
-                         .arg(hgv_percent).arg(min).arg(max));
+    if (out_msg && !ok_percent)
+        out_msg->append(QString::fromUtf8("Proportion de poids-lourds (%1) invalide : "
+                                          "doit être entre %2 et %3.\n")
+                        .arg(hgv_percent).arg(min).arg(max));
 
     return ok_total && ok_hgv && ok_percent;
 }
@@ -638,10 +648,12 @@ bool  TYRoute::setFromAADT(double aadt_hgv, double aadt_lv,
                            TYRoute::RoadFunction road_function,
                            QString* out_msg)
 {
-    if  (!note77_check_validity(aadt_hgv, aadt_lv, road_type, road_function, out_msg))
+    if (!note77_check_validity(aadt_hgv, aadt_lv, road_type, road_function, out_msg))
+    {
         return false;
+    }
 
-    for(unsigned i=0; i<NB_TRAFFIC_REGIMES; ++i)
+    for (unsigned i = 0; i < NB_TRAFFIC_REGIMES; ++i)
     {
         enum TrafficRegimes regime = static_cast<TrafficRegimes>(i);
         RoadTrafficComponent& traffic_lv  = accessRoadTrafficComponent(regime, TYTrafic::LV);
@@ -658,10 +670,10 @@ bool  TYRoute::setFromAADT(double aadt_hgv, double aadt_lv,
 TYRoute::TrafficHalfer::TrafficHalfer(TYRoute& road_) :
     road(road_)
 {
-    for(unsigned j=0; j<NB_TRAFFIC_REGIMES; ++j)
+    for (unsigned j = 0; j < NB_TRAFFIC_REGIMES; ++j)
     {
         enum TrafficRegimes regime = static_cast<TrafficRegimes>(j);
-        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+        for (unsigned i = 0; i < TYTrafic::NB_VEHICLE_TYPES; ++i)
         {
             enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
             road.accessRoadTrafficComponent(regime, vehicle_type).trafficFlow /= 2.0;
@@ -672,10 +684,10 @@ TYRoute::TrafficHalfer::TrafficHalfer(TYRoute& road_) :
 TYRoute::TrafficHalfer::~TrafficHalfer()
 {
     // Restore the traffic
-    for(unsigned j=0; j<NB_TRAFFIC_REGIMES; ++j)
+    for (unsigned j = 0; j < NB_TRAFFIC_REGIMES; ++j)
     {
         enum TrafficRegimes regime = static_cast<TrafficRegimes>(j);
-        for(unsigned i=0; i<TYTrafic::NB_VEHICLE_TYPES; ++i)
+        for (unsigned i = 0; i < TYTrafic::NB_VEHICLE_TYPES; ++i)
         {
             enum TYTrafic::VehicleTypes vehicle_type = static_cast<TYTrafic::VehicleTypes>(i);
             road.accessRoadTrafficComponent(regime, vehicle_type).trafficFlow *= 2.0;

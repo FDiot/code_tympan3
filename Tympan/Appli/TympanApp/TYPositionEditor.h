@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYPositionEditor.h
  * \brief gestion de la position selon les modes 'moving', 'rotation', 'edition' (fichier header)
@@ -247,7 +247,7 @@ protected:
      * \param closed If the polyline is closed
      * \param pAlti The altimetry (if available)
      */
-    void editPolyLine(LPTYElement pElt, TYTabPoint &pts, bool close, LPTYAltimetrie pAlti = NULL);
+    void editPolyLine(LPTYElement pElt, TYTabPoint& pts, bool close, LPTYAltimetrie pAlti = NULL);
 
     /**
      * \brief Add a new point on the closest line to the mouse position
@@ -255,7 +255,7 @@ protected:
      * \param newPoint The newly created point (for undo/redo purpose)
      * \param idInsert The id of the newly created point (for undo/redo purpose)
      */
-    void insertNewPoint(TYTabPoint &pts, TYPoint &newPoint, int &idInsert, LPTYAltimetrie pAlti = NULL);
+    void insertNewPoint(TYTabPoint& pts, TYPoint& newPoint, int& idInsert, LPTYAltimetrie pAlti = NULL);
 
     /**
      * \brief Delete the closest point of a polyline to the mouse position
@@ -263,21 +263,21 @@ protected:
      * \param deletedPoint The deleted point (for undo/redo purpose)
      * \param idDelete The id of the deleted point (for undo/redo purpose)
      */
-    void deletePoint(TYTabPoint &pts, TYPoint &deletedPoint, int &idDelete);
+    void deletePoint(TYTabPoint& pts, TYPoint& deletedPoint, int& idDelete);
 
     /**
      * \brief Find the closest segment of a polyline to the mouse position
      * \param pts The points of the polyline
      * \return The id of the first point of the closest segment
      */
-     int findClosestSegmentToMouse(const TYTabPoint &pts);
+    int findClosestSegmentToMouse(const TYTabPoint& pts);
 
     /**
      * \brief Return the id of the closest point of a polyline to the mouse position
      * \param pts The points of the polyline
      * \return The id of the closest point
      */
-    int findClosestPointToMouse(const TYTabPoint &pts);
+    int findClosestPointToMouse(const TYTabPoint& pts);
 
     /**
      * \bref Shortest distance (squared) between a segment and a point

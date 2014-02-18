@@ -33,7 +33,8 @@
 #include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OPlan.h"
 
-namespace tympan {
+namespace tympan
+{
 
 
 // From CGAL manuel Section 37.8
@@ -65,17 +66,18 @@ CGAL_Plane to_cgal(const OPlan& oplan);
 /**
  * @brief This class provides triangulating simple polygons without holes
  */
-class PolygonTriangulator {
+class PolygonTriangulator
+{
 
 public:
 
     struct VertexInfo
     {
-        VertexInfo(int i_=-1) : i(i_) {}
+        VertexInfo(int i_ = -1) : i(i_) {}
         int i; // This is the index of the vertice within the intial polygon.
     };
 
-    struct FaceInfo{};
+    struct FaceInfo {};
 
     /* Please refer to the following example in CGAL doc for meaning of those typedef
      * http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Triangulation_2/Chapter_main.html#Subsection_37.8.2
@@ -138,7 +140,8 @@ protected:
 } //namespace tympan
 
 
-namespace tympan { // Templates and inline implementations
+namespace tympan   // Templates and inline implementations
+{
 
 
 } // namespace tympan {

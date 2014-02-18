@@ -13,16 +13,18 @@
 // instead of being merely defined here.
 double my_add_feature(double a, double b)
 {
-    return a+b;
+    return a + b;
 }
 
-TEST(ExampleTest, addonint) {
+TEST(ExampleTest, addonint)
+{
     // This macro handles the check and the reporting
     EXPECT_EQ(5, my_add_feature(2, 3));
 }
 
 // the test name starting with DISABLED tells GTest it has to disable this test.
-TEST(ExampleTest, DISABLED_purposefulfail) {
+TEST(ExampleTest, DISABLED_purposefulfail)
+{
     // This macro handles the check and the reporting
     EXPECT_EQ(0, my_add_feature(2, 3));
 }

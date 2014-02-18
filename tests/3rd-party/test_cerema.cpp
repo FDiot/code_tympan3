@@ -13,7 +13,8 @@
 
 #include "RoadEmissionNMPB08.h"
 
-TEST(NMPB2008, road_emission_use) {
+TEST(NMPB2008, road_emission_use)
+{
 
     RoadTrafficComponent rtf_VL;
     rtf_VL.vehicleType = VehicleType_VL;
@@ -28,14 +29,14 @@ TEST(NMPB2008, road_emission_use) {
     RoadTraffic roadTraffic;
     roadTraffic.nbComponents = 2;
     roadTraffic.traffic = new
-                          RoadTrafficComponent[roadTraffic.nbComponents];
+    RoadTrafficComponent[roadTraffic.nbComponents];
     roadTraffic.traffic[0] = rtf_VL;
     roadTraffic.traffic[1] = rtf_PL;
     roadTraffic.surfaceType = RoadSurface_R2;
     roadTraffic.surfaceAge = 8;
     roadTraffic.ramp = 0.5;
 
-    double* Lwm = NMPB08_Lwm (&roadTraffic, Spectrum_3oct_A) ;
+    double* Lwm = NMPB08_Lwm(&roadTraffic, Spectrum_3oct_A) ;
 
     for (int i = 0 ; i < 18 ; i++)
     {

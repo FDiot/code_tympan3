@@ -32,7 +32,8 @@ typedef size_t node_idx;
 } //namespace tympan
 
 
-namespace tympan {
+namespace tympan
+{
 
 /**
  * @brief The base of all entity classes.
@@ -43,21 +44,21 @@ namespace tympan {
 class BaseEntity
 {
 protected:
-	BaseEntity() {};
+    BaseEntity() {};
 
 public:
-	virtual ~BaseEntity() {};
+    virtual ~BaseEntity() {};
 
-//    virtual tympan::shared_ptr<BaseEntity> ptr_any() = 0;
-//    virtual tympan::shared_ptr<BaseEntity const> ptr_any() const = 0;
-//
-//    template <class T>
-//    tympan::shared_ptr<T> ptr()
-//    { return boost::dynamic_pointer_cast<T>(ptr_any()); }
-//
-//    template <class T>
-//    tympan::shared_ptr<T const> ptr() const
-//    { return boost::dynamic_pointer_cast<T const>(ptr_any()); }
+    //    virtual tympan::shared_ptr<BaseEntity> ptr_any() = 0;
+    //    virtual tympan::shared_ptr<BaseEntity const> ptr_any() const = 0;
+    //
+    //    template <class T>
+    //    tympan::shared_ptr<T> ptr()
+    //    { return boost::dynamic_pointer_cast<T>(ptr_any()); }
+    //
+    //    template <class T>
+    //    tympan::shared_ptr<T const> ptr() const
+    //    { return boost::dynamic_pointer_cast<T const>(ptr_any()); }
 };
 
 //! Simple representation of an UUID (Universal Unique Identifier).
@@ -65,9 +66,12 @@ public:
     solver entities. It can match with a \c QUuid (UUID from Qt) and thus with a
     \c TYUUID (aka \c OGenID).
  */
-struct binary_uuid {
-    union {
-        struct {
+struct binary_uuid
+{
+    union
+    {
+        struct
+        {
             unsigned int   data1;
             unsigned short data2;
             unsigned short data3;

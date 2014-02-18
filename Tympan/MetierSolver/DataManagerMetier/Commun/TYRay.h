@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #ifndef _TYRAY_
 #define _TYRAY_
 
@@ -38,14 +38,14 @@ enum TY_RAY_EVENT
 struct TYRayEvent
 {
 public:
-	TYRayEvent() {}
-    TYRayEvent(const TYPoint& pt, const double& ang=0.0, const double& angtheta=0.0, const TY_RAY_EVENT& ev = TY_NO_TYPE, const int& idF1=0, const int& idF2=0);
+    TYRayEvent() {}
+    TYRayEvent(const TYPoint& pt, const double& ang = 0.0, const double& angtheta = 0.0, const TY_RAY_EVENT& ev = TY_NO_TYPE, const int& idF1 = 0, const int& idF2 = 0);
     TYPoint pos;        /*!< Position de l'evenement */
     double angle;       /*!< Angle d'incidence du rayon  (pour l'angle de tir - plan x,z -)*/
     double angletheta;  /*!< Angle de tir sur un plan horizontal (x,y) */
     TY_RAY_EVENT type;  /*!< Type d'evenement */
     int idFace1;        /*!< identifiant de la face sur laquelle a lieu l'evenement (reflexion & diffraction)*/
-	int idFace2;		/*!< identifiant de la face sur laquelle a lieu l'evenement (diffraction seulement)*/
+    int idFace2;        /*!< identifiant de la face sur laquelle a lieu l'evenement (diffraction seulement)*/
 };
 
 typedef std::vector<TYRayEvent> TYTabRayEvent;

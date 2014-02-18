@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -55,9 +55,9 @@ int TYChemineeSurface::fromXML(DOM_Element domElement)
     int retVal = TYAcousticSurface::fromXML(domElement);
 
     // On recupere le rectangle de la surface pour l'affecter a la source bafflee
-//    LPTYAcousticRectangle pRectangle = new TYAcousticRectangle();
+    //    LPTYAcousticRectangle pRectangle = new TYAcousticRectangle();
     LPTYRectangle pRectangle = new TYRectangle();
-//    *pRectangle->getBoundingRect() = *getBoundingRect();
+    //    *pRectangle->getBoundingRect() = *getBoundingRect();
     *pRectangle = *getBoundingRect();
 
     LPTYSourceCheminee pSrcCheminee = this->getSourceCheminee();
@@ -102,11 +102,11 @@ std::string TYChemineeSurface::toString() const
 
 void TYChemineeSurface::distriSrcs()
 {
-	if (surface() <= 1.E-8) 
-	{
-	    _pSrcSurf->purge();
-		return; // securite : pas de surface nulle
-	}
+    if (surface() <= 1.E-8)
+    {
+        _pSrcSurf->purge();
+        return; // securite : pas de surface nulle
+    }
 
     // La source surfacique est composee d'une seule
     // source de type TYSourceCheminee
@@ -149,13 +149,13 @@ void TYChemineeSurface::setSourceCheminee(LPTYSourceCheminee pSrc)
     // Uniquement si 'this' est un smart pointer...
     if (getRefCount() > 0)
     {
-//        pSrc->setAcousticRectangle(this);
-		pSrc->setAcousticRectangle(this->getBoundingRect());
+        //        pSrc->setAcousticRectangle(this);
+        pSrc->setAcousticRectangle(this->getBoundingRect());
     }
     else
     {
-//        LPTYAcousticRectangle temp = new TYAcousticRectangle(*this);
-		LPTYRectangle temp = new TYRectangle(*((*this).getBoundingRect()));
+        //        LPTYAcousticRectangle temp = new TYAcousticRectangle(*this);
+        LPTYRectangle temp = new TYRectangle(*((*this).getBoundingRect()));
         pSrc->setAcousticRectangle(temp);
     }
 }

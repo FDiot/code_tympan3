@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /**
  * \file TYPickEditor.cpp
  * \brief gestion de l'element actionne par picking
@@ -747,7 +747,7 @@ void TYPickEditor::showPopupMenu(LPTYElementCollection pElts)
                 if (pSite)
                 {
                     pSite->update(pElts->at(retCodes[popupRet]));
-					getTYMainWnd()->getSiteFrame()->updateList();
+                    getTYMainWnd()->getSiteFrame()->updateList();
                 }
             }
 
@@ -1469,14 +1469,14 @@ void TYPickEditor::showPopupMenu(LPTYElementCollection pElts)
 
                 pCopy->setRepere(repere);
 
-				LPTYCalcul pCalc = NULL;
-				TYSiteNode *pSite = NULL;
-				pSite = dynamic_cast<TYSiteNode*>( pCopy->getElement() ) ;
-				if (getTYApp()->getCurProjet() && pSite)
-				{
-						pCalc = getTYApp()->getCurProjet()->getCurrentCalcul();
-						if (pCalc) { pCalc->getCalculElements(pSite); }
-				}
+                LPTYCalcul pCalc = NULL;
+                TYSiteNode* pSite = NULL;
+                pSite = dynamic_cast<TYSiteNode*>(pCopy->getElement()) ;
+                if (getTYApp()->getCurProjet() && pSite)
+                {
+                    pCalc = getTYApp()->getCurProjet()->getCurrentCalcul();
+                    if (pCalc) { pCalc->getCalculElements(pSite); }
+                }
 
                 // Update Graphic
                 pCopy->updateGraphicTree();
@@ -1544,8 +1544,8 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
 {
     assert(pGeoNode);
 
-	// Recuperation de la hauteur de l'element
-	double hauteur = pGeoNode->getHauteur();
+    // Recuperation de la hauteur de l'element
+    double hauteur = pGeoNode->getHauteur();
 
     //On doit presenter la position de l'origine du GeoNode selectionne.
     //Cette position doit etre dans le repere du modeler frame.
@@ -1557,10 +1557,10 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
 
     // On cree un geonode temporaire copie du geonode transmis (uniquement les elements geometrique)
     TYGeometryNode* pTempGeoNode = new TYGeometryNode();
-//	pTempGeoNode->deepCopy(pGeoNode, true);
-	pTempGeoNode->setRepere(pGeoNode->getRepere()) ;
-	pTempGeoNode->setElement(pElement);
- 
+    //  pTempGeoNode->deepCopy(pGeoNode, true);
+    pTempGeoNode->setRepere(pGeoNode->getRepere()) ;
+    pTempGeoNode->setElement(pElement);
+
 
     TYPoint oldZero(0, 0, 0);
     oldZero = pGeoNode->localToGlobal(oldZero);
@@ -1572,8 +1572,8 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
         pTempGeoNode->getRepere()._origin = oldZero;
     }
 
-	// Affectation de la hauteur au geoNode temporaire
-	pTempGeoNode->setHauteur(hauteur);
+    // Affectation de la hauteur au geoNode temporaire
+    pTempGeoNode->setHauteur(hauteur);
 
     // Affiche la boite de dialogue
     TYPositionDialog* pDlg = new TYPositionDialog(pTempGeoNode, _pModeler);

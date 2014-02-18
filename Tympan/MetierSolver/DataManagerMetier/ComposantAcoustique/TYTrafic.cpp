@@ -37,12 +37,12 @@ TYTrafic::TYTrafic()
 
     lv.vehicleType = VehicleType_VL;
     hgv.vehicleType = VehicleType_PL;
-    for(unsigned i=0; i<NB_VEHICLE_TYPES; ++i)
+    for (unsigned i = 0; i < NB_VEHICLE_TYPES; ++i)
     {
         arr[i].flowType = FlowType_CONST;
         arr[i].trafficFlow = 0;
         arr[i].trafficSpeed = 0;
-        assert( (arr[i].vehicleType==i+1) && "Bad consistency assumption wrt vehicles types in Ctor");
+        assert((arr[i].vehicleType == i + 1) && "Bad consistency assumption wrt vehicles types in Ctor");
 
     }
 }
@@ -61,7 +61,7 @@ TYTrafic& TYTrafic::operator=(const TYTrafic& other)
     if (this != &other)
     {
         TYElement::operator =(other);
-        for(unsigned i=0; i<NB_VEHICLE_TYPES; ++i)
+        for (unsigned i = 0; i < NB_VEHICLE_TYPES; ++i)
         {
             arr[i].flowType = other.arr[i].flowType;
             arr[i].trafficFlow = other.arr[i].trafficFlow;
@@ -75,11 +75,11 @@ bool TYTrafic::operator==(const TYTrafic& other) const
 {
     if (this != &other)
     {
-        for(unsigned i=0; i<NB_VEHICLE_TYPES; ++i)
+        for (unsigned i = 0; i < NB_VEHICLE_TYPES; ++i)
         {
-            if( arr[i].flowType != other.arr[i].flowType)  {return false;};
-            if( arr[i].trafficFlow != other.arr[i].trafficFlow) {return false;};
-            if( arr[i].trafficSpeed != other.arr[i].trafficSpeed) {return false;};
+            if (arr[i].flowType != other.arr[i].flowType)  {return false;};
+            if (arr[i].trafficFlow != other.arr[i].trafficFlow) {return false;};
+            if (arr[i].trafficSpeed != other.arr[i].trafficSpeed) {return false;};
         }
     }
     return true;
@@ -110,7 +110,7 @@ DOM_Element TYTrafic::toXML(DOM_Element& domElement)
 {
     DOM_Element domTrafficElem = TYElement::toXML(domElement);
 
-    for(unsigned i=0; i<NB_VEHICLE_TYPES; ++i)
+    for (unsigned i = 0; i < NB_VEHICLE_TYPES; ++i)
     {
         const RoadTrafficComponent& rtc = arr[i];
         QDomDocument domDoc = domTrafficElem.ownerDocument();
@@ -118,7 +118,7 @@ DOM_Element TYTrafic::toXML(DOM_Element& domElement)
         componentElem.setAttribute("flowType", rtc.flowType);
         componentElem.setAttribute("trafficFlow", rtc.trafficFlow);
         componentElem.setAttribute("trafficSpeed", rtc.trafficSpeed);
-        assert((rtc.vehicleType==i+1) && "Bad consistency assumption wrt vehicles types");
+        assert((rtc.vehicleType == i + 1) && "Bad consistency assumption wrt vehicles types");
         componentElem.setAttribute("vehicleType", rtc.vehicleType);
         domTrafficElem.appendChild(componentElem);
     }
@@ -132,14 +132,14 @@ int TYTrafic::fromXML(DOM_Element domElement)
     QDomNodeList children = domElement.elementsByTagName("TrafficComponent");
     if (children.size() != NB_VEHICLE_TYPES)
     {
-         OMessageManager::get()->error(
+        OMessageManager::get()->error(
             "Loading TYTrafic element %s, "
             "%u TrafficComponent child elements were found but %u were expected",
             str_qt2c(getStringID()), children.size(), NB_VEHICLE_TYPES);
         return 0;
     }
 
-    for(unsigned i=0; i<NB_VEHICLE_TYPES; ++i)
+    for (unsigned i = 0; i < NB_VEHICLE_TYPES; ++i)
     {
         QDomElement elem = children.item(i).toElement();
         if (elem.isNull())
@@ -147,9 +147,11 @@ int TYTrafic::fromXML(DOM_Element domElement)
             debugXml(children.item(i));
             return 0;
         }
-        if(!fromXML_TrafficComponent(elem, arr[i]))
+        if (!fromXML_TrafficComponent(elem, arr[i]))
+        {
             return 0;
-        assert((arr[i].vehicleType==i+1) && "Inconsistent vehicle types in traffic components");
+        }
+        assert((arr[i].vehicleType == i + 1) && "Inconsistent vehicle types in traffic components");
     }
 
     return 1;
@@ -162,7 +164,7 @@ int TYTrafic::fromXML_TrafficComponent(DOM_Element domElement, RoadTrafficCompon
 
     // Deserialise the trafficFlow
     s = domElement.attribute("trafficFlow", QString());
-    if(s.isEmpty()) // Attribute not found
+    if (s.isEmpty()) // Attribute not found
     {
         OMessageManager::get()->error(
             "Can not read the TrafficComponent `trafficFlow` attribute for element %s.",
@@ -170,7 +172,7 @@ int TYTrafic::fromXML_TrafficComponent(DOM_Element domElement, RoadTrafficCompon
         return 0;
     }
     double trafficFlow = s.toDouble(&ok);
-    if(!ok)
+    if (!ok)
     {
         OMessageManager::get()->error(
             "Floating point number expected for attribute `trafficFlow` on element %s, not %s",
@@ -180,7 +182,7 @@ int TYTrafic::fromXML_TrafficComponent(DOM_Element domElement, RoadTrafficCompon
 
     // Deserialise the trafficSpeed
     s = domElement.attribute("trafficSpeed", QString());
-    if(s.isEmpty()) // Attribute not found
+    if (s.isEmpty()) // Attribute not found
     {
         OMessageManager::get()->error(
             "Can not read the TrafficComponent `trafficSpeed` attribute for element %s.",
@@ -188,7 +190,7 @@ int TYTrafic::fromXML_TrafficComponent(DOM_Element domElement, RoadTrafficCompon
         return 0;
     }
     double trafficSpeed = s.toDouble(&ok);
-    if(!ok)
+    if (!ok)
     {
         OMessageManager::get()->error(
             "Floating point number expected for attribute `trafficSpeed` on element %s, not %s",
@@ -198,7 +200,7 @@ int TYTrafic::fromXML_TrafficComponent(DOM_Element domElement, RoadTrafficCompon
 
     // Deserialise the flowType
     s = domElement.attribute("flowType", QString());
-    if(s.isEmpty()) // Attribute not found
+    if (s.isEmpty()) // Attribute not found
     {
         OMessageManager::get()->error(
             "Can not read the TrafficComponent `flowType` attribute for element %s.",
@@ -206,7 +208,7 @@ int TYTrafic::fromXML_TrafficComponent(DOM_Element domElement, RoadTrafficCompon
         return 0;
     }
     unsigned flowType = s.toUInt(&ok);
-    if(!ok)
+    if (!ok)
     {
         OMessageManager::get()->error(
             "Integer expected for attribute `flowType` on element %s, not %s",
@@ -216,7 +218,7 @@ int TYTrafic::fromXML_TrafficComponent(DOM_Element domElement, RoadTrafficCompon
 
     // Deserialise the vehicleType
     s = domElement.attribute("vehicleType", QString());
-    if(s.isEmpty()) // Attribute not found
+    if (s.isEmpty()) // Attribute not found
     {
         OMessageManager::get()->error(
             "Can not read the TrafficComponent `vehicleType` attribute for element %s.",
@@ -224,7 +226,7 @@ int TYTrafic::fromXML_TrafficComponent(DOM_Element domElement, RoadTrafficCompon
         return 0;
     }
     unsigned vehicleType = s.toUInt(&ok);
-    if(!ok)
+    if (!ok)
     {
         OMessageManager::get()->error(
             "Integer expected for attribute `vehicleType` on element %s, not %s",

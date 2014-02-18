@@ -50,9 +50,11 @@ void TYDXFImporter::LoadFloatParam(const char* ParamName, double& dParam)
 bool TYDXFImporter::ReadDXF(dimeModel* model, const QString& DXFFileName)
 {
     if (!QFile::exists(DXFFileName))
+    {
         return false;
+    }
     const QByteArray ba = DXFFileName.toLocal8Bit();
-    const char *c_filename = ba.data();
+    const char* c_filename = ba.data();
     dimeInput in;
     if (!in.setFile(c_filename))
     {

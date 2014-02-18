@@ -26,7 +26,8 @@ void print_table_of(const deque<deque<T> >& table)
     }
 }
 
-TEST(TestTestUtils, csvAsString) {
+TEST(TestTestUtils, csvAsString)
+{
     string s = "Field 1,  \"putting quotes around fields, allows commas\", Field 3\n"
                "1.0, 2.1, 3e-2\n";
 
@@ -41,7 +42,8 @@ TEST(TestTestUtils, csvAsString) {
     //print_table_of<string>(table);
 } // TEST(TestTestUtils, csvAsString)
 
-TEST(TestTestUtils, readCsvAsTableOf) {
+TEST(TestTestUtils, readCsvAsTableOf)
+{
     string s = "1.0, 2.1, .3e-2\n"
                "1, 0  , -4 ";
 

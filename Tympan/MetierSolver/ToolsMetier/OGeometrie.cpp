@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*
  *
  */
@@ -141,10 +141,10 @@
 
     // This is evil ! What the hell has it been put here for ?
     //  *(OCoord3D*)&ptI = *(OCoord3D*) & (2 * (vecPtA + (k * vecAB)) - vecPtP);
-	// Why be so complicated
-	//    (OCoord3D)ptI = (OCoord3D)(2 * (vecPtA + (k * vecAB)) - vecPtP);
-	// A very simple solution !
-	ptI = 2 * (vecPtA + (k * vecAB)) - vecPtP;
+    // Why be so complicated
+    //    (OCoord3D)ptI = (OCoord3D)(2 * (vecPtA + (k * vecAB)) - vecPtP);
+    // A very simple solution !
+    ptI = 2 * (vecPtA + (k * vecAB)) - vecPtP;
 
     return k;
 }

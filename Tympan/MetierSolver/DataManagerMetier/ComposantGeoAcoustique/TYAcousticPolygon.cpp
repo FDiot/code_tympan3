@@ -203,7 +203,7 @@ void TYAcousticPolygon::distriSrcs()
                 TYSourcePonctuelle* pSrc = new TYSourcePonctuelle();
 
                 // Definition de sa position
-	            pos._z +=  offsetZ; // on decale les sources pour le lancer de rayon selon l'orientation de la normale
+                pos._z +=  offsetZ; // on decale les sources pour le lancer de rayon selon l'orientation de la normale
                 pSrc->setPos(new TYPoint(pos));
 
                 // Attribution du parent
