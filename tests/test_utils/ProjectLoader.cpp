@@ -14,9 +14,9 @@
 namespace tympan
 {
 
-void load_project_from_file(const char * filename, LPTYProjet& project)
+void load_project_from_file(const char* filename, LPTYProjet& project)
 {
-	ASSERT_FALSE(project);
+    ASSERT_FALSE(project);
     QString xml_filename;
     TYXMLManager xmlManager;
     TYElementCollection elements;
@@ -27,11 +27,11 @@ void load_project_from_file(const char * filename, LPTYProjet& project)
     ASSERT_EQ(is_loaded, 1);
 
     // Retrieve project.
-    BOOST_FOREACH(LPTYElement& elt, elements)
+    BOOST_FOREACH(LPTYElement & elt, elements)
     {
         if (std::strcmp(elt->getClassName(), "TYProjet") == 0)
         {
-        	project = TYProjet::safeDownCast(elt);
+            project = TYProjet::safeDownCast(elt);
             break;
         }
     }
@@ -43,10 +43,10 @@ void load_project_from_file(const char * filename, LPTYProjet& project)
 
 void assert_loaded_project(const LPTYProjet& project)
 {
-	ASSERT_TRUE(project);
-	LPTYSiteNode site = project->getSite();
-	ASSERT_TRUE(site) << "Invalid root site";
-	ASSERT_EQ(0, site->getListSiteNode().size()) << "Sub-sites are not handled.";
+    ASSERT_TRUE(project);
+    LPTYSiteNode site = project->getSite();
+    ASSERT_TRUE(site) << "Invalid root site";
+    ASSERT_EQ(0, site->getListSiteNode().size()) << "Sub-sites are not handled.";
 }
 
 void assert_current_computation_project(const LPTYProjet& project)

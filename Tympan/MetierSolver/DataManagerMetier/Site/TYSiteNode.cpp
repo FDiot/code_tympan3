@@ -1304,9 +1304,9 @@ void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& 
 
 }
 
-void TYSiteNode::init(const LPTYCalcul& pCalcul)
+void TYSiteNode::setAtmosphere(const LPTYAtmosphere& pAtmosphere)
 {
-    _pTopographie->updateSol(*pCalcul->getAtmosphere());
+    _pTopographie->updateSol(*pAtmosphere);
 }
 
 void TYSiteNode::setChildsNotInCurrentCalcul()
@@ -1572,8 +1572,7 @@ LPTYSiteNode TYSiteNode::merge()
         appendSite(pSiteTmp, pSiteNodeGeoNode->getMatrix(), pSite);
     }
 
-    // Copie du terrain par defaut
-    pSite->getTopographie()->sortTerrains(); // Tri des terrains par ordre croissant des surfaces
+    pSite->getTopographie()->sortTerrainsBySurface();
     pSite->setProjet(_pProjet);
 
     return pSite;

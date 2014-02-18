@@ -63,10 +63,8 @@ static int compareRes(const void* elem1, const void* elem2);
 static int compareName(const void* elem1, const void* elem2);
 
 TYResultatWidget::TYResultatWidget(TYResultat* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(_pParent)
+    TYWidget(pElement, _pParent)
 {
-    Q_ASSERT(pElement);
-    _pElement = pElement;
     _freq = 100;
     _choixOperation = 0;
     _max = NULL; // Tableau des maxima par colonne (initialise plus tard)

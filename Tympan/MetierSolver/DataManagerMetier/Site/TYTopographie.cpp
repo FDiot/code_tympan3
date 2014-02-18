@@ -29,7 +29,7 @@ OPROTOINST(TYTopographie);
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 
 // Declaration de la fonction utilisee par qsort pour le tri des terrains
-static int compareTerrains(const void* elem1, const void* elem2);
+static int compareSurfaceTerrains(const void* elem1, const void* elem2);
 
 TYTopographie::TYTopographie()
 {
@@ -1586,7 +1586,7 @@ TYTerrain* TYTopographie::getDefTerrain()
     return dynamic_cast<TYTerrain*>(_listTerrain[_DefTerrainIdx]._pObj->getElement());
 }
 
-void TYTopographie::sortTerrains()
+void TYTopographie::sortTerrainsBySurface()
 {
     // 1. Nettoyage du tableau des terrains si non vide
     if (_pSortedTerrains)
@@ -1604,10 +1604,10 @@ void TYTopographie::sortTerrains()
     }
 
     // 3. Tri du tableau
-    qsort(_pSortedTerrains, nbTerrains, sizeof(TYTerrainGeoNode*), compareTerrains);
+    qsort(_pSortedTerrains, nbTerrains, sizeof(TYTerrainGeoNode*), compareSurfaceTerrains);
 }
 
-int compareTerrains(const void* elem1, const void* elem2)
+int compareSurfaceTerrains(const void* elem1, const void* elem2)
 {
     TYTerrainGeoNode* pTerrainNode = *((TYTerrainGeoNode**) elem1);
     TYTerrain* Terrain1 = dynamic_cast<TYTerrain*>(pTerrainNode->getElement());
@@ -1615,6 +1615,7 @@ int compareTerrains(const void* elem1, const void* elem2)
     pTerrainNode = *((TYTerrainGeoNode**)  elem2);
     TYTerrain* Terrain2 = dynamic_cast<TYTerrain*>(pTerrainNode->getElement());
 
+    // TODO return cmp(Terrain1->surface(), Terrain2->surface()) ?
     double res = Terrain1->surface() - Terrain2->surface();
     int sgn = int(res / fabs(res));
     return (sgn);

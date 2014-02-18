@@ -26,27 +26,27 @@
 
 TYAltimetrie* buildSlopeAltimetry(void)
 {
-	// Creating the topography
-	TYTopographie *pTopo = new TYTopographie();
-	TYAltimetrie *pAlti = new TYAltimetrie();
-	TYCourbeNiveau* pCrb = NULL;
-        // Those dimension match with the default emprise
-	const double xMin = -200.0, xMax = 200.0, yMin = -200.0, yMax = +200.0;
-        double z;
-	for (double x = xMin; x <= xMax; x += 10.)
-	{
-                // Building the level curves
-		z = x < -50. ? 0 : 3*x + 150;
-		z = x > +50. ? 300. : z;
-		pCrb = new TYCourbeNiveau();
-		pCrb->addPoint(x, yMin, z);
-		pCrb->addPoint(x, yMax, z);
-		pCrb->setAltitude(z);
-		pCrb->setDistMax(10.0);
+    // Creating the topography
+    TYTopographie* pTopo = new TYTopographie();
+    TYAltimetrie* pAlti = new TYAltimetrie();
+    TYCourbeNiveau* pCrb = NULL;
+    // Those dimension match with the default emprise
+    const double xMin = -200.0, xMax = 200.0, yMin = -200.0, yMax = +200.0;
+    double z;
+    for (double x = xMin; x <= xMax; x += 10.)
+    {
+        // Building the level curves
+        z = x < -50. ? 0 : 3 * x + 150;
+        z = x > +50. ? 300. : z;
+        pCrb = new TYCourbeNiveau();
+        pCrb->addPoint(x, yMin, z);
+        pCrb->addPoint(x, yMax, z);
+        pCrb->setAltitude(z);
+        pCrb->setDistMax(10.0);
 
-		// Adding the level curve to the topography
-		pTopo->addCrbNiv(pCrb);
-	}
+        // Adding the level curve to the topography
+        pTopo->addCrbNiv(pCrb);
+    }
 
 	// Creating the altimetry
 	std::deque<OPoint3D> points;
@@ -58,13 +58,13 @@ TYAltimetrie* buildSlopeAltimetry(void)
 
 	//compute(pTopo->collectPointsForAltimetrie(false), 1.E-5);
 
-	return pAlti;
+    return pAlti;
 }
 
 static  const double precision = 1e-6;
 
-TEST(TYAltimetryTest, update_point_altitude) {
-
+TEST(TYAltimetryTest, update_point_altitude)
+{
     // Create altimetry
     TYAltimetrie* pAlti = buildSlopeAltimetry();
 
@@ -138,7 +138,6 @@ static const double level_curve_B_alti = 20.0;
 
 LPTYCourbeNiveau addHillToSimpleSite(LPTYSiteNode pSite)
 {
-
     #define NB_POINTS_LEVEL_CURVE 5
     LPTYCourbeNiveau pCrb = new TYCourbeNiveau();
     // Initialise the level curve
