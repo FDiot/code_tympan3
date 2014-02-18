@@ -170,7 +170,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
                     for (l = 0; l < nbFacesFresnel; l++) // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
                     {
-                        sum = sum + coefRefl * tabPondFresnel[l];    // calcul du coeff de reflexion moy en ponderant avec les matériaux
+                        sum = sum + coefRefl * tabPondFresnel[l];    // calcul du coeff de reflexion moy en ponderant avec les matÃ©riaux
                     }
 
                     prod = prod * sum;

@@ -21,7 +21,7 @@
  */
 
 
-
+#include <boost/foreach.hpp>
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
@@ -69,7 +69,16 @@ void TYAcousticLineGraphic::display(GLenum mode /*= GL_RENDER*/)
 
     _pPolyLineGraphic->highlight(_highlight);
 
-    _pPolyLineGraphic->setTabPoint(getElement()->getTabPoint());
+    TYTabPoint& tabpts = _pPolyLineGraphic->getTabPoint();
+    tabpts.clear();
+    tabpts.reserve(getElement()->getSrcLineic()->getNbSrcs());
+
+    BOOST_FOREACH(LPTYSourcePonctuelle pSrc, getElement()->getSrcLineic()->getSrcs())
+    {
+        tabpts.push_back(*pSrc->getPos());
+    }
+
+    _pPolyLineGraphic->setTabPoint(tabpts);
 
     if (mode == GL_SELECT)
     {
