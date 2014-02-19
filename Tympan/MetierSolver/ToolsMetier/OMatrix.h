@@ -15,18 +15,14 @@
 
 /*
  *
- *
- *
  */
-
 
 #ifndef __O_MATRIX_3D__
 #define __O_MATRIX_3D__
 
-
 #include "OVector3D.h"
 
-#define SMALL_NUMBER    1.e-50
+#define EPSILON_50    1.e-50
 
 /**
  * \file  OMatrix.h
@@ -130,17 +126,27 @@ public:
     /**
      * \fn void reset();
      * \brief Mise a zero des elements de la matrice.
+     *
+     *      0   0   0   0
+     *      0   0   0   0
+     *      0   0   0   0
+     *      0   0   0   0
      */
     void reset();
 
     /**
      * \fn void unite();
      * \brief Initialisation d'une matrice unite.
+     *
+     *      1   0   0   0
+     *      0   1   0   0
+     *      0   0   1   0
+     *      0   0   0   1
      */
     void unite();
 
     /**
-     * \fn int  setTranslation(double x, double y, double z);
+     * \fn int setTranslation(double x, double y, double z);
      * \brief Mise a jour d'une matrice de translation.
      *
      * Translation T(x, y, z) :
@@ -152,8 +158,8 @@ public:
      */
     int setTranslation(double x, double y, double z);
 
-    /**.
-     * \fn int  setScale(double x, double y, double z);
+    /**
+     * \fn int setScale(double x, double y, double z);
      * \brief Mise a jour d'une matrice de zoom.
      *
      * Zoom Z(x, y, z) :

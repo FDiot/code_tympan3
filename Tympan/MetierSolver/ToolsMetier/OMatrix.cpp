@@ -426,7 +426,7 @@ int OMatrix::invert()
     // Calculate the adjoint matrix.
     adjoint();
 
-    if (fabs(det) < SMALL_NUMBER)
+    if (fabs(det) < EPSILON_50)
     {
         return 0;
     }
