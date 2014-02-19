@@ -391,7 +391,7 @@ int TYCalculParcours::Traite(
                         idx = i - 1;
                         break; // on s'arrete ici...
                     }
-                    else if (ABS(TYPointParcours::Scalaire(A, B)) < EPSILON_PRECIS)
+                    else if (ABS(TYPointParcours::Scalaire(A, B)) < EPSILON_13)
                     {
                         // on autorise les angles a 90i¿½ que lors du suivis du contour d'un obstacle
                         if (!_geoImporterDXF->AppartienneMemePolyligne(TableauDePointsEC[i - 2], TableauDePointsEC[i - 1], TableauDePointsEC[i]))

@@ -63,9 +63,9 @@ bool OCoord3D::operator==(const OCoord3D& coord) const
 {
     if (this != &coord)
     {
-        if (fabs(_x - coord._x) > EPSILON) { return false; }
-        if (fabs(_y - coord._y) > EPSILON) { return false; }
-        if (fabs(_z - coord._z) > EPSILON) { return false; }
+        if (fabs(_x - coord._x) > EPSILON_6) { return false; }
+        if (fabs(_y - coord._y) > EPSILON_6) { return false; }
+        if (fabs(_z - coord._z) > EPSILON_6) { return false; }
     }
     return true;
 }

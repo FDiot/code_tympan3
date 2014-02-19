@@ -99,9 +99,9 @@ int OHPlane3D::intersects(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D& pt
     double     D = dot(_N, u);
     double     N = -dot(_N, w);
 
-    if (ABS(D) < EPSILON_PRECIS)        // segment is parallel to plane
+    if (ABS(D) < EPSILON_13)        // segment is parallel to plane
     {
-        if (ABS(N) < EPSILON_PRECIS)   // segment lies in plane
+        if (ABS(N) < EPSILON_13)   // segment lies in plane
         {
             return 2;
         }

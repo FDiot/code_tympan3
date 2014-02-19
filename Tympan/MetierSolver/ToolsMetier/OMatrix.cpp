@@ -157,7 +157,7 @@ OVector3D OMatrix::operator*(const OVector3D& vector) const
 
     echelle = _m[3][0] * vector._x + _m[3][1] * vector._y + _m[3][2] * vector._z + _m[3][3];
 
-    if (ABS(echelle) < EPSILON_PRECIS)
+    if (ABS(echelle) < EPSILON_13)
     {
     }
     else
@@ -185,7 +185,7 @@ OVector3D OMatrix::multNormal(const OVector3D& normal) const
 
     echelle = _m[3][0] * normal._x + _m[3][1] * normal._y + _m[3][2] * normal._z + _m[3][3];
 
-    if (ABS(echelle) < EPSILON_PRECIS)
+    if (ABS(echelle) < EPSILON_13)
     {
     }
     else
@@ -316,13 +316,13 @@ int OMatrix::aligneVecteurSurOx(const OVector3D& vector)
     printf("Ox V : %f %f %f\n", vector._x, vector._y, vector._z);
 #endif
 
-    if (n2 > EPSILON_PRECIS)
+    if (n2 > EPSILON_13)
     {
         res = 1;
 
         n1 = sqrt(vector._x * vector._x + vector._y * vector._y);
 
-        if (n1 < EPSILON_PRECIS)
+        if (n1 < EPSILON_13)
         {
             cos1 = 1;
             sin1 = 0;
@@ -368,13 +368,13 @@ int OMatrix::aligneVecteurSurOy(const OVector3D& vector)
 
     n2 = vector.norme();
 
-    if (n2 > EPSILON_PRECIS)
+    if (n2 > EPSILON_13)
     {
         res = 1;
 
         n1 = sqrt(vector._x * vector._x + vector._y * vector._y);
 
-        if (n1 < EPSILON_PRECIS)
+        if (n1 < EPSILON_13)
         {
             cos1 = 1;
             sin1 = 0;
@@ -386,7 +386,7 @@ int OMatrix::aligneVecteurSurOy(const OVector3D& vector)
             /* Si le vecteur est dans le plan yOz,  */
             /* on evite la rotation autour de Oz    */
 
-            if (ABS(vector._x) < EPSILON_PRECIS)
+            if (ABS(vector._x) < EPSILON_13)
             {
                 n1 = (vector._y < 0.0 ? -n1 : n1);
             }
