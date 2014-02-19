@@ -210,11 +210,6 @@ public:
     void updateMatrix();
 
     /**
-     * Calcule le nouveau repere correspondant a la matrice.
-     */
-    void updateRepere();
-
-    /**
      * Determine la matrice de passage du repere local vers le repere absolu.
      */
     OMatrix localToGlobal();
