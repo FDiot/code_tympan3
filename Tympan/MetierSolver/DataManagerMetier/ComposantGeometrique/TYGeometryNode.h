@@ -188,11 +188,6 @@ public:
     void setMatrix(const OMatrix& matrix) { setPrivateMatrix(matrix); }
 
     /**
-     * Teste si la matrice vaut l'identite.
-     */
-    bool isIdentity() const { return _bIdentity; }
-
-    /**
      * Operateur de copie.
      */
     TYGeometryNode& operator=(const TYGeometryNode& other);
@@ -309,9 +304,6 @@ protected:
 
     ///Matrice correspondant au changement de repere.
     OMatrix _matrix;
-
-    ///booleen qui indique si la matrice vaut l'identite.
-    bool    _bIdentity;
 
     void setPrivateMatrix(const OMatrix& matrix);
 };
