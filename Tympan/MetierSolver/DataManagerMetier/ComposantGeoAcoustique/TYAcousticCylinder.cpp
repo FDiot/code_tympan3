@@ -17,9 +17,6 @@
  *
  */
 
-
-
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -27,9 +24,7 @@
 #include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/Tools/TYProgressManager.h"
 
-
 OPROTOINST(TYAcousticCylinder);
-
 
 TYAcousticCylinder::TYAcousticCylinder()
 {
@@ -608,11 +603,9 @@ int TYAcousticCylinder::isInside(const TYPoint& pt) const
     // Obtention de la matrice de changement de repere
     TYRepere repere = _pCircBottom->getShape()->getRepere();
     repere._origin = getCenter();
-    OMatrix matrix;
-    repere.getMatChangeRep(matrix);
 
     // On passe dans le repere du cylindre pour travailler en 2D
-    OPoint3D ptCopy = matrix * pt;
+    OPoint3D ptCopy = repere.asMatrix() * pt;
 
     // Test Xi¿½ + Yi¿½ <= Ri¿½
     double rayon = getDiameter() / 2.0;
