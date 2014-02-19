@@ -43,10 +43,10 @@ typedef float decimal;
 
 typedef unsigned int bitSet; /*!< used to manage set of elements*/
 
-#ifndef EPSILON
-#define EPSILON             (decimal)0.000001                       /*!< Approximation lors de la comparaison de 2 decimal */
+#ifndef EPSILON_6
+#define EPSILON_6           (decimal)0.000001 // 10e-6                      /*!< Approximation lors de la comparaison de 2 decimal */
 #endif
-#define BARELY_EPSILON      (decimal)0.0001                                 /*!< Approximation large lors de la comparaison de 2 decimal */
+
 #ifndef M_PI
 #define M_PI                (decimal)3.141592653589793238462643383279       /*!< PI */
 #endif
@@ -104,14 +104,14 @@ public:
 
     base_vec3(const vec4& _v);
 
-    int operator==(const base_vec3& _v) { return (fabs(this->x - _v.x) < EPSILON && fabs(this->y - _v.y) < EPSILON && fabs(this->z - _v.z) < EPSILON); }
+    int operator==(const base_vec3& _v) { return (fabs(this->x - _v.x) < EPSILON_6 && fabs(this->y - _v.y) < EPSILON_6 && fabs(this->z - _v.z) < EPSILON_6); }
     int operator!=(const base_vec3& _v) { return !(*this == _v); }
 
     base_vec3& operator=(base_t _f) { this->x = _f; this->y = _f; this->z = _f; return (*this); }
     const base_vec3 operator*(base_t _f) const { return base_vec3(this->x * _f, this->y * _f, this->z * _f); }
     const base_vec3 operator/(base_t _f) const
     {
-        if (fabs(_f) < EPSILON) { return *this; }
+        if (fabs(_f) < EPSILON_6) { return *this; }
         _f = 1.0f / _f;
         return (*this) * _f;
     }
@@ -152,7 +152,7 @@ public:
     base_t normalize(void)
     {
         base_t inv, l = this->length();
-        if (l < EPSILON) { return 0.0f; }
+        if (l < EPSILON_6) { return 0.0f; }
         inv = 1.0f / l;
         this->x *= inv;
         this->y *= inv;
@@ -179,11 +179,11 @@ public:
     }
     base_t dot(const base_vec3& v) const { return ((this->x * v.x) + (this->y * v.y) + (this->z * v.z)); } // Produit scalaire
     // this < _v
-    bool compare(const base_vec3& _v, base_t epsi = EPSILON) { return (fabs(this->x - _v.x) < epsi && fabs(this->y - _v.y) < epsi && fabs(this->z - _v.z) < epsi); }
+    bool compare(const base_vec3& _v, base_t epsi = EPSILON_6) { return (fabs(this->x - _v.x) < epsi && fabs(this->y - _v.y) < epsi && fabs(this->z - _v.z) < epsi); }
     base_t angle(const base_vec3& v)  const   // retourne l'angle en radians entre *this et v
     {
         base_t angle = acos(this->dot(v) / (this->length() * v.length()));
-        if (angle < EPSILON) { return 0; }
+        if (angle < EPSILON_6) { return 0; }
         return angle;
     }
     /** @brief  retourne les coordonnee du point le plus proche de *this sur la droite passant par vA et vB */
@@ -313,7 +313,7 @@ public:
     vec2(const vec3& _v);
     vec2(const vec4& _v);
 
-    int operator==(const vec2& _v) { return (fabs(this->x - _v.x) < EPSILON && fabs(this->y - _v.y) < EPSILON); }
+    int operator==(const vec2& _v) { return (fabs(this->x - _v.x) < EPSILON_6 && fabs(this->y - _v.y) < EPSILON_6); }
 
     int operator!=(const vec2& _v) { return !(*this == _v); }
 
@@ -321,7 +321,7 @@ public:
     const vec2 operator*(decimal _f) const { return vec2(this->x * _f, this->y * _f); }
     const vec2 operator/(decimal _f) const
     {
-        if (fabs(_f) < EPSILON) { return *this; }
+        if (fabs(_f) < EPSILON_6) { return *this; }
         _f = 1.0f / _f;
         return (*this) * _f;
     }
@@ -350,7 +350,7 @@ public:
     decimal normalize(void)
     {
         decimal inv, l = this->length();
-        if (l < EPSILON) { return 0.0f; }
+        if (l < EPSILON_6) { return 0.0f; }
         inv = 1.0f / l;
         this->x *= inv;
         this->y *= inv;
@@ -358,7 +358,7 @@ public:
     }
     decimal det(vec2& v) { return (this->x * v.y - this->y * v.x); }  //Determinant 2D
     decimal dot(const vec2& v) { return ((this->x * v.x) + (this->y * v.y)); } // Produit scalaire
-    bool compare(const vec2& _v, decimal epsi = EPSILON) { return (fabs(this->x - _v.x) < epsi && fabs(this->y - _v.y) < epsi); }
+    bool compare(const vec2& _v, decimal epsi = EPSILON_6) { return (fabs(this->x - _v.x) < epsi && fabs(this->y - _v.y) < epsi); }
     /** @brief retourne les coordonnee du point le plus proche de *this sur la droite passant par vA et vB */
     vec2 closestPointOnLine(const vec2& vA, const vec2& vB) { return (((vB - vA) * this->projectionOnLine(vA, vB)) + vA); }
     /** @brief retourne les coordonnee du point le plus proche de *this sur le segment vA,vB */
@@ -464,14 +464,14 @@ public:
     vec4(const vec3& _v, decimal _w) : x(_v.x), y(_v.y), z(_v.z), w(_w) { }
     vec4(const vec4& _v) : x(_v.x), y(_v.y), z(_v.z), w(_v.w) { }
 
-    int operator==(const vec4& _v) { return (fabs(this->x - _v.x) < EPSILON && fabs(this->y - _v.y) < EPSILON && fabs(this->z - _v.z) < EPSILON && fabs(this->w - _v.w) < EPSILON); }
+    int operator==(const vec4& _v) { return (fabs(this->x - _v.x) < EPSILON_6 && fabs(this->y - _v.y) < EPSILON_6 && fabs(this->z - _v.z) < EPSILON_6 && fabs(this->w - _v.w) < EPSILON_6); }
     int operator!=(const vec4& _v) { return !(*this == _v); }
 
     vec4& operator=(decimal _f) { this->x = _f; this->y = _f; this->z = _f; this->w = _f; return (*this); }
     const vec4 operator*(decimal _f) const { return vec4(this->x * _f, this->y * _f, this->z * _f, this->w * _f); }
     const vec4 operator/(decimal _f) const
     {
-        if (fabs(_f) < EPSILON) { return *this; }
+        if (fabs(_f) < EPSILON_6) { return *this; }
         _f = 1.0f / _f;
         return (*this) * _f;
     }
@@ -494,7 +494,7 @@ public:
 
     void set(decimal _x, decimal _y, decimal _z, decimal _w) { this->x = _x; this->y = _y; this->z = _z; this->w = _w; }
     void reset(void) { this->x = this->y = this->z = this->w = 0; }
-    bool compare(const vec4& _v, decimal epsi = EPSILON) { return (fabs(this->x - _v.x) < epsi && fabs(this->y - _v.y) < epsi && fabs(this->z - _v.z) < epsi && fabs(this->w - _v.w) < epsi); }
+    bool compare(const vec4& _v, decimal epsi = EPSILON_6) { return (fabs(this->x - _v.x) < epsi && fabs(this->y - _v.y) < epsi && fabs(this->z - _v.z) < epsi && fabs(this->w - _v.w) < epsi); }
 
     union
     {
@@ -848,14 +848,14 @@ inline int LineLineIntersect(
     p43.x = p4.x - p3.x;
     p43.y = p4.y - p3.y;
     p43.z = p4.z - p3.z;
-    if (fabs(p43.x)  < EPSILON && fabs(p43.y)  < EPSILON && fabs(p43.z)  < EPSILON)
+    if (fabs(p43.x)  < EPSILON_6 && fabs(p43.y)  < EPSILON_6 && fabs(p43.z)  < EPSILON_6)
     {
         return(false);
     }
     p21.x = p2.x - p1.x;
     p21.y = p2.y - p1.y;
     p21.z = p2.z - p1.z;
-    if (fabs(p21.x)  < EPSILON && fabs(p21.y)  < EPSILON && fabs(p21.z)  < EPSILON)
+    if (fabs(p21.x)  < EPSILON_6 && fabs(p21.y)  < EPSILON_6 && fabs(p21.z)  < EPSILON_6)
     {
         return(false);
     }
@@ -867,7 +867,7 @@ inline int LineLineIntersect(
     d2121 = p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
 
     denom = d2121 * d4343 - d4321 * d4321;
-    if (fabs(denom) < EPSILON)
+    if (fabs(denom) < EPSILON_6)
     {
         return(false);
     }

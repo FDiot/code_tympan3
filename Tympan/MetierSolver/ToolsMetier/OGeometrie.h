@@ -42,10 +42,8 @@
 ///Pas d'intersection.
 #define INTERS_NULLE    0
 
-///Epsilon
-#define EPSILON         0.0000001
-///Epsilon precis.
-#define EPSILON_PRECIS  0.0000000000001
+const double EPSILON_7  0.0000001        // 10e-7
+const double EPSILON_13 0.0000000000001  // 10e-13
 
 #ifndef M_PI
 ///Pi.
