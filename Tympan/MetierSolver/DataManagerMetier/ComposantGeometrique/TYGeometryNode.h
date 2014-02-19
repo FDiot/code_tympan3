@@ -185,7 +185,7 @@ public:
     /**
      * Set/Get de la matrice de changement de repere.
      */
-    void setMatrix(const OMatrix& matrix) { setPrivateMatrix(matrix); }
+    void setMatrix(const OMatrix& matrix);
 
     /**
      * Operateur de copie.
@@ -291,8 +291,6 @@ protected:
 
     /// Hauteur de l'element par rapport au sol
     double _hauteur;
-
-    void setPrivateMatrix(const OMatrix& matrix);
 };
 
 #if TY_USE_IHM
