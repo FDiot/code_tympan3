@@ -180,7 +180,7 @@ public:
     /**
      * Set/Get de la matrice de changement de repere.
      */
-    const OMatrix& getMatrix() const { return _matrix; }
+    const OMatrix getMatrix() const { return _repere.asMatrix(); }
 
     /**
      * Set/Get de la matrice de changement de repere.
@@ -301,9 +301,6 @@ protected:
 
     /// Hauteur de l'element par rapport au sol
     double _hauteur;
-
-    ///Matrice correspondant au changement de repere.
-    OMatrix _matrix;
 
     void setPrivateMatrix(const OMatrix& matrix);
 };

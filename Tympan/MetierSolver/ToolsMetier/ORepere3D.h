@@ -62,6 +62,13 @@ public:
     ORepere3D(const OPoint3D& origin, const OVector3D& vecI, const OVector3D& vecJ, const OVector3D& vecK);
 
     /**
+     * Constructor from a matrix
+     *
+     * \param matrix
+     */
+    ORepere3D(const OMatrix& matrix);
+
+    /**
      * Destructor.
      */
     virtual ~ORepere3D();
@@ -127,6 +134,13 @@ public:
      *         <code>false</code> sinon.
      */
     bool getMatChangeRep(OMatrix& matrix);
+
+    /**
+     * \return The homogeneous matrix associated with this pose (aka ORepere)
+     *
+     * This is the Matrix build by getMatChangeRep()
+     */
+    OMatrix asMatrix();
 
     //Members
 public:
