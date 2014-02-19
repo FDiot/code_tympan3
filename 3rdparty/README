@@ -1,17 +1,16 @@
-This is the third party dependencies directory for Code_TYMPAN 4.1.5
+This is the third party dependencies directory for Code_TYMPAN 4.1.13
 
-You need to download the archive Code_TYMPAN-4.1.5_third-party-NN.zip
+You need to download the archive Code_TYMPAN-4.1.13_third-party-NN.zip
 from https://extranet.logilab.fr/static/TYMPAN/files/ and uncompress
 it in this directory (where NN is the version number of the archive,
 currently NN=01) :
 
-https://extranet.logilab.fr/static/TYMPAN/files/Code_TYMPAN-4.1.5_third-party-01.zip
+https://extranet.logilab.fr/static/TYMPAN/files/Code_TYMPAN-4.1.13_third-party-01.zip
 
 This archive should contain :
  * an INSTALL file
  * a checksum.md5 to check the MD5 sum of each ZIP file
  * gtest-1.6.0.zip : the testing framework
- * yams++-0.1.1.zip : a tool for handling data models in C++
  * dime-137851b034f6.zip: Dime library to read DXF files (i.e. AutoCAD files)
  * breathe-0.8 directory : source only documentation utility.
  * sphinx-extension-mathjax directory : documentation utility
@@ -32,8 +31,8 @@ the NMPB2008.zip archive is a custom Logilab package based upon the
 distribNMPB2008_fromUpdate2013_11_13.zip official distribution and
 derived from it with the authorization of the CEREMA. Work is in
 progress to integrate required evolutions upstream. In the meantime
-the custom package will not be publicly distributed and thus not
-included into any Code_TYMPAN-4.x.y_third-party-NN.zip archive.
+there will not be publicly available repository but the archive will
+be included in the Code_TYMPAN-4.x.y_third-party-NN.zip archive.
 
 
 Please note that the following major dependencies are not provided by
@@ -41,4 +40,5 @@ this archive as they are better installed in a system dependent way :
  * Qt >= 4.6
  * CMake >= 2.8
  * Boost >= 1.46
- * CGAL >= 4.0.2
+ * CGAL >= 4.1
+
