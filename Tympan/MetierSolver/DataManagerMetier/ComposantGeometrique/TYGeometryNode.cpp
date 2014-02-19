@@ -480,7 +480,7 @@ LPTYElementGraphic TYGeometryNode::getGraphicObject()
 }
 #endif // TY_USE_IHM
 
-void TYGeometryNode::setPrivateMatrix(const OMatrix& matrix)
+void TYGeometryNode::setMatrix(const OMatrix& matrix)
 {
     _repere.set(matrix);
     setIsGeometryModified(true);
