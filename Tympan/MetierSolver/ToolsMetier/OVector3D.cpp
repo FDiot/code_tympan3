@@ -170,6 +170,9 @@ void OVector3D::normalize()
         _y /= n;
         _z /= n;
     }
+    else {
+      throw exception();
+    }
 }
 
 void OVector3D::invert()

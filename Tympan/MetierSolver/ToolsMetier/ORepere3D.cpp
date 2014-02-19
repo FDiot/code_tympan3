@@ -117,44 +117,29 @@ void ORepere3D::normalize()
     _vecK.normalize();
 }
 
-bool ORepere3D::getMatChangeRep(OMatrix& matrix)
-{
-    bool res = false;
-
-    double  normeI = _vecI.norme();
-    double  normeJ = _vecJ.norme();
-    double  normeK = _vecK.norme();
-
-    // Init matrix
-    matrix.unite();
-
-    // Change assertion for small values for numerical stability
-    if ((normeI != 0.0) && (normeJ != 0.0) && (normeK != 0.0))
-    {
-        res = true;
-
-        matrix._m[0][0] = _vecI._x / normeI;
-        matrix._m[0][1] = _vecJ._x / normeJ;
-        matrix._m[0][2] = _vecK._x / normeK;
-        matrix._m[0][3] = _origin._x;
-
-        matrix._m[1][0] = _vecI._y / normeI;
-        matrix._m[1][1] = _vecJ._y / normeJ;
-        matrix._m[1][2] = _vecK._y / normeK;
-        matrix._m[1][3] = _origin._y;
-
-        matrix._m[2][0] = _vecI._z / normeI;
-        matrix._m[2][1] = _vecJ._z / normeJ;
-        matrix._m[2][2] = _vecK._z / normeK;
-        matrix._m[2][3] = _origin._z;
-    }
-
-    return res;
-}
-
 OMatrix ORepere3D::asMatrix()
 {
     OMatrix matrix;
-    getMatChangeRep(matrix);
+
+    ORepere3D rep(this);
+    rep.normalize();
+
+    matrix.unite();
+
+    matrix._m[0][0] = rep._vecI._x;
+    matrix._m[0][1] = rep._vecJ._x;
+    matrix._m[0][2] = rep._vecK._x;
+    matrix._m[0][3] = rep._origin._x;
+
+    matrix._m[1][0] = rep._vecI._y;
+    matrix._m[1][1] = rep._vecJ._y;
+    matrix._m[1][2] = rep._vecK._y;
+    matrix._m[1][3] = rep._origin._y;
+
+    matrix._m[2][0] = rep._vecI._z;
+    matrix._m[2][1] = rep._vecJ._z;
+    matrix._m[2][2] = rep._vecK._z;
+    matrix._m[2][3] = rep._origin._z;
+
     return matrix;
 }

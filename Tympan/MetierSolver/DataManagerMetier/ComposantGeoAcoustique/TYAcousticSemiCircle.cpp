@@ -17,8 +17,6 @@
  *
  */
 
-
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -30,9 +28,7 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 
-
 OPROTOINST(TYAcousticSemiCircle);
-
 
 TYAcousticSemiCircle::TYAcousticSemiCircle()
 {
@@ -157,7 +153,7 @@ void TYAcousticSemiCircle::distriSrcs()
     // On place l'origine au centre du cercle pour simplifier les calculs
     repere._origin = getCenter();
     // Matrice de changement de repere
-    repere.getMatChangeRep(matrix);
+    matrix = repere.asMatrix();
 
     for (int i = 0 ; i < nbSrcsRadiale ; i++)
     {
@@ -243,7 +239,7 @@ TYTabPoint TYAcousticSemiCircle::getContour(int n /*=-1*/) const
     repere._origin = getCenter();
 
     // Matrice de changement de repere
-    repere.getMatChangeRep(matrix);
+    matrix = repere.asMatrix();
 
     // On connait la taille du tableau de point a retourner
     tab.reserve(n);
@@ -301,7 +297,7 @@ TYTabPoint3D TYAcousticSemiCircle::getOContour(int n /*=-1*/) const
     repere._origin = getCenter();
 
     // Matrice de changement de repere
-    repere.getMatChangeRep(matrix);
+    matrix = repere.asMatrix();
 
     // On connait la taille du tableau de point a retourner
     OPoint3D pt;
