@@ -390,11 +390,6 @@ void TYGeometryNode::updateMatrix()
     setIsGeometryModified(true);
 }
 
-void TYGeometryNode::updateRepere()
-{
-    setIsGeometryModified(true);
-}
-
 TYGeometryNode* TYGeometryNode::GetGeoNode(TYElement* pElement)
 {
     if (GetGeoNodeMap()->find(pElement) != GetGeoNodeMap()->end())
@@ -504,6 +499,6 @@ LPTYElementGraphic TYGeometryNode::getGraphicObject()
 void TYGeometryNode::setPrivateMatrix(const OMatrix& matrix)
 {
     _repere.set(matrix);
-    updateRepere();
+    setIsGeometryModified(true);
 }
 
