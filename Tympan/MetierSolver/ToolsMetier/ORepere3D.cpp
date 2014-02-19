@@ -17,9 +17,6 @@
  *
  */
 
-
-
-
 #include "ORepere3D.h"
 #include "OGeometrie.h"
 
@@ -43,6 +40,11 @@ ORepere3D::ORepere3D(const OPoint3D& origin, const OVector3D& vecI, const OVecto
     _vecJ(vecJ),
     _vecK(vecK)
 {
+}
+
+ORepere3D::ORepere3D(const OMatrix& matrix)
+{
+    set(matrix);
 }
 
 ORepere3D::~ORepere3D()
@@ -126,6 +128,7 @@ bool ORepere3D::getMatChangeRep(OMatrix& matrix)
     // Init matrix
     matrix.unite();
 
+    // Change assertion for small values for numerical stability
     if ((normeI != 0.0) && (normeJ != 0.0) && (normeK != 0.0))
     {
         res = true;
@@ -147,4 +150,11 @@ bool ORepere3D::getMatChangeRep(OMatrix& matrix)
     }
 
     return res;
+}
+
+OMatrix ORepere3D::asMatrix()
+{
+    OMatrix matrix;
+    getMatChangeRep(matrix);
+    return matrix;
 }

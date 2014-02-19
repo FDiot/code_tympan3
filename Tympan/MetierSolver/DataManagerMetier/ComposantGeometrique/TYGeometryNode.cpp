@@ -158,8 +158,8 @@ TYGeometryNode::TYGeometryNode(const TYRepere& repere, LPTYElement pElt)
 }
 
 TYGeometryNode::TYGeometryNode(TYElement* pElt, const OMatrix& matrix)
+    : _repere(matrix)
 {
-    setMatrix(matrix);
     _hauteur = 0.0;
 
     _pElement = pElt;
@@ -167,8 +167,8 @@ TYGeometryNode::TYGeometryNode(TYElement* pElt, const OMatrix& matrix)
 }
 
 TYGeometryNode::TYGeometryNode(LPTYElement pElt, const OMatrix& matrix)
+    : _repere(matrix)
 {
-    setMatrix(matrix);
     _hauteur = 0.0;
 
     _pElement = pElt;
@@ -335,7 +335,6 @@ TYGeometryNode& TYGeometryNode::operator=(const TYGeometryNode& other)
         //_pElement = other._pElement;//az--
         setElement(other._pElement);//az++
         _repere = other._repere;
-        _matrix = other._matrix;
         _hauteur = other._hauteur;
     }
     return *this;
@@ -348,7 +347,6 @@ bool TYGeometryNode::operator==(const TYGeometryNode& other) const
         if (TYElement::operator !=(other)) { return false; }
         if (_pElement != other._pElement) { return false; }
         if (_repere != other._repere) { return false; }
-        if (_matrix != other._matrix) { return false; }
         if (_hauteur != other._hauteur) { return false; }
     }
     return true;
@@ -375,7 +373,6 @@ bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     // Deep copy du repere
     if (!_repere.deepCopy(&pOtherGeoNode->_repere, copyId)) { return false; }
 
-    _matrix = pOtherGeoNode->_matrix;
     _hauteur = pOtherGeoNode->_hauteur;
 
     setIsGeometryModified(true);
@@ -395,7 +392,6 @@ void TYGeometryNode::updateMatrix()
 
 void TYGeometryNode::updateRepere()
 {
-    _repere.set(_matrix);
     setIsGeometryModified(true);
 }
 
@@ -447,11 +443,11 @@ void TYGeometryNode::GetGeoNodeParentList(TYListPtrGeoNode& GetGeoNodeParents)
 OMatrix TYGeometryNode::localToGlobal()
 {
     TYGeometryNode* pParent = GetGeoNodeParent();
-    OMatrix matrix = _matrix;
+    OMatrix matrix = _repere.asMatrix();
 
     while (pParent != NULL)
     {
-        matrix = pParent->getMatrix() * matrix;
+        matrix = pParent->getORepere3D().asMatrix() * matrix;
         pParent = pParent->GetGeoNodeParent();
     }
 
@@ -507,7 +503,7 @@ LPTYElementGraphic TYGeometryNode::getGraphicObject()
 
 void TYGeometryNode::setPrivateMatrix(const OMatrix& matrix)
 {
-    _matrix = matrix;
+    _repere.set(matrix);
     updateRepere();
 }
 
