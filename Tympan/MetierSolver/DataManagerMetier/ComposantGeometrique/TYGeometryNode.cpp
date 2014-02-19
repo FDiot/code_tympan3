@@ -17,8 +17,6 @@
  *
  */
 
-
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -26,11 +24,8 @@
 #include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
 
-
-
 /////////////////////////////////////////////////////////////////////////////
 // Implementation
-
 
 TYMapPtrGeoNode* TYGeometryNode::_geoNodeMap = NULL;
 TYListPtrGeoNode* TYGeometryNode::_geoNodeDoublonsList = NULL;
@@ -108,7 +103,6 @@ TYGeometryNode::TYGeometryNode()
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
-    _bIdentity = true;
     _hauteur = 0.0; //dt++
     _pElement = NULL;//az++
 }
@@ -119,7 +113,6 @@ TYGeometryNode::TYGeometryNode(TYElement* pElt , TYElement* pParent /*=NULL*/) :
     _pElement = pElt;
     addToTheMap();
     updateMatrix(); // TODO a priori inutile
-    _bIdentity = true;
     _hauteur = 0.0;
 
     if (pParent && _pElement)
@@ -135,7 +128,6 @@ TYGeometryNode::TYGeometryNode(LPTYElement pElt, TYElement* pParent /*=NULL*/) :
     _pElement = pElt;
     addToTheMap();
     updateMatrix(); // TODO a priori inutile
-    _bIdentity = true;
     _hauteur = 0.0;
 
     if (pParent && _pElement)
@@ -344,7 +336,6 @@ TYGeometryNode& TYGeometryNode::operator=(const TYGeometryNode& other)
         setElement(other._pElement);//az++
         _repere = other._repere;
         _matrix = other._matrix;
-        _bIdentity = other._bIdentity;
         _hauteur = other._hauteur;
     }
     return *this;
@@ -358,7 +349,6 @@ bool TYGeometryNode::operator==(const TYGeometryNode& other) const
         if (_pElement != other._pElement) { return false; }
         if (_repere != other._repere) { return false; }
         if (_matrix != other._matrix) { return false; }
-        if (_bIdentity != other._bIdentity) { return false; }
         if (_hauteur != other._hauteur) { return false; }
     }
     return true;
@@ -386,7 +376,6 @@ bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     if (!_repere.deepCopy(&pOtherGeoNode->_repere, copyId)) { return false; }
 
     _matrix = pOtherGeoNode->_matrix;
-    _bIdentity = pOtherGeoNode->_bIdentity;
     _hauteur = pOtherGeoNode->_hauteur;
 
     setIsGeometryModified(true);
@@ -520,6 +509,5 @@ void TYGeometryNode::setPrivateMatrix(const OMatrix& matrix)
 {
     _matrix = matrix;
     updateRepere();
-    _bIdentity = false;
 }
 
