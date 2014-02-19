@@ -154,7 +154,7 @@ int OPlan::intersectsSegment(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D&
 
         double z = ps1 + _d;
 
-        if (ABS(z) < EPSILON_PRECIS)
+        if (ABS(z) < EPSILON_13)
         {
             res = INTERS_CONFONDU;
         }
@@ -201,7 +201,7 @@ int OPlan::intersectsSegment(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D&
 
         double z = vecPt1.scalar(n) + _d;
 
-        if (ABS(z) < EPSILON_PRECIS)
+        if (ABS(z) < EPSILON_13)
         {
             res = INTERS_CONFONDU;
         }
@@ -219,7 +219,7 @@ bool OPlan::isInPlan(const OPoint3D& pt)
 
     double z = vecPt1.scalar(n) + _d;
 
-    if (ABS(z) < EPSILON_PRECIS)
+    if (ABS(z) < EPSILON_13)
     {
         res = true;
     }
@@ -259,19 +259,19 @@ int OPlan::intersectsPlan(const OPlan& plan, OVector3D& vectorIntersec)
     double  Dyz = _b * plan._c - plan._b * _c;
     double  Dzx = _c * plan._a - plan._c * _a;
 
-    if (ABS(Dxy) >= EPSILON_PRECIS)
+    if (ABS(Dxy) >= EPSILON_13)
     {
         vectorIntersec._x = Dyz / Dxy;
         vectorIntersec._y = Dzx / Dxy;
         vectorIntersec._z = 1.0;
     }
-    else if (ABS(Dyz) >= EPSILON_PRECIS)
+    else if (ABS(Dyz) >= EPSILON_13)
     {
         vectorIntersec._x = 1.0;
         vectorIntersec._y = Dzx / Dyz;
         vectorIntersec._z = Dxy / Dyz;
     }
-    else if (ABS(Dzx) >= EPSILON_PRECIS)
+    else if (ABS(Dzx) >= EPSILON_13)
     {
         vectorIntersec._x = Dyz / Dzx;
         vectorIntersec._y = 1.0;
