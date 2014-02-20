@@ -455,6 +455,12 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
 				source.setSampler(new UniformSphericSampler(globalNbRaysPerSource));
 				globalNbRaysPerSource = dynamic_cast<UniformSphericSampler*>( source.getSampler() )->getRealNbRays();
 				break;
+			case 2 : 
+				source.setSampler( new Latitude2DSampler(globalNbRaysPerSource) );
+				dynamic_cast<Latitude2DSampler*>( source.getSampler() )->setStartPhi(0.);
+				dynamic_cast<Latitude2DSampler*>( source.getSampler() )->setEndPhi(360.);
+				dynamic_cast<Latitude2DSampler*>( source.getSampler() )->setStartTheta(0.);
+				dynamic_cast<Latitude2DSampler*>( source.getSampler() )->setEndTheta(0.);
 		}
 
         source.setPosition(sources[i]);
