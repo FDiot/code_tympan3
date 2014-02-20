@@ -46,7 +46,8 @@ public:
 			Base(), 
 			pos(position), 
 			from(incomingDirection), 
-			nbResponseLeft(0), 
+			nbResponseLeft(0),
+			initialNbResponse(0),
 			sampler(NULL), 
 			shape(_shape) 
 	{ 
@@ -58,6 +59,7 @@ public:
         pos = vec3(other.pos);
         from = vec3(other.pos);
         nbResponseLeft = other.nbResponseLeft;
+		initialNbResponse = other.initialNbResponse;
 		type = other.type;
 		shape = other.shape;
         if (other.sampler) { sampler = new Sampler(*(other.sampler)); }
@@ -102,6 +104,8 @@ public:
     bool isReponseLeft() { return nbResponseLeft > 0; }
     int getNbResponseLeft() { return nbResponseLeft; }
     virtual void setNbResponseLeft(int _nbResponseLeft) { nbResponseLeft = _nbResponseLeft; }
+
+	virtual int getInitialNbResponseLeft() const { return initialNbResponse; }
 
 	/*!
    * \fn Shape* getShape()
@@ -165,7 +169,8 @@ public:
 protected:
     vec3 pos;			/*!< Point d'impact de l'evenement */
     vec3 from;			/*!< Vecteur directeur du rayon incident */
-    int nbResponseLeft;
+    int nbResponseLeft; /*!< Number of rays remaining to launch */
+	int initialNbResponse; /*!< number of rays to lauch after event*/
     Sampler* sampler;
     Shape* shape;		/*< La primitive impactee */
     typeevent type;		/*!< Type de l'evenement */

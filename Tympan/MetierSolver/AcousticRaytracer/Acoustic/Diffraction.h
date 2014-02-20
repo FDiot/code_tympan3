@@ -31,7 +31,7 @@ public:
 				Event(position, incomingDirection, (Shape*)(c)) 
 	{ 
 		name = "unknown diffraction"; 
-		nbResponseLeft = 200; 
+		nbResponseLeft = initialNbResponse = 200; 
 		type = DIFFRACTION; 
 		buildRepere(); 
 		computeAngle();
@@ -56,6 +56,7 @@ public:
 	{ 
 		nbResponseLeft = std::floor( std::abs( static_cast<decimal>(_nbResponseLeft-1) / M_2PI * angleOuverture * std::sin(angleArrive) ) + 0.5 );
 		nbResponseLeft = nbResponseLeft >= 4 ? nbResponseLeft : 4; // Limite le nombre à 4
+		initialNbResponse = nbResponseLeft;
 		computeDTheta(); 
 	}
 

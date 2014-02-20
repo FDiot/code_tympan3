@@ -24,7 +24,7 @@ class SpecularReflexion : public Event
 public:
 
     SpecularReflexion(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL):
-        Event(position, incomingDirection, _shape) { nbResponseLeft = 1; type = SPECULARREFLEXION;}
+        Event(position, incomingDirection, _shape) { nbResponseLeft = initialNbResponse = 1; type = SPECULARREFLEXION;}
 
     SpecularReflexion(const SpecularReflexion& other) : Event(other)
     {

@@ -27,6 +27,8 @@ void Ray::computeLongueur()
         std::cerr << "Erreur : rayon sans source dans computeLongueur" << endl;
         return;
     }
+
+	longueur = 0;
     switch (events.size())
     {
         case 0:
@@ -102,10 +104,9 @@ decimal Ray::computeTrueLength( vec3& closestPoint )
     switch (events.size())
     {
         case 0: // Chemin direct source-recepteur
-            longueur = posSource.distance(posRecep);
-			closestPoint = posRecep;
+			closestPoint = posRecep.closestPointOnLine(posSource, finalPosition);
+            longueur = posSource.distance(closestPoint);
             return longueur;
-
 			break;
 
         default:
