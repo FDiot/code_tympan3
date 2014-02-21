@@ -198,7 +198,8 @@ public:
 
 		if ( diffraction )
 		{
-			return 2 * M_PI * angle * distance;
+			//return 2 * M_PI * angle * distance;
+			return distance * angle;
 		}
 
 		return 2. * distance * sqrt( angle / M_PI ); 
@@ -220,7 +221,8 @@ public:
 		if ( e && ( e->getType() == DIFFRACTION ) )
 		{
 			diffraction = true;
-			return dynamic_cast<Diffraction*>(e)->getDeltaTheta();
+//			return sin( dynamic_cast<Diffraction*>(e)->getAngle() ) * dynamic_cast<Diffraction*>(e)->getAngleOuverture() / e->getInitialNbResponseLeft();
+			return dynamic_cast<Diffraction*>(e)->getAngle() * M_2PI / e->getInitialNbResponseLeft();
 		}
 		
 		diffraction = false;

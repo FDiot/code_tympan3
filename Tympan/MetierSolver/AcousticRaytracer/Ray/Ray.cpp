@@ -96,7 +96,7 @@ decimal Ray::computeTrueLength( vec3& closestPoint )
         return 0.;
     }
 
-	decimal longueur = 0.;
+	longueur = 0.;
 	vec3 posSource = source->getPosition();
     vec3 posRecep = static_cast<Recepteur*>(recepteur)->getPosition();
 	vec3 posLastEvent;
@@ -123,8 +123,9 @@ decimal Ray::computeTrueLength( vec3& closestPoint )
 
 			// Compute distance from the last event to the nearest point from receptor
 			posLastEvent = vec3(events.back()->getPosition());
-			closestPoint = posRecep.closestPointOnLine(posLastEvent, finalPosition); 
-			return ( longueur += closestPoint.distance(posLastEvent) );
+			closestPoint = posRecep.closestPointOnLine(posLastEvent, finalPosition);
+			longueur += closestPoint.distance(posLastEvent);
+			return longueur;
 
             break;
     }
@@ -140,7 +141,7 @@ decimal Ray::computePertinentLength(vec3& closestPoint)
         return 0.;
     }
 
-	decimal longueur = 0.;
+	decimal pertinent_length = 0.;
     vec3 posRecep = static_cast<Recepteur*>(recepteur)->getPosition();
 	vec3 posLastEvent;
 	vec3 current(0., 0., 0.), previous(0., 0., 0.);
@@ -177,14 +178,14 @@ decimal Ray::computePertinentLength(vec3& closestPoint)
 					{
 						rit++;
 						current = (*rit)->getPosition();
-						longueur += current.distance(previous);
+						pertinent_length += current.distance(previous);
 						previous = current;
 					}
 
 					// Compute distance from the last event to the nearest point from receptor
 					posLastEvent = vec3(events.back()->getPosition());
 					closestPoint = posRecep.closestPointOnLine(posLastEvent, finalPosition); 
-					return ( longueur += closestPoint.distance(posLastEvent) );
+					return ( pertinent_length += closestPoint.distance(posLastEvent) );
 				}
 			}
 

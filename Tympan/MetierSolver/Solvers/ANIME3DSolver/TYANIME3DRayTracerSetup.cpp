@@ -226,7 +226,7 @@ bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Sourc
 	//
     selectorManagerIntersection.addSelector(new DiffractionSelector<Ray>(globalMaxDiffraction));
     selectorManagerIntersection.addSelector(new ReflectionSelector<Ray>(globalMaxReflexion, globalUseSol));
-	selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));
+//	selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));
 
     // Ajoute des cylindres sur les arretes diffractantes
     PostTreatment::constructEdge(scene);
