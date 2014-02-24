@@ -36,6 +36,7 @@
 #include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/meteoLin.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
 #include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Latitude2DSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/RandomSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
@@ -455,7 +456,11 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
 				source.setSampler(new UniformSphericSampler(globalNbRaysPerSource));
 				globalNbRaysPerSource = dynamic_cast<UniformSphericSampler*>( source.getSampler() )->getRealNbRays();
 				break;
-			case 2 : 
+			case 2 :
+				source.setSampler(new UniformSphericSampler2(globalNbRaysPerSource));
+				globalNbRaysPerSource = dynamic_cast<UniformSphericSampler2*>( source.getSampler() )->getRealNbRays();
+				break;
+			case 3 : 
 				source.setSampler( new Latitude2DSampler(globalNbRaysPerSource) );
 				dynamic_cast<Latitude2DSampler*>( source.getSampler() )->setStartPhi(0.);
 				dynamic_cast<Latitude2DSampler*>( source.getSampler() )->setEndPhi(360.);
