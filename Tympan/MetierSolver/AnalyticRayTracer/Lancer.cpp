@@ -24,6 +24,7 @@
 #include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Latitude2DSampler.h"
 #include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Longitude2DSampler.h"
 #include "Tympan\MetierSolver\AcousticRaytracer\Geometry\UniformSphericSampler.h"
+#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\UniformSphericSampler2.h"
 
 
 Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(20)
@@ -96,6 +97,10 @@ void Lancer::init()
 	case 3 : // Tir sur une sphere
 		_sampler = new UniformSphericSampler(nbRay);
 		nbRay = dynamic_cast<UniformSphericSampler*>(_sampler)->getRealNbRays();
+		break; 
+	case 4 : // Tir sur une sphere v2
+		_sampler = new UniformSphericSampler2(nbRay);
+		nbRay = dynamic_cast<UniformSphericSampler2*>(_sampler)->getRealNbRays();
 		break; 
 	default :
 		return; // do nothing
