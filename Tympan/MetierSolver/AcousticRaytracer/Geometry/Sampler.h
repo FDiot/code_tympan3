@@ -73,6 +73,12 @@ public:
 	decimal getPhi() const { return _phi; }
 	void setPhi(const decimal& Phi) { _phi = Phi ; init(); }
 
+	/*!
+	 * \fn virtual unsigned int computeDiffractionNbr(const decimal& theta)
+	 * \brief return the numebr of rays to launch after a diffraction event
+	 */
+	virtual unsigned int computeDiffractionNbr(const decimal& theta) { return 0; }
+
 protected :
 	unsigned int _nb_rays; /*! Number of rays to lauch */
 	decimal _theta;		  /*! global equatorial angle */

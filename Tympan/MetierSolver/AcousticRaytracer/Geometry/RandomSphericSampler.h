@@ -20,7 +20,8 @@
 #include <vector>
 #include <string>
 #include <math.h>
-#include "Sampler.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Global.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/UnitConverter.h"
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real.hpp>
@@ -71,6 +72,9 @@ public:
     }
 
     virtual bool isAcceptableSample(vec3 v) { return true; }
+
+	virtual unsigned int computeDiffractionNbr(const decimal& thetaCalcul) { return globalNbRayWithDiffraction; }
+
 
 private :
 	static boost::mt19937 random_generator;
