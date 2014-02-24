@@ -54,7 +54,7 @@ public:
 
     virtual void setNbResponseLeft(int _nbResponseLeft) 
 	{ 
-		nbResponseLeft = std::floor( std::abs( static_cast<decimal>(_nbResponseLeft-1) / M_2PI * angleOuverture * std::sin(angleArrive) ) + 0.5 );
+		nbResponseLeft = static_cast<unsigned int>( std::floor( static_cast<decimal>(_nbResponseLeft-1) / M_2PI * angleOuverture + 0.5 ) );
 		nbResponseLeft = nbResponseLeft >= 4 ? nbResponseLeft : 4; // Limite le nombre à 4
 		initialNbResponse = nbResponseLeft;
 		computeDTheta(); 

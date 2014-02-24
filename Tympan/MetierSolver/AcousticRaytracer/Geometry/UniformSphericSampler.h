@@ -113,6 +113,11 @@ public:
 
 	unsigned int getRealNbRays() const { return _real_nb_rays; }
 
+	virtual unsigned int computeDiffractionNbr(const decimal& thetaCalcul) 
+	{ 
+		return static_cast<unsigned int>( floor( _nb_rays * (  sin( thetaCalcul + _theta /_n1 ) - sin( thetaCalcul - _theta / _n1 )  ) / 2.  + 0.5 ) ); 
+	}
+
 private :
 	inline void computeN1() 
 	{ 	

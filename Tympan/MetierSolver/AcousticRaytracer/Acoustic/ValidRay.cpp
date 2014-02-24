@@ -95,7 +95,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 #ifdef _FIXED_DIFFRACTION_NBRAYS_
     newEvent->setNbResponseLeft(globalNbRayWithDiffraction+1); // Attempt to correct problem 
 #else
-	unsigned int diff_nb_rays = std::floor( std::sqrt( static_cast<decimal>( r->getSource()->getSampler()->getNbRays() ) ) + 0.5 ) + 1;
+	unsigned int diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
 	newEvent->setNbResponseLeft(diff_nb_rays);
 #endif
     
