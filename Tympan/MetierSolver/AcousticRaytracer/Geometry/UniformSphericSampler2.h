@@ -136,23 +136,20 @@ public:
 private :
 	inline void computeN1() 
 	{ 	
-		decimal dh = 2 * _dr * sin(M_PI / 3); // elementary high of a slice
-		_d_theta = asin(dh);
-		_n1 = static_cast<unsigned int>( floor( M_PI / _d_theta + 0.5 ) );
+		decimal dh = 2 * _dr * sin(M_PI / 3); // high of a slice on equator
+		_d_theta = atan(dh);
+		_n1 = static_cast<unsigned int>( floor( M_PI / _d_theta ) );
 	}
 
 	inline void computeThetaCalcul(unsigned int i)
 	{
 		_thetaCalcul =  static_cast<decimal>( M_PIDIV2 - i * _d_theta );
-
-		//_thetaCalcul =  static_cast<decimal>( static_cast<int>(_n1) - 2 * static_cast<int>(i) + 1 ) * _theta / static_cast<decimal>(_n1) ;
 	}
 
 	inline void computeN2()
 	{
-		_n2 = static_cast<unsigned int>( floor( M_2PI * cos( _thetaCalcul ) / ( 2. * _dr ) + 0.5 ) );
+		_n2 = static_cast<unsigned int>( floor( M_2PI * cos( _thetaCalcul ) / ( 2. * _dr ) ) );
 		_d_phi = _phi / _n2;
-		//_n2 = static_cast<unsigned int>( floor( _nb_rays * (  sin( _thetaCalcul + _theta /_n1 ) - sin( _thetaCalcul - _theta / _n1 )  ) / 2.  + 0.5 ) );
 	}
 
 
