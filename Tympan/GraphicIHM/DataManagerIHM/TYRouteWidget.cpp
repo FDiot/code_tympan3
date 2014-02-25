@@ -85,9 +85,10 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
 
     q_AADT_Push = findChild<QPushButton*>("bouton_tmja");
     assert(q_AADT_Push);
-    assert(QObject::connect(q_AADT_Push,      SIGNAL(clicked()),
-                            this,             SLOT(display_AADT_dialog())));
-
+    bool connect_ok;
+    connect_ok = QObject::connect(q_AADT_Push,      SIGNAL(clicked()),
+                                  this,             SLOT(display_AADT_dialog()));
+    assert(connect_ok && "Qt signal connection failed");
     p_ModeCalcul_ButtonGroup = findChild<QButtonGroup*>("groupe_boutons_mode_calcul");
     assert(p_ModeCalcul_ButtonGroup);
     QRadioButton* q_check_box;
@@ -103,21 +104,24 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
 
     q_EditSpectre_Button[TYRoute::Day] = findChild<QPushButton*>("bouton_spectre_jour");
     assert(q_EditSpectre_Button[TYRoute::Day]);
-    assert(QObject::connect(q_EditSpectre_Button[TYRoute::Day], SIGNAL(clicked()),
-                            this, SLOT(displaySpectrumDay())));
+    connect_ok = QObject::connect(q_EditSpectre_Button[TYRoute::Day], SIGNAL(clicked()),
+                                  this, SLOT(displaySpectrumDay()));
+    assert(connect_ok && "Qt signal connection failed");
     q_EditSpectre_Button[TYRoute::Evening] = findChild<QPushButton*>("bouton_spectre_soir");
     assert(q_EditSpectre_Button[TYRoute::Evening]);
-    assert(QObject::connect(q_EditSpectre_Button[TYRoute::Evening], SIGNAL(clicked()),
-                            this, SLOT(displaySpectrumEvening())));
+    connect_ok = QObject::connect(q_EditSpectre_Button[TYRoute::Evening], SIGNAL(clicked()),
+                                  this, SLOT(displaySpectrumEvening()));
+    assert(connect_ok && "Qt signal connection failed");
     q_EditSpectre_Button[TYRoute::Night] = findChild<QPushButton*>("bouton_spectre_nuit");
     assert(q_EditSpectre_Button[TYRoute::Night]);
-    assert(QObject::connect(q_EditSpectre_Button[TYRoute::Night], SIGNAL(clicked()),
-                            this, SLOT(displaySpectrumNight())));
-
+    connect_ok = QObject::connect(q_EditSpectre_Button[TYRoute::Night], SIGNAL(clicked()),
+                                  this, SLOT(displaySpectrumNight()));
+    assert(connect_ok && "Qt signal connection failed");
 
     checkComputationMode(1);
-    assert(QObject::connect(p_ModeCalcul_ButtonGroup, SIGNAL(buttonClicked(int)),
-                            this, SLOT(checkComputationMode(int))));
+    connect_ok = QObject::connect(p_ModeCalcul_ButtonGroup, SIGNAL(buttonClicked(int)),
+                                  this, SLOT(checkComputationMode(int)));
+    assert(connect_ok && "Qt signal connection failed");
 
     // Update the GUI from the data in the TYRoute instance.
     updateContent();
