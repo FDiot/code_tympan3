@@ -145,7 +145,7 @@ void TYOpenElementDialog::open()
         QString itemName;
 
         _pElementChoiceListBox->clear();
-        _elements.purge();
+        _elements.clear();
 
         // Verification de l'etat du fichier
         QFileInfo fi(_fileName);
@@ -235,12 +235,12 @@ void TYOpenElementDialog::openBDTopo()
         QString itemName;
 
         _pElementChoiceListBox->clear();
-        _elements.purge();
+        _elements.clear();
 
         TYDXFBDTopoImporter importer;
         LPTYSiteNode pSite;
         importer.import(DirectoryName.toLatin1(), &pSite);
-        _elements.add(pSite);
+        _elements.push_back(pSite);
         // On rempli la liste
         for (unsigned int i = 0; i < _elements.size(); i++)
         {

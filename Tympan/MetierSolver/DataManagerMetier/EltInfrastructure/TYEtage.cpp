@@ -716,7 +716,7 @@ void TYEtage::exportCSV(std::ofstream& ofs)
     ofs << '\n';
 }
 
-void TYEtage::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYEtage::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYAcousticVolume::getChilds(childs, recursif);
 
@@ -724,11 +724,11 @@ void TYEtage::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
 
     for (i = 0; i < _tabMur.size(); i++)
     {
-        childs.add(_tabMur[i]->getElement());
+        childs.push_back(_tabMur[i]->getElement());
     }
 
-    childs.add(_pSol);
-    childs.add(_pPlafond);
+    childs.push_back(_pSol);
+    childs.push_back(_pPlafond);
 
     if (recursif)
     {

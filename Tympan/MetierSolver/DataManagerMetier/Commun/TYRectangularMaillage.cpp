@@ -248,7 +248,7 @@ bool TYRectangularMaillage::fromXML(const std::string& sFilePath)
     }
 
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
     if (xmlManager.load(fileName, elements))
     {
         if (elements.size() == 1)
@@ -283,7 +283,7 @@ bool TYRectangularMaillage::fromXMLString(const std::string& sXMLString)
     bool bRet = false;
 
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
     if (xmlManager.loadFromString(QString(sXMLString.c_str()), elements))
     {
         if (elements.size() == 1)

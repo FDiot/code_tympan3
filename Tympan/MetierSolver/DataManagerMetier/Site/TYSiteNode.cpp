@@ -324,12 +324,12 @@ int TYSiteNode::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYSiteNode::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYSiteNode::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYElement::getChilds(childs, recursif);
 
-    childs.add(_pTopographie);
-    childs.add(_pInfrastructure);
+    childs.push_back(_pTopographie);
+    childs.push_back(_pInfrastructure);
 
     if (recursif)
     {
@@ -339,8 +339,8 @@ void TYSiteNode::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
 
     for (unsigned int i = 0; i < _listSiteNode.size(); i++)
     {
-        childs.add(_listSiteNode[i]);
-        childs.add(_listSiteNode[i]->getElement());
+        childs.push_back(_listSiteNode[i]);
+        childs.push_back(_listSiteNode[i]->getElement());
     }
 
     if (recursif)
@@ -398,9 +398,9 @@ void TYSiteNode::updateCurrentCalcul(TYListID& listID, bool recursif)//=true
     if (recursif) // On parcours les enfants si besoin est...
     {
         // Collecte des childs
-        TYElementCollection childs;
+        LPTYElementArray childs;
         getChilds(childs, false);
-        for (int i = 0; i < childs.getCount(); i++)
+        for (int i = 0; i < childs.size(); i++)
         {
             childs[i]->updateCurrentCalcul(listID, recursif);
         }
@@ -1675,7 +1675,7 @@ void TYSiteNode::exportCSV(std::ofstream& ofs)
     // Export du type de l'objet
     ofs << toString() << '\n';
     // Export des donnees acoustiques
-    TYElementCollection childs;
+    LPTYElementArray childs;
     getChilds(childs);
 
     for (int i = 0; i < childs.size() ; i++)

@@ -936,10 +936,10 @@ void TYCalcul::addToSelection(TYElement* pElt, bool recursif /*=true*/)
         // Si recursif on ajoute les enfants
         if (recursif)
         {
-            TYElementCollection childs;
+            LPTYElementArray childs;
             pElt->getChilds(childs, false);
 
-            for (int i = 0; i < childs.getCount(); i++)
+            for (int i = 0; i < childs.size(); i++)
             {
                 addToSelection(childs[i], recursif);
             }
@@ -974,10 +974,10 @@ bool TYCalcul::remToSelection(TYElement* pElt, bool recursif /*=true*/)
         pElt->setInCurrentCalcul(false, false, false);
 
         //  On désactive ses enfants
-        TYElementCollection childs;
+        LPTYElementArray childs;
         pElt->getChilds(childs, false);
 
-        for (int i = 0; i < childs.getCount(); i++)
+        for (int i = 0; i < childs.size(); i++)
         {
             remToSelection(childs[i], recursif);
         }

@@ -64,7 +64,7 @@ public:
      *
      * @return L'etat de reussite.
      */
-    int load(const QString& fileName, TYElementCollection& eltCollection);
+    int load(const QString& fileName, LPTYElementArray& eltCollection);
 
     /**
      * Sauvegarde le document XML en cours dans un fichier XML.
@@ -85,7 +85,7 @@ public:
      *
      * @return L'etat de reussite.
      */
-    int loadFromString(const QString& xmlString, TYElementCollection& eltCollection);
+    int loadFromString(const QString& xmlString, LPTYElementArray& eltCollection);
 
     /**
      * Sauvegarde le document XML en cours dans une string XML.
@@ -111,7 +111,7 @@ public:
      *
      * @return L'etat de reussite.
      */
-    int addElements(TYElementCollection& eltCollection);
+    int addElements(LPTYElementArray& eltCollection);
     /**
      * Ajoute un nouvel element au document XML.
      *

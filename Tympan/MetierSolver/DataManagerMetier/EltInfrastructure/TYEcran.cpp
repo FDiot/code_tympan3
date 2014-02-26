@@ -249,7 +249,7 @@ int TYEcran::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYEcran::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYEcran::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYAcousticFaceSet::getChilds(childs, recursif);
 }

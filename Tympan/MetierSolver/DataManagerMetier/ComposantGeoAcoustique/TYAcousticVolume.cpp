@@ -165,7 +165,7 @@ void TYAcousticVolume::propagateRegime()
 void TYAcousticVolume::correctNbRegimes()
 {
     size_t nbRegimes = _tabRegimes.size();
-    TYElementCollection childs;
+    LPTYElementArray childs;
     getChilds(childs, false);
 
     LPTYGeometryNode pNode = NULL;

@@ -297,7 +297,7 @@ int TYGeometryNode::fromXML(DOM_Element domElement)
     return res;
 }
 
-void TYGeometryNode::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYGeometryNode::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYElement::getChilds(childs, recursif);
 
