@@ -62,6 +62,7 @@
  */
 
 class TYElementCollection;
+typedef std::vector<LPTYElement> LPTYElementArray;
 
 typedef  std::map<TYUUID, TYElement*> TYElementContainer;
 
@@ -230,7 +231,7 @@ public:
     /**
      * Collecte les enfants de cet element de facon recursive ou non.
      */
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true) {}
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true) {}
 
     /**
      * Set/Get de l'indicateur d'appartenance au Calcul courant.
@@ -480,7 +481,7 @@ public:
      *
      * @return Une instance du type trouve, sinon NULL.
      */
-    static TYElementCollection findTypeCollectionAndCallFromXML(DOM_Element parentElem, const char* type);
+    static LPTYElementArray findTypeCollectionAndCallFromXML(DOM_Element parentElem, const char* type);
 
     /**
      * Active ou desactive l'enregistrement de toutes les instances creees de type

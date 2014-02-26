@@ -73,7 +73,7 @@ class TYSiteNode: public TYElement
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     virtual void setIsGeometryModified(bool isModified);
 

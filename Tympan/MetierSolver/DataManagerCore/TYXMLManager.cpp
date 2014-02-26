@@ -80,7 +80,7 @@ int TYXMLManager::createDoc(QString docName, QString version)
     return 1;
 }
 
-int TYXMLManager::load(const QString& fileName, TYElementCollection& eltCollection)
+int TYXMLManager::load(const QString& fileName, LPTYElementArray& eltCollection)
 {
     OMessageManager::get()->info("Charge le fichier %s.", fileName.toAscii().data());
 
@@ -145,7 +145,7 @@ int TYXMLManager::load(const QString& fileName, TYElementCollection& eltCollecti
             readOk = pElt->fromXML(nodeList.item(i).toElement());
 
             // Ajout de l'element a la collection
-            eltCollection.add(pElt);
+            eltCollection.push_back(pElt);
         }
     }
 
@@ -172,7 +172,7 @@ int TYXMLManager::save(QString fileName)
     return DOMSave::saveNodeToFile(_domDocument, fileName.toAscii().data());
 }
 
-int TYXMLManager::loadFromString(const QString& xmlString, TYElementCollection& eltCollection)
+int TYXMLManager::loadFromString(const QString& xmlString, LPTYElementArray& eltCollection)
 {
     QDomDocument doc;
     QString  errorMsg ;
@@ -226,7 +226,7 @@ int TYXMLManager::loadFromString(const QString& xmlString, TYElementCollection& 
             readOk = pElt->fromXML(nodeList.item(i).toElement());
 
             // Ajout de l'element a la collection
-            eltCollection.add(pElt);
+            eltCollection.push_back(pElt);
         }
     }
 
@@ -298,13 +298,13 @@ int TYXMLManager::getEltType(const QString& fileName, QString& eltType)
     return 1;
 }
 
-int TYXMLManager::addElements(TYElementCollection& eltCollection)
+int TYXMLManager::addElements(LPTYElementArray& eltCollection)
 {
     // Pour chaque element
-    for (unsigned int i = 0; i < eltCollection.getCount(); i++)
+    for (unsigned int i = 0; i < eltCollection.size(); i++)
     {
         // Serialisation a partir du noeud root
-        eltCollection.getAt(i)->toXML(_rootElement);
+        eltCollection.at(i)->toXML(_rootElement);
     }
 
     return true;

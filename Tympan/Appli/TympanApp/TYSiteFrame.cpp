@@ -1425,7 +1425,7 @@ void TYSiteFrame::importFromLib(const unsigned int& filter, TYElement* pElement)
 
     TYGetLibraryDialog* pDlg = new TYGetLibraryDialog(filter, this);
     pDlg->exec();
-    TYElementCollection elements = pDlg->getElements();
+    LPTYElementArray elements = pDlg->getElements();
 
     if (getTYApp()->getCalculManager()->askForResetResultat())
     {
