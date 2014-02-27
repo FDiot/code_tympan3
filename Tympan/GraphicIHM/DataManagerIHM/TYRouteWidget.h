@@ -101,6 +101,7 @@ protected slots:
     void displaySpectrumDay() {displaySpectrum(TYRoute::Day);};
     void displaySpectrumEvening() {displaySpectrum(TYRoute::Evening);};;
     void displaySpectrumNight() {displaySpectrum(TYRoute::Night);};;
+    void onRoadSurfaceChange(int);
 
 private:
     void apply_road_surface();
