@@ -82,6 +82,7 @@ protected:
     TYAcousticLineWidget* _elmW;
 
     QComboBox*  q_RoadSurfaceType_Combo;
+    QComboBox*  q_RoadSurfaceFormulation_Combo;
     QCheckBox*  q_RoadSurfaceDraining_Check;
     QSpinBox*   q_RoadSurfaceAge_Spin;
     QComboBox*  q_RoadFlowType_Combo;
@@ -102,6 +103,7 @@ protected slots:
     void displaySpectrumEvening() {displaySpectrum(TYRoute::Evening);};;
     void displaySpectrumNight() {displaySpectrum(TYRoute::Night);};;
     void onRoadSurfaceChange(int);
+    void onRoadSurfaceFormulationChange(int);
 
 private:
     void apply_road_surface();
