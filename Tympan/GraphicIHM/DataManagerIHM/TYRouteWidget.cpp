@@ -38,6 +38,7 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
 {
     // Initialise the QT Designer generated UI base
     setupUi(this);
+    bool connect_ok;
 
     // Display the widget for pElement as an AcousticSource in an additional tab
     _elmW = new TYAcousticLineWidget(pElement, this);
@@ -49,6 +50,9 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     // Find the widget by name so that it is easy to access them
     q_RoadSurfaceType_Combo = findChild<QComboBox*>("route_classe_revetement");
     assert(q_RoadSurfaceType_Combo);
+    connect_ok = QObject::connect(q_RoadSurfaceType_Combo,      SIGNAL(currentIndexChanged(int)),
+                                  this,                         SLOT(onRoadSurfaceChange(int)));
+    assert(connect_ok && "Qt signal connection failed");
     q_RoadSurfaceDraining_Check = findChild<QCheckBox*>("route_drainant");
     assert(q_RoadSurfaceDraining_Check);
     q_RoadSurfaceAge_Spin = findChild<QSpinBox*>("route_age");
@@ -85,7 +89,6 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
 
     q_AADT_Push = findChild<QPushButton*>("bouton_tmja");
     assert(q_AADT_Push);
-    bool connect_ok;
     connect_ok = QObject::connect(q_AADT_Push,      SIGNAL(clicked()),
                                   this,             SLOT(display_AADT_dialog()));
     assert(connect_ok && "Qt signal connection failed");
@@ -123,6 +126,7 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
                                   this, SLOT(checkComputationMode(int)));
     assert(connect_ok && "Qt signal connection failed");
 
+
     // Update the GUI from the data in the TYRoute instance.
     updateContent();
 }
@@ -154,7 +158,7 @@ void TYRouteWidget::apply_road_surface()
     int index;
 
     index = q_RoadSurfaceType_Combo->currentIndex();
-    if (q_RoadSurfaceDraining_Check->isChecked())
+    if (index!=0 && q_RoadSurfaceDraining_Check->isChecked())
     {
         index += RoadSurface_DR1 - 1;
     }
@@ -176,7 +180,7 @@ void TYRouteWidget::update_road_surface()
     if (index >= RoadSurface_DR1)
     {
         q_RoadSurfaceDraining_Check->setChecked(true);
-        index -= RoadSurface_DR1 + 1;
+        index -= RoadSurface_DR1 - 1;
     }
     q_RoadSurfaceType_Combo->setCurrentIndex(index);
 
@@ -373,4 +377,11 @@ void TYRouteWidget::displaySpectrum(TYRoute::TrafficRegimes regime)
     road.setCurRegime(regime);
     TYSpectre* spectre = road.getCurrentSpectre();
     int ret = spectre->edit(this);
+}
+
+void TYRouteWidget::onRoadSurfaceChange(int)
+{
+    int index = q_RoadSurfaceType_Combo->currentIndex();
+    assert(index >= 0 && index < RoadSurface_UserDefined);
+    q_RoadSurfaceDraining_Check->setEnabled(index != RoadSurface_Default);
 }
