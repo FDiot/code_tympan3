@@ -22,8 +22,8 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>9</x>
-     <y>9</y>
+     <x>10</x>
+     <y>10</y>
      <width>434</width>
      <height>600</height>
     </rect>
@@ -41,7 +41,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="page_trafic">
     <attribute name="title">
@@ -389,6 +389,23 @@
      <string>Description route</string>
     </attribute>
     <layout class="QGridLayout" name="gridLayout_2">
+     <item row="6" column="0" colspan="5">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>NB : La formule de revêtement n'est pas sauvegardée : elle permet simplement de sélectionner la classe de revêtement.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Formule de revêtement</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
@@ -396,7 +413,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="4" column="1">
       <widget class="QComboBox" name="route_ecoulement">
        <item>
         <property name="text">
@@ -425,6 +442,19 @@
        </item>
       </widget>
      </item>
+     <item row="9" column="1">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
      <item row="0" column="1">
       <widget class="QComboBox" name="route_classe_revetement">
        <item>
@@ -449,7 +479,7 @@
        </item>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item row="3" column="2">
       <widget class="QLabel" name="label_7">
        <property name="text">
         <string>ans</string>
@@ -457,22 +487,9 @@
       </widget>
      </item>
      <item row="3" column="1">
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="1" column="1">
       <widget class="QSpinBox" name="route_age"/>
      </item>
-     <item row="1" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
         <string>Age</string>
@@ -486,7 +503,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_6">
        <property name="text">
         <string>Écoulement</string>
@@ -495,6 +512,98 @@
      </item>
      <item row="0" column="4">
       <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="route_formule_revetement">
+       <item>
+        <property name="text">
+         <string>-</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBUM 0/6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBDr 0/10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBTM 0/6 - type 2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBTM 0/6 - type 1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBTM 0/10 - type 2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBSG 0/10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBTM 0/10 - type 1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBUM 0/10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ECF</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBSG 0/14</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBTM 0/14</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ES 6/10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BC</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ES 10/14</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="5">
+      <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>

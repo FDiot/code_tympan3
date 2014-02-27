@@ -32,6 +32,22 @@
 #include "Tympan/Tools/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYRouteWidget", (id))
 
+static struct {const char* name ; int id;} RoadSurfaceFormulationMap[] = {
+    {"BBUM 0/6",           BBUM_0_6},
+    {"BBDr 0/10",          BBDR_0_10},
+    {"BBTM 0/6 - type 2",  BBTM_0_6_type2},
+    {"BBTM 0/6 - type 1",  BBTM_0_6_type1},
+    {"BBTM 0/10 - type 2", BBTM_0_10_type2},
+    {"BBSG 0/10",          BBSG_0_10},
+    {"BBTM 0/10 - type 1", BBTM_0_10_type1},
+    {"BBUM 0/10",          BBUM_0_10},
+    {"ECF",                ECF},
+    {"BBSG 0/14",          BBSG_0_14},
+    {"BBTM 0/14",          BBTM_0_14},
+    {"ES 6/10",            ES_6_10},
+    {"BC",                 BC},
+    {"ES 10/14",           ES_10_14}
+};
 
 TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
@@ -50,9 +66,8 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     // Find the widget by name so that it is easy to access them
     q_RoadSurfaceType_Combo = findChild<QComboBox*>("route_classe_revetement");
     assert(q_RoadSurfaceType_Combo);
-    connect_ok = QObject::connect(q_RoadSurfaceType_Combo,      SIGNAL(currentIndexChanged(int)),
-                                  this,                         SLOT(onRoadSurfaceChange(int)));
-    assert(connect_ok && "Qt signal connection failed");
+    q_RoadSurfaceFormulation_Combo = findChild<QComboBox*>("route_formule_revetement");
+    assert(q_RoadSurfaceFormulation_Combo);
     q_RoadSurfaceDraining_Check = findChild<QCheckBox*>("route_drainant");
     assert(q_RoadSurfaceDraining_Check);
     q_RoadSurfaceAge_Spin = findChild<QSpinBox*>("route_age");
@@ -86,6 +101,13 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     assert(q_RoadFlow_Spin[TYRoute::Evening][TYTrafic::HGV]);
     q_RoadFlow_Spin[TYRoute::Night][TYTrafic::HGV] = findChild<QSpinBox*>("periode_debit_pl_nuit");
     assert(q_RoadFlow_Spin[TYRoute::Night][TYTrafic::HGV]);
+
+    connect_ok = QObject::connect(q_RoadSurfaceType_Combo,      SIGNAL(currentIndexChanged(int)),
+                                  this,                         SLOT(onRoadSurfaceChange(int)));
+    assert(connect_ok && "Qt signal connection failed");
+    connect_ok = QObject::connect(q_RoadSurfaceFormulation_Combo,      SIGNAL(activated(int)),
+                                  this,                                SLOT(onRoadSurfaceFormulationChange(int)));
+    assert(connect_ok && "Qt signal connection failed");
 
     q_AADT_Push = findChild<QPushButton*>("bouton_tmja");
     assert(q_AADT_Push);
@@ -125,7 +147,6 @@ TYRouteWidget::TYRouteWidget(TYRoute* pElement, QWidget* _pParent /*=NULL*/):
     connect_ok = QObject::connect(p_ModeCalcul_ButtonGroup, SIGNAL(buttonClicked(int)),
                                   this, SLOT(checkComputationMode(int)));
     assert(connect_ok && "Qt signal connection failed");
-
 
     // Update the GUI from the data in the TYRoute instance.
     updateContent();
@@ -182,6 +203,8 @@ void TYRouteWidget::update_road_surface()
         q_RoadSurfaceDraining_Check->setChecked(true);
         index -= RoadSurface_DR1 - 1;
     }
+    else
+        q_RoadSurfaceDraining_Check->setChecked(false);
     q_RoadSurfaceType_Combo->setCurrentIndex(index);
 
     q_RoadSurfaceAge_Spin->setValue(road.surfaceAge());
@@ -384,4 +407,19 @@ void TYRouteWidget::onRoadSurfaceChange(int)
     int index = q_RoadSurfaceType_Combo->currentIndex();
     assert(index >= 0 && index < RoadSurface_UserDefined);
     q_RoadSurfaceDraining_Check->setEnabled(index != RoadSurface_Default);
+    q_RoadSurfaceFormulation_Combo->setCurrentIndex(0);
+}
+
+void TYRouteWidget::onRoadSurfaceFormulationChange(int index)
+{
+    if(index>0)
+    {
+        TYRoute& road = *getElement();
+        int surf_type_no = RoadSurfaceFormulationMap[index-1].id;
+        RoadSurfaceType surf_type = static_cast<RoadSurfaceType>(surf_type_no);
+        road.setSurfaceType(surf_type);
+        update_road_surface();
+        q_RoadSurfaceFormulation_Combo->setCurrentIndex(index);
+        QWidget::update();
+    }
 }
