@@ -73,7 +73,10 @@ public:
 
     virtual bool isAcceptableSample(vec3 v) { return true; }
 
-	virtual unsigned int computeDiffractionNbr(const decimal& thetaCalcul) { return globalNbRayWithDiffraction; }
+	virtual unsigned int computeDiffractionNbr(const decimal& thetaCalcul) 
+	{ 
+		return static_cast<unsigned int>( floor( sqrt( static_cast<decimal>(_nb_rays) ) * sin( M_PIDIV2 - thetaCalcul ) + 0.5 ) ); 
+	}
 
 
 private :
