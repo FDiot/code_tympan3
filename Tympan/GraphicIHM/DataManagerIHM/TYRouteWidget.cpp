@@ -32,7 +32,8 @@
 #include "Tympan/Tools/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYRouteWidget", (id))
 
-static struct {const char* name ; int id;} RoadSurfaceFormulationMap[] = {
+static struct {const char* name ; int id;} RoadSurfaceFormulationMap[] =
+{
     {"BBUM 0/6",           BBUM_0_6},
     {"BBDr 0/10",          BBDR_0_10},
     {"BBTM 0/6 - type 2",  BBTM_0_6_type2},
@@ -179,7 +180,7 @@ void TYRouteWidget::apply_road_surface()
     int index;
 
     index = q_RoadSurfaceType_Combo->currentIndex();
-    if (index!=0 && q_RoadSurfaceDraining_Check->isChecked())
+    if (index != 0 && q_RoadSurfaceDraining_Check->isChecked())
     {
         index += RoadSurface_DR1 - 1;
     }
@@ -204,7 +205,9 @@ void TYRouteWidget::update_road_surface()
         index -= RoadSurface_DR1 - 1;
     }
     else
+    {
         q_RoadSurfaceDraining_Check->setChecked(false);
+    }
     q_RoadSurfaceType_Combo->setCurrentIndex(index);
 
     q_RoadSurfaceAge_Spin->setValue(road.surfaceAge());
@@ -412,10 +415,10 @@ void TYRouteWidget::onRoadSurfaceChange(int)
 
 void TYRouteWidget::onRoadSurfaceFormulationChange(int index)
 {
-    if(index>0)
+    if (index > 0)
     {
         TYRoute& road = *getElement();
-        int surf_type_no = RoadSurfaceFormulationMap[index-1].id;
+        int surf_type_no = RoadSurfaceFormulationMap[index - 1].id;
         RoadSurfaceType surf_type = static_cast<RoadSurfaceType>(surf_type_no);
         road.setSurfaceType(surf_type);
         update_road_surface();
