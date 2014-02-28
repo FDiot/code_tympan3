@@ -102,7 +102,7 @@ bool DefaultEngine::process()
             new_ray->direction = precp - psource;
             new_ray->direction.normalize();
             new_ray->mint = 0.;
-            new_ray->maxt = 2000.0;
+            new_ray->maxt = 10000.;
             //std::cout<<"Emission d'un rayon d'origine ("<<new_ray->position.x<<","<<new_ray->position.y<<","<<new_ray->position.z;
             //std::cout<<") et direction ("<<new_ray->direction.x<<","<<new_ray->direction.y<<","<<new_ray->direction.z<<")."<<std::endl;
             pile_traitement.push(new_ray);
@@ -240,7 +240,7 @@ Ray* DefaultEngine::genRay()
             sources->at(i).getDirection(new_ray->direction);
             //std::cout<<"Direction du nouveau rayon : ("<<new_ray->direction.x<<","<<new_ray->direction.y<<","<<new_ray->direction.z<<") : "<<new_ray->direction.length()<<std::endl;
             new_ray->mint = 0.;
-            new_ray->maxt = 2000.;
+            new_ray->maxt = 10000.;
             return new_ray;
         }
     }
@@ -372,7 +372,7 @@ void DefaultEngine::runStructureBenchmark()
     {
         Ray r;
         r.mint = 0.00001f;
-        r.maxt = 2000.;
+        r.maxt = 10000.;
         r.direction = vec3((double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX);
         r.direction.normalize();
         r.position = vec3(((double)rand() / (double)RAND_MAX) * (sceneBox.pMax.x - sceneBox.pMin.x) + sceneBox.pMin.x,
