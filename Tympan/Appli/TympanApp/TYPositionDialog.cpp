@@ -141,8 +141,6 @@ void TYPositionDialog::apply()
 
     _pElement->setHauteur(_lineEditH->text().toDouble());
 
-    _pElement->updateMatrix();
-
     TYElement::setIsSavedOk(true);
     accept();
 }
