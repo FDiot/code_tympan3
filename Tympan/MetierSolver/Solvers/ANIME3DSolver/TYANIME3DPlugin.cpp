@@ -30,7 +30,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPlugin.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/OSpectreComplex.h"
+#include "Tympan/MetierSolver/ToolsMetier/OSpectreComplex.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
