@@ -157,7 +157,7 @@ public:
     /**
      * Set/Get du repere.
      */
-    void setRepere(const ORepere3D& repere) { _repere = repere; updateMatrix(); }
+    void setRepere(const ORepere3D& repere) { _repere = repere; }
 
     /**
      * Set/Get du repere.
@@ -175,7 +175,7 @@ public:
     /**
      * Set/Get du repere.
      */
-    void setRepere(const TYRepere& rep) { _repere = rep; updateMatrix(); }
+    void setRepere(const TYRepere& rep) { _repere = rep; }
 
     /**
      * Set/Get de la matrice de changement de repere.
@@ -203,11 +203,6 @@ public:
     bool operator!=(const TYGeometryNode& other) const;
 
     virtual bool deepCopy(const TYElement* pOther, bool copyId = true);
-
-    /**
-     * Calcule la nouvelle matrice correspondant au changement de repere.
-     */
-    void updateMatrix();
 
     /**
      * Determine la matrice de passage du repere local vers le repere absolu.

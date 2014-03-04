@@ -112,7 +112,6 @@ TYGeometryNode::TYGeometryNode(TYElement* pElt , TYElement* pParent /*=NULL*/) :
 {
     _pElement = pElt;
     addToTheMap();
-    updateMatrix(); // TODO a priori inutile
     _hauteur = 0.0;
 
     if (pParent && _pElement)
@@ -127,7 +126,6 @@ TYGeometryNode::TYGeometryNode(LPTYElement pElt, TYElement* pParent /*=NULL*/) :
 {
     _pElement = pElt;
     addToTheMap();
-    updateMatrix(); // TODO a priori inutile
     _hauteur = 0.0;
 
     if (pParent && _pElement)
@@ -140,7 +138,6 @@ TYGeometryNode::TYGeometryNode(LPTYElement pElt, TYElement* pParent /*=NULL*/) :
 TYGeometryNode::TYGeometryNode(const TYRepere& repere, TYElement* pElt)
 {
     _repere = repere;
-    updateMatrix();
     _hauteur = 0.0;
 
     _pElement = pElt;
@@ -150,7 +147,6 @@ TYGeometryNode::TYGeometryNode(const TYRepere& repere, TYElement* pElt)
 TYGeometryNode::TYGeometryNode(const TYRepere& repere, LPTYElement pElt)
 {
     _repere = repere;
-    updateMatrix();
     _hauteur = 0.0;
 
     _pElement = pElt;
@@ -238,9 +234,6 @@ int TYGeometryNode::fromXML(DOM_Element domElement)
         // On cherche le repere
         if (_repere.callFromXMLIfEqual(elemCur))
         {
-            // Mise a jour de la matrice en fct du repere
-            updateMatrix();
-
             // Le prochain child (node et pas '#text')
             // doit etre le noeud de l'element
             nodeTmp = elemCur.nextSibling();
@@ -379,15 +372,6 @@ bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     setIsAcousticModified(true);
 
     return true;
-}
-
-void TYGeometryNode::updateMatrix()
-{
-    OMatrix matrix;
-
-    _repere.getMatChangeRep(matrix);
-    setMatrix(matrix);
-    setIsGeometryModified(true);
 }
 
 TYGeometryNode* TYGeometryNode::GetGeoNode(TYElement* pElement)

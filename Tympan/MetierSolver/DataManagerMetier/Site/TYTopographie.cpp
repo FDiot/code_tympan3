@@ -1103,8 +1103,6 @@ TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv /* = 
         tabPt = pCourbeNiv->getListPoints();
         tabPtTemp = TYPoint::checkPointsMaxDistance(tabPt, distMax);
 
-        _listCrbNiv[i]->updateMatrix();
-
         const OMatrix& pMatrix = _listCrbNiv[i]->getMatrix();
 
         for (j = 0; j < tabPtTemp.size(); j++)
@@ -1139,7 +1137,6 @@ TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv /* = 
         double distMax = pPlanEau->getDistMax();
         TYTabPoint tabPtTemp = TYPoint::checkPointsMaxDistance(tabPt, distMax);
 
-        _listPlanEau[i]->updateMatrix();
         const OMatrix& pMatrix = _listPlanEau[i]->getMatrix();
 
         for (j = 0; j < tabPtTemp.size(); j++)
