@@ -45,7 +45,7 @@ public:
     /**
      * Constructeur par defaut.
      */
-    TYSpectre(const double &defaultValue = TY_SPECTRE_DEFAULT_VALUE);
+    TYSpectre(const double& defaultValue = TY_SPECTRE_DEFAULT_VALUE);
 
     /**
      * Constructeur a partir d'un OSpectre

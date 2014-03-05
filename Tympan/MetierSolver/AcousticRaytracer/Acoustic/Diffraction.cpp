@@ -19,25 +19,25 @@
 
 bool Diffraction::getResponse(vec3& r, bool force)
 {
-//#define __RANDOM__
-#ifdef __RANDOM__ 
-	
-	// Tir des rayons aléatoires sur le cone de Keller
-	decimal theta = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
+    //#define __RANDOM__
+#ifdef __RANDOM__
 
-	if (theta > angleOuverture / 2.)
+    // Tir des rayons aléatoires sur le cone de Keller
+    decimal theta = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
+
+    if (theta > angleOuverture / 2.)
     {
         theta += (2 * M_PI - angleOuverture);
     }
 
 #else
 
-	// Distribution régulière des rayons entre angleOuverture/2 et -angleOuverture/2
-	decimal theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
+    // Distribution régulière des rayons entre angleOuverture/2 et -angleOuverture/2
+    decimal theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
 
 #endif // __RANDOM__
 
-	if (!force)
+    if (!force)
     {
         nbResponseLeft--;
         if (nbResponseLeft < 0)
@@ -54,13 +54,13 @@ bool Diffraction::getResponse(vec3& r, bool force)
     }
 
     vec3 localResponse;
-    Tools::fromRadianToCarthesien2( angleArrive, theta, localResponse );
+    Tools::fromRadianToCarthesien2(angleArrive, theta, localResponse);
 
     vec3 globalResponse = localRepere.vectorFromLocalToGlobal(localResponse);
 
     r = vec3(globalResponse);
 
-	return true;
+    return true;
 }
 
 bool Diffraction::isAcceptableResponse(vec3& test)

@@ -31,7 +31,7 @@ OPROTOINST(TYSpectre);
 // Precision d'ecriture des resultats dans les fichiers XML
 int TYSpectre::_XMLprecision = 1;
 
-TYSpectre::TYSpectre(const double &defaultValue) : OSpectre(defaultValue)
+TYSpectre::TYSpectre(const double& defaultValue) : OSpectre(defaultValue)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 

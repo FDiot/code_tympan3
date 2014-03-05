@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include <vector>
 #include <map>
 
@@ -27,83 +27,83 @@ using namespace std;
 
 unsigned int duplicateEventPostFilter::Process()
 {
-	unsigned int nbSuppress = 0;
+    unsigned int nbSuppress = 0;
 
-	// first filter for diffraction)
-	//families famD;
-	//unsigned int nbFamD = buildFamilies(famD, DIFFRACTION);
+    // first filter for diffraction)
+    //families famD;
+    //unsigned int nbFamD = buildFamilies(famD, DIFFRACTION);
 
-	//// Second level sorting for reflection
-	//families::iterator iterD;
+    //// Second level sorting for reflection
+    //families::iterator iterD;
 
-	//for (iterD = famD.begin(); iterD != famD.end(); iterD++)
-	//{
-	//	// Si un seul ray dans la famille,  on passe au suivant
-	//	if ( (*iterD).second.size() <= 1 ) { continue; }
+    //for (iterD = famD.begin(); iterD != famD.end(); iterD++)
+    //{
+    //  // Si un seul ray dans la famille,  on passe au suivant
+    //  if ( (*iterD).second.size() <= 1 ) { continue; }
 
-	//	//Seconde passe pour traiter les reflexions en debut de rayon qui ne sont pas detectable (suite de 0)
-	//	postFilter *pF = new postFilter( &((*iterD).second) );
-	//	families famR;
-	//	pF->buildFamilies(famR, SPECULARREFLEXION);
+    //  //Seconde passe pour traiter les reflexions en debut de rayon qui ne sont pas detectable (suite de 0)
+    //  postFilter *pF = new postFilter( &((*iterD).second) );
+    //  families famR;
+    //  pF->buildFamilies(famR, SPECULARREFLEXION);
 
-	//	// Boucle sur la nouvelle serie
-	//	families::iterator iterR;
-	//	for (iterR = famR.begin(); iterR != famR.end(); iterR++)
-	//	{
-	//		if ( (*iterR).second.size() <= 1 ) { continue; }
+    //  // Boucle sur la nouvelle serie
+    //  families::iterator iterR;
+    //  for (iterR = famR.begin(); iterR != famR.end(); iterR++)
+    //  {
+    //      if ( (*iterR).second.size() <= 1 ) { continue; }
 
-	//		// loop under residual rays to test similarities
-	//		vector<Ray*>& tab = ( (*iterR).second );
+    //      // loop under residual rays to test similarities
+    //      vector<Ray*>& tab = ( (*iterR).second );
 
-	//		Ray* r = NULL;
-	//		vector<Ray*>::iterator iter1, iter2;
-	//		// Compare Ray two by two
-	//		for (iter1 = tab.begin(); iter1 != tab.end(); ++iter1)
-	//		{
-	//			for (iter2 = iter1+1; iter2 != tab.end(); ++iter2)
-	//			{
+    //      Ray* r = NULL;
+    //      vector<Ray*>::iterator iter1, iter2;
+    //      // Compare Ray two by two
+    //      for (iter1 = tab.begin(); iter1 != tab.end(); ++iter1)
+    //      {
+    //          for (iter2 = iter1+1; iter2 != tab.end(); ++iter2)
+    //          {
 
-	//				r = compareRays( (*iter1), (*(iter2)) );
+    //              r = compareRays( (*iter1), (*(iter2)) );
 
-	//				if (r == NULL) continue;
-	//				if ( r == (*iter1) ) 
-	//				{
-	//					cleanTab(tab, iter1);
-	//				}
-	//				else
-	//				{
-	//					cleanTab(tab, iter2);
-	//				}
-	//			}
-	//		}
-	//	}
-
-
-
-		//families famR;
-		//unsigned int nbFamR = buildFamilies(famD, SPECULARREFLEXION);
-
-		//families::iterator iterR;
-		//for (iterR = famR.begin(); iterR != famR.end(); iterR++)
-		//{
-		//	// Si un seul ray dans la famille,  on passe au suivant
-		//	if ( (*iterR).second.size() <= 1 ) { continue; }
-
-		//	// Réflechir sur la comparaison des évènement entre rayons
-		//	// ATTENTION AU CAS OU IL Y A PLUS DE DEUX RAYONS
-
-		//}
+    //              if (r == NULL) continue;
+    //              if ( r == (*iter1) )
+    //              {
+    //                  cleanTab(tab, iter1);
+    //              }
+    //              else
+    //              {
+    //                  cleanTab(tab, iter2);
+    //              }
+    //          }
+    //      }
+    //  }
 
 
-		//// Travail sur les évènements détectés
-		//sequenceMap sm = buildSequenceMap( (*iter).first, (*iter).second, SPECULARREFLEXION);
-		//sequenceMap::iterator itm;
-		//for (itm = sm.begin(); itm != sm.end(); itm++)
-		//{
-		//	// Si un seul ray dans la séquence, on passe au suivant
-		//	if ( (*iter).second.size() <= 1 ) { continue; }
-		//}
-	//}
 
-	return nbSuppress;
+    //families famR;
+    //unsigned int nbFamR = buildFamilies(famD, SPECULARREFLEXION);
+
+    //families::iterator iterR;
+    //for (iterR = famR.begin(); iterR != famR.end(); iterR++)
+    //{
+    //  // Si un seul ray dans la famille,  on passe au suivant
+    //  if ( (*iterR).second.size() <= 1 ) { continue; }
+
+    //  // Réflechir sur la comparaison des évènement entre rayons
+    //  // ATTENTION AU CAS OU IL Y A PLUS DE DEUX RAYONS
+
+    //}
+
+
+    //// Travail sur les évènements détectés
+    //sequenceMap sm = buildSequenceMap( (*iter).first, (*iter).second, SPECULARREFLEXION);
+    //sequenceMap::iterator itm;
+    //for (itm = sm.begin(); itm != sm.end(); itm++)
+    //{
+    //  // Si un seul ray dans la séquence, on passe au suivant
+    //  if ( (*iter).second.size() <= 1 ) { continue; }
+    //}
+    //}
+
+    return nbSuppress;
 }

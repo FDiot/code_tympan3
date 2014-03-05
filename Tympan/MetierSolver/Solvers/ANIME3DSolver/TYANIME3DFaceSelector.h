@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
+*/
 
 
 #ifndef __TYINPROFACESELECTOR__
@@ -23,14 +23,14 @@ public:
     TYANIME3DFaceSelector(const TYSiteNode& Site);
     virtual ~TYANIME3DFaceSelector();
 
-	/*!
-	 * \fn bool exec(TYStructSurfIntersect* tabPolygon, unsigned int& tabPolygonSize);
-	 * \brief buil list of faces used by the ray tracer and the acoustic solver
-	 */
-	bool exec(TYStructSurfIntersect *&tabPolygon, unsigned int& tabPolygonSize);
+    /*!
+     * \fn bool exec(TYStructSurfIntersect* tabPolygon, unsigned int& tabPolygonSize);
+     * \brief buil list of faces used by the ray tracer and the acoustic solver
+     */
+    bool exec(TYStructSurfIntersect *&tabPolygon, unsigned int& tabPolygonSize);
 
-private : 
-	/*!
+private :
+    /*!
     * \fn bool buildCalcStruct(TYStructSurfIntersect* _tabPolygon)
     * \brief Construit un tableau contenant la structure regroupant l'ensemble des informations relatives a une face/triangle du site.
     * Correspond a la fonction du meme nom dans le SolveurHarmonoise avec l'ajout des normales et des faces triangulees dans la structure.
@@ -43,10 +43,10 @@ private :
     * \brief Effectue une triangulation de l'ensemble des faces de la topographie et des infrastructures.
     * \return Renvoie vrai si les triangulations se sont bien passees.
     */
-    bool triangulateConcavePolygon(TYStructSurfIntersect *tabPolygon, const unsigned int& tabPolygonSize);
+    bool triangulateConcavePolygon(TYStructSurfIntersect* tabPolygon, const unsigned int& tabPolygonSize);
 
 protected :
-	const TYSiteNode& _site;
+    const TYSiteNode& _site;
 };
 
 #endif // __TYANIME3DFACESELECTOR__

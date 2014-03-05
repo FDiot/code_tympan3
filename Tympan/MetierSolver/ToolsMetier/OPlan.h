@@ -248,20 +248,20 @@ public:
      */
     double distance(const OPoint3D& pt);
 
- 
-	/*!
-	 * \fn OPoint3D symPtPlan(const OPoint3D& pt)
-	 * \brief Calcule le symétrique d'un point par rapport au plan
-	 */
-	OPoint3D symPtPlan(const OPoint3D& pt);
 
-	/*!
-	 * \fn OPoint3D projPtPlan(const OPoint3D& pt)
-	 * \brief Calcule le projeté d'un point sur le plan
-	 */
-	OPoint3D projPtPlan(const OPoint3D& pt);
-	
-	/**
+    /*!
+     * \fn OPoint3D symPtPlan(const OPoint3D& pt)
+     * \brief Calcule le symétrique d'un point par rapport au plan
+     */
+    OPoint3D symPtPlan(const OPoint3D& pt);
+
+    /*!
+     * \fn OPoint3D projPtPlan(const OPoint3D& pt)
+     * \brief Calcule le projeté d'un point sur le plan
+     */
+    OPoint3D projPtPlan(const OPoint3D& pt);
+
+    /**
      * \fn bool distancePlanParallel(const OPlan& plan, double& distance);
      * \brief Calcul de la distance entre ce plan et un autre plan parallele a ce plan.
      *

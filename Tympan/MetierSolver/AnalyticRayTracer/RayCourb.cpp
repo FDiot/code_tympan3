@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include "RayCourb.h"
 #include "../AcousticRaytracer/Geometry/mathlib.h"
 
@@ -22,7 +22,7 @@ RayCourb::RayCourb() : nbReflex(0)
 
 RayCourb::RayCourb(const vec3& a) : nbReflex(0)
 {
-	etapes.insert(etapes.begin(), Step(a) );
+    etapes.insert(etapes.begin(), Step(a));
 }
 
 RayCourb::RayCourb(const RayCourb& r) : etapes(r.etapes), nbReflex(r.nbReflex), position(r.position), rencontre(r.rencontre)

@@ -335,10 +335,12 @@ public:
     {
         //std::cout << "Boite englobante : (" << pMin.x << "," << pMin.y << "," << pMin.z << ") ";
         //std::cout << "(" << pMax.x << "," << pMax.y << "," << pMax.z << ") ";
-        if (isNull) { //std::cout << "Non initialisee." << std::endl; 
-		}
-        else { //std::cout << "Initialisee." << std::endl; 
-		}
+        if (isNull)   //std::cout << "Non initialisee." << std::endl;
+        {
+        }
+        else   //std::cout << "Initialisee." << std::endl;
+        {
+        }
     }
 
     vec3& operator[](int i)

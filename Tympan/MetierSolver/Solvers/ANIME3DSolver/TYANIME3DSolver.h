@@ -1,4 +1,4 @@
-﻿/* 
+﻿/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
+*/
 
 
 #ifndef __TY_ANIME3DSOLVER__
@@ -43,7 +43,7 @@ struct TYStructSurfIntersect
     int idFace;                             //Indice de la face
     int idBuilding;                         //Indice du building dans TYSite
     int idEtage;                            //Indice de l'etage
-    OSpectreComplex spectreAbso;			//Spectre d'absorption
+    OSpectreComplex spectreAbso;            //Spectre d'absorption
     double G;                               //Coefficient d'impedance
 };
 
@@ -78,14 +78,14 @@ public:
     * \fn void init(const TYSiteNode&, TYCalcul&)
     * \brief Initialize some data structures used by ANIME3D
     */
-	void init(const TYSiteNode& site, TYCalcul& calcul);
+    void init(const TYSiteNode& site, TYCalcul& calcul);
 
 
     /*!
-	 * \fn virtual void purge();
-	 * \brief Clean memory after being used in a calcul
-	 */
-	virtual void purge();
+     * \fn virtual void purge();
+     * \brief Clean memory after being used in a calcul
+     */
+    virtual void purge();
 
 protected:
     /*!
@@ -94,32 +94,32 @@ protected:
      */
     void saveAndOverSampleRay(const TYSiteNode& site, TYCalcul& calcul, const unsigned int& sens = 0, const double& dMin = 0.0);
 
-	/*!
+    /*!
      *\fn void restitModifiedAlti(TYSiteNode& site)
      *\brief Restitue au site la topographie (et infrastructure) transformee
      */
     void restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcousticPathFinder& pathFinder);
 
-	/*!
+    /*!
      * \fn exportRays(TYCalcul& calcul)
      * \brief export rays computed by acousticRayTracer in curved geometry
      */
-//	void exportRays(TYCalcul& calcul);
+    //  void exportRays(TYCalcul& calcul);
 
     /*!
-	 * \fn buildTestMeteoParameters()
-	 * \brief Build parameters file for TestMeteoSolver
-	 */
-//    void buildTestMeteoParameters();
+     * \fn buildTestMeteoParameters()
+     * \brief Build parameters file for TestMeteoSolver
+     */
+    //    void buildTestMeteoParameters();
 
     /*!
-	 * \fn restitMap()
-	 * \brief Send map of curved ray to metier  
-	 */
-//	void restitMap(const TYSiteNode& site);
+     * \fn restitMap()
+     * \brief Send map of curved ray to metier
+     */
+    //  void restitMap(const TYSiteNode& site);
 
 protected:
-	TYTabRay _tabRay;
+    TYTabRay _tabRay;
 
     /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face
     TYStructSurfIntersect* _tabPolygon;
@@ -128,19 +128,19 @@ protected:
     size_t _tabPolygonSize;
 
     /// Objet _rayTracing pour le lancer de rayons droits
-//    Simulation _rayTracing;
+    //    Simulation _rayTracing;
 
     /// Objet _curveRayTracing pour le lancer de rayons courbes
-//    Transfo _curveRayTracing;
+    //    Transfo _curveRayTracing;
 
     Logger logger;
     FILE logs;
 
-	/*!< List of sources used by the solver */
+    /*!< List of sources used by the solver */
     TYTabSourcePonctuelleGeoNode _tabSources;
 
-	/*!< List of receptors used by the solver */
-	TYTabPointCalculGeoNode _tabRecepteurs;
+    /*!< List of receptors used by the solver */
+    TYTabPointCalculGeoNode _tabRecepteurs;
 };
 
 #endif // __TY_ANIME3DSOLVER__

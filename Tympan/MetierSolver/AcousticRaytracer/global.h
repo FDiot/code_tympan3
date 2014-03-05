@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
@@ -26,7 +26,7 @@ extern int globalAccelerator;           //Choix de la structure acceleratrice. 0
 extern int globalMaxTreeDepth;          //Profondeur maximale autorisee pour le BVH ou KdTree.
 extern bool globalUseSol;               //Utilisation du sol (ou pas -cas NMPB-)
 extern bool globalKeepDebugRay;         //Permet de conserver les rayons qui ont ete invalides pendant la propagation.
-extern int globalDiscretization;		//Permet de choisir entre des rayons aléatoires ou déterministes (discretisation source)
+extern int globalDiscretization;        //Permet de choisir entre des rayons aléatoires ou déterministes (discretisation source)
 
 ////////////////////////////
 // NMPB value
@@ -64,10 +64,10 @@ extern double globalAnalyticC0;         // Celerite du son initiale
 extern int globalAnalyticTypeTransfo;   // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
 extern bool globalRestitModifiedGeom;   // Indique si l'on souhaite recuperer la geometrie transformee
 extern double globalOverSampleD;            // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
-extern double globalWindDirection;			// Direction du vent (un vent a 0 est dirige du nord vers le sud)
+extern double globalWindDirection;          // Direction du vent (un vent a 0 est dirige du nord vers le sud)
 
-extern bool globalUseFresnelArea;		// take into account the fresnel area
-extern float globalAnime3DSigma;		// incertitude relative sur la taille du rayon au carree
-extern float globalAnime3DForceC;		// Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
-extern bool globalUsePostFilters;		// Utilisation (!=0) ou non (0) des filtres post lancer de rayons
+extern bool globalUseFresnelArea;       // take into account the fresnel area
+extern float globalAnime3DSigma;        // incertitude relative sur la taille du rayon au carree
+extern float globalAnime3DForceC;       // Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
+extern bool globalUsePostFilters;       // Utilisation (!=0) ou non (0) des filtres post lancer de rayons
 #endif

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include "meteoLin.h"
 #include "RayCourb.h"
 #include "Lancer.h"
@@ -30,7 +30,7 @@
 Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(20)
 {
     _weather = new meteoLin();
-	initialAngleTheta = 0.0;                /*!<  angle de tir initial selon theta */
+    initialAngleTheta = 0.0;                /*!<  angle de tir initial selon theta */
     finalAngleTheta = 360.0;                  /*!<  angle de tir final selon theta */
     initialAnglePhi = 0.0;                  /*!<  angle de tir initial selon phi */
     finalAnglePhi = 360.0;                    /*!<  angle de tir final selon phi */
@@ -38,32 +38,32 @@ Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001), TM
     _launchType = 1;            /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
     wantOutFile = true;                   /*!<  true if outputfile wanted */
 
-	init();
+    init();
 }
 
 
 Lancer::Lancer(Lancer& L)
 {
-	sources = L.sources;
-	recepteurs = L.recepteurs;
-	_plan = L._plan;
-	_weather = L._weather;
-	h = L.h;
-	TMax = L.TMax; 
-	temps = L.temps;
-	dmax = L.dmax;
-	nbRay = L.nbRay; 
-	MatRes = L.MatRes;
+    sources = L.sources;
+    recepteurs = L.recepteurs;
+    _plan = L._plan;
+    _weather = L._weather;
+    h = L.h;
+    TMax = L.TMax;
+    temps = L.temps;
+    dmax = L.dmax;
+    nbRay = L.nbRay;
+    MatRes = L.MatRes;
 
-	initialAngleTheta = L.initialAngleTheta;
+    initialAngleTheta = L.initialAngleTheta;
     finalAngleTheta = L.finalAngleTheta;
-	initialAnglePhi = L.initialAnglePhi;
-	finalAnglePhi = L.finalAnglePhi;
+    initialAnglePhi = L.initialAnglePhi;
+    finalAnglePhi = L.finalAnglePhi;
 
-	_launchType = L._launchType;
-	wantOutFile = L.wantOutFile;
+    _launchType = L._launchType;
+    wantOutFile = L.wantOutFile;
 
-	init();
+    init();
 }
 
 
@@ -80,31 +80,31 @@ Lancer::~Lancer()
 
 void Lancer::init()
 {
-	switch(_launchType)
-	{
-	case 1 : // Tir horizontal
-		_sampler = new Latitude2DSampler(nbRay);
-		dynamic_cast<Latitude2DSampler*>(_sampler)->setStartTheta(initialAngleTheta);
-		dynamic_cast<Latitude2DSampler*>(_sampler)->setStartPhi(initialAnglePhi);
-		dynamic_cast<Latitude2DSampler*>(_sampler)->setEndPhi(finalAnglePhi);
-		break;
-	case 2 : // Tir vertical
-		_sampler = new Longitude2DSampler(nbRay);
-		dynamic_cast<Longitude2DSampler*>(_sampler)->setStartTheta(initialAngleTheta);
-		dynamic_cast<Longitude2DSampler*>(_sampler)->setEndTheta(finalAngleTheta);
-		dynamic_cast<Longitude2DSampler*>(_sampler)->setStartPhi(initialAnglePhi);
-		break;
-	case 3 : // Tir sur une sphere
-		_sampler = new UniformSphericSampler(nbRay);
-		nbRay = dynamic_cast<UniformSphericSampler*>(_sampler)->getRealNbRays();
-		break; 
-	case 4 : // Tir sur une sphere v2
-		_sampler = new UniformSphericSampler2(nbRay);
-		nbRay = dynamic_cast<UniformSphericSampler2*>(_sampler)->getRealNbRays();
-		break; 
-	default :
-		return; // do nothing
-	}
+    switch (_launchType)
+    {
+        case 1 : // Tir horizontal
+            _sampler = new Latitude2DSampler(nbRay);
+            dynamic_cast<Latitude2DSampler*>(_sampler)->setStartTheta(initialAngleTheta);
+            dynamic_cast<Latitude2DSampler*>(_sampler)->setStartPhi(initialAnglePhi);
+            dynamic_cast<Latitude2DSampler*>(_sampler)->setEndPhi(finalAnglePhi);
+            break;
+        case 2 : // Tir vertical
+            _sampler = new Longitude2DSampler(nbRay);
+            dynamic_cast<Longitude2DSampler*>(_sampler)->setStartTheta(initialAngleTheta);
+            dynamic_cast<Longitude2DSampler*>(_sampler)->setEndTheta(finalAngleTheta);
+            dynamic_cast<Longitude2DSampler*>(_sampler)->setStartPhi(initialAnglePhi);
+            break;
+        case 3 : // Tir sur une sphere
+            _sampler = new UniformSphericSampler(nbRay);
+            nbRay = dynamic_cast<UniformSphericSampler*>(_sampler)->getRealNbRays();
+            break;
+        case 4 : // Tir sur une sphere v2
+            _sampler = new UniformSphericSampler2(nbRay);
+            nbRay = dynamic_cast<UniformSphericSampler2*>(_sampler)->getRealNbRays();
+            break;
+        default :
+            return; // do nothing
+    }
 }
 
 void Lancer::purgeMatRes()
@@ -120,7 +120,7 @@ void Lancer::purgeMatRes()
 
 Step Lancer::EqRay(const Step& y0)                       // Fonction definissant le probleme a resoudre
 {
-	Step y;
+    Step y;
     vec3 n;
 
     // calcul des variables de celerite et de son gradient, de la vitesse du vent et de sa derive
@@ -128,7 +128,7 @@ Step Lancer::EqRay(const Step& y0)                       // Fonction definissant
     decimal c = dynamic_cast<meteoLin*>(_weather)->cTemp(y0.pos, Dc);
 
     //map<pair<int, int>, decimal> Jv;
-	const array< array<double, 3>, 3 >& Jv = dynamic_cast<meteoLin*>(_weather)->getJacobMatrix();
+    const array< array<double, 3>, 3 >& Jv = dynamic_cast<meteoLin*>(_weather)->getJacobMatrix();
     vec3 v = dynamic_cast<meteoLin*>(_weather)->cWind(y0.pos);
 
     // definition de s (normale normalisee selon la celerite effective) et de Omega
@@ -136,7 +136,7 @@ Step Lancer::EqRay(const Step& y0)                       // Fonction definissant
     decimal omega = 1 - (v * s);
 
     // on calcule les coordonnees
-    y.pos = ( (s * (c * c / omega) ) + v ); //(c * c / omega * s + v)
+    y.pos = ((s * (c * c / omega)) + v);    //(c * c / omega * s + v)
 
     // on calcule les normales
     //n.x = - omega / c * Dc.x - Jv[make_pair(1, 1)] * s.x - Jv[make_pair(1, 2)] * s.y - Jv[make_pair(1, 3)] * s.z;
@@ -176,7 +176,7 @@ RayCourb Lancer::RK4(const Step& y0)
     La methode rend un rayon courbe.
     */
 
-	decimal travel_length = 0.;
+    decimal travel_length = 0.;
 
     RayCourb y;
     y.setSize(temps.size() + 10);
@@ -189,33 +189,33 @@ RayCourb Lancer::RK4(const Step& y0)
     int cpt_tps = 0;                                      // compteur de temps
 
     // Les premieres valeurs correspondent a notre source.
-	y.etapes.push_back(yAct);
+    y.etapes.push_back(yAct);
 
     // on remplit le reste avec notre fonction EqRay qui definit notre probleme
-	decimal d2Max = dmax * dmax;
+    decimal d2Max = dmax * dmax;
 
-    while ( (static_cast<unsigned int>(cpt_tps) < temps.size()) && (travel_length < dmax) )
+    while ((static_cast<unsigned int>(cpt_tps) < temps.size()) && (travel_length < dmax))
     {
         // On definit deux variables qui vont nous servir a garder en memoire les valeurs minimales du point d'intersection
         // Car on parcourt les objets dans l'ordre ou ils sont ranges mais il se peut qu'un objet A plus pres du point considere se trouve apres un objet B plus loin
         // et quand on boucle, si on sort des la premiere intersection, la reponse sera l'intersection avec B alors que dans la realite, c'est avec l'objet A qu'il y a une intersection.
 
 
-        k1 = EqRay(yAct) * h;				// k1 = h * EqRay(yAct, Meteo);
-        k2 = EqRay(yAct + k1 * 0.5) * h;		// k2 = h * EqRay(yAct + 0.5 * k1, Meteo);
-        k3 = EqRay(yAct + k2 * 0.5) * h;		// k3 = h * EqRay(yAct + 0.5 * k2, Meteo);
-        k4 = EqRay(yAct + k3) * h;			// k4 = h * EqRay(yAct + k3, Meteo);
+        k1 = EqRay(yAct) * h;               // k1 = h * EqRay(yAct, Meteo);
+        k2 = EqRay(yAct + k1 * 0.5) * h;        // k2 = h * EqRay(yAct + 0.5 * k1, Meteo);
+        k3 = EqRay(yAct + k2 * 0.5) * h;        // k3 = h * EqRay(yAct + 0.5 * k2, Meteo);
+        k4 = EqRay(yAct + k3) * h;          // k4 = h * EqRay(yAct + k3, Meteo);
 
-        ySuiv = yAct + ( ( k1 + k2 * 2. + k3 * 2. + k4 ) * ( 1. / 6. ) );
+        ySuiv = yAct + ((k1 + k2 * 2. + k3 * 2. + k4) * (1. / 6.));
 
-		// Recherche des intersections
-		intersection(cpt_tps, y, yAct, ySuiv);
+        // Recherche des intersections
+        intersection(cpt_tps, y, yAct, ySuiv);
 
         // on remplit maintenant notre rayon
-		y.etapes.push_back(ySuiv);
+        y.etapes.push_back(ySuiv);
 
         // on met a jour nos variables
-		travel_length += ySuiv.pos.distance(yAct.pos); // distance parcourue par le rayon
+        travel_length += ySuiv.pos.distance(yAct.pos); // distance parcourue par le rayon
 
         yAct = ySuiv;
         cpt_tps++;
@@ -244,9 +244,9 @@ void Lancer::RemplirMat()
 
         for (unsigned int k = 0; k < nbRay; ++k)
         {
-			n0 = _sampler->getSample();
+            n0 = _sampler->getSample();
 
-            s0 = n0 / ( dynamic_cast<meteoLin*>(_weather)->cTemp( source, grad ) + ( dynamic_cast<meteoLin*>(_weather)->cWind( source ) * n0 ) );
+            s0 = n0 / (dynamic_cast<meteoLin*>(_weather)->cTemp(source, grad) + (dynamic_cast<meteoLin*>(_weather)->cWind(source) * n0));
             y0.norm = s0;
 
             // on resoud l'equation par la methode de runge-kutta d'ordre 4
@@ -294,7 +294,7 @@ vec3 Lancer::valideIntersection(const vec3& S, const vec3& R, const vec3* A, int
     vec3 I;
     int test = 0;
     reflexion = 2;
-	vec3 u = SR / SR.length(); // u : Vecteur directeur du trajet SR
+    vec3 u = SR / SR.length(); // u : Vecteur directeur du trajet SR
 
     // Premier test : on calcule u.n
     // Si le produit scalaire est positif ou nul, on ne rencontrera pas la face (on est respectivement en sens inverse ou parallele).
@@ -309,7 +309,7 @@ vec3 Lancer::valideIntersection(const vec3& S, const vec3& R, const vec3* A, int
     }
 
     // Deuxieme test : on regarde si le rayon va dans la direction du plan
-	
+
     vec3 A1 = A[0];
     vec3 A2 = A[1];
     vec3 A3 = A[2];
@@ -380,7 +380,7 @@ void Lancer::intersection(const unsigned int& timer, RayCourb& current, Step& Y_
     int intersec = 2;                                     // variable-test pour savoir s'il existe ou non une intersection
     vec3 I;                                                 // point d'intersection
 
-// reflexions: on boucle sur tous les objets existants
+    // reflexions: on boucle sur tous les objets existants
     for (r = 0; static_cast<unsigned int>(r) < _plan.size(); ++r)
     {
         // on determine les vecteurs directeurs u et v du plan plan[r]
@@ -434,7 +434,7 @@ void Lancer::intersection(const unsigned int& timer, RayCourb& current, Step& Y_
         Y_t1.pos = Imin;
 
         // on calcule le cosinus de l'angle forme par le rayon qui arrive et la normale n
-        decimal cos_angle = ( -nmin ) * ( Y_t0.norm / Y_t0.norm.length() );
+        decimal cos_angle = (-nmin) * (Y_t0.norm / Y_t0.norm.length());
 
         // enfin, on calcule la normale du rayon reflechi
         Y_t1.norm = Y_t0.norm + nmin * Y_t0.norm.length() * cos_angle * 2.;
@@ -511,12 +511,12 @@ void Lancer::save()
 {
     // on sauvegarde nos resultats dans un fichier .txt.
     ostringstream nom_var;
-	nom_var << "MatRes_C" << dynamic_cast<meteoLin*>(_weather)->getGradC() 
-			<< "_V" << dynamic_cast<meteoLin*>(_weather)->getGradV() 
-			<< "_D" << dmax 
-			<< ".txt" << ends;
-        
-	ofstream fic_out(nom_var.str().c_str());
+    nom_var << "MatRes_C" << dynamic_cast<meteoLin*>(_weather)->getGradC()
+            << "_V" << dynamic_cast<meteoLin*>(_weather)->getGradV()
+            << "_D" << dmax
+            << ".txt" << ends;
+
+    ofstream fic_out(nom_var.str().c_str());
 
     for (unsigned int i = 0; i < MatRes.size(); i++)
     {
@@ -524,9 +524,9 @@ void Lancer::save()
         {
             for (unsigned int k = 0; k < MatRes[i][j].etapes.size(); ++k)
             {
-                fic_out << MatRes[i][j].etapes[k].pos.x << " " 
-						<< MatRes[i][j].etapes[k].pos.y << " " 
-						<< MatRes[i][j].etapes[k].pos.z << endl;
+                fic_out << MatRes[i][j].etapes[k].pos.x << " "
+                        << MatRes[i][j].etapes[k].pos.y << " "
+                        << MatRes[i][j].etapes[k].pos.z << endl;
             }
 
             fic_out << endl << endl;
