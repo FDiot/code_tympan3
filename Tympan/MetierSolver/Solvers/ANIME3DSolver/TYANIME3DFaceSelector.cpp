@@ -48,11 +48,6 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
     // On nettoie le tableau des faces
     if (tabPolygon)
     {
-        for (size_t i = 0; i < tabPolygonSize; ++i)
-            if (tabPolygon[i].pSurfGeoNode)
-            {
-                tabPolygon[i].pSurfGeoNode->release();
-            }
         delete [] tabPolygon;
         tabPolygonSize = 0;
     }

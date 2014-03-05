@@ -74,11 +74,6 @@ void TYANIME3DSolver::purge()
 {
     if (_tabPolygon)
     {
-        for (size_t i = 0; i < _tabPolygonSize; i++)
-        {
-            _tabPolygon[i].pSurfGeoNode->release();
-        }
-
         delete [] _tabPolygon;
     }
 
@@ -134,8 +129,6 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
 			sLP.setType(SPECTRE_TYPE_LP);
 
 			tabSpectre[i][j] = sLP.toDB();  // conversion du tableau resultat en dB
-
-			_tabRecepteurs[j]->addRef();  //pour pas que cet objet ne soit detruit
 
 			traj.setSourcePonctuelle(_tabSources[i]);
 			traj.setPointCalcul(_tabRecepteurs[j]);
