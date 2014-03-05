@@ -81,9 +81,9 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 
 bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 {
-
     vec3 impact = r->position + r->direction * inter->t;
     Cylindre* cylindre = (Cylindre*)(inter->p);
+
     vec3 realImpact = impact.closestPointOnSegment(cylindre->getVertices()->at(cylindre->getLocalVertices()->at(0)), cylindre->getVertices()->at(cylindre->getLocalVertices()->at(1)));
 
     vec3 from = realImpact - r->position;
@@ -94,6 +94,14 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 if ( globalNbRayWithDiffraction > 0 )
 {
     newEvent->setNbResponseLeft(globalNbRayWithDiffraction+1); // Attempt to correct problem 
+}
+else if ( globalNbRayWithDiffraction == 0 )
+{
+	vec3 closestPoint = realImpact.closestPointOnLine(r->position, impact);
+	decimal pseudo_thick = realImpact.distance(closestPoint) ;
+	unsigned int diff_nb_rays = static_cast<unsigned int>( floor( M_2PI / pseudo_thick * sin( newEvent->getAngle() ) ) + 0.5 );
+	diff_nb_rays = diff_nb_rays > 36 ? diff_nb_rays : 36; 
+	newEvent->setNbResponseLeft(diff_nb_rays + 1);
 }
 else
 {
