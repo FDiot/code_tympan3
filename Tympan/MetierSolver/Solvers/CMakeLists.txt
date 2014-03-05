@@ -4,6 +4,4 @@ add_subdirectory(DefaultSolver)
 add_subdirectory(ExampleSolver)
 add_subdirectory(ANIME3DSolver)
 add_subdirectory(TestMeteo)
-add_subdirectory(ConvexHullSolver)
-add_subdirectory(HarmonoiseSolver)
 
