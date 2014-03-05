@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
+*/
 
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
@@ -35,10 +35,10 @@ TYANIME3DFaceSelector::~TYANIME3DFaceSelector()
 
 bool TYANIME3DFaceSelector::exec(TYStructSurfIntersect *&tabPolygon, unsigned int& tabPolygonSize)
 {
-	bool bRet = buildCalcStruct(tabPolygon, tabPolygonSize);
-	bRet &= triangulateConcavePolygon(tabPolygon, tabPolygonSize);
+    bool bRet = buildCalcStruct(tabPolygon, tabPolygonSize);
+    bRet &= triangulateConcavePolygon(tabPolygon, tabPolygonSize);
 
-	return bRet;
+    return bRet;
 }
 
 bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, unsigned int& tabPolygonSize)
@@ -55,7 +55,7 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
     // On recupere les faces
     TYTabAcousticSurfaceGeoNode tabFaces;
     std::vector<bool> estUnIndexDeFaceEcran;
-	unsigned int nbFacesInfra = 0;
+    unsigned int nbFacesInfra = 0;
     std::vector<std::pair<int, int> > indexBatiment;
     std::vector<int> etages;
 
@@ -66,10 +66,10 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
 
     tabPolygon = new TYStructSurfIntersect[tabPolygonSize];
 
-	unsigned int i, j;
+    unsigned int i, j;
 
     OMatrix mat;
-	TYSol* sol;
+    TYSol* sol;
 
     //====================================================
     // 1. Construction du tableau pour les infrastructures
@@ -105,7 +105,7 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
         tabPolygon[i].idEtage = etages.at(i);
 
         // Ajout du spectre d'attenuation
-        tabPolygon[i].spectreAbso = OSpectreComplex(OSpectre(0.0)); 
+        tabPolygon[i].spectreAbso = OSpectreComplex(OSpectre(0.0));
 
         // Recuperation des informations de la suface acoustique
         // si c'est un polygone
@@ -133,7 +133,7 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
         else if (pSemiCircle = TYAcousticSemiCircle::safeDownCast(tabFaces[i]->getElement()))
         {
             tabPolygon[i].tabPoint = pSemiCircle->getContour();
-			tabPolygon[i].normal = pSemiCircle->normal();
+            tabPolygon[i].normal = pSemiCircle->normal();
             tabPolygon[i].spectreAbso = pSemiCircle->getMateriau()->getSpectreAbso();
         }
         else  //Rmq : Spectre d'attenuation pour le sol calcule dans la methode acoustique car depend du rayon incident
@@ -149,7 +149,7 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
 
         // Ajout de la normale
         tabPolygon[i].normal = tabFaces[i]->getMatrix().multNormal(tabPolygon[i].normal);
-		tabPolygon[i].normal.normalize();
+        tabPolygon[i].normal.normalize();
 
         // Ajout de G =0
         tabPolygon[i].G = 0.;
@@ -192,15 +192,15 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
             }
 
             tabPolygon[i].normal = pPoly->normal();
-			tabPolygon[i].normal.normalize();
+            tabPolygon[i].normal.normalize();
         }
         pt.set(pt._x / (double)tabPolygon[i].tabPoint.size(), pt._y / (double)tabPolygon[i].tabPoint.size(), pt._z / (double)tabPolygon[i].tabPoint.size());
 
-		sol = _site.getTopographie()->terrainAt(pt)->getSol();
+        sol = _site.getTopographie()->terrainAt(pt)->getSol();
 
         // indices de batiment, de face et d'etage =-1
         tabPolygon[i].idBuilding = -1;
-        tabPolygon[i].idFace = i; //-1; 
+        tabPolygon[i].idFace = i; //-1;
         tabPolygon[i].idEtage = -1;
 
         // calcul et ajout de G j'ai pas vu
@@ -216,7 +216,7 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
     return true;
 }
 
-bool TYANIME3DFaceSelector::triangulateConcavePolygon(TYStructSurfIntersect *tabPolygon, const unsigned int& tabPolygonSize)
+bool TYANIME3DFaceSelector::triangulateConcavePolygon(TYStructSurfIntersect* tabPolygon, const unsigned int& tabPolygonSize)
 {
     if (tabPolygon == NULL || tabPolygonSize <= 0)
     {

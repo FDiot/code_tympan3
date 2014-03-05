@@ -91,17 +91,17 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 
     Diffraction* newEvent = new Diffraction(realImpact, from, (Cylindre*)(inter->p));
 
-if ( globalNbRayWithDiffraction > 0 )
-{
-    newEvent->setNbResponseLeft(globalNbRayWithDiffraction+1); // Attempt to correct problem 
-}
-else
-{
-	unsigned int diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
-	newEvent->setNbResponseLeft(diff_nb_rays);
-}
-    
-	vec3 newDir;
+    if (globalNbRayWithDiffraction > 0)
+    {
+        newEvent->setNbResponseLeft(globalNbRayWithDiffraction + 1); // Attempt to correct problem
+    }
+    else
+    {
+        unsigned int diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
+        newEvent->setNbResponseLeft(diff_nb_rays);
+    }
+
+    vec3 newDir;
     if (newEvent->getResponse(newDir))
     {
         r->position = realImpact;

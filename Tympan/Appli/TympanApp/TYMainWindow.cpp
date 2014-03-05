@@ -1224,9 +1224,9 @@ void TYMainWindow::updateCurCalcul()
             if (QMessageBox::warning(this, "Tympan", TR("id_msg_solver_out"), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
             {
                 // L'utilisateur accepte d'utiliser le solveur par defaut
-				_pProjetFrame->getProjet()->getCurrentCalcul()->setSolverId( OGenID( QString( DEFAULT_SOLVER_UUID ) ) );
-				_pProjetFrame->getProjet()->getCurrentCalcul()->setState(TYCalcul::Actif);
-				_pProjetFrame->getProjet()->setStatusSolver( true ); // On est ok sur le solveur 
+                _pProjetFrame->getProjet()->getCurrentCalcul()->setSolverId(OGenID(QString(DEFAULT_SOLVER_UUID)));
+                _pProjetFrame->getProjet()->getCurrentCalcul()->setState(TYCalcul::Actif);
+                _pProjetFrame->getProjet()->setStatusSolver(true);   // On est ok sur le solveur
             }
             else
             {

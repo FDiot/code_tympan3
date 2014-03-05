@@ -1240,7 +1240,7 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
     while ((i < _listPlanEau.size()) && (pFound == NULL))
     {
         pPlanEau = dynamic_cast<TYPlanEau*>(_listPlanEau.at(i)._pObj->getElement());
-		if (!pPlanEau) { i++; continue; }
+        if (!pPlanEau) { i++; continue; }
 
         const OMatrix& mat = _listPlanEau.at(i)._pObj->getMatrix();
 
@@ -1285,7 +1285,7 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
     while ((i < nbTerrain) && (pFound == NULL))
     {
         pTerrain = dynamic_cast<TYTerrain*>(_pSortedTerrains[i]->getElement());
-		if (!pTerrain) { i++; continue; }
+        if (!pTerrain) { i++; continue; }
         const OMatrix& mat = _pSortedTerrains[i]->getMatrix();
 
         nbPts = pTerrain->getListPoints().size();

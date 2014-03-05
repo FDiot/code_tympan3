@@ -24,7 +24,8 @@
 // For boost::exception diagnostic please see:
 // http://www.boost.org/doc/libs/1_54_0/libs/exception/doc/diagnostic_information.html
 
-namespace tympan {
+namespace tympan
+{
 
 } // namespace tympan
 

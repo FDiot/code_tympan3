@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -37,12 +37,12 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     ////////////////////////////
     globalMaxProfondeur = 2;            //Nombre d'evenements autorises pour un rayon, globalMaxProfondeur inclu
     globalNbRaysPerSource = 80000;      //Nombre de rayons lances par les sources
-	globalDiscretization = 1;			// Choix random = 0 ou discretisation = 1
-	globalSizeReceiver = 5.0f;          //Diametre de la sphere representant le recepteur
+    globalDiscretization = 1;           // Choix random = 0 ou discretisation = 1
+    globalSizeReceiver = 5.0f;          //Diametre de la sphere representant le recepteur
     globalAccelerator = 3;              //Choix de la structure acceleratrice. 0 : BruteForce, 1 : GridAccelerator, 2 : BVH, 3 : KdTree, other : GridAccelerator
     globalMaxTreeDepth = 12;            //Profondeur maximale autorisee pour le BVH ou KdTree.
     globalUseSol = true;                // Utilisation du sol pour les reflexions
-    globalKeepDebugRay = false;			//Permet de conserver les rayons qui ont ete invalides pendant la propagation.
+    globalKeepDebugRay = false;         //Permet de conserver les rayons qui ont ete invalides pendant la propagation.
 
     ////////////////////////////
     // NMPB value
@@ -72,23 +72,23 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
     globalAnalyticTMax = 3.0f;          // Temps de propagation maximal des rayons courbes
     globalAnalyticH = 0.01f;            // Pas de temps de calcul pour la propagation des rayons courbes
     globalAnalyticNbRay = 10;           // Nombre de rayons tires pour le lancer de rayons courbes
-	globalAnalyticAngleTheta = 0.;		// Angle de tir vertical (theta) des rayons
+    globalAnalyticAngleTheta = 0.;      // Angle de tir vertical (theta) des rayons
 
     globalAnalyticGradC = 0.1f;     // Gradient vertical de celerite
     globalAnalyticGradV = 0.15f;    // Gradient vertical de vitesse de vent
     globalAnalyticC0 = 340.0f;      // Celerite du son initiale
     globalAnalyticTypeTransfo = 1;  // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-	globalRestitModifiedGeom = 0;   // Indique si l'on souhaite recuperer la geometrie transformee
+    globalRestitModifiedGeom = 0;   // Indique si l'on souhaite recuperer la geometrie transformee
     globalOverSampleD = 3;          // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
-	globalWindDirection = 0.;		    // Direction du vent (un vent a 0 est dirige du nord vers le sud)
+    globalWindDirection = 0.;           // Direction du vent (un vent a 0 est dirige du nord vers le sud)
 
     /////////////////////////
     // ANIME3D Extensions
     /////////////////////////
-    globalUseFresnelArea = false;       // take into account the fresnel area 
-	globalAnime3DSigma = 0.0f;		// valeur de l'incertitude relative pour la calcul de la pression acoustique
-	globalAnime3DForceC = 0.0f;		// Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
-	globalUsePostFilters = true;		// Utilisation (!=0) ou non (0) des filtres post lancer de rayons
+    globalUseFresnelArea = false;       // take into account the fresnel area
+    globalAnime3DSigma = 0.0f;      // valeur de l'incertitude relative pour la calcul de la pression acoustique
+    globalAnime3DForceC = 0.0f;     // Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
+    globalUsePostFilters = true;        // Utilisation (!=0) ou non (0) des filtres post lancer de rayons
 
     // Chargement des parametres de calcul
     loadParameters();
@@ -112,7 +112,7 @@ bool TYANIME3DRayTracerSetup::loadParameters()
     //Nombre de rayons lances par les sources
     if (params.getline(ligne, 132)) { globalNbRaysPerSource = getParam(ligne); }
 
-	//Permet de choisir entre des rayons aléatoires: 0 ou déterministes: 1 (discretisation source)
+    //Permet de choisir entre des rayons aléatoires: 0 ou déterministes: 1 (discretisation source)
     if (params.getline(ligne, 132)) { globalDiscretization = getParam(ligne); }
 
     //Diametre de la sphere representant le recepteur
@@ -178,8 +178,8 @@ bool TYANIME3DRayTracerSetup::loadParameters()
     // Nombre de rayons tires pour le lancer de rayons courbes
     if (params.getline(ligne, 132)) { globalAnalyticNbRay = getParam(ligne); }
 
-	// Angle de tir vertical (theta) des rayons	
-	if (params.getline(ligne, 132)) { globalAnalyticAngleTheta = getParam(ligne); }	
+    // Angle de tir vertical (theta) des rayons
+    if (params.getline(ligne, 132)) { globalAnalyticAngleTheta = getParam(ligne); }
 
     // Gradient vertical de celerite
     if (params.getline(ligne, 132)) { globalAnalyticGradC = getParam(ligne); }
@@ -199,21 +199,21 @@ bool TYANIME3DRayTracerSetup::loadParameters()
     // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
     if (params.getline(ligne, 132)) { globalOverSampleD = getParam(ligne); }
 
-	// Direction du vent (un vent a 0 est dirige du nord vers le sud)	
-	if (params.getline(ligne, 132)) { globalWindDirection = getParam(ligne); }		    
+    // Direction du vent (un vent a 0 est dirige du nord vers le sud)
+    if (params.getline(ligne, 132)) { globalWindDirection = getParam(ligne); }
 
     // Prise en compte (ou non) de la zone de Fresnel
     if (params.getline(ligne, 132)) { globalUseFresnelArea = getParam(ligne); }
 
-	// valeur de l'incertitude relative pour la calcul de la pression acoustique
-	if (params.getline(ligne, 132)) { globalAnime3DSigma = getParam(ligne); }
+    // valeur de l'incertitude relative pour la calcul de la pression acoustique
+    if (params.getline(ligne, 132)) { globalAnime3DSigma = getParam(ligne); }
 
-	// Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
-	if (params.getline(ligne, 132)) { globalAnime3DForceC = getParam(ligne); }
+    // Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
+    if (params.getline(ligne, 132)) { globalAnime3DForceC = getParam(ligne); }
 
-	// Utilisation (!=0) ou non (0) des filtres post lancer de rayons
-	if (params.getline(ligne, 132)) { globalUsePostFilters = getParam(ligne); }		
-	
+    // Utilisation (!=0) ou non (0) des filtres post lancer de rayons
+    if (params.getline(ligne, 132)) { globalUsePostFilters = getParam(ligne); }
+
     params.close();
 
     return bRes;
@@ -221,12 +221,12 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 
 bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs)
 {
-	selectorManagerValidation.addSelector(new LengthSelector<Ray>(globalMaxLength));
+    selectorManagerValidation.addSelector(new LengthSelector<Ray>(globalMaxLength));
     //  selectorManagerIntersection.addSelector(new LengthSelector<Ray>(globalMaxLength));
-	//
+    //
     selectorManagerIntersection.addSelector(new DiffractionSelector<Ray>(globalMaxDiffraction));
     selectorManagerIntersection.addSelector(new ReflectionSelector<Ray>(globalMaxReflexion, globalUseSol));
-//	selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));
+    //  selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));
 
     // Ajoute des cylindres sur les arretes diffractantes
     PostTreatment::constructEdge(scene);

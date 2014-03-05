@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 // Rajout de libraires pour creation fichier externe de sortie
 #include <iostream>
 #include <fstream>
@@ -33,20 +33,20 @@ class RandomSphericSampler: public Sampler
 {
 
 public:
-    RandomSphericSampler( const unsigned int& nbRays = 0, 
-						  const decimal& Theta = (decimal) M_PIDIV2, 
-						  const decimal& Phi = (decimal) M_2PI		) :	Sampler(nbRays, Theta, Phi),
-																		bounded_sampler(boost::uniform_real<>(0., 1.))
-	{ 
-	}
+    RandomSphericSampler(const unsigned int& nbRays = 0,
+                         const decimal& Theta = (decimal) M_PIDIV2,
+                         const decimal& Phi = (decimal) M_2PI) : Sampler(nbRays, Theta, Phi),
+        bounded_sampler(boost::uniform_real<>(0., 1.))
+    {
+    }
 
     RandomSphericSampler(const RandomSphericSampler& other) : Sampler(other), bounded_sampler(other.bounded_sampler)
-	{
-	}
-    
-	RandomSphericSampler(RandomSphericSampler* sampler) : Sampler(sampler), bounded_sampler(sampler->bounded_sampler)
-	{
-	}
+    {
+    }
+
+    RandomSphericSampler(RandomSphericSampler* sampler) : Sampler(sampler), bounded_sampler(sampler->bounded_sampler)
+    {
+    }
 
     virtual Sampler* Clone()
     {
@@ -58,7 +58,7 @@ public:
 
     virtual vec3 getSample()
     {
-		double U = bounded_sampler(random_generator);
+        double U = bounded_sampler(random_generator);
         double V = bounded_sampler(random_generator);
 
         decimal thetaCalcul = acos(2. * U - 1.) - _theta;
@@ -73,16 +73,16 @@ public:
 
     virtual bool isAcceptableSample(vec3 v) { return true; }
 
-	virtual unsigned int computeDiffractionNbr(const decimal& thetaCalcul) 
-	{ 
-		return static_cast<unsigned int>( floor( sqrt( static_cast<decimal>(_nb_rays) ) * sin( M_PIDIV2 - thetaCalcul ) + 0.5 ) ); 
-	}
+    virtual unsigned int computeDiffractionNbr(const decimal& thetaCalcul)
+    {
+        return static_cast<unsigned int>(floor(sqrt(static_cast<decimal>(_nb_rays)) * sin(M_PIDIV2 - thetaCalcul) + 0.5));
+    }
 
 
 private :
-	static boost::mt19937 random_generator;
+    static boost::mt19937 random_generator;
 
-	boost::uniform_real<> bounded_sampler;
+    boost::uniform_real<> bounded_sampler;
 };
 
 boost::mt19937 RandomSphericSampler::random_generator = boost::mt19937();

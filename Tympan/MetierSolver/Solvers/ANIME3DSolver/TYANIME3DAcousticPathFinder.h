@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
+*/
 
 #ifndef __TYANIME3DACOUSTICPATHFINDER__
 #define __TYANIME3DACOUSTICPATHFINDER__
@@ -26,16 +26,16 @@ public:
     TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize, TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs, TYTabRay& tabTYRays);
     virtual ~TYANIME3DAcousticPathFinder();
 
-	bool exec();
+    bool exec();
 
-	/*!
-	 * \fn void TYRayCorrection(TYRay& tyRay)
-	 * \brief Curve TYRay with respect to meteo influence
-	 *		  This is only for watching curved rays on screen
-	 */
-	void tyRayCorrection(TYRay *tyRay);
+    /*!
+     * \fn void TYRayCorrection(TYRay& tyRay)
+     * \brief Curve TYRay with respect to meteo influence
+     *        This is only for watching curved rays on screen
+     */
+    void tyRayCorrection(TYRay* tyRay);
 
-	Simulation& getRayTracer() { return _rayTracing; }
+    Simulation& getRayTracer() { return _rayTracing; }
 
 private :
     /*!
@@ -113,11 +113,11 @@ private :
      */
     void buildListEvent(const int& sens, Ray* ray, std::vector<TYRayEvent*>& tabEvents);
 
-	/*!
-	 * \fn  void convertRayEventToTYRayEvent(const QSharedPoint<event> rev, TYRayEvent& e)
-	 * \brief Convert an event (as defined by acousticRayTracer) to a TYEvent (used by solver)
-	 */
-	 void convertRayEventToTYRayEvent(const QSharedPointer<Event> rev, TYRayEvent* e);
+    /*!
+     * \fn  void convertRayEventToTYRayEvent(const QSharedPoint<event> rev, TYRayEvent& e)
+     * \brief Convert an event (as defined by acousticRayTracer) to a TYEvent (used by solver)
+     */
+    void convertRayEventToTYRayEvent(const QSharedPointer<Event> rev, TYRayEvent* e);
 
     /*!
      * \fn void calculAnglesRayons(TYCalcul& calcul)
@@ -125,61 +125,61 @@ private :
      */
     void calculeAngleTirRayon(TYRay* tyRay);
 
-	/*!
-	* \fn void sampleAndCorrection()
-	* \brief Computes angle and length correction 
-	* \ by calling the three previous functions
-	* \ Creates two matrix which have corrected lengths and angles 
-	*/
-	void sampleAndCorrection();
+    /*!
+    * \fn void sampleAndCorrection()
+    * \brief Computes angle and length correction
+    * \ by calling the three previous functions
+    * \ Creates two matrix which have corrected lengths and angles
+    */
+    void sampleAndCorrection();
 
-	/*!
-	 * \fn void endLenghtCompute(TYRay *tyRay)
-	 * \brief compute the length between an event and the next pertinent event
-	 *		  (i.e. betwween a diffraction and the next reflection or receptor)
-	 */
-	void endLenghtCompute(TYRay *tyRay);
+    /*!
+     * \fn void endLenghtCompute(TYRay *tyRay)
+     * \brief compute the length between an event and the next pertinent event
+     *        (i.e. betwween a diffraction and the next reflection or receptor)
+     */
+    void endLenghtCompute(TYRay* tyRay);
 
-	/*!
-	 * \fn void angleCompute(TYRay *tyRay)
-	 * \brief compute the angle between incident ray and the face 
-	 */
-	void angleCompute(TYRay *tyRay);
+    /*!
+     * \fn void angleCompute(TYRay *tyRay)
+     * \brief compute the angle between incident ray and the face
+     */
+    void angleCompute(TYRay* tyRay);
 
-	/*!
-	 * \fn void nextLenghtCompute(TYRay *tyRay)
-	 * \brief compute the length between an event and the next event
-	 */
-	void nextLenghtCompute(TYRay *tyRay);
+    /*!
+     * \fn void nextLenghtCompute(TYRay *tyRay)
+     * \brief compute the length between an event and the next event
+     */
+    void nextLenghtCompute(TYRay* tyRay);
 
-	/*!
-	 * \fn void prevNextLengthCompute(TYRay *tyRay)
-	 * \brief Computes the length between event-1 and event+1
-	 */
-	void prevNextLengthCompute(TYRay *tyRay);
+    /*!
+     * \fn void prevNextLengthCompute(TYRay *tyRay)
+     * \brief Computes the length between event-1 and event+1
+     */
+    void prevNextLengthCompute(TYRay* tyRay);
 
-	/*!
-	 * \fn void nextLenghtCompute(TYRay *tyRay)
-	 * \brief compute the length between an event and the next event
-	 */
-	void eventPosCompute(TYRay *tyRay);
+    /*!
+     * \fn void nextLenghtCompute(TYRay *tyRay)
+     * \brief compute the length between an event and the next event
+     */
+    void eventPosCompute(TYRay* tyRay);
 
-	/*!
-	* \fn void lengthCorrection()
-	* \brief Computes length correction on path
-	* \ Works on over-sampled TYRays
-	* \ Creates a vector which has all corrected path lengths
-	*/
-	double lengthCorrection(TYRayEvent *ev1, const TYRayEvent *ev2);
+    /*!
+    * \fn void lengthCorrection()
+    * \brief Computes length correction on path
+    * \ Works on over-sampled TYRays
+    * \ Creates a vector which has all corrected path lengths
+    */
+    double lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2);
 
-	/*!
-	* \fn void angleCorrection()
-	* \brief Computes angle correction on path
-	*		 ev1 -> previous event
-	*		 ev2 -> event to wich compute anngle
-	*		 ev3 -> next event
-	*/
-	double angleCorrection(const TYRayEvent *ev1, TYRayEvent *ev2, const TYRayEvent *ev3);
+    /*!
+    * \fn void angleCorrection()
+    * \brief Computes angle correction on path
+    *        ev1 -> previous event
+    *        ev2 -> event to wich compute anngle
+    *        ev3 -> next event
+    */
+    double angleCorrection(const TYRayEvent* ev1, TYRayEvent* ev2, const TYRayEvent* ev3);
 
 private:
     /// Objet _rayTracing pour le lancer de rayons droits
@@ -188,19 +188,19 @@ private:
     /// Objet _curveRayTracing pour le lancer de rayons courbes
     Transfo _curveRayTracing;
 
-	    /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face
+    /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face
     TYStructSurfIntersect* _tabPolygon;
 
     /// Nombre de polygones presents dans _tabPolygon
     const size_t& _tabPolygonSize;
 
-   	/*!< List of sources used by the solver */
+    /*!< List of sources used by the solver */
     TYTabSourcePonctuelleGeoNode& _tabSources;
 
-	/*!< List of receptors used by the solver */
-	TYTabPointCalculGeoNode& _tabRecepteurs;
-	
-	/// tableau de l'ensemble des rayons métier Code_TYMPAN
+    /*!< List of receptors used by the solver */
+    TYTabPointCalculGeoNode& _tabRecepteurs;
+
+    /// tableau de l'ensemble des rayons métier Code_TYMPAN
     TYTabRay& _tabTYRays;
 };
 
