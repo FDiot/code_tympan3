@@ -24,6 +24,7 @@
 #include "Ray/Ray.h"
 #include "Tools/PostFilter.h"
 #include "Tools/CloseEventPostFilter.h"
+#include "Tools/FermatPostFilter.h"
 
 #include "DefaultEngine.h"
 #include "Tympan/Tools/TYProgressManager.h"
@@ -69,7 +70,7 @@ bool DefaultEngine::process()
 
     //std::cout<<"Lancement du process."<<std::endl;
 
-    //Compte le nombre total de rayon ? traiter
+    //Compte le nombre total de rayon a traiter
     std::size_t ray_to_process(0);
 
     for (unsigned int i = 0; i < sources->size(); i++)
@@ -101,7 +102,7 @@ bool DefaultEngine::process()
             new_ray->direction = precp - psource;
             new_ray->direction.normalize();
             new_ray->mint = 0.;
-            new_ray->maxt = 2000.0;
+            new_ray->maxt = 10000.;
             //std::cout<<"Emission d'un rayon d'origine ("<<new_ray->position.x<<","<<new_ray->position.y<<","<<new_ray->position.z;
             //std::cout<<") et direction ("<<new_ray->direction.x<<","<<new_ray->direction.y<<","<<new_ray->direction.z<<")."<<std::endl;
             pile_traitement.push(new_ray);
@@ -131,7 +132,7 @@ bool DefaultEngine::process()
             //TYProgressManager::step(); Erreur de compilation lors du link avec un solver utilisant RayTracer et Tools
             if (current_pourcent >= last_pourcent)
             {
-                std::cout << "Avancement : " << current_pourcent << "%." << endl;
+                //std::cout << "Avancement : " << current_pourcent << "%." << endl;
                 last_pourcent++;
             }
 
@@ -139,17 +140,17 @@ bool DefaultEngine::process()
             if (pile_traitement.empty())
             {
                 solver->finish();
-                std::cout << "Tous les rayon des sources ont ete traites" << endl;
+                //std::cout << "Tous les rayon des sources ont ete traites" << endl;
                 //std::cout << "Duree de la simulation : " << (double)(time.elapsed()) / 1000.0 << endl;
-                std::cout << "Il y a " << solver->getValidRays()->size() << " rayons valides. " << endl;
+                //std::cout << "Il y a " << solver->getValidRays()->size() << " rayons valides. " << endl;
                 //std::cout << nb_rayon_traite << " rayons ont ete traites." << endl;
 
-                std::cout << "Statistiques de benchmark pour le traitement : " << endl;
+                //std::cout << "Statistiques de benchmark pour le traitement : " << endl;
                 //std::cout << "Nombre de primitives : " << scene.getPrimitives()->size() << endl;
-                std::cout << "Duree de la simulation : " << ((int)(time.elapsed())) << endl;
-                std::cout << "Nombre de rayons traites : " << nbRayonsTraites << endl;
+                //std::cout << "Duree de la simulation : " << ((int)(time.elapsed())) << endl;
+                //std::cout << "Nombre de rayons traites : " << nbRayonsTraites << endl;
                 //std::cout << "Nombre  de traverser de rayon : " << totalTraversalStep << endl;
-                std::cout << "Vitesse de traitement : " << ((double)nbRayonsTraites / (double)(time.elapsed())) * 1000. << endl;
+                //std::cout << "Vitesse de traitement : " << ((double)nbRayonsTraites / (double)(time.elapsed())) * 1000. << endl;
                 //std::cout << "Nombre d'intersection moyen avec les boites : " << (double)totalIntersecNode / (double)totalRay << endl;
                 //std::cout << "Nombre d'intersection moyen avec les primitives : " << (double)totalIntersecPrimitive / (double)totalRay << endl;
                 //std::cout << "Calcul d'intersection par rapport au brut force : " << ((double) (((double)totalIntersecNode / (double)totalRay) + ((double)totalIntersecPrimitive / (double)totalRay)) / (double) (scene.getPrimitives()->size())) * 100;
@@ -176,9 +177,17 @@ bool DefaultEngine::process()
                 //}
                 // END
 
+				unsigned int suppressed = 0;
+				if (globalUsePostFilters)
+				{
                 // Post filtering of the rays
                 closeEventPostFilter cepf(getSolver()->getValidRays());
-                unsigned int suppressed = cepf.Process();
+					suppressed += cepf.Process();
+
+					fermatPostFilter fpf(getSolver()->getValidRays());
+					suppressed += fpf.Process();
+				}
+
                 return true;
             }
         }
@@ -206,7 +215,7 @@ bool DefaultEngine::process()
                     if (pile_traitement.size() > max_size)
                     {
                         max_size = pile_traitement.size();
-                        std::cout << "Nouvelle taille maximale : " << max_size << std::endl;
+                        //std::cout << "Nouvelle taille maximale : " << max_size << std::endl;
                     }
                 }
             }
@@ -231,7 +240,7 @@ Ray* DefaultEngine::genRay()
             sources->at(i).getDirection(new_ray->direction);
             //std::cout<<"Direction du nouveau rayon : ("<<new_ray->direction.x<<","<<new_ray->direction.y<<","<<new_ray->direction.z<<") : "<<new_ray->direction.length()<<std::endl;
             new_ray->mint = 0.;
-            new_ray->maxt = 2000.;
+            new_ray->maxt = 10000.;
             return new_ray;
         }
     }
@@ -363,7 +372,7 @@ void DefaultEngine::runStructureBenchmark()
     {
         Ray r;
         r.mint = 0.00001f;
-        r.maxt = 2000.;
+        r.maxt = 10000.;
         r.direction = vec3((double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX);
         r.direction.normalize();
         r.position = vec3(((double)rand() / (double)RAND_MAX) * (sceneBox.pMax.x - sceneBox.pMin.x) + sceneBox.pMin.x,
@@ -375,8 +384,8 @@ void DefaultEngine::runStructureBenchmark()
     }
 
     int totalTime = time.elapsed();
-    std::cout << "Fin du benchmark." << std::endl;
-    std::cout << "Nombre de rayons traites : " << nbVec << std::endl;
-    std::cout << "Temps ecoule : " << totalTime << " ms." << std::endl;
-    std::cout << "Vitesse de traitement : " << nbVec / totalTime << " rays/ms." << std::endl;
+    //std::cout << "Fin du benchmark." << std::endl;
+    //std::cout << "Nombre de rayons traites : " << nbVec << std::endl;
+    //std::cout << "Temps ecoule : " << totalTime << " ms." << std::endl;
+    //std::cout << "Vitesse de traitement : " << nbVec / totalTime << " rays/ms." << std::endl;
 }

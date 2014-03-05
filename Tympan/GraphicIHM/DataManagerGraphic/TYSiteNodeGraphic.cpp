@@ -314,7 +314,7 @@ void TYSiteNodeGraphic::display(GLenum mode /*=GL_RENDER*/)
         ((TYTopographieGraphic*)((TYElementGraphic*)getElement()->getTopographie()->getGraphicObject()))->unsetBackgroundImage();
     }
 
-    getElement()->getTopographie()->getGraphicObject()->display(mode);
+	getElement()->getTopographie()->getGraphicObject()->display(mode);
     getElement()->getInfrastructure()->getGraphicObject()->display(mode);
     // Sites childs
     TYSiteNode* pTYSiteNode = getElement();//az++

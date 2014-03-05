@@ -52,7 +52,7 @@ public:
     ORepere3D(const ORepere3D& repere);
 
     /**
-     * Constructor with a point and 3 vectors.
+     * \brief Constructor with a point and 3 vectors.
      *
      * \param origin The origin point.
      * \param vecI Vector I for the X axis.
@@ -60,6 +60,13 @@ public:
      * \param vecK Vector K for the Z axis.
      */
     ORepere3D(const OPoint3D& origin, const OVector3D& vecI, const OVector3D& vecJ, const OVector3D& vecK);
+
+    /**
+     * \brief Constructor with a point and 1 vectors.
+	 *  build an arbitrary 3D repere from a point and a single vector
+	 */
+	ORepere3D(const OPoint3D& origin, const OVector3D& vec);
+
 
     /**
      * Constructor from a matrix

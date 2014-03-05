@@ -47,6 +47,34 @@ ORepere3D::ORepere3D(const OMatrix& matrix)
     set(matrix);
 }
 
+ORepere3D::ORepere3D(const OPoint3D& origin, const OVector3D& vec) : 
+																	_origin(origin),
+																	_vecI(vec)
+{
+	/*
+	1.	On pose x1 = x2 et z1 = z2 (sinon infinité de solution)
+				x1.x1 + y1.y2 + z1.z1 = 0 (produit scalaire)
+				y1.y2 = - (x1.x2 + z1.z2)
+		donc	y2 = - (x1.x2 + z1.z2) / y1
+
+		Si y1 = 0 (plan xOz) -> n'importe quelle valeur de y valide
+	*/
+	double	x1 = _vecI._x, 
+			y1 = _vecI._y, 
+			z1 = _vecI._z;
+
+	double y2 = ( y1 != 0. ) ? -( x1 * x1 + z1 * z1 ) / y1 : -( x1 * x1 + z1 * z1 );
+
+	_vecJ = OVector3D( x1, -y2, z1 ); // -y pour orienter correctement le repère
+
+	_vecK = _vecI.cross(_vecJ);
+
+	_vecI.normalize();
+	_vecJ.normalize();
+	_vecK.normalize();
+}
+
+
 ORepere3D::~ORepere3D()
 {
 }
