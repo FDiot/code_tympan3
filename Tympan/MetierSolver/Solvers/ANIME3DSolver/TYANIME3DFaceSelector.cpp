@@ -33,7 +33,7 @@ TYANIME3DFaceSelector::~TYANIME3DFaceSelector()
 
 }
 
-bool TYANIME3DFaceSelector::exec(TYStructSurfIntersect *&tabPolygon, unsigned int& tabPolygonSize)
+bool TYANIME3DFaceSelector::exec(TYStructSurfIntersect *&tabPolygon, size_t& tabPolygonSize)
 {
     bool bRet = buildCalcStruct(tabPolygon, tabPolygonSize);
     bRet &= triangulateConcavePolygon(tabPolygon, tabPolygonSize);
@@ -41,7 +41,7 @@ bool TYANIME3DFaceSelector::exec(TYStructSurfIntersect *&tabPolygon, unsigned in
     return bRet;
 }
 
-bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, unsigned int& tabPolygonSize)
+bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, size_t& tabPolygonSize)
 {
     bool cancel = false;
 
@@ -216,7 +216,7 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
     return true;
 }
 
-bool TYANIME3DFaceSelector::triangulateConcavePolygon(TYStructSurfIntersect* tabPolygon, const unsigned int& tabPolygonSize)
+bool TYANIME3DFaceSelector::triangulateConcavePolygon(TYStructSurfIntersect* tabPolygon, size_t tabPolygonSize)
 {
     if (tabPolygon == NULL || tabPolygonSize <= 0)
     {
