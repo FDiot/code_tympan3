@@ -14,7 +14,7 @@
 */
 
 #include <cmath>
-#include "Ogeometrie.h"
+#include "OGeometrie.h"
 #include "SonieZwicker_1991.h"
 
 
@@ -85,7 +85,7 @@ sonie::sonie(double* vectToct, const unsigned short& champ /*= 0*/) : VectNiv3Oc
     BarkAxis = new double[240];
     _isOk = validation();
 
-    // Vérification des données d'entrée et execution si ok
+    // Vrification des donnes d'entre et execution si ok
     if (_isOk) { exec(); }
 }
 
@@ -99,10 +99,10 @@ sonie::~sonie()
 
 bool sonie::validation()
 {
-    // Vérification de la valeur de Champ (0 ou 1)
+    // Vrification de la valeur de Champ (0 ou 1)
     if ((Champ != 0) && (Champ != 1)) { return false; }
 
-    // Vérification du maximum et du minimum
+    // Vrification du maximum et du minimum
     for (unsigned short i = 0; i < 28; i++)
     {
         if ((VectNiv3Oct[i] > 120.0) || (VectNiv3Oct[i] < -60.0)) { return false; }
@@ -128,7 +128,7 @@ double sonie::calcIsoSonie(const double& val)
 
 void sonie::exec()
 {
-    // Création et initialisation des tableaux (dans l'ordre de leur mise
+    // Cration et initialisation des tableaux (dans l'ordre de leur mise
     // en oeuvre dans la version MATLAB
     double TI[11]  = {  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0   };
     double GI[3]   = {  0.0, 0.0, 0.0   };
@@ -143,9 +143,9 @@ void sonie::exec()
     double NS[240];
     for (unsigned short i = 0; i < 240; i++) { NS[i] = 0.0; } // Initialisation
 
-    // Correction des niveaux des bandes de tiers d'octave d'après
-    // les niveaux d'isosonie (Xp) et calcul des intensités sonores
-    // pour les bandes basses fréquences jusqu'à 315 Hz
+    // Correction des niveaux des bandes de tiers d'octave d'aprs
+    // les niveaux d'isosonie (Xp) et calcul des intensits sonores
+    // pour les bandes basses frquences jusqu' 315 Hz
     double XP = 0.0;
     for (unsigned short i = 0, j = 0; i < 11; i++)
     {
@@ -156,7 +156,7 @@ void sonie::exec()
         TI[i] = ::pow(10.0, XP / 10.0);
     }
 
-    // Détermination des niveaux (LCB) dans les 3 premières bandes critiques
+    // Dtermination des niveaux (LCB) dans les 3 premires bandes critiques
     GI[0] = TI[0] + TI[1] + TI[2] + TI[3] + TI[4] + TI[5];
     GI[1] = TI[6] + TI[7] + TI[8];
     GI[2] = TI[9] + TI[10];
@@ -172,7 +172,7 @@ void sonie::exec()
 
     const unsigned short NbandesCritiques = 20;
     const double S = 0.25;
-    const double NbandesBarkTotal = 24; // Apparemment utilisé uniquement pour définir l'axe (graphique) des barks
+    const double NbandesBarkTotal = 24; // Apparemment utilis uniquement pour dfinir l'axe (graphique) des barks
     const double BarkStep = 0.1;
 
     for (unsigned short i = 0; i < NbandesCritiques + 1; i++)
@@ -182,7 +182,7 @@ void sonie::exec()
         if (i < 3) { LE[i] = LCB[i]; }
 
         LE[i] = LE[i] - A0[i];
-        NM[i] = 0; // Cette ligne est elle utile dans la mesure ou NM a été initialisée ?
+        NM[i] = 0; // Cette ligne est elle utile dans la mesure ou NM a t initialise ?
 
         if (Champ == 1) { LE[i] = LE[i] + DDF[i]; }
 
@@ -199,14 +199,14 @@ void sonie::exec()
         }
     }
 
-    // Correction sur la sonie spécifique dans la première bande critique en prenant
-    // en compte la dépendance au seuil absolu d'audition pour le niveau de cette bande
+    // Correction sur la sonie spcifique dans la premire bande critique en prenant
+    // en compte la dpendance au seuil absolu d'audition pour le niveau de cette bande
     double KORRY = 0.4 + (0.32 * ::pow(NM[0], 0.2));
     if (KORRY > 1.0) { KORRY = 1.0; }
 
     NM[0] = NM[0] * KORRY;
 
-    // Définition de la valeur initiale
+    // Dfinition de la valeur initiale
     unsigned short IZ = 0;
     unsigned short IG = 0;
     double Z  = 0.1;
@@ -223,17 +223,17 @@ void sonie::exec()
     for (unsigned short i = 0, j = 0; i < NbandesCritiques; i++)
     {
         ZUPI = ZUP[i] + 0.0001;
-        if (i > 0) { IG = i - 1; } // A vérifier
-        if (IG > 7) { IG = 7; } // Les valeurs des pentes (USL) pour les bandes supérieures à l'indice 8 sont identiques
+        if (i > 0) { IG = i - 1; } // A vrifier
+        if (IG > 7) { IG = 7; } // Les valeurs des pentes (USL) pour les bandes suprieures  l'indice 8 sont identiques
 
         while (Z1 < ZUPI)
         {
-            if (N1 <= NM[i]) // pour les parties plates de la courbe de sonie spécifique
+            if (N1 <= NM[i]) // pour les parties plates de la courbe de sonie spcifique
             {
                 if (N1 < NM[i])
                 {
                     j = 0;
-                    // on détermine ici le niveau à considérer pour choisir la pente
+                    // on dtermine ici le niveau  considrer pour choisir la pente
                     // (pour les cas potentiels suivants ou N1 > NM(i))
                     while ((RNS[j] > NM[i]) && (j < 17)) { j++; }
                 }
@@ -284,7 +284,7 @@ void sonie::exec()
 
             if ((N2 <= RNS[j]) && (j >= 17)) { j = 17; }
 
-            // Initialisation des variables N1 et Z1 pour l'itération suivante.
+            // Initialisation des variables N1 et Z1 pour l'itration suivante.
             Z1 = Z2;
             N1 = N2;
         }
@@ -292,7 +292,7 @@ void sonie::exec()
 
     if (N < 0.0) { N = 0.0; }
 
-    // On arrondit la valeur a 10^(-3) près
+    // On arrondit la valeur a 10^(-3) prs
     if (N <= 16.0)
     {
         N = static_cast<double>(ROUND(N * 1000)) / 1000.0; // On ajoute pas O.5 car c'est fait par ROUND
@@ -310,34 +310,3 @@ void sonie::exec()
     // Calcul du niveau d'isosonie (en phones)
     LN = calcIsoSonie(N_Tot);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

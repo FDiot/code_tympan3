@@ -16,7 +16,7 @@
 #include <cassert>
 #include <vector>
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/event.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Ray.h"
 

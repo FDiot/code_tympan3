@@ -20,7 +20,7 @@
 #include <vector>
 #include <string>
 #include <math.h>
-#include "Tympan/MetierSolver/AcousticRaytracer/Global.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/global.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/UnitConverter.h"
 #include <boost/random/mersenne_twister.hpp>
