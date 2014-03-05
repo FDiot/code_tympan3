@@ -18,9 +18,11 @@
  *
  *
  */
+#include "OGeometrie.h"
 
 #ifndef __O_COORD_3D__
 #define __O_COORD_3D__
+
 
 /**
  * \file OCoord3D.h
@@ -28,6 +30,8 @@
  * \brief The 3D coordinate class.
  * \author Projet_Tympan
  */
+
+class OVector3D;
 
 class OCoord3D
 {
@@ -58,6 +62,9 @@ public:
      * Destructor.
      */
     virtual ~OCoord3D();
+
+	// Déclaration d'amitié avec une méthode définie dans OGeometrie.h
+	friend OCoord3D operator + (const OCoord3D& coord, const OVector3D& vect);
 
     /**
      * Assignment operator.

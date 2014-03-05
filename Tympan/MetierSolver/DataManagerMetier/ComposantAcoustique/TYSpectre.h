@@ -45,7 +45,7 @@ public:
     /**
      * Constructeur par defaut.
      */
-    TYSpectre();
+    TYSpectre(const double &defaultValue = TY_SPECTRE_DEFAULT_VALUE);
 
     /**
      * Constructeur a partir d'un OSpectre
@@ -86,24 +86,24 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    bool toXML(const std::string& sFilePath);
-    bool fromXML(const std::string& sFilePath);
+    virtual bool toXML(const std::string& sFilePath);
+    virtual bool fromXML(const std::string& sFilePath);
 
-    std::string toXMLString();
-    bool fromXMLString(const std::string& sXMLString);
+    virtual std::string toXMLString();
+    virtual bool fromXMLString(const std::string& sXMLString);
 
     // Compare le contenu de deux spectre
-    bool equivTo(const TYSpectre& other) const;
+    virtual bool equivTo(const TYSpectre& other) const;
 
     /// Set/Get de la forme du spectre.
-    TYSpectreForm getForm() {return _form;}
-    void setForm(const TYSpectreForm& form) { _form = form; }
+    virtual TYSpectreForm getForm() {return _form;}
+    virtual void setForm(const TYSpectreForm& form) { _form = form; }
 
     /// Set/Get des remarques.
-    QString getRemarque() const { return _remarque; }
+    virtual QString getRemarque() const { return _remarque; }
 
     /// Set/Get des remarques.
-    void setRemarque(QString rq) { _remarque = rq; }
+    virtual void setRemarque(QString rq) { _remarque = rq; }
 
     /// Set/Get du flag de conservation en BDD.
     //  bool getKeepInBDD() { return _keepInBDD; }
@@ -112,87 +112,22 @@ public:
     //  void setKeepInBDD(bool flag) { _keepInBDD = flag; }
 
     /// Set/Get du flag _isReadOnly.
-    bool getIsReadOnly() { return _isReadOnly; }
+    virtual bool getIsReadOnly() { return _isReadOnly; }
 
     /// Set/Get du flag _isReadOnly.
-    void setIsReadOnly(bool flag) { _isReadOnly = flag; }
+    virtual void setIsReadOnly(bool flag) { _isReadOnly = flag; }
 
     /// Conversion en tiers d'octave.
-    TYSpectre toTOct() const;
+    virtual TYSpectre toTOct() const;
 
     /// Conversion en octave.
-    TYSpectre toOct() const;
+    virtual TYSpectre toOct() const;
 
     /// Export du spectre au format csv en creant le fichier
-    void exportCSV(const std::string& filename);
+    virtual void exportCSV(const std::string& filename);
 
     /// Export du spectre au format csv sur un flux transmis
-    void exportCSV(std::ofstream& ofs);
-
-
-    // ======== METHODES EQUIVALENTES A OSPECTRE POUR COMPATIBILITE PYTHON
-    /// Conversion en dB.
-    //    TYSpectre toDB() const;
-
-    /// Conversion en grandeur physique.
-    //    TYSpectre toGPhy() const;
-
-    ///// Sommation arithmetique de deux spectres en 1/3 d'octave.
-    //TYSpectre sum(const TYSpectre& spectre) const;
-
-    ///// Ajoute une valeur constante a l'ensemble du spectre
-    //TYSpectre sum(const double& valeur) const;
-
-    ///// Sommation energetique de deux spectres en 1/3 d'octave.
-    //TYSpectre sumdB(const TYSpectre& spectre) const;
-
-    ///// Soustraction arithmetique de deux spectres en 1/3 d'octave.
-    //TYSpectre subst(const TYSpectre& spectre) const;
-
-    ///// soustrait une valeur constante a l'ensemble du spectre
-    //TYSpectre subst(const double& valeur) const;
-
-    ///// Soustraction energetique de deux spectres en 1/3 d'octave.
-    //TYSpectre substdB(const TYSpectre& spectre) const;
-
-    ///// multiplication de deux spectres terme a terme.
-    //TYSpectre mult(const TYSpectre& spectre) const;
-
-    ///// Multiplication d'un spectre par un scalaire.
-    //TYSpectre mult(const double& coefficient) const;
-
-    ///// division de deux spectres terme a terme.
-    //TYSpectre div(const TYSpectre& spectre) const;
-
-    ///// Division d'un spectre par une constante.
-    //TYSpectre div(const double& coefficient) const;
-
-    ///// Division d'une constante par un spectre.
-    //TYSpectre invMult(const double& coefficient = 1.0) const;
-
-    ///// Eleve un spectre a une puissance.
-    //TYSpectre power(const double& puissance) const;
-
-    ///// Calcule le log base n d'un spectre (n=10 par defaut).
-    //TYSpectre log(const double& base = 10.0) const;
-
-    ///// calcule 10^spectre pour chaque terme du spectre.
-    //TYSpectre tenPow() const;
-
-    ///// calcule la racine carree d'un spectre.
-    //TYSpectre racine() const;
-
-    ///// calcul le sin de la partie reelle du spectre
-    //TYSpectre sin() const;
-
-    ///// calcul le cos de la partie reelle du spectre
-    //TYSpectre cos() const;
-
-    ///// calcul le tan de la partie reelle du spectre
-    //TYSpectre tan() const;
-
-    ///// Retourne le spectre en valeur absolues
-    //TYSpectre abs() const;
+    virtual void exportCSV(std::ofstream& ofs);
 
     /// Cree un spectre en lin
     static TYSpectre getEmptyLinSpectre(const double& valInit = 1.0E-20);

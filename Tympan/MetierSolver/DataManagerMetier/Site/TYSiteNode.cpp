@@ -1157,7 +1157,7 @@ void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& 
                 LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(0));
 
                 // Old Code_TYMPAN version could use a floor as a screen so, that case should be treated
-                bool bEtageEcran = false;
+				bool bEtageEcran = false;
                 if (pEtage)
                 {
                     bEtageEcran = !pEtage->getClosed();

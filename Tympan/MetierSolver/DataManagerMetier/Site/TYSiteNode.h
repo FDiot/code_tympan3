@@ -60,11 +60,11 @@ class TYSiteNode: public TYElement
     virtual ~TYSiteNode();
 
     ///Operateur =.
-    TYSiteNode& operator=(const TYSiteNode& other);
+    virtual TYSiteNode& operator=(const TYSiteNode& other);
     ///Operateur ==.
-    bool operator==(const TYSiteNode& other) const;
+    virtual bool operator==(const TYSiteNode& other) const;
     ///Operateur !=.
-    bool operator!=(const TYSiteNode& other) const;
+    virtual bool operator!=(const TYSiteNode& other) const;
 
     virtual bool deepCopy(const TYElement* pOther, bool copyId = true);
 
@@ -411,7 +411,7 @@ class TYSiteNode: public TYElement
     void getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const;
     void getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const;
 
-    /// Get/Set du choix du systeme de repere du SIG
+	/// Get/Set du choix du systeme de repere du SIG
     int getSIGType() { return _SIGType; }
     const int getSIGType() const { return _SIGType; }
     void setSIGType(int SIGType) { _SIGType = (systemSIG) SIGType; }

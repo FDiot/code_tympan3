@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,11 +11,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
-
-/*
- *
- */
+*/ 
 
 /**
  * \file TYANIME3DPlugin.cpp
@@ -24,11 +20,29 @@
  * \date 04 avril 2011
  */
 
-
-#include "Tympan/MetierSolver/DataManagerCore/TYPlugin.h"
-#include "TYANIME3DSolver.h"
-
 #include "Tympan/Tools/TYProgressManager.h"
+
+#include "Tympan/MetierSolver/ToolsMetier/OMatrix.h"
+#include "Tympan/MetierSolver/ToolsMetier/OTriangle.h"
+#include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
+#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
+
+#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYPlugin.h"
+
+#include "Tympan/MetierSolver/ToolsMetier/OSpectreComplex.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
+#include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
+
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
+
+//#include "TYANIME3DSiteNode.h"
+#include "TYANIME3DSolver.h"
 
 // Variable globale
 TYPlugin* plugin;
