@@ -145,7 +145,7 @@ void ORepere3D::normalize()
     _vecK.normalize();
 }
 
-bool ORepere3D::getMatChangeRep(OMatrix& matrix)
+bool ORepere3D::getMatChangeRep(OMatrix& matrix) const
 {
     bool res = false;
 
@@ -180,7 +180,7 @@ bool ORepere3D::getMatChangeRep(OMatrix& matrix)
     return res;
 }
 
-OMatrix ORepere3D::asMatrix()
+OMatrix ORepere3D::asMatrix() const
 {
     OMatrix matrix;
     getMatChangeRep(matrix);

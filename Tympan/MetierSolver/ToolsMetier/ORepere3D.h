@@ -140,14 +140,14 @@ public:
      * \return <code>true</code> si le calcul a reussi,
      *         <code>false</code> sinon.
      */
-    bool getMatChangeRep(OMatrix& matrix);
+    bool getMatChangeRep(OMatrix& matrix) const;
 
     /**
      * \return The homogeneous matrix associated with this pose (aka ORepere)
      *
      * This is the Matrix build by getMatChangeRep()
      */
-    OMatrix asMatrix();
+    OMatrix asMatrix() const;
 
     //Members
 public:
