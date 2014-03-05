@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/
-
+*/ 
+ 
 /*!
 * \file meteo.h
 * \author Projet_Tympan
@@ -22,7 +22,7 @@
 #define __METEO_H
 
 #include <map>
-#include "R3.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 
 /*! \class meteo
 * \brief classe representant les donnees meteo relatives au calcul.
@@ -30,71 +30,43 @@
 class meteo
 {
 public:
-    double gradC;      /*!< gradient de la celerite */
-    double gradV;      /*!< gradient du vent */
-    double c0;         /*!< celerite en z = 0 */
-    double windDirection;  /*!< angle du vent */
-
-
     /*!
      *  \brief Constructeur
      *
      *  Constructeurs de la classe meteo par defaut et par passage d'arguments
      *
      */
-    meteo();
-    meteo(const double& gradC, const double& gradV, const double& windDir, const double& c0);
+	meteo() : c0(340.), wind_angle(0.) {}
 
-    /*!
-    * \fn bool setGradC(const double& g)
-    * \brief Modifie la valeur du gradient de celerite
-    * \param g nouvelle valeur que l'on souhaite attribuer a notre gradient
-    */
-    void setGradC(const double& g) { gradC = g; }
+	meteo(const double& windAngle, const double& sound_speed) : c0(sound_speed), 
+															    wind_angle( RADIANS(windAngle) ) {}
 
-    /*!
-    * \fn bool setGradV(const double& g)
-    * \brief Modifie la valeur de la vitesse du vent
-    * \param g nouvelle valeur que l'on souhaite attribuer a notre vent
-    */
-    void setGradV(const double& g) { gradV = g; }
-
-    /*!
-    * \fn bool setGradV(const double& g)
-    * \brief Modifie la valeur de la vitesse du vent
-    * \param g nouvelle valeur que l'on souhaite attribuer a notre vent
-    */
-    void setWindDirection(const double& dir) { windDirection = dir; }
+	~meteo() {}
 
     /*!
     * \fn bool setC0(const double& c)
     * \brief Modifie la valeur de c0
     * \param c nouvelle valeur que l'on souhaite attribuer a c0
     */
-    void setC0(const double& c) { c0 = c; }
+    virtual void setC0(const double& c) { c0 = c; }
+	virtual double getC0() const { return c0; }
 
-    /*!
-    * \fn R cLin(const R3& P, const meteo& Meteo, R3& grad)
-    * \brief Prend en compte la temperature pour le point P
-    * \param P Position du rayon
-    * \param grad gradient selon z (veleur modifiee)
-    */
-    double cLin(const R3& P, R3& grad) const;
+	/*!
+	 * \fn void setWindAngle(const double& windAngle)
+	 * \brief define wind angle 0 means wind from north to south
+	 */
+	virtual void setWindAngle(const double& windAngle) { wind_angle = RADIANS(windAngle); init(); }
+	virtual double getWindAngle() const { return DEGRES(wind_angle); }
 
-    /*!
-    * \fn R3 vent(const R3& P, map<pair<int, int>, R> &jacob)
-    * \brief Prend en compte le vent pour le point P
-    * \param P Position du rayon
-    * \param jacob : jacobien (veleur modifiee)
-    */
-    R3 vent(const R3& P, std::map<std::pair<int, int>, R> &jacob) const;
+	/*!
+	 * \fn void init()
+	 * \brief init parameters as needed
+	 */
+	virtual void init() {}
 
-    /*!
-     *  \brief Destructeur
-     *
-     *  Destructeur de la classe Lancer
-     */
-    ~meteo();
+protected:
+    double c0;				/*!< sound speed for z = 0 */
+	double wind_angle;		/*!< wind angle in radian 0 for a wind from north to south */
 };
 
 #endif //__METEO_H

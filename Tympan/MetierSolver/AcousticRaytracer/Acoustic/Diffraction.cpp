@@ -19,9 +19,25 @@
 
 bool Diffraction::getResponse(vec3& r, bool force)
 {
+//#define __RANDOM__
+#ifdef __RANDOM__ 
+	
+	// Tir des rayons aléatoires sur le cone de Keller
+	decimal theta = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
 
-    //std::cout<<"Generation dune reponse de diffraction."<<nbResponseLeft<<" left."<<std::endl;
-    if (!force)
+	if (theta > angleOuverture / 2.)
+    {
+        theta += (2 * M_PI - angleOuverture);
+    }
+
+#else
+
+	// Distribution régulière des rayons entre angleOuverture/2 et -angleOuverture/2
+	decimal theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
+
+#endif // __RANDOM__
+
+	if (!force)
     {
         nbResponseLeft--;
         if (nbResponseLeft < 0)
@@ -37,24 +53,14 @@ bool Diffraction::getResponse(vec3& r, bool force)
         return true;
     }
 
-    decimal tetha = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
-    if (tetha > angleOuverture / 2.)
-    {
-        tetha += (2 * M_PI - angleOuverture);
-    }
-
-
     vec3 localResponse;
-    //std::cout<<"tetha : "<<tetha * 360. / (2. * M_PI)<<", phi : "<<angleArrive * 360. / (2. * M_PI)<<std::endl;
-    Tools::fromRadianToCarthesien(angleArrive, tetha, localResponse);
-    //std::cout<<"Generation du vecteur local : ("<<localResponse.x<<","<<localResponse.y<<","<<localResponse.z<<")"<<std::endl;
+    Tools::fromRadianToCarthesien2( angleArrive, theta, localResponse );
 
     vec3 globalResponse = localRepere.vectorFromLocalToGlobal(localResponse);
-    //std::cout<<"Generation du vecteur global : ("<<globalResponse.x<<","<<globalResponse.y<<","<<globalResponse.z<<")"<<std::endl;
 
     r = vec3(globalResponse);
-    //std::cout<<"Fin de la generation."<<std::endl;
-    return true;
+
+	return true;
 }
 
 bool Diffraction::isAcceptableResponse(vec3& test)

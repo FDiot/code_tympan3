@@ -104,3 +104,13 @@ double OTriangle::getSurface()
     // air d'un triangle de cotes a, b , c (formule de Heron)
     return sqrt(s * (s - c1) * (s - c2) * (s - c3));
 }
+
+OPoint3D OTriangle::getCentre()
+{
+	OPoint3D G;
+	G._x = (_A._x + _B._x + _C._x) / 3;
+	G._y = (_A._y + _B._y + _C._y) / 3;
+	G._z = (_A._z + _B._z + _C._z) / 3;
+	
+	return G;
+}
