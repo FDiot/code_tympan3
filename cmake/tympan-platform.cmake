@@ -97,7 +97,7 @@ if(MSVC)
        CACHE STRING "MS VC Compiler Flags for All Builds")
 endif(MSVC)
 if(CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -frounding-math")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -frounding-math")
   # XXX -Wall would be FAR better than -fpermissive -w -Winvalid-pch
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -w -Winvalid-pch")
 endif(CMAKE_COMPILER_IS_GNUCXX)
