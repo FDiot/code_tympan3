@@ -21,7 +21,8 @@
 #include "Acoustic/Event.h"
 #include "Ray/Ray.h"
 #include "PostFilter.h"
-#include "duplicateEventPostFilter.h"
+#include "DuplicateEventPostFilter.h"
+
 
 using namespace std;
 
@@ -89,18 +90,18 @@ unsigned int duplicateEventPostFilter::Process()
     //  // Si un seul ray dans la famille,  on passe au suivant
     //  if ( (*iterR).second.size() <= 1 ) { continue; }
 
-    //  // Réflechir sur la comparaison des évènement entre rayons
+    //  // Rflechir sur la comparaison des vnement entre rayons
     //  // ATTENTION AU CAS OU IL Y A PLUS DE DEUX RAYONS
 
     //}
 
 
-    //// Travail sur les évènements détectés
+    //// Travail sur les vnements dtects
     //sequenceMap sm = buildSequenceMap( (*iter).first, (*iter).second, SPECULARREFLEXION);
     //sequenceMap::iterator itm;
     //for (itm = sm.begin(); itm != sm.end(); itm++)
     //{
-    //  // Si un seul ray dans la séquence, on passe au suivant
+    //  // Si un seul ray dans la squence, on passe au suivant
     //  if ( (*iter).second.size() <= 1 ) { continue; }
     //}
     //}

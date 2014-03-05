@@ -14,7 +14,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Source.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/event.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Diffraction.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/SpecularReflexion.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
