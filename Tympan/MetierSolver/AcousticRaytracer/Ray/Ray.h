@@ -26,9 +26,6 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 using namespace std;
 
-//#ifdef USE_QT
-//  #include "RayGraphic.h"
-//#endif
 
 /*!
  * brief : signature describes a ray by a pair of unsigend int. The first one gives the source number (in the range 0-4095)
@@ -89,7 +86,13 @@ public:
 
     virtual ~Ray() { }
 
-    /*!
+	/*!
+	 * \fn decimal computeEventsSequenceLength()
+	 * \brief compute the length of the sequence of events 
+	 */
+	decimal computeEventsSequenceLength();
+
+	/*!
     * \fn void computeLongueur()
     * \brief Calcul la distance parcourue par le rayon et place le resultat dans longueur
     */
@@ -97,16 +100,17 @@ public:
 
 	/*!
 	 * \fn decimal computeTrueLength(vec3& nearestPoint);
-	 * \brief Compute ray lenfth from source to the nearest point of the receptor
+	 * \brief	Compute ray lenfth from source to the nearest point 
+	 *			of the "event" located at ref position
 	 */
-	decimal computeTrueLength(vec3& closestPoint);
+	decimal computeTrueLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
 
 	/*!
 	 * \fn decimal computePertinentLength(vec3& nearestPoint);
 	 * \brief Compute ray lenfth from last pertinent event (i.e. source or last diffraction 
-	 *        to the nearest point of the receptor
+	 *        to the nearest point of the "event" located at ref position
 	 */
-	decimal computePertinentLength(vec3& closestPoint);
+	decimal computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
 
 	/*!
 	 * \fn void* getLastPertinentEventPos() const;
@@ -156,13 +160,6 @@ public:
     */
     const std::vector<QSharedPointer<Event> >* getEvents() const { return &events; }
 
-    /*!
-    * \fn float distanceSourceRecepteur()
-    * \brief Calcul la distance entre une source et un recepteur
-    * \return Distance entre la source et le recepteur associes au rayon
-    */
-    float distanceSourceRecepteur();
-
     vector<unsigned int>getFaceHistory();
 
     vector<unsigned int> getPrimitiveHistory();
@@ -196,11 +193,13 @@ public:
 		bool diffraction(false);
 		decimal angle = getSolidAngle( diffraction );
 
+#ifdef _FJ_THICKNESS_
 		if ( diffraction )
 		{
 			//return 2 * M_PI * angle * distance;
 			return distance * angle;
 		}
+#endif // _FJ_THICKNESS_
 
 		return 2. * distance * sqrt( angle / M_PI ); 
 	}
@@ -215,6 +214,7 @@ public:
 	{
 		unsigned int nb_rays = source->getInitialRayCount();
 
+#ifdef _FJ_THICKNESS_
 		Base *last = getLastPertinentEvent();
 		Event *e = dynamic_cast<Event*>(last);
 
@@ -224,6 +224,7 @@ public:
 //			return sin( dynamic_cast<Diffraction*>(e)->getAngle() ) * dynamic_cast<Diffraction*>(e)->getAngleOuverture() / e->getInitialNbResponseLeft();
 			return dynamic_cast<Diffraction*>(e)->getAngle() * M_2PI / e->getInitialNbResponseLeft();
 		}
+#endif //_FJ_THICKNESS_
 		
 		diffraction = false;
 		return M_4PI / static_cast<decimal>(nb_rays);
@@ -247,13 +248,6 @@ public:
 	 * \brief compute the bitSet associated with a list of events of type evType
 	 */
 	bitSet getEventsBitSet(const typeevent& typeEv);
-
-	/*!
-	 * \fn decimal coveredDistance(unsigned int current_indice, unsigned int initial_indice = 0);
-	 * \brief Gives the distance covered by the ray between two events
-	 *        by default from the source
-	 */
-	decimal coveredDistance(const unsigned int& current_indice, unsigned int initial_indice = 0, const bool &from_source = true) const;
 
 public:
     vec3 position;                              /*!< Point de depart du rayon */

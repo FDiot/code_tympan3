@@ -47,10 +47,16 @@ public:
 			size_t nbEvents = ray->getEvents()->size();
 #endif
 
-			decimal trueLength = ray->computePertinentLength(closestPoint);
+			vec3 receptorPos( static_cast<Recepteur*> (ray->recepteur)->getPosition() );
+			vec3 finalPos( ray->finalPosition );
+#ifdef _FJ_THICKNESS_
+			decimal trueLength = ray->computePertinentLength(receptorPos, finalPos, closestPoint);
+#else
+			decimal trueLength = ray->computeTrueLength(receptorPos, finalPos, closestPoint);
+#endif
 			decimal epaisseur = ray->getThickness( trueLength);
 			decimal closestDistance = static_cast<Recepteur*> ( ray->getRecepteur() )->getPosition().distance(closestPoint);
-			if ( closestDistance >= ( epaisseur/2. ) ) 
+			if ( closestDistance >= ( epaisseur/2. * 1.05 ) ) 
 			{
 				iter = _tabRay->erase(iter);
 				suppressed ++;

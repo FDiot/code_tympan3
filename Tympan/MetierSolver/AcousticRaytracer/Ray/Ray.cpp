@@ -88,44 +88,59 @@ void Ray::computeLongueur()
     }
 }
 
-decimal Ray::computeTrueLength( vec3& closestPoint )
+decimal Ray::computeEventsSequenceLength()
 {
-    if (source == NULL || recepteur == NULL)
+	decimal length = 0;
+
+	if ( events.size() == 0 ) { return 0; }
+
+	// Compute distance from source to the last event
+	std::vector< QSharedPointer<Event> > :: iterator iter = events.begin();
+
+	vec3 previous = (*iter)->getPosition();
+	vec3 current(0., 0., 0.);
+	
+	iter++;
+	while( iter != events.end() )
+	{
+		current = (*iter)->getPosition();
+		length += current.distance(previous);
+		previous = current;
+		iter++;
+	};
+
+	return length;
+}
+
+decimal Ray::computeTrueLength( const vec3& ref, const vec3& lastPos, vec3& closestPoint )
+{
+    if (source == NULL)
     {
         std::cerr << "Erreur : rayon without source or receptor computeTrueLength" << endl;
         return 0.;
     }
 
-	longueur = 0.;
+	decimal length = 0.;
 	vec3 posSource = source->getPosition();
-    vec3 posRecep = static_cast<Recepteur*>(recepteur)->getPosition();
 	vec3 posLastEvent;
-	vec3 current(0., 0., 0.), previous(0., 0., 0.);
     switch (events.size())
     {
         case 0: // Chemin direct source-recepteur
-			closestPoint = posRecep.closestPointOnLine(posSource, finalPosition);
-            longueur = posSource.distance(closestPoint);
-            return longueur;
+			closestPoint = ref.closestPointOnLine(posSource, lastPos);
+            return posSource.distance(closestPoint);
 			break;
 
         default:
-            longueur = 0;
-			previous = source->getPosition();
+			// Distance from source to first event
+            length = source->getPosition().distance( events.front()->getPosition() );
+			
+			// Add length of events sequence
+			length += computeEventsSequenceLength();
 
-			// Compute distance from source to the last event
-			for (std::vector< QSharedPointer<Event> > :: iterator iter = events.begin(); iter != events.end(); ++iter)
-			{
-				current = (*iter)->getPosition();
-				longueur += current.distance(previous);
-				previous = current;
-			}
-
-			// Compute distance from the last event to the nearest point from receptor
-			posLastEvent = vec3(events.back()->getPosition());
-			closestPoint = posRecep.closestPointOnLine(posLastEvent, finalPosition);
-			longueur += closestPoint.distance(posLastEvent);
-			return longueur;
+			// Compute distance from the last event to the nearest point from ref
+			posLastEvent = events.back()->getPosition();
+			closestPoint = ref.closestPointOnLine(posLastEvent, lastPos);
+			return length += closestPoint.distance(posLastEvent);
 
             break;
     }
@@ -133,16 +148,16 @@ decimal Ray::computeTrueLength( vec3& closestPoint )
 	return 0.;
 }
 
-decimal Ray::computePertinentLength(vec3& closestPoint)
+decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint)
 {
-    if (source == NULL || recepteur == NULL)
+    if (source == NULL)
     {
         std::cerr << "Erreur : rayon without source or receptor computeTrueLength" << endl;
         return 0.;
     }
 
 	decimal pertinent_length = 0.;
-    vec3 posRecep = static_cast<Recepteur*>(recepteur)->getPosition();
+
 	vec3 posLastEvent;
 	vec3 current(0., 0., 0.), previous(0., 0., 0.);
 
@@ -154,7 +169,7 @@ decimal Ray::computePertinentLength(vec3& closestPoint)
     {
         case 0: // Chemin direct source-recepteur
 			// needs only computing of full (true) length
-            return computeTrueLength(closestPoint);
+            return computeTrueLength(ref, lastPos, closestPoint);
 			break;
 
 		default:
@@ -164,7 +179,7 @@ decimal Ray::computePertinentLength(vec3& closestPoint)
 			if (s)
 			{
 				// needs only computing of full (true) length
-				return computeTrueLength(closestPoint);
+				return computeTrueLength(ref, lastPos, closestPoint);
 			}
 			else
 			{
@@ -184,7 +199,7 @@ decimal Ray::computePertinentLength(vec3& closestPoint)
 
 					// Compute distance from the last event to the nearest point from receptor
 					posLastEvent = vec3(events.back()->getPosition());
-					closestPoint = posRecep.closestPointOnLine(posLastEvent, finalPosition); 
+					closestPoint = ref.closestPointOnLine(posLastEvent, lastPos); 
 					return ( pertinent_length += closestPoint.distance(posLastEvent) );
 				}
 			}
@@ -205,43 +220,6 @@ Base* Ray::getLastPertinentEvent()
 	}
 
 	return res;
-}
-
-float Ray::distanceSourceRecepteur()
-{
-    vec3 pos_s = source->getPosition();
-    vec3 pos_r = static_cast<Recepteur*>(recepteur)->getPosition();
-
-    if (events.size() < 1)  // Rayon avec aucun evenement
-    {
-        return sqrt((pos_s.x - pos_r.x) * (pos_s.x - pos_r.x) + (pos_s.y - pos_r.y) * (pos_s.y - pos_r.y));
-    }
-
-    else if (events.size() == 1) // Rayon avec 1 evenement
-    {
-        vec3 impact = events.at(0)->getPosition();
-        return sqrt((pos_s.x - impact.x) * (pos_s.x - impact.x) + (pos_s.y - impact.y) * (pos_s.y - impact.y)) +
-               sqrt((pos_r.x - impact.x) * (pos_r.x - impact.x) + (pos_r.y - impact.y) * (pos_r.y - impact.y));
-    }
-    else // Rayon avec plusieurs evenements
-    {
-        float distance = 0.0;
-        vec3 impact, impact2;
-
-        for (unsigned int i = 0; i < events.size() - 1; i++)
-        {
-            impact = events.at(i)->getPosition();
-            impact2 = events.at(i + 1)->getPosition();
-            distance += sqrt((impact.x - impact2.x) * (impact.x - impact2.x) + (impact.y - impact2.y) * (impact.y - impact2.y));
-        }
-        impact = events.at(0)->getPosition();
-        distance += sqrt((pos_s.x - impact.x) * (pos_s.x - impact.x) + (pos_s.y - impact.y) * (pos_s.y - impact.y));
-
-        impact = events.at(events.size() - 1)->getPosition();
-        distance += sqrt((pos_r.x - impact.x) * (pos_r.x - impact.x) + (pos_r.y - impact.y) * (pos_r.y - impact.y));
-
-        return distance;
-    }
 }
 
 std::vector<unsigned int> Ray::getFaceHistory()
@@ -291,26 +269,3 @@ bitSet Ray::getEventsBitSet(const typeevent& typeEv)
 	return SD;
 }
 
-decimal Ray::coveredDistance(const unsigned int& current_indice, unsigned int initial_indice, const bool &from_source) const
-{
-	vec3 start_pos;
-	decimal distance = 0.;
-
-	if (from_source)
-	{
-		start_pos =  source->getPosition();
-		initial_indice = 0; // in this case we start from the the first event
-		distance = distance + start_pos.distance( events.at(0)->getPosition() ); 
-	}
-
-	vec3 pos1, pos2;
-	for (unsigned int i = initial_indice; i < current_indice; i++)
-	{
-		pos1 = events.at(i)->getPosition();
-		pos2 = events.at(i+1)->getPosition();
-
-		distance = distance + ( pos1.distance( pos2 ) );
-	}
-
-	return distance;
-}
