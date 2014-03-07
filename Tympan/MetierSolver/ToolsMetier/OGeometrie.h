@@ -19,14 +19,15 @@
  *
  */
 
+
 #ifndef __O_GEOMETRIE_H
 #define __O_GEOMETRIE_H
-
 
 #include "OPoint3D.h"
 #include "OVector3D.h"
 #include "OBox.h"
 #include <cmath>
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -246,6 +247,17 @@ inline int BORNE(int a)
 {
     return (int) BORNE((double) a, 0, 255);
 }
+
+
+//OCoord3D operator + (const OCoord3D& coord, const OVector3D& vect)
+//{
+//  return OCoord3D( coord._x + vect._x, coord._y + vect._y, coord._z + vect._z );
+//}
+
+//OPoint3D operator + (const OPoint3D& coord, const OVector3D& vect)
+//{
+//  return OPoint3D( coord._x + vect._x, coord._y + vect._y, coord._z + vect._z );
+//}
 
 
 ////////////////////////////////////////////////////////////////////////////////

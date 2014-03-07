@@ -1456,14 +1456,13 @@ bool TYSiteNode::remSiteNode(const LPTYSiteNodeGeoNode pSiteNodeGeoNode)
     assert(pSiteNodeGeoNode);
     bool ret = false;
     TYTabSiteNodeGeoNode::iterator ite;
-    TYProjet* pProjet = getProjet();
 
     for (ite = _listSiteNode.begin(); ite != _listSiteNode.end(); ite++)
     {
         if ((*ite) == pSiteNodeGeoNode)
         {
             // Suppression des calcul
-            if (pProjet) { pProjet->remElmtFromCalculs((*ite)->getElement()); }
+            if (_pProjet) { _pProjet->remElmtFromCalculs((*ite)->getElement()); }
 
             _listSiteNode.erase(ite);
             ret = true;
@@ -1481,14 +1480,13 @@ bool TYSiteNode::remSiteNode(const LPTYSiteNode pSiteNode)
     assert(pSiteNode);
     bool ret = false;
     TYTabSiteNodeGeoNode::iterator ite;
-    TYProjet* pProjet = getProjet();
 
     for (ite = _listSiteNode.begin(); ite != _listSiteNode.end(); ite++)
     {
         if (TYSiteNode::safeDownCast((*ite)->getElement()) == pSiteNode)
         {
             // Suppression des calcul
-            if (pProjet) { pProjet->remElmtFromCalculs((*ite)->getElement()); }
+            if (_pProjet) { _pProjet->remElmtFromCalculs((*ite)->getElement()); }
 
             _listSiteNode.erase(ite);
             ret = true;
@@ -1505,14 +1503,13 @@ bool TYSiteNode::remSiteNode(QString idSiteNode)
 {
     bool ret = false;
     TYTabSiteNodeGeoNode::iterator ite;
-    TYProjet* pProjet = getProjet();
 
     for (ite = _listSiteNode.begin(); ite != _listSiteNode.end(); ite++)
     {
         if (TYSiteNode::safeDownCast((*ite)->getElement())->getID().toString() == idSiteNode)
         {
             // Suppression des calcul
-            if (pProjet) { pProjet->remElmtFromCalculs((*ite)->getElement()); }
+            if (_pProjet) { _pProjet->remElmtFromCalculs((*ite)->getElement()); }
 
             _listSiteNode.erase(ite);
             ret = true;

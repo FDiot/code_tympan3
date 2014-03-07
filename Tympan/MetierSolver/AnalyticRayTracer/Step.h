@@ -13,50 +13,38 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
+/*!
+* \file Lancer.h
+* \author Projet_Tympan
+*/
+
+#ifndef __STEP_H
+#define __STEP_H
+
+/*!
+ * \class Step
+ * \brief describe a step in the ray path
  */
-
-#ifndef __O_OBSERVER__
-#define __O_OBSERVER__
-
-
-
-/**
- * Classe abstraite Observer du pattern Observer.
- * @see     OSubject
- */
-class OObserver
+class Step
 {
-    // Methodes
-public:
-    /**
-     * Destructeur.
-     */
-    virtual ~OObserver() {};
+public :
+    Step(const vec3& Pos = vec3(0., 0., 0.), const vec3& Norme = vec3(0., 0., 0.)) : pos(Pos), norm(Norme) {}
+    Step(const Step& other) { pos = other.pos; norm = other.norm; }
+    ~Step() {}
 
-    /**
-     * La methode virtuelle pure update() est appelee lors d'une requete
-     * de notification d'un sujet observe (methode OSubject::notify()).
-     */
-    virtual void update() = 0;
-
-protected:
-    /**
-     * Constructeur.
-     */
-    OObserver() {};
-
-private:
-
-    // Membres
-public:
-
-protected:
-
-private:
-
+public :
+    vec3 pos;
+    vec3 norm;
 };
 
+inline Step operator * (const Step& s, const decimal& a)
+{
+    return Step(s.pos * a, s.norm * a);
+}
 
-#endif // __O_OBSERVER__
+inline Step operator + (const Step& s1, const Step& s2)
+{
+    return Step(s1.pos + s2.pos, s1.norm + s2.norm);
+}
+
+#endif // __STEP_H

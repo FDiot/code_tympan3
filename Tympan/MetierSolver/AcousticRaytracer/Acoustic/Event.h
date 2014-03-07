@@ -25,16 +25,6 @@
 #include <vector>
 #include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 
-//#ifdef USE_QT
-//  #include "EventGraphic.h"
-//#endif
-
-//enum typeevent {
-//  SPECULARREFLEXION = 0,
-//    DIFFRACTION,
-//  REFRACTION
-//};
-
 enum typeevent
 {
     SPECULARREFLEXION = 0,
@@ -52,14 +42,24 @@ class Event : public Base
     //#endif
 
 public:
-    Event(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL):
-        Base(), pos(position), from(incomingDirection), nbResponseLeft(0), sampler(NULL), shape(_shape) { name = "unknown event"; }
+    Event(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL) :
+        Base(),
+        pos(position),
+        from(incomingDirection),
+        nbResponseLeft(0),
+        initialNbResponse(0),
+        sampler(NULL),
+        shape(_shape)
+    {
+        name = "unknown event";
+    }
 
     Event(const Event& other) : Base(other)
     {
         pos = vec3(other.pos);
         from = vec3(other.pos);
         nbResponseLeft = other.nbResponseLeft;
+        initialNbResponse = other.initialNbResponse;
         type = other.type;
         shape = other.shape;
         if (other.sampler) { sampler = new Sampler(*(other.sampler)); }
@@ -74,11 +74,11 @@ public:
     virtual bool isDiffuse() { return false; }
 
     /*!
-    * \fn vec3* getPosition()
-    * \brief Renvoie un pointeur vers le point d'impact de l'evenement.
-    * \return Adresse du vecteur decrivant le point d'impact
+     * \fn const vec3& getPosition() const
+     * \brief Renvoie une référence vers le point d'impact de l'evenement.
+     * \return Adresse du vecteur decrivant le point d'impact
     */
-    vec3 getPosition() { return pos; }
+    const vec3& getPosition() const { return pos; }
 
     /*!
     * \fn void setPosition(vec3 &_pos)
@@ -103,7 +103,9 @@ public:
 
     bool isReponseLeft() { return nbResponseLeft > 0; }
     int getNbResponseLeft() { return nbResponseLeft; }
-    void setNbResponseLeft(int _nbResponseLeft) { nbResponseLeft = _nbResponseLeft; }
+    virtual void setNbResponseLeft(int _nbResponseLeft) { nbResponseLeft = _nbResponseLeft; }
+
+    virtual int getInitialNbResponseLeft() const { return initialNbResponse; }
 
     /*!
     * \fn Shape* getShape()
@@ -148,12 +150,27 @@ public:
     */
     virtual int getType() { return type; }
 
+    /*!
+     * \fn virtual void setType()
+     * \brief Added by DTh to make possible simple test of rays
+     */
+    virtual void setType(const typeevent& _type) { type = _type; }
+
     virtual double getAngle() { return 0.0; }
+
+    /*!
+    * \fn const decimal distance(const Event &other) const
+    * \brief Return distance from another event
+    * \param other : event from which distance must be measured
+    */
+    const decimal distance(const Event& other) const { return this->pos.distance(other.getPosition()); }
+
 
 protected:
     vec3 pos;           /*!< Point d'impact de l'evenement */
     vec3 from;          /*!< Vecteur directeur du rayon incident */
-    int nbResponseLeft;
+    int nbResponseLeft; /*!< Number of rays remaining to launch */
+    int initialNbResponse; /*!< number of rays to lauch after event*/
     Sampler* sampler;
     Shape* shape;       /*< La primitive impactee */
     typeevent type;     /*!< Type de l'evenement */

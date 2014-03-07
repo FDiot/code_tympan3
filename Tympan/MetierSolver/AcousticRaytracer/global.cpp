@@ -28,7 +28,8 @@ bool globalKeepDebugRay;        //Permet de conserver les rayons qui ont ete inv
 float globalMaxLength;          //Longueur maximale autorisee pour un rayon, globalMaxLength inclu
 float globalSampleGround2D;     //Echantillonage sur sol pour la description de la topographie 2D sous le rayon. (NMPB)
 int globalRayTracingOrder;      //[0-2]Sens de traitement des rayon source-recepteur ou inverse (0 = SR / 1 =RS / 2 = auto)
-float globalAnalyticAnglePhi;   // Angle de tir vertical (phi) des rayons
+float globalAnalyticAngleTheta;   // Angle de tir vertical (theta) des rayons
+int globalDiscretization;       //Permet de choisir entre des rayons alatoires ou dterministes (discretisation source)
 
 ////////////////////////////
 // Reflexion
@@ -62,7 +63,11 @@ double globalAnalyticGradC;     // Gradient vertical de celerite
 double globalAnalyticGradV;     // Gradient vertical de vitesse de vent
 double globalAnalyticC0;        // Celerite du son initiale
 int globalAnalyticTypeTransfo;  // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-// Desactivated while refactoring the altimetry computation :
-// bool globalRestitModifiedGeom;  // Indique si l'on souhaite recuperer la geometrie transformee
+bool globalRestitModifiedGeom;  // Indique si l'on souhaite recuperer la geometrie transformee
 double globalOverSampleD;       // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
 double globalWindDirection;     // Direction du vent (un vent a 0 est dirige du nord vers le sud)
+
+bool globalUseFresnelArea;      // take into account the fresnel area
+float globalAnime3DSigma;       // incertitude relative sur la taille du rayon au carree
+float globalAnime3DForceC;      // Force C  0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dpendant de globalAnime3DSigma
+bool globalUsePostFilters;      // Utilisation (!=0) ou non (0) des filtres post lancer de rayons

@@ -23,6 +23,7 @@
 #ifndef __O_BOX__
 #define __O_BOX__
 
+#include "OCoord3D.h"
 #include "OPoint3D.h"
 
 /**

@@ -15,61 +15,50 @@
 
 #include <cmath>
 
-#include "meteo.h"
+#include "meteoLin.h"
 
-meteo::meteo()
-{
-    gradC = 0.5;
-    gradV = 0.5;
-    c0 = 340;
-    windDirection = 0.0;
-}
 
-meteo::meteo(const double& gradC, const double& gradV, const double& windDir, const double& c0) : gradC(gradC), gradV(gradV), windDirection(windDir), c0(c0) {} ;
-
-meteo::~meteo()
-{
-}
-
-double meteo::cLin(const R3& P, R3& grad) const
+double meteoLin::cTemp(const vec3& P, vec3& grad) const
 {
 
     // calcul de la celerite
-    R c = gradC * P.z + c0;
+    decimal c = grad_C * P.z + c0;
 
     // calcul du gradient
-    grad.z = gradC;
+    grad.z = grad_C;
 
     return c;
 };
 
-R3 meteo::vent(const R3& P, std::map<std::pair<int, int>, R> &jacob) const
+vec3 meteoLin::cWind(const vec3& P) const
 {
-
     // calcul du vent : on a une fonction lineaire fonction de la coordonnee z du point
-    R3 v;
+    vec3 v;
 
-    double angle = -(PI / 2.0) - (windDirection * PI / 180.0);
-    double DVx = cos(angle) * gradV;
-    double DVy = sin(angle) * gradV;
+    const double& DVx = jacob_matrix[0][2];
+    const double& DVy = jacob_matrix[1][2];
 
     v.x = DVx * P.z;
     v.y = DVy * P.z;
     v.z = 0;
 
-
-
-    //v.x = 0.5 * Meteo.gradV * P.z;
-    //v.y = 0.5 * Meteo.gradV * P.z;
-    //v.z = 0;
-
-    // calcul de la jacobienne
-    jacob[std::make_pair(1, 3)] = DVx;
-    jacob[std::make_pair(2, 3)] = DVy;
-
-
-    //jacob[make_pair(1, 3)] = 0.5 * Meteo.gradV;
-    //jacob[make_pair(2, 3)] = 0.5 * Meteo.gradV;
-
     return v;
+}
+
+void meteoLin::init()
+{
+    double angle = -M_PIDIV2 - wind_angle;
+    double DVx = cos(angle) * grad_V;
+    double DVy = sin(angle) * grad_V;
+
+    for (unsigned short i = 0; i < 3; i++)
+    {
+        for (unsigned short j = 0; j < 3; j++)
+        {
+            jacob_matrix[i][j] = 0.;
+        }
+    }
+
+    jacob_matrix[0][2] = DVx;
+    jacob_matrix[1][2] = DVy;
 }

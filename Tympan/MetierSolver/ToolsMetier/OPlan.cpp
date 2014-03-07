@@ -337,6 +337,41 @@ double OPlan::distance(const OPoint3D& pt)
     return ((_a * pt._x + _b * pt._y + _c * pt._z + _d) / OVector3D(pt).norme());
 }
 
+
+OPoint3D OPlan::symPtPlan(const OPoint3D& pt)
+{
+    OPoint3D ptSym;
+
+    // D'abord on calcule K
+    double K = -(_a * pt._x + _b * pt._y + _c * pt._z + _d) / (_a * _a + _b * _b + _c * _c);
+
+    // On calcule les coordonnées du point projeté sur le plan
+    double x1 = K * _a + pt._x;
+    double y1 = K * _b + pt._y;
+    double z1 = K * _c + pt._z;
+
+    // On calcule enfin les coordonnées du point symétrique
+    ptSym._x = 2 * x1 - pt._x;
+    ptSym._y = 2 * y1 - pt._y;
+    ptSym._z = 2 * z1 - pt._z;
+
+    return ptSym;
+}
+
+OPoint3D  OPlan::projPtPlan(const OPoint3D& pt)
+{
+    OPoint3D ptProj;
+    // D'abord on calcule K
+    double K = -(_a * pt._x + _b * pt._y + _c * pt._z + _d) / (_a * _a + _b * _b + _c * _c);
+
+    // On calcule les coordonnées du point projeté sur le plan
+    ptProj._x = K * _a + pt._x;
+    ptProj._y = K * _b + pt._y;
+    ptProj._z = K * _c + pt._z;
+
+    return ptProj;
+}
+
 bool OPlan::distancePlanParallel(const OPlan& plan, double& distance)
 {
     if (!isParallel(plan)) { return false; }
