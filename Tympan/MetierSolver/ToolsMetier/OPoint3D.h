@@ -19,13 +19,10 @@
  *
  */
 
+#include "OCoord3D.h"
 
 #ifndef __O_POINT_3D__
 #define __O_POINT_3D__
-
-
-#include "OCoord3D.h"
-
 
 /**
  * \file OPoint3D.h

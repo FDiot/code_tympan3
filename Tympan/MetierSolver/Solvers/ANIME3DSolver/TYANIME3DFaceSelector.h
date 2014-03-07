@@ -13,26 +13,40 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- */
-
-/**
- * \file TYANIME3DFaceSelector.h
- * \brief Le selecteur de faces associe a la methode ANIME3D (header)
- * \author Projet_Tympan
- * \date 04 avril 2011
- */
 
 #ifndef __TYINPROFACESELECTOR__
 #define __TYINPROFACESELECTOR__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYFaceSelectorInterface.h"
-
-class TYANIME3DFaceSelector : public TYFaceSelectorInterface
+class TYANIME3DFaceSelector
 {
 public:
-    TYANIME3DFaceSelector();
+    TYANIME3DFaceSelector(const TYSiteNode& Site);
     virtual ~TYANIME3DFaceSelector();
+
+    /*!
+     * \fn bool exec(TYStructSurfIntersect* tabPolygon, unsigned int& tabPolygonSize);
+     * \brief buil list of faces used by the ray tracer and the acoustic solver
+     */
+    bool exec(TYStructSurfIntersect *&tabPolygon, unsigned int& tabPolygonSize);
+
+private :
+    /*!
+    * \fn bool buildCalcStruct(TYStructSurfIntersect* _tabPolygon)
+    * \brief Construit un tableau contenant la structure regroupant l'ensemble des informations relatives a une face/triangle du site.
+    * Correspond a la fonction du meme nom dans le SolveurHarmonoise avec l'ajout des normales et des faces triangulees dans la structure.
+    * \param site Reference vers le site de la scene
+    */
+    bool buildCalcStruct(TYStructSurfIntersect *&tabPolygon, unsigned int& tabPolygonSize);
+
+    /*!
+    * \fn bool triangulateConcavePolygon(TYStructSurfIntersect* _tabPolygon)
+    * \brief Effectue une triangulation de l'ensemble des faces de la topographie et des infrastructures.
+    * \return Renvoie vrai si les triangulations se sont bien passees.
+    */
+    bool triangulateConcavePolygon(TYStructSurfIntersect* tabPolygon, const unsigned int& tabPolygonSize);
+
+protected :
+    const TYSiteNode& _site;
 };
 
 #endif // __TYANIME3DFACESELECTOR__

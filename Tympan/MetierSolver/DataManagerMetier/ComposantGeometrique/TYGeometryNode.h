@@ -157,7 +157,7 @@ public:
     /**
      * Set/Get du repere.
      */
-    void setRepere(const ORepere3D& repere) { _repere = repere; updateMatrix(); }
+    void setRepere(const ORepere3D& repere) { _repere = repere; }
 
     /**
      * Set/Get du repere.
@@ -175,22 +175,17 @@ public:
     /**
      * Set/Get du repere.
      */
-    void setRepere(const TYRepere& rep) { _repere = rep; updateMatrix(); }
+    void setRepere(const TYRepere& rep) { _repere = rep; }
 
     /**
      * Set/Get de la matrice de changement de repere.
      */
-    const OMatrix& getMatrix() const { return _matrix; }
+    const OMatrix getMatrix() const { return _repere.asMatrix(); }
 
     /**
      * Set/Get de la matrice de changement de repere.
      */
-    void setMatrix(const OMatrix& matrix) { setPrivateMatrix(matrix); }
-
-    /**
-     * Teste si la matrice vaut l'identite.
-     */
-    bool isIdentity() const { return _bIdentity; }
+    void setMatrix(const OMatrix& matrix);
 
     /**
      * Operateur de copie.
@@ -208,16 +203,6 @@ public:
     bool operator!=(const TYGeometryNode& other) const;
 
     virtual bool deepCopy(const TYElement* pOther, bool copyId = true);
-
-    /**
-     * Calcule la nouvelle matrice correspondant au changement de repere.
-     */
-    void updateMatrix();
-
-    /**
-     * Calcule le nouveau repere correspondant a la matrice.
-     */
-    void updateRepere();
 
     /**
      * Determine la matrice de passage du repere local vers le repere absolu.
@@ -306,14 +291,6 @@ protected:
 
     /// Hauteur de l'element par rapport au sol
     double _hauteur;
-
-    ///Matrice correspondant au changement de repere.
-    OMatrix _matrix;
-
-    ///booleen qui indique si la matrice vaut l'identite.
-    bool    _bIdentity;
-
-    void setPrivateMatrix(const OMatrix& matrix);
 };
 
 #if TY_USE_IHM

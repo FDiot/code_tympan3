@@ -2748,7 +2748,7 @@ void TYEtage::updateZSource()
         double h = pSource->getHauteur();
         pSource->getPos()->_z = h;
         _tabSources[i]->getRepere()._origin._z = h;
-        _tabSources[i]->updateRepere();
+        _tabSources[i]->setIsGeometryModified(true);
     }
 
     for (i = 0; i < _tabMachine.size(); i++)

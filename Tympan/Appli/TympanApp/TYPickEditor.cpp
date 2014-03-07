@@ -1061,7 +1061,7 @@ void TYPickEditor::showPopupMenu(LPTYElementCollection pElts)
             if (copyTopoRetCodes[popupRet]->isA("TYCourbeNiveau"))
             {
                 // Nouvelle element
-                LPTYCourbeNiveauGeoNode pCopy = new TYCourbeNiveauGeoNode(new TYCourbeNiveau);
+                LPTYCourbeNiveauGeoNode pCopy = new TYCourbeNiveauGeoNode(new TYCourbeNiveau());
                 pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
 
                 // Duplication

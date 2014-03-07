@@ -53,6 +53,12 @@ public:
      */
     double getSurface();
 
+    /**
+     * \fn OPoint3D getCenter()
+     * \brief Gives back the triangle centre
+     */
+    OPoint3D getCentre();
+
     int _p1;
     int _p2;
     int _p3;

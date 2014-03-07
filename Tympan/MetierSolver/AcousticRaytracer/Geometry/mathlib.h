@@ -14,10 +14,14 @@
 */
 
 //#include "std_tools.hpp"
+#include <cassert>
 #include <math.h>
 #include <stdlib.h>
 #include <float.h>
 #include <vector>
+#include <boost/foreach.hpp>
+
+#include "../../ToolsMetier/OPoint3D.h"
 
 
 /*! \file Core/Mathlib.h
@@ -36,6 +40,9 @@
 namespace core_mathlib
 {
 typedef float decimal;
+
+typedef unsigned int bitSet; /*!< used to manage set of elements*/
+
 #ifndef EPSILON
 #define EPSILON             (decimal)0.000001                       /*!< Approximation lors de la comparaison de 2 decimal */
 #endif
@@ -43,8 +50,17 @@ typedef float decimal;
 #ifndef M_PI
 #define M_PI                (decimal)3.141592653589793238462643383279       /*!< PI */
 #endif
+
 #define M_PIDIV2            (decimal)1.570796326794896619231321691639       /*!< PI / 2 */
+
+#ifndef M_2PI
 #define M_2PI               (decimal)6.283185307179586476925286766559       /*!< 2 * PI */
+#endif
+
+#ifndef M_4PI
+#define M_4PI               (decimal)12.566370614359172953850573533118      /*!< 4 * PI */
+#endif
+
 #define M_PI2               (decimal)9.869604401089358618834490999876       /*!< PI au carre */
 #define M_PIDIV180          (decimal)0.01745329251994329576923690768488     /*!< PI / 180 */
 #define M_180DIVPI          (decimal)57.295779513082320876798154814105      /*!< 180 / PI */
@@ -84,6 +100,8 @@ public:
     base_vec3(const vec2& _v, base_t _z);
     base_vec3(const base_vec3& _v) : x(_v.x), y(_v.y), z(_v.z) { }
     base_vec3(const base_vec3* _v) : x(_v->x), y(_v->y), z(_v->z) { }
+    base_vec3(const base_vec3& _v, const base_vec3& _w): x(_w.x - _v.x), y(_w.y - _v.y), z(_w.z - _v.z) {}                          // coordonnees du vecteur ab
+
     base_vec3(const vec4& _v);
 
     int operator==(const base_vec3& _v) { return (fabs(this->x - _v.x) < EPSILON && fabs(this->y - _v.y) < EPSILON && fabs(this->z - _v.z) < EPSILON); }
@@ -111,6 +129,13 @@ public:
     base_vec3& operator-=(const base_vec3& _v) { return *this = *this - _v; }
 
     base_t operator*(const base_vec3& _v) const { return this->x * _v.x + this->y * _v.y + this->z * _v.z; }
+    base_vec3 operator ^(const base_vec3& _v)const
+    {
+        return base_vec3(this->y * _v.z - this->z * _v.y,
+                         this->z * _v.x - this->x * _v.z,
+                         this->x * _v.y - this->y * _v.x) ;
+    }   // produit vectoriel
+
     base_t operator*(const vec4& _v) const;
 
 
@@ -225,6 +250,49 @@ public:
 typedef base_vec3<decimal> vec3;
 typedef base_vec3<double> dvec3;
 
+inline std::vector<vec3> operator * (const std::vector<vec3>& _v, const decimal& _a)
+{
+    std::vector<vec3> res ;
+    BOOST_FOREACH(vec3 vec, _v) { res.push_back(vec * _a); }
+    return res;
+}
+
+inline std::vector<vec3> operator + (const std::vector<vec3>& _u, const std::vector<vec3>& _v)
+{
+    assert(_u.size() == _v.size());
+    std::vector<vec3> res;
+    for (unsigned int i = 0; i < _v.size(); ++i) { res.push_back(_u[i] + _v[i]); }
+    return res;
+}
+
+// Version double
+inline std::vector<dvec3> operator * (const std::vector<dvec3>& _v, const decimal& _a)
+{
+    std::vector<dvec3> res ;
+    BOOST_FOREACH(dvec3 vec, _v) { res.push_back(vec * _a); }
+    return res;
+}
+
+inline std::vector<dvec3> operator + (const std::vector<dvec3>& _u, const std::vector<dvec3>& _v)
+{
+    assert(_u.size() == _v.size());
+    std::vector<dvec3> res;
+    for (unsigned int i = 0; i < _v.size(); ++i) { res.push_back(_u[i] + _v[i]); }
+    return res;
+}
+
+/*!
+ * \fn OPoint3D vec3ToOPoint3D(const vec3& p)
+ * \brief convertit un vec3 en OPoint3D
+ */
+inline OPoint3D vec3toOPoint3D(const vec3& _v) { return OPoint3D(static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z)); }
+
+/*!
+ * \fn vec3 OPoint3DTovec3(const OPoint3D& _p)
+ * \brief convertit un OPoint3D en vec3
+ */
+inline vec3 OPoint3Dtovec3(const OPoint3D& _p) { return vec3(static_cast<float>(_p._x), static_cast<float>(_p._y), static_cast<float>(_p._z)); }
+
 /*****************************************************************************/
 /*                                                                           */
 /* vec2                                                                      */
@@ -241,6 +309,7 @@ public:
     vec2(decimal _x, decimal _y) : x(_x), y(_y) { }
     vec2(const decimal* _v) : x(_v[0]), y(_v[1]) { }
     vec2(const vec2& _v) : x(_v.x), y(_v.y) { }
+    vec2(const vec2& _v, const vec2& _w): x(_w.x - _v.x), y(_w.y - _v.y)  {}
     vec2(const vec3& _v);
     vec2(const vec4& _v);
 
@@ -259,6 +328,8 @@ public:
     const vec2 operator+(const vec2& _v) const { return vec2(this->x + _v.x, this->y + _v.y); }
     const vec2 operator-() const { return vec2(-this->x, -this->y); }
     const vec2 operator-(const vec2& _v) const { return vec2(this->x - _v.x, this->y - _v.y); }
+
+    decimal operator^(const vec2& _v)const {return  this->x * _v.y - this->y * _v.x;} // produit mixte
 
     vec2& operator*=(decimal _f) { return *this = *this * _f; }
     vec2& operator/=(decimal _f) { return *this = *this / _f; }
@@ -317,6 +388,7 @@ public:
     };
 };
 
+inline decimal area(const vec2& A, const vec2& B, const vec2& C) { return vec2(A, B) ^ vec2(A, C) * 0.5;}
 
 inline void Cross(const vec3& v1, const vec3& v2, vec3& vout)
 {
@@ -1096,6 +1168,31 @@ inline decimal ClosestDistanceBetweenDotAndTriangle(
 
     return (decimal) fabs(fSqrDist);
 }
+
+/*
+ * \brief binary operation
+ */
+
+/*!
+ * \fn unsigned int buildBitSet(const unsigned int length)
+ * \brief build a bit sequence set to 1, for length bits
+ */
+inline unsigned int buildBitSet(const unsigned short& length)
+{
+    unsigned int res = 1;
+    for (unsigned short i = 0; i < length - 1; i++, res++) { res = res << 1; }
+    return res;
+}
+
+/*
+ * \fn sequence buildComplementaryBitSet(const unsigned& int length, const unsigned int& bitSet )
+ * \brief build the bit sequence repesenting complementary of bitset, taking account of is real useful length
+ */
+inline unsigned int buildComplementaryBitSet(const unsigned int& length, const unsigned int& bitSet)
+{
+    return (bitSet ^ buildBitSet(length));
+}
+
 }; //fin namespace
 using namespace core_mathlib;
 #endif // __HMATHLIB__

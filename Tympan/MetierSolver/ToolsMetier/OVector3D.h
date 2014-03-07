@@ -223,7 +223,49 @@ public:
      * \param vector The vector to mesure the angle with this vector.
      */
     double angle(const OVector3D& vector) const;
+
+    /**
+    * \fn OVector3D getRotationOz(double alpha, OVector3D V)
+    * \brief Returns the vector after a rotation around z axis
+    * \ x -> xprime. Both of these vectors will be given in the
+    * \ original base.
+    */
+    OVector3D getRotationOz(double alpha);
+
+    /**
+    * \fn OVector3D getRotationOzBase2(double alpha, OVector3D V)
+    * \brief Returns the vector after a rotation around z axis
+    * \ and gives back the coordinates of xprime or yprime in the
+    *\ new basis Bprime.
+    */
+    OVector3D getRotationOzBase2(double alpha);
+
+    /**
+    * \fn OVector3D getRotationOy(double alpha, OVector3D V)
+    * \brief Returns the vector after a rotation around z axis
+    */
+    OVector3D getRotationOy(double alpha);
+
+    /**
+    * \fn OVector3D getRotationOyBase2(double alpha, OVector3D V)
+    * \brief Returns the vector after a rotation around y axis
+    * \ and gives back the coordinates of xprime or zprime in the
+    *\ new basis Bprime.
+    */
+    OVector3D getRotationOyBase2(double alpha);
+
+    /**
+    * \fn OVector3D getRotationOzOy(double alpha, double theta, OVector3D V)
+    * \brief Returns the vector after 2 rotations around z axis and
+    * \y axis. It gives the coordinates of xsecond, ysecond and zsecond in the
+    *\ first basis B.
+    */
+    OVector3D getRotationOzOy(double alpha, double theta);
 };
 
+inline OCoord3D operator + (const OCoord3D& coord, const OVector3D& vect)
+{
+    return OCoord3D(coord._x + vect._x, coord._y + vect._y, coord._z + vect._z);
+}
 
 #endif // __O_VECTOR_3D__

@@ -17,8 +17,6 @@
  *
  */
 
-
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -26,11 +24,8 @@
 #include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
 
-
-
 /////////////////////////////////////////////////////////////////////////////
 // Implementation
-
 
 TYMapPtrGeoNode* TYGeometryNode::_geoNodeMap = NULL;
 TYListPtrGeoNode* TYGeometryNode::_geoNodeDoublonsList = NULL;
@@ -108,7 +103,6 @@ TYGeometryNode::TYGeometryNode()
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
-    _bIdentity = true;
     _hauteur = 0.0; //dt++
     _pElement = NULL;//az++
 }
@@ -118,8 +112,6 @@ TYGeometryNode::TYGeometryNode(TYElement* pElt , TYElement* pParent /*=NULL*/) :
 {
     _pElement = pElt;
     addToTheMap();
-    updateMatrix(); // TODO a priori inutile
-    _bIdentity = true;
     _hauteur = 0.0;
 
     if (pParent && _pElement)
@@ -134,8 +126,6 @@ TYGeometryNode::TYGeometryNode(LPTYElement pElt, TYElement* pParent /*=NULL*/) :
 {
     _pElement = pElt;
     addToTheMap();
-    updateMatrix(); // TODO a priori inutile
-    _bIdentity = true;
     _hauteur = 0.0;
 
     if (pParent && _pElement)
@@ -148,7 +138,6 @@ TYGeometryNode::TYGeometryNode(LPTYElement pElt, TYElement* pParent /*=NULL*/) :
 TYGeometryNode::TYGeometryNode(const TYRepere& repere, TYElement* pElt)
 {
     _repere = repere;
-    updateMatrix();
     _hauteur = 0.0;
 
     _pElement = pElt;
@@ -158,7 +147,6 @@ TYGeometryNode::TYGeometryNode(const TYRepere& repere, TYElement* pElt)
 TYGeometryNode::TYGeometryNode(const TYRepere& repere, LPTYElement pElt)
 {
     _repere = repere;
-    updateMatrix();
     _hauteur = 0.0;
 
     _pElement = pElt;
@@ -166,8 +154,8 @@ TYGeometryNode::TYGeometryNode(const TYRepere& repere, LPTYElement pElt)
 }
 
 TYGeometryNode::TYGeometryNode(TYElement* pElt, const OMatrix& matrix)
+    : _repere(matrix)
 {
-    setMatrix(matrix);
     _hauteur = 0.0;
 
     _pElement = pElt;
@@ -175,8 +163,8 @@ TYGeometryNode::TYGeometryNode(TYElement* pElt, const OMatrix& matrix)
 }
 
 TYGeometryNode::TYGeometryNode(LPTYElement pElt, const OMatrix& matrix)
+    : _repere(matrix)
 {
-    setMatrix(matrix);
     _hauteur = 0.0;
 
     _pElement = pElt;
@@ -246,9 +234,6 @@ int TYGeometryNode::fromXML(DOM_Element domElement)
         // On cherche le repere
         if (_repere.callFromXMLIfEqual(elemCur))
         {
-            // Mise a jour de la matrice en fct du repere
-            updateMatrix();
-
             // Le prochain child (node et pas '#text')
             // doit etre le noeud de l'element
             nodeTmp = elemCur.nextSibling();
@@ -343,8 +328,6 @@ TYGeometryNode& TYGeometryNode::operator=(const TYGeometryNode& other)
         //_pElement = other._pElement;//az--
         setElement(other._pElement);//az++
         _repere = other._repere;
-        _matrix = other._matrix;
-        _bIdentity = other._bIdentity;
         _hauteur = other._hauteur;
     }
     return *this;
@@ -357,8 +340,6 @@ bool TYGeometryNode::operator==(const TYGeometryNode& other) const
         if (TYElement::operator !=(other)) { return false; }
         if (_pElement != other._pElement) { return false; }
         if (_repere != other._repere) { return false; }
-        if (_matrix != other._matrix) { return false; }
-        if (_bIdentity != other._bIdentity) { return false; }
         if (_hauteur != other._hauteur) { return false; }
     }
     return true;
@@ -385,8 +366,6 @@ bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     // Deep copy du repere
     if (!_repere.deepCopy(&pOtherGeoNode->_repere, copyId)) { return false; }
 
-    _matrix = pOtherGeoNode->_matrix;
-    _bIdentity = pOtherGeoNode->_bIdentity;
     _hauteur = pOtherGeoNode->_hauteur;
 
     setIsGeometryModified(true);
@@ -397,23 +376,8 @@ bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 
 // XXX There seems to be excessive complexity around updateMatrix and updateRepere :
 // setMAtrix->setPrivateMatrix->updateRepere->_repere.set(_matrix)
-void TYGeometryNode::updateMatrix()
-{
     // FIXME Why this double copy of matrices while it looks like
     // _repere.getMatChangeRep(_matrix) would be simpler and more efficient ?
-    OMatrix matrix;
-
-    _repere.getMatChangeRep(matrix);
-    setMatrix(matrix);
-    setIsGeometryModified(true);
-}
-
-void TYGeometryNode::updateRepere()
-{
-    _repere.set(_matrix);
-    setIsGeometryModified(true);
-}
-
 TYGeometryNode* TYGeometryNode::GetGeoNode(TYElement* pElement)
 {
     if (GetGeoNodeMap()->find(pElement) != GetGeoNodeMap()->end())
@@ -462,11 +426,11 @@ void TYGeometryNode::GetGeoNodeParentList(TYListPtrGeoNode& GetGeoNodeParents)
 OMatrix TYGeometryNode::localToGlobal() const
 {
     TYGeometryNode* pParent = GetGeoNodeParent();
-    OMatrix matrix = _matrix;
+    OMatrix matrix = _repere.asMatrix();
 
     while (pParent != NULL)
     {
-        matrix = pParent->getMatrix() * matrix;
+        matrix = pParent->getORepere3D().asMatrix() * matrix;
         pParent = pParent->GetGeoNodeParent();
     }
 
@@ -520,10 +484,8 @@ LPTYElementGraphic TYGeometryNode::getGraphicObject()
 }
 #endif // TY_USE_IHM
 
-// CHECKME Why is this not in setMatrix
-void TYGeometryNode::setPrivateMatrix(const OMatrix& matrix)
+void TYGeometryNode::setMatrix(const OMatrix& matrix)
 {
-    _matrix = matrix;
-    updateRepere();
-    _bIdentity = false;
+    _repere.set(matrix);
+    setIsGeometryModified(true);
 }

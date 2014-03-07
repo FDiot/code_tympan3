@@ -13,43 +13,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
+#ifndef DUPLICATE_EVENT_POST_FILTER_H
+#define DUPLICATE_EVENT_POST_FILTER_H
 
-#include <boost/foreach.hpp>
-
-#include "OSubject.h"
-
-void OSubject::attach(OObserver* pObserver)
+class duplicateEventPostFilter : public postFilter
 {
-    if (pObserver)
-    {
-        _observers.insert(pObserver);
-    }
-}
+public:
+    duplicateEventPostFilter(std::vector<Ray*> *tabRay) : postFilter(tabRay) {}
+    ~duplicateEventPostFilter() {}
 
-bool OSubject::detach(OObserver* pObserver)
-{
-    bool ret = false;
+    /*!
+     * \fn unsigned int Traite();
+     * \brief apply a filter to the group of valid rays found by ray tracing
+     * \return number of rays suppressed
+     */
+    virtual unsigned int Process();
+};
 
-    if (pObserver)
-    {
-        _observers.erase(pObserver);
-        return true;
-    }
-    return ret;
-}
-
-void OSubject::reset()
-{
-    _observers.clear();
-}
-
-void OSubject::notify()
-{
-    BOOST_FOREACH(OObserver * obs, _observers)
-    {
-        obs->update();
-    }
-}
+#endif //DUPLICATE_EVENT_POST_FILTER_H

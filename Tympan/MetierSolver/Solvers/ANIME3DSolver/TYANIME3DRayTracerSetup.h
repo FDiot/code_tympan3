@@ -13,21 +13,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef TYANIME3DRAYTRACERPARAMETERS_H
-#define TYANIME3DRAYTRACERPARAMETERS_H
+#ifndef TYANIME3DRAYTRACERSETUP_H
+#define TYANIME3DRAYTRACERSETUP_H
 
-#include <cstdlib>
-
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Solver.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 
 /**
-* \class TYANIME3DRayTracerParameters
+* \class TYANIME3DRayTracerSetUp
 * \brief Classe implementant l'interface pour piloter le lancer de rayons pour le solver ANIME3D. (cree a partir de la classe SimpleRaySolver)
 */
 
-class TYANIME3DRayTracerParameters : public Solver
+class TYANIME3DRayTracerSetup : public Solver
 {
 
 public:
@@ -109,6 +104,8 @@ public:
 
     //virtual void clean();
 
+    bool _useFresnelArea;
+
 
 protected:
     SelectorManager<Ray> selectorManagerIntersection;
@@ -127,4 +124,4 @@ private:
     }
 };
 
-#endif
+#endif //TYANIME3DRAYTRACERSETUP_H
