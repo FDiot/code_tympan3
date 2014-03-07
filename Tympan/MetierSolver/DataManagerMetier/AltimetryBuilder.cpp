@@ -92,7 +92,6 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
     BOOST_FOREACH(LPTYCourbeNiveauGeoNode p_geo_node, level_curves)
     {
         // Handle the elements' transform
-        p_geo_node->updateMatrix();
         const OMatrix& matrix = p_geo_node->getMatrix();
         TYCourbeNiveau* p_curve =
             TYCourbeNiveau::safeDownCast(p_geo_node->getElement());
@@ -114,7 +113,6 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
     {
         TYPlanEau* p_water =
             TYPlanEau::safeDownCast(p_geo_node->getElement());
-        p_geo_node->updateMatrix();
         const OMatrix& matrix = p_geo_node->getMatrix();
         // This assumes the _pCrbNiv is up to date (TODO to be checked)
         try
@@ -135,7 +133,6 @@ AltimetryBuilder::process(TYTopographie& topography, bool use_emprise_as_level_c
     {
         TYTerrain* p_ground =
             TYTerrain::safeDownCast(p_geo_node->getElement());
-        p_geo_node->updateMatrix();
         const OMatrix& matrix = p_geo_node->getMatrix();
         try
         {
