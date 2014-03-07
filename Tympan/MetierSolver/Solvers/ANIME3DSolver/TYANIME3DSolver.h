@@ -95,11 +95,11 @@ protected:
     void saveAndOverSampleRay(const TYSiteNode& site, TYCalcul& calcul, const unsigned int& sens = 0, const double& dMin = 0.0);
 
     /*!
-    // XXX Check the reintroduction (Desactivated while refactoring the altimetry computation)
      *\fn void restitModifiedAlti(TYSiteNode& site)
      *\brief Restitue au site la topographie (et infrastructure) transformee
      */
-    void restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcousticPathFinder& pathFinder);
+    // CAUTION restitModifiedAlti() is incompatible with the new altimetry
+    // void restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcousticPathFinder& pathFinder);
 
     /*!
      * \fn exportRays(TYCalcul& calcul)
