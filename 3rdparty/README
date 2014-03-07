@@ -1,11 +1,14 @@
 This is the third party dependencies directory for Code_TYMPAN 4.1.5
 
 You need to download the archive Code_TYMPAN-4.1.5_third-party-NN.zip
-from https://extranet.logilab.fr/static/TYMPAN/files/ and uncompress
+from https://bitbucket.org/TYMPAN/code_tympan/downloads/ and uncompress
 it in this directory (where NN is the version number of the archive,
 currently NN=01) :
 
-https://extranet.logilab.fr/static/TYMPAN/files/Code_TYMPAN-4.1.5_third-party-01.zip
+https://bitbucket.org/TYMPAN/code_tympan/downloads/Code_TYMPAN-4.1.5_third-party-01.zip
+
+NB : The authenticatio use HTTP Digest Auth (which is broken in wget, 
+     use curl --digest instead to download from command line).
 
 This archive should contain :
  * an INSTALL file
