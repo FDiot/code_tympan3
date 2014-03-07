@@ -81,7 +81,10 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 
 bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 {
-    vec3 impact = r->position + r->direction * inter->t;
+	if (r->getDiff() >= globalMaxDiffraction) { return false; }
+
+	vec3 impact = r->position + r->direction * inter->t;
+
     Cylindre* cylindre = (Cylindre*)(inter->p);
 
     vec3 realImpact = impact.closestPointOnSegment(cylindre->getVertices()->at(cylindre->getLocalVertices()->at(0)), cylindre->getVertices()->at(cylindre->getLocalVertices()->at(1)));
@@ -91,23 +94,37 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 
     Diffraction* newEvent = new Diffraction(realImpact, from, (Cylindre*)(inter->p));
 
-if ( globalNbRayWithDiffraction > 0 )
-{
-    newEvent->setNbResponseLeft(globalNbRayWithDiffraction+1); // Attempt to correct problem 
-}
-else if ( globalNbRayWithDiffraction == 0 )
-{
-	vec3 closestPoint = realImpact.closestPointOnLine(r->position, impact);
-	decimal pseudo_thick = realImpact.distance(closestPoint) ;
-	unsigned int diff_nb_rays = static_cast<unsigned int>( floor( M_2PI / pseudo_thick * sin( newEvent->getAngle() ) ) + 0.5 );
-	diff_nb_rays = diff_nb_rays > 36 ? diff_nb_rays : 36; 
-	newEvent->setNbResponseLeft(diff_nb_rays + 1);
-}
-else
-{
-	unsigned int diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
-	newEvent->setNbResponseLeft(diff_nb_rays);
-}
+	if ( globalNbRayWithDiffraction > 0 )
+	{
+		newEvent->setNbResponseLeft(globalNbRayWithDiffraction+1); // Attempt to correct problem 
+	}
+	else if ( globalNbRayWithDiffraction == 0 )
+	{
+		vec3 closestPoint;
+
+#ifdef _FJ_THICKNESS_
+		decimal length = r->computePertinentLength(realImpact, impact, closestPoint);
+#else
+		decimal length = r->computeTrueLength(realImpact, impact, closestPoint);
+#endif
+		decimal thick = r->getThickness(length);
+		decimal closestDistance = realImpact.distance(closestPoint);
+
+		if ( closestDistance < ( thick / 2. ) ) 
+		{
+			unsigned int diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
+			newEvent->setNbResponseLeft(diff_nb_rays);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	else
+	{
+		unsigned int diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
+		newEvent->setNbResponseLeft(diff_nb_rays);
+	}
     
 	vec3 newDir;
     if (newEvent->getResponse(newDir))
@@ -120,5 +137,6 @@ else
 
         return true;
     }
+
     return false;
 }

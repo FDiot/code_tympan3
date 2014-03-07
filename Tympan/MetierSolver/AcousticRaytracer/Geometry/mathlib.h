@@ -187,9 +187,9 @@ public:
         return angle;
     }
     /** @brief  retourne les coordonnee du point le plus proche de *this sur la droite passant par vA et vB */
-    base_vec3 closestPointOnLine(const base_vec3& vA, const base_vec3& vB) { return (((vB - vA) * this->projectionOnLine(vA, vB)) + vA); }
+    base_vec3 closestPointOnLine(const base_vec3& vA, const base_vec3& vB) const { return (((vB - vA) * this->projectionOnLine(vA, vB)) + vA); }
     /** @brief  retourne les coordonnees du point le plus proche de *this sur le segment vA,vB */
-    base_vec3 closestPointOnSegment(const base_vec3& vA, const base_vec3& vB)
+    base_vec3 closestPointOnSegment(const base_vec3& vA, const base_vec3& vB) const
     {
         base_t factor = this->projectionOnLine(vA, vB);
         if (factor <= 0.0f) { return vA; }
@@ -197,7 +197,7 @@ public:
         return (((vB - vA) * factor) + vA);
     }
     /** @brief  retourne le facteur de la projection de *this sur la droite passant par vA et vB */
-    base_t projectionOnLine(const base_vec3& vA, const base_vec3& vB)
+    base_t projectionOnLine(const base_vec3& vA, const base_vec3& vB) const
     {
         base_vec3 v(vB - vA);
         return v.dot(*this - vA) / v.dot(v);
