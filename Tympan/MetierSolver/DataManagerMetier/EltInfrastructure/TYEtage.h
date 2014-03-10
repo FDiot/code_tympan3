@@ -33,7 +33,6 @@ class OSegment3D;
 #include "TYDalle.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYEtageWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYEtageGraphic.h"
 #endif
 
@@ -44,7 +43,7 @@ class OSegment3D;
 class TYEtage: public TYAcousticVolume
 {
     OPROTOSUPERDECL(TYEtage, TYAcousticVolume)
-    TY_EXTENSION_DECL(TYEtage)
+    TY_EXTENSION_DECL_ONLY(TYEtage)
     TY_EXT_GRAPHIC_DECL(TYEtage)
 
     // Methodes

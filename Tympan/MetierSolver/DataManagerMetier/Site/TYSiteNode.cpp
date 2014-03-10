@@ -16,6 +16,10 @@
 #include <cstdlib>
 #include <cassert>
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYSiteNodeWidget.h"
+#endif
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -38,6 +42,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 OPROTOINST(TYSiteNode);
+TY_EXTENSION_INST(TYSiteNode);
 
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 

@@ -29,7 +29,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSourcePonctuelleWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSourcePonctuelleGraphic.h"
 #endif
 
@@ -55,7 +54,7 @@ class OSegment3D;
 class TYSourcePonctuelle: public TYSource, public TYColorInterface
 {
     OPROTOSUPERDECL(TYSourcePonctuelle, TYSource)
-    TY_EXTENSION_DECL(TYSourcePonctuelle)
+    TY_EXTENSION_DECL_ONLY(TYSourcePonctuelle)
     TY_EXT_GRAPHIC_DECL(TYSourcePonctuelle)
 
     // Methodes

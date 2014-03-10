@@ -35,7 +35,6 @@ typedef boost::error_info < struct tag_position,
 } // namespace tympan
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAltimetrieWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAltimetrieGraphic.h"
 #endif
 
@@ -48,7 +47,7 @@ typedef boost::error_info < struct tag_position,
 class TYAltimetrie: public TYElement
 {
     OPROTOSUPERDECL(TYAltimetrie, TYElement)
-    TY_EXTENSION_DECL(TYAltimetrie)
+    TY_EXTENSION_DECL_ONLY(TYAltimetrie)
     TY_EXT_GRAPHIC_DECL(TYAltimetrie)
 
     // Methodes

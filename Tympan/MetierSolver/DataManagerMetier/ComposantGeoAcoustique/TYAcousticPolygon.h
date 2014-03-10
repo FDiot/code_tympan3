@@ -25,7 +25,6 @@
 #include "TYAcousticSurface.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticPolygonWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticPolygonGraphic.h"
 #endif
 
@@ -37,7 +36,7 @@
 class TYAcousticPolygon: public TYAcousticSurface
 {
     OPROTOSUPERDECL(TYAcousticPolygon, TYAcousticSurface)
-    TY_EXTENSION_DECL(TYAcousticPolygon)
+    TY_EXTENSION_DECL_ONLY(TYAcousticPolygon)
     TY_EXT_GRAPHIC_DECL(TYAcousticPolygon)
 
     // Methodes

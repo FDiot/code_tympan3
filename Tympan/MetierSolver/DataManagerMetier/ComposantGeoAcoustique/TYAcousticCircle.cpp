@@ -17,8 +17,9 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticCircleWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -33,7 +34,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 
 OPROTOINST(TYAcousticCircle);
-
+TY_EXTENSION_INST(TYAcousticCircle);
 
 TYAcousticCircle::TYAcousticCircle()
 {

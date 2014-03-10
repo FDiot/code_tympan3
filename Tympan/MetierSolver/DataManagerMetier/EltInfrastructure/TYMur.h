@@ -31,7 +31,6 @@ class OSegment3D;
 #include "TYParoi.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYMurWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYMurGraphic.h"
 #endif
 
@@ -42,7 +41,7 @@ class OSegment3D;
 class TYMur: public TYAcousticRectangleNode
 {
     OPROTOSUPERDECL(TYMur, TYAcousticRectangleNode)
-    TY_EXTENSION_DECL(TYMur)
+    TY_EXTENSION_DECL_ONLY(TYMur)
     TY_EXT_GRAPHIC_DECL(TYMur)
 
     // Methodes

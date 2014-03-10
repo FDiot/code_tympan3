@@ -27,7 +27,6 @@
 #include "TYAcousticVolume.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSemiCylinderWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCylinderGraphic.h"
 #endif
 
@@ -38,7 +37,7 @@
 class TYAcousticSemiCylinder: public TYAcousticVolume
 {
     OPROTOSUPERDECL(TYAcousticSemiCylinder, TYAcousticVolume)
-    TY_EXTENSION_DECL(TYAcousticSemiCylinder)
+    TY_EXTENSION_DECL_ONLY(TYAcousticSemiCylinder)
     TY_EXT_GRAPHIC_DECL(TYAcousticSemiCylinder)
 
     // Methodes

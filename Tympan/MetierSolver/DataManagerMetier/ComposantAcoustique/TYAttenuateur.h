@@ -23,10 +23,6 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "TYSpectre.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAttenuateurWidget.h"
-#endif
-
 
 /**
  * Classe de definition d'un attenuateur.
@@ -34,7 +30,7 @@
 class TYAttenuateur: public TYElement
 {
     OPROTOSUPERDECL(TYAttenuateur, TYElement)
-    TY_EXTENSION_DECL(TYAttenuateur)
+    TY_EXTENSION_DECL_ONLY(TYAttenuateur)
 
     // Methodes
 public:

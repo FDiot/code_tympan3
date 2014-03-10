@@ -17,7 +17,9 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYPaletteWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -38,7 +40,7 @@
 
 
 OPROTOINST(TYPalette);
-
+TY_EXTENSION_INST(TYPalette);
 
 const TYPalette::values_type TYPalette::infinity = std::numeric_limits<values_type>::infinity() ;
 

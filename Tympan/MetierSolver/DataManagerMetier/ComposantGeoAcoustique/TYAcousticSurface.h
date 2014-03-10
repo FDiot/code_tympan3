@@ -29,10 +29,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSurfaceWidget.h"
-#endif
-
 
 /**
  * Permet de creer de elements acoustiques surfaciques.
@@ -40,7 +36,7 @@
 class TYAcousticSurface: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYSurfaceInterface
 {
     OPROTOSUPERDECL(TYAcousticSurface, TYElement)
-    TY_EXTENSION_DECL(TYAcousticSurface)
+    TY_EXTENSION_DECL_ONLY(TYAcousticSurface)
 
     // Methodes
 public:

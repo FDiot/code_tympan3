@@ -28,7 +28,6 @@
 #include "TYEtage.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYBatimentWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYBatimentGraphic.h"
 #endif
 
@@ -38,7 +37,7 @@
 class TYBatiment: public TYAcousticVolumeNode
 {
     OPROTOSUPERDECL(TYBatiment, TYAcousticVolumeNode)
-    TY_EXTENSION_DECL(TYBatiment)
+    TY_EXTENSION_DECL_ONLY(TYBatiment)
     TY_EXT_GRAPHIC_DECL(TYBatiment)
 
     // Methodes

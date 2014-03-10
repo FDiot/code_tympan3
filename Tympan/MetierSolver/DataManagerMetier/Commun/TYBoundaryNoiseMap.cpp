@@ -17,6 +17,11 @@
  *
  */
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYBoundaryNoiseMapGraphic.h"
+#include "Tympan/GraphicIHM/DataManagerIHM/TYBoundaryNoiseMapWidget.h"
+#endif
+
 
 
 
@@ -34,6 +39,7 @@
 #undef max
 
 OPROTOINST(TYBoundaryNoiseMap);
+TY_EXTENSION_INST(TYBoundaryNoiseMap);
 
 TYBoundaryNoiseMap::TYBoundaryNoiseMap()
 {

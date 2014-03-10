@@ -24,7 +24,6 @@
 #include "TYSourcePonctuelle.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSourceLineicWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceLineicGraphic.h"
 #endif
 
@@ -36,7 +35,7 @@
 class TYSourceLineic: public TYSource
 {
     OPROTOSUPERDECL(TYSourceLineic, TYSource)
-    TY_EXTENSION_DECL(TYSourceLineic)
+    TY_EXTENSION_DECL_ONLY(TYSourceLineic)
     TY_EXT_GRAPHIC_DECL(TYSourceLineic)
 
     // Methodes

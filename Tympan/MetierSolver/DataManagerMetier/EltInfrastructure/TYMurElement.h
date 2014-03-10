@@ -28,7 +28,6 @@
 #include "TYParoi.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYMurElementWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYMurElementGraphic.h"
 #endif
 
@@ -39,7 +38,7 @@
 class TYMurElement: public TYAcousticRectangle
 {
     OPROTOSUPERDECL(TYMurElement, TYAcousticRectangle)
-    TY_EXTENSION_DECL(TYMurElement)
+    TY_EXTENSION_DECL_ONLY(TYMurElement)
     TY_EXT_GRAPHIC_DECL(TYMurElement)
 
     // Methodes

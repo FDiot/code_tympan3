@@ -23,17 +23,13 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "TYPoint.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRepereWidget.h"
-#endif
-
 /**
  * Classe de definition d'un repere.
  */
 class TYRepere: public TYElement, public ORepere3D
 {
     OPROTOSUPERDECL(TYRepere, TYElement)
-    TY_EXTENSION_DECL(TYRepere)
+    TY_EXTENSION_DECL_ONLY(TYRepere)
 
     // Methodes
 public:

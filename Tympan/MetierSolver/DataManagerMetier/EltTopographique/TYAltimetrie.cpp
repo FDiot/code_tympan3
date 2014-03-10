@@ -13,6 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAltimetrieWidget.h"
+#endif
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -60,6 +64,7 @@ struct triangle
 static int compareTriangle(const void* elem1, const void* elem2);
 
 OPROTOINST(TYAltimetrie);
+TY_EXTENSION_INST(TYAltimetrie);
 
 const double TYAltimetrie::invalid_altitude = -1E5;
 

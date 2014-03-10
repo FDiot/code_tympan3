@@ -17,6 +17,9 @@
  *
  */
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYSourceLineicWidget.h"
+#endif
 
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -28,7 +31,7 @@
 
 
 OPROTOINST(TYSourceLineic);
-
+TY_EXTENSION_INST(TYSourceLineic);
 
 TYSourceLineic::TYSourceLineic():
     _densiteSrcs(100.0),

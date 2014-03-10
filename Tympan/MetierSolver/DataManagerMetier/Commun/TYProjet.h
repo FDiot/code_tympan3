@@ -29,7 +29,6 @@
 #include "TYPointControl.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYProjetWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYProjetGraphic.h"
 #endif
 
@@ -51,7 +50,7 @@ using namespace std;
 class TYProjet: public TYElement
 {
     OPROTOSUPERDECL(TYProjet, TYElement)
-    TY_EXTENSION_DECL(TYProjet)
+    TY_EXTENSION_DECL_ONLY(TYProjet)
     TY_EXT_GRAPHIC_DECL(TYProjet)
 
     // Methodes

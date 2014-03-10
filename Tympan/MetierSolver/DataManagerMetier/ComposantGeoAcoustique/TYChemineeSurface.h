@@ -24,10 +24,6 @@
 #include "TYAcousticRectangle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourceCheminee.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYChemineeSurfaceWidget.h"
-#endif
-
 
 /**
  * Classe pour la representation d'une cheminee.
@@ -39,7 +35,7 @@
 class TYChemineeSurface: public TYAcousticRectangle
 {
     OPROTOSUPERDECL(TYChemineeSurface, TYAcousticRectangle)
-    TY_EXTENSION_DECL(TYChemineeSurface)
+    TY_EXTENSION_DECL_ONLY(TYChemineeSurface)
 
     // Methodes
 public:

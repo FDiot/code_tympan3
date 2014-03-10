@@ -21,6 +21,10 @@
 #   pragma warning (disable : 4786)
 #endif
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYCalculWidget.h"
+#endif
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -48,6 +52,7 @@ static char THIS_FILE[] = __FILE__;
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 
 OPROTOINST(TYCalcul);
+TY_EXTENSION_INST(TYCalcul);
 
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 

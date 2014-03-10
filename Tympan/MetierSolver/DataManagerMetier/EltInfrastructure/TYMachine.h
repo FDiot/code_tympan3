@@ -28,7 +28,6 @@
 #include "TYMurElement.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYMachineWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYMachineGraphic.h"
 #endif
 
@@ -39,7 +38,7 @@
 class TYMachine: public TYAcousticVolumeNode
 {
     OPROTOSUPERDECL(TYMachine, TYAcousticVolumeNode)
-    TY_EXTENSION_DECL(TYMachine)
+    TY_EXTENSION_DECL_ONLY(TYMachine)
     TY_EXT_GRAPHIC_DECL(TYMachine)
 
     // Methodes

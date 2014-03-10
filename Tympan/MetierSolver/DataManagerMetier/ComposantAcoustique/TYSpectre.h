@@ -23,10 +23,6 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "Tympan/MetierSolver/ToolsMetier/OSpectreComplex.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSpectreWidget.h"
-#endif
-
 ///Collection des frequences
 typedef std::vector<float> TYTabFreq;
 
@@ -37,7 +33,7 @@ class TYSpectre: public TYElement, public OSpectre
 {
 
     OPROTOSUPERDECL(TYSpectre, TYElement)
-    TY_EXTENSION_DECL(TYSpectre)
+    TY_EXTENSION_DECL_ONLY(TYSpectre)
 
 
     // Methodes

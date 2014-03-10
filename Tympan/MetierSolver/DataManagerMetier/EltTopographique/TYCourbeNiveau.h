@@ -25,7 +25,6 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYCourbeNiveauWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYCourbeNiveauGraphic.h"
 #endif
 
@@ -36,7 +35,7 @@
 class TYCourbeNiveau: public TYElement, public TYColorInterface
 {
     OPROTOSUPERDECL(TYCourbeNiveau, TYElement)
-    TY_EXTENSION_DECL(TYCourbeNiveau)
+    TY_EXTENSION_DECL_ONLY(TYCourbeNiveau)
     TY_EXT_GRAPHIC_DECL(TYCourbeNiveau)
 
     // Methodes

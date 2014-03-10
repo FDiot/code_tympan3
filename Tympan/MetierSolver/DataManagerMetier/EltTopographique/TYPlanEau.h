@@ -25,7 +25,6 @@
 #include "TYCourbeNiveau.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPlanEauWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPlanEauGraphic.h"
 #endif
 
@@ -39,7 +38,7 @@
 class TYPlanEau: public TYTerrain
 {
     OPROTOSUPERDECL(TYPlanEau, TYTerrain)
-    TY_EXTENSION_DECL(TYPlanEau)
+    TY_EXTENSION_DECL_ONLY(TYPlanEau)
     TY_EXT_GRAPHIC_DECL(TYPlanEau)
 
     // Methodes

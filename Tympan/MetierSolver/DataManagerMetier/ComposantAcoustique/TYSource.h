@@ -25,10 +25,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYAtmosphere.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSourceWidget.h"
-#endif
-
 
 ///Tableau associatif Regime/Spectre.
 typedef std::map<int, LPTYSpectre> TYMapRegimeSpectre;
@@ -40,7 +36,7 @@ typedef std::map<int, LPTYSpectre> TYMapRegimeSpectre;
 class TYSource: public TYElement
 {
     OPROTOSUPERDECL(TYSource, TYElement)
-    TY_EXTENSION_DECL(TYSource)
+    TY_EXTENSION_DECL_ONLY(TYSource)
 
     // Methodes
 public:

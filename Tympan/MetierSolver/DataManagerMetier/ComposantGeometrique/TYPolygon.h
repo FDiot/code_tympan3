@@ -24,7 +24,6 @@
 #include "TYSurfaceInterface.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPolygonWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPolygonGraphic.h"
 #endif
 
@@ -34,7 +33,7 @@
 class TYPolygon: public TYElement, public TYSurfaceInterface
 {
     OPROTOSUPERDECL(TYPolygon, TYElement)
-    TY_EXTENSION_DECL(TYPolygon)
+    TY_EXTENSION_DECL_ONLY(TYPolygon)
     TY_EXT_GRAPHIC_DECL(TYPolygon)
 
     // Methodes

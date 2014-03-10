@@ -29,7 +29,6 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYBoundaryNoiseMapGraphic.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYBoundaryNoiseMapWidget.h"
 #endif
 
 
@@ -46,7 +45,7 @@ class TYBoundaryNoiseMap: public TYMaillage
 {
     OPROTOSUPERDECL(TYBoundaryNoiseMap, TYMaillage)
     TY_EXT_GRAPHIC_DECL(TYBoundaryNoiseMap)
-    TY_EXTENSION_DECL(TYBoundaryNoiseMap)
+    TY_EXTENSION_DECL_ONLY(TYBoundaryNoiseMap)
 
     // Methods
 public:

@@ -28,7 +28,6 @@ class OSegment3D;
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticRectangleWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticRectangleGraphic.h"
 #endif
 
@@ -43,7 +42,7 @@ class OSegment3D;
 class TYAcousticRectangle: public TYAcousticSurface
 {
     OPROTOSUPERDECL(TYAcousticRectangle, TYAcousticSurface)
-    TY_EXTENSION_DECL(TYAcousticRectangle)
+    TY_EXTENSION_DECL_ONLY(TYAcousticRectangle)
     TY_EXT_GRAPHIC_DECL(TYAcousticRectangle)
 
     // Methodes

@@ -27,7 +27,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYContrainte.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRouteDeblaiWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRouteGraphic.h"
 #endif
 
@@ -38,7 +37,7 @@
 class TYRouteDeblai: public TYRoute, public TYContrainte
 {
     OPROTOSUPERDECL(TYRouteDeblai, TYRoute)
-    TY_EXTENSION_DECL(TYRouteDeblai)
+    TY_EXTENSION_DECL_ONLY(TYRouteDeblai)
     TY_EXT_GRAPHIC_DECL(TYRoute)
 
     // Methodes

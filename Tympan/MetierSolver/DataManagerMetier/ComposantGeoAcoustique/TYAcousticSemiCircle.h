@@ -28,7 +28,6 @@ class OSegment3D;
 #include "TYAcousticSurface.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSemiCircleWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCircleGraphic.h"
 #endif
 
@@ -44,7 +43,7 @@ class OSegment3D;
 class TYAcousticSemiCircle: public TYAcousticSurface
 {
     OPROTOSUPERDECL(TYAcousticSemiCircle, TYAcousticSurface)
-    TY_EXTENSION_DECL(TYAcousticSemiCircle)
+    TY_EXTENSION_DECL_ONLY(TYAcousticSemiCircle)
     TY_EXT_GRAPHIC_DECL(TYAcousticSemiCircle)
 
     // Methodes

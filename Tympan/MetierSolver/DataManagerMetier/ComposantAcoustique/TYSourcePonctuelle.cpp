@@ -17,6 +17,10 @@
  *
  */
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYSourcePonctuelleWidget.h"
+#endif
+
 
 #include <typeinfo>
 
@@ -38,6 +42,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 OPROTOINST(TYSourcePonctuelle);
+TY_EXTENSION_INST(TYSourcePonctuelle);
 
 /*static*/ const double TYSourcePonctuelle::_tabRA[] = {  1.0,
                                                           2.0,

@@ -13,6 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYTopographieWidget.h"
+#endif
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -25,6 +29,7 @@
 
 
 OPROTOINST(TYTopographie);
+TY_EXTENSION_INST(TYTopographie);
 
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 

@@ -17,7 +17,9 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYMachineWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -27,7 +29,7 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 OPROTOINST(TYMachine);
-
+TY_EXTENSION_INST(TYMachine);
 
 TYMachine::TYMachine()
 {

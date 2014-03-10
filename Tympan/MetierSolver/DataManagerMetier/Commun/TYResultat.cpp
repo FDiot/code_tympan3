@@ -17,8 +17,9 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYResultatWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -40,7 +41,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 OPROTOINST(TYResultat);
-
+TY_EXTENSION_INST(TYResultat);
 
 TYResultat::TYResultat() : _bPartial(false)
 {

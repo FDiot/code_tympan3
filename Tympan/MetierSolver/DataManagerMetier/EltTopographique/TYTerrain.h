@@ -26,7 +26,6 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYTerrainWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYTerrainGraphic.h"
 #endif
 
@@ -37,7 +36,7 @@
 class TYTerrain: public TYElement, public TYColorInterface
 {
     OPROTOSUPERDECL(TYTerrain, TYElement)
-    TY_EXTENSION_DECL(TYTerrain)
+    TY_EXTENSION_DECL_ONLY(TYTerrain)
     TY_EXT_GRAPHIC_DECL(TYTerrain)
 
     // Methodes
