@@ -53,8 +53,11 @@ void ValidRay::appendDirectionToEvent(QSharedPointer<Event> e, TargetManager& ta
 
 bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 {
-    if (inter->p->getMaterial()->isNatural) { return false; }
-    vec3 impact = r->position + r->direction * inter->t;
+	if (r->getReflex() >= static_cast<unsigned int>( globalMaxReflexion )) { return false; }
+
+	if (inter->p->getMaterial()->isNatural) { return false; }
+    
+	vec3 impact = r->position + r->direction * inter->t;
     vec3 normale = inter->p->getNormal(impact);
     if (normale.dot(r->direction) > 0.) { return false; }
 
@@ -81,13 +84,42 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 
 bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 {
-	if (r->getDiff() >= globalMaxDiffraction) { return false; }
-
-	vec3 impact = r->position + r->direction * inter->t;
+	if (r->getDiff() >= static_cast<unsigned int>( globalMaxDiffraction )) { return false; }
 
     Cylindre* cylindre = (Cylindre*)(inter->p);
 
+
+#define _TEST_IMPACT
+#ifdef _TEST_IMPACT
+
+	vec3 impact = r->position + r->direction * inter->t;
+
+	// Define first segment
+	vec3 p1 = r->position;
+	vec3 p2 = r->position + r->direction * inter->t * 2.;
+	// Define second segment
+	vec3 p3 = cylindre->getVertices()->at(cylindre->getLocalVertices()->at(0));
+	vec3 p4 = cylindre->getVertices()->at(cylindre->getLocalVertices()->at(1));
+
+	// shortest segment definition
+	vec3 *pa = new vec3(), *pb = new vec3();
+	decimal *mua = new decimal(), *mub = new decimal();
+	int res = LineLineIntersect(p1, p2, p3, p4, pa, pb, mua, mub);
+	if (!res) { return false; }
+
+	vec3 realImpact = *pb;
+
+	delete pa, pb, mua, mub; // Cleaning
+	
+	//vec3 realImpact = impact.closestPointOnLine(cylindre->getVertices()->at(cylindre->getLocalVertices()->at(0)), cylindre->getVertices()->at(cylindre->getLocalVertices()->at(1)));
+
+#else
+
+	vec3 impact = r->position + r->direction * inter->t.;
+
     vec3 realImpact = impact.closestPointOnSegment(cylindre->getVertices()->at(cylindre->getLocalVertices()->at(0)), cylindre->getVertices()->at(cylindre->getLocalVertices()->at(1)));
+
+#endif
 
     vec3 from = realImpact - r->position;
     from.normalize();
