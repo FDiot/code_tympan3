@@ -75,7 +75,7 @@ TYFaceModelerPickEditor::~TYFaceModelerPickEditor()
 {
 }
 
-void TYFaceModelerPickEditor::showPopupMenu(LPTYElementCollection pElts)
+void TYFaceModelerPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
 {
     if (!pElts)
     {

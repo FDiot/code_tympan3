@@ -232,7 +232,7 @@ void TYElementPicker::updateParents(TYElement* pElt)
         return;
     }
 
-    LPTYElementCollection pElts = new TYElementCollection();
+    std::shared_ptr<LPTYElementArray> pElts (new LPTYElementArray());
     TYElement* pTmpElt = pElt;
 
     while (pTmpElt != NULL)
@@ -247,7 +247,7 @@ void TYElementPicker::updateParents(TYElement* pElt)
             if (checkType(pPtCalcul))
             {
                 // Ajout
-                pElts->add(pPtCalcul);
+                pElts->push_back(pPtCalcul);
             }
         }
 
@@ -255,7 +255,7 @@ void TYElementPicker::updateParents(TYElement* pElt)
         checkType(pTmpElt); // DT-- le 31/08/04
 
         // Ajoute a la collection
-        pElts->add(pTmpElt);
+        pElts->push_back(pTmpElt);
 
         // Recupere le parent
         pTmpElt = pTmpElt->getParent();
