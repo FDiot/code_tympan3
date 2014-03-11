@@ -23,10 +23,6 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYCoursEauGraphic.h"
-#endif
-
 
 /**
  * Classe de definition du chemin d'un cours d'eau et de ses proprietes acoustiques.
@@ -35,7 +31,7 @@ class TYCoursEau: public TYAcousticLine
 {
     OPROTOSUPERDECL(TYCoursEau, TYAcousticLine)
     TY_EXTENSION_DECL_ONLY(TYCoursEau)
-    TY_EXT_GRAPHIC_DECL(TYCoursEau)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYCoursEau)
 
     // Methodes
 public:

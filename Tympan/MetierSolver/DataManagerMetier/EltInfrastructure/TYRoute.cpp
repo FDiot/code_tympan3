@@ -32,6 +32,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYRouteWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYRouteGraphic.h"
 #endif
 
 #include <boost/math/special_functions/fpclassify.hpp>
@@ -39,6 +40,7 @@
 
 OPROTOINST(TYRoute);
 TY_EXTENSION_INST(TYRoute);
+TY_EXT_GRAPHIC_INST(TYRoute);
 
 
 bool TYRoute::is_valid_declivity(double decli)

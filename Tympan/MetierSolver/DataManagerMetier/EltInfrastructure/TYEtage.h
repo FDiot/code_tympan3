@@ -32,11 +32,6 @@ class OSegment3D;
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYUserSourcePonctuelle.h"
 #include "TYDalle.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYEtageGraphic.h"
-#endif
-
-
 /**
  * Centralise les elements d'un etage.
  */
@@ -44,7 +39,7 @@ class TYEtage: public TYAcousticVolume
 {
     OPROTOSUPERDECL(TYEtage, TYAcousticVolume)
     TY_EXTENSION_DECL_ONLY(TYEtage)
-    TY_EXT_GRAPHIC_DECL(TYEtage)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYEtage)
 
     // Methodes
 public:

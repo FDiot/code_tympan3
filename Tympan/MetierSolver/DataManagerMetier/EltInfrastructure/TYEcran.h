@@ -29,11 +29,6 @@ class OSegment3D;
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYFaceSet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticFaceSet.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYEcranGraphic.h"
-#endif
-
-
 /**
  * Classe representant un ecran mince
  */
@@ -41,7 +36,7 @@ class TYEcran: public TYAcousticFaceSet
 {
     OPROTOSUPERDECL(TYEcran, TYAcousticFaceSet)
     TY_EXTENSION_DECL_ONLY(TYEcran)
-    TY_EXT_GRAPHIC_DECL(TYEcran)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYEcran)
 
     // Methodes
 public:

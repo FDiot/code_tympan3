@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYMachineWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYMachineGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -30,6 +31,7 @@
 
 OPROTOINST(TYMachine);
 TY_EXTENSION_INST(TYMachine);
+TY_EXT_GRAPHIC_INST(TYMachine);
 
 TYMachine::TYMachine()
 {

@@ -30,7 +30,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEcran.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickHandler.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYWidget.h"
-
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYPanelGraphic.h"
 #include "Tympan/Tools/OLocalizator.h"
 
 

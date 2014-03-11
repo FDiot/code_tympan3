@@ -23,10 +23,6 @@
 #include "TYSource.h"
 #include "TYSourcePonctuelle.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceLineicGraphic.h"
-#endif
-
 
 /**
  * Classe de definition d'une source lineique.
@@ -36,7 +32,7 @@ class TYSourceLineic: public TYSource
 {
     OPROTOSUPERDECL(TYSourceLineic, TYSource)
     TY_EXTENSION_DECL_ONLY(TYSourceLineic)
-    TY_EXT_GRAPHIC_DECL(TYSourceLineic)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYSourceLineic)
 
     // Methodes
 public:

@@ -24,10 +24,6 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
 #include "TYPoint.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSegmentGraphic.h"
-#endif
-
 // TYRectangle.h est inclu a la fin de la declaration de TYSegment.
 class TYRectangle;
 
@@ -38,7 +34,7 @@ class TYSegment: public TYElement, public TYColorInterface
 {
     OPROTOSUPERDECL(TYSegment, TYElement)
     TY_EXTENSION_DECL_ONLY(TYSegment)
-    TY_EXT_GRAPHIC_DECL(TYSegment)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYSegment)
 
     // Methodes
 public:

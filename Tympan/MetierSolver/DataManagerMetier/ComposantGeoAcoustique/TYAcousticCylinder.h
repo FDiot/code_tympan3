@@ -24,10 +24,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourceSurfacic.h"
 #include "TYAcousticVolume.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticCylinderGraphic.h"
-#endif
-
 
 /**
  * Permet de creer des volumes acoustiques cylindriques.
@@ -36,7 +32,7 @@ class TYAcousticCylinder: public TYAcousticVolume
 {
     OPROTOSUPERDECL(TYAcousticCylinder, TYAcousticVolume)
     TY_EXTENSION_DECL_ONLY(TYAcousticCylinder)
-    TY_EXT_GRAPHIC_DECL(TYAcousticCylinder)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticCylinder)
 
     // Methodes
 public:

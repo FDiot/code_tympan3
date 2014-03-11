@@ -22,10 +22,6 @@
 
 #include "TYAcousticSurfaceNode.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticRectangleNodeGraphic.h"
-#endif
-
 
 typedef std::vector<LPTYRectangle> TYTabLPRectangle;
 
@@ -36,7 +32,7 @@ class TYAcousticRectangleNode: public TYAcousticSurfaceNode
 {
     OPROTOSUPERDECL(TYAcousticRectangleNode, TYAcousticSurfaceNode)
     TY_EXTENSION_DECL_ONLY(TYAcousticRectangleNode)
-    TY_EXT_GRAPHIC_DECL(TYAcousticRectangleNode)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticRectangleNode)
 
     // Methodes
 public:

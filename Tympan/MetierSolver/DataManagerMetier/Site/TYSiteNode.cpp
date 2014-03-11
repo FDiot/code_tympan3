@@ -18,6 +18,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSiteNodeWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYSiteNodeGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -41,10 +42,11 @@ static char THIS_FILE[] = __FILE__;
 #endif
 #endif
 
+#define TR(id) OLocalizator::getString("OMessageManager", (id))
+
 OPROTOINST(TYSiteNode);
 TY_EXTENSION_INST(TYSiteNode);
-
-#define TR(id) OLocalizator::getString("OMessageManager", (id))
+TY_EXT_GRAPHIC_INST(TYSiteNode);
 
 /*static*/ const std::string& TYSiteNode::getTopoFilePath()
 {

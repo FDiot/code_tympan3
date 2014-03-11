@@ -27,9 +27,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticPolygon.h"
 #include "TYParoi.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYDalleGraphic.h"
-#endif
 
 /**
  * Classe de definition d'une dalle.
@@ -39,7 +36,7 @@ class TYDalle: public TYAcousticPolygon
 {
     OPROTOSUPERDECL(TYDalle, TYAcousticPolygon)
     TY_EXTENSION_DECL_ONLY(TYDalle)
-    TY_EXT_GRAPHIC_DECL(TYDalle)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYDalle)
 
     // Methodes
 public:

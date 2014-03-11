@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYPointControlWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYPointControlGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -30,6 +31,7 @@
 
 OPROTOINST(TYPointControl);
 TY_EXTENSION_INST(TYPointControl);
+TY_EXT_GRAPHIC_INST(TYPointControl);
 
 TYPointControl::TYPointControl() :  _object(0),
     _statusSIG(false)

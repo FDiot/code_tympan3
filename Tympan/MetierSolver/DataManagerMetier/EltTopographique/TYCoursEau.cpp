@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYCoursEauWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYCoursEauGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -30,6 +31,7 @@
 
 OPROTOINST(TYCoursEau);
 TY_EXTENSION_INST(TYCoursEau);
+TY_EXT_GRAPHIC_INST(TYCoursEau);
 
 TYCoursEau::TYCoursEau()
 {

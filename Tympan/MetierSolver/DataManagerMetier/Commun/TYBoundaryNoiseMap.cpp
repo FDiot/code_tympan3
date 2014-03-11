@@ -23,8 +23,6 @@
 #endif
 
 
-
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -40,6 +38,7 @@
 
 OPROTOINST(TYBoundaryNoiseMap);
 TY_EXTENSION_INST(TYBoundaryNoiseMap);
+TY_EXT_GRAPHIC_INST(TYBoundaryNoiseMap);
 
 TYBoundaryNoiseMap::TYBoundaryNoiseMap()
 {

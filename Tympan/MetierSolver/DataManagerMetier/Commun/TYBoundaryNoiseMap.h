@@ -27,10 +27,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
 #include "TYMaillage.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYBoundaryNoiseMapGraphic.h"
-#endif
-
 
 /**
  * \file TYBoundaryNoiseMap.h
@@ -44,7 +40,7 @@
 class TYBoundaryNoiseMap: public TYMaillage
 {
     OPROTOSUPERDECL(TYBoundaryNoiseMap, TYMaillage)
-    TY_EXT_GRAPHIC_DECL(TYBoundaryNoiseMap)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYBoundaryNoiseMap)
     TY_EXTENSION_DECL_ONLY(TYBoundaryNoiseMap)
 
     // Methods
