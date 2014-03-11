@@ -126,14 +126,24 @@ typedef  std::map<TYUUID, TYElement*> TYElementContainer;
         if (!_pGraphicObject)   _pGraphicObject = new classname##Graphic(this); \
         return _pGraphicObject; \
     }
-
 #endif
+
+#define TY_EXT_GRAPHIC_DECL_ONLY(classname) \
+    public: \
+    virtual LPTYElementGraphic getGraphicObject();
+
+#define TY_EXT_GRAPHIC_INST(classname) \
+    LPTYElementGraphic classname::getGraphicObject() { \
+        if (!_pGraphicObject)   _pGraphicObject = new classname##Graphic(this); \
+        return _pGraphicObject; \
+    }
 
 #else
 
 #define TY_EXT_GRAPHIC_DECL(classname)
+#define TY_EXT_GRAPHIC_DECL_ONLY(classname)
+#define TY_EXT_GRAPHIC_INST(classname)
 typedef void*   LPTYElementGraphic;
-
 #endif // TY_USE_IHM
 
 /**
