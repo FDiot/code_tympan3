@@ -49,7 +49,7 @@ class QRadioButton;
  * \class TYAcousticInterfaceWidget
  * \brief classe de l'objet IHM pour une interface acoustique
  */
-class TYAcousticInterfaceWidget : public TYWidget
+class TYAcousticInterfaceWidget : public QWidget
 {
     Q_OBJECT
 
