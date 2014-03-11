@@ -43,7 +43,7 @@ class QGroupBox;
  * \class TYSurfaceInterfaceWidget
  * \brief classe de l'objet IHM pour la gestion des objets de type SurfaceInterface
  */
-class TYSurfaceInterfaceWidget : public TYWidget
+class TYSurfaceInterfaceWidget : public QWidget
 {
     Q_OBJECT
 
