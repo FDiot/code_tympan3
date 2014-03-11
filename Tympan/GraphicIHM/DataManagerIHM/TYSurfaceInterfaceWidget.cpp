@@ -40,7 +40,7 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSurfaceInterfaceWidget.h"
 
 TYSurfaceInterfaceWidget::TYSurfaceInterfaceWidget(TYSurfaceInterface* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(dynamic_cast<TYElement*>(pElement), _pParent)
+    QWidget(_pParent), _pElement(pElement)
 {
 
     resize(300, 540);
@@ -81,5 +81,5 @@ void TYSurfaceInterfaceWidget::updateContent()
 void TYSurfaceInterfaceWidget::apply()
 {
     TYElement::setIsSavedOk(true);
-    emit modified();
+    //emit modified();
 }

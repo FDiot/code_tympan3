@@ -40,10 +40,9 @@
 #define TR(id) OLocalizator::getString("TYColorInterfaceWidget", (id))
 
 TYColorInterfaceWidget::TYColorInterfaceWidget(TYColorInterface* pElement, QWidget* _pParent /*=0*/):
-    TYWidget(dynamic_cast<TYElement*>(pElement), _pParent)
+    QWidget(_pParent), _pElement(pElement)
 {
-
-    resize(300, 40);
+	resize(300, 40);
     setWindowTitle(TR("id_caption"));
 
     _labelColor = new QLabel("labelColor");
@@ -88,7 +87,7 @@ void TYColorInterfaceWidget::apply()
     _pushButtonColor->getColor().getRgb(&color[0], &color[1], &color[2]);
     getElement()->setColor(OColor(color[0] / 255.0f, color[1] / 255.0f, color[2] / 255.0f));
 
-    emit modified();
+//    emit modified();
 }
 
 void TYColorInterfaceWidget::reject()
