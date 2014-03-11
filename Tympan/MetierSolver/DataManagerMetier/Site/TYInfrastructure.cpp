@@ -20,6 +20,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYInfrastructureWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYInfrastructureGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -33,6 +34,7 @@
 
 OPROTOINST(TYInfrastructure);
 TY_EXTENSION_INST(TYInfrastructure);
+TY_EXT_GRAPHIC_INST(TYInfrastructure);
 
 TYInfrastructure::TYInfrastructure()
 {

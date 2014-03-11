@@ -23,10 +23,6 @@
 #include "TYRepere.h"
 #include "TYVolumeInterface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYFaceSetGraphic.h"
-#endif
-
 /**
  * Classe de definition d'un volume decrit sous forme d'un ensemble de facettes.
  */
@@ -34,7 +30,7 @@ class TYFaceSet: public TYElement, public TYVolumeInterface
 {
     OPROTOSUPERDECL(TYFaceSet, TYElement)
     TY_EXTENSION_DECL_ONLY(TYFaceSet)
-    TY_EXT_GRAPHIC_DECL(TYFaceSet)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYFaceSet)
 
     // Methodes
 public:

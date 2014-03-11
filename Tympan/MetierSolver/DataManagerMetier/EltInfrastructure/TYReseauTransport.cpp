@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYReseauTransportWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYReseauTransportGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -31,6 +32,7 @@
 
 OPROTOINST(TYReseauTransport);
 TY_EXTENSION_INST(TYReseauTransport);
+TY_EXT_GRAPHIC_INST(TYReseauTransport);
 
 TYReseauTransport::TYReseauTransport():
     _nbBrins(2),

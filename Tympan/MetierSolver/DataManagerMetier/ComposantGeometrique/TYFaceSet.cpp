@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYFaceSetWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYFaceSetGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -34,6 +35,7 @@
 
 OPROTOINST(TYFaceSet);
 TY_EXTENSION_INST(TYFaceSet);
+TY_EXT_GRAPHIC_INST(TYFaceSet);
 
 TYFaceSet::TYFaceSet()
 {

@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticRectangleWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticRectangleGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -35,6 +36,7 @@
 
 OPROTOINST(TYAcousticRectangle);
 TY_EXTENSION_INST(TYAcousticRectangle);
+TY_EXT_GRAPHIC_INST(TYAcousticRectangle);
 
 TYAcousticRectangle::TYAcousticRectangle()
 {

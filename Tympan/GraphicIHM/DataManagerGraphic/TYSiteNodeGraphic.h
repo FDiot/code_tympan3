@@ -40,6 +40,8 @@
 //#include <qsignal.h>
 #endif // TY_USE_IHM
 
+#include "TYElementGraphic.h"
+
 class TYSiteNode;
 
 

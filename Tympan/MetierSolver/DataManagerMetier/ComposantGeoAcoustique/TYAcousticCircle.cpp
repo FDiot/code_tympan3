@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticCircleWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticCircleGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -35,6 +36,7 @@
 
 OPROTOINST(TYAcousticCircle);
 TY_EXTENSION_INST(TYAcousticCircle);
+TY_EXT_GRAPHIC_INST(TYAcousticCircle);
 
 TYAcousticCircle::TYAcousticCircle()
 {

@@ -28,10 +28,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPointControlGraphic.h"
-#endif
-
 
 /**
  * \file TYPointControl.h
@@ -45,7 +41,7 @@ class TYPointControl: public TYPointCalcul, public TYColorInterface
 {
     OPROTOSUPERDECL(TYPointControl, TYPointCalcul)
     TY_EXTENSION_DECL_ONLY(TYPointControl)
-    TY_EXT_GRAPHIC_DECL(TYPointControl)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYPointControl)
 
     // Methodes
 public:

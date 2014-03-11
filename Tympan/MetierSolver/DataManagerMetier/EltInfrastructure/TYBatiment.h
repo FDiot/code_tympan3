@@ -27,10 +27,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolumeNode.h"
 #include "TYEtage.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYBatimentGraphic.h"
-#endif
-
 /**
  * Classe batiment.
  */
@@ -38,7 +34,7 @@ class TYBatiment: public TYAcousticVolumeNode
 {
     OPROTOSUPERDECL(TYBatiment, TYAcousticVolumeNode)
     TY_EXTENSION_DECL_ONLY(TYBatiment)
-    TY_EXT_GRAPHIC_DECL(TYBatiment)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYBatiment)
 
     // Methodes
 public:

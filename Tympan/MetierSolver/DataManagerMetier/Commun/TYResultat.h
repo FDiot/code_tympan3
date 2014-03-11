@@ -27,10 +27,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "TYPointCalcul.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYResultatGraphic.h"
-#endif
-
 
 class TYTrajet;
 
@@ -63,7 +59,7 @@ class TYResultat: public TYElement
 {
     OPROTOSUPERDECL(TYResultat, TYElement)
     TY_EXTENSION_DECL_ONLY(TYResultat)
-    TY_EXT_GRAPHIC_DECL(TYResultat)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYResultat)
 
     // Methodes
 public:

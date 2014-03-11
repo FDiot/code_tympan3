@@ -25,10 +25,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYTerrainGraphic.h"
-#endif
-
 
 /**
  * Permet d'attribuer des proprietes acoustiques a une zone d'altimetrie.
@@ -37,7 +33,7 @@ class TYTerrain: public TYElement, public TYColorInterface
 {
     OPROTOSUPERDECL(TYTerrain, TYElement)
     TY_EXTENSION_DECL_ONLY(TYTerrain)
-    TY_EXT_GRAPHIC_DECL(TYTerrain)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYTerrain)
 
     // Methodes
 public:

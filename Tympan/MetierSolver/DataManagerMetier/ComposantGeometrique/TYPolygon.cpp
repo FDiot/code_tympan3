@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYPolygonWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYPolygonGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -44,6 +45,7 @@
 
 OPROTOINST(TYPolygon);
 TY_EXTENSION_INST(TYPolygon);
+TY_EXT_GRAPHIC_INST(TYPolygon);
 
 TYPolygon::TYPolygon()
 {

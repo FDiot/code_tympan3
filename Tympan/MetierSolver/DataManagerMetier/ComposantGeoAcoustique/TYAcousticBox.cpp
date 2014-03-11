@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticBoxWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticBoxGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -30,6 +31,7 @@
 
 OPROTOINST(TYAcousticBox);
 TY_EXTENSION_INST(TYAcousticBox);
+TY_EXT_GRAPHIC_INST(TYAcousticBox);
 
 TYAcousticBox::TYAcousticBox()
 {

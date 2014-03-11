@@ -15,6 +15,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAltimetrieWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYAltimetrieGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -65,6 +66,7 @@ static int compareTriangle(const void* elem1, const void* elem2);
 
 OPROTOINST(TYAltimetrie);
 TY_EXTENSION_INST(TYAltimetrie);
+TY_EXT_GRAPHIC_INST(TYAltimetrie);
 
 const double TYAltimetrie::invalid_altitude = -1E5;
 

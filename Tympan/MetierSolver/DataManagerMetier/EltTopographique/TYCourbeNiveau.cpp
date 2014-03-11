@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYCourbeNiveauWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYCourbeNiveauGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -30,6 +31,7 @@
 
 OPROTOINST(TYCourbeNiveau);
 TY_EXTENSION_INST(TYCourbeNiveau);
+TY_EXT_GRAPHIC_INST(TYCourbeNiveau);
 
 /*static*/ double TYCourbeNiveau::_defaultDistMax = setDefaultDistMax();
 

@@ -27,10 +27,6 @@ class OSegment3D;
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
 #include "TYAcousticSurface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCircleGraphic.h"
-#endif
-
 
 /**
  * Permet de creer des surfaces acoustiques semi-circulaires.
@@ -44,7 +40,7 @@ class TYAcousticSemiCircle: public TYAcousticSurface
 {
     OPROTOSUPERDECL(TYAcousticSemiCircle, TYAcousticSurface)
     TY_EXTENSION_DECL_ONLY(TYAcousticSemiCircle)
-    TY_EXT_GRAPHIC_DECL(TYAcousticSemiCircle)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticSemiCircle)
 
     // Methodes
 public:

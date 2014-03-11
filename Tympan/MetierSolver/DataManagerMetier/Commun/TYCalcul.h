@@ -37,10 +37,6 @@
 class TYProjet;
 
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYCalculGraphic.h"
-#endif
-
 /**
  * \file TYCalcul.h
  * \class TYCalcul
@@ -56,7 +52,7 @@ class TYCalcul: public TYElement
 {
     OPROTOSUPERDECL(TYCalcul, TYElement)
     TY_EXTENSION_DECL_ONLY(TYCalcul)
-    TY_EXT_GRAPHIC_DECL(TYCalcul)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYCalcul)
 
 public:
     /**

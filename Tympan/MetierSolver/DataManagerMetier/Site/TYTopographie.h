@@ -26,10 +26,6 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/AltimetryBuilder.hpp"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYTopographieGraphic.h"
-#endif
-
 ///Structure contenant un segment et un terrain.
 typedef struct
 {
@@ -58,7 +54,7 @@ class TYTopographie: public TYElement
 {
     OPROTOSUPERDECL(TYTopographie, TYElement)
     TY_EXTENSION_DECL_ONLY(TYTopographie)
-    TY_EXT_GRAPHIC_DECL(TYTopographie)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYTopographie)
 
     // Methodes
 

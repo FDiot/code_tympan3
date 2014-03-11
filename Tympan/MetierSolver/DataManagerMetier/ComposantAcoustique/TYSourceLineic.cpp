@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSourceLineicWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceLineicGraphic.h"
 #endif
 
 
@@ -32,6 +33,7 @@
 
 OPROTOINST(TYSourceLineic);
 TY_EXTENSION_INST(TYSourceLineic);
+TY_EXT_GRAPHIC_INST(TYSourceLineic);
 
 TYSourceLineic::TYSourceLineic():
     _densiteSrcs(100.0),

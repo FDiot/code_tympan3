@@ -33,6 +33,7 @@
 
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolumeNode.h"
+#include "TYAcousticVolumeNodeGraphic.h"
 class TYBatiment;
 
 

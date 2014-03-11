@@ -23,6 +23,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYCalculWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYCalculGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -53,6 +54,7 @@ static char THIS_FILE[] = __FILE__;
 
 OPROTOINST(TYCalcul);
 TY_EXTENSION_INST(TYCalcul);
+TY_EXT_GRAPHIC_INST(TYCalcul);
 
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 

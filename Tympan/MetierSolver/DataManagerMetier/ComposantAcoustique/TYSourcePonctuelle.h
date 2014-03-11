@@ -28,9 +28,6 @@
 #include "TYDirectivite.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourcePonctuelleGraphic.h"
-#endif
 
 ///Tableau associatif Regime/Directivite.
 typedef std::map<int, TYDirectivite> TYMapRegimeDirectivite;
@@ -55,7 +52,7 @@ class TYSourcePonctuelle: public TYSource, public TYColorInterface
 {
     OPROTOSUPERDECL(TYSourcePonctuelle, TYSource)
     TY_EXTENSION_DECL_ONLY(TYSourcePonctuelle)
-    TY_EXT_GRAPHIC_DECL(TYSourcePonctuelle)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYSourcePonctuelle)
 
     // Methodes
 public:

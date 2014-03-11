@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYMurElementWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYMurElementGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -32,6 +33,7 @@
 
 OPROTOINST(TYMurElement);
 TY_EXTENSION_INST(TYMurElement);
+TY_EXT_GRAPHIC_INST(TYMurElement);
 
 TYMurElement::TYMurElement()
 {

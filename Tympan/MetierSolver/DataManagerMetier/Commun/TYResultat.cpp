@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYResultatWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYResultatGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -42,6 +43,7 @@ static char THIS_FILE[] = __FILE__;
 
 OPROTOINST(TYResultat);
 TY_EXTENSION_INST(TYResultat);
+TY_EXT_GRAPHIC_INST(TYResultat);
 
 TYResultat::TYResultat() : _bPartial(false)
 {

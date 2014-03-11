@@ -19,6 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSemiCylinderWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCylinderGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -31,6 +32,7 @@
 
 OPROTOINST(TYAcousticSemiCylinder);
 TY_EXTENSION_INST(TYAcousticSemiCylinder);
+TY_EXT_GRAPHIC_INST(TYAcousticSemiCylinder);
 
 TYAcousticSemiCylinder::TYAcousticSemiCylinder()
 {

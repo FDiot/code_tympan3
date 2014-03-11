@@ -30,10 +30,6 @@ class OSegment3D;
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticRectangleNode.h"
 #include "TYParoi.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYMurGraphic.h"
-#endif
-
 
 /**
  * Comprend les proprietes acoustiques et geometriques d'un mur.
@@ -42,7 +38,7 @@ class TYMur: public TYAcousticRectangleNode
 {
     OPROTOSUPERDECL(TYMur, TYAcousticRectangleNode)
     TY_EXTENSION_DECL_ONLY(TYMur)
-    TY_EXT_GRAPHIC_DECL(TYMur)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYMur)
 
     // Methodes
 public:

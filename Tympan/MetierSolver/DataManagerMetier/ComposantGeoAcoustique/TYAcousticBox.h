@@ -24,11 +24,6 @@
 #include "TYAcousticRectangleNode.h"
 #include "TYAcousticVolume.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticBoxGraphic.h"
-#endif
-
-
 /**
  * Permet des creer des boites acoustiques.
  */
@@ -36,7 +31,7 @@ class TYAcousticBox: public TYAcousticVolume
 {
     OPROTOSUPERDECL(TYAcousticBox, TYAcousticVolume)
     TY_EXTENSION_DECL_ONLY(TYAcousticBox)
-    TY_EXT_GRAPHIC_DECL(TYAcousticBox)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticBox)
 
     // Methodes
 public:
