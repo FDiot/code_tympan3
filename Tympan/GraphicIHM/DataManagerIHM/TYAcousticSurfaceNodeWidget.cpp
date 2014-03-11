@@ -49,9 +49,9 @@ TYAcousticSurfaceNodeWidget::TYAcousticSurfaceNodeWidget(TYAcousticSurfaceNode* 
 {
 
     _elmW = new TYElementWidget(pElement, this);
-    _colorW = new TYColorInterfaceWidget(pElement, this);
-    _interW = new TYAcousticInterfaceWidget(pElement, this);
-    _surfaceW = new TYSurfaceInterfaceWidget(pElement, this);
+    _colorW = new TYColorInterfaceWidget(dynamic_cast<TYColorInterface*>(pElement), this);
+    _interW = new TYAcousticInterfaceWidget(dynamic_cast<TYAcousticInterface*>(pElement), this);
+    _surfaceW = new TYSurfaceInterfaceWidget(dynamic_cast<TYSurfaceInterface*>(pElement), this);
 
     resize(300, 480);
     setWindowTitle(TR("id_caption"));
