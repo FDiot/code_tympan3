@@ -54,7 +54,7 @@ static char THIS_FILE[] = __FILE__;
 #define TR(id) OLocalizator::getString("TYCalculWidget", (id))
 
 
-TYEtatsWidget::TYEtatsWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/): QDialog(_pParent)
+TYEtatsWidget::TYEtatsWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/): QDialog(_pParent), _pElement(pElement)
 {
 
     this->setWindowTitle(TR("id_etat_title"));
