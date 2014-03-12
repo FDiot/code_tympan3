@@ -48,7 +48,6 @@
 #include <qtoolbutton.h>
 #include <qpixmap.h>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 
 #include "Tympan/Tools/OLocalizator.h"

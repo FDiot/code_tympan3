@@ -28,7 +28,6 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLTextElement.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLCamera.h"
@@ -363,7 +362,7 @@ void TYElementGraphic::display(GLenum mode /*= GL_RENDER*/)
     // Emission du signal de notification de mise a jour
     activateSignal();
 
-#endif // TY_USE_IHM    
+#endif // TY_USE_IHM
 }
 
 void TYElementGraphic::setRecursiveVisible(bool visible /*=true*/)

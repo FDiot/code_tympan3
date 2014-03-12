@@ -31,7 +31,7 @@
 #include <qobject.h>
 #include <memory>
 #include "TYAppDefines.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 
 
 class TYMaillage;

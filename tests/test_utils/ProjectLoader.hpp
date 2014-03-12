@@ -13,7 +13,6 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
