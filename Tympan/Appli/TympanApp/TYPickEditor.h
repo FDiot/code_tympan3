@@ -30,7 +30,6 @@
 
 
 #include "TYAbstractSceneEditor.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "TYElementPicker.h"
 #include <QPoint>

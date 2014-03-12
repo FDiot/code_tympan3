@@ -19,7 +19,7 @@ void load_project_from_file(const char* filename, LPTYProjet& project)
     ASSERT_FALSE(project);
     QString xml_filename;
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
 
     xml_filename = QString(filename);
     // Load XML file.

@@ -57,11 +57,6 @@
 ///Boite a outils XML.
 #include "TYXMLTools.h"
 
-/**
- * Definition de la classe TYElementCollection
- */
-
-class TYElementCollection;
 typedef std::vector<LPTYElement> LPTYElementArray;
 
 typedef  std::map<TYUUID, TYElement*> TYElementContainer;

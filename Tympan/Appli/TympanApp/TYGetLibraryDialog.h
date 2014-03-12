@@ -29,7 +29,7 @@
 
 
 #include "TYAppDefines.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 
 #include <qdialog.h>
 
