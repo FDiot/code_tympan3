@@ -104,7 +104,7 @@ OVector3D OVector3D::operator-(const OVector3D& vector) const
 OVector3D OVector3D::operator*(const OVector3D& vector) const
 {
     OVector3D vectorRet;
-
+    // XXX This is meaningless
     vectorRet._x = this->_x * vector._x;
     vectorRet._y = this->_y * vector._y;
     vectorRet._z = this->_z * vector._z;

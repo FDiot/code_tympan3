@@ -102,7 +102,7 @@ private:
     QString _dirPath;
 
     // La collection d'elements dans la liste.
-    TYElementCollection _elements;
+    LPTYElementArray _elements;
 };
 
 #endif // __TY_CONSOLE__

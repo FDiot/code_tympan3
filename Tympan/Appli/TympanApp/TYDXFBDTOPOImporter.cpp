@@ -149,6 +149,7 @@ bool TYDXFBDTopoImporter::import(const char* FullBDDPath, LPTYSiteNode* pSiteIn)
     //
     //////////////////////////////////////////////////////////////////////////
     Display("Calcul de l'altimetrie ...");
+    // XXX See ticket https://extranet.logilab.fr/ticket/1484188
     pSite->updateAltimetrie();
     // pTYTopographie->computeAltimetrie();
 

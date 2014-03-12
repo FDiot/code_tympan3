@@ -33,9 +33,9 @@ Ray* createRay(void)
     ray->source = S;
     ray->recepteur = (void*) R;
 
-    // On ajoute les évènements utiles
+    // On ajoute les vnements utiles
 
-    // EVENEMENT 0  réflexion en position (10, 0, 0)
+    // EVENEMENT 0  rflexion en position (10, 0, 0)
     Event* ev0 = new Event();
     ev0->setType(SPECULARREFLEXION);
     ev0->setPosition(vec3(10, 0, 0));
@@ -62,7 +62,7 @@ Ray* createRay(void)
     QSP = QSharedPointer<Event> (ev2);
     ray->getEvents()->push_back(QSP);
 
-    // EVENEMENT 3  : Réflexion en position (50, 0, 0)
+    // EVENEMENT 3  : Rflexion en position (50, 0, 0)
     Event* ev3 = new Event();
     ev3->setType(SPECULARREFLEXION);
     ev3->setPosition(vec3(50, 0, 3));
@@ -81,17 +81,17 @@ TEST(SignatureRay, dumpenv)
 
     signature sig = ray->getSignature();
 
-    // TEST 1 : Vérification des valeurs SD = 6 (0110)
+    // TEST 1 : Vrification des valeurs SD = 6 (0110)
     unsigned int SR = sig.first, SD = sig.second;
-    ASSERT_TRUE(SD == 6);
+    EXPECT_EQ(6, SD);
 
-    // TEST 2 : Vérification du numéro de la source
+    // TEST 2 : Vrification du numro de la source
     unsigned int S = SR >> 20;
-    ASSERT_TRUE(S == 1536);
+    EXPECT_EQ(1536, S);
 
-    // TEST 3 : Vérification du numéro du récepteur
+    // TEST 3 : Vrification du numro du rcepteur
     unsigned int R = (SR << 12) >> 12;
-    ASSERT_TRUE(R == 5435);
+    EXPECT_EQ(5435, R);
 
     delete ray;
 }

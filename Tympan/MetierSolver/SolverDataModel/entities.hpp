@@ -10,12 +10,8 @@
 #ifndef TYMPAN__ENTITIES_H__INCLUDED
 #define TYMPAN__ENTITIES_H__INCLUDED
 
-#include <string>
-using std::string;
 
 #include "data_model_common.hpp"
-
-#include "yams/yams.hh"
 
 namespace tympan
 {
@@ -23,19 +19,67 @@ namespace tympan
 /// XXX \todo Add the entity 'Atmosphere' with attr: pression, temperature,
 /// hygrometry (\note can find these values in the TYCalcul instead of TYSite).
 
-
-class Node:
-    public Entity<Node>
+// NB For now an AcousticSpectrum simply IS a OSpectreComplex
+class AcousticSpectrum:
+    public virtual BaseEntity,
+    public Spectrum
 {
 public:
-    Node(const Point& p_);
-    virtual ~Node() {};
-
-    Point p;
+    AcousticSpectrum(const Spectrum& spectrum) : Spectrum(spectrum) {};
+    virtual ~AcousticSpectrum() {};
 };
 
+class AcousticMaterialBase:
+    public virtual BaseEntity
+{
+public:
+    AcousticMaterialBase(const string& name_);
+    string name;
+}; // class AcousticMaterialBase
+
+// TODO Or use boost pointers container ?
+typedef shared_ptr<AcousticMaterialBase> material_ptr_t;
+typedef std::deque<material_ptr_t> material_pool_t;
+
+class AcousticBuildingMaterial:
+    public virtual BaseEntity, public AcousticMaterialBase
+{
+public:
+    AcousticBuildingMaterial(const string& name_, const Spectrum& spectrum);
+    virtual ~AcousticBuildingMaterial() {};
+
+    AcousticSpectrum spectrum;
+};
+
+class AcousticGroundMaterial:
+    public virtual BaseEntity, public AcousticMaterialBase
+{
+public:
+    AcousticGroundMaterial(const string& name_, double resistivity_);
+    virtual ~AcousticGroundMaterial() {};
+
+    /// XXX \todo put SI unit.
+    double resistivity;
+};
+
+
+class AcousticTriangle :
+    public virtual BaseEntity
+{
+public:
+    AcousticTriangle(node_idx n1, node_idx n2, node_idx n3);
+
+    node_idx n[3];
+
+    shared_ptr<AcousticMaterialBase> made_of;
+    binary_uuid uuid;
+};
+
+typedef std::deque<AcousticTriangle> triangle_pool_t;
+typedef size_t triangle_idx;
+
 class DiffractionEdge:
-    public Entity<DiffractionEdge>
+    public virtual BaseEntity
 {
 public:
     DiffractionEdge(const Point& p1_, const Point& p2_, double angle_);
@@ -45,65 +89,7 @@ public:
     Point p2;
     /// Angle (radian).
     double angle;
-
-
 };
-
-/* The surface_has_node relation is supposed to have cardinality 3..n
- * and the normal given has attribute is supposed to be one of the
- * two possible unit normal vector for the triangle.
- * Those constraints can't be formaly expressed in the schema.
- */
-class AcousticSurface:
-    public Entity<AcousticSurface>
-{
-public:
-    AcousticSurface() {};
-    // AcousticSurface(const Vector& normal_);
-    virtual ~AcousticSurface() {};
-
-    // XXX Normal should be computed by the solver. It's only relevant to have a
-    // normal on the triangle surface after a Delaunay triangulation (not
-    // before).
-    // Vector normal;
-};
-
-class AcousticBuildingMaterial:
-    public Entity<AcousticBuildingMaterial>
-{
-public:
-    AcousticBuildingMaterial();
-    AcousticBuildingMaterial(const string& name_);
-    virtual ~AcousticBuildingMaterial() {};
-
-    string name;
-};
-
-class AcousticGroundMaterial:
-    public virtual BaseEntity
-{
-public:
-    AcousticGroundMaterial(const string& name_, double resistivity_);
-    virtual ~AcousticGroundMaterial() {};
-
-    string name;
-    /// XXX \todo put SI unit.
-    double resistivity;
-};
-
-// XXX Add some method to easy use & get freq. and spectrum attributes. See
-// class \c OSpectre.
-class AcousticSpectrum:
-    public virtual BaseEntity
-{
-public:
-    AcousticSpectrum() {};
-    virtual ~AcousticSpectrum() {};
-
-    // XXX How do you define a \c AcousticSpectrum ?
-    // XXX Add some attr?
-};
-
 
 class AcousticSource:
     public virtual BaseEntity
@@ -172,23 +158,12 @@ class SiteElement:
     public virtual BaseEntity
 {
 public:
-    SiteElement(const string& id_);
+    SiteElement(const binary_uuid& uid_);
     virtual ~SiteElement() {};
 
-    string id;
-    // XXX Add an attribute which will be a ref. to a \c TYElement??
-    // Other attributes? How do you define a \c SiteElement?
+    binary_uuid uid;
 };
 
-class SiteUserAcousticSource:
-    public Entity<SiteUserAcousticSource>
-{
-public:
-    SiteUserAcousticSource(unsigned int id_);
-    virtual ~SiteUserAcousticSource() {};
-
-    unsigned int id;
-};
 
 class SiteAcousticReceptor:
     public virtual BaseEntity
