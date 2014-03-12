@@ -43,20 +43,14 @@ public:
 			vec3 closestPoint;
 			Ray *ray = (*iter);
 
-#ifdef _DEBUG
-			size_t nbEvents = ray->getEvents()->size();
-#endif
-
 			vec3 receptorPos( static_cast<Recepteur*> (ray->recepteur)->getPosition() );
 			vec3 finalPos( ray->finalPosition );
-#ifdef _FJ_THICKNESS_
-			decimal trueLength = ray->computePertinentLength(receptorPos, finalPos, closestPoint);
-#else
+
 			decimal trueLength = ray->computeTrueLength(receptorPos, finalPos, closestPoint);
-#endif
-			decimal epaisseur = ray->getThickness( trueLength);
+
+			decimal epaisseur = ray->getThickness( trueLength, false );
 			decimal closestDistance = static_cast<Recepteur*> ( ray->getRecepteur() )->getPosition().distance(closestPoint);
-			if ( closestDistance >= ( epaisseur/2. * 1.05 ) ) 
+			if ( closestDistance >= ( epaisseur/2. ) ) 
 			{
 				iter = _tabRay->erase(iter);
 				suppressed ++;
@@ -66,10 +60,10 @@ public:
 			iter++;
 		}
 
-// TEST
 		// At this point similar rays are very close. Anyone is good enough 
 		// to use in acoustic computing. So we decide to delete all duplicates
 		// rays, using a map.
+		int deleted = _tabRay->size();
 		map < vector<unsigned int>, Ray* > mapRays;
 		for (unsigned int i = 0; i<_tabRay->size(); i++)
 		{
@@ -85,7 +79,8 @@ public:
 			_tabRay->push_back( (*it).second );
 		}
 
-// END TEST
+		suppressed += ( deleted - _tabRay->size() );
+
 		return suppressed; 
 	}
 

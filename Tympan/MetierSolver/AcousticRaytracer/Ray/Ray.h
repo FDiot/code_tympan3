@@ -17,13 +17,14 @@
 #define RAY_H
 
 #include <QSharedPointer>
+
+#include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Source.h"
 //#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Diffraction.h"
 
-#include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 using namespace std;
 
 
@@ -185,50 +186,18 @@ public:
 	signature getSignature(const typeevent& typeEv = SPECULARREFLEXION);
 
 	/*!
-	 * \fn decimal getThick( const decimal& distance, const decimal& solid_angle, const unsigned int& nb_rays, bool diffraction = false) const;
+	 * \fn decimal getThick( const decimal& distance, bool diffraction) const;
 	 * \brief Compute thickness of the ray after covering a distance distance for spherical or diffraction source
 	 */
-	inline decimal getThickness( const decimal& distance)
-	{
-		bool diffraction(false);
-		decimal angle = getSolidAngle( diffraction );
-
-#ifdef _FJ_THICKNESS_
-		if ( diffraction )
-		{
-			//return 2 * M_PI * angle * distance;
-			return distance * angle;
-		}
-#endif // _FJ_THICKNESS_
-
-		return 2. * distance * sqrt( angle / M_PI ); 
-	}
+	decimal getThickness( const decimal& distance, bool diffraction);
 
 	/*!
-	 * \fn decimal getSolidAngle( bool& diffraction)
+	 * \fn decimal getSolidAngle( bool &diffraction)
 	 * \brief	Compute solid angle associated with the ray
 	 *			Set diffraction true if last pertinent event 
 	 *			is a diffraction
 	 */
-	inline decimal getSolidAngle( bool& diffraction)
-	{
-		unsigned int nb_rays = source->getInitialRayCount();
-
-#ifdef _FJ_THICKNESS_
-		Base *last = getLastPertinentEvent();
-		Event *e = dynamic_cast<Event*>(last);
-
-		if ( e && ( e->getType() == DIFFRACTION ) )
-		{
-			diffraction = true;
-//			return sin( dynamic_cast<Diffraction*>(e)->getAngle() ) * dynamic_cast<Diffraction*>(e)->getAngleOuverture() / e->getInitialNbResponseLeft();
-			return dynamic_cast<Diffraction*>(e)->getAngle() * M_2PI / e->getInitialNbResponseLeft();
-		}
-#endif //_FJ_THICKNESS_
-		
-		diffraction = false;
-		return M_4PI / static_cast<decimal>(nb_rays);
-	}
+	decimal getSolidAngle( bool &diffraction );
 
 	/*!
 	 * \fn bitSet getSRBitSet(const unsigned& int source_id, const unsigned int & receptor_id);
