@@ -160,14 +160,14 @@ int TYAcousticVolumeNode::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYAcousticVolumeNode::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYAcousticVolumeNode::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYElement::getChilds(childs, recursif);
 
     for (int i = 0; i < getNbChild(); i++)
     {
-        childs.add(_tabAcousticVol[i]);
-        childs.add(_tabAcousticVol[i]->getElement());
+        childs.push_back(_tabAcousticVol[i]);
+        childs.push_back(_tabAcousticVol[i]->getElement());
     }
 
     if (recursif)
@@ -266,7 +266,7 @@ int TYAcousticVolumeNode::addRegime()
 void TYAcousticVolumeNode::correctNbRegimes()
 {
     size_t nbRegimes = _tabRegimes.size();
-    TYElementCollection childs;
+    LPTYElementArray childs;
     getChilds(childs, false);
     LPTYAcousticVolume pVolume = NULL;
     LPTYGeometryNode pNode = NULL;
@@ -866,7 +866,7 @@ void TYAcousticVolumeNode::setIsRayonnant(bool rayonnant, bool recursif /*= true
 
 LPTYSpectre TYAcousticVolumeNode::getRealPowerSpectrum()
 {
-    TYElementCollection childs;
+    LPTYElementArray childs;
     getChilds(childs, true);
     TYSpectre sp;
     sp.setType(SPECTRE_TYPE_LW);

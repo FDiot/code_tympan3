@@ -48,6 +48,10 @@ class TYPolyLineGraphic : public TYElementGraphic
 
     // Methodes
 public:
+    /// Default line width in screen pixels
+    /// (cf OpenGL doc for more details of meaning when coupled with anti-aliasing)
+    static const unsigned int default_width_px = 2;
+
     TYPolyLineGraphic(bool closed = false);
     virtual ~TYPolyLineGraphic();
 
@@ -63,6 +67,8 @@ public:
 protected:
     TYTabPoint _tabPts;
     bool _closed;
+
+    GLfloat width; ///< Line width - cf OpenGL doc for exact meaning
 };
 
 

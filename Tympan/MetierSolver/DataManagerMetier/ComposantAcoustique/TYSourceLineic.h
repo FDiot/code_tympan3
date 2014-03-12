@@ -32,6 +32,7 @@
 /**
  * Classe de definition d'une source lineique.
  */
+
 class TYSourceLineic: public TYSource
 {
     OPROTOSUPERDECL(TYSourceLineic, TYSource)

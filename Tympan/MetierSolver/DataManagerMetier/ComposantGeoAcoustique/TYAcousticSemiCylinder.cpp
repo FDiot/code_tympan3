@@ -236,12 +236,12 @@ int TYAcousticSemiCylinder::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYAcousticSemiCylinder::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYAcousticSemiCylinder::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
-    childs.add(_pSemiCircTop);
-    childs.add(_pSemiCircBottom);
-    childs.add(_pAccRect);
-    childs.add(_pEnveloppe);
+    childs.push_back(_pSemiCircTop);
+    childs.push_back(_pSemiCircBottom);
+    childs.push_back(_pAccRect);
+    childs.push_back(_pEnveloppe);
 
     if (recursif)
     {

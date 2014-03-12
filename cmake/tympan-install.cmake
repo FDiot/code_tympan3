@@ -1,3 +1,7 @@
+set(CMAKE_INSTALL_DEBUG_LIBRARIES ON)
+set(CMAKE_INSTALL_SYSTEM_RUNTIME_DESTINATION ${CMAKE_INSTALL_PREFIX})
+include (InstallRequiredSystemLibraries)
+
 if(WIN32)
   include(tympan-install-win)
 elseif(UNIX)

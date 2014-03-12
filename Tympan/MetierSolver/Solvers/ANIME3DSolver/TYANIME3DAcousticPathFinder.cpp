@@ -37,7 +37,7 @@
 #include "Tympan/MetierSolver/AnalyticRayTracer/meteoLin.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
-#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Latitude2DSampler.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Latitude2DSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/RandomSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
 

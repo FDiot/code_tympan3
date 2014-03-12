@@ -27,7 +27,7 @@ public:
      * \fn bool exec(TYStructSurfIntersect* tabPolygon, unsigned int& tabPolygonSize);
      * \brief buil list of faces used by the ray tracer and the acoustic solver
      */
-    bool exec(TYStructSurfIntersect *&tabPolygon, unsigned int& tabPolygonSize);
+    bool exec(TYStructSurfIntersect *&tabPolygon, size_t& tabPolygonSize);
 
 private :
     /*!
@@ -36,14 +36,14 @@ private :
     * Correspond a la fonction du meme nom dans le SolveurHarmonoise avec l'ajout des normales et des faces triangulees dans la structure.
     * \param site Reference vers le site de la scene
     */
-    bool buildCalcStruct(TYStructSurfIntersect *&tabPolygon, unsigned int& tabPolygonSize);
+    bool buildCalcStruct(TYStructSurfIntersect *&tabPolygon, size_t& tabPolygonSize);
 
     /*!
     * \fn bool triangulateConcavePolygon(TYStructSurfIntersect* _tabPolygon)
     * \brief Effectue une triangulation de l'ensemble des faces de la topographie et des infrastructures.
     * \return Renvoie vrai si les triangulations se sont bien passees.
     */
-    bool triangulateConcavePolygon(TYStructSurfIntersect* tabPolygon, const unsigned int& tabPolygonSize);
+    bool triangulateConcavePolygon(TYStructSurfIntersect* tabPolygon, size_t tabPolygonSize);
 
 protected :
     const TYSiteNode& _site;

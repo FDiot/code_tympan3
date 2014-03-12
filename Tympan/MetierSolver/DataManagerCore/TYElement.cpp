@@ -357,9 +357,7 @@ bool TYElement::operator != (const TYElement& other) const
 
 bool TYElement::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
-    //    assert(pOther);
-
-    if (!pOther) { return false; }
+    if (!pOther) { return false; }     // XXX assert(pOther);
 
     if (!pOther->inherits(getClassName())) { return false; }
 
@@ -447,11 +445,11 @@ void TYElement::setInCurrentCalcul(bool state, bool recurschild /*= true*/,  boo
     //// update childs status...
     //if (recurschild) {
     //  // Collecte des childs
-    //  TYElementCollection childs;
+    //  LPTYElementArray childs;
     //  getChilds(childs, false);
     //
     //  // Appel recursif
-    //  for (int i = 0; i < childs.getCount(); i++)
+    //  for (int i = 0; i < childs.size(); i++)
     //  {
     //      childs[i]->setInCurrentCalcul(state, recurschild, false);
     //  }
@@ -469,14 +467,14 @@ void TYElement::setInCurrentCalcul(bool state, bool recurschild /*= true*/,  boo
 void TYElement::OnChildInCalculStatusChange()
 {
     // Collecte des childs
-    TYElementCollection childs;
+    LPTYElementArray childs;
     getChilds(childs, false);
 
-    if (childs.getCount() > 0)
+    if (childs.size() > 0)
     {
         // Appel recursif
         bool onechildpresent = false;
-        for (int i = 0; i < childs.getCount(); i++)
+        for (int i = 0; i < childs.size(); i++)
         {
             onechildpresent = onechildpresent || (childs[i]->isInCurrentCalcul());
         }
@@ -507,9 +505,9 @@ void TYElement::updateCurrentCalcul(TYListID& listID, bool recursif)//=true
     if (recursif)
     {
         // Collecte des childs
-        TYElementCollection childs;
+        LPTYElementArray childs;
         getChilds(childs, false);
-        for (unsigned int i = 0; i < childs.getCount(); i++)
+        for (unsigned int i = 0; i < childs.size(); i++)
         {
             childs[i]->updateCurrentCalcul(listID, recursif);
         }
@@ -593,9 +591,9 @@ std::string TYElement::getMetierName()
 }
 
 
-/*static*/ TYElementCollection TYElement::findTypeCollectionAndCallFromXML(DOM_Element parentElem, const char* type)
+/*static*/ LPTYElementArray TYElement::findTypeCollectionAndCallFromXML(DOM_Element parentElem, const char* type)
 {
-    TYElementCollection eltCollection;
+    LPTYElementArray eltCollection;
     LPTYElement pElt = NULL;
     DOM_Element elemCur;
 
@@ -620,7 +618,7 @@ std::string TYElement::getMetierName()
             pElt->fromXML(elemCur);
 
             // Ajout
-            eltCollection.add(pElt);
+            eltCollection.push_back(pElt);
         }
     }
     return eltCollection;
