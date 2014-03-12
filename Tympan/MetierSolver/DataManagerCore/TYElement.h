@@ -593,17 +593,17 @@ private:
     mutable TYUUID _uuid;
 
 protected:
-    //Pour eviter de grossir la liste d'instance avec des objets temporaires:
-    bool _bPutInInstanceList;
-
-    // Decompte du nombre de copies
-    unsigned int _copyCount;
-
     ///Nom courant de l'element.
     QString _name;
 
     ///Reference sur l'element parent.
     TYElement* _pParent;
+
+    //Pour eviter de grossir la liste d'instance avec des objets temporaires:
+    bool _bPutInInstanceList;
+
+    // Decompte du nombre de copies
+    unsigned int _copyCount;
 
     ///Indique si cet element est actif dans le Calcul courant.
     bool _inCurrentCalcul;

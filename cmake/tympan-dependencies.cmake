@@ -47,7 +47,8 @@ if(WIN32)
   #   they are provided along with CGAL for windows as a specific binary build )
   set(cgal_dir_env $ENV{CGAL_DIR})
   if(cgal_dir_env)
-    set(GMP_MPFR_DIR $ENV{CGAL_DIR}/auxiliary/gmp/lib)
+    FILE(TO_CMAKE_PATH ${cgal_dir_env} GMP_MPFR_DIR)
+    set(GMP_MPFR_DIR ${GMP_MPFR_DIR}/auxiliary/gmp/lib)
     list(APPEND TYMPAN_3RDPARTY_DLL_DIRS ${GMP_MPFR_DIR})
   else(cgal_dir_env)
     message(WARNING "The pre-built GMP anf MPFR needs to be put on the PATH")
@@ -103,17 +104,6 @@ else(WIN32)
   set(sep ":")
 endif(WIN32)
 
-list(REMOVE_DUPLICATES TYMPAN_3RDPARTY_DLL_DIRS)
-set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "")
-foreach(dir ${TYMPAN_3RDPARTY_DLL_DIRS})
-    FILE(TO_NATIVE_PATH  ${dir} nativedir)
-    set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}${sep}${nativedir}")
-endforeach(dir)
-# Remove the leading separator and then make a string again of the list
-list(REMOVE_AT TYMPAN_3RDPARTY_DLL_NATIVE_DIRS 0)
-set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
-
-
 # Add the Dime library 3rd party as an external project.
 ExternalProject_Add(Dime
   URL "${TYMPAN_3RDPARTY_DIME}"
@@ -126,13 +116,50 @@ ExternalProject_Add(Dime
 
 # Get some properties from Dime project.
 ExternalProject_Get_Property (Dime SOURCE_DIR BINARY_DIR)
-
 # SOURCE_DIR is related to the Dime project.
 include_directories (${SOURCE_DIR}/include)
-
 # BINARY_DIR is related to the Dime project.
 link_directories (${BINARY_DIR}/src)
 
+
+# Add the NMPB2008 library 3rd party as an external project.
+ExternalProject_Add(NMPB2008
+  URL "${TYMPAN_3RDPARTY_NMPB2008}"
+  # URL_MD5 "${TYMPAN_3RDPARTY_DIME_MD5}"
+  CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
+  BUILD_IN_SOURCE 0
+)
+# Get some properties from NMPB2008 project.
+ExternalProject_Get_Property(NMPB2008 INSTALL_DIR)
+# INSTALL_DIR is now related to the NMPB2008 project.
+set(NMPB2008_INSTALL_DIR ${INSTALL_DIR})
+set(NMPB2008_INCLUDE_DIR ${NMPB2008_INSTALL_DIR}/include)
+set(NMPB2008_LIBRARY_DIR ${NMPB2008_INSTALL_DIR}/lib)
+
+include_directories(${NMPB2008_INCLUDE_DIR})
+link_directories(${NMPB2008_LIBRARY_DIR})
+
+if(MSVC)
+  # It is required to install the prebuilt NMPB08 DLL on windows
+  # along the executable and under the name `RoadEmissionNMPB.dll`
+  install(FILES ${NMPB2008_INSTALL_DIR}/RoadEmissionNMPB.dll
+    DESTINATION .)
+  list(APPEND TYMPAN_3RDPARTY_DLL_DIRS ${NMPB2008_INSTALL_DIR})
+else()
+  set(filename ${CMAKE_SHARED_LIBRARY_PREFIX}RoadEmissionNMPB${CMAKE_SHARED_LIBRARY_SUFFIX})
+  install(FILES ${NMPB2008_INSTALL_DIR}/lib/${filename} DESTINATION lib)
+  set(filename)
+endif(MSVC)
+
+list(REMOVE_DUPLICATES TYMPAN_3RDPARTY_DLL_DIRS)
+set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "")
+foreach(dir ${TYMPAN_3RDPARTY_DLL_DIRS})
+    FILE(TO_NATIVE_PATH  ${dir} nativedir)
+    set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}${sep}${nativedir}")
+endforeach(dir)
+# Remove the leading separator and then make a string again of the list
+list(REMOVE_AT TYMPAN_3RDPARTY_DLL_NATIVE_DIRS 0)
+set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
 
 message(STATUS "  ## TYMPAN_3RDPARTY_DLL_DIRS: " "${TYMPAN_3RDPARTY_DLL_DIRS}")
 message(STATUS "  ## TYMPAN_3RDPARTY_DLL_NATIVE_DIRS: " "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
