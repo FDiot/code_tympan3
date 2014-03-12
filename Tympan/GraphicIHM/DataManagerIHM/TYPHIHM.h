@@ -86,7 +86,7 @@
 #include "TYReseauTransportWidget.h"
 #include "TYResultatTreeDialog.h"
 #include "TYResultatWidget.h"
-#include "TYRouteWidget.h"
+// #include "TYRouteWidget.h" // XXX to speed-up compilation
 #include "TYRouteDeblaiWidget.h"
 #include "TYSegmentWidget.h"
 #include "TYSiteNodeWidget.h"

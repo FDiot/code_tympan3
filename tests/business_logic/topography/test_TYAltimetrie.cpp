@@ -48,15 +48,15 @@ TYAltimetrie* buildSlopeAltimetry(void)
         pTopo->addCrbNiv(pCrb);
     }
 
-	// Creating the altimetry
-	std::deque<OPoint3D> points;
-	std::deque<OTriangle> triangles;
-	// the false argument for use_emprise_as_level_curve is required
-	// because in this test the TYTopographie as no TYSiteNode as parent.
-	pTopo->computeAltimetricTriangulation(points, triangles, false);
-	pAlti->plugBackTriangulation(points, triangles);
+    // Creating the altimetry
+    std::deque<OPoint3D> points;
+    std::deque<OTriangle> triangles;
+    // the false argument for use_emprise_as_level_curve is required
+    // because in this test the TYTopographie as no TYSiteNode as parent.
+    pTopo->computeAltimetricTriangulation(points, triangles, false);
+    pAlti->plugBackTriangulation(points, triangles);
 
-	//compute(pTopo->collectPointsForAltimetrie(false), 1.E-5);
+    //compute(pTopo->collectPointsForAltimetrie(false), 1.E-5);
 
     return pAlti;
 }
@@ -99,15 +99,17 @@ LPTYSiteNode buildSiteSimpleAltimetry(void)
     // Those dimension match with the default emprise
     const double xMin = -200.0, xMax = 200.0, yMin = -200.0, yMax = +200.0;
 
-    #define NB_POINTS_LEVEL_CURVE 5
+#define NB_POINTS_LEVEL_CURVE 5
     TYCourbeNiveau* pCrb = new TYCourbeNiveau();
     // Initialise the level curve
     double level_curve_x[NB_POINTS_LEVEL_CURVE] = { -150, -150,  150,  150, -150};
     double level_curve_y[NB_POINTS_LEVEL_CURVE] = { -150,  150,  150, -150, -150};
-    for(unsigned i=0; i<NB_POINTS_LEVEL_CURVE; ++i)
+    for (unsigned i = 0; i < NB_POINTS_LEVEL_CURVE; ++i)
+    {
         pCrb->addPoint(level_curve_x[i], level_curve_y[i]);
+    }
     pCrb->setAltitude(level_curve_A_alti);
-    #undef NB_POINTS_LEVEL_CURVE
+#undef NB_POINTS_LEVEL_CURVE
 
     // Add the level curve and updates the altimetry
     pSite->getTopographie()->addCrbNiv(pCrb);
@@ -116,18 +118,20 @@ LPTYSiteNode buildSiteSimpleAltimetry(void)
 
 LPTYTerrain addTerrainToSimpleSite(LPTYSiteNode pSite)
 {
-    #define NB_POINTS_TERRAIN 4
+#define NB_POINTS_TERRAIN 4
     double terrain_x[NB_POINTS_TERRAIN] = {    0,    0,  100,  100};
     double terrain_y[NB_POINTS_TERRAIN] = { -150,   50,   50, -150};
 
     LPTYTerrain pTerrain = new TYTerrain();
-    for(unsigned i=0; i<NB_POINTS_TERRAIN; ++i)
+    for (unsigned i = 0; i < NB_POINTS_TERRAIN; ++i)
+    {
         pTerrain->getListPoints().push_back(TYPoint(terrain_x[i], terrain_y[i], -100));
+    }
     LPTYSol pSol = new TYSol();
     pSol->setName("grass");
     pSol->setResistivite(3.14); // NB This is a dummy value
     pTerrain->setSol(pSol);
-    #undef NB_POINTS_TERRAIN
+#undef NB_POINTS_TERRAIN
 
     pSite->getTopographie()->addTerrain(pTerrain);
 
@@ -138,15 +142,17 @@ static const double level_curve_B_alti = 20.0;
 
 LPTYCourbeNiveau addHillToSimpleSite(LPTYSiteNode pSite)
 {
-    #define NB_POINTS_LEVEL_CURVE 5
+#define NB_POINTS_LEVEL_CURVE 5
     LPTYCourbeNiveau pCrb = new TYCourbeNiveau();
     // Initialise the level curve
     double level_curve_x[NB_POINTS_LEVEL_CURVE] = {    0,    0,  100,  100,    0};
     double level_curve_y[NB_POINTS_LEVEL_CURVE] = { -140,   50,   50, -140, -140};
-    for(unsigned i=0; i<NB_POINTS_LEVEL_CURVE; ++i)
+    for (unsigned i = 0; i < NB_POINTS_LEVEL_CURVE; ++i)
+    {
         pCrb->addPoint(level_curve_x[i], level_curve_y[i]);
+    }
     pCrb->setAltitude(level_curve_B_alti);
-    #undef NB_POINTS_LEVEL_CURVE
+#undef NB_POINTS_LEVEL_CURVE
 
     // Add the level curve and updates the altimetry
     pSite->getTopographie()->addCrbNiv(pCrb);
@@ -154,7 +160,8 @@ LPTYCourbeNiveau addHillToSimpleSite(LPTYSiteNode pSite)
 }
 
 
-TEST(TYAltimetryTest, dummy_grid) {
+TEST(TYAltimetryTest, dummy_grid)
+{
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     LPTYTopographie pTopo = pSite->getTopographie();
     LPTYAltimetrie pAlti = pTopo->getAltimetrie();
@@ -184,7 +191,8 @@ TEST(TYAltimetryTest, dummy_grid) {
 
 
 
-TEST(TYAltimetryTest, simple_grid) {
+TEST(TYAltimetryTest, simple_grid)
+{
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     LPTYTopographie pTopo = pSite->getTopographie();
     LPTYAltimetrie pAlti = pTopo->getAltimetrie();
@@ -224,7 +232,7 @@ TEST(TYAltimetryTest, simple_grid) {
     // Check altitude on the flank of the hill
     pt.setCoords(50.0, 100.0, 0.0);
     EXPECT_TRUE(pAlti->updateAltitude(pt));
-    EXPECT_NEAR( (level_curve_A_alti + level_curve_B_alti)/2, pt._z, precision);
+    EXPECT_NEAR((level_curve_A_alti + level_curve_B_alti) / 2, pt._z, precision);
 
     // Check altitude of an outer point
     pt.setCoords(180.0, 180.0, 0.0);
@@ -232,7 +240,8 @@ TEST(TYAltimetryTest, simple_grid) {
     EXPECT_DOUBLE_EQ(TYAltimetrie::invalid_altitude, pt._z);
 }
 
-TEST(TYAltimetryTest, simple_terrain) {
+TEST(TYAltimetryTest, simple_terrain)
+{
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     LPTYTopographie pTopo = pSite->getTopographie();
     LPTYAltimetrie pAlti = pTopo->getAltimetrie();
