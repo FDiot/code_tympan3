@@ -19,11 +19,11 @@
 #include "mathlib.h"
 #include <string>
 #include <vector>
+#include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Material.h"
 #include "BBox.h"
 
-#include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 
 //#ifdef USE_QT
 //  #include "ShapeGraphic.h"

@@ -16,8 +16,6 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
-//#define _FJ_THICKNESS_
-
 
 ////////////////////////////
 // General Values

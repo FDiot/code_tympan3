@@ -67,14 +67,10 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
     if (newEvent->getResponse(newDir))
     {
         r->position = r->position + r->direction * inter->t;
-        //std::cout<<"Ancienne direction : ("<<r->direction.x<<","<<r->direction.y<<","<<r->direction.z<<")"<<std::endl;
         r->direction = newDir;
         r->direction.normalize();
-        //std::cout<<"Nouvelle direction : ("<<r->direction.x<<","<<r->direction.y<<","<<r->direction.z<<")"<<std::endl;
-        //std::cout<<"Nouvelle position : ("<<r->position.x<<","<<r->position.y<<","<<r->position.z<<")"<<std::endl;
         r->events.push_back(QSharedPointer<Event>(newEvent));
         r->nbReflexion += 1;
-        //std::cout<<"Validation d'une reflexion"<<std::endl;
         return true;
     }
 
@@ -88,10 +84,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 
     Cylindre* cylindre = (Cylindre*)(inter->p);
 
-
-#define _TEST_IMPACT
-#ifdef _TEST_IMPACT
-
+// Compute shortest distance between the ray and the ridge
 	vec3 impact = r->position + r->direction * inter->t;
 
 	// Define first segment
@@ -110,42 +103,29 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 	vec3 realImpact = *pb;
 
 	delete pa, pb, mua, mub; // Cleaning
-	
-	//vec3 realImpact = impact.closestPointOnLine(cylindre->getVertices()->at(cylindre->getLocalVertices()->at(0)), cylindre->getVertices()->at(cylindre->getLocalVertices()->at(1)));
 
-#else
-
-	vec3 impact = r->position + r->direction * inter->t.;
-
-    vec3 realImpact = impact.closestPointOnSegment(cylindre->getVertices()->at(cylindre->getLocalVertices()->at(0)), cylindre->getVertices()->at(cylindre->getLocalVertices()->at(1)));
-
-#endif
-
+// Create diffraction event
     vec3 from = realImpact - r->position;
     from.normalize();
 
     Diffraction* newEvent = new Diffraction(realImpact, from, (Cylindre*)(inter->p));
 
+	unsigned int diff_nb_rays = 0;
 	if ( globalNbRayWithDiffraction > 0 )
 	{
-		newEvent->setNbResponseLeft(globalNbRayWithDiffraction+1); // Attempt to correct problem 
+		diff_nb_rays = globalNbRayWithDiffraction+1; 
 	}
 	else if ( globalNbRayWithDiffraction == 0 )
 	{
 		vec3 closestPoint;
 
-#ifdef _FJ_THICKNESS_
 		decimal length = r->computePertinentLength(realImpact, impact, closestPoint);
-#else
-		decimal length = r->computeTrueLength(realImpact, impact, closestPoint);
-#endif
-		decimal thick = r->getThickness(length);
+		decimal thick = r->getThickness(length, true);
 		decimal closestDistance = realImpact.distance(closestPoint);
 
 		if ( closestDistance < ( thick / 2. ) ) 
 		{
-			unsigned int diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
-			newEvent->setNbResponseLeft(diff_nb_rays);
+			diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
 		}
 		else
 		{
@@ -154,17 +134,17 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 	}
 	else
 	{
-		unsigned int diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
-		newEvent->setNbResponseLeft(diff_nb_rays);
+		diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
 	}
-    
+
+    newEvent->setNbResponseLeft(diff_nb_rays);
+
 	vec3 newDir;
     if (newEvent->getResponse(newDir))
     {
         r->position = realImpact;
         r->direction = newDir;
         r->events.push_back(QSharedPointer<Event>(newEvent));
-        //          newEvent->setNbResponseLeft(200);
         r->nbDiffraction += 1;
 
         return true;

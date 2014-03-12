@@ -16,6 +16,7 @@
 #include <cassert>
 #include <vector>
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/event.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Ray.h"
@@ -246,6 +247,40 @@ std::vector<unsigned int> Ray::getPrimitiveHistory()
 
     result.push_back(((Recepteur*)recepteur)->getId());
     return result;
+}
+
+decimal Ray::getThickness( const decimal& distance, bool diffraction)
+{
+	decimal angle = getSolidAngle( diffraction );
+
+	if ( diffraction )
+	{
+		return distance * angle;
+	}
+
+	return 2. * distance * sqrt( angle / M_PI ); 
+}
+
+decimal Ray::getSolidAngle( bool &diffraction)
+{
+	unsigned int nb_rays = source->getInitialRayCount();
+
+	if (diffraction)
+	{
+		Base *last = getLastPertinentEvent();
+		Event *e = dynamic_cast<Event*>(last);
+
+		if ( e && ( e->getType() == DIFFRACTION ) )
+		{
+			return dynamic_cast<Diffraction*>(e)->getAngle() * M_2PI / e->getInitialNbResponseLeft();
+		}
+		else // else is done to be explicit
+		{
+			diffraction = false;
+		}
+	}
+		
+	return M_4PI / static_cast<decimal>(nb_rays);
 }
 
 signature Ray::getSignature(const typeevent& typeEv)
