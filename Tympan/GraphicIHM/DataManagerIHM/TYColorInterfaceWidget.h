@@ -42,7 +42,7 @@ class TYToolButton;
  * \class TYColorInterfaceWidget
  * \brief classe de l'objet IHM pour l'objet ColorInterface
  */
-class TYColorInterfaceWidget : public TYWidget
+class TYColorInterfaceWidget : public QWidget
 {
     Q_OBJECT
 
@@ -78,7 +78,6 @@ protected:
     TYToolButton* _pushButtonColor;
 
     QGridLayout* _groupBoxLayout;
-
 };
 
 #endif // __TYCOLORINTERFACEWIDGET__

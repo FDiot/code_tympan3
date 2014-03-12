@@ -47,7 +47,7 @@ TYAcousticFaceSetWidget::TYAcousticFaceSetWidget(TYAcousticFaceSet* pElement, QW
     setLayout(_acousticVolumeLayout);
 
     _elmW = new TYElementWidget(pElement, this);
-    _colorW = new TYColorInterfaceWidget(pElement, this);
+    _colorW = new TYColorInterfaceWidget(dynamic_cast<TYColorInterface*>(pElement), this);
     _volumeW = new TYFaceSetWidget(pElement->getFaceSet(), this);
 
     _acousticVolumeLayout->addWidget(_elmW, 0, 0);
