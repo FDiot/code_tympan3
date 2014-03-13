@@ -16,59 +16,94 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
+////////////////////////////
+// Meteo
+////////////////////////////
+
+extern double globalAtmosPressure;			// [METEO] Atmospheric pressure in pascal
+extern double globalAtmosTemperature;		// [METEO] Temperature in degres celsius
+extern double globalAtmosHygrometry;		// [METEO] Hygrometry percent
+extern double globalAnalyticC0;				// [METEO] initial (default) sound speed
+extern double globalWindDirection;			// [METEO] Wind direction 0 means from north to south
+extern double globalAnalyticGradC;			// [METEO] Vertical temperature gradient
+extern double globalAnalyticGradV;			// [METEO] Vertical wind speed gradient
 
 ////////////////////////////
-// General Values
+// Acoustic ray tracer
 ////////////////////////////
-extern int globalMaxProfondeur;         //Nombre d'evenements autorises pour un rayon, globalMaxProfondeur inclu
-extern int globalNbRaysPerSource;       //Nombre de rayons lances par les sources
-extern float globalSizeReceiver;        //Diametre de la sphere representant le recepteur
-extern int globalAccelerator;           //Choix de la structure acceleratrice. 0 : BruteForce, 1 : GridAccelerator, 2 : BVH, 3 : KdTree, other : GridAccelerator
-extern int globalMaxTreeDepth;          //Profondeur maximale autorisee pour le BVH ou KdTree.
-extern bool globalUseSol;               //Utilisation du sol (ou pas -cas NMPB-)
-extern bool globalKeepDebugRay;         //Permet de conserver les rayons qui ont ete invalides pendant la propagation.
-extern int globalDiscretization;		//Permet de choisir entre des rayons aléatoires ou déterministes (discretisation source)
+
+extern int globalRayTracingOrder;			// [ACOUSTICRAYTRACER] Ray tracing order propagation (0=From, 1=from receptor, 2=auto)
+extern int globalDiscretization;			// [ACOUSTICRAYTRACER] Sampler model 0=random, 1=uniform v1, 2= uniform v2, 3=horizontal
+extern int globalNbRaysPerSource;			// [ACOUSTICRAYTRACER] Number of rays per source
+extern float globalMaxLength;				// [ACOUSTICRAYTRACER] Maximum ray length in meter
+extern float globalSizeReceiver;			// [ACOUSTICRAYTRACER] Receptor radius in meter
+extern int globalAccelerator;				// [ACOUSTICRAYTRACER] Accelerating structure parameter (0=brut force, 1=grid, 2=BVH, 3=KDTree)
+extern int globalMaxTreeDepth;				// [ACOUSTICRAYTRACER] Maximal depth search for BVH or KDTree
+extern float globalAngleDiffMin;			// [ACOUSTICRAYTRACER] Minimum dihedral angle to add a diffraction cylinder
+extern float globalCylindreThick;			// [ACOUSTICRAYTRACER] Diffraction ridge size in meter
+extern int globalMaxProfondeur;				// [ACOUSTICRAYTRACER] Maximum events number for a ray
+extern bool globalUseSol;					// [ACOUSTICRAYTRACER] Allow ground reflections
+extern int globalMaxReflexion;				// [ACOUSTICRAYTRACER] Maximum reflections events for a ray
+extern int globalMaxDiffraction;			// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
+extern int globalNbRayWithDiffraction;		// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
+extern bool globalUsePathDifValidation;		// [ACOUSTICRAYTRACER] Allow use of path length difference validation
+extern bool globalMaxPathDifference;		// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
+extern bool globalKeepDebugRay;				// [ACOUSTICRAYTRACER] Keep invalid rays
+extern bool globalEnableTargets;			// [ACOUSTICRAYTRACER] Use targeting
+extern float globalSampleGround2D;			// [ACOUSTICRAYTRACER] Sample ground in 2D
+extern bool globalEnableFullTargets;		// [ACOUSTICRAYTRACER] Set target search after a diffuse event
+extern float globalTargetsDensity;			// [ACOUSTICRAYTRACER] Sampling density for interesting areas
+extern bool globalUsePostFilters;			// [ACOUSTICRAYTRACER] Use of post-filters
 
 ////////////////////////////
-// NMPB value
+// AnalyticRayTracer
+////////////////////////////
+
+extern int globalCurveRaySampler;			// [ANALYTICRAYTRACER] Sampler model 1=horizontal, 2=vertical, 3=uniform v1, 4=uniform v2
+extern float globalInitialAngleTheta;		// [ANALYTICRAYTRACER] Start vertical angle (theta)
+extern float globalFinalAngleTheta;			// [ANALYTICRAYTRACER] Final vertical angle (theta)
+extern float globalInitialAnglePhi;			// [ANALYTICRAYTRACER] Start horizontal angle (phi)
+extern float globalFinalAnglePhi;			// [ANALYTICRAYTRACER] Final horizontal angle (phi)
+extern int globalAnalyticNbRay;				// [ANALYTICRAYTRACER] Number of rays per source
+extern double globalAnalyticTMax;			// [ANALYTICRAYTRACER] Propagation time in second
+extern double globalAnalyticH;				// [ANALYTICRAYTRACER] Time step in second
+extern double globalAnalyticDMax;			// [ANALYTICRAYTRACER] Maximum length propagation
+
+////////////////////////////
+// Geometric transformer
 ///////////////////////////
-extern int globalMaxReflexion;          //Nombre de reflexions speculaires autorisees pour un rayon, globalMaxReflexion inclu
-extern int globalMaxDiffraction;        //Nombre de diffractions autorisees pour un rayon, globalMaxDiffraction inclu
-extern float globalMaxLength;           //Longueur maximale autorisee pour un rayon, globalMaxLength inclu
-extern float globalSampleGround2D;      //Echantillonage sur sol pour la description de la topograohie 2D sous le rayon.
-extern float globalCylindreThick;       //Epaisseur des aretes de diffraction.
+
+extern int globalAnalyticTypeTransfo;		// [GEOM_TRANSFORMER] Transformation method (1 is the only [good] response)
+extern float globalMeshRefinementValue;		// [GEOM_TRANSFORMER] Altimetry refinement parameter
+extern bool globalRestitModifiedGeom;		// [GEOM_TRANSFORMER] Restore modified altimetry after computing
 
 /////////////////////////////
-// Targeting system + NMPB
+// Preprocessing
 /////////////////////////////
-extern bool globalEnableTargets;        //Active la recherche de cible pour les sources. Pour le moment lie au solver NMPB.
-extern bool globalEnableFullTargets;    //Active la recherche de cible apres un evenement diffu. Pour le moment lie au solver NMPB.
-extern float globalTargetsDensity;      //Densite pour l'echantillonnage des zones interessantes.
+
+extern float globalMinSRDistance;					// [PREPROCESSING] Source-receptor minimal distance in meters
+
+/////////////////////////////
+// Default Solver
+/////////////////////////////
+
+extern bool globalUseRealGround;			// [DEFAULTSOLVER] Use of real ground (0) or totally reflective ground (1)
+extern bool globalUseVegetation;			// [DEFAULTSOLVER] Takes vegetation into account
+extern bool globalUseScreen;				// [DEFAULTSOLVER] Takes screens into account
+extern bool globalUseLateralDiffraction;	// [DEFAULTSOLVER] Lateral diffractions computing (if screens on)
+extern bool globalUseReflection;			// [DEFAULTSOLVER] Takes reflections in account (first order only)
+extern bool globalPropaConditions;			// [DEFAULTSOLVER] Propagation conditions (non refracting / downward conditions (ISO 9613))
+extern float globalH1parameter ;			// [DEFAULTSOLVER] H1 parameter (ISO 9613 downward conditions)
+extern bool globalModSummation;				// [DEFAULTSOLVER] Energetic (p² summation) or interference (p summation)
 
 //////////////////////////////
-// Dtn extensions
+// ANIME3D Solver
 /////////////////////////////
-extern float globalAngleDiffMin;        //Angle minimal a prendre en compte entre 2 faces pour ajouter une arrete de diffraction
-extern int globalNbRayWithDiffraction;  // Nombre de rayons relance lors d'un evenement diffraction
-extern int globalRayTracingOrder;       //[0-2]Sens de traitement des rayon source-recepteur ou inverse (0 = SR / 1 =RS / 2 = auto)
 
-extern bool globalUseMeteo;             // Prise en compte (ou non) de la geometrie
-extern double globalAnalyticDMax;       // Distance de propagation maximale des rayons courbes
-extern double globalAnalyticTMax;       // Temps de propagation maximal des rayons courbes
-extern double globalAnalyticH;          // Pas de temps de calcul pour la propagation des rayons courbes
-extern int globalAnalyticNbRay;         // Nombre de rayons tires pour le lancer de rayons courbes
-extern float globalAnalyticAngleTheta;    // Angle de tir vertical (theta) des rayons
+extern bool globalUseMeteo;					// [ANIME3D] Takes meteo in account
+extern float globalOverSampleD;				// [ANIME3D] Rays oversampling rate (if meteo -see above-)
+extern bool globalUseFresnelArea;			// [ANIME3D] Use Fresnel area
+extern float globalAnime3DSigma;			// [ANIME3D] Value of relative uncertainty
+extern float globalAnime3DForceC;			// [ANIME3D] Force "C" parameter
 
-extern double globalAnalyticGradC;      // Gradient vertical de celerite
-extern double globalAnalyticGradV;      // Gradient vertical de vitesse de vent
-extern double globalAnalyticC0;         // Celerite du son initiale
-extern int globalAnalyticTypeTransfo;   // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-extern bool globalRestitModifiedGeom;   // Indique si l'on souhaite recuperer la geometrie transformee
-extern double globalOverSampleD;            // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
-extern double globalWindDirection;			// Direction du vent (un vent a 0 est dirige du nord vers le sud)
-
-extern bool globalUseFresnelArea;		// take into account the fresnel area
-extern float globalAnime3DSigma;		// incertitude relative sur la taille du rayon au carree
-extern float globalAnime3DForceC;		// Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
-extern bool globalUsePostFilters;		// Utilisation (!=0) ou non (0) des filtres post lancer de rayons
-#endif
+#endif //GLOBAL_H
