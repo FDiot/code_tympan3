@@ -46,7 +46,7 @@ int globalMaxReflexion;				// [ACOUSTICRAYTRACER] Maximum reflections events for
 int globalMaxDiffraction;			// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
 int globalNbRayWithDiffraction;		// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
 bool globalUsePathDifValidation;		// [ACOUSTICRAYTRACER] Allow use of path length difference validation
-bool globalMaxPathDifference;		// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
+float globalMaxPathDifference;		// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
 bool globalKeepDebugRay;				// [ACOUSTICRAYTRACER] Keep invalid rays
 bool globalEnableTargets;			// [ACOUSTICRAYTRACER] Use targeting
 float globalSampleGround2D;			// [ACOUSTICRAYTRACER] Sample ground in 2D
