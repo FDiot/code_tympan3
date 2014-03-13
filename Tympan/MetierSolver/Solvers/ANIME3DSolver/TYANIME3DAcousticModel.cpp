@@ -396,6 +396,9 @@ MIS EN COMMENTAIRE POUR VALIDATION ULTERIEURE
 	
 	// S' depends on the point where the reflection occurs
 	int reflFace =  _tabTYRays[rayNbr]->getEvents().at(reflIndice)->idFace1;
+#ifdef _DEBUG
+	TYElement* pElm = _tabSurfIntersect[reflFace].pSurfGeoNode->getElement();
+#endif
 	TYAcousticSurface *face = TYAcousticSurface::safeDownCast(_tabSurfIntersect[reflFace].pSurfGeoNode->getElement());	
 	OPlan P = face->getPlan();
 	OPoint3D SIm = P.symPtPlan(Pprec); // Point image du point précedent la reflexion
