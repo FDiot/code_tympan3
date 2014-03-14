@@ -40,14 +40,15 @@ class Ray : public Base
 {
 
 public:
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Sphere)
-    //  GRAPHIC_DECL(Ray)
-    //#endif
+    Ray() : Base(), position(), direction(), mint(0), maxt(100000), source(NULL), recepteur(NULL), nbReflexion(0), nbDiffraction(0), cumulDistance(0.), cumulDelta(0.)
+	{ 
+		name = "unknow ray"; 
+	}
 
-    Ray() : Base(), position(), direction(), mint(0), maxt(100000), source(NULL), recepteur(NULL), nbReflexion(0), nbDiffraction(0) { name = "unknow ray"; }
-    Ray(const vec3& _position, const vec3& _direction) : Base(), position(_position), direction(_direction), mint(0), maxt(100000), source(NULL), recepteur(NULL), nbReflexion(0), nbDiffraction(0)
-    { name = "unknow ray";}
+    Ray(const vec3& _position, const vec3& _direction) : Base(), position(_position), direction(_direction), mint(0), maxt(100000), source(NULL), recepteur(NULL), nbReflexion(0), nbDiffraction(0), cumulDistance(0.), cumulDelta(0.)
+    { 
+		name = "unknow ray";
+	}
 
     Ray(const Ray& other) : Base(other)
     {
@@ -65,6 +66,8 @@ public:
 
         nbDiffraction = other.nbDiffraction;
         nbReflexion = other.nbReflexion;
+		cumulDistance = other.cumulDistance;
+		cumulDelta = other.cumulDelta;
     }
 
     Ray(Ray* other)
@@ -83,6 +86,9 @@ public:
 
         nbDiffraction = other->nbDiffraction;
         nbReflexion = other->nbReflexion;
+		cumulDistance = other->cumulDistance;
+		cumulDelta = other->cumulDelta;
+
     }
 
     virtual ~Ray() { }
@@ -114,11 +120,26 @@ public:
 	decimal computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
 
 	/*!
-	 * \fn void* getLastPertinentEventPos() const;
-	 * \brief return the apointer to the last pertinent event influencing ray thickness
-	 *        may be source or last diffraction event
+	 * \fn void* getLastPertinentEventOrSource(typeevent evType = DIFFRACTION) const;
+	 * \brief Return a pointer to the last event of type evType or source if none
 	 */
-	Base* getLastPertinentEvent();
+	Base* getLastPertinentEventOrSource(typeevent evType = DIFFRACTION);
+
+	/*!
+	 * \fn vec3 computeLocalOrigin( Base *ev);
+	 * \brief Return position of event found by getLastPertinentEventOrSource()
+	 */
+	inline vec3 computeLocalOrigin( Base *ev)
+	{
+		if ( dynamic_cast<Source*>(ev) )
+		{
+			return dynamic_cast<Source*>(ev)->getPosition();
+		}
+		else // that's a standard event
+		{
+			return dynamic_cast<Event*>(ev)->getPosition();
+		}
+	}
 
     /*!
     * \fn double getLongueur()
@@ -231,6 +252,8 @@ public:
     unsigned long long int constructId;         /*!< Identifiant du rayon */
     unsigned int nbReflexion;                   /*!< Nombre de reflexions subis par le rayon */
     unsigned int nbDiffraction;                 /*!< Nombre de diffractions subis par le rayon */
+	decimal cumulDistance;						/*!< Distance cumulee parcourue par le rayon calculee à chaque étape */
+	decimal cumulDelta;							/*!< Difference de marche cumulé par le rayon calculee à chaque etape */
 };
 
 

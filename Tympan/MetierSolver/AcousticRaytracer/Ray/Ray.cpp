@@ -164,7 +164,7 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
 
 	Source *s = NULL;
 	Event *e = NULL;
-	Base *beginEvent = getLastPertinentEvent();
+	Base *beginEvent = getLastPertinentEventOrSource();
 
     switch (events.size())
     {
@@ -211,13 +211,13 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
 	return 0.;
 }
 
-Base* Ray::getLastPertinentEvent()
+Base* Ray::getLastPertinentEventOrSource(typeevent evType)
 {
 	Base* res = (Base*) source;
 
 	for (std::vector< QSharedPointer<Event> > :: iterator iter = events.begin(); iter != events.end(); ++iter)
 	{
-		if ( (*iter)->getType() == DIFFRACTION ) { res = (Base*) ( (*iter).data() ); }
+		if ( (*iter)->getType() == evType ) { res = (Base*) ( (*iter).data() ); }
 	}
 
 	return res;
@@ -267,7 +267,7 @@ decimal Ray::getSolidAngle( bool &diffraction)
 
 	if (diffraction)
 	{
-		Base *last = getLastPertinentEvent();
+		Base *last = getLastPertinentEventOrSource();
 		Event *e = dynamic_cast<Event*>(last);
 
 		if ( e && ( e->getType() == DIFFRACTION ) )
