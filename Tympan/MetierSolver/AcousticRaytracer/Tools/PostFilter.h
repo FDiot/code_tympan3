@@ -14,19 +14,25 @@
 */ 
 
 #include <map>
+#include <deque>
 #include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
 
 #ifndef POST_FILTER_H
 #define POST_FILTER_H
 
+//typedef std::map< signature, std::vector<Ray*> > families;
+//typedef std::list<Event*> sequence;
+//typedef std::map< sequence, std::vector<Ray*> > sequenceMap;
 typedef std::map< signature, std::vector<Ray*> > families;
 typedef std::list<Event*> sequence;
 typedef std::map< sequence, std::vector<Ray*> > sequenceMap;
 
+
 class postFilter : public Base
 {
 public:
-	postFilter(std::vector<Ray*> *tabRay) : _tabRay(tabRay){}
+//	postFilter(std::vector<Ray*> *tabRay) : _tabRay(tabRay){}
+	postFilter(std::deque<Ray*> *tabRay) : _tabRay(tabRay){}
 	~postFilter() { _tabRay = NULL; }
 	
 	/*!
@@ -162,7 +168,8 @@ protected:
  
 protected:
 
-	std::vector<Ray*> *_tabRay;
+	std::deque<Ray*> *_tabRay;
+//	std::vector<Ray*> *_tabRay;
 };
 
 #endif //POST_FILTER_H
