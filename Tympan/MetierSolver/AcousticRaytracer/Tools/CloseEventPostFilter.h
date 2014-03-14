@@ -19,7 +19,8 @@
 class closeEventPostFilter : public postFilter
 {
 public:
-    closeEventPostFilter(std::vector<Ray*> *tabRay) : postFilter(tabRay) {}
+//    closeEventPostFilter(std::vector<Ray*> *tabRay) : postFilter(tabRay) {}
+    closeEventPostFilter(std::deque<Ray*> *tabRay) : postFilter(tabRay) {}
     ~closeEventPostFilter() {}
 
     /*!

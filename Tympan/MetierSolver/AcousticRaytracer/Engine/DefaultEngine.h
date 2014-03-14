@@ -45,7 +45,7 @@ public:
 protected:
     Ray* genRay();
     bool traitementRay(Ray* r, std::list<validRay> &result);
-    std::stack<Ray*> pile_traitement;
+    std::stack< Ray*, std::deque <Ray*> > pile_traitement;
 
     unsigned long long int nbRayonsTraites;
 };

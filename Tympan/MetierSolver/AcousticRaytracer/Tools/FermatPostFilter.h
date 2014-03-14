@@ -23,7 +23,8 @@
 class fermatPostFilter : public postFilter
 {
 public:
-	fermatPostFilter(std::vector<Ray*> *tabRay) : postFilter(tabRay){}
+//	fermatPostFilter(std::vector<Ray*> *tabRay) : postFilter(tabRay){}
+	fermatPostFilter(std::deque<Ray*> *tabRay) : postFilter(tabRay){}
 	~fermatPostFilter() { _tabRay = NULL; }
 	
 	/*!
@@ -37,7 +38,8 @@ public:
 		unsigned int suppressed = 0;
 
 		// Pour chaque rayon
-		std::vector<Ray*>::iterator iter = _tabRay->begin();
+//		std::vector<Ray*>::iterator iter = _tabRay->begin();
+		std::deque<Ray*>::iterator iter = _tabRay->begin();
 		while( iter != _tabRay->end() )
 		{
 			vec3 closestPoint;

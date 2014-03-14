@@ -19,7 +19,8 @@
 class duplicateEventPostFilter : public postFilter
 {
 public:
-	duplicateEventPostFilter(std::vector<Ray*> *tabRay) : postFilter(tabRay) {}
+//	duplicateEventPostFilter(std::vector<Ray*> *tabRay) : postFilter(tabRay) {}
+	duplicateEventPostFilter(std::deque<Ray*> *tabRay) : postFilter(tabRay) {}
 	~duplicateEventPostFilter() {}
 	
 	/*!

@@ -14,6 +14,7 @@
 */
 
 #include <vector>
+#include <deque>
 
 #include "Geometry/mathlib.h"
 #include "Geometry/Cylindre.h"
@@ -29,7 +30,8 @@ unsigned int closeEventPostFilter::Process()
     unsigned int nbSuppress = 0;
     bool bstatus = true;
 
-    vector<Ray*>::iterator it = _tabRay->begin();
+//    vector<Ray*>::iterator it = _tabRay->begin();
+    deque<Ray*>::iterator it = _tabRay->begin();
     while (it != _tabRay->end())
     {
         bstatus = true;
