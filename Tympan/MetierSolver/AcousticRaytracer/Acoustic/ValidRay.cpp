@@ -55,13 +55,37 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 {
 	if (r->getReflex() >= static_cast<unsigned int>( globalMaxReflexion )) { return false; }
 
+
+
 	if (inter->p->getMaterial()->isNatural) { return false; }
     
 	vec3 impact = r->position + r->direction * inter->t;
     vec3 normale = inter->p->getNormal(impact);
     if (normale.dot(r->direction) > 0.) { return false; }
 
-    SpecularReflexion* newEvent = new SpecularReflexion(impact, r->direction, inter->p);
+	if (globalUsePathDifValidation) // Validation sur la différence de marche due aux diffractions
+	{
+		vec3 previousPos;
+		if ( r->getEvents()->size() )
+		{
+			previousPos = r->getEvents()->back()->getPosition();
+		}
+		else
+		{
+			previousPos = r->getSource()->getPosition();
+		}
+
+		r->cumulDistance += previousPos.distance(impact);
+		vec3 origin = r->computeLocalOrigin( r->getLastPertinentEventOrSource(SPECULARREFLEXION) );
+		
+		// We compute the true path length difference between actual position and the last reflection or source
+		r->cumulDelta += ( r->cumulDistance - impact.distance(origin) ); 
+		r->cumulDistance = 0.;
+
+		if (r->cumulDelta > globalMaxPathDifference) { return false; }
+	}    
+	    
+	SpecularReflexion* newEvent = new SpecularReflexion(impact, r->direction, inter->p);
 
     vec3 newDir;
     if (newEvent->getResponse(newDir))
@@ -74,7 +98,8 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
         return true;
     }
 
-    delete newEvent;
+
+	delete newEvent;
     return false;
 }
 
@@ -84,9 +109,31 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 
     Cylindre* cylindre = (Cylindre*)(inter->p);
 
-// Compute shortest distance between the ray and the ridge
 	vec3 impact = r->position + r->direction * inter->t;
 
+	if (globalUsePathDifValidation) // Validation sur la différence de marche due aux diffractions
+	{
+		vec3 previousPos;
+		if ( r->getEvents()->size() )
+		{
+			previousPos = r->getEvents()->back()->getPosition();
+		}
+		else
+		{
+			previousPos = r->getSource()->getPosition();
+		}
+
+		r->cumulDistance += previousPos.distance(impact);
+		vec3 origin = r->computeLocalOrigin( r->getLastPertinentEventOrSource(SPECULARREFLEXION) );
+		
+		// We compute the true path length difference between actual position and the last reflection or source
+		decimal currentCumulDelta = r->cumulDelta + ( r->cumulDistance - impact.distance(origin) ); 
+
+		if ( currentCumulDelta > globalMaxPathDifference ) { return false; }
+	}   
+
+
+// Compute shortest distance between the ray and the ridge
 	// Define first segment
 	vec3 p1 = r->position;
 	vec3 p2 = r->position + r->direction * inter->t * 2.;
