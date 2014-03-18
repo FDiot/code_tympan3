@@ -482,7 +482,8 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
 void TYANIME3DAcousticPathFinder::convertRaytoTYRay(const unsigned int& sens)
 {
     //Recuperation de la liste des rayons valides pour la _rayTracing.
-    std::vector<Ray*>* rays = _rayTracing.getSolver()->getValidRays();
+//    std::vector<Ray*>* rays = _rayTracing.getSolver()->getValidRays();
+    std::deque<Ray*>* rays = _rayTracing.getSolver()->getValidRays();
 
 	// Dimensionnement du tableau des rayons
 	_tabTYRays.reserve( rays->size() );
