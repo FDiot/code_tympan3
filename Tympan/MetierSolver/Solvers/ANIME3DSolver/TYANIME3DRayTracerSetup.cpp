@@ -377,7 +377,7 @@ bool TYANIME3DRayTracerSetup::valideIntersection(Ray* r, Intersection* inter)
 
     if (isValid && globalEnableFullTargets) { ValidRay::appendDirectionToEvent(r->events.back(), targetManager); }
 
-    return (isValid && selectorManagerIntersection.appendData(r));
+    return (isValid); //(isValid && selectorManagerIntersection.appendData(r));
 }
 
 bool TYANIME3DRayTracerSetup::valideRayon(Ray* r)
@@ -391,6 +391,7 @@ bool TYANIME3DRayTracerSetup::invalidRayon(Ray* r)
     if (!globalKeepDebugRay)
     {
         delete r;
+		r = NULL;
     }
     else
     {
