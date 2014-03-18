@@ -94,7 +94,13 @@ public:
 
     virtual void inverseNormale() { _pPolygon->inverseNormale(); }
 
-
+    // Simple direct delegate
+    virtual void
+    exportMesh(
+        std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles,
+        const TYGeometryNode& geonode) const
+    { return _pPolygon->exportMesh(points, triangles, geonode); }
 
     // Membres
 protected:

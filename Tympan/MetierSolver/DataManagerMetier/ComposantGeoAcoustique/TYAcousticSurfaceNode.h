@@ -76,7 +76,7 @@ public:
 
     virtual void setIsAcousticModified(bool isModified);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     virtual void setDensiteSrcsH(double densite, bool recursif = true);
     virtual void setDensiteSrcsV(double densite, bool recursif = true);

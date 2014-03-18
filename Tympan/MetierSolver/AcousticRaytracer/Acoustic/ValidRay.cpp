@@ -188,7 +188,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 	diff_nb_rays += 1; // DO NOT MOVE/CONCATENATE THIS OPERATION ON UPPER LINES !!!
     newEvent->setNbResponseLeft(diff_nb_rays);
 
-	vec3 newDir;
+    vec3 newDir;
     if (newEvent->getResponse(newDir))
     {
         r->position = realImpact;

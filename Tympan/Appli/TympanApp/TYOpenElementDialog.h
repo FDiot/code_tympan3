@@ -89,7 +89,7 @@ public:
     /**
      * Retourne les elements de la liste de choix du dialogue
      */
-    TYElementCollection getAvailableElements() { return _elements; }
+    LPTYElementArray getAvailableElements() { return _elements; }
 
 
 public slots:
@@ -135,7 +135,7 @@ protected slots:
 
 protected:
     ///La collection d'elements dans la liste.
-    TYElementCollection _elements;
+    LPTYElementArray _elements;
 
     ///La liste des indices des elements selectionnes.
     QList<int> _selectedElts;

@@ -105,27 +105,27 @@ OSpectreComplex OSpectreComplex::operator + (const OSpectreComplex& spectre) con
     s._etat = _etat;
     s._type = _type;
 
-	// A complex number is defined as z = a + ib
-	std::complex<double> z1; // This is the original one
-	std::complex<double> z2; // This is the one we add
-	std::complex<double> z3; // This is the returned complex number i.e. the result
+    // A complex number is defined as z = a + ib
+    std::complex<double> z1; // This is the original one
+    std::complex<double> z2; // This is the one we add
+    std::complex<double> z3; // This is the returned complex number i.e. the result
 
     for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-		z1 = std::polar(_module[i], _phase[i]);
-		z2 = std::polar(spectre._module[i], spectre._phase[i]);
-		z3 = z1 + z2;
+        z1 = std::polar(_module[i], _phase[i]);
+        z2 = std::polar(spectre._module[i], spectre._phase[i]);
+        z3 = z1 + z2;
 
-		s._module[i] = std::abs(z3);
-		s._phase[i] = std::arg(z3);
+        s._module[i] = std::abs(z3);
+        s._phase[i] = std::arg(z3);
     }
     return s;
 }
 
 OSpectreComplex OSpectreComplex::operator * (const OSpectreComplex& spectre) const
 {
-	// Produit de deux complexes en module/phase
-	//  = produit des modules et somme des phases
+    // Produit de deux complexes en module/phase
+    //  = produit des modules et somme des phases
     OSpectreComplex s;
 
     // Recopie de l'empreinte du spectre
@@ -142,8 +142,8 @@ OSpectreComplex OSpectreComplex::operator * (const OSpectreComplex& spectre) con
 
 OSpectreComplex OSpectreComplex::operator * (const OSpectre& spectre) const
 {
-	// Produit de deux complexes en module/phase
-	//  = produit des modules et somme des phases
+    // Produit de deux complexes en module/phase
+    //  = produit des modules et somme des phases
     OSpectreComplex s;
 
     // Recopie de l'empreinte du spectre
@@ -152,10 +152,10 @@ OSpectreComplex OSpectreComplex::operator * (const OSpectre& spectre) const
 
     for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-		s._module[i] = _module[i] * (spectre.getTabValReel())[i];
+        s._module[i] = _module[i] * (spectre.getTabValReel())[i];
         s._phase[i] = _phase[i];
     }
-    return s;	
+    return s;
 }
 
 OSpectreComplex OSpectreComplex::operator * (const double& coefficient) const
@@ -192,8 +192,8 @@ OSpectreComplex OSpectreComplex::multi(const double& coefficient) const
 
 OSpectreComplex OSpectreComplex::operator / (const OSpectreComplex& spectre) const
 {
-	// Produit de deux complexes en module/phase
-	//  = rapport des modules et difference des phases
+    // Produit de deux complexes en module/phase
+    //  = rapport des modules et difference des phases
     OSpectreComplex s;
 
     // Recopie de l'empreinte du spectre

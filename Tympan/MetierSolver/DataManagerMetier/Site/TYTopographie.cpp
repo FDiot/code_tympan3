@@ -739,7 +739,7 @@ bool TYTopographie::addTerrain(LPTYTerrainGeoNode pTerGeoNode)
 {
     assert(pTerGeoNode);
 
-    LPTYTerrain pTerrain = dynamic_cast<TYTerrain*>(pTerGeoNode->getElement());
+    TYTerrain* pTerrain = dynamic_cast<TYTerrain*>(pTerGeoNode->getElement());
 
     assert(pTerrain);
 
@@ -768,7 +768,7 @@ bool TYTopographie::remTerrain(const LPTYTerrainGeoNode pTerGeoNode)
     unsigned int terrainNbr = 0;
 
     TYTabTerrainGeoNode::iterator ite;
-    LPTYTerrain pTerrain = dynamic_cast<TYTerrain*>(pTerGeoNode->getElement());
+    TYTerrain* pTerrain = dynamic_cast<TYTerrain*>(pTerGeoNode->getElement());
 
     for (ite = _listTerrain.begin(); ite != _listTerrain.end(); ite++)
     {
@@ -1008,14 +1008,45 @@ LPTYCourbeNiveauGeoNode TYTopographie::findCrbNiv(const LPTYCourbeNiveau pCrbNiv
 
     return NULL;
 }
+
+void TYTopographie::computeAltimetricTriangulation(
+    std::deque<OPoint3D>& points,
+    std::deque<OTriangle>& triangles,
+    bool use_emprise_as_level_curve)
+{
+
+    // we instanciate an AltimetryBuilder
+    p_alti_builder.reset(new tympan::AltimetryBuilder());
+
+    // We ask it to process this topography
+    p_alti_builder->process(*this, use_emprise_as_level_curve);
+    p_alti_builder->insertMaterialPolygonsInTriangulation();
+    if (p_alti_builder->number_of_faces() == 0)
+    {
+        return;
+    }
+
+    // We do update the materials
+    p_alti_builder->indexFacesMaterial();
+    // There should be a actual default ground material in the app
+    // But actually the default material in TYTerrain happens to be
+    // a new default constructed TYSol. So we do the same.
+    // TODO cf https://extranet.logilab.fr/ticket/1481980
+    LPTYSol def_mat(new TYSol());
+    p_alti_builder->labelFaces(def_mat);
+
+    //Fill points and triangle
+    p_alti_builder->exportMesh(points, triangles);
+
+    std::cerr << "Mise a jour altimetrie (Triangulation):  "
+              << number_of_vertices() << " points et "
+              << number_of_faces() << " triangles." << std::endl;
+
+    setIsGeometryModified(true); // For compatibility (XXX to be checked)
+}
 //
 //void TYTopographie::computeAltimetrie()
 //{
-//  // On fait le calcul seulement si cela est necessaire !
-//  if (!_pAltimetrie->getIsGeometryModified()) {
-//      return;
-//  }
-//
 //  double distanceMax = 200.0;
 //
 //#if TY_USE_IHM
@@ -1037,12 +1068,11 @@ LPTYCourbeNiveauGeoNode TYTopographie::findCrbNiv(const LPTYCourbeNiveau pCrbNiv
 //
 //  // Construction de l'altimetrie
 //  _pAltimetrie->compute(collectPointsForAltimetrie(distanceMax), delaunay);
-//
-//  setIsGeometryModified(true);
 //}
 
-//TYTabPoint TYTopographie::collectPointsForAltimetrie(const double& distanceMax, bool bEmpriseAsCrbNiv /* = false */ ) const
-TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv /* = false */) const
+/* is being replaced by AltymetryBuilder::process
+//TYTabPoint TYTopographie::collectPointsForAltimetrie(const double& distanceMax, bool bEmpriseAsCrbNiv) const
+TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv) const
 {
     TYTabPoint pts;
 
@@ -1094,7 +1124,7 @@ TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv /* = 
     // Extraction des points des courbes de niveau.
     for (i = 0; i < nbCrbs; i++)
     {
-        LPTYCourbeNiveau pCourbeNiv = dynamic_cast<TYCourbeNiveau*>(_listCrbNiv[i]->getElement());
+        TYCourbeNiveau* pCourbeNiv = dynamic_cast<TYCourbeNiveau*>(_listCrbNiv[i]->getElement());
         // Si la courbe de niveau possede une distMax propre, elle est prise en compte
         distMax = pCourbeNiv->getDistMax();
         altitude = pCourbeNiv->getAltitude();
@@ -1128,7 +1158,7 @@ TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv /* = 
     // Extraction des points des plans d'eau.
     for (i = 0; i < _listPlanEau.size(); i++)
     {
-        LPTYPlanEau pPlanEau = dynamic_cast<TYPlanEau*>(_listPlanEau[i]->getElement());
+        TYPlanEau* pPlanEau = dynamic_cast<TYPlanEau*>(_listPlanEau[i]->getElement());
 
         tabPt = pPlanEau->getCrbNiv()->getListPoints();
         altitude = pPlanEau->getAltitude();
@@ -1160,6 +1190,8 @@ TYTabPoint TYTopographie::collectPointsForAltimetrie(bool bEmpriseAsCrbNiv /* = 
 
     return pts;
 }
+*/
+
 
 bool TYTopographie::penteMoy(const OSegment3D& seg, OSegment3D& penteMoy) const
 {
@@ -1240,7 +1272,7 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
     while ((i < _listPlanEau.size()) && (pFound == NULL))
     {
         pPlanEau = dynamic_cast<TYPlanEau*>(_listPlanEau.at(i)._pObj->getElement());
-		if (!pPlanEau) { i++; continue; }
+        if (!pPlanEau) { i++; continue; }
 
         const OMatrix& mat = _listPlanEau.at(i)._pObj->getMatrix();
 
@@ -1285,7 +1317,7 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
     while ((i < nbTerrain) && (pFound == NULL))
     {
         pTerrain = dynamic_cast<TYTerrain*>(_pSortedTerrains[i]->getElement());
-		if (!pTerrain) { i++; continue; }
+        if (!pTerrain) { i++; continue; }
         const OMatrix& mat = _pSortedTerrains[i]->getMatrix();
 
         nbPts = pTerrain->getListPoints().size();
@@ -1532,7 +1564,7 @@ void TYTopographie::setDefTerrain(int defTerrainIdx)
 {
     if (_listTerrain.size() == 0) { return; }
     //  assert( _listTerrain.size());
-    LPTYTerrain pTerrain = getDefTerrain();
+    TYTerrain* pTerrain = getDefTerrain();
 
     LPTYSol pSol = getTerrain(defTerrainIdx)->getSol();
     if ((defTerrainIdx > 0) && (defTerrainIdx < _listTerrain.size()))
@@ -1587,4 +1619,18 @@ int compareSurfaceTerrains(const void* elem1, const void* elem2)
     double res = Terrain1->surface() - Terrain2->surface();
     int sgn = int(res / fabs(res));
     return (sgn);
+}
+
+const tympan::AltimetryBuilder& TYTopographie::getAltimetryBuilder() const
+{ return *p_alti_builder; }
+
+unsigned TYTopographie::number_of_vertices() const
+{ return p_alti_builder->number_of_vertices(); }
+
+unsigned TYTopographie::number_of_faces() const
+{ return p_alti_builder->number_of_faces(); }
+
+void TYTopographie::exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>* p_materials)
+{
+    p_alti_builder->exportMesh(points, triangles, p_materials);
 }

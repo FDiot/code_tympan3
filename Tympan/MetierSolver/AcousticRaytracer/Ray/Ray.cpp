@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include <cassert>
 #include <vector>
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
@@ -29,7 +29,7 @@ void Ray::computeLongueur()
         return;
     }
 
-	longueur = 0;
+    longueur = 0;
     switch (events.size())
     {
         case 0:
@@ -122,14 +122,14 @@ decimal Ray::computeTrueLength( const vec3& ref, const vec3& lastPos, vec3& clos
     }
 
 	decimal length = 0.;
-	vec3 posSource = source->getPosition();
-	vec3 posLastEvent;
+    vec3 posSource = source->getPosition();
+    vec3 posLastEvent;
     switch (events.size())
     {
         case 0: // Chemin direct source-recepteur
 			closestPoint = ref.closestPointOnLine(posSource, lastPos);
             return posSource.distance(closestPoint);
-			break;
+            break;
 
         default:
 			// Distance from source to first event
@@ -146,7 +146,7 @@ decimal Ray::computeTrueLength( const vec3& ref, const vec3& lastPos, vec3& clos
             break;
     }
 
-	return 0.;
+    return 0.;
 }
 
 decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint)
@@ -157,70 +157,70 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
         return 0.;
     }
 
-	decimal pertinent_length = 0.;
+    decimal pertinent_length = 0.;
 
-	vec3 posLastEvent;
-	vec3 current(0., 0., 0.), previous(0., 0., 0.);
+    vec3 posLastEvent;
+    vec3 current(0., 0., 0.), previous(0., 0., 0.);
 
-	Source *s = NULL;
-	Event *e = NULL;
+    Source* s = NULL;
+    Event* e = NULL;
 	Base *beginEvent = getLastPertinentEventOrSource();
 
     switch (events.size())
     {
         case 0: // Chemin direct source-recepteur
-			// needs only computing of full (true) length
+            // needs only computing of full (true) length
             return computeTrueLength(ref, lastPos, closestPoint);
-			break;
+            break;
 
-		default:
-			s = dynamic_cast<Source*>(beginEvent);
+        default:
+            s = dynamic_cast<Source*>(beginEvent);
 
-			// Compute distance from source to the last event
-			if (s)
-			{
-				// needs only computing of full (true) length
+            // Compute distance from source to the last event
+            if (s)
+            {
+                // needs only computing of full (true) length
 				return computeTrueLength(ref, lastPos, closestPoint);
-			}
-			else
-			{
-				e = dynamic_cast<Event*>(beginEvent);
-				if (e) 
-				{
-					// compute legth from end of vector
-					std::vector< QSharedPointer<Event> >::reverse_iterator rit = events.rbegin();
-					previous = (*rit)->getPosition();
-					while ( ( rit != events.rend() ) && ( (*rit).data() != e ) )
-					{
-						rit++;
-						current = (*rit)->getPosition();
-						pertinent_length += current.distance(previous);
-						previous = current;
-					}
+            }
+            else
+            {
+                e = dynamic_cast<Event*>(beginEvent);
+                if (e)
+                {
+                    // compute legth from end of vector
+                    std::vector< QSharedPointer<Event> >::reverse_iterator rit = events.rbegin();
+                    previous = (*rit)->getPosition();
+                    while ((rit != events.rend()) && ((*rit).data() != e))
+                    {
+                        rit++;
+                        current = (*rit)->getPosition();
+                        pertinent_length += current.distance(previous);
+                        previous = current;
+                    }
 
-					// Compute distance from the last event to the nearest point from receptor
-					posLastEvent = vec3(events.back()->getPosition());
+                    // Compute distance from the last event to the nearest point from receptor
+                    posLastEvent = vec3(events.back()->getPosition());
 					closestPoint = ref.closestPointOnLine(posLastEvent, lastPos); 
-					return ( pertinent_length += closestPoint.distance(posLastEvent) );
-				}
-			}
+                    return (pertinent_length += closestPoint.distance(posLastEvent));
+                }
+            }
 
-			break;
-	}
+            break;
+    }
 
-	return 0.;
+    return 0.;
 }
 
 Base* Ray::getLastPertinentEventOrSource(typeevent evType)
 {
-	Base* res = (Base*) source;
+    Base* res = (Base*) source;
 
-	for (std::vector< QSharedPointer<Event> > :: iterator iter = events.begin(); iter != events.end(); ++iter)
-	{
+    for (std::vector< QSharedPointer<Event> > :: iterator iter = events.begin(); iter != events.end(); ++iter)
+    {
 		if ( (*iter)->getType() == evType ) { res = (Base*) ( (*iter).data() ); }
-	}
+    }
 
-	return res;
+    return res;
 }
 
 std::vector<unsigned int> Ray::getFaceHistory()
@@ -285,22 +285,22 @@ decimal Ray::getSolidAngle( bool &diffraction)
 
 signature Ray::getSignature(const typeevent& typeEv)
 {
-	bitSet SR = getSRBitSet(source->getId(), (static_cast<Recepteur*>(recepteur))->getId());
-	bitSet SD = getEventsBitSet(typeEv);
+    bitSet SR = getSRBitSet(source->getId(), (static_cast<Recepteur*>(recepteur))->getId());
+    bitSet SD = getEventsBitSet(typeEv);
 
-	return std::make_pair(SR, SD);
+    return std::make_pair(SR, SD);
 }
 
 bitSet Ray::getEventsBitSet(const typeevent& typeEv)
 {
-	bitSet SD = 0;
-	for (size_t i=0; i<events.size(); i++)
-	{
-		SD = SD << 1;
+    bitSet SD = 0;
+    for (size_t i = 0; i < events.size(); i++)
+    {
+        SD = SD << 1;
 
-		if ( events.at(i)->getType() == typeEv) { SD++; }
-	}
+        if (events.at(i)->getType() == typeEv) { SD++; }
+    }
 
-	return SD;
+    return SD;
 }
 

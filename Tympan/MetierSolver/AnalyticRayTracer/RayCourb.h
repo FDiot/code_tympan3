@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #ifndef __RAYCOURB_H
 #define __RAYCOURB_H
 
@@ -36,7 +36,7 @@ public:
     RayCourb(const vec3& a);
     RayCourb(const RayCourb& r);
 
-	~RayCourb() {}
+    ~RayCourb() {}
 
     /*!
      * \fn void purge()
@@ -58,7 +58,7 @@ public:
 
 public:
     // donnees membres
-	vector<Step> etapes;						 /*!< vecteur des pas de temps calculés */
+    vector<Step> etapes;                         /*!< vecteur des pas de temps calculés */
     int nbReflex;                                /*!< nombre de reflexions */
     vector<int> position;                        /*!< liste des indices des points ou il y a une reflexion (le numero du pas de temps) */
     map<int, int> rencontre;                     /*!< couple (pas de temps, numero de la face rencontree) */

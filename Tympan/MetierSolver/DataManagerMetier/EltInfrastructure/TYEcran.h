@@ -79,7 +79,7 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     virtual int intersects(const OSegment3D& seg, TYTabPoint& ptList) const;
 
@@ -101,7 +101,7 @@ public:
     TYTabPoint getContour() const;
 
     /**
-     * Retourne le tableau des faces inférieurs d'un écran (s'il comporte plusieurs segments)
+     * Retourne le tableau des faces infrieurs d'un cran (s'il comporte plusieurs segments)
      */
     TYTabLPPolygon getContours() const;
 

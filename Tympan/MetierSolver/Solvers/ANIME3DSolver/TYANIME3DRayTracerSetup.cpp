@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -344,12 +344,12 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 
 bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs)
 {
-	selectorManagerValidation.addSelector(new LengthSelector<Ray>(globalMaxLength));
+    selectorManagerValidation.addSelector(new LengthSelector<Ray>(globalMaxLength));
     //  selectorManagerIntersection.addSelector(new LengthSelector<Ray>(globalMaxLength));
-	//
+    //
     selectorManagerIntersection.addSelector(new DiffractionSelector<Ray>(globalMaxDiffraction));
     selectorManagerIntersection.addSelector(new ReflectionSelector<Ray>(globalMaxReflexion, globalUseSol));
-//	selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));
+    //  selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));
 
     // Ajoute des cylindres sur les arretes diffractantes
     PostTreatment::constructEdge(scene);

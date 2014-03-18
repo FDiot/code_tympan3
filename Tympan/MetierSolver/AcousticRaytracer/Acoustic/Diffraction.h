@@ -28,23 +28,23 @@ class Diffraction : public Event
 public:
 
     Diffraction(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Cylindre* c = NULL):
-				Event(position, incomingDirection, (Shape*)(c)) 
-	{ 
-		name = "unknown diffraction"; 
-		nbResponseLeft = initialNbResponse = 200; 
-		type = DIFFRACTION; 
-		buildRepere(); 
-		computeAngle();
+        Event(position, incomingDirection, (Shape*)(c))
+    {
+        name = "unknown diffraction";
+        nbResponseLeft = initialNbResponse = 200;
+        type = DIFFRACTION;
+        buildRepere();
+        computeAngle();
 
-		computeDTheta();
-	}
+        computeDTheta();
+    }
 
     Diffraction(const Diffraction& other) : Event(other)
     {
         type = DIFFRACTION;
         buildRepere();
         computeAngle();
-		computeDTheta();
+        computeDTheta();
     }
 
     virtual ~Diffraction()
@@ -52,21 +52,21 @@ public:
 
     }
 
-    virtual void setNbResponseLeft(int _nbResponseLeft) 
-	{ 
-		nbResponseLeft = static_cast<unsigned int>( std::floor( static_cast<decimal>(_nbResponseLeft-1) / M_2PI * angleOuverture + 0.5 ) );
-		nbResponseLeft = nbResponseLeft >= 4 ? nbResponseLeft : 4; // Limite le nombre à 4
-		initialNbResponse = nbResponseLeft;
-		computeDTheta(); 
-	}
+    virtual void setNbResponseLeft(int _nbResponseLeft)
+    {
+        nbResponseLeft = static_cast<unsigned int>(std::floor(static_cast<decimal>(_nbResponseLeft - 1) / M_2PI * angleOuverture + 0.5));
+        nbResponseLeft = nbResponseLeft >= 4 ? nbResponseLeft : 4; // Limite le nombre à 4
+        initialNbResponse = nbResponseLeft;
+        computeDTheta();
+    }
 
-	virtual bool getResponse(vec3& r, bool force = false);
+    virtual bool getResponse(vec3& r, bool force = false);
 
     virtual bool isAcceptableResponse(vec3& test);
 
     void setAngleOuverture(decimal angle) { angleOuverture = angle; computeDTheta(); }
     decimal getAngleOuverture() { return angleOuverture; }
-	decimal getDeltaTheta() const { return delta_theta; }
+    decimal getDeltaTheta() const { return delta_theta; }
 
     virtual bool generateResponse(std::vector<vec3>& responses, unsigned int nbResponses);
     virtual bool generateTest(std::vector<vec3>& succededTest, std::vector<vec3>& failTest, unsigned int nbResponses);
@@ -79,17 +79,17 @@ protected:
 
     void buildRepere();
     void computeAngle();
-	void computeDTheta() 
-	{
-		delta_theta = angleOuverture / static_cast<decimal>(nbResponseLeft); 
-	}
+    void computeDTheta()
+    {
+        delta_theta = angleOuverture / static_cast<decimal>(nbResponseLeft);
+    }
 
     Repere localRepere;
 
-    decimal angleOuverture;			/*!< Aperture angle of the cone*/
-    decimal angleArrive;			/*!< incident ray angle*/
+    decimal angleOuverture;         /*!< Aperture angle of the cone*/
+    decimal angleArrive;            /*!< incident ray angle*/
 
-	decimal delta_theta;			/*!< angle step betwwen two rays to send */
+    decimal delta_theta;            /*!< angle step betwwen two rays to send */
 };
 
 #endif

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
+*/
 
 #include <map>
 #include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
@@ -25,25 +25,25 @@ class fermatPostFilter : public postFilter
 public:
 //	fermatPostFilter(std::vector<Ray*> *tabRay) : postFilter(tabRay){}
 	fermatPostFilter(std::deque<Ray*> *tabRay) : postFilter(tabRay){}
-	~fermatPostFilter() { _tabRay = NULL; }
-	
-	/*!
-	 * \fn unsigned int Process();
-	 * \brief apply a filter to the group of valid rays found by ray tracing
-	 * \return number of rays suppressed
-	 */
-	virtual unsigned int Process() 
-	{
-		decimal ray_length = 0.0;
-		unsigned int suppressed = 0;
+    ~fermatPostFilter() { _tabRay = NULL; }
 
-		// Pour chaque rayon
+    /*!
+     * \fn unsigned int Process();
+     * \brief apply a filter to the group of valid rays found by ray tracing
+     * \return number of rays suppressed
+     */
+    virtual unsigned int Process()
+    {
+        decimal ray_length = 0.0;
+        unsigned int suppressed = 0;
+
+        // Pour chaque rayon
 //		std::vector<Ray*>::iterator iter = _tabRay->begin();
 		std::deque<Ray*>::iterator iter = _tabRay->begin();
-		while( iter != _tabRay->end() )
-		{
-			vec3 closestPoint;
-			Ray *ray = (*iter);
+        while (iter != _tabRay->end())
+        {
+            vec3 closestPoint;
+            Ray* ray = (*iter);
 
 			vec3 receptorPos( static_cast<Recepteur*> (ray->recepteur)->getPosition() );
 			vec3 finalPos( ray->finalPosition );
@@ -51,40 +51,40 @@ public:
 			decimal trueLength = ray->computeTrueLength(receptorPos, finalPos, closestPoint);
 
 			decimal epaisseur = ray->getThickness( trueLength, false );
-			decimal closestDistance = static_cast<Recepteur*> ( ray->getRecepteur() )->getPosition().distance(closestPoint);
-			if ( closestDistance >= ( epaisseur/2. ) ) 
-			{
-				iter = _tabRay->erase(iter);
-				suppressed ++;
-				continue;
-			}
+            decimal closestDistance = static_cast<Recepteur*>(ray->getRecepteur())->getPosition().distance(closestPoint);
+            if (closestDistance >= (epaisseur / 2.))
+            {
+                iter = _tabRay->erase(iter);
+                suppressed ++;
+                continue;
+            }
 
-			iter++;
-		}
+            iter++;
+        }
 
-		// At this point similar rays are very close. Anyone is good enough 
-		// to use in acoustic computing. So we decide to delete all duplicates
-		// rays, using a map.
+        // At this point similar rays are very close. Anyone is good enough
+        // to use in acoustic computing. So we decide to delete all duplicates
+        // rays, using a map.
 		int deleted = _tabRay->size();
-		map < vector<unsigned int>, Ray* > mapRays;
-		for (unsigned int i = 0; i<_tabRay->size(); i++)
-		{
-			vector<unsigned int> tab = _tabRay->at(i)->getPrimitiveHistory();
-			mapRays[tab] = _tabRay->at(i);
-		}
+        map < vector<unsigned int>, Ray* > mapRays;
+        for (unsigned int i = 0; i < _tabRay->size(); i++)
+        {
+            vector<unsigned int> tab = _tabRay->at(i)->getPrimitiveHistory();
+            mapRays[tab] = _tabRay->at(i);
+        }
 
-		// Keep only rays on the map
-		_tabRay->clear();
-		map < vector<unsigned int>, Ray* >::iterator it;
-		for (it = mapRays.begin(); it != mapRays.end(); ++it)
-		{
-			_tabRay->push_back( (*it).second );
-		}
+        // Keep only rays on the map
+        _tabRay->clear();
+        map < vector<unsigned int>, Ray* >::iterator it;
+        for (it = mapRays.begin(); it != mapRays.end(); ++it)
+        {
+            _tabRay->push_back((*it).second);
+        }
 
 		suppressed += ( deleted - _tabRay->size() );
 
-		return suppressed; 
-	}
+        return suppressed;
+    }
 
 protected:
 

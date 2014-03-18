@@ -250,6 +250,19 @@ public:
 
     virtual void inverseNormale();
 
+    /**
+     * @brief Export the surface as a triangular mesh
+     *
+     * NB : This function expect empty deques and will clear the deque passed.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     */
+    void
+    exportMesh(
+        std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles,
+        const TYGeometryNode& geonode) const;
 
 
     // Membres
@@ -265,4 +278,3 @@ public:
 
 
 #endif // __TY_RECTANGLE__
-

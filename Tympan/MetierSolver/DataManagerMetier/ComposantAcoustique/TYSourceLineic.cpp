@@ -147,10 +147,10 @@ int TYSourceLineic::fromXML(DOM_Element domElement)
     }
 
     // Recupere l'ensemble des source ponctuelles et derivees
-    TYElementCollection srcs = TYElement::findTypeCollectionAndCallFromXML(domElement, "TYSourcePonctuelle");
+    LPTYElementArray srcs = TYElement::findTypeCollectionAndCallFromXML(domElement, "TYSourcePonctuelle");
 
     // Ajoute les srcs trouvees
-    for (i = 0; i < srcs.getCount(); i++)
+    for (i = 0; i < srcs.size(); i++)
     {
         addSrc((LPTYSourcePonctuelle&) srcs[i]);
     }

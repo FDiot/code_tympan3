@@ -33,8 +33,9 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
 
 
-TYPolyLineGraphic::TYPolyLineGraphic(bool closed /*=false*/) :
-    TYElementGraphic(NULL)
+TYPolyLineGraphic::TYPolyLineGraphic(bool closed /*=false*/)
+    : TYElementGraphic(NULL)
+    , width(default_width_px)
 {
     _closed = closed;
 }
@@ -92,7 +93,7 @@ void TYPolyLineGraphic::display(GLenum mode /*= GL_RENDER*/)
             line_mode = GL_LINE_STRIP;
         }
 
-        glLineWidth(2.0);
+        glLineWidth(width);
 
         glBegin(line_mode);
 
@@ -108,4 +109,3 @@ void TYPolyLineGraphic::display(GLenum mode /*= GL_RENDER*/)
         _globalBoundingBox.Enlarge(_boundingBox);
     }
 }
-

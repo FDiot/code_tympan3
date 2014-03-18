@@ -1,6 +1,6 @@
 set(MODULE_NAME tympan_tools)
 
-file(GLOB ${MODULE_NAME}_SRCS *.cpp *.h)
+file(GLOB ${MODULE_NAME}_SRCS *.cpp *.h *.hpp)
 
 #set_precompiled_header(${MODULE_NAME} CXX
 #  ${CMAKE_CURRENT_SOURCE_DIR}/XXX.h ${MODULE_NAME}_PCH_SRCS)

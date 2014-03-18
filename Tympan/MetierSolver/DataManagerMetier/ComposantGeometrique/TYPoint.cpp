@@ -226,11 +226,11 @@ int TYPoint::fromXML(DOM_Element domElement)
 
 /*static*/ TYTabPoint TYPoint::checkPointsMaxDistance(const TYPoint& point1, const TYPoint& point2, const double& distanceMax)
 {
-	TYTabPoint tabPoints;
-	tabPoints.push_back(point1);
-	tabPoints.push_back(point2);
+    TYTabPoint tabPoints;
+    tabPoints.push_back(point1);
+    tabPoints.push_back(point2);
 
-	return checkPointsMaxDistance(tabPoints, distanceMax);
+    return checkPointsMaxDistance(tabPoints, distanceMax);
 }
 
 /*static*/ TYTabPoint TYPoint::checkPointsMaxDistance(const TYTabPoint& points)

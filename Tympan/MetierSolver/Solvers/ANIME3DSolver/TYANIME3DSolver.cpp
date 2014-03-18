@@ -67,7 +67,7 @@ TYANIME3DSolver::TYANIME3DSolver()
 
 TYANIME3DSolver::~TYANIME3DSolver()
 {
-	purge();
+    purge();
 }
 
 void TYANIME3DSolver::purge()
@@ -86,107 +86,110 @@ void TYANIME3DSolver::init(const TYSiteNode& site, TYCalcul& calcul)
 
     calcul.getAllRecepteurs(_tabRecepteurs); // recuperation des recepteurs
 
-	_tabRay.clear();
+    _tabRay.clear();
 }
 
 bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
 {
-	// Récupération (once for all) des sources et des récepteurs
-	init(site, calcul);
+    // Rcupration (once for all) des sources et des rcepteurs
+    init(site, calcul);
 
-	// Construction de la liste des faces utilisée pour le calcul
-	TYANIME3DFaceSelector fs(site);
-	bool bRet = fs.exec(_tabPolygon, _tabPolygonSize);
+    // Construction de la liste des faces utilise pour le calcul
+    TYANIME3DFaceSelector fs(site);
+    bool bRet = fs.exec(_tabPolygon, _tabPolygonSize);
 
-	if (!bRet) return false;
+    if (!bRet) { return false; }
 
-	// Ray tracing computation
-	TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, _tabSources, _tabRecepteurs, _tabRay);
-	bRet &= apf.exec();
- 
-	////////////////////////////////////////////////////////////
+    // Ray tracing computation
+    TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, _tabSources, _tabRecepteurs, _tabRay);
+    bRet &= apf.exec();
+
+    ////////////////////////////////////////////////////////////
     // Calculs acoustiques sur les rayons via la methode ANIME3D
     ////////////////////////////////////////////////////////////
 
-	TYANIME3DAcousticModel aam(calcul, site, _tabRay, _tabPolygon, _tabSources, _tabRecepteurs);
+    TYANIME3DAcousticModel aam(calcul, site, _tabRay, _tabPolygon, _tabSources, _tabRecepteurs);
 
     // calcul de la matrice de pression totale pour chaque couple (S,R)
     OTab2DSpectreComplex tabSpectre = aam.ComputeAcousticModel();
 
     TabTrajet& trajets = calcul.getTabTrajet();  // recuperation du tableau de trajets
 
-	trajets.clear(); // nettoyage des trajets
+    trajets.clear(); // nettoyage des trajets
 
-	OSpectre sLP; // puissance de la source et spectre de pression pour chaque couple (S,R)
-	TYTrajet traj;
+    OSpectre sLP; // puissance de la source et spectre de pression pour chaque couple (S,R)
+    TYTrajet traj;
 
-	for(int i=0; i<_tabSources.size(); i++) // boucle sur les sources
-	{
-		for(int j=0; j<_tabRecepteurs.size(); j++) // boucle sur les recepteurs
-	   {
-			tabSpectre[i][j].setEtat(SPECTRE_ETAT_LIN);
-			sLP = tabSpectre[i][j];
-			sLP.setType(SPECTRE_TYPE_LP);
+    for (int i = 0; i < _tabSources.size(); i++) // boucle sur les sources
+    {
+        for (int j = 0; j < _tabRecepteurs.size(); j++) // boucle sur les recepteurs
+        {
+            tabSpectre[i][j].setEtat(SPECTRE_ETAT_LIN);
+            sLP = tabSpectre[i][j];
+            sLP.setType(SPECTRE_TYPE_LP);
 
-			tabSpectre[i][j] = sLP.toDB();  // conversion du tableau resultat en dB
+            tabSpectre[i][j] = sLP.toDB();  // conversion du tableau resultat en dB
 
-			traj.setSourcePonctuelle(_tabSources[i]);
-			traj.setPointCalcul(_tabRecepteurs[j]);
-			traj.setSpectre(tabSpectre[i][j]);
-			trajets.push_back(traj);
-		}
-	}
+            traj.setSourcePonctuelle(_tabSources[i]);
+            traj.setPointCalcul(_tabRecepteurs[j]);
+            traj.setSpectre(tabSpectre[i][j]);
+            trajets.push_back(traj);
+        }
+    }
 
-	if (globalUseMeteo && globalOverSampleD)
-	{
-		for (unsigned int i=0; i<_tabRay.size(); i++)
-		{
-			apf.tyRayCorrection(_tabRay[i]);
-		}
-	}
+    if (globalUseMeteo && globalOverSampleD)
+    {
+        for (unsigned int i = 0; i < _tabRay.size(); i++)
+        {
+            apf.tyRayCorrection(_tabRay[i]);
+        }
+    }
 
-	calcul.setTabRays(_tabRay);
+    calcul.setTabRays(_tabRay);
 
-// BEGIN : COMPLEMENTS "DECORATIFS"
-    if (globalRestitModifiedGeom) { restitModifiedAlti(site, apf); }
+    // BEGIN : COMPLEMENTS "DECORATIFS"
+    // CAUTION restitModifiedAlti() is incompatible with the new altimetry
+    // if (globalRestitModifiedGeom) { restitModifiedAlti(site, apf); }
 
- //   // Exportation des donnees des rayons dans un fichier texte pour comparaison
- //   exportRays(calcul);
+    //   // Exportation des donnees des rayons dans un fichier texte pour comparaison
+    //   exportRays(calcul);
 
-	//// Generation du fichier de parametre pour execution avec TestMeteo
-	//buildTestMeteoParameters();
-// END : COMPLEMENTS "DECORATIFS"
+    //// Generation du fichier de parametre pour execution avec TestMeteo
+    //buildTestMeteoParameters();
+    // END : COMPLEMENTS "DECORATIFS"
 
-// BEGIN : COMPLEMENTS "DECORATIFS"
-	ostringstream fic_out;
+    // BEGIN : COMPLEMENTS "DECORATIFS"
+    ostringstream fic_out;
     fic_out << "rayons_infos.txt" << ends;
     ofstream fic(fic_out.str().c_str());
-	fic << "on a " << _tabRay.size() << " rayons dans cette scene" << endl; // nombre de rayons
-	fic.close();
-// END : COMPLEMENTS "DECORATIFS"
+    fic << "on a " << _tabRay.size() << " rayons dans cette scene" << endl; // nombre de rayons
+    fic.close();
+    // END : COMPLEMENTS "DECORATIFS"
 
     return true;
 }
 
+// CAUTION restitModifiedAlti() is incompatible with the new altimetry
+// void TYANIME3DSolver::restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcousticPathFinder& pathFinder)
+// {
+//     // Recuperation de l'altimetrie du site
+//     const TYTopographie* pTopo = site.getTopographie().getRealPointer();
+//     TYAltimetrie* pAlti = pTopo->getAltimetrie();
 
-void TYANIME3DSolver::restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcousticPathFinder& pathFinder)
-{
-    // Recuperation de l'altimetrie du site
-    const TYTopographie* pTopo = site.getTopographie().getRealPointer();
-    TYAltimetrie* pAlti = pTopo->getAltimetrie();
+//     // Recuperation de la scene de calcul
+//     vector<vec3>* tabvertex = pathFinder.getRayTracer().getScene()->getVertices();
 
-    // Recuperation de la scene de calcul
-    vector<vec3>* tabvertex = pathFinder.getRayTracer().getScene()->getVertices();
+//     // Remplissage du tableau de points
+//     TYTabPoint tabPts;
+//     tabPts.reserve(tabvertex->size());
+//     for (unsigned int i = 0; i < tabvertex->size(); i++)
+//     {
+//         tabPts.push_back(TYPoint(tabvertex->at(i).x, tabvertex->at(i).y, tabvertex->at(i).z));
+//     }
 
-    // Remplissage du tableau de points
-    TYTabPoint tabPts;
-	tabPts.reserve(tabvertex->size());
-    for (unsigned int i = 0; i < tabvertex->size(); i++)
-        tabPts.push_back(TYPoint(tabvertex->at(i).x, tabvertex->at(i).y, tabvertex->at(i).z));
-
-    // Recalcul de la triangulation de l'altimetrie
-    pAlti->compute(tabPts, 1.E-5);
-}
+//     // Recalcul de la triangulation de l'altimetrie
+//     pAlti->compute(tabPts, 1.E-5);
+// }
 
 //struct pairComparator
 //{
@@ -210,7 +213,7 @@ void TYANIME3DSolver::restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcoust
 //
 //    ostringstream fic_out;
 //    fic_out << "TOTORAYONS" << _curveRayTracing.Meteo.gradC << "_V" << _curveRayTracing.Meteo.gradV << "_D" << _curveRayTracing.dmax << ".txt" << ends;
-//    
+//
 //    ofstream fic(fic_out.str().c_str());
 //    fic << "On a " << _tabRay.size() << " rayons" << endl; // nombre de rayons
 //
@@ -231,7 +234,7 @@ void TYANIME3DSolver::restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcoust
 //        fic << endl; // on est a la fin du rayon
 //    }
 //
-//	fic.close();
+//  fic.close();
 //}
 //
 //void TYANIME3DSolver::buildTestMeteoParameters()
@@ -241,22 +244,22 @@ void TYANIME3DSolver::restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcoust
 //
 //    ofstream fic("MeteoParameters.txt");
 //
-//    fic << globalAnalyticGradC << " ;	// Vertical sound speed gradient" << endl; 
-//    fic << globalAnalyticGradV << " ;	// Vertical wind speed gradient" << endl; 
-//    fic << globalWindDirection << " ;	// Wind direction" << endl; 
-//	fic << 20 << " ;	// Number of ray per launch" << endl; 
-//    fic << 4 << " ;	// 1=Horizontal, 2=vertical, 3=spheric, 4=file" << endl; 
-//    fic << 0.0 << " ;	// Theta start angle" << endl; 
-//    fic << 0.0 << " ;	// Theta final angle" << endl; 
-//    fic << 0.0 << " ;	// Phi start angle" << endl; 
-//    fic << 60.0 << " ;	// Phi final angle" << endl; 
-//    fic << globalAnalyticTMax << " ;	// Max propagation duration" << endl;  
-//    fic << globalAnalyticDMax << " ;	// Max propagation distance" << endl;  
-//    fic << globalAnalyticH << " ;	// time step" << endl;  
-//    fic << 0 << " ;	// True if output file wanted" << endl;
-//    fic << fic_out.str().c_str() << " ;	// file containing rays" << endl;  
+//    fic << globalAnalyticGradC << " ; // Vertical sound speed gradient" << endl;
+//    fic << globalAnalyticGradV << " ; // Vertical wind speed gradient" << endl;
+//    fic << globalWindDirection << " ; // Wind direction" << endl;
+//  fic << 20 << " ;    // Number of ray per launch" << endl;
+//    fic << 4 << " ;   // 1=Horizontal, 2=vertical, 3=spheric, 4=file" << endl;
+//    fic << 0.0 << " ; // Theta start angle" << endl;
+//    fic << 0.0 << " ; // Theta final angle" << endl;
+//    fic << 0.0 << " ; // Phi start angle" << endl;
+//    fic << 60.0 << " ;    // Phi final angle" << endl;
+//    fic << globalAnalyticTMax << " ;  // Max propagation duration" << endl;
+//    fic << globalAnalyticDMax << " ;  // Max propagation distance" << endl;
+//    fic << globalAnalyticH << " ; // time step" << endl;
+//    fic << 0 << " ;   // True if output file wanted" << endl;
+//    fic << fic_out.str().c_str() << " ;   // file containing rays" << endl;
 //
-//	fic.close();
+//  fic.close();
 //}
 ////
 //void TYANIME3DSolver::restitMap(const TYSiteNode& site)
@@ -265,14 +268,14 @@ void TYANIME3DSolver::restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcoust
 //    const TYTopographie* pTopo = site.getTopographie().getRealPointer();
 //    TYAltimetrie* pAlti = pTopo->getAltimetrie();
 //
-//	QList<OPoint3D>& tabR3 = _curveRayTracing.list_vertex;
+//  QList<OPoint3D>& tabR3 = _curveRayTracing.list_vertex;
 //
 //    // Remplissage du tableau de points
 //    TYTabPoint tabPts;
-//	for (unsigned int i=0; i<tabR3.size(); i++)
-//	{
-//		tabPts.push_back( TYPoint(tabR3[i]._x, tabR3[i]._y, tabR3[i]._z) );
-//	}
+//  for (unsigned int i=0; i<tabR3.size(); i++)
+//  {
+//      tabPts.push_back( TYPoint(tabR3[i]._x, tabR3[i]._y, tabR3[i]._z) );
+//  }
 //
 //    // Recalcul de la triangulation de l'altimetrie
 //    pAlti->compute(tabPts, 1.E-5);

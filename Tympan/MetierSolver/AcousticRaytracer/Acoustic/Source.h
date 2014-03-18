@@ -24,7 +24,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 
 #include <iostream>
-#include "Tympan\MetierSolver\AcousticRaytracer\global.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/global.h"
 
 //#ifdef USE_QT
 //  #include "SourceGraphic.h"
@@ -104,7 +104,7 @@ public:
         //}
         else
         {
-			r = vec3(sampler->getSample());
+            r = vec3(sampler->getSample());
         }
 
         //std::cout<<"Renvoie d'une nouvelle direction."<<std::endl;
@@ -126,7 +126,7 @@ protected:
     Sampler* sampler;
     int nbRayLeft;
     int initialRayCount;
-	int indice; // Knows which ray we are working on.
+    int indice; // Knows which ray we are working on.
     unsigned int initialTargetCount;
     unsigned int targetCount;
     std::vector<vec3> directions;
@@ -134,4 +134,3 @@ protected:
     TargetManager* targetManager;
 };
 #endif
-
