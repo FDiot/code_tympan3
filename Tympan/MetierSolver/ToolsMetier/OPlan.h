@@ -25,7 +25,7 @@
 
 #include "OPoint3D.h"
 #include "OVector3D.h"
-
+#include "ORepere3D.h"
 
 /**
  * \file OPlan.h
@@ -229,6 +229,21 @@ public:
     bool isInPlan(const OPoint3D& pt);
 
     /**
+     * \brief Check whether the plane is valid.
+     *
+     * a OPlan object can be invalid, i.e. not actually represent a
+     * plane, in case two cases :
+     *  - the normal vector (\c _a, \c _b, \c _c) is null.
+     *    This is the case when a OPlan is default constructed.
+     *  - the normal vector, the origin, ... has not component which is NaN
+     *    This can happend when points with NaN component are used.
+     */
+    bool is_valid();
+    bool is_null();
+    bool is_NaN();
+
+
+    /**
      * \fn double angle(const OPlan& plan);
      * \brief Calcul de l'angle entre ce plan et un autre plan.
      *
@@ -248,20 +263,20 @@ public:
      */
     double distance(const OPoint3D& pt);
 
- 
-	/*!
-	 * \fn OPoint3D symPtPlan(const OPoint3D& pt)
-	 * \brief Calcule le symétrique d'un point par rapport au plan
-	 */
-	OPoint3D symPtPlan(const OPoint3D& pt);
 
-	/*!
-	 * \fn OPoint3D projPtPlan(const OPoint3D& pt)
-	 * \brief Calcule le projeté d'un point sur le plan
-	 */
-	OPoint3D projPtPlan(const OPoint3D& pt);
-	
-	/**
+    /*!
+     * \fn OPoint3D symPtPlan(const OPoint3D& pt)
+     * \brief Calcule le symétrique d'un point par rapport au plan
+     */
+    OPoint3D symPtPlan(const OPoint3D& pt);
+
+    /*!
+     * \fn OPoint3D projPtPlan(const OPoint3D& pt)
+     * \brief Calcule le projeté d'un point sur le plan
+     */
+    OPoint3D projPtPlan(const OPoint3D& pt);
+
+    /**
      * \fn bool distancePlanParallel(const OPlan& plan, double& distance);
      * \brief Calcul de la distance entre ce plan et un autre plan parallele a ce plan.
      *
@@ -295,6 +310,16 @@ public:
      */
     bool isOrthogonal(const OPlan& plan);
 
+protected:
+    /**
+     * \brief updates the implicit representation of the plane
+     *
+     * We derive a reference frame for the plane (vector u and v) from
+     * the implicit equation which is the primnary representation of
+     * the plane.
+     *
+     */
+    void update_explicit_repr(OVector3D hint = OVector3D(1, 1, 1));
 
     //Members
 public:
@@ -306,8 +331,9 @@ public:
     double _c;
     ///The d parameter in the equation ax+by+cz+d=0.
     double _d;
+    // Redundant but explicit representation : the base vectors
+    ORepere3D rframe;
 };
 
 
 #endif //__O_PLAN__
-

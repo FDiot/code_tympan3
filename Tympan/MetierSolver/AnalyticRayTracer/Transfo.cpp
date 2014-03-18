@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #include "RayCourb.h"
 #include "Transfo.h"
 #include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
@@ -26,8 +26,8 @@ using namespace std;
 
 void Transfo::clear()
 {
-	Liste_triangles.clear();
-	shot.clear();
+    Liste_triangles.clear();
+    shot.clear();
 }
 
 vec3 Transfo::fonction_h(const vec3& P)
@@ -47,9 +47,9 @@ vec3 Transfo::fonction_h(const vec3& P)
         //Si le point appartient a un triangle, on le transforme.
         //Sinon, le point n'est pas modifie (il est en dehors de la zone de transformation).
 
-		TabTriangle[0] = vec3( OPoint3Dtovec3( Liste_vertex[Liste_triangles[i]._p1] ) );
-        TabTriangle[1] = vec3( OPoint3Dtovec3( Liste_vertex[Liste_triangles[i]._p2] ) );
-        TabTriangle[2] = vec3( OPoint3Dtovec3( Liste_vertex[Liste_triangles[i]._p3] ) );
+        TabTriangle[0] = vec3(OPoint3Dtovec3(Liste_vertex[Liste_triangles[i]._p1]));
+        TabTriangle[1] = vec3(OPoint3Dtovec3(Liste_vertex[Liste_triangles[i]._p2]));
+        TabTriangle[2] = vec3(OPoint3Dtovec3(Liste_vertex[Liste_triangles[i]._p3]));
 
         if (IsInTriangle(P, TabTriangle))
         {
@@ -72,7 +72,7 @@ vec3 Transfo::fonction_h_inverse(const vec3& P)
 
     // On cherche a quel triangle de Surf_Interp le point P appartient.
     // Un point P appartient au triangle ABC si l'aire signee des triangles ABP, BCP et CAP est positive.
-    
+
     vec3* TabTriangle = new vec3[3];
 
     for (int i = 0; i < Liste_triangles.size(); ++i)
@@ -84,7 +84,7 @@ vec3 Transfo::fonction_h_inverse(const vec3& P)
         OPoint3D v2 = Liste_vertex[Liste_triangles[i]._p2];
         OPoint3D v3 = Liste_vertex[Liste_triangles[i]._p3];
 
-		TabTriangle[0] = vec3(v1._x, v1._y, v1._z);
+        TabTriangle[0] = vec3(v1._x, v1._y, v1._z);
         TabTriangle[1] = vec3(v2._x, v2._y, v2._z);
         TabTriangle[2] = vec3(v3._x, v3._y, v3._z);
 
@@ -96,32 +96,32 @@ vec3 Transfo::fonction_h_inverse(const vec3& P)
 
     }
 
-	delete [] TabTriangle; // Gestion memoire
-    
-	return R;
+    delete [] TabTriangle; // Gestion memoire
+
+    return R;
 }
 
 
 void Transfo::trianguleNappe()
 {
-	unsigned int nbRay = shot.nbRay;
+    unsigned int nbRay = shot.nbRay;
 
-	// 1- On creer nos triangles de Delaunay
+    // 1- On creer nos triangles de Delaunay
     ODelaunayMaker oDelaunayMaker(1e-5);
 
     for (unsigned int i = 0; i < nbRay; ++i)                                                      // boucle sur les rayons lances
     {
         for (unsigned int j = 0; j < shot.MatRes[0][i].etapes.size(); ++j)                         // boucle sur les points du rayon
         {
-			oDelaunayMaker.addVertex( vec3toOPoint3D(shot.MatRes[0][i].etapes[j].pos) );
-		}
-	}
+            oDelaunayMaker.addVertex(vec3toOPoint3D(shot.MatRes[0][i].etapes[j].pos));
+        }
+    }
 
     oDelaunayMaker.compute();
 
     // 2- On a notre liste de triangles
     Liste_triangles = oDelaunayMaker.getFaces();
-	Liste_vertex = oDelaunayMaker.getVertex();
+    Liste_vertex = oDelaunayMaker.getVertex();
 }
 
 void Transfo::buildInterpolationSurface()
@@ -135,7 +135,7 @@ void Transfo::buildInterpolationSurface()
 
 #ifdef _DEBUG
     // 3- On creer un fichier .txt contenant nos triangles et un autre contenant nos points
-	ofstream ff("DelaunaySRS.txt");
+    ofstream ff("DelaunaySRS.txt");
 
     for (int i = 0; i < Liste_triangles.size(); i++)
     {

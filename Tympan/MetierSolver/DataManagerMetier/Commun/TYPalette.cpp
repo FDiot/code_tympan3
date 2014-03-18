@@ -525,7 +525,7 @@ LPTYPalette TYPalette::loadPaletteFromFile(const QString& qFileName)
 {
     // Chargement du fichier
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
 
     bool status = xmlManager.load(qFileName, elements);
     if (status)

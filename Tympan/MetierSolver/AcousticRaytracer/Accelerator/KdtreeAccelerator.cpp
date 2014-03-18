@@ -234,15 +234,17 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
         if (r->maxt < tmin) { break; }
         if (!node->isLeaf())
         {
-            if (trace) { //std::cout << "Intersection avec le noeud d'indice " << indexNode << std::endl; 
-			}
+            if (trace)   //std::cout << "Intersection avec le noeud d'indice " << indexNode << std::endl;
+            {
+            }
             // Process kd-tree interior node
 
             // Compute parametric distance along ray to split plane
             int axis = node->getAxe();
             float tplane = (node->getAxeValue() - r->position[axis]) * invDir[axis];
-            if (trace) { //std::cout << "axe : " << axis << ",tplane : " << tplane << ", split : " << node->getAxeValue() << ", origine : " << r->position[axis] << ", invDir : " << invDir[axis] << endl; 
-			}
+            if (trace)   //std::cout << "axe : " << axis << ",tplane : " << tplane << ", split : " << node->getAxeValue() << ", origine : " << r->position[axis] << ", invDir : " << invDir[axis] << endl;
+            {
+            }
 
             // Get node children pointers for ray
             KDNode* firstChild, *secondChild;
@@ -250,15 +252,17 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
                              (r->position[axis] == node->getAxeValue() && r->direction[axis] >= 0);
             if (belowFirst)
             {
-                if (trace) { //std::cout << "Push du noeud (" << indexNode + 1 << ") puis (" << node->AboveChild() << ")" << std::endl; 
-				}
+                if (trace)   //std::cout << "Push du noeud (" << indexNode + 1 << ") puis (" << node->AboveChild() << ")" << std::endl;
+                {
+                }
                 firstChild = node + 1;
                 secondChild = &tableNode[node->AboveChild()];
             }
             else
             {
-                if (trace) { //std::cout << "Push du noeud (" << node->AboveChild() << ") puis (" << indexNode + 1 << ")" << std::endl; 
-				}
+                if (trace)   //std::cout << "Push du noeud (" << node->AboveChild() << ") puis (" << indexNode + 1 << ")" << std::endl;
+                {
+                }
                 firstChild = &tableNode[node->AboveChild()];
                 secondChild = node + 1;
             }
@@ -266,20 +270,23 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
             // Advance to next child node, possibly enqueue other child
             if (tplane > tmax || tplane < 0)
             {
-                if (trace) { //std::cout << "On se deplace au premier noeud (tplane = " << tplane << ")" << std::endl; 
-				}
+                if (trace)   //std::cout << "On se deplace au premier noeud (tplane = " << tplane << ")" << std::endl;
+                {
+                }
                 node = firstChild;
             }
             else if (tplane < tmin)
             {
-                if (trace) { //std::cout << "On se deplace au second noeud." << std::endl; 
-				}
+                if (trace)   //std::cout << "On se deplace au second noeud." << std::endl;
+                {
+                }
                 node = secondChild;
             }
             else
             {
-                if (trace) { //std::cout << "On se deplce au premier noeud et on empile le second." << std::endl; 
-				}
+                if (trace)   //std::cout << "On se deplce au premier noeud et on empile le second." << std::endl;
+                {
+                }
                 // Enqueue _secondChild_ in todo list
                 todo[todoPos].node = secondChild;
                 todo[todoPos].tmin = tplane;
@@ -294,8 +301,9 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
             // Check for intersections inside leaf node
             unsigned int nPrimitives = node->getNbPrimitives();
             //std::cout<<"Premiere primitive du noeud : "<<node->getFirstIndex()<<"(max : "<<initialMesh->size()<<")."<<std::endl;
-            if (trace) { //std::cout << "La feuille contient " << node->getNbPrimitives() << " primitives." << std::endl; 
-			}
+            if (trace)   //std::cout << "La feuille contient " << node->getNbPrimitives() << " primitives." << std::endl;
+            {
+            }
             if (nPrimitives == 1)
             {
                 Shape* prim = initialMesh->at(node->getFirstIndex());
@@ -342,10 +350,12 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
                     }
                 }
                 if (hit)
-                    if (trace) { //std::cout << "Une intersection a ete trouve dans ce noeud." << std::endl; 
-					}
-                    else if (trace) { //std::cout << "Aucune intersection n'a ete trouve dans ce noeud." << std::endl; 
-					}
+                    if (trace)   //std::cout << "Une intersection a ete trouve dans ce noeud." << std::endl;
+                    {
+                    }
+                    else if (trace)   //std::cout << "Aucune intersection n'a ete trouve dans ce noeud." << std::endl;
+                    {
+                    }
             }
 
             // Grab next node to process from todo list

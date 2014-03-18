@@ -127,7 +127,7 @@ bool TYSol::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
         _pVegetation->deepCopy(pOtherSol->_pVegetation, copyId);
     }
 
-	calculZc(); // Compute _pImpedance spectrum
+    calculZc(); // Compute _pImpedance spectrum
 
     return true;
 }
@@ -648,5 +648,5 @@ OSpectreComplex TYSol::calculQ(const double& angle, const double& rR, const TYAt
     OSpectreComplex w  = calculW(Zs, rR, angle, Atmo);
     OSpectreComplex fW = calculFw(w);
 
-	return calculQ(angle, rP, fW).toModulePhase();
+    return calculQ(angle, rP, fW).toModulePhase();
 }

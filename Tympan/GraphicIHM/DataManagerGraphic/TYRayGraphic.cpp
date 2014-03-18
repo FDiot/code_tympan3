@@ -52,7 +52,7 @@ void TYRayGraphic::getRayEventColor(TYRayEvent& e)
     switch (e.type)
     {
         case TYSOURCE:
-            _r=1.0f; _g=1.0f; _b=0.0f;  // jaune;
+            _r = 1.0f; _g = 1.0f; _b = 0.0f; // jaune;
             break;
 
         case TYDIFFRACTION:
@@ -64,11 +64,11 @@ void TYRayGraphic::getRayEventColor(TYRayEvent& e)
             break;
 
         case TYREFLEXIONSOL:
-            _r=1.0f; _g=0.5f; _b=0.0f; // orange
+            _r = 1.0f; _g = 0.5f; _b = 0.0f; // orange
 
         case TYREFRACTION :
-			// Do nothing 
-//            _r=0.0f; _g=0.84f; _b=0.35f; // vert
+            // Do nothing
+            //            _r=0.0f; _g=0.84f; _b=0.35f; // vert
             break;
 
         case TYRECEPTEUR:

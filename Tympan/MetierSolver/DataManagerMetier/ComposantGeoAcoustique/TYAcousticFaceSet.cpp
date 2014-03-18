@@ -115,7 +115,7 @@ int TYAcousticFaceSet::fromXML(DOM_Element domElement, bool withfaces)
     return 1;
 }
 
-void TYAcousticFaceSet::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYAcousticFaceSet::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
 }
 

@@ -82,8 +82,7 @@ public:
      * Set/Get du materiau.
      */
     LPTYSol getSol() const { return _pSol;}
-
-    TYSol* getSol() { return _pSol._pObj; }
+    LPTYSol getSol() { return _pSol._pObj; }
 
     /**
      * Set/Get du materiau.

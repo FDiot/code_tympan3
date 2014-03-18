@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 //#include "std_tools.hpp"
 #include <cassert>
 #include <math.h>
@@ -58,7 +58,7 @@ typedef unsigned int bitSet; /*!< used to manage set of elements*/
 #endif
 
 #ifndef M_4PI
-#define M_4PI				(decimal)12.566370614359172953850573533118		/*!< 4 * PI */
+#define M_4PI               (decimal)12.566370614359172953850573533118      /*!< 4 * PI */
 #endif
 
 #define M_PI2               (decimal)9.869604401089358618834490999876       /*!< PI au carre */
@@ -129,12 +129,12 @@ public:
     base_vec3& operator-=(const base_vec3& _v) { return *this = *this - _v; }
 
     base_t operator*(const base_vec3& _v) const { return this->x * _v.x + this->y * _v.y + this->z * _v.z; }
-    base_vec3 operator ^(const base_vec3& _v)const 
-	{
-		return base_vec3(	this->y * _v.z - this->z * _v.y, 
-							this->z * _v.x - this->x * _v.z, 
-							this->x * _v.y - this->y * _v.x) ;
-	}   // produit vectoriel
+    base_vec3 operator ^(const base_vec3& _v)const
+    {
+        return base_vec3(this->y * _v.z - this->z * _v.y,
+                         this->z * _v.x - this->x * _v.z,
+                         this->x * _v.y - this->y * _v.x) ;
+    }   // produit vectoriel
 
     base_t operator*(const vec4& _v) const;
 
@@ -253,7 +253,7 @@ typedef base_vec3<double> dvec3;
 inline std::vector<vec3> operator * (const std::vector<vec3>& _v, const decimal& _a)
 {
     std::vector<vec3> res ;
-	BOOST_FOREACH(vec3 vec, _v) { res.push_back(vec * _a); }
+    BOOST_FOREACH(vec3 vec, _v) { res.push_back(vec * _a); }
     return res;
 }
 
@@ -261,7 +261,7 @@ inline std::vector<vec3> operator + (const std::vector<vec3>& _u, const std::vec
 {
     assert(_u.size() == _v.size());
     std::vector<vec3> res;
-    for (unsigned int i = 0; i < _v.size(); ++i) { res.push_back( _u[i] + _v[i] ); }
+    for (unsigned int i = 0; i < _v.size(); ++i) { res.push_back(_u[i] + _v[i]); }
     return res;
 }
 
@@ -269,7 +269,7 @@ inline std::vector<vec3> operator + (const std::vector<vec3>& _u, const std::vec
 inline std::vector<dvec3> operator * (const std::vector<dvec3>& _v, const decimal& _a)
 {
     std::vector<dvec3> res ;
-	BOOST_FOREACH(dvec3 vec, _v) { res.push_back(vec * _a); }
+    BOOST_FOREACH(dvec3 vec, _v) { res.push_back(vec * _a); }
     return res;
 }
 
@@ -277,7 +277,7 @@ inline std::vector<dvec3> operator + (const std::vector<dvec3>& _u, const std::v
 {
     assert(_u.size() == _v.size());
     std::vector<dvec3> res;
-    for (unsigned int i = 0; i < _v.size(); ++i) { res.push_back( _u[i] + _v[i] ); }
+    for (unsigned int i = 0; i < _v.size(); ++i) { res.push_back(_u[i] + _v[i]); }
     return res;
 }
 
@@ -285,13 +285,13 @@ inline std::vector<dvec3> operator + (const std::vector<dvec3>& _u, const std::v
  * \fn OPoint3D vec3ToOPoint3D(const vec3& p)
  * \brief convertit un vec3 en OPoint3D
  */
-inline OPoint3D vec3toOPoint3D( const vec3& _v ) { return OPoint3D( static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z) ); }
+inline OPoint3D vec3toOPoint3D(const vec3& _v) { return OPoint3D(static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z)); }
 
 /*!
  * \fn vec3 OPoint3DTovec3(const OPoint3D& _p)
  * \brief convertit un OPoint3D en vec3
  */
-inline vec3 OPoint3Dtovec3( const OPoint3D& _p ) { return vec3( static_cast<float>(_p._x), static_cast<float>(_p._y), static_cast<float>(_p._z) ); }
+inline vec3 OPoint3Dtovec3(const OPoint3D& _p) { return vec3(static_cast<float>(_p._x), static_cast<float>(_p._y), static_cast<float>(_p._z)); }
 
 /*****************************************************************************/
 /*                                                                           */
@@ -1179,9 +1179,9 @@ inline decimal ClosestDistanceBetweenDotAndTriangle(
  */
 inline unsigned int buildBitSet(const unsigned short& length)
 {
-	unsigned int res = 1;
-	for (unsigned short i=0; i<length-1; i++, res++) { res = res << 1; }
-	return res;
+    unsigned int res = 1;
+    for (unsigned short i = 0; i < length - 1; i++, res++) { res = res << 1; }
+    return res;
 }
 
 /*
@@ -1190,7 +1190,7 @@ inline unsigned int buildBitSet(const unsigned short& length)
  */
 inline unsigned int buildComplementaryBitSet(const unsigned int& length, const unsigned int& bitSet)
 {
-	return  (bitSet ^ buildBitSet(length));
+    return (bitSet ^ buildBitSet(length));
 }
 
 }; //fin namespace

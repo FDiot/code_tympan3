@@ -242,41 +242,49 @@ bool TYAcousticSurface::updateAcoustic(const bool& force) // force = false
 
 double TYAcousticSurface::surface() const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->surface();
 }
 
 OVector3D TYAcousticSurface::normal() const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->normal();
 }
 
 OPlan TYAcousticSurface::plan() const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->plan();
 }
 
 TYTabPoint TYAcousticSurface::getContour(int n /*=-1*/) const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->getContour(n);
 }
 
 TYTabPoint3D TYAcousticSurface::getOContour(int n /*=-1*/) const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->getOContour(n);
 }
 
 int TYAcousticSurface::intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->intersects(pSurf, seg);
 }
 
 int TYAcousticSurface::intersects(const OSegment3D& seg, OPoint3D& pt) const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->intersects(seg, pt);
 }
 
 int TYAcousticSurface::intersects(const OPoint3D& pt) const
 {
+    // XXX This is a dummy default implementation
     return _pBoundingRect->intersects(pt);
 }
 

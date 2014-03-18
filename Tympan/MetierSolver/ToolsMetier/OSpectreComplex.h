@@ -79,19 +79,19 @@ public:
     /// Somme de deux spectres complexes
     OSpectreComplex operator + (const OSpectreComplex& spectre) const;
 
-	// Produit de deux spectres complexesen module/phase
+    // Produit de deux spectres complexesen module/phase
     OSpectreComplex operator * (const OSpectreComplex& spectre) const;
 
-	// Computes the operation between a complex spectrum times a spectrum
+    // Computes the operation between a complex spectrum times a spectrum
     OSpectreComplex operator * (const OSpectre& spectre) const;
 
-	/// Operateur de multiplication d'un spectre complexe par un coeff de type double
+    /// Operateur de multiplication d'un spectre complexe par un coeff de type double
     OSpectreComplex operator * (const double& coefficient) const;
 
     /// Multiplication d'un spectre complexe par un scalaire.
     OSpectreComplex multi(const double& coefficient) const;
 
-	// Rapport de deux spectres complexes en module/phase
+    // Rapport de deux spectres complexes en module/phase
     virtual OSpectreComplex operator / (const OSpectreComplex& spectre) const;
 
     /// Set/Get du tableau des valeurs reelles

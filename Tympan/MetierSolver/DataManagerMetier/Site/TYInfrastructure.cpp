@@ -299,7 +299,7 @@ int TYInfrastructure::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYInfrastructure::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYInfrastructure::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     unsigned int i;
 
@@ -307,32 +307,32 @@ void TYInfrastructure::getChilds(TYElementCollection& childs, bool recursif /*=t
 
     for (i = 0; i < _listRoute.size(); i++)
     {
-        childs.add(_listRoute[i]);
-        childs.add(_listRoute[i]->getElement());
+        childs.push_back(_listRoute[i]);
+        childs.push_back(_listRoute[i]->getElement());
     }
 
     for (i = 0; i < _listResTrans.size(); i++)
     {
-        childs.add(_listResTrans[i]);
-        childs.add(_listResTrans[i]->getElement());
+        childs.push_back(_listResTrans[i]);
+        childs.push_back(_listResTrans[i]->getElement());
     }
 
     for (i = 0; i < _listBatiment.size(); i++)
     {
-        childs.add(_listBatiment[i]);
-        childs.add(_listBatiment[i]->getElement());
+        childs.push_back(_listBatiment[i]);
+        childs.push_back(_listBatiment[i]->getElement());
     }
 
     for (i = 0; i < _listMachine.size(); i++)
     {
-        childs.add(_listMachine[i]);
-        childs.add(_listMachine[i]->getElement());
+        childs.push_back(_listMachine[i]);
+        childs.push_back(_listMachine[i]->getElement());
     }
 
     for (i = 0; i < _listSrc.size(); i++)
     {
-        childs.add(_listSrc[i]);
-        childs.add(_listSrc[i]->getElement());
+        childs.push_back(_listSrc[i]);
+        childs.push_back(_listSrc[i]->getElement());
     }
 
     if (recursif)
@@ -371,9 +371,9 @@ void TYInfrastructure::updateCurrentCalcul(TYListID& listID, bool recursif)//=tr
     if (recursif) // On parcours les enfants si besoin est...
     {
         // Collecte des childs
-        TYElementCollection childs;
+        LPTYElementArray childs;
         getChilds(childs, false);
-        for (int i = 0; i < childs.getCount(); i++)
+        for (int i = 0; i < childs.size(); i++)
         {
             childs[i]->updateCurrentCalcul(listID, recursif);
         }

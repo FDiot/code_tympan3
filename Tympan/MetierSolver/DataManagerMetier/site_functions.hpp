@@ -19,17 +19,20 @@ namespace tympan
 //! Get the total number of points from a \c TYSiteNode.
 inline unsigned int total_point_number(LPTYSiteNode site_ptr)
 {
-    return site_ptr->collectPointsForAltimetrie().size();
+    return site_ptr->getTopographie()->number_of_vertices();
 };
 
 //! Get all points into a vector.
 /*!
  \c TYTabPoint is a typedef of \c std::vector<TYPoint>.
  */
-inline TYTabPoint all_point(LPTYSiteNode site_ptr)
+inline std::auto_ptr<std::deque<OPoint3D> > all_point(LPTYSiteNode site_ptr)
 {
-    TYTabPoint tab_points = site_ptr->collectPointsForAltimetrie();
-    return tab_points;
+    // TYTabPoint tab_points = site_ptr->collectPointsForAltimetrie();
+    std::auto_ptr<std::deque<OPoint3D> > p_points(new std::deque<OPoint3D>());
+    std::deque<OTriangle> triangles;
+    site_ptr->getTopographie()->exportMesh(*p_points, triangles);
+    return p_points;
 };
 
 
@@ -38,8 +41,7 @@ inline TYTabPoint all_point(LPTYSiteNode site_ptr)
     std::vector<LPTYAcousticSurfaceGeoNode>. Moreover, \c
     TYAcousticSurfaceGeoNode is also a typdef of \c TYGeometryNode.
  */
-std::vector<LPTYAcousticSurfaceGeoNode> get_acoustic_surfaces(LPTYSiteNode site_ptr,
-                                                              bool with_ecran = false);
+std::vector<LPTYAcousticSurfaceGeoNode> get_acoustic_surfaces(LPTYSiteNode site_ptr);
 
 
 //! Get the number of acoustic surfaces.
@@ -52,7 +54,7 @@ inline unsigned int get_acoustic_surface_number(LPTYSiteNode site_ptr)
 //! Get the number of acoustic surfaces with 'ecran'.
 inline unsigned int get_acoustic_surface_number_with_ecran(LPTYSiteNode site_ptr)
 {
-    return get_acoustic_surfaces(site_ptr, true).size();
+    return get_acoustic_surfaces(site_ptr).size();
 };
 
 

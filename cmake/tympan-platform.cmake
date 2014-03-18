@@ -23,11 +23,14 @@ if(WIN32)
   endif(NOT MSVC)
   # Code_TYMPAN uses a lot of 'unsecure' functions like vsprintf
   add_definitions(/DUSE_STANDARD_FILE_FUNCTIONS /D_CRT_SECURE_NO_WARNINGS)
+  # The `throw()` compiler specification triggers an annoying warning in VS2010
+  # (standard and C++'11 problems inside) but they are required in custom exception classes
+  add_definitions(/wd4290)
   set(SYS_NATIVE_WIN TRUE)
 else(WIN32)
-  if(NOT (UNIX AND CMAKE_COMPILER_IS_GNUCXX))
-    message(ERROR "On UNIXes (and esp. Linux) only G++-compatible toolchain is supported : seem your system does not match...")
-  endif(NOT (UNIX AND CMAKE_COMPILER_IS_GNUCXX))
+  if(NOT UNIX)
+    message(FATAL "Only windows and some UNIXes are supported : your system seems to be neither...")
+  endif(NOT UNIX)
   if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     message(WARNING "Mac OS X / g++ is not supported (yet) but should work...")
     set(SYS_MACOSX TRUE)
@@ -93,24 +96,26 @@ set_property(DIRECTORY ${PROJECT_SOURCE_DIR} APPEND PROPERTY COMPILE_DEFINITIONS
 
 if(MSVC)
   # Put here Visual Studio specific stuff
-  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}"
-       CACHE STRING "MS VC Compiler Flags for All Builds")
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 endif(MSVC)
 if(CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -frounding-math")
-  # XXX -Wall would be FAR better than -fpermissive -w -Winvalid-pch
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -w -Winvalid-pch")
+  # The objective is to get rid of all the -Wno-xxx
+  set(IGNORED_WARNINGS "-Wno-sign-compare -Wno-unknown-pragmas -Wno-comment -Wno-unused-variable")
+  set(WARNINGS_SETTINGS "-Wall ${IGNORED_WARNINGS} -Winvalid-pch")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -frounding-math ${WARNINGS_SETTINGS}")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 # NB: add_definitions(...)
 # -DLINUX used only by Tympan/Appli/PyTympan/PyTympan.cpp
 # -DTYMPAN_PRECOMPILED_HEADERS sems not to be used
+set(TYMPAN_INSTALL_PLUGINS_Release plugins)
+set(TYMPAN_INSTALL_PLUGINS_Debug pluginsd)
 
 macro(install_tympan_plugin PLUGIN_NAME)
 install(TARGETS ${PLUGIN_NAME}
-        LIBRARY DESTINATION plugins  CONFIGURATIONS Release)
+        LIBRARY DESTINATION ${TYMPAN_INSTALL_PLUGINS_Release} CONFIGURATIONS Release)
 install(TARGETS ${PLUGIN_NAME}
-        LIBRARY DESTINATION pluginsd CONFIGURATIONS Debug)
+        LIBRARY DESTINATION ${TYMPAN_INSTALL_PLUGINS_Debug} CONFIGURATIONS Debug)
 endmacro(install_tympan_plugin)
 
 macro(install_tympan_component TARGET)
