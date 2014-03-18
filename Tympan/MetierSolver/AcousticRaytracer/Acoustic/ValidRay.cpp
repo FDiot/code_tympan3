@@ -160,7 +160,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 	unsigned int diff_nb_rays = 0;
 	if ( globalNbRayWithDiffraction > 0 )
 	{
-		diff_nb_rays = globalNbRayWithDiffraction+1; 
+		diff_nb_rays = globalNbRayWithDiffraction; 
 	}
 	else if ( globalNbRayWithDiffraction == 0 )
 	{
@@ -172,7 +172,8 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 
 		if ( closestDistance < ( thick / 2. ) ) 
 		{
-			diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
+			diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle());
+			diff_nb_rays = diff_nb_rays / pow( static_cast<float>(2), static_cast<int>(r->nbDiffraction) ); 
 		}
 		else
 		{
@@ -181,9 +182,10 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 	}
 	else
 	{
-		diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle()) + 1;
+		diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle());
 	}
 
+	diff_nb_rays += 1; // DO NOT MOVE/CONCATENATE THIS OPERATION ON UPPER LINES !!!
     newEvent->setNbResponseLeft(diff_nb_rays);
 
 	vec3 newDir;
