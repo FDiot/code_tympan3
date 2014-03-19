@@ -24,6 +24,7 @@
 #include "Ray/Ray.h"
 #include "Tools/PostFilter.h"
 #include "Tools/CloseEventPostFilter.h"
+#include "Tools/DiffractionPathPostFilter.h"
 #include "Tools/FermatPostFilter.h"
 
 #include "DefaultEngine.h"
@@ -181,8 +182,14 @@ bool DefaultEngine::process()
 				if (globalUsePostFilters)
 				{
                 // Post filtering of the rays
-                closeEventPostFilter cepf(getSolver()->getValidRays());
+					closeEventPostFilter cepf(getSolver()->getValidRays());
 					suppressed += cepf.Process();
+
+					if (globalUsePathDifValidation)
+					{
+						diffractionPathPostFilter dppf(getSolver()->getValidRays());
+						suppressed += dppf.Process();
+					}	
 
 					fermatPostFilter fpf(getSolver()->getValidRays());
 					suppressed += fpf.Process();

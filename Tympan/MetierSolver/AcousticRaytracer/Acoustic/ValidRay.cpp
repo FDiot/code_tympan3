@@ -53,12 +53,6 @@ void ValidRay::appendDirectionToEvent(QSharedPointer<Event> e, TargetManager& ta
 
 bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 {
-	if (r->getReflex() >= static_cast<unsigned int>( globalMaxReflexion )) { return false; }
-
-
-
-	if (inter->p->getMaterial()->isNatural) { return false; }
-    
 	vec3 impact = r->position + r->direction * inter->t;
     vec3 normale = inter->p->getNormal(impact);
     if (normale.dot(r->direction) > 0.) { return false; }
@@ -105,8 +99,6 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 
 bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 {
-	if (r->getDiff() >= static_cast<unsigned int>( globalMaxDiffraction )) { return false; }
-
     Cylindre* cylindre = (Cylindre*)(inter->p);
 
 	vec3 impact = r->position + r->direction * inter->t;

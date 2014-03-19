@@ -76,7 +76,6 @@ public:
 
     bool appendData(T* data)
     {
-        //QMutexLocker locker(mutex);
         vector<unsigned long long> dataToReplace;
         unsigned long long oldData;
         for (unsigned int i = 0; i < selectors.size(); i++)
@@ -86,7 +85,8 @@ public:
                 case SELECTOR_REJECT:
                     if (deletable)
                     {
-                        ;//delete data; // DTn-- 20120514 : Les donnees seron detruites ulterieurement.
+                        delete data;
+						data = NULL;
                     }
                     else
                     {
