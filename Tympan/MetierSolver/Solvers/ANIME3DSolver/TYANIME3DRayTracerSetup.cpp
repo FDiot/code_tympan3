@@ -364,13 +364,15 @@ bool TYANIME3DRayTracerSetup::valideIntersection(Ray* r, Intersection* inter)
     bool isValid = false;
 
     // cas d'un triangle (sol)
-    if (inter->forme == TRIANGLE && !(inter->p->getMaterial()->isNatural) && r->nbReflexion <= static_cast<unsigned int>(globalMaxReflexion))
+    if ( ( inter->forme == TRIANGLE ) &&
+		 ( r->nbReflexion < static_cast<unsigned int>(globalMaxReflexion) ) &&
+		 !( !globalUseSol && inter->p->isSol() ) )
     {
         isValid = ValidRay::validTriangleWithSpecularReflexion(r, inter);
     }
 
     // cas du cylindre (arrete de diffraction)
-    else if (inter->forme == CYLINDRE && r->nbDiffraction <= static_cast<unsigned int>(globalMaxDiffraction))
+    else if (inter->forme == CYLINDRE && r->nbDiffraction < static_cast<unsigned int>(globalMaxDiffraction))
     {
         isValid = ValidRay::validCylindreWithDiffraction(r, inter);
     }
