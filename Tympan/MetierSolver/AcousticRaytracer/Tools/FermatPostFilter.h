@@ -38,7 +38,6 @@ public:
 		unsigned int suppressed = 0;
 
 		// Pour chaque rayon
-//		std::vector<Ray*>::iterator iter = _tabRay->begin();
 		std::deque<Ray*>::iterator iter = _tabRay->begin();
 		while( iter != _tabRay->end() )
 		{
@@ -52,7 +51,7 @@ public:
 
 			decimal epaisseur = ray->getThickness( trueLength, false );
 			decimal closestDistance = static_cast<Recepteur*> ( ray->getRecepteur() )->getPosition().distance(closestPoint);
-			if ( closestDistance >= ( epaisseur/2. ) ) 
+			if ( closestDistance >= ( epaisseur/2. * 1.05 ) ) // Ajout de 5 % de marge supplémentaire 
 			{
 				iter = _tabRay->erase(iter);
 				suppressed ++;
