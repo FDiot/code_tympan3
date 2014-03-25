@@ -30,7 +30,6 @@ unsigned int closeEventPostFilter::Process()
     unsigned int nbSuppress = 0;
     bool bstatus = true;
 
-//    vector<Ray*>::iterator it = _tabRay->begin();
     deque<Ray*>::iterator it = _tabRay->begin();
     while (it != _tabRay->end())
     {
@@ -75,6 +74,8 @@ unsigned int closeEventPostFilter::Process()
 
         if (!bstatus)
         {
+			delete (*it);
+			(*it) = NULL;
             it = _tabRay->erase(it);
             nbSuppress++;
         }

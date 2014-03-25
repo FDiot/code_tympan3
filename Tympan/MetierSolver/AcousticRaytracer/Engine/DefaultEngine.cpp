@@ -141,43 +141,7 @@ bool DefaultEngine::process()
             if (pile_traitement.empty())
             {
                 solver->finish();
-                //std::cout << "Tous les rayon des sources ont ete traites" << endl;
-                //std::cout << "Duree de la simulation : " << (double)(time.elapsed()) / 1000.0 << endl;
-                //std::cout << "Il y a " << solver->getValidRays()->size() << " rayons valides. " << endl;
-                //std::cout << nb_rayon_traite << " rayons ont ete traites." << endl;
-
-                //std::cout << "Statistiques de benchmark pour le traitement : " << endl;
-                //std::cout << "Nombre de primitives : " << scene.getPrimitives()->size() << endl;
-                //std::cout << "Duree de la simulation : " << ((int)(time.elapsed())) << endl;
-                //std::cout << "Nombre de rayons traites : " << nbRayonsTraites << endl;
-                //std::cout << "Nombre  de traverser de rayon : " << totalTraversalStep << endl;
-                //std::cout << "Vitesse de traitement : " << ((double)nbRayonsTraites / (double)(time.elapsed())) * 1000. << endl;
-                //std::cout << "Nombre d'intersection moyen avec les boites : " << (double)totalIntersecNode / (double)totalRay << endl;
-                //std::cout << "Nombre d'intersection moyen avec les primitives : " << (double)totalIntersecPrimitive / (double)totalRay << endl;
-                //std::cout << "Calcul d'intersection par rapport au brut force : " << ((double) (((double)totalIntersecNode / (double)totalRay) + ((double)totalIntersecPrimitive / (double)totalRay)) / (double) (scene.getPrimitives()->size())) * 100;
-
-                // BEGIN : DTn20130507 - Commented cause code under does nothing
-                //vector<vector<unsigned int> > historique = std::vector<std::vector<unsigned int> >();
-                //for (unsigned int i = 0; i < solver->getValidRays()->size(); i++)
-                //{
-                //    historique.push_back(solver->getValidRays()->at(i)->getPrimitiveHistory());
-                //}
-
-                //std::sort(historique.begin(), historique.end(), myCompare);
-                ////std::cout << "Fin de la Simulation. " << solver->getValidRays()->size() << " rayons ont ete trouves." << endl;
-                ////std::cout << "Historique des rayons : " << endl;
-                //for (unsigned int i = 0; i < historique.size(); i++)
-                //{
-                //    vector<unsigned int> path = historique.at(i);
-                //    //std::cout << "Historique du rayon " << i << " : [";
-                //    for (unsigned int j = 0; j < path.size(); j++)
-                //    {
-                //        //std::cout << path.at(j) << ",";
-                //    }
-                //    //std::cout << "]." << endl;
-                //}
-                // END
-
+ 
 				unsigned int suppressed = 0;
 				if (globalUsePostFilters)
 				{

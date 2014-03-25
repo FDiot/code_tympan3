@@ -53,6 +53,8 @@ public:
 			decimal closestDistance = static_cast<Recepteur*> ( ray->getRecepteur() )->getPosition().distance(closestPoint);
 			if ( closestDistance >= ( epaisseur/2. * 1.05 ) ) // Ajout de 5 % de marge supplémentaire 
 			{
+				delete (*iter);
+				(*iter) = NULL;
 				iter = _tabRay->erase(iter);
 				suppressed ++;
 				continue;
