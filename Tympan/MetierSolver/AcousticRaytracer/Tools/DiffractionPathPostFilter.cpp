@@ -78,6 +78,8 @@ unsigned int diffractionPathPostFilter::Process()
  
         if ( cumul_delta > globalMaxPathDifference )
         {
+			delete (*it);
+			(*it) = NULL;
             it = _tabRay->erase(it);
             nbSuppress++;
         }
