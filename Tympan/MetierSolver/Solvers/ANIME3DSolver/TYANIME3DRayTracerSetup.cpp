@@ -23,6 +23,9 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/LengthSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/ReflectionSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/CloseEventSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/FermatSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionPathSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
@@ -344,12 +347,18 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 
 bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs)
 {
-	selectorManagerValidation.addSelector(new LengthSelector<Ray>(globalMaxLength));
-    //  selectorManagerIntersection.addSelector(new LengthSelector<Ray>(globalMaxLength));
-	//
-    selectorManagerIntersection.addSelector(new DiffractionSelector<Ray>(globalMaxDiffraction));
-    selectorManagerIntersection.addSelector(new ReflectionSelector<Ray>(globalMaxReflexion, globalUseSol));
-//	selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));
+	selectorManagerValidation.addSelector( new LengthSelector<Ray>(globalMaxLength) );
+
+	if (globalUsePostFilters == 0)
+	{
+		selectorManagerValidation.addSelector( new CloseEventSelector<Ray>() );
+		selectorManagerValidation.addSelector( new DiffractionPathSelector<Ray>(globalMaxPathDifference) );
+		selectorManagerValidation.addSelector( new FermatSelector<Ray>() ); 
+		selectorManagerValidation.addSelector( new FaceSelector<Ray>(HISTORY_PRIMITIVE) );
+	}
+ 
+	selectorManagerIntersection.addSelector( new DiffractionSelector<Ray>(globalMaxDiffraction) );
+    selectorManagerIntersection.addSelector( new ReflectionSelector<Ray>(globalMaxReflexion, globalUseSol) );
 
     // Ajoute des cylindres sur les arretes diffractantes
     PostTreatment::constructEdge(scene);
@@ -385,6 +394,13 @@ bool TYANIME3DRayTracerSetup::valideIntersection(Ray* r, Intersection* inter)
 bool TYANIME3DRayTracerSetup::valideRayon(Ray* r)
 {
     selectorManagerValidation.appendData(r);
+#ifdef _DEBUG
+	if (selectorManagerValidation.getSelectedData().size() % 1000 == 0 )
+	{
+		std::cout << "Nombre de rayon valides = " << selectorManagerValidation.getSelectedData().size()<< std::endl;
+	}
+
+#endif
     return true;
 }
 
@@ -411,6 +427,9 @@ void TYANIME3DRayTracerSetup::finish()
     {
         valid_rays.push_back(it->second);
     }
+
+	selectorManagerIntersection.reset();
+	selectorManagerValidation.reset();
 
     return;
 }
