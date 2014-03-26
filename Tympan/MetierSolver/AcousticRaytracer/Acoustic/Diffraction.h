@@ -70,6 +70,7 @@ public:
 
     virtual bool generateResponse(std::vector<vec3>& responses, unsigned int nbResponses);
     virtual bool generateTest(std::vector<vec3>& succededTest, std::vector<vec3>& failTest, unsigned int nbResponses);
+	virtual const Repere& getRepere() const { return localRepere; }
 
     virtual bool appendTarget(vec3 target, bool force = false);
 

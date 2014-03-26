@@ -20,62 +20,65 @@
 // Meteo
 ////////////////////////////
 
-extern double globalAtmosPressure;			// [METEO] Atmospheric pressure in pascal
-extern double globalAtmosTemperature;		// [METEO] Temperature in degres celsius
-extern double globalAtmosHygrometry;		// [METEO] Hygrometry percent
-extern double globalAnalyticC0;				// [METEO] initial (default) sound speed
-extern double globalWindDirection;			// [METEO] Wind direction 0 means from north to south
-extern double globalAnalyticGradC;			// [METEO] Vertical temperature gradient
-extern double globalAnalyticGradV;			// [METEO] Vertical wind speed gradient
+extern double globalAtmosPressure;					// [METEO] Atmospheric pressure in pascal
+extern double globalAtmosTemperature;				// [METEO] Temperature in degres celsius
+extern double globalAtmosHygrometry;				// [METEO] Hygrometry percent
+extern double globalAnalyticC0;						// [METEO] initial (default) sound speed
+extern double globalWindDirection;					// [METEO] Wind direction 0 means from north to south
+extern double globalAnalyticGradC;					// [METEO] Vertical temperature gradient
+extern double globalAnalyticGradV;					// [METEO] Vertical wind speed gradient
 
 ////////////////////////////
 // Acoustic ray tracer
 ////////////////////////////
 
-extern int globalRayTracingOrder;			// [ACOUSTICRAYTRACER] Ray tracing order propagation (0=From, 1=from receptor, 2=auto)
-extern int globalDiscretization;			// [ACOUSTICRAYTRACER] Sampler model 0=random, 1=uniform v1, 2= uniform v2, 3=horizontal
-extern int globalNbRaysPerSource;			// [ACOUSTICRAYTRACER] Number of rays per source
-extern float globalMaxLength;				// [ACOUSTICRAYTRACER] Maximum ray length in meter
-extern float globalSizeReceiver;			// [ACOUSTICRAYTRACER] Receptor radius in meter
-extern int globalAccelerator;				// [ACOUSTICRAYTRACER] Accelerating structure parameter (0=brut force, 1=grid, 2=BVH, 3=KDTree)
-extern int globalMaxTreeDepth;				// [ACOUSTICRAYTRACER] Maximal depth search for BVH or KDTree
-extern float globalAngleDiffMin;			// [ACOUSTICRAYTRACER] Minimum dihedral angle to add a diffraction cylinder
-extern float globalCylindreThick;			// [ACOUSTICRAYTRACER] Diffraction ridge size in meter
-extern int globalMaxProfondeur;				// [ACOUSTICRAYTRACER] Maximum events number for a ray
-extern bool globalUseSol;					// [ACOUSTICRAYTRACER] Allow ground reflections
-extern int globalMaxReflexion;				// [ACOUSTICRAYTRACER] Maximum reflections events for a ray
-extern int globalMaxDiffraction;			// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
-extern int globalNbRayWithDiffraction;		// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
-extern bool globalUsePathDifValidation;		// [ACOUSTICRAYTRACER] Allow use of path length difference validation
-extern float globalMaxPathDifference;		// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
-extern bool globalKeepDebugRay;				// [ACOUSTICRAYTRACER] Keep invalid rays
-extern bool globalEnableTargets;			// [ACOUSTICRAYTRACER] Use targeting
-extern float globalSampleGround2D;			// [ACOUSTICRAYTRACER] Sample ground in 2D
-extern bool globalEnableFullTargets;		// [ACOUSTICRAYTRACER] Set target search after a diffuse event
-extern float globalTargetsDensity;			// [ACOUSTICRAYTRACER] Sampling density for interesting areas
-extern bool globalUsePostFilters;			// [ACOUSTICRAYTRACER] Use of post-filters
+extern int globalRayTracingOrder;					// [ACOUSTICRAYTRACER] Ray tracing order propagation (0=From, 1=from receptor, 2=auto)
+extern int globalDiscretization;					// [ACOUSTICRAYTRACER] Sampler model 0=random, 1=uniform v1, 2= uniform v2, 3=horizontal
+extern int globalNbRaysPerSource;					// [ACOUSTICRAYTRACER] Number of rays per source
+extern float globalMaxLength;						// [ACOUSTICRAYTRACER] Maximum ray length in meter
+extern float globalSizeReceiver;					// [ACOUSTICRAYTRACER] Receptor radius in meter
+extern int globalAccelerator;						// [ACOUSTICRAYTRACER] Accelerating structure parameter (0=brut force, 1=grid, 2=BVH, 3=KDTree)
+extern int globalMaxTreeDepth;						// [ACOUSTICRAYTRACER] Maximal depth search for BVH or KDTree
+extern float globalAngleDiffMin;					// [ACOUSTICRAYTRACER] Minimum dihedral angle to add a diffraction cylinder
+extern float globalCylindreThick;					// [ACOUSTICRAYTRACER] Diffraction ridge size in meter
+extern int globalMaxProfondeur;						// [ACOUSTICRAYTRACER] Maximum events number for a ray
+extern bool globalUseSol;							// [ACOUSTICRAYTRACER] Allow ground reflections
+extern int globalMaxReflexion;						// [ACOUSTICRAYTRACER] Maximum reflections events for a ray
+extern int globalMaxDiffraction;					// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
+extern bool globalDiffractionUseRandomSampler;		// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution 
+extern int globalNbRayWithDiffraction;				// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (0 = based on source sampling, >0 = forced)
+extern bool globalDiffractionDropDownNbRays;		// [ACOUSTICRAYTRACER] Drop down number of rays thrown after a diffraction
+extern bool globalUsePathDifValidation;				// [ACOUSTICRAYTRACER] Allow use of path length difference validation
+extern bool globalDiffractionUseDistanceAsFilter;	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
+extern float globalMaxPathDifference;				// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
+extern bool globalKeepDebugRay;						// [ACOUSTICRAYTRACER] Keep invalid rays
+extern bool globalEnableTargets;					// [ACOUSTICRAYTRACER] Use targeting
+extern float globalSampleGround2D;					// [ACOUSTICRAYTRACER] Sample ground in 2D
+extern bool globalEnableFullTargets;				// [ACOUSTICRAYTRACER] Set target search after a diffuse event
+extern float globalTargetsDensity;					// [ACOUSTICRAYTRACER] Sampling density for interesting areas
+extern bool globalUsePostFilters;					// [ACOUSTICRAYTRACER] Use of post-filters
 
 ////////////////////////////
 // AnalyticRayTracer
 ////////////////////////////
 
-extern int globalCurveRaySampler;			// [ANALYTICRAYTRACER] Sampler model 1=horizontal, 2=vertical, 3=uniform v1, 4=uniform v2
-extern float globalInitialAngleTheta;		// [ANALYTICRAYTRACER] Start vertical angle (theta)
-extern float globalFinalAngleTheta;			// [ANALYTICRAYTRACER] Final vertical angle (theta)
-extern float globalInitialAnglePhi;			// [ANALYTICRAYTRACER] Start horizontal angle (phi)
-extern float globalFinalAnglePhi;			// [ANALYTICRAYTRACER] Final horizontal angle (phi)
-extern int globalAnalyticNbRay;				// [ANALYTICRAYTRACER] Number of rays per source
-extern double globalAnalyticTMax;			// [ANALYTICRAYTRACER] Propagation time in second
-extern double globalAnalyticH;				// [ANALYTICRAYTRACER] Time step in second
-extern double globalAnalyticDMax;			// [ANALYTICRAYTRACER] Maximum length propagation
+extern int globalCurveRaySampler;					// [ANALYTICRAYTRACER] Sampler model 1=horizontal, 2=vertical, 3=uniform v1, 4=uniform v2
+extern float globalInitialAngleTheta;				// [ANALYTICRAYTRACER] Start vertical angle (theta)
+extern float globalFinalAngleTheta;					// [ANALYTICRAYTRACER] Final vertical angle (theta)
+extern float globalInitialAnglePhi;					// [ANALYTICRAYTRACER] Start horizontal angle (phi)
+extern float globalFinalAnglePhi;					// [ANALYTICRAYTRACER] Final horizontal angle (phi)
+extern int globalAnalyticNbRay;						// [ANALYTICRAYTRACER] Number of rays per source
+extern double globalAnalyticTMax;					// [ANALYTICRAYTRACER] Propagation time in second
+extern double globalAnalyticH;						// [ANALYTICRAYTRACER] Time step in second
+extern double globalAnalyticDMax;					// [ANALYTICRAYTRACER] Maximum length propagation
 
 ////////////////////////////
 // Geometric transformer
 ///////////////////////////
 
-extern int globalAnalyticTypeTransfo;		// [GEOM_TRANSFORMER] Transformation method (1 is the only [good] response)
-extern float globalMeshRefinementValue;		// [GEOM_TRANSFORMER] Altimetry refinement parameter
-extern bool globalRestitModifiedGeom;		// [GEOM_TRANSFORMER] Restore modified altimetry after computing
+extern int globalAnalyticTypeTransfo;				// [GEOM_TRANSFORMER] Transformation method (1 is the only [good] response)
+extern float globalMeshRefinementValue;				// [GEOM_TRANSFORMER] Altimetry refinement parameter
+extern bool globalRestitModifiedGeom;				// [GEOM_TRANSFORMER] Restore modified altimetry after computing
 
 /////////////////////////////
 // Preprocessing
@@ -87,23 +90,23 @@ extern float globalMinSRDistance;					// [PREPROCESSING] Source-receptor minimal
 // Default Solver
 /////////////////////////////
 
-extern bool globalUseRealGround;			// [DEFAULTSOLVER] Use of real ground (0) or totally reflective ground (1)
-extern bool globalUseVegetation;			// [DEFAULTSOLVER] Takes vegetation into account
-extern bool globalUseScreen;				// [DEFAULTSOLVER] Takes screens into account
-extern bool globalUseLateralDiffraction;	// [DEFAULTSOLVER] Lateral diffractions computing (if screens on)
-extern bool globalUseReflection;			// [DEFAULTSOLVER] Takes reflections in account (first order only)
-extern bool globalPropaConditions;			// [DEFAULTSOLVER] Propagation conditions (non refracting / downward conditions (ISO 9613))
-extern float globalH1parameter ;			// [DEFAULTSOLVER] H1 parameter (ISO 9613 downward conditions)
-extern bool globalModSummation;				// [DEFAULTSOLVER] Energetic (p² summation) or interference (p summation)
+extern bool globalUseRealGround;					// [DEFAULTSOLVER] Use of real ground (0) or totally reflective ground (1)
+extern bool globalUseVegetation;					// [DEFAULTSOLVER] Takes vegetation into account
+extern bool globalUseScreen;						// [DEFAULTSOLVER] Takes screens into account
+extern bool globalUseLateralDiffraction;			// [DEFAULTSOLVER] Lateral diffractions computing (if screens on)
+extern bool globalUseReflection;					// [DEFAULTSOLVER] Takes reflections in account (first order only)
+extern bool globalPropaConditions;					// [DEFAULTSOLVER] Propagation conditions (non refracting / downward conditions (ISO 9613))
+extern float globalH1parameter ;					// [DEFAULTSOLVER] H1 parameter (ISO 9613 downward conditions)
+extern bool globalModSummation;						// [DEFAULTSOLVER] Energetic (p² summation) or interference (p summation)
 
 //////////////////////////////
 // ANIME3D Solver
 /////////////////////////////
 
-extern bool globalUseMeteo;					// [ANIME3D] Takes meteo in account
-extern float globalOverSampleD;				// [ANIME3D] Rays oversampling rate (if meteo -see above-)
-extern bool globalUseFresnelArea;			// [ANIME3D] Use Fresnel area
-extern float globalAnime3DSigma;			// [ANIME3D] Value of relative uncertainty
-extern float globalAnime3DForceC;			// [ANIME3D] Force "C" parameter
+extern bool globalUseMeteo;							// [ANIME3D] Takes meteo in account
+extern float globalOverSampleD;						// [ANIME3D] Rays oversampling rate (if meteo -see above-)
+extern bool globalUseFresnelArea;					// [ANIME3D] Use Fresnel area
+extern float globalAnime3DSigma;					// [ANIME3D] Value of relative uncertainty
+extern float globalAnime3DForceC;					// [ANIME3D] Force "C" parameter
 
 #endif //GLOBAL_H

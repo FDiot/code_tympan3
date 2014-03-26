@@ -30,6 +30,25 @@ bool validTriangleWithSpecularReflexion(Ray* r, Intersection* inter);
 bool validCylindreWithDiffraction(Ray* r, Intersection* inter);
 void appendDirectionToEvent(QSharedPointer<Event> e, TargetManager& targets);
 
+/*!
+ * \fn isPathLengthDifferenceValid(const Ray *r, const vec3& impact, const decimal& maxDiff);
+ * \brief Test if difference betwen total path length and direct path length is smaller than maxDif
+ */
+bool isPathLengthDifferenceValid(Ray *r, const vec3& impact, const decimal& maxDiff);
+
+/*!
+ * \fn computeRealImpact(Ray *r, Cylindre *cylindre, vec3& impact)
+ * \brief Try to compute the intersection of the ray and the ridge
+ * \brief Return false if not possible
+ */
+bool computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre, vec3& impact);
+
+/*!
+ * \fn isRayClosestFromRidge(Ray *r, const vec3& impact, const vec3& realImpact);
+ * \brief Test if ray passes near from the ridge
+ */
+bool isRayClosestFromRidge(Ray *r, const vec3& impact, const vec3& realImpact);
+
 };
 
 #endif

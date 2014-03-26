@@ -45,10 +45,10 @@ public:
     void setW(vec3 _W) { W = vec3(_W); updateMatrices(); }
     void setO(vec3 _O) { O = vec3(_O); updateMatrices(); }
 
-    vec3 getU() { return U; }
-    vec3 getV() { return V; }
-    vec3 getW() { return W; }
-    vec3 getO() { return O; }
+    vec3 getU() const { return U; }
+    vec3 getV() const { return V; }
+    vec3 getW() const { return W; }
+    vec3 getO() const { return O; }
 
     vec3 vectorFromLocalToGlobal(vec3& local);
     vec3 vectorFromGlobalToLocal(vec3& global);
