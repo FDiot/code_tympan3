@@ -26,6 +26,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/CloseEventSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/FermatSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionPathSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionAngleSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
@@ -64,8 +65,11 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
 	globalUseSol = 0;						// [ACOUSTICRAYTRACER] Allow ground reflections
 	globalMaxReflexion = 0;					// [ACOUSTICRAYTRACER] Maximum reflections events for a ray
 	globalMaxDiffraction = 2;				// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
+	globalDiffractionUseRandomSampler = 0;	// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution 
 	globalNbRayWithDiffraction = 0;			// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
+	globalDiffractionDropDownNbRays = 1;	// [ACOUSTICRAYTRACER] Drop down number of rays thrown after a diffraction
 	globalUsePathDifValidation = 0;			// [ACOUSTICRAYTRACER] Allow use of path length difference validation
+	globalDiffractionUseDistanceAsFilter = 1;	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
 	globalMaxPathDifference = 25.;			// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
 	globalKeepDebugRay = 0;					// [ACOUSTICRAYTRACER] Keep invalid rays
 	globalEnableTargets = 0;				// [ACOUSTICRAYTRACER] Use targeting
@@ -210,11 +214,20 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 	// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
     if (params.getline(ligne, 132)) { globalMaxDiffraction = getParam(ligne); }
 
+	// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution 
+	if (params.getline(ligne, 132)) { globalDiffractionUseRandomSampler = getParam(ligne); }
+
 	// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
     if (params.getline(ligne, 132)) { globalNbRayWithDiffraction = getParam(ligne); }
 
+	// [ACOUSTICRAYTRACER] Drop down number of rays thrown after a diffraction
+	if (params.getline(ligne, 132)) { globalDiffractionDropDownNbRays = getParam(ligne); }
+
 	// [ACOUSTICRAYTRACER] Allow use of path length difference validation
     if (params.getline(ligne, 132)) { globalUsePathDifValidation = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
+	if (params.getline(ligne, 132)) { globalDiffractionUseDistanceAsFilter = getParam(ligne); }
 
 	// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
     if (params.getline(ligne, 132)) { globalMaxPathDifference = getParam(ligne); }
@@ -352,6 +365,7 @@ bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Sourc
 	if (globalUsePostFilters == 0)
 	{
 		selectorManagerValidation.addSelector( new CloseEventSelector<Ray>() );
+		selectorManagerValidation.addSelector( new DiffractionAngleSelector<Ray>() );
 		selectorManagerValidation.addSelector( new DiffractionPathSelector<Ray>(globalMaxPathDifference) );
 		selectorManagerValidation.addSelector( new FermatSelector<Ray>() ); 
 		selectorManagerValidation.addSelector( new FaceSelector<Ray>(HISTORY_PRIMITIVE) );
