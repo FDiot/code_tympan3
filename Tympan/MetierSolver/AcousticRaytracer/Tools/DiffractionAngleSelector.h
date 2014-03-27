@@ -17,6 +17,7 @@
 #define DIFFRACTION_ANGLE_SELECTOR
 
 #include "Selector.h"
+#include "Tympan/MetierSolver/ToolsMetier/OGeometrie.h"
 
 template<typename T>
 class DiffractionAngleSelector : public Selector<T>
@@ -39,7 +40,7 @@ public :
 		
 		vec3 beginPos = r->getSource()->getPosition();
 		vec3 endPos = static_cast<Recepteur*> (r->getRecepteur())->getPosition();
-		vec3 currentPos, nextPos, normale, from, to;
+		vec3 currentPos, nextPos, W, N, From, To;
 		Diffraction *pDiff = NULL;
 
 		vector<QSharedPointer<Event> >::iterator iter = events->begin();
@@ -50,10 +51,15 @@ public :
 			currentPos = (*iter)->getPosition();
 
 			pDiff = dynamic_cast<Diffraction*>( (*iter).data() );
-			normale = pDiff->getRepere().getU();
 
-			from = (currentPos - beginPos);
-			from.normalize();
+			// Combined normal of the two faces definig the ridge
+			N = pDiff->getRepere().getU();
+
+			// W is defined by the ridge
+			W = pDiff->getRepere().getW();
+
+			From = (currentPos - beginPos);
+			From.normalize();
 
 			if ( (iter+1) != events->end() )
 			{
@@ -64,10 +70,19 @@ public :
 				nextPos = static_cast<Recepteur*> (r->getRecepteur())->getPosition();
 			}
 
-			to = (currentPos - nextPos);
-			to.normalize();
+			To = (nextPos - currentPos);
+			To.normalize();
 
-			if ( (from * normale) < 0. || (to * normale) < 0. ) { return SELECTOR_REJECT; }
+			if ( (From - To).length() < BARELY_EPSILON ) { return SELECTOR_ACCEPT; }
+
+			if ( (From * To) < 0. ) { return SELECTOR_REJECT; }  // Le vecteur sortant est "oppose" au vecteur entrant
+
+			vec3 FcrossW = From ^ W;
+			vec3 Np =  FcrossW * SIGNE( FcrossW * N );
+
+			if ( (To * Np) > 0.) { return SELECTOR_REJECT; } // Le vecteur "remonte" après l'obstacle"
+
+			if ( ( (To ^ W) * Np ) < 0. ) { return SELECTOR_REJECT; } // Le vecteur part du mauvais cote de l'obstacle
 
 			beginPos = currentPos;
 			iter++;
@@ -87,7 +102,7 @@ public :
 		
 		vec3 beginPos = r->getSource()->getPosition();
 		vec3 endPos = static_cast<Recepteur*> (r->getRecepteur())->getPosition();
-		vec3 currentPos, nextPos, normale, from, to;
+		vec3 currentPos, nextPos, W, N, From, To;
 		Diffraction *pDiff = NULL;
 
 		vector<QSharedPointer<Event> >::iterator iter = events->begin();
@@ -98,10 +113,15 @@ public :
 			currentPos = (*iter)->getPosition();
 
 			pDiff = dynamic_cast<Diffraction*>( (*iter).data() );
-			normale = pDiff->getRepere().getU();
 
-			from = (currentPos - beginPos);
-			from.normalize();
+			// Combined normal of the two faces definig the ridge
+			N = pDiff->getRepere().getU();
+
+			// W is defined by the ridge
+			W = pDiff->getRepere().getW();
+
+			From = (currentPos - beginPos);
+			From.normalize();
 
 			if ( (iter+1) != events->end() )
 			{
@@ -112,10 +132,15 @@ public :
 				nextPos = static_cast<Recepteur*> (r->getRecepteur())->getPosition();
 			}
 
-			to = (currentPos - nextPos);
-			to.normalize();
+			To = (nextPos - currentPos);
+			To.normalize();
 
-			if ( (from * normale) > 0. && (to * normale) > 0. ) { return false; }
+			if ( (From - To).length() < BARELY_EPSILON ) { return true; }
+			if ( (From * To) < 0. ) { return false; }
+			
+			vec3 FcrossW = From ^ W;
+
+			if ( ( ( FcrossW * To ) * ( FcrossW * N ) ) < 0 ) { return false; }
 
 			beginPos = currentPos;
 			iter++;
@@ -123,6 +148,7 @@ public :
 		while( iter != events->end() );
 
 		return true;
+
     }
 };
 
