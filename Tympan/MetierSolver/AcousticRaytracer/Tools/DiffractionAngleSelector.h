@@ -136,20 +136,22 @@ public :
 			To.normalize();
 
 			if ( (From - To).length() < BARELY_EPSILON ) { return true; }
-			if ( (From * To) < 0. ) { return false; }
-			
-			vec3 FcrossW = From ^ W;
 
-			if ( ( ( FcrossW * To ) * ( FcrossW * N ) ) < 0 ) { return false; }
+			if ( (From * To) < 0. ) { return false; }  // Le vecteur sortant est "oppose" au vecteur entrant
+
+			vec3 FcrossW = From ^ W;
+			vec3 Np =  FcrossW * SIGNE( FcrossW * N );
+
+			if ( (To * Np) > 0.) { return false; } // Le vecteur "remonte" après l'obstacle"
+
+			if ( ( (To ^ W) * Np ) < 0. ) { return false; } // Le vecteur part du mauvais cote de l'obstacle
 
 			beginPos = currentPos;
 			iter++;
 		}
 		while( iter != events->end() );
 
-		return true;
-
-    }
+		return true;    }
 };
 
 #endif //DIFFRACTION_ANGLE_SELECTOR
