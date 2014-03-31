@@ -39,9 +39,10 @@ public :
         if ( (events->size() == 0) || (r->getDiff() == 0) ) { return SELECTOR_ACCEPT; }
 		
 		vec3 beginPos = r->getSource()->getPosition();
-		vec3 endPos = static_cast<Recepteur*> (r->getRecepteur())->getPosition();
-		vec3 currentPos, nextPos, W, N, From, To;
+		vec3 currentPos, nextPos, N, W, From, To;
+
 		Diffraction *pDiff = NULL;
+		int sgn = 0;
 
 		vector<QSharedPointer<Event> >::iterator iter = events->begin();
 		do
@@ -51,12 +52,8 @@ public :
 			currentPos = (*iter)->getPosition();
 
 			pDiff = dynamic_cast<Diffraction*>( (*iter).data() );
-
-			// Combined normal of the two faces definig the ridge
-			N = pDiff->getRepere().getU();
-
-			// W is defined by the ridge
-			W = pDiff->getRepere().getW();
+			N = pDiff->getRepere().getU(); // Combined normal of the two faces definig the ridge
+			W = pDiff->getRepere().getW(); // W is defined by the ridge
 
 			From = (currentPos - beginPos);
 			From.normalize();
@@ -73,16 +70,21 @@ public :
 			To = (nextPos - currentPos);
 			To.normalize();
 
-			if ( (From - To).length() < BARELY_EPSILON ) { return SELECTOR_ACCEPT; }
+			if ( (From - To).length() < BARELY_EPSILON ) { return SELECTOR_ACCEPT; } // Vecteur limite tangent au plan de propagation
 
 			if ( (From * To) < 0. ) { return SELECTOR_REJECT; }  // Le vecteur sortant est "oppose" au vecteur entrant
 
 			vec3 FcrossW = From ^ W;
-			vec3 Np =  FcrossW * SIGNE( FcrossW * N );
+			sgn = SIGNE( FcrossW * N );
+			vec3 Np = (FcrossW) * sgn;
 
+#ifdef _DEBUG
+			decimal bidon = (To * Np);
+#endif
 			if ( (To * Np) > 0.) { return SELECTOR_REJECT; } // Le vecteur "remonte" après l'obstacle"
 
-			if ( ( (To ^ W) * Np ) < 0. ) { return SELECTOR_REJECT; } // Le vecteur part du mauvais cote de l'obstacle
+			vec3 Nw = (To ^ W) * sgn;
+			if ( ( Nw * Np ) < 0. ) { return SELECTOR_REJECT; } // Le vecteur part du mauvais cote de l'obstacle
 
 			beginPos = currentPos;
 			iter++;
@@ -101,9 +103,10 @@ public :
         if ( (events->size() == 0) || (r->getDiff() == 0) ) { return true; }
 		
 		vec3 beginPos = r->getSource()->getPosition();
-		vec3 endPos = static_cast<Recepteur*> (r->getRecepteur())->getPosition();
-		vec3 currentPos, nextPos, W, N, From, To;
+		vec3 currentPos, nextPos, N, W, From, To;
+
 		Diffraction *pDiff = NULL;
+		int sgn = 0;
 
 		vector<QSharedPointer<Event> >::iterator iter = events->begin();
 		do
@@ -113,12 +116,8 @@ public :
 			currentPos = (*iter)->getPosition();
 
 			pDiff = dynamic_cast<Diffraction*>( (*iter).data() );
-
-			// Combined normal of the two faces definig the ridge
-			N = pDiff->getRepere().getU();
-
-			// W is defined by the ridge
-			W = pDiff->getRepere().getW();
+			N = pDiff->getRepere().getU(); // Combined normal of the two faces definig the ridge
+			W = pDiff->getRepere().getW(); // W is defined by the ridge
 
 			From = (currentPos - beginPos);
 			From.normalize();
@@ -135,23 +134,26 @@ public :
 			To = (nextPos - currentPos);
 			To.normalize();
 
-			if ( (From - To).length() < BARELY_EPSILON ) { return true; }
+			if ( (From - To).length() < BARELY_EPSILON ) { return true; } // Vecteur limite tangent au plan de propagation
 
 			if ( (From * To) < 0. ) { return false; }  // Le vecteur sortant est "oppose" au vecteur entrant
 
 			vec3 FcrossW = From ^ W;
-			vec3 Np =  FcrossW * SIGNE( FcrossW * N );
+			sgn = SIGNE( FcrossW * N );
+			vec3 Np = (FcrossW) * sgn;
 
 			if ( (To * Np) > 0.) { return false; } // Le vecteur "remonte" après l'obstacle"
 
-			if ( ( (To ^ W) * Np ) < 0. ) { return false; } // Le vecteur part du mauvais cote de l'obstacle
+			vec3 Nw = (To ^ W) * sgn;
+			if ( ( Nw * Np ) < 0. ) { return false; } // Le vecteur part du mauvais cote de l'obstacle
 
 			beginPos = currentPos;
 			iter++;
 		}
 		while( iter != events->end() );
 
-		return true;    }
+		return true;
+	}
 };
 
 #endif //DIFFRACTION_ANGLE_SELECTOR
