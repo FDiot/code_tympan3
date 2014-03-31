@@ -19,23 +19,20 @@
 
 bool Diffraction::getResponse(vec3& r, bool force)
 {
-//#define __RANDOM__
-#ifdef __RANDOM__ 
-	
-	// Tir des rayons aléatoires sur le cone de Keller
-	decimal theta = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
+	decimal theta = 0.;
+	if (globalDiffractionUseRandomSampler) // Tir des rayons aléatoires sur le cone de Keller
+	{
+		theta = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
 
-	if (theta > angleOuverture / 2.)
-    {
-        theta += (2 * M_PI - angleOuverture);
-    }
-
-#else
-
-	// Distribution régulière des rayons entre angleOuverture/2 et -angleOuverture/2
-	decimal theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
-
-#endif // __RANDOM__
+		if (theta > angleOuverture / 2.)
+		{
+			theta += (2 * M_PI - angleOuverture);
+		}
+	}
+	else // Distribution régulière des rayons entre angleOuverture/2 et -angleOuverture/2
+	{
+		theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
+	}
 
 	if (!force)
     {
