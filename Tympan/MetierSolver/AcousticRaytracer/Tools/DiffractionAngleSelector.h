@@ -39,10 +39,12 @@ public :
         if ( (events->size() == 0) || (r->getDiff() == 0) ) { return SELECTOR_ACCEPT; }
 		
 		vec3 beginPos = r->getSource()->getPosition();
-		vec3 currentPos, nextPos, N, W, From, To;
+		vec3 currentPos, nextPos, N, N1, N2, W, From, To;
 
 		Diffraction *pDiff = NULL;
 		int sgn = 0;
+
+		decimal F1 = 0., F2 = 0., T1 = 0., T2 = 0.;
 
 		vector<QSharedPointer<Event> >::iterator iter = events->begin();
 		do
@@ -52,12 +54,13 @@ public :
 			currentPos = (*iter)->getPosition();
 
 			pDiff = dynamic_cast<Diffraction*>( (*iter).data() );
-			N = pDiff->getRepere().getU(); // Combined normal of the two faces definig the ridge
-			W = pDiff->getRepere().getW(); // W is defined by the ridge
 
+			N1 = dynamic_cast<Cylindre*>(pDiff->getShape())->getFirstShape()->getNormal();
+			N2 = dynamic_cast<Cylindre*>(pDiff->getShape())->getSecondShape()->getNormal();
+			
 			From = (currentPos - beginPos);
 			From.normalize();
-
+			
 			if ( (iter+1) != events->end() )
 			{
 				nextPos = (*(iter+1)).data()->getPosition();
@@ -70,21 +73,28 @@ public :
 			To = (nextPos - currentPos);
 			To.normalize();
 
-			if ( (From - To).length() < BARELY_EPSILON ) { return SELECTOR_ACCEPT; } // Vecteur limite tangent au plan de propagation
+			if ( ( 1. - (From * To) ) < BARELY_EPSILON ) { return SELECTOR_ACCEPT; } // Vecteur limite tangent au plan de propagation
 
 			if ( (From * To) < 0. ) { return SELECTOR_REJECT; }  // Le vecteur sortant est "oppose" au vecteur entrant
 
-			vec3 FcrossW = From ^ W;
-			sgn = SIGNE( FcrossW * N );
-			vec3 Np = (FcrossW) * sgn;
+			F1 = From * N1;
+			F2 = From * N2;
+			T1 = To * N1;
+			T2 = To * N2;
 
-#ifdef _DEBUG
-			decimal bidon = (To * Np);
-#endif
-			if ( (To * Np) > 0.) { return SELECTOR_REJECT; } // Le vecteur "remonte" après l'obstacle"
+			if ( (F1 * F2) > 0.) { return SELECTOR_REJECT; } 
 
-			vec3 Nw = (To ^ W) * sgn;
-			if ( ( Nw * Np ) < 0. ) { return SELECTOR_REJECT; } // Le vecteur part du mauvais cote de l'obstacle
+			if ( (F1 <= 0.) )
+			{
+				if ( T1 > BARELY_EPSILON ) { return SELECTOR_REJECT; }
+				if ( (T2 - F2) > BARELY_EPSILON ) { return SELECTOR_REJECT; }
+			}
+
+			if ( F2 <= 0. )
+			{
+				if ( T2 > BARELY_EPSILON ) { return SELECTOR_REJECT; }
+				if ( (T1 - F1) > BARELY_EPSILON ) { return SELECTOR_REJECT; }
+			}
 
 			beginPos = currentPos;
 			iter++;
