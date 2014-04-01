@@ -43,3 +43,18 @@ the platform, diagnose the unsupported ones and then call
    compiled either as shared library or static ones depending on the
    platform. The option is thus declared in ``build-options`` and then set
    separately in each platform specific file.
+
+Third party dependencies
+========================
+
+As explained in :ref:`devel-installation` Code_TYMPAN has many
+dependencies, some of which are shipped as a companions source package.
+Those lightweight dependencies are built as `CMake external projects`__
+
+__ `CMake external projects`: http://www.kitware.com/media/html/BuildingExternalProjectsWithCMake2.8.html
+
+Some dependencies (CGAL and NMPB2008 notably) require the system to be
+able to find some shared libraries / DLL *at run time*. A path must be
+built while configuring dependencies so that it can be used when
+launching the application : the ``TYMPAN_3RDPARTY_DLL_DIRS`` CMake
+variable is used for this purpose.
