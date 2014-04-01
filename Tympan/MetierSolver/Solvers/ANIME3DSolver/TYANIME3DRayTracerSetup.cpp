@@ -68,9 +68,10 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
 	globalDiffractionUseRandomSampler = 0;	// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution 
 	globalNbRayWithDiffraction = 0;			// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
 	globalDiffractionDropDownNbRays = 1;	// [ACOUSTICRAYTRACER] Drop down number of rays thrown after a diffraction
+	globalDiffractionFilterRayAtCreation = 0;	// [ACOUSTICRAYTRACER] Do not create rays outside the correct angle
 	globalUsePathDifValidation = 0;			// [ACOUSTICRAYTRACER] Allow use of path length difference validation
-	globalDiffractionUseDistanceAsFilter = 1;	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
 	globalMaxPathDifference = 25.;			// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
+	globalDiffractionUseDistanceAsFilter = 1;	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
 	globalKeepDebugRay = 0;					// [ACOUSTICRAYTRACER] Keep invalid rays
 	globalEnableTargets = 0;				// [ACOUSTICRAYTRACER] Use targeting
 	globalSampleGround2D = 0;				// [ACOUSTICRAYTRACER] Sample ground in 2D
@@ -223,14 +224,17 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 	// [ACOUSTICRAYTRACER] Drop down number of rays thrown after a diffraction
 	if (params.getline(ligne, 132)) { globalDiffractionDropDownNbRays = getParam(ligne); }
 
+	// [ACOUSTICRAYTRACER] Do not create rays outside the correct angle
+	if (params.getline(ligne, 132)) { globalDiffractionFilterRayAtCreation = getParam(ligne); }
+
 	// [ACOUSTICRAYTRACER] Allow use of path length difference validation
     if (params.getline(ligne, 132)) { globalUsePathDifValidation = getParam(ligne); }
 
-	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
-	if (params.getline(ligne, 132)) { globalDiffractionUseDistanceAsFilter = getParam(ligne); }
-
 	// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
     if (params.getline(ligne, 132)) { globalMaxPathDifference = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
+	if (params.getline(ligne, 132)) { globalDiffractionUseDistanceAsFilter = getParam(ligne); }
 
 	// [ACOUSTICRAYTRACER] Keep invalid rays
     if (params.getline(ligne, 132)) { globalKeepDebugRay = getParam(ligne); }
@@ -365,7 +369,7 @@ bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Sourc
 	if (globalUsePostFilters == 0)
 	{
 		selectorManagerValidation.addSelector( new CloseEventSelector<Ray>() );
-		selectorManagerValidation.addSelector( new DiffractionAngleSelector<Ray>() );
+//		selectorManagerValidation.addSelector( new DiffractionAngleSelector<Ray>() );
 		selectorManagerValidation.addSelector( new DiffractionPathSelector<Ray>(globalMaxPathDifference) );
 		selectorManagerValidation.addSelector( new FermatSelector<Ray>() ); 
 		selectorManagerValidation.addSelector( new FaceSelector<Ray>(HISTORY_PRIMITIVE) );

@@ -47,9 +47,10 @@ int globalMaxDiffraction;			// [ACOUSTICRAYTRACER] Maximum diffraction events fo
 bool globalDiffractionUseRandomSampler;		// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution 
 int globalNbRayWithDiffraction;		// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
 bool globalDiffractionDropDownNbRays;		// [ACOUSTICRAYTRACER] Drop down number of rays thrown after a diffraction
+bool globalDiffractionFilterRayAtCreation;	// [ACOUSTICRAYTRACER] Do not create rays outside the correct angle
 bool globalUsePathDifValidation;		// [ACOUSTICRAYTRACER] Allow use of path length difference validation
-bool globalDiffractionUseDistanceAsFilter;	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
 float globalMaxPathDifference;		// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
+bool globalDiffractionUseDistanceAsFilter;	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
 bool globalKeepDebugRay;				// [ACOUSTICRAYTRACER] Keep invalid rays
 bool globalEnableTargets;			// [ACOUSTICRAYTRACER] Use targeting
 float globalSampleGround2D;			// [ACOUSTICRAYTRACER] Sample ground in 2D
