@@ -17,45 +17,88 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/UnitConverter.h"
 
+
+Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cylindre* c):
+						Event(position, incomingDirection, (Shape*)(c)) 
+{ 
+	name = "unknown diffraction"; 
+	nbResponseLeft = initialNbResponse = 200; 
+	type = DIFFRACTION; 
+	buildRepere(); 
+	computeAngle();
+
+	computeDTheta();
+
+	F = pos - from;
+	F.normalize();
+	N1 = dynamic_cast<Cylindre*>(shape)->getFirstShape()->getNormal();
+	N2 = dynamic_cast<Cylindre*>(shape)->getSecondShape()->getNormal();
+}
+
+Diffraction::Diffraction(const Diffraction& other) : Event(other)
+{
+    type = DIFFRACTION;
+    buildRepere();
+    computeAngle();
+	computeDTheta();
+
+	F = other.F;
+	N1 = other.N1;
+	N2 = other.N2;
+}
+
 bool Diffraction::getResponse(vec3& r, bool force)
 {
-	decimal theta = 0.;
-	if (globalDiffractionUseRandomSampler) // Tir des rayons aléatoires sur le cone de Keller
+	bool bRep = false;
+	do
 	{
-		theta = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
-
-		if (theta > angleOuverture / 2.)
+		decimal theta = 0.;
+		if (globalDiffractionUseRandomSampler) // Tir des rayons aléatoires sur le cone de Keller
 		{
-			theta += (2 * M_PI - angleOuverture);
+			theta = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
+
+			if (theta > angleOuverture / 2.)
+			{
+				theta += (2 * M_PI - angleOuverture);
+			}
 		}
-	}
-	else // Distribution régulière des rayons entre angleOuverture/2 et -angleOuverture/2
-	{
-		theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
-	}
+		else // Distribution régulière des rayons entre angleOuverture/2 et -angleOuverture/2
+		{
+			theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
+		}
 
-	if (!force)
-    {
-        nbResponseLeft--;
-        if (nbResponseLeft < 0)
-        {
-            return false;
-        }
-    }
+		if (!force)
+		{
+			nbResponseLeft--;
+			if (nbResponseLeft < 0)
+			{
+				return false;
+			}
+		}
 
-    if (!targets.empty())
-    {
-        r = vec3(targets.back());
-        targets.pop_back();
-        return true;
-    }
+		if (!targets.empty())
+		{
+			r = vec3(targets.back());
+			targets.pop_back();
+			return true;
+		}
 
-    vec3 localResponse;
-    Tools::fromRadianToCarthesien2( angleArrive, theta, localResponse );
+		vec3 localResponse;
+		Tools::fromRadianToCarthesien2( angleArrive, theta, localResponse );
 
-    vec3 globalResponse = localRepere.vectorFromLocalToGlobal(localResponse);
+		r = localRepere.vectorFromLocalToGlobal(localResponse);
 
-    r = vec3(globalResponse);
+		if (globalDiffractionFilterRayAtCreation) 
+		{ 
+			bRep = responseValidator(r); 
+		}
+		else
+		{
+			bRep = true;
+		}
+
+	} 
+	while(!bRep);
 
 	return true;
 }

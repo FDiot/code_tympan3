@@ -20,37 +20,17 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Repere.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 
-
 class Cylindre;
 
 class Diffraction : public Event
 {
 public:
 
-    Diffraction(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Cylindre* c = NULL):
-				Event(position, incomingDirection, (Shape*)(c)) 
-	{ 
-		name = "unknown diffraction"; 
-		nbResponseLeft = initialNbResponse = 200; 
-		type = DIFFRACTION; 
-		buildRepere(); 
-		computeAngle();
+    Diffraction(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Cylindre* c = NULL);
 
-		computeDTheta();
-	}
+    Diffraction(const Diffraction& other);
 
-    Diffraction(const Diffraction& other) : Event(other)
-    {
-        type = DIFFRACTION;
-        buildRepere();
-        computeAngle();
-		computeDTheta();
-    }
-
-    virtual ~Diffraction()
-    {
-
-    }
+	virtual ~Diffraction() {}
 
     virtual void setNbResponseLeft(int _nbResponseLeft) 
 	{ 
@@ -76,6 +56,40 @@ public:
 
     virtual double getAngle() { return angleArrive; }
 
+	/*!
+	 * \fn bool responseValidator(vec3 &T);
+	 * \brief Return true if the response is in a correct direction for "standard" diffraction
+	 */
+	bool responseValidator(vec3 &T) 
+	{ 
+		decimal FT = F * T;
+
+		if ( ( 1. - FT ) < BARELY_EPSILON ) { return true; } // Vecteur limite tangent au plan de propagation
+
+		if ( FT < 0. ) { return false; }  // Le vecteur sortant est "oppose" au vecteur entrant
+
+		decimal F1 = F * N1;
+		decimal F2 = F * N2;
+
+		if ( (F1 * F2) > 0.) { return false; } 
+
+		decimal T1 = T * N1;
+		decimal T2 = T * N2;
+
+
+		if ( (F1 <= 0.) && ( (T1 > BARELY_EPSILON ) || ( (T2 - F2) > BARELY_EPSILON ) ) )
+		{ 
+			return false; 
+		}
+
+		if ( (F2 <= 0.) && ( ( T2 > BARELY_EPSILON ) || ( (T1 - F1) > BARELY_EPSILON ) ) )
+		{ 
+			return false; 
+		}
+
+		return true; 
+	}
+
 protected:
 
     void buildRepere();
@@ -91,6 +105,10 @@ protected:
     decimal angleArrive;			/*!< incident ray angle*/
 
 	decimal delta_theta;			/*!< angle step betwwen two rays to send */
+
+	vec3 F;							/*!< incoming vector */
+	vec3 N1;						/*!< face 1 normal */
+	vec3 N2;						/*!< face 2 normal */
 };
 
 #endif

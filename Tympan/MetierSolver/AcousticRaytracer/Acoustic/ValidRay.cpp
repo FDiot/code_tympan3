@@ -80,6 +80,7 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 	}    
 	    
 	SpecularReflexion* newEvent = new SpecularReflexion(impact, r->direction, inter->p);
+	QSharedPointer<Event> SPEv(newEvent);
 
     vec3 newDir;
     if (newEvent->getResponse(newDir))
@@ -87,13 +88,11 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
         r->position = r->position + r->direction * inter->t;
         r->direction = newDir;
         r->direction.normalize();
-        r->events.push_back(QSharedPointer<Event>(newEvent));
+        r->events.push_back(SPEv);
         r->nbReflexion += 1;
         return true;
     }
 
-
-	delete newEvent;
     return false;
 }
 
