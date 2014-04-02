@@ -62,14 +62,14 @@ public:
 	 */
 	bool responseValidator(vec3 &T) 
 	{ 
-		decimal FT = F * T;
+		decimal FT = from * T;
 
 		if ( ( 1. - FT ) < BARELY_EPSILON ) { return true; } // Vecteur limite tangent au plan de propagation
 
 		if ( FT < 0. ) { return false; }  // Le vecteur sortant est "oppose" au vecteur entrant
 
-		decimal F1 = F * N1;
-		decimal F2 = F * N2;
+		decimal F1 = from * N1;
+		decimal F2 = from * N2;
 
 		if ( (F1 * F2) > 0.) { return false; } 
 
@@ -77,12 +77,12 @@ public:
 		decimal T2 = T * N2;
 
 
-		if ( (F1 <= 0.) && ( (T1 > BARELY_EPSILON ) || ( (T2 - F2) > BARELY_EPSILON ) ) )
+		if ( (F1 <= 0.) && ( (T1 > BARELY_EPSILON ) || ( (ABS(T2) - ABS(F2)) > BARELY_EPSILON ) ) )
 		{ 
 			return false; 
 		}
 
-		if ( (F2 <= 0.) && ( ( T2 > BARELY_EPSILON ) || ( (T1 - F1) > BARELY_EPSILON ) ) )
+		if ( (F2 <= 0.) && ( ( T2 > BARELY_EPSILON ) || ( (ABS(T1) - ABS(F1)) > BARELY_EPSILON ) ) )
 		{ 
 			return false; 
 		}
@@ -106,7 +106,6 @@ protected:
 
 	decimal delta_theta;			/*!< angle step betwwen two rays to send */
 
-	vec3 F;							/*!< incoming vector */
 	vec3 N1;						/*!< face 1 normal */
 	vec3 N2;						/*!< face 2 normal */
 };
