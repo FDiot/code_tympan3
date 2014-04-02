@@ -14,9 +14,6 @@ message(SEND_ERROR
   "PCH support forcibly disabled ; you can try to run cmake again.")
 endif(${CMAKE_VERSION} VERSION_LESS 2.8.9 AND LOGILAB_USE_PRECOMPILED_HEADER)
 
-# This enable includes relative to current source file dir
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 # logilab-pch need to be included even when pre-compiled headers are disabled
 # (i.e. LOGILAB_USE_PRECOMPILED_HEADER is OFF).
 # Indeed, it then defines dummy compatibility macros.

@@ -1,7 +1,7 @@
 # CMakeLists for test cases with GoogleTest framework.
 set(CURRENT_FOLDER "Tests")
 
-enable_testing ()
+enable_testing () # Activate CTest
 
 # GTest has already been loaded as external project by tympan-deps-gtest.cmake
 include_directories (${GTEST_INCLUDE_DIR})
@@ -12,7 +12,6 @@ find_package (Threads)
 
 include_directories(.)
 
-set(TYMPAN_CTEST_ENV )
 
 # XXX It should be possible to make this much lighter
 set (TYMPAN_MODULES

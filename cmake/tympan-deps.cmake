@@ -40,3 +40,4 @@ set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
 message(STATUS "You will have to ensure that the following directories "
   "are searched for shared libratries / DLL when launching the program : "
   "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
+
