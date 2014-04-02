@@ -1,5 +1,5 @@
 /**
- * \file model.cpp
+ * \file acoustic_problem_model.cpp
  * \brief Implementation for top-level of the model
  *
  * \date jul. 12 2013
@@ -12,12 +12,12 @@
 
 using namespace std;
 
-#include "model.hpp"
+#include "acoustic_problem_model.hpp"
 
 namespace tympan
 {
 
-node_idx SolverModel::make_node(const Point& p)
+node_idx AcousticProblemModel::make_node(const Point& p)
 {
     all_nodes.push_back(p);
     return all_nodes.size() - 1;
@@ -31,7 +31,7 @@ AcousticTriangle::AcousticTriangle(node_idx n1, node_idx n2, node_idx n3)
 }
 
 /*
-bool SolverModel::less_than (const node_idx & lhs, const node_idx & rhs)
+bool AcousticProblemModel::less_than (const node_idx & lhs, const node_idx & rhs)
 {
     if (lhs==rhs)
         return false;
@@ -42,7 +42,7 @@ bool SolverModel::less_than (const node_idx & lhs, const node_idx & rhs)
     return less_than(lp, rp);
 }
 
-bool SolverModel::less_than (const Point& lp, const Point& rp)
+bool AcousticProblemModel::less_than (const Point& lp, const Point& rp)
 {
     if(lp._x == rp._x)
     {
@@ -56,16 +56,16 @@ bool SolverModel::less_than (const Point& lp, const Point& rp)
 }
 */
 
-triangle_idx SolverModel::make_triangle(node_idx n1, node_idx n2, node_idx n3)
+triangle_idx AcousticProblemModel::make_triangle(node_idx n1, node_idx n2, node_idx n3)
 {
     /*
-    SolverModel::node_idx tab[3] = {n1, n2, n3};
+    AcousticProblemModel::node_idx tab[3] = {n1, n2, n3};
     assert(tab[1] == n2);
     assert(&tab[1] != &n2);
-    const unsigned k0 = std::min_element(&tab[0], &tab[3], SolverModel::less_than) - &tab[0];
+    const unsigned k0 = std::min_element(&tab[0], &tab[3], AcousticProblemModel::less_than) - &tab[0];
     assert( k0<3 );
 
-    SolverModel::triangle tri;
+    AcousticProblemModel::triangle tri;
     // We fill the triangle array starting from k0
     for(unsigned int k=k0; k<k0+3; k++)
         tri.n[k%3] = tab[k];
@@ -75,7 +75,7 @@ triangle_idx SolverModel::make_triangle(node_idx n1, node_idx n2, node_idx n3)
     return all_triangles.size() - 1;
 }
 
-material_ptr_t SolverModel::make_material(const string& name, double resistivity)
+material_ptr_t AcousticProblemModel::make_material(const string& name, double resistivity)
 {
     material_ptr_t p_mat = tympan::static_pointer_cast<AcousticMaterialBase>(
                                tympan::make_shared<AcousticGroundMaterial>(name, resistivity));
@@ -83,7 +83,7 @@ material_ptr_t SolverModel::make_material(const string& name, double resistivity
     return p_mat;
 }
 
-material_ptr_t SolverModel::make_material(const string& name, const Spectrum& spectrum)
+material_ptr_t AcousticProblemModel::make_material(const string& name, const Spectrum& spectrum)
 {
     material_ptr_t p_mat = tympan::static_pointer_cast<AcousticMaterialBase>(
                                tympan::make_shared<AcousticBuildingMaterial>(name, spectrum));
@@ -92,7 +92,7 @@ material_ptr_t SolverModel::make_material(const string& name, const Spectrum& sp
 }
 
 
-void  SolverModel::export_triangles_soup(const std::string& filename)
+void  AcousticProblemModel::export_triangles_soup(const std::string& filename)
 {
     const static string nodes_suffix("_nodes.csv");
     const static string faces_suffix("_faces.csv");

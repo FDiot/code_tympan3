@@ -40,8 +40,8 @@ UuidAdapter::operator TYUUID() const
 }
 
 
-SolverDataModelBuilder::SolverDataModelBuilder(SolverModel& model_):
-    model(model_)
+SolverDataModelBuilder::SolverDataModelBuilder(AcousticProblemModel& aproblem_):
+    model(aproblem_)
 {
     // We store a simple reference to the model this builder is responsible to update.
 }
