@@ -14,12 +14,12 @@ Main entry point
 
 The main entry point of the build system is the file :file:`CMakeLists.txt`
 which is to be kept as synthetic as possible ; most build options are
-documented and preset in the file :file:`build-options.cmake`.
+documented and preset in the file :file:`tympan-build-options.cmake`.
 
-.. note:: Do not edit :file:`build-options.cmake` !
+.. note:: Do not edit :file:`tympan-build-options.cmake` !
 
   In case you need to tune Code_TYMPAN build to your own set-up, you
-  might be tempted to edit :file:`cmake/build-options.cmake`. This is
+  might be tempted to edit :file:`cmake/tympan-build-options.cmake`. This is
   not the CMake way to customize a build. In this case you want to
   edit the CMake cache by either using ``ccmake`` or
   ``cmake-gui``. See `Running CMake`__ regarding this matter.
