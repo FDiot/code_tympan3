@@ -1,7 +1,6 @@
 project(Code_TYMPAN)
 cmake_minimum_required(VERSION 2.8)
 
-
 # Set path for additionnal CMake modules provides with Tympan
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
@@ -10,7 +9,7 @@ set(${PROJECT_NAME}_VERSION_MINOR 1)
 set(${PROJECT_NAME}_VERSION_PATCH 14)
 
 # This file specifies several build options
-include(build-options)
+include(build-options NO_POLICY_SCOPE)
 # Detect and handle the platform
 include(tympan-platform)
 include(tympan-utils) 

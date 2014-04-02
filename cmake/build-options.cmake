@@ -4,6 +4,12 @@
 # Should you need to tune those options for your build, please de NOT
 # modify this file but edit the CMake-cache instead (using ccmake or cmake-gui)
 
+# Adjust some policies (cf http://www.cmake.org/Wiki/CMake/Policies)
+if (${CMAKE_VERSION} VERSION_GREATER 2.8.4)
+  # This is necessary as of CMake version 2.8.8
+  cmake_policy(SET CMP0017 NEW)
+  # the way CGAL provides a lot of CMake modules makes the new behaviour preferable
+endif(${CMAKE_VERSION} VERSION_GREATER 2.8.4)
 
 option(TYMPAN_BUILD_TEST "Build Tympan tests" ON)
 option(TYMPAN_DEBUG_CMAKE "Verbose information messages from CMake" ON)
