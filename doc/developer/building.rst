@@ -30,7 +30,7 @@ __   <http://www.cmake.org/cmake/help/runningcmake.html>`_
 Platform handling
 =================
 
-The :file:`tympan-platform*.cmake` are responsible for handling the
+The :file:`tympan-platform*.cmake` files are responsible for handling the
 platform. The rationale is for :file:`tympan-platform.cmake` to detect
 the platform, diagnose the unsupported ones and then call
 :file:`tympan-platform-common.cmake` then
@@ -44,11 +44,11 @@ the platform, diagnose the unsupported ones and then call
    platform. The option is thus declared in ``build-options`` and then set
    separately in each platform specific file.
 
-The :file:`tympan-platform-common.cmake` expects each
-:file:`tympan-platform-XXX.cmake` to define some hooks : functions
-which will be called at later points requiring system dependent
-actions. It should check that those hooks are actually provided as is
-done for ``platform_install_hook``.
+The :file:`tympan-platform-common.cmake` file expects each
+:file:`tympan-platform-XXX.cmake` file to define some hooks :
+functions which will be called at later points requiring system
+dependent actions. It should check that those hooks are actually
+provided as is done for ``platform_install_hook``.
 
 Third party dependencies
 ========================
@@ -60,19 +60,36 @@ Those lightweight dependencies are built as `CMake external projects`__
 __ `CMake external projects`: http://www.kitware.com/media/html/BuildingExternalProjectsWithCMake2.8.html
 
 Some dependencies (CGAL and NMPB2008 notably) require the system to be
-able to find some shared libraries / DLL *at run time*. A path must be
-built while configuring dependencies so that it can be used when
-launching the application : the ``TYMPAN_3RDPARTY_DLL_DIRS`` CMake
-variable is used for this purpose.
+able to find some shared libraries / DLL *at run time*.  The
+``TYMPAN_3RDPARTY_DLL_DIRS`` CMake variable is a list of paths which
+gets built while configuring dependencies. It can then be used by
+installation scripts or test scripts to setup the execution path.
+
 
 Installation
 ============
 
-The :file:`tympan-utils.cmake` provides some macros related to
-installation which are to called by conponents or plugins to perform
-their installation. Those macro just end up calling CMake's
+The :file:`tympan-utils.cmake` file provides some macros related to
+installation which are to be called by components or plugins to
+perform their installation. Those macro just end up calling CMake's
 ``install`` command with the right paths and options.
 
 The :file:`tympan-install.cmake` configures the overall installation
 process, call the platform specific installation hook and add an
 ``uninstall`` target.
+
+Tests
+=====
+
+Most of the tests are currently implemented in C++ using GTest_.
+The test driver used is CTest_ which integrates very well with.
+
+The :file:`tympan-utils.cmake` notably provides the CMake function
+``configure_gtest_target`` which is called on the test executable to
+setup the right dependencies for GTest and register the test with
+CTest_.
+
+.. References
+
+.. _GTest: https://code.google.com/p/googletest/wiki/Documentation
+.. _CTest: http://www.cmake.org/Wiki/CMake_Testing_With_CTest

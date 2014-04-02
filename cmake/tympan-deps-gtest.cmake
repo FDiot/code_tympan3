@@ -8,12 +8,10 @@ ExternalProject_Add(GTest
   INSTALL_COMMAND ""
   BUILD_IN_SOURCE 0
 )
-ExternalProject_Get_Property(GTest SOURCE_DIR)
+ExternalProject_Get_Property(GTest SOURCE_DIR BINARY_DIR)
 set(GTEST_SOURCE_DIR ${SOURCE_DIR})
+set(GTEST_BINARY_DIR ${BINARY_DIR})
 set(GTEST_INCLUDE_DIR ${GTEST_SOURCE_DIR}/include)
-
-include_directories (${GTEST_INCLUDE_DIR})
-#NB Adding GTest include in the non-test tree is to enable gtest_prod.h
 
 if(TYMPAN_DEBUG_CMAKE)
 message(STATUS "INFO GTEST_INCLUDE_DIR: " "${GTEST_INCLUDE_DIR}" )
