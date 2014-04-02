@@ -17,5 +17,4 @@ include_directories (${GTEST_INCLUDE_DIR})
 
 if(TYMPAN_DEBUG_CMAKE)
 message(STATUS "INFO GTEST_INCLUDE_DIR: " "${GTEST_INCLUDE_DIR}" )
-
 endif()

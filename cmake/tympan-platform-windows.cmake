@@ -21,3 +21,33 @@ set(TYMPAN_COMPONENT_TYPE STATIC CACHE STRING
   "For now, on Windows, it is only possible to build the components as static libs." 
   FORCE)
 set_property(CACHE TYMPAN_COMPONENT_TYPE PROPERTY STRINGS STATIC)
+
+
+function(configure_RunTympan_scripts)
+  FILE(TO_NATIVE_PATH ${CMAKE_INSTALL_PREFIX} TYMPAN_EXE_FULL_PATH)
+
+  if(TYMPAN_DEBUG_CMAKE)
+    message(STATUS "INFO CMAKE_INSTALL_PREFIX: " ${CMAKE_INSTALL_PREFIX})
+    message(STATUS "INFO TYMPAN_EXE_FULL_PATH: " ${TYMPAN_EXE_FULL_PATH})
+  endif()
+  
+  
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/runTympanDebug.bat.in
+    ${PROJECT_BINARY_DIR}/runTympanDebug.bat @ONLY)
+  install(PROGRAMS ${PROJECT_BINARY_DIR}/runTympanDebug.bat
+    DESTINATION .
+    CONFIGURATIONS Debug)
+  
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/runTympanRelease.bat.in
+    ${PROJECT_BINARY_DIR}/runTympanRelease.bat @ONLY)
+  install(PROGRAMS ${PROJECT_BINARY_DIR}/runTympanRelease.bat
+    DESTINATION .
+    CONFIGURATIONS Release)
+endfunction(configure_RunTympan_scripts)
+
+function(platform_install_hook)
+  if(TYMPAN_DEBUG_CMAKE)
+    message(STATUS "INFO Running platform specific hooks for Windows")
+  endif()
+  configure_RunTympan_scripts()
+endfunction(platform_install_hook)

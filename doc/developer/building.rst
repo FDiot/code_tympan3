@@ -44,6 +44,12 @@ the platform, diagnose the unsupported ones and then call
    platform. The option is thus declared in ``build-options`` and then set
    separately in each platform specific file.
 
+The :file:`tympan-platform-common.cmake` expects each
+:file:`tympan-platform-XXX.cmake` to define some hooks : functions
+which will be called at later points requiring system dependent
+actions. It should check that those hooks are actually provided as is
+done for ``platform_install_hook``.
+
 Third party dependencies
 ========================
 
@@ -58,3 +64,15 @@ able to find some shared libraries / DLL *at run time*. A path must be
 built while configuring dependencies so that it can be used when
 launching the application : the ``TYMPAN_3RDPARTY_DLL_DIRS`` CMake
 variable is used for this purpose.
+
+Installation
+============
+
+The :file:`tympan-utils.cmake` provides some macros related to
+installation which are to called by conponents or plugins to perform
+their installation. Those macro just end up calling CMake's
+``install`` command with the right paths and options.
+
+The :file:`tympan-install.cmake` configures the overall installation
+process, call the platform specific installation hook and add an
+``uninstall`` target.
