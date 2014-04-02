@@ -51,7 +51,7 @@ if (TYMPAN_USE_IHM)
   add_definitions(-DTY_USE_IHM)
 endif(TYMPAN_USE_IHM)
 
-# The Tympan 'components' are built according to the TYMPAN_COMPONENT_TYPE
+# The Tympan 'components' are build according to the TYMPAN_COMPONENT_TYPE
 # custom variable or to the standard CMake default BUILD_SHARED_LIBS if
 # TYMPAN_COMPONENT_TYPE is empty. The plugins are always built as MODULEs 
 set(TYMPAN_COMPONENT_TYPE ""
