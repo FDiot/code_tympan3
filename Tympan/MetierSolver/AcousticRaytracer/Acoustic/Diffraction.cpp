@@ -29,8 +29,6 @@ Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cy
 
 	computeDTheta();
 
-	F = pos - from;
-	F.normalize();
 	N1 = dynamic_cast<Cylindre*>(shape)->getFirstShape()->getNormal();
 	N2 = dynamic_cast<Cylindre*>(shape)->getSecondShape()->getNormal();
 }
@@ -42,7 +40,6 @@ Diffraction::Diffraction(const Diffraction& other) : Event(other)
     computeAngle();
 	computeDTheta();
 
-	F = other.F;
 	N1 = other.N1;
 	N2 = other.N2;
 }
@@ -199,7 +196,10 @@ void Diffraction::computeAngle()
     Cylindre* c = (Cylindre*)(shape);
     angleOuverture = c->getAngleOuverture();
 
-    decimal cosAngleArrive = localRepere.getW().dot(from);
+    vec3 localFrom = localRepere.vectorFromGlobalToLocal(from);
+
+	decimal cosAngleArrive = localRepere.getW().dot(from);
+
     //std::cout<<"Axe X ("<<localRepere.getU().x<<","<<localRepere.getU().y<<","<<localRepere.getU().z<<")"<<std::endl;
     angleArrive = acos(cosAngleArrive);
 }
