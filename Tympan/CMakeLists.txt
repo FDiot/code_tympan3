@@ -2,6 +2,9 @@
 # TODO required for now (esp. by PCH) but should ideally be deactivated
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+include_directories (${GTEST_INCLUDE_DIR})
+#NB Adding GTest include in the non-test tree is required to enable gtest_prod.h
+
 ### Precompiled header handling ###
 if(${CMAKE_VERSION} VERSION_LESS 2.8.9 AND LOGILAB_USE_PRECOMPILED_HEADER)
 set(LOGILAB_USE_PRECOMPILED_HEADER OFF
