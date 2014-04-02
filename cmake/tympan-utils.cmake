@@ -1,18 +1,27 @@
 # Various utility macro
 
-macro(install_tympan_plugin PLUGIN_NAME)
-install(TARGETS ${PLUGIN_NAME}
-        LIBRARY DESTINATION ${TYMPAN_INSTALL_PLUGINS_Release} CONFIGURATIONS Release)
-install(TARGETS ${PLUGIN_NAME}
-        LIBRARY DESTINATION ${TYMPAN_INSTALL_PLUGINS_Debug} CONFIGURATIONS Debug)
-endmacro(install_tympan_plugin)
+## Related to installation
 
-macro(install_tympan_component TARGET)
+include(CMakeParseArguments)
+
+# This function installs a plugin in the right directory depending on the configuration
+function(install_tympan_plugin PLUGIN_NAME)
+install(TARGETS ${PLUGIN_NAME}
+        LIBRARY DESTINATION ${TYMPAN_INSTALL_PLUGINS_Release} 
+        CONFIGURATIONS Release)
+install(TARGETS ${PLUGIN_NAME}
+        LIBRARY DESTINATION ${TYMPAN_INSTALL_PLUGINS_Debug} 
+        CONFIGURATIONS Debug)
+endfunction(install_tympan_plugin)
+
+# This function installs a component (lib) in the right directory depending 
+# on the library type and OS
+function(install_tympan_component TARGET)
 install(TARGETS ${TARGET} ARCHIVE DESTINATION lib
                           LIBRARY DESTINATION lib
                           RUNTIME DESTINATION . )
+endfunction(install_tympan_component)
 
-endmacro(install_tympan_component)
 # This function configures an existing executable target as a GTest test
 # It registers it with CTest, add the dependencies for GTest and others
 # and configures a runtime path 
