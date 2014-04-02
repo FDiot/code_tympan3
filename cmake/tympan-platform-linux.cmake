@@ -25,3 +25,10 @@ set_property(CACHE TYMPAN_COMPONENT_TYPE PROPERTY STRINGS STATIC)
 if(CMAKE_COMPILER_IS_GNUCXX)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
 endif(CMAKE_COMPILER_IS_GNUCXX)
+
+
+function(platform_install_hook)
+  if(TYMPAN_DEBUG_CMAKE)
+    message(STATUS "INFO Running platform specific hooks for Linux")
+  endif()
+endfunction(platform_install_hook)

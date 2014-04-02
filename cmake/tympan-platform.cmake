@@ -37,3 +37,8 @@ elseif(SYS_MACOSX)
 else()
   message(FATAL "Your system has not been recognized...")
 endif(SYS_NATIVE_WIN)
+
+if(NOT COMMAND platform_install_hook)
+  message(FATAL "All platform specific settings file are expected to define  "
+    "a 'platform_install_hook()' function or macro.")
+endif()
