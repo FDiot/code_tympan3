@@ -1,12 +1,5 @@
 # Detect platform and handle some platform specific issues 
 
-if (${CMAKE_VERSION} VERSION_GREATER 2.8.4)
-  # This is necessary as of CMake version 2.8.8
-  cmake_policy(SET CMP0017 NEW)
-  # the way CGAL provides a lot of CMake modules makes the new behaviour preferable
-endif(${CMAKE_VERSION} VERSION_GREATER 2.8.4)
-
-
 # Perform detection of the platform 
 if(WIN32)
   if(CYGWIN)
