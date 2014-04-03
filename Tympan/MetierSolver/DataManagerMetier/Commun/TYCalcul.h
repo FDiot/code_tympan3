@@ -34,6 +34,10 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticEdge.h"
+
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
+
 class TYProjet;
 
 
@@ -861,6 +865,9 @@ public:
     * \return Renvoie le tableau d'arêtes Tympan.
     */
     TYTabAcousticEdge& getAllAcousticEdges() { return _tabEdges; }
+
+    tympan::AcousticResultModel _acousticResult;
+    tympan::AcousticProblemModel _acousticProblem;
 
 protected:
     /**

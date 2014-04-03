@@ -119,7 +119,9 @@ void TYSolver::purge()
     _pool = NULL;
 }
 
-bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
+bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
+        const tympan::AcousticProblemModel& aproblem,
+        tympan::AcousticResultModel& aresult)
 {
     // Creation de la collection de thread
     const unsigned int nbThread = calcul.getNbTHread();
