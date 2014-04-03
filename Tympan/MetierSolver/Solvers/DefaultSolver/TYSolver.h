@@ -26,6 +26,9 @@
 #include "TYSolverDefines.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
+
 class OThreadPool;
 
 class TYAcousticModel;
@@ -40,7 +43,9 @@ public:
 
     virtual void purge();
 
-    virtual bool solve(const TYSiteNode& site, TYCalcul& calcul);
+    virtual bool solve(const TYSiteNode& site, TYCalcul& calcul,
+            const tympan::AcousticProblemModel& aproblem,
+            tympan::AcousticResultModel& aresult);
 
     const TYStructSurfIntersect* getTabPolygon() const { return _tabPolygon; }
     const size_t getTabPolygonSize() const { return _tabPolygonSize; }

@@ -51,6 +51,9 @@
 #include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/Lancer.h"
 
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
+
 //#include "TYANIME3DSiteNode.h"
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DRayTracerSetup.h"
@@ -89,7 +92,9 @@ void TYANIME3DSolver::init(const TYSiteNode& site, TYCalcul& calcul)
     _tabRay.clear();
 }
 
-bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
+bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
+        const tympan::AcousticProblemModel& aproblem,
+        tympan::AcousticResultModel& aresult)
 {
     // Rcupration (once for all) des sources et des rcepteurs
     init(site, calcul);
