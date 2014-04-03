@@ -110,4 +110,13 @@ extern bool globalUseFresnelArea;					// [ANIME3D] Use Fresnel area
 extern float globalAnime3DSigma;					// [ANIME3D] Value of relative uncertainty
 extern float globalAnime3DForceC;					// [ANIME3D] Force "C" parameter
 
+////////////////////////////////
+// Mode DEBUG
+////////////////////////////////
+extern bool globalDebugUseCloseEventSelector;		// [DEBUG] allow use of closeEventSelector
+extern bool globalDebugUseDiffractionAngleSelector;	// [DEBUG] allow use of diffraction angle selector
+extern bool globalDebugUseDiffractionPathSelector;	// [DEBUG] allow use of diffraction path length selector
+extern bool globalDebugUseFermatSelector;			// [DEBUG] allow use of Fermat selector
+extern bool globalDebugUseFaceSelector;				// [DEBUG] allow use of (doubled) faces selector
+
 #endif //GLOBAL_H
