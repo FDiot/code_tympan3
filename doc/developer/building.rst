@@ -96,7 +96,55 @@ target, ``add_qtest_executable`` creates itself a *new* executable
 target from the sources: this allows it to launch MOC and add the
 generated sources to the executable.
 
+
+Pre-compiled headers
+====================
+
+Pre-compiled headers is a controversial technology which speeds up the
+compilation process in some use cases. But it increases significantly
+the build complexity, is highly platform specific and can even slow
+the build down in some use cases. To know more about pre-compiled
+header please see :
+
+* Introduction : http://gamesfromwithin.com/the-care-and-feeding-of-pre-compiled-headers
+* For GCC : http://gcc.gnu.org/onlinedocs/gcc/Precompiled-Headers.html
+* For Visual Studio : http://msdn.microsoft.com/en-us/library/szfdksca.aspx
+
+An **experimental** support for pre-compiled headers has been
+developed [1] in Code_TYMPAN so that it is possible to benefit from
+the hypothetical speed-up of builds. But because the benefit (and
+complexity) they bring are so controversial, this support can be
+enabled or disabled with the ``LOGILAB_USE_PRECOMPILED_HEADER`` build
+option.
+
+When ``LOGILAB_USE_PRECOMPILED_HEADER`` is set, the
+:file:`cmake/PrecompiledHeader.cmake` file will be loaded to provide
+the ``set_precompiled_header`` and ``use_precompiled_header`` CMake
+functions. Otherwise it will define dummy function as a replacement to
+allow their unconditional use in the main CMakeLists.
+
+Most Code_TYMPAN components (``DataManagerMetier``...) provide an
+*include everything* header (like :file:`TYPHMetier.h`) intended to
+be precompiled, hence the ``PH``. Such headers' inclusion is typically
+guarded by the preprocessor symbol ``TYMPAN_USE_PRECOMPILED_HEADER``.
+
+But this header has been misused: most source files rely on it being
+included instead of explicitely including the actually needed
+headers. Thus making the application compile without
+``TYMPAN_USE_PRECOMPILED_HEADER`` is not possible at the time of
+this writing (April 2014) and will require significant future work.
+
+The desired setting would be for``TYMPAN_USE_PRECOMPILED_HEADER`` to
+be defined **only when** the build option
+``LOGILAB_USE_PRECOMPILED_HEADER`` is defined.  Because this is not
+yet possible the :file:`Tympan/CMakeLists.txt)` file forcibly defines
+``TYMPAN_USE_PRECOMPILED_HEADER`` and emits a warning.
+
+
 .. References
 
 .. _GTest: https://code.google.com/p/googletest/wiki/Documentation
 .. _CTest: http://www.cmake.org/Wiki/CMake_Testing_With_CTest
+
+.. [1] Although the best option would be for CMake to provide cross
+       platform pre-compiled headers handling
