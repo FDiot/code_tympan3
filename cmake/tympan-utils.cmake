@@ -54,3 +54,20 @@ function(configure_gtest_target)
       "for target ${_TARGET}: " ${_UNPARSED_ARGUMENTS})
   endif()
 endfunction(configure_gtest_target)
+
+# adapted from : http://qt-project.org/wiki/Unit_Testing
+macro(add_qt_test testname testsrc)
+
+  set(${basename}_SRCS ${testsrc})
+
+  include_directories(${QT_QTTEST_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
+  qt4_automoc(${${basename}_SRCS})
+  add_executable(${basename} ${${basename}_SRCS})
+  target_link_libraries(${basename} ${TYMPAN_MODULES}
+    ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY}) 
+
+  set_property(TARGET ${basename} PROPERTY FOLDER ${CURRENT_FOLDER})
+  add_test(${basename} ${basename})
+  set_property(TEST ${basename} PROPERTY ENVIRONMENT
+             "${LD_VARNAME}=${ADD_PATH_STRING}")
+endmacro(add_qt_test)
