@@ -130,6 +130,17 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
 	globalAnime3DSigma = 0.;				// [ANIME3D] Value of relative uncertainty
 	globalAnime3DForceC = 1.;				// [ANIME3D] Force "C" parameter
 
+////////////////////////////////
+// Mode DEBUG
+////////////////////////////////
+
+	globalDebugUseCloseEventSelector = true;			// [DEBUG] allow use of closeEventSelector
+	globalDebugUseDiffractionAngleSelector = true;	// [DEBUG] allow use of diffraction angle selector
+	globalDebugUseDiffractionPathSelector = true;		// [DEBUG] allow use of diffraction path length selector
+	globalDebugUseFermatSelector = true;				// [DEBUG] allow use of Fermat selector
+	globalDebugUseFaceSelector = true;				// [DEBUG] allow use of (doubled) faces selector
+
+
     // Chargement des parametres de calcul
     loadParameters();
 }
@@ -357,7 +368,27 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 	// [ANIME3D] Force "C" parameter
     if (params.getline(ligne, 132)) { globalAnime3DForceC = getParam(ligne); }
 
-    params.close();
+////////////////////////////////
+// Mode DEBUG
+////////////////////////////////
+
+	// [DEBUG] allow use of closeEventSelector
+	if (params.getline(ligne, 132)) { globalDebugUseCloseEventSelector = getParam(ligne); }			
+	
+	// [DEBUG] allow use of diffraction angle selector
+	if (params.getline(ligne, 132)) { globalDebugUseDiffractionAngleSelector = getParam(ligne); }	
+	
+	// [DEBUG] allow use of diffraction path length selector
+	if (params.getline(ligne, 132)) { globalDebugUseDiffractionPathSelector = getParam(ligne); }		
+	
+	// [DEBUG] allow use of Fermat selector
+	if (params.getline(ligne, 132)) { globalDebugUseFermatSelector = getParam(ligne); }				
+	
+	// [DEBUG] allow use of (doubled) faces selector
+	if (params.getline(ligne, 132)) { globalDebugUseFaceSelector = getParam(ligne); }				
+
+
+	params.close();
 
     return bRes;
 }
@@ -368,10 +399,25 @@ bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Sourc
 
 	if (globalUsePostFilters == 0)
 	{
+#ifdef _DEBUG
+		if (globalDebugUseCloseEventSelector)
+#endif
 		selectorManagerValidation.addSelector( new CloseEventSelector<Ray>() );
-//		selectorManagerValidation.addSelector( new DiffractionAngleSelector<Ray>() );
+#ifdef _DEBUG
+		if (globalDebugUseDiffractionAngleSelector)
+#endif
+		selectorManagerValidation.addSelector( new DiffractionAngleSelector<Ray>() );
+#ifdef _DEBUG
+		if (globalDebugUseDiffractionPathSelector)
+#endif
 		selectorManagerValidation.addSelector( new DiffractionPathSelector<Ray>(globalMaxPathDifference) );
+#ifdef _DEBUG
+		if (globalDebugUseFermatSelector)
+#endif
 		selectorManagerValidation.addSelector( new FermatSelector<Ray>() ); 
+#ifdef _DEBUG
+		if (globalDebugUseFaceSelector)
+#endif
 		selectorManagerValidation.addSelector( new FaceSelector<Ray>(HISTORY_PRIMITIVE) );
 	}
  

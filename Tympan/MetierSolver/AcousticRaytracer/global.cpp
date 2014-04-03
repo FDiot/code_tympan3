@@ -108,3 +108,12 @@ float globalOverSampleD;			// [ANIME3D] Rays oversampling rate (if meteo -see ab
 bool globalUseFresnelArea;			// [ANIME3D] Use Fresnel area
 float globalAnime3DSigma;			// [ANIME3D] Value of relative uncertainty
 float globalAnime3DForceC;			// [ANIME3D] Force "C" parameter
+
+////////////////////////////////
+// Mode DEBUG
+////////////////////////////////
+bool globalDebugUseCloseEventSelector;			// [DEBUG] allow use of closeEventSelector
+bool globalDebugUseDiffractionAngleSelector;	// [DEBUG] allow use of diffraction angle selector
+bool globalDebugUseDiffractionPathSelector;		// [DEBUG] allow use of diffraction path length selector
+bool globalDebugUseFermatSelector;				// [DEBUG] allow use of Fermat selector
+bool globalDebugUseFaceSelector;				// [DEBUG] allow use of (doubled) faces selector

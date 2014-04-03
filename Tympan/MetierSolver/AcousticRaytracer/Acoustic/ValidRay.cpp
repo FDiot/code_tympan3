@@ -171,7 +171,17 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 	if ( !computeRealImpact(r, inter, cylindre, realImpact) ) { return false; }
 
 // Valid creation of event using distance from the ridge (if needed)
-	if ( globalDiffractionUseDistanceAsFilter && !isRayClosestFromRidge(r, impact, realImpact) ) { return false; }
+	if ( globalDiffractionUseDistanceAsFilter && !isRayClosestFromRidge(r, impact, realImpact) ) 
+	{ 
+		vec3 from = impact - r->position;
+		from.normalize();
+
+		// The ray follow his initial direction
+		r->position = impact;
+		r->direction = from;
+
+		return false; 
+	}
 	
 // Create diffraction event
     vec3 from = realImpact - r->position;
@@ -200,16 +210,24 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
     newEvent->setNbResponseLeft(diff_nb_rays); // Set the number of ray to throw
 
 // Add the event to the list
-	vec3 newDir;
-    if (newEvent->getResponse(newDir))
-    {
-        r->position = realImpact;
-        r->direction = newDir;
-        r->events.push_back(SPEv);
-        r->nbDiffraction += 1;
 
-        return true;
-    }
+	// The firts ray lauched follow the incoming ray
+    r->position = realImpact;
+    r->direction = from;
+    r->events.push_back(SPEv);
+	r->nbDiffraction += 1;
 
-	return false;
+    return true;
+	//vec3 newDir;
+    //if (newEvent->getResponse(newDir))
+    //{
+    //    r->position = realImpact;
+    //    r->direction = newDir;
+    //    r->events.push_back(SPEv);
+    //    r->nbDiffraction += 1;
+
+    //    return true;
+    //}
+
+	//return false;
 }
