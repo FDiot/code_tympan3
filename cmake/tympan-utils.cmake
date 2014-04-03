@@ -22,17 +22,10 @@ install(TARGETS ${TARGET} ARCHIVE DESTINATION lib
                           RUNTIME DESTINATION . )
 endfunction(install_tympan_component)
 
-# This function configures an existing executable target as a GTest test
-# It registers it with CTest, add the dependencies for GTest and others
-# and configures a runtime path 
-function(configure_gtest_target)
-  set(options "")
-  set(oneValueArgs "TARGET" "FOLDER")
-  set(multiValueArgs "RUNTIME_PATH" "DEPS" "LIBS")
-  cmake_parse_arguments("" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-
-  add_dependencies(${_TARGET} GTest ${_DEPS})
-  target_link_libraries(${_TARGET} gtest_main gtest ${CMAKE_THREAD_LIBS_INIT} ${_LIBS})
+# This MACRO factors out some functionalities shared among
+# add_qtest_executable and configure_gtest_target: it is NOT MEANT to
+# be called DIRECTLY
+macro(_register_test_target)
   add_test(${_TARGET} ${_TARGET})
 
   if(_RUNTIME_PATH)
@@ -48,6 +41,22 @@ function(configure_gtest_target)
   if(_FOLDER)
     set_property(TARGET ${_TARGET} PROPERTY FOLDER ${_FOLDER})
   endif() 
+endmacro()
+
+
+# This function configures an existing executable target as a GTest test
+# It registers it with CTest, add the dependencies for GTest and others
+# and configures a runtime path 
+function(configure_gtest_target)
+  set(options "")
+  set(oneValueArgs "TARGET" "FOLDER")
+  set(multiValueArgs "RUNTIME_PATH" "DEPS" "LIBS")
+  cmake_parse_arguments("" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+  add_dependencies(${_TARGET} GTest ${_DEPS})
+  target_link_libraries(${_TARGET} gtest_main gtest ${CMAKE_THREAD_LIBS_INIT} ${_LIBS})
+
+  _register_test_target()
 
   if(_UNPARSED_ARGUMENTS)
     message(WARNING "configure_gtest_target: unknown arguments remaining unparsed "
@@ -55,19 +64,27 @@ function(configure_gtest_target)
   endif()
 endfunction(configure_gtest_target)
 
-# adapted from : http://qt-project.org/wiki/Unit_Testing
-macro(add_qt_test testname testsrc)
 
-  set(${basename}_SRCS ${testsrc})
+# This function creates a new executable target which is a QTest test
+# It register it with CTest, adds the dependencies for QTest and
+# configure a runtime path
+# adapted from : http://qt-project.org/wiki/Unit_Testing
+function(add_qtest_executable)
+  set(options "")
+  set(oneValueArgs "TARGET" "FOLDER")
+  set(multiValueArgs "SOURCES" "RUNTIME_PATH" "DEPS" "LIBS")
+  cmake_parse_arguments("" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
   include_directories(${QT_QTTEST_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
-  qt4_automoc(${${basename}_SRCS})
-  add_executable(${basename} ${${basename}_SRCS})
-  target_link_libraries(${basename} ${TYMPAN_MODULES}
+  qt4_automoc(${_SOURCES})
+  add_executable(${_TARGET} ${_SOURCES})
+  target_link_libraries(${_TARGET} ${TYMPAN_MODULES}
     ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY}) 
 
-  set_property(TARGET ${basename} PROPERTY FOLDER ${CURRENT_FOLDER})
-  add_test(${basename} ${basename})
-  set_property(TEST ${basename} PROPERTY ENVIRONMENT
-             "${LD_VARNAME}=${ADD_PATH_STRING}")
-endmacro(add_qt_test)
+  _register_test_target()
+
+  if(_UNPARSED_ARGUMENTS)
+    message(WARNING "add_qtest_executable: unknown arguments remaining unparsed "
+      "for target ${_TARGET}: " ${_UNPARSED_ARGUMENTS})
+  endif()
+endfunction()

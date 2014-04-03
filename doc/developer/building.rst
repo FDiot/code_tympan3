@@ -81,13 +81,20 @@ process, call the platform specific installation hook and add an
 Tests
 =====
 
-Most of the tests are currently implemented in C++ using GTest_.
-The test driver used is CTest_ which integrates very well with.
+Most of the tests are currently implemented in C++ using GTest_, only
+the GUI-related ones are implemented using QTest. In both cases the
+test driver used is CTest_ which integrates very well with CMake.
 
 The :file:`tympan-utils.cmake` notably provides the CMake function
 ``configure_gtest_target`` which is called on the test executable to
 setup the right dependencies for GTest and register the test with
 CTest_.
+
+An analogous function is provided for QTest. Contrary to
+``configure_gtest_target`` which configures an *existing* executable
+target, ``add_qtest_executable`` creates itself a *new* executable
+target from the sources: this allows it to launch MOC and add the
+generated sources to the executable.
 
 .. References
 

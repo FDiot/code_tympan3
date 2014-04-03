@@ -9,5 +9,10 @@ set (TYMPAN_MODULES tympan_dm_metier tympan_dm_graphics tympan_dm_ihm
 # Main loop for all CPP test files.
 foreach (testfile ${TESTS_SRC})
   get_filename_component (basename ${testfile} NAME_WE)
-  add_qt_test(${basename} ${testfile})
+  add_qtest_executable(
+    TARGET ${basename}
+    SOURCES ${testfile}
+    FOLDER ${CURRENT_FOLDER}
+    RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}" 
+    LIBS ${TYMPAN_MODULES} )
 endforeach (testfile)
