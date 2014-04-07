@@ -1,7 +1,7 @@
 /**
  * @file Loader.hpp
  *
- * @brief Utilities to load a project and a solver.
+ * @brief Utility to load a solver.
  *
  */
 
@@ -12,11 +12,6 @@
 
 namespace tympan
 {
-
-    void load_project_from_file(const char *, LPTYProjet&);
-
-    void save_project(const char *, const LPTYProjet&);
-
     void load_solver(const char *, TYCalcul *);
 
 } /* namespace tympan */
