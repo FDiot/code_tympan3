@@ -31,8 +31,10 @@
 #include "TYCalculManager.h"
 
 #include "TYMessageManager.h"
+#include "Tympan/Config.h"
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/Tools/OChrono.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 
 #include <qcursor.h>
 #include <qmessagebox.h>
@@ -49,6 +51,7 @@ static char THIS_FILE[] = __FILE__;
 
 #define TR(id) OLocalizator::getString("TYCalculManager", (id))
 
+using namespace tympan;
 
 TYCalculManager::TYCalculManager()
 {
@@ -86,7 +89,69 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         // Lance le calcul
         OChronoTime startTime; //xbh: analyse du temps de calcul
 
-        ret = pCalcul->go();
+        TYProjet *pProject = pCalcul->getProjet();
+
+        // Serialize model
+        TYXMLManager xmlManagerOutput;
+        // XXX this code is temporary. We should use QTemporaryFile objects (TBD)
+        const char *problemfile = "problem.xml";
+        const char *resultfile = "result.xml";
+
+        int doc_created = xmlManagerOutput.createDoc(TY_PRODUCT_XMLTAG_,
+                TY_PRODUCT_VERSION_);
+        int doc_saved = 1;
+        if (doc_created)
+        {
+            xmlManagerOutput.addElement(pProject);
+            doc_saved = xmlManagerOutput.save(problemfile);
+        }
+        if (doc_saved == 0)
+        {
+            // Call python module to do the computation
+            // XXX we should define a work environment so as to know where to record
+            // the xml files, where to look for them, where are the python scripts
+            // we want to call, where are the libraries, etc.
+            // waiting for a decision, for now keep it dirty
+            QProcess python;
+            QStringList env = QProcess::systemEnvironment();
+            // XXX because for now we install the tympan project in the home
+            // directory. To be fixed
+            env.replaceInStrings(QRegExp("^LD_LIBRARY_PATH=(.*)"),
+                    "LD_LIBRARY_PATH=Tympan/lib");
+            python.setEnvironment(env);
+
+            QStringList args;
+            args << "Tympan/pythond/tympan.py" << problemfile << resultfile
+                << "Tympan/pluginsd";
+            python.start("python", args);
+            while (!python.waitForFinished()); // wait for the script to execute
+            int pystatus = python.exitStatus();
+            if (pystatus == 0)
+            {
+                // Then read the result to update the internal model
+                TYXMLManager xmlManagerInput;
+                LPTYElementArray elements;
+                int doc_loaded = xmlManagerInput.load(resultfile, elements);
+                if (doc_loaded)
+                {
+                    // Retrieve project.
+                    BOOST_FOREACH(LPTYElement & elt, elements)
+                    {
+                        if (std::strcmp(elt->getClassName(), "TYProjet") == 0)
+                        {
+                            pProject = TYProjet::safeDownCast(elt);
+                            break;
+                        }
+                    }
+                    // Update site node.
+                    pProject->getSite()->update();
+                    getTYApp()->getCurProjet()->setCurrentCalcul(
+                            pProject->getCurrentCalcul());
+                    pCalcul = pProject->getCurrentCalcul();
+                    ret = true;
+                }
+            }
+        }
 
         OChronoTime endTime; //xbh: analyse du temps de calcul
         OChronoTime duration = endTime - startTime;
