@@ -31,12 +31,6 @@ bool validCylindreWithDiffraction(Ray* r, Intersection* inter);
 void appendDirectionToEvent(QSharedPointer<Event> e, TargetManager& targets);
 
 /*!
- * \fn isPathLengthDifferenceValid(const Ray *r, const vec3& impact, const decimal& maxDiff);
- * \brief Test if difference betwen total path length and direct path length is smaller than maxDif
- */
-bool isPathLengthDifferenceValid(Ray *r, const vec3& impact, const decimal& maxDiff);
-
-/*!
  * \fn computeRealImpact(Ray *r, Cylindre *cylindre, vec3& impact)
  * \brief Try to compute the intersection of the ray and the ridge
  * \brief Return false if not possible
@@ -48,6 +42,27 @@ bool computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre, vec3& im
  * \brief Test if ray passes near from the ridge
  */
 bool isRayClosestFromRidge(Ray *r, const vec3& impact, const vec3& realImpact);
+
+
+/*!
+ * \fn pathDiffValidationForDiffraction(const Ray *r, const vec3& impact);
+ * \brief Test if difference betwen total path length and direct path length is smaller than maxDif
+ * \brief in case of diffraction
+ */
+bool pathDiffValidationForDiffraction(Ray *r, const vec3& impact);
+
+/*!
+ * \fn pathDiffValidationForReflection(const Ray *r, const vec3& impact);
+ * \brief Test if difference betwen total path length and direct path length is smaller than maxDif
+ * \brief in case of reflection
+ */
+bool pathDiffValidationForReflection(Ray * r, const vec3& impact);
+
+/*!
+ * \fn void computeCumulDistanceAndLocalOrigin(Ray *r, vec3& origin, const vec3& impact);
+ * \brief search the neares event of type REFLECTION otherwise the source
+ */
+void computeCumulDistance(Ray *r, const vec3& impact);
 
 };
 
