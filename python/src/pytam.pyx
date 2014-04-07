@@ -91,7 +91,7 @@ cdef class Computation:
 cdef class Project:
     cdef SmartPtr[TYProjet] thisptr
     def __cinit__(self):
-        self.thisptr = SmartPtr[TYProjet](new TYProjet())
+        self.thisptr = SmartPtr[TYProjet]()
     # Constructs a Computation python object and sets the wrapped instance
     # with the Computation retrieved from the C++ LPTYProject.
     def current_computation(self):
@@ -109,14 +109,10 @@ cdef class Project:
     @staticmethod
     def from_xml(filepath):
         project = Project()
-        load_project_from_file(filepath, project.thisptr)
-        return project
+        if load_project(filepath, project.thisptr):
+            return project
+        else:
+            raise Exception("Project could not be loaded from %s" % filepath)
     def to_xml(self, filepath):
-        save_project(filepath, self.thisptr)
-    @classmethod
-    def safeDownCast(self, Element el):
-        project = Project()
-        pproj = project.thisptr.getRealPointer()
-        pproj = safeDownCast(el.thisptr.getRealPointer())
-        return project
-
+        if self.thisptr.getRealPointer() != NULL:
+            save_project(filepath, self.thisptr)
