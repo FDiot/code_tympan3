@@ -34,7 +34,7 @@
 #include "Tympan/Config.h"
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/Tools/OChrono.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
 
 #include <qcursor.h>
 #include <qmessagebox.h>
@@ -92,20 +92,10 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         TYProjet *pProject = pCalcul->getProjet();
 
         // Serialize model
-        TYXMLManager xmlManagerOutput;
         // XXX this code is temporary. We should use QTemporaryFile objects (TBD)
         const char *problemfile = "problem.xml";
         const char *resultfile = "result.xml";
-
-        int doc_created = xmlManagerOutput.createDoc(TY_PRODUCT_XMLTAG_,
-                TY_PRODUCT_VERSION_);
-        int doc_saved = 1;
-        if (doc_created)
-        {
-            xmlManagerOutput.addElement(pProject);
-            doc_saved = xmlManagerOutput.save(problemfile);
-        }
-        if (doc_saved == 0)
+        if (save_project(problemfile, pProject))
         {
             // Call python module to do the computation
             // XXX we should define a work environment so as to know where to record
@@ -129,22 +119,10 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             if (pystatus == 0)
             {
                 // Then read the result to update the internal model
-                TYXMLManager xmlManagerInput;
-                LPTYElementArray elements;
-                int doc_loaded = xmlManagerInput.load(resultfile, elements);
-                if (doc_loaded)
+                LPTYProjet result;
+                if (load_project(resultfile, result))
                 {
-                    // Retrieve project.
-                    BOOST_FOREACH(LPTYElement & elt, elements)
-                    {
-                        if (std::strcmp(elt->getClassName(), "TYProjet") == 0)
-                        {
-                            pProject = TYProjet::safeDownCast(elt);
-                            break;
-                        }
-                    }
-                    // Update site node.
-                    pProject->getSite()->update();
+                    pProject = result.getRealPointer();
                     getTYApp()->getCurProjet()->setCurrentCalcul(
                             pProject->getCurrentCalcul());
                     pCalcul = pProject->getCurrentCalcul();
