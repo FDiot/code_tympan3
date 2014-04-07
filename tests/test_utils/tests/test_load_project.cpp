@@ -6,6 +6,7 @@
 
 
 #include "test_utils/ProjectLoader.hpp"
+#include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
 
 using std::cout;
 using std::endl;
@@ -14,7 +15,7 @@ TEST(TestTestUtils, loading)
 {
     const char filename[] = "../../data/projects-panel/1_PROJET_Site_emprise_seule.xml";
     LPTYProjet project;
-    tympan::load_project_from_file(filename, project);
+    tympan::load_project(filename, project);
     tympan::assert_loaded_project(project);
 }
 

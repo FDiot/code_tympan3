@@ -2,6 +2,7 @@
 
 
 #include "ComputationLauncher.hpp"
+#include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
 
 namespace tympan
 {
@@ -10,7 +11,7 @@ namespace tympan
 ComputationLauncher::ComputationLauncher(const char* filename) :
     _filename(filename)
 {
-    load_project_from_file(filename, _project);
+    load_project(filename, _project);
     setCurrentComputation(0);
 }
 
