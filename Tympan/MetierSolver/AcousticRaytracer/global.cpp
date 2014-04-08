@@ -52,11 +52,16 @@ bool globalUsePathDifValidation;		// [ACOUSTICRAYTRACER] Allow use of path lengt
 float globalMaxPathDifference;		// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
 bool globalDiffractionUseDistanceAsFilter;	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
 bool globalKeepDebugRay;				// [ACOUSTICRAYTRACER] Keep invalid rays
+bool globalUsePostFilters;			// [ACOUSTICRAYTRACER] Use of post-filters
+
+////////////////////////////
+// Targeting parameters
+////////////////////////////
+
 bool globalEnableTargets;			// [ACOUSTICRAYTRACER] Use targeting
 float globalSampleGround2D;			// [ACOUSTICRAYTRACER] Sample ground in 2D
 bool globalEnableFullTargets;		// [ACOUSTICRAYTRACER] Set target search after a diffuse event
 float globalTargetsDensity;			// [ACOUSTICRAYTRACER] Sampling density for interesting areas
-bool globalUsePostFilters;			// [ACOUSTICRAYTRACER] Use of post-filters
 
 ////////////////////////////
 // AnalyticRayTracer

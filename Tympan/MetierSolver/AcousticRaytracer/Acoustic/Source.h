@@ -21,24 +21,18 @@
 #include <string>
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
+
+#ifdef _ALLOW_TARGETING_
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
+#endif //_ALLOW_TARGETING_
 
 #include <iostream>
 #include "Tympan\MetierSolver\AcousticRaytracer\global.h"
 
-//#ifdef USE_QT
-//  #include "SourceGraphic.h"
-//#endif
-
 class Source : public Base
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Recepteur)
-    //  GRAPHIC_DECL(Source)
-    //#endif
-
 public:
+#ifdef _ALLOW_TARGETING_
     Source(std::string _name = "unknow source") :  sampler(NULL), Base(), targetManager(NULL) { name = _name;}
     Source(const Source& other) : Base(other)
     {
@@ -56,6 +50,19 @@ public:
         }
 
     }
+#else
+    Source(std::string _name = "unknow source") :  sampler(NULL), Base() { name = _name;}
+    Source(const Source& other) : Base(other)
+    {
+        name = std::string(other.name);
+        pos = vec3(other.pos);
+        spectrePuissance = Spectre(other.spectrePuissance);
+        if (other.sampler) { sampler = other.sampler->Clone(); }
+        else { sampler = NULL; }
+        nbRayLeft = other.nbRayLeft;
+        initialRayCount = other.initialRayCount;
+    }
+#endif
 
     virtual ~Source() { }
 
@@ -68,10 +75,6 @@ public:
     Spectre getSpectre() { return spectrePuissance; }
     void setSpectre(const Spectre& spectre) { spectrePuissance = Spectre(spectre); }
 
-    void setTargetManager(TargetManager* _targetManager) { targetManager = _targetManager; }
-
-    void setInitialTargetCount(unsigned int nb) { initialTargetCount = nb; targetCount = nb;}
-    unsigned int getInitialTargetCount() { return initialTargetCount; }
 
     int getNbRayLeft() { return nbRayLeft; }
     void setNbRayLeft(int nb) { nbRayLeft = nb; if (nbRayLeft > initialRayCount) { initialRayCount = nbRayLeft; } }
@@ -82,9 +85,12 @@ public:
     Sampler* getSampler() { return sampler; }
     void setSampler(Sampler* _sampler) { sampler = _sampler; }
 
+	unsigned int getId() { return id; }
+    void setId(unsigned int _id) { id = _id; }
+
     bool getDirection(vec3& r)
     {
-        //std::cout<<"La source peut encore genere "<<nbRayLeft<<" rayons."<<std::endl;
+#ifdef _ALLOW_TARGETING_
         if (nbRayLeft <= 0)
         {
             return false;
@@ -106,18 +112,20 @@ public:
         {
 			r = vec3(sampler->getSample());
         }
+#else
+        if (nbRayLeft <= 0)
+        {
+            return false;
+        }
+
+        nbRayLeft--;
+		
+		r = vec3(sampler->getSample());
+#endif // _ALLOW_TARGETING_
 
         //std::cout<<"Renvoie d'une nouvelle direction."<<std::endl;
         return true;
     }
-
-    void addDirection(vec3 dir) { directions.push_back(dir); }
-
-    std::vector<vec3>& getPrecomputedDirections() { return directions; }
-
-    unsigned int getId() { return id; }
-    void setId(unsigned int _id) { id = _id; }
-
 
 protected:
     std::string name;
@@ -126,12 +134,25 @@ protected:
     Sampler* sampler;
     int nbRayLeft;
     int initialRayCount;
+    unsigned int id;
 	int indice; // Knows which ray we are working on.
-    unsigned int initialTargetCount;
+
+#ifdef _ALLOW_TARGETING_
+public:
+    void setTargetManager(TargetManager* _targetManager) { targetManager = _targetManager; }
+
+    void setInitialTargetCount(unsigned int nb) { initialTargetCount = nb; targetCount = nb;}
+    unsigned int getInitialTargetCount() { return initialTargetCount; }
+    void addDirection(vec3 dir) { directions.push_back(dir); }
+
+    std::vector<vec3>& getPrecomputedDirections() { return directions; }
+
+protected:
+	unsigned int initialTargetCount;
     unsigned int targetCount;
     std::vector<vec3> directions;
-    unsigned int id;
     TargetManager* targetManager;
+#endif //_ALLOW_TARGETING_
 };
 #endif
 
