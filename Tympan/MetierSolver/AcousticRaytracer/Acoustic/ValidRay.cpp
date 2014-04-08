@@ -19,37 +19,6 @@
 #include "Diffraction.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"
 
-void ValidRay::appendDirectionToEvent(QSharedPointer<Event> e, TargetManager& targets)
-{
-    std::vector<vec3> &ponctualTargets = targets.getTargets();
-
-    std::vector<vec3> acceptableTargets;
-    for (unsigned int i = 0; i < ponctualTargets.size(); i++)
-    {
-        vec3 response = ponctualTargets.at(i) - e->getPosition();
-        response.normalize();
-        if (e->isAcceptableResponse(response))
-        {
-            acceptableTargets.push_back(response);
-        }
-    }
-
-    if (acceptableTargets.size() < static_cast<unsigned int>(e->getNbResponseLeft()))
-    {
-        for (unsigned int i = 0; i < acceptableTargets.size(); i++)
-        {
-            e->appendTarget(acceptableTargets.at(i), true);
-        }
-    }
-    else
-    {
-        for (unsigned int i = 0; i < static_cast<unsigned int>(e->getNbResponseLeft()); i++)
-        {
-            int index = rand() % e->getNbResponseLeft();
-            e->appendTarget(acceptableTargets.at(index), true);
-        }
-    }
-}
 
 bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 {
@@ -218,16 +187,41 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 	r->nbDiffraction += 1;
 
     return true;
-	//vec3 newDir;
-    //if (newEvent->getResponse(newDir))
-    //{
-    //    r->position = realImpact;
-    //    r->direction = newDir;
-    //    r->events.push_back(SPEv);
-    //    r->nbDiffraction += 1;
-
-    //    return true;
-    //}
-
-	//return false;
 }
+
+#ifdef _ALLOW_TARGETING_
+
+void ValidRay::appendDirectionToEvent(QSharedPointer<Event> e, TargetManager& targets)
+{
+    std::vector<vec3> &ponctualTargets = targets.getTargets();
+
+    std::vector<vec3> acceptableTargets;
+    for (unsigned int i = 0; i < ponctualTargets.size(); i++)
+    {
+        vec3 response = ponctualTargets.at(i) - e->getPosition();
+        response.normalize();
+        if (e->isAcceptableResponse(response))
+        {
+            acceptableTargets.push_back(response);
+        }
+    }
+
+    if (acceptableTargets.size() < static_cast<unsigned int>(e->getNbResponseLeft()))
+    {
+        for (unsigned int i = 0; i < acceptableTargets.size(); i++)
+        {
+            e->appendTarget(acceptableTargets.at(i), true);
+        }
+    }
+    else
+    {
+        for (unsigned int i = 0; i < static_cast<unsigned int>(e->getNbResponseLeft()); i++)
+        {
+            int index = rand() % e->getNbResponseLeft();
+            e->appendTarget(acceptableTargets.at(index), true);
+        }
+    }
+}
+#endif // _ALLOW_TARGETING_
+
+

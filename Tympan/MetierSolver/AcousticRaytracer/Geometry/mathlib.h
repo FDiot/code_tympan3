@@ -39,6 +39,10 @@
  */
 namespace core_mathlib
 {
+// Activation or not (if commented) of targeting operations
+//#define _ALLOW_TARGETING_
+
+
 typedef float decimal;
 
 typedef unsigned int bitSet; /*!< used to manage set of elements*/
