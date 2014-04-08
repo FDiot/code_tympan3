@@ -29,10 +29,27 @@ cdef class ResultModel:
 
 cdef class SolverModelBuilder:
     cdef SolverDataModelBuilder *thisptr
+    cdef AcousticProblemModel *model
     def __cinit__(self, ProblemModel model):
         self.thisptr = new SolverDataModelBuilder (model.thisptr[0])
     def fill_problem(self, Site site):
-        self.thisptr.walkTroughtSite(site.thisptr)
+        self.process_infrastructure(site)
+        self.thisptr.processAltimetry(site.thisptr)
+    def process_infrastructure(self, Site site):
+        cdef vector[bool] is_screen_face_idx
+        cdef vector[SmartPtr[TYGeometryNode]] face_list
+        cdef TYElement *pelt
+        cdef TYGeometryNode geonode
+        cdef unsigned int nb_building_faces = 0
+        site.thisptr.getRealPointer().getListFaces(face_list, nb_building_faces,
+                           is_screen_face_idx)
+        cdef TYAcousticSurface *pSurf = NULL
+        for i in range(nb_building_faces):
+            pelt = face_list[i].getRealPointer().getElement()
+            pSurf = safeDownCast(pelt)
+            if pSurf != NULL:
+                geonode = (face_list[i].getRealPointer())[0]
+                self.thisptr.setAcousticTriangle(geonode)
 
 cdef class ElementArray:
     cdef vector[SmartPtr[TYElement]] thisptr

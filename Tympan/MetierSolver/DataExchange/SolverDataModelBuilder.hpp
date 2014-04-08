@@ -59,16 +59,6 @@ public:
     SolverDataModelBuilder(AcousticProblemModel& model_);
     virtual ~SolverDataModelBuilder();
 
-    //! Walk trought \c TYSiteNode and fill some attributes.
-    void walkTroughtSite(LPTYSiteNode site_ptr);
-
-    //! Set a few 'geometric' entities such as \c tympan::Node.
-    /*! Create geometric entities, fill dedicated container and relate them
-        according to the relation definitions.
-      \param site_ptr A pointer to a \c TYSideNode.
-     */
-    void processInfrastructure(LPTYSiteNode site_ptr);
-
     void processAltimetry(LPTYSiteNode site_ptr);
 
     /**

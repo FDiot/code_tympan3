@@ -83,43 +83,6 @@ void SolverDataModelBuilder::processAltimetry(LPTYSiteNode site_ptr)
 }
 
 
-void SolverDataModelBuilder::walkTroughtSite(LPTYSiteNode site_ptr)
-{
-    // TODO There should be some error handling in here...
-    processAltimetry(site_ptr);
-    processInfrastructure(site_ptr);
-    // processAcousticSources(site_ptr); // TODO Dummy implementation for now
-    // processAcousticReceptors(site_ptr);// TODO Dummy implementation for now
-}
-
-
-
-void SolverDataModelBuilder::processInfrastructure(LPTYSiteNode site_ptr)
-{
-
-    // Get \c AcousticTriangle.
-    unsigned int nb_building_faces = 0;
-    TYTabAcousticSurfaceGeoNode face_list;
-    std::vector<bool> estUnIndexDeFaceEcran; // The notion of `faceEcran` is obsolete now
-    site_ptr->getListFaces(face_list, nb_building_faces, estUnIndexDeFaceEcran);
-
-    // Faces d'infrastructure
-    TYAcousticSurface* pSurf = NULL;
-
-    for (unsigned int i = 0 ; i < nb_building_faces ; i++)
-    {
-        // 'face_list' can contain topography elements. Not relevant here.
-        if (pSurf = TYAcousticSurface::safeDownCast(face_list[i]->getElement()))
-        {
-            setAcousticTriangle(pSurf);
-        }
-        else
-        {
-            continue;    // The face was not an acoustic surface, it is ignored.
-        }
-    }
-}
-
 void SolverDataModelBuilder::processMesh(
     const std::deque<OPoint3D>& points,
     const std::deque<OTriangle>& triangles)
