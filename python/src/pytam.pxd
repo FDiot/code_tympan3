@@ -34,8 +34,8 @@ cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
 cdef extern from "Tympan/MetierSolver/DataExchange/SolverDataModelBuilder.hpp" namespace "tympan":
     cdef cppclass SolverDataModelBuilder:
         SolverDataModelBuilder(AcousticProblemModel &model)
-        void walkTroughtSite(SmartPtr[TYSiteNode] site)
-
+        void processAltimetry(SmartPtr[TYSiteNode] site_ptr)
+        void setAcousticTriangle(const TYGeometryNode& acoust_surf_geo)
 cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
     cdef cppclass TYElement:
         QString getName()
@@ -45,6 +45,9 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
     cdef cppclass TYSiteNode:
         void getChilds (vector[SmartPtr[TYElement]] &elts, bool recursive)
         void update(const bool& force)
+        void getListFaces(vector[SmartPtr[TYGeometryNode]]& tabFaces,
+                          unsigned int& nbFaceInfra,
+                          vector[bool]& EstUnIndexDeFaceEcran)
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
     cdef cppclass TYCalcul:
@@ -56,3 +59,15 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":
     cdef cppclass TYProjet:
         SmartPtr[TYCalcul] getCurrentCalcul()
         SmartPtr[TYSiteNode] getSite()
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h":
+    cdef cppclass TYAcousticSurface:
+        pass
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h" namespace "TYAcousticSurface":
+    TYAcousticSurface * safeDownCast(TYElement *)
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h":
+    cdef cppclass TYGeometryNode:
+        TYElement* getElement()
+
