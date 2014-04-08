@@ -73,12 +73,14 @@ bool Diffraction::getResponse(vec3& r, bool force)
 			}
 		}
 
+#ifdef _ALLOW_TARGETING_
 		if (!targets.empty())
 		{
 			r = vec3(targets.back());
 			targets.pop_back();
 			return true;
 		}
+#endif
 
 		vec3 localResponse;
 		Tools::fromRadianToCarthesien2( angleArrive, theta, localResponse );
@@ -98,54 +100,6 @@ bool Diffraction::getResponse(vec3& r, bool force)
 	while(!bRep);
 
 	return true;
-}
-
-bool Diffraction::isAcceptableResponse(vec3& test)
-{
-
-    vec3 localResponse = localRepere.vectorFromGlobalToLocal(test);
-
-    if (localResponse.z < 0.)
-    {
-        return false;
-    }
-
-    decimal phi = acos(localResponse.z);
-    decimal tetha;
-
-    if (localResponse.y >= 0.)
-    {
-        tetha = acos(localResponse.x / (sqrt(localResponse.x * localResponse.x + localResponse.y * localResponse.y)));
-    }
-    else
-    {
-        tetha = 2. * M_PI - acos(localResponse.x / (sqrt(localResponse.x * localResponse.x + localResponse.y * localResponse.y)));
-    }
-
-    if (!(tetha < angleOuverture / 2. || tetha > (2. * M_PI - angleOuverture / 2.)))
-    {
-        return false;
-    }
-
-    decimal deltaPhi = fabs(angleArrive - phi);
-    if (deltaPhi < M_PI / 18.)
-    {
-        return true;
-    }
-    return false;
-
-}
-
-bool Diffraction::generateResponse(std::vector<vec3>& responses, unsigned int nbResponses)
-{
-    vec3 newDir;
-    for (unsigned int i = 0; i < nbResponses; i++)
-    {
-        getResponse(newDir, true);
-        responses.push_back(newDir);
-    }
-
-    return true;
 }
 
 bool Diffraction::generateTest(std::vector<vec3>& succededTest, std::vector<vec3>& failTest, unsigned int nbResponses)
@@ -204,6 +158,55 @@ void Diffraction::computeAngle()
     angleArrive = acos(cosAngleArrive);
 }
 
+#ifdef _ALLOW_TARGETING_
+bool Diffraction::isAcceptableResponse(vec3& test)
+{
+
+    vec3 localResponse = localRepere.vectorFromGlobalToLocal(test);
+
+    if (localResponse.z < 0.)
+    {
+        return false;
+    }
+
+    decimal phi = acos(localResponse.z);
+    decimal tetha;
+
+    if (localResponse.y >= 0.)
+    {
+        tetha = acos(localResponse.x / (sqrt(localResponse.x * localResponse.x + localResponse.y * localResponse.y)));
+    }
+    else
+    {
+        tetha = 2. * M_PI - acos(localResponse.x / (sqrt(localResponse.x * localResponse.x + localResponse.y * localResponse.y)));
+    }
+
+    if (!(tetha < angleOuverture / 2. || tetha > (2. * M_PI - angleOuverture / 2.)))
+    {
+        return false;
+    }
+
+    decimal deltaPhi = fabs(angleArrive - phi);
+    if (deltaPhi < M_PI / 18.)
+    {
+        return true;
+    }
+    return false;
+
+}
+
+bool Diffraction::generateResponse(std::vector<vec3>& responses, unsigned int nbResponses)
+{
+    vec3 newDir;
+    for (unsigned int i = 0; i < nbResponses; i++)
+    {
+        getResponse(newDir, true);
+        responses.push_back(newDir);
+    }
+
+    return true;
+}
+
 bool Diffraction::appendTarget(vec3 target, bool force)
 {
 
@@ -225,5 +228,7 @@ bool Diffraction::appendTarget(vec3 target, bool force)
     }
     return false;
 }
+#endif //_ALLOW_TARGETING_
+
 
 

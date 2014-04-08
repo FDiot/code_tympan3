@@ -68,17 +68,14 @@ struct CompareVec
 
 bool DefaultEngine::process()
 {
-
-    //std::cout<<"Lancement du process."<<std::endl;
-
     //Compte le nombre total de rayon a traiter
-    std::size_t ray_to_process(0);
+//    std::size_t ray_to_process(0);
 
-    for (unsigned int i = 0; i < sources->size(); i++)
-    {
+    //for (unsigned int i = 0; i < sources->size(); i++)
+    //{
 
-        ray_to_process += sources->at(i).getNbRayLeft();
-    }
+    //    ray_to_process += sources->at(i).getNbRayLeft();
+    //}
 
     std::size_t nb_event(0);
     bool find_intersection;
@@ -104,20 +101,15 @@ bool DefaultEngine::process()
             new_ray->direction.normalize();
             new_ray->mint = 0.;
             new_ray->maxt = 10000.;
-            //std::cout<<"Emission d'un rayon d'origine ("<<new_ray->position.x<<","<<new_ray->position.y<<","<<new_ray->position.z;
-            //std::cout<<") et direction ("<<new_ray->direction.x<<","<<new_ray->direction.y<<","<<new_ray->direction.z<<")."<<std::endl;
             pile_traitement.push(new_ray);
         }
     }
 
 
-    unsigned int last_pourcent = 0;
-    unsigned int total_ray = ray_to_process;
-#if TY_USE_IHM
-    TYProgressManager::setMessage("Calcule les trajets et appelle le solveur");
-    TYProgressManager::set(static_cast<int>(total_ray));
-#endif
-    //Traitement des rayons diffractes ainsi que les rayons tires aleatoirement
+    //unsigned int last_pourcent = 0;
+    //unsigned int total_ray = ray_to_process;
+
+	//Traitement des rayons diffractes ainsi que les rayons tires aleatoirement
     while (1)
     {
         //Pile de traitement vide, on prend le suivant dans la liste des sources
@@ -126,39 +118,21 @@ bool DefaultEngine::process()
             Ray* newRay = genRay();
             if (newRay)
             {
-                ray_to_process--;
+                //ray_to_process--;
                 pile_traitement.push(newRay);
             }
-            unsigned int current_pourcent = (unsigned int)(((double)(total_ray - ray_to_process) / (double)(total_ray)) * 100);
-            //TYProgressManager::step(); Erreur de compilation lors du link avec un solver utilisant RayTracer et Tools
-            if (current_pourcent >= last_pourcent)
-            {
-                //std::cout << "Avancement : " << current_pourcent << "%." << endl;
-                last_pourcent++;
-            }
+
+            //unsigned int current_pourcent = (unsigned int)(((double)(total_ray - ray_to_process) / (double)(total_ray)) * 100);
+            //if (current_pourcent >= last_pourcent)
+            //{
+            //    last_pourcent++;
+            //}
 
             //Aucun rayon genere a partir des sources, fin du traitement
             if (pile_traitement.empty())
             {
                 solver->finish();
  
-				unsigned int suppressed = 0;
-				if (globalUsePostFilters)
-				{
-                // Post filtering of the rays
-					closeEventPostFilter cepf(getSolver()->getValidRays());
-					suppressed += cepf.Process();
-
-					if (globalUsePathDifValidation)
-					{
-						diffractionPathPostFilter dppf(getSolver()->getValidRays());
-						suppressed += dppf.Process();
-					}	
-
-					fermatPostFilter fpf(getSolver()->getValidRays());
-					suppressed += fpf.Process();
-				}
-
                 return true;
             }
         }
@@ -186,11 +160,9 @@ bool DefaultEngine::process()
                     if (pile_traitement.size() > max_size)
                     {
                         max_size = pile_traitement.size();
-                        //std::cout << "Nouvelle taille maximale : " << max_size << std::endl;
                     }
                 }
             }
-            //cout << compteurValidation << " primitives ont ete valide." << endl;
         }
     }
 }
@@ -209,7 +181,6 @@ Ray* DefaultEngine::genRay()
             new_ray->source = (&(sources->at(i)));
             new_ray->position = sources->at(i).getPosition();
             sources->at(i).getDirection(new_ray->direction);
-            //std::cout<<"Direction du nouveau rayon : ("<<new_ray->direction.x<<","<<new_ray->direction.y<<","<<new_ray->direction.z<<") : "<<new_ray->direction.length()<<std::endl;
             new_ray->mint = 0.;
             new_ray->maxt = 10000.;
             return new_ray;
@@ -221,49 +192,26 @@ Ray* DefaultEngine::genRay()
 
 bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
 {
-
-    //std::cout<<"Traitement d'un rayon."<<std::endl;
-    bool valide;
     nbRayonsTraites++; //Nombre de rayons traites au cours de la simulation
 
     //Si le dernier evenement du rayon peut generer plusieurs rayons secondaires, on genere
     //un rayon secondaire, puis on copie le rayon restant et on le met dans la pile de traitement.
     //Si le dernier evenement n'a plus de rayon a generer, le rayon n'est pas traite
-    if (!(r->events.empty()))
+    if ( !(r->events.empty()) && (r->events.back()->isReponseLeft()) )
     {
-        //Le rayon ne peut plus generer de rayons secondaires
-        /*if(!r->events.back()->isReponseLeft())
-            return false;
-            r->events.back()->getResponse(r->direction);*/
-        if (r->events.back()->isReponseLeft())
-        {
-            //Copie de r->getEvents()->size() Evenements
-            //Copie d'un rayon ayant rencontre une diffraction...
-            Ray* copie = new Ray(r);
-            copie->constructId = rayCounter;
-            rayCounter++;
-            r->events.back()->getResponse(copie->direction);
-            pile_traitement.push(copie);
-            //Copie achevee
-        }
+		copyRayAndAddToStack(r);
     }
 
     decimal tmin = -1.0f;
 
-    //Recuperation des structures acceleratrices pour le Solver
-    Shape* firstPrimitive(NULL);
+	//Recuperation des structures acceleratrices pour le Solver
     Accelerator* accelerator = scene->getAccelerator();
     std::list<Intersection> foundPrims;
 
     //Appel du Solver pour le choix de la methode de traverser de la structure
     tmin =  accelerator->traverse(r, foundPrims);
 
-    //std::cout<<"L'accelerator a trouve "<<foundPrims.size()<<" intersections."<<std::endl;
-    if (!foundPrims.empty())
-    {
-        firstPrimitive = foundPrims.begin()->p;
-    }
-    //cout << "Recherche pour des recepteurs..." << endl;
+    // Recherche pour des recepteurs;
     for (unsigned int i = 0; i < recepteurs->size(); i++)
     {
         Intersection result;
@@ -284,38 +232,54 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
     //Validation des rayons en generant un evenement. Les premiers rayons valides sont des copies de l'original, le dernier est valide sans copie.
     //De cette maniere on peut valider separement des diffractions et une reflexion a partir d'un seul rayon initial.
     //La copie est necessaire pour ne pas valider 2 fois le meme evenement. Si le rayon ne peut pas etre valide, il sera delete dans la fonction traitement()
-    unsigned int compteurValide(0);
-    for (std::list<Intersection>::iterator it = foundPrims.begin(); it != foundPrims.end(); it++)
-    {
-        Ray* ray;
-        if (it != foundPrims.begin())
-        {
-            ray = new Ray(r);
-        }
-        else { ray = r; }
-        firstPrimitive = it->p;
+    bool valide(false);
+	unsigned int compteurValide(0);
+	Intersection *inter = NULL;
+	
+	if ( foundPrims.size() > 0 )
+	{
+		inter = &( *(foundPrims.begin()) );
         valide = false;
-        //if (tmin < 0 || (tmin > 0 && foundPrims.at(i).tsect <= tmin ))
-        //valide = firstPrimitive->valideIntersection(ray);
-        valide = solver->valideIntersection(ray, &(*it));
+        valide = solver->valideIntersection(r, inter);
         if (valide) { compteurValide++; }
-        validRay resultRay;
-        resultRay.r = ray;
-        resultRay.valid = valide;
-        result.push_back(resultRay);
-    }
+	}
+	else // no primitive found. The ray goes to infinity (and beyond)
+	{
+		valide = false;
+	}
 
-    if (result.empty()) //Aucune primitive rencontree, le rayon n'est pas valide.
-    {
-        validRay resultRay;
-        resultRay.r = r;
-        resultRay.valid = false;
-        result.push_back(resultRay);
-    }
-    //cout << "La traversee a valide " << compteurValide << " primitives." << endl;
+    validRay resultRay;
+    resultRay.r = r;
+    resultRay.valid = valide;
+    result.push_back(resultRay);
+
+    //for (std::list<Intersection>::iterator it = foundPrims.begin(); it != foundPrims.end(); it++)
+    //{
+    //    Ray* ray;
+    //    if (it != foundPrims.begin())
+    //    {
+    //        ray = new Ray(r);
+    //    }
+    //    else { ray = r; }
+    //    //firstPrimitive = it->p;
+    //    valide = false;
+    //    valide = solver->valideIntersection(ray, &(*it));
+    //    if (valide) { compteurValide++; }
+    //    validRay resultRay;
+    //    resultRay.r = ray;
+    //    resultRay.valid = valide;
+    //    result.push_back(resultRay);
+    //}
+
+    //if (result.empty()) //Aucune primitive rencontree, le rayon n'est pas valide.
+    //{
+    //    validRay resultRay;
+    //    resultRay.r = r;
+    //    resultRay.valid = false;
+    //    result.push_back(resultRay);
+    //}
 
     return true;
-
 }
 
 void DefaultEngine::runStructureBenchmark()
