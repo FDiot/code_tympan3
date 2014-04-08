@@ -16,10 +16,6 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-//#ifdef USE_QT
-//
-//#include <QtGui>
-//#endif
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
 #include <vector>
@@ -35,12 +31,6 @@ class Shape;
 
 class Event : public Base
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Recepteur)
-    //  GRAPHIC_DECL(Event)
-    //#endif
-
 public:
     Event( const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL ) :
 			Base(), 
@@ -174,8 +164,10 @@ protected:
     Sampler* sampler;
     Shape* shape;       /*< La primitive impactee */
     typeevent type;     /*!< Type de l'evenement */
-    std::vector<vec3> targets;
 
+#ifdef _ALLOW_TARGETING_
+    std::vector<vec3> targets;
+#endif
 };
 
 #endif

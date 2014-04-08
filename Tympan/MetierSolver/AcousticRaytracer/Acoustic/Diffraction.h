@@ -42,19 +42,13 @@ public:
 
 	virtual bool getResponse(vec3& r, bool force = false);
 
-    virtual bool isAcceptableResponse(vec3& test);
 
     void setAngleOuverture(decimal angle) { angleOuverture = angle; computeDTheta(); }
     decimal getAngleOuverture() { return angleOuverture; }
 	decimal getDeltaTheta() const { return delta_theta; }
-
-    virtual bool generateResponse(std::vector<vec3>& responses, unsigned int nbResponses);
+    virtual double getAngle() { return angleArrive; }
     virtual bool generateTest(std::vector<vec3>& succededTest, std::vector<vec3>& failTest, unsigned int nbResponses);
 	virtual const Repere& getRepere() const { return localRepere; }
-
-    virtual bool appendTarget(vec3 target, bool force = false);
-
-    virtual double getAngle() { return angleArrive; }
 
 	/*!
 	 * \fn bool responseValidator(vec3 &T);
@@ -89,6 +83,13 @@ public:
 
 		return true; 
 	}
+
+#ifdef _ALLOW_TARGETING_
+    virtual bool isAcceptableResponse(vec3& test);
+    virtual bool generateResponse(std::vector<vec3>& responses, unsigned int nbResponses);
+    virtual bool appendTarget(vec3 target, bool force = false);
+#endif //_ALLOW_TARGETING_
+
 
 protected:
 

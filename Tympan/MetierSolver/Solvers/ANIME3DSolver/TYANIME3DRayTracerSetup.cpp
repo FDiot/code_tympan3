@@ -27,7 +27,6 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/FermatSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionPathSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionAngleSelector.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Solver.h"
@@ -73,11 +72,16 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
 	globalMaxPathDifference = 25.;			// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
 	globalDiffractionUseDistanceAsFilter = 1;	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
 	globalKeepDebugRay = 0;					// [ACOUSTICRAYTRACER] Keep invalid rays
+	globalUsePostFilters = 1;				// [ACOUSTICRAYTRACER] Use of post-filters
+
+////////////////////////////
+// Targeting parameters
+////////////////////////////
+
 	globalEnableTargets = 0;				// [ACOUSTICRAYTRACER] Use targeting
 	globalSampleGround2D = 0;				// [ACOUSTICRAYTRACER] Sample ground in 2D
 	globalEnableFullTargets = 0;			// [ACOUSTICRAYTRACER] Set target search after a diffuse event
 	globalTargetsDensity = 0.1;				// [ACOUSTICRAYTRACER] Sampling density for interesting areas
-	globalUsePostFilters = 1;				// [ACOUSTICRAYTRACER] Use of post-filters
 
 ////////////////////////////
 // AnalyticRayTracer
@@ -250,6 +254,13 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 	// [ACOUSTICRAYTRACER] Keep invalid rays
     if (params.getline(ligne, 132)) { globalKeepDebugRay = getParam(ligne); }
 
+	// [ACOUSTICRAYTRACER] Use of post-filters
+    if (params.getline(ligne, 132)) { globalUsePostFilters = getParam(ligne); }	
+	
+////////////////////////////
+// Targeting parameters
+////////////////////////////
+
 	// [ACOUSTICRAYTRACER] Use targeting
     if (params.getline(ligne, 132)) { globalEnableTargets = getParam(ligne); }
 
@@ -261,10 +272,6 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 
 	// [ACOUSTICRAYTRACER] Sampling density for interesting areas
     if (params.getline(ligne, 132)) { globalTargetsDensity = getParam(ligne); }
-
-	// [ACOUSTICRAYTRACER] Use of post-filters
-    if (params.getline(ligne, 132)) { globalUsePostFilters = getParam(ligne); }
-
 
 ////////////////////////////
 // AnalyticRayTracer
@@ -397,7 +404,7 @@ bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Sourc
 {
 	selectorManagerValidation.addSelector( new LengthSelector<Ray>(globalMaxLength) );
 
-	if (globalUsePostFilters == 0)
+	if (globalUsePostFilters)
 	{
 #ifdef _DEBUG
 		if (globalDebugUseCloseEventSelector)
@@ -450,7 +457,9 @@ bool TYANIME3DRayTracerSetup::valideIntersection(Ray* r, Intersection* inter)
         isValid = ValidRay::validCylindreWithDiffraction(r, inter);
     }
 
+#ifdef _ALLOW_TARGETING_
     if (isValid && globalEnableFullTargets) { ValidRay::appendDirectionToEvent(r->events.back(), targetManager); }
+#endif //_ALLOW_TARGETING_
 
     return (isValid); //(isValid && selectorManagerIntersection.appendData(r));
 }

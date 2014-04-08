@@ -28,7 +28,6 @@ namespace ValidRay
 
 bool validTriangleWithSpecularReflexion(Ray* r, Intersection* inter);
 bool validCylindreWithDiffraction(Ray* r, Intersection* inter);
-void appendDirectionToEvent(QSharedPointer<Event> e, TargetManager& targets);
 
 /*!
  * \fn computeRealImpact(Ray *r, Cylindre *cylindre, vec3& impact)
@@ -64,6 +63,9 @@ bool pathDiffValidationForReflection(Ray * r, const vec3& impact);
  */
 void computeCumulDistance(Ray *r, const vec3& impact);
 
+#ifdef _ALLOW_TARGETING_
+void appendDirectionToEvent(QSharedPointer<Event> e, TargetManager& targets);
+#endif //_ALLOW_TARGETING_
 };
 
 #endif

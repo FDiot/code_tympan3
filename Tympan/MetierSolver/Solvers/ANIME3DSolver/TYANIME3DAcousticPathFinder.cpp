@@ -29,7 +29,6 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/LengthSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/ReflectionSelector.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangle.h"

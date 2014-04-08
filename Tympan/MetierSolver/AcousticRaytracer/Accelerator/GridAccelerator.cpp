@@ -35,7 +35,6 @@ bool GridAccelerator::build()
     // Find _voxelsPerUnitDist_ for grid
     int maxAxis = bounds.MaximumExtend();
     float invMaxWidth = 1.f / delta[maxAxis];
-    //Assert(invMaxWidth > 0.f);
     float cubeRoot = 3.f * powf(float(primitives.size()), 1.f / 3.f);
     float voxelsPerUnitDist = cubeRoot * invMaxWidth;
     for (int axis = 0; axis < 3; ++axis)
@@ -75,8 +74,6 @@ bool GridAccelerator::build()
                     if (!voxels[o])
                     {
                         // Allocate new voxel and store primitive in it
-                        //voxels[o] = (Voxel*)malloc(sizeof(Voxel));
-                        //(*voxels[o]) = Voxel(primitives.at(i));
                         voxels[o] = new Voxel(primitives.at(i));
                     }
                     else
