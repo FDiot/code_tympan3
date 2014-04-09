@@ -53,36 +53,6 @@ SolverDataModelBuilder::~SolverDataModelBuilder()
 }
 
 
-void SolverDataModelBuilder::processAltimetry(LPTYSiteNode site_ptr)
-{
-    /* We do NOT use the list of faces in the Altimetry : this is a legacy
-     * data-structure which provides polygons without their materials.
-     */
-    std::deque<OPoint3D> points;
-    std::deque<OTriangle> triangles;
-    std::deque<LPTYSol> materials;
-
-    const LPTYTopographie p_topo = site_ptr->getTopographie();
-    UuidAdapter element_uid(p_topo->getID());
-    p_topo->exportMesh(points, triangles, &materials);
-
-    processMesh(points, triangles);
-    // Set the UUID of the topography and the material of each triangle
-    unsigned tri_idx = 0;
-    BOOST_FOREACH(const OTriangle & tri, triangles)
-    {
-        AcousticTriangle& ac_tri =  model.triangle(tri_idx);
-        ac_tri.uuid = element_uid.getUuid();
-        const LPTYSol p_sol = materials[tri_idx];
-        material_ptr_t p_mat = model.make_material(
-                                   to_std(p_sol->getName()),
-                                   p_sol->getResistivite());
-        ac_tri.made_of = p_mat;
-        ++tri_idx;
-    }
-}
-
-
 void SolverDataModelBuilder::processMesh(
     const std::deque<OPoint3D>& points,
     const std::deque<OTriangle>& triangles)

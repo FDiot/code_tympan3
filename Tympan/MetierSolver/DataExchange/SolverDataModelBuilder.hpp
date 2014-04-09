@@ -59,8 +59,6 @@ public:
     SolverDataModelBuilder(AcousticProblemModel& model_);
     virtual ~SolverDataModelBuilder();
 
-    void processAltimetry(LPTYSiteNode site_ptr);
-
     /**
      *
      *
@@ -100,7 +98,7 @@ protected:
     to_std(const QString& qstr)
     { return std::string(qstr.toUtf8().constData()); } // NB : This does incur copy
 
-
+public:
     /**
      * @brief Creates the data model entities for a triangle soup.
      * @param points The points of the mesh.
