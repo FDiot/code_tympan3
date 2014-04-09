@@ -38,6 +38,8 @@ cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp
         AcousticTriangle &triangle(size_t tri_idx)
         AcousticTriangle *ptriangle(size_t tri_idx)
         shared_ptr[AcousticMaterialBase] make_material(const string& name, double resistivity)
+        size_t make_triangle(size_t n1, size_t n2, size_t n3)
+        size_t make_node(const OPoint3D&)
 
 cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp" namespace "tympan":
     cdef cppclass AcousticResultModel:
@@ -47,7 +49,6 @@ cdef extern from "Tympan/MetierSolver/DataExchange/SolverDataModelBuilder.hpp" n
     cdef cppclass SolverDataModelBuilder:
         SolverDataModelBuilder(AcousticProblemModel &model)
         void setAcousticTriangle(const TYGeometryNode& acoust_surf_geo)
-        void processMesh(const deque[OPoint3D] &points, const deque[OTriangle] &triangles)
     cdef cppclass UuidAdapter:
         UuidAdapter(const OGenID& rhs)
         binary_uuid getUuid()
@@ -89,12 +90,18 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYG
         TYElement* getElement()
 
 cdef extern from "Tympan/MetierSolver/ToolsMetier/OPoint3D.h":
-    cdef cppclass OPoint3D:
-        pass
+    cdef cppclass OPoint3D: 
+        bool operator==(const OPoint3D& coord)
+
 
 cdef extern from "Tympan/MetierSolver/ToolsMetier/OTriangle.h":
     cdef cppclass OTriangle:
-        pass
+        OPoint3D _A
+        OPoint3D _B
+        OPoint3D _C
+        int _p1
+        int _p2
+        int _p3
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h":
     cdef cppclass TYSol:
