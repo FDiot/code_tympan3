@@ -54,6 +54,47 @@ private :
         //Copie achevee
 	}
 
+	void searchForReceptor(const decimal &tmin, Ray *r)
+	{
+		for (unsigned int i = 0; i < recepteurs->size(); i++)
+		{
+			Intersection result;
+			if (recepteurs->at(i).intersectionRecepteur(r->position, r->direction, tmin, result))
+			{
+				//Cas ou le rayon touche un recepteur
+				Ray* valide_ray = new Ray(r);
+				valide_ray->constructId = rayCounter;
+				rayCounter++;
+				valide_ray->recepteur = (&(recepteurs->at(i)));
+				valide_ray->finalPosition = valide_ray->position + valide_ray->direction * result.t;
+				valide_ray->computeLongueur();
+				solver->valideRayon(valide_ray);
+			}
+		}	
+	}
+
+	void initialReceptorTargeting()
+	{
+		for (vector<Source>::iterator itsource = sources->begin(); itsource != sources->end(); itsource++)
+		{
+			for (vector<Recepteur>::iterator itrecp = recepteurs->begin(); itrecp != recepteurs->end(); itrecp++)
+			{
+				Ray* new_ray = new Ray();
+				new_ray->constructId = rayCounter;
+				rayCounter++;
+				new_ray->source = (&(*itsource));
+				new_ray->position = itsource->getPosition();
+				vec3 psource = itsource->getPosition();
+				vec3 precp = itrecp->getPosition();
+				new_ray->direction = precp - psource;
+				new_ray->direction.normalize();
+				new_ray->mint = 0.;
+				new_ray->maxt = 10000.;
+				pile_traitement.push(new_ray);
+			}
+		}	
+	}
+
 protected:
     Ray* genRay();
     bool traitementRay(Ray* r, std::list<validRay> &result);

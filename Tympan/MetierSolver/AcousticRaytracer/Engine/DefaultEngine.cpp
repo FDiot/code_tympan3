@@ -70,25 +70,8 @@ bool DefaultEngine::process()
     time.start();
     nbRayonsTraites = 0;
 
-    //Generation des rayons en direction des recepteurs pour chaque source
-    for (vector<Source>::iterator itsource = sources->begin(); itsource != sources->end(); itsource++)
-    {
-        for (vector<Recepteur>::iterator itrecp = recepteurs->begin(); itrecp != recepteurs->end(); itrecp++)
-        {
-            Ray* new_ray = new Ray();
-            new_ray->constructId = rayCounter;
-            rayCounter++;
-            new_ray->source = (&(*itsource));
-            new_ray->position = itsource->getPosition();
-            vec3 psource = itsource->getPosition();
-            vec3 precp = itrecp->getPosition();
-            new_ray->direction = precp - psource;
-            new_ray->direction.normalize();
-            new_ray->mint = 0.;
-            new_ray->maxt = 10000.;
-            pile_traitement.push(new_ray);
-        }
-    }
+    //We begin to throw a rays directly from each source to each receptor
+	initialReceptorTargeting();
 
 	//Traitement des rayons diffractes ainsi que les rayons tires aleatoirement
     while (1)
@@ -185,22 +168,7 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
     tmin =  accelerator->traverse(r, foundPrims);
 
     // Recherche pour des recepteurs;
-    for (unsigned int i = 0; i < recepteurs->size(); i++)
-    {
-        Intersection result;
-        if (recepteurs->at(i).intersectionRecepteur(r->position, r->direction, tmin, result))
-        {
-            //Cas ou le rayon touche un recepteur
-            Ray* valide_ray = new Ray(r);
-            valide_ray->constructId = rayCounter;
-            rayCounter++;
-            valide_ray->recepteur = (&(recepteurs->at(i)));
-            valide_ray->finalPosition = valide_ray->position + valide_ray->direction * result.t;
-            valide_ray->computeLongueur();
-            solver->valideRayon(valide_ray);
-        }
-    }
-
+	searchForReceptor(tmin, r);
 
     //Validation des rayons en generant un evenement. Les premiers rayons valides sont des copies de l'original, le dernier est valide sans copie.
     //De cette maniere on peut valider separement des diffractions et une reflexion a partir d'un seul rayon initial.
