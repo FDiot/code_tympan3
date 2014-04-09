@@ -1,9 +1,10 @@
 from libcpp cimport bool
 from libcpp.vector cimport vector
+from libcpp.deque cimport deque
 
 class NullCppObject(Exception):
     """
-    The SmartPtr object is empty
+    The referenced C++ object is NULL
     """
 
 def loadsolver(foldername, Computation comp):
@@ -12,14 +13,22 @@ def loadsolver(foldername, Computation comp):
 cdef class ProblemModel:
     cdef AcousticProblemModel *thisptr
     def __cinit__(self):
-        pass
+        self.thisptr = NULL
     def nbpoints(self):
+        if self.thisptr == NULL:
+            raise NullCppObject()
         return self.thisptr.num_points()
     def nbtriangles(self):
+        if self.thisptr == NULL:
+            raise NullCppObject()
         return self.thisptr.num_triangles()
     def nbmaterials(self):
+        if self.thisptr == NULL:
+            raise NullCppObject()
         return self.thisptr.num_materials()
     def export_triangles(self, filename):
+        if self.thisptr == NULL:
+            raise NullCppObject()
         self.thisptr.export_triangles_soup(filename)
 
 cdef class ResultModel:
@@ -30,11 +39,16 @@ cdef class ResultModel:
 cdef class SolverModelBuilder:
     cdef SolverDataModelBuilder *thisptr
     cdef AcousticProblemModel *model
-    def __cinit__(self, ProblemModel model):
-        self.thisptr = new SolverDataModelBuilder (model.thisptr[0])
+    def __cinit__(self):
+        self.model = new AcousticProblemModel()
+        self.thisptr = new SolverDataModelBuilder (self.model[0])
     def fill_problem(self, Site site):
         self.process_infrastructure(site)
-        self.thisptr.processAltimetry(site.thisptr)
+        self.process_altimetry(site)
+    def problem_model(self):
+        problem = ProblemModel()
+        problem.thisptr = self.model
+        return problem
     def process_infrastructure(self, Site site):
         cdef vector[bool] is_screen_face_idx
         cdef vector[SmartPtr[TYGeometryNode]] face_list
@@ -50,6 +64,24 @@ cdef class SolverModelBuilder:
             if pSurf != NULL:
                 geonode = (face_list[i].getRealPointer())[0]
                 self.thisptr.setAcousticTriangle(geonode)
+    def process_altimetry(self, Site site):
+        cdef deque[OPoint3D] points
+        cdef deque[OTriangle] triangles
+        cdef deque[SmartPtr[TYSol]] materials
+        cdef TYTopographie *ptopo = site.thisptr.getRealPointer().getTopographie().getRealPointer()
+        cdef UuidAdapter *element_uid = new UuidAdapter(ptopo.getID())
+        ptopo.exportMesh(points, triangles, &materials)
+        self.thisptr.processMesh(points, triangles)
+        cdef AcousticTriangle *actri = NULL
+        cdef TYSol *psol
+        cdef shared_ptr[AcousticMaterialBase] pmat
+        for i in range(triangles.size()):
+            # XXX find a way to use triangle() instead of ptriangle()
+            actri = self.model.ptriangle(i)
+            actri.uuid = element_uid[0].getUuid()
+            psol = materials[i].getRealPointer()
+            pmat = self.model.make_material(psol.getName().toStdString(), psol.getResistivite())
+            actri.made_of = pmat
 
 cdef class ElementArray:
     cdef vector[SmartPtr[TYElement]] thisptr
