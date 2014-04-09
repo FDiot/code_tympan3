@@ -17,26 +17,6 @@
 
 bool Sphere::getIntersection(Ray& ray, Intersection& inter)
 {
-    //calcul la plus petite distance entre la position du recepteur et le rayon, si cette distance est inferieur au rayon du recepteur alors il y a intersection
-    //std::cout<<tmax<<std::endl;
-
-    /*if(ray.maxt<EPSILON)
-     {
-         if(this->position.distance(this->position.closestPointOnSegment(ray.position,ray.position+(ray.direction*1e6)))<=radius)
-             return true;
-         else
-             return false;
-     }else{
-         if(this->position.distance(this->position.closestPointOnSegment(ray.position,ray.position+(ray.direction*1e6)))<=radius){
-             //std::cout<<"Intersection avec le rayon acceptee."<<std::endl;
-             return true;
-         }
-         else{
-             //std::cout<<"Intersection avec le rayon rejete."<<std::endl;
-             return false;
-         }
-    }
-    */
     // intersection rayon/sphere
     vec3 dist = position - ray.position;
     decimal B = ray.direction * dist;
