@@ -1,6 +1,7 @@
 from libcpp cimport bool
 from libcpp.vector cimport vector
 from libcpp.deque cimport deque
+from cython.operator cimport dereference as deref, preincrement as inc
 
 class NullCppObject(Exception):
     """
@@ -71,7 +72,28 @@ cdef class SolverModelBuilder:
         cdef TYTopographie *ptopo = site.thisptr.getRealPointer().getTopographie().getRealPointer()
         cdef UuidAdapter *element_uid = new UuidAdapter(ptopo.getID())
         ptopo.exportMesh(points, triangles, &materials)
-        self.thisptr.processMesh(points, triangles)
+        # process mesh
+        cdef size_t nbpoints = points.size()
+        cdef vector[size_t] map_to_model_node_idx = vector[size_t] (nbpoints)
+        cdef deque[OPoint3D].iterator itp = points.begin()
+        cdef deque[OTriangle].iterator itt = triangles.begin()
+        cdef unsigned int i = 0
+        while itp != points.end():
+            # Add the points
+            map_to_model_node_idx[i] = self.model.make_node(deref(itp))
+            i = i+1
+            inc(itp)
+        while  itt != triangles.end():
+            # Assert consistency of the OPoint3D given in the mesh
+            assert (deref(itt)._A == points[deref(itt)._p1])
+            assert (deref(itt)._B == points[deref(itt)._p2])
+            assert (deref(itt)._C == points[deref(itt)._p3])
+            # Add the deref(itt)angle
+            self.model.make_triangle(map_to_model_node_idx[deref(itt)._p1],
+                                     map_to_model_node_idx[deref(itt)._p2],
+                                     map_to_model_node_idx[deref(itt)._p3])
+            inc(itt)
+        # make material
         cdef AcousticTriangle *actri = NULL
         cdef TYSol *psol
         cdef shared_ptr[AcousticMaterialBase] pmat
@@ -80,7 +102,8 @@ cdef class SolverModelBuilder:
             actri = self.model.ptriangle(i)
             actri.uuid = element_uid[0].getUuid()
             psol = materials[i].getRealPointer()
-            pmat = self.model.make_material(psol.getName().toStdString(), psol.getResistivite())
+            pmat = self.model.make_material(psol.getName().toStdString(),
+                                            psol.getResistivite())
             actri.made_of = pmat
 
 cdef class ElementArray:
