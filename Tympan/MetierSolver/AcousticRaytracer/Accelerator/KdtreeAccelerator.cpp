@@ -54,10 +54,10 @@ bool compareToZAxis(InfoPrim p1, InfoPrim p2)
     return p1.box.centroid[2] < p2.box.centroid[2];
 }
 
-KdtreeAccelerator::KdtreeAccelerator(std::vector<Shape*>* _initialMesh,  BBox _globalBox)
+KdtreeAccelerator::KdtreeAccelerator(std::vector<Shape*>* _initialMesh,  BBox _globalBox) : Accelerator(_initialMesh, _globalBox)
 {
     initialMesh = _initialMesh;
-    globalBox = BBox(_globalBox);
+    //globalBox = BBox(_globalBox);
 
     maxProfondeur = 16;
     maxPrimPerLeaf = 2;
@@ -264,7 +264,8 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
                 {
                     hit = true;
                     result.push_back(currentIntersection);
-                    intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+//                    intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+                    intermin = (*pLeafTreatmentFunction) (result, intermin);
                 }
             }
             else if (nPrimitives > 1)
@@ -281,7 +282,8 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
                     {
                         hit = true;
                         result.push_back(currentIntersection);
-                        intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+                        //intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+                        intermin = (*pLeafTreatmentFunction) (result, intermin);
                     }
                 }
             }

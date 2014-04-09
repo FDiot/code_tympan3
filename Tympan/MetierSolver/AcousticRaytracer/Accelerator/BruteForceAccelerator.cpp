@@ -26,5 +26,5 @@ decimal BruteForceAccelerator::traverse(Ray* r, std::list<Intersection> &result)
         }
     }
 
-    return leafTreatment::keepFunction(intersectionChoice, result, -1.);
+    return (*pLeafTreatmentFunction) (result, -1.);
 }

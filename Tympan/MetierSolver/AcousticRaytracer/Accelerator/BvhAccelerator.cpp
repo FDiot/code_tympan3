@@ -401,7 +401,8 @@ decimal BvhAccelerator::traverse(Ray* ray, std::list<Intersection> &result)
                         hit = true;
                         result.push_back(currentIntersection);
 
-                        intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+                        //intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+                        intermin = (*pLeafTreatmentFunction) (result, intermin);
                     }
                     else
                     {
