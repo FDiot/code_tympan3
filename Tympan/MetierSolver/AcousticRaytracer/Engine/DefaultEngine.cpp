@@ -22,14 +22,8 @@
 #include "Geometry/mathlib.h"
 #include "Acoustic/Event.h"
 #include "Ray/Ray.h"
-#include "Tools/PostFilter.h"
-#include "Tools/CloseEventPostFilter.h"
-#include "Tools/DiffractionPathPostFilter.h"
-#include "Tools/FermatPostFilter.h"
 
 #include "DefaultEngine.h"
-#include "Tympan/Tools/TYProgressManager.h"
-
 
 struct CompareVec
 {
@@ -68,15 +62,6 @@ struct CompareVec
 
 bool DefaultEngine::process()
 {
-    //Compte le nombre total de rayon a traiter
-//    std::size_t ray_to_process(0);
-
-    //for (unsigned int i = 0; i < sources->size(); i++)
-    //{
-
-    //    ray_to_process += sources->at(i).getNbRayLeft();
-    //}
-
     std::size_t nb_event(0);
     bool find_intersection;
     std::size_t max_size(0);
@@ -105,10 +90,6 @@ bool DefaultEngine::process()
         }
     }
 
-
-    //unsigned int last_pourcent = 0;
-    //unsigned int total_ray = ray_to_process;
-
 	//Traitement des rayons diffractes ainsi que les rayons tires aleatoirement
     while (1)
     {
@@ -121,12 +102,6 @@ bool DefaultEngine::process()
                 //ray_to_process--;
                 pile_traitement.push(newRay);
             }
-
-            //unsigned int current_pourcent = (unsigned int)(((double)(total_ray - ray_to_process) / (double)(total_ray)) * 100);
-            //if (current_pourcent >= last_pourcent)
-            //{
-            //    last_pourcent++;
-            //}
 
             //Aucun rayon genere a partir des sources, fin du traitement
             if (pile_traitement.empty())
@@ -169,10 +144,8 @@ bool DefaultEngine::process()
 
 Ray* DefaultEngine::genRay()
 {
-    //progressionInfo progInfo(sources.size());
     for (unsigned int i = 0; i < sources->size(); i++)
     {
-
         if (sources->at(i).getNbRayLeft() > 0)
         {
             Ray* new_ray = new Ray();
@@ -236,48 +209,26 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
 	unsigned int compteurValide(0);
 	Intersection *inter = NULL;
 	
+	// ! IMPORTANT
+	// We suppose, here, that accelarating structures use "leafTreatment::treatment::FIRST:"
+	// In this case, accelerating structure return only the closest primitive.
+	// If it is not the case, you must browse througth the returned list
 	if ( foundPrims.size() > 0 )
 	{
 		inter = &( *(foundPrims.begin()) );
-        valide = false;
         valide = solver->valideIntersection(r, inter);
         if (valide) { compteurValide++; }
 	}
-	else // no primitive found. The ray goes to infinity (and beyond)
-	{
-		valide = false;
-	}
+	// Lines under are let intentionnaly commented only for understanding reason
+	//else // no primitive found. The ray goes to infinity (and beyond)
+	//{
+	//	valide = false;
+	//}
 
     validRay resultRay;
     resultRay.r = r;
     resultRay.valid = valide;
     result.push_back(resultRay);
-
-    //for (std::list<Intersection>::iterator it = foundPrims.begin(); it != foundPrims.end(); it++)
-    //{
-    //    Ray* ray;
-    //    if (it != foundPrims.begin())
-    //    {
-    //        ray = new Ray(r);
-    //    }
-    //    else { ray = r; }
-    //    //firstPrimitive = it->p;
-    //    valide = false;
-    //    valide = solver->valideIntersection(ray, &(*it));
-    //    if (valide) { compteurValide++; }
-    //    validRay resultRay;
-    //    resultRay.r = ray;
-    //    resultRay.valid = valide;
-    //    result.push_back(resultRay);
-    //}
-
-    //if (result.empty()) //Aucune primitive rencontree, le rayon n'est pas valide.
-    //{
-    //    validRay resultRay;
-    //    resultRay.r = r;
-    //    resultRay.valid = false;
-    //    result.push_back(resultRay);
-    //}
 
     return true;
 }

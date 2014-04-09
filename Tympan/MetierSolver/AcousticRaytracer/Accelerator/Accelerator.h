@@ -24,12 +24,12 @@ class Accelerator
 {
 
 public:
-    Accelerator() { }
-    Accelerator(std::vector<Shape*> *_shapes, BBox& _globalBox)
+    Accelerator() { intersectionChoice = leafTreatment::FIRST; defineLeafFunction(); }
+    Accelerator(std::vector<Shape*> *_shapes, BBox& _globalBox) : shapes(_shapes),
+																  globalBox(_globalBox)
     {
-        shapes = _shapes;
-        globalBox = _globalBox;
         intersectionChoice = leafTreatment::FIRST;
+		defineLeafFunction();
     }
 
     Accelerator(const Accelerator& other)
@@ -37,6 +37,7 @@ public:
         shapes = other.shapes;
         globalBox = other.globalBox;
         intersectionChoice = other.intersectionChoice;
+		pLeafTreatmentFunction = other.pLeafTreatmentFunction;
     }
 
     virtual ~Accelerator() { }
@@ -49,6 +50,27 @@ public:
     virtual decimal traverse(Ray* r, std::list<Intersection> &result) { return -1.; }
 
 protected:
+	void defineLeafFunction()
+	{
+		switch (intersectionChoice)
+		{
+			case leafTreatment::treatment::FIRST:
+				pLeafTreatmentFunction = leafTreatment::keepFirst;
+				break;
+			case leafTreatment::treatment::ALL_BEFORE_TRIANGLE:
+				pLeafTreatmentFunction = leafTreatment::keepAllBeforeTriangle;
+				break;
+			case leafTreatment::treatment::ALL_BEFORE_VISIBLE:
+				pLeafTreatmentFunction = leafTreatment::keepAllBeforeVisible;
+				break;
+			default:
+				pLeafTreatmentFunction = leafTreatment::keepFirst;
+				break;
+		}
+	}
+
+	// Pointeur sur la fonction de traitement de "feuilles"
+	decimal (*pLeafTreatmentFunction) (std::list<Intersection> &, decimal);
 
     leafTreatment::treatment intersectionChoice;
 

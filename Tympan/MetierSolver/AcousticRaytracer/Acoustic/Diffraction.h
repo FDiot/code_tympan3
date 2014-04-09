@@ -50,48 +50,15 @@ public:
     virtual bool generateTest(std::vector<vec3>& succededTest, std::vector<vec3>& failTest, unsigned int nbResponses);
 	virtual const Repere& getRepere() const { return localRepere; }
 
-	/*!
-	 * \fn bool responseValidator(vec3 &T);
-	 * \brief Return true if the response is in a correct direction for "standard" diffraction
-	 */
-	bool responseValidator(vec3 &T) 
-	{ 
-		decimal FT = from * T;
-
-		if ( ( 1. - FT ) < BARELY_EPSILON ) { return true; } // Vecteur limite tangent au plan de propagation
-
-		if ( FT < 0. ) { return false; }  // Le vecteur sortant est "oppose" au vecteur entrant
-
-		decimal F1 = from * N1;
-		decimal F2 = from * N2;
-
-		if ( (F1 * F2) > 0.) { return false; } 
-
-		decimal T1 = T * N1;
-		decimal T2 = T * N2;
-
-
-		if ( (F1 <= 0.) && ( (T1 > BARELY_EPSILON ) || ( (ABS(T2) - ABS(F2)) > BARELY_EPSILON ) ) )
-		{ 
-			return false; 
-		}
-
-		if ( (F2 <= 0.) && ( ( T2 > BARELY_EPSILON ) || ( (ABS(T1) - ABS(F1)) > BARELY_EPSILON ) ) )
-		{ 
-			return false; 
-		}
-
-		return true; 
-	}
-
 #ifdef _ALLOW_TARGETING_
     virtual bool isAcceptableResponse(vec3& test);
     virtual bool generateResponse(std::vector<vec3>& responses, unsigned int nbResponses);
     virtual bool appendTarget(vec3 target, bool force = false);
 #endif //_ALLOW_TARGETING_
 
-
 protected:
+	bool (*responseValidator) (const vec3&, const vec3&, const vec3&, vec3 &); /*!< filter generated response (or not)*/
+	void (*getTheta) (const decimal&, const decimal&, const decimal&, decimal&); /*!< get theta*/
 
     void buildRepere();
     void computeAngle();
@@ -109,6 +76,7 @@ protected:
 
 	vec3 N1;						/*!< face 1 normal */
 	vec3 N2;						/*!< face 2 normal */
+
 };
 
 #endif
