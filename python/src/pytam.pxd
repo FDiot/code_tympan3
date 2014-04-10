@@ -59,7 +59,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
         const char* getClassName() const
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
-    cdef cppclass TYSiteNode:
+    cdef cppclass TYSiteNode (TYElement):
         void getChilds (vector[SmartPtr[TYElement]] &elts, bool recursive)
         void update(const bool& force)
         void getListFaces(vector[SmartPtr[TYGeometryNode]]& tabFaces,
@@ -68,31 +68,34 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
         SmartPtr[TYTopographie] getTopographie()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
-    cdef cppclass TYCalcul:
+    cdef cppclass TYCalcul (TYElement):
         bool go()
         AcousticProblemModel _acousticProblem
         AcousticResultModel _acousticResult
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":
-    cdef cppclass TYProjet:
+    cdef cppclass TYProjet (TYElement):
         SmartPtr[TYCalcul] getCurrentCalcul()
         SmartPtr[TYSiteNode] getSite()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h":
-    cdef cppclass TYAcousticSurface:
+    cdef cppclass TYAcousticSurface (TYElement):
         pass
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h" namespace "TYAcousticSurface":
     TYAcousticSurface * safeDownCast(TYElement *)
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h":
-    cdef cppclass TYGeometryNode:
+    cdef cppclass TYGeometryNode (TYElement):
         TYElement* getElement()
 
-cdef extern from "Tympan/MetierSolver/ToolsMetier/OPoint3D.h":
-    cdef cppclass OPoint3D: 
-        bool operator==(const OPoint3D& coord)
+cdef extern from "Tympan/MetierSolver/ToolsMetier/OCoord3D.h":
+    cdef cppclass OCoord3D:
+        bool operator==(const OCoord3D& coord)
 
+cdef extern from "Tympan/MetierSolver/ToolsMetier/OPoint3D.h":
+    cdef cppclass OPoint3D (OCoord3D):
+        pass
 
 cdef extern from "Tympan/MetierSolver/ToolsMetier/OTriangle.h":
     cdef cppclass OTriangle:
@@ -104,14 +107,11 @@ cdef extern from "Tympan/MetierSolver/ToolsMetier/OTriangle.h":
         int _p3
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h":
-    cdef cppclass TYSol:
+    cdef cppclass TYSol (TYElement):
         double getResistivite()
-        # XXX here we should be able to use TYElement::getName() since TYSol
-        # inherits from TYElement...
-        QString getName()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h":
-    cdef cppclass TYTopographie:
+    cdef cppclass TYTopographie (TYElement):
         const OGenID& getID()
         void exportMesh(deque[OPoint3D] &, deque[OTriangle] &, deque[SmartPtr[TYSol]] *)
 
