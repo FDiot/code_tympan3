@@ -27,6 +27,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/FermatSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionPathSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionAngleSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/CleanerSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Solver.h"
@@ -59,7 +60,7 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
 	globalAccelerator = 3;					// [ACOUSTICRAYTRACER] Accelerating structure parameter (0=brut force, 1=grid, 2=BVH, 3=KDTree)
 	globalMaxTreeDepth = 12;				// [ACOUSTICRAYTRACER] Maximal depth search for BVH or KDTree
 	globalAngleDiffMin = 5.;				// [ACOUSTICRAYTRACER] Minimum dihedral angle to add a diffraction cylinder
-	globalCylindreThick = 0.3;				// [ACOUSTICRAYTRACER] Diffraction ridge size in meter
+	globalCylindreThick = 0.3f;				// [ACOUSTICRAYTRACER] Diffraction ridge size in meter
 	globalMaxProfondeur = 10;				// [ACOUSTICRAYTRACER] Maximum events number for a ray
 	globalUseSol = 0;						// [ACOUSTICRAYTRACER] Allow ground reflections
 	globalMaxReflexion = 0;					// [ACOUSTICRAYTRACER] Maximum reflections events for a ray
@@ -81,7 +82,7 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
 	globalEnableTargets = 0;				// [ACOUSTICRAYTRACER] Use targeting
 	globalSampleGround2D = 0;				// [ACOUSTICRAYTRACER] Sample ground in 2D
 	globalEnableFullTargets = 0;			// [ACOUSTICRAYTRACER] Set target search after a diffuse event
-	globalTargetsDensity = 0.1;				// [ACOUSTICRAYTRACER] Sampling density for interesting areas
+	globalTargetsDensity = 0.1f;				// [ACOUSTICRAYTRACER] Sampling density for interesting areas
 
 ////////////////////////////
 // AnalyticRayTracer
@@ -109,7 +110,7 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
 // Preprocessing
 /////////////////////////////
 
-	globalMinSRDistance = 0.3;				// [PREPROCESSING] Source-receptor minimal distance in meters
+	globalMinSRDistance = 0.3f;				// [PREPROCESSING] Source-receptor minimal distance in meters
 
 /////////////////////////////
 // Default Solver
@@ -402,6 +403,7 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 
 bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs)
 {
+	selectorManagerValidation.addSelector( new CleanerSelector<Ray>() );
 	selectorManagerValidation.addSelector( new LengthSelector<Ray>(globalMaxLength) );
 
 	if (globalUsePostFilters)
