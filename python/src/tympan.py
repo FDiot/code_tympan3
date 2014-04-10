@@ -14,11 +14,16 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
     ret = False
     # Load an existing project and retrieve its calcul to solve it
     project = pytam.Project.from_xml(input_project)
-    calc = project.current_computation()
+    comp = project.current_computation()
+    # Build an acoustic problem from the site of the computation
+    problem = comp.problem()
+    builder = pytam.SolverModelBuilder(problem)
+    builder.fill_problem(project.site())
+
     # Load solver plugin
-    pytam.loadsolver(solverdir, calc)
+    pytam.loadsolver(solverdir, comp)
     # Solve the problem and fill the acoustic result
-    ret = calc.go()
+    ret = comp.go()
     if ret is True:
         # Reserialize project
         project.to_xml(output_project)
