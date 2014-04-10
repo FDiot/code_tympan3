@@ -16,9 +16,30 @@
 #include "ValidRay.h"
 #include "SpecularReflexion.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sphere.h"
 #include "Diffraction.h"
+#include "DoNothing.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"
 
+bool ValidRay::validRayWithDoNothingEvent(Ray *r, Intersection* inter)
+{
+	vec3 impact = r->position + r->direction * inter->t;
+	DoNothing *newEvent = new DoNothing(impact, r->direction, inter->p);
+	QSharedPointer<Event> SPEv(newEvent);
+
+    vec3 newDir;
+    if (newEvent->getResponse(newDir))
+    {
+		decimal extend = BARELY_EPSILON;//inter->p->getTypicalSize();
+        r->position = r->position + r->direction * (inter->t + extend);
+        r->direction = newDir;
+        r->direction.normalize();
+        r->events.push_back(SPEv);
+        return true;
+	}
+
+	return false;
+}
 
 bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 {
@@ -151,14 +172,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 // Valid creation of event using distance from the ridge (if needed)
 	if ( globalDiffractionUseDistanceAsFilter && !isRayClosestFromRidge(r, impact, realImpact) ) 
 	{ 
-		vec3 from = impact - r->position;
-		from.normalize();
-
-		// The ray follow his initial direction
-		r->position = impact;
-		r->direction = from;
-
-		return false; 
+		return ValidRay::validRayWithDoNothingEvent(r, inter); 
 	}
 	
 // Create diffraction event

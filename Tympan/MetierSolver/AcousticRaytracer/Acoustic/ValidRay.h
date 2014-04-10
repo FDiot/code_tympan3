@@ -28,6 +28,7 @@ namespace ValidRay
 
 bool validTriangleWithSpecularReflexion(Ray* r, Intersection* inter);
 bool validCylindreWithDiffraction(Ray* r, Intersection* inter);
+bool validRayWithDoNothingEvent(Ray *r, Intersection* inter);
 
 /*!
  * \fn computeRealImpact(Ray *r, Cylindre *cylindre, vec3& impact)
