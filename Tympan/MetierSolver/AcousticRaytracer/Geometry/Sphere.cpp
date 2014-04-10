@@ -27,7 +27,6 @@ bool Sphere::getIntersection(Ray& ray, Intersection& inter)
     }
     float t0 = B - sqrtf(D);
     float t1 = B + sqrtf(D);
-    bool retvalue = false;
     if ((t0 > 0.1f) && (t0 < ray.maxt))
     {
         inter.t = t0;
