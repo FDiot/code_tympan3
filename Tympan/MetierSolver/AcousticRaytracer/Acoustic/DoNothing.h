@@ -13,34 +13,45 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef BASE_H
-#define BASE_H
+#ifndef DO_NOTHING_H
+#define DO_NOTHING_H
 
-#include <string>
+#include "Event.h"
 
-class Base
+class DoNothing : public Event
 {
 
 public:
-    Base()
-    {
-        name = "unkown element";
-    }
-    Base(const Base& other)
-    {
-        name = other.name;
-    }
 
-    virtual ~Base()
+    DoNothing(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL):
+        Event(position, incomingDirection, _shape) { nbResponseLeft = initialNbResponse = 1; type = NOTHING;}
+
+    DoNothing(const DoNothing& other) : Event(other)
     {
+        type = NOTHING;
     }
 
-    std::string getName() { return name; }
+    virtual ~DoNothing()
+    {
 
-    void setName(const std::string& _name) { name = _name; }
+    };
 
-protected:
-    std::string name;
+    virtual bool getResponse(vec3& r, bool force = false)
+	{
+		nbResponseLeft--;
+		if (nbResponseLeft < 0)
+		{
+			return false;
+		}
+		
+		r = from;
+		return true;
+	}
+
+    virtual bool isAcceptableResponse(vec3& test)
+    {
+        return false;
+    }
 };
 
-#endif
+#endif // DO_NOTHING_H

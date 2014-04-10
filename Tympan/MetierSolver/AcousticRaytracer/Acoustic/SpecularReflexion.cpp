@@ -18,13 +18,10 @@
 
 bool SpecularReflexion::getResponse(vec3& r, bool force)
 {
-    if (!force)
+    nbResponseLeft--;
+    if (nbResponseLeft < 0)
     {
-        nbResponseLeft--;
-        if (nbResponseLeft < 0)
-        {
-            return false;
-        }
+        return false;
     }
 
     r = from - shape->getNormal() * 2.0 * from.dot(shape->getNormal());

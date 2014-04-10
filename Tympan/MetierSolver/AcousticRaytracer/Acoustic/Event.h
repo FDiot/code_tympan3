@@ -24,7 +24,8 @@
 enum typeevent
 {
     SPECULARREFLEXION = 0,
-    DIFFRACTION
+    DIFFRACTION, 
+	NOTHING
 };
 
 class Shape;
