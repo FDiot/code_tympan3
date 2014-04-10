@@ -84,11 +84,13 @@ Of course other feature branches can be added by need.
 .. _hgview: http://www.logilab.org/project/hgview
 
 
+.. _devel-tools-cmake:
+
 CMake
 =====
 
 `CMake`_ is an open-source build system. It is used to control the software
-compilation process using simple platform and compiler independent configuration
+compilation process using a simple platform and compiler independent configuration
 files. CMake generates native makefiles and workspaces that can be used in the
 compiler environment of your choice. On GNU/Linux, CMake generates Makefiles and
 on Windows, it can generate Visual Studio solutions.

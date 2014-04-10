@@ -10,6 +10,7 @@ Documentation for Developers
    architecture
    convention
    tools
+   building
    testing
 
    ongoingwork
