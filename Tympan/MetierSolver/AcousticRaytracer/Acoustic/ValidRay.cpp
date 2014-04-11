@@ -93,10 +93,6 @@ bool ValidRay::pathDiffValidationForReflection(Ray * r, const vec3& impact)
 	r->cumulDelta += ( r->cumulDistance - impact.distance(origin) ); 
 	r->cumulDistance = 0.;
 
-//	if (r->cumulDelta > globalMaxPathDifference) { return false; }	
-	
-//	return true;
-
 	return ( r->cumulDelta <= globalMaxPathDifference );
 }
 
@@ -107,10 +103,6 @@ bool ValidRay::pathDiffValidationForDiffraction(Ray *r, const vec3& impact)
 		
 	// We compute the true path length difference between actual position and the last reflection or source
 	decimal currentCumulDelta = r->cumulDelta + ( r->cumulDistance - impact.distance(origin) ); 
-
-	//if ( currentCumulDelta > globalMaxPathDifference ) { return false; }
-
-	//return true;
 
 	return ( currentCumulDelta <= globalMaxPathDifference );
 }
@@ -130,11 +122,8 @@ bool ValidRay::computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre
 
 	delete pa, pb, mua, mub; // Cleaning
 
-//	if (!res) { return false; }
-
 	impact = *pb;
 
-//	return true;
 	return res;
 }
 
@@ -144,10 +133,6 @@ bool ValidRay::isRayClosestFromRidge(Ray *r, const vec3& impact, const vec3& rea
 	decimal length = r->computePertinentLength(realImpact, impact, closestPoint);
 	decimal thick = r->getThickness(length, true);
 	decimal closestDistance = realImpact.distance(closestPoint);
-
-	//if ( closestDistance > ( thick / 2. ) ) { return false; }
-
-	//return true;
 
 	return ( closestDistance <= ( thick / 2. ) );
 }

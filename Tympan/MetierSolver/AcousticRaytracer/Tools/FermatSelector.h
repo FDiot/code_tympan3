@@ -40,7 +40,7 @@ public :
 
 		decimal epaisseur = r->getThickness( trueLength, false );
 		decimal closestDistance = static_cast<Recepteur*> ( r->getRecepteur() )->getPosition().distance(closestPoint);
-		if ( closestDistance >= ( epaisseur/2. * 1.05 ) ) // Ajout de 5 % de marge supplémentaire 
+		if ( closestDistance >= ( epaisseur/2. /* * 1.05 */ ) ) // Ajout de 5 % de marge supplémentaire 
 		{
 			return SELECTOR_REJECT;
 		}
