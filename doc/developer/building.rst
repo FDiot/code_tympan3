@@ -9,6 +9,8 @@ The build system used in Code_TYMPAN is CMake (see
 works but how it is used in Code_TYMPAN. In order to benefit from it,
 it is recommended you ensure you have basic working knowledge of CMake.
 
+Main entry point
+================
 
 The main entry point of the build system is the file :file:`CMakeLists.txt`
 which is to be kept as synthetic as possible ; most build options are
@@ -23,3 +25,21 @@ documented and preset in the file :file:`build-options.cmake`.
   ``cmake-gui``. See `Running CMake`__ regarding this matter.
 
 __   <http://www.cmake.org/cmake/help/runningcmake.html>`_
+
+
+Platform handling
+=================
+
+The :file:`tympan-platform*.cmake` are responsible for handling the
+platform. The rationale is for :file:`tympan-platform.cmake` to detect
+the platform, diagnose the unsupported ones and then call
+:file:`tympan-platform-common.cmake` then
+:file:`tympan-platform-XXX.cmake` for platform specific settings.
+
+.. note:: The ``TYMPAN_COMPONENT_TYPE`` option
+
+   Code_TYMPAN is split into components, main application and solver
+   plugins. The components (DataManagerMetier and cie) must be
+   compiled either as shared library or static ones depending on the
+   platform. The option is thus declared in ``build-options`` and then set
+   separately in each platform specific file.
