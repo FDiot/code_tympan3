@@ -27,22 +27,20 @@ class OSegment3D;
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
 #include "TYAcousticSurface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSemiCircleWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCircleGraphic.h"
-#endif
-
 
 /**
  * Permet de creer des surfaces acoustiques semi-circulaires.
  * Les points 0 et 1 du rectangle associe correspondent au
  * "diametre de coupe" du demi-cercle.
+ *
+ * TOOD This code is mostly a copy-paste of the TYCircle class and
+ * needs to be factored.
  */
 class TYAcousticSemiCircle: public TYAcousticSurface
 {
     OPROTOSUPERDECL(TYAcousticSemiCircle, TYAcousticSurface)
-    TY_EXTENSION_DECL(TYAcousticSemiCircle)
-    TY_EXT_GRAPHIC_DECL(TYAcousticSemiCircle)
+    TY_EXTENSION_DECL_ONLY(TYAcousticSemiCircle)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticSemiCircle)
 
     // Methodes
 public:
@@ -112,6 +110,21 @@ public:
      * Set/Get du rectangle contenant le cercle.
      */
     TYRectangle* getShape() { return getBoundingRect(); }
+
+    /**
+     * @brief Export the surface as a triangular mesh
+     *
+     * NB : This function expect empty deques and will clear the deque passed.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     */
+    virtual void
+    exportMesh(
+        std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles,
+        const TYGeometryNode& geonode) const;
+
 
     // Membres
 protected:

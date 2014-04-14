@@ -12,17 +12,14 @@ Overview
 Downloading
 -----------
 
-For now, you can download the source_ code of last version of Code_TYMPAN. 
-A Mercurial_ repository will be soon available on Bitbucket_.
+A Mercurial_ repository is available on Bitbucket_ : the stable branch
+of development is at https://bitbucket.org/TYMPAN/code_tympan.
 
-.. _source: http://code-tympan.org/index.php/download/download-code-tympan-3-9/summary/1-download-code-tympan-software/4-download-code-tympan-3-9-sources
 .. _Bitbucket: https://bitbucket.org/
 .. _Mercurial: http://mercurial.selenic.com/
 
 The project also requires some third party dependencies (see below for
-more details) and an auxiliary project for handling data model :
-Yams++. For now Yams is not (yet) fully released but is available to
-Code_TYMPAN developer as a specific custom pre-release.
+more details).
 
 Those dependencies are divided into heavy, potentially system-wide,
 dependencies and lighter dependencies which can easily be
@@ -36,23 +33,14 @@ and unzipped into the ``3rdparty`` directory. Please refer to the
 ``3rdparty/README`` file which provide the exact URL for your current
 version of Code_TYMPAN.
 
-In case where you would like to have a recent version ot the Yams++ library
-dependency, you can set the CMake variable ``TYMPAN_USE_DEVEL_YAMS`` to ``ON``
-and specify the source directory of Yams++ with the CMake variable
-``TYMPAN_3RDPARTY_YAMS``. Please, carry it out in a **new building
-directory**. When you change the Yams++ source file, you would like to recompile
-it from Code_TYMPAN building directory. To do so, you have to remove the
-``3rdparty/Stamp/Yams/Yams-done`` file to carry out a new build of Yams++ in
-``3rdparty/Build/Yams``.
-
 Major dependencies
 ------------------
 
 The following dependencies are a bigger deal as their are likely to be
 already installed in your development environment in a system-wide
 way. If you are running a Linux box, the best way to get them is
-through your distribution package manager. If you are running a Linux
-box, your would be best by running the dedicated installers.
+through your distribution package manager. If you are running a
+Windows box, your would be best by running the dedicated installers.
 
 More details are given in further section on an OS and variant basis.
 
@@ -320,6 +308,11 @@ Then configure again (``c``) and generate the Makefile or Visual
 Studio solution (``g``). You can now build it with ``make`` or by
 opening the solution.
 
+.. note:: More about the CMake build system
+
+  If you want to add components or otherwise change the build system
+  for Code_TYMPAN you might want to have a look at :ref:`Build System
+  Documentation <build-system>` first.
 
 
 

@@ -17,6 +17,10 @@
  *
  */
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYSpectreWidget.h"
+#endif
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -27,6 +31,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 
 OPROTOINST(TYSpectre);
+TY_EXTENSION_INST(TYSpectre);
 
 // Precision d'ecriture des resultats dans les fichiers XML
 int TYSpectre::_XMLprecision = 1;
@@ -307,7 +312,7 @@ bool TYSpectre::fromXML(const std::string& sFilePath)
     }
 
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
     if (xmlManager.load(fileName, elements))
     {
         if (elements.size() == 1)
@@ -342,7 +347,7 @@ bool TYSpectre::fromXMLString(const std::string& sXMLString)
     bool bRet = false;
 
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
     if (xmlManager.loadFromString(QString(sXMLString.c_str()), elements))
     {
         if (elements.size() == 1)

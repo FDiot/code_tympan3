@@ -13,12 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #ifndef __TY_TOPOGRAPHIE__
 #define __TY_TOPOGRAPHIE__
+
+#include <memory>
 
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYPlanEau.h"
@@ -26,10 +24,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYTopographieWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYTopographieGraphic.h"
-#endif
+#include "Tympan/MetierSolver/DataManagerMetier/AltimetryBuilder.hpp"
 
 ///Structure contenant un segment et un terrain.
 typedef struct
@@ -58,10 +53,11 @@ typedef struct
 class TYTopographie: public TYElement
 {
     OPROTOSUPERDECL(TYTopographie, TYElement)
-    TY_EXTENSION_DECL(TYTopographie)
-    TY_EXT_GRAPHIC_DECL(TYTopographie)
+    TY_EXTENSION_DECL_ONLY(TYTopographie)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYTopographie)
 
     // Methodes
+
 public:
     /**
      * Constructeur.
@@ -388,17 +384,19 @@ public:
         setIsGeometryModified(true);
     }
 
-    /**
-     * Calcule l'altimetrie a partir des elements de topographie.
-     */
-    //  void computeAltimetrie();
 
     /**
-     * Collecte l'ensemble des points necessaires a la generation
-     * de l'altimetrie. Version 1D
+     * @brief computes the triangulation underlying the Altimetry
+     *
+     * This function expect empty deques and will clear the deque passed.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
      */
-    //  TYTabPoint collectPointsForAltimetrie(const double& distanceMax, bool bEmpriseAsCrbNiv = false ) const;
-    TYTabPoint collectPointsForAltimetrie(bool bEmpriseAsCrbNiv = false) const;
+    void computeAltimetricTriangulation(
+        std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles,
+        bool use_emprise_as_level_curve = true);
 
     /**
      * Calcule la pente moyenne pour le segment donne.
@@ -473,6 +471,33 @@ public:
     void setEmpriseColor(const OColor& color) { _empriseColor = color; };
     OColor getEmpriseColor() const { return _empriseColor; };
 
+    /**
+     * @brief Get number of vertices
+     * @return number of vertices (aka points) of the altimetry
+     */
+    unsigned number_of_vertices() const;
+
+    /**
+     * @brief Get number of faces
+     * @return number of faces (aka triangles) of the altimetry
+     */
+    unsigned number_of_faces() const;
+
+
+    const tympan::AltimetryBuilder& getAltimetryBuilder() const;
+
+    /**
+     * @brief Export the altimetry as a triangular mesh
+     *
+     * This function expect empty deques and will clear the deque passed.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     * @param p_materials optionnal output argument filled with the materials of the faces
+     *
+     */
+    void exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>* p_materials = NULL);
+
 private :
 
     // Membres
@@ -504,6 +529,9 @@ protected:
 
     /// Seuils confondus
     double _seuilConfondus;
+
+    /// The AltimetryBuilder used to build the Altimetry
+    std::auto_ptr< tympan::AltimetryBuilder > p_alti_builder;
 
 private :
     std::vector<TYStructElemPts> _tabElemPts; // Tableau des terrains

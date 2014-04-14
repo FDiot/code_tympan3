@@ -27,11 +27,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
 #include "TYMaillage.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangularMaillageGraphic.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRectangularMaillageWidget.h"
-#endif
-
 
 /**
  * \file TYRectangularMaillage.h
@@ -45,8 +40,8 @@
 class TYRectangularMaillage: public TYMaillage
 {
     OPROTOSUPERDECL(TYRectangularMaillage, TYMaillage)
-    TY_EXT_GRAPHIC_DECL(TYRectangularMaillage)
-    TY_EXTENSION_DECL(TYRectangularMaillage)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYRectangularMaillage)
+    TY_EXTENSION_DECL_ONLY(TYRectangularMaillage)
 
     // Methodes
 public:

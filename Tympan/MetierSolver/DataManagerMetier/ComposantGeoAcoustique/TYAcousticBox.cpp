@@ -17,8 +17,10 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticBoxWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticBoxGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -28,7 +30,8 @@
 
 
 OPROTOINST(TYAcousticBox);
-
+TY_EXTENSION_INST(TYAcousticBox);
+TY_EXT_GRAPHIC_INST(TYAcousticBox);
 
 TYAcousticBox::TYAcousticBox()
 {
@@ -380,14 +383,14 @@ int TYAcousticBox::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYAcousticBox::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYAcousticBox::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYAcousticVolume::getChilds(childs, recursif);
 
     for (int i = 0; i < 6; i++)
     {
-        childs.add(_faces[i]);
-        childs.add(_faces[i]->getElement());
+        childs.push_back(_faces[i]);
+        childs.push_back(_faces[i]->getElement());
     }
 
     if (recursif)

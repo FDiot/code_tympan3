@@ -17,8 +17,10 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYProjetWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYProjetGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -40,6 +42,8 @@ static char THIS_FILE[] = __FILE__;
 
 
 OPROTOINST(TYProjet);
+TY_EXTENSION_INST(TYProjet);
+TY_EXT_GRAPHIC_INST(TYProjet);
 
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 
@@ -491,8 +495,14 @@ bool TYProjet::updateAltiRecepteurs(const TYAltimetrie* pAlti)
     unsigned int i;
     for (i = 0; i < _pointsControl.size(); i++)
     {
+        // XXX See ticket https://extranet.logilab.fr/ticket/1484180
+        // The coordinates of the problematic point need to be properly reported
+        // or idealy an exception should be thrown.
         modified &= updateAltiPointControle(getPointControl(i), pAlti);
     }
+
+    // XXX See ticket https://extranet.logilab.fr/ticket/1484180:
+    // Why handling of PointControle and Recepteur are so different ?
 
     // Mise a jour de l'altitude pour les recepteurs du calcul
     getCurrentCalcul()->updateAltiRecepteurs(pAlti);
@@ -653,4 +663,3 @@ void TYProjet::setSite(const LPTYSiteNode pSite)
     _pSite->addToCalcul();
     setIsGeometryModified(true);
 }
-

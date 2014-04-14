@@ -25,10 +25,6 @@ class OSegment3D;
 #include "TYPoint.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYBoxWidget.h"
-#endif
-
 /**
  * Classe de definition d'une boite.
  * Une boite est representee par ses dimensions en X, Y et Z,
@@ -37,7 +33,7 @@ class OSegment3D;
 class TYBox: public TYElement, public TYColorInterface
 {
     OPROTOSUPERDECL(TYBox, TYElement)
-    TY_EXTENSION_DECL(TYBox)
+    TY_EXTENSION_DECL_ONLY(TYBox)
 
     // Methodes
 public:

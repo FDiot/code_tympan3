@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYDalleWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYDalleGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -28,7 +31,8 @@
 
 
 OPROTOINST(TYDalle);
-
+TY_EXTENSION_INST(TYDalle);
+TY_EXT_GRAPHIC_INST(TYDalle);
 
 TYDalle::TYDalle()
 {

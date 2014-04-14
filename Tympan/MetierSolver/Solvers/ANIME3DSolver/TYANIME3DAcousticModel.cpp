@@ -192,7 +192,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
                         std::cout << "sol n : " << k << "resistivite = " << pSol->getResistivite() << std::endl;
 
                         spectreAbs = pSol->abso(angle, rr, _atmos);
-                        // TO DO : S'assurer que la somme des pondérations de Fresnel égale 1
+                        // TO DO : S'assurer que la somme des pondrations de Fresnel gale 1
                         pond = spectreAbs * tabPondFresnel[k];
                         sum = sum + pond; // calcul du coeff de reflexion moy en ponderant avec les materiaux
                     }
@@ -250,7 +250,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
 void TYANIME3DAcousticModel::ComputeAbsDiff()
 {
-    // Delta = différence de marche
+    // Delta = diffrence de marche
     // precDiff = distance entre l'evenement precedent et la diffraction
     // diffEnd = distance entre la diffraction et l'evenement pertinent suivant
     // precEnd = distance entre l'evenement precedent et l'evenement pertinent suivant
@@ -263,8 +263,8 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
     // diffIdx = index de l'evenement diffraction courant
     // vDiffPrec = vecteur diffraction / evenement precedent
     // vDiffSuiv = vecteur diffraction evenement suivant
-    // n1 = normale à la première face du diedre diffractant
-    // n2 = normale à la seconde face du diedre diffractant
+    // n1 = normale  la premire face du diedre diffractant
+    // n2 = normale  la seconde face du diedre diffractant
     // normal = n1 + n2
 
 
@@ -294,8 +294,8 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
             diffIdx = tabDiff[j]; // Index de l'evenement diffraction courant
             TYRayEvent* currentEv = currentRay->getEvents().at(diffIdx); // Evenement courant
 
-            precDiff = currentEv->previous->distNextEvent; // Distance de l'évenement précedent à la diffraction
-            diffEnd = currentEv->distEndEvent; // de la diffraction à l'évènement pertinent suivant (recepteur ou reflexion)
+            precDiff = currentEv->previous->distNextEvent; // Distance de l'venement prcedent  la diffraction
+            diffEnd = currentEv->distEndEvent; // de la diffraction  l'vnement pertinent suivant (recepteur ou reflexion)
             precEnd = currentEv->previous->distEndEvent; // Chemin sans diffraction
 
             vDiffPrec = OVector3D(currentEv->pos, currentEv->previous->pos);
@@ -351,18 +351,18 @@ OBox2 TYANIME3DAcousticModel::ComputeFresnelArea(double angle, OPoint3D Pprec, O
     double dr = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->previous->distNextEvent + distPrefPsuiv;
     double dd = _tabTYRays[rayNbr]->getEvents().at(reflIndice)->distPrevNext;
 
-    // Calcul de Fc ne prenant en compte que la différence de marche
+    // Calcul de Fc ne prenant en compte que la diffrence de marche
     OSpectre f = OSpectre::getOSpectreFreqExact(); //frequence
     OSpectre fc = computeFc(dd, dr);
 
     /*
     MIS EN COMMENTAIRE POUR VALIDATION ULTERIEURE
 
-        // Calcul de F lambda officiel (equations 10 à 15 de H-T63-2010-01193-FR)
+        // Calcul de F lambda officiel (equations 10  15 de H-T63-2010-01193-FR)
         // parametre de l'ellipsoide de Fresnel F_{\lambda} via la formule definie dans la publie de D. van Maercke et J. Defrance (CSTB-2007)
-        // Version initiale du calcul de fc prenant en compte le sol réel
+        // Version initiale du calcul de fc prenant en compte le sol rel
 
-        // Le spectre Q sert à récupérer la phase du trajet réflechi
+        // Le spectre Q sert  rcuprer la phase du trajet rflechi
 
         OSpectre f = OSpectre::getOSpectreFreqExact(); //frequence
         std::cout << "f = " << f.valMax() << std::endl;
@@ -398,7 +398,7 @@ OBox2 TYANIME3DAcousticModel::ComputeFresnelArea(double angle, OPoint3D Pprec, O
     int reflFace =  _tabTYRays[rayNbr]->getEvents().at(reflIndice)->idFace1;
     TYAcousticSurface* face = TYAcousticSurface::safeDownCast(_tabSurfIntersect[reflFace].pSurfGeoNode->getElement());
     OPlan P = face->getPlan();
-    OPoint3D SIm = P.symPtPlan(Pprec); // Point image du point précedent la reflexion
+    OPoint3D SIm = P.symPtPlan(Pprec); // Point image du point prcedent la reflexion
     double dSImR = SIm.distFrom(Psuiv); // Distance de la source image au point suivant la reflexion
 
     std::cout << "Coordonnees de la source image " << std::endl;
@@ -406,11 +406,11 @@ OBox2 TYANIME3DAcousticModel::ComputeFresnelArea(double angle, OPoint3D Pprec, O
 
 
     // On fixe une frequence de travail
-    // TO DO : mettre freq en paramètre utilisateur
+    // TO DO : mettre freq en paramtre utilisateur
     float freq = 500.0f;
     double L = 2 * lF.getValueReal(freq) + dSImR;
     double l = sqrt(lF.getValueReal(freq) * (lF.getValueReal(freq) + 2.*dSImR));
-    double h = l; // hauteur = largeur (ajouté pour la lisibilité du code)
+    double h = l; // hauteur = largeur (ajout pour la lisibilit du code)
 
 
     std::cout << "L = " << L << " l = " << l << std::endl;
@@ -432,16 +432,16 @@ OBox2 TYANIME3DAcousticModel::ComputeFresnelArea(double angle, OPoint3D Pprec, O
 
     /*
         DTn commented to use new OBox manipulator I defined (20131218)
-        // Deplace le centre de la boite au centre du segment S'P (P = point suivant la réflexion)
+        // Deplace le centre de la boite au centre du segment S'P (P = point suivant la rflexion)
         const OVector3D vt( ( O._x - (0.5*L) ), ( O._y - ( 0.5*l ) ), ( O._z - ( 0.5*h ) ) );
         fresnelArea.Translate( vt );
 
-    // TO DO : S'assurer que la rotation s'effectue dans le bon repère
-        return fresnelArea.boxRotation( O, Psuiv ); // Voir la définition de boxRotation : devrai être fersnelArea.boxRotation(...)
+    // TO DO : S'assurer que la rotation s'effectue dans le bon repre
+        return fresnelArea.boxRotation( O, Psuiv ); // Voir la dfinition de boxRotation : devrai tre fersnelArea.boxRotation(...)
     */
 }
 
-// TO DO : Vérifier que c'est la méthode mise en commentaire dans computeFresnelArea
+// TO DO : Vrifier que c'est la mthode mise en commentaire dans computeFresnelArea
 OSpectre TYANIME3DAcousticModel::computeFc(const double& dd, const double& dr)
 {
     OSpectre FMin, FMax, fc;
@@ -484,6 +484,9 @@ OTabDouble TYANIME3DAcousticModel::ComputeFresnelWeighting(double angle, OPoint3
     std::cout << "Coordonnees de l'origine de la boite " << std::endl;
     std::cout << "Center = " << fresnelArea._center._x << " " << fresnelArea._center._y << " " << fresnelArea._center._z << std::endl;
 
+    // XXX Altimetry refactoring impacts here.
+
+
 
     std::cout << "Coordonnees des 8 sommets de la boite " << std::endl;
     std::cout << "A = " << fresnelArea._A._x << " " << fresnelArea._A._y << " " << fresnelArea._A._z << std::endl;
@@ -499,7 +502,7 @@ OTabDouble TYANIME3DAcousticModel::ComputeFresnelWeighting(double angle, OPoint3
 
 
     // Remplacer par l'intersection des segments FG, EH, AB, CD
-    // avec le plan de la face sur laquelle se trouve le point de réflexion.
+    // avec le plan de la face sur laquelle se trouve le point de rflexion.
     OSegment3D AB(fresnelArea._A, fresnelArea._B);
     OSegment3D CD(fresnelArea._C, fresnelArea._D);
     OSegment3D FG(fresnelArea._F, fresnelArea._G);
@@ -671,7 +674,7 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff()
 
         prodAbs = _absAtm[i] * _absRefl[i] * _absDiff[i];
 
-        // module = dir * W * rhoC / (4 * PI * R²) * produit (reflex, diffraction, atmos)
+        // module = dir * W * rhoC / (4 * PI * R) * produit (reflex, diffraction, atmos)
         mod = ((directivite * wSource * rhoc) * (1. / c1)).sqrt() * prodAbs.getModule();
         // phase = exp(j K *L)
         phase = _K.mult(_tabTYRays[i]->getLength()) + prodAbs.getPhase();
@@ -753,7 +756,7 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
                 }
             }
 
-            // Be carefull sum of p²!= p² of sum
+            // Be carefull sum of p!= p of sum
             sum1 = sum1.getModule() * sum1.getModule();
             tabPressionAcoust[i][j] = sum1 + sum2;
         }
@@ -765,11 +768,11 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
 OTab2DSpectreComplex TYANIME3DAcousticModel::ComputeAcousticModel()
 {
 
-    ComputeAbsAtm();// Absorption atmosphérique pour tous les rayons
+    ComputeAbsAtm();// Absorption atmosphrique pour tous les rayons
 
     ComputeAbsRefl(); // Absorption par reflexion pour tous les rayons
 
-    ComputeAbsDiff(); // Atténuation par diffraction pour tous les rayons
+    ComputeAbsDiff(); // Attnuation par diffraction pour tous les rayons
 
     ComputePressionAcoustEff(); // Pression acoustique efficace pour tous les rayons
 

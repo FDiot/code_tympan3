@@ -17,6 +17,12 @@
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYRayGraphic.h"
+#endif
+
+TY_EXT_GRAPHIC_INST(TYRay);
+
 #include "TYRay.h"
 
 TYRayEvent::TYRayEvent():   distNextEvent(0.0),

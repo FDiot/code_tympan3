@@ -25,17 +25,13 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
 #include "TYAtmosphere.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYVegetationWidget.h"
-#endif
-
 /**
  * Classe de definition d'une vegetation.
  */
 class TYVegetation: public TYElement
 {
     OPROTOSUPERDECL(TYVegetation, TYElement)
-    TY_EXTENSION_DECL(TYVegetation)
+    TY_EXTENSION_DECL_ONLY(TYVegetation)
 
     // Methodes
 public:

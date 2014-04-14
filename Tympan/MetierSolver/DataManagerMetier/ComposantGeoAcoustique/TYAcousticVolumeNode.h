@@ -25,10 +25,6 @@
 #include "TYAcousticSemiCylinder.h"
 #include "TYAcousticBox.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticVolumeNodeWidget.h"
-#endif
-
 
 /**
  * Composee d'un ou plusieurs volumes acoustiques..
@@ -36,7 +32,7 @@
 class TYAcousticVolumeNode: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYVolumeInterface
 {
     OPROTOSUPERDECL(TYAcousticVolumeNode, TYElement)
-    TY_EXTENSION_DECL(TYAcousticVolumeNode)
+    TY_EXTENSION_DECL_ONLY(TYAcousticVolumeNode)
 
     // Methodes
 public:
@@ -67,7 +63,7 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     virtual void setDensiteSrcsH(double densite, bool recursif = true);
     virtual void setDensiteSrcsV(double densite, bool recursif = true);

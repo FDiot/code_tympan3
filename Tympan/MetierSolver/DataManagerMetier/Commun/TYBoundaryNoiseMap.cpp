@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYBoundaryNoiseMapGraphic.h"
+#include "Tympan/GraphicIHM/DataManagerIHM/TYBoundaryNoiseMapWidget.h"
+#endif
 
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
@@ -34,6 +37,8 @@
 #undef max
 
 OPROTOINST(TYBoundaryNoiseMap);
+TY_EXTENSION_INST(TYBoundaryNoiseMap);
+TY_EXT_GRAPHIC_INST(TYBoundaryNoiseMap);
 
 TYBoundaryNoiseMap::TYBoundaryNoiseMap()
 {
@@ -247,7 +252,7 @@ bool TYBoundaryNoiseMap::fromXML(const std::string& sFilePath)
     }
 
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
     if (xmlManager.load(fileName, elements))
     {
         if (elements.size() == 1)
@@ -282,7 +287,7 @@ bool TYBoundaryNoiseMap::fromXMLString(const std::string& sXMLString)
     bool bRet = false;
 
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
     if (xmlManager.loadFromString(QString(sXMLString.c_str()), elements))
     {
         if (elements.size() == 1)

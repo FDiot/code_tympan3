@@ -29,7 +29,7 @@ float globalMaxLength;          //Longueur maximale autorisee pour un rayon, glo
 float globalSampleGround2D;     //Echantillonage sur sol pour la description de la topographie 2D sous le rayon. (NMPB)
 int globalRayTracingOrder;      //[0-2]Sens de traitement des rayon source-recepteur ou inverse (0 = SR / 1 =RS / 2 = auto)
 float globalAnalyticAngleTheta;   // Angle de tir vertical (theta) des rayons
-int globalDiscretization;       //Permet de choisir entre des rayons aléatoires ou déterministes (discretisation source)
+int globalDiscretization;       //Permet de choisir entre des rayons alatoires ou dterministes (discretisation source)
 
 ////////////////////////////
 // Reflexion
@@ -69,5 +69,5 @@ double globalWindDirection;     // Direction du vent (un vent a 0 est dirige du 
 
 bool globalUseFresnelArea;      // take into account the fresnel area
 float globalAnime3DSigma;       // incertitude relative sur la taille du rayon au carree
-float globalAnime3DForceC;      // Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
+float globalAnime3DForceC;      // Force C  0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dpendant de globalAnime3DSigma
 bool globalUsePostFilters;      // Utilisation (!=0) ou non (0) des filtres post lancer de rayons

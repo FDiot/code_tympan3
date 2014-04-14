@@ -27,10 +27,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticFaceSetWidget.h"
-#endif
-
 
 /**
  * Permet de creer de elements acoustiques volumiques.
@@ -38,7 +34,7 @@
 class TYAcousticFaceSet: public TYAcousticVolume
 {
     OPROTOSUPERDECL(TYAcousticFaceSet, TYAcousticVolume)
-    TY_EXTENSION_DECL(TYAcousticFaceSet)
+    TY_EXTENSION_DECL_ONLY(TYAcousticFaceSet)
 
     // Methodes
 public:
@@ -71,7 +67,7 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement, bool withfaces);
     virtual int fromXML(DOM_Element domElement, bool withfaces);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     virtual void propagateRegime();
     virtual void propagateAtt(LPTYAttenuateur pAtt);

@@ -24,10 +24,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSpectre.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAtmosphereWidget.h"
-#endif
-
 ///Pression de reference exprimee en Pascal.
 #define TY_EDF_PR 101325.0
 ///Zero absolu (Kelvin).
@@ -42,7 +38,7 @@
 class TYAtmosphere: public TYElement
 {
     OPROTOSUPERDECL(TYAtmosphere, TYElement)
-    TY_EXTENSION_DECL(TYAtmosphere)
+    TY_EXTENSION_DECL_ONLY(TYAtmosphere)
 
     // Methodes
 public:

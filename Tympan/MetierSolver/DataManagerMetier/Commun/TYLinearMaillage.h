@@ -27,12 +27,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
 #include "TYMaillage.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYLinearMaillageGraphic.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYLinearMaillageWidget.h"
-#endif
-
-
 /**
  * \file TYLinearMaillage.h
  * \class TYLinearMaillage
@@ -45,8 +39,8 @@
 class TYLinearMaillage: public TYMaillage
 {
     OPROTOSUPERDECL(TYLinearMaillage, TYMaillage)
-    TY_EXT_GRAPHIC_DECL(TYLinearMaillage)
-    TY_EXTENSION_DECL(TYLinearMaillage)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYLinearMaillage)
+    TY_EXTENSION_DECL_ONLY(TYLinearMaillage)
 
     // Methodes
 public:

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -98,7 +98,8 @@ protected:
      *\fn void restitModifiedAlti(TYSiteNode& site)
      *\brief Restitue au site la topographie (et infrastructure) transformee
      */
-    void restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcousticPathFinder& pathFinder);
+    // CAUTION restitModifiedAlti() is incompatible with the new altimetry
+    // void restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcousticPathFinder& pathFinder);
 
     /*!
      * \fn exportRays(TYCalcul& calcul)

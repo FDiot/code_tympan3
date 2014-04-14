@@ -27,19 +27,14 @@ class OPoint3D;
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
 #include "TYAcousticSurface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticCircleWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticCircleGraphic.h"
-#endif
-
 /**
  * Permet de creer des surfaces acoustiques circulaires.
  */
 class TYAcousticCircle: public TYAcousticSurface
 {
     OPROTOSUPERDECL(TYAcousticCircle, TYAcousticSurface)
-    TY_EXTENSION_DECL(TYAcousticCircle)
-    TY_EXT_GRAPHIC_DECL(TYAcousticCircle)
+    TY_EXTENSION_DECL_ONLY(TYAcousticCircle)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticCircle)
 
     // Methodes
 public:
@@ -109,6 +104,20 @@ public:
      * Set/Get du rectangle contenant le cercle.
      */
     TYRectangle* getShape() { return getBoundingRect(); }
+
+    /**
+     * @brief Export the surface as a triangular mesh
+     *
+     * NB : This function expect empty deques and will clear the deque passed.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     */
+    virtual void
+    exportMesh(
+        std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles,
+        const TYGeometryNode& geonode) const;
 
 
     // Membres
