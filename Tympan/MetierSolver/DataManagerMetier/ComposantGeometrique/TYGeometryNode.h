@@ -29,7 +29,6 @@
 #endif
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 #include "TYRepere.h"
 #include "Tympan/MetierSolver/ToolsMetier/OMatrix.h"
 

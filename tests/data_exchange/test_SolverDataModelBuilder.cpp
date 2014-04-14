@@ -9,7 +9,6 @@
 
 #include <QString>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
@@ -29,7 +28,7 @@ TEST_F(BuildingFromSiteFixture, export_triangles_soup)
 {
     load_file("../data/tiny_site.xml");
 
-    SolverModel model;
+    AcousticProblemModel model;
     SolverDataModelBuilder builder(model);
     builder.walkTroughtSite(project->getSite());
     model.export_triangles_soup("export_check_triangles");
@@ -40,7 +39,7 @@ TEST_F(BuildingFromSiteFixture, DISABLED_check_base)
 {
     load_file("../data/solver_export/base.xml");
 
-    SolverModel model;
+    AcousticProblemModel model;
     SolverDataModelBuilder builder(model);
     builder.walkTroughtSite(project->getSite());
 
@@ -65,7 +64,7 @@ TEST_F(BuildingFromSiteFixture, check_base_known_bad_results)
 {
     load_file("../data/solver_export/base.xml");
 
-    SolverModel model;
+    AcousticProblemModel model;
     SolverDataModelBuilder builder(model);
     builder.walkTroughtSite(project->getSite());
 
@@ -78,7 +77,7 @@ TEST_F(BuildingFromSiteFixture, DISABLED_check_ground)
 {
     load_file("../data/solver_export/ground_materials.xml");
 
-    SolverModel model;
+    AcousticProblemModel model;
     SolverDataModelBuilder builder(model);
     builder.walkTroughtSite(project->getSite());
 

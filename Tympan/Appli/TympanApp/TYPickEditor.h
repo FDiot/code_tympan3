@@ -30,7 +30,6 @@
 
 
 #include "TYAbstractSceneEditor.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "TYElementPicker.h"
 #include <QPoint>
@@ -96,7 +95,7 @@ public slots:
 
 
 protected slots:
-    virtual void showPopupMenu(LPTYElementCollection pElts);
+    virtual void showPopupMenu(std::shared_ptr<LPTYElementArray> pElts);
     void showPositionDialog(TYGeometryNode* pGeoNode);
     void showRotationDialog(TYGeometryNode* pGeoNode);
     void showDimensionsDialog(TYAcousticVolume* pAccVol);

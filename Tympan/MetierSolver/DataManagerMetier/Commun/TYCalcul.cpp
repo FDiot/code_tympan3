@@ -33,8 +33,6 @@
 #include <stdlib.h>
 #include <string>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
-
 #include "Tympan/Tools/TYProgressManager.h"
 
 #include "Tympan/Tools/OLocalizator.h"

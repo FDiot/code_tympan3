@@ -25,7 +25,6 @@
 
 #include <QString>
 #include "Tympan/Tools/OGenID.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 
 /**
  * Classe pour la gestion des arguments passe en mode console

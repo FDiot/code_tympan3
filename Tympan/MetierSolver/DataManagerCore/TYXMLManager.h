@@ -24,7 +24,7 @@
 #define __TY_XMLMANAGER__
 
 
-#include "TYElementCollection.h"
+#include "TYElement.h"
 #include "Tympan/MetierSolver/ToolsMetier/QT2DOM.h"
 
 
