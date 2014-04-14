@@ -57,8 +57,8 @@ cdef class SolverModelBuilder:
 
     @cython.locals(site=Site)
     def fill_problem(self, site):
-        self.process_infrastructure(site)
         self.process_altimetry(site)
+        self.process_infrastructure(site)
 
     def problem_model(self):
         problem = ProblemModel()
@@ -73,27 +73,46 @@ cdef class SolverModelBuilder:
         geonode = cython.declare(TYGeometryNode)
         nb_building_faces = cython.declare(cython.uint)
         nb_building_faces = 0
+        psurf = cython.declare(cython.pointer(TYAcousticSurface))
         site.thisptr.getRealPointer().getListFaces(face_list, nb_building_faces,
                            is_screen_face_idx)
-        pSurf = cython.declare(cython.pointer(TYAcousticSurface))
-        for i in range(nb_building_faces):
-            pelt = face_list[i].getRealPointer().getElement()
-            pSurf = safeDownCast(pelt)
-            if pSurf != NULL:
-                geonode = (face_list[i].getRealPointer())[0]
-                self.thisptr.setAcousticTriangle(geonode)
-
-    @cython.locals(site=Site)
-    def process_altimetry(self, site):
+        element_uid = cython.declare(cython.pointer(UuidAdapter))
         points = cython.declare(deque[OPoint3D])
         triangles = cython.declare(deque[OTriangle])
-        materials = cython.declare(deque[SmartPtr[TYSol]])
-        ptopo = cython.declare(cython.pointer(TYTopographie))
-        ptopo = site.thisptr.getRealPointer().getTopographie().getRealPointer()
-        element_uid = cython.declare(cython.pointer(UuidAdapter))
-        element_uid = new UuidAdapter(ptopo.getID())
-        ptopo.exportMesh(points, triangles, &materials)
-        # process mesh
+        for i in range(nb_building_faces):
+            pelt = face_list[i].getRealPointer().getElement()
+            psurf = safeDownCast(pelt)
+            # 'face_list' can contain topography elements. Not relevant here.
+            if psurf == NULL:
+                continue
+            geonode = (face_list[i].getRealPointer())[0]
+            # Get the uid for the site element bearing the current acoustic surface
+            element_uid = new UuidAdapter(psurf.getParent().getID())
+            # Use the triangulating interface of TYSurfaceInterface to get triangles
+            # and convert them to Nodes and AcousticTriangles (beware of mapping
+            # TYPoints to Node in the correct way.)
+            psurf.exportMesh(points, triangles, geonode)
+            self.process_mesh(points, triangles)
+            # Get the building material for the surface
+            pbuildmat = cython.declare(cython.pointer(TYMateriauConstruction))
+            pbuildmat = psurf.getMateriau().getRealPointer()
+            spectre = cython.declare(TYSpectre)
+            spectre = pbuildmat.getSpectreAbso()
+            pmat = cython.declare(shared_ptr[AcousticMaterialBase])
+            pmat = self.model.make_material( pbuildmat.getName().toStdString(),
+                                            spectre)
+            actri = cython.declare(cython.pointer(AcousticTriangle))
+            # Set the UUID of the site element and the material of the surface
+            for i in range(triangles.size()):
+                actri = self.model.ptriangle(i)
+                actri.uuid = (element_uid)[0].getUuid()
+                actri.made_of = pmat
+            points.clear()
+            triangles.clear()
+
+    @cython.cfunc
+    @cython.locals(points=deque[OPoint3D], triangles=deque[OTriangle])
+    def process_mesh(self, points, triangles):
         map_to_model_node_idx = cython.declare(vector[size_t])
         map_to_model_node_idx = vector[size_t] (points.size())
         itp = cython.declare(deque[OPoint3D].iterator)
@@ -111,11 +130,23 @@ cdef class SolverModelBuilder:
             assert (deref(itt)._A == points[deref(itt)._p1])
             assert (deref(itt)._B == points[deref(itt)._p2])
             assert (deref(itt)._C == points[deref(itt)._p3])
-            # Add the deref(itt)angle
+            # Add the triangle
             self.model.make_triangle(map_to_model_node_idx[deref(itt)._p1],
                                      map_to_model_node_idx[deref(itt)._p2],
                                      map_to_model_node_idx[deref(itt)._p3])
             inc(itt)
+
+    @cython.locals(site=Site)
+    def process_altimetry(self, site):
+        points = cython.declare(deque[OPoint3D])
+        triangles = cython.declare(deque[OTriangle])
+        materials = cython.declare(deque[SmartPtr[TYSol]])
+        ptopo = cython.declare(cython.pointer(TYTopographie))
+        ptopo = site.thisptr.getRealPointer().getTopographie().getRealPointer()
+        element_uid = cython.declare(cython.pointer(UuidAdapter))
+        element_uid = new UuidAdapter(ptopo.getID())
+        ptopo.exportMesh(points, triangles, cython.address(materials))
+        self.process_mesh(points, triangles)
         # make material
         actri = cython.declare(cython.pointer(AcousticTriangle))
         psol = cython.declare(cython.pointer(TYSol))

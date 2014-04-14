@@ -53,65 +53,6 @@ SolverDataModelBuilder::~SolverDataModelBuilder()
 }
 
 
-void SolverDataModelBuilder::processMesh(
-    const std::deque<OPoint3D>& points,
-    const std::deque<OTriangle>& triangles)
-{
-    // Create all nodes related to the triangles.
-    std::vector<node_idx> map_to_model_node_idx(points.size(), 0);
-    size_t i = 0;
-    BOOST_FOREACH(const Point & point, points)
-    {
-        map_to_model_node_idx[i++] = model.make_node(point); // add the points
-    }
-
-    BOOST_FOREACH(const OTriangle & tri, triangles)
-    {
-        // Assert consistency of the OPoint3D given in the mesh
-        assert(tri._A == points[tri._p1]);
-        assert(tri._B == points[tri._p2]);
-        assert(tri._C == points[tri._p3]);
-        // add the triangles
-        triangle_idx tri_idx = model.make_triangle(
-                                   map_to_model_node_idx[tri._p1],
-                                   map_to_model_node_idx[tri._p2],
-                                   map_to_model_node_idx[tri._p3]);
-    }
-}
-
-void SolverDataModelBuilder::setAcousticTriangle(const TYAcousticSurfaceGeoNode& acoust_surf_geo)
-{
-    const TYAcousticSurface* pSurf = dynamic_cast<TYAcousticSurface*>(acoust_surf_geo.getElement());
-
-    // Get the uid for the site element bearing the current acoustic surface
-    UuidAdapter element_uid(pSurf->getParent()->getID());
-
-    // Use the triangulating interface of TYSurfaceInterface to get triangles
-    // and convert them to Nodes and AcousticTriangles (beware of mapping
-    // TYPoints to Node in the correct way.)
-    std::deque<OPoint3D> points;
-    std::deque<OTriangle> triangles;
-    pSurf->exportMesh(points, triangles, acoust_surf_geo);
-    processMesh(points, triangles);
-
-    // Get the building material for the surface.
-    LPTYMateriauConstruction p_build_mat = pSurf->getMateriau();
-    const TYSpectre& ty_spectre = p_build_mat->getSpectreAbso();
-    material_ptr_t p_mat = model.make_material(
-                               to_std(p_build_mat->getName()),
-                               ty_spectre);
-
-    // Set the UUID of the site element and the material of the surface
-    unsigned tri_idx = 0;
-    BOOST_FOREACH(const OTriangle & tri, triangles)
-    {
-        AcousticTriangle& ac_tri =  model.triangle(tri_idx);
-        ac_tri.uuid = element_uid.getUuid();
-        ac_tri.made_of = p_mat;
-        ++tri_idx;
-    }
-}
-
 void SolverDataModelBuilder::setAcousticBuildMaterial(LPTYMateriauConstruction material_ptr)
 {
     // TODO is a kind of registry needed for Materials ? Cf. ticket #1469657
