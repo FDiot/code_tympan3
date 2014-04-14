@@ -17,7 +17,9 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSurfaceNodeWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -25,7 +27,7 @@
 
 
 OPROTOINST(TYAcousticSurfaceNode);
-
+TY_EXTENSION_INST(TYAcousticSurfaceNode);
 
 TYAcousticSurfaceNode::TYAcousticSurfaceNode()
 {
@@ -175,14 +177,14 @@ void TYAcousticSurfaceNode::setIsAcousticModified(bool isModified)
     if (_pParent) { _pParent->setIsAcousticModified(isModified); }
 }
 
-void TYAcousticSurfaceNode::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYAcousticSurfaceNode::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYElement::getChilds(childs, recursif);
 
     for (int i = 0; i < getNbChild(); i++)
     {
-        childs.add(_tabAcousticSurf[i]);
-        childs.add(_tabAcousticSurf[i]->getElement());
+        childs.push_back(_tabAcousticSurf[i]);
+        childs.push_back(_tabAcousticSurf[i]->getElement());
     }
 
     if (recursif)
@@ -345,7 +347,7 @@ int TYAcousticSurfaceNode::addRegime()
 void TYAcousticSurfaceNode::correctNbRegimes()
 {
     size_t nbRegimes = _tabRegimes.size();
-    TYElementCollection childs;
+    LPTYElementArray childs;
     getChilds(childs, false);
 
     LPTYGeometryNode pNode = NULL;

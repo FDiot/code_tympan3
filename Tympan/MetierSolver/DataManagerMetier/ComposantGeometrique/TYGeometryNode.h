@@ -118,7 +118,7 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     /**
      * Get of the element.
@@ -207,22 +207,22 @@ public:
     /**
      * Determine la matrice de passage du repere local vers le repere absolu.
      */
-    OMatrix localToGlobal();
+    OMatrix localToGlobal() const;
 
     /**
      * Determine la matrice de passage du repere absolu vers le repere local.
      */
-    OMatrix globalToLocal();
+    OMatrix globalToLocal() const;
 
     /**
      * Transforme un point du repere local vers le repere absolu.
      */
-    OCoord3D localToGlobal(const OCoord3D& point);
+    OCoord3D localToGlobal(const OCoord3D& point) const;
 
     /**
      * Transforme un point du repere absolu vers le repere local
      */
-    OCoord3D globalToLocal(const OCoord3D& point);
+    OCoord3D globalToLocal(const OCoord3D& point) const;
 
     /**
      * Transforme un point du repere local vers le repere absolu.
@@ -259,7 +259,7 @@ public:
 #endif // TY_USE_IHM
 
     static TYGeometryNode*  GetGeoNode(TYElement* pElement);
-    TYGeometryNode*         GetGeoNodeParent();
+    TYGeometryNode*         GetGeoNodeParent() const;
     void                    GetGeoNodeParentList(TYListPtrGeoNode& GetGeoNodeParents);
     // Membres
 protected:

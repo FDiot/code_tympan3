@@ -23,10 +23,6 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYDirectiviteWidget.h"
-#endif
-
 
 ///Permet d'associer une valeur a un couple d'angle.
 typedef struct TYDirectiviteAnglesValue
@@ -73,7 +69,7 @@ typedef std::vector<TYDirectiviteAnglesValue> TYDirectiviteAnglesValueTab;
 class TYDirectivite: public TYElement
 {
     OPROTOSUPERDECL(TYDirectivite, TYElement)
-    TY_EXTENSION_DECL(TYDirectivite)
+    TY_EXTENSION_DECL_ONLY(TYDirectivite)
 
     // Methodes
 public:

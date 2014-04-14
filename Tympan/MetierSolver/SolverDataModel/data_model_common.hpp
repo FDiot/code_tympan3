@@ -14,10 +14,21 @@
 
 #include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
 #include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
+#include "Tympan/MetierSolver/ToolsMetier/OSpectreComplex.h"
+
+
+// This section import some types from ToolsMetier
+// under a more generic name into the tympan namespace. Indeed,
+// there must be no dependency to TY-classes and no direct
+// ones to O-classes from within the solver data model.
 namespace tympan
 {
 typedef OPoint3D   Point;
 typedef OVector3D  Vector;
+typedef OSpectreComplex Spectrum;
+
+typedef std::deque<Point> nodes_pool_t;
+typedef size_t node_idx;
 } //namespace tympan
 
 
@@ -36,6 +47,8 @@ protected:
     BaseEntity() {};
 
 public:
+    virtual ~BaseEntity() {};
+
     //    virtual tympan::shared_ptr<BaseEntity> ptr_any() = 0;
     //    virtual tympan::shared_ptr<BaseEntity const> ptr_any() const = 0;
     //

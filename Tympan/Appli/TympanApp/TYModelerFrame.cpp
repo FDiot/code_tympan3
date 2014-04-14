@@ -62,6 +62,9 @@
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLightElement.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLGridElement.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLCamera.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceLineicGraphic.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceSurfacicGraphic.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYRayGraphic.h"
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYPrintDialog.h"
 #include "TYSetCameraCoordinates.h"

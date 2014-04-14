@@ -17,8 +17,10 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticCylinderWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticCylinderGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -29,7 +31,8 @@
 
 
 OPROTOINST(TYAcousticCylinder);
-
+TY_EXTENSION_INST(TYAcousticCylinder);
+TY_EXT_GRAPHIC_INST(TYAcousticCylinder);
 
 TYAcousticCylinder::TYAcousticCylinder()
 {
@@ -225,13 +228,13 @@ int TYAcousticCylinder::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYAcousticCylinder::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYAcousticCylinder::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYAcousticVolume::getChilds(childs, recursif);
 
-    childs.add(_pCircTop);
-    childs.add(_pCircBottom);
-    childs.add(_pEnveloppe);
+    childs.push_back(_pCircTop);
+    childs.push_back(_pCircBottom);
+    childs.push_back(_pEnveloppe);
 
     if (recursif)
     {

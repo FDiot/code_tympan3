@@ -17,7 +17,9 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYMateriauConstructionWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -30,7 +32,7 @@ TYSpectre* TYMateriauConstruction::_defSpectreTrans = NULL;
 TYSpectre* TYMateriauConstruction::_defSpectreAbso = NULL;
 
 OPROTOINST(TYMateriauConstruction);
-
+TY_EXTENSION_INST(TYMateriauConstruction);
 
 TYSpectre* TYMateriauConstruction::getDefSpectreTrans()
 {

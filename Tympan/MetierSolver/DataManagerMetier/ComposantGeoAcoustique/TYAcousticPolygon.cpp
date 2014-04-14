@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticPolygonWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticPolygonGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -27,9 +30,9 @@
 #include "Tympan/MetierSolver/ToolsMetier/OBox.h"
 #include "Tympan/Tools/TYProgressManager.h"
 
-
 OPROTOINST(TYAcousticPolygon);
-
+TY_EXTENSION_INST(TYAcousticPolygon);
+TY_EXT_GRAPHIC_INST(TYAcousticPolygon);
 
 TYAcousticPolygon::TYAcousticPolygon()
 {
@@ -250,7 +253,6 @@ TYTabPoint3D TYAcousticPolygon::getOContour(int n /*=-1*/) const
 {
     return _pPolygon->getOContour(n);
 }
-
 
 int TYAcousticPolygon::intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const
 {

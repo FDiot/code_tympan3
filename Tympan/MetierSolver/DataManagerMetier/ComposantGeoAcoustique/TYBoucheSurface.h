@@ -24,10 +24,6 @@
 #include "TYAcousticRectangle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourceBafflee.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYBoucheSurfaceWidget.h"
-#endif
-
 
 /**
  * Classe pour la representation d'une bouche de ventilation.
@@ -39,7 +35,7 @@
 class TYBoucheSurface: public TYAcousticRectangle
 {
     OPROTOSUPERDECL(TYBoucheSurface, TYAcousticRectangle)
-    TY_EXTENSION_DECL(TYBoucheSurface)
+    TY_EXTENSION_DECL_ONLY(TYBoucheSurface)
 
     // Methodes
 public:

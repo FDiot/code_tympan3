@@ -27,18 +27,13 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYMateriauConstruction.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYParoiWidget.h"
-#endif
-
-
 /**
  * Comprend les proprietes acoustiques et geometriques d'une paroi.
  */
 class TYParoi: public TYElement
 {
     OPROTOSUPERDECL(TYParoi, TYElement)
-    TY_EXTENSION_DECL(TYParoi)
+    TY_EXTENSION_DECL_ONLY(TYParoi)
 
     // Methodes
 public:

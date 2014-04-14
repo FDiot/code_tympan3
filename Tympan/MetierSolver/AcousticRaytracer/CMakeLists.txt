@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 set(MODULE_NAME tympan_acoustic_raytracer)
 
-file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h )
+file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h *.hpp)
 list(REMOVE_ITEM ${MODULE_NAME}_SRCS "Acoustic/NMPBSolver.h" "Acoustic/NMPBSolver.cpp" "main.cpp")
 
 #set_precompiled_header(${MODULE_NAME} CXX

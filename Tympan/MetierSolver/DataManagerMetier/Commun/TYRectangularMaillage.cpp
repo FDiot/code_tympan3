@@ -17,8 +17,10 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYRectangularMaillageWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangularMaillageGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -31,7 +33,8 @@
 
 
 OPROTOINST(TYRectangularMaillage);
-
+TY_EXTENSION_INST(TYRectangularMaillage);
+TY_EXT_GRAPHIC_INST(TYRectangularMaillage);
 
 TYRectangularMaillage::TYRectangularMaillage()
 {
@@ -248,7 +251,7 @@ bool TYRectangularMaillage::fromXML(const std::string& sFilePath)
     }
 
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
     if (xmlManager.load(fileName, elements))
     {
         if (elements.size() == 1)
@@ -283,7 +286,7 @@ bool TYRectangularMaillage::fromXMLString(const std::string& sXMLString)
     bool bRet = false;
 
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
     if (xmlManager.loadFromString(QString(sXMLString.c_str()), elements))
     {
         if (elements.size() == 1)

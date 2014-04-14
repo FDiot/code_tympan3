@@ -24,7 +24,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 
 #include <iostream>
-#include "Tympan\MetierSolver\AcousticRaytracer\global.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/global.h"
 
 //#ifdef USE_QT
 //  #include "SourceGraphic.h"
@@ -134,4 +134,3 @@ protected:
     TargetManager* targetManager;
 };
 #endif
-

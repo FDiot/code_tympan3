@@ -21,10 +21,10 @@
 #include <fstream>
 #include <string>
 #include <array>
-#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Latitude2DSampler.h"
-#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Longitude2DSampler.h"
-#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\UniformSphericSampler.h"
-#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\UniformSphericSampler2.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Latitude2DSampler.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Longitude2DSampler.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
 
 
 Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(20)

@@ -27,20 +27,19 @@ class OSegment3D;
 #include "TYAcousticSurface.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticRectangleWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticRectangleGraphic.h"
-#endif
-
 
 /**
  * Permet de creer des surfaces acoustiques rectangulaires.
+ *
+ * NB The _pBoundingRect attribute, inherited from TYAcousticSurface
+ * is used as the underlying rectangle to which surface related
+ * methods are delegated.
  */
 class TYAcousticRectangle: public TYAcousticSurface
 {
     OPROTOSUPERDECL(TYAcousticRectangle, TYAcousticSurface)
-    TY_EXTENSION_DECL(TYAcousticRectangle)
-    TY_EXT_GRAPHIC_DECL(TYAcousticRectangle)
+    TY_EXTENSION_DECL_ONLY(TYAcousticRectangle)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticRectangle)
 
     // Methodes
 public:
@@ -92,6 +91,22 @@ public:
     virtual void inverseNormale() { getBoundingRect()->inverseNormale(); }
 
 
+    /**
+     * @brief Export the surface as a triangular mesh
+     *
+     * NB : This is only a delegate to the underlying TYRectangle method.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     */
+    virtual void
+    exportMesh(
+        std::deque<OPoint3D>& points,
+        std::deque<OTriangle>& triangles,
+        const TYGeometryNode& geonode) const
+    { _pBoundingRect->exportMesh(points, triangles, geonode); }
+
+
     // Membres
 protected:
 
@@ -107,5 +122,3 @@ typedef std::vector<LPTYAcousticRectangleGeoNode> TYTabAcousticRectangleGeoNode;
 
 
 #endif // __TY_ACOUSTICRECTANGLE__
-
-

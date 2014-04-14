@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYBatimentWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYBatimentGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -28,7 +31,8 @@
 
 
 OPROTOINST(TYBatiment);
-
+TY_EXTENSION_INST(TYBatiment);
+TY_EXT_GRAPHIC_INST(TYBatiment);
 
 TYBatiment::TYBatiment()
 {
@@ -224,7 +228,7 @@ bool TYBatiment::updateAcoustic(const bool& force) // force = false
 
 LPTYSpectre TYBatiment::getRealPowerSpectrum()
 {
-    TYElementCollection childs;
+    LPTYElementArray childs;
     getChilds(childs, true);
     TYSpectre* sp = new TYSpectre(-200.0);
     sp->setType(SPECTRE_TYPE_LW);

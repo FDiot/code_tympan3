@@ -241,7 +241,7 @@ int TYGeometryNode::fromXML(DOM_Element domElement)
             // problem here with count
             // nodeTmp = nodeTmp.nextSibling();
 
-            // Au cas oi¿½ nbChild soit faux (trop grand)
+            // Au cas oi nbChild soit faux (trop grand)
             if (nodeTmp.isNull())
             {
                 break;
@@ -282,7 +282,7 @@ int TYGeometryNode::fromXML(DOM_Element domElement)
     return res;
 }
 
-void TYGeometryNode::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYGeometryNode::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYElement::getChilds(childs, recursif);
 
@@ -374,6 +374,10 @@ bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     return true;
 }
 
+// XXX There seems to be excessive complexity around updateMatrix and updateRepere :
+// setMAtrix->setPrivateMatrix->updateRepere->_repere.set(_matrix)
+    // FIXME Why this double copy of matrices while it looks like
+    // _repere.getMatChangeRep(_matrix) would be simpler and more efficient ?
 TYGeometryNode* TYGeometryNode::GetGeoNode(TYElement* pElement)
 {
     if (GetGeoNodeMap()->find(pElement) != GetGeoNodeMap()->end())
@@ -383,7 +387,7 @@ TYGeometryNode* TYGeometryNode::GetGeoNode(TYElement* pElement)
     return NULL;
 }
 
-TYGeometryNode* TYGeometryNode::GetGeoNodeParent()
+TYGeometryNode* TYGeometryNode::GetGeoNodeParent() const
 {
     //1. Element pointe par le GeoNode:
     TYElement* pElement = getElement();
@@ -419,7 +423,7 @@ void TYGeometryNode::GetGeoNodeParentList(TYListPtrGeoNode& GetGeoNodeParents)
     }
 }
 
-OMatrix TYGeometryNode::localToGlobal()
+OMatrix TYGeometryNode::localToGlobal() const
 {
     TYGeometryNode* pParent = GetGeoNodeParent();
     OMatrix matrix = _repere.asMatrix();
@@ -433,17 +437,17 @@ OMatrix TYGeometryNode::localToGlobal()
     return matrix;
 }
 
-OMatrix TYGeometryNode::globalToLocal()
+OMatrix TYGeometryNode::globalToLocal() const
 {
     return localToGlobal().getInvert();
 }
 
-OCoord3D TYGeometryNode::localToGlobal(const OCoord3D& point)
+OCoord3D TYGeometryNode::localToGlobal(const OCoord3D& point) const
 {
     return localToGlobal() * point;
 }
 
-OCoord3D TYGeometryNode::globalToLocal(const OCoord3D& point)
+OCoord3D TYGeometryNode::globalToLocal(const OCoord3D& point) const
 {
     return globalToLocal() * point;
 }
@@ -485,4 +489,3 @@ void TYGeometryNode::setMatrix(const OMatrix& matrix)
     _repere.set(matrix);
     setIsGeometryModified(true);
 }
-

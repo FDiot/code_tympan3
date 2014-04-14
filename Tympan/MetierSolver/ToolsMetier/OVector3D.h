@@ -127,11 +127,20 @@ public:
 
     /**
      * \fn OVector3D operator*(const OVector3D& vector) const;
-     * \brief Multiplication.
+     *
+     * \brief
+     * XXX meaningless componentwise multiplication whereas a dot
+     * product would have been expected.
      *
      * \param vector The object reference with which this object is multiplicated.
      */
     OVector3D operator*(const OVector3D& vector) const;
+
+    /**
+     * \brief dot product (assuming an orthonormal reference frame)
+     */
+    double dot(const OVector3D& v)
+    { return _x * v._x + _y * v._y + _z * v._z; }
 
     /**
      * \fn OVector3D operator*(const double a) const;

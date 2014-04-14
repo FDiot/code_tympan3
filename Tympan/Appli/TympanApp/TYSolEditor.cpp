@@ -80,24 +80,49 @@ void TYSolEditor::endSol()
 
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
 
-        for (unsigned int i = 0; i < tabPts.size(); i++)
-        {
-            tabPts[i]._z = 0.0;
-            pSite->getTopographie()->getAltimetrie()->updateAltitude(tabPts[i]);
-        }
-
-        pTerrain->setListPoints(tabPts);
-
+        // XXX See ticket https://extranet.logilab.fr/ticket/1484180
+        // This hardly readable cascade of if is better than no reporting
+        // but should instead be handled with exceptions.
         if (pSite->getTopographie()->addTerrain(pTerrain))
         {
-            TYAction* pAction = new TYAddElementToTopoAction((LPTYElement&) pTerrain, pSite->getTopographie(), _pModeler, TR("id_action_addsol"));
+            if (pSite->updateAltimetrie(true))
+            {
+                bool alti_update_ok = true;
+
+                for (unsigned int i = 0; i < tabPts.size(); i++)
+                {
+                    tabPts[i]._z = 0.0;
+                    alti_update_ok &= pSite->getTopographie()->getAltimetrie()->updateAltitude(tabPts[i]);
+                }
+                if (!alti_update_ok)
+                {
+                    OMessageManager::get()->error(
+                        "The ground material area is invalid : "
+                        "probably out of the area of well defined altimetry: "
+                        "it is going to be removed");
+                    pSite->getTopographie()->remTerrain(pTerrain);
+                    return;
+                } // if (!alti_update_ok)
+            }
+            else
+            {
+                OMessageManager::get()->error(
+                    "The altimetry update failed: "
+                    "the new material area will be left with invalid altitude!");
+            } // if (pSite->updateAltimetrie(true))
+
+            TYAction* pAction = new TYAddElementToTopoAction(
+                (LPTYElement&) pTerrain, pSite->getTopographie(), _pModeler,
+                TR("id_action_addsol"));
             _pModeler->getActionManager()->addAction(pAction);
+
+            pTerrain->setListPoints(tabPts);
 
             pSite->getTopographie()->updateGraphicTree();
             updateSiteFrame();
             _pModeler->getView()->getRenderer()->updateDisplayList();
             _pModeler->updateView();
-        }
+        } // (pSite->getTopographie()->addTerrain(pTerrain))
 
         // repasse en mode camera selection
         getTYMainWnd()->setDefaultCameraMode();

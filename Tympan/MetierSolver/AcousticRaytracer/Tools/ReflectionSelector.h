@@ -18,6 +18,7 @@
 
 #include "Selector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/SpecularReflexion.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Shape.h"
 
 template<typename T>
 class ReflectionSelector : public Selector<T>

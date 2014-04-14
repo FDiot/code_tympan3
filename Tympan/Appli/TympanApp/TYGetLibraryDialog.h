@@ -56,7 +56,7 @@ public:
     /**
      * Accesseur a la collection d'elements
      */
-    TYElementCollection getElements();
+    LPTYElementArray getElements();
 
 protected slots:
     /// Lit la selection
@@ -67,7 +67,7 @@ protected slots:
 
 protected:
     /// La collection d'element
-    TYElementCollection _elements;
+    LPTYElementArray _elements;
 
     /// Le bouton open
     QPushButton* _pOpenBtn;

@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYEtageWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYEtageGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -32,7 +35,8 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 OPROTOINST(TYEtage);
-
+TY_EXTENSION_INST(TYEtage);
+TY_EXT_GRAPHIC_INST(TYEtage);
 
 TYEtage::TYEtage(): _closed(false), _surfAbsorbante(0.0), _typeReverb(0), _volumeLibre(0.0)
 {
@@ -716,7 +720,7 @@ void TYEtage::exportCSV(std::ofstream& ofs)
     ofs << '\n';
 }
 
-void TYEtage::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYEtage::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYAcousticVolume::getChilds(childs, recursif);
 
@@ -724,11 +728,11 @@ void TYEtage::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
 
     for (i = 0; i < _tabMur.size(); i++)
     {
-        childs.add(_tabMur[i]->getElement());
+        childs.push_back(_tabMur[i]->getElement());
     }
 
-    childs.add(_pSol);
-    childs.add(_pPlafond);
+    childs.push_back(_pSol);
+    childs.push_back(_pPlafond);
 
     if (recursif)
     {

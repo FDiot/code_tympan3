@@ -27,10 +27,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticVolumeWidget.h"
-#endif
-
 
 /**
  * Permet de creer de elements acoustiques volumiques.
@@ -38,7 +34,7 @@
 class TYAcousticVolume: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYVolumeInterface
 {
     OPROTOSUPERDECL(TYAcousticVolume, TYElement)
-    TY_EXTENSION_DECL(TYAcousticVolume)
+    TY_EXTENSION_DECL_ONLY(TYAcousticVolume)
 
     // Methodes
 public:

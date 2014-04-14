@@ -25,10 +25,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSpectre.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPointCalculWidget.h"
-#endif
-
 /**
  * \file TYPointCalcul.h
  * \class TYPointCalcul
@@ -37,7 +33,7 @@
 class TYPointCalcul: public TYPoint
 {
     OPROTOSUPERDECL(TYPointCalcul, TYPoint)
-    TY_EXTENSION_DECL(TYPointCalcul)
+    TY_EXTENSION_DECL_ONLY(TYPointCalcul)
 
     // Methodes
 public:

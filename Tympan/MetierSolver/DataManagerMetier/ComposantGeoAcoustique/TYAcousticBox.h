@@ -24,20 +24,14 @@
 #include "TYAcousticRectangleNode.h"
 #include "TYAcousticVolume.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticBoxWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticBoxGraphic.h"
-#endif
-
-
 /**
  * Permet des creer des boites acoustiques.
  */
 class TYAcousticBox: public TYAcousticVolume
 {
     OPROTOSUPERDECL(TYAcousticBox, TYAcousticVolume)
-    TY_EXTENSION_DECL(TYAcousticBox)
-    TY_EXT_GRAPHIC_DECL(TYAcousticBox)
+    TY_EXTENSION_DECL_ONLY(TYAcousticBox)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticBox)
 
     // Methodes
 public:
@@ -87,7 +81,7 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     virtual void setDensiteSrcsH(double densite, bool recursif = true);
     virtual void setDensiteSrcsV(double densite, bool recursif = true);

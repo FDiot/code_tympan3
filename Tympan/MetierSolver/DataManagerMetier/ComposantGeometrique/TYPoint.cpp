@@ -17,7 +17,9 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYPointWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -29,6 +31,7 @@
 static const double DIST_MAX_PTS = 100.0;
 
 OPROTOINST(TYPoint);
+TY_EXTENSION_INST(TYPoint);
 
 long    compteurPoint = 0;
 

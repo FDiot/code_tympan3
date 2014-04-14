@@ -368,11 +368,11 @@ void TYElementGraphic::display(GLenum mode /*= GL_RENDER*/)
 
 void TYElementGraphic::setRecursiveVisible(bool visible /*=true*/)
 {
-    TYElementCollection childs;
+    LPTYElementArray childs;
 
     _pElement->getChilds(childs);
 
-    for (int i = 0; i < childs.getCount(); i++)
+    for (int i = 0; i < childs.size(); i++)
     {
         childs[i]->getGraphicObject()->setVisible(visible);
     }

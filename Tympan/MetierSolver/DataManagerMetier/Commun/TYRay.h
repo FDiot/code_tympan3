@@ -20,10 +20,6 @@
 
 #include <vector>
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYRayGraphic.h"
-#endif
-
 enum TY_RAY_EVENT
 {
     TY_NO_TYPE = 0,
@@ -83,7 +79,7 @@ class TYSourcePonctuelle;
 class TYRay: public TYElement
 {
     OPROTOSUPERDECL(TYRay, TYElement)
-    TY_EXT_GRAPHIC_DECL(TYRay)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYRay)
 
 public:
 

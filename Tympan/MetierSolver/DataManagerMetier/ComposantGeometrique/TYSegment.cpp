@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYSegmentWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYSegmentGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -30,7 +33,8 @@
 
 
 OPROTOINST(TYSegment);
-
+TY_EXTENSION_INST(TYSegment);
+TY_EXT_GRAPHIC_INST(TYSegment);
 
 TYSegment::TYSegment()
 {

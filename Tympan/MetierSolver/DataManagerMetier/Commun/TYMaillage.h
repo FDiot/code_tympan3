@@ -29,10 +29,6 @@
 #include "TYPalette.h"
 #include "TYPanel.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYMaillageWidget.h"
-#endif
-
 #include "Tympan/MetierSolver/ToolsMetier/OHPlane3D.h"
 
 ///Densite (nb de points par metre) par defaut pour la construction des maillages.
@@ -61,7 +57,7 @@ struct MTriangle
 class TYMaillage: public TYElement
 {
     OPROTOSUPERDECL(TYMaillage, TYElement)
-    TY_EXTENSION_DECL(TYMaillage)
+    TY_EXTENSION_DECL_ONLY(TYMaillage)
 
     // Methodes
 public:
