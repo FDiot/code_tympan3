@@ -29,7 +29,6 @@
 #include "TYColorInterface.h"
 #include "TYDefines.h"
 #include "TYElement.h"
-#include "TYElementCollection.h"
 #include "TYPreferenceManager.h"
 #include "TYXMLManager.h"
 #include "TYXMLTools.h"

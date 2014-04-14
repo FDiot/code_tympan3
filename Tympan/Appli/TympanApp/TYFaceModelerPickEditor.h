@@ -27,6 +27,7 @@
 #ifndef __TY_FACE_MODELER_PICK_EDITOR__
 #define __TY_FACE_MODELER_PICK_EDITOR__
 
+#include<memory>
 
 #include "TYPickEditor.h"
 
@@ -44,7 +45,7 @@ public:
 
 
 protected slots:
-    virtual void showPopupMenu(LPTYElementCollection pElts);
+    virtual void showPopupMenu(std::shared_ptr<LPTYElementArray> pElts);
     void showDimensionsDialog(TYRectangle* pRect, TYAcousticRectangleNode* pParent = NULL);
 
 

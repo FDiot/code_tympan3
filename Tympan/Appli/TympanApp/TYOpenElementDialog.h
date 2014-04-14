@@ -33,7 +33,7 @@
 #include <qdialog.h>
 #include <qlist.h>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 
 class QListWidget;
 class QPushButton;
