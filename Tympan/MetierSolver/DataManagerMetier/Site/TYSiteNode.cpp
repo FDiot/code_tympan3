@@ -975,10 +975,8 @@ double TYSiteNode::getDelaunay()
 // TODO remove cleanly related stuff
 vector<bool> EstUnIndexDeFaceEcran;
 
-void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const
+void TYSiteNode::getListFacesWithoutFloor(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const
 {
-    assert(useEcran && "The useEcran option is obsolete and should always be true before being removed.");
-
     std::ofstream file;
     file.open("logsChargement.txt", ios::out | ios::trunc);
     file << "Chargement de la liste des faces." << endl;
@@ -992,9 +990,6 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
 
     tabFaces.clear();
 
-    // Si le calcul prend en compte les ecrans
-    if (useEcran)
-    {
         // Batiments
         for (i = 0; i < _pInfrastructure->getListBatiment().size(); i++)
         {
@@ -1137,7 +1132,6 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
             }
             compteurInfra++;
         }
-    }
 
     nbFaceInfra = static_cast<uint32>(tabFaces.size()); // Determination du nombre de faces de l'infrastructure;
 
@@ -1173,9 +1167,8 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
 
 }
 
-void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const
+void TYSiteNode::getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const
 {
-    assert(useEcran && "The useEcran option is obsolete and should always be true before being removed.");
     EstUnIndexDeFaceEcran.clear();
 
     unsigned int j, i;
@@ -1183,9 +1176,6 @@ void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& 
 
     tabFaces.clear();
 
-    // Si le calcul prend en compte les ecrans
-    if (useEcran)
-    {
         // Batiments
         for (i = 0; i < _pInfrastructure->getListBatiment().size(); i++)
         {
@@ -1261,7 +1251,6 @@ void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& 
                 }
             }
         }
-    }
 
     nbFaceInfra = static_cast<uint32>(tabFaces.size()); // Determination du nombre de faces de l'infrastructure;
 

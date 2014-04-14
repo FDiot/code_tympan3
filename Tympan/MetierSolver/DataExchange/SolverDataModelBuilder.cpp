@@ -101,8 +101,7 @@ void SolverDataModelBuilder::processInfrastructure(LPTYSiteNode site_ptr)
     unsigned int nb_building_faces = 0;
     TYTabAcousticSurfaceGeoNode face_list;
     std::vector<bool> estUnIndexDeFaceEcran; // The notion of `faceEcran` is obsolete now
-    site_ptr->getListFaces(true, face_list, nb_building_faces,
-                           estUnIndexDeFaceEcran);
+    site_ptr->getListFaces(face_list, nb_building_faces, estUnIndexDeFaceEcran);
 
     // Faces d'infrastructure
     TYAcousticSurface* pSurf = NULL;

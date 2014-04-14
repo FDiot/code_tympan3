@@ -218,7 +218,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
      *   face belongs to a screen in the site
      */
     assert(calcul.getUseEcran() && "The useEcran option is obsolete and should always be true before being removed.");
-    site.getListFaces(true, tabFaces, nbFacesInfra, estUnIndexDeFaceEcran);
+    site.getListFaces(tabFaces, nbFacesInfra, estUnIndexDeFaceEcran);
 
     // Reservation de l'espace pour les tableaux
     _tabPolygonSize = static_cast<uint32>(tabFaces.size());
