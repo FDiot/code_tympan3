@@ -428,8 +428,8 @@ void TYANIME3DAcousticPathFinder::appendRecepteurToSimulation(vector<vec3>& rece
     //Conversion du recepteur Tympan en recepteur lancer de rayons
     for (unsigned int i = 0; i < recepteurs.size(); i++)
     {
-        Recepteur recep;
-        recep.setShape(new Sphere(recepteurs[i], globalSizeReceiver));
+        Recepteur recep(recepteurs[i], globalSizeReceiver);
+        //recep.setShape(new Sphere(recepteurs[i], globalSizeReceiver));
         recep.setId(idRecepteur);
 
         _rayTracing.addRecepteur(recep);
