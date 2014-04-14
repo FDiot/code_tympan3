@@ -59,13 +59,6 @@ public:
     SolverDataModelBuilder(AcousticProblemModel& model_);
     virtual ~SolverDataModelBuilder();
 
-    /**
-     *
-     *
-     */
-    void setAcousticTriangle(const TYAcousticSurfaceGeoNode& acoust_surf_geo);
-
-
     //! Update material, spectrum and frequencies information.
     void setAcousticBuildMaterial(LPTYMateriauConstruction material_ptr);
 
@@ -97,21 +90,6 @@ protected:
     const std::string
     to_std(const QString& qstr)
     { return std::string(qstr.toUtf8().constData()); } // NB : This does incur copy
-
-public:
-    /**
-     * @brief Creates the data model entities for a triangle soup.
-     * @param points The points of the mesh.
-     * @param triangles The triangles of the mesh.
-     * @return void
-     *
-     * Creates nodes and AcousticTriangles in the \c model to
-     * represent the mesh given as arguments.
-     */
-    void
-    processMesh(
-        const std::deque<OPoint3D>& points,
-        const std::deque<OTriangle>& triangles);
 
 protected:
     AcousticProblemModel& model;
