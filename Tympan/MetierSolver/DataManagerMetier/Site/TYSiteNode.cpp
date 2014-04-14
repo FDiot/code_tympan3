@@ -1205,8 +1205,6 @@ void TYSiteNode::getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned in
             // L'ensemble des faces de ce batiment
             tabTmp = pBatiment->acousticFaces();
 
-            bool bEcran = false; // element de type TYEcran
-
             // Pour chacune de ces faces
             for (j = 0; j < tabTmp.size(); j++)
             {
@@ -1215,7 +1213,7 @@ void TYSiteNode::getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned in
 
                 // Ajout de la face
                 tabFaces.push_back(tabTmp[j]);
-                EstUnIndexDeFaceEcran.push_back(bEtageEcran || bEcran);
+                EstUnIndexDeFaceEcran.push_back(bEtageEcran);
             }
             if (bEtageEcran)
             {
