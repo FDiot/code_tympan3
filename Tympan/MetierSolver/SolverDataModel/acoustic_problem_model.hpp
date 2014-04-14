@@ -45,9 +45,6 @@ public:
     AcousticTriangle& triangle(triangle_idx tri_idx)
     { return all_triangles[tri_idx]; }
 
-    AcousticTriangle *ptriangle(triangle_idx tri_idx)
-    { return &all_triangles[tri_idx]; }
-
     const AcousticTriangle& triangle(triangle_idx tri_idx) const
     { return all_triangles[tri_idx]; }
 
