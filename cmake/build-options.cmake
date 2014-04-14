@@ -43,3 +43,12 @@ set (TYMPAN_USE_IHM TRUE CACHE BOOL "Shall the GUI support be included (broken w
 if (TYMPAN_USE_IHM)
   add_definitions(-DTY_USE_IHM)
 endif(TYMPAN_USE_IHM)
+
+# The Tympan 'components' are built according to the TYMPAN_COMPONENT_TYPE
+# custom variable or to the standard CMake default BUILD_SHARED_LIBS if
+# TYMPAN_COMPONENT_TYPE is empty. The plugins are always built as MODULEs 
+set(TYMPAN_COMPONENT_TYPE ""
+    CACHE STRING "How to build Tympan components : SHARED or STATIC."
+                 " (empty means to rely on BUILD_SHARED_LIBS).")
+mark_as_advanced(TYMPAN_COMPONENT_TYPE)
+# NB Because this value is declared here but set in platform specific configuration.
