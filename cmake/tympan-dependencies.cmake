@@ -40,19 +40,3 @@ set(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
 message(STATUS "You will have to ensure that the following directories "
   "are searched for shared libratries / DLL when launching the program : "
   "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
-
-
-## Some final display
-if(TRUE) # XXX Debug, set to false in production
-message(STATUS "  ## TYMPAN_3RDPARTY_DLL_DIRS: " "${TYMPAN_3RDPARTY_DLL_DIRS}")
-message(STATUS "  ## TYMPAN_3RDPARTY_DLL_NATIVE_DIRS: " "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}")
-message(STATUS "  ## Boost_INCLUDE_DIRS: " "${Boost_INCLUDE_DIRS}")
-message(STATUS "  ## Boost_LIBRARIES   : " "${Boost_LIBRARIES}")
-message(STATUS "  ## CGAL_INCLUDE_DIRS : " "${CGAL_INCLUDE_DIRS}" )
-message(STATUS "  ## CGAL_3RD_PARTY_INCLUDE_DIRS : " "${CGAL_3RD_PARTY_INCLUDE_DIRS}" )
-message(STATUS "  ## CGAL_LIBRARIES_DIR: " "${CGAL_LIBRARIES_DIR}" )
-message(STATUS "  ## GMP_MPFR_DIR : " "${GMP_MPFR_DIR}" )
-message(STATUS "  ## CGAL_LIBRARIES    : " ${CGAL_LIBRARIES})
-message(STATUS "  ## QT_LIBRARIES      : " ${QT_LIBRARIES})
-message(STATUS "  ## OPENGL_LIBRARIES  : " ${OPENGL_LIBRARIES})
-endif()

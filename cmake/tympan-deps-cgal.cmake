@@ -7,10 +7,10 @@ option( CGAL_DONT_OVERRIDE_CMAKE_FLAGS
 
 find_package(CGAL COMPONENTS Qt4 REQUIRED)
 if(CGAL_USE_FILE)
-  message(STATUS "INFO including CGAL_USE_FILE at " "${CGAL_USE_FILE}")
+  message(STATUS "TYMPAN_DEBUG: including CGAL_USE_FILE at " "${CGAL_USE_FILE}")
   include(${CGAL_USE_FILE})
 else(CGAL_USE_FILE)
-  message(WARNING "INFO CGAL_USE_FILE is not set hence the configuration for CGAL might be incomplete")
+  message(WARNING "CGAL_USE_FILE is not set hence the configuration for CGAL might be incomplete")
 endif(CGAL_USE_FILE)
 
 if(WIN32)
@@ -35,3 +35,10 @@ if(UNIX)
   list(APPEND TYMPAN_3RDPARTY_DLL_DIRS  ${CGAL_LIBRARIES_DIR})
 endif(UNIX)
 
+if(TYMPAN_DEBUG_CMAKE)
+message(STATUS "TYMPAN_DEBUG: CGAL_INCLUDE_DIRS : " "${CGAL_INCLUDE_DIRS}" )
+message(STATUS "TYMPAN_DEBUG: CGAL_3RD_PARTY_INCLUDE_DIRS : " "${CGAL_3RD_PARTY_INCLUDE_DIRS}" )
+message(STATUS "TYMPAN_DEBUG: CGAL_LIBRARIES_DIR: " "${CGAL_LIBRARIES_DIR}" )
+message(STATUS "TYMPAN_DEBUG: GMP_MPFR_DIR      : " "${GMP_MPFR_DIR}" )
+message(STATUS "TYMPAN_DEBUG: CGAL_LIBRARIES    : " ${CGAL_LIBRARIES})
+endif()

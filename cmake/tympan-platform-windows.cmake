@@ -1,4 +1,4 @@
-# Setting specific to the Visula Studio / Windows platform
+# Setting specific to the Visual Studio / Windows platform
 
 # Assumes ${MSVC} is set
 
