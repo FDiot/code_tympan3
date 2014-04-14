@@ -30,8 +30,7 @@ bool ValidRay::validRayWithDoNothingEvent(Ray *r, Intersection* inter)
     vec3 newDir;
     if (newEvent->getResponse(newDir))
     {
-		decimal extend = BARELY_EPSILON;//inter->p->getTypicalSize();
-        r->position = r->position + r->direction * (inter->t + extend);
+        r->position = impact;
         r->direction = newDir;
         r->direction.normalize();
         r->events.push_back(SPEv);
