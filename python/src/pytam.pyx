@@ -58,13 +58,12 @@ cdef class SolverModelBuilder:
         self.process_altimetry(site)
         self.process_infrastructure(site)
 
-    def problem_model(self):
-        problem = ProblemModel()
-        problem.thisptr = self.model
-        return problem
-
     @cython.locals(site=Site)
     def process_infrastructure(self, site):
+        """ Set a few 'geometric' entities such as nodes
+            Create geometric entities, fill dedicated container and relate them
+            according to the relation definitions.
+        """
         is_screen_face_idx = cython.declare(vector[bool])
         face_list = cython.declare(vector[SmartPtr[TYGeometryNode]])
         pelt = cython.declare(cython.pointer(TYElement))
@@ -102,7 +101,7 @@ cdef class SolverModelBuilder:
             actri = cython.declare(cython.pointer(AcousticTriangle))
             # Set the UUID of the site element and the material of the surface
             for i in range(triangles.size()):
-                actri = self.model.ptriangle(i)
+                actri = cython.address(self.model.triangle(i))
                 actri.uuid = (element_uid)[0].getUuid()
                 actri.made_of = pmat
             points.clear()
@@ -111,11 +110,15 @@ cdef class SolverModelBuilder:
     @cython.cfunc
     @cython.locals(points=deque[OPoint3D], triangles=deque[OTriangle])
     def process_mesh(self, points, triangles):
+        """ Create nodes and acoustic triangles in the model to represent the
+            mesh given in argument.
+        """
         map_to_model_node_idx = cython.declare(vector[size_t])
         map_to_model_node_idx = vector[size_t] (points.size())
         itp = cython.declare(deque[OPoint3D].iterator)
         itp = points.begin()
         i = 0
+        # Create all nodes related to the triangles
         while itp != points.end():
             # Add the points
             map_to_model_node_idx[i] = self.model.make_node(deref(itp))
@@ -149,9 +152,9 @@ cdef class SolverModelBuilder:
         actri = cython.declare(cython.pointer(AcousticTriangle))
         psol = cython.declare(cython.pointer(TYSol))
         pmat = cython.declare(shared_ptr[AcousticMaterialBase])
+        # Set the UUID of the topography and the material of each triangle
         for i in range(triangles.size()):
-            # XXX find a way to use triangle() instead of ptriangle()
-            actri = self.model.ptriangle(i)
+            actri = cython.address(self.model.triangle(i))
             actri.uuid = element_uid[0].getUuid()
             psol = materials[i].getRealPointer()
             pmat = self.model.make_material(psol.getName().toStdString(),

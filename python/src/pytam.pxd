@@ -37,7 +37,6 @@ cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp
         size_t num_materials()
         void export_triangles_soup(string &filename)
         AcousticTriangle &triangle(size_t tri_idx)
-        AcousticTriangle *ptriangle(size_t tri_idx)
         shared_ptr[AcousticMaterialBase] make_material(const string& name, double resistivity)
         shared_ptr[AcousticMaterialBase] make_material(const string& name, const TYSpectre& spectrum)
         size_t make_triangle(size_t n1, size_t n2, size_t n3)
