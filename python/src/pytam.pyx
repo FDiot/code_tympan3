@@ -47,13 +47,11 @@ cdef class ResultModel:
 
 
 cdef class SolverModelBuilder:
-    thisptr = cython.declare(cython.pointer(SolverDataModelBuilder))
     model = cython.declare(cython.pointer(AcousticProblemModel))
 
     @cython.locals(model=ProblemModel)
     def __cinit__(self, model):
         self.model = model.thisptr
-        self.thisptr = new SolverDataModelBuilder (self.model[0])
 
     @cython.locals(site=Site)
     def fill_problem(self, site):
