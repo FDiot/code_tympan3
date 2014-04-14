@@ -11,7 +11,7 @@ add_definitions(-Dforeach=foreach)
 
 # Find and configure for using Qt
 find_package(Qt4 4.6.0 COMPONENTS QtCore QtGui QtOpenGL QtXml QtTest REQUIRED)
-message(STATUS "INFO including QT_USE_FILE at " "${QT_USE_FILE}")
+message(STATUS "TYMPAN_DEBUG: including QT_USE_FILE at " "${QT_USE_FILE}")
 include(${QT_USE_FILE})
 if(SYS_NATIVE_WIN)
   list(APPEND TYMPAN_3RDPARTY_DLL_DIRS  ${QT_BINARY_DIR})
@@ -33,3 +33,10 @@ list(APPEND TYMPAN_3RDPARTY_DLL_DIRS  ${Boost_LIBRARY_DIRS})
 
 find_package(OpenGL REQUIRED) # XXX Shouldn't this be implied by finding QtOpenGL ?
 include_directories(${OPENGL_INCLUDE_DIR})
+
+if(TYMPAN_DEBUG_CMAKE)
+message(STATUS "TYMPAN_DEBUG: Boost_INCLUDE_DIRS: " "${Boost_INCLUDE_DIRS}")
+message(STATUS "TYMPAN_DEBUG: Boost_LIBRARIES   : " "${Boost_LIBRARIES}")
+message(STATUS "TYMPAN_DEBUG: QT_LIBRARIES      : " ${QT_LIBRARIES})
+message(STATUS "TYMPAN_DEBUG: OPENGL_LIBRARIES  : " ${OPENGL_LIBRARIES})
+endif()

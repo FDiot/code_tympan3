@@ -6,6 +6,7 @@
 
 
 option(TYMPAN_BUILD_TEST "Build Tympan tests" ON)
+option(TYMPAN_DEBUG_CMAKE "Verbose information messages from CMake" ON)
 
 # Configure where to fetch 3rd party dependencies
 # Please cf. the file "3rdparty/README"
