@@ -39,13 +39,10 @@ public:
     virtual bool getResponse(vec3& r, bool force = false)
 	{
 		nbResponseLeft--;
-		if (nbResponseLeft < 0)
-		{
-			return false;
-		}
-		
+	
 		r = from;
-		return true;
+
+		return (nbResponseLeft >= 0);
 	}
 
     virtual bool isAcceptableResponse(vec3& test)
