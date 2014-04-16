@@ -11,7 +11,14 @@ add_test(NAME test_toto
   # [WORKING_DIRECTORY dir]
   COMMAND ${PYTHON_EXECUTABLE} test_toto.py)
 
-# XXX Convert this to native paths just for the C++ runtime path
 set(PYTHONPATH 
-  "${PROJECT_BINARY_DIR}/${TYMPAN_PythonModules}:${PROJECT_BINARY_DIR}/${TYMPAN_CythonModules_${CMAKE_BUILD_TYPE}}")
-set_property(TEST test_toto PROPERTY ENVIRONMENT "PYTHONPATH=${PYTHONPATH}")
+  "${PROJECT_BINARY_DIR}/${TYMPAN_PythonModules}"
+  "${PROJECT_BINARY_DIR}/${TYMPAN_CythonModules_${CMAKE_BUILD_TYPE}}")
+
+build_native_path_list(NATIVE_PYTHONPATH "${PYTHONPATH}")
+
+set_property(TEST test_toto PROPERTY ENVIRONMENT "PYTHONPATH=${NATIVE_PYTHONPATH}")
+
+if(TYMPAN_DEBUG_CMAKE)
+message(STATUS "TYMPAN_DEBUG: native PYTHONPATH for tests : " "${NATIVE_PYTHONPATH}" )
+endif()
