@@ -1,0 +1,15 @@
+project(TYMPAN_Python)
+cmake_minimum_required(VERSION 2.8.5)
+
+# Adapted from https://github.com/thewtex/cython-cmake-example/
+
+find_package(PythonInterp REQUIRED)
+
+# Include the CMake script UseCython.cmake.  This defines add_cython_module().
+# Instruction for use can be found at the top of cmake/UseCython.cmake.
+include(UseCython)
+
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+
+# Process the CMakeLists.txt in the 'src' subdirectory.
+add_subdirectory( src )

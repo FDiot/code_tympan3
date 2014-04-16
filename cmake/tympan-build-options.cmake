@@ -12,6 +12,7 @@ if (${CMAKE_VERSION} VERSION_GREATER 2.8.4)
 endif(${CMAKE_VERSION} VERSION_GREATER 2.8.4)
 
 option(TYMPAN_BUILD_TEST "Build Tympan tests" ON)
+option(TYMPAN_BUILD_PYTHON "Build Python / Cython related components" ON)
 option(TYMPAN_DEBUG_CMAKE "Verbose information messages from CMake" ON)
 
 # Configure where to fetch 3rd party dependencies
