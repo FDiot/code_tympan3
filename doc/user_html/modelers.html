@@ -1,0 +1,220 @@
+<html>
+<head>
+<title>Modeleurs 3D</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>
+
+<body bgcolor="#FFFFFF" text="#000000">
+<p><font face="Arial, Helvetica, sans-serif"><a href="index.html">Table des mati&egrave;res</a></font></p>
+<p>&nbsp;</p>
+<h1><font face="Arial, Helvetica, sans-serif">Modeleurs 3D</font></h1>
+<p><font face="Arial, Helvetica, sans-serif">Les diff&eacute;rents modeleurs comportent 
+  des comportements communs. Ces modeleurs sont :</font></p>
+<ul>
+  <li><font face="Arial, Helvetica, sans-serif"><a href="modelerMachine.html">Modeleur 
+    de Machine</a></font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><a href="modelerBatiment.html">Modeleur 
+    de B&acirc;timent</a></font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><a href="modelerFace.html">Modeleur 
+    de Face</a></font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><a href="modelerSite.html">Modeleur 
+    de Site/Projet</a></font></li>
+</ul>
+<p><font face="Arial, Helvetica, sans-serif">La <a href="toolbarModeleur.html">barre 
+  d'outils Modeleur</a> est commune &agrave; tous les types de modeleurs.</font></p>
+<p><font face="Arial, Helvetica, sans-serif">De plus, lorsque une fen&ecirc;tre 
+  de type modeleur est la fen&ecirc;tre active de l'<a href="workspace.html">espace 
+  de travail</a>, certaines fontionnalit&eacute;s deviennent actives dans les 
+  <a href="menuFichier.html">menu Fichier</a> et <a href="menuEdition.html">Edition</a>, 
+  et sur la <a href="toolbarFichier.html">barre d'outils associ&eacute;e</a> :</font></p>
+<ul>
+  <li><font face="Arial, Helvetica, sans-serif">Sauvegarde en <a href="toolBiblio.html">biblioth&egrave;que</a> 
+    de l'&eacute;l&eacute;ment &eacute;dit&eacute; (Ctr+S)</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><a href="exchange.html">Export 
+    en XML</a> de l'&eacute;l&eacute;ment &eacute;dit&eacute; (Ctrl+E)</font></li>
+  <li><font face="Arial, Helvetica, sans-serif">Impression de la vue du modeleur 
+    (Ctrl+P) </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">Export en VRML de la sc&egrave;ne 
+    3D </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">Annuler la derni&egrave;re action 
+    (Ctrl+Z) </font></li>
+  <li><font face="Arial, Helvetica, sans-serif">R&eacute;tablir la derni&egrave;re 
+    action annul&eacute;e (Ctrl+Y)</font></li>
+</ul>
+<p>&nbsp;</p>
+<h2><font face="Arial, Helvetica, sans-serif">Fen&ecirc;tre modeleur</font></h2>
+<p><font face="Arial, Helvetica, sans-serif">Certaines fonctionnalit&eacute;s 
+  sont directement accessibles depuis la barre d'outils associ&eacute;e &agrave; 
+  la fen&ecirc;tre du modeleur :</font></p>
+<p align="center"><font face="Arial, Helvetica, sans-serif"><img src="images/modeleurT.png" width="774"></font></p>
+<p align="left">&nbsp;</p>
+<ul>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Type de vue</b> : les 4 vues 
+    possibles sont : dessus, gauche, face et perspective</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Type de rendu</b> : il est 
+    possible d'afficher la sc&egrave;ne 3D en fils de fer ou en remplissant les 
+    faces (Surface), le rendu peut-&ecirc;tre liss&eacute; ou non (Flat ou Gouraud)</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Recadrer</b> : repositionne 
+    la cam&eacute;ra courante afin de visualiser tous les &eacute;l&eacute;ments 
+    pr&eacute;sents dans la sc&egrave;ne 3D</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Afficher la grille</b> : affiche 
+    ou masque la grille, ses dimensions peuvent &ecirc;tre modifi&eacute;s &agrave; 
+    partir de la bo&icirc;te de dialogue des <a href="preferences.html">pr&eacute;f&eacute;rences</a></font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Afficher l'&eacute;chelle</b> 
+    : affiche ou maque l'&eacute;l&eacute;ment graphique repr&eacute;sentant l'&eacute;chelle 
+    (en bas &agrave; droite) de la vue courante en fontion du niveau de zoom</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Activer la grille magn&eacute;tique</b> 
+    : la grille magn&eacute;tique est utilis&eacute;e pour le placement des &eacute;l&eacute;ments 
+    dans la sc&egrave;ne, ses caract&eacute;ristiques peuvent &ecirc;tre modifi&eacute;es 
+    &agrave; partir de la bo&icirc;te de dialogue des <a href="preferences.html">pr&eacute;f&eacute;rences</a></font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Activer le Back Face Culling</b> 
+    : le &quot;Back Face Culling&quot; est une technique 3D qui permet de masquer 
+    les faces qui sont dirig&eacute;es vers la cam&eacute;ra, cela permet par 
+    exemple de visualiser l'int&eacute;rieur d'un b&acirc;timent pour positionner 
+    les machines</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Propri&eacute;t&eacute;s de 
+    l'&eacute;l&eacute;ment &eacute;dit&eacute;</b> : affiche la bo&icirc;te de 
+    dialogue permettant d'&eacute;diter les propri&eacute;t&eacute;s de l'&eacute;l&eacute;ment 
+    &eacute;dit&eacute;</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Capture d'&eacute;cran dans 
+    une image</b> : une image repr&eacute;sentant la sc&egrave;ne courante du 
+    modeleur est enregistr&eacute;e, diff&eacute;rents formats d'images sont disponibles</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Capture d'&eacute;cran dans 
+    le presse-papier</b> : place une image repr&eacute;sentant la sc&egrave;ne 
+    courante du modeleur dans le presse-papier, il est ensuite possible de la 
+    coller directement dans une application tierce comme un tableur, un traitement 
+    de texte ou encore un logiciel de traitement d'image. Cette action est aussi 
+    possible en tapant : Ctrl+C</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Afficher les sources</b> : 
+    affiche ou maque les sources ponctuelles composant les machines ou les b&acirc;timents</font></li>
+</ul>
+<p>&nbsp;</p>
+<h2><font face="Arial, Helvetica, sans-serif">Menu contextuel</font></h2>
+<p><font face="Arial, Helvetica, sans-serif">La quasi totalit&eacute; des actions 
+  possibles sur les &eacute;l&eacute;ments de la sc&egrave;ne se fait par le menu 
+  contextuel. Celui-ci s'affiche lors d'un clic droit sur un &eacute;l&eacute;ment 
+  de la sc&egrave;ne 3D.</font></p>
+<p align="center"><img src="images/popupModeleur.png" width="125" height="329"></p>
+<p><font face="Arial, Helvetica, sans-serif">Ce menu est construit de fa&ccedil;on 
+  &agrave; repr&eacute;senter l'arborescence &agrave; partir de l'&eacute;l&eacute;ment 
+  r&eacute;ellement cliqu&eacute;. Celui-ci est plac&eacute; tout en haut du menu. 
+  L'&eacute;l&eacute;ment suivant est son parent et ainsi de suite (par exemple 
+  le parent de la bo&icirc;te est la machine, celui de la machine est l'infrastructure, 
+  etc.).</font></p>
+<p><font face="Arial, Helvetica, sans-serif">Pour chaque &eacute;l&eacute;ment 
+  correspond un regroupement d'actions pouvant contenir une ou plusieurs des actions 
+  suivantes en fonction du modeleur et de l'&eacute;l&eacute;ment : </font></p>
+<ul>
+  <li><font face="Arial, Helvetica, sans-serif">&quot;<b>Type de l'&eacute;l&eacute;ment</b>&quot; 
+    : le type de l'&eacute;l&eacute;ment en gras permet d'affiche la bo&icirc;te 
+    de dialogue associ&eacute;e &agrave; l'&eacute;l&eacute;ment</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Dimensions</b> : pour modifier 
+    les dimensions de l'&eacute;l&eacute;ments (par exemple hauteur d'un cylindre)</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Position</b> : pour placer 
+    un &eacute;l&eacute;ment &agrave; un endroit pr&eacute;cis, connaissant ses 
+    coordonn&eacute;es par rapport &agrave; son parent</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Rotation</b> : pour orienter 
+    un &eacute;l&eacute;ment pr&eacute;cisement, d'un angle connu par rapport 
+    &agrave; son rapport</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Dupliquer</b> : effectue une 
+    copie conforme de l'&eacute;l&eacute;ment et l'ajoute au parent de l'&eacute;l&eacute;ment 
+    copi&eacute; </font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Supprimer</b> : supprime l'&eacute;l&eacute;ment 
+    correspondant </font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Calculer</b> : effectue le 
+    calcul acoustique pour l'&eacute;l&eacute;ment correspondant (par exemple 
+    le calcul de la r&eacute;partition des sources pour une machine)</font></li>
+  <li><font face="Arial, Helvetica, sans-serif"><b>Editer</b> : ce choix affiche 
+    le <a href="modelerFace.html">modeleur de Face</a>, il permet, pour les faces 
+    des machines d'ajouter une bouche de ventilation ou une chemin&eacute;e, et 
+    pour les faces des constructions une fen&ecirc;tre</font></li>
+</ul>
+<p><font face="Arial, Helvetica, sans-serif">Il est &agrave; noter que chacune 
+  de ses actions peut &ecirc;tre annul&eacute;e (Ctr+Z) ou r&eacute;tablie (Ctr+Y).</font></p>
+<p>&nbsp;</p>
+<h2><font face="Arial, Helvetica, sans-serif">Raccouris clavier</font></h2>
+<p align="left"><font face="Arial, Helvetica, sans-serif">Certains raccourcis 
+  clavier permettent d'int&eacute;ragir avec le modeleur : </font></p>
+<div align="center"> 
+  <table width="65%" border="1">
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif"><b>Touche</b></font></td>
+      <td><font face="Arial, Helvetica, sans-serif"><b>Action</b></font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">1</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Vue de dessus (2D)</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">2</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Vue de gauche (2D)</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">3</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Vue de face (2D)</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">4</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Vue en perspective (3D)</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">V</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Change la vue courante</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">C</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Active le mode cam&eacute;ra</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">I</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Affiche ou masque le nombre 
+        d'images affich&eacute;es par seconde (fps)</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">F ou F5</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Recadre la vue courante (Fit)</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">Shift</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Active le mode cam&eacute;ra 
+        de fa&ccedil;on temporaire avec certains outils </font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">Ctrl</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">D&eacute;sactive la grille 
+        magn&eacute;tique de fa&ccedil;on temporaire</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">Ctrl+C</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Effectuer une capture d'&eacute;cran 
+        dans le presse-papier</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">Ctrl+E</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Exporter l'&eacute;l&eacute;ment 
+        &eacute;dit&eacute; en XML</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">Ctrl+P</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Imprimer la vue courante</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">Ctrl+S</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Sauvegarder l'&eacute;l&eacute;ment 
+        &eacute;dit&eacute;</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">Ctrl+Z</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">Annuler la derni&egrave;re 
+        action</font></td>
+    </tr>
+    <tr> 
+      <td><font face="Arial, Helvetica, sans-serif">Ctrl+Y</font></td>
+      <td><font face="Arial, Helvetica, sans-serif">R&eacute;tablir la derni&egrave;re 
+        action annul&eacute;e</font></td>
+    </tr>
+  </table>
+</div>
+<p align="center">&nbsp;</p>
+</body>
+</html>
