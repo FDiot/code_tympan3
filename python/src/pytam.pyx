@@ -3,6 +3,7 @@ from libcpp.vector cimport vector
 from libcpp.deque cimport deque
 from cython.operator cimport dereference as deref, preincrement as inc
 import cython
+import numpy as np
 
 class NullCppObject(Exception):
     """
@@ -34,11 +35,23 @@ cdef class ProblemModel:
             raise NullCppObject()
         return self.thisptr.num_materials()
 
-    def export_triangles(self, filename):
+    def export_triangular_mesh(self):
         if self.thisptr == NULL:
             raise NullCppObject()
-        self.thisptr.export_triangles_soup(filename)
-
+        nb_elts = cython.declare(cython.uint)
+        actri = cython.declare(cython.pointer(AcousticTriangle))
+        nb_elts = self.thisptr.num_triangles()
+        triangles = np.empty([nb_elts, 3])
+        for i in range(nb_elts):
+            actri = cython.address(self.thisptr.triangle(i))
+            triangles[i] = [actri.n[0], actri.n[1], actri.n[2]]
+        point = cython.declare(cython.pointer(OPoint3D))
+        nb_elts = self.thisptr.num_points()
+        nodes = np.empty([nb_elts, 3])
+        for i in range(nb_elts):
+            point = cython.address(self.thisptr.node(i))
+            nodes[i] = [point._x, point._y, point._z]
+        return (nodes, triangles)
 
 cdef class ResultModel:
     thisptr = cython.declare(cython.pointer(AcousticResultModel))

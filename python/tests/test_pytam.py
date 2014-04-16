@@ -1,6 +1,7 @@
 import os, os.path as osp
 
 import unittest
+import numpy as np
 
 import pytam
 
@@ -48,13 +49,28 @@ class TestTympan(unittest.TestCase):
         # some place ?
         # TODO to be completed: cf. ticket #1468184
 
-
-    def test_triangles(self):
+    def test_mesh(self):
+        """
+        Check SolverModelBuilder.fill_problem (triangular mesh creation)
+        """
+        # load a xml project, build an acoustic problem from it and retrieve
+        # its triangular mesh to make sure it contains the correct data
         project = pytam.Project.from_xml(osp.join(_TEST_DATA_DIR, "tiny_site.xml"))
         model = project.current_computation().problem()
         builder = pytam.SolverModelBuilder(model)
         builder.fill_problem(project.site())
-        model.export_triangles("export/export_check_triangles")
+        # exports in nodes_test the nodes coordinates (x,y,z) and in triangles_test
+        # the triangle nodes indices (position in the nodes_test array)
+        (nodes_test, triangles_test) = model.export_triangular_mesh()
+        nodes_ref = np.loadtxt("data/test_mesh_nodes_ref.csv", delimiter=';',
+                               dtype=np.float)
+        # nodes coordinates must be almost equal (milimeter precision)
+        self.assertTrue(np.allclose(a=nodes_ref, b=nodes_test, atol=1e-03))
+        triangles_ref = np.loadtxt("data/test_mesh_triangles_ref.csv", delimiter=';',
+                               dtype=np.uint)
+        # the indices must be strictly equal
+        self.assertTrue(np.array_equal(triangles_ref, triangles_test))
+
 
     @unittest.skip("Implementation to be fixed")
     def test_ground_materials(self):

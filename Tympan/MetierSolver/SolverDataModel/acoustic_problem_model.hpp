@@ -80,16 +80,6 @@ public:
      */
     material_ptr_t make_material(const string& name, const Spectrum& spectrum);
 
-    /**
-     * @brief Exports the triangle soup as a series of text files
-     *
-     * This methods is intented for validation and debugging purposes,
-     * but not serious serialisation of the SovlerDataModel.
-     *
-     * @param filename base name of the files to be written.
-     */
-    void export_triangles_soup(const std::string& filename); // IMPLEMENTME
-
 public: // XXX Could / should be protected but this complicates testing
 
     /*

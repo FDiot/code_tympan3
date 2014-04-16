@@ -92,29 +92,4 @@ material_ptr_t AcousticProblemModel::make_material(const string& name, const Spe
 }
 
 
-void  AcousticProblemModel::export_triangles_soup(const std::string& filename)
-{
-    const static string nodes_suffix("_nodes.csv");
-    const static string faces_suffix("_faces.csv");
-    ofstream nodes_f((filename + nodes_suffix).c_str());
-    ofstream faces_f((filename + faces_suffix).c_str());
-
-    nodes_f.setf(ios_base::fixed, ios_base::floatfield);
-    nodes_f.precision(6);
-
-    BOOST_FOREACH(const Point & p, all_nodes)
-    {
-        nodes_f << setw(12) << p._x << "; ";
-        nodes_f << setw(12) << p._y << "; ";
-        nodes_f << setw(12) << p._z << endl;
-    }
-
-    BOOST_FOREACH(const AcousticTriangle & tri, all_triangles)
-    {
-        faces_f << setw(4) << tri.n[0] << "; ";
-        faces_f << setw(4) << tri.n[1] << "; ";
-        faces_f << setw(4) << tri.n[2] << endl;
-    }
-}
-
 } // namespace tympan
