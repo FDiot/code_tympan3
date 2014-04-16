@@ -89,6 +89,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/T
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h":
     cdef cppclass TYGeometryNode (TYElement):
         TYElement* getElement()
+        TYGeometryNode(TYElement *)
 
 cdef extern from "Tympan/MetierSolver/ToolsMetier/OCoord3D.h":
     cdef cppclass OCoord3D:
