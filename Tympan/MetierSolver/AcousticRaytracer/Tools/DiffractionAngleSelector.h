@@ -49,7 +49,12 @@ public :
 		vector<QSharedPointer<Event> >::iterator iter = events->begin();
 		do
 		{
-			if ( (*iter)->getType() != DIFFRACTION ) { iter++; continue; }
+			if ( (*iter)->getType() != DIFFRACTION ) 
+			{ 
+				beginPos = (*iter)->getPosition();
+				iter++; 
+				continue; 
+			}
 
 			currentPos = (*iter)->getPosition();
 
@@ -125,7 +130,12 @@ public :
 		vector<QSharedPointer<Event> >::iterator iter = events->begin();
 		do
 		{
-			if ( (*iter)->getType() != DIFFRACTION ) { iter++; continue; }
+			if ( (*iter)->getType() != DIFFRACTION ) 
+			{ 
+				beginPos = (*iter)->getPosition();
+				iter++; 
+				continue; 
+			}
 
 			currentPos = (*iter)->getPosition();
 
