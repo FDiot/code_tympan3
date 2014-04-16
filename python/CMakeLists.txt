@@ -9,6 +9,10 @@ find_package(PythonInterp REQUIRED)
 # Instruction for use can be found at the top of cmake/UseCython.cmake.
 include(UseCython)
 
+set(TYMPAN_PythonModules         "pymodules")
+set(TYMPAN_CythonModules_Debug   "cython_d")
+set(TYMPAN_CythonModules_Release "cython")
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Process the CMakeLists.txt in the 'src' subdirectory.
