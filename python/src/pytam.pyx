@@ -67,7 +67,6 @@ cdef class SolverModelBuilder:
         is_screen_face_idx = cython.declare(vector[bool])
         face_list = cython.declare(vector[SmartPtr[TYGeometryNode]])
         pelt = cython.declare(cython.pointer(TYElement))
-        geonode = cython.declare(TYGeometryNode)
         nb_building_faces = cython.declare(cython.uint)
         nb_building_faces = 0
         psurf = cython.declare(cython.pointer(TYAcousticSurface))
@@ -82,13 +81,15 @@ cdef class SolverModelBuilder:
             # 'face_list' can contain topography elements. Not relevant here.
             if psurf == NULL:
                 continue
-            geonode = (face_list[i].getRealPointer())[0]
             # Get the uid for the site element bearing the current acoustic surface
             element_uid = new UuidAdapter(psurf.getParent().getID())
             # Use the triangulating interface of TYSurfaceInterface to get triangles
             # and convert them to Nodes and AcousticTriangles (beware of mapping
             # TYPoints to Node in the correct way.)
-            psurf.exportMesh(points, triangles, geonode)
+            # !! Here we must not give exportMesh the geonode face_list[i] but
+            # build a new one to avoid constructing the triangles in a local
+            # scale
+            psurf.exportMesh(points, triangles, TYGeometryNode(psurf))
             self.process_mesh(points, triangles)
             # Get the building material for the surface
             pbuildmat = cython.declare(cython.pointer(TYMateriauConstruction))
