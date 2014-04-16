@@ -17,3 +17,15 @@ file(
   DESTINATION "${PROJECT_BINARY_DIR}/${TYMPAN_PythonModules}" 
   FILES_MATCHING PATTERN "*.py" )
 
+install(DIRECTORY ./ 
+  DESTINATION ${TYMPAN_PythonModules}
+  FILES_MATCHING PATTERN "*.py")
+
+install(TARGETS toto
+  DESTINATION ${TYMPAN_CythonModules_Release}  
+  CONFIGURATIONS Release)
+
+install(TARGETS toto
+  DESTINATION ${TYMPAN_CythonModules_Debug} 
+  CONFIGURATIONS Debug)
+
