@@ -91,30 +91,6 @@ function(add_qtest_executable)
   endif()
 endfunction()
 
-# This function creates a new python test
-function(add_python_test)
-  set(options "")
-  set(oneValueArgs "TARGET" "SCRIPT" "FOLDER")
-  set(multiValueArgs "RUNTIME_PATH" "PYTHONPATH" "DEPS")
-  cmake_parse_arguments("" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
-
-  add_test(NAME ${_TARGET}
-    # [CONFIGURATIONS [Debug|Release|...]]
-    # [WORKING_DIRECTORY dir]
-    COMMAND ${PYTHON_EXECUTABLE} "${_SCRIPT}")
-  _common_test_config()
-
-  build_native_path_list(native_pythonpath "${_PYTHONPATH}")  
-  set_property(TEST ${_TARGET} APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${native_pythonpath}")
-
-  if(_UNPARSED_ARGUMENTS)
-    message(WARNING "add_qtest_executable: unknown arguments remaining unparsed "
-      "for target ${_TARGET}: " ${_UNPARSED_ARGUMENTS})
-  endif()
-endfunction()
-
-
-
 # This function rewrite a CMake list of path into a string
 # usable as native shell list of path like  
 # <user_home>/tympan/lib:<system>/lib on Linux
