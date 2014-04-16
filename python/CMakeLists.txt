@@ -13,3 +13,6 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Process the CMakeLists.txt in the 'src' subdirectory.
 add_subdirectory( src )
+
+# Process the CMakeLists.txt in the 'tests' subdirectory.
+add_subdirectory( tests )
