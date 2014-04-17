@@ -214,16 +214,6 @@ public:
     OMatrix globalToLocal() const;
 
     /**
-     * Effectue un changement de repere pour le point
-     */
-    OCoord3D changeRepere(TYGeometryNode& other, const OCoord3D& point);
-
-    /**
-     * Effectue un changement de repere pour le segment
-     */
-    OSegment3D changeRepere(TYGeometryNode& other, const OSegment3D& segment);
-
-    /**
      * get/set de la hauteur par rapport au sol
      */
     double getHauteur() { return _hauteur; }
