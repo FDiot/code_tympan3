@@ -831,7 +831,7 @@ void TYEtage::remMurs()
 
 bool TYEtage::setMurs(const TYTabPoint& tabPts, double hauteur /*=2.0*/, bool close /*=true*/)
 {
-    TYPoint pt0, pt1, pt2, pt3;
+    TYPoint pt0, pt1;
     size_t count = tabPts.size();
     TYRepere repMur;
 
@@ -869,8 +869,8 @@ bool TYEtage::setMurs(const TYTabPoint& tabPts, double hauteur /*=2.0*/, bool cl
     // Une face pour chaque couple de points qui se suivent
     for (int i = 0; i < count; i++)
     {
-        pt1 = pt2 = tabPts[i];
-        pt0 = pt3 = tabPts[(i + 1) % tabPts.size()];
+        pt1 = tabPts[i];
+        pt0 = tabPts[(i + 1) % tabPts.size()];
 
         // Vecteur pour la "longueur" de la face
         OVector3D vec01(pt0, pt1);
