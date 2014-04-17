@@ -22,9 +22,14 @@ include_directories(${CMAKE_BINARY_DIR})
 # Recurse into main sources directory...
 add_subdirectory(Tympan)
 
-# ... and in the test sources directory.
+# ... and in the test sources directory...
 if (TYMPAN_BUILD_TEST)
   add_subdirectory(tests)
 endif (TYMPAN_BUILD_TEST)
+
+# ... and in the python extension sources directory.
+if (TYMPAN_BUILD_PYTHON)
+  add_subdirectory(python)
+endif (TYMPAN_BUILD_PYTHON)
 
 include(tympan-install)
