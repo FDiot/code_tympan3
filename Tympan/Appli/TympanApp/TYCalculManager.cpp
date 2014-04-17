@@ -51,6 +51,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 #define TR(id) OLocalizator::getString("TYCalculManager", (id))
+#define COMPUTATION_TIMEOUT 10000 // In ms
 
 using namespace tympan;
 
@@ -76,131 +77,162 @@ bool TYCalculManager::launchCurrent()
 
 bool TYCalculManager::launch(LPTYCalcul pCalcul)
 {
-    bool ret = false;
-
-    if (pCalcul)
+    if (!pCalcul)
     {
-        TYMessageManager::get()->info(TR("id_msg_go_calcul"));
-
-        // On rend inactif l'IHM
-        getTYMainWnd()->setEnabled(false);
-
-        TYApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
-        // Lance le calcul
-        OChronoTime startTime; //xbh: analyse du temps de calcul
-
-        TYProjet *pProject = pCalcul->getProjet();
-
-        // Define 2 temporary XML files to give the current acoustic problem to
-        // the python script and retrieve the corresponding acoustic result
-        QTemporaryFile problemfile, resultfile;
-        if (problemfile.open() && resultfile.open())
-        {
-            problemfile.close();
-            resultfile.close();
-        }
-        else
-        {
-            // reactivate HMI
-            TYApplication::restoreOverrideCursor();
-            getTYMainWnd()->setEnabled(true);
-            return false;
-        }
-
-            try
-            {
-                // Serialize current project
-                save_project(problemfile.fileName().toUtf8().data(), pProject);
-            }
-            catch(tympan::invalid_data)
-            {
-                // reactivate HMI
-                TYApplication::restoreOverrideCursor();
-                getTYMainWnd()->setEnabled(true);
-                return false;
-            }
-
-            // Call python module to do the computation
-            // XXX we should define a work environment so as to know where to record
-            // the xml files, where to look for them, where are the python scripts
-            // we want to call, where are the libraries, etc.
-            // waiting for a decision, for now keep it dirty
-            QProcess python;
-            QStringList env = QProcess::systemEnvironment();
-            // XXX because for now we install the tympan project in the home
-            // directory. To be fixed
-            env.replaceInStrings(QRegExp("^LD_LIBRARY_PATH=(.*)"),
-                    "LD_LIBRARY_PATH=Tympan/lib");
-            python.setEnvironment(env);
-
-            QStringList args;
-            // Call python script "tympan.py" with: the name of the file
-            // containing the problem, the name of the file where to record
-            // the result and the directory containing the solver plugin to use
-            // to solve the acoustic problem
-            args << "Tympan/pymodules/tympan.py" << problemfile.fileName() 
-                << resultfile.fileName() << "Tympan/pluginsd";
-
-            python.start("python", args);
-            while (!python.waitForFinished()); // wait for the script to execute
-            int pystatus = python.exitStatus();
-            if (pystatus == 0)
-            {
-                // Then read the result to update the internal model
-                LPTYProjet result;
-                try
-                {
-                    result = load_project(resultfile.fileName().toUtf8().data());
-                }
-                catch(tympan::invalid_data)
-                {
-                    // reactivate HMI
-                    TYApplication::restoreOverrideCursor();
-                    getTYMainWnd()->setEnabled(true);
-                    return false;
-                }
-                    pProject = result.getRealPointer();
-                    getTYApp()->getCurProjet()->setCurrentCalcul(
-                            pProject->getCurrentCalcul());
-                    pCalcul = pProject->getCurrentCalcul();
-                    ret = true;
-            }
-
-        OChronoTime endTime; //xbh: analyse du temps de calcul
-        OChronoTime duration = endTime - startTime;
-        unsigned long second  = duration.getTime() / 1000;
-        unsigned long millisecond = duration.getTime() - second * 1000;
-        TYMessageManager::get()->info("Temps de calcul : %02ld,%03ld sec.  (%ld msec.)", second, millisecond, duration.getTime());
-
-        TYApplication::restoreOverrideCursor();
-
-        // On reactive l'IHM
-        getTYMainWnd()->setEnabled(true);
-
-
-        if (ret)
-        {
-            // Update graphic
-            pCalcul->getParent()->updateGraphicTree();
-            pCalcul->updateGraphicTree();
-            getTYMainWnd()->updateModelers(false, false);
-            TYElement::setIsSavedOk(true);
-
-            // Update projet frame
-            getTYMainWnd()->getProjetFrame()->setCalculDone(true);
-
-            // Calcul termine et reussi
-            TYMessageManager::get()->info(TR("id_msg_calcul_done"));
-        }
-        else
-        {
-            // Calcul termine et echec
-            TYMessageManager::get()->info(TR("id_msg_calcul_failed"));
-        }
+        return false;
     }
 
-    return ret;
+    TYProjet *pProject = pCalcul->getProjet();
+    OMessageManager& logger =  *OMessageManager::get();
+
+    // Temporary XML file to give the current acoustic problem to the python
+    // script
+    QTemporaryFile problemfile;
+    if (!problemfile.open())
+    {
+        logger.error(
+                "Could not open temporary file to export current project. Computation won't be done");
+        return false;
+    }
+    problemfile.close();
+
+    // Serialize current project
+    ostringstream msg;
+    try
+    {
+        save_project(problemfile.fileName().toUtf8().data(), pProject);
+    }
+    catch(const tympan::invalid_data& exc)
+    {
+        msg << boost::diagnostic_information(exc);
+        logger.error(
+                "Could not export current project. Computation won't be done");
+        logger.debug(msg.str().c_str());
+        return false;
+    }
+
+    QTemporaryFile resultfile;
+    if (!resultfile.open())
+    {
+        logger.error(
+                "Could not open temporary file to retrieve computation results.");
+        return false;
+    }
+    resultfile.close();
+
+    QProcess python;
+    // XXX we should define a work environment so as to know where to record
+    // the xml files, where to look for them, where are the python scripts
+    // we want to call, where are the libraries, etc.
+    // XXX LD_LIBRARY_PATH is set this way because for now we install the
+    // tympan project in the home directory. To be fixed
+    // XXX fix windows incompatibility
+    QStringList env = QProcess::systemEnvironment();
+    env.replaceInStrings(QRegExp("^LD_LIBRARY_PATH=(.*)"),
+            "LD_LIBRARY_PATH=Tympan/lib");
+    python.setEnvironment(env);
+
+    // Call python script "tympan.py" with: the name of the file
+    // containing the problem, the name of the file where to record
+    // the result and the directory containing the solver plugin to use
+    // to solve the acoustic problem
+    QStringList args;
+    args << "Tympan/pymodules/tympan.py" << problemfile.fileName()
+        << resultfile.fileName() << "Tympan/pluginsd";
+
+    logger.info(TR("id_msg_go_calcul"));
+
+    // Deactivate GUI
+    getTYMainWnd()->setEnabled(false);
+    TYApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+    // Start chrono
+    OChronoTime startTime;
+    float comp_duration (0.);
+    bool comp_finished (false);
+    python.start("python", args);
+    do
+    {
+        comp_finished = python.waitForFinished(COMPUTATION_TIMEOUT);
+        if (comp_finished)
+        {
+            break;
+        }
+        if (python.error() == QProcess::Timedout)
+        {
+            //Computation still running
+            comp_duration += (COMPUTATION_TIMEOUT/1000);
+            logger.info("Computation still running after %.3f seconds", comp_duration);
+            continue;
+        }
+        else
+        {
+            // Will have a bad exit status and will be handled below
+            break;
+        }
+    }
+    while(!comp_finished);
+
+    int pystatus = python.exitStatus();
+    if (pystatus == 1)
+    {
+        logger.error(
+                "QProcess running python script had a bad exit status. Error: %d. No results available.",
+                python.error());
+        logger.info(TR("id_msg_calcul_failed"));
+        // Reactivate GUI
+        TYApplication::restoreOverrideCursor();
+        getTYMainWnd()->setEnabled(true);
+        return false;
+    }
+    // Then read the result to update the internal model
+    LPTYProjet result;
+    try
+    {
+        result = load_project(resultfile.fileName().toUtf8().data());
+    }
+    catch(const tympan::invalid_data& exc)
+    {
+        msg << boost::diagnostic_information(exc);
+        logger.error("Could not import computed project. No results available.");
+        logger.debug(msg.str().c_str());
+        // reactivate GUI
+        TYApplication::restoreOverrideCursor();
+        getTYMainWnd()->setEnabled(true);
+        return false;
+    }
+
+    // Update the current project with the results of the current acoustic
+    // problem
+    pProject = result.getRealPointer();
+    getTYApp()->getCurProjet()->setCurrentCalcul(pProject->getCurrentCalcul());
+    pCalcul = pProject->getCurrentCalcul();
+
+    // Compute and display computation time
+    OChronoTime endTime;
+    OChronoTime duration = endTime - startTime;
+    unsigned long second  = duration.getTime() / 1000;
+    unsigned long millisecond = duration.getTime() - second * 1000;
+    logger.info("Temps de calcul : %02ld,%03ld sec.  (%ld msec.)", second,
+            millisecond, duration.getTime());
+
+    // Reactivate GUI
+    TYApplication::restoreOverrideCursor();
+    getTYMainWnd()->setEnabled(true);
+
+    // Update graphics
+    pCalcul->getParent()->updateGraphicTree();
+    pCalcul->updateGraphicTree();
+    getTYMainWnd()->updateModelers(false, false);
+    TYElement::setIsSavedOk(true);
+
+    // Update projet frame
+    getTYMainWnd()->getProjetFrame()->setCalculDone(true);
+
+    // Computation achieved with success
+    logger.info(TR("id_msg_calcul_done"));
+
+    return true;
 }
 
 bool TYCalculManager::askForResetResultat()
