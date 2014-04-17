@@ -25,9 +25,7 @@ endfunction(install_tympan_component)
 # This MACRO factors out some functionalities shared among
 # add_qtest_executable and configure_gtest_target: it is NOT MEANT to
 # be called DIRECTLY
-macro(_register_test_target)
-  add_test(${_TARGET} ${_TARGET})
-
+macro(_common_test_config)
   if(_RUNTIME_PATH)
     # From http://www.mail-archive.com/cmake@cmake.org/msg21493.html
     #
@@ -38,9 +36,11 @@ macro(_register_test_target)
     set_property(TEST ${_TARGET} PROPERTY ENVIRONMENT "${LD_VARNAME}=${_rt_path}")
   endif()
 
-  if(_FOLDER)
-    set_property(TARGET ${_TARGET} PROPERTY FOLDER ${_FOLDER})
-  endif() 
+  if(TARGET ${_TARGET})
+    if(_FOLDER)
+      set_property(TARGET ${_TARGET} PROPERTY FOLDER ${_FOLDER})
+    endif() 
+  endif()
 endmacro()
 
 
@@ -56,7 +56,8 @@ function(configure_gtest_target)
   add_dependencies(${_TARGET} GTest ${_DEPS})
   target_link_libraries(${_TARGET} gtest_main gtest ${CMAKE_THREAD_LIBS_INIT} ${_LIBS})
 
-  _register_test_target()
+  add_test(${_TARGET} ${_TARGET})
+  _common_test_config()
 
   if(_UNPARSED_ARGUMENTS)
     message(WARNING "configure_gtest_target: unknown arguments remaining unparsed "
@@ -81,7 +82,30 @@ function(add_qtest_executable)
   target_link_libraries(${_TARGET} ${TYMPAN_MODULES}
     ${QT_QTCORE_LIBRARY} ${QT_QTTEST_LIBRARY} ${QT_QTGUI_LIBRARY}) 
 
-  _register_test_target()
+  add_test(${_TARGET} ${_TARGET})
+  _common_test_config()
+
+  if(_UNPARSED_ARGUMENTS)
+    message(WARNING "add_qtest_executable: unknown arguments remaining unparsed "
+      "for target ${_TARGET}: " ${_UNPARSED_ARGUMENTS})
+  endif()
+endfunction()
+
+# This function creates a new python test
+function(add_python_test)
+  set(options "")
+  set(oneValueArgs "TARGET" "SCRIPT" "FOLDER")
+  set(multiValueArgs "RUNTIME_PATH" "PYTHONPATH" "DEPS")
+  cmake_parse_arguments("" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
+
+  add_test(NAME ${_TARGET}
+    # [CONFIGURATIONS [Debug|Release|...]]
+    # [WORKING_DIRECTORY dir]
+    COMMAND ${PYTHON_EXECUTABLE} "${_SCRIPT}")
+  _common_test_config()
+
+  build_native_path_list(native_pythonpath "${_PYTHONPATH}")  
+  set_property(TEST ${_TARGET} APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${native_pythonpath}")
 
   if(_UNPARSED_ARGUMENTS)
     message(WARNING "add_qtest_executable: unknown arguments remaining unparsed "
@@ -96,6 +120,12 @@ endfunction()
 # <user_home>/tympan/lib:<system>/lib on Linux
 # c:\<user_home>\tympan\lib;c:\<system>\lib on Windows
 function(build_native_path_list outvar inlist)
+  # Handles the special case a an empty list
+  if(NOT inlist)
+    set(${outvar} "" PARENT_SCOPE)
+    return()
+  endif()
+ 
   if(SYS_NATIVE_WIN)
     set(sep ";")
   endif()
