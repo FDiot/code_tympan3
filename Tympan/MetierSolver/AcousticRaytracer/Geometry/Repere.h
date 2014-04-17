@@ -39,7 +39,7 @@ public:
 
     virtual ~Repere() { };
 
-    void setRepere(vec3 _U, vec3 _V, vec3 _W, vec3 _O) { U = vec3(_U); V = vec3(_V); W = vec3(_W); O = vec3(_O); updateMatrices(); }
+    void set(vec3 _U, vec3 _V, vec3 _W, vec3 _O) { U = vec3(_U); V = vec3(_V); W = vec3(_W); O = vec3(_O); updateMatrices(); }
     void setU(vec3 _U) { U = vec3(_U); updateMatrices(); }
     void setV(vec3 _V) { V = vec3(_V); updateMatrices(); }
     void setW(vec3 _W) { W = vec3(_W); updateMatrices(); }
