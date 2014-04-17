@@ -1706,9 +1706,9 @@ void TYPickEditor::showRotationDialog(TYGeometryNode* pGeoNode)
                 dRotateZ -= yaw;
             }
 
-            tyMatTmpX.setRotationOx(-M_PI * dRotateX / 180);
-            tyMatTmpY.setRotationOy(-M_PI * dRotateY / 180);
-            tyMatTmpZ.setRotationOz(M_PI * dRotateZ / 180);
+            tyMatTmpX.setRotationOx(-DEGTORAD(dRotateX));
+            tyMatTmpY.setRotationOy(-DEGTORAD(dRotateY));
+            tyMatTmpZ.setRotationOz(DEGTORAD(dRotateZ));
 
             if (pDlg->getConcatenateStatus()) //az--
             {
