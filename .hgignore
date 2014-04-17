@@ -1,15 +1,18 @@
-
 syntax: regexp
+
 CMakeCache.txt$
 CMakeFiles/.*$
 ~$
 _static/doxyoutput$
-^build-.*
 
 syntax: glob
+
 doc/_build
 3rdparty
 .hgignore
+
+*.so
+
 Dependencies\*
 bin\vc8_32\*
 lib\*
