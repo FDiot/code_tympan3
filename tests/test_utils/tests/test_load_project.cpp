@@ -14,8 +14,7 @@ using std::endl;
 TEST(TestTestUtils, loading)
 {
     const char filename[] = "../../data/projects-panel/1_PROJET_Site_emprise_seule.xml";
-    LPTYProjet project;
-    tympan::load_project(filename, project);
+    LPTYProjet project = tympan::load_project(filename);
     tympan::assert_loaded_project(project);
 }
 
