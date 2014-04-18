@@ -18,4 +18,5 @@ add_dependencies(${MODULE_NAME} ${TYMPAN_MODULES} tympan_acoustic_raytracer tymp
 target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES}
 				     tympan_acoustic_raytracer tympan_analytic_raytracer ${TYMPAN_MODULES} ${OPENGL_LIBRARIES})
 
+configure_tympan_plugin(${MODULE_NAME})
 install_tympan_plugin(${MODULE_NAME})
