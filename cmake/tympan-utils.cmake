@@ -4,6 +4,15 @@
 
 include(CMakeParseArguments)
 
+
+function(configure_tympan_plugin plugin)
+  set_property(TARGET ${plugin} PROPERTY DEBUG_POSTFIX "")
+  set_property(TARGET ${plugin} PROPERTY LIBRARY_OUTPUT_DIRECTORY_DEBUG
+    "${PROJECT_BINARY_DIR}/${TYMPAN_INSTALL_PLUGINS_Debug}")
+  set_property(TARGET ${plugin} PROPERTY LIBRARY_OUTPUT_DIRECTORY_RELEASE
+    "${PROJECT_BINARY_DIR}/${TYMPAN_INSTALL_PLUGINS_Release}")
+endfunction()
+
 # This function installs a plugin in the right directory depending on the configuration
 function(install_tympan_plugin PLUGIN_NAME)
 install(TARGETS ${PLUGIN_NAME}
