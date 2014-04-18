@@ -38,6 +38,7 @@
 
 #include <qcursor.h>
 #include <qmessagebox.h>
+#include <QTemporaryFile>
 
 #if defined(WIN32)
 #include <crtdbg.h>
@@ -91,16 +92,15 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
 
         TYProjet *pProject = pCalcul->getProjet();
 
-        // Serialize model
-        // XXX this code is temporary. We should use QTemporaryFile objects (TBD)
-        const char *problemfile = "problem.xml";
-        const char *resultfile = "result.xml";
-
-        try
+        // Define 2 temporary XML files to give the current acoustic problem to
+        // the python script and retrieve the corresponding acoustic result
+        QTemporaryFile problemfile, resultfile;
+        if (problemfile.open() && resultfile.open())
         {
-            save_project(problemfile, pProject);
+            problemfile.close();
+            resultfile.close();
         }
-        catch(tympan::invalid_data)
+        else
         {
             // reactivate HMI
             TYApplication::restoreOverrideCursor();
@@ -108,6 +108,18 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             return false;
         }
 
+            try
+            {
+                // Serialize current project
+                save_project(problemfile.fileName().toUtf8().data(), pProject);
+            }
+            catch(tympan::invalid_data)
+            {
+                // reactivate HMI
+                TYApplication::restoreOverrideCursor();
+                getTYMainWnd()->setEnabled(true);
+                return false;
+            }
 
             // Call python module to do the computation
             // XXX we should define a work environment so as to know where to record
@@ -123,8 +135,13 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             python.setEnvironment(env);
 
             QStringList args;
-            args << "Tympan/pymodules/tympan.py" << problemfile << resultfile
-                << "Tympan/pluginsd";
+            // Call python script "tympan.py" with: the name of the file
+            // containing the problem, the name of the file where to record
+            // the result and the directory containing the solver plugin to use
+            // to solve the acoustic problem
+            args << "Tympan/pymodules/tympan.py" << problemfile.fileName() 
+                << resultfile.fileName() << "Tympan/pluginsd";
+
             python.start("python", args);
             while (!python.waitForFinished()); // wait for the script to execute
             int pystatus = python.exitStatus();
@@ -134,7 +151,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
                 LPTYProjet result;
                 try
                 {
-                    result = load_project(resultfile);
+                    result = load_project(resultfile.fileName().toUtf8().data());
                 }
                 catch(tympan::invalid_data)
                 {
