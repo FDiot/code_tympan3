@@ -960,7 +960,7 @@ void TYEtage::setHauteur(double hauteur)
         TYMur::safeDownCast(_tabMur[i]->getElement())->setSizeY(hauteur);
 
         // On positionne le centre du mur a la 1/2 hauteur
-        TYRepere rep = _tabMur[i]->getRepere();
+        ORepere3D rep = _tabMur[i]->getORepere3D();
         rep._origin._z = hauteur / 2.0;
         _tabMur[i]->setRepere(rep);
     }
@@ -1991,7 +1991,7 @@ TYTabAcousticSurfaceGeoNode TYEtage::acousticFaces()
                 }
 
                 // Ajout d'un offset en z seulement car les faces (plan) sont definis sur x et y
-                TYRepere rep = tabTmp[j]->getRepere();
+                ORepere3D rep = tabTmp[j]->getORepere3D();
                 rep._origin._z = +epaisseur;
                 pAccSurfGeoNode1->setRepere(rep);
                 rep._origin._z = -epaisseur;
@@ -2740,14 +2740,14 @@ void TYEtage::updateZSource()
         LPTYUserSourcePonctuelle pSource = TYUserSourcePonctuelle::safeDownCast(_tabSources[i]->getElement());
         double h = pSource->getHauteur();
         pSource->getPos()->_z = h;
-        _tabSources[i]->getRepere()._origin._z = h;
+        _tabSources[i]->getORepere3D()._origin._z = h;
         _tabSources[i]->setIsGeometryModified(true);
     }
 
     for (i = 0; i < _tabMachine.size(); i++)
     {
         double h = _tabMachine[i]->getHauteur();
-        ORepere3D repere = _tabMachine[i]->getRepere();
+        ORepere3D repere = _tabMachine[i]->getORepere3D();
         repere._origin._z = h;
         _tabMachine[i]->setRepere(repere);
     }

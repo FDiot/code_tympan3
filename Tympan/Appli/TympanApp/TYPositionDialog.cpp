@@ -112,9 +112,9 @@ TYPositionDialog::~TYPositionDialog()
 
 void TYPositionDialog::updateContent()
 {
-    _lineEditX->setText(QString().setNum(_pElement->getRepere()._origin._x, 'f', 2));
-    _lineEditY->setText(QString().setNum(_pElement->getRepere()._origin._y, 'f', 2));
-    _lineEditZ->setText(QString().setNum(_pElement->getRepere()._origin._z, 'f', 2));
+    _lineEditX->setText(QString().setNum(_pElement->getORepere3D()._origin._x, 'f', 2));
+    _lineEditY->setText(QString().setNum(_pElement->getORepere3D()._origin._y, 'f', 2));
+    _lineEditZ->setText(QString().setNum(_pElement->getORepere3D()._origin._z, 'f', 2));
     _lineEditH->setText(QString().setNum(_pElement->getHauteur(), 'f', 2));
 
     // Quand on doit saisir la hauteur, le Z est desactive et incersement
@@ -135,9 +135,9 @@ void TYPositionDialog::updateContent()
 
 void TYPositionDialog::apply()
 {
-    _pElement->getRepere()._origin._x = _lineEditX->text().toDouble();
-    _pElement->getRepere()._origin._y = _lineEditY->text().toDouble();
-    _pElement->getRepere()._origin._z = _lineEditZ->text().toDouble();
+    _pElement->getORepere3D()._origin._x = _lineEditX->text().toDouble();
+    _pElement->getORepere3D()._origin._y = _lineEditY->text().toDouble();
+    _pElement->getORepere3D()._origin._z = _lineEditZ->text().toDouble();
 
     _pElement->setHauteur(_lineEditH->text().toDouble());
 

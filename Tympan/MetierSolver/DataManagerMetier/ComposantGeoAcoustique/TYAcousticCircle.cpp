@@ -158,7 +158,7 @@ void TYAcousticCircle::distriSrcs()
     double posCercle = distRayon;
 
     // On recupere le repere local au plan du cercle
-    TYRepere repere = _pBoundingRect->getRepere();
+    ORepere3D repere = _pBoundingRect->getORepere3D();
     // On place l'origine au centre du cercle pour simplifier les calculs
     repere._origin = getCenter();
     // Matrice de changement de repere
@@ -253,7 +253,7 @@ TYTabPoint TYAcousticCircle::getContour(int n /*=-1*/) const
     double rayon = getDiameter() / 2.0;
 
     // On recupere le repere local au plan du cercle
-    TYRepere repere = _pBoundingRect->getRepere();
+    ORepere3D repere = _pBoundingRect->getORepere3D();
 
     // On place l'origine au centre du cercle pour simplifier les calculs
     repere._origin = getCenter();
@@ -311,7 +311,7 @@ TYTabPoint3D TYAcousticCircle::getOContour(int n) const
     double rayon = getDiameter() / 2.0;
 
     // On recupere le repere local au plan du cercle
-    ORepere3D repere = _pBoundingRect->getRepere();
+    ORepere3D repere = _pBoundingRect->getORepere3D();
 
     // On place l'origine au centre du cercle pour simplifier les calculs
     repere._origin = getCenter();

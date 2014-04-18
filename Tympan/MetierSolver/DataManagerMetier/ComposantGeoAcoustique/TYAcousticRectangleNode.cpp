@@ -180,7 +180,7 @@ void TYAcousticRectangleNode::scale(float factorX, float factorY)
         ORepere3D repere;
 
         pSurface->getBoundingRect()->scale(factorX, factorY);
-        repere = _tabAcousticSurf[i]->getRepere();
+        repere = _tabAcousticSurf[i]->getORepere3D();
         repere._origin._x *= factorX;
         repere._origin._y *= factorY;
         _tabAcousticSurf[i]->setRepere(repere);
@@ -260,7 +260,7 @@ bool TYAcousticRectangleNode::addSubRect(LPTYAcousticRectangleGeoNode pAccRectGe
     pRectangle->setIsSub(true);
 
     TYRectangle* pRect = pRectangle->getBoundingRect();
-    TYRepere repRect = pAccRectGeoNode->getRepere();
+    ORepere3D repRect = pAccRectGeoNode->getORepere3D();
 
     // Test si le rect passe se trouve a l'interieur du bounding rect de cette face
     if (((pRect->_pts[3]._x + repRect._origin._x) < _pBoundingRect->_pts[3]._x) ||
@@ -277,7 +277,7 @@ bool TYAcousticRectangleNode::addSubRect(LPTYAcousticRectangleGeoNode pAccRectGe
         LPTYAcousticSurface pSurface = TYAcousticSurface::safeDownCast(_tabAcousticSurf[i]->getElement());
 
         if ((pSurface->getIsSub()) &&
-            (pRect->intersectRect(pSurface->getBoundingRect(), repRect._origin, _tabAcousticSurf[i]->getRepere()._origin)))
+            (pRect->intersectRect(pSurface->getBoundingRect(), repRect._origin, _tabAcousticSurf[i]->getORepere3D()._origin)))
         {
             return false;
         }
@@ -388,8 +388,8 @@ void TYAcousticRectangleNode::updateGrid(const char* childType)
         {
             LPTYAcousticSurface pSurface = TYAcousticSurface::safeDownCast(_tabAcousticSurf[i]->getElement());
 
-            pRectGlobal->_pts[j]._x = pSurface->getBoundingRect()->_pts[j]._x + _tabAcousticSurf[i]->getRepere()._origin._x;
-            pRectGlobal->_pts[j]._y = pSurface->getBoundingRect()->_pts[j]._y + _tabAcousticSurf[i]->getRepere()._origin._y;
+            pRectGlobal->_pts[j]._x = pSurface->getBoundingRect()->_pts[j]._x + _tabAcousticSurf[i]->getORepere3D()._origin._x;
+            pRectGlobal->_pts[j]._y = pSurface->getBoundingRect()->_pts[j]._y + _tabAcousticSurf[i]->getORepere3D()._origin._y;
             pRectGlobal->_pts[j]._z = 0.0;
 
             pRectSub->_pts[j] = pRectGlobal->_pts[j];

@@ -633,7 +633,7 @@ bool TYRectangle::isValid() const
     return true;
 }
 
-ORepere3D TYRectangle::getRepere() const
+ORepere3D TYRectangle::getORepere3D() const
 {
     ORepere3D repere;
 

@@ -113,7 +113,7 @@ void TYAcousticVolumeNodeGraphic::computeBoundingBox()
         // CLM-NT33 : Correction calcul BB des machines
         //_boundingBox.Enlarge(pAccVolGeoNode->getGraphicObject()->GetBox());
         OBox bb = pAccVolGeoNode->getGraphicObject()->GetBox();
-        OPoint3D origin = pAccVolGeoNode->getRepere()._origin;
+        OPoint3D origin = pAccVolGeoNode->getORepere3D()._origin;
         bb.Translate(origin);
         _boundingBox.Enlarge(bb);
         // CLM-NT33

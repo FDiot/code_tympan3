@@ -222,7 +222,7 @@ public:
     /**
      * Calcule le repere local a ce rectangle par rapport au repere global.
      */
-    ORepere3D getRepere() const;
+    ORepere3D getORepere3D() const;
 
     /**
      * Convertit ce rectangle en un polygone.

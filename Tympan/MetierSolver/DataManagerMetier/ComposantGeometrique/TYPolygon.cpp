@@ -441,7 +441,7 @@ bool TYPolygon::isValid() const
     return res;
 }
 
-ORepere3D TYPolygon::getRepere() const
+ORepere3D TYPolygon::getORepere3D() const
 {
     ORepere3D res;
 
@@ -480,7 +480,7 @@ TYRectangle TYPolygon::getBoundingRect() const
     // Changement de repere
     OMatrix matrix;
 
-    if (!getRepere().getMatChangeRep(matrix))
+    if (!getORepere3D().getMatChangeRep(matrix))
     {
         return BoundingRect;
     }

@@ -148,28 +148,16 @@ public:
     /**
      * Set/Get du repere.
      */
-    ORepere3D getORepere3D() const
-    {
-        return _repere;
-    }
+    const ORepere3D& getORepere3D() const
+    { return _repere; }
+
+    ORepere3D& getORepere3D()
+    { return _repere; }
 
     /**
      * Set/Get du repere.
      */
     void setRepere(const ORepere3D& repere) { _repere = repere; }
-
-    /**
-     * Set/Get du repere.
-     */
-    TYRepere& getRepere()
-    {
-        return _repere;
-    }
-
-    const TYRepere& getRepere() const
-    {
-        return _repere;
-    }
 
     /**
      * Set/Get du repere.
@@ -269,6 +257,3 @@ protected:
 typedef SmartPtr<TYGeometryNode> LPTYGeometryNode;
 
 #endif //__TY_GEOMETRY_NODE__
-
-
-

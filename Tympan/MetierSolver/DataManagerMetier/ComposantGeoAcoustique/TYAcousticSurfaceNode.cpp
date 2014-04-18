@@ -94,7 +94,7 @@ bool TYAcousticSurfaceNode::deepCopy(const TYElement* pOther, bool copyId /*=tru
     {
         TYAcousticSurface* pNewChild = (TYAcousticSurface*) pOtherAccSurfNode->getAcousticSurf(i)->clone();
         pNewChild->deepCopy(pOtherAccSurfNode->getAcousticSurf(i), copyId);
-        addAcousticSurf(pNewChild, pOtherAccSurfNode->_tabAcousticSurf[i]->getRepere());
+        addAcousticSurf(pNewChild, pOtherAccSurfNode->_tabAcousticSurf[i]->getORepere3D());
     }
 
     _pBoundingRect->deepCopy(pOtherAccSurfNode->_pBoundingRect, copyId);

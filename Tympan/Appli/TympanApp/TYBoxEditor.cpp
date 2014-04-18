@@ -172,7 +172,7 @@ void TYBoxEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::Ke
                     snapToGrid(org._x, org._y, dummy);
                 }
 
-                ORepere3D repere = pBoxGeoNode->getRepere();
+                ORepere3D repere = pBoxGeoNode->getORepere3D();
 
                 repere._origin = org;
 

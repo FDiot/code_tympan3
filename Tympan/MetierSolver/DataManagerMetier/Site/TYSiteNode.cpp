@@ -642,7 +642,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         TYBatiment* pBat = TYBatiment::safeDownCast(pBatGeoNode->getElement());
 
         // Recuperation de l'origine de l'element
-        pt = pBatGeoNode->getRepere()._origin;
+        pt = pBatGeoNode->getORepere3D()._origin;
 
         // Hauteur par rapport au sol
         double hauteur = pBatGeoNode->getHauteur();
@@ -653,7 +653,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         // Recherche de l'altitude
         bNoPbAlti &= pAlti->updateAltitude(pt);
 
-        ORepere3D repere = pBatGeoNode->getRepere();
+        ORepere3D repere = pBatGeoNode->getORepere3D();
 
         // On repositionne la nouvelle origine
         repere._origin._z = pt._z + hauteur;
@@ -678,7 +678,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         TYMachine* pMachine = TYMachine::safeDownCast(pMachineGeoNode->getElement());
 
         // Recuperation de l'origine de l'element
-        pt = pMachineGeoNode->getRepere()._origin;
+        pt = pMachineGeoNode->getORepere3D()._origin;
 
         // Hauteur par rapport au sol
         double hauteur = pMachineGeoNode->getHauteur();
@@ -689,7 +689,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         // Recherche de l'altitude
         bNoPbAlti &= pAlti->updateAltitude(pt);
 
-        ORepere3D repere = pMachineGeoNode->getRepere();
+        ORepere3D repere = pMachineGeoNode->getORepere3D();
 
         // On repositionne la nouvelle origine
         repere._origin._z = pt._z + hauteur;

@@ -1219,7 +1219,7 @@ void TYSiteFrame::changeRotation(TYElement* pElement)
         {
             if (getTYApp()->getCalculManager()->askForResetResultat())
             {
-                ORepere3D Repere = pGeoNode->getRepere();
+                ORepere3D Repere = pGeoNode->getORepere3D();
                 ORepere3D oldRepere = Repere;
                 OMatrix tyMat;
                 OMatrix tyMatTmpX;
@@ -1301,7 +1301,7 @@ void TYSiteFrame::localise(TYElement* pElement, TYElementGraphic* pGraphicObject
             TYGeometryNode* pGeoNode = TYGeometryNode::GetGeoNode(pElement);
             if (pGeoNode)
             {
-                ORepere3D repere = pGeoNode->getRepere();
+                ORepere3D repere = pGeoNode->getORepere3D();
                 NxVec3 repereCenter = NxVec3(repere._origin._x, repere._origin._z, -repere._origin._y);
                 OBox oBox = pGraphicObject->GetBox();
                 NxVec3 oBoxMin = NxVec3(oBox._min._x, oBox._min._z, -oBox._min._y);
