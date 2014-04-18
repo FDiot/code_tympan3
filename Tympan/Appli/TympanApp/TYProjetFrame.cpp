@@ -545,7 +545,7 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                             TYGeometryNode* pGeoNode = TYGeometryNode::GetGeoNode(pElement);
                             if (pGeoNode)
                             {
-                                ORepere3D repere = pGeoNode->getRepere();
+                                ORepere3D repere = pGeoNode->getORepere3D();
                                 NxVec3 repereCenter = NxVec3(repere._origin._x, repere._origin._z, -repere._origin._y);
                                 OBox oBox = pGraphicObject->GetBox();
                                 NxVec3 oBoxMin = NxVec3(oBox._min._x, oBox._min._z, -oBox._min._y);

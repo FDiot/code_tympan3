@@ -173,7 +173,7 @@ void TYSemiCylinderEditor::slotMouseReleased(int x, int y, Qt::MouseButton butto
                     snapToGrid(org._x, org._y, org._z);
                 }
 
-                ORepere3D repere = pSemiCylGeoNode->getRepere();
+                ORepere3D repere = pSemiCylGeoNode->getORepere3D();
 
                 repere._origin = org;
 

@@ -152,7 +152,7 @@ public:
     /**
      * Calcule le repere local a ce polygone par rapport au repere global.
      */
-    ORepere3D getRepere() const;
+    ORepere3D getORepere3D() const;
 
     /**
      * Calcul le rectangle englobant ce polygone.

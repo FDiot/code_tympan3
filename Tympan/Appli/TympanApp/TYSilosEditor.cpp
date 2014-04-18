@@ -180,7 +180,7 @@ void TYSilosEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::
                     snapToGrid(org._x, org._y, org._z);
                 }
 
-                ORepere3D repere = pCylGeoNode->getRepere();
+                ORepere3D repere = pCylGeoNode->getORepere3D();
 
                 repere._origin = org;
 
@@ -222,7 +222,7 @@ void TYSilosEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::
                     snapToGrid(org._x, org._y, org._z);
                 }
 
-                ORepere3D repere = pBatNode->getRepere();
+                ORepere3D repere = pBatNode->getORepere3D();
 
                 repere._origin = org;
 

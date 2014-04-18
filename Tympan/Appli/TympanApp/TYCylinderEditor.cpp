@@ -170,7 +170,7 @@ void TYCylinderEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Q
                     snapToGrid(org._x, org._y, org._z);
                 }
 
-                ORepere3D repere = pCylGeoNode->getRepere();
+                ORepere3D repere = pCylGeoNode->getORepere3D();
 
                 repere._origin = org;
 

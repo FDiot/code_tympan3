@@ -962,7 +962,7 @@ TYMoveGeoNodeAction::~TYMoveGeoNodeAction()
 
 void TYMoveGeoNodeAction::undo()
 {
-    ORepere3D repere = _pGeoNode->getRepere();
+    ORepere3D repere = _pGeoNode->getORepere3D();
 
     repere._origin = _oldPos;
 
@@ -976,7 +976,7 @@ void TYMoveGeoNodeAction::undo()
 
 void TYMoveGeoNodeAction::redo()
 {
-    ORepere3D repere = _pGeoNode->getRepere();
+    ORepere3D repere = _pGeoNode->getORepere3D();
 
     repere._origin = _newPos;
 

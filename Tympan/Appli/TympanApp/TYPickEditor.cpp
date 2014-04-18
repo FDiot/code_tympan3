@@ -809,7 +809,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
 
         if (pGeoNode)
         {
-            ORepere3D repere = pGeoNode->getRepere();
+            ORepere3D repere = pGeoNode->getORepere3D();
             TYPoint org = repere._origin;
             // On retire l'ancienne hauteur
             org._z -= sizeZ / 2;
@@ -903,7 +903,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             if (((TYAcousticVolumeNode*) copyVolRetCodes[popupRet]->getParent())->addAcousticVol(pCopy))
             {
                 // Offset
-                ORepere3D repere = pCopy->getRepere();
+                ORepere3D repere = pCopy->getORepere3D();
 
                 if (pCopy->getElement()->inherits("TYEtage"))
                 {
@@ -949,7 +949,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             // Ajout
             if (((TYEtage*) copyMachineRetCodes[popupRet]->getParent())->addMachine(pCopy))
             {
-                ORepere3D repere = pCopy->getRepere();
+                ORepere3D repere = pCopy->getORepere3D();
                 // Offset
                 repere._origin._x += 5.0;
                 repere._origin._y -= 5.0;
@@ -1107,7 +1107,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
 
             if (pCopyTmp)
             {
-                ORepere3D repere = pCopyTmp->getRepere();
+                ORepere3D repere = pCopyTmp->getORepere3D();
                 // Offset
                 repere._origin._x += 50.0;
                 repere._origin._y -= 50.0;
@@ -1306,7 +1306,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             {
                 if (!copyInfraRetCodes[popupRet]->isA("TYUserSourcePonctuelle"))
                 {
-                    ORepere3D repere = pCopyTmp->getRepere();
+                    ORepere3D repere = pCopyTmp->getORepere3D();
 
                     // Offset proportionnel a la taille de l'objet
                     repere._origin._x += boundBox._sizeX; //10.0;
@@ -1346,7 +1346,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             // Ajout
             if (((TYCalcul*) copyMaillageRetCodes[popupRet]->getParent())->addMaillage(pCopy))
             {
-                ORepere3D repere = pCopy->getRepere();
+                ORepere3D repere = pCopy->getORepere3D();
                 // Offset
                 repere._origin._x += 10.0;
                 repere._origin._y -= 10.0;
@@ -1460,7 +1460,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             // Ajout
             if (((TYSiteNode*) copySiteNodeRetCodes[popupRet]->getParent())->addSiteNode(pCopy))
             {
-                ORepere3D repere = pCopy->getRepere();
+                ORepere3D repere = pCopy->getORepere3D();
                 // Offset
                 repere._origin._x += 100.0;
                 repere._origin._y -= 100.0;
@@ -1556,7 +1556,7 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
     // On cree un geonode temporaire copie du geonode transmis (uniquement les elements geometrique)
     TYGeometryNode* pTempGeoNode = new TYGeometryNode();
     //  pTempGeoNode->deepCopy(pGeoNode, true);
-    pTempGeoNode->setRepere(pGeoNode->getRepere()) ;
+    pTempGeoNode->setRepere(pGeoNode->getORepere3D()) ;
     pTempGeoNode->setElement(pElement);
 
 
@@ -1565,7 +1565,7 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
     if (pRootGeometryNode)
     {
         oldZero = pRootGeometryNode->globalToLocal() * oldZero;
-        pTempGeoNode->getRepere()._origin = oldZero;
+        pTempGeoNode->getORepere3D()._origin = oldZero;
     }
 
     // Affectation de la hauteur au geoNode temporaire
@@ -1594,7 +1594,7 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
         if (_pModeler->askForResetResultat())
         {
             //On a bouge l'origine (exprime dans le repere root)
-            OPoint3D newZero = pTempGeoNode->getRepere()._origin;
+            OPoint3D newZero = pTempGeoNode->getORepere3D()._origin;
 
             // On passe newZero dans le repere local s'il y a lieu
             if (pRootGeometryNode)
@@ -1606,7 +1606,7 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
             newZero = pGeoNode->globalToLocal() * newZero;
 
             //on modifie l'origine du GeoNode de newZero:
-            ORepere3D repere = pGeoNode->getRepere();
+            ORepere3D repere = pGeoNode->getORepere3D();
             TYPoint oldOrg = repere._origin;
             repere._origin._x = repere._origin._x + newZero._x;
             repere._origin._y = repere._origin._y + newZero._y;
@@ -1685,7 +1685,7 @@ void TYPickEditor::showRotationDialog(TYGeometryNode* pGeoNode)
     {
         if (_pModeler->askForResetResultat())
         {
-            ORepere3D Repere = pGeoNode->getRepere();
+            ORepere3D Repere = pGeoNode->getORepere3D();
             ORepere3D oldRepere = Repere;
             OMatrix tyMat;
             OMatrix tyMatTmpX;

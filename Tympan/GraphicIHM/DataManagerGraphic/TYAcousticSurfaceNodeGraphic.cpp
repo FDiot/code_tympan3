@@ -68,7 +68,7 @@ void TYAcousticSurfaceNodeGraphic::computeBoundingBox()
         // CLM-NT33 : Correction calcul BB des machines
         //_boundingBox.Enlarge(pAccSurfGeoNode->getGraphicObject()->GetBox());
         OBox bb = pAccSurfGeoNode->getGraphicObject()->GetBox();
-        bb.Translate(pAccSurfGeoNode->getRepere()._origin);
+        bb.Translate(pAccSurfGeoNode->getORepere3D()._origin);
         _boundingBox.Enlarge(bb);
     }
 }

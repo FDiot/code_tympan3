@@ -90,7 +90,7 @@ bool TYAcousticVolumeNode::deepCopy(const TYElement* pOther, bool copyId /*=true
     {
         TYAcousticVolume* pNewChild = (TYAcousticVolume*) pOtherAccVolNode->getAcousticVol(i)->clone();
         pNewChild->deepCopy(pOtherAccVolNode->getAcousticVol(i), copyId);
-        addAcousticVol(pNewChild, pOtherAccVolNode->_tabAcousticVol[i]->getRepere(), false);
+        addAcousticVol(pNewChild, pOtherAccVolNode->_tabAcousticVol[i]->getORepere3D(), false);
     }
 
     return true;

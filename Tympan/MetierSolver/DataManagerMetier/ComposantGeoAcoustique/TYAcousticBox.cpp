@@ -141,42 +141,42 @@ void TYAcousticBox::setDimension(float larg, float lon, float haut)
     float demiHaut = haut / 2.0;
 
     pElement = TYAcousticRectangleNode::safeDownCast(_faces[0]->getElement());
-    repere = _faces[0]->getRepere();
+    repere = _faces[0]->getORepere3D();
     repere._origin._x = demiLarg;
     _faces[0]->setRepere(repere);
     pElement->setSize(lon, haut);
     _faces[0]->setIsGeometryModified(true);
 
     pElement = TYAcousticRectangleNode::safeDownCast(_faces[2]->getElement());
-    repere = _faces[2]->getRepere();
+    repere = _faces[2]->getORepere3D();
     repere._origin._x = -demiLarg;
     _faces[2]->setRepere(repere);
     pElement->setSize(lon, haut);
     _faces[2]->setIsGeometryModified(true);
 
     pElement = TYAcousticRectangleNode::safeDownCast(_faces[1]->getElement());
-    repere = _faces[1]->getRepere();
+    repere = _faces[1]->getORepere3D();
     repere._origin._y = -demiLon;
     _faces[1]->setRepere(repere);
     pElement->setSize(larg, haut);
     _faces[1]->setIsGeometryModified(true);
 
     pElement = TYAcousticRectangleNode::safeDownCast(_faces[3]->getElement());
-    repere = _faces[3]->getRepere();
+    repere = _faces[3]->getORepere3D();
     repere._origin._y = demiLon;
     _faces[3]->setRepere(repere);
     pElement->setSize(larg, haut);
     _faces[3]->setIsGeometryModified(true);
 
     pElement = TYAcousticRectangleNode::safeDownCast(_faces[4]->getElement());
-    repere = _faces[4]->getRepere();
+    repere = _faces[4]->getORepere3D();
     repere._origin._z = -demiHaut;
     _faces[4]->setRepere(repere);
     pElement->setSize(larg, lon);
     _faces[4]->setIsGeometryModified(true);
 
     pElement = TYAcousticRectangleNode::safeDownCast(_faces[5]->getElement());
-    repere = _faces[5]->getRepere();
+    repere = _faces[5]->getORepere3D();
     repere._origin._z = demiHaut;
     _faces[5]->setRepere(repere);
     pElement->setSize(larg, lon);
