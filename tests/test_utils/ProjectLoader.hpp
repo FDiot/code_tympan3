@@ -58,8 +58,7 @@ public:
     virtual void load_file(const char filename[])
     {
         using namespace tympan;
-        project = LPTYProjet(); // a way to explicitely release the smart pointer
-        load_project(filename, project); // This output to `project`
+        project = load_project(filename); // This output to `project`
         assert_loaded_project(project);
     }
 

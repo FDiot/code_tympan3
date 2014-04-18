@@ -95,8 +95,20 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         // XXX this code is temporary. We should use QTemporaryFile objects (TBD)
         const char *problemfile = "problem.xml";
         const char *resultfile = "result.xml";
-        if (save_project(problemfile, pProject))
+
+        try
         {
+            save_project(problemfile, pProject);
+        }
+        catch(tympan::invalid_data)
+        {
+            // reactivate HMI
+            TYApplication::restoreOverrideCursor();
+            getTYMainWnd()->setEnabled(true);
+            return false;
+        }
+
+
             // Call python module to do the computation
             // XXX we should define a work environment so as to know where to record
             // the xml files, where to look for them, where are the python scripts
@@ -120,16 +132,23 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             {
                 // Then read the result to update the internal model
                 LPTYProjet result;
-                if (load_project(resultfile, result))
+                try
                 {
+                    result = load_project(resultfile);
+                }
+                catch(tympan::invalid_data)
+                {
+                    // reactivate HMI
+                    TYApplication::restoreOverrideCursor();
+                    getTYMainWnd()->setEnabled(true);
+                    return false;
+                }
                     pProject = result.getRealPointer();
                     getTYApp()->getCurProjet()->setCurrentCalcul(
                             pProject->getCurrentCalcul());
                     pCalcul = pProject->getCurrentCalcul();
                     ret = true;
-                }
             }
-        }
 
         OChronoTime endTime; //xbh: analyse du temps de calcul
         OChronoTime duration = endTime - startTime;

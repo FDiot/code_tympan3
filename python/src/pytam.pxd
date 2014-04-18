@@ -10,8 +10,8 @@ cdef extern from "Tympan/Tools/OSmartPtr.h":
         T *getRealPointer()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp" namespace "tympan":
-   bool load_project(const char *filename, SmartPtr[TYProjet] &)
-   bool save_project(const char *filename, const SmartPtr[TYProjet] &)
+   SmartPtr[TYProjet] load_project(const char *filename)
+   void save_project(const char *filename, const SmartPtr[TYProjet] &)
 
 cdef extern from "python/include/Loader.hpp" namespace "tympan":
    void load_solver(const char *foldername, TYCalcul *calcul)
@@ -70,4 +70,3 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/T
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h":
     cdef cppclass TYGeometryNode:
         TYElement* getElement()
-

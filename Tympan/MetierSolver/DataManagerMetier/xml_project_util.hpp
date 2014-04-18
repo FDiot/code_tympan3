@@ -19,7 +19,7 @@ namespace tympan
      *                made to refer to the loaded \c TYProjet.
      * @return true if the project could be loader, false otherwise
      */
-    bool load_project(const char * filename, LPTYProjet& project);
+    LPTYProjet load_project(const char * filename);
 
     /**
      * @brief save a project into an XML file
@@ -27,7 +27,7 @@ namespace tympan
      * @param project : pointer to the project to save
      * @return true if the project could be saved, false otherwise
      */
-    bool save_project(const char * filename, const LPTYProjet& project);
+    void save_project(const char * filename, const LPTYProjet& project);
 
 } /* namespace tympan */
 

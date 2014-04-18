@@ -126,7 +126,9 @@ cdef class Project:
     @staticmethod
     def from_xml(filepath):
         project = Project()
-        if load_project(filepath, project.thisptr):
+        # TODO see how to convert potential C++ exception into python ones
+        project.thisptr = load_project(filepath)
+        if  project.thisptr.getRealPointer() != NULL:
             return project
         else:
             raise Exception("Project could not be loaded from %s" % filepath)

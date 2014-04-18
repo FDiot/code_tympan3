@@ -11,7 +11,7 @@ namespace tympan
 ComputationLauncher::ComputationLauncher(const char* filename) :
     _filename(filename)
 {
-    load_project(filename, _project);
+    _project = load_project(filename);
     setCurrentComputation(0);
 }
 
