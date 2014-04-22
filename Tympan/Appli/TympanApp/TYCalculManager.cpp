@@ -111,7 +111,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             python.setEnvironment(env);
 
             QStringList args;
-            args << "Tympan/pythond/tympan.py" << problemfile << resultfile
+            args << "Tympan/pymodules/tympan.py" << problemfile << resultfile
                 << "Tympan/pluginsd";
             python.start("python", args);
             while (!python.waitForFinished()); // wait for the script to execute
