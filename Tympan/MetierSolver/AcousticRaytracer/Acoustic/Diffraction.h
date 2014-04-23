@@ -16,10 +16,11 @@
 #ifndef DIFFRACTION_H
 #define DIFFRACTION_H
 
+#include <cmath>
+
 #include "Event.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Repere.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
-
 
 class Cylindre;
 

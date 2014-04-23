@@ -20,15 +20,11 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
+#include "OSpectre.h"
 
 #undef min // Something defines a min macro on windows, which breaks std::min
 
 #include <algorithm>
-
-#include "Tympan/Tools/OMessageManager.h"
 
 // Frequence de travail minimale
 float OSpectre::_fMin = 16;
@@ -735,7 +731,7 @@ double OSpectre::valMax()
 
     for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        result = max(this->_module[i], result);
+        result = std::max(this->_module[i], result);
     }
 
     return result;
