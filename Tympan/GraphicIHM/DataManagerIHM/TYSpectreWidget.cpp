@@ -67,8 +67,6 @@ TYSpectreWidget::TYSpectreWidget(TYSpectre* pElement, QWidget* _pParent /*=NULL*
     // Par defaut precision prend la valeur affectee a la classe TYSpectre pour le stockage en XML
     _precision = TYSpectre::getXMLPrecision();
 
-    QString num;
-
     // On utilise une copie du spectre associe a ce widget
 
     // Et on conserve ce spectre par ailleurs

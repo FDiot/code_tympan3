@@ -72,8 +72,6 @@ bool TYAcousticPathFinder::computeParcoursLateraux(const TYSIntersection* tabInt
         ptsRight.push_back(rayon._ptA);
     }
 
-    TYTabPoint3D ptsTemp;
-
     // Creation du segment SR
     Parcours.AjouterSegmentSR(const_cast<double*>(rayon._ptA._value), const_cast<double*>(rayon._ptB._value));
 

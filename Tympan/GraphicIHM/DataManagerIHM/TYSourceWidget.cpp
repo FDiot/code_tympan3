@@ -39,7 +39,6 @@
 TYSourceWidget::TYSourceWidget(TYSource* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
-
     _elmW = new TYElementWidget(pElement, this);
     //  _colorW = new TYColorInterfaceWidget(pElement, this);
 
@@ -76,8 +75,6 @@ TYSourceWidget::~TYSourceWidget()
 
 void TYSourceWidget::updateContent()
 {
-    QString num;
-
     _elmW->updateContent();
     //  _colorW->updateContent();
 }

@@ -546,7 +546,6 @@ void TYCalculWidget::apply()
     TYPluginManager::TYPluginList& plugList = pPlug->getPluginList();
     TYPluginManager::TYPluginList::iterator iter;
 
-    QString solverName;
     unsigned short i = 0, currentSolverIndex = 0;
     unsigned short currentIndex = _comboSolver->currentIndex();
     OGenID id;

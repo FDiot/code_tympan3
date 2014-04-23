@@ -115,8 +115,6 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
     OPoint3D Prefl, Pprec, Psuiv;    //pt de reflexion, pt precedent et suivant
 
-    TYTabRayEvent events;           // liste des evenements
-
     OTabDouble tabPondFresnel;      // tableau des ponderations de Fresnel
     TYTabPoint3D triangleCentre;    // Contains all triangles centres
 

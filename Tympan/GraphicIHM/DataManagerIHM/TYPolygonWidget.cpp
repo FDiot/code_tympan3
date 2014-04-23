@@ -39,9 +39,6 @@
 TYPolygonWidget::TYPolygonWidget(TYPolygon* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
-    QString num;
-
-
     _elmW = new TYElementWidget(pElement, this);
     _surfaceW = new TYSurfaceInterfaceWidget(pElement, this);
 

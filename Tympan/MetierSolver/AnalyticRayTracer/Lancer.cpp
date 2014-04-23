@@ -234,7 +234,6 @@ void Lancer::RemplirMat()
     Step y0;
 
     RayCourb* tab = NULL;
-    vector<vec3> tableau_norm;
 
     for (unsigned int ns = 0; ns < sources.size(); ++ns)
     {

@@ -40,8 +40,6 @@
 TYTerrainWidget::TYTerrainWidget(TYTerrain* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
-    QString num;
-
     unsigned short lnW = 0;
 
     _elmW = new TYElementWidget(pElement, this);
