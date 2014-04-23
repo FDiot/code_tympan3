@@ -206,17 +206,6 @@ int TYRay::getNbrDiffractions()
     return nbrDiff;
 }
 
-double TYRay::getDistanceSR() const
-{
-    const OPoint3D S = *_source->getPos(); // coordonnees de la source
-
-    double coord[3];
-    _recepteur->getCoords(coord);
-    const OPoint3D R = OPoint3D(coord); // coordonnees du recepteur
-
-    return S.distFrom(R);
-}
-
 double TYRay::getLength()
 {
     double length = 0.0;

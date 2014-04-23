@@ -233,11 +233,6 @@ bool TYAcousticFaceSet::findAcousticSurface(const TYAcousticSurface* pAccSurf, O
     return false;
 }
 
-double TYAcousticFaceSet::lwApp(const TYSourcePonctuelle* pSrc, TYSegment seg) const
-{
-    return 0.0f;
-}
-
 TYSpectre TYAcousticFaceSet::setGlobalLW(const TYSpectre& spectre, const double& surfGlobale, const int& regime/*=-1*/)
 {
     TYSpectre LWv;

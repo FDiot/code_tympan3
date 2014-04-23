@@ -88,9 +88,6 @@ public:
     virtual std::string toXMLString();
     virtual bool fromXMLString(const std::string& sXMLString);
 
-    // Compare le contenu de deux spectre
-    virtual bool equivTo(const TYSpectre& other) const;
-
     /// Set/Get de la forme du spectre.
     virtual TYSpectreForm getForm() {return _form;}
     virtual void setForm(const TYSpectreForm& form) { _form = form; }

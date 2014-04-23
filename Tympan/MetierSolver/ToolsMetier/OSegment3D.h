@@ -134,14 +134,6 @@ public:
     OPoint3D centerOfCurvedPath(const double& R) const;
 
     /**
-     * \fn double topOfCurvedPath(const double& R) const;
-     * \brief Retourne la hauteur du sommet de l'arc de cercle de rayon R reliant les deux extremites du segment
-     *
-     * \return double Hauteur du sommet
-     */
-    double topOfCurvedPath(const double& R) const;
-
-    /**
      * \fn double lengthOfCurvedPath(const double& R);
      * \brief Calcule la longueur du trajet de rayon R passant par les extremites du segment
      * \param R rayon du cercle de rayon R

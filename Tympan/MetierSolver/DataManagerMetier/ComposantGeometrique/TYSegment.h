@@ -127,12 +127,6 @@ public:
      * @return TYPoint Position du centre du cercle
      */
     TYPoint centerOfCurvedPath(const double& R) const;
-    /**
-     * Retourne la hauteur du sommet de l'arc de cercle de rayon R reliant les deux extremites du segment
-     *
-     * @return double Hauteur du sommet
-     */
-    double topOfCurvedPath(const double& R) const;
 
     /**
      * Calcule la longueur du trajet de rayon R passant par les extremites du segment

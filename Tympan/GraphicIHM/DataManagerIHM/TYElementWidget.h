@@ -61,11 +61,6 @@ public:
      */
     virtual ~TYElementWidget();
 
-    /**
-     * Retourne le nom
-     */
-    QString getEditName() const;
-
 public slots:
     virtual void updateContent();
     virtual void apply();

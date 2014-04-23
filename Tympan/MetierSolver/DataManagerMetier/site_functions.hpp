@@ -51,13 +51,6 @@ inline unsigned int get_acoustic_surface_number(LPTYSiteNode site_ptr)
 };
 
 
-//! Get the number of acoustic surfaces with 'ecran'.
-inline unsigned int get_acoustic_surface_number_with_ecran(LPTYSiteNode site_ptr)
-{
-    return get_acoustic_surfaces(site_ptr).size();
-};
-
-
 //! Get \c TYMateriauConstruction from a \c TYGeometryNode (or a \c TYAcousticSurface).
 /*! XXX \todo does not work well. Don't know if we use the right object.
  */

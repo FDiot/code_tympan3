@@ -197,11 +197,6 @@ public:
     // void setColors(const OLookupTable& lookupTable) { _colorMap = lookupTable; } // XXX update callers
 
     /**
-     * \brief Get de la couleur pour un pourcentage
-     */
-    const OColor& getColorFromPercent(values_type percent) const;
-
-    /**
      * \brief Set de la couleur pour un pourcentage
      */
     //void setColorFromPercent(values_type percent, const OColor& color); //XXX merge into setColorFromValue

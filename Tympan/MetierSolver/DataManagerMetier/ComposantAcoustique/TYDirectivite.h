@@ -113,16 +113,6 @@ public:
      */
     void setTabAnglesVal(const TYDirectiviteAnglesValueTab& tab) { _tabAnglesVal = tab; }
 
-    /**
-     * Calcule le coefficient de directivite pour un couple d'angles donne.
-     *
-     * @param theta L'angle theta de l'incidence.
-     * @param phi L'angle phi de l'incidence.
-     *
-     * @return Le coefficient de directivite calcule.
-     */
-    double getDirectivite(double theta, double phi) const;
-
 
     inline double calcDeriveSeconde(const int& i) const ;
 

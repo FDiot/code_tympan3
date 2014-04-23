@@ -142,15 +142,6 @@ public:
     virtual OSpectre lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& Atmo, const int& expGeo = 0, const int& regime = -1) const;
 
     /**
-     * Calcule la distance de cette source par rapport a la source passee.
-     *
-     * @param pSrc Une source ponctuelle.
-     *
-     * @return La distance entre les 2 sources ponctuelles.
-     */
-    double distFromSrc(const TYSourcePonctuelle* pSrc) const;
-
-    /**
      * Set/Get de la hauteur de cette source par rapport au sol (a
      * l'altimetrie en fait).
      */

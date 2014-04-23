@@ -172,22 +172,6 @@ OSpectreComplex OSpectreComplex::operator * (const double& coefficient) const
     return s;
 }
 
-OSpectreComplex OSpectreComplex::multi(const double& coefficient) const
-{
-    OSpectreComplex s;
-
-    // Recopie de l'empreinte du spectre
-    s._etat = _etat; s._type = _type;
-
-    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-        s._module[i] = _module[i] * coefficient;
-        s._phase[i] = _phase[i]; // * coefficient;
-    }
-
-    return s;
-}
-
 OSpectreComplex OSpectreComplex::operator / (const OSpectreComplex& spectre) const
 {
     // Produit de deux complexes en module/phase
@@ -287,45 +271,6 @@ OSpectreComplex OSpectreComplex::toModulePhase() const
 
         s._module[i] = module;
         s._phase[i] = phase;
-    }
-    return s;
-}
-
-OSpectreComplex OSpectreComplex::toReelImaginaire() const
-{
-    OSpectreComplex s;
-    double reel, imag, module, phase;
-
-    // Recopie de l'empreinte du spectre
-    s._etat = _etat;
-    s._type = _type;
-
-    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-        module = this->_module[i];
-        phase = this->_phase[i];
-
-        reel = module * ::cos(phase);
-        imag = module * ::sin(phase);
-
-        s._module[i] = reel;
-        s._phase[i] = imag;
-    }
-    return s;
-}
-
-OSpectreComplex OSpectreComplex::sumComplex(const OSpectreComplex& spectre) const
-{
-    OSpectreComplex s;
-
-    // Recopie de l'empreinte du spectre
-    s._etat = _etat;
-    s._type = _type;
-
-    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-        s._module[i] = this->_module[i] + spectre._module[i];
-        s._phase[i] = this->_phase[i] + spectre._phase[i];
     }
     return s;
 }

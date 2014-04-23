@@ -476,21 +476,6 @@ TYPalette::values_type TYPalette::normalize(values_type value) const
     return (value - getValueMin()) / amplitude ;
 }
 
-const OColor& TYPalette::getColorFromPercent(values_type percent) const
-{
-    // Out of bound values
-    if (percent < std::numeric_limits<values_type>::epsilon())
-    {
-        return getInfColor();
-    }
-    // Valeur superieur ou egale a 1
-    if (percent >= 1.0f)
-    {
-        return getSupColor();
-    }
-    return getColorFromValue(denormalize(percent));
-}
-
 const OColor& TYPalette::getColorFromValue(values_type value) const
 {
     // Look up into the map

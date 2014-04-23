@@ -71,11 +71,6 @@ TYElementWidget::~TYElementWidget()
 {
 }
 
-QString TYElementWidget::getEditName() const
-{
-    return _lineEditName->text();
-}
-
 void TYElementWidget::updateContent()
 {
     _lineEditName->setText(getElement()->getName());

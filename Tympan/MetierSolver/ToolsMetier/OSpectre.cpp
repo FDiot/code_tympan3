@@ -608,21 +608,6 @@ OSpectre OSpectre::log(const double& base) const
     return s;
 }
 
-OSpectre OSpectre::tenPow() const
-{
-    OSpectre  s;
-
-    // Recopie de l'empreinte du spectre
-    s._etat = _etat; s._type = _type;
-
-    for (unsigned int i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT ; i++)
-    {
-        s._module[i] = pow(10.0, this->_module[i]);
-    }
-
-    return s;
-}
-
 OSpectre OSpectre::racine() const
 {
     OSpectre s;
@@ -688,11 +673,6 @@ OSpectre OSpectre::cos() const
     }
 
     return s;
-}
-
-OSpectre OSpectre::tan() const
-{
-    return this->sin().div(this->cos());
 }
 
 OSpectre OSpectre::abs() const

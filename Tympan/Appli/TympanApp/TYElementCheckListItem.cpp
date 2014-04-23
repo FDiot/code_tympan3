@@ -35,12 +35,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYMachine.h"
 
 
-/**
- * Identifie la classe TYElementCheckListItem pour la distinguer de sa classe parent QCheckListItem.
- * Cette valeur est retournee par 'virtual int TYElementCheckListItem::rtti()'.
- */
-/*static*/ int TYElementCheckListItem::RTTI = 1002;
-
 
 #define TR(id) OLocalizator::getString("TYElementCheckListItem", (id))
 
@@ -191,9 +185,4 @@ void TYElementCheckListItem::setOn(bool state, bool UpdateModelers)
 void TYElementCheckListItem::setCheckState(Qt::CheckState state)
 {
     setOn(state == Qt::Checked, true);
-}
-
-int TYElementCheckListItem::rtti() const
-{
-    return RTTI;
 }

@@ -215,27 +215,12 @@ NxReal NxVec3::magnitude() const
 }
 
 
-NxReal NxVec3::magnitudeSquared() const
-{
-    return x * x + y * y + z * z;
-}
-
-
 NxReal NxVec3::distance(const NxVec3& v) const
 {
     NxReal dx = x - v.x;
     NxReal dy = y - v.y;
     NxReal dz = z - v.z;
     return sqrt(dx * dx + dy * dy + dz * dz);
-}
-
-
-NxReal NxVec3::distanceSquared(const NxVec3& v) const
-{
-    NxReal dx = x - v.x;
-    NxReal dy = y - v.y;
-    NxReal dz = z - v.z;
-    return dx * dx + dy * dy + dz * dz;
 }
 
 

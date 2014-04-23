@@ -199,11 +199,6 @@ void TYUserSourcePonctuelleWidget::apply()
     emit modified();
 }
 
-//void TYUserSourcePonctuelleWidget::editDirectivite()
-//{
-//    getElement()->getDirectivite()->edit(this);
-//}
-
 void TYUserSourcePonctuelleWidget::createNewRegime()
 {
     // On commence par sauver le regime courant
@@ -232,8 +227,6 @@ void TYUserSourcePonctuelleWidget::saveCurrentRegime()
     {
         regime._pAtt = getElement()->getAttenuateur();
     }
-
-    //    regime._pDirectivite = getElement()->getDirectivite();
 }
 
 void TYUserSourcePonctuelleWidget::deleteRegime()

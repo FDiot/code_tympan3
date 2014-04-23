@@ -291,11 +291,6 @@ bool TYAcousticVolume::findAcousticSurface(const TYAcousticSurface* pAccSurf, OM
     return false;
 }
 
-double TYAcousticVolume::lwApp(const TYSourcePonctuelle* pSrc, TYSegment seg) const
-{
-    return 0.0f;
-}
-
 TYSpectre TYAcousticVolume::setGlobalLW(const TYSpectre& spectre, const double& surfGlobale, const int& regime/*=-1*/)
 {
     TYSpectre LWv;

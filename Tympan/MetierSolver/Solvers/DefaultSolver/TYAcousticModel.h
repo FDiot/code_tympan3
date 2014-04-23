@@ -156,16 +156,6 @@ public:
     bool addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFin, const OSegment3D& penteMoyenne, const TYSourcePonctuelleGeoNode* pSrcGeoNode, const bool& fromSource, const bool& toRecepteur, TYTabEtape& Etapes, double& longueur) const;
 
     /**
-     * Ajoute les chemins calcules au tableau des chemins du trajet
-     */
-    void addCheminToTrajet(const TYTabChemin& TabChemin, TYTrajet& trajet) const;
-
-    /**
-     *
-     */
-    void addCheminDirectToTrajet(const TYTabChemin& TabChemin, TYTrajet& trajet) const;
-
-    /**
      * Ajoute le trajet direct a chacun des chemins.
      */
     void addEtapeDirectToChemins(const TYEtape& EtapeDirecte, TYTabChemin& TabChemin) const;

@@ -438,18 +438,6 @@ public:
     TYTabStructSegPtrTer sols(const OSegment3D& seg);
 
     /**
-     * Hauteur du point passe par rapport a la pente moyenne.
-     *
-     * @param pt Point de la topographie.
-     * @param seg Segment pour lequel on calcul la pente moyenne.
-     * @param hauteur La hauteur resultante du point par rapport a la pente moyenne.
-     *
-     * @return <code>false</code> si le segment passe est valide
-     *         (inclu dans la zone de travail); <code>false</code> sinon.
-     */
-    bool hauteurFromPenteMoy(const OPoint3D& pt, const OSegment3D& seg, double& hauteur) const;
-
-    /**
      * Met a jour les caracteristique des sols definis dans la topo
      * Calcul du nombre d'onde dans le sol en fonction de l'atmosphere
      */

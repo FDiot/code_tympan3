@@ -308,28 +308,6 @@ OSpectre TYUserSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const
     return s;
 }
 
-const TYDirectiviteAnglesValue TYUserSourcePonctuelle::getAngles(const OVector3D dir) const
-{
-    TYDirectiviteAnglesValue angles;
-    angles._phi = 360;
-    angles._theta = 360;
-
-    TYAcousticSurface* pSurf = TYAcousticSurface::safeDownCast((TYElement*) getParent());
-
-    if (pSurf)
-    {
-        OVector3D dirXY(dir), dirZ(dir);
-
-        dirXY._z = 0;
-        if (dirZ._x != 0) { dirZ._y = 0; }
-
-        angles._phi = pSurf->normal().angle(dirXY);
-        angles._theta = pSurf->normal().angle(dirZ);
-    }
-
-    return angles;
-}
-
 int TYUserSourcePonctuelle::addRegime(TYUserSrcRegime regime)
 {
     _tabRegimes.push_back(regime);
