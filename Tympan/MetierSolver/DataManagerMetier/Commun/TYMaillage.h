@@ -259,40 +259,6 @@ public:
     void setLocked(const bool& locked) { _locked = locked; }
 
     /**
-     * \fn bool sumArith(const TYMaillage& maillage, TYMaillage& maillageOut)
-     * \brief Effectue la somme arithmetique de deux Maillages selectionnes.
-     * \param maillage, maillageOut
-     */
-    bool sumArith(const TYMaillage& maillage, TYMaillage& maillageOut) const;
-
-    /**
-     * \fn  bool sumEnerg(const TYMaillage& maillage, TYMaillage& maillageOut)
-     * \brief Effectue la somme energetique de deux Maillages selectionnes.
-     * \param maillage maillageOut
-     */
-    bool sumEnerg(const TYMaillage& maillage, TYMaillage& maillageOut) const;
-
-    /**
-     * \fn bool substArith(const TYMaillage& maillage, TYMaillage& maillageOut)
-     * \brief Effectue la soustraction arithmetique de deux Maillages selectionnes.
-     * \param maillage maillageOut
-     */
-    bool substArith(const TYMaillage& maillage, TYMaillage& maillageOut) const;
-
-    /**
-     * \fn bool substEnerg(const TYMaillage& maillage, TYMaillage& maillageOut)
-     * \brief Effectue la soustraction energetique de deux Maillages selectionnes.
-     * \param maillage maillageOut
-     */
-    bool substEnerg(const TYMaillage& maillage, TYMaillage& maillageOut) const;
-    /**
-     * \fn bool multCoef(const double& coeff, TYMaillage& maillageOut)
-     * \brief Effectue la multiplication d'un Maillage selectionne par un coefficient.
-     * \param coeff maillageOut
-     */
-    bool multCoef(const double& coeff, TYMaillage& maillageOut) const;
-
-    /**
      * \fn enum MaillageDataType
      * \brief Les differents type pour les donnees a representer
      * \param ValGlobalDBA        La valeur globale du spectre en dBA.

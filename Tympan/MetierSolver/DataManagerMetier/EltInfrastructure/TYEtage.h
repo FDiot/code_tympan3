@@ -367,15 +367,6 @@ public:
     void coeffSabine();
 
     /**
-     * Calcule le coefficient de transmission au point donne.
-     *
-     * @param pSrcPonct Source ponctuelle pour le calcul du coefficient de transmission.
-     *
-     * @return Le coefficient de transmission au point passe.
-     */
-    double coeffTransmFrom(const TYSourcePonctuelle* pSrcPonct) const;
-
-    /**
      * Calcule le temps de reverberation de l'etage.
      */
     void  calculTempsReverb();

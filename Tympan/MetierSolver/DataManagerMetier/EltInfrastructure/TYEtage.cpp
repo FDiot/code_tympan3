@@ -2187,17 +2187,6 @@ void TYEtage::calculTempsReverb()
     _TR.setEtat(SPECTRE_ETAT_DB); // Pour eviter une transformation non souhaitee
 }
 
-double TYEtage::coeffTransmFrom(const TYSourcePonctuelle* pSrcPonct) const
-{
-    assert(pSrcPonct);
-    TYAcousticSurface* pAccSurf = (TYAcousticSurface*) pSrcPonct->getParent();
-    assert(pAccSurf);
-    LPTYMateriauConstruction pMat = pAccSurf->getMateriau();
-    TYSpectre spectre = pMat->getSpectreTransm();
-
-    return 0;
-}
-
 void TYEtage::updateSolPlafond()
 {
     int nbPts = static_cast<int>(_tabMur.size());

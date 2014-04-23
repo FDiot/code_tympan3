@@ -107,9 +107,6 @@ public:
      */
     void setOn(bool state, bool UpdateModelers);
 
-    virtual int rtti() const;
-    static int RTTI;
-
 protected:
     void initItem(LPTYElement pElement, LPTYCalcul pCalcul, const QStringList& labels = QStringList());
 

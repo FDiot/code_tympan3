@@ -39,21 +39,6 @@ void KDNode::createNode(int axis, float _split, unsigned int nextChild)
     secondChild |= nextChild << 2;
 }
 
-bool compareToXAxis(InfoPrim p1, InfoPrim p2)
-{
-    return p1.box.centroid[0] < p2.box.centroid[0];
-}
-
-bool compareToYAxis(InfoPrim p1, InfoPrim p2)
-{
-    return p1.box.centroid[1] < p2.box.centroid[1];
-}
-
-bool compareToZAxis(InfoPrim p1, InfoPrim p2)
-{
-    return p1.box.centroid[2] < p2.box.centroid[2];
-}
-
 KdtreeAccelerator::KdtreeAccelerator(std::vector<Shape*>* _initialMesh,  BBox _globalBox)
 {
     initialMesh = _initialMesh;

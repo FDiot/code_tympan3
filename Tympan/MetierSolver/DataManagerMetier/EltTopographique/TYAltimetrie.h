@@ -186,11 +186,6 @@ public:
     double PremiereHauteurPositiveOuNulle(TYTabPoint& ptsIn);
 
     /**
-     * Retourne la liste des points d'altitude superieure au point donne.
-     */
-    TYTabPoint altSup(const TYPoint& pt) const;
-
-    /**
      * \brief Return the face under a point
      * \fn LPTYPolygon getFaceUnder(OPoint3D pt);
      */

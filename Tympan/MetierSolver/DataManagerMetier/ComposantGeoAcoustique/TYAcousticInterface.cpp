@@ -352,16 +352,6 @@ void TYAcousticInterface::propagateRegime()
     addRegime(buildRegime());
 }
 
-int TYAcousticInterface::checkRegimeNb(int regime) const
-{
-    if (regime <= -1)
-    {
-        regime = _curRegime;
-    }
-
-    return regime;
-}
-
 TYRegime TYAcousticInterface::buildRegime()
 {
     char buf[4];

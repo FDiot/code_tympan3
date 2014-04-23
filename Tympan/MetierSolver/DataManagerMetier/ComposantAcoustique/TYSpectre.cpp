@@ -365,12 +365,6 @@ bool TYSpectre::fromXMLString(const std::string& sXMLString)
     return bRet;
 }
 
-bool TYSpectre::equivTo(const TYSpectre& other) const
-{
-    if (*this == other) { return true; }
-    return false;
-}
-
 
 
 void TYSpectre::exportCSV(const std::string& filename)

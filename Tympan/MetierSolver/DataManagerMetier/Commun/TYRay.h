@@ -268,12 +268,6 @@ public:
     double getLength();
 
     /*!
-    * \fn double getDistanceSR()
-    * \brief Renvoie la distance source-recepteur du rayon
-    */
-    double getDistanceSR() const;
-
-    /*!
     * \fn int getnbEvents()
     * \brief Renvoie le nombre d'evenements compris dans le rayon
     */

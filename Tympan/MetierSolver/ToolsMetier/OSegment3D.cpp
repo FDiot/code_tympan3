@@ -179,16 +179,6 @@ OPoint3D OSegment3D::centerOfCurvedPath(const double& R) const
     return point;
 }
 
-double OSegment3D::topOfCurvedPath(const double& R) const
-{
-    double top;
-    double demiLongueur = longueur() / 2;
-
-    top = R - sqrt(R * R - demiLongueur * demiLongueur);
-
-    return top;
-}
-
 double OSegment3D::lengthOfCurvedPath(const double& R)
 {
     // Longueur du cote du triangle rectangle

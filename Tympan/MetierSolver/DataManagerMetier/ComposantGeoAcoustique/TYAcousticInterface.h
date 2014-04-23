@@ -369,18 +369,6 @@ public:
     };
 
 
-protected:
-    /**
-     * Verifie si le regime de fonctionnement existe.
-     * Si regime = -1, c'est le regime courant qui est utilise.
-     *
-     * @param regime Le regime de fonctionnement concerne.
-     *
-     * @return Le regime de fonctionnement.
-     */
-    int checkRegimeNb(int regime) const;
-
-
     // Membres
 protected:
     ///Densite horizontale de sources.

@@ -122,17 +122,6 @@ public:
     virtual bool findAcousticSurface(const TYAcousticSurface* pAccSurf, OMatrix* pMatrix = 0);
 
     /**
-     * Retourne la puissance apparente de la source ponctuelle passee
-     * dans la direction donnee par le segment passe.
-     *
-     * @param pSrc  Source ponctuelle dont on veut la puissance.
-     * @param seg   Direction.
-     *
-     * @return La puissance apparente resultante.
-     */
-    virtual double lwApp(const TYSourcePonctuelle* pSrc, TYSegment seg) const;
-
-    /**
      * Indique au volume le spectre global de la machine (volumeNode) pour lui
      * permettre de calculer sa puissance (connaissant sa surface et la surface globale)
      * @param le spectre global de la machine

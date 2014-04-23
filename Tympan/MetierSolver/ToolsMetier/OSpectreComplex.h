@@ -88,9 +88,6 @@ public:
     /// Operateur de multiplication d'un spectre complexe par un coeff de type double
     OSpectreComplex operator * (const double& coefficient) const;
 
-    /// Multiplication d'un spectre complexe par un scalaire.
-    OSpectreComplex multi(const double& coefficient) const;
-
     // Rapport de deux spectres complexes en module/phase
     virtual OSpectreComplex operator / (const OSpectreComplex& spectre) const;
 
@@ -156,15 +153,6 @@ public:
 
     /// Conversion en module/phase
     OSpectreComplex toModulePhase() const;
-
-    /// Conversion en module/phase
-    OSpectreComplex toReelImaginaire() const;
-
-    /// Somme le spectre en complexe avec un autre spectre complexe
-    OSpectreComplex sumComplex(const OSpectreComplex& spectre) const;
-
-    /// Somme d'un spectre complexe avec un spectre "normal"
-    OSpectreComplex sumComplex(const OSpectre& spectre) const;
 
     // === FONCTIONS MEMBRES STATIQUES
 

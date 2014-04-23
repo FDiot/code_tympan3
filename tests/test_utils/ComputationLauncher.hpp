@@ -46,9 +46,6 @@ public:
     //  Getters  //
     ///////////////
 
-    //! Get the pointer to the current project.
-    LPTYProjet getProject() const { return _project; }
-
     //! Get the list of available computations (i.e. \c TYCalcul).
     TYTabLPCalcul getComputationList() const { return _project->getListCalcul(); }
 

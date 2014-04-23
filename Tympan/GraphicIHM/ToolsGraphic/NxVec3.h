@@ -58,9 +58,7 @@ public:
     NxReal  dot(const NxVec3& other) const;
     bool    sameDirection(const NxVec3&) const;
     NxReal  magnitude() const;
-    NxReal  magnitudeSquared() const;
     NxReal  distance(const NxVec3&) const;
-    NxReal  distanceSquared(const NxVec3& v) const;
     void    cross(const NxVec3& left, const NxVec3& right);
     void    cross(const NxVec3& left, const NxVec3& right, bool normalized);
     bool    equals(const NxVec3&, NxReal epsilon) const;

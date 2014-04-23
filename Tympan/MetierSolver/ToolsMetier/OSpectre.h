@@ -259,9 +259,6 @@ public:
     /// Calcule le log base n d'un spectre (n=10 par defaut).
     virtual OSpectre log(const double& base = 10.0) const;
 
-    /// calcule 10^spectre pour chaque terme du spectre.
-    virtual OSpectre tenPow() const;
-
     /// calcule la racine carree d'un spectre.
     virtual OSpectre racine() const;
 
@@ -273,9 +270,6 @@ public:
 
     /// calcul le cos de la partie reelle du spectre
     virtual OSpectre cos() const;
-
-    /// calcul le tan de la partie reelle du spectre
-    virtual OSpectre tan() const;
 
     /// Retourne le spectre en valeur absolues
     virtual OSpectre abs() const;

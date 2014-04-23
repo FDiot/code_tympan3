@@ -1441,31 +1441,6 @@ TYTabStructSegPtrTer TYTopographie::sols(const OSegment3D& seg)
     return tabPtrTerSeg;
 }
 
-bool TYTopographie::hauteurFromPenteMoy(const OPoint3D& pt, const OSegment3D& seg, double& hauteur) const
-{
-    bool res = false;
-    OSegment3D pente;
-    OPoint3D ptSym;
-
-    if (penteMoy(seg, pente)) // Si pente moyenne calculable on l'utilise
-    {
-        res = true;
-
-        OGeometrie::symPointDroite(pente._ptA, pente._ptB, pt, ptSym);
-
-        // Definition du vecteur AB
-        OVector3D vect(pt, ptSym);
-
-        hauteur = vect.norme() / 2;
-    }
-    else // Sinon on renvoit la hauteur (deja connue) du point.
-    {
-        hauteur = pt._z;
-    }
-
-    return res;
-}
-
 void TYTopographie::updateSol(const TYAtmosphere& atmo)
 {
     // Traitement des terrains defini sur le site

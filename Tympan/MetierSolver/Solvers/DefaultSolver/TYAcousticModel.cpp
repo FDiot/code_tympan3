@@ -1335,27 +1335,6 @@ OSpectre TYAcousticModel::limAttDiffraction(const OSpectre& sNC, const OSpectre&
     return s;
 }
 
-
-void TYAcousticModel::addCheminToTrajet(const TYTabChemin& TabChemin, TYTrajet& trajet) const
-{
-    int j;
-
-    // On fixe l'atmosphere de chaque chemin et on ajoute celui-ci au trajet
-    for (j = 0 ; j < TabChemin.size() ; j++)
-    {
-        trajet.addChemin(TabChemin.at(j));
-    }
-}
-
-void TYAcousticModel::addCheminDirectToTrajet(const TYTabChemin& TabChemin, TYTrajet& trajet) const
-{
-    // On fixe l'atmosphere de chaque chemin et on ajoute celui-ci au trajet
-    for (unsigned int j = 0 ; j < TabChemin.size() ; j++)
-    {
-        trajet.addCheminDirect(TabChemin.at(j));
-    }
-}
-
 bool TYAcousticModel::solve(TYTrajet& trajet)
 {
     TYSourcePonctuelleGeoNode* pSrcGeoNode = trajet.getSourcePonctuelle();

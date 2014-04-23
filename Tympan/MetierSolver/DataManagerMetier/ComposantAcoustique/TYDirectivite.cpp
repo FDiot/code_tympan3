@@ -129,28 +129,6 @@ int TYDirectivite::fromXML(DOM_Element domElement)
     return 1;
 }
 
-double TYDirectivite::getDirectivite(double theta, double phi) const
-{
-    OMsg::msgToDo("TYDirectivite::getDirectivite -> done");
-
-    unsigned int i = 0;
-    //Recherche de l'angle plus proche par valeur inferieure
-    while (theta < _tabAnglesVal[i]._theta && i < _tabAnglesVal.size()) { i++; }
-
-    double dTheta = _tabAnglesVal[i + 1]._theta - _tabAnglesVal[i]._theta ;
-    double dT2 = dTheta * dTheta / 6.0;
-    double A = (_tabAnglesVal[i + 1]._theta - theta) / dTheta;
-    double B = 1 - A;
-    double C = (A * A * A - A) * dT2;
-    double D = (B * B * B - B) * dT2;
-
-    double d2Theta0 = calcDeriveSeconde(i);
-    double d2Theta1 = calcDeriveSeconde(i + 1);
-
-    double val = A * _tabAnglesVal[i]._val + B * _tabAnglesVal[i + 1]._val + C * d2Theta0 + D * d2Theta1;
-    return val;
-}
-
 inline double TYDirectivite::calcDeriveSeconde(const int& i) const
 {
     double dYdroite = 0.0;

@@ -71,16 +71,6 @@ public:
     /**
      * Set/Get de la directivite.
      */
-    LPTYDirectivite getDirectivite(int regime = -1) { return _pDirectivite; }
-
-    /**
-     * Set/Get de la directivite.
-     */
-    const LPTYDirectivite getDirectivite(int regime = -1) const { return (_pDirectivite);}
-
-    /**
-     * Set/Get de la directivite.
-     */
     void setDirectivite(const TYDirectivite& dir, int regime = -1) { _pDirectivite = new TYDirectivite(dir); }
 
     /**
@@ -97,24 +87,6 @@ public:
      * Set/Get de l'attenuateur.
      */
     void setAttenuateur(const LPTYAttenuateur pAtt) { _pAttenuateur = pAtt; }
-
-    /**
-     * Calcule la distance de cette source par rapport a la source passee.
-     *
-     * @param pSrc Une source ponctuelle.
-     *
-     * @return La distance entre les 2 sources ponctuelles.
-     */
-    double distFromSrc(const TYSourcePonctuelle* pSrc) const;
-
-    /**
-     * Calcule les angles theta et phi d'emission de la source.
-     *
-     * @param dir La direction d'emission.
-     *
-     * @return Une structure contenant ces angles.
-     */
-    const TYDirectiviteAnglesValue getAngles(const OVector3D dir) const;
 
     /**
      * Set/Get du spectre (integrant attenuateur)

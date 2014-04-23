@@ -340,16 +340,6 @@ OSpectre TYSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const TYA
     return s;
 }
 
-double TYSourcePonctuelle::distFromSrc(const TYSourcePonctuelle* pSrc) const
-{
-    if (pSrc)
-    {
-        return OVector3D(*this->_pPos, *pSrc->_pPos).norme();
-    }
-
-    return 1E20;
-}
-
 OSpectre TYSourcePonctuelle::calcDirectiviteMachine(const TYAcousticVolume* pVolume, const TYAcousticSurface* pSupport, const OMatrix& matrix, const OSegment3D& seg, const TYAtmosphere& Atmo) const
 {
     OSpectre s = OSpectre::getEmptyLinSpectre();
