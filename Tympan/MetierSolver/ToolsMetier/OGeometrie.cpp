@@ -21,7 +21,6 @@
 
 
 #include "OGeometrie.h"
-#include "Tympan/Tools/TYConfigure.h"
 
 #define MAX(A,B) (((A)>(B))?(A):(B))
 #define MIN(A,B) (((A)>(B))?(B):(A))
@@ -186,8 +185,6 @@ const double EPSILON_5 = 0.00001;
     return ((ABS(anglesum) > (M_2PI - EPSILON_6)) && (ABS(anglesum) < (M_2PI + EPSILON_6)));
 }
 
-
-// #include "Tympan/Tools/TYConfigure.h"
 
 #if TY_USE_IHM
 //in 2D

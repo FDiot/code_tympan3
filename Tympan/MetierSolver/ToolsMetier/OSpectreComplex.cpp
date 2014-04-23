@@ -20,8 +20,6 @@
 
 #include "OSpectreComplex.h"
 
-#include "Tympan/Tools/OMessageManager.h"
-
 OSpectreComplex::OSpectreComplex() : OSpectre()
 {
     for (unsigned int i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)

@@ -18,7 +18,6 @@
  *
  *
  */
-#include "OGeometrie.h"
 
 #ifndef __O_COORD_3D__
 #define __O_COORD_3D__

@@ -18,7 +18,6 @@
  */
 
 #include "OTriangle.h"
-#include "OPoint3D.h"
 #include <cmath>
 #include <limits>
 #include <cassert>
