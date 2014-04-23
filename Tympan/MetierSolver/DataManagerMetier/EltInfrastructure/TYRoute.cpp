@@ -545,7 +545,7 @@ const TYRoute::note77_tables TYRoute::note77_upper_bounds =
     // Link motorways
     {
         // Long distance function
-        {70000, 13500, 36},
+        {70000, 13500, 30},
         // Regional roads
         {93000, 14000, 34}
     },
