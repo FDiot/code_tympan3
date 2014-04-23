@@ -23,11 +23,11 @@
 #ifndef __O_THREADPOOL__
 #define __O_THREADPOOL__
 
-#include "Tympan/Tools/TYConfigure.h"
 
 #include <queue>
 #include <vector>
 
+#include "ThreadingSupport.h"
 #include "OTask.h"
 
 class OSlaveThread;

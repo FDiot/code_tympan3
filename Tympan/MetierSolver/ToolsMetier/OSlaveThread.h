@@ -23,7 +23,7 @@
 #ifndef __O_SLAVETHREAD__
 #define __O_SLAVETHREAD__
 
-#include "Tympan/Tools/TYConfigure.h"
+#include "ThreadingSupport.h"
 
 class OThreadPool;
 
