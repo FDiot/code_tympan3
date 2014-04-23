@@ -475,7 +475,7 @@ void TYSiteNode::loadTopoFile()
  // On conserve l'extension de l'image = son type
     size_t pointAt = _topoFileName.find_last_of(".");
 
-    if (pointAt = -1)
+    if (pointAt == -1)
     {
         _topoFileExtension = "";
     }
