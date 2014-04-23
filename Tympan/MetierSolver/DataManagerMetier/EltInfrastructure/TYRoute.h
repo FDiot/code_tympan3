@@ -126,8 +126,8 @@ public:
     //  void setTraficNuit(const LPTYTrafic pTrafic);
 
 
-    enum RoadType {Intercity, Motorway};
-    enum RoadFunction {Regional, LongDistance};
+    enum RoadType {Motorway, Intercity};
+    enum RoadFunction {LongDistance, Regional};
 
     /**
      * \brief Apply Note77 from Setra to estimate trafic from AADT and road kind.
