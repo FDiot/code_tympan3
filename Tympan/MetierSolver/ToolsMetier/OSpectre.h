@@ -308,10 +308,19 @@ public:
     /// Existence d'une tonalite marquee
     virtual bool isTonalite()const;
 
+    /// Conversion en tiers d'octave.
+    virtual OSpectre toTOct() const;
+
+    /// Conversion en octave.
+    virtual OSpectre toOct() const;
+
     // === FONCTIONS MEMBRES STATIQUES
 
     /// Cree un spectre en lin
     static OSpectre getEmptyLinSpectre(const double& valInit = 1.0E-20);
+
+    /// Construit un spectre en octave.
+    static OSpectre makeOctSpect();
 
     /// retourne l'indice associe a une frequence
     static int getIndice(const float& freq) { return _mapFreqIndice[freq]; }
