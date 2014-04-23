@@ -541,7 +541,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
 
     int etat = -1; // Etat du calcul
 
-    std::string strIDSiteCalcul;
     TYListID tempElementSelection;
     QString strSolverId;
 

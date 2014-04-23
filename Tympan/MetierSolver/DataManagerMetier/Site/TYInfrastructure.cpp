@@ -371,8 +371,6 @@ void TYInfrastructure::getChilds(LPTYElementArray& childs, bool recursif /*=true
 
 void TYInfrastructure::updateCurrentCalcul(TYListID& listID, bool recursif)//=true
 {
-    TYListID::iterator ite;
-
     if (recursif) // On parcours les enfants si besoin est...
     {
         // Collecte des childs

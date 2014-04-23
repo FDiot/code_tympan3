@@ -365,11 +365,11 @@ void OMessageManager::output(const char* message, int level)
 
 int OMessageManager::initTrace()
 {
-    intptr_t hFile;
     time_t thetime;
     char fileName[100];
     time(&thetime);
 #ifdef _WIN32
+    intptr_t hFile;
     struct _finddata_t c_file;
     if ((hFile = _findfirst("c:\\Trace*.*", &c_file)) != -1L)      //Attention: 20/02/01 LM : change le nom du fichier mais faudra mettre un truc pour parametrer ce nom
     {

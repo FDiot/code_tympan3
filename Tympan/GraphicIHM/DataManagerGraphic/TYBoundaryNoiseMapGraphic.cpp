@@ -181,7 +181,6 @@ void TYBoundaryNoiseMapGraphic::display(GLenum mode /*= GL_RENDER*/)
 void TYBoundaryNoiseMapGraphic::displaySurface(float opacity) //GLenum mode = GL_RENDER
 {
     LPTYPalette pPalette = getElement()->getPalette();
-    MTriangle vtx;
     size_t nbTriangles = _mesh.size();
     glBegin(GL_TRIANGLES);
     for (size_t i = 0; i < nbTriangles; i++)

@@ -113,7 +113,6 @@ OSpectre TYTrajet::getPEnergetique(const TYAtmosphere& atmos)
 {
     OSpectre s = OSpectre::getEmptyLinSpectre();
     OSpectreComplex sTemp;
-    std::vector<OSpectreComplex> tabSpectreAttDirect;
     int firstReflex = -1;
     int indiceDebutEffetEcran = 0;
     unsigned int i;

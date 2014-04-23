@@ -38,9 +38,6 @@
 TYAcousticRectangleNodeWidget::TYAcousticRectangleNodeWidget(TYAcousticRectangleNode* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
-    QString num;
-
-
     _elmW = new TYAcousticSurfaceNodeWidget(pElement, this);
 
     resize(300, 680);

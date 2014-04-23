@@ -43,9 +43,6 @@
 TYDirectiviteWidget::TYDirectiviteWidget(TYDirectivite* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
-    QString num;
-
-
     resize(300, 240);
     setWindowTitle(TR("id_caption"));
 

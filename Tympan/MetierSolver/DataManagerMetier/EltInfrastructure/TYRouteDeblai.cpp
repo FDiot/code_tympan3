@@ -233,10 +233,7 @@ bool TYRouteDeblai::computeConstraint()
 
     TYTabPoint _squelette = _tabPoint;
 
-    TYTabLPPolygon faces; // l'ensembles des faces de l'ecran
-
     OVector3D zvec(0, 0, 1);
-    TYTabPoint vertices;
     OVector3D vecN; //vecteur normal au segment courant
 
     // Cree la premiere face de cote

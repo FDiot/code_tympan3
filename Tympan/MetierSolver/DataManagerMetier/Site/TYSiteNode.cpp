@@ -400,8 +400,6 @@ bool TYSiteNode::remFromCalcul()
 
 void TYSiteNode::updateCurrentCalcul(TYListID& listID, bool recursif)//=true
 {
-    TYListID::iterator ite;
-
     if (recursif) // On parcours les enfants si besoin est...
     {
         // Collecte des childs

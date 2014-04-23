@@ -37,9 +37,6 @@
 TYRouteDeblaiWidget::TYRouteDeblaiWidget(TYRouteDeblai* pElement, QWidget* _pParent):
     TYWidget(pElement, _pParent)
 {
-    QString num;
-
-
     _elmW = new TYAcousticLineWidget(pElement, this);
 
     resize(300, 720);

@@ -39,9 +39,6 @@
 TYAttenuateurWidget::TYAttenuateurWidget(TYAttenuateur* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
-    QString num;
-
-
     _elmW = new TYElementWidget(pElement, this);
     resize(300, 200);
     setWindowTitle(TR("id_caption"));

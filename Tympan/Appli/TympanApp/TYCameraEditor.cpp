@@ -918,8 +918,6 @@ void TYCameraEditor::cameraZoneZoom(const float focalPoint2D[3], double factor)
 
     if (_pCurrentCamera)
     {
-        double dist = _pCurrentCamera->distanceFromTo;
-
         d[0] = _pCurrentCamera->from.x - _pCurrentCamera->to.x;
         d[1] = _pCurrentCamera->from.y - _pCurrentCamera->to.y;
         d[2] = _pCurrentCamera->from.z - _pCurrentCamera->to.z;
