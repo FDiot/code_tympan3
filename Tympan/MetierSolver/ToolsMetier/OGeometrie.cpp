@@ -59,7 +59,7 @@ const double EPSILON_5 = 0.00001;
 {
     int res = INTERS_NULLE;
 
-    double k, h;
+    double k;
     double d = (ptC._x - ptD._x) * (ptA._y - ptB._y) - (ptC._y - ptD._y) * (ptA._x - ptB._x);
 
     k = 0;
@@ -67,7 +67,6 @@ const double EPSILON_5 = 0.00001;
     if (ABS(d) > 0.0)
     {
         k = ((ptA._x - ptD._x) * (ptA._y - ptB._y) - (ptA._y - ptD._y) * (ptA._x - ptB._x)) / d;
-        h = ((ptC._x - ptD._x) * (ptA._y - ptD._y) - (ptC._y - ptD._y) * (ptA._x - ptD._x)) / d;
 
         res = INTERS_OUI;
     }
@@ -78,7 +77,6 @@ const double EPSILON_5 = 0.00001;
         if (ABS(d) > 0.0)
         {
             k = ((ptA._x - ptD._x) * (ptA._z - ptB._z) - (ptA._z - ptD._z) * (ptA._x - ptB._x)) / d;
-            h = ((ptC._x - ptD._x) * (ptA._z - ptD._z) - (ptC._z - ptD._z) * (ptA._x - ptD._x)) / d;
 
             res = INTERS_OUI;
         }
@@ -89,7 +87,6 @@ const double EPSILON_5 = 0.00001;
             if (ABS(d) > 0.0)
             {
                 k = ((ptA._y - ptD._y) * (ptA._z - ptB._z) - (ptA._z - ptD._z) * (ptA._y - ptB._y)) / d;
-                h = ((ptC._y - ptD._y) * (ptA._z - ptD._z) - (ptC._z - ptD._z) * (ptA._y - ptD._y)) / d;
 
                 res = INTERS_OUI;
             }

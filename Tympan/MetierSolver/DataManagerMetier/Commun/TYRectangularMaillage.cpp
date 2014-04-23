@@ -114,8 +114,6 @@ DOM_Element TYRectangularMaillage::toXML(DOM_Element& domElement)
 
     _pRect->toXML(domNewElem);
 
-    TYCalcul* pCalcul = TYCalcul::safeDownCast(getParent());
-
     if (TYProjet::gSaveValues)
     {
         for (unsigned int i = 0; i < _ptsCalcul.size(); i++)

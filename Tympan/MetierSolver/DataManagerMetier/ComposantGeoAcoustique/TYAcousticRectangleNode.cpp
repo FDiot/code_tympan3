@@ -399,14 +399,11 @@ void TYAcousticRectangleNode::updateGrid(const char* childType)
         tabSub.push_back(pRectSub);
     }
 
-    bool intersect;
     TYRectangle rect;  // Rectangle trouve
 
     // Construction pour chaque sous-face du rectangle englobant de taille max
     for (i = 0; i < tabGlobal.size(); i++)
     {
-        intersect = false;
-
         // Recherche en x-
         if (findNearestRect(tabGlobal[i], tabGlobal, -1, 0, rect)) // Un rectangle de construction a ete trouve
         {

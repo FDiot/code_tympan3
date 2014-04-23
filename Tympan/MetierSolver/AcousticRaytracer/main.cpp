@@ -338,6 +338,4 @@ int main(int argc, char* argv[])
     w.show();
 
     return a.exec();
-
-    std::cout << "Fin de l'executable de test." << std::endl;
 }

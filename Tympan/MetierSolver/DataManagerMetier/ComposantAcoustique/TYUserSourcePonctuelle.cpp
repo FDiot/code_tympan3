@@ -272,7 +272,6 @@ OSpectre TYUserSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const
 
     OVector3D v3D;
     double coef = 0.0;
-    double theta = 0.0;
 
     // NOTA : On prend la racine du coefficient de directivite car celui-ci est eleve au carre lors du calcul
 
@@ -295,7 +294,6 @@ OSpectre TYUserSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const
             break;
         case FORCED:
             v3D = seg.toVector3D();
-            theta = this->getOrientation().angle(v3D); // Angle par rapport au vecteur directeur de la source
             s.setDefaultValue(coef);
             break;
         case CALCULATED:

@@ -425,8 +425,6 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
         QAction* highlight = NULL;
         QAction* selectAll = NULL;
         QAction* unselectAll = NULL;
-        QAction* newElmt = NULL;
-        QAction* addElmtXML = NULL;
         QAction* addMachineXML = NULL;
         QAction* newMachine = NULL;
         QAction* addSrcXML = NULL;
@@ -1111,8 +1109,6 @@ void TYSiteFrame::exportEXCEL(TYElement* pElement)
             fileName += ".csv";
         }
 
-        std::string nomFichier = fileName.toAscii().constData();
-
         std::ofstream ofs;
         ofs.open(fileName.toAscii().constData(), std::ios_base::out);
 
@@ -1419,10 +1415,6 @@ bool TYSiteFrame::supprime(TYElementListItem* eltItem)
 void TYSiteFrame::importFromLib(const unsigned int& filter, TYElement* pElement)
 {
     assert(pElement);
-    TYSiteNode* pSiteNode = NULL;
-    TYInfrastructure* pInfra = NULL;
-    TYEtage* pEtage = NULL;
-
     TYGetLibraryDialog* pDlg = new TYGetLibraryDialog(filter, this);
     pDlg->exec();
     LPTYElementArray elements = pDlg->getElements();
@@ -1471,7 +1463,6 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
 
     TYSiteNode* pSiteNode = NULL;
     TYInfrastructure* pInfra = NULL;
-    TYEtage* pEtage = NULL;
     bool reallyAdd = true;  // Eviter qu'une machine dans un batiment soit connue du calcul (fenetre "etats")
 
     if (pElt->inherits("TYSiteNode"))
@@ -1590,7 +1581,7 @@ void TYSiteFrame::newElt(const char* className, TYElement* pElement)
     }
     else
     {
-        int editState = pElt->edit(this);
+        pElt->edit(this);
     }
 
     if ((pElt->inherits("TYSiteNode")) && _pCurrentCalcul)

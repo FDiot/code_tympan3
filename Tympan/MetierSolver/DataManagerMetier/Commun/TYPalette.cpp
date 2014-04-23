@@ -245,7 +245,7 @@ bool TYPalette::moveValue(values_type old_value, values_type new_value)
     // Otherwise, we do update the map
     OColor color = where->second;
     _colorMap.erase(where);
-    TYPalette::color_map_iter it =  _colorMap.insert(after, std::make_pair(new_value, color)) ;
+    _colorMap.insert(after, std::make_pair(new_value, color)) ;
     return true;
 }
 
@@ -318,7 +318,6 @@ DOM_Element TYPalette::save_legacy_XML(DOM_Element& domElement)
     std::ostringstream oss;
     values_type value;
     OColor color;
-    unsigned i = 0;
     BOOST_FOREACH(boost::tie(value, color), getColorMap())
     {
         oss << color.getAsRGBA() << " ";
@@ -338,7 +337,6 @@ int TYPalette::load_legacy_XML(const DOM_Element& domElement)
     DOM_Element elemCur;
     QDomNodeList children = domElement.elementsByTagName("lookupTable");
     values_type valueMin, valueMax;
-    bool fMinOk = false, fMaxOk = false;
     // NB : Legacy LookupTable for preferences backward compatibility
     OLookupTable  lookupTable;
 
@@ -363,8 +361,8 @@ int TYPalette::load_legacy_XML(const DOM_Element& domElement)
     QString elemName = lookupTableElement.nodeName();
     assert(elemName == "lookupTable");
 
-    fMinOk = TYXMLTools::getElementFloatValue(domElement.firstChildElement("valueMin"), "valueMin", valueMin);
-    fMaxOk = TYXMLTools::getElementFloatValue(domElement.firstChildElement("valueMax"), "valueMax", valueMax);
+    TYXMLTools::getElementFloatValue(domElement.firstChildElement("valueMin"), "valueMin", valueMin);
+    TYXMLTools::getElementFloatValue(domElement.firstChildElement("valueMax"), "valueMax", valueMax);
     // On recupere le nombre de couleur
     size_t nbColors = TYXMLTools::getElementAttributeToInt(lookupTableElement, "nbColors");
 

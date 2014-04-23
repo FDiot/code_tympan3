@@ -260,9 +260,6 @@ void TYSpectreWidget::tabValueChanged(int row, int col)
 
     if (col == 1)
     {
-        // Conversion de la chaine saisie en double
-        double val = _tableau->item(row, col)->text().toDouble(&ok);
-
         // Si la valeur saisie ne peut pas etre convertie en double
         if (!ok)
         {
@@ -343,10 +340,7 @@ void TYSpectreWidget::importCsv()
         {
             QTextStream s(&f);
             QString txt;
-            int row = 0;
             int i = 0;
-            bool ok = false;
-            int type = 0;
             _tableau->setRowCount(0);
 
             while (!s.atEnd())
@@ -356,8 +350,6 @@ void TYSpectreWidget::importCsv()
                 switch (i)
                 {
                     case 0 :
-                        ok = false;
-                        type = txt.toInt(&ok);
                         break;
                     case 1 : // On saute la ligne des labels
                         break;
@@ -479,9 +471,6 @@ void TYSpectreWidget::print()
                 mid = int(_printer->width() / 2) - int(paint.fontMetrics().width(pDialog->_lineEditTitre->text()) / 2);
                 paint.drawText(mid, _printer->height() * 14 / 15, pDialog->_lineEditTitre->text());
                 paint.setFont(QFont());
-
-                double Wmetric = _printer->width();
-                double Hmetric = _printer->height() * 4 / 5;
 
                 int sizeX = 80, sizeY = 25;
                 int ymax = int(double(_printer->height()) * 4 / 5 / (_tableau->rowCount() + 1));

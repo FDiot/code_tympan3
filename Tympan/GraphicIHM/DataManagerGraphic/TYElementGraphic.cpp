@@ -126,7 +126,6 @@ bool TYElementGraphic::getModified(bool andReset /*=false*/)
 
 void TYElementGraphic::highlight(bool state /*=true*/)
 {
-    bool reset = !state;
     // Update
     _highlight = state;
 }

@@ -43,8 +43,6 @@ bool TYANIME3DFaceSelector::exec(TYStructSurfIntersect *&tabPolygon, size_t& tab
 
 bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, size_t& tabPolygonSize)
 {
-    bool cancel = false;
-
     // On nettoie le tableau des faces
     if (tabPolygon)
     {

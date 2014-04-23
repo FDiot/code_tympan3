@@ -272,8 +272,6 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
             QMenu* pPopupMenuLinearMaillage = new QMenu(this);
             QMenu* pPopupMenuRectangularMaillage = new QMenu(this);
 
-            QAction* goSpectresManager = NULL;
-
             QAction* curCalcul = NULL;
             QAction* remCalculRes = NULL;
             QAction* goCalcul = NULL;

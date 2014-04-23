@@ -456,7 +456,6 @@ void TYCalculWidget::updateContent()
     _radioButtonEnergetique->setChecked(!getElement()->getInterference());
     _radioButtonInterference->setChecked(getElement()->getInterference());
 
-    bool bStatus = getElement()->getStatusPartialResult();
     _checkBoxStoreGlobalMatrix->setChecked(getElement()->getStatusPartialResult());
 
 
@@ -546,7 +545,7 @@ void TYCalculWidget::apply()
     TYPluginManager::TYPluginList& plugList = pPlug->getPluginList();
     TYPluginManager::TYPluginList::iterator iter;
 
-    unsigned short i = 0, currentSolverIndex = 0;
+    unsigned short i = 0;
     unsigned short currentIndex = _comboSolver->currentIndex();
     OGenID id;
     for (i = 0, iter = plugList.begin(); i <= currentIndex; i++, iter++)
@@ -643,20 +642,19 @@ void TYCalculWidget::editAtmosphere()
 
 void TYCalculWidget::editMaillage(QTreeWidgetItem* item)
 {
-    int ret;
     if (item->parent())
     {
-        ret = getElement()->getProjet()->getPointControl(item->text(0).toInt())->edit(_maillagesWidget);
+        getElement()->getProjet()->getPointControl(item->text(0).toInt())->edit(_maillagesWidget);
     }
     else
     {
-        ret = getElement()->getMaillages()[item->text(0).toInt()]->getElement()->edit(_maillagesWidget);
+        getElement()->getMaillages()[item->text(0).toInt()]->getElement()->edit(_maillagesWidget);
     }
 }
 
 void TYCalculWidget::editResultat()
 {
-    int ret = getElement()->getResultat()->edit(this);
+    getElement()->getResultat()->edit(this);
 }
 
 void TYCalculWidget::updateUseEcran()

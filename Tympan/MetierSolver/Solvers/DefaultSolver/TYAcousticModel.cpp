@@ -126,13 +126,13 @@ void TYAcousticModel::compute(const TYSIntersection* tabIntersect, const OSegmen
 
     // Calcul des parcours lateraux
     // 1. Vertical
-    bool bObstacle = computeCheminsAvecEcran(rayon, pSrcGeoNode, ptsTop, vertical, tabChemins, distance);
+    computeCheminsAvecEcran(rayon, pSrcGeoNode, ptsTop, vertical, tabChemins, distance);
 
     // 2. Horizontal gauche
-    bObstacle &= computeCheminsAvecEcran(rayon, pSrcGeoNode, ptsLeft, horizontal, tabChemins, distance);
+    computeCheminsAvecEcran(rayon, pSrcGeoNode, ptsLeft, horizontal, tabChemins, distance);
 
     // 3. Horizontal droite
-    bObstacle &= computeCheminsAvecEcran(rayon, pSrcGeoNode, ptsRight, horizontal, tabChemins, distance);
+    computeCheminsAvecEcran(rayon, pSrcGeoNode, ptsRight, horizontal, tabChemins, distance);
 
     if (tabChemins.size() == 0)
     {

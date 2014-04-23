@@ -157,10 +157,9 @@ void TYEtatsWidget::updateContent()
     TYMapPtrElementBool& mapEtat = _pElement->getEmitAcVolNode();
     TYMapPtrElementInt& mapRegime = _pElement->getMapElementRegime();
     TYMapPtrElementBool::iterator iterEmit;
-    TYMapPtrElementInt::iterator iterRegime;
 
     // Update des bâtiments
-    iterRegime = mapRegime.begin();
+    mapRegime.begin();
     for (iterEmit = mapEtat.begin(); iterEmit != mapEtat.end(); iterEmit++)
     {
         TYElement* pEmetteur = (*iterEmit).first;
@@ -197,7 +196,7 @@ void TYEtatsWidget::updateContent()
 
     // Update des Machines
     row = 0;
-    iterRegime = mapRegime.begin();
+    mapRegime.begin();
     for (iterEmit = mapEtat.begin(); iterEmit != mapEtat.end(); iterEmit++)
     {
         TYElement* pEmetteur = (*iterEmit).first;
@@ -234,7 +233,6 @@ void TYEtatsWidget::updateContent()
 
     // Update des Sources ponctuelles
     row = 0;
-    iterRegime = mapRegime.begin();
     for (iterEmit = mapEtat.begin(); iterEmit != mapEtat.end(); iterEmit++)
     {
         TYElement* pEmetteur = (*iterEmit).first;
@@ -253,7 +251,6 @@ void TYEtatsWidget::updateContent()
             QStringList listRegimes;  // Liste des regimes pour "peupler" le combo
             TYUserSourcePonctuelle* pSource = TYUserSourcePonctuelle::safeDownCast(pEmetteur);
             QString nom;
-            bool status = true;
             for (short i = 0 ; i < pSource->getNbRegimes(); i++)
             {
                 nom = pSource->getRegimeNb(i).getName();
@@ -271,7 +268,7 @@ void TYEtatsWidget::updateContent()
 
     // Update des Sources Lineiques
     row = 0;
-    iterRegime = mapRegime.begin();
+    mapRegime.begin();
     for (iterEmit = mapEtat.begin(); iterEmit != mapEtat.end(); iterEmit++)
     {
         TYElement* pEmetteur = (*iterEmit).first;
@@ -290,7 +287,6 @@ void TYEtatsWidget::updateContent()
             QStringList listRegimes;  // Liste des regimes pour "peupler" le combo
             TYAcousticLine* pSource = TYAcousticLine::safeDownCast(pEmetteur);
             QString nom;
-            bool status = true;
             for (short i = 0 ; i < pSource->getNbRegimes(); i++)
             {
                 nom = pSource->getRegimeNb(i).getName();

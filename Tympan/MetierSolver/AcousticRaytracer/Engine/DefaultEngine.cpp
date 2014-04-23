@@ -79,7 +79,6 @@ bool DefaultEngine::process()
         ray_to_process += sources->at(i).getNbRayLeft();
     }
 
-    std::size_t nb_event(0);
     bool find_intersection;
     std::size_t max_size(0);
 
@@ -177,15 +176,14 @@ bool DefaultEngine::process()
                 //}
                 // END
 
-                unsigned int suppressed = 0;
                 if (globalUsePostFilters)
                 {
                     // Post filtering of the rays
                     closeEventPostFilter cepf(getSolver()->getValidRays());
-                    suppressed += cepf.Process();
+                    cepf.Process();
 
                     fermatPostFilter fpf(getSolver()->getValidRays());
-                    suppressed += fpf.Process();
+                    fpf.Process();
                 }
 
                 return true;
@@ -196,11 +194,9 @@ bool DefaultEngine::process()
             Ray* current_ray = pile_traitement.top();
             pile_traitement.pop();
             //nb_rayon_traite++;
-            nb_event = current_ray->events.size();
             std::list<validRay> result;
             find_intersection = traitementRay(current_ray, result);
 
-            unsigned int compteurValidation(0);
             for (std::list<validRay>::iterator it = result.begin(); it != result.end(); it++)
             {
                 bool currentValid = it->valid;
@@ -219,7 +215,6 @@ bool DefaultEngine::process()
                     }
                 }
             }
-            //cout << compteurValidation << " primitives ont ete valide." << endl;
         }
     }
 }
@@ -280,7 +275,6 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
     decimal tmin = -1.0f;
 
     //Recuperation des structures acceleratrices pour le Solver
-    Shape* firstPrimitive(NULL);
     Accelerator* accelerator = scene->getAccelerator();
     std::list<Intersection> foundPrims;
 
@@ -288,10 +282,6 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
     tmin =  accelerator->traverse(r, foundPrims);
 
     //std::cout<<"L'accelerator a trouve "<<foundPrims.size()<<" intersections."<<std::endl;
-    if (!foundPrims.empty())
-    {
-        firstPrimitive = foundPrims.begin()->p;
-    }
     //cout << "Recherche pour des recepteurs..." << endl;
     for (unsigned int i = 0; i < recepteurs->size(); i++)
     {
@@ -322,10 +312,8 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
             ray = new Ray(r);
         }
         else { ray = r; }
-        firstPrimitive = it->p;
         valide = false;
         //if (tmin < 0 || (tmin > 0 && foundPrims.at(i).tsect <= tmin ))
-        //valide = firstPrimitive->valideIntersection(ray);
         valide = solver->valideIntersection(ray, &(*it));
         if (valide) { compteurValide++; }
         validRay resultRay;
@@ -383,7 +371,7 @@ void DefaultEngine::runStructureBenchmark()
         accel->traverse(&r, foundPrims);
     }
 
-    int totalTime = time.elapsed();
+    //int totalTime = time.elapsed();
     //std::cout << "Fin du benchmark." << std::endl;
     //std::cout << "Nombre de rayons traites : " << nbVec << std::endl;
     //std::cout << "Temps ecoule : " << totalTime << " ms." << std::endl;

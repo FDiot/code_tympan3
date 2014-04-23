@@ -90,11 +90,6 @@ void TYAltimetrieGraphic::update(bool force /*=false*/)
         }
 #endif
 
-        float hueRange[2] = {hsvMaxValue[0] / 255, hsvMinValue[0] / 255};
-        float saturationRange[2] = {hsvMaxValue[1] / 255, hsvMinValue[1] / 255};
-        float valueRange[2] = {hsvMaxValue[2] / 255, hsvMinValue[2] / 255};
-        //      TYColorManager::getLinearColorTable(256, hueRange, saturationRange, valueRange, _oColorMap);
-
         computeBoundingBox();
     }
 

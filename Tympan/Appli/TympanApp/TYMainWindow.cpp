@@ -528,10 +528,6 @@ bool TYMainWindow::loadSettings(const QString& fileName)
     QObjectList objectsList = children();//dockWindows();
     QWidget* pDockWnd = NULL;
     QObject* pObject = NULL;
-    int dock;
-    int index;
-    bool nl;
-    int extraOffset;
 
     for (int _i = 0; _i < objectsList.size(); _i++)
     {
@@ -544,17 +540,6 @@ bool TYMainWindow::loadSettings(const QString& fileName)
         {
             pDockWnd = (QWidget*)pObject;
             QString key = pDockWnd->objectName();
-
-            // Dock
-            if (TYPreferenceManager::exists(QString(key + "Dock")))
-            {
-                dock =  TYPreferenceManager::getInt(QString(key + "Dock"));
-                index = TYPreferenceManager::getInt(QString(key + "Index"));
-                nl = TYPreferenceManager::getBool(QString(key + "NewLine"));
-                extraOffset = TYPreferenceManager::getInt(QString(key + "ExtraOffset"));
-                //moveDockWindow(pDockWnd, dock, nl, index, extraOffset);
-            }
-
             // Geometry
             TYPreferenceManager::loadGeometryFromPreferences(key, pDockWnd);
         }
@@ -1215,8 +1200,6 @@ void TYMainWindow::setCurSiteNode(LPTYSiteNode pSiteNode)
 
 void TYMainWindow::updateCurCalcul()
 {
-    bool enable = false;
-
     if (_pProjetFrame->getProjet() && _pProjetFrame->getProjet()->getCurrentCalcul())
     {
         if (!_pProjetFrame->getProjet()->getStatusSolver()) // Le solveur du calcul n'est pas disponible
@@ -1235,15 +1218,6 @@ void TYMainWindow::updateCurCalcul()
             }
         }
 
-        // On ne peut executer un calcul bloque
-        if (_pProjetFrame->getProjet()->getCurrentCalcul()->getState() == TYCalcul::Locked)
-        {
-            enable = false;
-        }
-        else
-        {
-            enable = true;
-        }
     }
 
     _pGoCurCalculAction->setEnabled(true);
@@ -1680,8 +1654,7 @@ bool TYMainWindow::backupFile(const QString& fileName)
     }
 
     // Copie en bloc de l'un dans l'autre
-    long taille = backupFile.write(fileToSave.readAll());
-
+    backupFile.write(fileToSave.readAll());
 
     // Fermeture des fichier
     fileToSave.close();

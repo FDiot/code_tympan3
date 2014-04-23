@@ -107,7 +107,7 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
 
     // Ray tracing computation
     TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, _tabSources, _tabRecepteurs, _tabRay);
-    bRet &= apf.exec();
+    apf.exec();
 
     ////////////////////////////////////////////////////////////
     // Calculs acoustiques sur les rayons via la methode ANIME3D

@@ -307,9 +307,6 @@ void TYOpenElementDialog::openElement(LPTYElement pElt)
     {
         writeDebugMsg(QString("Ouverture d'un element de type : %1").arg(pElt->getClassName()));
 
-        QMessageBox* pMsgBox = new QMessageBox(TR("id_caption"), "", QMessageBox::NoIcon,
-                                               QMessageBox::Yes, QMessageBox::No, QMessageBox::Cancel | QMessageBox::Escape, this);
-
         // L'element est un Projet
         if (pElt->inherits("TYProjet"))
         {

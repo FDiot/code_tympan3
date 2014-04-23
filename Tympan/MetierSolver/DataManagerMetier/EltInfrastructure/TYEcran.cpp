@@ -302,7 +302,6 @@ TYTabLPPolygon TYEcran::getContours() const
     }
 
     // On recherche la face dont tous les points sont égals à minZ
-    unsigned int faceNumber = 0;
     vector<unsigned int> listIndices;
     bool faceOk = false;
     for (unsigned int i = 0; i < tabFaces.size(); i++)

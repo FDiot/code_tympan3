@@ -114,8 +114,6 @@ void TYHistoWidget::paintInto(QPainter* painter, int w, int h)
 
     nbFreq = tabFreq.size();
 
-    QString dB = "dB";
-    if (_dbType) { dB = "dB/km"; }
     // Initialisation des parametres
     double width = double(w);
     double height = double(h);
@@ -220,7 +218,6 @@ void TYHistoWidget::paintInto(QPainter* painter, int w, int h)
         echelle = height * 7 / 10 / (-hmin + hmax);
         hzero = height * 8.5 / 10 + hmin * echelle;
         hauteur = value * echelle;
-        val = ROUND(value);
 
         // Construction d'un nouvel axe pour dBLin
         painter->drawLine((int)x, (int)(height * 18 / 20), (int)x, (int)(hzero - hmax * echelle - 10));
@@ -249,7 +246,6 @@ void TYHistoWidget::paintInto(QPainter* painter, int w, int h)
         echelle = height * 7 / 10 / (-hmin + hmax);
         hzero = height * 8.5 / 10 + hmin * echelle;
         hauteur = value * echelle;
-        val = ROUND(value);
 
         painter->setPen(QPen(black, 2));
         // Construction d'un nouvel axe pour dBA

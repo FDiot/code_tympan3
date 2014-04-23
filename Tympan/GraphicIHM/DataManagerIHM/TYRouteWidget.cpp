@@ -367,7 +367,6 @@ void TYRouteWidget::setSpectresEditable(bool enabled)
 
 void TYRouteWidget::checkComputationMode(int mode)
 {
-    TYRoute& road = *getElement();
     switch (mode)
     {
         case 0: // Directly input spectrums
@@ -402,7 +401,7 @@ void TYRouteWidget::displaySpectrum(TYRoute::TrafficRegimes regime)
     assert(road.getNbRegimes() == 3);
     road.setCurRegime(regime);
     TYSpectre* spectre = road.getCurrentSpectre();
-    int ret = spectre->edit(this);
+    spectre->edit(this);
 }
 
 void TYRouteWidget::onRoadSurfaceChange(int)

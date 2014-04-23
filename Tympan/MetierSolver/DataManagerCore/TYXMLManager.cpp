@@ -203,8 +203,6 @@ int TYXMLManager::loadFromString(const QString& xmlString, LPTYElementArray& elt
 
     int nodecount = nodeList.length();
 
-    int readOk = 1; // Indicateur de probleme de relecture dans les calculs
-
     // Pour chaque noeud enfant du noeud root
     for (int i = 0; i < nodecount; i++)
     {
@@ -221,7 +219,7 @@ int TYXMLManager::loadFromString(const QString& xmlString, LPTYElementArray& elt
         if (pElt != NULL)
         {
             // Auto chargement des parametres par l'element
-            readOk = pElt->fromXML(nodeList.item(i).toElement());
+            pElt->fromXML(nodeList.item(i).toElement());
 
             // Ajout de l'element a la collection
             eltCollection.push_back(pElt);

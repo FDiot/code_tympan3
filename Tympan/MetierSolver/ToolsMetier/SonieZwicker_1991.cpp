@@ -172,7 +172,6 @@ void sonie::exec()
 
     const unsigned short NbandesCritiques = 20;
     const double S = 0.25;
-    const double NbandesBarkTotal = 24; // Apparemment utilis uniquement pour dfinir l'axe (graphique) des barks
     const double BarkStep = 0.1;
 
     for (unsigned short i = 0; i < NbandesCritiques + 1; i++)

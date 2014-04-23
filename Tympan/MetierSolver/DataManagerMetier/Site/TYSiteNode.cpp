@@ -472,15 +472,7 @@ void TYSiteNode::loadTopoFile()
     // Mise a jour du flag.
     _isTopoFileModified = true;
 
-    // On conserve le nom de l'image
-    size_t slashAt = _topoFileName.find_last_of("\\");
-    if (slashAt == std::string::npos)
-    {
-        slashAt = _topoFileName.find_last_of("/");
-    }
-
-
-    // On conserve l'extension de l'image = son type
+ // On conserve l'extension de l'image = son type
     size_t pointAt = _topoFileName.find_last_of(".");
 
     if (pointAt = -1)
@@ -569,6 +561,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
     OPoint3D pt;
     register unsigned int i, j;
 
+#if TY_USE_IHM
     size_t totalSteps = _pInfrastructure->getListRoute().size() +
                         _pInfrastructure->getListResTrans().size() +
                         _pInfrastructure->getListBatiment().size() +
@@ -576,8 +569,6 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
                         _pInfrastructure->getSrcs().size() +
                         _pTopographie->getListCrsEau().size() +
                         _pTopographie->getListTerrain().size();
-
-#if TY_USE_IHM
     TYProgressManager::setMessage("Mise a jour de l'altimetrie des infrastructures");
     TYProgressManager::set(static_cast<int>(totalSteps));
 #endif // TY_USE_IHM
@@ -650,12 +641,6 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         TYBatimentGeoNode* pBatGeoNode = _pInfrastructure->getListBatiment()[j];
         TYBatiment* pBat = TYBatiment::safeDownCast(pBatGeoNode->getElement());
 
-        double hauteurBat = 0.0;
-        if (pBat)
-        {
-            hauteurBat = pBat->volEnglob()._sizeZ;
-        }
-
         // Recuperation de l'origine de l'element
         pt = pBatGeoNode->getRepere()._origin;
 
@@ -691,12 +676,6 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
 
         TYMachineGeoNode* pMachineGeoNode = _pInfrastructure->getListMachine()[j];
         TYMachine* pMachine = TYMachine::safeDownCast(pMachineGeoNode->getElement());
-
-        double hauteurMachine = 0.0;
-        if (pMachine)
-        {
-            hauteurMachine = pMachine->volEnglob()._sizeZ;
-        }
 
         // Recuperation de l'origine de l'element
         pt = pMachineGeoNode->getRepere()._origin;
@@ -1529,7 +1508,6 @@ LPTYSiteNode TYSiteNode::merge()
         // Appel recursif
         TYSiteNode* pSiteChild = TYSiteNode::safeDownCast(pSiteNodeGeoNode->getElement());
         assert(pSiteChild);
-        bool btest = pSiteChild->isInCurrentCalcul();
         if (pSiteChild && !(pSiteChild->isInCurrentCalcul())) { continue; }
 
         LPTYSiteNode pSiteTmp = pSiteChild->merge();

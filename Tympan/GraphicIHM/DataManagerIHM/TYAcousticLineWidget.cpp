@@ -271,7 +271,6 @@ void TYAcousticLineWidget::changeRegime(int regime)
 
 void TYAcousticLineWidget::saveCurrentRegime()
 {
-    bool status = true;
     TYRegime& regime = getElement()->getRegimeNb(getElement()->getCurRegime());
 
     regime._isRayonnant = _checkBoxIsRayonnant->isChecked();

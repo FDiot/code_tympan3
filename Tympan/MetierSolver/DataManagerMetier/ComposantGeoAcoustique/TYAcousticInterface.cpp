@@ -141,7 +141,6 @@ int TYAcousticInterface::fromXML(DOM_Element domElement)
 {
     bool densiteHOk = false;
     bool densiteVOk = false;
-    bool isActiveOk = false;
     bool curRegimeOk = false;
     bool typeDistributionOk = false;
     bool useAttOk = false;

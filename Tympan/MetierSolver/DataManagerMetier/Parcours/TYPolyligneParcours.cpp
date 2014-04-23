@@ -61,8 +61,6 @@ void TYPolyligneParcours::ajouteSegment(TYPointParcours* p1, TYPointParcours* p2
     allouer(2);
     ajoutePoint(0, p1);
     ajoutePoint(1, p2);
-    bool bverifieNaturePolylignes = verifieNaturePolylignes();
-    //assert(bverifieNaturePolylignes);
 }
 
 bool TYPolyligneParcours::isInfra()
@@ -125,11 +123,8 @@ int TYPolyligneParcours::indexePointSuivant(int IndexPoint, TYPolyligneParcours*
 {
     //Verifications
     //assert(_nNbPoint == 2);
-    bool bAssert = !polylignesVoisinesPointentSurLaMemePolyligne();
-    if (bAssert)
-    {
-        bAssert = true;
-    }
+    //assert(!polylignesVoisinesPointentSurLaMemePolyligne());
+
     //Cherchons l'index du prochain point; il ne doit pas etre egal a l'indexe courant
     int IndexPointSuivant = autrePointDuSegment(IndexPoint);
     //assert(IndexPointSuivant >= 0);

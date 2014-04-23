@@ -215,9 +215,6 @@ bool TYRouteDeblai::computeConstraint()
 {
     purge();
 
-    //On recupere le site pour avoir acces a l'altimetrie. Necessaire pour definir le deblai/remblai
-    TYSiteNode* site = ((TYInfrastructure*)(this->getParent()))->getProjet()->getSite();
-
     //Construction de la geometrie de la route. Code extrait de TYEcran
     OVector3D pt0, pt1, pt2;
     OVector3D s0, s1; // sommets pour les faces (current)
@@ -230,8 +227,6 @@ bool TYRouteDeblai::computeConstraint()
     {
         return false;
     }
-
-    TYTabPoint _squelette = _tabPoint;
 
     OVector3D zvec(0, 0, 1);
     OVector3D vecN; //vecteur normal au segment courant
