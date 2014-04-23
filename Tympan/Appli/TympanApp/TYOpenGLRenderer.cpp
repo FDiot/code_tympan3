@@ -91,9 +91,6 @@ void TYOpenGLRenderer::init(int width, int height)
     glEnable(GL_LIGHTING);
     glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
-    float lux = 1.0f;
-    //SetAmbient(lux, lux, lux);
-    //GLfloat ambient[] = {lux, lux, lux, lux};
     static GLfloat ambient[] = { 0.1f, 0.1f, 0.1f, 1.0f };
     static GLfloat ambientBIS[] = { 0.8f, 0.8f, 0.8f, 0.8f };
     static GLfloat diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };

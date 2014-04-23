@@ -375,7 +375,6 @@ decimal BvhAccelerator::traverse(Ray* ray, std::list<Intersection> &result)
 {
     if (!nodes) { return -1.; }
 
-    bool hit = false;
     decimal intermin = -1.;
     vec3 origin = ray->position + ray->direction * ray->mint;
     vec3 invDir(1.f / ray->direction.x, 1.f / ray->direction.y, 1.f / ray->direction.z);
@@ -401,7 +400,6 @@ decimal BvhAccelerator::traverse(Ray* ray, std::list<Intersection> &result)
                     if (primitives.at(node->primitivesOffset + i)->getIntersection(*ray, currentIntersection) && currentIntersection.t > 0.0001)
                     {
                         //PBRT_BVH_INTERSECTION_PRIMITIVE_HIT(const_cast<Primitive *>(primitives[node->primitivesOffset+i].GetPtr()));
-                        hit = true;
                         result.push_back(currentIntersection);
 
                         intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);

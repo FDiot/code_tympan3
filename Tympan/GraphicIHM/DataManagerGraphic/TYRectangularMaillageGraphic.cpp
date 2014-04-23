@@ -70,9 +70,6 @@ TYRectangularMaillageGraphic::~TYRectangularMaillageGraphic()
 
 void TYRectangularMaillageGraphic::update(bool force /*=false*/)
 {
-    // TODO Use safeDownCast ?
-    TYCalcul* pCalcul = static_cast<TYCalcul*>(getElement()->getParent());
-
     TYRectangularMaillage* pRectangularMaillage = getElement();
     // TODO We do not want regular scale any longer.
 
@@ -92,9 +89,6 @@ void TYRectangularMaillageGraphic::update(bool force /*=false*/)
 
 void TYRectangularMaillageGraphic::computeBoundingBox()
 {
-    // XXX safedownCast ???
-    TYCalcul* pCalcul = static_cast<TYCalcul*>(getElement()->getParent());
-
     OBox reset;
 
     _boundingBox = reset;
@@ -117,16 +111,10 @@ void TYRectangularMaillageGraphic::computeBoundingBox()
 
             index1 = i * larg + j;
             TYPointCalcul* pPtCalcul = pPtsCalcul->at(index1);
-            //          if (pPtCalcul->getEtat(pCalcul))
-            //          {
             _boundingBox.Enlarge((float)(pPtCalcul->_x), (float)(pPtCalcul->_y), (float)(pPtCalcul->_z));
-            //          }
             index2 = (i + 1) * larg + j; //nextPoint(pPtsCalcul, index1, (i+1)*larg+j);
             pPtCalcul = pPtsCalcul->at(index2);
-            //          if (pPtCalcul->getEtat(pCalcul))
-            //          {
             _boundingBox.Enlarge((float)(pPtCalcul->_x), (float)(pPtCalcul->_y), (float)(pPtCalcul->_z));
-            //          }
         }
     }
 }

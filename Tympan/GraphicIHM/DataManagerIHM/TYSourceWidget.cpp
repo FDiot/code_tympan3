@@ -90,6 +90,5 @@ void TYSourceWidget::apply()
 void TYSourceWidget::showSpectre()
 {
     TYSpectre* spectre = getElement()->getCurrentSpectre();
-
-    int ret = spectre->edit(this);
+    spectre->edit(this);
 }

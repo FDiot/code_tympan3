@@ -205,7 +205,7 @@ int TYSetGeometriqueParcours::MergePointsDoubles()
 
 void TYSetGeometriqueParcours::RamenerPointsTraversantLaFrontiere(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours** IndexePointsFrontiere, int& NbPointsFrontiere, bool* EstUnPointIntersectant, bool bCoteGauche, bool* PointsAGauche, bool* PointsADroite)
 {
-    int i, indexePoint, indexeAutrePoint, indexePoint1, indexePoint2;
+    int i, indexePoint, indexePoint1, indexePoint2;
     int nAncienNbPointTotal = _nNbPointTotal / 2; //cf SeparationDroiteGauche
     //Initialisation
     NbPointsFrontiere = 0;
@@ -258,8 +258,6 @@ void TYSetGeometriqueParcours::RamenerPointsTraversantLaFrontiere(TYPointParcour
             nIndexePointFrontiereDansSegment = PointsAGauche[indexePoint1] ? 0 : 1;
         }
         indexePoint = _ListePolylines[i].indexePoint(nIndexePointFrontiereDansSegment);
-        //Retenir l'autre point
-        indexeAutrePoint = (indexePoint == indexePoint1) ? indexePoint2 : indexePoint1;
 
         //2. Modification du point donnant lieu a un point frontiere
         //Ce passage de frontiere peut donner lieu a 2 points d'intersections sur SR,
@@ -1017,7 +1015,6 @@ int TYSetGeometriqueParcours::SelectionnePointsEntreSetRetDuCoteDeSR(TYSetGeomet
     double MinX = G.x;
 
     //Comme le merge des points doubles a consistes a marquer en negatifs les points inutiles, on les ecartes
-    bool bIndentifiantNulAjoute = false;
     int racine = 0;
     //  int nNbPointRacine = 0;
     bool bEntreSetR;
@@ -1041,11 +1038,6 @@ int TYSetGeometriqueParcours::SelectionnePointsEntreSetRetDuCoteDeSR(TYSetGeomet
         if (bEntreSetR && (TYPointParcours::ZCross(GD, GP) >= 0))
         {
             TableauDePoints[nNbPointsSelectiones] = &(_ListePoint[i]);
-            if (_ListePoint[i].Identifiant == 0)
-            {
-                bIndentifiantNulAjoute = true;
-            }
-
             nNbPointsSelectiones++;
         }
     }

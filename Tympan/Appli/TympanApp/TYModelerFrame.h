@@ -301,11 +301,6 @@ public slots:
     void screenShot();
 
     /**
-     * Exporte la scene 3D dans un fichier VRML.
-     */
-    void exportToVRML();
-
-    /**
      * Mets a jour la vue graphique ainsi que les axes et la
      * grille.
      *

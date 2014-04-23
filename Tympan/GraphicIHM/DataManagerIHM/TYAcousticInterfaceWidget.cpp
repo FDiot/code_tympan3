@@ -303,7 +303,7 @@ void TYAcousticInterfaceWidget::showSpectre()
         spectre.setIsReadOnly(true);
     }
 
-    int ret = spectre.edit(this);
+    spectre.edit(this);
 
     spectre.setIsReadOnly(false);
 }
@@ -367,8 +367,6 @@ void TYAcousticInterfaceWidget::changeRegime(int regime)
     saveCurrentRegime();
 
     // Changement de regime
-    size_t nbRegime = getElement()->getNbRegimes();
-
     getElement()->setCurRegime(regime);
 
     updateFromCurrentRegime();

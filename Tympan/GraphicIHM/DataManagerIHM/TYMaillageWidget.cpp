@@ -258,10 +258,6 @@ void TYMaillageWidget::updateValMinMax()
 void TYMaillageWidget::updatePalette()
 {
     _lineEditPaletteName->setText(getElement()->getPalette()->getName());
-
-    float min = getElement()->getPalette()->getValueMin();
-    float max = getElement()->getPalette()->getValueMax();
-
     _lookupTableWidget->update(getElement()->getPalette());
 }
 

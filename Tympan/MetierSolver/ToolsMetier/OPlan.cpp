@@ -73,7 +73,6 @@ OPlan& OPlan::operator=(const OPlan& plan)
         _d = plan._d;
     }
     return *this;
-    update_explicit_repr();
 }
 
 bool OPlan::operator==(const OPlan& plan) const

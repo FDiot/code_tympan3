@@ -57,7 +57,6 @@ TYMateriauConstruction* get_material(TYTabAcousticSurfaceGeoNode surfaces)
         if (pMurElem != NULL) // Cas d'une face de batiment ou d'un ecran
         {
             cout << "  # if pMurElem != NULL" << endl;
-            TYMur* pMur = TYMur::safeDownCast(pMurElem->getParent());
 
             OVector3D normale = pPoly->normal();
 

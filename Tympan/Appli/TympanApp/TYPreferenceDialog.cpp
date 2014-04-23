@@ -1902,7 +1902,6 @@ void TYPreferenceDialog::savePreferences()
     TYPreferenceManager::setBool("UseReflexionCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseReflexion->isChecked());
     TYPreferenceManager::setBool("InterferenceCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->isChecked());
     TYPreferenceManager::setBool("UseEcranCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseEcran->isChecked());
-    int checkedId2 = ((AcoustiqueTab*)tabWidget->widget(3))->_pExpansGeoButtonGroup->checkedId();
     if (((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo2Pi->isChecked())
     {
         TYPreferenceManager::setBool("ExpansGeo2PiCalculDefault", false);

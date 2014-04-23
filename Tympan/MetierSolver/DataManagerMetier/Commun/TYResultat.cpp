@@ -396,9 +396,6 @@ void TYResultat::buildMatrix(const TYMapElementIndex& recepteurs, const TYMapEle
 
     matrix.resize(recepteurs.size());
 
-    size_t sR = recepteurs.size();
-    size_t sS = emetteurs.size();
-
     for (size_t i = 0; i < matrix.size(); i++)
     {
         matrix[i].resize(emetteurs.size());
@@ -628,9 +625,7 @@ void TYResultat::condensate()
     bool bValid = true; // Permettra de valider un spectre pour un couple source/recepteur
     TYTabSourcePonctuelleGeoNode tabSourceNode;
     OSpectre spectreCumule = OSpectre::getEmptyLinSpectre();
-    OSpectre s = OSpectre::getEmptyLinSpectre();
     TYSourcePonctuelle* pSource = NULL;
-
 
     // On boucle sur les recepteurs et sur les sources condensee
     for (itPt = _recepteurs.begin(); itPt != _recepteurs.end(); itPt++)

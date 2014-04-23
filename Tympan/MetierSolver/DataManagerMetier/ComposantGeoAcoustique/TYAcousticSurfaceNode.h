@@ -148,7 +148,7 @@ public:
     /**
      * Set/Get du rectangle englobant.
      */
-    LPTYRectangle getBoundingRect() { return _pBoundingRect; setIsGeometryModified(true); }
+    LPTYRectangle getBoundingRect() { return _pBoundingRect; }
     /**
      * Set/Get du rectangle englobant.
      */

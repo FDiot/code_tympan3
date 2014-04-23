@@ -183,19 +183,8 @@ void TYCameraZoneEditor::slotMouseReleased(int x, int y, Qt::MouseButton button,
                 focalPoint[1] = _pOGLRectangleElement->getPoint0()[1] + (_pOGLRectangleElement->getPoint2()[1] - _pOGLRectangleElement->getPoint0()[1]) / 2;
                 focalPoint[2] = _pOGLRectangleElement->getPoint0()[2] + (_pOGLRectangleElement->getPoint2()[2] - _pOGLRectangleElement->getPoint0()[2]) / 2;
 
-                double h = 1;
-                if (_pModeler->getCurrentView() == TYModelerFrame::TopView)
-                {
-                    h = pt2[1] - pt0[1];
-                }
-                else
-                {
-                    h = pt2[2] - pt0[2];
-                }
-
                 double factor = 1;
                 factor = min(_pInteractor->width() / (_pOGLRectangleElement->getPoint1()[0] - _pOGLRectangleElement->getPoint0()[0]), _pInteractor->height() / (_pOGLRectangleElement->getPoint1()[1] - _pOGLRectangleElement->getPoint2()[1]));
-                //pCameraEditor->cameraZoneZoom(focalPoint, fabs(h));
                 pCameraEditor->cameraZoneZoom(focalPoint, fabs(factor));
             }
         }

@@ -229,11 +229,9 @@ void TYPolygonGraphic::display(GLenum mode /*= GL_RENDER*/)
 
             TYNameManager::get()->enable(true);
 
-            double minX, minY, maxX, maxY;
+            double minX, minY;
             minX = rect.getMinX();
             minY = rect.getMinY();
-            maxX = rect.getMaxX();
-            maxY = rect.getMaxY();
 
             // Echelle des textures (1 = une texture par m)
             int scale = 2;

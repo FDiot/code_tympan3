@@ -354,9 +354,6 @@ bool TYPolyLineEditor::removeLastPoint()
         }
         else
         {
-            int x, y;
-            x = _OGLLineElementList.last()->getPoint1()[0];
-            y = _OGLLineElementList.last()->getPoint1()[2];
             _pInteractor->getRenderer()->removeOGLElement(_OGLLineElementList.last());
             delete _OGLLineElementList.last();
             _OGLLineElementList.removeLast();
@@ -394,7 +391,6 @@ bool TYPolyLineEditor::updateMovingLine(int x, int y)
     // Changement de repere Disp->World
     // On recupere le pt precedent
     TYPoint pt1 = _savedPoints.back();
-    double* myPt1 = _OGLSphereElementList.last()->getCenter();
 
     NxVec3 pt;
     if ((x == 0) && (y == 0))

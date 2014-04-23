@@ -206,8 +206,6 @@ void TYResultatTreeDialog::updateContent()
 
     for (itdel = mapElementChilds.begin(); itdel != mapElementChilds.end(); itdel++)
     {
-        TYElement* pParent = itdel.key();
-
         delete itdel.value();
         itdel.value() = NULL;
     }
@@ -230,8 +228,6 @@ void TYResultatTreeDialog::followChilds(QMap<TYElement*, childTreeItem*>& mapEle
     pCurItem = new QTreeWidgetItem(pCurItem, stringList);
     pCurItem->setText(2, QString().setNum(spectre.valGlobDBA(), 'f', 2));
     pCurItem->setText(3, QString().setNum(spectre.valGlobDBLin(), 'f', 2));
-
-    QTreeWidgetItem* pOldItem = NULL;
 
     // Ajout a la collection de parents
     std::map <TYElement*, TYElement*>::iterator itmap;

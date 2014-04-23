@@ -775,7 +775,6 @@ bool TYTopographie::remTerrain(const LPTYTerrainGeoNode pTerGeoNode)
     unsigned int terrainNbr = 0;
 
     TYTabTerrainGeoNode::iterator ite;
-    TYTerrain* pTerrain = dynamic_cast<TYTerrain*>(pTerGeoNode->getElement());
 
     for (ite = _listTerrain.begin(); ite != _listTerrain.end(); ite++)
     {
@@ -1260,7 +1259,6 @@ LPTYTerrain TYTopographie::solMoy(const OSegment3D& seg, const TYAtmosphere& atm
     TYTerrain* pTerrain = new TYTerrain();
 
     pTerrain->setSol(pSolRes);
-
 
     return pTerrain;
 }

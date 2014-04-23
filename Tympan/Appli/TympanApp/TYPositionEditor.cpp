@@ -1080,7 +1080,6 @@ void TYPositionEditor::PointOfGeoNodeInCurrentSiteCoordinatesOrPointOfCurrentSit
         pGeoNode->GetGeoNodeParentList(GeoNodeParents);
 
         TYListPtrGeoNode::iterator ite = GeoNodeParents.end();
-        TYListPtrGeoNode::iterator iteEnd = ite;
         int i, rootIndex = 0;
         if (pRootGeometryNode)
         {
@@ -1089,7 +1088,6 @@ void TYPositionEditor::PointOfGeoNodeInCurrentSiteCoordinatesOrPointOfCurrentSit
                 ite--;
                 if ((*ite) == pRootGeometryNode)
                 {
-                    iteEnd = ite;
                     rootIndex = i + 1;
                 }
             }

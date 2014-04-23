@@ -632,8 +632,6 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
         return ptTest;
     }
 
-    int i = 0;
-    int size = 0;
     OSegment3D segTest;
     TYPolygon* pFace = NULL;
     TYTabLPPolygon& divRef = _pSortedFaces[idx.pi][idx.qi];

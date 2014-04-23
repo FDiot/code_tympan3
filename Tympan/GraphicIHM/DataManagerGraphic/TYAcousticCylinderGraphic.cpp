@@ -123,9 +123,6 @@ void TYAcousticCylinderGraphic::display(GLenum mode /*= GL_RENDER*/)
             // Couleur
             glColor3fv(getElement()->getColor());
 
-            // Rayon
-            double rayon = getElement()->getDiameter() / 2.0;
-
             // Centre
             float center[3];
             getElement()->getCenter().getToOGL(center);
@@ -145,7 +142,6 @@ void TYAcousticCylinderGraphic::display(GLenum mode /*= GL_RENDER*/)
 
 #endif // TY_USE_IHM
 
-            GLUquadricObj* qobj = gluNewQuadric();
             OPoint3D oCenter = getElement()->getCenter();
             glTranslatef(oCenter._x, oCenter._y, oCenter._z);
 
@@ -163,8 +159,6 @@ void TYAcousticCylinderGraphic::display(GLenum mode /*= GL_RENDER*/)
                 glPopName();
                 _globalBoundingBox.Enlarge(_boundingBox);
             }
-
-            //          gluDeleteQuadric(qobj);
         }
     }
 }

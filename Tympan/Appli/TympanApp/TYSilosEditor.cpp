@@ -274,7 +274,7 @@ void TYSilosEditor::slotMouseMoved(int x, int y, Qt::MouseButtons button, Qt::Ke
         _pOGLRectangleElement->setPoint2(OPoint3D(x, _pOGLRectangleElement->getPoint0()[1] - w, 0.0));
         _pOGLRectangleElement->setPoint3(OPoint3D(_pOGLRectangleElement->getPoint0()[0], _pOGLRectangleElement->getPoint0()[1] - w, 0.0));
 
-        float pt0[2], pt1[2], pt2[2];
+        float pt0[2], pt1[2];
         NxVec3 point0 = OGLCamera::displayToWorld(NxVec3(_pOGLRectangleElement->getPoint0()[0], _pOGLRectangleElement->getPoint0()[1], _pOGLRectangleElement->getPoint0()[2]));
         NxVec3 point1 = OGLCamera::displayToWorld(NxVec3(_pOGLRectangleElement->getPoint1()[0], _pOGLRectangleElement->getPoint1()[1], _pOGLRectangleElement->getPoint1()[2]));
         NxVec3 point2 = OGLCamera::displayToWorld(NxVec3(_pOGLRectangleElement->getPoint2()[0], _pOGLRectangleElement->getPoint2()[1], _pOGLRectangleElement->getPoint2()[2]));
@@ -282,8 +282,6 @@ void TYSilosEditor::slotMouseMoved(int x, int y, Qt::MouseButtons button, Qt::Ke
         pt0[1] = point0.z;
         pt1[0] = point1.x;
         pt1[1] = point1.z;
-        pt2[0] = point2.x;
-        pt2[1] = point2.z;
 
         double diameter = ABS(pt1[0] - pt0[0]);
 

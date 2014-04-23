@@ -189,14 +189,12 @@ int TYSpectre::fromXML(DOM_Element domElement)
     bool fMinOk = false;
     bool fMaxOk = false;
     bool fDomain = false;
-    bool keepInBDDOk = false;
     bool rmqOk = false;
     int type;
     float fMin;
     float fMax;
     float freq;
     double reel;
-    double imag;
 
     QDomNodeList childs = domElement.childNodes();
 
@@ -254,8 +252,6 @@ int TYSpectre::fromXML(DOM_Element domElement)
         {
             freq = TYXMLTools::getElementAttributeToDouble(elemCur, "f");
             reel = TYXMLTools::getElementAttributeToDouble(elemCur, "re");
-            imag = TYXMLTools::getElementAttributeToDouble(elemCur, "im");
-
             setValue(freq, reel);
         }
 

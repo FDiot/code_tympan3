@@ -232,7 +232,6 @@ void TYAtmosphereWidget::updateContent()
 
 #ifdef TY_RECHERCHE
     double A, B, C, D;
-    int classeMeteo = getElement()->getClasseMeteo();
 
     getElement()->getProfilMeteo(A, B, C, D);
 

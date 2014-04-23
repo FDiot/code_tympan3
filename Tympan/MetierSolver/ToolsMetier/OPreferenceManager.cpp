@@ -250,26 +250,7 @@ bool OPreferenceManager::exists(const QString& dir, const QString& pref)
 {
     OPrefMap::OPrefMapIt ite;
     ite = _prefDirs._dirMap[dir]._prefMap.find(pref);
-    bool bFound = (ite != _prefDirs._dirMap[dir]._prefMap.end());
-    return bFound;
-    // On parcours la totalite du tableau associatif
-    for (ite = _prefDirs._dirMap[dir]._prefMap.begin(); ite != _prefDirs._dirMap[dir]._prefMap.end(); ite++)
-    {
-        if (((*ite).first).compare(pref) == 0)
-        {
-            if (!bFound)
-            {
-                return true;
-            }
-            return true;
-        }
-    }
-    if (bFound)
-    {
-        return false;
-    }
-
-    return false;
+    return (ite != _prefDirs._dirMap[dir]._prefMap.end());
 }
 
 QString OPreferenceManager::getDirectory(const QString& pref)

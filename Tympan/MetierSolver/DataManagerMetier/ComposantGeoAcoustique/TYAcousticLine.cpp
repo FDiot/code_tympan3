@@ -307,7 +307,6 @@ void TYAcousticLine::distriSrcs()
 {
     double densite = 1.0 / _pSrcLineic->getDensiteSrcs();
     //  double lSegment = 0.0;                              //Longueur du segment courant
-    double deltaSources = 0.0 ;                         //Ecart entre chaque sources
     double distance = 0.0;
     double x = 0.0, y = 0.0, z = 0.0;                   // Coordonnees du point courant
     int nbSources = 1;
@@ -331,8 +330,6 @@ void TYAcousticLine::distriSrcs()
         double distanceX = _tabPoint[i]._x - _tabPoint[i - 1]._x;
         double distanceY = _tabPoint[i]._y - _tabPoint[i - 1]._y;
         double distanceZ = _tabPoint[i]._z - _tabPoint[i - 1]._z;
-
-        deltaSources = distance / nbSources ;
 
         double deltaSourcesX = distanceX / nbSources ;
         double deltaSourcesY = distanceY / nbSources ;

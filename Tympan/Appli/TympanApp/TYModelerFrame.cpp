@@ -1003,26 +1003,6 @@ void TYModelerFrame::screenShot()
     delete pMenu;
 }
 
-void TYModelerFrame::exportToVRML()
-{
-    // Export VRML
-    QString file = QFileDialog::getSaveFileName(this, "", QString::null, "VRML (*.wrl)");
-
-    if (!file.isEmpty())
-    {
-        if (!file.endsWith(".wrl"))
-        {
-            file += ".wrl";
-        }
-
-        /*  vtkVRMLExporter * pVrmlExporter = vtkVRMLExporter::New();
-            pVrmlExporter->SetInput(getView()->getRenderWindow());
-            pVrmlExporter->SetFileName(file.toLatin1());
-            pVrmlExporter->Write();
-            pVrmlExporter->Delete();*/
-    }
-}
-
 void TYModelerFrame::copy()
 {
     // Snap
@@ -1207,7 +1187,6 @@ void TYModelerFrame::print()
                     {
                         paint.drawText(x, y, TR("id_print_comment"));
                         paint.drawText(x1, y, pMachine->getCommentaire());
-                        y += stepy;
                     }
                 }
                 else if (_pElement->inherits("TYSiteNode"))
@@ -1217,7 +1196,6 @@ void TYModelerFrame::print()
                     {
                         paint.drawText(x, y, TR("id_print_nom_site"));
                         paint.drawText(x1, y, pSite->getName());
-                        y += stepy;
                     }
                 }
             }

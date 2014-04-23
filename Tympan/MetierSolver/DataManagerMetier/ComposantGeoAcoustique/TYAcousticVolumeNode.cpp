@@ -129,8 +129,7 @@ int TYAcousticVolumeNode::fromXML(DOM_Element domElement)
     // Reset
     purge();
 
-    bool nbChildOk = false;
-    int nbChild = 0, retVal = -1;
+    int retVal = -1;
     LPTYAcousticVolumeGeoNode pAccVolGeoNode = new TYAcousticVolumeGeoNode(NULL, this);
 
     DOM_Element elemCur;

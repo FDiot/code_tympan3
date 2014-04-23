@@ -117,7 +117,7 @@ public:
     /**
      * Set/Get du rectangle englobant.
      */
-    TYRectangle* getBoundingRect() { return _pBoundingRect; setIsGeometryModified(true); }
+    TYRectangle* getBoundingRect() { return _pBoundingRect; }
 
     /**
      * Set/Get de l'indicateur qui precise si la surface est un sous-element d'une face.

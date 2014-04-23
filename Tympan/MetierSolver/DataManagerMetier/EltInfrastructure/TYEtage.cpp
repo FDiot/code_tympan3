@@ -274,7 +274,6 @@ DOM_Element TYEtage::toXML(DOM_Element& domElement)
     DOM_Element listEtatNode = domDoc.createElement("TabEtatElement");
     domNewElem.appendChild(listEtatNode);
 
-    unsigned int test = static_cast<unsigned int>(_tabRegimes.size());
     // Pour tous les regimes
     for (i = 0 ; i < _tabRegimes.size() ; i++)
     {

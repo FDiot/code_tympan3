@@ -437,7 +437,7 @@ bool PaletteModel::setData(const QModelIndex& index, const QVariant& value, int 
                 case Qt::BackgroundColorRole:
                 case Qt::EditRole:
                     qcolor = value.value<QColor>();
-                    ok = p_palette->insertColor(old_value, toOColor(qcolor));
+                    p_palette->insertColor(old_value, toOColor(qcolor));
                     emit dataChanged(index, index);
                     return true;
                     break;

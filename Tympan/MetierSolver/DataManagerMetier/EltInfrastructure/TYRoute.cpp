@@ -416,8 +416,6 @@ bool TYRoute::updateAcoustic(const bool& force) //force = false
 
 bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
 {
-    bool ok = true;
-
     assert(pGeoNode->getElement() == static_cast<TYElement*>(this) &&
            "Inconsistent arguments : the geoNode passed must point on `this` !");
 
@@ -436,7 +434,7 @@ bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNod
         OPoint3D pt = matrix * this->getTabPoint()[i];
 
         // Init the point at ground altitude
-        ok &= alti.updateAltitude(pt);
+        alti.updateAltitude(pt);
         // NB updateAltitude already report possibel problems
 
         // Add the heigth relative to the ground

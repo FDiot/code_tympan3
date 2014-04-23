@@ -155,7 +155,6 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
     vector<vec3> srcs;
 
     //Conversion des sources Tympan en source lancer de rayons
-    TYSourcePonctuelle* sourceP = NULL;
     for (unsigned int i = 0; i < _tabSources.size(); i++)
     {
         OPoint3D globalPos = computePosGlobalPoint(_tabSources.at(i));
@@ -809,11 +808,6 @@ double TYANIME3DAcousticPathFinder::angleCorrection(const TYRayEvent* ev1, TYRay
 
     OVector3D vec1(points[1], points[0]);
     OVector3D vec2(points[1], points[2]);
-
-#ifdef _DEBUG
-    double angle = vec1.angle(vec2);
-    double angleComp = (M_PI - vec1.angle(vec2)) / 2.;
-#endif
 
     return (M_PI - vec1.angle(vec2)) / 2.;
 }

@@ -131,7 +131,6 @@ DOM_Element TYBoundaryNoiseMap::toXML(DOM_Element& domElement)
         _tabPoint[i].toXML(domNewElem);
     }
 
-    TYCalcul* pCalcul = TYCalcul::safeDownCast(getParent());
     if (TYProjet::gSaveValues)
     {
         nbPoints = _ptsCalcul.size();
@@ -148,7 +147,6 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
 {
     TYMaillage::fromXML(domElement);
 
-    bool spectreIsOk = false;
     bool nbPointsIsOk = false;
 
     unsigned int i;
@@ -185,7 +183,6 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
         {
             tabSpectre.push_back(pSpectre);
             pSpectre = new TYSpectre();
-            spectreIsOk = true;
         }
     }
 

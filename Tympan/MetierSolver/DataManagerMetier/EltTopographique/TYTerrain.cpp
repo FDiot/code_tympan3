@@ -157,7 +157,6 @@ int TYTerrain::fromXML(DOM_Element domElement)
 
     _listPoints.clear();
 
-    bool typeOk = false;
     bool nbPointsOk = false;
     int nbPoints = 0;
     TYPoint pt;
@@ -167,7 +166,6 @@ int TYTerrain::fromXML(DOM_Element domElement)
     for (unsigned int i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
-        //      TYXMLTools::getElementIntValue(elemCur, "type", _type, typeOk);
 
         _pSol->callFromXMLIfEqual(elemCur);
 

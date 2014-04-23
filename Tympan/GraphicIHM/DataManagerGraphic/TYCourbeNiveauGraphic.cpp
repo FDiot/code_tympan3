@@ -86,7 +86,6 @@ void TYCourbeNiveauGraphic::display(GLenum mode /*= GL_RENDER*/)
     float color[4];//az++ test
     glGetFloatv(GL_CURRENT_COLOR, color);//az++ test
     Error = glGetError();
-    const unsigned char* sError = gluErrorString(Error);
     //delete [] color;//az++ test
     _pPolyLineGraphic->highlight(getHighlightState());//az++
     _pPolyLineGraphic->display(mode);

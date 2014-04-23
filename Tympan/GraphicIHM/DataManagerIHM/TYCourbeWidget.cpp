@@ -117,8 +117,6 @@ void TYCourbeWidget::paintInto(QPainter* painter, int w, int h)
     //RNU
     nbFreq = tabFreq.size();
 
-    QString dB = "dB";
-    if (_dbType) { dB = "dB/km"; }
     // Initialisation des parametres
     double width = double(w);
     double height = double(h);

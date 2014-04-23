@@ -1126,15 +1126,13 @@ LPTYMaillageGeoNode TYCalcul::findMaillage(const LPTYMaillage pMaillage)
 
 void TYCalcul::updateGraphicMaillage()
 {
-    TYMaillage* pMaillage = NULL;
-
+#if TY_USE_IHM
     for (unsigned int i = 0; i < getMaillages().size(); i++)
     {
-        pMaillage = getMaillage(i);
-#if TY_USE_IHM
+        TYMaillage* pMaillage = getMaillage(i);
         pMaillage->getGraphicObject()->update();
-#endif
     }
+#endif
 }
 
 bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode)
@@ -1524,9 +1522,6 @@ bool TYCalcul::go()
     }
 
     bool ret = true;
-    bool cancel = false;
-    unsigned int i = 0;
-
     // Reset des resultats precedents
     _pResultat->purge();
 
@@ -1567,15 +1562,7 @@ bool TYCalcul::go()
 
     xmlManager.createDoc(docName, version);
     xmlManager.addElement(pMergeSite);
-
-    if (xmlManager.save("merged.xml") == 0)
-    {
-        bool bRet = true;
-    }
-    else
-    {
-        bool bRet = false;
-    }
+    xmlManager.save("merged.xml");
 
 #endif
 
