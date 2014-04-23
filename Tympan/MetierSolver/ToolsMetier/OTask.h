@@ -23,8 +23,7 @@
 #ifndef __O_TASK__
 #define __O_TASK__
 
-#include "Tympan/Tools/TYConfigure.h"
-
+#include "ThreadingSupport.h"
 #include "Tympan/Tools/OSmartPtr.h"
 
 /**

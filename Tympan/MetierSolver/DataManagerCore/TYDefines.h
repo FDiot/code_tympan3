@@ -39,6 +39,7 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include <QString>
 
 /**
  * Declarations des types utilises par les methodes virtuelle d'extension

@@ -23,7 +23,7 @@
 #ifndef __O_MUTEXLOCKER__
 #define __O_MUTEXLOCKER__
 
-#include "Tympan/Tools/TYConfigure.h"
+#include "ThreadingSupport.h"
 
 /**
  * \file OMutexLocker.h
