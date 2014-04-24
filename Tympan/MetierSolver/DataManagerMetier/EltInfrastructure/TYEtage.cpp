@@ -29,6 +29,7 @@
 #include "TYEtage.h"
 
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
+#include "Tympan/MetierSolver/ToolsMetier/Defines.h"
 
 #include "Tympan/Tools/OMessageManager.h"
 

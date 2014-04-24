@@ -24,6 +24,12 @@
 #ifndef __O_POINT_3D__
 #define __O_POINT_3D__
 
+#include <vector>
+
+class OPoint3D;
+typedef std::vector<OPoint3D> TabPoint3D;
+
+
 /**
  * \file OPoint3D.h
  * \class OPoint3D
@@ -106,7 +112,27 @@ public:
     {
         return *this == oPoint;
     }
-};
 
+    /**
+     * Methode utilitaire qui s'assure que 2 points consecutifs sont
+     * espaces d'une distance maximale en ajoutant de nouveaux points
+     * quand cela est necessaire.
+     *
+     * @param points Le tableau de points a tester.
+     * @param distanceMax La distance maximale entre 2 points.
+     *
+     * @return Un nouveau tableau de points espaces d'au plus
+     *         la distance maximale.
+     */
+    static TabPoint3D checkPointsMaxDistance(const TabPoint3D& points, 
+            const double& distanceMax);
+
+    /**
+     * \brief Same as previous function taking two points instead of a tab of points
+     */
+    static TabPoint3D checkPointsMaxDistance(const OPoint3D& point1, 
+            const OPoint3D& point2, const double& distanceMax);
+
+};
 
 #endif // __O_POINT_3D__
