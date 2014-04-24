@@ -31,6 +31,7 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/MetierSolver/ToolsMetier/OTriangle.h"
+#include "Tympan/MetierSolver/ToolsMetier/Defines.h"
 
 OPROTOINST(TYRectangle);
 TY_EXTENSION_INST(TYRectangle);

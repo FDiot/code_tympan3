@@ -50,6 +50,8 @@ static char THIS_FILE[] = __FILE__;
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 
+#include "Tympan/MetierSolver/ToolsMetier/Defines.h"
+
 OPROTOINST(TYCalcul);
 TY_EXTENSION_INST(TYCalcul);
 TY_EXT_GRAPHIC_INST(TYCalcul);

@@ -28,8 +28,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-static const double DIST_MAX_PTS = 100.0;
-
 OPROTOINST(TYPoint);
 TY_EXTENSION_INST(TYPoint);
 
@@ -180,77 +178,4 @@ int TYPoint::fromXML(DOM_Element domElement)
     return 1;
 }
 
-/*static*/ TYTabPoint TYPoint::checkPointsMaxDistance(const TYTabPoint& points, const double& distanceMax)
-{
-    TYTabPoint retTab;
-    if (!points.size() || (distanceMax <= 0.1))
-    {
-        return points;
-    }
 
-    bool pointAdded = false;
-
-
-    // On verifie que les points ne sont pas trop eloignes les uns des autres
-    TYSegment seg;
-
-    seg._ptA = points[0];
-    retTab.push_back(seg._ptA);
-    double dist(0.0);
-
-    for (unsigned int i = 1; i < points.size(); i++)
-    {
-        seg._ptB = points[i];
-        dist = seg.longueur();
-
-        if (dist < TYSEUILCONFONDUS) { continue; } // i��limination du point en doublon
-
-        // Si les points sont trop eloignes...
-        if (dist > distanceMax)
-        {
-            // On ajoute un point entre les deux
-            OVector3D vec(seg._ptA, seg._ptB);
-            vec.normalize();
-
-            TYPoint newPt = OVector3D(seg._ptA) + (vec * (dist / 2));
-            retTab.push_back(newPt);
-
-            pointAdded = true;
-        }
-
-        retTab.push_back(seg._ptB);
-        seg._ptA = seg._ptB;
-    }
-
-    if (pointAdded) { retTab = checkPointsMaxDistance(retTab, distanceMax); }
-
-    return retTab;
-}
-
-/*static*/ TYTabPoint TYPoint::checkPointsMaxDistance(const TYPoint& point1, const TYPoint& point2, const double& distanceMax)
-{
-    TYTabPoint tabPoints;
-    tabPoints.push_back(point1);
-    tabPoints.push_back(point2);
-
-    return checkPointsMaxDistance(tabPoints, distanceMax);
-}
-
-/*static*/ TYTabPoint TYPoint::checkPointsMaxDistance(const TYTabPoint& points)
-{
-    double distanceMax = DIST_MAX_PTS;
-
-#if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "DistMinPtCrbNiv"))
-    {
-        distanceMax = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "DistMinPtCrbNiv");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "DistMinPtCrbNiv", distanceMax);
-    }
-
-#endif
-
-    return checkPointsMaxDistance(points, distanceMax);
-}

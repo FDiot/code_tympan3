@@ -23,6 +23,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/MetierSolver/ToolsMetier/Defines.h"
 #include "TYSolver.h"
 
 TYAcousticModel::TYAcousticModel(TYSolver& solver)

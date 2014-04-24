@@ -771,7 +771,7 @@ void TYANIME3DAcousticPathFinder::eventPosCompute(TYRay* tyRay)
 
 double TYANIME3DAcousticPathFinder::lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2)
 {
-    TYTabPoint tabPoint = TYPoint::checkPointsMaxDistance(ev1->pos, ev2->pos, globalOverSampleD);
+    TabPoint3D tabPoint = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, globalOverSampleD);
 
     // Calculation with h for each event
     // Useful for lengths & angles
@@ -795,8 +795,8 @@ double TYANIME3DAcousticPathFinder::lengthCorrection(TYRayEvent* ev1, const TYRa
 
 double TYANIME3DAcousticPathFinder::angleCorrection(const TYRayEvent* ev1, TYRayEvent* ev2, const TYRayEvent* ev3)
 {
-    TYTabPoint tabPoint1 = TYPoint::checkPointsMaxDistance(ev1->pos, ev2->pos, globalOverSampleD);
-    TYTabPoint tabPoint2 = TYPoint::checkPointsMaxDistance(ev2->pos, ev3->pos, globalOverSampleD);
+    TabPoint3D tabPoint1 = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, globalOverSampleD);
+    TabPoint3D tabPoint2 = OPoint3D::checkPointsMaxDistance(ev2->pos, ev3->pos, globalOverSampleD);
 
     // Corrects position for the only three events of interest
     OPoint3D points[3] = { tabPoint1.at(tabPoint1.size() - 2), tabPoint1.at(tabPoint1.size() - 1), tabPoint2.at(1) };

@@ -110,37 +110,6 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    /**
-     * Methode utilitaire qui s'assure que 2 points consecutifs sont
-     * espaces d'une distance maximale en ajoutant de nouveaux points
-     * quand cela est necessaire.
-     *
-     * @param points Le tableau de points a tester.
-     * @param distanceMax La distance maximale entre 2 points.
-     *
-     * @return Un nouveau tableau de points espaces d'au plus
-     *         la distance maximale.
-     */
-    static TYTabPoint checkPointsMaxDistance(const TYTabPoint& points, const double& distanceMax);
-
-    /**
-     * \brief Same as previous function taking two points instead of a tab of points
-     */
-    static TYTabPoint checkPointsMaxDistance(const TYPoint& point1, const TYPoint& point2, const double& distanceMax);
-
-
-    /**
-     * Methode utilitaire qui s'assure que 2 points consecutifs sont
-     * espaces d'une distance maximale en ajoutant de nouveaux points
-     * quand cela est necessaire.
-     * Utilise la distanceMax par defaut.
-     *
-     * @param points Le tableau de points a tester.
-     *
-     * @return Un nouveau tableau de points espaces d'au plus
-     *         la distance maximale.
-     */
-    static TYTabPoint checkPointsMaxDistance(const TYTabPoint& points);
 };
 
 

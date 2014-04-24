@@ -27,6 +27,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
+#include "Tympan/MetierSolver/ToolsMetier/Defines.h"
 #include "TYRectangle.h"
 #include "TYPolygon.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
