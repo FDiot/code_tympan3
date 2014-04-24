@@ -21,6 +21,7 @@
 #define __TY_REPERE__
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/MetierSolver/ToolsMetier/ORepere3D.h"
 #include "TYPoint.h"
 
 /**

@@ -22,6 +22,7 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
+#include "Tympan/MetierSolver/ToolsMetier/OMatrix.h"
 #include "TYPoint.h"
 
 // TYRectangle.h est inclu a la fin de la declaration de TYSegment.
