@@ -127,8 +127,7 @@ cdef class SolverModelBuilder:
         """ Create nodes and acoustic triangles in the model to represent the
             mesh given in argument.
         """
-        map_to_model_node_idx = cython.declare(vector[size_t])
-        map_to_model_node_idx = vector[size_t] (points.size())
+        map_to_model_node_idx = np.empty(points.size())
         itp = cython.declare(deque[OPoint3D].iterator)
         itp = points.begin()
         i = 0
