@@ -31,41 +31,34 @@
 OPROTOINST(TYPoint);
 TY_EXTENSION_INST(TYPoint);
 
-long    compteurPoint = 0;
 
 TYPoint::TYPoint(bool PutInInstanceList /*= false */): TYElement(NULL, PutInInstanceList), OPoint3D()
 {
-    compteurPoint++;
 }
 
 TYPoint::TYPoint(const TYPoint& other, bool PutInInstanceList /*= false */): TYElement(NULL, PutInInstanceList),
     OPoint3D(other)
 {
     *this = other;
-    compteurPoint++;
 }
 
 TYPoint::TYPoint(const OCoord3D& other, bool PutInInstanceList /*= false */): TYElement(NULL, PutInInstanceList),
     OPoint3D(other)
 {
-    compteurPoint++;
 }
 
 TYPoint::TYPoint(const OVector3D& other, bool PutInInstanceList /*= false */): TYElement(NULL, PutInInstanceList),
     OPoint3D(other)
 {
-    compteurPoint++;
 }
 
 TYPoint::TYPoint(double x, double y, double z, bool PutInInstanceList /*= false */):
     TYElement(NULL, PutInInstanceList), OPoint3D(x, y, z)
 {
-    compteurPoint++;
 }
 
 TYPoint::~TYPoint()
 {
-    compteurPoint--;
 }
 
 void TYPoint::set(double x, double y, double z)
