@@ -79,7 +79,6 @@ bool DefaultEngine::process()
         ray_to_process += sources->at(i).getNbRayLeft();
     }
 
-    bool find_intersection;
     std::size_t max_size(0);
 
     QTime time;
@@ -195,7 +194,7 @@ bool DefaultEngine::process()
             pile_traitement.pop();
             //nb_rayon_traite++;
             std::list<validRay> result;
-            find_intersection = traitementRay(current_ray, result);
+            traitementRay(current_ray, result);
 
             for (std::list<validRay>::iterator it = result.begin(); it != result.end(); it++)
             {

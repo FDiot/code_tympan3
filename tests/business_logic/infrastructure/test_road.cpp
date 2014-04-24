@@ -33,9 +33,6 @@ LPTYSiteNode buildFlatSiteSimpleRoad(void)
     pSite->setAltiEmprise(10);
     pSite->setUseEmpriseAsCrbNiv(true);
 
-    // Those dimension match with the default emprise
-    const double xMin = -200.0, xMax = 200.0, yMin = -200.0, yMax = +200.0;
-
     LPTYRoute pRoad = new TYRoute();
 #define NB_POINTS_ROAD 3
     // Initialise the level curve

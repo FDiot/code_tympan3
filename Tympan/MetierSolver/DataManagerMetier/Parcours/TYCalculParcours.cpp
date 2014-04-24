@@ -317,8 +317,7 @@ int TYCalculParcours::Traite(
         //3.3 Separation des points suivants le ci¿½te droit au gauche
         //Cette separation donne deja les segments intersectant [SR]
 
-        bool bPolylignesInfraFermees = _geoImporterDXF->PolylignesInfraFermees();
-        //assert(bPolylignesInfraFermees);
+        //assert(_geoImporterDXF->PolylignesInfraFermees());
 
         _geoImporterDXF->SeparationDroiteGauche(PointsAGauche, PointsADroite, geoGauche, geoDroite);
 
