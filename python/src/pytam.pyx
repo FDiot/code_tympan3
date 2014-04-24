@@ -264,13 +264,15 @@ cdef class Project:
     @staticmethod
     def from_xml(filepath):
         project = Project()
-        # TODO see how to convert potential C++ exception into python ones
+        # if an exception is raised from the C++ code, it will be converted to
+        # RuntimeError python exception. what() message should be preserved.
+        # see http://docs.cython.org/src/userguide/wrapping_CPlusPlus.html#exceptions
         project.thisptr = load_project(filepath)
-        if  project.thisptr.getRealPointer() != NULL:
-            return project
-        else:
-            raise Exception("Project could not be loaded from %s" % filepath)
+        return project
 
     def to_xml(self, filepath):
-        if self.thisptr.getRealPointer() != NULL:
-            save_project(filepath, self.thisptr)
+        if self.thisptr.getRealPointer() == NULL:
+            raise ValueError ("Cannot export an empty project")
+        # same thing as for load_project about the exception
+        save_project(filepath, self.thisptr)
+
