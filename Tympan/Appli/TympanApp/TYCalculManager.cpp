@@ -35,6 +35,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/Tools/OChrono.h"
 #include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
+#include "Tympan/Appli/TympanApp/TYApplication.h"
 
 #include <qcursor.h>
 #include <qmessagebox.h>
@@ -126,8 +127,14 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     // to solve the acoustic problem
     QProcess python;
     QStringList args;
-    args << "Tympan/pymodules/tympan.py" << problemfile.fileName()
-        << resultfile.fileName() << "Tympan/pluginsd";
+    QString absolute_plugins_path (getTYApp()->_binaryDir);
+    absolute_plugins_path.append("/");
+    absolute_plugins_path.append(PLUGINS_PATH);
+    QString absolute_pyscript_path (getTYApp()->_binaryDir);
+    absolute_pyscript_path.append("/");
+    absolute_pyscript_path.append(PYSCRIPT);
+    args << absolute_pyscript_path << problemfile.fileName() << resultfile.fileName()
+        << absolute_plugins_path;
 
     logger.info(TR("id_msg_go_calcul"));
 

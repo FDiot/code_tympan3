@@ -223,6 +223,9 @@ private :
     bool createCacheDir();
     bool createWorkDir();
 
+public:
+    QString _binaryDir;
+
 private:
     ///Chemin d'origine de l'application.
     static QString* _originalCurrentDirPath;

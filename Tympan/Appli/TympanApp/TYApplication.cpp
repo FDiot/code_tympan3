@@ -171,7 +171,7 @@ void TYApplication::setCurrentDirName(const QString& newValue)
 
 
 TYApplication::TYApplication(int& argc, char** argv)
-    : QApplication(argc, argv), _actionManager(10)
+    : QApplication(argc, argv), _actionManager(10), _binaryDir(applicationDirPath())
 {
     _pSplash = NULL;
     _pMainWnd = NULL;
