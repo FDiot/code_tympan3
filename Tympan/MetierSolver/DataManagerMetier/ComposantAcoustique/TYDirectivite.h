@@ -114,8 +114,6 @@ public:
     void setTabAnglesVal(const TYDirectiviteAnglesValueTab& tab) { _tabAnglesVal = tab; }
 
 
-    inline double calcDeriveSeconde(const int& i) const ;
-
     // Membres
 protected:
     ///Collection d'associations Angles-Valeur.

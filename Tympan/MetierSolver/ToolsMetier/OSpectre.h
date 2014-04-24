@@ -233,9 +233,6 @@ public:
     /// soustrait une valeur constante a l'ensemble du spectre
     virtual OSpectre subst(const double& valeur) const;
 
-    /// Soustraction energetique de deux spectres en 1/3 d'octave.
-    virtual OSpectre substdB(const OSpectre& spectre) const;
-
     /// multiplication de deux spectres terme a terme.
     virtual OSpectre mult(const OSpectre& spectre) const;
 

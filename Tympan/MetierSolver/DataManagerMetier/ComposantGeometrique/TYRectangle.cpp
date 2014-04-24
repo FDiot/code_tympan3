@@ -211,18 +211,6 @@ double TYRectangle::getMinX() const
     return minX;
 }
 
-double TYRectangle::getMaxX() const
-{
-    double maxX = _pts[0]._x;
-    for (unsigned int i = 0; i < 3; ++i)
-        if (_pts[i + 1]._x > maxX)
-        {
-            maxX = _pts[i + 1]._x;
-        }
-
-    return maxX;
-}
-
 double TYRectangle::getMinY() const
 {
     double minY = _pts[0]._y;

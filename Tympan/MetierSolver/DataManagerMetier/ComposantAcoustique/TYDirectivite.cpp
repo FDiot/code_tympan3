@@ -128,37 +128,3 @@ int TYDirectivite::fromXML(DOM_Element domElement)
 
     return 1;
 }
-
-inline double TYDirectivite::calcDeriveSeconde(const int& i) const
-{
-    double dYdroite = 0.0;
-    double dYgauche = 0.0;
-    const int max = static_cast<int>(_tabAnglesVal.size()) - 1;
-
-    if (_tabAnglesVal.size() >= 3) { return 0.0; }
-
-    if (i == 0)
-    {
-        dYdroite = (_tabAnglesVal[i + 1]._val - _tabAnglesVal[i]._val) /
-                   (_tabAnglesVal[i + 1]._theta - _tabAnglesVal[i]._theta);
-        dYgauche = (_tabAnglesVal[i]._val - _tabAnglesVal[max]._val) /
-                   (_tabAnglesVal[i]._theta - _tabAnglesVal[max]._theta) ;
-    }
-    else if (i == max)
-    {
-        dYdroite = (_tabAnglesVal[0]._val - _tabAnglesVal[i]._val) /
-                   (_tabAnglesVal[0]._theta - _tabAnglesVal[i]._theta);
-        dYgauche = (_tabAnglesVal[i]._val - _tabAnglesVal[i - 1]._val) /
-                   (_tabAnglesVal[i]._theta - _tabAnglesVal[i - 1]._theta) ;
-    }
-    else
-    {
-        dYdroite = (_tabAnglesVal[i + 1]._val - _tabAnglesVal[i]._val) /
-                   (_tabAnglesVal[i + 1]._theta - _tabAnglesVal[i]._theta);
-        dYgauche = (_tabAnglesVal[i]._val - _tabAnglesVal[i - 1]._val) /
-                   (_tabAnglesVal[i]._theta - _tabAnglesVal[i - 1]._theta) ;
-    }
-
-    return dYdroite - dYgauche;
-}
-
