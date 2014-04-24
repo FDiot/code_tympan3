@@ -416,38 +416,6 @@ OSpectre OSpectre::subst(const double& valeur) const
     return s;
 }
 
-OSpectre OSpectre::substdB(const OSpectre& spectre) const
-{
-    OSpectre s;
-
-    OSpectre tempoS1(this->toGPhy());
-    OSpectre tempoS2(spectre.toGPhy());
-
-    // Calcul de la somme energetique
-    double tempVal;
-
-    for (unsigned int i = 0; i < s.getNbValues(); i++)
-    {
-        tempVal = tempoS1._module[i] - tempoS2._module[i];
-
-        if (tempVal <= 0)
-        {
-            s._module[i] = 1e-20;
-            s._valid = false ;
-            continue;
-        }
-
-        s._module[i] = tempVal;
-    }
-
-    s._type = _type;
-    s._etat = SPECTRE_ETAT_LIN;
-
-    //  s = s.toDB();
-
-    return s.toDB();
-}
-
 OSpectre OSpectre::mult(const OSpectre& spectre) const
 {
     OSpectre s;

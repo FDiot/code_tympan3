@@ -290,27 +290,3 @@ bitSet Ray::getEventsBitSet(const typeevent& typeEv)
 
     return SD;
 }
-
-decimal Ray::coveredDistance(const unsigned int& current_indice, unsigned int initial_indice, const bool& from_source) const
-{
-    vec3 start_pos;
-    decimal distance = 0.;
-
-    if (from_source)
-    {
-        start_pos =  source->getPosition();
-        initial_indice = 0; // in this case we start from the the first event
-        distance = distance + start_pos.distance(events.at(0)->getPosition());
-    }
-
-    vec3 pos1, pos2;
-    for (unsigned int i = initial_indice; i < current_indice; i++)
-    {
-        pos1 = events.at(i)->getPosition();
-        pos2 = events.at(i + 1)->getPosition();
-
-        distance = distance + (pos1.distance(pos2));
-    }
-
-    return distance;
-}

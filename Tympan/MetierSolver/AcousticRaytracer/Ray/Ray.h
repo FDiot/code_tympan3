@@ -248,13 +248,6 @@ public:
      */
     bitSet getEventsBitSet(const typeevent& typeEv);
 
-    /*!
-     * \fn decimal coveredDistance(unsigned int current_indice, unsigned int initial_indice = 0);
-     * \brief Gives the distance covered by the ray between two events
-     *        by default from the source
-     */
-    decimal coveredDistance(const unsigned int& current_indice, unsigned int initial_indice = 0, const bool& from_source = true) const;
-
 public:
     vec3 position;                              /*!< Point de depart du rayon */
     vec3 direction;                             /*!< vecteur directeur du rayon a la source */

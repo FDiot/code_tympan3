@@ -140,11 +140,6 @@ public:
     double getMinX() const;
 
     /**
-     * Retourne la valeur max en X
-     */
-    double getMaxX() const;
-
-    /**
      * Retourne la valeur min en Y
      */
     double getMinY() const;

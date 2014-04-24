@@ -28,30 +28,6 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
-static int FindPowerOfTwo(int i)
-{
-    int size;
-
-    for (i--, size = 1; i > 0; size *= 2)
-    {
-        i /= 2;
-    }
-
-    // [these lines added by Tim Hutton (implementing Joris Vanden Wyngaerd's suggestions)]
-    // limit the size of the texture to the maximum allowed by OpenGL
-    // (slightly more graceful than texture failing but not ideal)
-    GLint maxDimGL;
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxDimGL);
-    if (size > maxDimGL)
-    {
-        size = maxDimGL ;
-    }
-    // end of Tim's additions
-
-    return size;
-}
-
-
 TYSiteNodeGraphic::TYSiteNodeGraphic(TYSiteNode* pElement) : TYElementGraphic(pElement)
 {
     _texture = 0;
