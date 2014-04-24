@@ -20,6 +20,7 @@
 #ifndef __TY_POLYGON__
 #define __TY_POLYGON__
 
+#include "Tympan/MetierSolver/ToolsMetier/OPlan.h"
 #include "TYRepere.h"
 #include "TYSurfaceInterface.h"
 

@@ -52,7 +52,6 @@
 #include "Tympan/Tools/OPrototype.h"
 
 ///Include general pour la geometrie.
-#include "Tympan/MetierSolver/ToolsMetier/OGeoInclude.h"
 
 ///Boite a outils XML.
 #include "TYXMLTools.h"
