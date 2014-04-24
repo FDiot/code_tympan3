@@ -1571,7 +1571,7 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
 
 void TYSiteFrame::newElt(const char* className, TYElement* pElement)
 {
-    TYElement* pElt = pElt = (TYElement*) TYElement::findAndClone(className);
+    TYElement* pElt = (TYElement*) TYElement::findAndClone(className);
     if (pElement) { addElt(pElement, pElt); }
 
     if (pElt->inherits("TYSiteNode") ||
