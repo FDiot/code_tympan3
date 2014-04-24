@@ -185,26 +185,23 @@ TYElementListItem* TYSiteFrame::addToList(LPTYTopographie pElement, TYElementLis
 
     // Liste des plans d'eau
     TYElementListItem* pListPlanEauItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_planeau_item")));
-    TYElementListItem* pPlanEauItem;
     for (i = 0; i < pElement->getListPlanEau().size(); i++)
     {
-        pPlanEauItem = new TYElementListItem(pListPlanEauItem, pElement->getPlanEau(i));
+        new TYElementListItem(pListPlanEauItem, pElement->getPlanEau(i));
     }
 
     // Liste des cours d'eau
     TYElementListItem* pListCoursEauItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_crseau_item")));
-    TYElementListItem* pCoursEauItem;
     for (i = 0; i < pElement->getListCrsEau().size(); i++)
     {
-        pCoursEauItem = new TYElementListItem(pListCoursEauItem, pElement->getCrsEau(i));
+        new TYElementListItem(pListCoursEauItem, pElement->getCrsEau(i));
     }
 
     // Liste des courbes de niveau
     TYElementListItem* pListCourbeNivItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_courbes_item")));
-    TYElementListItem* pCourbeNivItem;
     for (i = 0; i < pElement->getListCrbNiv().size(); i++)
     {
-        pCourbeNivItem = new TYElementListItem(pListCourbeNivItem, pElement->getCrbNiv(i));
+        new TYElementListItem(pListCourbeNivItem, pElement->getCrbNiv(i));
     }
 
     // Liste des terrains
@@ -236,11 +233,10 @@ TYElementListItem* TYSiteFrame::addToList(LPTYInfrastructure pElement, TYElement
 
     // Liste des sources
     TYElementListItem* pListSourcesItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_sources_item")));
-    TYElementListItem* pSourceItem;
     for (i = 0; i < pElement->getSrcs().size(); i++)
     {
         LPTYUserSourcePonctuelle pSource = TYUserSourcePonctuelle::safeDownCast(pElement->getSrc(i)->getElement());
-        pSourceItem = new TYElementListItem(pListSourcesItem, pSource, _pCurrentCalcul, QStringList(), true);
+        new TYElementListItem(pListSourcesItem, pSource, _pCurrentCalcul, QStringList(), true);
     }
 
     // Liste des batiments
@@ -253,27 +249,24 @@ TYElementListItem* TYSiteFrame::addToList(LPTYInfrastructure pElement, TYElement
 
     // Liste des machines
     TYElementListItem* pListMachineItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_machines_item")));
-    TYElementListItem* pMachineItem;
     for (i = 0; i < pElement->getListMachine().size(); i++)
     {
         LPTYMachine pMachine = TYMachine::safeDownCast(pElement->getMachine(i)->getElement());
-        pMachineItem = new TYElementListItem(pListMachineItem, pMachine, _pCurrentCalcul, QStringList(), true);
+        new TYElementListItem(pListMachineItem, pMachine, _pCurrentCalcul, QStringList(), true);
     }
 
     // Liste des reseaux de transport
     TYElementListItem* pListResTranspItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_restransps_item")));
-    TYElementListItem* pResTranspItem;
     for (i = 0; i < pElement->getListResTrans().size(); i++)
     {
-        pResTranspItem = new TYElementListItem(pListResTranspItem, pElement->getResTrans(i), _pCurrentCalcul, QStringList(), true);
+        new TYElementListItem(pListResTranspItem, pElement->getResTrans(i), _pCurrentCalcul, QStringList(), true);
     }
 
     // Liste des routes
     TYElementListItem* pListRouteItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_routes_item")));
-    TYElementListItem* pRouteItem;
     for (i = 0; i < pElement->getListRoute().size(); i++)
     {
-        pRouteItem = new TYElementListItem(pListRouteItem, pElement->getRoute(i), _pCurrentCalcul, QStringList(), true);
+        new TYElementListItem(pListRouteItem, pElement->getRoute(i), _pCurrentCalcul, QStringList(), true);
     }
 
     return pRootItem;
@@ -283,10 +276,8 @@ TYElementListItem* TYSiteFrame::addToList(LPTYMateriauConstruction pElement, TYE
 {
     // Materiau de construction
     TYElementListItem* pRootItem  = addEltToList(pElement, parent);
-
-    TYElementListItem* pSpectreTransmItem = new TYElementListItem(pRootItem, &pElement->getSpectreTransm());
-    TYElementListItem* pSpectreAbsoItem = new TYElementListItem(pRootItem, &pElement->getSpectreAbso());
-
+    new TYElementListItem(pRootItem, &pElement->getSpectreTransm());
+    new TYElementListItem(pRootItem, &pElement->getSpectreAbso());
     return pRootItem;
 }
 
@@ -294,12 +285,10 @@ TYElementListItem* TYSiteFrame::addToList(LPTYSol pElement, TYElementListItem* p
 {
     // Sol
     TYElementListItem* pRootItem  = addEltToList(pElement, parent);
-
     if (pElement->getVegetActive())
     {
-        TYElementListItem* pVegetationItem = new TYElementListItem(pRootItem, pElement->getVegetation());
+        new TYElementListItem(pRootItem, pElement->getVegetation());
     }
-
     return pRootItem;
 }
 
@@ -307,7 +296,6 @@ TYElementListItem* TYSiteFrame::addToList(LPTYSpectre pElement, TYElementListIte
 {
     // Spectre
     TYElementListItem* pRootItem  = addEltToList(pElement, parent);
-
     return pRootItem;
 }
 
@@ -315,7 +303,6 @@ TYElementListItem* TYSiteFrame::addToList(LPTYSourcePonctuelle pElement, TYEleme
 {
     // Source ponctuelle
     TYElementListItem* pRootItem  = addEltToList(pElement, parent);
-
     return pRootItem;
 }
 
@@ -327,17 +314,16 @@ TYElementListItem* TYSiteFrame::addToList(LPTYMachine pElement, TYElementListIte
     TYElementListItem* pRootItem  = addEltToList(pElement, parent);
 
     TYElementListItem* pListAccVolItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_accvols_item")));
-    TYElementListItem* pAccVolItem;
     for (i = 0; i < pElement->getTabAcousticVol().size(); i++)
     {
-        pAccVolItem = new TYElementListItem(pListAccVolItem, pElement->getAcousticVol(i));
+        new TYElementListItem(pListAccVolItem, pElement->getAcousticVol(i));
     }
 
-    TYElementListItem* pListSpectreItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_spectres_item")));
+    new TYElementListItem(pRootItem, QStringList(TR("id_list_spectres_item")));
 
     if (pElement->getUseAtt())
     {
-        TYElementListItem* pAttenuateurItem = new TYElementListItem(pRootItem, pElement->getAtt());
+        new TYElementListItem(pRootItem, pElement->getAtt());
     }
 
     return pRootItem;
@@ -369,17 +355,15 @@ TYElementListItem* TYSiteFrame::addToList(LPTYBatiment pElement, TYElementListIt
             }
 
             // Machines dans l'etage
-            TYElementListItem* pMachineItem;
             for (j = 0; j < pEtage->getTabMachine().size(); j++)
             {
-                pMachineItem = new TYElementListItem(pEtageItem, pEtage->getMachine(j));
+                new TYElementListItem(pEtageItem, pEtage->getMachine(j));
             }
 
             // Source dans l'etage
-            TYElementListItem* pSourceItem;
             for (j = 0; j < pEtage->getTabSources().size(); j++)
             {
-                pSourceItem = new TYElementListItem(pEtageItem, pEtage->getSource(j));
+                new TYElementListItem(pEtageItem, pEtage->getSource(j));
             }
         }
         else // Ou Silos
