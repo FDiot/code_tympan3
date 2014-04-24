@@ -194,7 +194,7 @@ void TYSilosEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::
                     pBat->updateGraphicTree();
                 }
 
-                TYAction* pAction = new TYAddAccVolToAccVolNodeAction((LPTYAcousticVolumeGeoNode&) pCylGeoNode, getBatiment(), _pModeler, TR("id_action_addcyl"));
+                pAction = new TYAddAccVolToAccVolNodeAction((LPTYAcousticVolumeGeoNode&) pCylGeoNode, getBatiment(), _pModeler, TR("id_action_addcyl"));
             }
             else if (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0)
             {
@@ -238,7 +238,7 @@ void TYSilosEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::
                     pSite->updateGraphicTree();
                 }
 
-                TYAction* pAction = new TYAddElementToInfraAction(pBatNode, pSite->getInfrastructure(), _pModeler, TR("id_action_addetage"));
+                pAction = new TYAddElementToInfraAction(pBatNode, pSite->getInfrastructure(), _pModeler, TR("id_action_addetage"));
 
             }
 
