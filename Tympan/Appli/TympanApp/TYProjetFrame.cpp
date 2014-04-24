@@ -155,10 +155,9 @@ TYElementListItem* TYProjetFrame::addToList(LPTYProjet pElement, TYElementListIt
     TYElementListItem* pRootItem  = addEltToList(pElement, parent);
 
     TYElementListItem* pListPointsControlItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_pointscontrol_item")));
-    TYElementListItem* pPointControlItem;
     for (i = 0; i < pElement->getPointsControl().size(); i++)
     {
-        pPointControlItem = new TYElementListItem(pListPointsControlItem, pElement->getPointControl(i), pElement->getCurrentCalcul(), QStringList(), true);
+        new TYElementListItem(pListPointsControlItem, pElement->getPointControl(i), pElement->getCurrentCalcul(), QStringList(), true);
     }
 
     for (i = 0; i < pElement->getListCalcul().size(); i++)
@@ -190,17 +189,16 @@ TYElementListItem* TYProjetFrame::addToList(LPTYCalcul pElement, TYElementListIt
     setCalculItemState(pRootItem, pElement->getIsUpTodate());
 
     unsigned int i;
-    TYElementListItem* pAtmosphereItem = new TYElementListItem(pRootItem, pElement->getAtmosphere(), NULL);
-    TYElementListItem* pEtatItem = new TYElementListItem(pRootItem, NULL, NULL, QStringList(TR("id_Etats_item")));
+    new TYElementListItem(pRootItem, pElement->getAtmosphere(), NULL);
+    new TYElementListItem(pRootItem, NULL, NULL, QStringList(TR("id_Etats_item")));
 
     TYElementListItem* pListMaillageItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_maillages_item")));
-    TYElementListItem* pMaillageItem;
     for (i = 0; i < pElement->getMaillages().size(); i++)
     {
-        pMaillageItem = new TYElementListItem(pListMaillageItem, pElement->getMaillage(i));
+        new TYElementListItem(pListMaillageItem, pElement->getMaillage(i));
     }
 
-    TYElementListItem* pResultatItem = new TYElementListItem(pRootItem, pElement->getResultat());
+    new TYElementListItem(pRootItem, pElement->getResultat());
 
     _pListView->setItemExpanded(pRootItem, true);
 
