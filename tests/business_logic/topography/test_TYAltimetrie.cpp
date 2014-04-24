@@ -96,9 +96,6 @@ LPTYSiteNode buildSiteSimpleAltimetry(void)
     pSite->setAltiEmprise(-100);
     pSite->setUseEmpriseAsCrbNiv(false);
 
-    // Those dimension match with the default emprise
-    const double xMin = -200.0, xMax = 200.0, yMin = -200.0, yMax = +200.0;
-
 #define NB_POINTS_LEVEL_CURVE 5
     TYCourbeNiveau* pCrb = new TYCourbeNiveau();
     // Initialise the level curve

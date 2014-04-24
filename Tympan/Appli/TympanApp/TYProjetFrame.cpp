@@ -266,9 +266,6 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
         if (eltItem->isElementItem())
         {
             QMenu* pMenu = new QMenu(this);
-            QMenu* pPopupMenuSpectre = new QMenu(this);
-            QMenu* pPopupMenuLinearMaillage = new QMenu(this);
-            QMenu* pPopupMenuRectangularMaillage = new QMenu(this);
 
             QAction* curCalcul = NULL;
             QAction* remCalculRes = NULL;
@@ -778,9 +775,6 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                 }
 
                 delete pMenu;
-                delete pPopupMenuSpectre;
-                delete pPopupMenuLinearMaillage;
-                delete pPopupMenuRectangularMaillage;
             }
         }
         else if (eltItem->text(0) == TR("id_list_pointscontrol_item"))

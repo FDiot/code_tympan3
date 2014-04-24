@@ -134,14 +134,13 @@ decimal GridAccelerator::traverse(Ray* r, std::list<Intersection> &result)
     }
 
     // Walk ray through voxel grid
-    bool hitSomething = false;
     for (;;)
     {
         // Check for intersection in current voxel and advance to next
         Voxel* voxel = voxels[offset(Pos[0], Pos[1], Pos[2])];
         if (voxel != NULL)
         {
-            hitSomething |= voxel->Intersect(r, result, intermin, intersectionChoice);
+            voxel->Intersect(r, result, intermin, intersectionChoice);
         }
 
         // Advance to next voxel

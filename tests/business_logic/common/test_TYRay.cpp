@@ -29,7 +29,6 @@ TYRay* createRay(void)
     // EVENEMENT 0
     TYPoint pt(0.0, 0.0, 0.0);
     TYRayEvent* ev = new TYRayEvent(pt);
-    TY_RAY_EVENT type_ev = TYSOURCE;
     ev->angle = 5.;
     ev->type = TYSOURCE;
 
