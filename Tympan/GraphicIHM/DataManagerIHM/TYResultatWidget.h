@@ -175,9 +175,6 @@ private :
     /// Affichage du contenu de la cellule
     void affichageCellule(const int& row, const int& col, TYCalcul* pCalcOp = NULL);
 
-    /// Creation du contenu d'une cellule
-    QString getValueMsg(const int& row, const int& col, OSpectre& spectre);
-
     /// Definition des attributs d'une cellule (couleur de fond, police)
     void setCellAttributs(const int& row, const int& col, const OSpectre& spectre);
 

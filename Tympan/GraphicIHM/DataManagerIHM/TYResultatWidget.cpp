@@ -635,12 +635,6 @@ void TYResultatWidget::updateTable()
     }
 }
 
-QString TYResultatWidget::getValueMsg(const int& row, const int& col, OSpectre& spectre)
-{
-    QString msg;
-    return msg;
-}
-
 OSpectre TYResultatWidget::getSpectre(const int& row, const int& col, TYCalcul* pCalcul)
 {
     OSpectre spectre;
