@@ -174,13 +174,13 @@ bool TYRay::deepCopy(TYRay* other)
     return true;
 }
 
-void TYRay::setSource(TYSourcePonctuelle* source, TYPoint& globalPosition)
+void TYRay::setSource(TYSourcePonctuelle* source, OPoint3D& globalPosition)
 {
     _source = source;
     _posSourceGlobal = globalPosition;
 }
 
-void TYRay::setRecepteur(TYPointCalcul* recep, TYPoint& globalPosition)
+void TYRay::setRecepteur(TYPointCalcul* recep, OPoint3D& globalPosition)
 {
     _recepteur = recep;
     _posReceptGlobal = globalPosition;

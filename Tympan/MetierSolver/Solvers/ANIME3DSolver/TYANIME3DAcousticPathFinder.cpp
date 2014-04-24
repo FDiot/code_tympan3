@@ -207,9 +207,9 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
 }
 
 
-TYPoint TYANIME3DAcousticPathFinder::computePosGlobalPoint(const TYGeometryNode* pNode)
+OPoint3D TYANIME3DAcousticPathFinder::computePosGlobalPoint(const TYGeometryNode* pNode)
 {
-    TYPoint* pPoint;
+    OPoint3D * pPoint;
     if (pNode->getElement()->inherits("TYSourcePonctuelle"))
     {
         pPoint = TYSourcePonctuelle::safeDownCast(pNode->getElement())->getPos();
@@ -553,11 +553,11 @@ bool TYANIME3DAcousticPathFinder::setSEtRToTYRay(const unsigned int sens, Ray* r
     if (static_cast<unsigned int>(idRecep) >= _tabRecepteurs.size() || static_cast<unsigned int>(idSource) >= _tabSources.size()) { return false; }
 
     vec3 pS = _rayTracing.getSources().at(idSource).getPosition();
-    TYPoint posSourceGlobal(pS.x, pS.y, pS.z);
+    OPoint3D posSourceGlobal(pS.x, pS.y, pS.z);
     TYSourcePonctuelle* sourceP = TYSourcePonctuelle::safeDownCast(_tabSources.at(idSource)->getElement());
 
     vec3 pR = _rayTracing.getRecepteurs().at(idRecep).getPosition();
-    TYPoint posReceptGlobal(pR.x, pR.y, pR.z);
+    OPoint3D posReceptGlobal(pR.x, pR.y, pR.z);
     TYPointCalcul* recepP = TYPointCalcul::safeDownCast(_tabRecepteurs.at(idRecep)->getElement());
 
     tyRay->setSource(sourceP, posSourceGlobal);
@@ -566,14 +566,14 @@ bool TYANIME3DAcousticPathFinder::setSEtRToTYRay(const unsigned int sens, Ray* r
     //Ajout de la source
     TYRayEvent* e = new TYRayEvent();
     e->type = TYSOURCE;
-    e->pos = TYPoint(r->source->getPosition().x, r->source->getPosition().y, r->source->getPosition().z);
+    e->pos = OPoint3D(r->source->getPosition().x, r->source->getPosition().y, r->source->getPosition().z);
     e->angle = 0.0;
     tyRay->getEvents().push_back(e);
 
     e = new TYRayEvent();
     e->type = TYRECEPTEUR;
     Recepteur* recep = (static_cast<Recepteur*>(r->getRecepteur()));
-    e->pos = TYPoint(recep->getPosition().x, recep->getPosition().y, recep->getPosition().z);
+    e->pos = OPoint3D(recep->getPosition().x, recep->getPosition().y, recep->getPosition().z);
     e->angle = 0.0;
     tyRay->getEvents().push_back(e);
 
@@ -647,7 +647,7 @@ void TYANIME3DAcousticPathFinder::convertRayEventToTYRayEvent(const QSharedPoint
             break;
     }
 
-    tyrev->pos = TYPoint(rev->getPosition().x, rev->getPosition().y, rev->getPosition().z);
+    tyrev->pos = OPoint3D(rev->getPosition().x, rev->getPosition().y, rev->getPosition().z);
     tyrev->angle = rev->getAngle();
 }
 

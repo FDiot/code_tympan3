@@ -49,7 +49,7 @@ private :
      * \fn TYPoint computePosGlobalPoint (const TYGeometryNode* pNode);
      * \brief Calcule la position d'un point (source ou recepteur) dans le repere global
      */
-    TYPoint computePosGlobalPoint(const TYGeometryNode* pNode);
+    OPoint3D computePosGlobalPoint(const TYGeometryNode* pNode);
 
     ///*!
     //* \fn void appendSourceToAnalyticRayTracer(TYCalcul &calcul, unsigned int nbRayons)
