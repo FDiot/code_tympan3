@@ -1159,7 +1159,6 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
     OMatrix matrixinv = matrix.getInvert();
     TYTabLPPointCalcul& tabpoint = pMaillage->getPtsCalcul();
 
-    bool cancel = false;
     bool bNoPbAlti = true; // Permet de tester si tous les points sont altimtriss correctement.
 
     if (pMaillage->getComputeAlti()) // Cas des maillages rectangulaires et lineaires horizontaux
@@ -1174,6 +1173,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
         {
 
 #if TY_USE_IHM
+            bool cancel = false;
             TYProgressManager::step(cancel);
             if (cancel) { break; }
 #endif // TY_USE_IHM
