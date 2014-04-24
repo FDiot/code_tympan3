@@ -41,6 +41,13 @@ configure_file(
   ${CMAKE_CURRENT_BINARY_DIR}/TYVersion.h
   @ONLY
 )
+set(PYMODULES_DIR "pymodules")
+set(PYSCRIPT "${PYMODULES_DIR}/tympan.py")
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/Config.h
+  @ONLY
+  )
 include_directories(${CMAKE_BINARY_DIR})
 
 ### Setting sub-directories and modules up ###
