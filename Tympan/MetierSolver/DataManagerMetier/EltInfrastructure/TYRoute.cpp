@@ -547,7 +547,7 @@ const TYRoute::note77_tables TYRoute::note77_upper_bounds =
     // Link motorways
     {
         // Long distance function
-        {70000, 13500, 36},
+        {70000, 13500, 30},
         // Regional roads
         {93000, 14000, 34}
     },
@@ -621,24 +621,24 @@ bool TYRoute::note77_check_validity(
     max = note77_upper_bounds[road_type][road_function][0];
     bool ok_total = is_in(aadt_total, min, max);
     if (out_msg && !ok_total)
-        out_msg->append(QString::fromUtf8("TMJA total (%1) invalide : "
-                                          "doit être entre %2 et %3.\n")
+        out_msg->append(QString::fromUtf8("TMJA total (%1 v/j) invalide : "
+                                          "doit être entre %2 et %3 v/j.\n")
                         .arg(aadt_total).arg(min).arg(max));
 
     min = note77_lower_bounds[road_type][road_function][1];
     max = note77_upper_bounds[road_type][road_function][1];
     bool ok_hgv = is_in(aadt_hgv, min, max);
     if (out_msg && !ok_hgv)
-        out_msg->append(QString::fromUtf8("TMJA poids-lourds (%1) invalide : "
-                                          "doit être entre %2 et %3.\n")
+        out_msg->append(QString::fromUtf8("TMJA poids-lourds (%1 v/j) invalide : "
+                                          "doit être entre %2 et %3 v/j.\n")
                         .arg(aadt_hgv).arg(min).arg(max));
 
     min = note77_lower_bounds[road_type][road_function][2];
     max = note77_upper_bounds[road_type][road_function][2];
     bool ok_percent = is_in(hgv_percent, min, max);
     if (out_msg && !ok_percent)
-        out_msg->append(QString::fromUtf8("Proportion de poids-lourds (%1) invalide : "
-                                          "doit être entre %2 et %3.\n")
+        out_msg->append(QString::fromUtf8("Proportion de poids-lourds (%1%) invalide : "
+                                          "doit être entre %2% et %3%.\n")
                         .arg(hgv_percent).arg(min).arg(max));
 
     return ok_total && ok_hgv && ok_percent;
