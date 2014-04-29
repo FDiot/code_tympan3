@@ -27,7 +27,6 @@
 
 #include "TYCalculParcours.h"
 
-#include "Tympan/Tools/TYConfigure.h"
 #if TY_USE_IHM
 #include <qstring.h>
 #endif

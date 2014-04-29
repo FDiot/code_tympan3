@@ -28,7 +28,7 @@
 #include <qdir.h>
 #include <qstringlist.h>
 
-#include "Tympan/Tools/TYConfigure.h"
+#include "Tympan/MetierSolver/CommonTools/Defines.h"
 #include "Tympan/Tools/OSmartPtr.h"
 #include "TYPlugin.h"
 

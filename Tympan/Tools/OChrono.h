@@ -23,7 +23,7 @@
 #ifndef __O_CHRONO__
 #define __O_CHRONO__
 
-#include "TYConfigure.h"
+#include "Tympan/MetierSolver/CommonTools/Defines.h"
 
 #if TY_PLATFORM == TY_PLATFORM_WIN32 || TY_PLATFORM == TY_PLATFORM_WIN64
 #include <windows.h>

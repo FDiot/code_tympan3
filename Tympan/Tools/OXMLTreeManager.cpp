@@ -20,8 +20,7 @@
 
 
 
-#include "TYConfigure.h"
-//#if TY_USE_IHM
+#include "Tympan/MetierSolver/CommonTools/Defines.h"
 
 
 #include <qtextstream.h>
@@ -594,5 +593,3 @@ bool OXMLTreeManager::findField(const QString& field, const QDomNode& currentnod
     return bFound;
 }
 
-
-//#endif // TY_USE_IHM
