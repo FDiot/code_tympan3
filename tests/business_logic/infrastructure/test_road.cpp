@@ -195,9 +195,6 @@ LPTYRoute functionnalResults_initRoadFromRow(const deque<double>& row)
     return pRoad;
 }
 
-inline const char* const qt2c_str(const QString& str)
-{ return str.toLocal8Bit().data(); }
-
 TEST(TestRoads, functionnalResults)
 {
     const double precision = 0.15; // in dB
@@ -206,14 +203,20 @@ TEST(TestRoads, functionnalResults)
     const QDir data_dir("../../data/");
     const QString data_file_name = data_dir.absoluteFilePath(
                                        "dataRoadEmissionNMPB2008.csv");
+
     ASSERT_TRUE(QFile::exists(data_file_name)) <<
-                                               "Can not load test data file : " << qt2c_str(data_file_name);
-    ifstream file(qt2c_str(data_file_name));
+        "Test data file : '" << data_file_name.toUtf8().constData() << "' does not exists.";
+    ifstream file(data_file_name.toUtf8().constData());
+    ASSERT_TRUE(file.is_open()) <<
+        "Can not open test data file : " << data_file_name.toUtf8().constData();
     string header;
     getline(file, header); // Read and check the header line
+    ASSERT_FALSE(file.fail())<<
+        "Failure while reading test data file : " << data_file_name.toUtf8().constData();
     EXPECT_EQ("Surface type,Age,Declivity,HGV,LV,% HGV,global,dB(A)", header);
     deque<deque<double> > table = readCsvAsTableOf<double>(file);
-    ASSERT_EQ(32, table.size());
+    ASSERT_EQ(32, table.size()) <<
+        "Bad number of rows in test data file " << data_file_name.toUtf8().constData();
 
     unsigned row_num = 0;
     BOOST_FOREACH(const deque<double>& row, table)
@@ -226,6 +229,29 @@ TEST(TestRoads, functionnalResults)
         EXPECT_TRUE(boost::math::isfinite(global_dBA)) << spectrum << endl;
         EXPECT_NEAR(loaded_ref, global_dBA, precision) <<
                                                        "Incorrect results for the row #" << row_num << " (header is #0)"
-                                                       " of the test data file : " << qt2c_str(data_file_name);
+                                                       " of the test data file : " << data_file_name.toUtf8().constData();
     }
+    file.close();
+}
+
+TEST(TestRoads, note77_bounds)
+{
+    TYRoute::RoadType road_type = TYRoute::Intercity;
+    TYRoute::RoadFunction road_function = TYRoute::Regional;
+    QString out_msg;
+    bool ok;
+    double aadt_hgv,  aadt_lv;
+
+    aadt_hgv = 1; // Heavy Goods Vehicle
+    aadt_lv = 1; // Light Vehicle
+    ok = TYRoute::note77_check_validity(aadt_hgv, aadt_lv,
+                                        road_type, road_function,
+                                        &out_msg);
+    ASSERT_FALSE(ok) << "Manifest bad data to check the reported bounds";
+    // NB TMJA is the french acronym for AADT
+    const char* expected =
+        "TMJA total (2 v/j) invalide : doit être entre 2500 et 22000 v/j.\n"
+        "TMJA poids-lourds (1 v/j) invalide : doit être entre 250 et 2500 v/j.\n"
+        "Proportion de poids-lourds (50%) invalide : doit être entre 5% et 17%.\n";
+    EXPECT_STREQ(expected, out_msg.toUtf8().constData());
 }
