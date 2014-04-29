@@ -22,7 +22,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-TEST(IsInsideTest, dumpenv)
+TEST(OBox2Test, IsInsideTest)
 {
     // Cration des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -46,7 +46,7 @@ TEST(IsInsideTest, dumpenv)
     EXPECT_FALSE(resu);
 }
 
-TEST(IsInside2DTest, dumpenv)
+TEST(OBox2Test, IsInside2DTest)
 {
     // Cration des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -75,7 +75,7 @@ TEST(IsInside2DTest, dumpenv)
     EXPECT_FALSE(resu);
 }
 
-TEST(translateTest, dumpenv)
+TEST(OBox2Test, DISABLED_translateTest)
 {
     // Cration des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -97,7 +97,7 @@ TEST(translateTest, dumpenv)
     EXPECT_EQ( box2._H, OPoint3D( 4.0, 1.0, 0.0 ) );
 }
 
-TEST(rotationTest, dumpenv)
+TEST(OBox2Test, DISABLED_rotationTest)
 {
     // Cration des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);

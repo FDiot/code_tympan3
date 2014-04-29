@@ -38,7 +38,7 @@ double* createSpectre()
     return LT;
 }
 
-TEST(SonieTest, dumpenv)
+TEST(SonieTest, DISABLED_SonieTest)
 {
     double* LT = createSpectre();
 
@@ -71,5 +71,3 @@ TEST(SonieTest, dumpenv)
 
     delete [] LT;
 }
-
-
