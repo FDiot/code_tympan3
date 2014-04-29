@@ -92,7 +92,7 @@ bool TYAcousticLine::operator==(const TYAcousticLine& other) const
 {
     if (this != &other)
     {
-        if (TYElement::operator !=(other)) { return false; }
+        // TODO See ticket https://extranet.logilab.fr/ticket/1522889
         if (_largeur != other._largeur) { return false; }
         if (_pSrcLineic != other._pSrcLineic) { return false; }
         if (!(_tabPoint == other._tabPoint)) { return false; }
@@ -103,7 +103,6 @@ bool TYAcousticLine::operator==(const TYAcousticLine& other) const
         if (_regimeChangeAble != other._regimeChangeAble) { return false; }
         if (_useAtt != other._useAtt) { return false; }
         if (_pAtt != other._pAtt) { return false; }
-        if (_pSrcLineic != other._pSrcLineic) { return false; }
     }
 
     return true;

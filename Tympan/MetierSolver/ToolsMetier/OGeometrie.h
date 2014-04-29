@@ -250,12 +250,12 @@ inline int BORNE(int a)
 
 //OCoord3D operator + (const OCoord3D& coord, const OVector3D& vect)
 //{
-//	return OCoord3D( coord._x + vect._x, coord._y + vect._y, coord._z + vect._z );
+//  return OCoord3D( coord._x + vect._x, coord._y + vect._y, coord._z + vect._z );
 //}
 
 //OPoint3D operator + (const OPoint3D& coord, const OVector3D& vect)
 //{
-//	return OPoint3D( coord._x + vect._x, coord._y + vect._y, coord._z + vect._z );
+//  return OPoint3D( coord._x + vect._x, coord._y + vect._y, coord._z + vect._z );
 //}
 
 

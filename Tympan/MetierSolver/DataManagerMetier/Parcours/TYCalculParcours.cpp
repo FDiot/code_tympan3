@@ -150,7 +150,7 @@ void TYCalculParcours::AjouterSegmentSR(double* ptA, double* ptB)
     double dDeltaY = fabs(ptA[1] - ptB[1]);
     InitChangementVariable2D3D(dDeltaX < dDeltaY);
 
-	AjouterSegment(ptA, ptB, false, false, _geoSR);
+    AjouterSegment(ptA, ptB, false, false, _geoSR);
 }
 
 void TYCalculParcours::PointTrajetGauche(int i, double* pt)

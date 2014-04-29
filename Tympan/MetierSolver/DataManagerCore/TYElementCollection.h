@@ -26,6 +26,10 @@
 
 #include "TYElement.h"
 
+ // std::vector<LPTYElement> will now be used instead of TYElementCollection.
+ // This typedef will make it easier to switch from vector to another data
+ // container later on.
+typedef std::vector<LPTYElement> LPTYElementArray;
 
 /**
  * Collection d'elements de base des composants et elements metiers.

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*!
 * \file Lancer.h
 * \author Projet_Tympan
@@ -52,13 +52,13 @@ public:
 
     ~Lancer();
 
-	//--------------------------------------------------------------------------------------------------------//
+    //--------------------------------------------------------------------------------------------------------//
     // Fonctions membres :
     //--------------------------------------------------------------------------------------------------------//
 
-	void setMeteo(const meteo* Meteo) { _weather = const_cast<meteo*>(Meteo); }
+    void setMeteo(const meteo* Meteo) { _weather = const_cast<meteo*>(Meteo); }
 
-	/*!
+    /*!
     * \fn void purgeMatRes()
     * \brief Libere la memoire occupee par MatRes
     */
@@ -139,7 +139,7 @@ public:
     */
     vec3 valideIntersection(const vec3& S, const vec3& R, const vec3* A, int& reflexion, const vec3& nExt_plan, const vec3& SR);
 
-	void intersection(const unsigned int& timer, RayCourb& current, Step& Y_t0, Step& Y_t1);
+    void intersection(const unsigned int& timer, RayCourb& current, Step& Y_t0, Step& Y_t1);
 
     /*!
     * \fn RayCourb RK4(vector<vec3> y0, vector<vec3*> plan, vec3 source)
@@ -169,28 +169,28 @@ public:
      */
     void loadRayFile(vector<vec3>& tableau_norm);
 
-	/*!
-	 * \fn void setSampler(Sampler* generator);
-	 * \brief set ray generator
-	 */
-	void setSampler( Sampler *generator ) { _sampler = generator; }
+    /*!
+     * \fn void setSampler(Sampler* generator);
+     * \brief set ray generator
+     */
+    void setSampler(Sampler* generator) { _sampler = generator; }
 
-	/*!
-	 * \fn Sampler* getSampler(Sampler* generator);
-	 * \brief get ray generator for modification 
-	 */
-	Sampler* getSampler() { return _sampler; } 
+    /*!
+     * \fn Sampler* getSampler(Sampler* generator);
+     * \brief get ray generator for modification
+     */
+    Sampler* getSampler() { return _sampler; }
 
-	/*!
-	 * \fn void setLauchType(const unsigned int &launchType)
-	 * \brief define how rays will be created;
-	 */
-	void setLaunchType(const unsigned int &launchType) { _launchType = launchType; init(); }
+    /*!
+     * \fn void setLauchType(const unsigned int &launchType)
+     * \brief define how rays will be created;
+     */
+    void setLaunchType(const unsigned int& launchType) { _launchType = launchType; init(); }
 
 private :
-	void init();
+    void init();
 
-	void save(); /*!< save rays to a file */
+    void save(); /*!< save rays to a file */
 
 public :
     // Donnees membres :
@@ -198,8 +198,8 @@ public :
     vector<vec3> sources;                 /*!< vector contenant les sources */
     vector<vec3> recepteurs;              /*!<  vector contenant les recepteurs */
     vector<vec3*> _plan;                   /*!<  "liste" des objets definis par 3 points */
-    meteo *_weather;                        /*!<  meteo */
-	Sampler *_sampler;						/*!< ray generator */
+    meteo* _weather;                        /*!<  meteo */
+    Sampler* _sampler;                      /*!< ray generator */
 
     decimal h;                                /*!<  pas de discretisation */
     decimal TMax;                             /*!<  temps de propagation maximal */

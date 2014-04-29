@@ -30,7 +30,7 @@
 
 class QToolButton;
 class QComboBox;
-class TYRouteDeblaiEditor;
+// class TYRouteDeblaiEditor;
 
 /**
  * \class TYSiteModelerFrame
@@ -228,7 +228,7 @@ protected:
     TYPlanEauEditor* _pPlanEauEditor;
     TYSolEditor* _pSolEditor;
     TYRouteEditor* _pRouteEditor;
-    TYRouteDeblaiEditor* _pRouteDeblaiEditor;               //Editeur pour dessiner des routes avec calcul de deblai
+    // TYRouteDeblaiEditor* _pRouteDeblaiEditor;               //Editeur pour dessiner des routes avec calcul de deblai
     TYReseauTransportEditor* _pReseauTransportEditor;
     TYEtageEditor* _pEtageEditor;
     TYSilosEditor* _pSilosEditor;

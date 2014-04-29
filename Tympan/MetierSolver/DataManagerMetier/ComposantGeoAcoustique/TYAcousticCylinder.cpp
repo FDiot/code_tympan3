@@ -225,13 +225,13 @@ int TYAcousticCylinder::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYAcousticCylinder::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYAcousticCylinder::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYAcousticVolume::getChilds(childs, recursif);
 
-    childs.add(_pCircTop);
-    childs.add(_pCircBottom);
-    childs.add(_pEnveloppe);
+    childs.push_back(_pCircTop);
+    childs.push_back(_pCircBottom);
+    childs.push_back(_pEnveloppe);
 
     if (recursif)
     {

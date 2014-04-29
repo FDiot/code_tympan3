@@ -224,7 +224,7 @@ bool TYBatiment::updateAcoustic(const bool& force) // force = false
 
 LPTYSpectre TYBatiment::getRealPowerSpectrum()
 {
-    TYElementCollection childs;
+    LPTYElementArray childs;
     getChilds(childs, true);
     TYSpectre* sp = new TYSpectre(-200.0);
     sp->setType(SPECTRE_TYPE_LW);

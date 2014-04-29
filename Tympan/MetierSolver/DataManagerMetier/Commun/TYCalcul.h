@@ -742,7 +742,7 @@ public:
      * \fn bool getSaveRay()
      * \brief Return the status of ray persistence
      */
-	bool getSaveRay() const { return _bSaveRay; }
+    bool getSaveRay() const { return _bSaveRay; }
 
     /**
      * \fn double getSeuilConfondu()
@@ -847,11 +847,11 @@ public:
     */
     TYTabRay& getAllRays() { return _tabRays; }
 
-	/*!
-	 * \fn void setTabRay(const TYTabRay& tabRay)
-	 * \brief set the vector of TYRays
-	 */
-	void setTabRays(const TYTabRay& tabRays) { _tabRays = tabRays; }
+    /*!
+     * \fn void setTabRay(const TYTabRay& tabRay)
+     * \brief set the vector of TYRays
+     */
+    void setTabRays(const TYTabRay& tabRays) { _tabRays = tabRays; }
 
     /*!
     * \fn void addAcousticEdge(TYAcousticEdge &edge)
@@ -917,8 +917,8 @@ protected:
     ///Calcul energetique ou avec interference.
     bool _interference;
 
-	/// Sauvegarde des rayon (TYRay)
-	bool _bSaveRay;
+    /// Sauvegarde des rayon (TYRay)
+    bool _bSaveRay;
 
     ///Parametre h1 pour un calcul avec conditions favorables.
     double _h1;

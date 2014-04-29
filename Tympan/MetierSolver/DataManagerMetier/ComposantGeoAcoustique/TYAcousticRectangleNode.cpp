@@ -328,10 +328,10 @@ void TYAcousticRectangleNode::updateGrid(const char* childType)
     unsigned int i, j;
     TYTabLPRectangle tabGlobal, tabSub;
 
-    TYElementCollection childs;
+    LPTYElementArray childs;
     getChilds(childs);
 
-    for (i = 0; i < childs.getCount(); i++)
+    for (i = 0; i < childs.size(); i++)
     {
         childs[i]->setInCurrentCalcul(isInCurrentCalcul());
     }

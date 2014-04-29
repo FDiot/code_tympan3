@@ -224,13 +224,13 @@ void TYParoiWidget::getFromXML()
     {
         TYXMLManager xmlManager;
         TYElement* pElt = NULL;
-        TYElementCollection eltList;
+        LPTYElementArray eltList;
 
         LPTYParoi pParoi = NULL;
 
         xmlManager.load(fileName, eltList);
 
-        size_t count = eltList.getCount();
+        size_t count = eltList.size();
         for (size_t i = 0 ; i < count; i++)
         {
             pElt = eltList.at(i);

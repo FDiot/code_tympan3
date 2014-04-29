@@ -77,7 +77,7 @@ TYGetLibraryDialog::~TYGetLibraryDialog()
     QObject::disconnect(_pLibrary, SIGNAL(highlighted(const QString&)), this, SLOT(setEnableButton(const QString&)));
 }
 
-TYElementCollection TYGetLibraryDialog::getElements()
+LPTYElementArray TYGetLibraryDialog::getElements()
 {
     return _elements;
 }

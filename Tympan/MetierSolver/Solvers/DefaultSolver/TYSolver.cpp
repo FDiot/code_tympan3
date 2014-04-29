@@ -190,6 +190,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
     bool cancel = false;
 
     // On nettoie le tableau des faces
+    // XXX This should finally boil down to _tabPolygon.clear().
     if (_tabPolygon)
     {
         for (size_t i = 0; i < _tabPolygonSize; ++i)
@@ -204,8 +205,20 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
     // On recupere les faces
     TYTabAcousticSurfaceGeoNode tabFaces;
     unsigned int nbFacesInfra = 0;
-    std::vector<bool> estUnIndexDeFaceEcran;
-    site.getListFaces(calcul.getUseEcran(), tabFaces, nbFacesInfra, estUnIndexDeFaceEcran);
+    std::vector<bool> estUnIndexDeFaceEcran; // XXX Should probably be a deque
+    /* This call does implement quite a lot of functionalities :
+     *
+     * - it basically fills the `tabFaces` with all faces from the site
+     * - but it does some filtering out
+     *    - optionnaly of the faces belonging to screens depending on 1st argument
+     * - and it actually fill an array of GeoNodes to Faces, such that the transfrom
+     *   is from global to face's local, regardless of the intermediary transforms
+     *   in the Site.
+     * - it also fill the estUnIndexDeFaceEcran to indicate whether the corresponding
+     *   face belongs to a screen in the site
+     */
+    assert(calcul.getUseEcran() && "The useEcran option is obsolete and should always be true before being removed.");
+    site.getListFaces(true, tabFaces, nbFacesInfra, estUnIndexDeFaceEcran);
 
     // Reservation de l'espace pour les tableaux
     _tabPolygonSize = static_cast<uint32>(tabFaces.size());
@@ -243,6 +256,8 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
         _tabPolygon[i].isEcran = estUnIndexDeFaceEcran[i];
         _tabPolygon[i].isInfra = true;
 
+        // XXX This should be a virtual method call not this unmaintable and
+        // inefficient testing !
         // Recuperation des information du polygon
         if (pPoly = dynamic_cast<TYAcousticPolygon*>(tabFaces[i]->getElement()))
         {
@@ -262,10 +277,12 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
         }
         else
         {
-            continue; // type de face non identifiee
+            // XXX This is a dangerous silent error/warning sink.
+            continue; // Unidentified face type
         }
 
-        // Tentative de conversion des points dans le repere global
+        // Trying to transform coordinates to the global reference frame
+        // and closing the polygons at the same time (CHECKME: why ?)
         if (_tabPolygon[i].tabPoint.size() != 0)
         {
             for (j = 0; j < _tabPolygon[i].tabPoint.size(); j++)

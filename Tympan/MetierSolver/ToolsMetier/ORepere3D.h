@@ -63,9 +63,9 @@ public:
 
     /**
      * \brief Constructor with a point and 1 vectors.
-	 *  build an arbitrary 3D repere from a point and a single vector
-	 */
-	ORepere3D(const OPoint3D& origin, const OVector3D& vec);
+     *  build an arbitrary 3D repere from a point and a single vector
+     */
+    ORepere3D(const OPoint3D& origin, const OVector3D& vec);
 
 
     /**

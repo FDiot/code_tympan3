@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 /*!
 * \file meteo.h
 * \author Projet_Tympan
@@ -36,12 +36,12 @@ public:
      *  Constructeurs de la classe meteo par defaut et par passage d'arguments
      *
      */
-	meteo() : c0(340.), wind_angle(0.) {}
+    meteo() : c0(340.), wind_angle(0.) {}
 
-	meteo(const double& windAngle, const double& sound_speed) : c0(sound_speed), 
-															    wind_angle( RADIANS(windAngle) ) {}
+    meteo(const double& windAngle, const double& sound_speed) : c0(sound_speed),
+        wind_angle(RADIANS(windAngle)) {}
 
-	~meteo() {}
+    ~meteo() {}
 
     /*!
     * \fn bool setC0(const double& c)
@@ -49,24 +49,24 @@ public:
     * \param c nouvelle valeur que l'on souhaite attribuer a c0
     */
     virtual void setC0(const double& c) { c0 = c; }
-	virtual double getC0() const { return c0; }
+    virtual double getC0() const { return c0; }
 
-	/*!
-	 * \fn void setWindAngle(const double& windAngle)
-	 * \brief define wind angle 0 means wind from north to south
-	 */
-	virtual void setWindAngle(const double& windAngle) { wind_angle = RADIANS(windAngle); init(); }
-	virtual double getWindAngle() const { return DEGRES(wind_angle); }
+    /*!
+     * \fn void setWindAngle(const double& windAngle)
+     * \brief define wind angle 0 means wind from north to south
+     */
+    virtual void setWindAngle(const double& windAngle) { wind_angle = RADIANS(windAngle); init(); }
+    virtual double getWindAngle() const { return DEGRES(wind_angle); }
 
-	/*!
-	 * \fn void init()
-	 * \brief init parameters as needed
-	 */
-	virtual void init() {}
+    /*!
+     * \fn void init()
+     * \brief init parameters as needed
+     */
+    virtual void init() {}
 
 protected:
-    double c0;				/*!< sound speed for z = 0 */
-	double wind_angle;		/*!< wind angle in radian 0 for a wind from north to south */
+    double c0;              /*!< sound speed for z = 0 */
+    double wind_angle;      /*!< wind angle in radian 0 for a wind from north to south */
 };
 
 #endif //__METEO_H

@@ -380,14 +380,14 @@ int TYAcousticBox::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYAcousticBox::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYAcousticBox::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYAcousticVolume::getChilds(childs, recursif);
 
     for (int i = 0; i < 6; i++)
     {
-        childs.add(_faces[i]);
-        childs.add(_faces[i]->getElement());
+        childs.push_back(_faces[i]);
+        childs.push_back(_faces[i]->getElement());
     }
 
     if (recursif)
