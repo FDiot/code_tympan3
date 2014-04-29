@@ -229,6 +229,13 @@ public:
      */
     bool computed_declivity;
 
+    /**
+     * @brief Check the validity domain of AADT for Note 77
+     */
+    static bool note77_check_validity(double aadt_hgv, double aadt_lv,
+                                      RoadType road_type, RoadFunction road_function,
+                                      QString* out_msg = NULL);
+
 private:
     virtual void distriSrcs()
     {assert(false && "You must use distriSrcs(const TYAltimetrie&) for roads");}
@@ -275,6 +282,7 @@ protected:
     double getOffSet() { return _offSet; }
     void setOffSet(const double& offSet) { _offSet = offSet; }
 
+
     // Membres
 protected:
 
@@ -286,9 +294,6 @@ protected:
 
 private:
 
-    bool note77_check_validity(double aadt_hgv, double aadt_lv,
-                               RoadType road_type, RoadFunction road_function,
-                               QString* out_msg = NULL);
 
     /**
      * @brief This helper class halves and restore the traffic flow of the road

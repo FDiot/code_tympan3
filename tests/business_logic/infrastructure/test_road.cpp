@@ -196,7 +196,7 @@ LPTYRoute functionnalResults_initRoadFromRow(const deque<double>& row)
 }
 
 inline const char* const qt2c_str(const QString& str)
-{ return str.toLocal8Bit().data(); }
+{ return str.toUtf8().data(); }
 
 TEST(TestRoads, functionnalResults)
 {
@@ -228,4 +228,26 @@ TEST(TestRoads, functionnalResults)
                                                        "Incorrect results for the row #" << row_num << " (header is #0)"
                                                        " of the test data file : " << qt2c_str(data_file_name);
     }
+}
+
+TEST(TestRoads, note77_bounds)
+{
+    TYRoute::RoadType road_type = TYRoute::Intercity;
+    TYRoute::RoadFunction road_function = TYRoute::Regional;
+    QString out_msg;
+    bool ok;
+    double aadt_hgv,  aadt_lv;
+
+    aadt_hgv = 1; // Heavy Goods Vehicle
+    aadt_lv = 1; // Light Vehicle
+    ok = TYRoute::note77_check_validity(aadt_hgv, aadt_lv,
+                                        road_type, road_function,
+                                        &out_msg);
+    ASSERT_FALSE(ok) << "Manifest bad data to check the reported bounds";
+    // NB TMJA is the french acronym for AADT
+    const char* expected =
+        "TMJA total (2 v/j) invalide : doit être entre 2500 et 22000 v/j.\n"
+        "TMJA poids-lourds (1 v/j) invalide : doit être entre 250 et 2500 v/j.\n"
+        "Proportion de poids-lourds (50%) invalide : doit être entre 5% et 17%.\n";
+    EXPECT_STREQ(expected, qt2c_str(out_msg));
 }
