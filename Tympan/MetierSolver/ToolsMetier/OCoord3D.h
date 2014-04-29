@@ -63,8 +63,8 @@ public:
      */
     virtual ~OCoord3D();
 
-	// Déclaration d'amitié avec une méthode définie dans OGeometrie.h
-	friend OCoord3D operator + (const OCoord3D& coord, const OVector3D& vect);
+    // Déclaration d'amitié avec une méthode définie dans OGeometrie.h
+    friend OCoord3D operator + (const OCoord3D& coord, const OVector3D& vect);
 
     /**
      * Assignment operator.

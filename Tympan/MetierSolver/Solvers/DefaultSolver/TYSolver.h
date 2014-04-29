@@ -61,6 +61,8 @@ protected:
 private:
     bool buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul);
 
+    // XXX This pointer is actually used like a C array :
+    // TODO replace with a std::deque or similar container.
     TYStructSurfIntersect* _tabPolygon;
     size_t _tabPolygonSize;
 

@@ -172,13 +172,13 @@ void TYMateriauConstructionWidget::getFromXML()
     {
         TYXMLManager xmlManager;
         TYElement* pElt = NULL;
-        TYElementCollection eltList;
+        LPTYElementArray eltList;
 
         LPTYMateriauConstruction pMat = NULL;
 
         xmlManager.load(fileName, eltList);
 
-        size_t count = eltList.getCount();
+        size_t count = eltList.size();
         for (size_t i = 0 ; i < count; i++)
         {
             pElt = eltList.at(i);

@@ -75,6 +75,7 @@ void TYCourbeNiveauEditor::slotKeyPressed(int key)
         case Qt::Key_Space:
             if (_active)
             {
+                // XXX See ticket https://extranet.logilab.fr/ticket/1484188
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateAltimetrie();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateAltiInfra();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateGraphic();
@@ -111,12 +112,14 @@ void TYCourbeNiveauEditor::endCourbeNiveau()
             _pModeler->getActionManager()->addAction(pAction);
 
             // On altimetrise aussi le sous-site (si s'en est un !)
+            // XXX See ticket https://extranet.logilab.fr/ticket/1484188
             if (!pSite->getRoot()) { pSite->updateAltimetrie(true); }
 
             // On met a jour l'altimetrie globale du site
             TYProjet* pProjet = getTYApp()->getCurProjet();
             if (pProjet)
             {
+                // XXX See ticket https://extranet.logilab.fr/ticket/1484188
                 pProjet->getSite()->updateAltimetrie(true);
                 pProjet->getSite()->updateAltiInfra(true);
                 pProjet->updateAltiRecepteurs();

@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,7 +11,7 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
+*/
 
 #ifndef __TYANIME3DACOUSTICMODEL__
 #define __TYANIME3DACOUSTICMODEL__
@@ -52,10 +52,10 @@ class TYANIME3DAcousticModel : public TYAcousticModelInterface
 {
 public:
     /// constructeurs
-	//TYANIME3DAcousticModel();
+    //TYANIME3DAcousticModel();
 
-	TYANIME3DAcousticModel(	TYCalcul& calcul, const TYSiteNode& site, TYTabRay &tabRayons, TYStructSurfIntersect* tabStruct, 
-							TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs );
+    TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TYTabRay& tabRayons, TYStructSurfIntersect* tabStruct,
+                           TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs);
 
     /// destructeur
     virtual ~TYANIME3DAcousticModel();
@@ -100,44 +100,44 @@ protected:
     OBox2 ComputeFresnelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice);
 
     /**
-     * \fn 	OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
+     * \fn  OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
      * \brief calcul des ponderations de Fresnel associees a la zone de Fresnel
      */
-	OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
+    OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre);
 
-	/**
-	 * \fn 	std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
-	 * \brief Computes triangulation inside the bounding box
-	 * \brief Needs 4 points which are the box corners' projection on the ground
-	 */
-	std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
-
-	 /**
-     * \fn void ComputeAbsDiff(TYCalcul & calcul, const TYSiteNode & site)
-     * \brief calcul de l'absorption par diffraction
+    /**
+     * \fn  std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
+     * \brief Computes triangulation inside the bounding box
+     * \brief Needs 4 points which are the box corners' projection on the ground
      */
+    std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
+
+    /**
+    * \fn void ComputeAbsDiff(TYCalcul & calcul, const TYSiteNode & site)
+    * \brief calcul de l'absorption par diffraction
+    */
     void ComputeAbsDiff();
 
 
 
-private : 
-	/*
-	 * \fn OSpectre computeFc(const double& dd, const double& dr);
-	 * \brief compute transition frequency spectrum fc
-	 */
-	OSpectre computeFc(const double& dd, const double& dr);
+private :
+    /*
+     * \fn OSpectre computeFc(const double& dd, const double& dr);
+     * \brief compute transition frequency spectrum fc
+     */
+    OSpectre computeFc(const double& dd, const double& dr);
 
 protected :
 
-	// Test : vector de triangles
-	std::vector<OTriangle> _oTriangles;
-	//std::vector<OPoint3D>& _oVertex;
-	QList<OTriangle> triangles;
+    // Test : vector de triangles
+    std::vector<OTriangle> _oTriangles;
+    //std::vector<OPoint3D>& _oVertex;
+    QList<OTriangle> triangles;
 
-	TYAltimetrie* _alti;
+    TYAltimetrie* _alti;
 
-	TYCalcul& _calcul;
-	const TYSiteNode& _site;
+    TYCalcul& _calcul;
+    const TYSiteNode& _site;
 
     /// tableau des pressions acoustiques efficaces par rayon
     OTabSpectreComplex _pressAcoustEff;
@@ -157,39 +157,39 @@ protected :
     /// tableau de l'ensemble des rayons TYMPAN
     TYTabRay& _tabTYRays;
 
-	TYStructSurfIntersect* _tabSurfIntersect; /*!< Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face */
+    TYStructSurfIntersect* _tabSurfIntersect; /*!< Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face */
 
-	/// l'atmosphere
-	TYAtmosphere _atmos; 
+    /// l'atmosphere
+    TYAtmosphere _atmos;
 
-	/// la topographie du site
-	TYTopographie *_topo;
+    /// la topographie du site
+    TYTopographie* _topo;
 
-	/// la liste des terrains du site
-	TYTabTerrainGeoNode _listeTerrains; 
+    /// la liste des terrains du site
+    TYTabTerrainGeoNode _listeTerrains;
 
-	/// la liste des triangles de la topo
-    TYTabLPPolygon _listeTriangles;  
+    /// la liste des triangles de la topo
+    TYTabLPPolygon _listeTriangles;
 
-	/// la liste des triangles de la topo
-    TYTabLPPolygon _listeTrianglesBox; 
+    /// la liste des triangles de la topo
+    TYTabLPPolygon _listeTrianglesBox;
 
-	/*!< List of sources used by the solver */
+    /*!< List of sources used by the solver */
     TYTabSourcePonctuelleGeoNode& _tabSources;
 
-	/*!< List of receptors used by the solver */
-	TYTabPointCalculGeoNode& _tabRecepteurs;
-   
+    /*!< List of receptors used by the solver */
+    TYTabPointCalculGeoNode& _tabRecepteurs;
+
     /// vitesse du son
-	double _c;	
+    double _c;
 
-        /// nombre d'onde
-	OSpectre _K;	
+    /// nombre d'onde
+    OSpectre _K;
 
-	/// longueur d'onde
-    OSpectre _lambda;	
-    
-    /// take into account the fresnel area 
+    /// longueur d'onde
+    OSpectre _lambda;
+
+    /// take into account the fresnel area
     bool _useFresnelArea;
 };
 

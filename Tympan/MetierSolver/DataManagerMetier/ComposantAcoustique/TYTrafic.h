@@ -23,6 +23,9 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 
+#include "RoadEmissionNMPB08.h"
+
+
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYTraficWidget.h"
 #endif
@@ -35,6 +38,10 @@ class TYTrafic: public TYElement
 {
     OPROTOSUPERDECL(TYTrafic, TYElement)
     TY_EXTENSION_DECL(TYTrafic)
+
+    friend class TYRoute;
+
+    enum VehicleTypes {LV /*Light Vehicules*/, HGV /*Heavy Goods Vehicules*/, NB_VEHICLE_TYPES};
 
     // Methodes
 public:
@@ -72,30 +79,47 @@ public:
     /**
      * Set/Get du debit voiture.
      */
-    double getDebitPL() const { return _debitPL; }
+    double getDebitPL() const { return hgv.trafficFlow; }
     /**
      * Set/Get du debit voiture.
      */
-    void setDebitPL(double deb) { _debitPL = deb; }
+    void setDebitPL(double deb) { hgv.trafficFlow = deb; }
 
     /**
      * Set/Get du debit camion.
      */
-    double getDebitVL() const { return _debitVL; }
+    double getDebitVL() const { return lv.trafficFlow; }
     /**
      * Set/Get du debit camion.
      */
-    void setDebitVL(double deb) { _debitVL = deb; }
+    void setDebitVL(double deb) { lv.trafficFlow = deb; }
 
 
     // Membres
 protected:
-    ///Debit voiture.
-    double _debitVL;
-    ///Debit camion.
-    double _debitPL;
+
+    union
+    {
+        struct
+        {
+            RoadTrafficComponent lv;
+            RoadTrafficComponent hgv;
+        };
+
+        RoadTrafficComponent arr[NB_VEHICLE_TYPES];
+    };
+
+private:
+    /**
+     * \brief Auxilliary methods used to read a RoadTrafficComponent from XML
+     *
+     * \param domElement the XML element to read from
+     * \param rtc output argument referencing the RoadTrafficComponent to initialize
+     * \return 1 in case of success and 0 in case of failure
+     */
+    int fromXML_TrafficComponent(DOM_Element domElement, RoadTrafficComponent& rtc);
+
 };
 
 
 #endif // __TY_TRAFIC__
-

@@ -104,7 +104,7 @@ OVector3D OVector3D::operator-(const OVector3D& vector) const
 OVector3D OVector3D::operator*(const OVector3D& vector) const
 {
     OVector3D vectorRet;
-
+    // XXX This is meaningless
     vectorRet._x = this->_x * vector._x;
     vectorRet._y = this->_y * vector._y;
     vectorRet._z = this->_z * vector._z;
@@ -193,67 +193,67 @@ double OVector3D::angle(const OVector3D& vector) const
 
 OVector3D OVector3D::getRotationOz(double alpha)
 {
-	OVector3D &V = *this;
-	double cosA = cos(alpha);
-	double sinA = sin(alpha);
-	OVector3D Vfinal;
-	// Computes the calculations
-	Vfinal._x = cosA*V._x - sinA*V._y;
-	Vfinal._y = sinA*V._x + cosA*V._y;
-	Vfinal._z = V._z;
-	return Vfinal;
+    OVector3D& V = *this;
+    double cosA = cos(alpha);
+    double sinA = sin(alpha);
+    OVector3D Vfinal;
+    // Computes the calculations
+    Vfinal._x = cosA * V._x - sinA * V._y;
+    Vfinal._y = sinA * V._x + cosA * V._y;
+    Vfinal._z = V._z;
+    return Vfinal;
 }
 
 OVector3D OVector3D::getRotationOy(double alpha)
 {
-	OVector3D &V = *this;
-	double cosA = cos(alpha);
-	double sinA = sin(alpha);
-	OVector3D Vfinal;
-	// Computes the calculations
-	Vfinal._x = cosA*V._x - sinA*V._z;
-	Vfinal._y = V._y;
-	Vfinal._z = sinA*V._x + cosA*V._z;
-	return Vfinal;
+    OVector3D& V = *this;
+    double cosA = cos(alpha);
+    double sinA = sin(alpha);
+    OVector3D Vfinal;
+    // Computes the calculations
+    Vfinal._x = cosA * V._x - sinA * V._z;
+    Vfinal._y = V._y;
+    Vfinal._z = sinA * V._x + cosA * V._z;
+    return Vfinal;
 }
 
 OVector3D OVector3D::getRotationOzBase2(double alpha)
 {
-	OVector3D &V = *this;
-	double cosA = cos(alpha);
-	double sinA = sin(alpha);
-	OVector3D Vfinal;
-	// Computes the calculations
-	Vfinal._x = cosA*V._x + sinA*V._y;
-	Vfinal._y = -sinA*V._x + cosA*V._y;
-	Vfinal._z = V._z;
-	return Vfinal;
+    OVector3D& V = *this;
+    double cosA = cos(alpha);
+    double sinA = sin(alpha);
+    OVector3D Vfinal;
+    // Computes the calculations
+    Vfinal._x = cosA * V._x + sinA * V._y;
+    Vfinal._y = -sinA * V._x + cosA * V._y;
+    Vfinal._z = V._z;
+    return Vfinal;
 }
 
 OVector3D OVector3D::getRotationOyBase2(double alpha)
 {
-	OVector3D &V = *this;
-	double cosA = cos(alpha);
-	double sinA = sin(alpha);
-	OVector3D Vfinal;
-	// Computes the calculations
-	Vfinal._x = cosA*V._x + sinA*V._z;
-	Vfinal._y = V._y;
-	Vfinal._z = - sinA*V._x + cosA*V._z;
-	return Vfinal;
+    OVector3D& V = *this;
+    double cosA = cos(alpha);
+    double sinA = sin(alpha);
+    OVector3D Vfinal;
+    // Computes the calculations
+    Vfinal._x = cosA * V._x + sinA * V._z;
+    Vfinal._y = V._y;
+    Vfinal._z = - sinA * V._x + cosA * V._z;
+    return Vfinal;
 }
 
 OVector3D OVector3D::getRotationOzOy(double alpha, double theta)
 {
-	OVector3D &V = *this;
-	double cosA = cos(alpha);
-	double sinA = sin(alpha);
-	double cosB = cos(theta);
-	double sinB = sin(theta);
-	OVector3D Vfinal;
-	// Computes the calculations
-	Vfinal._x = cosA*cosB*V._x - sinA*V._y - cosA*sinB*V._z;
-	Vfinal._y = sinA*cosB*V._x + cosA*V._y - sinA*sinB*V._z;
-	Vfinal._z = sinB*V._x + cosB*V._z;
-	return Vfinal;	
+    OVector3D& V = *this;
+    double cosA = cos(alpha);
+    double sinA = sin(alpha);
+    double cosB = cos(theta);
+    double sinB = sin(theta);
+    OVector3D Vfinal;
+    // Computes the calculations
+    Vfinal._x = cosA * cosB * V._x - sinA * V._y - cosA * sinB * V._z;
+    Vfinal._y = sinA * cosB * V._x + cosA * V._y - sinA * sinB * V._z;
+    Vfinal._z = sinB * V._x + cosB * V._z;
+    return Vfinal;
 }

@@ -60,6 +60,7 @@ void TYEmpriseEditor::slotKeyPressed(int key)
         case Qt::Key_Space:
             if (_active)
             {
+                // XXX See ticket https://extranet.logilab.fr/ticket/1484188
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateAltimetrie();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateAltiInfra();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateGraphic();

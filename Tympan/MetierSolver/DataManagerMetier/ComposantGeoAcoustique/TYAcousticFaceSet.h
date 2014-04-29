@@ -71,7 +71,7 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement, bool withfaces);
     virtual int fromXML(DOM_Element domElement, bool withfaces);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     virtual void propagateRegime();
     virtual void propagateAtt(LPTYAttenuateur pAtt);

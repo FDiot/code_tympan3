@@ -8,23 +8,27 @@
 
 #include "entities.hpp"
 
+#include "relations.hpp"
+
 namespace tympan
 {
+
+AcousticMaterialBase::AcousticMaterialBase(
+    const string& name_
+) : name(name_) {}
 
 DiffractionEdge::DiffractionEdge(
     const Point& p1_, const Point& p2_, double angle_
 ) : p1(p1_), p2(p2_), angle(angle_) {}
 
 AcousticBuildingMaterial::AcousticBuildingMaterial(
-) : name("") {}
-
-AcousticBuildingMaterial::AcousticBuildingMaterial(
-    const string& name_
-) : name(name_) {}
+    const string& name_,
+    const Spectrum& spectrum_
+) : AcousticMaterialBase(name_), spectrum(spectrum_) {}
 
 AcousticGroundMaterial::AcousticGroundMaterial(
     const string& name_, double resistivity_
-) : name(name_), resistivity(resistivity_) {}
+) : AcousticMaterialBase(name_), resistivity(resistivity_) {}
 
 AcousticReceptor::AcousticReceptor(
     const Point& point_
@@ -40,12 +44,8 @@ AcousticProblem::AcousticProblem(
 
 
 SiteElement::SiteElement(
-    const string& id_
-) : id(id_) {}
-
-SiteUserAcousticSource::SiteUserAcousticSource(
-    unsigned int id_
-) : id(id_) {}
+    const binary_uuid& uid_
+) : uid(uid_) {}
 
 SiteAcousticReceptor::SiteAcousticReceptor(
     unsigned int id_
@@ -56,17 +56,10 @@ Site::Site(
 ) : id(id_) {}
 
 
-SpectrumSample::SpectrumSample(
-    double modulus_, const string& type_, double phase_
-) : modulus(modulus_), type(type_), phase(phase_) {}
-
 DirectivityCoefficient::DirectivityCoefficient(
     double value_, double theta_, double phi_, bool solid_angle_
 ) : value(value_), theta(theta_), phi(phi_), solid_angle(solid_angle_) {}
 
-Frequency::Frequency(
-    double value_
-) : value(value_) {}
 
 
 // XXX Copy/paste these methods to the \c AcousticGroundMaterial See

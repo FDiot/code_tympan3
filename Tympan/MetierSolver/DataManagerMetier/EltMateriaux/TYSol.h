@@ -75,11 +75,11 @@ public:
      */
     void setResistivite(double res) { _resistivite = res; calculZc(); }
 
-	/*!
-	 * \fn double getG() { return min(pow(300.0 / sol->getResistivite(), 0.57), 1.0); }
-	 * \brief Compute equivalent ISO 9613 ground absorption
-	 */
-	double getG() { return MIN(pow(300.0 / _resistivite, 0.57), 1.0); }
+    /*!
+     * \fn double getG() { return min(pow(300.0 / sol->getResistivite(), 0.57), 1.0); }
+     * \brief Compute equivalent ISO 9613 ground absorption
+     */
+    double getG() { return MIN(pow(300.0 / _resistivite, 0.57), 1.0); }
 
     /**
      * Set/Get de l'epaisseur.

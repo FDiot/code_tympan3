@@ -23,9 +23,9 @@ if(LOGILAB_USE_PRECOMPILED_HEADER)
   # This triggers the inclusion of the TYPH*.h headers from the *.cpp files
   add_definitions(-DTYMPAN_USE_PRECOMPILED_HEADER)
 else(LOGILAB_USE_PRECOMPILED_HEADER)
-  message(WARNING
+  message(STATUS
     "Because the way the headers are inappropriately handled, "
-    "you NEED TO #define the TYMPAN_USE_PRECOMPILED_HEADER  "
+    "we had to force #define the TYMPAN_USE_PRECOMPILED_HEADER  "
     "and pay the price of excessive dependencies, at least for now...")
   add_definitions(-DTYMPAN_USE_PRECOMPILED_HEADER)
 endif(LOGILAB_USE_PRECOMPILED_HEADER)

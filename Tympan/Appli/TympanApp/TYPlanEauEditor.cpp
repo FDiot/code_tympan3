@@ -74,6 +74,7 @@ void TYPlanEauEditor::slotKeyPressed(int key)
         case Qt::Key_Space:
             if (_active)
             {
+                // XXX See ticket https://extranet.logilab.fr/ticket/1484188
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateAltimetrie();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateAltiInfra();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateGraphicTree();
@@ -109,6 +110,7 @@ void TYPlanEauEditor::endPlanEau()
             _pModeler->getActionManager()->addAction(pAction);
 
             // On altimetrise aussi le sous-site (si s'en est un !)
+            // XXX See ticket https://extranet.logilab.fr/ticket/1484188
             if (!pSite->getRoot()) { pSite->updateAltimetrie(true); }
 
             // On met a jour l'altimetrie globale du site

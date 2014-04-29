@@ -107,10 +107,10 @@ double OTriangle::getSurface()
 
 OPoint3D OTriangle::getCentre()
 {
-	OPoint3D G;
-	G._x = (_A._x + _B._x + _C._x) / 3;
-	G._y = (_A._y + _B._y + _C._y) / 3;
-	G._z = (_A._z + _B._z + _C._z) / 3;
-	
-	return G;
+    OPoint3D G;
+    G._x = (_A._x + _B._x + _C._x) / 3;
+    G._y = (_A._y + _B._y + _C._y) / 3;
+    G._z = (_A._z + _B._z + _C._z) / 3;
+
+    return G;
 }

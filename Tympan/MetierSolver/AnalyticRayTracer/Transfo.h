@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -11,8 +11,8 @@
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-*/ 
- 
+*/
+
 #ifndef __TRANSFO_H
 #define __TRANSFO_H
 
@@ -38,16 +38,16 @@ class Transfo
 public:
 
     // Constructeurs :
-	Transfo() : methode(1) {}
-	Transfo(Lancer& L) : shot(L), methode(1) {}
-	Transfo(Transfo& r) : shot(r.shot), methode(r.methode) {}
+    Transfo() : methode(1) {}
+    Transfo(Lancer& L) : shot(L), methode(1) {}
+    Transfo(Transfo& r) : shot(r.shot), methode(r.methode) {}
 
     // Destructeur :
-	~Transfo() {}
+    ~Transfo() {}
 
-	
-	void setRecepteurs(const vector<vec3>& R) { shot.recepteurs = R; }
-	void setMeteo(const meteo *Meteo) { shot.setMeteo(Meteo); }
+
+    void setRecepteurs(const vector<vec3>& R) { shot.recepteurs = R; }
+    void setMeteo(const meteo* Meteo) { shot.setMeteo(Meteo); }
 
     /*!
     * \fn void Init()
@@ -100,20 +100,20 @@ public:
     */
     vec3 fonction_h_inverse(const vec3& P);
 
-	/*!
-	 * \fn double interpo(const vec3* triangle, vec3 P);
-	 * \brief return z position of point (P) inside a triangle
-	 */
-	double interpo(const vec3* triangle, vec3 P);
+    /*!
+     * \fn double interpo(const vec3* triangle, vec3 P);
+     * \brief return z position of point (P) inside a triangle
+     */
+    double interpo(const vec3* triangle, vec3 P);
 
-	/*!
-	 * \brief functions below are only interface with "shot" member 
-	 */
-	void setSource(const vec3& source) { shot.sources.push_back(source); }
-	void setNbRay(const unsigned int& nb) { shot.setNbRay(nb); }
-	void setDMax(const decimal& dm) { shot.setDMax(dm); }
-	void setTMax(const decimal& tm) { shot.setTMax(tm); }
-	void setTimeStep(const decimal& tt) { shot.setTimeStep(tt); }
+    /*!
+     * \brief functions below are only interface with "shot" member
+     */
+    void setSource(const vec3& source) { shot.sources.push_back(source); }
+    void setNbRay(const unsigned int& nb) { shot.setNbRay(nb); }
+    void setDMax(const decimal& dm) { shot.setDMax(dm); }
+    void setTMax(const decimal& tm) { shot.setTMax(tm); }
+    void setTimeStep(const decimal& tt) { shot.setTimeStep(tt); }
 
 public :
     Lancer shot;                                               /*!< notre lancer sans reflexion */
@@ -122,7 +122,7 @@ private :
     int methode;                                               /*!< entier definissant la methode de transformation utilisee */
 
     QList<OTriangle> Liste_triangles;                           /*!< Liste des triangles de la nappe interpolee */
-	QList<OPoint3D> Liste_vertex;									/*!< Liste des vertex de la triangulation */
+    QList<OPoint3D> Liste_vertex;                                   /*!< Liste des vertex de la triangulation */
 
 private :
 };

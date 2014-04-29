@@ -491,8 +491,14 @@ bool TYProjet::updateAltiRecepteurs(const TYAltimetrie* pAlti)
     unsigned int i;
     for (i = 0; i < _pointsControl.size(); i++)
     {
+        // XXX See ticket https://extranet.logilab.fr/ticket/1484180
+        // The coordinates of the problematic point need to be properly reported
+        // or idealy an exception should be thrown.
         modified &= updateAltiPointControle(getPointControl(i), pAlti);
     }
+
+    // XXX See ticket https://extranet.logilab.fr/ticket/1484180:
+    // Why handling of PointControle and Recepteur are so different ?
 
     // Mise a jour de l'altitude pour les recepteurs du calcul
     getCurrentCalcul()->updateAltiRecepteurs(pAlti);
@@ -653,4 +659,3 @@ void TYProjet::setSite(const LPTYSiteNode pSite)
     _pSite->addToCalcul();
     setIsGeometryModified(true);
 }
-

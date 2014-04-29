@@ -127,9 +127,9 @@ public:
      */
     static TYTabPoint checkPointsMaxDistance(const TYTabPoint& points, const double& distanceMax);
 
-	/**
-	 * \brief Same as previous function taking two points instead of a tab of points
-	 */
+    /**
+     * \brief Same as previous function taking two points instead of a tab of points
+     */
     static TYTabPoint checkPointsMaxDistance(const TYPoint& point1, const TYPoint& point2, const double& distanceMax);
 
 

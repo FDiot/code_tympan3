@@ -27,7 +27,7 @@
 #endif //_ALLOW_TARGETING_
 
 #include <iostream>
-#include "Tympan\MetierSolver\AcousticRaytracer\global.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/global.h"
 
 class Source : public Base
 {
@@ -110,7 +110,7 @@ public:
         //}
         else
         {
-			r = vec3(sampler->getSample());
+            r = vec3(sampler->getSample());
         }
 #else
         if (nbRayLeft <= 0)
@@ -135,7 +135,7 @@ protected:
     int nbRayLeft;
     int initialRayCount;
     unsigned int id;
-	int indice; // Knows which ray we are working on.
+    int indice; // Knows which ray we are working on.
 
 #ifdef _ALLOW_TARGETING_
 public:
@@ -155,4 +155,3 @@ protected:
 #endif //_ALLOW_TARGETING_
 };
 #endif
-

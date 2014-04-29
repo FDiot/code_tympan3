@@ -8,5 +8,6 @@ Documentation for Users
 
    installation
    quickstart
+   overview
    gui
    solvers
