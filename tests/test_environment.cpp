@@ -13,7 +13,7 @@
 
 #include <QDir>
 
-#include "TympanTestsConfig.h"
+#include "TympanTestsConfig.hpp"
 
 using std::cout;
 using std::cerr;
@@ -28,6 +28,6 @@ TEST(TestEnvironment, Path)
 
 TEST(TestEnvironment, TestDataPath)
 {
-    QString expected_data_path = QDir::toNativeSeparators(QDir::current().absoluteFilePath("data"));
-    EXPECT_EQ(expected_data_path.toStdString(), std::string(TYMPAN_TESTS_DATA_DIR));
+    std::string expected_data_path = tympan::path_to_test_data("");
+    EXPECT_EQ(expected_data_path, std::string(TYMPAN_TESTS_DATA_DIR));
 }

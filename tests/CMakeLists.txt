@@ -38,8 +38,8 @@ set(TYMPAN_TESTS_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/data")
 file(TO_NATIVE_PATH  ${TYMPAN_TESTS_DATA_DIR} TYMPAN_TESTS_DATA_DIR_NATIVE)
 string(REPLACE "\\" "\\\\" TYMPAN_TESTS_DATA_DIR_NATIVE ${TYMPAN_TESTS_DATA_DIR_NATIVE})
 configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/TympanTestsConfig.h.in
-    ${CMAKE_CURRENT_BINARY_DIR}/TympanTestsConfig.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/TympanTestsConfig.hpp.in
+    ${CMAKE_CURRENT_BINARY_DIR}/TympanTestsConfig.hpp
     @ONLY
 )
 add_subdirectory(test_utils)
