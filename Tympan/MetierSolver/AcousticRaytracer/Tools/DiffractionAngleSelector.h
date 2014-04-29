@@ -80,7 +80,7 @@ public :
 
 			FT = From * To;
 
-			if ( ( 1. - FT ) < BARELY_EPSILON ) { return SELECTOR_ACCEPT; } // Vecteur limite tangent au plan de propagation
+			if ( ( 1. - FT ) < EPSILON_4 ) { return SELECTOR_ACCEPT; } // Vecteur limite tangent au plan de propagation
 
 			if ( FT < 0. ) { return SELECTOR_REJECT; }  // Le vecteur sortant est "oppose" au vecteur entrant
 
@@ -93,12 +93,12 @@ public :
 			T2 = To * N2;
 
 
-			if ( (F1 <= 0.) && ( (T1 > BARELY_EPSILON ) || ( (T2 - F2) > BARELY_EPSILON ) ) )
+			if ( (F1 <= 0.) && ( (T1 > EPSILON_4 ) || ( (T2 - F2) > EPSILON_4 ) ) )
 			{ 
 				return SELECTOR_REJECT; 
 			}
 
-			if ( (F2 <= 0.) && ( ( T2 > BARELY_EPSILON ) || ( (T1 - F1) > BARELY_EPSILON ) ) )
+			if ( (F2 <= 0.) && ( ( T2 > EPSILON_4 ) || ( (T1 - F1) > EPSILON_4 ) ) )
 			{ 
 				return SELECTOR_REJECT; 
 			}
@@ -161,7 +161,7 @@ public :
 
 			FT = From * To;
 
-			if ( ( 1. - FT ) < BARELY_EPSILON ) { return true; } // Vecteur limite tangent au plan de propagation
+			if ( ( 1. - FT ) < EPSILON_4 ) { return true; } // Vecteur limite tangent au plan de propagation
 
 			if ( FT < 0. ) { return false; }  // Le vecteur sortant est "oppose" au vecteur entrant
 
@@ -174,12 +174,12 @@ public :
 			T2 = To * N2;
 
 
-			if ( (F1 <= 0.) && ( (T1 > BARELY_EPSILON ) || ( (T2 - F2) > BARELY_EPSILON ) ) )
+			if ( (F1 <= 0.) && ( (T1 > EPSILON_4 ) || ( (T2 - F2) > EPSILON_4 ) ) )
 			{ 
 				return false; 
 			}
 
-			if ( (F2 <= 0.) && ( ( T2 > BARELY_EPSILON ) || ( (T1 - F1) > BARELY_EPSILON ) ) )
+			if ( (F2 <= 0.) && ( ( T2 > EPSILON_4 ) || ( (T1 - F1) > EPSILON_4 ) ) )
 			{ 
 				return false; 
 			}

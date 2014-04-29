@@ -22,7 +22,7 @@ bool responseAngleLimiter(const vec3& from, const vec3& N1, const vec3& N2, vec3
 { 
 	decimal FT = from * T;
 
-	if ( ( 1. - FT ) < BARELY_EPSILON ) { return true; } // Vecteur limite tangent au plan de propagation
+	if ( ( 1. - FT ) < EPSILON_4 ) { return true; } // Vecteur limite tangent au plan de propagation
 
 	if ( FT < 0. ) { return false; }  // Le vecteur sortant est "oppose" au vecteur entrant
 
@@ -35,12 +35,12 @@ bool responseAngleLimiter(const vec3& from, const vec3& N1, const vec3& N2, vec3
 	decimal T2 = T * N2;
 
 
-	if ( (F1 <= 0.) && ( (T1 > BARELY_EPSILON ) || ( (ABS(T2) - ABS(F2)) > BARELY_EPSILON ) ) )
+	if ( (F1 <= 0.) && ( (T1 > EPSILON_4 ) || ( (ABS(T2) - ABS(F2)) > EPSILON_4 ) ) )
 	{ 
 		return false; 
 	}
 
-	if ( (F2 <= 0.) && ( ( T2 > BARELY_EPSILON ) || ( (ABS(T1) - ABS(F1)) > BARELY_EPSILON ) ) )
+	if ( (F2 <= 0.) && ( ( T2 > EPSILON_4 ) || ( (ABS(T1) - ABS(F1)) > EPSILON_4 ) ) )
 	{ 
 		return false; 
 	}
