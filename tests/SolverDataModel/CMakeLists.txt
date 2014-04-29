@@ -10,17 +10,10 @@ set(TYMPAN_MODULES
 # Main loop for all CPP test files.
 foreach (testfile ${TESTS_SRC})
   get_filename_component (basename ${testfile} NAME_WE)
-
   add_executable (${basename} ${testfile})
-  set_property(TARGET ${basename} PROPERTY FOLDER ${CURRENT_FOLDER})
-
-  add_dependencies (${basename} GTest tympan_solver_data_model ) # tympan_tools_metier
-
-  # 'CMAKE_THREAD_LIBS_INIT' can be empty on Windows.
-  target_link_libraries (${basename} gtest_main gtest ${CMAKE_THREAD_LIBS_INIT} tympan_solver_data_model)
-
-  add_test (${basename} ${basename})
-  set_property(TEST ${basename} PROPERTY ENVIRONMENT
-             "${LD_VARNAME}=${ADD_PATH_STRING}")
+  configure_gtest_target(TARGET ${basename} 
+             FOLDER ${CURRENT_FOLDER}
+             RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}" 
+             LIBS test_utils ${TYMPAN_MODULES} )
 endforeach (testfile)
 

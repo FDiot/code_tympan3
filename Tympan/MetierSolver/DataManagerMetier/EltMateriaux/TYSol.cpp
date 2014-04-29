@@ -17,7 +17,9 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYSolWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -27,6 +29,7 @@
 
 
 OPROTOINST(TYSol);
+TY_EXTENSION_INST(TYSol);
 
 TYSol::TYSol():
     _resistivite(20000),
@@ -126,6 +129,8 @@ bool TYSol::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         _pVegetation->deepCopy(pOtherSol->_pVegetation, copyId);
     }
+
+    calculZc(); // Compute _pImpedance spectrum
 
     return true;
 }
@@ -646,5 +651,5 @@ OSpectreComplex TYSol::calculQ(const double& angle, const double& rR, const TYAt
     OSpectreComplex w  = calculW(Zs, rR, angle, Atmo);
     OSpectreComplex fW = calculFw(w);
 
-    return calculQ(angle, rP, fW);
+    return calculQ(angle, rP, fW).toModulePhase();
 }

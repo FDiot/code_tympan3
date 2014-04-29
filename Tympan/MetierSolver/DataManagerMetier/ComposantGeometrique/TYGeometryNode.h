@@ -29,7 +29,6 @@
 #endif
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 #include "TYRepere.h"
 #include "Tympan/MetierSolver/ToolsMetier/OMatrix.h"
 
@@ -118,7 +117,7 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     /**
      * Get of the element.
@@ -157,7 +156,7 @@ public:
     /**
      * Set/Get du repere.
      */
-    void setRepere(const ORepere3D& repere) { _repere = repere; updateMatrix(); }
+    void setRepere(const ORepere3D& repere) { _repere = repere; }
 
     /**
      * Set/Get du repere.
@@ -175,22 +174,17 @@ public:
     /**
      * Set/Get du repere.
      */
-    void setRepere(const TYRepere& rep) { _repere = rep; updateMatrix(); }
+    void setRepere(const TYRepere& rep) { _repere = rep; }
 
     /**
      * Set/Get de la matrice de changement de repere.
      */
-    const OMatrix& getMatrix() const { return _matrix; }
+    const OMatrix getMatrix() const { return _repere.asMatrix(); }
 
     /**
      * Set/Get de la matrice de changement de repere.
      */
-    void setMatrix(const OMatrix& matrix) { setPrivateMatrix(matrix); }
-
-    /**
-     * Teste si la matrice vaut l'identite.
-     */
-    bool isIdentity() const { return _bIdentity; }
+    void setMatrix(const OMatrix& matrix);
 
     /**
      * Operateur de copie.
@@ -210,16 +204,6 @@ public:
     virtual bool deepCopy(const TYElement* pOther, bool copyId = true);
 
     /**
-     * Calcule la nouvelle matrice correspondant au changement de repere.
-     */
-    void updateMatrix();
-
-    /**
-     * Calcule le nouveau repere correspondant a la matrice.
-     */
-    void updateRepere();
-
-    /**
      * Determine la matrice de passage du repere local vers le repere absolu.
      */
     OMatrix localToGlobal() const;
@@ -228,36 +212,6 @@ public:
      * Determine la matrice de passage du repere absolu vers le repere local.
      */
     OMatrix globalToLocal() const;
-
-    /**
-     * Transforme un point du repere local vers le repere absolu.
-     */
-    OCoord3D localToGlobal(const OCoord3D& point) const;
-
-    /**
-     * Transforme un point du repere absolu vers le repere local
-     */
-    OCoord3D globalToLocal(const OCoord3D& point) const;
-
-    /**
-     * Transforme un point du repere local vers le repere absolu.
-     */
-    OSegment3D localToGlobal(const OSegment3D& segment);
-
-    /**
-     * Transforme un point du repere absolu vers le repere local
-     */
-    OSegment3D globalToLocal(const OSegment3D& segment);
-
-    /**
-     * Effectue un changement de repere pour le point
-     */
-    OCoord3D changeRepere(TYGeometryNode& other, const OCoord3D& point);
-
-    /**
-     * Effectue un changement de repere pour le segment
-     */
-    OSegment3D changeRepere(TYGeometryNode& other, const OSegment3D& segment);
 
     /**
      * get/set de la hauteur par rapport au sol
@@ -306,14 +260,6 @@ protected:
 
     /// Hauteur de l'element par rapport au sol
     double _hauteur;
-
-    ///Matrice correspondant au changement de repere.
-    OMatrix _matrix;
-
-    ///booleen qui indique si la matrice vaut l'identite.
-    bool    _bIdentity;
-
-    void setPrivateMatrix(const OMatrix& matrix);
 };
 
 #if TY_USE_IHM

@@ -17,7 +17,9 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYBoxWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -28,7 +30,7 @@
 
 
 OPROTOINST(TYBox);
-
+TY_EXTENSION_INST(TYBox);
 
 TYBox::TYBox():
     _sizeX(1),

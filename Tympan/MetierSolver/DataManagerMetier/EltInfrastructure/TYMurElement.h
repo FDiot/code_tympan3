@@ -27,20 +27,14 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticRectangle.h"
 #include "TYParoi.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYMurElementWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYMurElementGraphic.h"
-#endif
-
-
 /**
  * Comprend les proprietes acoustiques et geometriques d'un element de mur.
  */
 class TYMurElement: public TYAcousticRectangle
 {
     OPROTOSUPERDECL(TYMurElement, TYAcousticRectangle)
-    TY_EXTENSION_DECL(TYMurElement)
-    TY_EXT_GRAPHIC_DECL(TYMurElement)
+    TY_EXTENSION_DECL_ONLY(TYMurElement)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYMurElement)
 
     // Methodes
 public:

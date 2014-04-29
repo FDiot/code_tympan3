@@ -17,19 +17,21 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYSourceSurfacicWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceSurfacicGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 
 #include "Tympan/Tools/OMessageManager.h"
 
 
 OPROTOINST(TYSourceSurfacic);
-
+TY_EXTENSION_INST(TYSourceSurfacic);
+TY_EXT_GRAPHIC_INST(TYSourceSurfacic);
 
 TYSourceSurfacic::TYSourceSurfacic():
     _densiteSrcsH(0.0),
@@ -159,10 +161,10 @@ int TYSourceSurfacic::fromXML(DOM_Element domElement)
 
     // Les sources ponctuelles associees aux sources surfaciques ne sont plus sauvegardees
     // Recupere l'ensemble des source ponctuelles et derivees
-    TYElementCollection srcs = TYElement::findTypeCollectionAndCallFromXML(domElement, "TYSourcePonctuelle");
+    LPTYElementArray srcs = TYElement::findTypeCollectionAndCallFromXML(domElement, "TYSourcePonctuelle");
 
     // Ajoute les srcs trouvees
-    for (i = 0; i < srcs.getCount(); i++)
+    for (i = 0; i < srcs.size(); i++)
     {
         addSrc((LPTYSourcePonctuelle&) srcs[i]);
     }

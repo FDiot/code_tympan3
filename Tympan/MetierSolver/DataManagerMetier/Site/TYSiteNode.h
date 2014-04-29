@@ -24,11 +24,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSiteNodeWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSiteNodeGraphic.h"
-#endif
-
 /// Systeme SIG
 typedef enum {TYMPAN, LAMBERTIIe, GPS} systemSIG;
 
@@ -43,8 +38,8 @@ typedef std::vector<LPTYSiteNodeGeoNode> TYTabSiteNodeGeoNode;
 class TYSiteNode: public TYElement
 {
     OPROTOSUPERDECL(TYSiteNode, TYElement)
-    TY_EXTENSION_DECL(TYSiteNode)
-    TY_EXT_GRAPHIC_DECL(TYSiteNode)
+    TY_EXTENSION_DECL_ONLY(TYSiteNode)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYSiteNode)
 
     /**
      * Constructeur.
@@ -60,11 +55,11 @@ class TYSiteNode: public TYElement
     virtual ~TYSiteNode();
 
     ///Operateur =.
-    TYSiteNode& operator=(const TYSiteNode& other);
+    virtual TYSiteNode& operator=(const TYSiteNode& other);
     ///Operateur ==.
-    bool operator==(const TYSiteNode& other) const;
+    virtual bool operator==(const TYSiteNode& other) const;
     ///Operateur !=.
-    bool operator!=(const TYSiteNode& other) const;
+    virtual bool operator!=(const TYSiteNode& other) const;
 
     virtual bool deepCopy(const TYElement* pOther, bool copyId = true);
 
@@ -73,7 +68,7 @@ class TYSiteNode: public TYElement
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     virtual void setIsGeometryModified(bool isModified);
 
@@ -415,12 +410,9 @@ public:
     /**
      * Cree la liste des faces des elements du site.
      *
-     * @param useEcran Indique si les faces des machines et bâtiments doivent
-     *                 etre prises en compte OBSOLETE MUST BE TRUE.
-     *
      */
-    void getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const;
-    void getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const;
+    void getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const;
+    void getListFacesWithoutFloor(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const;
 
     /// Get/Set du choix du systeme de repere du SIG
     int getSIGType() { return _SIGType; }

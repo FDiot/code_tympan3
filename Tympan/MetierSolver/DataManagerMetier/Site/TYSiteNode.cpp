@@ -16,6 +16,11 @@
 #include <cstdlib>
 #include <cassert>
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYSiteNodeWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYSiteNodeGraphic.h"
+#endif
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -37,9 +42,11 @@ static char THIS_FILE[] = __FILE__;
 #endif
 #endif
 
-OPROTOINST(TYSiteNode);
-
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
+
+OPROTOINST(TYSiteNode);
+TY_EXTENSION_INST(TYSiteNode);
+TY_EXT_GRAPHIC_INST(TYSiteNode);
 
 /*static*/ const std::string& TYSiteNode::getTopoFilePath()
 {
@@ -324,12 +331,12 @@ int TYSiteNode::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYSiteNode::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYSiteNode::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYElement::getChilds(childs, recursif);
 
-    childs.add(_pTopographie);
-    childs.add(_pInfrastructure);
+    childs.push_back(_pTopographie);
+    childs.push_back(_pInfrastructure);
 
     if (recursif)
     {
@@ -339,8 +346,8 @@ void TYSiteNode::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
 
     for (unsigned int i = 0; i < _listSiteNode.size(); i++)
     {
-        childs.add(_listSiteNode[i]);
-        childs.add(_listSiteNode[i]->getElement());
+        childs.push_back(_listSiteNode[i]);
+        childs.push_back(_listSiteNode[i]->getElement());
     }
 
     if (recursif)
@@ -398,9 +405,9 @@ void TYSiteNode::updateCurrentCalcul(TYListID& listID, bool recursif)//=true
     if (recursif) // On parcours les enfants si besoin est...
     {
         // Collecte des childs
-        TYElementCollection childs;
+        LPTYElementArray childs;
         getChilds(childs, false);
-        for (int i = 0; i < childs.getCount(); i++)
+        for (int i = 0; i < childs.size(); i++)
         {
             childs[i]->updateCurrentCalcul(listID, recursif);
         }
@@ -968,10 +975,8 @@ double TYSiteNode::getDelaunay()
 // TODO remove cleanly related stuff
 vector<bool> EstUnIndexDeFaceEcran;
 
-void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const
+void TYSiteNode::getListFacesWithoutFloor(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const
 {
-    assert(useEcran && "The useEcran option is obsolete and should always be true before being removed.");
-
     std::ofstream file;
     file.open("logsChargement.txt", ios::out | ios::trunc);
     file << "Chargement de la liste des faces." << endl;
@@ -985,151 +990,147 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
 
     tabFaces.clear();
 
-    // Si le calcul prend en compte les ecrans
-    if (useEcran)
+    // Batiments
+    for (i = 0; i < _pInfrastructure->getListBatiment().size(); i++)
     {
-        // Batiments
-        for (i = 0; i < _pInfrastructure->getListBatiment().size(); i++)
+        file << "Chargement du batiment " << i << endl;
+        // Si ce batiment est actif pour le calcul
+        LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
+
+        if (pBatiment && pBatiment->isInCurrentCalcul())
         {
-            file << "Chargement du batiment " << i << endl;
-            // Si ce batiment est actif pour le calcul
-            LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
+            tabTmp.clear();
 
-            if (pBatiment && pBatiment->isInCurrentCalcul())
+            // Matrice de changement de repere pour ce batiment
+            OMatrix matrix = _pInfrastructure->getListBatiment()[i]->getMatrix();
+
+            for (j = 0; j < pBatiment->getTabAcousticVol().size(); j++)
             {
-                tabTmp.clear();
-
-                // Matrice de changement de repere pour ce batiment
-                OMatrix matrix = _pInfrastructure->getListBatiment()[i]->getMatrix();
-
-                for (j = 0; j < pBatiment->getTabAcousticVol().size(); j++)
-                {
-                    //Attempt to cast volume to a TYEtage
-                    LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(j));
-                    OMatrix matriceEtage = pBatiment->getTabAcousticVol().at(j)->getMatrix();
-                    if (pEtage)
-                    {
-                        //Récupération des faces des murs
-                        for (unsigned int k = 0; k < pEtage->getTabMur().size(); k++)
-                        {
-                            TYMur* mur = TYMur::safeDownCast(pEtage->getTabMur().at(k)->getElement());
-                            OMatrix matriceMur = pEtage->getTabMur().at(k)->getMatrix();
-                            if (mur)
-                            {
-                                file << "Récupération d'un mur rectangulaire." << endl;
-                                TYAcousticRectangle* pRect = TYAcousticRectangle::safeDownCast(mur->getTabAcousticSurf().at(0)->getElement());
-                                if (pRect)
-                                {
-                                    //Conversion de la face du mur en AcousticSurfaceGeoNode
-                                    file << "Récupération d'un rectangle." << endl;
-                                    file << "Ajout de la face " << compteurFace  << ", etage " << j << ", batiment " << i << endl;
-                                    LPTYAcousticSurfaceGeoNode newNode = LPTYAcousticSurfaceGeoNode(new TYAcousticSurfaceGeoNode(pRect, matriceEtage * matriceMur));
-                                    tabTmp.push_back(newNode);
-                                    indices.push_back(std::pair<int, int>(compteurFace++, compteurInfra));
-                                    etages.push_back(j);
-
-                                }
-                            }
-                        }
-
-                        //Recovery of the upper floor only
-                        TYAcousticPolygon* poly = TYAcousticPolygon::safeDownCast(pEtage->getPlafond());
-                        LPTYAcousticSurfaceGeoNode newNode = LPTYAcousticSurfaceGeoNode(new TYAcousticSurfaceGeoNode(poly, matriceEtage));
-                        tabTmp.push_back(newNode);
-                        indices.push_back(std::pair<int, int>(compteurFace++, (int)i));
-                        etages.push_back(j);
-
-                    }
-                    else
-                    {
-                        // try to cast as a screen (TYEcran)
-                        LPTYEcran pEcran = TYEcran::safeDownCast(pBatiment->getAcousticVol(j));
-
-                        if (pEcran)
-                        {
-                            TYTabAcousticSurfaceGeoNode tabTmp2;
-                            tabTmp2 = pEcran->acousticFaces();
-                            for (unsigned k = 0; k < tabTmp2.size(); k++)
-                            {
-                                tabTmp2[k]->setMatrix(matriceEtage * tabTmp2[k]->getMatrix());
-                                tabTmp.push_back(tabTmp2[k]);
-                                indices.push_back(std::pair<int, int>(compteurFace++, compteurInfra));
-                                etages.push_back(j);
-                            }
-                        }
-                    }
-                }
-
-                LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(0));
-                bool bEtageEcran = false;
+                //Attempt to cast volume to a TYEtage
+                LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(j));
+                OMatrix matriceEtage = pBatiment->getTabAcousticVol().at(j)->getMatrix();
                 if (pEtage)
                 {
-                    bEtageEcran = !pEtage->getClosed();
+                    //Récupération des faces des murs
+                    for (unsigned int k = 0; k < pEtage->getTabMur().size(); k++)
+                    {
+                        TYMur* mur = TYMur::safeDownCast(pEtage->getTabMur().at(k)->getElement());
+                        OMatrix matriceMur = pEtage->getTabMur().at(k)->getMatrix();
+                        if (mur)
+                        {
+                            file << "Récupération d'un mur rectangulaire." << endl;
+                            TYAcousticRectangle* pRect = TYAcousticRectangle::safeDownCast(mur->getTabAcousticSurf().at(0)->getElement());
+                            if (pRect)
+                            {
+                                //Conversion de la face du mur en AcousticSurfaceGeoNode
+                                file << "Récupération d'un rectangle." << endl;
+                                file << "Ajout de la face " << compteurFace  << ", etage " << j << ", batiment " << i << endl;
+                                LPTYAcousticSurfaceGeoNode newNode = LPTYAcousticSurfaceGeoNode(new TYAcousticSurfaceGeoNode(pRect, matriceEtage * matriceMur));
+                                tabTmp.push_back(newNode);
+                                indices.push_back(std::pair<int, int>(compteurFace++, compteurInfra));
+                                etages.push_back(j);
+
+                            }
+                        }
+                    }
+
+                    //Recovery of the upper floor only
+                    TYAcousticPolygon* poly = TYAcousticPolygon::safeDownCast(pEtage->getPlafond());
+                    LPTYAcousticSurfaceGeoNode newNode = LPTYAcousticSurfaceGeoNode(new TYAcousticSurfaceGeoNode(poly, matriceEtage));
+                    tabTmp.push_back(newNode);
+                    indices.push_back(std::pair<int, int>(compteurFace++, (int)i));
+                    etages.push_back(j);
+
                 }
-                if (bEtageEcran)
+                else
                 {
-                    pEtage->setacousticFacesPourCalcul(true);
-                }
+                    // try to cast as a screen (TYEcran)
+                    LPTYEcran pEcran = TYEcran::safeDownCast(pBatiment->getAcousticVol(j));
 
-                // L'ensemble des faces de ce batiment
-                //tabTmp = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement())->acousticFaces();
-
-                bool bEcran = false; // element de type TYEcran
-                // Next 3 lines commented, may be invalid (a building can't be a floor)
-                //if (_pInfrastructure->getBatiment(i)->getElement()->isA("TYEcran"))
-                //{
-                //    bEcran = true;
-                //}
-
-                // Pour chacune de ces faces
-                for (j = 0; j < tabTmp.size(); j++)
-                {
-                    // On concatene les matrices
-                    tabTmp[j]->setMatrix(matrix * tabTmp[j]->getMatrix());
-
-                    // Ajout de la face
-                    tabFaces.push_back(tabTmp[j]);
-                    EstUnIndexDeFaceEcran.push_back(bEtageEcran || bEcran);
-                }
-                if (bEtageEcran)
-                {
-                    pEtage->setacousticFacesPourCalcul(false);
+                    if (pEcran)
+                    {
+                        TYTabAcousticSurfaceGeoNode tabTmp2;
+                        tabTmp2 = pEcran->acousticFaces();
+                        for (unsigned k = 0; k < tabTmp2.size(); k++)
+                        {
+                            tabTmp2[k]->setMatrix(matriceEtage * tabTmp2[k]->getMatrix());
+                            tabTmp.push_back(tabTmp2[k]);
+                            indices.push_back(std::pair<int, int>(compteurFace++, compteurInfra));
+                            etages.push_back(j);
+                        }
+                    }
                 }
             }
 
-            compteurInfra++;
-        }
-
-        // Machines
-        for (i = 0; i < _pInfrastructure->getListMachine().size(); i++)
-        {
-            // Si cette machine est active pour le calcul
-            LPTYMachine pMachine = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement());
-            if (pMachine && pMachine->isInCurrentCalcul())
+            LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(0));
+            bool bEtageEcran = false;
+            if (pEtage)
             {
-                tabTmp.clear();
-
-                // Matrice de changement de repere pour cette machine
-                OMatrix matrix = _pInfrastructure->getListMachine()[i]->getMatrix();
-
-                // L'ensemble des faces de cette machine
-                tabTmp = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement())->acousticFaces();
-
-                // Pour chacune de ces faces
-                for (j = 0; j < tabTmp.size(); j++)
-                {
-                    // On concatene les matrices
-                    tabTmp[j]->setMatrix(matrix * tabTmp[j]->getMatrix());
-
-                    // Ajout de la face
-                    tabFaces.push_back(tabTmp[j]);
-                    indices.push_back(std::pair<int, int>(compteurFace++, compteurInfra));
-                    EstUnIndexDeFaceEcran.push_back(false);
-                    etages.push_back(0);
-                }
+                bEtageEcran = !pEtage->getClosed();
             }
-            compteurInfra++;
+            if (bEtageEcran)
+            {
+                pEtage->setacousticFacesPourCalcul(true);
+            }
+
+            // L'ensemble des faces de ce batiment
+            //tabTmp = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement())->acousticFaces();
+
+            bool bEcran = false; // element de type TYEcran
+            // Next 3 lines commented, may be invalid (a building can't be a floor)
+            //if (_pInfrastructure->getBatiment(i)->getElement()->isA("TYEcran"))
+            //{
+            //    bEcran = true;
+            //}
+
+            // Pour chacune de ces faces
+            for (j = 0; j < tabTmp.size(); j++)
+            {
+                // On concatene les matrices
+                tabTmp[j]->setMatrix(matrix * tabTmp[j]->getMatrix());
+
+                // Ajout de la face
+                tabFaces.push_back(tabTmp[j]);
+                EstUnIndexDeFaceEcran.push_back(bEtageEcran || bEcran);
+            }
+            if (bEtageEcran)
+            {
+                pEtage->setacousticFacesPourCalcul(false);
+            }
         }
+
+        compteurInfra++;
+    }
+
+    // Machines
+    for (i = 0; i < _pInfrastructure->getListMachine().size(); i++)
+    {
+        // Si cette machine est active pour le calcul
+        LPTYMachine pMachine = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement());
+        if (pMachine && pMachine->isInCurrentCalcul())
+        {
+            tabTmp.clear();
+
+            // Matrice de changement de repere pour cette machine
+            OMatrix matrix = _pInfrastructure->getListMachine()[i]->getMatrix();
+
+            // L'ensemble des faces de cette machine
+            tabTmp = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement())->acousticFaces();
+
+            // Pour chacune de ces faces
+            for (j = 0; j < tabTmp.size(); j++)
+            {
+                // On concatene les matrices
+                tabTmp[j]->setMatrix(matrix * tabTmp[j]->getMatrix());
+
+                // Ajout de la face
+                tabFaces.push_back(tabTmp[j]);
+                indices.push_back(std::pair<int, int>(compteurFace++, compteurInfra));
+                EstUnIndexDeFaceEcran.push_back(false);
+                etages.push_back(0);
+            }
+        }
+        compteurInfra++;
     }
 
     nbFaceInfra = static_cast<uint32>(tabFaces.size()); // Determination du nombre de faces de l'infrastructure;
@@ -1166,9 +1167,8 @@ void TYSiteNode::getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurf
 
 }
 
-void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const
+void TYSiteNode::getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const
 {
-    assert(useEcran && "The useEcran option is obsolete and should always be true before being removed.");
     EstUnIndexDeFaceEcran.clear();
 
     unsigned int j, i;
@@ -1176,82 +1176,76 @@ void TYSiteNode::getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& 
 
     tabFaces.clear();
 
-    // Si le calcul prend en compte les ecrans
-    if (useEcran)
+    // Batiments
+    for (i = 0; i < _pInfrastructure->getListBatiment().size(); i++)
     {
-        // Batiments
-        for (i = 0; i < _pInfrastructure->getListBatiment().size(); i++)
+        // Si ce batiment est actif pour le calcul
+        LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
+        if (pBatiment && pBatiment->isInCurrentCalcul())
         {
-            // Si ce batiment est actif pour le calcul
-            LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
-            if (pBatiment && pBatiment->isInCurrentCalcul())
+            tabTmp.clear();
+
+            // Matrice de changement de repere pour ce batiment
+            OMatrix matrix = _pInfrastructure->getListBatiment()[i]->getMatrix();
+
+            //                LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
+            LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(0));
+
+            // Old Code_TYMPAN version could use a floor as a screen so, that case should be treated
+            bool bEtageEcran = false;
+            if (pEtage)
             {
-                tabTmp.clear();
+                bEtageEcran = !pEtage->getClosed();
+            }
+            if (bEtageEcran)
+            {
+                pEtage->setacousticFacesPourCalcul(true);
+            }
 
-                // Matrice de changement de repere pour ce batiment
-                OMatrix matrix = _pInfrastructure->getListBatiment()[i]->getMatrix();
+            // L'ensemble des faces de ce batiment
+            tabTmp = pBatiment->acousticFaces();
 
-                //                LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
-                LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(0));
+            // Pour chacune de ces faces
+            for (j = 0; j < tabTmp.size(); j++)
+            {
+                // On concatene les matrices
+                tabTmp[j]->setMatrix(matrix * tabTmp[j]->getMatrix());
 
-                // Old Code_TYMPAN version could use a floor as a screen so, that case should be treated
-                bool bEtageEcran = false;
-                if (pEtage)
-                {
-                    bEtageEcran = !pEtage->getClosed();
-                }
-                if (bEtageEcran)
-                {
-                    pEtage->setacousticFacesPourCalcul(true);
-                }
-
-                // L'ensemble des faces de ce batiment
-                tabTmp = pBatiment->acousticFaces();
-
-                bool bEcran = false; // element de type TYEcran
-
-                // Pour chacune de ces faces
-                for (j = 0; j < tabTmp.size(); j++)
-                {
-                    // On concatene les matrices
-                    tabTmp[j]->setMatrix(matrix * tabTmp[j]->getMatrix());
-
-                    // Ajout de la face
-                    tabFaces.push_back(tabTmp[j]);
-                    EstUnIndexDeFaceEcran.push_back(bEtageEcran || bEcran);
-                }
-                if (bEtageEcran)
-                {
-                    pEtage->setacousticFacesPourCalcul(false);
-                }
+                // Ajout de la face
+                tabFaces.push_back(tabTmp[j]);
+                EstUnIndexDeFaceEcran.push_back(bEtageEcran);
+            }
+            if (bEtageEcran)
+            {
+                pEtage->setacousticFacesPourCalcul(false);
             }
         }
+    }
 
-        // Machines
-        for (i = 0; i < _pInfrastructure->getListMachine().size(); i++)
+    // Machines
+    for (i = 0; i < _pInfrastructure->getListMachine().size(); i++)
+    {
+        // Si cette machine est active pour le calcul
+        LPTYMachine pMachine = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement());
+        if (pMachine && pMachine->isInCurrentCalcul())
         {
-            // Si cette machine est active pour le calcul
-            LPTYMachine pMachine = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement());
-            if (pMachine && pMachine->isInCurrentCalcul())
+            tabTmp.clear();
+
+            // Matrice de changement de repere pour cette machine
+            OMatrix matrix = _pInfrastructure->getListMachine()[i]->getMatrix();
+
+            // L'ensemble des faces de cette machine
+            tabTmp = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement())->acousticFaces();
+
+            // Pour chacune de ces faces
+            for (j = 0; j < tabTmp.size(); j++)
             {
-                tabTmp.clear();
+                // On concatene les matrices
+                tabTmp[j]->setMatrix(matrix * tabTmp[j]->getMatrix());
 
-                // Matrice de changement de repere pour cette machine
-                OMatrix matrix = _pInfrastructure->getListMachine()[i]->getMatrix();
-
-                // L'ensemble des faces de cette machine
-                tabTmp = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement())->acousticFaces();
-
-                // Pour chacune de ces faces
-                for (j = 0; j < tabTmp.size(); j++)
-                {
-                    // On concatene les matrices
-                    tabTmp[j]->setMatrix(matrix * tabTmp[j]->getMatrix());
-
-                    // Ajout de la face
-                    tabFaces.push_back(tabTmp[j]);
-                    EstUnIndexDeFaceEcran.push_back(false);
-                }
+                // Ajout de la face
+                tabFaces.push_back(tabTmp[j]);
+                EstUnIndexDeFaceEcran.push_back(false);
             }
         }
     }
@@ -1433,14 +1427,13 @@ bool TYSiteNode::remSiteNode(const LPTYSiteNodeGeoNode pSiteNodeGeoNode)
     assert(pSiteNodeGeoNode);
     bool ret = false;
     TYTabSiteNodeGeoNode::iterator ite;
-    TYProjet* pProjet = getProjet();
 
     for (ite = _listSiteNode.begin(); ite != _listSiteNode.end(); ite++)
     {
         if ((*ite) == pSiteNodeGeoNode)
         {
             // Suppression des calcul
-            if (pProjet) { pProjet->remElmtFromCalculs((*ite)->getElement()); }
+            if (_pProjet) { _pProjet->remElmtFromCalculs((*ite)->getElement()); }
 
             _listSiteNode.erase(ite);
             ret = true;
@@ -1458,14 +1451,13 @@ bool TYSiteNode::remSiteNode(const LPTYSiteNode pSiteNode)
     assert(pSiteNode);
     bool ret = false;
     TYTabSiteNodeGeoNode::iterator ite;
-    TYProjet* pProjet = getProjet();
 
     for (ite = _listSiteNode.begin(); ite != _listSiteNode.end(); ite++)
     {
         if (TYSiteNode::safeDownCast((*ite)->getElement()) == pSiteNode)
         {
             // Suppression des calcul
-            if (pProjet) { pProjet->remElmtFromCalculs((*ite)->getElement()); }
+            if (_pProjet) { _pProjet->remElmtFromCalculs((*ite)->getElement()); }
 
             _listSiteNode.erase(ite);
             ret = true;
@@ -1482,14 +1474,13 @@ bool TYSiteNode::remSiteNode(QString idSiteNode)
 {
     bool ret = false;
     TYTabSiteNodeGeoNode::iterator ite;
-    TYProjet* pProjet = getProjet();
 
     for (ite = _listSiteNode.begin(); ite != _listSiteNode.end(); ite++)
     {
         if (TYSiteNode::safeDownCast((*ite)->getElement())->getID().toString() == idSiteNode)
         {
             // Suppression des calcul
-            if (pProjet) { pProjet->remElmtFromCalculs((*ite)->getElement()); }
+            if (_pProjet) { _pProjet->remElmtFromCalculs((*ite)->getElement()); }
 
             _listSiteNode.erase(ite);
             ret = true;
@@ -1652,7 +1643,7 @@ void TYSiteNode::exportCSV(std::ofstream& ofs)
     // Export du type de l'objet
     ofs << toString() << '\n';
     // Export des donnees acoustiques
-    TYElementCollection childs;
+    LPTYElementArray childs;
     getChilds(childs);
 
     for (int i = 0; i < childs.size() ; i++)

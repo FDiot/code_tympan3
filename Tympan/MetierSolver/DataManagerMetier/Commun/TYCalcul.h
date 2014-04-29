@@ -31,15 +31,15 @@
 #include "TYPointControl.h"
 #include "TYResultat.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
-#include "TYRay.h"
+
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticEdge.h"
+
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
+
 class TYProjet;
 
-
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYCalculWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYCalculGraphic.h"
-#endif
 
 /**
  * \file TYCalcul.h
@@ -55,8 +55,8 @@ class TYProjet;
 class TYCalcul: public TYElement
 {
     OPROTOSUPERDECL(TYCalcul, TYElement)
-    TY_EXTENSION_DECL(TYCalcul)
-    TY_EXT_GRAPHIC_DECL(TYCalcul)
+    TY_EXTENSION_DECL_ONLY(TYCalcul)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYCalcul)
 
 public:
     /**
@@ -737,6 +737,11 @@ public:
      */
     void setStatusPartialResult(const bool& status) { _pResultat->setPartialState(status); }
 
+    /**
+     * \fn bool getSaveRay()
+     * \brief Return the status of ray persistence
+     */
+    bool getSaveRay() const { return _bSaveRay; }
 
     /**
      * \fn double getSeuilConfondu()
@@ -832,7 +837,7 @@ public:
     * \brief Ajoute un rayon issue du lancer de rayon convertie au format Tympan.
     * \param ray : Référence vers un rayon Tympan à ajouter
     */
-    void addRay(LPTYRay& ray) { _tabRays.push_back(ray); }
+    void addRay(LPTYRay ray) { _tabRays.push_back(ray);}
 
     /*!
     * \fn TYTabRay getAllRays()
@@ -841,6 +846,11 @@ public:
     */
     TYTabRay& getAllRays() { return _tabRays; }
 
+    /*!
+     * \fn void setTabRay(const TYTabRay& tabRay)
+     * \brief set the vector of TYRays
+     */
+    void setTabRays(const TYTabRay& tabRays) { _tabRays = tabRays; }
 
     /*!
     * \fn void addAcousticEdge(TYAcousticEdge &edge)
@@ -855,6 +865,9 @@ public:
     * \return Renvoie le tableau d'arêtes Tympan.
     */
     TYTabAcousticEdge& getAllAcousticEdges() { return _tabEdges; }
+
+    tympan::AcousticResultModel _acousticResult;
+    tympan::AcousticProblemModel _acousticProblem;
 
 protected:
     /**
@@ -905,6 +918,10 @@ protected:
     bool _useReflexion;
     ///Calcul energetique ou avec interference.
     bool _interference;
+
+    /// Sauvegarde des rayon (TYRay)
+    bool _bSaveRay;
+
     ///Parametre h1 pour un calcul avec conditions favorables.
     double _h1;
     ///Distance minimale entre une source et un recepteur

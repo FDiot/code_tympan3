@@ -27,20 +27,14 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolumeNode.h"
 #include "TYMurElement.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYMachineWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYMachineGraphic.h"
-#endif
-
-
 /**
  * Comprend les proprietes acoustiques et geometriques d'une machine.
  */
 class TYMachine: public TYAcousticVolumeNode
 {
     OPROTOSUPERDECL(TYMachine, TYAcousticVolumeNode)
-    TY_EXTENSION_DECL(TYMachine)
-    TY_EXT_GRAPHIC_DECL(TYMachine)
+    TY_EXTENSION_DECL_ONLY(TYMachine)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYMachine)
 
     // Methodes
 public:

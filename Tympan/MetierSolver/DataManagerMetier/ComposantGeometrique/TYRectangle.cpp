@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYRectangleWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangleGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -30,6 +33,8 @@
 #include "Tympan/MetierSolver/ToolsMetier/OTriangle.h"
 
 OPROTOINST(TYRectangle);
+TY_EXTENSION_INST(TYRectangle);
+TY_EXT_GRAPHIC_INST(TYRectangle);
 
 const int TYRectangle::_nbPts = 4;
 
@@ -691,7 +696,7 @@ void TYRectangle::exportMesh(
     // exports the point to the mesh, converting to global r/ frame
     for (int i = 0; i < 4; ++i)
     {
-        points.push_back(geonode.localToGlobal(_pts[i]));
+        points.push_back(geonode.localToGlobal() * _pts[i]);
     }
     // exports triangle (0, 1, 2)
     OTriangle tri(0, 1, 2);

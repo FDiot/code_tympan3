@@ -24,17 +24,13 @@
 #include "TYVegetation.h"
 #include "TYAtmosphere.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSolWidget.h"
-#endif
-
 /**
  * Classe de definition d'un sol.
  */
 class TYSol: public TYElement
 {
     OPROTOSUPERDECL(TYSol, TYElement)
-    TY_EXTENSION_DECL(TYSol)
+    TY_EXTENSION_DECL_ONLY(TYSol)
 
     // Methodes
 public:
@@ -74,6 +70,12 @@ public:
      * Set/Get de la resistivite.
      */
     void setResistivite(double res) { _resistivite = res; calculZc(); }
+
+    /*!
+     * \fn double getG() { return min(pow(300.0 / sol->getResistivite(), 0.57), 1.0); }
+     * \brief Compute equivalent ISO 9613 ground absorption
+     */
+    double getG() { return MIN(pow(300.0 / _resistivite, 0.57), 1.0); }
 
     /**
      * Set/Get de l'epaisseur.

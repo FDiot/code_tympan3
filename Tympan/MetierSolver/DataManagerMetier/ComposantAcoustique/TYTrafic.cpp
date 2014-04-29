@@ -17,8 +17,9 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYTraficWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -29,7 +30,7 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 OPROTOINST(TYTrafic);
-
+TY_EXTENSION_INST(TYTrafic);
 
 TYTrafic::TYTrafic()
 {

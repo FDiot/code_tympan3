@@ -29,9 +29,9 @@
 
 
 #include <qobject.h>
-
+#include <memory>
 #include "TYAppDefines.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 
 
 class TYMaillage;
@@ -101,13 +101,13 @@ signals:
     void highestParentPicked(TYElement* pElt);
 
     /**
-     * \fn void elementCollectionPicked(LPTYElementCollection pElts)
+     * \fn void elementCollectionPicked(std::shared_ptr<LPTYElementArray> pElts)
      * \brief Indique qu'un element a ete picke, sans connaitre son type.
      * La collection d'elements pickes est composee d'au minimum
      * l'elemenet picke puis de sa famille (parent, parent du parent...).
      * \param pElts L'element picke et ses parents.
      */
-    void elementCollectionPicked(LPTYElementCollection pElts);
+    void elementCollectionPicked(std::shared_ptr<LPTYElementArray> pElts);
 
     // Ces elements sont pickes directement ("bas niveau")
     void pointPicked(TYElement* pElt);

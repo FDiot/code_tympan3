@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYLinearMaillageWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYLinearMaillageGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -30,7 +33,8 @@
 
 
 OPROTOINST(TYLinearMaillage);
-
+TY_EXTENSION_INST(TYLinearMaillage);
+TY_EXT_GRAPHIC_INST(TYLinearMaillage);
 
 TYLinearMaillage::TYLinearMaillage()
 {
@@ -218,7 +222,7 @@ bool TYLinearMaillage::fromXML(const std::string& sFilePath)
     }
 
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
     if (xmlManager.load(fileName, elements))
     {
         if (elements.size() == 1)
@@ -253,7 +257,7 @@ bool TYLinearMaillage::fromXMLString(const std::string& sXMLString)
     bool bRet = false;
 
     TYXMLManager xmlManager;
-    TYElementCollection elements;
+    LPTYElementArray elements;
     if (xmlManager.loadFromString(QString(sXMLString.c_str()), elements))
     {
         if (elements.size() == 1)

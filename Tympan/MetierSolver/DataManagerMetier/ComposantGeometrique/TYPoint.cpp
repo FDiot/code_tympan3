@@ -17,7 +17,9 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYPointWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -29,6 +31,7 @@
 static const double DIST_MAX_PTS = 100.0;
 
 OPROTOINST(TYPoint);
+TY_EXTENSION_INST(TYPoint);
 
 long    compteurPoint = 0;
 
@@ -222,6 +225,15 @@ int TYPoint::fromXML(DOM_Element domElement)
     if (pointAdded) { retTab = checkPointsMaxDistance(retTab, distanceMax); }
 
     return retTab;
+}
+
+/*static*/ TYTabPoint TYPoint::checkPointsMaxDistance(const TYPoint& point1, const TYPoint& point2, const double& distanceMax)
+{
+    TYTabPoint tabPoints;
+    tabPoints.push_back(point1);
+    tabPoints.push_back(point2);
+
+    return checkPointsMaxDistance(tabPoints, distanceMax);
 }
 
 /*static*/ TYTabPoint TYPoint::checkPointsMaxDistance(const TYTabPoint& points)

@@ -23,10 +23,6 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 //#include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPointWidget.h"
-#endif
-
 /**
  * Classe de definition d'un point.
  */
@@ -34,7 +30,7 @@
 class TYPoint: public TYElement, public OPoint3D
 {
     OPROTOSUPERDECL(TYPoint, TYElement)
-    TY_EXTENSION_DECL(TYPoint)
+    TY_EXTENSION_DECL_ONLY(TYPoint)
 
     // Methodes
 public:
@@ -126,6 +122,12 @@ public:
      *         la distance maximale.
      */
     static TYTabPoint checkPointsMaxDistance(const TYTabPoint& points, const double& distanceMax);
+
+    /**
+     * \brief Same as previous function taking two points instead of a tab of points
+     */
+    static TYTabPoint checkPointsMaxDistance(const TYPoint& point1, const TYPoint& point2, const double& distanceMax);
+
 
     /**
      * Methode utilitaire qui s'assure que 2 points consecutifs sont

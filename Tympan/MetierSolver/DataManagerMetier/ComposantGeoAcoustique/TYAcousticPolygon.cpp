@@ -17,6 +17,11 @@
  *
  */
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticPolygonWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticPolygonGraphic.h"
+#endif
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
@@ -26,6 +31,8 @@
 #include "Tympan/Tools/TYProgressManager.h"
 
 OPROTOINST(TYAcousticPolygon);
+TY_EXTENSION_INST(TYAcousticPolygon);
+TY_EXT_GRAPHIC_INST(TYAcousticPolygon);
 
 TYAcousticPolygon::TYAcousticPolygon()
 {

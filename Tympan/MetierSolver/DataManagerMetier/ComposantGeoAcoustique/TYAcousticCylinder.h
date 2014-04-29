@@ -24,11 +24,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourceSurfacic.h"
 #include "TYAcousticVolume.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticCylinderWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticCylinderGraphic.h"
-#endif
-
 
 /**
  * Permet de creer des volumes acoustiques cylindriques.
@@ -36,8 +31,8 @@
 class TYAcousticCylinder: public TYAcousticVolume
 {
     OPROTOSUPERDECL(TYAcousticCylinder, TYAcousticVolume)
-    TY_EXTENSION_DECL(TYAcousticCylinder)
-    TY_EXT_GRAPHIC_DECL(TYAcousticCylinder)
+    TY_EXTENSION_DECL_ONLY(TYAcousticCylinder)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticCylinder)
 
     // Methodes
 public:
@@ -68,7 +63,7 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true);
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true);
 
     virtual void setDensiteSrcsH(double densite, bool recursif = true);
     virtual void setDensiteSrcsV(double densite, bool recursif = true);

@@ -27,19 +27,14 @@ class OPoint3D;
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
 #include "TYAcousticSurface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticCircleWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticCircleGraphic.h"
-#endif
-
 /**
  * Permet de creer des surfaces acoustiques circulaires.
  */
 class TYAcousticCircle: public TYAcousticSurface
 {
     OPROTOSUPERDECL(TYAcousticCircle, TYAcousticSurface)
-    TY_EXTENSION_DECL(TYAcousticCircle)
-    TY_EXT_GRAPHIC_DECL(TYAcousticCircle)
+    TY_EXTENSION_DECL_ONLY(TYAcousticCircle)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticCircle)
 
     // Methodes
 public:

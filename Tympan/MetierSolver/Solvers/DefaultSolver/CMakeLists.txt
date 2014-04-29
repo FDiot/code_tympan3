@@ -17,4 +17,5 @@ add_dependencies(${MODULE_NAME} ${TYMPAN_MODULES})
 target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${TYMPAN_MODULES}
 				  ${OPENGL_LIBRARIES})
 
+configure_tympan_plugin(${MODULE_NAME})
 install_tympan_plugin(${MODULE_NAME})

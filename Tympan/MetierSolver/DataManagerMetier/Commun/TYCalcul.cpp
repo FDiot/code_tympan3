@@ -21,14 +21,17 @@
 #   pragma warning (disable : 4786)
 #endif
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYCalculWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYCalculGraphic.h"
+#endif
+
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include <stdlib.h>
 #include <string>
-
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 
 #include "Tympan/Tools/TYProgressManager.h"
 
@@ -48,6 +51,8 @@ static char THIS_FILE[] = __FILE__;
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 
 OPROTOINST(TYCalcul);
+TY_EXTENSION_INST(TYCalcul);
+TY_EXT_GRAPHIC_INST(TYCalcul);
 
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 
@@ -936,10 +941,10 @@ void TYCalcul::addToSelection(TYElement* pElt, bool recursif /*=true*/)
         // Si recursif on ajoute les enfants
         if (recursif)
         {
-            TYElementCollection childs;
+            LPTYElementArray childs;
             pElt->getChilds(childs, false);
 
-            for (int i = 0; i < childs.getCount(); i++)
+            for (int i = 0; i < childs.size(); i++)
             {
                 addToSelection(childs[i], recursif);
             }
@@ -974,10 +979,10 @@ bool TYCalcul::remToSelection(TYElement* pElt, bool recursif /*=true*/)
         pElt->setInCurrentCalcul(false, false, false);
 
         //  On désactive ses enfants
-        TYElementCollection childs;
+        LPTYElementArray childs;
         pElt->getChilds(childs, false);
 
-        for (int i = 0; i < childs.getCount(); i++)
+        for (int i = 0; i < childs.size(); i++)
         {
             remToSelection(childs[i], recursif);
         }
@@ -1597,7 +1602,7 @@ bool TYCalcul::go()
         OMessageManager::get()->info("Calcul en cours...");
 
         pluginInfos* pInfos = new pluginInfos();
-        TYPluginManager::get()->getInfos(pInfos, getSolverId());
+        TYPluginManager::get()->getInfos(pInfos, _solverId);
         OMessageManager::get()->info("***************************************************************");
         OMessageManager::get()->info("                          APPEL DE LA DLL");
         OMessageManager::get()->info("");
@@ -1610,9 +1615,10 @@ bool TYCalcul::go()
         delete pInfos;
         pInfos = NULL;
 
-        TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(getSolverId());
+        TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(_solverId);
         // XXX ... and pass the SolverDataModel built here.
-        ret = pSolver->solve(*pMergeSite, *this);
+        ret = pSolver->solve(*pMergeSite, *this, _acousticProblem,
+                _acousticResult);
         pSolver->purge();
 
         // Cumul de la pression aux differents points de calcul

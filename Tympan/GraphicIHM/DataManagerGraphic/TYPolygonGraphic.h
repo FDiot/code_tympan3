@@ -32,6 +32,7 @@
 #endif // _MSC_VER > 1000
 
 #include "TYElementGraphic.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
 
 /**
  * \class TYPolygonGraphic

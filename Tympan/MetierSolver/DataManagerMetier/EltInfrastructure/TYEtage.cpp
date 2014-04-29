@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYEtageWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYEtageGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -32,7 +35,8 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 OPROTOINST(TYEtage);
-
+TY_EXTENSION_INST(TYEtage);
+TY_EXT_GRAPHIC_INST(TYEtage);
 
 TYEtage::TYEtage(): _closed(false), _surfAbsorbante(0.0), _typeReverb(0), _volumeLibre(0.0)
 {
@@ -716,7 +720,7 @@ void TYEtage::exportCSV(std::ofstream& ofs)
     ofs << '\n';
 }
 
-void TYEtage::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
+void TYEtage::getChilds(LPTYElementArray& childs, bool recursif /*=true*/)
 {
     TYAcousticVolume::getChilds(childs, recursif);
 
@@ -724,11 +728,11 @@ void TYEtage::getChilds(TYElementCollection& childs, bool recursif /*=true*/)
 
     for (i = 0; i < _tabMur.size(); i++)
     {
-        childs.add(_tabMur[i]->getElement());
+        childs.push_back(_tabMur[i]->getElement());
     }
 
-    childs.add(_pSol);
-    childs.add(_pPlafond);
+    childs.push_back(_pSol);
+    childs.push_back(_pPlafond);
 
     if (recursif)
     {
@@ -827,7 +831,7 @@ void TYEtage::remMurs()
 
 bool TYEtage::setMurs(const TYTabPoint& tabPts, double hauteur /*=2.0*/, bool close /*=true*/)
 {
-    TYPoint pt0, pt1, pt2, pt3;
+    TYPoint pt0, pt1;
     size_t count = tabPts.size();
     TYRepere repMur;
 
@@ -865,8 +869,8 @@ bool TYEtage::setMurs(const TYTabPoint& tabPts, double hauteur /*=2.0*/, bool cl
     // Une face pour chaque couple de points qui se suivent
     for (int i = 0; i < count; i++)
     {
-        pt1 = pt2 = tabPts[i];
-        pt0 = pt3 = tabPts[(i + 1) % tabPts.size()];
+        pt1 = tabPts[i];
+        pt0 = tabPts[(i + 1) % tabPts.size()];
 
         // Vecteur pour la "longueur" de la face
         OVector3D vec01(pt0, pt1);
@@ -2748,7 +2752,7 @@ void TYEtage::updateZSource()
         double h = pSource->getHauteur();
         pSource->getPos()->_z = h;
         _tabSources[i]->getRepere()._origin._z = h;
-        _tabSources[i]->updateRepere();
+        _tabSources[i]->setIsGeometryModified(true);
     }
 
     for (i = 0; i < _tabMachine.size(); i++)

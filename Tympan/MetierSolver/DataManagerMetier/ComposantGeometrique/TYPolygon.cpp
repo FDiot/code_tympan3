@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYPolygonWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYPolygonGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -41,7 +44,8 @@
 
 
 OPROTOINST(TYPolygon);
-
+TY_EXTENSION_INST(TYPolygon);
+TY_EXT_GRAPHIC_INST(TYPolygon);
 
 TYPolygon::TYPolygon()
 {
@@ -270,7 +274,6 @@ int TYPolygon::intersects(const OSegment3D& seg, OPoint3D& pt) const
 int TYPolygon::intersects(const OSegment3D& seg, OPoint3D& pt, bool insideTest) const
 {
     int res = INTERS_NULLE;
-    //  int i = 0;
 
     // Minimum 3 points
     if (getNbPts() < 3)
@@ -777,7 +780,7 @@ void TYPolygon::exportMesh(
         poly.push_back(plane.to_2d(plane.projection(to_cgal(op))));
         // export the point with the same index as its 2D alter-ego
         // will have within `poly` and in the global r/ frame
-        points.push_back(geonode.localToGlobal(op));
+        points.push_back(geonode.localToGlobal() * op);
     }
     PolygonTriangulator triangulator(poly);
     // Use information from triangulator.vertice_handles and the triangulation itself.

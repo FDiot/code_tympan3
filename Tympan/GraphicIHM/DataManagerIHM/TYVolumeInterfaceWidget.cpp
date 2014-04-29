@@ -40,7 +40,7 @@
 
 
 TYVolumeInterfaceWidget::TYVolumeInterfaceWidget(TYVolumeInterface* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(dynamic_cast<TYElement*>(pElement), _pParent)
+    QWidget(_pParent), _pElement(pElement)
 {
 
     resize(300, 540);
@@ -98,5 +98,5 @@ void TYVolumeInterfaceWidget::apply()
 {
     TYElement::setIsSavedOk(true);
 
-    emit modified();
+    //emit modified();
 }

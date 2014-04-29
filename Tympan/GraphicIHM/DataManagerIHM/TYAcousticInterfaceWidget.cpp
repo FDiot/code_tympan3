@@ -45,7 +45,7 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticInterfaceWidget.h"
 
 TYAcousticInterfaceWidget::TYAcousticInterfaceWidget(TYAcousticInterface* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(dynamic_cast<TYElement*>(pElement), _pParent)
+    QWidget(_pParent), _pElement(pElement)
 {
     _bAddRemRegimeOk = false;
     _modified = false;
@@ -251,7 +251,7 @@ void TYAcousticInterfaceWidget::apply()
     getElement()->updateCurrentRegime();
 
     TYElement::setIsSavedOk(true);
-    emit modified();
+//    emit modified();
 }
 
 void TYAcousticInterfaceWidget::updateDensite()

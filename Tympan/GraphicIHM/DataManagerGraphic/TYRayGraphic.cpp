@@ -47,69 +47,39 @@ void TYRayGraphic::computeBoundingBox()
     _boundingBox = reset;
 }
 
-void TYRayGraphic::getRayEventColor(TYRayEvent& e, float& r, float& g, float& b)
+void TYRayGraphic::getRayEventColor(TYRayEvent& e)
 {
     switch (e.type)
     {
         case TYSOURCE:
-            r = 182; g = 102; b = 210; // violet; r=255; g=255; b=0; // jaune;
+            _r = 1.0f; _g = 1.0f; _b = 0.0f; // jaune;
             break;
+
         case TYDIFFRACTION:
-            r = 49; g = 140; b = 231; // bleu; r=0; g=0; b=255; // bleu;
-            /*if (_lastRayEventType == TYDIFFRACTION)
-            {
-                if (_repeatRayEventCount==0)
-                {
-                    r=1; g=215; b=88; // vert ;r=0; g=255; b=0; // vert
-                }
-                _repeatRayEventCount = (_repeatRayEventCount+1)%2;
-            }
-            else
-            {
-                _repeatRayEventCount = 0;
-            }*/
+            _r = 0.2f; _g = 0.55f; _b = 0.91f; // bleu
             break;
+
         case TYREFLEXION:
-            r = 255; g = 0; b = 0; // rouge;
-            /*if (_lastRayEventType == TYREFLEXION)
-            {
-                if (_repeatRayEventCount==0)
-                {
-                    r=255; g=128; b=0; // orange
-                }
-                _repeatRayEventCount = (_repeatRayEventCount+1)%2;
-            }
-            else
-            {
-                _repeatRayEventCount = 0;
-            }*/
+            _r = 1.0f; _g = 0.0f; _b = 0.0f; // rouge
             break;
+
+        case TYREFLEXIONSOL:
+            _r = 1.0f; _g = 0.5f; _b = 0.0f; // orange
+
         case TYREFRACTION :
-            r = 0, g = 0, b = 255; // bleu
+            // Do nothing
+            //            _r=0.0f; _g=0.84f; _b=0.35f; // vert
             break;
+
         case TYRECEPTEUR:
-            r = 255; g = 110; b = 180; //rose r=255; g=255; b=0; // jaune;
+            _r = 1.0f; _g = 0.43f; _b = 0.71f; //rose
             break;
     }
-
 }
 
 void TYRayGraphic::display(GLenum mode /*= GL_RENDER*/)
 {
-    LPTYRay pRay = getElement();
-    TYPoint pt1, pt2;
-    TYPoint diff;
-
-    /*if (_highlight)
-    {
-        if(_bFirstDisp)
-        {
-            computeBoundingBox();
-            _bFirstDisp = false;
-        }
-        drawLineBoundingBox();
-        if(mode == GL_COMPILE) drawName();
-    }*/
+    TYRay* pRay = getElement();
 
     if (_visible)
     {
@@ -121,30 +91,26 @@ void TYRayGraphic::display(GLenum mode /*= GL_RENDER*/)
         _repeatRayEventCount = 0;
         for (unsigned int j = 0; j < pRay->getEvents().size(); j++)
         {
-            float r, g, b;
-            TYRayEvent e = pRay->getEvents().at(j);
+            TYRayEvent* e = pRay->getEvents().at(j);
 
             if (j != 0)
             {
                 // 2nd point du segment
-                TYPoint pt(e.pos);
+                OPoint3D pt(e->pos);
                 glVertex3f(pt._x, pt._y, pt._z);
             }
 
-            getRayEventColor(e, r, g, b);
-            glColor3f(r, g, b);
-            _lastRayEventType = e.type;
-            _lastRayEventPos = e.pos;
+            getRayEventColor(*e);
+            glColor3f(_r, _g, _b);
+            _lastRayEventType = e->type;
+            _lastRayEventPos = e->pos;
 
             // 1er point du segment
-            TYPoint pt(e.pos);
+            OPoint3D pt(e->pos);
             glVertex3f(pt._x, pt._y, pt._z);
         }
 
         glEnd();
-
-        //Calcul du volume englobant pour le fit:
-        //_globalBoundingBox.Enlarge(_boundingBox);
     }
 }
 

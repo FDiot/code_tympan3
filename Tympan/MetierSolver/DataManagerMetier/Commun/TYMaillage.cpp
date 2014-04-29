@@ -17,8 +17,9 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYMaillageWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -33,6 +34,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 OPROTOINST(TYMaillage);
+TY_EXTENSION_INST(TYMaillage);
 
 TYMaillage::TYMaillage()
 {

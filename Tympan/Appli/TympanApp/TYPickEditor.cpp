@@ -30,7 +30,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEcran.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickHandler.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYWidget.h"
-
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYPanelGraphic.h"
 #include "Tympan/Tools/OLocalizator.h"
 
 
@@ -133,7 +133,7 @@ void TYPickEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::K
         }
         if ((button == Qt::RightButton) && _usePopup)
         {
-            QObject::connect(_pPicker, SIGNAL(elementCollectionPicked(LPTYElementCollection)), this, SLOT(showPopupMenu(LPTYElementCollection)));
+            QObject::connect(_pPicker, SIGNAL(elementCollectionPicked(std::shared_ptr<LPTYElementArray>)), this, SLOT(showPopupMenu(std::shared_ptr<LPTYElementArray>)));
             doPick = true;
         }
 
@@ -147,7 +147,7 @@ void TYPickEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::K
 
             // Deconnections
             QObject::disconnect(_pPicker, SIGNAL(elementPicked(TYElement*)), _pPicker, SLOT(highlightElement(TYElement*)));
-            QObject::disconnect(_pPicker, SIGNAL(elementCollectionPicked(LPTYElementCollection)), this, SLOT(showPopupMenu(LPTYElementCollection)));
+            QObject::disconnect(_pPicker, SIGNAL(elementCollectionPicked(std::shared_ptr<LPTYElementArray>)), this, SLOT(showPopupMenu(std::shared_ptr<LPTYElementArray>)));
         }
     }
 }
@@ -240,7 +240,7 @@ void TYPickEditor::slotMouseLeave()
 }
 
 // TODO : What's this monster ?!? Circa 1300 lines of code full of if ?!?
-void TYPickEditor::showPopupMenu(LPTYElementCollection pElts)
+void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
 {
     if (!pElts)
     {
@@ -1061,7 +1061,7 @@ void TYPickEditor::showPopupMenu(LPTYElementCollection pElts)
             if (copyTopoRetCodes[popupRet]->isA("TYCourbeNiveau"))
             {
                 // Nouvelle element
-                LPTYCourbeNiveauGeoNode pCopy = new TYCourbeNiveauGeoNode(new TYCourbeNiveau);
+                LPTYCourbeNiveauGeoNode pCopy = new TYCourbeNiveauGeoNode(new TYCourbeNiveau());
                 pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
 
                 // Duplication
@@ -1563,12 +1563,10 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
 
 
     TYPoint oldZero(0, 0, 0);
-    oldZero = pGeoNode->localToGlobal(oldZero);
+    oldZero = pGeoNode->localToGlobal() * oldZero;
     if (pRootGeometryNode)
     {
-        oldZero = pRootGeometryNode->globalToLocal(oldZero);//oldZero est maintenant exprime dans le repere pRootGeometryNode
-
-        // Affectation de la nouvelle origine au geonode
+        oldZero = pRootGeometryNode->globalToLocal() * oldZero;
         pTempGeoNode->getRepere()._origin = oldZero;
     }
 
@@ -1603,11 +1601,11 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
             // On passe newZero dans le repere local s'il y a lieu
             if (pRootGeometryNode)
             {
-                newZero = pRootGeometryNode->localToGlobal(newZero);
+	      newZero = pRootGeometryNode->localToGlobal() * newZero;
             }
 
             //exprimons newZero dans le repere du GeoNode:
-            newZero = pGeoNode->globalToLocal(newZero);//newZero est maintenant exprime dans le repere global
+            newZero = pGeoNode->globalToLocal() * newZero;
 
             //on modifie l'origine du GeoNode de newZero:
             ORepere3D repere = pGeoNode->getRepere();
@@ -1708,9 +1706,9 @@ void TYPickEditor::showRotationDialog(TYGeometryNode* pGeoNode)
                 dRotateZ -= yaw;
             }
 
-            tyMatTmpX.setRotationOx(-M_PI * dRotateX / 180);
-            tyMatTmpY.setRotationOy(-M_PI * dRotateY / 180);
-            tyMatTmpZ.setRotationOz(M_PI * dRotateZ / 180);
+            tyMatTmpX.setRotationOx(-DEGTORAD(dRotateX));
+            tyMatTmpY.setRotationOy(-DEGTORAD(dRotateY));
+            tyMatTmpZ.setRotationOz(DEGTORAD(dRotateZ));
 
             if (pDlg->getConcatenateStatus()) //az--
             {
@@ -1963,7 +1961,7 @@ void TYPickEditor::showPanel(TYElement* pElt)
         LPTYPointCalcul pResult = 0;
         if (pPtCalcul)
         {
-            coord = pMaillageGeoNode->localToGlobal(OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0));
+	  coord = pMaillageGeoNode->localToGlobal() * OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0);
             switch (_pModeler->getCurrentView())
             {
                 case TYModelerFrame::TopView:
@@ -1984,7 +1982,7 @@ void TYPickEditor::showPanel(TYElement* pElt)
         for (unsigned int i = 1; i < pMaillage->getPtsCalcul().size(); i++)
         {
             pPtCalcul = pMaillage->getPtsCalcul()[i];
-            coord = pMaillageGeoNode->localToGlobal(OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0));
+            coord = pMaillageGeoNode->localToGlobal() * OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0);
 
             double distSquare = 0.0;
             switch (_pModeler->getCurrentView())

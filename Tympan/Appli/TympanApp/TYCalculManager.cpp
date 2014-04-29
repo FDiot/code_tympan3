@@ -31,11 +31,14 @@
 #include "TYCalculManager.h"
 
 #include "TYMessageManager.h"
+#include "Tympan/Config.h"
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/Tools/OChrono.h"
+#include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
 
 #include <qcursor.h>
 #include <qmessagebox.h>
+#include <QTemporaryFile>
 
 #if defined(WIN32)
 #include <crtdbg.h>
@@ -49,6 +52,7 @@ static char THIS_FILE[] = __FILE__;
 
 #define TR(id) OLocalizator::getString("TYCalculManager", (id))
 
+using namespace tympan;
 
 TYCalculManager::TYCalculManager()
 {
@@ -86,7 +90,82 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         // Lance le calcul
         OChronoTime startTime; //xbh: analyse du temps de calcul
 
-        ret = pCalcul->go();
+        TYProjet *pProject = pCalcul->getProjet();
+
+        // Define 2 temporary XML files to give the current acoustic problem to
+        // the python script and retrieve the corresponding acoustic result
+        QTemporaryFile problemfile, resultfile;
+        if (problemfile.open() && resultfile.open())
+        {
+            problemfile.close();
+            resultfile.close();
+        }
+        else
+        {
+            // reactivate HMI
+            TYApplication::restoreOverrideCursor();
+            getTYMainWnd()->setEnabled(true);
+            return false;
+        }
+
+            try
+            {
+                // Serialize current project
+                save_project(problemfile.fileName().toUtf8().data(), pProject);
+            }
+            catch(tympan::invalid_data)
+            {
+                // reactivate HMI
+                TYApplication::restoreOverrideCursor();
+                getTYMainWnd()->setEnabled(true);
+                return false;
+            }
+
+            // Call python module to do the computation
+            // XXX we should define a work environment so as to know where to record
+            // the xml files, where to look for them, where are the python scripts
+            // we want to call, where are the libraries, etc.
+            // waiting for a decision, for now keep it dirty
+            QProcess python;
+            QStringList env = QProcess::systemEnvironment();
+            // XXX because for now we install the tympan project in the home
+            // directory. To be fixed
+            env.replaceInStrings(QRegExp("^LD_LIBRARY_PATH=(.*)"),
+                    "LD_LIBRARY_PATH=Tympan/lib");
+            python.setEnvironment(env);
+
+            QStringList args;
+            // Call python script "tympan.py" with: the name of the file
+            // containing the problem, the name of the file where to record
+            // the result and the directory containing the solver plugin to use
+            // to solve the acoustic problem
+            args << "Tympan/pymodules/tympan.py" << problemfile.fileName() 
+                << resultfile.fileName() << "Tympan/pluginsd";
+
+            python.start("python", args);
+            while (!python.waitForFinished()); // wait for the script to execute
+            int pystatus = python.exitStatus();
+            if (pystatus == 0)
+            {
+                // Then read the result to update the internal model
+                LPTYProjet result;
+                try
+                {
+                    result = load_project(resultfile.fileName().toUtf8().data());
+                }
+                catch(tympan::invalid_data)
+                {
+                    // reactivate HMI
+                    TYApplication::restoreOverrideCursor();
+                    getTYMainWnd()->setEnabled(true);
+                    return false;
+                }
+                    pProject = result.getRealPointer();
+                    getTYApp()->getCurProjet()->setCurrentCalcul(
+                            pProject->getCurrentCalcul());
+                    pCalcul = pProject->getCurrentCalcul();
+                    ret = true;
+            }
 
         OChronoTime endTime; //xbh: analyse du temps de calcul
         OChronoTime duration = endTime - startTime;

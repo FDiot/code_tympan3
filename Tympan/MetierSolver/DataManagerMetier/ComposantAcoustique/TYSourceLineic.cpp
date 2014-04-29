@@ -17,18 +17,22 @@
  *
  */
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYSourceLineicWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceLineicGraphic.h"
+#endif
 
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 
 #include "Tympan/Tools/OMessageManager.h"
 
 
 OPROTOINST(TYSourceLineic);
-
+TY_EXTENSION_INST(TYSourceLineic);
+TY_EXT_GRAPHIC_INST(TYSourceLineic);
 
 TYSourceLineic::TYSourceLineic():
     _densiteSrcs(100.0),
@@ -147,10 +151,10 @@ int TYSourceLineic::fromXML(DOM_Element domElement)
     }
 
     // Recupere l'ensemble des source ponctuelles et derivees
-    TYElementCollection srcs = TYElement::findTypeCollectionAndCallFromXML(domElement, "TYSourcePonctuelle");
+    LPTYElementArray srcs = TYElement::findTypeCollectionAndCallFromXML(domElement, "TYSourcePonctuelle");
 
     // Ajoute les srcs trouvees
-    for (i = 0; i < srcs.getCount(); i++)
+    for (i = 0; i < srcs.size(); i++)
     {
         addSrc((LPTYSourcePonctuelle&) srcs[i]);
     }

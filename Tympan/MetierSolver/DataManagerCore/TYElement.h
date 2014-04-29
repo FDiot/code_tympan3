@@ -57,11 +57,7 @@
 ///Boite a outils XML.
 #include "TYXMLTools.h"
 
-/**
- * Definition de la classe TYElementCollection
- */
-
-class TYElementCollection;
+typedef std::vector<LPTYElement> LPTYElementArray;
 
 typedef  std::map<TYUUID, TYElement*> TYElementContainer;
 
@@ -125,14 +121,24 @@ typedef  std::map<TYUUID, TYElement*> TYElementContainer;
         if (!_pGraphicObject)   _pGraphicObject = new classname##Graphic(this); \
         return _pGraphicObject; \
     }
-
 #endif
+
+#define TY_EXT_GRAPHIC_DECL_ONLY(classname) \
+    public: \
+    virtual LPTYElementGraphic getGraphicObject();
+
+#define TY_EXT_GRAPHIC_INST(classname) \
+    LPTYElementGraphic classname::getGraphicObject() { \
+        if (!_pGraphicObject)   _pGraphicObject = new classname##Graphic(this); \
+        return _pGraphicObject; \
+    }
 
 #else
 
 #define TY_EXT_GRAPHIC_DECL(classname)
+#define TY_EXT_GRAPHIC_DECL_ONLY(classname)
+#define TY_EXT_GRAPHIC_INST(classname)
 typedef void*   LPTYElementGraphic;
-
 #endif // TY_USE_IHM
 
 /**
@@ -230,7 +236,7 @@ public:
     /**
      * Collecte les enfants de cet element de facon recursive ou non.
      */
-    virtual void getChilds(TYElementCollection& childs, bool recursif = true) {}
+    virtual void getChilds(LPTYElementArray& childs, bool recursif = true) {}
 
     /**
      * Set/Get de l'indicateur d'appartenance au Calcul courant.
@@ -480,7 +486,7 @@ public:
      *
      * @return Une instance du type trouve, sinon NULL.
      */
-    static TYElementCollection findTypeCollectionAndCallFromXML(DOM_Element parentElem, const char* type);
+    static LPTYElementArray findTypeCollectionAndCallFromXML(DOM_Element parentElem, const char* type);
 
     /**
      * Active ou desactive l'enregistrement de toutes les instances creees de type
