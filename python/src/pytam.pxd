@@ -91,7 +91,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYG
         TYElement* getElement()
         TYGeometryNode(TYElement *)
 
-cdef extern from "Tympan/MetierSolver/ToolsMetier/OCoord3D.h":
+cdef extern from "Tympan/MetierSolver/CommonTools/OCoord3D.h":
     cdef cppclass OCoord3D:
         double _x
         double _y
@@ -99,11 +99,11 @@ cdef extern from "Tympan/MetierSolver/ToolsMetier/OCoord3D.h":
         double _value[3]
         bool operator==(const OCoord3D& coord)
 
-cdef extern from "Tympan/MetierSolver/ToolsMetier/OPoint3D.h":
+cdef extern from "Tympan/MetierSolver/CommonTools/OPoint3D.h":
     cdef cppclass OPoint3D (OCoord3D):
         pass
 
-cdef extern from "Tympan/MetierSolver/ToolsMetier/OTriangle.h":
+cdef extern from "Tympan/MetierSolver/CommonTools/OTriangle.h":
     cdef cppclass OTriangle:
         OPoint3D _A
         OPoint3D _B

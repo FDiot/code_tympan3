@@ -26,12 +26,12 @@
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
+#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 #include "Tympan/Tools/OMessageManager.h"
-#include "Tympan/MetierSolver/ToolsMetier/OTriangle.h"
-#include "Tympan/MetierSolver/ToolsMetier/Defines.h"
+#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include "Tympan/MetierSolver/CommonTools/Defines.h"
 
 OPROTOINST(TYRectangle);
 TY_EXTENSION_INST(TYRectangle);

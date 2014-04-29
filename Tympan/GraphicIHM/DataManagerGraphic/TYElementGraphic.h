@@ -50,12 +50,12 @@
 #endif // TY_USE_IHM
 
 #include "Tympan/Tools/OColor.h"
-#include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
+#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
 #include "Tympan/Tools/OSmartPtr.h"
 class TYElement;
 
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"//az++ pour les calculs de BoundingBox (fctn fit et localiser)
-#include "Tympan/MetierSolver/ToolsMetier/OBox.h"//az++ pour les calculs de BoundingBox (fctn fit et localiser)
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"//az++ pour les calculs de BoundingBox (fctn fit et localiser)
+#include "Tympan/MetierSolver/CommonTools/OBox.h"//az++ pour les calculs de BoundingBox (fctn fit et localiser)
 
 #define TY_DECL_METIER_GRAPHIC(classname) \
     public: \

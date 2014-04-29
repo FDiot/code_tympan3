@@ -22,7 +22,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYTrafic.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/prettyprint.hpp"
+#include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
 
 using namespace std;
 

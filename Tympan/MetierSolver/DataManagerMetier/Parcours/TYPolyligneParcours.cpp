@@ -24,7 +24,7 @@
 
 #include "TYPolyligneParcours.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/GlobalMacros.h"
+#include "Tympan/MetierSolver/CommonTools/GlobalMacros.h"
 #include <stdio.h>
 //#include <assert.h>
 

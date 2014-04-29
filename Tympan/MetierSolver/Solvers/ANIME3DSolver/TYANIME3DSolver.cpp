@@ -21,8 +21,8 @@
 
 #include "Tympan/Tools/TYProgressManager.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
+#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
+#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"

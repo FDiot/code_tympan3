@@ -18,7 +18,7 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
 
 typedef std::pair<unsigned int, unsigned int> Edge;
 

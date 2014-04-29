@@ -14,7 +14,7 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-#include "Tympan/MetierSolver/ToolsMetier/SonieZwicker_1991.h"
+#include "Tympan/MetierSolver/CommonTools/SonieZwicker_1991.h"
 
 double* createSpectre()
 {

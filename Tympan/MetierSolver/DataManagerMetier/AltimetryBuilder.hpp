@@ -21,8 +21,8 @@
 #include <algorithm>
 
 // CGAL related Includes
-#include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
-#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
+#include "Tympan/MetierSolver/CommonTools/cgal_tools.hpp"
+#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
 
 #include <boost/ptr_container/ptr_deque.hpp>
 // http://www.boost.org/doc/libs/1_52_0/libs/ptr_container/doc/examples.html
@@ -43,7 +43,7 @@ class SolverDataModelBuilder;
 }
 
 // Tympan includes site side
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYCourbeNiveau.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYTerrain.h"
@@ -52,7 +52,7 @@ class SolverDataModelBuilder;
 #undef max // XXX
 
 #include "Tympan/MetierSolver/SolverDataModel/data_model_common.hpp"
-#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
+#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
 
 
 #define TY_USE_CGAL_QT_IFACE 1

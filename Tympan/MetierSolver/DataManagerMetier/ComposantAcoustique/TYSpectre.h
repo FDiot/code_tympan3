@@ -21,7 +21,7 @@
 #define __TY_SPECTRE__
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
-#include "Tympan/MetierSolver/ToolsMetier/OSpectreComplex.h"
+#include "Tympan/MetierSolver/CommonTools/OSpectreComplex.h"
 
 ///Collection des frequences
 typedef std::vector<float> TYTabFreq;

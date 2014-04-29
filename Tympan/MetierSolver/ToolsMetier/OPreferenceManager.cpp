@@ -22,7 +22,7 @@
 
 #include "OPreferenceManager.h"
 #include "DOMSave.h"
-#include "GlobalMacros.h"
+#include "Tympan/MetierSolver/CommonTools/GlobalMacros.h"
 
 #include <qfile.h>
 #include <iostream>

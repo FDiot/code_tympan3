@@ -44,7 +44,7 @@
 ///Definitions des types.
 #include "TYDefines.h"
 ///Macros utilitaires generales.
-#include "Tympan/MetierSolver/ToolsMetier/GlobalMacros.h"
+#include "Tympan/MetierSolver/CommonTools/GlobalMacros.h"
 ///Gestion des messages d'erreurs/warning/debug.
 #include "Tympan/Tools/OMsg.h"
 

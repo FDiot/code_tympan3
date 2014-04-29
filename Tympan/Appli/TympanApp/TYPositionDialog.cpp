@@ -27,7 +27,7 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYIncludesQT.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYElementWidget.h"
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 //Added by qt3to4:
 #include <QGridLayout>

@@ -7,7 +7,7 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/prettyprint.hpp"
+#include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
 
 using std::cout;
 using std::endl;

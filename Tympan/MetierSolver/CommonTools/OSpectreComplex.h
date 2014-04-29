@@ -23,7 +23,6 @@
 #ifndef __O_SPECTRE_COMPLEX__
 #define __O_SPECTRE_COMPLEX__
 
-//#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "OSpectre.h"
 #include "GlobalMacros.h"
 

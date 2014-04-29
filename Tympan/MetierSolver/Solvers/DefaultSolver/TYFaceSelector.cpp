@@ -19,7 +19,7 @@
 
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolume.h"
-#include "Tympan/MetierSolver/ToolsMetier/Defines.h"
+#include "Tympan/MetierSolver/CommonTools/Defines.h"
 
 #include "TYFaceSelector.h"
 #include "TYSolver.h"

@@ -26,7 +26,7 @@
 
 #include "qlist.h"
 #include "Lancer.h"
-#include "Tympan/MetierSolver/ToolsMetier/OTriangle.h"
+#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
 
 using namespace std;
 

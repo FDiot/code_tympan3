@@ -34,9 +34,9 @@
 #include <boost/current_function.hpp>
 #include <boost/foreach.hpp>
 
-#include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OBox.h"
-#include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
+#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
+#include "Tympan/MetierSolver/CommonTools/OBox.h"
+#include "Tympan/MetierSolver/CommonTools/OBox2.h"
 
 #include "TYAltimetrie.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
@@ -45,7 +45,7 @@
 #include "Tympan/Tools/TYProgressManager.h"
 #include "Tympan/Tools/OMessageManager.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
+#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

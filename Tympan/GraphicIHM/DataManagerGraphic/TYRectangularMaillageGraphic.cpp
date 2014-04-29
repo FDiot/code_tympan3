@@ -26,9 +26,10 @@
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OHPlane3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
+
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OHPlane3D.h"
+#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRectangularMaillage.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
