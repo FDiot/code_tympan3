@@ -1,0 +1,22 @@
+Source: tympan
+Section: science
+Priority: standard
+Maintainer: Denis Thomasson <denis.thomasson@edf.fr>
+Build-Depends: debhelper (>= 4.2.32), autotools-dev, libqt4-dev (>= 4.1.5), python2.4-dev, python2.5-dev, libboost-python-dev
+Standards-Version: 3.6.2
+
+Package: tympan
+Architecture: any 
+Depends: ${shlibs:Depends}
+Description: Ingeniering software for outdoor acoustic studies
+ TYMPAN follows the recommandations of ISO 9613 standard in the field
+ of atmospheric propagation and on the general methodology of
+ calculating according to the differnet situations of propagation 
+ (Screen, reflection,...).
+ .
+ It differs, however, with regard to the treatment of volumic sources 
+ directivity, reflections on the ground and the possibility of taking
+ interferences into account.
+ .
+ It also integrates features specific to the creation and processing of 
+ industrial sources.
