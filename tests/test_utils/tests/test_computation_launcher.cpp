@@ -9,7 +9,6 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 
 #define DEFAULT_SOLVER_DIR "../../../Tympan/MetierSolver/Solvers/DefaultSolver/"
-#define SIMPLERAY_SOLVER_DIR "../../../Tympan/MetierSolver/Solvers/SimpleRaySolver/"
 #define XML_TEST_FILE "../../data/projects-panel/20_PROJET_Site_emprise_seule_avec_un_ecran_plusieurs_segments.xml"
 
 
@@ -47,18 +46,4 @@ TEST_F(LauncherTestFixture, default_solver)
     launcher.launchDefault(DEFAULT_SOLVER_DIR);
     LPTYCalcul current_computation = launcher.getCurrentComputation();
     // XXX Try to get/export some results from the current computation.
-}
-
-
-// Try to launch the simple ray solver.
-TEST_F(LauncherTestFixture, simple_ray_solver)
-{
-    ASSERT_GT(launcher.getComputationNumber(), (size_t)0);
-    cout << "###  Number of computations: "
-         << launcher.getComputationNumber() << endl;
-
-    LPTYCalcul sim_ptr = launcher.getCurrentComputation();
-    ASSERT_TRUE(sim_ptr != NULL);
-
-    launcher.launchSimpleRay(SIMPLERAY_SOLVER_DIR);
 }
