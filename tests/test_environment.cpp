@@ -7,8 +7,13 @@
  */
 
 #include <cstdlib>
+#include <string>
 
 #include "gtest/gtest.h"
+
+#include <QDir>
+
+#include "TympanTestsConfig.h"
 
 using std::cout;
 using std::cerr;
@@ -19,4 +24,10 @@ TEST(TestEnvironment, Path)
     char* path = std::getenv("PATH");
     ASSERT_FALSE(path == NULL);
     cout << "PATH = " << path << endl;
+}
+
+TEST(TestEnvironment, TestDataPath)
+{
+    QString expected_data_path = QDir::toNativeSeparators(QDir::current().absoluteFilePath("data"));
+    EXPECT_EQ(expected_data_path.toStdString(), std::string(TYMPAN_TESTS_DATA_DIR));
 }

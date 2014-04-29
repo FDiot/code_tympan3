@@ -31,7 +31,17 @@ set (TYMPAN_MODULES
   tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
   tympan_tools_metier tympan_tools_graphics tympan_tools)
 
-include_directories(.)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+# Configure the headers for the tests
+set(TYMPAN_TESTS_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/data")
+file(TO_NATIVE_PATH  ${TYMPAN_TESTS_DATA_DIR} TYMPAN_TESTS_DATA_DIR_NATIVE)
+string(REPLACE "\\" "\\\\" TYMPAN_TESTS_DATA_DIR_NATIVE ${TYMPAN_TESTS_DATA_DIR_NATIVE})
+configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/TympanTestsConfig.h.in
+    ${CMAKE_CURRENT_BINARY_DIR}/TympanTestsConfig.h
+    @ONLY
+)
 add_subdirectory(test_utils)
 
 add_executable(test_example test_example.cpp)
