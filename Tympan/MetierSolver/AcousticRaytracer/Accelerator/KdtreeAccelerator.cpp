@@ -210,12 +210,10 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
         if (r->maxt < tmin) { break; }
         if (!node->isLeaf())
         {
-            {
             // Process kd-tree interior node
             // Compute parametric distance along ray to split plane
             int axis = node->getAxe();
             float tplane = (node->getAxeValue() - r->position[axis]) * invDir[axis];
-            {
 
             // Get node children pointers for ray
             KDNode* firstChild, *secondChild;
@@ -223,13 +221,11 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
                              (r->position[axis] == node->getAxeValue() && r->direction[axis] >= 0);
             if (belowFirst)
             {
-                {
                 firstChild = node + 1;
                 secondChild = &tableNode[node->AboveChild()];
             }
             else
             {
-                {
                 firstChild = &tableNode[node->AboveChild()];
                 secondChild = node + 1;
             }
@@ -237,17 +233,14 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
             // Advance to next child node, possibly enqueue other child
             if (tplane > tmax || tplane < 0)
             {
-                {
                 node = firstChild;
             }
             else if (tplane < tmin)
             {
-                {
                 node = secondChild;
             }
             else
             {
-                {
                 // Enqueue _secondChild_ in todo list
                 todo[todoPos].node = secondChild;
                 todo[todoPos].tmin = tplane;
@@ -261,7 +254,6 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
         {
             // Check for intersections inside leaf node
             unsigned int nPrimitives = node->getNbPrimitives();
-            {
             if (nPrimitives == 1)
             {
                 Shape* prim = initialMesh->at(node->getFirstIndex());
@@ -292,9 +284,7 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
                         result.push_back(currentIntersection);
                         //intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
                         intermin = (*pLeafTreatmentFunction) (result, intermin);
-                    {
                     }
-                    {
                 }
             }
 

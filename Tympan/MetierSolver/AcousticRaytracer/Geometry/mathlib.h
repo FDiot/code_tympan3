@@ -47,6 +47,10 @@ typedef float decimal;
 
 typedef unsigned int bitSet; /*!< used to manage set of elements*/
 
+#ifndef EPSILON_4 // was BARELY_EPSILON before
+#define EPSILON_4           (decimal)0.0001 // 10e-4
+#endif
+
 #ifndef EPSILON_6
 #define EPSILON_6           (decimal)0.000001 // 10e-6                      /*!< Approximation lors de la comparaison de 2 decimal */
 #endif
