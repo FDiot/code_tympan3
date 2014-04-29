@@ -24,10 +24,6 @@
 #define __O_XML_TREE_MANAGER__
 
 
-#include "TYConfigure.h"
-//#if TY_USE_IHM
-
-
 /**
  * This class is used to read an write miscellanous information in XML files.
  * It can sort information in a hierarchy like files on a hard drive.
@@ -251,9 +247,6 @@ inline QDomNode OXMLTreeManager::getRootDomNode()
     }
     return node;
 }
-
-
-//#endif // TY_USE_IHM
 
 
 #endif // __O_XML_TREE_MANAGER__

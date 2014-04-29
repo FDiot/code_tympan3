@@ -24,10 +24,6 @@
 #define __O_LOCALIZATOR__
 
 
-#include "TYConfigure.h"
-//#if TY_USE_IHM
-
-
 #include <qmap.h>
 #include <qstring.h>
 #include <qdom.h>
@@ -84,8 +80,5 @@ private:
     static QString          _ressourcePath;
     static OXMLTreeManager  _treeManager;
 };
-
-//#endif // TY_USE_IHM
-
 
 #endif // __O_LOCALIZATOR__

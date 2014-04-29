@@ -36,8 +36,6 @@
 #pragma warning( disable : 4284 )
 #endif
 
-#include "Tympan/Tools/TYConfigure.h"
-
 #if TY_USE_IHM
 #include <QtOpenGL>
 #include <GL/gl.h>

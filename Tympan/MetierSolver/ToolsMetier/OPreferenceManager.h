@@ -27,15 +27,9 @@
 #ifndef __O_PREFERENCE_MANAGER__
 #define __O_PREFERENCE_MANAGER__
 
-#include "Tympan/Tools/TYConfigure.h"
+#include "Tympan/MetierSolver/CommonTools/Defines.h"
 #include <map>
-//#include <string>
 #include <QString>
-
-//using namespace :: std;
-//using std::map;
-//using QString;
-
 
 /**
  * \struct OPrefMap
