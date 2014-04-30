@@ -1,6 +1,7 @@
 #ifndef MY_ELEMENT_H
 #define MY_ELEMENT_H
 
+#include <string>
 #include <iostream>
 using namespace std;
 
