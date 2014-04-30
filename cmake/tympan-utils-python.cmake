@@ -7,6 +7,7 @@ function(configure_cython_module module)
     "${PROJECT_BINARY_DIR}/${TYMPAN_CythonModules_Debug}")
   set_property(TARGET ${module} PROPERTY LIBRARY_OUTPUT_DIRECTORY_RELEASE
     "${PROJECT_BINARY_DIR}/${TYMPAN_CythonModules_Release}")
+  # We do NOT want to depend on the debug version of the Python libs
 endfunction()
 
 function(install_cython_module module)

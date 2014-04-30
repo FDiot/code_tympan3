@@ -1,6 +1,9 @@
 # CMakeLists for test cases with GoogleTest framework.
 set(CURRENT_FOLDER "Tests")
 
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} 
+  APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG _DEBUG)
+
 enable_testing () # Activate CTest
 
 # GTest has already been loaded as external project by tympan-deps-gtest.cmake
