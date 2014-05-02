@@ -192,7 +192,6 @@ bool DefaultEngine::process()
         {
             Ray* current_ray = pile_traitement.top();
             pile_traitement.pop();
-            //nb_rayon_traite++;
             std::list<validRay> result;
             traitementRay(current_ray, result);
 
