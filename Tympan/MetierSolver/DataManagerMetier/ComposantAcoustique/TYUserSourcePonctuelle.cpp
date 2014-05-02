@@ -265,11 +265,6 @@ int TYUserSourcePonctuelle::fromXML(DOM_Element domElement)
 OSpectre TYUserSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& Atmo, const int& expGeo /*=0*/, const int& regime /*=-1*/) const
 {
     OSpectre s = OSpectre::getEmptyLinSpectre();
-
-    LPTYAcousticSurface pSupport = NULL;
-    LPTYAcousticVolume pVolParent = NULL;
-    OMatrix matrix; // Matrice de changement de repere entre le volume parent et cette source
-
     OVector3D v3D;
     double coef = 0.0;
 

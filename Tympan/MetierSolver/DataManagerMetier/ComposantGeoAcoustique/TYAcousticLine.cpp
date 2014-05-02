@@ -306,7 +306,6 @@ void TYAcousticLine::remAllSrcs()
 void TYAcousticLine::distriSrcs()
 {
     double densite = 1.0 / _pSrcLineic->getDensiteSrcs();
-    //  double lSegment = 0.0;                              //Longueur du segment courant
     double distance = 0.0;
     double x = 0.0, y = 0.0, z = 0.0;                   // Coordonnees du point courant
     int nbSources = 1;
