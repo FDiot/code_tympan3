@@ -17,10 +17,15 @@
  *
  */
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYRegimeWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
+
+TY_EXTENSION_INST(TYRegime)
 
 TYRegime::TYRegime() :  _isRayonnant(true),
     _useAtt(false),

@@ -30,7 +30,6 @@
 #include <qpushbutton.h>
 //#include <qtreeWidget.h>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"

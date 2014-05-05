@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticLineWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticLineGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -27,7 +30,8 @@
 
 
 OPROTOINST(TYAcousticLine);
-
+TY_EXTENSION_INST(TYAcousticLine);
+TY_EXT_GRAPHIC_INST(TYAcousticLine);
 
 TYAcousticLine::TYAcousticLine() : _typeDistribution(TY_PUISSANCE_IMPOSEE)
 {

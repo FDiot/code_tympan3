@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYRectangleWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangleGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -30,6 +33,8 @@
 #include "Tympan/MetierSolver/ToolsMetier/OTriangle.h"
 
 OPROTOINST(TYRectangle);
+TY_EXTENSION_INST(TYRectangle);
+TY_EXT_GRAPHIC_INST(TYRectangle);
 
 const int TYRectangle::_nbPts = 4;
 

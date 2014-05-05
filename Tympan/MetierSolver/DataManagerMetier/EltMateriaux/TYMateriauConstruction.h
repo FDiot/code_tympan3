@@ -26,14 +26,10 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSpectre.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYMateriauConstructionWidget.h"
-#endif
-
 class TYMateriauConstruction: public TYElement
 {
     OPROTOSUPERDECL(TYMateriauConstruction, TYElement)
-    TY_EXTENSION_DECL(TYMateriauConstruction)
+    TY_EXTENSION_DECL_ONLY(TYMateriauConstruction)
 
     // Methodes
 public:

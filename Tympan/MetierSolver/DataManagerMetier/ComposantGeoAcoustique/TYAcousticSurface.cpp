@@ -17,7 +17,9 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSurfaceWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -25,7 +27,7 @@
 
 
 OPROTOINST(TYAcousticSurface);
-
+TY_EXTENSION_INST(TYAcousticSurface);
 
 TYAcousticSurface::TYAcousticSurface()
 {

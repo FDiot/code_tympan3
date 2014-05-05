@@ -22,10 +22,6 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPanelGraphic.h"
-#endif
-
 /**
  * \file TYPanel.h
  * \class TYPanel
@@ -37,7 +33,7 @@
 class TYPanel : public TYElement
 {
     OPROTOSUPERDECL(TYPanel, TYElement)
-    TY_EXT_GRAPHIC_DECL(TYPanel)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYPanel)
 
     // Methodes
 public:

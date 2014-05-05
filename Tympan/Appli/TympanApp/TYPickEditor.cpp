@@ -30,7 +30,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEcran.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickHandler.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYWidget.h"
-
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYPanelGraphic.h"
 #include "Tympan/Tools/OLocalizator.h"
 
 
@@ -133,7 +133,7 @@ void TYPickEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::K
         }
         if ((button == Qt::RightButton) && _usePopup)
         {
-            QObject::connect(_pPicker, SIGNAL(elementCollectionPicked(LPTYElementCollection)), this, SLOT(showPopupMenu(LPTYElementCollection)));
+            QObject::connect(_pPicker, SIGNAL(elementCollectionPicked(std::shared_ptr<LPTYElementArray>)), this, SLOT(showPopupMenu(std::shared_ptr<LPTYElementArray>)));
             doPick = true;
         }
 
@@ -147,7 +147,7 @@ void TYPickEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::K
 
             // Deconnections
             QObject::disconnect(_pPicker, SIGNAL(elementPicked(TYElement*)), _pPicker, SLOT(highlightElement(TYElement*)));
-            QObject::disconnect(_pPicker, SIGNAL(elementCollectionPicked(LPTYElementCollection)), this, SLOT(showPopupMenu(LPTYElementCollection)));
+            QObject::disconnect(_pPicker, SIGNAL(elementCollectionPicked(std::shared_ptr<LPTYElementArray>)), this, SLOT(showPopupMenu(std::shared_ptr<LPTYElementArray>)));
         }
     }
 }
@@ -240,7 +240,7 @@ void TYPickEditor::slotMouseLeave()
 }
 
 // TODO : What's this monster ?!? Circa 1300 lines of code full of if ?!?
-void TYPickEditor::showPopupMenu(LPTYElementCollection pElts)
+void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
 {
     if (!pElts)
     {

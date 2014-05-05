@@ -17,8 +17,10 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYRectangularMaillageWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangularMaillageGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -31,7 +33,8 @@
 
 
 OPROTOINST(TYRectangularMaillage);
-
+TY_EXTENSION_INST(TYRectangularMaillage);
+TY_EXT_GRAPHIC_INST(TYRectangularMaillage);
 
 TYRectangularMaillage::TYRectangularMaillage()
 {

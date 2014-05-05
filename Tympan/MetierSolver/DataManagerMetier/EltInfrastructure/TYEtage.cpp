@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYEtageWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYEtageGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -32,7 +35,8 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 OPROTOINST(TYEtage);
-
+TY_EXTENSION_INST(TYEtage);
+TY_EXT_GRAPHIC_INST(TYEtage);
 
 TYEtage::TYEtage(): _closed(false), _surfAbsorbante(0.0), _typeReverb(0), _volumeLibre(0.0)
 {

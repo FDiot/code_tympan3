@@ -1,13 +1,14 @@
 /**
- * \file model.hpp
- * \brief This file provides the top-level declaration for the model
+ * \file acoustic_problem_model.hpp
+ * \brief This file provides the top-level declaration for the acoustic problem
+ * model
  *
  * \date jul. 12 2013
  * \author Anthony Truchet <anthony.truchet@logilab.fr>
  */
 
-#ifndef TYMPAN__MODEL_H__INCLUDED
-#define TYMPAN__MODEL_H__INCLUDED
+#ifndef TYMPAN__ACOUSTIC_PROBLEM_MODEL_H__INCLUDED
+#define TYMPAN__ACOUSTIC_PROBLEM_MODEL_H__INCLUDED
 
 #include <string>
 
@@ -17,12 +18,12 @@
 namespace tympan
 {
 
-class SolverModel
+class AcousticProblemModel
 {
 public:
 
-    SolverModel() {};
-    virtual ~SolverModel() {};
+    AcousticProblemModel() {};
+    virtual ~AcousticProblemModel() {};
 
     /**
      * @brief Maps a \c TYPoint or \c OPoint3D as a \c node_ref
@@ -109,7 +110,7 @@ protected: // data members
     nodes_pool_t all_nodes;
     triangle_pool_t all_triangles;
     material_pool_t all_materials;
-};  // class SolverModel
+};  // class AcousticProblemModel
 
 
 } // namespace tympan
@@ -117,4 +118,4 @@ protected: // data members
 
 
 
-#endif // TYMPAN__MODEL_H__INCLUDED
+#endif // TYMPAN__ACOUSTIC_PROBLEM_MODEL_H__INCLUDED

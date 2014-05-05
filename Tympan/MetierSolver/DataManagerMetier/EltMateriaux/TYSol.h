@@ -24,17 +24,13 @@
 #include "TYVegetation.h"
 #include "TYAtmosphere.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSolWidget.h"
-#endif
-
 /**
  * Classe de definition d'un sol.
  */
 class TYSol: public TYElement
 {
     OPROTOSUPERDECL(TYSol, TYElement)
-    TY_EXTENSION_DECL(TYSol)
+    TY_EXTENSION_DECL_ONLY(TYSol)
 
     // Methodes
 public:

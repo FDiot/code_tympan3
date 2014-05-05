@@ -20,7 +20,7 @@
 // Solver data model header files.
 #include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
 #include "Tympan/MetierSolver/SolverDataModel/relations.hpp"
-#include "Tympan/MetierSolver/SolverDataModel/model.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
 
 
 namespace tympan
@@ -56,7 +56,7 @@ class SolverDataModelBuilder
 {
 public:
     // Constructor & destructor.
-    SolverDataModelBuilder(SolverModel& model_);
+    SolverDataModelBuilder(AcousticProblemModel& model_);
     virtual ~SolverDataModelBuilder();
 
     //! Walk trought \c TYSiteNode and fill some attributes.
@@ -126,7 +126,7 @@ protected:
         const std::deque<OTriangle>& triangles);
 
 protected:
-    SolverModel& model;
+    AcousticProblemModel& model;
 }; // class SolverDataModelBuilder
 
 } /* namespace tympan */

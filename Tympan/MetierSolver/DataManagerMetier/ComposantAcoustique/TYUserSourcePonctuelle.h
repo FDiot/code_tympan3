@@ -24,11 +24,6 @@
 #include "TYSourcePonctuelle.h"
 #include "TYUserSrcRegime.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYUserSourcePonctuelleWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourcePonctuelleGraphic.h"
-#endif
-
 
 /**
  * Classe de definition d'une source ponctuelle.
@@ -36,8 +31,7 @@
 class TYUserSourcePonctuelle: public TYSourcePonctuelle
 {
     OPROTOSUPERDECL(TYUserSourcePonctuelle, TYSourcePonctuelle)
-    TY_EXTENSION_DECL(TYUserSourcePonctuelle)
-    TY_EXT_GRAPHIC_DECL(TYSourcePonctuelle)
+    TY_EXTENSION_DECL_ONLY(TYUserSourcePonctuelle)
 
     // Methodes
 public:

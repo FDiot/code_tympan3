@@ -41,8 +41,6 @@ class QListWidgetItem;
 class QComboBox;
 class QLabel;
 
-class TYElementCollection;
-
 enum TYLibraryFilter
 {
     eNoneFilter,            // Ne filtre pas

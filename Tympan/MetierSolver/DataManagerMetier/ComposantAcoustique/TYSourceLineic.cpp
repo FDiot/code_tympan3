@@ -17,18 +17,22 @@
  *
  */
 
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYSourceLineicWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceLineicGraphic.h"
+#endif
 
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerCore/TYElementCollection.h"
 
 #include "Tympan/Tools/OMessageManager.h"
 
 
 OPROTOINST(TYSourceLineic);
-
+TY_EXTENSION_INST(TYSourceLineic);
+TY_EXT_GRAPHIC_INST(TYSourceLineic);
 
 TYSourceLineic::TYSourceLineic():
     _densiteSrcs(100.0),

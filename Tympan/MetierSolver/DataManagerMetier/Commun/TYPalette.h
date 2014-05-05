@@ -29,11 +29,6 @@
 #include "Tympan/Tools/TYColorManager.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPaletteWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPaletteGraphic.h"
-#endif
-
 /**
  * \file TYPalette.h
  * \class TYPalette
@@ -46,8 +41,8 @@
 class TYPalette : public TYElement
 {
     OPROTOSUPERDECL(TYPalette, TYElement)
-    TY_EXTENSION_DECL(TYPalette)
-    TY_EXT_GRAPHIC_DECL(TYPalette)
+    TY_EXTENSION_DECL_ONLY(TYPalette)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYPalette)
 
     // Methodes
 public:

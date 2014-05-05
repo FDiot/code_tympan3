@@ -27,11 +27,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYTrafic.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYRouteGraphic.h"
-#endif
-
-
 #include "RoadEmissionNMPB08.h"
 
 
@@ -52,7 +47,7 @@ class TYRoute: public TYAcousticLine
 
     OPROTOSUPERDECL(TYRoute, TYAcousticLine)
     TY_EXTENSION_DECL_ONLY(TYRoute)
-    TY_EXT_GRAPHIC_DECL(TYRoute)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYRoute)
 
     // Methodes
 public:

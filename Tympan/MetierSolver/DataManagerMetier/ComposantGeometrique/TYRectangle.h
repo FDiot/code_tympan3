@@ -26,19 +26,14 @@
 #include "TYPolygon.h"
 #include "TYSurfaceInterface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRectangleWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangleGraphic.h"
-#endif
-
 /**
  * Classe de definition d'un rectangle.
  */
 class TYRectangle: public TYElement, public TYSurfaceInterface
 {
     OPROTOSUPERDECL(TYRectangle, TYElement)
-    TY_EXTENSION_DECL(TYRectangle)
-    TY_EXT_GRAPHIC_DECL(TYRectangle)
+    TY_EXTENSION_DECL_ONLY(TYRectangle)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYRectangle)
 
     // Methodes
 public:

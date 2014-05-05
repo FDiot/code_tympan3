@@ -23,19 +23,14 @@
 #include "TYRepere.h"
 #include "TYSurfaceInterface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPolygonWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPolygonGraphic.h"
-#endif
-
 /**
  * Classe de definition d'un polygone.
  */
 class TYPolygon: public TYElement, public TYSurfaceInterface
 {
     OPROTOSUPERDECL(TYPolygon, TYElement)
-    TY_EXTENSION_DECL(TYPolygon)
-    TY_EXT_GRAPHIC_DECL(TYPolygon)
+    TY_EXTENSION_DECL_ONLY(TYPolygon)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYPolygon)
 
     // Methodes
 public:

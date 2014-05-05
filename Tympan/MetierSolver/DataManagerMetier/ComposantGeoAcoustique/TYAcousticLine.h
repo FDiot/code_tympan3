@@ -26,20 +26,14 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "TYAcousticInterface.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticLineWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticLineGraphic.h"
-#endif
-
-
 /**
 * Permet de creer de elements acoustiques lineaires.
 */
 class TYAcousticLine: public TYSource, public TYColorInterface
 {
     OPROTOSUPERDECL(TYAcousticLine, TYSource)
-    TY_EXTENSION_DECL(TYAcousticLine)
-    TY_EXT_GRAPHIC_DECL(TYAcousticLine)
+    TY_EXTENSION_DECL_ONLY(TYAcousticLine)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticLine)
 
     // Methodes
 public:
