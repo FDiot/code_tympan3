@@ -26,11 +26,6 @@
 #include "TYAcousticRectangle.h"
 #include "TYAcousticVolume.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSemiCylinderWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCylinderGraphic.h"
-#endif
-
 
 /**
  * Permet de creer des volumes acoustiques semi-cylindriques.
@@ -38,8 +33,8 @@
 class TYAcousticSemiCylinder: public TYAcousticVolume
 {
     OPROTOSUPERDECL(TYAcousticSemiCylinder, TYAcousticVolume)
-    TY_EXTENSION_DECL(TYAcousticSemiCylinder)
-    TY_EXT_GRAPHIC_DECL(TYAcousticSemiCylinder)
+    TY_EXTENSION_DECL_ONLY(TYAcousticSemiCylinder)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticSemiCylinder)
 
     // Methodes
 public:

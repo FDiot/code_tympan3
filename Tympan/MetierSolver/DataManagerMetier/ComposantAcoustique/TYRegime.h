@@ -26,9 +26,6 @@
 #include "TYAttenuateur.h"
 
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRegimeWidget.h"
-#endif
 //*/
 
 
@@ -40,7 +37,7 @@
 class TYRegime : public TYElement
 {
     OPROTOSUPERDECL(TYRegime, TYElement)
-    TY_EXTENSION_DECL(TYRegime)
+    TY_EXTENSION_DECL_ONLY(TYRegime)
 
     // Methodes
 public:

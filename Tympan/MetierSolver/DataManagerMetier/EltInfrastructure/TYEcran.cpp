@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYEcranWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYEcranGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -35,7 +38,8 @@
 
 
 OPROTOINST(TYEcran);
-
+TY_EXTENSION_INST(TYEcran);
+TY_EXT_GRAPHIC_INST(TYEcran);
 
 TYEcran::TYEcran()
 {

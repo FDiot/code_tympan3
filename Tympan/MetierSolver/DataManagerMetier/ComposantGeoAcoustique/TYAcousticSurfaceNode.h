@@ -32,10 +32,6 @@
 #include "TYAcousticRectangle.h"
 #include "TYAcousticVolume.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSurfaceNodeWidget.h"
-#endif
-
 
 /**
  * Composee d'une ou plusieurs surfaces acoustiques..
@@ -43,7 +39,7 @@
 class TYAcousticSurfaceNode: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYSurfaceInterface
 {
     OPROTOSUPERDECL(TYAcousticSurfaceNode, TYElement)
-    TY_EXTENSION_DECL(TYAcousticSurfaceNode)
+    TY_EXTENSION_DECL_ONLY(TYAcousticSurfaceNode)
 
     // Methodes
 public:

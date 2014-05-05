@@ -24,11 +24,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSiteNodeWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSiteNodeGraphic.h"
-#endif
-
 /// Systeme SIG
 typedef enum {TYMPAN, LAMBERTIIe, GPS} systemSIG;
 
@@ -43,8 +38,8 @@ typedef std::vector<LPTYSiteNodeGeoNode> TYTabSiteNodeGeoNode;
 class TYSiteNode: public TYElement
 {
     OPROTOSUPERDECL(TYSiteNode, TYElement)
-    TY_EXTENSION_DECL(TYSiteNode)
-    TY_EXT_GRAPHIC_DECL(TYSiteNode)
+    TY_EXTENSION_DECL_ONLY(TYSiteNode)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYSiteNode)
 
     /**
      * Constructeur.

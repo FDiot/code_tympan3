@@ -23,20 +23,14 @@
 #include "TYSource.h"
 #include "TYSourcePonctuelle.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSourceSurfacicWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceSurfacicGraphic.h"
-#endif
-
-
 /**
  * Classe de definition d'une source surfacique.
  */
 class TYSourceSurfacic: public TYSource
 {
     OPROTOSUPERDECL(TYSourceSurfacic, TYElement)
-    TY_EXTENSION_DECL(TYSourceSurfacic)
-    TY_EXT_GRAPHIC_DECL(TYSourceSurfacic)
+    TY_EXTENSION_DECL_ONLY(TYSourceSurfacic)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYSourceSurfacic)
 
     // Methodes
 public:

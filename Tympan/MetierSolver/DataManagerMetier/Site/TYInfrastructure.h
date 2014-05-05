@@ -26,19 +26,14 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRouteDeblai.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYUserSourcePonctuelle.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYInfrastructureWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYInfrastructureGraphic.h"
-#endif
-
 /**
  * Centralise les elements d'infrastructure.
  */
 class TYInfrastructure: public TYElement
 {
     OPROTOSUPERDECL(TYInfrastructure, TYElement)
-    TY_EXTENSION_DECL(TYInfrastructure)
-    TY_EXT_GRAPHIC_DECL(TYInfrastructure)
+    TY_EXTENSION_DECL_ONLY(TYInfrastructure)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYInfrastructure)
 
     // Methodes
 public:

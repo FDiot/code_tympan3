@@ -26,10 +26,6 @@
 #include "RoadEmissionNMPB08.h"
 
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYTraficWidget.h"
-#endif
-
 
 /**
  * Structure de trafic routier.
@@ -37,7 +33,7 @@
 class TYTrafic: public TYElement
 {
     OPROTOSUPERDECL(TYTrafic, TYElement)
-    TY_EXTENSION_DECL(TYTrafic)
+    TY_EXTENSION_DECL_ONLY(TYTrafic)
 
     friend class TYRoute;
 

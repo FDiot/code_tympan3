@@ -17,8 +17,9 @@
  *
  */
 
-
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticFaceSetWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -26,7 +27,7 @@
 
 
 OPROTOINST(TYAcousticFaceSet);
-
+TY_EXTENSION_INST(TYAcousticFaceSet);
 
 TYAcousticFaceSet::TYAcousticFaceSet()
 {

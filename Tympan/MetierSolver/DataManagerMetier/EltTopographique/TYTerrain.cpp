@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYTerrainWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYTerrainGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -27,7 +30,8 @@
 
 
 OPROTOINST(TYTerrain);
-
+TY_EXTENSION_INST(TYTerrain);
+TY_EXT_GRAPHIC_INST(TYTerrain);
 
 TYTerrain::TYTerrain()
 {

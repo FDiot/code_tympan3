@@ -26,20 +26,14 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYReseauTransportWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYReseauTransportGraphic.h"
-#endif
-
-
 /**
  * Comprend les proprietes acoustiques et geometriques d'un reseau de transport.
  */
 class TYReseauTransport: public TYAcousticLine
 {
     OPROTOSUPERDECL(TYReseauTransport, TYAcousticLine)
-    TY_EXTENSION_DECL(TYReseauTransport)
-    TY_EXT_GRAPHIC_DECL(TYReseauTransport)
+    TY_EXTENSION_DECL_ONLY(TYReseauTransport)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYReseauTransport)
 
     // Methodes
 public:

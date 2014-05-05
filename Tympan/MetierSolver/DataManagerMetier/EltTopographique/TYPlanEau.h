@@ -24,11 +24,6 @@
 #include "TYTerrain.h"
 #include "TYCourbeNiveau.h"
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPlanEauWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPlanEauGraphic.h"
-#endif
-
 
 /**
  * Classe pour la representation d'un plan eau.
@@ -39,8 +34,8 @@
 class TYPlanEau: public TYTerrain
 {
     OPROTOSUPERDECL(TYPlanEau, TYTerrain)
-    TY_EXTENSION_DECL(TYPlanEau)
-    TY_EXT_GRAPHIC_DECL(TYPlanEau)
+    TY_EXTENSION_DECL_ONLY(TYPlanEau)
+    TY_EXT_GRAPHIC_DECL_ONLY(TYPlanEau)
 
     // Methodes
 public:

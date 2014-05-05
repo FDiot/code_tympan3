@@ -17,7 +17,10 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYPlanEauWidget.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYPlanEauGraphic.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -28,7 +31,8 @@
 
 
 OPROTOINST(TYPlanEau);
-
+TY_EXTENSION_INST(TYPlanEau);
+TY_EXT_GRAPHIC_INST(TYPlanEau);
 
 TYPlanEau::TYPlanEau()
 {

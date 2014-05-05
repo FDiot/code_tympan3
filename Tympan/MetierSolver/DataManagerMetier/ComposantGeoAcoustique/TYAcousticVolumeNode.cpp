@@ -17,14 +17,16 @@
  *
  */
 
-
+#if TY_USE_IHM
+#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticVolumeNodeWidget.h"
+#endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 OPROTOINST(TYAcousticVolumeNode);
-
+TY_EXTENSION_INST(TYAcousticVolumeNode);
 
 TYAcousticVolumeNode::TYAcousticVolumeNode()
 {
