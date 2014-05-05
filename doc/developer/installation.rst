@@ -12,10 +12,9 @@ Overview
 Downloading
 -----------
 
-For now, you can download the source_ code of last version of Code_TYMPAN. 
-A Mercurial_ repository will be soon available on Bitbucket_.
+A Mercurial_ repository is available on Bitbucket_ : the stable branch
+of development is at https://bitbucket.org/TYMPAN/code_tympan.
 
-.. _source: http://code-tympan.org/index.php/download/download-code-tympan-3-9/summary/1-download-code-tympan-software/4-download-code-tympan-3-9-sources
 .. _Bitbucket: https://bitbucket.org/
 .. _Mercurial: http://mercurial.selenic.com/
 
@@ -309,6 +308,11 @@ Then configure again (``c``) and generate the Makefile or Visual
 Studio solution (``g``). You can now build it with ``make`` or by
 opening the solution.
 
+.. note:: More about the CMake build system
+
+  If you want to add components or otherwise change the build system
+  for Code_TYMPAN you might want to have a look at :ref:`Build System
+  Documentation <build-system>` first.
 
 
 

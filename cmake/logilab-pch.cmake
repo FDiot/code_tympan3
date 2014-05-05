@@ -6,8 +6,8 @@
 if(LOGILAB_USE_PRECOMPILED_HEADER)
   include(PrecompiledHeader)
 else(LOGILAB_USE_PRECOMPILED_HEADER)
-  macro(set_precompiled_header target) # DUMMY
-  endmacro(set_precompiled_header)
-  macro(use_precompiled_header target) # DUMMY
-  endmacro(use_precompiled_header)
+  function(set_precompiled_header target) # DUMMY
+  endfunction(set_precompiled_header)
+  function(use_precompiled_header target) # DUMMY
+  endfunction(use_precompiled_header)
 endif(LOGILAB_USE_PRECOMPILED_HEADER)
