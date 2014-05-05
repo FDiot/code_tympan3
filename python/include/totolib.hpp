@@ -2,6 +2,8 @@
 #define MY_ELEMENT_H
 
 #include <iostream>
+#include <string>
+
 using namespace std;
 
 class MyElement
