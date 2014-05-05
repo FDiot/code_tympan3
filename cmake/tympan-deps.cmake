@@ -21,7 +21,7 @@ if(SYS_LINUX)
   set(LD_VARNAME "LD_LIBRARY_PATH")
 endif()
 
-build_native_path_list(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS ${TYMPAN_3RDPARTY_DLL_DIRS})
+build_native_path_list(TYMPAN_3RDPARTY_DLL_NATIVE_DIRS "${TYMPAN_3RDPARTY_DLL_DIRS}")
 
 message(STATUS "You will have to ensure that the following directories "
   "are searched for shared libratries / DLL when launching the program : "
