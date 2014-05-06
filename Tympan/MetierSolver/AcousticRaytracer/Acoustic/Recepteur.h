@@ -21,46 +21,31 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 
-//#ifdef USE_QT
-//  #include "RecepteurGraphic.h"
-//#endif
-
-
-class Recepteur : public Base
+class Recepteur : public Sphere
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Recepteur)
-    //  GRAPHIC_DECL(Recepteur)
-    //#endif
-
 public:
 
-    Recepteur(Shape* _shape = new Sphere(), std::string _name = "unknow receptor") : Base()
-    {
-        shape = _shape;
-        name = _name;
-    }
+	Recepteur(const vec3& pos, const decimal& r) : Sphere(pos, r) 
+	{
+		name = "unknow receptor";
+	}
 
-    Recepteur(const Recepteur& other) : Base(other)
+    Recepteur(const Recepteur& other) : Sphere(other)
     {
-        shape = other.shape->Clone();
         id = other.id;
     }
 
-    virtual ~Recepteur() { delete shape;}
+    virtual ~Recepteur() { }
 
-    Shape* getShape() { return shape; }
-    void setShape(Shape* _shape) { shape = _shape; }
+    Shape* getShape() { return dynamic_cast<Shape*>(this); }
 
-    vec3 getPosition() { return shape->getBBox().centroid; }
+    vec3 getPosition() { return this->getBBox().centroid; }
     bool intersectionRecepteur(vec3& origine, vec3& directeur, float tmax, Intersection& result);
 
     unsigned int getId() { return id;}
     void setId(unsigned int _id) { id = _id; }
 
 protected:
-    Shape* shape;
     unsigned int id;
 };
 

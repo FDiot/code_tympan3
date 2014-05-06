@@ -29,7 +29,6 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/LengthSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/ReflectionSelector.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangle.h"
@@ -428,8 +427,8 @@ void TYANIME3DAcousticPathFinder::appendRecepteurToSimulation(vector<vec3>& rece
     //Conversion du recepteur Tympan en recepteur lancer de rayons
     for (unsigned int i = 0; i < recepteurs.size(); i++)
     {
-        Recepteur recep;
-        recep.setShape(new Sphere(recepteurs[i], globalSizeReceiver));
+        Recepteur recep(recepteurs[i], globalSizeReceiver);
+        //recep.setShape(new Sphere(recepteurs[i], globalSizeReceiver));
         recep.setId(idRecepteur);
 
         _rayTracing.addRecepteur(recep);
@@ -481,7 +480,8 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
 void TYANIME3DAcousticPathFinder::convertRaytoTYRay(const unsigned int& sens)
 {
     //Recuperation de la liste des rayons valides pour la _rayTracing.
-    std::vector<Ray*>* rays = _rayTracing.getSolver()->getValidRays();
+//    std::vector<Ray*>* rays = _rayTracing.getSolver()->getValidRays();
+    std::deque<Ray*>* rays = _rayTracing.getSolver()->getValidRays();
 
     // Dimensionnement du tableau des rayons
     _tabTYRays.reserve(rays->size());

@@ -43,7 +43,6 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/LengthSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/ReflectionSelector.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
 

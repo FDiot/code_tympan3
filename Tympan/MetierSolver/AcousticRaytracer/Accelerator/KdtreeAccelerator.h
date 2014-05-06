@@ -120,7 +120,6 @@ public:
 
     virtual bool build();
 
-    //bool getIntersection(Ray &ray,Intersection &inter);
     virtual decimal traverse(Ray* r, std::list<Intersection> &result);
 
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
@@ -133,8 +132,6 @@ public:
 
     void print();
 
-    //void display(unsigned int indexNode);
-
     bool alreadyFail;
     unsigned int nbFail;
     Ray r;
@@ -144,7 +141,7 @@ protected:
     void generateMidKdTree(int currentProfondeur, BBox& localBox, unsigned int nbPrims, unsigned int* prims);
     void generateSAHKdTree(int currentProfondeur, BBox& localBox, TaBRecBoundEdge* edges[3], unsigned int nbPrims, unsigned int* prims);
     std::vector<Shape*>* initialMesh;
-    BBox globalBox;
+//    BBox globalBox;
 
     std::vector<InfoPrim> tablePrimitive;
     std::vector<BBox> tableBox;
