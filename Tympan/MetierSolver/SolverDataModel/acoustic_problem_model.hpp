@@ -80,6 +80,15 @@ public:
      */
     material_ptr_t make_material(const string& name, const Spectrum& spectrum);
 
+    /**
+     * @brief Push a new acoustic source into the model
+     * TODO
+     */
+    source_idx make_source(
+        const Point& point_, 
+        const binary_uuid& id_,
+        const Spectrum& spectrum_);
+
 public: // XXX Could / should be protected but this complicates testing
 
     /*
@@ -100,6 +109,7 @@ protected: // data members
     nodes_pool_t all_nodes;
     triangle_pool_t all_triangles;
     material_pool_t all_materials;
+    source_pool_t all_sources;
 };  // class AcousticProblemModel
 
 

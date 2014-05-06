@@ -78,38 +78,55 @@ public:
 typedef std::deque<AcousticTriangle> triangle_pool_t;
 typedef size_t triangle_idx;
 
-class DiffractionEdge:
-    public virtual BaseEntity
+class SourceDirectivityInterface
 {
 public:
-    DiffractionEdge(const Point& p1_, const Point& p2_, double angle_);
-    virtual ~DiffractionEdge() {};
+    virtual Spectrum lwAdjustment(Vector direction) = 0;
+};
 
-    Point p1;
-    Point p2;
-    /// Angle (radian).
-    double angle;
+class SphericalSourceDirectivity :
+      public virtual BaseEntity,
+      public SourceDirectivityInterface
+{
+public:
+     virtual Spectrum lwAdjustment(Vector direction)
+     { return Spectrum(std::complex<double>(1.0, 0.0)); }
 };
 
 class AcousticSource:
     public virtual BaseEntity
 {
 public:
-    AcousticSource() {};
+    AcousticSource(
+            const Point& point_, 
+            const binary_uuid& id_,
+            const Spectrum& spectrum_);
+        
     virtual ~AcousticSource() {};
 
-    // XXX Add some attr.?
+    Point position;
+    binary_uuid id;
+    Spectrum spectrum;
+    std::unique_ptr<SourceDirectivityInterface> directivity;
 };
+
+typedef std::deque<AcousticSource> source_pool_t;
+typedef size_t source_idx;
+
 
 class AcousticReceptor:
     public virtual BaseEntity
 {
 public:
-    AcousticReceptor(const Point& point_);
+    AcousticReceptor(const Point& position_);
     virtual ~AcousticReceptor() {};
 
-    Point point;
+    Point position;
 };
+
+typedef std::deque<AcousticReceptor> receptor_pool_t;
+typedef size_t receptor_idx;
+
 
 class AcousticEvent:
     public virtual BaseEntity
