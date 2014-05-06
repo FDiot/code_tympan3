@@ -8,7 +8,18 @@
 
 #include "acoustic_result_model.hpp"
 
+#include "data_model_common.hpp"
+#include "entities.hpp"
+
 namespace tympan
 {
+
+    AcousticResultModel::AcousticResultModel() 
+    {
+    };
+
+    AcousticResultModel::~AcousticResultModel() 
+    {
+    };
 
 } // namespace tympan
