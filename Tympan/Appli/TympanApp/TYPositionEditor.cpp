@@ -1335,7 +1335,7 @@ void TYPositionEditor::orienteSrcPonct()
     //Il nous faut la position du point dans le repere global
     TYPoint pos(0, 0, 0);
     OPoint3D SrcePos(pos);
-    OCoord3D opos = _pEditGeoNode->localToGlobal(SrcePos);//repere le + haut dans la hierarchie, mais pas forcement celui du modelerFrame courant
+    OCoord3D opos = _pEditGeoNode->localToGlobal() * SrcePos;//repere le + haut dans la hierarchie, mais pas forcement celui du modelerFrame courant
     pos = opos;
 
     // Calcul du vecteur orientation : il est constitue de 2 points:
@@ -1353,11 +1353,11 @@ void TYPositionEditor::orienteSrcPonct()
     TYGeometryNode* pRootGeometryNode = TYGeometryNode::GetGeoNode(pRootTYElement);
     if (pRootGeometryNode)
     {
-        optCur = pRootGeometryNode->localToGlobal(optCur);
+      optCur = pRootGeometryNode->localToGlobal() * optCur;
     }
     //optCur represente maintenant les coordonnees du second point dans le repere le plus haut dans la hierarchie:
-    optCur = _pEditGeoNode->globalToLocal(optCur);
-    pos = _pEditGeoNode->globalToLocal(pos);
+    optCur = _pEditGeoNode->globalToLocal() * optCur;
+    pos = _pEditGeoNode->globalToLocal() * pos;
     OVector3D vecOrient(pos, optCur);
 
     switch (_pModeler->getCurrentView())

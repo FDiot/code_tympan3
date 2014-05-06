@@ -18,8 +18,7 @@ std::vector<LPTYAcousticSurfaceGeoNode> get_acoustic_surfaces(LPTYSiteNode site_
     TYTabAcousticSurfaceGeoNode tab_faces;
     unsigned int nb_faces_infra = 0;
     std::vector<bool> is_face_ecran_index;
-    site_ptr->getListFaces(true, tab_faces,
-                           nb_faces_infra, is_face_ecran_index);
+    site_ptr->getListFaces(tab_faces, nb_faces_infra, is_face_ecran_index);
     return tab_faces;
 };
 

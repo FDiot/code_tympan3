@@ -437,15 +437,15 @@ void TYAcousticSemiCircle::exportMesh(
 #endif // TY_USE_IHM
 
     TYTabPoint3D poly = getOContour(resolution); // local r/ frame
-    OPoint3D center = geonode.localToGlobal(getCenter()); // converted early to global r/ frame
+    OPoint3D center = geonode.localToGlobal() * getCenter(); // converted early to global r/ frame
     points.push_back(center);
     assert(resolution = poly.size() && "Inconsistency in contour size");
     // poly[0] (local) becomes points[1] (global)
-    points.push_back(geonode.localToGlobal(poly[0]));
+    points.push_back(geonode.localToGlobal() * poly[0]);
     for (int i = 1; i < resolution; ++i) // resolution points -> resolution-1 triangles
     {
         // poly[i] (local) becomes points[i+1] (global)
-        points.push_back(geonode.localToGlobal(poly[i]));
+        points.push_back(geonode.localToGlobal() * poly[i]);
         // Use only global coordinates
         OTriangle tri(center, points[i], points[(i % resolution) + 1]);
         tri._p1 = 0; tri._p2 = i; tri._p3 = (i % resolution) + 1;

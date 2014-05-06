@@ -448,13 +448,13 @@ void TYAcousticCircle::exportMesh(
 #endif // TY_USE_IHM
 
     TYTabPoint3D poly = getOContour(resolution);
-    OPoint3D center = geonode.localToGlobal(getCenter());
+    OPoint3D center = geonode.localToGlobal() * getCenter();
     points.push_back(center);
-    points.push_back(geonode.localToGlobal(poly[0]));
+    points.push_back(geonode.localToGlobal() * poly[0]);
     for (int i = 1; i < resolution; ++i)
     {
         // poly[i] (local) become points[i+1] (global)
-        points.push_back(geonode.localToGlobal(poly[i]));
+        points.push_back(geonode.localToGlobal() * poly[i]);
         OTriangle tri(center, points[i], points[i + 1]);
         tri._p1 = 0; tri._p2 = i; tri._p3 = i + 1;
     }

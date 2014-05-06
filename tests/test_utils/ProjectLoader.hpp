@@ -13,22 +13,12 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
-
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
-
+#include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
 
 namespace tympan
 {
-
-/**
- * @brief load an XML project file
- * @param filename the filename of the project to be open.
- * @param project Output argument : this pointer (expected to be NULL) will be
- *                make to refer to the loaded \c TYProjet.
- */
-void load_project_from_file(const char* filename, LPTYProjet& project);
 
 /**
  * @brief Assert some assumptions on a loaded project (like no subsites...)
@@ -68,8 +58,7 @@ public:
     virtual void load_file(const char filename[])
     {
         using namespace tympan;
-        project = LPTYProjet(); // a way to explicitely release the smart pointer
-        load_project_from_file(filename, project); // This output to `project`
+        project = load_project(filename); // This output to `project`
         assert_loaded_project(project);
     }
 

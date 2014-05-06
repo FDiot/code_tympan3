@@ -56,7 +56,7 @@ TYXMLManager::~TYXMLManager()
 {
 }
 
-int TYXMLManager::createDoc(QString docName, QString version)
+void TYXMLManager::createDoc(QString docName, QString version)
 {
     QDomImplementation domImpl;
     // Reset doc
@@ -76,8 +76,6 @@ int TYXMLManager::createDoc(QString docName, QString version)
     _rootElement = _domDocument.documentElement();
 
     TYXMLTools::addElementStringValue(_rootElement, "Version", version);
-
-    return 1;
 }
 
 int TYXMLManager::load(const QString& fileName, LPTYElementArray& eltCollection)

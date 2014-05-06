@@ -22,7 +22,6 @@
 
 #include "ProjectLoader.hpp"
 
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"

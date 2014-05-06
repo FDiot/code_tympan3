@@ -51,9 +51,8 @@ public:
      * @param docName Le nom du noeud racine du document XML.
      * @param version le numero de version
      *
-     * @return L'etat de reussite.
      */
-    int createDoc(QString docName, QString version);
+    void createDoc(QString docName, QString version);
 
     /**
      * Ouvre un fichier XML et parse le document.

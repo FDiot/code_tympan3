@@ -59,7 +59,7 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
     std::vector<std::pair<int, int> > indexBatiment;
     std::vector<int> etages;
 
-    _site.getListFacesWithoutFloor(true, tabFaces, nbFacesInfra, estUnIndexDeFaceEcran, indexBatiment, etages);
+    _site.getListFacesWithoutFloor(tabFaces, nbFacesInfra, estUnIndexDeFaceEcran, indexBatiment, etages);
 
     // Reservation de l'espace pour les tableaux
     tabPolygonSize = static_cast<uint32>(tabFaces.size());
