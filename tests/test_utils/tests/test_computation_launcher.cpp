@@ -8,12 +8,12 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 
+#include "TympanTestsConfig.hpp"
+
 #define DEFAULT_SOLVER_DIR "../../../Tympan/MetierSolver/Solvers/DefaultSolver/"
-#define XML_TEST_FILE "../../data/projects-panel/20_PROJET_Site_emprise_seule_avec_un_ecran_plusieurs_segments.xml"
 
-
-using std::cout;
-using std::endl;
+static const std::string XML_TEST_FILE = tympan::path_to_test_data(
+        "projects-panel/20_PROJET_Site_emprise_seule_avec_un_ecran_plusieurs_segments.xml");
 
 // Test fixture which loads a project and create an instance of
 // 'ComputationLauncher'.
@@ -21,13 +21,10 @@ class LauncherTestFixture: public ::testing::Test
 {
 public:
     LauncherTestFixture() :
-        xml_filename(XML_TEST_FILE),
-        launcher(xml_filename) {}
+        launcher(XML_TEST_FILE.c_str()) {}
     virtual void SetUp()
     {
     }
-
-    char* xml_filename;
     tympan::ComputationLauncher launcher;
 };
 

@@ -6,15 +6,14 @@
 
 
 #include "test_utils/ProjectLoader.hpp"
-
-using std::cout;
-using std::endl;
+#include "TympanTestsConfig.hpp"
 
 TEST(TestTestUtils, loading)
 {
-    const char filename[] = "../../data/projects-panel/1_PROJET_Site_emprise_seule.xml";
+    std::string filename = tympan::path_to_test_data
+        ("projects-panel/1_PROJET_Site_emprise_seule.xml");
     LPTYProjet project;
-    tympan::load_project_from_file(filename, project);
+    tympan::load_project_from_file(filename.c_str(), project);
     tympan::assert_loaded_project(project);
 }
 

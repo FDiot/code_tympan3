@@ -18,6 +18,7 @@
 #include "Tympan/MetierSolver/DataExchange/SolverDataModelBuilder.hpp"
 
 #include "test_utils/ProjectLoader.hpp"
+#include "TympanTestsConfig.hpp"
 
 using namespace tympan;
 
@@ -27,7 +28,8 @@ using std::endl;
 
 TEST_F(BuildingFromSiteFixture, export_triangles_soup)
 {
-    load_file("../data/tiny_site.xml");
+    std::string tiny_site = tympan::path_to_test_data("tiny_site.xml");
+    load_file(tiny_site.c_str());
 
     SolverModel model;
     SolverDataModelBuilder builder(model);
@@ -38,7 +40,8 @@ TEST_F(BuildingFromSiteFixture, export_triangles_soup)
 // This test is temporaryly disable due to hard to specifiy 'good' results
 TEST_F(BuildingFromSiteFixture, DISABLED_check_base)
 {
-    load_file("../data/solver_export/base.xml");
+    std::string base = tympan::path_to_test_data("solver_export/base.xml");
+    load_file(base.c_str());
 
     SolverModel model;
     SolverDataModelBuilder builder(model);
@@ -63,7 +66,8 @@ TEST_F(BuildingFromSiteFixture, DISABLED_check_base)
 // This test uses expected bad values profided by the current implementation
 TEST_F(BuildingFromSiteFixture, check_base_known_bad_results)
 {
-    load_file("../data/solver_export/base.xml");
+    std::string base = tympan::path_to_test_data("solver_export/base.xml");
+    load_file(base.c_str());
 
     SolverModel model;
     SolverDataModelBuilder builder(model);
@@ -76,7 +80,8 @@ TEST_F(BuildingFromSiteFixture, check_base_known_bad_results)
 
 TEST_F(BuildingFromSiteFixture, DISABLED_check_ground)
 {
-    load_file("../data/solver_export/ground_materials.xml");
+    std::string ground_mat = tympan::path_to_test_data("solver_export/ground_materials.xml");
+    load_file(ground_mat.c_str());
 
     SolverModel model;
     SolverDataModelBuilder builder(model);
