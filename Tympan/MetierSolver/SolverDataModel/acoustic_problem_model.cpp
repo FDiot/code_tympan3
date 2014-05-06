@@ -91,5 +91,14 @@ material_ptr_t AcousticProblemModel::make_material(const string& name, const Spe
     return p_mat;
 }
 
+source_idx AcousticProblemModel::make_source(
+        const Point& point, 
+        const binary_uuid& id,
+        const Spectrum& spectrum)
+{
+   
+    all_sources.push_back(AcousticSource(point, id, spectrum));
+    return all_sources.size() - 1;
+}
 
 } // namespace tympan
