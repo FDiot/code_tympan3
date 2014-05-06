@@ -10,8 +10,6 @@
 #ifndef TYMPAN__ACOUSTIC_RESULT_MODEL_H__INCLUDED
 #define TYMPAN__ACOUSTIC_RESULT_MODEL_H__INCLUDED
 
-#include <string>
-
 
 namespace tympan
 {
@@ -20,8 +18,8 @@ class AcousticResultModel
 {
 public:
 
-    AcousticResultModel() {};
-    virtual ~AcousticResultModel() {};
+    AcousticResultModel();
+    virtual ~AcousticResultModel();
 protected: // data members
 
 };  // class AcousticResultModel
