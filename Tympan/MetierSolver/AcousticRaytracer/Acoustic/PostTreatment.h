@@ -17,15 +17,20 @@
 #define POSTTREATMENT_H
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Scene.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
 #include "Recepteur.h"
+
+#ifdef _ALLOW_TARGETING_
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
+#endif _ALLOW_TARGETING_
 
 namespace PostTreatment
 {
 bool constructEdge(Scene* scene);
+
+#ifdef _ALLOW_TARGETING_
 bool findTargetsForNMPB(Scene* scene, std::vector<Recepteur>& recepteurs, TargetManager& targetManager, decimal density);
 void appendDirectionToSources(TargetManager* targets, std::vector<Source>& sources);
-
+#endif _ALLOW_TARGETING_
 };
 
 #endif
