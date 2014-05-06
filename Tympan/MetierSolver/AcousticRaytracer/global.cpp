@@ -16,58 +16,109 @@
 #include "global.h"
 
 ////////////////////////////
-// General Values
+// Meteo
 ////////////////////////////
-int globalMaxProfondeur;        //Nombre d'evenements autorises pour un rayon, globalMaxProfondeur inclu
-int globalNbRaysPerSource;      //Nombre de rayons lances par les sources
-float globalSizeReceiver;       //Diametre de la sphere representant le recepteur
-int globalAccelerator;          //Choix de la structure acceleratrice. 0 : BruteForce, 1 : GridAccelerator, 2 : BVH, 3 : KdTree, other : GridAccelerator
-int globalMaxTreeDepth;         //Profondeur maximale autorisee pour le BVH ou KdTree.
-bool globalUseSol;              //Utilisation du sol (ou pas -cas NMPB-)
-bool globalKeepDebugRay;        //Permet de conserver les rayons qui ont ete invalides pendant la propagation.
-float globalMaxLength;          //Longueur maximale autorisee pour un rayon, globalMaxLength inclu
-float globalSampleGround2D;     //Echantillonage sur sol pour la description de la topographie 2D sous le rayon. (NMPB)
-int globalRayTracingOrder;      //[0-2]Sens de traitement des rayon source-recepteur ou inverse (0 = SR / 1 =RS / 2 = auto)
-float globalAnalyticAngleTheta;   // Angle de tir vertical (theta) des rayons
-int globalDiscretization;       //Permet de choisir entre des rayons alatoires ou dterministes (discretisation source)
+
+double globalAtmosPressure;			// [METEO] Atmospheric pressure in pascal
+double globalAtmosTemperature;		// [METEO] Temperature in degres celsius
+double globalAtmosHygrometry;		// [METEO] Hygrometry percent
+double globalAnalyticC0;				// [METEO] initial (default) sound speed
+double globalWindDirection;			// [METEO] Wind direction 0 means from north to south
+double globalAnalyticGradC;			// [METEO] Vertical temperature gradient
+double globalAnalyticGradV;			// [METEO] Vertical wind speed gradient
 
 ////////////////////////////
-// Reflexion
-///////////////////////////
-int globalMaxReflexion;         //Nombre de reflexions speculaires autorisees pour un rayon, globalMaxReflexion inclu
+// Acoustic ray tracer
+////////////////////////////
+
+int globalRayTracingOrder;			// [ACOUSTICRAYTRACER] Ray tracing order propagation (0=From, 1=from receptor, 2=auto)
+int globalDiscretization;			// [ACOUSTICRAYTRACER] Sampler model 0=random, 1=uniform v1, 2= uniform v2, 3=horizontal
+int globalNbRaysPerSource;			// [ACOUSTICRAYTRACER] Number of rays per source
+float globalMaxLength;				// [ACOUSTICRAYTRACER] Maximum ray length in meter
+float globalSizeReceiver;			// [ACOUSTICRAYTRACER] Receptor radius in meter
+int globalAccelerator;				// [ACOUSTICRAYTRACER] Accelerating structure parameter (0=brut force, 1=grid, 2=BVH, 3=KDTree)
+int globalMaxTreeDepth;				// [ACOUSTICRAYTRACER] Maximal depth search for BVH or KDTree
+float globalAngleDiffMin;			// [ACOUSTICRAYTRACER] Minimum dihedral angle to add a diffraction cylinder
+float globalCylindreThick;			// [ACOUSTICRAYTRACER] Diffraction ridge size in meter
+int globalMaxProfondeur;				// [ACOUSTICRAYTRACER] Maximum events number for a ray
+bool globalUseSol;					// [ACOUSTICRAYTRACER] Allow ground reflections
+int globalMaxReflexion;				// [ACOUSTICRAYTRACER] Maximum reflections events for a ray
+int globalMaxDiffraction;			// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
+bool globalDiffractionUseRandomSampler;		// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution 
+int globalNbRayWithDiffraction;		// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
+bool globalDiffractionDropDownNbRays;		// [ACOUSTICRAYTRACER] Drop down number of rays thrown after a diffraction
+bool globalDiffractionFilterRayAtCreation;	// [ACOUSTICRAYTRACER] Do not create rays outside the correct angle
+bool globalUsePathDifValidation;		// [ACOUSTICRAYTRACER] Allow use of path length difference validation
+float globalMaxPathDifference;		// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
+bool globalDiffractionUseDistanceAsFilter;	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
+bool globalKeepDebugRay;				// [ACOUSTICRAYTRACER] Keep invalid rays
+bool globalUsePostFilters;			// [ACOUSTICRAYTRACER] Use of post-filters
 
 ////////////////////////////
-// Diffraction
+// Targeting parameters
+////////////////////////////
+
+bool globalEnableTargets;			// [ACOUSTICRAYTRACER] Use targeting
+float globalSampleGround2D;			// [ACOUSTICRAYTRACER] Sample ground in 2D
+bool globalEnableFullTargets;		// [ACOUSTICRAYTRACER] Set target search after a diffuse event
+float globalTargetsDensity;			// [ACOUSTICRAYTRACER] Sampling density for interesting areas
+
+////////////////////////////
+// AnalyticRayTracer
+////////////////////////////
+
+int globalCurveRaySampler;			// [ANALYTICRAYTRACER] Sampler model 1=horizontal, 2=vertical, 3=uniform v1, 4=uniform v2
+float globalInitialAngleTheta;		// [ANALYTICRAYTRACER] Start vertical angle (theta)
+float globalFinalAngleTheta;			// [ANALYTICRAYTRACER] Final vertical angle (theta)
+float globalInitialAnglePhi;			// [ANALYTICRAYTRACER] Start horizontal angle (phi)
+float globalFinalAnglePhi;			// [ANALYTICRAYTRACER] Final horizontal angle (phi)
+int globalAnalyticNbRay;				// [ANALYTICRAYTRACER] Number of rays per source
+double globalAnalyticTMax;			// [ANALYTICRAYTRACER] Propagation time in second
+double globalAnalyticH;				// [ANALYTICRAYTRACER] Time step in second
+double globalAnalyticDMax;			// [ANALYTICRAYTRACER] Maximum length propagation
+
+////////////////////////////
+// Geometric transformer
 ///////////////////////////
-int globalMaxDiffraction;       //Nombre de diffractions autorisees pour un rayon, globalMaxDiffraction inclu
-int globalNbRayWithDiffraction; //Nombre de rayons relances lors d'un evenement diffraction
-float globalAngleDiffMin;       //Angle minimal a prendre en compte entre 2 faces pour ajouter une arrete de diffraction
-float globalCylindreThick;      //Epaisseur des aretes de diffraction.
+
+int globalAnalyticTypeTransfo;		// [GEOM_TRANSFORMER] Transformation method (1 is the only [good] response)
+float globalMeshRefinementValue;	// [GEOM_TRANSFORMER] Altimetry refinement parameter
+bool globalRestitModifiedGeom;		// [GEOM_TRANSFORMER] Restore modified altimetry after computing
 
 /////////////////////////////
-// Targeting system + NMPB
+// Preprocessing
 /////////////////////////////
-bool globalEnableTargets;       //Active la recherche de cible pour les sources. Pour le moment lie au solver NMPB.
-bool globalEnableFullTargets;   //Active la recherche de cible apres un evenement diffu. Pour le moment lie au solver NMPB.
-float globalTargetsDensity;     //Densite pour l'echantillonnage des zones interessantes.
 
-///////////////
-// meteo
-//////////////
-bool globalUseMeteo;            // Prise en compte (ou non) de la meteo
-double globalAnalyticDMax;      // Distance de propagation maximale des rayons courbes
-double globalAnalyticTMax;      // Temps de propagation maximal des rayons courbes
-double globalAnalyticH;         // Pas de temps de calcul pour la propagation des rayons courbes
-int globalAnalyticNbRay;        // Nombre de rayons tires pour le lancer de rayons courbes
-double globalAnalyticGradC;     // Gradient vertical de celerite
-double globalAnalyticGradV;     // Gradient vertical de vitesse de vent
-double globalAnalyticC0;        // Celerite du son initiale
-int globalAnalyticTypeTransfo;  // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-bool globalRestitModifiedGeom;  // Indique si l'on souhaite recuperer la geometrie transformee
-double globalOverSampleD;       // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
-double globalWindDirection;     // Direction du vent (un vent a 0 est dirige du nord vers le sud)
+float globalMinSRDistance;			// [PREPROCESSING] Source-receptor minimal distance in meters
 
-bool globalUseFresnelArea;      // take into account the fresnel area
-float globalAnime3DSigma;       // incertitude relative sur la taille du rayon au carree
-float globalAnime3DForceC;      // Force C  0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dpendant de globalAnime3DSigma
-bool globalUsePostFilters;      // Utilisation (!=0) ou non (0) des filtres post lancer de rayons
+/////////////////////////////
+// Default Solver
+/////////////////////////////
+
+bool globalUseRealGround;			// [DEFAULTSOLVER] Use of real ground (0) or totally reflective ground (1)
+bool globalUseVegetation;			// [DEFAULTSOLVER] Takes vegetation into account
+bool globalUseScreen;				// [DEFAULTSOLVER] Takes screens into account
+bool globalUseLateralDiffraction;	// [DEFAULTSOLVER] Lateral diffractions computing (if screens on)
+bool globalUseReflection;			// [DEFAULTSOLVER] Takes reflections in account (first order only)
+bool globalPropaConditions;			// [DEFAULTSOLVER] Propagation conditions (non refracting / downward conditions (ISO 9613))
+float globalH1parameter ;			// [DEFAULTSOLVER] H1 parameter (ISO 9613 downward conditions)
+bool globalModSummation;			// [DEFAULTSOLVER] Energetic (p² summation) or interference (p summation)
+
+//////////////////////////////
+// ANIME3D Solver
+/////////////////////////////
+
+bool globalUseMeteo;				// [ANIME3D] Takes meteo in account
+float globalOverSampleD;			// [ANIME3D] Rays oversampling rate (if meteo -see above-)
+bool globalUseFresnelArea;			// [ANIME3D] Use Fresnel area
+float globalAnime3DSigma;			// [ANIME3D] Value of relative uncertainty
+float globalAnime3DForceC;			// [ANIME3D] Force "C" parameter
+
+////////////////////////////////
+// Mode DEBUG
+////////////////////////////////
+bool globalDebugUseCloseEventSelector;			// [DEBUG] allow use of closeEventSelector
+bool globalDebugUseDiffractionAngleSelector;	// [DEBUG] allow use of diffraction angle selector
+bool globalDebugUseDiffractionPathSelector;		// [DEBUG] allow use of diffraction path length selector
+bool globalDebugUseFermatSelector;				// [DEBUG] allow use of Fermat selector
+bool globalDebugUseFaceSelector;				// [DEBUG] allow use of (doubled) faces selector
