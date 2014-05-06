@@ -16,29 +16,7 @@
 #ifndef BASE_H
 #define BASE_H
 
-//#include "BaseGraphic.h"
-//#include "BaseWidget.h"
-
 #include <string>
-
-//#ifdef USE_QT
-//
-//#define GRAPHIC_DECL(classname) \
-//  friend class classname##Graphic; \
-//  public: \
-//      virtual BaseGraphic* getGraphicBase() { \
-//          if (!graphicBase)   graphicBase = new classname##Graphic(this); \
-//          return graphicBase; \
-//      }
-//
-//#define WIDGET_DECL(classname) \
-//  friend class classname##Widget; \
-//  public: \
-//      virtual BaseWidget* getEditWidget() { \
-//          return new classname##Widget(this); \
-//      }
-//
-//#endif
 
 class Base
 {
@@ -46,33 +24,22 @@ class Base
 public:
     Base()
     {
-        //graphicBase = NULL;
-        //widgetBase = NULL;
-
         name = "unkown element";
     }
     Base(const Base& other)
     {
-        //graphicBase = other.graphicBase;
-        //widgetBase = other.widgetBase;
         name = other.name;
     }
 
     virtual ~Base()
     {
-        //if(graphicBase) delete graphicBase;
-        //if(widgetBase) delete widgetBase;
     }
 
     std::string getName() { return name; }
 
     void setName(const std::string& _name) { name = _name; }
 
-
 protected:
-    //BaseGraphic* graphicBase;
-    //BaseWidget* widgetBase;
-
     std::string name;
 };
 

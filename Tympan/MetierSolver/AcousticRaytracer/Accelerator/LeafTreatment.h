@@ -35,7 +35,6 @@ decimal keepFunction(treatment choice, std::list<Intersection> &currentIntersect
 decimal keepFirst(std::list<Intersection> &currentIntersections, decimal currentTmin);
 decimal keepAllBeforeTriangle(std::list<Intersection> &currentIntersections, decimal currentTmin);
 decimal keepAllBeforeVisible(std::list<Intersection> &currentIntersections, decimal currentTmin);
-//decimal keepAllVisibleBeforeTriangle(std::list<Intersection> &currentIntersections);
 
 };
 
