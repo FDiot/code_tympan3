@@ -17,7 +17,7 @@
 #include <vector>
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/event.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Ray.h"
 
@@ -100,7 +100,7 @@ decimal Ray::computeEventsSequenceLength()
 
 	vec3 previous = (*iter)->getPosition();
 	vec3 current(0., 0., 0.);
-	
+
 	iter++;
 	while( iter != events.end() )
 	{
@@ -134,7 +134,7 @@ decimal Ray::computeTrueLength( const vec3& ref, const vec3& lastPos, vec3& clos
         default:
 			// Distance from source to first event
             length = source->getPosition().distance( events.front()->getPosition() );
-			
+
 			// Add length of events sequence
 			length += computeEventsSequenceLength();
 
@@ -200,7 +200,7 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
 
                     // Compute distance from the last event to the nearest point from receptor
                     posLastEvent = vec3(events.back()->getPosition());
-					closestPoint = ref.closestPointOnLine(posLastEvent, lastPos); 
+					closestPoint = ref.closestPointOnLine(posLastEvent, lastPos);
                     return (pertinent_length += closestPoint.distance(posLastEvent));
                 }
             }
@@ -258,7 +258,7 @@ decimal Ray::getThickness( const decimal& distance, bool diffraction)
 		return distance * angle;
 	}
 
-	return 2. * distance * sqrt( angle / M_PI ); 
+	return 2. * distance * sqrt( angle / M_PI );
 }
 
 decimal Ray::getSolidAngle( bool &diffraction)
@@ -279,7 +279,7 @@ decimal Ray::getSolidAngle( bool &diffraction)
 			diffraction = false;
 		}
 	}
-		
+
 	return M_4PI / static_cast<decimal>(nb_rays);
 }
 
@@ -303,4 +303,3 @@ bitSet Ray::getEventsBitSet(const typeevent& typeEv)
 
     return SD;
 }
-
