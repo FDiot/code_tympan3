@@ -410,12 +410,9 @@ public:
     /**
      * Cree la liste des faces des elements du site.
      *
-     * @param useEcran Indique si les faces des machines et bâtiments doivent
-     *                 etre prises en compte OBSOLETE MUST BE TRUE.
-     *
      */
-    void getListFaces(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const;
-    void getListFacesWithoutFloor(const bool useEcran, TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const;
+    void getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const;
+    void getListFacesWithoutFloor(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const;
 
     /// Get/Set du choix du systeme de repere du SIG
     int getSIGType() { return _SIGType; }

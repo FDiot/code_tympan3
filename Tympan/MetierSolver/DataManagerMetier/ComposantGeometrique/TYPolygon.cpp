@@ -780,7 +780,7 @@ void TYPolygon::exportMesh(
         poly.push_back(plane.to_2d(plane.projection(to_cgal(op))));
         // export the point with the same index as its 2D alter-ego
         // will have within `poly` and in the global r/ frame
-        points.push_back(geonode.localToGlobal(op));
+        points.push_back(geonode.localToGlobal() * op);
     }
     PolygonTriangulator triangulator(poly);
     // Use information from triangulator.vertice_handles and the triangulation itself.

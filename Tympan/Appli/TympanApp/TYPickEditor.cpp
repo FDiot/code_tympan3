@@ -1563,12 +1563,10 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
 
 
     TYPoint oldZero(0, 0, 0);
-    oldZero = pGeoNode->localToGlobal(oldZero);
+    oldZero = pGeoNode->localToGlobal() * oldZero;
     if (pRootGeometryNode)
     {
-        oldZero = pRootGeometryNode->globalToLocal(oldZero);//oldZero est maintenant exprime dans le repere pRootGeometryNode
-
-        // Affectation de la nouvelle origine au geonode
+        oldZero = pRootGeometryNode->globalToLocal() * oldZero;
         pTempGeoNode->getRepere()._origin = oldZero;
     }
 
@@ -1603,11 +1601,11 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
             // On passe newZero dans le repere local s'il y a lieu
             if (pRootGeometryNode)
             {
-                newZero = pRootGeometryNode->localToGlobal(newZero);
+	      newZero = pRootGeometryNode->localToGlobal() * newZero;
             }
 
             //exprimons newZero dans le repere du GeoNode:
-            newZero = pGeoNode->globalToLocal(newZero);//newZero est maintenant exprime dans le repere global
+            newZero = pGeoNode->globalToLocal() * newZero;
 
             //on modifie l'origine du GeoNode de newZero:
             ORepere3D repere = pGeoNode->getRepere();
@@ -1963,7 +1961,7 @@ void TYPickEditor::showPanel(TYElement* pElt)
         LPTYPointCalcul pResult = 0;
         if (pPtCalcul)
         {
-            coord = pMaillageGeoNode->localToGlobal(OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0));
+	  coord = pMaillageGeoNode->localToGlobal() * OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0);
             switch (_pModeler->getCurrentView())
             {
                 case TYModelerFrame::TopView:
@@ -1984,7 +1982,7 @@ void TYPickEditor::showPanel(TYElement* pElt)
         for (unsigned int i = 1; i < pMaillage->getPtsCalcul().size(); i++)
         {
             pPtCalcul = pMaillage->getPtsCalcul()[i];
-            coord = pMaillageGeoNode->localToGlobal(OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0));
+            coord = pMaillageGeoNode->localToGlobal() * OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0);
 
             double distSquare = 0.0;
             switch (_pModeler->getCurrentView())

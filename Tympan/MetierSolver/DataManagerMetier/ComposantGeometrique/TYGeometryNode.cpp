@@ -442,37 +442,6 @@ OMatrix TYGeometryNode::globalToLocal() const
     return localToGlobal().getInvert();
 }
 
-OCoord3D TYGeometryNode::localToGlobal(const OCoord3D& point) const
-{
-    return localToGlobal() * point;
-}
-
-OCoord3D TYGeometryNode::globalToLocal(const OCoord3D& point) const
-{
-    return globalToLocal() * point;
-}
-
-OSegment3D TYGeometryNode::localToGlobal(const OSegment3D& segment)
-{
-    return segment * localToGlobal();
-}
-
-OSegment3D TYGeometryNode::globalToLocal(const OSegment3D& segment)
-{
-    return segment * globalToLocal();
-}
-
-OCoord3D TYGeometryNode::changeRepere(TYGeometryNode& other, const OCoord3D& point)
-{
-    return this->globalToLocal(other.localToGlobal(point));
-}
-
-OSegment3D TYGeometryNode::changeRepere(TYGeometryNode& other, const OSegment3D& segment)
-{
-    return this->globalToLocal(other.localToGlobal(segment));
-}
-
-
 #if TY_USE_IHM
 LPTYElementGraphic TYGeometryNode::getGraphicObject()
 {

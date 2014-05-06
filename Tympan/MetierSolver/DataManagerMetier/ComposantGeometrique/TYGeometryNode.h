@@ -214,36 +214,6 @@ public:
     OMatrix globalToLocal() const;
 
     /**
-     * Transforme un point du repere local vers le repere absolu.
-     */
-    OCoord3D localToGlobal(const OCoord3D& point) const;
-
-    /**
-     * Transforme un point du repere absolu vers le repere local
-     */
-    OCoord3D globalToLocal(const OCoord3D& point) const;
-
-    /**
-     * Transforme un point du repere local vers le repere absolu.
-     */
-    OSegment3D localToGlobal(const OSegment3D& segment);
-
-    /**
-     * Transforme un point du repere absolu vers le repere local
-     */
-    OSegment3D globalToLocal(const OSegment3D& segment);
-
-    /**
-     * Effectue un changement de repere pour le point
-     */
-    OCoord3D changeRepere(TYGeometryNode& other, const OCoord3D& point);
-
-    /**
-     * Effectue un changement de repere pour le segment
-     */
-    OSegment3D changeRepere(TYGeometryNode& other, const OSegment3D& segment);
-
-    /**
      * get/set de la hauteur par rapport au sol
      */
     double getHauteur() { return _hauteur; }

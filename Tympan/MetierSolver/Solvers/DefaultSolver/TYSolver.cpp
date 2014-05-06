@@ -119,7 +119,9 @@ void TYSolver::purge()
     _pool = NULL;
 }
 
-bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul)
+bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
+        const tympan::AcousticProblemModel& aproblem,
+        tympan::AcousticResultModel& aresult)
 {
     // Creation de la collection de thread
     const unsigned int nbThread = calcul.getNbTHread();
@@ -218,7 +220,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
      *   face belongs to a screen in the site
      */
     assert(calcul.getUseEcran() && "The useEcran option is obsolete and should always be true before being removed.");
-    site.getListFaces(true, tabFaces, nbFacesInfra, estUnIndexDeFaceEcran);
+    site.getListFaces(tabFaces, nbFacesInfra, estUnIndexDeFaceEcran);
 
     // Reservation de l'espace pour les tableaux
     _tabPolygonSize = static_cast<uint32>(tabFaces.size());

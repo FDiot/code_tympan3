@@ -25,6 +25,8 @@
 
 class TYCalcul;
 class TYSiteNode;
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
 
 class TYSolverInterface
 {
@@ -32,7 +34,9 @@ public:
     TYSolverInterface() { }
     virtual ~TYSolverInterface() { }
 
-    virtual bool solve(const TYSiteNode& site, TYCalcul& calcul) = 0;
+    virtual bool solve(const TYSiteNode& site, TYCalcul& calcul,
+            const tympan::AcousticProblemModel& aproblem,
+            tympan::AcousticResultModel& aresult) = 0;
 
     virtual void purge() { }
 

@@ -1617,7 +1617,8 @@ bool TYCalcul::go()
 
         TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(_solverId);
         // XXX ... and pass the SolverDataModel built here.
-        ret = pSolver->solve(*pMergeSite, *this);
+        ret = pSolver->solve(*pMergeSite, *this, _acousticProblem,
+                _acousticResult);
         pSolver->purge();
 
         // Cumul de la pression aux differents points de calcul
