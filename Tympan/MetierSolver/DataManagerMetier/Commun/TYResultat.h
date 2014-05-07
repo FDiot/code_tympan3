@@ -25,6 +25,7 @@
 
 #include <cstddef>
 
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "TYPointCalcul.h"
 
@@ -43,38 +44,6 @@ typedef std::map<TYElement*, int> TYMapElementIndex;
 * \date 2008/01/25
 *
 */
-namespace tympan {
-
-class SpectrumMatrix
-{
-public:
-
-    typedef std::vector<std::vector<OSpectre> > impl_matrix_t;
-    
-    SpectrumMatrix();
-    SpectrumMatrix(size_t nb_sources, size_t nb_receptors);
-    virtual ~SpectrumMatrix() {};
-
-    size_t nb_sources()   const { return _nb_sources; };
-    size_t nb_receptors() const { return data.size(); };
-
-    const OSpectre& operator()(size_t receptor_idx, size_t sources_idx) const; 
-    OSpectre& operator()(size_t receptor_idx, size_t sources_idx);
-
-    const OTabSpectre& tympan::SpectrumMatrix::by_receptor(size_t receptor_idx) const;
-
-    void clearReceptor(size_t receptor_idx);
-
-    void clear() {data.clear(); };
-
-protected:
-    impl_matrix_t data;
-private:
-    size_t _nb_sources;
-
-}; // class SpectrumMatrix
-
-} //namespace tympan {
 
 class TYResultat: public TYElement
 {
