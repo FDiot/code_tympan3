@@ -58,6 +58,30 @@ cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
         TYElement* getParent()
         OGenID getID()
 
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h":
+    cdef cppclass TYResultat(TYElement):
+        bool operator==(const TYResultat& other) const
+        size_t getNbOfRecepteurs() const
+        size_t getNbOfSources() const
+        OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
+
+cdef extern from "Tympan/MetierSolver/CommonTools/OSpectre.h":
+    const unsigned int TY_SPECTRE_DEFAULT_NB_ELMT
+    cdef enum TYSpectreType:
+        SPECTRE_TYPE_ATT
+        SPECTRE_TYPE_ABSO
+        SPECTRE_TYPE_LW
+        SPECTRE_TYPE_LP
+        SPECTRE_TYPE_AUTRE
+    cdef cppclass OSpectre:
+        OSpectre()
+        bool operator==(const OSpectre& other) const
+        bool operator!=(const OSpectre& other) const
+        OSpectre toDB()
+        void setType(TYSpectreType type)
+        double * getTabValReel()
+        unsigned int getNbValues() const
+
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
     cdef cppclass TYSiteNode (TYElement):
         void getChilds (vector[SmartPtr[TYElement]] &elts, bool recursive)
@@ -72,6 +96,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
         bool go()
         AcousticProblemModel _acousticProblem
         AcousticResultModel _acousticResult
+        SmartPtr[TYResultat] getResultat()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":
     cdef cppclass TYProjet (TYElement):
