@@ -23,15 +23,13 @@
 #ifndef __TY_RESULTAT__
 #define __TY_RESULTAT__
 
+#include <cstddef>
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "TYPointCalcul.h"
 
 
 class TYTrajet;
-
-///Matrice nxn de TYSpectreLeger.
-typedef std::vector<std::vector<OSpectre> > OSpectreMatrix;
 
 /// Map ptrElement-index
 typedef std::map<TYElement*, int> TYMapElementIndex;
@@ -45,6 +43,38 @@ typedef std::map<TYElement*, int> TYMapElementIndex;
 * \date 2008/01/25
 *
 */
+namespace tympan {
+
+class SpectrumMatrix
+{
+public:
+
+    typedef std::vector<std::vector<OSpectre> > impl_matrix_t;
+    
+    SpectrumMatrix();
+    SpectrumMatrix(size_t nb_sources, size_t nb_receptors);
+    virtual ~SpectrumMatrix() {};
+
+    size_t nb_sources()   const { return _nb_sources; };
+    size_t nb_receptors() const { return data.size(); };
+
+    const OSpectre& operator()(size_t receptor_idx, size_t sources_idx) const; 
+    OSpectre& operator()(size_t receptor_idx, size_t sources_idx);
+
+    const OTabSpectre& tympan::SpectrumMatrix::by_receptor(size_t receptor_idx) const;
+
+    void clearReceptor(size_t receptor_idx);
+
+    void clear() {data.clear(); };
+
+protected:
+    impl_matrix_t data;
+private:
+    size_t _nb_sources;
+
+}; // class SpectrumMatrix
+
+} //namespace tympan {
 
 class TYResultat: public TYElement
 {
@@ -95,13 +125,6 @@ public:
      * \brief Reinitialise la matrice resultat.
      */
     void purge();
-
-    /**
-     * \fn size_t getNbOfCouples() const
-     * \brief Retourne le nombre de couples.
-     * \return _matrix.size(): Le nombre de couples.
-     */
-    size_t getNbOfCouples() const { return _matrix.size(); }
 
     /**
      * \fn size_t getNbOfSources() const
@@ -162,12 +185,6 @@ public:
     void buildMatrix();
 
     /**
-     * \fn void buildMatrix(const TYMapElementIndex& recepteurs, const TYMapElementIndex& emetteurs, OSpectreMatrix& matrix)
-     * \brief Construit une matrice de resultat a partir des listes de recepteurs et de sources
-     */
-    static void buildMatrix(const TYMapElementIndex& recepteurs, const TYMapElementIndex& emetteurs, OSpectreMatrix& matrix);
-
-    /**
      * \fn int getIndexSource(TYSourcePonctuelle* pSource)
      * \brief Retourne l'index d'une source
      * \return _sources[pSource]:l'index d'une source
@@ -197,13 +214,13 @@ public:
      * \fn bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre & Spectre)
      * \brief Assigne un spectre a un couple S-R.
      */
-    bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre& Spectre);
+    bool setSpectre(int indexRecepteur, int indexSource, OSpectre& Spectre);
 
     /**
      * \fn bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre & Spectre, OSpectreMatrix& matrix)
      * \brief Ajoute un spectre dans une matrice de resultat
      */
-    bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre& Spectre, OSpectreMatrix& matrix);
+    static bool setSpectre(int indexRecepteur, int indexSource, OSpectre& Spectre, tympan::SpectrumMatrix& matrix);
 
     /**
      * \fn OSpectre getSpectre(TYPointCalcul* pRecepteur,TYElement* pSource)
@@ -215,13 +232,13 @@ public:
      * \fn OSpectre getSpectre(const int& indexRecepteur, const int& indexSource)
      * \brief Retourne un spectre pour un couple S-R.
      */
-    OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const;
+    const OSpectre& TYResultat::getSpectre(int indexRecepteur, int indexSource) const;
 
     /**
      * \fn OSpectre getElementSpectre(const int& indexRecepteur, const int& indexSource)
      * \brief Retourne le spectre de la matrice brute (avant condensation)pour un couple S-R (S = Source elementaire)
      */
-    OSpectre getElementSpectre(const int& indexRecepteur, const int& indexSource) const;
+    const OSpectre& getElementSpectre(int indexRecepteur, int indexSource) const;
 
     /**
      * \fn OTabSpectre getSpectres(TYPointCalcul* pRecepteur)
@@ -229,7 +246,6 @@ public:
      * \brief Retourne les spectres pour un recepteur donne.
      */
     OTabSpectre getSpectres(TYPointCalcul* pRecepteur);
-    void getSpectres(TYPointCalcul* pRecepteur, OTabSpectre& tab);
 
     /**
      * \fn OTabSpectre getSpectres(const int& indexRecepteur)
@@ -237,7 +253,6 @@ public:
      * \brief Retourne les spectres pour un recepteur donne.
      */
     OTabSpectre getSpectres(const int& indexRecepteur) const;
-    void getSpectres(const int& indexRecepteur, OTabSpectre& tab) const;
 
     /**
      * \fn void remSpectres(TYPointCalcul* pRecepteur)
@@ -360,11 +375,11 @@ private:
     // Membres
 protected:
     ///La matrice de resultat.
-    OSpectreMatrix _matrix;
+    tympan::SpectrumMatrix _matrix;
 
     /// Sauvegarde de la matrice brute
     bool _bPartial;
-    OSpectreMatrix _backupMatrix;
+    tympan::SpectrumMatrix _backupMatrix;
     TYMapElementIndex _backupSources;
 
     ///Les sources contenues dans la matrice resultat.
