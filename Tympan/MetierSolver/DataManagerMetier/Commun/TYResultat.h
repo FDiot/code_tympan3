@@ -201,7 +201,7 @@ public:
      * \fn OSpectre getSpectre(const int& indexRecepteur, const int& indexSource)
      * \brief Retourne un spectre pour un couple S-R.
      */
-    const OSpectre& TYResultat::getSpectre(int indexRecepteur, int indexSource) const;
+    const OSpectre& getSpectre(int indexRecepteur, int indexSource) const;
 
     /**
      * \fn OSpectre getElementSpectre(const int& indexRecepteur, const int& indexSource)

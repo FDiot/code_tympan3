@@ -1,6 +1,6 @@
 /**
  * \file acoustic_result_model.hpp
- * \brief This file provides the top-level declaration for the acoustic 
+ * \brief This file provides the top-level declaration for the acoustic
  * result model
  *
  * \date march 13 2014
@@ -24,7 +24,7 @@ class SpectrumMatrix
 public:
 
     typedef std::vector<std::vector<Spectrum> > impl_matrix_t;
-    
+
     SpectrumMatrix();
     SpectrumMatrix(size_t nb_sources, size_t nb_receptors);
     virtual ~SpectrumMatrix() {};
@@ -32,10 +32,10 @@ public:
     size_t nb_sources()   const { return _nb_sources; };
     size_t nb_receptors() const { return data.size(); };
 
-    const Spectrum& operator()(size_t receptor_idx, size_t sources_idx) const; 
+    const Spectrum& operator()(size_t receptor_idx, size_t sources_idx) const;
     Spectrum& operator()(size_t receptor_idx, size_t sources_idx);
 
-    const std::vector<Spectrum>& tympan::SpectrumMatrix::by_receptor(size_t receptor_idx) const;
+    const std::vector<Spectrum>& by_receptor(size_t receptor_idx) const;
 
     void clearReceptor(size_t receptor_idx);
 
