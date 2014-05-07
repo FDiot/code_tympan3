@@ -31,6 +31,7 @@
 
 #include <fstream>
 #include <iomanip>
+#include <cassert>
 
 #if defined(WIN32)
 #include <crtdbg.h>
@@ -44,6 +45,52 @@ static char THIS_FILE[] = __FILE__;
 OPROTOINST(TYResultat);
 TY_EXTENSION_INST(TYResultat);
 TY_EXT_GRAPHIC_INST(TYResultat);
+
+
+tympan::SpectrumMatrix::SpectrumMatrix(size_t nb_sources, size_t nb_receptors)
+    : _nb_sources(nb_sources)
+{
+    data.clear();
+    data.reserve(nb_receptors);
+
+    OSpectre nullSpectrum(0);
+    nullSpectrum.setType(SPECTRE_TYPE_LP);
+    nullSpectrum.setEtat(SPECTRE_ETAT_LIN);
+
+    for (size_t i = 0; i < nb_receptors; i++)
+    {
+        data.push_back(std::vector<OSpectre>(nb_sources, nullSpectrum));
+    }
+    assert(data.size()==nb_receptors);
+}
+
+tympan::SpectrumMatrix::SpectrumMatrix() : _nb_sources(0) {}
+
+const OSpectre& tympan::SpectrumMatrix::operator()(size_t receptor_idx, size_t sources_idx) const
+{
+    assert(receptor_idx < nb_receptors());
+    assert(sources_idx < nb_sources());
+    return data[receptor_idx][sources_idx];
+}
+
+OSpectre& tympan::SpectrumMatrix::operator()(size_t receptor_idx, size_t sources_idx)
+{
+    assert(receptor_idx < nb_receptors());
+    assert(sources_idx < nb_sources());
+    return data[receptor_idx][sources_idx];
+}
+
+const OTabSpectre& tympan::SpectrumMatrix::by_receptor(size_t receptor_idx) const
+{
+    assert(receptor_idx < nb_receptors());
+    return data[receptor_idx];
+}
+
+void tympan::SpectrumMatrix::clearReceptor(size_t receptor_idx)
+{
+    assert(receptor_idx < nb_receptors());
+    data[receptor_idx].clear();
+}
 
 TYResultat::TYResultat() : _bPartial(false)
 {
@@ -77,7 +124,7 @@ bool TYResultat::operator==(const TYResultat& other) const
     if (this != &other)
     {
         if (TYElement::operator !=(other)) { return false; }
-        if (_matrix != other._matrix) { return false; }
+        // if (!(_matrix == other._matrix)) { return false; } // XXX
     }
     return true;
 }
@@ -130,9 +177,8 @@ DOM_Element TYResultat::toXML(DOM_Element& domElement)
 
 
 
-    size_t nbMatrixRcpts = _matrix.size();
-    size_t nbMatrixSrcs = 0;
-    if (nbMatrixRcpts > 0) { nbMatrixSrcs = _matrix[0].size(); }
+    size_t nbMatrixRcpts = _matrix.nb_receptors();
+    size_t nbMatrixSrcs = _matrix.nb_sources();
 
     for (unsigned int i = 0; i < nbMatrixRcpts; i++)
     {
@@ -145,7 +191,7 @@ DOM_Element TYResultat::toXML(DOM_Element& domElement)
             resultEntry.setAttribute("indexRec", intToStr(i).data());
             resultEntry.setAttribute("indexSrc", intToStr(j).data());
 
-            TYSpectre spectre = _matrix[i][j].toDB();
+            TYSpectre spectre = _matrix(i,j).toDB();
             spectre.toXML(resultEntry);
         }
     }
@@ -384,19 +430,7 @@ void TYResultat::remRecepteur(TYPointCalcul* pRecepteur)
 
 void TYResultat::buildMatrix()
 {
-    buildMatrix(_recepteurs, _sources, _matrix);
-}
-
-void TYResultat::buildMatrix(const TYMapElementIndex& recepteurs, const TYMapElementIndex& emetteurs, OSpectreMatrix& matrix)
-{
-    matrix.clear();
-
-    matrix.resize(recepteurs.size());
-
-    for (size_t i = 0; i < matrix.size(); i++)
-    {
-        matrix[i].resize(emetteurs.size());
-    }
+    _matrix = tympan::SpectrumMatrix(_recepteurs.size(), _sources.size());
 }
 
 bool TYResultat::setSpectre(TYPointCalcul* pRecepteur, TYSourcePonctuelle* pSource, OSpectre& Spectre)
@@ -423,26 +457,15 @@ bool TYResultat::setSpectre(const TYTrajet& trajet)
     return setSpectre(pPoint, pSrc, spectre);
 }
 
-bool TYResultat::setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre& Spectre)
+bool TYResultat::setSpectre(int indexRecepteur, int indexSource, OSpectre& Spectre)
 {
     return setSpectre(indexRecepteur, indexSource, Spectre, _matrix);
 }
 
-bool TYResultat::setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre& Spectre, OSpectreMatrix& matrix)
+bool TYResultat::setSpectre(int indexRecepteur, int indexSource, OSpectre& Spectre, tympan::SpectrumMatrix& matrix)
 {
-
-
-    if ((indexRecepteur < (int)matrix.size()) && (indexSource < (int)matrix[indexRecepteur].size()))
-    {
-        matrix[indexRecepteur][indexSource] = Spectre;
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-
-    return true;
+    matrix(indexRecepteur, indexSource) = Spectre;
+    return true; // TODO return kept for compatibility reasons : to be changed to void later 
 }
 
 OSpectre TYResultat::getSpectre(TYPointCalcul* pRecepteur, TYElement* pSource)
@@ -460,61 +483,33 @@ OSpectre TYResultat::getSpectre(TYPointCalcul* pRecepteur, TYElement* pSource)
     return getSpectre(indexRecepteur, indexSource);
 }
 
-OSpectre TYResultat::getSpectre(const int& indexRecepteur, const int& indexSource) const
+const OSpectre& TYResultat::getSpectre(int indexRecepteur, int indexSource) const
 {
-    OSpectre spectre ;
-
-    size_t nbMatrixRcpts = _matrix.size();
-    size_t nbMatrixSrcs = _matrix[0].size();
-
-    if ((indexRecepteur >= nbMatrixRcpts) || (indexSource >= nbMatrixSrcs)) { return spectre; }
-
-    return _matrix[indexRecepteur][indexSource];
+    return _matrix(indexRecepteur, indexSource);
 }
 
-OSpectre TYResultat::getElementSpectre(const int& indexRecepteur, const int& indexSource) const
+const OSpectre& TYResultat::getElementSpectre(int indexRecepteur, int indexSource) const
 {
-    return _backupMatrix[indexRecepteur][indexSource];
+    return _backupMatrix(indexRecepteur, indexSource);
 }
 
 OTabSpectre TYResultat::getSpectres(TYPointCalcul* pRecepteur)
 {
     // Index recepteur
     int indexRecepteur = _recepteurs[pRecepteur];
-
     return getSpectres(indexRecepteur);
 }
 
 OTabSpectre TYResultat::getSpectres(const int& indexRecepteur) const
 {
-    OTabSpectre tab;
-    for (unsigned int i = 0; i < _matrix[indexRecepteur].size(); i++)
-        tab.push_back(_matrix[indexRecepteur][i]);
-    return tab;
-}
-
-void TYResultat::getSpectres(TYPointCalcul* pRecepteur, OTabSpectre& tab)
-{
-    // Index recepteur
-    int indexRecepteur = _recepteurs[pRecepteur];
-
-    getSpectres(indexRecepteur, tab);
-}
-
-void TYResultat::getSpectres(const int& indexRecepteur, OTabSpectre& tab) const
-{
-    for (unsigned int i = 0; i < _matrix[indexRecepteur].size(); i++)
-    {
-        tab.push_back(_matrix[indexRecepteur][i]);
-    }
+    return _matrix.by_receptor(indexRecepteur);
 }
 
 
 void TYResultat::remSpectres(TYPointCalcul* pRecepteur)
 {
     int indexRecepteur = _recepteurs[pRecepteur];
-    _matrix[indexRecepteur].clear();
-
+    _matrix.clearReceptor(indexRecepteur);
     _recepteurs.erase(pRecepteur);
 
 }
@@ -575,9 +570,6 @@ void TYResultat::condensate()
         _backupMatrix = _matrix;
     }
 
-    // Creation de la matrice qui va recevoir les spectres regroupe(condenses)
-    OSpectreMatrix condensateMatrix;
-
     TYMapElementIndex emetteurs;
 
     TYMapElementIndex::iterator itPt;
@@ -594,7 +586,8 @@ void TYResultat::condensate()
     }
 
     // ... ce qui qui permet de construire la matrice de resultat
-    buildMatrix(_recepteurs, emetteurs, condensateMatrix);
+    // Creation de la matrice qui va recevoir les spectres regroupe(condenses)
+    tympan::SpectrumMatrix condensateMatrix(_recepteurs.size(), emetteurs.size());
 
     TYPointCalcul* pPoint = NULL;
     int indexRecepteur = 0, indexEmetteur = 0;
@@ -635,6 +628,7 @@ void TYResultat::condensate()
 
             // Ajout du spectre cumule dans la matrice
             setSpectre(indexRecepteur, indexEmetteur, spectreCumule, condensateMatrix);
+            condensateMatrix(indexRecepteur, indexEmetteur) = spectreCumule;
         }
     }
 
@@ -696,8 +690,7 @@ bool TYResultat::cumulSpectres()
         SCumul.setDefaultValue(0.0);
 
         // Recuperation des spectres associes au point
-        tabSp.clear() ;
-        getSpectres(pPoint, tabSp);
+        tabSp = getSpectres(pPoint);
 
         // Cumul des spectres sur le point
         for (i = 0; i < tabSp.size(); i++)

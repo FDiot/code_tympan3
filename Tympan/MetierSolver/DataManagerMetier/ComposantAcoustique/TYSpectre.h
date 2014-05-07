@@ -24,7 +24,7 @@
 #include "Tympan/MetierSolver/ToolsMetier/OSpectreComplex.h"
 
 ///Collection des frequences
-typedef std::vector<float> TYTabFreq;
+typedef OTabFreq TYTabFreq;
 
 /**
  * Permet de stocker des valeurs de puissance accoustique pour differentes frequences.
