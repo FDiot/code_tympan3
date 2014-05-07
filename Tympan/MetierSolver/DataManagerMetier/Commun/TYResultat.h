@@ -30,17 +30,8 @@
 
 class TYTrajet;
 
-///Matrice nxn de LPTYSpectre.
-typedef std::vector<std::vector<LPTYSpectre > > TYLPSpectreMatrix;
-
 ///Matrice nxn de TYSpectreLeger.
 typedef std::vector<std::vector<OSpectre> > OSpectreMatrix;
-
-///Map Source-index.
-typedef std::map<LPTYSourcePonctuelle, int> TYMapLPSourcePonctuelleIndex;
-
-///Map PointCalcul-index.
-typedef std::map<LPTYPointCalcul, int> TYMapLPPointCalculIndex;
 
 /// Map ptrElement-index
 typedef std::map<TYElement*, int> TYMapElementIndex;
