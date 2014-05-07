@@ -47,51 +47,6 @@ TY_EXTENSION_INST(TYResultat);
 TY_EXT_GRAPHIC_INST(TYResultat);
 
 
-tympan::SpectrumMatrix::SpectrumMatrix(size_t nb_sources, size_t nb_receptors)
-    : _nb_sources(nb_sources)
-{
-    data.clear();
-    data.reserve(nb_receptors);
-
-    OSpectre nullSpectrum(0);
-    nullSpectrum.setType(SPECTRE_TYPE_LP);
-    nullSpectrum.setEtat(SPECTRE_ETAT_LIN);
-
-    for (size_t i = 0; i < nb_receptors; i++)
-    {
-        data.push_back(std::vector<OSpectre>(nb_sources, nullSpectrum));
-    }
-    assert(data.size()==nb_receptors);
-}
-
-tympan::SpectrumMatrix::SpectrumMatrix() : _nb_sources(0) {}
-
-const OSpectre& tympan::SpectrumMatrix::operator()(size_t receptor_idx, size_t sources_idx) const
-{
-    assert(receptor_idx < nb_receptors());
-    assert(sources_idx < nb_sources());
-    return data[receptor_idx][sources_idx];
-}
-
-OSpectre& tympan::SpectrumMatrix::operator()(size_t receptor_idx, size_t sources_idx)
-{
-    assert(receptor_idx < nb_receptors());
-    assert(sources_idx < nb_sources());
-    return data[receptor_idx][sources_idx];
-}
-
-const OTabSpectre& tympan::SpectrumMatrix::by_receptor(size_t receptor_idx) const
-{
-    assert(receptor_idx < nb_receptors());
-    return data[receptor_idx];
-}
-
-void tympan::SpectrumMatrix::clearReceptor(size_t receptor_idx)
-{
-    assert(receptor_idx < nb_receptors());
-    data[receptor_idx].clear();
-}
-
 TYResultat::TYResultat() : _bPartial(false)
 {
     _name = TYNameManager::get()->generateName(getClassName());
