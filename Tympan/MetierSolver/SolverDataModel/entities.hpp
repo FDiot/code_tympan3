@@ -19,16 +19,6 @@ namespace tympan
 /// XXX \todo Add the entity 'Atmosphere' with attr: pression, temperature,
 /// hygrometry (\note can find these values in the TYCalcul instead of TYSite).
 
-// NB For now an AcousticSpectrum simply IS a OSpectreComplex
-class AcousticSpectrum:
-    public virtual BaseEntity,
-    public Spectrum
-{
-public:
-    AcousticSpectrum(const Spectrum& spectrum) : Spectrum(spectrum) {};
-    virtual ~AcousticSpectrum() {};
-};
-
 class AcousticMaterialBase:
     public virtual BaseEntity
 {
@@ -45,10 +35,10 @@ class AcousticBuildingMaterial:
     public virtual BaseEntity, public AcousticMaterialBase
 {
 public:
-    AcousticBuildingMaterial(const string& name_, const Spectrum& spectrum);
+    AcousticBuildingMaterial(const string& name_, const ComplexSpectrum& spectrum);
     virtual ~AcousticBuildingMaterial() {};
 
-    AcousticSpectrum spectrum;
+    ComplexSpectrum spectrum;
 };
 
 class AcousticGroundMaterial:
@@ -90,7 +80,7 @@ class SphericalSourceDirectivity :
 {
 public:
      virtual Spectrum lwAdjustment(Vector direction)
-     { return Spectrum(std::complex<double>(1.0, 0.0)); }
+     { return Spectrum(1.0); }
 };
 
 class AcousticSource:
@@ -107,7 +97,7 @@ public:
     Point position;
     binary_uuid id;
     Spectrum spectrum;
-    std::unique_ptr<SourceDirectivityInterface> directivity;
+    SourceDirectivityInterface* directivity;
 };
 
 typedef std::deque<AcousticSource> source_pool_t;

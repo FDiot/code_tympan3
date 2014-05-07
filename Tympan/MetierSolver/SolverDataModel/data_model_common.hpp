@@ -25,7 +25,8 @@ namespace tympan
 {
 typedef OPoint3D   Point;
 typedef OVector3D  Vector;
-typedef OSpectreComplex Spectrum;
+typedef OSpectre        Spectrum;
+typedef OSpectreComplex ComplexSpectrum;
 
 typedef std::deque<Point> nodes_pool_t;
 typedef size_t node_idx;

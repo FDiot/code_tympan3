@@ -19,7 +19,7 @@ AcousticMaterialBase::AcousticMaterialBase(
 
 AcousticBuildingMaterial::AcousticBuildingMaterial(
     const string& name_,
-    const Spectrum& spectrum_
+    const ComplexSpectrum& spectrum_
 ) : AcousticMaterialBase(name_), spectrum(spectrum_) {}
 
 AcousticGroundMaterial::AcousticGroundMaterial(
