@@ -128,7 +128,7 @@ DOM_Element TYResultat::toXML(DOM_Element& domElement)
     DOM_Element listSp = domDoc.createElement("ListSpectres");
     domNewElem.appendChild(listSp);
 
-    TYSpectre spectre;
+
 
     size_t nbMatrixRcpts = _matrix.size();
     size_t nbMatrixSrcs = 0;
@@ -145,10 +145,7 @@ DOM_Element TYResultat::toXML(DOM_Element& domElement)
             resultEntry.setAttribute("indexRec", intToStr(i).data());
             resultEntry.setAttribute("indexSrc", intToStr(j).data());
 
-            spectre.fromSpectreLeger(_matrix[i][j]);
-            spectre.setType(SPECTRE_TYPE_LP);
-            spectre = spectre.toDB();
-
+            TYSpectre spectre = _matrix[i][j].toDB();
             spectre.toXML(resultEntry);
         }
     }
@@ -390,7 +387,7 @@ void TYResultat::buildMatrix()
     buildMatrix(_recepteurs, _sources, _matrix);
 }
 
-void TYResultat::buildMatrix(const TYMapElementIndex& recepteurs, const TYMapElementIndex& emetteurs, TYSpectreLegerMatrix& matrix)
+void TYResultat::buildMatrix(const TYMapElementIndex& recepteurs, const TYMapElementIndex& emetteurs, OSpectreMatrix& matrix)
 {
     matrix.clear();
 
@@ -431,15 +428,13 @@ bool TYResultat::setSpectre(const int& indexRecepteur, const int& indexSource, O
     return setSpectre(indexRecepteur, indexSource, Spectre, _matrix);
 }
 
-bool TYResultat::setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre& Spectre, TYSpectreLegerMatrix& matrix)
+bool TYResultat::setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre& Spectre, OSpectreMatrix& matrix)
 {
-    TYSpectreLeger spectreleger;
 
-    Spectre.toSpectreLeger(spectreleger);
 
     if ((indexRecepteur < (int)matrix.size()) && (indexSource < (int)matrix[indexRecepteur].size()))
     {
-        matrix[indexRecepteur][indexSource] = spectreleger;
+        matrix[indexRecepteur][indexSource] = Spectre;
         return true;
     }
     else
@@ -474,22 +469,12 @@ OSpectre TYResultat::getSpectre(const int& indexRecepteur, const int& indexSourc
 
     if ((indexRecepteur >= nbMatrixRcpts) || (indexSource >= nbMatrixSrcs)) { return spectre; }
 
-    spectre.fromSpectreLeger(_matrix[indexRecepteur][indexSource]);
-
-    spectre.setType(SPECTRE_TYPE_LP);
-
-    return spectre;
+    return _matrix[indexRecepteur][indexSource];
 }
 
 OSpectre TYResultat::getElementSpectre(const int& indexRecepteur, const int& indexSource) const
 {
-    OSpectre spectre ;
-
-    spectre.fromSpectreLeger(_backupMatrix[indexRecepteur][indexSource]);
-
-    spectre.setType(SPECTRE_TYPE_LP);
-
-    return spectre;
+    return _backupMatrix[indexRecepteur][indexSource];
 }
 
 OTabSpectre TYResultat::getSpectres(TYPointCalcul* pRecepteur)
@@ -503,14 +488,8 @@ OTabSpectre TYResultat::getSpectres(TYPointCalcul* pRecepteur)
 OTabSpectre TYResultat::getSpectres(const int& indexRecepteur) const
 {
     OTabSpectre tab;
-    OSpectre spectre ;
-
     for (unsigned int i = 0; i < _matrix[indexRecepteur].size(); i++)
-    {
-        spectre.fromSpectreLeger(_matrix[indexRecepteur][i]);
-        tab.push_back(spectre);
-    }
-
+        tab.push_back(_matrix[indexRecepteur][i]);
     return tab;
 }
 
@@ -524,12 +503,9 @@ void TYResultat::getSpectres(TYPointCalcul* pRecepteur, OTabSpectre& tab)
 
 void TYResultat::getSpectres(const int& indexRecepteur, OTabSpectre& tab) const
 {
-    OSpectre spectre ;
-
     for (unsigned int i = 0; i < _matrix[indexRecepteur].size(); i++)
     {
-        spectre.fromSpectreLeger(_matrix[indexRecepteur][i]);
-        tab.push_back(spectre);
+        tab.push_back(_matrix[indexRecepteur][i]);
     }
 }
 
@@ -600,7 +576,7 @@ void TYResultat::condensate()
     }
 
     // Creation de la matrice qui va recevoir les spectres regroupe(condenses)
-    TYSpectreLegerMatrix condensateMatrix;
+    OSpectreMatrix condensateMatrix;
 
     TYMapElementIndex emetteurs;
 

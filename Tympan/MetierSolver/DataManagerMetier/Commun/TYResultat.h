@@ -34,7 +34,7 @@ class TYTrajet;
 typedef std::vector<std::vector<LPTYSpectre > > TYLPSpectreMatrix;
 
 ///Matrice nxn de TYSpectreLeger.
-typedef std::vector<std::vector<TYSpectreLeger> > TYSpectreLegerMatrix;
+typedef std::vector<std::vector<OSpectre> > OSpectreMatrix;
 
 ///Map Source-index.
 typedef std::map<LPTYSourcePonctuelle, int> TYMapLPSourcePonctuelleIndex;
@@ -171,10 +171,10 @@ public:
     void buildMatrix();
 
     /**
-     * \fn void buildMatrix(const TYMapElementIndex& recepteurs, const TYMapElementIndex& emetteurs, TYSpectreLegerMatrix& matrix)
+     * \fn void buildMatrix(const TYMapElementIndex& recepteurs, const TYMapElementIndex& emetteurs, OSpectreMatrix& matrix)
      * \brief Construit une matrice de resultat a partir des listes de recepteurs et de sources
      */
-    void buildMatrix(const TYMapElementIndex& recepteurs, const TYMapElementIndex& emetteurs, TYSpectreLegerMatrix& matrix);
+    static void buildMatrix(const TYMapElementIndex& recepteurs, const TYMapElementIndex& emetteurs, OSpectreMatrix& matrix);
 
     /**
      * \fn int getIndexSource(TYSourcePonctuelle* pSource)
@@ -209,10 +209,10 @@ public:
     bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre& Spectre);
 
     /**
-     * \fn bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre & Spectre, TYSpectreLegerMatrix& matrix)
+     * \fn bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre & Spectre, OSpectreMatrix& matrix)
      * \brief Ajoute un spectre dans une matrice de resultat
      */
-    bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre& Spectre, TYSpectreLegerMatrix& matrix);
+    bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre& Spectre, OSpectreMatrix& matrix);
 
     /**
      * \fn OSpectre getSpectre(TYPointCalcul* pRecepteur,TYElement* pSource)
@@ -369,11 +369,11 @@ private:
     // Membres
 protected:
     ///La matrice de resultat.
-    TYSpectreLegerMatrix _matrix;
+    OSpectreMatrix _matrix;
 
     /// Sauvegarde de la matrice brute
     bool _bPartial;
-    TYSpectreLegerMatrix _backupMatrix;
+    OSpectreMatrix _backupMatrix;
     TYMapElementIndex _backupSources;
 
     ///Les sources contenues dans la matrice resultat.
