@@ -22,7 +22,7 @@
 #ifndef _GLOBAL_MACROS_
 #define _GLOBAL_MACROS_
 
-#include "Tympan/Tools/TYConfigure.h"
+#include "Defines.h"
 #include "OGeometrie.h"
 
 ///Pour la gestion des assertions.

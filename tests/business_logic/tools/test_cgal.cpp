@@ -12,16 +12,16 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/cgal_tools.hpp"
-#include "Tympan/MetierSolver/ToolsMetier/prettyprint.hpp"
+#include "Tympan/MetierSolver/CommonTools/cgal_tools.hpp"
+#include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
 
 /*
-#include "Tympan/MetierSolver/ToolsMetier/OGeometrie.h"
-#include "Tympan/MetierSolver/ToolsMetier/OBox.h"
+#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
+#include "Tympan/MetierSolver/CommonTools/OBox.h"
 */
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OPlan.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
+#include "Tympan/MetierSolver/CommonTools/OPlan.h"
 
 using std::cout;
 using std::cerr;

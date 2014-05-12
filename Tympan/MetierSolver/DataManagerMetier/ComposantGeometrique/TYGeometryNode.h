@@ -30,7 +30,7 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "TYRepere.h"
-#include "Tympan/MetierSolver/ToolsMetier/OMatrix.h"
+#include "Tympan/MetierSolver/CommonTools/OMatrix.h"
 
 /**
  * Template pour la gestion des noeuds de geometrie.

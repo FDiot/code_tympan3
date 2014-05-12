@@ -12,12 +12,12 @@
 
 #include "std_boost_utils.hpp"
 
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OSpectreComplex.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
+#include "Tympan/MetierSolver/CommonTools/OSpectreComplex.h"
 
 
-// This section import some types from ToolsMetier
+// This section import some types from CommonTools
 // under a more generic name into the tympan namespace. Indeed,
 // there must be no dependency to TY-classes and no direct
 // ones to O-classes from within the solver data model.

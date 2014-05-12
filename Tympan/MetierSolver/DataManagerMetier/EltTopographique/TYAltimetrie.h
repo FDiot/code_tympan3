@@ -22,9 +22,9 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
-#include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
-#include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
-#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
+#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
+#include "Tympan/MetierSolver/CommonTools/OBox2.h"
+#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
 
 namespace tympan
 {

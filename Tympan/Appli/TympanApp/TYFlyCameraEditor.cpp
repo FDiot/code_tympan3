@@ -33,7 +33,7 @@
 #include <qcursor.h>
 
 #include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
-#include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
+#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
 
 using namespace Qt;
 

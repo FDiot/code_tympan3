@@ -32,6 +32,7 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEtage.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEcran.h"
+#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
 #include "TYActions.h"
 
 #include <qmessagebox.h>

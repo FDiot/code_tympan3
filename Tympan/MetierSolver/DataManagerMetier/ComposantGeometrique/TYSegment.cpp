@@ -31,7 +31,7 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/Defines.h"
+#include "Tympan/MetierSolver/CommonTools/Defines.h"
 
 OPROTOINST(TYSegment);
 TY_EXTENSION_INST(TYSegment);

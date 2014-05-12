@@ -12,7 +12,7 @@
 #include "gtest/gtest.h"
 // #include "test_utils/prettyprint.hpp"
 
-#include "Tympan/MetierSolver/ToolsMetier/exceptions.hpp"
+#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
 
 static unsigned test_exceptions_source_line_no;
 static const char* test_exceptions_func_name;

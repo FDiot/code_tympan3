@@ -28,7 +28,6 @@
 #define __TY_APPLICATION__
 
 #include <qapplication.h>
-#include "Tympan/Tools/TYConfigure.h"
 
 #include "TYAppDefines.h"
 #include "TYCalculManager.h"

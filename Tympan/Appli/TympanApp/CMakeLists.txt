@@ -45,7 +45,7 @@ qt4_wrap_cpp(${MODULE_NAME}_MOC_SRCS ${${MODULE_NAME}_MOC_HDRS})
 set(TYMPAN_MODULES  
   tympan_acoustic_raytracer 
   tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
-  tympan_tools_metier tympan_tools_graphics
+  tympan_tools_metier tympan_common_tools tympan_tools_graphics
   tympan_tools
 )
 

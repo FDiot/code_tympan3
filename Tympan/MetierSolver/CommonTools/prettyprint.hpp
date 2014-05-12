@@ -11,10 +11,10 @@
 #include <cstring>
 #include <ostream>
 
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OPlan.h"
-#include "Tympan/MetierSolver/ToolsMetier/OSpectre.h"
+#include "OPoint3D.h"
+#include "OVector3D.h"
+#include "OPlan.h"
+#include "OSpectre.h"
 
 // Beware : Stuff::operator<< must be defined in the same namespace as Stuff
 

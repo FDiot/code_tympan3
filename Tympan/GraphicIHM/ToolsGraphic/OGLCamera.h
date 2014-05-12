@@ -32,7 +32,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "NxVec3.h"
-#include "Tympan/MetierSolver/ToolsMetier/OBox.h"
+#include "Tympan/MetierSolver/CommonTools/OBox.h"
 
 typedef enum {PARALLEL, PERSPECTIVE, FREE} CameraType;
 

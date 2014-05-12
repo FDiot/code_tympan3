@@ -15,7 +15,7 @@
 
 #include "RayCourb.h"
 #include "Transfo.h"
-#include "Tympan/MetierSolver/ToolsMetier/ODelaunayMaker.h"
+#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 
 #include <map>

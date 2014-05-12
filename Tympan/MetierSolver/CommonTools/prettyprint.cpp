@@ -6,7 +6,7 @@
  *
  */
 
-#include "Tympan/MetierSolver/ToolsMetier/prettyprint.hpp"
+#include "prettyprint.hpp"
 
 ::std::ostream& operator<<(::std::ostream& os, const OCoord3D& c)
 {

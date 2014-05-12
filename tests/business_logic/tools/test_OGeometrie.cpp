@@ -9,9 +9,9 @@
 #include <cstdlib>
 
 #include "gtest/gtest.h"
-#include "Tympan/MetierSolver/ToolsMetier/OGeometrie.h"
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
+#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
 
 using std::cout;
 using std::cerr;
