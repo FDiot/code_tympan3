@@ -633,11 +633,9 @@ int TYAcousticSemiCylinder::isInside(const TYPoint& pt) const
     // Obtention de la matrice de changement de repere
     ORepere3D repere = _pSemiCircBottom->getShape()->getORepere3D();
     repere._origin = getCenter();
-    OMatrix matrix;
-    repere.getMatChangeRep(matrix);
 
     // On passe dans le repere du cylindre pour travailler en 2D
-    OPoint3D ptBis = matrix * pt;
+    OPoint3D ptBis = repere.asMatrix() * pt;
 
     // Test Xi¿½ + Yi¿½ <= Ri¿½
     double rayon = getDiameter() / 2.0;

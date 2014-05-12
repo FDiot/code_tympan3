@@ -424,9 +424,7 @@ void OBox2::moveAndRotate(const OPoint3D& origin, const OVector3D& vec)
     _center = origin;
     _repere = ORepere3D(origin, vec);
 
-    OMatrix mat;
-
-    _repere.getMatChangeRep(mat);
+    OMatrix mat = _repere.asMatrix();
 
     _A = mat * _A;
     _B = mat * _B;
