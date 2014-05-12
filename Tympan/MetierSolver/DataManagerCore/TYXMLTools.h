@@ -25,7 +25,7 @@
 
 #include "Tympan/MetierSolver/ToolsMetier/QT2DOM.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/GlobalMacros.h"
+#include "Tympan/MetierSolver/CommonTools/GlobalMacros.h"
 
 
 /**

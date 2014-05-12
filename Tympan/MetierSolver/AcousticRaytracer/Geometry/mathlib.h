@@ -21,7 +21,7 @@
 #include <vector>
 #include <boost/foreach.hpp>
 
-#include "../../ToolsMetier/OPoint3D.h"
+#include "../../CommonTools/OPoint3D.h"
 
 
 /*! \file Core/Mathlib.h

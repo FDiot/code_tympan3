@@ -18,7 +18,7 @@
 
 #include <memory>
 
-#include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
+#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYPlanEau.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYCoursEau.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h"

@@ -29,9 +29,9 @@
 #include <CGAL/Polygon_2_algorithms.h>
 #include <CGAL/centroid.h>
 
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OPlan.h"
+#include "OPoint3D.h"
+#include "OVector3D.h"
+#include "OPlan.h"
 
 namespace tympan
 {

@@ -22,7 +22,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/Tools/OMessageManager.h"
-#include "Tympan/MetierSolver/ToolsMetier/OSegment3D.h"
+#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // Implementation

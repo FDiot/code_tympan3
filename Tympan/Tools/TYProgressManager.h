@@ -20,8 +20,6 @@
 #ifndef __TY_PROGRESS_MANAGER__
 #define __TY_PROGRESS_MANAGER__
 
-#include "TYConfigure.h"
-
 #if TY_USE_IHM
 
 #include <qprogressdialog.h>

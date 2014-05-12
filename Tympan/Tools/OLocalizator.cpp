@@ -20,8 +20,6 @@
 
 
 
-#include "TYConfigure.h"
-//#if TY_USE_IHM
 
 #include <qstring.h>
 #include <qdom.h>
@@ -160,5 +158,3 @@ bool OLocalizator::findIdAndSetValue(const QString& directory, const QString& st
     return bFound;
 }
 
-
-//#endif // TY_USE_IHM

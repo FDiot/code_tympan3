@@ -22,15 +22,15 @@
 
 #include "Tympan/Tools/TYProgressManager.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/OMatrix.h"
-#include "Tympan/MetierSolver/ToolsMetier/OTriangle.h"
-#include "Tympan/MetierSolver/ToolsMetier/OVector3D.h"
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OMatrix.h"
+#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPlugin.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/OSpectreComplex.h"
+#include "Tympan/MetierSolver/CommonTools/OSpectreComplex.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"

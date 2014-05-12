@@ -29,7 +29,7 @@
 #include "TYPalette.h"
 #include "TYPanel.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/OHPlane3D.h"
+#include "Tympan/MetierSolver/CommonTools/OHPlane3D.h"
 
 ///Densite (nb de points par metre) par defaut pour la construction des maillages.
 static const double TY_MAILLAGE_DEFAULT_DENSITE = 0.1; // 1 point tous les 10m

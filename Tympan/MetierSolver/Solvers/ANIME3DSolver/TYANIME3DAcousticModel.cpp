@@ -20,7 +20,7 @@
 #include <fstream>
 #include <iomanip>
 
-#include "Tympan/MetierSolver/ToolsMetier/OBox2.h"
+#include "Tympan/MetierSolver/CommonTools/OBox2.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"

@@ -27,13 +27,12 @@
 
 #include "TYCalculParcours.h"
 
-#include "Tympan/Tools/TYConfigure.h"
 #if TY_USE_IHM
 #include <qstring.h>
 #endif
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
-#include "Tympan/MetierSolver/ToolsMetier/OGeometrie.h"
+#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
 #include "Tympan/Tools/OMessageManager.h"
 //#include <assert.h>
 

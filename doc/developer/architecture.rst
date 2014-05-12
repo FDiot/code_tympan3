@@ -45,7 +45,7 @@ See the ``Tools`` directory and some sub-directories in ``MetierSolver``:
   - ``DataManagerCore``: the main base class ``TYElement`` used for every
     business logic object. Also implement an interface for the solvers and some
     XML tools in order to export/import a Code_TYMPAN study ;
-  - ``ToolsMetier`` common objects used by the `Business Logic`_ objects: point,
+  - ``CommonTools`` common objects used by the `Business Logic`_ objects: point,
     vector, matrix, etc.
 
 

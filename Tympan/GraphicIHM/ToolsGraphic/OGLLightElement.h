@@ -25,7 +25,7 @@
 #define __OGL_LIGHT_ELEMENT
 
 #include "OGLElement.h"
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
 
 #include <qstring.h>
 

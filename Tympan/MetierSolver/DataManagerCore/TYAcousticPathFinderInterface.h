@@ -23,8 +23,6 @@
 #ifndef __TYACOUSTICPATHFINDERINTERFACE__
 #define __TYACOUSTICPATHFINDERINTERFACE__
 
-#include "Tympan/Tools/TYConfigure.h"
-
 class TYAcousticPathFinderInterface
 {
 public:

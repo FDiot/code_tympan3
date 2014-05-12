@@ -26,7 +26,7 @@
 
 #include "OGLElement.h"
 #include "Tympan/Tools/OColor.h"
-#include "Tympan/MetierSolver/ToolsMetier/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
 
 #include <qstring.h>
 

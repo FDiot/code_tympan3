@@ -20,7 +20,7 @@
 
 
 #include "OGLCamera.h"
-#include "Tympan/MetierSolver/ToolsMetier/OGeometrie.h"
+#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
 
 #if _WIN32
 #include <windows.h>
