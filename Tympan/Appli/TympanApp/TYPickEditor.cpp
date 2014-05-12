@@ -1710,7 +1710,7 @@ void TYPickEditor::showRotationDialog(TYGeometryNode* pGeoNode)
 
             if (pDlg->getConcatenateStatus()) //az--
             {
-                Repere.getMatChangeRep(tyMat);//ne fait que retourner la matrice associe a ce repere
+                tyMat = Repere.asMatrix();
                 tyMatTmpConcat = tyMat;
             }
 

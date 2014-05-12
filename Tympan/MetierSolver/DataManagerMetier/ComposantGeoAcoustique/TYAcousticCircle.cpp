@@ -162,7 +162,7 @@ void TYAcousticCircle::distriSrcs()
     // On place l'origine au centre du cercle pour simplifier les calculs
     repere._origin = getCenter();
     // Matrice de changement de repere
-    repere.getMatChangeRep(matrix);
+    matrix = repere.asMatrix();
 
     // On ajoute une source au centre dans tous les cas, on s'assure ainsi
     // d'avoir toujours au moins une source sur la surface si les densites
@@ -259,7 +259,7 @@ TYTabPoint TYAcousticCircle::getContour(int n /*=-1*/) const
     repere._origin = getCenter();
 
     // Matrice de changement de repere
-    repere.getMatChangeRep(matrix);
+    matrix = repere.asMatrix();
 
     // On connait la taille du tableau de point a retourner
     tab.reserve(n);
@@ -317,7 +317,7 @@ TYTabPoint3D TYAcousticCircle::getOContour(int n) const
     repere._origin = getCenter();
 
     // Matrice de changement de repere
-    repere.getMatChangeRep(matrix);
+    matrix = repere.asMatrix();
 
     // On connait la taille du tableau de point a retourner
     //tab.reserve(n);

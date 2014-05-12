@@ -1538,7 +1538,6 @@ bool TYPositionEditor::rotate(ORepere3D* pRepere, bool enableX /*=true*/, bool e
         OMatrix tyMatTmpX;
         OMatrix tyMatTmpY;
         OMatrix tyMatTmpZ;
-        pRepere->getMatChangeRep(tyMat);
 
         double vpNormal[3];
         vpNormal[0] = _pInteractor->getRenderer()->getActiveCamera()->front.x;
@@ -1552,7 +1551,8 @@ bool TYPositionEditor::rotate(ORepere3D* pRepere, bool enableX /*=true*/, bool e
         if (vpNormal[0] != 0) { tyMatTmpX.setRotationOx(-vpNormal[0]*M_PI * angle / 180); }
         if (vpNormal[2] != 0) { tyMatTmpY.setRotationOy(vpNormal[2]*M_PI * angle / 180); }
         if (vpNormal[1] != 0) { tyMatTmpZ.setRotationOz(-vpNormal[1]*M_PI * angle / 180); }
-        tyMat = tyMat * tyMatTmpZ * tyMatTmpY * tyMatTmpX;
+
+        tyMat = pRepere->asMatrix() * tyMatTmpZ * tyMatTmpY * tyMatTmpX;
 
         OPoint3D org = pRepere->_origin; // On conserve l'origine de depart
         pRepere->set(tyMat);

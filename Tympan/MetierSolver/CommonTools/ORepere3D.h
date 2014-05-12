@@ -127,25 +127,10 @@ public:
     void normalize();
 
     /**
-     * \fn bool getMatChangeRep(OMatrix& matrix);
-     * \brief Mise a jour d'une matrice de changement de repere connaissant la definition du repere source (ce repere) dans le repere destination.
-     *
-     * L'origine de cette matrice represente les coordonnees de l'origine
-     * du repere source dans le repere destination.
-     * Les vecteurs de ce repere reperesentent les composantes des 3 vecteurs
-     * bases du repere source dans le repere destination.
-     *
-     * \param matrix Adresse de la matrice resultat.
-     *
-     * \return <code>true</code> si le calcul a reussi,
-     *         <code>false</code> sinon.
-     */
-    bool getMatChangeRep(OMatrix& matrix) const;
-
-    /**
      * \return The homogeneous matrix associated with this pose (aka ORepere)
      *
-     * This is the Matrix build by getMatChangeRep()
+     * \brief return the transformation matrix from unity to this pose
+     * such as this = transform * unity
      */
     OMatrix asMatrix() const;
 

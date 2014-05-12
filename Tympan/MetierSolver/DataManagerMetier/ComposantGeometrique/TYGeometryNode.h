@@ -167,7 +167,7 @@ public:
     /**
      * Set/Get de la matrice de changement de repere.
      */
-    const OMatrix getMatrix() const { return _repere.asMatrix(); }
+    OMatrix getMatrix() const { return _repere.asMatrix(); }
 
     /**
      * Set/Get de la matrice de changement de repere.
