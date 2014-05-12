@@ -39,41 +39,8 @@ static const unsigned int TY_SPECTRE_DEFAULT_NB_ELMT = 31;
 static const double TY_SPECTRE_DEFAULT_VALUE = -200.0;
 
 ///Collection des frequences
-typedef std::vector<float> OTabFreq;
+typedef std::vector<double> OTabFreq;
 
-
-/**
- * Structure de spectre allegee. Utilisee uniquement pour le stockage dans la matrice de transfert
- *
- * @author Projet_Tympan
- *
- */
-
-struct TYSpectreLeger
-{
-    float _module[TY_SPECTRE_DEFAULT_NB_ELMT];
-
-    bool operator == (const TYSpectreLeger& other) const
-    {
-        bool res = true;
-
-        for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-        {
-            if (_module[i] != other._module[i])
-            {
-                res = false;
-                break;
-            }
-        }
-
-        return res;
-    }
-    bool operator != (const TYSpectreLeger& other) const
-    {
-        return !(*this == other);
-    }
-
-};
 
 /**
  * Permet de stocker des valeurs de puissance accoustique pour differentes frequences.
@@ -289,12 +256,6 @@ public:
     /// Cumule les valeurs du spectre
     virtual double sigma();
     virtual const double sigma() const;
-
-    // Conversion en spectre "leger"
-    void toSpectreLeger(TYSpectreLeger& spectre) const;
-
-    // initialisation des valeurs reelles a partir d'un spectre "leger"
-    virtual void fromSpectreLeger(const TYSpectreLeger& spectre);
 
     /// Existence d'une tonalite marquee
     virtual bool isTonalite()const;
