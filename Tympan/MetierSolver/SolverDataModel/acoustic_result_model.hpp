@@ -55,7 +55,12 @@ public:
 
     AcousticResultModel();
     virtual ~AcousticResultModel();
+
+    SpectrumMatrix& get_data() { return acoustic_data; }
+
 protected: // data members
+
+    SpectrumMatrix acoustic_data;
 
 };  // class AcousticResultModel
 
