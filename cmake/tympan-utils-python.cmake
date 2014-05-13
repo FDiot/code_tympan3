@@ -30,7 +30,7 @@ function(add_python_test)
   add_test(NAME ${_TARGET}
     # [CONFIGURATIONS [Debug|Release|...]]
     # [WORKING_DIRECTORY dir]
-    COMMAND ${PYTHON_EXECUTABLE} "${_SCRIPT}")
+    COMMAND ${PYTHON_EXECUTABLE} "${_SCRIPT}" $<CONFIGURATION>)
   _common_test_config()
 
   build_native_path_list(native_pythonpath "${_PYTHONPATH}")  

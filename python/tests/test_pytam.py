@@ -17,6 +17,12 @@ if not osp.isdir(_TEST_SOLVERS_DIR):
     solver_dir = osp.abspath(osp.join(_HERE, '..', '..', 'plugins'))
 assert osp.isdir(_TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % _TEST_SOLVERS_DIR
 
+# TODO Factor out common code in test_toto.py
+import sys
+
+config = len(sys.argv) > 1 and sys.argv[1]
+if config:
+    del sys.argv[1]
 
 class TestTympan(unittest.TestCase):
     def test_solve(self):
