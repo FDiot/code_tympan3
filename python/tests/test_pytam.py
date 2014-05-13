@@ -62,12 +62,14 @@ class TestTympan(unittest.TestCase):
         # exports in nodes_test the nodes coordinates (x,y,z) and in triangles_test
         # the triangle nodes indices (position in the nodes_test array)
         (nodes_test, triangles_test) = model.export_triangular_mesh()
-        nodes_ref = np.loadtxt("data/test_mesh_nodes_ref.csv", delimiter=';',
-                               dtype=np.float)
+        nodes_ref = np.loadtxt(osp.join(_TEST_DATA_DIR, "expected",
+                                        "test_mesh_nodes_ref.csv"),
+                               delimiter=';', dtype=np.float)
         # nodes coordinates must be almost equal (milimeter precision)
         self.assertTrue(np.allclose(a=nodes_ref, b=nodes_test, atol=1e-03))
-        triangles_ref = np.loadtxt("data/test_mesh_triangles_ref.csv", delimiter=';',
-                               dtype=np.uint)
+        triangles_ref = np.loadtxt(osp.join(_TEST_DATA_DIR, "expected",
+                                            "test_mesh_triangles_ref.csv"),
+                                   delimiter=';', dtype=np.uint)
         # the indices must be strictly equal
         self.assertTrue(np.array_equal(triangles_ref, triangles_test))
 
