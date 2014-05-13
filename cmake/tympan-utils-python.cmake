@@ -1,4 +1,4 @@
-# Utilities related to pyhton and cython
+# Utilities related to python and cython
 
 
 function(configure_cython_module module)
@@ -37,7 +37,7 @@ function(add_python_test)
   set_property(TEST ${_TARGET} APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${native_pythonpath}")
 
   if(_UNPARSED_ARGUMENTS)
-    message(WARNING "add_qtest_executable: unknown arguments remaining unparsed "
+    message(WARNING "add_python_test: unknown arguments remaining unparsed "
       "for target ${_TARGET}: " ${_UNPARSED_ARGUMENTS})
   endif()
 endfunction()
