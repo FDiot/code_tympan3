@@ -140,6 +140,32 @@ be defined **only when** the build option
 yet possible the :file:`Tympan/CMakeLists.txt)` file forcibly defines
 ``TYMPAN_USE_PRECOMPILED_HEADER`` and emits a warning.
 
+Avoid debug python library on Windows
+=====================================
+
+A specific additional step was require to solve the following problem
+on Windows when building in *Debug*: ``python27_d.lib`` is not found
+and actually does not exists and is not really needed. This is a known
+issue related to Python header ``pyconfig.h`` using the evil MSVC
+autolink functionality.
+
+The problem is described and solved by boost::Python :
+http://www.boost.org/doc/libs/1_53_0/libs/python/doc/building.html#id19
+
+Other lighter solutions found on the Internet are not relevant for the
+build system of Code_TYMPAN, especially desactivating the ``_DEBUG``
+pre-processor symbol for building ``pytam``. Indeed ``pytam`` relies
+on CGAL which does *not* support being included both with and without
+``_DEBUG`` (and we definitely need debugging mode of CGAL).
+
+The solution is to insert an ad-hoc patch step (implemented by the
+``cython_patch.py`` script) in between the generation of ``pytam.cxx``
+from ``pytam.pyx`` by Cython and the actual compilation of the file.
+This patch step replaces the direct inclusion of ``pyconfig.h`` and
+``Python.h`` by inclusion of custom wrappers (``tympan_wrap_*.h``)
+which are adapted from those used by boost to solve the very same
+problem (``boost/python/detail/wrap_python.hpp``).
+
 
 .. References
 
