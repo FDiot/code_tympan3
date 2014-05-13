@@ -120,22 +120,11 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     }
     resultfile.close();
 
-    QProcess python;
-    // XXX we should define a work environment so as to know where to record
-    // the xml files, where to look for them, where are the python scripts
-    // we want to call, where are the libraries, etc.
-    // XXX LD_LIBRARY_PATH is set this way because for now we install the
-    // tympan project in the home directory. To be fixed
-    // XXX fix windows incompatibility
-    QStringList env = QProcess::systemEnvironment();
-    env.replaceInStrings(QRegExp("^LD_LIBRARY_PATH=(.*)"),
-            "LD_LIBRARY_PATH=Tympan/lib");
-    python.setEnvironment(env);
-
     // Call python script "tympan.py" with: the name of the file
     // containing the problem, the name of the file where to record
     // the result and the directory containing the solver plugin to use
     // to solve the acoustic problem
+    QProcess python;
     QStringList args;
     args << "Tympan/pymodules/tympan.py" << problemfile.fileName()
         << resultfile.fileName() << "Tympan/pluginsd";
