@@ -6,16 +6,14 @@
 
 
 #include "test_utils/ProjectLoader.hpp"
-#include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
+#include "TympanTestsConfig.hpp"
 
-using std::cout;
-using std::endl;
-
-TEST(TestTestUtils, loading)
+TEST_F(BuildingFromSiteFixture, loading)
 {
-    const char filename[] = "../../data/projects-panel/1_PROJET_Site_emprise_seule.xml";
-    LPTYProjet project = tympan::load_project(filename);
-    tympan::assert_loaded_project(project);
+    std::string filename = tympan::path_to_test_data
+        ("projects-panel/1_PROJET_Site_emprise_seule.xml");
+    load_file(filename.c_str());
+    EXPECT_TRUE(project);
 }
 
 /*
