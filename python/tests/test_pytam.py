@@ -2,38 +2,23 @@ import os, os.path as osp
 
 import unittest
 import numpy as np
+import sys
+
+from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR
 
 import pytam
 
-_HERE = osp.realpath(osp.dirname(__file__))
-
-_PROJECT_BASE = osp.abspath(osp.join(_HERE, '..', '..'))
-
-_TEST_DATA_DIR = osp.join(_PROJECT_BASE, 'tests', 'data')
-assert osp.isdir(_TEST_DATA_DIR), "The test data dir does not exists '%s'" % _TEST_DATA_DIR
-
-_TEST_SOLVERS_DIR = osp.join(_PROJECT_BASE, 'pluginsd')
-if not osp.isdir(_TEST_SOLVERS_DIR):
-    solver_dir = osp.abspath(osp.join(_HERE, '..', '..', 'plugins'))
-assert osp.isdir(_TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % _TEST_SOLVERS_DIR
-
-# TODO Factor out common code in test_toto.py
-import sys
-
-config = len(sys.argv) > 1 and sys.argv[1]
-if config:
-    del sys.argv[1]
 
 class TestTympan(unittest.TestCase):
     def test_solve(self):
-        project = pytam.Project.from_xml(osp.join(_TEST_DATA_DIR, 'projects-panel',
+        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, 'projects-panel',
                     "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml"))
         computation = project.current_computation()
-        pytam.loadsolver(_TEST_SOLVERS_DIR, computation)
+        pytam.loadsolver(TEST_SOLVERS_DIR, computation)
         self.assertTrue(computation.go())
 
     def test_hierarchy(self):
-        project = pytam.Project.from_xml(osp.join(_TEST_DATA_DIR, 'projects-panel',
+        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, 'projects-panel',
                     "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml"))
         site = project.site()
         childs = site.childs()
@@ -43,7 +28,7 @@ class TestTympan(unittest.TestCase):
     def test_base(self):
         # XXX This test uses expected bad values provided by the current
         # implementation
-        project = pytam.Project.from_xml(osp.join(_TEST_DATA_DIR, 'solver_export', "base.xml"))
+        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, 'solver_export', "base.xml"))
         model = project.current_computation().problem()
         builder = pytam.SolverModelBuilder(model)
         builder.fill_problem(project.site())
@@ -61,19 +46,19 @@ class TestTympan(unittest.TestCase):
         """
         # load a xml project, build an acoustic problem from it and retrieve
         # its triangular mesh to make sure it contains the correct data
-        project = pytam.Project.from_xml(osp.join(_TEST_DATA_DIR, "tiny_site.xml"))
+        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, "tiny_site.xml"))
         model = project.current_computation().problem()
         builder = pytam.SolverModelBuilder(model)
         builder.fill_problem(project.site())
         # exports in nodes_test the nodes coordinates (x,y,z) and in triangles_test
         # the triangle nodes indices (position in the nodes_test array)
         (nodes_test, triangles_test) = model.export_triangular_mesh()
-        nodes_ref = np.loadtxt(osp.join(_TEST_DATA_DIR, "expected",
+        nodes_ref = np.loadtxt(osp.join(TEST_DATA_DIR, "expected",
                                         "test_mesh_nodes_ref.csv"),
                                delimiter=';', dtype=np.float)
         # nodes coordinates must be almost equal (milimeter precision)
         self.assertTrue(np.allclose(a=nodes_ref, b=nodes_test, atol=1e-03))
-        triangles_ref = np.loadtxt(osp.join(_TEST_DATA_DIR, "expected",
+        triangles_ref = np.loadtxt(osp.join(TEST_DATA_DIR, "expected",
                                             "test_mesh_triangles_ref.csv"),
                                    delimiter=';', dtype=np.uint)
         # the indices must be strictly equal
@@ -82,7 +67,7 @@ class TestTympan(unittest.TestCase):
 
     @unittest.skip("Implementation to be fixed")
     def test_ground_materials(self):
-        project = pytam.Project.from_xml(osp.join(_TEST_DATA_DIR, 'solver_export', "ground_materials.xml"))
+        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, 'solver_export', "ground_materials.xml"))
         model = project.current_computation().problem()
         builder = pytam.SolverModelBuilder(model)
         builder.fill_problem(project.site())
@@ -91,4 +76,5 @@ class TestTympan(unittest.TestCase):
         # TODO to be completed: cf. ticket #1468184
 
 if __name__ == '__main__':
-    unittest.main()
+    from utils import main
+    main()
