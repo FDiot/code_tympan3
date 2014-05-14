@@ -9,6 +9,7 @@
 #include "gtest/gtest.h"
 
 #include "test_utils/misc.hpp"
+#include "TympanTestsConfig.hpp"
 
 #include <QtXml>
 #include <QDir>
@@ -197,23 +198,19 @@ TEST(TestRoads, functionnalResults)
     const double precision = 0.15; // in dB
 
     // Locate CSV data file
-    const QDir data_dir("../../data/");
-    const QString data_file_name = data_dir.absoluteFilePath(
-                                       "dataRoadEmissionNMPB2008.csv");
+    std::string data_file_name = tympan::path_to_test_data("dataRoadEmissionNMPB2008.csv");
 
-    ASSERT_TRUE(QFile::exists(data_file_name)) <<
-        "Test data file : '" << data_file_name.toUtf8().constData() << "' does not exists.";
-    ifstream file(data_file_name.toUtf8().constData());
+    ifstream file(data_file_name.c_str());
     ASSERT_TRUE(file.is_open()) <<
-        "Can not open test data file : " << data_file_name.toUtf8().constData();
+        "Can not open test data file : " << data_file_name.c_str();
     string header;
     getline(file, header); // Read and check the header line
     ASSERT_FALSE(file.fail())<<
-        "Failure while reading test data file : " << data_file_name.toUtf8().constData();
+        "Failure while reading test data file : " << data_file_name.c_str();
     EXPECT_EQ("Surface type,Age,Declivity,HGV,LV,% HGV,global,dB(A)", header);
     deque<deque<double> > table = readCsvAsTableOf<double>(file);
     ASSERT_EQ(32, table.size()) <<
-        "Bad number of rows in test data file " << data_file_name.toUtf8().constData();
+        "Bad number of rows in test data file " << data_file_name.c_str();
 
     unsigned row_num = 0;
     BOOST_FOREACH(const deque<double>& row, table)
@@ -226,7 +223,7 @@ TEST(TestRoads, functionnalResults)
         EXPECT_TRUE(boost::math::isfinite(global_dBA)) << spectrum << endl;
         EXPECT_NEAR(loaded_ref, global_dBA, precision) <<
                                                        "Incorrect results for the row #" << row_num << " (header is #0)"
-                                                       " of the test data file : " << data_file_name.toUtf8().constData();
+                                                       " of the test data file : " << data_file_name.c_str();
     }
     file.close();
 }

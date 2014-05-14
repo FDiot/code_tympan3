@@ -17,22 +17,28 @@ AcousticMaterialBase::AcousticMaterialBase(
     const string& name_
 ) : name(name_) {}
 
-DiffractionEdge::DiffractionEdge(
-    const Point& p1_, const Point& p2_, double angle_
-) : p1(p1_), p2(p2_), angle(angle_) {}
-
 AcousticBuildingMaterial::AcousticBuildingMaterial(
     const string& name_,
-    const Spectrum& spectrum_
+    const ComplexSpectrum& spectrum_
 ) : AcousticMaterialBase(name_), spectrum(spectrum_) {}
 
 AcousticGroundMaterial::AcousticGroundMaterial(
     const string& name_, double resistivity_
 ) : AcousticMaterialBase(name_), resistivity(resistivity_) {}
 
+AcousticSource::AcousticSource(
+    const Point& position_,
+    const binary_uuid& id_,
+    const Spectrum& spectrum_ )
+    : position(position_)
+    , id(id_)
+    , spectrum(spectrum_)
+    , directivity(new SphericalSourceDirectivity())
+{}
+
 AcousticReceptor::AcousticReceptor(
-    const Point& point_
-) : point(point_) {}
+    const Point& position_
+) : position(position_) {}
 
 AcousticEvent::AcousticEvent(
     const string& event_type_, const Point& point_
@@ -54,12 +60,6 @@ SiteAcousticReceptor::SiteAcousticReceptor(
 Site::Site(
     unsigned int id_
 ) : id(id_) {}
-
-
-DirectivityCoefficient::DirectivityCoefficient(
-    double value_, double theta_, double phi_, bool solid_angle_
-) : value(value_), theta(theta_), phi(phi_), solid_angle(solid_angle_) {}
-
 
 
 // XXX Copy/paste these methods to the \c AcousticGroundMaterial See

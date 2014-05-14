@@ -705,27 +705,6 @@ OSpectre OSpectre::seuillage(const double& min, const double max)
     return s;
 }
 
-
-void OSpectre::toSpectreLeger(TYSpectreLeger& spectre) const
-{
-    OSpectre s(this->toGPhy());
-
-    for (unsigned int i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-        spectre._module[i] = s._module[i];
-    }
-}
-
-void OSpectre::fromSpectreLeger(const TYSpectreLeger& spectre)
-{
-    _etat = SPECTRE_ETAT_LIN;
-
-    for (unsigned int i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
-    {
-        _module[i] = spectre._module[i];
-    }
-}
-
 // Fonctions statiques
 
 std::map<float, int>  OSpectre::setMapFreqIndice()

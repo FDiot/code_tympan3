@@ -19,16 +19,6 @@ namespace tympan
 /// XXX \todo Add the entity 'Atmosphere' with attr: pression, temperature,
 /// hygrometry (\note can find these values in the TYCalcul instead of TYSite).
 
-// NB For now an AcousticSpectrum simply IS a OSpectreComplex
-class AcousticSpectrum:
-    public virtual BaseEntity,
-    public Spectrum
-{
-public:
-    AcousticSpectrum(const Spectrum& spectrum) : Spectrum(spectrum) {};
-    virtual ~AcousticSpectrum() {};
-};
-
 class AcousticMaterialBase:
     public virtual BaseEntity
 {
@@ -45,10 +35,10 @@ class AcousticBuildingMaterial:
     public virtual BaseEntity, public AcousticMaterialBase
 {
 public:
-    AcousticBuildingMaterial(const string& name_, const Spectrum& spectrum);
+    AcousticBuildingMaterial(const string& name_, const ComplexSpectrum& spectrum);
     virtual ~AcousticBuildingMaterial() {};
 
-    AcousticSpectrum spectrum;
+    ComplexSpectrum spectrum;
 };
 
 class AcousticGroundMaterial:
@@ -78,38 +68,55 @@ public:
 typedef std::deque<AcousticTriangle> triangle_pool_t;
 typedef size_t triangle_idx;
 
-class DiffractionEdge:
-    public virtual BaseEntity
+class SourceDirectivityInterface
 {
 public:
-    DiffractionEdge(const Point& p1_, const Point& p2_, double angle_);
-    virtual ~DiffractionEdge() {};
+    virtual Spectrum lwAdjustment(Vector direction) = 0;
+};
 
-    Point p1;
-    Point p2;
-    /// Angle (radian).
-    double angle;
+class SphericalSourceDirectivity :
+      public virtual BaseEntity,
+      public SourceDirectivityInterface
+{
+public:
+     virtual Spectrum lwAdjustment(Vector direction)
+     { return Spectrum(1.0); }
 };
 
 class AcousticSource:
     public virtual BaseEntity
 {
 public:
-    AcousticSource() {};
+    AcousticSource(
+            const Point& point_, 
+            const binary_uuid& id_,
+            const Spectrum& spectrum_);
+        
     virtual ~AcousticSource() {};
 
-    // XXX Add some attr.?
+    Point position;
+    binary_uuid id;
+    Spectrum spectrum;
+    SourceDirectivityInterface* directivity;
 };
+
+typedef std::deque<AcousticSource> source_pool_t;
+typedef size_t source_idx;
+
 
 class AcousticReceptor:
     public virtual BaseEntity
 {
 public:
-    AcousticReceptor(const Point& point_);
+    AcousticReceptor(const Point& position_);
     virtual ~AcousticReceptor() {};
 
-    Point point;
+    Point position;
 };
+
+typedef std::deque<AcousticReceptor> receptor_pool_t;
+typedef size_t receptor_idx;
+
 
 class AcousticEvent:
     public virtual BaseEntity

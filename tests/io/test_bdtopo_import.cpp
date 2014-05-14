@@ -16,6 +16,7 @@
 #include "Tympan/Appli/TympanApp/TYDXFBDTOPOImporter.h"
 
 #include "test_utils/ProjectLoader.hpp"
+#include "TympanTestsConfig.hpp"
 
 using std::cout;
 using std::endl;
@@ -27,11 +28,8 @@ TEST(TestBDTOPOImport, topography_import)
 {
 
     // DXF files to read.
-    const QDir data_dir("../data/dxf");
-    const QString alti_file = data_dir.absoluteFilePath("ALT_TEST.dxf");
-    const QString oro_file = data_dir.absoluteFilePath("ORO_TEST.dxf");
-    ASSERT_TRUE(QFile::exists(alti_file));
-    ASSERT_TRUE(QFile::exists(oro_file));
+    std::string alti_file = tympan::path_to_test_data("dxf/ALT_TEST.dxf");
+    std::string oro_file = tympan::path_to_test_data("dxf/ORO_TEST.dxf");
 
     // Max number of isolines to import.
     const int MAX = 1000;
@@ -69,8 +67,8 @@ TEST(TestBDTOPOImport, topography_import)
     dimeModel model[nDXFFileCount];
 
     // Read just two files.
-    importer.ReadDXF(&(model[0]), alti_file);
-    importer.ReadDXF(&(model[7]), oro_file);
+    importer.ReadDXF(&(model[0]), QString(alti_file.c_str()));
+    importer.ReadDXF(&(model[7]), QString(oro_file.c_str()));
 
     // Import isolines from the two previous DXF files.
     importer.importIsoline(MAX, model, offset, pTYTopographie);

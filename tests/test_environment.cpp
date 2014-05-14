@@ -7,17 +7,27 @@
  */
 
 #include <cstdlib>
+#include <string>
 
 #include "gtest/gtest.h"
+
+#include <QDir>
+
+#include "TympanTestsConfig.hpp"
 
 using std::cout;
 using std::cerr;
 using std::endl;
 
-TEST(PathTest, dumpenv)
+TEST(TestEnvironment, Path)
 {
-
     char* path = std::getenv("PATH");
     ASSERT_FALSE(path == NULL);
-    cerr << "PATH = " << path << endl;
+    cout << "PATH = " << path << endl;
+}
+
+TEST(TestEnvironment, TestDataPath)
+{
+    std::string expected_data_path = tympan::path_to_test_data("");
+    EXPECT_EQ(expected_data_path, std::string(TYMPAN_TESTS_DATA_DIR));
 }
