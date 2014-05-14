@@ -226,14 +226,14 @@ cdef class Computation:
             raise NullCppObject()
         return self.thisptr.getRealPointer().go()
 
-    def problem(self):
+    def acoustic_problem(self):
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         problem = ProblemModel()
         problem.thisptr = cython.address(self.thisptr.getRealPointer()._acousticProblem)
         return problem
 
-    def result(self):
+    def acoustic_result(self):
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         result = ResultModel()

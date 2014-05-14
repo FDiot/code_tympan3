@@ -29,7 +29,7 @@ class TestTympan(unittest.TestCase):
         # XXX This test uses expected bad values provided by the current
         # implementation
         project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, 'solver_export', "base.xml"))
-        model = project.current_computation().problem()
+        model = project.current_computation().acoustic_problem()
         builder = pytam.SolverModelBuilder(model)
         builder.fill_problem(project.site())
         self.assertEqual(model.nbpoints(), 6) # OK
@@ -47,7 +47,7 @@ class TestTympan(unittest.TestCase):
         # load a xml project, build an acoustic problem from it and retrieve
         # its triangular mesh to make sure it contains the correct data
         project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, "tiny_site.xml"))
-        model = project.current_computation().problem()
+        model = project.current_computation().acoustic_problem()
         builder = pytam.SolverModelBuilder(model)
         builder.fill_problem(project.site())
         # exports in nodes_test the nodes coordinates (x,y,z) and in triangles_test
@@ -68,7 +68,7 @@ class TestTympan(unittest.TestCase):
     @unittest.skip("Implementation to be fixed")
     def test_ground_materials(self):
         project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, 'solver_export', "ground_materials.xml"))
-        model = project.current_computation().problem()
+        model = project.current_computation().acoustic_problem()
         builder = pytam.SolverModelBuilder(model)
         builder.fill_problem(project.site())
         self.assertEqual(model.nbmaterials(), 3)

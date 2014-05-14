@@ -16,7 +16,7 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
     project = pytam.Project.from_xml(input_project)
     comp = project.current_computation()
     # Build an acoustic problem from the site of the computation
-    problem = comp.problem()
+    problem = comp.acoustic_problem()
     builder = pytam.SolverModelBuilder(problem)
     builder.fill_problem(project.site())
 
