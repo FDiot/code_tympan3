@@ -921,10 +921,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
             pt._z += ((TYRectangularMaillage*) pMaillage)->getRectangle()->getSizeY() / 2.0;
         }
 
-        ORepere3D repere = pMaillageGeoNode->getORepere3D();
-        // On assigne la nouvelle altitude
-        repere._origin._z = pt._z;
-        pMaillageGeoNode->setRepere(repere);
+        pMaillageGeoNode->getORepere3D()._origin._z = pt._z;
 
         modified = true;
     }

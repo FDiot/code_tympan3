@@ -741,13 +741,7 @@ void TYSiteNode::updateAltiInfra()
         // Recherche de l'altitude
         bNoPbAlti &= pAlti->updateAltitude(pt);
 
-        ORepere3D repere = pBatGeoNode->getORepere3D();
-
-        // On repositionne la nouvelle origine
-        repere._origin._z = pt._z + hauteur;
-
-        // Mise a jour de la matrice du GeoNode
-        pBatGeoNode->setRepere(repere);
+        pBatGeoNode->getORepere3D()._origin._z = pt._z + hauteur;
 
         pBat->setIsGeometryModified(false);
         pBat = NULL;
@@ -777,12 +771,7 @@ void TYSiteNode::updateAltiInfra()
         // Recherche de l'altitude
         bNoPbAlti &= pAlti->updateAltitude(pt);
 
-        ORepere3D repere = pMachineGeoNode->getORepere3D();
-
-        // On repositionne la nouvelle origine
-        repere._origin._z = pt._z + hauteur;
-
-        pMachineGeoNode->setRepere(repere);
+        pMachineGeoNode->getORepere3D()._origin._z = pt._z + hauteur;
 
         pMachine->setIsGeometryModified(false);
         pMachine = NULL;

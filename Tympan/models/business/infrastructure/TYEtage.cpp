@@ -826,7 +826,7 @@ bool TYEtage::setMurs(const TYTabPoint& tabPts, double hauteur /*=2.0*/, bool cl
 {
     TYPoint pt0, pt1;
     size_t count = tabPts.size();
-    TYRepere repMur;
+    ORepere3D repMur;
 
     if ((count == 0) || (hauteur <= 0.0))
     {
@@ -953,9 +953,7 @@ void TYEtage::setHauteur(double hauteur)
         TYMur::safeDownCast(_tabMur[i]->getElement())->setSizeY(hauteur);
 
         // On positionne le centre du mur a la 1/2 hauteur
-        ORepere3D rep = _tabMur[i]->getORepere3D();
-        rep._origin._z = hauteur / 2.0;
-        _tabMur[i]->setRepere(rep);
+        _tabMur[i]->getORepere3D()._origin._z = hauteur / 2.0;
     }
 
     updateSolPlafond();
@@ -2727,9 +2725,7 @@ void TYEtage::updateZSource()
     for (i = 0; i < _tabMachine.size(); i++)
     {
         double h = _tabMachine[i]->getHauteur();
-        ORepere3D repere = _tabMachine[i]->getORepere3D();
-        repere._origin._z = h;
-        _tabMachine[i]->setRepere(repere);
+        _tabMachine[i]->getORepere3D()._origin._z = h;
     }
 
     setIsGeometryModified(true);
