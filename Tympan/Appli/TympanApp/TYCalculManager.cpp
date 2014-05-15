@@ -97,121 +97,121 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     else
     {
         logger.debug("Computation through Python script");
-    // Temporary XML file to give the current acoustic problem to the python
-    // script
-    QTemporaryFile problemfile;
-    if (!problemfile.open())
-    {
-        logger.error(
-                "Could not open temporary file to export current project. Computation won't be done");
-        return false;
-    }
-    problemfile.close();
-
-    // Serialize current project
-    ostringstream msg;
-    try
-    {
-        save_project(problemfile.fileName().toUtf8().data(), pProject);
-    }
-    catch(const tympan::invalid_data& exc)
-    {
-        msg << boost::diagnostic_information(exc);
-        logger.error(
-                "Could not export current project. Computation won't be done");
-        logger.debug(msg.str().c_str());
-        return false;
-    }
-
-    QTemporaryFile resultfile;
-    if (!resultfile.open())
-    {
-        logger.error(
-                "Could not open temporary file to retrieve computation results.");
-        return false;
-    }
-    resultfile.close();
-
-    // Call python script "tympan.py" with: the name of the file
-    // containing the problem, the name of the file where to record
-    // the result and the directory containing the solver plugin to use
-    // to solve the acoustic problem
-    QProcess python;
-    QStringList args;
-    QString absolute_plugins_path (getTYApp()->_binaryDir);
-    absolute_plugins_path.append("/");
-    absolute_plugins_path.append(PLUGINS_PATH);
-    QString absolute_pyscript_path (getTYApp()->_binaryDir);
-    absolute_pyscript_path.append("/");
-    absolute_pyscript_path.append(PYSCRIPT);
-    args << absolute_pyscript_path << problemfile.fileName() << resultfile.fileName()
-        << absolute_plugins_path;
-
-    logger.info(TR("id_msg_go_calcul"));
-
-    // Deactivate GUI
-    getTYMainWnd()->setEnabled(false);
-    TYApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
-    float comp_duration (0.);
-    bool comp_finished (false);
-    python.start("python", args);
-    do
-    {
-        comp_finished = python.waitForFinished(COMPUTATION_TIMEOUT);
-        if (comp_finished)
+        // Temporary XML file to give the current acoustic problem to the python
+        // script
+        QTemporaryFile problemfile;
+        if (!problemfile.open())
         {
-            break;
+            logger.error(
+                    "Could not open temporary file to export current project. Computation won't be done");
+            return false;
         }
-        if (python.error() == QProcess::Timedout)
-        {
-            //Computation still running
-            comp_duration += (COMPUTATION_TIMEOUT/1000);
-            logger.info("Computation still running after %.3f seconds", comp_duration);
-            continue;
-        }
-        else
-        {
-            // Will have a bad exit status and will be handled below
-            break;
-        }
-    }
-    while(!comp_finished);
+        problemfile.close();
 
-    int pystatus = python.exitStatus();
-    if (pystatus == 1)
-    {
-        logger.error(
-                "QProcess running python script had a bad exit status. Error: %d. No results available.",
-                python.error());
-        logger.info(TR("id_msg_calcul_failed"));
-        // Reactivate GUI
-        TYApplication::restoreOverrideCursor();
-        getTYMainWnd()->setEnabled(true);
-        return false;
-    }
-    // Then read the result to update the internal model
-    LPTYProjet result;
-    try
-    {
-        result = load_project(resultfile.fileName().toUtf8().data());
-    }
-    catch(const tympan::invalid_data& exc)
-    {
-        msg << boost::diagnostic_information(exc);
-        logger.error("Could not import computed project. No results available.");
-        logger.debug(msg.str().c_str());
-        // reactivate GUI
-        TYApplication::restoreOverrideCursor();
-        getTYMainWnd()->setEnabled(true);
-        return false;
-    }
+        // Serialize current project
+        ostringstream msg;
+        try
+        {
+            save_project(problemfile.fileName().toUtf8().data(), pProject);
+        }
+        catch(const tympan::invalid_data& exc)
+        {
+            msg << boost::diagnostic_information(exc);
+            logger.error(
+                    "Could not export current project. Computation won't be done");
+            logger.debug(msg.str().c_str());
+            return false;
+        }
 
-    // Update the current project with the results of the current acoustic
-    // problem
-    pProject = result.getRealPointer();
-    getTYApp()->getCurProjet()->setCurrentCalcul(pProject->getCurrentCalcul());
-    pCalcul = pProject->getCurrentCalcul();
+        QTemporaryFile resultfile;
+        if (!resultfile.open())
+        {
+            logger.error(
+                    "Could not open temporary file to retrieve computation results.");
+            return false;
+        }
+        resultfile.close();
+
+        // Call python script "tympan.py" with: the name of the file
+        // containing the problem, the name of the file where to record
+        // the result and the directory containing the solver plugin to use
+        // to solve the acoustic problem
+        QProcess python;
+        QStringList args;
+        QString absolute_plugins_path (getTYApp()->_binaryDir);
+        absolute_plugins_path.append("/");
+        absolute_plugins_path.append(PLUGINS_PATH);
+        QString absolute_pyscript_path (getTYApp()->_binaryDir);
+        absolute_pyscript_path.append("/");
+        absolute_pyscript_path.append(PYSCRIPT);
+        args << absolute_pyscript_path << problemfile.fileName() << resultfile.fileName()
+            << absolute_plugins_path;
+
+        logger.info(TR("id_msg_go_calcul"));
+
+        // Deactivate GUI
+        getTYMainWnd()->setEnabled(false);
+        TYApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+
+        float comp_duration (0.);
+        bool comp_finished (false);
+        python.start("python", args);
+        do
+        {
+            comp_finished = python.waitForFinished(COMPUTATION_TIMEOUT);
+            if (comp_finished)
+            {
+                break;
+            }
+            if (python.error() == QProcess::Timedout)
+            {
+                //Computation still running
+                comp_duration += (COMPUTATION_TIMEOUT/1000);
+                logger.info("Computation still running after %.3f seconds", comp_duration);
+                continue;
+            }
+            else
+            {
+                // Will have a bad exit status and will be handled below
+                break;
+            }
+        }
+        while(!comp_finished);
+
+        int pystatus = python.exitStatus();
+        if (pystatus == 1)
+        {
+            logger.error(
+                    "QProcess running python script had a bad exit status. Error: %d. No results available.",
+                    python.error());
+            logger.info(TR("id_msg_calcul_failed"));
+            // Reactivate GUI
+            TYApplication::restoreOverrideCursor();
+            getTYMainWnd()->setEnabled(true);
+            return false;
+        }
+        // Then read the result to update the internal model
+        LPTYProjet result;
+        try
+        {
+            result = load_project(resultfile.fileName().toUtf8().data());
+        }
+        catch(const tympan::invalid_data& exc)
+        {
+            msg << boost::diagnostic_information(exc);
+            logger.error("Could not import computed project. No results available.");
+            logger.debug(msg.str().c_str());
+            // reactivate GUI
+            TYApplication::restoreOverrideCursor();
+            getTYMainWnd()->setEnabled(true);
+            return false;
+        }
+
+        // Update the current project with the results of the current acoustic
+        // problem
+        pProject = result.getRealPointer();
+        getTYApp()->getCurProjet()->setCurrentCalcul(pProject->getCurrentCalcul());
+        pCalcul = pProject->getCurrentCalcul();
     }
 
     // Compute and display computation time
