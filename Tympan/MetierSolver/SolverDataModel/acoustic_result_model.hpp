@@ -26,7 +26,7 @@ public:
     typedef std::vector<std::vector<Spectrum> > impl_matrix_t;
 
     SpectrumMatrix();
-    SpectrumMatrix(size_t nb_sources, size_t nb_receptors);
+    SpectrumMatrix(size_t nb_receptors, size_t nb_sources);
     virtual ~SpectrumMatrix() {};
 
     size_t nb_sources()   const { return _nb_sources; };
