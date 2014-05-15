@@ -225,17 +225,25 @@ cdef class Result:
     def __cinit__(self):
         self.thisptr = SmartPtr[TYResultat]()
 
-    def num_sources(self):
+    @property
+    def nsources(self):
+        """ Returns the number of acoustic sources
+        """
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         return self.thisptr.getRealPointer().getNbOfSources()
 
-    def num_receivers(self):
+    @property
+    def nreceivers(self):
+        """ Returns the number of acoustic receivers
+        """
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         return self.thisptr.getRealPointer().getNbOfRecepteurs()
 
     def spectrum(self, receiver, source):
+        """ Returns the computed acoustic spectrum
+        """
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         spec = Spectrum()
@@ -249,20 +257,26 @@ cdef class Spectrum:
     def __cinit__(self):
         pass
 
-    def num_values(self):
+    @property
+    def nvalues(self):
+        """ Returns the number of values contained in the spectrum
+        """
         return self.thisobj.getNbValues()
 
+    @property
     def values(self):
-        # fixme - couldn't make it work this way (err: "cannot assign to or delete this")
-#        spec_val = cython.declare(np.ndarray, np.zeros((self.num_values(), 1),
-#                                                       dtype=np.float))
-#        (<double *> spec_val.data) = self.thisobj.getTabValReel()
-        cdef cyarray cy_array = <double[:self.num_values()]> self.thisobj.getTabValReel()
-        spec_val = np.array(cy_array, dtype=np.float32)
+        """ Returns the values of the spectrum
+        """
+        cdef cyarray cy_array = <double[:self.nvalues]> self.thisobj.getTabValReel()
+        spec_val = np.array(cy_array, dtype=np.double)
         return spec_val
 
-    def toDB(self):
-        self.thisobj = self.thisobj.toDB()
+    def to_dB(self):
+        """ Convert the spectrum to a dB scale
+        """
+        spectrum = Spectrum()
+        spectrum.thisobj = self.thisobj.toDB()
+        return spectrum
 
 
 cdef class Computation:
@@ -271,7 +285,10 @@ cdef class Computation:
     def __cinit__(self):
         self.thisptr = SmartPtr[TYCalcul]()
 
+    @property
     def result(self):
+        """ Returns an acoustic result (business representation)
+        """
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         res = Result()
@@ -279,11 +296,16 @@ cdef class Computation:
         return res
 
     def go(self):
+        """ Solves the current acoustic problem. A solver must be loaded.
+        """
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         return self.thisptr.getRealPointer().go()
 
     def acoustic_problem(self):
+        """ Returns an acoustic problem model (geometric representation as
+        used by the solvers)
+        """
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         problem = ProblemModel()
@@ -291,6 +313,9 @@ cdef class Computation:
         return problem
 
     def acoustic_result(self):
+        """ Returns an acoustic result model (geometric representation as used
+        by the solvers)
+        """
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         result = ResultModel()
