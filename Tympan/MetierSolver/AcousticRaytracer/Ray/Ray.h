@@ -17,18 +17,16 @@
 #define RAY_H
 
 #include <QSharedPointer>
+
+#include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Source.h"
 //#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Diffraction.h"
 
-#include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 using namespace std;
 
-//#ifdef USE_QT
-//  #include "RayGraphic.h"
-//#endif
 
 /*!
  * brief : signature describes a ray by a pair of unsigend int. The first one gives the source number (in the range 0-4095)
@@ -42,14 +40,15 @@ class Ray : public Base
 {
 
 public:
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Sphere)
-    //  GRAPHIC_DECL(Ray)
-    //#endif
+    Ray() : Base(), position(), direction(), mint(0), maxt(100000), source(NULL), recepteur(NULL), nbReflexion(0), nbDiffraction(0), cumulDistance(0.), cumulDelta(0.)
+	{ 
+		name = "unknow ray"; 
+	}
 
-    Ray() : Base(), position(), direction(), mint(0), maxt(100000), source(NULL), recepteur(NULL), nbReflexion(0), nbDiffraction(0) { name = "unknow ray"; }
-    Ray(const vec3& _position, const vec3& _direction) : Base(), position(_position), direction(_direction), mint(0), maxt(100000), source(NULL), recepteur(NULL), nbReflexion(0), nbDiffraction(0)
-    { name = "unknow ray";}
+    Ray(const vec3& _position, const vec3& _direction) : Base(), position(_position), direction(_direction), mint(0), maxt(100000), source(NULL), recepteur(NULL), nbReflexion(0), nbDiffraction(0), cumulDistance(0.), cumulDelta(0.)
+    { 
+		name = "unknow ray";
+	}
 
     Ray(const Ray& other) : Base(other)
     {
@@ -67,6 +66,8 @@ public:
 
         nbDiffraction = other.nbDiffraction;
         nbReflexion = other.nbReflexion;
+		cumulDistance = other.cumulDistance;
+		cumulDelta = other.cumulDelta;
     }
 
     Ray(Ray* other)
@@ -85,11 +86,20 @@ public:
 
         nbDiffraction = other->nbDiffraction;
         nbReflexion = other->nbReflexion;
+		cumulDistance = other->cumulDistance;
+		cumulDelta = other->cumulDelta;
+
     }
 
     virtual ~Ray() { }
 
-    /*!
+	/*!
+	 * \fn decimal computeEventsSequenceLength()
+	 * \brief compute the length of the sequence of events 
+	 */
+	decimal computeEventsSequenceLength();
+
+	/*!
     * \fn void computeLongueur()
     * \brief Calcul la distance parcourue par le rayon et place le resultat dans longueur
     */
@@ -97,23 +107,39 @@ public:
 
     /*!
      * \fn decimal computeTrueLength(vec3& nearestPoint);
-     * \brief Compute ray lenfth from source to the nearest point of the receptor
+	 * \brief	Compute ray lenfth from source to the nearest point 
+	 *			of the "event" located at ref position
      */
-    decimal computeTrueLength(vec3& closestPoint);
+	decimal computeTrueLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
 
     /*!
      * \fn decimal computePertinentLength(vec3& nearestPoint);
      * \brief Compute ray lenfth from last pertinent event (i.e. source or last diffraction
-     *        to the nearest point of the receptor
+	 *        to the nearest point of the "event" located at ref position
      */
-    decimal computePertinentLength(vec3& closestPoint);
+	decimal computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
 
     /*!
-     * \fn void* getLastPertinentEventPos() const;
-     * \brief return the apointer to the last pertinent event influencing ray thickness
-     *        may be source or last diffraction event
+	 * \fn void* getLastPertinentEventOrSource(typeevent evType = DIFFRACTION) const;
+	 * \brief Return a pointer to the last event of type evType or source if none
      */
-    Base* getLastPertinentEvent();
+	Base* getLastPertinentEventOrSource(typeevent evType = DIFFRACTION);
+
+	/*!
+	 * \fn vec3 computeLocalOrigin( Base *ev);
+	 * \brief Return position of event found by getLastPertinentEventOrSource()
+	 */
+	inline vec3 computeLocalOrigin( Base *ev)
+	{
+		if ( dynamic_cast<Source*>(ev) )
+		{
+			return dynamic_cast<Source*>(ev)->getPosition();
+		}
+		else // that's a standard event
+		{
+			return dynamic_cast<Event*>(ev)->getPosition();
+		}
+	}
 
     /*!
     * \fn double getLongueur()
@@ -156,13 +182,6 @@ public:
     */
     const std::vector<QSharedPointer<Event> >* getEvents() const { return &events; }
 
-    /*!
-    * \fn float distanceSourceRecepteur()
-    * \brief Calcul la distance entre une source et un recepteur
-    * \return Distance entre la source et le recepteur associes au rayon
-    */
-    float distanceSourceRecepteur();
-
     vector<unsigned int>getFaceHistory();
 
     vector<unsigned int> getPrimitiveHistory();
@@ -188,46 +207,18 @@ public:
     signature getSignature(const typeevent& typeEv = SPECULARREFLEXION);
 
     /*!
-     * \fn decimal getThick( const decimal& distance, const decimal& solid_angle, const unsigned int& nb_rays, bool diffraction = false) const;
+	 * \fn decimal getThick( const decimal& distance, bool diffraction) const;
      * \brief Compute thickness of the ray after covering a distance distance for spherical or diffraction source
      */
-    inline decimal getThickness(const decimal& distance)
-    {
-        bool diffraction(false);
-        decimal angle = getSolidAngle(diffraction);
-
-        if (diffraction)
-        {
-            //return 2 * M_PI * angle * distance;
-            return distance * angle;
-        }
-
-        return 2. * distance * sqrt(angle / M_PI);
-    }
+	decimal getThickness( const decimal& distance, bool diffraction);
 
     /*!
-     * \fn decimal getSolidAngle( bool& diffraction)
+	 * \fn decimal getSolidAngle( bool &diffraction)
      * \brief   Compute solid angle associated with the ray
      *          Set diffraction true if last pertinent event
      *          is a diffraction
      */
-    inline decimal getSolidAngle(bool& diffraction)
-    {
-        unsigned int nb_rays = source->getInitialRayCount();
-
-        Base* last = getLastPertinentEvent();
-        Event* e = dynamic_cast<Event*>(last);
-
-        if (e && (e->getType() == DIFFRACTION))
-        {
-            diffraction = true;
-            //          return sin( dynamic_cast<Diffraction*>(e)->getAngle() ) * dynamic_cast<Diffraction*>(e)->getAngleOuverture() / e->getInitialNbResponseLeft();
-            return dynamic_cast<Diffraction*>(e)->getAngle() * M_2PI / e->getInitialNbResponseLeft();
-        }
-
-        diffraction = false;
-        return M_4PI / static_cast<decimal>(nb_rays);
-    }
+	decimal getSolidAngle( bool &diffraction );
 
     /*!
      * \fn bitSet getSRBitSet(const unsigned& int source_id, const unsigned int & receptor_id);
@@ -261,6 +252,8 @@ public:
     unsigned long long int constructId;         /*!< Identifiant du rayon */
     unsigned int nbReflexion;                   /*!< Nombre de reflexions subis par le rayon */
     unsigned int nbDiffraction;                 /*!< Nombre de diffractions subis par le rayon */
+	decimal cumulDistance;						/*!< Distance cumulee parcourue par le rayon calculee à chaque étape */
+	decimal cumulDelta;							/*!< Difference de marche cumulé par le rayon calculee à chaque etape */
 };
 
 

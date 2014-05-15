@@ -16,21 +16,13 @@
 #ifndef CYLINDRE_H
 #define CYLINDRE_H
 
-#include "Shape.h"
-#include "Repere.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Shape.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Repere.h"
 
-//#ifdef USE_QT
-//  #include "CylindreGraphic.h"
-//#endif
+class Ray;
 
 class Cylindre : public Shape
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Shape)
-    //  GRAPHIC_DECL(Cylindre)
-    //#endif
-
 public:
 
     Cylindre(Shape* _p1 = NULL, Shape* _p2 = NULL, std::vector<vec3>* _vertices = NULL, unsigned int v1 = 0, unsigned int v2 = 1, decimal _epaisseur = 0.2);
@@ -66,7 +58,6 @@ protected:
 
     vector<vec3> points;
     vector<Shape*> mesh;
-
 };
 
 #endif
