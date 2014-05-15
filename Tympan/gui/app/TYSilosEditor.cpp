@@ -172,11 +172,7 @@ void TYSilosEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::
                     snapToGrid(org._x, org._y, org._z);
                 }
 
-                ORepere3D repere = pCylGeoNode->getORepere3D();
-
-                repere._origin = org;
-
-                pCylGeoNode->setRepere(repere);
+                pCylGeoNode->getORepere3D()._origin = org;
 
                 // Ajout au batiment
                 LPTYBatiment pBat = getBatiment();
