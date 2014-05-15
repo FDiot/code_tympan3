@@ -225,6 +225,7 @@ private :
 
 public:
     QString _binaryDir;
+    bool _usePython;
 
 private:
     ///Chemin d'origine de l'application.

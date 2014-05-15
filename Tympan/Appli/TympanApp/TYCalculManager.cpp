@@ -85,7 +85,18 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
 
     TYProjet *pProject = pCalcul->getProjet();
     OMessageManager& logger =  *OMessageManager::get();
+    // Start chrono
+    OChronoTime startTime;
 
+    if (!getTYApp()->_usePython)
+    {
+        logger.warning("Legacy computation (without Python)");
+        bool ret = pCalcul->go();
+
+    }
+    else
+    {
+        logger.debug("Computation through Python script");
     // Temporary XML file to give the current acoustic problem to the python
     // script
     QTemporaryFile problemfile;
@@ -142,8 +153,6 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     getTYMainWnd()->setEnabled(false);
     TYApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    // Start chrono
-    OChronoTime startTime;
     float comp_duration (0.);
     bool comp_finished (false);
     python.start("python", args);
@@ -203,6 +212,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     pProject = result.getRealPointer();
     getTYApp()->getCurProjet()->setCurrentCalcul(pProject->getCurrentCalcul());
     pCalcul = pProject->getCurrentCalcul();
+    }
 
     // Compute and display computation time
     OChronoTime endTime;
