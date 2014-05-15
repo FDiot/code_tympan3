@@ -63,7 +63,6 @@ public:
 
     virtual bool build();
 
-    //bool getIntersection(Ray &ray,Intersection &inter);
     virtual decimal traverse(Ray* r, std::list<Intersection> &result);
 
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
@@ -73,8 +72,6 @@ public:
     int getMaxPrimPerLeaf() { return maxPrimPerLeaf; }
 
     void print();
-
-    //void display(unsigned int indexNode);
 
     bool alreadyFail;
     unsigned int nbFail;
@@ -116,8 +113,6 @@ protected:
     BBox bounds;
     vec3 width, invWidth;
     Voxel** voxels;
-    //MemoryArena voxelArena;
-    //mutable RWMutex *rwMutex;
 };
 
 
