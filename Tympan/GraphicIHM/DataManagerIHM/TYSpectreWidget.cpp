@@ -256,27 +256,26 @@ void TYSpectreWidget::apply()
 
 void TYSpectreWidget::tabValueChanged(int row, int col)
 {
-    bool ok;
-
     if (col == 1)
     {
-        // Si la valeur saisie ne peut pas etre convertie en double
+        // Translate imput value to double to see if it's a correct number 
+        bool ok; 
+        double val = _tableau->item(row, col)->text().toDouble(&ok);
+
+        // If value is not a valid number, get the original value in the spectrum and return
         if (!ok)
         {
-            _tableau->item(row, 0)->setText(QString().setNum(TYSpectre::getTabFreqNorm(_pTmpSpectre->getForm())[row], 'f', 2));
             _tableau->item(row, 1)->setText(QString().setNum(_pTmpSpectre->getTabValReel()[row], 'f', _precision));
             return;
         }
 
-        // On copie la valeur saisie a toutes les cases selectionnees
+        // Else, we copy value to all the selected cells
         for (int i = 0; i < _nbFreq; i++)
         {
-            if (_tableau->item(i, col))
+            if ( ( _tableau->item(i, col) ) && 
+                 ( _tableau->isItemSelected( _tableau->item(i, col) ) ) )
             {
-                if (_tableau->isItemSelected(_tableau->item(i, col)))
-                {
                     _tableau->item(i, col)->setText(_tableau->item(row, col)->text());
-                }
             }
         }
 
