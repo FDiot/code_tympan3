@@ -13,7 +13,7 @@ add_definitions(/wd4290)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 
 # Reserve more memory esp. for precompiled headers
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm180")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm200")
 
 ## Building components as shared libs is unpossible on Windows by lack
 ## of DDL_EXPORTS/DLL_IMPORTS specifiers in the code for supporting it.
