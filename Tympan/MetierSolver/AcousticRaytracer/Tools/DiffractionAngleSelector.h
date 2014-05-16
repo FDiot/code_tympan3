@@ -17,7 +17,7 @@
 #define DIFFRACTION_ANGLE_SELECTOR
 
 #include "Selector.h"
-#include "Tympan/MetierSolver/ToolsMetier/OGeometrie.h"
+#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
 
 template<typename T>
 class DiffractionAngleSelector : public Selector<T>

@@ -22,6 +22,6 @@
 #include "Tympan/common_precompiled.h"
 
 
-#include "SolverDataModelBuilder.hpp"
+//#include "SolverDataModelBuilder.hpp"
 
 #endif // __TY_PH_DATA_EXCHANGE__
