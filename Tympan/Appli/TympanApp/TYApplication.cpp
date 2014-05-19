@@ -180,6 +180,7 @@ TYApplication::TYApplication(int& argc, char** argv)
     _pCalculManager = NULL;
     _saved = false;
     QStringList args = this->arguments();
+    _usePython = true;
     if (args.count() > 1)
     {
         // We want to solve the acoustic problems using the legacy version of
@@ -187,10 +188,6 @@ TYApplication::TYApplication(int& argc, char** argv)
         if (args.contains("--legacy-computation"))
         {
             _usePython = false;
-        }
-        else
-        {
-            _usePython = true;
         }
     }
 }
