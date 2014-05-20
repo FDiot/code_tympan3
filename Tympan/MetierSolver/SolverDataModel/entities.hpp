@@ -88,14 +88,12 @@ class AcousticSource:
 {
 public:
     AcousticSource(
-            const Point& point_, 
-            const binary_uuid& id_,
+            const Point& point_,
             const Spectrum& spectrum_);
-        
+
     virtual ~AcousticSource() {};
 
     Point position;
-    binary_uuid id;
     Spectrum spectrum;
     SourceDirectivityInterface* directivity;
 };

@@ -85,8 +85,7 @@ public:
      * TODO
      */
     source_idx make_source(
-        const Point& point_, 
-        const binary_uuid& id_,
+        const Point& point_,
         const Spectrum& spectrum_);
 
 public: // XXX Could / should be protected but this complicates testing
