@@ -92,12 +92,11 @@ material_ptr_t AcousticProblemModel::make_material(const string& name, const Spe
 }
 
 source_idx AcousticProblemModel::make_source(
-        const Point& point, 
-        const binary_uuid& id,
+        const Point& point,
         const Spectrum& spectrum)
 {
-   
-    all_sources.push_back(AcousticSource(point, id, spectrum));
+
+    all_sources.push_back(AcousticSource(point, spectrum));
     return all_sources.size() - 1;
 }
 

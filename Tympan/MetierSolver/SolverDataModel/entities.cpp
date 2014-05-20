@@ -28,10 +28,8 @@ AcousticGroundMaterial::AcousticGroundMaterial(
 
 AcousticSource::AcousticSource(
     const Point& position_,
-    const binary_uuid& id_,
     const Spectrum& spectrum_ )
     : position(position_)
-    , id(id_)
     , spectrum(spectrum_)
     , directivity(new SphericalSourceDirectivity())
 {}
