@@ -162,7 +162,7 @@ public:
      *
      * @return La valeur reelle du complexe correspondant.
      */
-    virtual  double getValueReal(float freq, bool* pValid = 0);
+    virtual  double getValueReal(double freq);
 
     /**
     * Recuperation d'un intervalle de valeurs reelles au tableau frequence/complexe
@@ -298,7 +298,7 @@ public:
     static OSpectre getOSpectreFreqExact();
 
     /// Construction du tableau frequence/indice
-    static std::map<float, int>  setMapFreqIndice();
+    static std::map<double, int>  setMapFreqIndice();
 
     /// Construit un spectre de ponderation A.
     static OSpectre pondA();
@@ -325,19 +325,19 @@ protected:
     // CAUTION Check how those static members behave in shared libraries
 
     ///Tableau des frequences en Hz centrales normalisees en tiers d'octave.
-    static const float _freqNorm[];
+    static const double _freqNorm[];
 
     /// Frequence minimale de travail
-    static float _fMin;
+    static double _fMin;
 
     /// Frequence minimale de travail
-    static float _fMax;
+    static double _fMax;
 
     /// Valeur par defaut du spectre
     static double _defaultValue;
 
     /// Carte de correspondance entre frequence et indice du tableau
-    static std::map<float, int> _mapFreqIndice;
+    static std::map<double, int> _mapFreqIndice;
 
     // ==== AUTRES MEMBRES
 
