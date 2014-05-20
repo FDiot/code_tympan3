@@ -152,6 +152,14 @@ typedef class OGenID TYUUID;
  */
 #include "Tympan/MetierSolver/ToolsMetier/TYNameManager.h"
 
+
+template<typename T>
+T *downcast(TYElement * elt)
+{
+    return T::safeDownCast(elt);
+}
+
+
 /**
  * Classe de base des composants et elements metiers.
  */

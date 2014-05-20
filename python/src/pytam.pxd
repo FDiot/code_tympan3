@@ -53,6 +53,20 @@ cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
         TYElement* getParent()
         OGenID getID()
 
+cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
+    TYAcousticSurface* downcast_acoustic_surface "downcast<TYAcousticSurface>"(TYElement *)
+    # Occurences of downcast_acoustic_surface in Cython will be directly
+    # translated into downcast<TYAcousticSurface> in C++.
+    # This is compatible with cython 0.19. Templates are supported from cython
+    # 0.20. This code thus sticks to cython 0.19.
+    # It was tried to upgrade to cython 0.20 and wrap the template this way
+    # but it didn't work:
+    #    "T* downcast[T](TYElement * elt)"
+    # As a matter of fact, the T* return type caused a compilation error
+    #  ("'T' is not a type identifier")
+    # However "T max[T](T a, T b)" is actually supported in cython 0.20.
+
+
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h":
     cdef cppclass TYResultat(TYElement):
         bool operator==(const TYResultat& other) const
@@ -102,9 +116,6 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/T
     cdef cppclass TYAcousticSurface (TYElement):
         void exportMesh(deque[OPoint3D] &, deque[OTriangle] &, TYGeometryNode &)
         SmartPtr[TYMateriauConstruction] getMateriau()
-
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h" namespace "TYAcousticSurface":
-    TYAcousticSurface * safeDownCast(TYElement *)
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h":
     cdef cppclass TYGeometryNode (TYElement):
