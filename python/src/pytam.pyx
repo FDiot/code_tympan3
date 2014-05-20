@@ -93,7 +93,7 @@ cdef class SolverModelBuilder:
         triangles = cython.declare(deque[OTriangle])
         for i in range(nb_building_faces):
             pelt = face_list[i].getRealPointer().getElement()
-            psurf = safeDownCast(pelt)
+            psurf = downcast_acoustic_surface(pelt)
             # 'face_list' can contain topography elements. Not relevant here.
             if psurf == NULL:
                 continue
