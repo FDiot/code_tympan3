@@ -42,6 +42,9 @@ public:
     size_t ntriangles() const //TODO move to implementation file
     { return  all_triangles.size(); }
 
+    size_t nsources() const //TODO move to implementation file
+    { return  all_sources.size(); }
+
     AcousticTriangle& triangle(triangle_idx tri_idx)
     { return all_triangles[tri_idx]; }
 

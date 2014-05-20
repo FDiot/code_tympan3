@@ -38,6 +38,12 @@ cdef class ProblemModel:
             raise NullCppObject()
         return self.thisptr.nmaterials()
 
+    @property
+    def nsources(self):
+        if self.thisptr == NULL:
+            raise NullCppObject()
+        return self.thisptr.nsources()
+
     def export_triangular_mesh(self):
         if self.thisptr == NULL:
             raise NullCppObject()
