@@ -2,6 +2,7 @@ from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 from libcpp.deque cimport deque
+from libcpp.map cimport map
 
 cdef extern from "Tympan/Tools/OSmartPtr.h":
     cdef cppclass SmartPtr[T]:
@@ -45,6 +46,7 @@ cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp
         shared_ptr[AcousticMaterialBase] make_material(const string& name, const OSpectre& spectrum)
         size_t make_triangle(size_t n1, size_t n2, size_t n3)
         size_t make_node(const OPoint3D&)
+        size_t make_source(const OPoint3D& point_, const OSpectre& spectrum_)
 
 cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp" namespace "tympan":
     cdef cppclass AcousticResultModel:
@@ -69,7 +71,12 @@ cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
     # As a matter of fact, the T* return type caused a compilation error
     #  ("'T' is not a type identifier")
     # However "T max[T](T a, T b)" is actually supported in cython 0.20.
+    TYSourcePonctuelle* downcast_source_ponctuelle "downcast<TYSourcePonctuelle>"(TYElement *)
 
+# This is because it seems unsupported to declare a map containing pointers
+# http://trac.cython.org/cython_trac/ticket/793
+# http://grokbase.com/t/gg/cython-users/12b61wdpnm/std-pair-of-two-pointers-in-cython-problem
+ctypedef (TYElement *) TYElem_ptr
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h":
     cdef cppclass TYResultat(TYElement):
@@ -77,6 +84,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h":
         size_t getNbOfRecepteurs() const
         size_t getNbOfSources() const
         OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
+        map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
 
 cdef extern from "Tympan/MetierSolver/CommonTools/OSpectre.h":
     const unsigned int TY_SPECTRE_DEFAULT_NB_ELMT
@@ -95,6 +103,14 @@ cdef extern from "Tympan/MetierSolver/CommonTools/OSpectre.h":
         double * getTabValReel()
         unsigned int getNbValues() const
 
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSource.h":
+    cdef cppclass TYSource(TYElement):
+        TYSpectre* getSpectre() const
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h":
+    cdef cppclass TYSourcePonctuelle(TYSource):
+        SmartPtr[TYPoint] getPos()
+
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
     cdef cppclass TYSiteNode (TYElement):
         void getChilds (vector[SmartPtr[TYElement]] &elts, bool recursive)
@@ -103,6 +119,12 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
                           unsigned int& nbFaceInfra,
                           vector[bool]& EstUnIndexDeFaceEcran)
         SmartPtr[TYTopographie] getTopographie()
+        SmartPtr[TYInfrastructure] getInfrastructure()
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h":
+    cdef cppclass TYInfrastructure (TYElement):
+        void getAllSrcs(const TYCalcul* pCalcul, map[TYElem_ptr,
+                        vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs)
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
     cdef cppclass TYCalcul (TYElement):
@@ -110,6 +132,8 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
         unique_ptr[AcousticProblemModel] _acousticProblem
         unique_ptr[AcousticResultModel]  _acousticResult
         SmartPtr[TYResultat] getResultat()
+        void getAllSources(map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
+                      vector[SmartPtr[TYGeometryNode]])
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":
     cdef cppclass TYProjet (TYElement):
