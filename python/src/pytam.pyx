@@ -76,10 +76,37 @@ cdef class SolverModelBuilder:
     def __cinit__(self, model):
         self.model = model.thisptr
 
-    @cython.locals(site=Site)
-    def fill_problem(self, site):
+    @cython.locals(site=Site, comp=Computation)
+    def fill_problem(self, site, comp):
         self.process_altimetry(site)
         self.process_infrastructure(site)
+        self.build_sources(site, comp)
+
+    @cython.locals(site=Site, comp=Computation)
+    def build_sources(self, site, comp):
+        infra = cython.declare(cython.pointer(TYInfrastructure))
+        infra = site.thisptr.getRealPointer().getInfrastructure().getRealPointer()
+        map_elt_srcs = cython.declare(map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]])
+        infra.getAllSrcs(comp.thisptr.getRealPointer(), map_elt_srcs)
+        sources = cython.declare(vector[SmartPtr[TYGeometryNode]])
+        sources_of_elt = cython.declare(vector[SmartPtr[TYGeometryNode]])
+        its = cython.declare(map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]].iterator)
+        its = map_elt_srcs.begin()
+        while its != map_elt_srcs.end():
+            sources_of_elt = deref(its).second
+            nsources = sources_of_elt.size()
+            for i in xrange(nsources):
+                sources.push_back(sources_of_elt[i])
+            inc(its)
+        nsources = sources.size()
+        pelt = cython.declare(cython.pointer(TYElement))
+        psource = cython.declare(cython.pointer(TYSourcePonctuelle))
+        ppoint = cython.declare(cython.pointer(TYPoint))
+        for i in xrange(nsources):
+            pelt = sources[i].getRealPointer().getElement()
+            psource = downcast_source_ponctuelle(pelt)
+            ppoint = psource.getPos().getRealPointer()
+            self.model.make_source(ppoint[0], psource.getSpectre()[0])
 
     @cython.locals(site=Site)
     def process_infrastructure(self, site):
