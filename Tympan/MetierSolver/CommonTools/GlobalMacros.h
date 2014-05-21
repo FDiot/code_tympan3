@@ -33,6 +33,10 @@
 ///Type pour les valeurs complexes.
 typedef std::complex<double> TYComplex;
 
+#define CPLX_UN TYComplex(1.0, 0.0)
+#define CPLX_MUN TYComplex(-1.0, 0.0)
+#define CPLX_J TYComplex(0.0, 1.0)
+
 /**
  * Calcul de la cotangente hyperbolique d'un complexe.
  */

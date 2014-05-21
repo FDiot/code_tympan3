@@ -28,6 +28,7 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
+
 OPROTOINST(TYSol);
 TY_EXTENSION_INST(TYSol);
 
@@ -258,8 +259,8 @@ OSpectreComplex TYSol::calculZs(const double phi, const TYAtmosphere& atmos) con
 {
     OSpectreComplex Zs;
     const TYComplex j = TYComplex(0.0, 1.0);
-    const TYComplex CPLX_UN  = TYComplex(1.0, 0.0);
-    const TYComplex CPLX_MUN = TYComplex(-1.0, 0.0);
+//    const TYComplex CPLX_UN  = TYComplex(1.0, 0.0);
+//    const TYComplex CPLX_MUN = TYComplex(-1.0, 0.0);
     double k;
 
     TYComplex operand, K, Zc;
@@ -581,7 +582,7 @@ OSpectreComplex TYSol::calculRp(const OSpectreComplex& Zs, const double& phi) co
 {
     OSpectreComplex rP;
 
-    const TYComplex CPLX_UN = TYComplex(1.0, 0.0);
+//    const TYComplex CPLX_UN = TYComplex(1.0, 0.0);
     double sinPhi = sin(phi);
     TYComplex Z;
 
@@ -603,7 +604,7 @@ OSpectreComplex TYSol::calculQ(const double& phi, const OSpectreComplex& rp, con
 {
     OSpectreComplex Q ;
 
-    const TYComplex CPLX_UN = TYComplex(1.0, 0.0);
+//    const TYComplex CPLX_UN = TYComplex(1.0, 0.0);
     TYComplex RP, FW ;
 
     for (unsigned int i = 0 ; i < _pImpedance.getNbValues(); i++)
@@ -627,7 +628,7 @@ OSpectreComplex TYSol::calculQ(const double& phi, const OSpectreComplex& fw) con
     const OSpectreComplex Zs = calculZs(phi, atmos);
     const OSpectreComplex rp = calculRp(Zs, phi);
 
-    const TYComplex CPLX_UN = TYComplex(1.0, 0.0);
+//    const TYComplex CPLX_UN = TYComplex(1.0, 0.0);
     TYComplex RP, FW ;
 
     for (unsigned int i = 0 ; i < _pImpedance.getNbValues(); i++)
