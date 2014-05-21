@@ -87,6 +87,10 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
         TYPluginData* plugin_data = new TYPluginData();
         plugin_data->filename = itfile->absoluteFilePath();
 
+        OMessageManager::get()->debug(
+              "Trying to dynamically load '%s'.\n",
+              itfile->absoluteFilePath().toUtf8().data());
+
         plugin_data->pluginDllInstance =
             (LIB_HANDLE)LIB_LOAD(itfile->absoluteFilePath().toLocal8Bit().data());
 
