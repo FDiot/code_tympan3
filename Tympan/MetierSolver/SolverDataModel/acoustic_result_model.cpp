@@ -11,8 +11,7 @@
 
 namespace tympan
 {
-
-    SpectrumMatrix::SpectrumMatrix(size_t nb_sources, size_t nb_receptors)
+    SpectrumMatrix::SpectrumMatrix(size_t nb_receptors,size_t nb_sources)
         : _nb_sources(nb_sources)
     {
         data.clear();
