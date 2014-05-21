@@ -66,6 +66,18 @@ cdef class ProblemModel:
         source.thisptr = cython.address(self.thisptr.source(idx))
         return source
 
+    @property
+    def sources(self):
+        """ Return all the acoustic sources of the model
+        """
+        assert self.thisptr != NULL
+        sources = []
+        for i in xrange(self.nsources):
+            source = SolverSource()
+            source.thisptr = cython.address(self.thisptr.source(i))
+            sources.append(source)
+        return sources
+
     def export_triangular_mesh(self):
         """ Build a triangular mesh from the acoustic problem model.
             Return two nparrays:
@@ -146,6 +158,11 @@ cdef class SolverModelBuilder:
             pelt = sources[i].getRealPointer().getElement()
             psource = downcast_source_ponctuelle(pelt)
             ppoint = psource.getPos().getRealPointer()
+            point3d  = cython.declare(OPoint3D)
+            point3d = sources[i].getRealPointer().getMatrix() * ppoint[0]
+            ppoint[0]._x = point3d._x
+            ppoint[0]._y = point3d._y
+            ppoint[0]._z = point3d._z
             self.model.make_source(ppoint[0], psource.getSpectre()[0])
 
     @cython.locals(site=Site, comp=Computation)
