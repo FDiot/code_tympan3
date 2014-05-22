@@ -7,19 +7,22 @@ import numpy as np
 import pytam
 
 from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR
+def load_project(*path):
+    return pytam.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
 
 
 class TestTympan(unittest.TestCase):
+
     def test_solve(self):
-        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, 'projects-panel',
-                    "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml"))
+        project = load_project('projects-panel',
+                               "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
         computation = project.current_computation()
         pytam.loadsolver(TEST_SOLVERS_DIR, computation)
         self.assertTrue(computation.go())
 
     def test_hierarchy(self):
-        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, 'projects-panel',
-                    "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml"))
+        project = load_project('projects-panel',
+                               "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
         site = project.site()
         childs = site.childs()
         for c in childs:
@@ -28,7 +31,7 @@ class TestTympan(unittest.TestCase):
     def test_base(self):
         # XXX This test uses expected bad values provided by the current
         # implementation
-        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, 'solver_export', "base.xml"))
+        project = load_project('solver_export', "base.xml")
         model = project.current_computation().acoustic_problem()
         builder = pytam.SolverModelBuilder(model)
         builder.fill_problem(project.site())
@@ -46,7 +49,7 @@ class TestTympan(unittest.TestCase):
         """
         # load a xml project, build an acoustic problem from it and retrieve
         # its triangular mesh to make sure it contains the correct data
-        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, "tiny_site.xml"))
+        project = load_project("tiny_site.xml")
         model = project.current_computation().acoustic_problem()
         builder = pytam.SolverModelBuilder(model)
         builder.fill_problem(project.site())
@@ -67,7 +70,7 @@ class TestTympan(unittest.TestCase):
 
     @unittest.skip("Implementation to be fixed")
     def test_ground_materials(self):
-        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, 'solver_export', "ground_materials.xml"))
+        project = load_project('solver_export', "ground_materials.xml")
         model = project.current_computation().acoustic_problem()
         builder = pytam.SolverModelBuilder(model)
         builder.fill_problem(project.site())
