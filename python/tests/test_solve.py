@@ -1,8 +1,12 @@
 import os, os.path as osp
 import unittest
-import pytam
+
 import numpy as np
 
+from utils import no_output
+
+with no_output():
+    import pytam
 
 _HERE = osp.realpath(osp.dirname(__file__))
 
@@ -37,13 +41,16 @@ def make_test_with_file(test_file):
     """
     def test_with_file(self):
         # Load and solve the project
-        project = pytam.Project.from_xml(osp.join(_TEST_PROBLEM_DIR, test_file))
-        computation = project.current_computation()
-        pytam.loadsolver(_TEST_SOLVERS_DIR, computation)
-        self.assertTrue(computation.go())
+        with no_output():
+            project = pytam.Project.from_xml(osp.join(_TEST_PROBLEM_DIR, test_file))
+            computation = project.current_computation()
+            pytam.loadsolver(_TEST_SOLVERS_DIR, computation)
+            result = computation.go()
+        self.assertTrue(result)
         # Load the expected result
         result_file = osp.join(_TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
-        expected_result_project = pytam.Project.from_xml(result_file)
+        with no_output():
+            expected_result_project = pytam.Project.from_xml(result_file)
         # Compare results
         current_result = computation.result
         expected_result = expected_result_project.current_computation().result
