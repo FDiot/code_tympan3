@@ -1021,7 +1021,7 @@ void TYTopographie::computeAltimetricTriangulation(
 {
 
     // we instanciate an AltimetryBuilder
-    p_alti_builder.reset(new tympan::AltimetryBuilder());
+    p_alti_builder = std::move(tympan::make_altimetry_builder());
 
     // We ask it to process this topography
     p_alti_builder->process(*this, use_emprise_as_level_curve);
@@ -1600,7 +1600,7 @@ int compareSurfaceTerrains(const void* elem1, const void* elem2)
     return (sgn);
 }
 
-const tympan::AltimetryBuilder& TYTopographie::getAltimetryBuilder() const
+const tympan::IAltimetryBuilder& TYTopographie::getAltimetryBuilder() const
 { return *p_alti_builder; }
 
 unsigned TYTopographie::number_of_vertices() const
