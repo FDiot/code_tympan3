@@ -166,5 +166,5 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYMateriauC
         TYSpectre& getSpectreAbso()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSpectre.h":
-    cdef cppclass TYSpectre (TYElement):
+    cdef cppclass TYSpectre (TYElement, OSpectre):
         pass
