@@ -1,0 +1,47 @@
+tympan (3.6.2) unstable; urgency=low
+
+  * Debugging,
+  * Adding "Set Free Camera Coordinates" functionality,
+  * Adding coloration depending results in "result" dialog box.
+
+ -- Romain Neveu <romain.neveu@virtuofacto.fr>  Thurday, 5 November 2010 09:12:14 +0100
+
+tympan (3.6.1) unstable; urgency=low
+
+  * Porting to QT4.1
+
+ -- Romain Neveu <romain.neveu@virtuofacto.fr>  Thurday, 29 October 2009 09:12:14 +0100
+
+tympan (3.6.0) unstable; urgency=low
+
+  * Adding PyTympan module to export TySpectre, TyLinearMaillage and TyRectangularMaillage into python objects.
+  * Adding a Python console to Tympan and the possibility to put tympan spectres and maillages into slots that can be retreive into the console.
+
+ -- Romain Neveu <romain.neveu@virtuofacto.fr>  Mon, 30 March 2009 09:12:14 +0100
+
+tympan (3.5.0-1) unstable; urgency=low
+
+  * Adding 64bits compilation support,
+  * Porting for Debian Etch release.
+
+ -- Stephane Metz <stephane.metz@virtuofacto.fr>  Mon, 15 Dec 2008 09:12:14 +0100
+
+tympan (3.5.0) unstable; urgency=low
+
+  * Adding multithreaded solvering,
+  * Adding color's range editor,
+  * Adding meshing overlay viewing.
+
+ -- Stephane Metz <stephane.metz@virtuofacto.fr>  Tue, 07 Mai 2008 10:34:37 +0100
+
+tympan (3.4.2) unstable; urgency=low
+
+  * Adding console mode.
+
+ -- Stephane Metz <stephane.metz@virtuofacto.fr>  Fri, 04 Jan 2008 19:36:12 +0100
+
+tympan (3.4.1-1) unstable; urgency=low
+
+  * Initial release.
+
+ -- Stephane Metz <stephane.metz@virtuofacto.fr>  Wed, 12 Dec 2007 10:12:23 +0100
