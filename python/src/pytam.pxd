@@ -128,6 +128,10 @@ cdef extern from "Tympan/MetierSolver/CommonTools/OPoint3D.h":
     cdef cppclass OPoint3D (OCoord3D):
         pass
 
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h":
+    cdef cppclass TYPoint(TYElement, OPoint3D):
+        pass
+
 cdef extern from "Tympan/MetierSolver/CommonTools/OTriangle.h":
     cdef cppclass OTriangle:
         OPoint3D _A
