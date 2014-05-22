@@ -24,7 +24,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/AltimetryBuilder.hpp"
+#include "Tympan/MetierSolver/DataManagerMetier/cgal_bridge.hpp"
 
 ///Structure contenant un segment et un terrain.
 typedef struct
@@ -472,7 +472,7 @@ public:
     unsigned number_of_faces() const;
 
 
-    const tympan::AltimetryBuilder& getAltimetryBuilder() const;
+    const tympan::IAltimetryBuilder& getAltimetryBuilder() const;
 
     /**
      * @brief Export the altimetry as a triangular mesh
@@ -519,7 +519,7 @@ protected:
     double _seuilConfondus;
 
     /// The AltimetryBuilder used to build the Altimetry
-    std::auto_ptr< tympan::AltimetryBuilder > p_alti_builder;
+    std::unique_ptr< tympan::IAltimetryBuilder > p_alti_builder;
 
 private :
     std::vector<TYStructElemPts> _tabElemPts; // Tableau des terrains

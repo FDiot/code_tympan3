@@ -20,8 +20,7 @@
 
 #include "prettyprint.hpp"
 
-// This will have to be redefined as nothrow in C++'11
-#define DO_NOT_THROW throw()
+#define DO_NOT_THROW noexcept
 
 namespace tympan
 {
