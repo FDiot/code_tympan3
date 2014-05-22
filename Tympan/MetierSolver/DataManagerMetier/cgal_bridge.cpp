@@ -55,16 +55,23 @@ namespace tympan
             poly2d.push_back(plane.to_2d(plane.projection(to_cgal(op))));
             points.push_back(op);
         }
-        // XXX Dummy implementation to satisfy test TYPolygonTriangulatorTest.single_triangle
-        OTriangle tri(0, 1, 2);
-        for (unsigned i = 0; i < 3; ++i)
+        // Actual triangulation done by CGAL
+        PolygonTriangulator triangulator(poly2d);
+        // Use information from triangulator.vertice_handles and the triangulation itself.
+        // to level-up from 2D CGAL representation to our 3D OPoints world
+        std::deque<PolygonTriangulator::Tri_indices> tri_indices;
+        triangulator.exportTrianglesIndices(tri_indices);
+        for(const auto& tri_idx :tri_indices)
         {
-            const OPoint3D& p = points[i];
-            tri.vertex(i) = p;
+            OTriangle tri(tri_idx[0], tri_idx[1], tri_idx[2]);
+            for (unsigned i = 0; i < 3; ++i)
+            {
+                const OPoint3D& p = points[i];
+                tri.vertex(i) = p;
+            }
+            triangles.push_back(tri);
         }
-        triangles.push_back(tri);
-    }
-
+    } // void TYPolygonTriangulator::exportMesh(...)
 
     std::unique_ptr<ITYPolygonTriangulator>
     make_polygon_triangulator(const TYPolygon& poly)
