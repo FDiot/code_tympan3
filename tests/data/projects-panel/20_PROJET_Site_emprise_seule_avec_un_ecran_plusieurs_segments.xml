@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
 <Tympan>
- <Version>3.8.0 - EDF - EDF-00000000</Version>
+ <Version>3.9.0 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
  <Projet id="{98707fcb-023a-4d25-843a-35bda3efd371}" name="Projet 0">
   <auteur></auteur>
   <dateCreation>2001-10-01</dateCreation>
@@ -62,7 +62,7 @@
     <ListBatiment>
      <GeometryNode id="{987e4d08-19b3-4d46-b698-483d89b2a225}" name="">
       <hauteur>0.000</hauteur>
-      <Repere id="{c11e0576-7e90-42f9-adc2-d672f6315e88}" name="Repère 879">
+      <Repere id="{339b5ca2-7de8-4935-ace9-7ac7ffba3ceb}" name="">
        <Point x="-17.600000000000" y="4.600000000000" z="0.000000000000"/>
        <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
@@ -70,13 +70,13 @@
       </Repere>
       <Batiment id="{ab063b0a-438d-45cd-83a7-5f6797a85007}" name="Construction 4">
        <Color g="1" r="1" b="1"/>
-       <densiteSrcsH>25</densiteSrcsH>
-       <densiteSrcsV>25</densiteSrcsV>
+       <densiteSrcsH>0</densiteSrcsH>
+       <densiteSrcsV>0</densiteSrcsV>
        <curRegime>0</curRegime>
        <nbRegimes>1</nbRegimes>
        <nextRegime>1</nextRegime>
        <Regime id="{8c9e70ae-2bdd-400c-a445-c476b0a91d92}" name="Régime 0">
-        <isRayonnant>1</isRayonnant>
+        <isRayonnant>0</isRayonnant>
         <useAtt>0</useAtt>
         <typeDistribution>0</typeDistribution>
        </Regime>
@@ -91,8 +91,8 @@
         </Repere>
         <Ecran id="{9a97d017-7929-48f1-83c1-5245388fac4a}" name="Ecran mince 1">
          <Color g="0.807843" r="0.807843" b="0.807843"/>
-         <densiteSrcsH>25</densiteSrcsH>
-         <densiteSrcsV>25</densiteSrcsV>
+         <densiteSrcsH>0</densiteSrcsH>
+         <densiteSrcsV>0</densiteSrcsV>
          <curRegime>0</curRegime>
          <nbRegimes>1</nbRegimes>
          <nextRegime>1</nextRegime>
@@ -159,7 +159,7 @@
          <type>2</type>
          <fMin>16</fMin>
          <fMax>16000</fMax>
-         <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+         <freqTab form="0">100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0</freqTab>
         </Spectre>
        </UserSrcRegime>
       </UserSourcePonctuelle>
@@ -172,14 +172,20 @@
    <SIG_Y>0</SIG_Y>
   </SiteNode>
   <PointsControl>
-   <PointControl x="82.000" y="-95.000" z="0.000" id="{fb136d24-2b60-4acf-8aa1-007e2413ab1f}" name="Point de contrôle 0">
+   <PointControl x="82.000" y="-95.000" z="2.000" id="{fb136d24-2b60-4acf-8aa1-007e2413ab1f}" name="Point de contrôle 0">
     <etatCalcul idCalcul="{58cbe526-8b47-441f-bcd1-7499ae8d9e15}" Etat="1"/>
+    <Spectre idCalcul="{58cbe526-8b47-441f-bcd1-7499ae8d9e15}" id="{211985c1-38bd-438d-9917-392f04a0a1c4}" name="">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">39.4 38.6 38.0 37.4 36.5 35.7 34.9 33.9 32.9 32.0 31.0 30.0 28.9 27.9 27.1 26.7 24.2 23.0 21.8 20.8 20.2 19.6 18.8 17.6 15.7 12.9 8.6 2.0 -8.1 -23.7 -47.1</freqTab>
+    </Spectre>
     <Color g="0" r="0.333333" b="1"/>
     <hauteur>2.000</hauteur>
     <formeObjet>0</formeObjet>
    </PointControl>
   </PointsControl>
-  <Calcul isUpTodate="0" id="{58cbe526-8b47-441f-bcd1-7499ae8d9e15}" name="Calcul 0">
+  <Calcul isUpTodate="1" id="{58cbe526-8b47-441f-bcd1-7499ae8d9e15}" name="Calcul 0">
    <numero>1</numero>
    <auteur>Auteur</auteur>
    <dateCreation>2001-10-01</dateCreation>
@@ -210,7 +216,7 @@
    </ListID>
    <EmissionAccVolNodes>
     <EmissionAccVolNode accVolNodeId="{3bbad011-bbc6-436b-bd9c-54045f27a834}" state="1"/>
-    <EmissionAccVolNode accVolNodeId="{ab063b0a-438d-45cd-83a7-5f6797a85007}" state="1"/>
+    <EmissionAccVolNode accVolNodeId="{ab063b0a-438d-45cd-83a7-5f6797a85007}" state="0"/>
    </EmissionAccVolNodes>
    <RegimeAccNode>
     <RegimeAccNode accVolNodeId="{3bbad011-bbc6-436b-bd9c-54045f27a834}" state="0"/>
@@ -235,10 +241,40 @@
     </Spectre>
    </Atmosphere>
    <Resultat id="{fdf4732c-1b2f-45d4-9f7a-6a81f2149cbd}" name="Résultat 0">
-    <ListSources/>
-    <ListRecepteurs/>
-    <ListSpectres/>
-    <ListLw/>
+    <ListSources>
+     <Source srcId="{3bbad011-bbc6-436b-bd9c-54045f27a834}" index="0"/>
+    </ListSources>
+    <ListRecepteurs>
+     <Recepteur recId="{fb136d24-2b60-4acf-8aa1-007e2413ab1f}" index="0"/>
+    </ListRecepteurs>
+    <ListSpectres>
+     <SpectreInd indexRec="0" indexSrc="0">
+      <Spectre id="{300a7ce8-539d-4b50-8607-9beb0bca3be9}" name="Spectre 79">
+       <type>3</type>
+       <fMin>16</fMin>
+       <fMax>16000</fMax>
+       <freqTab form="0">39.4 38.6 38.0 37.4 36.5 35.7 34.9 33.9 32.9 32.0 31.0 30.0 28.9 27.9 27.1 26.7 24.2 23.0 21.8 20.8 20.2 19.6 18.8 17.6 15.7 12.9 8.6 2.0 -8.1 -23.7 -47.1</freqTab>
+      </Spectre>
+     </SpectreInd>
+    </ListSpectres>
+    <ListLw>
+     <SourceLw srcId="{3bbad011-bbc6-436b-bd9c-54045f27a834}">
+      <Spectre id="{43c45a76-9a2d-472a-a984-6d00609e0bee}" name="">
+       <type>2</type>
+       <fMin>16</fMin>
+       <fMax>16000</fMax>
+       <freqTab form="0">100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0</freqTab>
+      </Spectre>
+     </SourceLw>
+     <SourceLw srcId="{ab063b0a-438d-45cd-83a7-5f6797a85007}">
+      <Spectre id="{899e6e12-f090-426b-aa7a-fb08e1ed587b}" name="">
+       <type>2</type>
+       <fMin>16</fMin>
+       <fMax>16000</fMax>
+       <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+      </Spectre>
+     </SourceLw>
+    </ListLw>
    </Resultat>
   </Calcul>
  </Projet>

@@ -110,6 +110,7 @@ protected: // data members
     triangle_pool_t all_triangles;
     material_pool_t all_materials;
     source_pool_t all_sources;
+    receptor_pool_t all_receptors;
 };  // class AcousticProblemModel
 
 

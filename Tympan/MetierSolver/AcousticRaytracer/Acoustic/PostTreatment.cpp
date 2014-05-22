@@ -145,6 +145,7 @@ bool PostTreatment::constructEdge(Scene* scene)
     return true;
 }
 
+#ifdef _ALLOW_TARGETING_
 bool PostTreatment::findTargetsForNMPB(Scene* scene, std::vector<Recepteur>& recepteurs, TargetManager& targetManager, decimal density)
 {
 
@@ -200,3 +201,4 @@ void PostTreatment::appendDirectionToSources(TargetManager* targets, std::vector
         sources.at(i).setInitialTargetCount(sources.at(i).getInitialRayCount());
     }
 }
+#endif
