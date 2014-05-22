@@ -322,40 +322,6 @@ cdef class Computation:
         result.thisptr = cython.address(self.thisptr.getRealPointer()._acousticResult)
         return result
 
-    @cython.locals(other=Computation)
-    def same_result(self, other):
-        """ Check if the result of "other" computation is equal to the result
-        of the current computation.
-        Basically the acoustic spectrums of the results are compared one by one,
-        identified by a receiver and a source id. Beforehand the spectrums are
-        set to a DB scale.
-        """
-        # Can't use operator== here since the one declared for TYResultat also
-        # compares the uuids and the pointers to the parent TYElements (which are unique)
-        # Besides, spectrum float values are compared with '==' and their definition
-        # is high --> it never matches.
-        if (self.result().num_sources() != other.result().num_sources()) or \
-           (self.result().num_receivers() != other.result().num_receivers()):
-            return False
-        for i in xrange (self.result().num_receivers()):
-            for j in xrange (self.result().num_sources()):
-                curr_spectrum = self.result().spectrum(i, j)
-                other_spectrum = other.result().spectrum(i, j)
-                # Both spectrums must have the same number of elements
-                num_elem = curr_spectrum.num_values()
-                if num_elem != other_spectrum.num_values():
-                    return False
-                # Let's compare the values in dB
-                curr_spectrum.toDB()
-                other_spectrum.toDB()
-                # Retrieve the values and put them in a numpy array
-                # There should be a more efficient or direct way to do it
-                curr_val = curr_spectrum.values()
-                other_val = other_spectrum.values()
-                if not np.allclose(curr_val, other_val, decimal=1):
-                    return False
-        return True
-
 
 cdef class Project:
     thisptr = cython.declare(SmartPtr[TYProjet])
