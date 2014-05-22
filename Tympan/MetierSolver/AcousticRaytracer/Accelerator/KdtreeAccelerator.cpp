@@ -39,10 +39,10 @@ void KDNode::createNode(int axis, float _split, unsigned int nextChild)
     secondChild |= nextChild << 2;
 }
 
-KdtreeAccelerator::KdtreeAccelerator(std::vector<Shape*>* _initialMesh,  BBox _globalBox)
+KdtreeAccelerator::KdtreeAccelerator(std::vector<Shape*>* _initialMesh,  BBox _globalBox) : Accelerator(_initialMesh, _globalBox)
 {
     initialMesh = _initialMesh;
-    globalBox = BBox(_globalBox);
+    //globalBox = BBox(_globalBox);
 
     maxProfondeur = 16;
     maxPrimPerLeaf = 2;
@@ -87,17 +87,7 @@ bool KdtreeAccelerator::build()
         edges[i] = new TaBRecBoundEdge[2 * initialMesh->size()];
     }
 
-    //std::cout << "Lancement de la generation de l'arbre..." << endl;
-    //generateMidKdTree(0,globalBox,initialMesh->size(),prims);
-    //std::cout << "Fin de la generation de l'arbre." << endl;
     generateSAHKdTree(0, globalBox, edges, initialMesh->size(), prims);
-
-    //for(unsigned int i = 0; i < tableBox.size(); i++)
-    //  tableBox.at(i).computePoints();
-
-    //std::cout << "Construction du KdtreeAccelerator terminee." << std::endl;
-    //std::cout << "L'arbre comporte " << tableNode.size() << " noeuds." << std::endl;
-    //std::cout << "Le KdtreeAccelerator a atteint la profondeur " << realMaxProfondeur << std::endl;
 
     for (int i = 0; i < 3; ++i)
     {
@@ -112,9 +102,6 @@ void KdtreeAccelerator::generateMidKdTree(int currentProfondeur, BBox& localBox,
 
     if (currentProfondeur >= maxProfondeur || (int)(nbPrims) <= maxPrimPerLeaf)
     {
-        //std::cout<<"Construction d'une feuille avec "<<nbPrims<<" primitives"<<std::endl;
-        //std::cout<<"Boite englobante globale : ";
-        //globalBox.print();
         KDNode node;
         unsigned int* newPrims = (unsigned int*)malloc(nbPrims * sizeof(unsigned int));
         for (unsigned int i = 0; i < nbPrims; i++)
@@ -132,7 +119,6 @@ void KdtreeAccelerator::generateMidKdTree(int currentProfondeur, BBox& localBox,
         return;
     }
 
-    //std::cout<<"Construction d'un noeud."<<std::endl;
     unsigned int n0(0), n1(0);
     unsigned int* prims0, *prims1;
     prims0 = (unsigned int*)malloc(nbPrims * sizeof(unsigned int));
@@ -166,9 +152,6 @@ void KdtreeAccelerator::generateMidKdTree(int currentProfondeur, BBox& localBox,
 
     free(prims);
 
-    //unsigned int indexFirstFalse = (unsigned int)(firstFalse - tablePrimitive.begin());
-    //std::cout<<"La partition a trouve "<<indexFirstFalse<<" primitives inferieur au milieu."<<std::endl;
-
     KDNode currentNode;
     unsigned int indexCurrentNode = tableNode.size();
     tableNode.push_back(currentNode);
@@ -177,27 +160,20 @@ void KdtreeAccelerator::generateMidKdTree(int currentProfondeur, BBox& localBox,
     BBox firstBox = BBox(localBox);
     firstBox.pMax[axis] = split;
     generateMidKdTree(currentProfondeur + 1, firstBox, n0, prims0);
-    //free(prims0);
 
-    //std::cout<<"Avant modification, le noeud "<<indexCurrentNode<<" a pour second fils "<<tableNode.at(indexCurrentNode).AboveChild()<<std::endl;
     tableNode.at(indexCurrentNode).createNode(axis, split, tableNode.size());
-    //std::cout<<"Apres modification, le noeud "<<indexCurrentNode<<" a pour second fils "<<tableNode.at(indexCurrentNode).AboveChild()<<std::endl;
 
     BBox secondBox = BBox(localBox);
     secondBox.pMin[axis] = split;
     generateMidKdTree(currentProfondeur + 1, secondBox, n1, prims1);
-    //free(prims1);
 }
 
 decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
 {
 
-    //std::cout<<"Calcul d'intersection..."<<std::endl;
-    // Compute initial parametric range of ray inside kd-tree extent
     decimal tmin, tmax, intermin = -1.;
     if (!globalBox.IntersectP(r->position, r->direction, &tmin, &tmax))
     {
-        //std::cout<<"Echecs de l'intersection avec la boite englobante."<<std::endl;
         return -1.;
     }
 
@@ -219,17 +195,10 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
         if (r->maxt < tmin) { break; }
         if (!node->isLeaf())
         {
-            if (trace)   //std::cout << "Intersection avec le noeud d'indice " << indexNode << std::endl;
-            {
-            }
             // Process kd-tree interior node
-
             // Compute parametric distance along ray to split plane
             int axis = node->getAxe();
             float tplane = (node->getAxeValue() - r->position[axis]) * invDir[axis];
-            if (trace)   //std::cout << "axe : " << axis << ",tplane : " << tplane << ", split : " << node->getAxeValue() << ", origine : " << r->position[axis] << ", invDir : " << invDir[axis] << endl;
-            {
-            }
 
             // Get node children pointers for ray
             KDNode* firstChild, *secondChild;
@@ -237,17 +206,11 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
                              (r->position[axis] == node->getAxeValue() && r->direction[axis] >= 0);
             if (belowFirst)
             {
-                if (trace)   //std::cout << "Push du noeud (" << indexNode + 1 << ") puis (" << node->AboveChild() << ")" << std::endl;
-                {
-                }
                 firstChild = node + 1;
                 secondChild = &tableNode[node->AboveChild()];
             }
             else
             {
-                if (trace)   //std::cout << "Push du noeud (" << node->AboveChild() << ") puis (" << indexNode + 1 << ")" << std::endl;
-                {
-                }
                 firstChild = &tableNode[node->AboveChild()];
                 secondChild = node + 1;
             }
@@ -255,23 +218,14 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
             // Advance to next child node, possibly enqueue other child
             if (tplane > tmax || tplane < 0)
             {
-                if (trace)   //std::cout << "On se deplace au premier noeud (tplane = " << tplane << ")" << std::endl;
-                {
-                }
                 node = firstChild;
             }
             else if (tplane < tmin)
             {
-                if (trace)   //std::cout << "On se deplace au second noeud." << std::endl;
-                {
-                }
                 node = secondChild;
             }
             else
             {
-                if (trace)   //std::cout << "On se deplce au premier noeud et on empile le second." << std::endl;
-                {
-                }
                 // Enqueue _secondChild_ in todo list
                 todo[todoPos].node = secondChild;
                 todo[todoPos].tmin = tplane;
@@ -285,10 +239,6 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
         {
             // Check for intersections inside leaf node
             unsigned int nPrimitives = node->getNbPrimitives();
-            //std::cout<<"Premiere primitive du noeud : "<<node->getFirstIndex()<<"(max : "<<initialMesh->size()<<")."<<std::endl;
-            if (trace)   //std::cout << "La feuille contient " << node->getNbPrimitives() << " primitives." << std::endl;
-            {
-            }
             if (nPrimitives == 1)
             {
                 Shape* prim = initialMesh->at(node->getFirstIndex());
@@ -299,24 +249,15 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
                 {
                     hit = true;
                     result.push_back(currentIntersection);
-                    /*if(inter.t < 0.f || currentIntersection.t < inter.t){
-                        inter.t = currentIntersection.t;
-                        inter.forme = currentIntersection.forme;
-                        inter.p = currentIntersection.p;
-                        //inter.material = currentIntersection.material;
-                        //inter.normal = glm::vec3(currentIntersection.normal);
-                        //inter.pos = glm::vec3(currentIntersection.pos);
-                    }*/
-                    intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+//                    intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+                    intermin = (*pLeafTreatmentFunction) (result, intermin);
                 }
             }
             else if (nPrimitives > 1)
             {
-                //logs<<"Arrive sur une feuille avec plusieurs primitives."<<std::endl;
                 unsigned int* prims = node->getPrims();
                 for (unsigned int i = 0; i < nPrimitives; i++)
                 {
-                    //const Reference<Primitive> &prim = primitives[prims[i]];
                     Shape* prim = initialMesh->at(prims[i]);
 
                     // Check one primitive inside leaf node
@@ -326,21 +267,10 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
                     {
                         hit = true;
                         result.push_back(currentIntersection);
-                        /*if(inter.t < 0.f || currentIntersection.t < inter.t){
-                            inter.t = currentIntersection.t;
-                            inter.forme = currentIntersection.forme;
-                            inter.p = currentIntersection.p;
-                        }*/
-                        intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+                        //intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+                        intermin = (*pLeafTreatmentFunction) (result, intermin);
                     }
                 }
-                if (hit)
-                    if (trace)   //std::cout << "Une intersection a ete trouve dans ce noeud." << std::endl;
-                    {
-                    }
-                    else if (trace)   //std::cout << "Aucune intersection n'a ete trouve dans ce noeud." << std::endl;
-                    {
-                    }
             }
 
             // Grab next node to process from todo list
@@ -357,17 +287,7 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
             }
         }
     }
-    //std::cout<<"Fin du calcul d'intersection."<<std::endl;
-    /*if(!hit && !alreadyFail){
-        nbFail++;
-        if(nbFail == 50000){
-            std::cout<<logs.str()<<std::endl;
-            r = Ray(ray);
-            alreadyFail = true;
-        }
-    }*/
-    //if(hit)
-    //  std::cout<<"Il y a "<<result.size()<<" intersections conservees pour le rayon."<<std::endl;
+
     return intermin;
 }
 
@@ -375,91 +295,21 @@ void KdtreeAccelerator::print()
 {
     for (unsigned int i = 0; i < tableNode.size(); i++)
     {
-        //std::cout << "Le noeud " << i << " est ";
         if (tableNode.at(i).isLeaf())
         {
-            //std::cout << "une feuille." << std::endl;
-            //std::cout << "La feuille contient " << tableNode.at(i).getNbPrimitives() << "(1er : ";
             if (tableNode.at(i).getNbPrimitives() == 1)
             {
-                //std::cout << tableNode.at(i).getFirstIndex() << ")" << std::endl;
             }
             else
             {
-                //std::cout << ((tableNode.at(i).getPrims())[0]) << ")" << std::endl;
             }
         }
         else
         {
-            //std::cout << "un noeud interne" << std::endl;
-            //std::cout << "Le second fils est a l'indice " << tableNode.at(i).AboveChild() << "(max : " << tablePrimitive.size() << ")" << std::endl;
         }
     }
 }
 
-/*void KdtreeAccelerator::display(unsigned int indexNode){
-    if(indexNode >= tableNode.size())
-        return;
-    BBox box = BBox(tableBox.at(indexNode));
-    if(box.isNull)
-        return;
-
-    glBegin(GL_LINES);
-        glVertex3f(box.points[0].x,box.points[0].y,box.points[0].z);
-        glVertex3f(box.points[1].x,box.points[1].y,box.points[1].z);
-
-        glVertex3f(box.points[0].x,box.points[0].y,box.points[0].z);
-        glVertex3f(box.points[2].x,box.points[2].y,box.points[2].z);
-
-        glVertex3f(box.points[3].x,box.points[3].y,box.points[3].z);
-        glVertex3f(box.points[2].x,box.points[2].y,box.points[2].z);
-
-        glVertex3f(box.points[3].x,box.points[3].y,box.points[3].z);
-        glVertex3f(box.points[1].x,box.points[1].y,box.points[1].z);
-
-        glVertex3f(box.points[0].x,box.points[0].y,box.points[0].z);
-        glVertex3f(box.points[4].x,box.points[4].y,box.points[4].z);
-
-        glVertex3f(box.points[5].x,box.points[5].y,box.points[5].z);
-        glVertex3f(box.points[1].x,box.points[1].y,box.points[1].z);
-
-        glVertex3f(box.points[6].x,box.points[6].y,box.points[6].z);
-        glVertex3f(box.points[2].x,box.points[2].y,box.points[2].z);
-
-        glVertex3f(box.points[3].x,box.points[3].y,box.points[3].z);
-        glVertex3f(box.points[7].x,box.points[7].y,box.points[7].z);
-
-        glVertex3f(box.points[5].x,box.points[5].y,box.points[5].z);
-        glVertex3f(box.points[4].x,box.points[4].y,box.points[4].z);
-
-        glVertex3f(box.points[6].x,box.points[6].y,box.points[6].z);
-        glVertex3f(box.points[4].x,box.points[4].y,box.points[4].z);
-
-        glVertex3f(box.points[5].x,box.points[5].y,box.points[5].z);
-        glVertex3f(box.points[7].x,box.points[7].y,box.points[7].z);
-
-        glVertex3f(box.points[6].x,box.points[6].y,box.points[6].z);
-        glVertex3f(box.points[7].x,box.points[7].y,box.points[7].z);
-    glEnd();
-    if(!tableNode.at(indexNode).isLeaf())
-        return;
-    unsigned int *prims = tableNode.at(indexNode).getPrims();
-    for(unsigned int i = 0; i < tableNode.at(indexNode).getNbPrimitives(); i++){
-        Triangle &triangle = initialMesh->at(prims[i]);
-        glBegin(GL_TRIANGLES);
-            glVertex3f(triangle.data[0],triangle.data[1],triangle.data[2]);
-            glVertex3f(triangle.data[3],triangle.data[4],triangle.data[5]);
-            glVertex3f(triangle.data[6],triangle.data[7],triangle.data[8]);
-        glEnd();
-    }
-
-    glColor3ub(255,0,0);
-    glBegin(GL_LINES);
-        glVertex3f(r.pos.x,r.pos.y,r.pos.z);
-        glVertex3f(r.pos.x + 1000.f * r.dir.x,r.pos.y + 1000.f * r.dir.y,r.pos.z + 1000.f * r.dir.z);
-    glEnd();
-    glColor3ub(255,255,255);
-}*/
 
 void KdtreeAccelerator::generateSAHKdTree(int currentProfondeur, BBox& localBox, TaBRecBoundEdge* edges[3], unsigned int nbPrims, unsigned int* prims)
 {
@@ -487,10 +337,6 @@ void KdtreeAccelerator::generateSAHKdTree(int currentProfondeur, BBox& localBox,
     prims0 = (unsigned int*)malloc(nbPrims * sizeof(unsigned int));
     prims1 = (unsigned int*)malloc(nbPrims * sizeof(unsigned int));
 
-    //Coupe au milieu, on selectionne la plus grande dimension
-    //int axis = localBox.MaximumExtend();
-    //float split = (localBox.pMin[axis] + localBox.pMax[axis]) / 2.f;
-
     // Initialize interior node and continue recursion
     // Choose split axis position for interior node
     int bestAxis = -1, bestOffset = -1;
@@ -504,6 +350,7 @@ void KdtreeAccelerator::generateSAHKdTree(int currentProfondeur, BBox& localBox,
     if (d.x > d.y && d.x > d.z) { axis = 0; }
     else { axis = (d.y > d.z) ? 1 : 2; }
     int retries = 0;
+
 retrySplit:
     // Initialize edges for _axis_
     for (int i = 0; i < static_cast<int>(nbPrims); ++i)
@@ -550,8 +397,8 @@ retrySplit:
         }
         if (edges[axis][i].type == TaBRecBoundEdge::START) { ++nBelow; }
     }
-    //BOOST_ASSERT(nBelow == nP && nAbove == 0); // NOBOOK
-    // Create leaf if no good splits were found
+
+	// Create leaf if no good splits were found
     if (bestAxis == -1 && retries < 2)
     {
         ++retries;
@@ -585,9 +432,6 @@ retrySplit:
 
     free(prims);
 
-    //unsigned int indexFirstFalse = (unsigned int)(firstFalse - tablePrimitive.begin());
-    //std::cout<<"La partition a trouve "<<indexFirstFalse<<" primitives inferieur au milieu."<<std::endl;
-
     KDNode currentNode;
     unsigned int indexCurrentNode = tableNode.size();
     tableNode.push_back(currentNode);
@@ -596,11 +440,8 @@ retrySplit:
     BBox firstBox = BBox(localBox);
     firstBox.pMax[axis] = split;
     generateMidKdTree(currentProfondeur + 1, firstBox, n0, prims0);
-    //free(prims0);
 
-    //std::cout<<"Avant modification, le noeud "<<indexCurrentNode<<" a pour second fils "<<tableNode.at(indexCurrentNode).AboveChild()<<std::endl;
     tableNode.at(indexCurrentNode).createNode(axis, split, tableNode.size());
-    //std::cout<<"Apres modification, le noeud "<<indexCurrentNode<<" a pour second fils "<<tableNode.at(indexCurrentNode).AboveChild()<<std::endl;
 
     BBox secondBox = BBox(localBox);
     secondBox.pMin[axis] = split;
