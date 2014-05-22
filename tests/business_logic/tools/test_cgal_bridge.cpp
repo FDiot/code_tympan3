@@ -29,43 +29,48 @@ using std::deque;
 
 using tympan::ITYPolygonTriangulator;
 
-TEST(TYPolygonTriangulatorTest, instanciation)
+/**
+ * \brief Fixture which provides a Polygon to be triangulated
+*/
+class TriangulatePolygonTest :
+    public testing::Test
 {
+private:
     TYPolygon poly;
 
-    auto p_triangulator = tympan::make_polygon_triangulator(poly);
-    ASSERT_TRUE(p_triangulator != NULL);
-}
+protected:
+    deque<OPoint3D> points;
+    deque<OTriangle> triangles;
 
-TEST(TYPolygonTriangulatorTest, single_triangle)
+    std::unique_ptr<ITYPolygonTriangulator> p_triangulator;
+
+    void triangulate(const vector<TYPoint>& pts)
+    {
+        poly.setPoints(pts);
+        p_triangulator = tympan::make_polygon_triangulator(poly);
+        p_triangulator->exportMesh(points, triangles);
+    }
+}; // class TriangulatePolygonTest
+
+
+TEST_F(TriangulatePolygonTest, single_triangle)
 {
     // NB New c++'11 initializer-list syntax
     // Cf. http://en.wikipedia.org/wiki/C++11#Initializer_lists
     vector<TYPoint> pts { {0,0,0}, {0,1,0}, {1, 0, 0}};
-    TYPolygon poly(pts);
 
-    deque<OPoint3D> points;
-    deque<OTriangle> triangles;
+    triangulate(pts);
 
-    auto p_triangulator = tympan::make_polygon_triangulator(poly);
-    p_triangulator->exportMesh(points, triangles);
 
     ASSERT_EQ(3, points.size());
     ASSERT_EQ(1, triangles.size());
 }
 
-TEST(TYPolygonTriangulatorTest, concave_quadrangle)
+TEST_F(TriangulatePolygonTest, concave_quadrangle)
 {
-    // NB New c++'11 initializer-list syntax
-    // Cf. http://en.wikipedia.org/wiki/C++11#Initializer_lists
     vector<TYPoint> pts { {0,0,0}, {5, 0,0}, {1, 1, 0}, {0.5, 6, 0}};
-    TYPolygon poly(pts);
 
-    deque<OPoint3D> points;
-    deque<OTriangle> triangles;
-
-    auto p_triangulator = tympan::make_polygon_triangulator(poly);
-    p_triangulator->exportMesh(points, triangles);
+    triangulate(pts);
 
     ASSERT_EQ(4, points.size());
     ASSERT_EQ(2, triangles.size());
