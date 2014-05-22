@@ -32,9 +32,9 @@ cdef extern from "Qt/qstring.h":
 
 cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp" namespace "tympan":
     cdef cppclass AcousticProblemModel:
-        size_t num_points()
-        size_t num_triangles()
-        size_t num_materials()
+        size_t npoints()
+        size_t ntriangles()
+        size_t nmaterials()
         AcousticTriangle &triangle(size_t tri_idx)
         OPoint3D& node(size_t idx)
         shared_ptr[AcousticMaterialBase] make_material(const string& name, double resistivity)

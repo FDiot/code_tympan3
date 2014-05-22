@@ -36,10 +36,10 @@ public:
 
     triangle_idx make_triangle(node_idx n1, node_idx n2, node_idx n3);
 
-    size_t num_points() const //TODO move to implementation file
+    size_t npoints() const //TODO move to implementation file
     { return  all_nodes.size(); }
 
-    size_t num_triangles() const //TODO move to implementation file
+    size_t ntriangles() const //TODO move to implementation file
     { return  all_triangles.size(); }
 
     AcousticTriangle& triangle(triangle_idx tri_idx)
@@ -55,7 +55,7 @@ public:
     { return all_nodes[idx]; }
 
 
-    size_t num_materials() const //TODO move to implementation file
+    size_t nmaterials() const //TODO move to implementation file
     { return  all_materials.size(); }
 
     const AcousticMaterialBase& material(size_t mat_idx) const

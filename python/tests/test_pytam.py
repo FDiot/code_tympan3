@@ -40,9 +40,9 @@ class TestTympan(unittest.TestCase):
             model = project.current_computation().acoustic_problem()
             builder = pytam.SolverModelBuilder(model)
             builder.fill_problem(project.site())
-        self.assertEqual(model.nbpoints(), 6) # OK
-        self.assertEqual(model.nbtriangles(), 5) # XXX should be 4
-        self.assertEqual(model.nbmaterials(), 5) # XXX should be 1
+        self.assertEqual(model.npoints(), 6) # OK
+        self.assertEqual(model.ntriangles(), 5) # XXX should be 4
+        self.assertEqual(model.nmaterials(), 5) # XXX should be 1
         # FIXME the default material is replicated once per triangle.
         # TODO : how to test the altitude of a point ? or access a triangle at
         # some place ?
@@ -81,7 +81,7 @@ class TestTympan(unittest.TestCase):
             model = project.current_computation().acoustic_problem()
             builder = pytam.SolverModelBuilder(model)
             builder.fill_problem(project.site())
-        self.assertEqual(model.nbmaterials(), 3)
+        self.assertEqual(model.nmaterials(), 3)
         # XXX FIXME: the default material is replicated once per triangle
         # TODO to be completed: cf. ticket #1468184
 
