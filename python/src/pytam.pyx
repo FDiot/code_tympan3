@@ -23,33 +23,33 @@ cdef class ProblemModel:
     def __cinit__(self):
         self.thisptr = NULL
 
-    def nbpoints(self):
+    def npoints(self):
         if self.thisptr == NULL:
             raise NullCppObject()
-        return self.thisptr.num_points()
+        return self.thisptr.npoints()
 
-    def nbtriangles(self):
+    def ntriangles(self):
         if self.thisptr == NULL:
             raise NullCppObject()
-        return self.thisptr.num_triangles()
+        return self.thisptr.ntriangles()
 
-    def nbmaterials(self):
+    def nmaterials(self):
         if self.thisptr == NULL:
             raise NullCppObject()
-        return self.thisptr.num_materials()
+        return self.thisptr.nmaterials()
 
     def export_triangular_mesh(self):
         if self.thisptr == NULL:
             raise NullCppObject()
         nb_elts = cython.declare(cython.uint)
         actri = cython.declare(cython.pointer(AcousticTriangle))
-        nb_elts = self.thisptr.num_triangles()
+        nb_elts = self.thisptr.ntriangles()
         triangles = np.empty([nb_elts, 3])
         for i in range(nb_elts):
             actri = cython.address(self.thisptr.triangle(i))
             triangles[i] = [actri.n[0], actri.n[1], actri.n[2]]
         point = cython.declare(cython.pointer(OPoint3D))
-        nb_elts = self.thisptr.num_points()
+        nb_elts = self.thisptr.npoints()
         nodes = np.empty([nb_elts, 3])
         for i in range(nb_elts):
             point = cython.address(self.thisptr.node(i))
