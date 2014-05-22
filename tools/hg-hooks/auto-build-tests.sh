@@ -12,7 +12,7 @@ TIP_ID=$(hg log -r tip --template '{node|short}\n')
 echo "HG_NODE: $HG_NODE - tip: $TIP_ID"
 hg up --clean $TIP_ID
 echo "Running make for CS $TIP_ID and $BUILD_DIR..."
-LOGFILE=make-$TIP_ID.log
-make -C $BUILD_DIR -j8  > $LOGFILE 2>&1 &
+LOGFILE=$BUILD_DIR/$TIP_ID-make.log
+( make -C $BUILD_DIR -j8 rebuild_cache all  2>&1 | tee $LOGFILE > make.log ) &
 MAKE_PID=$!
 echo "Make Process ID : $MAKE_PID"
