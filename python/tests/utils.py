@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """Ease paths configuration for test in Python
 
 Allow to access the test data, solvers and other resources in a cross
@@ -23,9 +21,10 @@ THIS EXPECTS THE NAME OF THE BUILD CONFIG TO BE TESTED IS PASSED
 AS FIRST ARGUMENT TO THE SCRIPT
 """
 
-import sys, os.path as osp
+import sys
+import os
+import os.path as osp
 
-import unittest
 
 _HERE = osp.realpath(osp.dirname(__file__))
 PROJECT_BASE = osp.abspath(osp.join(_HERE, '..', '..'))
@@ -63,11 +62,11 @@ else:
 
 
 def main():
+    import unittest
     # The build configuration (Debug or Release) to be tested is added as
     # first argument by CTest and need to be removed from sys.argv not to
     # confuse unittest
-    
     if config:
         del sys.argv[1]
-
     unittest.main()
+

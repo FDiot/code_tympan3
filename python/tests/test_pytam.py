@@ -1,12 +1,12 @@
-import os, os.path as osp
-
-import unittest
-import numpy as np
 import sys
+import os, os.path as osp
+import unittest
 
-from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR
+import numpy as np
 
 import pytam
+
+from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR
 
 
 class TestTympan(unittest.TestCase):
