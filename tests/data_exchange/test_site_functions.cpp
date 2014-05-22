@@ -1,9 +1,9 @@
 /**
- * \file test_build_from_site.cpp
- * \test Try to build some solver data model entities from a TYSite.
+ * \file test_site_functions.cpp
+ * \test XXX actually test some numbers from a XML loaded site
  *
  *  Created on: 8 nov. 2012
- *      Author: Damien Garayd <damien.garaud@logilab.fr>
+ *      Author: Damien Garaud <damien.garaud@logilab.fr>
  */
 
 #include <iostream>
@@ -17,8 +17,6 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
-
-#include "Tympan/MetierSolver/DataManagerMetier/site_functions.hpp"
 
 #include "test_utils/ProjectLoader.hpp"
 
@@ -39,10 +37,14 @@ TEST_F(BuildingFromSiteFixture, check_size)
     LPTYSiteNode site_ptr = project->getSite();
 
     // Get the number of points.
-    unsigned int points_number = total_point_number(site_ptr);
+    unsigned int points_number = site_ptr->getTopographie()->number_of_vertices();
     EXPECT_EQ(14, points_number);
 
     // Get the number of surfaces ('ecran' is obsoleted).
-    unsigned int surfaces_number = get_acoustic_surface_number(site_ptr);
+    TYTabAcousticSurfaceGeoNode tab_faces;
+    unsigned int nb_faces_infra = 0;
+    std::vector<bool> is_face_ecran_index;
+    site_ptr->getListFaces(tab_faces, nb_faces_infra, is_face_ecran_index);
+    unsigned int surfaces_number = tab_faces.size();
     EXPECT_EQ(28, surfaces_number);
 }
