@@ -479,20 +479,23 @@ public:
      * @ brief exception class raised by \c poly_comparator in case polygons
      * are not comparable.
      */
-    struct NonComparablePolygons : tympan::invalid_data
+    struct CGALNonComparablePolygons
+        : tympan::IAltimetryBuilder::NonComparablePolygons
     {
+        typedef tympan::IAltimetryBuilder::NonComparablePolygons base_class;
+
         const material_polygon_handle_t p1, p2;
         const face_set_t intersect;
 
-        NonComparablePolygons(
-            material_polygon_handle_t p1_,
-            material_polygon_handle_t p2_,
-            const face_set_t& intersect_
-        ) DO_NOT_THROW
-: tympan::invalid_data("AltimetryBuilder: incomparable polygons"),
-        p1(p1_), p2(p2_), intersect(intersect_) {}
+        CGALNonComparablePolygons(
+                                  material_polygon_handle_t p1_,
+                                  material_polygon_handle_t p2_,
+                                  const face_set_t& intersect_
+                                  ) DO_NOT_THROW
+        : base_class("AltimetryBuilder: incomparable polygons"),
+            p1(p1_), p2(p2_), intersect(intersect_) {}
 
-        ~NonComparablePolygons() DO_NOT_THROW {};
+        ~CGALNonComparablePolygons() DO_NOT_THROW {};
     };
 
     /**

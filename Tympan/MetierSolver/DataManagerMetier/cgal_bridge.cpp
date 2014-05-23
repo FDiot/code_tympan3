@@ -92,4 +92,7 @@ namespace tympan
     }; // make_altimetry_builder
 
 
+    IAltimetryBuilder::NonComparablePolygons::NonComparablePolygons(const std::string& desc)
+        : ::tympan::invalid_data(desc) {}
+
 } // namespace tympan
