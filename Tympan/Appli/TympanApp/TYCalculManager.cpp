@@ -36,6 +36,8 @@
 #include "Tympan/Tools/OChrono.h"
 #include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
 #include "Tympan/Appli/TympanApp/TYApplication.h"
+#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "EnvironmentUtils.hpp"
 
 #include <qcursor.h>
 #include <qmessagebox.h>
@@ -92,7 +94,6 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     {
         logger.warning("Legacy computation (without Python)");
         bool ret = pCalcul->go();
-
     }
     else
     {
@@ -155,7 +156,30 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
 
         float comp_duration (0.);
         bool comp_finished (false);
-        python.start("python", args);
+        // Send python script output to the current process std::out/err
+        python.setProcessChannelMode(QProcess::ForwardedChannels);
+        // Set PYTHONPATH to python subprocess
+        QStringList env(python_qprocess_environment());
+        python.setEnvironment(env);
+        // Since scripts passed to QProcess are not launched through cmd.exe
+        // under windows, we have to give QProcess the path to the python interpreter
+        QString python_interp;
+        try
+        {
+            python_interp = get_python_interp();
+        }
+        catch(const tympan::invalid_data& exc)
+        {
+            msg << boost::diagnostic_information(exc);
+            logger.error(
+                    "Could not find python interpreter to launch python script. Computation won't be done");
+            logger.debug(msg.str().c_str());
+            // Reactivate GUI
+            TYApplication::restoreOverrideCursor();
+            getTYMainWnd()->setEnabled(true);
+            return false;
+        }
+        python.start(python_interp, args);
         do
         {
             comp_finished = python.waitForFinished(COMPUTATION_TIMEOUT);
