@@ -284,9 +284,8 @@ public:
     material_poly_to_face_set_t poly_to_faces;
 
 public:
-    AltimetryBuilder();
-    virtual
-    ~AltimetryBuilder();
+    AltimetryBuilder() = default ;
+    virtual ~AltimetryBuilder() = default ;
 
     //TODO We should properly handle a simple state machine.
 

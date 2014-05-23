@@ -60,14 +60,6 @@ throw(tympan::InvalidDataError)
 }
 
 
-AltimetryBuilder::AltimetryBuilder()
-{
-}
-
-AltimetryBuilder::~AltimetryBuilder()
-{
-}
-
 // Main methods
 
 void
