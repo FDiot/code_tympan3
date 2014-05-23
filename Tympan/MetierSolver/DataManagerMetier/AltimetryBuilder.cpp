@@ -355,7 +355,7 @@ bool AltimetryBuilder::poly_comparator::operator()(face_to_material_poly_t::valu
     }
     else
     {
-        throw NonComparablePolygons(p1, p2, intersect);
+        throw CGALNonComparablePolygons(p1, p2, intersect);
     }
 }
 
@@ -393,7 +393,7 @@ AltimetryBuilder::labelFaces(material_t default_material)
                 // Handle the case where no valid material has been associated to the material polygon
                 f_it->info().material = mater == NULL ? default_material : mater;
             }
-            catch (const NonComparablePolygons& exc)
+            catch (const CGALNonComparablePolygons& exc)
             {
                 // Enrich the exception with the geographical position
                 const CGAL_Point& center = CGAL::centroid(cdt.triangle(f_it));

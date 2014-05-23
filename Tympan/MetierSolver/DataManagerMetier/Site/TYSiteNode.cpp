@@ -495,7 +495,7 @@ void TYSiteNode::loadTopoFile()
         do_updateAltimetrie(force);
         return true;
     }
-    catch (const tympan::AltimetryBuilder::NonComparablePolygons& exc)
+    catch (const tympan::IAltimetryBuilder::NonComparablePolygons& exc)
     {
         logger.error("Invalid ground material polygons prevented to update the altimetry");
         // TODO move here reporting code from AltimetryBuilder
