@@ -28,10 +28,10 @@
 
 namespace tympan
 {
-typedef boost::error_info < struct tag_elements_implied,
-        std::deque<LPTYElement> > elements_implied_errinfo;
-typedef boost::error_info < struct tag_position,
-        OPoint3D > position_errinfo;
+    typedef boost::error_info < struct tag_elements_implied,
+                                std::deque<LPTYElement> > elements_implied_errinfo;
+    typedef boost::error_info < struct tag_position,
+                                OPoint3D > position_errinfo;
 } // namespace tympan
 
 
