@@ -1,6 +1,8 @@
 import os, os.path as osp
 import unittest
 import pytam
+import numpy as np
+
 
 _HERE = osp.realpath(osp.dirname(__file__))
 
@@ -29,7 +31,9 @@ def make_test_with_file(test_file):
     """ For a TEST_xx_NO_RESU.xml file from data/project-panel, load and
     solve the corresponding project, load the expected result
     from data/expected/TEST_xx.xml and compare the computed result with
-    the expected result
+    the expected result.
+    The acoustic spectrums of the results are compared one by one (identified
+    by a receiver and source id), in a dB scale, with a 1 decimal definition.
     """
     def test_with_file(self):
         # Load and solve the project
@@ -41,7 +45,21 @@ def make_test_with_file(test_file):
         result_file = osp.join(_TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
         expected_result_project = pytam.Project.from_xml(result_file)
         # Compare results
-        self.assertTrue(computation.same_result(expected_result_project.current_computation()))
+        current_result = computation.result
+        expected_result = expected_result_project.current_computation().result
+        self.assertEqual(current_result.nsources, expected_result.nsources)
+        self.assertEqual(current_result.nreceivers, expected_result.nreceivers)
+        for i in xrange(current_result.nreceivers):
+            for j in xrange(current_result.nsources):
+                curr_spectrum = current_result.spectrum(i, j)
+                expected_spectrum = expected_result.spectrum(i, j)
+                # Both spectrums must have the same number of elements
+                self.assertEqual(curr_spectrum.nvalues, expected_spectrum.nvalues)
+                # Let's compare the values in dB
+                curr_spectrum = curr_spectrum.to_dB()
+                expected_spectrum = expected_spectrum.to_dB()
+                np.testing.assert_almost_equal(curr_spectrum.values,
+                                               expected_spectrum.values, decimal=1)
     return test_with_file
 
 # Retrieve all the available "TEST_XX" xml files and make a test for each one

@@ -38,7 +38,7 @@ cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp
         AcousticTriangle &triangle(size_t tri_idx)
         OPoint3D& node(size_t idx)
         shared_ptr[AcousticMaterialBase] make_material(const string& name, double resistivity)
-        shared_ptr[AcousticMaterialBase] make_material(const string& name, const TYSpectre& spectrum)
+        shared_ptr[AcousticMaterialBase] make_material(const string& name, const OSpectre& spectrum)
         size_t make_triangle(size_t n1, size_t n2, size_t n3)
         size_t make_node(const OPoint3D&)
 
@@ -128,6 +128,10 @@ cdef extern from "Tympan/MetierSolver/CommonTools/OPoint3D.h":
     cdef cppclass OPoint3D (OCoord3D):
         pass
 
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h":
+    cdef cppclass TYPoint(TYElement, OPoint3D):
+        pass
+
 cdef extern from "Tympan/MetierSolver/CommonTools/OTriangle.h":
     cdef cppclass OTriangle:
         OPoint3D _A
@@ -162,5 +166,5 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYMateriauC
         TYSpectre& getSpectreAbso()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSpectre.h":
-    cdef cppclass TYSpectre (TYElement):
+    cdef cppclass TYSpectre (TYElement, OSpectre):
         pass
