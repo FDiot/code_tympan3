@@ -65,9 +65,17 @@ CMake
         version 2.8 or newer is required.
 
 CGAL
-        CGAL_ is a Computational Geometry library and itself depends upon
-        both Boost and Qt4 and as such needs to be installed in a
-        compatible way with your Qt and Boost installation. Version
+        CGAL_ is a Computational Geometry library and itself depends
+        upon both Boost and Qt4 and as such needs to be installed in a
+        compatible way with your Qt and Boost installation.
+
+        .. todo:: Specify version **required** ( 4.3.1 suggested)
+
+                  - 4.0.5 is the version packaged on debian wheezy but
+                    has broken CMake configuration scripts on Windows
+                  - 4.1 has broken tuple support on Windows
+                  - 4.2 and 4.3 bring improvement regarding triangulation
+                  - 4.4 is quite young at the time of this writing (may 2014)
 
 Documentation dependencies
 --------------------------
@@ -169,8 +177,7 @@ CMake
 
 CGAL
         See the `Compiling CGAL`_ (no real binary installer available on Windows) :
-        https://gforge.inria.fr/frs/download.php/31643/CGAL-4.1-Setup.exe
-
+        https://gforge.inria.fr/frs/download.php/32993/CGAL-4.3-Setup.exe
 
 If you have no direct Internet connection (typically you are behind an
 authenticating proxy) you will have to build Boost from source :
@@ -206,7 +213,7 @@ The first step is to download the source archive from `CGAL
 forge`_. Please download the windows installer ``CGAL-4.x-Setup.exe``
 for Windows or any suitably compressed archive for Linux like
 ``CGAL-4.x.tar.bz2``. Then unzip it to some directory (e.g
-``~/dists/CGAL-4.1``) and follow the build instruction, summarized
+``~/dists/CGAL-4.x``) and follow the build instruction, summarized
 thereafter.
 
 **NB:** The windows installer will download the GMP and MPFR dependencies and
@@ -219,9 +226,9 @@ Make a *build directory* **distinct** from the *source directory* in
 which you unzipped the archive (typically a sibling directory) and
 invoke CMake from within it :
 
-  ~/dist$ mkdir build-CGAL-4.1
-  ~/dist$ cd build-CGAL-4.1
-  ~/dist/build-CGAL-4.1$ ccmake ../CGAL-4.1
+  ~/dist$ mkdir build-CGAL-4.3
+  ~/dist$ cd build-CGAL-4.3
+  ~/dist/build-CGAL-4.3$ ccmake ../CGAL-4.3
 
 You should have read some basic CMake documentation before going
 further... Now suppose you have, by pressing ``c`` you launch the
@@ -299,7 +306,7 @@ directory) and run CMake in it, telling it where you have **built**
 
 CMake is likely not to find CGAL 4, and possibly Boost. You have to
 set some CMake variables (or alternatively environment variables) in
-order to help it find them, e.g.  ``CGAL_DIR=~/dist/build-CGAL-4.1``.
+order to help it find them, e.g.  ``CGAL_DIR=~/dist/build-CGAL-4.3``.
 You also have to tell CMake where it will install Code_TYMPAN thanks
 to the ``CMAKE_INSTALL_PREFIX`` variable
 (e.g. ``~/projets/install-Code_TYMPAN``).
