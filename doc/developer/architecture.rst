@@ -48,6 +48,37 @@ See the ``Tools`` directory and some sub-directories in ``MetierSolver``:
   - ``CommonTools`` common objects used by the `Business Logic`_ objects: point,
     vector, matrix, etc.
 
+The rationale behind the creation of ``CommonTools`` is to provide
+basic representations and utilities which *do not depend* upon
+``TYElement`` nor ``OPrototype``. Typically such representation and
+utilities are likely to be shared between the main application and the
+solvers.
+
+The way the CGAL library is used deserves a special explanation. CGAL
+is a very powerful but quite complex templates-based library. As such
+dependency to CGAL appears in the headers of the client code and this
+has a heavy impact on compilation time and apparent code complexity.
+
+In order to mitigate those drawbacks while benefiting from the CGAL
+features a variant of the classical Bridge* design pattern is used
+(For design pattern the key reference is [DPGoF]_ ).
+
+Namely the ``cgal_tools`` module in ``CommonTools`` builds some
+high-level functionality (constrained triangulations and domain
+meshing) upon CGAL features ; its API relies on CGAL types and does
+not depend on other Tympan types.
+
+The ``cgal_bridge`` module in ``DataManagerMetier`` exposes interfaces
+to those features expressed with the main Tympan datatypes and ensure
+the conversions.
+
+This allows independent development and testing and reduces
+compilation times by breaking header dependencies propagation thanks to
+the bridge between the interfaces seen by the client code and the
+implementation.
+
+.. [DPGoF] *Design Patterns*
+           E. Gamma, R. Helm, R. Johnson, J. Vlissides - Adisson-Wesley
 
 Business Logic
 --------------
@@ -86,29 +117,29 @@ See in ``GraphicIHM`` and its three sub-directories:
 Rendering
 `````````
 
-The OpenGL API is used to render the scene geometry. The application uses immediate mode and 
+The OpenGL API is used to render the scene geometry. The application uses immediate mode and
 display lists, these methods are from an old specification of OpenGL and are now deprecated.
 When immediate mode is used, the server (GPU) wait for the client (CPU) to send the geometry.
 This method is slow because the GPU has to wait for all the data to be transferred.
-The rendering function of each business logic object is located in ``GraphicIHM/DataManagerGraphic`` 
+The rendering function of each business logic object is located in ``GraphicIHM/DataManagerGraphic``
 and simple geometry rendering can be found at ``GraphicIHM/ToolsGraphic``.
 
 In order to make the rendering faster, the OpenGL commands can be compiled and store on the GPU.
-That way, the CPU simply has to tell the GPU to render this display list instead of sending the 
+That way, the CPU simply has to tell the GPU to render this display list instead of sending the
 geometry on each frame. The use of displayList can be found at ``Appli/TympanApp/TYOpenGLRenderer.cpp``.
 It simply encapsulates all the rendering function (immediate mode) of the scene.
 
-The modern way to render things in OpenGL relies on the use of VBO's (Vertex Buffer Object). The idea is 
-to store the geometry on the GPU as compact arrays (of vertices, indices, normals, ...). One advantage over 
-the display list is that you can access these buffers and edit the data in a dynamic way, whereas display 
-lists are static, in a sense that when the geometry changes you have to recompile/send the whole display 
+The modern way to render things in OpenGL relies on the use of VBO's (Vertex Buffer Object). The idea is
+to store the geometry on the GPU as compact arrays (of vertices, indices, normals, ...). One advantage over
+the display list is that you can access these buffers and edit the data in a dynamic way, whereas display
+lists are static, in a sense that when the geometry changes you have to recompile/send the whole display
 list again.
 
-The matrix management of the application relies on the OpenGL matrices, by using functions such as 
-glRotate(), glTranslate(), ... Additionally, the matrix management of OpenGL features a stack of 
+The matrix management of the application relies on the OpenGL matrices, by using functions such as
+glRotate(), glTranslate(), ... Additionally, the matrix management of OpenGL features a stack of
 matrices (glPushMatrix(), glPopMatrix()).
-The goal of OpenGL is to take advantages of the "**GPU**", but all the functions that implies matrix 
-operations are done on the "**CPU**", they are now deprecated and should be done by the application 
+The goal of OpenGL is to take advantages of the "**GPU**", but all the functions that implies matrix
+operations are done on the "**CPU**", they are now deprecated and should be done by the application
 itself and not the OpenGL API. There exists many libraries that features matrix management (CGAL? Qt?).
 
 Picking
@@ -117,7 +148,7 @@ Picking
 The picking is entirely done on the GPU by using a name stack and a selection buffer.
 This method rely on OpenGL deprecated functions and the steps are as followed:.
 
- #. We define a small "*picking window*"(5 pixel width) and we enter selection mode 
+ #. We define a small "*picking window*"(5 pixel width) and we enter selection mode
     (a mode where the resulting rendering won't be displayed).
  #. We give a "*name*" (an integer) to each object we are willing to pick/draw.
  #. The objects are then rendered. If a primitive falls inside the "*picking window*", a "*hit*" occurs.
@@ -135,14 +166,14 @@ There are two principal different ways of doing picking :
   - color picking ;
   - ray intersection.
 
-The color picking uses entirely the GPU once again. We render every objects with an unique 
-color, then we read the color of the pixel under the mouse. This technique is straighforward and should 
+The color picking uses entirely the GPU once again. We render every objects with an unique
+color, then we read the color of the pixel under the mouse. This technique is straighforward and should
 be simple to implement, however we can't get the coordinate of the intersection point.
 
-The other method consists of a ray that we cast on the scene, and then perform ray-intersection 
-test against the object of our scene. Usually, the ray go through an acceleration structure (e.g. grid, 
-octree, k-d tree, etc), before being tested with the bounding box of the object. This method usually 
-run on the CPU and is independant of the rendering API. It is easy to know the exact intersection 
+The other method consists of a ray that we cast on the scene, and then perform ray-intersection
+test against the object of our scene. Usually, the ray go through an acceleration structure (e.g. grid,
+octree, k-d tree, etc), before being tested with the bounding box of the object. This method usually
+run on the CPU and is independant of the rendering API. It is easy to know the exact intersection
 point between our ray and the picked object.
 
 .. note::

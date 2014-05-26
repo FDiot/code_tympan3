@@ -23,6 +23,9 @@
 #include "Tympan/MetierSolver/CommonTools/OVector3D.h"
 #include "Tympan/MetierSolver/CommonTools/OPlan.h"
 
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
+#include "Tympan/MetierSolver/DataManagerMetier/cgal_bridge.hpp"
+
 using std::cout;
 using std::cerr;
 using std::endl;
