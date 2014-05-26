@@ -11,6 +11,7 @@
 #define TYMPAN__ACOUSTIC_PROBLEM_MODEL_H__INCLUDED
 
 #include <string>
+#include <memory>
 
 #include "data_model_common.hpp"
 #include "entities.hpp"
@@ -114,6 +115,7 @@ protected: // data members
     source_pool_t all_sources;
 };  // class AcousticProblemModel
 
+    std::unique_ptr<AcousticProblemModel> make_AcousticProblemModel();
 
 } // namespace tympan
 

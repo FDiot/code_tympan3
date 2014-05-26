@@ -100,4 +100,7 @@ source_idx AcousticProblemModel::make_source(
     return all_sources.size() - 1;
 }
 
+    std::unique_ptr<AcousticProblemModel> make_AcousticProblemModel()
+    { return std::unique_ptr<AcousticProblemModel>(new AcousticProblemModel()); }
+
 } // namespace tympan
