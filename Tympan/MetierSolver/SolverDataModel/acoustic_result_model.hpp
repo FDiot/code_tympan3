@@ -12,6 +12,7 @@
 
 #include <cstddef>
 #include <vector>
+#include <memory>
 
 #include "data_model_common.hpp"
 #include "entities.hpp"
@@ -58,6 +59,8 @@ public:
 protected: // data members
 
 };  // class AcousticResultModel
+
+std::unique_ptr<AcousticResultModel> make_AcousticResultModel();
 
 
 } // namespace tympan

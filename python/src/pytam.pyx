@@ -308,7 +308,7 @@ cdef class Computation:
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         problem = ProblemModel()
-        problem.thisptr = cython.address(self.thisptr.getRealPointer()._acousticProblem)
+        problem.thisptr = self.thisptr.getRealPointer()._acousticProblem.get()
         return problem
 
     def acoustic_result(self):
@@ -318,7 +318,7 @@ cdef class Computation:
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         result = ResultModel()
-        result.thisptr = cython.address(self.thisptr.getRealPointer()._acousticResult)
+        result.thisptr = self.thisptr.getRealPointer()._acousticResult.get()
         return result
 
 
@@ -356,4 +356,3 @@ cdef class Project:
             raise ValueError ("Cannot export an empty project")
         # same thing as for load_project about the exception
         save_project(filepath, self.thisptr)
-

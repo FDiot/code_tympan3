@@ -25,6 +25,7 @@
 #ifndef __TY_CALCUL__
 #define __TY_CALCUL__
 
+#include <memory>
 
 #include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYAtmosphere.h"
 #include "TYMaillage.h"
@@ -35,10 +36,11 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticEdge.h"
 
-#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
-#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
-
 class TYProjet;
+namespace tympan {
+    class AcousticProblemModel;
+    class AcousticResultModel;
+} // namespace tympan
 
 
 /**
@@ -866,8 +868,8 @@ public:
     */
     TYTabAcousticEdge& getAllAcousticEdges() { return _tabEdges; }
 
-    tympan::AcousticResultModel _acousticResult;
-    tympan::AcousticProblemModel _acousticProblem;
+    std::unique_ptr<tympan::AcousticResultModel>  _acousticResult;
+    std::unique_ptr<tympan::AcousticProblemModel> _acousticProblem;
 
 protected:
     /**

@@ -25,8 +25,11 @@
 
 class TYCalcul;
 class TYSiteNode;
-#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
-#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
+
+namespace tympan {
+    class AcousticProblemModel;
+    class AcousticResultModel;
+} // namespace tympan
 
 class TYSolverInterface
 {

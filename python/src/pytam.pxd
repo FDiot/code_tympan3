@@ -13,6 +13,10 @@ cdef extern from "boost/shared_ptr.hpp" namespace "boost":
     cdef cppclass shared_ptr[T]:
         T *get()
 
+cdef extern from "memory" namespace "std":
+    cdef cppclass unique_ptr[T]:
+        T *get()
+
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp" namespace "tympan":
     SmartPtr[TYProjet] load_project(const char *filename) except +
     void save_project(const char *filename, const SmartPtr[TYProjet] &) except +
@@ -21,7 +25,6 @@ cdef extern from "Tympan/Tools/OGenID.h":
     cdef cppclass OGenID:
         OGenID(const OGenID& other)
         OGenID()
-
 
 cdef extern from "python/include/Loader.hpp" namespace "tympan":
    void load_solver(const char *foldername, TYCalcul *calcul)
@@ -104,8 +107,8 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
     cdef cppclass TYCalcul (TYElement):
         bool go()
-        AcousticProblemModel _acousticProblem
-        AcousticResultModel _acousticResult
+        unique_ptr[AcousticProblemModel] _acousticProblem
+        unique_ptr[AcousticResultModel]  _acousticResult
         SmartPtr[TYResultat] getResultat()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":

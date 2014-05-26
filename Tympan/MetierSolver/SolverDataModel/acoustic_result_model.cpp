@@ -56,12 +56,15 @@ namespace tympan
         data[receptor_idx].clear();
     }
 
-    AcousticResultModel::AcousticResultModel() 
+    AcousticResultModel::AcousticResultModel()
     {
     };
 
-    AcousticResultModel::~AcousticResultModel() 
+    AcousticResultModel::~AcousticResultModel()
     {
     };
+
+    std::unique_ptr<AcousticResultModel> make_AcousticResultModel()
+    { return std::unique_ptr<AcousticResultModel>(new AcousticResultModel()); }
 
 } // namespace tympan

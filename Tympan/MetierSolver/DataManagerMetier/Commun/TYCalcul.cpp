@@ -51,6 +51,8 @@ static char THIS_FILE[] = __FILE__;
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 
 #include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
 
 OPROTOINST(TYCalcul);
 TY_EXTENSION_INST(TYCalcul);
@@ -59,6 +61,8 @@ TY_EXT_GRAPHIC_INST(TYCalcul);
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 
 TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
+    : _acousticProblem(tympan::make_AcousticProblemModel())
+    , _acousticResult(tympan::make_AcousticResultModel())
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -1605,8 +1609,8 @@ bool TYCalcul::go()
 
         TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(_solverId);
         // XXX ... and pass the SolverDataModel built here.
-        ret = pSolver->solve(*pMergeSite, *this, _acousticProblem,
-                _acousticResult);
+        ret = pSolver->solve(*pMergeSite, *this, *_acousticProblem,
+                *_acousticResult);
         pSolver->purge();
 
         // Cumul de la pression aux differents points de calcul
