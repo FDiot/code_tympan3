@@ -89,7 +89,6 @@ cdef class SolverModelBuilder:
         psurf = cython.declare(cython.pointer(TYAcousticSurface))
         site.thisptr.getRealPointer().getListFaces(face_list, nb_building_faces,
                            is_screen_face_idx)
-        element_uid = cython.declare(cython.pointer(UuidAdapter))
         points = cython.declare(deque[OPoint3D])
         triangles = cython.declare(deque[OTriangle])
         for i in range(nb_building_faces):
@@ -98,8 +97,6 @@ cdef class SolverModelBuilder:
             # 'face_list' can contain topography elements. Not relevant here.
             if psurf == NULL:
                 continue
-            # Get the uid for the site element bearing the current acoustic surface
-            element_uid = new UuidAdapter(psurf.getParent().getID())
             # Use the triangulating interface of TYSurfaceInterface to get triangles
             # and convert them to Nodes and AcousticTriangles (beware of mapping
             # TYPoints to Node in the correct way.)
@@ -120,7 +117,6 @@ cdef class SolverModelBuilder:
             # Set the UUID of the site element and the material of the surface
             for i in range(triangles.size()):
                 actri = cython.address(self.model.triangle(i))
-                actri.uuid = (element_uid)[0].getUuid()
                 actri.made_of = pmat
             points.clear()
             triangles.clear()
@@ -161,18 +157,15 @@ cdef class SolverModelBuilder:
         materials = cython.declare(deque[SmartPtr[TYSol]])
         ptopo = cython.declare(cython.pointer(TYTopographie))
         ptopo = site.thisptr.getRealPointer().getTopographie().getRealPointer()
-        element_uid = cython.declare(cython.pointer(UuidAdapter))
-        element_uid = new UuidAdapter(ptopo.getID())
         ptopo.exportMesh(points, triangles, cython.address(materials))
         self.process_mesh(points, triangles)
         # make material
         actri = cython.declare(cython.pointer(AcousticTriangle))
         psol = cython.declare(cython.pointer(TYSol))
         pmat = cython.declare(shared_ptr[AcousticMaterialBase])
-        # Set the UUID of the topography and the material of each triangle
+        # Set the material of each triangle
         for i in range(triangles.size()):
             actri = cython.address(self.model.triangle(i))
-            actri.uuid = element_uid[0].getUuid()
             psol = materials[i].getRealPointer()
             pmat = self.model.make_material(psol.getName().toStdString(),
                                             psol.getResistivite())
