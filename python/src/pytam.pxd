@@ -46,11 +46,6 @@ cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
     cdef cppclass AcousticResultModel:
         pass
 
-cdef extern from "Tympan/MetierSolver/DataExchange/UuidAdapter.hpp" namespace "tympan":
-    cdef cppclass UuidAdapter:
-        UuidAdapter(const OGenID& rhs)
-        binary_uuid getUuid()
-
 cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
     cdef cppclass TYElement:
         QString getName()
@@ -149,14 +144,9 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h":
     cdef cppclass TYTopographie (TYElement):
         void exportMesh(deque[OPoint3D] &, deque[OTriangle] &, deque[SmartPtr[TYSol]] *)
 
-cdef extern from "Tympan/MetierSolver/SolverDataModel/data_model_common.hpp" namespace "tympan":
-    struct binary_uuid:
-        pass
-
 cdef extern from "Tympan/MetierSolver/SolverDataModel/entities.hpp" namespace "tympan":
     cdef cppclass AcousticTriangle:
         shared_ptr[AcousticMaterialBase] made_of
-        binary_uuid uuid
         size_t n[3]
     cdef cppclass AcousticMaterialBase:
         pass

@@ -62,27 +62,6 @@ public:
     //    { return boost::dynamic_pointer_cast<T const>(ptr_any()); }
 };
 
-//! Simple representation of an UUID (Universal Unique Identifier).
-/*! Do the correspondance between \c TYElement uuid and the uuid of schema
-    solver entities. It can match with a \c QUuid (UUID from Qt) and thus with a
-    \c TYUUID (aka \c OGenID).
- */
-struct binary_uuid
-{
-    union
-    {
-        struct
-        {
-            unsigned int   data1;
-            unsigned short data2;
-            unsigned short data3;
-            unsigned char  data4[8];
-        } s;
-        unsigned char t[16];
-    };
-};
-
-
 } /* namespace tympan */
 
 #endif /* TYMPAN__DATA_MODEL_COMMON_HPP__INCLUDED */

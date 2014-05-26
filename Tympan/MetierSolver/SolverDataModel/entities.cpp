@@ -47,9 +47,7 @@ AcousticProblem::AcousticProblem(
 ) : name(name_) {}
 
 
-SiteElement::SiteElement(
-    const binary_uuid& uid_
-) : uid(uid_) {}
+SiteElement::SiteElement() {}
 
 SiteAcousticReceptor::SiteAcousticReceptor(
     unsigned int id_
