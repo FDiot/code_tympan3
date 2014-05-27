@@ -3,28 +3,17 @@ import unittest
 
 import numpy as np
 
-from utils import no_output
+from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, no_output
 
 with no_output():
     import pytam
 
-_HERE = osp.realpath(osp.dirname(__file__))
 
-_PROJECT_BASE = osp.abspath(osp.join(_HERE, '..', '..'))
-
-_TEST_DATA_DIR = osp.join(_PROJECT_BASE, 'tests', 'data')
-assert osp.isdir(_TEST_DATA_DIR), "The test data dir does not exists '%s'" % _TEST_DATA_DIR
-
-_TEST_PROBLEM_DIR = osp.join(_TEST_DATA_DIR, 'projects-panel')
+_TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'projects-panel')
 assert osp.isdir(_TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % _TEST_PROBLEM_DIR
 
-_TEST_RESULT_DIR = osp.join(_TEST_DATA_DIR, 'expected')
+_TEST_RESULT_DIR = osp.join(TEST_DATA_DIR, 'expected')
 assert osp.isdir(_TEST_RESULT_DIR), "The test result dir does not exists '%s'" % _TEST_RESULT_DIR
-
-_TEST_SOLVERS_DIR = osp.join(_PROJECT_BASE, 'pluginsd')
-if not osp.isdir(_TEST_SOLVERS_DIR):
-    solver_dir = osp.abspath(osp.join(_HERE, '..', '..', 'plugins'))
-assert osp.isdir(_TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % _TEST_SOLVERS_DIR
 
 
 class TestTympan(unittest.TestCase):
@@ -44,7 +33,7 @@ def make_test_with_file(test_file):
         with no_output():
             project = pytam.Project.from_xml(osp.join(_TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation()
-            pytam.loadsolver(_TEST_SOLVERS_DIR, computation)
+            pytam.loadsolver(TEST_SOLVERS_DIR, computation)
             result = computation.go()
         self.assertTrue(result)
         # Load the expected result
@@ -76,4 +65,5 @@ for test_file in os.listdir(_TEST_PROBLEM_DIR):
                 make_test_with_file(test_file))
 
 if __name__ == '__main__':
-    unittest.main()
+    from utils import main
+    main()
