@@ -47,6 +47,7 @@ class AltimetryBuilder;
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYCourbeNiveau.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYTerrain.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h"
+#include "Tympan/MetierSolver/DataManagerMetier/cgal_bridge.hpp"
 
 #undef max // XXX
 
@@ -258,6 +259,7 @@ class AltimetryFixture;
  * materials.
  */
 class AltimetryBuilder
+    : public tympan::IAltimetryBuilder
 {
 
 public:
@@ -285,7 +287,7 @@ public:
 
 public:
     AltimetryBuilder() {} ;
-    virtual ~AltimetryBuilder() {} ;
+    virtual ~AltimetryBuilder() noexcept {} ;
 
     //TODO We should properly handle a simple state machine.
 
@@ -302,6 +304,7 @@ public:
      * effect *freezes*  the altimetry (it is no longer possible to insert level curves.)
      *
      */
+    virtual
     void
     insertMaterialPolygonsInTriangulation();
 
@@ -310,6 +313,7 @@ public:
      * @param topography ref. to a TYTopography to be processed.
      * @param use_emprise_as_level_curve if the emprise should be use as a level curve.
      */
+    virtual
     void
     process(TYTopographie& topography, bool use_emprise_as_level_curve = true);
 
@@ -322,6 +326,7 @@ public:
      * @param matrix a transform to be applied to \c ground_area before processing
      * @param ground_area ref. to a \c TYTerrain to be processed.
      */
+    virtual
     void
     process(const TYTerrain& ground_area, const OMatrix& matrix = OMatrix());
 
@@ -335,6 +340,7 @@ public:
      * @param closed if true the last point will be linked to the first
      * @param level_curve ref. to a level curve to be processed.
      */
+    virtual
     void
     process(TYCourbeNiveau& level_curve, const OMatrix& matrix = OMatrix(), bool closed = false);
 
@@ -343,6 +349,7 @@ public:
      * @param topography
      * @param as_level_curve
      */
+    virtual
     void
     process_emprise(TYTopographie& topography, bool as_level_curve = true);
 
@@ -351,6 +358,7 @@ public:
      *
      * This method builds the \c face_to_poly and \c poly_to_faces members
      */
+    virtual
     void
     indexFacesMaterial();
 
@@ -361,6 +369,7 @@ public:
      * been called. This method associates each face (aka triangle) with its
      * material : ie the material of the most specific MaterialPolygon.
      */
+    virtual
     void
     labelFaces(material_t default_material);
 
@@ -373,6 +382,7 @@ public:
      * @param triangles output argument filled with the faces of the triangulation
      * @param p_materials optional output argument filled with the materials of the faces
      */
+    virtual
     void exportMesh(std::deque<OPoint3D>& points,
                     std::deque<OTriangle>& triangles,
                     std::deque<material_t>* p_materials = NULL) const;
@@ -381,6 +391,7 @@ public:
      * @brief Counts the number of (constrained) edges
      * @return a pair (#edges, #constrained edges)
      */
+    virtual
     std::pair<unsigned, unsigned>
     count_edges() const;
 
@@ -388,6 +399,7 @@ public:
      * @brief Get number of vertices
      * @return number of vertices (aka points) of the altimetry
      */
+    virtual
     unsigned number_of_vertices() const
     { return cdt.number_of_vertices(); }
 
@@ -395,6 +407,7 @@ public:
      * @brief Get number of faces
      * @return number of faces (aka triangles) of the altimetry
      */
+    virtual
     unsigned number_of_faces() const
     { return cdt.number_of_faces(); }
 

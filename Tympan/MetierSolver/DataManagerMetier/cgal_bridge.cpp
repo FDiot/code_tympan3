@@ -12,6 +12,7 @@
 
 #include "Tympan/MetierSolver/CommonTools/cgal_tools.hpp"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
+#include "Tympan/MetierSolver/DataManagerMetier/AltimetryBuilder.hpp"
 
 namespace tympan
 {
@@ -82,6 +83,13 @@ namespace tympan
         return  std::unique_ptr<ITYPolygonTriangulator>(
             new TYPolygonTriangulator(poly));
     } // ITYPolygonTriangulator* make_polygon_triangulator()
+
+
+    std::unique_ptr<IAltimetryBuilder>
+    make_altimetry_builder()
+    {
+        return std::unique_ptr<IAltimetryBuilder>(new AltimetryBuilder());
+    }; // make_altimetry_builder
 
 
 } // namespace tympan
