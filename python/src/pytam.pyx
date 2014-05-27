@@ -44,6 +44,13 @@ cdef class ProblemModel:
             raise NullCppObject()
         return self.thisptr.nsources()
 
+    def source(self, idx):
+        if self.thisptr == NULL:
+            raise NullCppObject()
+        source = Source()
+        source.thisptr = cython.address(self.thisptr.source(idx))
+        return source
+
     def export_triangular_mesh(self):
         if self.thisptr == NULL:
             raise NullCppObject()
@@ -302,6 +309,46 @@ cdef class Spectrum:
         """
         spectrum = Spectrum()
         spectrum.thisobj = self.thisobj.toDB()
+        return spectrum
+
+cdef class Point3D:
+    thisobj = cython.declare(OPoint3D)
+
+    def __init__(self):
+        pass
+
+    @property
+    def x(self):
+        return self.thisobj._x
+
+    @property
+    def y(self):
+        return self.thisobj._y
+
+    @property
+    def z(self):
+        return self.thisobj._z
+
+cdef class Source:
+    thisptr = cython.declare(cython.pointer(AcousticSource))
+
+    def __cinit__(self):
+        pass
+
+    @property
+    def position(self):
+        if self.thisptr == NULL:
+            raise NullCppObject()
+        point = Point3D()
+        point.thisobj = self.thisptr.position
+        return point
+
+    @property
+    def spectrum(self):
+        if self.thisptr == NULL:
+            raise NullCppObject()
+        spectrum = Spectrum()
+        spectrum.thisobj = self.thisptr.spectrum
         return spectrum
 
 
