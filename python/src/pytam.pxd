@@ -41,6 +41,7 @@ cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp
         size_t nmaterials()
         size_t nsources()
         AcousticTriangle &triangle(size_t tri_idx)
+        AcousticSource& source(size_t idx)
         OPoint3D& node(size_t idx)
         shared_ptr[AcousticMaterialBase] make_material(const string& name, double resistivity)
         shared_ptr[AcousticMaterialBase] make_material(const string& name, const OSpectre& spectrum)
@@ -102,6 +103,15 @@ cdef extern from "Tympan/MetierSolver/CommonTools/OSpectre.h":
         void setType(TYSpectreType type)
         double * getTabValReel()
         unsigned int getNbValues() const
+
+cdef extern from "Tympan/MetierSolver/SolverDataModel/data_model_common.hpp":
+    cdef cppclass BaseEntity:
+        pass
+
+cdef extern from "Tympan/MetierSolver/SolverDataModel/entities.hpp" namespace "tympan":
+    cdef cppclass AcousticSource(BaseEntity):
+        OPoint3D position
+        OSpectre spectrum
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSource.h":
     cdef cppclass TYSource(TYElement):

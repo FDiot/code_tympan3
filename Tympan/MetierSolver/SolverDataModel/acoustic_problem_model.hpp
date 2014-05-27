@@ -58,6 +58,11 @@ public:
     const Point& node(node_idx idx) const
     { return all_nodes[idx]; }
 
+    AcousticSource& source(source_idx idx)
+    { return all_sources[idx]; }
+
+    const AcousticSource& source(source_idx idx) const
+    { return all_sources[idx]; }
 
     size_t nmaterials() const //TODO move to implementation file
     { return  all_materials.size(); }
