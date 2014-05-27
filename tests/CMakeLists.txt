@@ -18,7 +18,7 @@ include_directories(.)
 
 # XXX It should be possible to make this much lighter
 set (TYMPAN_MODULES
-  tympan_data_exchange tympan_solver_data_model
+   tympan_solver_data_model
   tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
   tympan_tools_metier tympan_tools_graphics tympan_tools)
 
