@@ -57,7 +57,10 @@ TEST_F(TriangulatePolygonTest, single_triangle)
 {
     // NB New c++'11 initializer-list syntax
     // Cf. http://en.wikipedia.org/wiki/C++11#Initializer_lists
-    vector<TYPoint> pts { {0,0,0}, {0,1,0}, {1, 0, 0}};
+    vector<TYPoint> pts;
+    pts.push_back(TYPoint(0,0,0));
+    pts.push_back(TYPoint(0,1,0));
+    pts.push_back(TYPoint(1,0,0));
 
     triangulate(pts);
 
