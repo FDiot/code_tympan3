@@ -1,10 +1,12 @@
 #include "EnvironmentUtils.hpp"
 
 #include <QFile>
+#include <QCoreApplication>
+#include <QProcess>
+#include <QDir>
 
 #include "Tympan/MetierSolver/CommonTools/Defines.h"
 #include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
-#include "TYApplication.h"
 
 namespace tympan
 {
@@ -37,7 +39,7 @@ QStringList python_qprocess_environment()
 {
     QStringList env(QProcess::systemEnvironment());
     // Absolute path to Tympan install directory
-    QString cythonlibs_path(getTYApp()->_binaryDir);
+    QString cythonlibs_path(QCoreApplication::applicationDirPath());
     // Relative path from Tympan install directory to cython modules
     cythonlibs_path.append("/");
     cythonlibs_path.append(TYMPAN_REL_CYTHON_PATH);
@@ -65,7 +67,7 @@ QStringList python_qprocess_environment()
     int path_index = env.indexOf(path_regexp);
     QString path = env[path_index]; 
     path.append(";");
-    path.append(getTYApp()->_binaryDir);
+    path.append(QCoreApplication::applicationDirPath());
     env.removeAt(path_index);
     env.append(path);
 #endif

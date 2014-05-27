@@ -224,7 +224,6 @@ private :
     bool createWorkDir();
 
 public:
-    QString _binaryDir;
     bool _usePython;
 
 private:

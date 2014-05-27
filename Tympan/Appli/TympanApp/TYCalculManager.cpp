@@ -139,10 +139,10 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         // to solve the acoustic problem
         QProcess python;
         QStringList args;
-        QString absolute_plugins_path (getTYApp()->_binaryDir);
+        QString absolute_plugins_path (QCoreApplication::applicationDirPath());
         absolute_plugins_path.append("/");
         absolute_plugins_path.append(PLUGINS_PATH);
-        QString absolute_pyscript_path (getTYApp()->_binaryDir);
+        QString absolute_pyscript_path (QCoreApplication::applicationDirPath());
         absolute_pyscript_path.append("/");
         absolute_pyscript_path.append(PYSCRIPT);
         args << absolute_pyscript_path << problemfile.fileName() << resultfile.fileName()
