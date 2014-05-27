@@ -51,7 +51,15 @@ QStringList python_qprocess_environment()
     if (pythonpath_index > 0)
     {
         pythonpath = env[pythonpath_index];
-        pythonpath.append(";");
+        // Check the presence of cython libs in the PYTHONPATH
+        if (pythonpath != "PYTHONPATH=")
+        {
+#if TY_PLATFORM == TY_PLATFORM_WIN32 || TY_PLATFORM == TY_PLATFORM_WIN64
+            pythonpath.append(";");
+#else
+            pythonpath.append(":");
+#endif
+        }
         pythonpath.append(cythonlibs_path);
         env.removeAt(pythonpath_index);
     }
