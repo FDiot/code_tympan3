@@ -289,8 +289,7 @@ public:
 
     //TODO We should properly handle a simple state machine.
 
-    // Main methods
-
+    /* BEGIN of public interface */
 
     /**
      * @brief Insert the stored material polygons into the triangulation
@@ -348,6 +347,60 @@ public:
     process_emprise(TYTopographie& topography, bool as_level_curve = true);
 
     /**
+     * @brief Build an index of which face belong to which Material polygon
+     *
+     * This method builds the \c face_to_poly and \c poly_to_faces members
+     */
+    void
+    indexFacesMaterial();
+
+    /**
+     * @brief Label each face with its material.
+     *
+     * Can be called only once \c insertMaterialPolygonsInTriangulation() has
+     * been called. This method associates each face (aka triangle) with its
+     * material : ie the material of the most specific MaterialPolygon.
+     */
+    void
+    labelFaces(material_t default_material);
+
+    /**
+     * @brief Export the altimetry as a triangular mesh
+     *
+     * This function expect empty deques and will clear the deque passed.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     * @param p_materials optional output argument filled with the materials of the faces
+     */
+    void exportMesh(std::deque<OPoint3D>& points,
+                    std::deque<OTriangle>& triangles,
+                    std::deque<material_t>* p_materials = NULL) const;
+
+    /**
+     * @brief Counts the number of (constrained) edges
+     * @return a pair (#edges, #constrained edges)
+     */
+    std::pair<unsigned, unsigned>
+    count_edges() const;
+
+    /**
+     * @brief Get number of vertices
+     * @return number of vertices (aka points) of the altimetry
+     */
+    unsigned number_of_vertices() const
+    { return cdt.number_of_vertices(); }
+
+    /**
+     * @brief Get number of faces
+     * @return number of faces (aka triangles) of the altimetry
+     */
+    unsigned number_of_faces() const
+    { return cdt.number_of_faces(); }
+
+    /* END of public interface */
+
+    /**
      * @brief Add \c points_range as elements of the triangulation
      *
      * PointRange must satisfy the requirement for the boost Range concept
@@ -383,13 +436,6 @@ public:
 
 public:
 
-    /**
-     * @brief Build an index of which face belong to which Meterial polygon
-     *
-     * This method builds the \c face_to_poly and \c poly_to_faces members
-     */
-    void
-    indexFacesMaterial();
 
     /* TODO
      * Provide triangulation refinement following :
@@ -435,16 +481,6 @@ public:
 
         ~NonComparablePolygons() DO_NOT_THROW {};
     };
-
-    /**
-     * @brief Label each face with its material.
-     *
-     * Can be called only once \c insertMaterialPolygonsInTriangulation() has
-     * been called. This method associate each face (aka triangle) with its
-     * material : ie the material of the most specific MaterialPolygon.
-     */
-    void
-    labelFaces(material_t default_material);
 
     /**
      * @brief Insert a point and a constraint into the triangulation
@@ -494,27 +530,6 @@ public:
     insert_range(PointRange points_range);
 
     /**
-     * @brief Counts the number of (constrained) edges
-     * @return a pair (#edges, #constrained edges)
-     */
-    std::pair<unsigned, unsigned>
-    count_edges() const;
-
-    /**
-     * @brief Get number of vertices
-     * @return number of vertices (aka points) of the altimetry
-     */
-    unsigned number_of_vertices() const
-    { return cdt.number_of_vertices(); }
-
-    /**
-     * @brief Get number of faces
-     * @return number of faces (aka triangles) of the altimetry
-     */
-    unsigned number_of_faces() const
-    { return cdt.number_of_faces(); }
-
-    /**
      * @brief Conversion from a CGAL Vertex_handle to a Tympan point
      * @param vh the CGAL vertex handle
      * @return coordinates of \c vh as a tympan point
@@ -526,19 +541,6 @@ public:
         const VertexInfo& i = vh->info();
         return Point(p.x(), p.y(), i.altitude);
     }
-
-    /**
-     * @brief Export the altimetry as a triangular mesh
-     *
-     * This function expect empty deques and will clear the deque passed.
-     *
-     * @param points output argument filled with the vertices of the triangulation
-     * @param triangles output argument filled with the faces of the triangulation
-     * @param p_materials optional output argument filled with the materials of the faces
-     */
-    void exportMesh(std::deque<OPoint3D>& points,
-                    std::deque<OTriangle>& triangles,
-                    std::deque<material_t>* p_materials = NULL) const;
 
 protected:
     /**
