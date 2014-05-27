@@ -48,7 +48,7 @@ namespace tympan
         // We build a polygon in the plane (aka 2D) so as to be able to triangulate it
         CGAL_Plane plane(to_cgal(poly.getPlan()));
         CGAL_Polygon poly2d;
-        for(const OPoint3D & op : poly.getPoints())
+        BOOST_FOREACH(const OPoint3D& op, poly.getPoints())
         {
             // CHECKME the .to_2d method implement an unspecified *affine*
             // transform - NOT an isometry
