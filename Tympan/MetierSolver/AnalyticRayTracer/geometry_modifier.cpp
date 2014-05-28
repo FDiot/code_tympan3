@@ -13,24 +13,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "RayCourb.h"
-#include "Transfo.h"
-#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
+
 
 #include <map>
 #include <cstdlib>
 #include <vector>
 
+#include "geometry_modifier.h"
+#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
+#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include "Lancer.h"
+#include "RayCourb.h"
+
 using namespace std;
 
-void Transfo::clear()
+void geometry_modifier::clear()
 {
     Liste_triangles.clear();
-    shot.clear();
 }
 
-vec3 Transfo::fonction_h(const vec3& P)
+vec3 geometry_modifier::fonction_h(const vec3& P)
 {
     // c'est notre fonction h(x,y) qui transforme notre geometrie
 
@@ -53,7 +55,7 @@ vec3 Transfo::fonction_h(const vec3& P)
 
         if (IsInTriangle(P, TabTriangle))
         {
-            R.z = R.z - interpo(TabTriangle, R) + shot.sources[0].z ;
+            R.z = R.z - interpo(TabTriangle, R) + pos_center.z ;
             break;
         }
     }
@@ -64,7 +66,7 @@ vec3 Transfo::fonction_h(const vec3& P)
 }
 
 
-vec3 Transfo::fonction_h_inverse(const vec3& P)
+vec3 geometry_modifier::fonction_h_inverse(const vec3& P)
 {
     // Fonction inverse de la fonction h.
 
@@ -90,7 +92,7 @@ vec3 Transfo::fonction_h_inverse(const vec3& P)
 
         if (IsInTriangle(P, TabTriangle))
         {
-            R.z = R.z + interpo(TabTriangle, R) - shot.sources[0].z;
+            R.z = R.z + interpo(TabTriangle, R) - pos_center.z;
             break;
         }
 
@@ -102,9 +104,10 @@ vec3 Transfo::fonction_h_inverse(const vec3& P)
 }
 
 
-void Transfo::trianguleNappe()
+void geometry_modifier::trianguleNappe(const Lancer& shot)
 {
     unsigned int nbRay = shot.nbRay;
+    pos_center = shot.sources[0];
 
     // 1- On creer nos triangles de Delaunay
     ODelaunayMaker oDelaunayMaker(1e-5);
@@ -124,29 +127,7 @@ void Transfo::trianguleNappe()
     Liste_vertex = oDelaunayMaker.getVertex();
 }
 
-void Transfo::buildInterpolationSurface()
-{
-    shot.run();
-
-    // triangule le champ de rayons
-    trianguleNappe();
-
-    assert(Liste_triangles.isEmpty() == 0);  // on verifie que notre liste n'est pas vide
-
-#ifdef _DEBUG
-    // 3- On creer un fichier .txt contenant nos triangles et un autre contenant nos points
-    ofstream ff("DelaunaySRS.txt");
-
-    for (int i = 0; i < Liste_triangles.size(); i++)
-    {
-        ff << Liste_triangles[i]._p1 << " " << Liste_triangles[i]._p2 << " " << Liste_triangles[i]._p3 << endl;
-    }
-#endif
-
-}
-
-
-double Transfo::interpo(const vec3* triangle, vec3 P)
+double geometry_modifier::interpo(const vec3* triangle, vec3 P)
 {
     // rend la coordonnee P.z
 
@@ -159,10 +140,6 @@ double Transfo::interpo(const vec3* triangle, vec3 P)
     double a = ((B.x - P.x) * (C.y - P.y) - (C.x - P.x) * (B.y - P.y)) / del;
     double b = ((C.x - P.x) * (A.y - P.y) - (A.x - P.x) * (C.y - P.y)) / del;
     double c = ((A.x - P.x) * (B.y - P.y) - (B.x - P.x) * (A.y - P.y)) / del;
-
-    //  P.z = a*A.z + b*B.z + c*C.z;
-
-    //  return P.z;
 
     return a * A.z + b * B.z + c * C.z;
 }
