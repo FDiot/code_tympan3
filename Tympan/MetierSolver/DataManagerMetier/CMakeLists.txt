@@ -22,6 +22,6 @@ add_dependencies(${MODULE_NAME}
     tympan_tools_graphics
     GTest)
 
-target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${CGAL_LIBRARIES} RoadEmissionNMPB tympan_tools_metier tympan_solver_data_model tympan_tools tympan_dm_core tympan_tools_graphics)
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${CGAL_LIBRARIES} RoadEmissionNMPB tympan_tools_metier tympan_solver_data_model tympan_tools tympan_dm_core tympan_tools_graphics tympan_analytic_raytracer)
 
 install_tympan_component(${MODULE_NAME})

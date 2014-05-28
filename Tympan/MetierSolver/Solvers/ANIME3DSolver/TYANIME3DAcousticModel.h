@@ -39,9 +39,6 @@ typedef std::vector<Ray*> TabRays;
 ///Type pour les tableaux de rayons TYMPAN
 typedef std::vector<TYRay> TYTabRays;
 
-///Type pour les tableaux d'evenements
-typedef std::vector<TYRayEvent*> TYTabRayEvent;
-
 class OBox2;
 
 /**

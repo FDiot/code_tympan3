@@ -16,6 +16,8 @@
 #ifndef __TYANIME3DACOUSTICPATHFINDER__
 #define __TYANIME3DACOUSTICPATHFINDER__
 
+#include "Tympan/MetierSolver/AnalyticRayTracer/geometry_modifier.h"
+
 /**
  * \class TYANIME3DAcousticPathFinder
  * \brief La recherche de chemins acoustiques associee a la methode ANIME3D
@@ -28,14 +30,16 @@ public:
 
     bool exec();
 
-    /*!
-     * \fn void TYRayCorrection(TYRay& tyRay)
-     * \brief Curve TYRay with respect to meteo influence
-     *        This is only for watching curved rays on screen
-     */
-    void tyRayCorrection(TYRay* tyRay);
+    ///*!
+    // * \fn void TYRayCorrection(TYRay& tyRay)
+    // * \brief Curve TYRay with respect to meteo influence
+    // *        This is only for watching curved rays on screen
+    // */
+    //void tyRayCorrection(TYRay* tyRay);
 
     Simulation& getRayTracer() { return _rayTracing; }
+
+    geometry_modifier& get_geometry_modifier() { return transformer; }
 
 private :
     /*!
@@ -51,29 +55,11 @@ private :
      */
     OPoint3D computePosGlobalPoint(const TYGeometryNode* pNode);
 
-    ///*!
-    //* \fn void appendSourceToAnalyticRayTracer(TYCalcul &calcul, unsigned int nbRayons)
-    //* \brief Ajoute les sources ponctuelles actives a la simulation
-    //*/
-    //void appendSourceToAnalyticRayTracer(vector<vec3>& tabSources);
-
-    ///*!
-    //* \fn void appendRecepteurToAnalyticRayTracer(TYCalcul& calcul, vector<vec3>& tabRecepteurs)
-    //* \brief Ajoute les recepteurs poncutels actifs a la simulation
-    //*/
-    //void appendRecepteurToAnalyticRayTracer(vector<vec3>& tabRecepteurs);
-
     /*!
      * \fn void transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
      * \brief Adapte la position des sources et des recepteurs dans la geometrie transformee
      */
     void transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs);
-
-    /*!
-     * \fn vec3 modifGeom(const vec3&)
-     * \brief modifie l'altimetrie d'un point en prenant en compte l'effet meteo
-     */
-    vec3 modifGeom(const vec3& point);
 
     /*!
     * \fn bool appendTriangleToScene()
@@ -101,31 +87,6 @@ private :
     void convertRaytoTYRay(const unsigned int& sens);
 
     /*!
-     * \fn bool setSEtR(TYTabSourcePonctuelleGeoNode& sources, TYTabPointCalculGeoNode& tabRecepteurs, const unsigned int sens, TYRay& tyRay)
-     * \brief affecte la source et le recepteur d'un rayon de type TYRay
-     * \return Renvoie false si la source ou le recepteur ne sont pas trouves
-     */
-    bool setSEtRToTYRay(const unsigned int sens, Ray* r, TYRay* tyRay);
-
-    /*!
-     * \fn void buildListEvent(const int& sens, const Ray ray, std::list<TYEvent>& listEvent)
-     * \brief construit une liste d'evenement TYEvent a partir d'un rayon
-     */
-    void buildListEvent(const int& sens, Ray* ray, std::vector<TYRayEvent*>& tabEvents);
-
-    /*!
-     * \fn  void convertRayEventToTYRayEvent(const QSharedPoint<event> rev, TYRayEvent& e)
-     * \brief Convert an event (as defined by acousticRayTracer) to a TYEvent (used by solver)
-     */
-    void convertRayEventToTYRayEvent(const QSharedPointer<Event> rev, TYRayEvent* e);
-
-    /*!
-     * \fn void calculAnglesRayons(TYCalcul& calcul)
-     * \brief Calcule les angles associes aux evenements des rayons
-     */
-    void calculeAngleTirRayon(TYRay* tyRay);
-
-    /*!
     * \fn void sampleAndCorrection()
     * \brief Computes angle and length correction
     * \ by calling the three previous functions
@@ -134,59 +95,18 @@ private :
     void sampleAndCorrection();
 
     /*!
-     * \fn void endLenghtCompute(TYRay *tyRay)
-     * \brief compute the length between an event and the next pertinent event
-     *        (i.e. betwween a diffraction and the next reflection or receptor)
+     * \fn void set_metier_source_and_receptor();
      */
-    void endLenghtCompute(TYRay* tyRay);
-
-    /*!
-     * \fn void angleCompute(TYRay *tyRay)
-     * \brief compute the angle between incident ray and the face
-     */
-    void angleCompute(TYRay* tyRay);
-
-    /*!
-     * \fn void nextLenghtCompute(TYRay *tyRay)
-     * \brief compute the length between an event and the next event
-     */
-    void nextLenghtCompute(TYRay* tyRay);
-
-    /*!
-     * \fn void prevNextLengthCompute(TYRay *tyRay)
-     * \brief Computes the length between event-1 and event+1
-     */
-    void prevNextLengthCompute(TYRay* tyRay);
-
-    /*!
-     * \fn void nextLenghtCompute(TYRay *tyRay)
-     * \brief compute the length between an event and the next event
-     */
-    void eventPosCompute(TYRay* tyRay);
-
-    /*!
-    * \fn void lengthCorrection()
-    * \brief Computes length correction on path
-    * \ Works on over-sampled TYRays
-    * \ Creates a vector which has all corrected path lengths
-    */
-    double lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2);
-
-    /*!
-    * \fn void angleCorrection()
-    * \brief Computes angle correction on path
-    *        ev1 -> previous event
-    *        ev2 -> event to wich compute anngle
-    *        ev3 -> next event
-    */
-    double angleCorrection(const TYRayEvent* ev1, TYRayEvent* ev2, const TYRayEvent* ev3);
+    void set_metier_source_and_receptor_to_TYRay(int sens, Ray *ray, TYRay *tyRay);
 
 private:
+    void build_geometry_transformer( const vector<vec3>& sources );
+
     /// Objet _rayTracing pour le lancer de rayons droits
     Simulation _rayTracing;
 
     /// Objet _curveRayTracing pour le lancer de rayons courbes
-    Transfo _curveRayTracing;
+    geometry_modifier transformer;
 
     /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face
     TYStructSurfIntersect* _tabPolygon;

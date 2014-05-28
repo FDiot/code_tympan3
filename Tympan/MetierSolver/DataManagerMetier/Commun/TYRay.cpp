@@ -23,6 +23,12 @@
 
 TY_EXT_GRAPHIC_INST(TYRay);
 
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
+
+#include "Tympan/MetierSolver/AnalyticRayTracer/geometry_modifier.h"
+
 #include "TYRay.h"
 
 TYRayEvent::TYRayEvent():   distNextEvent(0.0),
@@ -81,9 +87,52 @@ TYRayEvent& TYRayEvent::operator=(const TYRayEvent& other)
     return *this;
 }
 
-// ===================================================================================================================================================
+/*static*/ TYRayEvent TYRayEvent::build_from_RayEvent(const Event *rev)
+{
+    TYRayEvent tyrev;
 
-TYRay::TYRay()
+    Cylindre* cyl = NULL;
+    switch (rev->getType())
+    {
+        case SPECULARREFLEXION :
+            if (rev->getShape()->isSol())
+            {
+                tyrev.type = TYREFLEXIONSOL;
+            }
+            else
+            {
+                tyrev.type = TYREFLEXION;
+            }
+
+            tyrev.idFace1 = rev->getShape()->getFaceId();
+
+            break;
+
+        case DIFFRACTION:
+            tyrev.type = TYDIFFRACTION;
+            cyl = dynamic_cast<Cylindre*>(const_cast<Event *>(rev)->getShape());
+            if (cyl)
+            {
+                tyrev.idFace1 = cyl->getFirstShape()->getFaceId();
+                tyrev.idFace2 = cyl->getSecondShape()->getFaceId();
+            }
+            break;
+
+        default:
+            tyrev.type = TY_NO_TYPE;
+            break;
+    }
+
+    tyrev.pos = OPoint3D(rev->getPosition().x, rev->getPosition().y, rev->getPosition().z);
+    tyrev.angle = rev->getAngle();
+
+    return tyrev;
+}
+
+// ===================================================================================================================================================
+double TYRay:: sampler_step = 1.0;
+
+TYRay::TYRay() 
 {
     _source = NULL;
     _recepteur = NULL;
@@ -122,6 +171,17 @@ TYRay::TYRay(TYSourcePonctuelle* sourceP, TYPointCalcul* recepP, std::vector<TYR
 TYRay::~TYRay()
 {
     cleanEventsTab();
+}
+
+TYRay TYRay::build_from_Ray(int sens, Ray* ray)
+{
+    TYRay tyRay;
+    
+    tyRay.build_event_list_from_Ray(sens, ray);
+    tyRay.build_links_between_events();
+    tyRay.compute_shot_angle();
+
+    return tyRay;
 }
 
 void TYRay::cleanEventsTab()
@@ -318,4 +378,221 @@ void TYRay::overSample(const double& dMin)
         endIter = _events.end() - 1;  // Actualisation car le tableau a ete modifie
         iter = iter2;               // Atualisation car le tableau a ete modifie
     };
+}
+
+void TYRay::build_event_list_from_Ray(int sens, Ray* ray)
+{
+    //Definition des Evenements.
+    TYRayEvent* e = NULL;
+
+    //Add source as an event
+    e = new TYRayEvent();
+    e->type = TYSOURCE;
+    e->pos = OPoint3D(ray->source->getPosition().x, ray->source->getPosition().y, ray->source->getPosition().z);
+    e->angle = 0.0;
+    _events.push_back(e);
+
+    if (sens == 1) // Rays traveled from receptor to source
+    {
+        //Creation des evenements de diffractions et reflexions
+        std::vector<QSharedPointer<Event> >::reverse_iterator rit;
+
+        for (rit = ray->getEvents()->rbegin(); rit != ray->getEvents()->rend(); rit++)
+        {
+            e = new TYRayEvent( TYRayEvent::build_from_RayEvent( (*rit).data() ) );
+            _events.push_back(e);
+        }
+    }
+    else // Rays traveled from source to receptor (normal
+    {
+
+        //Creation des evenements de diffractions et reflexions
+        std::vector<QSharedPointer<Event> >::iterator rit;
+
+        for (rit = ray->getEvents()->begin(); rit != ray->getEvents()->end(); rit++)
+        {
+            e = new TYRayEvent( TYRayEvent::build_from_RayEvent( (*rit).data() ) );
+            _events.push_back(e);
+        }
+    }
+
+    // Add receptor as an event
+    e = new TYRayEvent();
+    e->type = TYRECEPTEUR;
+    Recepteur* recep = (static_cast<Recepteur*>(ray->getRecepteur()));
+    e->pos = OPoint3D(recep->getPosition().x, recep->getPosition().y, recep->getPosition().z);
+    e->angle = 0.0;
+    _events.push_back(e);
+}
+
+void TYRay::build_links_between_events()
+{
+    std::vector<int> tabIndex = getIndexOfEvents(TYREFLEXION | TYREFLEXIONSOL | TYRECEPTEUR);
+    unsigned int k = 0;
+
+    for (unsigned int j = 0; j < _events.size() - 1; j++)
+    {
+        _events.at(j)->next = _events.at(j + 1);
+
+        if (j > 0) { _events.at(j)->previous = _events.at(j - 1); }
+        if (j == _events.size() - 2) { _events.at(j + 1)->previous = _events.at(j); }
+
+        if (j == tabIndex[k]) { k++; }
+
+        _events.at(j)->endEvent = _events.at(tabIndex[k]);
+    }
+}
+
+void TYRay::compute_shot_angle()
+{
+    vec3 P0 = OPoint3Dtovec3( _events[0]->pos );
+    vec3 P1 = OPoint3Dtovec3( _events[1]->pos );
+    vec3 v0(P0, P1);
+    vec3 v1(v0);
+    vec3 v2(v0);
+    v1.z = 0;
+    v2.y = 0;
+    v0.normalize();
+    v1.normalize();
+    v2.normalize();
+
+    // Angle phi
+    double result = v0 * v1;
+    int sign = v0.z > 0 ?  1 : -1;
+    double angle = ::acos(result) * sign;
+
+    _events[0]->angle = angle;
+
+    // Angle theta
+    result = v0 * v2;
+    sign = v0.y > 0 ?  1 : -1;
+    angle = ::acos(result) * sign;
+    angle = v0.x < 0 ? M_PI - angle : angle;
+
+    _events[0]->angletheta = angle;
+}
+
+void TYRay::sampleAndCorrection(geometry_modifier& transformer)
+{
+        // Récupération des longueurs simples (éléments suivants)
+        nextLenghtCompute(transformer);
+
+        // Récupération des distances aux évènements pertinents
+        endLenghtCompute(transformer);
+
+        // Distance entre évènement précédent et suivant
+        prevNextLengthCompute(transformer);
+
+        // Récupération des angles
+        angleCompute(transformer);
+
+        // Correction de la position des évènements
+        eventPosCompute(transformer);
+}
+
+void TYRay::nextLenghtCompute(geometry_modifier& transformer)
+{
+    for (unsigned j = 0; j < _events.size() - 1; j++)
+    {
+        // Path length correction for distance from one event to next event needed for calculus
+        _events.at(j)->distNextEvent = lengthCorrection(_events.at(j), _events.at(j)->next, transformer);
+    }
+}
+
+double TYRay::lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2, geometry_modifier& transformer)
+{
+    TabPoint3D tabPoint = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, sampler_step);
+
+    // Calculation with h for each event
+    // Useful for lengths & angles
+    for (int i = 0; i < tabPoint.size(); i++)
+    {
+        vec3 point = OPoint3Dtovec3(tabPoint[i]);
+        point = transformer.fonction_h_inverse(point);
+        tabPoint[i] = vec3toOPoint3D(point);
+    }
+
+    double length = 0.;
+    for (int i = 0; i < tabPoint.size() - 1; i++)
+    {
+        length += tabPoint[i].distFrom(tabPoint[i + 1]);
+    }
+
+    return length;
+}
+
+void TYRay::endLenghtCompute(geometry_modifier& transformer)
+{
+    for (unsigned j = 0; j < _events.size() - 1; j++)
+    {
+        // Path length correction for distance from one event to next event needed for calculus
+        _events.at(j)->distEndEvent = lengthCorrection(_events.at(j), _events.at(j)->endEvent, transformer);
+    }
+}
+
+void TYRay::prevNextLengthCompute(geometry_modifier& transformer)
+{
+    for (unsigned j = 1; j < _events.size() - 1; j++)
+    {
+        // Path length correction gives back the corrected distance between event-1 and event+1
+        _events.at(j)->distPrevNext = lengthCorrection(_events.at(j)->previous, _events.at(j)->next, transformer);
+    }
+}
+
+void TYRay::angleCompute(geometry_modifier& transformer)
+{
+    for (unsigned j = 1; j < _events.size() - 1; j++)
+    {
+        // Path length correction for distance from one event to next event needed for calculus
+        _events.at(j)->angle = angleCorrection(_events.at(j)->previous, _events.at(j), _events.at(j)->next, transformer);
+    }
+}
+
+void TYRay::eventPosCompute(geometry_modifier& transformer)
+{
+    for (unsigned i = 0; i < _events.size(); i++)
+    {
+        vec3 point = transformer.fonction_h_inverse( OPoint3Dtovec3(_events[i]->pos) );
+        _events[i]->pos = vec3toOPoint3D(point);
+    }
+}
+
+double TYRay::angleCorrection(const TYRayEvent* ev1, 
+                                    TYRayEvent* ev2, 
+                              const TYRayEvent* ev3, 
+                              geometry_modifier& transformer)
+{
+    TabPoint3D tabPoint1 = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, sampler_step);
+    TabPoint3D tabPoint2 = OPoint3D::checkPointsMaxDistance(ev2->pos, ev3->pos, sampler_step);
+
+    // Corrects position for the only three events of interest
+    OPoint3D points[3] = { tabPoint1.at(tabPoint1.size() - 2), tabPoint1.at(tabPoint1.size() - 1), tabPoint2.at(1) };
+    for (int i = 0; i < 3; i++)
+    {
+        vec3 point = transformer.fonction_h_inverse( OPoint3Dtovec3(points[i]) );
+        points[i] = vec3toOPoint3D(point);
+    }
+
+    OVector3D vec1(points[1], points[0]);
+    OVector3D vec2(points[1], points[2]);
+
+    return (M_PI - vec1.angle(vec2)) / 2.;
+}
+
+void TYRay::tyRayCorrection(geometry_modifier& transformer)
+{
+    // Repositionnement des elements du rayon
+    for (unsigned i = 0; i < _events.size(); i++)
+    {
+        vec3 point = transformer.fonction_h( OPoint3Dtovec3(_events[i]->pos) );
+        _events[i]->pos = vec3toOPoint3D(point);
+    }
+
+    overSample(sampler_step);
+
+    for (unsigned int i = 0 ; i < _events.size() ; i++)
+    {
+        vec3 point = transformer.fonction_h_inverse( OPoint3Dtovec3(_events[i]->pos) );
+        _events[i]->pos = vec3toOPoint3D(point);
+    }
 }

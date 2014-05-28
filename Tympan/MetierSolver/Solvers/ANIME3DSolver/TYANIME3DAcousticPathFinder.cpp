@@ -32,8 +32,10 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangle.h"
-#include "Tympan/MetierSolver/AnalyticRayTracer/Transfo.h"
+
 #include "Tympan/MetierSolver/AnalyticRayTracer/meteoLin.h"
+#include "Tympan/MetierSolver/AnalyticRayTracer/Lancer.h"
+
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Latitude2DSampler.h"
@@ -45,7 +47,7 @@
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DAcousticPathFinder.h"
 
-//#define _USE_METEO_
+#define _USE_METEO_
 
 
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize,
@@ -77,43 +79,11 @@ bool TYANIME3DAcousticPathFinder::exec()
     vector<vec3> recepteurs;
     unsigned int sens = getTabsSAndR(sources, recepteurs);
 
-#ifdef _USE_METEO_
-    // Definition des objets de lancer de rayons courbes
-    if (globalUseMeteo)
-    {
-        // Creation du lancer de rayons courbes
-        _curveRayTracing.clear();
+    // Create geometry transformer
+    build_geometry_transformer( sources );
 
-        // Recuperation des sources et des recepteurs
-        //appendSourceToAnalyticRayTracer(_curveRayTracing.shot.sources);
-        //appendRecepteurToAnalyticRayTracer(_curveRayTracing.shot.recepteurs);
-
-        // Parametrage du lancer
-        _curveRayTracing.setDMax(globalAnalyticDMax);
-        _curveRayTracing.setTMax(globalAnalyticTMax);
-        _curveRayTracing.setTimeStep(globalAnalyticH);
-        _curveRayTracing.setNbRay(globalAnalyticNbRay);
-        dynamic_cast<meteoLin*>(_curveRayTracing.shot._weather)->setGradC(globalAnalyticGradC);
-        dynamic_cast<meteoLin*>(_curveRayTracing.shot._weather)->setGradV(globalAnalyticGradV);
-        _curveRayTracing.shot._weather->setWindAngle(globalWindDirection);
-        _curveRayTracing.shot._weather->setC0(globalAnalyticC0);
-        _curveRayTracing.setMethode(globalAnalyticTypeTransfo);
-        _curveRayTracing.shot.setLaunchType(1);                                 // Indique que l'on tire les rayons sur un plan horizontal
-
-        dynamic_cast<Latitude2DSampler*>(_curveRayTracing.shot.getSampler())->setStartTheta(globalAnalyticAngleTheta);
-
-        _curveRayTracing.shot.initialAngleTheta = globalAnalyticAngleTheta;     // Angle de tir vertical (theta) des rayons
-
-        // Choix de la source
-        _curveRayTracing.setSource(sources[0]);   // At this time source is the firs one
-
-        // Transformation de la geometrie
-        _curveRayTracing.buildInterpolationSurface();
-
-        // Positionnement des sources et des recepteurs
-        transformSEtR(sources, recepteurs);
-    }
-#endif //_USE_METEO_
+    // Positionnement des sources et des recepteurs
+    transformSEtR(sources, recepteurs);
 
     //Ajout des triangles a l'objet Scene de _rayTracing
     appendTriangleToScene();
@@ -217,70 +187,19 @@ OPoint3D TYANIME3DAcousticPathFinder::computePosGlobalPoint(const TYGeometryNode
     return  pNode->getMatrix() * (*pPoint);
 }
 
-
-//void TYANIME3DAcousticPathFinder::appendSourceToAnalyticRayTracer(vector<vec3>& tabR3Sources)
-//{
-//    //Nettoyage du tableau des sources
-//    tabR3Sources.clear();
-//
-//    //Conversion des sources Tympan en source lancer de rayons
-//    int idSource = 0;
-//    TYSourcePonctuelle* sourceP = NULL;
-//    for (unsigned int i = 0; i < _tabSources.size(); i++)
-//    {
-//      OPoint3D globalPos = computePosGlobalPoint(_tabSources.at(i));
-//
-//        vec3 pos = vec3(globalPos._x, globalPos._y, globalPos._z);
-//
-//        tabR3Sources.push_back(pos);
-//
-//        idSource++;
-//    }
-//}
-//
-//void TYANIME3DAcousticPathFinder::appendRecepteurToAnalyticRayTracer(vector<vec3>& tabR3Recept)
-//{
-//    // Nettoyage du tableau des recepteurs
-//    tabR3Recept.clear();
-//
-//    //Ajout des recepteurs
-//    unsigned int idRecepteur = 0;
-//
-//    //Conversion du recepteur Tympan en recepteur lancer de rayons
-//    for (unsigned int i = 0; i < _tabRecepteurs.size(); i++)
-//    {
-//      OPoint3D pos = computePosGlobalPoint(_tabRecepteurs.at(i));
-//
-//        vec3 unPoint(pos._x, pos._y, pos._z);
-//        tabR3Recept.push_back(unPoint);
-//    }
-//}
-
-
 void TYANIME3DAcousticPathFinder::transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
 {
     // Pour toutes les sources
     for (unsigned int i = 0; i < sources.size(); i++)
     {
-        sources[i] = modifGeom(sources[i]);
+        sources[i] = transformer.fonction_h(sources[i]);
     }
 
     // Pour tous les recepteurs
     for (unsigned int i = 0; i < recepteurs.size(); i++)
     {
-        recepteurs[i] = modifGeom(recepteurs[i]);
+        recepteurs[i] = transformer.fonction_h(recepteurs[i]);
     }
-}
-
-
-vec3 TYANIME3DAcousticPathFinder::modifGeom(const vec3& point)
-{
-    if (!globalUseMeteo) { return point; } // Aucune action si pas meteo
-
-    vec3 mPoint(point.x, point.y, point.z);
-    mPoint = _curveRayTracing.fonction_h(mPoint);
-
-    return vec3(mPoint.x, mPoint.y, mPoint.z);
 }
 
 
@@ -314,32 +233,18 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
             unsigned int a, b, c;
             double coord[3];
 
-#ifdef _USE_METEO_
             _tabPolygon[i].tabPoint[0].getCoords(coord);
-            pos = modifGeom(vec3(coord[0], coord[1], coord[2]));
+            pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
             scene->addVertex(pos, a);
 
             _tabPolygon[i].tabPoint[1].getCoords(coord);
-            pos = modifGeom(vec3(coord[0], coord[1], coord[2]));
+            pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
             scene->addVertex(pos, b);
 
             _tabPolygon[i].tabPoint[2].getCoords(coord);
-            pos = modifGeom(vec3(coord[0], coord[1], coord[2]));
-            scene->addVertex(pos, c);
-#else
-            _tabPolygon[i].tabPoint[0].getCoords(coord);
-            pos = vec3(coord[0], coord[1], coord[2]);
-            scene->addVertex(pos, a);
-
-            _tabPolygon[i].tabPoint[1].getCoords(coord);
-            pos = vec3(coord[0], coord[1], coord[2]);
-            scene->addVertex(pos, b);
-
-            _tabPolygon[i].tabPoint[2].getCoords(coord);
-            pos = vec3(coord[0], coord[1], coord[2]);
+            pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
             scene->addVertex(pos, c);
 
-#endif
             Triangle* face;
             if (_tabPolygon[i].isEcran || _tabPolygon[i].isInfra)
             {
@@ -353,7 +258,6 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
             face->setBuildingId(_tabPolygon[i].idBuilding);
             face->setFaceId(_tabPolygon[i].idFace);
             face->setEtageId(_tabPolygon[i].idEtage);
-            //face->setNormal(normalFace);
 
             if (face->getNormal().dot(normalFace) < -0.001) //Les normales sont de sens contraire
             {
@@ -368,32 +272,17 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
             {
                 unsigned int a, b, c;
 
-#ifdef _USE_METEO_
                 coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p1);
-                pos = modifGeom(vec3(coord._x, coord._y, coord._z));
+                pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
                 scene->addVertex(pos, a);
 
                 coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p2);
-                pos = modifGeom(vec3(coord._x, coord._y, coord._z));
+                pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
                 scene->addVertex(pos, b);
 
                 coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p3);
-                pos = modifGeom(vec3(coord._x, coord._y, coord._z));
+                pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
                 scene->addVertex(pos, c);
-#else
-                coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p1);
-                pos = vec3(coord._x, coord._y, coord._z);
-                scene->addVertex(pos, a);
-
-                coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p2);
-                pos = vec3(coord._x, coord._y, coord._z);
-                scene->addVertex(pos, b);
-
-                coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p3);
-                pos = vec3(coord._x, coord._y, coord._z);
-                scene->addVertex(pos, c);
-
-#endif //_USE_METEO_
 
                 Triangle* face;
                 if (_tabPolygon[i].isEcran || _tabPolygon[i].isInfra)
@@ -480,7 +369,6 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
 void TYANIME3DAcousticPathFinder::convertRaytoTYRay(const unsigned int& sens)
 {
     //Recuperation de la liste des rayons valides pour la _rayTracing.
-//    std::vector<Ray*>* rays = _rayTracing.getSolver()->getValidRays();
     std::deque<Ray*>* rays = _rayTracing.getSolver()->getValidRays();
 
     // Dimensionnement du tableau des rayons
@@ -489,67 +377,55 @@ void TYANIME3DAcousticPathFinder::convertRaytoTYRay(const unsigned int& sens)
     //Conversion des rayons du lancer en rayons metier Tympan
     for (unsigned int i = 0; i < rays->size(); i++)
     {
-        LPTYRay tyRay = new TYRay(); // Creation du rayon
-        Ray* r = rays->at(i);
+        Ray* ray = rays->at(i);
+        LPTYRay tyRay = new TYRay( TYRay::build_from_Ray(sens, ray) ); // Creation du rayon
 
-        // Recuperation de la source et du recepteur
-        if (!setSEtRToTYRay(sens, r, tyRay.getRealPointer())) { continue; }
-
-        // Recuperation de la liste des evenements
-        std::vector<TYRayEvent*> events;
-        buildListEvent(sens, r, events);
-
-        // Insertion dans la liste des evenements du rayon (qui contient deja la source et le recepteur)
-        std::vector<TYRayEvent*>::iterator iter = tyRay->getEvents().begin();
-        iter++; // On passe le premier point
-        for (unsigned int j = 0; j < events.size(); j++, iter++)
-        {
-            iter = tyRay->getEvents().insert(iter, events[j]);
-        }
-
-        // Ajoute les informations de liaison entre les évènements du TYRay
-        std::vector<int> tabIndex = tyRay->getIndexOfEvents(TYREFLEXION | TYREFLEXIONSOL | TYRECEPTEUR);
-        unsigned int k = 0;
-        TYTabRayEvent tabEvents = tyRay->getEvents();
-        for (unsigned int j = 0; j < tabEvents.size() - 1; j++)
-        {
-            tabEvents.at(j)->next = tabEvents.at(j + 1);
-
-            if (j > 0) { tabEvents.at(j)->previous = tabEvents.at(j - 1); }
-            if (j == tabEvents.size() - 2) { tabEvents.at(j + 1)->previous = tabEvents.at(j); }
-
-            if (j == tabIndex[k]) { k++; }
-
-            tabEvents.at(j)->endEvent = tabEvents.at(tabIndex[k]);
-        }
-
-
-        // Calcul de l'angle de tir des rayons
-        calculeAngleTirRayon(tyRay);
+        // Connect TYSource & TYReceptor (will be obsolete in future solver data model)
+        set_metier_source_and_receptor_to_TYRay(sens, ray, tyRay);
 
         // Ajoute le rayon au calcul
         _tabTYRays.push_back(tyRay);
     }
 }
 
+void TYANIME3DAcousticPathFinder::sampleAndCorrection()
+{
+    for (int i = 0; i < _tabTYRays.size(); i++)
+    {
+        // Récupération des longueurs simples (éléments suivants)
+        _tabTYRays.at(i)->nextLenghtCompute(transformer);
 
-bool TYANIME3DAcousticPathFinder::setSEtRToTYRay(const unsigned int sens, Ray* r, TYRay* tyRay)
+        // Récupération des distances aux évènements pertinents
+        _tabTYRays.at(i)->endLenghtCompute(transformer);
+
+        // Distance entre évènement précédent et suivant
+        _tabTYRays.at(i)->prevNextLengthCompute(transformer);
+
+        // Récupération des angles
+        _tabTYRays.at(i)->angleCompute(transformer);
+
+        // Correction de la position des évènements
+        _tabTYRays.at(i)->eventPosCompute(transformer);
+    }
+}
+
+void TYANIME3DAcousticPathFinder::set_metier_source_and_receptor_to_TYRay(int sens, Ray *ray, TYRay *tyRay)
 {
     unsigned int idSource = 0;
     unsigned int idRecep = 0;
     if (sens == 1) // On inverse les identifiants de source et de recepteur
     {
-        idSource = static_cast<Recepteur*>(r->getRecepteur())->getId();
-        idRecep = r->getSource()->getId();
+        idSource = static_cast<Recepteur*>(ray->getRecepteur())->getId();
+        idRecep = ray->getSource()->getId();
     }
     else
     {
-        idRecep = static_cast<Recepteur*>(r->getRecepteur())->getId();
-        idSource = r->getSource()->getId();
+        idRecep = static_cast<Recepteur*>(ray->getRecepteur())->getId();
+        idSource = ray->getSource()->getId();
     }
 
     //Les identifiants des recepteurs et sources sont construit pour correspondre a l'index des sources et recepteurs dans Tympan.
-    if (static_cast<unsigned int>(idRecep) >= _tabRecepteurs.size() || static_cast<unsigned int>(idSource) >= _tabSources.size()) { return false; }
+    assert (static_cast<unsigned int>(idRecep) < _tabRecepteurs.size() && static_cast<unsigned int>(idSource) < _tabSources.size());
 
     vec3 pS = _rayTracing.getSources().at(idSource).getPosition();
     OPoint3D posSourceGlobal(pS.x, pS.y, pS.z);
@@ -561,277 +437,39 @@ bool TYANIME3DAcousticPathFinder::setSEtRToTYRay(const unsigned int sens, Ray* r
 
     tyRay->setSource(sourceP, posSourceGlobal);
     tyRay->setRecepteur(recepP, posReceptGlobal);
-
-    //Ajout de la source
-    TYRayEvent* e = new TYRayEvent();
-    e->type = TYSOURCE;
-    e->pos = OPoint3D(r->source->getPosition().x, r->source->getPosition().y, r->source->getPosition().z);
-    e->angle = 0.0;
-    tyRay->getEvents().push_back(e);
-
-    e = new TYRayEvent();
-    e->type = TYRECEPTEUR;
-    Recepteur* recep = (static_cast<Recepteur*>(r->getRecepteur()));
-    e->pos = OPoint3D(recep->getPosition().x, recep->getPosition().y, recep->getPosition().z);
-    e->angle = 0.0;
-    tyRay->getEvents().push_back(e);
-
-    return true;
 }
 
-
-void TYANIME3DAcousticPathFinder::buildListEvent(const int& sens, Ray* ray, std::vector<TYRayEvent*>& tabEvents)
+void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>& sources )
 {
-    //Definition des Evenements.
-    TYRayEvent* e = NULL;
-
-    if (sens == 1)
+    if (globalUseMeteo)
     {
-        //Creation des evenements de diffractions et reflexions
-        std::vector<QSharedPointer<Event> >::reverse_iterator rit;
+        // Creation du lancer de rayons courbes
+        Lancer CurveRayShot;
 
-        for (rit = ray->getEvents()->rbegin(); rit != ray->getEvents()->rend(); rit++)
-        {
-            e = new TYRayEvent();
-            convertRayEventToTYRayEvent((*rit), e);
-            tabEvents.push_back(e);
-        }
-    }
-    else
-    {
-        //Creation des evenements de diffractions et reflexions
-        std::vector<QSharedPointer<Event> >::iterator rit;
+        // Parametrage du lancer de rayons courbe
+        CurveRayShot.clear();
+        CurveRayShot.setDMax(globalAnalyticDMax);
 
-        for (rit = ray->getEvents()->begin(); rit != ray->getEvents()->end(); rit++)
-        {
-            e = new TYRayEvent();
-            convertRayEventToTYRayEvent((*rit), e);
-            tabEvents.push_back(e);
-        }
-    }
-}
+        CurveRayShot.setTMax(globalAnalyticTMax);
+        CurveRayShot.setTimeStep(globalAnalyticH);
+        CurveRayShot.setNbRay(globalAnalyticNbRay);
+        dynamic_cast<meteoLin*>(CurveRayShot._weather)->setGradC(globalAnalyticGradC);
+        dynamic_cast<meteoLin*>(CurveRayShot._weather)->setGradV(globalAnalyticGradV);
+        CurveRayShot._weather->setWindAngle(globalWindDirection);
+        CurveRayShot._weather->setC0(globalAnalyticC0);
+        CurveRayShot.setLaunchType(1);                                 // Indique que l'on tire les rayons sur un plan horizontal
 
+        dynamic_cast<Latitude2DSampler*>(CurveRayShot.getSampler())->setStartTheta(globalInitialAnglePhi);
 
-void TYANIME3DAcousticPathFinder::convertRayEventToTYRayEvent(const QSharedPointer<Event> rev, TYRayEvent* tyrev)
-{
-    Cylindre* cyl = NULL;
-    switch (rev->getType())
-    {
-        case SPECULARREFLEXION :
-            if (rev->getShape()->isSol())
-            {
-                tyrev->type = TYREFLEXIONSOL;
-            }
-            else
-            {
-                tyrev->type = TYREFLEXION;
-            }
+        CurveRayShot.initialAngleTheta = globalInitialAngleTheta;     // Angle de tir vertical (theta) des rayons
 
-            tyrev->idFace1 = rev->getShape()->getFaceId();
+        // Choix de la source
+        CurveRayShot.addSource(sources[0]);   // At this time source is the firs one
 
-            break;
-
-        case DIFFRACTION:
-            tyrev->type = TYDIFFRACTION;
-            cyl = static_cast<Cylindre*>(rev->getShape());
-            if (cyl)
-            {
-                tyrev->idFace1 = cyl->getFirstShape()->getFaceId();
-                tyrev->idFace2 = cyl->getSecondShape()->getFaceId();
-            }
-            break;
-
-        default:
-            tyrev->type = TY_NO_TYPE;
-            break;
-    }
-
-    tyrev->pos = OPoint3D(rev->getPosition().x, rev->getPosition().y, rev->getPosition().z);
-    tyrev->angle = rev->getAngle();
-}
-
-
-void TYANIME3DAcousticPathFinder::calculeAngleTirRayon(TYRay* tyRay)
-{
-    TYTabRayEvent& tabEvent = tyRay->getEvents();
-    vec3 P0 = OPoint3Dtovec3(tabEvent[0]->pos);
-    vec3 P1 = OPoint3Dtovec3(tabEvent[1]->pos);
-    vec3 v0(P0, P1);
-    vec3 v1(v0);
-    vec3 v2(v0);
-    v1.z = 0;
-    v2.y = 0;
-    v0.normalize();
-    v1.normalize();
-    v2.normalize();
-
-    // Angle phi
-    double result = v0 * v1;
-    int sign = v0.z > 0 ?  1 : -1;
-    double angle = ::acos(result) * sign;
-
-    tabEvent[0]->angle = angle;
-
-    // Angle theta
-    result = v0 * v2;
-    sign = v0.y > 0 ?  1 : -1;
-    angle = ::acos(result) * sign;
-    angle = v0.x < 0 ? M_PI - angle : angle;
-
-    tabEvent[0]->angletheta = angle;
-}
-
-void TYANIME3DAcousticPathFinder::sampleAndCorrection()
-{
-    TYRay* tmpTYRay = NULL;
-    // Pour tous les rayons
-    for (int i = 0; i < _tabTYRays.size(); i++)
-    {
-        // Création d'une copie du TYRay
-        tmpTYRay = _tabTYRays.at(i);
-
-        // Récupération des longueurs simples (éléments suivants)
-        nextLenghtCompute(tmpTYRay);
-
-        // Récupération des distances aux évènements pertinents
-        endLenghtCompute(tmpTYRay);
-
-        // Distance entre évènement précédent et suivant
-        prevNextLengthCompute(tmpTYRay);
-
-        // Récupération des angles
-        angleCompute(tmpTYRay);
-
-        // Correction de la position des évènements
-        eventPosCompute(tmpTYRay);
+        // Transformation de la geometrie
+        transformer.clear();
+        transformer.setMethode(globalAnalyticTypeTransfo);
+        transformer.trianguleNappe(CurveRayShot);
     }
 }
 
-void TYANIME3DAcousticPathFinder::endLenghtCompute(TYRay* tyRay)
-{
-    TYTabRayEvent& tabEvent = tyRay->getEvents();
-
-    // Boucle sur tous les évènements du rayon
-    for (unsigned j = 0; j < tabEvent.size() - 1; j++)
-    {
-        // Path length correction for distance from one event to next event needed for calculus
-        tabEvent.at(j)->distEndEvent = lengthCorrection(tabEvent.at(j), tabEvent.at(j)->endEvent);
-    }
-}
-
-void TYANIME3DAcousticPathFinder::nextLenghtCompute(TYRay* tyRay)
-{
-    TYTabRayEvent& tabEvent = tyRay->getEvents();
-
-    // Boucle sur tous les évènements du rayon
-    for (unsigned j = 0; j < tabEvent.size() - 1; j++)
-    {
-        // Path length correction for distance from one event to next event needed for calculus
-        tabEvent.at(j)->distNextEvent = lengthCorrection(tabEvent.at(j), tabEvent.at(j)->next);
-    }
-}
-
-void TYANIME3DAcousticPathFinder::prevNextLengthCompute(TYRay* tyRay)
-{
-    TYTabRayEvent& tabEvent = tyRay->getEvents();
-
-    // For all events in the ray
-    for (unsigned j = 1; j < tabEvent.size() - 1; j++)
-    {
-        // Path length correction gives back the corrected distance between event-1 and event+1
-        tabEvent.at(j)->distPrevNext = lengthCorrection(tabEvent.at(j)->previous, tabEvent.at(j)->next);
-    }
-}
-
-void TYANIME3DAcousticPathFinder::angleCompute(TYRay* tyRay)
-{
-    TYTabRayEvent& tabEvent = tyRay->getEvents();
-
-    // Boucle sur tous les évènements du rayon
-    for (unsigned j = 1; j < tabEvent.size() - 1; j++)
-    {
-        // Path length correction for distance from one event to next event needed for calculus
-        tabEvent.at(j)->angle = angleCorrection(tabEvent.at(j)->previous, tabEvent.at(j), tabEvent.at(j)->next);
-    }
-}
-
-void TYANIME3DAcousticPathFinder::eventPosCompute(TYRay* tyRay)
-{
-    TYTabRayEvent& tabEvent = tyRay->getEvents();
-
-    // Boucle sur tous les évènements du rayon
-    for (unsigned i = 0; i < tabEvent.size(); i++)
-    {
-        vec3 point = OPoint3Dtovec3(tabEvent[i]->pos);
-        point = _curveRayTracing.fonction_h_inverse(point);
-        tabEvent[i]->pos = vec3toOPoint3D(point);
-    }
-}
-
-double TYANIME3DAcousticPathFinder::lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2)
-{
-    TabPoint3D tabPoint = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, globalOverSampleD);
-
-    // Calculation with h for each event
-    // Useful for lengths & angles
-    for (int i = 0; i < tabPoint.size(); i++)
-    {
-        vec3 point = OPoint3Dtovec3(tabPoint[i]);
-        point = _curveRayTracing.fonction_h_inverse(point);
-        tabPoint[i] = vec3toOPoint3D(point);
-    }
-
-    double length = 0.;
-    for (int i = 0; i < tabPoint.size() - 1; i++)
-    {
-        length += tabPoint[i].distFrom(tabPoint[i + 1]);
-    }
-
-
-    return length;
-}
-
-
-double TYANIME3DAcousticPathFinder::angleCorrection(const TYRayEvent* ev1, TYRayEvent* ev2, const TYRayEvent* ev3)
-{
-    TabPoint3D tabPoint1 = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, globalOverSampleD);
-    TabPoint3D tabPoint2 = OPoint3D::checkPointsMaxDistance(ev2->pos, ev3->pos, globalOverSampleD);
-
-    // Corrects position for the only three events of interest
-    OPoint3D points[3] = { tabPoint1.at(tabPoint1.size() - 2), tabPoint1.at(tabPoint1.size() - 1), tabPoint2.at(1) };
-    for (int i = 0; i < 3; i++)
-    {
-        vec3 point = OPoint3Dtovec3(points[i]);
-        point = _curveRayTracing.fonction_h_inverse(point);
-        points[i] = vec3toOPoint3D(point);
-    }
-
-    OVector3D vec1(points[1], points[0]);
-    OVector3D vec2(points[1], points[2]);
-
-    return (M_PI - vec1.angle(vec2)) / 2.;
-}
-
-void TYANIME3DAcousticPathFinder::tyRayCorrection(TYRay* tyRay)
-{
-    TYTabRayEvent& tabEvents = tyRay->getEvents();
-
-    // Repositionnement des elements du rayon
-    for (unsigned i = 0; i < tabEvents.size(); i++)
-    {
-        vec3 point = OPoint3Dtovec3(tabEvents[i]->pos);
-        point = _curveRayTracing.fonction_h(point);
-        tabEvents[i]->pos = vec3toOPoint3D(point);
-    }
-
-    tyRay->overSample(globalOverSampleD);
-
-    TYTabRayEvent& tabEvents2 = tyRay->getEvents();
-
-    for (unsigned int i = 0 ; i < tabEvents2.size() ; i++)
-    {
-        vec3 point = OPoint3Dtovec3(tabEvents2[i]->pos);
-        point = _curveRayTracing.fonction_h_inverse(point);
-        tabEvents2[i]->pos = vec3toOPoint3D(point);
-    }
-}
