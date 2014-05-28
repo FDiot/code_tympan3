@@ -105,6 +105,8 @@ public:
     */
     Shape* getShape() { return shape; }
 
+    const Shape* getShape() const { return shape; }
+
     /*!
     * \fn void setShape(Shape* _shape)
     * \brief place la primitive impactee
@@ -139,7 +141,7 @@ public:
     * \return type de l'evenement
     * \warning Doit etre redefini par les classes heritant de Event
     */
-    virtual int getType() { return type; }
+    virtual int getType() const { return type; }
 
     /*!
      * \fn virtual void setType()
@@ -147,7 +149,7 @@ public:
      */
     virtual void setType(const typeevent& _type) { type = _type; }
 
-    virtual double getAngle() { return 0.0; }
+    virtual double getAngle() const { return 0.0; }
 
     /*!
     * \fn const decimal distance(const Event &other) const

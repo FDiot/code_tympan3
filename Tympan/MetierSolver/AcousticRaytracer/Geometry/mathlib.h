@@ -294,13 +294,13 @@ inline std::vector<dvec3> operator + (const std::vector<dvec3>& _u, const std::v
  * \fn OPoint3D vec3ToOPoint3D(const vec3& p)
  * \brief convertit un vec3 en OPoint3D
  */
-inline OPoint3D vec3toOPoint3D(const vec3& _v) { return OPoint3D(static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z)); }
+inline static OPoint3D vec3toOPoint3D(const vec3& _v) { return OPoint3D(static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z)); }
 
 /*!
  * \fn vec3 OPoint3DTovec3(const OPoint3D& _p)
  * \brief convertit un OPoint3D en vec3
  */
-inline vec3 OPoint3Dtovec3(const OPoint3D& _p) { return vec3(static_cast<float>(_p._x), static_cast<float>(_p._y), static_cast<float>(_p._z)); }
+inline static vec3 OPoint3Dtovec3(const OPoint3D& _p) { return vec3(static_cast<float>(_p._x), static_cast<float>(_p._y), static_cast<float>(_p._z)); }
 
 /*****************************************************************************/
 /*                                                                           */
