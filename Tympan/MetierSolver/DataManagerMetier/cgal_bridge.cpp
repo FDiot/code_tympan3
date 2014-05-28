@@ -8,6 +8,8 @@
 
 #include "cgal_bridge.hpp"
 
+#include <boost/foreach.hpp>
+
 #include "Tympan/MetierSolver/CommonTools/cgal_tools.hpp"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 
@@ -61,7 +63,7 @@ namespace tympan
         // to level-up from 2D CGAL representation to our 3D OPoints world
         std::deque<PolygonTriangulator::Tri_indices> tri_indices;
         triangulator.exportTrianglesIndices(tri_indices);
-        for(const auto& tri_idx :tri_indices)
+        BOOST_FOREACH(const auto& tri_idx, tri_indices)
         {
             OTriangle tri(tri_idx[0], tri_idx[1], tri_idx[2]);
             for (unsigned i = 0; i < 3; ++i)

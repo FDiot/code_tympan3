@@ -64,14 +64,17 @@ TEST_F(TriangulatePolygonTest, single_triangle)
 
     triangulate(pts);
 
-
     ASSERT_EQ(3, points.size());
     ASSERT_EQ(1, triangles.size());
 }
 
 TEST_F(TriangulatePolygonTest, concave_quadrangle)
 {
-    vector<TYPoint> pts { {0,0,0}, {5, 0,0}, {1, 1, 0}, {0.5, 6, 0}};
+    vector<TYPoint> pts;
+    pts.push_back(TYPoint(0,0,0));
+    pts.push_back(TYPoint(5, 0,0));
+    pts.push_back(TYPoint(1, 1, 0));
+    pts.push_back(TYPoint(0.5, 6, 0));
 
     triangulate(pts);
 
