@@ -187,6 +187,13 @@ public:
      */
     void setLaunchType(const unsigned int& launchType) { _launchType = launchType; init(); }
 
+    /*!
+     * \fn void addSource(const vec3& source)
+     * \brief add a source in sources list
+     */
+    void addSource(const vec3& source) { sources.push_back(source); }
+
+
 private :
     void init();
 

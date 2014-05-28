@@ -13,8 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef __TRANSFO_H
-#define __TRANSFO_H
+#ifndef __GEOMETRY_MODIFIER_H
+#define __GEOMETRY_MODIFIER_H
 
 #include <cmath>
 #include <cassert>
@@ -24,30 +24,26 @@
 #include <iostream>
 #include <fstream>
 
-#include "qlist.h"
-#include "Lancer.h"
-#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include <qlist.h>
+
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
+
+class Lancer;
+class OTriangle;
 
 using namespace std;
 
-class RayCourb;
-class Lancer;
-
-class Transfo
+class geometry_modifier
 {
 public:
 
     // Constructeurs :
-    Transfo() : methode(1) {}
-    Transfo(Lancer& L) : shot(L), methode(1) {}
-    Transfo(Transfo& r) : shot(r.shot), methode(r.methode) {}
+    geometry_modifier() : methode(1) {}
+    geometry_modifier(Lancer& L) : methode(1) {}
+    geometry_modifier(geometry_modifier& r) : methode(r.methode) {}
 
     // Destructeur :
-    ~Transfo() {}
-
-
-    void setRecepteurs(const vector<vec3>& R) { shot.recepteurs = R; }
-    void setMeteo(const meteo* Meteo) { shot.setMeteo(Meteo); }
+    ~geometry_modifier() {}
 
     /*!
     * \fn void Init()
@@ -63,16 +59,10 @@ public:
     void setMethode(const unsigned int& meth) {methode = meth;}
 
     /*!
-    * \fn void Transformer()
-    * \brief Transformation de la geometrie, lancer de rayons droits et transformation de ces rayons droits en rayons courbes.
-    */
-    void buildInterpolationSurface();
-
-    /*!
      * \fn void trianguleNappe()
      * \brief creation de la nappe de rayons triangulee pour l'interpolation
      */
-    void trianguleNappe();
+    void trianguleNappe(const Lancer& shot);
 
     /*!
      * \fn QList<OTriangle>& getNappe()
@@ -106,20 +96,9 @@ public:
      */
     double interpo(const vec3* triangle, vec3 P);
 
-    /*!
-     * \brief functions below are only interface with "shot" member
-     */
-    void setSource(const vec3& source) { shot.sources.push_back(source); }
-    void setNbRay(const unsigned int& nb) { shot.setNbRay(nb); }
-    void setDMax(const decimal& dm) { shot.setDMax(dm); }
-    void setTMax(const decimal& tm) { shot.setTMax(tm); }
-    void setTimeStep(const decimal& tt) { shot.setTimeStep(tt); }
-
-public :
-    Lancer shot;                                               /*!< notre lancer sans reflexion */
-
 private :
     int methode;                                               /*!< entier definissant la methode de transformation utilisee */
+    vec3 pos_center;
 
     QList<OTriangle> Liste_triangles;                           /*!< Liste des triangles de la nappe interpolee */
     QList<OPoint3D> Liste_vertex;                                   /*!< Liste des vertex de la triangulation */
@@ -129,4 +108,4 @@ private :
 
 bool IsInTriangle(const vec3& P, const vec3* triangle);
 
-#endif //__TRANSFO_H
+#endif //__GEOMETRY_MODIFIER_H
