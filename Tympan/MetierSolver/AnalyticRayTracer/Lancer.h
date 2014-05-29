@@ -21,24 +21,15 @@
 #ifndef __LANCER_H
 #define __LANCER_H
 
-#include <cmath>
-#include <cassert>
-#include <cstdlib>
-#include <vector>
-#include <map>
-#include <iostream>
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
-#include "meteo.h"
 #include "Step.h"
 
 
 using namespace std;
 
 class RayCourb;
-
-
-
+class Sampler;
+class meteo;
 
 /*! \class Lancer
 * \brief classe representant un lancer de rayons courbes

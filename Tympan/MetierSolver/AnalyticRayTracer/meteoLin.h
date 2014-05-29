@@ -18,7 +18,6 @@
 * \author Projet_Tympan
 */
 
-#include <map>
 #include <array>
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 #include "meteo.h"

@@ -16,14 +16,6 @@
 #ifndef __GEOMETRY_MODIFIER_H
 #define __GEOMETRY_MODIFIER_H
 
-#include <cmath>
-#include <cassert>
-#include <cstdlib>
-#include <vector>
-#include <map>
-#include <iostream>
-#include <fstream>
-
 #include <qlist.h>
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"

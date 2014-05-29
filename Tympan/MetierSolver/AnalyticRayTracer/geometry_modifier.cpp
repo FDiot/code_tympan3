@@ -15,10 +15,6 @@
 
 
 
-#include <map>
-#include <cstdlib>
-#include <vector>
-
 #include "geometry_modifier.h"
 #include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
 #include "Tympan/MetierSolver/CommonTools/OTriangle.h"

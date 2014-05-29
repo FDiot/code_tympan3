@@ -13,19 +13,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "meteoLin.h"
-#include "RayCourb.h"
-#include "Lancer.h"
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <string>
-#include <array>
+
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Latitude2DSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Longitude2DSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
 
+#include "meteo.h"
+#include "meteoLin.h"
+#include "RayCourb.h"
+#include "Lancer.h"
 
 Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(20)
 {
@@ -65,13 +63,6 @@ Lancer::Lancer(Lancer& L)
 
     init();
 }
-
-
-//Lancer::Lancer(vector<vec3> sources, vector<vec3> recepteurs, vector<vec3*> plan, meteo* Meteo, decimal h, decimal TmpMax, vector<decimal> temps, decimal dmax, unsigned int nbRay) :
-//    sources(sources), recepteurs(recepteurs), _plan(plan), _weather(Meteo), h(h), TMax(TmpMax), temps(temps), dmax(dmax), nbRay(nbRay)
-//{
-//    //RemplirMat();
-//}
 
 Lancer::~Lancer()
 {
@@ -138,23 +129,14 @@ Step Lancer::EqRay(const Step& y0)                       // Fonction definissant
     // on calcule les coordonnees
     y.pos = ((s * (c * c / omega)) + v);    //(c * c / omega * s + v)
 
-    // on calcule les normales
-    //n.x = - omega / c * Dc.x - Jv[make_pair(1, 1)] * s.x - Jv[make_pair(1, 2)] * s.y - Jv[make_pair(1, 3)] * s.z;
-    //n.y = - omega / c * Dc.y - Jv[make_pair(2, 1)] * s.x - Jv[make_pair(2, 2)] * s.y - Jv[make_pair(2, 3)] * s.z;
-    //n.z = - omega / c * Dc.z - Jv[make_pair(3, 1)] * s.x - Jv[make_pair(3, 2)] * s.y - Jv[make_pair(3, 3)] * s.z;
-
-    //n.x += (Jv[make_pair(1, 2)] - Jv[make_pair(2, 1)]) * s.y + (Jv[make_pair(1, 3)] - Jv[make_pair(3, 1)]) * s.z;
-    //n.y += (Jv[make_pair(2, 3)] - Jv[make_pair(3, 2)]) * s.z + (Jv[make_pair(2, 1)] - Jv[make_pair(1, 2)]) * s.x;
-    //n.z += (Jv[make_pair(3, 1)] - Jv[make_pair(1, 3)]) * s.x + (Jv[make_pair(3, 2)] - Jv[make_pair(2, 3)]) * s.y;
-
-    n.x = - omega / c * Dc.x - Jv[0][0] * s.x - Jv[0][1] * s.y - Jv[0][2] * s.z;
+    // On calcule les normales
+	n.x = - omega / c * Dc.x - Jv[0][0] * s.x - Jv[0][1] * s.y - Jv[0][2] * s.z;
     n.y = - omega / c * Dc.y - Jv[1][0] * s.x - Jv[1][1] * s.y - Jv[1][2] * s.z;
     n.z = - omega / c * Dc.z - Jv[2][0] * s.x - Jv[2][1] * s.y - Jv[2][2] * s.z;
 
     n.x += (Jv[0][1] - Jv[1][0]) * s.y + (Jv[0][2] - Jv[2][0]) * s.z;
     n.y += (Jv[1][2] - Jv[2][1]) * s.z + (Jv[1][0] - Jv[0][1]) * s.x;
     n.z += (Jv[2][0] - Jv[0][2]) * s.x + (Jv[2][1] - Jv[1][2]) * s.y;
-
 
     y.norm = n;
 
