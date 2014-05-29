@@ -15,14 +15,8 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
 
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/FaceSelector.h"
@@ -36,6 +30,7 @@
 #include "Tympan/MetierSolver/AnalyticRayTracer/meteoLin.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/Lancer.h"
 
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Latitude2DSampler.h"
@@ -472,4 +467,3 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
         transformer.trianguleNappe(CurveRayShot);
     }
 }
-

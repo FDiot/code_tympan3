@@ -17,6 +17,7 @@
 #define SELECTOR_H
 
 #include <vector>
+#include <algorithm>
 
 enum SELECTOR_RESPOND
 {
@@ -38,7 +39,7 @@ struct CompareToKey
     bool operator()(std::vector<unsigned int> list1, std::vector<unsigned int> list2) const
     {
         //On compare jusqu'a ce qu'on atteigne le bout du plus petit vecteur
-        int minSize = min(list1.size(), list2.size());
+        int minSize = ( list1.size() < list2.size() ) ? list1.size() : list2.size() ; // Ne fonctionnait pas avec std::min
         for (int i = 0; i < minSize; i++)
         {
             if (list1.at(i) < list2.at(i))

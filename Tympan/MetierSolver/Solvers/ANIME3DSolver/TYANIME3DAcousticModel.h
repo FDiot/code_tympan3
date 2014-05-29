@@ -49,8 +49,6 @@ class TYANIME3DAcousticModel : public TYAcousticModelInterface
 {
 public:
     /// constructeurs
-    //TYANIME3DAcousticModel();
-
     TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TYTabRay& tabRayons, TYStructSurfIntersect* tabStruct,
                            TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs);
 
