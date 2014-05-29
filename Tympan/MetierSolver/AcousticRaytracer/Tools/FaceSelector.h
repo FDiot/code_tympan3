@@ -20,6 +20,7 @@
 #include <QMutexLocker>
 #include "Selector.h"
 #include <map>
+#include<vector>
 
 
 enum TYPEHISTORY
@@ -167,7 +168,7 @@ public:
     }
 
 protected:
-    std::map<vector<unsigned int>, T*, CompareToKey> selectedPath;
+    std::map<std::vector<unsigned int>, T*, CompareToKey> selectedPath;
     TYPEHISTORY modeHistory;
 };
 

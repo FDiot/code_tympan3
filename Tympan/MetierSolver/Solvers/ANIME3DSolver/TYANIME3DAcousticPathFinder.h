@@ -17,6 +17,7 @@
 #define __TYANIME3DACOUSTICPATHFINDER__
 
 #include "Tympan/MetierSolver/AnalyticRayTracer/geometry_modifier.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"
 
 /**
  * \class TYANIME3DAcousticPathFinder
@@ -29,13 +30,6 @@ public:
     virtual ~TYANIME3DAcousticPathFinder();
 
     bool exec();
-
-    ///*!
-    // * \fn void TYRayCorrection(TYRay& tyRay)
-    // * \brief Curve TYRay with respect to meteo influence
-    // *        This is only for watching curved rays on screen
-    // */
-    //void tyRayCorrection(TYRay* tyRay);
 
     Simulation& getRayTracer() { return _rayTracing; }
 

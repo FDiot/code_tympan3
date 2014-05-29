@@ -22,26 +22,8 @@
 
 #include "Tympan/Tools/TYProgressManager.h"
 
-#include "Tympan/MetierSolver/CommonTools/OMatrix.h"
-#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
-#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
-
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPlugin.h"
-
-#include "Tympan/MetierSolver/CommonTools/OSpectreComplex.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
-
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
-
-//#include "TYANIME3DSiteNode.h"
 #include "TYANIME3DSolver.h"
 
 // Variable globale

@@ -13,10 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/ValidRay.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/PostTreatment.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/FaceSelector.h"
