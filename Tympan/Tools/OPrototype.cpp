@@ -66,20 +66,6 @@ OPrototype::~OPrototype()
     return (_factory_map.count(className) > 0 ? 1 : -1);
 }
 
-/*static*/ int OPrototype::registerPrototype(OPrototype* pProto)
-{
-    if (pProto == 0) { return -1; }
-
-    // Si on n'a pas attend le max de prototypes
-    if (_nbPrototypes < PROTOTYPE_MAX_NB)
-    {
-        // Ajoute le prototype
-        _prototypes[_nbPrototypes++] = pProto;
-    }
-
-    return _nbPrototypes;
-}
-
 bool OPrototype::isA(const char* className) const
 {
     // Test le nom du type

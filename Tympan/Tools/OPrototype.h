@@ -51,11 +51,6 @@
         } \
         return nullptr;\
     } \
-    private: \
-    static int registerPrototype() { return OPrototype::registerPrototype(&classname::_register); } \
-    private: \
-    static classname _register; \
-    static int _registerCall;
 
 /**
  * Macro pour la declaration des methodes a surcharger
@@ -80,18 +75,6 @@
         return classname::isTypeOf(className); \
     }
 
-/**
- * Macro pour l'implementation de la Prototype Factory.
- * Elle instancie le type unique pour la registration
- * de la classe 'classname' derivee de OPrototype.
- * Cette macro doit se trouver a l'exterieur de la
- * declaration de la nouvelle classe derivee (.cpp).
- */
-#define OPROTOINST(classname) \
-    classname   classname::_register; \
-    int         classname::_registerCall = classname::registerPrototype();
-
-
 //
 /////////////////////////////////////////////////////////////
 
@@ -110,21 +93,23 @@ static const int PROTOTYPE_MAX_NB = 256;
  * Classe abstraite Prototype du pattern Prototype Factory.
  * Les classes derivees de Prototype peuvent etre instanciees
  * a partir seulement du nom de la classe (chaine de caracteres).
- * Cela permet aussi de cloner une instance (derivee de Prototype)
- * sans connaitre son type.
  *
- * Pour cela, le tableau statique '_prototypes' et l'entier statique
- * '_nbPrototypes' conservent respectivement les differents types et
- * le nombre de classes derivees de Prototype.
- * La methode protegee 'registerPrototype()' doit etre appelee une seule fois
- * par chaque classe derivee pour la registrer dans Prototype.
- * La methode public static 'findAndClone()' est l'interface principal
+ * Pour cela, la map statique _factory_map associe a une chaine de caracteres
+ * representant le nom de la classe la factory permettant de construire une
+ * instance de ce type
+ * (ATTENTION: pas de clonage : appel systematique au constructeur par defaut)
+ *
+ * La methode public static 'findAndClone()' est l'interface principale
  * de ce mecanisme, elle permet d'instancier un nouvel objet a partir
  * de son nom (a condition que le type correspondant existe et soit
- * deja registre dans Prototype au moment de l'appel).
- * Enfin, la methode virtuelle pure 'clone()' permet aux classes
- * derivees de retourner une nouvelle instance du type derive
- * correspondant.
+ * deja registre dans Prototype au moment de l'appel). Si le nom n'est pas connu
+ * au moment de l'appel, elle leve une exception tympan::invalid_data.
+ *
+ * La methode 'findPrototype()' cherche si une classe est enregistree aupres
+ * de OPrototype.
+ *
+ * Enfin, la methode virtuelle pure 'clone()' permet aux classes derivees de
+ * retourner une nouvelle instance du type derive correspondant.
  *
  * De plus, les methodes 'isA()' et 'inherits()' peuvent s'averer
  * tres utiles, la premiere permet de verifier le type d'une instance,
@@ -151,44 +136,17 @@ static const int PROTOTYPE_MAX_NB = 256;
  *    //...//
  *
  *    // Permet de creer une nouvelle instance de type ConcretePrototype.
- *    // Le parametre 'andCopy' permet d'effectuer une copie.
- *    virtual Prototype* clone(bool andCopy = false) const {
- *      if (andCopy) return new ConcretePrototype(*this);
- *      else return new ConcretePrototype();
+ *    virtual Prototype* clone() const {
+ *      return new ConcretePrototype();
  *    }
  *
  *    // Retourne le nom de la classe.
  *    virtual char* getClassName() { return "ConcretePrototype"; }
  *
- * private:
- *    // Methode pour la registration de cette classe.
- *    // Ne doit etre appele qu'une seule fois.
- *    static int registerPrototype() { return OPrototype::registerPrototype(&_register); }
- *
- * private:
- *    // Cette instance sera dans la table de prototype de la factory.
- *    // Elle sera la representante de cette classe.
- *    static ConcretePrototype _registrer;
- *
- *    // Sert uniquement a appeler la methode de registration.
- *    static int _registerCall;
  * };
- *
- * // Implementation (ConcretePrototype.cpp)
- *
- * // Membre static pour la registration.
- * ConcretePrototype ConcretePrototype::_registrer;
- *
- * // Cette variable static sert uniquement a appeler de facon automatique
- * // et avant toute autre instanciation la methode de registration
- * // de cette classe 'registerPrototype()'.
- * int ConcretePrototype::_registerCall = ConcretePrototype::registerPrototype();
- *
  * </pre>
  *
- * Cette declaration peut etre fait avec les macros OPROTODECL et OPROTOINST :
  * <pre>
- *
  * #define  OPROTODECL(classname) \
  *    friend register##classname(); \
  *  public: \
@@ -197,15 +155,6 @@ static const int PROTOTYPE_MAX_NB = 256;
  *      else return new classname(); \
  *    } \
  *    virtual char* getClassName() { return #classname; }
- *  private:\
- *      static int registerPrototype() { return OPrototype::registerPrototype(&classname::_register); } \
- *      static classname _register; \
- *      static int _registerCall;
- *
- * #define  OPROTOINST(classname) \
- *  classname   classname::_register; \
- *  int         classname::_registerCall = classname::registerPrototype();
- *
  * </pre>
  *
  * La macro OPROTOSUPERDECL est une extension de OPROTODECL, elle permet
@@ -240,18 +189,24 @@ static const int PROTOTYPE_MAX_NB = 256;
  * #include "ConcretePrototype.h"
  *
  *
- OPROTOINST(ConcretePrototype)
- *
  * ConcretePrototype::ConcretePrototype()
  * {
  * }
  *
  * </pre>
  *
- * Cette technique de registration n'est pas autonome puisqu'il est
+ * Cette technique d'enregistrement n'est pas autonome puisqu'il est
  * necessaire de reprendre le modele ci-dessus pour chaque nouvelle
  * classe derivee de Prototype. Par contre les macros offrent un
  * moyen alternatif simple pour la creation de ce type de classe.
+ *
+ *
+ * ATTENTION: la map doit etre remplie avant le lancement de l'application, au
+ * moyen de la methode statique 'add_factory()', qui permet d'enregistrer les
+ * differentes classes ainsi que leurs fabriques (utiliser la fonction
+ * 'build_factory<TYTopographie>()'.
+ * Exemple d'utilisation:
+ *      OPrototype::add_factory("TYTopographie", move(build_factory<TYTopographie>()));
  */
 
 #include <type_traits>
@@ -264,6 +219,7 @@ public:
      * Destructeur.
      */
     virtual ~OPrototype();
+
 
     /**
      * Recherche une classe par son nom dans le tableau des
@@ -399,6 +355,7 @@ public:
     static void add_factory(const char*, IOProtoFactory::ptr_type factory);
 
 protected:
+
     /**
      * Constructeur par defaut.
      */
@@ -415,9 +372,9 @@ protected:
      */
     static int registerPrototype(OPrototype* pProto);
 
-
-    // Membres
+// Membres
 private:
+
     ///Tableau des prototypes registres.
     static OPrototype*  _prototypes[PROTOTYPE_MAX_NB];
 
@@ -430,7 +387,6 @@ private:
      */
     static std::unordered_map<std::string, IOProtoFactory::ptr_type> _factory_map;
 
-
 };
 
 /**
@@ -442,6 +398,7 @@ private:
  */
 template<typename T>
 std::unique_ptr<OPrototype::Factory<T> > build_factory(){return std::unique_ptr<OPrototype::Factory<T> >( new OPrototype::Factory<T>() ); }
+
 
 
 
