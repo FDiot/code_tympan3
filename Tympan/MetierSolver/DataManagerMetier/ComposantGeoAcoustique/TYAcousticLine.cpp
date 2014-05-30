@@ -29,7 +29,6 @@
 #include "Tympan/Tools/TYProgressManager.h"
 
 
-OPROTOINST(TYAcousticLine);
 TY_EXTENSION_INST(TYAcousticLine);
 TY_EXT_GRAPHIC_INST(TYAcousticLine);
 

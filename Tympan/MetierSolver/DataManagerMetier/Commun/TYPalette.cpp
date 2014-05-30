@@ -40,7 +40,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYPalette);
 TY_EXTENSION_INST(TYPalette);
 TY_EXT_GRAPHIC_INST(TYPalette);
 

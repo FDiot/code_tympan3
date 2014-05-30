@@ -28,7 +28,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYAttenuateur);
 TY_EXTENSION_INST(TYAttenuateur);
 
 TYAttenuateur::TYAttenuateur()

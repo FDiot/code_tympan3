@@ -43,7 +43,6 @@ static char THIS_FILE[] = __FILE__;
 // classe TYElement
 // -------------------------------------------------------------------------
 
-OPROTOINST(TYElement)
 
 /** Le log des instances ne doit absolument pas etre active
  * au lancement de l'application, le log des instances statiques

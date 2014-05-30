@@ -26,7 +26,6 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 
-OPROTOINST(TYDirectivite);
 TY_EXTENSION_INST(TYDirectivite);
 
 TYDirectivite::TYDirectivite()

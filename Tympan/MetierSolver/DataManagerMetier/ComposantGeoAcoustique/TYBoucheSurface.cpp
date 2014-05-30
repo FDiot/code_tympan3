@@ -30,7 +30,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYBoucheSurface);
 TY_EXTENSION_INST(TYBoucheSurface);
 
 TYBoucheSurface::TYBoucheSurface()

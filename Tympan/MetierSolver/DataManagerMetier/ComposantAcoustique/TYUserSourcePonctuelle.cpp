@@ -39,7 +39,6 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-OPROTOINST(TYUserSourcePonctuelle);
 TY_EXTENSION_INST(TYUserSourcePonctuelle);
 
 TYUserSourcePonctuelle::TYUserSourcePonctuelle():

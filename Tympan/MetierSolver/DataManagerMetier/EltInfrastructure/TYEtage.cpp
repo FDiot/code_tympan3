@@ -35,7 +35,6 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
-OPROTOINST(TYEtage);
 TY_EXTENSION_INST(TYEtage);
 TY_EXT_GRAPHIC_INST(TYEtage);
 

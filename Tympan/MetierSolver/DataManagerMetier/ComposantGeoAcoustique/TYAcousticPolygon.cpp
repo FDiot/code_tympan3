@@ -30,7 +30,6 @@
 #include "Tympan/MetierSolver/CommonTools/OBox.h"
 #include "Tympan/Tools/TYProgressManager.h"
 
-OPROTOINST(TYAcousticPolygon);
 TY_EXTENSION_INST(TYAcousticPolygon);
 TY_EXT_GRAPHIC_INST(TYAcousticPolygon);
 

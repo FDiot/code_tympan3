@@ -28,7 +28,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYSol);
 TY_EXTENSION_INST(TYSol);
 
 TYSol::TYSol():

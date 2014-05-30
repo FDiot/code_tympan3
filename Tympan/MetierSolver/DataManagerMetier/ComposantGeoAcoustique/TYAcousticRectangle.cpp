@@ -34,7 +34,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYAcousticRectangle);
 TY_EXTENSION_INST(TYAcousticRectangle);
 TY_EXT_GRAPHIC_INST(TYAcousticRectangle);
 

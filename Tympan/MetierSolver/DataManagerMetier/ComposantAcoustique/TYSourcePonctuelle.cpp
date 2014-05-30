@@ -42,7 +42,6 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-OPROTOINST(TYSourcePonctuelle);
 TY_EXTENSION_INST(TYSourcePonctuelle);
 TY_EXT_GRAPHIC_INST(TYSourcePonctuelle);
 

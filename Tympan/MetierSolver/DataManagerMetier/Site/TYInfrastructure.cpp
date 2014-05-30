@@ -32,7 +32,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYInfrastructure);
 TY_EXTENSION_INST(TYInfrastructure);
 TY_EXT_GRAPHIC_INST(TYInfrastructure);
 

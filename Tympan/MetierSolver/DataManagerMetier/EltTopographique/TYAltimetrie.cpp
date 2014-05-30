@@ -63,7 +63,6 @@ struct triangle
     double pts[3][3];
 };
 
-OPROTOINST(TYAltimetrie);
 TY_EXTENSION_INST(TYAltimetrie);
 TY_EXT_GRAPHIC_INST(TYAltimetrie);
 

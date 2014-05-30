@@ -33,7 +33,6 @@
 #include "Tympan/MetierSolver/CommonTools/OTriangle.h"
 #include "Tympan/MetierSolver/CommonTools/Defines.h"
 
-OPROTOINST(TYRectangle);
 TY_EXTENSION_INST(TYRectangle);
 TY_EXT_GRAPHIC_INST(TYRectangle);
 

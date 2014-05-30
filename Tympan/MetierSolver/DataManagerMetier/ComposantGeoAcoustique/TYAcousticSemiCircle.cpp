@@ -35,7 +35,6 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 
-OPROTOINST(TYAcousticSemiCircle);
 TY_EXTENSION_INST(TYAcousticSemiCircle);
 TY_EXT_GRAPHIC_INST(TYAcousticSemiCircle);
 

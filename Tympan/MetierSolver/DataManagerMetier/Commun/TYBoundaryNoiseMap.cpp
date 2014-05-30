@@ -36,7 +36,6 @@
 #undef min
 #undef max
 
-OPROTOINST(TYBoundaryNoiseMap);
 TY_EXTENSION_INST(TYBoundaryNoiseMap);
 TY_EXT_GRAPHIC_INST(TYBoundaryNoiseMap);
 

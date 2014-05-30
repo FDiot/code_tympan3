@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYAcousticBox);
 TY_EXTENSION_INST(TYAcousticBox);
 TY_EXT_GRAPHIC_INST(TYAcousticBox);
 

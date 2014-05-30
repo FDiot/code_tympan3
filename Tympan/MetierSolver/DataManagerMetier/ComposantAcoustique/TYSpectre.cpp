@@ -30,7 +30,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 
-OPROTOINST(TYSpectre);
 TY_EXTENSION_INST(TYSpectre);
 
 // Precision d'ecriture des resultats dans les fichiers XML
