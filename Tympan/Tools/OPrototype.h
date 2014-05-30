@@ -23,6 +23,7 @@
 #include <memory>
 #include <unordered_map>
 #include <iostream>
+#include <boost/exception/error_info.hpp>
 
 /////////////////////////////////////////////////////////////
 // Definition de macros pour la creation de nouveaux types
@@ -93,6 +94,12 @@
 
 //
 /////////////////////////////////////////////////////////////
+
+namespace tympan
+{
+     typedef boost::error_info < struct tag_classname, std::string >
+         oproto_classname_errinfo;
+} // namespace tympan
 
 
 ///Nombre maximum de prototypes.

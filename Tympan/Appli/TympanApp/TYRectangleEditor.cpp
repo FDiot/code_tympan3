@@ -37,6 +37,9 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRepere.h"
 #include "Tympan/Tools/OLocalizator.h"
 
+#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+
+#include <iostream>
 #include <qmessagebox.h>
 
 #if defined(WIN32)
@@ -197,7 +200,20 @@ void TYRectangleEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, 
 
             // Instanciation du type choisi
             _pRectangle = NULL;
-            _pRectangle = (TYAcousticRectangle*) TYElement::findAndClone(childType);
+            try
+            {
+                _pRectangle = (TYAcousticRectangle*) TYElement::findAndClone(childType);
+            }
+            catch(tympan::invalid_data& exc)
+            {
+                std::ostringstream msg;
+                msg << boost::diagnostic_information(exc);
+                OMessageManager::get()->error(
+                        "Asked to clone class %s which isn't registered in OPrototype",
+                        childType);
+                OMessageManager::get()->debug(msg.str().c_str());
+                _pRectangle = NULL;
+            }
 
             if (_pRectangle)
             {

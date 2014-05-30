@@ -29,7 +29,9 @@
 #include <qlistwidget.h>
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
 #include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/Tools/OMessageManager.h"
 
 #include <qlayout.h>
 #include <qmessagebox.h>
@@ -129,7 +131,21 @@ TYCreateElementDialog::~TYCreateElementDialog()
 
 void TYCreateElementDialog::createElement(QString eltType)
 {
-    LPTYElement pElt = (TYElement*) TYElement::findAndClone(eltType.toLatin1());
+    LPTYElement pElt;
+    try
+    {
+        pElt = (TYElement*) TYElement::findAndClone(eltType.toLatin1());
+    }
+    catch(tympan::invalid_data& exc)
+    {
+        std::ostringstream msg;
+        msg << boost::diagnostic_information(exc);
+        OMessageManager::get()->error(
+                "Asked to clone class %s which isn't registered in OPrototype",
+                eltType.toStdString().c_str());
+        OMessageManager::get()->debug(msg.str().c_str());
+        pElt._pObj = NULL;
+    }
 
     if (pElt)
     {
