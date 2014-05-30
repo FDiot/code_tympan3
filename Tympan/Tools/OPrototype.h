@@ -20,6 +20,8 @@
 #ifndef __O_PROTOTYPE__
 #define __O_PROTOTYPE__
 
+#include<memory>
+
 /////////////////////////////////////////////////////////////
 // Definition de macros pour la creation de nouveaux types
 // derives de OPrototype.
@@ -39,10 +41,13 @@
     } \
     virtual const char* getClassName() const { return #classname; } \
     static classname* safeDownCast(OPrototype * pObject) { \
-        if (pObject && pObject->inherits(#classname)) { \
-            return (classname *) pObject; \
+        if (pObject) { \
+            classname * pTypedObject = dynamic_cast<classname *>(pObject); \
+            if (pTypedObject != nullptr) { \
+                return pTypedObject; \
+            } \
         } \
-        return 0;\
+        return nullptr;\
     } \
     private: \
     static int registerPrototype() { return OPrototype::registerPrototype(&classname::_register); } \
