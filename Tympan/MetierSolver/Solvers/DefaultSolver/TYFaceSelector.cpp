@@ -309,11 +309,6 @@ TYAcousticSurface* TYFaceSelector::getActiveSurface(const TYAcousticSurfaceGeoNo
         return pSurface;
     }
 
-    // Face d'altimetrie ne peut etre parente d'une source !
-    //if (pParentSurface && pParentSurface->inherits("TYAltimetrie"))
-    //{
-    //    return pSurface;
-    //}
 
     TYElement* pParentSrc = pSrc->getParent();
 
