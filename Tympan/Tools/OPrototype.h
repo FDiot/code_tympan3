@@ -35,9 +35,8 @@
  */
 #define OPROTODECL(classname) \
     public: \
-    virtual OPrototype* clone(bool andCopy = false) const { \
-        if (andCopy) return new classname(*this); \
-        else return new classname(); \
+    virtual OPrototype* clone() const { \
+        return new classname(); \
     } \
     virtual const char* getClassName() const { return #classname; } \
     static classname* safeDownCast(OPrototype * pObject) { \
@@ -285,7 +284,7 @@ public:
      *
      * @return Une nouvelle instance du type derive.
      */
-    virtual OPrototype* clone(bool andCopy = false) const = 0;
+    virtual OPrototype* clone() const = 0;
 
     /**
      * Retourne le type de la classe sous la forme d'une
