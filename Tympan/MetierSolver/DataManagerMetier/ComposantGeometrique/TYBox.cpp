@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYBox);
 TY_EXTENSION_INST(TYBox);
 
 TYBox::TYBox():

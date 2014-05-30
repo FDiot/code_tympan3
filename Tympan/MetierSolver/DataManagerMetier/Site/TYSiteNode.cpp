@@ -44,7 +44,6 @@ static char THIS_FILE[] = __FILE__;
 
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 
-OPROTOINST(TYSiteNode);
 TY_EXTENSION_INST(TYSiteNode);
 TY_EXT_GRAPHIC_INST(TYSiteNode);
 

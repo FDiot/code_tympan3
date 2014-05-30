@@ -25,7 +25,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-OPROTOINST(TYAcousticVolumeNode);
 TY_EXTENSION_INST(TYAcousticVolumeNode);
 
 TYAcousticVolumeNode::TYAcousticVolumeNode()

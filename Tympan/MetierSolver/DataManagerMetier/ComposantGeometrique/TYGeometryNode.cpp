@@ -29,7 +29,6 @@
 
 TYMapPtrGeoNode* TYGeometryNode::_geoNodeMap = NULL;
 TYListPtrGeoNode* TYGeometryNode::_geoNodeDoublonsList = NULL;
-OPROTOINST(TYGeometryNode);
 
 
 // acces map like a singleton to avoid bad order in static instantiation

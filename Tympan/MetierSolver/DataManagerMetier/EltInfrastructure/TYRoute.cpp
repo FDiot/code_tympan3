@@ -38,7 +38,6 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 
 
-OPROTOINST(TYRoute);
 TY_EXTENSION_INST(TYRoute);
 TY_EXT_GRAPHIC_INST(TYRoute);
 

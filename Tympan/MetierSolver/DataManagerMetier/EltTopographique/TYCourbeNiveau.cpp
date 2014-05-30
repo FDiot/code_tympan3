@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYCourbeNiveau);
 TY_EXTENSION_INST(TYCourbeNiveau);
 TY_EXT_GRAPHIC_INST(TYCourbeNiveau);
 

@@ -29,7 +29,6 @@
 #include "TYMachine.h"
 #include "Tympan/Tools/OMessageManager.h"
 
-OPROTOINST(TYMachine);
 TY_EXTENSION_INST(TYMachine);
 TY_EXT_GRAPHIC_INST(TYMachine);
 

@@ -31,7 +31,6 @@
 
 
 
-OPROTOINST(TYMurElement);
 TY_EXTENSION_INST(TYMurElement);
 TY_EXT_GRAPHIC_INST(TYMurElement);
 

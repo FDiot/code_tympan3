@@ -26,7 +26,6 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 
-OPROTOINST(TYAcousticFaceSet);
 TY_EXTENSION_INST(TYAcousticFaceSet);
 
 TYAcousticFaceSet::TYAcousticFaceSet()

@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYPointControl);
 TY_EXTENSION_INST(TYPointControl);
 TY_EXT_GRAPHIC_INST(TYPointControl);
 

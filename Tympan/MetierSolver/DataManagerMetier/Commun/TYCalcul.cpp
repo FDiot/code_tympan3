@@ -54,7 +54,6 @@ static char THIS_FILE[] = __FILE__;
 #include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
 #include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
 
-OPROTOINST(TYCalcul);
 TY_EXTENSION_INST(TYCalcul);
 TY_EXT_GRAPHIC_INST(TYCalcul);
 

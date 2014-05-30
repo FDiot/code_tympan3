@@ -33,7 +33,6 @@
 
 #include "Tympan/MetierSolver/CommonTools/Defines.h"
 
-OPROTOINST(TYSegment);
 TY_EXTENSION_INST(TYSegment);
 TY_EXT_GRAPHIC_INST(TYSegment);
 

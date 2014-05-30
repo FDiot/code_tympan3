@@ -30,7 +30,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYSourceLineic);
 TY_EXTENSION_INST(TYSourceLineic);
 TY_EXT_GRAPHIC_INST(TYSourceLineic);
 
