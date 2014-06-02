@@ -58,25 +58,26 @@ public:
         }
         selectors.clear();
 
-        if (!isDeletable())
+        if ( !isDeletable() )
         {
             selectedData.clear();
         }
         else
         {
-            while (!selectedData.empty())
-            {
-                T* data = selectedData.back();
-                selectedData.pop_back();
-                delete data;
-            }
+   //         std::map<unsigned long long, T*>::iterator it = selectedData.begin();
+			//while ( it != selectedData.end() )
+   //         {
+			//	T* data = (*it).second;
+			//	delete data;
+			//	
+			//	it = selectedData.erase(it);
+   //         }
             selectedData.clear();
         }
     }
 
     bool appendData(T* data)
     {
-        //QMutexLocker locker(mutex);
         vector<unsigned long long> dataToReplace;
         unsigned long long oldData;
         for (unsigned int i = 0; i < selectors.size(); i++)
@@ -86,7 +87,8 @@ public:
                 case SELECTOR_REJECT:
                     if (deletable)
                     {
-                        ;//delete data; // DTn-- 20120514 : Les donnees seron detruites ulterieurement.
+                        delete data;
+						data = NULL;
                     }
                     else
                     {

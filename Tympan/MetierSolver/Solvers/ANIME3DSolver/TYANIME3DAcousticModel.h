@@ -39,9 +39,6 @@ typedef std::vector<Ray*> TabRays;
 ///Type pour les tableaux de rayons TYMPAN
 typedef std::vector<TYRay> TYTabRays;
 
-///Type pour les tableaux d'evenements
-typedef std::vector<TYRayEvent*> TYTabRayEvent;
-
 class OBox2;
 
 /**
@@ -52,8 +49,6 @@ class TYANIME3DAcousticModel : public TYAcousticModelInterface
 {
 public:
     /// constructeurs
-    //TYANIME3DAcousticModel();
-
     TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TYTabRay& tabRayons, TYStructSurfIntersect* tabStruct,
                            TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs);
 

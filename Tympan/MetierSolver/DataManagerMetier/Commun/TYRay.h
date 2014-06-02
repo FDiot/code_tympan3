@@ -32,6 +32,8 @@ enum TY_RAY_EVENT
     TY_ALL_TYPE = TYDIFFRACTION | TYREFLEXION | TYREFLEXIONSOL | TYREFRACTION | TYSOURCE | TYRECEPTEUR
 };
 
+class Event;
+
 class TYRayEvent
 {
     /*!
@@ -51,6 +53,8 @@ public:
 
     TYRayEvent& operator=(const TYRayEvent& other);
 
+    static TYRayEvent build_from_RayEvent(const Event *rev);
+
     OPoint3D pos;           /*!< Position de l'evenement */
     double distNextEvent;   /*!< Distance between this event and the next one in TYRay's list of events */
     double distEndEvent;    /*!< Distance between this event and the next event needed for calculating (for ex. reflexion after a diffraction) */
@@ -68,6 +72,8 @@ public:
 typedef std::vector<TYRayEvent*> TYTabRayEvent;
 class TYPointCalcul;
 class TYSourcePonctuelle;
+class Ray;
+class geometry_modifier;
 
 /*!
 * \file TYRay.h
@@ -106,6 +112,8 @@ public:
     // Destructor
     ~TYRay();
 
+    static TYRay build_from_Ray(int sens, Ray* ray);
+
     /*!
      * \fn void cleanEventsTab();
      * \brief clean tab of events
@@ -123,6 +131,13 @@ public:
      * \brief Deep copy of a ray mainly the events tab
      */
     bool deepCopy(TYRay* pOther);
+
+    /*!
+     * \fn void TYRayCorrection(TYRay& tyRay)
+     * \brief Curve TYRay with respect to meteo influence
+     *        This is only for watching curved rays on screen
+     */
+    void tyRayCorrection(geometry_modifier& transformer);
 
     /*!
     * \fn void setSource(TYSourcePonctuelle *_source OPoint3D &globalPosition)
@@ -161,19 +176,6 @@ public:
     * \brief Recuperation du recepteur du rayon
     */
     TYPointCalcul* getRecepteur() {return _recepteur;}
-
-    /*!
-    * \fn void setTabPoint(TYTabPoint &_tabPoint)
-    * \brief Place le tableau de point correspondant au parcours du rayon.
-    * \warning Le premier point doit toujours correspondre i¿½ la position globale de la source et le dernier point doit toujours correspondre i¿½ la position globale du recepteur
-    */
-    //void setTabPoint(TYTabPoint &_tabPoint);
-
-    /*!
-    * \fn TYTabPoint& getTabPoint()
-    * \brief Renvoie le tableau de points correspondant au parcours du rayon incluant la source et le recepteur
-    */
-    //TYTabPoint& getTabPoint(){return polyligne;}
 
     /*!
     * \fn void setIdentifiant(int _id)
@@ -303,21 +305,93 @@ public:
     */
     void overSample(const double& dMin);
 
+    /*!
+    * \fn void sampleAndCorrection()
+    * \brief Computes angle and length correction
+    * \ by calling the three previous functions
+    * \ Creates two matrix which have corrected lengths and angles
+    */
+    void sampleAndCorrection(geometry_modifier& transformer);
+
+    /*!
+     * \fn void endLenghtCompute(TYRay *tyRay)
+     * \brief compute the length between an event and the next pertinent event
+     *        (i.e. betwween a diffraction and the next reflection or receptor)
+     */
+    void endLenghtCompute(geometry_modifier& transformer);
+
+    /*!
+     * \fn void angleCompute(TYRay *tyRay)
+     * \brief compute the angle between incident ray and the face
+     */
+    void angleCompute(geometry_modifier& transformer);
+
+    /*!
+     * \fn void nextLenghtCompute(TYRay *tyRay)
+     * \brief compute the length between an event and the next event
+     */
+    void nextLenghtCompute(geometry_modifier& transformer);
+
+    /*!
+     * \fn void prevNextLengthCompute(TYRay *tyRay)
+     * \brief Computes the length between event-1 and event+1
+     */
+    void prevNextLengthCompute(geometry_modifier& transformer);
+
+    /*!
+     * \fn void nextLenghtCompute(TYRay *tyRay)
+     * \brief compute the length between an event and the next event
+     */
+    void eventPosCompute(geometry_modifier& transformer);
+
+    /*!
+    * \fn void lengthCorrection()
+    * \brief Computes length correction on path
+    * \ Works on over-sampled TYRays
+    * \ Creates a vector which has all corrected path lengths
+    */
+    double lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2, geometry_modifier& transformer);
+
+    /*!
+    * \fn void angleCorrection()
+    * \brief Computes angle correction on path
+    *        ev1 -> previous event
+    *        ev2 -> event to wich compute anngle
+    *        ev3 -> next event
+    */
+    double angleCorrection(const TYRayEvent* ev1, TYRayEvent* ev2, const TYRayEvent* ev3, geometry_modifier& transformer);
+
+	static void set_sampler_step(double sampler_step_) { sampler_step = sampler_step_; }
+
+private :
+    /*!
+     * \fn void buildListEvent(const int& sens, const Ray ray, std::list<TYEvent>& listEvent)
+     * \brief construit une liste d'evenement TYEvent a partir d'un rayon
+     */
+    void build_event_list_from_Ray(int sens, Ray* ray);
+
+    /*!
+     * \fn void build_links_between_events();
+     * \brief TYRayEvent has to know is direct neighbour (before and after him)
+     * \brief It olso has to know his the next REFLEXION event or (if not exist) the RECEPTOR
+     */
+    void build_links_between_events();
+
+    /*!
+     * \fn void compute_shot_angle();
+     * \brief Compute shot angle from source
+     */
+    void compute_shot_angle();
+
 protected:
-    /*!< Identifiant du rayon */
-    int _identifiant;
-
-    /*!< Pointeur vers la source du rayon */
-    TYSourcePonctuelle* _source;
-
-    /*!< Pointeur vers le recepteur du rayon */
-    TYPointCalcul* _recepteur;
-
-    OPoint3D _posSourceGlobal;
+	static double sampler_step;		/*!< max size of step between events after spatial sampling*/
+	int _identifiant;				/*!< Identifiant du rayon */
+    TYSourcePonctuelle* _source;	/*!< Pointeur vers la source du rayon */
+    TYPointCalcul* _recepteur;		/*!< Pointeur vers le recepteur du rayon */
+    OPoint3D _posSourceGlobal;		
     OPoint3D _posReceptGlobal;
-
-    /*!< Vecteurs d'evenements contenant la liste des evenements du rayon associe et leurs positions.*/
-    TYTabRayEvent _events;
+    
+    TYTabRayEvent _events;			/*!< Vecteurs d'evenements contenant la liste des evenements du rayon associe et leurs positions.*/
 };
 //Smart Pointer sur TYRay
 typedef SmartPtr<TYRay> LPTYRay;

@@ -123,7 +123,7 @@ void OMessageManager::debug(const char* message, ...)
     if (bDebug)
     {
         va_list args;
-        char    mess[512];
+        char    mess[1024];
 
         va_start(args, message);
         vsprintf(mess, message, args);

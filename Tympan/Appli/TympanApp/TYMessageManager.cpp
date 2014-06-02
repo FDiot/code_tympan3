@@ -60,9 +60,9 @@ void TYMessageManager::format(int level, const char* message, ...)
     if ((!bDebug) && (level == MSG_DEBUG)) { return; }   // on n'affiche les msg debug qu'en mode debug...
 
     va_list args;
-    char    strLevel[512];
-    char    tmp[256];
-    char    msg[512];
+    char    strLevel[1024];
+    char    tmp[1024];
+    char    msg[2048];
 
     switch (level)
     {

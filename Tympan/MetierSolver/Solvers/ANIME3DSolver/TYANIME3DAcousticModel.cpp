@@ -13,37 +13,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include <map>
-#include <list>
-#include <vector>
-#include <string>
-#include <fstream>
-#include <iomanip>
-
 #include "Tympan/MetierSolver/CommonTools/OBox2.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
 
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangulate.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"
 
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DAcousticModel.h"
 
-
-//TYANIME3DAcousticModel::TYANIME3DAcousticModel() :    _calcul(TYCalcul()),
-//                                                  _site(TYSiteNode()),
-//                                                  _tabSurfIntersect(NULL),
-//                                                  _tabTYRays(TYTabRay())
-//{
-//}
 
 TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site,
                                                TYTabRay& tabRayons, TYStructSurfIntersect* tabStruct,
@@ -66,13 +47,6 @@ TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNod
     _absDiff = OTabSpectreComplex(_nbRays, s1);
 
     _atmos = *(calcul.getAtmosphere());
-
-    // deepcopy is used instead of classical assignation to avoid problem with pointer
-    //_topo.deepCopy(site.getTopographie());
-    //TYSiteNode* pSiteParent = static_cast<TYSiteNode*>(&(const_cast<TYSiteNode&>(site)));
-    //_topo.setParent(static_cast<TYElement*>(pSiteParent));
-    //// need to call "sortTerrain()" to have a correct identification of terrain when needed
-    //_topo.sortTerrains();
 
     _topo = const_cast<TYSiteNode&>(site).getTopographie().getRealPointer();
 
@@ -392,6 +366,9 @@ OBox2 TYANIME3DAcousticModel::ComputeFresnelArea(double angle, OPoint3D Pprec, O
 
     // S' depends on the point where the reflection occurs
     int reflFace =  _tabTYRays[rayNbr]->getEvents().at(reflIndice)->idFace1;
+#ifdef _DEBUG
+	TYElement* pElm = _tabSurfIntersect[reflFace].pSurfGeoNode->getElement();
+#endif
     TYAcousticSurface* face = TYAcousticSurface::safeDownCast(_tabSurfIntersect[reflFace].pSurfGeoNode->getElement());
     OPlan P = face->getPlan();
     OPoint3D SIm = P.symPtPlan(Pprec); // Point image du point prcedent la reflexion
