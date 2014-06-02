@@ -21,6 +21,8 @@
 #ifndef __STEP_H
 #define __STEP_H
 
+#include "../AcousticRaytracer/Geometry/mathlib.h"
+
 /*!
  * \class Step
  * \brief describe a step in the ray path

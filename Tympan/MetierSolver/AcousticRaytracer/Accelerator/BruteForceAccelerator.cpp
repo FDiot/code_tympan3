@@ -17,7 +17,6 @@
 
 decimal BruteForceAccelerator::traverse(Ray* r, std::list<Intersection> &result)
 {
-    //std::cout<<"Test de traversee..."<<std::endl;
     for (unsigned int i = 0; i < shapes->size(); i++)
     {
         Intersection currentI;
@@ -26,7 +25,6 @@ decimal BruteForceAccelerator::traverse(Ray* r, std::list<Intersection> &result)
             result.push_back(currentI);
         }
     }
-    //std::cout<<"Fin de la traversee."<<std::endl;
 
-    return leafTreatment::keepFunction(intersectionChoice, result, -1.);
+    return (*pLeafTreatmentFunction) (result, -1.);
 }

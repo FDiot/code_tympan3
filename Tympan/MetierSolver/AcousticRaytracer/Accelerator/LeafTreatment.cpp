@@ -65,10 +65,7 @@ decimal keepFirst(std::list<Intersection> &currentIntersections, decimal current
         currentIntersections.clear();
         currentIntersections.push_back(firstIntersection);
     }
-    if (currentIntersections.size() > 1)
-    {
-        //std::cout << "Erreur : trop d'intersections." << std::endl;
-    }
+
     return tmin;
 }
 

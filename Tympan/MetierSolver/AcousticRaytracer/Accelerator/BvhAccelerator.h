@@ -38,7 +38,6 @@ public:
 
     virtual bool build();
 
-    //bool getIntersection(Ray &ray,Intersection &inter);
     virtual decimal traverse(Ray* r, std::list<Intersection> &result);
 
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
@@ -50,8 +49,6 @@ public:
     std::vector<BBox>& getBBox() { return tableBox; }
 
     void print();
-
-    //void display(unsigned int indexNode);
 
     bool alreadyFail;
     unsigned int nbFail;
