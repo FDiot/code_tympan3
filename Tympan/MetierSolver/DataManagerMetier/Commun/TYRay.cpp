@@ -178,8 +178,6 @@ TYRay TYRay::build_from_Ray(int sens, Ray* ray)
     TYRay tyRay;
     
     tyRay.build_event_list_from_Ray(sens, ray);
-    tyRay.build_links_between_events();
-    tyRay.compute_shot_angle();
 
     return tyRay;
 }
@@ -208,8 +206,11 @@ TYRay& TYRay::operator=(const TYRay& other)
 
     for (unsigned int i = 0; i < other._events.size(); i++)
     {
-        _events.push_back(other._events.at(i));
+        _events.push_back( new TYRayEvent( *(other._events.at(i)) ) );
     }
+
+    build_links_between_events();
+    compute_shot_angle();
 
     return *this;
 }
