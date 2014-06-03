@@ -188,6 +188,10 @@ cdef extern from "Tympan/MetierSolver/CommonTools/OTriangle.h":
         int _p2
         int _p3
 
+        bool checkConsistencyWrtPointsTab(const deque[OPoint3D]& points) const
+        string reportInconsistencyWrtPointsTab(const deque[OPoint3D]& points)
+
+
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h":
     cdef cppclass TYSol (TYElement):
         double getResistivite()
@@ -210,3 +214,6 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYMateriauC
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSpectre.h":
     cdef cppclass TYSpectre (TYElement, OSpectre):
         pass
+
+cdef extern from "Tympan/MetierSolver/CommonTools/prettyprint.hpp":
+    cdef string OPoint3D_to_string "tympan_to_string<OPoint3D>"(const OPoint3D& o)

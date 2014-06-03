@@ -9,7 +9,10 @@
 #define TYMPAN__PRETTYPRINT_HPP__INCLUDED
 
 #include <cstring>
+#include <string>
 #include <ostream>
+#include <sstream>
+
 
 #include "OPoint3D.h"
 #include "OVector3D.h"
@@ -34,5 +37,22 @@ namespace tympan
 ::std::ostream& operator<<(::std::ostream& os, const OPoint3D& v);
 ::std::ostream& operator<<(::std::ostream& os, const OPlan& p);
 ::std::ostream& operator<<(::std::ostream& os, const OSpectre& s);
+
+
+/** Convert an object T to a string using operator<< */
+template<typename T>
+std::string tympan_to_string(const T& o);
+
+
+///// Templates implementations /////
+
+template<typename T>
+std::string tympan_to_string(const T& o)
+{
+    using namespace std;
+    stringstream ss;
+    ss << o;
+    return ss.str();
+}
 
 #endif // TYMPAN__PRETTYPRINT_HPP__INCLUDED
