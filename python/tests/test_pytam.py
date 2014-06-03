@@ -10,6 +10,8 @@ TEST_OUTPUT_REDIRECTED = 'test_pytam_out.log'
 TEST_ERRORS_REDIRECTED = 'test_pytam_err.log'
 # TEST_OUTPUT_REDIRECTED = os.devnull
 
+_HERE = osp.realpath(osp.dirname(__file__))
+
 with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
     import pytam
     pytam.init_tympan_registry()
@@ -67,6 +69,13 @@ class TestTympan(unittest.TestCase):
             # exports in nodes_test the nodes coordinates (x,y,z) and in triangles_test
             # the triangle nodes indices (position in the nodes_test array)
             (nodes_test, triangles_test) = model.export_triangular_mesh()
+            # Dump actual exported mesh
+            np.savetxt(osp.join(_HERE, "test_mesh_nodes_actual.csv"),
+                       nodes_test,
+                       delimiter=';', fmt='%f')
+            np.savetxt(osp.join(_HERE, "test_mesh_triangles_actual.csv"),
+                       triangles_test,
+                       delimiter=';', fmt='%d')
         nodes_ref = np.loadtxt(osp.join(TEST_DATA_DIR, "expected",
                                         "test_mesh_nodes_ref.csv"),
                                delimiter=';', dtype=np.float)
