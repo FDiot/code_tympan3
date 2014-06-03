@@ -21,6 +21,12 @@
 #include <cmath>
 #include <limits>
 #include <cassert>
+#include <sstream>
+
+// Threshold use by consistency checks
+#define CONSISTENCY_EPSILON (1e-5)
+
+#include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
 
 OPoint3D OTriangle::* OTriangle::vertices_m_ptr[3] = {&OTriangle::_A, &OTriangle::_B, &OTriangle::_C};
 int OTriangle::* OTriangle::indices_m_ptr[3] = {&OTriangle::_p1, &OTriangle::_p2, &OTriangle::_p3};
@@ -112,4 +118,29 @@ OPoint3D OTriangle::getCentre()
     G._z = (_A._z + _B._z + _C._z) / 3;
 
     return G;
+}
+
+
+bool OTriangle::checkConsistencyWrtPointsTab(const std::deque<OPoint3D>& points) const
+{
+    return (points[_p1].distFrom(_A) < CONSISTENCY_EPSILON &&
+            points[_p2].distFrom(_B) < CONSISTENCY_EPSILON &&
+            points[_p3].distFrom(_C) < CONSISTENCY_EPSILON );
+}
+
+std::string OTriangle::reportInconsistencyWrtPointsTab(const std::deque<OPoint3D>& points)
+{
+    using std::stringstream;
+    using std::endl;
+
+    if (checkConsistencyWrtPointsTab(points))
+        return std::string();
+
+    stringstream ss;
+
+    ss << "A " << _A << " ?= P(p1) " << points[_p1] << endl;
+    ss << "B " << _B << " ?= P(p2) " << points[_p2] << endl;
+    ss << "C " << _C << " ?= P(p3) " << points[_p3] << endl;
+
+    return ss.str();
 }

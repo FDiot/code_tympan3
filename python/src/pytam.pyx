@@ -183,9 +183,7 @@ cdef class SolverModelBuilder:
         itt = triangles.begin()
         while  itt != triangles.end():
             # Assert consistency of the OPoint3D given in the mesh
-            assert (deref(itt)._A == points[deref(itt)._p1])
-            assert (deref(itt)._B == points[deref(itt)._p2])
-            assert (deref(itt)._C == points[deref(itt)._p3])
+            assert deref(itt).checkConsistencyWrtPointsTab(points), deref(itt).reportInconsistencyWrtPointsTab(points)
             # Add the triangle
             self.model.make_triangle(map_to_model_node_idx[deref(itt)._p1],
                                      map_to_model_node_idx[deref(itt)._p2],
