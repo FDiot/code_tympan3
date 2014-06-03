@@ -68,10 +68,11 @@ namespace tympan
             OTriangle tri(tri_idx[0], tri_idx[1], tri_idx[2]);
             for (unsigned i = 0; i < 3; ++i)
             {
-                const OPoint3D& p = points[i];
+                const OPoint3D& p = points[tri_idx[i]];
                 tri.vertex(i) = p;
             }
             triangles.push_back(tri);
+            assert(triangles.back().checkConsistencyWrtPointsTab(points));
         }
     } // void TYPolygonTriangulator::exportMesh(...)
 
