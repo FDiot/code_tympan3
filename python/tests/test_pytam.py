@@ -8,6 +8,7 @@ from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, no_output
 
 with no_output():
     import pytam
+    pytam.init_tympan_registry()
 
 def load_project(*path):
     with no_output():
