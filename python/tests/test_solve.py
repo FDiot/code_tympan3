@@ -5,7 +5,11 @@ import numpy as np
 
 from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, no_output
 
-with no_output():
+TEST_OUTPUT_REDIRECTED = 'test_solve_out.log'
+TEST_ERRORS_REDIRECTED = 'test_solve_err.log'
+# TEST_OUTPUT_REDIRECTED = os.devnull
+
+with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
     import pytam
     pytam.init_tympan_registry()
 
@@ -31,7 +35,7 @@ def make_test_with_file(test_file):
     """
     def test_with_file(self):
         # Load and solve the project
-        with no_output():
+        with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
             project = pytam.Project.from_xml(osp.join(_TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation()
             pytam.loadsolver(TEST_SOLVERS_DIR, computation)
@@ -39,7 +43,7 @@ def make_test_with_file(test_file):
         self.assertTrue(result)
         # Load the expected result
         result_file = osp.join(_TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
-        with no_output():
+        with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
             expected_result_project = pytam.Project.from_xml(result_file)
         # Compare results
         current_result = computation.result
