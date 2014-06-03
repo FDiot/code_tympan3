@@ -42,7 +42,7 @@ public:
 
     virtual void runStructureBenchmark();
 
-private :
+protected :
 	void copyRayAndAddToStack(Ray *r)
 	{
         //Copie d'un rayon ayant rencontre une diffraction...
@@ -95,9 +95,9 @@ private :
 		}	
 	}
 
-protected:
     Ray* genRay();
-    bool traitementRay(Ray* r, std::list<validRay> &result);
+    virtual bool traitementRay(Ray* r, std::list<validRay> &result);
+
     std::stack< Ray*, std::deque <Ray*> > pile_traitement;
 
     unsigned long long int nbRayonsTraites;

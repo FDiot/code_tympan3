@@ -190,6 +190,12 @@ private :
 
     void save(); /*!< save rays to a file */
 
+    /*!
+     * \brief compute next step taking account of meteo 
+     */
+    Step compute_next_step(const Step& current_step);
+
+
 public :
     // Donnees membres :
 

@@ -166,8 +166,6 @@ RayCourb Lancer::RK4(const Step& y0)
     /* on definit deux vectors : un  "actuel" et un "suivant" car la methode de Runge-Kutta est une methode de resolution explicite a un pas de temps */
     Step yAct(y0);
     Step ySuiv;
-
-    Step k1, k2, k3, k4;                            // variables intermediaires pour la resolution de l'algorithme de Runge-Kutta
     int cpt_tps = 0;                                      // compteur de temps
 
     // Les premieres valeurs correspondent a notre source.
@@ -182,13 +180,7 @@ RayCourb Lancer::RK4(const Step& y0)
         // Car on parcourt les objets dans l'ordre ou ils sont ranges mais il se peut qu'un objet A plus pres du point considere se trouve apres un objet B plus loin
         // et quand on boucle, si on sort des la premiere intersection, la reponse sera l'intersection avec B alors que dans la realite, c'est avec l'objet A qu'il y a une intersection.
 
-
-        k1 = EqRay(yAct) * h;               // k1 = h * EqRay(yAct, Meteo);
-        k2 = EqRay(yAct + k1 * 0.5) * h;        // k2 = h * EqRay(yAct + 0.5 * k1, Meteo);
-        k3 = EqRay(yAct + k2 * 0.5) * h;        // k3 = h * EqRay(yAct + 0.5 * k2, Meteo);
-        k4 = EqRay(yAct + k3) * h;          // k4 = h * EqRay(yAct + k3, Meteo);
-
-        ySuiv = yAct + ((k1 + k2 * 2. + k3 * 2. + k4) * (1. / 6.));
+        ySuiv = compute_next_step(yAct);
 
         // Recherche des intersections
         intersection(cpt_tps, y, yAct, ySuiv);
@@ -240,6 +232,18 @@ void Lancer::RemplirMat()
     assert(MatRes.size() == sources.size());
 
     if (wantOutFile) { save(); }
+}
+
+Step Lancer::compute_next_step(const Step& current_step)
+{
+    Step k1, k2, k3, k4;
+
+    k1 = EqRay(current_step) * h;
+    k2 = EqRay(current_step + k1 * 0.5) * h;
+    k3 = EqRay(current_step + k2 * 0.5) * h;
+    k4 = EqRay(current_step + k3) * h;
+
+    return current_step + ((k1 + k2 * 2. + k3 * 2. + k4) * (1. / 6.));
 }
 
 
