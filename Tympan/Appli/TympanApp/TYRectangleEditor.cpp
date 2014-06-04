@@ -202,20 +202,11 @@ void TYRectangleEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, 
             _pRectangle = NULL;
             try
             {
-                _pRectangle = (TYAcousticRectangle*) TYElement::findAndClone(childType);
+                _pRectangle = dynamic_cast<TYAcousticRectangle*>(TYElement::findAndClone(childType));
             }
-            catch(tympan::invalid_data& exc)
-            {
-                std::ostringstream msg;
-                msg << boost::diagnostic_information(exc);
-                OMessageManager::get()->error(
-                        "Asked to clone class %s which isn't registered in OPrototype",
-                        childType);
-                OMessageManager::get()->debug(msg.str().c_str());
-                _pRectangle = NULL;
-            }
+            catch(tympan::invalid_data& exc) {};
 
-            if (_pRectangle)
+            if (_pRectangle != nullptr)
             {
                 _pRectangle->getBoundingRect()->setDimension(sizeX, sizeY);
 
@@ -227,7 +218,10 @@ void TYRectangleEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, 
                     // Update
                     getAcousticRectangleNode()->updateGraphicTree();
 
-                    TYAction* pAction = new TYAddAccSurfToAccSurfNodeAction((LPTYAcousticSurface&) _pRectangle, getAcousticRectangleNode(), _pModeler, TR("id_action_remface"));
+                    TYAction* pAction = new TYAddAccSurfToAccSurfNodeAction(
+                            (LPTYAcousticSurface&) _pRectangle,
+                            getAcousticRectangleNode(), _pModeler,
+                            TR("id_action_remface"));
                     _pModeler->getActionManager()->addAction(pAction);
                 }
 

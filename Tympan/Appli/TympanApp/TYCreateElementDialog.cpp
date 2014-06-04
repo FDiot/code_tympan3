@@ -134,20 +134,14 @@ void TYCreateElementDialog::createElement(QString eltType)
     LPTYElement pElt;
     try
     {
-        pElt = (TYElement*) TYElement::findAndClone(eltType.toLatin1());
+        pElt = dynamic_cast<TYElement*>(TYElement::findAndClone(eltType.toLatin1()));
     }
     catch(tympan::invalid_data& exc)
     {
-        std::ostringstream msg;
-        msg << boost::diagnostic_information(exc);
-        OMessageManager::get()->error(
-                "Asked to clone class %s which isn't registered in OPrototype",
-                eltType.toStdString().c_str());
-        OMessageManager::get()->debug(msg.str().c_str());
-        pElt._pObj = NULL;
+        pElt = nullptr;
     }
 
-    if (pElt)
+    if (pElt != nullptr)
     {
         TYOpenElementDialog* pOpenDlg = new TYOpenElementDialog(this);
         pOpenDlg->openElement(pElt);
