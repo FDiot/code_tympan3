@@ -20,10 +20,13 @@
 
 
 
-#include <string.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdarg>
+#include <cstdlib>
+#include <cstdio>
+
+#include <string>
+
 #ifdef _WIN32
 #include <io.h>
 #else
@@ -39,10 +42,55 @@
 LPOMessageManager OMessageManager::_pInstance = 0;
 
 #ifdef _DEBUG
-static bool bDebug = true;
+static const bool bDebug = true;
 #else
-static bool bDebug = false;
+static const bool bDebug = false;
 #endif
+
+// Adapted from URL below, which claims BSD license
+// http://stackoverflow.com/questions/69738/c-how-to-get-fprintf-results-as-a-stdstring-w-o-sprintf
+
+static const size_t string_vformat_init_size = 1024;
+static const size_t string_vformat_max_size = string_vformat_init_size * 8;
+
+// We want a static free function
+static
+std::string
+string_vformat (const char *fmt, va_list ap)
+{
+    // Allocate a buffer on the stack that's big enough for us almost
+    // all the time.  Be prepared to allocate dynamically if it doesn't fit.
+    size_t size = string_vformat_init_size;
+    char stackbuf[string_vformat_init_size];
+    std::vector<char> dynamicbuf;
+    char *buf = &stackbuf[0];
+
+    while (size <= string_vformat_max_size) {
+        // Try to vsnprintf into our buffer.
+        int needed = vsnprintf (buf, size, fmt, ap);
+        // NB. C99 (which modern Linux and OS X follow) says vsnprintf
+        // failure returns the length it would have needed.  But older
+        // glibc and current Windows return -1 for failure, i.e., not
+        // telling us how much was needed.
+
+        if (needed <= (int)size && needed >= 0) {
+            // It fit fine so we're done.
+            return std::string (buf, (size_t) needed);
+        }
+
+        // vsnprintf reported that it wanted to write more characters
+        // than we allotted.  So try again using a dynamic buffer.  This
+        // doesn't happen very often if we chose our initial size well.
+        size = (needed > 0) ? (needed+1) : (size*2);
+        dynamicbuf.resize (size);
+        buf = &dynamicbuf[0];
+    }
+    // We exited the loop because the message size exceed the limit
+    // We force the null terminator and return the truncated message
+    dynamicbuf.back() = '\0';
+    buf = &dynamicbuf[0];
+    return std::string (buf);
+}
 
 OMessageManager::OMessageManager()
 {
