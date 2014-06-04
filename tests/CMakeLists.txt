@@ -4,8 +4,6 @@ set(CURRENT_FOLDER "Tests")
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} 
   APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG _DEBUG)
 
-enable_testing () # Activate CTest
-
 # GTest has already been loaded as external project by tympan-deps-gtest.cmake
 include_directories (${GTEST_INCLUDE_DIR})
 link_directories (${GTEST_BINARY_DIR})
