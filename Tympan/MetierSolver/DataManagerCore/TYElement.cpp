@@ -611,20 +611,11 @@ std::string TYElement::getMetierName()
         try
         {
             // Auto construction
-            pElt = (TYElement*) TYElement::findAndClone((char*)str.toAscii().data());
+            pElt = dynamic_cast<TYElement*>(TYElement::findAndClone((char*)str.toAscii().data()));
         }
-        catch(tympan::invalid_data& exc)
-        {
-            std::ostringstream msg;
-            msg << boost::diagnostic_information(exc);
-            OMessageManager::get()->error(
-                    "Asked to clone class %s which isn't registered in OPrototype",
-                    str.toStdString().c_str());
-            OMessageManager::get()->debug(msg.str().c_str());
-            pElt = NULL;
-        }
+        catch(tympan::invalid_data& exc) {pElt = nullptr;}
 
-        if (pElt && pElt->inherits(type))
+        if ((pElt != nullptr) && pElt->inherits(type))
         {
             // Parsing XML
             pElt->fromXML(elemCur);

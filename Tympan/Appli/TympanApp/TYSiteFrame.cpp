@@ -1555,22 +1555,14 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
 
 void TYSiteFrame::newElt(const char* className, TYElement* pElement)
 {
-    TYElement* pElt;
+    TYElement* pElt = NULL;
     try
     {
-        pElt = (TYElement*) TYElement::findAndClone(className);
+        pElt = dynamic_cast<TYElement*>(TYElement::findAndClone(className));
     }
-    catch(tympan::invalid_data& exc)
-    {
-        std::ostringstream msg;
-        msg << boost::diagnostic_information(exc);
-        OMessageManager::get()->error(
-                "Asked to clone class %s which isn't registered in OPrototype",
-                className);
-        OMessageManager::get()->debug(msg.str().c_str());
-        pElement = NULL;
-    }
+    catch(tympan::invalid_data& exc) {}
 
+    assert (pElt);
     if (pElement) { addElt(pElement, pElt); }
 
     if (pElt->inherits("TYSiteNode") ||

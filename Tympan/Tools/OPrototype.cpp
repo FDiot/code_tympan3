@@ -50,7 +50,10 @@ OPrototype::~OPrototype()
 
     if (it == _factory_map.end())
     {
-        throw tympan::invalid_data("Class does not exist") << tympan_source_loc
+        std::string err_msg ("Asked to clone class ");
+        err_msg.append (className);
+        err_msg.append (" which isn't registered in OPrototype.");
+        throw tympan::invalid_data(err_msg) << tympan_source_loc
             << tympan::oproto_classname_errinfo(className);
     }
     else

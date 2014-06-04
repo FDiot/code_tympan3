@@ -138,22 +138,12 @@ int TYXMLManager::load(const QString& fileName, LPTYElementArray& eltCollection)
 
         try
         {
-            pElt = (TYElement*) TYElement::findAndClone((char*)str.toAscii().data());
+            pElt = dynamic_cast<TYElement*>(TYElement::findAndClone((char*)str.toAscii().data()));
         }
-        catch(tympan::invalid_data& exc)
+        catch(tympan::invalid_data& exc) {pElt = nullptr;}
+        if(pElt != nullptr)
         {
-            std::ostringstream msg;
-            msg << boost::diagnostic_information(exc);
-            OMessageManager::get()->error(
-                    "Asked to clone class %s which isn't registered in OPrototype",
-                    str.toStdString().c_str());
-            OMessageManager::get()->debug(msg.str().c_str());
-            pElt = NULL;
-        }
-
-        // Si l element a ete trouve
-        if (pElt != NULL)
-        {
+            // Si l element a ete trouve
             // Auto chargement des parametres par l'element
             readOk = pElt->fromXML(nodeList.item(i).toElement());
 
@@ -230,22 +220,12 @@ int TYXMLManager::loadFromString(const QString& xmlString, LPTYElementArray& elt
 
         try
         {
-            pElt = (TYElement*) TYElement::findAndClone((char*)str.toAscii().data());
+            pElt = dynamic_cast<TYElement*>(TYElement::findAndClone((char*)str.toAscii().data()));
         }
-        catch(tympan::invalid_data& exc)
+        catch(tympan::invalid_data& exc) {pElt = nullptr;}
+        if (pElt != nullptr)
         {
-            std::ostringstream msg;
-            msg << boost::diagnostic_information(exc);
-            OMessageManager::get()->error(
-                    "Asked to clone class %s which isn't registered in OPrototype",
-                    str.toStdString().c_str());
-            OMessageManager::get()->debug(msg.str().c_str());
-            pElt = NULL;
-        }
-
-        // Si l'element a ete trouve
-        if (pElt != NULL)
-        {
+            // Si l'element a ete trouve
             // Auto chargement des parametres par l'element
             pElt->fromXML(nodeList.item(i).toElement());
 
