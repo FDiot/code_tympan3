@@ -27,7 +27,7 @@
 // Declaration des membres statiques.
 OPrototype* OPrototype::_prototypes[];
 int         OPrototype::_nbPrototypes = 0;
-
+std::unordered_map<std::string, OPrototype::IOProtoFactory::ptr_type> OPrototype::_factory_map;
 
 OPrototype::OPrototype()
 {
@@ -35,6 +35,12 @@ OPrototype::OPrototype()
 
 OPrototype::~OPrototype()
 {
+}
+
+/* static */ void OPrototype::add_factory(const char * classname,
+        IOProtoFactory::ptr_type factory)
+{
+    _factory_map[std::string(classname)] = move(factory);
 }
 
 /*static*/ OPrototype* OPrototype::findAndClone(const char* className)

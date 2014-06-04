@@ -20,7 +20,9 @@
 #ifndef __O_PROTOTYPE__
 #define __O_PROTOTYPE__
 
-#include<memory>
+#include <memory>
+#include <unordered_map>
+#include <iostream>
 
 /////////////////////////////////////////////////////////////
 // Definition de macros pour la creation de nouveaux types
@@ -200,7 +202,7 @@ static const int PROTOTYPE_MAX_NB = 256;
  * </pre>
  *
  * La macro OPROTOSUPERDECL est une extension de OPROTODECL, elle permet
- * d'utiliser la methode 'inherits()' grâce au nom de la classe heritee :
+ * d'utiliser la methode 'inherits()' grce au nom de la classe heritee :
  *
  * <pre>
  *
@@ -244,6 +246,9 @@ static const int PROTOTYPE_MAX_NB = 256;
  * classe derivee de Prototype. Par contre les macros offrent un
  * moyen alternatif simple pour la creation de ce type de classe.
  */
+
+#include <type_traits>
+
 class OPrototype
 {
     // Methodes
@@ -347,6 +352,44 @@ public:
      */
     static OPrototype* safeDownCast(OPrototype* pObject);
 
+    /**
+     * Defines an interface for the Oprototype factory
+     *
+     * make method must return a unique pointer to a OPrototype object
+     *
+     */
+    class IOProtoFactory
+    {
+    public:
+        typedef std::unique_ptr<IOProtoFactory> ptr_type;
+        virtual std::unique_ptr<OPrototype> make() = 0;
+    };
+
+    /**
+     * Template implementation of the IOProtoFactory interface
+     *
+     * make method creates a T object and returns a unique pointer to it
+     *
+     * CAUTION: T must inherit from OPrototype
+     *
+     */
+    template<typename T>
+    class Factory : public IOProtoFactory
+    {
+    public:
+        typedef std::unique_ptr<T> ptr_type;
+
+        static_assert(std::is_base_of<OPrototype, T>::value,
+                      "Factory<T> : T must inherit from OPrototype");
+
+        ptr_type typed_make () { return ptr_type(new T()); }
+        virtual std::unique_ptr<OPrototype> make () { return typed_make(); }
+    };
+
+    /**
+     * Adds the factory "factory" allowing to build the class named "classname"
+     */
+    static void add_factory(const char*, IOProtoFactory::ptr_type factory);
 
 protected:
     /**
@@ -373,7 +416,26 @@ private:
 
     ///Nombre de prototypes registres.
     static int          _nbPrototypes;
+
+    /**
+     * maps a class name (key) to the corresponding factory (value) that can 
+     * build it through its "make()" method
+     */
+    static std::unordered_map<std::string, IOProtoFactory::ptr_type> _factory_map;
+
+
 };
+
+/**
+ * Template class method allowing to build a factory for a T class
+ *
+ * @return a unique ptr on the build factory
+ *
+ * CAUTION: T must inherit from OPrototype
+ */
+template<typename T>
+std::unique_ptr<OPrototype::Factory<T> > build_factory(){return std::unique_ptr<OPrototype::Factory<T> >( new OPrototype::Factory<T>() ); }
+
 
 
 #endif // __O_PROTOTYPE__
