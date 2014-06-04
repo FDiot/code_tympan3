@@ -36,7 +36,7 @@
 //#include <qplatinumstyle.h>
 #include "TYApplication.h"
 
-#include "Tympan/Tools/OPrototype.h"
+#include "Tympan/MetierSolver/DataManagerMetier/init_registry.h"
 
 static QtMsgHandler old_handler;
 
@@ -91,12 +91,6 @@ static void QTMessageHandler(QtMsgType type, const char* message)
     }
 }
 
-void init_oproto_factory()
-{
-    OPrototype::add_factory("TYElement", move(build_factory<TYElement>()));
-    // and so on...
-}
-
 
 static int tyMain(int argc, char** argv)
 {
@@ -146,9 +140,8 @@ int main(int argc, char** argv)
 #endif
 #endif
 
-    // Initialize OPrototype factory
-    // (map TY* class names to the corresponding class factories)
-    init_oproto_factory();
+    // Register TY* classes before starting the application
+    tympan::init_registry();
 
     // Appel le main de Tympan
     ret = tyMain(argc, argv);
