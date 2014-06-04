@@ -27,6 +27,7 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
         the input XML project (the one opened from the Code_TYMPAN GUI)
     """
     ret = False
+    pytam.init_tympan_registry()
     # Load an existing project and retrieve its calcul to solve it
     try:
         project = pytam.Project.from_xml(input_project)
