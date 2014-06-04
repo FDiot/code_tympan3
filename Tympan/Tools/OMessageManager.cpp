@@ -171,7 +171,7 @@ void OMessageManager::warning(const QString& message, ...)
     char* mymessage =  message.toAscii().data();
 #endif
 
-    va_start(args, mymessage);
+    va_start(args, message);
     vsprintf(mess, mymessage, args);
     format(MSG_WARNING, mess);
     va_end(args);
@@ -190,7 +190,7 @@ void OMessageManager::error(const QString& message, ...)
     char* mymessage =  message.toAscii().data();
 #endif
 
-    va_start(args, mymessage);
+    va_start(args, message);
     vsprintf(mess, mymessage, args);
     format(MSG_ERROR, mess);
     va_end(args);
@@ -209,7 +209,7 @@ void OMessageManager::fatal(const QString& message, ...)
     char* mymessage =  message.toAscii().data();
 #endif
 
-    va_start(args, mymessage);
+    va_start(args, message);
     vsprintf(mess, mymessage, args);
     format(MSG_FATAL, mess);
     va_end(args);
@@ -228,7 +228,7 @@ void OMessageManager::info(const QString& message, ...)
     char* mymessage =  message.toAscii().data();
 #endif
 
-    va_start(args, mymessage);
+    va_start(args, message);
     vsprintf(mess, mymessage, args);
     va_end(args);
 
@@ -249,7 +249,7 @@ void OMessageManager::debug(const QString& message, ...)
 #else
         char* mymessage =  message.toAscii().data();
 #endif
-        va_start(args, mymessage);
+        va_start(args, message);
         vsprintf(mess, mymessage, args);
         format(MSG_DEBUG, mess);
         va_end(args);
@@ -278,7 +278,7 @@ void OMessageManager::trace(const QString& message, ...)
     char* mymessage =  message.toAscii().data();
 #endif
 
-    va_start(args, mymessage);
+    va_start(args, message);
 
     if (initTrace())
     {
