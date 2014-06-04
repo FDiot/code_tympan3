@@ -169,6 +169,11 @@ public:
     virtual void format(int level, const char* message, ...);
 
     /**
+     * \brief Variable argument list version of format */
+    void vformat(int level, const char* message, va_list args);
+
+
+    /**
      * Affiche/ecrit le message final, le niveau du message est passe dans
      * le cas ou la redirection des messages depend de celui-ci.
      * Cette methode est appelee une fois que le message est ete formate.
