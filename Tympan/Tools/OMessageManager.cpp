@@ -26,6 +26,7 @@
 #include <cstdio>
 
 #include <string>
+#include <sstream>
 
 #ifdef _WIN32
 #include <io.h>
@@ -37,6 +38,8 @@
 #endif // _WIN32
 #include "OMessageManager.h"
 
+using std::string;
+using std::stringstream;
 
 // Initialise a NULL.
 LPOMessageManager OMessageManager::_pInstance = 0;
@@ -124,46 +127,33 @@ OMessageManager* OMessageManager::get()
 void OMessageManager::warning(const char* message, ...)
 {
     va_list args;
-    char    mess[512];
-
     va_start(args, message);
-    vsprintf(mess, message, args);
-    format(MSG_WARNING, mess);
+    vformat(MSG_WARNING, message, args);
     va_end(args);
 }
 
 void OMessageManager::error(const char* message, ...)
 {
     va_list args;
-    char    mess[512];
-
     va_start(args, message);
-    vsprintf(mess, message, args);
-    format(MSG_ERROR, mess);
+    vformat(MSG_ERROR, message, args);
     va_end(args);
 }
 
 void OMessageManager::fatal(const char* message, ...)
 {
     va_list args;
-    char    mess[512];
-
     va_start(args, message);
-    vsprintf(mess, message, args);
-    format(MSG_FATAL, mess);
+    vformat(MSG_FATAL, message, args);
     va_end(args);
 }
 
 void OMessageManager::info(const char* message, ...)
 {
     va_list args;
-    char    mess[512];
-
     va_start(args, message);
-    vsprintf(mess, message, args);
+    vformat(MSG_INFO, message, args);
     va_end(args);
-
-    format(MSG_INFO, mess);
 }
 
 void OMessageManager::debug(const char* message, ...)
@@ -171,11 +161,8 @@ void OMessageManager::debug(const char* message, ...)
     if (bDebug)
     {
         va_list args;
-        char    mess[512];
-
         va_start(args, message);
-        vsprintf(mess, message, args);
-        format(MSG_DEBUG, mess);
+        vformat(MSG_DEBUG, message, args);
         va_end(args);
     }
 }
@@ -209,7 +196,6 @@ void OMessageManager::trace(const char* message, ...)
 void OMessageManager::warning(const QString& message, ...)
 {
     va_list args;
-    char    mess[512];
 
 #ifdef _WIN32
     // CLM-NT35: Pb en debug avec string cast
@@ -220,15 +206,13 @@ void OMessageManager::warning(const QString& message, ...)
 #endif
 
     va_start(args, message);
-    vsprintf(mess, mymessage, args);
-    format(MSG_WARNING, mess);
+    vformat(MSG_WARNING, mymessage, args);
     va_end(args);
 }
 
 void OMessageManager::error(const QString& message, ...)
 {
     va_list args;
-    char    mess[512];
 
 #ifdef _WIN32
     // CLM-NT35: Pb en debug avec string cast
@@ -239,15 +223,13 @@ void OMessageManager::error(const QString& message, ...)
 #endif
 
     va_start(args, message);
-    vsprintf(mess, mymessage, args);
-    format(MSG_ERROR, mess);
+    vformat(MSG_ERROR, mymessage, args);
     va_end(args);
 }
 
 void OMessageManager::fatal(const QString& message, ...)
 {
     va_list args;
-    char    mess[512];
 
 #ifdef _WIN32
     // CLM-NT35: Pb en debug avec string cast
@@ -258,15 +240,13 @@ void OMessageManager::fatal(const QString& message, ...)
 #endif
 
     va_start(args, message);
-    vsprintf(mess, mymessage, args);
-    format(MSG_FATAL, mess);
+    vformat(MSG_FATAL, mymessage, args);
     va_end(args);
 }
 
 void OMessageManager::info(const QString& message, ...)
 {
     va_list args;
-    char    mess[512];
 
 #ifdef _WIN32
     // CLM-NT35: Pb en debug avec string cast
@@ -277,31 +257,24 @@ void OMessageManager::info(const QString& message, ...)
 #endif
 
     va_start(args, message);
-    vsprintf(mess, mymessage, args);
+    vformat(MSG_INFO, mymessage, args);
     va_end(args);
-
-    format(MSG_INFO, mess);
 }
 
 void OMessageManager::debug(const QString& message, ...)
 {
-    if (bDebug)
-    {
-        va_list args;
-        char    mess[512];
+    va_list args;
 
 #ifdef _WIN32
-        // CLM-NT35: Pb en debug avec string cast
-        std::string mess_tmp = message.toAscii();
-        char* mymessage = (char*)mess_tmp.data();
+    // CLM-NT35: Pb en debug avec string cast
+    std::string mess_tmp = message.toAscii();
+    char* mymessage = (char*)mess_tmp.data();
 #else
-        char* mymessage =  message.toAscii().data();
+    char* mymessage =  message.toAscii().data();
 #endif
-        va_start(args, message);
-        vsprintf(mess, mymessage, args);
-        format(MSG_DEBUG, mess);
-        va_end(args);
-    }
+    va_start(args, message);
+    vformat(MSG_DEBUG, mymessage, args);
+    va_end(args);
 }
 
 void OMessageManager::missingFile(const QString& nomFic)
@@ -327,64 +300,59 @@ void OMessageManager::trace(const QString& message, ...)
 #endif
 
     va_start(args, message);
-
-    if (initTrace())
-    {
-        fprintf(_ficTrace, "TRACE %s : ", getStrDate());
-        vfprintf(_ficTrace, mymessage, args);
-        fprintf(_ficTrace, "\n");
-        fflush(_ficTrace);
-    }
-
+    trace(mymessage, args);
     va_end(args);
 }
 
 void OMessageManager::format(int level, const char* message, ...)
 {
+    va_list args;
+    va_start(args, message);
+    vformat(level, message, args);
+    va_end(args);
+}
+
+void OMessageManager::vformat(int level, const char* message, va_list args)
+{
     if ((!bDebug) && (level == MSG_DEBUG)) { return; }   // on n'affiche les msg debug qu'en mode debug...
 
-    va_list args;
+
     char    strLevel[64];
     char    tmp[256];
-    char    msg[512];
+    stringstream msg;
 
+    // On construit le msg de la facon suivante :
+    // JJ/MM/AAAA HH:MM:SS <niveau> <message> <retour a la ligne>
+    msg << getStrDate() << " ";
     switch (level)
     {
         case MSG_DEBUG:
-            sprintf(strLevel, "%s : ", "Debug");
+            msg << "Debug";
             break;
         case MSG_BENCH:
-            sprintf(strLevel, "%s : ", "Bench");
+            msg <<  "Bench";
             break;
         case MSG_INFO:
-            sprintf(strLevel, "%s : ", "Info");
+            msg <<  "Info";
             break;
         case MSG_WARNING:
-            sprintf(strLevel, "%s : ", "Warning");
+            msg <<  "Warning";
             break;
         case MSG_ERROR:
-            sprintf(strLevel, "%s : ", "Erreur");
+            msg <<  "Erreur";
             break;
         case MSG_FATAL:
-            sprintf(strLevel, "%s : ", "Erreur Fatale");
+            msg <<  "Erreur Fatale";
             break;
         default:
-            strcpy(strLevel, "");
             break;
     }
-
-    va_start(args, message);
-
-    // Arguments
-    vsprintf(tmp, message, args);
-    // On construit le msg de la facon suivante :
-    // JJ/MM/AAAA HH:MM:SS <niveau> <message> <retour a la ligne>
-    sprintf(msg, "%s %s %s %s", getStrDate(), strLevel, tmp, "\n");
-
-    va_end(args);
+    msg << " : ";
+    msg << string_vformat(message, args);
+    msg << std::endl;
 
     // Affichage/ecriture du message
-    output(msg, level);
+    output(msg.str().c_str(), level);
 }
 
 void OMessageManager::output(const char* message, int level)
