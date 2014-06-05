@@ -26,7 +26,6 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 
-OPROTOINST(TYAcousticVolume);
 TY_EXTENSION_INST(TYAcousticVolume);
 
 TYAcousticVolume::TYAcousticVolume() : _forceNormales(false)

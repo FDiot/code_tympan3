@@ -102,7 +102,9 @@ def stdout_redirected(to=os.devnull, stdout=None):
             os.dup2(copied.fileno(), stdout_fd)  # $ exec >&copied
 
 @contextmanager
-def no_output():
-    with stdout_redirected(stdout=sys.stdout):
-        with stdout_redirected(stdout=sys.stderr):
+def no_output(to=os.devnull, err_to=None):
+    if err_to is None :
+        err_to = to
+    with stdout_redirected(to=to, stdout=sys.stdout):
+        with stdout_redirected(to=err_to, stdout=sys.stderr):
             yield

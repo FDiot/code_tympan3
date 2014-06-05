@@ -27,10 +27,11 @@ function(add_python_test)
   set(multiValueArgs "RUNTIME_PATH" "PYTHONPATH" "DEPS")
   cmake_parse_arguments("" "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-  add_test(NAME ${_TARGET}
-    # [CONFIGURATIONS [Debug|Release|...]]
+  add_test( 
+    NAME ${_TARGET}
     # [WORKING_DIRECTORY dir]
-    COMMAND ${PYTHON_EXECUTABLE} "${_SCRIPT}" $<CONFIGURATION>)
+    COMMAND ${PYTHON_EXECUTABLE} "${_SCRIPT}" $<CONFIGURATION> -v 
+    )
   _common_test_config()
 
   build_native_path_list(native_pythonpath "${_PYTHONPATH}")  

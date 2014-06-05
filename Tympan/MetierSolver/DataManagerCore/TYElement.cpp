@@ -37,13 +37,12 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #include "Tympan/Tools/OMessageManager.h"
-
-
+#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include <iostream>
 // -------------------------------------------------------------------------
 // classe TYElement
 // -------------------------------------------------------------------------
 
-OPROTOINST(TYElement)
 
 /** Le log des instances ne doit absolument pas etre active
  * au lancement de l'application, le log des instances statiques
@@ -609,8 +608,21 @@ std::string TYElement::getMetierName()
         str = "TY";
         str += nodeName;
 
-        // Auto construction
-        pElt = (TYElement*) TYElement::findAndClone((char*)str.toAscii().data());
+        try
+        {
+            // Auto construction
+            pElt = (TYElement*) TYElement::findAndClone((char*)str.toAscii().data());
+        }
+        catch(tympan::invalid_data& exc)
+        {
+            std::ostringstream msg;
+            msg << boost::diagnostic_information(exc);
+            OMessageManager::get()->error(
+                    "Asked to clone class %s which isn't registered in OPrototype",
+                    str.toStdString().c_str());
+            OMessageManager::get()->debug(msg.str().c_str());
+            pElt = NULL;
+        }
 
         if (pElt && pElt->inherits(type))
         {

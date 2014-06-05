@@ -33,7 +33,6 @@
 #include "Tympan/Tools/OChrono.h"
 
 
-OPROTOINST(TYFaceSet);
 TY_EXTENSION_INST(TYFaceSet);
 TY_EXT_GRAPHIC_INST(TYFaceSet);
 

@@ -28,7 +28,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYRepere);
 TY_EXTENSION_INST(TYRepere);
 
 TYRepere::TYRepere():

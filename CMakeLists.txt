@@ -24,6 +24,7 @@ add_subdirectory(Tympan)
 
 # ... and in the test sources directory...
 if (TYMPAN_BUILD_TEST)
+  enable_testing () # Activate CTest			
   add_subdirectory(tests)
 endif (TYMPAN_BUILD_TEST)
 

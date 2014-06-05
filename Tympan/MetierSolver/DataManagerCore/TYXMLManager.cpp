@@ -32,7 +32,9 @@
 #include "Tympan/Tools/TYProgressManager.h"
 
 #include <qfile.h>
+#include <iostream>
 
+#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
 #include "Tympan/MetierSolver/ToolsMetier/DOMSave.h"
 
 
@@ -134,7 +136,20 @@ int TYXMLManager::load(const QString& fileName, LPTYElementArray& eltCollection)
         str = "TY";
         str += nodeList.item(i).nodeName();
 
-        pElt = (TYElement*) TYElement::findAndClone((char*)str.toAscii().data());
+        try
+        {
+            pElt = (TYElement*) TYElement::findAndClone((char*)str.toAscii().data());
+        }
+        catch(tympan::invalid_data& exc)
+        {
+            std::ostringstream msg;
+            msg << boost::diagnostic_information(exc);
+            OMessageManager::get()->error(
+                    "Asked to clone class %s which isn't registered in OPrototype",
+                    str.toStdString().c_str());
+            OMessageManager::get()->debug(msg.str().c_str());
+            pElt = NULL;
+        }
 
         // Si l element a ete trouve
         if (pElt != NULL)
@@ -213,7 +228,20 @@ int TYXMLManager::loadFromString(const QString& xmlString, LPTYElementArray& elt
         str = "TY";
         str += nodeList.item(i).nodeName();
 
-        pElt = (TYElement*) TYElement::findAndClone((char*)str.toAscii().data());
+        try
+        {
+            pElt = (TYElement*) TYElement::findAndClone((char*)str.toAscii().data());
+        }
+        catch(tympan::invalid_data& exc)
+        {
+            std::ostringstream msg;
+            msg << boost::diagnostic_information(exc);
+            OMessageManager::get()->error(
+                    "Asked to clone class %s which isn't registered in OPrototype",
+                    str.toStdString().c_str());
+            OMessageManager::get()->debug(msg.str().c_str());
+            pElt = NULL;
+        }
 
         // Si l'element a ete trouve
         if (pElt != NULL)

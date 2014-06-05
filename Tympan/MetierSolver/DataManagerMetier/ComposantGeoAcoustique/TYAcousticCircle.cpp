@@ -34,7 +34,6 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 
-OPROTOINST(TYAcousticCircle);
 TY_EXTENSION_INST(TYAcousticCircle);
 TY_EXT_GRAPHIC_INST(TYAcousticCircle);
 

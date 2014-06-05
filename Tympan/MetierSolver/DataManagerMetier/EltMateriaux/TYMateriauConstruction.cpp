@@ -31,7 +31,6 @@
 TYSpectre* TYMateriauConstruction::_defSpectreTrans = NULL;
 TYSpectre* TYMateriauConstruction::_defSpectreAbso = NULL;
 
-OPROTOINST(TYMateriauConstruction);
 TY_EXTENSION_INST(TYMateriauConstruction);
 
 TYSpectre* TYMateriauConstruction::getDefSpectreTrans()

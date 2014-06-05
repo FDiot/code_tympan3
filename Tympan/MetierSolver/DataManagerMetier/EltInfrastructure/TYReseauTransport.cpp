@@ -30,7 +30,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYReseauTransport);
 TY_EXTENSION_INST(TYReseauTransport);
 TY_EXT_GRAPHIC_INST(TYReseauTransport);
 

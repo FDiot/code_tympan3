@@ -26,7 +26,6 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 
-OPROTOINST(TYAcousticSurface);
 TY_EXTENSION_INST(TYAcousticSurface);
 
 TYAcousticSurface::TYAcousticSurface()

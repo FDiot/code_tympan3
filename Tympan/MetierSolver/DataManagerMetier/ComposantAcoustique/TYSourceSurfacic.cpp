@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYSourceSurfacic);
 TY_EXTENSION_INST(TYSourceSurfacic);
 TY_EXT_GRAPHIC_INST(TYSourceSurfacic);
 

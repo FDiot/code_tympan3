@@ -26,7 +26,6 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 
-OPROTOINST(TYSource);
 TY_EXTENSION_INST(TYSource);
 
 TYSource::TYSource()

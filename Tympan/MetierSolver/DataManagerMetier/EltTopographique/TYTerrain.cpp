@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYTerrain);
 TY_EXTENSION_INST(TYTerrain);
 TY_EXT_GRAPHIC_INST(TYTerrain);
 

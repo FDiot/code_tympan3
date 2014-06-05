@@ -29,7 +29,6 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 
-OPROTOINST(TYTrafic);
 TY_EXTENSION_INST(TYTrafic);
 
 TYTrafic::TYTrafic()

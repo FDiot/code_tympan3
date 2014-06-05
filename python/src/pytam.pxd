@@ -27,6 +27,9 @@ cdef extern from "Tympan/Tools/OGenID.h":
         OGenID(const OGenID& other)
         OGenID()
 
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/init_registry.h" namespace "tympan":
+    void init_registry()
+
 cdef extern from "python/include/Loader.hpp" namespace "tympan":
    void load_solver(const char *foldername, TYCalcul *calcul)
 

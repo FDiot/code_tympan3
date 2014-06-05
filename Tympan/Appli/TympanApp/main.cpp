@@ -36,6 +36,8 @@
 //#include <qplatinumstyle.h>
 #include "TYApplication.h"
 
+#include "Tympan/MetierSolver/DataManagerMetier/init_registry.h"
+
 static QtMsgHandler old_handler;
 
 static void QTMessageHandler(QtMsgType type, const char* message)
@@ -137,6 +139,9 @@ int main(int argc, char** argv)
         _CrtMemCheckpoint(&start_mem_state);*/
 #endif
 #endif
+
+    // Register TY* classes before starting the application
+    tympan::init_registry();
 
     // Appel le main de Tympan
     ret = tyMain(argc, argv);

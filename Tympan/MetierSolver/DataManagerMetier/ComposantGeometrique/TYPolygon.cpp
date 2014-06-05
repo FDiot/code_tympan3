@@ -44,7 +44,6 @@
 #endif // TY_USE_IHM
 
 
-OPROTOINST(TYPolygon);
 TY_EXTENSION_INST(TYPolygon);
 TY_EXT_GRAPHIC_INST(TYPolygon);
 

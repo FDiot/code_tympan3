@@ -25,7 +25,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-OPROTOINST(TYPanel);
 TY_EXT_GRAPHIC_INST(TYPanel);
 
 TYPanel::TYPanel()

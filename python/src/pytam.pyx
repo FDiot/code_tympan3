@@ -16,6 +16,8 @@ class NullCppObject(Exception):
 def loadsolver(foldername, comp):
     load_solver(foldername, comp.thisptr.getRealPointer())
 
+def init_tympan_registry():
+    init_registry()
 
 cdef class ProblemModel:
     thisptr = cython.declare(cython.pointer(AcousticProblemModel))

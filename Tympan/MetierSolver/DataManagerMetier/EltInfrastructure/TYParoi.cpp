@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYParoi);
 TY_EXTENSION_INST(TYParoi);
 
 TYParoi::TYParoi()

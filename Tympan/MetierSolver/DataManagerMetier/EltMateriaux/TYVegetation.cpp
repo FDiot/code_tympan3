@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYVegetation);
 TY_EXTENSION_INST(TYVegetation);
 
 TYVegetation::TYVegetation()

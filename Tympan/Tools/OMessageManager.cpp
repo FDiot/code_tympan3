@@ -20,10 +20,14 @@
 
 
 
-#include <string.h>
-#include <stdarg.h>
-#include <stdlib.h>
-#include <stdio.h>
+#include <cstring>
+#include <cstdarg>
+#include <cstdlib>
+#include <cstdio>
+
+#include <string>
+#include <sstream>
+
 #ifdef _WIN32
 #include <io.h>
 #else
@@ -34,15 +38,62 @@
 #endif // _WIN32
 #include "OMessageManager.h"
 
+using std::string;
+using std::stringstream;
 
 // Initialise a NULL.
 LPOMessageManager OMessageManager::_pInstance = 0;
 
 #ifdef _DEBUG
-static bool bDebug = true;
+static const bool bDebug = true;
 #else
-static bool bDebug = false;
+static const bool bDebug = false;
 #endif
+
+// Adapted from URL below, which claims BSD license
+// http://stackoverflow.com/questions/69738/c-how-to-get-fprintf-results-as-a-stdstring-w-o-sprintf
+
+static const size_t string_vformat_init_size = 1024;
+static const size_t string_vformat_max_size = string_vformat_init_size * 8;
+
+// We want a static free function
+static
+std::string
+string_vformat (const char *fmt, va_list ap)
+{
+    // Allocate a buffer on the stack that's big enough for us almost
+    // all the time.  Be prepared to allocate dynamically if it doesn't fit.
+    size_t size = string_vformat_init_size;
+    char stackbuf[string_vformat_init_size];
+    std::vector<char> dynamicbuf;
+    char *buf = &stackbuf[0];
+
+    while (size <= string_vformat_max_size) {
+        // Try to vsnprintf into our buffer.
+        int needed = vsnprintf (buf, size, fmt, ap);
+        // NB. C99 (which modern Linux and OS X follow) says vsnprintf
+        // failure returns the length it would have needed.  But older
+        // glibc and current Windows return -1 for failure, i.e., not
+        // telling us how much was needed.
+
+        if (needed <= (int)size && needed >= 0) {
+            // It fit fine so we're done.
+            return std::string (buf, (size_t) needed);
+        }
+
+        // vsnprintf reported that it wanted to write more characters
+        // than we allotted.  So try again using a dynamic buffer.  This
+        // doesn't happen very often if we chose our initial size well.
+        size = (needed > 0) ? (needed+1) : (size*2);
+        dynamicbuf.resize (size);
+        buf = &dynamicbuf[0];
+    }
+    // We exited the loop because the message size exceed the limit
+    // We force the null terminator and return the truncated message
+    dynamicbuf.back() = '\0';
+    buf = &dynamicbuf[0];
+    return std::string (buf);
+}
 
 OMessageManager::OMessageManager()
 {
@@ -76,46 +127,33 @@ OMessageManager* OMessageManager::get()
 void OMessageManager::warning(const char* message, ...)
 {
     va_list args;
-    char    mess[512];
-
     va_start(args, message);
-    vsprintf(mess, message, args);
-    format(MSG_WARNING, mess);
+    vformat(MSG_WARNING, message, args);
     va_end(args);
 }
 
 void OMessageManager::error(const char* message, ...)
 {
     va_list args;
-    char    mess[512];
-
     va_start(args, message);
-    vsprintf(mess, message, args);
-    format(MSG_ERROR, mess);
+    vformat(MSG_ERROR, message, args);
     va_end(args);
 }
 
 void OMessageManager::fatal(const char* message, ...)
 {
     va_list args;
-    char    mess[512];
-
     va_start(args, message);
-    vsprintf(mess, message, args);
-    format(MSG_FATAL, mess);
+    vformat(MSG_FATAL, message, args);
     va_end(args);
 }
 
 void OMessageManager::info(const char* message, ...)
 {
     va_list args;
-    char    mess[512];
-
     va_start(args, message);
-    vsprintf(mess, message, args);
+    vformat(MSG_INFO, message, args);
     va_end(args);
-
-    format(MSG_INFO, mess);
 }
 
 void OMessageManager::debug(const char* message, ...)
@@ -123,11 +161,8 @@ void OMessageManager::debug(const char* message, ...)
     if (bDebug)
     {
         va_list args;
-        char    mess[1024];
-
         va_start(args, message);
-        vsprintf(mess, message, args);
-        format(MSG_DEBUG, mess);
+        vformat(MSG_DEBUG, message, args);
         va_end(args);
     }
 }
@@ -161,7 +196,6 @@ void OMessageManager::trace(const char* message, ...)
 void OMessageManager::warning(const QString& message, ...)
 {
     va_list args;
-    char    mess[512];
 
 #ifdef _WIN32
     // CLM-NT35: Pb en debug avec string cast
@@ -171,16 +205,14 @@ void OMessageManager::warning(const QString& message, ...)
     char* mymessage =  message.toAscii().data();
 #endif
 
-    va_start(args, mymessage);
-    vsprintf(mess, mymessage, args);
-    format(MSG_WARNING, mess);
+    va_start(args, message);
+    vformat(MSG_WARNING, mymessage, args);
     va_end(args);
 }
 
 void OMessageManager::error(const QString& message, ...)
 {
     va_list args;
-    char    mess[512];
 
 #ifdef _WIN32
     // CLM-NT35: Pb en debug avec string cast
@@ -190,16 +222,14 @@ void OMessageManager::error(const QString& message, ...)
     char* mymessage =  message.toAscii().data();
 #endif
 
-    va_start(args, mymessage);
-    vsprintf(mess, mymessage, args);
-    format(MSG_ERROR, mess);
+    va_start(args, message);
+    vformat(MSG_ERROR, mymessage, args);
     va_end(args);
 }
 
 void OMessageManager::fatal(const QString& message, ...)
 {
     va_list args;
-    char    mess[512];
 
 #ifdef _WIN32
     // CLM-NT35: Pb en debug avec string cast
@@ -209,16 +239,14 @@ void OMessageManager::fatal(const QString& message, ...)
     char* mymessage =  message.toAscii().data();
 #endif
 
-    va_start(args, mymessage);
-    vsprintf(mess, mymessage, args);
-    format(MSG_FATAL, mess);
+    va_start(args, message);
+    vformat(MSG_FATAL, mymessage, args);
     va_end(args);
 }
 
 void OMessageManager::info(const QString& message, ...)
 {
     va_list args;
-    char    mess[512];
 
 #ifdef _WIN32
     // CLM-NT35: Pb en debug avec string cast
@@ -228,32 +256,25 @@ void OMessageManager::info(const QString& message, ...)
     char* mymessage =  message.toAscii().data();
 #endif
 
-    va_start(args, mymessage);
-    vsprintf(mess, mymessage, args);
+    va_start(args, message);
+    vformat(MSG_INFO, mymessage, args);
     va_end(args);
-
-    format(MSG_INFO, mess);
 }
 
 void OMessageManager::debug(const QString& message, ...)
 {
-    if (bDebug)
-    {
-        va_list args;
-        char    mess[512];
+    va_list args;
 
 #ifdef _WIN32
-        // CLM-NT35: Pb en debug avec string cast
-        std::string mess_tmp = message.toAscii();
-        char* mymessage = (char*)mess_tmp.data();
+    // CLM-NT35: Pb en debug avec string cast
+    std::string mess_tmp = message.toAscii();
+    char* mymessage = (char*)mess_tmp.data();
 #else
-        char* mymessage =  message.toAscii().data();
+    char* mymessage =  message.toAscii().data();
 #endif
-        va_start(args, mymessage);
-        vsprintf(mess, mymessage, args);
-        format(MSG_DEBUG, mess);
-        va_end(args);
-    }
+    va_start(args, message);
+    vformat(MSG_DEBUG, mymessage, args);
+    va_end(args);
 }
 
 void OMessageManager::missingFile(const QString& nomFic)
@@ -278,65 +299,60 @@ void OMessageManager::trace(const QString& message, ...)
     char* mymessage =  message.toAscii().data();
 #endif
 
-    va_start(args, mymessage);
-
-    if (initTrace())
-    {
-        fprintf(_ficTrace, "TRACE %s : ", getStrDate());
-        vfprintf(_ficTrace, mymessage, args);
-        fprintf(_ficTrace, "\n");
-        fflush(_ficTrace);
-    }
-
+    va_start(args, message);
+    trace(mymessage, args);
     va_end(args);
 }
 
 void OMessageManager::format(int level, const char* message, ...)
 {
+    va_list args;
+    va_start(args, message);
+    vformat(level, message, args);
+    va_end(args);
+}
+
+void OMessageManager::vformat(int level, const char* message, va_list args)
+{
     if ((!bDebug) && (level == MSG_DEBUG)) { return; }   // on n'affiche les msg debug qu'en mode debug...
 
-    va_list args;
+
     char    strLevel[64];
     char    tmp[256];
-    char    msg[512];
+    stringstream msg;
 
+    // On construit le msg de la facon suivante :
+    // JJ/MM/AAAA HH:MM:SS <niveau> <message> <retour a la ligne>
+    msg << getStrDate() << " ";
     switch (level)
     {
         case MSG_DEBUG:
-            sprintf(strLevel, "%s : ", "Debug");
+            msg << "Debug";
             break;
         case MSG_BENCH:
-            sprintf(strLevel, "%s : ", "Bench");
+            msg <<  "Bench";
             break;
         case MSG_INFO:
-            sprintf(strLevel, "%s : ", "Info");
+            msg <<  "Info";
             break;
         case MSG_WARNING:
-            sprintf(strLevel, "%s : ", "Warning");
+            msg <<  "Warning";
             break;
         case MSG_ERROR:
-            sprintf(strLevel, "%s : ", "Erreur");
+            msg <<  "Erreur";
             break;
         case MSG_FATAL:
-            sprintf(strLevel, "%s : ", "Erreur Fatale");
+            msg <<  "Erreur Fatale";
             break;
         default:
-            strcpy(strLevel, "");
             break;
     }
-
-    va_start(args, message);
-
-    // Arguments
-    vsprintf(tmp, message, args);
-    // On construit le msg de la facon suivante :
-    // JJ/MM/AAAA HH:MM:SS <niveau> <message> <retour a la ligne>
-    sprintf(msg, "%s %s %s %s", getStrDate(), strLevel, tmp, "\n");
-
-    va_end(args);
+    msg << " : ";
+    msg << string_vformat(message, args);
+    msg << std::endl;
 
     // Affichage/ecriture du message
-    output(msg, level);
+    output(msg.str().c_str(), level);
 }
 
 void OMessageManager::output(const char* message, int level)

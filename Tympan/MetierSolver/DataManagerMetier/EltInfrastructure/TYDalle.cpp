@@ -30,7 +30,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYDalle);
 TY_EXTENSION_INST(TYDalle);
 TY_EXT_GRAPHIC_INST(TYDalle);
 

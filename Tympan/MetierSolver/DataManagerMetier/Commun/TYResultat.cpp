@@ -42,7 +42,6 @@ static char THIS_FILE[] = __FILE__;
 #endif
 #endif
 
-OPROTOINST(TYResultat);
 TY_EXTENSION_INST(TYResultat);
 TY_EXT_GRAPHIC_INST(TYResultat);
 
