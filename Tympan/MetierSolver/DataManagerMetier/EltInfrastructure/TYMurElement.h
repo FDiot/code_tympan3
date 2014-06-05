@@ -32,7 +32,7 @@
  */
 class TYMurElement: public TYAcousticRectangle
 {
-    OPROTOSUPERDECL(TYMurElement, TYAcousticRectangle)
+    OPROTODECL(TYMurElement)
     TY_EXTENSION_DECL_ONLY(TYMurElement)
     TY_EXT_GRAPHIC_DECL_ONLY(TYMurElement)
 

@@ -34,7 +34,7 @@
  */
 class TYBoucheSurface: public TYAcousticRectangle
 {
-    OPROTOSUPERDECL(TYBoucheSurface, TYAcousticRectangle)
+    OPROTODECL(TYBoucheSurface)
     TY_EXTENSION_DECL_ONLY(TYBoucheSurface)
 
     // Methodes

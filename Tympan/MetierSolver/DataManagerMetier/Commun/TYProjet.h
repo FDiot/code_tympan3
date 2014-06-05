@@ -45,7 +45,7 @@ using namespace std;
  */
 class TYProjet: public TYElement
 {
-    OPROTOSUPERDECL(TYProjet, TYElement)
+    OPROTODECL(TYProjet)
     TY_EXTENSION_DECL_ONLY(TYProjet)
     TY_EXT_GRAPHIC_DECL_ONLY(TYProjet)
 

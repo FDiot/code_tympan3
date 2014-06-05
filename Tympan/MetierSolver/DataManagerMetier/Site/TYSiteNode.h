@@ -37,7 +37,7 @@ typedef std::vector<LPTYSiteNodeGeoNode> TYTabSiteNodeGeoNode;
 
 class TYSiteNode: public TYElement
 {
-    OPROTOSUPERDECL(TYSiteNode, TYElement)
+    OPROTODECL(TYSiteNode)
     TY_EXTENSION_DECL_ONLY(TYSiteNode)
     TY_EXT_GRAPHIC_DECL_ONLY(TYSiteNode)
 

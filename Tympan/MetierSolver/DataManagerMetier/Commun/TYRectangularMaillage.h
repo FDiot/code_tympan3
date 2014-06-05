@@ -39,7 +39,7 @@
  */
 class TYRectangularMaillage: public TYMaillage
 {
-    OPROTOSUPERDECL(TYRectangularMaillage, TYMaillage)
+    OPROTODECL(TYRectangularMaillage)
     TY_EXT_GRAPHIC_DECL_ONLY(TYRectangularMaillage)
     TY_EXTENSION_DECL_ONLY(TYRectangularMaillage)
 

@@ -32,7 +32,7 @@
  */
 class TYRouteDeblai: public TYRoute, public TYContrainte
 {
-    OPROTOSUPERDECL(TYRouteDeblai, TYRoute)
+    OPROTODECL(TYRouteDeblai)
     TY_EXTENSION_DECL_ONLY(TYRouteDeblai)
 //    TY_EXT_GRAPHIC_DECL_ONLY(TYRoute)
 

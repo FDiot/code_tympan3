@@ -50,7 +50,7 @@ class OSegment3D;
  */
 class TYSourcePonctuelle: public TYSource, public TYColorInterface
 {
-    OPROTOSUPERDECL(TYSourcePonctuelle, TYSource)
+    OPROTODECL(TYSourcePonctuelle)
     TY_EXTENSION_DECL_ONLY(TYSourcePonctuelle)
     TY_EXT_GRAPHIC_DECL_ONLY(TYSourcePonctuelle)
 

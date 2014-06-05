@@ -75,15 +75,6 @@ bool OPrototype::isA(const char* className) const
     return (!strcmp(className, this->getClassName()));
 }
 
-/*static*/ bool OPrototype::isTypeOf(const char* className)
-{
-    if (!strcmp(className, "OPrototype"))
-    {
-        return true;
-    }
-    return false;
-}
-
 /*static*/ OPrototype* OPrototype::safeDownCast(OPrototype* pObject)
 {
     return (OPrototype*) pObject;

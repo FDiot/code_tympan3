@@ -52,26 +52,6 @@
         return nullptr;\
     } \
 
-/**
- * Macro pour la declaration des methodes a surcharger
- * de la classe OPrototype, et pour la registration du type
- * 'classname' dans la Prototype Factory.
- * Cette version permet d'utiliser la methode inherits().
- * Cette macro doit etre appelee dans la declaration de la
- * nouvelle classe derivee (.h).
- */
-#define OPROTOSUPERDECL(classname, superclassname) \
-    OPROTODECL(classname) \
-    typedef superclassname Superclass; \
-    public: \
-    virtual const char* getSuperClassName() const { return #superclassname; } \
-    static bool isTypeOf(const char* className) { \
-        if (!strcmp(className, #classname)) { \
-            return true; \
-        } \
-        return superclassname::isTypeOf(className); \
-    } \
-//
 /////////////////////////////////////////////////////////////
 
 namespace tympan
@@ -150,16 +130,6 @@ static const int PROTOTYPE_MAX_NB = 256;
  *    virtual char* getClassName() { return #classname; }
  * </pre>
  *
- * La macro OPROTOSUPERDECL est une extension de OPROTODECL.
- *
- * <pre>
- *
- * #define  OPROTOSUPERDECL(classname, superclassname) \
- *  OPROTODECL(classname) \
- *  public: \
- *      virtual const char* getSuperClassName() const { return #superclassname; }
- *
- * </pre>
  *
  * La declaration d'une nouvelle classe s'en trouve alors simplifiee.
  * L'exemple precedent devient donc :
@@ -255,14 +225,6 @@ public:
     virtual const char* getClassName() const { return "OPrototype"; }
 
     /**
-     * Retourne le type de la classe surchargee sous la forme d'une
-     * chaine de caractere.
-     *
-     * @return Le nom de la classe surchargee.
-     */
-    virtual const char* getSuperClassName() const { return 0; }
-
-    /**
      * Compare le type de cet objet avec un nom de classe donne.
      *
      * @param   className Le nom de la classe a comparer.
@@ -271,17 +233,6 @@ public:
      *          classe specifiee, si non <code>false</code>.
      */
     bool isA(const char* className) const;
-
-    /**
-     * Compare le type de cet classe (et celui de ses classes derivees) avec
-     * un nom de classe donne.
-     *
-     * @param   className Le nom de la classe a comparer.
-     *
-     * @return  Retourne <code>true</code> si cette classe est du type de la
-     *          classe specifiee, si non <code>false</code>.
-     */
-    static bool isTypeOf(const char* className);
 
     /**
      * Effectue un cast sur l'objet passe si cela est possible, sinon

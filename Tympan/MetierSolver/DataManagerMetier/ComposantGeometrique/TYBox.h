@@ -32,7 +32,7 @@ class OSegment3D;
  */
 class TYBox: public TYElement, public TYColorInterface
 {
-    OPROTOSUPERDECL(TYBox, TYElement)
+    OPROTODECL(TYBox)
     TY_EXTENSION_DECL_ONLY(TYBox)
 
     // Methodes

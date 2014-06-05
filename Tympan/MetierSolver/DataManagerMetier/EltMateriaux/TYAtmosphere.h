@@ -37,7 +37,7 @@
  */
 class TYAtmosphere: public TYElement
 {
-    OPROTOSUPERDECL(TYAtmosphere, TYElement)
+    OPROTODECL(TYAtmosphere)
     TY_EXTENSION_DECL_ONLY(TYAtmosphere)
 
     // Methodes

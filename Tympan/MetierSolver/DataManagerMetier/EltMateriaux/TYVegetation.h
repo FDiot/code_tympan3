@@ -30,7 +30,7 @@
  */
 class TYVegetation: public TYElement
 {
-    OPROTOSUPERDECL(TYVegetation, TYElement)
+    OPROTODECL(TYVegetation)
     TY_EXTENSION_DECL_ONLY(TYVegetation)
 
     // Methodes

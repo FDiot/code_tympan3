@@ -30,7 +30,7 @@
  */
 class TYUserSourcePonctuelle: public TYSourcePonctuelle
 {
-    OPROTOSUPERDECL(TYUserSourcePonctuelle, TYSourcePonctuelle)
+    OPROTODECL(TYUserSourcePonctuelle)
     TY_EXTENSION_DECL_ONLY(TYUserSourcePonctuelle)
 
     // Methodes

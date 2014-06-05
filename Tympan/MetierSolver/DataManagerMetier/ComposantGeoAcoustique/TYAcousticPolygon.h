@@ -31,7 +31,7 @@
  */
 class TYAcousticPolygon: public TYAcousticSurface
 {
-    OPROTOSUPERDECL(TYAcousticPolygon, TYAcousticSurface)
+    OPROTODECL(TYAcousticPolygon)
     TY_EXTENSION_DECL_ONLY(TYAcousticPolygon)
     TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticPolygon)
 

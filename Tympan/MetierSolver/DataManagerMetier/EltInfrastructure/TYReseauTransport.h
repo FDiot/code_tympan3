@@ -31,7 +31,7 @@
  */
 class TYReseauTransport: public TYAcousticLine
 {
-    OPROTOSUPERDECL(TYReseauTransport, TYAcousticLine)
+    OPROTODECL(TYReseauTransport)
     TY_EXTENSION_DECL_ONLY(TYReseauTransport)
     TY_EXT_GRAPHIC_DECL_ONLY(TYReseauTransport)
 

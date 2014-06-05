@@ -35,7 +35,7 @@ typedef std::map<int, LPTYSpectre> TYMapRegimeSpectre;
  */
 class TYSource: public TYElement
 {
-    OPROTOSUPERDECL(TYSource, TYElement)
+    OPROTODECL(TYSource)
     TY_EXTENSION_DECL_ONLY(TYSource)
 
     // Methodes

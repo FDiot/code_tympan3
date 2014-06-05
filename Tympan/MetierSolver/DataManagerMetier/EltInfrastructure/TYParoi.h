@@ -32,7 +32,7 @@
  */
 class TYParoi: public TYElement
 {
-    OPROTOSUPERDECL(TYParoi, TYElement)
+    OPROTODECL(TYParoi)
     TY_EXTENSION_DECL_ONLY(TYParoi)
 
     // Methodes

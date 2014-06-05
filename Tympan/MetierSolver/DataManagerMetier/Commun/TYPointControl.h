@@ -39,7 +39,7 @@
  */
 class TYPointControl: public TYPointCalcul, public TYColorInterface
 {
-    OPROTOSUPERDECL(TYPointControl, TYPointCalcul)
+    OPROTODECL(TYPointControl)
     TY_EXTENSION_DECL_ONLY(TYPointControl)
     TY_EXT_GRAPHIC_DECL_ONLY(TYPointControl)
 

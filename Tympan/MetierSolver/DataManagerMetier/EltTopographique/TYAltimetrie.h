@@ -42,7 +42,7 @@ namespace tympan
  */
 class TYAltimetrie: public TYElement
 {
-    OPROTOSUPERDECL(TYAltimetrie, TYElement)
+    OPROTODECL(TYAltimetrie)
     TY_EXTENSION_DECL_ONLY(TYAltimetrie)
     TY_EXT_GRAPHIC_DECL_ONLY(TYAltimetrie)
 

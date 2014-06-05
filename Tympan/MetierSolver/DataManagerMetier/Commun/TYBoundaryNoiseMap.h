@@ -39,7 +39,7 @@
  */
 class TYBoundaryNoiseMap: public TYMaillage
 {
-    OPROTOSUPERDECL(TYBoundaryNoiseMap, TYMaillage)
+    OPROTODECL(TYBoundaryNoiseMap)
     TY_EXT_GRAPHIC_DECL_ONLY(TYBoundaryNoiseMap)
     TY_EXTENSION_DECL_ONLY(TYBoundaryNoiseMap)
 

@@ -38,7 +38,7 @@ class OSegment3D;
  */
 class TYAcousticSemiCircle: public TYAcousticSurface
 {
-    OPROTOSUPERDECL(TYAcousticSemiCircle, TYAcousticSurface)
+    OPROTODECL(TYAcousticSemiCircle)
     TY_EXTENSION_DECL_ONLY(TYAcousticSemiCircle)
     TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticSemiCircle)
 

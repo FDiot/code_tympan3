@@ -36,7 +36,7 @@
 
 class TYRegime : public TYElement
 {
-    OPROTOSUPERDECL(TYRegime, TYElement)
+    OPROTODECL(TYRegime)
     TY_EXTENSION_DECL_ONLY(TYRegime)
 
     // Methodes

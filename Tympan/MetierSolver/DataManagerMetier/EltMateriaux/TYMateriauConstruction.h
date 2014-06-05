@@ -28,7 +28,7 @@
 
 class TYMateriauConstruction: public TYElement
 {
-    OPROTOSUPERDECL(TYMateriauConstruction, TYElement)
+    OPROTODECL(TYMateriauConstruction)
     TY_EXTENSION_DECL_ONLY(TYMateriauConstruction)
 
     // Methodes

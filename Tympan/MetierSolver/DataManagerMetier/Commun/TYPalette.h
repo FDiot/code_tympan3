@@ -40,7 +40,7 @@
  */
 class TYPalette : public TYElement
 {
-    OPROTOSUPERDECL(TYPalette, TYElement)
+    OPROTODECL(TYPalette)
     TY_EXTENSION_DECL_ONLY(TYPalette)
     TY_EXT_GRAPHIC_DECL_ONLY(TYPalette)
 

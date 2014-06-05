@@ -32,7 +32,7 @@ class OPoint3D;
  */
 class TYAcousticCircle: public TYAcousticSurface
 {
-    OPROTOSUPERDECL(TYAcousticCircle, TYAcousticSurface)
+    OPROTODECL(TYAcousticCircle)
     TY_EXTENSION_DECL_ONLY(TYAcousticCircle)
     TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticCircle)
 

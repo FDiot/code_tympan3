@@ -37,7 +37,7 @@ class OSegment3D;
  */
 class TYEtage: public TYAcousticVolume
 {
-    OPROTOSUPERDECL(TYEtage, TYAcousticVolume)
+    OPROTODECL(TYEtage)
     TY_EXTENSION_DECL_ONLY(TYEtage)
     TY_EXT_GRAPHIC_DECL_ONLY(TYEtage)
 

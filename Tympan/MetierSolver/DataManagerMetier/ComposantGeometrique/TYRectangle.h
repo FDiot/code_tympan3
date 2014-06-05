@@ -31,7 +31,7 @@
  */
 class TYRectangle: public TYElement, public TYSurfaceInterface
 {
-    OPROTOSUPERDECL(TYRectangle, TYElement)
+    OPROTODECL(TYRectangle)
     TY_EXTENSION_DECL_ONLY(TYRectangle)
     TY_EXT_GRAPHIC_DECL_ONLY(TYRectangle)
 

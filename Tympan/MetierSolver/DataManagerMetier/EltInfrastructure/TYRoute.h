@@ -45,7 +45,7 @@ class TYRoute: public TYAcousticLine
 
     FRIEND_TEST(TestRoads, xml_roundtrip);
 
-    OPROTOSUPERDECL(TYRoute, TYAcousticLine)
+    OPROTODECL(TYRoute)
     TY_EXTENSION_DECL_ONLY(TYRoute)
     TY_EXT_GRAPHIC_DECL_ONLY(TYRoute)
 

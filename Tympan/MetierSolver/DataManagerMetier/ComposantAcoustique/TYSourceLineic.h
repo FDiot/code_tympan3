@@ -30,7 +30,7 @@
 
 class TYSourceLineic: public TYSource
 {
-    OPROTOSUPERDECL(TYSourceLineic, TYSource)
+    OPROTODECL(TYSourceLineic)
     TY_EXTENSION_DECL_ONLY(TYSourceLineic)
     TY_EXT_GRAPHIC_DECL_ONLY(TYSourceLineic)
 

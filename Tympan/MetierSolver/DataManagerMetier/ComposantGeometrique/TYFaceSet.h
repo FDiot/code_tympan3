@@ -28,7 +28,7 @@
  */
 class TYFaceSet: public TYElement, public TYVolumeInterface
 {
-    OPROTOSUPERDECL(TYFaceSet, TYElement)
+    OPROTODECL(TYFaceSet)
     TY_EXTENSION_DECL_ONLY(TYFaceSet)
     TY_EXT_GRAPHIC_DECL_ONLY(TYFaceSet)
 

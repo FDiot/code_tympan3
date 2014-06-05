@@ -29,7 +29,7 @@
  */
 class TYAcousticBox: public TYAcousticVolume
 {
-    OPROTOSUPERDECL(TYAcousticBox, TYAcousticVolume)
+    OPROTODECL(TYAcousticBox)
     TY_EXTENSION_DECL_ONLY(TYAcousticBox)
     TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticBox)
 
