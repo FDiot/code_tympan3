@@ -75,11 +75,6 @@ bool OPrototype::isA(const char* className) const
     return (!strcmp(className, this->getClassName()));
 }
 
-bool OPrototype::inherits(const char* className) const
-{
-    return OPrototype::isTypeOf(className);
-}
-
 /*static*/ bool OPrototype::isTypeOf(const char* className)
 {
     if (!strcmp(className, "OPrototype"))

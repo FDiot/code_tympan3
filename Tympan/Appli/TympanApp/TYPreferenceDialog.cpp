@@ -1980,9 +1980,9 @@ void TYPreferenceDialog::savePreferences()
 #else
         QWidget* internal_window = windows.at(i);
 #endif
-        if (internal_window->inherits("TYModelerFrame"))
+        TYModelerFrame* pM = dynamic_cast<TYModelerFrame*>(internal_window);
+        if (pM != nullptr)
         {
-            TYModelerFrame* pM = (TYModelerFrame*) internal_window;
             pM->getActionManager()->setHistorySize(((GeneralTab*)tabWidget->widget(4))->_pHistoSizeEdit->text().toInt());
             pM->updatePreferences();
             pM->getView()->getRenderer()->updateDisplayList();

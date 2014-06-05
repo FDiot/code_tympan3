@@ -1305,27 +1305,31 @@ bool TYSiteNode::update(TYElement* pElem)
 {
     bool ret = false;
 
-    if (pElem->inherits("TYSourcePonctuelle"))
+    TYSourcePonctuelle* pSource = dynamic_cast<TYSourcePonctuelle*>(pElem);
+    if (pSource != nullptr)
     {
         return true; // Pas de mise à jour nécessaire
     }
-    else if (pElem->inherits("TYAcousticLine")) // Cas 1 : un objet de type source linéique
+    TYAcousticLine* pLine = dynamic_cast<TYAcousticLine*>(pElem);
+    if (pLine != nullptr) // Cas 1 : un objet de type source linéique
     {
-        TYAcousticLine::safeDownCast(pElem)->updateAcoustic(true);
+        pLine->updateAcoustic(true);
     }
     else // Autres cas, recherche de parent et traitement approprié
     {
         TYElement* pParent = pElem; // On commencera par tester l'objet lui-meme
         do
         {
-            if (pParent->inherits("TYAcousticVolumeNode"))
+            TYAcousticVolumeNode* pVolNode = dynamic_cast<TYAcousticVolumeNode*>(pParent);
+            if (pVolNode != nullptr)
             {
-                ret = TYAcousticVolumeNode::safeDownCast(pParent)->updateAcoustic(true);
+                ret = pVolNode->updateAcoustic(true);
                 break; // On a trouvé, on peut sortir
             }
-            else if (pParent->inherits("TYSiteNode"))
+            TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pParent);
+            if (pSite != nullptr)
             {
-                TYSiteNode::safeDownCast(pParent)->update();
+                pSite->update();
                 ret = true;
                 break; // On a trouvé, on peut sortir
             }
@@ -1624,34 +1628,29 @@ void TYSiteNode::exportCSV(std::ofstream& ofs)
     for (int i = 0; i < childs.size() ; i++)
     {
         TYElement* pElement = childs[i];
-        if (pElement->inherits("TYSiteNode"))
+        TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pElement);
+        if (pSite != nullptr)
         {
             // Export du nom de l'objet
             ofs << pElement->getName().toAscii().data() << '\n';
+            continue;
         }
-        else if (pElement->inherits("TYAcousticVolumeNode"))
+        LPTYAcousticVolumeNode pVolNode = dynamic_cast<TYAcousticVolumeNode*>(pElement);
+        if (pVolNode != nullptr)
         {
-            LPTYAcousticVolumeNode pVolNode = TYAcousticVolumeNode::safeDownCast(pElement);
-            if (pVolNode)
-            {
-                pVolNode->exportCSV(ofs);
-            }
+            pVolNode->exportCSV(ofs);
+            continue;
         }
-        else if (pElement->inherits("TYAcousticLine"))
+        LPTYAcousticLine pAcLine = dynamic_cast<TYAcousticLine*>(pElement);
+        if (pAcLine != nullptr)
         {
-            LPTYAcousticLine pAcLine = TYAcousticLine::safeDownCast(pElement);
-            if (pAcLine)
-            {
-                pAcLine->exportCSV(ofs);
-            }
+            pAcLine->exportCSV(ofs);
+            continue;
         }
-        else if (pElement->inherits("TYUserSourcePonctuelle"))
+        LPTYUserSourcePonctuelle pSource = dynamic_cast<TYUserSourcePonctuelle*>(pElement);
+        if (pSource != nullptr)
         {
-            LPTYUserSourcePonctuelle pSource = TYUserSourcePonctuelle::safeDownCast(pElement);
-            if (pSource)
-            {
-                pSource->exportCSV(ofs);
-            }
+            pSource->exportCSV(ofs);
         }
     }
 

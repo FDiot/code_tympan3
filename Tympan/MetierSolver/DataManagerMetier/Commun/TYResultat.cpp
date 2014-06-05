@@ -922,17 +922,23 @@ void TYResultat::saveValue(const std::string& filename, const int& affichage, do
         {
             LPTYSpectre puissance = 0;
             LPTYElement pElement = getSource(row);
-            if (pElement->inherits("TYSourcePonctuelle"))
+            TYUserSourcePonctuelle* pSource = dynamic_cast<TYUserSourcePonctuelle*>(pElement._pObj);
+            if (pSource != nullptr)
             {
-                puissance = TYUserSourcePonctuelle::safeDownCast(pElement)->getRealPowerSpectrum();
-            }
-            else if (pElement->inherits("TYAcousticVolumeNode"))
-            {
-                puissance = TYAcousticVolumeNode::safeDownCast(pElement)->getRealPowerSpectrum();
+                puissance = pSource->getRealPowerSpectrum();
             }
             else
             {
-                puissance = TYAcousticLine::safeDownCast(pElement)->getRealPowerSpectrum();
+                TYAcousticVolumeNode* pVolNode =
+                    dynamic_cast<TYAcousticVolumeNode*>(pElement._pObj);
+                if (pVolNode != nullptr)
+                {
+                    puissance = pVolNode->getRealPowerSpectrum();
+                }
+                else
+                {
+                    puissance = TYAcousticLine::safeDownCast(pElement)->getRealPowerSpectrum();
+                }
             }
 
             // Spectre de puissance
@@ -1008,20 +1014,20 @@ void TYResultat::buildMapSourceSpectre()
     for (it = _mapEmetteurSources.begin(); it != _mapEmetteurSources.end(); it++)
     {
         TYElement* pElement = (*it).first;
-        if (pElement->inherits("TYSourcePonctuelle"))
+        TYUserSourcePonctuelle* pSource = dynamic_cast<TYUserSourcePonctuelle*>(pElement);
+        if (pSource != nullptr)
         {
-            TYUserSourcePonctuelle* pSource = TYUserSourcePonctuelle::safeDownCast(pElement);
-            if (pSource) { puissance = pSource->getRealPowerSpectrum(); }
+            puissance = pSource->getRealPowerSpectrum();
         }
-        else if (pElement->inherits("TYAcousticVolumeNode"))
+        else
         {
-            TYAcousticVolumeNode* pVolNode = TYAcousticVolumeNode::safeDownCast(pElement);
-            if (pVolNode) { puissance = pVolNode->getRealPowerSpectrum(); }
-        }
-        else // Source lineique
-        {
-            TYAcousticLine* pLine = TYAcousticLine::safeDownCast(pElement);
-            if (pLine) { puissance = pLine->getRealPowerSpectrum(); }
+            TYAcousticVolumeNode* pVolNode = dynamic_cast<TYAcousticVolumeNode*>(pElement);
+            if (pVolNode != nullptr) { puissance = pVolNode->getRealPowerSpectrum(); }
+            else // Source lineique
+            {
+                TYAcousticLine* pLine = TYAcousticLine::safeDownCast(pElement);
+                if (pLine) { puissance = pLine->getRealPowerSpectrum(); }
+            }
         }
 
         puissance->setType(SPECTRE_TYPE_LW);

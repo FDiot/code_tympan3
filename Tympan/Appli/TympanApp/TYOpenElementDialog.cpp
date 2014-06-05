@@ -307,49 +307,45 @@ void TYOpenElementDialog::openElement(LPTYElement pElt)
     {
         writeDebugMsg(QString("Ouverture d'un element de type : %1").arg(pElt->getClassName()));
 
+        LPTYProjet pProjet = dynamic_cast<TYProjet*>(pElt._pObj);
         // L'element est un Projet
-        if (pElt->inherits("TYProjet"))
+        if (pProjet._pObj != nullptr)
         {
             // Mise a jour des elements du projet
-            LPTYProjet pProjet = TYProjet::safeDownCast(pElt);
-            if (pProjet)
-            {
-                // Directement projet courant, la "place" etant libre
-                getTYApp()->setCurProjet(pProjet);
+            // Directement projet courant, la "place" etant libre
+            getTYApp()->setCurProjet(pProjet);
 
-                //// Mise a jour des elements du projet
-                //TYSiteNode* pSite = pProjet->getSite();
-                //TYCalcul* pCalcul = pProjet->getCurrentCalcul();
-                //if (pSite && pCalcul) pSite->update();
-            }
+            //// Mise a jour des elements du projet
+            //TYSiteNode* pSite = pProjet->getSite();
+            //TYCalcul* pCalcul = pProjet->getCurrentCalcul();
+            //if (pSite && pCalcul) pSite->update();
         }
         // L'element est un SiteNode
-        else if (pElt->inherits("TYSiteNode"))
+        else
         {
             // Directement site courant, la "place" etant libre
-            LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElt);
-            if (pSite)
+            LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pElt._pObj);
+            if (pSite._pObj != nullptr)
             {
                 // XXX See ticket https://extranet.logilab.fr/ticket/1484188
                 getTYApp()->setCurSiteNode(pSite);
                 pSite->updateAltimetrie();
             }
+            else if (dynamic_cast<TYBatiment*>(pElt._pObj) != nullptr)
+            {
+                // Modeler directement
+            }
+            else if (dynamic_cast<TYMachine*>(pElt._pObj) != nullptr)
+            {
+                // Modeler directement
+            }
+            // Dans tous les autres cas on edite l'element cree
+            else if (pElt->edit(this) == Accepted)
+            {
+                // Si les modifications sont acceptes on demande ce qu'on fait de l'element
+                save(pElt);
+            }
         }
-        else if (pElt->inherits("TYBatiment"))
-        {
-            // Modeler directement
-        }
-        else if (pElt->inherits("TYMachine"))
-        {
-            // Modeler directement
-        }
-        // Dans tous les autres cas on edite l'element cree
-        else if (pElt->edit(this) == Accepted)
-        {
-            // Si les modifications sont acceptes on demande ce qu'on fait de l'element
-            save(pElt);
-        }
-
         // Si c'est un element modifiable graphiquement, on ouvre un modeleur
         getTYMainWnd()->makeModeler(pElt);
     }

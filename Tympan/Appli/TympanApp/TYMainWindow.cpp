@@ -536,7 +536,7 @@ bool TYMainWindow::loadSettings(const QString& fileName)
             || (pObject->objectName() == "SiteDockWnd")
             || (pObject->objectName() == "OutputDockWnd")
             || (pObject->metaObject()->className() == "QToolBar")
-            || (pObject->inherits("QToolBar")))
+            || (dynamic_cast<QToolBar*>(pObject) != nullptr))
         {
             pDockWnd = (QWidget*)pObject;
             QString key = pDockWnd->objectName();
@@ -605,9 +605,10 @@ void TYMainWindow::makeModeler(TYElement* pElt)
 {
     if (!pElt) { return; }
 
-    if (pElt->inherits("TYProjet"))
+    TYProjet* pProj = dynamic_cast<TYProjet*>(pElt);
+    if (pProj != nullptr)
     {
-        makeProjetModeler(static_cast<TYProjet*>(pElt));
+        makeProjetModeler(pProj);
     }
     else if (pElt->isA("TYSiteNode"))
     {
@@ -742,9 +743,10 @@ void TYMainWindow::updateModelers(bool clipping /*=true*/, bool axesAndGrid /*=t
 #else
         QWidget* internal_window = windows.at(i);
 #endif
-        if (internal_window->inherits("TYModelerFrame"))
+        TYModelerFrame* pInW = dynamic_cast<TYModelerFrame*>(internal_window);
+        if (pInW != nullptr)
         {
-            ((TYModelerFrame*) internal_window)->updateView(clipping, axesAndGrid); //az--
+            pInW->updateView(clipping, axesAndGrid); //az--
             if (displayList)
             {
                 TYRenderWindowInteractor* pView = ((TYModelerFrame*) internal_window)->getView();
@@ -774,9 +776,10 @@ void TYMainWindow::updateModelersElementGraphic(bool force /* = false */)
 #else
         QWidget* internal_window = windows.at(i);
 #endif
-        if (internal_window->inherits("TYModelerFrame"))
+        TYModelerFrame* pInW = dynamic_cast<TYModelerFrame*>(internal_window);
+        if (pInW != nullptr)
         {
-            ((TYModelerFrame*) internal_window)->updateElementGraphic(force);
+            pInW->updateElementGraphic(force);
         }
     }
 }
@@ -800,7 +803,7 @@ void TYMainWindow::closeModeler(const TYElement* pElement)
 #endif
         QWidget* container_window = windows.at(i);
 
-        if (internal_window->inherits("TYModelerFrame"))
+        if (dynamic_cast<TYModelerFrame*>(internal_window) != nullptr)
         {
             if (static_cast<TYModelerFrame*>(internal_window)->getElement() == pElement)
             {
@@ -970,7 +973,7 @@ void TYMainWindow::subWindowActivated()
         return;
     }
 
-    if (pW->inherits("TYModelerFrame"))
+    if (dynamic_cast<TYModelerFrame*>(pW) != nullptr)
     {
         TYModelerFrame* pModeler = (TYModelerFrame*) pW;
 
@@ -1435,20 +1438,22 @@ TYElement* TYMainWindow::elementToSave()
     else // Sinon  on sauve ce qu'on peut, l'element actif
     {
         QWidget* pW = this->focusWidget();
-        if (pW && pW->inherits("TYModelerFrame"))
+        if (pW && (dynamic_cast<TYModelerFrame*>(pW) != nullptr))
         {
             pElement = ((TYModelerFrame*) pW)->getElement();
 
-            if (pElement && pElement->inherits("TYAcousticVolume")) { return pElement; }
+            if (pElement && (dynamic_cast<TYAcousticVolume*>(pElement) != nullptr))
+                        { return pElement; }
 
             // Recherche d'un parent de type "acousticVolume"
             TYElement* pParent = pElement->getParent();
-            while (pParent && !(pParent->inherits("TYAcousticVolumeNode")))
+            while (pParent && (dynamic_cast<TYAcousticVolumeNode*>(pParent) == nullptr))
             {
                 pParent = pParent->getParent();
             };
 
-            if (pParent && pParent->inherits("TYAcousticVolumeNode")) { return pParent; }
+            if (pParent && (dynamic_cast<TYAcousticVolumeNode*>(pParent) != nullptr))
+                    { return pParent; }
         }
     }
 
@@ -1767,7 +1772,7 @@ void TYMainWindow::print()
 {
     QWidget* pW = this->focusWidget();
 
-    if (pW && pW->inherits("TYModelerFrame"))
+    if (pW && (dynamic_cast<TYModelerFrame*>(pW) != nullptr))
     {
         ((TYModelerFrame*) pW)->print();
     }
@@ -1878,7 +1883,7 @@ void TYMainWindow::closeEvent(QCloseEvent* pEvent)
             || (pObject->objectName() == "SiteDockWnd")
             || (pObject->objectName() == "OutputDockWnd")
             || (pObject->metaObject()->className() == "QToolBar")
-            || (pObject->inherits("QToolBar")))
+            || (dynamic_cast<QToolBar*>(pObject) != nullptr))
         {
 
             pDockWnd = (QWidget*)pObject;

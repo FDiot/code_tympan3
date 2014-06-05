@@ -339,10 +339,9 @@ TYElementListItem* TYSiteFrame::addToList(LPTYBatiment pElement, TYElementListIt
     for (i = 0; i < pElement->getTabAcousticVol().size(); i++)
     {
         // Etage
-        if (pElement->getAcousticVol(i)->inherits("TYEtage"))
+        LPTYEtage pEtage = dynamic_cast<TYEtage*>(pElement->getAcousticVol(i)._pObj);
+        if (pEtage != nullptr)
         {
-            LPTYEtage pEtage = (TYEtage*) pElement->getAcousticVol(i).getRealPointer();
-
             if (pEtage->getClosed())
             {
                 // Ferme = etage
@@ -449,11 +448,11 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
             prop = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_editeelt"))), TR("id_contextmenu_properties"));
             pMenu->addSeparator();
 
-            if (pElement->inherits("TYSiteNode"))
+            TYSiteNode* pSiteNode = dynamic_cast<TYSiteNode*>(pElement);
+            if (pSiteNode != nullptr)
             {
                 showModeler = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_modeler"))), TR("id_contextmenu_modeler"));
 
-                TYSiteNode* pSiteNode = TYSiteNode::safeDownCast(pElement);
                 bool bNotSiteRoot = (pSiteNode && !pSiteNode->getRoot());
 
                 if (bNotSiteRoot) // Actions possibles si ce n'est pas le site racine
@@ -499,7 +498,7 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
                     del = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_contextmenu_delete"));
                 }
             }
-            else if (pElement->inherits("TYInfrastructure"))
+            else if (dynamic_cast<TYInfrastructure*>(pElement) != nullptr)
             {
                 // Definition du sous menu d'ajout d'elements
                 addBatimentXML = pSubMenuAdd->addAction(TR("id_contextmenu_addbatiment_xml"));
@@ -517,7 +516,7 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
 
                 pMenu->addMenu(pSubMenuAdd);
             }
-            else if (pElement->inherits("TYAcousticVolumeNode"))
+            else if (dynamic_cast<TYAcousticVolumeNode*>(pElement) != nullptr)
             {
                 showModeler = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_modeler"))), TR("id_contextmenu_modeler"));
                 pMenu->addSeparator();
@@ -537,7 +536,8 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
                 pMenu->addSeparator();
                 del = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_contextmenu_delete"));
             }
-            else if (pElement->inherits("TYAcousticVolume")) // Cas de l'etage
+            else if (dynamic_cast<TYAcousticVolume*>(pElement) != nullptr)
+               // Cas de l'etage
             {
                 // Definition du sous menu d'ajout d'elements
                 addMachineXML = pSubMenuAdd->addAction(TR("id_contextmenu_addmachine_xml"));
@@ -551,7 +551,7 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
 
                 pMenu->addMenu(pSubMenuAdd);
             }
-            else if (pElement->inherits("AcousticLine"))
+            else if (dynamic_cast<TYAcousticLine*>(pElement) != nullptr)
             {
                 if (pGraphicObject)
                 {
@@ -561,7 +561,7 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
                     pMenu->addSeparator();
                 }
             }
-            else if (pElement->inherits("TYSourcePonctuelle"))
+            else if (dynamic_cast<TYSourcePonctuelle*>(pElement) != nullptr)
             {
                 if (pGraphicObject)
                 {
@@ -576,7 +576,8 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
                 pMenu->addSeparator();
                 del = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_contextmenu_delete"));
             }
-            else if (pElement->getParent()->inherits("TYTopographie")) // Pour les objets de topo en general
+            else if (dynamic_cast<TYTopographie*>(pElement->getParent()) != nullptr)
+                // Pour les objets de topo en general
             {
                 del = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_contextmenu_delete"));
             }
@@ -686,15 +687,15 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
             }
             else if (pElement && ret == showModeler)
             {
-                if (pElement->inherits("TYSiteNode"))
+                if (dynamic_cast<TYSiteNode*>(pElement) != nullptr)
                 {
                     getTYMainWnd()->makeSiteModeler((TYSiteNode*) pElement);
                 }
-                else if (eltItem->getElement()->inherits("TYBatiment"))
+                else if (dynamic_cast<TYBatiment*>(eltItem->getElement()._pObj) != nullptr)
                 {
                     getTYMainWnd()->makeBatimentModeler((TYBatiment*) pElement);
                 }
-                else if (eltItem->getElement()->inherits("TYMachine"))
+                else if (dynamic_cast<TYMachine*>(eltItem->getElement()._pObj) != nullptr)
                 {
                     getTYMainWnd()->makeMachineModeler((TYMachine*) pElement);
                 }
@@ -732,27 +733,27 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
             else if (ret == importLib)
             {
                 unsigned int filter = 0;
-                if (pElement->inherits("TYSiteNode"))
+                if (dynamic_cast<TYSiteNode*>(pElement) != nullptr)
                 {
                     filter = eSiteFilter;
                 }
-                else if (pElement->inherits("TYInfrastructure"))
+                else if (dynamic_cast<TYInfrastructure*>(pElement) != nullptr)
                 {
                     filter = eInfraFilter;
                 }
-                else if (pElement->inherits("TYBatiment"))
+                else if (dynamic_cast<TYBatiment*>(pElement) != nullptr)
                 {
                     filter = eConstructionFilter;
                 }
-                else if (pElement->inherits("TYEtage"))
+                else if (dynamic_cast<TYEtage*>(pElement) != nullptr)
                 {
                     filter = eEtageFilter;
                 }
-                else if (pElement->inherits("TYMachine"))
+                else if (dynamic_cast<TYMachine*>(pElement) != nullptr)
                 {
                     filter = eMachineFilter;
                 }
-                else if (pElement->inherits("TYSource"))
+                else if (dynamic_cast<TYSource*>(pElement) != nullptr)
                 {
                     filter = eSourceFilter;
                 }
@@ -1020,15 +1021,15 @@ bool TYSiteFrame::remFromSite(TYElement* pElement)
         }
         else if (strcmp(pParent->getClassName(), "TYEtage") == 0)
         {
-            TYEtage* pEtage = TYEtage::safeDownCast(pParent);
+            TYEtage* pEtage = dynamic_cast<TYEtage*>(pParent);
 
-            if (pEtage)
+            if (pEtage != nullptr)
             {
-                if (pElement->inherits("TYMachine"))
+                if (dynamic_cast<TYMachine*>(pElement) != nullptr)
                 {
                     res = pEtage->remMachine((LPTYMachine&)pElement);
                 }
-                else if (pElement->inherits("TYSource"))
+                else if (dynamic_cast<TYSource*>(pElement) != nullptr)
                 {
                     res = pEtage->remSource((LPTYUserSourcePonctuelle&) pElement);
                 }
@@ -1057,15 +1058,15 @@ void TYSiteFrame::openModeler(QTreeWidgetItem* item, int column)
     TYElementListItem* eltItem = (TYElementListItem*) item;
     if ((eltItem) && (eltItem->isElementItem()))
     {
-        if (eltItem->getElement()->inherits("TYSiteNode"))
+        if (dynamic_cast<TYSiteNode*>(eltItem->getElement()._pObj) != nullptr)
         {
             getTYMainWnd()->makeSiteModeler((TYSiteNode*) eltItem->getElement().getRealPointer());
         }
-        else if (eltItem->getElement()->inherits("TYBatiment"))
+        else if (dynamic_cast<TYBatiment*>(eltItem->getElement()._pObj) != nullptr)
         {
             getTYMainWnd()->makeBatimentModeler((TYBatiment*) eltItem->getElement().getRealPointer());
         }
-        else if (eltItem->getElement()->inherits("TYMachine"))
+        else if (dynamic_cast<TYMachine*>(eltItem->getElement()._pObj) != nullptr)
         {
             getTYMainWnd()->makeMachineModeler((TYMachine*) eltItem->getElement().getRealPointer());
         }
@@ -1103,36 +1104,33 @@ void TYSiteFrame::exportEXCEL(TYElement* pElement)
 
             // Sauvegarde
             // Adaptation au type
-            if (pElement->inherits("TYAcousticVolumeNode"))
+            LPTYAcousticVolumeNode pVolNode = dynamic_cast<TYAcousticVolumeNode*>(pElement);
+            if (pVolNode != nullptr)
             {
-                LPTYAcousticVolumeNode pVolNode = TYAcousticVolumeNode::safeDownCast(pElement);
-                if (pVolNode)
-                {
-                    pVolNode->exportCSV(ofs);
-                }
+                pVolNode->exportCSV(ofs);
             }
-            else if (pElement->inherits("TYAcousticLine"))
+            else
             {
-                LPTYAcousticLine pAcLine = TYAcousticLine::safeDownCast(pElement);
-                if (pAcLine)
+                TYAcousticLine* pAcLine = dynamic_cast<TYAcousticLine*>(pElement);
+                if (pAcLine != nullptr)
                 {
                     pAcLine->exportCSV(ofs);
                 }
-            }
-            else if (pElement->inherits("TYUserSourcePonctuelle"))
-            {
-                LPTYUserSourcePonctuelle pSource = TYUserSourcePonctuelle::safeDownCast(pElement);
-                if (pSource)
+                else
                 {
-                    pSource->exportCSV(ofs);
-                }
-            }
-            else if (pElement->inherits("TYSiteNode"))
-            {
-                TYSiteNode* pSite = TYSiteNode::safeDownCast(pElement);
-                if (pSite)
-                {
-                    pSite->exportCSV(ofs);
+                    TYUserSourcePonctuelle* pSource = dynamic_cast<TYUserSourcePonctuelle*>(pElement);
+                    if (pSource != nullptr)
+                    {
+                        pSource->exportCSV(ofs);
+                    }
+                    else
+                    {
+                        TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pElement);
+                        if (pSite != nullptr)
+                        {
+                            pSite->exportCSV(ofs);
+                        }
+                    }
                 }
             }
         }
@@ -1320,7 +1318,7 @@ void TYSiteFrame::localise(TYElement* pElement, TYElementGraphic* pGraphicObject
 #else
                     QWidget* internal_window = windows.at(i);
 #endif
-                    if (internal_window->inherits("TYModelerFrame"))
+                    if (dynamic_cast<TYModelerFrame*>(internal_window) != nullptr)
                     {
                         TYRenderWindowInteractor* pView = ((TYModelerFrame*) internal_window)->getView();
                         pView->getRenderer()->getActiveCamera()->setTo(center.get());
@@ -1449,9 +1447,9 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
     TYInfrastructure* pInfra = NULL;
     bool reallyAdd = true;  // Eviter qu'une machine dans un batiment soit connue du calcul (fenetre "etats")
 
-    if (pElt->inherits("TYSiteNode"))
+    TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pElt);
+    if (pSite != nullptr)
     {
-        TYSiteNode* pSite = TYSiteNode::safeDownCast(pElt);
         pSiteNode = TYSiteNode::safeDownCast(pElement);
 
         pSite->setRoot(false); // Le site ajoute n'est pas racine
@@ -1462,11 +1460,11 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
         pSiteNode->updateGraphicTree();
         pSiteNode->setIsGeometryModified(true);
     }
-    else if (pElt->inherits("TYBatiment"))
+    else if (dynamic_cast<TYBatiment*>(pElt) != nullptr)
     {
         TYBatiment* pBatiment = TYBatiment::safeDownCast(pElt);
 
-        if (pElement->inherits("TYSiteNode"))
+        if (dynamic_cast<TYSiteNode*>(pElement) != nullptr)
         {
             pInfra = TYSiteNode::safeDownCast(pElement)->getInfrastructure();
         }
@@ -1480,11 +1478,11 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
             pInfra->addBatiment(pBatiment, TYRepere());
         }
     }
-    else if (pElt->inherits("TYMachine"))
+    else if (dynamic_cast<TYMachine*>(pElt) != nullptr)
     {
         TYMachine* pMachine = TYMachine::safeDownCast(pElt);
 
-        if (pElement->inherits("TYEtage"))
+        if (dynamic_cast<TYEtage*>(pElement) != nullptr)
         {
             TYEtage* pEtage = TYEtage::safeDownCast(pElement);
             if (pEtage)
@@ -1496,7 +1494,7 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
         }
         else
         {
-            if (pElement->inherits("TYSiteNode"))
+            if (dynamic_cast<TYSiteNode*>(pElement) != nullptr)
             {
                 pInfra = TYSiteNode::safeDownCast(pElement)->getInfrastructure();
             }
@@ -1511,11 +1509,11 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
             }
         }
     }
-    else if (pElt->inherits("TYUserSourcePonctuelle"))
+    else if (dynamic_cast<TYUserSourcePonctuelle*>(pElt) != nullptr)
     {
         TYUserSourcePonctuelle* pSource = TYUserSourcePonctuelle::safeDownCast(pElt);
 
-        if (pElement->inherits("TYEtage"))
+        if (dynamic_cast<TYEtage*>(pElement) != nullptr)
         {
             TYEtage* pEtage = TYEtage::safeDownCast(pElement);
             if (pEtage)
@@ -1527,7 +1525,7 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
         }
         else
         {
-            if (pElement->inherits("TYSiteNode"))
+            if (dynamic_cast<TYSiteNode*>(pElement) != nullptr)
             {
                 pInfra = TYSiteNode::safeDownCast(pElement)->getInfrastructure();
             }
@@ -1565,8 +1563,8 @@ void TYSiteFrame::newElt(const char* className, TYElement* pElement)
     assert (pElt);
     if (pElement) { addElt(pElement, pElt); }
 
-    if (pElt->inherits("TYSiteNode") ||
-        pElt->inherits("TYAcousticVolumeNode"))
+    if ((dynamic_cast<TYSiteNode*>(pElt) != nullptr) ||
+        (dynamic_cast<TYAcousticVolumeNode*>(pElt) != nullptr))
     {
         getTYMainWnd()->makeModeler(pElt);
     }
@@ -1575,7 +1573,7 @@ void TYSiteFrame::newElt(const char* className, TYElement* pElement)
         pElt->edit(this);
     }
 
-    if ((pElt->inherits("TYSiteNode")) && _pCurrentCalcul)
+    if ((dynamic_cast<TYSiteNode*>(pElt) != nullptr) && _pCurrentCalcul)
     {
         _pCurrentCalcul->addToSelection(pElt);
         _pSiteNodeRoot->update();

@@ -71,10 +71,6 @@
         } \
         return superclassname::isTypeOf(className); \
     } \
-    virtual bool inherits(const char* className) const { \
-        return classname::isTypeOf(className); \
-    }
-
 //
 /////////////////////////////////////////////////////////////
 
@@ -111,10 +107,7 @@ static const int PROTOTYPE_MAX_NB = 256;
  * Enfin, la methode virtuelle pure 'clone()' permet aux classes derivees de
  * retourner une nouvelle instance du type derive correspondant.
  *
- * De plus, les methodes 'isA()' et 'inherits()' peuvent s'averer
- * tres utiles, la premiere permet de verifier le type d'une instance,
- * tandis que la deuxieme permet de verifier si une instance herite
- * d'un type particulier.
+ * De plus, la methode 'isA()' permet de verifier le type d'une instance.
  *
  * L'exemple suivant presente le squelette a reprendre pour creer
  * des classes derivees de Prototype, c'est-a-dire de nouveaux
@@ -157,8 +150,7 @@ static const int PROTOTYPE_MAX_NB = 256;
  *    virtual char* getClassName() { return #classname; }
  * </pre>
  *
- * La macro OPROTOSUPERDECL est une extension de OPROTODECL, elle permet
- * d'utiliser la methode 'inherits()' grce au nom de la classe heritee :
+ * La macro OPROTOSUPERDECL est une extension de OPROTODECL.
  *
  * <pre>
  *
@@ -279,19 +271,6 @@ public:
      *          classe specifiee, si non <code>false</code>.
      */
     bool isA(const char* className) const;
-
-    /**
-     * Permet de tester si le type de cette instance est derivee
-     * d'un type particulier.
-     * Le type de cette classe est consideree comme un type derive.
-     *
-     * @param   className Le nom de la classe a comparer.
-     *
-     * @return  Retourne <code>true</code> si le type cet objet est
-     *          derivee de la classe specifiee, si non <code>false</code>.
-     */
-    virtual bool inherits(const char* className) const;
-
 
     /**
      * Compare le type de cet classe (et celui de ses classes derivees) avec

@@ -122,10 +122,15 @@ void TYPositionDialog::updateContent()
     _lineEditZ->setEnabled(!_bHauteurEnable);
 
     // Cas particulier d'un siteNode
-    if (_pElement->getElement()->inherits("TYSiteNode")) { _lineEditZ->setEnabled(false); }
+
+    if (dynamic_cast<TYSiteNode*>(_pElement->getElement()) != nullptr)
+    {
+        _lineEditZ->setEnabled(false);
+    }
 
     // Cas particulier d'un maillage
-    if (_pElement->getElement()->inherits("TYMaillage") || _pElement->getElement()->inherits("TYAcousticSurface"))
+    if ((dynamic_cast<TYMaillage*>(_pElement->getElement()) != nullptr)
+        || (dynamic_cast<TYAcousticSurface*>(_pElement->getElement()) != nullptr))
     {
         _bHauteurEnable = false;
         _lineEditZ->setEnabled(false);

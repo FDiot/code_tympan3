@@ -238,10 +238,11 @@ void TYElementPicker::updateParents(TYElement* pElt)
     while (pTmpElt != NULL)
     {
         // Cas particulier du maillage
-        if (pTmpElt->inherits("TYMaillage"))
+        TYMaillage* pMail = dynamic_cast<TYMaillage*>(pTmpElt);
+        if (pMail != nullptr)
         {
             // Recherche du point de calcul clicke
-            TYElement* pPtCalcul = findPointCalculOnMaillage((TYMaillage*) pTmpElt);
+            TYElement* pPtCalcul = findPointCalculOnMaillage(pMail);
 
             // Detecte le type pour emettre le signal
             if (checkType(pPtCalcul))
