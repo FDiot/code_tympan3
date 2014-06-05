@@ -495,7 +495,7 @@ public:
         : base_class("AltimetryBuilder: incomparable polygons"),
             p1(p1_), p2(p2_), intersect(intersect_) {}
 
-        ~CGALNonComparablePolygons() {};
+        ~CGALNonComparablePolygons() BOOST_NOEXCEPT {};
     };
 
     /**

@@ -17,6 +17,7 @@
 #include <boost/exception/all.hpp>
 #include <boost/current_function.hpp>
 #include <boost/throw_exception.hpp>
+#include <boost/config.hpp>
 
 #include "prettyprint.hpp"
 
