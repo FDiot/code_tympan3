@@ -33,7 +33,7 @@
  */
 class TYAcousticFaceSet: public TYAcousticVolume
 {
-    OPROTOSUPERDECL(TYAcousticFaceSet, TYAcousticVolume)
+    OPROTODECL(TYAcousticFaceSet)
     TY_EXTENSION_DECL_ONLY(TYAcousticFaceSet)
 
     // Methodes

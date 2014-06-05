@@ -165,7 +165,7 @@ T *downcast(TYElement * elt)
  */
 class TYElement : public IRefCount, public OPrototype
 {
-    OPROTOSUPERDECL(TYElement, OPrototype)
+    OPROTODECL(TYElement)
 
     // Methodes
 public:

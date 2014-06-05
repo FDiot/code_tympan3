@@ -34,7 +34,7 @@
  */
 class TYDalle: public TYAcousticPolygon
 {
-    OPROTOSUPERDECL(TYDalle, TYAcousticPolygon)
+    OPROTODECL(TYDalle)
     TY_EXTENSION_DECL_ONLY(TYDalle)
     TY_EXT_GRAPHIC_DECL_ONLY(TYDalle)
 

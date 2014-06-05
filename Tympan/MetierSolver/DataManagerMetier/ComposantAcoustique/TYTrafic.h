@@ -32,7 +32,7 @@
  */
 class TYTrafic: public TYElement
 {
-    OPROTOSUPERDECL(TYTrafic, TYElement)
+    OPROTODECL(TYTrafic)
     TY_EXTENSION_DECL_ONLY(TYTrafic)
 
     friend class TYRoute;

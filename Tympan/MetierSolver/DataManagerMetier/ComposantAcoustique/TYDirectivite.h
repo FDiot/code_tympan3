@@ -68,7 +68,7 @@ typedef std::vector<TYDirectiviteAnglesValue> TYDirectiviteAnglesValueTab;
  */
 class TYDirectivite: public TYElement
 {
-    OPROTOSUPERDECL(TYDirectivite, TYElement)
+    OPROTODECL(TYDirectivite)
     TY_EXTENSION_DECL_ONLY(TYDirectivite)
 
     // Methodes

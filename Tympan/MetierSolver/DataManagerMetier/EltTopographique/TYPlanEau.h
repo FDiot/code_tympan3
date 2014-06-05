@@ -33,7 +33,7 @@
  */
 class TYPlanEau: public TYTerrain
 {
-    OPROTOSUPERDECL(TYPlanEau, TYTerrain)
+    OPROTODECL(TYPlanEau)
     TY_EXTENSION_DECL_ONLY(TYPlanEau)
     TY_EXT_GRAPHIC_DECL_ONLY(TYPlanEau)
 

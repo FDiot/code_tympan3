@@ -33,7 +33,7 @@ class TYRectangle;
  */
 class TYSegment: public TYElement, public TYColorInterface
 {
-    OPROTOSUPERDECL(TYSegment, TYElement)
+    OPROTODECL(TYSegment)
     TY_EXTENSION_DECL_ONLY(TYSegment)
     TY_EXT_GRAPHIC_DECL_ONLY(TYSegment)
 

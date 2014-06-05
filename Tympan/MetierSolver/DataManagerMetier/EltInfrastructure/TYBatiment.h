@@ -32,7 +32,7 @@
  */
 class TYBatiment: public TYAcousticVolumeNode
 {
-    OPROTOSUPERDECL(TYBatiment, TYAcousticVolumeNode)
+    OPROTODECL(TYBatiment)
     TY_EXTENSION_DECL_ONLY(TYBatiment)
     TY_EXT_GRAPHIC_DECL_ONLY(TYBatiment)
 

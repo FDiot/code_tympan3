@@ -32,7 +32,7 @@
  */
 class TYPointCalcul: public TYPoint
 {
-    OPROTOSUPERDECL(TYPointCalcul, TYPoint)
+    OPROTODECL(TYPointCalcul)
     TY_EXTENSION_DECL_ONLY(TYPointCalcul)
 
     // Methodes

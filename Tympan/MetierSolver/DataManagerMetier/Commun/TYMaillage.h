@@ -56,7 +56,7 @@ struct MTriangle
  */
 class TYMaillage: public TYElement
 {
-    OPROTOSUPERDECL(TYMaillage, TYElement)
+    OPROTODECL(TYMaillage)
     TY_EXTENSION_DECL_ONLY(TYMaillage)
 
     // Methodes

@@ -32,7 +32,7 @@
  */
 class TYAcousticSemiCylinder: public TYAcousticVolume
 {
-    OPROTOSUPERDECL(TYAcousticSemiCylinder, TYAcousticVolume)
+    OPROTODECL(TYAcousticSemiCylinder)
     TY_EXTENSION_DECL_ONLY(TYAcousticSemiCylinder)
     TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticSemiCylinder)
 

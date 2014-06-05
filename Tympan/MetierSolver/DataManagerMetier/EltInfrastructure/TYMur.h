@@ -36,7 +36,7 @@ class OSegment3D;
  */
 class TYMur: public TYAcousticRectangleNode
 {
-    OPROTOSUPERDECL(TYMur, TYAcousticRectangleNode)
+    OPROTODECL(TYMur)
     TY_EXTENSION_DECL_ONLY(TYMur)
     TY_EXT_GRAPHIC_DECL_ONLY(TYMur)
 

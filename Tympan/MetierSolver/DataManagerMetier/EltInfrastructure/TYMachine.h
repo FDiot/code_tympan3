@@ -32,7 +32,7 @@
  */
 class TYMachine: public TYAcousticVolumeNode
 {
-    OPROTOSUPERDECL(TYMachine, TYAcousticVolumeNode)
+    OPROTODECL(TYMachine)
     TY_EXTENSION_DECL_ONLY(TYMachine)
     TY_EXT_GRAPHIC_DECL_ONLY(TYMachine)
 

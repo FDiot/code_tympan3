@@ -29,7 +29,7 @@
  */
 class TYCourbeNiveau: public TYElement, public TYColorInterface
 {
-    OPROTOSUPERDECL(TYCourbeNiveau, TYElement)
+    OPROTODECL(TYCourbeNiveau)
     TY_EXTENSION_DECL_ONLY(TYCourbeNiveau)
     TY_EXT_GRAPHIC_DECL_ONLY(TYCourbeNiveau)
 

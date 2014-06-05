@@ -31,7 +31,7 @@
  */
 class TYTerrain: public TYElement, public TYColorInterface
 {
-    OPROTOSUPERDECL(TYTerrain, TYElement)
+    OPROTODECL(TYTerrain)
     TY_EXTENSION_DECL_ONLY(TYTerrain)
     TY_EXT_GRAPHIC_DECL_ONLY(TYTerrain)
 

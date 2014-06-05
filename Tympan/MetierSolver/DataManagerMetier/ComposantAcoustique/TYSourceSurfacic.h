@@ -28,7 +28,7 @@
  */
 class TYSourceSurfacic: public TYSource
 {
-    OPROTOSUPERDECL(TYSourceSurfacic, TYElement)
+    OPROTODECL(TYSourceSurfacic)
     TY_EXTENSION_DECL_ONLY(TYSourceSurfacic)
     TY_EXT_GRAPHIC_DECL_ONLY(TYSourceSurfacic)
 

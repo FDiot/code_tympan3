@@ -31,7 +31,7 @@
 */
 class TYAcousticLine: public TYSource, public TYColorInterface
 {
-    OPROTOSUPERDECL(TYAcousticLine, TYSource)
+    OPROTODECL(TYAcousticLine)
     TY_EXTENSION_DECL_ONLY(TYAcousticLine)
     TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticLine)
 

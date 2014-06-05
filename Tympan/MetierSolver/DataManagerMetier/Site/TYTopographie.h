@@ -52,7 +52,7 @@ typedef struct
  */
 class TYTopographie: public TYElement
 {
-    OPROTOSUPERDECL(TYTopographie, TYElement)
+    OPROTODECL(TYTopographie)
     TY_EXTENSION_DECL_ONLY(TYTopographie)
     TY_EXT_GRAPHIC_DECL_ONLY(TYTopographie)
 

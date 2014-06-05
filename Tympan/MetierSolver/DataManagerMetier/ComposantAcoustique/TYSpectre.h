@@ -32,7 +32,7 @@ typedef OTabFreq TYTabFreq;
 class TYSpectre: public TYElement, public OSpectre
 {
 
-    OPROTOSUPERDECL(TYSpectre, TYElement)
+    OPROTODECL(TYSpectre)
     TY_EXTENSION_DECL_ONLY(TYSpectre)
 
 

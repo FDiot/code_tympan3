@@ -47,7 +47,7 @@ typedef std::list<TYGeometryNode*> TYListPtrGeoNode;
 
 class TYGeometryNode: public TYElement
 {
-    OPROTOSUPERDECL(TYGeometryNode, TYElement)
+    OPROTODECL(TYGeometryNode)
 public:
     /**
      * Constructeur par defaut.

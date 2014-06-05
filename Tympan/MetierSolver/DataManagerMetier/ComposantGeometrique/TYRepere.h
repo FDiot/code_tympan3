@@ -29,7 +29,7 @@
  */
 class TYRepere: public TYElement, public ORepere3D
 {
-    OPROTOSUPERDECL(TYRepere, TYElement)
+    OPROTODECL(TYRepere)
     TY_EXTENSION_DECL_ONLY(TYRepere)
 
     // Methodes

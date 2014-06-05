@@ -38,7 +38,7 @@
  */
 class TYLinearMaillage: public TYMaillage
 {
-    OPROTOSUPERDECL(TYLinearMaillage, TYMaillage)
+    OPROTODECL(TYLinearMaillage)
     TY_EXT_GRAPHIC_DECL_ONLY(TYLinearMaillage)
     TY_EXTENSION_DECL_ONLY(TYLinearMaillage)
 

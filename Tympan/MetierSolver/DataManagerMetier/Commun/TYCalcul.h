@@ -56,7 +56,7 @@ namespace tympan {
  */
 class TYCalcul: public TYElement
 {
-    OPROTOSUPERDECL(TYCalcul, TYElement)
+    OPROTODECL(TYCalcul)
     TY_EXTENSION_DECL_ONLY(TYCalcul)
     TY_EXT_GRAPHIC_DECL_ONLY(TYCalcul)
 

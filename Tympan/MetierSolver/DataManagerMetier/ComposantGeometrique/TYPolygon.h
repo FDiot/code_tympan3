@@ -29,7 +29,7 @@
  */
 class TYPolygon: public TYElement, public TYSurfaceInterface
 {
-    OPROTOSUPERDECL(TYPolygon, TYElement)
+    OPROTODECL(TYPolygon)
     TY_EXTENSION_DECL_ONLY(TYPolygon)
     TY_EXT_GRAPHIC_DECL_ONLY(TYPolygon)
 

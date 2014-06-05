@@ -47,7 +47,7 @@ typedef std::map<TYElement*, int> TYMapElementIndex;
 
 class TYResultat: public TYElement
 {
-    OPROTOSUPERDECL(TYResultat, TYElement)
+    OPROTODECL(TYResultat)
     TY_EXTENSION_DECL_ONLY(TYResultat)
     TY_EXT_GRAPHIC_DECL_ONLY(TYResultat)
 

@@ -32,7 +32,7 @@
  */
 class TYPanel : public TYElement
 {
-    OPROTOSUPERDECL(TYPanel, TYElement)
+    OPROTODECL(TYPanel)
     TY_EXT_GRAPHIC_DECL_ONLY(TYPanel)
 
     // Methodes

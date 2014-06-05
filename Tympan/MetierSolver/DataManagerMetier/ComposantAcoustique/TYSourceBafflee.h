@@ -49,7 +49,7 @@ class OSegment3D;
  */
 class TYSourceBafflee: public TYSourcePonctuelle
 {
-    OPROTOSUPERDECL(TYSourceBafflee, TYSourcePonctuelle)
+    OPROTODECL(TYSourceBafflee)
 
     // Methodes
 public:

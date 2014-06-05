@@ -31,7 +31,7 @@
  */
 class TYAcousticVolumeNode: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYVolumeInterface
 {
-    OPROTOSUPERDECL(TYAcousticVolumeNode, TYElement)
+    OPROTODECL(TYAcousticVolumeNode)
     TY_EXTENSION_DECL_ONLY(TYAcousticVolumeNode)
 
     // Methodes

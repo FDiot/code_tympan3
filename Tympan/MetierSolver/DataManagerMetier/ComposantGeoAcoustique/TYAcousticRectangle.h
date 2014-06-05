@@ -37,7 +37,7 @@ class OSegment3D;
  */
 class TYAcousticRectangle: public TYAcousticSurface
 {
-    OPROTOSUPERDECL(TYAcousticRectangle, TYAcousticSurface)
+    OPROTODECL(TYAcousticRectangle)
     TY_EXTENSION_DECL_ONLY(TYAcousticRectangle)
     TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticRectangle)
 

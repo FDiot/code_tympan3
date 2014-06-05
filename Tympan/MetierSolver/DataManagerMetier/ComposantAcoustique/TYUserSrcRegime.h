@@ -28,7 +28,7 @@
  */
 class TYUserSrcRegime : public TYRegime
 {
-    OPROTOSUPERDECL(TYUserSrcRegime, TYRegime)
+    OPROTODECL(TYUserSrcRegime)
 
     // Methodes
 public:

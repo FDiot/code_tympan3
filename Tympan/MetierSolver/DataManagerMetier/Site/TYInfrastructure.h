@@ -31,7 +31,7 @@
  */
 class TYInfrastructure: public TYElement
 {
-    OPROTOSUPERDECL(TYInfrastructure, TYElement)
+    OPROTODECL(TYInfrastructure)
     TY_EXTENSION_DECL_ONLY(TYInfrastructure)
     TY_EXT_GRAPHIC_DECL_ONLY(TYInfrastructure)
 

@@ -50,7 +50,7 @@ class OSegment3D;
  */
 class TYSourceCheminee: public TYSourcePonctuelle
 {
-    OPROTOSUPERDECL(TYSourceCheminee, TYSourcePonctuelle)
+    OPROTODECL(TYSourceCheminee)
 
     // Methodes
 public:

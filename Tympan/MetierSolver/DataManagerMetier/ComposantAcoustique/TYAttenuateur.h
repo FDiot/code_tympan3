@@ -29,7 +29,7 @@
  */
 class TYAttenuateur: public TYElement
 {
-    OPROTOSUPERDECL(TYAttenuateur, TYElement)
+    OPROTODECL(TYAttenuateur)
     TY_EXTENSION_DECL_ONLY(TYAttenuateur)
 
     // Methodes

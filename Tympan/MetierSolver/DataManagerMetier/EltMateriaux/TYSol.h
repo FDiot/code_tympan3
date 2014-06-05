@@ -29,7 +29,7 @@
  */
 class TYSol: public TYElement
 {
-    OPROTOSUPERDECL(TYSol, TYElement)
+    OPROTODECL(TYSol)
     TY_EXTENSION_DECL_ONLY(TYSol)
 
     // Methodes

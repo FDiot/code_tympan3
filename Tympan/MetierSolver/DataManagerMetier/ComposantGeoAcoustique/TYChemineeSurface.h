@@ -34,7 +34,7 @@
  */
 class TYChemineeSurface: public TYAcousticRectangle
 {
-    OPROTOSUPERDECL(TYChemineeSurface, TYAcousticRectangle)
+    OPROTODECL(TYChemineeSurface)
     TY_EXTENSION_DECL_ONLY(TYChemineeSurface)
 
     // Methodes

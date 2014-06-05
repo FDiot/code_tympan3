@@ -29,7 +29,7 @@
 //class TYPoint: public TYElement, public TYColorInterface, public OPoint3D
 class TYPoint: public TYElement, public OPoint3D
 {
-    OPROTOSUPERDECL(TYPoint, TYElement)
+    OPROTODECL(TYPoint)
     TY_EXTENSION_DECL_ONLY(TYPoint)
 
     // Methodes

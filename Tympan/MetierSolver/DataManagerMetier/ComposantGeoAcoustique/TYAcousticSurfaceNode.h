@@ -38,7 +38,7 @@
  */
 class TYAcousticSurfaceNode: public TYElement, public TYColorInterface, public TYAcousticInterface, public TYSurfaceInterface
 {
-    OPROTOSUPERDECL(TYAcousticSurfaceNode, TYElement)
+    OPROTODECL(TYAcousticSurfaceNode)
     TY_EXTENSION_DECL_ONLY(TYAcousticSurfaceNode)
 
     // Methodes

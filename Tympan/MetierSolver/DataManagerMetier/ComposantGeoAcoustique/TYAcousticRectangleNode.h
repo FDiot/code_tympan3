@@ -30,7 +30,7 @@ typedef std::vector<LPTYRectangle> TYTabLPRectangle;
  */
 class TYAcousticRectangleNode: public TYAcousticSurfaceNode
 {
-    OPROTOSUPERDECL(TYAcousticRectangleNode, TYAcousticSurfaceNode)
+    OPROTODECL(TYAcousticRectangleNode)
     TY_EXTENSION_DECL_ONLY(TYAcousticRectangleNode)
     TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticRectangleNode)
 

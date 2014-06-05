@@ -29,7 +29,7 @@
  */
 class TYCoursEau: public TYAcousticLine
 {
-    OPROTOSUPERDECL(TYCoursEau, TYAcousticLine)
+    OPROTODECL(TYCoursEau)
     TY_EXTENSION_DECL_ONLY(TYCoursEau)
     TY_EXT_GRAPHIC_DECL_ONLY(TYCoursEau)
 

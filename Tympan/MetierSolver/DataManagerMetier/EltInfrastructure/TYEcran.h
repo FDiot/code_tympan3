@@ -34,7 +34,7 @@ class OSegment3D;
  */
 class TYEcran: public TYAcousticFaceSet
 {
-    OPROTOSUPERDECL(TYEcran, TYAcousticFaceSet)
+    OPROTODECL(TYEcran)
     TY_EXTENSION_DECL_ONLY(TYEcran)
     TY_EXT_GRAPHIC_DECL_ONLY(TYEcran)
 

@@ -30,7 +30,7 @@
  */
 class TYAcousticCylinder: public TYAcousticVolume
 {
-    OPROTOSUPERDECL(TYAcousticCylinder, TYAcousticVolume)
+    OPROTODECL(TYAcousticCylinder)
     TY_EXTENSION_DECL_ONLY(TYAcousticCylinder)
     TY_EXT_GRAPHIC_DECL_ONLY(TYAcousticCylinder)
 
