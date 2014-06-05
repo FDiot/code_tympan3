@@ -20,8 +20,6 @@
 
 #include "prettyprint.hpp"
 
-#define DO_NOT_THROW noexcept
-
 namespace tympan
 {
 

@@ -59,10 +59,10 @@ namespace tympan
     class IAltimetryBuilder
     {
     protected:
-        IAltimetryBuilder() = default;
+        IAltimetryBuilder() {};
 
     public:
-        virtual ~IAltimetryBuilder() = default;
+        virtual ~IAltimetryBuilder() {};
 
         /**
          * @brief Walk through a TYTopograpy and process all its elements
@@ -187,10 +187,10 @@ namespace tympan
             : public tympan::invalid_data
         {
         protected:
-            NonComparablePolygons() = default;
+            NonComparablePolygons() {};
             NonComparablePolygons(const std::string& desc);
         public:
-            virtual ~NonComparablePolygons() noexcept = default;
+            virtual ~NonComparablePolygons() {};
         };
 
 

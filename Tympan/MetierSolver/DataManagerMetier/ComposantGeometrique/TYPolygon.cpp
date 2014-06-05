@@ -762,7 +762,7 @@ void TYPolygon::exportMesh(
 
     // Convert Polygon into global frame
     TYPolygon gpoly(*this);
-    for(auto& pt : gpoly._pts)
+    BOOST_FOREACH(auto& pt, gpoly._pts)
         pt = geonode.localToGlobal() * pt;
 
     auto triangulator = make_polygon_triangulator(gpoly);
