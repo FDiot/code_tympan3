@@ -287,7 +287,7 @@ public:
 
 public:
     AltimetryBuilder() {} ;
-    virtual ~AltimetryBuilder() noexcept {} ;
+    virtual ~AltimetryBuilder() {};
 
     //TODO We should properly handle a simple state machine.
 
@@ -491,11 +491,11 @@ public:
                                   material_polygon_handle_t p1_,
                                   material_polygon_handle_t p2_,
                                   const face_set_t& intersect_
-                                  ) DO_NOT_THROW
+                                  )
         : base_class("AltimetryBuilder: incomparable polygons"),
             p1(p1_), p2(p2_), intersect(intersect_) {}
 
-        ~CGALNonComparablePolygons() DO_NOT_THROW {};
+        ~CGALNonComparablePolygons() {};
     };
 
     /**
