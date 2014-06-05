@@ -190,7 +190,7 @@ namespace tympan
             NonComparablePolygons() {};
             NonComparablePolygons(const std::string& desc);
         public:
-            virtual ~NonComparablePolygons() {};
+            virtual ~NonComparablePolygons() BOOST_NOEXCEPT {};
         };
 
 
