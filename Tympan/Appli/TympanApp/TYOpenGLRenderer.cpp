@@ -293,7 +293,7 @@ void TYOpenGLRenderer::drawElement(GLenum mode)
     {
         pGraphObj = _pElement->getGraphicObject();
 
-        if (_pElement->inherits("TYSiteNode"))
+        if (dynamic_cast<TYSiteNode*>(_pElement) != nullptr)
         {
             TYElement* pParent = _pElement->getParent();
             if (pParent && pParent->isA("TYProjet"))

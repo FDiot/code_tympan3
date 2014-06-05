@@ -93,7 +93,7 @@ void TYFaceModelerPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pE
 
     while ((i < pElts->size()) && (i + 1 < pElts->size()))
     {
-        if (pElts->at(i)->inherits("TYAcousticRectangle"))
+        if (dynamic_cast<TYAcousticRectangle*>(pElts->at(i)._pObj) != nullptr)
         {
             // Proprietes
             QFont font = pPopup->font();
@@ -104,7 +104,7 @@ void TYFaceModelerPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pE
             retCodes[code] = i;
 
             // Dimensions
-            if (pElts->at(i + 1)->inherits("TYAcousticSurfaceNode"))
+            if (dynamic_cast<TYAcousticSurfaceNode*>(pElts->at(i + 1)._pObj) != nullptr)
             {
                 pParent = (LPTYAcousticRectangleNode&) pElts->at(i + 1);
                 code = pPopup->addAction(TR("id_popup_dimension"));
@@ -112,7 +112,7 @@ void TYFaceModelerPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pE
             }
 
             // Position via le parent (GeoNode)
-            if (pElts->at(i + 1)->inherits("TYAcousticSurfaceNode"))
+            if (dynamic_cast<TYAcousticSurfaceNode*>(pElts->at(i + 1)._pObj) != nullptr)
             {
                 pParent = (LPTYAcousticRectangleNode&) pElts->at(i + 1);
                 code = pPopup->addAction(QIcon(IMG("id_icon_moving")), TR("id_popup_position"));
@@ -125,7 +125,7 @@ void TYFaceModelerPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pE
 
             pPopup->addSeparator();
         }
-        else if (pElts->at(i)->inherits("TYAcousticRectangleNode"))
+        else if (dynamic_cast<TYAcousticRectangleNode*>(pElts->at(i)._pObj) != nullptr)
         {
             // Face parent
             code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_editeelt"))), TYWidget::getDisplayName(pElts->at(i)));

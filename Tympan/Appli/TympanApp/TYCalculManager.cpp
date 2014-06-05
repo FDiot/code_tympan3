@@ -319,16 +319,14 @@ bool TYCalculManager::askForResetResultat()
 bool TYCalculManager::updateAcoustic(TYElement* pElement)
 {
     bool ret = false;
-    if (pElement->inherits("TYSiteNode"))
+    TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pElement);
+    if (pSite != nullptr)
     {
-        TYSiteNode* pSite = TYSiteNode::safeDownCast(pElement);
-        if (pSite) { pSite->update(); }
+        pSite->update();
     }
-    if (pElement->inherits("TYAcousticVolumeNode"))
+    LPTYAcousticVolumeNode pAccVolNode = dynamic_cast<TYAcousticVolumeNode*>(pElement);
+    if (pAccVolNode._pObj != nullptr)
     {
-        LPTYAcousticVolumeNode pAccVolNode = TYAcousticVolumeNode::safeDownCast(pElement);
-        if (pAccVolNode)
-        {
             TYMessageManager::get()->info(TR("id_msg_go_updateacoustic"));
 
             TYApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -350,12 +348,11 @@ bool TYCalculManager::updateAcoustic(TYElement* pElement)
             getTYMainWnd()->updateModelers(false, false);
 
             TYApplication::restoreOverrideCursor();
-        }
     }
-    else if (pElement->inherits("TYAcousticLine"))
+    else
     {
-        LPTYAcousticLine pLine = TYAcousticLine::safeDownCast(pElement);
-        if (pLine)
+        LPTYAcousticLine pLine = dynamic_cast<TYAcousticLine*>(pElement);
+        if (pLine._pObj != nullptr)
         {
             TYMessageManager::get()->info(TR("id_msg_go_updateacoustic"));
 

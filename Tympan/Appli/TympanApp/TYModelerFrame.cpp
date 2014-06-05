@@ -1033,15 +1033,15 @@ void TYModelerFrame::print()
 
     if (_pElement)
     {
-        if (_pElement->inherits("TYBatiment"))
+        if (dynamic_cast<TYBatiment*>(_pElement._pObj) != nullptr)
         {
             pDialog->_groupBoxBatiment->show();
         }
-        else if (_pElement->inherits("TYMachine"))
+        else if (dynamic_cast<TYMachine*>(_pElement._pObj) != nullptr)
         {
             pDialog->_groupBoxMachine->show();
         }
-        else if (_pElement->inherits("TYSiteNode"))
+        else if (dynamic_cast<TYSiteNode*>(_pElement._pObj) != nullptr)
         {
             pDialog->_groupBoxSite->show();
         }
@@ -1189,13 +1189,16 @@ void TYModelerFrame::print()
                         paint.drawText(x1, y, pMachine->getCommentaire());
                     }
                 }
-                else if (_pElement->inherits("TYSiteNode"))
+                else
                 {
-                    TYSiteNode* pSite = (TYSiteNode*) pElement;
-                    if (pDialog->_checkBoxNomSite->isChecked())
+                    TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pElement);
+                    if (pSite != nullptr)
                     {
-                        paint.drawText(x, y, TR("id_print_nom_site"));
-                        paint.drawText(x1, y, pSite->getName());
+                        if (pDialog->_checkBoxNomSite->isChecked())
+                        {
+                            paint.drawText(x, y, TR("id_print_nom_site"));
+                            paint.drawText(x1, y, pSite->getName());
+                        }
                     }
                 }
             }
@@ -1243,9 +1246,9 @@ OBox TYModelerFrame::getGlobalBoundingBox()
     if (_pElement)
     {
         TYElement* pTYElement = (TYElement*)_pElement;
-        if (pTYElement->inherits("TYProjet"))
+        TYProjet* pTYProjet = dynamic_cast<TYProjet*>(pTYElement);
+        if (pTYProjet != nullptr)
         {
-            TYProjet* pTYProjet = (TYProjet*)pTYElement;
             TYSiteNode* pTYSiteNode = (TYSiteNode*)pTYProjet->getSite();
             pTYElement = pTYSiteNode;
         }

@@ -157,15 +157,18 @@ void TYSiteNodeGraphic::display(GLenum mode /*=GL_RENDER*/)
 
             // Tentative d'ajustement de la position de l'image de fond
             TYElement* pParent = getElement()->getParent();
-            if (pParent && pParent->inherits("TYSiteNode")) // Si il a un parent
+            if (pParent) // Si il a un parent
             {
-                TYSiteNode* pSite = static_cast<TYSiteNode*>(pParent);
-                int posParent = pSite->getPosition()._z;
-                pt._z = posParent + 1;
-            }
-            else
-            {
-                pt._z = 0;
+                TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pParent);
+                if(pSite != nullptr)
+                {
+                    int posParent = pSite->getPosition()._z;
+                    pt._z = posParent + 1;
+                }
+                else
+                {
+                    pt._z = 0;
+                }
             }
 
             getElement()->setPosition(pt);

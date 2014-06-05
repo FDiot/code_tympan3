@@ -33,6 +33,9 @@
 
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolumeNode.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourceSurfacic.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QShowEvent>
@@ -161,7 +164,7 @@ void TYResultatTreeDialog::updateContent()
 
     for (it = mapElementChilds.begin(); it != mapElementChilds.end(); it++)
     {
-        TYElement* pParent = it.key();
+        pParent = it.key();
         pCurItem = pRootItem;
 
         if (pParent->isA("TYUserSourcePonctuelle"))
@@ -178,7 +181,7 @@ void TYResultatTreeDialog::updateContent()
             // Ajout a la collection de parents
             mapParentItem.insert(pParent, pCurItem);
         }
-        else if (pParent->inherits("TYAcousticLine"))
+        else if (dynamic_cast<TYAcousticLine*>(pParent) != nullptr)
         {
             // Spectre de l'element racine
             OSpectre spectre = it.value()->spectre;
@@ -192,7 +195,7 @@ void TYResultatTreeDialog::updateContent()
             // Ajout a la collection de parents
             mapParentItem.insert(pParent, pCurItem);
         }
-        else if (pParent->inherits("TYAcousticVolumeNode"))
+        else if (dynamic_cast<TYAcousticVolumeNode*>(pParent) != nullptr)
         {
             QMap<TYElement*, childTreeItem*>::iterator it2  = mapElementChilds.find(pParent);
             followChilds(mapElementChilds, it2, mapParentItem, pCurItem);
@@ -219,7 +222,8 @@ void TYResultatTreeDialog::followChilds(QMap<TYElement*, childTreeItem*>& mapEle
                                         QTreeWidgetItem* pCurItem)
 {
     TYElement* pParent = it.key();
-    if (pParent->inherits("TYSourceSurfacic")) { return; }
+
+    if (dynamic_cast<TYSourceSurfacic*>(pParent) != nullptr) { return; }
 
     OSpectre spectre = it.value()->spectre;
     QStringList stringList;

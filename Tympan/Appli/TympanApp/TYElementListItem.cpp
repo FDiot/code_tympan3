@@ -105,7 +105,7 @@ void TYElementListItem::updateContent()
 
             setText(1, TYPluginManager::get()->getInfo("name", currentId));
         }
-        else if (_pElement->inherits("TYPointCalcul"))
+        else if (dynamic_cast<TYPointCalcul*>(_pElement._pObj) != nullptr)
         {
             TYPointControl* pPoint = TYPointControl::safeDownCast(_pElement);
             TYCalcul* pCalcul = static_cast<TYProjet*>(pPoint->getParent())->getCurrentCalcul();
@@ -202,7 +202,7 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
         //}
 
         // On traite a part le cas des points de controle
-        if (_pElement->inherits("TYPointCalcul"))
+        if (dynamic_cast<TYPointCalcul*>(_pElement._pObj) != nullptr)
         {
             TYPointControl* pPoint = static_cast<TYPointControl*>(_pElement.getRealPointer());
             if (pPoint->getEtat(_pCurrentCalcul) != state)

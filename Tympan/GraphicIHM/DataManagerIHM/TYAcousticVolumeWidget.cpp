@@ -151,7 +151,7 @@ void TYAcousticVolumeWidget::reject()
 void TYAcousticVolumeWidget::editMat()
 {
     if ((_pElement->getParent()->isA("TYMachine")) ||
-        (_pElement->inherits("TYAcousticCylinder")))
+        (dynamic_cast<TYAcousticCylinder*>(_pElement) != nullptr))
     {
         int ret = getElement()->getMateriau()->edit(this);
 

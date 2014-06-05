@@ -272,7 +272,8 @@ void TYEtatsWidget::updateContent()
     for (iterEmit = mapEtat.begin(); iterEmit != mapEtat.end(); iterEmit++)
     {
         TYElement* pEmetteur = (*iterEmit).first;
-        if (pEmetteur->inherits("TYAcousticLine"))
+        TYAcousticLine* pSource = dynamic_cast<TYAcousticLine*>(pEmetteur);
+        if (pSource != nullptr)
         {
             _tabPtrSourceLin.push_back(pEmetteur);
 
@@ -285,7 +286,6 @@ void TYEtatsWidget::updateContent()
 
             // Ajout des comboBox
             QStringList listRegimes;  // Liste des regimes pour "peupler" le combo
-            TYAcousticLine* pSource = TYAcousticLine::safeDownCast(pEmetteur);
             QString nom;
             for (short i = 0 ; i < pSource->getNbRegimes(); i++)
             {

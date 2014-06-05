@@ -209,9 +209,10 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
 OPoint3D TYANIME3DAcousticPathFinder::computePosGlobalPoint(const TYGeometryNode* pNode)
 {
     OPoint3D * pPoint;
-    if (pNode->getElement()->inherits("TYSourcePonctuelle"))
+    TYSourcePonctuelle* pSource = dynamic_cast<TYSourcePonctuelle*>(pNode->getElement());
+    if (pSource != nullptr)
     {
-        pPoint = TYSourcePonctuelle::safeDownCast(pNode->getElement())->getPos();
+        pPoint = pSource->getPos();
     }
     else { pPoint = TYPoint::safeDownCast(pNode->getElement()); }
 

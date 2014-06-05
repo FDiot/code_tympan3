@@ -1189,9 +1189,10 @@ bool TYInfrastructure::updateAcoustic(const TYCalcul* pCalcul, const bool& force
         int regimeNb = (*itRegime).second;
         bool isRayonnant = mapElementEtat[pElement];
 
-        if (pElement->inherits("TYAcousticVolumeNode"))
+        TYAcousticVolumeNode* pVolNode = dynamic_cast<TYAcousticVolumeNode*>(pElement);
+
+        if (pVolNode != nullptr)
         {
-            TYAcousticVolumeNode* pVolNode = TYAcousticVolumeNode::safeDownCast(pElement);
             pVolNode->setIsRayonnant(isRayonnant, false);
 
             if (isRayonnant)
@@ -1204,31 +1205,33 @@ bool TYInfrastructure::updateAcoustic(const TYCalcul* pCalcul, const bool& force
             }
 
         }
-        else if (pElement->inherits("TYAcousticLine"))
+        else
         {
-            TYAcousticLine* pAcLine = TYAcousticLine::safeDownCast(pElement);
-            pAcLine->setIsRayonnant(isRayonnant);
-
-            if (isRayonnant)
+            TYAcousticLine* pAcLine = dynamic_cast<TYAcousticLine*>(pElement);
+            if (pAcLine != nullptr)
             {
-                tmpRet = pAcLine->updateAcoustic(force);
-                pAcLine->setCurRegime(regimeNb);
+                pAcLine->setIsRayonnant(isRayonnant);
 
-                if (!tmpRet) { _tabUpdateNOk.push_back((TYElement*) pAcLine); }
-                ret &= tmpRet;
+                if (isRayonnant)
+                {
+                    tmpRet = pAcLine->updateAcoustic(force);
+                    pAcLine->setCurRegime(regimeNb);
+
+                    if (!tmpRet) { _tabUpdateNOk.push_back((TYElement*) pAcLine); }
+                    ret &= tmpRet;
+                }
             }
-
-        }
-        else if (pElement->isA("TYUserSourcePonctuelle"))
-        {
-            TYUserSourcePonctuelle* pSP = TYUserSourcePonctuelle::safeDownCast(pElement);
-            pSP->setIsRayonnant(isRayonnant);
-
-            if (isRayonnant)
+            else if (pElement->isA("TYUserSourcePonctuelle"))
             {
-                pSP->setCurrentRegime(regimeNb);
-            }
+                TYUserSourcePonctuelle* pSP = TYUserSourcePonctuelle::safeDownCast(pElement);
+                pSP->setIsRayonnant(isRayonnant);
 
+                if (isRayonnant)
+                {
+                    pSP->setCurrentRegime(regimeNb);
+                }
+
+            }
         }
     }
 

@@ -264,7 +264,7 @@ void TYFaceModelerFrame::updateToolActivation()
     if (_pFace)
     {
         // Activation des outils selon le type de la face
-        if (_pFace->inherits("TYMur"))
+        if (dynamic_cast<TYMur*>(_pFace._pObj) != nullptr)
         {
             // Les sous-faces sont des fenetres
             getTYMainWnd()->getFaceToolbar()->activeBouche(false);

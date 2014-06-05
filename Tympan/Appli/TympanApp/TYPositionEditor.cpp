@@ -1123,8 +1123,8 @@ void TYPositionEditor::editGeoNode()
         // Copie de l'ancienne pos
         oldPos = _pEditGeoNode->getORepere3D()._origin;
 
-        if (_pEditGeoNode->getElement()->inherits("TYCourbeNiveau") ||
-            _pEditGeoNode->getElement()->inherits("TYPlanEau"))
+        if ((dynamic_cast<TYCourbeNiveau*>(_pEditGeoNode->getElement()) != nullptr)
+            || (dynamic_cast<TYPlanEau*>(_pEditGeoNode->getElement()) != nullptr))
         {
             enableZ = false;
         }
@@ -1141,10 +1141,10 @@ void TYPositionEditor::editGeoNode()
         // Copie de l'ancien repere
         oldRepere = _pEditGeoNode->getORepere3D();
 
-        if (_pEditGeoNode->getElement()->inherits("TYMaillage") ||
-            _pEditGeoNode->getElement()->inherits("TYCourbeNiveau") ||
-            _pEditGeoNode->getElement()->inherits("TYPlanEau") ||
-            _pEditGeoNode->getElement()->inherits("TYSiteNode"))
+        if ((dynamic_cast<TYMaillage*>(_pEditGeoNode->getElement()) != nullptr)
+            || (dynamic_cast<TYCourbeNiveau*>(_pEditGeoNode->getElement()) != nullptr)
+            || (dynamic_cast<TYPlanEau*>(_pEditGeoNode->getElement()) != nullptr)
+            || (dynamic_cast<TYSiteNode*>(_pEditGeoNode->getElement()) != nullptr))
         {
             enableX = false;
             enableY = false;
@@ -1247,7 +1247,7 @@ void TYPositionEditor::editPoint()
         {
             ((TYMovePointPolyLineAction*) _pLastAction)->setNewPos(*_pEditPoint);
         }
-        else if (_pEditElement->inherits("TYAcousticLine"))
+        else if (dynamic_cast<TYAcousticLine*>(_pEditElement) != nullptr)
         {
             ((TYMovePointPolyLineAction*) _pLastAction)->setNewPos(*_pEditPoint);
         }
@@ -1259,11 +1259,11 @@ void TYPositionEditor::editPoint()
         {
             ((TYMovePointPolyLineAction*) _pLastAction)->setNewPos(*_pEditPoint);
         }
-        else if (_pEditElement->inherits("TYSourcePonctuelle"))
+        else if (dynamic_cast<TYSourcePonctuelle*>(_pEditElement) != nullptr)
         {
             ((TYMoveSrcPonctAction*) _pLastAction)->setNewPos(*_pEditPoint);
         }
-        else if (_pEditElement->inherits("TYPointControl"))
+        else if (dynamic_cast<TYPointControl*>(_pEditElement) != nullptr)
         {
             ((TYMovePointControlAction*) _pLastAction)->setNewPos(*_pEditPoint);
         }
@@ -1647,7 +1647,7 @@ bool TYPositionEditor::selectElement(TYElement* pElt)
     // Recherche du siteNodeParent
     TYElement* pParent = pElt->getParent();
 
-    while (pParent && !pParent->inherits("TYSiteNode"))
+    while (pParent && (dynamic_cast<TYSiteNode*>(pParent) == nullptr))
     {
         pParent = pParent->getParent();
     }

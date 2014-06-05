@@ -873,9 +873,9 @@ LPTYSpectre TYAcousticVolumeNode::getRealPowerSpectrum()
     LPTYAcousticSurface pSurf = NULL;
     for (unsigned int i = 0; i < childs.size(); i++)
     {
-        if (childs[i]->inherits("TYAcousticSurface"))
+        pSurf = dynamic_cast<TYAcousticSurface*>(childs[i]._pObj);
+        if (pSurf._pObj != nullptr)
         {
-            pSurf = TYAcousticSurface::safeDownCast(childs[i]);
             sp = sp.sumdB(*pSurf->getRealPowerSpectrum());
         }
     }

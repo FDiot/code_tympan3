@@ -102,10 +102,13 @@ TYPickEditor::~TYPickEditor()
 
 void TYPickEditor::slotMousePressed(int x, int y, Qt::MouseButton button, Qt::KeyboardModifiers state)
 {
-    if (_pModeler->hasFocus() && _pLastRolloverElt && _pLastRolloverElt->inherits("TYMaillage"))
+    if (_pModeler->hasFocus() && _pLastRolloverElt)
     {
-        hidePanel(_pLastRolloverElt);
-        _pModeler->getView()->updateGL();
+        if(dynamic_cast<TYMaillage*>(_pLastRolloverElt) != nullptr)
+        {
+            hidePanel(_pLastRolloverElt);
+            _pModeler->getView()->updateGL();
+        }
     }
 
 
@@ -214,10 +217,13 @@ void TYPickEditor::slotMouseMoved(int x, int y, Qt::MouseButtons button, Qt::Key
 
 void TYPickEditor::slotWheeled(int x, int y, int delta, Qt::KeyboardModifiers state)
 {
-    if (_pModeler->hasFocus() && _pLastRolloverElt && _pLastRolloverElt->inherits("TYMaillage"))
+    if (_pModeler->hasFocus() && _pLastRolloverElt)
     {
-        hidePanel(_pLastRolloverElt);
-        _pModeler->getView()->updateGL();
+        if(dynamic_cast<TYMaillage*>(_pLastRolloverElt) != nullptr)
+        {
+            hidePanel(_pLastRolloverElt);
+            _pModeler->getView()->updateGL();
+        }
     }
 }
 
@@ -232,10 +238,13 @@ void TYPickEditor::slotKeyPressed(int key)
 
 void TYPickEditor::slotMouseLeave()
 {
-    if (_pModeler->hasFocus() && _pLastRolloverElt && _pLastRolloverElt->inherits("TYMaillage"))
+    if (_pModeler->hasFocus() && _pLastRolloverElt)
     {
-        hidePanel(_pLastRolloverElt);
-        _pModeler->getView()->updateGL();
+        if(dynamic_cast<TYMaillage*>(_pLastRolloverElt) != nullptr)
+        {
+            hidePanel(_pLastRolloverElt);
+            _pModeler->getView()->updateGL();
+        }
     }
 }
 
@@ -316,13 +325,15 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                 pSelected = pElts->at(i);
             }
 
-            if ((i + 1 < pElts->size()) && pElts->at(i + 1)->inherits("TYInfrastructure"))
+            if ((i + 1 < pElts->size()) &&
+                    (dynamic_cast<TYInfrastructure*>(pElts->at(i + 1)._pObj) != nullptr))
             {
                 if ((QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") != 0) &&
                     (QString(_pModeler->metaObject()->className()).compare("TYMachineModelerFrame") != 0))
                 {
                     // Si le batiment est dans le modeler de son site parent on a acces a sa position
-                    if (((i + 2) < pElts->size()) && (pElts->at(i + 2)->inherits("TYSiteNode")))
+                    if (((i + 2) < pElts->size()) &&
+                            (dynamic_cast<TYSiteNode*>(pElts->at(i + 2)._pObj) != nullptr))
                     {
                         LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElts->at(i + 2));
                         TYSiteModelerFrame* pmodelerFrame = (TYSiteModelerFrame*) _pModeler;
@@ -344,7 +355,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                 }
             }
         }
-        else if ((pElts->at(i)->inherits("TYAcousticRectangleNode")) &&
+        else if ((dynamic_cast<TYAcousticRectangleNode*>(pElts->at(i)._pObj) != nullptr) &&
                  ((QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0) ||
                   (QString(_pModeler->metaObject()->className()).compare("TYMachineModelerFrame") == 0)))
         {
@@ -352,7 +363,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             rectFound = i;
             editFace = pPopup->addAction(TR("id_popup_editface"));
         }
-        else if (pElts->at(i)->inherits("TYAcousticVolume"))
+        else if (dynamic_cast<TYAcousticVolume*>(pElts->at(i)._pObj) != nullptr)
         {
             // Dans tous les cas, on offre la possibilite d'inverser la normales des faces
             volumeFound = i;
@@ -416,15 +427,17 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                 }
             }
         }
-        else if (pElts->at(i)->inherits("TYMachine"))
+        else if (dynamic_cast<TYMachine*>(pElts->at(i)._pObj) != nullptr)
         {
             // Calcul acoustique
             code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_calcul"))), TR("id_popup_calculer"));
             calculVolNodeRetCodes[code] = (LPTYAcousticVolumeNode&) pElts->at(i);
 
             // Machine
-            bool bMachineDansUnEtage = (i + 1 < pElts->size()) && pElts->at(i + 1)->inherits("TYEtage"); //az++
-            bool bMachineDansUneInfrastructure = (i + 1 < pElts->size()) && pElts->at(i + 1)->inherits("TYInfrastructure");
+            bool bMachineDansUnEtage = (i + 1 < pElts->size()) &&
+                (dynamic_cast<TYEtage*>(pElts->at(i + 1)._pObj) != nullptr); //az++
+            bool bMachineDansUneInfrastructure = (i + 1 < pElts->size()) &&
+                (dynamic_cast<TYInfrastructure*>(pElts->at(i + 1)._pObj) != nullptr);
             bool bBatimentModeler = QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0;
             bool bSiteModeler = QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0;
             if ((bMachineDansUnEtage && bBatimentModeler) ||
@@ -447,7 +460,8 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                     pEltGeoNode = (TYGeometryNode*)((LPTYInfrastructure&) pElts->at(i + 1))->findMachine((LPTYMachine&) pElts->at(i)).getRealPointer();
 
                     // Si la machine est dans le modeler de son site parent on a acces a sa position
-                    if (((i + 2) < pElts->size()) && (pElts->at(i + 2)->inherits("TYSiteNode")))
+                    if (((i + 2) < pElts->size()) &&
+                            (dynamic_cast<TYSiteNode*>(pElts->at(i + 2)._pObj) != nullptr))
                     {
                         LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElts->at(i + 2));
                         TYSiteModelerFrame* pmodelerFrame = (TYSiteModelerFrame*) _pModeler;
@@ -478,10 +492,11 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                 }
             }
         }
-        else if (pElts->at(i)->inherits("TYMaillage"))
+        else if (dynamic_cast<TYMaillage*>(pElts->at(i)._pObj) != nullptr)
         {
             // Calcul parent
-            if ((i + 1 < pElts->size()) && pElts->at(i + 1)->inherits("TYCalcul"))
+            if ((i + 1 < pElts->size()) &&
+                    (dynamic_cast<TYCalcul*>(pElts->at(i + 1)._pObj) != nullptr))
             {
                 LPTYMaillage pMaillage = (LPTYMaillage&) pElts->at(i);
 
@@ -507,10 +522,11 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                 }
             }
         }
-        else if (pElts->at(i)->inherits("TYPointControl"))
+        else if (dynamic_cast<TYPointControl*>(pElts->at(i)._pObj) != nullptr)
         {
             // Projet parent
-            if ((i + 1 < pElts->size()) && pElts->at(i + 1)->inherits("TYProjet"))
+            if ((i + 1 < pElts->size()) &&
+                    (dynamic_cast<TYProjet*>(pElts->at(i + 1)._pObj) != nullptr))
             {
                 // Duplication
                 code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
@@ -522,11 +538,13 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             }
         }
         // Site
-        else if (pElts->at(i)->inherits("TYSiteNode")) // Donc on est forcemment dans un modelerSiteFrame
+        else if (dynamic_cast<TYSiteNode*>(pElts->at(i)._pObj) != nullptr)
         {
             LPTYSiteNode pSiteNode = (LPTYSiteNode&) pElts->at(i);
 
-            if ((i + 1 < pElts->size()) && pElts->at(i + 1)->inherits("TYSiteNode")) // On est bien dans un site imbrique dans un autre
+            if ((i + 1 < pElts->size()) &&
+                    (dynamic_cast<TYSiteNode*>(pElts->at(i + 1)._pObj) != nullptr))
+                // On est bien dans un site imbrique dans un autre
             {
                 LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElts->at(i + 1));
 
@@ -566,13 +584,13 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
         if ((i + 1 < pElts->size()) && (pElts->at(i + 1)->isA("TYTopographie")))
         {
 
-            if (((i + 2) < pElts->size()) && (pElts->at(i + 2)->inherits("TYSiteNode")))
+            if ((i + 2) < pElts->size())
             {
-                LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElts->at(i + 2));
+                LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pElts->at(i + 2)._pObj);
                 TYSiteModelerFrame* pmodelerFrame = (TYSiteModelerFrame*) _pModeler;
 
                 // On ne peut dupliquer ou supprimer que dans le modeler de son site
-                if ((pSite) && (pSite == pmodelerFrame->getSite()))
+                if ((pSite._pObj != nullptr) && (pSite == pmodelerFrame->getSite()))
                 {
                     // Duplication
                     code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
@@ -583,17 +601,17 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                     remTopoRetCodes[code] = pElts->at(i);
                 }
             }
-        }
+    }
         // Elts d'Infra
         else if ((i + 1 < pElts->size()) && (pElts->at(i + 1)->isA("TYInfrastructure")) && (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0))
         {
-            if (((i + 2) < pElts->size()) && (pElts->at(i + 2)->inherits("TYSiteNode")))
+            if ((i + 2) < pElts->size())
             {
-                LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElts->at(i + 2));
+                LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pElts->at(i + 2)._pObj);
                 TYSiteModelerFrame* pmodelerFrame = (TYSiteModelerFrame*) _pModeler;
 
                 // On ne peut dupliquer ou supprimer que dans le modeler de son site
-                if ((pSite) && (pSite == pmodelerFrame->getSite()))
+                if ((pSite._pObj != nullptr) && (pSite == pmodelerFrame->getSite()))
                 {
                     // Duplication
                     code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
@@ -752,10 +770,13 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             }
 
             // Mise a jour graphic
-            if ((pElts->at(retCodes[popupRet])->inherits("TYAcousticSurface")) ||
-                (pElts->at(retCodes[popupRet])->inherits("TYAcousticSurfaceNode")) ||
-                (pElts->at(retCodes[popupRet])->inherits("TYAcousticCylinder")) ||
-                (pElts->at(retCodes[popupRet])->inherits("TYAcousticSemiCylinder")))
+            if ((dynamic_cast<TYAcousticSurface*>(pElts->at(retCodes[popupRet])._pObj) != nullptr)
+                   ||
+                (dynamic_cast<TYAcousticSurfaceNode*>(pElts->at(retCodes[popupRet])._pObj) != nullptr)
+                   ||
+                (dynamic_cast<TYAcousticCylinder*>(pElts->at(retCodes[popupRet])._pObj) != nullptr)
+                   ||
+                (dynamic_cast<TYAcousticSemiCylinder*>(pElts->at(retCodes[popupRet])._pObj) != nullptr))
             {
                 pElts->at(retCodes[popupRet])->updateGraphicTree();
                 bUpdateDisplayList = false;
@@ -835,10 +856,9 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             pGeoNode->setRepere(repere);
         }
 
-
-        if ((pElts->at(retCodes[popupRet])->inherits("TYAcousticSurface")) ||
-            (pElts->at(retCodes[popupRet])->inherits("TYAcousticSurfaceNode")) ||
-            (pElts->at(retCodes[popupRet])->inherits("TYAcousticCylinder")))
+        if ((dynamic_cast<TYAcousticSurface*>(pElts->at(retCodes[popupRet])._pObj) != nullptr)
+            || (dynamic_cast<TYAcousticSurfaceNode*>(pElts->at(retCodes[popupRet])._pObj) != nullptr)
+            || (dynamic_cast<TYAcousticCylinder*>(pElts->at(retCodes[popupRet])._pObj) != nullptr))
         {
             pElts->at(retCodes[popupRet])->updateGraphicTree();
         }
@@ -905,7 +925,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                 // Offset
                 ORepere3D repere = pCopy->getORepere3D();
 
-                if (pCopy->getElement()->inherits("TYEtage"))
+                if (dynamic_cast<TYEtage*>(pCopy->getElement()) != nullptr)
                 {
                     TYElement* pElt = pCopy->getElement();
                     repere._origin._z += ((TYEtage*)pElt)->getHauteur();
@@ -1673,7 +1693,8 @@ void TYPickEditor::showRotationDialog(TYGeometryNode* pGeoNode)
     // Affiche la boite de dialogue
     OPoint3D rot(pitch, roll, yaw);
     TYRotationDialog* pDlg = new TYRotationDialog(&rot, _pModeler);
-    if (pGeoNode->getElement()->inherits("TYMaillage") || pGeoNode->getElement()->inherits("TYSiteNode"))
+    if ((dynamic_cast<TYMaillage*>(pGeoNode->getElement()) != nullptr)
+            || (dynamic_cast<TYSiteNode*>(pGeoNode->getElement()) != nullptr))
     {
         pDlg->lockXY();
     }
@@ -1915,12 +1936,12 @@ void TYPickEditor::showPanel(TYElement* pElt)
         return;
     }
 
-    if (pElt->inherits("TYMaillage"))
+    LPTYMaillage pMaillage = dynamic_cast<TYMaillage*>(pElt);
+    if (pMaillage != nullptr)
     {
         double x = _lastMovedCurPos.x();
         double y = _pInteractor->height() - _lastMovedCurPos.y();
 
-        LPTYMaillage pMaillage = TYMaillage::safeDownCast(pElt);
         LPTYPanel pPanel = pMaillage->getPanel();
 
         // Position du curseur
@@ -2039,9 +2060,9 @@ void TYPickEditor::hidePanel(TYElement* pElt)
         return;
     }
 
-    if (pElt->inherits("TYMaillage"))
+    LPTYMaillage pMaillage = dynamic_cast<TYMaillage*>(pElt);
+    if (pMaillage != nullptr)
     {
-        LPTYMaillage pMaillage = TYMaillage::safeDownCast(pElt);
         pMaillage->getPanel()->getGraphicObject()->setVisible(false);
 
         // On met a jour uniquement le maillage

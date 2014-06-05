@@ -651,7 +651,8 @@ void TYEtage::verifTabRegimeSources()
         {
             bFound = false;
             TYElement* pElement = _tabSources[j]->getElement();
-            if (!pElement->inherits("TYSource")) { continue; }
+            TYSource* pSource = dynamic_cast<TYSource*>(pElement);
+            if (pSource == nullptr) { continue; }
 
             std::map<TYElement*, bool>::iterator itEtat;
 
