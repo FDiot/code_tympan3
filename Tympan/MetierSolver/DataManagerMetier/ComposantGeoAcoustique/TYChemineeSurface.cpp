@@ -30,7 +30,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYChemineeSurface);
 TY_EXTENSION_INST(TYChemineeSurface);
 
 TYChemineeSurface::TYChemineeSurface()

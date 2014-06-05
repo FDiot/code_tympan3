@@ -29,7 +29,6 @@
 
 
 
-OPROTOINST(TYSol);
 TY_EXTENSION_INST(TYSol);
 
 TYSol::TYSol():

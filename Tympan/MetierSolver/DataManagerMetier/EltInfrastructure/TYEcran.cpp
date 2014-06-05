@@ -37,7 +37,6 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 
-OPROTOINST(TYEcran);
 TY_EXTENSION_INST(TYEcran);
 TY_EXT_GRAPHIC_INST(TYEcran);
 

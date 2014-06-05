@@ -1404,7 +1404,6 @@ TYMateriauConstruction* TYAcousticModel::getMateriauFace(TYAcousticSurface* pSur
     {
         TYElement* pParentSurface = pSurf->getParent();
         TYAcousticVolume* pVolParentSurface = NULL;
-        //        while (pParentSurface && !(pParentSurface->inherits("TYAcousticVolume")))
         while (pParentSurface && !(dynamic_cast<TYAcousticVolume*>(pParentSurface)))
         {
             pParentSurface = pParentSurface->getParent();

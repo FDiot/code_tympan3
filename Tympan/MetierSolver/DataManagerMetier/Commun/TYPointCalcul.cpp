@@ -28,7 +28,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYPointCalcul);
 TY_EXTENSION_INST(TYPointCalcul);
 
 TYPointCalcul::TYPointCalcul() : TYPoint(true)

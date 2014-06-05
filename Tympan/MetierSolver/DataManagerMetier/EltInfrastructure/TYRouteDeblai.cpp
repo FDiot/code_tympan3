@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYRouteDeblai);
 TY_EXTENSION_INST(TYRouteDeblai);
 
 TYRouteDeblai::TYRouteDeblai()

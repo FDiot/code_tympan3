@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYCoursEau);
 TY_EXTENSION_INST(TYCoursEau);
 TY_EXT_GRAPHIC_INST(TYCoursEau);
 

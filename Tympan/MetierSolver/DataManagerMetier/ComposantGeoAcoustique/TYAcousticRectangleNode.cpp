@@ -30,7 +30,6 @@
 
 
 
-OPROTOINST(TYAcousticRectangleNode);
 TY_EXTENSION_INST(TYAcousticRectangleNode);
 TY_EXT_GRAPHIC_INST(TYAcousticRectangleNode);
 

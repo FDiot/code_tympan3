@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/Tools/TYProgressManager.h"
 
-OPROTOINST(TYAcousticCylinder);
 TY_EXTENSION_INST(TYAcousticCylinder);
 TY_EXT_GRAPHIC_INST(TYAcousticCylinder);
 

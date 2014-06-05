@@ -21,13 +21,13 @@
 
 
 #include "OPrototype.h"
+#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
 #include <string.h>
-
 
 // Declaration des membres statiques.
 OPrototype* OPrototype::_prototypes[];
 int         OPrototype::_nbPrototypes = 0;
-
+std::unordered_map<std::string, OPrototype::IOProtoFactory::ptr_type> OPrototype::_factory_map;
 
 OPrototype::OPrototype()
 {
@@ -37,53 +37,33 @@ OPrototype::~OPrototype()
 {
 }
 
+/* static */ void OPrototype::add_factory(const char * classname,
+        IOProtoFactory::ptr_type factory)
+{
+    _factory_map[std::string(classname)] = move(factory);
+}
+
 /*static*/ OPrototype* OPrototype::findAndClone(const char* className)
 {
-    // Recherche le type correspondant
-    int index = findPrototype(className);
+    std::unordered_map<std::string, IOProtoFactory::ptr_type>::const_iterator it =
+        _factory_map.find(className);
 
-    // Si le type existe
-    if (index >= 0)
+    if (it == _factory_map.end())
     {
-        // Clone le type correspondant trouve
-        return _prototypes[index]->clone();
+        throw tympan::invalid_data("Class does not exist") << tympan_source_loc
+            << tympan::oproto_classname_errinfo(className);
     }
-
-    // Le type n'existe pas, retourne NULL
-    return 0;
+    else
+    {
+        return _factory_map[className]->make().release();
+    }
 }
 
 /*static*/ int OPrototype::findPrototype(const char* className)
 {
     if (className == 0) { return -1; }
-
-    // Parcours le tableau de prototypes
-    for (int i = 0; i < _nbPrototypes; i++)
-    {
-        // Compare le nom du type
-        if (!strcmp(className, _prototypes[i]->getClassName()))
-        {
-            // Le type existe
-            return i;
-        }
-    }
-
-    // Le type n'existe pas
-    return -1;
-}
-
-/*static*/ int OPrototype::registerPrototype(OPrototype* pProto)
-{
-    if (pProto == 0) { return -1; }
-
-    // Si on n'a pas attend le max de prototypes
-    if (_nbPrototypes < PROTOTYPE_MAX_NB)
-    {
-        // Ajoute le prototype
-        _prototypes[_nbPrototypes++] = pProto;
-    }
-
-    return _nbPrototypes;
+    // Return 1 if the class className exists, -1 otherwise
+    return (_factory_map.count(className) > 0 ? 1 : -1);
 }
 
 bool OPrototype::isA(const char* className) const

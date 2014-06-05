@@ -41,7 +41,6 @@ static char THIS_FILE[] = __FILE__;
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 
 
-OPROTOINST(TYProjet);
 TY_EXTENSION_INST(TYProjet);
 TY_EXT_GRAPHIC_INST(TYProjet);
 

@@ -33,7 +33,6 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
-OPROTOINST(TYMaillage);
 TY_EXTENSION_INST(TYMaillage);
 
 TYMaillage::TYMaillage()

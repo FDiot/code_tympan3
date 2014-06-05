@@ -32,7 +32,6 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 
 
-OPROTOINST(TYLinearMaillage);
 TY_EXTENSION_INST(TYLinearMaillage);
 TY_EXT_GRAPHIC_INST(TYLinearMaillage);
 

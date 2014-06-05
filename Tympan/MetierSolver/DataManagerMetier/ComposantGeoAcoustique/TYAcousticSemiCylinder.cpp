@@ -30,7 +30,6 @@
 #include "Tympan/Tools/TYProgressManager.h"
 
 
-OPROTOINST(TYAcousticSemiCylinder);
 TY_EXTENSION_INST(TYAcousticSemiCylinder);
 TY_EXT_GRAPHIC_INST(TYAcousticSemiCylinder);
 

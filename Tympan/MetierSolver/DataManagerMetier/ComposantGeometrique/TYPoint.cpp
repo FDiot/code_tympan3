@@ -28,7 +28,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYPoint);
 TY_EXTENSION_INST(TYPoint);
 
 

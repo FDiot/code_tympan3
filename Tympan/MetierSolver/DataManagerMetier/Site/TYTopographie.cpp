@@ -29,7 +29,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYTopographie);
 TY_EXTENSION_INST(TYTopographie);
 TY_EXT_GRAPHIC_INST(TYTopographie);
 

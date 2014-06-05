@@ -30,7 +30,6 @@
 #include "Tympan/Tools/OMessageManager.h"
 
 
-OPROTOINST(TYBatiment);
 TY_EXTENSION_INST(TYBatiment);
 TY_EXT_GRAPHIC_INST(TYBatiment);
 
