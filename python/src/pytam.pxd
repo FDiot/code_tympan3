@@ -124,6 +124,10 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSo
     cdef cppclass TYSourcePonctuelle(TYSource):
         SmartPtr[TYPoint] getPos()
 
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYAtmosphere.h":
+    cdef cppclass TYAtmosphere (TYElement):
+        pass
+
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
     cdef cppclass TYSiteNode (TYElement):
         void getChilds (vector[SmartPtr[TYElement]] &elts, bool recursive)
@@ -135,6 +139,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
         void updateAltiInfra(const bool& force)
         void updateAcoustique(const bool& force)
         void update(const bool& force)
+        void setAtmosphere(const SmartPtr[TYAtmosphere]& pAtmosphere)
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
@@ -149,6 +154,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
         SmartPtr[TYResultat] getResultat()
         void getAllSources(map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
                       vector[SmartPtr[TYGeometryNode]])
+        SmartPtr[TYAtmosphere] getAtmosphere()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":
     cdef cppclass TYProjet (TYElement):

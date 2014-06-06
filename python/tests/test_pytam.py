@@ -19,8 +19,8 @@ with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
 def load_project(*path):
     with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
         project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
-        site = project.site
-        site.update()
+        project.update_site()
+        project.update_altimetry_on_receptors()
         return project
 
 
