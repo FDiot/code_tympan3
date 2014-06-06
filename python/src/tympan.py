@@ -34,11 +34,12 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
     except RuntimeError:
         logging.exception("Couldn't load the acoustic project from %s file", input_project)
         raise
-    comp = project.current_computation()
+    comp = project.current_computation
     # Build an acoustic problem from the site of the computation
-    problem = comp.acoustic_problem()
+    problem = comp.acoustic_problem
     builder = pytam.SolverModelBuilder(problem)
-    builder.fill_problem(project.site(), comp)
+    site = project.site
+    builder.fill_problem(site, comp)
     # Load solver plugin
     pytam.loadsolver(solverdir, comp)
     # Solve the problem and fill the acoustic result

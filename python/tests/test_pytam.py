@@ -26,7 +26,7 @@ class TestTympan(unittest.TestCase):
     def test_solve(self):
         project = load_project('projects-panel',
                                "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
-        computation = project.current_computation()
+        computation = project.current_computation
         with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
             pytam.loadsolver(TEST_SOLVERS_DIR, computation)
             self.assertTrue(computation.go())
@@ -34,7 +34,7 @@ class TestTympan(unittest.TestCase):
     def test_hierarchy(self):
         project = load_project('projects-panel',
                                "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
-        site = project.site()
+        site = project.site
         childs = site.childs()
         for c in childs:
             self.assertRegexpMatches(c.name(),'Infrastructure|Topographie')
@@ -44,9 +44,9 @@ class TestTympan(unittest.TestCase):
         # implementation
         project = load_project('solver_export', "base.xml")
         with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
-            model = project.current_computation().acoustic_problem()
+            model = project.current_computation.acoustic_problem
             builder = pytam.SolverModelBuilder(model)
-            builder.fill_problem(project.site(), project.current_computation())
+            builder.fill_problem(project.site, project.current_computation)
         self.assertEqual(model.npoints(), 6) # OK
         self.assertEqual(model.ntriangles(), 5) # XXX should be 4
         self.assertEqual(model.nmaterials(), 5) # XXX should be 1
@@ -63,9 +63,9 @@ class TestTympan(unittest.TestCase):
         # its triangular mesh to make sure it contains the correct data
         project = load_project("tiny_site.xml")
         with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
-            model = project.current_computation().acoustic_problem()
+            model = project.current_computation.acoustic_problem
             builder = pytam.SolverModelBuilder(model)
-            builder.fill_problem(project.site(), project.current_computation())
+            builder.fill_problem(project.site, project.current_computation)
             # exports in nodes_test the nodes coordinates (x,y,z) and in triangles_test
             # the triangle nodes indices (position in the nodes_test array)
             (nodes_test, triangles_test) = model.export_triangular_mesh()
@@ -92,10 +92,10 @@ class TestTympan(unittest.TestCase):
     def test_ground_materials(self):
         project = load_project('solver_export', "ground_materials.xml")
         with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
-            model = project.current_computation().acoustic_problem()
+            model = project.current_computation.acoustic_problem
             builder = pytam.SolverModelBuilder(model)
-            builder.fill_problem(project.site())
-            builder.fill_problem(project.site(), project.current_computation())
+            builder.fill_problem(project.site)
+            builder.fill_problem(project.site, project.current_computation)
         self.assertEqual(model.nmaterials(), 3)
         # XXX FIXME: the default material is replicated once per triangle
         # TODO to be completed: cf. ticket #1468184

@@ -37,7 +37,7 @@ def make_test_with_file(test_file):
         # Load and solve the project
         with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
             project = pytam.Project.from_xml(osp.join(_TEST_PROBLEM_DIR, test_file))
-            computation = project.current_computation()
+            computation = project.current_computation
             pytam.loadsolver(TEST_SOLVERS_DIR, computation)
             result = computation.go()
         self.assertTrue(result)
@@ -47,7 +47,7 @@ def make_test_with_file(test_file):
             expected_result_project = pytam.Project.from_xml(result_file)
         # Compare results
         current_result = computation.result
-        expected_result = expected_result_project.current_computation().result
+        expected_result = expected_result_project.current_computation.result
         self.assertEqual(current_result.nsources, expected_result.nsources)
         self.assertEqual(current_result.nreceivers, expected_result.nreceivers)
         for i in xrange(current_result.nreceivers):

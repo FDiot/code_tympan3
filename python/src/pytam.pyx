@@ -374,7 +374,7 @@ cdef class Computation:
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         return self.thisptr.getRealPointer().go()
-
+    @property
     def acoustic_problem(self):
         """ Returns an acoustic problem model (geometric representation as
         used by the solvers)
@@ -385,6 +385,7 @@ cdef class Computation:
         problem.thisptr = self.thisptr.getRealPointer()._acousticProblem.get()
         return problem
 
+    @property
     def acoustic_result(self):
         """ Returns an acoustic result model (geometric representation as used
         by the solvers)
@@ -402,6 +403,7 @@ cdef class Project:
     def __cinit__(self):
         self.thisptr = SmartPtr[TYProjet]()
 
+    @property
     def current_computation(self):
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
@@ -409,6 +411,7 @@ cdef class Project:
         comp.thisptr = self.thisptr.getRealPointer().getCurrentCalcul()
         return comp
 
+    @property
     def site(self):
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
