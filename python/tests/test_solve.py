@@ -37,6 +37,8 @@ def make_test_with_file(test_file):
         # Load and solve the project
         with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
             project = pytam.Project.from_xml(osp.join(_TEST_PROBLEM_DIR, test_file))
+            site = project.site
+            site.update()
             computation = project.current_computation
             pytam.loadsolver(TEST_SOLVERS_DIR, computation)
             result = computation.go()

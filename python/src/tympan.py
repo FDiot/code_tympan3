@@ -41,7 +41,9 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
     # Build an acoustic problem from the site of the computation
     problem = comp.acoustic_problem
     builder = pytam.SolverModelBuilder(problem)
+    # Update site before building the acoustic problem
     site = project.site
+    site.update()
     builder.fill_problem(site, comp)
     # Load solver plugin
     pytam.loadsolver(solverdir, comp)
