@@ -105,7 +105,8 @@ cdef class SolverModelBuilder:
             sources_of_elt = deref(its).second
             nsources = sources_of_elt.size()
             for i in xrange(nsources):
-                sources.push_back(sources_of_elt[i])
+                if sources_of_elt[i].getRealPointer() != NULL:
+                    sources.push_back(sources_of_elt[i])
             inc(its)
         nsources = sources.size()
         pelt = cython.declare(cython.pointer(TYElement))
