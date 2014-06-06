@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -61,25 +61,20 @@ namespace tympan
 } // namespace tympan
 
 
-///Nombre maximum de prototypes.
-static const int PROTOTYPE_MAX_NB = 256;
-
-
 /**
  * Classe abstraite Prototype du pattern Prototype Factory.
- * Les classes derivees de Prototype peuvent etre instanciees
- * a partir seulement du nom de la classe (chaine de caracteres).
+ * Les classes derivees de Prototype peuvent etre instanciees a partir
+ * seulement du nom de la classe (chaine de caracteres).
  *
  * Pour cela, la map statique _factory_map associe a une chaine de caracteres
  * representant le nom de la classe la factory permettant de construire une
  * instance de ce type
- * (ATTENTION: pas de clonage : appel systematique au constructeur par defaut)
  *
  * La methode public static 'findAndClone()' est l'interface principale
  * de ce mecanisme, elle permet d'instancier un nouvel objet a partir
  * de son nom (a condition que le type correspondant existe et soit
- * deja registre dans Prototype au moment de l'appel). Si le nom n'est pas connu
- * au moment de l'appel, elle leve une exception tympan::invalid_data.
+ * deja enregistre dans Prototype au moment de l'appel). Si le nom n'est pas
+ * connu au moment de l'appel, elle leve une exception 'tympan::invalid_data'.
  *
  * La methode 'findPrototype()' cherche si une classe est enregistree aupres
  * de OPrototype.
@@ -89,18 +84,14 @@ static const int PROTOTYPE_MAX_NB = 256;
  *
  * De plus, la methode 'isA()' permet de verifier le type d'une instance.
  *
- * L'exemple suivant presente le squelette a reprendre pour creer
- * des classes derivees de Prototype, c'est-a-dire de nouveaux
- * composants. La classe derivee pour cet exemple se nomme
- * 'ConcretePrototype'.
+ * L'exemple suivant presente le squelette a reprendre pour creer des classe
+ * derivees de Prototype, c'est-a-dire de nouveaux composants. La classe
+ * derivee pour cet exemple se nomme 'ConcretePrototype'.
  *
  * <pre>
  * // Declaration (ConcretePrototype.h)
  *
  * class ConcretePrototype : public Prototype {
- *
- *    // La methode suivante doit etre amie pour acceder aux membres prives.
- *    friend registerConcretePrototype();
  *
  * public:
  *    // Constructeur par defaut.
@@ -119,6 +110,8 @@ static const int PROTOTYPE_MAX_NB = 256;
  * };
  * </pre>
  *
+ * La macro OPROTODECL a ete concue pour reprendre ces declarations comme suit:
+ *
  * <pre>
  * #define  OPROTODECL(classname) \
  *    friend register##classname(); \
@@ -131,8 +124,8 @@ static const int PROTOTYPE_MAX_NB = 256;
  * </pre>
  *
  *
- * La declaration d'une nouvelle classe s'en trouve alors simplifiee.
- * L'exemple precedent devient donc :
+ * La declaration d'une nouvelle classe s'en trouve alors simplifiee, il suffit
+ * de faire appel a la macro. L'exemple precedent devient donc :
  *
  * <pre>
  *
@@ -157,21 +150,25 @@ static const int PROTOTYPE_MAX_NB = 256;
  *
  * </pre>
  *
- * Cette technique d'enregistrement n'est pas autonome puisqu'il est
- * necessaire de reprendre le modele ci-dessus pour chaque nouvelle
- * classe derivee de Prototype. Par contre les macros offrent un
- * moyen alternatif simple pour la creation de ce type de classe.
+ * Cette technique d'enregistrement n'est donc pas autonome puisqu'il est
+ * necessaire de reprendre le modele ci-dessus pour chaque nouvelle classe
+ * derivee de Prototype.
  *
  *
- * ATTENTION: la map doit etre remplie avant le lancement de l'application, au
- * moyen de la methode statique 'add_factory()', qui permet d'enregistrer les
- * differentes classes ainsi que leurs fabriques (utiliser la fonction
- * 'build_factory<TYTopographie>()'.
+ * ATTENTION: en complement des declarations des classes via la macro OPROTODECL,
+ * il faut egalement enregistrer celles-ci aupres de OProrotype. Cette action doit
+ * etre effectuee avant toute utilisation des methodes de creation d'instances
+ * et de recherche de classes definies par OPrototype ('findPrototype()', 'clone()'
+  et 'findAndClone()').
+ * Cet enregistrement s'effectue au moyen de la methode statique 'add_factory()',
+ * qui permet d'enregistrer les differentes classes ainsi que leurs fabriques
+ * (utiliser la fonction 'build_factory<T>()' pour la fabrique).
  * Exemple d'utilisation:
  *      OPrototype::add_factory("TYTopographie", move(build_factory<TYTopographie>()));
+ *
+ * (voir Tympan/MetierSolver/DataManagerMetier/init_registry.{h,cpp})
  */
 
-#include <type_traits>
 
 class OPrototype
 {
@@ -291,28 +288,11 @@ protected:
      */
     OPrototype();
 
-    /**
-     * Ajoute un type derive de OPrototype au tableau des
-     * classes registrees.
-     *
-     * @param pProto Une instance de la classe a registrer.
-     *
-     * @return Le nombre de prototype registres ou -1 si une
-     *         erreur est survenue.
-     */
-    static int registerPrototype(OPrototype* pProto);
-
 // Membres
 private:
 
-    ///Tableau des prototypes registres.
-    static OPrototype*  _prototypes[PROTOTYPE_MAX_NB];
-
-    ///Nombre de prototypes registres.
-    static int          _nbPrototypes;
-
     /**
-     * maps a class name (key) to the corresponding factory (value) that can 
+     * maps a class name (key) to the corresponding factory (value) that can
      * build it through its "make()" method
      */
     static std::unordered_map<std::string, IOProtoFactory::ptr_type> _factory_map;
