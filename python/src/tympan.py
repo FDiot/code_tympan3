@@ -44,6 +44,7 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
     # Update site before building the acoustic problem
     site = project.site
     site.update()
+    project.update_altimetry_on_receptors()
     builder.fill_problem(site, comp)
     # Load solver plugin
     pytam.loadsolver(solverdir, comp)
