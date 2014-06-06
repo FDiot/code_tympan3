@@ -412,6 +412,12 @@ cdef class Project:
     def __cinit__(self):
         self.thisptr = SmartPtr[TYProjet]()
 
+    def update_site(self):
+        self.site.update()
+        atmosphere = cython.declare(SmartPtr[TYAtmosphere])
+        atmosphere = self.thisptr.getRealPointer().getCurrentCalcul().getRealPointer().getAtmosphere()
+        self.thisptr.getRealPointer().getSite().getRealPointer().setAtmosphere(atmosphere)
+
     def update_altimetry_on_receptors(self):
         site = cython.declare(cython.pointer(TYSiteNode))
         site = self.thisptr.getRealPointer().getSite().getRealPointer()
