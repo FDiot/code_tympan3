@@ -127,12 +127,14 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSo
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
     cdef cppclass TYSiteNode (TYElement):
         void getChilds (vector[SmartPtr[TYElement]] &elts, bool recursive)
-        void update(const bool& force)
         void getListFaces(vector[SmartPtr[TYGeometryNode]]& tabFaces,
                           unsigned int& nbFaceInfra,
                           vector[bool]& EstUnIndexDeFaceEcran)
         SmartPtr[TYTopographie] getTopographie()
         SmartPtr[TYInfrastructure] getInfrastructure()
+        void updateAltiInfra(const bool& force)
+        void updateAcoustique(const bool& force)
+        void update(const bool& force)
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
@@ -199,6 +201,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h":
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h":
     cdef cppclass TYTopographie (TYElement):
         void exportMesh(deque[OPoint3D] &, deque[OTriangle] &, deque[SmartPtr[TYSol]] *)
+        void sortTerrainsBySurface()
 
 cdef extern from "Tympan/MetierSolver/SolverDataModel/entities.hpp" namespace "tympan":
     cdef cppclass AcousticTriangle:

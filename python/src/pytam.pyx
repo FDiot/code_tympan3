@@ -252,6 +252,14 @@ cdef class Site:
             pylist.append(child)
         return pylist
 
+    def update(self):
+        """ Updates a site:
+            - Updates the altimetry of the infrastructure elements
+            - Updates the acoustic of the infrastructure elements
+        """
+        self.thisptr.getRealPointer().getTopographie().getRealPointer().sortTerrainsBySurface()
+        self.thisptr.getRealPointer().updateAltiInfra(True)
+        self.thisptr.getRealPointer().updateAcoustique(True)
 
 cdef class Result:
     thisptr = cython.declare(SmartPtr[TYResultat])

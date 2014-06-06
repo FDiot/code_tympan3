@@ -18,7 +18,10 @@ with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
 
 def load_project(*path):
     with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
-        return pytam.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
+        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
+        site = project.site
+        site.update()
+        return project
 
 
 class TestTympan(unittest.TestCase):

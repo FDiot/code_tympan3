@@ -1551,11 +1551,7 @@ bool TYCalcul::go()
     // make sure of it
     LPTYSiteNode pSite = pProjet->getSite();
     assert (pSite->getListSiteNode().size() == 0);
-    pSite->getTopographie()->sortTerrainsBySurface();
-    pSite->updateAltiInfra(true);
-    pSite->updateAcoustique(true);
     pProjet->updateAltiRecepteurs(pSite->getTopographie()->getAltimetrie());
-
     pSite->setAtmosphere(getAtmosphere());
 
     TYNameManager::get()->enable(false);
