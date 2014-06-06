@@ -154,6 +154,11 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":
     cdef cppclass TYProjet (TYElement):
         SmartPtr[TYCalcul] getCurrentCalcul()
         SmartPtr[TYSiteNode] getSite()
+        bool updateAltiRecepteurs(const TYAltimetrie* pAlti)
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h":
+    cdef cppclass TYAltimetrie (TYElement):
+        pass
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h":
     cdef cppclass TYAcousticSurface (TYElement):
@@ -201,6 +206,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h":
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h":
     cdef cppclass TYTopographie (TYElement):
         void exportMesh(deque[OPoint3D] &, deque[OTriangle] &, deque[SmartPtr[TYSol]] *)
+        SmartPtr[TYAltimetrie] getAltimetrie()
         void sortTerrainsBySurface()
 
 cdef extern from "Tympan/MetierSolver/SolverDataModel/entities.hpp" namespace "tympan":
