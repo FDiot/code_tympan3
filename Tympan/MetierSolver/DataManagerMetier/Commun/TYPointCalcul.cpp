@@ -339,7 +339,7 @@ void TYPointCalcul::setEtat(const bool& etat, TYCalcul* pCalcul)
     _tabEtats[idCalcul] = etat;
 }
 
-bool TYPointCalcul::getEtat(TYCalcul* pCalcul, const bool& addToCalcul)
+bool TYPointCalcul::getEtat(TYCalcul* pCalcul)
 {
     QString idCalcul = "";
 
