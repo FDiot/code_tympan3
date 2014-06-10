@@ -15,7 +15,7 @@ def make_mesh(project_name):
     project = pytam.Project.from_xml(project_name)
     model = project.current_computation().acoustic_problem()
     builder = pytam.SolverModelBuilder(model)
-    builder.fill_problem(project.site(), project.current_computation())
+    builder.fill_problem(project.site()) # , project.current_computation()
     (nodes, triangles) = model.export_triangular_mesh()
     return (nodes, triangles)
 

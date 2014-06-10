@@ -22,6 +22,9 @@
 #ifndef _O_TRIANGLE__
 #define _O_TRIANGLE__
 
+#include <deque>
+#include <string>
+
 #include "OPoint3D.h"
 
 /**
@@ -76,6 +79,9 @@ public:
     int& index(unsigned i);
     //! Get coordinate (int) from index.
     int  index(unsigned i) const;
+
+    bool checkConsistencyWrtPointsTab(const std::deque<OPoint3D>& points) const;
+    std::string reportInconsistencyWrtPointsTab(const std::deque<OPoint3D>& points);
 
 private:
     //! A static table of \c OPoint3D.
