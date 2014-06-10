@@ -42,8 +42,7 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
     problem = comp.acoustic_problem
     builder = pytam.SolverModelBuilder(problem)
     # Update site before building the acoustic problem
-#    site.update()
-    project.update_site() # update atmosphere, acoustic and infrastructure (altimetry)
+    project.update_site()
     project.update_altimetry_on_receptors()
     site = project.site
     builder.fill_problem(site, comp)
