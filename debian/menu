@@ -1,0 +1,6 @@
+?package(tympan):\
+	needs="X11"\
+	section="Apps/Math"\
+	title="Tympan"\
+	icon="/usr/share/tympan/resources/TympanApp.ico"\
+	command="/usr/bin/tympan"
