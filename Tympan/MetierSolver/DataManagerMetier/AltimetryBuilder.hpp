@@ -47,6 +47,7 @@ class AltimetryBuilder;
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYCourbeNiveau.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYTerrain.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h"
+#include "Tympan/MetierSolver/DataManagerMetier/cgal_bridge.hpp"
 
 #undef max // XXX
 
@@ -258,6 +259,7 @@ class AltimetryFixture;
  * materials.
  */
 class AltimetryBuilder
+    : public tympan::IAltimetryBuilder
 {
 
 public:
@@ -285,12 +287,11 @@ public:
 
 public:
     AltimetryBuilder() {} ;
-    virtual ~AltimetryBuilder() {} ;
+    virtual ~AltimetryBuilder() {};
 
     //TODO We should properly handle a simple state machine.
 
-    // Main methods
-
+    /* BEGIN of public interface */
 
     /**
      * @brief Insert the stored material polygons into the triangulation
@@ -303,6 +304,7 @@ public:
      * effect *freezes*  the altimetry (it is no longer possible to insert level curves.)
      *
      */
+    virtual
     void
     insertMaterialPolygonsInTriangulation();
 
@@ -311,6 +313,7 @@ public:
      * @param topography ref. to a TYTopography to be processed.
      * @param use_emprise_as_level_curve if the emprise should be use as a level curve.
      */
+    virtual
     void
     process(TYTopographie& topography, bool use_emprise_as_level_curve = true);
 
@@ -323,6 +326,7 @@ public:
      * @param matrix a transform to be applied to \c ground_area before processing
      * @param ground_area ref. to a \c TYTerrain to be processed.
      */
+    virtual
     void
     process(const TYTerrain& ground_area, const OMatrix& matrix = OMatrix());
 
@@ -336,6 +340,7 @@ public:
      * @param closed if true the last point will be linked to the first
      * @param level_curve ref. to a level curve to be processed.
      */
+    virtual
     void
     process(TYCourbeNiveau& level_curve, const OMatrix& matrix = OMatrix(), bool closed = false);
 
@@ -344,8 +349,69 @@ public:
      * @param topography
      * @param as_level_curve
      */
+    virtual
     void
     process_emprise(TYTopographie& topography, bool as_level_curve = true);
+
+    /**
+     * @brief Build an index of which face belong to which Material polygon
+     *
+     * This method builds the \c face_to_poly and \c poly_to_faces members
+     */
+    virtual
+    void
+    indexFacesMaterial();
+
+    /**
+     * @brief Label each face with its material.
+     *
+     * Can be called only once \c insertMaterialPolygonsInTriangulation() has
+     * been called. This method associates each face (aka triangle) with its
+     * material : ie the material of the most specific MaterialPolygon.
+     */
+    virtual
+    void
+    labelFaces(material_t default_material);
+
+    /**
+     * @brief Export the altimetry as a triangular mesh
+     *
+     * This function expect empty deques and will clear the deque passed.
+     *
+     * @param points output argument filled with the vertices of the triangulation
+     * @param triangles output argument filled with the faces of the triangulation
+     * @param p_materials optional output argument filled with the materials of the faces
+     */
+    virtual
+    void exportMesh(std::deque<OPoint3D>& points,
+                    std::deque<OTriangle>& triangles,
+                    std::deque<material_t>* p_materials = NULL) const;
+
+    /**
+     * @brief Counts the number of (constrained) edges
+     * @return a pair (#edges, #constrained edges)
+     */
+    virtual
+    std::pair<unsigned, unsigned>
+    count_edges() const;
+
+    /**
+     * @brief Get number of vertices
+     * @return number of vertices (aka points) of the altimetry
+     */
+    virtual
+    unsigned number_of_vertices() const
+    { return cdt.number_of_vertices(); }
+
+    /**
+     * @brief Get number of faces
+     * @return number of faces (aka triangles) of the altimetry
+     */
+    virtual
+    unsigned number_of_faces() const
+    { return cdt.number_of_faces(); }
+
+    /* END of public interface */
 
     /**
      * @brief Add \c points_range as elements of the triangulation
@@ -383,13 +449,6 @@ public:
 
 public:
 
-    /**
-     * @brief Build an index of which face belong to which Meterial polygon
-     *
-     * This method builds the \c face_to_poly and \c poly_to_faces members
-     */
-    void
-    indexFacesMaterial();
 
     /* TODO
      * Provide triangulation refinement following :
@@ -420,31 +479,24 @@ public:
      * @ brief exception class raised by \c poly_comparator in case polygons
      * are not comparable.
      */
-    struct NonComparablePolygons : tympan::invalid_data
+    struct CGALNonComparablePolygons
+        : tympan::IAltimetryBuilder::NonComparablePolygons
     {
+        typedef tympan::IAltimetryBuilder::NonComparablePolygons base_class;
+
         const material_polygon_handle_t p1, p2;
         const face_set_t intersect;
 
-        NonComparablePolygons(
-            material_polygon_handle_t p1_,
-            material_polygon_handle_t p2_,
-            const face_set_t& intersect_
-        ) DO_NOT_THROW
-: tympan::invalid_data("AltimetryBuilder: incomparable polygons"),
-        p1(p1_), p2(p2_), intersect(intersect_) {}
+        CGALNonComparablePolygons(
+                                  material_polygon_handle_t p1_,
+                                  material_polygon_handle_t p2_,
+                                  const face_set_t& intersect_
+                                  )
+        : base_class("AltimetryBuilder: incomparable polygons"),
+            p1(p1_), p2(p2_), intersect(intersect_) {}
 
-        ~NonComparablePolygons() DO_NOT_THROW {};
+        ~CGALNonComparablePolygons() BOOST_NOEXCEPT {};
     };
-
-    /**
-     * @brief Label each face with its material.
-     *
-     * Can be called only once \c insertMaterialPolygonsInTriangulation() has
-     * been called. This method associate each face (aka triangle) with its
-     * material : ie the material of the most specific MaterialPolygon.
-     */
-    void
-    labelFaces(material_t default_material);
 
     /**
      * @brief Insert a point and a constraint into the triangulation
@@ -494,27 +546,6 @@ public:
     insert_range(PointRange points_range);
 
     /**
-     * @brief Counts the number of (constrained) edges
-     * @return a pair (#edges, #constrained edges)
-     */
-    std::pair<unsigned, unsigned>
-    count_edges() const;
-
-    /**
-     * @brief Get number of vertices
-     * @return number of vertices (aka points) of the altimetry
-     */
-    unsigned number_of_vertices() const
-    { return cdt.number_of_vertices(); }
-
-    /**
-     * @brief Get number of faces
-     * @return number of faces (aka triangles) of the altimetry
-     */
-    unsigned number_of_faces() const
-    { return cdt.number_of_faces(); }
-
-    /**
      * @brief Conversion from a CGAL Vertex_handle to a Tympan point
      * @param vh the CGAL vertex handle
      * @return coordinates of \c vh as a tympan point
@@ -526,19 +557,6 @@ public:
         const VertexInfo& i = vh->info();
         return Point(p.x(), p.y(), i.altitude);
     }
-
-    /**
-     * @brief Export the altimetry as a triangular mesh
-     *
-     * This function expect empty deques and will clear the deque passed.
-     *
-     * @param points output argument filled with the vertices of the triangulation
-     * @param triangles output argument filled with the faces of the triangulation
-     * @param p_materials optional output argument filled with the materials of the faces
-     */
-    void exportMesh(std::deque<OPoint3D>& points,
-                    std::deque<OTriangle>& triangles,
-                    std::deque<material_t>* p_materials = NULL) const;
 
 protected:
     /**

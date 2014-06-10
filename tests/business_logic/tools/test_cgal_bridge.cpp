@@ -68,6 +68,7 @@ TEST_F(TriangulatePolygonTest, single_triangle)
     ASSERT_EQ(1, triangles.size());
 }
 
+
 TEST_F(TriangulatePolygonTest, concave_quadrangle)
 {
     vector<TYPoint> pts;
@@ -80,4 +81,10 @@ TEST_F(TriangulatePolygonTest, concave_quadrangle)
 
     ASSERT_EQ(4, points.size());
     ASSERT_EQ(2, triangles.size());
+}
+
+TEST(AltimetryBuilder, instanciantion)
+{
+    auto p_alti_builder = tympan::make_altimetry_builder();
+    ASSERT_TRUE(static_cast<bool>(p_alti_builder));
 }
