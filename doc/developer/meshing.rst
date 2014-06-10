@@ -164,3 +164,43 @@ Noteworthy points
   outside the land-take are filtered out.
 
 * There is no *a priori* requirement for the solution to be incremental.
+
+
+Solutions
+=========
+
+Algorithm for a single site
+---------------------------
+
+The processing flow implemented up to Code_TYMPAN version 4.2.3
+(June 2014) was targeted at single sites and was asserting there are
+no sub-site to merge. It is yet (June 2014) unclear how this approach can
+be adapted and how it would scale to the whole problem.
+
+1. All the level curves (including ponds) are first added to a
+   Constrained Delaunay Triangulation (CDT) **in 2D**. The 2D vertices
+   bear their altitude as additional information.
+
+2. This triangulation is then copied and used to answer altitude
+   query: when the altitude for a 2D point is needed, first the
+   triangulation is searched for the triangle containing this
+   point. If the point is outside the convex hull of the triangulation
+   the ``undefined_altitude`` is returned.
+
+3. Material ground polygons are then added to the triangulation as
+   constraints (their vertices are given an altitude at this
+   point). Then all vertices are iterated over and those without a
+   valid altitude (i.e. the vertices created as intersection of
+   constraints) are given an altitude.
+
+4. A double mapping between material polygons and faces of the
+   triangulation is then built by iterating over the faces of the
+   triangulation. One stores, on one hand, for each face all polygons
+   containing this face and, on the other hand, for each polygon all
+   the faces it contains.
+
+5. Last, this double mapping is used to associate to each face its
+   material, by searching the minimal polygon (for inclusion)
+   containing this face. In case there is not such minimal polygon it
+   means there is a partial overlap between two material polygons and
+   that this face is a witness of this overlap which is reported.
