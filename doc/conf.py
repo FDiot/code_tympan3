@@ -51,7 +51,7 @@ try:
 except ImportError:
     sys.path.append(os.path.abspath('../3rdparty/breathe-0.8'))
 extensions.append('breathe')
-breathe_projects = { "Code_TYMPAN": "./_static/doxyoutput/xml" }
+breathe_projects = { "Code_TYMPAN": "./_build/doxygen/xml" }
 breathe_default_project = "Code_TYMPAN"
 
 # Add any paths that contain templates here, relative to this directory.
