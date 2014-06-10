@@ -93,3 +93,74 @@ Noteworthy points
   - they properly mark a hole in the ground
   - it is easy to join the triangles of the building or machine and
     the triangles of the ground in a later stage of processing
+
+Sub-sites and land-take
+-----------------------
+
+Introduction
+~~~~~~~~~~~~
+
+For reasons linked to the business process of the end-user of the
+product, a notion of *sub-site* has been introduced. In addition to
+its *topography* and its *infratructure* a site consists of zero, one
+or several *sub-sites*, each with their own *topography*,
+*infrastructure* and, potentially, *sub-sites*.
+
+A typical usage for this feature is layered modelling :
+
+1. A first user of the application builds a model of the pre-existing
+   site, before implanting a plant
+2. An other user builds a model of the plant itself, which can include
+   levelling works, as a sub-site to be integrated into the main site.
+3. Some years later a plant extension is built and is modelled as a
+   sub-sub-site to be integrated into the previous one.
+
+When computing the altimetry for a project, the topography and
+infrastructure of the main site and all its (active) sub-sites must be
+taken into account. Because a sub-site must be able to change the
+topography of its parent site *where and when relevant* some rules have been
+established to build the altimetry for a tree of (sub-)sites. This is
+the role of a site's *land-take*.
+
+Land-take and merging sub-sites topography
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The *land-take* (*emprise* in French in the code) is a simple polygon
+associated to a site which delimit the *authoritative area* for the
+site. When site B is included as a sub-site of main site A and the
+altimetry for the project is built :
+
+* all features of A which lie entirely within the land-take of B are
+  ignored and must be reported as such to the user. This is not an error.
+* all features of B which lie entirely outside the land-take of B are
+  ignored and must be reported as such to the user. This is not an error.
+* all features **but for the level curves** of either A or B which
+  overlap the land-take of B are to be considered as *modelling
+  errors*. They must be reported as such and stop the process of
+  building the altimetry.
+
+  NB: This rule is mainly intended as a simplification measure, and is
+  likely to be quite restrictive both for the end user and the
+  implementation. It should be possible to amend it if need be.
+* the level curves of B which overlap the land-take of B must be
+  truncated to the interior of it
+* the level curves of A which overlap the land-take of B must be
+  truncated to the exterior of it
+
+Noteworthy points
+~~~~~~~~~~~~~~~~~
+
+* For a given project the land-takes of the sub-sites form a tree of
+  simple polygon for the inclusion, akin to the ground material
+  polygons in the case of a single site.
+* Thanks to the *no overlap but for level curves* rule, the trees
+  formed by sub-site land-takes and material polygons are compatible
+  and could possibly be represented as a single tree during the
+  computation.
+* In the case of a single site project the land-take's role is not yet
+  clear : it could be reasonable to expect that the land-take is
+  included in the convex hull of the level curves (enabling altitude
+  computation at all point within the landtake) and that elements
+  outside the land-take are filtered out.
+
+* There is no *a priori* requirement for the solution to be incremental.
