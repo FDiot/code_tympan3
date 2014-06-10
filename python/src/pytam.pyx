@@ -90,6 +90,7 @@ cdef class SolverModelBuilder:
         self.process_altimetry(site)
         self.process_infrastructure(site)
         self.build_sources(site, comp)
+        self.build_receptors(site, comp)
 
     @cython.locals(site=Site, comp=Computation)
     def build_sources(self, site, comp):
@@ -117,6 +118,47 @@ cdef class SolverModelBuilder:
             psource = downcast_source_ponctuelle(pelt)
             ppoint = psource.getPos().getRealPointer()
             self.model.make_source(ppoint[0], psource.getSpectre()[0])
+
+    @cython.locals(site=Site, comp=Computation)
+    def build_receptors(self, site, comp):
+        """ Retrieve the mesh points (TYPointCalcul, TYPointControl) used in the
+            current computation (the active ones), build the acoustic receptors
+            using their position and add them to the acoustic problem model.
+        """
+        project = cython.declare(cython.pointer(TYProjet))
+        project = site.thisptr.getRealPointer().getProjet()
+        # First add isolated receptors to the acoustic problem model
+        control_points = cython.declare(vector[SmartPtr[TYPointControl]])
+        control_points = project.getPointsControl()
+        n_ctrl_pts = control_points.size()
+        for i in xrange(n_ctrl_pts):
+            # if control point state == active (with respect to the current computation)
+            if control_points[i].getRealPointer().getEtat(comp.thisptr.getRealPointer()):
+                # inheritance: TYPointControl > TYPointCalcul > TYPoint > OPoint3D > OCoord3D
+                # call to OPoint3D copy constructor to record control point coordinates
+                self.model.make_receptor((control_points[i].getRealPointer())[0])
+        # Then add mesh points to the acoustic problem model
+        meshes = cython.declare(vector[SmartPtr[TYGeometryNode]])
+        meshes = comp.thisptr.getRealPointer().getMaillages()
+        mesh = cython.declare(cython.pointer(TYMaillage))
+        mesh_points = cython.declare(vector[SmartPtr[TYPointCalcul]])
+        nmeshes = meshes.size()
+        for i in xrange(nmeshes):
+            matrix = cython.declare(OMatrix)
+            matrix = meshes[i].getRealPointer().getMatrix()
+            mesh = downcast_maillage(meshes[i].getRealPointer().getElement())
+            # mesh point must be active
+            if mesh.getState() != Actif: # enum value from MaillageState (class TYMaillage)
+                continue
+            mesh_points = mesh.getPtsCalcul()
+            n_mesh_points = mesh_points.size()
+            for j in xrange(n_mesh_points):
+                # if control point state == active (with respect to the current computation)
+                if mesh_points[i].getRealPointer().getEtat(comp.thisptr.getRealPointer()):
+                    # XXX here we should take into account the global position
+                    # should we add the matrix to the AcousticReceptor class ?
+                    # Will be clarified when writing the tests
+                    self.model.make_receptor((mesh_points[i].getRealPointer())[0])
 
     @cython.locals(site=Site)
     def process_infrastructure(self, site):
@@ -414,9 +456,13 @@ cdef class Project:
 
     def update_site(self):
         self.site.update()
+        computation = cython.declare(cython.pointer(TYCalcul))
+        computation = self.thisptr.getRealPointer().getCurrentCalcul().getRealPointer()
         atmosphere = cython.declare(SmartPtr[TYAtmosphere])
-        atmosphere = self.thisptr.getRealPointer().getCurrentCalcul().getRealPointer().getAtmosphere()
+        atmosphere = computation.getAtmosphere()
         self.thisptr.getRealPointer().getSite().getRealPointer().setAtmosphere(atmosphere)
+        # detect and deactivate the mesh points that are inside machines or buildings
+        computation.selectActivePoint(self.thisptr.getRealPointer().getSite())
 
     def update_altimetry_on_receptors(self):
         site = cython.declare(cython.pointer(TYSiteNode))

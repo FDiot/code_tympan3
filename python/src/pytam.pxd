@@ -51,6 +51,7 @@ cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp
         size_t make_triangle(size_t n1, size_t n2, size_t n3)
         size_t make_node(const OPoint3D&)
         size_t make_source(const OPoint3D& point_, const OSpectre& spectrum_)
+        size_t make_receptor(const OPoint3D& point_)
 
 cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp" namespace "tympan":
     cdef cppclass AcousticResultModel:
@@ -62,6 +63,16 @@ cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
         const char* getClassName() const
         TYElement* getParent()
         OGenID getID()
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYMaillage.h":
+    cdef cppclass TYMaillage:
+        int getState()
+        const vector[SmartPtr[TYPointCalcul]]& getPtsCalcul() const
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYMaillage.h" namespace "TYMaillage":
+    cdef enum MaillageState:
+        Actif
+        Inactif
 
 cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
     TYAcousticSurface* downcast_acoustic_surface "downcast<TYAcousticSurface>"(TYElement *)
@@ -76,6 +87,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
     #  ("'T' is not a type identifier")
     # However "T max[T](T a, T b)" is actually supported in cython 0.20.
     TYSourcePonctuelle* downcast_source_ponctuelle "downcast<TYSourcePonctuelle>"(TYElement *)
+    TYMaillage* downcast_maillage "downcast<TYMaillage>"(TYElement *)
 
 # This is because it seems unsupported to declare a map containing pointers
 # http://trac.cython.org/cython_trac/ticket/793
@@ -116,6 +128,10 @@ cdef extern from "Tympan/MetierSolver/SolverDataModel/entities.hpp" namespace "t
         OPoint3D position
         OSpectre spectrum
 
+cdef extern from "Tympan/MetierSolver/SolverDataModel/entities.hpp" namespace "tympan":
+    cdef cppclass AcousticReceptor(BaseEntity):
+        OPoint3D position
+
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSource.h":
     cdef cppclass TYSource(TYElement):
         TYSpectre* getSpectre() const
@@ -140,6 +156,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
         void updateAcoustique(const bool& force)
         void update(const bool& force)
         void setAtmosphere(const SmartPtr[TYAtmosphere]& pAtmosphere)
+        TYProjet* getProjet()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
@@ -155,12 +172,15 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
         void getAllSources(map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
                       vector[SmartPtr[TYGeometryNode]])
         SmartPtr[TYAtmosphere] getAtmosphere()
+        void selectActivePoint(SmartPtr[TYSiteNode] pSite)
+        const vector[SmartPtr[TYGeometryNode]] getMaillages() const
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":
     cdef cppclass TYProjet (TYElement):
         SmartPtr[TYCalcul] getCurrentCalcul()
         SmartPtr[TYSiteNode] getSite()
         bool updateAltiRecepteurs(const TYAltimetrie* pAlti)
+        vector[SmartPtr[TYPointControl]]& getPointsControl()
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h":
     cdef cppclass TYAltimetrie (TYElement):
@@ -175,6 +195,11 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYG
     cdef cppclass TYGeometryNode (TYElement):
         TYElement* getElement()
         TYGeometryNode(TYElement *)
+        OMatrix getMatrix()
+
+cdef extern from "Tympan/MetierSolver/CommonTools/OMatrix.h":
+    cdef cppclass OMatrix:
+        pass
 
 cdef extern from "Tympan/MetierSolver/CommonTools/OCoord3D.h":
     cdef cppclass OCoord3D:
@@ -190,6 +215,14 @@ cdef extern from "Tympan/MetierSolver/CommonTools/OPoint3D.h":
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h":
     cdef cppclass TYPoint(TYElement, OPoint3D):
+        pass
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h":
+    cdef cppclass TYPointCalcul (TYPoint):
+        bool getEtat(TYCalcul* pCalcul)
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointControl.h":
+    cdef cppclass TYPointControl (TYPointCalcul):
         pass
 
 cdef extern from "Tympan/MetierSolver/CommonTools/OTriangle.h":

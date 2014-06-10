@@ -97,6 +97,12 @@ public:
         const Point& point_,
         const Spectrum& spectrum_);
 
+    /**
+     * @brief Push a new acoustic receptor into the model
+     */
+    receptor_idx make_receptor(
+        const Point& position_);
+
 public: // XXX Could / should be protected but this complicates testing
 
     /*
@@ -118,6 +124,7 @@ protected: // data members
     triangle_pool_t all_triangles;
     material_pool_t all_materials;
     source_pool_t all_sources;
+    receptor_pool_t all_receptors;
 };  // class AcousticProblemModel
 
     std::unique_ptr<AcousticProblemModel> make_AcousticProblemModel();

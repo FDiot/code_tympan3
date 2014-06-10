@@ -100,6 +100,13 @@ source_idx AcousticProblemModel::make_source(
     return all_sources.size() - 1;
 }
 
+receptor_idx AcousticProblemModel::make_receptor(
+        const Point& position_)
+{
+    all_receptors.push_back(AcousticReceptor(position_));
+    return all_receptors.size() - 1;
+}
+
     std::unique_ptr<AcousticProblemModel> make_AcousticProblemModel()
     { return std::unique_ptr<AcousticProblemModel>(new AcousticProblemModel()); }
 
