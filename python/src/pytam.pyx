@@ -60,13 +60,13 @@ cdef class ProblemModel:
         actri = cython.declare(cython.pointer(AcousticTriangle))
         nb_elts = self.thisptr.ntriangles()
         triangles = np.empty([nb_elts, 3])
-        for i in range(nb_elts):
+        for i in xrange(nb_elts):
             actri = cython.address(self.thisptr.triangle(i))
             triangles[i] = [actri.n[0], actri.n[1], actri.n[2]]
         point = cython.declare(cython.pointer(OPoint3D))
         nb_elts = self.thisptr.npoints()
         nodes = np.empty([nb_elts, 3])
-        for i in range(nb_elts):
+        for i in xrange(nb_elts):
             point = cython.address(self.thisptr.node(i))
             nodes[i] = [point._x, point._y, point._z]
         return (nodes, triangles)
@@ -134,7 +134,7 @@ cdef class SolverModelBuilder:
                            is_screen_face_idx)
         points = cython.declare(deque[OPoint3D])
         triangles = cython.declare(deque[OTriangle])
-        for i in range(nb_building_faces):
+        for i in xrange(nb_building_faces):
             pelt = face_list[i].getRealPointer().getElement()
             psurf = downcast_acoustic_surface(pelt)
             # 'face_list' can contain topography elements. Not relevant here.
@@ -158,7 +158,7 @@ cdef class SolverModelBuilder:
                                             spectre)
             actri = cython.declare(cython.pointer(AcousticTriangle))
             # Set the UUID of the site element and the material of the surface
-            for i in range(triangles.size()):
+            for i in xrange(triangles.size()):
                 actri = cython.address(self.model.triangle(i))
                 actri.made_of = pmat
             points.clear()
@@ -205,7 +205,7 @@ cdef class SolverModelBuilder:
         psol = cython.declare(cython.pointer(TYSol))
         pmat = cython.declare(shared_ptr[AcousticMaterialBase])
         # Set the material of each triangle
-        for i in range(triangles.size()):
+        for i in xrange(triangles.size()):
             actri = cython.address(self.model.triangle(i))
             psol = materials[i].getRealPointer()
             pmat = self.model.make_material(psol.getName().toStdString(),
@@ -246,7 +246,7 @@ cdef class Site:
         # Constructs a python list and appends to it the LPTYElement objects
         # previously wrapped into Elements objects
         pylist = []
-        for i in range(childs.size()):
+        for i in xrange(childs.size()):
             child = Element()
             child.thisptr = childs[i]
             pylist.append(child)
