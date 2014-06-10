@@ -204,3 +204,30 @@ be adapted and how it would scale to the whole problem.
    containing this face. In case there is not such minimal polygon it
    means there is a partial overlap between two material polygons and
    that this face is a witness of this overlap which is reported.
+
+
+Resources
+=========
+
+CGAL packages
+-------------
+
+The packages used for the version 4.2.3 (June 2014) are
+CGAL_Polygons_ and CGAL_Triangulation_. The use of the package
+CGAL_Mesh_ is planned to handle the refinement of the altimetry.
+Those packages will be accessed from Python tanks to the `CGAL Bindings`_.
+
+.. _`CGAL_Polygons`: http://doc.cgal.org/latest/Polygon/index.html#Chapter_2D_Polygon
+.. _`CGAL_Triangulation`: http://doc.cgal.org/latest/Triangulation_2/index.html
+.. _`CGAL_Mesh`: http://doc.cgal.org/latest/Mesh_2/index.html#Chapter_2D_Conforming_Triangulations_and_Meshes
+.. _`CGAL Bindings`: http://code.google.com/p/cgal-bindings/
+
+Shapely
+-------
+
+Shapely_ is a Python wrapping of the geogaphical processing library
+GEOS_.  It will be used to pre-process the sub-sites geometry before
+triangulation and meshing.
+
+.. _Shapely: http://toblerity.org/shapely/index.html
+.. _GEOS: http://trac.osgeo.org/geos/
