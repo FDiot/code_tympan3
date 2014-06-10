@@ -143,7 +143,7 @@ public:
      * Set/Get de l'etat de ce point de calcul.
      */
     void setEtat(const bool& etat, TYCalcul* pCalcul = NULL);
-    bool getEtat(TYCalcul* pCalcul = NULL, const bool& addToCalcul = false);
+    bool getEtat(TYCalcul* pCalcul = NULL);
     //  void setState(int state) { _state = state; setIsGeometryModified(true); }
 
     /**
