@@ -8,7 +8,7 @@ PAPER         =
 BUILDDIR      = _build
 
 DOXYGEN       = doxygen
-DOXY_OUTPUT   = _static/doxyoutput/xml
+DOXY_OUTPUT   = _build/doxygen/xml
 
 # Internal variables.
 PAPEROPT_a4     = -D latex_paper_size=a4
