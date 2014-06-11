@@ -22,18 +22,9 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
+#include "Tympan/MetierSolver/DataManagerCore/exceptions.hpp"
 #include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
 #include "Tympan/MetierSolver/CommonTools/OBox2.h"
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
-
-namespace tympan
-{
-    typedef boost::error_info < struct tag_elements_implied,
-                                std::deque<LPTYElement> > elements_implied_errinfo;
-    typedef boost::error_info < struct tag_position,
-                                OPoint3D > position_errinfo;
-} // namespace tympan
-
 
 /**
  * \class TYAltimetrie
