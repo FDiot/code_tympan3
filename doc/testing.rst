@@ -139,6 +139,6 @@ some high level, global validation procedure is always useful a *by
 hand* validation procedure is proposed.
 
 For now it this procedure is documented in this :download:`external
-PDF document <./methodologie_qualification-v2013-06-11.pdf>` and the
+PDF document <_static/documents/methodologie_qualification-v2013-06-11.pdf>` and the
 resources it refers to are stored under
 :file:`tests/data/manual_validation/`.

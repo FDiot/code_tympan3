@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to CodeTympan's developpers documentation
-==================================================
+Welcome to Code_TYMPAN developers documentation
+===============================================
 
 **Code_TYMPAN** is a **C++ Open Source acoustic simulation code**. It deals with
 propagation acoustic waves in an industrial site. It provides **different
@@ -17,5 +17,13 @@ and display some results.
 .. toctree::
    :maxdepth: 2
 
-   developer/index
+   installing
+   architecture
+   convention
+   tools
+   building
+   testing
+   meshing
 
+   ongoingwork
+   api
