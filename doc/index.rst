@@ -12,18 +12,42 @@ numerical solvers** and a **Qt4 graphical** user interface to create and display
 your site: buildings, fields, machines, acoustic sources, to launch a simulation
 and display some results.
 
-**Table of Contents**
+
+Description of the environment and conventions
+----------------------------------------------
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   installing
    architecture
    convention
    tools
+
+Main developers' tasks
+----------------------
+
+.. toctree::
+   :maxdepth: 1
+
+   installing
    building
    testing
+
+
+Computations and algorithms
+---------------------------
+
+.. toctree::
+   :maxdepth: 1
+
    meshing
+
+
+Appendices
+----------
+
+.. toctree::
+   :maxdepth: 1
 
    ongoingwork
    api
