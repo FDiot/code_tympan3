@@ -1546,16 +1546,19 @@ bool TYCalcul::go()
     // NB This is the place to assert the "no sub-site assumption"
     // required by some variant of the software
 
-    // Fusion des sites
-    LPTYSiteNode pMergeSite = pProjet->getSite()->merge();
-    pMergeSite->update(true);
-    pMergeSite->getTopographie()->sortTerrainsBySurface();
-    pMergeSite->updateAcoustique(true);
 
-    // Actualisation de l'altimetrie des recepteurs (securite)
-    pProjet->updateAltiRecepteurs(pMergeSite->getTopographie()->getAltimetrie());
+    // There shouldn't be any subsites at this level --> don't call merge but
+    // make sure of it
+    LPTYSiteNode pSite = pProjet->getSite();
+    assert (pSite->getListSiteNode().size() == 0);
+    pSite->getTopographie()->sortTerrainsBySurface();
 
-    pMergeSite->setAtmosphere(getAtmosphere());
+    pSite->update(true);
+    pSite->updateAcoustique(true);
+    pProjet->updateAltiRecepteurs(pSite->getTopographie()->getAltimetrie());
+
+
+    pSite->setAtmosphere(getAtmosphere());
 
     TYNameManager::get()->enable(false);
 
@@ -1568,21 +1571,21 @@ bool TYCalcul::go()
     TYXMLManager xmlManager;
 
     xmlManager.createDoc(docName, version);
-    xmlManager.addElement(pMergeSite);
+    xmlManager.addElement(pSite);
     xmlManager.save("merged.xml");
 
 #endif
 
     OMessageManager::get()->info("Recuperation de la liste des sources");
     TYMapElementTabSources& mapElementSources = _pResultat->getMapEmetteurSrcs();
-    pMergeSite->getInfrastructure()->getAllSrcs(this, mapElementSources);
+    pSite->getInfrastructure()->getAllSrcs(this, mapElementSources);
 
     OMessageManager::get()->info("Creation des sources");
     TYTabSourcePonctuelleGeoNode sources;
     getAllSources(mapElementSources, sources);
 
     OMessageManager::get()->info("Selection des points de reception actifs");
-    selectActivePoint(pMergeSite);
+    selectActivePoint(pSite);
 
     OMessageManager::get()->info("Creation des recepteurs");
     TYTabPointCalculGeoNode recepteurs;
@@ -1592,7 +1595,7 @@ bool TYCalcul::go()
     buildValidTrajects(sources, recepteurs);
 
     // XXX Instantiate and call the SolverDataModelBuilder here ...
-    if (isCalculPossible(static_cast<int>(sources.size()), static_cast<int>(recepteurs.size()), pMergeSite))
+    if (isCalculPossible(static_cast<int>(sources.size()), static_cast<int>(recepteurs.size()), pSite))
     {
         OMessageManager::get()->info("Calcul en cours...");
 
@@ -1612,8 +1615,7 @@ bool TYCalcul::go()
 
         TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(_solverId);
         // XXX ... and pass the SolverDataModel built here.
-        ret = pSolver->solve(*pMergeSite, *this, *_acousticProblem,
-                *_acousticResult);
+        ret = pSolver->solve(*pSite, *this, *_acousticProblem, *_acousticResult);
         pSolver->purge();
 
         // Cumul de la pression aux differents points de calcul
@@ -1662,7 +1664,7 @@ bool TYCalcul::go()
     // Il est necessaire de reattribuer les parents des elements du site merges
     getProjet()->getSite()->reparent();
 
-    pMergeSite = NULL;
+    pSite = NULL;
 
     sources.clear();
     recepteurs.clear();
