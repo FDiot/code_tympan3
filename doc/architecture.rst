@@ -22,7 +22,7 @@ user interface and solvers.
 
 The schema of the current architecture:
 
-.. figure:: ../_static/built_resources/SourcesCurrentArch.png
+.. figure:: _static/built_resources/SourcesCurrentArch.png
    :align: center
    :alt: Current architecture schema
 
@@ -218,7 +218,7 @@ separate the business logic related to a site with the way to solve the acoustic
 problem. A computation needs triangles with materials from a site triangulation,
 acoustic sources/receptors and an altimetry.
 
-.. figure:: ../_static/built_resources/SiteBDM.png
+.. figure:: _static/built_resources/SiteBDM.png
    :align: center
    :alt: Target architecture schema
 
@@ -227,7 +227,7 @@ acoustic sources/receptors and an altimetry.
 
 About the future architecture, take a look at the following schema.
 
-.. figure:: ../_static/built_resources/SourcesTargetArch.png
+.. figure:: _static/built_resources/SourcesTargetArch.png
    :align: center
    :alt: Target architecture schema
 
