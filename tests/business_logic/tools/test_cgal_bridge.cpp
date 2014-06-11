@@ -8,7 +8,6 @@
  */
 
 
-
 #include <vector>
 #include <deque>
 #include <memory>
@@ -26,6 +25,7 @@ using std::deque;
 
 #include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
 #include "Tympan/MetierSolver/DataManagerMetier/cgal_bridge.hpp"
+#include "Tympan/MetierSolver/DataManagerCore/exceptions.hpp"
 
 using tympan::ITYPolygonTriangulator;
 
@@ -82,6 +82,32 @@ TEST_F(TriangulatePolygonTest, concave_quadrangle)
     ASSERT_EQ(4, points.size());
     ASSERT_EQ(2, triangles.size());
 }
+
+TEST_F(TriangulatePolygonTest, vertical_face)
+{
+    vector<TYPoint> pts;
+    pts.push_back(TYPoint(0, 0, 0));
+    pts.push_back(TYPoint(1, 0, 0));
+    pts.push_back(TYPoint(1, 0, 2));
+    pts.push_back(TYPoint(0, 0, 2));
+
+    triangulate(pts);
+
+    ASSERT_EQ(4, points.size());
+    ASSERT_EQ(2, triangles.size());
+}
+
+TEST_F(TriangulatePolygonTest, non_simple_face)
+{
+    // see https://extranet.logilab.fr/ticket/1650297
+    vector<TYPoint> pts;
+    pts.push_back(TYPoint(0, 0, 0));
+    pts.push_back(TYPoint(2, 0, 0));
+    pts.push_back(TYPoint(1, 0, 0));
+
+    ASSERT_THROW(triangulate(pts), tympan::invalid_data);
+}
+
 
 TEST(AltimetryBuilder, instanciantion)
 {
