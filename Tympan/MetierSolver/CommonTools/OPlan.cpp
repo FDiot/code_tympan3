@@ -243,7 +243,7 @@ bool OPlan::isInPlan(const OPoint3D& pt)
 
     double z = vecPt1.scalar(n) + _d;
 
-    if (ABS(z) < EPSILON_13)
+    if (ABS(z) < EPSILON_6)
     {
         res = true;
     }

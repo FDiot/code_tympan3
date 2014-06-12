@@ -48,11 +48,21 @@ namespace tympan
         assert(triangles.size() == 0 &&
                "Output arguments 'triangles' is expected to be initially empty");
 
+        TYPolygon checked_poly(poly);
+        checked_poly.updateNormal(); // This actually updates the associated plane
+        if(!checked_poly.checkCoplanar())
+        {
+            std::deque<LPTYElement> elements;
+            LPTYElement element(new TYPolygon(poly));
+            elements.push_back(element);
+            throw tympan::invalid_data("Polygon is not planar.")
+                << tympan_source_loc << tympan::elements_implied_errinfo(elements);
+        }
         // NB The triangulation happen in the local r/ frame
         // We build a polygon in the plane (aka 2D) so as to be able to triangulate it
-        CGAL_Plane plane(to_cgal(poly.getPlan()));
+        CGAL_Plane plane(to_cgal(checked_poly.getPlan()));
         CGAL_Polygon poly2d;
-        BOOST_FOREACH(const OPoint3D& op, poly.getPoints())
+        BOOST_FOREACH(const OPoint3D& op, checked_poly.getPoints())
         {
             // Projection of `op` onto `plane`
             const CGAL_Point3 pp3d = plane.projection(to_cgal(op));
