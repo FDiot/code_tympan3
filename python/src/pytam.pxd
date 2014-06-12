@@ -88,6 +88,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
     # However "T max[T](T a, T b)" is actually supported in cython 0.20.
     TYSourcePonctuelle* downcast_source_ponctuelle "downcast<TYSourcePonctuelle>"(TYElement *)
     TYMaillage* downcast_maillage "downcast<TYMaillage>"(TYElement *)
+    TYPointControl* downcast_point_control "downcast<TYPointControl>"(TYElement *)
 
 # This is because it seems unsupported to declare a map containing pointers
 # http://trac.cython.org/cython_trac/ticket/793
@@ -101,6 +102,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h":
         size_t getNbOfSources() const
         OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
         map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
+        SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
 
 cdef extern from "Tympan/MetierSolver/CommonTools/OSpectre.h":
     const unsigned int TY_SPECTRE_DEFAULT_NB_ELMT
@@ -174,6 +176,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
         SmartPtr[TYAtmosphere] getAtmosphere()
         void selectActivePoint(SmartPtr[TYSiteNode] pSite)
         const vector[SmartPtr[TYGeometryNode]] getMaillages() const
+        void setNbThread(unsigned int nbThread)
 
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":
     cdef cppclass TYProjet (TYElement):

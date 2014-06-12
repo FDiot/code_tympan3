@@ -372,6 +372,15 @@ cdef class Result:
             raise NullCppObject()
         return self.thisptr.getRealPointer().getNbOfRecepteurs()
 
+    def receptor(self, index):
+        """ Return the receptor of index 'index'
+        """
+        if self.thisptr.getRealPointer() == NULL:
+            raise NullCppObject()
+        receptor = Receptor()
+        receptor.thisptr = self.thisptr.getRealPointer().getRecepteur(index)
+        return receptor
+
     def spectrum(self, receptor, source):
         """ Return the computed acoustic spectrum
         """
@@ -382,6 +391,22 @@ cdef class Result:
         return spec
 
 
+cdef class Receptor:
+    thisptr = cython.declare(SmartPtr[TYPointCalcul])
+
+    def __cinit__(self):
+        pass
+
+    def is_control_point(self):
+        """ Return true if the receptor is a control point (that is, a kind of
+            "smart" receptor), false otherwise
+        """
+        if self.thisptr.getRealPointer() == NULL:
+            raise NullCppObject()
+        control_point = cython.declare(cython.pointer(TYPointControl))
+        control_point = downcast_point_control(self.thisptr.getRealPointer())
+        return (control_point != NULL)
+
 cdef class Spectrum:
     thisobj = cython.declare(OSpectre)
 
@@ -390,13 +415,13 @@ cdef class Spectrum:
 
     @property
     def nvalues(self):
-        """ Returns the number of values contained in the spectrum
+        """ Return the number of values contained in the spectrum
         """
         return self.thisobj.getNbValues()
 
     @property
     def values(self):
-        """ Returns the values of the spectrum
+        """ Return the values of the spectrum
         """
         cdef cyarray cy_array = <double[:self.nvalues]> self.thisobj.getTabValReel()
         spec_val = np.array(cy_array, dtype=np.double)
@@ -476,6 +501,15 @@ cdef class Computation:
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         return self.thisptr.getRealPointer().go()
+
+    def set_nthread(self, nthread):
+        """ Set the number of threads used by the default solver to compute the
+            acoustic problem
+        """
+        if self.thisptr.getRealPointer() == NULL:
+            raise NullCppObject()
+        self.thisptr.getRealPointer().setNbThread(nthread)
+
     @property
     def acoustic_problem(self):
         """ Return an acoustic problem model (geometric representation as

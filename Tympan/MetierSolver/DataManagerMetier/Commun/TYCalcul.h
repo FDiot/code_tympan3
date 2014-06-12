@@ -833,6 +833,7 @@ public:
     unsigned short getTypeSaisieMeteo() const { return _typeSaisieMeteo; }
 
     unsigned int getNbTHread() const { return _nbThread; }
+    void setNbThread(unsigned int nbThread) { _nbThread = nbThread; }
 
     /*!
     * \fn void addRay(LPTYRay &ray)

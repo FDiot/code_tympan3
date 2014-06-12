@@ -636,7 +636,7 @@
    <condFav>0</condFav>
    <useVegetation>0</useVegetation>
    <useAtmosphere>1</useAtmosphere>
-   <useEcran>0</useEcran>
+   <useEcran>1</useEcran>
    <calculTrajetHorizontaux>1</calculTrajetHorizontaux>
    <useReflexion>0</useReflexion>
    <interference>0</interference>
