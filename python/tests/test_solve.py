@@ -40,6 +40,7 @@ def make_test_with_file(test_file):
             project.update_site()
             project.update_altimetry_on_receptors()
             computation = project.current_computation
+            computation.set_nthread(1) # avoid segfaults due to multithreading
             pytam.loadsolver(TEST_SOLVERS_DIR, computation)
             result = computation.go()
         self.assertTrue(result)
@@ -50,9 +51,24 @@ def make_test_with_file(test_file):
         # Compare results
         current_result = computation.result
         expected_result = expected_result_project.current_computation.result
-        self.assertEqual(current_result.nsources, expected_result.nsources)
-        self.assertEqual(current_result.nreceivers, expected_result.nreceivers)
-        for i in xrange(current_result.nreceivers):
+        # Check we have the same number of receptors
+        self.assertEqual(current_result.nreceptors, expected_result.nreceptors)
+        # Check if there is a control point (TYPointControl) among the receptors
+        # in the project.
+        # If not, we are not interested in checking the sources since the
+        # control points are the only receptors able to take into account the
+        # individual contributions of the sources.
+        # The sources here can be user sources, the machines and the buildings
+        # (TYUserSourcePonctuelle, TYMachine, TYBatiment)
+        check_nsources  = False
+        for i in xrange (current_result.nreceptors):
+            if current_result.receptor(i).is_control_point():
+                self.assertTrue(expected_result.receptor(i).is_control_point())
+                check_nsources = True
+        if check_nsources:
+            self.assertEqual(current_result.nsources, expected_result.nsources)
+        # check spectrums
+        for i in xrange(current_result.nreceptors):
             for j in xrange(current_result.nsources):
                 curr_spectrum = current_result.spectrum(i, j)
                 expected_spectrum = expected_result.spectrum(i, j)
