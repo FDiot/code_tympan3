@@ -240,6 +240,8 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         // Update the current project with the results of the current acoustic
         // problem
         pProject = result.getRealPointer();
+        getTYApp()->getCurProjet()->setCurrentCalcul(pProject->getCurrentCalcul());
+        pCalcul = pProject->getCurrentCalcul();
         getTYMainWnd()->getProjetFrame()->setProjet(pProject);
     }
 
