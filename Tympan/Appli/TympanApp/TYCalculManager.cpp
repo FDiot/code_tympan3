@@ -93,6 +93,12 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     if (!getTYApp()->_usePython)
     {
         logger.warning("Legacy computation (without Python)");
+        LPTYSiteNode pSite = pProject->getSite();
+        pSite->getTopographie()->sortTerrainsBySurface();
+        pSite->updateAltiInfra(true);
+        pSite->updateAcoustique(true);
+        pProject->updateAltiRecepteurs(pSite->getTopographie()->getAltimetrie());
+        pSite->setAtmosphere(pCalcul->getAtmosphere());
         bool ret = pCalcul->go();
     }
     else
