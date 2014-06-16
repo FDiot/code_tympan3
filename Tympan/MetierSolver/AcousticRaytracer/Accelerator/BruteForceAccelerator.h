@@ -22,8 +22,8 @@ class BruteForceAccelerator : public Accelerator
 {
 
 public:
-    BruteForceAccelerator() { }
-    BruteForceAccelerator(std::vector<Shape*> *_shapes, BBox& _globalBox) : Accelerator(_shapes, _globalBox) {    }
+    BruteForceAccelerator() : Accelerator() { }
+    BruteForceAccelerator(std::vector<Shape*> *_shapes, BBox& _globalBox) : Accelerator(_shapes, _globalBox) {  }
 
     BruteForceAccelerator(const BruteForceAccelerator& other)
     {
@@ -37,6 +37,5 @@ public:
     virtual bool build() { return true; }
 
     virtual decimal traverse(Ray* r, std::list<Intersection> &result);
-
 };
 #endif

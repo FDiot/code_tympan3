@@ -21,6 +21,9 @@
 #ifndef __STEP_H
 #define __STEP_H
 
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
+
 /*!
  * \class Step
  * \brief describe a step in the ray path
@@ -31,6 +34,11 @@ public :
     Step(const vec3& Pos = vec3(0., 0., 0.), const vec3& Norme = vec3(0., 0., 0.)) : pos(Pos), norm(Norme) {}
     Step(const Step& other) { pos = other.pos; norm = other.norm; }
     ~Step() {}
+
+    static Step Ray_adapter(Ray& ray)
+    {
+        return Step( ray.position, ray.direction );
+    }
 
 public :
     vec3 pos;

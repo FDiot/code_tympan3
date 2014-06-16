@@ -13,34 +13,35 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef BASE_H
-#define BASE_H
+#ifndef DEFAULT_CURV_RAY_ENGINE_H
+#define DEFAULT_CURV_RAY_ENGINE_H
 
-#include <string>
+#include "Tympan/MetierSolver/AcousticRayTracer/Engine/DefaultEngine.h"
+#include <stack>
 
-class Base
+class DefaultCurvRayEngine : public DefaultEngine
 {
 
 public:
-    Base()
+    DefaultCurvRayEngine() : DefaultEngine() {}
+
+    DefaultCurvRayEngine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, std::vector<Recepteur> *_recepteurs)
+        : DefaultEngine(_scene, _sources, _solver, _recepteurs) {  }
+
+    DefaultCurvRayEngine(const DefaultCurvRayEngine& other)
     {
-        name = "unkown element";
-    }
-    Base(const Base& other)
-    {
-        name = other.name;
+        scene = other.scene;
+        sources = other.sources;
+        solver = other.solver;
+        recepteurs = other.recepteurs;
     }
 
-    virtual ~Base()
-    {
-    }
+    virtual ~DefaultCurvRayEngine() { }
 
-    std::string getName() { return name; }
-
-    void setName(const std::string& _name) { name = _name; }
+    virtual bool process();
 
 protected:
-    std::string name;
+    virtual bool traitementRay(Ray* r, std::list<validRay> &result);
 };
 
-#endif
+#endif //_CURV_RAY

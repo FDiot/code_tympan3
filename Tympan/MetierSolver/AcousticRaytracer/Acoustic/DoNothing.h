@@ -13,21 +13,42 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef DUPLICATE_EVENT_POST_FILTER_H
-#define DUPLICATE_EVENT_POST_FILTER_H
+#ifndef DO_NOTHING_H
+#define DO_NOTHING_H
 
-class duplicateEventPostFilter : public postFilter
+#include "Event.h"
+
+class DoNothing : public Event
 {
-public:
-    duplicateEventPostFilter(std::vector<Ray*> *tabRay) : postFilter(tabRay) {}
-    ~duplicateEventPostFilter() {}
 
-    /*!
-     * \fn unsigned int Traite();
-     * \brief apply a filter to the group of valid rays found by ray tracing
-     * \return number of rays suppressed
-     */
-    virtual unsigned int Process();
+public:
+
+    DoNothing(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL):
+        Event(position, incomingDirection, _shape) { nbResponseLeft = initialNbResponse = 1; type = NOTHING;}
+
+    DoNothing(const DoNothing& other) : Event(other)
+    {
+        type = NOTHING;
+    }
+
+    virtual ~DoNothing()
+    {
+
+    };
+
+    virtual bool getResponse(vec3& r, bool force = false)
+	{
+		nbResponseLeft--;
+	
+		r = from;
+
+		return (nbResponseLeft >= 0);
+	}
+
+    virtual bool isAcceptableResponse(vec3& test)
+    {
+        return false;
+    }
 };
 
-#endif //DUPLICATE_EVENT_POST_FILTER_H
+#endif // DO_NOTHING_H

@@ -16,18 +16,12 @@
 #ifndef __RAYCOURB_H
 #define __RAYCOURB_H
 
-#include <cmath>
-#include <cassert>
-#include <cstdlib>
 #include <vector>
 #include <map>
-#include <iostream>
-
-#include "meteo.h"
 #include "Step.h"
+#include "../AcousticRaytracer/Geometry/mathlib.h"
 
 using namespace std;
-
 
 class RayCourb
 {

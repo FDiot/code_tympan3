@@ -16,10 +16,6 @@
 #ifndef EVENT_H
 #define EVENT_H
 
-//#ifdef USE_QT
-//
-//#include <QtGui>
-//#endif
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
 #include <vector>
@@ -28,19 +24,14 @@
 enum typeevent
 {
     SPECULARREFLEXION = 0,
-    DIFFRACTION
+    DIFFRACTION, 
+	NOTHING
 };
 
 class Shape;
 
 class Event : public Base
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Recepteur)
-    //  GRAPHIC_DECL(Event)
-    //#endif
-
 public:
     Event(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL) :
         Base(),
@@ -114,6 +105,8 @@ public:
     */
     Shape* getShape() { return shape; }
 
+    const Shape* getShape() const { return shape; }
+
     /*!
     * \fn void setShape(Shape* _shape)
     * \brief place la primitive impactee
@@ -148,7 +141,7 @@ public:
     * \return type de l'evenement
     * \warning Doit etre redefini par les classes heritant de Event
     */
-    virtual int getType() { return type; }
+    virtual int getType() const { return type; }
 
     /*!
      * \fn virtual void setType()
@@ -156,7 +149,7 @@ public:
      */
     virtual void setType(const typeevent& _type) { type = _type; }
 
-    virtual double getAngle() { return 0.0; }
+    virtual double getAngle() const { return 0.0; }
 
     /*!
     * \fn const decimal distance(const Event &other) const
@@ -174,8 +167,10 @@ protected:
     Sampler* sampler;
     Shape* shape;       /*< La primitive impactee */
     typeevent type;     /*!< Type de l'evenement */
-    std::vector<vec3> targets;
 
+#ifdef _ALLOW_TARGETING_
+    std::vector<vec3> targets;
+#endif
 };
 
 #endif

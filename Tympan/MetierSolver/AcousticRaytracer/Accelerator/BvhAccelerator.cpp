@@ -96,8 +96,8 @@ bool CompareToBucket::operator()(const BVHPrimitiveInfo& p) const
     int b = nBuckets * ((p.centroid[dim] - centroidBounds.pMin[dim]) /
                         (centroidBounds.pMax[dim] - centroidBounds.pMin[dim]));
     if (b == nBuckets) { b = nBuckets - 1; }
-    //Assert(b >= 0 && b < nBuckets);
-    return b <= splitBucket;
+
+	return b <= splitBucket;
 }
 
 struct LinearBVHNode
@@ -158,7 +158,6 @@ BvhAccelerator::BvhAccelerator(std::vector<Shape*>* _initialMesh,
     else if (sm == "equal") { splitMethod = SPLIT_EQUAL_COUNTS; }
     else
     {
-        //std::cout << "BVH split method " << sm.c_str() << " unknown.  Using \"sah\"." << std::endl;
         splitMethod = SPLIT_SAH;
     }
 
@@ -206,8 +205,8 @@ BVHBuildNode* BvhAccelerator::recursiveBuild(std::vector<BVHPrimitiveInfo> &buil
 
         // Partition primitives into two sets and build children
         uint32_t mid = (start + end) / 2;
-        //std::cout<<"Construction entre "<<start<<" et "<<end<<std::endl;
-        if (centroidBounds.pMax[dim] == centroidBounds.pMin[dim])
+
+		if (centroidBounds.pMax[dim] == centroidBounds.pMin[dim])
         {
             // Create leaf _BVHBuildNode_
             uint32_t firstPrimOffset = orderedPrims.size();
@@ -276,7 +275,6 @@ BVHBuildNode* BvhAccelerator::recursiveBuild(std::vector<BVHPrimitiveInfo> &buil
                                 ((buildData[i].centroid[dim] - centroidBounds.pMin[dim]) /
                                  (centroidBounds.pMax[dim] - centroidBounds.pMin[dim]));
                         if (b == nBuckets) { b = nBuckets - 1; }
-                        //Assert(b >= 0 && b < nBuckets);
                         buckets[b].count++;
                         buckets[b].bounds = buckets[b].bounds.Union(buildData[i].bounds);
                     }
@@ -355,7 +353,6 @@ uint32_t BvhAccelerator::flattenBVHTree(BVHBuildNode* node, uint32_t* offset)
     uint32_t myOffset = (*offset)++;
     if (node->nPrimitives > 0)
     {
-        //Assert(!node->children[0] && !node->children[1]);
         linearNode->primitivesOffset = node->firstPrimOffset;
         linearNode->nPrimitives = node->nPrimitives;
     }
@@ -402,7 +399,8 @@ decimal BvhAccelerator::traverse(Ray* ray, std::list<Intersection> &result)
                         //PBRT_BVH_INTERSECTION_PRIMITIVE_HIT(const_cast<Primitive *>(primitives[node->primitivesOffset+i].GetPtr()));
                         result.push_back(currentIntersection);
 
-                        intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+                        //intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
+                        intermin = (*pLeafTreatmentFunction) (result, intermin);
                     }
                     else
                     {
@@ -464,7 +462,6 @@ bool BvhAccelerator::build()
                                         primitives.size(), &totalNodes,
                                         orderedPrims);
     primitives.swap(orderedPrims);
-    //std::cout << "BVH created with " << totalNodes << " nodes for " << (int)primitives.size() << " primitives (" << float(totalNodes * sizeof(LinearBVHNode)) / (1024.f * 1024.f) << " MB)" << std::endl;
 
     // Compute representation of depth-first traversal of BVH tree
     nodes = (LinearBVHNode*)malloc(totalNodes * sizeof(LinearBVHNode));
