@@ -239,9 +239,13 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
 
         // Update the current project with the results of the current acoustic
         // problem
+        TYCalcul* pOldComp = pCalcul;
         pProject = result.getRealPointer();
-        getTYApp()->getCurProjet()->setCurrentCalcul(pProject->getCurrentCalcul());
         pCalcul = pProject->getCurrentCalcul();
+        getTYApp()->getCurProjet()->setCurrentCalcul(pCalcul);
+        // Can't remove current computation so first assign it and then remove
+        // the previous one from the project
+        getTYApp()->getCurProjet()->remCalcul(pOldComp);
         getTYMainWnd()->getProjetFrame()->setProjet(pProject);
     }
 
