@@ -25,11 +25,16 @@ AcousticBuildingMaterial::AcousticBuildingMaterial(
 ) : AcousticMaterialBase(name_), spectrum(spectrum_) {}
 
 // ---------
-AtmosphericConditions *AcousticGroundMaterial::atmosphere = NULL;
+AtmosphericConditions *AcousticGroundMaterial::atmosphere = new AtmosphericConditions(101300., 20., 70.);
 
 AcousticGroundMaterial::AcousticGroundMaterial(
     const string& name_, double resistivity_ ) : 
     AcousticMaterialBase(name_),  resistivity(resistivity_), thickness(1.0) 
+{
+    init();
+}
+
+void AcousticGroundMaterial::init()
 {
     computeZc();
     computeK();

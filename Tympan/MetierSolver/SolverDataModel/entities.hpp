@@ -137,6 +137,8 @@ protected:
 
 
 private:
+    void init();
+
     /*!
      * \brief : Functions used in Fw computation
      */
