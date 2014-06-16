@@ -14,7 +14,6 @@
 */
 
 #include "RayCourb.h"
-#include "../AcousticRaytracer/Geometry/mathlib.h"
 
 RayCourb::RayCourb() : nbReflex(0)
 {

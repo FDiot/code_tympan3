@@ -29,5 +29,5 @@ bool Recepteur::intersectionRecepteur(vec3& origine, vec3& directeur, float tmax
         r.maxt = tmax;
     }
 
-    return shape->getIntersection(r, result);
+    return getIntersection(r, result);
 }

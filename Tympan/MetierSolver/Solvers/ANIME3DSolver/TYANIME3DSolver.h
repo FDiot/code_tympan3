@@ -17,6 +17,13 @@
 #ifndef __TY_ANIME3DSOLVER__
 #define __TY_ANIME3DSOLVER__
 
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
+#include "Tympan/MetierSolver/CommonTools/OMatrix.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
 
 class TYANIME3DAcousticModel;
@@ -24,7 +31,6 @@ class TYANIME3DAcousticPathFinder;
 class TYANIME3DFaceSelector;
 
 class Lancer;
-class R3;
 
 //Structure permettant de stocker les informations de Tympan dans un format aisement convertible
 //Les infos idFace, idBuilding, idEtage, spectreAbsoMat, G ne sont pas obligatoires.
@@ -95,31 +101,6 @@ protected:
      */
     void saveAndOverSampleRay(const TYSiteNode& site, TYCalcul& calcul, const unsigned int& sens = 0, const double& dMin = 0.0);
 
-    /*!
-     *\fn void restitModifiedAlti(TYSiteNode& site)
-     *\brief Restitue au site la topographie (et infrastructure) transformee
-     */
-    // CAUTION restitModifiedAlti() is incompatible with the new altimetry
-    // void restitModifiedAlti(const TYSiteNode& site, TYANIME3DAcousticPathFinder& pathFinder);
-
-    /*!
-     * \fn exportRays(TYCalcul& calcul)
-     * \brief export rays computed by acousticRayTracer in curved geometry
-     */
-    //  void exportRays(TYCalcul& calcul);
-
-    /*!
-     * \fn buildTestMeteoParameters()
-     * \brief Build parameters file for TestMeteoSolver
-     */
-    //    void buildTestMeteoParameters();
-
-    /*!
-     * \fn restitMap()
-     * \brief Send map of curved ray to metier
-     */
-    //  void restitMap(const TYSiteNode& site);
-
 protected:
     TYTabRay _tabRay;
 
@@ -128,12 +109,6 @@ protected:
 
     /// Nombre de polygones presents dans _tabPolygon
     size_t _tabPolygonSize;
-
-    /// Objet _rayTracing pour le lancer de rayons droits
-    //    Simulation _rayTracing;
-
-    /// Objet _curveRayTracing pour le lancer de rayons courbes
-    //    Transfo _curveRayTracing;
 
     Logger logger;
     FILE logs;

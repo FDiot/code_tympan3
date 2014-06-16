@@ -13,19 +13,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "meteoLin.h"
-#include "RayCourb.h"
-#include "Lancer.h"
-#include <iostream>
-#include <sstream>
-#include <fstream>
-#include <string>
-#include <array>
+
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Latitude2DSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Longitude2DSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
 
+#include "meteo.h"
+#include "meteoLin.h"
+#include "RayCourb.h"
+#include "Lancer.h"
 
 Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(20)
 {
@@ -65,13 +63,6 @@ Lancer::Lancer(Lancer& L)
 
     init();
 }
-
-
-//Lancer::Lancer(vector<vec3> sources, vector<vec3> recepteurs, vector<vec3*> plan, meteo* Meteo, decimal h, decimal TmpMax, vector<decimal> temps, decimal dmax, unsigned int nbRay) :
-//    sources(sources), recepteurs(recepteurs), _plan(plan), _weather(Meteo), h(h), TMax(TmpMax), temps(temps), dmax(dmax), nbRay(nbRay)
-//{
-//    //RemplirMat();
-//}
 
 Lancer::~Lancer()
 {
@@ -138,23 +129,14 @@ Step Lancer::EqRay(const Step& y0)                       // Fonction definissant
     // on calcule les coordonnees
     y.pos = ((s * (c * c / omega)) + v);    //(c * c / omega * s + v)
 
-    // on calcule les normales
-    //n.x = - omega / c * Dc.x - Jv[make_pair(1, 1)] * s.x - Jv[make_pair(1, 2)] * s.y - Jv[make_pair(1, 3)] * s.z;
-    //n.y = - omega / c * Dc.y - Jv[make_pair(2, 1)] * s.x - Jv[make_pair(2, 2)] * s.y - Jv[make_pair(2, 3)] * s.z;
-    //n.z = - omega / c * Dc.z - Jv[make_pair(3, 1)] * s.x - Jv[make_pair(3, 2)] * s.y - Jv[make_pair(3, 3)] * s.z;
-
-    //n.x += (Jv[make_pair(1, 2)] - Jv[make_pair(2, 1)]) * s.y + (Jv[make_pair(1, 3)] - Jv[make_pair(3, 1)]) * s.z;
-    //n.y += (Jv[make_pair(2, 3)] - Jv[make_pair(3, 2)]) * s.z + (Jv[make_pair(2, 1)] - Jv[make_pair(1, 2)]) * s.x;
-    //n.z += (Jv[make_pair(3, 1)] - Jv[make_pair(1, 3)]) * s.x + (Jv[make_pair(3, 2)] - Jv[make_pair(2, 3)]) * s.y;
-
-    n.x = - omega / c * Dc.x - Jv[0][0] * s.x - Jv[0][1] * s.y - Jv[0][2] * s.z;
+    // On calcule les normales
+	n.x = - omega / c * Dc.x - Jv[0][0] * s.x - Jv[0][1] * s.y - Jv[0][2] * s.z;
     n.y = - omega / c * Dc.y - Jv[1][0] * s.x - Jv[1][1] * s.y - Jv[1][2] * s.z;
     n.z = - omega / c * Dc.z - Jv[2][0] * s.x - Jv[2][1] * s.y - Jv[2][2] * s.z;
 
     n.x += (Jv[0][1] - Jv[1][0]) * s.y + (Jv[0][2] - Jv[2][0]) * s.z;
     n.y += (Jv[1][2] - Jv[2][1]) * s.z + (Jv[1][0] - Jv[0][1]) * s.x;
     n.z += (Jv[2][0] - Jv[0][2]) * s.x + (Jv[2][1] - Jv[1][2]) * s.y;
-
 
     y.norm = n;
 
@@ -184,8 +166,6 @@ RayCourb Lancer::RK4(const Step& y0)
     /* on definit deux vectors : un  "actuel" et un "suivant" car la methode de Runge-Kutta est une methode de resolution explicite a un pas de temps */
     Step yAct(y0);
     Step ySuiv;
-
-    Step k1, k2, k3, k4;                            // variables intermediaires pour la resolution de l'algorithme de Runge-Kutta
     int cpt_tps = 0;                                      // compteur de temps
 
     // Les premieres valeurs correspondent a notre source.
@@ -200,13 +180,7 @@ RayCourb Lancer::RK4(const Step& y0)
         // Car on parcourt les objets dans l'ordre ou ils sont ranges mais il se peut qu'un objet A plus pres du point considere se trouve apres un objet B plus loin
         // et quand on boucle, si on sort des la premiere intersection, la reponse sera l'intersection avec B alors que dans la realite, c'est avec l'objet A qu'il y a une intersection.
 
-
-        k1 = EqRay(yAct) * h;               // k1 = h * EqRay(yAct, Meteo);
-        k2 = EqRay(yAct + k1 * 0.5) * h;        // k2 = h * EqRay(yAct + 0.5 * k1, Meteo);
-        k3 = EqRay(yAct + k2 * 0.5) * h;        // k3 = h * EqRay(yAct + 0.5 * k2, Meteo);
-        k4 = EqRay(yAct + k3) * h;          // k4 = h * EqRay(yAct + k3, Meteo);
-
-        ySuiv = yAct + ((k1 + k2 * 2. + k3 * 2. + k4) * (1. / 6.));
+        ySuiv = compute_next_step(yAct);
 
         // Recherche des intersections
         intersection(cpt_tps, y, yAct, ySuiv);
@@ -258,6 +232,18 @@ void Lancer::RemplirMat()
     assert(MatRes.size() == sources.size());
 
     if (wantOutFile) { save(); }
+}
+
+Step Lancer::compute_next_step(const Step& current_step)
+{
+    Step k1, k2, k3, k4;
+
+    k1 = EqRay(current_step) * h;
+    k2 = EqRay(current_step + k1 * 0.5) * h;
+    k3 = EqRay(current_step + k2 * 0.5) * h;
+    k4 = EqRay(current_step + k3) * h;
+
+    return current_step + ((k1 + k2 * 2. + k3 * 2. + k4) * (1. / 6.));
 }
 
 
