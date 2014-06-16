@@ -365,20 +365,20 @@ cdef class Result:
         return self.thisptr.getRealPointer().getNbOfSources()
 
     @property
-    def nreceivers(self):
-        """ Returns the number of acoustic receivers
+    def nreceptors(self):
+        """ Returns the number of acoustic receptors
         """
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         return self.thisptr.getRealPointer().getNbOfRecepteurs()
 
-    def spectrum(self, receiver, source):
-        """ Returns the computed acoustic spectrum
+    def spectrum(self, receptor, source):
+        """ Return the computed acoustic spectrum
         """
         if self.thisptr.getRealPointer() == NULL:
             raise NullCppObject()
         spec = Spectrum()
-        spec.thisobj = self.thisptr.getRealPointer().getSpectre(receiver, source)
+        spec.thisobj = self.thisptr.getRealPointer().getSpectre(receptor, source)
         return spec
 
 

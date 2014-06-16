@@ -31,7 +31,7 @@ def make_test_with_file(test_file):
     from data/expected/TEST_xx.xml and compare the computed result with
     the expected result.
     The acoustic spectrums of the results are compared one by one (identified
-    by a receiver and source id), in a dB scale, with a 1 decimal definition.
+    by a receptor and source id), in a dB scale, with a 1 decimal definition.
     """
     def test_with_file(self):
         # Load and solve the project
