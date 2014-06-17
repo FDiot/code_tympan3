@@ -43,14 +43,14 @@ Core and Tools
 See the ``Tools`` directory and some sub-directories in ``MetierSolver``:
 
   - ``DataManagerCore``: the main base class ``TYElement`` used for every
-    business logic object. Also implement an interface for the solvers and some
+    business logic objects. Also implements an interface for the solvers and some
     XML tools in order to export/import a Code_TYMPAN study ;
   - ``CommonTools`` common objects used by the `Business Logic`_ objects: point,
     vector, matrix, etc.
 
 The rationale behind the creation of ``CommonTools`` is to provide
 basic representations and utilities which *do not depend* upon
-``TYElement`` nor ``OPrototype``. Typically such representation and
+``TYElement`` nor ``OPrototype``. Typically such representations and
 utilities are likely to be shared between the main application and the
 solvers.
 
@@ -69,7 +69,7 @@ meshing) upon CGAL features ; its API relies on CGAL types and does
 not depend on other Tympan types.
 
 The ``cgal_bridge`` module in ``DataManagerMetier`` exposes interfaces
-to those features expressed with the main Tympan datatypes and ensure
+to those features expressed with the main Tympan datatypes and ensures
 the conversions.
 
 This allows independent development and testing and reduces
@@ -124,7 +124,7 @@ This method is slow because the GPU has to wait for all the data to be transferr
 The rendering function of each business logic object is located in ``GraphicIHM/DataManagerGraphic``
 and simple geometry rendering can be found at ``GraphicIHM/ToolsGraphic``.
 
-In order to make the rendering faster, the OpenGL commands can be compiled and store on the GPU.
+In order to make the rendering faster, the OpenGL commands can be compiled and stored on the GPU.
 That way, the CPU simply has to tell the GPU to render this display list instead of sending the
 geometry on each frame. The use of displayList can be found at ``Appli/TympanApp/TYOpenGLRenderer.cpp``.
 It simply encapsulates all the rendering function (immediate mode) of the scene.
@@ -140,13 +140,13 @@ glRotate(), glTranslate(), ... Additionally, the matrix management of OpenGL fea
 matrices (glPushMatrix(), glPopMatrix()).
 The goal of OpenGL is to take advantages of the "**GPU**", but all the functions that implies matrix
 operations are done on the "**CPU**", they are now deprecated and should be done by the application
-itself and not the OpenGL API. There exists many libraries that features matrix management (CGAL? Qt?).
+itself and not the OpenGL API. There exist many libraries that feature matrix management (CGAL? Qt?).
 
 Picking
 ```````
 
 The picking is entirely done on the GPU by using a name stack and a selection buffer.
-This method rely on OpenGL deprecated functions and the steps are as followed:.
+This method relies on OpenGL deprecated functions and the steps are as follows:
 
  #. We define a small "*picking window*"(5 pixel width) and we enter selection mode
     (a mode where the resulting rendering won't be displayed).
@@ -159,7 +159,7 @@ The algorithm is located in the ``Appli/TympanApp/TYElementPicker.cpp`` file.
 .. note::
 
    Actually, numerous names can be given to a primitive, that's the reason why a stack is used.
-   It enables the programmer to pick objects as an hierarchical structure.
+   It enables the programmer to pick objects as a hierarchical structure.
 
 There are two principal different ways of doing picking :
 
@@ -167,7 +167,7 @@ There are two principal different ways of doing picking :
   - ray intersection.
 
 The color picking uses entirely the GPU once again. We render every objects with an unique
-color, then we read the color of the pixel under the mouse. This technique is straighforward and should
+color, then we read the color of the pixel under the mouse. This technique is straightforward and should
 be simple to implement, however we can't get the coordinate of the intersection point.
 
 The other method consists of a ray that we cast on the scene, and then perform ray-intersection
