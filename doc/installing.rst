@@ -77,6 +77,17 @@ CGAL
                   - 4.2 and 4.3 bring improvement regarding triangulation
                   - 4.4 is quite young at the time of this writing (may 2014)
 
+Python
+        A Python_ interpreter is required, version 2.7
+
+Cython
+        Cython_ is a programming language inspired from Python, allowing to
+        write Python code with C/C++ declarations. The cython code is then
+        translated into C/C++ and compiled as a Python library. It is used in
+        Code_TYMPAN to interface Python code with TYMPAN C++ libraries. A version
+        0.19 or above is required.
+
+
 Documentation dependencies
 --------------------------
 
@@ -147,6 +158,11 @@ this command.
 .. [#] A *complete* installation of Boost is not strictly required but
        is much easier than picking all the required components by hand.
 
+**Installation of python and cython** ::
+
+    $ sudo aptitude install python cython
+
+
 Windows Seven
 =============
 
@@ -179,6 +195,11 @@ CMake
 CGAL
         See the `Compiling CGAL`_ (no real binary installer available on Windows) :
         https://gforge.inria.fr/frs/download.php/32993/CGAL-4.3-Setup.exe
+
+Cython
+        Cython can be installed through *Python(x,y)*  and found at:
+        http://code.google.com/p/pythonxy/wiki/StandardPlugins (follow the
+        installation instructions)
 
 If you have no direct Internet connection (typically you are behind an
 authenticating proxy) you will have to build Boost from source :
@@ -329,7 +350,8 @@ opening the solution.
 .. _CMake: http://www.cmake.org/
 .. _CGAL: http://www.cgal.org/
 .. _MinGW: http://www.mingw.org/
-
+.. _Python: http://www.python.org/
+.. _Cython: http://www.cython.org/
 
 .. _`CGAL forge` : https://gforge.inria.fr/frs/?group_id=52
 
