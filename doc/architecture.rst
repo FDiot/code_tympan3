@@ -30,6 +30,12 @@ The schema of the current architecture:
 
 .. todo:: write a legend for the previous schema
 
+.. todo:: update this diagram: no more TympanConsole, make python qprocess appear
+   (on the diagram of the future archi too)
+
+.. todo:: is it still necessary to keep these two parts: current and future architecture,
+   since now we are in a state somewhere between the two?
+
 .. note::
 
    The main Code_TYMPAN executable to launch the application is in the
@@ -94,6 +100,14 @@ See the different sub-directories in ``MetierSolver/DataManagerMetier``:
     (sources, receptor, paths), materials, machines, etc.
   - ``SolverDataModel``: the current work which describes a data model for the
     solvers. This is a part of the `Future Architecture`_;
+
+Code_TYMPAN offers a way to build the ``DataManagerMetier`` objects from
+a string representing their class name. This feature (mostly used during XML
+deserialization) is implemented in the ``OPrototype`` class through a factory
+pattern. To use this facility, it is first necessary to register all the objects
+that will need it. This is handled by the ``init_registry()`` method
+(from ``Tympan/MetierSolver/DataManagerMetier/init_registry.h``), that must be
+ran before any call to the methods specified by ``OPrototype`` interface.
 
 For now, the splitting between the business logic objects and the `Graphical User
 Interface`_ is not clear. In other words, you can have a strong dependency
@@ -189,6 +203,25 @@ is dedicated to the solver named *Simple Ray Solver* but does not occur in the
 ``Solvers`` directory.
 
 
+Appli
+-----
+
+The ``Appli`` package is the place where the simulation workflow is split in
+order to delegate some of the processing to a Python subprocess (see ``launch()``
+method from ``TYCalculManager`` class).
+When asked to perform a simulation, the computation manager:
+
+* Serializes the current project to a XML file
+* Calls a subprocess running ``tympan.py`` python script that uses tympan libraries to:
+
+  * Read the serialized file
+  * Build a data model representing the acoustic problem (see details below, section **Future Architecture**)
+  * Run the simulation
+  * Serialize the computed project (with the results)
+* Reads the simulation results from the file serialized by the Python subprocess
+* Updates the current project with these results
+
+
 Future Architecture
 -------------------
 
@@ -204,14 +237,18 @@ idea is to split:
 
 Some tasks have already been started:
 
- #. Make a data model for the solver part, i.e. create objects such acoustic
-    sources, triangles related to a material, a spectrum, etc. in order to
-    define a model used by any solver. These objecs are built from a specific
-    site.
+ #. Make a dedicated data model for the solver part (see class ``AcousticProblemModel``),
+    i.e. create elementary
+    objects (as opposed to business objects) such as acoustic sources and receptors,
+    triangles related to a material, spectrums, etc. in order to
+    define a model that can be used by any solver.
  #. Change the core simulation workflow in order to have a clear separation
-    between the business logic and the solvers. In other words, data from site
-    to the computation and then the graphical user interface will be provided by
-    a few data files.
+    between the business logic and the solvers.
+    In other word, rewrite the solvers (starting from the default solver) to
+    make them use the new data model aforementioned, which is built from the
+    business representation of the site just before the computation.
+ #. Build the solver data model from the Python subprocess by going through the
+    current site and computation and extracting relevant data.
 
 Here a schema about the splitting between site elements and the computation ---
 separate the business logic related to a site with the way to solve the acoustic
