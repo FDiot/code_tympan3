@@ -32,7 +32,7 @@ Main developers' tasks
    installing
    building
    testing
-
+   debugging
 
 Computations and algorithms
 ---------------------------
