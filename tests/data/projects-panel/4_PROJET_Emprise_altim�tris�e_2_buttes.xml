@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
 <Tympan>
- <Version>3.8.0 - EDF - EDF-00000000</Version>
- <Projet id="{98707fcb-023a-4d25-843a-35bda3efd371}" name="Projet 0">
+ <Version>4.1.14 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
+ <Projet id="{98707fcb-023a-4d25-843a-35bda3efd371}" name="Project_4">
   <auteur></auteur>
-  <dateCreation>2001-10-01</dateCreation>
-  <dateModif>2001-10-01</dateModif>
+  <dateCreation>2014-06-17</dateCreation>
+  <dateModif>2014-06-17</dateModif>
   <delaunayTolerence>0.0001</delaunayTolerence>
   <distMaxBetweenPoints>100</distMaxBetweenPoints>
   <useDefGeomVal>1</useDefGeomVal>
@@ -181,7 +181,7 @@
          <type>2</type>
          <fMin>16</fMin>
          <fMax>16000</fMax>
-         <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+         <freqTab form="0">79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0</freqTab>
         </Spectre>
        </UserSrcRegime>
       </UserSourcePonctuelle>
@@ -196,12 +196,18 @@
   <PointsControl>
    <PointControl x="82.000" y="-95.000" z="52.000" id="{fb136d24-2b60-4acf-8aa1-007e2413ab1f}" name="Point de contrôle 0">
     <etatCalcul idCalcul="{58cbe526-8b47-441f-bcd1-7499ae8d9e15}" Etat="1"/>
+    <Spectre idCalcul="{58cbe526-8b47-441f-bcd1-7499ae8d9e15}" id="{3e9a1f61-637f-48ab-a5cf-a6361eba0113}" name="">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">21.1 20.8 20.7 20.6 20.3 20.0 19.6 19.2 18.6 18.2 17.6 17.0 16.3 15.5 14.7 13.7 12.7 11.7 10.5 9.3 8.0 6.7 5.1 3.1 0.6 -2.8 -7.6 -14.6 -25.0 -40.3 -63.5</freqTab>
+    </Spectre>
     <Color g="0" r="0.333333" b="1"/>
     <hauteur>2.000</hauteur>
     <formeObjet>0</formeObjet>
    </PointControl>
   </PointsControl>
-  <Calcul isUpTodate="0" id="{58cbe526-8b47-441f-bcd1-7499ae8d9e15}" name="Calcul 0">
+  <Calcul isUpTodate="1" id="{58cbe526-8b47-441f-bcd1-7499ae8d9e15}" name="Calcul 0">
    <numero>1</numero>
    <auteur>Auteur</auteur>
    <dateCreation>2001-10-01</dateCreation>
@@ -254,12 +260,32 @@
     </Spectre>
    </Atmosphere>
    <Resultat id="{fdf4732c-1b2f-45d4-9f7a-6a81f2149cbd}" name="Résultat 0">
-    <ListSources/>
+    <ListSources>
+     <Source srcId="{3bbad011-bbc6-436b-bd9c-54045f27a834}" index="0"/>
+    </ListSources>
     <ListRecepteurs>
      <Recepteur recId="{fb136d24-2b60-4acf-8aa1-007e2413ab1f}" index="0"/>
     </ListRecepteurs>
-    <ListSpectres/>
-    <ListLw/>
+    <ListSpectres>
+     <SpectreInd indexRec="0" indexSrc="0">
+      <Spectre id="{9d0dbb53-04bc-4936-b4a5-983be15b55a6}" name="Spectre 43">
+       <type>3</type>
+       <fMin>16</fMin>
+       <fMax>16000</fMax>
+       <freqTab form="0">21.1 20.8 20.7 20.6 20.3 20.0 19.6 19.2 18.6 18.2 17.6 17.0 16.3 15.5 14.7 13.7 12.7 11.7 10.5 9.3 8.0 6.7 5.1 3.1 0.6 -2.8 -7.6 -14.6 -25.0 -40.3 -63.5</freqTab>
+      </Spectre>
+     </SpectreInd>
+    </ListSpectres>
+    <ListLw>
+     <SourceLw srcId="{3bbad011-bbc6-436b-bd9c-54045f27a834}">
+      <Spectre id="{ee2ad67c-fb65-40e5-a21b-92e5ea11935a}" name="">
+       <type>2</type>
+       <fMin>16</fMin>
+       <fMax>16000</fMax>
+       <freqTab form="0">79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0 79.0</freqTab>
+      </Spectre>
+     </SourceLw>
+    </ListLw>
    </Resultat>
   </Calcul>
  </Projet>
