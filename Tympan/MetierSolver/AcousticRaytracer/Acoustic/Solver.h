@@ -18,6 +18,7 @@
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
 #include <vector>
+#include <deque>
 
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Scene.h"
@@ -124,14 +125,16 @@ public:
     * \brief Renvoie la liste des rayons valides.
     * \return Pointeur vers le vecteur contenant les rayons valides par le solveur.
     */
-    virtual vector<Ray*>* getValidRays() { return &valid_rays;}
+    virtual deque<Ray*>* getValidRays() { return &valid_rays;}
+    //virtual vector<Ray*>* getValidRays() { return &valid_rays;}
 
     /*!
     * \fn vector<Ray*>* getDebugRays()
     * \brief Renvoie la liste des rayons invalides.
     * \return Pointeur vers le vecteur contenant les rayons invalides par le solveur.
     */
-    vector<Ray*>* getDebugRays() { return &debug_rays;}
+    deque<Ray*>* getDebugRays() { return &debug_rays;}
+    //vector<Ray*>* getDebugRays() { return &debug_rays;}
 
     virtual void finish();
 
@@ -145,8 +148,8 @@ public:
     virtual bool loadParameters();
 
 protected:
-    vector<Ray*> valid_rays;    /*!< Liste des rayons valides par le solveur */
-    vector<Ray*> debug_rays;    /*!< List des rayons invalides par le solveur */
+    deque<Ray*> valid_rays;    /*!< Liste des rayons valides par le solveur */
+    deque<Ray*> debug_rays;    /*!< List des rayons invalides par le solveur */
 };
 
 #endif // SOLVER_H

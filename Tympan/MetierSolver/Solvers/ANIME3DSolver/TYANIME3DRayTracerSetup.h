@@ -16,6 +16,8 @@
 #ifndef TYANIME3DRAYTRACERSETUP_H
 #define TYANIME3DRAYTRACERSETUP_H
 
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Solver.h"
 
 /**
 * \class TYANIME3DRayTracerSetUp
@@ -110,7 +112,6 @@ public:
 protected:
     SelectorManager<Ray> selectorManagerIntersection;
     SelectorManager<Ray> selectorManagerValidation;
-    TargetManager targetManager;
 
 private:
     double getParam(char* ligne)
@@ -122,6 +123,11 @@ private:
         const char* bidon = str.c_str();
         return std::atof(bidon);
     }
+
+#ifdef _ALLOW_TARGETING_
+protected :
+    TargetManager targetManager;
+#endif //_ALLOW_TARGETING_
 };
 
 #endif //TYANIME3DRAYTRACERSETUP_H

@@ -27,15 +27,15 @@
 #include <algorithm>
 
 // Frequence de travail minimale
-float OSpectre::_fMin = 16;
+double OSpectre::_fMin = 16;
 
 // Frequence de travail maximale
-float OSpectre::_fMax = 16000;
+double OSpectre::_fMax = 16000;
 
 double OSpectre::_defaultValue = TY_SPECTRE_DEFAULT_VALUE;
 
 // Tableau des frequences en Hz centrales normalisees en tiers d'octave.
-const float OSpectre::_freqNorm[] = {   /*  0 */    16.0,    20.0,    25.0,
+const double OSpectre::_freqNorm[] = {   /*  0 */    16.0,    20.0,    25.0,
                                                     /*  3 */    31.5,    40.0,    50.0,
                                                     /*  6 */    63.0,    80.0,   100.0,
                                                     /*  9 */   125.0,   160.0,   200.0,
@@ -49,7 +49,7 @@ const float OSpectre::_freqNorm[] = {   /*  0 */    16.0,    20.0,    25.0,
                                     };
 
 
-std::map<float, int> OSpectre::_mapFreqIndice = setMapFreqIndice();
+std::map<double, int> OSpectre::_mapFreqIndice = setMapFreqIndice();
 
 
 OSpectre::OSpectre() : _valid(true), _type(SPECTRE_TYPE_ATT), _etat(SPECTRE_ETAT_DB), _form(SPECTRE_FORM_TIERS)
@@ -223,7 +223,7 @@ void OSpectre::setValue(const float& freq, const double& reel/*=0.0*/)
     _module[indice] = reel;
 }
 
-double OSpectre::getValueReal(float freq, bool* pValid)
+double OSpectre::getValueReal(double freq)
 {
     int indice = _mapFreqIndice[freq];
 
@@ -707,10 +707,10 @@ OSpectre OSpectre::seuillage(const double& min, const double max)
 
 // Fonctions statiques
 
-std::map<float, int>  OSpectre::setMapFreqIndice()
+std::map<double, int>  OSpectre::setMapFreqIndice()
 {
-    std::map <float, int> mapFI;
-    float value = 0.0;
+    std::map <double, int> mapFI;
+    double value = 0.0;
 
     for (unsigned int i = 0 ; i < TY_SPECTRE_DEFAULT_NB_ELMT ; i++)
     {

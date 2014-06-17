@@ -21,24 +21,15 @@
 #ifndef __LANCER_H
 #define __LANCER_H
 
-#include <cmath>
-#include <cassert>
-#include <cstdlib>
-#include <vector>
-#include <map>
-#include <iostream>
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
-#include "meteo.h"
 #include "Step.h"
 
 
 using namespace std;
 
 class RayCourb;
-
-
-
+class Sampler;
+class meteo;
 
 /*! \class Lancer
 * \brief classe representant un lancer de rayons courbes
@@ -187,10 +178,23 @@ public:
      */
     void setLaunchType(const unsigned int& launchType) { _launchType = launchType; init(); }
 
+    /*!
+     * \fn void addSource(const vec3& source)
+     * \brief add a source in sources list
+     */
+    void addSource(const vec3& source) { sources.push_back(source); }
+
+
 private :
     void init();
 
     void save(); /*!< save rays to a file */
+
+    /*!
+     * \brief compute next step taking account of meteo 
+     */
+    Step compute_next_step(const Step& current_step);
+
 
 public :
     // Donnees membres :

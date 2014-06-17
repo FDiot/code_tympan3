@@ -19,11 +19,11 @@
 #include "mathlib.h"
 #include <string>
 #include <vector>
+#include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Material.h"
-#include "BBox.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/BBox.h"
 
-#include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 
 //#ifdef USE_QT
 //  #include "ShapeGraphic.h"
@@ -105,7 +105,7 @@ public:
     int getPrimitiveId() { return primitiveId; }
 
     void setFaceId(int id) { faceId = id; }
-    int getFaceId() { return faceId; }
+    int getFaceId() const { return faceId; }
 
     void setEtageId(int id) { etageId = id; }
     int getEtageId() { return etageId; }
@@ -115,7 +115,7 @@ public:
 
     virtual bool sample(decimal density, std::vector<vec3>& samples) { return false; }
 
-    bool isSol() { return _isSol; }
+    bool isSol() const { return _isSol; }
     void setIsSol(const bool& isSol) { _isSol = isSol; }
 
 

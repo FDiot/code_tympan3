@@ -20,6 +20,7 @@
 #include <QMutexLocker>
 #include "Selector.h"
 #include <map>
+#include<vector>
 
 
 enum TYPEHISTORY
@@ -34,8 +35,8 @@ class FaceSelector : public Selector<T>
 {
 
 public:
-    FaceSelector(TYPEHISTORY _modeHistory = HISTORY_FACE) : Selector<T>() { modeHistory = _modeHistory; mutex = new QMutex();}
-    virtual ~FaceSelector() { delete mutex; }
+    FaceSelector(TYPEHISTORY _modeHistory = HISTORY_FACE) : Selector<T>() { modeHistory = _modeHistory; }
+    virtual ~FaceSelector() {}
 
     virtual Selector<T>* Copy()
     {
@@ -57,7 +58,6 @@ public:
 
     virtual SELECTOR_RESPOND canBeInserted(T* r, unsigned long long& replace)
     {
-        //cout << "Insertion du rayon dans le FaceSelector." << endl;
         typename std::map<vector<unsigned int>, T*, CompareToKey>::iterator it;
         std::vector<unsigned int> path;
         switch (modeHistory)
@@ -65,9 +65,6 @@ public:
             case HISTORY_FACE :
                 path = r->getFaceHistory();
                 break;
-                /*case HISTORY_BUILDING :
-                    path = r->getBatimentHistory();
-                    break;*/
             case HISTORY_PRIMITIVE :
                 path = r->getPrimitiveHistory();
                 break;
@@ -75,36 +72,29 @@ public:
                 path = r->getFaceHistory();
                 break;
         }
-        //QMutexLocker locker(mutex);
-        //cout << "Tentative de l'ajout d'historique : [";
-        it = selectedPath.find(path);
-        /*for(unsigned int i = 0; i < path.size(); i++)
-            cout << path.at(i) << ",";
-        cout << "]." << endl;*/
-        if (it != selectedPath.end())
+        
+		it = selectedPath.find(path);
+
+		if (it != selectedPath.end())
         {
             r->computeLongueur();
             double currentDistance = r->getLongueur();
             if (currentDistance < it->second->getLongueur())
             {
                 replace = it->second->constructId;
-                //cout << "Historique ajoute." << endl;
                 return SELECTOR_REPLACE;
             }
             else
             {
-                //cout << "Historique rejete." << endl;
                 return SELECTOR_REJECT;
             }
 
         }
-        //cout << "Historique ajoute." << endl;
         return SELECTOR_ACCEPT;
     }
 
     virtual void insert(T* r)
     {
-        //cout << "Insertion avec l'historique du rayon." << endl;
         typename std::map<vector<unsigned int>, T*, CompareToKey>::iterator it;
         std::vector<unsigned int> path;
         switch (modeHistory)
@@ -112,9 +102,6 @@ public:
             case HISTORY_FACE :
                 path = r->getFaceHistory();
                 break;
-                /*case HISTORY_BUILDING :
-                    path = r->getBatimentHistory();
-                    break;*/
             case HISTORY_PRIMITIVE :
                 path = r->getPrimitiveHistory();
                 break;
@@ -123,37 +110,21 @@ public:
                 break;
         }
 
-        /*std::cout<<"Insertion du vecteur [";
-        for(unsigned int i = 0; i < path.size(); i++)
-            std::cout<<path.at(i)<<";";
-        std::cout<<"]"<<std::endl;*/
-        //QMutexLocker locker(mutex);
         it = selectedPath.find(path);
         r->computeLongueur();
 
         if (it != selectedPath.end()) //Il y avait deja un rayon avec le meme historique
         {
-            /*cout << "Remplacement dans la table sans test." << endl;
-            std::vector<unsigned int> oldPath = it->second->getPrimitiveHistory();
-            cout << "Ancien historique : [";
-            for(unsigned int i = 0; i < oldPath.size(); i++)
-                std::cout<<oldPath.at(i)<<";";
-            std::cout<<"]"<<std::endl;
-            std::cout<<"Ancienne longueur : "<<it->second->getLongueur();
-            std::cout<<"Nouvelle longueur : "<<r->getLongueur()<<std::endl;*/
-
             it->second = r;
 
             return;
         }
         else
         {
-            //cout << "Tentative d'insertion d'un nouveau rayon." << endl;
             selectedPath.insert(pair<vector<unsigned int>, T*>(path, r));
-            //cout << "Le selecteur de face contient " << selectedPath.size() << " rayons apres insertion." << endl;
-            //cout << "Reussite de l'insertion d'un nouveau rayon." << endl;
         }
-        return ;
+
+		return ;
     }
 
     virtual bool insertWithTest(T* r)
@@ -165,9 +136,6 @@ public:
             case HISTORY_FACE :
                 path = r->getFaceHistory();
                 break;
-                /*case HISTORY_BUILDING :
-                    path = r->getBatimentHistory();
-                    break;*/
             case HISTORY_PRIMITIVE :
                 path = r->getPrimitiveHistory();
                 break;
@@ -175,8 +143,8 @@ public:
                 path = r->getFaceHistory();
                 break;
         }
-        //QMutexLocker locker(mutex);
-        it = selectedPath.find(path);
+
+		it = selectedPath.find(path);
         r->computeLongueur();
         double currentDistance = r->getLongueur();
 
@@ -189,7 +157,6 @@ public:
             }
             else
             {
-                //cout << "Erreur : une distance inferieure etait deja dans la table." << endl;
                 return false;
             }
         }
@@ -201,10 +168,8 @@ public:
     }
 
 protected:
-    std::map<vector<unsigned int>, T*, CompareToKey> selectedPath;
+    std::map<std::vector<unsigned int>, T*, CompareToKey> selectedPath;
     TYPEHISTORY modeHistory;
-
-    QMutex* mutex;
 };
 
 #endif

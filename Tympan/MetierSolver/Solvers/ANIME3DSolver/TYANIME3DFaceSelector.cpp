@@ -16,9 +16,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
 
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangulate.h"
 
 #include "TYANIME3DSolver.h"
@@ -302,4 +300,3 @@ bool TYANIME3DFaceSelector::triangulateConcavePolygon(TYStructSurfIntersect* tab
     }
     return true;
 }
-

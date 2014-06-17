@@ -18,6 +18,58 @@ namespace tympan
 
 /// XXX \todo Add the entity 'Atmosphere' with attr: pression, temperature,
 /// hygrometry (\note can find these values in the TYCalcul instead of TYSite).
+class AtmosphericConditions : 
+    public virtual BaseEntity
+{
+public:
+    AtmosphericConditions(double static_pressure_, double temperature_, double hygrometry_);
+    virtual ~AtmosphericConditions() {}
+
+    /*!
+     * \fn void compute_absorption_spectrum();
+     * \brief Compute absorption spectrum in dB/m
+     * \brief This spectrum will be used to compute absorption for a given distance
+     */
+    void compute_absorption_spectrum(); 
+
+    double compute_c(); //!< compute sound speed
+
+    void compute_k(); //!< compute wave number
+
+    double compute_z(); //!< compute impedance
+
+    Spectrum compute_length_absorption(double length);
+
+    /*!
+     * Get / Set
+     */
+    const Spectrum& get_k() const { return wave_number; }
+
+    /*!
+     * \fn double get_absorption_value( double freq )
+     * \brief return absorption value at a given frequency
+     */
+    double get_absorption_value( double freq ) {  return absorption_spectrum.getValueReal(freq); }
+
+
+private :
+    double compute_hm() const; //!< compute molar hygrometry coefficient
+
+protected:
+    double static_pressure;
+    double temperature;
+    double hygrometry;
+    Spectrum wave_number;
+    Spectrum absorption_spectrum;
+
+public:
+    static const double Z_ref; //!< reference impedance 
+
+    static const double reference_pressure;
+    static const double reference_temperature;
+    static const double absolute_zero;
+
+};
 
 class AcousticMaterialBase:
     public virtual BaseEntity
@@ -25,11 +77,14 @@ class AcousticMaterialBase:
 public:
     AcousticMaterialBase(const string& name_);
     string name;
+
 }; // class AcousticMaterialBase
 
 // TODO Or use boost pointers container ?
 typedef shared_ptr<AcousticMaterialBase> material_ptr_t;
 typedef std::deque<material_ptr_t> material_pool_t;
+
+// -------------------
 
 class AcousticBuildingMaterial:
     public virtual BaseEntity, public AcousticMaterialBase
@@ -38,8 +93,16 @@ public:
     AcousticBuildingMaterial(const string& name_, const ComplexSpectrum& spectrum);
     virtual ~AcousticBuildingMaterial() {};
 
+    /*!
+     * \brief : get material absorption at reflexion point
+     * \fn ComplexSpectrum get_absorption (const double& incidence_angle)
+     */    
+    virtual ComplexSpectrum get_absorption (const double& incidence_angle, double length) { return spectrum; }
+
     ComplexSpectrum spectrum;
 };
+
+// -------------------
 
 class AcousticGroundMaterial:
     public virtual BaseEntity, public AcousticMaterialBase
@@ -48,10 +111,62 @@ public:
     AcousticGroundMaterial(const string& name_, double resistivity_);
     virtual ~AcousticGroundMaterial() {};
 
+    /*!
+     * \brief : get material absorption at reflexion point
+     * \fn ComplexSpectrum get_absorption (const double& incidence_angle)
+     */    
+    virtual ComplexSpectrum get_absorption (double incidence_angle, double length);
+
+    const ComplexSpectrum& get_Zc() const { return Zc; }
+    const ComplexSpectrum& get_K() const  { return K; }
+
+    void set_thickness( double thickness_ ) { thickness = thickness_; }
+
+    double get_ISO9613_G();
+
+    static void set_atmosphere( AtmosphericConditions *atmosphere_ ) { atmosphere = atmosphere_; }
+
+protected:
+    void computeZc(); //!< compute characteristic impedance
+    void computeK();  //!< compute wave nuber in ground
+    void computeZs(double angle, ComplexSpectrum& spectrum); //!< compute specific impedance
+    void computeRp(double angle, const ComplexSpectrum& Zs, ComplexSpectrum& Rp);  //!<compute reflexion coefficient for plane waves
+    void computeW(double angle, double length, const ComplexSpectrum& Zs, ComplexSpectrum &W); //compute numeric distance
+    void computeFw(ComplexSpectrum localW, ComplexSpectrum& Fw); // Compute function of numeric distance
+    void computeQ(double angle, ComplexSpectrum &Rp, ComplexSpectrum &Fw, ComplexSpectrum &Q); // compute reflexion coefficient
+
+
+private:
+    void init();
+
+    /*!
+     * \brief : Functions used in Fw computation
+     */
+    TYComplex erfcCas1(const TYComplex& wValue) const;
+    TYComplex erfcCas2(const TYComplex& wValue) const;
+    TYComplex erfcCas3(const TYComplex& wValue) const;
+
+    /*!
+     * \brief : function used in G computation
+     */
+    TYComplex sgnReIm(const TYComplex& W, const TYComplex& G) const ;
+
+    void limit_W_values(ComplexSpectrum& localW);
+    void erfc_G_computation(const ComplexSpectrum& localW, ComplexSpectrum& G);
+    void sgn_G_computation(const ComplexSpectrum& localW, ComplexSpectrum& G);
+
+protected :
     /// XXX \todo put SI unit.
     double resistivity;
+    double thickness;
+
+    ComplexSpectrum Zc; //!< Characteriestic impedance
+    ComplexSpectrum K;  //!< Wave number
+
+    static AtmosphericConditions *atmosphere;
 };
 
+// -------------------
 
 class AcousticTriangle :
     public virtual BaseEntity

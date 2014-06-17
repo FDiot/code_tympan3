@@ -39,9 +39,17 @@
  */
 namespace core_mathlib
 {
+// Activation or not (if commented) of targeting operations
+//#define _ALLOW_TARGETING_
+
+
 typedef float decimal;
 
 typedef unsigned int bitSet; /*!< used to manage set of elements*/
+
+#ifndef EPSILON_4 // was BARELY_EPSILON before
+#define EPSILON_4           (decimal)0.0001 // 10e-4
+#endif
 
 #ifndef EPSILON_6
 #define EPSILON_6           (decimal)0.000001 // 10e-6                      /*!< Approximation lors de la comparaison de 2 decimal */
@@ -69,6 +77,7 @@ typedef unsigned int bitSet; /*!< used to manage set of elements*/
 #define RadToDeg(a) a*=M_180DIVPI
 #define RADIANS(a)  a*M_PIDIV180
 #define DEGRES(a)   a*M_180DIVPI
+#define ABS(x) (fabs(x))
 
 #ifndef SIGN
 #define SIGN(x) ((x) > 0 ? 1 : -1)
@@ -187,9 +196,9 @@ public:
         return angle;
     }
     /** @brief  retourne les coordonnee du point le plus proche de *this sur la droite passant par vA et vB */
-    base_vec3 closestPointOnLine(const base_vec3& vA, const base_vec3& vB) { return (((vB - vA) * this->projectionOnLine(vA, vB)) + vA); }
+    base_vec3 closestPointOnLine(const base_vec3& vA, const base_vec3& vB) const { return (((vB - vA) * this->projectionOnLine(vA, vB)) + vA); }
     /** @brief  retourne les coordonnees du point le plus proche de *this sur le segment vA,vB */
-    base_vec3 closestPointOnSegment(const base_vec3& vA, const base_vec3& vB)
+    base_vec3 closestPointOnSegment(const base_vec3& vA, const base_vec3& vB) const
     {
         base_t factor = this->projectionOnLine(vA, vB);
         if (factor <= 0.0f) { return vA; }
@@ -197,7 +206,7 @@ public:
         return (((vB - vA) * factor) + vA);
     }
     /** @brief  retourne le facteur de la projection de *this sur la droite passant par vA et vB */
-    base_t projectionOnLine(const base_vec3& vA, const base_vec3& vB)
+    base_t projectionOnLine(const base_vec3& vA, const base_vec3& vB) const
     {
         base_vec3 v(vB - vA);
         return v.dot(*this - vA) / v.dot(v);
@@ -285,13 +294,13 @@ inline std::vector<dvec3> operator + (const std::vector<dvec3>& _u, const std::v
  * \fn OPoint3D vec3ToOPoint3D(const vec3& p)
  * \brief convertit un vec3 en OPoint3D
  */
-inline OPoint3D vec3toOPoint3D(const vec3& _v) { return OPoint3D(static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z)); }
+inline static OPoint3D vec3toOPoint3D(const vec3& _v) { return OPoint3D(static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z)); }
 
 /*!
  * \fn vec3 OPoint3DTovec3(const OPoint3D& _p)
  * \brief convertit un OPoint3D en vec3
  */
-inline vec3 OPoint3Dtovec3(const OPoint3D& _p) { return vec3(static_cast<float>(_p._x), static_cast<float>(_p._y), static_cast<float>(_p._z)); }
+inline static vec3 OPoint3Dtovec3(const OPoint3D& _p) { return vec3(static_cast<float>(_p._x), static_cast<float>(_p._y), static_cast<float>(_p._z)); }
 
 /*****************************************************************************/
 /*                                                                           */
