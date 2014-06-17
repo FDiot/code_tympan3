@@ -19,7 +19,7 @@
 #include <sstream>
 #include <vector>
 #include <string>
-#include <math.h>
+#include <cmath>
 #include "Sampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/UnitConverter.h"
 
