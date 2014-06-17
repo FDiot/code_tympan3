@@ -13,56 +13,207 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Diffraction.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/UnitConverter.h"
+#include "Diffraction.h"
+
+
+bool responseAngleLimiter(const vec3& from, const vec3& N1, const vec3& N2, vec3 &T) 
+{ 
+	decimal FT = from * T;
+
+	if ( ( 1. - FT ) < EPSILON_4 ) { return true; } // Vecteur limite tangent au plan de propagation
+
+	if ( FT < 0. ) { return false; }  // Le vecteur sortant est "oppose" au vecteur entrant
+
+	decimal F1 = from * N1;
+	decimal F2 = from * N2;
+
+	if ( (F1 * F2) > 0.) { return false; } 
+
+	decimal T1 = T * N1;
+	decimal T2 = T * N2;
+
+
+	if ( (F1 <= 0.) && ( (T1 > EPSILON_4 ) || ( (ABS(T2) - ABS(F2)) > EPSILON_4 ) ) )
+	{ 
+		return false; 
+	}
+
+	if ( (F2 <= 0.) && ( ( T2 > EPSILON_4 ) || ( (ABS(T1) - ABS(F1)) > EPSILON_4 ) ) )
+	{ 
+		return false; 
+	}
+
+	return true; 
+}
+
+bool responseAlwaysYes(const vec3& from, const vec3& N1, const vec3& N2, vec3 &T) { return true; }
+
+void getThetaRandom(const decimal& angleOuverture, const decimal & delta_theta, const decimal & nbResponseLeft, decimal& theta)
+{
+	theta = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
+
+	if (theta > angleOuverture / 2.)
+	{
+		theta += (2 * M_PI - angleOuverture);
+	}
+}
+
+void getThetaRegular(const decimal& angleOuverture, const decimal & delta_theta, const decimal & nbResponseLeft, decimal& theta)
+{
+	theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
+}
+
+
+Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cylindre* c):
+						Event(position, incomingDirection, (Shape*)(c)) 
+{ 
+	name = "unknown diffraction"; 
+	nbResponseLeft = initialNbResponse = 200; 
+	type = DIFFRACTION; 
+	buildRepere(); 
+	computeAngle();
+
+	computeDTheta();
+
+	N1 = dynamic_cast<Cylindre*>(shape)->getFirstShape()->getNormal();
+	N2 = dynamic_cast<Cylindre*>(shape)->getSecondShape()->getNormal();
+
+	if (globalDiffractionFilterRayAtCreation)
+	{
+		responseValidator = responseAngleLimiter;
+	}
+	else
+	{
+		responseValidator = responseAlwaysYes;
+	}
+
+	if (globalDiffractionUseRandomSampler) // Tir des rayons aléatoires sur le cone de Keller
+	{
+		getTheta = getThetaRandom; 
+	}
+	else
+	{
+		getTheta = getThetaRegular;
+	}
+
+}
+
+Diffraction::Diffraction(const Diffraction& other) : Event(other)
+{
+    type = DIFFRACTION;
+    buildRepere();
+    computeAngle();
+	computeDTheta();
+
+	N1 = other.N1;
+	N2 = other.N2;
+
+	responseValidator = other.responseValidator;
+}
 
 bool Diffraction::getResponse(vec3& r, bool force)
 {
-    //#define __RANDOM__
-#ifdef __RANDOM__
+	bool bRep = false;
+	do
+	{
+		decimal theta = 0.;
+		(*getTheta) (angleOuverture, delta_theta, nbResponseLeft, theta);
 
-    // Tir des rayons aléatoires sur le cone de Keller
-    decimal theta = ((decimal)(rand())) * angleOuverture / ((decimal)RAND_MAX);
+#ifdef _ALLOW_TARGETING_
+		if (!force)
+		{
+			nbResponseLeft--;
+			if (nbResponseLeft < 0)
+			{
+				return false;
+			}
+		}
 
-    if (theta > angleOuverture / 2.)
-    {
-        theta += (2 * M_PI - angleOuverture);
-    }
-
+		if (!targets.empty())
+		{
+			r = vec3(targets.back());
+			targets.pop_back();
+			return true;
+		}
 #else
+		// force n'est true que dans une utilisation avec targeting
+		nbResponseLeft--;
+		if (nbResponseLeft < 0)
+		{
+			return false;
+		}
+#endif
 
-    // Distribution régulière des rayons entre angleOuverture/2 et -angleOuverture/2
-    decimal theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
+		vec3 localResponse;
+		Tools::fromRadianToCarthesien2( angleArrive, theta, localResponse );
 
-#endif // __RANDOM__
+		r = localRepere.vectorFromLocalToGlobal(localResponse);
 
-    if (!force)
+		bRep = (*responseValidator)(from, N1, N2, r);
+	} 
+	while(!bRep);
+
+	return true;
+}
+
+void Diffraction::buildRepere()
+{
+    Cylindre* c = (Cylindre*)(shape);
+    vec3 O = pos;
+    vec3 v1 = c->getVertices()->at(c->getLocalVertices()->at(0));
+    vec3 v2 = c->getVertices()->at(c->getLocalVertices()->at(1));
+
+    vec3 Z = v1 - O;
+    if (Z.dot(from) < 0)
     {
-        nbResponseLeft--;
-        if (nbResponseLeft < 0)
+        Z = v2 - O;
+    }
+    Z.normalize();
+
+    vec3 X = c->getFirstShape()->getNormal() + c->getSecondShape()->getNormal();
+    X.normalize();
+
+    vec3 Y;
+    Y.cross(Z, X);
+    Y.normalize();
+
+    localRepere = Repere(X, Y, Z, O);
+
+}
+
+void Diffraction::computeAngle()
+{
+    Cylindre* c = (Cylindre*)(shape);
+    angleOuverture = c->getAngleOuverture();
+
+    vec3 localFrom = localRepere.vectorFromGlobalToLocal(from);
+
+	decimal cosAngleArrive = localRepere.getW().dot(from);
+
+    angleArrive = acos(cosAngleArrive);
+}
+
+bool Diffraction::generateTest(std::vector<vec3>& succededTest, std::vector<vec3>& failTest, unsigned int nbResponses)
+{
+    for (unsigned int i = 0; i < nbResponses; i++)
+    {
+        vec3 newDir = vec3(((decimal)rand() / (decimal)RAND_MAX) * 2. - 1., ((decimal)rand() / (decimal)RAND_MAX) * 2. - 1., ((decimal)rand() / (decimal)RAND_MAX) * 2. - 1.);
+        newDir.normalize();
+        if (isAcceptableResponse(newDir))
         {
-            return false;
+            succededTest.push_back(newDir);
+        }
+        else
+        {
+            failTest.push_back(newDir);
         }
     }
-
-    if (!targets.empty())
-    {
-        r = vec3(targets.back());
-        targets.pop_back();
-        return true;
-    }
-
-    vec3 localResponse;
-    Tools::fromRadianToCarthesien2(angleArrive, theta, localResponse);
-
-    vec3 globalResponse = localRepere.vectorFromLocalToGlobal(localResponse);
-
-    r = vec3(globalResponse);
-
     return true;
 }
 
+#ifdef _ALLOW_TARGETING_
 bool Diffraction::isAcceptableResponse(vec3& test)
 {
 
@@ -111,59 +262,6 @@ bool Diffraction::generateResponse(std::vector<vec3>& responses, unsigned int nb
     return true;
 }
 
-bool Diffraction::generateTest(std::vector<vec3>& succededTest, std::vector<vec3>& failTest, unsigned int nbResponses)
-{
-    for (unsigned int i = 0; i < nbResponses; i++)
-    {
-        vec3 newDir = vec3(((decimal)rand() / (decimal)RAND_MAX) * 2. - 1., ((decimal)rand() / (decimal)RAND_MAX) * 2. - 1., ((decimal)rand() / (decimal)RAND_MAX) * 2. - 1.);
-        newDir.normalize();
-        if (isAcceptableResponse(newDir))
-        {
-            succededTest.push_back(newDir);
-        }
-        else
-        {
-            failTest.push_back(newDir);
-        }
-    }
-    return true;
-}
-
-void Diffraction::buildRepere()
-{
-    Cylindre* c = (Cylindre*)(shape);
-    vec3 O = pos;
-    vec3 v1 = c->getVertices()->at(c->getLocalVertices()->at(0));
-    vec3 v2 = c->getVertices()->at(c->getLocalVertices()->at(1));
-
-    vec3 Z = v1 - O;
-    if (Z.dot(from) < 0)
-    {
-        Z = v2 - O;
-    }
-    Z.normalize();
-
-    vec3 X = c->getFirstShape()->getNormal() + c->getSecondShape()->getNormal();
-    X.normalize();
-
-    vec3 Y;
-    Y.cross(Z, X);
-    Y.normalize();
-
-    localRepere = Repere(X, Y, Z, O);
-
-}
-
-void Diffraction::computeAngle()
-{
-    Cylindre* c = (Cylindre*)(shape);
-    angleOuverture = c->getAngleOuverture();
-
-    decimal cosAngleArrive = localRepere.getW().dot(from);
-    //std::cout<<"Axe X ("<<localRepere.getU().x<<","<<localRepere.getU().y<<","<<localRepere.getU().z<<")"<<std::endl;
-    angleArrive = acos(cosAngleArrive);
-}
-
 bool Diffraction::appendTarget(vec3 target, bool force)
 {
 
@@ -185,5 +283,7 @@ bool Diffraction::appendTarget(vec3 target, bool force)
     }
     return false;
 }
+#endif //_ALLOW_TARGETING_
+
 
 

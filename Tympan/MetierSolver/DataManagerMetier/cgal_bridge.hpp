@@ -27,6 +27,9 @@ class TYCourbeNiveau;
 ///Smart pointer sur TYSol.
 typedef SmartPtr<TYSol> LPTYSol;
 
+#ifndef BOOST_NOEXCEPT
+#define BOOST_NOEXCEPT
+#endif
 
 namespace tympan
 {

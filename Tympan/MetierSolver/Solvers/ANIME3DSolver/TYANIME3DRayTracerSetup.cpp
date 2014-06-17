@@ -13,17 +13,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include <iostream>
-#include <fstream>
-#include <cstdlib>
-
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/ValidRay.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/PostTreatment.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/FaceSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/LengthSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/ReflectionSelector.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/TargetManager.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/CloseEventSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/FermatSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionPathSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/DiffractionAngleSelector.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/CleanerSelector.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Solver.h"
@@ -32,63 +32,115 @@
 
 void TYANIME3DRayTracerSetup::initGlobalValues()
 {
-    ////////////////////////////
-    // General Values
-    ////////////////////////////
-    globalMaxProfondeur = 2;            //Nombre d'evenements autorises pour un rayon, globalMaxProfondeur inclu
-    globalNbRaysPerSource = 80000;      //Nombre de rayons lances par les sources
-    globalDiscretization = 1;           // Choix random = 0 ou discretisation = 1
-    globalSizeReceiver = 5.0f;          //Diametre de la sphere representant le recepteur
-    globalAccelerator = 3;              //Choix de la structure acceleratrice. 0 : BruteForce, 1 : GridAccelerator, 2 : BVH, 3 : KdTree, other : GridAccelerator
-    globalMaxTreeDepth = 12;            //Profondeur maximale autorisee pour le BVH ou KdTree.
-    globalUseSol = true;                // Utilisation du sol pour les reflexions
-    globalKeepDebugRay = false;         //Permet de conserver les rayons qui ont ete invalides pendant la propagation.
+////////////////////////////
+// Meteo
+////////////////////////////
 
-    ////////////////////////////
-    // NMPB value
-    ///////////////////////////
-    globalMaxReflexion = 2;         //Nombre de reflexions speculaires autorisees pour un rayon, globalMaxReflexion inclu
-    globalMaxDiffraction = 2;           //Nombre de diffractions autorisees pour un rayon, globalMaxDiffraction inclu
-    globalMaxLength = 2000;         //Longueur maximale autorisee pour un rayon, globalMaxLength inclu
-    globalSampleGround2D = 0.1f;        //Echantillonage sur sol pour la description de la topograohie 2D sous le rayon. (pas encore utilise)
-    globalCylindreThick = 0.2f;     //Epaisseur des aretes de diffraction.
+	globalAtmosPressure = 101300.;			// [METEO] Atmospheric pressure in pascal
+	globalAtmosTemperature = 20.;			// [METEO] Temperature in degres celsius
+	globalAtmosHygrometry = 60.;			// [METEO] Hygrometry percent
+	globalAnalyticC0 = 340.;				// [METEO] initial (default) sound speed
+	globalWindDirection = 0.;				// [METEO] Wind direction 0 means from north to south
+	globalAnalyticGradC = 0.;				// [METEO] Vertical temperature gradient
+	globalAnalyticGradV = 0.;				// [METEO] Vertical wind speed gradient
 
-    /////////////////////////////
-    // Targeting system + NMPB
-    /////////////////////////////
-    globalEnableTargets = false;        //Active la recherche de cible pour les sources. Pour le moment lie au solver NMPB.
-    globalEnableFullTargets = false;    //Active la recherche de cible apres un evenement diffu. Pour le moment lie au solver NMPB.
-    globalTargetsDensity = 10;          //Densite pour l'echantillonnage des zones interessantes.
+////////////////////////////
+// Acoustic ray tracer
+////////////////////////////
 
-    //////////////////////////////
-    // Meteo Extensions
-    /////////////////////////////
-    globalAngleDiffMin = 5;             // Angle minimal (exprime en degre) a prendre en compte entre 2 faces pour ajouter une arrete de diffraction
-    globalNbRayWithDiffraction = 200;   // Nombre de rayons relance lors d'un evenement diffraction
-    globalRayTracingOrder = 0;          // [0-2]Sens de traitement des rayons source-recepteur ou inverse (0 = SR / 1 =RS / 2 = auto)
+	globalRayTracingOrder = 0;				// [ACOUSTICRAYTRACER] Ray tracing order propagation (0=From, 1=from receptor, 2=auto)
+	globalDiscretization = 2;				// [ACOUSTICRAYTRACER] Sampler model 0=random, 1=uniform v1, 2= uniform v2, 3=horizontal
+	globalNbRaysPerSource = 100000;			// [ACOUSTICRAYTRACER] Number of rays per source
+	globalMaxLength = 5000;					// [ACOUSTICRAYTRACER] Maximum ray length in meter
+	globalSizeReceiver = 2.;				// [ACOUSTICRAYTRACER] Receptor radius in meter
+	globalAccelerator = 3;					// [ACOUSTICRAYTRACER] Accelerating structure parameter (0=brut force, 1=grid, 2=BVH, 3=KDTree)
+	globalMaxTreeDepth = 12;				// [ACOUSTICRAYTRACER] Maximal depth search for BVH or KDTree
+	globalAngleDiffMin = 5.;				// [ACOUSTICRAYTRACER] Minimum dihedral angle to add a diffraction cylinder
+	globalCylindreThick = 0.3f;				// [ACOUSTICRAYTRACER] Diffraction ridge size in meter
+	globalMaxProfondeur = 10;				// [ACOUSTICRAYTRACER] Maximum events number for a ray
+	globalUseSol = 0;						// [ACOUSTICRAYTRACER] Allow ground reflections
+	globalMaxReflexion = 0;					// [ACOUSTICRAYTRACER] Maximum reflections events for a ray
+	globalMaxDiffraction = 2;				// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
+	globalDiffractionUseRandomSampler = 0;	// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution 
+	globalNbRayWithDiffraction = 0;			// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
+	globalDiffractionDropDownNbRays = 1;	// [ACOUSTICRAYTRACER] Drop down number of rays thrown after a diffraction
+	globalDiffractionFilterRayAtCreation = 0;	// [ACOUSTICRAYTRACER] Do not create rays outside the correct angle
+	globalUsePathDifValidation = 0;			// [ACOUSTICRAYTRACER] Allow use of path length difference validation
+	globalMaxPathDifference = 25.;			// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
+	globalDiffractionUseDistanceAsFilter = 1;	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
+	globalKeepDebugRay = 0;					// [ACOUSTICRAYTRACER] Keep invalid rays
+	globalUsePostFilters = 1;				// [ACOUSTICRAYTRACER] Use of post-filters
 
-    globalUseMeteo = false;              // Prise en compte (ou non) de la meteo
-    globalAnalyticDMax = 2000.0f;       // Distance de propagation maximale des rayons courbes
-    globalAnalyticTMax = 3.0f;          // Temps de propagation maximal des rayons courbes
-    globalAnalyticH = 0.01f;            // Pas de temps de calcul pour la propagation des rayons courbes
-    globalAnalyticNbRay = 10;           // Nombre de rayons tires pour le lancer de rayons courbes
-    globalAnalyticAngleTheta = 0.;      // Angle de tir vertical (theta) des rayons
+////////////////////////////
+// Targeting parameters
+////////////////////////////
 
-    globalAnalyticGradC = 0.1f;     // Gradient vertical de celerite
-    globalAnalyticGradV = 0.15f;    // Gradient vertical de vitesse de vent
-    globalAnalyticC0 = 340.0f;      // Celerite du son initiale
-    globalAnalyticTypeTransfo = 1;  // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-    globalRestitModifiedGeom = 0;   // Indique si l'on souhaite recuperer la geometrie transformee
-    globalOverSampleD = 3;          // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
-    globalWindDirection = 0.;           // Direction du vent (un vent a 0 est dirige du nord vers le sud)
+	globalEnableTargets = 0;				// [ACOUSTICRAYTRACER] Use targeting
+	globalSampleGround2D = 0;				// [ACOUSTICRAYTRACER] Sample ground in 2D
+	globalEnableFullTargets = 0;			// [ACOUSTICRAYTRACER] Set target search after a diffuse event
+	globalTargetsDensity = 0.1f;				// [ACOUSTICRAYTRACER] Sampling density for interesting areas
 
-    /////////////////////////
-    // ANIME3D Extensions
-    /////////////////////////
-    globalUseFresnelArea = false;       // take into account the fresnel area
-    globalAnime3DSigma = 0.0f;      // valeur de l'incertitude relative pour la calcul de la pression acoustique
-    globalAnime3DForceC = 0.0f;     // Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
-    globalUsePostFilters = true;        // Utilisation (!=0) ou non (0) des filtres post lancer de rayons
+////////////////////////////
+// AnalyticRayTracer
+////////////////////////////
+
+	globalCurveRaySampler = 1;				// [ANALYTICRAYTRACER] Sampler model 1=horizontal, 2=vertical, 3=uniform v1, 4=uniform v2
+	globalInitialAngleTheta = 0.;			// [ANALYTICRAYTRACER] Start vertical angle (theta)
+	globalFinalAngleTheta = 0.;				// [ANALYTICRAYTRACER] Final vertical angle (theta)
+	globalInitialAnglePhi = 0.;				// [ANALYTICRAYTRACER] Start horizontal angle (phi)
+	globalFinalAnglePhi = 360.;				// [ANALYTICRAYTRACER] Final horizontal angle (phi)
+	globalAnalyticNbRay = 20;				// [ANALYTICRAYTRACER] Number of rays per source
+	globalAnalyticTMax = 10.;				// [ANALYTICRAYTRACER] Propagation time in second
+	globalAnalyticH = 0.1;					// [ANALYTICRAYTRACER] Time step in second
+	globalAnalyticDMax = 3000;				// [ANALYTICRAYTRACER] Maximum length propagation
+
+////////////////////////////
+// Geometric transformer
+///////////////////////////
+
+	globalAnalyticTypeTransfo = 1;			// [GEOM_TRANSFORMER] Transformation method (1 is the only [good] response)
+	globalMeshRefinementValue = 0.;			// [GEOM_TRANSFORMER] Altimetry refinement parameter
+	globalRestitModifiedGeom = 0;			// [GEOM_TRANSFORMER] Restore modified altimetry after computing
+
+/////////////////////////////
+// Preprocessing
+/////////////////////////////
+
+	globalMinSRDistance = 0.3f;				// [PREPROCESSING] Source-receptor minimal distance in meters
+
+/////////////////////////////
+// Default Solver
+/////////////////////////////
+
+	globalUseRealGround = 1;				// [DEFAULTSOLVER] Use of real ground (0) or totally reflective ground (1)
+	globalUseVegetation = 0;				// [DEFAULTSOLVER] Takes vegetation into account
+	globalUseScreen = 1;					// [DEFAULTSOLVER] Takes screens into account
+	globalUseLateralDiffraction = 1;		// [DEFAULTSOLVER] Lateral diffractions computing (if screens on)
+	globalUseReflection = 1;				// [DEFAULTSOLVER] Takes reflections in account (first order only)
+	globalPropaConditions = 0;				// [DEFAULTSOLVER] Propagation conditions (non refracting / downward conditions (ISO 9613))
+	globalH1parameter = 10.;				// [DEFAULTSOLVER] H1 parameter (ISO 9613 downward conditions)
+	globalModSummation = 0;					// [DEFAULTSOLVER] Energetic (p² summation) or interference (p summation)
+
+//////////////////////////////
+// ANIME3D Solver
+/////////////////////////////
+
+	globalUseMeteo = 0;						// [ANIME3D] Takes meteo in account
+	globalOverSampleD = 0;					// [ANIME3D] Rays oversampling rate (if meteo -see above-)
+	globalUseFresnelArea = 0;				// [ANIME3D] Use Fresnel area
+	globalAnime3DSigma = 0.;				// [ANIME3D] Value of relative uncertainty
+	globalAnime3DForceC = 1.;				// [ANIME3D] Force "C" parameter
+
+////////////////////////////////
+// Mode DEBUG
+////////////////////////////////
+
+	globalDebugUseCloseEventSelector = true;			// [DEBUG] allow use of closeEventSelector
+	globalDebugUseDiffractionAngleSelector = true;	// [DEBUG] allow use of diffraction angle selector
+	globalDebugUseDiffractionPathSelector = true;		// [DEBUG] allow use of diffraction path length selector
+	globalDebugUseFermatSelector = true;				// [DEBUG] allow use of Fermat selector
+	globalDebugUseFaceSelector = true;				// [DEBUG] allow use of (doubled) faces selector
+
 
     // Chargement des parametres de calcul
     loadParameters();
@@ -97,7 +149,7 @@ void TYANIME3DRayTracerSetup::initGlobalValues()
 bool TYANIME3DRayTracerSetup::loadParameters()
 {
     bool bRes = true;
-    const char fileName[31] = "ANIME3DRayTracerParameters.txt";
+    const char fileName[33] = "universalSolverParameterFile.txt";
 
     // Ouverture du fichier
     ifstream params(fileName, ios::in);
@@ -106,127 +158,276 @@ bool TYANIME3DRayTracerSetup::loadParameters()
 
     char ligne[132];
 
-    //Nombre d'evenements autorises pour un rayon, globalMaxProfondeur inclu
-    if (params.getline(ligne, 132)) { globalMaxProfondeur = getParam(ligne); }
+////////////////////////////
+// Meteo
+////////////////////////////
 
-    //Nombre de rayons lances par les sources
-    if (params.getline(ligne, 132)) { globalNbRaysPerSource = getParam(ligne); }
+	// [METEO] Atmospheric pressure in pascal
+    if (params.getline(ligne, 132)) { globalAtmosPressure = getParam(ligne); }
 
-    //Permet de choisir entre des rayons aléatoires: 0 ou déterministes: 1 (discretisation source)
-    if (params.getline(ligne, 132)) { globalDiscretization = getParam(ligne); }
+	// [METEO] Temperature in degres celsius
+    if (params.getline(ligne, 132)) { globalAtmosTemperature = getParam(ligne); }
 
-    //Diametre de la sphere representant le recepteur
-    if (params.getline(ligne, 132)) { globalSizeReceiver = getParam(ligne); }
+	// [METEO] Hygrometry percent
+    if (params.getline(ligne, 132)) { globalAtmosHygrometry = getParam(ligne); }
 
-    //Choix de la structure acceleratrice. 0 : BruteForce, 1 : GridAccelerator, 2 : BVH, 3 : KdTree, other : GridAccelerator
-    if (params.getline(ligne, 132)) { globalAccelerator = getParam(ligne); }
-
-    //Profondeur maximale autorisee pour le BVH ou KdTree
-    if (params.getline(ligne, 132)) { globalMaxTreeDepth = getParam(ligne); }
-
-    // Utilisation du sol pour les reflexions
-    if (params.getline(ligne, 132)) { globalUseSol = getParam(ligne); }
-
-    //Permet de conserver les rayons qui ont ete invalides pendant la propagation.
-    if (params.getline(ligne, 132)) { globalKeepDebugRay = getParam(ligne); }
-
-    //Nombre de reflexions speculaires autorisees pour un rayon, globalMaxReflexion inclu
-    if (params.getline(ligne, 132)) { globalMaxReflexion = getParam(ligne); }
-
-    //Nombre de diffractions autorisees pour un rayon, globalMaxDiffraction inclu
-    if (params.getline(ligne, 132)) { globalMaxDiffraction = getParam(ligne); }
-
-    //Longueur maximale autorisee pour un rayon, globalMaxLength inclu
-    if (params.getline(ligne, 132)) { globalMaxLength = getParam(ligne); }
-
-    //Echantillonage sur sol pour la description de la topographie 2D sous le rayon. (pas encore utilise)
-    if (params.getline(ligne, 132)) { globalSampleGround2D = getParam(ligne); }
-
-    //Epaisseur des aretes de diffraction.
-    if (params.getline(ligne, 132)) { globalCylindreThick = getParam(ligne); }
-
-    //Active la recherche de cible pour les sources. Pour le moment lie au solver NMPB.
-    if (params.getline(ligne, 132)) { globalEnableTargets = getParam(ligne); }
-
-    //Active la recherche de cible apres un evenement diffu. Pour le moment lie au solver NMPB.
-    if (params.getline(ligne, 132)) { globalEnableFullTargets = getParam(ligne); }
-
-    //Densite pour l'echantillonnage des zones interessantes.
-    if (params.getline(ligne, 132)) { globalTargetsDensity = getParam(ligne); }
-
-    //Angle minimal (exprime en degre) a prendre en compte entre 2 faces pour ajouter une arrete de diffraction
-    if (params.getline(ligne, 132)) { globalAngleDiffMin = getParam(ligne); }
-
-    // Nombre de rayons relance lors d'un evenement diffraction
-    if (params.getline(ligne, 132)) { globalNbRayWithDiffraction = getParam(ligne); }
-
-    //[0-2]Sens de traitement des rayon source-recepteur ou inverse (0 = SR / 1 =RS / 2 = auto)
-    if (params.getline(ligne, 132)) { globalRayTracingOrder = getParam(ligne); }
-
-    // Prise en compte (ou non) de la meteo
-    if (params.getline(ligne, 132)) { globalUseMeteo = getParam(ligne); }
-
-    // Distance de propagation maximale des rayons courbes
-    if (params.getline(ligne, 132)) { globalAnalyticDMax = getParam(ligne); }
-
-    // Temps de propagation maximal des rayons courbes
-    if (params.getline(ligne, 132)) { globalAnalyticTMax = getParam(ligne); }
-
-    // Pas de temps de calcul pour la propagation des rayons courbes
-    if (params.getline(ligne, 132)) { globalAnalyticH = getParam(ligne); }
-
-    // Nombre de rayons tires pour le lancer de rayons courbes
-    if (params.getline(ligne, 132)) { globalAnalyticNbRay = getParam(ligne); }
-
-    // Angle de tir vertical (theta) des rayons
-    if (params.getline(ligne, 132)) { globalAnalyticAngleTheta = getParam(ligne); }
-
-    // Gradient vertical de celerite
-    if (params.getline(ligne, 132)) { globalAnalyticGradC = getParam(ligne); }
-
-    // Gradient vertical de vitesse de vent
-    if (params.getline(ligne, 132)) { globalAnalyticGradV = getParam(ligne); }
-
-    // Celerite du son initiale
+	// [METEO] initial (default) sound speed
     if (params.getline(ligne, 132)) { globalAnalyticC0 = getParam(ligne); }
 
-    // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-    if (params.getline(ligne, 132)) { globalAnalyticTypeTransfo = getParam(ligne); }
-
-    // Indique si l'on souhaite recuperer la geometrie transformee
-    if (params.getline(ligne, 132)) { globalRestitModifiedGeom = getParam(ligne); }
-
-    // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
-    if (params.getline(ligne, 132)) { globalOverSampleD = getParam(ligne); }
-
-    // Direction du vent (un vent a 0 est dirige du nord vers le sud)
+	// [METEO] Wind direction 0 means from north to south
     if (params.getline(ligne, 132)) { globalWindDirection = getParam(ligne); }
 
-    // Prise en compte (ou non) de la zone de Fresnel
+	// [METEO] Vertical temperature gradient
+    if (params.getline(ligne, 132)) { globalAnalyticGradC = getParam(ligne); }
+
+	// [METEO] Vertical wind speed gradient
+    if (params.getline(ligne, 132)) { globalAnalyticGradV = getParam(ligne); }
+
+
+////////////////////////////
+// Acoustic ray tracer
+////////////////////////////
+
+	// [ACOUSTICRAYTRACER] Ray tracing order propagation (0=From, 1=from receptor, 2=auto)
+    if (params.getline(ligne, 132)) { globalRayTracingOrder = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Sampler model 0=random, 1=uniform v1, 2= uniform v2, 3=horizontal
+    if (params.getline(ligne, 132)) { globalDiscretization = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Number of rays per source
+    if (params.getline(ligne, 132)) { globalNbRaysPerSource = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Maximum ray length in meter
+    if (params.getline(ligne, 132)) { globalMaxLength = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Receptor radius in meter
+    if (params.getline(ligne, 132)) { globalSizeReceiver = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Accelerating structure parameter (0=brut force, 1=grid, 2=BVH, 3=KDTree)
+    if (params.getline(ligne, 132)) { globalAccelerator = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Maximal depth search for BVH or KDTree
+    if (params.getline(ligne, 132)) { globalMaxTreeDepth = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Minimum dihedral angle to add a diffraction cylinder
+    if (params.getline(ligne, 132)) { globalAngleDiffMin = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Diffraction ridge size in meter
+    if (params.getline(ligne, 132)) { globalCylindreThick = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Maximum events number for a ray
+    if (params.getline(ligne, 132)) { globalMaxProfondeur = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Allow ground reflections
+    if (params.getline(ligne, 132)) { globalUseSol = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Maximum reflections events for a ray
+    if (params.getline(ligne, 132)) { globalMaxReflexion = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
+    if (params.getline(ligne, 132)) { globalMaxDiffraction = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution 
+	if (params.getline(ligne, 132)) { globalDiffractionUseRandomSampler = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
+    if (params.getline(ligne, 132)) { globalNbRayWithDiffraction = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Drop down number of rays thrown after a diffraction
+	if (params.getline(ligne, 132)) { globalDiffractionDropDownNbRays = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Do not create rays outside the correct angle
+	if (params.getline(ligne, 132)) { globalDiffractionFilterRayAtCreation = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Allow use of path length difference validation
+    if (params.getline(ligne, 132)) { globalUsePathDifValidation = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)
+    if (params.getline(ligne, 132)) { globalMaxPathDifference = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Allow suppressing rays passing to far from the ridge
+	if (params.getline(ligne, 132)) { globalDiffractionUseDistanceAsFilter = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Keep invalid rays
+    if (params.getline(ligne, 132)) { globalKeepDebugRay = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Use of post-filters
+    if (params.getline(ligne, 132)) { globalUsePostFilters = getParam(ligne); }	
+	
+////////////////////////////
+// Targeting parameters
+////////////////////////////
+
+	// [ACOUSTICRAYTRACER] Use targeting
+    if (params.getline(ligne, 132)) { globalEnableTargets = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Sample ground in 2D
+    if (params.getline(ligne, 132)) { globalSampleGround2D = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Set target search after a diffuse event
+    if (params.getline(ligne, 132)) { globalEnableFullTargets = getParam(ligne); }
+
+	// [ACOUSTICRAYTRACER] Sampling density for interesting areas
+    if (params.getline(ligne, 132)) { globalTargetsDensity = getParam(ligne); }
+
+////////////////////////////
+// AnalyticRayTracer
+////////////////////////////
+
+	// [ANALYTICRAYTRACER] Sampler model 1=horizontal, 2=vertical, 3=uniform v1, 4=uniform v2
+    if (params.getline(ligne, 132)) { globalCurveRaySampler = getParam(ligne); }
+
+	// [ANALYTICRAYTRACER] Start vertical angle (theta)
+    if (params.getline(ligne, 132)) { globalInitialAngleTheta = getParam(ligne); }
+
+	// [ANALYTICRAYTRACER] Final vertical angle (theta)
+    if (params.getline(ligne, 132)) { globalFinalAngleTheta = getParam(ligne); }
+
+	// [ANALYTICRAYTRACER] Start horizontal angle (phi)
+    if (params.getline(ligne, 132)) { globalInitialAnglePhi = getParam(ligne); }
+
+	// [ANALYTICRAYTRACER] Final horizontal angle (phi)
+    if (params.getline(ligne, 132)) { globalFinalAnglePhi = getParam(ligne); }
+
+	// [ANALYTICRAYTRACER] Number of rays per source
+    if (params.getline(ligne, 132)) { globalAnalyticNbRay = getParam(ligne); }
+
+	// [ANALYTICRAYTRACER] Propagation time in second
+    if (params.getline(ligne, 132)) { globalAnalyticTMax = getParam(ligne); }
+
+	// [ANALYTICRAYTRACER] Time step in second
+    if (params.getline(ligne, 132)) { globalAnalyticH = getParam(ligne); }
+
+	// [ANALYTICRAYTRACER] Maximum length propagation
+    if (params.getline(ligne, 132)) { globalAnalyticDMax = getParam(ligne); }
+
+
+////////////////////////////
+// Geometric transformer
+///////////////////////////
+
+	// [GEOM_TRANSFORMER] Transformation method (1 is the only [good] response)
+    if (params.getline(ligne, 132)) { globalAnalyticTypeTransfo = getParam(ligne); }
+
+	// [GEOM_TRANSFORMER] Altimetry refinement parameter
+    if (params.getline(ligne, 132)) { globalMeshRefinementValue = getParam(ligne); }
+
+	// [GEOM_TRANSFORMER] Restore modified altimetry after computing
+    if (params.getline(ligne, 132)) { globalRestitModifiedGeom = getParam(ligne); }
+
+
+/////////////////////////////
+// Preprocessing
+/////////////////////////////
+
+	// [PREPROCESSING] Source-receptor minimal distance in meters
+    if (params.getline(ligne, 132)) { globalMinSRDistance = getParam(ligne); }
+
+
+/////////////////////////////
+// Default Solver
+/////////////////////////////
+
+	// [DEFAULTSOLVER] Use of real ground (0) or totally reflective ground (1)
+    if (params.getline(ligne, 132)) { globalUseRealGround = getParam(ligne); }
+
+	// [DEFAULTSOLVER] Takes vegetation into account
+    if (params.getline(ligne, 132)) { globalUseVegetation = getParam(ligne); }
+
+	// [DEFAULTSOLVER] Takes screens into account
+    if (params.getline(ligne, 132)) { globalUseScreen = getParam(ligne); }
+
+	// [DEFAULTSOLVER] Lateral diffractions computing (if screens on)
+    if (params.getline(ligne, 132)) { globalUseLateralDiffraction = getParam(ligne); }
+
+	// [DEFAULTSOLVER] Takes reflections in account (first order only)
+    if (params.getline(ligne, 132)) { globalUseReflection = getParam(ligne); }
+
+	// [DEFAULTSOLVER] Propagation conditions (non refracting / downward conditions (ISO 9613))
+    if (params.getline(ligne, 132)) { globalPropaConditions = getParam(ligne); }
+
+	// [DEFAULTSOLVER] H1 parameter (ISO 9613 downward conditions)
+    if (params.getline(ligne, 132)) { globalH1parameter = getParam(ligne); }
+
+	// [DEFAULTSOLVER] Energetic (p² summation) or interference (p summation)
+    if (params.getline(ligne, 132)) { globalModSummation = getParam(ligne); }
+
+
+//////////////////////////////
+// ANIME3D Solver
+/////////////////////////////
+
+	// [ANIME3D] Takes meteo in account
+    if (params.getline(ligne, 132)) { globalUseMeteo = getParam(ligne); }
+
+	// [ANIME3D] Rays oversampling rate (if meteo -see above-)
+    if (params.getline(ligne, 132)) { globalOverSampleD = getParam(ligne); }
+
+	// [ANIME3D] Use Fresnel area
     if (params.getline(ligne, 132)) { globalUseFresnelArea = getParam(ligne); }
 
-    // valeur de l'incertitude relative pour la calcul de la pression acoustique
+	// [ANIME3D] Value of relative uncertainty
     if (params.getline(ligne, 132)) { globalAnime3DSigma = getParam(ligne); }
 
-    // Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
+	// [ANIME3D] Force "C" parameter
     if (params.getline(ligne, 132)) { globalAnime3DForceC = getParam(ligne); }
 
-    // Utilisation (!=0) ou non (0) des filtres post lancer de rayons
-    if (params.getline(ligne, 132)) { globalUsePostFilters = getParam(ligne); }
+////////////////////////////////
+// Mode DEBUG
+////////////////////////////////
 
-    params.close();
+	// [DEBUG] allow use of closeEventSelector
+	if (params.getline(ligne, 132)) { globalDebugUseCloseEventSelector = getParam(ligne); }			
+	
+	// [DEBUG] allow use of diffraction angle selector
+	if (params.getline(ligne, 132)) { globalDebugUseDiffractionAngleSelector = getParam(ligne); }	
+	
+	// [DEBUG] allow use of diffraction path length selector
+	if (params.getline(ligne, 132)) { globalDebugUseDiffractionPathSelector = getParam(ligne); }		
+	
+	// [DEBUG] allow use of Fermat selector
+	if (params.getline(ligne, 132)) { globalDebugUseFermatSelector = getParam(ligne); }				
+	
+	// [DEBUG] allow use of (doubled) faces selector
+	if (params.getline(ligne, 132)) { globalDebugUseFaceSelector = getParam(ligne); }				
+
+
+	params.close();
 
     return bRes;
 }
 
 bool TYANIME3DRayTracerSetup::postTreatmentScene(Scene* scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs)
 {
-    selectorManagerValidation.addSelector(new LengthSelector<Ray>(globalMaxLength));
-    //  selectorManagerIntersection.addSelector(new LengthSelector<Ray>(globalMaxLength));
-    //
-    selectorManagerIntersection.addSelector(new DiffractionSelector<Ray>(globalMaxDiffraction));
-    selectorManagerIntersection.addSelector(new ReflectionSelector<Ray>(globalMaxReflexion, globalUseSol));
-    //  selectorManagerValidation.addSelector(new FaceSelector<Ray>(HISTORY_PRIMITIVE));
+	selectorManagerValidation.addSelector( new CleanerSelector<Ray>() );
+	selectorManagerValidation.addSelector( new LengthSelector<Ray>(globalMaxLength) );
+
+	if (globalUsePostFilters)
+	{
+#ifdef _DEBUG
+		if (globalDebugUseCloseEventSelector)
+#endif
+		selectorManagerValidation.addSelector( new CloseEventSelector<Ray>() );
+#ifdef _DEBUG
+		if (globalDebugUseDiffractionAngleSelector)
+#endif
+		selectorManagerValidation.addSelector( new DiffractionAngleSelector<Ray>() );
+#ifdef _DEBUG
+		if (globalDebugUseDiffractionPathSelector)
+#endif
+		selectorManagerValidation.addSelector( new DiffractionPathSelector<Ray>(globalMaxPathDifference) );
+#ifdef _DEBUG
+		if (globalDebugUseFermatSelector)
+#endif
+		selectorManagerValidation.addSelector( new FermatSelector<Ray>() ); 
+#ifdef _DEBUG
+		if (globalDebugUseFaceSelector)
+#endif
+		selectorManagerValidation.addSelector( new FaceSelector<Ray>(HISTORY_PRIMITIVE) );
+	}
+ 
+	selectorManagerIntersection.addSelector( new DiffractionSelector<Ray>(globalMaxDiffraction) );
+    selectorManagerIntersection.addSelector( new ReflectionSelector<Ray>(globalMaxReflexion, globalUseSol) );
 
     // Ajoute des cylindres sur les arretes diffractantes
     PostTreatment::constructEdge(scene);
@@ -241,25 +442,36 @@ bool TYANIME3DRayTracerSetup::valideIntersection(Ray* r, Intersection* inter)
     bool isValid = false;
 
     // cas d'un triangle (sol)
-    if (inter->forme == TRIANGLE && !(inter->p->getMaterial()->isNatural) && r->nbReflexion <= static_cast<unsigned int>(globalMaxReflexion))
+    if ( ( inter->forme == TRIANGLE ) &&
+		 ( r->nbReflexion < static_cast<unsigned int>(globalMaxReflexion) ) &&
+		 !( !globalUseSol && inter->p->isSol() ) )
     {
         isValid = ValidRay::validTriangleWithSpecularReflexion(r, inter);
     }
 
     // cas du cylindre (arrete de diffraction)
-    else if (inter->forme == CYLINDRE && r->nbDiffraction <= static_cast<unsigned int>(globalMaxDiffraction))
+    else if (inter->forme == CYLINDRE && r->nbDiffraction < static_cast<unsigned int>(globalMaxDiffraction))
     {
         isValid = ValidRay::validCylindreWithDiffraction(r, inter);
     }
 
+#ifdef _ALLOW_TARGETING_
     if (isValid && globalEnableFullTargets) { ValidRay::appendDirectionToEvent(r->events.back(), targetManager); }
+#endif //_ALLOW_TARGETING_
 
-    return (isValid && selectorManagerIntersection.appendData(r));
+    return (isValid); //(isValid && selectorManagerIntersection.appendData(r));
 }
 
 bool TYANIME3DRayTracerSetup::valideRayon(Ray* r)
 {
     selectorManagerValidation.appendData(r);
+#ifdef _DEBUG
+	if (selectorManagerValidation.getSelectedData().size() % 1000 == 0 )
+	{
+		std::cout << "Nombre de rayon valides = " << selectorManagerValidation.getSelectedData().size()<< std::endl;
+	}
+
+#endif
     return true;
 }
 
@@ -268,6 +480,7 @@ bool TYANIME3DRayTracerSetup::invalidRayon(Ray* r)
     if (!globalKeepDebugRay)
     {
         delete r;
+		r = NULL;
     }
     else
     {
@@ -285,6 +498,9 @@ void TYANIME3DRayTracerSetup::finish()
     {
         valid_rays.push_back(it->second);
     }
+
+	selectorManagerIntersection.reset();
+	selectorManagerValidation.reset();
 
     return;
 }
