@@ -40,12 +40,12 @@ The following dependencies are a bigger deal as their are likely to be
 already installed in your development environment in a system-wide
 way. If you are running a Linux box, the best way to get them is
 through your distribution package manager. If you are running a
-Windows box, your would be best by running the dedicated installers.
+Windows box, you should run the dedicated installers.
 
-More details are given in further section on an OS and variant basis.
+More details are given in further sections, on an OS and variant basis.
 
 Boost
-        Boost_ is a set of C++ libraries which provide an higher level
+        Boost_ is a set of C++ libraries which provide a higher level
         of expressiveness and convenience for C++. A version 1.46 or
         newer is recommended.
 
@@ -56,8 +56,8 @@ Qt 4
         is recommended.
 
 OpenGL
-        is a common 3D rendering API. It is maintly acessed through
-        the QtOpenGL component.
+        is a common 3D rendering API. It is mainly accessed through
+        the QtOpenGL components.
 
 CMake
         CMake_ is a multi platform built tool used to build Code_TYMPAN
@@ -87,7 +87,7 @@ reStructuredText_ sources thanks to Sphinx_. The breathe_ extension
 two and MathJax_ is used to nicely display equations.
 
  Doxygen_ and Sphinx_ need to be installed either from your package
- manager or the official Windows installer. As there are no specific
+ manager or from the official Windows installer. As there are no specific
  difficulties, please refer to their official documentations.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
@@ -100,7 +100,7 @@ two and MathJax_ is used to nicely display equations.
 Ubuntu / Debian standard install
 ================================
 
-This section introduce the installation from the package manager of a
+This section introduces the installation from the package manager of a
 Debian based distribution. It assumes a pretty recent version of the
 system on the date of writing, so that most packages are available
 from standard package repositories in a compatible version. Here we
@@ -112,8 +112,9 @@ use an *Ubuntu 12.04.1 LTS*.
 
 In case an older version of boost is already installed you might have
 to either complete [#]_ its installation or completely remove it to install
-the most recent packaged version. If really neither is practicable, a custom
-install of Boost from source is the solution (see `Compiling Boost`_).
+the most recent packaged version. If really none of these options is
+practicable, a custom install of Boost from source is the solution
+(see `Compiling Boost`_).
 
 **Installation of Qt 4** ::
 
@@ -149,7 +150,7 @@ this command.
 Windows Seven
 =============
 
-*NB* : This section is concerned with the installation on Windows
+*NB* : This section deals with the installation on Windows
 Seven using the native Microsoft Visual Studio development
 environment, which is assumed to be already installed.
 Installation using MinGW_ / MSYS has not been attempted
@@ -163,8 +164,8 @@ depending on your system and option choices.
 
 Boost
 
-        BoostPro provide an installer for windows at :
-        http://www.boostpro.com/download/ .
+        BoostPro provides an installer for windows at :
+        http://www.boostpro.com/download/
 
 Qt 4
 
@@ -187,7 +188,7 @@ And you will have to manually download the CGAL sources then build
 them according to `Compiling CGAL`_, **without forgetting** to manually
 install GMP and MPFR.
 
-The Tel Aviv University	provides some help for installiong CGAL on Windows :
+The Tel Aviv University	provides some help for installing CGAL on Windows :
 http://acg.cs.tau.ac.il/cgal-at-tau/installing-cgal-and-related-programs-on-windows
 
 http://xinyustudio.wordpress.com/2012/07/18/setup-cgal-in-windows-7-step-by-step-tutorial/
