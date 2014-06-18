@@ -26,6 +26,7 @@ cdef class ProblemModel:
     def __cinit__(self):
         self.thisptr = NULL
 
+    @property
     def npoints(self):
         """ Return the number of mesh nodes contained in the acoustic problem
             model
@@ -33,6 +34,7 @@ cdef class ProblemModel:
         assert(self.thisptr != NULL)
         return self.thisptr.npoints()
 
+    @property
     def ntriangles(self):
         """ Return the number of mesh triangles contained in the acoustic problem
             model
@@ -40,6 +42,7 @@ cdef class ProblemModel:
         assert(self.thisptr != NULL)
         return self.thisptr.ntriangles()
 
+    @property
     def nmaterials(self):
         """ Return the number of acoustic materials contained in the acoustic
             problem model
