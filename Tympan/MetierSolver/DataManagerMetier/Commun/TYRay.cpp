@@ -132,7 +132,7 @@ TYRayEvent& TYRayEvent::operator=(const TYRayEvent& other)
 // ===================================================================================================================================================
 double TYRay:: sampler_step = 1.0;
 
-TYRay::TYRay() 
+TYRay::TYRay()
 {
     _source = NULL;
     _recepteur = NULL;
@@ -176,7 +176,7 @@ TYRay::~TYRay()
 TYRay TYRay::build_from_Ray(int sens, Ray* ray)
 {
     TYRay tyRay;
-    
+
     tyRay.build_event_list_from_Ray(sens, ray);
 
     return tyRay;
