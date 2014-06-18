@@ -27,8 +27,6 @@ TY_EXT_GRAPHIC_INST(TYRay);
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 
-#include "Tympan/MetierSolver/AnalyticRayTracer/geometry_modifier.h"
-
 #include "TYRay.h"
 
 TYRayEvent::TYRayEvent():   distNextEvent(0.0),
@@ -473,7 +471,7 @@ void TYRay::compute_shot_angle()
     _events[0]->angletheta = angle;
 }
 
-void TYRay::sampleAndCorrection(geometry_modifier& transformer)
+void TYRay::sampleAndCorrection(IGeometryModifier& transformer)
 {
         // Récupération des longueurs simples (éléments suivants)
         nextLenghtCompute(transformer);
@@ -491,7 +489,7 @@ void TYRay::sampleAndCorrection(geometry_modifier& transformer)
         eventPosCompute(transformer);
 }
 
-void TYRay::nextLenghtCompute(geometry_modifier& transformer)
+void TYRay::nextLenghtCompute(IGeometryModifier& transformer)
 {
     for (unsigned j = 0; j < _events.size() - 1; j++)
     {
@@ -500,7 +498,7 @@ void TYRay::nextLenghtCompute(geometry_modifier& transformer)
     }
 }
 
-double TYRay::lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2, geometry_modifier& transformer)
+double TYRay::lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2, IGeometryModifier& transformer)
 {
     TabPoint3D tabPoint = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, sampler_step);
 
@@ -521,7 +519,7 @@ double TYRay::lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2, geometry_
     return length;
 }
 
-void TYRay::endLenghtCompute(geometry_modifier& transformer)
+void TYRay::endLenghtCompute(IGeometryModifier& transformer)
 {
     for (unsigned j = 0; j < _events.size() - 1; j++)
     {
@@ -530,7 +528,7 @@ void TYRay::endLenghtCompute(geometry_modifier& transformer)
     }
 }
 
-void TYRay::prevNextLengthCompute(geometry_modifier& transformer)
+void TYRay::prevNextLengthCompute(IGeometryModifier& transformer)
 {
     for (unsigned j = 1; j < _events.size() - 1; j++)
     {
@@ -539,7 +537,7 @@ void TYRay::prevNextLengthCompute(geometry_modifier& transformer)
     }
 }
 
-void TYRay::angleCompute(geometry_modifier& transformer)
+void TYRay::angleCompute(IGeometryModifier& transformer)
 {
     for (unsigned j = 1; j < _events.size() - 1; j++)
     {
@@ -548,7 +546,7 @@ void TYRay::angleCompute(geometry_modifier& transformer)
     }
 }
 
-void TYRay::eventPosCompute(geometry_modifier& transformer)
+void TYRay::eventPosCompute(IGeometryModifier& transformer)
 {
     for (unsigned i = 0; i < _events.size(); i++)
     {
@@ -557,10 +555,10 @@ void TYRay::eventPosCompute(geometry_modifier& transformer)
     }
 }
 
-double TYRay::angleCorrection(const TYRayEvent* ev1, 
-                                    TYRayEvent* ev2, 
-                              const TYRayEvent* ev3, 
-                              geometry_modifier& transformer)
+double TYRay::angleCorrection(const TYRayEvent* ev1,
+                                    TYRayEvent* ev2,
+                              const TYRayEvent* ev3,
+                              IGeometryModifier& transformer)
 {
     TabPoint3D tabPoint1 = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, sampler_step);
     TabPoint3D tabPoint2 = OPoint3D::checkPointsMaxDistance(ev2->pos, ev3->pos, sampler_step);
@@ -579,7 +577,7 @@ double TYRay::angleCorrection(const TYRayEvent* ev1,
     return (M_PI - vec1.angle(vec2)) / 2.;
 }
 
-void TYRay::tyRayCorrection(geometry_modifier& transformer)
+void TYRay::tyRayCorrection(IGeometryModifier& transformer)
 {
     // Repositionnement des elements du rayon
     for (unsigned i = 0; i < _events.size(); i++)
