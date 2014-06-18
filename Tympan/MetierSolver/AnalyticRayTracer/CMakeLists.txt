@@ -10,6 +10,6 @@ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
 #use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 
 
-target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} tympan_acoustic_raytracer)
 
 install_tympan_component(${MODULE_NAME})
