@@ -13,6 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <vector>
+using std::vector;
+
+
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
 #include "Tympan/MetierSolver/CommonTools/OTriangle.h"
