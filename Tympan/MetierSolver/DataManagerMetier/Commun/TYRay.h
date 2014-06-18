@@ -97,9 +97,9 @@ public:
 
     /*!
     * \fn TYRay(TYSourcePonctuelle *_sourceP, TYPointControl *_recepP, TYTabPoint &_polyligne)
-    * \brief Construction d'un rayon avec une source, un recepteur et une liste de positions d'i¿½vi¿½nements acoustiques (ri¿½flexion, diffraction, etc...)
-    * \warning Hypothese : Le premier point de la polyligne correspond i¿½ la position de la source en coordonni¿½es globales et le dernier point de la polyligne
-    * correspond a la position du recepteur en coordonni¿½es globales. Si ces conditions ne sont pas respecti¿½es, la fonction renvoie un rayon vide equivalent i¿½ TYRay()
+    * \brief Construction d'un rayon avec une source, un recepteur et une liste de positions d'événements acoustiques (réflexion, diffraction, etc...)
+    * \warning Hypothese : Le premier point de la polyligne correspond à la position de la source en coordonnées globales et le dernier point de la polyligne
+    * correspond a la position du recepteur en coordonnées globales. Si ces conditions ne sont pas respectées, la fonction renvoie un rayon vide equivalent à TYRay()
     */
     TYRay(TYSourcePonctuelle* _sourceP, TYPointCalcul* _recepP, std::vector<TYRayEvent*> &_events);
 
@@ -388,9 +388,9 @@ protected:
 	int _identifiant;				/*!< Identifiant du rayon */
     TYSourcePonctuelle* _source;	/*!< Pointeur vers la source du rayon */
     TYPointCalcul* _recepteur;		/*!< Pointeur vers le recepteur du rayon */
-    OPoint3D _posSourceGlobal;		
+    OPoint3D _posSourceGlobal;
     OPoint3D _posReceptGlobal;
-    
+
     TYTabRayEvent _events;			/*!< Vecteurs d'evenements contenant la liste des evenements du rayon associe et leurs positions.*/
 };
 //Smart Pointer sur TYRay
