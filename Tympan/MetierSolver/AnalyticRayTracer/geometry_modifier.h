@@ -19,13 +19,15 @@
 #include <qlist.h>
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 
 class Lancer;
 class OTriangle;
 
 using namespace std;
 
-class geometry_modifier
+class geometry_modifier :
+    public IGeometryModifier
 {
 public:
 

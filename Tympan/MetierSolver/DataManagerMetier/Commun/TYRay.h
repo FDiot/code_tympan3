@@ -73,7 +73,14 @@ typedef std::vector<TYRayEvent*> TYTabRayEvent;
 class TYPointCalcul;
 class TYSourcePonctuelle;
 class Ray;
-class geometry_modifier;
+
+struct IGeometryModifier
+{
+    virtual ~IGeometryModifier() {};
+
+    virtual OPoint3D fonction_h(const OPoint3D&) = 0;
+    virtual OPoint3D fonction_h_inverse(const OPoint3D&) = 0;
+};
 
 /*!
 * \file TYRay.h
@@ -137,7 +144,7 @@ public:
      * \brief Curve TYRay with respect to meteo influence
      *        This is only for watching curved rays on screen
      */
-    void tyRayCorrection(geometry_modifier& transformer);
+    void tyRayCorrection(IGeometryModifier& transformer);
 
     /*!
     * \fn void setSource(TYSourcePonctuelle *_source OPoint3D &globalPosition)
@@ -311,38 +318,38 @@ public:
     * \ by calling the three previous functions
     * \ Creates two matrix which have corrected lengths and angles
     */
-    void sampleAndCorrection(geometry_modifier& transformer);
+    void sampleAndCorrection(IGeometryModifier& transformer);
 
     /*!
      * \fn void endLenghtCompute(TYRay *tyRay)
      * \brief compute the length between an event and the next pertinent event
      *        (i.e. betwween a diffraction and the next reflection or receptor)
      */
-    void endLenghtCompute(geometry_modifier& transformer);
+    void endLenghtCompute(IGeometryModifier& transformer);
 
     /*!
      * \fn void angleCompute(TYRay *tyRay)
      * \brief compute the angle between incident ray and the face
      */
-    void angleCompute(geometry_modifier& transformer);
+    void angleCompute(IGeometryModifier& transformer);
 
     /*!
      * \fn void nextLenghtCompute(TYRay *tyRay)
      * \brief compute the length between an event and the next event
      */
-    void nextLenghtCompute(geometry_modifier& transformer);
+    void nextLenghtCompute(IGeometryModifier& transformer);
 
     /*!
      * \fn void prevNextLengthCompute(TYRay *tyRay)
      * \brief Computes the length between event-1 and event+1
      */
-    void prevNextLengthCompute(geometry_modifier& transformer);
+    void prevNextLengthCompute(IGeometryModifier& transformer);
 
     /*!
      * \fn void nextLenghtCompute(TYRay *tyRay)
      * \brief compute the length between an event and the next event
      */
-    void eventPosCompute(geometry_modifier& transformer);
+    void eventPosCompute(IGeometryModifier& transformer);
 
     /*!
     * \fn void lengthCorrection()
@@ -350,7 +357,7 @@ public:
     * \ Works on over-sampled TYRays
     * \ Creates a vector which has all corrected path lengths
     */
-    double lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2, geometry_modifier& transformer);
+    double lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2, IGeometryModifier& transformer);
 
     /*!
     * \fn void angleCorrection()
@@ -359,7 +366,7 @@ public:
     *        ev2 -> event to wich compute anngle
     *        ev3 -> next event
     */
-    double angleCorrection(const TYRayEvent* ev1, TYRayEvent* ev2, const TYRayEvent* ev3, geometry_modifier& transformer);
+    double angleCorrection(const TYRayEvent* ev1, TYRayEvent* ev2, const TYRayEvent* ev3, IGeometryModifier& transformer);
 
 	static void set_sampler_step(double sampler_step_) { sampler_step = sampler_step_; }
 
