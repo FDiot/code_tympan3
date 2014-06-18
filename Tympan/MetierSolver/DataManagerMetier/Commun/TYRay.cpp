@@ -508,9 +508,8 @@ double TYRay::lengthCorrection(TYRayEvent* ev1, const TYRayEvent* ev2, geometry_
     // Useful for lengths & angles
     for (int i = 0; i < tabPoint.size(); i++)
     {
-        vec3 point = OPoint3Dtovec3(tabPoint[i]);
+        OPoint3D& point = tabPoint[i];
         point = transformer.fonction_h_inverse(point);
-        tabPoint[i] = vec3toOPoint3D(point);
     }
 
     double length = 0.;
@@ -553,8 +552,8 @@ void TYRay::eventPosCompute(geometry_modifier& transformer)
 {
     for (unsigned i = 0; i < _events.size(); i++)
     {
-        vec3 point = transformer.fonction_h_inverse( OPoint3Dtovec3(_events[i]->pos) );
-        _events[i]->pos = vec3toOPoint3D(point);
+        OPoint3D& point = _events[i]->pos;
+        point = transformer.fonction_h_inverse(point);
     }
 }
 
@@ -570,8 +569,8 @@ double TYRay::angleCorrection(const TYRayEvent* ev1,
     OPoint3D points[3] = { tabPoint1.at(tabPoint1.size() - 2), tabPoint1.at(tabPoint1.size() - 1), tabPoint2.at(1) };
     for (int i = 0; i < 3; i++)
     {
-        vec3 point = transformer.fonction_h_inverse( OPoint3Dtovec3(points[i]) );
-        points[i] = vec3toOPoint3D(point);
+        OPoint3D& point = points[i];
+        point = transformer.fonction_h_inverse(point);
     }
 
     OVector3D vec1(points[1], points[0]);
@@ -585,15 +584,15 @@ void TYRay::tyRayCorrection(geometry_modifier& transformer)
     // Repositionnement des elements du rayon
     for (unsigned i = 0; i < _events.size(); i++)
     {
-        vec3 point = transformer.fonction_h( OPoint3Dtovec3(_events[i]->pos) );
-        _events[i]->pos = vec3toOPoint3D(point);
+        OPoint3D& point = _events[i]->pos;
+        point = transformer.fonction_h(point);
     }
 
     overSample(sampler_step);
 
     for (unsigned int i = 0 ; i < _events.size() ; i++)
     {
-        vec3 point = transformer.fonction_h_inverse( OPoint3Dtovec3(_events[i]->pos) );
-        _events[i]->pos = vec3toOPoint3D(point);
+        OPoint3D& point = _events[i]->pos;
+        point = transformer.fonction_h(point);
     }
 }
