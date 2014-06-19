@@ -20,6 +20,8 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
 
+#include "Tympan/MetierSolver/CommonTools/acoustic_path.h"
+
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"
 
 #include "TYANIME3DSolver.h"
@@ -27,7 +29,7 @@
 
 
 TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site,
-                                               TYTabRay& tabRayons, TYStructSurfIntersect* tabStruct,
+                                               tab_acoustic_path& tabRayons, TYStructSurfIntersect* tabStruct,
                                                TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs) :
     _calcul(calcul),
     _site(site),
@@ -82,7 +84,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
     double angle = 0.0, rd = 0.0, rr = 0.0; // incidence angle of acoustic wave, lenght for events computation
     int idFace = 0, rayNbr = 0, reflIndice = 0, nbFacesFresnel = 0;
 
-    TYRay* ray = NULL;
+    acoustic_path* ray = NULL;
     TYSol* pSol = NULL;
 
     OPoint3D Prefl, Pprec, Psuiv;    //pt de reflexion, pt precedent et suivant
@@ -101,7 +103,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
     for (int i = 0; i < _nbRays; i++) // boucle sur les rayons
     {
-        ray = _tabTYRays[i].getRealPointer();
+        ray = _tabTYRays[i];
         std::vector<int> tabRefl = ray->getIndexOfEvents(TYREFLEXION | TYREFLEXIONSOL);
 
         rayNbr = i;
@@ -249,11 +251,11 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
 
     OVector3D vDiffPrec, vDiffSuiv, n1, n2, normal;
 
-    TYRay* currentRay = NULL;
+    acoustic_path* currentRay = NULL;
 
     for (int i = 0; i < _nbRays; i++) // boucle sur les rayons
     {
-        currentRay = _tabTYRays[i].getRealPointer();
+        currentRay = _tabTYRays[i];
 
         prod = OSpectre(1.0);
 
@@ -262,7 +264,7 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
         for (int j = 0; j < tabDiff.size(); j++)
         {
             diffIdx = tabDiff[j]; // Index de l'evenement diffraction courant
-            TYRayEvent* currentEv = currentRay->getEvents().at(diffIdx); // Evenement courant
+            acoustic_event* currentEv = currentRay->getEvents().at(diffIdx); // Evenement courant
 
             precDiff = currentEv->previous->distNextEvent; // Distance de l'venement prcedent  la diffraction
             diffEnd = currentEv->distEndEvent; // de la diffraction  l'vnement pertinent suivant (recepteur ou reflexion)
@@ -625,7 +627,14 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff()
     for (int i = 0; i < _nbRays; i++) // boucle sur les rayons
     {
         totalRayLength = 0.0; // Computes the total ray length including reflections only (diffractions are not included)
-        source = _tabTYRays[i]->getSource();
+
+
+
+        // TO DO : Should find source in list known by solver from it's index given by the ray
+
+        //source = _tabTYRays[i]->getSource();
+
+        //--------------------------------------
 
         totalRayLength = _tabTYRays[i]->getLength();
 
@@ -689,11 +698,21 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
 
             for (int k = 0; k < _nbRays; k++) // boucle sur les rayons allant de la source au recepteur
             {
-                source = _tabTYRays[k]->getSource();
-                recept = _tabTYRays[k]->getRecepteur();
+
+        // TO DO : Should find source in list known by solver from it's index given by the ray
+
+               // source = _tabTYRays[k]->getSource();
+
+        // ------------------------------------------------
+
+        // TO DO : Should find receptor in list known by solver from it's index given by the ray
+
+                // recept = _tabTYRays[k]->getRecepteur();
+
+        // -------------------------------------------------
 
                 // test si la source est celle en cours idem pour recepteur
-                if (source == (TYSourcePonctuelle*)(_tabSources[i]->getElement()) && recept == (TYPointCalcul*)(_tabRecepteurs[j]->getElement()))
+ //               if (source == (TYSourcePonctuelle*)(_tabSources[i]->getElement()) && recept == (TYPointCalcul*)(_tabRecepteurs[j]->getElement()))
                 {
                     totalRayLength = _tabTYRays[k]->getLength();
                     mod = (_pressAcoustEff[k]).getModule();

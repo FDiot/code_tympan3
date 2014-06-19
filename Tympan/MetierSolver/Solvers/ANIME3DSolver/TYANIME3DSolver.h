@@ -22,7 +22,8 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
+//#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
+#include "Tympan/MetierSolver/CommonTools/acoustic_path.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
 
@@ -102,7 +103,7 @@ protected:
     void saveAndOverSampleRay(const TYSiteNode& site, TYCalcul& calcul, const unsigned int& sens = 0, const double& dMin = 0.0);
 
 protected:
-    TYTabRay _tabRay;
+    tab_acoustic_path _tabRay;
 
     /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face
     TYStructSurfIntersect* _tabPolygon;
