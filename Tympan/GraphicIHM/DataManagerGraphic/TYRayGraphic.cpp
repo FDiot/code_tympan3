@@ -47,7 +47,7 @@ void TYRayGraphic::computeBoundingBox()
     _boundingBox = reset;
 }
 
-void TYRayGraphic::getRayEventColor(TYRayEvent& e)
+void TYRayGraphic::getRayEventColor(acoustic_event& e)
 {
     switch (e.type)
     {
@@ -91,7 +91,7 @@ void TYRayGraphic::display(GLenum mode /*= GL_RENDER*/)
         _repeatRayEventCount = 0;
         for (unsigned int j = 0; j < pRay->getEvents().size(); j++)
         {
-            TYRayEvent* e = pRay->getEvents().at(j);
+            acoustic_event* e = pRay->getEvents().at(j);
 
             if (j != 0)
             {

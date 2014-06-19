@@ -32,7 +32,7 @@
 #include "TYElementGraphic.h"
 
 class TYRay;
-class TYRayEvent;
+class acoustic_event;
 
 /**
  * Classe graphique pour representer un rayon
@@ -58,7 +58,7 @@ public:
     static bool _gVisible;
 
 protected:
-    void getRayEventColor(TYRayEvent& e);
+    void getRayEventColor(acoustic_event& e);
     float _r, _g, _b; // current color of ray
 
     int _lastRayEventType;                  /*!< Type du dernier evenement du rayon affiche */
