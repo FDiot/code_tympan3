@@ -74,13 +74,18 @@ endfunction(build_native_path_list)
 # be called DIRECTLY
 macro(_common_test_config)
   if(_RUNTIME_PATH)
+    set(current_rt_path "$ENV{${LD_VARNAME}}")
+    # Removes trailing directory separator before a path separator
+    string(REPLACE "\\;" ";" current_rt_path "${current_rt_path}")  
+    set(extended_rt_path "${_RUNTIME_PATH}${OS_PATH_SEPARATOR}${current_rt_path}")
     # From http://www.mail-archive.com/cmake@cmake.org/msg21493.html
     #
     # IMPORTANT NOTE: The set_tests_properties(), below, internally
     # stores its name/value pairs with a semicolon delimiter.
     # because of this we must protect the semicolons in the path
-    string(REPLACE ";" "\\;" _rt_path "${_RUNTIME_PATH}")  
-    set_property(TEST ${_TARGET} PROPERTY ENVIRONMENT "${LD_VARNAME}=${_rt_path}")
+    string(REPLACE ";" "\\;" extended_rt_path "${extended_rt_path}")  
+
+    set_property(TEST ${_TARGET} PROPERTY ENVIRONMENT "${LD_VARNAME}=${extended_rt_path}")
   endif()
 
   if(TARGET ${_TARGET})
@@ -137,4 +142,3 @@ function(add_qtest_executable)
       "for target ${_TARGET}: " ${_UNPARSED_ARGUMENTS})
   endif()
 endfunction()
-
