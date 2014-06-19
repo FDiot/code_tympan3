@@ -31,6 +31,44 @@ install(TARGETS ${TARGET} ARCHIVE DESTINATION lib
                           RUNTIME DESTINATION . )
 endfunction(install_tympan_component)
 
+if(SYS_NATIVE_WIN)
+  set(OS_PATH_SEPARATOR ";")
+endif()
+if(SYS_LINUX)
+  set(OS_PATH_SEPARATOR ":")
+endif()
+
+
+# This function rewrite a CMake list of path into a string
+# usable as native shell list of path like  
+# <user_home>/tympan/lib:<system>/lib on Linux
+# c:\<user_home>\tympan\lib;c:\<system>\lib on Windows
+function(build_native_path_list outvar inlist)
+  # Handles the special case a an empty list
+  if(NOT inlist)
+    set(${outvar} "" PARENT_SCOPE)
+    return()
+  endif()
+ 
+
+  ## We now process this 3rd party list of directories according to
+  ## http://www.mail-archive.com/cmake@cmake.org/msg21493.html
+  list(REMOVE_DUPLICATES inlist)
+
+  set(native_list "")
+  foreach(dir ${inlist})
+    FILE(TO_NATIVE_PATH  ${dir} nativedir)
+    set(native_list "${native_list}${OS_PATH_SEPARATOR}${nativedir}")
+  endforeach(dir)
+
+  # Remove the leading separator 
+  string(SUBSTRING "${native_list}" 1 -1 native_list )
+
+  # Export the result in calling function scope
+  set(${outvar} "${native_list}" PARENT_SCOPE)
+endfunction(build_native_path_list)
+
+
 # This MACRO factors out some functionalities shared among
 # add_qtest_executable and configure_gtest_target: it is NOT MEANT to
 # be called DIRECTLY
@@ -100,37 +138,3 @@ function(add_qtest_executable)
   endif()
 endfunction()
 
-# This function rewrite a CMake list of path into a string
-# usable as native shell list of path like  
-# <user_home>/tympan/lib:<system>/lib on Linux
-# c:\<user_home>\tympan\lib;c:\<system>\lib on Windows
-function(build_native_path_list outvar inlist)
-  # Handles the special case a an empty list
-  if(NOT inlist)
-    set(${outvar} "" PARENT_SCOPE)
-    return()
-  endif()
- 
-  if(SYS_NATIVE_WIN)
-    set(sep ";")
-  endif()
-  if(SYS_LINUX)
-    set(sep ":")
-  endif()
-
-  ## We now process this 3rd party list of directories according to
-  ## http://www.mail-archive.com/cmake@cmake.org/msg21493.html
-  list(REMOVE_DUPLICATES inlist)
-
-  set(native_list "")
-  foreach(dir ${inlist})
-    FILE(TO_NATIVE_PATH  ${dir} nativedir)
-    set(native_list "${native_list}${sep}${nativedir}")
-  endforeach(dir)
-
-  # Remove the leading separator 
-  string(SUBSTRING "${native_list}" 1 -1 native_list )
-
-  # Export the result in calling function scope
-  set(${outvar} "${native_list}" PARENT_SCOPE)
-endfunction(build_native_path_list)
