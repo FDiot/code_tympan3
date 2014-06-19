@@ -42,3 +42,5 @@ lib\*
 *.orig
 *.lnk
 *.rej
+*.patch
+
