@@ -1,6 +1,4 @@
-echo "Adding to PATH to run Tympan (Debug)"
+echo "Adding paths to Code_TYMPAN (Debug) runtime dependencies to PATH"
 set PATH=%PATH%;@TYMPAN_3RDPARTY_DLL_NATIVE_DIRS@
  
 set TYMPAN_TESTS_DATA_DIR=@TYMPAN_TESTS_DATA_DIR_NATIVE@
-
-REM set PYTHONPATH=%PYTHONPATH%;@PYTHONPATH@
