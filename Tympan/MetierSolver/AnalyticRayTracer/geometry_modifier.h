@@ -20,9 +20,11 @@
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 
 class Lancer;
-class OTriangle;
 
 using namespace std;
 
