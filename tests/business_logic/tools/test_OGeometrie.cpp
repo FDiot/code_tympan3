@@ -17,7 +17,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
-TEST(NormaleTest, dumpenv)
+TEST(TestGeometrie, normale)
 {
     // Création du tableau de points
     OPoint3D pts[3];
@@ -34,7 +34,7 @@ TEST(NormaleTest, dumpenv)
     ASSERT_TRUE(normale._z == 1);
 }
 
-TEST(SymPtDroite, dumpenv)
+TEST(TestGeometrie, sym_pt_droite)
 {
     // Création des points
     OPoint3D ptA(-20.0, 0.0, 0.0), ptB(20.0, 0.0, 0.0), ptP(-20.0, 0.0, 2.0), ptI;
@@ -47,7 +47,7 @@ TEST(SymPtDroite, dumpenv)
 
 }
 
-TEST(intersDemiSegmentAvecSegment, dumpenv)
+TEST(TestGeometrie, inters_demi_segment_avec_segment)
 {
     // Création des points du segment et du point ptS
     OPoint3D ptA(-20.0, -10.0, 5.0), ptB(20.0, 12.0, 5.0), ptS(-20.0, 3.0, 5.0);
@@ -62,7 +62,7 @@ TEST(intersDemiSegmentAvecSegment, dumpenv)
     ASSERT_FALSE(resu == false);
 }
 
-TEST(intersDroitesPoints, dumpenv)
+TEST(TestGeometrie, inters_droites_points)
 {
     // Création des points des 2 segments
     OPoint3D ptA(-10.0, 23.0, 0.0), ptB(10.0, -17.0, 0.0), ptC(-10.0, -32.0, 0.0), ptD(10.0, 28.0, 0.0), ptI;
@@ -78,7 +78,7 @@ TEST(intersDroitesPoints, dumpenv)
     ASSERT_TRUE(resu == 0);
 }
 
-TEST(pointInPolygonAngleSum, dumpenv)
+TEST(TestGeometrie, point_in_polygon_angle_sum)
 {
     // Définition du tableau de points
     OPoint3D pts[6];
@@ -102,7 +102,7 @@ TEST(pointInPolygonAngleSum, dumpenv)
     ASSERT_FALSE(resu == true);
 }
 
-TEST(pointInPolygonRayCasting, dumpenv)
+TEST(TestGeometrie, point_in_polygon_ray_casting)
 {
     // Définition du tableau de points
     OPoint3D pts[6];
@@ -133,7 +133,7 @@ TEST(pointInPolygonRayCasting, dumpenv)
     ASSERT_FALSE(resu == true);
 }
 
-TEST(shortestSegBetween2Lines, dumpenv)
+TEST(TestGeometrie, shortest_seg_between_2_lines)
 {
     // Création des points des 2 segments et du segment retourné
     OPoint3D pt1(-10.0, 23.0, 0.0), pt2(10.0, -17.0, 0.0), pt3(-10.0, -32.0, 3.0), pt4(10.0, 28.0, 3.0), ptA, ptB;
@@ -156,7 +156,7 @@ TEST(shortestSegBetween2Lines, dumpenv)
     ASSERT_TRUE(ptB == OPoint3D(1.0, 1.0, 0.0));
 }
 
-TEST(boundingBox, dumpenv)
+TEST(TestGeometrie, bounding_box)
 {
     // Définition du tableau de points
     OPoint3D pts[6];
@@ -177,7 +177,7 @@ TEST(boundingBox, dumpenv)
     ASSERT_TRUE(ptMax == OPoint3D(6.0, 10.0, 5.0));
 }
 
-TEST(intersDroitesPointVecteur, dumpenv)
+TEST(TestGeometrie, inters_droites_point_vecteur)
 {
     // Définition des points
     OPoint3D ptA0(-10.0, 23.0, 0.0), ptA1(10.0, -17.0, 0.0), ptB0(-10.0, -32.0, 0.0), ptB1(10.0, 28.0, 0.0), ptI;
