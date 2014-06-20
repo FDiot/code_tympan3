@@ -1,6 +1,6 @@
-#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Shape.h"
-#include "Tympan\MetierSolver\AcousticRaytracer\Geometry\Cylindre.h"
-#include "Tympan\MetierSolver\AcousticRaytracer\Acoustic\Recepteur.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Shape.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/geometry_modifier.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Conversion_tools.h"
 
@@ -96,7 +96,7 @@ void build_event_list_from_Ray(int sens, Ray* ray, acoustic_path& ap)
 
 acoustic_path build_from_Ray(int sens, Ray* ray)
 {
-    acoustic_path tyRay; 
+    acoustic_path tyRay;
     build_event_list_from_Ray(sens, ray, tyRay);
 
     return tyRay;

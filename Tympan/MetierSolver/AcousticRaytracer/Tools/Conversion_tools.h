@@ -1,7 +1,6 @@
-
 #include "Tympan/MetierSolver/CommonTools/Acoustic_path.h"
-#include "Tympan\MetierSolver\AcousticRaytracer\Acoustic\Event.h"
-#include "Tympan/MetierSolver/AcousticRayTracer/Ray/Ray.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
 
 
 namespace Tools
@@ -21,4 +20,3 @@ void build_event_list_from_Ray(int sens, Ray* ray, acoustic_path& ap);
  */
 acoustic_path build_from_Ray(int sens, Ray* ray);
 }
-
