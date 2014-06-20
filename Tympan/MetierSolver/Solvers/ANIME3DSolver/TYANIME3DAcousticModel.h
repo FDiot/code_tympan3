@@ -36,9 +36,6 @@ typedef std::vector<OPoint3D> OTabPoints;
 ///Type pour les tableaux de rays
 typedef std::vector<Ray*> TabRays;
 
-///Type pour les tableaux de rayons TYMPAN
-typedef std::vector<TYRay> TYTabRays;
-
 class OBox2;
 
 /**
@@ -49,7 +46,7 @@ class TYANIME3DAcousticModel : public TYAcousticModelInterface
 {
 public:
     /// constructeurs
-    TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, TYTabRay& tabRayons, TYStructSurfIntersect* tabStruct,
+    TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, tab_acoustic_path& tabRayons, TYStructSurfIntersect* tabStruct,
                            TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs);
 
     /// destructeur
@@ -150,7 +147,7 @@ protected :
     int _nbRays;
 
     /// tableau de l'ensemble des rayons TYMPAN
-    TYTabRay& _tabTYRays;
+    tab_acoustic_path& _tabTYRays;
 
     TYStructSurfIntersect* _tabSurfIntersect; /*!< Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face */
 

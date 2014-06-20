@@ -13,10 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <vector>
+using std::vector;
+
+
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
 #include "Tympan/MetierSolver/CommonTools/OTriangle.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
+//#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/FaceSelector.h"
@@ -36,7 +40,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Latitude2DSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/RandomSphericSampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
-
+#include "Tympan/MetierSolver/AcousticRaytracer/Tools/Conversion_tools.h"
 
 #include "TYANIME3DRayTracerSetup.h"
 #include "TYANIME3DSolver.h"
@@ -47,7 +51,7 @@
 
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize,
                                                          TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs,
-                                                         TYTabRay& tabTYRays) : _tabPolygon(tabPolygon),
+                                                         tab_acoustic_path& tabTYRays) : _tabPolygon(tabPolygon),
     _tabPolygonSize(tabPolygonSize),
     _tabSources(tabSources),
     _tabRecepteurs(tabRecepteurs),
@@ -103,7 +107,7 @@ bool TYANIME3DAcousticPathFinder::exec()
 
 
     // This function creates TYRays from Rays .
-    convertRaytoTYRay(sens);
+    convert_Rays_to_acoustic_path(sens);
 
     // This function corrects distances between events and angles at each event
     sampleAndCorrection();
@@ -362,7 +366,7 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
     }
 }
 
-void TYANIME3DAcousticPathFinder::convertRaytoTYRay(const unsigned int& sens)
+void TYANIME3DAcousticPathFinder::convert_Rays_to_acoustic_path(const unsigned int& sens)
 {
     //Recuperation de la liste des rayons valides pour la _rayTracing.
     std::deque<Ray*>* rays = _rayTracing.getSolver()->getValidRays();
@@ -374,10 +378,10 @@ void TYANIME3DAcousticPathFinder::convertRaytoTYRay(const unsigned int& sens)
     for (unsigned int i = 0; i < rays->size(); i++)
     {
         Ray* ray = rays->at(i);
-        LPTYRay tyRay = new TYRay( TYRay::build_from_Ray(sens, ray) ); // Creation du rayon
+        acoustic_path *tyRay = new acoustic_path( Tools::build_from_Ray(sens, ray) ); // Creation du rayon
 
         // Connect TYSource & TYReceptor (will be obsolete in future solver data model)
-        set_metier_source_and_receptor_to_TYRay(sens, ray, tyRay);
+        set_source_idx_and_receptor_idx_to_acoustic_path(sens, ray, tyRay);
 
         // Ajoute le rayon au calcul
         _tabTYRays.push_back(tyRay);
@@ -405,7 +409,7 @@ void TYANIME3DAcousticPathFinder::sampleAndCorrection()
     }
 }
 
-void TYANIME3DAcousticPathFinder::set_metier_source_and_receptor_to_TYRay(int sens, Ray *ray, TYRay *tyRay)
+void TYANIME3DAcousticPathFinder::set_source_idx_and_receptor_idx_to_acoustic_path(int sens, Ray *ray, acoustic_path *tyRay)
 {
     unsigned int idSource = 0;
     unsigned int idRecep = 0;
@@ -431,8 +435,8 @@ void TYANIME3DAcousticPathFinder::set_metier_source_and_receptor_to_TYRay(int se
     OPoint3D posReceptGlobal(pR.x, pR.y, pR.z);
     TYPointCalcul* recepP = TYPointCalcul::safeDownCast(_tabRecepteurs.at(idRecep)->getElement());
 
-    tyRay->setSource(sourceP, posSourceGlobal);
-    tyRay->setRecepteur(recepP, posReceptGlobal);
+    tyRay->setSource(idSource); //(sourceP, posSourceGlobal);
+    tyRay->setRecepteur(idRecep); //(recepP, posReceptGlobal);
 }
 
 void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>& sources )
