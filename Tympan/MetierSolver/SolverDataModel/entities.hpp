@@ -185,7 +185,7 @@ typedef size_t triangle_idx;
 class SourceDirectivityInterface
 {
 public:
-    virtual Spectrum lwAdjustment(Vector direction) = 0;
+    virtual Spectrum lwAdjustment(Vector direction, double distance) = 0;
 };
 
 class SphericalSourceDirectivity :
@@ -196,6 +196,110 @@ public:
      virtual Spectrum lwAdjustment(Vector direction)
      { return Spectrum(1.0); }
 };
+
+class CommonFaceDirectivity : 
+        public virtual BaseEntity,
+        public SourceDirectivityInterface
+{
+public:
+    CommonFaceDirectivity(const Vector& support_normal_, double support_size_) : 
+                      BaseEntity(), 
+                      support_normal(support_normal_),
+                      support_size(support_size_) {}
+
+    ~CommonFaceDirectivity() {}
+
+protected :
+    Vector support_normal;              /*! Normal of support face */
+    double support_size;                /*! Characteristic size of support face */
+};
+
+class VolumeFaceDirectivity :
+    public CommonFaceDirectivity
+{
+public:
+    VolumeFaceDirectivity(const Vector& support_normal_, double support_size_) : 
+                      CommonFaceDirectivity(support_normal_, support_size_) 
+    
+     ~VolumeFaceDirectivity() {}
+
+     virtual Spectrum lwAdjustment(Vector direction, double distance);
+
+private:
+    static const double _tabRA[];       /*<! RA form factor */
+    static const double _tabCor[];      /*<! Correction factors */
+
+    double calculC(double distance);    /*! Compute directivity factor */
+};
+//
+// ------------------
+//
+#ifdef NB_KA
+#   undef NB_KA
+#   define NB_KA 38
+#else
+#   define NB_KA 38
+#endif
+
+#ifdef NB_THETA
+#   undef NB_THETA
+#   define NB_THETA 21
+#else
+#   define NB_THETA 21
+#endif
+class ChimneyFaceDirectivity :
+    public CommonFaceDirectivity
+{
+public :
+    ChimneyFaceDirectivity(const Vector& support_normal_, double support_size_) : 
+                      CommonFaceDirectivity(support_normal_, support_size_) 
+
+    ~ChimneyFaceDirectivity() {}
+    virtual Spectrum lwAdjustment(Vector direction, double distance);
+
+
+private :
+    double compute_q(int ka_idx, int theta_idx, double ka, double theta);
+
+    static const double _tabQ[NB_KA][NB_THETA];
+};
+//
+// -------------------------
+//
+#ifdef NB_KA
+#   undef NB_KA
+#   define NB_KA 9
+#else
+#   define NB_KA 9
+#endif
+
+// nombre de valeurs de theta dans le tableau
+#ifdef NB_THETA
+#   undef NB_THETA
+#   define NB_THETA 41
+#else
+#   define NB_THETA 41
+#endif
+
+class BaffledFaceDirectivity :
+    public CommonFaceDirectivity
+{
+public :
+    BaffledFaceDirectivity(const Vector& support_normal_, double support_size_) : 
+                      CommonFaceDirectivity(support_normal_, support_size_);
+
+    ~BaffledFaceDirectivity() {}
+    virtual Spectrum lwAdjustment(Vector direction, double distance);
+
+private:
+    static const double _tabQ[NB_KA][NB_THETA];
+    static const double _tabKa[NB_KA];
+
+    double compute_q(int indice_Ka, int indice_theta, double ka, double theta);
+
+    int find_Ka_idx(double ka);
+};
+
 
 class AcousticSource:
     public virtual BaseEntity
