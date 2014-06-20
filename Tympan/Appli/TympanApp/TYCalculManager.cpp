@@ -183,6 +183,10 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             // Reactivate GUI
             TYApplication::restoreOverrideCursor();
             getTYMainWnd()->setEnabled(true);
+            QMessageBox msgBox;
+            msgBox.setText(
+                    "L'interpreteur python n'a pas pu etre trouve.\nVeuillez verifier que la variable d'environnement TYMPAN_PYTHON_INTERP est correctement positionnee");
+            msgBox.exec();
             return false;
         }
         python.start(python_interp, args);
@@ -218,6 +222,9 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             // Reactivate GUI
             TYApplication::restoreOverrideCursor();
             getTYMainWnd()->setEnabled(true);
+            QMessageBox msgBox;
+            msgBox.setText("Le calcul a echoue, veuillez reessayer.");
+            msgBox.exec();
             return false;
         }
         // Then read the result to update the internal model
@@ -234,6 +241,9 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             // reactivate GUI
             TYApplication::restoreOverrideCursor();
             getTYMainWnd()->setEnabled(true);
+            QMessageBox msgBox;
+            msgBox.setText("Le fichier de resultats n'a pas pu etre lu.");
+            msgBox.exec();
             return false;
         }
 

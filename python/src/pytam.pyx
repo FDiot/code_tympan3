@@ -6,12 +6,6 @@ import cython
 import numpy as np
 from cython.view cimport array as cyarray
 
-
-class NullCppObject(Exception):
-    """
-    The referenced C++ object is NULL
-    """
-
 @cython.locals(comp=Computation)
 def loadsolver(foldername, comp):
     """ Load a solver plugin (looked for in the 'foldername' folder) that will
@@ -32,28 +26,28 @@ cdef class ProblemModel:
     def __cinit__(self):
         self.thisptr = NULL
 
+    @property
     def npoints(self):
         """ Return the number of mesh nodes contained in the acoustic problem
             model
         """
-        if self.thisptr == NULL:
-            raise NullCppObject()
+        assert(self.thisptr != NULL)
         return self.thisptr.npoints()
 
+    @property
     def ntriangles(self):
         """ Return the number of mesh triangles contained in the acoustic problem
             model
         """
-        if self.thisptr == NULL:
-            raise NullCppObject()
+        assert(self.thisptr != NULL)
         return self.thisptr.ntriangles()
 
+    @property
     def nmaterials(self):
         """ Return the number of acoustic materials contained in the acoustic
             problem model
         """
-        if self.thisptr == NULL:
-            raise NullCppObject()
+        assert(self.thisptr != NULL)
         return self.thisptr.nmaterials()
 
     @property
@@ -61,15 +55,13 @@ cdef class ProblemModel:
         """ Return the number of acoustic sources involved in the acoustic
             problem model
         """
-        if self.thisptr == NULL:
-            raise NullCppObject()
+        assert(self.thisptr != NULL)
         return self.thisptr.nsources()
 
     def source(self, idx):
         """ Return the acoustic source (Source object) of index 'idx'
         """
-        if self.thisptr == NULL:
-            raise NullCppObject()
+        assert(self.thisptr != NULL)
         source = Source()
         source.thisptr = cython.address(self.thisptr.source(idx))
         return source
@@ -83,8 +75,7 @@ cdef class ProblemModel:
                 where each line stands for a triangle and contains the indices of
                 its 3 vertices in the 'nodes' array.
         """
-        if self.thisptr == NULL:
-            raise NullCppObject()
+        assert(self.thisptr != NULL)
         nb_elts = cython.declare(cython.uint)
         actri = cython.declare(cython.pointer(AcousticTriangle))
         nb_elts = self.thisptr.ntriangles()
@@ -307,8 +298,7 @@ cdef class Element:
     def name(self):
         """ Return the name of the element
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         return self.thisptr.getRealPointer().getName().toStdString()
 
 
@@ -322,8 +312,7 @@ cdef class Site:
         """ Return the direct childs of the Site (ie the elements it contains)
             as a python list. Not recursive.
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         childs = cython.declare(vector[SmartPtr[TYElement]])
         # Retrieves the childs of the site (LPTYElements) into the "childs" vector.
         self.thisptr.getRealPointer().getChilds(childs, False)
@@ -360,23 +349,20 @@ cdef class Result:
     def nsources(self):
         """ Returns the number of acoustic sources
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         return self.thisptr.getRealPointer().getNbOfSources()
 
     @property
     def nreceptors(self):
         """ Returns the number of acoustic receptors
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         return self.thisptr.getRealPointer().getNbOfRecepteurs()
 
     def receptor(self, index):
         """ Return the receptor of index 'index'
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         receptor = Receptor()
         receptor.thisptr = self.thisptr.getRealPointer().getRecepteur(index)
         return receptor
@@ -384,8 +370,7 @@ cdef class Result:
     def spectrum(self, receptor, source):
         """ Return the computed acoustic spectrum
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         spec = Spectrum()
         spec.thisobj = self.thisptr.getRealPointer().getSpectre(receptor, source)
         return spec
@@ -401,8 +386,7 @@ cdef class Receptor:
         """ Return true if the receptor is a control point (that is, a kind of
             "smart" receptor), false otherwise
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         control_point = cython.declare(cython.pointer(TYPointControl))
         control_point = downcast_point_control(self.thisptr.getRealPointer())
         return (control_point != NULL)
@@ -462,8 +446,7 @@ cdef class Source:
     def position(self):
         """ Return the acoustic source position (as a 'Point3D' object)
         """
-        if self.thisptr == NULL:
-            raise NullCppObject()
+        assert(self.thisptr != NULL)
         point = Point3D()
         point.thisobj = self.thisptr.position
         return point
@@ -472,8 +455,7 @@ cdef class Source:
     def spectrum(self):
         """ Return the acoustic spectrum of the Source (dB scale, power spectrum)
         """
-        if self.thisptr == NULL:
-            raise NullCppObject()
+        assert(self.thisptr != NULL)
         spectrum = Spectrum()
         spectrum.thisobj = self.thisptr.spectrum
         return spectrum
@@ -489,8 +471,7 @@ cdef class Computation:
     def result(self):
         """ Return an acoustic result (business representation)
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         res = Result()
         res.thisptr = self.thisptr.getRealPointer().getResultat()
         return res
@@ -498,16 +479,14 @@ cdef class Computation:
     def go(self):
         """ Solve the current acoustic problem. A solver must be loaded.
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         return self.thisptr.getRealPointer().go()
 
     def set_nthread(self, nthread):
         """ Set the number of threads used by the default solver to compute the
             acoustic problem
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         self.thisptr.getRealPointer().setNbThread(nthread)
 
     @property
@@ -515,8 +494,7 @@ cdef class Computation:
         """ Return an acoustic problem model (geometric representation as
             used by the solvers)
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         problem = ProblemModel()
         problem.thisptr = self.thisptr.getRealPointer()._acousticProblem.get()
         return problem
@@ -526,8 +504,7 @@ cdef class Computation:
         """ Returns an acoustic result model (geometric representation as used
         by the solvers)
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         result = ResultModel()
         result.thisptr = self.thisptr.getRealPointer()._acousticResult.get()
         return result
@@ -567,8 +544,7 @@ cdef class Project:
     def current_computation(self):
         """ Return the project current computation
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         comp = Computation()
         comp.thisptr = self.thisptr.getRealPointer().getCurrentCalcul()
         return comp
@@ -577,8 +553,7 @@ cdef class Project:
     def site(self):
         """ Return the site considered in the project
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise NullCppObject()
+        assert(self.thisptr.getRealPointer() != NULL)
         site = Site()
         site.thisptr = self.thisptr.getRealPointer().getSite()
         return site
@@ -597,7 +572,6 @@ cdef class Project:
     def to_xml(self, filepath):
         """ Export an acoustic project to a XML file
         """
-        if self.thisptr.getRealPointer() == NULL:
-            raise ValueError ("Cannot export an empty project")
+        assert(self.thisptr.getRealPointer() != NULL)
         # same thing as for load_project about the exception
         save_project(filepath, self.thisptr)
