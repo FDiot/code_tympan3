@@ -16,7 +16,7 @@
 #ifndef DEFAULT_CURV_RAY_ENGINE_H
 #define DEFAULT_CURV_RAY_ENGINE_H
 
-#include "Tympan/MetierSolver/AcousticRayTracer/Engine/DefaultEngine.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Engine/DefaultEngine.h"
 #include <stack>
 
 class DefaultCurvRayEngine : public DefaultEngine
