@@ -85,7 +85,7 @@ public:
     bool isDeletable() { return deletable; }
     void setIsDeletable(bool _isDeletable) { deletable = _isDeletable; }
 
-    virtual SELECTOR_RESPOND canBeInserted(T* r, unsigned long long& replace) { std::cout << "Appel du mauvais selector." << endl; return SELECTOR_REJECT; }
+    virtual SELECTOR_RESPOND canBeInserted(T* r, unsigned long long& replace) { std::cout << "Appel du mauvais selector." << std::endl; return SELECTOR_REJECT; }
     virtual void insert(T* r) { return; }
     virtual bool insertWithTest(T* r) { return true; }
 
