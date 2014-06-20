@@ -502,24 +502,27 @@ AcousticSource::AcousticSource(
     , directivity(new SphericalSourceDirectivity())
 {}
 
+// ---------
+
 AcousticReceptor::AcousticReceptor(
     const Point& position_
 ) : position(position_) {}
 
-AcousticEvent::AcousticEvent(
-    const string& event_type_, const Point& point_
-) : event_type(event_type_), point(point_) {}
+// ---------
 
 AcousticProblem::AcousticProblem(
     const string& name_
 ) : name(name_) {}
 
+// ---------
 
 SiteElement::SiteElement() {}
 
 SiteAcousticReceptor::SiteAcousticReceptor(
     unsigned int id_
 ) : id(id_) {}
+
+// ---------
 
 Site::Site(
     unsigned int id_

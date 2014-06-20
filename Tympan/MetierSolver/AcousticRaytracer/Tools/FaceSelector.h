@@ -72,7 +72,7 @@ public:
                 path = r->getFaceHistory();
                 break;
         }
-        
+
 		it = selectedPath.find(path);
 
 		if (it != selectedPath.end())
@@ -121,7 +121,7 @@ public:
         }
         else
         {
-            selectedPath.insert(pair<vector<unsigned int>, T*>(path, r));
+            selectedPath.insert(std::pair<vector<unsigned int>, T*>(path, r));
         }
 
 		return ;
@@ -162,7 +162,7 @@ public:
         }
         else
         {
-            selectedPath.insert(pair<vector<unsigned int>, T*>(path, r));
+            selectedPath.insert(std::pair<vector<unsigned int>, T*>(path, r));
             return true;
         }
     }
