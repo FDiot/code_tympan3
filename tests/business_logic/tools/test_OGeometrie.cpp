@@ -12,6 +12,7 @@
 #include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
 #include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
 #include "Tympan/MetierSolver/CommonTools/OVector3D.h"
+#include "Tympan/MetierSolver/CommonTools/OMatrix.h"
 
 using std::cout;
 using std::cerr;
@@ -45,6 +46,37 @@ TEST(TestGeometrie, sym_pt_droite)
     ASSERT_TRUE(ptI == OPoint3D(-20.0, 0.0, -2.0));
     ASSERT_TRUE(k == 0.0);
 
+}
+
+TEST(TestGeometrie, matrix_point_multiplication)
+{
+    OMatrix matrix;
+    matrix.setRotationOz(M_PI/2); // quarter turn around Z axis, counter-clock wise
+    // Translation
+    matrix._m[0][3] = 2;
+    matrix._m[1][3] = 1;
+    matrix._m[2][3] = 0;
+    OPoint3D point (2, 1, 0);
+    point = matrix * point;
+    EXPECT_DOUBLE_EQ(1, point._x);
+    EXPECT_DOUBLE_EQ(3, point._y);
+    EXPECT_DOUBLE_EQ(0, point._z);
+}
+
+TEST(TestGeometrie, matrix_vector_multiplication)
+{
+    OMatrix matrix;
+    matrix.setRotationOz(M_PI/2); // quarter turn around Z axis, counter-clock wise
+    // Translation
+    matrix._m[0][3] = 2;
+    matrix._m[1][3] = 1;
+    matrix._m[2][3] = 0;
+    matrix._m[3][3] = 0;
+    OVector3D vec (2, -1, 0);
+    vec = matrix * vec;
+    EXPECT_DOUBLE_EQ(1, vec._x);
+    EXPECT_DOUBLE_EQ(2, vec._y);
+    EXPECT_DOUBLE_EQ(0, vec._z);
 }
 
 TEST(TestGeometrie, inters_demi_segment_avec_segment)
