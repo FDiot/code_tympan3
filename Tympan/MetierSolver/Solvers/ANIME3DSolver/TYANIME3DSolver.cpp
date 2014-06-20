@@ -129,7 +129,7 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
         }
     }
 
-    calcul.setTabRays(_tabRay);
+//    calcul.setTabRays(_tabRay);
 
     // BEGIN : COMPLEMENTS "DECORATIFS"
     ostringstream fic_out;

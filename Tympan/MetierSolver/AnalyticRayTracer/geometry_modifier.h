@@ -19,13 +19,17 @@
 #include <qlist.h>
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
+#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 
 class Lancer;
-class OTriangle;
 
 using namespace std;
 
-class geometry_modifier
+class geometry_modifier :
+    public IGeometryModifier
 {
 public:
 
@@ -72,6 +76,8 @@ public:
     * \return rend les coordonnees du point transforme.
     */
     vec3 fonction_h(const vec3& P);
+    virtual OPoint3D fonction_h(const OPoint3D& P)
+    { return vec3toOPoint3D(fonction_h(OPoint3Dtovec3(P))); }
 
     /*!
     * \fn vec3 fonction_h_inverse (vec3 P, QList<OTriangle> Liste_triangles)
@@ -81,6 +87,8 @@ public:
     * \return rend les coordonnees du point transforme (point de l'espace original).
     */
     vec3 fonction_h_inverse(const vec3& P);
+    virtual OPoint3D fonction_h_inverse(const OPoint3D& P)
+    { return vec3toOPoint3D(fonction_h_inverse(OPoint3Dtovec3(P))); }
 
     /*!
      * \fn double interpo(const vec3* triangle, vec3 P);
