@@ -32,11 +32,11 @@ tympan::AtmosphericConditions functionnalResults_initAtmosphereFromRow(const deq
     double pressure = row[0];
 	double temperature = row[1];
 	double hygrometry = row[2];
-    
+
 	return tympan::AtmosphericConditions(pressure, temperature, hygrometry);
 }
 
-TEST(AtmosphericAbsorption, dumpenv)
+TEST(AcousticEntities, AtmosphericAbsorption)
 {
     const double precision = 0.1; // in dB/km
 
@@ -62,7 +62,7 @@ TEST(AtmosphericAbsorption, dumpenv)
         ++row_num;
 		tympan::AtmosphericConditions atm = functionnalResults_initAtmosphereFromRow(row);
 		computed_value = atm.get_absorption_value( row[3] );
-		
+
         // Tabbed value is done in dB/km computed must be multiplied by 1000 for comparison
         EXPECT_NEAR( row[4], computed_value*1000., precision) <<
                                                        "Incorrect results for the row #" << row_num << " (header is #0)"
@@ -71,7 +71,7 @@ TEST(AtmosphericAbsorption, dumpenv)
     file.close();
 }
 
-TEST(SoundSpeed, dumpEnv)
+TEST(AcousticEntities, SoundSpeed)
 {
     tympan::AtmosphericConditions atm(101325., 43., 70.);
     double estimated_sound_speed = 331. + 0.6 * 43.;
