@@ -46,6 +46,9 @@ public:
     size_t nsources() const //TODO move to implementation file
     { return  all_sources.size(); }
 
+    size_t nreceptors() const //TODO move to implementation file
+    { return  all_receptors.size(); }
+
     AcousticTriangle& triangle(triangle_idx tri_idx)
     { return all_triangles[tri_idx]; }
 
@@ -63,6 +66,9 @@ public:
 
     const AcousticSource& source(source_idx idx) const
     { return all_sources[idx]; }
+
+    AcousticReceptor& receptor(receptor_idx idx)
+    { return all_receptors[idx]; }
 
     size_t nmaterials() const //TODO move to implementation file
     { return  all_materials.size(); }
