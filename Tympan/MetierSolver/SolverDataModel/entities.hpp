@@ -15,7 +15,6 @@
 
 namespace tympan
 {
-
 /// XXX \todo Add the entity 'Atmosphere' with attr: pression, temperature,
 /// hygrometry (\note can find these values in the TYCalcul instead of TYSite).
 class AtmosphericConditions : 
@@ -32,7 +31,7 @@ public:
      */
     void compute_absorption_spectrum(); 
 
-    double compute_c(); //!< compute sound speed
+    double compute_c() const; //!< compute sound speed
 
     void compute_k(); //!< compute wave number
 
@@ -135,6 +134,7 @@ protected:
     void computeFw(ComplexSpectrum localW, ComplexSpectrum& Fw); // Compute function of numeric distance
     void computeQ(double angle, ComplexSpectrum &Rp, ComplexSpectrum &Fw, ComplexSpectrum &Q); // compute reflexion coefficient
 
+    static AtmosphericConditions *atmosphere;
 
 private:
     void init();
@@ -162,8 +162,6 @@ protected :
 
     ComplexSpectrum Zc; //!< Characteriestic impedance
     ComplexSpectrum K;  //!< Wave number
-
-    static AtmosphericConditions *atmosphere;
 };
 
 // -------------------
@@ -193,7 +191,7 @@ class SphericalSourceDirectivity :
       public SourceDirectivityInterface
 {
 public:
-     virtual Spectrum lwAdjustment(Vector direction)
+     virtual Spectrum lwAdjustment(Vector direction, double distance)
      { return Spectrum(1.0); }
 };
 
@@ -208,10 +206,14 @@ public:
                       support_size(support_size_) {}
 
     ~CommonFaceDirectivity() {}
+    
+    static void set_atmosphere( AtmosphericConditions *atmosphere_ ) { atmosphere = atmosphere_; }
 
 protected :
     Vector support_normal;              /*! Normal of support face */
     double support_size;                /*! Characteristic size of support face */
+    
+    static AtmosphericConditions *atmosphere;
 };
 
 class VolumeFaceDirectivity :
@@ -219,7 +221,7 @@ class VolumeFaceDirectivity :
 {
 public:
     VolumeFaceDirectivity(const Vector& support_normal_, double support_size_) : 
-                      CommonFaceDirectivity(support_normal_, support_size_) 
+                            CommonFaceDirectivity(support_normal_, support_size_) {}
     
      ~VolumeFaceDirectivity() {}
 
@@ -252,7 +254,7 @@ class ChimneyFaceDirectivity :
 {
 public :
     ChimneyFaceDirectivity(const Vector& support_normal_, double support_size_) : 
-                      CommonFaceDirectivity(support_normal_, support_size_) 
+                            CommonFaceDirectivity(support_normal_, support_size_) {}
 
     ~ChimneyFaceDirectivity() {}
     virtual Spectrum lwAdjustment(Vector direction, double distance);
@@ -286,7 +288,7 @@ class BaffledFaceDirectivity :
 {
 public :
     BaffledFaceDirectivity(const Vector& support_normal_, double support_size_) : 
-                      CommonFaceDirectivity(support_normal_, support_size_);
+                            CommonFaceDirectivity(support_normal_, support_size_) {}
 
     ~BaffledFaceDirectivity() {}
     virtual Spectrum lwAdjustment(Vector direction, double distance);
@@ -422,5 +424,7 @@ public:
 };
 
 } /* namespace tympan */
+
+
 
 #endif /* TYMPAN__ENTITIES_H__INCLUDED */
