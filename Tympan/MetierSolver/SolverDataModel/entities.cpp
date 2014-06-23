@@ -8,16 +8,16 @@
 
 #include "entities.hpp"
 
-#include "relations.hpp"
+//#include "relations.hpp"
 
 namespace tympan
 {
-
 AcousticMaterialBase::AcousticMaterialBase(
     const string& name_
 ) : name(name_) {}
 
 // ---------
+AtmosphericConditions *AcousticGroundMaterial::atmosphere = new AtmosphericConditions(101300., 20., 70.);
 
 AcousticBuildingMaterial::AcousticBuildingMaterial(
     const string& name_,
@@ -25,8 +25,6 @@ AcousticBuildingMaterial::AcousticBuildingMaterial(
 ) : AcousticMaterialBase(name_), spectrum(spectrum_) {}
 
 // ---------
-AtmosphericConditions *AcousticGroundMaterial::atmosphere = new AtmosphericConditions(101300., 20., 70.);
-
 AcousticGroundMaterial::AcousticGroundMaterial(
     const string& name_, double resistivity_ ) : 
     AcousticMaterialBase(name_),  resistivity(resistivity_), thickness(1.0) 
@@ -444,7 +442,7 @@ void AtmosphericConditions::compute_absorption_spectrum()
     }
 }
 
-double AtmosphericConditions::compute_c()
+double AtmosphericConditions::compute_c() const
 {
     const double gamma = 1.41;
     const double R = 8.31441;
@@ -493,6 +491,10 @@ Spectrum AtmosphericConditions::compute_length_absorption(double length)
 }
 
 // ---------
+
+    AtmosphericConditions *CommonFaceDirectivity::atmosphere = new AtmosphericConditions(101300., 20., 70.);
+
+// ---------
 /*static*/ const double VolumeFaceDirectivity::_tabRA[] = {  1.0,
                                                           2.0,
                                                           3.0,
@@ -538,16 +540,16 @@ double VolumeFaceDirectivity::calculC(double distance)
 Spectrum VolumeFaceDirectivity::lwAdjustment(Vector direction, double distance)
 {
     Spectrum directivity_spectrum;
-    double q;
+    double q, ka;
 
     // Angle angle between support normal and (source to receptor) vector
     double cosPhi = cos( support_normal.angle( direction ) );
 
     double C = calculC(distance);  //Coefficient de directivite
 
-    for (unsigned int i = 0 ; i < s.getNbValues() ; i++)
+    for (unsigned int i = 0 ; i < directivity_spectrum.getNbValues() ; i++)
     {
-        ka = Atmo.getKAcoust().getTabValReel()[i] * support_size ;
+        ka = atmosphere->get_k().getTabValReel()[i] * support_size ;
 
         q = (1 + (ka / (ka + 0.4)) * cosPhi) * C;
 
@@ -770,7 +772,7 @@ Spectrum ChimneyFaceDirectivity::lwAdjustment(Vector direction, double distance)
 {
     Spectrum directivity_spectrum;
 
-    Spectrum spectre_Ka = atmos.getKAcoust().mult(support_size);
+    Spectrum spectre_ka = atmosphere->get_k().mult(support_size);
 
     double theta = direction.angle(support_normal); // Angle du segment par rapport a la normale au support de la source
 
@@ -782,7 +784,7 @@ Spectrum ChimneyFaceDirectivity::lwAdjustment(Vector direction, double distance)
     int indice_theta = (int)(20 * theta / M_PI); // Indice de l'angle theta dans le tableau
     for (unsigned int i = 0 ; i < spectre_ka.getNbValues(); i++)
     {
-        double ka = spectre_Ka.getTabValReel()[i];
+        double ka = spectre_ka.getTabValReel()[i];
         ka = ka > 3.8 ? 3.8 : ka ;
         int indice_Ka = (int)(10 * ka);
 
@@ -919,7 +921,7 @@ const double BaffledFaceDirectivity::_tabQ[NB_KA][NB_THETA] =
 Spectrum BaffledFaceDirectivity::lwAdjustment(Vector direction, double distance)
 {
     Spectrum directivity_spectrum;
-    Spectrum spectre_Ka = atmos.getKAcoust().mult(support_size); // 1/2 longueur de la diagonale de la bouche
+    Spectrum spectre_Ka = atmosphere->get_k().mult(support_size); // 1/2 longueur de la diagonale de la bouche
 
     double theta = direction.angle(support_normal); // Angle du segment par rapport a la normale au support de la source
 
@@ -931,7 +933,7 @@ Spectrum BaffledFaceDirectivity::lwAdjustment(Vector direction, double distance)
 
     indice_theta = indice_theta > (NB_THETA - 2) ? NB_THETA - 2 : indice_theta; // Eviter les depassement de tableau
 
-    for (unsigned int i = 0 ; i < s.getNbValues(); i++)
+    for (unsigned int i = 0 ; i < directivity_spectrum.getNbValues(); i++)
     {
         double ka = spectre_Ka.getTabValReel()[i];
         ka = ka > 20.0 ? 20.0 : ka ;
