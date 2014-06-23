@@ -59,10 +59,10 @@ cdef class ProblemModel:
         return self.thisptr.nsources()
 
     def source(self, idx):
-        """ Return the acoustic source (Source object) of index 'idx'
+        """ Return the acoustic source (SolverSource object) of index 'idx'
         """
         assert(self.thisptr != NULL)
-        source = Source()
+        source = SolverSource()
         source.thisptr = cython.address(self.thisptr.source(idx))
         return source
 
@@ -436,7 +436,7 @@ cdef class Point3D:
     def z(self):
         return self.thisobj._z
 
-cdef class Source:
+cdef class SolverSource:
     thisptr = cython.declare(cython.pointer(AcousticSource))
 
     def __cinit__(self):
