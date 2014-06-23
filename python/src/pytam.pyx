@@ -58,6 +58,14 @@ cdef class ProblemModel:
         assert(self.thisptr != NULL)
         return self.thisptr.nsources()
 
+    @property
+    def nreceptors(self):
+        """ Return the number of acoustic receptors involved in the acoustic
+            problem model
+        """
+        assert self.thisptr != NULL
+        return self.thisptr.nreceptors()
+
     def source(self, idx):
         """ Return the acoustic source (SolverSource object) of index 'idx'
         """
@@ -77,6 +85,26 @@ cdef class ProblemModel:
             source.thisptr = cython.address(self.thisptr.source(i))
             sources.append(source)
         return sources
+
+    def receptor(self, idx):
+        """ Return the acoustic receptor (SolverReceptor object) of index 'idx'
+        """
+        assert self.thisptr != NULL
+        receptor = SolverReceptor()
+        receptor.thisptr = cython.address(self.thisptr.receptor(idx))
+        return receptor
+
+    @property
+    def receptors(self):
+        """ Return all the acoustic receptors of the model
+        """
+        assert self.thisptr != NULL
+        receptors = []
+        for i in xrange(self.nreceptors):
+            receptor = SolverReceptor()
+            receptor.thisptr = cython.address(self.thisptr.receptor(i))
+            receptors.append(receptor)
+        return receptors
 
     def export_triangular_mesh(self):
         """ Build a triangular mesh from the acoustic problem model.
@@ -476,6 +504,22 @@ cdef class SolverSource:
         spectrum = Spectrum()
         spectrum.thisobj = self.thisptr.spectrum
         return spectrum
+
+
+cdef class SolverReceptor:
+    thisptr = cython.declare(cython.pointer(AcousticReceptor))
+
+    def __cinit__(self):
+        pass
+
+    @property
+    def position(self):
+        """ Return the acoustic source position (as a 'Point3D' object)
+        """
+        assert(self.thisptr != NULL)
+        point = Point3D()
+        point.thisobj = self.thisptr.position
+        return point
 
 
 cdef class Computation:
