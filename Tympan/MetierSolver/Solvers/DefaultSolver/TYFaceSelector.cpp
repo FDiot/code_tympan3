@@ -114,9 +114,7 @@ void TYFaceSelector::selectFaces(TYSIntersection* tabIntersect, const TYSourcePo
     segTest2._ptB._x = +10000;
     segTest2._ptB._y = (A2 * segTest2._ptB._x) + B2;
 
-
     // Test des faces qui coupent le plan vertical
-    bool bInterVertical = false, bInterHorizontal = false;
     for (i = 0; i < nbFaces; i++)
     {
         if (tabIntersect[i].noIntersect)
@@ -128,9 +126,9 @@ void TYFaceSelector::selectFaces(TYSIntersection* tabIntersect, const TYSourcePo
 
         if ((SI.tabPoint.size() == 0)) { continue; }
 
-        bInterVertical = testIntersect2D(SI, tabIntersect[i], plan, segTest1, cosA, sinA, 0, XY);
+        testIntersect2D(SI, tabIntersect[i], plan, segTest1, cosA, sinA, 0, XY);
 
-        bInterHorizontal = testIntersect2D(SI, tabIntersect[i], plan, segTest2, cosA, sinA, 1, XZ);
+        testIntersect2D(SI, tabIntersect[i], plan, segTest2, cosA, sinA, 1, XZ);
     }
 }
 

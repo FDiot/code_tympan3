@@ -157,9 +157,6 @@ void TYAcousticSemiCylinderGraphic::display(GLenum mode /*= GL_RENDER*/)
             // Couleur
             glColor3fv(getElement()->getColor());
 
-            // Rayon
-            double rayon = getElement()->getDiameter() / 2.0;
-
             // Resolution
             int resolution = TYDEFAULTRESOLUTIONIONCIRCLE;
 

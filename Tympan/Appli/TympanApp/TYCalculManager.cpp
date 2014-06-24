@@ -99,7 +99,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         pSite->updateAcoustique(true);
         pProject->updateAltiRecepteurs(pSite->getTopographie()->getAltimetrie());
         pSite->setAtmosphere(pCalcul->getAtmosphere());
-        bool ret = pCalcul->go();
+        pCalcul->go();
     }
     else
     {

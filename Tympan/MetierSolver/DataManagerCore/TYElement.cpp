@@ -263,7 +263,7 @@ void TYElement::setID(TYUUID id)
     // If the element was registered, we update the map (new insertion).
     if (was_registered)
     {
-        bool success = getInstances().insert(std::make_pair(_uuid, this)).second;
+        getInstances().insert(std::make_pair(_uuid, this));
     }
 }
 
@@ -286,7 +286,7 @@ void TYElement::addInstance()
     if (_logInstances)
     {
         const TYUUID& uuid = getID(); // Could force the generation of the UUID.
-        bool success = getInstances().insert(std::make_pair(uuid, this)).second;
+        getInstances().insert(std::make_pair(uuid, this));
     }
 }
 
