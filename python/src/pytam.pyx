@@ -228,11 +228,14 @@ cdef class SolverModelBuilder:
             n_mesh_points = mesh_points.size()
             for j in xrange(n_mesh_points):
                 # if control point state == active (with respect to the current computation)
-                if mesh_points[i].getRealPointer().getEtat(comp.thisptr.getRealPointer()):
-                    # XXX here we should take into account the global position
-                    # should we add the matrix to the AcousticReceptor class ?
-                    # Will be clarified when writing the tests
-                    self.model.make_receptor((mesh_points[i].getRealPointer())[0])
+                if mesh_points[j].getRealPointer().getEtat(comp.thisptr.getRealPointer()):
+                    point3d  = cython.declare(OPoint3D)
+                    # Move receptor to a global scale
+                    point3d = matrix * mesh_points[j].getRealPointer()[0]
+                    mesh_points[j].getRealPointer()._x = point3d._x
+                    mesh_points[j].getRealPointer()._y = point3d._y
+                    mesh_points[j].getRealPointer()._z = point3d._z
+                    self.model.make_receptor((mesh_points[j].getRealPointer())[0])
 
     @cython.locals(site=Site)
     def process_infrastructure(self, site):
