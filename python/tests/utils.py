@@ -38,6 +38,13 @@ if not osp.isdir(TEST_SOLVERS_DIR):
     solver_dir = osp.abspath(osp.join(_HERE, '..', '..', 'plugins'))
 assert osp.isdir(TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % TEST_SOLVERS_DIR
 
+TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'projects-panel')
+assert osp.isdir(TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % TEST_PROBLEM_DIR
+
+TEST_RESULT_DIR = osp.join(TEST_DATA_DIR, 'expected')
+assert osp.isdir(TEST_RESULT_DIR), "The test result dir does not exists '%s'" % TEST_RESULT_DIR
+
+
 _SOLVERS_DIR = {
     'Release' : osp.abspath(osp.join(PROJECT_BASE, 'plugins')),
     'Debug'   : osp.abspath(osp.join(PROJECT_BASE, 'pluginsd'))
