@@ -64,7 +64,7 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
 
     unsigned int i, j;
 
-    OMatrix mat;
+//    OMatrix mat;
     TYSol* sol;
 
     //====================================================
@@ -268,9 +268,10 @@ bool TYANIME3DFaceSelector::triangulateConcavePolygon(TYStructSurfIntersect* tab
             Vector2dVector input, output;
             for (unsigned int j = 0; j < tabPolygon[i].tabPoint.size() - 1; j++)
             {
-                double coord[3];
-                OCoord3D newCoord = invP * tabPolygon[i].tabPoint[j];
-                newCoord.getCoords(coord);
+//                double coord[3];
+                //OCoord3D newCoord = invP * tabPolygon[i].tabPoint[j];
+                OPoint3D newCoord = invP * tabPolygon[i].tabPoint[j];
+//                newCoord.getCoords(coord);
 
                 input.push_back(vec2(newCoord._x, newCoord._y));
             }
@@ -290,8 +291,8 @@ bool TYANIME3DFaceSelector::triangulateConcavePolygon(TYStructSurfIntersect* tab
             for (unsigned int j = 0; j < output.size(); j++)
             {
                 //Conversion vers le repere reel
-                OCoord3D coordLocal = OCoord3D(output.at(j).x, output.at(j).y, 0.f);
-                OCoord3D coordGlobal = P * coordLocal;
+                OPoint3D coordLocal = OCoord3D(output.at(j).x, output.at(j).y, 0.f);
+                OPoint3D coordGlobal = P * coordLocal;
                 double coords[3];
                 coordGlobal.getCoords(coords);
                 tabPolygon[i].realVertex.append(OPoint3D(coords[0], coords[1], coords[2]));

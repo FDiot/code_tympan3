@@ -110,7 +110,8 @@ const double EPSILON_5 = 0.00001;
     vecA1 = OVector3D(ptA) + vecA;
     vecB1 = OVector3D(ptB) + vecB;
 
-    return intersDroitesPoints(ptA, OPoint3D(*(OCoord3D*)&vecA1), ptB, OPoint3D(*(OCoord3D*)&vecB1), ptI);
+//    return intersDroitesPoints(ptA, OPoint3D(*(OCoord3D*)&vecA1), ptB, OPoint3D(*(OCoord3D*)&vecB1), ptI);
+    return intersDroitesPoints(ptA, OPoint3D(vecA1), ptB, OPoint3D(vecB1), ptI);
 }
 
 /*static*/ double OGeometrie::symPointDroite(const OPoint3D& ptA, const OPoint3D& ptB, const OPoint3D& ptP, OPoint3D& ptI)
