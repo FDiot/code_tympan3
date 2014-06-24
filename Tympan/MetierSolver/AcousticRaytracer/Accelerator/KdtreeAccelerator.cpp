@@ -178,7 +178,6 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
     }
 
     stringstream logs;
-    unsigned int indexNode = 0;
 
     // Prepare to traverse kd-tree for ray
     vec3 invDir(1.f / r->direction.x, 1.f / r->direction.y, 1.f / r->direction.z);
@@ -341,7 +340,6 @@ void KdtreeAccelerator::generateSAHKdTree(int currentProfondeur, BBox& localBox,
     // Choose split axis position for interior node
     int bestAxis = -1, bestOffset = -1;
     float bestCost = std::numeric_limits<float>::infinity();//INFINITY;
-    float oldCost = isectCost * nbPrims;
     vec3 d = localBox.pMax - localBox.pMin;
     float totalSA = (2.f * (d.x * d.y + d.x * d.z + d.y * d.z));
     float invTotalSA = 1.f / totalSA;
