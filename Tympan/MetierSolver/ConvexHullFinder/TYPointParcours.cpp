@@ -18,9 +18,9 @@
  */
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
+//#ifdef TYMPAN_USE_PRECOMPILED_HEADER
+//#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
+//#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "TYPointParcours.h"
 
