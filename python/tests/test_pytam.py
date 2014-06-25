@@ -4,38 +4,22 @@ import unittest
 
 import numpy as np
 
-from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, no_output
-
-TEST_OUTPUT_REDIRECTED = 'test_pytam_out.log'
-TEST_ERRORS_REDIRECTED = 'test_pytam_err.log'
-# TEST_OUTPUT_REDIRECTED = os.devnull
+from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, TympanTC, pytam
 
 _HERE = osp.realpath(osp.dirname(__file__))
 
-with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
-    import pytam
-    pytam.init_tympan_registry()
-
-def load_project(*path):
-    with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
-        project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
-        project.update_site()
-        project.update_altimetry_on_receptors()
-        return project
-
-
-class TestTympan(unittest.TestCase):
+class TestPyTam(TympanTC):
 
     def test_solve(self):
-        project = load_project('projects-panel',
+        project = self.load_project('projects-panel',
                                "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
         computation = project.current_computation
-        with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
+        with self.no_output():
             pytam.loadsolver(TEST_SOLVERS_DIR, computation)
             self.assertTrue(computation.go())
 
     def test_hierarchy(self):
-        project = load_project('projects-panel',
+        project = self.load_project('projects-panel',
                                "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
         site = project.site
         childs = site.childs()
@@ -45,11 +29,8 @@ class TestTympan(unittest.TestCase):
     def test_base(self):
         # XXX This test uses expected bad values provided by the current
         # implementation
-        project = load_project('solver_export', "base.xml")
-        with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
-            model = project.current_computation.acoustic_problem
-            builder = pytam.SolverModelBuilder(model)
-            builder.fill_problem(project.site, project.current_computation)
+        project = self.load_project('solver_export', "base.xml")
+        model = project.current_computation.acoustic_problem
         self.assertEqual(model.npoints, 6) # OK
         self.assertEqual(model.ntriangles, 5) # XXX should be 4
         self.assertEqual(model.nmaterials, 5) # XXX should be 1
@@ -64,11 +45,9 @@ class TestTympan(unittest.TestCase):
         """
         # load a xml project, build an acoustic problem from it and retrieve
         # its triangular mesh to make sure it contains the correct data
-        project = load_project("tiny_site.xml")
-        with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
+        project = self.load_project("tiny_site.xml")
+        with self.no_output():
             model = project.current_computation.acoustic_problem
-            builder = pytam.SolverModelBuilder(model)
-            builder.fill_problem(project.site, project.current_computation)
             # exports in nodes_test the nodes coordinates (x,y,z) and in triangles_test
             # the triangle nodes indices (position in the nodes_test array)
             (nodes_test, triangles_test) = model.export_triangular_mesh()
@@ -93,12 +72,8 @@ class TestTympan(unittest.TestCase):
 
     @unittest.skip("Implementation to be fixed")
     def test_ground_materials(self):
-        project = load_project('solver_export', "ground_materials.xml")
-        with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
-            model = project.current_computation.acoustic_problem
-            builder = pytam.SolverModelBuilder(model)
-            builder.fill_problem(project.site)
-            builder.fill_problem(project.site, project.current_computation)
+        project = self.load_project('solver_export', "ground_materials.xml")
+        model = project.current_computation.acoustic_problem
         self.assertEqual(model.nmaterials(), 3)
         # XXX FIXME: the default material is replicated once per triangle
         # TODO to be completed: cf. ticket #1468184

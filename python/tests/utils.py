@@ -24,6 +24,7 @@ AS FIRST ARGUMENT TO THE SCRIPT
 import sys
 import os
 import os.path as osp
+import unittest
 from contextlib import contextmanager
 
 
@@ -43,7 +44,6 @@ assert osp.isdir(TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" 
 
 TEST_RESULT_DIR = osp.join(TEST_DATA_DIR, 'expected')
 assert osp.isdir(TEST_RESULT_DIR), "The test result dir does not exists '%s'" % TEST_RESULT_DIR
-
 
 _SOLVERS_DIR = {
     'Release' : osp.abspath(osp.join(PROJECT_BASE, 'plugins')),
@@ -70,7 +70,6 @@ else:
 
 
 def main():
-    import unittest
     # The build configuration (Debug or Release) to be tested is added as
     # first argument by CTest and need to be removed from sys.argv not to
     # confuse unittest
@@ -115,3 +114,33 @@ def no_output(to=os.devnull, err_to=None):
     with stdout_redirected(to=to, stdout=sys.stdout):
         with stdout_redirected(to=err_to, stdout=sys.stderr):
             yield
+
+
+with no_output():
+    import pytam
+    pytam.init_tympan_registry()
+
+
+class TympanTC(unittest.TestCase):
+
+    @classmethod
+    @contextmanager
+    def no_output(cls):
+        stdout_log = '%s_stdout.log' % (cls.__name__)
+        stderr_log = '%s_stderr.log' % (cls.__name__)
+        with no_output(to=stdout_log, err_to=stderr_log):
+            yield
+
+    def load_project(self, *path):
+        with self.no_output():
+            project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
+            project.update_site()
+            project.update_altimetry_on_receptors()
+            computation = project.current_computation
+            model = computation.acoustic_problem
+            builder = pytam.SolverModelBuilder(model)
+            builder.fill_problem(project.site, computation)
+        return project
+
+
+
