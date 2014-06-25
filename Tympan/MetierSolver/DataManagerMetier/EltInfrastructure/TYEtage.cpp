@@ -855,7 +855,7 @@ bool TYEtage::setMurs(const TYTabPoint& tabPts, double hauteur /*=2.0*/, bool cl
     }
 
     // On teste le 1er point et le dernier point sont confondus avec une tolerance
-    if ((OCoord3D) tabPts[0] == (OCoord3D) tabPts[count - 1])
+    if (tabPts[0] == tabPts[count - 1])
     {
         // On ne reprend pas le dernier point
         count -= 1;
