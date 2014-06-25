@@ -152,7 +152,7 @@ void TYAcousticSemiCircle::distriSrcs()
     double distRayon = rayon / (nbSrcsRadiale + 1);
 
     OMatrix matrix;
-    OCoord3D pt;
+    OPoint3D pt;
     double angle = 0.0;
     double posCercle = distRayon;
 

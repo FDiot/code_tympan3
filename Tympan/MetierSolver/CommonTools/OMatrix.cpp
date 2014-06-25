@@ -146,31 +146,49 @@ OMatrix OMatrix::operator*(const OMatrix& matrix) const
     return matrixRes;
 }
 
-OVector3D OMatrix::operator*(const OVector3D& vector) const
+OCoord3D OMatrix::dot(const OCoord3D& coord) const
 {
-    double  echelle;
-    OVector3D vecRes;
+    OCoord3D coordRes;
 
-    vecRes._x = _m[0][0] * vector._x + _m[0][1] * vector._y + _m[0][2] * vector._z + _m[0][3];
-    vecRes._y = _m[1][0] * vector._x + _m[1][1] * vector._y + _m[1][2] * vector._z + _m[1][3];
-    vecRes._z = _m[2][0] * vector._x + _m[2][1] * vector._y + _m[2][2] * vector._z + _m[2][3];
+    coordRes._x = _m[0][0] * coord._x + _m[0][1] * coord._y + _m[0][2] * coord._z;
+    coordRes._y = _m[1][0] * coord._x + _m[1][1] * coord._y + _m[1][2] * coord._z;
+    coordRes._z = _m[2][0] * coord._x + _m[2][1] * coord._y + _m[2][2] * coord._z;
 
-    echelle = _m[3][0] * vector._x + _m[3][1] * vector._y + _m[3][2] * vector._z + _m[3][3];
+    return coordRes;
+}
 
-    if (ABS(echelle) < EPSILON_13)
+OCoord3D OMatrix::scale(const OCoord3D& coord) const
+{
+    OCoord3D coordRes (coord);
+    double  scale;
+
+    scale = _m[3][0] * coord._x + _m[3][1] * coord._y + _m[3][2] * coord._z + _m[3][3];
+
+    if ( (scale != 1) && (ABS(scale) >= EPSILON_13))
     {
-    }
-    else
-    {
-        if (echelle != 1)
-        {
-            vecRes._x /= echelle;
-            vecRes._y /= echelle;
-            vecRes._z /= echelle;
-        }
+        coordRes._x /= scale;
+        coordRes._y /= scale;
+        coordRes._z /= scale;
     }
 
-    return vecRes;
+    return coordRes;
+}
+
+OVector3D operator*(const OMatrix& mat, const OVector3D& vec)
+{
+    OVector3D resVec = mat.dot(vec);
+    resVec = mat.scale(resVec);
+    return resVec;
+}
+
+OPoint3D operator*(const OMatrix& mat, const OPoint3D& pt)
+{
+    OPoint3D resPt = mat.dot(pt);
+    // Translation
+    resPt._x = resPt._x + mat._m[0][3];
+    resPt._y = resPt._y + mat._m[1][3];
+    resPt._z = resPt._z + mat._m[2][3];
+    return resPt;
 }
 
 OVector3D OMatrix::multNormal(const OVector3D& normal) const

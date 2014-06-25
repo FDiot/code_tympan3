@@ -21,6 +21,7 @@
 #define __O_MATRIX_3D__
 
 #include "OVector3D.h"
+#include "OPoint3D.h"
 
 #define EPSILON_50    1.e-50
 
@@ -100,14 +101,6 @@ public:
      * \param matrix The object reference with which this object is multiplicated.
      */
     OMatrix operator*(const OMatrix& matrix) const;
-
-    /**
-     * \fn OVector3D operator*(const OVector3D& vector) const;
-     * \brief Multiplication with a vector.
-     *
-     * \param vector The object reference with which this object is multiplicated.
-     */
-    OVector3D operator*(const OVector3D& vector) const;
 
     /**
      * \fn OVector3D multNormal(const OVector3D& normal) const;
@@ -373,11 +366,26 @@ public:
      */
     static double mat3x3Det(double a1, double a2, double a3, double b1, double b2, double b3, double c1, double c2, double c3);
 
+    /**
+     * \fn OCoord3D dot(const OCoord3D& coord) const;
+     * \brief Multiplication with a 3D coordinate
+     *
+     * \param coord The reference object with which this matrix is multiplicated.
+     */
+    OCoord3D dot(const OCoord3D& coord) const;
+
+    /**
+     */
+    OCoord3D scale(const OCoord3D& coord) const;
+
+
     // Members
 public:
     ///The 4x4 matrix array.
     double _m[4][4];
 };
 
+OVector3D operator*(const OMatrix& mat, const OVector3D& vec);
+OPoint3D operator*(const OMatrix& mat, const OPoint3D& pt);
 
 #endif // __O_MATRIX_3D__
