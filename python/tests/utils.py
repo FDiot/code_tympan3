@@ -100,7 +100,7 @@ def stdout_redirected(to=os.devnull, stdout=None):
         try:
             os.dup2(fileno(to), stdout_fd)  # $ exec >&to
         except ValueError:  # filename
-            with open(to, 'wb') as to_file:
+            with open(to, 'ab') as to_file:
                 os.dup2(to_file.fileno(), stdout_fd)  # $ exec > to
         try:
             yield stdout # allow code to be run with the redirected stdout
