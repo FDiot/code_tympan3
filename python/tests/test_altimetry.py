@@ -9,6 +9,8 @@ from altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
                                  WaterBody, SiteNode, PolygonalTympanFeature,
                                  InvalidGeometry, MATERIAL_WATER)
 from altimetry.merge import SiteNodeGeometryCleaner,build_site_shape_with_hole
+from altimetry import visu
+
 
 class AltimetryDataTC(unittest.TestCase):
 
@@ -253,6 +255,46 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
         with self.assertRaises(InvalidGeometry):
             cleaner.merge_subsite(self.subsite)
 
+
+_runVisualTests = os.environ.get('RUN_VISUAL_TESTS', False)
+
+if _runVisualTests:
+    from matplotlib import pyplot as plt
+
+@unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
+class VisualisationTC(unittest.TestCase, _TestFeatures):
+    global_lims = [-1, 13, -1, 11]
+
+    def setUp(self):
+        _TestFeatures.build_features(self)
+        self.fig = plt.figure()
+        self.ax = self.fig.add_subplot(1, 1, 1)
+        self.ax.set_title(self._testMethodName)
+
+    def tearDown(self):
+        self.show()
+        plt.close(self.fig)
+
+    def show(self):
+        plt.axis(self.global_lims, normed=True)
+        plt.show(self.fig)
+
+    def test_LevelCurve_and_grass(self):
+        self.level_curve_A.plot(self.ax)
+        self.grass_area.plot(self.ax, facecolor='green')
+
+    def test_plot_site_node(self):
+        self.subsite.plot(self.ax)
+
+    def test_plot_site_node_recursive(self):
+        self.mainsite.plot(self.ax, recursive=True)
+
+    def test_plot_site_node_recursive_alt_geom(self):
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+        cleaner.process_all_features()
+        cleaner.merge_subsite(self.subsite)
+
+        self.mainsite.plot(self.ax, recursive=True, alt_geom_map=cleaner.geom)
 
 
 if __name__ == '__main__':
