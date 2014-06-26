@@ -18,22 +18,22 @@
  */
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
+//#ifdef TYMPAN_USE_PRECOMPILED_HEADER
+//#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
+//#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include <stdio.h>
 #include <math.h>
 
 #include "TYCalculParcours.h"
 
-#if TY_USE_IHM
-#include <qstring.h>
-#endif
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+//#if TY_USE_IHM
+//#include <qstring.h>
+//#endif
+//#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 #include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
-#include "Tympan/Tools/OMessageManager.h"
+//#include "Tympan/Tools/OMessageManager.h"
 //#include <assert.h>
 
 int nNbAbandonsParPointNuples = 0;
@@ -273,7 +273,7 @@ int TYCalculParcours::Traite(
     //assert(NULL != _geoSR);
     if (NULL == _geoSR->_ListePoint)
     {
-        OMessageManager::get()->format(MSG_DEBUG, "Pas de Points detectes pour Source-Recepteur\n");
+        //OMessageManager::get()->format(MSG_DEBUG, "Pas de Points detectes pour Source-Recepteur\n");
         return -1;
     }
     //2. On attribue des identifiants speciaux aux points S & R, pour ne pas les melanger a d'autres
@@ -288,7 +288,7 @@ int TYCalculParcours::Traite(
         geoSecondePasseDroite.Copy(*_geoSR);
 
         //On n'ecrit pas le fichier
-        OMessageManager::get()->format(MSG_DEBUG, "Aucun obstacle !\n");
+//        OMessageManager::get()->format(MSG_DEBUG, "Aucun obstacle !\n");
         return 0;
     }
 

@@ -18,9 +18,9 @@
  */
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
+//#ifdef TYMPAN_USE_PRECOMPILED_HEADER
+//#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
+//#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "TYSetGeometriqueParcours.h"
 
@@ -31,7 +31,7 @@
 
 #include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
 #include "Tympan/MetierSolver/CommonTools/OVector3D.h"
-#include "Tympan/Tools/OMessageManager.h"
+//#include "Tympan/Tools/OMessageManager.h"
 
 #include "TYPointParcours.h"
 
@@ -383,22 +383,22 @@ void TYSetGeometriqueParcours::SeparationDroiteGauche(bool* PointsAGauche, bool*
 }
 
 
-void TYSetGeometriqueParcours::AffichePolylignes()
-{
-    OMessageManager::get()->format(MSG_DEBUG, "----------AffichePolylignes----------\n");
-
-    int i, j;
-    for (i = 0; i < _nNbPolylines; i++)
-    {
-        OMessageManager::get()->format(MSG_DEBUG, "Polyligne %d ", i);
-        for (j = 0; j < _ListePolylines[i].nombreDePoint(); j++)
-        {
-            int indexePoint = _ListePolylines[i].indexePoint(j);
-            OMessageManager::get()->format(MSG_DEBUG, "point %-3d [%-3.1f %-3.1f]\t", indexePoint, _ListePoint[indexePoint].x, _ListePoint[indexePoint].y);
-        }
-        OMessageManager::get()->format(MSG_DEBUG, "\n");
-    }
-}
+//void TYSetGeometriqueParcours::AffichePolylignes()
+//{
+//    OMessageManager::get()->format(MSG_DEBUG, "----------AffichePolylignes----------\n");
+//
+//    int i, j;
+//    for (i = 0; i < _nNbPolylines; i++)
+//    {
+//        OMessageManager::get()->format(MSG_DEBUG, "Polyligne %d ", i);
+//        for (j = 0; j < _ListePolylines[i].nombreDePoint(); j++)
+//        {
+//            int indexePoint = _ListePolylines[i].indexePoint(j);
+//            OMessageManager::get()->format(MSG_DEBUG, "point %-3d [%-3.1f %-3.1f]\t", indexePoint, _ListePoint[indexePoint].x, _ListePoint[indexePoint].y);
+//        }
+//        OMessageManager::get()->format(MSG_DEBUG, "\n");
+//    }
+//}
 
 //Return Value Description for Qsort compare
 //< 0 elem1 less than elem2
