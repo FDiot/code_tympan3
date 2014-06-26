@@ -19,16 +19,10 @@ endif()
 set_source_files_properties(${CYTHON_SOURCES}
   PROPERTIES CYTHON_IS_CXX TRUE )
 
-# This is only a toy module to validate the CMake / Cython integration
-cython_add_module(toto toto.pyx totolib.cpp)
-configure_cython_module(toto)
-install_cython_module(toto)
-
 cython_add_module(pytam pytam.pyx Loader.cpp)
 configure_cython_module(pytam)
-target_link_libraries(pytam 
+target_link_libraries(pytam
     tympan_dm_core tympan_dm_metier tympan_dm_ihm tympan_dm_graphics
     tympan_solver_data_model)
 install_cython_module(pytam)
-
 
