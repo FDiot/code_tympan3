@@ -237,6 +237,13 @@ class SiteNode(PolygonalTympanFeature):
     def landtakes(self):
         return self.children["InfrastructureLandtake"][:]
 
+    @property
+    def all_features(self):
+        # TODO Use itertools.chain
+        return ( self.children["LevelCurve"] +
+                 self.children["MaterialArea"] +
+                 self.children["WaterBody"] +
+                 self.children["InfrastructureLandtake"] )
 
 class InfrastructureLandtake(PolygonalTympanFeature):
 
