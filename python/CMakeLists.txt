@@ -19,7 +19,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories (${GTEST_INCLUDE_DIR})
 
 # Process the CMakeLists.txt in the 'src' subdirectory.
-add_subdirectory( src )
+add_subdirectory( tympan )
 
 # Process the CMakeLists.txt in the 'tests' subdirectory.
 add_subdirectory( tests )
