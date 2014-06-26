@@ -94,3 +94,29 @@ class SiteNodeGeometryCleaner(object):
     def process_infrastructure_landtakes(self):
         for landtake in self.sitenode.landtakes:
             self._add_or_reject_polygonal_feature(landtake)
+
+    def process_all_features(self):
+        self.process_level_curves()
+        self.process_material_areas()
+        self.process_infrastructure_landtakes()
+
+    def export_cleaned_geometries_into(self, hostcleaner):
+        """Create new geometry and info into the hostside representing the
+        cleaned geometry for each feature of this cleaner
+
+        Info are shared between the self and the hostcleaner
+        """
+        for feature_id, shape in self.geom.iteritems():
+            hostcleaner._add_new_shape(feature_id, shape, self.info[feature_id])
+
+
+    def merge_subsite(self, subsite):
+        "Merge the cleaned geometries for subsite into the self cleaner"
+        subcleaner = SiteNodeGeometryCleaner(subsite)
+        subcleaner.process_all_features()
+        if subcleaner.erroneous_overlap:
+            msg = ("Can not merge subsite %s because of "
+                   "the follow ing features overlaping its boundaries : \n")
+            msg += ', '.join(subcleaner.erroneous_overlap)
+            raise InvalidGeometry(msg)
+        subcleaner.export_cleaned_geometries_into(self)

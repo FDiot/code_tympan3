@@ -144,12 +144,15 @@ class _TestFeatures(object):
     grass = GroundMaterial("grass")
 
     level_curve_A_coords = [(-1, -1), (2, 2), (4, 2)]
+    cleaned_level_A_shape = MultiLineString([[(0, 0), (2, 2), (4, 2)]])
+
     altitude_A = 10.0
     grass_area_coords = [(1.0, 1.0), (11.0, 1.0), (1.0, 9.0), (1.0, 1.0)]
     waterbody_coords = [(3, 3), (5, 4), (3, 5)]
     altitude_water = 5.0
     subsite_A_coords = [(6, 8), (11, 8), (11, 6), (6, 6)]
     level_curve_B_coords =[(8.0, 4.0), (8.0, 7.0), (12.0, 7.0)]
+    cleaned_level_B_shape = MultiLineString([[(8.0, 6.0), (8.0, 7.0), (11.0, 7.0)]])
     altitude_B = 20.0
 
     def build_features(self):
@@ -169,6 +172,7 @@ class _TestFeatures(object):
                                         altitude=self.altitude_B,
                                         parent_site=self.subsite, id="{Level curve B}")
 
+
 class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
 
     def setUp(self):
@@ -183,11 +187,10 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
 
     def test_add_and_clean_level_curves(self):
         cleaner = SiteNodeGeometryCleaner(self.mainsite)
-        cleaned_level_A = MultiLineString([[(0, 0), (2, 2), (4, 2)]])
 
         cleaner.process_level_curves()
 
-        self.assertTrue(cleaner.geom['{Level curve A}'].equals(cleaned_level_A))
+        self.assertTrue(cleaner.geom['{Level curve A}'].equals(self.cleaned_level_A_shape))
         # Not directly in sitenode
         with self.assertRaises(KeyError):
             cleaner['{Level curve B}']
@@ -217,6 +220,38 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
 
         water_shape, water_info = cleaner['{Water body ID}']
         self.assertEqual(water_info["altitude"], self.altitude_water)
+
+    def test_export_subsite_feature(self):
+        cleaner_mainsite = SiteNodeGeometryCleaner(self.mainsite)
+        cleaner_subsite = SiteNodeGeometryCleaner(self.subsite)
+        cleaner_subsite.process_level_curves()
+
+        cleaner_subsite.export_cleaned_geometries_into(cleaner_mainsite)
+
+        self.assertTrue(cleaner_mainsite.geom['{Level curve B}'].equals(
+            self.cleaned_level_B_shape))
+
+    def test_merge_subsite_OK(self):
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+        cleaner.process_all_features()
+
+        cleaner.merge_subsite(self.subsite)
+
+        self.assertTrue(cleaner.geom['{Level curve A}'].equals(
+            self.cleaned_level_A_shape))
+        self.assertTrue(cleaner.geom['{Level curve B}'].equals(
+            self.cleaned_level_B_shape))
+
+
+    def test_merge_subsite_report_errors(self):
+        overlap_area = MaterialArea([(5, 5), (5, 7), (7, 7), (7, 5)],
+                                    material=self.grass,
+                                    parent_site=self.subsite, id="{Overlap area}")
+
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+
+        with self.assertRaises(InvalidGeometry):
+            cleaner.merge_subsite(self.subsite)
 
 
 
