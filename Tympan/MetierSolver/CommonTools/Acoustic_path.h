@@ -1,7 +1,7 @@
 #ifndef __ACOUSTIC_PATH_H_
 #define __ACOUSTIC_PATH_H_
 
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/models/common/3d.h"
 
 enum ACOUSTIC_EVENT_TYPES
 {

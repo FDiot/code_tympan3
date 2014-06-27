@@ -21,7 +21,7 @@
 #include <vector>
 #include <boost/foreach.hpp>
 
-#include "../../CommonTools/OPoint3D.h"
+#include "Tympan/models/common/3d.h"
 
 
 /*! \file Core/Mathlib.h

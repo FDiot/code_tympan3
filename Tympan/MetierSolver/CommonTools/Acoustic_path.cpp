@@ -17,7 +17,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
 
-#include "OVector3D.h"
+#include "Tympan/models/common/3d.h"
 #include "Acoustic_path.h"
 
 acoustic_event::acoustic_event():   distNextEvent(0.0),

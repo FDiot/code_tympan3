@@ -27,7 +27,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
+#include "Tympan/models/common/3d.h"
 
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"

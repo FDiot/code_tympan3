@@ -57,10 +57,12 @@ set(CURRENT_FOLDER "Tympan")
 # The Tympan components must be enumerated here in reverse depence order
 set(TYMPAN_MODULES  tympan_dm_metier tympan_dm_graphics tympan_dm_ihm tympan_dm_core
 		    tympan_tools_metier tympan_common_tools tympan_tools_graphics
-		    tympan_tools
+		    tympan_tools tympan_models_common
 )
 
 # The inclusion order seems to be significant for dependencies
+#add_subdirectory(core)
+add_subdirectory(models)
 add_subdirectory(Tools)
 add_subdirectory(MetierSolver)
 add_subdirectory(GraphicIHM)

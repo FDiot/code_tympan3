@@ -13,9 +13,8 @@
 #include <memory>
 
 #include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
 #include "Tympan/MetierSolver/CommonTools/OTriangle.h"
-#include "Tympan/MetierSolver/CommonTools/OMatrix.h"
+#include "Tympan/models/common/3d.h"
 
 // Forward declarations
 #include "Tympan/Tools/OSmartPtr.h"

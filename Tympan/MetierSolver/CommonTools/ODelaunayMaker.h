@@ -24,7 +24,7 @@
 
 #include <qlist.h>
 
-#include "OPoint3D.h"
+#include "Tympan/models/common/3d.h"
 #include "OTriangle.h"
 
 /**

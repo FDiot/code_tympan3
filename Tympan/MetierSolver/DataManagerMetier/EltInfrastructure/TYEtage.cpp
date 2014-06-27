@@ -28,7 +28,7 @@
 
 #include "TYEtage.h"
 
-#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/core/defines.h"
 
 #include "Tympan/Tools/OMessageManager.h"

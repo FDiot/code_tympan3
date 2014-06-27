@@ -202,13 +202,12 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYG
         TYGeometryNode(TYElement *)
         OMatrix getMatrix()
 
-cdef extern from "Tympan/MetierSolver/CommonTools/OMatrix.h":
+cdef extern from "Tympan/models/common/3d.h":
     cdef cppclass OMatrix:
         pass
     OVector3D operator*(const OMatrix& mat, const OVector3D& vector)
     OPoint3D operator*(const OMatrix& mat, const OPoint3D& point)
 
-cdef extern from "Tympan/MetierSolver/CommonTools/OCoord3D.h":
     cdef cppclass OCoord3D:
         double _x
         double _y
@@ -216,11 +215,9 @@ cdef extern from "Tympan/MetierSolver/CommonTools/OCoord3D.h":
         double _value[3]
         bool operator==(const OCoord3D& coord)
 
-cdef extern from "Tympan/MetierSolver/CommonTools/OPoint3D.h":
     cdef cppclass OPoint3D (OCoord3D):
         pass
 
-cdef extern from "Tympan/MetierSolver/CommonTools/OVector3D.h":
     cdef cppclass OVector3D (OCoord3D):
         pass
 

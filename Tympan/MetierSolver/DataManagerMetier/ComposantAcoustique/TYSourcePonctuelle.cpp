@@ -28,7 +28,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
+#include "Tympan/models/common/3d.h"
 
 #include "Tympan/Tools/OMessageManager.h"
 

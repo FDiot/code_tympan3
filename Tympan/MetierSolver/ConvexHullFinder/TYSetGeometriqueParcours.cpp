@@ -29,8 +29,7 @@
 #include <math.h>
 //#include <assert.h>
 
-#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
-#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
+#include "Tympan/models/common/3d.h"
 //#include "Tympan/Tools/OMessageManager.h"
 
 #include "TYPointParcours.h"

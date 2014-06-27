@@ -12,8 +12,7 @@
 
 #include "std_boost_utils.hpp"
 
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
-#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/CommonTools/OSpectreComplex.h"
 
 

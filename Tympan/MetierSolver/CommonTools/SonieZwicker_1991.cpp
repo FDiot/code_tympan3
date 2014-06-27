@@ -14,7 +14,7 @@
 */
 
 #include <cmath>
-#include "OGeometrie.h"
+#include "Tympan/models/common/3d.h"
 #include "SonieZwicker_1991.h"
 
 
