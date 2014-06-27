@@ -1296,7 +1296,6 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
         }
 
 #if TY_USE_IHM
-        //        if (OGeometrie::pointInPolygonRayCasting(testPt, pts1, static_cast<int>(nbPts) , TYPolygon(pPlanEau->getListPoints()).normal(), box) == 1)
         if (OGeometrie::pointInPolygonRayCasting(testPt, pts1, static_cast<int>(nbPts)) == 1)
 #else
         if (OGeometrie::pointInPolygonAngleSum(testPt, pts, nbPts))
@@ -1340,7 +1339,6 @@ TYTerrain* TYTopographie::terrainAt(const OPoint3D& pt)
         }
 
 #if TY_USE_IHM
-        //        if (OGeometrie::pointInPolygonRayCasting(testPt, pts2, static_cast<int>(nbPts), TYPolygon(pTerrain->getListPoints()).normal(), box) == 1)
         if (OGeometrie::pointInPolygonRayCasting(testPt, pts2, static_cast<int>(nbPts)) == 1)
 #else
         if (OGeometrie::pointInPolygonAngleSum(testPt, pts, static_cast<int>(nbPts)))
