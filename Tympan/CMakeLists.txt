@@ -5,17 +5,18 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 include_directories (${GTEST_INCLUDE_DIR})
 #NB Adding GTest include in the non-test tree is required to enable gtest_prod.h
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} 
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG _DEBUG)
 
 
 ### Precompiled header handling ###
 if(${CMAKE_VERSION} VERSION_LESS 2.8.9 AND LOGILAB_USE_PRECOMPILED_HEADER)
-set(LOGILAB_USE_PRECOMPILED_HEADER OFF
-  CACHE BOOL "Pre-compiled headers forcibly disabled." FORCE)
-message(SEND_ERROR
-  "Pre-compiled headers support requires CMake >= 2.8.9. "
-  "PCH support forcibly disabled ; you can try to run cmake again.")
+
+  set(LOGILAB_USE_PRECOMPILED_HEADER OFF
+    CACHE BOOL "Pre-compiled headers forcibly disabled." FORCE)
+  message(SEND_ERROR
+    "Pre-compiled headers support requires CMake >= 2.8.9. "
+    "PCH support forcibly disabled ; you can try to run cmake again.")
 endif(${CMAKE_VERSION} VERSION_LESS 2.8.9 AND LOGILAB_USE_PRECOMPILED_HEADER)
 
 # logilab-pch need to be included even when pre-compiled headers are disabled
