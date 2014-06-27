@@ -1537,7 +1537,6 @@ bool TYCalcul::go()
 
     // Nettoyage du tableau de rayon
     _tabRays.clear();
-    _tabEdges.clear();
 
     // Regroupement des sites et mise a jour de l'altimetrie et des sols
     // Creation de la liste des recepteurs

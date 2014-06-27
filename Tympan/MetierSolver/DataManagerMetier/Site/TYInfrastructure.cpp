@@ -494,11 +494,6 @@ bool TYInfrastructure::addRoute(LPTYRoute pRoute)
     return addRoute(new TYRouteGeoNode((LPTYElement)pRoute));
 }
 
-bool TYInfrastructure::addRoute(LPTYRouteDeblai pRoute)
-{
-    return addRoute(new TYRouteGeoNode((LPTYElement)pRoute));
-}
-
 bool TYInfrastructure::remRoute(const LPTYRouteGeoNode pRouteGeoNode)
 {
     assert(pRouteGeoNode);
