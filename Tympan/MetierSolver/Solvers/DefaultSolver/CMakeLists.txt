@@ -14,9 +14,8 @@ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
 
 add_dependencies(${MODULE_NAME} ${TYMPAN_MODULES} tympan_convexhull_finder)
 
-target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} tympan_dm_metier tympan_dm_graphics tympan_dm_ihm 
-						tympan_dm_core tympan_tools_metier tympan_common_tools tympan_tools_graphics
-						tympan_tools tympan_convexhull_finder ${OPENGL_LIBRARIES} )
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${TYMPAN_MODULES}
+                      tympan_convexhull_finder ${OPENGL_LIBRARIES} )
 
 configure_tympan_plugin(${MODULE_NAME})
 install_tympan_plugin(${MODULE_NAME})
