@@ -139,7 +139,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         }
         resultfile.close();
 
-        // Call python script "tympan.py" with: the name of the file
+        // Call python script "solve_project.py" with: the name of the file
         // containing the problem, the name of the file where to record
         // the result and the directory containing the solver plugin to use
         // to solve the acoustic problem

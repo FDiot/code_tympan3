@@ -81,7 +81,7 @@ are directly set in the code (see ``Tympan/Appli/TympanApp/EnvironmentUtils.h``)
 
 * Path to Python interpreter (Windows specific):
   to run the Python script, the complete path to the Python interpreter is
-  needed (``python tympan.py`` is not interpreted). Yet, there is no standard
+  needed (``python solve_project.py`` is not interpreted). Yet, there is no standard
   under Windows regarding where to install python, so this path cannot be known
   from Code_TYMPAN. That is why ``TYMPAN_PYTHON_INTERP`` environment variable
   must be set by the user (for example: "C:\\Python27\\python.exe").

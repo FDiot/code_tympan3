@@ -43,7 +43,7 @@ configure_file(
   @ONLY
 )
 set(PYMODULES_DIR "pymodules")
-set(PYSCRIPT "${PYMODULES_DIR}/tympan.py")
+set(PYSCRIPT "${PYMODULES_DIR}/solve_project.py")
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/Config.h

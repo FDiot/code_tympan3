@@ -212,7 +212,7 @@ method from ``TYCalculManager`` class).
 When asked to perform a simulation, the computation manager:
 
 * Serializes the current project to a XML file
-* Calls a subprocess running ``tympan.py`` python script that uses tympan libraries to:
+* Calls a subprocess running ``solve_project.py`` python script that uses tympan libraries to:
 
   * Read the serialized file
   * Build a data model representing the acoustic problem (see details below, section **Future Architecture**)
