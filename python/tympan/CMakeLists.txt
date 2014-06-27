@@ -10,6 +10,9 @@ install(DIRECTORY ./
   DESTINATION ${TYMPAN_PythonModules}
   FILES_MATCHING PATTERN "*.py")
 
+# Handles __init__.py files
+copy_init_files(${CYTHON_LIB_CURR_DIR})
+
 # Handles cython modules
 file(GLOB CYTHON_SOURCES *.pyx)
 

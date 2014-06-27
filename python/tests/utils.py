@@ -117,7 +117,7 @@ def no_output(to=os.devnull, err_to=None):
 
 
 with no_output():
-    import pytam
+    import tympan.pytam as pytam
     pytam.init_tympan_registry()
 
 

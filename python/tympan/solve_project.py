@@ -10,7 +10,7 @@ logging.basicConfig(stream=stream, level=logging.DEBUG,
 
 
 try:
-    import pytam
+    import tympan.pytam as pytam
 except ImportError:
     err = "solve_project.py module couldn't find pytam library."
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
