@@ -12,7 +12,7 @@ logging.basicConfig(stream=stream, level=logging.DEBUG,
 try:
     import pytam
 except ImportError:
-    err = "tympan.py module couldn't find pytam library."
+    err = "solve_project.py module couldn't find pytam library."
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
     raise ImportError(err)
 
@@ -64,7 +64,7 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
 
 if __name__ == '__main__':
     if len(sys.argv) != 4:
-        err = "tympan.py module called with bad arguments"
+        err = "solve_project.py module called with bad arguments"
         logging.error("%s Couldn't solve acoustic problem.", err)
         sys.exit(-1) # XXX to be improved
     # read command-line arguments
@@ -77,6 +77,6 @@ if __name__ == '__main__':
                                output_project=output_proj,
                                solverdir=solverdir)
     except:
-        logging.exception("tympan.py module couldn't solve the acoustic problem")
+        logging.exception("solve_project.py module couldn't solve the acoustic problem")
         sys.exit(-1)
     sys.exit(0)
