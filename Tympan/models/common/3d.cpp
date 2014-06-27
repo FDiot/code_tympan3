@@ -1109,7 +1109,6 @@ void OBox::Translate(const OPoint3D& vectorTranslate)
     return ((ABS(anglesum) > (M_2PI - EPSILON_6)) && (ABS(anglesum) < (M_2PI + EPSILON_6)));
 }
 
-#if TY_USE_IHM
 //in 2D
 /*static*/ bool OGeometrie::pointInPolygonRayCasting(const OPoint3D& ptP, const OPoint3D* pts, int nbPts)
 {
@@ -1127,12 +1126,6 @@ void OBox::Translate(const OPoint3D& vectorTranslate)
     }
     return cross % 2 != 0;
 }
-#else // TY_USE_IHM
-/*static*/ bool OGeometrie::pointInPolygonRayCasting(const OPoint3D& ptP, const OPoint3D* pts, int nbPts, const OVector3D& normal, const OBox& box)
-{
-    return false;
-}
-#endif // TY_USE_IHM
 
 /*static*/ bool OGeometrie::shortestSegBetween2Lines(const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3, const OPoint3D& pt4,
                                                      OPoint3D& ptA, OPoint3D& ptB, double* mua, double* mub)
