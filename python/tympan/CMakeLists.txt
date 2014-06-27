@@ -31,3 +31,5 @@ target_link_libraries(pytam
     tympan_solver_data_model)
 install_cython_module(pytam ${CYTHON_LIB_CURR_DIR})
 
+
+add_subdirectory( models )
