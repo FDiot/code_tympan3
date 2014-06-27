@@ -689,9 +689,6 @@ int OMatrix::aligneVecteurSurOx(const OVector3D& vector)
     double  cos1, sin1, cos2, sin2;
     double  n1, n2;
     n2 = vector.norme();
-#ifdef _DEBUG_GEO
-    printf("Ox V : %f %f %f\n", vector._x, vector._y, vector._z);
-#endif
     if (n2 > EPSILON_13)
     {
         res = 1;
@@ -714,9 +711,6 @@ int OMatrix::aligneVecteurSurOx(const OVector3D& vector)
         _m[1][0] = -sin1;      _m[1][1] = cos1;       _m[1][2] = 0;    _m[1][3] = 0;
         _m[2][0] = -sin2 * cos1; _m[2][1] = -sin2 * sin1; _m[2][2] = cos2; _m[2][3] = 0;
         _m[3][0] = 0;          _m[3][1] = 0;          _m[3][2] = 0;    _m[3][3] = 1;
-#ifdef _DEBUG_GEO
-        show();
-#endif
     }
     return res;
 }
@@ -726,9 +720,6 @@ int OMatrix::aligneVecteurSurOy(const OVector3D& vector)
     int res = 0;
     double  cos1, sin1, cos2, sin2;
     double  n1, n2;
-#ifdef _DEBUG_GEO
-    printf("Oy V : %f %f %f\n", vector._x, vector._y, vector._z);
-#endif
     n2 = vector.norme();
     if (n2 > EPSILON_13)
     {
@@ -758,9 +749,6 @@ int OMatrix::aligneVecteurSurOy(const OVector3D& vector)
         _m[1][0] = sin1 * cos2;  _m[1][1] = cos1 * cos2;  _m[1][2] = sin2; _m[1][3] = 0;
         _m[2][0] = -sin1 * sin2; _m[2][1] = -cos1 * sin2; _m[2][2] = cos2; _m[2][3] = 0;
         _m[3][0] = 0;          _m[3][1] = 0;          _m[3][2] = 0;    _m[3][3] = 1;
-#ifdef _DEBUG_GEO
-        show();
-#endif
     }
     return res;
 }
