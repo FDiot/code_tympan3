@@ -20,7 +20,7 @@
 
 
 
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 
 
 #include <qtextstream.h>

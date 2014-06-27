@@ -29,7 +29,7 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYLinearMaillage.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 #include "Tympan/Tools/OSizeManager.h"
 
 #if defined(WIN32)

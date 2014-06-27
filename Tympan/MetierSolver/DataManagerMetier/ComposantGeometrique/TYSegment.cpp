@@ -31,7 +31,7 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 
 TY_EXTENSION_INST(TYSegment);
 TY_EXT_GRAPHIC_INST(TYSegment);

@@ -35,7 +35,7 @@
 #endif // _NDEBUG
 
 #include "Tympan/Tools/TYConfigure.h"
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYElementWidget.h"

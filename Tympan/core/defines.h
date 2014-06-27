@@ -1,5 +1,5 @@
-#ifndef _DEFINES_H__INCLUDED
-#define _DEFINES_H__INCLUDED
+#ifndef TY_C_DEFINES
+#define TY_C_DEFINES
 
 /* From this threshold (in meters), two elements are considered as at the same
  * position
@@ -66,4 +66,4 @@
     #endif
 
 
-#endif // _DEFINES_H__INCLUDED
+#endif // TY_C_DEFINES

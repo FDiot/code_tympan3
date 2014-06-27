@@ -22,7 +22,7 @@
 #ifndef __TY_DEFINES__
 #define __TY_DEFINES__
 
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 
 #if _MSC_VER > 1000
 #pragma once
