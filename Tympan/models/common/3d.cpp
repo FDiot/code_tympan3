@@ -380,7 +380,7 @@ void OPoint3D::set(double x, double y, double z)
 TabPoint3D OPoint3D::checkPointsMaxDistance(const TabPoint3D& points, const double& distanceMax)
 {
     TabPoint3D retTab;
-    if (!points.size() || (distanceMax <= 0.1))
+    if (points.empty() || (distanceMax <= 0.1))
     {
         return points;
     }
@@ -452,12 +452,11 @@ OMatrix::~OMatrix()
 
 OMatrix& OMatrix::operator=(const OMatrix& matrix)
 {
-    int i, j;
     if (this != &matrix)
     {
-        for (i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            for (j = 0; j < 4; j++)
+            for (int j = 0; j < 4; j++)
             {
                 _m[i][j] = matrix._m[i][j];
             }
@@ -468,12 +467,11 @@ OMatrix& OMatrix::operator=(const OMatrix& matrix)
 
 bool OMatrix::operator==(const OMatrix& matrix) const
 {
-    int i, j;
     if (this != &matrix)
     {
-        for (i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)
         {
-            for (j = 0; j < 4; j++)
+            for (int j = 0; j < 4; j++)
             {
                 if (_m[i][j] != matrix._m[i][j]) { return false; }
             }
@@ -489,11 +487,10 @@ bool OMatrix::operator!=(const OMatrix& matrix) const
 
 OMatrix OMatrix::operator+(const OMatrix& matrix) const
 {
-    int i, j;
     OMatrix matrixRes;
-    for (i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for (j = 0; j < 3; j++)
+        for (int j = 0; j < 3; j++)
         {
             matrixRes._m[i][j] = _m[i][j] + matrix._m[i][j];
         }
@@ -503,11 +500,10 @@ OMatrix OMatrix::operator+(const OMatrix& matrix) const
 
 OMatrix OMatrix::operator-(const OMatrix& matrix) const
 {
-    int i, j;
     OMatrix matrixRes;
-    for (i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for (j = 0; j < 3; j++)
+        for (int j = 0; j < 3; j++)
         {
             matrixRes._m[i][j] = _m[i][j] - matrix._m[i][j];
         }
@@ -517,14 +513,13 @@ OMatrix OMatrix::operator-(const OMatrix& matrix) const
 
 OMatrix OMatrix::operator*(const OMatrix& matrix) const
 {
-    int i, j, k;
-    double  t;
     OMatrix matrixRes;
-    for (i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
-        for (j = 0; j < 4; j++)
+        for (int j = 0; j < 4; j++)
         {
-            for (k = 0, t = 0; k < 4; k++)
+            double t = 0;
+            for (int k = 0; k < 4; k++)
             {
                 t += _m[i][k] * matrix._m[k][j];
             }
@@ -686,11 +681,10 @@ int OMatrix::setRotationOz(double a)
 int OMatrix::aligneVecteurSurOx(const OVector3D& vector)
 {
     int res = 0;
-    double  cos1, sin1, cos2, sin2;
-    double  n1, n2;
-    n2 = vector.norme();
+    double n2 = vector.norme();
     if (n2 > EPSILON_13)
     {
+        double n1, cos1, sin1, cos2, sin2;
         res = 1;
         n1 = sqrt(vector._x * vector._x + vector._y * vector._y);
         if (n1 < EPSILON_13)
@@ -718,11 +712,10 @@ int OMatrix::aligneVecteurSurOx(const OVector3D& vector)
 int OMatrix::aligneVecteurSurOy(const OVector3D& vector)
 {
     int res = 0;
-    double  cos1, sin1, cos2, sin2;
-    double  n1, n2;
-    n2 = vector.norme();
+    double n2 = vector.norme();
     if (n2 > EPSILON_13)
     {
+        double  n1, cos1, sin1, cos2, sin2;
         res = 1;
         n1 = sqrt(vector._x * vector._x + vector._y * vector._y);
         if (n1 < EPSILON_13)
@@ -755,7 +748,6 @@ int OMatrix::aligneVecteurSurOy(const OVector3D& vector)
 
 int OMatrix::invert()
 {
-    int i, j;
     double det = determinant();
     adjoint();
     // if the determinant is zero,
@@ -765,9 +757,9 @@ int OMatrix::invert()
         return 0;
     }
     // Scale the adjoint matrix to get the inverse.
-    for (i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
     {
-        for (j = 0; j < 4; j++)
+        for (int j = 0; j < 4; j++)
         {
             _m[i][j] = _m[i][j] / det;
         }
@@ -1359,15 +1351,15 @@ OPoint3D OSegment3D::centerOfCurvedPath(const double& R) const
     OPoint3D point;
     OPoint3D milieu = centreOf() ;
     double demiLongueur = longueur() / 2;
-    double d, x, y, z, q;
+    double x, y, z;
     x = milieu._x; y = milieu._y; z = milieu._z;
     if (R > demiLongueur)
     {
-        d = sqrt(R * R - demiLongueur * demiLongueur);
+        double d = sqrt(R * R - demiLongueur * demiLongueur);
         if (_ptA._z != _ptB._z)
         {
             d = d * SIGNE(_ptA._z - _ptB._z);
-            q = (_ptB._y - _ptA._y) / (_ptB._z - _ptA._z);
+            double q = (_ptB._y - _ptA._y) / (_ptB._z - _ptA._z);
             y = milieu._y + d / sqrt(1 + q * q);
         }
         z = milieu._z + sqrt(ABS(d * d - (y - milieu._y) * (y - milieu._y)));
@@ -1540,14 +1532,15 @@ OMatrix ORepere3D::asMatrix() const
 /* OHPlane3D ******************************************************************/
 
 OHPlane3D::OHPlane3D()
+    : _p(0)
 {
 }
 
 OHPlane3D::OHPlane3D(const OHPlane3D& Plane)
 {
     _N = Plane._N;
-    _p = Plane._p;
     _O = Plane._O;
+    _p = Plane._p;
 }
 
 OHPlane3D::OHPlane3D(const OVector3D& normal, const OPoint3D& origin)
@@ -1571,8 +1564,8 @@ void OHPlane3D::set(const OVector3D& normal, const OPoint3D& origin)
 OHPlane3D& OHPlane3D::operator=(const OHPlane3D& Plane)
 {
     _N = Plane._N;
-    _p = Plane._p;
     _O = Plane._O;
+    _p = Plane._p;
     return *this;
 }
 
