@@ -5,7 +5,7 @@
 #include <QProcess>
 #include <QDir>
 
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 #include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
 
 namespace tympan

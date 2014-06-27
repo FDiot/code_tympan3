@@ -25,7 +25,7 @@
 
 #pragma warning(disable: 4251)
 
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #   ifdef _PLUGIN_DLL

@@ -36,7 +36,7 @@
 #include "Tympan/Tools/OChrono.h"
 #include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
 #include "Tympan/Appli/TympanApp/TYApplication.h"
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 #include "EnvironmentUtils.hpp"
 
 #include <qcursor.h>
