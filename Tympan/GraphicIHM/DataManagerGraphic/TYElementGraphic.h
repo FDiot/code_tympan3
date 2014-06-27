@@ -17,11 +17,6 @@
  * \file TYElementGraphic.h
  * \brief Representation graphique d'un element de base (fichier header)
  * \author Projet_Tympan
- *
- *
- *
- *
- *
  */
 
 #ifndef __TY_ELEMENT_GRAPHIC__
@@ -47,13 +42,12 @@
 #include <GL/glu.h>
 #endif // TY_USE_IHM
 
+#include "Tympan/models/common/3d.h"
 #include "Tympan/Tools/OColor.h"
-#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
 #include "Tympan/Tools/OSmartPtr.h"
+
 class TYElement;
 
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"//az++ pour les calculs de BoundingBox (fctn fit et localiser)
-#include "Tympan/MetierSolver/CommonTools/OBox.h"//az++ pour les calculs de BoundingBox (fctn fit et localiser)
 
 #define TY_DECL_METIER_GRAPHIC(classname) \
     public: \

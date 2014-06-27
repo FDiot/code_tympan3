@@ -25,7 +25,7 @@
 #include <deque>
 #include <string>
 
-#include "OPoint3D.h"
+#include "Tympan/models/common/3d.h"
 
 /**
  * \file OTriangle.h

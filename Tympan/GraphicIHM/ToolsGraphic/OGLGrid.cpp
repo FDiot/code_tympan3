@@ -29,7 +29,7 @@
 #include <GL/gl.h>
 
 #include "Tympan/Tools/OColor.h"
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/models/common/3d.h"
 #include "OGLLine.h"
 
 OGLGrid::OGLGrid()

@@ -13,9 +13,7 @@
 #include <ostream>
 #include <sstream>
 
-
-#include "OPoint3D.h"
-#include "OVector3D.h"
+#include "Tympan/models/common/3d.h"
 #include "OPlan.h"
 #include "OSpectre.h"
 

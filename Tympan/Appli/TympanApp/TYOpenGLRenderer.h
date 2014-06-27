@@ -37,7 +37,7 @@
 #include <GL/glu.h>
 
 
-#include "Tympan/MetierSolver/CommonTools/OMatrix.h"
+#include "Tympan/models/common/3d.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 

@@ -27,7 +27,7 @@
 #include "TYChemin.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "TYPointCalcul.h"
-#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
+#include "Tympan/models/common/3d.h"
 
 /**
  * \file TYTrajet.h

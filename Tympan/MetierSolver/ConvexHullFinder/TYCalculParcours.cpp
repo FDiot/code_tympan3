@@ -32,7 +32,7 @@
 //#endif
 //#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
-#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
+#include "Tympan/models/common/3d.h"
 //#include "Tympan/Tools/OMessageManager.h"
 //#include <assert.h>
 

@@ -27,16 +27,12 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/core/defines.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRectangularMaillage.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
-
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
-
 #include "Tympan/Tools/TYColorManager.h"
-
 #include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 
 TYRectangularMaillageGraphic::TYRectangularMaillageGraphic(TYRectangularMaillage* pElement) :
     TYElementGraphic(pElement)

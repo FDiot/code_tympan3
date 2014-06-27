@@ -17,8 +17,7 @@ using std::deque;
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
-#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/CommonTools/OPlan.h"
 #include "Tympan/MetierSolver/CommonTools/OTriangle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"

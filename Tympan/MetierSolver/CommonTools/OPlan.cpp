@@ -23,7 +23,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #include "OPlan.h"
-#include "OGeometrie.h"
+#include "Tympan/models/common/3d.h"
 
 OPlan::OPlan():
     _a(0.0),

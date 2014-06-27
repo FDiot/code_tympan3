@@ -25,7 +25,7 @@
 
 #include <deque>
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
-#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
+#include "Tympan/models/common/3d.h"
 
 struct TYStructSurfIntersect
 {

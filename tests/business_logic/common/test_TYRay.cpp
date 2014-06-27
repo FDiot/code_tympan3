@@ -10,9 +10,7 @@
 #include <vector>
 
 #include "gtest/gtest.h"
-#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
-#include "Tympan/MetierSolver/CommonTools/OCoord3D.h"
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 

@@ -18,7 +18,7 @@
 #define __TY_ANIME3DSOLVER__
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
-#include "Tympan/MetierSolver/CommonTools/OMatrix.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h"
