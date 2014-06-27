@@ -30,7 +30,7 @@
 
 class QToolButton;
 class QComboBox;
-class TYRouteDeblaiEditor;
+// class TYRouteDeblaiEditor;
 
 /**
  * \class TYSiteModelerFrame
@@ -115,7 +115,6 @@ public:
         SrcPonctMode,
         RecepteurMode,
         RouteMode,
-        RouteDeblaiMode,        //Mode ajoute pour les routes avec calcul de deblai/remblai
         ReseauTransportMode,
         EtageMode,
         MachineMode,
@@ -228,7 +227,6 @@ protected:
     TYPlanEauEditor* _pPlanEauEditor;
     TYSolEditor* _pSolEditor;
     TYRouteEditor* _pRouteEditor;
-    TYRouteDeblaiEditor* _pRouteDeblaiEditor;               //Editeur pour dessiner des routes avec calcul de deblai
     TYReseauTransportEditor* _pReseauTransportEditor;
     TYEtageEditor* _pEtageEditor;
     TYSilosEditor* _pSilosEditor;

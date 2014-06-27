@@ -237,10 +237,6 @@ class TYRoute;
 ///Smart pointer sur TYRoute.
 typedef SmartPtr<TYRoute> LPTYRoute;
 
-class TYRouteDeblai;
-///Smart pointer sur TYRouteDeblai
-typedef SmartPtr<TYRouteDeblai> LPTYRouteDeblai;
-
 class TYRay;
 // SmartPOinter sur TYRay
 typedef SmartPtr<TYRay> LPTYRay;

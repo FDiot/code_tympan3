@@ -23,7 +23,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYBatiment.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYReseauTransport.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRouteDeblai.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYUserSourcePonctuelle.h"
 
 #if TY_USE_IHM
@@ -136,11 +135,6 @@ public:
      * Ajoute une entree a la liste des routes.
      */
     bool addRoute(LPTYRoute pRoute);
-
-    /**
-     * Ajoute une entree a la liste des routes.
-     */
-    bool addRoute(LPTYRouteDeblai pRoute);
 
     /**
      * Supprime une entree a la liste des routes.
