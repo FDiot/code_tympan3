@@ -63,16 +63,6 @@ TYInfraToolbar::TYInfraToolbar(QButtonGroup* pBtnGroup, QMainWindow* parent /*= 
     addWidget(_toolButtonRoute);
     pBtnGroup->addButton(_toolButtonRoute, TYSiteModelerFrame::RouteMode);
 
-    //Ajout du nouveau bouton pour les route en deblai/remblai
-    _toolButtonRouteDeblai = new QToolButton(this);
-    _toolButtonRouteDeblai->setIcon(QPixmap(IMG("id_icon_route_deblai")));
-    _toolButtonRouteDeblai->setText(TR("id_menuitem_route_deblai"));
-    _toolButtonRouteDeblai->setToolTip(TR("id_menuitem_route_deblai"));
-    _toolButtonRouteDeblai->setStatusTip(TR("id_menuitem_route_deblai"));
-    _toolButtonRouteDeblai->setCheckable(true);
-    addWidget(_toolButtonRouteDeblai);
-    pBtnGroup->addButton(_toolButtonRouteDeblai, TYSiteModelerFrame::RouteDeblaiMode);
-
     _toolButtonReseau = new QToolButton(this);
     _toolButtonReseau->setIcon(QPixmap(IMG("id_icon_reseau")));
     _toolButtonReseau->setText(TR("id_menuitem_reseau"));
@@ -101,46 +91,6 @@ TYInfraToolbar::TYInfraToolbar(QButtonGroup* pBtnGroup, QMainWindow* parent /*= 
     pBtnGroup->addButton(_toolButtonSilos, TYSiteModelerFrame::SilosMode);
 
     addSeparator();
-
-    /*_toolButtonMachine = new QToolButton(this);
-    _toolButtonMachine->setIcon(QPixmap( IMG("id_icon_machine") ));
-    _toolButtonMachine->setText(TR("id_menuitem_machine"));
-    _toolButtonMachine->setToolTip(TR("id_menuitem_machine"));
-    _toolButtonMachine->setStatusTip(TR("id_menuitem_machine"));
-    _toolButtonMachine->setCheckable(true);
-    pBtnGroup->addButton(_toolButtonMachine, TYSiteModelerFrame::MachineMode);
-    addWidget(_toolButtonMachine);
-    _toolButtonMachine->setEnabled(false);
-
-    _toolButtonBatiment = new QToolButton(this);
-    _toolButtonBatiment->setIcon(QPixmap( IMG("id_icon_batiment") ));
-    _toolButtonBatiment->setText(TR("id_menuitem_batiment"));
-    _toolButtonBatiment->setToolTip(TR("id_menuitem_batiment"));
-    _toolButtonBatiment->setStatusTip(TR("id_menuitem_batiment"));
-    _toolButtonBatiment->setCheckable(true);
-    pBtnGroup->addButton(_toolButtonBatiment, TYSiteModelerFrame::BatimentMode);
-    addWidget(_toolButtonBatiment);
-    _toolButtonBatiment->setEnabled(false);
-
-    _toolButtonEcran = new QToolButton(this);
-    _toolButtonEcran->setIcon(QPixmap( IMG("id_icon_ecran") ));
-    _toolButtonEcran->setText(TR("id_menuitem_ecran"));
-    _toolButtonEcran->setToolTip(TR("id_menuitem_ecran"));
-    _toolButtonEcran->setStatusTip(TR("id_menuitem_ecran"));
-    _toolButtonEcran->setCheckable(true);
-    pBtnGroup->addButton(_toolButtonEcran, TYSiteModelerFrame::EcranMode);
-    addWidget(_toolButtonEcran);
-    _toolButtonEcran->setEnabled(false);
-
-    _toolButtonSite = new QToolButton(this);
-    _toolButtonSite->setIcon(QPixmap( IMG("id_icon_site") ));
-    _toolButtonSite->setText(TR("id_menuitem_site"));
-    _toolButtonSite->setToolTip(TR("id_menuitem_site"));
-    _toolButtonSite->setStatusTip(TR("id_menuitem_site"));
-    _toolButtonSite->setCheckable(true);
-    pBtnGroup->addButton(_toolButtonSite, TYSiteModelerFrame::SiteMode);
-    addWidget(_toolButtonSite);
-    _toolButtonSite->setEnabled(false);*/
 }
 
 TYInfraToolbar::~TYInfraToolbar()
@@ -151,15 +101,7 @@ void TYInfraToolbar::activeButtons(bool active)
 {
     _toolButtonSrcPonct->setEnabled(active);
     _toolButtonRoute->setEnabled(active);
-    _toolButtonRouteDeblai->setEnabled(active);
     _toolButtonReseau->setEnabled(active);
     _toolButtonEtage->setEnabled(active);
     _toolButtonSilos->setEnabled(active);
-
-    // Desactivation de tout acces a la base de donnees - DT 07/03/2005 -
-    // Les boutons suivants ont ete desactives
-    /*_toolButtonMachine->setEnabled(false);
-    _toolButtonBatiment->setEnabled(false);
-    _toolButtonEcran->setEnabled(false);
-    _toolButtonSite->setEnabled(false);*/
 }

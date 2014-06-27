@@ -36,7 +36,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticBox.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticCircle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticCylinder.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticEdge.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticFaceSet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticInterface.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
@@ -90,7 +89,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYReseauTransport.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRouteDeblai.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"

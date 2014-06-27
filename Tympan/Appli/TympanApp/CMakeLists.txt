@@ -1,8 +1,6 @@
 set(MODULE_NAME tympan_qt_app)
 
-file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h)
-# Some problematic / unused source files to be removed
-# list(REMOVE_ITEM ${MODULE_NAME}_SRCS )
+file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.cpp *.h *.hpp)
 
 # Headers requiring MOC pre-processing...
 file(GLOB ${MODULE_NAME}_MOC_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} *.h )
@@ -82,3 +80,35 @@ endforeach()
 install(TARGETS ${MODULE_NAME}
         DESTINATION . )
 
+
+if(SYS_NATIVE_WIN)
+  # From http://www.cmake.org/Wiki/BundleUtilitiesExample
+  
+  #--------------------------------------------------------------------------------
+  # Use BundleUtilities to get all other dependencies for the application to work.
+  # It takes a bundle or executable along with possible plugins and inspects it
+  # for dependencies.  If they are not system dependencies, they are copied.
+  
+  # directories to look for dependencies
+  SET(APPS_Debug   "\${CMAKE_INSTALL_PREFIX}/Tympan_d.exe")
+  SET(APPS_Release "\${CMAKE_INSTALL_PREFIX}/Tympan.exe")
+  SET(DLL_FROM_DIRS ${TYMPAN_3RDPARTY_DLL_DIRS})
+  
+  # Now the work of copying dependencies into the bundle/package
+  # The quotes are escaped and variables to use at install time have their $ escaped
+  # An alternative is the do a configure_file() on a script and use install(SCRIPT  ...).
+  INSTALL(CODE "
+    # Takes the configuration into account
+    set(TYMPAN_INSTALL_PLUGINS_Release ${TYMPAN_INSTALL_PLUGINS_Release})
+    set(TYMPAN_INSTALL_PLUGINS_Debug ${TYMPAN_INSTALL_PLUGINS_Debug})
+    set(APPS_Release ${APPS_Release})
+    set(APPS_Debug ${APPS_Debug})
+    set(_plugins_dir \${TYMPAN_PLUGINS_\${CMAKE_INSTALL_CONFIG_NAME}})
+    set(_apps \${APPS_\${CMAKE_INSTALL_CONFIG_NAME}})
+
+    file(GLOB_RECURSE PLUGINS
+      \"\${CMAKE_INSTALL_PREFIX}/\${_plugins_dir}/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
+    include(BundleUtilities)
+    fixup_bundle(\"\${_apps}\" \"\${PLUGINS}\" \"${DLL_FROM_DIRS}\")
+    " COMPONENT Runtime )
+endif(SYS_NATIVE_WIN)

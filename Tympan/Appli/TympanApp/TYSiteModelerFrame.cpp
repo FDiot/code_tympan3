@@ -157,7 +157,6 @@ void TYSiteModelerFrame::init()
     _pPlanEauEditor = new TYPlanEauEditor(this);
     _pSolEditor = new TYSolEditor(this);
     _pRouteEditor = new TYRouteEditor(this);
-    _pRouteDeblaiEditor = new TYRouteDeblaiEditor(this);
     _pReseauTransportEditor = new TYReseauTransportEditor(this);
     _pEtageEditor = new TYEtageEditor(this);
     _pSilosEditor = new TYSilosEditor(this);
@@ -223,7 +222,6 @@ TYSiteModelerFrame::~TYSiteModelerFrame()
     delete _pPlanEauEditor;
     delete _pSolEditor;
     delete _pRouteEditor;
-    delete _pRouteDeblaiEditor;
     delete _pReseauTransportEditor;
     delete _pEtageEditor;
     delete _pSilosEditor;
@@ -422,9 +420,6 @@ void TYSiteModelerFrame::setEditorMode(int mode)
                 break;
             case RouteMode:
                 _pCurrentEditor = _pRouteEditor;
-                break;
-            case RouteDeblaiMode:
-                _pCurrentEditor = _pRouteDeblaiEditor;
                 break;
             case ReseauTransportMode:
                 _pCurrentEditor = _pReseauTransportEditor;
