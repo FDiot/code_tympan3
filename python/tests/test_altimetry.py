@@ -304,11 +304,30 @@ class MeshedCDTTC(unittest.TestCase):
     def setUp(self):
         self.mesher = mesh.MeshedCDTWithInfo()
 
+    def count_edges(self):
+        count_edges, count_constrained = 0, 0
+        for c in self.mesher.cdt.finite_edges():
+            if self.mesher.cdt.is_constrained(c):
+                count_constrained += 1
+            count_edges += 1
+        return count_edges, count_constrained
+
+    def assert_basic_counts(self, vertices=None, faces=None,
+                            edges=None, constrained=None):
+        if vertices is not None:
+            self.assertEqual(self.mesher.cdt.number_of_vertices(), vertices)
+        if faces is not None:
+            self.assertEqual(self.mesher.cdt.number_of_faces(), faces)
+        count_edges, count_constrained = self.count_edges()
+        if edges is not None:
+            self.assertEqual(count_edges, edges)
+        if constrained is not None:
+            self.assertEqual(count_constrained, constrained)
+
     def test_insert_point(self):
         points = [mesh.Point(1, 1)]
         self.mesher.insert_polyline(imap(mesh.to_cgal_point, points))
-        self.assertEqual(self.mesher.cdt.number_of_vertices(), 1)
-        self.assertEqual(self.mesher.cdt.number_of_faces(), 0)
+        self.assert_basic_counts(vertices=1, faces=0)
 
     def test_insert_point_types(self):
         for point in [geometry.Point(1, 1), (3,4)]:
@@ -322,37 +341,19 @@ class MeshedCDTTC(unittest.TestCase):
         points = [(1, 1), (1, 2), (3, 4)]
         self.mesher.insert_polyline(imap(mesh.to_cgal_point, points),
                                connected=False)
-        self.assertEqual(self.mesher.cdt.number_of_vertices(), 3)
-        self.assertEqual(self.mesher.cdt.number_of_faces(), 1)
-        count = 0
-        for c in self.mesher.cdt.finite_edges():
-            self.assertFalse(self.mesher.cdt.is_constrained(c))
-            count += 1
-        self.assertEqual(count, 3)
+        self.assert_basic_counts(vertices=3, faces=1, edges=3, constrained=0)
 
     def test_insert_triangle(self):
         points = [(1, 1), (1, 2), (3, 4)]
         self.mesher.insert_polyline(imap(mesh.to_cgal_point, points),
                                close_it = True)
-        self.assertEqual(self.mesher.cdt.number_of_vertices(), 3)
-        self.assertEqual(self.mesher.cdt.number_of_faces(), 1)
-        count = 0
-        for c in self.mesher.cdt.finite_edges():
-            self.assertTrue(self.mesher.cdt.is_constrained(c))
-            count += 1
-        self.assertEqual(count, 3)
+        self.assert_basic_counts(vertices=3, faces=1, edges=3, constrained=3)
 
     def test_insert_vee(self):
         points = [(-1, 2), (0, 0), (1, 2)]
         self.mesher.insert_polyline(imap(mesh.to_cgal_point, points),
                                close_it=False) # the default by the way
-        self.assertEqual(self.mesher.cdt.number_of_vertices(), 3)
-        self.assertEqual(self.mesher.cdt.number_of_faces(), 1)
-        count_constrained = 0
-        for c in self.mesher.cdt.finite_edges():
-            if self.mesher.cdt.is_constrained(c):
-                count_constrained += 1
-        self.assertEqual(count_constrained, 2)
+        self.assert_basic_counts(vertices=3, faces=1, edges=3, constrained=2)
 
     def test_info_simple_polyline(self):
         points = map(mesh.to_cgal_point, [(1, 1), (1, 2), (3,4)])
