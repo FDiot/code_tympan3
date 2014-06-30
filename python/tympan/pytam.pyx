@@ -6,16 +6,6 @@ import cython
 import numpy as np
 from cython.view cimport array as cyarray
 
-cdef acousticproblemmodel2problemmodel(AcousticProblemModel* apm):
-    pbmodel = ProblemModel()
-    pbmodel.thisptr = apm
-    return pbmodel
-
-cdef acousticresultmodel2resultmodel(AcousticResultModel* arm):
-    resmodel = ResultModel()
-    resmodel.thisptr = arm
-    return resmodel
-
 
 @cython.locals(comp=Computation)
 def loadsolver(foldername, comp):

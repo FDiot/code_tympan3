@@ -1,12 +1,11 @@
-"""business models for Code_TYMPAN, headers
+"""business models for Code_TYMPAN
 """
 
 import cython as cy
 
 from tympan.models cimport common as tycommon
-from tympan.pytam cimport (load_project, save_project,
-                           acousticproblemmodel2problemmodel,
-                           acousticresultmodel2resultmodel,) # XXX
+from tympan.models cimport solver as tysolver
+from tympan.pytam cimport load_project, save_project # XXX
 
 
 cdef class Element:
@@ -145,7 +144,7 @@ cdef class Computation:
             used by the solvers)
         """
         assert self.thisptr.getRealPointer() != NULL
-        return acousticproblemmodel2problemmodel(
+        return tysolver.acousticproblemmodel2problemmodel(
             self.thisptr.getRealPointer()._acousticProblem.get())
 
     @property
@@ -154,7 +153,7 @@ cdef class Computation:
         by the solvers)
         """
         assert self.thisptr.getRealPointer() != NULL
-        return acousticresultmodel2resultmodel(
+        return tysolver.acousticresultmodel2resultmodel(
             self.thisptr.getRealPointer()._acousticResult.get())
 
 

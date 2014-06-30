@@ -274,6 +274,3 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSp
 cdef extern from "Tympan/MetierSolver/CommonTools/prettyprint.hpp":
     cdef string OPoint3D_to_string "tympan_to_string<OPoint3D>"(const OPoint3D& o)
 
-cdef acousticproblemmodel2problemmodel(AcousticProblemModel* apm)
-
-cdef acousticresultmodel2resultmodel(AcousticResultModel* arm)
