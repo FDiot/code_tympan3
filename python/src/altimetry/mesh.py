@@ -47,9 +47,16 @@ class MeshedCDTWithInfo(object):
     """
     This call provide the meshing of a geometry with arbitrary informations attached
     """
+    FaceInfo = dict
+    EdgeInfo = dict
+    VertexInfo = dict
 
     def __init__(self):
         self.cdt = CDT()
+        self.faces_infos = defaultdict(self.FaceInfo)
+        self.vertices_infos = defaultdict(self.VertexInfo)
+        self.edges_infos = defaultdict(self.EdgeInfo)
+        self.constraints_infos = defaultdict(self.EdgeInfo)
 
     def insert_polyline(self, polyline, close_it=False, connected=True):
         """Insert a sequence of points as a polyline.
@@ -85,4 +92,19 @@ class MeshedCDTWithInfo(object):
         # Now actually insert the edges as constraints into the triangulation
         for constraint in constraints:
             self.cdt.insert_constraint(*constraint)
+        return vertices_handles, constraints
+
+    def insert_polyline_with_info(self, polyline,
+                                  close_it=False, connected=True,
+                                  **kwargs):
+        """Just as ``insert_polyline``, but the remaining key-word arguments
+        are used to build self.VertexInfo and self.EdgeInfo to build the
+        additional information associated with new vertices and constraints.
+        """
+        vertices_handles, constraints = self.insert_polyline(
+            polyline, close_it=False, connected=True)
+        for vertex in vertices_handles:
+            self.vertices_infos[vertex] = self.VertexInfo(**kwargs)
+        for constraint in constraints:
+            self.constraints_infos[constraint] = self.EdgeInfo(**kwargs)
         return vertices_handles, constraints
