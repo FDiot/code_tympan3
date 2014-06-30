@@ -354,6 +354,17 @@ class MeshedCDTTC(unittest.TestCase):
                 count_constrained += 1
         self.assertEqual(count_constrained, 2)
 
+    def test_info_simple_polyline(self):
+        points = map(mesh.to_cgal_point, [(1, 1), (1, 2), (3,4)])
+        vertices, input_constraints = self.mesher.insert_polyline_with_info(
+            points, altitude=10)
+
+        for constraint in input_constraints:
+            self.assertEqual(self.mesher.constraints_infos[constraint],
+                             {"altitude": 10})
+        for vertex in vertices:
+            self.assertEqual(self.mesher.vertices_infos[vertex],
+                             {"altitude": 10})
 
 
 if __name__ == '__main__':
