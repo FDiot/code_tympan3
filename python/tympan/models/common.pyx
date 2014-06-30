@@ -14,6 +14,15 @@ cdef ospectre2spectrum(OSpectre os):
     spectrum.thisobj = os
     return spectrum
 
+cdef opoint3d2point3d(OPoint3D pt):
+    """factory function: return a Point3D (python object) from an Point3D (cpp
+    lib)
+    """
+    point = Point3D()
+    point.thisobj = pt
+    return point
+
+
 
 cdef class Spectrum:
     thisobj = cy.declare(OSpectre)

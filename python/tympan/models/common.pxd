@@ -59,6 +59,7 @@ cdef extern from "Tympan/models/common/spectrum.h":
 
 
 cdef ospectre2spectrum(OSpectre os)
+cdef opoint3d2point3d(OPoint3D pt)
 
 
 
