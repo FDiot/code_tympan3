@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,12 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#ifndef __O_SPECTRE__
-#define __O_SPECTRE__
+#ifndef TY_SPECTRUM
+#define TY_SPECTRUM
 
 #include <vector>
 #include <map>
@@ -52,16 +48,9 @@ class OSpectre
 {
     // Methodes
 public:
-    /**
-     * Constructeur par defaut.
-     */
     OSpectre();
-
-    /**
-     * Constructeur par defaut avec une valeur par defaut
-     */
     OSpectre(double defaultValue);
-
+    OSpectre(const OSpectre& other);
     /**
      * Constructeur a partir d'un tableau de valeurs (besoin pour harmonoise)
      * valeur ==> Tableau des valeurs par frequence
@@ -70,37 +59,19 @@ public:
      */
     OSpectre(const double* valeurs, unsigned nbVal, unsigned decalage);
 
-    /**
-     * Constructeur par copie.
-     */
-    OSpectre(const OSpectre& other);
-
-    /**
-     * Destructeur.
-     */
     virtual ~OSpectre();
 
-    /// Operateur d'affectation
     virtual OSpectre& operator= (const OSpectre& other);
-
-    /// Operateur d'egalite
     virtual bool operator== (const OSpectre& other) const;
-
-    /// Operateur d'inegalite
     virtual bool operator != (const OSpectre& other) const;
-
-    /// operateur de multiplication par un Spectre
+    /// multiplication par un Spectre
     OSpectre operator * (const OSpectre& spectre) const;
-
-    /// operateur de multiplication par un coeff de type double
+    /// multiplication par un coeff de type double
     OSpectre operator * (const double& coefficient) const;
-
-    /// Operateur d'addition pour ajouter une valeur constante a l'ensemble du spectre
+    /// ajouter une valeur constante a l'ensemble du spectre
     virtual OSpectre operator + (const double& valeur) const;
-
     /// Sommation arithmetique de deux spectres en 1/3 d'octave.
     virtual OSpectre operator + (const OSpectre& spectre) const;
-
     /// Soustraction arithmetique de deux spectres en 1/3 d'octave.
     virtual OSpectre operator - (const OSpectre& spectre) const;
 
@@ -361,4 +332,4 @@ protected:
 typedef std::vector<OSpectre> OTabSpectre;
 typedef std::vector<std::vector<OSpectre> > OTab2DSpectre;
 
-#endif // __O_SPECTRE__
+#endif // TY_SPECTRUM

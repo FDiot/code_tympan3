@@ -106,7 +106,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h":
         map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
 
-cdef extern from "Tympan/MetierSolver/CommonTools/OSpectre.h":
+cdef extern from "Tympan/models/common/spectre.h":
     const unsigned int TY_SPECTRE_DEFAULT_NB_ELMT
     cdef enum TYSpectreType:
         SPECTRE_TYPE_ATT

@@ -30,7 +30,7 @@
 
 #include "Tympan/common_precompiled.h"
 
-#include "Tympan/MetierSolver/CommonTools/OSpectre.h"
+#include "Tympan/models/common/spectre.h"
 #include "Tympan/MetierSolver/CommonTools/OSpectreComplex.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticBox.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticCircle.h"
