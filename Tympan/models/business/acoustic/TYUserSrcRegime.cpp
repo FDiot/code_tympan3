@@ -44,7 +44,7 @@ TYUserSrcRegime& TYUserSrcRegime::operator=(const TYUserSrcRegime& other)
         TYRegime::operator =(other);
         if (other._pDirectivite != NULL)
         {
-            _pDirectivite = new TYDirectivite(*other._pDirectivite);
+            _pDirectivite = new TYDirectivity(*other._pDirectivite);
         }
         else
         {
@@ -77,7 +77,7 @@ bool TYUserSrcRegime::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 
     if (((TYUserSrcRegime*) pOther)->_pDirectivite != NULL)
     {
-        _pDirectivite = new TYDirectivite();
+        _pDirectivite = new TYDirectivity();
         _pDirectivite->deepCopy(((TYUserSrcRegime*) pOther)->_pAtt, copyId);
     }
     else
@@ -111,7 +111,7 @@ int TYUserSrcRegime::fromXML(DOM_Element domElement)
 
     QDomNodeList childs = domElement.childNodes();
 
-    LPTYDirectivite pDir = new TYDirectivite();
+    LPTYDirectivity pDir = new TYDirectivity();
 
     for (unsigned int i = 0; i < childs.length(); i++)
     {

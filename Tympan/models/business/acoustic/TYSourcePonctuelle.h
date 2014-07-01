@@ -20,17 +20,14 @@
 #ifndef __TY_SOURCEPONCTUELLE__
 #define __TY_SOURCEPONCTUELLE__
 
-#include "TYSpectre.h"
 #include "Tympan/models/business/geometry/TYPoint.h"
 #include "Tympan/models/business/geometry/TYSegment.h"
+#include "Tympan/models/business/geometry/TYGeometryNode.h"
+#include "TYSpectre.h"
 #include "TYSource.h"
 #include "TYAttenuateur.h"
-#include "TYDirectivite.h"
-#include "Tympan/models/business/geometry/TYGeometryNode.h"
+#include "TYDirectivity.h"
 
-
-///Tableau associatif Regime/Directivite.
-typedef std::map<int, TYDirectivite> TYMapRegimeDirectivite;
 
 /**
  * Definition des types de rayonnement.

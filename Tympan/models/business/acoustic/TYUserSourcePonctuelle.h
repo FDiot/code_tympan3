@@ -71,7 +71,7 @@ public:
     /**
      * Set/Get de la directivite.
      */
-    void setDirectivite(const TYDirectivite& dir, int regime = -1) { _pDirectivite = new TYDirectivite(dir); }
+    void setDirectivite(const TYDirectivity& dir, int regime = -1) { _pDirectivite = new TYDirectivity(dir); }
 
     /**
      * Set/Get de l'attenuateur.
@@ -195,7 +195,7 @@ protected:
     bool _isRayonnant;
 
     /// Directivite associee a la source
-    LPTYDirectivite _pDirectivite;
+    LPTYDirectivity _pDirectivite;
 
     ///Attenuateur lie a cette source.
     LPTYAttenuateur _pAttenuateur;

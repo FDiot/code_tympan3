@@ -66,9 +66,9 @@ typedef class OGenID TYUUID;
 ///Smart pointer sur TYElement.
 typedef SmartPtr<TYElement> LPTYElement;
 
-class TYDirectivite;
+class TYDirectivity;
 ///Smart pointer sur TYDirectivite.
-typedef SmartPtr<TYDirectivite> LPTYDirectivite;
+typedef SmartPtr<TYDirectivity> LPTYDirectivity;
 
 class TYTrafic;
 ///Smart pointer sur TYTrafic.

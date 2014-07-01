@@ -24,7 +24,7 @@
 
 
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/acoustic/TYDirectivite.h"
+#include "Tympan/models/business/acoustic/TYDirectivity.h"
 
 #include <qmenu.h>
 #include <qtablewidget.h>
@@ -39,7 +39,7 @@
 #define TR(id) OLocalizator::getString("TYDirectiviteWidget", (id))
 
 
-TYDirectiviteWidget::TYDirectiviteWidget(TYDirectivite* pElement, QWidget* _pParent /*=NULL*/):
+TYDirectiviteWidget::TYDirectiviteWidget(TYDirectivity* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
     resize(300, 240);
