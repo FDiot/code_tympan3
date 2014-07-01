@@ -81,7 +81,6 @@ class MeshedCDTWithInfo(object):
         self.cdt = CDT()
         self.faces_infos = defaultdict(self.FaceInfo)
         self.vertices_infos = {}
-        self._edges_infos = defaultdict(list)
         self._constraints_infos = {}
 
     def input_constraint_infos(self, (va, vb)):
@@ -189,3 +188,21 @@ class MeshedCDTWithInfo(object):
     def iter_constraints_info_overlapping(self, edge):
         for constraint in self.iter_input_constraint_overlapping(edge):
             yield self._constraints_infos[constraint]
+
+
+    def fetch_constraint_infos_for_edges(self, edges=None):
+        """For all given edges (or all edges if none is given), return a dict
+        mapping each edge to the list of input constraints information
+        for this edge.
+        """
+        edges_infos = {}
+        if not edges:
+            edges_it = self.cdt.finite_edges() # Iter over half-edges !!!
+        else:
+            edges_it = iter(edges)
+        for edge in edges_it:
+            v_pair = self.ensure_vertices_pair(edge)
+            infos = edges_infos.setdefault(v_pair, [])
+            for info in self.iter_constraints_info_overlapping(edge):
+                infos.append(info)
+        return edges_infos

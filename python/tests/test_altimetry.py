@@ -407,6 +407,37 @@ class MeshedCDTTC(unittest.TestCase):
         self.assertItemsEqual((vA, vB), self.mesher.ensure_vertices_pair(edge))
         self.assertEqual(edge, self.mesher.ensure_half_edge(cAB))
 
+    def _find_vertex_at(self, p):
+        # Point comparison is NOT ROBUST : do no use in production
+        p = mesh.to_cgal_point(p)
+        for v in self.mesher.cdt.finite_vertices():
+            if v.point() == mesh.Point(0, 0): # Not robust in real cases
+                return v
+        else:
+            return None
+
+    def build_two_crossing_segments(self):
+        h_segment = map(mesh.to_cgal_point, [(-1, 0), (1, 0)])
+        v_segment = map(mesh.to_cgal_point, [(0, -1), (0, 1)])
+        (vA, vB), (cAB,) = self.mesher.insert_polyline(
+            h_segment, origin="H", altitude=10)
+        (vC, vD), (cCD,) =self.mesher.insert_polyline(
+            v_segment, origin="V", color='blue')
+        # Geometrical precondition checks
+        self.assert_basic_counts(vertices=5, faces=4, edges=8, constrained=4)
+        # Informations check
+        vO = self._find_vertex_at((0, 0))
+        self.assertFalse(vO is None)
+        return (vA, vB, vC, vD, cAB, cCD, vO)
+
+    def test_info_on_edges_crossing_polylines(self):
+        (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments()
+
+        edges_infos = self.mesher.fetch_constraint_infos_for_edges()
+        self.assertEqual(len(edges_infos), 8)
+        self.assertEqual(edges_infos[mesh.sorted_vertex_pair(vA, vO)],
+                         [{'altitude': 10, 'origin':'H'}])
+
 
 
 if __name__ == '__main__':
