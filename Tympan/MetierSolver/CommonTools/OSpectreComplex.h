@@ -24,7 +24,7 @@
 #define __O_SPECTRE_COMPLEX__
 
 //#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
-#include "OSpectre.h"
+#include "Tympan/models/common/spectre.h"
 #include "GlobalMacros.h"
 
 /**
