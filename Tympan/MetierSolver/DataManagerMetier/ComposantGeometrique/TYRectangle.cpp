@@ -30,7 +30,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 #include "Tympan/Tools/OMessageManager.h"
-#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include "Tympan/models/common/triangle.h"
 #include "Tympan/core/defines.h"
 
 TY_EXTENSION_INST(TYRectangle);

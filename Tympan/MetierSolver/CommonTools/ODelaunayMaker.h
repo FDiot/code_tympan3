@@ -25,7 +25,7 @@
 #include <qlist.h>
 
 #include "Tympan/models/common/3d.h"
-#include "OTriangle.h"
+#include "Tympan/models/common/triangle.h"
 
 /**
  * \file ODelaunayMaker.h

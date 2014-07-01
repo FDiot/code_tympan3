@@ -13,7 +13,7 @@
 #include <memory>
 
 #include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
-#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include "Tympan/models/common/triangle.h"
 #include "Tympan/models/common/3d.h"
 
 // Forward declarations

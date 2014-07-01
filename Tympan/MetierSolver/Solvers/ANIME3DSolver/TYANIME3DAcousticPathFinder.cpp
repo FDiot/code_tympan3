@@ -19,7 +19,7 @@ using std::vector;
 
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
-#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include "Tympan/models/common/triangle.h"
 //#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"

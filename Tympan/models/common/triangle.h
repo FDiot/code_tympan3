@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,14 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- */
-
-#ifndef _O_TRIANGLE__
-#define _O_TRIANGLE__
+#ifndef TY_TRIANGLE
+#define TY_TRIANGLE
 
 #include <deque>
 #include <string>
@@ -28,26 +22,15 @@
 #include "Tympan/models/common/3d.h"
 
 /**
- * \file OTriangle.h
+ * \file triangle.h
  * \class OTriangle
  * \brief Classe de definition d'un triangle
  */
 class OTriangle
 {
 public:
-    /**
-    *   Constructor a partir de 3 entiers
-    */
     OTriangle(int p1, int p2, int p3);
-
-    /**
-    *   Constructor a partir de 3 points sommets
-    */
     OTriangle(OPoint3D A, OPoint3D B, OPoint3D C);
-
-    /**
-    *   Destructor.
-    */
     ~OTriangle();
 
     /**
@@ -89,4 +72,5 @@ private:
     //! A static table of coordinate.
     static int OTriangle::* indices_m_ptr[3];
 };
-#endif //_O_TRIANGLE__
+
+#endif //TY_TRIANGLE

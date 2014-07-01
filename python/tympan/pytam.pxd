@@ -233,7 +233,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointControl.h"
     cdef cppclass TYPointControl (TYPointCalcul):
         pass
 
-cdef extern from "Tympan/MetierSolver/CommonTools/OTriangle.h":
+cdef extern from "Tympan/models/common/triangle.h":
     cdef cppclass OTriangle:
         OPoint3D _A
         OPoint3D _B
