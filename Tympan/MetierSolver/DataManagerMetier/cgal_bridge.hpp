@@ -17,7 +17,7 @@
 #include "Tympan/models/common/3d.h"
 
 // Forward declarations
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 class TYPolygon;
 class TYTopographie;
 class TYSol;

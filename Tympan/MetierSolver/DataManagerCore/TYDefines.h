@@ -29,7 +29,7 @@
 #endif // _MSC_VER > 1000
 
 
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 // Pour l'utilisation de la librairie standard STL.
 #include <map>

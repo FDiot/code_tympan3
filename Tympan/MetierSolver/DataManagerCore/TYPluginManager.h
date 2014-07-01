@@ -29,7 +29,7 @@
 #include <qstringlist.h>
 
 #include "Tympan/core/defines.h"
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 #include "TYPlugin.h"
 
 #if TY_COMPILER == TY_COMPILER_MSVC

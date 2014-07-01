@@ -20,7 +20,7 @@
 #ifndef __O_MESSAGE_MANAGER__
 #define __O_MESSAGE_MANAGER__
 
-#include "OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 #include <iostream>
 #include <time.h>

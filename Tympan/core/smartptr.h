@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef __SMART_PTR_H__
-#define __SMART_PTR_H__
+#ifndef TY_SMARTPTR
+#define TY_SMARTPTR
 
 #if _MSC_VER > 1000
 #pragma once
@@ -36,7 +36,7 @@
 /**
  * This warning is generated when compiling in debug mode.
  * Debug symbols cannot be longer than 255 but when using templates
- * it is usual to have debug symbols longer tahn 255.
+ * it is usual to have debug symbols longer than 255.
  * You may ignore this warning.
  */
 #ifdef _MSC_VER
@@ -51,13 +51,7 @@
 class IRefCount
 {
 public:
-    /**
-     * Default constructor.
-     */
     IRefCount() : m_refCount(0) { };
-    /**
-     * Destructor.
-     */
     virtual ~IRefCount() {}
 
     /**
@@ -107,14 +101,7 @@ protected:
 template <class T> class SmartPtr
 {
 public:
-    /**
-     * Default constructor.
-     */
     SmartPtr() { _pObj = 0; }
-
-    /**
-     * Constructor.
-     */
     SmartPtr(T* pObj)
     {
         _pObj = pObj;
@@ -123,7 +110,6 @@ public:
             _pObj->incRef();
         }
     }
-
     /**
      * Copy constructor from an inherited type of T.
      */
@@ -135,7 +121,6 @@ public:
             _pObj->incRef();
         }
     }
-
     /**
      * Copy constructor.
      */
@@ -148,9 +133,6 @@ public:
         }
     }
 
-    /**
-     * Destructor.
-     */
     ~SmartPtr()
     {
         if (_pObj != 0)
@@ -166,10 +148,6 @@ public:
      * Cast operator.
      */
     operator T* () const { return _pObj; }
-
-    /**
-     * Cast operator.
-     */
     T& operator* () { return *_pObj; }
 
     /**
@@ -307,5 +285,5 @@ public:
     T* _pObj;
 };
 
-#endif // __SMART_PTR_H__
+#endif // TY_SMARTPTR
 

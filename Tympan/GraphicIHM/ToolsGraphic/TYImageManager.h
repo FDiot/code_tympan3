@@ -33,7 +33,7 @@
 #pragma warning(disable: 4786)
 #endif // WIN32
 
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 #include <map>
 #include <string>
