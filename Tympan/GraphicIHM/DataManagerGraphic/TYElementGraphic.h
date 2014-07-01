@@ -44,7 +44,7 @@
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/Tools/OColor.h"
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 class TYElement;
 

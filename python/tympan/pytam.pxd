@@ -4,7 +4,7 @@ from libcpp.vector cimport vector
 from libcpp.deque cimport deque
 from libcpp.map cimport map
 
-cdef extern from "Tympan/Tools/OSmartPtr.h":
+cdef extern from "Tympan/core/smartptr.h":
     cdef cppclass SmartPtr[T]:
         SmartPtr()
         SmartPtr(T *)

@@ -23,7 +23,7 @@
 #ifndef __O_GLCAMERA__
 #define __O_GLCAMERA__
 
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 #if _WIN32
 #include <windows.h>
