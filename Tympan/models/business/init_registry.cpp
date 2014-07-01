@@ -42,7 +42,7 @@
 #include "Tympan/models/business/topography/TYTerrain.h"
 #include "Tympan/models/business/topography/TYCourbeNiveau.h"
 #include "Tympan/models/business/acoustic/TYSource.h"
-#include "Tympan/models/business/acoustic/TYDirectivite.h"
+#include "Tympan/models/business/acoustic/TYDirectivity.h"
 #include "Tympan/models/business/acoustic/TYSpectre.h"
 #include "Tympan/models/business/acoustic/TYSourceLineic.h"
 #include "Tympan/models/business/acoustic/TYSourceCheminee.h"
@@ -124,7 +124,7 @@ void init_registry()
     OPrototype::add_factory("TYCourbeNiveau", std::move(build_factory<TYCourbeNiveau>()));
     // models/business/acoustique
     OPrototype::add_factory("TYSource", std::move(build_factory<TYSource>()));
-    OPrototype::add_factory("TYDirectivite", std::move(build_factory<TYDirectivite>()));
+    OPrototype::add_factory("TYDirectivity", std::move(build_factory<TYDirectivity>()));
     OPrototype::add_factory("TYSpectre", std::move(build_factory<TYSpectre>()));
     OPrototype::add_factory("TYSourceLineic", std::move(build_factory<TYSourceLineic>()));
     OPrototype::add_factory("TYSourceCheminee", std::move(build_factory<TYSourceCheminee>()));

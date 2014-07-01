@@ -21,7 +21,7 @@
 #define __TY_USER_SRC_REGIME__
 
 #include "TYRegime.h"
-#include "TYDirectivite.h"
+#include "TYDirectivity.h"
 
 /**
  * Classe pour definir les differents regimes d'une source ponctuelle.
@@ -61,7 +61,7 @@ public:
 
     // Membres
 public:
-    LPTYDirectivite _pDirectivite;
+    LPTYDirectivity _pDirectivite;
 
 protected:
 };

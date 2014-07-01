@@ -84,7 +84,7 @@ TYUserSourcePonctuelle& TYUserSourcePonctuelle::operator=(const TYUserSourcePonc
 
         if (other._pDirectivite)
         {
-            _pDirectivite = new TYDirectivite(*other._pDirectivite);
+            _pDirectivite = new TYDirectivity(*other._pDirectivite);
         }
         else
         {
@@ -201,10 +201,10 @@ int TYUserSourcePonctuelle::fromXML(DOM_Element domElement)
     bool isRayonnantOk = false;
     bool nextRegimeFound = false;
     //  int regime = 0;
-    TYDirectivite dir;
+    TYDirectivity dir;
 
     LPTYAttenuateur pAtt = new TYAttenuateur();
-    LPTYDirectivite pDir = new TYDirectivite();
+    LPTYDirectivity pDir = new TYDirectivity();
 
     DOM_Element elemCur;
 

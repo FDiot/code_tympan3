@@ -24,8 +24,8 @@
  *
  */
 
-#ifndef __TY_DIRECTIVITE_WIDGET__
-#define __TY_DIRECTIVITE_WIDGET__
+#ifndef __TY_DIRECTIVITY_WIDGET__
+#define __TY_DIRECTIVITY_WIDGET__
 
 
 #include "TYWidget.h"
@@ -33,7 +33,7 @@
 #include <QGridLayout>
 #include <QLabel>
 
-class TYDirectivite;
+class TYDirectivity;
 class QLineEdit;
 class QGridLayout;
 class QLabel;
@@ -45,22 +45,22 @@ class QTableWidget;
  * \class TYDirectiviteWidget
  * \brief classe de l'objet IHM pour la directivite
  */
-class TYDirectiviteWidget : public TYWidget
+class TYDirectivityWidget : public TYWidget
 {
     Q_OBJECT
 
-    TY_DECL_METIER_WIDGET(TYDirectivite)
+    TY_DECL_METIER_WIDGET(TYDirectivity)
 
     // Methodes
 public:
     /**
      * Constructeur.
      */
-    TYDirectiviteWidget(TYDirectivite* pElement, QWidget* _pParent = NULL);
+    TYDirectivityWidget(TYDirectivity* pElement, QWidget* _pParent = NULL);
     /**
      * Destructeur.
      */
-    virtual ~TYDirectiviteWidget();
+    virtual ~TYDirectivityWidget();
 
 
 public slots:
@@ -84,4 +84,4 @@ protected:
 };
 
 
-#endif // __TY_DIRECTIVITE_WIDGET__
+#endif // __TY_DIRECTIVITY_WIDGET__
