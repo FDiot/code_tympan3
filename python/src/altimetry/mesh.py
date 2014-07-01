@@ -16,9 +16,15 @@ from CGAL.CGAL_Mesh_2 import (
     Mesh_2_Constrained_Delaunay_triangulation_plus_2 as CDT,
     Mesh_2_Constrained_Delaunay_triangulation_plus_2_Face_handle as Face_handle,
     Ref_Mesh_2_Constrained_Delaunay_triangulation_plus_2_Face_handle as Ref_Face_handle,
+    Mesh_2_Constrained_Delaunay_triangulation_plus_2_Vertex_handle as Vertex_handle,
+    Mesh_2_Constrained_Delaunay_triangulation_plus_2_Edge as Edge,
     Delaunay_mesh_plus_size_criteria_2 as Mesh_criteria,
     refine_Delaunay_mesh_2 as CGAL_refine_Delaunay_mesh)
 
+
+# Monkey patch Edge to work around issue
+# http://code.google.com/p/cgal-bindings/issues/detail?id=48
+Edge.__iter__= lambda this: iter((this[0], this[1]))
 
 from datamodel import *
 
@@ -129,15 +135,22 @@ class MeshedCDTWithInfo(object):
             constraints = []
         return vertices_handles, constraints
 
-    def vertice_pair_from_edge(self, (face, index)):
-        """ Make a normalized pair of vertices handles from an edge
+    def vertices_pair_from_half_edge(self, face, index):
+        """ Make a normalized pair of vertices handles from an half edge
         """
         va = face.vertex(self.cdt.cw(index))
         vb = face.vertex(self.cdt.ccw(index))
         return sorted_vertex_pair(va, vb)
 
-    def edge_from_vertice_pair(self, va, vb):
-        """ Make a CGAL edge (Face_handle, index) from a pair of pair of vertices handles
+    def ensure_vertices_pair(self, edge):
+        if isinstance(edge[0], Face_handle):
+            fh, i = edge
+            return self.vertices_pair_from_half_edge(fh, i)
+        else:
+            return edge
+
+    def half_edge_from_vertices_pair(self, va, vb):
+        """ Make a CGAL half edge (Face_handle, index) from a pair of pair of vertices handles
         """
         # fh and i are output arguments a la C++
         fh = Ref_Face_handle()
@@ -148,18 +161,25 @@ class MeshedCDTWithInfo(object):
         else:
             raise ValueError("This is not an edge (%s, %s)" % (va.point(), vb.point()))
 
+    def ensure_half_edge(self, edge):
+        if isinstance(edge[0], Vertex_handle):
+            va, vb = edge
+            return self.half_edge_from_vertices_pair(va, vb)
+        else:
+            return edge
+
+    def mirror_half_edge(self, fh, i):
+        return self.cdt.mirror_edge((fh, i))
+
     def iter_input_constraint_overlapping(self, edge):
         """Return an iterator over the input constraint overlapping the given edge.
 
-        The edge can be given either as a pair a vertices handles or a
-        face handle and an index.
+        The edge can be given either as a pair of vertices handles or a
+        half edge (face handle and an index).
         """
-        if isinstance(edge[0], Face_handle):
-            edge_v_pair = self.vertice_pair_from_edge(edge)
-        else:
-            edge_v_pair = edge
-            edge = self.edge_from_vertice_pair(*edge_v_pair)
-        if not self.cdt.is_constrained(edge):
+        edge_v_pair = self.ensure_vertices_pair(edge)
+        half_edge = self.ensure_half_edge(edge)
+        if not self.cdt.is_constrained(half_edge):
             return
         for context in self.cdt.contexts(*edge_v_pair):
             context_boundaries = first_and_last(context.vertices())
