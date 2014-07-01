@@ -387,6 +387,25 @@ class MeshedCDTTC(unittest.TestCase):
                               [{"altitude":10, "origin":"1"},
                                {"color": "blue", "origin":"2"}])
 
+    def test_explicit_edge_conversion(self):
+        segment = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
+        (vA, vB), (cAB,) = self.mesher.insert_polyline(segment)
+        (edge, ) = self.mesher.cdt.finite_edges()
+
+        (fh, i) = self.mesher.half_edge_from_vertices_pair(vA, vB)
+        self.assertEqual((fh, i), edge)
+        (v1, v2) = self.mesher.vertices_pair_from_half_edge(fh, i)
+        self.assertItemsEqual((v1, v2), (vA, vB))
+
+    def test_ensured_edge_conversion(self):
+        segment = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
+        (vA, vB), (cAB,) = self.mesher.insert_polyline(segment)
+        (edge, ) = self.mesher.cdt.finite_edges()
+
+        self.assertIs(edge, self.mesher.ensure_half_edge(edge))
+        self.assertIs(cAB, self.mesher.ensure_vertices_pair(cAB))
+        self.assertItemsEqual((vA, vB), self.mesher.ensure_vertices_pair(edge))
+        self.assertEqual(edge, self.mesher.ensure_half_edge(cAB))
 
 
 
