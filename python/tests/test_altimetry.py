@@ -3,8 +3,12 @@ import os, os.path as osp
 
 from shapely import geometry
 from shapely.geometry import Point, MultiLineString
-from altimetry.datamodel import * # NB also allows to find CGAL bindings
 
+# NB Importing altimetry configures path to find CGAL bindings
+from altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
+                                 WaterBody, SiteNode, PolygonalTympanFeature,
+                                 InvalidGeometry, MATERIAL_WATER)
+from altimetry.merge import SiteNodeGeometryCleaner,build_site_shape_with_hole
 
 class AltimetryDataTC(unittest.TestCase):
 
@@ -64,6 +68,7 @@ class AltimetryDataTC(unittest.TestCase):
         self.assertIsNone(level_curve_B._shape)
 
         shape = level_curve_B.shape
+
         self.assertTrue(shape.equals(level_curve_B.as_shape))
         self.assertIs(shape, level_curve_B._shape)
 
@@ -132,6 +137,88 @@ class TestAltimetry(TympanTC):
         except ImportError:
             self.fail('''CGAL_BINDINGS_PATH environment variable must contain
                       the path to CGAL_bindings python libraries''')
+
+class _TestFeatures(object):
+
+    big_rect_coords = [(0, 0), (12,0), (12, 10), (0, 10)]
+    grass = GroundMaterial("grass")
+
+    level_curve_A_coords = [(-1, -1), (2, 2), (4, 2)]
+    altitude_A = 10.0
+    grass_area_coords = [(1.0, 1.0), (11.0, 1.0), (1.0, 9.0), (1.0, 1.0)]
+    waterbody_coords = [(3, 3), (5, 4), (3, 5)]
+    altitude_water = 5.0
+    subsite_A_coords = [(6, 8), (11, 8), (11, 6), (6, 6)]
+    level_curve_B_coords =[(8.0, 4.0), (8.0, 7.0), (12.0, 7.0)]
+    altitude_B = 20.0
+
+    def build_features(self):
+        self.mainsite = SiteNode(self.big_rect_coords, id="{Main site ID}")
+        self.level_curve_A = LevelCurve(self.level_curve_A_coords,
+                                        altitude=self.altitude_A,
+                                        parent_site=self.mainsite, id="{Level curve A}")
+        self.grass_area = MaterialArea(self.grass_area_coords,
+                                       material=self.grass,
+                                       parent_site=self.mainsite, id="{Grass area}")
+        self.waterbody= WaterBody(self.waterbody_coords,
+                                   altitude=self.altitude_water,
+                                   parent_site=self.mainsite, id="{Water body ID}")
+        self.subsite = SiteNode(self.subsite_A_coords, id="{Subsite ID}",
+                                parent_site=self.mainsite)
+        self.level_curve_B = LevelCurve(self.level_curve_B_coords,
+                                        altitude=self.altitude_B,
+                                        parent_site=self.subsite, id="{Level curve B}")
+
+class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
+
+    def setUp(self):
+        _TestFeatures.build_features(self)
+
+    def test_holes_in_site_shape(self):
+        shape = build_site_shape_with_hole(self.mainsite)
+
+        self.assertEqual(len(shape.interiors), 1)
+        self.assertFalse(shape.contains(Point(9, 7)))
+        self.assertTrue(shape.contains(Point(1, 1)))
+
+    def test_add_and_clean_level_curves(self):
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+        cleaned_level_A = MultiLineString([[(0, 0), (2, 2), (4, 2)]])
+
+        cleaner.process_level_curves()
+
+        self.assertTrue(cleaner.geom['{Level curve A}'].equals(cleaned_level_A))
+        # Not directly in sitenode
+        with self.assertRaises(KeyError):
+            cleaner['{Level curve B}']
+        # Already clean
+        self.assertTrue(cleaner.geom['{Water body ID}'].equals(self.waterbody.shape))
+
+    def test_add_and_clean_material_area(self):
+        overlap_area = MaterialArea([(5, 5), (5, 7), (7, 7), (7, 5)],
+                                    material=self.grass,
+                                    parent_site=self.mainsite, id="{Overlap area}")
+        in_hole_scope_area = MaterialArea([(6, 6), (6, 7), (7, 7), (7, 6)],
+                                    material=self.grass,
+                                    parent_site=self.mainsite, id="{In hole area}")
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+
+        cleaner.process_material_areas()
+
+        self.assertIn("{Overlap area}", cleaner.erroneous_overlap)
+        self.assertIn("{In hole area}", cleaner.ignored_features)
+        self.assertTrue(cleaner.geom["{Grass area}"].equals(self.grass_area.shape))
+
+    def test_water_body_info(self):
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+
+        cleaner.process_level_curves()
+        cleaner.process_material_areas()
+
+        water_shape, water_info = cleaner['{Water body ID}']
+        self.assertEqual(water_info["altitude"], self.altitude_water)
+
+
 
 if __name__ == '__main__':
     from utils import main
