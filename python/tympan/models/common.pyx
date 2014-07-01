@@ -22,10 +22,19 @@ cdef opoint3d2point3d(OPoint3D pt):
     point.thisobj = pt
     return point
 
+cdef otriangle2triangle(OTriangle* tri):
+    """factory function: return a Triangle (python object) from an OTriangle
+    (cpp lib)
+    """
+    assert tri != NULL
+    triangle = cy.declare(Triangle)
+    triangle = Triangle()
+    triangle.thisptr = tri
+    return triangle
+
 
 
 cdef class Spectrum:
-    thisobj = cy.declare(OSpectre)
 
     @property
     def nvalues(self):
@@ -47,8 +56,25 @@ cdef class Spectrum:
         return ospectre2spectrum(self.thisobj.toDB())
 
 
+cdef class Triangle:
+
+    def __cinit__(self):
+        self.thisptr = NULL
+
+    @property
+    def p1(self):
+        return self.thisptr._p1
+
+    @property
+    def p2(self):
+        return self.thisptr._p2
+
+    @property
+    def p2(self):
+        return self.thisptr._p2
+
+
 cdef class Point3D:
-    thisobj = cy.declare(OPoint3D)
 
     @property
     def x(self):

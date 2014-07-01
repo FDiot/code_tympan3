@@ -5,6 +5,10 @@ from libcpp.string cimport string
 from tympan.models.common cimport OPoint3D, OSpectre
 from tympan.core cimport shared_ptr
 
+
+cdef class ProblemModel:
+    cdef AcousticProblemModel* thisptr
+
 cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp" namespace "tympan":
     cdef cppclass AcousticProblemModel:
         size_t npoints()

@@ -26,10 +26,6 @@ cdef acousticresultmodel2resultmodel(AcousticResultModel* arm):
 
 
 cdef class ProblemModel:
-    thisptr = cy.declare(cy.pointer(AcousticProblemModel))
-
-    def __cinit__(self):
-        self.thisptr = NULL
 
     @property
     def npoints(self):

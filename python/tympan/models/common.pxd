@@ -9,6 +9,8 @@ cdef extern from "Tympan/models/common/3d.h":
 
     cdef cppclass OMatrix:
         pass
+    OPoint3D dot "operator*"(const OMatrix& mat, const OPoint3D& point)
+    # because "import operator*" triggers a syntax error
 
     cdef cppclass OCoord3D:
         double _x
@@ -27,6 +29,7 @@ cdef extern from "Tympan/models/common/3d.h":
 cdef extern from "Tympan/models/common/triangle.h":
 
     cdef cppclass OTriangle:
+        OTriangle(int p1, int p2, int p3)
         OPoint3D _A
         OPoint3D _B
         OPoint3D _C
@@ -58,8 +61,20 @@ cdef extern from "Tympan/models/common/spectrum.h":
         unsigned int getNbValues() const
 
 
+cdef class Spectrum:
+    cdef OSpectre thisobj
+
+cdef class Point3D:
+    cdef OPoint3D thisobj
+
+cdef class Triangle:
+    # because OTriangle has no default constructor so we can't have an OTriangle
+    # allocated object as data member
+    cdef OTriangle* thisptr
+
+
 cdef ospectre2spectrum(OSpectre os)
 cdef opoint3d2point3d(OPoint3D pt)
-
+cdef otriangle2triangle(OTriangle* tri)
 
 
