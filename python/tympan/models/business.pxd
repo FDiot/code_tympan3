@@ -155,3 +155,13 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSp
         pass
 
 
+cdef class Computation:
+    cdef SmartPtr[TYCalcul] thisptr
+
+cdef class Site:
+    cdef SmartPtr[TYSiteNode] thisptr
+
+cdef pointcalcul2receptor(SmartPtr[TYPointCalcul] ptcalc)
+cdef typrojet2project(TYProjet* proj)
+cdef tymateriauconstruction2material(SmartPtr[TYMateriauConstruction] mat)
+
