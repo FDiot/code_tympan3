@@ -21,7 +21,7 @@
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include "Tympan/models/common/triangle.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 
 class Lancer;

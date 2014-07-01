@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,20 +13,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#include "OTriangle.h"
 #include <cmath>
 #include <limits>
 #include <cassert>
 #include <sstream>
 
-// Threshold use by consistency checks
-#define CONSISTENCY_EPSILON (1e-5)
+#include "triangle.h"
 
-#include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
 
 OPoint3D OTriangle::* OTriangle::vertices_m_ptr[3] = {&OTriangle::_A, &OTriangle::_B, &OTriangle::_C};
 int OTriangle::* OTriangle::indices_m_ptr[3] = {&OTriangle::_p1, &OTriangle::_p2, &OTriangle::_p3};
@@ -98,14 +91,12 @@ double OTriangle::getSurface()
     B = OPoint3D(xB, yB, zB);
     C = OPoint3D(xC, yC, zC);
     */
-
     // calcul des cotes :
     double c1 = _A.distFrom(_B);
     double c2 = _B.distFrom(_C);
     double c3 = _C.distFrom(_A);
-
-    double s = (c1 + c2 + c3) * 0.5; // demie somme des cotes du triangle
-
+    // demie somme des cotes du triangle
+    double s = (c1 + c2 + c3) * 0.5;
     // air d'un triangle de cotes a, b , c (formule de Heron)
     return sqrt(s * (s - c1) * (s - c2) * (s - c3));
 }
@@ -116,31 +107,26 @@ OPoint3D OTriangle::getCentre()
     G._x = (_A._x + _B._x + _C._x) / 3;
     G._y = (_A._y + _B._y + _C._y) / 3;
     G._z = (_A._z + _B._z + _C._z) / 3;
-
     return G;
 }
 
 
 bool OTriangle::checkConsistencyWrtPointsTab(const std::deque<OPoint3D>& points) const
 {
-    return (points[_p1].distFrom(_A) < CONSISTENCY_EPSILON &&
-            points[_p2].distFrom(_B) < CONSISTENCY_EPSILON &&
-            points[_p3].distFrom(_C) < CONSISTENCY_EPSILON );
+    return (points[_p1].distFrom(_A) < EPSILON_5 &&
+            points[_p2].distFrom(_B) < EPSILON_5 &&
+            points[_p3].distFrom(_C) < EPSILON_5 );
 }
 
 std::string OTriangle::reportInconsistencyWrtPointsTab(const std::deque<OPoint3D>& points)
 {
     using std::stringstream;
     using std::endl;
-
     if (checkConsistencyWrtPointsTab(points))
         return std::string();
-
     stringstream ss;
-
     ss << "A " << _A << " ?= P(p1) " << points[_p1] << endl;
     ss << "B " << _B << " ?= P(p2) " << points[_p2] << endl;
     ss << "C " << _C << " ?= P(p3) " << points[_p3] << endl;
-
     return ss.str();
 }

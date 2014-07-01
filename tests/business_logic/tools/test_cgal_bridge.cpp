@@ -19,7 +19,7 @@ using std::deque;
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/CommonTools/OPlan.h"
-#include "Tympan/MetierSolver/CommonTools/OTriangle.h"
+#include "Tympan/models/common/triangle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 
 #include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
