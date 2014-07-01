@@ -32,7 +32,7 @@
 ///Pas d'intersection.
 #define INTERS_NULLE    0
 
-#define EPSILON_5  0.00001         // 10e-6
+#define EPSILON_5  0.00001          // 10e-5
 #define EPSILON_6  0.000001         // 10e-6
 #define EPSILON_7  0.0000001        // 10e-7
 #define EPSILON_13 0.0000000000001  // 10e-13
