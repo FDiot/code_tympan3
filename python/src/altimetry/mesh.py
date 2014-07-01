@@ -191,12 +191,13 @@ class MeshedCDTWithInfo(object):
 
 
     def fetch_constraint_infos_for_edges(self, edges=None):
-        """For all given edges (or all edges if none is given), return a dict
-        mapping each edge to the list of input constraints information
-        for this edge.
+        """Return a dict mapping each given edges (or all edges if none is
+         given), to the list of input constraints information
+         overlapping this edge.
+
         """
         edges_infos = {}
-        if not edges:
+        if edges is None:
             edges_it = self.cdt.finite_edges() # Iter over half-edges !!!
         else:
             edges_it = iter(edges)
@@ -206,3 +207,34 @@ class MeshedCDTWithInfo(object):
             for info in self.iter_constraints_info_overlapping(edge):
                 infos.append(info)
         return edges_infos
+
+    def iter_input_constraint_around(self, vertex):
+        incident_constrained_edges = [] # Output argument a la C++
+        self.cdt.incident_constraints(vertex, incident_constrained_edges)
+        for edge in incident_constrained_edges:
+            for input_contraint in self.iter_input_constraint_overlapping(edge):
+                 yield input_contraint
+
+    def fetch_constraint_infos_for_vertices(self, vertices=None):
+        """Return a dict mapping each given vertices (or all vertices if none
+        is given) to the list of input constraint information incident
+        to the vertex.
+
+        NB 1: if the same input constraint overlap two incident edges
+        the associated information will be present only once.
+
+        NB 2: This only fetch information associated with input
+        constraints, not with the the vertices themselves.
+        """
+        vertices_info = {}
+        if vertices is None:
+            vertices_it = self.cdt.finite_vertices()
+        else:
+            vertices_it = iter(vertices)
+        for vertex in vertices_it:
+            infos = vertices_info.setdefault(vertex, [])
+            for input_constraint in self.iter_input_constraint_around(vertex):
+                info = self.input_constraint_infos(input_constraint)
+                if info not in infos:
+                    infos.append(info)
+        return vertices_info

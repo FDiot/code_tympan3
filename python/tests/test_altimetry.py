@@ -438,6 +438,19 @@ class MeshedCDTTC(unittest.TestCase):
         self.assertEqual(edges_infos[mesh.sorted_vertex_pair(vA, vO)],
                          [{'altitude': 10, 'origin':'H'}])
 
+    def test_input_constraints_around_polylines_crossing(self):
+        (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments()
+
+        input_constraints = set(self.mesher.iter_input_constraint_around(vO))
+        self.assertEqual(input_constraints, set((cAB, cCD)))
+
+    def test_constraints_info_on_intersection_of_polylines(self):
+        (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments()
+
+        vertex_infos = self.mesher.fetch_constraint_infos_for_vertices([vO])
+        self.assertItemsEqual(vertex_infos[vO],
+                              [{'origin': 'H', 'altitude': 10},
+                               {'origin': 'V', 'color': 'blue'}])
 
 
 if __name__ == '__main__':
