@@ -144,7 +144,7 @@ typedef void*   LPTYElementGraphic;
 /**
  * Structure contenant un identifiant unique pour chaque TYElement.
  */
-#include"Tympan/Tools/OGenID.h"
+#include"Tympan/core/idgen.h"
 typedef class OGenID TYUUID;
 
 /**

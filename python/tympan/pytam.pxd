@@ -22,7 +22,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp" na
     SmartPtr[TYProjet] load_project(const char *filename) except +
     void save_project(const char *filename, const SmartPtr[TYProjet] &) except +
 
-cdef extern from "Tympan/Tools/OGenID.h":
+cdef extern from "Tympan/core/idgen.h":
     cdef cppclass OGenID:
         OGenID(const OGenID& other)
         OGenID()

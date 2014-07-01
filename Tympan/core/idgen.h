@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,26 +13,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
-#ifndef __O_GEN_ID__
-#define __O_GEN_ID__
+#ifndef TY_IDGEN
+#define TY_IDGEN
 
 #include <string>
-
 #include <quuid.h>
 
-// #include "Tympan/MetierSolver/DataManagerMetier/SolverDataModelBuilder.hpp"
 
 namespace tympan
 {
 class UuidAdapter;
 } // namespace tympan
+
 
 class OGenID
 {
@@ -131,7 +123,9 @@ inline size_t qHash(const QUuid& uuid)
 
 
 inline size_t qHash(const OGenID& uid)
-{ return qHash(uid.quid); }
+{
+    return qHash(uid.quid);
+}
 
-#endif // __O_GEN_ID__
+#endif // TY_IDGEN
 
