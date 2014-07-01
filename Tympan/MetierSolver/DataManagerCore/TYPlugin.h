@@ -39,7 +39,7 @@
 
 #include <string>
 
-#include "Tympan/Tools/OGenID.h"
+#include "Tympan/core/idgen.h"
 #include "TYSolverInterface.h"
 
 typedef struct

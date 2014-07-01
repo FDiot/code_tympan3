@@ -24,7 +24,7 @@
 #include "TYPHCore.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/Tools/OGenID.h"
+#include "Tympan/core/idgen.h"
 #include "Tympan/Tools/OChrono.h"
 
 #if defined(WIN32)
