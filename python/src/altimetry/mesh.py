@@ -37,7 +37,7 @@ def to_cgal_point(pt):
     else:
         raise TypeError("Don't know how to make a CGAL Point_2 from", pt)
 
-def _sorted_vertex_pair(v1, v2):
+def sorted_vertex_pair(v1, v2):
     if v1.__hash__() < v2.__hash__():
         return (v1, v2)
     else:
@@ -87,10 +87,10 @@ class MeshedCDTWithInfo(object):
         performed.
 
         """
-        return self._constraints_infos[_sorted_vertex_pair(va, vb)]
+        return self._constraints_infos[sorted_vertex_pair(va, vb)]
 
     def insert_constraint(self, va, vb, **kwargs):
-        constraint = _sorted_vertex_pair(va, vb)
+        constraint = sorted_vertex_pair(va, vb)
         self.cdt.insert_constraint(va, vb)
         self._constraints_infos[constraint] = self.EdgeInfo(**kwargs)
         return constraint
@@ -134,7 +134,7 @@ class MeshedCDTWithInfo(object):
         """
         va = face.vertex(self.cdt.cw(index))
         vb = face.vertex(self.cdt.ccw(index))
-        return _sorted_vertex_pair(va, vb)
+        return sorted_vertex_pair(va, vb)
 
     def edge_from_vertice_pair(self, va, vb):
         """ Make a CGAL edge (Face_handle, index) from a pair of pair of vertices handles
@@ -163,7 +163,7 @@ class MeshedCDTWithInfo(object):
             return
         for context in self.cdt.contexts(*edge_v_pair):
             context_boundaries = first_and_last(context.vertices())
-            constraint_v_pair = _sorted_vertex_pair(*context_boundaries)
+            constraint_v_pair = sorted_vertex_pair(*context_boundaries)
             yield constraint_v_pair
 
     def iter_constraints_info_overlapping(self, edge):
