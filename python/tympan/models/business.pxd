@@ -169,7 +169,14 @@ cdef class Computation:
 cdef class Site:
     cdef SmartPtr[TYSiteNode] thisptr
 
+cdef class Material:
+    cdef SmartPtr[TYMateriauConstruction] thisptr
+
+cdef class Ground:
+    cdef SmartPtr[TYSol] thisptr
+
 cdef pointcalcul2receptor(SmartPtr[TYPointCalcul] ptcalc)
 cdef typrojet2project(TYProjet* proj)
 cdef tymateriauconstruction2material(SmartPtr[TYMateriauConstruction] mat)
+cdef tysol2ground(SmartPtr[TYSol] grnd)
 
