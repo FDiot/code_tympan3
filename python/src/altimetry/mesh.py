@@ -77,6 +77,8 @@ class MeshedCDTWithInfo(object):
     EdgeInfo = dict
     VertexInfo = dict
 
+    default_refine_criteria = Mesh_criteria(0.125, 0.5) # First arg MUST be < 0.125
+
     def __init__(self):
         self.cdt = CDT()
         self._input_vertices_infos = {}
@@ -313,3 +315,8 @@ class MeshedCDTWithInfo(object):
         for constraint in ilinks(iter(poly), close_it=close_it):
             for faces_left_right in self.iter_faces_for_input_constraint(*constraint):
                 yield faces_left_right
+
+    def refine_mesh(self, hole_seeds=None, criteria=None):
+        criteria = criteria or self.default_refine_criteria
+        hole_seeds = hole_seeds or []
+        CGAL_refine_Delaunay_mesh(self.cdt, hole_seeds, criteria)
