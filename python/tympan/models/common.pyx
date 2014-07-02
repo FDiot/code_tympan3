@@ -70,8 +70,8 @@ cdef class Triangle:
         return self.thisptr._p2
 
     @property
-    def p2(self):
-        return self.thisptr._p2
+    def p3(self):
+        return self.thisptr._p3
 
 
 cdef class Point3D:
