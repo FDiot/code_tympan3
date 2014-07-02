@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,17 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 
 #include <cassert>
 
 #include <boost/math/special_functions/fpclassify.hpp>
 
-#include "OPlan.h"
 #include "Tympan/models/common/3d.h"
+#include "OPlan.h"
+
 
 OPlan::OPlan():
     _a(0.0),
@@ -430,4 +427,9 @@ void OPlan::update_explicit_repr(OVector3D hint /* = OVector3D(1, 1, 1) */)
     OVector3D V(N.cross(U));
     assert(fabs(V.norme() - 1.0) < 0.01) ; // Check validity of the construction
     rframe.set(origin, U, V, N);
+}
+
+::std::ostream& operator<<(::std::ostream& os, const OPlan& p)
+{
+    return os << "OPlan(" << p._a << ", " << p._b << ", " << p._c << ", " << p._d << ")";
 }

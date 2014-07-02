@@ -7,7 +7,8 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/spectre.h"
 
 using std::cout;
 using std::endl;

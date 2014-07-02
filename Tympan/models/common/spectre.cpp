@@ -16,6 +16,7 @@
 #undef min // Something defines a min macro on windows, which breaks std::min
 
 #include <algorithm>
+
 #include "spectre.h"
 
 
@@ -894,4 +895,19 @@ OSpectre OSpectre::toOct() const
     s._form = SPECTRE_FORM_OCT; // indication explicite de la forme octave
     return s;
 
+}
+
+::std::ostream& operator<<(::std::ostream& os, const OSpectre& s)
+{
+    os << "Spectrum["
+       << "type=" << s.getType()
+       << ", state=" << s.getEtat()
+       << "]" << std::endl ;
+    os << "        (";
+    for (unsigned i = 0; i < s.getNbValues(); ++i)
+    {
+        os << s.getTabValReel()[i] << ", ";
+    }
+    os << ")" << std::endl;
+    return os;
 }

@@ -22,6 +22,7 @@
 #ifndef __O_PLAN__
 #define __O_PLAN__
 
+#include <ostream>
 
 #include "Tympan/models/common/3d.h"
 
@@ -333,5 +334,6 @@ public:
     ORepere3D rframe;
 };
 
+::std::ostream& operator<<(::std::ostream& os, const OPlan& p);
 
 #endif //__O_PLAN__
