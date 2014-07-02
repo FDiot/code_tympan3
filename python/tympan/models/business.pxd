@@ -8,7 +8,7 @@ from libcpp.map cimport map
 
 from tympan.core cimport unique_ptr, QString, SmartPtr, OGenID
 from tympan.models cimport common as tycommon
-from tympan.pytam cimport AcousticProblemModel, AcousticResultModel # XXX
+from tympan.models cimport solver as tysolver
 
 
 cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
@@ -92,8 +92,8 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h"
 cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
     cdef cppclass TYCalcul (TYElement):
         bool go()
-        unique_ptr[AcousticProblemModel] _acousticProblem
-        unique_ptr[AcousticResultModel]  _acousticResult
+        unique_ptr[tysolver.AcousticProblemModel] _acousticProblem
+        unique_ptr[tysolver.AcousticResultModel]  _acousticResult
         SmartPtr[TYResultat] getResultat()
         void getAllSources(map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
                       vector[SmartPtr[TYGeometryNode]])
