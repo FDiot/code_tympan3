@@ -52,6 +52,7 @@
 #include "Tympan/models/business/acoustic/TYSourceBafflee.h"
 #include "Tympan/models/business/acoustic/TYTrafic.h"
 #include "Tympan/models/business/acoustic/TYAttenuateur.h"
+#include "Tympan/models/business/geoacoustic/TYBoucheSurface.h"
 #include "Tympan/models/business/geoacoustic/TYChemineeSurface.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticSurfaceNode.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticVolume.h"
@@ -125,6 +126,8 @@ void init_registry()
     // models/business/acoustique
     OPrototype::add_factory("TYSource", std::move(build_factory<TYSource>()));
     OPrototype::add_factory("TYDirectivity", std::move(build_factory<TYDirectivity>()));
+    OPrototype::add_factory("TYUserDefinedDirectivity", std::move(build_factory<TYUserDefinedDirectivity>()));
+    OPrototype::add_factory("TYComputedDirectivity", std::move(build_factory<TYComputedDirectivity>()));
     OPrototype::add_factory("TYSpectre", std::move(build_factory<TYSpectre>()));
     OPrototype::add_factory("TYSourceLineic", std::move(build_factory<TYSourceLineic>()));
     OPrototype::add_factory("TYSourceCheminee", std::move(build_factory<TYSourceCheminee>()));
@@ -135,6 +138,7 @@ void init_registry()
     OPrototype::add_factory("TYTrafic", std::move(build_factory<TYTrafic>()));
     OPrototype::add_factory("TYAttenuateur", std::move(build_factory<TYAttenuateur>()));
     // models/business/geoacoustic
+    OPrototype::add_factory("TYBoucheSurface", std::move(build_factory<TYBoucheSurface>()));
     OPrototype::add_factory("TYChemineeSurface", std::move(build_factory<TYChemineeSurface>()));
     OPrototype::add_factory("TYAcousticSurfaceNode", std::move(build_factory<TYAcousticSurfaceNode>()));
     OPrototype::add_factory("TYAcousticVolume", std::move(build_factory<TYAcousticVolume>()));
