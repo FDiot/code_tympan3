@@ -23,7 +23,6 @@
 #include "test_utils/misc.hpp"
 #include "TympanTestsConfig.hpp"
 #include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
-#include "Tympan/MetierSolver/SolverDataModel/relations.hpp"
 #include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
 
 using namespace std;
