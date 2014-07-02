@@ -147,6 +147,13 @@ public:
     const double getHauteur() const { return _hauteur; }
 
     /**
+     * \brief : Get/Set directivity to source
+     */
+    void setDirectivity( TYDirectivity *directivity_ ) { Directivity = directivity_; }
+
+    TYDirectivity* getDirectivity() const { return Directivity; }
+
+    /**
      * Les differents types possible d'une source ponctuelle.
      */
     enum
@@ -188,6 +195,14 @@ protected:
 
     ///La hauteur de la source par rapport a l'altitude (dans le cas de source utilisateur).
     double _hauteur;
+
+    TYDirectivity *Directivity; /*!< source directivity*/
+
+private:
+    /// Tableau des facteurs de forme RA
+    static const double _tabRA[];
+    /// Tableau des facteurs de correction
+    static const double _tabCor[];
 };
 
 

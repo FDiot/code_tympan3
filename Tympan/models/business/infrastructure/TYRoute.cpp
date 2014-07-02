@@ -461,6 +461,8 @@ void TYRoute::distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
     for (unsigned int i = 0; i < _pSrcLineic->getNbSrcs(); i++)
     {
         LPTYSourcePonctuelle pSrc = _pSrcLineic->getSrc(i);
+        pSrc->setDirectivity( new TYDirectivity() );
+
         // Transform to site frame pose
         OPoint3D pt = matrix * (*pSrc->getPos());
         alti.updateAltitude(pt);

@@ -336,6 +336,7 @@ void TYAcousticLine::distriSrcs()
             pSource = new TYSourcePonctuelle() ;
             pSource->setParent(this);
             pSource->setType(SPHERIC);
+            pSource->setDirectivity( new TYDirectivity() );
 
             // Positionnement de la source
             pSource->getPos()->set(pos->_x, pos->_y, pos->_z);

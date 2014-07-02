@@ -164,6 +164,11 @@ void TYAcousticCircle::distriSrcs()
     pSrc->setTypeRaynt(CALCULATED);
     _pSrcSurf->addSrc(pSrc);
 
+    // To define directivity
+    double specificSize = getDiameter();
+    OVector3D faceNormal = normal();
+    faceNormal.normalize();
+    int type = TYComputedDirectivity::Surface;
 
     for (int i = 0 ; i < nbSrcsRadiale ; i++)
     {
@@ -179,6 +184,7 @@ void TYAcousticCircle::distriSrcs()
 
             // Creation d'une source ponctuelle
             TYSourcePonctuelle* pSrc = new TYSourcePonctuelle();
+            pSrc->setDirectivity( new TYComputedDirectivity(faceNormal, type, specificSize) );
 
             // Definition de sa position
             *pSrc->getPos() = pt;

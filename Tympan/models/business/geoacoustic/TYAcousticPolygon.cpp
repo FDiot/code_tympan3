@@ -175,6 +175,18 @@ void TYAcousticPolygon::distriSrcs()
 
     OBox box(ptMin, ptMax);
 
+    // To define directivity
+    // As the bounding rectangle is not calculated correctly (but bounding box is), we need to do it
+    const OBox box2 = _pPolygon->getBox();
+    OPoint3D pt0(box._min._x, box._max._y, box._max._z);
+    OPoint3D pt1(box._max._x, box._max._y, box._max._z);
+    OPoint3D pt2(box._max._x, box._min._y, box._max._z);
+    OPoint3D pt3(box._min._x, box._min._y, box._max._z);
+    TYRectangle rect(pt0, pt1, pt2, pt3);
+    double specificSize = rect.getDiagSize();
+    OVector3D faceNormal = normal();
+    faceNormal.normalize();
+    int type = TYComputedDirectivity::Surface;
 
     // Scan V
     for (int iV = 0; (iV < nbSrcsV); iV++)
@@ -193,6 +205,7 @@ void TYAcousticPolygon::distriSrcs()
             {
                 // Creation d'une source ponctuelle
                 TYSourcePonctuelle* pSrc = new TYSourcePonctuelle();
+                pSrc->setDirectivity( new TYComputedDirectivity(faceNormal, type, specificSize) );
 
                 // Definition de sa position
                 pos._z +=  offsetZ; // on decale les sources pour le lancer de rayon selon l'orientation de la normale

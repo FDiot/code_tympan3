@@ -170,6 +170,7 @@ public:
 
     virtual void inverseNormale();
 
+    virtual const OBox& getBox() const { return _box; }
     /**
      * @brief Export the surface as a triangular mesh
      *

@@ -109,6 +109,12 @@ void TYChemineeSurface::distriSrcs()
         // On creait la source, cela devrait etre fait qu'une seule fois a l'init...
         setSourceCheminee(new TYSourceCheminee());
     }
+    // To define directivity
+    double specificSize = getBoundingRect()->getCircleEqDiameter() / 2.0;
+    OVector3D faceNormal = normal();
+    faceNormal.normalize();
+    int type = TYComputedDirectivity::Chimney;
+    getSourceCheminee()->setDirectivity( new TYComputedDirectivity(faceNormal, type, specificSize) );
 }
 
 LPTYSourceCheminee TYChemineeSurface::getSourceCheminee()

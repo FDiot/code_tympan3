@@ -152,6 +152,12 @@ void TYAcousticSemiCircle::distriSrcs()
     // Matrice de changement de repere
     matrix = repere.asMatrix();
 
+    // To define directivity
+    double specificSize = getBoundingRect()->getDiagSize();
+    OVector3D faceNormal = normal();
+    faceNormal.normalize();
+    int type = TYComputedDirectivity::Surface;
+
     for (int i = 0 ; i < nbSrcsRadiale ; i++)
     {
         for (int j = 0 ; j < nbSrcsAngulaire ; j++)
@@ -166,6 +172,7 @@ void TYAcousticSemiCircle::distriSrcs()
 
             // Creation d'une source ponctuelle
             TYSourcePonctuelle* pSrc = new TYSourcePonctuelle();
+            pSrc->setDirectivity( new TYComputedDirectivity(faceNormal, type, specificSize) );
 
             // Definition de sa position
             *pSrc->getPos() = pt;

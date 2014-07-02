@@ -69,11 +69,6 @@ public:
     virtual int fromXML(DOM_Element domElement);
 
     /**
-     * Set/Get de la directivite.
-     */
-    void setDirectivite(const TYDirectivity& dir, int regime = -1) { _pDirectivite = new TYDirectivity(dir); }
-
-    /**
      * Set/Get de l'attenuateur.
      */
     LPTYAttenuateur getAttenuateur() { return _pAttenuateur; }
@@ -193,9 +188,6 @@ protected:
 
     /// Source rayonnante
     bool _isRayonnant;
-
-    /// Directivite associee a la source
-    LPTYDirectivity _pDirectivite;
 
     ///Attenuateur lie a cette source.
     LPTYAttenuateur _pAttenuateur;

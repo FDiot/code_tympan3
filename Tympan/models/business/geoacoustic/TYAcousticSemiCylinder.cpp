@@ -441,6 +441,12 @@ void TYAcousticSemiCylinder::distriSrcs()
     double rayon = (getDiameter() / 2.0) + _offsetSources; // Decalage des sources pour le lancer de rayons
     const double demiPi = M_PI / 2.0;
     const double hauteurOffset = _pSemiCircBottom->getCenter()._z;
+    OPoint3D center = _pSemiCircBottom->getCenter();
+
+    // To define directivity
+    double diag = getDiameter();
+    double specificSize = sqrt(diag * diag + (diag / 2) * (diag / 2));
+    int type = TYComputedDirectivity::Surface;
 
     if (anglePortion > 0.0)
     {
@@ -458,8 +464,14 @@ void TYAcousticSemiCylinder::distriSrcs()
                 pt._y = sin(angle) * rayon;
                 pt._z = hauteurOffset + hauteur;
 
+                // Pour trouver la normale
+                center._z = pt._z;
+                OVector3D faceNormal(center, pt);
+                faceNormal.normalize();
+
                 // Creation d'une source ponctuelle
                 TYSourcePonctuelle* pSrc = new TYSourcePonctuelle();
+                pSrc->setDirectivity( new TYComputedDirectivity(faceNormal, type, specificSize) );
 
                 // Definition de sa position
                 *pSrc->getPos() = pt;

@@ -425,6 +425,11 @@ void TYAcousticCylinder::distriSrcs()
     double hauteur = base;
     double rayon = (getDiameter() / 2.0) + _offsetSources; // decalage des sources pour le lancer de rayons
     const double hauteurOffset = _pCircBottom->getCenter()._z;
+    OPoint3D center = _pCircBottom->getCenter();
+
+    // To define directivity
+    double specificSize = this->getDiameter();
+    int type = TYComputedDirectivity::Surface;
 
     // Calcul de la portion d'angle pour le cercle
     if (anglePortion > 0.0)
@@ -444,8 +449,14 @@ void TYAcousticCylinder::distriSrcs()
                 pt._y = sin(angle) * rayon;
                 pt._z = hauteurOffset + hauteur;
 
+                // Pour trouver la normale
+                center._z = pt._z;
+                OVector3D faceNormal(center, pt);
+                faceNormal.normalize();
+
                 // Creation d'une source ponctuelle
                 TYSourcePonctuelle* pSrc = new TYSourcePonctuelle();
+                pSrc->setDirectivity( new TYComputedDirectivity(faceNormal, type, specificSize) );
 
                 // Definition de sa position
                 *pSrc->getPos() = pt;

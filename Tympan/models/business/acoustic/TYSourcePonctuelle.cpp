@@ -38,7 +38,8 @@ TYSourcePonctuelle::TYSourcePonctuelle():
     _type(TypeSurface),
     _object(0),
     _typeRaynt(SPHERIC),
-    _hauteur(0.0)
+    _hauteur(0.0),
+    Directivity(NULL)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -69,6 +70,12 @@ TYSourcePonctuelle::TYSourcePonctuelle(const TYSourcePonctuelle& other)
 
 TYSourcePonctuelle::~TYSourcePonctuelle()
 {
+    if (Directivity) 
+    { 
+        delete Directivity; 
+    }
+
+    Directivity = NULL;
 }
 
 TYSourcePonctuelle& TYSourcePonctuelle::operator=(const TYSourcePonctuelle& other)
