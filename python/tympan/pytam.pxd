@@ -274,9 +274,4 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSp
 cdef extern from "Tympan/MetierSolver/CommonTools/prettyprint.hpp":
     cdef string OPoint3D_to_string "tympan_to_string<OPoint3D>"(const OPoint3D& o)
 
-cdef class Business2MicroSource:
-    cdef map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]] map_sources
-
-cdef business2microsource(map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]] map_sources)
-
 
