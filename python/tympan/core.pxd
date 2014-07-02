@@ -3,7 +3,6 @@
 
 from libcpp.string cimport string
 
-
 # STL ##########################################################################
 
 cdef extern from "boost/shared_ptr.hpp" namespace "boost":
