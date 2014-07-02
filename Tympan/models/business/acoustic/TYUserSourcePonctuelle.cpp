@@ -40,7 +40,6 @@ TYUserSourcePonctuelle::TYUserSourcePonctuelle():
     _type = TYSourcePonctuelle::TypeUser;
     _useAtt = false;
     _isRayonnant = true;
-    _pDirectivite = NULL;
     _pAttenuateur = NULL;
     _nextRegime = 0;
     _curRegime = addRegime(buildRegime()) - 1;
@@ -61,7 +60,6 @@ TYUserSourcePonctuelle::TYUserSourcePonctuelle(const TYSourcePonctuelle* other)
     // Enfin on construit la "TYUserSourcePonctuelle
     _useAtt = false;
     _isRayonnant = true;
-    _pDirectivite = NULL;
     _pAttenuateur = NULL;
 
     // Construction d'un premier regime qui devient le regime courant
@@ -81,15 +79,6 @@ TYUserSourcePonctuelle& TYUserSourcePonctuelle::operator=(const TYUserSourcePonc
         _hauteur = other._hauteur;
         _curRegime = other._curRegime;
         _nextRegime = other._nextRegime;
-
-        if (other._pDirectivite)
-        {
-            _pDirectivite = new TYDirectivity(*other._pDirectivite);
-        }
-        else
-        {
-            _pDirectivite = NULL;
-        }
 
         _useAtt = other._useAtt;
 
@@ -115,7 +104,6 @@ bool TYUserSourcePonctuelle::operator==(const TYUserSourcePonctuelle& other) con
     {
         if (TYSourcePonctuelle::operator !=(other)) { return false; }
         if (_hauteur != other._hauteur) { return false; }
-        if (_pDirectivite != other._pDirectivite) { return false; }
         if (_pAttenuateur != other._pAttenuateur) { return false; }
         if (_curRegime != other._curRegime) { return false; }
         if (_nextRegime != other._nextRegime) { return false; }
@@ -138,11 +126,6 @@ bool TYUserSourcePonctuelle::deepCopy(const TYElement* pOther, bool copyId /*=tr
     _hauteur = pOtherSrc->_hauteur;
     _curRegime = pOtherSrc->_curRegime;
     _nextRegime = pOtherSrc->_nextRegime;
-
-    if (_pDirectivite != NULL)
-    {
-        _pDirectivite->deepCopy(pOtherSrc->_pDirectivite, copyId);
-    }
 
     if ((pOtherSrc->getUseAtt()) && (pOtherSrc->_pAttenuateur != NULL))
     {
@@ -201,10 +184,8 @@ int TYUserSourcePonctuelle::fromXML(DOM_Element domElement)
     bool isRayonnantOk = false;
     bool nextRegimeFound = false;
     //  int regime = 0;
-    TYDirectivity dir;
 
     LPTYAttenuateur pAtt = new TYAttenuateur();
-    LPTYDirectivity pDir = new TYDirectivity();
 
     DOM_Element elemCur;
 
@@ -222,11 +203,6 @@ int TYUserSourcePonctuelle::fromXML(DOM_Element domElement)
         if (pAtt->callFromXMLIfEqual(elemCur))
         {
             _pAttenuateur = pAtt;
-        }
-
-        if (pDir->callFromXMLIfEqual(elemCur))
-        {
-            _pDirectivite = pDir;
         }
 
         TYUserSrcRegime regime;
@@ -295,7 +271,7 @@ TYUserSrcRegime TYUserSourcePonctuelle::buildRegime()
     regime._typeDistribution = 1; // TY_PUISSANCE_IMPOSEE;
     regime._spectre = *_pSpectre;
     regime._pAtt = _pAttenuateur;
-    regime._pDirectivite = _pDirectivite;
+    regime._pDirectivite = Directivity;
 
     // Pour eviter de depasser 999 regimes dans ce cas on revient a 0
     if (_nextRegime == 999)
@@ -325,7 +301,7 @@ void TYUserSourcePonctuelle::updateCurrentRegime()
         regime._pAtt->deepCopy(_pAttenuateur, false);
     }
 
-    regime._pDirectivite = _pDirectivite;
+    regime._pDirectivite = Directivity;
 }
 
 void TYUserSourcePonctuelle::setRegimeName(const QString& name)
@@ -367,7 +343,7 @@ void TYUserSourcePonctuelle::setCurrentRegime(const int& regimeNumber)
     //  _typeDistribution = regime._typeDistribution;
     *_pSpectre = regime._spectre;
     _pAttenuateur = regime._pAtt;
-    _pDirectivite = regime._pDirectivite;
+    Directivity = regime._pDirectivite;
 
     _curRegime = currentRegime;
 }
@@ -398,7 +374,7 @@ void TYUserSourcePonctuelle::loadRegime(int regimeNb)
 
     if (regime._pDirectivite != NULL)
     {
-        _pDirectivite = regime._pDirectivite;
+        Directivity = regime._pDirectivite;
     }
 
 }

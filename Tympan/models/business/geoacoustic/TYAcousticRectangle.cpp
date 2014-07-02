@@ -129,6 +129,12 @@ void TYAcousticRectangle::distriSrcs()
     // Calcul du pt de depart pour le placement des srcs
     OVector3D startPt = OVector3D(_pBoundingRect->_pts[0]) + (vecH * 0.5) + (vecV * 0.5);
 
+    // To define directivity
+    double specificSize = this->getBoundingRect()->getDiagSize();
+    OVector3D faceNormal = normal();
+    faceNormal.normalize();
+    int type = TYComputedDirectivity::Surface;
+
     // Scan V
     for (int iV = 0; (iV < nbSrcsV); iV++)
     {
@@ -141,6 +147,7 @@ void TYAcousticRectangle::distriSrcs()
 
             // Creation d'une source ponctuelle
             TYSourcePonctuelle* pSrc = new TYSourcePonctuelle();
+            pSrc->setDirectivity( new TYComputedDirectivity(faceNormal, type, specificSize) );
 
             // Positionnement, on "parcours" la surface par des multiples
             // des vecteurs pas

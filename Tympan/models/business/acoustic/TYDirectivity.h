@@ -29,7 +29,7 @@ struct ConstraintDirectivityElement
     double Theta;
     double Phi;
     TYSpectre Coefficients;
-    
+
     ConstraintDirectivityElement& operator=(const ConstraintDirectivityElement& other)
     {
         if (this != &other)
@@ -40,7 +40,7 @@ struct ConstraintDirectivityElement
         }
         return *this;
     }
-    
+
     ///Operateur de comparaison.
     bool operator==(const ConstraintDirectivityElement& other) const
     {
@@ -67,9 +67,10 @@ class TYDirectivity: public TYElement
     // Methodes
 public:
     /**
-     * Constructeur.
+     * Constructeurs
      */
     TYDirectivity();
+    TYDirectivity(OVector3D& vec) : DirectivityVector(vec) {}
     /**
      * Constructeur par copie.
      */
@@ -103,7 +104,7 @@ class TYUserDefinedDirectivity : public TYDirectivity
 public:
     TYUserDefinedDirectivity() : TYDirectivity() {}
     TYUserDefinedDirectivity( const TYUserDefinedDirectivity& other );
-
+    TYUserDefinedDirectivity(OVector3D& vec) : TYDirectivity(vec) {}
     ~TYUserDefinedDirectivity() {}
 
     virtual DOM_Element toXML(DOM_Element& domElement);
@@ -121,6 +122,7 @@ private :
 
 class TYComputedDirectivity : public TYDirectivity
 {
+public:
     enum
     {
         Surface,    /*!< 0 - Sources situees sur une face. */
@@ -128,19 +130,18 @@ class TYComputedDirectivity : public TYDirectivity
         Chimney,    /*!< 2 - Sources cheminees. */
     };
 
-    TYComputedDirectivity() :   TYDirectivity(), 
-                                Type(Surface), 
+    TYComputedDirectivity() :   TYDirectivity(),
+                                Type(Surface),
                                 SpecificSize(1.) {}
+    YComputedDirectivity(OVector3D& vec, int type, double size) :
+        TYDirectivity(vec),
+        Type(type),
+        SpecificSize(size) {}
     TYComputedDirectivity( const TYComputedDirectivity& directivity );
-
     ~TYComputedDirectivity() {}
-
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-
-
-public : 
     int Type;
     double SpecificSize; /*!< Support (face/volume) size */
 };

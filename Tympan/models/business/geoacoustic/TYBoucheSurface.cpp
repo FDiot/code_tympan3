@@ -97,7 +97,6 @@ void TYBoucheSurface::distriSrcs()
         _pSrcSurf->purge();
         return; // securite : pas de surface nulle
     }
-
     // La source surfacique est composee d'une seule
     // source de type TYSourceBafflee
     // Si la source n'est pas trouvee
@@ -106,6 +105,12 @@ void TYBoucheSurface::distriSrcs()
         // On creait la source, cela devrait etre fait qu'une seule fois a l'init...
         setSourceBafflee(new TYSourceBafflee());
     }
+    // To define directivity
+    double specificSize = getBoundingRect()->getCircleEqDiameter() / 2.0;
+    OVector3D faceNormal = normal();
+    faceNormal.normalize();
+    int type = TYComputedDirectivity::Baffled;
+    getSourceBafflee()->setDirectivity( new TYComputedDirectivity(faceNormal, type, specificSize) );
 }
 
 LPTYSourceBafflee TYBoucheSurface::getSourceBafflee()
