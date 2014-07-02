@@ -8,8 +8,6 @@
 
 #include "entities.hpp"
 
-//#include "relations.hpp"
-
 namespace tympan
 {
 AcousticMaterialBase::AcousticMaterialBase(
@@ -26,8 +24,8 @@ AcousticBuildingMaterial::AcousticBuildingMaterial(
 
 // ---------
 AcousticGroundMaterial::AcousticGroundMaterial(
-    const string& name_, double resistivity_ ) : 
-    AcousticMaterialBase(name_),  resistivity(resistivity_), thickness(1.0) 
+    const string& name_, double resistivity_ ) :
+    AcousticMaterialBase(name_),  resistivity(resistivity_), thickness(1.0)
 {
     init();
 }
@@ -404,7 +402,7 @@ const double AtmosphericConditions::reference_pressure = 101325.0;
 const double AtmosphericConditions::reference_temperature = 293.15;
 const double AtmosphericConditions::absolute_zero = 273.15;
 
-AtmosphericConditions::AtmosphericConditions( 
+AtmosphericConditions::AtmosphericConditions(
     double static_pressure_, double temperature_, double hygrometry_ ) :
     static_pressure(static_pressure_), temperature(temperature_), hygrometry(hygrometry_)
 {
@@ -472,7 +470,7 @@ void AtmosphericConditions::compute_k()
     }
 }
 
-double AtmosphericConditions::compute_hm() const 
+double AtmosphericConditions::compute_hm() const
 {
     double T01 = absolute_zero + 0.01   ;       // Temperature isotherme au point triple
     double tK = temperature + absolute_zero;   // Temperature en Kelvin
