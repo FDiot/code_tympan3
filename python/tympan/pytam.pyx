@@ -5,13 +5,6 @@ from cython.operator cimport dereference as deref, preincrement as inc
 import cython
 import numpy as np
 from cython.view cimport array as cyarray
-from tympan.pytam import Business2MicroSource
-
-cdef business2microsource(map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]] map_sources):
-    b2ms = cython.declare(Business2MicroSource)
-    b2ms = Business2MicroSource()
-    b2ms.map_sources = map_sources
-    return b2ms
 
 @cython.locals(comp=Computation)
 def loadsolver(foldername, comp):

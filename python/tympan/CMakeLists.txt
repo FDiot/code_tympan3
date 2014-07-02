@@ -31,5 +31,10 @@ target_link_libraries(pytam
     tympan_solver_data_model)
 install_cython_module(pytam ${CYTHON_LIB_CURR_DIR})
 
+cython_add_module(business2solver business2solver.pyx Loader.cpp)
+configure_cython_module(business2solver ${CYTHON_LIB_CURR_DIR})
+target_link_libraries(business2solver tympan_dm_metier tympan_dm_ihm
+    tympan_dm_graphics)
+install_cython_module(business2solver ${CYTHON_LIB_CURR_DIR})
 
 add_subdirectory( models )
