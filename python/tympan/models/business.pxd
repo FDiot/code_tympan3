@@ -11,6 +11,14 @@ from tympan.models cimport common as tycommon
 from tympan.models cimport solver as tysolver
 
 
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp" namespace "tympan":
+    SmartPtr[TYProjet] load_project(const char *filename) except +
+    void save_project(const char *filename, SmartPtr[TYProjet] &) except +
+
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/init_registry.h" namespace "tympan":
+    void init_registry()
+
+
 cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
     cdef cppclass TYElement:
         QString getName()

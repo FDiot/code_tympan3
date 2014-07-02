@@ -4,7 +4,6 @@
 import cython as cy
 from cython.operator cimport dereference as deref, preincrement as inc
 
-from tympan.pytam cimport load_project, save_project
 from tympan.models cimport common as tycommon
 from tympan.models cimport solver as tysolver
 from tympan.business2solver cimport business2microsource
@@ -33,6 +32,13 @@ cdef tymateriauconstruction2material(SmartPtr[TYMateriauConstruction] mat):
     material = Material()
     material.thisptr = mat
     return material
+
+def init_tympan_registry():
+    """ Trigger the registration of Tympan business classes (TY* classes).
+        It is necessary to do it before playing with Tympan library (just after
+        cython libraries import)
+    """
+    init_registry()
 
 
 cdef class Element:
