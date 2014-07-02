@@ -524,6 +524,15 @@ class MeshedCDTTC(unittest.TestCase):
         faces_left, _ = zip(*faces)
         self.assertEqual(faces_left, (f1, f2, f3))
 
+        if _runVisualTests:
+            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
+            plotter.plot_edges()
+            for vertex, name in zip((vA, vB, vC, vD, vM, vN, vP, vQ),
+                                    ("A", "B", "C", "D", "M", "N", "P", "Q")):
+                plotter.annotate_vertex(vertex, name)
+            for i, face in enumerate(self.mesher.cdt.finite_faces()):
+                plotter.annotate_finite_face(face, "f%02d" % i)
+            plotter.show()
 
 
 

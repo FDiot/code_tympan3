@@ -107,6 +107,8 @@ class MeshedCDTPlotter(object):
 
     style_edge = {'linewidth': 1, 'color':'black'}
     style_constrained_edge = {'linewidth': 3}
+    style_annotations = {'textcoords': 'offset points',
+                         'xytext': (5, 5)}
 
     def __init__(self, mesher, title="Mesh"):
         self.mesher = mesher
@@ -132,3 +134,16 @@ class MeshedCDTPlotter(object):
     def plot_edges(self):
         for edge in self.cdt.finite_edges():
             self.plot_edge(edge)
+
+    def annotate_at(self, x, y, text, **kwargs):
+        plot_opts = self.style_annotations.copy()
+        plot_opts.update(kwargs)
+        return self.ax.annotate(text, (x, y), **plot_opts)
+
+    def annotate_vertex(self, vertex, text, **kwargs):
+        p = vertex.point()
+        return self.annotate_at(p.x(), p.y(), text, **kwargs)
+
+    def annotate_finite_face(self, face, text, **kwargs):
+        p = self.mesher.point_for_face(face)
+        return self.annotate_at(p.x(), p.y(), text, **kwargs)
