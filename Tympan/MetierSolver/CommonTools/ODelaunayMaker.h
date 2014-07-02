@@ -24,8 +24,8 @@
 
 #include <qlist.h>
 
-#include "OPoint3D.h"
-#include "OTriangle.h"
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/triangle.h"
 
 /**
  * \file ODelaunayMaker.h

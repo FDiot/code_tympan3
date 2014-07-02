@@ -20,7 +20,7 @@
 #ifndef __O_SIZEMANAGER__
 #define __O_SIZEMANAGER__
 
-#include "OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 // Smart pointer sur OSizeManager.
 class OSizeManager;

@@ -22,14 +22,14 @@
 #ifndef __TY_DEFINES__
 #define __TY_DEFINES__
 
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
 
 
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 // Pour l'utilisation de la librairie standard STL.
 #include <map>
@@ -237,10 +237,6 @@ typedef SmartPtr<TYReseauTransport> LPTYReseauTransport;
 class TYRoute;
 ///Smart pointer sur TYRoute.
 typedef SmartPtr<TYRoute> LPTYRoute;
-
-class TYRouteDeblai;
-///Smart pointer sur TYRouteDeblai
-typedef SmartPtr<TYRouteDeblai> LPTYRouteDeblai;
 
 class TYRay;
 // SmartPOinter sur TYRay

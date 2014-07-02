@@ -29,7 +29,7 @@
 
 #include <GL/gl.h>
 
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 /**
  * Interface pour la gestion des textures OpengGL.
  */

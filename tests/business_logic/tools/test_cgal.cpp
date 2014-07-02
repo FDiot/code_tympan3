@@ -12,17 +12,10 @@
 
 #include "gtest/gtest.h"
 
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/CommonTools/cgal_tools.hpp"
 #include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
-
-/*
-#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
-#include "Tympan/MetierSolver/CommonTools/OBox.h"
-*/
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
-#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
 #include "Tympan/MetierSolver/CommonTools/OPlan.h"
-
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 #include "Tympan/MetierSolver/DataManagerMetier/cgal_bridge.hpp"
 

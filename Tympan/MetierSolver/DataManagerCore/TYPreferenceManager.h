@@ -24,7 +24,7 @@
 #define __TY_PREFERENCE_MANAGER__
 
 
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 #if TY_USE_IHM
 
 #include "Tympan/MetierSolver/ToolsMetier/OPreferenceManager.h"

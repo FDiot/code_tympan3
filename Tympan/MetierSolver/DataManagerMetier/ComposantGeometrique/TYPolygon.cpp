@@ -28,8 +28,8 @@
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/models/common/3d.h"
+#include "Tympan/core/defines.h"
 #include "TYRectangle.h"
 #include "TYPolygon.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"

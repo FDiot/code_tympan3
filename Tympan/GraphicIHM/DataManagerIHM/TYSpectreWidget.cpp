@@ -260,7 +260,7 @@ void TYSpectreWidget::tabValueChanged(int row, int col)
     {
         // Translate input value to double to see if it's a correct number 
         bool ok; 
-        double val = _tableau->item(row, col)->text().toDouble(&ok);
+        _tableau->item(row, col)->text().toDouble(&ok);
 
         // If value is not a valid number, get the original value in the spectrum and return
         if (!ok)

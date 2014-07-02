@@ -20,7 +20,7 @@
 #ifndef __TY_ACOUSTICFACESET__
 #define __TY_ACOUSTICFACESET__
 
-#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
+#include "Tympan/models/common/3d.h"
 #include "TYAcousticVolume.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYFaceSet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYMateriauConstruction.h"

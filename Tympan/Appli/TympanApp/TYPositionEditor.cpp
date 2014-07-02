@@ -1333,7 +1333,7 @@ void TYPositionEditor::orienteSrcPonct()
     //Il nous faut la position du point dans le repere global
     TYPoint pos(0, 0, 0);
     OPoint3D SrcePos(pos);
-    OCoord3D opos = _pEditGeoNode->localToGlobal() * SrcePos;//repere le + haut dans la hierarchie, mais pas forcement celui du modelerFrame courant
+    OPoint3D opos = _pEditGeoNode->localToGlobal() * SrcePos;//repere le + haut dans la hierarchie, mais pas forcement celui du modelerFrame courant
     pos = opos;
 
     // Calcul du vecteur orientation : il est constitue de 2 points:

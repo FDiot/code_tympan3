@@ -427,7 +427,7 @@ void TYAcousticCylinder::distriSrcs()
 
     // nombre d'iterations ((M_2PI / distAngle) + (hauteurCyl / distHauteur));
 
-    OCoord3D pt;
+    OPoint3D pt;
     double angle = 0.0;
     double hauteur = base;
     double rayon = (getDiameter() / 2.0) + _offsetSources; // decalage des sources pour le lancer de rayons

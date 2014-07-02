@@ -25,7 +25,7 @@
 
 #pragma warning(disable: 4251)
 
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #   ifdef _PLUGIN_DLL
@@ -39,7 +39,7 @@
 
 #include <string>
 
-#include "Tympan/Tools/OGenID.h"
+#include "Tympan/core/idgen.h"
 #include "TYSolverInterface.h"
 
 typedef struct

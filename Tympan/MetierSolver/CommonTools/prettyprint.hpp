@@ -13,11 +13,9 @@
 #include <ostream>
 #include <sstream>
 
-
-#include "OPoint3D.h"
-#include "OVector3D.h"
+#include "Tympan/models/common/3d.h"
 #include "OPlan.h"
-#include "OSpectre.h"
+#include "Tympan/models/common/spectre.h"
 
 // Beware : Stuff::operator<< must be defined in the same namespace as Stuff
 

@@ -28,7 +28,7 @@
 
 #include <GL/gl.h>
 
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/models/common/3d.h"
 
 OGLLight::OGLLight()
 {

@@ -14,6 +14,7 @@ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
 #use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 
 
-target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
+add_dependencies(${MODULE_NAME} tympan_models_common)
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} tympan_models_common)
 
 install_tympan_component(${MODULE_NAME})

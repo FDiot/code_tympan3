@@ -180,11 +180,15 @@ public:
 typedef std::deque<AcousticTriangle> triangle_pool_t;
 typedef size_t triangle_idx;
 
+// -------------------
+
 class SourceDirectivityInterface
 {
 public:
     virtual Spectrum lwAdjustment(Vector direction, double distance) = 0;
 };
+
+// -------------------
 
 class SphericalSourceDirectivity :
       public virtual BaseEntity,
@@ -194,6 +198,8 @@ public:
      virtual Spectrum lwAdjustment(Vector direction, double distance)
      { return Spectrum(1.0); }
 };
+
+// -------------------
 
 class CommonFaceDirectivity : 
         public virtual BaseEntity,
@@ -321,6 +327,7 @@ public:
 typedef std::deque<AcousticSource> source_pool_t;
 typedef size_t source_idx;
 
+// -------------------
 
 class AcousticReceptor:
     public virtual BaseEntity
@@ -335,28 +342,7 @@ public:
 typedef std::deque<AcousticReceptor> receptor_pool_t;
 typedef size_t receptor_idx;
 
-
-class AcousticEvent:
-    public virtual BaseEntity
-{
-public:
-    AcousticEvent(const string& event_type_, const Point& point_);
-    virtual ~AcousticEvent() {};
-
-    Point point;
-    /// Can be 'reflection', 'diffraction', 'refraction', 'emission', 'reception'.
-    string event_type;
-};
-
-class AcousticPath:
-    public virtual BaseEntity
-{
-public:
-    AcousticPath() {};
-    virtual ~AcousticPath() {};
-
-    // XXX Add some attr?
-};
+// -------------------
 
 class AcousticProblem:
     public virtual BaseEntity
@@ -368,6 +354,7 @@ public:
     string name;
 };
 
+// -------------------
 
 class GlobalContribution:
     public virtual BaseEntity
@@ -379,6 +366,8 @@ public:
     // XXX Add some attrs?
 };
 
+// -------------------
+
 class SiteElement:
     public virtual BaseEntity
 {
@@ -388,6 +377,7 @@ public:
 
 };
 
+// -------------------
 
 class SiteAcousticReceptor:
     public virtual BaseEntity
@@ -399,6 +389,8 @@ public:
     unsigned int id;
 };
 
+// -------------------
+
 class Site:
     public virtual BaseEntity
 {
@@ -408,6 +400,8 @@ public:
 
     unsigned int id;
 };
+
+// -------------------
 
 class DirectivityCoefficient
 {

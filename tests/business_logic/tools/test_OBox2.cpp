@@ -9,12 +9,7 @@
 #include <cstdlib>
 
 #include "gtest/gtest.h"
-#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
-#include "Tympan/MetierSolver/CommonTools/OCoord3D.h"
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
-#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
-#include "Tympan/MetierSolver/CommonTools/ORepere3D.h"
-#include "Tympan/MetierSolver/CommonTools/OBox.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/CommonTools/OBox2.h"
 #include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
 

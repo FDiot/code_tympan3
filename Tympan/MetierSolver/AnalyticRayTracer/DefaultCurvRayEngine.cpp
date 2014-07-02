@@ -19,9 +19,9 @@
 #include <QTime>
 #include <vector>
 
-#include "Tympan/MetierSolver/AcousticRayTracer/Geometry/mathlib.h"
-#include "Tympan/MetierSolver/AcousticRayTracer/Acoustic/Event.h"
-#include "Tympan/MetierSolver/AcousticRayTracer/Ray/Ray.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
 
 #include "DefaultCurvRayEngine.h"
 

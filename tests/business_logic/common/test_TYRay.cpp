@@ -10,9 +10,7 @@
 #include <vector>
 
 #include "gtest/gtest.h"
-#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
-#include "Tympan/MetierSolver/CommonTools/OCoord3D.h"
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
 
@@ -28,7 +26,7 @@ TYRay* createRay(void)
 
     // EVENEMENT 0
     TYPoint pt(0.0, 0.0, 0.0);
-    TYRayEvent* ev = new TYRayEvent(pt);
+    acoustic_event* ev = new acoustic_event(pt);
     ev->angle = 5.;
     ev->type = TYSOURCE;
 
@@ -36,7 +34,7 @@ TYRay* createRay(void)
 
     // EVENEMENT 1
     pt._x = 10.0;
-    ev = new TYRayEvent(pt);
+    ev = new acoustic_event(pt);
     ev->angle = 7.;
     ev->type = TYDIFFRACTION;
 
@@ -44,7 +42,7 @@ TYRay* createRay(void)
 
     // EVENEMENT 2
     pt._x = 20.0;
-    ev = new TYRayEvent(pt);
+    ev = new acoustic_event(pt);
     ev->angle = 0.;
     ev->type = TYDIFFRACTION;
 
@@ -52,7 +50,7 @@ TYRay* createRay(void)
 
     // EVENEMENT 3
     pt._x = 30.0;
-    ev = new TYRayEvent(pt);
+    ev = new acoustic_event(pt);
     ev->angle = 0.;
     ev->type = TYREFLEXION;
 
@@ -60,7 +58,7 @@ TYRay* createRay(void)
 
     // EVENEMENT 4
     pt._x = 40.0;
-    ev = new TYRayEvent(pt);
+    ev = new acoustic_event(pt);
     ev->angle = 0.;
     ev->type = TYDIFFRACTION;
 
@@ -68,7 +66,7 @@ TYRay* createRay(void)
 
     // EVENEMENT 5
     pt._x = 50.0;
-    ev = new TYRayEvent(pt);
+    ev = new acoustic_event(pt);
     ev->angle = 0.;
     ev->type = TYRECEPTEUR;
 
