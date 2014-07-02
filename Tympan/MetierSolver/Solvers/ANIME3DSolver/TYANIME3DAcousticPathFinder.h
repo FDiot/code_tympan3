@@ -26,7 +26,7 @@
 class TYANIME3DAcousticPathFinder
 {
 public:
-    TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize, TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs, TYTabRay& tabTYRays);
+    TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize, TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs, tab_acoustic_path& tabTYRays);
     virtual ~TYANIME3DAcousticPathFinder();
 
     bool exec();
@@ -78,7 +78,7 @@ private :
     * \fn  void convertRaytoTYRay(const TYSiteNode& site, TYCalcul& calcul, const unsigned int& sens)
     * \brief convertion des rayons en rayons TYMPAN
     */
-    void convertRaytoTYRay(const unsigned int& sens);
+    void convert_Rays_to_acoustic_path(const unsigned int& sens);
 
     /*!
     * \fn void sampleAndCorrection()
@@ -91,7 +91,7 @@ private :
     /*!
      * \fn void set_metier_source_and_receptor();
      */
-    void set_metier_source_and_receptor_to_TYRay(int sens, Ray *ray, TYRay *tyRay);
+    void set_source_idx_and_receptor_idx_to_acoustic_path(int sens, Ray *ray, acoustic_path *tyRay);
 
 private:
     void build_geometry_transformer( const vector<vec3>& sources );
@@ -115,7 +115,7 @@ private:
     TYTabPointCalculGeoNode& _tabRecepteurs;
 
     /// tableau de l'ensemble des rayons métier Code_TYMPAN
-    TYTabRay& _tabTYRays;
+    tab_acoustic_path& _tabTYRays;
 };
 
 #endif // __TYANIME3DACOUSTICPATHFINDER__

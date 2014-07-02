@@ -69,21 +69,8 @@ protected:
     QToolButton* _toolButtonSilos;
     ///Bouton route.
     QToolButton* _toolButtonRoute;
-    ///Bouton route Deblai
-    QToolButton* _toolButtonRouteDeblai;
     ///Bouton reseau de transport.
     QToolButton* _toolButtonReseau;
-
-    // Desactivation de tout acces a la base de donnees - DT 07/03/2005 -
-    // Les boutons suivants ont ete desactives
-    ///Bouton machine.
-    //QToolButton * _toolButtonMachine;
-    ///Bouton bâtiment.
-    //QToolButton * _toolButtonBatiment;
-    ///Bouton ecran.
-    //QToolButton * _toolButtonEcran;
-    ///Bouton site.
-    //QToolButton * _toolButtonSite;
 };
 
 #endif //__TY_INFRA_TOOLBAR__

@@ -3,25 +3,10 @@ import unittest
 
 import numpy as np
 
-from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, no_output
-
-TEST_OUTPUT_REDIRECTED = 'test_solve_out.log'
-TEST_ERRORS_REDIRECTED = 'test_solve_err.log'
-# TEST_OUTPUT_REDIRECTED = os.devnull
-
-with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
-    import pytam
-    pytam.init_tympan_registry()
+from utils import TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC, pytam
 
 
-_TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'projects-panel')
-assert osp.isdir(_TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % _TEST_PROBLEM_DIR
-
-_TEST_RESULT_DIR = osp.join(TEST_DATA_DIR, 'expected')
-assert osp.isdir(_TEST_RESULT_DIR), "The test result dir does not exists '%s'" % _TEST_RESULT_DIR
-
-
-class TestTympan(unittest.TestCase):
+class TestTympan(TympanTC):
     pass
 
 
@@ -35,18 +20,16 @@ def make_test_with_file(test_file):
     """
     def test_with_file(self):
         # Load and solve the project
-        with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
-            project = pytam.Project.from_xml(osp.join(_TEST_PROBLEM_DIR, test_file))
-            project.update_site()
-            project.update_altimetry_on_receptors()
+        with self.no_output():
+            project = self.load_project(osp.join(TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation
             computation.set_nthread(1) # avoid segfaults due to multithreading
             pytam.loadsolver(TEST_SOLVERS_DIR, computation)
             result = computation.go()
         self.assertTrue(result)
         # Load the expected result
-        result_file = osp.join(_TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
-        with no_output(to=TEST_OUTPUT_REDIRECTED, err_to=TEST_ERRORS_REDIRECTED):
+        result_file = osp.join(TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
+        with self.no_output():
             expected_result_project = pytam.Project.from_xml(result_file)
         # Compare results
         current_result = computation.result
@@ -81,8 +64,9 @@ def make_test_with_file(test_file):
                                                expected_spectrum.values, decimal=1)
     return test_with_file
 
+
 # Retrieve all the available "TEST_XX" xml files and make a test for each one
-for test_file in os.listdir(_TEST_PROBLEM_DIR):
+for test_file in os.listdir(TEST_PROBLEM_DIR):
     if test_file.startswith('TEST_') and test_file.endswith('xml'):
         setattr(TestTympan, "test_" + test_file.split('.')[0].replace('TEST_', '').lower(),
                 make_test_with_file(test_file))

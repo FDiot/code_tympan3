@@ -444,7 +444,7 @@ void TYAcousticSemiCylinder::distriSrcs()
     // Position du premier cercle de sources en partant du bas
     double base = (hauteurCyl - (nbCercle - 1) * distHauteur) / 2.0;
 
-    OCoord3D pt;
+    OPoint3D pt;
     double angle = 0.0;
     double hauteur = base;
     double rayon = (getDiameter() / 2.0) + _offsetSources; // Decalage des sources pour le lancer de rayons

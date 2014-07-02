@@ -34,7 +34,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYSurfaceInterfaceWidget", (id))
 
-#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSurfaceInterface.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSurfaceInterfaceWidget.h"

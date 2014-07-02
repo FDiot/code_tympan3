@@ -34,7 +34,6 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticEdge.h"
 
 class TYProjet;
 namespace tympan {
@@ -855,20 +854,6 @@ public:
      */
     void setTabRays(const TYTabRay& tabRays) { _tabRays = tabRays; }
 
-    /*!
-    * \fn void addAcousticEdge(TYAcousticEdge &edge)
-    * \brief Ajoute une arête de diffraction générée par le lancer de rayons.
-    * \param : Référence vers une arête Tympan à ajouter.
-    */
-    void addAcousticEdge(TYAcousticEdge& edge) { _tabEdges.push_back(edge); }
-
-    /*!
-    * \fn TYTabAcousticEdge getAllAcousticEdges()
-    * \brief Renvoie un tableau contenant l'ensemble des arêtes de diffractions générées par le lancer de rayon.
-    * \return Renvoie le tableau d'arêtes Tympan.
-    */
-    TYTabAcousticEdge& getAllAcousticEdges() { return _tabEdges; }
-
     std::unique_ptr<tympan::AcousticResultModel>  _acousticResult;
     std::unique_ptr<tympan::AcousticProblemModel> _acousticProblem;
 
@@ -990,9 +975,6 @@ protected:
 
     //Rayons valides produit par le lancer de rayons
     TYTabRay _tabRays;
-
-    //Ensemble des aretes de diffractions générées par le lancer de rayons
-    TYTabAcousticEdge _tabEdges;
 };
 
 #include "TYProjet.h"

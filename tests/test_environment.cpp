@@ -26,6 +26,15 @@ TEST(TestEnvironment, Path)
     cout << "PATH = " << path << endl;
 }
 
+TEST(TestEnvironment, LdPath)
+{
+    char* path = std::getenv("LD_LIBRARY_PATH");
+    if(path == NULL)
+        path = "";
+    cout << "LD_LIBRARY_PATH = " << path << endl;
+}
+
+
 TEST(TestEnvironment, TestDataPath)
 {
     std::string expected_data_path = tympan::path_to_test_data("");

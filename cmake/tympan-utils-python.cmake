@@ -1,22 +1,42 @@
 # Utilities related to python and cython
 
+function(copy_init_files destination)
+  # destination = relative destination
+  file(
+    COPY .
+    DESTINATION "${PROJECT_BINARY_DIR}/${TYMPAN_CythonModules_Debug}/${destination}"
+    FILES_MATCHING PATTERN "__init__.py" )
+  file(
+    COPY .
+    DESTINATION "${PROJECT_BINARY_DIR}/${TYMPAN_CythonModules_Release}/${destination}"
+    FILES_MATCHING PATTERN "__init__.py" )
+  install(DIRECTORY ./
+    DESTINATION "${TYMPAN_CythonModules_Release}/${destination}"
+    CONFIGURATIONS Release
+    FILES_MATCHING PATTERN "__init__.py")
+  install(DIRECTORY ./
+    DESTINATION "${TYMPAN_CythonModules_Debug}/${destination}"
+    CONFIGURATIONS Debug
+    FILES_MATCHING PATTERN "__init__.py")
+endfunction()
 
-function(configure_cython_module module)
+
+function(configure_cython_module module destination)
   set_property(TARGET ${module} PROPERTY DEBUG_POSTFIX "")
   set_property(TARGET ${module} PROPERTY LIBRARY_OUTPUT_DIRECTORY_DEBUG
-    "${PROJECT_BINARY_DIR}/${TYMPAN_CythonModules_Debug}")
+    "${PROJECT_BINARY_DIR}/${TYMPAN_CythonModules_Debug}/${destination}")
   set_property(TARGET ${module} PROPERTY LIBRARY_OUTPUT_DIRECTORY_RELEASE
-    "${PROJECT_BINARY_DIR}/${TYMPAN_CythonModules_Release}")
+    "${PROJECT_BINARY_DIR}/${TYMPAN_CythonModules_Release}/${destination}")
   # We do NOT want to depend on the debug version of the Python libs
 endfunction()
 
-function(install_cython_module module)
+function(install_cython_module module destination)
   install(TARGETS ${module}
-    DESTINATION ${TYMPAN_CythonModules_Release}  
+    DESTINATION ${TYMPAN_CythonModules_Release}/${destination}
     CONFIGURATIONS Release)
   
   install(TARGETS ${module}
-    DESTINATION ${TYMPAN_CythonModules_Debug}
+    DESTINATION ${TYMPAN_CythonModules_Debug}/${destination}
     CONFIGURATIONS Debug)  
 endfunction()
 

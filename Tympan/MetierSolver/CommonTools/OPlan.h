@@ -23,9 +23,7 @@
 #define __O_PLAN__
 
 
-#include "OPoint3D.h"
-#include "OVector3D.h"
-#include "ORepere3D.h"
+#include "Tympan/models/common/3d.h"
 
 /**
  * \file OPlan.h

@@ -35,7 +35,7 @@
 #endif // _NDEBUG
 
 #include "Tympan/Tools/TYConfigure.h"
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYElementWidget.h"
@@ -144,7 +144,7 @@ typedef void*   LPTYElementGraphic;
 /**
  * Structure contenant un identifiant unique pour chaque TYElement.
  */
-#include"Tympan/Tools/OGenID.h"
+#include"Tympan/core/idgen.h"
 typedef class OGenID TYUUID;
 
 /**

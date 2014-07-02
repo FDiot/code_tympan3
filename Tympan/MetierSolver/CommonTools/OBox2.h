@@ -23,9 +23,7 @@
 #ifndef __O_BOX2__
 #define __O_BOX2__
 
-#include "OPoint3D.h"
-#include "ORepere3D.h"
-#include "OBox.h"
+#include "Tympan/models/common/3d.h"
 
 /**
  * \file OBox2.h

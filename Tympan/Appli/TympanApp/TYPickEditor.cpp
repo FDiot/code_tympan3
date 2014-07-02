@@ -1973,14 +1973,15 @@ void TYPickEditor::showPanel(TYElement* pElt)
         LPTYMaillageGeoNode pMaillageGeoNode = TYCalcul::safeDownCast(pMaillage->getParent())->findMaillage(pMaillage);
 
         // On recupere la premiere distance
-        OCoord3D coord;
+        OPoint3D coord;
         double minDistSquare = 0.0;
         LPTYPointCalcul pPtCalcul = pMaillage->getPtsCalcul().front();
         LPTYPointCalcul pResult = 0;
         if (pPtCalcul)
         {
-	  coord = pMaillageGeoNode->localToGlobal() * OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0);
-            switch (_pModeler->getCurrentView())
+	        //coord = pMaillageGeoNode->localToGlobal() * OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0);
+ 	        coord = pMaillageGeoNode->localToGlobal() * OPoint3D(pPtCalcul->_x, pPtCalcul->_y, 0.0);
+           switch (_pModeler->getCurrentView())
             {
                 case TYModelerFrame::TopView:
                     minDistSquare = std::sqrt(std::pow(coord._x - worldPos[0], 2) + std::pow(coord._y + worldPos[2], 2));
@@ -2000,7 +2001,7 @@ void TYPickEditor::showPanel(TYElement* pElt)
         for (unsigned int i = 1; i < pMaillage->getPtsCalcul().size(); i++)
         {
             pPtCalcul = pMaillage->getPtsCalcul()[i];
-            coord = pMaillageGeoNode->localToGlobal() * OCoord3D(pPtCalcul->_x, pPtCalcul->_y, 0.0);
+            coord = pMaillageGeoNode->localToGlobal() * OPoint3D(pPtCalcul->_x, pPtCalcul->_y, 0.0);
 
             double distSquare = 0.0;
             switch (_pModeler->getCurrentView())

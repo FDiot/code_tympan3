@@ -22,8 +22,8 @@
 #ifndef _GLOBAL_MACROS_
 #define _GLOBAL_MACROS_
 
-#include "Defines.h"
-#include "OGeometrie.h"
+#include "Tympan/core/defines.h"
+#include "Tympan/models/common/3d.h"
 
 ///Pour la gestion des assertions.
 #include <assert.h>

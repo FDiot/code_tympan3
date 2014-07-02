@@ -20,7 +20,7 @@
 #ifndef __TYNAMEMANAGER__
 #define __TYNAMEMANAGER__
 
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 #include <map>
 #include <string>
 #include <utility>

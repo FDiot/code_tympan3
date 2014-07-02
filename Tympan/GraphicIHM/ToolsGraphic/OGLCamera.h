@@ -23,7 +23,7 @@
 #ifndef __O_GLCAMERA__
 #define __O_GLCAMERA__
 
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 #if _WIN32
 #include <windows.h>
@@ -32,7 +32,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "NxVec3.h"
-#include "Tympan/MetierSolver/CommonTools/OBox.h"
+#include "Tympan/models/common/3d.h"
 
 typedef enum {PARALLEL, PERSPECTIVE, FREE} CameraType;
 

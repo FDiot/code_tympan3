@@ -11,12 +11,7 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/CommonTools/OGeometrie.h"
-#include "Tympan/MetierSolver/CommonTools/OCoord3D.h"
-#include "Tympan/MetierSolver/CommonTools/OPoint3D.h"
-#include "Tympan/MetierSolver/CommonTools/OVector3D.h"
-#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
-#include "Tympan/MetierSolver/CommonTools/OBox.h"
+#include "Tympan/models/common/3d.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYCourbeNiveau.h"
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h"

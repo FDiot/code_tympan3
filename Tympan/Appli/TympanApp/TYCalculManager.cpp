@@ -36,7 +36,7 @@
 #include "Tympan/Tools/OChrono.h"
 #include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
 #include "Tympan/Appli/TympanApp/TYApplication.h"
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 #include "EnvironmentUtils.hpp"
 
 #include <qcursor.h>
@@ -99,7 +99,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         pSite->updateAcoustique(true);
         pProject->updateAltiRecepteurs(pSite->getTopographie()->getAltimetrie());
         pSite->setAtmosphere(pCalcul->getAtmosphere());
-        bool ret = pCalcul->go();
+        pCalcul->go();
     }
     else
     {
@@ -139,7 +139,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         }
         resultfile.close();
 
-        // Call python script "tympan.py" with: the name of the file
+        // Call python script "solve_project.py" with: the name of the file
         // containing the problem, the name of the file where to record
         // the result and the directory containing the solver plugin to use
         // to solve the acoustic problem
@@ -183,6 +183,10 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             // Reactivate GUI
             TYApplication::restoreOverrideCursor();
             getTYMainWnd()->setEnabled(true);
+            QMessageBox msgBox;
+            msgBox.setText(
+                    "L'interpreteur python n'a pas pu etre trouve.\nVeuillez verifier que la variable d'environnement TYMPAN_PYTHON_INTERP est correctement positionnee");
+            msgBox.exec();
             return false;
         }
         python.start(python_interp, args);
@@ -218,6 +222,9 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             // Reactivate GUI
             TYApplication::restoreOverrideCursor();
             getTYMainWnd()->setEnabled(true);
+            QMessageBox msgBox;
+            msgBox.setText("Le calcul a echoue, veuillez reessayer.");
+            msgBox.exec();
             return false;
         }
         // Then read the result to update the internal model
@@ -234,6 +241,9 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             // reactivate GUI
             TYApplication::restoreOverrideCursor();
             getTYMainWnd()->setEnabled(true);
+            QMessageBox msgBox;
+            msgBox.setText("Le fichier de resultats n'a pas pu etre lu.");
+            msgBox.exec();
             return false;
         }
 

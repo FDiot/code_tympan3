@@ -25,7 +25,7 @@
 
 class OPoint3D;
 
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 class OGLLight
 {

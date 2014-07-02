@@ -20,8 +20,8 @@
 #ifndef __TY_REPERE__
 #define __TY_REPERE__
 
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
-#include "Tympan/MetierSolver/CommonTools/ORepere3D.h"
 #include "TYPoint.h"
 
 /**

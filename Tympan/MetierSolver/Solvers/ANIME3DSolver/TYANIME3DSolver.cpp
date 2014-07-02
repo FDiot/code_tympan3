@@ -21,7 +21,7 @@
 #include "Tympan/Tools/TYProgressManager.h"
 #include "TYANIME3DSolver.h"
 
-#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
@@ -129,7 +129,7 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
         }
     }
 
-    calcul.setTabRays(_tabRay);
+//    calcul.setTabRays(_tabRay);
 
     // BEGIN : COMPLEMENTS "DECORATIFS"
     ostringstream fic_out;

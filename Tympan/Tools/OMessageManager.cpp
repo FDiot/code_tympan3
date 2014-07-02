@@ -317,9 +317,6 @@ void OMessageManager::vformat(int level, const char* message, va_list args)
 {
     if ((!bDebug) && (level == MSG_DEBUG)) { return; }   // on n'affiche les msg debug qu'en mode debug...
 
-
-    char    strLevel[64];
-    char    tmp[256];
     stringstream msg;
 
     // On construit le msg de la facon suivante :

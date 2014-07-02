@@ -12,10 +12,10 @@ add_library(${MODULE_NAME} MODULE ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SR
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
 #use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 
-add_dependencies(${MODULE_NAME} ${TYMPAN_MODULES})
+add_dependencies(${MODULE_NAME} ${TYMPAN_MODULES} tympan_convexhull_finder)
 
 target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${TYMPAN_MODULES}
-				  ${OPENGL_LIBRARIES})
+                      tympan_convexhull_finder ${OPENGL_LIBRARIES} )
 
 configure_tympan_plugin(${MODULE_NAME})
 install_tympan_plugin(${MODULE_NAME})

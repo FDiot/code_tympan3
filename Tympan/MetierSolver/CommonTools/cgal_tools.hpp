@@ -29,8 +29,7 @@
 #include <CGAL/Polygon_2_algorithms.h>
 #include <CGAL/centroid.h>
 
-#include "OPoint3D.h"
-#include "OVector3D.h"
+#include "Tympan/models/common/3d.h"
 #include "OPlan.h"
 
 namespace tympan

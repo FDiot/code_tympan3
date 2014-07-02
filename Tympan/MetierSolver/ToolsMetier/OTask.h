@@ -24,7 +24,7 @@
 #define __O_TASK__
 
 #include "ThreadingSupport.h"
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 /**
  * \file OTask.h

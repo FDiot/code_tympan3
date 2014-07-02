@@ -31,18 +31,61 @@ install(TARGETS ${TARGET} ARCHIVE DESTINATION lib
                           RUNTIME DESTINATION . )
 endfunction(install_tympan_component)
 
+if(SYS_NATIVE_WIN)
+  set(OS_PATH_SEPARATOR ";")
+endif()
+if(SYS_LINUX)
+  set(OS_PATH_SEPARATOR ":")
+endif()
+
+
+# This function rewrite a CMake list of path into a string
+# usable as native shell list of path like  
+# <user_home>/tympan/lib:<system>/lib on Linux
+# c:\<user_home>\tympan\lib;c:\<system>\lib on Windows
+function(build_native_path_list outvar inlist)
+  # Handles the special case a an empty list
+  if(NOT inlist)
+    set(${outvar} "" PARENT_SCOPE)
+    return()
+  endif()
+ 
+
+  ## We now process this 3rd party list of directories according to
+  ## http://www.mail-archive.com/cmake@cmake.org/msg21493.html
+  list(REMOVE_DUPLICATES inlist)
+
+  set(native_list "")
+  foreach(dir ${inlist})
+    FILE(TO_NATIVE_PATH  ${dir} nativedir)
+    set(native_list "${native_list}${OS_PATH_SEPARATOR}${nativedir}")
+  endforeach(dir)
+
+  # Remove the leading separator 
+  string(SUBSTRING "${native_list}" 1 -1 native_list )
+
+  # Export the result in calling function scope
+  set(${outvar} "${native_list}" PARENT_SCOPE)
+endfunction(build_native_path_list)
+
+
 # This MACRO factors out some functionalities shared among
 # add_qtest_executable and configure_gtest_target: it is NOT MEANT to
 # be called DIRECTLY
 macro(_common_test_config)
   if(_RUNTIME_PATH)
+    set(current_rt_path "$ENV{${LD_VARNAME}}")
+    # Removes trailing directory separator before a path separator
+    string(REPLACE "\\;" ";" current_rt_path "${current_rt_path}")  
+    set(extended_rt_path "${_RUNTIME_PATH}${OS_PATH_SEPARATOR}${current_rt_path}")
     # From http://www.mail-archive.com/cmake@cmake.org/msg21493.html
     #
     # IMPORTANT NOTE: The set_tests_properties(), below, internally
     # stores its name/value pairs with a semicolon delimiter.
     # because of this we must protect the semicolons in the path
-    string(REPLACE ";" "\\;" _rt_path "${_RUNTIME_PATH}")  
-    set_property(TEST ${_TARGET} PROPERTY ENVIRONMENT "${LD_VARNAME}=${_rt_path}")
+    string(REPLACE ";" "\\;" extended_rt_path "${extended_rt_path}")  
+
+    set_property(TEST ${_TARGET} PROPERTY ENVIRONMENT "${LD_VARNAME}=${extended_rt_path}")
   endif()
 
   if(TARGET ${_TARGET})
@@ -99,38 +142,3 @@ function(add_qtest_executable)
       "for target ${_TARGET}: " ${_UNPARSED_ARGUMENTS})
   endif()
 endfunction()
-
-# This function rewrite a CMake list of path into a string
-# usable as native shell list of path like  
-# <user_home>/tympan/lib:<system>/lib on Linux
-# c:\<user_home>\tympan\lib;c:\<system>\lib on Windows
-function(build_native_path_list outvar inlist)
-  # Handles the special case a an empty list
-  if(NOT inlist)
-    set(${outvar} "" PARENT_SCOPE)
-    return()
-  endif()
- 
-  if(SYS_NATIVE_WIN)
-    set(sep ";")
-  endif()
-  if(SYS_LINUX)
-    set(sep ":")
-  endif()
-
-  ## We now process this 3rd party list of directories according to
-  ## http://www.mail-archive.com/cmake@cmake.org/msg21493.html
-  list(REMOVE_DUPLICATES inlist)
-
-  set(native_list "")
-  foreach(dir ${inlist})
-    FILE(TO_NATIVE_PATH  ${dir} nativedir)
-    set(native_list "${native_list}${sep}${nativedir}")
-  endforeach(dir)
-
-  # Remove the leading separator 
-  string(SUBSTRING "${native_list}" 1 -1 native_list )
-
-  # Export the result in calling function scope
-  set(${outvar} "${native_list}" PARENT_SCOPE)
-endfunction(build_native_path_list)

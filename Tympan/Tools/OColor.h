@@ -20,7 +20,7 @@
 #ifndef __O_COLOR__
 #define __O_COLOR__
 
-#include "OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 #include <vector>
 #include <cmath>

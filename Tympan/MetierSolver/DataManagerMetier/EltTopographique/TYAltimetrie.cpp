@@ -34,8 +34,7 @@
 #include <boost/current_function.hpp>
 #include <boost/foreach.hpp>
 
-#include "Tympan/MetierSolver/CommonTools/OSegment3D.h"
-#include "Tympan/MetierSolver/CommonTools/OBox.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/CommonTools/OBox2.h"
 
 #include "TYAltimetrie.h"
@@ -607,7 +606,6 @@ OPoint3D TYAltimetrie::projection(const OPoint3D& pt) const
     }
 
     OSegment3D segTest;
-    TYPolygon* pFace = NULL;
     TYTabLPPolygon& divRef = _pSortedFaces[idx.pi][idx.qi];
 
     BOOST_FOREACH(const LPTYPolygon & pFace, divRef)

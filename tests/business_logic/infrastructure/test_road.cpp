@@ -15,7 +15,7 @@
 #include <QDir>
 
 
-#include "Tympan/Tools/OSmartPtr.h"
+#include "Tympan/core/smartptr.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h"

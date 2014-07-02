@@ -27,7 +27,7 @@
 #ifndef __O_PREFERENCE_MANAGER__
 #define __O_PREFERENCE_MANAGER__
 
-#include "Tympan/MetierSolver/CommonTools/Defines.h"
+#include "Tympan/core/defines.h"
 #include <map>
 #include <QString>
 
