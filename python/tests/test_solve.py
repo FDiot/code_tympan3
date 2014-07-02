@@ -3,7 +3,8 @@ import unittest
 
 import numpy as np
 
-from utils import TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC, pytam
+from utils import (TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC,
+                   tybusiness, bus2solv)
 
 
 class TestTympan(TympanTC):
@@ -24,13 +25,13 @@ def make_test_with_file(test_file):
             project = self.load_project(osp.join(TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation
             computation.set_nthread(1) # avoid segfaults due to multithreading
-            pytam.loadsolver(TEST_SOLVERS_DIR, computation)
+            bus2solv.loadsolver(TEST_SOLVERS_DIR, computation)
             result = computation.go()
         self.assertTrue(result)
         # Load the expected result
         result_file = osp.join(TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
         with self.no_output():
-            expected_result_project = pytam.Project.from_xml(result_file)
+            expected_result_project = tybusiness.Project.from_xml(result_file)
         # Compare results
         current_result = computation.result
         expected_result = expected_result_project.current_computation.result

@@ -117,8 +117,10 @@ def no_output(to=os.devnull, err_to=None):
 
 
 with no_output():
-    import tympan.pytam as pytam
-    pytam.init_tympan_registry()
+    import tympan.models.business as tybusiness
+    import tympan.models.solver as tysolver
+    import tympan.business2solver as bus2solv
+    tybusiness.init_tympan_registry()
 
 
 class TympanTC(unittest.TestCase):
@@ -133,14 +135,11 @@ class TympanTC(unittest.TestCase):
 
     def load_project(self, *path):
         with self.no_output():
-            project = pytam.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
+            project = tybusiness.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
             project.update_site()
             project.update_altimetry_on_receptors()
             computation = project.current_computation
             model = computation.acoustic_problem
-            builder = pytam.SolverModelBuilder(model)
+            builder = bus2solv.SolverModelBuilder(model)
             builder.fill_problem(project.site, computation)
         return project
-
-
-

@@ -6,7 +6,7 @@ import numpy as np
 from itertools import izip
 from numpy.testing import assert_allclose
 
-from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, TEST_RESULT_DIR, TympanTC, pytam
+from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, TEST_RESULT_DIR, TympanTC
 
 
 _TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'computed-projects-panel')

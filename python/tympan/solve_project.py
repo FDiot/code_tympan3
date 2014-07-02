@@ -10,11 +10,19 @@ logging.basicConfig(stream=stream, level=logging.DEBUG,
 
 
 try:
-    import tympan.pytam as pytam
+    import tympan.models.business as tybusiness
 except ImportError:
-    err = "solve_project.py module couldn't find pytam library."
+    err = "solve_project.py module couldn't find tympan.models.business cython library."
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
     raise ImportError(err)
+
+try:
+    import tympan.business2solver as bus2solv
+except ImportError:
+    err = "solve_project.py module couldn't find tympan.business2solver cython library."
+    logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
+    raise ImportError(err)
+
 
 def solve_acoustic_problem(input_project, output_project, solverdir):
     """ Solve an acoustic problem with Code_TYMPAN from
@@ -30,24 +38,24 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
         the input XML project (the one opened from the Code_TYMPAN GUI)
     """
     ret = False
-    pytam.init_tympan_registry()
+    tybusiness.init_tympan_registry()
     # Load an existing project and retrieve its calcul to solve it
     try:
-        project = pytam.Project.from_xml(input_project)
+        project = tybusiness.Project.from_xml(input_project)
     except RuntimeError:
         logging.exception("Couldn't load the acoustic project from %s file", input_project)
         raise
     comp = project.current_computation
     # Build an acoustic problem from the site of the computation
     problem = comp.acoustic_problem
-    builder = pytam.SolverModelBuilder(problem)
+    builder = bus2solv.SolverModelBuilder(problem)
     # Update site before building the acoustic problem
     project.update_site()
     project.update_altimetry_on_receptors()
     site = project.site
     builder.fill_problem(site, comp)
     # Load solver plugin
-    pytam.loadsolver(solverdir, comp)
+    bus2solv.loadsolver(solverdir, comp)
     # Solve the problem and fill the acoustic result
     logging.debug("Calling C++ go method")
     ret = comp.go()

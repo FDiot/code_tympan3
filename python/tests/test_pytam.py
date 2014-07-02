@@ -4,7 +4,7 @@ import unittest
 
 import numpy as np
 
-from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, TympanTC, pytam
+from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, TympanTC, bus2solv
 
 _HERE = osp.realpath(osp.dirname(__file__))
 
@@ -15,7 +15,7 @@ class TestPyTam(TympanTC):
                                "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
         computation = project.current_computation
         with self.no_output():
-            pytam.loadsolver(TEST_SOLVERS_DIR, computation)
+            bus2solv.loadsolver(TEST_SOLVERS_DIR, computation)
             self.assertTrue(computation.go())
 
     def test_hierarchy(self):
