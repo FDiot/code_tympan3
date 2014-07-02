@@ -82,3 +82,53 @@ def plot_SiteNode(this, ax, recursive=False, **kwargs):
         for f in this.subsites:
             f.plot(ax, recursive=True, **kwargs)
 SiteNode.plot=plot_SiteNode
+
+
+
+def rescale_plot(ax, scale = 1.0):
+    ax.axis('tight')
+    ax.axis('equal')
+
+def plot_points_seq(ax, points, **kwargs):
+    plot_opts = {'linestyle':'',
+                 'marker':'o'}
+    plot_opts.update(kwargs)
+    xs, ys = zip(*[(p.x(), p.y()) for p in points])
+    return ax.plot(xs, ys, **plot_opts)
+
+def plot_segment(ax, s, **kwargs):
+    plot_opts = {'linestyle':'-',
+                 'marker':''}
+    plot_opts.update(kwargs)
+    return plot_points_seq(ax, [s.source(), s.target()], **plot_opts)
+
+
+class MeshedCDTPlotter(object):
+
+    style_edge = {'linewidth': 1, 'color':'black'}
+    style_constrained_edge = {'linewidth': 3}
+
+    def __init__(self, mesher, title="Mesh"):
+        self.mesher = mesher
+        self.fig = plt.figure()
+        self.ax = self.fig.add_subplot(1, 1, 1)
+        self.ax.set_title(title)
+
+    def show(self):
+        rescale_plot(self.ax)
+        plt.show()
+
+    @property
+    def cdt(self):
+        return self.mesher.cdt
+
+    def plot_edge(self, edge, **kwargs):
+        plot_opts = self.style_edge.copy()
+        if self.cdt.is_constrained(edge):
+            plot_opts.update(self.style_constrained_edge)
+        plotted = plot_segment(self.ax, self.mesher.segment_for_edge(edge), **plot_opts)
+        return plotted
+
+    def plot_edges(self):
+        for edge in self.cdt.finite_edges():
+            self.plot_edge(edge)

@@ -452,6 +452,22 @@ class MeshedCDTTC(unittest.TestCase):
                               [{'origin': 'H', 'altitude': 10},
                                {'origin': 'V', 'color': 'blue'}])
 
+    def build_simple_scene(self):
+        border = self.mesher.insert_polyline( #NB CCW
+            [(0, 0), (6, 0), (6, 5), (0, 5)], close_it=True,
+            material='concrete', altitude=0)
+        hole = self.mesher.insert_polyline( # NB CW
+            reversed([(2, 2), (5, 2), (5, 4), (2, 4)]), close_it=True,
+            material='hidden')
+        line = self.mesher.insert_polyline(
+            [(1, 4), (4, 1)], altitude=20)
+
+    @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
+    def test_mesh_plotter(self):
+        self.build_simple_scene()
+        plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
+        plotter.plot_edges()
+        plotter.show()
 
 if __name__ == '__main__':
     from utils import main

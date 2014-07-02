@@ -10,6 +10,7 @@ from CGAL.CGAL_Kernel import (
     Point_2 as Point,
     Vector_2 as Vector,
     Triangle_2 as Triangle,
+    Segment_2 as Segment,
     Ref_int,
     centroid)
 from CGAL.CGAL_Mesh_2 import (
@@ -238,3 +239,9 @@ class MeshedCDTWithInfo(object):
                 if info not in infos:
                     infos.append(info)
         return vertices_info
+
+    def segment_for_edge(self, edge):
+        if isinstance(edge[0], Face_handle):
+            return self.cdt.segment(edge)
+        else: # Vertices pair assumed
+            return Segment(edge[0].point(), edge[1].point())
