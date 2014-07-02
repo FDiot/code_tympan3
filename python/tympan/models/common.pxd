@@ -40,7 +40,7 @@ cdef extern from "Tympan/models/common/triangle.h":
         string reportInconsistencyWrtPointsTab(const deque[OPoint3D]& points)
 
 
-cdef extern from "Tympan/models/common/spectrum.h":
+cdef extern from "Tympan/models/common/spectre.h":
 
     const unsigned int TY_SPECTRE_DEFAULT_NB_ELMT
 
