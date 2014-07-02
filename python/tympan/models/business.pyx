@@ -33,6 +33,13 @@ cdef tymateriauconstruction2material(SmartPtr[TYMateriauConstruction] mat):
     material.thisptr = mat
     return material
 
+cdef tysol2ground(SmartPtr[TYSol] grnd):
+    """factory function: return a Ground (python object) from a SmartPtr[TYSol] (cpp lib)
+    """
+    ground = Ground()
+    ground.thisptr = grnd
+    return ground
+
 def init_tympan_registry():
     """ Trigger the registration of Tympan business classes (TY* classes).
         It is necessary to do it before playing with Tympan library (just after
@@ -97,7 +104,6 @@ cdef class AcousticSurface:
 
 
 cdef class Material:
-    thisptr = cy.declare(SmartPtr[TYMateriauConstruction])
 
     @property
     def spectrum(self):
@@ -114,6 +120,21 @@ cdef class Material:
         return self.thisptr.getRealPointer().getName().toStdString()
 
 
+cdef class Ground:
+
+    @property
+    def resistivity(self):
+        """ Return ground resistivity (double value)
+        """
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getResistivite()
+
+    def name(self):
+        """ Return a string representing the name of the element
+        """
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getName().toStdString()
+
 cdef class Site:
 
     @property
@@ -127,6 +148,7 @@ cdef class Site:
         """ Retrieve the acoustic surfaces of the site and return them as a list
             of 'AcousticSurface' cython objects.
         """
+        assert self.thisptr.getRealPointer() != NULL
         is_screen_face_idx = cy.declare(vector[bool])
         face_list = cy.declare(vector[SmartPtr[TYGeometryNode]])
         nb_building_faces = cy.declare(cy.uint)
@@ -144,6 +166,49 @@ cdef class Site:
                 continue
             surfaces.append(surf)
         return surfaces
+
+    def export_topo_mesh(self):
+        """ Retrieve the mesh of the site topography and return it as 3 lists:
+            - 'points' contains 'Point3D' cython objects
+            - 'triangles' contains 'Triangle' cython objects
+            - 'ground' contains 'Ground' cython objects
+        """
+        assert self.thisptr.getRealPointer() != NULL
+        pts = cy.declare(deque[tycommon.OPoint3D])
+        tgles = cy.declare(deque[tycommon.OTriangle])
+        mats = cy.declare(deque[SmartPtr[TYSol]])
+        ptopo = cy.declare(cy.pointer(TYTopographie))
+        ptopo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        # Retrieve topography mesh as c++ objects
+        ptopo.exportMesh(pts, tgles, cy.address(mats))
+        # Retrieve points
+        points = []
+        itp = cy.declare(deque[tycommon.OPoint3D].iterator)
+        itp = pts.begin()
+        while itp != pts.end():
+            points.append(tycommon.opoint3d2point3d(deref(itp)))
+            inc(itp)
+        # Retrieve triangles
+        triangles = []
+        itt = cy.declare(deque[tycommon.OTriangle].iterator)
+        itt = tgles.begin()
+        while itt != tgles.end():
+            # Assert consistency of the tycommon.OPoint3D given in the mesh
+            assert (deref(itt).checkConsistencyWrtPointsTab(pts),
+                    deref(itt).reportInconsistencyWrtPointsTab(pts))
+            tri = cy.declare(cy.pointer(tycommon.OTriangle))
+            tri = new tycommon.OTriangle(deref(itt)._p1, deref(itt)._p2, deref(itt)._p3)
+            triangles.append(tycommon.otriangle2triangle(tri))
+            inc(itt)
+        # Retrieve ground materials
+        grounds = []
+        itg = cy.declare(deque[SmartPtr[TYSol]].iterator)
+        itg = mats.begin()
+        while itg != mats.end():
+            grounds.append(tysol2ground(deref(itg)))
+            inc(itg)
+        return (points, triangles, grounds)
+
 
     @cy.locals(comp=Computation)
     def fetch_sources(self, comp):
@@ -200,14 +265,14 @@ cdef class Result:
 
     @property
     def nsources(self):
-        """ Returns the number of acoustic sources
+        """ Return the number of acoustic sources
         """
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getNbOfSources()
 
     @property
     def nreceptors(self):
-        """ Returns the number of acoustic receptors
+        """ Return the number of acoustic receptors
         """
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getNbOfRecepteurs()
@@ -231,11 +296,16 @@ cdef class Mesh:
 
     @property
     def is_active(self):
+        """ Return true if the mesh is in an active state, false otherwise
+        """
         # enum value from MaillageState (class TYMaillage)
         return self.thisptr.getState() == Actif
 
     @property
     def receptors(self):
+        """ Return the receptors contained in the mesh as a list of 'Receptor'
+            cython objects
+        """
         assert self.thisptr != NULL
         ptscalc = cy.declare(vector[SmartPtr[TYPointCalcul]])
         ptscalc = self.thisptr.getPtsCalcul()
@@ -286,6 +356,9 @@ cdef class Receptor:
 
     @cy.locals(comp=Computation)
     def is_active(self, comp):
+        """ Return true if this receptor is active in computation 'comp', false
+            otherwise
+        """
         if self.thisptr.getRealPointer().getEtat(comp.thisptr.getRealPointer()):
             return True
         return False
@@ -350,7 +423,7 @@ cdef class Computation:
 
     @property
     def acoustic_result(self):
-        """ Returns an acoustic result model (geometric representation as used
+        """ Return an acoustic result model (geometric representation as used
         by the solvers)
         """
         assert self.thisptr.getRealPointer() != NULL
@@ -408,6 +481,9 @@ cdef class Project:
 
     @property
     def user_receptors(self):
+        """ Return user-defined receptors (i.e. control points) as a list of
+            'UserReceptor' cython objects
+        """
         assert self.thisptr.getRealPointer() != NULL
         ctrl_pts = cy.declare(vector[SmartPtr[TYPointControl]])
         ctrl_pts = self.thisptr.getRealPointer().getPointsControl()
