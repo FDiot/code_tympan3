@@ -16,6 +16,7 @@
 
 #include<math.h>
 #include<stdio.h>
+
 #include "Tympan/core/defines.h"
 #include "3d.h"
 
@@ -106,6 +107,11 @@ double* OCoord3D::getCoords()
     res[1] = _y;
     res[2] = _z;
     return res;
+}
+
+::std::ostream& operator<<(::std::ostream& os, const OCoord3D& c)
+{
+    return os << "(" << c._x << ", " << c._y << ", " << c._z << ")";
 }
 
 
@@ -330,6 +336,12 @@ OVector3D OVector3D::getRotationOzOy(double alpha, double theta)
     return Vfinal;
 }
 
+::std::ostream& operator<<(::std::ostream& os, const OVector3D& v)
+{
+    return os << "OVector3D"
+           << static_cast<const OCoord3D&>(v);
+}
+
 
 /* OPoint3D *******************************************************************/
 
@@ -419,6 +431,12 @@ TabPoint3D OPoint3D::checkPointsMaxDistance(const OPoint3D& point1,
     tabPoints.push_back(point1);
     tabPoints.push_back(point2);
     return checkPointsMaxDistance(tabPoints, distanceMax);
+}
+
+::std::ostream& operator<<(::std::ostream& os, const OPoint3D& v)
+{
+    return os << "OPoint3D"
+           << static_cast<const OCoord3D&>(v);
 }
 
 

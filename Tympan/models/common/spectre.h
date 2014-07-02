@@ -18,6 +18,7 @@
 
 #include <vector>
 #include <map>
+#include <ostream>
 
 
 ///Type de spectre.
@@ -328,6 +329,7 @@ protected:
     double _module[TY_SPECTRE_DEFAULT_NB_ELMT];
 };
 
+::std::ostream& operator<<(::std::ostream& os, const OSpectre& s);
 
 typedef std::vector<OSpectre> OTabSpectre;
 typedef std::vector<std::vector<OSpectre> > OTab2DSpectre;

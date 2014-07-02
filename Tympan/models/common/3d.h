@@ -23,6 +23,7 @@
 
 #include <cmath>
 #include <vector>
+#include <ostream>
 
 // Defines pour les calculs d'intersection
 ///Les elements sont confondus.
@@ -272,6 +273,8 @@ public:
     };
 };
 
+::std::ostream& operator<<(::std::ostream& os, const OCoord3D& c);
+
 
 /**
  * \class OVector3D
@@ -453,6 +456,8 @@ inline OCoord3D operator + (const OCoord3D& coord, const OVector3D& vect)
     return OCoord3D(coord._x + vect._x, coord._y + vect._y, coord._z + vect._z);
 }
 
+::std::ostream& operator<<(::std::ostream& os, const OVector3D& v);
+
 
 /**
  * \class OPoint3D
@@ -558,6 +563,8 @@ public:
             const OPoint3D& point2, const double& distanceMax);
 
 };
+
+::std::ostream& operator<<(::std::ostream& os, const OPoint3D& v);
 
 
 /**
