@@ -546,7 +546,16 @@ class MeshedCDTTC(unittest.TestCase):
         self.assertEqual(faces_right, (f1, f2, f3))
 
     @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
-    def test_input_constraints_oriantation(self):
+    def test_mesh_refine_no_holes(self):
+        (border, hole, line) = self.build_simple_scene()
+
+        self.mesher.refine_mesh()
+        plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
+        plotter.plot_edges()
+        plotter.show()
+
+    @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
+    def test_input_constraints_orientation(self):
         (border, hole, line) = self.build_simple_scene()
         plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
         plotter.plot_edges()
