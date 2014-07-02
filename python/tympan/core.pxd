@@ -6,10 +6,12 @@ from libcpp.string cimport string
 
 # STL ##########################################################################
 
-cdef extern from "memory" namespace "std":
+cdef extern from "boost/shared_ptr.hpp" namespace "boost":
 
     cdef cppclass shared_ptr[T]:
         T *get()
+
+cdef extern from "memory" namespace "std":
 
     cdef cppclass unique_ptr[T]:
         T *get()
