@@ -411,7 +411,7 @@ class MeshedCDTTC(unittest.TestCase):
         # Point comparison is NOT ROBUST : do no use in production
         p = mesh.to_cgal_point(p)
         for v in self.mesher.cdt.finite_vertices():
-            if v.point() == mesh.Point(0, 0): # Not robust in real cases
+            if v.point() == p: # Not robust in real cases
                 return v
         else:
             return None
@@ -427,7 +427,7 @@ class MeshedCDTTC(unittest.TestCase):
         self.assert_basic_counts(vertices=5, faces=4, edges=8, constrained=4)
         # Informations check
         vO = self._find_vertex_at((0, 0))
-        self.assertFalse(vO is None)
+        self.assertIsNotNone(vO)
         return (vA, vB, vC, vD, cAB, cCD, vO)
 
     def test_info_on_edges_crossing_polylines(self):
@@ -461,13 +461,71 @@ class MeshedCDTTC(unittest.TestCase):
             material='hidden')
         line = self.mesher.insert_polyline(
             [(1, 4), (4, 1)], altitude=20)
+        return (border, hole, line)
 
     @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_mesh_plotter(self):
-        self.build_simple_scene()
+        (border, hole, line) = self.build_simple_scene()
         plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
         plotter.plot_edges()
+        faces_left, faces_right = zip(*[self.mesher.faces_for_edge(edge)
+                                        for edge  in border[1]])
+        points_left = [self.mesher.point_for_face(f) for f in faces_left]
+        points_right = [self.mesher.point_for_face(f) for f in faces_right]
+        self.assertEqual(points_right, [None]*4)
+        visu.plot_points_seq(plotter.ax, points_left, marker='*')
         plotter.show()
+
+    def test_faces_from_edge(self):
+        # NB ABCD is given in counter-clock-wise orientation
+        (vA, vB, vC, vD), _ = self.mesher.insert_polyline(
+            [(0, 0), (6, 0), (6, 5), (0, 5)], close_it=True,
+            material='concrete', altitude=0)
+
+        (face_left, face_right) = self.mesher.faces_for_edge((vA, vB))
+        self.assertTrue(self.mesher.cdt.is_infinite(face_right))
+        self.assertFalse(self.mesher.cdt.is_infinite(face_left))
+        (face_left, face_right) = self.mesher.faces_for_edge((vB, vA))
+        self.assertFalse(self.mesher.cdt.is_infinite(face_right))
+        self.assertTrue(self.mesher.cdt.is_infinite(face_left))
+
+    def test_find_single_face(self):
+        (v1, v2, v3), _ = self.mesher.insert_polyline( [(1, 1), (1, 2), (3, 4)],
+                                                       close_it = True)
+        face, = self.mesher.cdt.finite_faces()
+
+        found_face = self.mesher.face_for_vertices(v1, v2, v3)
+        self.assertEqual(found_face, face)
+        found_face = self.mesher.face_for_vertices(v1, v3, v2)
+        self.assertEqual(found_face, face)
+
+    def test_faces_from_input_constraint(self):
+        # NB ABCD is given in counter-clock-wise orientation
+        (vA, vB, vC, vD), _ = self.mesher.insert_polyline(
+            [(0, 0), (2, 0), (2, 1), (0, 1)], close_it=True)
+        (vM, vN), _ = self.mesher.insert_polyline([(1, -1), (1, 2)])
+        # Get the two added vertices
+        vP = self._find_vertex_at((1, 0))
+        self.assertIsNotNone(vP)
+        vQ = self._find_vertex_at((1, 1))
+        self.assertIsNotNone(vQ)
+        # Get the faces of interest
+        f1 = self.mesher.face_for_vertices(vM, vP, vA)
+        self.assertIsNotNone(f1)
+        f2a = self.mesher.face_for_vertices(vP, vQ, vA)
+        f2b = self.mesher.face_for_vertices(vP, vQ, vD)
+        f2 = f2a or f2b
+        self.assertIsNotNone(f2)
+        f3 = self.mesher.face_for_vertices(vQ, vN, vD)
+        self.assertIsNotNone(f3)
+
+        faces = list(self.mesher.iter_faces_for_input_constraint(vM, vN))
+
+        faces_left, _ = zip(*faces)
+        self.assertEqual(faces_left, (f1, f2, f3))
+
+
+
 
 if __name__ == '__main__':
     from utils import main
