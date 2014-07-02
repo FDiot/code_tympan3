@@ -96,10 +96,9 @@ class MeshedCDTWithInfo(object):
         return self._constraints_infos[sorted_vertex_pair(va, vb)]
 
     def insert_constraint(self, va, vb, **kwargs):
-        constraint = sorted_vertex_pair(va, vb)
         self.cdt.insert_constraint(va, vb)
-        self._constraints_infos[constraint] = self.EdgeInfo(**kwargs)
-        return constraint
+        self._constraints_infos[sorted_vertex_pair(va, vb)] = self.EdgeInfo(**kwargs)
+        return (va, vb) # Important to return the contrain in the input order
 
     def insert_point(self, point, **kwargs):
         point = to_cgal_point(point)
@@ -169,7 +168,7 @@ class MeshedCDTWithInfo(object):
             return edge
 
     def mirror_half_edge(self, fh, i):
-        return self.cdt.mirror_edge((fh, i))
+        return fh.neighbor(i)
 
     def iter_input_constraint_overlapping(self, edge):
         """Return an iterator over the input constraint overlapping the given edge.
@@ -245,3 +244,37 @@ class MeshedCDTWithInfo(object):
             return self.cdt.segment(edge)
         else: # Vertices pair assumed
             return Segment(edge[0].point(), edge[1].point())
+
+    def faces_for_edge(self, edge):
+        """Return the pair (face_left, face_right) of face handle respectively
+        on the left and on the right of the given edge.
+
+        If edge is given as a pair of vertices (va, vb) the edge is
+        oriented from va to vb, if the edge is an half edge (fh, i)
+        its natural orientation is used. NB: In this later case
+        face_right == fh.
+        """
+        face_right, i = self.ensure_half_edge(edge)
+        face_left = self.mirror_half_edge(face_right, i)
+        return (face_left, face_right)
+
+    def point_for_face(self, fh):
+        "Return a point in the interior of the face, or None if face is infinite"
+        if self.cdt.is_infinite(fh):
+            return None
+        else:
+            return centroid(*(fh.vertex(i).point() for i in xrange(3)))
+
+    def iter_faces_for_input_constraint(self, va, vb):
+        for edge in ilinks(self.cdt.vertices_in_constraint(va, vb)):
+            yield self.faces_for_edge(edge)
+
+    def face_for_vertices(self, v1, v2, v3):
+        """Return the face handle for the face having the arguments as
+        vertices or None if no such face exists.
+        """
+        fh = Ref_Face_handle()
+        if self.cdt.is_face(v1, v2, v3, fh):
+            return fh.object()
+        else:
+            return None
