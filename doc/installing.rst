@@ -87,6 +87,10 @@ Cython
         Code_TYMPAN to interface Python code with TYMPAN C++ libraries. A version
         0.19 or above is required.
 
+Shapely
+        Shapely_ is a Python package for manipulation and analysis of planar 
+        geometric objects. Version 1.3 is suggested.
+
 
 Documentation dependencies
 --------------------------
@@ -162,6 +166,10 @@ this command.
 
     $ sudo aptitude install python cython
 
+**Installation of shapely** ::
+
+    $ sudo aptitude install python-shapely
+
 
 Windows Seven
 =============
@@ -200,6 +208,11 @@ Cython
         Cython can be installed through *Python(x,y)*  and found at:
         http://code.google.com/p/pythonxy/wiki/StandardPlugins (follow the
         installation instructions)
+
+Shapely
+        Shapely can be installed through the dedicated executable installer,
+        which contains the required GEOS DLL. It can be downloaded from:
+        http://pypi.python.org/pypi/Shapely#downloads (choose python 2.7 version)
 
 If you have no direct Internet connection (typically you are behind an
 authenticating proxy) you will have to build Boost from source :
@@ -352,6 +365,7 @@ opening the solution.
 .. _MinGW: http://www.mingw.org/
 .. _Python: http://www.python.org/
 .. _Cython: http://www.cython.org/
+.. _Shapely: http://pypi.python.org/pypi/Shapely
 
 .. _`CGAL forge` : https://gforge.inria.fr/frs/?group_id=52
 
