@@ -29,12 +29,14 @@
 
 #include <qapplication.h>
 
-#include "TYAppDefines.h"
 #include "TYCalculManager.h"
 #include "TYActionManager.h"
+#include "TYMainWindow.h"
 
 class TYImageManager;
 class TYPluginManager;
+class OSplashScreen;
+class TYMessageManager;
 
 /**
  * \class TYApplication
