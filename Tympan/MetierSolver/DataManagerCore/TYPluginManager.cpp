@@ -215,15 +215,23 @@ TYSolverInterface* TYPluginManager::getSolver() const
 
 TYSolverInterface* TYPluginManager::getSolver(const OGenID& uuid) const
 {
-    // On cree le plugin correspondant a l'uuid
+    TYPlugin* plugin = getPlugin(uuid);
+    if (plugin != nullptr)
+        return plugin->getSolver();
+    return nullptr;
+}
+
+TYPlugin* TYPluginManager::getPlugin(const OGenID& uuid) const
+{
     for (TYPluginList::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it)
         if ((*it)->getPlugin()->getUUID() == uuid)
         {
-            return (*it)->getPlugin()->getSolver();
+            return (*it)->getPlugin();
         }
 
-    return 0;
+    return nullptr;
 }
+
 
 void TYPluginManager::getInfos(pluginInfos* pInfos) const
 {

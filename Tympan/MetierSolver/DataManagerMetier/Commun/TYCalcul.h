@@ -34,6 +34,8 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+#include "Tympan/MetierSolver/DataManagerCore/TYPlugin.h"
 
 class TYProjet;
 namespace tympan {
@@ -783,14 +785,20 @@ public:
     void setGeomPrecision(const double& geomPrecision) { this->_geomPrecision = _geomPrecision; }
 
     /**
-     * \fn OGenID getSolverId()
-     *     void setSolverId(const OGenID& iD)
-     * \brief Get/Set du solveur ID
-     * \return _solverId
+     * \fn void setPlugin(TYPlugin* plugin)
+     * \brief Set solver plugin
      */
-    OGenID getSolverId() { return _solverId; }
-    const OGenID getSolverId() const { return _solverId; }
+    void setPlugin(TYPlugin* plugin){ _plugin = plugin; }
+
+    /**
+     * -     * \fn OGenID getSolverId()
+     *       -     *     void setSolverId(const OGenID& iD)
+     *       -     * \brief Get/Set du solveur ID
+     *       -     * \return _solverId
+     */
     void setSolverId(const OGenID& iD) { _solverId = iD; }
+    const OGenID getSolverId() const { return _solverId; }
+    OGenID getSolverId() { return _solverId; }
 
     /**
      * \fn  bool HARM_AveragingEnabled()
@@ -866,6 +874,10 @@ protected:
 
     // Membres
 protected:
+    // solver to be used to solve this "calcul"
+    TYPlugin* _plugin;
+    OGenID _solverId;
+
     ///Numero du Calcul.
     int _numero;
     ///Nom de l'auteur.
@@ -966,9 +978,6 @@ protected:
 
     /// Tableau des trajets du calcul
     std::vector<TYTrajet> _tabTrajets; // Tableau des trajets
-
-    /// Identification du solveur utilise
-    OGenID _solverId;
 
     /// Nombre de process de calcul simultane
     unsigned int _nbThread;
