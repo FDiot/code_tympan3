@@ -30,7 +30,6 @@
 
 class QToolButton;
 class QComboBox;
-// class TYRouteDeblaiEditor;
 
 /**
  * \class TYSiteModelerFrame
