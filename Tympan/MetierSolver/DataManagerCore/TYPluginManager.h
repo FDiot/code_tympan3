@@ -142,6 +142,8 @@ public:
     // Decharge les plugins charges de la memoire
     void unloadPlugins();
 
+    TYPlugin* getPlugin(const OGenID& uuid) const;
+
     // Fonction de haut-niveau permettant le retour directe de l'objet TYSolver courant
     TYSolverInterface* getSolver() const;
 

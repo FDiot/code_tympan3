@@ -1591,7 +1591,7 @@ bool TYCalcul::go()
         OMessageManager::get()->info("Calcul en cours...");
 
         pluginInfos* pInfos = new pluginInfos();
-        TYPluginManager::get()->getInfos(pInfos, _solverId);
+        _plugin->getInfos(pInfos);
         OMessageManager::get()->info("***************************************************************");
         OMessageManager::get()->info("                          APPEL DE LA DLL");
         OMessageManager::get()->info("");
@@ -1604,7 +1604,7 @@ bool TYCalcul::go()
         delete pInfos;
         pInfos = NULL;
 
-        TYSolverInterface* pSolver = TYPluginManager::get()->getSolver(_solverId);
+        TYSolverInterface* pSolver = _plugin->getSolver();
         // XXX ... and pass the SolverDataModel built here.
         ret = pSolver->solve(*pSite, *this, *_acousticProblem, *_acousticResult);
         pSolver->purge();

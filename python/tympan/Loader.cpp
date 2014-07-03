@@ -11,7 +11,7 @@
 #include <boost/foreach.hpp>
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
-
+#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 namespace tympan
 {
 
@@ -21,7 +21,7 @@ void load_solver(const char *foldername, TYCalcul *calcul)
     plugin_manager->unloadPlugins();
     plugin_manager->loadPlugins(foldername, false);
     plugin_manager->setCurrent("DefaultSolver");
-    calcul->setSolverId(plugin_manager->getCurrent());
+    calcul->setPlugin(plugin_manager->getPlugin(plugin_manager->getCurrent()));
 }
 
 
