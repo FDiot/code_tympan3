@@ -81,7 +81,6 @@ class TYRenderWindowInteractor;
 class TYReseauTransportEditor;
 class TYRotationDialog;
 class TYRouteEditor;
-class TYRouteDeblaiEditor;
 class TYSemiCylinderEditor;
 class TYSilosEditor;
 class TYSiteFrame;

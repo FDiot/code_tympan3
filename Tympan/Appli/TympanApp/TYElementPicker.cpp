@@ -321,10 +321,6 @@ bool TYElementPicker::checkType(TYElement* pElt)
     {
         emit(routePicked(pElt));
     }
-    else if (pElt->isA("TYRouteDeblai"))
-    {
-        emit(routePicked(pElt));
-    }
     else if (pElt->isA("TYCoursEau"))
     {
         emit(coursEauPicked(pElt));
