@@ -4,11 +4,13 @@ set(CYTHON_LIB_CURR_DIR "tympan")
 file(
   COPY .
   DESTINATION "${PROJECT_BINARY_DIR}/${TYMPAN_PythonModules}" 
-  FILES_MATCHING PATTERN "*.py" )
+  FILES_MATCHING PATTERN "*.py"
+  PATTERN "__init__.py" EXCLUDE)
 
 install(DIRECTORY ./ 
   DESTINATION ${TYMPAN_PythonModules}
-  FILES_MATCHING PATTERN "*.py")
+  FILES_MATCHING PATTERN "*.py"
+  PATTERN "__init__.py" EXCLUDE)
 
 # Handles __init__.py files
 copy_init_files(${CYTHON_LIB_CURR_DIR})
