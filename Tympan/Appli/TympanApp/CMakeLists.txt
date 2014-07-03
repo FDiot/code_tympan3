@@ -22,7 +22,6 @@ list(REMOVE_ITEM ${MODULE_NAME}_MOC_HDRS
     TYOpenGLRenderer.h
     TYPHTympanApp.h
     TYVersion.h
-    TYRouteDeblaiEditor.h # Temporarily disabled
 )
 
 # Needed to import DXF files.
@@ -52,9 +51,6 @@ add_executable(${MODULE_NAME}  ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS}
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
 use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 
-if(LOGILAB_USE_PRECOMPILED_HEADER)
-add_dependencies(${MODULE_NAME}_pch Yams)
-endif(LOGILAB_USE_PRECOMPILED_HEADER)
 add_dependencies(${MODULE_NAME} ${TYMPAN_MODULES})
 add_dependencies(${MODULE_NAME} Dime)
 
