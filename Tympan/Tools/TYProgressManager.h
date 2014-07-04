@@ -141,15 +141,6 @@ public:
      */
     static TYProgressDialog* getProgressDialog() { return _pProgressDialog; }
 
-    /**
-     * Fixe le mode console.
-     */
-    static void setConsoleMode(bool isConsole) { _isConsole = isConsole; }
-    /**
-     * Indique si l'on est en mode console.
-     */
-    static bool getConsoleMode() { return _isConsole; }
-
 protected:
     /**
      * Constructeur par defaut.
@@ -164,8 +155,6 @@ private:
     ///La taille d'un step.
     static int _stepSize;
 
-    ///Mode console
-    static bool _isConsole;
 };
 
 #else // TY_USE_IHM
