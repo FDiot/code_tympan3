@@ -10,7 +10,7 @@
 
 #include <boost/foreach.hpp>
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 #include "Tympan/core/exceptions.h"
 #include "Tympan/Config.h"

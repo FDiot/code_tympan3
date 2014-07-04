@@ -38,7 +38,7 @@
 #include "TYDXFImporter.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 

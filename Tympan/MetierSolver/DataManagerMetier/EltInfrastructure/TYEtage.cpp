@@ -31,7 +31,7 @@
 #include "Tympan/models/common/3d.h"
 #include "Tympan/core/defines.h"
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 

@@ -27,7 +27,7 @@
 #include "TYPHCore.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 #include "TYXMLManager.h"
 #include "Tympan/Tools/TYProgressManager.h"
 

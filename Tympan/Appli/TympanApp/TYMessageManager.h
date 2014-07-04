@@ -29,7 +29,7 @@
 #define __TY_MESSAGE_MANAGER__
 
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 
 /**

@@ -27,7 +27,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/models/common/3d.h"
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

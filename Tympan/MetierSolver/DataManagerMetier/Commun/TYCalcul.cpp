@@ -36,7 +36,7 @@
 #include "Tympan/Tools/TYProgressManager.h"
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

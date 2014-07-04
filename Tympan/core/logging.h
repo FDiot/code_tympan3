@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,18 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#ifndef __O_MESSAGE_MANAGER__
-#define __O_MESSAGE_MANAGER__
-
-#include "Tympan/core/smartptr.h"
+#ifndef TY_LOGGING
+#define TY_LOGGING
 
 #include <iostream>
 #include <time.h>
 #include <qstring.h>
+
+#include "Tympan/core/smartptr.h"
 
 #define MSG_DEBUG   0x0001
 #define MSG_BENCH   0x0002
@@ -220,4 +216,4 @@ private:
     static LPOMessageManager _pInstance;
 };
 
-#endif // __O_MESSAGE_MANAGER__
+#endif // TY_LOGGING

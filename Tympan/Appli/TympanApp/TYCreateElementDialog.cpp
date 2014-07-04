@@ -31,7 +31,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 #include "Tympan/core/exceptions.h"
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 #include <qlayout.h>
 #include <qmessagebox.h>

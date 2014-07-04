@@ -22,7 +22,7 @@
   #include "Tympan/GraphicIHM/DataManagerGraphic/TYBoundaryNoiseMapGraphic.h"
   #include "Tympan/GraphicIHM/DataManagerIHM/TYBoundaryNoiseMapWidget.h"
 #endif
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 
 #undef min

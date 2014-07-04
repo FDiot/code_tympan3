@@ -28,7 +28,7 @@
 #include <limits>
 #include <cmath>
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 #if TY_USE_IHM
 #include "Tympan/GraphicIHM/DataManagerIHM/TYRouteWidget.h"

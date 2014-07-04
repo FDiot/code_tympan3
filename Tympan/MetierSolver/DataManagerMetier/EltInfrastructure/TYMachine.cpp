@@ -27,7 +27,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "TYMachine.h"
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 TY_EXTENSION_INST(TYMachine);
 TY_EXT_GRAPHIC_INST(TYMachine);
