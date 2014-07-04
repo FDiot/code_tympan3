@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+
 # This enable includes relative to current source file dir
 # TODO required for now (esp. by PCH) but should ideally be deactivated
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -60,9 +62,23 @@ set(TYMPAN_MODULES  tympan_dm_metier tympan_dm_graphics tympan_dm_ihm tympan_dm_
 		    tympan_tools tympan_models_common
 )
 
+
+set(MODULE_NAME tympan_models_common)
+file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    *.cpp *.h
+    core/*.cpp core/*.h
+    models/common/*.cpp models/common/*.h
+)
+# Those objects are also used by Solvers and as such need to be build as PIC
+# Once the solvers will be independents modules / executable this directory
+# should build a shared library use by the GUI and the SolverDataModel
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models")
+#target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
+install_tympan_component(${MODULE_NAME})
+
+
 # The inclusion order seems to be significant for dependencies
-#add_subdirectory(core)
-add_subdirectory(models)
 add_subdirectory(Tools)
 add_subdirectory(MetierSolver)
 add_subdirectory(GraphicIHM)
