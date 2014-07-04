@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,24 +13,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- */
+#ifndef TY_MACROS
+#define TY_MACROS
 
-#ifndef _GLOBAL_MACROS_
-#define _GLOBAL_MACROS_
-
-#include "Tympan/core/defines.h"
-#include "Tympan/models/common/3d.h"
-
-///Pour la gestion des assertions.
 #include <assert.h>
-
 #include <complex>
 
-///Type pour les valeurs complexes.
+#include "Tympan/core/defines.h"
+
+
+// Type pour les valeurs complexes.
 typedef std::complex<double> TYComplex;
 
 #define CPLX_UN TYComplex(1.0, 0.0)
@@ -244,4 +236,4 @@ inline T fromString(const std::string& str, std::ios_base & (*f)(std::ios_base&)
 #endif
 
 
-#endif // _GLOBAL_MACROS_
+#endif // TY_MACROS
