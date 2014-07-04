@@ -397,6 +397,27 @@ class MeshedCDTTC(unittest.TestCase):
         (v1, v2) = self.mesher.vertices_pair_from_half_edge(fh, i)
         self.assertItemsEqual((v1, v2), (vA, vB))
 
+        (fh, i) = self.mesher.half_edge_from_vertices_pair(vB, vA)
+        self.assertEqual((fh, i), edge)
+        (v1, v2) = self.mesher.vertices_pair_from_half_edge(fh, i)
+        self.assertItemsEqual((v1, v2), (vB, vA))
+
+    def test_orientation_in_edge_conversion(self):
+        segment = map(mesh.to_cgal_point, [(0, 0), (2, 0)])
+        (vA, vB), (cAB,) = self.mesher.insert_polyline(segment)
+        cV = self.mesher.insert_point((1, 1))
+        # NB ABC is CCW
+        cdt = self.mesher.cdt
+
+        (edgeAB,) = [edge for edge in cdt.finite_edges()
+                    if cdt.is_constrained(edge)]
+        (faceABC,) = cdt.finite_faces()
+
+        (fh, i) = self.mesher.half_edge_from_vertices_pair(vB, vA)
+        self.assertEqual(fh, faceABC)
+        (fh, i) = self.mesher.half_edge_from_vertices_pair(vA, vB)
+        self.assertTrue(cdt.is_infinite(fh))
+
     def test_ensured_edge_conversion(self):
         segment = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
         (vA, vB), (cAB,) = self.mesher.insert_polyline(segment)

@@ -135,11 +135,14 @@ class MeshedCDTWithInfo(object):
         return vertices_handles, constraints
 
     def vertices_pair_from_half_edge(self, face, index):
-        """ Make a normalized pair of vertices handles from an half edge
+        """Make a directed pair of vertices handles from an half edge so the
+        pair is ccw oriented with respect to the input face (i.e. the
+        fae is on the left of a->b)
+
         """
-        va = face.vertex(self.cdt.cw(index))
-        vb = face.vertex(self.cdt.ccw(index))
-        return sorted_vertex_pair(va, vb)
+        va = face.vertex(self.cdt.ccw(index))
+        vb = face.vertex(self.cdt.cw(index))
+        return (va, vb)
 
     def ensure_vertices_pair(self, edge):
         if isinstance(edge[0], Face_handle):
