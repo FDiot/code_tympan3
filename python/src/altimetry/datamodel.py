@@ -32,9 +32,9 @@ def _preproc_point_seq(coordinates):
     return [_preproc_one_coord(c) for c in coordinates]
 
 
-
 class InvalidGeometry(Exception):
     pass
+
 
 class GroundMaterial(object):
 
@@ -43,6 +43,8 @@ class GroundMaterial(object):
 
 
 MATERIAL_WATER = GroundMaterial("Water")
+DEFAULT_MATERIAL = GroundMaterial("__default__")
+HIDDEN_MATERIAL =  GroundMaterial("__hidden__")
 
 
 class GeometricFeature(object):
