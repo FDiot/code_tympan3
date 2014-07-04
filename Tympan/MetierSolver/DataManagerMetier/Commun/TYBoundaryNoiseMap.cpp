@@ -13,28 +13,59 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYBoundaryNoiseMapGraphic.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYBoundaryNoiseMapWidget.h"
-#endif
-
-
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
-
 #include <qdir.h>
 
+#ifdef TYMPAN_USE_PRECOMPILED_HEADER
+  #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
+#endif // TYMPAN_USE_PRECOMPILED_HEADER
+#if TY_USE_IHM
+  #include "Tympan/GraphicIHM/DataManagerGraphic/TYBoundaryNoiseMapGraphic.h"
+  #include "Tympan/GraphicIHM/DataManagerIHM/TYBoundaryNoiseMapWidget.h"
+#endif
 #include "Tympan/Tools/OMessageManager.h"
-#include "Tympan/Tools/geometrical_function.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 
 #undef min
 #undef max
+
+
+//! Compute the squared distance between a point and a segment.
+/*!
+ \param point_x
+ \param point_y
+ \param a_x
+ \param a_y
+ \param b_x
+ \param b_y
+  \return Squared distance.
+ */
+double compute_segment_point_square_distance(double point_x, double point_y,
+                                             double a_x, double a_y,
+                                             double b_x, double b_y)
+{
+    double l2 = (a_x - b_x) * (a_x - b_x) + (a_y - b_y) * (a_y - b_y) ;
+    if (l2 != 0)
+    {
+        double t = ((point_x - a_x) * (b_x - a_x) + (point_y - a_y) * (b_y - a_y)) / l2;
+        if (t < 0)
+        {
+            return (point_x - a_x) * (point_x - a_x) + (point_y - a_y) * (point_y - a_y);
+        }
+        else if (t > 1)
+        {
+            return (point_x - b_x) * (point_x - b_x) + (point_y - b_y) * (point_y - b_y);
+        }
+        else
+        {
+            return (point_x - (a_x + t * (b_x - a_x)))
+                   * (point_x - (a_x + t * (b_x - a_x)))
+                   + (point_y - (a_y + t * (b_y - a_y)))
+                   * (point_y - (a_y + t * (b_y - a_y)));
+        }
+    }
+    return (point_x - a_x) * (point_x - a_x) + (point_y - a_y) * (point_y - a_y);
+}
+
 
 TY_EXTENSION_INST(TYBoundaryNoiseMap);
 TY_EXT_GRAPHIC_INST(TYBoundaryNoiseMap);
