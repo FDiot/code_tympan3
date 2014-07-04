@@ -77,6 +77,18 @@ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models")
 #target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
 install_tympan_component(${MODULE_NAME})
 
+set(MODULE_NAME tympan_gui)
+file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    gui/*.cpp gui/*.h
+)
+# Those objects are also used by Solvers and as such need to be build as PIC
+# Once the solvers will be independents modules / executable this directory
+# should build a shared library use by the GUI and the SolverDataModel
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/gui")
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
+install_tympan_component(${MODULE_NAME})
+
 
 # The inclusion order seems to be significant for dependencies
 add_subdirectory(Tools)

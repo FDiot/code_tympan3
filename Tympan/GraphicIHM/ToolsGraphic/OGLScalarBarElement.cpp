@@ -30,7 +30,7 @@
 
 #include "OGLRectangle.h"
 #include "OGLFont.h"
-#include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/gui/OSizeManager.h"
 
 
 OGLScalarBarElement::OGLScalarBarElement()

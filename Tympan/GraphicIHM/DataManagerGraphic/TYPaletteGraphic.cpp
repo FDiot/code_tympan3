@@ -33,7 +33,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/gui/OSizeManager.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPalette.h"
 
 #define IMG(id) OLocalizator::getPicture("TYPaletteGraphic", (id))

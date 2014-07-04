@@ -27,7 +27,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/gui/OSizeManager.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLTextElement.h"
 
 #if defined(WIN32)

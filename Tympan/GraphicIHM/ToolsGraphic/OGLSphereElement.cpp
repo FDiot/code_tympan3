@@ -29,7 +29,7 @@
 #include <GL/gl.h>
 
 #include "OGLSphere.h"
-#include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/gui/OSizeManager.h"
 
 
 OGLSphereElement::OGLSphereElement()

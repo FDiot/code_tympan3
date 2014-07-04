@@ -29,7 +29,7 @@
 #include <GL/gl.h>
 
 #include "OGLRectangle.h"
-#include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/gui/OSizeManager.h"
 
 
 OGLRectangleElement::OGLRectangleElement()

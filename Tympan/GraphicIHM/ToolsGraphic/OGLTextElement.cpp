@@ -21,7 +21,7 @@
 
 #include "OGLTextElement.h"
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/gui/OSizeManager.h"
 
 #include "OGLFont.h"
 

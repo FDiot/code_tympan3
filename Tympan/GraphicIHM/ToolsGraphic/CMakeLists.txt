@@ -11,7 +11,7 @@ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
 
 add_dependencies(${MODULE_NAME} tympan_tools)
 
-target_link_libraries(${MODULE_NAME} tympan_tools
+target_link_libraries(${MODULE_NAME} tympan_tools tympan_gui
 				     ${QT_LIBRARIES}
 				     ${OPENGL_LIBRARIES})
 

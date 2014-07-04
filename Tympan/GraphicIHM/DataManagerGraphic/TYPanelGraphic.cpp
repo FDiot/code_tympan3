@@ -24,7 +24,7 @@
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/gui/OSizeManager.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYMaillage.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPanel.h"
 
