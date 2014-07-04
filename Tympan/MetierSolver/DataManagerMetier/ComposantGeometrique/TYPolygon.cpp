@@ -39,7 +39,7 @@
 #include "TYGeometryNode.h"
 
 #include "Tympan/Tools/OMessageManager.h"
-#include "Tympan/Tools/OChrono.h"
+#include "Tympan/core/chrono.h"
 
 
 #if TY_USE_IHM

@@ -25,7 +25,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/core/idgen.h"
-#include "Tympan/Tools/OChrono.h"
+#include "Tympan/core/chrono.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>
