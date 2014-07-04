@@ -311,21 +311,14 @@ class MeshedCDTTC(unittest.TestCase):
     def setUp(self):
         self.mesher = mesh.MeshedCDTWithInfo()
 
-    def count_edges(self):
-        count_edges, count_constrained = 0, 0
-        for c in self.mesher.cdt.finite_edges():
-            if self.mesher.cdt.is_constrained(c):
-                count_constrained += 1
-            count_edges += 1
-        return count_edges, count_constrained
-
     def assert_basic_counts(self, vertices=None, faces=None,
-                            edges=None, constrained=None):
+                            edges=None, constrained=None, mesher=None):
+        mesher = mesher or self.mesher
         if vertices is not None:
-            self.assertEqual(self.mesher.cdt.number_of_vertices(), vertices)
+            self.assertEqual(mesher.cdt.number_of_vertices(), vertices)
         if faces is not None:
-            self.assertEqual(self.mesher.cdt.number_of_faces(), faces)
-        count_edges, count_constrained = self.count_edges()
+            self.assertEqual(mesher.cdt.number_of_faces(), faces)
+        count_edges, count_constrained = mesher.count_edges()
         if edges is not None:
             self.assertEqual(count_edges, edges)
         if constrained is not None:
@@ -608,6 +601,32 @@ class MeshedCDTTC(unittest.TestCase):
             plotter.plot_edges()
             visu.plot_points_seq(plotter.ax, seeds_for_holes, marker='*')
             plotter.show()
+
+    def assertEqualButNotIdentical(self, a, b):
+        self.assertIsNot(a, b)
+        self.assertEqual(a, b)
+
+    def test_copy(self):
+        cdt = self.mesher.cdt
+        (vA, vB), (cAB,) = self.mesher.insert_polyline([(0, 0), (2, 0)], material='concrete')
+        vC = self.mesher.insert_point((1, 1), altitude=10.0)
+        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
+        (edgeAB,) = [edge for edge in cdt.finite_edges()
+                    if cdt.is_constrained(edge)]
+        (faceABC,) = cdt.finite_faces()
+
+        mesher2 = self.mesher.copy()
+        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1, mesher=mesher2)
+        vD = mesher2.insert_point((1, -1), altitude=20.0)
+
+        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
+        self.assert_basic_counts(faces=2, vertices=4, edges=5, constrained=1, mesher=mesher2)
+
+        # Test use of faces anf edges identifier across the copy
+        self.assertEqual(mesher2.point_for_face(faceABC),
+                         self.mesher.point_for_face(faceABC))
+        self.assertEqual(mesher2.segment_for_edge(edgeAB),
+                         self.mesher.segment_for_edge(edgeAB))
 
 if __name__ == '__main__':
     from utils import main
