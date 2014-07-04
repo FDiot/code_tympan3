@@ -1,4 +1,4 @@
-/** \test prettyprint.cpp
+/** \test OPoint3D and OSpectre to string
  * @author Anthony Truchet <anthony.truchet@logilab.org>
  */
 

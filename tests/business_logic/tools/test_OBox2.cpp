@@ -11,7 +11,6 @@
 #include "gtest/gtest.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/CommonTools/OBox2.h"
-#include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
 
 using std::cout;
 using std::cerr;

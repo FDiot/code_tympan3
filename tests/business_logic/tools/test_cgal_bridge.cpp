@@ -21,8 +21,6 @@ using std::deque;
 #include "Tympan/MetierSolver/CommonTools/OPlan.h"
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
-
-#include "Tympan/MetierSolver/CommonTools/prettyprint.hpp"
 #include "Tympan/MetierSolver/DataManagerMetier/cgal_bridge.hpp"
 #include "Tympan/MetierSolver/DataManagerCore/exceptions.hpp"
 
