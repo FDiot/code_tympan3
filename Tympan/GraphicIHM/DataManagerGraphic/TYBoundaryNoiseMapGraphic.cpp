@@ -24,7 +24,7 @@
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/gui/OSizeManager.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYBoundaryNoiseMap.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"

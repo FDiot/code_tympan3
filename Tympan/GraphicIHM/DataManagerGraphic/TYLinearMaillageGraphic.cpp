@@ -30,7 +30,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYLinearMaillage.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 #include "Tympan/core/defines.h"
-#include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/gui/OSizeManager.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

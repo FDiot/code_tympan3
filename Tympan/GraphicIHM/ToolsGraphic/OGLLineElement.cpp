@@ -29,7 +29,7 @@
 #include <GL/gl.h>
 
 #include "OGLLine.h"
-#include "Tympan/Tools/OSizeManager.h"
+#include "Tympan/gui/OSizeManager.h"
 
 
 OGLLineElement::OGLLineElement()
