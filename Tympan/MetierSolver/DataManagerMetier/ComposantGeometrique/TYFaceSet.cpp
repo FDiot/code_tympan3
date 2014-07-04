@@ -30,7 +30,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 #include "Tympan/Tools/OMessageManager.h"
-#include "Tympan/Tools/OChrono.h"
+#include "Tympan/core/chrono.h"
 
 
 TY_EXTENSION_INST(TYFaceSet);
