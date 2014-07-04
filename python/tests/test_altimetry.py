@@ -484,19 +484,6 @@ class MeshedCDTTC(unittest.TestCase):
             [(1, 4), (4, 1)], altitude=20)
         return (border, hole, line)
 
-    @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
-    def test_mesh_plotter(self):
-        (border, hole, line) = self.build_simple_scene()
-        plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
-        plotter.plot_edges()
-        faces_left, faces_right = zip(*[self.mesher.faces_for_edge(va, vb)
-                                        for va, vb in border[1]])
-        points_left = [self.mesher.point_for_face(f) for f in faces_left]
-        points_right = [self.mesher.point_for_face(f) for f in faces_right]
-        self.assertEqual(points_right, [None]*4)
-        visu.plot_points_seq(plotter.ax, points_left, marker='*')
-        plotter.show()
-
     def test_faces_from_edge(self):
         # NB ABCD is given in counter-clock-wise orientation
         (vA, vB, vC, vD), _ = self.mesher.insert_polyline(
@@ -558,6 +545,19 @@ class MeshedCDTTC(unittest.TestCase):
 
         self.assertEqual(faces_right, (f1, f2, f3))
 
+    @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
+    def test_input_constraints_oriantation(self):
+        (border, hole, line) = self.build_simple_scene()
+        plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
+        plotter.plot_edges()
+
+        faces = list(self.mesher.iter_faces_for_input_polyline(hole[0], close_it=True))
+        faces_left, faces_right = zip(*faces)
+        points_left = [self.mesher.point_for_face(f) for f in faces_left]
+        points_right = [self.mesher.point_for_face(f) for f in faces_right]
+        visu.plot_points_seq(plotter.ax, points_left, marker='<')
+        visu.plot_points_seq(plotter.ax, points_right, marker='>')
+        plotter.show()
 
 if __name__ == '__main__':
     from utils import main

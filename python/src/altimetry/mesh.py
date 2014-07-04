@@ -303,3 +303,8 @@ class MeshedCDTWithInfo(object):
             return fh.object()
         else:
             return None
+
+    def iter_faces_for_input_polyline(self, poly, close_it=False):
+        for constraint in ilinks(iter(poly), close_it=close_it):
+            for faces_left_right in self.iter_faces_for_input_constraint(*constraint):
+                yield faces_left_right
