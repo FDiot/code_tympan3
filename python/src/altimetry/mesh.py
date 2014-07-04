@@ -77,6 +77,8 @@ class MeshedCDTWithInfo(object):
     EdgeInfo = dict
     VertexInfo = dict
 
+    _attributes_to_be_copied_with_copy_ = ('_input_vertices_infos', '_input_constraints_infos')
+
     def __init__(self):
         self.cdt = CDT()
         self._input_vertices_infos = {}
@@ -84,6 +86,24 @@ class MeshedCDTWithInfo(object):
 
     def clear_caches(self):
         pass
+
+    def copy(self):
+        newone = type(self)()
+        for attr in self._attributes_to_be_copied_with_copy_:
+            value = getattr(self, attr).copy()
+            setattr(newone, attr, value)
+        # Copying a CDT is tricky
+        # See http://code.google.com/p/cgal-bindings/issues/detail?id=49
+        newone.cdt.deepcopy(self.cdt)
+        return newone
+
+    def count_edges(self):
+        count_edges, count_constrained = 0, 0
+        for c in self.cdt.finite_edges():
+            if self.cdt.is_constrained(c):
+                count_constrained += 1
+            count_edges += 1
+        return count_edges, count_constrained
 
     def input_constraint_infos(self, (va, vb)):
         """Get the constraint informations associated to the given pair of vertices
