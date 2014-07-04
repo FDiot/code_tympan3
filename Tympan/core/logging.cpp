@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,31 +13,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
-
-
 #include <cstring>
 #include <cstdarg>
 #include <cstdlib>
 #include <cstdio>
-
 #include <string>
 #include <sstream>
 #include <vector>
 
 #ifdef _WIN32
-#include <io.h>
+  #include <io.h>
 #else
-#include <glob.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
+  #include <glob.h>
+  #include <sys/types.h>
+  #include <sys/stat.h>
+  #include <unistd.h>
 #endif // _WIN32
-#include "OMessageManager.h"
+
+#include "logging.h"
 
 using std::string;
 using std::stringstream;

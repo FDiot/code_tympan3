@@ -42,7 +42,7 @@
 #include "TYResultatTreeDialog.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QBoxLayout>

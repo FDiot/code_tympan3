@@ -29,7 +29,7 @@
 #include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/core/defines.h"
 

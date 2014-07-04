@@ -24,8 +24,8 @@
 
 
 #include "TYPluginManager.h"
-#include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/core/logging.h"
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #   define WIN32_LEAN_AND_MEAN

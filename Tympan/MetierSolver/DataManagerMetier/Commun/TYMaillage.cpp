@@ -29,7 +29,7 @@
 #include <boost/tuple/tuple.hpp>
 
 #include "Tympan/Tools/TYColorManager.h"
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 

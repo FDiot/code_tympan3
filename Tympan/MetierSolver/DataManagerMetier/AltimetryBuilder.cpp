@@ -17,7 +17,7 @@
 #include <boost/bind.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/MetierSolver/DataManagerMetier/AltimetryBuilder.hpp"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 

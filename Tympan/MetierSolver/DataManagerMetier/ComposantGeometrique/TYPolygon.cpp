@@ -38,7 +38,7 @@
 
 #include "TYGeometryNode.h"
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/core/chrono.h"
 
 

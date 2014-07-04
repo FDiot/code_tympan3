@@ -31,7 +31,7 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticCylinder.h"
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/Tools/OLocalizator.h"
 
 #include <qinputdialog.h>

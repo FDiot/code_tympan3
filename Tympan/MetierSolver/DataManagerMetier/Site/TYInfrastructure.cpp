@@ -29,7 +29,7 @@
 
 #include "Tympan/Tools/TYProgressManager.h"
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 
 TY_EXTENSION_INST(TYInfrastructure);

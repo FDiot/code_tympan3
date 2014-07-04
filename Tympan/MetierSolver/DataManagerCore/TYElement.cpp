@@ -32,7 +32,7 @@
 #include "Tympan/core/idgen.h"
 #include "Tympan/core/chrono.h"
 #include "Tympan/core/exceptions.h"
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 
 // Declaration des membres statiques.

@@ -34,7 +34,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/Tools/TYColorManager.h"
 #include "Tympan/Tools/OColor.h"
 #include "TYLookupTableWidget.h"

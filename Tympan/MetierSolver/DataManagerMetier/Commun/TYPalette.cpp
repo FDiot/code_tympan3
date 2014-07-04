@@ -37,7 +37,7 @@
 #include <QDebug>
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 
 TY_EXTENSION_INST(TYPalette);

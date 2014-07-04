@@ -29,7 +29,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 #include "Tympan/Tools/TYProgressManager.h"
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 #include <QDir>
 

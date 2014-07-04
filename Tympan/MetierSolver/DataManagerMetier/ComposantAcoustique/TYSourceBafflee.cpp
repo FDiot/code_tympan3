@@ -25,7 +25,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/models/common/3d.h"
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 
 // nombre de valeurs de ka dans le tableau
 #ifdef NB_KA

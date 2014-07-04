@@ -28,7 +28,7 @@
 
 #include <qdir.h>
 
-#include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 
 
