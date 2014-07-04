@@ -23,7 +23,7 @@
 #ifndef TYSET_GEOMETRIQUE_PARCOURS_H
 #define TYSET_GEOMETRIQUE_PARCOURS_H
 
-#include "Tympan/MetierSolver/CommonTools/GlobalMacros.h"
+#include "Tympan/core/macros.h"
 #include "TYPointParcours.h"
 #include "TYPolyligneParcours.h"
 

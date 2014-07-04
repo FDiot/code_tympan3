@@ -25,7 +25,7 @@
 
 //#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "Tympan/models/common/spectre.h"
-#include "GlobalMacros.h"
+#include "Tympan/core/macros.h"
 
 /**
  * Permet de stocker des valeurs de puissance accoustique pour differentes frequences.
