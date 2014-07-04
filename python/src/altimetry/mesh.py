@@ -170,9 +170,6 @@ class MeshedCDTWithInfo(object):
         else:
             return edge
 
-    def mirror_half_edge(self, fh, i):
-        return fh.neighbor(i)
-
     def iter_input_constraint_overlapping(self, edge):
         """Return an iterator over the input constraint overlapping the given edge.
 
@@ -258,7 +255,7 @@ class MeshedCDTWithInfo(object):
         face_right == fh.
         """
         face_right, i = self.ensure_half_edge(edge)
-        face_left = self.mirror_half_edge(face_right, i)
+        face_left = face_right.neighbor(i)
         return (face_left, face_right)
 
     def point_for_face(self, fh):
@@ -271,6 +268,22 @@ class MeshedCDTWithInfo(object):
     def iter_faces_for_input_constraint(self, va, vb):
         for edge in ilinks(self.cdt.vertices_in_constraint(va, vb)):
             yield self.faces_for_edge(edge)
+
+    def py_vertex(self, vh):
+        p = vh.point()
+        return ((p.x(), p.y()))
+
+    def py_face(self, face):
+        return ["FACE"] + [self.py_vertex(face.vertex(i)) for i in xrange(3)]
+
+    def py_edge(self, edge):
+        """Return a python representation of the edge either as a pair of
+        points or a triple of point and an index
+        """
+        if isinstance(edge[0], Face_handle):
+            return ["EDGE", edge[1]] + self.py_face(edge[0])[1:]
+        else:
+            return ["EDGE"] + [self.py_vertex(v) for v in edge]
 
     def face_for_vertices(self, v1, v2, v3):
         """Return the face handle for the face having the arguments as
