@@ -1,8 +1,9 @@
 import sys
 import os, os.path as osp
+from itertools import imap
 
 from shapely import geometry
-from shapely.geometry import Point, MultiLineString
+from shapely.geometry import MultiLineString
 
 # NB Importing altimetry configures path to find CGAL bindings
 from altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
@@ -10,6 +11,7 @@ from altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
                                  InvalidGeometry, MATERIAL_WATER)
 from altimetry.merge import SiteNodeGeometryCleaner,build_site_shape_with_hole
 from altimetry import visu
+from altimetry import mesh
 
 
 class AltimetryDataTC(unittest.TestCase):
@@ -184,8 +186,8 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
         shape = build_site_shape_with_hole(self.mainsite)
 
         self.assertEqual(len(shape.interiors), 1)
-        self.assertFalse(shape.contains(Point(9, 7)))
-        self.assertTrue(shape.contains(Point(1, 1)))
+        self.assertFalse(shape.contains(geometry.Point(9, 7)))
+        self.assertTrue(shape.contains(geometry.Point(1, 1)))
 
     def test_add_and_clean_level_curves(self):
         cleaner = SiteNodeGeometryCleaner(self.mainsite)
@@ -295,6 +297,63 @@ class VisualisationTC(unittest.TestCase, _TestFeatures):
         cleaner.merge_subsite(self.subsite)
 
         self.mainsite.plot(self.ax, recursive=True, alt_geom_map=cleaner.geom)
+
+
+class MeshedCDTTC(unittest.TestCase):
+
+    def setUp(self):
+        self.mesher = mesh.MeshedCDTWithInfo()
+
+    def test_insert_point(self):
+        points = [mesh.Point(1, 1)]
+        self.mesher.insert_polyline(imap(mesh.to_cgal_point, points))
+        self.assertEqual(self.mesher.cdt.number_of_vertices(), 1)
+        self.assertEqual(self.mesher.cdt.number_of_faces(), 0)
+
+    def test_insert_point_types(self):
+        for point in [geometry.Point(1, 1), (3,4)]:
+            with self.assertRaises(TypeError):
+                self.mesher.insert_polyline([point])
+            self.mesher.insert_polyline([mesh.to_cgal_point(point)])
+        point = mesh.Point(1, 2) # CGAL Point
+        self.assertEqual(mesh.to_cgal_point(point), point)
+
+    def test_insert_3_point(self):
+        points = [(1, 1), (1, 2), (3, 4)]
+        self.mesher.insert_polyline(imap(mesh.to_cgal_point, points),
+                               connected=False)
+        self.assertEqual(self.mesher.cdt.number_of_vertices(), 3)
+        self.assertEqual(self.mesher.cdt.number_of_faces(), 1)
+        count = 0
+        for c in self.mesher.cdt.finite_edges():
+            self.assertFalse(self.mesher.cdt.is_constrained(c))
+            count += 1
+        self.assertEqual(count, 3)
+
+    def test_insert_triangle(self):
+        points = [(1, 1), (1, 2), (3, 4)]
+        self.mesher.insert_polyline(imap(mesh.to_cgal_point, points),
+                               close_it = True)
+        self.assertEqual(self.mesher.cdt.number_of_vertices(), 3)
+        self.assertEqual(self.mesher.cdt.number_of_faces(), 1)
+        count = 0
+        for c in self.mesher.cdt.finite_edges():
+            self.assertTrue(self.mesher.cdt.is_constrained(c))
+            count += 1
+        self.assertEqual(count, 3)
+
+    def test_insert_vee(self):
+        points = [(-1, 2), (0, 0), (1, 2)]
+        self.mesher.insert_polyline(imap(mesh.to_cgal_point, points),
+                               close_it=False) # the default by the way
+        self.assertEqual(self.mesher.cdt.number_of_vertices(), 3)
+        self.assertEqual(self.mesher.cdt.number_of_faces(), 1)
+        count_constrained = 0
+        for c in self.mesher.cdt.finite_edges():
+            if self.mesher.cdt.is_constrained(c):
+                count_constrained += 1
+        self.assertEqual(count_constrained, 2)
+
 
 
 if __name__ == '__main__':
