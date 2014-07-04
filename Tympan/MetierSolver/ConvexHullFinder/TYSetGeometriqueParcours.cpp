@@ -13,31 +13,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
 
-
-//#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-//#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
-//#endif // TYMPAN_USE_PRECOMPILED_HEADER
-
-#include "TYSetGeometriqueParcours.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-//#include <assert.h>
 
 #include "Tympan/models/common/3d.h"
-//#include "Tympan/Tools/OMessageManager.h"
-
+#include "TYSetGeometriqueParcours.h"
 #include "TYPointParcours.h"
-
-//TYPointParcours* TYSetGeometriqueParcours::_ListePointQSort = NULL;
-//TYPointParcours* TYSetGeometriqueParcours::_SrceQSort = NULL;
-//TYPointParcours* TYSetGeometriqueParcours::_DestQSort = NULL;
-//QMutex TYSetGeometriqueParcours::_mutex;
 
 //Return Value Description for Qsort compare
 //< 0 elem1 less than elem2
@@ -381,45 +365,14 @@ void TYSetGeometriqueParcours::SeparationDroiteGauche(bool* PointsAGauche, bool*
     SAFE_DELETE_LIST(bAuMoinsUnPointADroite);
 }
 
-
-//void TYSetGeometriqueParcours::AffichePolylignes()
-//{
-//    OMessageManager::get()->format(MSG_DEBUG, "----------AffichePolylignes----------\n");
-//
-//    int i, j;
-//    for (i = 0; i < _nNbPolylines; i++)
-//    {
-//        OMessageManager::get()->format(MSG_DEBUG, "Polyligne %d ", i);
-//        for (j = 0; j < _ListePolylines[i].nombreDePoint(); j++)
-//        {
-//            int indexePoint = _ListePolylines[i].indexePoint(j);
-//            OMessageManager::get()->format(MSG_DEBUG, "point %-3d [%-3.1f %-3.1f]\t", indexePoint, _ListePoint[indexePoint].x, _ListePoint[indexePoint].y);
-//        }
-//        OMessageManager::get()->format(MSG_DEBUG, "\n");
-//    }
-//}
-
 //Return Value Description for Qsort compare
 //< 0 elem1 less than elem2
 //0 elem1 equivalent to elem2
 //> 0 elem1 greater than elem2
 int compareAbscissesCurvilignes(const void* p1, const void* p2)
 {
-    //TYPointParcours* Srce = TYSetGeometriqueParcours::_SrceQSort;
-    //TYPointParcours* Dest = TYSetGeometriqueParcours::_DestQSort;
-    //TYPointParcours* ListePoint = TYSetGeometriqueParcours::_ListePointQSort;
-    //int e1 = *((int*)(p1));
-    //int e2 = *((int*)(p2));
-    //TYPointParcours& P1 = ListePoint[e1];
-    //TYPointParcours& P2 = ListePoint[e2];
-
-
     double AP1 = ((TYPointParcours*) p1)->_abcisse;
     double AP2 = ((TYPointParcours*) p2)->_abcisse;
-
-    //double dAbscisseCurviligneCP1 = TYPointParcours::AbscisseCurviligneCarreSurSR(P1, *Srce, *Dest);
-    //double dAbscisseCurviligneCP2 = TYPointParcours::AbscisseCurviligneCarreSurSR(P2, *Srce, *Dest);
-
     if (AP1 < AP2) { return -1; }
     if (AP1 > AP2) { return  1; }
     return 0;
@@ -427,37 +380,10 @@ int compareAbscissesCurvilignes(const void* p1, const void* p2)
 
 void TYSetGeometriqueParcours::TriePointsIntersectionSuivantSR(TYPointParcours& Srce, TYPointParcours& Dest, TYPointParcours** IndexePointsFrontiere, int NbPointsFrontiere)
 {
-    //  int i;
-    //  TYPointParcours* P;
-    //  double PDist;
-
     if (NbPointsFrontiere == 0) { return; }
 
-    /*
-        for(i=0; i < NbPointsFrontiere;i++)
-        {
-            P = &(_ListePoint[IndexePointsFrontiere[i]]);
-            if (P != NULL)
-                PDist = fabs(P->x - Srce.x) + fabs(P->y-Srce.y);
-        }
-    */
     //Quick Sort
-    //    TYSetGeometriqueParcours::_mutex.lock();
-    //TYSetGeometriqueParcours::_SrceQSort = &Srce;
-    //TYSetGeometriqueParcours::_DestQSort = &Dest;
-    //TYSetGeometriqueParcours::_ListePointQSort = _ListePoint;
     qsort((void*)IndexePointsFrontiere, (size_t)NbPointsFrontiere, sizeof(TYPointParcours *), compareAbscissesCurvilignes);
-    //    TYSetGeometriqueParcours::_mutex.unlock();
-    //qsort( void *base, size_t num, size_t width, int (__cdecl *compare )(const void *elem1, const void *elem2 ) );
-
-    /*
-        for(i=0; i < NbPointsFrontiere;i++)
-        {
-            P = &(_ListePoint[IndexePointsFrontiere[i]]);
-            if (P != NULL)
-                PDist = fabs(P->x - Srce.x) + fabs(P->y-Srce.y);
-        }
-    */
 }
 
 bool TYSetGeometriqueParcours::AjoutePointALaPolyLigne(int indexPolyligne, TYPointParcours& P)

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,28 +13,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
-//#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-//#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
-//#endif // TYMPAN_USE_PRECOMPILED_HEADER
-
 #include <stdio.h>
 #include <math.h>
 
-#include "TYCalculParcours.h"
-
-//#if TY_USE_IHM
-//#include <qstring.h>
-//#endif
-//#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
-
 #include "Tympan/models/common/3d.h"
-//#include "Tympan/Tools/OMessageManager.h"
-//#include <assert.h>
+#include "TYCalculParcours.h"
 
 int nNbAbandonsParPointNuples = 0;
 
@@ -273,7 +256,6 @@ int TYCalculParcours::Traite(
     //assert(NULL != _geoSR);
     if (NULL == _geoSR->_ListePoint)
     {
-        //OMessageManager::get()->format(MSG_DEBUG, "Pas de Points detectes pour Source-Recepteur\n");
         return -1;
     }
     //2. On attribue des identifiants speciaux aux points S & R, pour ne pas les melanger a d'autres
@@ -288,7 +270,6 @@ int TYCalculParcours::Traite(
         geoSecondePasseDroite.Copy(*_geoSR);
 
         //On n'ecrit pas le fichier
-//        OMessageManager::get()->format(MSG_DEBUG, "Aucun obstacle !\n");
         return 0;
     }
 
