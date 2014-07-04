@@ -489,8 +489,8 @@ class MeshedCDTTC(unittest.TestCase):
         (border, hole, line) = self.build_simple_scene()
         plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
         plotter.plot_edges()
-        faces_left, faces_right = zip(*[self.mesher.faces_for_edge(edge)
-                                        for edge  in border[1]])
+        faces_left, faces_right = zip(*[self.mesher.faces_for_edge(va, vb)
+                                        for va, vb in border[1]])
         points_left = [self.mesher.point_for_face(f) for f in faces_left]
         points_right = [self.mesher.point_for_face(f) for f in faces_right]
         self.assertEqual(points_right, [None]*4)
@@ -503,10 +503,10 @@ class MeshedCDTTC(unittest.TestCase):
             [(0, 0), (6, 0), (6, 5), (0, 5)], close_it=True,
             material='concrete', altitude=0)
 
-        (face_left, face_right) = self.mesher.faces_for_edge((vA, vB))
+        (face_left, face_right) = self.mesher.faces_for_edge(vA, vB)
         self.assertTrue(self.mesher.cdt.is_infinite(face_right))
         self.assertFalse(self.mesher.cdt.is_infinite(face_left))
-        (face_left, face_right) = self.mesher.faces_for_edge((vB, vA))
+        (face_left, face_right) = self.mesher.faces_for_edge(vB, vA)
         self.assertFalse(self.mesher.cdt.is_infinite(face_right))
         self.assertTrue(self.mesher.cdt.is_infinite(face_left))
 
@@ -524,37 +524,39 @@ class MeshedCDTTC(unittest.TestCase):
         # NB ABCD is given in counter-clock-wise orientation
         (vA, vB, vC, vD), _ = self.mesher.insert_polyline(
             [(0, 0), (2, 0), (2, 1), (0, 1)], close_it=True)
-        (vM, vN), _ = self.mesher.insert_polyline([(1, -1), (1, 2)])
+        (vM, vN), _ = self.mesher.insert_polyline([(1, 2), (1, -1)])
         # Get the two added vertices
         vP = self._find_vertex_at((1, 0))
         self.assertIsNotNone(vP)
         vQ = self._find_vertex_at((1, 1))
         self.assertIsNotNone(vQ)
         # Get the faces of interest
-        f1 = self.mesher.face_for_vertices(vM, vP, vA)
+        f1 = self.mesher.face_for_vertices(vN, vP, vA)
         self.assertIsNotNone(f1)
         f2a = self.mesher.face_for_vertices(vP, vQ, vA)
         f2b = self.mesher.face_for_vertices(vP, vQ, vD)
         f2 = f2a or f2b
         self.assertIsNotNone(f2)
-        f3 = self.mesher.face_for_vertices(vQ, vN, vD)
+        f3 = self.mesher.face_for_vertices(vQ, vM, vD)
         self.assertIsNotNone(f3)
 
         faces = list(self.mesher.iter_faces_for_input_constraint(vM, vN))
-
-        faces_left, _ = zip(*faces)
-        self.assertEqual(faces_left, (f1, f2, f3))
-
+        faces_left, faces_right = zip(*faces)
         if _runVisualTests:
             plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
             plotter.plot_edges()
+            points_left = [self.mesher.point_for_face(f) for f in faces_left]
+            points_right = [self.mesher.point_for_face(f) for f in faces_right]
             for vertex, name in zip((vA, vB, vC, vD, vM, vN, vP, vQ),
                                     ("A", "B", "C", "D", "M", "N", "P", "Q")):
                 plotter.annotate_vertex(vertex, name)
-            for i, face in enumerate(self.mesher.cdt.finite_faces()):
-                plotter.annotate_finite_face(face, "f%02d" % i)
+            for i, f in enumerate((f1, f2, f3), 1):
+                plotter.annotate_finite_face(f, "F%d"%i)
+            visu.plot_points_seq(plotter.ax, points_left, marker='<')
+            visu.plot_points_seq(plotter.ax, points_right, marker='>')
             plotter.show()
 
+        self.assertEqual(faces_right, (f1, f2, f3))
 
 
 if __name__ == '__main__':

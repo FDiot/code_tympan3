@@ -245,18 +245,17 @@ class MeshedCDTWithInfo(object):
         else: # Vertices pair assumed
             return Segment(edge[0].point(), edge[1].point())
 
-    def faces_for_edge(self, edge):
+    def faces_for_edge(self, va, vb):
         """Return the pair (face_left, face_right) of face handle respectively
         on the left and on the right of the given edge.
-
-        If edge is given as a pair of vertices (va, vb) the edge is
-        oriented from va to vb, if the edge is an half edge (fh, i)
-        its natural orientation is used. NB: In this later case
-        face_right == fh.
         """
-        face_right, i = self.ensure_half_edge(edge)
-        face_left = face_right.neighbor(i)
-        return (face_left, face_right)
+        face1, i = self.half_edge_from_vertices_pair(va, vb)
+        face2 = face1.neighbor(i)
+        vaa, vbb = self.vertices_pair_from_half_edge(face1, i)
+        if (vaa, vbb)==(va, vb): # f1 is the face on the left of a->b
+            return (face1, face2)
+        else:
+            return (face2, face1)
 
     def point_for_face(self, fh):
         "Return a point in the interior of the face, or None if face is infinite"
@@ -266,8 +265,18 @@ class MeshedCDTWithInfo(object):
             return centroid(*(fh.vertex(i).point() for i in xrange(3)))
 
     def iter_faces_for_input_constraint(self, va, vb):
-        for edge in ilinks(self.cdt.vertices_in_constraint(va, vb)):
-            yield self.faces_for_edge(edge)
+        # CAUTION the CGAL method vertices_in_constraint does NOT
+        # always return the vertices in the order from va to vb
+        constraint_direction = Segment(va.point(), vb.point()).direction()
+        def same_direction_as_constraint(v0, v1):
+            s = Segment(v0.point(), v1.point())
+            if s.direction() == constraint_direction:
+                return (v0, v1)
+            else:
+                return (v1, v0)
+        for v0, v1 in ilinks(self.cdt.vertices_in_constraint(va, vb)):
+            v0, v1 = same_direction_as_constraint(v0, v1)
+            yield self.faces_for_edge(v0, v1)
 
     def py_vertex(self, vh):
         p = vh.point()
