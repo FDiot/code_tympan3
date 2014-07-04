@@ -45,35 +45,27 @@ static char THIS_FILE[] = __FILE__;
 // Initialisation.
 TYProgressDialog* TYProgressManager::_pProgressDialog = NULL;
 int TYProgressManager::_stepSize = 1;
-bool TYProgressManager::_isConsole = false;
 
 
 /*static*/ void TYProgressManager::create(QWidget* pParent, const char* name /*=0*/)
 {
-    if (!_isConsole)
+    QString strBtnCancel = TR("id_cancel_btn");
+    if (strBtnCancel.length() == 0)
     {
-        QString strBtnCancel = TR("id_cancel_btn");
-        if (strBtnCancel.length() == 0)
-        {
-            strBtnCancel = "Cancel";
-        }
-
-        _pProgressDialog = new TYProgressDialog(name, strBtnCancel, 100, pParent, name, true);
-
-        _pProgressDialog->setAutoClose(true);
-        _pProgressDialog->setAutoReset(true);
-        _pProgressDialog->setMinimumDuration(0);
-
-        // "Decoration"
-        _pProgressDialog->setCursor(Qt::ArrowCursor);
-
-        QString strCaption = TR("id_caption");
-        if (strCaption.length() == 0)
-        {
-            strCaption = name;
-        }
-        _pProgressDialog->setWindowTitle(strCaption);
+        strBtnCancel = "Cancel";
     }
+    _pProgressDialog = new TYProgressDialog(name, strBtnCancel, 100, pParent, name, true);
+    _pProgressDialog->setAutoClose(true);
+    _pProgressDialog->setAutoReset(true);
+    _pProgressDialog->setMinimumDuration(0);
+    // "Decoration"
+    _pProgressDialog->setCursor(Qt::ArrowCursor);
+    QString strCaption = TR("id_caption");
+    if (strCaption.length() == 0)
+    {
+        strCaption = name;
+    }
+    _pProgressDialog->setWindowTitle(strCaption);
 }
 
 /*static*/ void TYProgressManager::set(int totalSteps, int stepSize /*=1*/)
@@ -98,12 +90,6 @@ bool TYProgressManager::_isConsole = false;
 
 /*static*/ void TYProgressManager::step(bool& wasCancelled)
 {
-    if (_isConsole)
-    {
-        std::cout << '.';
-        return;
-    }
-
     if (!_pProgressDialog) { return; }
 
     // Si le bouton "Cancel" a ete enfonce
@@ -142,12 +128,6 @@ bool TYProgressManager::_isConsole = false;
 
 /*static*/ void TYProgressManager::stepToEnd()
 {
-    if (_isConsole)
-    {
-        std::cout << std::endl;
-        return;
-    }
-
     if (!_pProgressDialog) { return; }
 
     // On progresse jusqu'a la fin
