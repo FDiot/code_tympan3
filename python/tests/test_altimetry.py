@@ -8,7 +8,7 @@ from shapely.geometry import MultiLineString
 # NB Importing altimetry configures path to find CGAL bindings
 from altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
                                  WaterBody, SiteNode, PolygonalTympanFeature,
-                                 InvalidGeometry, MATERIAL_WATER)
+                                 InconsistentGeometricModel, MATERIAL_WATER)
 from altimetry.merge import SiteNodeGeometryCleaner,build_site_shape_with_hole
 from altimetry import visu
 from altimetry import mesh
@@ -80,16 +80,17 @@ class AltimetryDataTC(unittest.TestCase):
         poly = PolygonalTympanFeature(self.big_rect_coords, id=None)
         try:
             poly.ensure_ok()
-        except InvalidGeometry:
+        except InconsistentGeometricModel:
             self.fail("poly was expected to be valid")
 
         coords = self.big_rect_coords[:]
         coords[1:3] = coords[2:0:-1]
-        poly2 = PolygonalTympanFeature(coords, id=None)
+        poly2 = PolygonalTympanFeature(coords, id="toto")
 
-        with self.assertRaises(InvalidGeometry) as cm:
+        with self.assertRaises(InconsistentGeometricModel) as cm:
             poly2.ensure_ok()
-        self.assertIn("Self-intersection", cm.exception.args[0])
+        self.assertEqual(cm.exception.ids, ["toto"])
+        self.assertIn("Self-intersection", str(cm.exception))
 
 
     def test_polygon_exterior_orientation(self):
@@ -254,7 +255,7 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
 
         cleaner = SiteNodeGeometryCleaner(self.mainsite)
 
-        with self.assertRaises(InvalidGeometry):
+        with self.assertRaises(InconsistentGeometricModel):
             cleaner.merge_subsite(self.subsite)
 
 
@@ -658,7 +659,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
         degenerate_mesher = mesh.MeshedCDTWithInfo()
         degenerate_mesher.insert_point((0, 0))
-        with self.assertRaises(InvalidGeometry):
+        with self.assertRaises(InconsistentGeometricModel):
             degenerate_mesher.locate_point((0, 1))
 
 if __name__ == '__main__':

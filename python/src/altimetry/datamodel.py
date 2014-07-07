@@ -32,9 +32,18 @@ def _preproc_point_seq(coordinates):
     return [_preproc_one_coord(c) for c in coordinates]
 
 
-class InvalidGeometry(Exception):
-    pass
+class InconsistentGeometricModel(Exception):
 
+    def __init__(self, message,
+                 ids=None, witness_point=None, **kwargs):
+        super(InconsistentGeometricModel, self).__init__(message)
+        self.message = message
+        self.ids = list(ids) if ids else []
+        self.witness_point = witness_point
+        self.__dict__.update(kwargs)
+
+    def __str__(self):
+        return self.message.format(**self.__dict__)
 
 class GroundMaterial(object):
 
@@ -110,7 +119,9 @@ class GeometricFeature(object):
         if shape.is_valid:
             return
         else :
-            raise InvalidGeometry(explain_validity(shape))
+            raise InconsistentGeometricModel("Invalid shapely shape : {details}",
+                                             details=explain_validity(shape),
+                                             ids=[self.id])
 
 
 class TympanFeature(GeometricFeature):
@@ -178,7 +189,8 @@ class PolygonalTympanFeature(TympanFeature):
     def ensure_ok(self):
         super(PolygonalTympanFeature, self).ensure_ok()
         if not self.shape.exterior.is_simple:
-            raise InvalidGeometry("Polygon is expected to be simple")
+            raise InconsistentGeometricModel("Polygon is expected to be simple",
+                                             ids=[self.id])
 
 
 class MaterialArea(PolygonalTympanFeature):
