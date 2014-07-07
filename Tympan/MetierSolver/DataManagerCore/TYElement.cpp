@@ -37,7 +37,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #include "Tympan/Tools/OMessageManager.h"
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 #include <iostream>
 // -------------------------------------------------------------------------
 // classe TYElement

@@ -12,7 +12,7 @@
 #include <deque>
 #include <memory>
 
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/models/common/3d.h"
 

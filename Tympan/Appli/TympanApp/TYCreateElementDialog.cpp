@@ -29,7 +29,7 @@
 #include <qlistwidget.h>
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/Tools/OMessageManager.h"
 

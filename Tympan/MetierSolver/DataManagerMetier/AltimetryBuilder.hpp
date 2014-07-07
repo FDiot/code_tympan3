@@ -22,7 +22,7 @@
 
 // CGAL related Includes
 #include "Tympan/MetierSolver/CommonTools/cgal_tools.hpp"
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 
 #include <boost/ptr_container/ptr_deque.hpp>
 // http://www.boost.org/doc/libs/1_52_0/libs/ptr_container/doc/examples.html
@@ -52,7 +52,7 @@ class AltimetryBuilder;
 #undef max // XXX
 
 #include "Tympan/MetierSolver/SolverDataModel/data_model_common.hpp"
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 
 
 #define TY_USE_CGAL_QT_IFACE 1

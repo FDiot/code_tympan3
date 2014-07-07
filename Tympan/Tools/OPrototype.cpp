@@ -14,7 +14,7 @@
 */
 
 #include "OPrototype.h"
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 #include <string.h>
 
 // Declaration des membres statiques.

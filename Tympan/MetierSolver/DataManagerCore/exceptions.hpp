@@ -8,7 +8,7 @@
 #define __TYMPAN__DMM_EXCEPTIONS_HPP__INCLUDED__
 
 #include <deque>
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 
 namespace tympan
 {

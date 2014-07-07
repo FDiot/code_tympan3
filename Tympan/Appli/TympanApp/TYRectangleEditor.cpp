@@ -37,7 +37,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRepere.h"
 #include "Tympan/Tools/OLocalizator.h"
 
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 
 #include <iostream>
 #include <qmessagebox.h>
