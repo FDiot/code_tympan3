@@ -16,6 +16,7 @@
 #ifndef __TYANIME3DACOUSTICPATHFINDER__
 #define __TYANIME3DACOUSTICPATHFINDER__
 
+#include "Tympan/MetierSolver/Solvers/ANIME3DSolver/TYANIME3DSolver.h"
 #include "Tympan/MetierSolver/AnalyticRayTracer/geometry_modifier.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"
 
