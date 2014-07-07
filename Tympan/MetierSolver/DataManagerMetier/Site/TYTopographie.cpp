@@ -13,20 +13,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYTopographieWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYTopographieGraphic.h"
-#endif
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
+  #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-
-#include "Tympan/models/common/3d.h"
-
-#include "Tympan/Tools/TYProgressManager.h"
-
 #include "Tympan/core/logging.h"
+#include "Tympan/models/common/3d.h"
+#if TY_USE_IHM
+  #include "Tympan/GraphicIHM/DataManagerIHM/TYTopographieWidget.h"
+  #include "Tympan/GraphicIHM/DataManagerGraphic/TYTopographieGraphic.h"
+#endif
 
 
 TY_EXTENSION_INST(TYTopographie);

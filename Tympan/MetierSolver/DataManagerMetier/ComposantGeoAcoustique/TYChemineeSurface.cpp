@@ -13,21 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYChemineeSurfaceWidget.h"
-#endif
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
+  #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/Tools/TYProgressManager.h"
-
 #include "Tympan/core/logging.h"
+#if TY_USE_IHM
+  #include "Tympan/GraphicIHM/DataManagerIHM/TYChemineeSurfaceWidget.h"
+#endif
 
 
 TY_EXTENSION_INST(TYChemineeSurface);
