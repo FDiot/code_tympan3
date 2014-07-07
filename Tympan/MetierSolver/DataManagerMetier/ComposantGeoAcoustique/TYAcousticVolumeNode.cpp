@@ -646,7 +646,7 @@ TYBox TYAcousticVolumeNode::volEnglob() const
 
 TYPoint TYAcousticVolumeNode::centreGravite() const
 {
-    OMsg::msgToDo("TYAcousticVolumeNode::centreGravite");
+    printf("TYAcousticVolumeNode::centreGravite non implemente.\n");
     return volEnglob().getPosition();
 }
 

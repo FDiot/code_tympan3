@@ -1,6 +1,4 @@
 #include "init_registry.h"
-#include "Tympan/Tools/OPrototype.h"
-
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h"

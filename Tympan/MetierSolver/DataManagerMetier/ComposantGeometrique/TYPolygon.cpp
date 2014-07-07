@@ -423,7 +423,7 @@ void TYPolygon::transform(const OMatrix& matrix)
 
 bool TYPolygon::isValid() const
 {
-    OMsg::msgToDo("TYPolygon::isValid");
+    printf("TYPolygon::isValid non implemente.\n");
     bool res = false;
 
 #if TY_USE_IHM

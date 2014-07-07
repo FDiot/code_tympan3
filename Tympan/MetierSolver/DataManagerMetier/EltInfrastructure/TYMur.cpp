@@ -205,13 +205,13 @@ int TYMur::intersects(const OSegment3D& seg, OPoint3D& pt) const
 
 bool TYMur::abso(const TYPoint& pt, TYSpectre& spectre) const
 {
-    OMsg::msgToDo("TYMur::abso");
+    printf("TYMur::abso non implemente.\n");
     return false;
 }
 
 bool TYMur::transm(const TYPoint& pt, TYSpectre& spectre) const
 {
-    OMsg::msgToDo("TYMur::transm");
+    printf("TYMur::absom non implemente.\n");
     return false;
 }
 
