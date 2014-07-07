@@ -34,7 +34,7 @@
 #include <qfile.h>
 #include <iostream>
 
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 #include "Tympan/MetierSolver/ToolsMetier/DOMSave.h"
 
 

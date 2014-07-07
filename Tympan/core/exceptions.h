@@ -1,15 +1,17 @@
 /**
  * @file exception.hpp
  *
- * @brief Utilities to handle exceptions
+ * @brief Utilities to handle exceptions and to pretty-print value
  *
  * @author Anthony Truchet <anthony.truchet@logilab.fr>
  *
  */
 
-#ifndef TYMPAN__EXCEPTIONS_HPP__INCLUDED
-#define TYMPAN__EXCEPTIONS_HPP__INCLUDED
+#ifndef TY_EXCEPTIONS
+#define TY_EXCEPTIONS
 
+#include <string>
+#include <sstream>
 #include <cassert>
 #include <exception>
 #include <deque>
@@ -19,7 +21,24 @@
 #include <boost/throw_exception.hpp>
 #include <boost/config.hpp>
 
-#include "prettyprint.hpp"
+
+// Beware : Stuff::operator<< must be defined in the same namespace as Stuff
+
+// For GTest related pretty-printing please see :
+// http://code.google.com/p/googletest/wiki/AdvancedGuide#Teaching_Google_Test_How_to_Print_Your_Values
+
+// For boost::exception diagnostic please see:
+// http://www.boost.org/doc/libs/1_54_0/libs/exception/doc/diagnostic_information.html
+
+template<typename T>
+std::string tympan_to_string(const T& o)
+{
+    using namespace std;
+    stringstream ss;
+    ss << o;
+    return ss.str();
+}
+
 
 namespace tympan
 {
@@ -62,4 +81,4 @@ struct invalid_data: /*virtual*/ std::runtime_error, virtual tympan::exception
                                                     ::boost::throw_line((int)__LINE__)
 
 
-#endif // TYMPAN__EXCEPTIONS_HPP__INCLUDED
+#endif // TY_EXCEPTIONS

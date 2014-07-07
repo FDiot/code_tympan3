@@ -6,7 +6,7 @@
 #include <QDir>
 
 #include "Tympan/core/defines.h"
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 
 namespace tympan
 {

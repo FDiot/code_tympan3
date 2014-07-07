@@ -11,7 +11,7 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 
 static unsigned test_exceptions_source_line_no;
 static const char* test_exceptions_func_name;

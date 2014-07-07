@@ -12,7 +12,7 @@
 
 #include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
-#include "Tympan/MetierSolver/CommonTools/exceptions.hpp"
+#include "Tympan/core/exceptions.h"
 #include "Tympan/Config.h"
 
 namespace tympan
