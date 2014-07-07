@@ -209,6 +209,30 @@ cdef class SolverModelBuilder:
             inc(itt)
         return (map_to_model_node_idx, map_to_model_tgle_idx)
 
+    def refactored_process_mesh(self, points, triangles):
+        """ Create nodes and acoustic triangles in the model to represent the
+        mesh given in argument.
+        The mesh must be given as a list of 'Point3D' python objects ('points')
+        and a list of 'Triangle' python objects ('triangles')
+        Returns 2 np arrays containing the indices of these nodes and triangles
+        in the model once created.
+        """
+        map_to_model_node_idx = np.empty(len(points))
+        for (i, pt) in enumerate(points):
+            node = cy.declare(tycommon.OPoint3D)
+            node._x = pt.x
+            node._y = pt.y
+            node._z = pt.z
+            map_to_model_node_idx[i] = self.model.make_node(node)
+            map_to_model_tgle_idx = np.empty(len(triangles))
+        for (i, tri) in enumerate(triangles):
+            map_to_model_tgle_idx[i] = self.model.make_triangle(
+                map_to_model_node_idx[tri.p1],
+                map_to_model_node_idx[tri.p2],
+                map_to_model_node_idx[tri.p3])
+        return (map_to_model_node_idx, map_to_model_tgle_idx)
+
+
     @cy.locals(site=tybusiness.Site)
     def process_altimetry(self, site):
         """ Call Tympan methods to make a mesh (points, triangles, materials)
@@ -216,24 +240,21 @@ cdef class SolverModelBuilder:
             acoustic problem model (see also process_mesh), converting the data
             in basic classes 'understandable' by the solvers (see entities.hpp).
         """
-        points = cy.declare(deque[tycommon.OPoint3D])
-        triangles = cy.declare(deque[tycommon.OTriangle])
-        materials = cy.declare(deque[SmartPtr[tybusiness.TYSol]])
-        ptopo = cy.declare(cy.pointer(tybusiness.TYTopographie))
-        ptopo = site.thisptr.getRealPointer().getTopographie().getRealPointer()
-        ptopo.exportMesh(points, triangles, cy.address(materials))
-        (nodes_idx, tgles_idx) = self.process_mesh(points, triangles)
+        (points, triangles, grounds) = site.export_topo_mesh()
+        (nodes_idx, tgles_idx) = self.refactored_process_mesh(points, triangles)
         # make material
         actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
-        psol = cy.declare(cy.pointer(tybusiness.TYSol))
         pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
         # Set the material of each triangle
-        for i in xrange(tgles_idx.size):
+        for (i, ground) in enumerate(grounds):
             actri = cy.address(self.model.triangle(tgles_idx[i]))
-            psol = materials[i].getRealPointer()
-            pmat = self.model.make_material(psol.getName().toStdString(),
-                                            psol.getResistivite())
+            _ground = cy.declare(tybusiness.Ground)
+            _ground = ground
+            grnd = cy.declare(SmartPtr[tybusiness.TYSol])
+            grnd = _ground.thisptr
+            mat_name = cy.declare(string)
+            mat_name = grnd.getRealPointer().getName().toStdString()
+            mat_res = cy.declare(double)
+            mat_res = ground.resistivity
+            pmat = self.model.make_material(mat_name, mat_res)
             actri.made_of = pmat
-
-
-
