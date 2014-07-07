@@ -156,7 +156,7 @@ cdef class SolverModelBuilder:
             # build a new one to avoid constructing the triangles in a local
             # scale
             psurf.exportMesh(points, triangles, tybusiness.TYGeometryNode(psurf))
-            self.process_mesh(points, triangles)
+            (nodes_idx, tgles_idx) = self.process_mesh(points, triangles)
             # Get the building material for the surface
             pbuildmat = cy.declare(cy.pointer(tybusiness.TYMateriauConstruction))
             pbuildmat = psurf.getMateriau().getRealPointer()
@@ -167,8 +167,8 @@ cdef class SolverModelBuilder:
                                             spectre)
             actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
             # Set the UUID of the site element and the material of the surface
-            for i in xrange(triangles.size()):
-                actri = cy.address(self.model.triangle(i))
+            for i in xrange(tgles_idx.size):
+                actri = cy.address(self.model.triangle(tgles_idx[i]))
                 actri.made_of = pmat
             points.clear()
             triangles.clear()
@@ -177,7 +177,11 @@ cdef class SolverModelBuilder:
     @cy.locals(points=deque[tycommon.OPoint3D], triangles=deque[tycommon.OTriangle])
     def process_mesh(self, points, triangles):
         """ Create nodes and acoustic triangles in the model to represent the
-            mesh given in argument.
+        mesh given in argument.
+        The mesh must be given as a list of 'Point3D' python objects ('points')
+        and a list of 'Triangle' python objects ('triangles')
+        Returns 2 np arrays containing the indices of these nodes and triangles
+        in the model once created.
         """
         map_to_model_node_idx = np.empty(points.size())
         itp = cy.declare(deque[tycommon.OPoint3D].iterator)
@@ -189,16 +193,21 @@ cdef class SolverModelBuilder:
             map_to_model_node_idx[i] = self.model.make_node(deref(itp))
             i = i+1
             inc(itp)
+        map_to_model_tgle_idx = np.empty(triangles.size())
         itt = cy.declare(deque[tycommon.OTriangle].iterator)
         itt = triangles.begin()
+        i = 0
         while  itt != triangles.end():
             # Assert consistency of the tycommon.OPoint3D given in the mesh
             assert deref(itt).checkConsistencyWrtPointsTab(points), deref(itt).reportInconsistencyWrtPointsTab(points)
             # Add the triangle
-            self.model.make_triangle(map_to_model_node_idx[deref(itt)._p1],
-                                     map_to_model_node_idx[deref(itt)._p2],
-                                     map_to_model_node_idx[deref(itt)._p3])
+            map_to_model_tgle_idx[i] = self.model.make_triangle(
+                map_to_model_node_idx[deref(itt)._p1],
+                map_to_model_node_idx[deref(itt)._p2],
+                map_to_model_node_idx[deref(itt)._p3])
+            i = i+1
             inc(itt)
+        return (map_to_model_node_idx, map_to_model_tgle_idx)
 
     @cy.locals(site=tybusiness.Site)
     def process_altimetry(self, site):
@@ -213,14 +222,14 @@ cdef class SolverModelBuilder:
         ptopo = cy.declare(cy.pointer(tybusiness.TYTopographie))
         ptopo = site.thisptr.getRealPointer().getTopographie().getRealPointer()
         ptopo.exportMesh(points, triangles, cy.address(materials))
-        self.process_mesh(points, triangles)
+        (nodes_idx, tgles_idx) = self.process_mesh(points, triangles)
         # make material
         actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
         psol = cy.declare(cy.pointer(tybusiness.TYSol))
         pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
         # Set the material of each triangle
-        for i in xrange(triangles.size()):
-            actri = cy.address(self.model.triangle(i))
+        for i in xrange(tgles_idx.size):
+            actri = cy.address(self.model.triangle(tgles_idx[i]))
             psol = materials[i].getRealPointer()
             pmat = self.model.make_material(psol.getName().toStdString(),
                                             psol.getResistivite())
