@@ -133,83 +133,27 @@ cdef class SolverModelBuilder:
             Create geometric entities, fill dedicated container and relate them
             according to the relation definitions.
         """
-        is_screen_face_idx = cy.declare(vector[bool])
-        face_list = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
-        pelt = cy.declare(cy.pointer(tybusiness.TYElement))
-        nb_building_faces = cy.declare(cy.uint)
-        nb_building_faces = 0
-        psurf = cy.declare(cy.pointer(tybusiness.TYAcousticSurface))
-        site.thisptr.getRealPointer().getListFaces(face_list, nb_building_faces,
-                           is_screen_face_idx)
-        points = cy.declare(deque[tycommon.OPoint3D])
-        triangles = cy.declare(deque[tycommon.OTriangle])
-        for i in xrange(nb_building_faces):
-            pelt = face_list[i].getRealPointer().getElement()
-            psurf = tybusiness.downcast_acoustic_surface(pelt)
-            # 'face_list' can contain topography elements. Not relevant here.
-            if psurf == NULL:
-                continue
-            # Use the triangulating interface of TYSurfaceInterface to get triangles
-            # and convert them to Nodes and AcousticTriangles (beware of mapping
-            # TYPoints to Node in the correct way.)
-            # !! Here we must not give exportMesh the geonode face_list[i] but
-            # build a new one to avoid constructing the triangles in a local
-            # scale
-            psurf.exportMesh(points, triangles, tybusiness.TYGeometryNode(psurf))
+        for surface in site.acoustic_surfaces:
+            (points, triangles) = surface.export_mesh()
             (nodes_idx, tgles_idx) = self.process_mesh(points, triangles)
             # Get the building material for the surface
-            pbuildmat = cy.declare(cy.pointer(tybusiness.TYMateriauConstruction))
-            pbuildmat = psurf.getMateriau().getRealPointer()
-            spectre = cy.declare(tybusiness.TYSpectre)
-            spectre = pbuildmat.getSpectreAbso()
             pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
-            pmat = self.model.make_material(pbuildmat.getName().toStdString(),
-                                            spectre)
+            buildmat = cy.declare(tybusiness.Material)
+            buildmat = surface.material
+            mat_spec = cy.declare(tycommon.Spectrum)
+            mat_spec = buildmat.spectrum
+            mat_cspec = cy.declare(tycommon.OSpectre)
+            mat_cspec = mat_spec.thisobj
+            mat_name = cy.declare(string)
+            mat_name = buildmat.name
+            pmat = self.model.make_material(mat_name, mat_cspec)
             actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
-            # Set the UUID of the site element and the material of the surface
+            # Set the material of the surface
             for i in xrange(tgles_idx.size):
                 actri = cy.address(self.model.triangle(tgles_idx[i]))
                 actri.made_of = pmat
-            points.clear()
-            triangles.clear()
 
-    @cy.cfunc
-    @cy.locals(points=deque[tycommon.OPoint3D], triangles=deque[tycommon.OTriangle])
     def process_mesh(self, points, triangles):
-        """ Create nodes and acoustic triangles in the model to represent the
-        mesh given in argument.
-        The mesh must be given as a list of 'Point3D' python objects ('points')
-        and a list of 'Triangle' python objects ('triangles')
-        Returns 2 np arrays containing the indices of these nodes and triangles
-        in the model once created.
-        """
-        map_to_model_node_idx = np.empty(points.size())
-        itp = cy.declare(deque[tycommon.OPoint3D].iterator)
-        itp = points.begin()
-        i = 0
-        # Create all nodes related to the triangles
-        while itp != points.end():
-            # Add the points
-            map_to_model_node_idx[i] = self.model.make_node(deref(itp))
-            i = i+1
-            inc(itp)
-        map_to_model_tgle_idx = np.empty(triangles.size())
-        itt = cy.declare(deque[tycommon.OTriangle].iterator)
-        itt = triangles.begin()
-        i = 0
-        while  itt != triangles.end():
-            # Assert consistency of the tycommon.OPoint3D given in the mesh
-            assert deref(itt).checkConsistencyWrtPointsTab(points), deref(itt).reportInconsistencyWrtPointsTab(points)
-            # Add the triangle
-            map_to_model_tgle_idx[i] = self.model.make_triangle(
-                map_to_model_node_idx[deref(itt)._p1],
-                map_to_model_node_idx[deref(itt)._p2],
-                map_to_model_node_idx[deref(itt)._p3])
-            i = i+1
-            inc(itt)
-        return (map_to_model_node_idx, map_to_model_tgle_idx)
-
-    def refactored_process_mesh(self, points, triangles):
         """ Create nodes and acoustic triangles in the model to represent the
         mesh given in argument.
         The mesh must be given as a list of 'Point3D' python objects ('points')
@@ -241,7 +185,7 @@ cdef class SolverModelBuilder:
             in basic classes 'understandable' by the solvers (see entities.hpp).
         """
         (points, triangles, grounds) = site.export_topo_mesh()
-        (nodes_idx, tgles_idx) = self.refactored_process_mesh(points, triangles)
+        (nodes_idx, tgles_idx) = self.process_mesh(points, triangles)
         # make material
         actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
         pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])

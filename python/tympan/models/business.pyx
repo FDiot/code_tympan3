@@ -75,6 +75,12 @@ cdef class AcousticSurface:
         assert self.thisptr != NULL
         pts = cy.declare(deque[tycommon.OPoint3D])
         tgles = cy.declare(deque[tycommon.OTriangle])
+        # Use the triangulating interface of TYSurfaceInterface to get triangles
+        # and convert them to Nodes and AcousticTriangles (beware of mapping
+        # TYPoints to Node in the correct way.)
+        # !! Here we must not give exportMesh the geonode face_list[i] but
+        # build a new one to avoid constructing the triangles in a local
+        # scale
         self.thisptr.exportMesh(pts, tgles, TYGeometryNode(self.thisptr))
         points = []
         itp = cy.declare(deque[tycommon.OPoint3D].iterator)
