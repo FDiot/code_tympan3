@@ -120,7 +120,7 @@ cdef class ProblemModel:
         nb_elts = cy.declare(cy.uint)
         actri = cy.declare(cy.pointer(AcousticTriangle))
         nb_elts = self.thisptr.ntriangles()
-        triangles = np.empty([nb_elts, 3])
+        triangles = np.empty([nb_elts, 3], dtype=int)
         for i in xrange(nb_elts):
             actri = cy.address(self.thisptr.triangle(i))
             triangles[i] = [actri.n[0], actri.n[1], actri.n[2]]

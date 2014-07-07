@@ -3,6 +3,7 @@ import os, os.path as osp
 import unittest
 
 import numpy as np
+from numpy.testing import assert_allclose
 
 from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, TympanTC, bus2solv
 
@@ -62,12 +63,21 @@ class TestPyTam(TympanTC):
                                         "test_mesh_nodes_ref.csv"),
                                delimiter=';', dtype=np.float)
         # nodes coordinates must be almost equal (milimeter precision)
-        self.assertTrue(np.allclose(a=nodes_ref, b=nodes_test, atol=1e-03))
+        assert_allclose(nodes_ref, nodes_test, atol=1e-03)
         triangles_ref = np.loadtxt(osp.join(TEST_DATA_DIR, "expected",
                                             "test_mesh_triangles_ref.csv"),
                                    delimiter=';', dtype=np.uint)
-        # the indices must be strictly equal
-        self.assertTrue(np.array_equal(triangles_ref, triangles_test))
+        # Put triangles in a set of set
+        tgles_set_ref = set()
+        tgles_set_test = set()
+        for i in xrange(triangles_ref.shape[0]):
+            tgles_set_ref.add(frozenset(
+                [triangles_ref[i][0], triangles_ref[i][1], triangles_ref[i][2]]))
+            tgles_set_test.add(frozenset(
+                [triangles_test[i][0], triangles_test[i][1], triangles_test[i][2]]))
+        # the indices must be strictly equal, but order of triangles and of
+        # their vertices is not important
+        self.assertEqual(set([]), tgles_set_ref.symmetric_difference(tgles_set_test))
 
 
     @unittest.skip("Implementation to be fixed")
