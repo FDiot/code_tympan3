@@ -13,32 +13,82 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- */
-
-
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHCore.h"
+  #include "TYPHCore.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
+
+#include <string.h>
+#include <iostream>
+#if defined(WIN32)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
+#endif
 
 #include "Tympan/core/idgen.h"
 #include "Tympan/core/chrono.h"
-
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
-
-#include "Tympan/Tools/OMessageManager.h"
 #include "Tympan/core/exceptions.h"
-#include <iostream>
+#include "Tympan/Tools/OMessageManager.h"
+
+
+// Declaration des membres statiques.
+std::unordered_map<std::string, OPrototype::IOProtoFactory::ptr_type> OPrototype::_factory_map;
+
+OPrototype::OPrototype()
+{
+}
+
+OPrototype::~OPrototype()
+{
+}
+
+/* static */ void OPrototype::add_factory(const char * classname,
+        IOProtoFactory::ptr_type factory)
+{
+    _factory_map[std::string(classname)] = move(factory);
+}
+
+/*static*/ OPrototype* OPrototype::findAndClone(const char* className)
+{
+    auto it = _factory_map.find(className);
+
+    if (it == _factory_map.end())
+    {
+        std::string err_msg ("Asked to clone class ");
+        err_msg.append (className);
+        err_msg.append (" which isn't registered in OPrototype.");
+        throw tympan::invalid_data(err_msg) << tympan_source_loc
+            << tympan::oproto_classname_errinfo(className);
+    }
+    else
+    {
+        return _factory_map[className]->make().release();
+    }
+}
+
+/*static*/ int OPrototype::findPrototype(const char* className)
+{
+    if (className == 0) { return -1; }
+    // Return 1 if the class className exists, -1 otherwise
+    return (_factory_map.count(className) > 0 ? 1 : -1);
+}
+
+bool OPrototype::isA(const char* className) const
+{
+    // Test le nom du type
+    return (!strcmp(className, this->getClassName()));
+}
+
+/*static*/ OPrototype* OPrototype::safeDownCast(OPrototype* pObject)
+{
+    return (OPrototype*) pObject;
+}
+
+
 // -------------------------------------------------------------------------
 // classe TYElement
 // -------------------------------------------------------------------------
@@ -70,69 +120,6 @@ TYElementContainer& TYElement::getInstances()
 
     return *_instances;
 }
-
-// void CompteInstance(TYListPtrElement& instances)
-// {
-//     const int nbTypeObjet = 1024;
-//     int nCurrentNbTypeObjet = 0;
-//     std::string InstancesName[nbTypeObjet];
-//     long instanceCount[nbTypeObjet];
-//     int i;
-//     //RAZ
-//     for (i = 0; i < nbTypeObjet; i++)
-//     {
-//         instanceCount[i] = 0;
-//     }
-//     //Comptage des objets
-//     TYElement* pTYElement = NULL;
-//     TYListPtrElement::iterator ite;
-//     int nCurrentPos = 0;
-//     for (ite = instances.begin(); ite != instances.end(); ite++)
-//     {
-//         pTYElement = (*ite);
-//         bool bValidPtr = false ; // INIT to false Projet_Tympan to avoid warnings on g++
-//         if (pTYElement)
-//         {
-//             bValidPtr = pTYElement->getRefCount() >= 0 && pTYElement->getRefCount() < 5000;    //(NULL != OPrototype::safeDownCast(pTYElement));
-//         }
-//         if (bValidPtr && pTYElement)
-//         {
-//             //Est-ce que le nom de cet objet est enregistre ?
-//             bool bClasseConnue = false;
-//             for (i = 0; i < nCurrentNbTypeObjet; i++)
-//             {
-//                 if (pTYElement->getClassName() && InstancesName[i] == pTYElement->getClassName())
-//                 {
-//                     bClasseConnue = true;
-//                     instanceCount[i]++;//et un objet en plus
-//                     break;//oui
-//                 }
-//             }
-//             //Non enregistre:
-//             if (!bClasseConnue && pTYElement->getClassName())
-//             {
-//                 InstancesName[nCurrentNbTypeObjet] = pTYElement->getClassName();
-//                 instanceCount[nCurrentNbTypeObjet]++;//et un objet en plus
-//                 nCurrentNbTypeObjet++;
-//             }
-
-//         }
-//         nCurrentPos++;
-
-//     }
-//     //Decompte total:
-// #ifdef _DEBUG
-//     for (i = 0; i < nCurrentNbTypeObjet; i++)
-//     {
-//         char Debug[2048];
-//         sprintf(Debug, "%s : %d\n", InstancesName[i].c_str(), instanceCount[i]);
-//         OMsg::msgDebug(Debug);
-//         //printf(Debug);
-//     }
-//     OMsg::msgDebug("\n");
-// #endif
-//
-// }
 
 TYElement::TYElement() : _bPutInInstanceList(true), _pParent(NULL), _copyCount(0)
 {
@@ -196,12 +183,6 @@ TYElement::~TYElement()
     {
         remInstance();
     }
-    // bool bCompteInstance = false;
-    // if (bCompteInstance)
-    // {
-    //     CompteInstance(getInstances());
-    // }
-
 #if TY_USE_IHM
     if (_pGraphicObject)
     {
