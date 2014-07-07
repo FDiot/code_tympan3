@@ -43,7 +43,7 @@
 #endif // TY_USE_IHM
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/Tools/OColor.h"
+#include "Tympan/core/color.h"
 #include "Tympan/core/smartptr.h"
 
 class TYElement;

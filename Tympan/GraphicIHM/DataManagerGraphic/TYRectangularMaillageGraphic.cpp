@@ -30,7 +30,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRectangularMaillage.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
-#include "Tympan/Tools/TYColorManager.h"
+#include "Tympan/core/color.h"
 #include "Tympan/gui/OSizeManager.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 

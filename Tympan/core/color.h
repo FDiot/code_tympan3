@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,17 +13,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#ifndef __O_COLOR__
-#define __O_COLOR__
-
-#include "Tympan/core/smartptr.h"
+#ifndef TY_COLOR
+#define TY_COLOR
 
 #include <vector>
 #include <cmath>
+
+#include "Tympan/core/smartptr.h"
 
 #undef min
 #undef max
@@ -150,14 +146,25 @@ inline OColor::operator const float* () const
 }
 
 
-#if TY_USE_IHM
-#include <QColor>
+/**
+ Classe utilitaire permettant de gerer les palettes de couleurs pour les cartographies
+*/
 
-inline QColor toQColor(const OColor& color) {return QColor(color.r * 255.0f, color.g * 255.0f, color.b * 255.0f);}
+class TYColorManager
+{
+public:
+    /// Generation de la table de couleurs basee sur une rampe S-Curve ( y = (1-cos(pi*x))/2 )
+    static void getSCurveColorTable(const unsigned int& nbColors, const float* hueRange, const float* saturationRange, const float* valueRange, OLookupTable& outColors);
 
-inline OColor toOColor(const QColor& color) {return OColor(color.red() / 255.0f, color.green() / 255.0f, color.blue() / 255.0f);}
+    /// Generation de la table de couleurs basee sur une rampe lineaire ( y = x+0.5/255 )
+    static void getLinearColorTable(const unsigned int& nbColors, const float* hueRange, const float* saturationRange, const float* valueRange, OLookupTable& outColors);
 
-#endif // TY_USE_IHM
+    /// Generation de la table de couleurs basee sur une rampe sqrt ( y = sqrt(x)+0.5/255 )
+    static void getSqrtColorTable(const unsigned int& nbColors, const float* hueRange, const float* saturationRange, const float* valueRange, OLookupTable& outColors);
+
+    /// Generation de la table de couleurs a partir d'une repartition gaussienne en R, G, B
+    static void getGaussColorTable(const unsigned int& nbColors, const float& alpha1, const float& alpha2, OLookupTable& outColors);
+};
 
 
-#endif // __O_COLOR__
+#endif // TY_COLOR

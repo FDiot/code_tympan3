@@ -28,7 +28,7 @@
 
 #include <GL/gl.h>
 
-#include "Tympan/Tools/OColor.h"
+#include "Tympan/core/color.h"
 #include "Tympan/models/common/3d.h"
 
 OGLSphere::OGLSphere()

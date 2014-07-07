@@ -28,7 +28,7 @@
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
 
-#include "Tympan/Tools/TYColorManager.h"
+#include "Tympan/core/color.h"
 #include "Tympan/core/logging.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"

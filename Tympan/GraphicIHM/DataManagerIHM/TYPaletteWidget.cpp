@@ -35,8 +35,7 @@
 
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/core/logging.h"
-#include "Tympan/Tools/TYColorManager.h"
-#include "Tympan/Tools/OColor.h"
+#include "Tympan/core/color.h"
 #include "TYLookupTableWidget.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPalette.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYLookupTableWidget.h"
