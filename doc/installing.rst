@@ -30,7 +30,7 @@ Lightweight dependencies
 
 Those dependencies are to be downloaded as a companion source package
 and unzipped into the ``3rdparty`` directory. Please refer to the
-``3rdparty/README`` file which provide the exact URL for your current
+``3rdparty/README`` file which provides the exact URL for your current
 version of Code_TYMPAN.
 
 Major dependencies
@@ -90,6 +90,12 @@ Cython
 Shapely
         Shapely_ is a Python package for manipulation and analysis of planar 
         geometric objects. Version 1.3 is suggested.
+
+SWIG
+        Swig_ is a software development tool that connects programs written in
+        C and C++ with a variety of high-level programming languages.
+        It is needed by the 3rd party dependency *CGAL-bingings*, to connect
+        C++ with Python code.
 
 
 Documentation dependencies
@@ -170,6 +176,10 @@ this command.
 
     $ sudo aptitude install python-shapely
 
+**Installation of swig** ::
+
+    $ sudo aptitude install swig
+
 
 Windows Seven
 =============
@@ -213,6 +223,10 @@ Shapely
         Shapely can be installed through the dedicated executable installer,
         which contains the required GEOS DLL. It can be downloaded from:
         http://pypi.python.org/pypi/Shapely#downloads (choose python 2.7 version)
+
+SWIG
+        A prebuilt executable of SWIG can be retrieved from
+        http://www.swig.org/download.html (download *swigwin-3.0.2*)
 
 If you have no direct Internet connection (typically you are behind an
 authenticating proxy) you will have to build Boost from source :
@@ -366,6 +380,7 @@ opening the solution.
 .. _Python: http://www.python.org/
 .. _Cython: http://www.cython.org/
 .. _Shapely: http://pypi.python.org/pypi/Shapely
+.. _Swig: http://www.swig.org/
 
 .. _`CGAL forge` : https://gforge.inria.fr/frs/?group_id=52
 

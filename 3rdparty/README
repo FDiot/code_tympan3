@@ -1,11 +1,11 @@
-This is the third party dependencies directory for Code_TYMPAN 4.1.13
+This is the third party dependencies directory for Code_TYMPAN 4.2.5
 
-You need to download the archive Code_TYMPAN-4.1.13_third-party-NN.zip
+You need to download the archive Code_TYMPAN-4.2.5_third-party-NN.zip
 from https://bitbucket.org/TYMPAN/code_tympan/downloads/ and uncompress
 it in this directory (where NN is the version number of the archive,
 currently NN=01) :
 
-https://bitbucket.org/TYMPAN/code_tympan/downloads/Code_TYMPAN-4.1.13_third-party-01.zip
+https://bitbucket.org/TYMPAN/code_tympan/downloads/Code_TYMPAN-4.2.6_third-party-01.zip
 
 NB : The authenticatio use HTTP Digest Auth (which is broken in wget, 
      use curl --digest instead to download from command line).
@@ -20,7 +20,12 @@ This archive should contain :
                                         (for old sphinx versions)
  * NMPB2008.zip : the reference implementation for the NMPB2008 from CEREMA
                   (see Note 2 below : this is not publicly distributed for now)
-
+ * cgalbindings-e5f897746416.zip : a distribution of swig bindings of
+   CGAL which provides support for an installation target in CMake.
+   For now and awaiting its intergration upstream, this is available from 
+             https://code.google.com/r/medionilaura-cgal-bindings/ 
+   (e5f897746416 being the commit ID)
+   
 Note about Dime: there is not tagged version. Thus, the name is followed by the
 SHA1 of the changeset. For now, Logilab forked the Dime project on Bitbucket at
 https://bitbucket.org/garaud/dime in order to write CMake files. Logilab asked
@@ -44,4 +49,5 @@ this archive as they are better installed in a system dependent way :
  * CMake >= 2.8
  * Boost >= 1.46
  * CGAL >= 4.1
+ * SWIG >= 2.0
 
