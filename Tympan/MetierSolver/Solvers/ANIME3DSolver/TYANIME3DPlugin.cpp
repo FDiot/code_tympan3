@@ -20,8 +20,6 @@
  * \date 04 avril 2011
  */
 
-#include "Tympan/Tools/TYProgressManager.h"
-
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPlugin.h"
 #include "TYANIME3DSolver.h"
@@ -42,11 +40,6 @@ extern "C" PLUGIN_DECL void startPlugin(bool console)
 
     // Creation du solver
     plugin->setSolver(new TYANIME3DSolver());
-
-#if TY_USE_IHM
-    TYProgressManager::setConsoleMode(console);
-    TYProgressManager::create(NULL, plugin->getName().toAscii().data());
-#endif
 }
 
 extern "C" PLUGIN_DECL TYPlugin* getPlugin()

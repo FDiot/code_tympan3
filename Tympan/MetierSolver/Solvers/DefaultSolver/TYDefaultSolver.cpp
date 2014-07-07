@@ -13,16 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
-#if TY_USE_IHM
-#include "Tympan/Tools/TYProgressManager.h"
-#endif
-
-
 #include "TYSolver.h"
 #include "TYDefaultSolver.h"
 
@@ -42,11 +32,6 @@ void startPlugin(bool console)
 
     // Creation du solver
     plugin->setSolver(new TYSolver());
-
-#if TY_USE_IHM
-    TYProgressManager::setConsoleMode(console);
-    TYProgressManager::create(NULL, plugin->getName().toAscii().data());
-#endif
 }
 
 TYPlugin* getPlugin()

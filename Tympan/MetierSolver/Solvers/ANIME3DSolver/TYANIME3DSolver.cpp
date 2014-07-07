@@ -18,27 +18,21 @@
 #include <cmath>
 #include <vector>
 
-#include "Tympan/Tools/TYProgressManager.h"
-#include "TYANIME3DSolver.h"
-
 #include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
-
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
-
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
-
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"
-
 #include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
 #include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
-
 #include "TYANIME3DRayTracerSetup.h"
 #include "TYANIME3DAcousticModel.h"
 #include "TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DFaceSelector.h"
+#include "TYANIME3DSolver.h"
+
 
 typedef std::vector<TYTrajet> TabTrajet;
 
