@@ -3,9 +3,9 @@
 
 #include "gtest/gtest.h"
 
+#include "Tympan/GraphicIHM/DataManagerIHM/TYLookupTableWidget.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPalette.h"
 
-// #include "test_utils/ProjectLoader.hpp"
 
 TEST(TestTYPalette, color_conversions)
 {

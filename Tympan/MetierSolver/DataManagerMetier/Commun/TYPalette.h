@@ -25,8 +25,7 @@
 
 #include <map>
 
-#include "Tympan/Tools/OColor.h"
-#include "Tympan/Tools/TYColorManager.h"
+#include "Tympan/core/color.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 
 /**

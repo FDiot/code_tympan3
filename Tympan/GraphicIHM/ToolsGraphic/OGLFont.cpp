@@ -20,7 +20,7 @@
 
 
 #include <stdio.h>
-#include "Tympan/Tools/OColor.h"
+#include "Tympan/core/color.h"
 #include "OGLFont.h"
 #include "OImageGlf.h"
 #include "TYImageManager.h"

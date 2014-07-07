@@ -21,7 +21,7 @@
 #ifndef __TYCOLORINTERFACE__
 #define __TYCOLORINTERFACE__
 
-#include "Tympan/Tools/OColor.h"
+#include "Tympan/core/color.h"
 #include "TYXMLTools.h"
 
 /**

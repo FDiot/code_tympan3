@@ -31,7 +31,7 @@
 #include <memory>
 #include <set>
 
-#include "Tympan/Tools/OColor.h"
+#include "Tympan/core/color.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
 
 class TYElementWidget;

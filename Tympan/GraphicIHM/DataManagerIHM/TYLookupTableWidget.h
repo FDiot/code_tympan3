@@ -26,12 +26,18 @@
 #ifndef __TY_LOOKUPTABLE_WIDGET__
 #define __TY_LOOKUPTABLE_WIDGET__
 
-#include "Tympan/Tools/OColor.h"
-
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QPaintEvent>
 #include <QResizeEvent>
+#include <QColor>
+
+#include "Tympan/core/color.h"
+
+inline QColor toQColor(const OColor& color) {return QColor(color.r * 255.0f, color.g * 255.0f, color.b * 255.0f);}
+
+inline OColor toOColor(const QColor& color) {return OColor(color.red() / 255.0f, color.green() / 255.0f, color.blue() / 255.0f);}
+
 
 class QRect;
 class TYPalette;

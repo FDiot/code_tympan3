@@ -25,7 +25,7 @@
 #define __OGL_SPHERE_ELEMENT
 
 #include "OGLElement.h"
-#include "Tympan/Tools/OColor.h"
+#include "Tympan/core/color.h"
 #include "Tympan/models/common/3d.h"
 
 #include <qstring.h>

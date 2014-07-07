@@ -30,7 +30,7 @@
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/Tools/TYColorManager.h"
+#include "Tympan/core/color.h"
 #include "Tympan/Tools/OLocalizator.h"
 
 #include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h"

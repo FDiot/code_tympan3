@@ -25,7 +25,7 @@
 #define __OGL_GRID_ELEMENT
 
 #include "OGLElement.h"
-#include "Tympan/Tools/OColor.h"
+#include "Tympan/core/color.h"
 
 #include <qstring.h>
 
