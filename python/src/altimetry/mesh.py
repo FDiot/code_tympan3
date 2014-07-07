@@ -74,36 +74,42 @@ class MeshedCDTWithInfo(object):
     """
     This call provide the meshing of a geometry with arbitrary informations attached
     """
-    FaceInfo = dict
     EdgeInfo = dict
     VertexInfo = dict
 
     def __init__(self):
         self.cdt = CDT()
-        self.faces_infos = defaultdict(self.FaceInfo)
-        self.vertices_infos = {}
-        self._constraints_infos = {}
+        self._input_vertices_infos = {}
+        self._input_constraints_infos = {}
+
+    def clear_caches(self):
+        pass
 
     def input_constraint_infos(self, (va, vb)):
         """Get the constraint informations associated to the given pair of vertices
 
         NB: Input constraints are represented as a pair of vertices,
         sorted in some arbitrary order and used as keys in
-        _constraints_infos. This method ensure this normalisation is
+        _input_constraints_infos. This method ensure this normalisation is
         performed.
 
         """
-        return self._constraints_infos[sorted_vertex_pair(va, vb)]
+        return self._input_constraints_infos[sorted_vertex_pair(va, vb)]
+
+    def input_vertex_infos(self, v):
+        return self._input_vertices_infos[v]
 
     def insert_constraint(self, va, vb, **kwargs):
+        self.clear_caches()
         self.cdt.insert_constraint(va, vb)
-        self._constraints_infos[sorted_vertex_pair(va, vb)] = self.EdgeInfo(**kwargs)
+        self._input_constraints_infos[sorted_vertex_pair(va, vb)] = self.EdgeInfo(**kwargs)
         return (va, vb) # Important to return the contrain in the input order
 
     def insert_point(self, point, **kwargs):
+        self.clear_caches()
         point = to_cgal_point(point)
         vertex = self.cdt.insert(point)
-        self.vertices_infos[vertex] = self.VertexInfo(**kwargs)
+        self._input_vertices_infos[vertex] = self.VertexInfo(**kwargs)
         return vertex
 
     def insert_polyline(self, polyline, close_it=False, connected=True, **kwargs):
@@ -187,8 +193,7 @@ class MeshedCDTWithInfo(object):
 
     def iter_constraints_info_overlapping(self, edge):
         for constraint in self.iter_input_constraint_overlapping(edge):
-            yield self._constraints_infos[constraint]
-
+            yield self.input_constraint_infos(constraint)
 
     def fetch_constraint_infos_for_edges(self, edges=None):
         """Return a dict mapping each given edges (or all edges if none is
