@@ -13,38 +13,30 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
 
 #ifdef _MSC_VER
-#pragma warning(disable : 4786)
+  #pragma warning(disable : 4786)
 #endif
-
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHCore.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
-
-#include "Tympan/core/logging.h"
-#include "TYXMLManager.h"
-#include "Tympan/Tools/TYProgressManager.h"
 
 #include <qfile.h>
 #include <iostream>
 
+#ifdef TYMPAN_USE_PRECOMPILED_HEADER
+  #include "TYPHCore.h"
+#endif // TYMPAN_USE_PRECOMPILED_HEADER
+#include "Tympan/core/logging.h"
 #include "Tympan/core/exceptions.h"
 #include "Tympan/MetierSolver/ToolsMetier/DOMSave.h"
+#include "TYXMLManager.h"
 
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 QString TYXMLManager::_savedFileName = QString("");

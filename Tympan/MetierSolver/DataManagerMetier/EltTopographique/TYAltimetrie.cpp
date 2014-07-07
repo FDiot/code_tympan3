@@ -13,47 +13,41 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAltimetrieWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAltimetrieGraphic.h"
-#endif
-
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
+#undef min
+#undef max
 
 #include <cstdlib>
 #include <cassert>
 #include <cmath>
 #include <limits>
-
-#undef min
-#undef max
 #include <algorithm>
+#if defined(WIN32)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
+#endif
 
 #include <boost/current_function.hpp>
 #include <boost/foreach.hpp>
 
+#ifdef TYMPAN_USE_PRECOMPILED_HEADER
+  #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
+#endif // TYMPAN_USE_PRECOMPILED_HEADER
+#include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/CommonTools/OBox2.h"
-
-#include "TYAltimetrie.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
-
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
-#include "Tympan/Tools/TYProgressManager.h"
-#include "Tympan/core/logging.h"
-
 #include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
+#if TY_USE_IHM
+  #include "Tympan/GraphicIHM/DataManagerIHM/TYAltimetrieWidget.h"
+  #include "Tympan/GraphicIHM/DataManagerGraphic/TYAltimetrieGraphic.h"
+#endif
+#include "TYAltimetrie.h"
 
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
 
 static inline double grid_step(double nb_triangles) {return sqrt(nb_triangles) / 2;}
 

@@ -13,27 +13,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSemiCircleWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCircleGraphic.h"
-#endif
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
+  #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-
 #include "Tympan/models/common/3d.h"
-#include "Tympan/models/common/3d.h"
-
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
-
-#include "Tympan/Tools/TYProgressManager.h"
-
 #include "Tympan/core/logging.h"
+#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
+#if TY_USE_IHM
+  #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSemiCircleWidget.h"
+  #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCircleGraphic.h"
+#endif
 
 TY_EXTENSION_INST(TYAcousticSemiCircle);
 TY_EXT_GRAPHIC_INST(TYAcousticSemiCircle);
