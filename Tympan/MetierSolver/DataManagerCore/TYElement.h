@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,53 +13,44 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- */
-
 #ifndef __TY_ELEMENT__
 #define __TY_ELEMENT__
 
 
-#if _MSC_VER > 1000
-#pragma once
-#endif // _MSC_VER > 1000
+#ifdef HAVE_CONFIG_H
+  #include "config.h"
+#endif // HAVE_CONFIG_H
 
+#if _MSC_VER > 1000
+  #pragma once
+#endif // _MSC_VER > 1000
 #ifdef _MSC_VER
-#pragma warning( disable : 4275 4800 4355 4273 4786 4018 4503)
+  #pragma warning( disable : 4275 4800 4355 4273 4786 4018 4503) 4081)
 #endif
 
+#pragma warning(disable: 4081)
+
 #ifndef _NDEBUG
-#include <QDebug>
+  #include <QDebug>
 #endif // _NDEBUG
 
-#include "Tympan/Tools/TYConfigure.h"
 #include "Tympan/core/defines.h"
-
-#if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYElementWidget.h"
-#include "TYPreferenceManager.h"
-#endif // TY_USE_IHM
-
-///Definitions des types.
-#include "TYDefines.h"
-///Macros utilitaires generales.
 #include "Tympan/core/macros.h"
-///Gestion des messages d'erreurs/warning/debug.
 #include "Tympan/Tools/OMsg.h"
-
-///Pattern Prototype factory.
 #include "Tympan/Tools/OPrototype.h"
-
-///Include general pour la geometrie.
-
-///Boite a outils XML.
+#if TY_USE_IHM
+  #include "Tympan/GraphicIHM/DataManagerIHM/TYElementWidget.h"
+  #include "TYPreferenceManager.h"
+#endif // TY_USE_IHM
+#include "TYDefines.h"
 #include "TYXMLTools.h"
+
+// Nom de la categorie pour la sauvegarde des preferences.
+#define TYDIRPREFERENCEMANAGER "UserPreferences"
 
 typedef std::vector<LPTYElement> LPTYElementArray;
 
-typedef  std::map<TYUUID, TYElement*> TYElementContainer;
+typedef std::map<TYUUID, TYElement*> TYElementContainer;
 
 /**
  * Macro pour la declaration des methodes d'extension
