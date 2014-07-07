@@ -2,8 +2,6 @@
 Provide triangulation and meshing of a clean, single site, geometry.
 """
 
-from collections import defaultdict, deque
-
 from shapely import geometry as sh_geom
 
 from CGAL.CGAL_Kernel import (
@@ -30,7 +28,7 @@ from CGAL.CGAL_Triangulation_2 import  (
 # http://code.google.com/p/cgal-bindings/issues/detail?id=48
 Edge.__iter__= lambda this: iter((this[0], this[1]))
 
-from datamodel import *
+from datamodel import InconsistentGeometricModel
 
 
 UNSPECIFIED_ALTITUDE = float('nan')
@@ -396,7 +394,7 @@ class MeshedCDTWithInfo(object):
             return face_handle, face_handle.vertex(index.object())
         else:
             assert locate_type == OUTSIDE_AFFINE_HULL
-            raise InvalidGeometry("Degenerate triangulation (0D or 1D)")
+            raise InconsistentGeometricModel("Degenerate triangulation (0D or 1D)")
 
 class FaceFlooder(object):
     """This is a base class for implementing the family of flood algorithms
