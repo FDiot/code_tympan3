@@ -30,23 +30,316 @@
 
 #pragma warning(disable: 4081)
 
+
+#include <memory>
+#include <unordered_map>
+#include <iostream>
+
+#include <boost/exception/error_info.hpp>
+
 #ifndef _NDEBUG
   #include <QDebug>
 #endif // _NDEBUG
 
 #include "Tympan/core/defines.h"
 #include "Tympan/core/macros.h"
-#include "Tympan/Tools/OMsg.h"
-#include "Tympan/Tools/OPrototype.h"
+#include "Tympan/core/idgen.h"
+#include "Tympan/MetierSolver/ToolsMetier/TYNameManager.h"
 #if TY_USE_IHM
   #include "Tympan/GraphicIHM/DataManagerIHM/TYElementWidget.h"
+  #include "Tympan/GraphicIHM/DataManagerGraphic/TYElementGraphic.h"
   #include "TYPreferenceManager.h"
 #endif // TY_USE_IHM
 #include "TYDefines.h"
 #include "TYXMLTools.h"
 
+
 // Nom de la categorie pour la sauvegarde des preferences.
 #define TYDIRPREFERENCEMANAGER "UserPreferences"
+
+/////////////////////////////////////////////////////////////
+// Definition de macros pour la creation de nouveaux types
+// derives de OPrototype.
+
+/**
+ * Macro pour la declaration des methodes a surcharger
+ * de la classe OPrototype, et pour la registration du type
+ * 'classname' dans la Prototype Factory.
+ * Cette macro doit etre appelee dans la declaration de la
+ * nouvelle classe derivee (.h).
+ */
+#define OPROTODECL(classname) \
+    public: \
+    virtual OPrototype* clone() const { \
+        return new classname(); \
+    } \
+    virtual const char* getClassName() const { return #classname; } \
+    static classname* safeDownCast(OPrototype * pObject) { \
+        if (pObject) { \
+            classname * pTypedObject = dynamic_cast<classname *>(pObject); \
+            if (pTypedObject != nullptr) { \
+                return pTypedObject; \
+            } \
+        } \
+        return nullptr;\
+    } \
+
+/////////////////////////////////////////////////////////////
+
+namespace tympan
+{
+     typedef boost::error_info < struct tag_classname, std::string >
+         oproto_classname_errinfo;
+} // namespace tympan
+
+
+/**
+ * Classe abstraite Prototype du pattern Prototype Factory.
+ * Les classes derivees de Prototype peuvent etre instanciees a partir
+ * seulement du nom de la classe (chaine de caracteres).
+ *
+ * Pour cela, la map statique _factory_map associe a une chaine de caracteres
+ * representant le nom de la classe la factory permettant de construire une
+ * instance de ce type
+ *
+ * La methode public static 'findAndClone()' est l'interface principale
+ * de ce mecanisme, elle permet d'instancier un nouvel objet a partir
+ * de son nom (a condition que le type correspondant existe et soit
+ * deja enregistre dans Prototype au moment de l'appel). Si le nom n'est pas
+ * connu au moment de l'appel, elle leve une exception 'tympan::invalid_data'.
+ *
+ * La methode 'findPrototype()' cherche si une classe est enregistree aupres
+ * de OPrototype.
+ *
+ * Enfin, la methode virtuelle pure 'clone()' permet aux classes derivees de
+ * retourner une nouvelle instance du type derive correspondant.
+ *
+ * De plus, la methode 'isA()' permet de verifier le type d'une instance.
+ *
+ * L'exemple suivant presente le squelette a reprendre pour creer des classe
+ * derivees de Prototype, c'est-a-dire de nouveaux composants. La classe
+ * derivee pour cet exemple se nomme 'ConcretePrototype'.
+ *
+ * <pre>
+ * // Declaration (ConcretePrototype.h)
+ *
+ * class ConcretePrototype : public Prototype {
+ *
+ * public:
+ *    // Constructeur par defaut.
+ *    ConcretePrototype();
+ *
+ *    //...//
+ *
+ *    // Permet de creer une nouvelle instance de type ConcretePrototype.
+ *    virtual Prototype* clone() const {
+ *      return new ConcretePrototype();
+ *    }
+ *
+ *    // Retourne le nom de la classe.
+ *    virtual char* getClassName() { return "ConcretePrototype"; }
+ *
+ * };
+ * </pre>
+ *
+ * La macro OPROTODECL a ete concue pour reprendre ces declarations comme suit:
+ *
+ * <pre>
+ * #define  OPROTODECL(classname) \
+ *    friend register##classname(); \
+ *  public: \
+ *    virtual OPrototype* clone(bool andCopy = false) const { \
+ *      if (andCopy) return new classname(*this); \
+ *      else return new classname(); \
+ *    } \
+ *    virtual char* getClassName() { return #classname; }
+ * </pre>
+ *
+ *
+ * La declaration d'une nouvelle classe s'en trouve alors simplifiee, il suffit
+ * de faire appel a la macro. L'exemple precedent devient donc :
+ *
+ * <pre>
+ *
+ * class ConcretePrototype : public Prototype {
+ *    OPROTODECL(ConcretePrototype)
+ *
+ * public:
+ *    // Constructeur par defaut.
+ *    ConcretePrototype();
+ *
+ *    //...//
+ * };
+ *
+ * // Implementation (ConcretePrototype.cpp)
+ *
+ * #include "ConcretePrototype.h"
+ *
+ *
+ * ConcretePrototype::ConcretePrototype()
+ * {
+ * }
+ *
+ * </pre>
+ *
+ * Cette technique d'enregistrement n'est donc pas autonome puisqu'il est
+ * necessaire de reprendre le modele ci-dessus pour chaque nouvelle classe
+ * derivee de Prototype.
+ *
+ *
+ * ATTENTION: en complement des declarations des classes via la macro OPROTODECL,
+ * il faut egalement enregistrer celles-ci aupres de OProrotype. Cette action doit
+ * etre effectuee avant toute utilisation des methodes de creation d'instances
+ * et de recherche de classes definies par OPrototype ('findPrototype()', 'clone()'
+  et 'findAndClone()').
+ * Cet enregistrement s'effectue au moyen de la methode statique 'add_factory()',
+ * qui permet d'enregistrer les differentes classes ainsi que leurs fabriques
+ * (utiliser la fonction 'build_factory<T>()' pour la fabrique).
+ * Exemple d'utilisation:
+ *      OPrototype::add_factory("TYTopographie", move(build_factory<TYTopographie>()));
+ *
+ * (voir Tympan/MetierSolver/DataManagerMetier/init_registry.{h,cpp})
+ */
+
+
+class OPrototype
+{
+    // Methodes
+public:
+    /**
+     * Destructeur.
+     */
+    virtual ~OPrototype();
+
+
+    /**
+     * Recherche une classe par son nom dans le tableau des
+     * classes registrees, une nouvelle instance est creee et
+     * retournee si le type a ete trouvee.
+     *
+     * @param   className Le nom de la classe a chercher puis cloner.
+     *
+     * @return  Une nouvelle instance du type recherche ou NULL s'il
+     *          n'a pas ete trouve.
+     */
+    static OPrototype* findAndClone(const char* className);
+
+    /**
+     * Recherche une classe par son nom dans le tableau des
+     * classes registrees.
+     *
+     * @param className Le nom de la classe a chercher.
+     *
+     * @return L'index dans le tableau si la classe a ete registree;
+     *         -1 sinon.
+     */
+    static int findPrototype(const char* className);
+
+    /**
+     * Instancie un nouvel objet du meme type que cet objet.
+     * Il est aussi possible de retourner une copie.
+     *
+     * @param andCopy Pour que l'objet clone soit une copie de cet objet.
+     *
+     * @return Une nouvelle instance du type derive.
+     */
+    virtual OPrototype* clone() const = 0;
+
+    /**
+     * Retourne le type de la classe sous la forme d'une
+     * chaine de caractere.
+     *
+     * @return Le nom de la classe.
+     */
+    virtual const char* getClassName() const { return "OPrototype"; }
+
+    /**
+     * Compare le type de cet objet avec un nom de classe donne.
+     *
+     * @param   className Le nom de la classe a comparer.
+     *
+     * @return  Retourne <code>true</code> si cet objet est une instance de la
+     *          classe specifiee, si non <code>false</code>.
+     */
+    bool isA(const char* className) const;
+
+    /**
+     * Effectue un cast sur l'objet passe si cela est possible, sinon
+     * retourne NULL. Cette methode statique est reimplementee dans toutes
+     * les classes derivees a OPrototype par la macro OPROTODECL.
+     *
+     * @param   object L'instance a caster.
+     *
+     * @return  L'instance castee dans le bon type ou NULL.
+     */
+    static OPrototype* safeDownCast(OPrototype* pObject);
+
+    /**
+     * Defines an interface for the Oprototype factory
+     *
+     * make method must return a unique pointer to a OPrototype object
+     *
+     */
+    class IOProtoFactory
+    {
+    public:
+        typedef std::unique_ptr<IOProtoFactory> ptr_type;
+        virtual std::unique_ptr<OPrototype> make() = 0;
+    };
+
+    /**
+     * Template implementation of the IOProtoFactory interface
+     *
+     * make method creates a T object and returns a unique pointer to it
+     *
+     * CAUTION: T must inherit from OPrototype
+     *
+     */
+    template<typename T>
+    class Factory : public IOProtoFactory
+    {
+    public:
+        typedef std::unique_ptr<T> ptr_type;
+
+        static_assert(std::is_base_of<OPrototype, T>::value,
+                      "Factory<T> : T must inherit from OPrototype");
+
+        ptr_type typed_make () { return ptr_type(new T()); }
+        virtual std::unique_ptr<OPrototype> make () { return typed_make(); }
+    };
+
+    /**
+     * Adds the factory "factory" allowing to build the class named "classname"
+     */
+    static void add_factory(const char*, IOProtoFactory::ptr_type factory);
+
+protected:
+
+    /**
+     * Constructeur par defaut.
+     */
+    OPrototype();
+
+// Membres
+private:
+
+    /**
+     * maps a class name (key) to the corresponding factory (value) that can
+     * build it through its "make()" method
+     */
+    static std::unordered_map<std::string, IOProtoFactory::ptr_type> _factory_map;
+
+};
+
+/**
+ * Template class method allowing to build a factory for a T class
+ *
+ * @return a unique ptr on the build factory
+ *
+ * CAUTION: T must inherit from OPrototype
+ */
+template<typename T>
+std::unique_ptr<OPrototype::Factory<T> > build_factory(){return std::unique_ptr<OPrototype::Factory<T> >( new OPrototype::Factory<T>() ); }
 
 typedef std::vector<LPTYElement> LPTYElementArray;
 
@@ -95,8 +388,6 @@ typedef std::map<TYUUID, TYElement*> TYElementContainer;
  */
 #if TY_USE_IHM
 
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYElementGraphic.h"
-
 #if defined(WIN32)
 #define TY_EXT_GRAPHIC_DECL(classname) \
     friend class classname; \
@@ -135,13 +426,7 @@ typedef void*   LPTYElementGraphic;
 /**
  * Structure contenant un identifiant unique pour chaque TYElement.
  */
-#include"Tympan/core/idgen.h"
 typedef class OGenID TYUUID;
-
-/**
- * Generateur de nom indexe.
- */
-#include "Tympan/MetierSolver/ToolsMetier/TYNameManager.h"
 
 
 template<typename T>
