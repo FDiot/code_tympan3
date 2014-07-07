@@ -356,7 +356,7 @@ class MeshedCDTTC(unittest.TestCase):
             self.assertEqual(self.mesher.input_constraint_infos(constraint),
                              {"altitude": 10})
         for vertex in vertices:
-            self.assertEqual(self.mesher.vertices_infos[vertex],
+            self.assertEqual(self.mesher.input_vertex_infos(vertex),
                              {"altitude": 10})
 
     def build_two_overlapping_segments(self):
