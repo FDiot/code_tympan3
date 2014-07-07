@@ -51,7 +51,7 @@ bool GetADisplayList(GLuint& displayList)
         {
             GLenum errorCode = glGetError();
             const unsigned char* sError = gluErrorString(errorCode);
-            OMsg::msgDebug("Erreur OpenGL %d : %s\n", errorCode, sError);
+            printf("Erreur OpenGL %d : %s\n", errorCode, sError);
             return false;
         }
     }

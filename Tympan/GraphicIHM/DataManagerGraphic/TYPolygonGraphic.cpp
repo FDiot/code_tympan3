@@ -75,7 +75,7 @@ void STDCALL vertexCallback(GLdouble* vertex)
 void errorCallback(GLenum errorCode)
 {
     const unsigned char* sError = gluErrorString(errorCode);
-    OMsg::msgDebug("Erreur OpenGL %d : %s\n", errorCode, sError);
+    printf("Erreur OpenGL %d : %s\n", errorCode, sError);
 }
 
 void TYPolygonGraphic::computeBoundingBox()
