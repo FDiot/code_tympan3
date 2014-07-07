@@ -24,7 +24,6 @@
 #include "TYAcousticPathFinder.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
 #include "TYFaceSelector.h"
-#include "Tympan/Tools/TYProgressManager.h"
 #include "TYTask.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
@@ -227,11 +226,6 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
 
     _tabPolygon = new TYStructSurfIntersect[_tabPolygonSize];
 
-#if TY_USE_IHM
-    TYProgressManager::setMessage("Initialisation du solveur");
-    TYProgressManager::set(_tabPolygonSize);
-#endif // TY_USE_IHM
-
     unsigned int i, j;
 
     OMatrix mat;
@@ -294,18 +288,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
 
             _tabPolygon[i].tabPoint.push_back(_tabPolygon[i].tabPoint[0]); // On rajoute le premier point car ce sont des objets fermes
         }
-
-#if TY_USE_IHM
-        TYProgressManager::step(cancel);
-        if (cancel)
-        {
-            TYProgressManager::stepToEnd();
-            return false;
-        }
-#endif // TY_USE_IHM
     }
-
-
     // Meme chose pour toutes les faces de la topographie
     for (i = nbFacesInfra ; i < tabFaces.size() ; i++)
     {
@@ -329,18 +312,6 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul)
         }
 
         _tabPolygon[i].tabPoint.push_back(_tabPolygon[i].tabPoint[0]); // On rajoute le premier point car ce sont des objets fermes
-#if TY_USE_IHM
-        TYProgressManager::step(cancel);
-        if (cancel)
-        {
-            TYProgressManager::stepToEnd();
-            return false;
-        }
-#endif // TY_USE_IHM
     }
-
-#if TY_USE_IHM
-    TYProgressManager::stepToEnd();
-#endif // TY_USE_IHM
     return true;
 }

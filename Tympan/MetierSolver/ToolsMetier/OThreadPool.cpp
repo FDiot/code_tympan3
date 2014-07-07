@@ -13,18 +13,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
+#include <QThread>
 
 #include "OThreadPool.h"
-
 #include "OMutexLocker.h"
 #include "OSlaveThread.h"
 #include "OTask.h"
-#include "Tympan/Tools/TYProgressManager.h"
-#include <QThread>
 
 OThreadPool::OThreadPool(unsigned int slaves)
     : _totalCount(0), _counter(0)
@@ -104,12 +98,6 @@ bool OThreadPool::end()
 {
     unsigned int totalCount = getTotalCount();
 
-#if TY_USE_IHM
-    TYProgressManager::setMessage("Calcul des trajets");
-    TYProgressManager::set(totalCount + 1);
-    TYProgressManager::step();
-#endif // TY_USE_IHM
-
     int last = 0;
     bool cancel = false;
     while (last < totalCount)
@@ -117,24 +105,14 @@ bool OThreadPool::end()
         int current = getCount();
         for (size_t i = 0; i < current - last; ++i)
         {
-#if TY_USE_IHM
-            TYProgressManager::step(cancel);
-#endif // TY_USE_IHM
             if (cancel)
             {
                 stop();
-#if TY_USE_IHM
-                TYProgressManager::stepToEnd();
-#endif // TY_USE_IHM
                 return false;
             }
         }
         last = current;
     }
-#if TY_USE_IHM
-    TYProgressManager::stepToEnd();
-#endif // TY_USE_IHM
-
     return true;
 }
 
