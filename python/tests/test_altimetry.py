@@ -306,10 +306,7 @@ def left_and_right_faces(faces_it):
     return zip(*list(faces_it))
 
 
-class MeshedCDTTC(unittest.TestCase):
-
-    def setUp(self):
-        self.mesher = mesh.MeshedCDTWithInfo()
+class MesherTestUtilsMixin(object):
 
     def assert_basic_counts(self, vertices=None, faces=None,
                             edges=None, constrained=None, mesher=None):
@@ -323,6 +320,61 @@ class MeshedCDTTC(unittest.TestCase):
             self.assertEqual(count_edges, edges)
         if constrained is not None:
             self.assertEqual(count_constrained, constrained)
+
+    def build_two_overlapping_segments(self):
+        segment1 = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
+        segment2 = map(mesh.to_cgal_point, [(0, 1), (0, 3)])
+        (vA, vB), (cAB,) = self.mesher.insert_polyline(
+            segment1, id="1", altitude=10)
+        (vC, vD), (cCD,) = self.mesher.insert_polyline(
+            segment2, id="2", color='blue')
+        return (vA, vB, vC, vD, cAB, cCD)
+        # Geometrical precondition checks
+        self.assert_basic_counts(vertices=4, faces=0, edges=3, constrained=3)
+
+    def _find_vertex_at(self, p):
+        # Point comparison is NOT ROBUST : do no use in production
+        p = mesh.to_cgal_point(p)
+        for v in self.mesher.cdt.finite_vertices():
+            if v.point() == p: # Not robust in real cases
+                return v
+        else:
+            return None
+
+    def build_two_crossing_segments(self):
+        h_segment = map(mesh.to_cgal_point, [(-1, 0), (1, 0)])
+        v_segment = map(mesh.to_cgal_point, [(0, -1), (0, 1)])
+        (vA, vB), (cAB,) = self.mesher.insert_polyline(
+            h_segment, id="H", altitude=10)
+        (vC, vD), (cCD,) =self.mesher.insert_polyline(
+            v_segment, id="V", color='blue')
+        # Geometrical precondition checks
+        self.assert_basic_counts(vertices=5, faces=4, edges=8, constrained=4)
+        # Informations check
+        vO = self._find_vertex_at((0, 0))
+        self.assertIsNotNone(vO)
+        return (vA, vB, vC, vD, cAB, cCD, vO)
+
+    def assertEqualButNotIdentical(self, a, b):
+        self.assertIsNot(a, b)
+        self.assertEqual(a, b)
+
+    def build_triangle(self):
+        cdt = self.mesher.cdt
+        (vA, vB), (cAB,) = self.mesher.insert_polyline([(0, 0), (2, 0)], material='concrete')
+        vC = self.mesher.insert_point((1, 1), altitude=10.0)
+        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
+        (edgeAB,) = [edge for edge in cdt.finite_edges()
+                    if cdt.is_constrained(edge)]
+        (faceABC,) = cdt.finite_faces()
+        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
+        return (vA, vB, vC, edgeAB, faceABC)
+
+
+class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
+
+    def setUp(self):
+        self.mesher = mesh.MeshedCDTWithInfo()
 
     def test_insert_point(self):
         points = [mesh.Point(1, 1)]
@@ -359,17 +411,6 @@ class MeshedCDTTC(unittest.TestCase):
             self.assertEqual(self.mesher.input_vertex_infos(vertex),
                              {"altitude": 10})
 
-    def build_two_overlapping_segments(self):
-        segment1 = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
-        segment2 = map(mesh.to_cgal_point, [(0, 1), (0, 3)])
-        (vA, vB), (cAB,) = self.mesher.insert_polyline(
-            segment1, origin="1", altitude=10)
-        (vC, vD), (cCD,) = self.mesher.insert_polyline(
-            segment2, origin="2", color='blue')
-        return (vA, vB, vC, vD, cAB, cCD)
-        # Geometrical precondition checks
-        self.assert_basic_counts(vertices=4, faces=0, edges=3, constrained=3)
-
     def assert_constraints_between(self, v1, v2, constraints):
         l_constraint = list(self.mesher.iter_input_constraint_overlapping((v1, v2)))
         self.assertItemsEqual(l_constraint, constraints)
@@ -384,8 +425,8 @@ class MeshedCDTTC(unittest.TestCase):
         (vA, vB, vC, vD, cAB, cCD) = self.build_two_overlapping_segments()
 
         self.assertItemsEqual(list(self.mesher.iter_constraints_info_overlapping((vB, vC))),
-                              [{"altitude":10, "origin":"1"},
-                               {"color": "blue", "origin":"2"}])
+                              [{"altitude":10, "id":"1"},
+                               {"color": "blue", "id":"2"}])
 
     def test_explicit_edge_conversion(self):
         segment = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
@@ -428,36 +469,13 @@ class MeshedCDTTC(unittest.TestCase):
         self.assertItemsEqual((vA, vB), self.mesher.ensure_vertices_pair(edge))
         self.assertEqual(edge, self.mesher.ensure_half_edge(cAB))
 
-    def _find_vertex_at(self, p):
-        # Point comparison is NOT ROBUST : do no use in production
-        p = mesh.to_cgal_point(p)
-        for v in self.mesher.cdt.finite_vertices():
-            if v.point() == p: # Not robust in real cases
-                return v
-        else:
-            return None
-
-    def build_two_crossing_segments(self):
-        h_segment = map(mesh.to_cgal_point, [(-1, 0), (1, 0)])
-        v_segment = map(mesh.to_cgal_point, [(0, -1), (0, 1)])
-        (vA, vB), (cAB,) = self.mesher.insert_polyline(
-            h_segment, origin="H", altitude=10)
-        (vC, vD), (cCD,) =self.mesher.insert_polyline(
-            v_segment, origin="V", color='blue')
-        # Geometrical precondition checks
-        self.assert_basic_counts(vertices=5, faces=4, edges=8, constrained=4)
-        # Informations check
-        vO = self._find_vertex_at((0, 0))
-        self.assertIsNotNone(vO)
-        return (vA, vB, vC, vD, cAB, cCD, vO)
-
     def test_info_on_edges_crossing_polylines(self):
         (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments()
 
         edges_infos = self.mesher.fetch_constraint_infos_for_edges()
         self.assertEqual(len(edges_infos), 8)
         self.assertEqual(edges_infos[mesh.sorted_vertex_pair(vA, vO)],
-                         [{'altitude': 10, 'origin':'H'}])
+                         [{'altitude': 10, 'id':'H'}])
 
     def test_input_constraints_around_polylines_crossing(self):
         (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments()
@@ -470,8 +488,8 @@ class MeshedCDTTC(unittest.TestCase):
 
         vertex_infos = self.mesher.fetch_constraint_infos_for_vertices([vO])
         self.assertItemsEqual(vertex_infos[vO],
-                              [{'origin': 'H', 'altitude': 10},
-                               {'origin': 'V', 'color': 'blue'}])
+                              [{'id': 'H', 'altitude': 10},
+                               {'id': 'V', 'color': 'blue'}])
 
     def build_simple_scene(self):
         border = self.mesher.insert_polyline( #NB CCW
@@ -601,21 +619,6 @@ class MeshedCDTTC(unittest.TestCase):
             plotter.plot_edges()
             visu.plot_points_seq(plotter.ax, seeds_for_holes, marker='*')
             plotter.show()
-
-    def assertEqualButNotIdentical(self, a, b):
-        self.assertIsNot(a, b)
-        self.assertEqual(a, b)
-
-    def build_triangle(self):
-        cdt = self.mesher.cdt
-        (vA, vB), (cAB,) = self.mesher.insert_polyline([(0, 0), (2, 0)], material='concrete')
-        vC = self.mesher.insert_point((1, 1), altitude=10.0)
-        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
-        (edgeAB,) = [edge for edge in cdt.finite_edges()
-                    if cdt.is_constrained(edge)]
-        (faceABC,) = cdt.finite_faces()
-        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
-        return (vA, vB, vC, edgeAB, faceABC)
 
     def test_copy(self):
         cdt = self.mesher.cdt
