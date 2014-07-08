@@ -1,6 +1,7 @@
 """
 Provide triangulation and meshing of a clean, single site, geometry.
 """
+from collections import defaultdict
 
 from shapely import geometry as sh_geom
 
@@ -9,8 +10,14 @@ from CGAL.CGAL_Kernel import (
     Vector_2 as Vector,
     Triangle_2 as Triangle,
     Segment_2 as Segment,
+    Point_3,
+    Vector_3,
+    Triangle_3,
+    Line_3,
     Ref_int,
-    centroid)
+    Object as CGAL_Object,
+    centroid,
+    intersection)
 from CGAL.CGAL_Mesh_2 import (
     Mesh_2_Constrained_Delaunay_triangulation_plus_2 as CDT,
     Mesh_2_Constrained_Delaunay_triangulation_plus_2_Face_handle as Face_handle,
@@ -23,6 +30,9 @@ from CGAL.CGAL_Triangulation_2 import  (
     Ref_Locate_type_2 as Ref_locate_type,
     VERTEX, EDGE, FACE, OUTSIDE_CONVEX_HULL, OUTSIDE_AFFINE_HULL
 )
+
+Z_VECTOR = Vector_3(0, 0, 1)
+_PROXIMITY_THRESHOLD = 0.01
 
 # Monkey patch Edge to work around issue
 # http://code.google.com/p/cgal-bindings/issues/detail?id=48
@@ -58,7 +68,6 @@ def first_and_last(iterable):
         last = e
     return (first, last)
 
-
 def ilinks(it, close_it=False):
     """Given an input iterable `it` iter over the successive pairs (v0,
     v1), (v1, v2)... if close_it=True add an nth pair (vn-1, v0)
@@ -88,8 +97,9 @@ class MeshedCDTWithInfo(object):
     def clear_caches(self):
         pass
 
-    def copy(self):
-        newone = type(self)()
+    def copy(self, class_=None):
+        class_ =  type(self) if class_ is None else class_
+        newone = class_()
         for attr in self._attributes_to_be_copied_with_copy_:
             value = getattr(self, attr).copy()
             setattr(newone, attr, value)
@@ -265,6 +275,26 @@ class MeshedCDTWithInfo(object):
                     infos.append(info)
         return vertices_info
 
+    def merge_info_for_vertices(self, merge_function, vertices=None, init_map=None):
+        """Reduce the list of information available on a vertices to a single one.
+
+        This method works by calling repeatedly merge_function to
+        merge two infos into a single one, starting with informatiosn
+        drawn from init_map (or default constructed if init_map is not
+        given or does not contains the vertex).
+
+        """
+        init_map = init_map or {}
+        d = {}
+        for v, info_list in self.fetch_constraint_infos_for_vertices(vertices=vertices).iteritems():
+            info = self._input_vertices_infos.get(v, init_map.get(v, self.VertexInfo()))
+            try:
+                d[v] = reduce(merge_function, info_list, info)
+            except InconsistentGeometricModel as exc:
+                exc.witness_point = self.py_vertex(v)
+                raise
+        return d
+
     def segment_for_edge(self, edge):
         if isinstance(edge[0], Face_handle):
             return self.cdt.segment(edge)
@@ -350,7 +380,6 @@ class MeshedCDTWithInfo(object):
         criteria = Mesh_criteria(shape_criteria, size_criteria)
         hole_seeds = hole_seeds or []
         CGAL_refine_Delaunay_mesh(self.cdt, hole_seeds, criteria)
-
 
     def mirror_half_edge(self, fh, i):
         fh2 = fh.neighbor(i)
@@ -484,3 +513,145 @@ class FaceFlooder(object):
             self.add_to_frontier(seed)
             while(self.frontier):
                 self.visit_one()
+
+
+
+class ElevationMesh(MeshedCDTWithInfo):
+    """ An elevation mesh associates an altitude to its vertices.
+
+    This altitude can be unspecified (yet) and represented as UNSPECIFIED_ALTITUDE
+    """
+
+    class VertexInfo(object):
+        ALTITUDE_TOLERANCE = 0.1
+
+        def __init__(self, altitude=UNSPECIFIED_ALTITUDE, id=None, **kwargs):
+            self.altitude = float(altitude)
+            self.ids = (id and [id]) or []
+
+        def merge_ids(self, other_info):
+            ids = getattr(other_info, "ids", None)
+            if ids is None: return
+            self.ids += ids
+
+        def merge_altitude(self, other_info):
+            alti = getattr(other_info, "altitude", UNSPECIFIED_ALTITUDE)
+            if alti is not UNSPECIFIED_ALTITUDE:
+                if self.altitude is UNSPECIFIED_ALTITUDE:
+                    self.altitude = alti
+                else:
+                    delta = abs(alti - self.altitude)
+                    if delta > self.ALTITUDE_TOLERANCE:
+                        raise InconsistentGeometricModel(
+                            "Intersecting constraints with different altitudes",
+                            ids=self.ids)
+
+        def merge_with(self, other_info):
+            self.merge_ids(other_info)
+            self.merge_altitude(other_info)
+            return self # so as to enable using reduce
+
+    EdgeInfo = VertexInfo
+
+    def __init__(self):
+        super(ElevationMesh, self).__init__()
+        self.vertices_info = defaultdict(self.VertexInfo)
+        self._init_vertices_info_from_input()
+
+    def _init_vertices_info_from_input(self):
+        for vh, info in self._input_vertices_infos.iteritems():
+            self.vertices_info[vh] = info # XXX or copy ?
+
+    def clear_caches(self):
+        self.vertices_info.clear()
+        self._init_vertices_info_from_input()
+
+    def insert_point(self, point, **kwargs):
+        vh = super(ElevationMesh, self).insert_point(point, **kwargs)
+        self.vertices_info[vh] = self.input_vertex_infos(vh) # XXX or copy ?
+        return vh
+
+    def point3d_for_vertex(self, vh):
+        alti = self.vertices_info[vh].altitude
+        x, y = vh.point().x(), vh.point().y()
+        if alti is UNSPECIFIED_ALTITUDE:
+            raise InconsistentGeometricModel("No altitude defined for vertex",
+                                             witness_point=(x, y))
+        else:
+            return Point_3(x, y, alti)
+
+    def triangle3d_for_face(self, fh):
+        if self.cdt.is_infinite(fh):
+            return None
+        else:
+            t = Triangle_3(*(self.point3d_for_vertex(fh.vertex(i))
+                             for i in xrange(3)))
+            return t
+
+    def update_info_for_vertices(self, vertices=None, init_map=None):
+        merge_function = lambda i1, i2: i1.merge_with(i2)
+        d = self.merge_info_for_vertices(
+            merge_function, vertices=vertices, init_map=self.vertices_info)
+        self.vertices_info.update(d)
+
+    def update_altitude_from_reference(self, reference):
+        for vh in self.cdt.finite_vertices():
+            try:
+                input_altitude = self._input_vertices_infos[vh].altitude
+            except KeyError:
+                input_altitude = UNSPECIFIED_ALTITUDE
+            if input_altitude is UNSPECIFIED_ALTITUDE:
+                info = self.vertices_info[vh]
+                info.altitude = reference(vh.point())
+
+
+class ReferenceElevationMesh(ElevationMesh):
+    """A reference elevation mesh is an elevation mesh whose all
+    constraint must have an altitude specified.
+
+    This enables computing the altitude of all vertices created as
+    constraints intersection, and from this on to compute an
+    interpolated altitude for all points within the convex hull of the
+    constraints.
+    """
+
+    def insert_point(self, point, altitude, **kwargs):
+        return super(ReferenceElevationMesh, self).insert_point(
+            point, altitude=altitude, **kwargs)
+
+    def insert_polyline(self, polyline, altitude, **kwargs):
+        return super(ReferenceElevationMesh, self).insert_polyline(
+            polyline, altitude=altitude, **kwargs)
+
+    def altitude_for_input_vertex(self, vh):
+        alti = self.input_vertex_infos(vh).altitude
+        assert alti is not UNSPECIFIED_ALTITUDE
+        return alti
+
+    def point_altitude(self, p, face_hint=None):
+        p = to_cgal_point(p)
+        fh, vh_or_i = self.locate_point(p, face_hint=face_hint)
+        if fh is None: # point p is out of the convex hull of the triangulation
+            return UNSPECIFIED_ALTITUDE
+        if isinstance(vh_or_i, Vertex_handle): # point p is a vertex
+            return self.altitude_for_input_vertex(vh_or_i)
+        if isinstance(vh_or_i, int): # point is on an edge
+            if self.cdt.is_infinite(fh): # get a finite face if needed
+                fh, _ = self.mirror_half_edge(fh, vh_or_i)
+                assert not self.cdt.is_infinite(fh)
+        triangle = self.triangle3d_for_face(fh)
+        p2 = Point_3(p.x(), p.y(), 0)
+        vline = Line_3(p2, Z_VECTOR)
+        inter = intersection(triangle, vline)
+        if not inter.is_Point_3():
+            raise InconsistentGeometricModel("Can not compute elevation",
+                                             witness_point=(p.x(), p.y()))
+        p3 = inter.get_Point_3()
+        alti = p3.z()
+        assert abs((p3-p2).squared_length()-alti**2) < _PROXIMITY_THRESHOLD*alti
+        return alti
+
+
+    def copy_as_ElevationMesh(self):
+        newone = self.copy(class_=ElevationMesh)
+        return newone

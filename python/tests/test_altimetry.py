@@ -342,13 +342,17 @@ class MesherTestUtilsMixin(object):
         else:
             return None
 
-    def build_two_crossing_segments(self):
+    def build_two_crossing_segments(self, V_altitude=None):
         h_segment = map(mesh.to_cgal_point, [(-1, 0), (1, 0)])
         v_segment = map(mesh.to_cgal_point, [(0, -1), (0, 1)])
         (vA, vB), (cAB,) = self.mesher.insert_polyline(
             h_segment, id="H", altitude=10)
-        (vC, vD), (cCD,) =self.mesher.insert_polyline(
-            v_segment, id="V", color='blue')
+        if V_altitude is None:
+            (vC, vD), (cCD,) =self.mesher.insert_polyline(
+                v_segment, id="V", color='blue')
+        else:
+            (vC, vD), (cCD,) =self.mesher.insert_polyline(
+                v_segment, id="V", color='blue', altitude=V_altitude)
         # Geometrical precondition checks
         self.assert_basic_counts(vertices=5, faces=4, edges=8, constrained=4)
         # Informations check
@@ -362,7 +366,8 @@ class MesherTestUtilsMixin(object):
 
     def build_triangle(self):
         cdt = self.mesher.cdt
-        (vA, vB), (cAB,) = self.mesher.insert_polyline([(0, 0), (2, 0)], material='concrete')
+        (vA, vB), (cAB,) = self.mesher.insert_polyline(
+            [(0, 0), (2, 0)], material='concrete', altitude=0.0)
         vC = self.mesher.insert_point((1, 1), altitude=10.0)
         self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
         (edgeAB,) = [edge for edge in cdt.finite_edges()
@@ -661,6 +666,75 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         degenerate_mesher.insert_point((0, 0))
         with self.assertRaises(InconsistentGeometricModel):
             degenerate_mesher.locate_point((0, 1))
+
+class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
+
+    def setUp(self):
+        self.mesher = mesh.ReferenceElevationMesh()
+
+    def test_mandatory_altitude(self):
+        with self.assertRaises(TypeError) as cm:
+             self.mesher.insert_point((1, 0.5))
+
+    def test_point_altitude(self):
+        cdt = self.mesher.cdt
+        (vA, vB, vC, edgeAB, faceABC) = self.build_triangle()
+        slope = self.mesher.altitude_for_input_vertex(vC) / vC.point().y()
+
+        self.assertEqual(self.mesher.altitude_for_input_vertex(vA), 0)
+        self.assertEqual(self.mesher.point_altitude((0, 0)), 0) # vertex
+        self.assertEqual(self.mesher.point_altitude((0.5, 0.5)), slope*0.5) # edge
+        self.assertIs(self.mesher.point_altitude((1, -1)),
+                         mesh.UNSPECIFIED_ALTITUDE) #out of bounds
+        self.assertEqual(self.mesher.point_altitude((1, 0.5)), slope*0.5) # face
+
+    def test_crossing_level_lines_same_altitude_merge_info(self):
+        (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments(V_altitude=10)
+        altitudes = self.mesher.merge_info_for_vertices(
+            lambda i1, i2: i1.merge_with(i2), vertices=(vA, vO))
+
+        self.assertItemsEqual(altitudes.keys(), (vA, vO))
+        self.assertEqual(altitudes[vA].altitude, 10)
+        self.assertEqual(altitudes[vO].altitude, 10)
+        self.assertItemsEqual(altitudes[vO].ids, ["H", "V"])
+
+    def test_crossing_level_lines_same_altitude_update_info(self):
+        (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments(V_altitude=10)
+        self.mesher.update_info_for_vertices(vertices=(vA, vO))
+
+        self.assertEqual(self.mesher.vertices_info[vA].altitude, 10)
+        self.assertEqual(self.mesher.vertices_info[vO].altitude, 10)
+        self.assertItemsEqual(self.mesher.vertices_info[vO].ids, ["H", "V"])
+
+    def test_crossing_level_lines_different_altitude(self):
+        (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments(V_altitude=20)
+        self.assertIsInstance(vO, mesh.Vertex_handle)
+        with self.assertRaises(InconsistentGeometricModel) as cm:
+            self.mesher.update_info_for_vertices((vO,))
+        self.assertEqual(cm.exception.witness_point, (0.0, 0.0))
+        self.assertItemsEqual(cm.exception.ids, ["H", "V"])
+
+    def test_vertices_info_set_from_input(self):
+        (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments(V_altitude=20)
+        self.assertIsInstance(vO, mesh.Vertex_handle)
+        vertices_info = self.mesher.vertices_info
+        self.assertEqual(vertices_info[vA].altitude, 10)
+        self.assertIs(vertices_info[vO].altitude, mesh.UNSPECIFIED_ALTITUDE)
+
+    def test_copy_as_base_class_and_compute_altitude(self):
+        cdt = self.mesher.cdt
+        (vA, vB, vC, edgeAB, faceABC) = self.build_triangle()
+        slope = self.mesher.altitude_for_input_vertex(vC) / vC.point().y()
+        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
+
+        mesher2 = self.mesher.copy_as_ElevationMesh()
+        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1, mesher=mesher2)
+        vD = mesher2.insert_point((1, 0.5)) # Altitude is missing and this should be OK
+        mesher2.update_altitude_from_reference(self.mesher.point_altitude)
+        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
+        self.assert_basic_counts(faces=3, vertices=4, edges=6, constrained=1, mesher=mesher2)
+        self.assertEqual(mesher2.vertices_info[vD].altitude, slope*0.5)
+
 
 if __name__ == '__main__':
     from utils import main
