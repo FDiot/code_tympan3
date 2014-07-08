@@ -24,7 +24,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/acoustique/TYRegime.h"
 
 #define TR(id) OLocalizator::getString("TYRegimeWidget", (id))

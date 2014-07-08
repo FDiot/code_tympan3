@@ -30,7 +30,7 @@
 #include "Tympan/models/business/TYLinearMaillage.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include <qdialog.h>
 #include <qmessagebox.h>

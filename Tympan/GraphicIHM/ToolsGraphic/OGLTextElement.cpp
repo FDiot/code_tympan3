@@ -20,7 +20,7 @@
 
 
 #include "OGLTextElement.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/gui/OSizeManager.h"
 
 #include "OGLFont.h"

@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/infrastructure/TYEcran.h"
 #include <qradiobutton.h>
 #include <qbuttongroup.h>

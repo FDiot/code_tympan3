@@ -38,7 +38,7 @@
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticRectangleNodeGraphic.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 
 #if defined(WIN32)

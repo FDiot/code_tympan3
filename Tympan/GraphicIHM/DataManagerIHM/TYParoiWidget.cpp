@@ -27,7 +27,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <qfiledialog.h>
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/infrastructure/TYParoi.h"
 #include "Tympan/models/business/TYXMLManager.h"
 //Added by qt3to4:

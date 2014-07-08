@@ -59,7 +59,7 @@ set(CURRENT_FOLDER "Tympan")
 # The Tympan components must be enumerated here in reverse depence order
 set(TYMPAN_MODULES  tympan_dm_metier tympan_dm_graphics tympan_dm_ihm
 		    tympan_tools_graphics
-		    tympan_tools tympan_models_common
+		    tympan_models_common
 )
 
 
@@ -90,9 +90,6 @@ target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
 install_tympan_component(${MODULE_NAME})
 
 
-# The inclusion order seems to be significant for dependencies
-add_subdirectory(Tools)
-
 set(MODULE_NAME tympan_dm_metier)
 file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/models/business
     *.cpp *.h *.hpp
@@ -104,15 +101,16 @@ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models/business")
 use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 add_dependencies(${MODULE_NAME}
     NMPB2008
-    tympan_solver_data_model tympan_tools
+    tympan_solver_data_model
     tympan_tools_graphics tympan_dm_ihm
     GTest)
 target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${CGAL_LIBRARIES}
     RoadEmissionNMPB
-    tympan_solver_data_model tympan_tools tympan_tools_graphics)
+    tympan_solver_data_model tympan_tools_graphics)
 install_tympan_component(${MODULE_NAME})
 
 
+# The inclusion order seems to be significant for dependencies
 add_subdirectory(GraphicIHM)
 add_subdirectory(Appli)
 

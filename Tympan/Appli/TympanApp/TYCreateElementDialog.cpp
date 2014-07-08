@@ -30,7 +30,7 @@
 
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/core/exceptions.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/core/logging.h"
 
 #include <qlayout.h>

@@ -26,7 +26,7 @@
 #include "Tympan/models/business/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/core/logging.h"
 
 #if defined(WIN32)

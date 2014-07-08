@@ -27,7 +27,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <qcombobox.h>
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/acoustique/TYUserSourcePonctuelle.h"
 //Added by qt3to4:
 #include <QGridLayout>

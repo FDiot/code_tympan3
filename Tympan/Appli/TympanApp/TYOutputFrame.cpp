@@ -32,7 +32,7 @@
 #include <QBoxLayout>
 #include <QVBoxLayout>
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 
 

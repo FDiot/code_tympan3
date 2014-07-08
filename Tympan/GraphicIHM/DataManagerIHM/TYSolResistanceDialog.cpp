@@ -45,7 +45,7 @@
 
 #include "QPushButton"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYSolResistanceDialog", (id))
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"

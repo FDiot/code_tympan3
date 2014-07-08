@@ -66,7 +66,7 @@
 #include "Tympan/models/business/acoustique/TYSpectre.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSpectreWidget.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYPluginManager.h"

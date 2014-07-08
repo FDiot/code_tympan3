@@ -29,7 +29,7 @@
 
 #include "RoadEmissionNMPB08.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYRouteWidget", (id))
 
 static struct {const char* name ; int id;} RoadSurfaceFormulationMap[] =

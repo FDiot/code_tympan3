@@ -27,7 +27,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 
 #include "Tympan/models/business/infrastructure/TYRoute.h"

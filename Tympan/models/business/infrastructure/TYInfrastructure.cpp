@@ -27,7 +27,7 @@
 #include "Tympan/models/business/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/Tools/TYProgressManager.h"
+#include "Tympan/models/business/TYProgressManager.h"
 
 #include "Tympan/core/logging.h"
 

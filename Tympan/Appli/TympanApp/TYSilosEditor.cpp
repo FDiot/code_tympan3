@@ -32,7 +32,7 @@
 #include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
 
 #include "Tympan/core/logging.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include <qinputdialog.h>
 

@@ -30,7 +30,7 @@
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
 

@@ -28,7 +28,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/models/business/TYElement.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLTextElement.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLCamera.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"

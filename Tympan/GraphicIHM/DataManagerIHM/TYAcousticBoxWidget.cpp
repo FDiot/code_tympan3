@@ -28,7 +28,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <qmenu.h>
 #include <qtablewidget.h>
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticBox.h"
 //Added by qt3to4:
 #include <QGridLayout>

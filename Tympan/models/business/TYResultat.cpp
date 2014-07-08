@@ -27,7 +27,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/core/logging.h"
-#include "Tympan/Tools/TYProgressManager.h"
+#include "Tympan/models/business/TYProgressManager.h"
 
 #include <fstream>
 #include <iomanip>

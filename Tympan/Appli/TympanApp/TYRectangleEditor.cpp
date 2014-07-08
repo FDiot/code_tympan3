@@ -35,7 +35,7 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPointGraphic.h"
 
 #include "Tympan/models/business/geometry/TYRepere.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include "Tympan/core/exceptions.h"
 

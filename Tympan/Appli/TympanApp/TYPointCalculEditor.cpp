@@ -29,7 +29,7 @@
 
 #include "Tympan/models/business/TYPointControl.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include <qmessagebox.h>
 #include <qinputdialog.h>

@@ -46,7 +46,7 @@
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYToolButton.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include "Tympan/models/business/TYMaillage.h"
 #include "Tympan/models/business/acoustique/TYSpectre.h"

@@ -19,7 +19,7 @@
 
 
 #include "TYImageManager.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include "OImageBmp.h"
 #include "OImageGlf.h"

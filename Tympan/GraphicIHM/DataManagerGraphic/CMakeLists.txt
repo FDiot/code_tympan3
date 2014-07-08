@@ -9,7 +9,7 @@ add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${M
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
 use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 
-add_dependencies(${MODULE_NAME} tympan_gui tympan_tools tympan_tools_graphics)
+add_dependencies(${MODULE_NAME} tympan_gui tympan_tools_graphics)
 
 target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
 

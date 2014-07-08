@@ -35,7 +35,7 @@
 #include <QBoxLayout>
 #include <QHBoxLayout>
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #define TR(id) OLocalizator::getString("TYGetLibraryDialog", (id))
 
