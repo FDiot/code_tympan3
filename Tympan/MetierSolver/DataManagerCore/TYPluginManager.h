@@ -190,4 +190,20 @@ private:
     static LPTYPluginManager _pInstance;
 };
 
+
+class TYCalcul;
+
+namespace tympan
+{
+    //! Load the default solver and set it to the computation
+    /*!
+     * \param path Path to the solver libraries (plugins) to load, containing
+     *      among others the default solver
+     * \param comp computation that will use the default solver to solve its
+     *      acoustic problem
+     */
+    void load_solver(const char *path, TYCalcul *comp);
+
+} /* namespace tympan */
+
 #endif // __TY_PLUGINMANAGER__

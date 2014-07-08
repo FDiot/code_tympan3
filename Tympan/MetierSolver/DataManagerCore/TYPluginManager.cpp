@@ -25,6 +25,7 @@
 
 #include "TYPluginManager.h"
 #include "Tympan/Tools/OMessageManager.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #   define WIN32_LEAN_AND_MEAN
@@ -345,3 +346,15 @@ bool TYPluginManager::exist(const QString& solverName)
     // Sinon, on retourne faux
     return false;
 }
+
+namespace tympan
+{
+    void load_solver(const char *path, TYCalcul *comp)
+    {
+        LPTYPluginManager plugin_manager = TYPluginManager::get();
+        plugin_manager->unloadPlugins();
+        plugin_manager->loadPlugins(path, false);
+        plugin_manager->setCurrent("DefaultSolver");
+        comp->setPlugin(plugin_manager->getPlugin(plugin_manager->getCurrent()));
+    }
+} /* namespace tympan */
