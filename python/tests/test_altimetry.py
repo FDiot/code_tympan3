@@ -329,14 +329,6 @@ class MeshedCDTTC(unittest.TestCase):
         self.mesher.insert_polyline(imap(mesh.to_cgal_point, points))
         self.assert_basic_counts(vertices=1, faces=0)
 
-    def test_insert_point_types(self):
-        for point in [geometry.Point(1, 1), (3,4)]:
-            with self.assertRaises(TypeError):
-                self.mesher.insert_polyline([point])
-            self.mesher.insert_polyline([mesh.to_cgal_point(point)])
-        point = mesh.Point(1, 2) # CGAL Point
-        self.assertEqual(mesh.to_cgal_point(point), point)
-
     def test_insert_3_point(self):
         points = [(1, 1), (1, 2), (3, 4)]
         self.mesher.insert_polyline(imap(mesh.to_cgal_point, points),
@@ -357,7 +349,7 @@ class MeshedCDTTC(unittest.TestCase):
 
     def test_info_simple_polyline(self):
         points = map(mesh.to_cgal_point, [(1, 1), (1, 2), (3,4)])
-        vertices, input_constraints = self.mesher.insert_polyline_with_info(
+        vertices, input_constraints = self.mesher.insert_polyline(
             points, altitude=10)
 
         for constraint in input_constraints:
@@ -370,9 +362,9 @@ class MeshedCDTTC(unittest.TestCase):
     def build_two_overlapping_segments(self):
         segment1 = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
         segment2 = map(mesh.to_cgal_point, [(0, 1), (0, 3)])
-        (vA, vB), (cAB,) = self.mesher.insert_polyline_with_info(
+        (vA, vB), (cAB,) = self.mesher.insert_polyline(
             segment1, origin="1", altitude=10)
-        (vC, vD), (cCD,) = self.mesher.insert_polyline_with_info(
+        (vC, vD), (cCD,) = self.mesher.insert_polyline(
             segment2, origin="2", color='blue')
         return (vA, vB, vC, vD, cAB, cCD)
         # Geometrical precondition checks
@@ -394,6 +386,7 @@ class MeshedCDTTC(unittest.TestCase):
         self.assertItemsEqual(list(self.mesher.iter_constraints_info_overlapping((vB, vC))),
                               [{"altitude":10, "origin":"1"},
                                {"color": "blue", "origin":"2"}])
+
 
 
 
