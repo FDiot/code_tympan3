@@ -299,6 +299,13 @@ class VisualisationTC(unittest.TestCase, _TestFeatures):
         self.mainsite.plot(self.ax, recursive=True, alt_geom_map=cleaner.geom)
 
 
+def left_and_right_faces(faces_it):
+    """Takes an iterable on pair (left_face, right_face) and return the
+    pair of the list of all left faces and the list of all right faces
+    """
+    return zip(*list(faces_it))
+
+
 class MeshedCDTTC(unittest.TestCase):
 
     def setUp(self):
@@ -548,7 +555,6 @@ class MeshedCDTTC(unittest.TestCase):
     @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_mesh_refine_no_holes(self):
         (border, hole, line) = self.build_simple_scene()
-
         self.mesher.refine_mesh()
         plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
         plotter.plot_edges()
@@ -567,6 +573,41 @@ class MeshedCDTTC(unittest.TestCase):
         visu.plot_points_seq(plotter.ax, points_left, marker='<')
         visu.plot_points_seq(plotter.ax, points_right, marker='>')
         plotter.show()
+
+    def test_flood(self):
+
+        class FaceFlooderForMarkingHoles(mesh.FaceFlooder):
+
+            def __init__(self, mesher):
+                super(FaceFlooderForMarkingHoles, self).__init__(mesher)
+
+            def is_landtake_border(self, edge):
+                for info in self.mesher.iter_constraints_info_overlapping(edge):
+                    if "material" in info and info["material"]=='hidden':
+                        return True
+                return False
+
+            def should_follow(self, from_face, edge, to_face):
+                return not self.is_landtake_border(edge)
+
+        (border, hole, line) = self.build_simple_scene()
+
+
+        faces_left, faces_right = left_and_right_faces(
+            self.mesher.iter_faces_for_input_polyline(hole[0], close_it=True))
+        flooder = FaceFlooderForMarkingHoles(self.mesher)
+        flooder.flood_from([faces_right[0]]) # A single face is enough
+        seeds_for_holes = [self.mesher.point_for_face(f) for f in flooder.visited]
+        self.assertEqual(len(seeds_for_holes), 4)
+
+        if _runVisualTests:
+            self.mesher.refine_mesh(hole_seeds=seeds_for_holes,
+                                    size_criterion=0.4, shape_criterion=0)
+
+            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
+            plotter.plot_edges()
+            visu.plot_points_seq(plotter.ax, seeds_for_holes, marker='*')
+            plotter.show()
 
 if __name__ == '__main__':
     from utils import main
