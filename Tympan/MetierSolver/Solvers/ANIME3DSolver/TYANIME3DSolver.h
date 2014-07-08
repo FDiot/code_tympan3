@@ -22,7 +22,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h"
-#include "Tympan/MetierSolver/CommonTools/Acoustic_path.h"
+#include "Tympan/models/common/acoustic_path.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
 

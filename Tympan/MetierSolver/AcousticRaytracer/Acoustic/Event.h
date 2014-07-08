@@ -17,8 +17,8 @@
 #define EVENT_H
 
 
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
 #include <vector>
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Sampler.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Base.h"
 
 enum typeevent

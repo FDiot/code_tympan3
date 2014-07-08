@@ -20,7 +20,7 @@
 
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
 
-#include "Tympan/MetierSolver/CommonTools/Acoustic_path.h"
+#include "Tympan/models/common/acoustic_path.h"
 
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"
 
