@@ -13,7 +13,7 @@
 #include "std_boost_utils.hpp"
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/CommonTools/OSpectreComplex.h"
+#include "Tympan/models/common/spectre.h"
 
 
 // This section import some types from CommonTools
