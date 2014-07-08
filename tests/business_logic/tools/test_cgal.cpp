@@ -13,7 +13,7 @@
 #include "gtest/gtest.h"
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/CommonTools/cgal_tools.hpp"
+#include "Tympan/MetierSolver/DataManagerMetier/cgal_tools.h"
 #include "Tympan/models/common/plan.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 #include "Tympan/MetierSolver/DataManagerMetier/cgal_bridge.hpp"

@@ -9,7 +9,7 @@
 
 #include <cassert>
 
-#include "cgal_tools.hpp"
+#include "cgal_tools.h"
 
 namespace tympan
 {
