@@ -29,7 +29,7 @@
 #include "TYSourcePonctuelleGraphic.h"
 
 #include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
 
 
 ///Taille de la source par defaut.

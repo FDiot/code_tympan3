@@ -32,7 +32,7 @@
 #include "Tympan/models/business/topography/TYPlanEau.h"
 
 #include "Tympan/models/business/TYPreferenceManager.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
 
 
 TYPlanEauGraphic::TYPlanEauGraphic(TYPlanEau* pElement) :

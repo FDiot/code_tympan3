@@ -47,7 +47,7 @@
 #include "Tympan/models/business/TYNameManager.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYElementWidget.h"
-  #include "Tympan/GraphicIHM/DataManagerGraphic/TYElementGraphic.h"
+  #include "Tympan/gui/gl/TYElementGraphic.h"
   #include "TYPreferenceManager.h"
 #endif // TY_USE_IHM
 #include "TYDefines.h"

@@ -19,7 +19,7 @@
 #include "Tympan/core/logging.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAcousticCylinderWidget.h"
-  #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticCylinderGraphic.h"
+  #include "Tympan/gui/gl/TYAcousticCylinderGraphic.h"
 #endif
 
 TY_EXTENSION_INST(TYAcousticCylinder);

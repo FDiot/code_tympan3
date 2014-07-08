@@ -32,7 +32,7 @@
 #include "Tympan/models/business/geoacoustic/TYBoucheSurface.h"
 #include "Tympan/models/business/geoacoustic/TYChemineeSurface.h"
 
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPointGraphic.h"
+#include "Tympan/gui/gl/TYPointGraphic.h"
 
 #include "Tympan/models/business/geometry/TYRepere.h"
 #include "Tympan/models/business/OLocalizator.h"

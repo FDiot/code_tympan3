@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYBatimentWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYBatimentGraphic.h"
+#include "Tympan/gui/gl/TYBatimentGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

@@ -20,7 +20,7 @@
 #include "Tympan/models/common/3d.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYTopographieWidget.h"
-  #include "Tympan/GraphicIHM/DataManagerGraphic/TYTopographieGraphic.h"
+  #include "Tympan/gui/gl/TYTopographieGraphic.h"
 #endif
 
 

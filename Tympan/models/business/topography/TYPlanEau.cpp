@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYPlanEauWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPlanEauGraphic.h"
+#include "Tympan/gui/gl/TYPlanEauGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

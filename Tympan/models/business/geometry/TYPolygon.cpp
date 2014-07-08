@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYPolygonWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPolygonGraphic.h"
+#include "Tympan/gui/gl/TYPolygonGraphic.h"
 #endif
 
 #include <memory>

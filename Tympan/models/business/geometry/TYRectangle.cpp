@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYRectangleWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangleGraphic.h"
+#include "Tympan/gui/gl/TYRectangleGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

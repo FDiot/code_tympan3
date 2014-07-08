@@ -27,7 +27,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/models/business/topography/TYCourbeNiveau.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYCourbeNiveauGraphic.h"
+#include "Tympan/gui/gl/TYCourbeNiveauGraphic.h"
 
 #include "Tympan/models/business/OLocalizator.h"
 

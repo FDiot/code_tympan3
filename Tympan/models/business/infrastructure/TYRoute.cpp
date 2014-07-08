@@ -32,7 +32,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYRouteWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYRouteGraphic.h"
+#include "Tympan/gui/gl/TYRouteGraphic.h"
 #endif
 
 #include <boost/math/special_functions/fpclassify.hpp>

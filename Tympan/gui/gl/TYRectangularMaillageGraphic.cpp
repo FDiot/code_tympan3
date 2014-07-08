@@ -32,7 +32,7 @@
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/core/color.h"
 #include "Tympan/gui/OSizeManager.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
 
 TYRectangularMaillageGraphic::TYRectangularMaillageGraphic(TYRectangularMaillage* pElement) :
     TYElementGraphic(pElement)

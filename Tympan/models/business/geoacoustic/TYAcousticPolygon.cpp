@@ -19,7 +19,7 @@
 #include "Tympan/models/common/3d.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAcousticPolygonWidget.h"
-  #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticPolygonGraphic.h"
+  #include "Tympan/gui/gl/TYAcousticPolygonGraphic.h"
 #endif
 
 

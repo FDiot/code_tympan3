@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYReseauTransportWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYReseauTransportGraphic.h"
+#include "Tympan/gui/gl/TYReseauTransportGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYLinearMaillageWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYLinearMaillageGraphic.h"
+#include "Tympan/gui/gl/TYLinearMaillageGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

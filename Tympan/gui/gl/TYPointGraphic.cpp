@@ -29,7 +29,7 @@
 
 #include "TYPointGraphic.h"
 #include "Tympan/models/business/geometry/TYPoint.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
 
 
 TYPointGraphic::TYPointGraphic(TYPoint* pElement) :

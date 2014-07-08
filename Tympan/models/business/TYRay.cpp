@@ -18,7 +18,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYRayGraphic.h"
+#include "Tympan/gui/gl/TYRayGraphic.h"
 #endif
 
 TY_EXT_GRAPHIC_INST(TYRay);

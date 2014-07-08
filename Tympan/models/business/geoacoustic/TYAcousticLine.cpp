@@ -18,7 +18,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAcousticLineWidget.h"
-  #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticLineGraphic.h"
+  #include "Tympan/gui/gl/TYAcousticLineGraphic.h"
 #endif
 
 

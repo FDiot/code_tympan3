@@ -21,7 +21,7 @@
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAcousticCircleWidget.h"
-  #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticCircleGraphic.h"
+  #include "Tympan/gui/gl/TYAcousticCircleGraphic.h"
 #endif
 
 TY_EXTENSION_INST(TYAcousticCircle);

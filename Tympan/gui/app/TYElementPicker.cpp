@@ -30,9 +30,9 @@
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYLinearMaillage.h"
 
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickHandler.h"
+#include "Tympan/gui/gl/TYPickHandler.h"
 #include "Tympan/gui/widgets/TYWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

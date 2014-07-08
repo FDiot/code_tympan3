@@ -61,7 +61,7 @@
 #include <qprocess.h>
 #include <qtextbrowser.h>
 
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
 
 #include "Tympan/models/business/acoustique/TYSpectre.h"
 #include "Tympan/gui/widgets/TYSpectreWidget.h"

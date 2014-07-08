@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYTerrainWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYTerrainGraphic.h"
+#include "Tympan/gui/gl/TYTerrainGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
