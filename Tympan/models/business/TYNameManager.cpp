@@ -18,7 +18,7 @@
  */
 
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "TYNameManager.h"
 #include <sstream>
 

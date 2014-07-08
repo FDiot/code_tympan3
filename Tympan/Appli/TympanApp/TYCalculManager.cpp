@@ -32,7 +32,7 @@
 
 #include "TYMessageManager.h"
 #include "Tympan/Config.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/core/chrono.h"
 #include "Tympan/models/business/xml_project_util.h"
 #include "Tympan/Appli/TympanApp/TYApplication.h"

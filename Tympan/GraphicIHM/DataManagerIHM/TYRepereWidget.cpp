@@ -26,7 +26,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <stdlib.h>
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geometry/TYRepere.h"
 //Added by qt3to4:
 #include <QGridLayout>

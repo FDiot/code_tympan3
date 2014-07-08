@@ -41,7 +41,7 @@
 #include <QTreeWidgetItem>
 
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/TYProjet.h"

@@ -32,7 +32,7 @@
 #include <qpushbutton.h>
 #include <qcursor.h>
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 
 #if defined(WIN32)

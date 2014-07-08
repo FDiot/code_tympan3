@@ -39,7 +39,7 @@
 
 #include "Tympan/models/business/TYXMLManager.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 //Added by qt3to4:
 #include <QPixmap>

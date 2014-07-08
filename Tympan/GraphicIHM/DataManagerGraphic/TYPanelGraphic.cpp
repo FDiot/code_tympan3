@@ -23,7 +23,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/gui/OSizeManager.h"
 #include "Tympan/models/business/TYMaillage.h"
 #include "Tympan/models/business/TYPanel.h"

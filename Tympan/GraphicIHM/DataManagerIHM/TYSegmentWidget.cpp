@@ -36,7 +36,7 @@
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSegmentWidget.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geometry/TYSegment.h"
 
 

@@ -30,7 +30,7 @@
 
 #include "Tympan/models/business/topography/TYPlanEau.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include <qinputdialog.h>
 

@@ -30,7 +30,7 @@
 #include <qlayout.h>
 #include <qpushbutton.h>
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QBoxLayout>

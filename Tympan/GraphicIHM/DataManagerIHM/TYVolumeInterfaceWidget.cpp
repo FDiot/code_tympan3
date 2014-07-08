@@ -35,7 +35,7 @@
 
 #include "Tympan/models/business/geometry/TYVolumeInterface.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYVolumeInterfaceWidget", (id))
 
 

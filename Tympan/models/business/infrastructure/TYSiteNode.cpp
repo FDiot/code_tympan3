@@ -27,8 +27,8 @@
 
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYXMLManager.h"
-#include "Tympan/Tools/TYProgressManager.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/TYProgressManager.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/core/logging.h"
 
 #include <QDir>

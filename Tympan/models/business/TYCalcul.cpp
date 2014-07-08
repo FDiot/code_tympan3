@@ -33,9 +33,9 @@
 #include <stdlib.h>
 #include <string>
 
-#include "Tympan/Tools/TYProgressManager.h"
+#include "Tympan/models/business/TYProgressManager.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/core/logging.h"
 
 #if defined(WIN32)

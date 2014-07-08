@@ -36,7 +36,7 @@
 #include <QList>
 #include <QKeyEvent>
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #define TR(id) OLocalizator::getString("TYLibraryWidget", (id))
 

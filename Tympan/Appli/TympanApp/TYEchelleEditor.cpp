@@ -26,7 +26,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include <qinputdialog.h>
 

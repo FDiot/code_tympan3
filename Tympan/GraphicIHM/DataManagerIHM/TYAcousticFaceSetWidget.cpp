@@ -33,7 +33,7 @@
 //Added by qt3to4:
 #include <QGridLayout>
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYAcousticFaceSetWidget", (id))
 
 

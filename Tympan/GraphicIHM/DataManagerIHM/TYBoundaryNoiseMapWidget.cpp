@@ -26,7 +26,7 @@
 
 #include <limits>
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYBoundaryNoiseMap.h"
 
 //Added by qt3to4:

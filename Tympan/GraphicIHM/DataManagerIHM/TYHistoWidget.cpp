@@ -28,7 +28,7 @@
 #include "TYHistoWidget.h"
 #include "TYSpectreWidget.h"
 #include <QPainter>
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "TYPrintDialog.h"
 #include <QPrinter>
 #include <QPrintDialog>

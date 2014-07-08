@@ -31,7 +31,7 @@
 #include <QGridLayout>
 #include <QLabel>
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYSurfaceInterfaceWidget", (id))
 
 #include "Tympan/models/common/3d.h"

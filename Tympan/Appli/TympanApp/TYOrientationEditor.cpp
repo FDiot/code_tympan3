@@ -29,7 +29,7 @@
 
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

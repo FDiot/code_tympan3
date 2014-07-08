@@ -32,7 +32,7 @@
 #include <boost/tuple/tuple.hpp>
 #include <boost/math/special_functions/fpclassify.hpp>
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/gui/OSizeManager.h"
 #include "Tympan/models/business/TYPalette.h"
 

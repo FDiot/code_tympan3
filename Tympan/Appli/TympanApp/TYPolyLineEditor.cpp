@@ -29,7 +29,7 @@
 
 #include "Tympan/models/common/3d.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLSphereElement.h"
 

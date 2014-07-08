@@ -24,7 +24,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include <stdio.h>
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 
 

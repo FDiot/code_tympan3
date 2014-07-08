@@ -29,7 +29,7 @@
 #include "Tympan/models/business/topography/TYCourbeNiveau.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYCourbeNiveauGraphic.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include <qinputdialog.h>
 

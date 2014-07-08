@@ -29,7 +29,7 @@
 
 #include "Tympan/models/business/acoustique/TYUserSourcePonctuelle.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include <qinputdialog.h>
 

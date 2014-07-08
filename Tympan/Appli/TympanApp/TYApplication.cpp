@@ -32,11 +32,11 @@
 #include <qtimer.h>
 #include <qmessagebox.h>
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 
 #include "Tympan/models/business/TYXMLManager.h"
 
-#include "Tympan/Tools/TYProgressManager.h"
+#include "Tympan/models/business/TYProgressManager.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/TYImageManager.h"
 #include "Tympan/models/business/TYPluginManager.h"
 

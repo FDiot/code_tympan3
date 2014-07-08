@@ -40,7 +40,7 @@
 
 #include "Tympan/models/business/geoacoustic/TYAcousticSurfaceNode.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYAcousticSurfaceNodeWidget", (id))
 
 

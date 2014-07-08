@@ -33,7 +33,7 @@
 
 #include "TYColorInterfaceWidget.h"
 
-#include "Tympan/Tools/OLocalizator.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYColorInterface.h"
 #include "TYToolButton.h"
 
