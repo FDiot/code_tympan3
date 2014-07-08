@@ -1,4 +1,4 @@
-#include "Tympan/MetierSolver/CommonTools/Acoustic_path.h"
+#include "Tympan/models/common/acoustic_path.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
 

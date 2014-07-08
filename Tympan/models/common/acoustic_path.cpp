@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,12 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
-
 #include "Tympan/models/common/3d.h"
-#include "Acoustic_path.h"
+#include "acoustic_path.h"
 
 acoustic_event::acoustic_event():   distNextEvent(0.0),
     distEndEvent(0.0),

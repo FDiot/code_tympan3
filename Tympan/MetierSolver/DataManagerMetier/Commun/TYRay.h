@@ -18,7 +18,7 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/CommonTools/Acoustic_path.h"
+#include "Tympan/models/common/acoustic_path.h"
 
 /*!
 * \file TYRay.h
