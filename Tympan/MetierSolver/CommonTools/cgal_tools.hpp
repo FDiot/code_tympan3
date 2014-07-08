@@ -30,7 +30,7 @@
 #include <CGAL/centroid.h>
 
 #include "Tympan/models/common/3d.h"
-#include "OPlan.h"
+#include "Tympan/models/common/plan.h"
 
 namespace tympan
 {

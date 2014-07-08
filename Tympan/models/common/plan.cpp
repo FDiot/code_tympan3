@@ -19,7 +19,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #include "Tympan/models/common/3d.h"
-#include "OPlan.h"
+#include "plan.h"
 
 
 OPlan::OPlan():
