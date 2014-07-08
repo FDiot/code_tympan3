@@ -28,7 +28,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLFont.h"
+#include "Tympan/gui/tools/OGLFont.h"
 #include "TYElementGraphic.h"
 
 class TYPanel;

@@ -41,9 +41,9 @@
 
 #include "Tympan/models/business/TYElement.h"
 
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLLightElement.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLElement.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLCamera.h"
+#include "Tympan/gui/tools/OGLLightElement.h"
+#include "Tympan/gui/tools/OGLElement.h"
+#include "Tympan/gui/tools/OGLCamera.h"
 
 class TYGeometryNode;
 

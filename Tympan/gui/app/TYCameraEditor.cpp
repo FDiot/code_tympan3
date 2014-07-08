@@ -27,7 +27,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLCamera.h"
+#include "Tympan/gui/tools/OGLCamera.h"
 
 #include <qtimer.h>
 #include <qcursor.h>

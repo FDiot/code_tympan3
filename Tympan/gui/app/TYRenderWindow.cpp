@@ -28,7 +28,7 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/gui/OSizeManager.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLTextElement.h"
+#include "Tympan/gui/tools/OGLTextElement.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

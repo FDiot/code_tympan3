@@ -124,7 +124,20 @@ install_tympan_component(${MODULE_NAME})
 
 
 # The inclusion order seems to be significant for dependencies
+set(CURRENT_FOLDER "Tympan/GUI")
+
+set(MODULE_NAME tympan_tools_graphics)
+file(GLOB ${MODULE_NAME}_SRCS/gui/tools
+    *.cpp *.h *.hpp)
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
+target_link_libraries(${MODULE_NAME} tympan_gui
+				     ${QT_LIBRARIES}
+				     ${OPENGL_LIBRARIES})
+install_tympan_component(${MODULE_NAME})
+
 add_subdirectory(GraphicIHM)
+
 
 set(CURRENT_FOLDER "Tympan/GUI_Application")
 add_subdirectory(gui/app)

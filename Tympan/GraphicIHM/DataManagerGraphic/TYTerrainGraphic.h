@@ -32,7 +32,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLTexture2D.h"
+#include "Tympan/gui/tools/OGLTexture2D.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
 #include "TYPolyLineGraphic.h"
 

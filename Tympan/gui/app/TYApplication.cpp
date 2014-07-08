@@ -37,7 +37,7 @@
 #include "Tympan/models/business/TYXMLManager.h"
 
 #include "Tympan/models/business/TYProgressManager.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/TYImageManager.h"
+#include "Tympan/gui/tools/TYImageManager.h"
 #include "Tympan/models/business/TYPluginManager.h"
 
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
