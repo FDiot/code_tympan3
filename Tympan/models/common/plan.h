@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,24 +13,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- */
-
-#ifndef __O_PLAN__
-#define __O_PLAN__
+#ifndef TY_MC_PLAN
+#define TY_MC_PLAN
 
 #include <ostream>
 
 #include "Tympan/models/common/3d.h"
 
 /**
- * \file OPlan.h
+ * \file plan.h
  * \class OPlan
  * \brief Plan defined by its equation : ax+by+cz+d=0.
- * \author Projet_Tympan
  *
  */
 class OPlan
@@ -336,4 +329,4 @@ public:
 
 ::std::ostream& operator<<(::std::ostream& os, const OPlan& p);
 
-#endif //__O_PLAN__
+#endif //TY_MC_PLAN
