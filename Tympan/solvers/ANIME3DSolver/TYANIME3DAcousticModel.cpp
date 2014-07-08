@@ -22,7 +22,7 @@
 
 #include "Tympan/models/common/acoustic_path.h"
 
-#include "Tympan/MetierSolver/AcousticRaytracer/global.h"
+#include "Tympan/solvers/AcousticRaytracer/global.h"
 
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DAcousticModel.h"

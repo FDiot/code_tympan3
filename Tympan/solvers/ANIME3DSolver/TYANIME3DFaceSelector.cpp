@@ -17,7 +17,7 @@
 
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangulate.h"
+#include "Tympan/solvers/AcousticRaytracer/Geometry/Triangulate.h"
 
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DFaceSelector.h"

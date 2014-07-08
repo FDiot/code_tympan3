@@ -128,5 +128,60 @@ add_subdirectory(GraphicIHM)
 add_subdirectory(Appli)
 
 set(CURRENT_FOLDER "Tympan/solvers")
-add_subdirectory(solvers/DefaultSolver)
-add_subdirectory(solvers/ANIME3DSolver)
+
+set(MODULE_NAME tympan_analytic_raytracer)
+file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/solvers/AnalyticRayTracer
+    *.cpp *.h *.hpp)
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} tympan_acoustic_raytracer)
+install_tympan_component(${MODULE_NAME})
+
+set(MODULE_NAME tympan_acoustic_raytracer)
+file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/solvers/AcousticRaytracer
+    *.cpp *.h *.hpp)
+list(REMOVE_ITEM ${MODULE_NAME}_SRCS "Acoustic/NMPBSolver.h" "Acoustic/NMPBSolver.cpp" "main.cpp")
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
+add_dependencies(${MODULE_NAME} tympan_models_common)
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
+install_tympan_component(${MODULE_NAME})
+
+set(MODULE_NAME tympan_convexhull_finder)
+file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/solvers/ConvexHullFinder
+    *.cpp *.h *.hpp)
+list(REMOVE_ITEM ${MODULE_NAME}_SRCS "Acoustic/NMPBSolver.h" "Acoustic/NMPBSolver.cpp" "main.cpp")
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
+add_dependencies(${MODULE_NAME} tympan_models_common)
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
+install_tympan_component(${MODULE_NAME})
+
+set(MODULE_NAME tympan_default_solver)
+file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/solvers/DefaultSolver
+    *.cpp *.h *.hpp)
+set_property(SOURCE ${${MODULE_NAME}_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
+link_directories(${CGAL_LIBRARIES_DIR})
+add_library(${MODULE_NAME} MODULE ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
+add_dependencies(${MODULE_NAME} ${TYMPAN_MODULES} tympan_convexhull_finder)
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${TYMPAN_MODULES}
+                      tympan_convexhull_finder ${OPENGL_LIBRARIES} )
+configure_tympan_plugin(${MODULE_NAME})
+install_tympan_plugin(${MODULE_NAME})
+
+
+set(MODULE_NAME tympan_ANIME3D_solver)
+file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/solvers/ANIME3D
+    *.cpp *.h *.hpp)
+set_property(SOURCE ${${MODULE_NAME}_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
+link_directories(${CGAL_LIBRARIES_DIR})
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} MODULE ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
+add_dependencies(${MODULE_NAME} ${TYMPAN_MODULES} tympan_acoustic_raytracer tympan_analytic_raytracer)
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES}
+                      tympan_acoustic_raytracer tympan_analytic_raytracer
+                      ${TYMPAN_MODULES} ${OPENGL_LIBRARIES})
+configure_tympan_plugin(${MODULE_NAME})
+install_tympan_plugin(${MODULE_NAME})
+
