@@ -23,7 +23,7 @@
 #ifndef __TY_TASK__
 #define __TY_TASK__
 
-#include "Tympan/MetierSolver/ToolsMetier/OTask.h"
+#include "Tympan/MetierSolver/Solvers/OTask.h"
 
 class TYSolver;
 class TYTrajet;
@@ -40,7 +40,7 @@ public:
     // Destructeur
     ~TYTask();
 
-    // Procedure principale de la tâche (Cf. Tympan/MetierSolver/ToolsMetier/OTask.h)
+    // Procedure principale de la tâche (Cf. Tympan/MetierSolver/Solvers/OTask.h)
     void main();
 
 private:

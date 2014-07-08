@@ -17,7 +17,7 @@
  *
  */
 
-#include "Tympan/MetierSolver/ToolsMetier/OThreadPool.h"
+#include "Tympan/MetierSolver/Solvers/OThreadPool.h"
 #include "Tympan/models/business/TYTrajet.h"
 #include "TYSolver.h"
 #include "TYAcousticModel.h"
