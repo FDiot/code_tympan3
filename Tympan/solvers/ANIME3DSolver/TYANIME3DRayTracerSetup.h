@@ -16,8 +16,8 @@
 #ifndef TYANIME3DRAYTRACERSETUP_H
 #define TYANIME3DRAYTRACERSETUP_H
 
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/SelectorManager.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Solver.h"
+#include "Tympan/solvers/AcousticRaytracer/Tools/SelectorManager.h"
+#include "Tympan/solvers/AcousticRaytracer/Acoustic/Solver.h"
 
 /**
 * \class TYANIME3DRayTracerSetUp

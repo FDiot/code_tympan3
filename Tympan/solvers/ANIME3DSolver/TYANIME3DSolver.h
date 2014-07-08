@@ -17,7 +17,7 @@
 #ifndef __TY_ANIME3DSOLVER__
 #define __TY_ANIME3DSOLVER__
 
-#include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
+#include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
 #include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
