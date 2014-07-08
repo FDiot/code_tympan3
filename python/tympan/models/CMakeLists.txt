@@ -11,7 +11,7 @@ set_source_files_properties(${CYTHON_SOURCES}
 
 cython_add_module(common common.pyx)
 configure_cython_module(common ${CYTHON_LIB_CURR_DIR})
-target_link_libraries(common tympan_common_tools)
+target_link_libraries(common tympan_models_common)
 install_cython_module(common ${CYTHON_LIB_CURR_DIR})
 
 cython_add_module(business business.pyx)
@@ -22,5 +22,5 @@ install_cython_module(business ${CYTHON_LIB_CURR_DIR})
 
 cython_add_module(solver solver.pyx)
 configure_cython_module(solver ${CYTHON_LIB_CURR_DIR})
-target_link_libraries(solver tympan_common_tools tympan_solver_data_model)
+target_link_libraries(solver tympan_solver_data_model)
 install_cython_module(solver ${CYTHON_LIB_CURR_DIR})
