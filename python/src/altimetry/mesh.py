@@ -10,10 +10,12 @@ from CGAL.CGAL_Kernel import (
     Point_2 as Point,
     Vector_2 as Vector,
     Triangle_2 as Triangle,
+    Ref_int,
     centroid)
 from CGAL.CGAL_Mesh_2 import (
     Mesh_2_Constrained_Delaunay_triangulation_plus_2 as CDT,
     Mesh_2_Constrained_Delaunay_triangulation_plus_2_Face_handle as Face_handle,
+    Ref_Mesh_2_Constrained_Delaunay_triangulation_plus_2_Face_handle as Ref_Face_handle,
     Delaunay_mesh_plus_size_criteria_2 as Mesh_criteria,
     refine_Delaunay_mesh_2 as CGAL_refine_Delaunay_mesh)
 
@@ -35,12 +37,18 @@ def to_cgal_point(pt):
     else:
         raise TypeError("Don't know how to make a CGAL Point_2 from", pt)
 
-
 def _sorted_vertex_pair(v1, v2):
     if v1.__hash__() < v2.__hash__():
         return (v1, v2)
     else:
         return (v2, v1)
+
+def first_and_last(iterable):
+    it = iter(iterable)
+    first = next(it)
+    for e in it:
+        last = e
+    return (first, last)
 
 
 class MeshedCDTWithInfo(object):
@@ -55,8 +63,19 @@ class MeshedCDTWithInfo(object):
         self.cdt = CDT()
         self.faces_infos = defaultdict(self.FaceInfo)
         self.vertices_infos = defaultdict(self.VertexInfo)
-        self.edges_infos = defaultdict(self.EdgeInfo)
-        self.constraints_infos = defaultdict(self.EdgeInfo)
+        self._edges_infos = defaultdict(list)
+        self._constraints_infos = defaultdict(self.EdgeInfo)
+
+    def input_constraint_infos(self, (va, vb)):
+        """Get the constraint informations associated to the given pair of vertices
+
+        NB: Input constraints are represented as a pair of vertices,
+        sorted in some arbitrary order and used as keys in
+        _constraints_infos. This method ensure this normalisation is
+        performed.
+
+        """
+        return self._constraints_infos[_sorted_vertex_pair(va, vb)]
 
     def insert_polyline(self, polyline, close_it=False, connected=True):
         """Insert a sequence of points as a polyline.
@@ -106,5 +125,47 @@ class MeshedCDTWithInfo(object):
         for vertex in vertices_handles:
             self.vertices_infos[vertex] = self.VertexInfo(**kwargs)
         for constraint in constraints:
-            self.constraints_infos[constraint] = self.EdgeInfo(**kwargs)
+            self._constraints_infos[constraint] = self.EdgeInfo(**kwargs)
         return vertices_handles, constraints
+
+    def vertice_pair_from_edge(self, (face, index)):
+        """ Make a normalized pair of vertices handles from an edge
+        """
+        va = face.vertex(self.cdt.cw(index))
+        vb = face.vertex(self.cdt.ccw(index))
+        return _sorted_vertex_pair(va, vb)
+
+    def edge_from_vertice_pair(self, va, vb):
+        """ Make a CGAL edge (Face_handle, index) from a pair of pair of vertices handles
+        """
+        # fh and i are output arguments a la C++
+        fh = Ref_Face_handle()
+        i = Ref_int()
+        is_edge = self.cdt.is_edge(va, vb, fh, i)
+        if is_edge:
+            return (fh.object(), i.object())
+        else:
+            raise ValueError("This is not an edge (%s, %s)" % (va.point(), vb.point()))
+
+    def iter_input_constraint_overlapping(self, edge):
+        """Return an iterator over the input constraint overlapping the given edge.
+
+        The edge can be given either as a pair a vertices handles or a
+        face handle and an index.
+        """
+        if isinstance(edge[0], Face_handle):
+            edge_v_pair = self.vertice_pair_from_edge(edge)
+        else:
+            edge_v_pair = edge
+            edge = self.edge_from_vertice_pair(*edge_v_pair)
+        if not self.cdt.is_constrained(edge):
+            return
+        for context in self.cdt.contexts(*edge_v_pair):
+            context_boundaries = first_and_last(context.vertices())
+            constraint_v_pair = _sorted_vertex_pair(*context_boundaries)
+            yield constraint_v_pair
+
+    def iter_constraints_info_overlapping(self, edge):
+        for constraint in self.iter_input_constraint_overlapping(edge):
+            yield self._constraints_infos[constraint]
+
