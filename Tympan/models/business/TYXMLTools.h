@@ -23,7 +23,7 @@
 #ifndef __TY_XML_TOOLS__
 #define __TY_XML_TOOLS__
 
-#include "Tympan/MetierSolver/ToolsMetier/QT2DOM.h"
+#include "Tympan/models/business/QT2DOM.h"
 
 #include "Tympan/core/macros.h"
 
