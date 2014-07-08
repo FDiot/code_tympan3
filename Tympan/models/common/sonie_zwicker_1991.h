@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,8 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef __SONIE_H__
-#define __SONIE_H__
+#ifndef TY_MC_SONIE_ZWICKER_1991
+#define TY_MC_SONIE_ZWICKER_1991
 
 class sonie
 {
@@ -112,4 +112,4 @@ private :
     /// Indication de bonne exécution du calcul
     bool _isOk;
 };
-#endif // __SONIE_H__
+#endif // TY_MC_SONIE_ZWICKER_1991
