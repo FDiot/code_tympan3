@@ -44,7 +44,7 @@
 #include "Tympan/core/defines.h"
 #include "Tympan/core/macros.h"
 #include "Tympan/core/idgen.h"
-#include "Tympan/MetierSolver/ToolsMetier/TYNameManager.h"
+#include "Tympan/models/business/TYNameManager.h"
 #if TY_USE_IHM
   #include "Tympan/GraphicIHM/DataManagerIHM/TYElementWidget.h"
   #include "Tympan/GraphicIHM/DataManagerGraphic/TYElementGraphic.h"

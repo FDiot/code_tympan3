@@ -26,7 +26,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/core/logging.h"
 #include "Tympan/core/exceptions.h"
-#include "Tympan/MetierSolver/ToolsMetier/DOMSave.h"
+#include "Tympan/models/business/DOMSave.h"
 #include "TYXMLManager.h"
 
 

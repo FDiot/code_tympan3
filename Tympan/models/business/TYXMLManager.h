@@ -25,7 +25,7 @@
 
 
 #include "TYElement.h"
-#include "Tympan/MetierSolver/ToolsMetier/QT2DOM.h"
+#include "Tympan/models/business/QT2DOM.h"
 
 
 /**

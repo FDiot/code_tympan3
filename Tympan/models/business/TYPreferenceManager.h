@@ -27,7 +27,7 @@
 #include "Tympan/core/defines.h"
 #if TY_USE_IHM
 
-#include "Tympan/MetierSolver/ToolsMetier/OPreferenceManager.h"
+#include "Tympan/models/business/OPreferenceManager.h"
 
 class QWidget;
 class QString;
