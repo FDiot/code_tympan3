@@ -21,7 +21,7 @@
 #include <algorithm>
 
 // CGAL related Includes
-#include "Tympan/MetierSolver/CommonTools/cgal_tools.hpp"
+#include "Tympan/MetierSolver/DataManagerMetier/cgal_tools.h"
 #include "Tympan/core/exceptions.h"
 
 #include <boost/ptr_container/ptr_deque.hpp>

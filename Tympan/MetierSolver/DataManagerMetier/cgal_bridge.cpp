@@ -10,7 +10,7 @@
 
 #include <boost/foreach.hpp>
 
-#include "Tympan/MetierSolver/CommonTools/cgal_tools.hpp"
+#include "Tympan/MetierSolver/DataManagerMetier/cgal_tools.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 #include "Tympan/MetierSolver/DataManagerMetier/AltimetryBuilder.hpp"
 #include "Tympan/MetierSolver/DataManagerCore/exceptions.hpp"
