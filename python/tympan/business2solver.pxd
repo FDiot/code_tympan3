@@ -11,5 +11,5 @@ cdef class Business2MicroSource:
 
 cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]] map_elt_srcs)
 
-cdef extern from "python/include/Loader.hpp" namespace "tympan":
+cdef extern from "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h" namespace "tympan":
    void load_solver(const char *foldername, tybusiness.TYCalcul *calcul)
