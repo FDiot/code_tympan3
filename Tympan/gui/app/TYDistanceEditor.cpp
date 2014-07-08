@@ -28,8 +28,8 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLTextElement.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
+#include "Tympan/gui/tools/OGLTextElement.h"
+#include "Tympan/gui/tools/OGLLineElement.h"
 
 #include <qcursor.h>
 #include <qstatusbar.h>

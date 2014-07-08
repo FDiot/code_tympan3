@@ -33,7 +33,7 @@
 #endif // _MSC_VER > 1000
 
 
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLTexture2D.h"
+#include "Tympan/gui/tools/OGLTexture2D.h"
 #include "TYElementGraphic.h"
 #include "TYPolygonGraphic.h"
 #include <QImage>

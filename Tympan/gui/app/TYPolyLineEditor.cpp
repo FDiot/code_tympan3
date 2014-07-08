@@ -30,8 +30,8 @@
 #include "Tympan/models/common/3d.h"
 
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLSphereElement.h"
+#include "Tympan/gui/tools/OGLLineElement.h"
+#include "Tympan/gui/tools/OGLSphereElement.h"
 
 #include <qcursor.h>
 #include <QList>

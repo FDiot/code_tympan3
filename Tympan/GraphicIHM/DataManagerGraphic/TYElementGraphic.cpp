@@ -29,10 +29,10 @@
 
 #include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLTextElement.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLCamera.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/NxVec3.h"
+#include "Tympan/gui/tools/OGLTextElement.h"
+#include "Tympan/gui/tools/OGLCamera.h"
+#include "Tympan/gui/tools/OGLLineElement.h"
+#include "Tympan/gui/tools/NxVec3.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 
 #define IMG(id) OLocalizator::getPicture("TYElementGraphic", (id))

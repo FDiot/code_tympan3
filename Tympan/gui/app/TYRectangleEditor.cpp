@@ -27,7 +27,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLRectangleElement.h"
+#include "Tympan/gui/tools/OGLRectangleElement.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
 #include "Tympan/models/business/geoacoustic/TYBoucheSurface.h"
 #include "Tympan/models/business/geoacoustic/TYChemineeSurface.h"

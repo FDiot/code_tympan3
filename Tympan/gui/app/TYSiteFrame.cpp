@@ -56,9 +56,9 @@
 // CLM-NT35 End
 
 
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
+#include "Tympan/gui/tools/OGLLineElement.h"
 
-#include "Tympan/GraphicIHM/ToolsGraphic/NxVec3.h"
+#include "Tympan/gui/tools/NxVec3.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

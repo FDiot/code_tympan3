@@ -28,7 +28,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/models/business/TYLinearMaillage.h"
-#include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
+#include "Tympan/gui/tools/OGLLineElement.h"
 
 #include "Tympan/models/business/OLocalizator.h"
 
