@@ -31,7 +31,7 @@
 
 #include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
 
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPointGraphic.h"
+#include "Tympan/gui/gl/TYPointGraphic.h"
 
 #include "Tympan/models/business/geometry/TYRepere.h"
 #include "Tympan/models/business/OLocalizator.h"

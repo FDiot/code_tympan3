@@ -14,50 +14,51 @@
 */
 
 /**
- * \file TYAcousticSemiCircleGraphic.cpp
- * \brief Repri¿½sentation graphique d'1/2 cercle acoustique
+ * \file TYAcousticCircleGraphic.cpp
+ * \brief Repri¿½sentation graphique d'un cercle accoustique
  *
  *
  */
 
 
 
-
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/models/business/geometry/TYPolygon.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticSemiCircle.h"
 
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
+#include "TYAcousticCircleGraphic.h"
 
+#include "Tympan/models/business/geoacoustic/TYAcousticCircle.h"
 
-TYAcousticSemiCircleGraphic::TYAcousticSemiCircleGraphic(TYAcousticSemiCircle* pElement) :
+#include "Tympan/gui/gl/TYPickingTable.h"
+
+TYAcousticCircleGraphic::TYAcousticCircleGraphic(TYAcousticCircle* pElement) :
     TYElementGraphic(pElement)
 {
 }
 
-TYAcousticSemiCircleGraphic::~TYAcousticSemiCircleGraphic()
+TYAcousticCircleGraphic::~TYAcousticCircleGraphic()
 {
 }
 
-void TYAcousticSemiCircleGraphic::update(bool force /*=false*/)
+void TYAcousticCircleGraphic::update(bool force /*=false*/)
 {
     TYElementGraphic::update(force);
 }
 
-void TYAcousticSemiCircleGraphic::computeBoundingBox()
+void TYAcousticCircleGraphic::computeBoundingBox()
 {
     OBox reset;
     _boundingBox = reset;
 
-    double rayon = getElement()->getDiameter() / 2.0;
-    _boundingBox.Enlarge((float)(getElement()->getCenter()._x + rayon), (float)(getElement()->getCenter()._y + rayon), (float)(getElement()->getCenter()._z));
-    _boundingBox.Enlarge((float)(getElement()->getCenter()._x - rayon), (float)(getElement()->getCenter()._y - rayon), (float)(getElement()->getCenter()._z));
+    double diametre = getElement()->getDiameter();
+    _boundingBox.Enlarge((float)(-diametre / 2), (float)(-diametre / 2), (float)(getElement()->getCenter()._z));
+    _boundingBox.Enlarge((float)(diametre / 2), (float)(diametre / 2), (float)(getElement()->getCenter()._z));
 }
 
-void TYAcousticSemiCircleGraphic::display(GLenum mode /*= GL_RENDER*/)
+void TYAcousticCircleGraphic::display(GLenum mode /*= GL_RENDER*/)
 {
+
     // CLM-NT35: Affiche que le nom de l'element localisi¿½ en overlay
     if (mode == GL_COMPILE)
     {
@@ -65,7 +66,6 @@ void TYAcousticSemiCircleGraphic::display(GLenum mode /*= GL_RENDER*/)
     }
     else
     {
-        //TYElementGraphic::display(mode);
         if (_highlight)
         {
             if (_bFirstDisp)
@@ -73,16 +73,15 @@ void TYAcousticSemiCircleGraphic::display(GLenum mode /*= GL_RENDER*/)
                 computeBoundingBox();
                 _bFirstDisp = false;
             }
-
             drawLineBoundingBox();
         }
+
 
         if (_visible)
         {
             OColor tmpColor;
             glGetFloatv(GL_CURRENT_COLOR, tmpColor);
-            //glColor4fv(getElement()->getColor());
-            glColor3fv(getElement()->getColor());
+            glColor4fv(getElement()->getColor());
 
             double rayon = getElement()->getDiameter() / 2.0;
 
@@ -90,8 +89,6 @@ void TYAcousticSemiCircleGraphic::display(GLenum mode /*= GL_RENDER*/)
             int resolution = TYDEFAULTRESOLUTIONIONCIRCLE;
 
 #if TY_USE_IHM
-            //      static const char prefName[] = "ResolutionCircle";
-
             if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "ResolutionCircle"))
             {
                 resolution = TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "ResolutionCircle");
@@ -104,7 +101,7 @@ void TYAcousticSemiCircleGraphic::display(GLenum mode /*= GL_RENDER*/)
 
             GLUquadricObj* qobj = gluNewQuadric();
             glPushMatrix();
-            glTranslatef(getElement()->getCenter()._x, getElement()->getCenter()._y, getElement()->getCenter()._z);
+            glTranslatef(0.0, 0.0, getElement()->getCenter()._z);
 
             if (mode == GL_SELECT)
             {
@@ -112,20 +109,35 @@ void TYAcousticSemiCircleGraphic::display(GLenum mode /*= GL_RENDER*/)
                 glPushName((GLuint)(TYPickingTable::getIndex()));
             }
 
-            gluPartialDiskAndEnlargeBB(qobj, 0, rayon, resolution, 1, 0, 180);
+            //Dessine un disque de centre [0 0 getElement()->getCenter()._z]:
+            gluDiskAndEnlargeBB(qobj, 0, rayon, resolution, 1);
 
             if (mode == GL_SELECT)
             {
                 glPopName();
             }
-
             gluDeleteQuadric(qobj);
             glPopMatrix();
+
             //Calcul du volume englobant pour le fit:
             _globalBoundingBox.Enlarge(_boundingBox);
+
+            // Affichage de la normale
+            if (TYElementGraphic::_gDrawNormals)
+            {
+                OPoint3D p1 = getElement()->getCenter();
+                OVector3D n = getElement()->normal();
+                n.normalize();
+                n = n * 5;
+                displayNormal(n, p1);
+            }
+
+            glColor3fv(tmpColor);
 
             // Affichage de la source surfacique
             getElement()->getSrcSurf()->getGraphicObject()->display(mode);
         }
     }
 }
+
+

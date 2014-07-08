@@ -28,9 +28,9 @@
 
 #include "Tympan/models/business/infrastructure/TYBatiment.h"
 #include "Tympan/models/business/infrastructure/TYEcran.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickHandler.h"
+#include "Tympan/gui/gl/TYPickHandler.h"
 #include "Tympan/gui/widgets/TYWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPanelGraphic.h"
+#include "Tympan/gui/gl/TYPanelGraphic.h"
 #include "Tympan/models/business/OLocalizator.h"
 
 
@@ -62,7 +62,7 @@
 
 
 #include "Tympan/models/business/TYRectangularMaillage.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangularMaillageGraphic.h"
+#include "Tympan/gui/gl/TYRectangularMaillageGraphic.h"
 #include "TYMenuItem.h"
 
 using namespace Qt;

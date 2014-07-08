@@ -19,7 +19,7 @@
   #include "Tympan/models/business/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #if TY_USE_IHM
-  #include "Tympan/GraphicIHM/DataManagerGraphic/TYBoundaryNoiseMapGraphic.h"
+  #include "Tympan/gui/gl/TYBoundaryNoiseMapGraphic.h"
   #include "Tympan/gui/widgets/TYBoundaryNoiseMapWidget.h"
 #endif
 #include "Tympan/core/logging.h"

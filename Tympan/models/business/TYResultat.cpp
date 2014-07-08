@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYResultatWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYResultatGraphic.h"
+#include "Tympan/gui/gl/TYResultatGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

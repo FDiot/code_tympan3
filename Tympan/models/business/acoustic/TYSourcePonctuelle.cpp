@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYSourcePonctuelleWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourcePonctuelleGraphic.h"
+#include "Tympan/gui/gl/TYSourcePonctuelleGraphic.h"
 #endif
 
 

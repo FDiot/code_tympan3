@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYCourbeNiveauWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYCourbeNiveauGraphic.h"
+#include "Tympan/gui/gl/TYCourbeNiveauGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

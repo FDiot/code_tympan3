@@ -251,7 +251,7 @@ protected:
 };
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYGeometryNodeGraphic.h"
+#include "Tympan/gui/gl/TYGeometryNodeGraphic.h"
 #endif
 
 typedef SmartPtr<TYGeometryNode> LPTYGeometryNode;

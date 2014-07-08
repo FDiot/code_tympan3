@@ -28,7 +28,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/models/business/infrastructure/TYBatiment.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickHandler.h"
+#include "Tympan/gui/gl/TYPickHandler.h"
 #include "Tympan/gui/widgets/TYWidget.h"
 
 #include "Tympan/models/business/OLocalizator.h"

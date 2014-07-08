@@ -18,7 +18,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYSiteNodeWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSiteNodeGraphic.h"
+#include "Tympan/gui/gl/TYSiteNodeGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

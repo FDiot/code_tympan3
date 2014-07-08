@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYRectangularMaillageWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangularMaillageGraphic.h"
+#include "Tympan/gui/gl/TYRectangularMaillageGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

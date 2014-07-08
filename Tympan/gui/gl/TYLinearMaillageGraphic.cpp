@@ -28,7 +28,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/models/business/TYLinearMaillage.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
 #include "Tympan/core/defines.h"
 #include "Tympan/gui/OSizeManager.h"
 

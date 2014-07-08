@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYAcousticRectangleNodeWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticRectangleNodeGraphic.h"
+#include "Tympan/gui/gl/TYAcousticRectangleNodeGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

@@ -20,7 +20,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYInfrastructureWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYInfrastructureGraphic.h"
+#include "Tympan/gui/gl/TYInfrastructureGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

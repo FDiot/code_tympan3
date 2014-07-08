@@ -28,7 +28,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYMachineGraphic.h"
+#include "Tympan/gui/gl/TYMachineGraphic.h"
 
 #include <qlayout.h>
 #include <qpushbutton.h>

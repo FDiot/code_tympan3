@@ -14,13 +14,11 @@
 */
 
 /**
- * \file TYAcousticSemiCylinderGraphic.cpp
- * \brief Repri¿½sentation graphique d'un 1/2 cylindre acoustique
+ * \file TYAcousticCylinderGraphic.cpp
+ * \brief Repri¿½sentation graphique d'un cylindre accoustique
  *
  *
  */
-
-
 
 
 
@@ -28,94 +26,69 @@
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCylinderGraphic.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticSemiCylinder.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
+#include "Tympan/gui/gl/TYAcousticCylinderGraphic.h"
 
+#include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
 
-TYAcousticSemiCylinderGraphic::TYAcousticSemiCylinderGraphic(TYAcousticSemiCylinder* pElement) :
+TYAcousticCylinderGraphic::TYAcousticCylinderGraphic(TYAcousticCylinder* pElement) :
     TYElementGraphic(pElement)
 {
 }
 
-TYAcousticSemiCylinderGraphic::~TYAcousticSemiCylinderGraphic()
+TYAcousticCylinderGraphic::~TYAcousticCylinderGraphic()
 {
 }
 
-void TYAcousticSemiCylinderGraphic::update(bool force /*=false*/)
+void TYAcousticCylinderGraphic::update(bool force /*=false*/)
 {
     TYElementGraphic::update(force);
 }
 
-void TYAcousticSemiCylinderGraphic::getChilds(TYListPtrTYElementGraphic& childs, bool recursif /*=true*/)
+void TYAcousticCylinderGraphic::getChilds(TYListPtrTYElementGraphic& childs, bool recursif /*=true*/)
 {
     TYElementGraphic* pTYElementGraphic;
+    // Src surf
     pTYElementGraphic = getElement()->getSrcSurf()->getGraphicObject();
     childs.push_back(pTYElementGraphic);
     if (recursif)
     {
         pTYElementGraphic->getChilds(childs, recursif);
     }
-
-    pTYElementGraphic = getElement()->getSemiCircTop()->getGraphicObject();
+    // Cercle top
+    pTYElementGraphic = getElement()->getCircTop()->getGraphicObject();
     childs.push_back(pTYElementGraphic);
     if (recursif)
     {
         pTYElementGraphic->getChilds(childs, recursif);
     }
-
-    pTYElementGraphic = getElement()->getSemiCircBottom()->getGraphicObject();
+    // Cercle bottom
+    pTYElementGraphic = getElement()->getCircBottom()->getGraphicObject();
     childs.push_back(pTYElementGraphic);
     if (recursif)
     {
         pTYElementGraphic->getChilds(childs, recursif);
-    }
-
-    // Face laterale
-    pTYElementGraphic = getElement()->getRect()->getGraphicObject();
-    childs.push_back(pTYElementGraphic);
-    if (recursif)
-    {
-        pTYElementGraphic->getChilds(childs, recursif);
-    }
-
-    // Resolution
-    int resolution = TYDEFAULTRESOLUTIONIONCIRCLE;
-    TYTabRectangle tabRect = getElement()->getEnveloppe(resolution);
-    for (int i = 0; i < resolution; i++)
-    {
-        pTYElementGraphic = tabRect[i].getGraphicObject();
-        childs.push_back(pTYElementGraphic);
-        if (recursif)
-        {
-            pTYElementGraphic->getChilds(childs, recursif);
-        }
     }
 }
 
-void TYAcousticSemiCylinderGraphic::computeBoundingBox()
+void TYAcousticCylinderGraphic::computeBoundingBox()
 {
     OBox reset;
     _boundingBox = reset;
 
-    // Src surf
-    getElement()->getSrcSurf()->getGraphicObject()->computeBoundingBox();
-    _boundingBox.Enlarge(getElement()->getSrcSurf()->getGraphicObject()->GetBox());
+    TYTabPoint sommets = getElement()->sommets();
 
-    // Cercle top
-    getElement()->getSemiCircTop()->getGraphicObject()->computeBoundingBox();
-    _boundingBox.Enlarge(getElement()->getSemiCircTop()->getGraphicObject()->GetBox());
-
-    // Cercle bottom
-    getElement()->getSemiCircBottom()->getGraphicObject()->computeBoundingBox();
-    _boundingBox.Enlarge(getElement()->getSemiCircBottom()->getGraphicObject()->GetBox());
+    size_t nbPts = sommets.size();
+    TYPoint pt;
+    for (size_t i = 0; i < nbPts; i++)
+    {
+        pt = sommets[i];
+        _boundingBox.Enlarge((float)(pt._x), (float)(pt._y), (float)(pt._z));
+    }
 }
 
-void TYAcousticSemiCylinderGraphic::display(GLenum mode /*= GL_RENDER*/)
+void TYAcousticCylinderGraphic::display(GLenum mode /*= GL_RENDER*/)
 {
-    //TYElementGraphic::display(mode);
-
-    // CLM-NT35: Affiche que le nom de l'element localisi¿½ en overlay
     if (mode == GL_COMPILE)
     {
         drawName();
@@ -132,37 +105,32 @@ void TYAcousticSemiCylinderGraphic::display(GLenum mode /*= GL_RENDER*/)
             drawLineBoundingBox();
         }
 
-
         if (_visible)
         {
-            // Src surf
-            getElement()->getSrcSurf()->getGraphicObject()->display(mode);
-
-
             if (mode == GL_SELECT)
             {
                 TYPickingTable::addElement(getElement());
                 glPushName((GLuint)(TYPickingTable::getIndex()));
             }
 
-            // Face laterale
-            getElement()->getRect()->getGraphicObject()->display(mode);
-
+            // Enveloppe
+            getElement()->getSrcSurf()->getGraphicObject()->display(mode);
             // Cercle top
-            getElement()->getSemiCircTop()->getGraphicObject()->display(mode);
-
+            getElement()->getCircTop()->getGraphicObject()->display(mode);
             // Cercle bottom
-            getElement()->getSemiCircBottom()->getGraphicObject()->display(mode);
+            getElement()->getCircBottom()->getGraphicObject()->display(mode);
 
             // Couleur
             glColor3fv(getElement()->getColor());
+
+            // Centre
+            float center[3];
+            getElement()->getCenter().getToOGL(center);
 
             // Resolution
             int resolution = TYDEFAULTRESOLUTIONIONCIRCLE;
 
 #if TY_USE_IHM
-            //      static const char prefName[] = "ResolutionCircle";
-
             if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "ResolutionCircle"))
             {
                 resolution = TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "ResolutionCircle");
@@ -174,8 +142,8 @@ void TYAcousticSemiCylinderGraphic::display(GLenum mode /*= GL_RENDER*/)
 
 #endif // TY_USE_IHM
 
-            glTranslatef(getElement()->getCenter()._x, getElement()->getCenter()._y, getElement()->getCenter()._z);
-
+            OPoint3D oCenter = getElement()->getCenter();
+            glTranslatef(oCenter._x, oCenter._y, oCenter._z);
 
             // Dessin de l'enveloppe
             TYTabRectangle tabRect = getElement()->getEnveloppe(resolution);
@@ -185,12 +153,13 @@ void TYAcousticSemiCylinderGraphic::display(GLenum mode /*= GL_RENDER*/)
                 tabRect[i].getGraphicObject()->display(mode);
             }
 
+
             if (mode == GL_SELECT)
             {
                 glPopName();
-                //Calcul du volume englobant pour le fit:
                 _globalBoundingBox.Enlarge(_boundingBox);
             }
         }
     }
 }
+

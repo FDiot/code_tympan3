@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYSegmentWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSegmentGraphic.h"
+#include "Tympan/gui/gl/TYSegmentGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

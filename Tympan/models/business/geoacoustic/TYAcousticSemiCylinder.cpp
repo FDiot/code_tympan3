@@ -18,7 +18,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAcousticSemiCylinderWidget.h"
-  #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCylinderGraphic.h"
+  #include "Tympan/gui/gl/TYAcousticSemiCylinderGraphic.h"
 #endif
 
 #include "Tympan/core/logging.h"

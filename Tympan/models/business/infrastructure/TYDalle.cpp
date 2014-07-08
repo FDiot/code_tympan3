@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYDalleWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYDalleGraphic.h"
+#include "Tympan/gui/gl/TYDalleGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

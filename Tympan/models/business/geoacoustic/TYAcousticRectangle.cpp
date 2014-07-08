@@ -21,7 +21,7 @@
 #include "Tympan/models/common/3d.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAcousticRectangleWidget.h"
-  #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticRectangleGraphic.h"
+  #include "Tympan/gui/gl/TYAcousticRectangleGraphic.h"
 #endif
 
 

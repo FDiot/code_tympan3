@@ -38,10 +38,10 @@
 #include <qcombobox.h>
 
 #include "Tympan/models/business/TYRectangularMaillage.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangularMaillageGraphic.h"
+#include "Tympan/gui/gl/TYRectangularMaillageGraphic.h"
 
 #include "Tympan/models/business/TYBoundaryNoiseMap.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYBoundaryNoiseMapGraphic.h"
+#include "Tympan/gui/gl/TYBoundaryNoiseMapGraphic.h"
 
 #include <qlayout.h>
 #include <qcursor.h>

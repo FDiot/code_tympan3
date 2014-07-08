@@ -23,7 +23,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYCalculWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYCalculGraphic.h"
+#include "Tympan/gui/gl/TYCalculGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

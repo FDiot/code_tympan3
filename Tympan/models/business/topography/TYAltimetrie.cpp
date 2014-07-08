@@ -43,7 +43,7 @@
 #include "Tympan/models/common/delaunay_maker.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAltimetrieWidget.h"
-  #include "Tympan/GraphicIHM/DataManagerGraphic/TYAltimetrieGraphic.h"
+  #include "Tympan/gui/gl/TYAltimetrieGraphic.h"
 #endif
 #include "TYAltimetrie.h"
 

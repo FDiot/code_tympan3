@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYMurElementWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYMurElementGraphic.h"
+#include "Tympan/gui/gl/TYMurElementGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

@@ -19,7 +19,7 @@
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYSourceSurfacicWidget.h"
-#include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceSurfacicGraphic.h"
+#include "Tympan/gui/gl/TYSourceSurfacicGraphic.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
