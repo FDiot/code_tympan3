@@ -19,7 +19,7 @@
 #include <vector>
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
+#include "Tympan/models/common/delaunay_maker.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"

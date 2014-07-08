@@ -23,7 +23,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 #include "Tympan/MetierSolver/DataManagerCore/exceptions.hpp"
-#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
+#include "Tympan/models/common/delaunay_maker.h"
 #include "Tympan/models/common/3d.h"
 
 /**

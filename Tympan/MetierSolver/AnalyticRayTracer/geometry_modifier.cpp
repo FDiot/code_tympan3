@@ -16,7 +16,7 @@
 
 
 #include "geometry_modifier.h"
-#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
+#include "Tympan/models/common/delaunay_maker.h"
 #include "Tympan/models/common/triangle.h"
 #include "Lancer.h"
 #include "RayCourb.h"
