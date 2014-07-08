@@ -361,11 +361,40 @@ class MeshedCDTTC(unittest.TestCase):
             points, altitude=10)
 
         for constraint in input_constraints:
-            self.assertEqual(self.mesher.constraints_infos[constraint],
+            self.assertEqual(self.mesher.input_constraint_infos(constraint),
                              {"altitude": 10})
         for vertex in vertices:
             self.assertEqual(self.mesher.vertices_infos[vertex],
                              {"altitude": 10})
+
+    def build_two_overlapping_segments(self):
+        segment1 = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
+        segment2 = map(mesh.to_cgal_point, [(0, 1), (0, 3)])
+        (vA, vB), (cAB,) = self.mesher.insert_polyline_with_info(
+            segment1, origin="1", altitude=10)
+        (vC, vD), (cCD,) = self.mesher.insert_polyline_with_info(
+            segment2, origin="2", color='blue')
+        return (vA, vB, vC, vD, cAB, cCD)
+        # Geometrical precondition checks
+        self.assert_basic_counts(vertices=4, faces=0, edges=3, constrained=3)
+
+    def assert_constraints_between(self, v1, v2, constraints):
+        l_constraint = list(self.mesher.iter_input_constraint_overlapping((v1, v2)))
+        self.assertItemsEqual(l_constraint, constraints)
+
+    def test_overlapping_constraints(self):
+        (vA, vB, vC, vD, cAB, cCD) = self.build_two_overlapping_segments()
+        self.assert_constraints_between(vA, vC, [cAB])
+        self.assert_constraints_between(vB, vC, [cAB, cCD])
+        self.assert_constraints_between(vB, vD, [cCD])
+
+    def test_overlapping_constraints_info(self):
+        (vA, vB, vC, vD, cAB, cCD) = self.build_two_overlapping_segments()
+
+        self.assertItemsEqual(list(self.mesher.iter_constraints_info_overlapping((vB, vC))),
+                              [{"altitude":10, "origin":"1"},
+                               {"color": "blue", "origin":"2"}])
+
 
 
 if __name__ == '__main__':
