@@ -51,6 +51,18 @@ def first_and_last(iterable):
     return (first, last)
 
 
+def ilinks(it, close_it=False):
+    """Given an input iterable `it` iter over the successive pairs (v0,
+    v1), (v1, v2)... if close_it=True add an nth pair (vn-1, v0)
+    """
+    first = next(it)
+    prev = first
+    for el in it:
+        yield (prev, el)
+        prev = el
+    if close_it and prev != first:
+        yield (prev, first)
+
 class MeshedCDTWithInfo(object):
     """
     This call provide the meshing of a geometry with arbitrary informations attached
@@ -62,9 +74,9 @@ class MeshedCDTWithInfo(object):
     def __init__(self):
         self.cdt = CDT()
         self.faces_infos = defaultdict(self.FaceInfo)
-        self.vertices_infos = defaultdict(self.VertexInfo)
+        self.vertices_infos = {}
         self._edges_infos = defaultdict(list)
-        self._constraints_infos = defaultdict(self.EdgeInfo)
+        self._constraints_infos = {}
 
     def input_constraint_infos(self, (va, vb)):
         """Get the constraint informations associated to the given pair of vertices
@@ -77,7 +89,19 @@ class MeshedCDTWithInfo(object):
         """
         return self._constraints_infos[_sorted_vertex_pair(va, vb)]
 
-    def insert_polyline(self, polyline, close_it=False, connected=True):
+    def insert_constraint(self, va, vb, **kwargs):
+        constraint = _sorted_vertex_pair(va, vb)
+        self.cdt.insert_constraint(va, vb)
+        self._constraints_infos[constraint] = self.EdgeInfo(**kwargs)
+        return constraint
+
+    def insert_point(self, point, **kwargs):
+        point = to_cgal_point(point)
+        vertex = self.cdt.insert(point)
+        self.vertices_infos[vertex] = self.VertexInfo(**kwargs)
+        return vertex
+
+    def insert_polyline(self, polyline, close_it=False, connected=True, **kwargs):
         """Insert a sequence of points as a polyline.
 
         If ``close_it=True`` is specified, then a segment joining the
@@ -87,45 +111,22 @@ class MeshedCDTWithInfo(object):
         If ``connected=False`` is specified only the points are added,
         but not the segments connecting them.
 
+        The key-word arguments are used to buildthe self.VertexInfo
+        and self.EdgeInfo instances associated with new vertices and
+        constraints.
+
         Returns the list of vertices handles and of constraints added.
         """
         assert not close_it or connected, \
             "It's meaningless to close an unconnected points sequence"
-        points_it = iter(polyline)
-        first_point = next(points_it)
-        if not isinstance(first_point, Point):
-            raise TypeError("`polyline` is expected to be an iterable over CGAL Point_2")
-        vertices_handles = [self.cdt.insert(first_point)]
-        constraints = []
         # Insert points, thus making CDT vertices and build the list of edges
-        for point in points_it:
-            vertex = self.cdt.insert(point)
-            vertices_handles.append(vertex)
-            if connected:
-                # Constraint connecting the last vertex and the one just inserted
-                # represented as a pair of arbitrarily vertices handles
-                constraint = _sorted_vertex_pair(vertices_handles[-2], vertices_handles[-1])
-                constraints.append(constraint)
-        if close_it and len(vertices_handles) > 2:
-            constraints.append(_sorted_vertex_pair(vertices_handles[-1], vertices_handles[0]))
-        # Now actually insert the edges as constraints into the triangulation
-        for constraint in constraints:
-            self.cdt.insert_constraint(*constraint)
-        return vertices_handles, constraints
-
-    def insert_polyline_with_info(self, polyline,
-                                  close_it=False, connected=True,
-                                  **kwargs):
-        """Just as ``insert_polyline``, but the remaining key-word arguments
-        are used to build self.VertexInfo and self.EdgeInfo to build the
-        additional information associated with new vertices and constraints.
-        """
-        vertices_handles, constraints = self.insert_polyline(
-            polyline, close_it=False, connected=True)
-        for vertex in vertices_handles:
-            self.vertices_infos[vertex] = self.VertexInfo(**kwargs)
-        for constraint in constraints:
-            self._constraints_infos[constraint] = self.EdgeInfo(**kwargs)
+        vertices_handles = [self.insert_point(point, **kwargs)
+                            for point in polyline]
+        if connected:
+            constraints = [self.insert_constraint(va, vb, **kwargs)
+                           for va, vb in ilinks(iter(vertices_handles), close_it=close_it)]
+        else:
+            constraints = []
         return vertices_handles, constraints
 
     def vertice_pair_from_edge(self, (face, index)):
@@ -168,4 +169,3 @@ class MeshedCDTWithInfo(object):
     def iter_constraints_info_overlapping(self, edge):
         for constraint in self.iter_input_constraint_overlapping(edge):
             yield self._constraints_infos[constraint]
-
