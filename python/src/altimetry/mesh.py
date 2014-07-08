@@ -2,7 +2,7 @@
 Provide triangulation and meshing of a clean, single site, geometry.
 """
 
-from collections import defaultdict
+from collections import defaultdict, deque
 
 from shapely import geometry as sh_geom
 
@@ -76,8 +76,6 @@ class MeshedCDTWithInfo(object):
     """
     EdgeInfo = dict
     VertexInfo = dict
-
-    default_refine_criteria = Mesh_criteria(0.125, 0.5) # First arg MUST be < 0.125
 
     def __init__(self):
         self.cdt = CDT()
@@ -316,7 +314,108 @@ class MeshedCDTWithInfo(object):
             for faces_left_right in self.iter_faces_for_input_constraint(*constraint):
                 yield faces_left_right
 
-    def refine_mesh(self, hole_seeds=None, criteria=None):
-        criteria = criteria or self.default_refine_criteria
+    def refine_mesh(self, hole_seeds=None, size_criterion=0, shape_criterion=0.125):
+        """Refine the triangulation into a regular mesh.
+
+        * size_criteria is an upper bound on the size of triangles
+          (the default, 0, means no bound)
+        * shape_criteria is explained in CGAL documentation.
+          Beware! The default value is the best bound which warrant
+          termination of the algorithms, Changing its value can lead
+          to application freezing.
+
+        cf. http://doc.cgal.org/latest/Mesh_2/index.html#secMesh_2_criteria
+        """
+        criteria = Mesh_criteria(shape_criteria, size_criteria)
         hole_seeds = hole_seeds or []
         CGAL_refine_Delaunay_mesh(self.cdt, hole_seeds, criteria)
+
+
+class FaceFlooder(object):
+    """This is a base class for implementing the family of flood algorithms
+
+    Flood algorithms are a way of walking through a mesh to mark or
+    process faces, edges and vertices. It consists of starting at some
+    seed point and processing adjacents faces (potentially under
+    condition on the edge connecting them).
+    """
+
+    def __init__(self, mesher):
+        self.visited = set()
+        self.frontier = set()
+        self.border = set()
+        self.mesher = mesher
+
+    def add_to_frontier(self, element):
+        if element not in self.visited:
+            self.frontier.add(element)
+
+    def links_for(self, face_handle):
+        """ Return an iterable on edges with adjacent faces
+        """
+        for i in xrange(3):
+            edge = (face_handle, i)
+            yield edge
+
+    def follow_link(self, edge):
+        """ Follow the edge to the adjacent face if the face
+        is finite and self.should_follow(edge) is True.
+        """
+        cdt = self.mesher.cdt
+        (fh, i) = edge
+        neighbor = fh.neighbor(i)
+        if not cdt.is_infinite(neighbor) and self.should_follow(fh, edge, neighbor):
+            return neighbor
+        else:
+            return None
+
+    def should_follow(self, from_face, edge, to_face):
+        """Override this method to define which edges stop the flood"""
+        raise NotImplementedError
+
+    def visit_epilog(self, element):
+        """Override this method if some action needs to be taken on an element
+        after all potential neighbor have been considered and
+        scheduled for visit in case they should.
+        """
+        return element
+
+    def visit_one(self):
+        """Process the next element in the frontier: consider all potential
+        links to neighbors (as returned by ``links_for``) and, for
+        the links which should be followed to a neighbor (as
+        indicated by ``follow_link``) mark the neighbor for visit if
+        is has no already been visited.
+
+        Returns the value returned by ``visit_epilog`` called at the end.
+
+        Raises IndexError if the frontier is empty
+
+        """
+        next_one = self.frontier.pop()
+        for link in self.links_for(next_one):
+            neighbor = self.follow_link(link)
+            if not neighbor:
+                self.border.add(link)
+                continue
+            if neighbor in self.visited:
+                continue
+            self.frontier.add(neighbor)
+        self.visited.add(next_one)
+        return self.visit_epilog(next_one)
+
+    def flood_from(self, seeds):
+        """Walk faces reachable from the given seeds
+
+        ``seeds`` must be an iterable over elements.  The first seed
+        is added to the frontier and the graph is flooded from this
+        point until the frontier is emppty.  Then the next seed is
+        added to the frontier if it was not yet visted and the process
+        starts again until seeds are all considered.
+        """
+        for seed in seeds:
+            if seed in self.visited:
+                continue
+            self.add_to_frontier(seed)
+            while(self.frontier):
+                self.visit_one()
