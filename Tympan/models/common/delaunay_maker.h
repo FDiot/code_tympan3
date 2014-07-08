@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,14 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- */
-
-#ifndef _O_DELAUNAY_MAKER__
-#define _O_DELAUNAY_MAKER__
+#ifndef TY_MC_DELAUNAY_MAKER
+#define TY_MC_DELAUNAY_MAKER
 
 #include <qlist.h>
 
@@ -28,7 +22,7 @@
 #include "Tympan/models/common/triangle.h"
 
 /**
- * \file ODelaunayMaker.h
+ * \file delaunay_maker.h
  * \class ODelaunayMaker
  * \brief Triangulation de Delaunay
  */
@@ -102,4 +96,4 @@ private :
     double _triangulatePrecision;
 };
 
-#endif //_O_DELAUNAY_MAKER__
+#endif //TY_MC_DELAUNAY_MAKER

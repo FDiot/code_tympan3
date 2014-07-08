@@ -40,7 +40,7 @@
 #include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
-#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
+#include "Tympan/models/common/delaunay_maker.h"
 #if TY_USE_IHM
   #include "Tympan/GraphicIHM/DataManagerIHM/TYAltimetrieWidget.h"
   #include "Tympan/GraphicIHM/DataManagerGraphic/TYAltimetrieGraphic.h"

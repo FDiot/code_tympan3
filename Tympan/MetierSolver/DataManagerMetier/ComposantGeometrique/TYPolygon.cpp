@@ -43,7 +43,7 @@
 
 
 #if TY_USE_IHM
-#include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
+#include "Tympan/models/common/delaunay_maker.h"
 #endif // TY_USE_IHM
 
 
