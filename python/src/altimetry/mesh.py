@@ -21,7 +21,10 @@ from CGAL.CGAL_Mesh_2 import (
     Mesh_2_Constrained_Delaunay_triangulation_plus_2_Edge as Edge,
     Delaunay_mesh_plus_size_criteria_2 as Mesh_criteria,
     refine_Delaunay_mesh_2 as CGAL_refine_Delaunay_mesh)
-
+from CGAL.CGAL_Triangulation_2 import  (
+    Ref_Locate_type_2 as Ref_locate_type,
+    VERTEX, EDGE, FACE, OUTSIDE_CONVEX_HULL, OUTSIDE_AFFINE_HULL
+)
 
 # Monkey patch Edge to work around issue
 # http://code.google.com/p/cgal-bindings/issues/detail?id=48
@@ -350,6 +353,50 @@ class MeshedCDTWithInfo(object):
         hole_seeds = hole_seeds or []
         CGAL_refine_Delaunay_mesh(self.cdt, hole_seeds, criteria)
 
+
+    def mirror_half_edge(self, fh, i):
+        fh2 = fh.neighbor(i)
+        i2 = self.cdt.mirror_index(fh, i)
+        return (fh2, i2)
+
+    def locate_point(self, p, face_hint=None):
+        """Locate a point in the triangulation and return a pair whose first
+        element is the finite face handle of a face on which the point
+        lies and the second element a complementary information :
+
+        * if the point is out of the convex hull of the triangulation,
+          the first face handle is None and the second if the witness
+          infinite face handle return by CGAL locate method.
+        * if the point lies within the face, the second element is None
+
+        * if the point is on an edge, then the second element is the
+          index of the edge and thus the returned (face _andle, index)
+          forms an half-edge representation
+        * if the point is a vertex the second element is its vertex handle
+
+        An optional Face_handle can be passed as the face_hint
+        argument. It can be used to make the search in the
+        triangulation start from the given face (cf CGAL doc for
+        CDT::locate(...)).
+        """
+
+        face_hint = face_hint or Face_handle()
+        p = to_cgal_point(p)
+        locate_type = Ref_locate_type()
+        index = Ref_int()
+        face_handle = self.cdt.locate(p, locate_type, index, face_hint)
+        locate_type = locate_type.object()
+        if locate_type == OUTSIDE_CONVEX_HULL:
+            return None, face_handle
+        elif locate_type == FACE:
+            return face_handle, None
+        elif locate_type == EDGE:
+            return (face_handle, index.object())
+        elif locate_type == VERTEX:
+            return face_handle, face_handle.vertex(index.object())
+        else:
+            assert locate_type == OUTSIDE_AFFINE_HULL
+            raise InvalidGeometry("Degenerate triangulation (0D or 1D)")
 
 class FaceFlooder(object):
     """This is a base class for implementing the family of flood algorithms

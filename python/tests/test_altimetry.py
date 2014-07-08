@@ -606,7 +606,7 @@ class MeshedCDTTC(unittest.TestCase):
         self.assertIsNot(a, b)
         self.assertEqual(a, b)
 
-    def test_copy(self):
+    def build_triangle(self):
         cdt = self.mesher.cdt
         (vA, vB), (cAB,) = self.mesher.insert_polyline([(0, 0), (2, 0)], material='concrete')
         vC = self.mesher.insert_point((1, 1), altitude=10.0)
@@ -614,19 +614,49 @@ class MeshedCDTTC(unittest.TestCase):
         (edgeAB,) = [edge for edge in cdt.finite_edges()
                     if cdt.is_constrained(edge)]
         (faceABC,) = cdt.finite_faces()
+        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
+        return (vA, vB, vC, edgeAB, faceABC)
+
+    def test_copy(self):
+        cdt = self.mesher.cdt
+        (vA, vB, vC, edgeAB, faceABC) = self.build_triangle()
 
         mesher2 = self.mesher.copy()
         self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1, mesher=mesher2)
         vD = mesher2.insert_point((1, -1), altitude=20.0)
-
         self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
         self.assert_basic_counts(faces=2, vertices=4, edges=5, constrained=1, mesher=mesher2)
 
-        # Test use of faces anf edges identifier across the copy
+        # Test use of faces and edges identifier across the copy
         self.assertEqual(mesher2.point_for_face(faceABC),
                          self.mesher.point_for_face(faceABC))
         self.assertEqual(mesher2.segment_for_edge(edgeAB),
                          self.mesher.segment_for_edge(edgeAB))
+
+    def test_mirror_half_edge(self):
+        cdt = self.mesher.cdt
+        (vA, vB, vC, edgeAB, faceABC) = self.build_triangle()
+        mirror_half_edge = self.mesher.mirror_half_edge
+
+        fh, i = mirror_half_edge(*edgeAB)
+        self.assertTrue(cdt.is_infinite(fh))
+        self.assertEqual(mirror_half_edge(fh, i), edgeAB)
+
+    def test_locate(self):
+        cdt = self.mesher.cdt
+        (vA, vB, vC, edgeAB, faceABC) = self.build_triangle()
+        edgeBA = self.mesher.mirror_half_edge(*edgeAB)
+        locate = self.mesher.locate_point
+
+        self.assertEqual(locate((1, 0.5)), (faceABC, None))
+        self.assertIsNone(locate((1, -1))[0])
+        self.assertEqual(locate((0, 0)), (faceABC, vA))
+        self.assertIn(locate((1, 0)), (edgeAB, edgeBA))
+
+        degenerate_mesher = mesh.MeshedCDTWithInfo()
+        degenerate_mesher.insert_point((0, 0))
+        with self.assertRaises(InvalidGeometry):
+            degenerate_mesher.locate_point((0, 1))
 
 if __name__ == '__main__':
     from utils import main
