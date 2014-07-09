@@ -13,15 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
-//#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-//#include "Tympan/models/business/TYPHMetier.h"
-//#endif // TYMPAN_USE_PRECOMPILED_HEADER
-
 #include "TYPointParcours.h"
 
 #include <stdio.h>
