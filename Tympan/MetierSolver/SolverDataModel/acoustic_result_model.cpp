@@ -14,6 +14,13 @@ namespace tympan
     SpectrumMatrix::SpectrumMatrix(size_t nb_receptors,size_t nb_sources)
         : _nb_sources(nb_sources)
     {
+        resize(nb_receptors, nb_sources);
+    }
+
+    SpectrumMatrix::SpectrumMatrix() : _nb_sources(0) {}
+
+     void SpectrumMatrix::resize(size_t nb_receptors, size_t nb_sources)
+     {
         data.clear();
         data.reserve(nb_receptors);
 
@@ -26,9 +33,7 @@ namespace tympan
             data.push_back(std::vector<Spectrum>(nb_sources, nullSpectrum));
         }
         assert(data.size()==nb_receptors);
-    }
-
-    SpectrumMatrix::SpectrumMatrix() : _nb_sources(0) {}
+     }
 
     const Spectrum& SpectrumMatrix::operator()(size_t receptor_idx, size_t sources_idx) const
     {
@@ -56,9 +61,7 @@ namespace tympan
         data[receptor_idx].clear();
     }
 
-    AcousticResultModel::AcousticResultModel()
-    {
-    };
+// ----------------
 
     AcousticResultModel::~AcousticResultModel()
     {
