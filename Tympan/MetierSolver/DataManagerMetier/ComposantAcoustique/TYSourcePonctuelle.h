@@ -139,7 +139,7 @@ public:
      * Calcul le spectre de puissance acoustique apparente dans la direction du
      * segment donne pour le regime donne.
      */
-    virtual OSpectre lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& Atmo, const int& expGeo = 0, const int& regime = -1) const;
+    //virtual OSpectre lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& Atmo, const int& expGeo = 0, const int& regime = -1) const;
 
     /**
      * Set/Get de la hauteur de cette source par rapport au sol (a

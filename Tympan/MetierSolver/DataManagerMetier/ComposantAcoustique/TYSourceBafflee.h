@@ -101,7 +101,7 @@ public:
     /**
      * Calcul de la puissance apparente de la source dans la direction du segment
      */
-    OSpectre lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& atmos, const int& expGeo = 0, const int& regime = -1) const;
+    //OSpectre lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& atmos, const int& expGeo = 0, const int& regime = -1) const;
 
 
 private:

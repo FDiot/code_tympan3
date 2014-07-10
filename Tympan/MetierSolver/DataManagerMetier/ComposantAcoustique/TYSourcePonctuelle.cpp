@@ -235,109 +235,109 @@ int TYSourcePonctuelle::fromXML(DOM_Element domElement)
     return 1;
 }
 
-OSpectre TYSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& Atmo, const int& expGeo /*=0*/, const int& regime /*=-1*/) const
-{
-    OSpectre s = OSpectre::getEmptyLinSpectre();
-
-    TYAcousticSurface* pSupport = NULL;
-    TYAcousticVolume* pVolParent = NULL;
-    OMatrix matrix; // Matrice de changement de repere entre le volume parent et cette source
-
-    OVector3D v3D;
-    double coef = 0.0;
-    TYElement* pParent = NULL;
-
-    // NOTA : On prend la racine du coefficient de directivite car celui-ci est eleve au carre lors du calcul
-
-
-    // Type de directivite de la source
-    switch (_typeRaynt)
-    {
-        case SPHERIC :
-            coef = sqrt(1.0 + expGeo);
-            s.setDefaultValue(coef); //Gain 1 (expansion geometrique 4pi) ou 2 (expansion geometrique 2pi)
-            break;
-        case HEMISPHERIC:
-            coef = sqrt(2.0);
-            s.setDefaultValue(coef);
-            break;
-        case SOLID:
-            coef = 1;
-            s.setDefaultValue(coef);
-            break;
-        case FORCED:
-            coef = 1;
-            s.setDefaultValue(coef);
-            break;
-        case CALCULATED:
-            // Recherche en "paternite"
-            pParent = getParent();
-
-            // Recherche du support (de type AcousticSurface) de la source
-            // Rmq : la position de la source est exprime dans le repere du support
-            while (pParent)
-            {
-                pSupport = dynamic_cast<TYAcousticSurface*>(pParent);
-                if (pSupport) { break; }
-
-                pParent = pParent->getParent();
-            }
-
-            // Le support a ete trouve
-            if (pSupport)
-            {
-                // On repart du parent du support
-                pParent = pSupport->getParent();
-            }
-            else
-            {
-                // On repart du parent de la source
-                pParent = getParent();
-            }
-
-            // Recherche du volume (de type AcousticVolume) parent (direct ou non)
-            while (pParent)
-            {
-                pVolParent = dynamic_cast<TYAcousticVolume*>(pParent);
-                if (pVolParent) { break; }
-
-                pParent = pParent->getParent();
-            }
-
-            // Le volume parent a ete trouve
-            if (pVolParent)
-            {
-                // Matrice de changement de repere entre le volume parent et cette source (son support)
-                pVolParent->findAcousticSurface(pSupport, &matrix);
-                matrix.invert();
-
-                // Traitement selon cas
-                TYElement* pElement = pVolParent->getParent();
-                TYMachine* pMachine = NULL;
-                TYEtage* pEtage = NULL;
-                if (pElement)  { pMachine = dynamic_cast<TYMachine*>(pElement); }
-                if (!pMachine) { pEtage = dynamic_cast<TYEtage*>(pElement); }
-                if (pMachine)
-                {
-                    s = (calcDirectiviteMachine(pVolParent, pSupport, matrix, seg, Atmo)).racine();
-                }
-                else if (pEtage)
-                {
-                    s = (calcDirectiviteEtage(pVolParent, pSupport, matrix, seg, Atmo)).racine();
-                }
-                else // Cas du bâtiment cylindrique
-                {
-                    s = (calcDirectiviteMachine(pVolParent, pSupport, matrix, seg, Atmo)).racine();
-                }
-            }
-
-            break;
-        default:
-            break;
-    }
-
-    return s;
-}
+//OSpectre TYSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& Atmo, const int& expGeo /*=0*/, const int& regime /*=-1*/) const
+//{
+//    OSpectre s = OSpectre::getEmptyLinSpectre();
+//
+//    TYAcousticSurface* pSupport = NULL;
+//    TYAcousticVolume* pVolParent = NULL;
+//    OMatrix matrix; // Matrice de changement de repere entre le volume parent et cette source
+//
+//    OVector3D v3D;
+//    double coef = 0.0;
+//    TYElement* pParent = NULL;
+//
+//    // NOTA : On prend la racine du coefficient de directivite car celui-ci est eleve au carre lors du calcul
+//
+//
+//    // Type de directivite de la source
+//    switch (_typeRaynt)
+//    {
+//        case SPHERIC :
+//            coef = sqrt(1.0 + expGeo);
+//            s.setDefaultValue(coef); //Gain 1 (expansion geometrique 4pi) ou 2 (expansion geometrique 2pi)
+//            break;
+//        case HEMISPHERIC:
+//            coef = sqrt(2.0);
+//            s.setDefaultValue(coef);
+//            break;
+//        case SOLID:
+//            coef = 1;
+//            s.setDefaultValue(coef);
+//            break;
+//        case FORCED:
+//            coef = 1;
+//            s.setDefaultValue(coef);
+//            break;
+//        case CALCULATED:
+//            // Recherche en "paternite"
+//            pParent = getParent();
+//
+//            // Recherche du support (de type AcousticSurface) de la source
+//            // Rmq : la position de la source est exprime dans le repere du support
+//            while (pParent)
+//            {
+//                pSupport = dynamic_cast<TYAcousticSurface*>(pParent);
+//                if (pSupport) { break; }
+//
+//                pParent = pParent->getParent();
+//            }
+//
+//            // Le support a ete trouve
+//            if (pSupport)
+//            {
+//                // On repart du parent du support
+//                pParent = pSupport->getParent();
+//            }
+//            else
+//            {
+//                // On repart du parent de la source
+//                pParent = getParent();
+//            }
+//
+//            // Recherche du volume (de type AcousticVolume) parent (direct ou non)
+//            while (pParent)
+//            {
+//                pVolParent = dynamic_cast<TYAcousticVolume*>(pParent);
+//                if (pVolParent) { break; }
+//
+//                pParent = pParent->getParent();
+//            }
+//
+//            // Le volume parent a ete trouve
+//            if (pVolParent)
+//            {
+//                // Matrice de changement de repere entre le volume parent et cette source (son support)
+//                pVolParent->findAcousticSurface(pSupport, &matrix);
+//                matrix.invert();
+//
+//                // Traitement selon cas
+//                TYElement* pElement = pVolParent->getParent();
+//                TYMachine* pMachine = NULL;
+//                TYEtage* pEtage = NULL;
+//                if (pElement)  { pMachine = dynamic_cast<TYMachine*>(pElement); }
+//                if (!pMachine) { pEtage = dynamic_cast<TYEtage*>(pElement); }
+//                if (pMachine)
+//                {
+//                    s = (calcDirectiviteMachine(pVolParent, pSupport, matrix, seg, Atmo)).racine();
+//                }
+//                else if (pEtage)
+//                {
+//                    s = (calcDirectiviteEtage(pVolParent, pSupport, matrix, seg, Atmo)).racine();
+//                }
+//                else // Cas du bâtiment cylindrique
+//                {
+//                    s = (calcDirectiviteMachine(pVolParent, pSupport, matrix, seg, Atmo)).racine();
+//                }
+//            }
+//
+//            break;
+//        default:
+//            break;
+//    }
+//
+//    return s;
+//}
 
 OSpectre TYSourcePonctuelle::calcDirectiviteMachine(const TYAcousticVolume* pVolume, const TYAcousticSurface* pSupport, const OMatrix& matrix, const OSegment3D& seg, const TYAtmosphere& Atmo) const
 {

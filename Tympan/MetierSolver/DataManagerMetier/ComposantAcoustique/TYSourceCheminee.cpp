@@ -352,46 +352,46 @@ void TYSourceCheminee::setAcousticRectangle(LPTYRectangle pAcousticRectangle)
     setIsAcousticModified(true);
 }
 
-OSpectre TYSourceCheminee::lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& atmos, const int& expGeo /*=0*/, const int& regime/*=-1*/) const
-{
-    OSpectre s = OSpectre::getEmptyLinSpectre();
-
-    if (!_pAcousticRectangle)
-    {
-        return s;
-    }
-
-    //    double rayonBouche = _pAcousticRectangle->getBoundingRect()->getCircleEqDiameter() / 2.0; // 1/2 longueur de la diagonale de la bouche
-    double rayonBouche = _pAcousticRectangle->getCircleEqDiameter() / 2.0; // 1/2 longueur de la diagonale de la bouche
-    OSpectre spectre_Ka = atmos.getKAcoust().mult(rayonBouche);
-
-    OVector3D v3D = seg.toVector3D();
-    OVector3D normale = _pAcousticRectangle->normal();
-    double theta = v3D.angle(normale); // Angle du segment par rapport a la normale au support de la source
-
-    // angle compris entre 0 et pi
-    if (theta < -M_PI) { theta = theta + M_2PI; }
-    if (theta >  M_PI) { theta = theta - M_2PI; }
-    theta = ABS(theta); // On prend la valeur absolue de theta
-
-    int indice_theta = (int)(20 * theta / M_PI); // Indice de l'angle theta dans le tableau
-    //  indice_theta = indice_theta > (NB_THETA-2) ? NB_THETA-2 : indice_theta; // Eviter les depassement de tableau
-
-    for (unsigned int i = 0 ; i < s.getNbValues(); i++)
-    {
-        double ka = spectre_Ka.getTabValReel()[i];
-        ka = ka > 3.8 ? 3.8 : ka ;
-        int indice_Ka = (int)(10 * ka);  //-1;
-
-        //      indice_Ka = indice_Ka >= 0 ? indice_Ka : 0;
-
-        //      indice_Ka = indice_Ka > (NB_KA-2) ? NB_KA-2 : indice_Ka; // Eviter les depassement de tableau
-
-        s.getTabValReel()[i] = normeQChem(indice_Ka, indice_theta, ka, theta);
-    }
-
-    return s.racine();
-}
+//OSpectre TYSourceCheminee::lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& atmos, const int& expGeo /*=0*/, const int& regime/*=-1*/) const
+//{
+//    OSpectre s = OSpectre::getEmptyLinSpectre();
+//
+//    if (!_pAcousticRectangle)
+//    {
+//        return s;
+//    }
+//
+//    //    double rayonBouche = _pAcousticRectangle->getBoundingRect()->getCircleEqDiameter() / 2.0; // 1/2 longueur de la diagonale de la bouche
+//    double rayonBouche = _pAcousticRectangle->getCircleEqDiameter() / 2.0; // 1/2 longueur de la diagonale de la bouche
+//    OSpectre spectre_Ka = atmos.getKAcoust().mult(rayonBouche);
+//
+//    OVector3D v3D = seg.toVector3D();
+//    OVector3D normale = _pAcousticRectangle->normal();
+//    double theta = v3D.angle(normale); // Angle du segment par rapport a la normale au support de la source
+//
+//    // angle compris entre 0 et pi
+//    if (theta < -M_PI) { theta = theta + M_2PI; }
+//    if (theta >  M_PI) { theta = theta - M_2PI; }
+//    theta = ABS(theta); // On prend la valeur absolue de theta
+//
+//    int indice_theta = (int)(20 * theta / M_PI); // Indice de l'angle theta dans le tableau
+//    //  indice_theta = indice_theta > (NB_THETA-2) ? NB_THETA-2 : indice_theta; // Eviter les depassement de tableau
+//
+//    for (unsigned int i = 0 ; i < s.getNbValues(); i++)
+//    {
+//        double ka = spectre_Ka.getTabValReel()[i];
+//        ka = ka > 3.8 ? 3.8 : ka ;
+//        int indice_Ka = (int)(10 * ka);  //-1;
+//
+//        //      indice_Ka = indice_Ka >= 0 ? indice_Ka : 0;
+//
+//        //      indice_Ka = indice_Ka > (NB_KA-2) ? NB_KA-2 : indice_Ka; // Eviter les depassement de tableau
+//
+//        s.getTabValReel()[i] = normeQChem(indice_Ka, indice_theta, ka, theta);
+//    }
+//
+//    return s.racine();
+//}
 
 double TYSourceCheminee::normeQChem(const int& indice_Ka, const int& indice_theta, const double& ka, const double& theta) const
 {
