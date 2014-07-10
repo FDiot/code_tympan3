@@ -27,6 +27,9 @@
 
 class TYSolver;
 class TYTrajet;
+class nodes_pool_t;
+class triangle_pool_t;
+class material_pool_t;
 
 /**
  * Tâche d'une collection de thread pour le solveur Tympan
@@ -35,7 +38,7 @@ class TYTask : public OTask
 {
 public:
     // Constructeur
-    TYTask(TYSolver& solver, TYTrajet& trajet, int nNbTrajets);
+    TYTask(TYSolver& solver, const tympan::nodes_pool_t& nodes, const tympan::triangle_pool_t& triangles, const tympan::material_pool_t& materials, TYTrajet& trajet, int nNbTrajets);
 
     // Destructeur
     ~TYTask();
@@ -55,6 +58,10 @@ private:
 
     // Tableau des intersections
     TYSIntersection* _tabIntersect;
+
+    const tympan::nodes_pool_t& _nodes;
+    const tympan::triangle_pool_t& _triangles;
+    const tympan::material_pool_t& _materials;
 };
 
 ///Smart Pointer sur TYTask.

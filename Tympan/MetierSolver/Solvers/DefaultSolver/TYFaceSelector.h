@@ -34,17 +34,17 @@ public:
     TYFaceSelector(TYSolver& solver);
     virtual ~TYFaceSelector();
 
-    virtual void selectFaces(TYSIntersection* tabIntersect, const TYSourcePonctuelleGeoNode* pSrcGeoNode, const OSegment3D& rayon);
+    virtual void selectFaces(TYSIntersection* tabIntersect, const OSegment3D& rayon);
 
 protected :
     // Reference sur le solver
     TYSolver& _solver;
 
 private  :
-    bool testIntersect2D(const TYStructSurfIntersect& SI, TYSIntersection& I, TYSPlan* plan, const OSegment3D& segTest, const double& cosA, const double& sinA, const short& indice, const short& XYZ);
+    //bool testIntersect2D(const TYStructSurfIntersect& SI, TYSIntersection& I, TYSPlan* plan, const OSegment3D& segTest, const double& cosA, const double& sinA, const short& indice, const short& XYZ);
     bool buildPlans(TYSPlan* plan, const OSegment3D& rayon);
     bool CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourante, TYSIntersection& Intersect, OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3, const int& indice) const;
-    TYAcousticSurface* getActiveSurface(const TYAcousticSurfaceGeoNode* pSurfaceGeoNode, const TYSourcePonctuelle* pSrc) const;
+    //TYAcousticSurface* getActiveSurface(const TYAcousticSurfaceGeoNode* pSurfaceGeoNode, const TYSourcePonctuelle* pSrc) const;
 };
 
 #endif // __TYFACESELECTOR__
