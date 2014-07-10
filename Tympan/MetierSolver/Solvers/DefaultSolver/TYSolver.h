@@ -64,7 +64,7 @@ protected:
     TYAcousticModel* _acousticModel;
 
 private:
-    bool buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul);
+    bool buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem);
 
     // XXX This pointer is actually used like a C array :
     // TODO replace with a std::deque or similar container.

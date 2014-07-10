@@ -25,6 +25,8 @@
 
 #include <deque>
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
+
+#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
 #include "Tympan/models/common/3d.h"
 
 struct TYStructSurfIntersect
@@ -34,6 +36,7 @@ struct TYStructSurfIntersect
     TYTabPoint3D tabPoint; // Tableau de point utilise pour la preselection
     bool isEcran;   // Est un ecran
     bool isInfra; // Face d'infrastructure
+    tympan::AcousticMaterialBase* material; 
 };
 
 // Structure de donnees simple pour la gestion des intersections
@@ -42,6 +45,7 @@ struct TYSIntersection
     OSegment3D segInter[2]; // Segment d'intersection face/plan vertical[0] ou horizontal[1]
     bool noIntersect; // Indique qu'une face ne doit pas etre testee pour l'intersection
     bool bIntersect[2]; // Booleen qui indique si la face coupe le plan vertical ([0]) ou horizontal([1])
+    tympan::AcousticMaterialBase* material;
 };
 
 // Structure de donnees simple pour decrire le plan pour conserver les point qui definissent le plan de travail

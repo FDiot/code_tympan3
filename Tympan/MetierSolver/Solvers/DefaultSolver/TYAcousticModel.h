@@ -26,6 +26,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
 #include "TYSolverDefines.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYChemin.h"
+#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
 
 class TYTrajet;
 class TYSolver;
@@ -55,7 +56,7 @@ public:
      * @return <code>true</code> si le calcul a reussi;
      *         <code>false</code> sinon.
      */
-    virtual bool computeCheminsAvecEcran(const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, const TYTabPoint3D& pts, const bool vertical, TYTabChemin& TabChemin, double distance) const;
+    virtual bool computeCheminsAvecEcran(const OSegment3D& rayon, const tympan::AcousticSource& source, const TYTabPoint3D& pts, const bool vertical, TYTabChemin& TabChemin, double distance) const;
 
     /**
      * Calcule la liste des chemins generes par la reflexion sur les parois verticales.
@@ -66,7 +67,7 @@ public:
      * @param tabChemin La liste des chemins generes par la reflexion.
      * @param tabFaces Ensemble des faces du site.
      */
-    void computeCheminReflexion(const TYSIntersection* tabIntersect, const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const;
+    void computeCheminReflexion(const TYSIntersection* tabIntersect, const OSegment3D& rayon, const tympan::AcousticSource& source, TYTabChemin& TabChemins, double distance) const;
 
     /**
      * Calcule les spectres d'attenuation caracteristiques de la vegetation
@@ -88,7 +89,7 @@ public:
      *
      * @return Le chemin determine.
      */
-    void computeCheminAvecVeg(const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, const OSegment3D& penteMoyenne, TYTabChemin& TabChemin, double distance) const;
+    void computeCheminAvecVeg(const OSegment3D& rayon, const tympan::AcousticSource& source, const OSegment3D& penteMoyenne, TYTabChemin& TabChemin, double distance) const;
 
     /**
      * Calcule les chemins avec reflexion au sol s'il n'y a pas d'ecran.
@@ -101,7 +102,7 @@ public:
      * @param tabChemin La liste des chemins generes (1 ou 2 sous conditions favorables).
      * @param penteMoyenne La pente moyenne sur le rayon.
      */
-    void computeCheminSansEcran(const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const;
+    void computeCheminSansEcran(const OSegment3D& rayon, const tympan::AcousticSource& source, TYTabChemin& TabChemins, double distance) const;
 
     /**
      * Calcule les chemin pour un terrain parfaitement plat et reflechissant
@@ -110,7 +111,7 @@ public:
      * @param pSrcGeoNode La source ponctuelle emittrice.
      * @param tabChemin La liste des chemins generes (1 ou 2 sous conditions favorables).
      */
-    void computeCheminAPlat(const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const;
+    void computeCheminAPlat(const OSegment3D& rayon, const tympan::AcousticSource& source, TYTabChemin& TabChemins, double distance) const;
 
 
     /**
@@ -153,7 +154,7 @@ public:
      * @return bool <code>true</code> si le calcul est juste;
      *              <code>false</code> sinon.
      */
-    bool addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFin, const OSegment3D& penteMoyenne, const TYSourcePonctuelleGeoNode* pSrcGeoNode, const bool& fromSource, const bool& toRecepteur, TYTabEtape& Etapes, double& longueur) const;
+    bool addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFin, const OSegment3D& penteMoyenne, const tympan::AcousticSource& source, const bool& fromSource, const bool& toRecepteur, TYTabEtape& Etapes, double& longueur) const;
 
     /**
      * Ajoute le trajet direct a chacun des chemins.
@@ -184,6 +185,9 @@ private:
     double _seuilConfondus;
     double _paramH;
     TYAtmosphere* _pAtmo;
+
+    std::unique_ptr<tympan::AtmosphericConditions> pSolverAtmos;
+
     TYTopographie* _pTopographie;
     OSpectre _lambda;
     OSpectreComplex _absoNulle;
