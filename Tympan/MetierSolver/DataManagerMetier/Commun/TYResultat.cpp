@@ -805,8 +805,6 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
             ofs << "Energétique" << ';';
         }
         ofs << pCalcul->getDistanceSRMin() << ';';
-        ofs << pCalcul->getFreqMinFreq() << ';';
-        ofs << pCalcul->getFreqMaxFreq() << ';';
         ofs << '\n';
         ofs << '\n';
     }
