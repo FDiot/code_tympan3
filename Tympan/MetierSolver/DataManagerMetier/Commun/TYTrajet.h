@@ -28,6 +28,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "TYPointCalcul.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
 
 /**
  * \file TYTrajet.h
@@ -47,7 +48,9 @@ public:
      * \brief Constructeur par defaut.
      * Le constructeur par defaut de la classe TYTrajet
      */
-    TYTrajet(TYSourcePonctuelleGeoNode* pSrc = NULL, TYPointCalculGeoNode* pPtCalcul = NULL);
+//    TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_, TYSourcePonctuelleGeoNode* pSrc = NULL, TYPointCalculGeoNode* pPtCalcul = NULL);
+    TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_, TYPointCalculGeoNode* pPtCalcul = NULL);
+    
     /**
      * \fn TYTrajet(const TYTrajet& other)
      * \brief Constructeur par copie.
@@ -95,7 +98,7 @@ public:
     /**
      * Set/Get de la source ponctuelle associee a cette etape.
      */
-    void setSourcePonctuelle(TYSourcePonctuelleGeoNode* pSrc) { _pSrc = pSrc; }
+//    void setSourcePonctuelle(TYSourcePonctuelleGeoNode* pSrc) { _pSrc = pSrc; }
 
     /**
      * \fn TYPointCalculGeoNode* getPointCalcul()
@@ -191,13 +194,13 @@ public:
      * \fn OSpectre getPEnergetique(const TYAtmosphere& atmos)
      * \brief Calcule la pression acoustique en module phase sur le trajet
      */
-    OSpectre getPEnergetique(const TYAtmosphere& atmos);
+    OSpectre getPEnergetique(const tympan::AtmosphericConditions& atmos);
 
     /**
      * \fn OSpectre getPInterference(const TYAtmosphere& atmos)
      * \brief Calcule la pression quadratique sur le trajet
      */
-    OSpectre getPInterference(const TYAtmosphere& atmos);
+    OSpectre getPInterference(const tympan::AtmosphericConditions& atmos);
 
     /**
      * \fn void addRay(const TYRay* ray)
@@ -212,7 +215,14 @@ public:
     std::vector<TYRay*>& getTabRays() { return _tabRays; }
 
 private:
-    OSpectre correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const TYAtmosphere& atmos, const double& ri, const double& rj) const;
+    OSpectre correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const tympan::AtmosphericConditions& atmos, const double& ri, const double& rj) const;
+
+public :
+    // Business source
+    tympan::AcousticSource& asrc;
+
+    // Business receptor
+    tympan::AcousticReceptor& arcpt;
 
 
     // Membres
