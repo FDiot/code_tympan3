@@ -220,14 +220,3 @@ int TYMateriauConstruction::fromXML(DOM_Element domElement)
 
     return 1;
 }
-
-TYSpectre TYMateriauConstruction::getSpectreAbsoEyring()const
-{
-    TYSpectre Eyring(_spectreAbso);
-
-    // 1-e^(-alphaS)
-    Eyring = Eyring.exp(-1.0).mult(-1.0).sum(1.0);
-
-    return Eyring;
-}
-

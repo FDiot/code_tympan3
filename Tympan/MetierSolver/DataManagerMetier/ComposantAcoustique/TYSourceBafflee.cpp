@@ -225,43 +225,43 @@ int TYSourceBafflee::fromXML(DOM_Element domElement)
     return 1;
 }
 
-OSpectre TYSourceBafflee::lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& atmos, const int& expGeo /*=0*/, const int& regime/*=-1*/) const
-{
-    OSpectre s = OSpectre::getEmptyLinSpectre();
-
-    if (!_pAcousticRectangle)
-    {
-        return s;
-    }
-
-    //    OSpectre spectre_Ka = atmos.getKAcoust().mult(_pAcousticRectangle->getBoundingRect()->getCircleEqDiameter() / 2.0); // 1/2 longueur de la diagonale de la bouche
-    OSpectre spectre_Ka = atmos.getKAcoust().mult(_pAcousticRectangle->getCircleEqDiameter() / 2.0); // 1/2 longueur de la diagonale de la bouche
-
-    OVector3D v3D = seg.toVector3D();
-    OVector3D normale = _pAcousticRectangle->normal();
-    double theta = v3D.angle(normale); // Angle du segment par rapport a la normale a la source
-
-    // Angle compris entre 0 et 2pi;
-    if (theta < 0) { theta = theta + M_2PI; }
-    if (theta > M_2PI) { theta = theta - M_2PI; }
-
-    int indice_theta = (int)(20.0 * theta / M_PI);
-
-    indice_theta = indice_theta > (NB_THETA - 2) ? NB_THETA - 2 : indice_theta; // Eviter les depassement de tableau
-
-    for (unsigned int i = 0 ; i < s.getNbValues(); i++)
-    {
-        double ka = spectre_Ka.getTabValReel()[i];
-        ka = ka > 20.0 ? 20.0 : ka ;
-
-        int indice_Ka = getIndiceKa(ka);
-        indice_Ka = indice_Ka > (NB_KA - 2) ? NB_KA - 2 : indice_Ka; // Eviter les depassement de tableau
-
-        s.getTabValReel()[i] = normeQBaffle(indice_Ka, indice_theta, ka, theta);
-    }
-
-    return s.racine();
-}
+//OSpectre TYSourceBafflee::lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& atmos, const int& expGeo /*=0*/, const int& regime/*=-1*/) const
+//{
+//    OSpectre s = OSpectre::getEmptyLinSpectre();
+//
+//    if (!_pAcousticRectangle)
+//    {
+//        return s;
+//    }
+//
+//    //    OSpectre spectre_Ka = atmos.getKAcoust().mult(_pAcousticRectangle->getBoundingRect()->getCircleEqDiameter() / 2.0); // 1/2 longueur de la diagonale de la bouche
+//    OSpectre spectre_Ka = atmos.getKAcoust().mult(_pAcousticRectangle->getCircleEqDiameter() / 2.0); // 1/2 longueur de la diagonale de la bouche
+//
+//    OVector3D v3D = seg.toVector3D();
+//    OVector3D normale = _pAcousticRectangle->normal();
+//    double theta = v3D.angle(normale); // Angle du segment par rapport a la normale a la source
+//
+//    // Angle compris entre 0 et 2pi;
+//    if (theta < 0) { theta = theta + M_2PI; }
+//    if (theta > M_2PI) { theta = theta - M_2PI; }
+//
+//    int indice_theta = (int)(20.0 * theta / M_PI);
+//
+//    indice_theta = indice_theta > (NB_THETA - 2) ? NB_THETA - 2 : indice_theta; // Eviter les depassement de tableau
+//
+//    for (unsigned int i = 0 ; i < s.getNbValues(); i++)
+//    {
+//        double ka = spectre_Ka.getTabValReel()[i];
+//        ka = ka > 20.0 ? 20.0 : ka ;
+//
+//        int indice_Ka = getIndiceKa(ka);
+//        indice_Ka = indice_Ka > (NB_KA - 2) ? NB_KA - 2 : indice_Ka; // Eviter les depassement de tableau
+//
+//        s.getTabValReel()[i] = normeQBaffle(indice_Ka, indice_theta, ka, theta);
+//    }
+//
+//    return s.racine();
+//}
 
 int TYSourceBafflee::getIndiceKa(const double& ka) const
 {
