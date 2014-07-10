@@ -220,9 +220,11 @@ private:
 public :
     // Business source
     tympan::AcousticSource& asrc;
+    tympan::source_idx asrc_idx;
 
     // Business receptor
     tympan::AcousticReceptor& arcpt;
+    tympan::receptor_idx arcpt_idx;
 
 
     // Membres
