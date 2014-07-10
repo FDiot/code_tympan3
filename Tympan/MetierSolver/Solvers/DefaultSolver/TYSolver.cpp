@@ -169,8 +169,14 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
         return false;
     }
 
-    tympan::SpectrumMatrix matrix = aresult.get_data();
+    tympan::SpectrumMatrix& matrix = aresult.get_data();
     matrix.resize(aproblem.nreceptors(), aproblem.nsources());
+    for (unsigned int i=0; i<tabTrajets.size(); i++)
+    {
+        tympan::source_idx sidx = tabTrajets[i].asrc_idx;
+        tympan::receptor_idx ridx = tabTrajets[i].arcpt_idx;
+        matrix(ridx, sidx) = tabTrajets[i].getSpectre();
+    }
 
     return true;
 }
