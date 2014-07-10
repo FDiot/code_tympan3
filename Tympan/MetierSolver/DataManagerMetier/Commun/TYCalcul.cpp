@@ -1370,50 +1370,67 @@ void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
 
 void TYCalcul::buildValidTrajects(const TYTabSourcePonctuelleGeoNode& sources, TYTabPointCalculGeoNode& recepteurs)
 {
-    unsigned int i;
+    //unsigned int i;
     // Suppression des points trop proches des sources
-    TYTabPointCalculGeoNode::iterator ite;
+    //TYTabPointCalculGeoNode::iterator ite;
 
-    _tabTrajets.reserve(sources.size()*recepteurs.size());
-    double distance = 0.0;
+    _tabTrajets.reserve( _acousticProblem->nsources() * _acousticProblem->nreceptors() );
 
-    TYSourcePonctuelle* pSource = NULL;
-    TYPointCalcul* pRecepteur = NULL;
-
-    for (i = 0 ; i < sources.size(); i++)
+    for(unsigned int i=0; i<_acousticProblem->nsources(); i++)
     {
-        pSource = TYSourcePonctuelle::safeDownCast(sources[i]->getElement());
-
-        // Position de la source dans le repere du site
-        OPoint3D source = sources[i]->getMatrix() * (*(pSource->getPos()));
-
-        for (ite = recepteurs.begin(); ite != recepteurs.end(); ite++)
+        for (unsigned int j = 0; j<_acousticProblem->nreceptors(); j++)
         {
-            pRecepteur = TYPointCalcul::safeDownCast((*ite)->getElement());
-
-            // Position du recepteur dans le repere du site
-            OPoint3D recepteur = (*ite)->getMatrix() * (*pRecepteur);
-            distance = recepteur.distFrom(source);
-
-            if (distance < _distanceSRMin)
-            {
-                // Inactivation du recepteur
-                pRecepteur->setEtat(false, this);
-            }
-            else
-            {
-                // On remplit la liste des trajets
-                tympan::AcousticSource bidonsource(OPoint3D(0., 0., 0.), OSpectre());
-                tympan::AcousticReceptor bidonreceptor(OPoint3D(0., 0., 0.));
-                TYTrajet trajet(bidonsource, bidonreceptor);
-
-                trajet.setPointCalcul((*ite));
-                trajet.setPtSetPtR(source, recepteur);
-                trajet.setDistance(distance);
-                _tabTrajets.push_back(trajet);
-            }
+            double distance = _acousticProblem->source(i).position.distFrom(_acousticProblem->receptor(j).position);
+            TYTrajet trajet(_acousticProblem->source(i), _acousticProblem->receptor(j));
+            trajet.setDistance(distance);
+            trajet.asrc_idx = i;
+            trajet.arcpt_idx = j;
+            _tabTrajets.push_back(trajet);
         }
     }
+
+
+
+
+
+
+    //TYSourcePonctuelle* pSource = NULL;
+    //TYPointCalcul* pRecepteur = NULL;
+
+    //for (i = 0 ; i < sources.size(); i++)
+    //{
+    //    pSource = TYSourcePonctuelle::safeDownCast(sources[i]->getElement());
+
+    //    // Position de la source dans le repere du site
+    //    OPoint3D source = sources[i]->getMatrix() * (*(pSource->getPos()));
+
+    //    for (ite = recepteurs.begin(); ite != recepteurs.end(); ite++)
+    //    {
+    //        pRecepteur = TYPointCalcul::safeDownCast((*ite)->getElement());
+
+    //        // Position du recepteur dans le repere du site
+    //        OPoint3D recepteur = (*ite)->getMatrix() * (*pRecepteur);
+    //        distance = recepteur.distFrom(source);
+
+    //        if (distance < _distanceSRMin)
+    //        {
+    //            // Inactivation du recepteur
+    //            pRecepteur->setEtat(false, this);
+    //        }
+    //        else
+    //        {
+    //            // On remplit la liste des trajets
+    //            tympan::AcousticSource bidonsource(OPoint3D(0., 0., 0.), OSpectre());
+    //            tympan::AcousticReceptor bidonreceptor(OPoint3D(0., 0., 0.));
+    //            TYTrajet trajet(bidonsource, bidonreceptor);
+
+    //            trajet.setPointCalcul((*ite));
+    //            trajet.setPtSetPtR(source, recepteur);
+    //            trajet.setDistance(distance);
+    //            _tabTrajets.push_back(trajet);
+    //        }
+    //    }
+    //}
 }
 
 void TYCalcul::getAllRecepteurs(TYTabPointCalculGeoNode& tabRecepteur)
