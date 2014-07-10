@@ -1375,7 +1375,6 @@ void TYCalcul::buildValidTrajects(const TYTabSourcePonctuelleGeoNode& sources, T
     TYTabPointCalculGeoNode::iterator ite;
 
     _tabTrajets.reserve(sources.size()*recepteurs.size());
-    TYTrajet trajet;
     double distance = 0.0;
 
     TYSourcePonctuelle* pSource = NULL;
@@ -1404,7 +1403,10 @@ void TYCalcul::buildValidTrajects(const TYTabSourcePonctuelleGeoNode& sources, T
             else
             {
                 // On remplit la liste des trajets
-                trajet.setSourcePonctuelle(sources[i]);
+                tympan::AcousticSource bidonsource(OPoint3D(0., 0., 0.), OSpectre());
+                tympan::AcousticReceptor bidonreceptor(OPoint3D(0., 0., 0.));
+                TYTrajet trajet(bidonsource, bidonreceptor);
+
                 trajet.setPointCalcul((*ite));
                 trajet.setPtSetPtR(source, recepteur);
                 trajet.setDistance(distance);
