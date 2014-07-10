@@ -320,6 +320,43 @@ int OPlan::intersectsPlan(const OPlan& plan, OVector3D& vectorIntersec)
     return res;
 }
 
+int OPlan::intersectsSurface(const std::deque<OPoint3D>& contour, OSegment3D& seg) const
+{
+    int res = INTERS_NULLE;
+    bool ptAFind = false, ptBFind = false;
+    OPoint3D ptIntersec;
+
+    // Contour
+    size_t nbPts = contour.size();
+
+    // Pour chaque segment composant le contour
+    for (size_t i = 0; i < nbPts; i++)
+    {
+        if (intersectsSegment(contour[i], contour[(i + 1) % nbPts], ptIntersec) == INTERS_OUI)
+        {
+            if (!ptAFind)
+            {
+                // Un 1er point a ete trouve
+                seg._ptA = ptIntersec;
+                ptAFind = true;
+            }
+            else if (!ptBFind)
+            {
+                // Un 2eme point a ete trouve
+                if (ptIntersec == seg._ptA) { continue ; } // Cas ou le plan passe exactement par un point
+                seg._ptB = ptIntersec;
+                ptBFind = true;
+
+                // Si on a trouve point B c'est qu'on a trouve point A on peut sortir victorieusement
+                res = INTERS_OUI;
+                break;
+            }
+        }
+    }
+
+    return res;
+}
+
 double OPlan::angle(const OPlan& plan)
 {
     double cosAngle = (_a * plan._a + _b * plan._b + _c * plan._c) /
