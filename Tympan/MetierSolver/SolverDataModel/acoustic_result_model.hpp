@@ -42,6 +42,8 @@ public:
 
     void clear() {data.clear(); };
 
+    void resize(size_t nb_receptors, size_t nb_sources);
+
 protected:
     impl_matrix_t data;
 private:
@@ -53,8 +55,8 @@ private:
 class AcousticResultModel
 {
 public:
+    AcousticResultModel() {};
 
-    AcousticResultModel();
     virtual ~AcousticResultModel();
 
     SpectrumMatrix& get_data() { return acoustic_data; }

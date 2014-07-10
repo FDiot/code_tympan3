@@ -37,7 +37,7 @@ public:
 
     double compute_z(); //!< compute impedance
 
-    Spectrum compute_length_absorption(double length);
+    Spectrum compute_length_absorption(double length) const;
 
     /*!
      * Get / Set
@@ -75,6 +75,7 @@ class AcousticMaterialBase:
 {
 public:
     AcousticMaterialBase(const string& name_);
+    virtual ComplexSpectrum get_absorption (const double& incidence_angle, double length) { return ComplexSpectrum(); }
     string name;
 
 }; // class AcousticMaterialBase
@@ -97,6 +98,9 @@ public:
      * \fn ComplexSpectrum get_absorption (const double& incidence_angle)
      */    
     virtual ComplexSpectrum get_absorption (const double& incidence_angle, double length) { return spectrum; }
+
+    ComplexSpectrum asEyring() const;
+
 
     ComplexSpectrum spectrum;
 };
