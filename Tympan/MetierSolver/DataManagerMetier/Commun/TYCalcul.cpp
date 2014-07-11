@@ -1325,24 +1325,6 @@ void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
     tabVolNodeGeoNode.clear();
 }
 
-void TYCalcul::buildValidTrajects(const TYTabSourcePonctuelleGeoNode& sources, TYTabPointCalculGeoNode& recepteurs)
-{
-    _tabTrajets.reserve( _acousticProblem->nsources() * _acousticProblem->nreceptors() );
-
-    for(unsigned int i=0; i<_acousticProblem->nsources(); i++)
-    {
-        for (unsigned int j = 0; j<_acousticProblem->nreceptors(); j++)
-        {
-            double distance = _acousticProblem->source(i).position.distFrom(_acousticProblem->receptor(j).position);
-            TYTrajet trajet(_acousticProblem->source(i), _acousticProblem->receptor(j));
-            trajet.setDistance(distance);
-            trajet.asrc_idx = i;
-            trajet.arcpt_idx = j;
-            _tabTrajets.push_back(trajet);
-        }
-    }
-}
-
 void TYCalcul::getAllRecepteurs(TYTabPointCalculGeoNode& tabRecepteur)
 {
     unsigned int i, j;
@@ -1508,11 +1490,8 @@ bool TYCalcul::go()
     selectActivePoint(pSite);
 
     OMessageManager::get()->info("Creation des recepteurs");
-    TYTabPointCalculGeoNode recepteurs;
+    TYTabPointCalculGeoNode recepteurs; 
     getAllRecepteurs(recepteurs);
-
-    OMessageManager::get()->info("Selection des trajets actifs");
-    buildValidTrajects(sources, recepteurs);
 
     // XXX Instantiate and call the SolverDataModelBuilder here ...
     if (isCalculPossible(static_cast<int>(sources.size()), static_cast<int>(recepteurs.size()), pSite))

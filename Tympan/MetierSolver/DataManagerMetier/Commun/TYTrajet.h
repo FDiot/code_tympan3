@@ -176,18 +176,6 @@ public:
      */
     OSpectre getPInterference(const tympan::AtmosphericConditions& atmos);
 
-    /**
-     * \fn void addRay(const TYRay* ray)
-     * \brief add a TYRay to the vector of TYRay _tabRays
-     */
-    void addRay(const TYRay* ray) { _tabRays.push_back(const_cast<TYRay*>(ray)); }
-
-    /**
-     * \fn std::vector<TYRay*>& getTabRays()
-     * \brief Getter to the vector of rays : tabRays
-     */
-    std::vector<TYRay*>& getTabRays() { return _tabRays; }
-
 private:
     OSpectre correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const tympan::AtmosphericConditions& atmos, const double& ri, const double& rj) const;
 
@@ -209,10 +197,7 @@ protected:
     /// Definition du point recepteur dans le repere du site
     OPoint3D _ptR;
 
-    /// Liste des chemins (TYRay) reliants la source et le récepteur
-    std::vector<TYRay*> _tabRays;
-
-    ///La collection de Chemins.
+    ///La collection de Chemins. 
     TYTabChemin _chemins;
 
     ///Collection des chemins "direct" sans obstacles
