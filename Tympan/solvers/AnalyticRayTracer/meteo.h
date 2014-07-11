@@ -22,7 +22,7 @@
 #define __METEO_H
 
 #include <map>
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 
 /*! \class meteo
 * \brief classe representant les donnees meteo relatives au calcul.

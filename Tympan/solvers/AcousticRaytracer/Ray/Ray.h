@@ -19,7 +19,7 @@
 #include <QSharedPointer>
 
 #include "Tympan/solvers/AcousticRaytracer/Base.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Source.h"
 //#include "Tympan/solvers/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Event.h"

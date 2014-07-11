@@ -21,7 +21,7 @@
 #ifndef __LANCER_H
 #define __LANCER_H
 
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include "Step.h"
 
 

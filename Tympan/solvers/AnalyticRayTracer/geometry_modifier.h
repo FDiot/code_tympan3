@@ -18,11 +18,10 @@
 
 #include <qlist.h>
 
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
-#include "Tympan/models/business/TYRay.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/triangle.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
+#include "Tympan/models/common/acoustic_path.h"
 
 class Lancer;
 

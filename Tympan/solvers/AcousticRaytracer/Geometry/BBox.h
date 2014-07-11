@@ -22,7 +22,7 @@
  * \brief Definition d'une boîte englobante alignee sur les axes (BBox AABB) ainsi que quelques operations usuelles.
  */
 
-#include "mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 //#include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
 #include <iostream>
 using namespace std;

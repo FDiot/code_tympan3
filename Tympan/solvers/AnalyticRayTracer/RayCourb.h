@@ -18,8 +18,8 @@
 
 #include <vector>
 #include <map>
+#include "Tympan/models/common/mathlib.h"
 #include "Step.h"
-#include "../AcousticRaytracer/Geometry/mathlib.h"
 
 using namespace std;
 

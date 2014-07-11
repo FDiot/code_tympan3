@@ -21,7 +21,7 @@
 #ifndef __STEP_H
 #define __STEP_H
 
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
 
 /*!

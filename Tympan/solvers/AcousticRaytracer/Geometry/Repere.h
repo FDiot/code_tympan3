@@ -16,7 +16,7 @@
 #ifndef REPERE_H
 #define REPERE_H
 
-#include "mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Base.h"
 
 //#ifdef USE_QT
