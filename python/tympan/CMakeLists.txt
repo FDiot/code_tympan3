@@ -28,8 +28,8 @@ set_source_files_properties(${CYTHON_SOURCES}
 
 cython_add_module(business2solver business2solver.pyx)
 configure_cython_module(business2solver ${CYTHON_LIB_CURR_DIR})
-target_link_libraries(business2solver tympan_dm_metier tympan_dm_ihm
-    tympan_dm_graphics)
+target_link_libraries(business2solver tympan_models_business tympan_gui_widgets
+    tympan_gui_gl)
 install_cython_module(business2solver ${CYTHON_LIB_CURR_DIR})
 
 add_subdirectory( models )

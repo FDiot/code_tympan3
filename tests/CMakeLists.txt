@@ -16,9 +16,9 @@ include_directories(.)
 
 # XXX It should be possible to make this much lighter
 set (TYMPAN_MODULES
-   tympan_solver_data_model
-  tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
-  tympan_tools_metier tympan_tools_graphics tympan_tools)
+   tympan_models_solver
+  tympan_models_business tympan_gui_gl tympan_gui_widgets  tympan_models_common
+  tympan_models_common tympan_gui tympan_models_common)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})

@@ -16,11 +16,11 @@ install_cython_module(common ${CYTHON_LIB_CURR_DIR})
 
 cython_add_module(business business.pyx)
 configure_cython_module(business ${CYTHON_LIB_CURR_DIR})
-target_link_libraries(business tympan_dm_metier tympan_dm_core tympan_dm_ihm
-                      tympan_dm_graphics)
+target_link_libraries(business tympan_models_business tympan_models_common tympan_gui_widgets
+                      tympan_gui_gl)
 install_cython_module(business ${CYTHON_LIB_CURR_DIR})
 
 cython_add_module(solver solver.pyx)
 configure_cython_module(solver ${CYTHON_LIB_CURR_DIR})
-target_link_libraries(solver tympan_solver_data_model)
+target_link_libraries(solver tympan_models_solver)
 install_cython_module(solver ${CYTHON_LIB_CURR_DIR})

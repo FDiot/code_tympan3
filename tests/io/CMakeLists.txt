@@ -8,11 +8,11 @@ add_definitions (-DTY_USE_DXF -DDIME_NOT_DLL)
 file (GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp )
 
 # Needed for DXF files import.
-set (DXF_DEPEND_FILES ${PROJECT_SOURCE_DIR}/Tympan/Appli/TympanApp/TYDXFBDTOPOImporter.cpp
-  ${PROJECT_SOURCE_DIR}/Tympan/Appli/TympanApp/TYDXFImporter.cpp)
+set (DXF_DEPEND_FILES ${PROJECT_SOURCE_DIR}/Tympan/gui/app/TYDXFBDTOPOImporter.cpp
+  ${PROJECT_SOURCE_DIR}/Tympan/gui/app/TYDXFImporter.cpp)
 
-set (TYMPAN_MODULES tympan_dm_metier tympan_dm_graphics tympan_dm_ihm
-     tympan_dm_core tympan_tools_metier tympan_tools_graphics tympan_tools)
+set (TYMPAN_MODULES tympan_models_business tympan_gui_gl tympan_gui_widgets
+     tympan_models_common tympan_models_common tympan_gui tympan_models_common)
 
 # Main loop for all CPP test files.
 foreach (testfile ${TESTS_SRC})

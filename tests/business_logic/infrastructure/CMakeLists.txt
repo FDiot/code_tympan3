@@ -1,8 +1,8 @@
 # Find all CPP test files.
 file (GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp )
 
-set (TYMPAN_MODULES tympan_dm_metier tympan_dm_graphics tympan_dm_ihm
-     tympan_dm_core tympan_tools_metier tympan_tools_graphics tympan_tools)
+set (TYMPAN_MODULES tympan_models_business tympan_gui_gl tympan_gui_widgets
+     tympan_models_common tympan_models_common tympan_gui tympan_models_common)
 
 # The Xml / IO related test could be moved to IO section
 # Thus enabling to get rid of this dependancy to QtXml here
