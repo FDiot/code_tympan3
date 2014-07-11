@@ -156,7 +156,6 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
         _pool->push(new TYTask(*this, aproblem.nodes(), aproblem.triangles(), aproblem.materials(), _tabTrajets[i], i + 1));
     }
 
-
     if (!_pool->end())
     {
         return false;
@@ -171,6 +170,14 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
         matrix(ridx, sidx) = _tabTrajets[i].getSpectre();
     }
 
+
+//  --- BEGIN ---
+//	Code below is only for compatibility reasons and must be suppressed when result matrix will be implemented correctly in TYResultat
+ 
+	calcul.getTabTrajet().clear();
+	calcul.getTabTrajet() = _tabTrajets;
+
+//  ---  END  ---
     return true;
 }
 
