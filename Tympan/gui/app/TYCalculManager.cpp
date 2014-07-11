@@ -37,7 +37,7 @@
 #include "Tympan/models/business/xml_project_util.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/core/defines.h"
-#include "EnvironmentUtils.hpp"
+#include "EnvironmentUtils.h"
 
 #include <qcursor.h>
 #include <qmessagebox.h>
