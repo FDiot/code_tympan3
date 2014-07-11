@@ -123,8 +123,8 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
     const unsigned int nbThread = calcul.getNbTHread();
     _pool = new OThreadPool(nbThread);
 
-    // On recupere les trajets
-    std::vector<TYTrajet>& tabTrajets = calcul.getTabTrajet();
+    // build trajects and return count of
+    size_t count = buildTrajects( const_cast<tympan::AcousticProblemModel&>(aproblem) );
 
     // Creation du face selector
     if (!_faceSelector) { createFaceSelector(); }
@@ -147,16 +147,13 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
     // Initialisation du acoustic model
     _acousticModel->init(site, calcul);
 
-    // Nombre total de calcul
-    unsigned int count = static_cast<uint32>(tabTrajets.size());
-
     // On reset la thread pool
     _pool->begin(count);
 
     // Lancement des calculs
     for (unsigned int i = 0; i < count; ++i)
     {
-        _pool->push(new TYTask(*this, aproblem.nodes(), aproblem.triangles(), aproblem.materials(), tabTrajets[i], i + 1));
+        _pool->push(new TYTask(*this, aproblem.nodes(), aproblem.triangles(), aproblem.materials(), _tabTrajets[i], i + 1));
     }
 
 
@@ -167,11 +164,11 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
 
     tympan::SpectrumMatrix& matrix = aresult.get_data();
     matrix.resize(aproblem.nreceptors(), aproblem.nsources());
-    for (unsigned int i=0; i<tabTrajets.size(); i++)
+    for (unsigned int i=0; i<_tabTrajets.size(); i++)
     {
-        tympan::source_idx sidx = tabTrajets[i].asrc_idx;
-        tympan::receptor_idx ridx = tabTrajets[i].arcpt_idx;
-        matrix(ridx, sidx) = tabTrajets[i].getSpectre();
+        tympan::source_idx sidx = _tabTrajets[i].asrc_idx;
+        tympan::receptor_idx ridx = _tabTrajets[i].arcpt_idx;
+        matrix(ridx, sidx) = _tabTrajets[i].getSpectre();
     }
 
     return true;
@@ -214,4 +211,24 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul, const t
     }
 
     return true;
+}
+
+size_t TYSolver::buildTrajects(tympan::AcousticProblemModel& aproblem)
+{
+    _tabTrajets.reserve( aproblem.nsources() * aproblem.nreceptors() );
+
+    for(unsigned int i=0; i< aproblem.nsources(); i++)
+    {
+        for (unsigned int j = 0; j<aproblem.nreceptors(); j++)
+        {
+            double distance = aproblem.source(i).position.distFrom(aproblem.receptor(j).position);
+            TYTrajet trajet(aproblem.source(i), aproblem.receptor(j));
+            trajet.setDistance(distance);
+            trajet.asrc_idx = i;
+            trajet.arcpt_idx = j;
+            _tabTrajets.push_back(trajet);
+        }
+    }
+
+	return _tabTrajets.size();
 }
