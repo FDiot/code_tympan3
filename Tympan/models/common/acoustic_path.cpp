@@ -13,6 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <vector>
+#include <cassert>
 #include "Tympan/models/common/3d.h"
 #include "acoustic_path.h"
 
@@ -168,7 +170,7 @@ double acoustic_path::getLength()
 
 std::vector<int> acoustic_path::getIndexOfEvents(const int& eventType) const
 {
-    vector<int> eventsIndexList;
+    std::vector<int> eventsIndexList;
     for (size_t i = 0; i < _events.size(); i++)
     {
         if (_events[i]->type & eventType)
@@ -188,7 +190,7 @@ void acoustic_path::copyEvents(const acoustic_path* tyRay, ACOUSTIC_EVENT_TYPES 
 
     const tab_acoustic_events& tabEvents = tyRay->getEvents();
 
-    vector<int> tabIndexEvents = tyRay->getIndexOfEvents(eventType);
+    std::vector<int> tabIndexEvents = tyRay->getIndexOfEvents(eventType);
 
     for (unsigned int i = 0; i < tabIndexEvents.size(); i++)
     {
@@ -198,7 +200,7 @@ void acoustic_path::copyEvents(const acoustic_path* tyRay, ACOUSTIC_EVENT_TYPES 
 
 void acoustic_path::setNextDistance(ACOUSTIC_EVENT_TYPES eventType)
 {
-    vector<int> idxList = getIndexOfEvents(eventType);
+    std::vector<int> idxList = getIndexOfEvents(eventType);
 
     unsigned int j = 0;
     double length = 0.;
