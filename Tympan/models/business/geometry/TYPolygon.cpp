@@ -34,7 +34,7 @@
 #include "TYPolygon.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
-#include "Tympan/models/business/cgal_bridge.hpp"
+#include "Tympan/models/business/cgal_bridge.h"
 
 #include "TYGeometryNode.h"
 

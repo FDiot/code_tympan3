@@ -6,14 +6,14 @@
  * @author Anthony Truchet <anthony.truchet@logilab.fr>
  */
 
-#include "cgal_bridge.hpp"
+#include "cgal_bridge.h"
 
 #include <boost/foreach.hpp>
 
 #include "Tympan/models/business/cgal_tools.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
-#include "Tympan/models/business/AltimetryBuilder.hpp"
-#include "Tympan/models/business/exceptions.hpp"
+#include "Tympan/models/business/AltimetryBuilder.h"
+#include "Tympan/models/business/exceptions.h"
 
 namespace tympan
 {

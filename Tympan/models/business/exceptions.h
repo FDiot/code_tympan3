@@ -1,5 +1,5 @@
 /**
- * \file exceptions.hpp
+ * \file exceptions.h
  *
  * \brief Define some exception related utilities relying on DataManagerMetier classes
  */

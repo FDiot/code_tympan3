@@ -24,7 +24,7 @@
 #include "Tympan/models/business/topography/TYAltimetrie.h"
 #include "Tympan/models/business/material/TYSol.h"
 
-#include "Tympan/models/business/cgal_bridge.hpp"
+#include "Tympan/models/business/cgal_bridge.h"
 
 ///Structure contenant un segment et un terrain.
 typedef struct

@@ -1,5 +1,5 @@
 /**
- * @file cgal_bridge.hpp
+ * @file cgal_bridge.h
  *
  * @brief Bridges TY* types with CGAL functionalities exposed by @f cgal_tools.hpp
  *

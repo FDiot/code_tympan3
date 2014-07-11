@@ -1,5 +1,5 @@
 /**
- * @file AltimetryBuilder.hpp
+ * @file AltimetryBuilder.h
  *
  * @brief The \c AltimetryBuilder is responsible to build a altimetry compatilbe
  *        with the groud material.
@@ -47,7 +47,7 @@ class AltimetryBuilder;
 #include "Tympan/models/business/topography/TYCourbeNiveau.h"
 #include "Tympan/models/business/topography/TYTerrain.h"
 #include "Tympan/models/business/topography/TYAltimetrie.h"
-#include "Tympan/models/business/cgal_bridge.hpp"
+#include "Tympan/models/business/cgal_bridge.h"
 
 #undef max // XXX
 
