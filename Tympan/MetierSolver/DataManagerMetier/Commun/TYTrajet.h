@@ -48,8 +48,7 @@ public:
      * \brief Constructeur par defaut.
      * Le constructeur par defaut de la classe TYTrajet
      */
-//    TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_, TYSourcePonctuelleGeoNode* pSrc = NULL, TYPointCalculGeoNode* pPtCalcul = NULL);
-    TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_, TYPointCalculGeoNode* pPtCalcul = NULL);
+    TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_);
     
     /**
      * \fn TYTrajet(const TYTrajet& other)
@@ -87,31 +86,6 @@ public:
     const double getDistance() const { return _distance; }
 
     void setDistance(const double& distance) { _distance = distance; }
-
-    /**
-     * \fn TYSourcePonctuelleGeoNode* getSourcePonctuelle()
-     *     void setSourcePonctuelle(TYSourcePonctuelleGeoNode* pSrc)
-     * \brief Set/Get de la source ponctuelle associee a cette etape.
-     * \return _pSrc
-     */
-    TYSourcePonctuelleGeoNode* getSourcePonctuelle() const { return _pSrc; }
-    /**
-     * Set/Get de la source ponctuelle associee a cette etape.
-     */
-//    void setSourcePonctuelle(TYSourcePonctuelleGeoNode* pSrc) { _pSrc = pSrc; }
-
-    /**
-     * \fn TYPointCalculGeoNode* getPointCalcul()
-     *     void setPointCalcul(TYPointCalculGeoNode* pPtCalcul)
-     * \brief Set/Get du point de calcul associe a cette etape.
-     * \return _pPtCalcul
-     */
-    TYPointCalculGeoNode* getPointCalcul() const { return _pPtCalcul; }
-
-    /**
-     * Set/Get du point de calcul associe a cette etape.
-     */
-    void setPointCalcul(TYPointCalculGeoNode* pPtCalcul) { _pPtCalcul = pPtCalcul; }
 
     /**
      * \fn size_t getNbChemins()
@@ -229,12 +203,6 @@ public :
 
     // Membres
 protected:
-    ///La source ponctuelle.
-    TYSourcePonctuelleGeoNode* _pSrc;
-
-    ///Le point de calcul (recepteur).
-    TYPointCalculGeoNode* _pPtCalcul;
-
     /// Definition du point source dans le repere du site
     OPoint3D _ptS;
 

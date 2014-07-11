@@ -25,10 +25,9 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 
-TYTrajet::TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_, TYPointCalculGeoNode* pPtCalcul) :
+TYTrajet::TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_) :
     asrc(asrc_),
     arcpt(arcpt_),
-    _pPtCalcul(pPtCalcul),
     _distance(0.0)
 {
 }
@@ -42,7 +41,6 @@ TYTrajet::TYTrajet(const TYTrajet& other) : asrc(other.asrc), arcpt(other.arcpt)
 TYTrajet::~TYTrajet()
 {
     reset();
-    _pPtCalcul = NULL;
 }
 
 void TYTrajet::reset()
@@ -64,7 +62,6 @@ TYTrajet& TYTrajet::operator=(const TYTrajet& other)
 {
     if (this != &other)
     {
-        _pPtCalcul = other._pPtCalcul;
         _chemins = other._chemins;
         _ptS = other._ptS;
         _ptR = other._ptR;
@@ -80,7 +77,6 @@ bool TYTrajet::operator==(const TYTrajet& other) const
 {
     if (this != &other)
     {
-        if (_pPtCalcul != other._pPtCalcul) { return false; }
         if (_chemins != other._chemins) { return false; }
         if (_ptS != other._ptS) { return false; }
         if (_ptR != other._ptR) { return false; }

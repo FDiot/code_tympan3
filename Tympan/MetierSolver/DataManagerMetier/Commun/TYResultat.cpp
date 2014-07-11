@@ -403,12 +403,12 @@ bool TYResultat::setSpectre(TYPointCalcul* pRecepteur, TYSourcePonctuelle* pSour
 
 bool TYResultat::setSpectre(const TYTrajet& trajet)
 {
-    TYSourcePonctuelle* pSrc = TYSourcePonctuelle::safeDownCast(trajet.getSourcePonctuelle()->getElement());
-    TYPointCalcul* pPoint = TYPointCalcul::safeDownCast(trajet.getPointCalcul()->getElement());
+	tympan::source_idx src_idx = trajet.asrc_idx;
+	tympan::receptor_idx rcpt_idx = trajet.arcpt_idx;;
 
-    TYSpectre spectre = trajet.getSpectre();
+    OSpectre spectre = trajet.getSpectre();
 
-    return setSpectre(pPoint, pSrc, spectre);
+    return setSpectre(rcpt_idx, src_idx, spectre);
 }
 
 bool TYResultat::setSpectre(int indexRecepteur, int indexSource, OSpectre& Spectre)
