@@ -13,11 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
 #include "TYAcousticModel.h"
 #include "TYAcousticPathFinder.h"
 #include "TYFaceSelector.h"
@@ -51,13 +46,6 @@ void TYTask::main()
     TYTabPoint3D ptsTop;
     TYTabPoint3D ptsLeft;
     TYTabPoint3D ptsRight;
-
-    // Recupere un pointeur sur le noeud geometrique de la source ponctuelle
-    //TYSourcePonctuelleGeoNode* pSrcGeoNode = _trajet.getSourcePonctuelle();
-
-    //// Recupere les pointeur sur la source ponctuelle et le point de calcul
-    //TYSourcePonctuelle* pSrc = NULL;
-    //if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
 
     TYPointCalcul* pPointCalc = dynamic_cast<TYPointCalcul*>(_trajet.getPointCalcul()->getElement());
     if (!(pPointCalc)) { return; }
