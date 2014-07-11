@@ -56,7 +56,7 @@ Three logs are available:
 Is the environment correctly configured ?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 The following environment variables are needed by Code_TYMPAN, and some of them
-are directly set in the code (see ``Tympan/Appli/TympanApp/EnvironmentUtils.h``):
+are directly set in the code (see ``Tympan/gui/app/EnvironmentUtils.h``):
 
 * ``PYTHONPATH``: should contain the directory of cython library ``pytam.so``/
   ``pytam.pyd`` (i.e. ``cython`` in release mode, ``cython_d`` in debug mode).

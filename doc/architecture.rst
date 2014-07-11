@@ -39,7 +39,7 @@ The schema of the current architecture:
 .. note::
 
    The main Code_TYMPAN executable to launch the application is in the
-   ``Appli/TympanApp`` directory. Other directories are dedicated to build
+   ``gui/app`` directory. Other directories are dedicated to build
    libraries or plugins (for the solvers).
 
 
@@ -112,14 +112,14 @@ ran before any call to the methods specified by ``OPrototype`` interface.
 For now, the splitting between the business logic objects and the `Graphical User
 Interface`_ is not clear. In other words, you can have a strong dependency
 between ``MetierSolver/DataManagerMetier`` and graphical widgets described in
-``GraphicIHM/DataManagerIHM``. One of the objectives described in the section
+``gui/widgets``. One of the objectives described in the section
 `Future Architecture`_ is to split these parts.
 
 
 Graphical User Interface
 ------------------------
 
-See in ``GraphicIHM`` and its three sub-directories:
+See in ``gui`` and its three sub-directories:
 
  - ``ToolsGraphic`` common tools and objects used for the GUI ;
  - ``DataManagerIHM`` widgets such as buttons, boxes and some widgets dedicated
@@ -135,12 +135,12 @@ The OpenGL API is used to render the scene geometry. The application uses immedi
 display lists, these methods are from an old specification of OpenGL and are now deprecated.
 When immediate mode is used, the server (GPU) wait for the client (CPU) to send the geometry.
 This method is slow because the GPU has to wait for all the data to be transferred.
-The rendering function of each business logic object is located in ``GraphicIHM/DataManagerGraphic``
-and simple geometry rendering can be found at ``GraphicIHM/ToolsGraphic``.
+The rendering function of each business logic object is located in ``gui/gl``
+and simple geometry rendering can be found at ``gui/tools``.
 
 In order to make the rendering faster, the OpenGL commands can be compiled and stored on the GPU.
 That way, the CPU simply has to tell the GPU to render this display list instead of sending the
-geometry on each frame. The use of displayList can be found at ``Appli/TympanApp/TYOpenGLRenderer.cpp``.
+geometry on each frame. The use of displayList can be found at ``gui/app/TYOpenGLRenderer.cpp``.
 It simply encapsulates all the rendering function (immediate mode) of the scene.
 
 The modern way to render things in OpenGL relies on the use of VBO's (Vertex Buffer Object). The idea is
@@ -168,7 +168,7 @@ This method relies on OpenGL deprecated functions and the steps are as follows:
  #. The objects are then rendered. If a primitive falls inside the "*picking window*", a "*hit*" occurs.
  #. For each "*hit*", the primitive with the smallest z-value (the closest one) is chosen.
 
-The algorithm is located in the ``Appli/TympanApp/TYElementPicker.cpp`` file.
+The algorithm is located in the ``gui/app/TYElementPicker.cpp`` file.
 
 .. note::
 
