@@ -563,12 +563,6 @@ public:
     void selectActivePoint(const LPTYSiteNode pSite);
 
     /**
-     * \fn void buildValidTrajects(const TYTabSourcePonctuelleGeoNode& sources, TYTabPointCalculGeoNode& recepteurs)
-     * \brief construit le tableau des trajets et la matrice resultat en supprimant les points trop proches d'une source
-     */
-    void buildValidTrajects(const TYTabSourcePonctuelleGeoNode& sources, TYTabPointCalculGeoNode& recepteurs);
-
-    /**
      * \fn void getAllRecepteurs(TYTabPointCalculGeoNode& tabRecepteur)
      * \brief Construit la liste des recepteurs
      */
@@ -665,7 +659,7 @@ public:
 
     /**
      * \fn void setModifiable(bool modify)
-     * \brief Set attribut modifiable
+     * \brief Set attribut modifiable 
      */
     void setState(int state);
 

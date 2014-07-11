@@ -13,12 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
-
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
@@ -47,14 +41,6 @@ void TYTrajet::reset()
 {
     _chemins.clear();
     _cheminsDirect.clear();
-
-    for (unsigned int i = 0; i < _tabRays.size(); i++)
-    {
-        if (_tabRays[i]) { delete _tabRays[i]; }
-        _tabRays[i] = NULL;
-    }
-
-    _tabRays.clear();
 }
 
 
@@ -316,7 +302,7 @@ OSpectre TYTrajet::getPInterference(const tympan::AtmosphericConditions& atmos)
 
             }
 
-            attDirect = sCarreModuleDirect.sum(sProduitCroiseDirect); //.abs() ;
+            attDirect = sCarreModuleDirect.sum(sProduitCroiseDirect); //.abs();
         }
 
         // On remplace la contribution du trajet direct pour toutes les frequences ou cela est necessaire
