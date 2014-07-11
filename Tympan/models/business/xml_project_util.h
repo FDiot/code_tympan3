@@ -1,5 +1,5 @@
 /**
- * @file xml_project_util.hpp
+ * @file xml_project_util.h
  *
  * @brief Utilities to load a project and a solver.
  *

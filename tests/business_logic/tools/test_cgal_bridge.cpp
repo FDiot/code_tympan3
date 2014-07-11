@@ -21,8 +21,8 @@ using std::deque;
 #include "Tympan/models/common/plan.h"
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
-#include "Tympan/models/business/cgal_bridge.hpp"
-#include "Tympan/models/business/exceptions.hpp"
+#include "Tympan/models/business/cgal_bridge.h"
+#include "Tympan/models/business/exceptions.h"
 
 using tympan::ITYPolygonTriangulator;
 

@@ -6,7 +6,7 @@
  */
 
 
-#include "xml_project_util.hpp"
+#include "xml_project_util.h"
 
 #include <boost/foreach.hpp>
 

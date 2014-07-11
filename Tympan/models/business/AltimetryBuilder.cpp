@@ -18,7 +18,7 @@
 #include <boost/math/special_functions/fpclassify.hpp>
 
 #include "Tympan/core/logging.h"
-#include "Tympan/models/business/AltimetryBuilder.hpp"
+#include "Tympan/models/business/AltimetryBuilder.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
 

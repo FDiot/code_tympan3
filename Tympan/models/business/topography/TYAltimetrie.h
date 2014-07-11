@@ -22,7 +22,7 @@
 
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
-#include "Tympan/models/business/exceptions.hpp"
+#include "Tympan/models/business/exceptions.h"
 #include "Tympan/models/common/delaunay_maker.h"
 #include "Tympan/models/common/3d.h"
 

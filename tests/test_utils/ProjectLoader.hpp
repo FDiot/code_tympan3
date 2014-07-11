@@ -13,9 +13,9 @@
 
 #include "gtest/gtest.h"
 
+#include "Tympan/models/business/xml_project_util.h"
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
-#include "Tympan/models/business/xml_project_util.hpp"
 
 
 /* This Fixture loads a project from an XML project file */
