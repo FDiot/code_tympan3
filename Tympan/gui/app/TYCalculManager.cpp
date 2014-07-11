@@ -35,7 +35,7 @@
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/core/chrono.h"
 #include "Tympan/models/business/xml_project_util.h"
-#include "Tympan/Appli/TympanApp/TYApplication.h"
+#include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/core/defines.h"
 #include "EnvironmentUtils.hpp"
 
