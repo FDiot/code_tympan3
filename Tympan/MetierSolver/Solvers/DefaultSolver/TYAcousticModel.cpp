@@ -487,7 +487,6 @@ void TYAcousticModel::computeCheminAvecVeg(const OSegment3D& rayon, const tympan
 
     TYChemin chemin;
 
-    //  const int expGeo = _pCalcul->getExpansGeo();
     TYTabStructSegLPSp tabSegSp;
     //
     TYTabEtape tabEtapes;
@@ -1332,14 +1331,12 @@ bool TYAcousticModel::solve(TYTrajet& trajet)
 
     rD2 = rD2 * rD2 ;
 
-//    double divGeom = _pAtmo->getImpedanceSpecifique() / (PIM4 * rD2);
     double divGeom = pSolverAtmos->Z_ref / (PIM4 * rD2);
 
     OSpectre& SLp = trajet.getSpectre();
 
     // W.rho.c / (4pi*rdi¿½)
 
-    //SLp = (*pSrc->getSpectre()).mult(divGeom);
     SLp = trajet.asrc.spectrum.mult(divGeom);
 
     //  (W.rho.c/4.pi.Rdi¿½)*Attenuations du trajet
