@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPaletteWidget.h"
+#include "Tympan/gui/widgets/TYPaletteWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPaletteGraphic.h"
 #endif
 

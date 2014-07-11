@@ -34,8 +34,8 @@
 
 #define TR(id) OLocalizator::getString("TYSegmentWidget", (id))
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSegmentWidget.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYSegmentWidget.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geometry/TYSegment.h"
 

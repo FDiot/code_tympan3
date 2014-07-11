@@ -39,7 +39,7 @@
 #define TR(id) OLocalizator::getString("TYCourbeNiveauWidget", (id))
 
 #include "Tympan/models/business/topography/TYCourbeNiveau.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
 
 
 TYCourbeNiveauWidget::TYCourbeNiveauWidget(TYCourbeNiveau* pElement, QWidget* _pParent /*=NULL*/):

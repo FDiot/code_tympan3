@@ -64,7 +64,7 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 
 #include "Tympan/models/business/acoustique/TYSpectre.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSpectreWidget.h"
+#include "Tympan/gui/widgets/TYSpectreWidget.h"
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"

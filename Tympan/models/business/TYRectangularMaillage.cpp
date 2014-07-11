@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRectangularMaillageWidget.h"
+#include "Tympan/gui/widgets/TYRectangularMaillageWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangularMaillageGraphic.h"
 #endif
 

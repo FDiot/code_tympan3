@@ -27,7 +27,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYWidget.h"
+#include "Tympan/gui/widgets/TYWidget.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 

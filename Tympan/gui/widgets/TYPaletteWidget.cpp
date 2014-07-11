@@ -38,7 +38,7 @@
 #include "Tympan/core/color.h"
 #include "TYLookupTableWidget.h"
 #include "Tympan/models/business/TYPalette.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYLookupTableWidget.h"
+#include "Tympan/gui/widgets/TYLookupTableWidget.h"
 
 
 #include <qcolordialog.h>

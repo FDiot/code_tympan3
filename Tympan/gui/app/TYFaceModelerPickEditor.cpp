@@ -29,7 +29,7 @@
 
 #include "Tympan/models/business/infrastructure/TYBatiment.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickHandler.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYWidget.h"
+#include "Tympan/gui/widgets/TYWidget.h"
 
 #include "Tympan/models/business/OLocalizator.h"
 

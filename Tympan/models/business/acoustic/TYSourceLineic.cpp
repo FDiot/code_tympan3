@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSourceLineicWidget.h"
+#include "Tympan/gui/widgets/TYSourceLineicWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceLineicGraphic.h"
 #endif
 

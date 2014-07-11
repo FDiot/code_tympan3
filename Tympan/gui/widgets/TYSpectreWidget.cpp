@@ -44,7 +44,7 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/acoustique/TYSpectre.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPrintDialog.h"
+#include "Tympan/gui/widgets/TYPrintDialog.h"
 #include "TYHistoWidget.h"
 #include "TYCourbeWidget.h"
 

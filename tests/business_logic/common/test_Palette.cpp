@@ -3,7 +3,7 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYLookupTableWidget.h"
+#include "Tympan/gui/widgets/TYLookupTableWidget.h"
 #include "Tympan/models/business/TYPalette.h"
 
 

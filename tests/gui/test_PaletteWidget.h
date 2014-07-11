@@ -14,7 +14,7 @@
 #include <QApplication>
 
 #include "Tympan/models/business/TYPalette.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPaletteWidget.h"
+#include "Tympan/gui/widgets/TYPaletteWidget.h"
 
 class TYPaletteWidgetTests: public QObject
 {

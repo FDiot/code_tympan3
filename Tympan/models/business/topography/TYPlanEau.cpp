@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPlanEauWidget.h"
+#include "Tympan/gui/widgets/TYPlanEauWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPlanEauGraphic.h"
 #endif
 

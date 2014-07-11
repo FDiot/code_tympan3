@@ -42,7 +42,7 @@
 #define TR(id) OLocalizator::getString("TYAcousticInterfaceWidget", (id))
 #define IMG(id) OLocalizator::getPicture("TYAcousticInterfaceWidget", (id))
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYAcousticInterfaceWidget.h"
 
 TYAcousticInterfaceWidget::TYAcousticInterfaceWidget(TYAcousticInterface* pElement, QWidget* _pParent /*=NULL*/):
     QWidget(_pParent), _pElement(pElement)

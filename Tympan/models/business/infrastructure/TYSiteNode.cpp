@@ -17,7 +17,7 @@
 #include <cassert>
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSiteNodeWidget.h"
+#include "Tympan/gui/widgets/TYSiteNodeWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSiteNodeGraphic.h"
 #endif
 

@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPolygonWidget.h"
+#include "Tympan/gui/widgets/TYPolygonWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPolygonGraphic.h"
 #endif
 

@@ -29,11 +29,11 @@
 
 #include "TYAcousticVolumeNodeWidget.h"
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYAcousticInterfaceWidget.h"
 
 #include <qmenu.h>
 #include <qtablewidget.h>

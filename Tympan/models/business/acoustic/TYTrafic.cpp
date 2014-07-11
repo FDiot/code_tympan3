@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYTraficWidget.h"
+#include "Tympan/gui/widgets/TYTraficWidget.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

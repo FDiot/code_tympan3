@@ -37,7 +37,7 @@
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/geometry/TYPoint.h"
 #include "Tympan/models/business/geometry/TYSurfaceInterface.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSurfaceInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYSurfaceInterfaceWidget.h"
 
 TYSurfaceInterfaceWidget::TYSurfaceInterfaceWidget(TYSurfaceInterface* pElement, QWidget* _pParent /*=NULL*/):
     QWidget(_pParent), _pElement(pElement)

@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYTerrainWidget.h"
+#include "Tympan/gui/widgets/TYTerrainWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYTerrainGraphic.h"
 #endif
 

@@ -31,7 +31,7 @@
 #include "Tympan/core/logging.h"
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRouteWidget.h"
+#include "Tympan/gui/widgets/TYRouteWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRouteGraphic.h"
 #endif
 

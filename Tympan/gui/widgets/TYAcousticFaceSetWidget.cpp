@@ -26,7 +26,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticFaceSet.h"
 #include "Tympan/models/business/infrastructure/TYEcran.h"
 

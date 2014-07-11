@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPointControlWidget.h"
+#include "Tympan/gui/widgets/TYPointControlWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPointControlGraphic.h"
 #endif
 

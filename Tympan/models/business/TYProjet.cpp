@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYProjetWidget.h"
+#include "Tympan/gui/widgets/TYProjetWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYProjetGraphic.h"
 #endif
 

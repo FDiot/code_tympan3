@@ -20,7 +20,7 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
 #if TY_USE_IHM
-  #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticRectangleWidget.h"
+  #include "Tympan/gui/widgets/TYAcousticRectangleWidget.h"
   #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticRectangleGraphic.h"
 #endif
 

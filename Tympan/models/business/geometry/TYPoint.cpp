@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPointWidget.h"
+#include "Tympan/gui/widgets/TYPointWidget.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

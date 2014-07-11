@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYCourbeNiveauWidget.h"
+#include "Tympan/gui/widgets/TYCourbeNiveauWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYCourbeNiveauGraphic.h"
 #endif
 

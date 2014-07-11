@@ -32,7 +32,7 @@
 #include <qbuttongroup.h>
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
 
 //Added by qt3to4:
 #include <QGridLayout>

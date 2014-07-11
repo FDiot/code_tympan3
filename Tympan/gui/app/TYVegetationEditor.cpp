@@ -30,7 +30,7 @@
 #include "Tympan/models/business/OLocalizator.h"
 
 #include "Tympan/models/business/material/TYSol.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSolWidget.h"
+#include "Tympan/gui/widgets/TYSolWidget.h"
 
 #include <qinputdialog.h>
 

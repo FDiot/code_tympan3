@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYReseauTransportWidget.h"
+#include "Tympan/gui/widgets/TYReseauTransportWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYReseauTransportGraphic.h"
 #endif
 

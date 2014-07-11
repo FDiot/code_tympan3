@@ -24,8 +24,8 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/GraphicIHM/DataManagerIHM/TYIncludesQT.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYElementWidget.h"
+#include "Tympan/gui/widgets/TYIncludesQT.h"
+#include "Tympan/gui/widgets/TYElementWidget.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
