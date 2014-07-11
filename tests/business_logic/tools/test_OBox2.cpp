@@ -10,7 +10,6 @@
 
 #include "gtest/gtest.h"
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/CommonTools/OBox2.h"
 
 using std::cout;
 using std::cerr;

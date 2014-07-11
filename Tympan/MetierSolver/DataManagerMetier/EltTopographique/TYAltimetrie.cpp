@@ -38,7 +38,6 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/CommonTools/OBox2.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 #include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"

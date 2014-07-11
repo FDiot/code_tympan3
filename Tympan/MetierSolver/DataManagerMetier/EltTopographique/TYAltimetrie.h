@@ -24,7 +24,7 @@
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
 #include "Tympan/MetierSolver/DataManagerCore/exceptions.hpp"
 #include "Tympan/MetierSolver/CommonTools/ODelaunayMaker.h"
-#include "Tympan/MetierSolver/CommonTools/OBox2.h"
+#include "Tympan/models/common/3d.h"
 
 /**
  * \class TYAltimetrie
