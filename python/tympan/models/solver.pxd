@@ -9,7 +9,7 @@ from tympan.core cimport shared_ptr
 cdef class ProblemModel:
     cdef AcousticProblemModel* thisptr
 
-cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp" namespace "tympan":
+cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "tympan":
     cdef cppclass AcousticProblemModel:
         size_t npoints()
         size_t ntriangles()
@@ -27,24 +27,24 @@ cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp
         size_t make_source(const OPoint3D& point_, const OSpectre& spectrum_)
         size_t make_receptor(const OPoint3D& point_)
 
-cdef extern from "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp" namespace "tympan":
+cdef extern from "Tympan/models/solver/acoustic_result_model.hpp" namespace "tympan":
     cdef cppclass AcousticResultModel:
         pass
 
-cdef extern from "Tympan/MetierSolver/SolverDataModel/data_model_common.hpp":
+cdef extern from "Tympan/models/solver/data_model_common.hpp":
     cdef cppclass BaseEntity:
         pass
 
-cdef extern from "Tympan/MetierSolver/SolverDataModel/entities.hpp" namespace "tympan":
+cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
     cdef cppclass AcousticSource(BaseEntity):
         OPoint3D position
         OSpectre spectrum
 
-cdef extern from "Tympan/MetierSolver/SolverDataModel/entities.hpp" namespace "tympan":
+cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
     cdef cppclass AcousticReceptor(BaseEntity):
         OPoint3D position
 
-cdef extern from "Tympan/MetierSolver/SolverDataModel/entities.hpp" namespace "tympan":
+cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
     cdef cppclass AcousticTriangle:
         shared_ptr[AcousticMaterialBase] made_of
         size_t n[3]

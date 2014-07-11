@@ -51,8 +51,8 @@ static char THIS_FILE[] = __FILE__;
 #include "Tympan/models/business/TYPluginManager.h"
 
 #include "Tympan/core/defines.h"
-#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
-#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
+#include "Tympan/models/solver/acoustic_problem_model.hpp"
+#include "Tympan/models/solver/acoustic_result_model.hpp"
 
 TY_EXTENSION_INST(TYCalcul);
 TY_EXT_GRAPHIC_INST(TYCalcul);
