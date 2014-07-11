@@ -25,11 +25,8 @@
   #pragma once
 #endif // _MSC_VER > 1000
 #ifdef _MSC_VER
-  #pragma warning( disable : 4275 4800 4355 4273 4786 4018 4503) 4081)
+  #pragma warning( disable : 4275 4800 4355 4273 4786 4018 4503 4081)
 #endif
-
-#pragma warning(disable: 4081)
-
 
 #include <memory>
 #include <unordered_map>
