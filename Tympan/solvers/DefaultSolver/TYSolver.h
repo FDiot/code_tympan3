@@ -26,8 +26,8 @@
 #include "TYSolverDefines.h"
 #include "Tympan/models/business/TYSolverInterface.h"
 
-#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
-#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
+#include "Tympan/models/solver/acoustic_problem_model.hpp"
+#include "Tympan/models/solver/acoustic_result_model.hpp"
 
 class OThreadPool;
 
