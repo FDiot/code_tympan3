@@ -26,8 +26,8 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYFaceSet.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
+#include "Tympan/models/business/geometry/TYFaceSet.h"
+#include "Tympan/models/business/geometry/TYPolygon.h"
 
 TYFaceSetGraphic::TYFaceSetGraphic(TYFaceSet* pElement) :
     TYElementGraphic(pElement)

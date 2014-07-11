@@ -28,7 +28,7 @@
 #define __TY_RESULTAT_TREE_DIALOG__
 
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h"
+#include "Tympan/models/business/TYResultat.h"
 
 #include <qdialog.h>
 #include <qmap.h>

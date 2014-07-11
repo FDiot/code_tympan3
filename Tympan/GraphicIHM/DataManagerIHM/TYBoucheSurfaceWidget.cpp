@@ -27,8 +27,8 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYBoucheSurface.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticRectangleNode.h"
+#include "Tympan/models/business/geoacoustic/TYBoucheSurface.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
 //Added by qt3to4:
 
 #include <QMessageBox>

@@ -15,7 +15,7 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangulate.h"
 

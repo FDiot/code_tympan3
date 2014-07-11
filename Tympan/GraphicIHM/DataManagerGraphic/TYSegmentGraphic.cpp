@@ -26,7 +26,7 @@
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
+#include "Tympan/models/business/geometry/TYSegment.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 
 TYSegmentGraphic::TYSegmentGraphic(TYSegment* pElement) :

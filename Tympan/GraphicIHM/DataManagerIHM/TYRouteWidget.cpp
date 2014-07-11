@@ -25,7 +25,7 @@
 #include <QMessageBox>
 
 #include "TYRouteWidget.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
+#include "Tympan/models/business/infrastructure/TYRoute.h"
 
 #include "RoadEmissionNMPB08.h"
 

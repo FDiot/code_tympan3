@@ -29,11 +29,11 @@
 
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRectangularMaillage.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPointGraphic.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRepere.h"
+#include "Tympan/models/business/geometry/TYRepere.h"
 #include "Tympan/Tools/OLocalizator.h"
 
 #include <qdialog.h>

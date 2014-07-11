@@ -28,7 +28,7 @@
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticCylinderGraphic.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticCylinder.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 
 TYAcousticCylinderGraphic::TYAcousticCylinderGraphic(TYAcousticCylinder* pElement) :

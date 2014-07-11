@@ -35,7 +35,7 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
 #include "TYElementGraphic.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
+#include "Tympan/models/business/geometry/TYPoint.h"
 
 
 /**

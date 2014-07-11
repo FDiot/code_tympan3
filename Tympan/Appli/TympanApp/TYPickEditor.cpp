@@ -26,8 +26,8 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYBatiment.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEcran.h"
+#include "Tympan/models/business/infrastructure/TYBatiment.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickHandler.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPanelGraphic.h"
@@ -61,7 +61,7 @@
 // CLM-NT35 End
 
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRectangularMaillage.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangularMaillageGraphic.h"
 #include "TYMenuItem.h"
 

@@ -4,7 +4,7 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYBoundaryNoiseMap.h"
+#include "Tympan/models/business/TYBoundaryNoiseMap.h"
 
 using std::cout;
 using std::endl;

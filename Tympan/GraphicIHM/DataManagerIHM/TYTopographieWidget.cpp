@@ -29,7 +29,7 @@
 
 #include "Tympan/TYVersion.h"
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
+#include "Tympan/models/business/infrastructure/TYTopographie.h"
 #include <qmenu.h>
 //Added by qt3to4:
 #include <QGridLayout>

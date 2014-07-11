@@ -26,10 +26,10 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <qmessagebox.h>
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSpectre.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYAtmosphere.h"
+#include "Tympan/models/business/material/TYAtmosphere.h"
 #include <qcombobox.h>
 //Added by qt3to4:
 #include <QGridLayout>

@@ -48,8 +48,8 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 #include "Tympan/Tools/OLocalizator.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYMaillage.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSpectre.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/acoustique/TYSpectre.h"
 
 //Added by qt3to4:
 #include <QHideEvent>

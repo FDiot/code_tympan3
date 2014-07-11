@@ -19,7 +19,7 @@
 
 
 #include "TYAcousticPathFinder.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/MetierSolver/ConvexHullFinder/TYCalculParcours.h"
 #include "TYSolver.h"
 

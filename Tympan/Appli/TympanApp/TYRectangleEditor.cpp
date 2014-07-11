@@ -28,13 +28,13 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLRectangleElement.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticRectangle.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYBoucheSurface.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYChemineeSurface.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
+#include "Tympan/models/business/geoacoustic/TYBoucheSurface.h"
+#include "Tympan/models/business/geoacoustic/TYChemineeSurface.h"
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPointGraphic.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRepere.h"
+#include "Tympan/models/business/geometry/TYRepere.h"
 #include "Tympan/Tools/OLocalizator.h"
 
 #include "Tympan/core/exceptions.h"

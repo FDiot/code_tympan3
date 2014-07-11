@@ -26,8 +26,8 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"//az++ pour updateDisplayListOverlay
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/geometry/TYGeometryNode.h"//az++ pour updateDisplayListOverlay
 
 /*
 #if defined(WIN32)

@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticRectangleNode.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
 
 
 TYAcousticRectangleNodeGraphic::TYAcousticRectangleNodeGraphic(TYAcousticRectangleNode* pElement) :

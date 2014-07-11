@@ -30,7 +30,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
+#include "Tympan/models/business/infrastructure/TYRoute.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYRouteWidget.h"
 
 #include <qinputdialog.h>

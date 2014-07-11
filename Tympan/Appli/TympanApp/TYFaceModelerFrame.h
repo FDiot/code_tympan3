@@ -31,7 +31,7 @@
 #include <qwidget.h>
 //Added by qt3to4:
 #include <QFocusEvent>
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticRectangleNode.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
 #include "TYModelerFrame.h"
 
 

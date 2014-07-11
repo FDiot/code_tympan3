@@ -27,7 +27,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
+#include "Tympan/models/business/TYProjet.h"
 #include <qmenu.h>
 //Added by qt3to4:
 #include <QGridLayout>

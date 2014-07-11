@@ -28,7 +28,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "TYPointGraphic.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
+#include "Tympan/models/business/geometry/TYPoint.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 
 

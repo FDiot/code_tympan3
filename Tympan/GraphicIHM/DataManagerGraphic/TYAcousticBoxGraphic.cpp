@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticBox.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticBox.h"
 
 
 TYAcousticBoxGraphic::TYAcousticBoxGraphic(TYAcousticBox* pElement) :

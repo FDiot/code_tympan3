@@ -35,8 +35,8 @@
 #define TR(id) OLocalizator::getString("TYSurfaceInterfaceWidget", (id))
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSurfaceInterface.h"
+#include "Tympan/models/business/geometry/TYPoint.h"
+#include "Tympan/models/business/geometry/TYSurfaceInterface.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSurfaceInterfaceWidget.h"
 
 TYSurfaceInterfaceWidget::TYSurfaceInterfaceWidget(TYSurfaceInterface* pElement, QWidget* _pParent /*=NULL*/):

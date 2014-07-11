@@ -28,7 +28,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <qfiledialog.h>
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYParoi.h"
+#include "Tympan/models/business/infrastructure/TYParoi.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
 //Added by qt3to4:
 #include <QGridLayout>

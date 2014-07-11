@@ -35,13 +35,13 @@
 #include <qprinter.h>
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYUserSourcePonctuelle.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolumeNode.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
+#include "Tympan/models/business/TYResultat.h"
+#include "Tympan/models/business/acoustique/TYUserSourcePonctuelle.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
 #include "TYResultatTreeDialog.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/core/logging.h"
 //Added by qt3to4:
 #include <QHBoxLayout>

@@ -31,7 +31,7 @@
 
 
 #include <qobject.h>
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
+#include "Tympan/models/business/TYProjet.h"
 
 
 /**

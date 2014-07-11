@@ -32,7 +32,7 @@
 #endif // _MSC_VER > 1000
 
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolumeNode.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
 #include "TYAcousticVolumeNodeGraphic.h"
 class TYBatiment;
 

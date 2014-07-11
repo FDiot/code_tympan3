@@ -28,8 +28,8 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticInterface.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSpectre.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticInterface.h"
+#include "Tympan/models/business/acoustique/TYSpectre.h"
 
 #include <qradiobutton.h>
 #include <qbuttongroup.h>

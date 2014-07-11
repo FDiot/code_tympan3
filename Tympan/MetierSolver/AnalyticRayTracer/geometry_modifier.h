@@ -19,7 +19,7 @@
 #include <qlist.h>
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRay.h"
+#include "Tympan/models/business/TYRay.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"

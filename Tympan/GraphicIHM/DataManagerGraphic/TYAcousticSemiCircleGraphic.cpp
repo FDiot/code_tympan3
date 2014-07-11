@@ -26,8 +26,8 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSemiCircle.h"
+#include "Tympan/models/business/geometry/TYPolygon.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticSemiCircle.h"
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 

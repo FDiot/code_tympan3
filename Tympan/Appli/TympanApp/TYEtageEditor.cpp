@@ -30,8 +30,8 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 #include "Tympan/Tools/OLocalizator.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEtage.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEcran.h"
+#include "Tympan/models/business/infrastructure/TYEtage.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
 #include "Tympan/models/common/3d.h"
 #include "TYActions.h"
 

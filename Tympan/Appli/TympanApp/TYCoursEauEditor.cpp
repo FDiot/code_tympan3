@@ -29,7 +29,7 @@
 
 #include "Tympan/Tools/OLocalizator.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYCoursEau.h"
+#include "Tympan/models/business/topography/TYCoursEau.h"
 
 #include <qdialog.h>
 

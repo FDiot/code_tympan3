@@ -27,7 +27,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourceLineic.h"
+#include "Tympan/models/business/acoustique/TYSourceLineic.h"
 #include <qmenu.h>
 
 //Added by qt3to4:

@@ -31,7 +31,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEcran.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
 
 #include <qcursor.h>
 #include <qstatusbar.h>

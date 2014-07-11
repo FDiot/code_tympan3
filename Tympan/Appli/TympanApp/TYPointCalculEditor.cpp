@@ -27,7 +27,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointControl.h"
+#include "Tympan/models/business/TYPointControl.h"
 
 #include "Tympan/Tools/OLocalizator.h"
 

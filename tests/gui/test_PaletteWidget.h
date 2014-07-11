@@ -13,7 +13,7 @@
 #include <QtGui>
 #include <QApplication>
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPalette.h"
+#include "Tympan/models/business/TYPalette.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYPaletteWidget.h"
 
 class TYPaletteWidgetTests: public QObject

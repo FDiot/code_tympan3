@@ -28,7 +28,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYPlanEau.h"
+#include "Tympan/models/business/topography/TYPlanEau.h"
 
 #include "Tympan/Tools/OLocalizator.h"
 

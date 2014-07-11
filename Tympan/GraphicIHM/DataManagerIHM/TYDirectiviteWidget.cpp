@@ -27,7 +27,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYDirectivite.h"
+#include "Tympan/models/business/acoustique/TYDirectivite.h"
 
 #include <qmenu.h>
 #include <qtablewidget.h>

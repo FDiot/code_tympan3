@@ -74,7 +74,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSo
     cdef cppclass TYSourcePonctuelle(TYSource):
         SmartPtr[TYPoint] getPos()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYAtmosphere.h":
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/material/TYAtmosphere.h":
     cdef cppclass TYAtmosphere (TYElement):
         pass
 
@@ -117,7 +117,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":
         bool updateAltiRecepteurs(const TYAltimetrie* pAlti)
         vector[SmartPtr[TYPointControl]]& getPointsControl()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h":
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/topography/TYAltimetrie.h":
     cdef cppclass TYAltimetrie (TYElement):
         pass
 
@@ -144,7 +144,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointControl.h"
     cdef cppclass TYPointControl (TYPointCalcul):
         pass
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h":
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/material/TYSol.h":
     cdef cppclass TYSol (TYElement):
         double getResistivite()
 
@@ -154,7 +154,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h":
         SmartPtr[TYAltimetrie] getAltimetrie()
         void sortTerrainsBySurface()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYMateriauConstruction.h":
+cdef extern from "Tympan/MetierSolver/DataManagerMetier/material/TYMateriauConstruction.h":
     cdef cppclass TYMateriauConstruction (TYElement):
         TYSpectre& getSpectreAbso()
 

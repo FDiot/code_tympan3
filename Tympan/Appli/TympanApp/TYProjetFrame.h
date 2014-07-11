@@ -34,7 +34,7 @@
 #include <QTreeWidget>
 
 #include "TYAppDefines.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
+#include "Tympan/models/business/TYProjet.h"
 
 class QMenuBar;
 class TYSpectresManagerFrame;

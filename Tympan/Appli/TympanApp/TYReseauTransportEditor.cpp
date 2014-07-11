@@ -31,7 +31,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYReseauTransport.h"
+#include "Tympan/models/business/infrastructure/TYReseauTransport.h"
 
 #include <qinputdialog.h>
 

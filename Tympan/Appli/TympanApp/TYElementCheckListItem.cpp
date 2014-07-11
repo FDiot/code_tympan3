@@ -32,7 +32,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYMachine.h"
+#include "Tympan/models/business/infrastructure/TYMachine.h"
 
 
 

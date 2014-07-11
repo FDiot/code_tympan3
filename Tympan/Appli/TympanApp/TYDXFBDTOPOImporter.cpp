@@ -31,7 +31,7 @@
 #include "TYDXFBDTOPOImporter.h"
 #include "TYDXFBDTOPOSpecifications.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
 
 //////////////////////////////////////////////////////////////////////

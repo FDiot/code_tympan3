@@ -33,7 +33,7 @@
 #endif // _MSC_VER > 1000
 
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLTexture2D.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
+#include "Tympan/models/business/geometry/TYPolygon.h"
 #include "TYPolyLineGraphic.h"
 
 class TYTerrain;

@@ -40,7 +40,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 #include "Tympan/Tools/OLocalizator.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYBoundaryNoiseMap.h"
+#include "Tympan/models/business/TYBoundaryNoiseMap.h"
 #include "TYActions.h"
 
 #if defined(WIN32)

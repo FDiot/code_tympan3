@@ -27,9 +27,9 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h"
+#include "Tympan/models/business/TYPointCalcul.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/TYCalcul.h"
 
 #include <qradiobutton.h>
 #include <qbuttongroup.h>

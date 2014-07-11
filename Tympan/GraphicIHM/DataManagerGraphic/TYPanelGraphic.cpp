@@ -25,8 +25,8 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/gui/OSizeManager.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYMaillage.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPanel.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/TYPanel.h"
 
 #define IMG(id) OLocalizator::getPicture("TYPanelGraphic", (id))
 

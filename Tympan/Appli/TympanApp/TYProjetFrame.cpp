@@ -39,7 +39,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYEtatsWidget.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRectangularMaillage.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
 #include <QTextStream>
 //Added by qt3to4:
 #include <QKeyEvent>

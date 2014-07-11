@@ -19,9 +19,9 @@
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
+#include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
+#include "Tympan/models/business/TYPointCalcul.h"
 #include "Tympan/models/common/acoustic_path.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 

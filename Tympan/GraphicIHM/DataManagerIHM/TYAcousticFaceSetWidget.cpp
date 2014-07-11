@@ -27,8 +27,8 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticFaceSet.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEcran.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticFaceSet.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
 
 //Added by qt3to4:
 #include <QGridLayout>

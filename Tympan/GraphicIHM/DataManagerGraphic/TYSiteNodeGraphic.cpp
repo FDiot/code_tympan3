@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
 TYSiteNodeGraphic::TYSiteNodeGraphic(TYSiteNode* pElement) : TYElementGraphic(pElement)
 {

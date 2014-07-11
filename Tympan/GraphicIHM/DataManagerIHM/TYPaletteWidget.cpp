@@ -37,7 +37,7 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/core/color.h"
 #include "TYLookupTableWidget.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPalette.h"
+#include "Tympan/models/business/TYPalette.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYLookupTableWidget.h"
 
 

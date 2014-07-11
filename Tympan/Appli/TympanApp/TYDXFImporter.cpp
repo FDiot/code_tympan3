@@ -37,7 +37,7 @@
 
 #include "TYDXFImporter.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/core/logging.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 

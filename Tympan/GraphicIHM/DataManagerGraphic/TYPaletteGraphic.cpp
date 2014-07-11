@@ -34,7 +34,7 @@
 
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/gui/OSizeManager.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPalette.h"
+#include "Tympan/models/business/TYPalette.h"
 
 #define IMG(id) OLocalizator::getPicture("TYPaletteGraphic", (id))
 

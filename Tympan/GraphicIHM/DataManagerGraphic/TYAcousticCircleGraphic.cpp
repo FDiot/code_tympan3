@@ -28,7 +28,7 @@
 
 #include "TYAcousticCircleGraphic.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticCircle.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticCircle.h"
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 

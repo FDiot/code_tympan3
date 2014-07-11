@@ -27,7 +27,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEtage.h"
+#include "Tympan/models/business/infrastructure/TYEtage.h"
 #include <qmenu.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>

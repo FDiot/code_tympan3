@@ -29,7 +29,7 @@
 
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLRectangleElement.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticCylinder.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
 
 #include "Tympan/core/logging.h"
 #include "Tympan/Tools/OLocalizator.h"

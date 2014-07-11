@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourceLineic.h"
+#include "Tympan/models/business/acoustique/TYSourceLineic.h"
 
 
 bool TYSourceLineicGraphic::_gVisible = false;
