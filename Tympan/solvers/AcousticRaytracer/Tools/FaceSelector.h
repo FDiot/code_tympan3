@@ -58,7 +58,7 @@ public:
 
     virtual SELECTOR_RESPOND canBeInserted(T* r, unsigned long long& replace)
     {
-        typename std::map<vector<unsigned int>, T*, CompareToKey>::iterator it;
+        typename std::map<std::vector<unsigned int>, T*, CompareToKey>::iterator it;
         std::vector<unsigned int> path;
         switch (modeHistory)
         {
@@ -95,7 +95,7 @@ public:
 
     virtual void insert(T* r)
     {
-        typename std::map<vector<unsigned int>, T*, CompareToKey>::iterator it;
+        typename std::map<std::vector<unsigned int>, T*, CompareToKey>::iterator it;
         std::vector<unsigned int> path;
         switch (modeHistory)
         {
@@ -121,7 +121,7 @@ public:
         }
         else
         {
-            selectedPath.insert(std::pair<vector<unsigned int>, T*>(path, r));
+            selectedPath.insert(std::pair<std::vector<unsigned int>, T*>(path, r));
         }
 
 		return ;
@@ -129,7 +129,7 @@ public:
 
     virtual bool insertWithTest(T* r)
     {
-        typename std::map<vector<unsigned int>, T*, CompareToKey>::iterator it;
+        typename std::map<std::vector<unsigned int>, T*, CompareToKey>::iterator it;
         std::vector<unsigned int> path;
         switch (modeHistory)
         {
@@ -162,7 +162,7 @@ public:
         }
         else
         {
-            selectedPath.insert(std::pair<vector<unsigned int>, T*>(path, r));
+            selectedPath.insert(std::pair<std::vector<unsigned int>, T*>(path, r));
             return true;
         }
     }
