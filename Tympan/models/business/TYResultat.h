@@ -25,7 +25,7 @@
 
 #include <cstddef>
 
-#include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
+#include "Tympan/models/solver/acoustic_result_model.hpp"
 #include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
 #include "TYPointCalcul.h"
 

@@ -22,8 +22,8 @@
 
 #include "test_utils/misc.hpp"
 #include "TympanTestsConfig.hpp"
-#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
-#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
+#include "Tympan/models/solver/entities.hpp"
+#include "Tympan/models/solver/acoustic_problem_model.hpp"
 
 using namespace std;
 tympan::AtmosphericConditions functionnalResults_initAtmosphereFromRow(const deque<double>& row)

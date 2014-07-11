@@ -90,6 +90,19 @@ target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
 install_tympan_component(${MODULE_NAME})
 
 
+set(MODULE_NAME tympan_models_solver)
+file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/models/solver
+    *.cpp *.h *.hpp)
+set_precompiled_header(${MODULE_NAME} CXX
+  ${CMAKE_CURRENT_SOURCE_DIR}/std_boost_utils.hpp ${MODULE_NAME}_PCH_SRCS)
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models/solver")
+use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
+add_dependencies( ${MODULE_NAME} tympan_models_common)
+target_link_libraries( ${MODULE_NAME} tympan_models_common)
+install_tympan_component(${MODULE_NAME})
+
+
 set(MODULE_NAME tympan_dm_metier)
 file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/models/business
     *.cpp *.h *.hpp
@@ -101,12 +114,12 @@ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models/business")
 use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 add_dependencies(${MODULE_NAME}
     NMPB2008
-    tympan_solver_data_model
+    tympan_models_solver
     tympan_tools_graphics tympan_dm_ihm
     GTest)
 target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${CGAL_LIBRARIES}
     RoadEmissionNMPB
-    tympan_solver_data_model tympan_tools_graphics)
+    tympan_models_solver tympan_tools_graphics)
 install_tympan_component(${MODULE_NAME})
 
 
@@ -114,3 +127,6 @@ install_tympan_component(${MODULE_NAME})
 add_subdirectory(GraphicIHM)
 add_subdirectory(Appli)
 
+set(CURRENT_FOLDER "Tympan/solvers")
+add_subdirectory(solvers/DefaultSolver)
+add_subdirectory(solvers/ANIME3DSolver)

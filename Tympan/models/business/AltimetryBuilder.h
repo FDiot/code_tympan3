@@ -51,7 +51,7 @@ class AltimetryBuilder;
 
 #undef max // XXX
 
-#include "Tympan/MetierSolver/SolverDataModel/data_model_common.hpp"
+#include "Tympan/models/solver/data_model_common.hpp"
 #include "Tympan/core/exceptions.h"
 
 
