@@ -17,38 +17,33 @@
 #   pragma warning (disable : 4786)
 #endif
 
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYCalculWidget.h"
-#include "Tympan/gui/gl/TYCalculGraphic.h"
-#endif
-
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/models/business/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
-
 #include <stdlib.h>
 #include <string>
 
-#include "Tympan/models/business/TYProgressManager.h"
-
-#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/core/defines.h"
 #include "Tympan/core/logging.h"
-
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
-
+#include "Tympan/models/business/TYProgressManager.h"
+#include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYPluginManager.h"
-
-#include "Tympan/core/defines.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
+#ifdef TYMPAN_USE_PRECOMPILED_HEADER
+  #include "Tympan/models/business/TYPHMetier.h"
+#endif // TYMPAN_USE_PRECOMPILED_HEADER
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYCalculWidget.h"
+  #include "Tympan/gui/gl/TYCalculGraphic.h"
+#endif
+
+#if defined(WIN32)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
+#endif
 
 TY_EXTENSION_INST(TYCalcul);
 TY_EXT_GRAPHIC_INST(TYCalcul);

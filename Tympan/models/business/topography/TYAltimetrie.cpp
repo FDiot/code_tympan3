@@ -13,22 +13,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#undef min
-#undef max
-
 #include <cstdlib>
 #include <cassert>
 #include <cmath>
 #include <limits>
 #include <algorithm>
-#if defined(WIN32)
-  #include <crtdbg.h>
-  #ifdef _DEBUG
-    #undef THIS_FILE
-    static char THIS_FILE[] = __FILE__;
-    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-  #endif
-#endif
 
 #include <boost/current_function.hpp>
 #include <boost/foreach.hpp>
@@ -46,6 +35,18 @@
   #include "Tympan/gui/gl/TYAltimetrieGraphic.h"
 #endif
 #include "TYAltimetrie.h"
+
+#if defined(WIN32)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
+#endif
+
+#undef min
+#undef max
 
 
 static inline double grid_step(double nb_triangles) {return sqrt(nb_triangles) / 2;}

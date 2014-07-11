@@ -13,12 +13,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "NMPBSolver.h"
-#include "ValidRay.h"
-#include "PostTreatment.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/FaceSelector.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/LengthSelector.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
+#include "NMPBSolver.h"
+#include "ValidRay.h"
+#include "PostTreatment.h"
 
 void NMPBSolver::initGlobalValues()
 {

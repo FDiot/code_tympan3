@@ -20,7 +20,7 @@
 #include <QMutexLocker>
 #include "Selector.h"
 #include <map>
-#include<vector>
+#include <vector>
 
 
 enum TYPEHISTORY

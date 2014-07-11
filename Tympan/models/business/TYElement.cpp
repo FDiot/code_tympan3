@@ -20,6 +20,12 @@
 
 #include <string.h>
 #include <iostream>
+
+#include "Tympan/core/idgen.h"
+#include "Tympan/core/chrono.h"
+#include "Tympan/core/exceptions.h"
+#include "Tympan/core/logging.h"
+
 #if defined(WIN32)
   #include <crtdbg.h>
   #ifdef _DEBUG
@@ -28,11 +34,6 @@
     #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
   #endif
 #endif
-
-#include "Tympan/core/idgen.h"
-#include "Tympan/core/chrono.h"
-#include "Tympan/core/exceptions.h"
-#include "Tympan/core/logging.h"
 
 
 // Declaration des membres statiques.
