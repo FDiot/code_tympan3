@@ -36,7 +36,7 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYResultat.h"
-#include "Tympan/models/business/acoustique/TYUserSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
 #include "TYResultatTreeDialog.h"

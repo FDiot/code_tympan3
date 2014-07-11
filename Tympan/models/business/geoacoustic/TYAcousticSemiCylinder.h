@@ -22,7 +22,7 @@
 
 
 #include "TYAcousticSemiCircle.h"
-#include "Tympan/models/business/acoustique/TYSourceSurfacic.h"
+#include "Tympan/models/business/acoustic/TYSourceSurfacic.h"
 #include "TYAcousticRectangle.h"
 #include "TYAcousticVolume.h"
 

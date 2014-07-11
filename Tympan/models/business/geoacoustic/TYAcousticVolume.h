@@ -24,7 +24,7 @@
 #include "Tympan/models/business/TYColorInterface.h"
 #include "Tympan/models/business/geometry/TYVolumeInterface.h"
 #include "Tympan/models/business/material/TYMateriauConstruction.h"
-#include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "Tympan/models/business/geometry/TYSegment.h"
 
 

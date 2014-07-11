@@ -34,7 +34,7 @@
 #include <QGridLayout>
 #include <QMouseEvent>
 #include <QPaintEvent>
-#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 
 class QPainter;
 class QPrinter;

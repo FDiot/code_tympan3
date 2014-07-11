@@ -28,7 +28,7 @@
 
 #include "TYSourcePonctuelleGraphic.h"
 
-#include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
 
 

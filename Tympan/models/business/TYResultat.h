@@ -26,7 +26,7 @@
 #include <cstddef>
 
 #include "Tympan/models/solver/acoustic_result_model.hpp"
-#include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "TYPointCalcul.h"
 
 

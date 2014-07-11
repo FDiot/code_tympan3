@@ -24,7 +24,7 @@
 #include "TYAcousticVolume.h"
 #include "Tympan/models/business/geometry/TYFaceSet.h"
 #include "Tympan/models/business/material/TYMateriauConstruction.h"
-#include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "Tympan/models/business/geometry/TYSegment.h"
 
 

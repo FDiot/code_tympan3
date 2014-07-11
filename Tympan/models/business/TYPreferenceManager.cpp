@@ -32,7 +32,7 @@
 #include <qstring.h>
 #include <qfile.h>
 
-#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 
 #include "TYPreferenceManager.h"
 

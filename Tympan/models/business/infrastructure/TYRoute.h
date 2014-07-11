@@ -25,7 +25,7 @@
 
 #include "gtest/gtest_prod.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
-#include "Tympan/models/business/acoustique/TYTrafic.h"
+#include "Tympan/models/business/acoustic/TYTrafic.h"
 
 #include "RoadEmissionNMPB08.h"
 

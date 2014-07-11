@@ -24,7 +24,7 @@
 #include "Tympan/models/business/TYColorInterface.h"
 #include "TYAcousticInterface.h"
 #include "Tympan/models/business/geometry/TYSurfaceInterface.h"
-#include "Tympan/models/business/acoustique/TYSourceSurfacic.h"
+#include "Tympan/models/business/acoustic/TYSourceSurfacic.h"
 #include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/geometry/TYRectangle.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"

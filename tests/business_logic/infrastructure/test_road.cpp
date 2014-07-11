@@ -20,7 +20,7 @@
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/models/business/infrastructure/TYInfrastructure.h"
 #include "Tympan/models/business/infrastructure/TYRoute.h"
-#include "Tympan/models/business/acoustique/TYTrafic.h"
+#include "Tympan/models/business/acoustic/TYTrafic.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
 
 

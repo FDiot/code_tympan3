@@ -35,7 +35,7 @@
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
-#include "Tympan/models/business/acoustique/TYSourceSurfacic.h"
+#include "Tympan/models/business/acoustic/TYSourceSurfacic.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QShowEvent>

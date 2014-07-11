@@ -26,7 +26,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <qmessagebox.h>
-#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/material/TYAtmosphere.h"

@@ -24,7 +24,7 @@
 #define __TY_MATERIAUCONSTRUCTION__
 
 #include "Tympan/models/business/TYElement.h"
-#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 
 class TYMateriauConstruction: public TYElement
 {

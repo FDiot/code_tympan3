@@ -24,7 +24,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 #include "TYHistoWidget.h"
 #include "TYSpectreWidget.h"
 #include <QPainter>

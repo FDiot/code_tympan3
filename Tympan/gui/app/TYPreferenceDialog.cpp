@@ -49,7 +49,7 @@
 #include "Tympan/models/business/OLocalizator.h"
 
 #include "Tympan/models/business/TYMaillage.h"
-#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 
 //Added by qt3to4:
 #include <QHideEvent>

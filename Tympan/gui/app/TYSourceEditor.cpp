@@ -27,7 +27,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/models/business/acoustique/TYUserSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
 
 #include "Tympan/models/business/OLocalizator.h"
 
