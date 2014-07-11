@@ -1,4 +1,4 @@
-#include "EnvironmentUtils.hpp"
+#include "EnvironmentUtils.h"
 
 #include <QFile>
 #include <QCoreApplication>
