@@ -20,7 +20,7 @@
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
-#include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "Tympan/models/business/TYPointCalcul.h"
 #include "Tympan/models/common/acoustic_path.h"
 #include "Tympan/models/business/TYSolverInterface.h"

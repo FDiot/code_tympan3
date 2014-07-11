@@ -63,7 +63,7 @@
 
 #include "Tympan/gui/gl/TYPickingTable.h"
 
-#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 #include "Tympan/gui/widgets/TYSpectreWidget.h"
 
 #include "Tympan/models/business/OLocalizator.h"

@@ -43,7 +43,7 @@
 #include "TYSpectreWidget.h"
 
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 #include "Tympan/gui/widgets/TYPrintDialog.h"
 #include "TYHistoWidget.h"
 #include "TYCourbeWidget.h"

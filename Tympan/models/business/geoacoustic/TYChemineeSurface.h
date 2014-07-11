@@ -22,7 +22,7 @@
 
 
 #include "TYAcousticRectangle.h"
-#include "Tympan/models/business/acoustique/TYSourceCheminee.h"
+#include "Tympan/models/business/acoustic/TYSourceCheminee.h"
 
 
 /**

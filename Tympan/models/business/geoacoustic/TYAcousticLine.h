@@ -21,8 +21,8 @@
 #define __TY_ACOUSTICLINE__
 
 
-#include "Tympan/models/business/acoustique/TYRegime.h"
-#include "Tympan/models/business/acoustique/TYSourceLineic.h"
+#include "Tympan/models/business/acoustic/TYRegime.h"
+#include "Tympan/models/business/acoustic/TYSourceLineic.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #include "TYAcousticInterface.h"
 

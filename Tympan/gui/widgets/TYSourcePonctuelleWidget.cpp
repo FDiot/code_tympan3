@@ -31,7 +31,7 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
 
 //Added by qt3to4:

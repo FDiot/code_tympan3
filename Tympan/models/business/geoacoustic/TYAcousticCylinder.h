@@ -21,7 +21,7 @@
 #define __TY_ACOUSTICCYLINDER__
 
 #include "TYAcousticCircle.h"
-#include "Tympan/models/business/acoustique/TYSourceSurfacic.h"
+#include "Tympan/models/business/acoustic/TYSourceSurfacic.h"
 #include "TYAcousticVolume.h"
 
 

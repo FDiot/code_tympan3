@@ -29,7 +29,7 @@ class OSegment3D;
 #include "Tympan/models/business/geoacoustic/TYAcousticVolume.h"
 #include "TYMur.h"
 #include "TYMachine.h"
-#include "Tympan/models/business/acoustique/TYUserSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
 #include "TYDalle.h"
 
 /**

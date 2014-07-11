@@ -22,10 +22,10 @@
 
 
 #include "Tympan/models/business/TYElement.h"
-#include "Tympan/models/business/acoustique/TYSpectre.h"
-#include "Tympan/models/business/acoustique/TYAttenuateur.h"
-#include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
-#include "Tympan/models/business/acoustique/TYRegime.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYAttenuateur.h"
+#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYRegime.h"
 
 /**
  * Classe abstraite permettant de constituer des elements acoustiques.

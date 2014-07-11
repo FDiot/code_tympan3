@@ -27,7 +27,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/acoustique/TYTrafic.h"
+#include "Tympan/models/business/acoustic/TYTrafic.h"
 
 //Added by qt3to4:
 #include <QGridLayout>

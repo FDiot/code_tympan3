@@ -11,11 +11,11 @@ from tympan.models cimport common as tycommon
 from tympan.models cimport solver as tysolver
 
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp" namespace "tympan":
+cdef extern from "Tympan/models/business/xml_project_util.h" namespace "tympan":
     SmartPtr[TYProjet] load_project(const char *filename) except +
     void save_project(const char *filename, SmartPtr[TYProjet] &) except +
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/init_registry.h" namespace "tympan":
+cdef extern from "Tympan/models/business/init_registry.h" namespace "tympan":
     void init_registry()
 
 
@@ -26,12 +26,12 @@ cdef extern from "Tympan/models/business/TYElement.h":
         TYElement* getParent()
         OGenID getID()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYMaillage.h":
+cdef extern from "Tympan/models/business/TYMaillage.h":
     cdef cppclass TYMaillage:
         int getState()
         const vector[SmartPtr[TYPointCalcul]]& getPtsCalcul() const
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYMaillage.h" namespace "TYMaillage":
+cdef extern from "Tympan/models/business/TYMaillage.h" namespace "TYMaillage":
     cdef enum MaillageState:
         Actif
         Inactif
@@ -57,7 +57,7 @@ cdef extern from "Tympan/models/business/TYElement.h":
 # http://grokbase.com/t/gg/cython-users/12b61wdpnm/std-pair-of-two-pointers-in-cython-problem
 ctypedef (TYElement *) TYElem_ptr
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h":
+cdef extern from "Tympan/models/business/TYResultat.h":
     cdef cppclass TYResultat(TYElement):
         bool operator==(const TYResultat& other) const
         size_t getNbOfRecepteurs() const
@@ -66,19 +66,19 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYResultat.h":
         map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSource.h":
+cdef extern from "Tympan/models/business/acoustic/TYSource.h":
     cdef cppclass TYSource(TYElement):
         TYSpectre* getSpectre() const
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h":
+cdef extern from "Tympan/models/business/acoustic/TYSourcePonctuelle.h":
     cdef cppclass TYSourcePonctuelle(TYSource):
         SmartPtr[TYPoint] getPos()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/material/TYAtmosphere.h":
+cdef extern from "Tympan/models/business/material/TYAtmosphere.h":
     cdef cppclass TYAtmosphere (TYElement):
         pass
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
+cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
     cdef cppclass TYSiteNode (TYElement):
         void getChilds (vector[SmartPtr[TYElement]] &elts, bool recursive)
         void getListFaces(vector[SmartPtr[TYGeometryNode]]& tabFaces,
@@ -92,12 +92,12 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h":
         void setAtmosphere(const SmartPtr[TYAtmosphere]& pAtmosphere)
         TYProjet* getProjet()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h":
+cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
         void getAllSrcs(const TYCalcul* pCalcul, map[TYElem_ptr,
                         vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs)
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
+cdef extern from "Tympan/models/business/TYCalcul.h":
     cdef cppclass TYCalcul (TYElement):
         bool go()
         unique_ptr[tysolver.AcousticProblemModel] _acousticProblem
@@ -110,55 +110,55 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h":
         const vector[SmartPtr[TYGeometryNode]] getMaillages() const
         void setNbThread(unsigned int nbThread)
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h":
+cdef extern from "Tympan/models/business/TYProjet.h":
     cdef cppclass TYProjet (TYElement):
         SmartPtr[TYCalcul] getCurrentCalcul()
         SmartPtr[TYSiteNode] getSite()
         bool updateAltiRecepteurs(const TYAltimetrie* pAlti)
         vector[SmartPtr[TYPointControl]]& getPointsControl()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/topography/TYAltimetrie.h":
+cdef extern from "Tympan/models/business/topography/TYAltimetrie.h":
     cdef cppclass TYAltimetrie (TYElement):
         pass
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h":
+cdef extern from "Tympan/models/business/geoacoustic/TYAcousticSurface.h":
     cdef cppclass TYAcousticSurface (TYElement):
         void exportMesh(deque[tycommon.OPoint3D] &, deque[tycommon.OTriangle] &, TYGeometryNode &)
         SmartPtr[TYMateriauConstruction] getMateriau()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h":
+cdef extern from "Tympan/models/business/geometry/TYGeometryNode.h":
     cdef cppclass TYGeometryNode (TYElement):
         TYElement* getElement()
         TYGeometryNode(TYElement *)
         tycommon.OMatrix getMatrix()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPoint.h":
+cdef extern from "Tympan/models/business/geometry/TYPoint.h":
     cdef cppclass TYPoint(TYElement, tycommon.OPoint3D):
         pass
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h":
+cdef extern from "Tympan/models/business/TYPointCalcul.h":
     cdef cppclass TYPointCalcul (TYPoint):
         bool getEtat(TYCalcul* pCalcul)
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointControl.h":
+cdef extern from "Tympan/models/business/TYPointControl.h":
     cdef cppclass TYPointControl (TYPointCalcul):
         pass
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/material/TYSol.h":
+cdef extern from "Tympan/models/business/material/TYSol.h":
     cdef cppclass TYSol (TYElement):
         double getResistivite()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h":
+cdef extern from "Tympan/models/business/infrastructure/TYTopographie.h":
     cdef cppclass TYTopographie (TYElement):
         void exportMesh(deque[tycommon.OPoint3D] &, deque[tycommon.OTriangle] &, deque[SmartPtr[TYSol]] *)
         SmartPtr[TYAltimetrie] getAltimetrie()
         void sortTerrainsBySurface()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/material/TYMateriauConstruction.h":
+cdef extern from "Tympan/models/business/material/TYMateriauConstruction.h":
     cdef cppclass TYMateriauConstruction (TYElement):
         TYSpectre& getSpectreAbso()
 
-cdef extern from "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSpectre.h":
+cdef extern from "Tympan/models/business/acoustic/TYSpectre.h":
     cdef cppclass TYSpectre (TYElement, tycommon.OSpectre):
         pass
 

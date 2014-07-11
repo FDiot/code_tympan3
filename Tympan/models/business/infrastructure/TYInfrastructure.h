@@ -23,7 +23,7 @@
 #include "Tympan/models/business/infrastructure/TYBatiment.h"
 #include "Tympan/models/business/infrastructure/TYReseauTransport.h"
 #include "Tympan/models/business/infrastructure/TYRoute.h"
-#include "Tympan/models/business/acoustique/TYUserSourcePonctuelle.h"
+#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
 
 /**
  * Centralise les elements d'infrastructure.

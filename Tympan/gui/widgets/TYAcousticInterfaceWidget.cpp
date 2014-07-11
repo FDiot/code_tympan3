@@ -29,7 +29,7 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticInterface.h"
-#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 
 #include <qradiobutton.h>
 #include <qbuttongroup.h>

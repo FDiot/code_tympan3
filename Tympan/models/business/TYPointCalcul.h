@@ -23,7 +23,7 @@
 
 #include "Tympan/models/business/geometry/TYPoint.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
-#include "Tympan/models/business/acoustique/TYSpectre.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 
 /**
  * \file TYPointCalcul.h
