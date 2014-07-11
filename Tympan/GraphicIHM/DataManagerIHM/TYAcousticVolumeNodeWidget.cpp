@@ -31,7 +31,7 @@
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolumeNode.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticInterfaceWidget.h"
 

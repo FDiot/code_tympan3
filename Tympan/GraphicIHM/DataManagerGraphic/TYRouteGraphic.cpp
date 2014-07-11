@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
+#include "Tympan/models/business/infrastructure/TYRoute.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 

@@ -25,7 +25,7 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
 #include "TYSolverDefines.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYChemin.h"
+#include "Tympan/models/business/TYChemin.h"
 
 class TYTrajet;
 class TYSolver;

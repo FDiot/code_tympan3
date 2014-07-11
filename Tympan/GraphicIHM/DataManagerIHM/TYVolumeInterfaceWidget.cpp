@@ -33,7 +33,7 @@
 #include <QGridLayout>
 #include <QLabel>
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYVolumeInterface.h"
+#include "Tympan/models/business/geometry/TYVolumeInterface.h"
 
 #include "Tympan/Tools/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYVolumeInterfaceWidget", (id))

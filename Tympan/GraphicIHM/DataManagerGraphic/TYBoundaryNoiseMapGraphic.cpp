@@ -26,10 +26,10 @@
 
 #include "Tympan/gui/OSizeManager.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYBoundaryNoiseMap.h"
+#include "Tympan/models/business/TYBoundaryNoiseMap.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/TYCalcul.h"
 
 TYBoundaryNoiseMapGraphic::TYBoundaryNoiseMapGraphic(TYBoundaryNoiseMap* pElement) :
     TYElementGraphic(pElement)

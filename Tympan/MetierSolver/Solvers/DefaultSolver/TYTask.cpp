@@ -23,7 +23,7 @@
 #include "TYFaceSelector.h"
 #include "TYSolver.h"
 #include "TYTask.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
+#include "Tympan/models/business/TYTrajet.h"
 
 TYTask::TYTask(TYSolver& solver, TYTrajet& trajet, int nNbTrajets)
     : _solver(solver), _trajet(trajet), _nNbTrajets(nNbTrajets), _tabIntersect(0)

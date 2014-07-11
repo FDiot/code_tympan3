@@ -31,7 +31,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
+#include "Tympan/models/business/TYProjet.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 
 #include <qpixmap.h>

@@ -38,7 +38,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYCourbeNiveauWidget", (id))
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYCourbeNiveau.h"
+#include "Tympan/models/business/topography/TYCourbeNiveau.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
 
 

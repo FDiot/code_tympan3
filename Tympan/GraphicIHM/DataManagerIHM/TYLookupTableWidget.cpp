@@ -37,7 +37,7 @@
 #include <qpainter.h>
 #include <qrect.h>
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPalette.h"
+#include "Tympan/models/business/TYPalette.h"
 
 
 TYLookupTableWidget::TYLookupTableWidget(const TYPalette* palette, QWidget* parent, const char* name)

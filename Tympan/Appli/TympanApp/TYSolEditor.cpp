@@ -29,7 +29,7 @@
 
 #include "Tympan/Tools/OLocalizator.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYSol.h"
+#include "Tympan/models/business/material/TYSol.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSolWidget.h"
 
 #include <qinputdialog.h>

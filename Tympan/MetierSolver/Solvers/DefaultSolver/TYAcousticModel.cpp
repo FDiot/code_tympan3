@@ -19,10 +19,10 @@
 
 #include <deque>
 #include "TYAcousticModel.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYTrajet.h"
+#include "Tympan/models/business/infrastructure/TYTopographie.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/core/defines.h"
 #include "TYSolver.h"
 

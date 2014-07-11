@@ -73,7 +73,7 @@ file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 # Once the solvers will be independents modules / executable this directory
 # should build a shared library use by the GUI and the SolverDataModel
 add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
-set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models")
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models/common")
 #target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
 install_tympan_component(${MODULE_NAME})
 
@@ -92,7 +92,25 @@ install_tympan_component(${MODULE_NAME})
 
 # The inclusion order seems to be significant for dependencies
 add_subdirectory(Tools)
-add_subdirectory(MetierSolver)
+
+set(MODULE_NAME tympan_dm_metier)
+file(GLOB_RECURSE ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/models/business
+    *.cpp *.h *.hpp
+)
+set_precompiled_header(${MODULE_NAME} CXX
+  ${CMAKE_CURRENT_SOURCE_DIR}/TYPHMetier.h ${MODULE_NAME}_PCH_SRCS)
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models/business")
+use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
+add_dependencies(${MODULE_NAME}
+    NMPB2008
+    tympan_tools_metier tympan_solver_data_model tympan_tools tympan_dm_core
+    tympan_tools_graphics
+    GTest)
+target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${CGAL_LIBRARIES} RoadEmissionNMPB tympan_tools_metier tympan_solver_data_model tympan_tools tympan_dm_core tympan_tools_graphics)
+install_tympan_component(${MODULE_NAME})
+
+
 add_subdirectory(GraphicIHM)
 add_subdirectory(Appli)
 

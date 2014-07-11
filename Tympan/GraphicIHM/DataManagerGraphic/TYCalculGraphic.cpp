@@ -26,8 +26,8 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYCalcul.h"
 
 
 TYCalculGraphic::TYCalculGraphic(TYCalcul* pElement) :

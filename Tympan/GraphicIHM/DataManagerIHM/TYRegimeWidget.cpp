@@ -25,7 +25,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYRegime.h"
+#include "Tympan/models/business/acoustique/TYRegime.h"
 
 #define TR(id) OLocalizator::getString("TYRegimeWidget", (id))
 

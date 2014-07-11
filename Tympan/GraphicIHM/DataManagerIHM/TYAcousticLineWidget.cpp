@@ -27,7 +27,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>

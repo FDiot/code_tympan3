@@ -18,7 +18,7 @@
  */
 
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolume.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticVolume.h"
 #include "Tympan/core/defines.h"
 
 #include "TYFaceSelector.h"

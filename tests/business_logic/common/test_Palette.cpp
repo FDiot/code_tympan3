@@ -4,7 +4,7 @@
 #include "gtest/gtest.h"
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYLookupTableWidget.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPalette.h"
+#include "Tympan/models/business/TYPalette.h"
 
 
 TEST(TestTYPalette, color_conversions)

@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYEcran.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
 
 
 TYEcranGraphic::TYEcranGraphic(TYEcran* pElement) :

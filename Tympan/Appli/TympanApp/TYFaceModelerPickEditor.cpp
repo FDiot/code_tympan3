@@ -27,7 +27,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYBatiment.h"
+#include "Tympan/models/business/infrastructure/TYBatiment.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickHandler.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYWidget.h"
 

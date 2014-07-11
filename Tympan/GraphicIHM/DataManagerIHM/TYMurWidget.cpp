@@ -27,7 +27,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYMur.h"
+#include "Tympan/models/business/infrastructure/TYMur.h"
 #include <QPushButton>
 #include <QCheckBox>
 //Added by qt3to4:

@@ -37,10 +37,10 @@
 #include <qtooltip.h>
 #include <qcombobox.h>
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRectangularMaillage.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangularMaillageGraphic.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYBoundaryNoiseMap.h"
+#include "Tympan/models/business/TYBoundaryNoiseMap.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYBoundaryNoiseMapGraphic.h"
 
 #include <qlayout.h>

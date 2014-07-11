@@ -29,11 +29,11 @@
 
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLRectangleElement.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticBox.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticBox.h"
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPointGraphic.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRepere.h"
+#include "Tympan/models/business/geometry/TYRepere.h"
 #include "Tympan/Tools/OLocalizator.h"
 
 #include <qinputdialog.h>

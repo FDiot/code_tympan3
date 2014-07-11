@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYMur.h"
+#include "Tympan/models/business/infrastructure/TYMur.h"
 
 
 TYMurGraphic::TYMurGraphic(TYMur* pElement) :

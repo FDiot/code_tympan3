@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
+#include "Tympan/models/business/geometry/TYRectangle.h"
 
 
 TYRectangleGraphic::TYRectangleGraphic(TYRectangle* pElement) :

@@ -38,8 +38,8 @@
 #include <QHeaderView>
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYProjet.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

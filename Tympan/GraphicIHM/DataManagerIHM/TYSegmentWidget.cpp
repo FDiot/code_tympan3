@@ -37,7 +37,7 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSegmentWidget.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYSegment.h"
+#include "Tympan/models/business/geometry/TYSegment.h"
 
 
 TYSegmentWidget::TYSegmentWidget(TYSegment* pElement, QWidget* _pParent /*=NULL*/):

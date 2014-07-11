@@ -36,7 +36,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
 #include "TYElementGraphic.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYMaillage.h"
+#include "Tympan/models/business/TYMaillage.h"
 
 /**
  * \class TYRectangularMaillageGraphic

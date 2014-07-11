@@ -29,7 +29,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCylinderGraphic.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSemiCylinder.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticSemiCylinder.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 
 

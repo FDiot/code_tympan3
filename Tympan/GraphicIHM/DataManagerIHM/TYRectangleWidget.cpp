@@ -35,7 +35,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYRectangleWidget", (id))
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRectangle.h"
+#include "Tympan/models/business/geometry/TYRectangle.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSurfaceInterfaceWidget.h"
 
 

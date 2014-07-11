@@ -13,10 +13,10 @@
 #include "gtest/gtest.h"
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/DataManagerMetier/cgal_tools.h"
+#include "Tympan/models/business/cgal_tools.h"
 #include "Tympan/models/common/plan.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
-#include "Tympan/MetierSolver/DataManagerMetier/cgal_bridge.hpp"
+#include "Tympan/models/business/geometry/TYPolygon.h"
+#include "Tympan/models/business/cgal_bridge.hpp"
 
 using std::cout;
 using std::cerr;

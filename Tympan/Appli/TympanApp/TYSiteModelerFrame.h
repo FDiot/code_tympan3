@@ -26,7 +26,7 @@
 #define __TY_SITE_MODELER_FRAME__
 
 #include "TYModelerFrame.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
+#include "Tympan/models/business/TYProjet.h"
 
 class QToolButton;
 class QComboBox;

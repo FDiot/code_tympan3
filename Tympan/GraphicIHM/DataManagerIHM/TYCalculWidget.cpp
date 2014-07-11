@@ -42,11 +42,11 @@
 
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYLinearMaillage.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYRectangularMaillage.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYLinearMaillage.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYEtatsWidget.h"
 

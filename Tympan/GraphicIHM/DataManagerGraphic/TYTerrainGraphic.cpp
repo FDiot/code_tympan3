@@ -26,7 +26,7 @@
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYTerrain.h"
+#include "Tympan/models/business/topography/TYTerrain.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 

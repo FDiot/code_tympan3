@@ -29,7 +29,7 @@
 
 
 #include <qwidget.h>
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYBatiment.h"
+#include "Tympan/models/business/infrastructure/TYBatiment.h"
 #include "TYModelerFrame.h"
 
 

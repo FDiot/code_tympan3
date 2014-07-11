@@ -34,7 +34,7 @@
 #include "Tympan/Config.h"
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/core/chrono.h"
-#include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
+#include "Tympan/models/business/xml_project_util.hpp"
 #include "Tympan/Appli/TympanApp/TYApplication.h"
 #include "Tympan/core/defines.h"
 #include "EnvironmentUtils.hpp"

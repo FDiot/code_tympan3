@@ -25,7 +25,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYBox.h"
+#include "Tympan/models/business/geometry/TYBox.h"
 
 
 TYBoxGraphic::TYBoxGraphic(TYBox* pElement) :

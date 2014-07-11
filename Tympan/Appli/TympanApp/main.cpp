@@ -36,7 +36,7 @@
 //#include <qplatinumstyle.h>
 #include "TYApplication.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/init_registry.h"
+#include "Tympan/models/business/init_registry.h"
 
 static QtMsgHandler old_handler;
 

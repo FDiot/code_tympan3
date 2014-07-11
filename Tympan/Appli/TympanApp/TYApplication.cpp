@@ -40,7 +40,7 @@
 #include "Tympan/GraphicIHM/ToolsGraphic/TYImageManager.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
 using namespace Qt;
 

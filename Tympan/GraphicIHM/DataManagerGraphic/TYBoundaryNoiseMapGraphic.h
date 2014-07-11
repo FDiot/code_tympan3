@@ -34,7 +34,7 @@
 
 #include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYMaillage.h"
+#include "Tympan/models/business/TYMaillage.h"
 
 #include "TYPolyLineGraphic.h"
 

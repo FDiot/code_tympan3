@@ -27,7 +27,7 @@
 #include "TYPHIHM.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
 #include <qmenu.h>
 #include <qcombobox.h>

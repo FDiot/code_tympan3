@@ -33,9 +33,9 @@
 
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolumeNode.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourceSurfacic.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
+#include "Tympan/models/business/acoustique/TYSourceSurfacic.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QShowEvent>

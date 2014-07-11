@@ -18,11 +18,11 @@
  */
 
 #include "Tympan/MetierSolver/ToolsMetier/OThreadPool.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
+#include "Tympan/models/business/TYTrajet.h"
 #include "TYSolver.h"
 #include "TYAcousticModel.h"
 #include "TYAcousticPathFinder.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/TYCalcul.h"
 #include "TYFaceSelector.h"
 #include "TYTask.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"

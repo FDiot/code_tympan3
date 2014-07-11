@@ -31,7 +31,7 @@
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPointGraphic.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYRepere.h"
+#include "Tympan/models/business/geometry/TYRepere.h"
 #include "TYApplication.h"
 #include "Tympan/Tools/OLocalizator.h"
 #include <cmath>

@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticRectangle.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 

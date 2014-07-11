@@ -33,7 +33,7 @@
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLCamera.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLineElement.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/NxVec3.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
+#include "Tympan/models/business/geometry/TYGeometryNode.h"
 
 #define IMG(id) OLocalizator::getPicture("TYElementGraphic", (id))
 

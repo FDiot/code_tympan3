@@ -33,7 +33,7 @@
 #include "Tympan/core/color.h"
 #include "Tympan/Tools/OLocalizator.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h"
+#include "Tympan/models/business/topography/TYAltimetrie.h"
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"

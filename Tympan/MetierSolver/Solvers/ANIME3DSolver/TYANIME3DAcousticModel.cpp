@@ -18,7 +18,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/TYCalcul.h"
 
 #include "Tympan/models/common/acoustic_path.h"
 

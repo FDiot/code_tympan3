@@ -195,7 +195,7 @@ namespace tympan
  * Exemple d'utilisation:
  *      OPrototype::add_factory("TYTopographie", move(build_factory<TYTopographie>()));
  *
- * (voir Tympan/MetierSolver/DataManagerMetier/init_registry.{h,cpp})
+ * (voir Tympan/models/business/init_registry.{h,cpp})
  */
 
 

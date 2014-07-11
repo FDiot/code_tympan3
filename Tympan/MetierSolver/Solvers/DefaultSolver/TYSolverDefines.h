@@ -24,7 +24,7 @@
 #define __TY_SOLVERDEFINES__
 
 #include <deque>
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
 #include "Tympan/models/common/3d.h"
 
 struct TYStructSurfIntersect

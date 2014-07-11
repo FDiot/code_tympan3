@@ -38,7 +38,7 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticInterfaceWidget.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSurfaceInterfaceWidget.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurfaceNode.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticSurfaceNode.h"
 
 #include "Tympan/Tools/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYAcousticSurfaceNodeWidget", (id))

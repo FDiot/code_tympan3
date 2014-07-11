@@ -29,9 +29,9 @@
 #include <qtreewidget.h>
 
 #include "TYAppDefines.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltMateriaux/TYAtmosphere.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/material/TYAtmosphere.h"
+#include "Tympan/models/business/TYCalcul.h"
 
 class QMenuBar;
 class QListView;

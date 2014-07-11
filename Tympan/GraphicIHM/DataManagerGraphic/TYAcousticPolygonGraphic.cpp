@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticPolygon.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticPolygon.h"
 
 
 TYAcousticPolygonGraphic::TYAcousticPolygonGraphic(TYAcousticPolygon* pElement) :

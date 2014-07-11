@@ -33,7 +33,7 @@
 #endif // _MSC_VER > 1000
 
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
+#include "Tympan/models/business/geometry/TYPolygon.h"
 class TYPlanEau;
 
 

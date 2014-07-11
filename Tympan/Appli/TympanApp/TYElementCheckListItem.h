@@ -31,7 +31,7 @@
 #include "TYAppDefines.h"
 #include <qtreewidget.h>
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/TYCalcul.h"
 
 
 /**

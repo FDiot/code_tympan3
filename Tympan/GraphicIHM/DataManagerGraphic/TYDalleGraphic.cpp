@@ -26,7 +26,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHGraphic.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYDalle.h"
+#include "Tympan/models/business/infrastructure/TYDalle.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
 

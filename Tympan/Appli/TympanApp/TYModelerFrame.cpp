@@ -54,7 +54,7 @@
 
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYGeometryNode.h"
+#include "Tympan/models/business/geometry/TYGeometryNode.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLTextElement.h"
 #include "Tympan/gui/OSizeManager.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLScalarBarElement.h"
