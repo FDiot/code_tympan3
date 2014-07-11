@@ -47,8 +47,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 #endif
 
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
+#include "Tympan/models/business/TYPluginManager.h"
 
 #include "Tympan/core/defines.h"
 #include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"

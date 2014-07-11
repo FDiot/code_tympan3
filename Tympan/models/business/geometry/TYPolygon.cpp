@@ -32,7 +32,7 @@
 #include "Tympan/core/defines.h"
 #include "TYRectangle.h"
 #include "TYPolygon.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #include "Tympan/models/business/cgal_bridge.hpp"
 

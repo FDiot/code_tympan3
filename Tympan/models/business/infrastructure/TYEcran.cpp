@@ -34,7 +34,7 @@
 
 #include "Tympan/core/logging.h"
 
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 
 TY_EXTENSION_INST(TYEcran);

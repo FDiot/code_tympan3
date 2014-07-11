@@ -32,7 +32,7 @@
 
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
 #include "Tympan/models/business/acoustique/TYSourceSurfacic.h"

@@ -13,7 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+#include "Tympan/models/business/TYSolverInterface.h"
 
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 

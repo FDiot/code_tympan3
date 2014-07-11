@@ -27,7 +27,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/triangle.h"

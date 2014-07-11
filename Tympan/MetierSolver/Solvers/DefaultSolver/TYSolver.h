@@ -24,7 +24,7 @@
 #define __TY_SOLVER__
 
 #include "TYSolverDefines.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+#include "Tympan/models/business/TYSolverInterface.h"
 
 #include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
 #include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"

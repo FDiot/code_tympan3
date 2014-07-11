@@ -1,5 +1,5 @@
 #include "init_registry.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/infrastructure/TYTopographie.h"
 #include "Tympan/models/business/infrastructure/TYInfrastructure.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"

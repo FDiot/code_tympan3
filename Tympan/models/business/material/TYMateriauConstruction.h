@@ -23,7 +23,7 @@
 #ifndef __TY_MATERIAUCONSTRUCTION__
 #define __TY_MATERIAUCONSTRUCTION__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/acoustique/TYSpectre.h"
 
 class TYMateriauConstruction: public TYElement

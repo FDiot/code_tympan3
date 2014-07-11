@@ -35,7 +35,7 @@
 #include <qcursor.h>
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 #define TR(id) OLocalizator::getString("TYMachineModelerFrame", (id))
 #define IMG(id) OLocalizator::getPicture("TYMachineModelerFrame", (id))

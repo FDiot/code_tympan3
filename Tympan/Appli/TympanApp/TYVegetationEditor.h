@@ -25,7 +25,7 @@
 #define __TY_VEGETATION_EDITOR__
 
 #include "TYPolyLineEditor.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
+#include "Tympan/models/business/TYDefines.h"
 
 /**
  * \class TYVegetationEditor

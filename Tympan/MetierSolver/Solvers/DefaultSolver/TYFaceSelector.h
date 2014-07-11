@@ -23,7 +23,7 @@
 #ifndef __TYFACESELECTOR__
 #define __TYFACESELECTOR__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYFaceSelectorInterface.h"
+#include "Tympan/models/business/TYFaceSelectorInterface.h"
 #include "TYSolverDefines.h"
 
 class TYSolver;

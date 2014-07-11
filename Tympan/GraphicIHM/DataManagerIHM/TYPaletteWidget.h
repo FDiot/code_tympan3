@@ -32,7 +32,7 @@
 #include <set>
 
 #include "Tympan/core/color.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
+#include "Tympan/models/business/TYDefines.h"
 
 class TYElementWidget;
 class TYLabeledLookupTableWidget;

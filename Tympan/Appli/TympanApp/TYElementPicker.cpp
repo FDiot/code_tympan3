@@ -26,7 +26,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYLinearMaillage.h"
 

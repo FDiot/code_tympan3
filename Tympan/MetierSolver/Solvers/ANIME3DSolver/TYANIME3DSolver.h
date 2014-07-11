@@ -23,7 +23,7 @@
 #include "Tympan/models/business/acoustique/TYSourcePonctuelle.h"
 #include "Tympan/models/business/TYPointCalcul.h"
 #include "Tympan/models/common/acoustic_path.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+#include "Tympan/models/business/TYSolverInterface.h"
 
 
 class TYANIME3DAcousticModel;

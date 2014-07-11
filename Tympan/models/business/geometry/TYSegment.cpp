@@ -26,7 +26,7 @@
 #include "Tympan/models/business/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include <math.h>
 
 #include "Tympan/core/logging.h"

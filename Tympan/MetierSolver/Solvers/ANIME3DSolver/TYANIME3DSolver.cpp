@@ -20,7 +20,7 @@
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/delaunay_maker.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
+#include "Tympan/models/business/TYAcousticModelInterface.h"
 #include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"

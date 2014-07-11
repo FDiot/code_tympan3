@@ -20,8 +20,8 @@
 #ifndef __TY_POINT__
 #define __TY_POINT__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
-//#include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
+#include "Tympan/models/business/TYElement.h"
+//#include "Tympan/models/business/TYColorInterface.h"
 
 /**
  * Classe de definition d'un point.

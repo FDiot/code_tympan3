@@ -67,9 +67,9 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSpectreWidget.h"
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
+#include "Tympan/models/business/TYPluginManager.h"
 #include "TYCustomPopupMenu.h"
 
 #include <QDockWidget>

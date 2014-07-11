@@ -38,7 +38,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 #endif
 
-#include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
+#include "Tympan/models/business/TYPluginManager.h"
 
 
 TY_EXTENSION_INST(TYProjet);

@@ -28,7 +28,7 @@
 #ifndef __TY_PLAN_EAU_EDITOR__
 #define __TY_PLAN_EAU_EDITOR__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
+#include "Tympan/models/business/TYDefines.h"
 #include "TYPolyLineEditor.h"
 
 /**

@@ -20,7 +20,7 @@
 #ifndef __TY_SPECTRE__
 #define __TY_SPECTRE__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/common/spectre.h"
 
 ///Collection des frequences

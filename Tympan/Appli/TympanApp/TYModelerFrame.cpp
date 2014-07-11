@@ -53,7 +53,7 @@
 //#include <vtkVRMLExporter.h>
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLTextElement.h"
 #include "Tympan/gui/OSizeManager.h"

@@ -16,7 +16,7 @@
 #ifndef _TYRAY_
 #define _TYRAY_
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/acoustic_path.h"
 

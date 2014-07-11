@@ -28,12 +28,12 @@
 #define __TY_OPEN_ELEMENT_DIALOG__
 
 #include "TYAppDefines.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
+#include "Tympan/models/business/TYDefines.h"
 
 #include <qdialog.h>
 #include <qlist.h>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 
 class QListWidget;
 class QPushButton;

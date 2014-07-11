@@ -28,7 +28,7 @@
 #include <qfiledialog.h>
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/models/business/material/TYMateriauConstruction.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>

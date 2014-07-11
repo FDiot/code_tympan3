@@ -23,7 +23,7 @@
   #include "Tympan/GraphicIHM/DataManagerIHM/TYBoundaryNoiseMapWidget.h"
 #endif
 #include "Tympan/core/logging.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
 
 #undef min
 #undef max

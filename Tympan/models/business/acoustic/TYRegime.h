@@ -21,7 +21,7 @@
 #define __TY_REGIME__
 
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "TYSpectre.h"
 #include "TYAttenuateur.h"
 

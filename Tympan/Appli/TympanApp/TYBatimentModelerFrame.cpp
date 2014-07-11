@@ -33,7 +33,7 @@
 #include <qcursor.h>
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

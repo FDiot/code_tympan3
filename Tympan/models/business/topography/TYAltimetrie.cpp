@@ -39,7 +39,7 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/geometry/TYSegment.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/common/delaunay_maker.h"
 #if TY_USE_IHM
   #include "Tympan/GraphicIHM/DataManagerIHM/TYAltimetrieWidget.h"

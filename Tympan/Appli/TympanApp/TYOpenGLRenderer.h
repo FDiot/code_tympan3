@@ -39,7 +39,7 @@
 
 #include "Tympan/models/common/3d.h"
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLLightElement.h"
 #include "Tympan/GraphicIHM/ToolsGraphic/OGLElement.h"

@@ -26,7 +26,7 @@
 #include <map>
 
 #include "Tympan/core/color.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 
 /**
  * \file TYPalette.h

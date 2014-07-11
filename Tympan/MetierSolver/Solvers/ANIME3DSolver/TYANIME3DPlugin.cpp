@@ -20,8 +20,8 @@
  * \date 04 avril 2011
  */
 
-#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPlugin.h"
+#include "Tympan/models/business/TYSolverInterface.h"
+#include "Tympan/models/business/TYPlugin.h"
 #include "TYANIME3DSolver.h"
 
 // Variable globale

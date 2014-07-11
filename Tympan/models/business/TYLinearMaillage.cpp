@@ -29,7 +29,7 @@
 #include <qdir.h>
 
 #include "Tympan/core/logging.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
 
 
 TY_EXTENSION_INST(TYLinearMaillage);

@@ -21,7 +21,7 @@
 #define __TY_TRAFIC__
 
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 
 #include "RoadEmissionNMPB08.h"
 
