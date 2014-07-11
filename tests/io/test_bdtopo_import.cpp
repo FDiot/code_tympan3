@@ -1,7 +1,7 @@
 //! \test test_bdtopo_import.cpp
 /*! \note Test BDTOPO DXF files import. Have to test some protected/private
     methods from \c TYDXFImporter and \c TYDXFBDTopoImporter. Need to write \c
-    FRIEND_TEST class from GTest in \file Tympan/TympanApp/Appli/TYDXFImporter.h
+    FRIEND_TEST class from GTest in \file Tympan/gui/app/TYDXFImporter.h
 
     \sa http://code.google.com/p/googletest/wiki/AdvancedGuide#Private_Class_Members
  */
@@ -12,8 +12,8 @@
 
 #include <dime/Model.h>
 
-#include "Tympan/Appli/TympanApp/TYDXFImporter.h"
-#include "Tympan/Appli/TympanApp/TYDXFBDTOPOImporter.h"
+#include "Tympan/gui/app/TYDXFImporter.h"
+#include "Tympan/gui/app/TYDXFBDTOPOImporter.h"
 
 #include "test_utils/ProjectLoader.hpp"
 #include "TympanTestsConfig.hpp"

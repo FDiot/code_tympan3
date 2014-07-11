@@ -125,7 +125,9 @@ install_tympan_component(${MODULE_NAME})
 
 # The inclusion order seems to be significant for dependencies
 add_subdirectory(GraphicIHM)
-add_subdirectory(Appli)
+
+set(CURRENT_FOLDER "Tympan/GUI_Application")
+add_subdirectory(gui/app)
 
 set(CURRENT_FOLDER "Tympan/solvers")
 
