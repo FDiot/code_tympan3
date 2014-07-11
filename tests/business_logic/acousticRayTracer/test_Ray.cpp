@@ -11,13 +11,13 @@
 #include <map>
 
 #include "gtest/gtest.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Cylindre.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Source.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Recepteur.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Event.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/Diffraction.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Acoustic/SpecularReflexion.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Ray/Ray.h"
+#include "Tympan/solvers/AcousticRaytracer/Geometry/Cylindre.h"
+#include "Tympan/solvers/AcousticRaytracer/Acoustic/Source.h"
+#include "Tympan/solvers/AcousticRaytracer/Acoustic/Recepteur.h"
+#include "Tympan/solvers/AcousticRaytracer/Acoustic/Event.h"
+#include "Tympan/solvers/AcousticRaytracer/Acoustic/Diffraction.h"
+#include "Tympan/solvers/AcousticRaytracer/Acoustic/SpecularReflexion.h"
+#include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
 
 using std::cout;
 using std::cerr;

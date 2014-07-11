@@ -17,15 +17,15 @@
  *
  */
 
-#include "Tympan/MetierSolver/Solvers/OThreadPool.h"
 #include "Tympan/models/business/TYTrajet.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/solvers/DefaultSolver/threading.h"
 #include "TYSolver.h"
 #include "TYAcousticModel.h"
 #include "TYAcousticPathFinder.h"
-#include "Tympan/models/business/TYCalcul.h"
 #include "TYFaceSelector.h"
 #include "TYTask.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
 
 TYSolver::TYSolver()
     : _faceSelector(0), _acousticPathFinder(0), _acousticModel(0), _tabPolygon(0), _tabPolygonSize(0), _pool(0)

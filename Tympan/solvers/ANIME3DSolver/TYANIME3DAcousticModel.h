@@ -16,7 +16,7 @@
 #ifndef __TYANIME3DACOUSTICMODEL__
 #define __TYANIME3DACOUSTICMODEL__
 
-#include "Tympan/MetierSolver/Solvers/ANIME3DSolver/TYANIME3DSolver.h"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DSolver.h"
 
 // Pour l'utilisation de la librairie standard STL.
 

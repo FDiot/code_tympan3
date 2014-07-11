@@ -16,7 +16,6 @@
 #include <QThread>
 
 #include "threading.h"
-#include "OMutexLocker.h"
 
 OSlaveThread::OSlaveThread(OThreadPool* pool)
     : _pool(pool)
