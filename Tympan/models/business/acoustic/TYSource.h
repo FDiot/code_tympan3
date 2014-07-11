@@ -20,10 +20,10 @@
 #ifndef __TY_SOURCE__
 #define __TY_SOURCE__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "TYSpectre.h"
 #include "Tympan/models/business/material/TYAtmosphere.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
+#include "Tympan/models/business/TYColorInterface.h"
 
 
 ///Tableau associatif Regime/Spectre.

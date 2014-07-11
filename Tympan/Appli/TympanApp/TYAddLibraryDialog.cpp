@@ -26,7 +26,7 @@
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/TYVersion.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
 
 #include <qcursor.h>
 #include <qdir.h>

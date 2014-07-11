@@ -24,7 +24,7 @@
 #define __TY_SEMI_CYLINDER_EDITOR__
 
 #include "TYAbstractSceneEditor.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
+#include "Tympan/models/business/TYDefines.h"
 
 class OGLRectangleElement;
 /**

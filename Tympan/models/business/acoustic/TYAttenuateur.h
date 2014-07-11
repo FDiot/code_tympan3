@@ -20,7 +20,7 @@
 #ifndef __TY_ATTENUATEUR__
 #define __TY_ATTENUATEUR__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "TYSpectre.h"
 
 

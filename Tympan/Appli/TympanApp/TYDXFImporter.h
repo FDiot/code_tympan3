@@ -15,7 +15,7 @@
 #ifndef __TYDXF_IMPORTER__
 #define __TYDXF_IMPORTER__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
+#include "Tympan/models/business/TYDefines.h"
 
 #ifdef TY_USE_DXF
 

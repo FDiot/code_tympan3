@@ -34,7 +34,7 @@
 #include "TYColorInterfaceWidget.h"
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
+#include "Tympan/models/business/TYColorInterface.h"
 #include "TYToolButton.h"
 
 #define TR(id) OLocalizator::getString("TYColorInterfaceWidget", (id))

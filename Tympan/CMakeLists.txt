@@ -105,7 +105,7 @@ use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 add_dependencies(${MODULE_NAME}
     NMPB2008
     tympan_tools_metier tympan_solver_data_model tympan_tools tympan_dm_core
-    tympan_tools_graphics
+    tympan_tools_graphics tympan_dm_ihm
     GTest)
 target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${CGAL_LIBRARIES} RoadEmissionNMPB tympan_tools_metier tympan_solver_data_model tympan_tools tympan_dm_core tympan_tools_graphics)
 install_tympan_component(${MODULE_NAME})

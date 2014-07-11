@@ -17,7 +17,7 @@
 using std::vector;
 
 
-#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+#include "Tympan/models/business/TYSolverInterface.h"
 
 #include "Tympan/models/common/triangle.h"
 //#include "Tympan/models/business/TYRay.h"

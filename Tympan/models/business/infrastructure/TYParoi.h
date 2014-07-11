@@ -24,7 +24,7 @@
 #define __TY_PAROI__
 
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/material/TYMateriauConstruction.h"
 
 /**

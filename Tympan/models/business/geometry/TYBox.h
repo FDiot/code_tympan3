@@ -23,7 +23,7 @@
 class OSegment3D;
 
 #include "TYPoint.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
+#include "Tympan/models/business/TYColorInterface.h"
 
 /**
  * Classe de definition d'une boite.

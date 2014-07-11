@@ -34,10 +34,10 @@
 #include <qfiledialog.h>
 #include <qmessagebox.h>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYEtatsWidget.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include <QTextStream>

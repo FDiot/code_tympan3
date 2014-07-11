@@ -37,10 +37,10 @@
 #include <qfiledialog.h>
 #include <qmessagebox.h>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 //Added by qt3to4:
 #include <QPixmap>
 #include <QVBoxLayout>

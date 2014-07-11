@@ -45,7 +45,7 @@
 #include "Tympan/GraphicIHM/DataManagerIHM/TYSolResistanceDialog.h"
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYToolButton.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/Tools/OLocalizator.h"
 
 #include "Tympan/models/business/TYMaillage.h"

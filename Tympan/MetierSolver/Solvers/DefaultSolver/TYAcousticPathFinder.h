@@ -23,7 +23,7 @@
 #ifndef __TYACOUSTICPATHFINDER__
 #define __TYACOUSTICPATHFINDER__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYAcousticPathFinderInterface.h"
+#include "Tympan/models/business/TYAcousticPathFinderInterface.h"
 #include "TYSolverDefines.h"
 
 class TYSolver;

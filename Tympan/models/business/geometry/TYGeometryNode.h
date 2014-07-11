@@ -28,7 +28,7 @@
 #pragma warning( disable : 4284 )
 #endif
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "TYRepere.h"
 #include "Tympan/models/common/3d.h"
 

@@ -33,7 +33,7 @@
 #endif // _MSC_VER > 1000
 
 
-#include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
+#include "Tympan/models/business/TYDefines.h"
 #include "TYElementGraphic.h"
 
 

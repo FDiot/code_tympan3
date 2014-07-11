@@ -21,7 +21,7 @@
 #define __TY_DIRECTIVITE__
 
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 
 
 ///Permet d'associer une valeur a un couple d'angle.

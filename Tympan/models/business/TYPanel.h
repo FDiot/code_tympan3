@@ -20,7 +20,7 @@
 #ifndef __TY_PANEL__
 #define __TY_PANEL__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 
 /**
  * \file TYPanel.h

@@ -21,7 +21,7 @@
 #define __TY_REPERE__
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "TYPoint.h"
 
 /**

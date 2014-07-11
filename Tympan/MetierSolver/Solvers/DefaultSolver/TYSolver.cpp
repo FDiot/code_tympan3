@@ -25,7 +25,7 @@
 #include "Tympan/models/business/TYCalcul.h"
 #include "TYFaceSelector.h"
 #include "TYTask.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 TYSolver::TYSolver()
     : _faceSelector(0), _acousticPathFinder(0), _acousticModel(0), _tabPolygon(0), _tabPolygonSize(0), _pool(0)

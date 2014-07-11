@@ -29,7 +29,7 @@
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYWidget.h"
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 
 #include "Tympan/models/business/infrastructure/TYMachine.h"

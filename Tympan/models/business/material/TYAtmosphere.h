@@ -20,7 +20,7 @@
 #ifndef __TY_ATMOSPHERE__
 #define __TY_ATMOSPHERE__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/acoustique/TYSpectre.h"
 #include "Tympan/models/business/geometry/TYSegment.h"
 

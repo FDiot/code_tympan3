@@ -32,7 +32,7 @@
 
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 
 #define TR(id) OLocalizator::getString("TYFaceToolbar", (id))

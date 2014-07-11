@@ -17,7 +17,7 @@
  *
  */
 
-#include "Tympan/MetierSolver/DataManagerCore/TYPlugin.h"
+#include "Tympan/models/business/TYPlugin.h"
 
 extern "C" PLUGIN_DECL void startPlugin(bool console);
 

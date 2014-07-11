@@ -28,7 +28,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/models/business/infrastructure/TYReseauTransport.h"
 
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 
 TYReseauTransportGraphic::TYReseauTransportGraphic(TYReseauTransport* pElement) :

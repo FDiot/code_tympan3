@@ -19,7 +19,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/init_registry.h" namespa
     void init_registry()
 
 
-cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
+cdef extern from "Tympan/models/business/TYElement.h":
     cdef cppclass TYElement:
         QString getName()
         const char* getClassName() const
@@ -36,7 +36,7 @@ cdef extern from "Tympan/MetierSolver/DataManagerMetier/Commun/TYMaillage.h" nam
         Actif
         Inactif
 
-cdef extern from "Tympan/MetierSolver/DataManagerCore/TYElement.h":
+cdef extern from "Tympan/models/business/TYElement.h":
     TYAcousticSurface* downcast_acoustic_surface "downcast<TYAcousticSurface>"(TYElement *)
     # Occurences of downcast_acoustic_surface in Cython will be directly
     # translated into downcast<TYAcousticSurface> in C++.

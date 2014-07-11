@@ -35,7 +35,7 @@
 #include <QLabel>
 
 #include "TYPolyLineEditor.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYDefines.h"
+#include "Tympan/models/business/TYDefines.h"
 
 class QDoubleSpinBox;
 

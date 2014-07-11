@@ -43,7 +43,7 @@
 #include "TYDrawSpectres.h"
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYPrintDialog.h"
 
 #define NBSPECTRESMAX 5

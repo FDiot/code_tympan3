@@ -25,8 +25,8 @@
 #include "Tympan/models/business/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/Tools/TYProgressManager.h"
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/core/logging.h"

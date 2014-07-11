@@ -28,7 +28,7 @@
 #include "Tympan/Tools/OLocalizator.h"
 #include "Tympan/models/business/topography/TYTerrain.h"
 
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 #define IMG(id) OLocalizator::getPicture("TYTerrainGraphic", (id))
 

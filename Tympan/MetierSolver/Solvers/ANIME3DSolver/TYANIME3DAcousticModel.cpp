@@ -15,8 +15,8 @@
 
 #include "Tympan/models/common/3d.h"
 
-#include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+#include "Tympan/models/business/TYAcousticModelInterface.h"
+#include "Tympan/models/business/TYSolverInterface.h"
 
 #include "Tympan/models/business/TYCalcul.h"
 

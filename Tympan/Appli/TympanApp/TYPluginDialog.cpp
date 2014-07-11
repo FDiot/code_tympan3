@@ -25,7 +25,7 @@
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYPHTympanApp.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
+#include "Tympan/models/business/TYPluginManager.h"
 
 #include <qlayout.h>
 #include <qpushbutton.h>

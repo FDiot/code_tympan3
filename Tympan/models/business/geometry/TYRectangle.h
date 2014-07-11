@@ -20,7 +20,7 @@
 #ifndef __TY_RECTANGLE__
 #define __TY_RECTANGLE__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 #include "TYPoint.h"
 #include "TYRepere.h"
 #include "TYPolygon.h"

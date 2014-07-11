@@ -13,7 +13,7 @@
 
 #include <QString>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
 
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"

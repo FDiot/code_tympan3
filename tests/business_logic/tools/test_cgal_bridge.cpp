@@ -22,7 +22,7 @@ using std::deque;
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
 #include "Tympan/models/business/cgal_bridge.hpp"
-#include "Tympan/MetierSolver/DataManagerCore/exceptions.hpp"
+#include "Tympan/models/business/exceptions.hpp"
 
 using tympan::ITYPolygonTriangulator;
 

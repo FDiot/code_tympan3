@@ -39,7 +39,7 @@
 
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/core/logging.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 
 void TYDXFImporter::LoadFloatParam(const char* ParamName, double& dParam)

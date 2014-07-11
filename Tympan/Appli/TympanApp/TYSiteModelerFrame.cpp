@@ -48,10 +48,10 @@
 #include <qtoolbutton.h>
 #include <qpixmap.h>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 #if defined(WIN32)
 #ifdef _DEBUG

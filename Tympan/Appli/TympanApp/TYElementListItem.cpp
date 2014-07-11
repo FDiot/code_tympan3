@@ -29,10 +29,10 @@
 
 #include "Tympan/GraphicIHM/DataManagerIHM/TYWidget.h"
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 #include "Tympan/models/business/TYProjet.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
+#include "Tympan/models/business/TYPluginManager.h"
 
 #include <qpixmap.h>
 

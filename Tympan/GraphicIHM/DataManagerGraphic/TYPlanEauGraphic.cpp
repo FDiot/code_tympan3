@@ -31,7 +31,7 @@
 
 #include "Tympan/models/business/topography/TYPlanEau.h"
 
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 
 

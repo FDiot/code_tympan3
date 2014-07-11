@@ -37,7 +37,7 @@
 
 #include <limits>
 
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/Tools/OLocalizator.h"
 
 #include "Tympan/models/business/TYBoundaryNoiseMap.h"

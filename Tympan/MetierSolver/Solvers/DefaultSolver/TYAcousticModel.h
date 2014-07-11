@@ -23,7 +23,7 @@
 #ifndef __TYACOUSTICMODEL__
 #define __TYACOUSTICMODEL__
 
-#include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
+#include "Tympan/models/business/TYAcousticModelInterface.h"
 #include "TYSolverDefines.h"
 #include "Tympan/models/business/TYChemin.h"
 

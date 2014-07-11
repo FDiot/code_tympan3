@@ -22,7 +22,7 @@
 
 
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYColorInterface.h"
+#include "Tympan/models/business/TYColorInterface.h"
 
 /**
  * Permet de creer une altimetrie.

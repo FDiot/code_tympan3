@@ -44,7 +44,7 @@
 #include "TYAppDefines.h"
 #include "TYRenderWindowInteractor.h"
 #include "TYActionManager.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 
 class QGridLayout;
 class QBoxLayout;

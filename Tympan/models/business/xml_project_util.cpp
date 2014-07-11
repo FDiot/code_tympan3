@@ -11,7 +11,7 @@
 #include <boost/foreach.hpp>
 
 #include "Tympan/core/logging.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYXMLManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/core/exceptions.h"
 #include "Tympan/Config.h"
 

@@ -27,7 +27,7 @@
 #include "Tympan/gui/OSizeManager.h"
 
 #include "Tympan/models/business/TYBoundaryNoiseMap.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 
 #include "Tympan/models/business/TYCalcul.h"
 

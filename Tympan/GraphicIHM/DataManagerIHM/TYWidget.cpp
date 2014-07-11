@@ -30,8 +30,8 @@
 #include <qstring.h>
 
 #include "Tympan/Tools/OLocalizator.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/TYElement.h"
 
 #define TR(id) OLocalizator::getString("TYWidget", (id))
 

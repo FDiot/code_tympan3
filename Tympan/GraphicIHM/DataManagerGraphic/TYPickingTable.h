@@ -32,7 +32,7 @@
 #pragma once
 #endif // _MSC_VER > 1000
 
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 
 ///Collection de TYElement*.
 typedef std::vector<TYElement*> TYTabPtrElement;

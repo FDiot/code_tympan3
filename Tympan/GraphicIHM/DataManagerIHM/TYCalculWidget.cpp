@@ -47,7 +47,7 @@
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYLinearMaillage.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPluginManager.h"
+#include "Tympan/models/business/TYPluginManager.h"
 #include "Tympan/GraphicIHM/DataManagerIHM/TYEtatsWidget.h"
 
 #if defined(WIN32)
