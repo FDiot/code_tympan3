@@ -16,8 +16,11 @@
 #ifndef __TY_SOLVER__
 #define __TY_SOLVER__
 
+#include <vector>
+
 #include "TYSolverDefines.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
 
 #include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
 #include "Tympan/MetierSolver/SolverDataModel/acoustic_result_model.hpp"
@@ -59,10 +62,18 @@ protected:
 private:
     bool buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem);
 
+    /**
+     * \fn size_t buildValidTrajects(tympan::AcousticProblemModel& aproblem)
+     * \brief construit le tableau des trajets et la matrice resultat en supprimant les points trop proches d'une source
+     */
+   size_t buildTrajects(tympan::AcousticProblemModel& aproblem);
+
     // XXX This pointer is actually used like a C array :
     // TODO replace with a std::deque or similar container.
     TYStructSurfIntersect* _tabPolygon;
     size_t _tabPolygonSize;
+
+	std::vector<TYTrajet> _tabTrajets; 
 
     OThreadPool* _pool;
 };

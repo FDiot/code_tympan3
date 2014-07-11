@@ -47,9 +47,6 @@ void TYTask::main()
     TYTabPoint3D ptsLeft;
     TYTabPoint3D ptsRight;
 
-    TYPointCalcul* pPointCalc = dynamic_cast<TYPointCalcul*>(_trajet.getPointCalcul()->getElement());
-    if (!(pPointCalc)) { return; }
-
     // Construction du rayon SR
     OSegment3D rayon;
     _trajet.getPtSetPtRfromOSeg3D(rayon);
