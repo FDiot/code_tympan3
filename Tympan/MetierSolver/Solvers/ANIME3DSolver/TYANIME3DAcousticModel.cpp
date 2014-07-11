@@ -13,7 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/MetierSolver/CommonTools/OBox2.h"
+#include "Tympan/models/common/3d.h"
 
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
