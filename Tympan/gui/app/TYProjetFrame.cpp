@@ -38,7 +38,7 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYEtatsWidget.h"
+#include "Tympan/gui/widgets/TYEtatsWidget.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include <QTextStream>
 //Added by qt3to4:

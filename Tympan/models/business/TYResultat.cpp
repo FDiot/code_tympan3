@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYResultatWidget.h"
+#include "Tympan/gui/widgets/TYResultatWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYResultatGraphic.h"
 #endif
 

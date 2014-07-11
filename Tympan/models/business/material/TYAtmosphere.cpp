@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAtmosphereWidget.h"
+#include "Tympan/gui/widgets/TYAtmosphereWidget.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSourceSurfacicWidget.h"
+#include "Tympan/gui/widgets/TYSourceSurfacicWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceSurfacicGraphic.h"
 #endif
 

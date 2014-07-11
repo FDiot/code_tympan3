@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSurfaceWidget.h"
+#include "Tympan/gui/widgets/TYAcousticSurfaceWidget.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

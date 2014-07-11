@@ -20,7 +20,7 @@
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #if TY_USE_IHM
-  #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticCircleWidget.h"
+  #include "Tympan/gui/widgets/TYAcousticCircleWidget.h"
   #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticCircleGraphic.h"
 #endif
 

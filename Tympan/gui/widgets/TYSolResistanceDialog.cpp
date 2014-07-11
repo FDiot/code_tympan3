@@ -48,7 +48,7 @@
 #include "Tympan/models/business/OLocalizator.h"
 #define TR(id) OLocalizator::getString("TYSolResistanceDialog", (id))
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
 
 ///Liste des resistances pour les labels.
 static double resistance[] =

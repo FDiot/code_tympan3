@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticRectangleNodeWidget.h"
+#include "Tympan/gui/widgets/TYAcousticRectangleNodeWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticRectangleNodeGraphic.h"
 #endif
 

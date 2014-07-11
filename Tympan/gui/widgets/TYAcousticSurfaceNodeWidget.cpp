@@ -34,9 +34,9 @@
 #include <QHeaderView>
 
 #include "TYAcousticSurfaceNodeWidget.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYColorInterfaceWidget.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticInterfaceWidget.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSurfaceInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYAcousticInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYSurfaceInterfaceWidget.h"
 
 #include "Tympan/models/business/geoacoustic/TYAcousticSurfaceNode.h"
 

@@ -19,7 +19,7 @@
 
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYInfrastructureWidget.h"
+#include "Tympan/gui/widgets/TYInfrastructureWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYInfrastructureGraphic.h"
 #endif
 

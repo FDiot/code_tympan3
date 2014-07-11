@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSegmentWidget.h"
+#include "Tympan/gui/widgets/TYSegmentWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSegmentGraphic.h"
 #endif
 

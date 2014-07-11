@@ -19,7 +19,7 @@
 
 #include "Tympan/core/logging.h"
 #if TY_USE_IHM
-  #include "Tympan/GraphicIHM/DataManagerIHM/TYChemineeSurfaceWidget.h"
+  #include "Tympan/gui/widgets/TYChemineeSurfaceWidget.h"
 #endif
 
 

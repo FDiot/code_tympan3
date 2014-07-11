@@ -20,7 +20,7 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #if TY_USE_IHM
-  #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSemiCircleWidget.h"
+  #include "Tympan/gui/widgets/TYAcousticSemiCircleWidget.h"
   #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCircleGraphic.h"
 #endif
 

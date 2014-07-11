@@ -17,7 +17,7 @@
   #include "Tympan/models/business/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #if TY_USE_IHM
-  #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticLineWidget.h"
+  #include "Tympan/gui/widgets/TYAcousticLineWidget.h"
   #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticLineGraphic.h"
 #endif
 

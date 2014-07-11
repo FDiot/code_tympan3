@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRegimeWidget.h"
+#include "Tympan/gui/widgets/TYRegimeWidget.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

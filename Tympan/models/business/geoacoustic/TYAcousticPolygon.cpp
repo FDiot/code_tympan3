@@ -18,7 +18,7 @@
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/models/common/3d.h"
 #if TY_USE_IHM
-  #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticPolygonWidget.h"
+  #include "Tympan/gui/widgets/TYAcousticPolygonWidget.h"
   #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticPolygonGraphic.h"
 #endif
 

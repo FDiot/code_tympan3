@@ -31,7 +31,7 @@
 #include "Tympan/models/business/TYLinearMaillage.h"
 
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickHandler.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYWidget.h"
+#include "Tympan/gui/widgets/TYWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYPickingTable.h"
 
 #if defined(WIN32)

@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYDirectiviteWidget.h"
+#include "Tympan/gui/widgets/TYDirectiviteWidget.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

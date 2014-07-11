@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSpectreWidget.h"
+#include "Tympan/gui/widgets/TYSpectreWidget.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

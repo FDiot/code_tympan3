@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYDalleWidget.h"
+#include "Tympan/gui/widgets/TYDalleWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYDalleGraphic.h"
 #endif
 

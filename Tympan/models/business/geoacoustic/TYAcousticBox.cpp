@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticBoxWidget.h"
+#include "Tympan/gui/widgets/TYAcousticBoxWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticBoxGraphic.h"
 #endif
 

@@ -48,7 +48,7 @@
 #include "Tympan/models/business/TYLinearMaillage.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYPluginManager.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYEtatsWidget.h"
+#include "Tympan/gui/widgets/TYEtatsWidget.h"
 
 #if defined(WIN32)
 #include <crtdbg.h>

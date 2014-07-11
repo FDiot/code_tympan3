@@ -31,7 +31,7 @@
 
 
 #include "Tympan/models/business/infrastructure/TYRoute.h"
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRouteWidget.h"
+#include "Tympan/gui/widgets/TYRouteWidget.h"
 
 #include <qinputdialog.h>
 

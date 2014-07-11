@@ -42,9 +42,9 @@
 #include <qvalidator.h>
 #include <qfiledialog.h>
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYSolResistanceDialog.h"
+#include "Tympan/gui/widgets/TYSolResistanceDialog.h"
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYToolButton.h"
+#include "Tympan/gui/widgets/TYToolButton.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/OLocalizator.h"
 

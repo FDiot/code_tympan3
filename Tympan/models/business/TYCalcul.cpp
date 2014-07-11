@@ -22,7 +22,7 @@
 #endif
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYCalculWidget.h"
+#include "Tympan/gui/widgets/TYCalculWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYCalculGraphic.h"
 #endif
 

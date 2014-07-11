@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYRectangleWidget.h"
+#include "Tympan/gui/widgets/TYRectangleWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRectangleGraphic.h"
 #endif
 

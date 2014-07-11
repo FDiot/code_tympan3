@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYEtageWidget.h"
+#include "Tympan/gui/widgets/TYEtageWidget.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYEtageGraphic.h"
 #endif
 

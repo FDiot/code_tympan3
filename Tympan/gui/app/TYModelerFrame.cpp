@@ -66,7 +66,7 @@
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYSourceSurfacicGraphic.h"
 #include "Tympan/GraphicIHM/DataManagerGraphic/TYRayGraphic.h"
 
-#include "Tympan/GraphicIHM/DataManagerIHM/TYPrintDialog.h"
+#include "Tympan/gui/widgets/TYPrintDialog.h"
 #include "TYSetCameraCoordinates.h"
 
 //Added by qt3to4:

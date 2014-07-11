@@ -18,7 +18,7 @@
  */
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticVolumeWidget.h"
+#include "Tympan/gui/widgets/TYAcousticVolumeWidget.h"
 #endif
 
 #ifdef TYMPAN_USE_PRECOMPILED_HEADER

@@ -17,7 +17,7 @@
   #include "Tympan/models/business/TYPHMetier.h"
 #endif // TYMPAN_USE_PRECOMPILED_HEADER
 #if TY_USE_IHM
-  #include "Tympan/GraphicIHM/DataManagerIHM/TYAcousticSemiCylinderWidget.h"
+  #include "Tympan/gui/widgets/TYAcousticSemiCylinderWidget.h"
   #include "Tympan/GraphicIHM/DataManagerGraphic/TYAcousticSemiCylinderGraphic.h"
 #endif
 
