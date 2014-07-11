@@ -32,7 +32,7 @@
 #include "TYPointControl.h"
 #include "TYResultat.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYPlugin.h"
+#include "Tympan/models/business/TYPlugin.h"
 #include "Tympan/models/business/TYRay.h"
 
 class TYProjet;

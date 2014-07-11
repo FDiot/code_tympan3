@@ -24,7 +24,7 @@
 
 
 #include "TYPluginManager.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/core/logging.h"
 
 #if TY_COMPILER == TY_COMPILER_MSVC
