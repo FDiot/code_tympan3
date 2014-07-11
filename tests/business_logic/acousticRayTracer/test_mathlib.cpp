@@ -9,7 +9,7 @@
 #include <cstdlib>
 
 #include "gtest/gtest.h"
-#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 
 using std::cout;
 using std::cerr;

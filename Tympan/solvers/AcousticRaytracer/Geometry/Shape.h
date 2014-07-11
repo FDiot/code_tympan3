@@ -16,7 +16,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-#include "mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include <string>
 #include <vector>
 #include "Tympan/solvers/AcousticRaytracer/Base.h"

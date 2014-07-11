@@ -19,7 +19,7 @@
 */
 
 #include <array>
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include "meteo.h"
 
 #ifndef __METEO_LIN_H
