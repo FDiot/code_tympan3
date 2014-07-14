@@ -261,45 +261,6 @@ int TYUserSourcePonctuelle::fromXML(DOM_Element domElement)
     return 1;
 }
 
-//OSpectre TYUserSourcePonctuelle::lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& Atmo, const int& expGeo /*=0*/, const int& regime /*=-1*/) const
-//{
-//    OSpectre s = OSpectre::getEmptyLinSpectre();
-//    OVector3D v3D;
-//    double coef = 0.0;
-//
-//    // NOTA : On prend la racine du coefficient de directivite car celui-ci est eleve au carre lors du calcul
-//
-//
-//    // Type de directivite de la source
-//    switch (_typeRaynt)
-//    {
-//        case SPHERIC :
-//            coef = sqrt(1.0 + expGeo);
-//            s.setDefaultValue(coef); //Gain 1 (expansion geometrique 4pi) ou 2 (expansion geometrique 2pi)
-//            break;
-//        case HEMISPHERIC:
-//            v3D = seg.toVector3D();
-//            coef = sqrt(2.0);
-//            s.setDefaultValue(coef);
-//            break;
-//        case SOLID:
-//            v3D = seg.toVector3D();
-//            s.setDefaultValue(coef);
-//            break;
-//        case FORCED:
-//            v3D = seg.toVector3D();
-//            s.setDefaultValue(coef);
-//            break;
-//        case CALCULATED:
-//            s.setDefaultValue(1);
-//            break;
-//        default:
-//            break;
-//    }
-//
-//    return s;
-//}
-
 int TYUserSourcePonctuelle::addRegime(TYUserSrcRegime regime)
 {
     _tabRegimes.push_back(regime);
