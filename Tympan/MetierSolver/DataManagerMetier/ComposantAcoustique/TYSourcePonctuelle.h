@@ -135,11 +135,6 @@ public:
      * Set/Get de l'orientation.
      */
     void setOrientation(const OVector3D& orientation) { _orientation = orientation; }
-    /**
-     * Calcul le spectre de puissance acoustique apparente dans la direction du
-     * segment donne pour le regime donne.
-     */
-    //virtual OSpectre lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& Atmo, const int& expGeo = 0, const int& regime = -1) const;
 
     /**
      * Set/Get de la hauteur de cette source par rapport au sol (a
@@ -177,43 +172,6 @@ public:
     };
 
 
-private:
-    /**
-     * Calcul du spectre de puissance acoustique apparente de la source.
-     * <b>Cas de la machine</b>.
-     *
-     * @param pVolume Volume supportant la source.
-     * @param pSupport Face supportant la source.
-     * @param matrix Matrice de changement de repere du volume vers cette source.
-     * @param seg Le rayon.
-     * @param pAtmo L'atmosphere courante.
-     *
-     * @return Le spectre resultant.
-     */
-    OSpectre calcDirectiviteMachine(const TYAcousticVolume* pVolume, const TYAcousticSurface* pSupport, const OMatrix& matrix, const OSegment3D& seg, const TYAtmosphere& Atmo) const;
-
-    /**
-     * Calcul du spectre de puissance acoustique apparente de la source.
-     * <b>Cas de l'etage</b>.
-     *
-     * @param pVolume Volume supportant la source (l'etage).
-     * @param pSupport Face supportant la source.
-     * @param matrix Matrice de changement de repere du volume vers cette source.
-     * @param seg Le rayon.
-     * @param pAtmo L'atmosphere courante.
-     *
-     * @return Le spectre resultant.
-     */
-    OSpectre calcDirectiviteEtage(const TYAcousticVolume* pVolume, const TYAcousticSurface* pSupport, const OMatrix& matrix, const OSegment3D& seg, const TYAtmosphere& atmos) const;
-
-    /**
-     * Calcul du coeffficient de correction de la directivite
-     * @param un double representant la valeur r/a
-     * @return un double
-     */
-    inline double calculC(const double& r, const double& a) const;
-
-
     // Membres
 protected:
     ///Type de cette source.
@@ -233,12 +191,6 @@ protected:
 
     ///La hauteur de la source par rapport a l'altitude (dans le cas de source utilisateur).
     double _hauteur;
-
-private:
-    /// Tableau des facteurs de forme RA
-    static const double _tabRA[];
-    /// Tableau des facteurs de correction
-    static const double _tabCor[];
 };
 
 
