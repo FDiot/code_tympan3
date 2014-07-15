@@ -93,7 +93,7 @@ public:
      * @param the absorption spectrum (TO BE PRECISED)
      * @return a shared_ptr to the corresponding AcousticBuildingMaterial instance
      */
-    material_ptr_t make_material(const string& name, const Spectrum& spectrum);
+    material_ptr_t make_material(const string& name, const ComplexSpectrum& spectrum);
 
     /**
      * @brief Push a new acoustic source into the model

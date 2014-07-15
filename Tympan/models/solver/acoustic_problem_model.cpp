@@ -83,7 +83,7 @@ material_ptr_t AcousticProblemModel::make_material(const string& name, double re
     return p_mat;
 }
 
-material_ptr_t AcousticProblemModel::make_material(const string& name, const Spectrum& spectrum)
+material_ptr_t AcousticProblemModel::make_material(const string& name, const ComplexSpectrum& spectrum)
 {
     material_ptr_t p_mat = tympan::static_pointer_cast<AcousticMaterialBase>(
                                tympan::make_shared<AcousticBuildingMaterial>(name, spectrum));

@@ -2,7 +2,7 @@
 """
 from libcpp.string cimport string
 
-from tympan.models.common cimport OPoint3D, OSpectre
+from tympan.models.common cimport OPoint3D, OSpectre, OSpectreComplex
 from tympan.core cimport shared_ptr
 
 
@@ -21,7 +21,7 @@ cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "ty
         AcousticReceptor& receptor(size_t idx)
         OPoint3D& node(size_t idx)
         shared_ptr[AcousticMaterialBase] make_material(const string& name, double resistivity)
-        shared_ptr[AcousticMaterialBase] make_material(const string& name, const OSpectre& spectrum)
+        shared_ptr[AcousticMaterialBase] make_material(const string& name, const OSpectreComplex& spectrum)
         size_t make_triangle(size_t n1, size_t n2, size_t n3)
         size_t make_node(const OPoint3D&)
         size_t make_source(const OPoint3D& point_, const OSpectre& spectrum_)
