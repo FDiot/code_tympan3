@@ -60,6 +60,10 @@ cdef extern from "Tympan/models/common/spectre.h":
         double * getTabValReel()
         unsigned int getNbValues() const
 
+    cdef cppclass OSpectreComplex (OSpectre):
+        OSpectreComplex()
+        OSpectreComplex(const OSpectre& other)
+
 
 cdef class Spectrum:
     cdef OSpectre thisobj

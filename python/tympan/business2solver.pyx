@@ -142,8 +142,8 @@ cdef class SolverModelBuilder:
             buildmat = surface.material
             mat_spec = cy.declare(tycommon.Spectrum)
             mat_spec = buildmat.spectrum
-            mat_cspec = cy.declare(tycommon.OSpectre)
-            mat_cspec = mat_spec.thisobj
+            mat_cspec = cy.declare(tycommon.OSpectreComplex)
+            mat_cspec = tycommon.OSpectreComplex(mat_spec.thisobj)
             mat_name = cy.declare(string)
             mat_name = buildmat.name
             pmat = self.model.make_material(mat_name, mat_cspec)
