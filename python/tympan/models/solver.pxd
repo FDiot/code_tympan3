@@ -40,16 +40,40 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
         OPoint3D position
         OSpectre spectrum
 
-cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
     cdef cppclass AcousticReceptor(BaseEntity):
         OPoint3D position
 
-cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
     cdef cppclass AcousticTriangle:
         shared_ptr[AcousticMaterialBase] made_of
         size_t n[3]
+
     cdef cppclass AcousticMaterialBase:
         pass
+
+    cdef cppclass AcousticBuildingMaterial(AcousticMaterialBase):
+        AcousticBuildingMaterial(const string& name_, const OSpectreComplex& spectrum)
+
+    cdef cppclass AcousticGroundMaterial(AcousticMaterialBase):
+        AcousticGroundMaterial(const string& name_, double resistivity_)
+
+    cdef cppclass SourceDirectivityInterface:
+        pass
+
+    cdef cppclass SphericalSourceDirectivity(BaseEntity, SourceDirectivityInterface):
+        pass
+
+    cdef cppclass CommonFaceDirectivity(BaseEntity, SourceDirectivityInterface):
+        pass
+
+    cdef cppclass VolumeFaceDirectivity(CommonFaceDirectivity):
+        pass
+
+    cdef cppclass ChimneyFaceDirectivity(CommonFaceDirectivity):
+        pass
+
+    cdef cppclass BaffledFaceDirectivity(CommonFaceDirectivity):
+        pass
+
 
 cdef acousticproblemmodel2problemmodel(AcousticProblemModel* apm)
 cdef acousticresultmodel2resultmodel(AcousticResultModel* arm)
