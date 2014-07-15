@@ -86,7 +86,7 @@ typedef std::deque<material_ptr_t> material_pool_t;
 // -------------------
 
 class AcousticBuildingMaterial:
-    public virtual BaseEntity, public AcousticMaterialBase
+    public AcousticMaterialBase
 {
 public:
     AcousticBuildingMaterial(const string& name_, const ComplexSpectrum& spectrum);
@@ -104,7 +104,7 @@ public:
 // -------------------
 
 class AcousticGroundMaterial:
-    public virtual BaseEntity, public AcousticMaterialBase
+    public AcousticMaterialBase
 {
 public:
     AcousticGroundMaterial(const string& name_, double resistivity_);
