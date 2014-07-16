@@ -19,10 +19,12 @@ from altimetry.merge import SiteNodeGeometryCleaner,build_site_shape_with_hole
 from altimetry import visu
 from altimetry import mesh
 
+def rect(x1, y1, x2, y2):
+    return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
 
 class AltimetryDataTC(unittest.TestCase):
 
-    big_rect_coords = [(0, 0), (12,0), (12, 10), (0, 10)]
+    big_rect_coords = rect(0, 0, 12, 10)
 
     level_curve_A_coords = [(0, 0), (2.5, 3.5), (4, 4.0)]
     level_curve_A =  LevelCurve(level_curve_A_coords, altitude=10.0, id="{123456}")
@@ -133,7 +135,7 @@ class AltimetryDataTC(unittest.TestCase):
 
 class _TestFeatures(object):
 
-    big_rect_coords = [(0, 0), (12,0), (12, 10), (0, 10)]
+    big_rect_coords = rect(0, 0, 12, 10)
     grass = GroundMaterial("grass")
 
     level_curve_A_coords = [(-1, -1), (2, 2), (4, 2)]
@@ -143,7 +145,7 @@ class _TestFeatures(object):
     grass_area_coords = [(1.0, 1.0), (11.0, 1.0), (1.0, 9.0), (1.0, 1.0)]
     waterbody_coords = [(3, 3), (5, 4), (3, 5)]
     altitude_water = 5.0
-    subsite_A_coords = [(6, 8), (11, 8), (11, 6), (6, 6)]
+    subsite_A_coords = rect(6, 6, 11, 8)
     level_curve_B_coords =[(8.0, 4.0), (8.0, 7.0), (12.0, 7.0)]
     cleaned_level_B_shape = MultiLineString([[(8.0, 6.0), (8.0, 7.0), (11.0, 7.0)]])
     altitude_B = 20.0
@@ -191,10 +193,10 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
         self.assertTrue(cleaner.geom['{Water body ID}'].equals(self.waterbody.shape))
 
     def test_add_and_clean_material_area(self):
-        overlap_area = MaterialArea([(5, 5), (5, 7), (7, 7), (7, 5)],
+        overlap_area = MaterialArea(rect(5, 7, 7, 9),
                                     material=self.grass,
                                     parent_site=self.mainsite, id="{Overlap area}")
-        in_hole_scope_area = MaterialArea([(6, 6), (6, 7), (7, 7), (7, 6)],
+        in_hole_scope_area = MaterialArea(rect(6, 6, 7, 7),
                                     material=self.grass,
                                     parent_site=self.mainsite, id="{In hole area}")
         cleaner = SiteNodeGeometryCleaner(self.mainsite)
@@ -237,7 +239,7 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
 
 
     def test_merge_subsite_report_errors(self):
-        overlap_area = MaterialArea([(5, 5), (5, 7), (7, 7), (7, 5)],
+        overlap_area = MaterialArea(rect(5, 5, 7, 7),
                                     material=self.grass,
                                     parent_site=self.subsite, id="{Overlap area}")
 
