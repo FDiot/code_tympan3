@@ -18,13 +18,18 @@ cdef extern from "Tympan/models/business/xml_project_util.h" namespace "tympan":
 cdef extern from "Tympan/models/business/init_registry.h" namespace "tympan":
     void init_registry()
 
+cdef extern from "Tympan/core/smartptr.h":
+    cdef cppclass IRefCount:
+        int getRefCount() const
+        int incRef()
 
 cdef extern from "Tympan/models/business/TYElement.h":
-    cdef cppclass TYElement:
+    cdef cppclass TYElement(IRefCount):
         QString getName()
         const char* getClassName() const
         TYElement* getParent()
         OGenID getID()
+        void setIsAcousticModified(bool isModified)
 
 cdef extern from "Tympan/models/business/TYMaillage.h":
     cdef cppclass TYMaillage:
@@ -65,6 +70,7 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         tycommon.OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
         map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
+        void setResultMatrix(tysolver.SpectrumMatrix matrix)
 
 cdef extern from "Tympan/models/business/acoustic/TYSource.h":
     cdef cppclass TYSource(TYElement):
@@ -140,6 +146,7 @@ cdef extern from "Tympan/models/business/geometry/TYPoint.h":
 cdef extern from "Tympan/models/business/TYPointCalcul.h":
     cdef cppclass TYPointCalcul (TYPoint):
         bool getEtat(TYCalcul* pCalcul)
+        void setSpectre(const TYSpectre& spectre, TYCalcul* pCalcul)
 
 cdef extern from "Tympan/models/business/TYPointControl.h":
     cdef cppclass TYPointControl (TYPointCalcul):
@@ -161,8 +168,7 @@ cdef extern from "Tympan/models/business/material/TYMateriauConstruction.h":
 
 cdef extern from "Tympan/models/business/acoustic/TYSpectre.h":
     cdef cppclass TYSpectre (TYElement, tycommon.OSpectre):
-        pass
-
+        TYSpectre(const tycommon.OSpectre& spectre)
 
 cdef class Computation:
     cdef SmartPtr[TYCalcul] thisptr

@@ -59,6 +59,10 @@ cdef extern from "Tympan/models/common/spectre.h":
         void setType(TYSpectreType type)
         double * getTabValReel()
         unsigned int getNbValues() const
+        void setDefaultValue(const double& valeur)
+        OSpectre sum(const OSpectre& spectre) const
+        bool isValid() const
+        void setValid(const bool& valid)
 
     cdef cppclass OSpectreComplex (OSpectre):
         OSpectreComplex()
