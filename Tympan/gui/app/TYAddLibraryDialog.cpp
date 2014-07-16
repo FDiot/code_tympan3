@@ -16,14 +16,8 @@
 /**
  * \file TYAddLibraryDialog.cpp
  * \brief Boite de dialogue pour l'ajout d'un element dans la bibliotheque
- *
- *
  */
 
-
-
-#include "Tympan/TYVersion.h"
-#include "Tympan/models/business/TYXMLManager.h"
 
 #include <qcursor.h>
 #include <qdir.h>
@@ -37,9 +31,12 @@
 #include <QHBoxLayout>
 #include <QList>
 
+#include "Tympan/core/config.h"
+#include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/OLocalizator.h"
 
 #define TR(id) OLocalizator::getString("TYAddLibraryDialog", (id))
+
 
 TYAddLibraryDialog::TYAddLibraryDialog(QWidget* parent, const char* name, Qt::WFlags f)
     : QDialog(parent, f), _element(0)

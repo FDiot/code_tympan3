@@ -9,20 +9,13 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 
 # Configuring source code ######################################################
 
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/TYVersion.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/TYVersion.h
-  @ONLY
-)
-
 set(PYMODULES_DIR "pymodules")
 set(PYSCRIPT "${PYMODULES_DIR}/solve_project.py")
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/Config.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/core/config.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/core/config.h
   @ONLY
   )
-
 # XXX is it useful here and part of source code configuration ?
 include_directories(${CMAKE_BINARY_DIR})
 
@@ -242,7 +235,6 @@ list(REMOVE_ITEM ${MODULE_NAME}_MOC_HDRS
     gui/app/TYMessageManager.h
     gui/app/TYOpenGLRenderer.h
     gui/app/TYPHTympanApp.h
-    gui/app/TYVersion.h
 )
 # Needed to import DXF files.
 add_definitions (-DTY_USE_DXF -DDIME_NOT_DLL) # XXX Add DIME_NOT_DLL too?? See

@@ -17,38 +17,31 @@
  * \file TYCalculManager.cpp
  * \brief Gestionnaire des calculs acoustiques. Il fait l'interface entre l'IHM et le gestionnaire de donnees
  * pour la partie calcul
- *
- *
  */
 
-
-
-
-
-#include "TYCalculManager.h"
-
-#include "TYMessageManager.h"
-#include "Tympan/Config.h"
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/core/chrono.h"
-#include "Tympan/models/business/xml_project_util.h"
-#include "Tympan/gui/app/TYApplication.h"
-#include "Tympan/core/defines.h"
-#include "EnvironmentUtils.h"
 
 #include <qcursor.h>
 #include <qmessagebox.h>
 #include <QTemporaryFile>
 
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
+#include "Tympan/core/config.h"
+#include "Tympan/core/chrono.h"
+#include "Tympan/core/defines.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/xml_project_util.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/EnvironmentUtils.h"
+#include "Tympan/gui/app/TYMessageManager.h"
+#include "TYCalculManager.h"
 
+#if defined(WIN32)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
+#endif
 
 #define TR(id) OLocalizator::getString("TYCalculManager", (id))
 #define COMPUTATION_TIMEOUT 10000 // In ms

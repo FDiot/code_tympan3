@@ -16,16 +16,7 @@
 /**
  * \file TYMainWindow.cpp
  * \brief Fenetre principale de l'application Tympan
- *
- *
  */
-
-
-
-
-#include "Tympan/TYVersion.h"
-
-#include <qtextstream.h>
 
 
 //Added by qt3to4:
@@ -33,10 +24,10 @@
 #include <QCloseEvent>
 // CLM-NT35: Gestion MDI avec QT4.7
 #ifdef USE_QMDIAREA
-#include <QMdiArea>
-#include <QMdiSubWindow>
+  #include <QMdiArea>
+  #include <QMdiSubWindow>
 #else
-#include <QWorkspace>
+  #include <QWorkspace>
 #endif
 // CLM-NT35 End
 #include <qaction.h>
@@ -57,40 +48,39 @@
 #include <qmainwindow.h>
 #include <qprocess.h>
 #include <qtextbrowser.h>
+#include <qtextstream.h>
+#include <QDockWidget>
 
-#include "Tympan/gui/gl/TYPickingTable.h"
-
+#include "Tympan/core/config.h"
 #include "Tympan/models/business/acoustic/TYSpectre.h"
-#include "Tympan/gui/widgets/TYSpectreWidget.h"
-
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYPluginManager.h"
-#include "TYCustomPopupMenu.h"
-
-#include <QDockWidget>
-//#include <QWindowsVistaStyle>
-//#include <QGtkStyle>
-
-using namespace Qt;
+#include "Tympan/gui/widgets/TYSpectreWidget.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "Tympan/gui/app/TYCustomPopupMenu.h"
+#include "TYMainWindow.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
+
+#define TR(id) OLocalizator::getString("TYMainWindow", (id))
+#define IMG(id) OLocalizator::getPicture("TYMainWindow", (id))
+
+
+using namespace Qt;
 
 // to avoid X11 macro conflit
 #ifdef Always
 #undef Always
 #endif
-
-#define TR(id) OLocalizator::getString("TYMainWindow", (id))
-#define IMG(id) OLocalizator::getPicture("TYMainWindow", (id))
 
 
 

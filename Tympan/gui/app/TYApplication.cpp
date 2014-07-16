@@ -16,40 +16,31 @@
 /**
  * \file TYApplication.cpp
  * \brief pour l'application Tympan
- *
- *
  */
 
-
-
-
-#include "Tympan/TYVersion.h"
 
 #include <qdir.h>
 #include <qtimer.h>
 #include <qmessagebox.h>
 
+#include "Tympan/core/config.h"
 #include "Tympan/models/business/OLocalizator.h"
-
 #include "Tympan/models/business/TYXMLManager.h"
-
 #include "Tympan/models/business/TYProgressManager.h"
-#include "Tympan/gui/tools/TYImageManager.h"
 #include "Tympan/models/business/TYPluginManager.h"
-
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
-
-using namespace Qt;
+#include "Tympan/gui/tools/TYImageManager.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
+using namespace Qt;
 
 #define TR(id) OLocalizator::getString("TYApplication", (id))
 

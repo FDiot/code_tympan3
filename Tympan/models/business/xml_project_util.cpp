@@ -5,15 +5,14 @@
  *
  */
 
-
-#include "xml_project_util.h"
-
 #include <boost/foreach.hpp>
 
 #include "Tympan/core/logging.h"
-#include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/core/exceptions.h"
-#include "Tympan/Config.h"
+#include "Tympan/core/config.h"
+#include "Tympan/models/business/TYXMLManager.h"
+#include "xml_project_util.h"
+
 
 namespace tympan
 {
