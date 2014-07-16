@@ -315,7 +315,6 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
         cleaner.merge_subsite(self.subsite)
 
         self.assertIn(self.subgrass.id, cleaner.geom)
-        self.assertIn(self.subgrass.id, cleaner.info)
         geom, info = cleaner[self.subgrass.id]
         self.assertEqual(info['material'], self.grass.id)
 
@@ -339,6 +338,14 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
                                                   [(6.5, 7.5), (6.5, 8)]])
         self.assertTrue(expected_shape.equals(geom))
 
+    def test_equivalent_site(self):
+        self.build_more_features_in_subsites()
+        cleaner = recursively_merge_all_subsites(self.mainsite)
+        equiv = cleaner.equivalent_site
+
+        self.assertItemsEqual(equiv.subsites, [])
+        self.assertNotIn("{Out of subsite area}", equiv.features_by_id)
+        self.assertIn("{Subsub level curve}", equiv.features_by_id)
 
 @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
 class VisualisationTC(unittest.TestCase, _TestFeatures):
@@ -366,6 +373,11 @@ class VisualisationTC(unittest.TestCase, _TestFeatures):
         self.build_more_features_in_subsites()
         cleaner = recursively_merge_all_subsites(self.mainsite)
         self.mainsite.plot(self.ax, recursive=True, alt_geom_map=cleaner.geom)
+
+    def test_plot_equivalent_site(self):
+        self.build_more_features_in_subsites()
+        cleaner = recursively_merge_all_subsites(self.mainsite)
+        cleaner.equivalent_site.plot(self.ax, alt_geom_map=cleaner.geom)
 
 
 if __name__ == '__main__':

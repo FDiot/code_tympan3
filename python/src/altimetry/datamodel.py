@@ -221,7 +221,6 @@ class MaterialArea(PolygonalTympanFeature):
         return d
 
 
-
 class WaterBody(MaterialArea, LevelCurve):
     geometric_type = "Polygon"
 
@@ -240,9 +239,11 @@ class SiteNode(PolygonalTympanFeature):
         self.children = {}
         for k in self.CHILDREN_TYPES:
             self.children[k] = []
+        self.features_by_id = {}
 
     def add_child(self, child):
         self.children[child.tympan_type].append(child)
+        self.features_by_id[child.id] = child
 
     @property
     def level_curves(self):
@@ -267,6 +268,7 @@ class SiteNode(PolygonalTympanFeature):
                  self.children["MaterialArea"] +
                  self.children["WaterBody"] +
                  self.children["InfrastructureLandtake"] )
+
 
 class InfrastructureLandtake(PolygonalTympanFeature):
 
