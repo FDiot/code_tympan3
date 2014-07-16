@@ -109,6 +109,7 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         void selectActivePoint(SmartPtr[TYSiteNode] pSite)
         const vector[SmartPtr[TYGeometryNode]] getMaillages() const
         void setNbThread(unsigned int nbThread)
+        void goPostprocessing()
 
 cdef extern from "Tympan/models/business/TYProjet.h":
     cdef cppclass TYProjet (TYElement):

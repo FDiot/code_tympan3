@@ -859,7 +859,7 @@ public:
      * \brief set the vector of TYRays
      */
     void setTabRays(const TYTabRay& tabRays) { _tabRays = tabRays; }
-
+    void goPostprocessing();
     std::unique_ptr<tympan::AcousticResultModel>  _acousticResult;
     std::unique_ptr<tympan::AcousticProblemModel> _acousticProblem;
 

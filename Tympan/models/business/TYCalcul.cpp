@@ -1497,6 +1497,8 @@ bool TYCalcul::isCalculPossible(const int& nbSources, const int& nbRecepteurs, c
     return true;
 }
 
+TYTabPointCalculGeoNode recepteurs;
+TYTabSourcePonctuelleGeoNode sources;
 bool TYCalcul::go()
 {
     TYProjet* pProjet = getProjet();
@@ -1556,14 +1558,12 @@ bool TYCalcul::go()
     pSite->getInfrastructure()->getAllSrcs(this, mapElementSources);
 
     OMessageManager::get()->info("Creation des sources");
-    TYTabSourcePonctuelleGeoNode sources;
     getAllSources(mapElementSources, sources);
 
     OMessageManager::get()->info("Selection des points de reception actifs");
     selectActivePoint(pSite);
 
     OMessageManager::get()->info("Creation des recepteurs");
-    TYTabPointCalculGeoNode recepteurs;
     getAllRecepteurs(recepteurs);
 
     OMessageManager::get()->info("Selection des trajets actifs");
@@ -1593,57 +1593,57 @@ bool TYCalcul::go()
         ret = pSolver->solve(*pSite, *this, *_acousticProblem, *_acousticResult);
         pSolver->purge();
 
-        // Cumul de la pression aux differents points de calcul
-        if (ret) // Si l'etape precedente s'est mal passee, inutile de continuer
+        if (!ret)
         {
-            OMessageManager::get()->info("Contruction matrice resultat");
-            // Puisque le calcul est OK on va construire la matrice resultat
-            _pResultat->buildSources(sources);
-            _pResultat->buildRecepteurs(recepteurs);
-            _pResultat->buildMatrix();
-
-            ret = _pResultat->cumulSpectres(_tabTrajets);
-
-            // Suppression des points de maillage de la matrice
-            for (unsigned int i = 0; i < recepteurs.size(); i++)
-            {
-                TYMaillage* pMail = dynamic_cast<TYMaillage*>(
-                        recepteurs[i]->getElement()->getParent());
-                if (pMail != nullptr)
-                {
-                    _pResultat->remSpectres(static_cast<TYPointCalcul*>(recepteurs[i]->getElement()));
-                }
-            }
+            _pResultat->purge();
         }
+
+
     }
     else
     {
         OMessageManager::get()->info("Calcul impossible: arrt.");
         ret = false;
     }
+    return ret;
+}
 
-    if (ret)
+void TYCalcul::goPostprocessing()
+{
+    OMessageManager::get()->info("Contruction matrice resultat");
+    // Puisque le calcul est OK on va construire la matrice resultat
+    _pResultat->buildSources(sources);
+    _pResultat->buildRecepteurs(recepteurs);
+    _pResultat->buildMatrix();
+
+    _pResultat->cumulSpectres(_tabTrajets);
+
+    int rem_rec = 0;
+    // Suppression des points de maillage de la matrice
+    for (unsigned int i = 0; i < recepteurs.size(); i++)
     {
-        OMessageManager::get()->info("Finalisation des resultats (post-traitement)...");
-        // Condensation des sources sur les emetteurs
-        _pResultat->condensate();
-
-        updateGraphicMaillage();
-    }
-    else
-    {
-        _pResultat->purge();
+        TYMaillage* pMail = dynamic_cast<TYMaillage*>(
+                recepteurs[i]->getElement()->getParent());
+        if (pMail != nullptr)
+        {
+            rem_rec ++;
+            _pResultat->remSpectres(static_cast<TYPointCalcul*>(recepteurs[i]->getElement()));
+        }
     }
 
-    // Le calcul a proprement parler est termine
-    // Il est necessaire de reattribuer les parents des elements du site merges
-    getProjet()->getSite()->reparent();
+    OMessageManager::get()->info("Finalisation des resultats (post-traitement)...");
+    // Condensation des sources sur les emetteurs
+    _pResultat->condensate();
 
-    pSite = NULL;
+    updateGraphicMaillage();
 
     sources.clear();
     recepteurs.clear();
     _tabTrajets.clear();
+
+    // Le calcul a proprement parler est termine
+    // Il est necessaire de reattribuer les parents des elements du site merges
+    getProjet()->getSite()->reparent();
 
     TYNameManager::get()->enable(true);
 
@@ -1658,8 +1658,6 @@ bool TYCalcul::go()
     {
         TYPreferenceManager::setUInt(TYDIRPREFERENCEMANAGER, "NbThread", static_cast<unsigned long>(_nbThread));
     }
-
-    return ret;
 }
 
 void TYCalcul::getCalculElements(LPTYSiteNode pSite)
