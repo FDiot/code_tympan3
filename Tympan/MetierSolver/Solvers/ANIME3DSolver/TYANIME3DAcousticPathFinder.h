@@ -28,12 +28,18 @@ class AcousticProblemModel;
 class TYANIME3DAcousticPathFinder
 {
 public:
+    //TYANIME3DAcousticPathFinder(    TYStructSurfIntersect* tabPolygon, 
+    //                                const size_t& tabPolygonSize, 
+    //                                TYTabSourcePonctuelleGeoNode& tabSources, 
+    //                                TYTabPointCalculGeoNode& tabRecepteurs,
+    //                                const tympan::AcousticProblemModel& aproblem_,
+    //                                tab_acoustic_path& tabTYRays);
+
     TYANIME3DAcousticPathFinder(    TYStructSurfIntersect* tabPolygon, 
                                     const size_t& tabPolygonSize, 
-                                    TYTabSourcePonctuelleGeoNode& tabSources, 
-                                    TYTabPointCalculGeoNode& tabRecepteurs,
                                     const tympan::AcousticProblemModel& aproblem_,
                                     tab_acoustic_path& tabTYRays);
+
 
     virtual ~TYANIME3DAcousticPathFinder();
 
@@ -111,10 +117,10 @@ private:
     const size_t& _tabPolygonSize;
 
     /*!< List of sources used by the solver */
-    TYTabSourcePonctuelleGeoNode& _tabSources;
+    //TYTabSourcePonctuelleGeoNode& _tabSources;
 
     /*!< List of receptors used by the solver */
-    TYTabPointCalculGeoNode& _tabRecepteurs;
+    //TYTabPointCalculGeoNode& _tabRecepteurs;
 
     /// tableau de l'ensemble des rayons métier Code_TYMPAN
     tab_acoustic_path& _tabTYRays;

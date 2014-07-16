@@ -22,7 +22,7 @@ class AcousticProblemModel;
 class TYANIME3DFaceSelector
 {
 public:
-    TYANIME3DFaceSelector(const TYSiteNode& Site, const tympan::AcousticProblemModel& aproblem_);
+    TYANIME3DFaceSelector( const tympan::AcousticProblemModel& aproblem_ );
     virtual ~TYANIME3DFaceSelector();
 
     /*!
@@ -40,15 +40,7 @@ private :
     */
     bool buildCalcStruct(TYStructSurfIntersect *&tabPolygon, size_t& tabPolygonSize);
 
-    ///*!
-    //* \fn bool triangulateConcavePolygon(TYStructSurfIntersect* _tabPolygon)
-    //* \brief Effectue une triangulation de l'ensemble des faces de la topographie et des infrastructures.
-    //* \return Renvoie vrai si les triangulations se sont bien passees.
-    //*/
-    //bool triangulateConcavePolygon(TYStructSurfIntersect* tabPolygon, size_t tabPolygonSize);
-
 protected :
-    const TYSiteNode& _site;
     const tympan::AcousticProblemModel& aproblem;
 };
 

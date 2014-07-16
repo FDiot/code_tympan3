@@ -52,12 +52,9 @@ using std::vector;
 
 
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize,
-                                                         TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs,
                                                          const tympan::AcousticProblemModel& aproblem_, tab_acoustic_path& tabTYRays) : 
     _tabPolygon(tabPolygon),
     _tabPolygonSize(tabPolygonSize),
-    _tabSources(tabSources),
-    _tabRecepteurs(tabRecepteurs),
     _aproblem(aproblem_),
     _tabTYRays(tabTYRays)
 {
@@ -359,15 +356,7 @@ void TYANIME3DAcousticPathFinder::set_source_idx_and_receptor_idx_to_acoustic_pa
     }
 
     //Les identifiants des recepteurs et sources sont construit pour correspondre a l'index des sources et recepteurs dans Tympan.
-    assert (static_cast<unsigned int>(idRecep) < _tabRecepteurs.size() && static_cast<unsigned int>(idSource) < _tabSources.size());
-
-    vec3 pS = _rayTracing.getSources().at(idSource).getPosition();
-    OPoint3D posSourceGlobal(pS.x, pS.y, pS.z);
-    TYSourcePonctuelle* sourceP = TYSourcePonctuelle::safeDownCast(_tabSources.at(idSource)->getElement());
-
-    vec3 pR = _rayTracing.getRecepteurs().at(idRecep).getPosition();
-    OPoint3D posReceptGlobal(pR.x, pR.y, pR.z);
-    TYPointCalcul* recepP = TYPointCalcul::safeDownCast(_tabRecepteurs.at(idRecep)->getElement());
+    assert (static_cast<unsigned int>(idRecep) < _aproblem.nreceptors() && static_cast<unsigned int>(idSource) < _aproblem.nsources());
 
     tyRay->setSource(idSource); //(sourceP, posSourceGlobal);
     tyRay->setRecepteur(idRecep); //(recepP, posReceptGlobal);

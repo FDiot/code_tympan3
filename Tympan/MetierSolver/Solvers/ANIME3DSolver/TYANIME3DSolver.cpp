@@ -63,12 +63,8 @@ void TYANIME3DSolver::purge()
     _tabPolygon = NULL;
 }
 
-void TYANIME3DSolver::init(const TYSiteNode& site, TYCalcul& calcul)
+void TYANIME3DSolver::init()
 {
-    site.getInfrastructure()->getAllSrcs(&calcul, _tabSources);
-
-    calcul.getAllRecepteurs(_tabRecepteurs); // recuperation des recepteurs
-
     ANIME3DSetup::exec();
 
     _pAtmos = std::unique_ptr<tympan::AtmosphericConditions>( new tympan::AtmosphericConditions(globalAtmosPressure, globalAtmosTemperature, globalAtmosHygrometry) ); 
@@ -81,23 +77,23 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
         tympan::AcousticResultModel& aresult)
 {
     // Rcupration (once for all) des sources et des rcepteurs
-    init(site, calcul);
+    init();
 
     // Construction de la liste des faces utilise pour le calcul
-    TYANIME3DFaceSelector fs(site, aproblem);
+    TYANIME3DFaceSelector fs(aproblem);
     bool bRet = fs.exec(_tabPolygon, _tabPolygonSize);
 
     if (!bRet) { return false; }
 
     // Ray tracing computation
-    TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, _tabSources, _tabRecepteurs, aproblem, _tabRay);
+    TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, aproblem, _tabRay);
     apf.exec();
 
     ////////////////////////////////////////////////////////////
     // Calculs acoustiques sur les rayons via la methode ANIME3D
     ////////////////////////////////////////////////////////////
 
-    TYANIME3DAcousticModel aam(calcul, site, _tabRay, _tabPolygon, aproblem, *_pAtmos, _tabSources, _tabRecepteurs);
+    TYANIME3DAcousticModel aam(_tabRay, _tabPolygon, aproblem, *_pAtmos);
 
     // calcul de la matrice de pression totale pour chaque couple (S,R)
     OTab2DSpectreComplex tabSpectre = aam.ComputeAcousticModel();
@@ -129,12 +125,15 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
     size_t count = buildTrajects( const_cast<tympan::AcousticProblemModel&>(aproblem) );
 
 
-    for (int i = 0; i < _tabSources.size(); i++) // boucle sur les sources
+    for (unsigned int i = 0; i < aproblem.nsources(); i++) // boucle sur les sources
     {
-        for (int j = 0; j < _tabRecepteurs.size(); j++) // boucle sur les recepteurs
+        for (unsigned int j = 0; j < aproblem.nreceptors(); j++) // boucle sur les recepteurs
         {
             TYTrajet traj(  const_cast<tympan::AcousticSource&>(aproblem.source(i)), 
                             const_cast<tympan::AcousticReceptor&>(aproblem.receptor(j)) );
+            traj.asrc_idx = i;
+            traj.arcpt_idx = j;
+
             tabSpectre[i][j].setEtat(SPECTRE_ETAT_LIN);
             sLP = tabSpectre[i][j];
             sLP.setType(SPECTRE_TYPE_LP);
