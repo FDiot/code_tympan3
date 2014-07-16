@@ -7,8 +7,7 @@ Merging sub-sites for the computation of the altimetry.
 from collections import defaultdict
 
 from shapely import geometry
-from altimetry.datamodel import *
-
+from altimetry.datamodel import InconsistentGeometricModel, SiteNode
 
 def build_site_shape_with_hole(site):
     site.ensure_ok()
@@ -40,36 +39,43 @@ class SiteNodeGeometryCleaner(object):
 
     The new geometry computed for each feature is available through
     the ``geom`` dictionary attribute, which is indexed by the
-    feature IDs and the properties of the original features (if any)
-    are available through the ``info`` dictionary attribute. The
-    class also implement a __get_item__ method so that both geometry
-    and properties can be accessed with ``geom, info = cleaner[feature_id]``.
+    feature IDs.
+
+    An equivalent site is maintained with the original features.  The
+    class also implement a __get_item__ method so that both the new
+    geometry and the original properties can be accessed with ``geom,
+    info = cleaner[feature_id]``.
     """
 
     def __init__(self, sitenode):
         self.sitenode = sitenode
         self.siteshape = build_site_shape_with_hole(self.sitenode)
         self.geom = {}
-        self.info = defaultdict(dict)
         self.ignored_features = []
         self.erroneous_overlap = []
         self._sorted_material_areas = []
+        self.equivalent_site = SiteNode(sitenode.build_coordinates()[0], id=None)
 
-    def _add_new_shape(self, id_, shape, props):
+    def _add_feature_with_new_shape(self, feature, shape):
+        assert not isinstance(feature, SiteNode)
+        id_ = feature.id
         existing_shape = self.geom.pop(id_, None)
         if existing_shape and not existing_shape.equals(shape):
             raise ValueError("ID %s is already associated to a different shape %s" %
                              (id_, existing_shape.wkt))
+        self.equivalent_site.add_child(feature)
         self.geom[id_] = shape
-        self.info[id_].update(props)
+
+    def feature_from_id(self, id):
+        return self.equivalent_site.features_by_id[id]
 
     def __getitem__(self, feature_id):
-        return self.geom[feature_id], self.info[feature_id]
+        return self.geom[feature_id], self.feature_from_id(feature_id).build_properties()
 
     def process_level_curves(self):
         for level_curve in self.sitenode.level_curves:
             shape = level_curve.shape.intersection(self.siteshape)
-            self._add_new_shape(level_curve.id, shape, level_curve.build_properties())
+            self._add_feature_with_new_shape(level_curve, shape)
 
     def _add_or_reject_polygonal_feature(self, feature):
         """
@@ -85,7 +91,7 @@ class SiteNodeGeometryCleaner(object):
         if not self.siteshape.contains(feature.shape):
             self.ignored_features.append(feature.id)
             return False
-        self._add_new_shape(feature.id, feature.shape, feature.build_properties())
+        self._add_feature_with_new_shape(feature, feature.shape)
         return True
 
     def process_material_areas(self):
@@ -110,7 +116,8 @@ class SiteNodeGeometryCleaner(object):
         Info are shared between the self and the hostcleaner
         """
         for feature_id, shape in self.geom.iteritems():
-            hostcleaner._add_new_shape(feature_id, shape, self.info[feature_id])
+            hostcleaner._add_feature_with_new_shape(
+                self.feature_from_id(feature_id), shape)
 
     def merge_subsite(self, subsite):
         """Merge the cleaned geometries for subsite into the self cleaner"""
