@@ -18,7 +18,7 @@
 #include "Tympan/MetierSolver/DataManagerCore/TYAcousticModelInterface.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
+#include "Tympan/models/common/triangle.h"
 
 #include "Tympan/MetierSolver/CommonTools/Acoustic_path.h"
 
@@ -31,22 +31,14 @@
 #include "TYANIME3DAcousticModel.h"
 
 
-TYANIME3DAcousticModel::TYANIME3DAcousticModel( TYCalcul& calcul, 
-                                                const TYSiteNode& site,
-                                                tab_acoustic_path& tabRayons, 
+TYANIME3DAcousticModel::TYANIME3DAcousticModel( tab_acoustic_path& tabRayons, 
                                                 TYStructSurfIntersect* tabStruct,
                                                 const tympan::AcousticProblemModel& aproblem,
-                                                tympan::AtmosphericConditions& atmos,
-                                                TYTabSourcePonctuelleGeoNode& tabSources, 
-                                                TYTabPointCalculGeoNode& tabRecepteurs) :
-    _calcul(calcul),
-    _site(site),
+                                                tympan::AtmosphericConditions& atmos) :
     _tabTYRays(tabRayons),
     _tabSurfIntersect(tabStruct),
     _aproblem(aproblem),
-    _atmos(atmos),
-    _tabSources(tabSources),
-    _tabRecepteurs(tabRecepteurs)
+    _atmos(atmos)
 {
     _nbRays = _tabTYRays.size();
 
@@ -57,14 +49,6 @@ TYANIME3DAcousticModel::TYANIME3DAcousticModel( TYCalcul& calcul,
     _absAtm  = OTabSpectreComplex(_nbRays, s1);
     _absRefl = OTabSpectreComplex(_nbRays, s1);
     _absDiff = OTabSpectreComplex(_nbRays, s1);
-
-    _topo = const_cast<TYSiteNode&>(site).getTopographie().getRealPointer();
-
-    // _alti parameter initialized
-    _alti = _topo->getAltimetrie().getRealPointer();
-
-    _listeTerrains = _topo->getListTerrain();
-    _listeTriangles = (*_topo->getAltimetrie()).getListFaces();
 
     _c = _atmos.compute_c();
     _K = _atmos.get_k();
@@ -696,11 +680,8 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
     double cst = (pow(2., 1. / 6.) - pow(2., -1. / 6.)) * (pow(2., 1. / 6.) - pow(2., -1. / 6.)) / 3.0 + incerRel * incerRel;
     double totalRayLength;
 
-    const int nbSources    = _tabSources.size();           // nbr de sources de la scene
-    const int nbRecepteurs = _tabRecepteurs.size();         // nbr de recepteurs de la scene
-
-    TYSourcePonctuelle* source = NULL;
-    TYPointCalcul* recept = NULL;
+    const int nbSources    = _aproblem.nsources();           // nbr de sources de la scene
+    const int nbRecepteurs = _aproblem.nreceptors();         // nbr de recepteurs de la scene
 
     OTab2DSpectreComplex tabPressionAcoust(nbSources);
 

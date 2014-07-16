@@ -48,14 +48,10 @@ class TYANIME3DAcousticModel : public TYAcousticModelInterface
 {
 public:
     /// constructeurs
-    TYANIME3DAcousticModel( TYCalcul& calcul, 
-                            const TYSiteNode& site,
-                            tab_acoustic_path& tabRayons, 
+    TYANIME3DAcousticModel( tab_acoustic_path& tabRayons, 
                             TYStructSurfIntersect* tabStruct,
                             const tympan::AcousticProblemModel& aproblem,
-                            tympan::AtmosphericConditions& atmos,
-                            TYTabSourcePonctuelleGeoNode& tabSources,
-                            TYTabPointCalculGeoNode& tabRecepteurs);
+                            tympan::AtmosphericConditions& atmos);
 
     /// destructeur
     virtual ~TYANIME3DAcousticModel();
@@ -130,14 +126,9 @@ private :
 protected :
 
     // Test : vector de triangles
-    std::vector<OTriangle> _oTriangles;
+//    std::vector<OTriangle> _oTriangles;
     //std::vector<OPoint3D>& _oVertex;
-    QList<OTriangle> triangles;
-
-    TYAltimetrie* _alti;
-
-    TYCalcul& _calcul;
-    const TYSiteNode& _site;
+//    QList<OTriangle> triangles;
 
     /// tableau des pressions acoustiques efficaces par rayon
     OTabSpectreComplex _pressAcoustEff;
@@ -159,23 +150,8 @@ protected :
 
     TYStructSurfIntersect* _tabSurfIntersect; /*!< Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face */
 
-    /// la topographie du site
-    TYTopographie* _topo;
-
-    /// la liste des terrains du site
-    TYTabTerrainGeoNode _listeTerrains;
-
     /// la liste des triangles de la topo
-    TYTabLPPolygon _listeTriangles;
-
-    /// la liste des triangles de la topo
-    TYTabLPPolygon _listeTrianglesBox;
-
-    /*!< List of sources used by the solver */
-    TYTabSourcePonctuelleGeoNode& _tabSources;
-
-    /*!< List of receptors used by the solver */
-    TYTabPointCalculGeoNode& _tabRecepteurs;
+//    TYTabLPPolygon _listeTrianglesBox;
 
     /// vitesse du son
     double _c;

@@ -21,9 +21,6 @@
 
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h"
 #include "Tympan/MetierSolver/CommonTools/Acoustic_path.h"
 #include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
@@ -42,7 +39,6 @@ class Lancer;
 //Exemple : le dev peut choisir de conserver la resistivite plutot que le G.
 struct TYStructSurfIntersect
 {
-    TYAcousticSurfaceGeoNode* pSurfGeoNode; //Geonode de la surface
     OMatrix matInv;                         // Matrice inverse pour les faces d'infrastructure
     TYTabPoint tabPoint;                    // Tableau de point utilise pour la preselection
     bool isEcran;                           // Est un ecran
@@ -90,7 +86,7 @@ public:
     * \fn void init(const TYSiteNode&, TYCalcul&)
     * \brief Initialize some data structures used by ANIME3D
     */
-    void init(const TYSiteNode& site, TYCalcul& calcul);
+    void init();
 
 
     /*!
@@ -119,10 +115,10 @@ protected:
     FILE logs;
 
     /*!< List of sources used by the solver */
-    TYTabSourcePonctuelleGeoNode _tabSources;
+    //TYTabSourcePonctuelleGeoNode _tabSources;
 
     /*!< List of receptors used by the solver */
-    TYTabPointCalculGeoNode _tabRecepteurs;
+    //TYTabPointCalculGeoNode _tabRecepteurs;
 
     tympan::source_pool_t all_sources;
     tympan::receptor_pool_t all_receptors;
