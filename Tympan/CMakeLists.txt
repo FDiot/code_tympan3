@@ -233,7 +233,6 @@ list(REMOVE_ITEM ${MODULE_NAME}_MOC_HDRS
     gui/app/TYActions.h
     gui/app/TYAppDefines.h
     gui/app/TYCustomPopupMenu.h
-    gui/app/TYDOMErrorHandler.h
     gui/app/TYDXFBDTOPOImporter.h
     gui/app/TYDXFImporter.h
     gui/app/TYDXFBDTOPOSpecifications.h
