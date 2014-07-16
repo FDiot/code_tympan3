@@ -18,9 +18,6 @@
  */
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHCore.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 
 #include "TYPluginManager.h"

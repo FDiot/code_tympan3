@@ -26,9 +26,6 @@
 #pragma warning(disable: 4503)
 #endif
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHTympanApp.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include <qlayout.h>
 #include <qstring.h>

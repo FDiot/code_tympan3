@@ -24,9 +24,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHGraphic.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/gui/gl/TYAcousticSemiCylinderGraphic.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticSemiCylinder.h"

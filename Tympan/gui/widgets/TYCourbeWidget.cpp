@@ -22,9 +22,6 @@
  */
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHIHM.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/models/business/acoustic/TYSpectre.h"
 #include "TYCourbeWidget.h"
 #include "TYSpectreWidget.h"

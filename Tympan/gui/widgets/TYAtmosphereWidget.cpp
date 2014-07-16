@@ -22,9 +22,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHIHM.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <qmessagebox.h>
 #include "Tympan/models/business/acoustic/TYSpectre.h"
 #include "Tympan/models/business/TYCalcul.h"

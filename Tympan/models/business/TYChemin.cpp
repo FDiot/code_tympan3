@@ -20,9 +20,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/models/business/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 
 TYChemin::TYChemin() :  _typeChemin(CHEMIN_DIRECT), _longueur(0.0), _distance(0.0)

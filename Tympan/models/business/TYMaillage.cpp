@@ -21,9 +21,6 @@
 #include "Tympan/gui/widgets/TYMaillageWidget.h"
 #endif
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/models/business/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>

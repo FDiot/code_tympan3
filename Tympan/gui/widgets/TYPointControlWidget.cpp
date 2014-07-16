@@ -23,9 +23,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHIHM.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPointControl.h"
 #include "Tympan/models/business/TYCalcul.h"

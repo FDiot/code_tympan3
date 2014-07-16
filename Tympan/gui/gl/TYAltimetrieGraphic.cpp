@@ -26,9 +26,6 @@
 #pragma warning( disable : 4284 )
 #endif
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHGraphic.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/core/color.h"
 #include "Tympan/models/business/OLocalizator.h"

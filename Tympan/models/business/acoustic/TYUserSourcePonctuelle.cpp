@@ -21,9 +21,6 @@
 #include "Tympan/gui/widgets/TYUserSourcePonctuelleWidget.h"
 #endif
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/models/business/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/common/3d.h"
 

@@ -23,9 +23,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHIHM.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qpixmap.h>

@@ -1,42 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 
-# This enable includes relative to current source file dir
-# TODO required for now (esp. by PCH) but should ideally be deactivated
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 # Adding GTest include in the non-test tree is required to enable gtest_prod.h
 include_directories (${GTEST_INCLUDE_DIR})
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG _DEBUG)
-
-
-# Precompiled header handling ##################################################
-
-if(${CMAKE_VERSION} VERSION_LESS 2.8.9 AND LOGILAB_USE_PRECOMPILED_HEADER)
-
-  set(LOGILAB_USE_PRECOMPILED_HEADER OFF
-    CACHE BOOL "Pre-compiled headers forcibly disabled." FORCE)
-  message(SEND_ERROR
-    "Pre-compiled headers support requires CMake >= 2.8.9. "
-    "PCH support forcibly disabled ; you can try to run cmake again.")
-endif(${CMAKE_VERSION} VERSION_LESS 2.8.9 AND LOGILAB_USE_PRECOMPILED_HEADER)
-
-# logilab-pch need to be included even when pre-compiled headers are disabled
-# (i.e. LOGILAB_USE_PRECOMPILED_HEADER is OFF).
-# Indeed, it then defines dummy compatibility macros.
-include(logilab-pch)
-
-if(LOGILAB_USE_PRECOMPILED_HEADER)
-  # This triggers the inclusion of the TYPH*.h headers from the *.cpp files
-  add_definitions(-DTYMPAN_USE_PRECOMPILED_HEADER)
-else(LOGILAB_USE_PRECOMPILED_HEADER)
-  message(STATUS
-    "Because the way the headers are inappropriately handled, "
-    "we had to force #define the TYMPAN_USE_PRECOMPILED_HEADER  "
-    "and pay the price of excessive dependencies, at least for now...")
-  add_definitions(-DTYMPAN_USE_PRECOMPILED_HEADER)
-endif(LOGILAB_USE_PRECOMPILED_HEADER)
 
 
 # Configuring source code ######################################################
@@ -66,7 +34,7 @@ file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     core/*.cpp core/*.h
     models/common/*.cpp models/common/*.h
 )
-add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS})
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models/common")
 install_tympan_component(${MODULE_NAME})
 
@@ -75,11 +43,8 @@ set(MODULE_NAME tympan_models_solver)
 file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     models/solver/*.cpp models/solver/*.h models/solver/*.hpp
 )
-set_precompiled_header(${MODULE_NAME} CXX
-  ${CMAKE_CURRENT_SOURCE_DIR}/std_boost_utils.hpp ${MODULE_NAME}_PCH_SRCS)
-add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS})
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models/solver")
-use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 target_link_libraries(${MODULE_NAME}
     tympan_models_common
 )
@@ -91,11 +56,8 @@ file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     models/business/*.cpp models/business/*.h
     models/business/*/*.cpp models/business/*/*.h
 )
-set_precompiled_header(${MODULE_NAME} CXX
-  ${CMAKE_CURRENT_SOURCE_DIR}/TYPHMetier.h ${MODULE_NAME}_PCH_SRCS)
-add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models/business")
-use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 add_dependencies(${MODULE_NAME}
     NMPB2008
     NMPB2008 # XXX?
@@ -123,7 +85,7 @@ list(REMOVE_ITEM ${MODULE_NAME}_SRCS
     "solvers/AcousticRaytracer/Acoustic/NMPBSolver.h"
     "solvers/AcousticRaytracer/Acoustic/NMPBSolver.cpp"
     "solvers/AcousticRaytracer/main.cpp")
-add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS})
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/solvers/AcousticRaytracer")
 add_dependencies(${MODULE_NAME}
     tympan_models_common
@@ -135,7 +97,7 @@ file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/AnalyticRayTracer/*.cpp solvers/AnalyticRayTracer/*.h
     solvers/AnalyticRayTracer/*/*.cpp solvers/AnalyticRayTracer/*/*.h
 )
-add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS})
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/solvers/AnalyticRayTracer")
 target_link_libraries(${MODULE_NAME}
     ${QT_LIBRARIES} # XXX
@@ -148,7 +110,7 @@ file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/ConvexHullFinder/*.cpp solvers/ConvexHullFinder/*.h
     solvers/ConvexHullFinder/*/*.cpp solvers/ConvexHullFinder/*/*.h
 )
-add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS})
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/solvers/ConvexHullFinder")
 add_dependencies(${MODULE_NAME}
     tympan_models_common
@@ -163,7 +125,7 @@ file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 )
 set_property(SOURCE ${${MODULE_NAME}_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
 link_directories(${CGAL_LIBRARIES_DIR})
-add_library(${MODULE_NAME} MODULE ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
+add_library(${MODULE_NAME} MODULE ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/solvers/DefaultSolver")
 target_link_libraries(${MODULE_NAME}
     tympan_models_solver
@@ -182,7 +144,7 @@ file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
 )
 set_property(SOURCE ${${MODULE_NAME}_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
 link_directories(${CGAL_LIBRARIES_DIR})
-add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} MODULE ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS})
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} MODULE ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/solvers/ANIME3DSolver")
 target_link_libraries(${MODULE_NAME}
     tympan_acoustic_raytracer tympan_analytic_raytracer
@@ -200,7 +162,7 @@ file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     gui/*.cpp gui/*.h
     gui/tools/*.cpp gui/tools/*.h
 )
-add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS})
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/gui")
 target_link_libraries(${MODULE_NAME}
     #tympan_models_business # XXX
@@ -230,7 +192,6 @@ file(GLOB ${MODULE_NAME}_FORMS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} gui/widgets/
 qt4_wrap_ui(${MODULE_NAME}_FORMS_HDRS ${${MODULE_NAME}_FORMS})
 add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE}
   ${${MODULE_NAME}_SRCS}
-  ${${MODULE_NAME}_PCH_SRCS}
   ${${MODULE_NAME}_MOC_SRCS} # Sources generated by MOC
   ${${MODULE_NAME}_FORMS_HDRS} # Sources generated by UIC
 )
@@ -248,11 +209,8 @@ set(MODULE_NAME tympan_gui_gl)
 file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     gui/gl/*.cpp gui/gl/*.h
 )
-set_precompiled_header(${MODULE_NAME} CXX
-  ${CMAKE_CURRENT_SOURCE_DIR}/TYPHGraphic.h ${MODULE_NAME}_PCH_SRCS)
-add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS})
+add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/gui/gl")
-use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 add_dependencies(${MODULE_NAME}
     tympan_gui
 )
@@ -293,12 +251,8 @@ add_definitions (-DTY_USE_DXF -DDIME_NOT_DLL) # XXX Add DIME_NOT_DLL too?? See
                                               # 'TYDXFImporter.h'.
 # Call moc on the listed headers, thus generating new sources
 qt4_wrap_cpp(${MODULE_NAME}_MOC_SRCS ${${MODULE_NAME}_MOC_HDRS})
-set_precompiled_header(${MODULE_NAME} CXX
-    ${CMAKE_CURRENT_SOURCE_DIR}/TYPHTympanApp.h ${MODULE_NAME}_PCH_SRCS)
-add_executable(${MODULE_NAME} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS}
-                              ${${MODULE_NAME}_MOC_SRCS})  # Sources generated by MOC
+add_executable(${MODULE_NAME} ${${MODULE_NAME}_MOC_SRCS})  # Sources generated by MOC
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/gui/app")
-use_precompiled_header(${MODULE_NAME} ${MODULE_NAME}_SRCS)
 add_dependencies(${MODULE_NAME}
     Dime
 )

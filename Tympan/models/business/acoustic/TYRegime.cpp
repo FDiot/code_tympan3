@@ -21,9 +21,6 @@
 #include "Tympan/gui/widgets/TYRegimeWidget.h"
 #endif
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/models/business/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 TY_EXTENSION_INST(TYRegime)
 

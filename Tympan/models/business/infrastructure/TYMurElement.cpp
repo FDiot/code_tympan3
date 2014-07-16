@@ -22,9 +22,6 @@
 #include "Tympan/gui/gl/TYMurElementGraphic.h"
 #endif
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/models/business/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "TYMurElement.h"
 #include "Tympan/core/logging.h"
