@@ -104,7 +104,7 @@ class SiteNodeGeometryCleaner(object):
         self.process_infrastructure_landtakes()
 
     def export_cleaned_geometries_into(self, hostcleaner):
-        """Create new geometry and info into the hostside representing the
+        """Create new geometry and info into the host site representing the
         cleaned geometry for each feature of this cleaner
 
         Info are shared between the self and the hostcleaner
@@ -113,7 +113,7 @@ class SiteNodeGeometryCleaner(object):
             hostcleaner._add_new_shape(feature_id, shape, self.info[feature_id])
 
     def merge_subsite(self, subsite):
-        "Merge the cleaned geometries for subsite into the self cleaner"
+        """Merge the cleaned geometries for subsite into the self cleaner"""
         subcleaner = SiteNodeGeometryCleaner(subsite)
         subcleaner.process_all_features()
         if subcleaner.erroneous_overlap:
@@ -122,6 +122,7 @@ class SiteNodeGeometryCleaner(object):
             raise InconsistentGeometricModel(msg, subsite=subsite.id,
                                              ids=subcleaner.erroneous_overlap)
         subcleaner.export_cleaned_geometries_into(self)
+        self._merge_subsite_materials(subcleaner)
 
     def insert_position_for_sorted_material_area(self, inserted_area):
         """Insert the ID of inserted_area into _sorted_material_areas so that
@@ -145,6 +146,18 @@ class SiteNodeGeometryCleaner(object):
         else:
             # The inserted_area is disjoint with all others, insert it at the end
             return len(self._sorted_material_areas)
+
+    def _merge_subsite_materials(self, subcleaner):
+        """Expect subcleaner is a cleaner for a subsite of self.sitenode and
+        import into self the ordered list of the subsite material
+        areas
+        """
+        # A site node is not a material area but has a geometry which
+        # is enough to call insert_position_for_sorted_material_area to get the
+        # place where to insert its own material
+        pos = self.insert_position_for_sorted_material_area(subcleaner.sitenode)
+        self._sorted_material_areas[pos:pos] = subcleaner.material_areas_inner_first()
+
 
     def check_issues_with_material_area_order(self):
         """ Diagnostic helper: returns violation of the ordering for material area"""
