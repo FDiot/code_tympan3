@@ -20,9 +20,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHCore.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 TYColorInterface::TYColorInterface() : _color(OColor::WHITE)
 {

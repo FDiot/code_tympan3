@@ -22,9 +22,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHIHM.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <qtablewidget.h>
 #include <qtabwidget.h>
 #include <qradiobutton.h>

@@ -22,13 +22,7 @@
 #include "Tympan/gui/gl/TYEcranGraphic.h"
 #endif
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/models/business/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/models/business/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/models/business/infrastructure/TYEcran.h"
 #include "Tympan/models/common/3d.h"
 

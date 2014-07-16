@@ -21,9 +21,6 @@
 #include <qfile.h>
 #include <iostream>
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-  #include "TYPHCore.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/core/logging.h"
 #include "Tympan/core/exceptions.h"
 #include "Tympan/models/business/DOMSave.h"

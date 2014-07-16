@@ -20,9 +20,6 @@
  *
  */
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHTympanApp.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include <qcursor.h>
 #include <qtreewidget.h>

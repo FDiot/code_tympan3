@@ -24,9 +24,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHIHM.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>

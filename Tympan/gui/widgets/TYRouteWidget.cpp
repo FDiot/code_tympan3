@@ -18,9 +18,6 @@
  * \brief outil IHM pour une route
  */
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHIHM.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include <QMessageBox>
 

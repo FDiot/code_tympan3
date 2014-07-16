@@ -22,9 +22,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHTympanApp.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/gui/tools/OGLTextElement.h"

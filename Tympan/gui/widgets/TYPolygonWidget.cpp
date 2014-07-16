@@ -23,9 +23,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHIHM.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
 //Added by qt3to4:

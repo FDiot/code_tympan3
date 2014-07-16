@@ -28,9 +28,6 @@
 #include "Tympan/models/business/TYPluginManager.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-  #include "Tympan/models/business/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYCalculWidget.h"
   #include "Tympan/gui/gl/TYCalculGraphic.h"

@@ -22,9 +22,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHTympanApp.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"//az++ pour updateDisplayListOverlay

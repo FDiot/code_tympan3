@@ -23,9 +23,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHTympanApp.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYSetCameraCoordinates.h"
 
 #include "Tympan/models/business/OLocalizator.h"

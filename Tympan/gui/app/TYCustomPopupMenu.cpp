@@ -21,9 +21,6 @@
  */
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHTympanApp.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYCustomPopupMenu.h"
 
 // CLM-NT35: Gestion MDI avec QT4.7

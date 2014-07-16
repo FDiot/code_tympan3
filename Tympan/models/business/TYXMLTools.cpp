@@ -20,12 +20,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-
-#include <limits>
-
-#include "TYPHCore.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "TYXMLTools.h"
 
 #include "Tympan/core/logging.h"

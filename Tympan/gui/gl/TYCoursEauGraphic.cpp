@@ -23,9 +23,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHGraphic.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/models/business/topography/TYCoursEau.h"
 
 #include "Tympan/models/business/TYPreferenceManager.h"

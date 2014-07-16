@@ -18,9 +18,6 @@
  * \brief action qui necessite l'acces au modeler
  */
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHTympanApp.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 
 TYAddAccSurfToAccSurfNodeAction::TYAddAccSurfToAccSurfNodeAction(LPTYAcousticSurfaceGeoNode pAccSurfGeoNode,
                                                                  LPTYAcousticSurfaceNode pAccSurfNode,

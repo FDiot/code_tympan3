@@ -22,9 +22,6 @@
 
 
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "TYPHTympanApp.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
 #include "Tympan/gui/widgets/TYIncludesQT.h"
 #include "Tympan/gui/widgets/TYElementWidget.h"
 #include "Tympan/models/business/OLocalizator.h"
