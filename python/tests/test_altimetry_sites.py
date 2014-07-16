@@ -283,6 +283,19 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
         cleaner.process_material_areas()
         self.assertEqual(cleaner.check_issues_with_material_area_order(), [])
 
+    def test_merge_subsite_material(self):
+        self.subgrass = MaterialArea(rect(6, 7, 7, 8), material=self.grass,
+                                     id="{Grass in subsite}",
+                                     parent_site=self.subsite)
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+        cleaner.process_all_features()
+        cleaner.merge_subsite(self.subsite)
+
+        self.assertIn(self.subgrass.id, cleaner.geom)
+        self.assertIn(self.subgrass.id, cleaner.info)
+        geom, info = cleaner[self.subgrass.id]
+        self.assertEqual(info['material'], self.grass.id)
+
 
 @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
 class VisualisationTC(unittest.TestCase, _TestFeatures):
