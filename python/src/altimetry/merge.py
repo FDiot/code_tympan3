@@ -174,3 +174,16 @@ class SiteNodeGeometryCleaner(object):
 
     def material_areas_inner_first(self):
         return list(self._sorted_material_areas)
+
+
+
+def recursively_merge_all_subsites(rootsite):
+    """Merges all subsites and their subsites and so on into this merger."""
+    cleaned = SiteNodeGeometryCleaner(rootsite)
+    cleaned.process_all_features()
+    subsites_to_be_processed = rootsite.subsites
+    while subsites_to_be_processed:
+        current_site = subsites_to_be_processed.pop()
+        cleaned.merge_subsite(current_site)
+        subsites_to_be_processed.extend(current_site.subsites)
+    return cleaned

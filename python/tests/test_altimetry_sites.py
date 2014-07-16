@@ -15,7 +15,8 @@ from shapely.geometry import MultiLineString
 from altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
                                  WaterBody, SiteNode, PolygonalTympanFeature,
                                  InconsistentGeometricModel, MATERIAL_WATER)
-from altimetry.merge import SiteNodeGeometryCleaner,build_site_shape_with_hole
+from altimetry.merge import (SiteNodeGeometryCleaner, build_site_shape_with_hole,
+                             recursively_merge_all_subsites)
 from altimetry import visu
 from altimetry import mesh
 
@@ -167,6 +168,16 @@ class _TestFeatures(object):
                                         altitude=self.altitude_B,
                                         parent_site=self.subsite, id="{Level curve B}")
 
+    def build_more_features_in_subsites(self):
+        self.subsubsite = SiteNode(rect(6, 6.5, 7, 7.5), id="{SubSubsite ID}",
+                                   parent_site=self.subsite)
+        self.sub_level_curve = LevelCurve([(6.5, 6), (6.5, 9)], altitude=6.0,
+                                          id="{Cut level curve}",
+                                          parent_site=self.subsite)
+        self.subsub_level_curve = LevelCurve([(5, 5.5), (8, 8.5)], altitude=7.0,
+                                             id="{Subsub level curve}",
+                                             parent_site=self.subsubsite)
+
 
 class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
 
@@ -295,6 +306,16 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
         self.assertIn(self.subgrass.id, cleaner.info)
         geom, info = cleaner[self.subgrass.id]
         self.assertEqual(info['material'], self.grass.id)
+
+    def test_recursive_merge(self):
+        self.build_more_features_in_subsites()
+        cleaner = recursively_merge_all_subsites(self.mainsite)
+
+        self.assertIn("{Subsub level curve}", cleaner.geom)
+        geom, info = cleaner["{Subsub level curve}"]
+        expected_shape = geometry.LineString([(6, 6.5), (7, 7.5)])
+        self.assertTrue(expected_shape.equals(geom))
+        self.assertEqual(info['site'], self.subsubsite.id)
 
 
 @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
