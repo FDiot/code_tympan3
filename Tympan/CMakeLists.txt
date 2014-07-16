@@ -46,15 +46,17 @@ configure_file(
   ${CMAKE_CURRENT_BINARY_DIR}/TYVersion.h
   @ONLY
 )
+
+set(PYMODULES_DIR "pymodules")
+set(PYSCRIPT "${PYMODULES_DIR}/solve_project.py")
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/Config.h
   @ONLY
   )
-include_directories(${CMAKE_BINARY_DIR})
-set(PYMODULES_DIR "pymodules")
-set(PYSCRIPT "${PYMODULES_DIR}/solve_project.py")
 
+# XXX is it useful here and part of source code configuration ?
+include_directories(${CMAKE_BINARY_DIR})
 
 # models #######################################################################
 
