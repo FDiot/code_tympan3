@@ -19,6 +19,8 @@
 #include "Tympan/MetierSolver/AnalyticRayTracer/geometry_modifier.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"
 
+class AcousticProblemModel;
+
 /**
  * \class TYANIME3DAcousticPathFinder
  * \brief La recherche de chemins acoustiques associee a la methode ANIME3D
@@ -26,7 +28,13 @@
 class TYANIME3DAcousticPathFinder
 {
 public:
-    TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize, TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs, tab_acoustic_path& tabTYRays);
+    TYANIME3DAcousticPathFinder(    TYStructSurfIntersect* tabPolygon, 
+                                    const size_t& tabPolygonSize, 
+                                    TYTabSourcePonctuelleGeoNode& tabSources, 
+                                    TYTabPointCalculGeoNode& tabRecepteurs,
+                                    const tympan::AcousticProblemModel& aproblem_,
+                                    tab_acoustic_path& tabTYRays);
+
     virtual ~TYANIME3DAcousticPathFinder();
 
     bool exec();
@@ -42,12 +50,6 @@ private :
      * \return Renvoie 0 pour le sens S->R et 1 pour le sens R->S
      */
     unsigned int getTabsSAndR(vector<vec3>& sources, vector<vec3>& recepteurs);
-
-    /*!
-     * \fn TYPoint computePosGlobalPoint (const TYGeometryNode* pNode);
-     * \brief Calcule la position d'un point (source ou recepteur) dans le repere global
-     */
-    OPoint3D computePosGlobalPoint(const TYGeometryNode* pNode);
 
     /*!
      * \fn void transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
@@ -116,6 +118,8 @@ private:
 
     /// tableau de l'ensemble des rayons métier Code_TYMPAN
     tab_acoustic_path& _tabTYRays;
+
+    const tympan::AcousticProblemModel& _aproblem;
 };
 
 #endif // __TYANIME3DACOUSTICPATHFINDER__
