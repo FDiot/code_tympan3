@@ -42,7 +42,9 @@ using std::vector;
 #include "Tympan/MetierSolver/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Conversion_tools.h"
 
-#include "TYANIME3DRayTracerSetup.h"
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
+
+#include "TYANIME3DRayTracerSolverAdapter.h"
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DAcousticPathFinder.h"
 
@@ -51,10 +53,12 @@ using std::vector;
 
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize,
                                                          TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs,
-                                                         tab_acoustic_path& tabTYRays) : _tabPolygon(tabPolygon),
+                                                         const tympan::AcousticProblemModel& aproblem_, tab_acoustic_path& tabTYRays) : 
+    _tabPolygon(tabPolygon),
     _tabPolygonSize(tabPolygonSize),
     _tabSources(tabSources),
     _tabRecepteurs(tabRecepteurs),
+    _aproblem(aproblem_),
     _tabTYRays(tabTYRays)
 {
 }
@@ -70,8 +74,7 @@ bool TYANIME3DAcousticPathFinder::exec()
     _rayTracing.clean();
 
     // Ajout des parametres du _rayTracing liés à la methode acoustique
-    TYANIME3DRayTracerSetup* solver = new TYANIME3DRayTracerSetup();
-    solver->initGlobalValues();
+    TYANIME3DRayTracerSolverAdapter* solver = new TYANIME3DRayTracerSolverAdapter();
     _rayTracing.setSolver(solver);
 
     vector<vec3> sources;
@@ -123,9 +126,9 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
     vector<vec3> srcs;
 
     //Conversion des sources Tympan en source lancer de rayons
-    for (unsigned int i = 0; i < _tabSources.size(); i++)
+    for (unsigned int i = 0; i < _aproblem.nsources(); i++)
     {
-        OPoint3D globalPos = computePosGlobalPoint(_tabSources.at(i));
+        OPoint3D globalPos = _aproblem.source(i).position;
         vec3 pos = vec3(globalPos._x, globalPos._y, globalPos._z);
         srcs.push_back(pos);
     }
@@ -133,9 +136,9 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
     vector<vec3> rcpts;
 
     //Conversion du recepteur Tympan en recepteur lancer de rayons
-    for (unsigned int i = 0; i < _tabRecepteurs.size(); i++)
+    for (unsigned int i = 0; i < _aproblem.nreceptors(); i++)
     {
-        OPoint3D globalPos = computePosGlobalPoint(_tabRecepteurs.at(i));
+        OPoint3D globalPos = _aproblem.receptor(i).position;
         vec3 pos = vec3(globalPos._x, globalPos._y, globalPos._z);
 
         rcpts.push_back(pos);
@@ -173,32 +176,18 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
     return sens;
 }
 
-
-OPoint3D TYANIME3DAcousticPathFinder::computePosGlobalPoint(const TYGeometryNode* pNode)
-{
-    OPoint3D * pPoint;
-    TYSourcePonctuelle* pSource = dynamic_cast<TYSourcePonctuelle*>(pNode->getElement());
-    if (pSource != nullptr)
-    {
-        pPoint = pSource->getPos();
-    }
-    else { pPoint = TYPoint::safeDownCast(pNode->getElement()); }
-
-    return  pNode->getMatrix() * (*pPoint);
-}
-
 void TYANIME3DAcousticPathFinder::transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
 {
     // Pour toutes les sources
-    for (unsigned int i = 0; i < sources.size(); i++)
+    for (unsigned int i = 0; i < _aproblem.nsources(); i++)
     {
-        sources[i] = transformer.fonction_h(sources[i]);
+        sources[i] = OPoint3Dtovec3( transformer.fonction_h( _aproblem.source(i).position ) );
     }
 
     // Pour tous les recepteurs
-    for (unsigned int i = 0; i < recepteurs.size(); i++)
+    for (unsigned int i = 0; i < _aproblem.nreceptors(); i++)
     {
-        recepteurs[i] = transformer.fonction_h(recepteurs[i]);
+        recepteurs[i] = OPoint3Dtovec3( transformer.fonction_h( _aproblem.receptor(i).position ) );
     }
 }
 
@@ -211,13 +200,8 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
     }
 
     Scene* scene = _rayTracing.getScene();
-    Material* m1 = new Material();
-    Material* m2 = new Material();
-    m2->setName(std::string("MyMaterial"));
-    //  m1->r = 255;m1->g = 125; m1->b = 0;
-    m1->isNatural = false;
-    //  m2->r = 0;m2->g = 255; m2->b = 0;
-    m2->isNatural = false;
+
+    Material *m = new Material(); // Only for compatibility, may be suppressed;
 
     vec3 pos;
 
@@ -228,84 +212,34 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
         _tabPolygon[i].normal.getCoords(coordNormal);
         vec3 normalFace = vec3(coordNormal[0], coordNormal[1], coordNormal[2]);
 
-        if (_tabPolygon[i].tabPoint.size() == 4) //Creation d'un triangle a partir des points de la surface
+        unsigned int a, b, c;
+        double coord[3];
+
+        _tabPolygon[i].tabPoint[0].getCoords(coord);
+        pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
+        scene->addVertex(pos, a);
+
+        _tabPolygon[i].tabPoint[1].getCoords(coord);
+        pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
+        scene->addVertex(pos, b);
+
+        _tabPolygon[i].tabPoint[2].getCoords(coord);
+        pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
+        scene->addVertex(pos, c);
+
+        Triangle* face;
+        if ( dynamic_cast<tympan::AcousticGroundMaterial*>(_tabPolygon[i].material) )
         {
-            unsigned int a, b, c;
-            double coord[3];
-
-            _tabPolygon[i].tabPoint[0].getCoords(coord);
-            pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
-            scene->addVertex(pos, a);
-
-            _tabPolygon[i].tabPoint[1].getCoords(coord);
-            pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
-            scene->addVertex(pos, b);
-
-            _tabPolygon[i].tabPoint[2].getCoords(coord);
-            pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
-            scene->addVertex(pos, c);
-
-            Triangle* face;
-            if (_tabPolygon[i].isEcran || _tabPolygon[i].isInfra)
-            {
-                face = (Triangle*)scene->addTriangle(a, b, c, m1);
-                ss << "Ajout d'un triangle non naturel." << std::endl;
-            }
-            else
-            {
-                face = (Triangle*)scene->addTriangle(a, b, c, m2, true);
-            }
-            face->setBuildingId(_tabPolygon[i].idBuilding);
-            face->setFaceId(_tabPolygon[i].idFace);
-            face->setEtageId(_tabPolygon[i].idEtage);
-
-            if (face->getNormal().dot(normalFace) < -0.001) //Les normales sont de sens contraire
-            {
-                face->setNormal(face->getNormal() * (-1.));
-            }
-
+            // Set last parameter true means triangle is part of the ground
+            face = (Triangle*)scene->addTriangle(a, b, c, m, true);
         }
-        else if (_tabPolygon[i].tabPoint.size() > 4)
+        else
         {
-            OPoint3D coord;
-            for (unsigned int j = 0; j < _tabPolygon[i].triangles.size(); j++)
-            {
-                unsigned int a, b, c;
-
-                coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p1);
-                pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
-                scene->addVertex(pos, a);
-
-                coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p2);
-                pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
-                scene->addVertex(pos, b);
-
-                coord = _tabPolygon[i].realVertex.at(_tabPolygon[i].triangles.at(j)._p3);
-                pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
-                scene->addVertex(pos, c);
-
-                Triangle* face;
-                if (_tabPolygon[i].isEcran || _tabPolygon[i].isInfra)
-                {
-                    face = (Triangle*)scene->addTriangle(a, b, c, m1);
-                    ss << "Ajout d'un triangle non naturel." << std::endl;
-                }
-                else
-                {
-                    face = (Triangle*)scene->addTriangle(a, b, c, m2, true);
-                }
-                face->setBuildingId(_tabPolygon[i].idBuilding);
-                face->setFaceId(_tabPolygon[i].idFace);
-                face->setEtageId(_tabPolygon[i].idEtage);
-                //face->setNormal(normalFace);
-
-                if (face->getNormal().dot(normalFace) < -0.001) //Les normales sont de sens contraire
-                {
-                    face->setNormal(face->getNormal() * (-1.));
-                }
-            }
+            face = (Triangle*)scene->addTriangle(a, b, c, m);
+            ss << "Ajout d'un triangle non naturel." << std::endl;
         }
     }
+
     return true;
 }
 

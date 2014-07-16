@@ -17,13 +17,17 @@
 #ifndef __TY_ANIME3DSOLVER__
 #define __TY_ANIME3DSOLVER__
 
+#include <memory>
+
 #include "Tympan/MetierSolver/AcousticRaytracer/Tools/Logger.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
 #include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYSourcePonctuelle.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYPointCalcul.h"
 #include "Tympan/MetierSolver/CommonTools/Acoustic_path.h"
+#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
+#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
 
 
 class TYANIME3DAcousticModel;
@@ -51,6 +55,7 @@ struct TYStructSurfIntersect
     int idEtage;                            //Indice de l'etage
     OSpectreComplex spectreAbso;            //Spectre d'absorption
     double G;                               //Coefficient d'impedance
+    tympan::AcousticMaterialBase *material;  //triangle material
 };
 
 
@@ -118,6 +123,20 @@ protected:
 
     /*!< List of receptors used by the solver */
     TYTabPointCalculGeoNode _tabRecepteurs;
+
+    tympan::source_pool_t all_sources;
+    tympan::receptor_pool_t all_receptors;
+
+private:
+    /**
+     * \fn size_t buildValidTrajects(tympan::AcousticProblemModel& aproblem)
+     * \brief construit le tableau des trajets et la matrice resultat en supprimant les points trop proches d'une source
+     */
+   size_t buildTrajects(tympan::AcousticProblemModel& aproblem);
+
+   std::vector<TYTrajet> _tabTrajets; 
+
+   std::unique_ptr<tympan::AtmosphericConditions> _pAtmos;
 };
 
 #endif // __TY_ANIME3DSOLVER__

@@ -23,18 +23,28 @@
 #include "Tympan/MetierSolver/CommonTools/Acoustic_path.h"
 
 #include "Tympan/MetierSolver/AcousticRaytracer/global.h"
+#include "Tympan/MetierSolver/SolverDataModel/Entities.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/Entities.hpp"
+#include "Tympan/MetierSolver/SolverDataModel/acoustic_problem_model.hpp"
 
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DAcousticModel.h"
 
 
-TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site,
-                                               tab_acoustic_path& tabRayons, TYStructSurfIntersect* tabStruct,
-                                               TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs) :
+TYANIME3DAcousticModel::TYANIME3DAcousticModel( TYCalcul& calcul, 
+                                                const TYSiteNode& site,
+                                                tab_acoustic_path& tabRayons, 
+                                                TYStructSurfIntersect* tabStruct,
+                                                const tympan::AcousticProblemModel& aproblem,
+                                                tympan::AtmosphericConditions& atmos,
+                                                TYTabSourcePonctuelleGeoNode& tabSources, 
+                                                TYTabPointCalculGeoNode& tabRecepteurs) :
     _calcul(calcul),
     _site(site),
-    _tabSurfIntersect(tabStruct),
     _tabTYRays(tabRayons),
+    _tabSurfIntersect(tabStruct),
+    _aproblem(aproblem),
+    _atmos(atmos),
     _tabSources(tabSources),
     _tabRecepteurs(tabRecepteurs)
 {
@@ -48,8 +58,6 @@ TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNod
     _absRefl = OTabSpectreComplex(_nbRays, s1);
     _absDiff = OTabSpectreComplex(_nbRays, s1);
 
-    _atmos = *(calcul.getAtmosphere());
-
     _topo = const_cast<TYSiteNode&>(site).getTopographie().getRealPointer();
 
     // _alti parameter initialized
@@ -58,8 +66,8 @@ TYANIME3DAcousticModel::TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNod
     _listeTerrains = _topo->getListTerrain();
     _listeTriangles = (*_topo->getAltimetrie()).getListFaces();
 
-    _c = _atmos.getVitSon();
-    _K = _atmos.getKAcoust();
+    _c = _atmos.compute_c();
+    _K = _atmos.get_k();
     _lambda = OSpectre::getLambda(_c);
 
     _useFresnelArea = globalUseFresnelArea;
@@ -75,7 +83,7 @@ void TYANIME3DAcousticModel::ComputeAbsAtm()
 {
     for (int i = 0; i < _nbRays; i++)
     {
-        _absAtm[i] = OSpectreComplex(_atmos.getAtt(_tabTYRays[i]->getLength()));
+        _absAtm[i] = OSpectreComplex( _atmos.compute_length_absorption( _tabTYRays[i]->getLength() ) );
     }
 }
 
@@ -142,57 +150,57 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 
             if (_useFresnelArea) // Avec ponderation de Fresnel
             {
-                if (ray->getEvents().at(reflIndice)->type == TYREFLEXIONSOL)
-                {
-                    std::cout << "We start using Fresnel Area on the ground" << std::endl;
+                //if (ray->getEvents().at(reflIndice)->type == TYREFLEXIONSOL)
+                //{
+                //    std::cout << "We start using Fresnel Area on the ground" << std::endl;
 
-                    triangleCentre.clear();
-                    tabPondFresnel.clear();
-                    tabPondFresnel = ComputeFresnelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
-                    nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
+                //    triangleCentre.clear();
+                //    tabPondFresnel.clear();
+                //    tabPondFresnel = ComputeFresnelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
+                //    nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
 
-                    std::cout << "il y a N ponderations : " << nbFacesFresnel << std::endl;
+                //    std::cout << "il y a N ponderations : " << nbFacesFresnel << std::endl;
 
-                    sum = zero;
+                //    sum = zero;
 
-                    for (int k = 0; k < nbFacesFresnel; k++)
-                    {
-                        // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
-                        pSol = _topo->terrainAt(triangleCentre[k])->getSol();
-                        pSol->calculNombreDOnde(_atmos);
+                //    for (int k = 0; k < nbFacesFresnel; k++)
+                //    {
+                //        // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
+                //        pSol = _topo->terrainAt(triangleCentre[k])->getSol();
+                //        pSol->calculNombreDOnde(_atmos);
 
-                        std::cout << "sol n : " << k << "resistivite = " << pSol->getResistivite() << std::endl;
+                //        std::cout << "sol n : " << k << "resistivite = " << pSol->getResistivite() << std::endl;
 
-                        spectreAbs = pSol->abso(angle, rr, _atmos);
-                        // TO DO : S'assurer que la somme des pondrations de Fresnel gale 1
-                        pond = spectreAbs * tabPondFresnel[k];
-                        sum = sum + pond; // calcul du coeff de reflexion moy en ponderant avec les materiaux
-                    }
+                //        spectreAbs = pSol->abso(angle, rr, _atmos);
+                //        // TO DO : S'assurer que la somme des pondrations de Fresnel gale 1
+                //        pond = spectreAbs * tabPondFresnel[k];
+                //        sum = sum + pond; // calcul du coeff de reflexion moy en ponderant avec les materiaux
+                //    }
 
-                    prod = prod * sum * (rd / rr);
-                }
-                else // Reflexion sur une construction
-                {
-                    std::cout << "We start using Fresnel Area on a building" << std::endl;
+                //    prod = prod * sum * (rd / rr);
+                //}
+                //else // Reflexion sur une construction
+                //{
+                //    std::cout << "We start using Fresnel Area on a building" << std::endl;
 
-                    triangleCentre.clear();
-                    tabPondFresnel = ComputeFresnelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
-                    nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
+                //    triangleCentre.clear();
+                //    tabPondFresnel = ComputeFresnelWeighting(angle, Pprec, Prefl, Psuiv, rayNbr, reflIndice, triangleCentre);  // calcul des ponderations de Frenel
+                //    nbFacesFresnel = tabPondFresnel.size();  // nbr de triangles dans le zone de Fresnel
 
-                    std::cout << "il y a N ponderations : " << nbFacesFresnel << std::endl;
+                //    std::cout << "il y a N ponderations : " << nbFacesFresnel << std::endl;
 
-                    sum = zero;
+                //    sum = zero;
 
-                    for (int k = 0; k < nbFacesFresnel; k++)
-                    {
-                        // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
-                        pond = spectreAbs * tabPondFresnel[k];
-                        sum = sum + pond;   // calcul du coeff de reflexion moy en ponderant avec les materiaux
-                    }
-                    prod = prod * sum;
-                }
+                //    for (int k = 0; k < nbFacesFresnel; k++)
+                //    {
+                //        // boucle sur les faces = intersection plan de l'objet intersecte / ellipsoide de Fresnel
+                //        pond = spectreAbs * tabPondFresnel[k];
+                //        sum = sum + pond;   // calcul du coeff de reflexion moy en ponderant avec les materiaux
+                //    }
+                //    prod = prod * sum;
+                //}
 
-                std::cout << "End of Fresnel Area" << std::endl;
+                //std::cout << "End of Fresnel Area" << std::endl;
             }
             else // not use Fresnel Area
             {
@@ -200,12 +208,18 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
                 std::cout << "We are not using Fresnel Area on the ground" << std::endl;
                 if (ray->getEvents().at(reflIndice)->type == TYREFLEXIONSOL)
                 {
-                    pSol = _topo->terrainAt(Prefl)->getSol();
-                    std::cout << "Impedance sol = " << pSol->getResistivite() << std::endl;
-                    pSol->calculNombreDOnde(_atmos);
-                    spectreAbs = pSol->abso(angle, rr, _atmos);
-                    spectreAbs = spectreAbs * (rd / rr);
-                    std::cout << "A 500 Hz, Q = " << spectreAbs.getModule().getValueReal(500) << std::endl;
+                    unsigned int index_face = ray->getEvents().at(reflIndice)->idFace1;
+                    tympan::AcousticGroundMaterial *material = dynamic_cast<tympan::AcousticGroundMaterial*>( _tabSurfIntersect[index_face].material );
+                    assert(material);
+
+                    spectreAbs = material->get_absorption(angle, rr);
+
+                    //pSol = _topo->terrainAt(Prefl)->getSol();
+                    //std::cout << "Impedance sol = " << pSol->getResistivite() << std::endl;
+                    //pSol->calculNombreDOnde(_atmos);
+                    //spectreAbs = pSol->abso(angle, rr, _atmos);
+                    //spectreAbs = spectreAbs * (rd / rr);
+                    //std::cout << "A 500 Hz, Q = " << spectreAbs.getModule().getValueReal(500) << std::endl;
                 }
                 else
                 {
@@ -306,6 +320,7 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
     }
 }
 
+/*
 // calcul de la zone de Fresnel pour une diffraction donnee - Approximation : zone = boite englobante de l'ellipsoide de Fresnel
 OBox2 TYANIME3DAcousticModel::ComputeFresnelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice)
 {
@@ -327,35 +342,35 @@ OBox2 TYANIME3DAcousticModel::ComputeFresnelArea(double angle, OPoint3D Pprec, O
     OSpectre f = OSpectre::getOSpectreFreqExact(); //frequence
     OSpectre fc = computeFc(dd, dr);
 
-    /*
-    MIS EN COMMENTAIRE POUR VALIDATION ULTERIEURE
+    //
+    //MIS EN COMMENTAIRE POUR VALIDATION ULTERIEURE
 
-        // Calcul de F lambda officiel (equations 10  15 de H-T63-2010-01193-FR)
-        // parametre de l'ellipsoide de Fresnel F_{\lambda} via la formule definie dans la publie de D. van Maercke et J. Defrance (CSTB-2007)
-        // Version initiale du calcul de fc prenant en compte le sol rel
+    //    // Calcul de F lambda officiel (equations 10  15 de H-T63-2010-01193-FR)
+    //    // parametre de l'ellipsoide de Fresnel F_{\lambda} via la formule definie dans la publie de D. van Maercke et J. Defrance (CSTB-2007)
+    //    // Version initiale du calcul de fc prenant en compte le sol rel
 
-        // Le spectre Q sert  rcuprer la phase du trajet rflechi
+    //    // Le spectre Q sert  rcuprer la phase du trajet rflechi
 
-        OSpectre f = OSpectre::getOSpectreFreqExact(); //frequence
-        std::cout << "f = " << f.valMax() << std::endl;
-        OSpectreComplex Q = _topo.terrainAt(Prefl)->getSol()->calculQ(angle, distPrefPsuiv, _atmos) ; // coeff de reflexion du sol au pt de reflexion
-        const double c1 = 0.5 * _c /(dr - dd);  // cste de calcul
-        OSpectre phaseQdivPI = Q.getPhase().div(M_PI);
-        OSpectre fmin = (OSpectre(0.5) - phaseQdivPI)*c1;
-        OSpectre fmax = (OSpectre(1.0) - phaseQdivPI)*c1;
-        OSpectre fc = (fmin * fmax).sqrt();      // frequence de transition
+    //    OSpectre f = OSpectre::getOSpectreFreqExact(); //frequence
+    //    std::cout << "f = " << f.valMax() << std::endl;
+    //    OSpectreComplex Q = _topo.terrainAt(Prefl)->getSol()->calculQ(angle, distPrefPsuiv, _atmos) ; // coeff de reflexion du sol au pt de reflexion
+    //    const double c1 = 0.5 * _c /(dr - dd);  // cste de calcul
+    //    OSpectre phaseQdivPI = Q.getPhase().div(M_PI);
+    //    OSpectre fmin = (OSpectre(0.5) - phaseQdivPI)*c1;
+    //    OSpectre fmax = (OSpectre(1.0) - phaseQdivPI)*c1;
+    //    OSpectre fc = (fmin * fmax).sqrt();      // frequence de transition
 
-        std::cout << "fmin = " << fmin.valMax() << std::endl;
-        std::cout << "fmax = " << fmax.valMax() << std::endl;
-        std::cout << "fc = " << fc.valMax() << std::endl;
+    //    std::cout << "fmin = " << fmin.valMax() << std::endl;
+    //    std::cout << "fmax = " << fmax.valMax() << std::endl;
+    //    std::cout << "fc = " << fc.valMax() << std::endl;
 
-        const OSpectre F = (OSpectre(1.0)-((f*f).div(fc*fc)).exp(1.0))*32.0;
+    //    const OSpectre F = (OSpectre(1.0)-((f*f).div(fc*fc)).exp(1.0))*32.0;
 
-        OSpectre A = (fc*fc)*-1;
-        OSpectre B = f*f;
-        OSpectre C = B.div(A);
-        const OSpectre F = (OSpectre(1.0)-(C.exp()))*32;
-    */
+    //    OSpectre A = (fc*fc)*-1;
+    //    OSpectre B = f*f;
+    //    OSpectre C = B.div(A);
+    //    const OSpectre F = (OSpectre(1.0)-(C.exp()))*32;
+    //
 
     // F fixe a 1 pour eviter une boite trop grande a basse freq
     const OSpectre F = OSpectre(1.0);
@@ -405,22 +420,23 @@ OBox2 TYANIME3DAcousticModel::ComputeFresnelArea(double angle, OPoint3D Pprec, O
 
     return fresnelArea;
 
-    /*
-        DTn commented to use new OBox manipulator I defined (20131218)
-        // Deplace le centre de la boite au centre du segment S'P (P = point suivant la rflexion)
-        const OVector3D vt( ( O._x - (0.5*L) ), ( O._y - ( 0.5*l ) ), ( O._z - ( 0.5*h ) ) );
-        fresnelArea.Translate( vt );
+    //
+    //    DTn commented to use new OBox manipulator I defined (20131218)
+    //    // Deplace le centre de la boite au centre du segment S'P (P = point suivant la rflexion)
+    //    const OVector3D vt( ( O._x - (0.5*L) ), ( O._y - ( 0.5*l ) ), ( O._z - ( 0.5*h ) ) );
+    //    fresnelArea.Translate( vt );
 
-    // TO DO : S'assurer que la rotation s'effectue dans le bon repre
-        return fresnelArea.boxRotation( O, Psuiv ); // Voir la dfinition de boxRotation : devrai tre fersnelArea.boxRotation(...)
-    */
+    //// TO DO : S'assurer que la rotation s'effectue dans le bon repre
+    //    return fresnelArea.boxRotation( O, Psuiv ); // Voir la dfinition de boxRotation : devrai tre fersnelArea.boxRotation(...)
+    //
 }
+*/
 
 // TO DO : Vrifier que c'est la mthode mise en commentaire dans computeFresnelArea
 OSpectre TYANIME3DAcousticModel::computeFc(const double& dd, const double& dr)
 {
     OSpectre FMin, FMax, fc;
-    OSpectre PhiN = _atmos.getKAcoust() * (dr - dd);
+    OSpectre PhiN = _atmos.get_k() * (dr - dd);
     OSpectre Phi0Min(M_PI / 2);
     OSpectre Phi0Max(M_PI);
     OSpectre freq = OSpectre::getOSpectreFreqExact();
@@ -445,6 +461,7 @@ OSpectre TYANIME3DAcousticModel::computeFc(const double& dd, const double& dr)
     return fc;
 }
 
+/*
 OTabDouble TYANIME3DAcousticModel::ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre)
 {
     OTabDouble tabPond;             // tableau des ponderation de Fresnel
@@ -565,7 +582,9 @@ OTabDouble TYANIME3DAcousticModel::ComputeFresnelWeighting(double angle, OPoint3
 
     return tabPond;
 }
+*/
 
+/*
 std::vector<OTriangle> TYANIME3DAcousticModel::ComputeTriangulation(const TYTabPoint& points, const double& delaunay)
 {
 
@@ -610,17 +629,20 @@ std::vector<OTriangle> TYANIME3DAcousticModel::ComputeTriangulation(const TYTabP
 
     return listeTriangle;
 }
+*/
 
 void TYANIME3DAcousticModel::ComputePressionAcoustEff()
 {
     OSpectre phase; // phase du nombre complexe _pressAcoustEff[i] pour chq i
     OSpectre mod;   // module du nombre complexe _pressAcoustEff[i] pour chq i
-    const double rhoc = _atmos.getImpedanceSpecifique(); //400.0;   // kg/m^2/s
+    const double rhoc = _atmos.Z_ref; //400.0;   // kg/m^2/s
     double c1;      // constante du calcul
     OPoint3D S, P0; // pt de la source et pt du 1er evenement
     OSegment3D seg; // premier segment du rayon
     OSpectre directivite, wSource; // fonction de directivite et spectre de puissance de la source
-    TYSourcePonctuelle* source = NULL; // source
+    
+    //TYSourcePonctuelle* source = NULL; // source
+    
     OSpectreComplex prodAbs; // produit des differentes absorptions
     double totalRayLength; // Computes the total ray length including reflections only (diffractions are not included)
 
@@ -628,11 +650,7 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff()
     {
         totalRayLength = 0.0; // Computes the total ray length including reflections only (diffractions are not included)
 
-
-
-        // TO DO : Should find source in list known by solver from it's index given by the ray
-
-        //source = _tabTYRays[i]->getSource();
+        const tympan::AcousticSource& source = _aproblem.source( _tabTYRays[i]->getSource_idx() );
 
         //--------------------------------------
 
@@ -644,8 +662,11 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff()
         P0 = _tabTYRays[i]->getEvents().at(1)->pos;
         seg = OSegment3D(S, P0);
 
-        directivite = source->lwApparenteSrcDest(seg, _atmos);
-        wSource = (*source->getSpectre()).toGPhy();
+        OVector3D vec(S, P0);
+        double length = S.distFrom(P0);
+
+        directivite = source.directivity->lwAdjustment(vec, length);
+        wSource = source.spectrum.toGPhy(); 
 
         prodAbs = _absAtm[i] * _absRefl[i] * _absDiff[i];
 
@@ -698,42 +719,28 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
 
             for (int k = 0; k < _nbRays; k++) // boucle sur les rayons allant de la source au recepteur
             {
+                const tympan::AcousticSource& source = _aproblem.source( _tabTYRays[i]->getSource_idx() );
+                const tympan::AcousticReceptor& receptor = _aproblem.receptor( _tabTYRays[i]->getRecepteur_idx() );
 
-        // TO DO : Should find source in list known by solver from it's index given by the ray
+                totalRayLength = _tabTYRays[k]->getLength();
+                mod = (_pressAcoustEff[k]).getModule();
 
-               // source = _tabTYRays[k]->getSource();
-
-        // ------------------------------------------------
-
-        // TO DO : Should find receptor in list known by solver from it's index given by the ray
-
-                // recept = _tabTYRays[k]->getRecepteur();
-
-        // -------------------------------------------------
-
-                // test si la source est celle en cours idem pour recepteur
- //               if (source == (TYSourcePonctuelle*)(_tabSources[i]->getElement()) && recept == (TYPointCalcul*)(_tabRecepteurs[j]->getElement()))
+                if (((int) globalAnime3DForceC) == 0)
                 {
-                    totalRayLength = _tabTYRays[k]->getLength();
-                    mod = (_pressAcoustEff[k]).getModule();
-
-                    if (((int) globalAnime3DForceC) == 0)
-                    {
-                        C = 0.0; // = defaultSolver "energetique"
-                    }
-                    else if (((int) globalAnime3DForceC) == 1)
-                    {
-                        C = 1.0; // = defaultSolver "interferences"
-                    }
-                    else
-                    {
-                        C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
-                    }
-
-                    sum3 = _pressAcoustEff[k] * C;
-                    sum1 = sum1 + sum3;
-                    sum2 = sum2 + mod * mod * (un - C * C);
+                    C = 0.0; // = defaultSolver "energetique"
                 }
+                else if (((int) globalAnime3DForceC) == 1)
+                {
+                    C = 1.0; // = defaultSolver "interferences"
+                }
+                else
+                {
+                    C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
+                }
+
+                sum3 = _pressAcoustEff[k] * C;
+                sum1 = sum1 + sum3;
+                sum2 = sum2 + mod * mod * (un - C * C);
             }
 
             // Be carefull sum of p!= p of sum
