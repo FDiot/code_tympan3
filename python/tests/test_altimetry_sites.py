@@ -160,7 +160,7 @@ class _TestFeatures(object):
                                        parent_site=self.mainsite, id="{Grass area}")
         self.waterbody= WaterBody(self.waterbody_coords,
                                    altitude=self.altitude_water,
-                                   parent_site=self.mainsite, id="{Water body ID}")
+                                   parent_site=self.mainsite, id="{Water body}")
         self.subsite = SiteNode(self.subsite_A_coords, id="{Subsite ID}",
                                 parent_site=self.mainsite)
         self.level_curve_B = LevelCurve(self.level_curve_B_coords,
@@ -190,7 +190,7 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
         with self.assertRaises(KeyError):
             cleaner['{Level curve B}']
         # Already clean
-        self.assertTrue(cleaner.geom['{Water body ID}'].equals(self.waterbody.shape))
+        self.assertTrue(cleaner.geom['{Water body}'].equals(self.waterbody.shape))
 
     def test_add_and_clean_material_area(self):
         overlap_area = MaterialArea(rect(5, 7, 7, 9),
@@ -213,7 +213,7 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
         cleaner.process_level_curves()
         cleaner.process_material_areas()
 
-        water_shape, water_info = cleaner['{Water body ID}']
+        water_shape, water_info = cleaner['{Water body}']
         self.assertEqual(water_info["altitude"], self.altitude_water)
 
     def test_export_subsite_feature(self):
@@ -247,6 +247,41 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
 
         with self.assertRaises(InconsistentGeometricModel):
             cleaner.merge_subsite(self.subsite)
+
+    def assert_pos_and_insert(self, cleaner, area, expected_pos):
+        self.assertTrue(cleaner._add_or_reject_polygonal_feature(area))
+        pos = cleaner.insert_position_for_sorted_material_area(area)
+        self.assertEqual(pos, expected_pos)
+        cleaner._sorted_material_areas.insert(pos, area.id)
+
+    def test_sorting_material_area_in_order(self):
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+
+        self.assert_pos_and_insert(cleaner, self.waterbody, 0)
+        self.assertEqual(cleaner.material_areas_inner_first(),
+                         ['{Water body}'])
+
+        self.assert_pos_and_insert(cleaner, self.grass_area, 1)
+        self.assertEqual(cleaner.material_areas_inner_first(),
+                         ['{Water body}','{Grass area}'])
+
+    def test_sorting_material_area_reverse_order(self):
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+
+        self.assert_pos_and_insert(cleaner, self.grass_area, 0)
+        self.assertEqual(cleaner.material_areas_inner_first(),
+                         ['{Grass area}'])
+
+        self.assert_pos_and_insert(cleaner, self.waterbody, 0)
+        self.assertEqual(cleaner.material_areas_inner_first(),
+                         ['{Water body}', '{Grass area}'])
+
+    def test_sorting_material_area_two_branches(self):
+        site = SiteNode(rect(0, 0, 12, 12), id='{Main site}')
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+
+        cleaner.process_material_areas()
+        self.assertEqual(cleaner.check_issues_with_material_area_order(), [])
 
 
 @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
