@@ -16,23 +16,19 @@
 /**
  * \file TYTopographieWidget.cpp
  * \brief outil IHM pour une topographie
- *
- *
  */
 
 
-
-
-
-#include "Tympan/TYVersion.h"
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/infrastructure/TYTopographie.h"
 #include <qmenu.h>
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QHeaderView>
+
+#include "Tympan/core/config.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYTopographie.h"
 
 
 #define TR(id) OLocalizator::getString("TYTopographieWidget", (id))

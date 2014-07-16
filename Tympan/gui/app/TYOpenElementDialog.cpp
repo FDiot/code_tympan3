@@ -16,21 +16,10 @@
 /**
  * \file TYOpenElementDialog.cpp
  * \brief Boite de dialogue pour le chargement d'un element metier
- *
- *
  */
 
 
-
-
-#include "Tympan/TYVersion.h"
-
 #include <qlistwidget.h>
-
-#include "Tympan/models/business/TYPreferenceManager.h"
-#include "Tympan/models/business/TYXMLManager.h"
-#include "Tympan/models/business/OLocalizator.h"
-
 #include <qlayout.h>
 #include <qmessagebox.h>
 #include <qfiledialog.h>
@@ -43,23 +32,24 @@
 #include <QBoxLayout>
 #include <QGridLayout>
 
+#include "Tympan/core/config.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/TYXMLManager.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "TYOpenElementDialog.h"
+
 #ifdef TY_USE_DXF
-#include "TYDXFBDTOPOImporter.h"
-// #include "TYDXFGenericImporter.h"
+  #include "TYDXFBDTOPOImporter.h"
 #endif // TY_USE_DXF
 
 #if defined(WIN32)
-#include <crtdbg.h>
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-
-#if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
-
 
 #define TR(id) OLocalizator::getString("TYOpenElementDialog", (id))
 

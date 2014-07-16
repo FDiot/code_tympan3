@@ -14,23 +14,24 @@
 */
 
 /**
- * \file TYVersion.h
- * \brief (fichier header)
+ * \file config.h
+ * \brief configuration globale
  *
  */
 
-#ifndef __TY_VERSION__
-#define __TY_VERSION__
+#ifndef TY_CONFIG
+#define TY_CONFIG
 
 #define TY_PRODUCT_NAME_        "Code_TYMPAN"
 #define TY_PRODUCT_VERSION_     "@Code_TYMPAN_VERSION_MAJOR@.@Code_TYMPAN_VERSION_MINOR@"
 #define TY_CURRENT_RELEASE_     TY_PRODUCT_VERSION_ ".@Code_TYMPAN_VERSION_PATCH@"
 
 #if TY_ARCH_TYPE == TY_ARCHITECTURE_32
-#define TY_PRODUCT_PLATFORM_    "32bits"
+  #define TY_PRODUCT_PLATFORM_    "32bits"
 #else
-#define TY_PRODUCT_PLATFORM_    "64bits"
+  #define TY_PRODUCT_PLATFORM_    "64bits"
 #endif
+
 #define TY_PRODUCT_COPYRIGHT_   "EDF - 2012"
 #define TY_BUILD_DATE_          __DATE__
 #define TY_BUILD_TIME_          __TIME__
@@ -45,4 +46,7 @@
 
 #define TY_TIME_LIMIT_          "illimitee"
 
-#endif //__TY_VERSION__
+#define PYMODULES_DIR "@PYMODULES_DIR@"
+#define PYSCRIPT "@PYSCRIPT@"
+
+#endif //TY_CONFIG
