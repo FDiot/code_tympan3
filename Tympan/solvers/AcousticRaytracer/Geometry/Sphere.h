@@ -16,19 +16,10 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-//#ifdef USE_QT
-//  #include "SphereGraphic.h"
-//#endif
-
 #include "Shape.h"
 
 class Sphere : public Shape
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Sphere)
-    //  GRAPHIC_DECL(Sphere)
-    //#endif
 
 public:
     Sphere() : Shape() { position = vec3(0.0, 0.0, 0.0); radius = 0.;}

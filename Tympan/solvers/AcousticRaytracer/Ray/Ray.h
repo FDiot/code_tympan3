@@ -21,7 +21,6 @@
 #include "Tympan/solvers/AcousticRaytracer/Base.h"
 #include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Source.h"
-//#include "Tympan/solvers/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Event.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Diffraction.h"
 
