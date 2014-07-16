@@ -16,15 +16,15 @@
 #ifndef BBOX_H
 #define BBOX_H
 
+#include <iostream>
+#include "Tympan/models/common/mathlib.h"
+
 /*!
  * \file BBox.h
  * \class BBox
  * \brief Definition d'une boîte englobante alignee sur les axes (BBox AABB) ainsi que quelques operations usuelles.
  */
 
-#include "Tympan/models/common/mathlib.h"
-//#include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
-#include <iostream>
 using namespace std;
 
 class BBox

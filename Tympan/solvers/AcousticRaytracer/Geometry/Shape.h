@@ -16,18 +16,14 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-#include "Tympan/models/common/mathlib.h"
 #include <string>
 #include <vector>
+
+#include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Base.h"
 #include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Material.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/BBox.h"
-
-
-//#ifdef USE_QT
-//  #include "ShapeGraphic.h"
-//#endif
 
 
 class Shape;
@@ -54,11 +50,6 @@ typedef struct _Intersection
 class Shape : public Base
 {
 
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Shape)
-    //  GRAPHIC_DECL(Shape)
-    //#endif
-
 public:
     Shape() : Base(), material(NULL) { name = "unknown shape"; }
     Shape(const std::string _name) : material(NULL) { name = _name; }
@@ -79,9 +70,6 @@ public:
         return newShape;
     }
 
-    //std::string getName() const { return name; }
-    //void setName(const std::string _name){ name = std::string(_name); }
-
     Material* getMaterial() { return material; }
     void setMaterial(Material* m) { material = m; }
 
@@ -94,8 +82,6 @@ public:
     vector<vec3>* getVertices() { return vertices; }
 
     vector<unsigned int>* getLocalVertices() { return &localVertices; }
-
-    //virtual std::vector<Shape*>& toPrimaryShapes(){ return primaryShapes; }
 
     virtual bool isVisible() { return true;}
 
@@ -121,18 +107,15 @@ public:
 
 
 protected:
-    //std::string name;                         //Name of the shape
-    BBox box;                                   //Bounding box of the shape
-    Material* material;                         //Material
-    std::vector<vec3> *vertices;                //GlobalVertices of the scene
-    std::vector<unsigned int> localVertices;    //Index of the vertices used for this shape.
-    int primitiveId;                            //Index of the primitive (given by the scene)
-    int faceId;                                 //Index of the face supporting the primitive
-    int buildingId;                             //Index of the building supporting the primitive (-1 if none)
-    int etageId;                                //Index of the etage supporting the primitive   (-1 if none)
-    bool _isSol;                                // Type de triangle (false = non naturel, true = sol)
-
-    //std::vector<Shape*> primaryShapes;
+    BBox box;                                //Bounding box of the shape
+    Material* material;                      //Material
+    std::vector<vec3> *vertices;             //GlobalVertices of the scene
+    std::vector<unsigned int> localVertices; //Index of the vertices used for this shape.
+    int primitiveId;                         //Index of the primitive (given by the scene)
+    int faceId;                              //Index of the face supporting the primitive
+    int buildingId;                          //Index of the building supporting the primitive (-1 if none)
+    int etageId;                             //Index of the etage supporting the primitive   (-1 if none)
+    bool _isSol;                             // Type de triangle (false = non naturel, true = sol)
 };
 
 #endif

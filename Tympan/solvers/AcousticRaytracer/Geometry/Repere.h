@@ -19,17 +19,8 @@
 #include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Base.h"
 
-//#ifdef USE_QT
-//  #include "RepereGraphic.h"
-//#endif
-
 class Repere : public Base
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Recepteur)
-    //  GRAPHIC_DECL(Repere)
-    //#endif
 
 public:
 

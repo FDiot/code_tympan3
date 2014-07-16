@@ -16,13 +16,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "Shape.h"
-#include "Tympan/solvers/AcousticRaytracer/Accelerator/Accelerator.h"
 #include <vector>
-
-//#ifdef USE_QT
-//  #include "SceneGraphic.h"
-//#endif
+#include "Tympan/solvers/AcousticRaytracer/Accelerator/Accelerator.h"
+#include "Shape.h"
 
 
 struct compVec
@@ -47,11 +43,6 @@ struct compVec
 
 class Scene : public Base
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Sphere)
-    //  GRAPHIC_DECL(Scene)
-    //#endif
 
 public:
     Scene() : accelerator(NULL), Base() { name = "unknown scene"; compteurPrimitive = 0; compteurFace = 0;}

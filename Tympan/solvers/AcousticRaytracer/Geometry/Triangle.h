@@ -18,17 +18,8 @@
 
 #include "Shape.h"
 
-//#ifdef USE_QT
-//  #include "TriangleGraphic.h"
-//#endif
-
 class Triangle : public Shape
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Sphere)
-    //  GRAPHIC_DECL(Triangle)
-    //#endif
 
 public:
     Triangle() { name = "unknown triangle"; };

@@ -16,19 +16,15 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
+#include "Tympan/solvers/AcousticRaytracer/Base.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Solver.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Source.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Recepteur.h"
-#include "DefaultEngine.h"
-#include "ParallelDefaultEngine.h"
-#include "Tympan/solvers/AcousticRaytracer/Base.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Material.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
-
-//#ifdef USE_QT
-//  #include "SimulationGraphic.h"
-//#endif
+#include "DefaultEngine.h"
+#include "ParallelDefaultEngine.h"
 
 enum engineChoice
 {
@@ -46,11 +42,6 @@ enum engineChoice
 */
 class Simulation : public Base
 {
-
-    //#ifdef USE_QT
-    //  //WIDGET_DECL(Simulation)
-    //  GRAPHIC_DECL(Simulation)
-    //#endif
 
 public:
     Simulation() : solver(NULL), engine(NULL), engineC(DEFAULT), materialManager(NULL) { compteurSource = 0; compteurRecepteur = 0;}
