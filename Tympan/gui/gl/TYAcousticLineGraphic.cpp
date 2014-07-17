@@ -68,11 +68,11 @@ void TYAcousticLineGraphic::display(GLenum mode /*= GL_RENDER*/)
 
     TYTabPoint& tabpts = _pPolyLineGraphic->getTabPoint();
     tabpts.clear();
-    tabpts.reserve(getElement()->getSrcLineic()->getNbSrcs());
+    tabpts.reserve( getElement()->getTabPoint().size() );//->getSrcLineic()->getNbSrcs());
 
-    BOOST_FOREACH(LPTYSourcePonctuelle pSrc, getElement()->getSrcLineic()->getSrcs())
+    BOOST_FOREACH(TYPoint pt, getElement()->getTabPoint())//->getSrcLineic()->getSrcs())
     {
-        tabpts.push_back(*pSrc->getPos());
+        tabpts.push_back(pt);
     }
 
     _pPolyLineGraphic->setTabPoint(tabpts);
