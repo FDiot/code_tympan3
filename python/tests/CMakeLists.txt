@@ -29,4 +29,6 @@ foreach(testfile ${TESTS_SCRIPTS})
     RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}") 
 endforeach (testfile)
 
-
+# Add CGAL_BINDINGS_PATH environment variable (for the altimetry-related tests)
+set_property(TEST test_altimetry APPEND PROPERTY ENVIRONMENT 
+  "CGAL_BINDINGS_PATH=${CGAL_BINDINGS_DIR}")
