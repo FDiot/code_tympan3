@@ -358,22 +358,9 @@ class VisualisationTC(unittest.TestCase, _TestFeatures):
         plt.axis(self.global_lims, normed=True)
         plt.show(self.fig)
 
-    def test_LevelCurve_and_grass(self):
-        self.level_curve_A.plot(self.ax)
-        self.grass_area.plot(self.ax, facecolor='green')
-
-    def test_plot_site_node(self):
-        self.subsite.plot(self.ax)
-
     def test_plot_site_node_recursive(self):
+        self.build_more_features_in_subsites()
         self.mainsite.plot(self.ax, recursive=True)
-
-    def test_plot_site_node_recursive_alt_geom(self):
-        cleaner = SiteNodeGeometryCleaner(self.mainsite)
-        cleaner.process_all_features()
-        cleaner.merge_subsite(self.subsite)
-
-        self.mainsite.plot(self.ax, recursive=True, alt_geom_map=cleaner.geom)
 
     def test_plot_recursive_merge(self):
         self.build_more_features_in_subsites()
