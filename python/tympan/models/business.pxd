@@ -79,6 +79,7 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
         void setResultMatrix(tysolver.SpectrumMatrix matrix)
+        tysolver.SpectrumMatrix& getResultMatrix()
 
 cdef extern from "Tympan/models/business/acoustic/TYSource.h":
     cdef cppclass TYSource(TYElement):
@@ -205,6 +206,9 @@ cdef extern from "Tympan/models/business/material/TYMateriauConstruction.h":
 cdef extern from "Tympan/models/business/acoustic/TYSpectre.h":
     cdef cppclass TYSpectre (TYElement, tycommon.OSpectre):
         TYSpectre(const tycommon.OSpectre& spectre)
+
+cdef class Result:
+    cdef SmartPtr[TYResultat] thisptr
 
 cdef class Computation:
     cdef SmartPtr[TYCalcul] thisptr

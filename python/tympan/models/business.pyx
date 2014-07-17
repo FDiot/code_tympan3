@@ -509,7 +509,6 @@ cdef class Lake:
 
 
 cdef class Result:
-    thisptr = cy.declare(SmartPtr[TYResultat])
 
     def __cinit__(self):
         self.thisptr = SmartPtr[TYResultat]()

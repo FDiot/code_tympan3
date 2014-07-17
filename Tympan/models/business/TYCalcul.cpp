@@ -1501,8 +1501,6 @@ void TYCalcul::goPostprocessing()
     _pResultat->buildRecepteurs(recepteurs);
     _pResultat->buildMatrix();
 
-    _pResultat->cumulSpectres(_tabTrajets);
-
     int rem_rec = 0;
     // Suppression des points de maillage de la matrice
     for (unsigned int i = 0; i < recepteurs.size(); i++)
@@ -1520,6 +1518,7 @@ void TYCalcul::goPostprocessing()
     // Condensation des sources sur les emetteurs
     _pResultat->condensate();
 
+    _pResultat->buildMapSourceSpectre();
     updateGraphicMaillage();
 
     sources.clear();
