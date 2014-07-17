@@ -40,6 +40,32 @@ def loadsolver(foldername, tybusiness.Computation comp):
     """
     load_solver(foldername, comp.thisptr.getRealPointer())
 
+cdef class Business2SolverConverter:
+    # Business model
+    comp = cy.declare(tybusiness.Computation)
+    site = cy.declare(tybusiness.Site)
+
+    @cy.locals(comp=tybusiness.Computation, site=tybusiness.Site)
+    def __cinit__(self, comp, site):
+        self.comp = comp
+        self.site = site
+
+    @property
+    def solver_problem(self):
+        return self.comp.acoustic_problem
+
+    @property
+    def solver_result(self):
+        return self.comp.acoustic_result
+
+    def build_solver_problem(self):
+        builder = SolverModelBuilder(self.solver_problem)
+        builder.fill_problem(self.site, self.comp)
+
+    def postprocessing(self):
+        self.comp.thisptr.getRealPointer().goPostprocessing()
+
+
 
 cdef class SolverModelBuilder:
     model = cy.declare(cy.pointer(tysolver.AcousticProblemModel))

@@ -47,17 +47,20 @@ def solve(input_project, output_project, solverdir, multithreading_on=True, inte
     except RuntimeError:
         logging.exception("Couldn't load the acoustic project from %s file", input_project)
         raise
+    # Business model
+    site = project.site
     comp = project.current_computation
     if not multithreading_on:
         comp.set_nthread(1)
-    # Build an acoustic problem from the site of the computation
-    problem = comp.acoustic_problem
-    builder = bus2solv.SolverModelBuilder(problem)
-    # Update site before building the acoustic problem
+    # Solver model
+    solver_problem = comp.acoustic_problem
+    solver_result = comp.acoustic_result
+    # Update site before building the solver model
     project.update_site()
     project.update_altimetry_on_receptors()
-    site = project.site
-    builder.fill_problem(site, comp)
+    # Build an acoustic problem from the site of the computation
+    bus2solv_conv = bus2solv.Business2SolverConverter(comp, project.site)
+    bus2solv_conv.build_solver_problem()
     # Load solver plugin
     bus2solv.loadsolver(solverdir, comp)
     # Solve the problem and fill the acoustic result
@@ -67,6 +70,8 @@ def solve(input_project, output_project, solverdir, multithreading_on=True, inte
         err = "Computation failed (C++ go method returned false)"
         logging.error(err)
         raise RuntimeError(err)
+    # Export solver results to the business model
+    bus2solv_conv.postprocessing()
     # Reserialize project
     try:
         project.to_xml(output_project)

@@ -9,6 +9,10 @@ from libcpp.vector cimport vector
 cdef class ProblemModel:
     cdef AcousticProblemModel* thisptr
 
+cdef class ResultModel:
+    cdef AcousticResultModel* thisptr
+
+
 cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "tympan":
     cdef cppclass AcousticProblemModel:
         size_t npoints()

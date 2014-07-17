@@ -1497,8 +1497,6 @@ bool TYCalcul::isCalculPossible(const int& nbSources, const int& nbRecepteurs, c
     return true;
 }
 
-TYTabPointCalculGeoNode recepteurs;
-TYTabSourcePonctuelleGeoNode sources;
 bool TYCalcul::go()
 {
     TYProjet* pProjet = getProjet();

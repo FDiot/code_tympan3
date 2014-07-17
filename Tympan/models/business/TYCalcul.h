@@ -982,6 +982,11 @@ protected:
 
     //Rayons valides produit par le lancer de rayons
     TYTabRay _tabRays;
+
+    // XXX Temporary (won't be needed anymore as soon as the solvers are
+    // independent from the business model)
+    TYTabPointCalculGeoNode recepteurs;
+    TYTabSourcePonctuelleGeoNode sources;
 };
 
 #include "TYProjet.h"
