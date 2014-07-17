@@ -82,11 +82,19 @@ void TYRouteEditor::endRoute()
 
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
 
+        // On met a jour l'altimetrie globale du site
+        TYProjet* pProjet = getTYApp()->getCurProjet();
+        if (pProjet)
+        {
+            pProjet->getSite()->updateAltimetrie(true);
+        }
+
         for (unsigned int i = 0; i < pRoute->getTabPoint().size(); i++)
         {
             pRoute->getTabPoint()[i]._z = 0.0;
             pSite->getTopographie()->getAltimetrie()->updateAltitude(pRoute->getTabPoint()[i]);
         }
+
 
         if (pSite->getInfrastructure()->addRoute(pRoute))
         {
@@ -101,13 +109,16 @@ void TYRouteEditor::endRoute()
                 }
             }
 
+            pProjet->getSite()->updateAltiInfra(true);
+
             TYAction* pAction = new TYAddElementToInfraAction((LPTYElement&) pRoute, pSite->getInfrastructure(), _pModeler, TR("id_action_addroute"));
             _pModeler->getActionManager()->addAction(pAction);
 
             // repasse en mode camera selection
             getTYMainWnd()->setDefaultCameraMode();
 
-            pSite->getInfrastructure()->updateGraphicTree();
+            pProjet->getSite()->updateGraphicTree();
+            pProjet->getSite()->updateGraphic();
             refreshSiteFrame();
             _pModeler->getView()->getRenderer()->updateDisplayList();
             _pModeler->updateView();
