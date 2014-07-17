@@ -1,92 +1,12 @@
-import sys
-import os, os.path as osp
 import unittest
-
-_runVisualTests = os.environ.get('RUN_VISUAL_TESTS', False)
-
-if _runVisualTests:
-    from matplotlib import pyplot as plt
 
 from altimetry.datamodel import InconsistentGeometricModel
 from altimetry import visu
 from altimetry import mesh
+from altimetry_testutils import MesherTestUtilsMixin, runVisualTests, left_and_right_faces
 
-class MesherTestUtilsMixin(object):
-
-    def assert_basic_counts(self, vertices=None, faces=None,
-                            edges=None, constrained=None, mesher=None):
-        mesher = mesher or self.mesher
-        if vertices is not None:
-            self.assertEqual(mesher.cdt.number_of_vertices(), vertices)
-        if faces is not None:
-            self.assertEqual(mesher.cdt.number_of_faces(), faces)
-        count_edges, count_constrained = mesher.count_edges()
-        if edges is not None:
-            self.assertEqual(count_edges, edges)
-        if constrained is not None:
-            self.assertEqual(count_constrained, constrained)
-
-    def build_two_overlapping_segments(self):
-        segment1 = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
-        segment2 = map(mesh.to_cgal_point, [(0, 1), (0, 3)])
-        (vA, vB), (cAB,) = self.mesher.insert_polyline(
-            segment1, id="1", altitude=10)
-        (vC, vD), (cCD,) = self.mesher.insert_polyline(
-            segment2, id="2", color='blue')
-        return (vA, vB, vC, vD, cAB, cCD)
-        # Geometrical precondition checks
-        self.assert_basic_counts(vertices=4, faces=0, edges=3, constrained=3)
-
-    def _find_vertex_at(self, p):
-        # Point comparison is NOT ROBUST : do no use in production
-        p = mesh.to_cgal_point(p)
-        for v in self.mesher.cdt.finite_vertices():
-            if v.point() == p: # Not robust in real cases
-                return v
-        else:
-            return None
-
-    def build_two_crossing_segments(self, V_altitude=None):
-        h_segment = map(mesh.to_cgal_point, [(-1, 0), (1, 0)])
-        v_segment = map(mesh.to_cgal_point, [(0, -1), (0, 1)])
-        (vA, vB), (cAB,) = self.mesher.insert_polyline(
-            h_segment, id="H", altitude=10)
-        if V_altitude is None:
-            (vC, vD), (cCD,) =self.mesher.insert_polyline(
-                v_segment, id="V", color='blue')
-        else:
-            (vC, vD), (cCD,) =self.mesher.insert_polyline(
-                v_segment, id="V", color='blue', altitude=V_altitude)
-        # Geometrical precondition checks
-        self.assert_basic_counts(vertices=5, faces=4, edges=8, constrained=4)
-        # Informations check
-        vO = self._find_vertex_at((0, 0))
-        self.assertIsNotNone(vO)
-        return (vA, vB, vC, vD, cAB, cCD, vO)
-
-    def assertEqualButNotIdentical(self, a, b):
-        self.assertIsNot(a, b)
-        self.assertEqual(a, b)
-
-    def build_triangle(self):
-        cdt = self.mesher.cdt
-        (vA, vB), (cAB,) = self.mesher.insert_polyline(
-            [(0, 0), (2, 0)], material='concrete', altitude=0.0)
-        vC = self.mesher.insert_point((1, 1), altitude=10.0)
-        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
-        (edgeAB,) = [edge for edge in cdt.finite_edges()
-                    if cdt.is_constrained(edge)]
-        (faceABC,) = cdt.finite_faces()
-        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
-        return (vA, vB, vC, edgeAB, faceABC)
-
-
-def left_and_right_faces(faces_it):
-    """Takes an iterable on pair (left_face, right_face) and return the
-    pair of the list of all left faces and the list of all right faces
-    """
-    return zip(*list(faces_it))
-
+if runVisualTests:
+    from matplotlib import pyplot as plt
 
 class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
@@ -264,7 +184,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
         faces_left, faces_right = left_and_right_faces(
             self.mesher.iter_faces_for_input_constraint(vM, vN))
-        if _runVisualTests:
+        if runVisualTests:
             plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
             plotter.plot_edges()
             points_left = [self.mesher.point_for_face(f) for f in faces_left]
@@ -280,7 +200,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
         self.assertEqual(faces_right, (f1, f2, f3))
 
-    @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
+    @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_mesh_refine_no_holes(self):
         (border, hole, line) = self.build_simple_scene()
         self.mesher.refine_mesh()
@@ -288,7 +208,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         plotter.plot_edges()
         plotter.show()
 
-    @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
+    @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_input_constraints_orientation(self):
         (border, hole, line) = self.build_simple_scene()
         plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
@@ -326,7 +246,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         seeds_for_holes = [self.mesher.point_for_face(f) for f in flooder.visited]
         self.assertEqual(len(seeds_for_holes), 4)
 
-        if _runVisualTests:
+        if runVisualTests:
             self.mesher.refine_mesh(hole_seeds=seeds_for_holes,
                                     size_criterion=0.4, shape_criterion=0)
 
