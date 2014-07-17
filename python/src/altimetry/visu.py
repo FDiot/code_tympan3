@@ -131,10 +131,13 @@ class MeshedCDTPlotter(object):
     style_annotations = {'textcoords': 'offset points',
                          'xytext': (5, 5)}
 
-    def __init__(self, mesher, title="Mesh"):
+    def __init__(self, mesher, title="Mesh", ax=None):
         self.mesher = mesher
-        self.fig = plt.figure()
-        self.ax = self.fig.add_subplot(1, 1, 1)
+        if ax is None:
+            self.fig = plt.figure()
+            self.ax = self.fig.add_subplot(1, 1, 1)
+        else:
+            self.ax = ax
         self.ax.set_title(title)
 
     def show(self):

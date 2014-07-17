@@ -38,7 +38,8 @@ _PROXIMITY_THRESHOLD = 0.01
 # http://code.google.com/p/cgal-bindings/issues/detail?id=48
 Edge.__iter__= lambda this: iter((this[0], this[1]))
 
-from datamodel import InconsistentGeometricModel
+
+from . datamodel import InconsistentGeometricModel
 
 
 UNSPECIFIED_ALTITUDE = float('nan')
