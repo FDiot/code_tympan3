@@ -334,6 +334,9 @@ public:
      */
     std::map<TYElement*, LPTYSpectre>& getMapElementSpectre() { return _mapElementSpectre; }
 
+    void setResultMatrix(tympan::SpectrumMatrix matrix){ _matrix = matrix; }
+    tympan::SpectrumMatrix& getResultMatrix(){ return _matrix; }
+
 private:
     /**
      * Ecrit sur 2 lignes les parametres du calcul.

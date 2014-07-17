@@ -565,6 +565,7 @@ public:
      * \return _pResultat
      */
     const LPTYResultat getResultat() const { return _pResultat; }
+    LPTYResultat getResultat() { return _pResultat; }
 
     /**
      * \fn const LPTYResultat getResultat()
