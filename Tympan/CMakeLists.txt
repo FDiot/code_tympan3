@@ -74,10 +74,6 @@ file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/AcousticRaytracer/*.cpp solvers/AcousticRaytracer/*.h
     solvers/AcousticRaytracer/*/*.cpp solvers/AcousticRaytracer/*/*.h
 )
-list(REMOVE_ITEM ${MODULE_NAME}_SRCS
-    "solvers/AcousticRaytracer/Acoustic/NMPBSolver.h"
-    "solvers/AcousticRaytracer/Acoustic/NMPBSolver.cpp"
-    "solvers/AcousticRaytracer/main.cpp")
 add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS})
 set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/solvers/AcousticRaytracer")
 add_dependencies(${MODULE_NAME}
