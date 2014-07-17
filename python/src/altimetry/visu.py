@@ -58,11 +58,22 @@ def plot_polygonal_shape(ax, shape, **opts):
         ax.add_patch(p)
     return patches
 
+def get_shape_update_opt(this, alt_geom_map, opts):
+    if alt_geom_map is not None:
+        shape = alt_geom_map.get(this.id)
+        if shape is None: # The this feature was not deleted from the alt_geom
+            shape = this.shape
+            opts.update({'linestyle': 'dashed',
+                         'alpha': opts['alpha']**1.5})
+    else:
+        shape = this.shape
+    return shape
+
 def plot_LevelCurve(this, ax,  alt_geom_map=None, **kwargs):
     opts = {'color':'red',
             'linewidth':3 }
+    shape = get_shape_update_opt(this, alt_geom_map, opts)
     opts.update(kwargs)
-    shape = (alt_geom_map and alt_geom_map[this.id]) or this.shape
     plot_linear_shape(ax, shape, **opts)
 LevelCurve.plot = plot_LevelCurve
 
@@ -70,7 +81,7 @@ def plot_PolygonalFeature(this, ax, alt_geom_map=None, **kwargs):
     opts = {'linewidth': 3,
             'alpha': 0.4,
             'facecolor':'none'}
-    shape = (alt_geom_map and alt_geom_map[this.id]) or this.shape
+    shape = get_shape_update_opt(this, alt_geom_map, opts)
     opts.update(kwargs)
     plot_polygonal_shape(ax, shape, **opts)
     return ax

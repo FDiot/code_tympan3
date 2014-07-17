@@ -179,6 +179,9 @@ class _TestFeatures(object):
         self.level_curve_B = LevelCurve(self.level_curve_B_coords,
                                         altitude=self.altitude_B,
                                         parent_site=self.subsite, id="{Level curve B}")
+        self.out_of_subsite = MaterialArea(rect(9, 9, 10, 10),
+                                       material=self.grass,
+                                       parent_site=self.subsite, id="{Out of subsite area}")
 
     def build_more_features_in_subsites(self):
         self.subsubsite = SiteNode(rect(6, 6.5, 7, 7.5), id="{SubSubsite ID}",
