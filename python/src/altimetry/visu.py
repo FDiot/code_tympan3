@@ -21,6 +21,7 @@ Notably relies upon:
 * https://bitbucket.org/sgillies/descartes/
 
 """
+from warnings import warn
 
 from matplotlib import pyplot as plt
 from shapely import geometry as geom
@@ -34,8 +35,17 @@ MATERIAL_COLORS = {
 }
 
 def plot_linear_shape(ax, shape, **opts):
-    x, y = shape.xy
-    return ax.plot(x, y, **opts)
+    if isinstance(shape, geom.LineString):
+        shape = [shape]
+    plots = []
+    for ls in shape:
+        try:
+            x, y = ls.xy
+        except NotImplementedError:
+            warn("Not able to plot the shape %s, part of %s" % ls.wkt, shape.wkt)
+            continue
+        plots.append(ax.plot(x, y, **opts))
+    return plots
 
 def plot_polygonal_shape(ax, shape, **opts):
     if shape.type == 'Polygon':

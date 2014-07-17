@@ -9,12 +9,13 @@ if _runVisualTests:
 
 
 from shapely import geometry
-from shapely.geometry import MultiLineString
+from shapely.geometry import MultiLineString, LineString
 
 # NB Importing altimetry configures path to find CGAL bindings
 from altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
                                  WaterBody, SiteNode, PolygonalTympanFeature,
-                                 InconsistentGeometricModel, MATERIAL_WATER)
+                                 InconsistentGeometricModel, MATERIAL_WATER,
+                                 elementary_shapes)
 from altimetry.merge import (SiteNodeGeometryCleaner, build_site_shape_with_hole,
                              recursively_merge_all_subsites)
 from altimetry import visu
@@ -30,8 +31,8 @@ class AltimetryDataTC(unittest.TestCase):
     level_curve_A_coords = [(0, 0), (2.5, 3.5), (4, 4.0)]
     level_curve_A =  LevelCurve(level_curve_A_coords, altitude=10.0, id="{123456}")
     level_curve_A_json = (
-        '{"geometry": {"coordinates": [[0.0, 0.0], [2.5, 3.5], [4.0, 4.0]],'
-        ' "type": "LineString"}, "id": "{123456}",'
+        '{"geometry": {"coordinates": [[[0.0, 0.0], [2.5, 3.5], [4.0, 4.0]]],'
+        ' "type": "MultiLineString"}, "id": "{123456}",'
         ' "properties": {"altitude": 10.0, "type": "LevelCurve"},'
         ' "type": "Feature"}')
     material_area_A_coords = big_rect_coords
@@ -75,7 +76,6 @@ class AltimetryDataTC(unittest.TestCase):
         self.assertIn(level_curve_B, self.subsite_A.children["LevelCurve"])
         self.assertEqual(level_curve_B.parent_site_id, "{Sub-site A ID}")
 
-
     def test_cached_shape_property(self):
         level_curve_B =  LevelCurve(self.level_curve_B_coords, altitude=20.0, id=None)
         self.assertIsNone(level_curve_B._shape)
@@ -100,7 +100,6 @@ class AltimetryDataTC(unittest.TestCase):
             poly2.ensure_ok()
         self.assertEqual(cm.exception.ids, ["toto"])
         self.assertIn("Self-intersection", str(cm.exception))
-
 
     def test_polygon_exterior_orientation(self):
         coords = self.big_rect_coords[:]
@@ -132,6 +131,19 @@ class AltimetryDataTC(unittest.TestCase):
         self.assertItemsEqual(mainsite.material_areas, [material_area_A, waterbody])
         self.assertItemsEqual(mainsite.subsites, [subsite])
         self.assertItemsEqual(subsite.level_curves, [level_curve_B])
+
+    def test_elementary_shapes(self):
+        mainsite = SiteNode(self.big_rect_coords, id="{Main site ID}")
+        mls = MultiLineString([[(0.0, 0.0), (1.0, 0.0)], [(1.0, 1.0), (1.0, 2.0)]])
+        ls1 = LineString([(0.0, 0.0), (1.0, 0.0)])
+        ls2 = LineString([(1.0, 1.0), (1.0, 2.0)])
+        level_curve = LevelCurve(mls, altitude=10.0,
+                                 parent_site=mainsite, id=None)
+
+        shapes = elementary_shapes(level_curve.shape)
+        self.assertEqual(len(shapes), 2)
+        for shape in shapes:
+            self.assertTrue(ls1.equals(shape) or ls2.equals(shape))
 
 
 class _TestFeatures(object):
@@ -171,7 +183,7 @@ class _TestFeatures(object):
     def build_more_features_in_subsites(self):
         self.subsubsite = SiteNode(rect(6, 6.5, 7, 7.5), id="{SubSubsite ID}",
                                    parent_site=self.subsite)
-        self.sub_level_curve = LevelCurve([(6.5, 6), (6.5, 9)], altitude=6.0,
+        self.sub_level_curve = LevelCurve([(6.5, 5), (6.5, 9)], altitude=6.0,
                                           id="{Cut level curve}",
                                           parent_site=self.subsite)
         self.subsub_level_curve = LevelCurve([(5, 5.5), (8, 8.5)], altitude=7.0,
@@ -317,6 +329,16 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
         self.assertTrue(expected_shape.equals(geom))
         self.assertEqual(info['site'], self.subsubsite.id)
 
+    def test_split_level_curve(self):
+        self.build_more_features_in_subsites()
+        cleaner = recursively_merge_all_subsites(self.mainsite)
+
+        self.assertIn("{Cut level curve}", cleaner.geom)
+        geom, info = cleaner["{Cut level curve}"]
+        expected_shape = geometry.MultiLineString([[(6.5, 6), (6.5, 6.5)],
+                                                  [(6.5, 7.5), (6.5, 8)]])
+        self.assertTrue(expected_shape.equals(geom))
+
 
 @unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
 class VisualisationTC(unittest.TestCase, _TestFeatures):
@@ -351,6 +373,11 @@ class VisualisationTC(unittest.TestCase, _TestFeatures):
         cleaner.process_all_features()
         cleaner.merge_subsite(self.subsite)
 
+        self.mainsite.plot(self.ax, recursive=True, alt_geom_map=cleaner.geom)
+
+    def test_plot_recursive_merge(self):
+        self.build_more_features_in_subsites()
+        cleaner = recursively_merge_all_subsites(self.mainsite)
         self.mainsite.plot(self.ax, recursive=True, alt_geom_map=cleaner.geom)
 
 
