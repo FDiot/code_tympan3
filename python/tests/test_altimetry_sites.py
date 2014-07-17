@@ -1,12 +1,10 @@
-import sys
-import os, os.path as osp
 import unittest
 
-_runVisualTests = os.environ.get('RUN_VISUAL_TESTS', False)
+from altimetry_testutils import runVisualTests, TestFeatures, rect
 
-if _runVisualTests:
+if runVisualTests:
     from matplotlib import pyplot as plt
-
+    from altimetry import visu
 
 from shapely import geometry
 from shapely.geometry import MultiLineString, LineString
@@ -18,11 +16,7 @@ from altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
                                  elementary_shapes)
 from altimetry.merge import (SiteNodeGeometryCleaner, build_site_shape_with_hole,
                              recursively_merge_all_subsites)
-from altimetry import visu
-from altimetry import mesh
 
-def rect(x1, y1, x2, y2):
-    return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
 
 class AltimetryDataTC(unittest.TestCase):
 
@@ -146,58 +140,11 @@ class AltimetryDataTC(unittest.TestCase):
             self.assertTrue(ls1.equals(shape) or ls2.equals(shape))
 
 
-class _TestFeatures(object):
 
-    big_rect_coords = rect(0, 0, 12, 10)
-    grass = GroundMaterial("grass")
-
-    level_curve_A_coords = [(-1, -1), (2, 2), (4, 2)]
-    cleaned_level_A_shape = MultiLineString([[(0, 0), (2, 2), (4, 2)]])
-
-    altitude_A = 10.0
-    grass_area_coords = [(1.0, 1.0), (11.0, 1.0), (1.0, 9.0), (1.0, 1.0)]
-    waterbody_coords = [(3, 3), (5, 4), (3, 5)]
-    altitude_water = 5.0
-    subsite_A_coords = rect(6, 6, 11, 8)
-    level_curve_B_coords =[(8.0, 4.0), (8.0, 7.0), (12.0, 7.0)]
-    cleaned_level_B_shape = MultiLineString([[(8.0, 6.0), (8.0, 7.0), (11.0, 7.0)]])
-    altitude_B = 20.0
-
-    def build_features(self):
-        self.mainsite = SiteNode(self.big_rect_coords, id="{Main site ID}")
-        self.level_curve_A = LevelCurve(self.level_curve_A_coords,
-                                        altitude=self.altitude_A,
-                                        parent_site=self.mainsite, id="{Level curve A}")
-        self.grass_area = MaterialArea(self.grass_area_coords,
-                                       material=self.grass,
-                                       parent_site=self.mainsite, id="{Grass area}")
-        self.waterbody= WaterBody(self.waterbody_coords,
-                                   altitude=self.altitude_water,
-                                   parent_site=self.mainsite, id="{Water body}")
-        self.subsite = SiteNode(self.subsite_A_coords, id="{Subsite ID}",
-                                parent_site=self.mainsite)
-        self.level_curve_B = LevelCurve(self.level_curve_B_coords,
-                                        altitude=self.altitude_B,
-                                        parent_site=self.subsite, id="{Level curve B}")
-        self.out_of_subsite = MaterialArea(rect(9, 9, 10, 10),
-                                       material=self.grass,
-                                       parent_site=self.subsite, id="{Out of subsite area}")
-
-    def build_more_features_in_subsites(self):
-        self.subsubsite = SiteNode(rect(6, 6.5, 7, 7.5), id="{SubSubsite ID}",
-                                   parent_site=self.subsite)
-        self.sub_level_curve = LevelCurve([(6.5, 5), (6.5, 9)], altitude=6.0,
-                                          id="{Cut level curve}",
-                                          parent_site=self.subsite)
-        self.subsub_level_curve = LevelCurve([(5, 5.5), (8, 8.5)], altitude=7.0,
-                                             id="{Subsub level curve}",
-                                             parent_site=self.subsubsite)
-
-
-class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
+class AltimetryMergerTC(unittest.TestCase, TestFeatures):
 
     def setUp(self):
-        _TestFeatures.build_features(self)
+        TestFeatures.build_features(self)
 
     def test_holes_in_site_shape(self):
         shape = build_site_shape_with_hole(self.mainsite)
@@ -350,12 +297,12 @@ class AltimetryMergerTC(unittest.TestCase, _TestFeatures):
         self.assertNotIn("{Out of subsite area}", equiv.features_by_id)
         self.assertIn("{Subsub level curve}", equiv.features_by_id)
 
-@unittest.skipUnless(_runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
-class VisualisationTC(unittest.TestCase, _TestFeatures):
+@unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
+class VisualisationTC(unittest.TestCase, TestFeatures):
     global_lims = [-1, 13, -1, 11]
 
     def setUp(self):
-        _TestFeatures.build_features(self)
+        TestFeatures.build_features(self)
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(1, 1, 1)
         self.ax.set_title(self._testMethodName)
