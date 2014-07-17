@@ -570,9 +570,6 @@ void TYResultat::condensate()
 
             spectreCumule.setValid(bValid);
             spectreCumule.setType(SPECTRE_TYPE_LP);
-
-            // Ajout du spectre cumule dans la matrice
-            setSpectre(indexRecepteur, indexEmetteur, spectreCumule, condensateMatrix);
             condensateMatrix(indexRecepteur, indexEmetteur) = spectreCumule;
         }
     }
