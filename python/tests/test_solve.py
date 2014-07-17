@@ -24,11 +24,13 @@ def make_test_with_file(test_file):
     def test_with_file(self):
         # Load and solve the project
         with self.no_output():
-            project = self.load_project(osp.join(TEST_PROBLEM_DIR, test_file))
+            (project, bus2solv_conv) = self.load_project(
+                osp.join(TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation
             computation.set_nthread(1) # avoid segfaults due to multithreading
             bus2solv.loadsolver(TEST_SOLVERS_DIR, computation)
             result = computation.go()
+            bus2solv_conv.postprocessing()
         self.assertTrue(result)
         # Load the expected result
         result_file = osp.join(TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')

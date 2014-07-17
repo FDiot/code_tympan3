@@ -134,7 +134,6 @@ cdef class ProblemModel:
 
 
 cdef class ResultModel:
-    thisptr = cy.declare(cy.pointer(AcousticResultModel))
 
     def __cinit__(self):
         self.thisptr = NULL

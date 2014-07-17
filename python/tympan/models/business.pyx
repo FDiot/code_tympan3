@@ -409,10 +409,7 @@ cdef class Computation:
         """ Solve the current acoustic problem. A solver must be loaded.
         """
         assert self.thisptr.getRealPointer() != NULL
-        if self.thisptr.getRealPointer().go():
-            self.thisptr.getRealPointer().goPostprocessing()
-            return True
-        return False
+        return self.thisptr.getRealPointer().go()
 
     def set_nthread(self, nthread):
         """ Set the number of threads used by the default solver to compute the
