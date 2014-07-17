@@ -59,10 +59,20 @@ HIDDEN_MATERIAL =  GroundMaterial("__hidden__")
 class GeometricFeature(object):
     geometric_type = None # To be overridden by derived classes
 
-    def __init__(self, coords, id):
-        self._coords = _preproc_point_seq(coords)
+    def __init__(self, coords_or_shape, id):
+        if isinstance(coords_or_shape, geometry.base.BaseGeometry):
+            self.set_shape(coords_or_shape)
+        else:
+            self._coords = _preproc_point_seq(coords_or_shape)
+            self._shape = None # to cache the Shapely shape
         self.id = id
-        self._shape = None # to cache the Shapely shape
+
+    def set_shape(self, shape):
+        self._shape = shape
+        if isinstance(shape, geometry.base.BaseMultipartGeometry):
+            self._coords = [subshape.coords for subshape in shape.geoms]
+        else:
+            self._coords = shape.coords
 
     def build_coordinates(self):
         raise NotImplementedError
@@ -123,6 +133,11 @@ class GeometricFeature(object):
                                              details=explain_validity(shape),
                                              ids=[self.id])
 
+def elementary_shapes(shape):
+    if isinstance(shape, geometry.base.BaseMultipartGeometry):
+        return shape.geoms
+    else:
+        return (shape,)
 
 class TympanFeature(GeometricFeature):
 
@@ -152,17 +167,14 @@ class TympanFeature(GeometricFeature):
 
 
 class LevelCurve(TympanFeature):
-    geometric_type = "LineString"
+    geometric_type = "MultiLineString"
 
     def __init__(self, coords, altitude, **kwargs):
-        try:
-            self.altitude = float(altitude)
-        except KeyError:
-            raise ValueError('LevelCurve(...) expect an `altitude` named argument')
+        self.altitude = float(altitude)
         super(LevelCurve, self).__init__(coords, **kwargs)
 
     def build_coordinates(self):
-        return self._coords
+        return [self._coords]
 
     def build_properties(self):
         d = super(LevelCurve, self).build_properties()
@@ -196,10 +208,7 @@ class PolygonalTympanFeature(TympanFeature):
 class MaterialArea(PolygonalTympanFeature):
 
     def __init__(self, coords, material, **kwargs):
-        try:
-            self.material = material
-        except KeyError:
-            raise ValueError('Material(...) expect a `material` named argument')
+        self.material = material
         super(MaterialArea, self).__init__(coords, **kwargs)
 
     @property
