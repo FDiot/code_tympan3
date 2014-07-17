@@ -139,6 +139,7 @@ def elementary_shapes(shape):
     else:
         return (shape,)
 
+
 class TympanFeature(GeometricFeature):
 
     def __init__(self, coords, parent_site=None, **kwargs):
@@ -169,8 +170,13 @@ class TympanFeature(GeometricFeature):
 class LevelCurve(TympanFeature):
     geometric_type = "MultiLineString"
 
-    def __init__(self, coords, altitude, **kwargs):
+    def __init__(self, coords, altitude, close_it=False, **kwargs):
         self.altitude = float(altitude)
+        if close_it:
+            if isinstance(coords, geometry.base.BaseGeometry):
+                raise ValueError("close_it=True is incompatible with passing an existing shape")
+            else:
+                coords = coords + [coords[0]] # Close the sequence of points
         super(LevelCurve, self).__init__(coords, **kwargs)
 
     def build_coordinates(self):

@@ -7,7 +7,7 @@ Merging sub-sites for the computation of the altimetry.
 from collections import defaultdict
 
 from shapely import geometry
-from altimetry.datamodel import InconsistentGeometricModel, SiteNode
+from . datamodel import SiteNode, InconsistentGeometricModel
 
 def build_site_shape_with_hole(site):
     site.ensure_ok()
@@ -48,6 +48,8 @@ class SiteNodeGeometryCleaner(object):
     """
 
     def __init__(self, sitenode):
+        if not isinstance(sitenode, SiteNode):
+            raise TypeError("A altimetry.datamodel.SiteNode was expected")
         self.sitenode = sitenode
         self.siteshape = build_site_shape_with_hole(self.sitenode)
         self.geom = {}
