@@ -377,7 +377,7 @@ class MeshedCDTWithInfo(object):
 
         cf. http://doc.cgal.org/latest/Mesh_2/index.html#secMesh_2_criteria
         """
-        criteria = Mesh_criteria(shape_criteria, size_criteria)
+        criteria = Mesh_criteria(shape_criterion, size_criterion)
         hole_seeds = hole_seeds or []
         CGAL_refine_Delaunay_mesh(self.cdt, hole_seeds, criteria)
 
