@@ -107,8 +107,9 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
             OMessageManager::get()->info(
                 "Unable to load the library file '%s'.",
                 itfile->absoluteFilePath().toUtf8().data());
-            LIB_UNLOAD(plugin_data->pluginDllInstance);
+            // Do not attempt to unload a library not loaded
             delete plugin_data;
+            continue;
         }
 
         // Check all pointers to methods.
@@ -120,6 +121,7 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
                 itfile->absoluteFilePath().toUtf8().data());
             LIB_UNLOAD(plugin_data->pluginDllInstance);
             delete plugin_data;
+            continue;
         }
 
         // Start the plugin and add it to the list '_plugins'. True if success.
@@ -131,6 +133,7 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
                 itfile->absoluteFilePath().toUtf8().data());
             LIB_UNLOAD(plugin_data->pluginDllInstance);
             delete plugin_data;
+            continue;
         }
     }
 }
