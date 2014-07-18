@@ -38,9 +38,12 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             self.assertIsInstance(vh, mesh.Vertex_handle)
             info = mesher.vertices_info[vh]
             for k, v in expected.iteritems():
-                self.assertEqual(getattr(info, k), v)
+                if v is mesh.UNSPECIFIED_ALTITUDE:
+                    self.assertIs(getattr(info, k), mesh.UNSPECIFIED_ALTITUDE)
+                else:
+                    self.assertEqual(getattr(info, k), v)
 
-    def test_altimetric_base(self):
+    def test_build_altimetric_base(self):
         self.builder.merge_subsites()
         for id_ in ["{Mainsite ref altitude}", "{Subsub level curve}"]:
             self.assertIn(id_, self.builder.equivalent_site.features_by_id)
@@ -52,3 +55,29 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         common_expectations = [((0, 0), {'altitude': self.altitude_A})]
         self.check_vertices_props(self.builder.alti, common_expectations)
         self.check_vertices_props(self.builder.mesh, common_expectations)
+
+    def test_build_triangulation(self):
+        self.builder.merge_subsites()
+        self.builder.build_altimetric_base()
+        self.builder.build_triangulation()
+
+        self.check_vertices_props( self.builder.mesh, [
+            ((1, 1), {'altitude': self.altitude_A,
+                      'ids': set(['{Grass area}', '{Level curve A}'])}),
+            ((1, 9), {'altitude': mesh.UNSPECIFIED_ALTITUDE,
+                      'ids': set(['{Grass area}'])}),
+        ])
+
+    def test_compute_elevations(self):
+        self.builder.merge_subsites()
+        self.builder.build_altimetric_base()
+        self.builder.build_triangulation()
+        pM = (8.5, 6.5) # in the corner of Level curve B
+        vM = self.builder.mesh.insert_point(pM)
+        self.builder.compute_elevations()
+
+        self.check_vertices_props( self.builder.mesh, [
+            ((1, 1), {'altitude': self.altitude_A,
+                      'ids': set(['{Grass area}', '{Level curve A}'])}),
+            (pM, {'altitude': self.level_curve_B.altitude,}),
+        ])

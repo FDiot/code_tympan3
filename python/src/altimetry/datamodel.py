@@ -275,6 +275,11 @@ class SiteNode(PolygonalTympanFeature):
                  self.children["WaterBody"] +
                  self.children["InfrastructureLandtake"] )
 
+    @property
+    def non_altimetric_features(self):
+        return ( self.children["MaterialArea"] +
+                 self.children["InfrastructureLandtake"] )
+
 
 class InfrastructureLandtake(PolygonalTympanFeature):
 
