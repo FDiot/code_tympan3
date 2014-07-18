@@ -41,6 +41,6 @@ class Builder(object):
                     points = polyline.exterior.coords[:]
                 else:
                     raise TypeError("Only level curves or waterbodies are expected")
-                vertices = self.alti.insert_polyline(points, altitude,
+                vertices = self.alti.insert_polyline(points, altitude=altitude,
                                                      id=level_curve.id)
         self.mesh = self.alti.copy_as_ElevationMesh()
