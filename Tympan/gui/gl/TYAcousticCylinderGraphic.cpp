@@ -28,6 +28,8 @@
 #include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
 
+#include "TYAcousticCylinderGraphic.h"
+
 TYAcousticCylinderGraphic::TYAcousticCylinderGraphic(TYAcousticCylinder* pElement) :
     TYElementGraphic(pElement)
 {

@@ -32,8 +32,11 @@
 #include <QList>
 
 #include "Tympan/core/config.h"
-#include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYXMLManager.h"
+#include "Tympan/gui/app/TYLibraryWidget.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "TYAddLibraryDialog.h"
 
 #define TR(id) OLocalizator::getString("TYAddLibraryDialog", (id))
 

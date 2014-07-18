@@ -32,6 +32,8 @@
 #include <QLabel>
 
 
+#include "TYParoiWidget.h"
+
 #define TR(id) OLocalizator::getString("TYParoiWidget", (id))
 
 

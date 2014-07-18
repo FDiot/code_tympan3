@@ -14,10 +14,13 @@
 */
 
 #include "Tympan/core/logging.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAcousticCylinderWidget.h"
   #include "Tympan/gui/gl/TYAcousticCylinderGraphic.h"
 #endif
+#include "TYAcousticCylinder.h"
 
 TY_EXTENSION_INST(TYAcousticCylinder);
 TY_EXT_GRAPHIC_INST(TYAcousticCylinder);

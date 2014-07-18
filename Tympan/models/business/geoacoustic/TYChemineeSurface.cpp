@@ -20,6 +20,8 @@
 #endif
 
 
+#include "TYChemineeSurface.h"
+
 TY_EXTENSION_INST(TYChemineeSurface);
 
 TYChemineeSurface::TYChemineeSurface()

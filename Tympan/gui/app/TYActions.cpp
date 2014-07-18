@@ -18,6 +18,12 @@
  * \brief action qui necessite l'acces au modeler
  */
 
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticSurfaceNode.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/gui/app/TYPickEditor.h"
+#include "TYActions.h"
+
 
 TYAddAccSurfToAccSurfNodeAction::TYAddAccSurfToAccSurfNodeAction(LPTYAcousticSurfaceGeoNode pAccSurfGeoNode,
                                                                  LPTYAcousticSurfaceNode pAccSurfNode,

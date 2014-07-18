@@ -13,16 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYPaletteWidget.h"
-#include "Tympan/gui/gl/TYPaletteGraphic.h"
-#endif
-
-#include "Tympan/models/business/TYXMLManager.h"
 
 #include <limits>
 #include <cmath>
@@ -33,8 +23,15 @@
 
 #include <QDebug>
 
-#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYXMLManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "TYPalette.h"
+
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYPaletteWidget.h"
+  #include "Tympan/gui/gl/TYPaletteGraphic.h"
+#endif
 
 
 TY_EXTENSION_INST(TYPalette);

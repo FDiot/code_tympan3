@@ -13,26 +13,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
-
-
-#include "TYRoute.h"
 
 #include <limits>
 #include <cmath>
 
-#include "Tympan/core/logging.h"
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYRouteWidget.h"
-#include "Tympan/gui/gl/TYRouteGraphic.h"
-#endif
-
 #include <boost/math/special_functions/fpclassify.hpp>
+
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/topography/TYAltimetrie.h"
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYRouteWidget.h"
+  #include "Tympan/gui/gl/TYRouteGraphic.h"
+#endif
+#include "TYRoute.h"
 
 
 TY_EXTENSION_INST(TYRoute);

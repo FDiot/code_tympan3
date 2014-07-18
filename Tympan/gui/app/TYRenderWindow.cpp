@@ -16,27 +16,26 @@
 /**
  * \file TYRenderWindow.cpp
  * \brief association du graphic (OpenGL) au modeleur
- *
- *
  */
-
-
 
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/gui/OSizeManager.h"
 #include "Tympan/gui/tools/OGLTextElement.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "TYRenderWindow.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 #define IMG(id) OLocalizator::getPicture("TYRenderWindow", (id))
+
 
 TYRenderWindow::TYRenderWindow(QGLFormat glf, QWidget* parent, const char* name):
     QGLWidget(glf, parent)

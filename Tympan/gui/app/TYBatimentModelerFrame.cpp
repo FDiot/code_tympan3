@@ -16,12 +16,7 @@
 /**
  * \file TYBatimentModelerFrame.cpp
  * \brief Modeler specialisee pour l'edition des bâtiments
- *
- *
  */
-
-
-
 
 
 #include <qlayout.h>
@@ -31,19 +26,22 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/gui/app/TYEtageEditor.h"
+#include "Tympan/gui/app/TYSilosEditor.h"
+#include "Tympan/gui/app/TYSourceEditor.h"
+#include "Tympan/gui/app/TYPickEditor.h"
+#include "Tympan/gui/app/TYAbstractSceneEditor.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "TYBatimentModelerFrame.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-
-#if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
-
 
 #define TR(id) OLocalizator::getString("TYBatimentModelerFrame", (id))
 #define IMG(id) OLocalizator::getPicture("TYSiteModelerFrame", (id))

@@ -16,8 +16,6 @@
 /**
  * \file TYProjetFrame.cpp
  * \brief Frame pour la gestion de projet
- *
- *
  */
 
 
@@ -30,13 +28,6 @@
 #include <qdialog.h>
 #include <qfiledialog.h>
 #include <qmessagebox.h>
-
-#include "Tympan/models/business/TYXMLManager.h"
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
-#include "Tympan/gui/widgets/TYEtatsWidget.h"
-#include "Tympan/models/business/TYRectangularMaillage.h"
 #include <QTextStream>
 //Added by qt3to4:
 #include <QKeyEvent>
@@ -46,24 +37,37 @@
 #include <QHeaderView>
 // CLM-NT35: Gestion MDI avec QT4.7
 #ifdef USE_QMDIAREA
-#include <QMdiArea>
-#include <QMdiSubWindow>
+  #include <QMdiArea>
+  #include <QMdiSubWindow>
 #else
-#include <QWorkspace>
+  #include <QWorkspace>
 #endif
 // CLM-NT35 End
+
+#include "Tympan/models/business/TYXMLManager.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
+#include "Tympan/gui/tools/NxVec3.h"
+#include "Tympan/gui/widgets/TYEtatsWidget.h"
+#include "Tympan/gui/app/TYElementListItem.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYProjetFrame.h"
 
 using namespace Qt;
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
-
 
 #define TR(id) OLocalizator::getString("TYProjetFrame", (id))
 #define IMG(id) OLocalizator::getPicture("TYProjetFrame", (id))

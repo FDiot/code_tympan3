@@ -16,17 +16,16 @@
 /**
  * \file TYAcousticCylinderWidget.cpp
  * \brief outil IHM pour un cylindre acoustique
- *
- *
  */
 
 
-
+//Added by qt3to4:
+#include <QGridLayout>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
-//Added by qt3to4:
-#include <QGridLayout>
+#include "Tympan/gui/widgets/TYAcousticVolumeWidget.h"
+#include "TYAcousticCylinderWidget.h"
 
 #define TR(id) OLocalizator::getString("TYAcousticCylinderWidget", (id))
 

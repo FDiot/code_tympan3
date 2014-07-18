@@ -26,6 +26,8 @@
 #include "Tympan/models/business/infrastructure/TYMurElement.h"
 
 
+#include "TYMurElementGraphic.h"
+
 TYMurElementGraphic::TYMurElementGraphic(TYMurElement* pElement) :
     TYAcousticRectangleGraphic(pElement)
 {

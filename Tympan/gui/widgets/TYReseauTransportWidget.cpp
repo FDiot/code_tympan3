@@ -16,18 +16,16 @@
 /**
  * \file TYReseauTransportWidget.cpp
  * \brief Outil IHM pour un reseau de transport
- *
- *
  */
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/infrastructure/TYReseauTransport.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYReseauTransport.h"
+#include "Tympan/gui/widgets/TYAcousticLineWidget.h"
+#include "TYReseauTransportWidget.h"
 
 #define TR(id) OLocalizator::getString("TYReseauTransportWidget", (id))
 

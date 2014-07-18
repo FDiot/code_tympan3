@@ -26,6 +26,8 @@
 #include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
 
 
+#include "TYAcousticRectangleNodeGraphic.h"
+
 TYAcousticRectangleNodeGraphic::TYAcousticRectangleNodeGraphic(TYAcousticRectangleNode* pElement) :
     TYAcousticSurfaceNodeGraphic(pElement)
 {

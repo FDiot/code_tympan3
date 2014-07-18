@@ -31,6 +31,8 @@
 #include <QLabel>
 
 
+#include "TYElementWidget.h"
+
 #define TR(id) OLocalizator::getString("TYElementWidget", (id))
 
 

@@ -13,9 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
+#include <vector>
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYEcranWidget.h"
@@ -23,13 +21,12 @@
 #endif
 
 
-#include "Tympan/models/business/infrastructure/TYEcran.h"
-#include "Tympan/models/common/3d.h"
-
 #include "Tympan/core/logging.h"
-
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticPolygon.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-
+#include "TYEcran.h"
 
 TY_EXTENSION_INST(TYEcran);
 TY_EXT_GRAPHIC_INST(TYEcran);
@@ -295,7 +292,7 @@ TYTabLPPolygon TYEcran::getContours() const
     }
 
     // On recherche la face dont tous les points sont égals à minZ
-    vector<unsigned int> listIndices;
+    std::vector<unsigned int> listIndices;
     bool faceOk = false;
     for (unsigned int i = 0; i < tabFaces.size(); i++)
     {

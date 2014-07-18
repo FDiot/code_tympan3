@@ -16,16 +16,13 @@
 /**
  * \file TYPointControlGraphic.cpp
  * \brief Representation graphique d'un point de controle
- *
- *
  */
-
-
 
 
 #include "Tympan/models/business/TYPointControl.h"
 #include "Tympan/models/business/TYProjet.h"
-
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYPointControlGraphic.h"
 
 ///Taille du point de controle.
 static const float PointControlGraphicDefaultSize = 2.0;

@@ -29,7 +29,7 @@
 #include "Tympan/core/config.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/infrastructure/TYTopographie.h"
-
+#include "TYTopographieWidget.h"
 
 #define TR(id) OLocalizator::getString("TYTopographieWidget", (id))
 

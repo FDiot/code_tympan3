@@ -16,16 +16,13 @@
 /**
  * \file TYAcousticRectangleGraphic.cpp
  * \brief Representation graphique d'un rectangle accoustique
- *
- *
  */
 
 
-
-
 #include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
-
 #include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYAcousticRectangleGraphic.h"
 
 
 TYAcousticRectangleGraphic::TYAcousticRectangleGraphic(TYAcousticRectangle* pElement) :

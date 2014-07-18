@@ -13,14 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #if TY_USE_IHM
-#include "Tympan/gui/gl/TYPanelGraphic.h"
+  #include "Tympan/gui/gl/TYPanelGraphic.h"
 #endif
-
+#include "TYPanel.h"
 
 TY_EXT_GRAPHIC_INST(TYPanel);
 

@@ -13,17 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/infrastructure/TYTopographie.h"
+#include "TYCourbeNiveau.h"
 
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYCourbeNiveauWidget.h"
-#include "Tympan/gui/gl/TYCourbeNiveauGraphic.h"
+  #include "Tympan/gui/widgets/TYCourbeNiveauWidget.h"
+  #include "Tympan/gui/gl/TYCourbeNiveauGraphic.h"
 #endif
-
-
-#include "Tympan/core/logging.h"
 
 
 TY_EXTENSION_INST(TYCourbeNiveau);

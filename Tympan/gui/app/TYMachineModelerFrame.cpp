@@ -16,16 +16,8 @@
 /**
  * \file TYMachineModelerFrame.cpp
  * \brief Modeler specialisee pour l'edition des machines
- *
- *
  */
 
-
-
-
-
-
-#include "Tympan/gui/gl/TYMachineGraphic.h"
 
 #include <qlayout.h>
 #include <qpushbutton.h>
@@ -33,6 +25,14 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/gui/gl/TYMachineGraphic.h"
+#include "Tympan/gui/app/TYBoxEditor.h"
+#include "Tympan/gui/app/TYCylinderEditor.h"
+#include "Tympan/gui/app/TYSemiCylinderEditor.h"
+#include "Tympan/gui/app/TYPickEditor.h"
+#include "Tympan/gui/app/TYAbstractSceneEditor.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "TYMachineModelerFrame.h"
 
 #define TR(id) OLocalizator::getString("TYMachineModelerFrame", (id))
 #define IMG(id) OLocalizator::getPicture("TYMachineModelerFrame", (id))

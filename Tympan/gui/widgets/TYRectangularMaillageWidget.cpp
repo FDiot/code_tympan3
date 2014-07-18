@@ -16,29 +16,27 @@
 /**
  * \file TYRectangularMaillageWidget.cpp
  * \brief outil IHM pour un maillage rectangulaire
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/TYRectangularMaillage.h"
-#include "Tympan/models/business/TYCalcul.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/gui/widgets/TYMaillageWidget.h"
+#include "TYRectangularMaillageWidget.h"
 
+#if defined(WIN32)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
+#endif
 
 #define TR(id) OLocalizator::getString("TYRectangularMaillageWidget", (id))
 

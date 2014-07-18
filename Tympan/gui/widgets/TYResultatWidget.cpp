@@ -16,10 +16,10 @@
 /**
  * \file TYResultatWidget.cpp
  * \brief outil IHM pour un resultat
- *
- *
  */
 
+
+#include <cstdlib>
 
 #include <qprinter.h>
 #include <qradiobutton.h>
@@ -30,16 +30,6 @@
 #include <qfiledialog.h>
 #include <qpainter.h>
 #include <qprinter.h>
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/TYResultat.h"
-#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
-#include "TYResultatTreeDialog.h"
-#include "Tympan/models/business/TYProjet.h"
-#include "Tympan/models/business/TYCalcul.h"
-#include "Tympan/core/logging.h"
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QBoxLayout>
@@ -49,7 +39,17 @@
 #include <QHeaderView>
 #include <QPrintDialog>
 
-#include <cstdlib>
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYResultat.h"
+#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/gui/widgets/TYPrintDialog.h"
+#include "TYResultatTreeDialog.h"
+#include "TYResultatWidget.h"
 
 #define TR(id) OLocalizator::getString("TYResultatWidget", (id))
 

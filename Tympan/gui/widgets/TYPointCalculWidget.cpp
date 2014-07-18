@@ -16,23 +16,19 @@
 /**
  * \file TYPointCalculWidget.cpp
  * \brief outil IHM pour un point de calcul
- *
- *
  */
 
-
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/TYPointCalcul.h"
-
-#include "Tympan/models/business/TYCalcul.h"
 
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 //Added by qt3to4:
 #include <QGridLayout>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYPointCalcul.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/gui/widgets/TYPointWidget.h"
+#include "TYPointCalculWidget.h"
 
 #define TR(id) OLocalizator::getString("TYPointCalculWidget", (id))
 

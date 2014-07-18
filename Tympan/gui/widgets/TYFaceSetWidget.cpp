@@ -32,6 +32,8 @@
 
 
 
+#include "TYFaceSetWidget.h"
+
 #define TR(id) OLocalizator::getString("TYFaceSetWidget", (id))
 
 

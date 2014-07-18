@@ -16,21 +16,19 @@
 /**
  * \file TYFlyCameraEditor.cpp
  * \brief Indique que la position ou l'orientation de la camera a ete modifiee
- *
- *
  */
 
 
-
-
-
 #include <QtOpenGL>
-
 #include <qtimer.h>
 #include <qcursor.h>
 
 #include "Tympan/models/business/TYDefines.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/gui/tools/OGLCamera.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "TYFlyCameraEditor.h"
 
 using namespace Qt;
 

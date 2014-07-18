@@ -17,6 +17,7 @@
   #include "Tympan/gui/widgets/TYAcousticLineWidget.h"
   #include "Tympan/gui/gl/TYAcousticLineGraphic.h"
 #endif
+#include "TYAcousticLine.h"
 
 
 TY_EXTENSION_INST(TYAcousticLine);

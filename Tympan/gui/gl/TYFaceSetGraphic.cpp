@@ -26,6 +26,8 @@
 #include "Tympan/models/business/geometry/TYFaceSet.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
 
+#include "TYFaceSetGraphic.h"
+
 TYFaceSetGraphic::TYFaceSetGraphic(TYFaceSet* pElement) :
     TYElementGraphic(pElement)
 {

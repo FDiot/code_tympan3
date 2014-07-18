@@ -16,24 +16,18 @@
 /**
  * \file main.cpp
  * \brief fichier principal de lancement de l'application Tympan en mode IHM
- *
- *
  */
 
 
-
-//#include "vld.h"
-
-
 #if defined(WIN32)
-#include <crtdbg.h>
+  #include <crtdbg.h>
 #endif
 
 #include <qmessagebox.h>
-//#include <qplatinumstyle.h>
-#include "TYApplication.h"
 
+#include "Tympan/core/logging.h"
 #include "Tympan/models/business/init_registry.h"
+#include "TYApplication.h"
 
 static QtMsgHandler old_handler;
 

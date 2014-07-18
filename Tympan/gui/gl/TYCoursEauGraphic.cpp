@@ -27,6 +27,8 @@
 
 #include "Tympan/models/business/TYPreferenceManager.h"
 
+#include "TYCoursEauGraphic.h"
+
 TYCoursEauGraphic::TYCoursEauGraphic(TYCoursEau* pElement) :
     TYAcousticLineGraphic(pElement)
 {

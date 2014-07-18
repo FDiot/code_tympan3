@@ -13,22 +13,19 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYRectangleWidget.h"
-#include "Tympan/gui/gl/TYRectangleGraphic.h"
-#endif
-
-
-#include "Tympan/models/common/3d.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
 
 #include "Tympan/core/logging.h"
-#include "Tympan/models/common/triangle.h"
 #include "Tympan/core/defines.h"
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/triangle.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/geometry/TYSegment.h"
+#include "Tympan/models/business/geometry/TYGeometryNode.h"
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYRectangleWidget.h"
+  #include "Tympan/gui/gl/TYRectangleGraphic.h"
+#endif
+#include "TYRectangle.h"
 
 TY_EXTENSION_INST(TYRectangle);
 TY_EXT_GRAPHIC_INST(TYRectangle);

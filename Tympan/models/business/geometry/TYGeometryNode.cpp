@@ -24,6 +24,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Implementation
 
+#include "TYGeometryNode.h"
+
 TYMapPtrGeoNode* TYGeometryNode::_geoNodeMap = NULL;
 TYListPtrGeoNode* TYGeometryNode::_geoNodeDoublonsList = NULL;
 

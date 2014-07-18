@@ -16,19 +16,17 @@
 /**
  * \file TYAttenuateurWidget.cpp
  * \brief outil IHM pour un attenuateur
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/acoustic/TYAttenuateur.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/acoustic/TYAttenuateur.h"
+#include "Tympan/gui/widgets/TYSpectreWidget.h"
+#include "TYAttenuateurWidget.h"
 
 #define TR(id) OLocalizator::getString("TYAttenuateurWidget", (id))
 

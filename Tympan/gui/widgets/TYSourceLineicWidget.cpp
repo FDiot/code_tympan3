@@ -16,22 +16,20 @@
 /**
  * \file TYSourceLineicWidget.cpp
  * \brief outil IHM pour une source lineique
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/acoustic/TYSourceLineic.h"
 #include <qmenu.h>
-
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QTreeWidget>
 #include <QLabel>
 #include <QHeaderView>
+
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/acoustic/TYSourceLineic.h"
+#include "Tympan/gui/widgets/TYSourceWidget.h"
+#include "TYSourceLineicWidget.h"
 
 #define TR(id) OLocalizator::getString("TYSourceLineicWidget", (id))
 

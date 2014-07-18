@@ -30,6 +30,8 @@
 #include <QGridLayout>
 #include <QLabel>
 
+#include "TYTraficWidget.h"
+
 #define TR(id) OLocalizator::getString("TYTraficWidget", (id))
 
 

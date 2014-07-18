@@ -24,6 +24,8 @@
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/acoustic/TYRegime.h"
 
+#include "TYRegimeWidget.h"
+
 #define TR(id) OLocalizator::getString("TYRegimeWidget", (id))
 
 

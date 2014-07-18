@@ -16,13 +16,8 @@
 /**
  * \file TYGetLibraryDialog.cpp
  * \brief Boite de dialogue pour la lecture d'un element dans la bibliotheque
- *
- *
  */
 
-
-
-#include "Tympan/models/business/TYXMLManager.h"
 
 #include <qcursor.h>
 #include <qmessagebox.h>
@@ -32,7 +27,13 @@
 #include <QBoxLayout>
 #include <QHBoxLayout>
 
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/gui/app/TYLibraryWidget.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYGetLibraryDialog.h"
 
 #define TR(id) OLocalizator::getString("TYGetLibraryDialog", (id))
 

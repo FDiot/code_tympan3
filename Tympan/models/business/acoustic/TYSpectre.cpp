@@ -13,19 +13,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYSpectreWidget.h"
-#endif
-
-
 #include <qdir.h>
 
+#include "Tympan/core/config.h"
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/TYXMLManager.h"
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYSpectreWidget.h"
+#endif
+#include "TYSpectre.h"
 
 TY_EXTENSION_INST(TYSpectre);
 

@@ -16,14 +16,12 @@
 /**
  * \file TYSiteNodeGraphic.cpp
  * \brief Repri¿½sentation graphique d'un ensemble de sites
- *
- *
  */
 
 
-
-
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/gui/gl/TYTopographieGraphic.h"
+#include "TYSiteNodeGraphic.h"
 
 TYSiteNodeGraphic::TYSiteNodeGraphic(TYSiteNode* pElement) : TYElementGraphic(pElement)
 {

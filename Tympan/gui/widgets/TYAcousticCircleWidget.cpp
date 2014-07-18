@@ -16,18 +16,16 @@
 /**
  * \file TYAcousticCircleWidget.cpp
  * \brief outil IHM pour un cercle acoustique
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticCircle.h"
 //Added by qt3to4:
 #include <QGridLayout>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticCircle.h"
+#include "Tympan/gui/widgets/TYAcousticSurfaceWidget.h"
+#include "TYAcousticCircleWidget.h"
 
 #define TR(id) OLocalizator::getString("TYAcousticCircleWidget", (id))
 

@@ -15,12 +15,15 @@
 
 #include <qdir.h>
 
+#include "Tympan/core/config.h"
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYXMLManager.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "TYBoundaryNoiseMap.h"
 #if TY_USE_IHM
   #include "Tympan/gui/gl/TYBoundaryNoiseMapGraphic.h"
   #include "Tympan/gui/widgets/TYBoundaryNoiseMapWidget.h"
 #endif
-#include "Tympan/core/logging.h"
-#include "Tympan/models/business/TYXMLManager.h"
 
 #undef min
 #undef max

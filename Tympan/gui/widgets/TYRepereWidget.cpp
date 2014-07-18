@@ -30,6 +30,8 @@
 #include <QLabel>
 
 
+#include "TYRepereWidget.h"
+
 #define TR(id) OLocalizator::getString("TYRepereWidget", (id))
 
 

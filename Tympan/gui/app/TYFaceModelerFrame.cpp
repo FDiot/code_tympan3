@@ -13,38 +13,38 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-//Added by qt3to4:
-#include <QFocusEvent>
 /**
  * \file TYFaceModelerFrame.cpp
  * \brief Classe Modeler specialisee pour l'edition des faces
- *
- *
- *
  */
-
-
-
 
 
 #include <qcombobox.h>
 #include <qlayout.h>
 #include <qtoolbutton.h>
 #include <qpushbutton.h>
-
-
-#include "Tympan/gui/gl/TYAcousticRectangleNodeGraphic.h"
+//Added by qt3to4:
+#include <QFocusEvent>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/gui/gl/TYAcousticRectangleNodeGraphic.h"
+#include "Tympan/gui/app/TYRectangleEditor.h"
+#include "Tympan/gui/app/TYPickEditor.h"
+#include "Tympan/gui/app/TYFaceModelerPickEditor.h"
+#include "Tympan/gui/app/TYAbstractSceneEditor.h"
+#include "Tympan/gui/app/TYFaceToolbar.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYFaceModelerFrame.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 

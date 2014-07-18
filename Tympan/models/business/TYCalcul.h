@@ -28,12 +28,12 @@
 #include <memory>
 
 #include "Tympan/models/business/material/TYAtmosphere.h"
-#include "TYMaillage.h"
-#include "TYPointControl.h"
-#include "TYResultat.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/models/business/TYPlugin.h"
 #include "Tympan/models/business/TYRay.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/TYPointControl.h"
+#include "Tympan/models/business/TYResultat.h"
 
 class TYProjet;
 namespace tympan {

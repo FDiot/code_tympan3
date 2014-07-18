@@ -22,6 +22,8 @@
 #endif
 
 
+#include "TYAcousticVolumeNode.h"
+
 TY_EXTENSION_INST(TYAcousticVolumeNode);
 
 TYAcousticVolumeNode::TYAcousticVolumeNode()

@@ -38,7 +38,6 @@ class TYCoursEauEditor;
 class TYCreateElementDialog;
 class TYCylinderEditor;
 class TYDistanceEditor;
-class TYDOMErrorHandler;
 class TYEchelleEditor;
 class TYElementCheckListItem;
 class TYElementListItem;

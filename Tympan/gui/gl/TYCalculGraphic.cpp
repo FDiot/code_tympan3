@@ -16,16 +16,13 @@
 /**
  * \file TYCalculGraphic.cpp
  * \brief Representation graphique d'un calcul
- *
- *
  */
-
-
 
 
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYCalcul.h"
-
+#include "Tympan/gui/gl/TYRayGraphic.h"
+#include "TYCalculGraphic.h"
 
 TYCalculGraphic::TYCalculGraphic(TYCalcul* pElement) :
     TYElementGraphic(pElement)

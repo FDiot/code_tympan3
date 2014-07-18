@@ -16,18 +16,17 @@
 /**
  * \file TYTerrainGraphic.cpp
  * \brief Representation graphique d'un terrain
- *
- *
  */
-
 
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/topography/TYTerrain.h"
-
 #include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYTerrainGraphic.h"
 
 #define IMG(id) OLocalizator::getPicture("TYTerrainGraphic", (id))
+
 
 TYTerrainGraphic::TYTerrainGraphic(TYTerrain* pElement) :
     TYElementGraphic(pElement)

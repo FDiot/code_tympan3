@@ -28,6 +28,8 @@
 //#include <QSignal>
 
 
+#include "TYProjetGraphic.h"
+
 TYProjetGraphic::TYProjetGraphic(TYProjet* pElement) :
     TYElementGraphic(pElement)
 {

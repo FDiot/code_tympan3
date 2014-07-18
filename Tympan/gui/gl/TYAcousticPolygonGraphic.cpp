@@ -16,14 +16,12 @@
 /**
  * \file TYAcousticPolygonGraphic.cpp
  * \brief Representation graphique d'un polygone accoustique
- *
- *
  */
 
 
-
-
 #include "Tympan/models/business/geoacoustic/TYAcousticPolygon.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYAcousticPolygonGraphic.h"
 
 
 TYAcousticPolygonGraphic::TYAcousticPolygonGraphic(TYAcousticPolygon* pElement) :

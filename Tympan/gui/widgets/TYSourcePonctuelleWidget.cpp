@@ -16,24 +16,22 @@
 /**
  * \file TYSourcePonctuelleWidget.cpp
  * \brief outil IHM pour une source ponctuelle
- *
- *
- *
  */
-
-
 
 
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
-#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
-
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
+
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYSourceWidget.h"
+#include "Tympan/gui/widgets/TYPointWidget.h"
+#include "TYSourcePonctuelleWidget.h"
 
 #define TR(id) OLocalizator::getString("TYSourcePonctuelleWidget", (id))
 

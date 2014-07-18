@@ -26,8 +26,12 @@
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYPluginManager.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
+#include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
+#include "TYCalcul.h"
+
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYCalculWidget.h"
   #include "Tympan/gui/gl/TYCalculGraphic.h"

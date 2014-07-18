@@ -37,6 +37,8 @@
 #include <qfiledialog.h>
 
 
+#include "TYSiteNodeWidget.h"
+
 #define TR(id) OLocalizator::getString("TYSiteNodeWidget", (id))
 
 

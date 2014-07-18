@@ -32,6 +32,8 @@
 #include <QHeaderView>
 
 
+#include "TYInfrastructureWidget.h"
+
 #define TR(id) OLocalizator::getString("TYInfrastructureWidget", (id))
 
 

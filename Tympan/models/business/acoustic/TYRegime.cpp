@@ -22,6 +22,8 @@
 #endif
 
 
+#include "TYRegime.h"
+
 TY_EXTENSION_INST(TYRegime)
 
 TYRegime::TYRegime() :  _isRayonnant(true),

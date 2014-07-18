@@ -32,6 +32,8 @@
 #include "Tympan/gui/tools/NxVec3.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 
+#include "TYElementGraphic.h"
+
 #define IMG(id) OLocalizator::getPicture("TYElementGraphic", (id))
 
 OBox TYElementGraphic::_globalBoundingBox;

@@ -13,31 +13,31 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYSourcePonctuelleWidget.h"
-#include "Tympan/gui/gl/TYSourcePonctuelleGraphic.h"
-#endif
-
-
 #include <typeinfo>
 
-#include "Tympan/models/common/3d.h"
-
 #include "Tympan/core/logging.h"
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticVolume.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticSemiCylinder.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
+#include "Tympan/models/business/infrastructure/TYMachine.h"
+#include "Tympan/models/business/infrastructure/TYEtage.h"
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYSourcePonctuelleWidget.h"
+  #include "Tympan/gui/gl/TYSourcePonctuelleGraphic.h"
+#endif
+#include "TYSourcePonctuelle.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
-
 
 TY_EXTENSION_INST(TYSourcePonctuelle);
 TY_EXT_GRAPHIC_INST(TYSourcePonctuelle);

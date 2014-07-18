@@ -26,6 +26,8 @@
 #include "Tympan/models/business/geometry/TYSegment.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
 
+#include "TYSegmentGraphic.h"
+
 TYSegmentGraphic::TYSegmentGraphic(TYSegment* pElement) :
     TYElementGraphic(pElement)
 {

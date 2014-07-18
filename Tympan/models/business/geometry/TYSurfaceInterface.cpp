@@ -13,12 +13,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
+#include <cassert>
 
 #include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/plan.h"
+#include "Tympan/models/business/TYDefines.h"
+#include "TYSurfaceInterface.h"
 
 int TYSurfaceInterface::intersects(const TYSurfaceInterface* pSurf, OSegment3D& seg) const
 {

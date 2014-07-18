@@ -16,17 +16,17 @@
 /**
  * \file TYBoundaryNoiseMap.cpp
  * \brief Graphical representation of the BoundaryNoiseMap entity
- *
- *
  */
 
 
-#include "Tympan/gui/OSizeManager.h"
-
 #include "Tympan/models/business/TYBoundaryNoiseMap.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-
 #include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/gui/OSizeManager.h"
+#include "Tympan/gui/gl/TYPaletteGraphic.h"
+#include "Tympan/gui/gl/TYPanelGraphic.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYBoundaryNoiseMapGraphic.h"
 
 TYBoundaryNoiseMapGraphic::TYBoundaryNoiseMapGraphic(TYBoundaryNoiseMap* pElement) :
     TYElementGraphic(pElement)

@@ -15,15 +15,14 @@
 
 /**
  * \file TYTopographieGraphic.cpp
- * \brief Repri¿½sentation graphique d'une topographie
- *
- *
+ * \brief Représentation graphique d'une topographie
  */
 
 
-
-
 #include "Tympan/models/business/infrastructure/TYTopographie.h"
+#include "Tympan/gui/gl/TYAltimetrieGraphic.h"
+#include "TYTopographieGraphic.h"
+
 
 TYTopographieGraphic::TYTopographieGraphic(TYTopographie* pElement) :
     TYElementGraphic(pElement)

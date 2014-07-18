@@ -26,6 +26,8 @@
 
 
 
+#include "TYSol.h"
+
 TY_EXTENSION_INST(TYSol);
 
 TYSol::TYSol():

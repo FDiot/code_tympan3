@@ -20,7 +20,7 @@
   #include "Tympan/gui/widgets/TYAcousticRectangleWidget.h"
   #include "Tympan/gui/gl/TYAcousticRectangleGraphic.h"
 #endif
-
+#include "TYAcousticRectangle.h"
 
 TY_EXTENSION_INST(TYAcousticRectangle);
 TY_EXT_GRAPHIC_INST(TYAcousticRectangle);

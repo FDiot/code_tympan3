@@ -17,11 +17,6 @@
  * \file TYResultatWidget.h
  * \brief outil IHM pour un resultat (fichier header)
  * \author Projet_Tympan
- *
- *
- *
- *
- *
  */
 
 #ifndef __TY_RESULTAT_WIDGET__

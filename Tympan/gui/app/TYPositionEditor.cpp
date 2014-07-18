@@ -16,34 +16,41 @@
 /**
  * \file TYPositionEditor.cpp
  * \brief gestion de la position selon les modes 'moving', 'rotation', 'edition
- *
- *
  */
 
 
-
-
 #include <qtimer.h>
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/gui/tools/OGLLineElement.h"
-
-#include "Tympan/models/business/infrastructure/TYEcran.h"
-
 #include <qcursor.h>
 #include <qstatusbar.h>
 
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
+#include "Tympan/models/business/infrastructure/TYEtage.h"
+#include "Tympan/models/business/infrastructure/TYInfrastructure.h"
+#include "Tympan/models/business/topography/TYAltimetrie.h"
+#include "Tympan/gui/tools/OGLLineElement.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYElementPicker.h"
+#include "Tympan/gui/app/TYCameraEditor.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "TYPositionEditor.h"
 
+#if defined(WIN32)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
+#endif
 
 #define TR(id) OLocalizator::getString("TYPositionEditor", (id))
+
 
 static bool bTYPositionEditorFirstMove = true;
 

@@ -16,30 +16,26 @@
 /**
  * \file TYLinearMaillageGraphic.cpp
  * \brief Representation graphique d'un maillage lineaire
- *
- *
  */
-
-
-
 
 
 #include "Tympan/models/business/TYLinearMaillage.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
 #include "Tympan/core/defines.h"
 #include "Tympan/gui/OSizeManager.h"
+#include "Tympan/gui/gl/TYPaletteGraphic.h"
+#include "Tympan/gui/gl/TYPanelGraphic.h"
+#include "TYLinearMaillageGraphic.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
-#if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
 
 
 TYLinearMaillageGraphic::TYLinearMaillageGraphic(TYLinearMaillage* pElement) :

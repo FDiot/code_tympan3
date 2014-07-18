@@ -23,8 +23,9 @@
 #endif
 
 
-#include "TYDalle.h"
 #include "Tympan/core/logging.h"
+#include "Tympan/models/business/infrastructure/TYEtage.h"
+#include "TYDalle.h"
 
 
 TY_EXTENSION_INST(TYDalle);

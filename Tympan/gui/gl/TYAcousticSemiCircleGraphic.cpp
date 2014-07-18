@@ -29,6 +29,8 @@
 #include "Tympan/gui/gl/TYPickingTable.h"
 
 
+#include "TYAcousticSemiCircleGraphic.h"
+
 TYAcousticSemiCircleGraphic::TYAcousticSemiCircleGraphic(TYAcousticSemiCircle* pElement) :
     TYElementGraphic(pElement)
 {

@@ -16,20 +16,19 @@
 /**
  * \file TYMurElementWidget.cpp
  * \brief outil IHM pour un element de mur
- *
- *
  */
 
-
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/infrastructure/TYMurElement.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
 
 //Added by qt3to4:
 #include <QMessageBox>
 #include <QGridLayout>
+
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYMurElement.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
+#include "Tympan/gui/widgets/TYAcousticRectangleWidget.h"
+#include "Tympan/gui/widgets/TYAcousticSurfaceWidget.h"
+#include "TYMurElementWidget.h"
 
 
 #define TR(id) OLocalizator::getString("TYMurElementWidget", (id))

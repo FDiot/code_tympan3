@@ -16,15 +16,13 @@
 /**
  * \file TYAcousticFaceSetGraphic.cpp
  * \brief Representation graphique d'un ensemble de faces acoustiques
- *
- *
  */
-
-
 
 
 #include "Tympan/models/business/geometry/TYFaceSet.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticFaceSet.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYAcousticFaceSetGraphic.h"
 
 
 TYAcousticFaceSetGraphic::TYAcousticFaceSetGraphic(TYAcousticFaceSet* pElement) :

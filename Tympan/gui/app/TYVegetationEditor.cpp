@@ -16,32 +16,30 @@
 /**
  * \file TYVegetationEditor.cpp
  * \brief Construit un Vegetation a partir des points saisis
- *
- *
  */
 
 
-
-
-
-#include "Tympan/models/business/OLocalizator.h"
-
-#include "Tympan/models/business/material/TYSol.h"
-#include "Tympan/gui/widgets/TYSolWidget.h"
-
 #include <qinputdialog.h>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/material/TYSol.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/topography/TYTerrain.h"
+#include "Tympan/gui/widgets/TYSolWidget.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYVegetationEditor.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#endif
-
-#if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 

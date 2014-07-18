@@ -26,6 +26,8 @@
 #include "Tympan/models/business/TYResultat.h"
 
 
+#include "TYResultatGraphic.h"
+
 TYResultatGraphic::TYResultatGraphic(TYResultat* pElement) :
     TYElementGraphic(pElement)
 {

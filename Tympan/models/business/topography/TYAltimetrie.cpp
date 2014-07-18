@@ -248,10 +248,10 @@ void TYAltimetrie::plugBackTriangulation(
                         << tympan_source_loc << tympan::position_errinfo(oTriangle.vertex(j));
             };
 
-            ipmax = max(ipmax, idx.pi);
-            iqmax = max(iqmax, idx.qi);
-            ipmin = min(ipmin, idx.pi);
-            iqmin = min(iqmin, idx.qi);
+            ipmax = std::max(ipmax, idx.pi);
+            iqmax = std::max(iqmax, idx.qi);
+            ipmin = std::min(ipmin, idx.pi);
+            iqmin = std::min(iqmin, idx.qi);
         }
         // Pour chacun des carres, on affecte le triangle
         // Todo: Optim: faire le test d'intersection carre/trianle avant d'ajouter.
@@ -498,8 +498,8 @@ bool TYAltimetrie::getGridIndices(const OPoint3D& pt, grid_index& indXY) const
 
     // In case pt lies on the top-most (resp. right-most) border of the bounding box
     // p could be exactly _gridSX (resp. q exactly _gridSY) and this needs clipping.
-    pi = min(pi, _gridSX - 1);
-    qi = min(qi, _gridSY - 1);
+    pi = std::min(pi, _gridSX - 1);
+    qi = std::min(qi, _gridSY - 1);
 
     assert((pi >= 0) && (qi >= 0) && (pi < _gridSX) && (qi < _gridSY));
 
@@ -524,10 +524,10 @@ bool TYAltimetrie::getGridIndices(const OPoint3D* pts, unsigned int* iMinMax) co
     for (size_t i = 0 ; i < 4 ; i++)
     {
         res &= getGridIndices(pts[i], iXY);
-        minX = min(minX, iXY.pi);
-        minY = min(minY, iXY.qi);
-        maxX = max(maxX, iXY.pi);
-        maxY = max(maxY, iXY.qi);
+        minX = std::min(minX, iXY.pi);
+        minY = std::min(minY, iXY.qi);
+        maxX = std::max(maxX, iXY.pi);
+        maxY = std::max(maxY, iXY.qi);
     }
 
     iMinMax[0] = minX;
@@ -553,7 +553,7 @@ bool TYAltimetrie::getGridIndices(const OBox2& box, unsigned int* iMinMax) const
 
 void TYAltimetrie::getFacesinIndices(unsigned int& minX, unsigned int& maxX, unsigned int& minY, unsigned int& maxY, TYTabLPPolygon& faces)
 {
-    map <LPTYPolygon, int> mapFaces;
+    std::map <LPTYPolygon, int> mapFaces;
     TYTabLPPolygon* pDivRef = NULL;
 
     //Utilisation d'un map pour filtrer les faces
@@ -570,7 +570,7 @@ void TYAltimetrie::getFacesinIndices(unsigned int& minX, unsigned int& maxX, uns
     }
 
     //Remplissage du tableau
-    map <LPTYPolygon, int>::iterator it;
+    std::map <LPTYPolygon, int>::iterator it;
     for (it = mapFaces.begin(); it != mapFaces.end(); it++)
     {
         faces.push_back(it->first);

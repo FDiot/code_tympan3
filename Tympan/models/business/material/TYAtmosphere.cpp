@@ -25,6 +25,8 @@
 #include "Tympan/core/logging.h"
 
 
+#include "TYAtmosphere.h"
+
 TY_EXTENSION_INST(TYAtmosphere);
 
 const double TYAtmosphere::_impedanceRef(400.0);

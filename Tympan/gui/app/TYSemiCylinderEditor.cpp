@@ -16,36 +16,37 @@
 /**
  * \file TYSemiCylinderEditor.cpp
  * \brief gestion de l'edition d'un 1/2 cylindre
- *
- *
  */
 
 
-
-
-
-#include "Tympan/gui/tools/OGLRectangleElement.h"
-
-#include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
-
-#include "Tympan/gui/gl/TYPointGraphic.h"
-
-#include "Tympan/models/business/geometry/TYRepere.h"
-#include "Tympan/models/business/OLocalizator.h"
-
 #include <qinputdialog.h>
 
-#include "TYApplication.h"//az++
+#include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
+#include "Tympan/models/business/geometry/TYRepere.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYPointControl.h"
+#include "Tympan/models/business/infrastructure/TYMachine.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/gui/tools/OGLRectangleElement.h"
+#include "Tympan/gui/gl/TYPointGraphic.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYMachineModelerFrame.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "TYSemiCylinderEditor.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
-
 
 #define TR(id) OLocalizator::getString("TYSemiCylinderEditor", (id))
 

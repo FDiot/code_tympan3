@@ -16,18 +16,16 @@
 /**
  * \file TYCoursEauWidget.cpp
  * \brief Outil IHM pour un cours d'eau
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/topography/TYCoursEau.h"
 //Added by qt3to4:
 #include <QGridLayout>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/topography/TYCoursEau.h"
+#include "TYCoursEauWidget.h"
+#include "Tympan/gui/widgets/TYAcousticLineWidget.h"
 
 #define TR(id) OLocalizator::getString("TYCoursEauWidget", (id))
 

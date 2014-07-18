@@ -30,6 +30,8 @@
 #include <QLabel>
 
 
+#include "TYVegetationWidget.h"
+
 #define TR(id) OLocalizator::getString("TYVegetationWidget", (id))
 
 

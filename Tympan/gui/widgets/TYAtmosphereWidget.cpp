@@ -33,6 +33,8 @@
 #include <QLabel>
 
 
+#include "TYAtmosphereWidget.h"
+
 #define TR(id) OLocalizator::getString("TYAtmosphereWidget", (id))
 
 

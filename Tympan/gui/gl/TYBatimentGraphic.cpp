@@ -26,6 +26,8 @@
 #include "Tympan/models/business/infrastructure/TYBatiment.h"
 
 
+#include "TYBatimentGraphic.h"
+
 TYBatimentGraphic::TYBatimentGraphic(TYBatiment* pElement) :
     TYAcousticVolumeNodeGraphic(pElement)
 {

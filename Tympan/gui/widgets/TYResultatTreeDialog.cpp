@@ -39,6 +39,8 @@
 #include <QCloseEvent>
 #include <QTreeWidget>
 
+#include "TYResultatTreeDialog.h"
+
 #define TR(id) OLocalizator::getString("TYResultatTreeDialog", (id))
 
 

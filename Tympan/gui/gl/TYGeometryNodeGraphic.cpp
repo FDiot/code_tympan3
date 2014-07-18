@@ -38,6 +38,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 #endif
 
+#include "TYGeometryNodeGraphic.h"
+
 TYGeometryNodeGraphic::TYGeometryNodeGraphic(TYGeometryNode* pElement) :
     TYElementGraphic(pElement)
 {

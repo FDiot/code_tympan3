@@ -16,39 +16,29 @@
 /**
  * \file TYPlanEauEditor.cpp
  * \brief Construit un plan d'eau a partir des points saisis
- *
- *
  */
 
 
-
-
-
-
-#include "Tympan/models/business/topography/TYPlanEau.h"
-
-#include "Tympan/models/business/OLocalizator.h"
-
 #include <qinputdialog.h>
 
-
-#include "TYRenderWindowInteractor.h"
-#include "TYModelerFrame.h"
-#include "TYSiteModelerFrame.h"
-#include "TYActions.h"
+#include "Tympan/models/business/topography/TYPlanEau.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYPlanEauEditor.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-
-#if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
-
 
 #define TR(id) OLocalizator::getString("TYPlanEauEditor", (id))
 

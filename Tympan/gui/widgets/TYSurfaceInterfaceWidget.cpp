@@ -29,6 +29,8 @@
 #include <QLabel>
 
 #include "Tympan/models/business/OLocalizator.h"
+#include "TYSurfaceInterfaceWidget.h"
+
 #define TR(id) OLocalizator::getString("TYSurfaceInterfaceWidget", (id))
 
 #include "Tympan/models/common/3d.h"

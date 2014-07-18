@@ -13,24 +13,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
 
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYEtageWidget.h"
-#include "Tympan/gui/gl/TYEtageGraphic.h"
-#endif
+#include <vector>
 
-
-#include "TYEtage.h"
-
-#include "Tympan/models/common/3d.h"
 #include "Tympan/core/defines.h"
-
 #include "Tympan/core/logging.h"
-
+#include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYEtageWidget.h"
+  #include "Tympan/gui/gl/TYEtageGraphic.h"
+#endif
+#include "TYEtage.h"
 
 TY_EXTENSION_INST(TYEtage);
 TY_EXT_GRAPHIC_INST(TYEtage);
@@ -2211,7 +2205,7 @@ void TYEtage::updateSolPlafond()
     // Inversion des points du sol pour que toutes les normales soient vers l'exti¿½rieur
     TYTabPoint tabPtsTemp = pointsSol;
     pointsSol.clear();
-    vector<TYPoint>::reverse_iterator it;
+    std::vector<TYPoint>::reverse_iterator it;
     for (it = tabPtsTemp.rbegin(); it != tabPtsTemp.rend(); it++)
     {
         pointsSol.push_back((*it));

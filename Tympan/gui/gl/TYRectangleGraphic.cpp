@@ -26,6 +26,8 @@
 #include "Tympan/models/business/geometry/TYRectangle.h"
 
 
+#include "TYRectangleGraphic.h"
+
 TYRectangleGraphic::TYRectangleGraphic(TYRectangle* pElement) :
     TYElementGraphic(pElement)
 {

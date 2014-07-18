@@ -16,21 +16,18 @@
 /**
  * \file TYBoucheSurfaceWidget.cpp
  * \brief outil IHM pour une bouche de ventilation
- *
- *
  */
 
 
-
+//Added by qt3to4:
+#include <QMessageBox>
+#include <QGridLayout>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geoacoustic/TYBoucheSurface.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
-//Added by qt3to4:
-
-#include <QMessageBox>
-#include <QGridLayout>
-
+#include "Tympan/gui/widgets/TYAcousticRectangleWidget.h"
+#include "TYBoucheSurfaceWidget.h"
 
 #define TR(id) OLocalizator::getString("TYBoucheSurfaceWidget", (id))
 

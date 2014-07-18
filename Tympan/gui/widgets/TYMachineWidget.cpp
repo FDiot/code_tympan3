@@ -16,20 +16,20 @@
 /**
  * \file TYMachineWidget.cpp
  * \brief outil IHM pour une machine
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/infrastructure/TYMachine.h"
 
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 #include <QTextEdit>
+
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYMachine.h"
+#include "Tympan/gui/widgets/TYAcousticVolumeNodeWidget.h"
+
+#include "TYMachineWidget.h"
 
 #define TR(id) OLocalizator::getString("TYMachineWidget", (id))
 

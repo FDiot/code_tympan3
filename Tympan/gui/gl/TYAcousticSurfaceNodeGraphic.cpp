@@ -16,15 +16,12 @@
 /**
  * \file TYAcousticSurfaceNodeGraphic.cpp
  * \brief Representation graphique d'un ensemble de surfaces acoustiques
- *
- *
  */
 
 
-
-
 #include "Tympan/models/business/geoacoustic/TYAcousticSurfaceNode.h"
-
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYAcousticSurfaceNodeGraphic.h"
 
 TYAcousticSurfaceNodeGraphic::TYAcousticSurfaceNodeGraphic(TYAcousticSurfaceNode* pElement) :
     TYElementGraphic(pElement)

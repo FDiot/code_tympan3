@@ -23,6 +23,8 @@
 
 
 
+#include "TYDirectivite.h"
+
 TY_EXTENSION_INST(TYDirectivite);
 
 TYDirectivite::TYDirectivite()

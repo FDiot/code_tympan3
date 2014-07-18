@@ -26,6 +26,8 @@
 #include "Tympan/core/logging.h"
 
 
+#include "TYSourceSurfacic.h"
+
 TY_EXTENSION_INST(TYSourceSurfacic);
 TY_EXT_GRAPHIC_INST(TYSourceSurfacic);
 

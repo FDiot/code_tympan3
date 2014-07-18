@@ -33,6 +33,8 @@
 #include "Tympan/gui/OSizeManager.h"
 #include "Tympan/models/business/TYPalette.h"
 
+#include "TYPaletteGraphic.h"
+
 #define IMG(id) OLocalizator::getPicture("TYPaletteGraphic", (id))
 
 TYPaletteGraphic::TYPaletteGraphic(TYPalette* pElement)

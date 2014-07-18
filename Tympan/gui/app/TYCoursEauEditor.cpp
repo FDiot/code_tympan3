@@ -16,31 +16,27 @@
 /**
  * \file TYCoursEauEditor.cpp
  * \brief Construit un CoursEau a partir des points saisis
- *
- *
  */
-
-
-
-
-
-#include "Tympan/models/business/OLocalizator.h"
-
-#include "Tympan/models/business/topography/TYCoursEau.h"
 
 #include <qdialog.h>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/topography/TYCoursEau.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYCoursEauEditor.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#endif
-
-#if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 

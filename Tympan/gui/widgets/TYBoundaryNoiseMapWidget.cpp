@@ -16,28 +16,29 @@
 /**
  * \file TYBoundaryNoiseMapWidget.cpp
  * \brief GUI tool for a TYBoundaryNoiseMap
- *
- *
  */
 
 
 #include <limits>
 
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/TYBoundaryNoiseMap.h"
-
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYBoundaryNoiseMap.h"
+#include "Tympan/gui/widgets/TYMaillageWidget.h"
+#include "TYBoundaryNoiseMapWidget.h"
+
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
+
 
 
 #define TR(id) OLocalizator::getString("TYBoundaryNoiseMapWidget", (id))

@@ -16,32 +16,35 @@
 /**
  * \file TYBoxEditor.cpp
  * \brief gestion de l'edition d'une box
- *
- *
  */
-
-
-
-
-
-#include "Tympan/gui/tools/OGLRectangleElement.h"
-
-#include "Tympan/models/business/geoacoustic/TYAcousticBox.h"
-
-#include "Tympan/gui/gl/TYPointGraphic.h"
-
-#include "Tympan/models/business/geometry/TYRepere.h"
-#include "Tympan/models/business/OLocalizator.h"
 
 #include <qinputdialog.h>
 
+#include "Tympan/models/business/geoacoustic/TYAcousticBox.h"
+#include "Tympan/models/business/geometry/TYRepere.h"
+#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
+#include "Tympan/models/business/TYPointControl.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/infrastructure/TYMachine.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/gui/tools/OGLRectangleElement.h"
+#include "Tympan/gui/gl/TYPointGraphic.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYMachineModelerFrame.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYBoxEditor.h"
+
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 

@@ -56,6 +56,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 #endif
 
+#include "TYPaletteWidget.h"
+
 #define TR(id) OLocalizator::getString("TYPaletteWidget", (id))
 
 TYPaletteWidget::TYPaletteWidget(TYPalette* pElement, QWidget* _pParent /*=NULL*/)

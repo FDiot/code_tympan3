@@ -15,11 +15,13 @@
 
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/triangle.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAcousticCircleWidget.h"
   #include "Tympan/gui/gl/TYAcousticCircleGraphic.h"
 #endif
+#include "TYAcousticCircle.h"
 
 TY_EXTENSION_INST(TYAcousticCircle);
 TY_EXT_GRAPHIC_INST(TYAcousticCircle);

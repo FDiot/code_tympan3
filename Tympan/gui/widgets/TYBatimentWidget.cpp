@@ -16,18 +16,15 @@
 /**
  * \file TYBatimentWidget.cpp
  * \brief outil IHM pour un batiment
- *
- *
  */
 
-
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/infrastructure/TYBatiment.h"
 //Added by qt3to4:
 #include <QGridLayout>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYBatiment.h"
+#include "Tympan/gui/widgets/TYAcousticVolumeNodeWidget.h"
+#include "TYBatimentWidget.h"
 
 #define TR(id) OLocalizator::getString("TYBatimentWidget", (id))
 

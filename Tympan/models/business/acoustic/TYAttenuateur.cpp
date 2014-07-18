@@ -25,6 +25,8 @@
 #include "Tympan/core/logging.h"
 
 
+#include "TYAttenuateur.h"
+
 TY_EXTENSION_INST(TYAttenuateur);
 
 TYAttenuateur::TYAttenuateur()

@@ -26,6 +26,8 @@
 #include "Tympan/models/business/infrastructure/TYInfrastructure.h"
 
 
+#include "TYInfrastructureGraphic.h"
+
 TYInfrastructureGraphic::TYInfrastructureGraphic(TYInfrastructure* pElement) :
     TYElementGraphic(pElement)
 {

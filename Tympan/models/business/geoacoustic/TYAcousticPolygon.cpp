@@ -18,6 +18,7 @@
   #include "Tympan/gui/widgets/TYAcousticPolygonWidget.h"
   #include "Tympan/gui/gl/TYAcousticPolygonGraphic.h"
 #endif
+#include "TYAcousticPolygon.h"
 
 
 TY_EXTENSION_INST(TYAcousticPolygon);

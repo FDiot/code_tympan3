@@ -30,6 +30,8 @@
 #include <QGridLayout>
 #include <QLabel>
 
+#include "TYMateriauConstructionWidget.h"
+
 #define TR(id) OLocalizator::getString("TYMateriauConstructionWidget", (id))
 
 

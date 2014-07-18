@@ -30,6 +30,12 @@
 #include "Tympan/models/business/TYPluginManager.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/gui/tools/TYImageManager.h"
+#include "Tympan/gui/app/OSplashScreen.h"
+#include "Tympan/gui/app/TYMessageManager.h"
+#include "Tympan/gui/app/TYOutputFrame.h"
+#include "Tympan/gui/app/TYProjetFrame.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYApplication.h"
 
 #if defined(WIN32)
   #include <crtdbg.h>

@@ -30,6 +30,8 @@
 #include "Tympan/gui/gl/TYPickingTable.h"
 
 
+#include "TYAcousticSemiCylinderGraphic.h"
+
 TYAcousticSemiCylinderGraphic::TYAcousticSemiCylinderGraphic(TYAcousticSemiCylinder* pElement) :
     TYElementGraphic(pElement)
 {

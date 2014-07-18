@@ -16,20 +16,18 @@
 /**
  * \file TYChemineeSurfaceWidget.cpp
  * \brief outil IHM pour une surface de cheminee
- *
- *
  */
 
-
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/geoacoustic/TYChemineeSurface.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
 
 //Added by qt3to4:
 #include <QMessageBox>
 #include <QGridLayout>
+
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/geoacoustic/TYChemineeSurface.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
+#include "Tympan/gui/widgets/TYAcousticRectangleWidget.h"
+#include "TYChemineeSurfaceWidget.h"
 
 #define TR(id) OLocalizator::getString("TYChemineeSurfaceWidget", (id))
 

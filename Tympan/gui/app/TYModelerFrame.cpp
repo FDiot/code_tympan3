@@ -16,16 +16,12 @@
 /**
  * \file TYModelerFrame.cpp
  * \brief Classe generique pour une fenetre de modeleur
- *
- *
  */
 
 
-
 #ifdef _MSC_VER
-#pragma warning(disable: 4503)
+  #pragma warning(disable: 4503)
 #endif
-
 
 #include <qlayout.h>
 #include <qstring.h>
@@ -46,26 +42,6 @@
 #include <qclipboard.h>
 #include <qmessagebox.h>
 #include <qtoolbutton.h>
-
-//#include <vtkVRMLExporter.h>
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
-#include "Tympan/models/business/geometry/TYGeometryNode.h"
-#include "Tympan/gui/tools/OGLTextElement.h"
-#include "Tympan/gui/OSizeManager.h"
-#include "Tympan/gui/tools/OGLScalarBarElement.h"
-#include "Tympan/gui/tools/OGLLineElement.h"
-#include "Tympan/gui/tools/OGLLightElement.h"
-#include "Tympan/gui/tools/OGLGridElement.h"
-#include "Tympan/gui/tools/OGLCamera.h"
-#include "Tympan/gui/gl/TYSourceLineicGraphic.h"
-#include "Tympan/gui/gl/TYSourceSurfacicGraphic.h"
-#include "Tympan/gui/gl/TYRayGraphic.h"
-
-#include "Tympan/gui/widgets/TYPrintDialog.h"
-#include "TYSetCameraCoordinates.h"
-
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <QWheelEvent>
@@ -79,6 +55,36 @@
 #include <QEvent>
 #include <QImageWriter>
 #include <QPrintDialog>
+
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/infrastructure/TYBatiment.h"
+#include "Tympan/models/business/infrastructure/TYMachine.h"
+#include "Tympan/models/business/geometry/TYGeometryNode.h"
+#include "Tympan/gui/OSizeManager.h"
+#include "Tympan/gui/tools/OGLTextElement.h"
+#include "Tympan/gui/tools/OGLScalarBarElement.h"
+#include "Tympan/gui/tools/OGLLineElement.h"
+#include "Tympan/gui/tools/OGLLightElement.h"
+#include "Tympan/gui/tools/OGLGridElement.h"
+#include "Tympan/gui/tools/OGLCamera.h"
+#include "Tympan/gui/gl/TYSourceLineicGraphic.h"
+#include "Tympan/gui/gl/TYSourceSurfacicGraphic.h"
+#include "Tympan/gui/gl/TYRayGraphic.h"
+#include "Tympan/gui/widgets/TYPrintDialog.h"
+#include "Tympan/gui/app/TYElementPicker.h"
+#include "Tympan/gui/app/TYCameraEditor.h"
+#include "Tympan/gui/app/TYCameraZoneEditor.h"
+#include "Tympan/gui/app/TYCameraStepEditor.h"
+#include "Tympan/gui/app/TYDistanceEditor.h"
+#include "Tympan/gui/app/TYPositionEditor.h"
+#include "Tympan/gui/app/TYPickEditor.h"
+#include "Tympan/gui/app/TYAbstractSceneEditor.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYSetCameraCoordinates.h"
+#include "TYModelerFrame.h"
 
 using namespace Qt;
 

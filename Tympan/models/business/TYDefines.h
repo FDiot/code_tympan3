@@ -13,23 +13,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- */
-
 #ifndef __TY_DEFINES__
 #define __TY_DEFINES__
 
-#include "Tympan/core/defines.h"
 
 #if _MSC_VER > 1000
 #pragma once
 #endif // _MSC_VER > 1000
-
-
-#include "Tympan/core/smartptr.h"
 
 // Pour l'utilisation de la librairie standard STL.
 #include <map>
@@ -41,6 +31,11 @@
 #include <iomanip>
 #include <QString>
 
+
+#include "Tympan/core/defines.h"
+#include "Tympan/core/smartptr.h"
+
+
 /**
  * Declarations des types utilises par les methodes virtuelle d'extension
  * de TYElement. Ces methodes sont :
@@ -48,18 +43,15 @@
  *      TYEditWidget *      TYElement::getEditWidget();
  * </pre>
  */
-
 ///Declarations de types pour l'API IHM et l'Impression.
 #if TY_USE_IHM
-class QWidget;
-
-///Type element IHM de base.
-typedef QWidget     TYEditWidget;
+  class QWidget;
+  ///Type element IHM de base.
+  typedef QWidget     TYEditWidget;
 #else
-///Type element IHM de base.
-typedef void        TYEditWidget;
+  ///Type element IHM de base.
+  typedef void        TYEditWidget;
 #endif
-
 
 
 ////////////////////////////////////////////////////////////////////////////////
