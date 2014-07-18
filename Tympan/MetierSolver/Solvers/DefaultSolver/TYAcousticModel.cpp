@@ -21,8 +21,6 @@
 #include "TYAcousticModel.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYCalcul.h"
 #include "Tympan/MetierSolver/DataManagerMetier/Commun/TYTrajet.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Shape.h"
 #include "Tympan/MetierSolver/AcousticRaytracer/Accelerator/Accelerator.h"
@@ -45,8 +43,6 @@ TYAcousticModel::TYAcousticModel(TYSolver& solver)
       _interference(false),
       _seuilConfondus(0.01),
       _paramH(10.0),
-      _pAtmo(NULL),
-      _pTopographie(NULL),
       _solver(solver)
 {
     _absoNulle = OSpectreComplex(TYComplex(1.0, 0.0));
@@ -58,7 +54,7 @@ TYAcousticModel::~TYAcousticModel()
 
 }
 
-void TYAcousticModel::init(const TYSiteNode& site, const TYCalcul& calcul)
+void TYAcousticModel::init(const TYCalcul& calcul)
 {
     // Calcul de l'expansion geometrique
     _expGeo = calcul.getExpansGeo();
@@ -77,8 +73,6 @@ void TYAcousticModel::init(const TYSiteNode& site, const TYCalcul& calcul)
 
 
     // Definit l'atmosphere courante du site
-    _pAtmo = calcul.getAtmosphere()._pObj;
-
     double pression = calcul.getAtmosphere()._pObj->getPression();
     double temperature = calcul.getAtmosphere()._pObj->getTemperature();
     double hygrometrie = calcul.getAtmosphere()._pObj->getHygrometrie();
@@ -114,19 +108,14 @@ void TYAcousticModel::init(const TYSiteNode& site, const TYCalcul& calcul)
     /// Calcul des trajets horizontaux
     _bCalculTrajetsHorizontaux = calcul.getCalculTrajetsHorizontaux();
 
-
-    // Topographie du site
-    _pTopographie = site.getTopographie()._pObj;
-
-
     // Coefficient multiplicateur pour le calcul des reflexions supplementaires en condition favorable
     _paramH = calcul.getParamH();
 }
 
 
 void TYAcousticModel::compute(  const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, 
-                                TYTrajet& trajet, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, 
-                                TYTabPoint3D& ptsRight )
+                                TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, 
+                                TabPoint3D& ptsRight )
 {
     bool vertical = true, horizontal = false;
 
@@ -176,7 +165,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
 
     // Calcul de la pente moyenne sur le trajet source-recepteur
     OSegment3D penteMoyenne;
-    _pTopographie->penteMoy(rayon, penteMoyenne);
+    meanSlope(rayon, penteMoyenne);
 
     // Etape directe Source-Recepteur
     TYEtape etape1;
@@ -283,16 +272,16 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
 
     // Calcul de la pente moyenne sur le trajet source-recepteur
     OSegment3D penteMoyenne;
-    _pTopographie->penteMoy(rayon, penteMoyenne);
+    meanSlope(rayon, penteMoyenne);
 
 
-    // 1. Chemin direct avec vegetation
-    if (_useVegetation)
-    {
-        computeCheminAvecVeg(rayon, source, penteMoyenne, TabChemin, distance);
+    //// 1. Chemin direct avec vegetation
+    //if (_useVegetation)
+    //{
+    //    computeCheminAvecVeg(rayon, source, penteMoyenne, TabChemin, distance);
 
-        if (TabChemin.size() > 0) { return; }
-    }
+    //    if (TabChemin.size() > 0) { return; }
+    //}
 
     // 1. Conditions homogenes sans vegetation
     TYTabEtape Etapes;
@@ -491,203 +480,203 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
     }
 }
 
-void TYAcousticModel::computeCheminAvecVeg(const OSegment3D& rayon, const tympan::AcousticSource& source, const OSegment3D& penteMoyenne, TYTabChemin& TabChemin, double distance) const
-{
-    double longueur = 0.0;
-    OSegment3D seg;
+//void TYAcousticModel::computeCheminAvecVeg(const OSegment3D& rayon, const tympan::AcousticSource& source, const OSegment3D& penteMoyenne, TYTabChemin& TabChemin, double distance) const
+//{
+//    double longueur = 0.0;
+//    OSegment3D seg;
+//
+//    TYChemin chemin;
+//
+//    TYTabStructSegLPSp tabSegSp;
+//    //
+//    TYTabEtape tabEtapes;
+//
+//    getSpectreAttVegetation(rayon, penteMoyenne, tabSegSp);
+//
+//    if (tabSegSp.size() == 0) { return ; }  // Si pas de vegetation detectee, on retourne l'ensemble des chemins sans obstacles
+//
+//    // Etape 1 : Avant la foret
+//    seg = OSegment3D(rayon._ptA, tabSegSp[0]._segment._ptA);
+//    longueur += seg.longueur();
+//
+//    // Calcul de l'absorption (directivite) de la source
+//    TYEtape Etape;
+//
+//    Etape._pt = rayon._ptA;
+//    Etape._Absorption = source.directivity->lwAdjustment(OVector3D(rayon._ptA, rayon._ptB), rayon.longueur());
+//
+//    // On rentre dans la foret, loup y es tu ?
+//    OPoint3D ext;
+//    OPoint3D lastPoint(rayon._ptA);
+//    OSpectre spectreAtt = OSpectre::getEmptyLinSpectre(); // On cumule les attenuations des differents segments
+//
+//    OPoint3D currentPoint;
+//    OSegment3D currentSeg;
+//
+//    for (unsigned int i = 0; i < tabSegSp.size(); i++)
+//    {
+//        currentPoint._x = tabSegSp[i]._segment._ptA._x;
+//        currentPoint._y = tabSegSp[i]._segment._ptA._y;
+//        currentPoint._z = tabSegSp[i]._segment._ptA._z;
+//
+//        currentSeg._ptA = lastPoint;
+//        currentSeg._ptB = currentPoint;
+//        longueur += currentSeg.longueur();
+//
+//        // On somme les attenuation vegetation (attenuation atmospherique comprise)
+//        spectreAtt = spectreAtt.sum(*tabSegSp[i]._spectreAtt);
+//
+//        if (i != (tabSegSp.size() - 1))
+//        {
+//            ext = OPoint3D(tabSegSp[i + 1]._segment._ptA);
+//        }
+//        else
+//        {
+//            ext = OPoint3D(rayon._ptB);
+//        }
+//
+//        if (OPoint3D(tabSegSp[i]._segment._ptB) != ext)
+//        {
+//            /*
+//                        TYEtape Etape;
+//                        Etape.setPoint(tabSegSp[i]._segment._ptB);
+//                        tabEtapes.push_back(Etape);
+//            */
+//        }
+//
+//        lastPoint = currentPoint;
+//    }
+//
+//    Etape._Attenuation = spectreAtt;
+//    tabEtapes.push_back(Etape);
+//
+//    chemin.setType(CHEMIN_DIRECT);
+//    chemin.setLongueur(longueur);
+//    chemin.setDistance(distance);
+//    chemin.calcAttenuation(tabEtapes, *pSolverAtmos);
+//
+//    TabChemin.push_back(chemin);
+//
+//    // Cleaning tab of segments crossing forest
+//    for (unsigned int i = 0; i < tabSegSp.size(); i++)
+//    {
+//        if (tabSegSp[i]._spectreAtt != NULL) { delete tabSegSp[i]._spectreAtt; tabSegSp[i]._spectreAtt = NULL; }
+//    }
+//    tabSegSp.clear();
+//}
+//
+//void TYAcousticModel::getSpectreAttVegetation(const OSegment3D& rayon, const OSegment3D& penteMoyenne, TYTabStructSegLPSp& tabSegSp) const
+//{
+//    TYStructSegLPSp elmt;
+//    elmt._spectreAtt = NULL;
+//
+//    double  hveg, hA, hB, l;
+//    OPoint3D ptCenter, ptMid, projA, projB, pt, ptTmp;
+//    double R = TY_EDF_FOREST_RAYON;
+//
+//    // Recuperation des terrains et des segments associes le long du rayon
+//    TYTabStructSegPtrTer tabSegTer;
+//    tabSegTer = _pTopographie->sols(rayon);
+//
+//    // Calcul du centre ptCenter du cercle de rayon R passant par les extremites du rayon
+//    // 2 cercles correspondent a ce critere,
+//    // on garde celui dont le centre a l'altitude la plus faible
+//    ptMid = rayon.centreOf();
+//    ptCenter = rayon.centerOfCurvedPath(R);
+//    if (ptCenter._z > ptMid._z)
+//    {
+//        ptCenter._z = ptMid._z - (ptCenter._z - ptMid._z);
+//    }
+//
+//    // Construction du segment segCenter parallele au rayon passant par ptCenter
+//    OVector3D vectCenter(ptCenter);
+//    OVector3D vectMid(rayon._ptA, ptMid);
+//    OVector3D A(vectCenter - vectMid);
+//    OVector3D B(vectCenter + vectMid);
+//    OSegment3D segCenter(A, B);
+//    OVector3D vectAB(A, B);
+//    vectAB.normalize();
+//
+//    for (unsigned int i = 0; i < tabSegTer.size(); i++)
+//    {
+//        // Pour chaque terrain traverse qui possede une vegetation
+//        // on calcule le segment et le spectre associe
+//        if (tabSegTer[i]._terrain->getSol()->getVegetActive())
+//        {
+//            // On considere le segment courant associe a chaque terrain
+//            OSegment3D segTmp(tabSegTer[i]._segment);
+//            OSegment3D seg;
+//            // Calcul de la projection du segment courant sur le rayon
+//            rayon.projection(segTmp._ptA, seg._ptA, _seuilConfondus);
+//            rayon.projection(segTmp._ptB, seg._ptB, _seuilConfondus);
+//            TYVegetation* pVeg = tabSegTer[i]._terrain->getSol()->getVegetation();
+//
+//            // Calcul de la projection du segment courant sur segCenter
+//            segCenter.projection(seg._ptA, projA, _seuilConfondus);
+//            segCenter.projection(seg._ptB, projB, _seuilConfondus);
+//            // Hauteur de vegetation par rapport a segCenter
+//            hveg = pVeg->getHauteur() + OVector3D(segTmp._ptA, projA).norme();
+//
+//            // Hauteur du premier point du segment courant par rapport a segCenter
+//            hA = sqrt(R * R - OVector3D(projA, ptCenter).norme() * OVector3D(projA, ptCenter).norme());
+//            // Hauteur du deuxieme point du segment courant par rapport a segCenter
+//            hB = sqrt(R * R - OVector3D(projB, ptCenter).norme() * OVector3D(projB, ptCenter).norme());
+//            // Distance par rapport a ptCenter et en projection sur segCenter
+//            // de l'extremite de la vegetation
+//            l = sqrt(ABS(R * R - hveg * hveg));
+//
+//            // Si le premier point est en dessous de la vegetation
+//            if (hA < hveg)
+//            {
+//                // Si le deuxieme point est en dessous de la vegetation
+//                if (hB < hveg)
+//                {
+//                    // Si la vegetation est au dessus du cercle
+//                    // le segment est entierement dans la vegetation
+//                    if (hveg > R)
+//                    {
+//                        elmt._segment = seg;
+//                        elmt._spectreAtt = new OSpectre(pVeg->getAtt(seg, *_pAtmo));
+//                        tabSegSp.push_back(elmt);
+//                    }
+//                    else
+//                    {
+//                        ptTmp = OPoint3D(vectCenter - vectAB * l);
+//                        seg.projection(ptTmp, pt, _seuilConfondus);
+//
+//                        elmt._segment = OSegment3D(seg._ptA, pt);
+//                        elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
+//                        tabSegSp.push_back(elmt);
+//
+//                        ptTmp = OPoint3D(vectCenter + vectAB * l);
+//                        seg.projection(ptTmp, pt, _seuilConfondus);
+//                        elmt._segment = OSegment3D(pt, seg._ptB);
+//                        elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
+//                        tabSegSp.push_back(elmt);
+//                    }
+//                }
+//                else
+//                {
+//                    ptTmp = OPoint3D(vectCenter - vectAB * l);
+//                    seg.projection(ptTmp, pt, _seuilConfondus);
+//                    elmt._segment = OSegment3D(seg._ptA, pt);
+//                    elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
+//                    tabSegSp.push_back(elmt);
+//                }
+//            }
+//            else if (hB < hveg)
+//            {
+//                ptTmp = OPoint3D(vectCenter + vectAB * l);
+//                seg.projection(ptTmp, pt, _seuilConfondus);
+//                elmt._segment = OSegment3D(pt, seg._ptB);
+//                elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
+//                tabSegSp.push_back(elmt);
+//            }
+//        }
+//    }
+//}
 
-    TYChemin chemin;
-
-    TYTabStructSegLPSp tabSegSp;
-    //
-    TYTabEtape tabEtapes;
-
-    getSpectreAttVegetation(rayon, penteMoyenne, tabSegSp);
-
-    if (tabSegSp.size() == 0) { return ; }  // Si pas de vegetation detectee, on retourne l'ensemble des chemins sans obstacles
-
-    // Etape 1 : Avant la foret
-    seg = OSegment3D(rayon._ptA, tabSegSp[0]._segment._ptA);
-    longueur += seg.longueur();
-
-    // Calcul de l'absorption (directivite) de la source
-    TYEtape Etape;
-
-    Etape._pt = rayon._ptA;
-    Etape._Absorption = source.directivity->lwAdjustment(OVector3D(rayon._ptA, rayon._ptB), rayon.longueur());
-
-    // On rentre dans la foret, loup y es tu ?
-    OPoint3D ext;
-    OPoint3D lastPoint(rayon._ptA);
-    OSpectre spectreAtt = OSpectre::getEmptyLinSpectre(); // On cumule les attenuations des differents segments
-
-    OPoint3D currentPoint;
-    OSegment3D currentSeg;
-
-    for (unsigned int i = 0; i < tabSegSp.size(); i++)
-    {
-        currentPoint._x = tabSegSp[i]._segment._ptA._x;
-        currentPoint._y = tabSegSp[i]._segment._ptA._y;
-        currentPoint._z = tabSegSp[i]._segment._ptA._z;
-
-        currentSeg._ptA = lastPoint;
-        currentSeg._ptB = currentPoint;
-        longueur += currentSeg.longueur();
-
-        // On somme les attenuation vegetation (attenuation atmospherique comprise)
-        spectreAtt = spectreAtt.sum(*tabSegSp[i]._spectreAtt);
-
-        if (i != (tabSegSp.size() - 1))
-        {
-            ext = OPoint3D(tabSegSp[i + 1]._segment._ptA);
-        }
-        else
-        {
-            ext = OPoint3D(rayon._ptB);
-        }
-
-        if (OPoint3D(tabSegSp[i]._segment._ptB) != ext)
-        {
-            /*
-                        TYEtape Etape;
-                        Etape.setPoint(tabSegSp[i]._segment._ptB);
-                        tabEtapes.push_back(Etape);
-            */
-        }
-
-        lastPoint = currentPoint;
-    }
-
-    Etape._Attenuation = spectreAtt;
-    tabEtapes.push_back(Etape);
-
-    chemin.setType(CHEMIN_DIRECT);
-    chemin.setLongueur(longueur);
-    chemin.setDistance(distance);
-    chemin.calcAttenuation(tabEtapes, *pSolverAtmos);
-
-    TabChemin.push_back(chemin);
-
-    // Cleaning tab of segments crossing forest
-    for (unsigned int i = 0; i < tabSegSp.size(); i++)
-    {
-        if (tabSegSp[i]._spectreAtt != NULL) { delete tabSegSp[i]._spectreAtt; tabSegSp[i]._spectreAtt = NULL; }
-    }
-    tabSegSp.clear();
-}
-
-void TYAcousticModel::getSpectreAttVegetation(const OSegment3D& rayon, const OSegment3D& penteMoyenne, TYTabStructSegLPSp& tabSegSp) const
-{
-    TYStructSegLPSp elmt;
-    elmt._spectreAtt = NULL;
-
-    double  hveg, hA, hB, l;
-    OPoint3D ptCenter, ptMid, projA, projB, pt, ptTmp;
-    double R = TY_EDF_FOREST_RAYON;
-
-    // Recuperation des terrains et des segments associes le long du rayon
-    TYTabStructSegPtrTer tabSegTer;
-    tabSegTer = _pTopographie->sols(rayon);
-
-    // Calcul du centre ptCenter du cercle de rayon R passant par les extremites du rayon
-    // 2 cercles correspondent a ce critere,
-    // on garde celui dont le centre a l'altitude la plus faible
-    ptMid = rayon.centreOf();
-    ptCenter = rayon.centerOfCurvedPath(R);
-    if (ptCenter._z > ptMid._z)
-    {
-        ptCenter._z = ptMid._z - (ptCenter._z - ptMid._z);
-    }
-
-    // Construction du segment segCenter parallele au rayon passant par ptCenter
-    OVector3D vectCenter(ptCenter);
-    OVector3D vectMid(rayon._ptA, ptMid);
-    OVector3D A(vectCenter - vectMid);
-    OVector3D B(vectCenter + vectMid);
-    OSegment3D segCenter(A, B);
-    OVector3D vectAB(A, B);
-    vectAB.normalize();
-
-    for (unsigned int i = 0; i < tabSegTer.size(); i++)
-    {
-        // Pour chaque terrain traverse qui possede une vegetation
-        // on calcule le segment et le spectre associe
-        if (tabSegTer[i]._terrain->getSol()->getVegetActive())
-        {
-            // On considere le segment courant associe a chaque terrain
-            OSegment3D segTmp(tabSegTer[i]._segment);
-            OSegment3D seg;
-            // Calcul de la projection du segment courant sur le rayon
-            rayon.projection(segTmp._ptA, seg._ptA, _seuilConfondus);
-            rayon.projection(segTmp._ptB, seg._ptB, _seuilConfondus);
-            TYVegetation* pVeg = tabSegTer[i]._terrain->getSol()->getVegetation();
-
-            // Calcul de la projection du segment courant sur segCenter
-            segCenter.projection(seg._ptA, projA, _seuilConfondus);
-            segCenter.projection(seg._ptB, projB, _seuilConfondus);
-            // Hauteur de vegetation par rapport a segCenter
-            hveg = pVeg->getHauteur() + OVector3D(segTmp._ptA, projA).norme();
-
-            // Hauteur du premier point du segment courant par rapport a segCenter
-            hA = sqrt(R * R - OVector3D(projA, ptCenter).norme() * OVector3D(projA, ptCenter).norme());
-            // Hauteur du deuxieme point du segment courant par rapport a segCenter
-            hB = sqrt(R * R - OVector3D(projB, ptCenter).norme() * OVector3D(projB, ptCenter).norme());
-            // Distance par rapport a ptCenter et en projection sur segCenter
-            // de l'extremite de la vegetation
-            l = sqrt(ABS(R * R - hveg * hveg));
-
-            // Si le premier point est en dessous de la vegetation
-            if (hA < hveg)
-            {
-                // Si le deuxieme point est en dessous de la vegetation
-                if (hB < hveg)
-                {
-                    // Si la vegetation est au dessus du cercle
-                    // le segment est entierement dans la vegetation
-                    if (hveg > R)
-                    {
-                        elmt._segment = seg;
-                        elmt._spectreAtt = new OSpectre(pVeg->getAtt(seg, *_pAtmo));
-                        tabSegSp.push_back(elmt);
-                    }
-                    else
-                    {
-                        ptTmp = OPoint3D(vectCenter - vectAB * l);
-                        seg.projection(ptTmp, pt, _seuilConfondus);
-
-                        elmt._segment = OSegment3D(seg._ptA, pt);
-                        elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
-                        tabSegSp.push_back(elmt);
-
-                        ptTmp = OPoint3D(vectCenter + vectAB * l);
-                        seg.projection(ptTmp, pt, _seuilConfondus);
-                        elmt._segment = OSegment3D(pt, seg._ptB);
-                        elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
-                        tabSegSp.push_back(elmt);
-                    }
-                }
-                else
-                {
-                    ptTmp = OPoint3D(vectCenter - vectAB * l);
-                    seg.projection(ptTmp, pt, _seuilConfondus);
-                    elmt._segment = OSegment3D(seg._ptA, pt);
-                    elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
-                    tabSegSp.push_back(elmt);
-                }
-            }
-            else if (hB < hveg)
-            {
-                ptTmp = OPoint3D(vectCenter + vectAB * l);
-                seg.projection(ptTmp, pt, _seuilConfondus);
-                elmt._segment = OSegment3D(pt, seg._ptB);
-                elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
-                tabSegSp.push_back(elmt);
-            }
-        }
-    }
-}
-
-bool TYAcousticModel::computeCheminsAvecEcran(const OSegment3D& rayon, const tympan::AcousticSource& source, const TYTabPoint3D& pts, const bool vertical, TYTabChemin& TabChemins, double distance) const
+bool TYAcousticModel::computeCheminsAvecEcran(const OSegment3D& rayon, const tympan::AcousticSource& source, const TabPoint3D& pts, const bool vertical, TYTabChemin& TabChemins, double distance) const
 {
     /* ============================================================================================================
         07/03/2005 : Suppression du calcul ddes pentes moyennes avant et apres l'obstacle.
@@ -715,7 +704,7 @@ bool TYAcousticModel::computeCheminsAvecEcran(const OSegment3D& rayon, const tym
     double longNoReflex = 0.0;
 
     //// Calcul de la pente moyenne sur le trajet source-recepteur
-    _pTopographie->penteMoy(rayon, penteMoyenneTotale);
+    meanSlope(rayon, penteMoyenneTotale);
 
     //                              /*--- AVANT L'OBSTACLE ---*/
 
@@ -1431,3 +1420,31 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OPoint3D& position
 
     return spectre;
 }
+
+void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) const
+{
+    // Search for primitives under the two segment extremities
+
+    // first one
+    Ray ray1( OPoint3Dtovec3(director._ptA), vec3(0., 0., -1.) );
+
+    std::list<Intersection> LI;
+
+    double distance1 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray1, LI ) );
+
+    assert( distance1 > 0. );
+
+    unsigned int indexFace = LI.begin()->p->getPrimitiveId();
+
+    // Second one
+    Ray ray2( OPoint3Dtovec3(director._ptB), vec3(0., 0., -1.) );
+
+    double distance2 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray2, LI ) );
+
+    assert( distance2 > 0. );
+
+    // Compute projection on the ground of segment points suppose sol is under the points ...
+    slope._ptA._z = director._ptA._z - distance1;
+    slope._ptB._z = director._ptB._z - distance2;
+}
+

@@ -38,9 +38,9 @@ TYTask::~TYTask()
 
 void TYTask::main()
 {
-    TYTabPoint3D ptsTop;
-    TYTabPoint3D ptsLeft;
-    TYTabPoint3D ptsRight;
+    TabPoint3D ptsTop;
+    TabPoint3D ptsLeft;
+    TabPoint3D ptsRight;
 
     // Construction du rayon SR
     OSegment3D rayon;

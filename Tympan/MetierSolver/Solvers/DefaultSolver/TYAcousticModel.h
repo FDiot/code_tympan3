@@ -39,10 +39,10 @@ public:
 
     virtual void compute(   const std::deque<TYSIntersection>& tabIntersect, 
                             const OSegment3D& rayon, TYTrajet& trajet, 
-                            TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, 
-                            TYTabPoint3D& ptsRight );
+                            TabPoint3D& ptsTop, TabPoint3D& ptsLeft, 
+                            TabPoint3D& ptsRight );
 
-    void init(const TYSiteNode& site, const TYCalcul& calcul);
+    void init(const TYCalcul& calcul);
 
     /**
      * Calcule le chemin sur un segment a partir de la liste des points du parcours
@@ -61,7 +61,7 @@ public:
      *         <code>false</code> sinon.
      */
     virtual bool computeCheminsAvecEcran(   const OSegment3D& rayon, const tympan::AcousticSource& source, 
-                                            const TYTabPoint3D& pts, const bool vertical, 
+                                            const TabPoint3D& pts, const bool vertical, 
                                             TYTabChemin& TabChemin, double distance ) const;
 
     /**
@@ -77,27 +77,27 @@ public:
                                     const tympan::AcousticSource& source, TYTabChemin& TabChemins, 
                                     double distance ) const;
 
-    /**
-     * Calcule les spectres d'attenuation caracteristiques de la vegetation
-     * pour chaque terrain survole par rayon.
-     *
-     * @param rayon Un segment representant le rayon acoustique.
-     * @param tabSegSp Le tableau dans lequel sont stockes les spectres d'attenuation et segments associes.
-     * @param penteMoyenne La pente moyenne sur le rayon.
-     */
-    void getSpectreAttVegetation(const OSegment3D& rayon, const OSegment3D& penteMoyenne, TYTabStructSegLPSp& tabSegSp) const;
+    ///**
+    // * Calcule les spectres d'attenuation caracteristiques de la vegetation
+    // * pour chaque terrain survole par rayon.
+    // *
+    // * @param rayon Un segment representant le rayon acoustique.
+    // * @param tabSegSp Le tableau dans lequel sont stockes les spectres d'attenuation et segments associes.
+    // * @param penteMoyenne La pente moyenne sur le rayon.
+    // */
+    //void getSpectreAttVegetation(const OSegment3D& rayon, const OSegment3D& penteMoyenne, TYTabStructSegLPSp& tabSegSp) const;
 
-    /**
-     * Calcule le chemin direct en tenant compte de la vegetation.
-     *
-     * @param rayon Un segment representant le rayon acoustique.
-     * @param Atmo L'atmosphere courante.
-     * @param pSrcGeoNode La source ponctuelle.
-     * @param penteMoyenne La pente moyenne sur le rayon.
-     *
-     * @return Le chemin determine.
-     */
-    void computeCheminAvecVeg(const OSegment3D& rayon, const tympan::AcousticSource& source, const OSegment3D& penteMoyenne, TYTabChemin& TabChemin, double distance) const;
+    ///**
+    // * Calcule le chemin direct en tenant compte de la vegetation.
+    // *
+    // * @param rayon Un segment representant le rayon acoustique.
+    // * @param Atmo L'atmosphere courante.
+    // * @param pSrcGeoNode La source ponctuelle.
+    // * @param penteMoyenne La pente moyenne sur le rayon.
+    // *
+    // * @return Le chemin determine.
+    // */
+    //void computeCheminAvecVeg(const OSegment3D& rayon, const tympan::AcousticSource& source, const OSegment3D& penteMoyenne, TYTabChemin& TabChemin, double distance) const;
 
     /**
      * Calcule les chemins avec reflexion au sol s'il n'y a pas d'ecran.
@@ -182,6 +182,8 @@ public:
 private :
     OSpectreComplex getReflexionSpectrumAt(const OPoint3D& position, const OVector3D& direction, double length) const;
 
+    void meanSlope(const OSegment3D& director, OSegment3D& slope) const;
+
 private:
     int  _expGeo;
     int  _typeCalculSol;
@@ -195,11 +197,9 @@ private:
     bool _interference;
     double _seuilConfondus;
     double _paramH;
-    TYAtmosphere* _pAtmo;
 
     std::unique_ptr<tympan::AtmosphericConditions> pSolverAtmos;
 
-    TYTopographie* _pTopographie;
     OSpectre _lambda;
     OSpectreComplex _absoNulle;
 

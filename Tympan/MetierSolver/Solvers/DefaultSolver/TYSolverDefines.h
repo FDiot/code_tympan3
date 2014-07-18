@@ -24,16 +24,14 @@
 #define __TY_SOLVERDEFINES__
 
 #include <deque>
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticSurface.h"
 
+#include "Tympan/models/common/3d.h"
 #include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
 #include "Tympan/models/common/3d.h"
 
 struct TYStructSurfIntersect
 {
-    TYAcousticSurfaceGeoNode* pSurfGeoNode; //Geonode de la surface
-    OMatrix matInv; // Matrice inverse pour les faces d'infrastructure
-    TYTabPoint3D tabPoint; // Tableau de point utilise pour la preselection
+    TabPoint3D tabPoint; // Tableau de point utilise pour la preselection
     OVector3D normal; // Normal to the face
     bool isEcran;   // Est un ecran
     bool isInfra; // Face d'infrastructure
