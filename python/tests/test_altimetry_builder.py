@@ -32,9 +32,23 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         cleaned.equivalent_site.plot(plotter.ax, alt_geom_map=cleaned.geom)
         plotter.show()
 
+    def check_vertices_props(self, mesher, points_and_expectations):
+        for point, expected in points_and_expectations:
+            fh, vh = mesher.locate_point(point)
+            self.assertIsInstance(vh, mesh.Vertex_handle)
+            info = mesher.vertices_info[vh]
+            for k, v in expected.iteritems():
+                self.assertEqual(getattr(info, k), v)
+
     def test_altimetric_base(self):
         self.builder.merge_subsites()
-        self.builder.build_altimetric_base()
-        cleaned = self.builder.cleaned
+        for id_ in ["{Mainsite ref altitude}", "{Subsub level curve}"]:
+            self.assertIn(id_, self.builder.equivalent_site.features_by_id)
+            self.assertIn(id_, self.builder.cleaned.geom)
 
+        self.builder.build_altimetric_base()
         self.assertIsNotNone(self.builder.mesh)
+
+        common_expectations = [((0, 0), {'altitude': self.altitude_A})]
+        self.check_vertices_props(self.builder.alti, common_expectations)
+        self.check_vertices_props(self.builder.mesh, common_expectations)

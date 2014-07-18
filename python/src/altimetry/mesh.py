@@ -695,3 +695,10 @@ class ReferenceElevationMesh(ElevationMesh):
 
     def copy_as_ElevationMesh(self):
         return self.copy(class_=ElevationMesh)
+        for dest_vh in newone.cdt.finite_vertices():
+            _, orig_vh = self.locate_point(dest_vh.point())
+            assert isinstance(orig_vh, Vertex_handle)
+            assert orig_vh.point() == dest_vh.point()
+            orig_info = self.vertices_info[orig_vh]
+            dest_info = newone.vertices_info[dest_vh]
+            dest_info.merge_with(orig_info)
