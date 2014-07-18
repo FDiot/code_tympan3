@@ -8,7 +8,7 @@ from .datamodel import (InconsistentGeometricModel,
                         DEFAULT_MATERIAL, HIDDEN_MATERIAL,
                         elementary_shapes)
 from .merge import recursively_merge_all_subsites
-from .mesh import ElevationMesh, ReferenceElevationMesh
+from .mesh import ElevationMesh, ReferenceElevationMesh,Vertex_handle
 
 class Builder(object):
 
