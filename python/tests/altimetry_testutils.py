@@ -125,7 +125,7 @@ class MesherTestUtilsMixin(object):
     def build_triangle(self):
         cdt = self.mesher.cdt
         (vA, vB), (cAB,) = self.mesher.insert_polyline(
-            [(0, 0), (2, 0)], material='concrete', altitude=0.0)
+            [(0, 0), (2, 0)], id='concrete', altitude=0.0)
         vC = self.mesher.insert_point((1, 1), altitude=10.0)
         self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
         (edgeAB,) = [edge for edge in cdt.finite_edges()

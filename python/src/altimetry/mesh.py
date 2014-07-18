@@ -2,6 +2,7 @@
 Provide triangulation and meshing of a clean, single site, geometry.
 """
 from collections import defaultdict
+import copy
 
 from shapely import geometry as sh_geom
 
@@ -88,8 +89,6 @@ class MeshedCDTWithInfo(object):
     EdgeInfo = dict
     VertexInfo = dict
 
-    _attributes_to_be_copied_with_copy_ = ('_input_vertices_infos', '_input_constraints_infos')
-
     def __init__(self):
         self.cdt = CDT()
         self._input_vertices_infos = {}
@@ -98,15 +97,32 @@ class MeshedCDTWithInfo(object):
     def clear_caches(self):
         pass
 
-    def copy(self, class_=None):
+    def vertices_map_to_other_mesh(self, other_mesh):
+        vmap = {}
+        for orig_vh in self.cdt.finite_vertices():
+            _, dest_vh = other_mesh.locate_point(orig_vh.point())
+            if not isinstance(dest_vh, Vertex_handle):
+                # other_mesh as not vertex at the same position as orig_vh
+                continue
+            assert orig_vh.point() == dest_vh.point()
+            vmap[orig_vh] = dest_vh
+        return vmap
+
+    def copy(self, class_=None, deep=False):
         class_ =  type(self) if class_ is None else class_
-        newone = class_()
-        for attr in self._attributes_to_be_copied_with_copy_:
-            value = getattr(self, attr).copy()
-            setattr(newone, attr, value)
         # Copying a CDT is tricky
         # See http://code.google.com/p/cgal-bindings/issues/detail?id=49
+        newone = class_()
         newone.cdt.deepcopy(self.cdt)
+        vmap = self.vertices_map_to_other_mesh(newone)
+        for orig_vh, orig_info in self._input_vertices_infos.iteritems():
+            dest_vh = vmap[orig_vh]
+            dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
+            newone._input_vertices_infos[dest_vh] = dest_info
+        for (orig_va, orig_vb), orig_info in self._input_constraints_infos.iteritems():
+            dest_va, dest_vb = vmap[orig_va], vmap[orig_vb]
+            dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
+            newone._input_constraints_infos[(dest_va, dest_vb)] = dest_info
         return newone
 
     def count_edges(self):
@@ -528,7 +544,7 @@ class ElevationMesh(MeshedCDTWithInfo):
 
         def __init__(self, altitude=UNSPECIFIED_ALTITUDE, id=None, **kwargs):
             self.altitude = float(altitude)
-            self.ids = (id and [id]) or []
+            self.ids = kwargs.pop('ids', (id and [id]) or [])
 
         def merge_ids(self, other_info):
             ids = getattr(other_info, "ids", None)
@@ -552,6 +568,20 @@ class ElevationMesh(MeshedCDTWithInfo):
             self.merge_altitude(other_info)
             return self # so as to enable using reduce
 
+        def __repr__(self):
+            args = ", ".join(["%s=%r" % kv for kv in self.__dict__.iteritems()])
+            return "".join(["VertexInfo(", args, ")"])
+
+        def __eq__(self, other):
+            if isinstance(other, self.__class__): # XXX type(other) is type(self)
+                return self.__dict__ == other.__dict__
+            else:
+                return False
+
+        def __ne__(self, other):
+            return not self.__eq__(other)
+
+
     EdgeInfo = VertexInfo
 
     def __init__(self):
@@ -562,6 +592,15 @@ class ElevationMesh(MeshedCDTWithInfo):
     def _init_vertices_info_from_input(self):
         for vh, info in self._input_vertices_infos.iteritems():
             self.vertices_info[vh] = info # XXX or copy ?
+
+    def copy(self, class_=None, deep=False):
+        newone = super(ElevationMesh, self).copy(class_=class_, deep=deep)
+        vmap = self.vertices_map_to_other_mesh(newone)
+        for orig_vh, dest_vh in vmap.iteritems():
+            orig_info = self.vertices_info[orig_vh]
+            dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
+            newone.vertices_info[dest_vh] = dest_info
+        return newone
 
     def clear_caches(self):
         self.vertices_info.clear()
@@ -654,7 +693,5 @@ class ReferenceElevationMesh(ElevationMesh):
         assert abs((p3-p2).squared_length()-alti**2) < _PROXIMITY_THRESHOLD*alti
         return alti
 
-
     def copy_as_ElevationMesh(self):
-        newone = self.copy(class_=ElevationMesh)
-        return newone
+        return self.copy(class_=ElevationMesh)

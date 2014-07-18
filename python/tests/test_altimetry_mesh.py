@@ -257,19 +257,22 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
     def test_copy(self):
         cdt = self.mesher.cdt
-        (vA, vB, vC, edgeAB, faceABC) = self.build_triangle()
+        (vA, vB, vC, _, _) = self.build_triangle()
 
         mesher2 = self.mesher.copy()
-        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1, mesher=mesher2)
+
         vD = mesher2.insert_point((1, -1), altitude=20.0)
         self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
         self.assert_basic_counts(faces=2, vertices=4, edges=5, constrained=1, mesher=mesher2)
 
         # Test use of faces and edges identifier across the copy
-        self.assertEqual(mesher2.point_for_face(faceABC),
-                         self.mesher.point_for_face(faceABC))
-        self.assertEqual(mesher2.segment_for_edge(edgeAB),
-                         self.mesher.segment_for_edge(edgeAB))
+        vmap = self.mesher.vertices_map_to_other_mesh(mesher2)
+        edgeAB2 = ((vmap[vA], vmap[vB]))
+
+        self.assertEqual(mesher2.input_constraint_infos(edgeAB2),
+                         mesher2.VertexInfo(id='concrete', altitude=0.0))
+        self.assertIsNot(mesher2.input_constraint_infos(edgeAB2),
+                         self.mesher.input_constraint_infos((vA, vB)))
 
     def test_mirror_half_edge(self):
         cdt = self.mesher.cdt
@@ -351,16 +354,28 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         self.assertEqual(vertices_info[vA].altitude, 10)
         self.assertIs(vertices_info[vO].altitude, mesh.UNSPECIFIED_ALTITUDE)
 
+    def test_copy_elevation_mesh(self):
+        cdt = self.mesher.cdt
+        (vA, vB, vC, _, _) = self.build_triangle()
+        vD = self.mesher.insert_point((0, 1), altitude=0.0, id="stuff")
+
+        mesher2 = self.mesher.copy()
+        vmap = self.mesher.vertices_map_to_other_mesh(mesher2)
+
+        self.assertEqual(self.mesher.vertices_info[vD],
+                         mesher2.vertices_info[vmap[vD]])
+        self.assertIsNot(self.mesher.vertices_info[vD],
+                         mesher2.vertices_info[vmap[vD]])
+
     def test_copy_as_base_class_and_compute_altitude(self):
         cdt = self.mesher.cdt
         (vA, vB, vC, edgeAB, faceABC) = self.build_triangle()
         slope = self.mesher.altitude_for_input_vertex(vC) / vC.point().y()
-        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
 
         mesher2 = self.mesher.copy_as_ElevationMesh()
-        self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1, mesher=mesher2)
         vD = mesher2.insert_point((1, 0.5)) # Altitude is missing and this should be OK
         mesher2.update_altitude_from_reference(self.mesher.point_altitude)
+
         self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
         self.assert_basic_counts(faces=3, vertices=4, edges=6, constrained=1, mesher=mesher2)
         self.assertEqual(mesher2.vertices_info[vD].altitude, slope*0.5)
