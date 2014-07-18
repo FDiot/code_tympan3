@@ -72,7 +72,7 @@ public:
 
     BBox getGlobalBox() { return globalBox; }
 
-    Accelerator* getAccelerator() { return accelerator; }
+    Accelerator* getAccelerator() const { return accelerator; }
 
     std::vector<Shape*>* getShapes() { return &shapes; }
     std::vector<vec3>* getVertices() { return &vertices; }

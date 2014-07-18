@@ -354,7 +354,7 @@ public:
 
     decimal diag() { return sqrt((pMax.x - pMin.x) * (pMax.x - pMin.x) + (pMax.y - pMin.y) * (pMax.y - pMin.y) + (pMax.z - pMin.z) * (pMax.z - pMin.z)); }
 
-    bool Inside(vec3& pt)
+    bool Inside(vec3& pt) const
     {
         return (pt.x >= pMin.x && pt.x <= pMax.x &&
                 pt.y >= pMin.y && pt.y <= pMax.y &&
