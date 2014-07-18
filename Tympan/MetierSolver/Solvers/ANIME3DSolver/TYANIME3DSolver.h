@@ -40,7 +40,7 @@ class Lancer;
 struct TYStructSurfIntersect
 {
     OMatrix matInv;                         // Matrice inverse pour les faces d'infrastructure
-    TYTabPoint tabPoint;                    // Tableau de point utilise pour la preselection
+    TabPoint3D tabPoint;                    // Tableau de point utilise pour la preselection
     bool isEcran;                           // Est un ecran
     bool isInfra;                           // Face d'infrastructure
     OVector3D normal;                       //Normale de la surface

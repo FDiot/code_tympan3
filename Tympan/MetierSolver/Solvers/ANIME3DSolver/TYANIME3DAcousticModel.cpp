@@ -82,7 +82,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
     OPoint3D Prefl, Pprec, Psuiv;    //pt de reflexion, pt precedent et suivant
 
     OTabDouble tabPondFresnel;      // tableau des ponderations de Fresnel
-    TYTabPoint3D triangleCentre;    // Contains all triangles centres
+    TabPoint3D triangleCentre;    // Contains all triangles centres
 
     OSpectreComplex spectreAbs;
     OSpectreComplex zero = OSpectreComplex(OSpectre(1.0));
