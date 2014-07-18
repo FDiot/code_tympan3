@@ -11,9 +11,6 @@ file (GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp )
 set (DXF_DEPEND_FILES ${PROJECT_SOURCE_DIR}/Tympan/gui/app/TYDXFBDTOPOImporter.cpp
   ${PROJECT_SOURCE_DIR}/Tympan/gui/app/TYDXFImporter.cpp)
 
-set (TYMPAN_MODULES tympan_models_business tympan_gui_gl tympan_gui_widgets
-     tympan_models_common tympan_models_common tympan_gui tympan_models_common)
-
 # Main loop for all CPP test files.
 foreach (testfile ${TESTS_SRC})
   get_filename_component (basename ${testfile} NAME_WE)
