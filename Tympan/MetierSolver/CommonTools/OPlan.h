@@ -226,7 +226,7 @@ public:
      * \fn int intersectsSurface(const std::deque<OPoint3D>& tabPoints, OSegment3D& segment);
      * \brief compute intersection between a plan and a surface defined by his bounds
      */
-    int intersectsSurface(const std::deque<OPoint3D>& contour, OSegment3D& segment) const;
+    int intersectsSurface(const TabPoint3D& contour, OSegment3D& segment) const;
 
     /**
      * \fn bool isInPlan(const OPoint3D& pt);
