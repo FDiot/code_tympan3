@@ -27,18 +27,13 @@ TYTask::TYTask(TYSolver& solver, const tympan::nodes_pool_t& nodes, const tympan
     _nodes(nodes),
     _triangles(triangles),
     _materials(materials), 
-    _nNbTrajets(nNbTrajets), 
-    _tabIntersect(0)
+    _nNbTrajets(nNbTrajets) 
 {
 
 }
 
 TYTask::~TYTask()
 {
-    if (_tabIntersect)
-    {
-        delete [] _tabIntersect;
-    }
 }
 
 void TYTask::main()
@@ -51,23 +46,14 @@ void TYTask::main()
     OSegment3D rayon;
     _trajet.getPtSetPtRfromOSeg3D(rayon);
 
-    // Initialisation du tableau des intersections
-    _tabIntersect = new TYSIntersection[_solver.getTabPolygonSize()];
-
     // On selectionne les faces de la scene concernes par le calcul acoustique pour la paire concernee
     _solver.getFaceSelector()->selectFaces(_tabIntersect, rayon);
 
     // On calcul les trajets acoustiques horizontaux et verticaux reliant la paire source/recepteur
-    _solver.getAcousticPathFinder()->computePath(_tabIntersect, rayon, ptsTop, ptsLeft, ptsRight, _nNbTrajets);
+    _solver.getAcousticPathFinder()->computePath(_tabIntersect, rayon, ptsTop, ptsLeft, ptsRight);
 
     // On effectue les calculs acoustiques en utilisant les formules du modele acoustique
     _solver.getAcousticModel()->compute(_tabIntersect, rayon, _trajet, ptsTop, ptsLeft, ptsRight);
-
-    if (_tabIntersect)
-    {
-        delete [] _tabIntersect;
-    }
-    _tabIntersect = NULL;
 
     ptsTop.clear();
     ptsLeft.clear();

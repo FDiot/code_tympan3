@@ -28,7 +28,7 @@ public:
     TYFaceSelector(TYSolver& solver);
     virtual ~TYFaceSelector();
 
-    virtual void selectFaces(TYSIntersection* tabIntersect, const OSegment3D& rayon);
+    virtual void selectFaces(std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon);
 
 protected :
     // Reference sur le solver

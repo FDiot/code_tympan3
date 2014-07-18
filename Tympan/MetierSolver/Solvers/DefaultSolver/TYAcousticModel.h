@@ -37,7 +37,11 @@ public:
     TYAcousticModel(TYSolver& solver);
     virtual ~TYAcousticModel();
 
-    virtual void compute(const TYSIntersection* tabIntersect, const OSegment3D& rayon, TYTrajet& trajet, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight);
+    virtual void compute(   const std::deque<TYSIntersection>& tabIntersect, 
+                            const OSegment3D& rayon, TYTrajet& trajet, 
+                            TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, 
+                            TYTabPoint3D& ptsRight );
+
     void init(const TYSiteNode& site, const TYCalcul& calcul);
 
     /**
@@ -56,7 +60,9 @@ public:
      * @return <code>true</code> si le calcul a reussi;
      *         <code>false</code> sinon.
      */
-    virtual bool computeCheminsAvecEcran(const OSegment3D& rayon, const tympan::AcousticSource& source, const TYTabPoint3D& pts, const bool vertical, TYTabChemin& TabChemin, double distance) const;
+    virtual bool computeCheminsAvecEcran(   const OSegment3D& rayon, const tympan::AcousticSource& source, 
+                                            const TYTabPoint3D& pts, const bool vertical, 
+                                            TYTabChemin& TabChemin, double distance ) const;
 
     /**
      * Calcule la liste des chemins generes par la reflexion sur les parois verticales.
@@ -67,7 +73,9 @@ public:
      * @param tabChemin La liste des chemins generes par la reflexion.
      * @param tabFaces Ensemble des faces du site.
      */
-    void computeCheminReflexion(const TYSIntersection* tabIntersect, const OSegment3D& rayon, const tympan::AcousticSource& source, TYTabChemin& TabChemins, double distance) const;
+    void computeCheminReflexion(    const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, 
+                                    const tympan::AcousticSource& source, TYTabChemin& TabChemins, 
+                                    double distance ) const;
 
     /**
      * Calcule les spectres d'attenuation caracteristiques de la vegetation
@@ -170,6 +178,9 @@ public:
      * Renvoi le materiau de la face rencontree par le rayon incident
      */
     TYMateriauConstruction* getMateriauFace(TYAcousticSurface* pSurf, const OSegment3D& seg) const;
+
+private :
+    OSpectreComplex getReflexionSpectrumAt(const OPoint3D& position, const OVector3D& direction, double length) const;
 
 private:
     int  _expGeo;

@@ -16,6 +16,7 @@
 #ifndef __TY_TASK__
 #define __TY_TASK__
 
+#include <deque>
 #include "Tympan/MetierSolver/ToolsMetier/OTask.h"
 
 class TYSolver;
@@ -50,7 +51,7 @@ private:
     unsigned int _nNbTrajets;
 
     // Tableau des intersections
-    TYSIntersection* _tabIntersect;
+    std::deque<TYSIntersection> _tabIntersect;
 
     const tympan::nodes_pool_t& _nodes;
     const tympan::triangle_pool_t& _triangles;
