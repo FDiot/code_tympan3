@@ -544,12 +544,12 @@ class ElevationMesh(MeshedCDTWithInfo):
 
         def __init__(self, altitude=UNSPECIFIED_ALTITUDE, id=None, **kwargs):
             self.altitude = float(altitude)
-            self.ids = kwargs.pop('ids', (id and [id]) or [])
+            self.ids = kwargs.pop('ids', set((id and [id]) or []))
 
         def merge_ids(self, other_info):
             ids = getattr(other_info, "ids", None)
             if ids is None: return
-            self.ids += ids
+            self.ids.update(ids)
 
         def merge_altitude(self, other_info):
             alti = getattr(other_info, "altitude", UNSPECIFIED_ALTITUDE)
