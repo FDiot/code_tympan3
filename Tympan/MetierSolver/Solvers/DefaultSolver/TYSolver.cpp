@@ -88,7 +88,7 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
     _acousticPathFinder->init(calcul);
 
     // Initialisation du acoustic model
-    _acousticModel->init(site, calcul);
+    _acousticModel->init(calcul);
 
     // On reset la thread pool
     _pool->begin(count);

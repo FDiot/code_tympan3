@@ -27,6 +27,7 @@
 #include "TYSolverDefines.h"
 
 class TYSolver;
+class TYCalcul;
 
 class TYAcousticPathFinder : public TYAcousticPathFinderInterface
 {
@@ -34,14 +35,14 @@ public:
     TYAcousticPathFinder(TYSolver& solver);
     virtual ~TYAcousticPathFinder();
 
-    virtual void computePath(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight);
+    virtual void computePath(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, TabPoint3D& ptsRight);
     virtual void init(TYCalcul& calcul);
 
 private :
     // Reference sur le solver
     TYSolver& _solver;
 
-    bool computeParcoursLateraux(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, const bool& dessus, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight) const;
+    bool computeParcoursLateraux(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, const bool& dessus, TabPoint3D& ptsLeft, TabPoint3D& ptsRight) const;
 
     // Faut il calculer les trajets horizontaux
     bool _bCalcTrajetHorizontaux;

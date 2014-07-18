@@ -13,7 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticVolume.h"
 #include "Tympan/core/defines.h"
 
 #include "TYFaceSelector.h"

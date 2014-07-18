@@ -40,7 +40,7 @@ void TYAcousticPathFinder::init(TYCalcul& calcul)
     _bCalcTrajetHorizontaux = calcul.getCalculTrajetsHorizontaux();
 }
 
-void TYAcousticPathFinder::computePath(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight)
+void TYAcousticPathFinder::computePath(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, TabPoint3D& ptsRight)
 {
     bool dessus = true, lateral = false;
 
@@ -53,7 +53,7 @@ void TYAcousticPathFinder::computePath(const std::deque<TYSIntersection>& tabInt
     computeParcoursLateraux(tabIntersect, rayon, lateral, ptsLeft, ptsRight);
 }
 
-bool TYAcousticPathFinder::computeParcoursLateraux(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, const bool& dessus, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight) const
+bool TYAcousticPathFinder::computeParcoursLateraux(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, const bool& dessus, TabPoint3D& ptsLeft, TabPoint3D& ptsRight) const
 {
     // Si on est en trajet lateral non demande par le calcul
     if (!_bCalcTrajetHorizontaux && !dessus) { return false; }
