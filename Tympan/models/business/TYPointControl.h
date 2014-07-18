@@ -13,20 +13,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TY_POINTCONTROL__
 #define __TY_POINTCONTROL__
 
-
-#include "TYPointCalcul.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #include "Tympan/models/business/TYColorInterface.h"
+#include "Tympan/models/business/TYPointCalcul.h"
 
 
 /**

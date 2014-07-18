@@ -16,18 +16,17 @@
 /**
  * \file TYSolWidget.cpp
  * \brief outil IHM pour un sol
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/material/TYSol.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
+
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/material/TYSol.h"
+#include "TYSolWidget.h"
+#include "Tympan/gui/widgets/TYSolResistanceDialog.h"
 
 #define TR(id) OLocalizator::getString("TYSolWidget", (id))
 

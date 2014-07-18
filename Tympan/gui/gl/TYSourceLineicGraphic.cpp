@@ -26,6 +26,8 @@
 #include "Tympan/models/business/acoustic/TYSourceLineic.h"
 
 
+#include "TYSourceLineicGraphic.h"
+
 bool TYSourceLineicGraphic::_gVisible = false;
 
 

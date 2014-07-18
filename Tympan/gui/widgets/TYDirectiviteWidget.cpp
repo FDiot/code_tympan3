@@ -34,6 +34,8 @@
 #include <QHeaderView>
 
 
+#include "TYDirectiviteWidget.h"
+
 #define TR(id) OLocalizator::getString("TYDirectiviteWidget", (id))
 
 

@@ -16,20 +16,18 @@
 /**
  * \file TYEcranWidget.cpp
  * \brief Outil IHM pour un ecran
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/infrastructure/TYEcran.h"
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 //Added by qt3to4:
 #include <QGridLayout>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
+#include "Tympan/gui/widgets/TYAcousticFaceSetWidget.h"
+#include "TYEcranWidget.h"
 
 #define TR(id) OLocalizator::getString("TYEcranWidget", (id))
 

@@ -13,21 +13,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYMurWidget.h"
 #include "Tympan/gui/gl/TYMurGraphic.h"
 #endif
 
 
-#include "TYMur.h"
-#include "Tympan/models/common/3d.h"
-
-
 #include "Tympan/core/logging.h"
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/business/infrastructure/TYMurElement.h"
+#include "Tympan/models/business/infrastructure/TYEtage.h"
+#include "TYMur.h"
 
 
 TY_EXTENSION_INST(TYMur);

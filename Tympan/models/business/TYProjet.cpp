@@ -13,29 +13,25 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
+
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYPluginManager.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "TYProjet.h"
 
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYProjetWidget.h"
-#include "Tympan/gui/gl/TYProjetGraphic.h"
+  #include "Tympan/gui/widgets/TYProjetWidget.h"
+  #include "Tympan/gui/gl/TYProjetGraphic.h"
 #endif
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/core/logging.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
-
-#include "Tympan/models/business/TYPluginManager.h"
 
 
 TY_EXTENSION_INST(TYProjet);

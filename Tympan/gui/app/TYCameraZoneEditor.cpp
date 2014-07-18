@@ -16,21 +16,8 @@
 /**
  * \file TYCameraZoneEditor.cpp
  * \brief gestion de zoom par zone selectionnee (fichier obsolete)
- *
- *
  */
 
-
-
-
-
-#include "Tympan/gui/tools/OGLRectangleElement.h"
-
-#include "Tympan/gui/gl/TYPointGraphic.h"
-
-#include "Tympan/models/business/geometry/TYRepere.h"
-#include "TYApplication.h"
-#include "Tympan/models/business/OLocalizator.h"
 #include <cmath>
 
 #include <qdialog.h>
@@ -41,19 +28,27 @@
 #include <qlayout.h>
 #include <qcursor.h>
 
+#include "Tympan/models/business/geometry/TYRepere.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/gui/tools/OGLRectangleElement.h"
+#include "Tympan/gui/gl/TYPointGraphic.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYCameraEditor.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "TYCameraZoneEditor.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
-
 
 #ifndef min
-#define min(a,b)            (((a) < (b)) ? (a) : (b))
+  #define min(a,b)            (((a) < (b)) ? (a) : (b))
 #endif
 
 #define TR(id) OLocalizator::getString("TYCameraZoneEditor", (id))

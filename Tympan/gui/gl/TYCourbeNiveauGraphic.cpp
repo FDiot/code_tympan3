@@ -16,17 +16,13 @@
 /**
  * \file TYCourbeNiveauGraphic.cpp
  * \brief Representation graphique d'une courbe de niveau
- *
- *
  */
 
 
-
-
 #include "Tympan/models/business/topography/TYCourbeNiveau.h"
-
 #include "Tympan/models/business/TYPreferenceManager.h"
-
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYCourbeNiveauGraphic.h"
 
 
 TYCourbeNiveauGraphic::TYCourbeNiveauGraphic(TYCourbeNiveau* pElement) :

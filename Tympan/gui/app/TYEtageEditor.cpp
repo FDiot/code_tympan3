@@ -16,21 +16,8 @@
 /**
  * \file TYEtageEditor.cpp
  * \brief Construit un etage a partir des points saisis
- *
- *
  */
 
-
-
-
-
-#include "Tympan/models/business/TYPreferenceManager.h"
-#include "Tympan/models/business/OLocalizator.h"
-
-#include "Tympan/models/business/infrastructure/TYEtage.h"
-#include "Tympan/models/business/infrastructure/TYEcran.h"
-#include "Tympan/models/common/3d.h"
-#include "TYActions.h"
 
 #include <qmessagebox.h>
 #include <qdialog.h>
@@ -43,16 +30,32 @@
 #include <QGridLayout>
 #include <QGroupBox>
 
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYPointControl.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/infrastructure/TYInfrastructure.h"
+#include "Tympan/models/business/infrastructure/TYBatiment.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYEtage.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
+#include "Tympan/models/common/3d.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYBatimentModelerFrame.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYEtageEditor.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
-
 
 #define TR(id) OLocalizator::getString("TYEtageEditor", (id))
 

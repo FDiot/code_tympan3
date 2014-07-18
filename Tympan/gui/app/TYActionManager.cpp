@@ -16,27 +16,24 @@
 /**
  * \file TYActionManager.cpp
  * \brief Gere les undos
- *
- *
  */
-
 
 
 //Added by qt3to4:
 #include <QList>
 
 #if defined(WIN32)
-#include <crtdbg.h>
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
-#if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
-
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYActionManager.h"
 
 TYActionManager::TYActionManager(int size)
     : _current(-1), _size(size),  _savedAt(-1), _modified(false)

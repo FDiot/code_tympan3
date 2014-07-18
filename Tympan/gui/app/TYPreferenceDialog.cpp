@@ -16,12 +16,7 @@
 /**
  * \file TYPreferenceDialog.cpp
  * \brief Table generale dans le dialog de la gestion des preferences
- *
- *
  */
-
-
-
 
 
 #include <qslider.h>
@@ -31,45 +26,42 @@
 #include <qbuttongroup.h>
 #include <qradiobutton.h>
 #include <qgridlayout.h>
-
 #include <qcombobox.h>
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qpushbutton.h>
 #include <qvalidator.h>
 #include <qfiledialog.h>
-
-#include "Tympan/gui/widgets/TYSolResistanceDialog.h"
-
-#include "Tympan/gui/widgets/TYToolButton.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
-#include "Tympan/models/business/OLocalizator.h"
-
-#include "Tympan/models/business/TYMaillage.h"
-#include "Tympan/models/business/acoustic/TYSpectre.h"
-
 //Added by qt3to4:
 #include <QHideEvent>
-//#include <QDialogButtonBox>
 // CLM-NT35: Gestion MDI avec QT4.7
 #ifdef USE_QMDIAREA
-#include <QMdiSubWindow>
-#include <QMdiArea>
+  #include <QMdiSubWindow>
+  #include <QMdiArea>
 #else
-#include <QWorkspace>
+  #include <QWorkspace>
 #endif
 // CLM-NT35 End
 
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/acoustic/TYSpectre.h"
+#include "Tympan/gui/widgets/TYSolResistanceDialog.h"
+#include "Tympan/gui/widgets/TYToolButton.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYPreferenceDialog.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
-
 
 #define TR(id) OLocalizator::getString("TYPreferenceDialog", (id))
 

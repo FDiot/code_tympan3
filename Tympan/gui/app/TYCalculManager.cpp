@@ -31,7 +31,9 @@
 #include "Tympan/models/business/xml_project_util.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/EnvironmentUtils.h"
+#include "Tympan/gui/app/TYProjetFrame.h"
 #include "Tympan/gui/app/TYMessageManager.h"
+#include "Tympan/gui/app/TYMainWindow.h"
 #include "TYCalculManager.h"
 
 #if defined(WIN32)

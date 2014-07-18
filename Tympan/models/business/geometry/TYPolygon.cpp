@@ -13,35 +13,27 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYPolygonWidget.h"
-#include "Tympan/gui/gl/TYPolygonGraphic.h"
-#endif
-
 #include <memory>
+#include <vector>
 
+#include <boost/foreach.hpp>
 
-#include "Tympan/models/common/3d.h"
 #include "Tympan/core/defines.h"
-#include "TYRectangle.h"
-#include "TYPolygon.h"
+#include "Tympan/core/logging.h"
+#include "Tympan/core/chrono.h"
+#include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #include "Tympan/models/business/cgal_bridge.h"
-
+#include "TYRectangle.h"
 #include "TYGeometryNode.h"
-
-#include "Tympan/core/logging.h"
-#include "Tympan/core/chrono.h"
-
-
 #if TY_USE_IHM
-#include "Tympan/models/common/delaunay_maker.h"
-#endif // TY_USE_IHM
+  #include "Tympan/gui/widgets/TYPolygonWidget.h"
+  #include "Tympan/gui/gl/TYPolygonGraphic.h"
+  #include "Tympan/models/common/delaunay_maker.h"
+#endif
+#include "TYPolygon.h"
+
 
 
 TY_EXTENSION_INST(TYPolygon);
@@ -740,7 +732,7 @@ void TYPolygon::inverseNormale()
 {
     TYTabPoint tabPtsTemp = _pts;
     _pts.clear();
-    vector<TYPoint>::reverse_iterator it;
+    std::vector<TYPoint>::reverse_iterator it;
     for (it = tabPtsTemp.rbegin(); it != tabPtsTemp.rend(); it++)
     {
         _pts.push_back((*it));

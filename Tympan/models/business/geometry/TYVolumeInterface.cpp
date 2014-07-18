@@ -13,12 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
-
+#include "Tympan/models/business/geometry/TYPolygon.h"
+#include "TYVolumeInterface.h"
 
 
 TYBox TYVolumeInterface::volEnglob() const

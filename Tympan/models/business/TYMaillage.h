@@ -13,23 +13,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TY_Maillage__
 #define __TY_Maillage__
 
 
-#include "TYPointCalcul.h"
-#include "Tympan/models/business/geometry/TYGeometryNode.h"
-#include "TYPalette.h"
-#include "TYPanel.h"
-
 #include "Tympan/core/defines.h"
+#include "Tympan/models/business/geometry/TYGeometryNode.h"
+#include "Tympan/models/business/TYPointCalcul.h"
+#include "Tympan/models/business/TYPalette.h"
+#include "Tympan/models/business/TYPanel.h"
+
+class TYCalcul;
 
 ///Densite (nb de points par metre) par defaut pour la construction des maillages.
 static const double TY_MAILLAGE_DEFAULT_DENSITE = 0.1; // 1 point tous les 10m

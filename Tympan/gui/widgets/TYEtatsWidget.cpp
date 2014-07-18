@@ -48,6 +48,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
+#include "TYEtatsWidget.h"
+
 #define TR(id) OLocalizator::getString("TYCalculWidget", (id))
 
 

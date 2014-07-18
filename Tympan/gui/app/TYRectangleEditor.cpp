@@ -16,38 +16,40 @@
 /**
  * \file TYRectangleEditor.cpp
  * \brief gestion de l'edition d'un rectangle
- *
- *
  */
 
-
-
-
-
-#include "Tympan/gui/tools/OGLRectangleElement.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
-#include "Tympan/models/business/geoacoustic/TYBoucheSurface.h"
-#include "Tympan/models/business/geoacoustic/TYChemineeSurface.h"
-
-#include "Tympan/gui/gl/TYPointGraphic.h"
-
-#include "Tympan/models/business/geometry/TYRepere.h"
-#include "Tympan/models/business/OLocalizator.h"
-
-#include "Tympan/core/exceptions.h"
 
 #include <iostream>
 #include <qmessagebox.h>
 
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
+#include "Tympan/core/exceptions.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
+#include "Tympan/models/business/geoacoustic/TYBoucheSurface.h"
+#include "Tympan/models/business/geoacoustic/TYChemineeSurface.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
+#include "Tympan/models/business/geometry/TYRepere.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYMachine.h"
+#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
+#include "Tympan/models/business/TYPointControl.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/gui/gl/TYPointGraphic.h"
+#include "Tympan/gui/tools/OGLRectangleElement.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYFaceModelerFrame.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "TYRectangleEditor.h"
 
+#if defined(WIN32)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
+#endif
 
 #define TR(id) OLocalizator::getString("TYRectangleEditor", (id))
 

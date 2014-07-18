@@ -16,15 +16,9 @@
 /**
  * \file TYEtageWidget.cpp
  * \brief outil IHM pour un etage
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/infrastructure/TYEtage.h"
 #include <qmenu.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
@@ -37,6 +31,11 @@
 #include <QVBoxLayout>
 #include <QTreeWidgetItem>
 #include <QHeaderView>
+
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYEtage.h"
+#include "Tympan/gui/widgets/TYAcousticVolumeWidget.h"
+#include "TYEtageWidget.h"
 
 using namespace Qt;
 

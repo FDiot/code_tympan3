@@ -13,14 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
-
-
-
+#include "TYChemin.h"
 
 TYChemin::TYChemin() :  _typeChemin(CHEMIN_DIRECT), _longueur(0.0), _distance(0.0)
 {

@@ -26,6 +26,8 @@
 #include "Tympan/models/business/geoacoustic/TYAcousticBox.h"
 
 
+#include "TYAcousticBoxGraphic.h"
+
 TYAcousticBoxGraphic::TYAcousticBoxGraphic(TYAcousticBox* pElement) :
     TYElementGraphic(pElement)
 {

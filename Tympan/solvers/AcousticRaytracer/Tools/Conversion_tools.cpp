@@ -4,6 +4,8 @@
 #include "Tympan/solvers/AnalyticRayTracer/geometry_modifier.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Conversion_tools.h"
 
+#include "Conversion_tools.h"
+
 namespace Tools
 {
 

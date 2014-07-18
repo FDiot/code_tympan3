@@ -16,14 +16,13 @@
 /**
  * \file TYAction.cpp
  * \brief Definit une action, necessaire pour la gestion de l'undo
- *
- *
  */
 
 
-
-
 #include <qstring.h>
+
+#include "TYAction.h"
+
 
 TYAction::TYAction(const QString& actionName)
     : _actionName(actionName)

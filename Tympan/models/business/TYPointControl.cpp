@@ -13,17 +13,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "TYPointControl.h"
 
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYPointControlWidget.h"
-#include "Tympan/gui/gl/TYPointControlGraphic.h"
+  #include "Tympan/gui/widgets/TYPointControlWidget.h"
+  #include "Tympan/gui/gl/TYPointControlGraphic.h"
 #endif
-
-
-#include "Tympan/core/logging.h"
 
 
 TY_EXTENSION_INST(TYPointControl);
@@ -167,8 +166,6 @@ int TYPointControl::fromXML(DOM_Element domElement)
 
 void TYPointControl::purge(TYCalcul* pCalcul)
 {
-    //_pSpectre = new TYSpectre();
-    //_pSpectre->setType(SPECTRE_TYPE_LP);
     if (pCalcul == NULL)
     {
         TYMapIdSpectre::iterator it_s;
@@ -187,10 +184,6 @@ void TYPointControl::purge(TYCalcul* pCalcul)
 
 void TYPointControl::toSIG()
 {
-    //TYCalcul* pCalcul = TYCalcul::safeDownCast(getParent());
-    //LPTYSiteNode pSite = NULL;
-    //if (pCalcul) pSite = pCalcul->getSite();
-
     TYProjet* pProjet = TYProjet::safeDownCast(getParent());
     TYSiteNode* pSite = NULL;
     if (pProjet)
@@ -208,10 +201,6 @@ void TYPointControl::toSIG()
 
 void TYPointControl::fromSIG()
 {
-    //TYCalcul* pCalcul = TYCalcul::safeDownCast(getParent());
-    //LPTYSiteNode pSite = NULL;
-    //if (pCalcul) pSite = pCalcul->getSite();
-
     TYProjet* pProjet = TYProjet::safeDownCast(getParent());
     TYSiteNode* pSite = NULL;
     if (pProjet)

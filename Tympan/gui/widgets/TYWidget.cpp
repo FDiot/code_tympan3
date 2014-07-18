@@ -30,6 +30,8 @@
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYElement.h"
 
+#include "TYWidget.h"
+
 #define TR(id) OLocalizator::getString("TYWidget", (id))
 
 

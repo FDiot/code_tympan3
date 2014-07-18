@@ -18,10 +18,6 @@
  * \brief Frame pour la gestion de projet (fichier header)
  * \author Projet_Tympan
  *
- *
- *
- *
- *
  */
 
 #ifndef __TY_PROJET_FRAME__

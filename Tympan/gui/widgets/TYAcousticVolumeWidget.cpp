@@ -16,18 +16,18 @@
 /**
  * \file TYAcousticVolumeWidget.cpp
  * \brief outil IHM pour un volume acoustique
- *
- *
  */
 
 
+//Added by qt3to4:
+#include <QGridLayout>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticVolume.h"
 #include "Tympan/models/business/infrastructure/TYEtage.h"
-//Added by qt3to4:
-#include <QGridLayout>
-
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYAcousticInterfaceWidget.h"
+#include "TYAcousticVolumeWidget.h"
 
 #define TR(id) OLocalizator::getString("TYAcousticVolumeWidget", (id))
 

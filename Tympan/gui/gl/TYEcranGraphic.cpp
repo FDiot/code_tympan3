@@ -26,6 +26,8 @@
 #include "Tympan/models/business/infrastructure/TYEcran.h"
 
 
+#include "TYEcranGraphic.h"
+
 TYEcranGraphic::TYEcranGraphic(TYEcran* pElement) :
     TYAcousticFaceSetGraphic(pElement)
 {

@@ -26,6 +26,8 @@
 #include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
 
 
+#include "TYAcousticVolumeNodeGraphic.h"
+
 TYAcousticVolumeNodeGraphic::TYAcousticVolumeNodeGraphic(TYAcousticVolumeNode* pElement) :
     TYElementGraphic(pElement)
 {

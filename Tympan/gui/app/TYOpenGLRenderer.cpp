@@ -26,6 +26,8 @@
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"//az++ pour updateDisplayListOverlay
 
+#include "TYOpenGLRenderer.h"
+
 /*
 #if defined(WIN32)
 #include <crtdbg.h>

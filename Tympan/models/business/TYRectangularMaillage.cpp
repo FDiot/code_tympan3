@@ -13,20 +13,18 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYRectangularMaillageWidget.h"
-#include "Tympan/gui/gl/TYRectangularMaillageGraphic.h"
-#endif
-
-
 #include <qdir.h>
 
+#include "Tympan/core/config.h"
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/TYXMLManager.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "TYRectangularMaillage.h"
+
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYRectangularMaillageWidget.h"
+  #include "Tympan/gui/gl/TYRectangularMaillageGraphic.h"
+#endif
 
 
 TY_EXTENSION_INST(TYRectangularMaillage);

@@ -16,20 +16,19 @@
 /**
  * \file TYRectangularMaillageGraphic.cpp
  * \brief Representation graphique d'un maillage rectangulaire
- *
- *
  */
 
 
-
-
+#include "Tympan/core/color.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYCalcul.h"
-#include "Tympan/core/color.h"
 #include "Tympan/gui/OSizeManager.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
+#include "Tympan/gui/gl/TYPaletteGraphic.h"
+#include "Tympan/gui/gl/TYPanelGraphic.h"
+#include "TYRectangularMaillageGraphic.h"
 
 TYRectangularMaillageGraphic::TYRectangularMaillageGraphic(TYRectangularMaillage* pElement) :
     TYElementGraphic(pElement)

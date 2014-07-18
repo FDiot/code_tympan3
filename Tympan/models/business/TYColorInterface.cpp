@@ -13,12 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- */
-
-
+#include "TYColorInterface.h"
 
 
 TYColorInterface::TYColorInterface() : _color(OColor::WHITE)

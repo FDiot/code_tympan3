@@ -26,6 +26,8 @@
 #include "Tympan/core/logging.h"
 
 
+#include "TYVegetation.h"
+
 TY_EXTENSION_INST(TYVegetation);
 
 TYVegetation::TYVegetation()

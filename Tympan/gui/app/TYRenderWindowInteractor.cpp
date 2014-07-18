@@ -17,6 +17,8 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QWheelEvent>
+#include "TYRenderWindowInteractor.h"
+
 /**
  * \file TYRenderWindowInteractor.cpp
  * \brief Le role de cette classe est limite a emettre des signaux pouvant etre utilise pour interagir sur le renderer avec le clavier et la souris.

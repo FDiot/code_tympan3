@@ -29,6 +29,8 @@
 #include <QGridLayout>
 
 
+#include "TYAltimetrieWidget.h"
+
 #define TR(id) OLocalizator::getString("TYAltimetrieWidget", (id))
 
 

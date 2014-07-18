@@ -16,14 +16,12 @@
 /**
  * \file TYEtageGraphic.cpp
  * \brief Representation graphique d'un etage
- *
- *
  */
 
 
-
-
 #include "Tympan/models/business/infrastructure/TYEtage.h"
+#include "Tympan/gui/gl/TYPolyLineGraphic.h"
+#include "TYEtageGraphic.h"
 
 
 TYEtageGraphic::TYEtageGraphic(TYEtage* pElement) :

@@ -16,22 +16,8 @@
 /**
  * \file TYVerticalMaillageEditor.cpp
  * \brief gestion de l'edition d'un maillage verticale
- *
- *
  */
 
-
-
-
-
-#include "Tympan/gui/tools/OGLLineElement.h"
-
-#include "Tympan/models/business/TYRectangularMaillage.h"
-
-#include "Tympan/gui/gl/TYPointGraphic.h"
-
-#include "Tympan/models/business/geometry/TYRepere.h"
-#include "Tympan/models/business/OLocalizator.h"
 
 #include <qdialog.h>
 #include <qmessagebox.h>
@@ -47,16 +33,29 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 
+#include "Tympan/models/business/geometry/TYRepere.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
+#include "Tympan/models/business/geometry/TYSegment.h"
+#include "Tympan/gui/tools/OGLLineElement.h"
+#include "Tympan/gui/gl/TYPointGraphic.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "TYVerticalMaillageEditor.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
-
 
 #define TR(id) OLocalizator::getString("TYVerticalMaillageEditor", (id))
 

@@ -16,19 +16,17 @@
 /**
  * \file TYPlanEauWidget.cpp
  * \brief outil IHM pour un plan d'eau
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/topography/TYPlanEau.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/topography/TYPlanEau.h"
+#include "Tympan/gui/widgets/TYTerrainWidget.h"
+#include "TYPlanEauWidget.h"
 
 #define TR(id) OLocalizator::getString("TYPlanEauWidget", (id))
 

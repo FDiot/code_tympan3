@@ -16,18 +16,16 @@
 /**
  * \file TYAcousticRectangleNodeWidget.cpp
  * \brief outil IHM pour un ensemble de rectangles acoustiques
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
 //Added by qt3to4:
 #include <QGridLayout>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticRectangleNode.h"
+#include "Tympan/gui/widgets/TYAcousticSurfaceNodeWidget.h"
+#include "TYAcousticRectangleNodeWidget.h"
 
 #define TR(id) OLocalizator::getString("TYAcousticRectangleNodeWidget", (id))
 

@@ -16,14 +16,14 @@
 /**
  * \file TYAcousticLineGraphic.cpp
  * \brief Representation graphique d'une ligne acoustique
- *
- *
  */
 
 
 #include <boost/foreach.hpp>
 
 #include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYAcousticLineGraphic.h"
 
 
 TYAcousticLineGraphic::TYAcousticLineGraphic(TYAcousticLine* pElement) :

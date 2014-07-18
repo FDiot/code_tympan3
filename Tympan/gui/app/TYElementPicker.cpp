@@ -16,31 +16,26 @@
 /**
  * \file TYElementPicker.cpp
  * \brief gestion des elements selectionnes par picking
- *
- *
  */
-
-
 
 
 #include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYLinearMaillage.h"
-
 #include "Tympan/gui/gl/TYPickHandler.h"
 #include "Tympan/gui/widgets/TYWidget.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "TYElementPicker.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#endif
-
-#if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 ///La tolerance pour le picking.

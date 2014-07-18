@@ -26,6 +26,7 @@
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYProgressManager.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
 #include "Tympan/core/logging.h"
 
 #include <QDir>
@@ -38,6 +39,8 @@ static char THIS_FILE[] = __FILE__;
 #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
 #endif
 #endif
+
+#include "TYSiteNode.h"
 
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 

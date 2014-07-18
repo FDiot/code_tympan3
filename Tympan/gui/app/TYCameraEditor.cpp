@@ -16,21 +16,20 @@
 /**
  * \file TYCameraEditor.cpp
  * \brief gestion de l'edition de la camera
- *
- *
  */
 
-
-
-
-
-#include "Tympan/gui/tools/OGLCamera.h"
 
 #include <qtimer.h>
 #include <qcursor.h>
 
-#include "Tympan/models/business/TYDefines.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/models/business/TYDefines.h"
+#include "Tympan/models/business/TYElement.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/gui/tools/OGLCamera.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "TYCameraEditor.h"
 
 using namespace Qt;
 

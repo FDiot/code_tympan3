@@ -16,20 +16,15 @@
 /**
  * \file TYCalculToolbar.cpp
  * \brief Barre d'outil calcul
- *
- *
  */
-
-
-
-
 
 #include <qtoolbutton.h>
 #include <qbuttongroup.h>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "TYCalculToolbar.h"
 
 #define TR(id) OLocalizator::getString("TYCalculToolbar", (id))
 #define IMG(id) OLocalizator::getPicture("TYCalculToolbar", (id))

@@ -21,8 +21,6 @@
  */
 
 
-
-
 #include <qtextedit.h>
 #include <qlayout.h>
 //Added by qt3to4:
@@ -31,7 +29,7 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-
+#include "TYOutputFrame.h"
 
 #define TR(id) OLocalizator::getString("TYOutputFrame", (id))
 

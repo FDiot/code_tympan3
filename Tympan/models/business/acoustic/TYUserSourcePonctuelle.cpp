@@ -36,6 +36,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
+#include "TYUserSourcePonctuelle.h"
+
 TY_EXTENSION_INST(TYUserSourcePonctuelle);
 
 TYUserSourcePonctuelle::TYUserSourcePonctuelle():

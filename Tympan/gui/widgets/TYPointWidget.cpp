@@ -30,6 +30,8 @@
 #include <QLabel>
 
 
+#include "TYPointWidget.h"
+
 #define TR(id) OLocalizator::getString("TYPointWidget", (id))
 
 

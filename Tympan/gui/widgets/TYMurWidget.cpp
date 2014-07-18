@@ -16,21 +16,19 @@
 /**
  * \file TYMurWidget.cpp
  * \brief outil IHM pour un mur
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/infrastructure/TYMur.h"
 #include <QPushButton>
 #include <QCheckBox>
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYMur.h"
+#include "Tympan/gui/widgets/TYAcousticRectangleNodeWidget.h"
+#include "TYMurWidget.h"
 
 #define TR(id) OLocalizator::getString("TYMurWidget", (id))
 

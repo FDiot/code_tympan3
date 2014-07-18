@@ -21,6 +21,7 @@
 #include "Tympan/core/chrono.h"
 #include "Tympan/core/exceptions.h"
 #include "Tympan/core/logging.h"
+#include "TYElement.h"
 
 #if defined(WIN32)
   #include <crtdbg.h>

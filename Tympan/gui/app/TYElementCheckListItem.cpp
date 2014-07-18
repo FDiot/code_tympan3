@@ -16,21 +16,16 @@
 /**
  * \file TYElementCheckListItem.cpp
  * \brief Frame pour les messages de retour
- *
- *
  */
 
 
-
-
-
-#include "Tympan/gui/widgets/TYWidget.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-
-
 #include "Tympan/models/business/infrastructure/TYMachine.h"
-
+#include "Tympan/gui/widgets/TYWidget.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYElementCheckListItem.h"
 
 
 #define TR(id) OLocalizator::getString("TYElementCheckListItem", (id))

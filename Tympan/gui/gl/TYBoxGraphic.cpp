@@ -16,13 +16,11 @@
 /**
  * \file TYBoxGraphic.cpp
  * \brief Representation graphique d'une boite
- *
- *
  */
 
-
-
 #include "Tympan/models/business/geometry/TYBox.h"
+#include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYBoxGraphic.h"
 
 
 TYBoxGraphic::TYBoxGraphic(TYBox* pElement) :

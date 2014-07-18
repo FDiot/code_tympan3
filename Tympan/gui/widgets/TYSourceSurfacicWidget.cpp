@@ -16,15 +16,9 @@
 /**
  * \file TYSourceSurfacicWidget.cpp
  * \brief outil IHM pour une source surfacique
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/acoustic/TYSourceSurfacic.h"
 #include <qmenu.h>
 //Added by qt3to4:
 #include <QGridLayout>
@@ -32,6 +26,11 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QHeaderView>
+
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/acoustic/TYSourceSurfacic.h"
+#include "Tympan/gui/widgets/TYSourceWidget.h"
+#include "TYSourceSurfacicWidget.h"
 
 #define TR(id) OLocalizator::getString("TYSourceSurfacicWidget", (id))
 

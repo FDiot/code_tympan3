@@ -36,6 +36,8 @@
 #include <QLabel>
 
 
+#include "TYAcousticInterfaceWidget.h"
+
 #define TR(id) OLocalizator::getString("TYAcousticInterfaceWidget", (id))
 #define IMG(id) OLocalizator::getPicture("TYAcousticInterfaceWidget", (id))
 

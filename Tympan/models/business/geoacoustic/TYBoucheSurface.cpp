@@ -17,6 +17,7 @@
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYBoucheSurfaceWidget.h"
 #endif
+#include "TYBoucheSurface.h"
 
 
 TY_EXTENSION_INST(TYBoucheSurface);

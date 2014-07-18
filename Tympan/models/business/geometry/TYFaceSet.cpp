@@ -13,22 +13,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYFaceSetWidget.h"
-#include "Tympan/gui/gl/TYFaceSetGraphic.h"
-#endif
-
-#include "Tympan/models/common/3d.h"
-
-#include "Tympan/models/business/TYPreferenceManager.h"
-
 #include "Tympan/core/logging.h"
 #include "Tympan/core/chrono.h"
-
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/geometry/TYPolygon.h"
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYFaceSetWidget.h"
+  #include "Tympan/gui/gl/TYFaceSetGraphic.h"
+#endif
+#include "TYFaceSet.h"
 
 TY_EXTENSION_INST(TYFaceSet);
 TY_EXT_GRAPHIC_INST(TYFaceSet);

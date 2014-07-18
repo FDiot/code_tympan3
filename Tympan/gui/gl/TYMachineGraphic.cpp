@@ -26,6 +26,8 @@
 #include "Tympan/models/business/infrastructure/TYMachine.h"
 
 
+#include "TYMachineGraphic.h"
+
 TYMachineGraphic::TYMachineGraphic(TYMachine* pElement) :
     TYAcousticVolumeNodeGraphic(pElement)
 {

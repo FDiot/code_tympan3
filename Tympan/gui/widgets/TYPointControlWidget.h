@@ -17,21 +17,15 @@
  * \file TYPointControlWidget.h
  * \brief outil IHM pour un point de controle (fichier header)
  * \author Projet_Tympan
- *
- *
- *
- *
- *
- *
  */
 
 #ifndef __TY_POINT_CONTROL_WIDGET__
 #define __TY_POINT_CONTROL_WIDGET__
 
-
-#include "TYWidget.h"
 //Added by qt3to4:
 #include <QLabel>
+
+#include "TYWidget.h"
 
 class TYPointControl;
 class QLineEdit;

@@ -16,18 +16,11 @@
 /**
  * \file TYPluginDialog.cpp
  * \brief Boite de dialogue pour la selection du plugin de calcul
- *
- *
  */
 
 
-
-#include "Tympan/models/business/TYPluginManager.h"
-
 #include <qlayout.h>
 #include <qpushbutton.h>
-
-#include "Tympan/models/business/OLocalizator.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QBoxLayout>
@@ -35,6 +28,10 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QHeaderView>
+
+#include "Tympan/models/business/TYPluginManager.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "TYPluginDialog.h"
 
 #define TR(id) OLocalizator::getString("TYPluginDialog", (id))
 

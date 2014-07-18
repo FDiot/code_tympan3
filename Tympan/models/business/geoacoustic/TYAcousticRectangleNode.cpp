@@ -13,17 +13,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYAcousticRectangleNodeWidget.h"
-#include "Tympan/gui/gl/TYAcousticRectangleNodeGraphic.h"
-#endif
-
 
 #include "Tympan/core/logging.h"
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYAcousticRectangleNodeWidget.h"
+  #include "Tympan/gui/gl/TYAcousticRectangleNodeGraphic.h"
+#endif
+#include "TYAcousticRectangleNode.h"
 
 
 

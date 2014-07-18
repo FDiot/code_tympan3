@@ -13,22 +13,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYMaillageWidget.h"
-#endif
-
 
 #include <boost/foreach.hpp>
 #include <boost/tuple/tuple.hpp>
 
 #include "Tympan/core/color.h"
 #include "Tympan/core/logging.h"
-
 #include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYLinearMaillage.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
+#include "TYMaillage.h"
+
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYMaillageWidget.h"
+#endif
 
 TY_EXTENSION_INST(TYMaillage);
 

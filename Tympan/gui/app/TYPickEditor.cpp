@@ -16,19 +16,7 @@
 /**
  * \file TYPickEditor.cpp
  * \brief gestion de l'element actionne par picking
- *
- *
  */
-
-
-
-
-#include "Tympan/models/business/infrastructure/TYBatiment.h"
-#include "Tympan/models/business/infrastructure/TYEcran.h"
-#include "Tympan/gui/gl/TYPickHandler.h"
-#include "Tympan/gui/widgets/TYWidget.h"
-#include "Tympan/gui/gl/TYPanelGraphic.h"
-#include "Tympan/models/business/OLocalizator.h"
 
 
 #include <qdialog.h>
@@ -42,7 +30,6 @@
 #include <qcursor.h>
 #include <qinputdialog.h>
 #include <QMessageBox>
-
 //Added by qt3to4:
 #include <QBoxLayout>
 #include <QPixmap>
@@ -50,29 +37,49 @@
 #include <QHBoxLayout>
 // CLM-NT35: Gestion MDI avec QT4.7
 #ifdef USE_QMDIAREA
-#include <QMdiArea>
-#include <QMdiSubWindow>
+  #include <QMdiArea>
+  #include <QMdiSubWindow>
 #else
-#include <QWorkspace>
+  #include <QWorkspace>
 #endif
 // CLM-NT35 End
 
-
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYBatiment.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
+#include "Tympan/models/business/infrastructure/TYInfrastructure.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
+#include "Tympan/gui/gl/TYPickHandler.h"
+#include "Tympan/gui/gl/TYPanelGraphic.h"
 #include "Tympan/gui/gl/TYRectangularMaillageGraphic.h"
-#include "TYMenuItem.h"
+#include "Tympan/gui/widgets/TYWidget.h"
+#include "Tympan/gui/app/TYMenuItem.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYFaceModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYRotationDialog.h"
+#include "Tympan/gui/app/TYPositionDialog.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYPickEditor.h"
 
 using namespace Qt;
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
-
 
 #define TR(id) OLocalizator::getString("TYPickEditor", (id))
 #define IMG(id) OLocalizator::getPicture("TYPickEditor", (id))

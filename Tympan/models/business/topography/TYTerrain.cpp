@@ -13,17 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYTerrainWidget.h"
-#include "Tympan/gui/gl/TYTerrainGraphic.h"
-#endif
-
 
 #include "Tympan/core/logging.h"
+#include "TYTerrain.h"
+
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYTerrainWidget.h"
+  #include "Tympan/gui/gl/TYTerrainGraphic.h"
+#endif
 
 
 TY_EXTENSION_INST(TYTerrain);

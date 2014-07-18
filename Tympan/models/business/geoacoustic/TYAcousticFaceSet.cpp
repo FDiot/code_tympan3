@@ -13,14 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYAcousticFaceSetWidget.h"
+  #include "Tympan/gui/widgets/TYAcousticFaceSetWidget.h"
 #endif
-
+#include "TYAcousticFaceSet.h"
 
 
 TY_EXTENSION_INST(TYAcousticFaceSet);

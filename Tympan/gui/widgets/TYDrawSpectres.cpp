@@ -16,17 +16,12 @@
 /**
  * \file TYDrawSpectres.cpp
  * \brief outil IHM pour l'affichage des spectres
- *
- *
  */
-
-
 
 
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qpixmap.h>
-
 //Added by qt3to4:
 #include <QHBoxLayout>
 #include <QBoxLayout>
@@ -36,18 +31,16 @@
 #include <QScrollBar>
 #include <QPrintDialog>
 
-
-#include "TYDrawSpectres.h"
-
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/gui/widgets/TYPrintDialog.h"
+#include "TYDrawSpectres.h"
 
 #define NBSPECTRESMAX 5
+#define TR(id) OLocalizator::getString("TYDrawSpectres", (id))
 
 using namespace Qt;
 
-#define TR(id) OLocalizator::getString("TYDrawSpectres", (id))
 
 QString TYDrawSpectresColor[] =
 {

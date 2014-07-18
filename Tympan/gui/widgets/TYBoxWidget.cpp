@@ -16,20 +16,17 @@
 /**
  * \file TYBoxWidget.cpp
  * \brief outil IHM pour une boite
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/geometry/TYBox.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
-
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/geometry/TYBox.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
+#include "TYBoxWidget.h"
 
 #define TR(id) OLocalizator::getString("TYBoxWidget", (id))
 

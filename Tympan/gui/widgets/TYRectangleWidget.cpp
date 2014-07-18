@@ -30,6 +30,8 @@
 #include <QTreeWidgetItem>
 
 #include "Tympan/models/business/OLocalizator.h"
+#include "TYRectangleWidget.h"
+
 #define TR(id) OLocalizator::getString("TYRectangleWidget", (id))
 
 #include "Tympan/models/business/geometry/TYRectangle.h"

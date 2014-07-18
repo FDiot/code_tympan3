@@ -27,6 +27,8 @@
 
 
 ///Initialisation du dernier objet picke avec NULL.
+#include "TYPickHandler.h"
+
 TYElement* TYPickHandler::_pPickedElt = NULL;
 
 

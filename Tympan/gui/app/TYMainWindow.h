@@ -32,8 +32,9 @@
 #include <QCloseEvent>
 #include <QMenu>
 
-#include "TYAppDefines.h"
 #include "Tympan/models/business/TYProjet.h"
+#include "Tympan/gui/app/TYAppDefines.h"
+#include "TYMainWindow.h"
 
 class QAction;
 class QToolBar;

@@ -25,6 +25,8 @@
 #include "Tympan/models/business/TYMaillage.h"
 #include "Tympan/models/business/TYPanel.h"
 
+#include "TYPanelGraphic.h"
+
 #define IMG(id) OLocalizator::getPicture("TYPanelGraphic", (id))
 
 TYPanelGraphic::TYPanelGraphic(TYPanel* pElement) :

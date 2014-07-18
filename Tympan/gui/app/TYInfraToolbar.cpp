@@ -16,20 +16,17 @@
 /**
  * \file TYInfraToolbar.cpp
  * \brief Barre d'outil infastructure
- *
- *
  */
-
-
-
 
 
 #include <qtoolbutton.h>
 #include <qbuttongroup.h>
+#include <QToolBar>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "TYInfraToolbar.h"
 
 #define TR(id) OLocalizator::getString("TYInfraToolbar", (id))
 #define IMG(id) OLocalizator::getPicture("TYInfraToolbar", (id))

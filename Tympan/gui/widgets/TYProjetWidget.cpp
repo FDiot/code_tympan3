@@ -38,6 +38,8 @@
 
 
 
+#include "TYProjetWidget.h"
+
 #define TR(id) OLocalizator::getString("TYProjetWidget", (id))
 
 

@@ -29,6 +29,8 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
+#include "TYSegmentWidget.h"
+
 #define TR(id) OLocalizator::getString("TYSegmentWidget", (id))
 
 #include "Tympan/gui/widgets/TYSegmentWidget.h"

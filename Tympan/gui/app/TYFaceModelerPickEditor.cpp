@@ -16,19 +16,8 @@
 /**
  * \file TYFaceModelerPickEditor.cpp
  * \brief gestion du picking des faces
- *
- *
  */
 
-
-
-
-
-#include "Tympan/models/business/infrastructure/TYBatiment.h"
-#include "Tympan/gui/gl/TYPickHandler.h"
-#include "Tympan/gui/widgets/TYWidget.h"
-
-#include "Tympan/models/business/OLocalizator.h"
 
 #include <qdialog.h>
 #include <qpushbutton.h>
@@ -45,17 +34,26 @@
 #include <QGridLayout>
 #include <QPixmap>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/TYPointControl.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYBatiment.h"
+#include "Tympan/gui/gl/TYPickHandler.h"
+#include "Tympan/gui/widgets/TYWidget.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYFaceModelerPickEditor.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#endif
-
-#if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 

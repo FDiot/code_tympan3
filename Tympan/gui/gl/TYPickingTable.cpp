@@ -35,6 +35,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
+#include "TYPickingTable.h"
+
 TYTabPtrElement TYPickingTable::_elements;
 int TYPickingTable::_index;
 

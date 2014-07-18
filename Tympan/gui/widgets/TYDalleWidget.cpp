@@ -16,20 +16,17 @@
 /**
  * \file TYDalleWidget.cpp
  * \brief Outil IHM pour une dalle
- *
- *
  */
 
-
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/infrastructure/TYDalle.h"
 #include <QCheckBox>
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/infrastructure/TYDalle.h"
+#include "Tympan/gui/widgets/TYAcousticPolygonWidget.h"
+#include "TYDalleWidget.h"
 
 #define TR(id) OLocalizator::getString("TYDalleWidget", (id))
 

@@ -16,8 +16,6 @@
 /**
  * \file TYAcousticBoxWidget.cpp
  * \brief outil IHM pour une boite acoustique
- *
- *
  */
 
 
@@ -25,12 +23,14 @@
 
 #include <qmenu.h>
 #include <qtablewidget.h>
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticBox.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QHeaderView>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticBox.h"
+#include "Tympan/gui/widgets/TYAcousticVolumeWidget.h"
+#include "TYAcousticBoxWidget.h"
 
 #define TR(id) OLocalizator::getString("TYAcousticBoxWidget", (id))
 

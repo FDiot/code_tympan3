@@ -28,6 +28,8 @@
 #include "Tympan/models/business/TYPreferenceManager.h"
 
 
+#include "TYReseauTransportGraphic.h"
+
 TYReseauTransportGraphic::TYReseauTransportGraphic(TYReseauTransport* pElement) :
     TYAcousticLineGraphic(pElement)
 {

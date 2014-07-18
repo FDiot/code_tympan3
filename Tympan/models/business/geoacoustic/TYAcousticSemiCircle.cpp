@@ -13,13 +13,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/models/common/3d.h"
 #include "Tympan/core/logging.h"
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/triangle.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAcousticSemiCircleWidget.h"
   #include "Tympan/gui/gl/TYAcousticSemiCircleGraphic.h"
 #endif
+
+#include "TYAcousticSemiCircle.h"
 
 TY_EXTENSION_INST(TYAcousticSemiCircle);
 TY_EXT_GRAPHIC_INST(TYAcousticSemiCircle);

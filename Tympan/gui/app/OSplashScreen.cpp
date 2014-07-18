@@ -17,27 +17,27 @@
  * \file OSplashScreen.cpp
  * \brief Splash screen widget
  *
- *
  */
 
 
-
 //Added by qt3to4:
-#include <QMouseEvent>
-#include <QPixmap>
-
 #include <qapplication.h>
 #include <qpainter.h>
+#include <QMouseEvent>
+#include <QPixmap>
 #include <QDesktopWidget>
 #include <QMessageBox>
+#include <QLabel>
+
+#include "OSplashScreen.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 

@@ -26,6 +26,8 @@
 #include "Tympan/models/business/acoustic/TYSourceSurfacic.h"
 
 
+#include "TYSourceSurfacicGraphic.h"
+
 bool TYSourceSurfacicGraphic::_gVisible = false;
 
 

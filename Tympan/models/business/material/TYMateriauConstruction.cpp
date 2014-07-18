@@ -25,6 +25,8 @@
 #include "Tympan/core/logging.h"
 
 
+#include "TYMateriauConstruction.h"
+
 TYSpectre* TYMateriauConstruction::_defSpectreTrans = NULL;
 TYSpectre* TYMateriauConstruction::_defSpectreAbso = NULL;
 

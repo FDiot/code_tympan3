@@ -16,19 +16,17 @@
 /**
  * \file TYBatimentToolbar.cpp
  * \brief Barre d'outils Batiment
- *
- *
  */
-
-
 
 
 #include <qtoolbutton.h>
 #include <qbuttongroup.h>
+#include <QToolBar>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-
+#include "Tympan/gui/app/TYBatimentModelerFrame.h"
+#include "TYBatimentToolbar.h"
 
 #define TR(id) OLocalizator::getString("TYBatimentToolbar", (id))
 #define IMG(id) OLocalizator::getPicture("TYBatimentToolbar", (id))

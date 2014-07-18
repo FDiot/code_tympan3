@@ -13,17 +13,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
+#include "Tympan/core/logging.h"
+#include "TYPlanEau.h"
 
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYPlanEauWidget.h"
-#include "Tympan/gui/gl/TYPlanEauGraphic.h"
+  #include "Tympan/gui/widgets/TYPlanEauWidget.h"
+  #include "Tympan/gui/gl/TYPlanEauGraphic.h"
 #endif
-
-
-#include "Tympan/core/logging.h"
 
 
 

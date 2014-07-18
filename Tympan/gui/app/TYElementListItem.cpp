@@ -16,23 +16,18 @@
 /**
  * \file TYElementListItem.cpp
  * \brief Frame pour les messages de retour
- *
- *
  */
-
-
-
-
-
-#include "Tympan/gui/widgets/TYWidget.h"
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
-
-#include "Tympan/models/business/TYProjet.h"
-#include "Tympan/models/business/TYPluginManager.h"
 
 #include <qpixmap.h>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYPluginManager.h"
+#include "Tympan/gui/widgets/TYWidget.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYElementListItem.h"
 
 
 #define TR(id) OLocalizator::getString("TYElementListItem", (id))

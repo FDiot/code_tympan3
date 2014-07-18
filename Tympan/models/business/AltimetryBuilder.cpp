@@ -22,6 +22,8 @@
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
 
+#include "AltimetryBuilder.h"
+
 namespace tympan
 {
 

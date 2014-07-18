@@ -13,13 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
 
-
-
-
+#include "TYTrajet.h"
 
 
 TYTrajet::TYTrajet(TYSourcePonctuelleGeoNode* pSrc /*=NULL*/, TYPointCalculGeoNode* pPtCalcul /*=NULL*/) :

@@ -13,18 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
 
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYBoxWidget.h"
-#endif
-
-
-#include "Tympan/models/common/3d.h"
 #include "Tympan/core/logging.h"
-
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/business/geometry/TYRectangle.h" 
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYBoxWidget.h"
+#endif
+#include "TYBox.h"
 
 TY_EXTENSION_INST(TYBox);
 

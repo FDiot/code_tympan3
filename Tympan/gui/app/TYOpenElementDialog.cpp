@@ -33,9 +33,14 @@
 #include <QGridLayout>
 
 #include "Tympan/core/config.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
 #include "TYOpenElementDialog.h"
 
 #ifdef TY_USE_DXF

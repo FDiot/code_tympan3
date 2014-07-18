@@ -21,17 +21,22 @@
  */
 
 
-#include "Tympan/gui/widgets/TYIncludesQT.h"
-#include "Tympan/gui/widgets/TYElementWidget.h"
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/common/3d.h"
-#include "Tympan/models/business/geometry/TYGeometryNode.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
 
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticSurfaceNode.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/geometry/TYGeometryNode.h"
+#include "Tympan/gui/widgets/TYIncludesQT.h"
+#include "Tympan/gui/widgets/TYElementWidget.h"
+
+#include "TYPositionDialog.h"
 
 #define TR(id) OLocalizator::getString("TYPositionDialog", (id))
 

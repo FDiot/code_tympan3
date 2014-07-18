@@ -16,20 +16,22 @@
 /**
  * \file TYCustomPopupMenu.cpp
  * \brief Definit un popup menu, necessaire pour maitriser l'ouverture automtique apres un createPopupMenu
- *
- *
  */
 
 
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
 #include "TYCustomPopupMenu.h"
 
 // CLM-NT35: Gestion MDI avec QT4.7
 #ifdef USE_QMDIAREA
-#include <QMdiArea>
+  #include <QMdiArea>
 #else
-#include <QWorkspace>
+  #include <QWorkspace>
 #endif
 // CLM-NT35 End
+
+
 TYCustomPopupMenu::TYCustomPopupMenu(QWidget* parent)
     : QMenu(parent)
 {

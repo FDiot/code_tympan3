@@ -16,20 +16,17 @@
 /**
  * \file TYMachineToolbar.cpp
  * \brief Barre d'outils Machine
- *
- *
  */
-
-
-
 
 
 #include <qtoolbutton.h>
 #include <qbuttongroup.h>
+#include <QToolBar>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-
+#include "Tympan/gui/app/TYMachineModelerFrame.h"
+#include "TYMachineToolbar.h"
 
 #define TR(id) OLocalizator::getString("TYMachineToolbar", (id))
 #define IMG(id) OLocalizator::getPicture("TYMachineToolbar", (id))

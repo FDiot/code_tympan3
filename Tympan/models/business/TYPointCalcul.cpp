@@ -13,16 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYPointCalculWidget.h"
-#endif
-
-
 #include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYMaillage.h"
+#include "TYPointCalcul.h"
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYPointCalculWidget.h"
+#endif
 
 
 TY_EXTENSION_INST(TYPointCalcul);

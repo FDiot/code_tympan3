@@ -16,19 +16,19 @@
 /**
  * \file TYAcousticSurfaceWidget.cpp
  * \brief outil IHM pour une surface acoustique
- *
- *
  */
 
 
-
+//Added by qt3to4:
+#include <QGridLayout>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
 #include "Tympan/models/business/material/TYMateriauConstruction.h"
-//Added by qt3to4:
-#include <QGridLayout>
-
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYSurfaceInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYAcousticInterfaceWidget.h"
+#include "TYAcousticSurfaceWidget.h"
 
 #define TR(id) OLocalizator::getString("TYAcousticSurfaceWidget", (id))
 

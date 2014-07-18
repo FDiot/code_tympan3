@@ -16,22 +16,17 @@
 /**
  * \file TYTopoToolbar.cpp
  * \brief Barre d'outils topographie
- *
- *
  */
-
-
-
 
 
 #include <qtoolbutton.h>
 #include <qbuttongroup.h>
-
-#include "TYTopoToolbar.h"
+#include <QToolBar>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "TYTopoToolbar.h"
 
 #define TR(id) OLocalizator::getString("TYTopoToolbar", (id))
 #define IMG(id) OLocalizator::getPicture("TYTopoToolbar", (id))

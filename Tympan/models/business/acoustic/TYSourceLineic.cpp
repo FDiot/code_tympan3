@@ -27,6 +27,8 @@
 #include "Tympan/core/logging.h"
 
 
+#include "TYSourceLineic.h"
+
 TY_EXTENSION_INST(TYSourceLineic);
 TY_EXT_GRAPHIC_INST(TYSourceLineic);
 

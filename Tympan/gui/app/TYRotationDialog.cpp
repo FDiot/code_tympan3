@@ -15,22 +15,21 @@
 
 /**
  * \file TYRotationDialog.cpp
- * \brief Boite de dialogue pour la saisie de la l'angle des objets
- *
- *
+ * \brief Boite de dialogue pour la saisie de l'angle des objets
  */
 
 
-
-#include "Tympan/gui/widgets/TYIncludesQT.h"
-#include "Tympan/gui/widgets/TYElementWidget.h"
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/common/3d.h"
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QBoxLayout>
 #include <QHBoxLayout>
 #include <QLabel>
+
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/common/3d.h"
+#include "Tympan/gui/widgets/TYIncludesQT.h"
+#include "Tympan/gui/widgets/TYElementWidget.h"
+#include "TYRotationDialog.h"
 
 #define TR(id) OLocalizator::getString("TYRotationDialog", (id))
 

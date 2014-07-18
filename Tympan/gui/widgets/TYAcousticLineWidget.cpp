@@ -16,15 +16,9 @@
 /**
  * \file TYAcousticLineWidget.cpp
  * \brief Outil IHM pour une ligne acoustique
- *
- *
  */
 
 
-
-
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
@@ -32,6 +26,10 @@
 #include <QGridLayout>
 #include <QLabel>
 
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
+#include "Tympan/gui/widgets/TYSourceWidget.h"
+#include "TYAcousticLineWidget.h"
 
 #define TR(id) OLocalizator::getString("TYAcousticLineWidget", (id))
 

@@ -25,6 +25,8 @@
 #include "Tympan/core/logging.h"
 
 
+#include "TYRepere.h"
+
 TY_EXTENSION_INST(TYRepere);
 
 TYRepere::TYRepere():

@@ -22,6 +22,8 @@
 
 #include "Tympan/models/business/TYRay.h"
 
+#include "TYRayGraphic.h"
+
 bool TYRayGraphic::_gVisible = false;
 
 TYRayGraphic::TYRayGraphic(TYRay* pElement) :

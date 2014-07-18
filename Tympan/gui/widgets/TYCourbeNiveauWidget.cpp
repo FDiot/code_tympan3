@@ -33,6 +33,8 @@
 #include <QTreeWidgetItem>
 
 #include "Tympan/models/business/OLocalizator.h"
+#include "TYCourbeNiveauWidget.h"
+
 #define TR(id) OLocalizator::getString("TYCourbeNiveauWidget", (id))
 
 #include "Tympan/models/business/topography/TYCourbeNiveau.h"

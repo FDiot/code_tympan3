@@ -38,6 +38,8 @@
 #endif
 
 
+#include "TYPolygonGraphic.h"
+
 TYPolygonGraphic::TYPolygonGraphic(TYPolygon* pElement) :
     TYElementGraphic(pElement)
 {

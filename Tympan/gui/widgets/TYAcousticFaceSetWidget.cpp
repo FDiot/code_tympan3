@@ -16,21 +16,19 @@
 /**
  * \file TYAcousticFaceSetWidget.cpp
  * \brief outil IHM pour un ensemble de faces acoustiques
- *
- *
  */
 
-
-
-
-#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
-#include "Tympan/models/business/geoacoustic/TYAcousticFaceSet.h"
-#include "Tympan/models/business/infrastructure/TYEcran.h"
 
 //Added by qt3to4:
 #include <QGridLayout>
 
+#include "Tympan/models/business/geoacoustic/TYAcousticFaceSet.h"
+#include "Tympan/models/business/infrastructure/TYEcran.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
+#include "Tympan/gui/widgets/TYFaceSetWidget.h"
+#include "TYAcousticFaceSetWidget.h"
+
 #define TR(id) OLocalizator::getString("TYAcousticFaceSetWidget", (id))
 
 

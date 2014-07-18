@@ -13,9 +13,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
+#include "TYRay.h"
 #if TY_USE_IHM
-#include "Tympan/gui/gl/TYRayGraphic.h"
+  #include "Tympan/gui/gl/TYRayGraphic.h"
 #endif
 
 TY_EXT_GRAPHIC_INST(TYRay);

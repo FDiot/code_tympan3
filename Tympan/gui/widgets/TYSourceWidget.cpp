@@ -29,6 +29,8 @@
 #include <qbuttongroup.h>
 
 
+#include "TYSourceWidget.h"
+
 #define TR(id) OLocalizator::getString("TYSourceWidget", (id))
 #define IMG(id) OLocalizator::getPicture("TYSourceWidget", (id))
 

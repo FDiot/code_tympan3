@@ -16,32 +16,29 @@
 /**
  * \file TYCreateElementDialog.cpp
  * \brief Boite de dialogue pour la creation d'un nouvel element metier. L'element cree peut etre sauvegarde en BDD ou exporter en XML.
- *
- *
  */
 
-
-
-
-#include <qlistwidget.h>
-
-#include "Tympan/models/business/TYPreferenceManager.h"
-#include "Tympan/core/exceptions.h"
-#include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/core/logging.h"
 
 #include <qlayout.h>
 #include <qmessagebox.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
+#include <qlistwidget.h>
+
+#include "Tympan/core/exceptions.h"
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/gui/app/TYOpenElementDialog.h"
+#include "TYCreateElementDialog.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 

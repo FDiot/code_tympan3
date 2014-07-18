@@ -16,19 +16,21 @@
 /**
  * \file YPrintDialog.cpp
  * \brief Boite de dialogue des parametres d'impression
- *
- *
  */
 
 
 #include <qvariant.h>
 #include <qcheckbox.h>
 #include <qtooltip.h>
+#include <QGroupBox>
+#include <QPushButton>
+#include <QLineEdit>
 //Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
 #include "Tympan/models/business/OLocalizator.h"
+#include "TYPrintDialog.h"
 
 #define TR(id) OLocalizator::getString("TYPrintDialog", (id))
 

@@ -28,6 +28,8 @@
 #include "Tympan/models/business/TYPreferenceManager.h"
 
 
+#include "TYDalleGraphic.h"
+
 TYDalleGraphic::TYDalleGraphic(TYDalle* pElement) :
     TYAcousticPolygonGraphic(pElement)
 {

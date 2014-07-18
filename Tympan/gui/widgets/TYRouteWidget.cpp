@@ -21,12 +21,13 @@
 
 #include <QMessageBox>
 
-#include "TYRouteWidget.h"
-#include "Tympan/models/business/infrastructure/TYRoute.h"
-
 #include "RoadEmissionNMPB08.h"
 
+#include "Tympan/models/business/infrastructure/TYRoute.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/gui/widgets/TYAcousticLineWidget.h"
+#include "TYRouteWidget.h"
+
 #define TR(id) OLocalizator::getString("TYRouteWidget", (id))
 
 static struct {const char* name ; int id;} RoadSurfaceFormulationMap[] =

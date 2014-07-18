@@ -16,21 +16,20 @@
 /**
  * \file TYModelerToolbar.cpp
  * \brief Barre d'outils generale pour les modelers
- *
- *
  */
 
 
-
+#include <qtoolbutton.h>
+#include <qbuttongroup.h>
 //Added by qt3to4:
 #include <QPixmap>
 
-#include <qtoolbutton.h>
-#include <qbuttongroup.h>
-
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
-
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "TYModelerToolbar.h"
 
 #define TR(id) OLocalizator::getString("TYModelerToolbar", (id))
 #define IMG(id) OLocalizator::getPicture("TYModelerToolbar", (id))

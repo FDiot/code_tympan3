@@ -13,30 +13,31 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYResultatWidget.h"
-#include "Tympan/gui/gl/TYResultatGraphic.h"
-#endif
-
-
-#include "Tympan/core/logging.h"
-#include "Tympan/models/business/TYProgressManager.h"
 
 #include <fstream>
 #include <iomanip>
 #include <cassert>
 
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYProgressManager.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYTrajet.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
+#include "TYResultat.h"
+
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYResultatWidget.h"
+  #include "Tympan/gui/gl/TYResultatGraphic.h"
 #endif
+
+#if defined(WIN32)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 TY_EXTENSION_INST(TYResultat);

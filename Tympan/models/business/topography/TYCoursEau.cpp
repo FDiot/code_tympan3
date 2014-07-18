@@ -13,17 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYCoursEauWidget.h"
-#include "Tympan/gui/gl/TYCoursEauGraphic.h"
-#endif
-
 
 #include "Tympan/core/logging.h"
+#include "TYCoursEau.h"
+
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYCoursEauWidget.h"
+  #include "Tympan/gui/gl/TYCoursEauGraphic.h"
+#endif
 
 
 TY_EXTENSION_INST(TYCoursEau);

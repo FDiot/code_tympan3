@@ -21,6 +21,8 @@
 #endif
 
 
+#include "TYTopographie.h"
+
 TY_EXTENSION_INST(TYTopographie);
 TY_EXT_GRAPHIC_INST(TYTopographie);
 

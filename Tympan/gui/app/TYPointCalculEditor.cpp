@@ -16,31 +16,30 @@
 /**
  * \file TYPointCalculEditor.cpp
  * \brief gestion de l'edition d'un point de calcul
- *
- *
  */
 
-
-
-
-
-#include "Tympan/models/business/TYPointControl.h"
-
-#include "Tympan/models/business/OLocalizator.h"
 
 #include <qmessagebox.h>
 #include <qinputdialog.h>
 
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYPointControl.h"
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "TYPointCalculEditor.h"
 
 #if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
-#endif
-
 
 #define TR(id) OLocalizator::getString("TYPointCalculEditor", (id))
 

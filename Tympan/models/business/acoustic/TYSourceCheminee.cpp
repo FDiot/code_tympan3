@@ -41,6 +41,8 @@
 #endif
 
 
+#include "TYSourceCheminee.h"
+
 const double TYSourceCheminee::_tabQ[NB_KA][NB_THETA] =
 {
     {

@@ -13,13 +13,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "Tympan/core/logging.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYAcousticSemiCylinderWidget.h"
   #include "Tympan/gui/gl/TYAcousticSemiCylinderGraphic.h"
 #endif
-
-#include "Tympan/core/logging.h"
-
+#include "TYAcousticSemiCylinder.h"
 
 TY_EXTENSION_INST(TYAcousticSemiCylinder);
 TY_EXT_GRAPHIC_INST(TYAcousticSemiCylinder);

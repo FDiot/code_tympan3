@@ -16,13 +16,8 @@
 /**
  * \file TYLibraryWidget.cpp
  * \brief Widget pour lister les elements de la bibilotheque
- *
- *
  */
 
-
-
-#include "Tympan/models/business/TYXMLManager.h"
 
 #include <qlabel.h>
 #include <qcombobox.h>
@@ -34,6 +29,9 @@
 #include <QKeyEvent>
 
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYXMLManager.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "TYLibraryWidget.h"
 
 #define TR(id) OLocalizator::getString("TYLibraryWidget", (id))
 

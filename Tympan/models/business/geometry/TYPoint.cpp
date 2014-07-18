@@ -25,6 +25,8 @@
 #include "Tympan/core/logging.h"
 
 
+#include "TYPoint.h"
+
 TY_EXTENSION_INST(TYPoint);
 
 

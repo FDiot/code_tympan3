@@ -35,6 +35,8 @@
 #include "Tympan/gui/gl/TYPickingTable.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 
+#include "TYAltimetrieGraphic.h"
+
 #define IMG(id) OLocalizator::getPicture("TYAltimetrieGraphic", (id))
 
 TYAltimetrieGraphic::TYAltimetrieGraphic(TYAltimetrie* pElement) :

@@ -16,46 +16,58 @@
 /**
  * \file TYSiteModelerFrame.cpp
  * \brief Classe Modeler specialisee pour l'edition des sites
- *
- *
  */
 
 
-
-
-
-#include "TYSiteModelerFrame.h"
-
 #if defined(WIN32)
-#include <crtdbg.h>
+  #include <crtdbg.h>
 #endif
 
 #include <qmessagebox.h>
 #include <qtooltip.h>
 #include <qcombobox.h>
-
-#include "Tympan/models/business/TYRectangularMaillage.h"
-#include "Tympan/gui/gl/TYRectangularMaillageGraphic.h"
-
-#include "Tympan/models/business/TYBoundaryNoiseMap.h"
-#include "Tympan/gui/gl/TYBoundaryNoiseMapGraphic.h"
-
 #include <qlayout.h>
 #include <qcursor.h>
 #include <qtoolbutton.h>
 #include <qpixmap.h>
 
+#include "Tympan/models/business/TYRectangularMaillage.h"
+#include "Tympan/models/business/TYBoundaryNoiseMap.h"
 #include "Tympan/models/business/TYXMLManager.h"
-
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/gui/gl/TYRectangularMaillageGraphic.h"
+#include "Tympan/gui/gl/TYBoundaryNoiseMapGraphic.h"
+#include "Tympan/gui/app/TYPickEditor.h"
+#include "Tympan/gui/app/TYAbstractSceneEditor.h"
+#include "Tympan/gui/app/TYEchelleEditor.h"
+#include "Tympan/gui/app/TYPointRefEditor.h"
+#include "Tympan/gui/app/TYOrientationEditor.h"
+#include "Tympan/gui/app/TYEmpriseEditor.h"
+#include "Tympan/gui/app/TYCourbeNiveauEditor.h"
+#include "Tympan/gui/app/TYPlanEauEditor.h"
+#include "Tympan/gui/app/TYSolEditor.h"
+#include "Tympan/gui/app/TYRouteEditor.h"
+#include "Tympan/gui/app/TYReseauTransportEditor.h"
+#include "Tympan/gui/app/TYEtageEditor.h"
+#include "Tympan/gui/app/TYSilosEditor.h"
+#include "Tympan/gui/app/TYCoursEauEditor.h"
+#include "Tympan/gui/app/TYVegetationEditor.h"
+#include "Tympan/gui/app/TYSourceEditor.h"
+#include "Tympan/gui/app/TYPointCalculEditor.h"
+#include "Tympan/gui/app/TYRectangularMaillageEditor.h"
+#include "Tympan/gui/app/TYLinearMaillageEditor.h"
+#include "Tympan/gui/app/TYVerticalMaillageEditor.h"
+#include "Tympan/gui/app/TYBoundaryNoiseMapEditor.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "TYSiteModelerFrame.h"
 
 #if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
 #endif
 
 

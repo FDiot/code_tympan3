@@ -16,29 +16,30 @@
 /**
  * \file TYSourceEditor.cpp
  * \brief gestion de l'edition d'une source
- *
- *
  */
 
 
-
-
-
-#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
-
-#include "Tympan/models/business/OLocalizator.h"
-
 #include <qinputdialog.h>
 
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
+#include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
+#include "Tympan/models/business/infrastructure/TYEtage.h"
+#include "Tympan/gui/app/TYActions.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYBatimentModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "TYSourceEditor.h"
 
+#if defined(WIN32)
+  #include <crtdbg.h>
+  #ifdef _DEBUG
+    #undef THIS_FILE
+    static char THIS_FILE[] = __FILE__;
+    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
+  #endif
+#endif
 
 #define TR(id) OLocalizator::getString("TYSourceEditor", (id))
 
