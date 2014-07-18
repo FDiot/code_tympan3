@@ -616,13 +616,15 @@ class ReferenceElevationMesh(ElevationMesh):
     constraints.
     """
 
-    def insert_point(self, point, altitude, **kwargs):
-        return super(ReferenceElevationMesh, self).insert_point(
-            point, altitude=altitude, **kwargs)
+    def insert_point(self, point, **kwargs):
+        if 'altitude' not in kwargs:
+            raise TypeError('altitude is mandatory for *reference* elevation meshes')
+        return super(ReferenceElevationMesh, self).insert_point(point, **kwargs)
 
-    def insert_polyline(self, polyline, altitude, **kwargs):
-        return super(ReferenceElevationMesh, self).insert_polyline(
-            polyline, altitude=altitude, **kwargs)
+    def insert_polyline(self, polyline, **kwargs):
+        if 'altitude' not in kwargs:
+            raise TypeError('altitude is mandatory for *reference* elevation meshes')
+        return super(ReferenceElevationMesh, self).insert_polyline(polyline, **kwargs)
 
     def altitude_for_input_vertex(self, vh):
         alti = self.input_vertex_infos(vh).altitude
