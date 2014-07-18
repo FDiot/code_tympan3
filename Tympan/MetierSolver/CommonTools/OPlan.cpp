@@ -320,7 +320,7 @@ int OPlan::intersectsPlan(const OPlan& plan, OVector3D& vectorIntersec)
     return res;
 }
 
-int OPlan::intersectsSurface(const std::deque<OPoint3D>& contour, OSegment3D& seg) const
+int OPlan::intersectsSurface(const TabPoint3D& contour, OSegment3D& seg) const
 {
     int res = INTERS_NULLE;
     bool ptAFind = false, ptBFind = false;
