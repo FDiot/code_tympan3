@@ -34,6 +34,7 @@ struct TYStructSurfIntersect
     TYAcousticSurfaceGeoNode* pSurfGeoNode; //Geonode de la surface
     OMatrix matInv; // Matrice inverse pour les faces d'infrastructure
     TYTabPoint3D tabPoint; // Tableau de point utilise pour la preselection
+    OVector3D normal; // Normal to the face
     bool isEcran;   // Est un ecran
     bool isInfra; // Face d'infrastructure
     tympan::AcousticMaterialBase* material; 
@@ -45,6 +46,8 @@ struct TYSIntersection
     OSegment3D segInter[2]; // Segment d'intersection face/plan vertical[0] ou horizontal[1]
     bool noIntersect; // Indique qu'une face ne doit pas etre testee pour l'intersection
     bool bIntersect[2]; // Booleen qui indique si la face coupe le plan vertical ([0]) ou horizontal([1])
+    bool isEcran;   // Est un ecran
+    bool isInfra; // Face d'infrastructure
     tympan::AcousticMaterialBase* material;
 };
 

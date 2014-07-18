@@ -17,6 +17,7 @@
 #define __TY_SOLVER__
 
 #include <vector>
+#include <memory>
 
 #include "TYSolverDefines.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYSolverInterface.h"
@@ -30,6 +31,7 @@ class OThreadPool;
 class TYAcousticModel;
 class TYAcousticPathFinder;
 class TYFaceSelector;
+class Scene;
 
 class TYSolver : public TYSolverInterface
 {
@@ -37,30 +39,36 @@ public:
     TYSolver();
     virtual ~TYSolver();
 
-    virtual void purge();
-
     virtual bool solve(const TYSiteNode& site, TYCalcul& calcul,
             const tympan::AcousticProblemModel& aproblem,
             tympan::AcousticResultModel& aresult);
 
-    const TYStructSurfIntersect* getTabPolygon() const { return _tabPolygon; }
-    const size_t getTabPolygonSize() const { return _tabPolygonSize; }
+    const std::vector<TYStructSurfIntersect>& getTabPolygon() const { return _tabPolygon; }
 
-    TYFaceSelector* getFaceSelector() { return _faceSelector; }
-    TYAcousticPathFinder* getAcousticPathFinder() { return _acousticPathFinder; }
-    TYAcousticModel* getAcousticModel() { return _acousticModel; }
+    TYFaceSelector* getFaceSelector() { return _faceSelector._Myptr; }
+    TYAcousticPathFinder* getAcousticPathFinder() { return _acousticPathFinder._Myptr; }
+    TYAcousticModel* getAcousticModel() { return _acousticModel._Myptr; }
+
+    const Scene* getScene() const { return _scene._Myptr; }
 
 protected:
-    virtual void createFaceSelector();
-    virtual void createAcousticPathFinder();
-    virtual void createAcousticModel();
+    std::unique_ptr<TYFaceSelector> make_face_selector();
+    std::unique_ptr<TYAcousticPathFinder> make_path_finder();
+    std::unique_ptr<TYAcousticModel> make_acoustic_model();
 
-    TYFaceSelector* _faceSelector;
-    TYAcousticPathFinder* _acousticPathFinder;
-    TYAcousticModel* _acousticModel;
+    std::unique_ptr<TYFaceSelector> _faceSelector;
+    std::unique_ptr<TYAcousticPathFinder> _acousticPathFinder;
+    std::unique_ptr<TYAcousticModel> _acousticModel;
 
 private:
     bool buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem);
+
+    /*!
+    * \fn bool appendTriangleToScene()
+    * \brief Convertion des triangles Tympan en primitives utilisables par ray tracer.
+    * \return Renvoie vrai si l'ensemble des primitives a bien pu etre importe dans la simulation.
+    */
+    bool appendTriangleToScene();
 
     /**
      * \fn size_t buildValidTrajects(tympan::AcousticProblemModel& aproblem)
@@ -70,12 +78,14 @@ private:
 
     // XXX This pointer is actually used like a C array :
     // TODO replace with a std::deque or similar container.
-    TYStructSurfIntersect* _tabPolygon;
-    size_t _tabPolygonSize;
+    std::vector<TYStructSurfIntersect> _tabPolygon;
 
 	std::vector<TYTrajet> _tabTrajets; 
 
     OThreadPool* _pool;
+
+private:
+    std::unique_ptr<Scene> _scene;
 };
 
 #endif // __TY_SOLVER__

@@ -40,29 +40,28 @@ void TYAcousticPathFinder::init(TYCalcul& calcul)
     _bCalcTrajetHorizontaux = calcul.getCalculTrajetsHorizontaux();
 }
 
-void TYAcousticPathFinder::computePath(const TYSIntersection* tabIntersect, const OSegment3D& rayon, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight, unsigned int nNbTrajet)
+void TYAcousticPathFinder::computePath(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight)
 {
     bool dessus = true, lateral = false;
 
     // Determination du parcours et calcul des chemins
     //1. Parcours vertical
     //le dernier ptsTop n'est pas affecte
-    computeParcoursLateraux(tabIntersect, rayon, dessus, ptsTop, ptsTop, nNbTrajet);
+    computeParcoursLateraux(tabIntersect, rayon, dessus, ptsTop, ptsTop);
 
     // Parcours gauche & droits si necessaire
-    computeParcoursLateraux(tabIntersect, rayon, lateral, ptsLeft, ptsRight, nNbTrajet);
+    computeParcoursLateraux(tabIntersect, rayon, lateral, ptsLeft, ptsRight);
 }
 
-bool TYAcousticPathFinder::computeParcoursLateraux(const TYSIntersection* tabIntersect, const OSegment3D& rayon, const bool& dessus, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight, unsigned int nNbTrajet) const
+bool TYAcousticPathFinder::computeParcoursLateraux(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, const bool& dessus, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight) const
 {
     // Si on est en trajet lateral non demande par le calcul
     if (!_bCalcTrajetHorizontaux && !dessus) { return false; }
 
-    unsigned int nbFaces = static_cast<uint32>(_solver.getTabPolygonSize());
+    unsigned int nbFaces = tabIntersect.size();
 
     short indiceIntersect = dessus ? 0 : 1;
     TYCalculParcours Parcours(nbFaces, dessus != 0); //dessus = vue de cote
-    Parcours.NumPlanCoupe = nNbTrajet;
 
     //Quoiqu'il arrive, on ajoute la source:
     ptsLeft.push_back(rayon._ptA);
@@ -79,11 +78,10 @@ bool TYAcousticPathFinder::computeParcoursLateraux(const TYSIntersection* tabInt
     {
         if (tabIntersect[i].bIntersect[indiceIntersect])
         {
-            const TYStructSurfIntersect& SI = _solver.getTabPolygon()[i];
-            if (SI.tabPoint.size() == 0) { continue; }
-            Parcours.AjouterSegmentCoupe((double*)tabIntersect[i].segInter[indiceIntersect]._ptA._value,
-                                         (double*)tabIntersect[i].segInter[indiceIntersect]._ptB._value,
-                                         SI.isInfra, SI.isEcran);
+            TYSIntersection inter = tabIntersect[i];
+            Parcours.AjouterSegmentCoupe((double*)inter.segInter[indiceIntersect]._ptA._value,
+                                         (double*)inter.segInter[indiceIntersect]._ptB._value,
+                                         inter.isInfra, inter.isEcran);
         }
     }
 

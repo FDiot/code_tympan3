@@ -23,18 +23,23 @@
 #include "Tympan/Tools/TYProgressManager.h"
 #include "TYTask.h"
 #include "Tympan/MetierSolver/DataManagerCore/TYPreferenceManager.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Scene.h"
+#include "Tympan/MetierSolver/AcousticRaytracer/Geometry/Triangle.h"
 
 TYSolver::TYSolver()
-    : _faceSelector(0), _acousticPathFinder(0), _acousticModel(0), _tabPolygon(0), _tabPolygonSize(0), _pool(0)
 {
     // Creation du face selector
-    createFaceSelector();
+    _faceSelector = make_face_selector();
 
     // Creation du path finder
-    createAcousticPathFinder();
+    _acousticPathFinder = make_path_finder();
 
     // Creation du acoustic model
-    createAcousticModel();
+    _acousticModel = make_acoustic_model();
+
+    _tabPolygon.clear();
+
+    _scene = std::unique_ptr<Scene>( new Scene() ); 
 
     // Creation de la collection de thread
     _pool = NULL;
@@ -42,78 +47,12 @@ TYSolver::TYSolver()
 
 TYSolver::~TYSolver()
 {
-    // Release des pointeurs sur les TYAcousticSurfaceGeoNode
-    if (_tabPolygon)
-        for (size_t i = 0; i < _tabPolygonSize; ++i)
-        {
-            _tabPolygon[i].pSurfGeoNode->decRef();
-        }
-
-    if (_faceSelector)
-    {
-        delete _faceSelector;
-    }
-    if (_acousticPathFinder)
-    {
-        delete _acousticPathFinder;
-    }
-    if (_acousticModel)
-    {
-        delete _acousticModel;
-    }
-    if (_tabPolygon)
-    {
-        delete [] _tabPolygon;
-    }
     if (_pool)
     {
         delete _pool;
     }
-}
+    _pool = NULL;}
 
-void TYSolver::purge()
-{
-    if (_tabPolygon)
-    {
-        for (size_t i = 0; i < _tabPolygonSize; i++)
-        {
-            _tabPolygon[i].pSurfGeoNode->decRef();
-        }
-    }
-
-    if (_tabPolygon)
-    {
-        delete [] _tabPolygon;
-    }
-
-    _tabPolygon = NULL;
-
-    if (_faceSelector)
-    {
-        delete _faceSelector;
-    }
-    _faceSelector = NULL;
-
-
-    if (_acousticPathFinder)
-    {
-        delete _acousticPathFinder;
-    }
-    _acousticPathFinder = NULL;
-
-
-    if (_acousticModel)
-    {
-        delete _acousticModel;
-    }
-    _acousticModel = NULL;
-
-    if (_pool)
-    {
-        delete _pool;
-    }
-    _pool = NULL;
-}
 
 bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
         const tympan::AcousticProblemModel& aproblem,
@@ -127,16 +66,20 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
     size_t count = buildTrajects( const_cast<tympan::AcousticProblemModel&>(aproblem) );
 
     // Creation du face selector
-    if (!_faceSelector) { createFaceSelector(); }
+    if (!_faceSelector) { _faceSelector = make_face_selector(); }
 
     // Creation du path finder
-    if (!_acousticPathFinder) { createAcousticPathFinder(); }
+    if (!_acousticPathFinder) { _acousticPathFinder = make_path_finder(); }
 
     // Creation du acoustic model
-    if (!_acousticModel) { createAcousticModel(); }
+    if (!_acousticModel) { _acousticModel = make_acoustic_model(); }
 
     // On calcule la structure
-    if (!buildCalcStruct(site, calcul, aproblem))
+    if (buildCalcStruct(site, calcul, aproblem))
+    {
+        appendTriangleToScene();
+    }
+    else
     {
         return false;
     }
@@ -181,19 +124,19 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
     return true;
 }
 
-void TYSolver::createFaceSelector()
+std::unique_ptr<TYFaceSelector> TYSolver::make_face_selector()
 {
-    _faceSelector = new TYFaceSelector(*this);
+    return std::unique_ptr<TYFaceSelector>( new TYFaceSelector(*this) );
 }
 
-void TYSolver::createAcousticPathFinder()
+std::unique_ptr<TYAcousticPathFinder> TYSolver::make_path_finder()
 {
-    _acousticPathFinder = new TYAcousticPathFinder(*this);
+    return std::unique_ptr<TYAcousticPathFinder>( new TYAcousticPathFinder(*this) );
 }
 
-void TYSolver::createAcousticModel()
+std::unique_ptr<TYAcousticModel> TYSolver::make_acoustic_model()
 {
-    _acousticModel = new TYAcousticModel(*this);
+    return std::unique_ptr<TYAcousticModel>( new TYAcousticModel(*this) );
 }
 
 bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem)
@@ -203,19 +146,75 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul, const t
     const tympan::nodes_pool_t& nodes = aproblem.nodes(); 
     const tympan::triangle_pool_t& triangles = aproblem.triangles();
 
-    _tabPolygon = new TYStructSurfIntersect[triangles.size()];
+    _tabPolygon.reserve( triangles.size() );
 
+    OPoint3D pts[3];
     for (unsigned int i=0; i<triangles.size(); i++)
     {
-        OPoint3D p1 = nodes[triangles[i].n[0]];
-        OPoint3D p2 = nodes[triangles[i].n[1]];
-        OPoint3D p3 = nodes[triangles[i].n[2]];
+        pts[0] = nodes[triangles[i].n[0]];
+        pts[1] = nodes[triangles[i].n[1]];
+        pts[2] = nodes[triangles[i].n[2]];
 
-        _tabPolygon[i].tabPoint.push_back(p1);
-        _tabPolygon[i].tabPoint.push_back(p2);
-        _tabPolygon[i].tabPoint.push_back(p3);
-        _tabPolygon[i].material = const_cast<tympan::AcousticMaterialBase*>(&aproblem.material(i));
+        TYStructSurfIntersect SI;
+        OGeometrie::computeNormal(pts, 3, SI.normal);
+
+        SI.tabPoint.push_back(pts[0]);
+        SI.tabPoint.push_back(pts[1]);
+        SI.tabPoint.push_back(pts[2]);
+        SI.material = const_cast<tympan::AcousticMaterialBase*>(&aproblem.material(i));
+
+        _tabPolygon.push_back(SI);
     }
+
+    return true;
+}
+
+bool TYSolver::appendTriangleToScene()
+{
+    if ( _tabPolygon.empty() )
+    {
+        return false;
+    }
+
+    Material *m = new Material(); // Only for compatibility, may be suppressed;
+
+    vec3 pos;
+
+    for (unsigned int i = 0; i < _tabPolygon.size(); i++)
+    {
+        //Recuperation et convertion de la normale de la surface
+        double coordNormal[3];
+        _tabPolygon[i].normal.getCoords(coordNormal);
+        vec3 normalFace = vec3(coordNormal[0], coordNormal[1], coordNormal[2]);
+
+        unsigned int a, b, c;
+        double coord[3];
+
+        _tabPolygon[i].tabPoint[0].getCoords(coord);
+        pos = OPoint3Dtovec3(coord);
+        _scene->addVertex(pos, a);
+
+        _tabPolygon[i].tabPoint[1].getCoords(coord);
+        pos = OPoint3Dtovec3(coord);
+        _scene->addVertex(pos, b);
+
+        _tabPolygon[i].tabPoint[2].getCoords(coord);
+        pos = OPoint3Dtovec3(coord);
+        _scene->addVertex(pos, c);
+
+        Triangle* face;
+        if ( dynamic_cast<tympan::AcousticGroundMaterial*>(_tabPolygon[i].material) )
+        {
+            // Set last parameter true means triangle is part of the ground
+            face = (Triangle*)_scene->addTriangle(a, b, c, m, true);
+        }
+        else
+        {
+            face = (Triangle*)_scene->addTriangle(a, b, c, m);
+        }
+    }
+
+    _scene->finish(); // Build accelerating structure
 
     return true;
 }

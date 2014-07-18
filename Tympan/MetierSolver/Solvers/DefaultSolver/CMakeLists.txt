@@ -15,7 +15,7 @@ set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER ${CURRENT_FOLDER})
 add_dependencies(${MODULE_NAME} ${TYMPAN_MODULES} tympan_convexhull_finder)
 
 target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES} ${TYMPAN_MODULES} tympan_solver_data_model
-                      tympan_convexhull_finder ${OPENGL_LIBRARIES} )
+                      tympan_convexhull_finder tympan_acoustic_raytracer ${OPENGL_LIBRARIES} )
 
 configure_tympan_plugin(${MODULE_NAME})
 install_tympan_plugin(${MODULE_NAME})

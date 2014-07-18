@@ -30,7 +30,7 @@ TYFaceSelector::~TYFaceSelector()
 
 }
 
-void TYFaceSelector::selectFaces(TYSIntersection* tabIntersect, const OSegment3D& rayon)
+void TYFaceSelector::selectFaces(std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon)
 {
     int i;
     short XY = 0, XZ = 1;
@@ -39,25 +39,21 @@ void TYFaceSelector::selectFaces(TYSIntersection* tabIntersect, const OSegment3D
     TYSPlan plan[2];
     buildPlans(plan, rayon);
 
-    // Recuperation de la taille  du tableau de faces
-    size_t nbFaces = _solver.getTabPolygonSize();
+    size_t nbFaces = _solver.getTabPolygon().size();
 
     // Test des faces qui coupent le plan vertical
     for (i = 0; i < nbFaces; i++)
     {
-        if (tabIntersect[i].noIntersect)
-        {
-            continue;
-        }
-
         const TYStructSurfIntersect& SI = _solver.getTabPolygon()[i];
 
         if ((SI.tabPoint.size() == 0)) { continue; }
 
         // Plan vertical = 0 / Plan horizontal = 1
+        TYSIntersection intersection; 
+        bool bVertical = CalculSegmentCoupe(SI, intersection, plan[0].pt1, plan[0].pt2, plan[0].pt3, 0);
+        bool bHorizontal = CalculSegmentCoupe(SI, intersection, plan[1].pt1, plan[1].pt2, plan[1].pt3, 1);
 
-        CalculSegmentCoupe(SI, tabIntersect[i], plan[0].pt1, plan[0].pt2, plan[0].pt3, 0);
-        CalculSegmentCoupe(SI, tabIntersect[i], plan[1].pt1, plan[1].pt2, plan[1].pt3, 1);
+        if (bVertical || bHorizontal) { tabIntersect.push_back(intersection); }
     }
 }
 
@@ -121,11 +117,6 @@ bool TYFaceSelector::buildPlans(TYSPlan* plan, const OSegment3D& rayon)
 bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourante, TYSIntersection& Intersect, OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3, const int& indice) const
 {
     bool bRes = false;
-    const OMatrix matrixinv = FaceCourante.matInv;
-    TYAcousticSurfaceGeoNode* pSurfaceGeoNode = FaceCourante.pSurfGeoNode;
-
-    TYAcousticSurface* pSurface = NULL;
-    if (pSurfaceGeoNode) { pSurface = dynamic_cast<TYAcousticSurface*>(pSurfaceGeoNode->getElement()); }
 
     OSegment3D segInter;
 
@@ -135,6 +126,8 @@ bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourant
     {
         Intersect.bIntersect[indice] = true;
         Intersect.segInter[indice] = segInter;
+        Intersect.isEcran = FaceCourante.isEcran;
+        Intersect.isInfra = FaceCourante.isInfra;
         Intersect.material = FaceCourante.material;
         bRes = true;
     }
