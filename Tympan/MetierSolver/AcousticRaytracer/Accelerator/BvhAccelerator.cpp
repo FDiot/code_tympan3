@@ -368,7 +368,7 @@ uint32_t BvhAccelerator::flattenBVHTree(BVHBuildNode* node, uint32_t* offset)
     return myOffset;
 }
 
-decimal BvhAccelerator::traverse(Ray* ray, std::list<Intersection> &result)
+decimal BvhAccelerator::traverse(Ray* ray, std::list<Intersection> &result) const
 {
     if (!nodes) { return -1.; }
 
