@@ -173,7 +173,7 @@ You can also use (if needed):
 .. code-block:: cmake
 
    # If your module depends on other Tympan modules (i.e. other Tympan libraries).
-   add_dependencies(${MODULE_NAME} tympan_models_common tympan_gui)
+   add_dependencies(${MODULE_NAME} tympan_common tympan_lib)
 
    # If you have to link your library with one or a few libraries such as Boost,
    # Qt or OpenGL.
