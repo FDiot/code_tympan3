@@ -110,6 +110,7 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
     {
         tympan::source_idx sidx = _tabTrajets[i].asrc_idx;
         tympan::receptor_idx ridx = _tabTrajets[i].arcpt_idx;
+
         matrix(ridx, sidx) = _tabTrajets[i].getSpectre();
     }
 
@@ -223,11 +224,10 @@ size_t TYSolver::buildTrajects(tympan::AcousticProblemModel& aproblem)
     {
         for (unsigned int j = 0; j<aproblem.nreceptors(); j++)
         {
-            double distance = aproblem.source(i).position.distFrom(aproblem.receptor(j).position);
             TYTrajet trajet(aproblem.source(i), aproblem.receptor(j));
-            trajet.setDistance(distance);
             trajet.asrc_idx = i;
             trajet.arcpt_idx = j;
+
             _tabTrajets.push_back(trajet);
         }
     }
