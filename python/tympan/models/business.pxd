@@ -101,7 +101,9 @@ cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
         void update(const bool& force)
         void setAtmosphere(const SmartPtr[TYAtmosphere]& pAtmosphere)
         TYProjet* getProjet()
+        const double getAltiEmprise() const
         const vector[SmartPtr[TYGeometryNode]]& getListSiteNode() const
+        bool getUseEmpriseAsCrbNiv() const
 
 cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
@@ -184,6 +186,7 @@ cdef extern from "Tympan/models/business/infrastructure/TYTopographie.h":
         const vector[SmartPtr[TYGeometryNode]]& getListPlanEau() const
         const vector[SmartPtr[TYGeometryNode]]& getListTerrain() const
         const vector[SmartPtr[TYGeometryNode]]& getListCrbNiv() const
+        const vector[TYPoint]& getEmprise() const
 
 cdef extern from "Tympan/models/business/material/TYMateriauConstruction.h":
     cdef cppclass TYMateriauConstruction (TYElement):
