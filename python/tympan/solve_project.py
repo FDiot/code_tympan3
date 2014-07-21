@@ -23,7 +23,7 @@ except ImportError:
     raise ImportError(err)
 
 
-def solve(input_project, output_project, solverdir):
+def solve(input_project, output_project, solverdir, multithreading_on=True):
     """ Solve an acoustic problem with Code_TYMPAN from
 
         Keywords arguments:
@@ -45,6 +45,8 @@ def solve(input_project, output_project, solverdir):
         logging.exception("Couldn't load the acoustic project from %s file", input_project)
         raise
     comp = project.current_computation
+    if not multithreading_on:
+        comp.set_nthread(1)
     # Build an acoustic problem from the site of the computation
     problem = comp.acoustic_problem
     builder = bus2solv.SolverModelBuilder(problem)
@@ -68,4 +70,3 @@ def solve(input_project, output_project, solverdir):
     except ValueError:
         logging.exception("Couldn't export the acoustic results to %s file", output_project)
         raise
-
