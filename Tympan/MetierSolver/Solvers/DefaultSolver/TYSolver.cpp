@@ -188,18 +188,14 @@ bool TYSolver::appendTriangleToScene()
         vec3 normalFace = vec3(coordNormal[0], coordNormal[1], coordNormal[2]);
 
         unsigned int a, b, c;
-        double coord[3];
 
-        _tabPolygon[i].tabPoint[0].getCoords(coord);
-        pos = OPoint3Dtovec3(coord);
+        pos = OPoint3Dtovec3(_tabPolygon[i].tabPoint[0]);
         _scene->addVertex(pos, a);
 
-        _tabPolygon[i].tabPoint[1].getCoords(coord);
-        pos = OPoint3Dtovec3(coord);
+        pos = OPoint3Dtovec3(_tabPolygon[i].tabPoint[1]);
         _scene->addVertex(pos, b);
 
-        _tabPolygon[i].tabPoint[2].getCoords(coord);
-        pos = OPoint3Dtovec3(coord);
+        pos = OPoint3Dtovec3(_tabPolygon[i].tabPoint[2]);
         _scene->addVertex(pos, c);
 
         Triangle* face;

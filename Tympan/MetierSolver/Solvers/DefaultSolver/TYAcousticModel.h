@@ -174,11 +174,6 @@ public:
      */
     bool solve(TYTrajet& trajet);
 
-    /**
-     * Renvoi le materiau de la face rencontree par le rayon incident
-     */
-    TYMateriauConstruction* getMateriauFace(TYAcousticSurface* pSurf, const OSegment3D& seg) const;
-
 private :
     OSpectreComplex getReflexionSpectrumAt(const OPoint3D& position, const OVector3D& direction, double length) const;
 
