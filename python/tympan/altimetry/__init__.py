@@ -24,8 +24,11 @@ It is devided in several modules:
   diagnostic helpers
 """
 
+from __future__ import absolute_import
+
 import sys, os
 import os.path as osp
+
 
 _HERE = osp.realpath(osp.dirname(__file__))
 _PROJECT_BASE = osp.abspath(osp.join(_HERE, '..', '..', '..'))
