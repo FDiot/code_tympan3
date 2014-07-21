@@ -51,23 +51,24 @@ _SOLVERS_DIR = {
 }
 
 _CYTHON_EXTENSION_DIR = {
-    'Release' : osp.abspath(osp.join(PROJECT_BASE, 'python', 'cython')),
-    'Debug'   : osp.abspath(osp.join(PROJECT_BASE, 'python', 'cython_d'))
+    'Release' : osp.abspath(osp.join(PROJECT_BASE, 'cython')),
+    'Debug'   : osp.abspath(osp.join(PROJECT_BASE, 'cython_d'))
 }
 
 assert frozenset(_SOLVERS_DIR) == frozenset(_CYTHON_EXTENSION_DIR)
 _KNOWN_CONFIGURATIONS = frozenset(_SOLVERS_DIR)
 
 config = len(sys.argv) > 1 and sys.argv[1]
-if config in _KNOWN_CONFIGURATIONS:
-    TEST_CYTHON_EXTENSION_DIR = _CYTHON_EXTENSION_DIR[config]
-    assert osp.isdir(TEST_CYTHON_EXTENSION_DIR ), "The test cython dir does not exists '%s'" % TEST_CYTHON_EXTENSION_DIR
-    sys.path.append(TEST_CYTHON_EXTENSION_DIR)
-    TEST_SOLVERS_DIR = _SOLVERS_DIR[config]
-    assert osp.isdir(TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % TEST_SOLVERS_DIR
-else:
-    print 'WARNING: no config specification or unknown config (%s)' % config
 
+def config_cython_extensions_path():
+    if config in _KNOWN_CONFIGURATIONS:
+        TEST_CYTHON_EXTENSION_DIR = _CYTHON_EXTENSION_DIR[config]
+        assert osp.isdir(TEST_CYTHON_EXTENSION_DIR ), "The test cython dir does not exists '%s'" % TEST_CYTHON_EXTENSION_DIR
+        sys.path.append(TEST_CYTHON_EXTENSION_DIR)
+        TEST_SOLVERS_DIR = _SOLVERS_DIR[config]
+        assert osp.isdir(TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % TEST_SOLVERS_DIR
+    else:
+        print 'WARNING: no config specification or unknown config (%s)' % config
 
 def main():
     # The build configuration (Debug or Release) to be tested is added as
