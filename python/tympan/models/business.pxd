@@ -152,6 +152,21 @@ cdef extern from "Tympan/models/business/TYPointControl.h":
     cdef cppclass TYPointControl (TYPointCalcul):
         pass
 
+cdef extern from "Tympan/models/business/topography/TYCourbeNiveau.h":
+    cdef cppclass TYCourbeNiveau(TYElement):
+        const vector[TYPoint]& getListPoints() const
+        double getAltitude() const
+        TYCourbeNiveau(const vector[TYPoint]& pts, double alt)
+
+cdef extern from "Tympan/models/business/topography/TYTerrain.h":
+    cdef cppclass TYTerrain(TYElement):
+        SmartPtr[TYSol] getSol()
+        const vector[TYPoint]& getListPoints() const
+
+cdef extern from "Tympan/models/business/topography/TYPlanEau.h":
+    cdef cppclass TYPlanEau(TYTerrain):
+        SmartPtr[TYCourbeNiveau] getCrbNiv()
+
 cdef extern from "Tympan/models/business/material/TYSol.h":
     cdef cppclass TYSol (TYElement):
         double getResistivite()
