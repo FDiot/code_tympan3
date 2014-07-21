@@ -1356,43 +1356,6 @@ bool TYAcousticModel::solve(TYTrajet& trajet)
     return true;
 }
 
-TYMateriauConstruction* TYAcousticModel::getMateriauFace(TYAcousticSurface* pSurf, const OSegment3D& seg) const
-{
-    TYMateriauConstruction* mat = NULL;
-    TYMurElement* pMurElem = dynamic_cast<TYMurElement*>(pSurf);
-
-    if (pMurElem) // Cas d'une face de bi¿½timent ou d'un ecran
-    {
-        TYMur* pMur = dynamic_cast<TYMur*>(pMurElem->getParent());
-
-        OVector3D normale = pSurf->normal();
-        OVector3D rayon(seg._ptA, seg._ptB);
-
-        if (normale.scalar(rayon) < 0.0) // Rayon incident de direction oppose a la normale = face exterieure
-        {
-            mat = pMur->getParoi()->getMatFace2();
-        }
-        else // Materiau de la face interieure
-        {
-            mat = pMur->getParoi()->getMatFace1();
-        }
-    }
-    else // Cas d'une machine ou d'un acousticVolume quelconque
-    {
-        TYElement* pParentSurface = pSurf->getParent();
-        TYAcousticVolume* pVolParentSurface = NULL;
-        while (pParentSurface && !(dynamic_cast<TYAcousticVolume*>(pParentSurface)))
-        {
-            pParentSurface = pParentSurface->getParent();
-        }
-
-        pVolParentSurface = dynamic_cast<TYAcousticVolume*>(pParentSurface);
-        mat = pVolParentSurface->getMateriau();
-    }
-
-    return mat;
-}
-
 OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OPoint3D& position, const OVector3D& direction, double length) const
 {
     OSpectreComplex spectre;
