@@ -16,17 +16,11 @@
 /**
  * \file TYGeometryNodeGraphic.cpp
  * \brief Representation graphique d'un GeometryNode
- *
- *
  */
 
-
-
-
+#include <QtOpenGL> // this MUST be included before GL/*.h
 #include <GL/gl.h>
 #include <GL/glu.h>
-
-
 
 #include "TYGeometryNodeGraphic.h"
 
