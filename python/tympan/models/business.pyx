@@ -40,6 +40,25 @@ cdef tysol2ground(SmartPtr[TYSol] grnd):
     ground.thisptr = grnd
     return ground
 
+cdef tyelement_id(TYElement* elem):
+    """ Return the id of the element contained in the TYGeometryNode as a string
+    """
+    return elem.getID().toString().toStdString()
+
+cdef cpp2cypoints(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
+    """ Return a list of 'Point3D' cython objects from the c++ 'TYPoint' contained
+    in the vector 'cpp_points'.
+    Convert them to a global scale with the transform matrix 'matrix'
+    """
+    points = []
+    for i in xrange(cpp_points.size()):
+        cpp_point = cy.declare(tycommon.OPoint3D)
+        cpp_point = tycommon.dot(matrix, cpp_points[i])
+        cy_point = cy.declare(tycommon.Point3D)
+        cy_point = tycommon.opoint3d2point3d(cpp_point)
+        points.append(cy_point)
+    return points
+
 def init_tympan_registry():
     """ Trigger the registration of Tympan business classes (TY* classes).
         It is necessary to do it before playing with Tympan library (just after
@@ -141,6 +160,12 @@ cdef class Ground:
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getName().toStdString()
 
+    @property
+    def elem_id(self):
+        """ Return Ground id as a string """
+        return tyelement_id(self.thisptr.getRealPointer())
+
+
 cdef class Site:
 
     @property
@@ -215,7 +240,6 @@ cdef class Site:
             inc(itg)
         return (points, triangles, grounds)
 
-
     @cy.locals(comp=Computation)
     def fetch_sources(self, comp):
         """ Explore business infrastructure to retrieve its acoustic sources
@@ -261,6 +285,75 @@ cdef class Site:
         self.thisptr.getRealPointer().getTopographie().getRealPointer().sortTerrainsBySurface()
         self.thisptr.getRealPointer().updateAltiInfra(True)
         self.thisptr.getRealPointer().updateAcoustique(True)
+
+
+cdef class MaterialArea:
+    thisptr = cy.declare(cy.pointer(TYTerrain))
+    matrix = cy.declare(tycommon.OMatrix)
+
+    @property
+    def ground_material(self):
+        """ Return the ground material the material area is made of as a 'Ground'
+        cython object """
+        ground = Ground()
+        ground.thisptr = self.thisptr.getSol()
+        return ground
+
+    @property
+    def points(self):
+        # retrieve material area points
+        cpp_points = cy.declare(vector[TYPoint])
+        cpp_points = self.thisptr.getListPoints()
+        return cpp2cypoints(cpp_points, self.matrix)
+
+    @property
+    def elem_id(self):
+        """ Return MaterialArea id as a string """
+        return tyelement_id(self.thisptr)
+
+
+cdef class LevelCurve:
+    thisptr = cy.declare(cy.pointer(TYCourbeNiveau))
+    matrix = cy.declare(tycommon.OMatrix)
+    altitude
+
+    @property
+    def points(self):
+        """ Returns the successive points of the level curve as a list of
+        'Point3D' cython objects
+        """
+        # retrieve level curve points
+        cpp_points = cy.declare(vector[TYPoint])
+        cpp_points = self.thisptr.getListPoints()
+        return cpp2cypoints(cpp_points, self.matrix)
+
+    @property
+    def altitude(self):
+        """ Return the altitude of the level curve (float value) """
+        return self.altitude
+
+    @property
+    def elem_id(self):
+        """ Return LevelCurve id as a string """
+        return tyelement_id(self.thisptr)
+
+
+cdef class Lake:
+    thisptr = cy.declare(cy.pointer(TYPlanEau))
+    matrix = cy.declare(tycommon.OMatrix) # to get Lake pos in a global scale
+
+    @property
+    def elem_id(self):
+        """ Return Lake id as a string """
+        return tyelement_id(self.thisptr)
+
+    @property
+    def level_curve(self):
+        """ Return the lake's level curve as a 'LevelCurve' cython object
+        """
+        lev_curve = LevelCurve()
+        lev_curve.thisptr = self.thisptr.getCrbNiv().getRealPointer()
+        return lev_curve
 
 
 cdef class Result:
