@@ -1,19 +1,6 @@
-set(CYTHON_LIB_CURR_DIR "tympan")
-
+path_relative_to_python(destination)
 # Handles pure python sources
-file(
-  COPY .
-  DESTINATION "${PROJECT_BINARY_DIR}/${TYMPAN_PythonModules}" 
-  FILES_MATCHING PATTERN "*.py"
-  PATTERN "__init__.py" EXCLUDE)
-
-install(DIRECTORY ./ 
-  DESTINATION ${TYMPAN_PythonModules}
-  FILES_MATCHING PATTERN "*.py"
-  PATTERN "__init__.py" EXCLUDE)
-
-# Handles __init__.py files
-copy_init_files(${CYTHON_LIB_CURR_DIR})
+copy_and_install_python_files(${destination})
 
 # Handles cython modules
 file(GLOB CYTHON_SOURCES *.pyx)
@@ -27,9 +14,9 @@ set_source_files_properties(${CYTHON_SOURCES}
   PROPERTIES CYTHON_IS_CXX TRUE )
 
 cython_add_module(business2solver business2solver.pyx)
-configure_cython_module(business2solver ${CYTHON_LIB_CURR_DIR})
+configure_cython_module(business2solver ${destination})
 target_link_libraries(business2solver tympan_dm_metier tympan_dm_ihm
     tympan_dm_graphics)
-install_cython_module(business2solver ${CYTHON_LIB_CURR_DIR})
+install_cython_module(business2solver ${destination})
 
-add_subdirectory( models )
+add_subdirectory(models)

@@ -4,17 +4,17 @@ from altimetry_testutils import runVisualTests, TestFeatures, rect
 
 if runVisualTests:
     from matplotlib import pyplot as plt
-    from altimetry import visu
+    from tympan.altimetry import visu
 
 from shapely import geometry
 from shapely.geometry import MultiLineString, LineString
 
 # NB Importing altimetry configures path to find CGAL bindings
-from altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
+from tympan.altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
                                  WaterBody, SiteNode, PolygonalTympanFeature,
                                  InconsistentGeometricModel, MATERIAL_WATER,
                                  elementary_shapes)
-from altimetry.merge import (SiteNodeGeometryCleaner, build_site_shape_with_hole,
+from tympan.altimetry.merge import (SiteNodeGeometryCleaner, build_site_shape_with_hole,
                              recursively_merge_all_subsites)
 
 
@@ -329,7 +329,6 @@ class VisualisationTC(unittest.TestCase, TestFeatures):
         cleaner = recursively_merge_all_subsites(self.mainsite)
         cleaner.equivalent_site.plot(self.ax, alt_geom_map=cleaner.geom)
 
-
 if __name__ == '__main__':
-    from unittest import main
+    from utils import main
     main()

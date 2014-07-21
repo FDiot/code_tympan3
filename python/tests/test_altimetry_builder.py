@@ -1,14 +1,16 @@
 import unittest
 
 
-from altimetry.datamodel import (InconsistentGeometricModel,
+from tympan.altimetry.datamodel import (InconsistentGeometricModel,
                                  LevelCurve)
-from altimetry import visu
-from altimetry import mesh
-from altimetry.builder import Builder
+from tympan.altimetry import mesh
+from tympan.altimetry.builder import Builder
 
 from altimetry_testutils import (MesherTestUtilsMixin, TestFeatures,
                                  rect, runVisualTests, left_and_right_faces)
+
+if runVisualTests:
+    from tympan.altimetry import visu
 
 
 class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
@@ -81,3 +83,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                       'ids': set(['{Grass area}', '{Level curve A}'])}),
             (pM, {'altitude': self.level_curve_B.altitude,}),
         ])
+
+if __name__ == '__main__':
+    from utils import main
+    main()

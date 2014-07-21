@@ -1,11 +1,11 @@
 import unittest
 
-from altimetry.datamodel import InconsistentGeometricModel
-from altimetry import visu
-from altimetry import mesh
+from tympan.altimetry.datamodel import InconsistentGeometricModel
+from tympan.altimetry import mesh
 from altimetry_testutils import MesherTestUtilsMixin, runVisualTests, left_and_right_faces
 
 if runVisualTests:
+    from tympan.altimetry import visu
     from matplotlib import pyplot as plt
 
 class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
@@ -382,5 +382,5 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
 
 
 if __name__ == '__main__':
-    from unittest import main
+    from utils import main
     main()

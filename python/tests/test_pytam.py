@@ -89,5 +89,6 @@ class TestPyTam(TympanTC):
         # TODO to be completed: cf. ticket #1468184
 
 if __name__ == '__main__':
-    from utils import main
+    from utils import main, config_cython_extensions_path
+    config_cython_extensions_path()
     main()
