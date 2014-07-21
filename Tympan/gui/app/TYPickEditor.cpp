@@ -70,19 +70,10 @@
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "TYPickEditor.h"
 
-using namespace Qt;
-
-#if defined(WIN32)
-  #include <crtdbg.h>
-  #ifdef _DEBUG
-    #undef THIS_FILE
-    static char THIS_FILE[] = __FILE__;
-    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-  #endif
-#endif
-
 #define TR(id) OLocalizator::getString("TYPickEditor", (id))
 #define IMG(id) OLocalizator::getPicture("TYPickEditor", (id))
+
+using namespace Qt;
 
 
 TYPickEditor::TYPickEditor(TYModelerFrame* pModeler) :

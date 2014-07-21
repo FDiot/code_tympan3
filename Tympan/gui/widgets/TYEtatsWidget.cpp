@@ -38,14 +38,6 @@
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/TYProjet.h"
 
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
 
 
 #include "TYEtatsWidget.h"

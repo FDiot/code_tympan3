@@ -31,14 +31,6 @@
 
 #include "OSplashScreen.h"
 
-#if defined(WIN32)
-  #include <crtdbg.h>
-  #ifdef _DEBUG
-    #undef THIS_FILE
-    static char THIS_FILE[] = __FILE__;
-    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-  #endif
-#endif
 
 
 // WStyle_Splash est dispo que depuis Qt 3.1, il est equivalent a : WStyle_NoBorder|WStyle_StaysOnTop|WX11BypassWM
