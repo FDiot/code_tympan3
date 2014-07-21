@@ -3,9 +3,9 @@ import os
 runVisualTests = os.environ.get('RUN_VISUAL_TESTS', False)
 
 from shapely.geometry import MultiLineString
-from altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
+from tympan.altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
                                  WaterBody, SiteNode)
-from altimetry import mesh
+from tympan.altimetry import mesh
 
 def rect(x1, y1, x2, y2):
     return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]

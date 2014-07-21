@@ -19,6 +19,7 @@ include(tympan-deps)
 include_directories(${CMAKE_SOURCE_DIR})
 include_directories(${CMAKE_BINARY_DIR})
 
+set(TYMPAN_PythonModules         "python")
 # Recurse into main sources directory...
 add_subdirectory(Tympan)
 

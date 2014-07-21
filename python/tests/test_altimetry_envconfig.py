@@ -22,5 +22,5 @@ class TestAltimetry(unittest.TestCase):
                       the path to CGAL_bindings python libraries''')
 
 if __name__ == '__main__':
-    from unittest import main
+    from utils import main
     main()
