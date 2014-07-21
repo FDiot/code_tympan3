@@ -169,6 +169,11 @@ cdef class Ground:
 cdef class Site:
 
     @property
+    def elem_id(self):
+        """ Return SiteNode id as a string """
+        return tyelement_id(self.thisptr.getRealPointer())
+
+    @property
     def subsites(self):
         """ return a list containg the site subsites as 'Site' cython objects"""
         subsite_geonodes = cy.declare(vector[SmartPtr[TYGeometryNode]])
@@ -301,6 +306,28 @@ cdef class Site:
         self.thisptr.getRealPointer().updateAltiInfra(True)
         self.thisptr.getRealPointer().updateAcoustique(True)
 
+    def process_landtake(self):
+        """ Return a list of 'Point3D' cython objects representing the landtake
+        of the site. If 'use_landtake_as_level_curve' is true or if no level
+        curves are defined for the site, the landtake will be used as a level
+        curve and a 'LevelCurve' cython object will be returned as well
+        """
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        cpp_points = cy.declare(vector[TYPoint])
+        cpp_points = topo.getEmprise()
+        points = cpp2cypoints(cpp_points, self.matrix)
+        cpp_lcurves = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        cpp_lcurves = topo.getListCrbNiv()
+        make_level_curve = self.thisptr.getRealPointer().getUseEmpriseAsCrbNiv()
+        if make_level_curve or cpp_lcurves.empty():
+            alti = self.thisptr.getRealPointer().getAltiEmprise()
+            level_curve = LevelCurve()
+            level_curve.thisptr = new TYCourbeNiveau(cpp_points, alti)
+            level_curve.matrix = self.matrix
+            level_curve._altitude = alti
+            return (points, level_curve)
+        return (points, None)
 
     @property
     def lakes(self):
@@ -388,7 +415,7 @@ cdef class MaterialArea:
 cdef class LevelCurve:
     thisptr = cy.declare(cy.pointer(TYCourbeNiveau))
     matrix = cy.declare(tycommon.OMatrix)
-    altitude
+    _altitude = cy.declare(double)
 
     @property
     def points(self):
@@ -403,7 +430,7 @@ cdef class LevelCurve:
     @property
     def altitude(self):
         """ Return the altitude of the level curve (float value) """
-        return self.altitude
+        return self._altitude
 
     @property
     def elem_id(self):
