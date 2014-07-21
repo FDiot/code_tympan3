@@ -56,6 +56,9 @@ cdef extern from "Tympan/models/business/TYElement.h":
     TYSourcePonctuelle* downcast_source_ponctuelle "downcast<TYSourcePonctuelle>"(TYElement *)
     TYMaillage* downcast_maillage "downcast<TYMaillage>"(TYElement *)
     TYPointControl* downcast_point_control "downcast<TYPointControl>"(TYElement *)
+    TYCourbeNiveau* downcast_courbe_niveau "downcast<TYCourbeNiveau>"(TYElement*)
+    TYPlanEau* downcast_plan_eau "downcast<TYPlanEau>"(TYElement*)
+    TYTerrain* downcast_terrain "downcast<TYTerrain>"(TYElement*)
 
 # This is because it seems unsupported to declare a map containing pointers
 # http://trac.cython.org/cython_trac/ticket/793
@@ -176,6 +179,9 @@ cdef extern from "Tympan/models/business/infrastructure/TYTopographie.h":
         void exportMesh(deque[tycommon.OPoint3D] &, deque[tycommon.OTriangle] &, deque[SmartPtr[TYSol]] *)
         SmartPtr[TYAltimetrie] getAltimetrie()
         void sortTerrainsBySurface()
+        const vector[SmartPtr[TYGeometryNode]]& getListPlanEau() const
+        const vector[SmartPtr[TYGeometryNode]]& getListTerrain() const
+        const vector[SmartPtr[TYGeometryNode]]& getListCrbNiv() const
 
 cdef extern from "Tympan/models/business/material/TYMateriauConstruction.h":
     cdef cppclass TYMateriauConstruction (TYElement):

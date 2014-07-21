@@ -287,6 +287,64 @@ cdef class Site:
         self.thisptr.getRealPointer().updateAcoustique(True)
 
 
+    @property
+    def lakes(self):
+        """ Return the lakes of the topography as a list of 'Lake' cython objects """
+        lakes = []
+        material_areas = []
+        cpp_lakes = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        cpp_lakes = topo.getListPlanEau()
+        for i in xrange(cpp_lakes.size()):
+            cpp_lake = cy.declare(cy.pointer(TYPlanEau))
+            cpp_lake = downcast_plan_eau(cpp_lakes[i].getRealPointer().getElement())
+            lake = Lake()
+            lake.thisptr = cpp_lake
+            lake.matrix = cpp_lakes[i].getRealPointer().getMatrix()
+            lakes.append(lake)
+        return lakes
+
+    @property
+    def material_areas(self):
+        """ Return the material areas of the topography as a list of
+        'MaterialArea' cython objects """
+        mareas = []
+        cpp_mat_areas = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        cpp_mat_areas = topo.getListTerrain()
+        for i in xrange (cpp_mat_areas.size()):
+            cpp_mat_area = cy.declare(cy.pointer(TYTerrain))
+            cpp_mat_area = downcast_terrain(
+                cpp_mat_areas[i].getRealPointer().getElement())
+            area = MaterialArea()
+            area.thisptr = cpp_mat_area
+            area.matrix = cpp_mat_areas[i].getRealPointer().getMatrix()
+            mareas.append(area)
+        return mareas
+
+    @property
+    def level_curves(self):
+        """ Return the level curves of the topography as a list of 'LevelCurve'
+        cython objects """
+        lcurves = []
+        cpp_lcurves = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        cpp_lcurves = topo.getListCrbNiv()
+        for i in xrange (cpp_lcurves.size()):
+            cpp_lcurve = cy.declare(cy.pointer(TYCourbeNiveau))
+            cpp_lcurve = downcast_courbe_niveau(
+                cpp_lcurves[i].getRealPointer().getElement())
+            lcurve = LevelCurve()
+            lcurve.thisptr = cpp_lcurve
+            lcurve.matrix = cpp_lcurves[i].getRealPointer().getMatrix()
+            lcurve.altitude = cpp_lcurve.getAltitude()
+            lcurves.append(lcurve)
+        return lcurves
+
+
 cdef class MaterialArea:
     thisptr = cy.declare(cy.pointer(TYTerrain))
     matrix = cy.declare(tycommon.OMatrix)
