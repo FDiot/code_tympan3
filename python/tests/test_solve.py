@@ -73,5 +73,6 @@ for test_file in os.listdir(TEST_PROBLEM_DIR):
                 make_test_with_file(test_file))
 
 if __name__ == '__main__':
-    from utils import main
+    from utils import main, config_cython_extensions_path
+    config_cython_extensions_path()
     main()

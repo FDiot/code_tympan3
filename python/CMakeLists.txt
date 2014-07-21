@@ -1,6 +1,3 @@
-project(TYMPAN_Python)
-cmake_minimum_required(VERSION 2.8.5)
-
 set(CURRENT_FOLDER "python")
 
 find_package(PythonInterp REQUIRED)
@@ -11,7 +8,6 @@ include(UseCython)
 
 include(tympan-utils-python)
 
-set(TYMPAN_PythonModules         "pymodules")
 set(TYMPAN_CythonModules_Debug   "cython_d")
 set(TYMPAN_CythonModules_Release "cython")
 
