@@ -13,31 +13,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
-
-#include "TYProgressManager.h"
 
 #if TY_USE_IHM
 
-#include "OLocalizator.h"
+#include <iostream>
 
 #include <qapplication.h>
 #include <qcursor.h>
-#include <iostream>
 
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
-
+#include "OLocalizator.h"
+#include "TYProgressManager.h"
 
 #define TR(id) OLocalizator::getString("TYProgressManager", (id))
 

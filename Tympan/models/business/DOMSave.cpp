@@ -13,32 +13,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
 
-
-
-#include "DOMSave.h"
+#include <iostream>
+#include <fstream>
 
 #include <qfile.h>
 #include <qtextstream.h>
 
-#include <iostream>
-#include <fstream>
+#include "DOMSave.h"
+
+
 using namespace std;
-
-#if defined(WIN32)
-#include <crtdbg.h>
-#endif
-
-#if defined(WIN32)
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
 
 
 //////////////////////////////////////////////////////////////////////////////

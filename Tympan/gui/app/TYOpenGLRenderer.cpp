@@ -16,28 +16,15 @@
 /**
  * \file TYOpenGLRenderer.cpp
  * \brief Realise le rendu VTK et le rendu OpenGL
- *
- *
  */
 
 
-
-
 #include "Tympan/models/business/TYProjet.h"
-#include "Tympan/models/business/geometry/TYGeometryNode.h"//az++ pour updateDisplayListOverlay
+#include "Tympan/models/business/geometry/TYGeometryNode.h"
 
 #include "TYOpenGLRenderer.h"
 
-/*
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
-*/
+
 ///La tolerance pour le picking.
 static const float ElementPickerTolerance = 0.01f;
 

@@ -19,9 +19,6 @@
  */
 
 
-#if defined(WIN32)
-  #include <crtdbg.h>
-#endif
 
 #include <qmessagebox.h>
 
@@ -40,22 +37,6 @@ static void QTMessageHandler(QtMsgType type, const char* message)
         case QtDebugMsg:
             break;
         case QtWarningMsg:
-            /*          int selected;
-
-                        selected = QMessageBox::critical(NULL,"Warning !", message, "Debug", "Continue", "Quit");
-
-                        if (selected == 0) {
-                            // Debug
-                            #if defined(WIN32)
-                            _CrtDbgBreak();
-                            #endif
-                        } else if (selected == 1) {
-                            // Continue
-                        } else if (selected == 2) {
-                            // Quit
-                            exit(1);
-                        }
-            //*/
             break;
         case QtFatalMsg:
             int selected;
@@ -112,41 +93,10 @@ static int tyMain(int argc, char** argv)
 int main(int argc, char** argv)
 {
     int ret;
-    //  VLDDisable ();
-    // Pour la gestion des memory leaks
-#if defined(WIN32)
-#ifdef _DEBUG
-    /*
-
-        int old_flag = _CrtSetDbgFlag( _CRTDBG_REPORT_FLAG );
-        int new_flag = old_flag |   _CRTDBG_ALLOC_MEM_DF;
-        new_flag |= _CRTDBG_LEAK_CHECK_DF;
-
-        _CrtSetDbgFlag(new_flag);
-        _CrtMemState start_mem_state;
-        _CrtMemState end_mem_state;
-        _CrtMemState result_mem_state;
-
-        _CrtMemCheckpoint(&start_mem_state);*/
-#endif
-#endif
-
     // Register TY* classes before starting the application
     tympan::init_registry();
-
     // Appel le main de Tympan
     ret = tyMain(argc, argv);
-
-    // Affiche les memory leaks
-#if defined(WIN32)
-#ifdef _DEBUG
-    //  _CrtMemCheckpoint(&end_mem_state);
-    //  _CrtMemDifference(&result_mem_state,&start_mem_state,&end_mem_state);
-    //  _CrtMemDumpStatistics(&result_mem_state);
-    //  _CrtMemDumpAllObjectsSince(&start_mem_state);
-#endif
-#endif
-
     return ret;
 }
 

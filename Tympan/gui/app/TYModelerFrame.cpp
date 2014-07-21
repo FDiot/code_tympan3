@@ -86,19 +86,10 @@
 #include "Tympan/gui/app/TYSetCameraCoordinates.h"
 #include "TYModelerFrame.h"
 
-using namespace Qt;
-
-#if defined(WIN32)
-#include <crtdbg.h>
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-#endif
-#endif
-
 #define TR(id) OLocalizator::getString("TYModelerFrame", (id))
 #define IMG(id) OLocalizator::getPicture("TYModelerFrame", (id))
+
+using namespace Qt;
 
 // Couleurs
 static double gridColor[] = { 0.59, 0.41, 0.42 };

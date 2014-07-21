@@ -47,14 +47,6 @@
 #include "Tympan/gui/app/TYApplication.h"
 #include "TYLinearMaillageEditor.h"
 
-#if defined(WIN32)
-  #include <crtdbg.h>
-  #ifdef _DEBUG
-    #undef THIS_FILE
-    static char THIS_FILE[] = __FILE__;
-    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-  #endif
-#endif
 
 #define TR(id) OLocalizator::getString("TYLinearMaillageEditor", (id))
 

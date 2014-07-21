@@ -19,9 +19,6 @@
  */
 
 
-#if defined(WIN32)
-  #include <crtdbg.h>
-#endif
 
 #include <qmessagebox.h>
 #include <qtooltip.h>
@@ -62,13 +59,6 @@
 #include "Tympan/gui/app/TYApplication.h"
 #include "TYSiteModelerFrame.h"
 
-#if defined(WIN32)
-  #ifdef _DEBUG
-    #undef THIS_FILE
-    static char THIS_FILE[] = __FILE__;
-    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-  #endif
-#endif
 
 
 #define TR(id) OLocalizator::getString("TYSiteModelerFrame", (id))

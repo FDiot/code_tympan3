@@ -83,14 +83,6 @@
 #include "Tympan/gui/app/TYApplication.h"
 #include "TYMainWindow.h"
 
-#if defined(WIN32)
-  #include <crtdbg.h>
-  #ifdef _DEBUG
-    #undef THIS_FILE
-    static char THIS_FILE[] = __FILE__;
-    #define new new(_NORMAL_BLOCK, THIS_FILE, __LINE__)
-  #endif
-#endif
 
 #define TR(id) OLocalizator::getString("TYMainWindow", (id))
 #define IMG(id) OLocalizator::getPicture("TYMainWindow", (id))
