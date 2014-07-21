@@ -1,9 +1,8 @@
 import sys
 import os, os.path as osp
+import unittest
 
-from utils import TympanTC
-
-class TestAltimetry(TympanTC):
+class TestAltimetry(unittest.TestCase):
     def test_environment(self):
         # Import shapely (must be in the PYTHONPATH)
         try:
@@ -23,5 +22,5 @@ class TestAltimetry(TympanTC):
                       the path to CGAL_bindings python libraries''')
 
 if __name__ == '__main__':
-    from utils import main
+    from unittest import main
     main()
