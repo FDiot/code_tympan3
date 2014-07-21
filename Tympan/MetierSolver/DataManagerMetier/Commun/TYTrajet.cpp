@@ -24,6 +24,9 @@ TYTrajet::TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcp
     arcpt(arcpt_),
     _distance(0.0)
 {
+    _ptS = asrc.position;
+    _ptR = arcpt.position;
+    _distance = _ptS.distFrom(_ptR);
 }
 
 
@@ -55,6 +58,8 @@ TYTrajet& TYTrajet::operator=(const TYTrajet& other)
         _sLP = other._sLP;
         asrc = other.asrc;
         arcpt = other.arcpt;
+        asrc_idx = other.asrc_idx;
+        arcpt_idx = other.arcpt_idx;
     }
     return *this;
 }
@@ -67,7 +72,13 @@ bool TYTrajet::operator==(const TYTrajet& other) const
         if (_ptS != other._ptS) { return false; }
         if (_ptR != other._ptR) { return false; }
         if (_distance != other._distance) { return false; }
+        if (_sLP != other._sLP) { return false; };
+        //if (asrc != other.asrc) { return false; };
+        //if (arcpt != other.arcpt) ;
+        if (asrc_idx != other.asrc_idx) { return false; };
+        if (arcpt_idx != other.arcpt_idx) { return false; };
     }
+
     return true;
 }
 
