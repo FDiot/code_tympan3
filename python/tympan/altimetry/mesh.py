@@ -113,7 +113,7 @@ class MeshedCDTWithInfo(object):
         # Copying a CDT is tricky
         # See http://code.google.com/p/cgal-bindings/issues/detail?id=49
         newone = class_()
-        newone.cdt.deepcopy(self.cdt)
+        newone.cdt = self.cdt.deepcopy()
         vmap = self.vertices_map_to_other_mesh(newone)
         for orig_vh, orig_info in self._input_vertices_infos.iteritems():
             dest_vh = vmap[orig_vh]
