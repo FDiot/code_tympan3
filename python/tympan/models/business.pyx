@@ -169,6 +169,21 @@ cdef class Ground:
 cdef class Site:
 
     @property
+    def subsites(self):
+        """ return a list containg the site subsites as 'Site' cython objects"""
+        subsite_geonodes = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        subsite_geonodes = self.thisptr.getRealPointer().getListSiteNode()
+        subsites = []
+        for i in xrange(subsite_geonodes.size()):
+            cpp_site = cy.declare(cy.pointer(TYSiteNode))
+            cpp_site = downcast_sitenode(subsite_geonodes[i].getRealPointer().getElement())
+            site = Site()
+            site.matrix = subsite_geonodes[i].getRealPointer().getMatrix()
+            site.thisptr = SmartPtr[TYSiteNode](cpp_site)
+            subsites.append(site)
+        return subsites
+
+    @property
     def project(self):
         """ Return the parent project of the site as a 'Project' cython object
         """
