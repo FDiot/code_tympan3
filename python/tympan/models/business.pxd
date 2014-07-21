@@ -59,6 +59,7 @@ cdef extern from "Tympan/models/business/TYElement.h":
     TYCourbeNiveau* downcast_courbe_niveau "downcast<TYCourbeNiveau>"(TYElement*)
     TYPlanEau* downcast_plan_eau "downcast<TYPlanEau>"(TYElement*)
     TYTerrain* downcast_terrain "downcast<TYTerrain>"(TYElement*)
+    TYSiteNode* downcast_sitenode "downcast<TYSiteNode>"(TYElement*)
 
 # This is because it seems unsupported to declare a map containing pointers
 # http://trac.cython.org/cython_trac/ticket/793
@@ -100,6 +101,7 @@ cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
         void update(const bool& force)
         void setAtmosphere(const SmartPtr[TYAtmosphere]& pAtmosphere)
         TYProjet* getProjet()
+        const vector[SmartPtr[TYGeometryNode]]& getListSiteNode() const
 
 cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
@@ -196,6 +198,7 @@ cdef class Computation:
 
 cdef class Site:
     cdef SmartPtr[TYSiteNode] thisptr
+    cdef tycommon.OMatrix matrix
 
 cdef class Material:
     cdef SmartPtr[TYMateriauConstruction] thisptr
