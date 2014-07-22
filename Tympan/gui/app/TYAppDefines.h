@@ -47,7 +47,6 @@ class TYEtageEditor;
 class TYFaceModelerFrame;
 class TYFaceModelerPickEditor;
 class TYFaceToolbar;
-class TYFlyCameraEditor;
 class TYGetLibraryDialog;
 class TYInfraToolbar;
 class TYLibraryWidget;
