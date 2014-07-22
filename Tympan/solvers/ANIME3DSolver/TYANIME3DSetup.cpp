@@ -16,7 +16,7 @@
 #include <string>
 #include <fstream>
 
-#include "Tympan/MetierSolver/AcousticRaytracer/global.h"
+#include "Tympan/solvers/AcousticRaytracer/global.h"
 #include "TYANIME3DSetup.h"
 
 namespace ANIME3DSetup

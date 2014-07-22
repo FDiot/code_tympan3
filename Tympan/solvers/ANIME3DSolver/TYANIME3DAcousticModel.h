@@ -39,6 +39,8 @@ typedef std::vector<OPoint3D> OTabPoints;
 typedef std::vector<Ray*> TabRays;
 
 class OBox2;
+class AcousticProblemModel;
+class AtmosphericConditions;
 
 /**
  * \class TYANIME3DAcousticModel
@@ -48,8 +50,10 @@ class TYANIME3DAcousticModel : public TYAcousticModelInterface
 {
 public:
     /// constructeurs
-    TYANIME3DAcousticModel(TYCalcul& calcul, const TYSiteNode& site, tab_acoustic_path& tabRayons, TYStructSurfIntersect* tabStruct,
-                           TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs);
+    TYANIME3DAcousticModel( tab_acoustic_path& tabRayons, 
+                            TYStructSurfIntersect* tabStruct,
+                            const tympan::AcousticProblemModel& aproblem,
+                            tympan::AtmosphericConditions& atmos);
 
     /// destructeur
     virtual ~TYANIME3DAcousticModel();
@@ -91,20 +95,20 @@ protected:
      * \fn OBox ComputeFresnelArea(TYCalcul & calcul,TYSiteNode & site, TYRay & ray)
      * \brief calcul des triangles de la zone de Fresnel
      */
-    OBox2 ComputeFresnelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice);
+    //OBox2 ComputeFresnelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice);
 
     /**
      * \fn  OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
      * \brief calcul des ponderations de Fresnel associees a la zone de Fresnel
      */
-    OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre);
+    //OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre);
 
     /**
      * \fn  std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
      * \brief Computes triangulation inside the bounding box
      * \brief Needs 4 points which are the box corners' projection on the ground
      */
-    std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
+    //std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
 
     /**
     * \fn void ComputeAbsDiff(TYCalcul & calcul, const TYSiteNode & site)
@@ -124,14 +128,9 @@ private :
 protected :
 
     // Test : vector de triangles
-    std::vector<OTriangle> _oTriangles;
+//    std::vector<OTriangle> _oTriangles;
     //std::vector<OPoint3D>& _oVertex;
-    QList<OTriangle> triangles;
-
-    TYAltimetrie* _alti;
-
-    TYCalcul& _calcul;
-    const TYSiteNode& _site;
+//    QList<OTriangle> triangles;
 
     /// tableau des pressions acoustiques efficaces par rayon
     OTabSpectreComplex _pressAcoustEff;
@@ -153,26 +152,8 @@ protected :
 
     TYStructSurfIntersect* _tabSurfIntersect; /*!< Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face */
 
-    /// l'atmosphere
-    TYAtmosphere _atmos;
-
-    /// la topographie du site
-    TYTopographie* _topo;
-
-    /// la liste des terrains du site
-    TYTabTerrainGeoNode _listeTerrains;
-
     /// la liste des triangles de la topo
-    TYTabLPPolygon _listeTriangles;
-
-    /// la liste des triangles de la topo
-    TYTabLPPolygon _listeTrianglesBox;
-
-    /*!< List of sources used by the solver */
-    TYTabSourcePonctuelleGeoNode& _tabSources;
-
-    /*!< List of receptors used by the solver */
-    TYTabPointCalculGeoNode& _tabRecepteurs;
+//    TYTabLPPolygon _listeTrianglesBox;
 
     /// vitesse du son
     double _c;
@@ -185,6 +166,13 @@ protected :
 
     /// take into account the fresnel area
     bool _useFresnelArea;
+
+private:
+    // Problem data
+    const tympan::AcousticProblemModel& _aproblem;
+
+    tympan::AtmosphericConditions& _atmos;
 };
+
 
 #endif // __TYANIME3DACOUSTICMODEL__

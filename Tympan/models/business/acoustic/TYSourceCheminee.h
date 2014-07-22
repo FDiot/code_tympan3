@@ -105,10 +105,6 @@ protected:
     ///Le rectangle acoustique associe a cette source.
     //    LPTYAcousticRectangle _pAcousticRectangle;
     LPTYRectangle _pAcousticRectangle;
-
-private:
-    // Tableaux utilises dans le calcul de la directivite.
-    static const double _tabQ[NB_KA][NB_THETA];
 };
 
 

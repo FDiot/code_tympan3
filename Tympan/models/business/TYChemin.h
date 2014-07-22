@@ -26,7 +26,7 @@
 
 #include <deque>
 #include "TYEtape.h"
-#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
+#include "Tympan/models/solver/entities.hpp"
 
 
 /**

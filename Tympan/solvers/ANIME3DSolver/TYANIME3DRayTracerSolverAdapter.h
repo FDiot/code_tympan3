@@ -13,8 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef TYANIME3DRAYTRACERSETUP_H
-#define TYANIME3DRAYTRACERSETUP_H
+#ifndef TYANIME3D_RAYTRACER_SOLVER_ADAPTER_H
+#define TYANIME3D_RAYTRACER_SOLVER_ADAPTER_H
 
 #include "Tympan/solvers/AcousticRaytracer/Tools/SelectorManager.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Solver.h"
@@ -24,24 +24,10 @@
 * \brief Classe implementant l'interface pour piloter le lancer de rayons pour le solver ANIME3D. (cree a partir de la classe SimpleRaySolver)
 */
 
-class TYANIME3DRayTracerSetup : public Solver
+class TYANIME3DRayTracerSolverAdapter : public Solver
 {
 
 public:
-
-    /*!
-    * \fn virtual void initGlobalValues()
-    * \brief  Parametres par defaut du lancer de rayons pour le solveur ANIME3D
-    */
-    virtual void initGlobalValues();
-
-    /*!
-    * \fn virtual void loadParameters()
-    * \brief  Lecture des parametres lancer de rayons pour le solveur ANIME3D dans le fichier ANIME3DRayTracerParameters.txt
-    * \return Renvoie vrai si l'ensemble des operations se sont bien deroulees.
-    */
-    virtual bool loadParameters();
-
     /*!
     * \fn virtual bool postTreatmentScene(Scene *scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs)
     * \brief Fonction virtuelle post traitant la scene. Cette phase a 2 objectifs : transformer les meta-objets et augmenter la scene. La phase
@@ -113,21 +99,10 @@ protected:
     SelectorManager<Ray> selectorManagerIntersection;
     SelectorManager<Ray> selectorManagerValidation;
 
-private:
-    double getParam(char* ligne)
-    {
-        std::string str(ligne);
-        int delim = str.find(';');
-        str.erase(delim);
-        if (delim == -1) { return 1.0E-32f; }
-        const char* bidon = str.c_str();
-        return std::atof(bidon);
-    }
-
 #ifdef _ALLOW_TARGETING_
 protected :
     TargetManager targetManager;
 #endif //_ALLOW_TARGETING_
 };
 
-#endif //TYANIME3DRAYTRACERSETUP_H
+#endif //TYANIME3D_RAYTRACER_SOLVER_ADAPTER_H
