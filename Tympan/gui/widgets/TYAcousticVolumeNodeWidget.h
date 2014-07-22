@@ -39,7 +39,6 @@ class QGridLayout;
 class QLabel;
 class QGroupBox;
 class TYAcousticInterfaceWidget;
-class TYVolumeInterfaceWidget;
 class TYElementWidget;
 class TYColorInterfaceWidget;
 class QWidget;
@@ -119,7 +118,6 @@ protected:
     QGridLayout* _groupBoxLayout;
 
     TYAcousticInterfaceWidget* _interW;
-    TYVolumeInterfaceWidget* _volumeW;
     TYColorInterfaceWidget* _colorW;
     TYElementWidget* _elmW;
 

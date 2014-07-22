@@ -44,13 +44,11 @@ TYAcousticVolumeWidget::TYAcousticVolumeWidget(TYAcousticVolume* pElement, QWidg
     _elmW = new TYElementWidget(pElement, this);
     _colorW = new TYColorInterfaceWidget(dynamic_cast<TYColorInterface*>(pElement), this);
     _interW = new TYAcousticInterfaceWidget(dynamic_cast<TYAcousticInterface*>(pElement), this);
-    //  _volumeW = new TYVolumeInterfaceWidget(pElement, this);
 
     unsigned int iln = 0;
 
     _acousticVolumeLayout->addWidget(_elmW, iln, 0);
     _acousticVolumeLayout->addWidget(_colorW, ++iln, 0);
-    //  _acousticVolumeLayout->addWidget(_volumeW, ++iln2, 0);
     _acousticVolumeLayout->addWidget(_interW, ++iln, 0);
 
     _groupBoxMat = new QGroupBox(this);
@@ -106,14 +104,12 @@ void TYAcousticVolumeWidget::updateContent()
     _elmW->updateContent();
     _colorW->updateContent();
     _interW->updateContent();
-    //  _volumeW->updateContent();
 }
 
 void TYAcousticVolumeWidget::apply()
 {
     _elmW->apply();
     _colorW->apply();
-    //  _volumeW->apply();
 
     if (_isColorModified)
     {
