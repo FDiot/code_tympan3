@@ -862,10 +862,6 @@ void TYMainWindow::windowsMenuAboutToShow()
         QWidget* internal_window = windows.at(i);
 #endif
         if (!internal_window) { break; } // Securite
-        if (QString(internal_window->metaObject()->className()).compare("TYDrawSpectres") == 0)
-        {
-            continue;
-        }
 
         QAction* id = _pWindowsMenu->addAction(internal_window->windowTitle(),
                                                this, SLOT(windowsMenuActivated()));
