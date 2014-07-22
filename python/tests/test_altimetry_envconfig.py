@@ -15,11 +15,14 @@ class TestAltimetry(unittest.TestCase):
         self.assertTrue(osp.isdir(CGAL_BINDINGS_PATH))
         sys.path.append(CGAL_BINDINGS_PATH)
         try:
-            import CGAL
             from CGAL import CGAL_Kernel, CGAL_Mesh_2
-        except ImportError:
-            self.fail('''CGAL_BINDINGS_PATH environment variable must contain
-                      the path to CGAL_bindings python libraries''')
+        except ImportError as exc:
+             self.fail(
+                'Could not load CGAL bindings : note the '
+                'CGAL_BINDINGS_PATH environment variable must hold '
+                'the path to CGAL_bindings python libraries in case they '
+                'are not already in the PYTHONPATH  (' + CGAL_BINDINGS_PATH + 
+                ') the error was: ' + exc.message)
 
 if __name__ == '__main__':
     from utils import main
