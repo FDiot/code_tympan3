@@ -30,7 +30,6 @@ class TYBoxEditor;
 class TYCalculManager;
 class TYCalculToolbar;
 class TYCameraEditor;
-class TYCameraZoneEditor;
 class TYConsole;
 class TYCourbeNiveauEditor;
 class TYCoursEauEditor;
