@@ -8,9 +8,6 @@ include(UseCython)
 
 include(tympan-utils-python)
 
-set(TYMPAN_CythonModules_Debug   "cython_d")
-set(TYMPAN_CythonModules_Release "cython")
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories (${GTEST_INCLUDE_DIR})
 
