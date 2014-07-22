@@ -107,7 +107,6 @@ public:
     {
         NoMode = -1,
         CameraMode,
-        CameraZoneMode,
         DistanceMode,
         MovingMode,
         RotationMode,
@@ -521,9 +520,6 @@ private:
 
     ///Editor pour deplacer les elements.
     TYPositionEditor* _pPositionEditor;
-
-    ///Editor pour definir une zone de zoom pour la camera.
-    TYCameraZoneEditor* _pCameraZoneEditor;
 
     ///Label 2D pour afficher le type de la vue.
     OGLTextElement* _pOGLTextElement;
