@@ -1,7 +1,7 @@
 # CMakeLists for test cases with GoogleTest framework.
 set(CURRENT_FOLDER "Tests")
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} 
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG _DEBUG)
 
 # GTest has already been loaded as external project by tympan-deps-gtest.cmake
@@ -13,12 +13,7 @@ find_package (Threads)
 
 include_directories(.)
 
-
-# XXX It should be possible to make this much lighter
-set (TYMPAN_MODULES
-   tympan_solver_data_model
-  tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
-  tympan_tools_metier tympan_tools_graphics tympan_tools)
+set (TYMPAN_MODULES tympan_common tympan_lib)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
@@ -44,13 +39,13 @@ endif()
 add_subdirectory(test_utils)
 
 add_executable(test_example test_example.cpp)
-configure_gtest_target(TARGET test_example 
-  RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}" 
+configure_gtest_target(TARGET test_example
+  RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
   FOLDER ${CURRENT_FOLDER})
 
 add_executable(print_environment test_environment.cpp)
-configure_gtest_target(TARGET print_environment 
-  RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}" 
+configure_gtest_target(TARGET print_environment
+  RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
   FOLDER ${CURRENT_FOLDER})
 
 file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

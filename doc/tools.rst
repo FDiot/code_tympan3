@@ -166,14 +166,14 @@ best way is to create a ``CMakeLists.txt`` file in this current directory and wr
    add_library(${MODULE_NAME} ${${MODULE_NAME}_SRCS})
 
 You can further refer to your module with the variable
-``new_tympan_module_name``.
+``MODULE_NAME``.
 
 You can also use (if needed):
 
 .. code-block:: cmake
 
    # If your module depends on other Tympan modules (i.e. other Tympan libraries).
-   add_dependencies(${MODULE_NAME} tympan_tools tympan_dm_core tympan_tools_graphics)
+   add_dependencies(${MODULE_NAME} tympan_common tympan_lib)
 
    # If you have to link your library with one or a few libraries such as Boost,
    # Qt or OpenGL.

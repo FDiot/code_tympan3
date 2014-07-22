@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "gtest/gtest.h"
-#include "Tympan/MetierSolver/DataManagerCore/TYElement.h"
+#include "Tympan/models/business/TYElement.h"
 
 using namespace std;
 

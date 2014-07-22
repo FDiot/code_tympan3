@@ -1,86 +1,215 @@
 cmake_minimum_required(VERSION 2.8)
 
-# This enable includes relative to current source file dir
-# TODO required for now (esp. by PCH) but should ideally be deactivated
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
+# Adding GTest include in the non-test tree is required to enable gtest_prod.h
 include_directories (${GTEST_INCLUDE_DIR})
-#NB Adding GTest include in the non-test tree is required to enable gtest_prod.h
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG _DEBUG)
 
 
-### Precompiled header handling ###
-if(${CMAKE_VERSION} VERSION_LESS 2.8.9 AND LOGILAB_USE_PRECOMPILED_HEADER)
+# Configuring source code ######################################################
 
-  set(LOGILAB_USE_PRECOMPILED_HEADER OFF
-    CACHE BOOL "Pre-compiled headers forcibly disabled." FORCE)
-  message(SEND_ERROR
-    "Pre-compiled headers support requires CMake >= 2.8.9. "
-    "PCH support forcibly disabled ; you can try to run cmake again.")
-endif(${CMAKE_VERSION} VERSION_LESS 2.8.9 AND LOGILAB_USE_PRECOMPILED_HEADER)
-
-# logilab-pch need to be included even when pre-compiled headers are disabled
-# (i.e. LOGILAB_USE_PRECOMPILED_HEADER is OFF).
-# Indeed, it then defines dummy compatibility macros.
-include(logilab-pch)
-
-if(LOGILAB_USE_PRECOMPILED_HEADER)
-  # This triggers the inclusion of the TYPH*.h headers from the *.cpp files
-  add_definitions(-DTYMPAN_USE_PRECOMPILED_HEADER)
-else(LOGILAB_USE_PRECOMPILED_HEADER)
-  message(STATUS
-    "Because the way the headers are inappropriately handled, "
-    "we had to force #define the TYMPAN_USE_PRECOMPILED_HEADER  "
-    "and pay the price of excessive dependencies, at least for now...")
-  add_definitions(-DTYMPAN_USE_PRECOMPILED_HEADER)
-endif(LOGILAB_USE_PRECOMPILED_HEADER)
-
-
-### Configuring source code ###
-configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/TYVersion.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/TYVersion.h
-  @ONLY
-)
 
 set(PYSCRIPT "${TYMPAN_PythonModules}/tympan/solve_project.py")
 configure_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/Config.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/Config.h
+  ${CMAKE_CURRENT_SOURCE_DIR}/core/config.h.in
+  ${CMAKE_CURRENT_BINARY_DIR}/core/config.h
   @ONLY
   )
+# XXX is it useful here and part of source code configuration ?
 include_directories(${CMAKE_BINARY_DIR})
 
-### Setting sub-directories and modules up ###
-set(CURRENT_FOLDER "Tympan")
 
-# The Tympan components must be enumerated here in reverse depence order
-set(TYMPAN_MODULES  tympan_dm_metier tympan_dm_graphics tympan_dm_ihm tympan_dm_core
-		    tympan_tools_metier tympan_common_tools tympan_tools_graphics
-		    tympan_tools tympan_models_common
-)
+# common models ################################################################
 
-
-set(MODULE_NAME tympan_models_common)
-file(GLOB ${MODULE_NAME}_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+file(GLOB TYMPAN_COMMON_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     *.cpp *.h
     core/*.cpp core/*.h
     models/common/*.cpp models/common/*.h
 )
-# Those objects are also used by Solvers and as such need to be build as PIC
-# Once the solvers will be independents modules / executable this directory
-# should build a shared library use by the GUI and the SolverDataModel
-add_library(${MODULE_NAME} ${TYMPAN_COMPONENT_TYPE} ${${MODULE_NAME}_SRCS} ${${MODULE_NAME}_PCH_SRCS} )
-set_property(TARGET ${MODULE_NAME} PROPERTY FOLDER "Tympan/models")
-#target_link_libraries(${MODULE_NAME} ${QT_LIBRARIES})
-install_tympan_component(${MODULE_NAME})
+add_library(tympan_common ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_COMMON_SRCS})
+set_property(TARGET tympan_common PROPERTY FOLDER "Tympan/common")
+target_link_libraries(tympan_common
+    # qstring in core/logging, quuid in core/idgen, qlist in models/common/delaunay_maker.h
+    ${QT_QTCORE_LIBRARY}
+    # Boost isn't linked as the "header only library" part is used
+)
+install_tympan_component(tympan_common)
 
 
-# The inclusion order seems to be significant for dependencies
-add_subdirectory(Tools)
-add_subdirectory(MetierSolver)
-add_subdirectory(GraphicIHM)
-add_subdirectory(Appli)
+# main library #################################################################
 
+file(GLOB TYMPAN_LIB_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    models/solver/*.cpp models/solver/*.h models/solver/*.hpp
+    models/business/*.cpp models/business/*.h
+    models/business/*/*.cpp models/business/*/*.h
+    gui/*.cpp gui/*.h
+    gui/tools/*.cpp gui/tools/*.h
+    gui/widgets/*.cpp gui/widgets/*.h
+    gui/gl/*.cpp gui/gl/*.h
+)
+# cf. https://qt-project.org/quarterly/view/using_cmake_to_build_qt_projects
+# Headers requiring MOC pre-processing...
+file(GLOB TYMPAN_LIB_MOC_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} gui/widgets/*.h)
+# ... all in this directory but for the two below
+list(REMOVE_ITEM TYMPAN_LIB_MOC_HDRS
+    gui/widgets/TYIncludesQT.h
+)
+# Call moc on the listed headers, thus generating new sources
+qt4_wrap_cpp(TYMPAN_LIB_MOC_SRCS ${TYMPAN_LIB_MOC_HDRS})
+# Qt Designer UIC files
+file(GLOB TYMPAN_LIB_FORMS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} gui/widgets/*.ui)
+# Call moc on the listed UI file, thus generating new sources
+qt4_wrap_ui(TYMPAN_LIB_FORMS_HDRS ${TYMPAN_LIB_FORMS})
+add_library(tympan_lib ${TYMPAN_COMPONENT_TYPE}
+  ${TYMPAN_LIB_SRCS}
+  ${TYMPAN_LIB_MOC_SRCS} # Sources generated by MOC
+  ${TYMPAN_LIB_FORMS_HDRS} # Sources generated by UIC
+)
+set_property(TARGET tympan_lib PROPERTY FOLDER "Tympan/lib")
+add_dependencies(tympan_lib
+    NMPB2008
+    GTest # XXX pour que les tests aient accès à des membres protégés
+)
+target_link_libraries(tympan_lib
+    ${QT_LIBRARIES}
+    ${CGAL_LIBRARIES}
+	${OPENGL_LIBRARIES}
+    RoadEmissionNMPB
+    tympan_common
+)
+install_tympan_component(tympan_lib)
+
+
+# solvers ######################################################################
+
+file(GLOB TYMPAN_SOLVER_DEFAULT_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    solvers/DefaultSolver/*.cpp solvers/DefaultSolver/*.h
+    solvers/DefaultSolver/*/*.cpp solvers/DefaultSolver/*/*.h
+    solvers/ConvexHullFinder/*.cpp solvers/ConvexHullFinder/*.h
+    solvers/ConvexHullFinder/*/*.cpp solvers/ConvexHullFinder/*/*.h
+)
+set_property(SOURCE ${TYMPAN_SOLVER_DEFAULT_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
+link_directories(${CGAL_LIBRARIES_DIR})
+add_library(tympan_solver_default MODULE ${TYMPAN_SOLVER_DEFAULT_SRCS})
+set_property(TARGET tympan_solver_default PROPERTY FOLDER "Tympan/solvers/DefaultSolver")
+target_link_libraries(tympan_solver_default
+    ${QT_QTCORE_LIBRARY} # threading QMutex, QThread, QWaitCondition
+    tympan_common
+    tympan_lib
+)
+configure_tympan_plugin(tympan_solver_default)
+install_tympan_plugin(tympan_solver_default)
+
+
+file(GLOB TYMPAN_SOLVER_ANIME3D_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    solvers/ANIME3DSolver/*.cpp solvers/ANIME3DSolver/*.h
+    solvers/ANIME3DSolver/*/*.cpp solvers/ANIME3DSolver/*/*.h
+    solvers/AcousticRaytracer/*.cpp solvers/AcousticRaytracer/*.h
+    solvers/AcousticRaytracer/*/*.cpp solvers/AcousticRaytracer/*/*.h
+    solvers/AnalyticRayTracer/*.cpp solvers/AnalyticRayTracer/*.h
+    solvers/AnalyticRayTracer/*/*.cpp solvers/AnalyticRayTracer/*/*.h
+)
+set_property(SOURCE ${TYMPAN_SOLVER_ANIME3D_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
+link_directories(${CGAL_LIBRARIES_DIR})
+add_library(tympan_solver_anime3d ${TYMPAN_COMPONENT_TYPE} MODULE ${TYMPAN_SOLVER_ANIME3D_SRCS})
+set_property(TARGET tympan_solver_anime3d PROPERTY FOLDER "Tympan/solvers/ANIME3DSolver")
+target_link_libraries(tympan_solver_anime3d
+    ${QT_QTCORE_LIBRARY} # qlist, QTime, QMutex QSharedPointer QTime
+    tympan_common
+    tympan_lib
+)
+configure_tympan_plugin(tympan_solver_anime3d)
+install_tympan_plugin(tympan_solver_anime3d)
+
+
+# main app #####################################################################
+
+file(GLOB TYMPAN_APP_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    gui/app/*.cpp gui/app/*.h
+)
+# Headers requiring MOC pre-processing...
+file(GLOB TYMPAN_APP_MOC_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} gui/app/*.h)
+# ... all in this directory but for the one below
+list(REMOVE_ITEM TYMPAN_APP_MOC_HDRS
+    gui/app/OSplashScreen.h
+    gui/app/TYAction.h
+    gui/app/TYActions.h
+    gui/app/TYAppDefines.h
+    gui/app/TYCustomPopupMenu.h
+    gui/app/TYDXFBDTOPOImporter.h
+    gui/app/TYDXFImporter.h
+    gui/app/TYDXFBDTOPOSpecifications.h
+    gui/app/TYElementCheckListItem.h
+    gui/app/TYElementListItem.h
+    gui/app/TYMenuItem.h
+    gui/app/TYMessageManager.h
+    gui/app/TYOpenGLRenderer.h
+)
+# Needed to import DXF files.
+add_definitions (-DTY_USE_DXF -DDIME_NOT_DLL) # XXX Add DIME_NOT_DLL too?? See
+                                              # the define and the comment in
+                                              # 'TYDXFImporter.h'.
+# Call moc on the listed headers, thus generating new sources
+qt4_wrap_cpp(TYMPAN_APP_MOC_SRCS ${TYMPAN_APP_MOC_HDRS})
+add_executable(tympan_app
+    ${TYMPAN_APP_SRCS}
+    ${TYMPAN_APP_MOC_SRCS}  # Sources generated by MOC
+)
+set_property(TARGET tympan_app PROPERTY FOLDER "Tympan/app")
+add_dependencies(tympan_app
+    Dime
+)
+# Set the actual executable name to 'Tympan' or Tympan_d for debug version
+set_property(TARGET tympan_app PROPERTY OUTPUT_NAME Tympan)
+set_property(TARGET tympan_app PROPERTY DEBUG_POSTFIX "_d")
+set_property(TARGET tympan_app
+    APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG  "PLUGINS_PATH=\"${TYMPAN_INSTALL_PLUGINS_Debug}\"")
+set_property(TARGET tympan_app
+    APPEND PROPERTY COMPILE_DEFINITIONS_RELEASE  "PLUGINS_PATH=\"${TYMPAN_INSTALL_PLUGINS_Release}\"")
+link_directories(${CGAL_LIBRARIES_DIR})
+target_link_libraries(tympan_app
+    ${QT_LIBRARIES}
+    ${OPENGL_LIBRARIES}
+    tympan_common
+    tympan_lib
+)
+
+set(ADDITIONNAL_LIBRARIES "dime")
+if (WIN32)
+    LIST(APPEND ADDITIONNAL_LIBRARIES winmm.lib)
+endif ()
+foreach(lib ${ADDITIONNAL_LIBRARIES})
+   target_link_libraries(tympan_app ${lib})
+endforeach()
+
+install(TARGETS tympan_app DESTINATION . )
+
+if(SYS_NATIVE_WIN)
+  # From http://www.cmake.org/Wiki/BundleUtilitiesExample
+  #--------------------------------------------------------------------------------
+  # Use BundleUtilities to get all other dependencies for the application to work.
+  # It takes a bundle or executable along with possible plugins and inspects it
+  # for dependencies.  If they are not system dependencies, they are copied.
+  # directories to look for dependencies
+  SET(APPS_Debug   "\${CMAKE_INSTALL_PREFIX}/Tympan_d.exe")
+  SET(APPS_Release "\${CMAKE_INSTALL_PREFIX}/Tympan.exe")
+  SET(DLL_FROM_DIRS ${TYMPAN_3RDPARTY_DLL_DIRS})
+  # Now the work of copying dependencies into the bundle/package
+  # The quotes are escaped and variables to use at install time have their $ escaped
+  # An alternative is the do a configure_file() on a script and use install(SCRIPT  ...).
+  INSTALL(CODE "
+    # Takes the configuration into account
+    set(TYMPAN_INSTALL_PLUGINS_Release ${TYMPAN_INSTALL_PLUGINS_Release})
+    set(TYMPAN_INSTALL_PLUGINS_Debug ${TYMPAN_INSTALL_PLUGINS_Debug})
+    set(APPS_Release ${APPS_Release})
+    set(APPS_Debug ${APPS_Debug})
+    set(_plugins_dir \${TYMPAN_PLUGINS_\${CMAKE_INSTALL_CONFIG_NAME}})
+    set(_apps \${APPS_\${CMAKE_INSTALL_CONFIG_NAME}})
+
+    file(GLOB_RECURSE PLUGINS
+      \"\${CMAKE_INSTALL_PREFIX}/\${_plugins_dir}/*${CMAKE_SHARED_LIBRARY_SUFFIX}\")
+    include(BundleUtilities)
+    fixup_bundle(\"\${_apps}\" \"\${PLUGINS}\" \"${DLL_FROM_DIRS}\")
+    " COMPONENT Runtime )
+ endif(SYS_NATIVE_WIN)

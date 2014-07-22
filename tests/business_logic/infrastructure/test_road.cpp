@@ -17,11 +17,11 @@
 
 #include "Tympan/core/smartptr.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYInfrastructure.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltInfrastructure/TYRoute.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantAcoustique/TYTrafic.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeoAcoustique/TYAcousticLine.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYInfrastructure.h"
+#include "Tympan/models/business/infrastructure/TYRoute.h"
+#include "Tympan/models/business/acoustic/TYTrafic.h"
+#include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
 
 
 using namespace std;

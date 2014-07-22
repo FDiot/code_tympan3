@@ -46,8 +46,6 @@ set(TYMPAN_3RDPARTY_CGAL_BINDINGS_MD5  "73160b203dcc6a6cda610bc8853ccaf6"
 # set(BOOST_ROOT ""
 #     CACHE PATH "The prefix where boost is installed" )
 
-option(LOGILAB_USE_PRECOMPILED_HEADER "Enable pre-compiled headers" OFF)
-
 ## For now, some modules of Code_TYMPAN do not compile when this macro is not defined.
 ## => We Discard the option and set TRUE by default.
 # option(TYMPAN_USE_IHM "Builds TYMPAN with GUI support" ON)

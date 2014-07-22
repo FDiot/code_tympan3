@@ -18,11 +18,11 @@ using std::deque;
 #include "gtest/gtest.h"
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/CommonTools/OPlan.h"
+#include "Tympan/models/common/plan.h"
 #include "Tympan/models/common/triangle.h"
-#include "Tympan/MetierSolver/DataManagerMetier/ComposantGeometrique/TYPolygon.h"
-#include "Tympan/MetierSolver/DataManagerMetier/cgal_bridge.hpp"
-#include "Tympan/MetierSolver/DataManagerCore/exceptions.hpp"
+#include "Tympan/models/business/geometry/TYPolygon.h"
+#include "Tympan/models/business/cgal_bridge.h"
+#include "Tympan/models/business/exceptions.h"
 
 using tympan::ITYPolygonTriangulator;
 

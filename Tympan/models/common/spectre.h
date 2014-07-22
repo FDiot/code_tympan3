@@ -13,13 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef TY_SPECTRUM
-#define TY_SPECTRUM
+#ifndef TY_MC_SPECTRE
+#define TY_MC_SPECTRE
 
 #include <vector>
 #include <map>
 #include <ostream>
 
+#include "Tympan/core/macros.h"
 
 ///Type de spectre.
 enum TYSpectreType { SPECTRE_TYPE_ATT, SPECTRE_TYPE_ABSO, SPECTRE_TYPE_LW, SPECTRE_TYPE_LP, SPECTRE_TYPE_AUTRE };
@@ -334,4 +335,109 @@ protected:
 typedef std::vector<OSpectre> OTabSpectre;
 typedef std::vector<std::vector<OSpectre> > OTab2DSpectre;
 
-#endif // TY_SPECTRUM
+/**
+ * Permet de stocker des valeurs de puissance accoustique pour differentes frequences.
+ *
+ */
+class OSpectreComplex : public OSpectre
+{
+    // Methodes
+public:
+    OSpectreComplex();
+    OSpectreComplex(const TYComplex& defaultValue);
+    OSpectreComplex(const OSpectreComplex& other);
+    /**
+     * Constructeur a partir d'un OSpectre qui represente le module du spectre complexe
+     */
+    OSpectreComplex(const OSpectre& other);
+    /**
+     * Constructeur a partir de 2 OSpectre : le module et la phase
+     */
+    OSpectreComplex(const OSpectre& spectre1, const OSpectre& spectre2);
+
+    virtual ~OSpectreComplex();
+
+    OSpectreComplex& operator= (const OSpectreComplex& other);
+    bool operator== (const OSpectreComplex& other) const;
+    bool operator != (const OSpectreComplex& other) const;
+    OSpectreComplex operator + (const OSpectreComplex& spectre) const;
+    // Produit de deux spectres complexesen module/phase
+    OSpectreComplex operator * (const OSpectreComplex& spectre) const;
+    // Computes the operation between a complex spectrum times a spectrum
+    OSpectreComplex operator * (const OSpectre& spectre) const;
+    // Operateur de multiplication d'un spectre complexe par un coeff de type double
+    OSpectreComplex operator * (const double& coefficient) const;
+    // Rapport de deux spectres complexes en module/phase
+    virtual OSpectreComplex operator / (const OSpectreComplex& spectre) const;
+
+    /// Set/Get du tableau des valeurs reelles
+    virtual double* getTabValReel() { return _module; }
+    virtual const double* getTabValReel() const {return _module; }
+    /// Set/Get du tableau des valeurs imaginaires
+    double* getTabValImag() { return _phase; }
+    const double* getTabValImag() const { return _phase; }
+
+    /**
+     * Attribution d'une valeur complexe au tableau Frequence/Complexe.
+     *
+     * @param freq Frequence pour laquelle on attribut une nouvelle valeur.
+     * @param reel partie reelle.
+     * @param imag partie imaginaire
+     */
+    virtual void setValue(const float& freq, const double& reel, const double& imag = 0.0);
+    /**
+     * Attribution d'une valeur complexe au tableau Frequence/Complexe.
+     *
+     * @param freq Frequence pour laquelle on attribut une nouvelle valeur.
+     * @param cplx un TYComplex
+     */
+    virtual void setValue(const float& freq, const TYComplex& cplx);
+    /**
+     * Recuperation d'une valeur imaginaire au tableau Frequence/Complexe
+     * a partir d'une frequence.
+     *
+     * @param freq Frequence pour laquelle on recherche la valeur.
+     * @param pValid Positionner a false si la frequence passee n'est pas valide pour ce spectre.
+     *
+     * @return La valeur imaginaire du complexe correspondant.
+     */
+    double getValueImag(float freq, bool* pValid = 0);
+    /**
+     * Attribution de la phase a un spectre.
+     * @param Un OSpectre.
+     */
+    void setPhase(const OSpectre& spectre);
+    /**
+     * Attribution de la phase a un spectre.
+     * @param Un double.
+     */
+    void setPhase(const double& valeur = 0.0);
+    /**
+     * Lecture de la phase d'un spectre.
+     * @return Un TYSpectre.
+     */
+    OSpectre getPhase() const;
+    /**
+    * \fn OSpectre getModule() const
+    * \brief get du module du spectre
+    */
+    OSpectre getModule() const;
+    // Conversion en module/phase
+    OSpectreComplex toModulePhase() const;
+
+    // === FONCTIONS MEMBRES STATIQUES
+
+    // Cree un spectre complexe
+    static OSpectreComplex getCplxSpectre(const double& valInit = 1.0E-20);
+    // Membres
+public:
+
+protected:
+    /// tableau des valeurs imaginaires
+    double _phase[TY_SPECTRE_DEFAULT_NB_ELMT];
+};
+
+typedef std::vector<OSpectreComplex> OTabSpectreComplex;
+typedef std::vector<std::vector<OSpectreComplex> > OTab2DSpectreComplex;
+
+#endif // TY_MC_SPECTRE

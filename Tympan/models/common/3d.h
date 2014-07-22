@@ -22,6 +22,7 @@
  */
 
 #include <cmath>
+#include <math.h>
 #include <vector>
 #include <ostream>
 
@@ -875,88 +876,6 @@ OPoint3D operator*(const OMatrix& mat, const OPoint3D& pt);
 
 
 /**
- * \class OBox
- * \brief The box class.
- */
-
-class OBox
-{
-public:
-    OBox();
-    OBox(const OBox& box);
-    OBox(const OCoord3D& min, const OCoord3D& max);
-    OBox(double x1, double y1, double z1, double x2, double y2, double z2);
-
-    virtual ~OBox() {}
-
-    virtual OBox& operator=(const OBox& box);
-    virtual bool operator==(const OBox& box) const;
-    virtual bool operator!=(const OBox& box) const { return !operator==(box);}
-
-    /**
-     * \fn bool isInside(const OPoint3D& pt) const
-     * \brief Test whether the point is inside the box or not.
-     *
-     * \param pt The point to test.
-     */
-    virtual bool isInside(const OPoint3D& pt) const;
-
-    /**
-     * \fn bool isInside2D(const OPoint3D& pt) const
-     * \brief Test whether the point is inside the box or not (from upper point of view).
-     *
-     * \param pt The point to test.
-     */
-    virtual bool isInside2D(const OPoint3D& pt) const;
-
-    /**
-     * \fn bool isInContact(const OBox& box) const
-     * \brief Test whether the boxes are in contact or not.
-     *
-     * \param box The box to test.
-     */
-    virtual bool isInContact(const OBox& box) const;
-
-    /**
-     * \fn void Enlarge(const OPoint3D& pt)
-     * \brief Enlarge the box with the point if the point is outside the box.
-     *
-     * \param pt The point to test/make it larger.
-     */
-    virtual void Enlarge(const OPoint3D& pt);
-
-    /**
-     * \fn void Enlarge(float x, float y, float z)
-     * \brief Enlarge the box with the point (x,y, z) if the point is outside the box.
-     *
-     * \param x coordonnee x du point a tester
-     * \param y coordonnee y du point a tester
-     * \param z coordonnee z du point a tester
-     */
-    virtual void Enlarge(float x, float y, float z);
-
-    /**
-     * \fn void Enlarge(const OBox& box)
-     * \brief Enlarge this box with the box passed if this box does not contain the box passed.
-     *
-     * \param box The box to test.
-     */
-    virtual void Enlarge(const OBox& box);
-
-    /**
-     * \fn void Translate(const OPoint3D& vectorTranslate)
-     * \brief Translate this box
-     *
-     * \param vector translation.
-     */
-    virtual void Translate(const OPoint3D& vectorTranslate);
-
-public:
-    OPoint3D _min;
-    OPoint3D _max;
-};
-
-/**
  * \class OGeometrie
  * \brief Class utilitaire de geometrie.
  */
@@ -1307,6 +1226,207 @@ public:
     ///Vector K for the Z axis.
     OVector3D _vecK;
 
+};
+
+
+/**
+ * \class OBox
+ * \brief The box class.
+ */
+
+class OBox
+{
+public:
+    OBox();
+    OBox(const OBox& box);
+    OBox(const OCoord3D& min, const OCoord3D& max);
+    OBox(double x1, double y1, double z1, double x2, double y2, double z2);
+
+    virtual ~OBox() {}
+
+    virtual OBox& operator=(const OBox& box);
+    virtual bool operator==(const OBox& box) const;
+    virtual bool operator!=(const OBox& box) const { return !operator==(box);}
+
+    /**
+     * \fn bool isInside(const OPoint3D& pt) const
+     * \brief Test whether the point is inside the box or not.
+     *
+     * \param pt The point to test.
+     */
+    virtual bool isInside(const OPoint3D& pt) const;
+
+    /**
+     * \fn bool isInside2D(const OPoint3D& pt) const
+     * \brief Test whether the point is inside the box or not (from upper point of view).
+     *
+     * \param pt The point to test.
+     */
+    virtual bool isInside2D(const OPoint3D& pt) const;
+
+    /**
+     * \fn bool isInContact(const OBox& box) const
+     * \brief Test whether the boxes are in contact or not.
+     *
+     * \param box The box to test.
+     */
+    virtual bool isInContact(const OBox& box) const;
+
+    /**
+     * \fn void Enlarge(const OPoint3D& pt)
+     * \brief Enlarge the box with the point if the point is outside the box.
+     *
+     * \param pt The point to test/make it larger.
+     */
+    virtual void Enlarge(const OPoint3D& pt);
+
+    /**
+     * \fn void Enlarge(float x, float y, float z)
+     * \brief Enlarge the box with the point (x,y, z) if the point is outside the box.
+     *
+     * \param x coordonnee x du point a tester
+     * \param y coordonnee y du point a tester
+     * \param z coordonnee z du point a tester
+     */
+    virtual void Enlarge(float x, float y, float z);
+
+    /**
+     * \fn void Enlarge(const OBox& box)
+     * \brief Enlarge this box with the box passed if this box does not contain the box passed.
+     *
+     * \param box The box to test.
+     */
+    virtual void Enlarge(const OBox& box);
+
+    /**
+     * \fn void Translate(const OPoint3D& vectorTranslate)
+     * \brief Translate this box
+     *
+     * \param vector translation.
+     */
+    virtual void Translate(const OPoint3D& vectorTranslate);
+
+public:
+    OPoint3D _min;
+    OPoint3D _max;
+};
+
+
+/**
+ * \class OBox2
+ * \brief classe de definition d'une boite (pas forcement parallele aux axes a la difference de la OBox)
+ */
+class OBox2 : public OBox
+{
+    // Methods
+public:
+    OBox2();
+    OBox2(const OBox2& box);
+    /**
+     * \fn OBox2(const OBox & box, ORepere3D & repere)
+     * \brief Constructor from a box and its local coordinate system
+     * \param box The box define in the local coordinate system
+     */
+    OBox2(const OBox& box);
+    /**
+     * \fn OBox2(const double& length, const double& width, const double& height);
+     * \brief build a box centered on [0, 0, 0] from its length, width and height
+     */
+    OBox2(const double& length, const double& width, const double& height);
+
+private : // Set private for security seems to an "af hoc" adaptation and is used only by an internal member function
+    /**
+     * \fn OBox2(const OBox & box, ORepere3D & repere)
+     * \brief Constructor from a box and its local coordinate system
+     * \param box The box define in the local coordinate system
+     * \param repere The global coordinate system of the box
+     * \param centre Is the box centre, this point is the middle of [S'R]
+     */
+    OBox2(const OBox2& box, const ORepere3D& repere, const OPoint3D& centre);
+
+public :
+    virtual ~OBox2() {}
+
+    virtual OBox2& operator=(const OBox2& box);
+    virtual bool operator==(const OBox2& box) const;
+    virtual bool operator!=(const OBox2& box) const { return !operator==(box);}
+
+    /**
+     *\fn OCoord3D BoxCoord(int N);
+     *\brief Returns the coordinates of one of the box corner.
+     *\ We consider that the first corner is the one on the bottom left side
+     *\ and then we go clockwise, upper and the same.
+     *\ N must be between 0 and 8, where 0 represents the box center.
+     *\ 1(0,0,0) 2(0,1,0) 3(1,1,0) 4(1,0,0) 5(1,0,1) 6(0,0,1) 7(0,1,1) 8(1,1,1)
+     *\param N is the corner we want the coordinates of.
+     */
+    OPoint3D BoxCoord(int N) const;
+    /**
+     * \fn bool isInside(const OPoint3D& pt) const
+     * \brief Test whether the point is inside the box or not.
+     * \param pt The point to test.
+     */
+    virtual bool isInside(const OPoint3D& pt) const;
+    /**
+     * \fn bool isInside2D(const OPoint3D& pt) const
+     * \brief Test whether the point is inside the box or not (from upper point of view).
+     * \param pt The point to test.
+     */
+    virtual bool isInside2D(const OPoint3D& pt) const;
+    /**
+     * \fn void Translate(const OPoint3D& vectorTranslate)
+     * \brief Translate this box
+     * \param vector translation.
+     */
+    virtual void Translate(const OVector3D& vect);
+    /**
+     * fn OBox2 boxRotation(const OVector3D& v1, const OVector3D& v2)
+     * brief return a box rotated by two vectors
+     */
+    OBox2 boxRotation(const OPoint3D& O, const OPoint3D& P2);
+    /**
+     *\fn void BoxRotationOzOy(const OBox2& box);
+     *\brief Computes the box rotation around Oz and Oy (usual coordinates system).
+     *\param box is an OBox2.
+     */
+    void BoxRotationOzOy(double alpha, double theta);
+    /**
+     * \fn void moveAndRotate(const OPoint3D& origin, const OVector3D& vec);
+     * \brief Move and rotate the box
+     */
+    void moveAndRotate(const OPoint3D& origin, const OVector3D& vec);
+
+private:
+    /**
+     * fn OBox2 rotInXOYOnly(const OVector3D& v1, const OVector3D& v2)
+     * brief return a box rotated by two vectors
+     */
+    OBox2 rotInXOYOnly(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2);
+    /**
+     * fn OBox2 rotInXOZOnly(const OVector3D& v1, const OVector3D& v2)
+     * brief return a box rotated by two vectors
+     */
+    OBox2 rotInXOZOnly(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2);
+    /**
+     * fn OBox2 rot3D(const OVector3D& v1, const OVector3D& v2)
+     * brief return a box rotated by two vectors
+     */
+    OBox2 rot3D(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2);
+
+public:
+    ORepere3D _repere;
+    OPoint3D _center;
+    OPoint3D _A;
+    OPoint3D _B;
+    OPoint3D _C;
+    OPoint3D _D;
+    OPoint3D _E;
+    OPoint3D _F;
+    OPoint3D _G;
+    OPoint3D _H;
+    double _length;
+    double _height;
+    double _width;
 };
 
 

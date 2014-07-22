@@ -13,10 +13,10 @@
 
 #include "Tympan/models/common/3d.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYCourbeNiveau.h"
-#include "Tympan/MetierSolver/DataManagerMetier/EltTopographique/TYAltimetrie.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYTopographie.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
+#include "Tympan/models/business/topography/TYCourbeNiveau.h"
+#include "Tympan/models/business/topography/TYAltimetrie.h"
+#include "Tympan/models/business/infrastructure/TYTopographie.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
 
 TYAltimetrie* buildSlopeAltimetry(void)

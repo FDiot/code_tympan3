@@ -12,7 +12,7 @@
 #include <deque>
 
 #define TY_USE_CGAL_QT_IFACE 1 // To enable Qt visualization helpers
-#include "Tympan/MetierSolver/DataManagerMetier/AltimetryBuilder.hpp"
+#include "Tympan/models/business/AltimetryBuilder.h"
 
 using namespace tympan;
 

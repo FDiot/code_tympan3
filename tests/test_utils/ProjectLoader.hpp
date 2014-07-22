@@ -13,9 +13,9 @@
 
 #include "gtest/gtest.h"
 
-#include "Tympan/MetierSolver/DataManagerMetier/Commun/TYProjet.h"
-#include "Tympan/MetierSolver/DataManagerMetier/Site/TYSiteNode.h"
-#include "Tympan/MetierSolver/DataManagerMetier/xml_project_util.hpp"
+#include "Tympan/models/business/xml_project_util.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
 
 /* This Fixture loads a project from an XML project file */
