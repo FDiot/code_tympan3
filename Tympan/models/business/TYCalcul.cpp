@@ -43,6 +43,9 @@ TY_EXT_GRAPHIC_INST(TYCalcul);
 
 #define TR(id) OLocalizator::getString("OMessageManager", (id))
 
+#define MAX_SOURCES 1024
+#define MAX_RECEPTEURS 131072
+
 TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     : _acousticProblem(tympan::make_AcousticProblemModel())
     , _acousticResult(tympan::make_AcousticResultModel())
@@ -72,18 +75,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _useReflexion = false;
     _useEcran = true;
     _bCalculTrajetsHorizontaux = true;
-
-    _useExternal = false;   // Par defaut, on utilise la methode interne
-    _refExternal = 0;       // Reference de la methode externe utilisee
-
-    _geomPrecision = 10.0;  // Precicion 10%
-
-    HARM_averaging = 2; // Lissage
-    HARM_airAbsorption = 4; // Prise en compte de l'absorption atmospherique
-    HARM_turbulenceScattering = 8; // Prise en compte de la diffusion turbulente
-    HARM_diffHaddenPierce = 0; // Non utilisation de la Formule de diffraction de Hadde-Pierce
-    HARM_randomTerrain = 0; // Non activation des Perturbation aleatoire du profil du terrain
-
     _useReflexion = false;
     _interference = false;
 
@@ -92,8 +83,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _h1 = 10.0;
     _distanceSRMin = 0.3;
     _anechoic = false; // Par defaut : conditions semi-anechoiques
-    _freqMinSpectre = 16.0;
-    _freqMaxSpectre = 16000;
 
     _seuilConfondus = TYSEUILCONFONDUS;
 
@@ -219,15 +208,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
         }
     }
 
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "GeomPrecision"))
-    {
-        _geomPrecision = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "GeomPrecision");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "GeomPrecision", _geomPrecision);
-    }
-
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
     {
         _seuilConfondus = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus");
@@ -289,8 +269,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _state = other._state;
         _h1 = other._h1;
         _distanceSRMin = other._distanceSRMin;
-        _freqMinSpectre = other._freqMinSpectre;
-        _freqMaxSpectre = other._freqMaxSpectre;
         _pAtmosphere = other._pAtmosphere;
         _maillages = other._maillages;
         _pResultat = other._pResultat;
@@ -325,8 +303,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_state != other._state) { return false; }
         if (_h1 != other._h1) { return false; }
         if (_distanceSRMin != other._distanceSRMin) { return false; }
-        if (_freqMinSpectre != other._freqMinSpectre) { return false; }
-        if (_freqMaxSpectre != other._freqMaxSpectre) { return false; }
         if (_pAtmosphere != other._pAtmosphere) { return false; }
         if (_maillages != other._maillages) { return false; }
         if (_pResultat != other._pResultat) { return false; }
@@ -372,8 +348,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _state = pOtherCalcul->_state;
     _h1 = pOtherCalcul->_h1;
     _distanceSRMin = pOtherCalcul->_distanceSRMin;
-    _freqMinSpectre = pOtherCalcul->_freqMinSpectre;
-    _freqMaxSpectre = pOtherCalcul->_freqMaxSpectre;
     _anechoic = pOtherCalcul->_anechoic;
 
     _pAtmosphere->deepCopy(pOtherCalcul->_pAtmosphere, copyId);
@@ -438,8 +412,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementIntValue(domNewElem, "interference", _interference);
     TYXMLTools::addElementDoubleValue(domNewElem, "h1", _h1);
     TYXMLTools::addElementDoubleValue(domNewElem, "distanceSRMin", _distanceSRMin);
-    TYXMLTools::addElementDoubleValue(domNewElem, "freqMinSpectre", _freqMinSpectre);
-    TYXMLTools::addElementDoubleValue(domNewElem, "freqMaxSpectre", _freqMaxSpectre);
 
     // Ajout du site node sur lequel s'effectue le calcul
     DOM_Document domDoc = domElement.ownerDocument();
@@ -559,9 +531,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementBoolValue(elemCur, "interference", _interference, getOk[12]);
         TYXMLTools::getElementDoubleValue(elemCur, "h1", _h1, getOk[13]);
         TYXMLTools::getElementDoubleValue(elemCur, "distanceSRMin", _distanceSRMin, getOk[14]);
-        TYXMLTools::getElementFloatValue(elemCur, "freqMinSpectre", _freqMinSpectre, getOk[15]);
-        TYXMLTools::getElementFloatValue(elemCur, "freqMaxSpectre", _freqMaxSpectre, getOk[16]);
-
 
         if (!getOk[17]) { _typeCalculSol = 0; } // Par defaut, calcul avec sol local
 
@@ -817,18 +786,6 @@ void TYCalcul::clearResult()
     _emitAcVolNode.clear();
 
     setIsGeometryModified(true);
-}
-
-void TYCalcul::setFreqMinFreq(float freq)
-{
-    _freqMinSpectre = freq;
-    TYSpectre::setFMin(freq);
-}
-
-void TYCalcul::setFreqMaxFreq(float freq)
-{
-    _freqMaxSpectre = freq;
-    TYSpectre::setFMax(freq);
 }
 
 void TYCalcul::setElementSelection(TYListID selection)
@@ -1352,52 +1309,6 @@ void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
     tabVolNodeGeoNode.clear();
 }
 
-void TYCalcul::buildValidTrajects(const TYTabSourcePonctuelleGeoNode& sources, TYTabPointCalculGeoNode& recepteurs)
-{
-    unsigned int i;
-    // Suppression des points trop proches des sources
-    TYTabPointCalculGeoNode::iterator ite;
-
-    _tabTrajets.reserve(sources.size()*recepteurs.size());
-    TYTrajet trajet;
-    double distance = 0.0;
-
-    TYSourcePonctuelle* pSource = NULL;
-    TYPointCalcul* pRecepteur = NULL;
-
-    for (i = 0 ; i < sources.size(); i++)
-    {
-        pSource = TYSourcePonctuelle::safeDownCast(sources[i]->getElement());
-
-        // Position de la source dans le repere du site
-        OPoint3D source = sources[i]->getMatrix() * (*(pSource->getPos()));
-
-        for (ite = recepteurs.begin(); ite != recepteurs.end(); ite++)
-        {
-            pRecepteur = TYPointCalcul::safeDownCast((*ite)->getElement());
-
-            // Position du recepteur dans le repere du site
-            OPoint3D recepteur = (*ite)->getMatrix() * (*pRecepteur);
-            distance = recepteur.distFrom(source);
-
-            if (distance < _distanceSRMin)
-            {
-                // Inactivation du recepteur
-                pRecepteur->setEtat(false, this);
-            }
-            else
-            {
-                // On remplit la liste des trajets
-                trajet.setSourcePonctuelle(sources[i]);
-                trajet.setPointCalcul((*ite));
-                trajet.setPtSetPtR(source, recepteur);
-                trajet.setDistance(distance);
-                _tabTrajets.push_back(trajet);
-            }
-        }
-    }
-}
-
 void TYCalcul::getAllRecepteurs(TYTabPointCalculGeoNode& tabRecepteur)
 {
     unsigned int i, j;
@@ -1563,11 +1474,8 @@ bool TYCalcul::go()
     selectActivePoint(pSite);
 
     OMessageManager::get()->info("Creation des recepteurs");
-    TYTabPointCalculGeoNode recepteurs;
+    TYTabPointCalculGeoNode recepteurs; 
     getAllRecepteurs(recepteurs);
-
-    OMessageManager::get()->info("Selection des trajets actifs");
-    buildValidTrajects(sources, recepteurs);
 
     // XXX Instantiate and call the SolverDataModelBuilder here ...
     if (isCalculPossible(static_cast<int>(sources.size()), static_cast<int>(recepteurs.size()), pSite))
@@ -1771,13 +1679,10 @@ void TYCalcul::setUseAtmosphere(const bool use /*=true*/)
         attenuationNulle.setDefaultValue(1e-20);// Spectre d'attenuation nulle
 
         _pAtmosphere->setSpectreAtt(attenuationNulle);
-
-        HARM_airAbsorption = 0;
     }
     else
     {
         _pAtmosphere->calculProprietes();
-        HARM_airAbsorption = 4;
     }
 }
 

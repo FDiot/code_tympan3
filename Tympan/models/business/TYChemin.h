@@ -26,6 +26,7 @@
 
 #include <deque>
 #include "TYEtape.h"
+#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
 
 
 /**
@@ -75,7 +76,8 @@ public:
      * \fn void calcAttenuation(const TYTabEtape& tabEtapes, const TYAtmosphere & atmos)
      * \brief Calcule l'attenuation globale du chemin
      */
-    void calcAttenuation(const TYTabEtape& tabEtapes, const TYAtmosphere& atmos);
+//    void calcAttenuation(const TYTabEtape& tabEtapes, const TYAtmosphere& atmos);
+    void calcAttenuation(const TYTabEtape& tabEtapes, const tympan::AtmosphericConditions& atmos);
 
     /**
      * \fn OSpectreComplex& getAttenuation()

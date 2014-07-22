@@ -28,6 +28,7 @@
 #include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "TYPointCalcul.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
 
 /**
  * \file TYTrajet.h
@@ -47,7 +48,8 @@ public:
      * \brief Constructeur par defaut.
      * Le constructeur par defaut de la classe TYTrajet
      */
-    TYTrajet(TYSourcePonctuelleGeoNode* pSrc = NULL, TYPointCalculGeoNode* pPtCalcul = NULL);
+    TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_);
+    
     /**
      * \fn TYTrajet(const TYTrajet& other)
      * \brief Constructeur par copie.
@@ -84,31 +86,6 @@ public:
     const double getDistance() const { return _distance; }
 
     void setDistance(const double& distance) { _distance = distance; }
-
-    /**
-     * \fn TYSourcePonctuelleGeoNode* getSourcePonctuelle()
-     *     void setSourcePonctuelle(TYSourcePonctuelleGeoNode* pSrc)
-     * \brief Set/Get de la source ponctuelle associee a cette etape.
-     * \return _pSrc
-     */
-    TYSourcePonctuelleGeoNode* getSourcePonctuelle() const { return _pSrc; }
-    /**
-     * Set/Get de la source ponctuelle associee a cette etape.
-     */
-    void setSourcePonctuelle(TYSourcePonctuelleGeoNode* pSrc) { _pSrc = pSrc; }
-
-    /**
-     * \fn TYPointCalculGeoNode* getPointCalcul()
-     *     void setPointCalcul(TYPointCalculGeoNode* pPtCalcul)
-     * \brief Set/Get du point de calcul associe a cette etape.
-     * \return _pPtCalcul
-     */
-    TYPointCalculGeoNode* getPointCalcul() const { return _pPtCalcul; }
-
-    /**
-     * Set/Get du point de calcul associe a cette etape.
-     */
-    void setPointCalcul(TYPointCalculGeoNode* pPtCalcul) { _pPtCalcul = pPtCalcul; }
 
     /**
      * \fn size_t getNbChemins()
@@ -191,48 +168,36 @@ public:
      * \fn OSpectre getPEnergetique(const TYAtmosphere& atmos)
      * \brief Calcule la pression acoustique en module phase sur le trajet
      */
-    OSpectre getPEnergetique(const TYAtmosphere& atmos);
+    OSpectre getPEnergetique(const tympan::AtmosphericConditions& atmos);
 
     /**
      * \fn OSpectre getPInterference(const TYAtmosphere& atmos)
      * \brief Calcule la pression quadratique sur le trajet
      */
-    OSpectre getPInterference(const TYAtmosphere& atmos);
-
-    /**
-     * \fn void addRay(const TYRay* ray)
-     * \brief add a TYRay to the vector of TYRay _tabRays
-     */
-    void addRay(const TYRay* ray) { _tabRays.push_back(const_cast<TYRay*>(ray)); }
-
-    /**
-     * \fn std::vector<TYRay*>& getTabRays()
-     * \brief Getter to the vector of rays : tabRays
-     */
-    std::vector<TYRay*>& getTabRays() { return _tabRays; }
+    OSpectre getPInterference(const tympan::AtmosphericConditions& atmos);
 
 private:
-    OSpectre correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const TYAtmosphere& atmos, const double& ri, const double& rj) const;
+    OSpectre correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const tympan::AtmosphericConditions& atmos, const double& ri, const double& rj) const;
+
+public :
+    // Business source
+    tympan::AcousticSource& asrc;
+    tympan::source_idx asrc_idx;
+
+    // Business receptor
+    tympan::AcousticReceptor& arcpt;
+    tympan::receptor_idx arcpt_idx;
 
 
     // Membres
 protected:
-    ///La source ponctuelle.
-    TYSourcePonctuelleGeoNode* _pSrc;
-
-    ///Le point de calcul (recepteur).
-    TYPointCalculGeoNode* _pPtCalcul;
-
     /// Definition du point source dans le repere du site
     OPoint3D _ptS;
 
     /// Definition du point recepteur dans le repere du site
     OPoint3D _ptR;
 
-    /// Liste des chemins (TYRay) reliants la source et le récepteur
-    std::vector<TYRay*> _tabRays;
-
-    ///La collection de Chemins.
+    ///La collection de Chemins. 
     TYTabChemin _chemins;
 
     ///Collection des chemins "direct" sans obstacles
