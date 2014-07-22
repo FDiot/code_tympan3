@@ -2255,7 +2255,7 @@ OSpectre TYEtage::champDirect(const OPoint3D& unPoint)
                 distance = SR.longueur();
 
                 // Affectation de la directivite a la puissance de la source
-                sTemp = pSrc->lwApparenteSrcDest(SR, atmos); // Q
+                sTemp = OSpectre::getEmptyLinSpectre(1.0); //pSrc->lwApparenteSrcDest(SR, atmos); // Q
                 sTemp = sTemp.mult(pSrc->getSpectre()->toGPhy()); // W
                 sTemp = sTemp.mult(atmos.getImpedanceSpecifique() / (4 * M_PI * distance * distance)); // Q.W.rho.C / 4.pi.di¿½
 
@@ -2277,7 +2277,7 @@ OSpectre TYEtage::champDirect(const OPoint3D& unPoint)
             distance = SR.longueur();
 
             // Affectation de la directivite a la puissance de la source
-            sTemp = pSrc->lwApparenteSrcDest(SR, atmos); // Directivite de la source Q
+            sTemp = OSpectre::getEmptyLinSpectre(1.); //pSrc->lwApparenteSrcDest(SR, atmos); // Directivite de la source Q
             sTemp = sTemp.mult(pSrc->getSpectre()->toGPhy());  // Puissance W
             sTemp = sTemp.mult(atmos.getImpedanceSpecifique() / (4 * M_PI * distance * distance)); // Q.W.rho.C/(4.pi.di¿½)
 

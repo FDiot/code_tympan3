@@ -23,22 +23,6 @@
 #include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
 #include "TYSourcePonctuelle.h"
 
-// nombre de valeurs de ka dans le tableau
-#ifdef NB_KA
-#   undef NB_KA
-#   define NB_KA 9
-#else
-#   define NB_KA 9
-#endif
-
-// nombre de valeurs de theta dans le tableau
-#ifdef NB_THETA
-#   undef NB_THETA
-#   define NB_THETA 41
-#else
-#   define NB_THETA 41
-#endif
-
 class OSegment3D;
 
 /**
@@ -98,39 +82,11 @@ public:
     //    const LPTYAcousticRectangle getAcousticRectangle() const { return _pAcousticRectangle; }
     const LPTYRectangle getAcousticRectangle() const { return _pAcousticRectangle; }
 
-    /**
-     * Calcul de la puissance apparente de la source dans la direction du segment
-     */
-    OSpectre lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& atmos, const int& expGeo = 0, const int& regime = -1) const;
-
-
-private:
-    /**
-     * Recherche dans le tableau _tabCorrLWBaffle[] du coefficient de correction.
-     * Exacte copie du code de TYMPAN II.
-     *
-     * @param ka Indice KA.
-     *
-     * @return Le coefficient de correction.
-     */
-    double normeQBaffle(const int& indice_Ka, const int& indice_theta, const double& ka, const double& theta) const;
-
-    /**
-     * recherche de l'indice correspondant a la valeur de Ka dans le tableau _tabKa
-     */
-    int getIndiceKa(const double& ka) const;
-
-
     // Membres
 protected:
     ///Le rectangle acoustique associe a cette source.
-    //    LPTYAcousticRectangle _pAcousticRectangle;
     LPTYRectangle _pAcousticRectangle;
 
-private:
-    // Tableaux utilises dans le calcul de la directivite.
-    static const double _tabQ[NB_KA][NB_THETA];
-    static const double _tabKa[NB_KA];
 };
 
 

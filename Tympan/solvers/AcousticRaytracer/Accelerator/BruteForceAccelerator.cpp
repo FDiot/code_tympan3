@@ -15,7 +15,7 @@
 
 #include "BruteForceAccelerator.h"
 
-decimal BruteForceAccelerator::traverse(Ray* r, std::list<Intersection> &result)
+decimal BruteForceAccelerator::traverse(Ray* r, std::list<Intersection> &result) const
 {
     for (unsigned int i = 0; i < shapes->size(); i++)
     {
