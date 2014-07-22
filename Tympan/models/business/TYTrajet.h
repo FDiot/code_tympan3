@@ -28,7 +28,7 @@
 #include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "TYPointCalcul.h"
 #include "Tympan/models/common/3d.h"
-#include "Tympan/MetierSolver/SolverDataModel/entities.hpp"
+#include "Tympan/models/solver/entities.hpp"
 
 /**
  * \file TYTrajet.h

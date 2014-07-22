@@ -13,20 +13,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TY_TASK__
 #define __TY_TASK__
 
-#include "Tympan/solvers/DefaultSolver/threading.h"
+#include <deque>
+#include "threading.h"
 
 class TYSolver;
 class TYTrajet;
+class nodes_pool_t;
+class triangle_pool_t;
+class material_pool_t;
 
 /**
  * Tâche d'une collection de thread pour le solveur Tympan
@@ -35,12 +32,12 @@ class TYTask : public OTask
 {
 public:
     // Constructeur
-    TYTask(TYSolver& solver, TYTrajet& trajet, int nNbTrajets);
+    TYTask(TYSolver& solver, const tympan::nodes_pool_t& nodes, const tympan::triangle_pool_t& triangles, const tympan::material_pool_t& materials, TYTrajet& trajet, int nNbTrajets);
 
     // Destructeur
     ~TYTask();
 
-    // Procedure principale de la tâche (Cf. Tympan/solvers/OTask.h)
+    // Procedure principale de la tâche (Cf. Tympan/MetierSolver/ToolsMetier/OTask.h)
     void main();
 
 private:
@@ -54,7 +51,11 @@ private:
     unsigned int _nNbTrajets;
 
     // Tableau des intersections
-    TYSIntersection* _tabIntersect;
+    std::deque<TYSIntersection> _tabIntersect;
+
+    const tympan::nodes_pool_t& _nodes;
+    const tympan::triangle_pool_t& _triangles;
+    const tympan::material_pool_t& _materials;
 };
 
 ///Smart Pointer sur TYTask.
