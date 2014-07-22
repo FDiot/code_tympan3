@@ -21,7 +21,7 @@ import sys, os
 # -- General configuration -----------------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
-needs_sphinx = '1.0'
+needs_sphinx = '1.1'
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
@@ -29,17 +29,6 @@ extensions = ['sphinx.ext.todo']
 
 # This option, False by default, switch on the display of ToDo (lists)
 todo_include_todos = True
-
-# For MathJax from
-# https://bitbucket.org/kevindunn/sphinx-extension-mathjax/wiki/Home
-# Part of Sphinx as of version 1.1
-try:
-    import sphinx.ext.mathjax
-except ImportError:
-    sys.path.append(os.path.abspath('../3rdparty/sphinx-extension-mathjax'))
-    extensions.append('mathjax')
-else:
-    extensions.append('sphinx.ext.mathjax')
 
 # Path to MathJax. Use the Content Delivery Network (CDN).
 # See http://www.mathjax.org/docs/1.1/start.html#mathjax-cdn
@@ -49,7 +38,7 @@ mathjax_path = 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_
 try:
     import breathe
 except ImportError:
-    sys.path.append(os.path.abspath('../3rdparty/breathe-0.8'))
+    sys.path.append(os.path.abspath('../3rdparty/breathe-1.2.0'))
 extensions.append('breathe')
 breathe_projects = { "Code_TYMPAN": "./_build/doxygen/xml" }
 breathe_default_project = "Code_TYMPAN"
