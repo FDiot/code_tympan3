@@ -140,7 +140,6 @@ list(REMOVE_ITEM TYMPAN_APP_MOC_HDRS
     gui/app/TYDXFBDTOPOImporter.h
     gui/app/TYDXFImporter.h
     gui/app/TYDXFBDTOPOSpecifications.h
-    gui/app/TYElementCheckListItem.h
     gui/app/TYElementListItem.h
     gui/app/TYMenuItem.h
     gui/app/TYMessageManager.h
