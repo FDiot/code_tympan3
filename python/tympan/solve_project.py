@@ -1,6 +1,5 @@
 import sys
 import logging
-import os.path as osp
 
 # open file in unbuffered mode so it get written asap, in case of later crash
 # due to underlying C code
@@ -24,7 +23,7 @@ except ImportError:
     raise ImportError(err)
 
 
-def solve_acoustic_problem(input_project, output_project, solverdir):
+def solve(input_project, output_project, solverdir, multithreading_on=True):
     """ Solve an acoustic problem with Code_TYMPAN from
 
         Keywords arguments:
@@ -46,6 +45,8 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
         logging.exception("Couldn't load the acoustic project from %s file", input_project)
         raise
     comp = project.current_computation
+    if not multithreading_on:
+        comp.set_nthread(1)
     # Build an acoustic problem from the site of the computation
     problem = comp.acoustic_problem
     builder = bus2solv.SolverModelBuilder(problem)
@@ -69,22 +70,3 @@ def solve_acoustic_problem(input_project, output_project, solverdir):
     except ValueError:
         logging.exception("Couldn't export the acoustic results to %s file", output_project)
         raise
-
-if __name__ == '__main__':
-    if len(sys.argv) != 4:
-        err = "solve_project.py module called with bad arguments"
-        logging.error("%s Couldn't solve acoustic problem.", err)
-        sys.exit(-1) # XXX to be improved
-    # read command-line arguments
-    input_proj = sys.argv[1]
-    output_proj = sys.argv[2]
-    solverdir = sys.argv[3]
-    # solve problem
-    try:
-        solve_acoustic_problem(input_project=input_proj,
-                               output_project=output_proj,
-                               solverdir=solverdir)
-    except:
-        logging.exception("solve_project.py module couldn't solve the acoustic problem")
-        sys.exit(-1)
-    sys.exit(0)
