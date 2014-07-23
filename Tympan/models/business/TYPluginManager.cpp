@@ -354,7 +354,7 @@ namespace tympan
         LPTYPluginManager plugin_manager = TYPluginManager::get();
         plugin_manager->unloadPlugins();
         plugin_manager->loadPlugins(path, false);
-        plugin_manager->setCurrent("DefaultSolver");
+        plugin_manager->setCurrent(comp->getSolverId());
         comp->setPlugin(plugin_manager->getPlugin(plugin_manager->getCurrent()));
     }
 } /* namespace tympan */
