@@ -195,7 +195,7 @@ class TYCalcul;
 
 namespace tympan
 {
-    //! Load the default solver and set it to the computation
+    //! Load the solver that was chosen to compute 'comp' (its ID is owned by 'comp'
     /*!
      * \param path Path to the solver libraries (plugins) to load, containing
      *      among others the default solver
