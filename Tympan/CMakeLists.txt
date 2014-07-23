@@ -10,7 +10,7 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 # Configuring source code ######################################################
 
 
-set(PYSCRIPT "${TYMPAN_PythonModules}/tympan/solve_project.py")
+set(PYSCRIPT "bin/solve_tympan_project.py")
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/core/config.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/core/config.h

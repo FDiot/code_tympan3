@@ -1,4 +1,3 @@
-
 .. _code-structure:
 
 Structure of the code base
@@ -53,7 +52,7 @@ Peters, remember that *flat is better than nested* (import this).
 
 
 Python code hierarchy (i.e. the `Python` directory)
-------------------------------------------------
+---------------------------------------------------
 
 File hierarchy
 ~~~~~~~~~~~~~~
@@ -110,5 +109,3 @@ XXX to be completed
 
 * used by the python library to start computation for a solver model (python
   thin wrapper around solvers code)
-
-

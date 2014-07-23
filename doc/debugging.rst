@@ -81,7 +81,7 @@ are directly set in the code (see ``Tympan/gui/app/EnvironmentUtils.h``):
 
 * Path to Python interpreter (Windows specific):
   to run the Python script, the complete path to the Python interpreter is
-  needed (``python solve_project.py`` is not interpreted). Yet, there is no standard
+  needed (``python solve_tympan_project.py`` is not interpreted). Yet, there is no standard
   under Windows regarding where to install python, so this path cannot be known
   from Code_TYMPAN. That is why ``TYMPAN_PYTHON_INTERP`` environment variable
   must be set by the user (for example: "C:\\Python27\\python.exe").
@@ -90,4 +90,31 @@ are directly set in the code (see ``Tympan/gui/app/EnvironmentUtils.h``):
   If the environment variable exists but does not lead to the python interpreter, 
   the following message will be logged:
   "*Can't access python interpreter. TYMPAN_PYTHON_INTERP environment variable is not correctly set.*"
+
+* Path to CGAL bindings python libraries (used in altimetry computations):
+  it must be whether in the PYTHONPATH or in the CGAL_BINDINGS_PATH dedicated
+  environment variable.
+
+
+Tympan debugging options
+~~~~~~~~~~~~~~~~~~~~~~~~
+The 'TYMPAN_DEBUG' environment variable is read from both python and C++ code,
+and can be used to enable some debug options (format: ``TYMPAN_DEBUG=opt1;opt2;opt3``).
+The following options are taken into account:
+
+- **interactive** : when solve_tympan_project.py is called from an interactive terminal,
+  *pdb* (python debugger) is invoked in this script and the ID of the python
+  process running the script is displayed in the terminal. The script execution is
+  therefore paused, waiting for an user entry. It makes it possible to attach the
+  python process to a debugger (MSVC debugger under Windows, for example), and
+  then enter *run* in the terminal to start the script execution and thus
+  C++ code debugging.
+- **xml**: when Tympan executable is run, the two temporary XML files used to
+  communicate with the python script (input and output projects) are not removed
+  after the computation, and their path is displayed by Code_TYMPAN logging system.
+- **monothread** : disables the multithreading, computations will be run with just
+  one thread.
+
+
+
 
