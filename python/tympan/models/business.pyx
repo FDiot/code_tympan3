@@ -344,6 +344,7 @@ cdef class Site:
             lake = Lake()
             lake.thisptr = cpp_lake
             lake.matrix = cpp_lakes[i].getRealPointer().getMatrix()
+            lake.thisgeonodeptr = cpp_lakes[i]
             lakes.append(lake)
         return lakes
 
@@ -363,6 +364,7 @@ cdef class Site:
             area = MaterialArea()
             area.thisptr = cpp_mat_area
             area.matrix = cpp_mat_areas[i].getRealPointer().getMatrix()
+            area.thisgeonodeptr = cpp_mat_areas[i]
             mareas.append(area)
         return mareas
 
@@ -383,11 +385,13 @@ cdef class Site:
             lcurve.thisptr = cpp_lcurve
             lcurve.matrix = cpp_lcurves[i].getRealPointer().getMatrix()
             lcurve._altitude = cpp_lcurve.getAltitude()
+            lcurve.thisgeonodeptr = cpp_lcurves[i]
             lcurves.append(lcurve)
         return lcurves
 
 
 cdef class MaterialArea:
+    thisgeonodeptr = cy.declare(SmartPtr[TYGeometryNode])
     thisptr = cy.declare(cy.pointer(TYTerrain))
     matrix = cy.declare(tycommon.OMatrix)
 
@@ -413,6 +417,7 @@ cdef class MaterialArea:
 
 
 cdef class LevelCurve:
+    thisgeonodeptr = cy.declare(SmartPtr[TYGeometryNode])
     thisptr = cy.declare(cy.pointer(TYCourbeNiveau))
     matrix = cy.declare(tycommon.OMatrix)
     _altitude = cy.declare(double)
@@ -439,6 +444,7 @@ cdef class LevelCurve:
 
 
 cdef class Lake:
+    thisgeonodeptr = cy.declare(SmartPtr[TYGeometryNode])
     thisptr = cy.declare(cy.pointer(TYPlanEau))
     matrix = cy.declare(tycommon.OMatrix) # to get Lake pos in a global scale
 
