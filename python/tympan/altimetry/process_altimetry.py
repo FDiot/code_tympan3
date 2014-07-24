@@ -42,7 +42,7 @@ def export_site_topo(cysite):
         Keyword argument:
             cy_site -- cython site to process in order to build an altimetry site
     """
-    # build current SiteNode
+    # Site landtake
     (points, cylcurve) = cysite.process_landtake()
     asite = altimetry.SiteNode(coords=cypoints2acoords(points), id=cysite.elem_id)
     if cylcurve is not None:
@@ -51,6 +51,14 @@ def export_site_topo(cysite):
             altitude=cylcurve.altitude,
             id=cylcurve.elem_id)
         asite.add_child(alcurve)
+    # Water bodies
+    for cylake in cysite.lakes:
+        allake = altimetry.WaterBody(
+            coords=cypoints2acoords(cylake.level_curve.points),
+            altitude=cylake.level_curve.altitude,
+            id=cylake.elem_id)
+        asite.add_child(allake)
+    # Level curves
     for cylcurve in cysite.level_curves:
         alcurve = altimetry.LevelCurve(
             coords=cypoints2acoords(cylcurve.points),
