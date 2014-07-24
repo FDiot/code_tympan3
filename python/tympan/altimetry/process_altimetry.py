@@ -58,6 +58,17 @@ def export_site_topo(cysite):
             altitude=cylake.level_curve.altitude,
             id=cylake.elem_id)
         asite.add_child(allake)
+    # Other material areas
+    for cymarea in cysite.material_areas:
+        # Build a ground material
+        cymaterial = cymarea.ground_material
+        almaterial = altimetry.GroundMaterial(cymaterial.elem_id)
+        # Build a material area made of the above defined ground material
+        almatarea = altimetry.MaterialArea(
+            coords=cypoints2acoords(cymarea.points),
+            material=almaterial,
+            id=cymarea.elem_id)
+        asite.add_child(almatarea)
     # Level curves
     for cylcurve in cysite.level_curves:
         alcurve = altimetry.LevelCurve(
