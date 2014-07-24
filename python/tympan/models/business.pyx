@@ -382,7 +382,7 @@ cdef class Site:
             lcurve = LevelCurve()
             lcurve.thisptr = cpp_lcurve
             lcurve.matrix = cpp_lcurves[i].getRealPointer().getMatrix()
-            lcurve.altitude = cpp_lcurve.getAltitude()
+            lcurve._altitude = cpp_lcurve.getAltitude()
             lcurves.append(lcurve)
         return lcurves
 

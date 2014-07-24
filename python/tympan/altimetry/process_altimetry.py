@@ -51,6 +51,12 @@ def export_site_topo(cysite):
             altitude=cylcurve.altitude,
             id=cylcurve.elem_id)
         asite.add_child(alcurve)
+    for cylcurve in cysite.level_curves:
+        alcurve = altimetry.LevelCurve(
+            coords=cypoints2acoords(cylcurve.points),
+            altitude=cylcurve.altitude,
+            id=cylcurve.elem_id)
+        asite.add_child(alcurve)
     return asite
 
 
