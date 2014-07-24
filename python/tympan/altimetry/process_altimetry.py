@@ -19,7 +19,6 @@ def process_site_altimetry(input_project):
             input_project -- XML file containing the serialized project
                 containing the site whose altimetry must be processed.
 
-
         The execution is logged into 'tympan.log', created in the directory of
         the input XML project (the one opened from the Code_TYMPAN GUI)
     """
@@ -76,6 +75,11 @@ def export_site_topo(cysite):
             altitude=cylcurve.altitude,
             id=cylcurve.elem_id)
         asite.add_child(alcurve)
+    # Recurse
+    cysubsites = cysite.subsites
+    for cysbsite in cysubsites:
+        asbsite = export_site_topo(cysbsite)
+        asite.add_child(asbsite)
     return asite
 
 
