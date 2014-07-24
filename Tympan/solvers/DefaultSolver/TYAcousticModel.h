@@ -174,8 +174,16 @@ public:
     bool solve(TYTrajet& trajet);
 
 private :
-    OSpectreComplex getReflexionSpectrumAt(const OPoint3D& position, const OVector3D& direction, double length) const;
+    /*!
+     * \fn OSpectreComplex getReflexionSpectrumAt(const OSegment3D& incident, double length) const
+     * \brief Find Reflexion spectrum at point defined by the end of an incident segment.
+     */
+    OSpectreComplex getReflexionSpectrumAt(const OSegment3D& incident, double length) const;
 
+    /*!
+     * \fn void meanSlope(const OSegment3D& director, OSegment3D& slope) const
+     * \brief Create a segment corresponding to the projection of "director" segment on the ground
+     */
     void meanSlope(const OSegment3D& director, OSegment3D& slope) const;
 
 private:
