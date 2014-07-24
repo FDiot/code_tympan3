@@ -23,7 +23,7 @@ except ImportError:
     raise ImportError(err)
 
 
-def solve(input_project, output_project, solverdir, multithreading_on=True):
+def solve(input_project, output_project, solverdir, multithreading_on=True, interactive=False):
     """ Solve an acoustic problem with Code_TYMPAN from
 
         Keywords arguments:
@@ -36,6 +36,9 @@ def solve(input_project, output_project, solverdir, multithreading_on=True):
         The execution is logged into 'tympan.log', created in the directory of
         the input XML project (the one opened from the Code_TYMPAN GUI)
     """
+    if interactive:
+        import pdb
+        pdb.set_trace()
     ret = False
     tybusiness.init_tympan_registry()
     # Load an existing project and retrieve its calcul to solve it
