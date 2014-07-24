@@ -13,10 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #include <deque>
 #include <list>
 #include "TYAcousticModel.h"
@@ -229,18 +225,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
 
     if (_useSol)
     {
-        etape3._Absorption = getReflexionSpectrumAt( rayon._ptA, OVector3D( rayon._ptA, ptReflex ), rr );
-        //TYTerrain* pTerrain = NULL;
-        //TYSol* pSol = NULL;
-        //double angleA = OVector3D(ptReflex, penteMoyenne._ptA).angle(OVector3D(ptReflex, rayon._ptA));// Angle d'incidence
-
-        //pTerrain = _pTopographie->terrainAt(ptReflex);
-        //if (!pTerrain) { pTerrain = _pTopographie->getDefTerrain(); }
-        //if (pTerrain)
-        //{
-        //    pSol = pTerrain->getSol();
-        //    if (pSol) { etape3._Absorption = pSol->abso(angleA, rr, *_pAtmo); }
-        //}
+        etape3._Absorption = getReflexionSpectrumAt( seg1, rr );
     }
     else  // Sol totalement reflechissant
     {
@@ -264,9 +249,6 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
         ET DE UN (CONDITIONS NORMALES) A TROIS (CONDITIONS FAVORABLES) TRAJETS
         REFLECHIS
     */
-    TYTerrain* pTerrain = NULL;
-    TYSol* pSol = NULL;
-
     OSegment3D seg;
     TYTabEtape tabEtapes;
     double rr = 0.0; // Longueur du chemin reflechi
@@ -390,7 +372,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             // 3 cas :
             if (_useSol)
             {
-                etape._Absorption = getReflexionSpectrumAt( rayon._ptA, OVector3D(rayon._ptA, ptReflex), rr );
+                etape._Absorption = getReflexionSpectrumAt( seg, rr );
                 //double angle = OVector3D(ptReflex, projA).angle(OVector3D(ptReflex, rayon._ptA));
 
                 //pTerrain = _pTopographie->terrainAt(ptReflex);
@@ -453,7 +435,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             // 3 cas :
             if (_useSol)
             {
-                etape._Absorption = getReflexionSpectrumAt( rayon._ptA, OVector3D(rayon._ptA, ptReflex), rr );
+                etape._Absorption = getReflexionSpectrumAt( seg, rr );
                 //double angle = OVector3D(ptReflex, projA).angle(OVector3D(ptReflex, rayon._ptA));
 
                 //pTerrain = _pTopographie->terrainAt(ptReflex);
@@ -843,8 +825,6 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
        ========================================================================================= */
     bool res = true;
 
-    TYSol* pSol = NULL;
-
     OSegment3D segDirect(ptDebut, ptFin);
     OPoint3D ptSym, ptReflex, pt3;
 
@@ -954,9 +934,9 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
     if ((ptSym.distFrom(ptReflex) > _seuilConfondus) && (ptFin.distFrom(ptReflex) > _seuilConfondus))
     {
         //              Etape avant la reflexion
-        OSegment3D seg(ptDebut, ptReflex);
+        OSegment3D seg1(ptDebut, ptReflex);
 
-        rr = seg.longueur();
+        rr = seg1.longueur();
 
         if (fromSource)   // Si on part d'une source, on tient compte de la directivite de celle-ci
         {
@@ -972,24 +952,13 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
         //              Etape Apres reflexion
         EtapeCourante._pt = ptReflex;
 
-        TYTerrain* pTerrain = NULL;
-
-        seg = OSegment3D(ptReflex, ptFin);// Segment Point de reflexion->Point de reception
-        rr = rr + seg.longueur(); // Longueur parcourue sur le trajet reflechi
+        OSegment3D seg2 = OSegment3D(ptReflex, ptFin);// Segment Point de reflexion->Point de reception
+        rr = rr + seg2.longueur(); // Longueur parcourue sur le trajet reflechi
 
         // 3 cas :
         if (_useSol)
         {
-            EtapeCourante._Absorption = getReflexionSpectrumAt( ptDebut, OVector3D(ptDebut, ptReflex), rr );
-            //double angleA = OVector3D(ptReflex, segPente._ptA).angle(OVector3D(ptReflex, ptDebut));// Angle d'incidence
-
-            //pTerrain = _pTopographie->terrainAt(ptReflex);
-            //if (!pTerrain) { pTerrain = _pTopographie->getDefTerrain(); }
-            //if (pTerrain) // Une zone de terrain a ete definie
-            //{
-            //    pSol = pTerrain->getSol();
-            //    if (pSol) { EtapeCourante._Absorption = pSol->abso(angleA, rr, *_pAtmo); }
-            //}
+            EtapeCourante._Absorption = getReflexionSpectrumAt( seg1, rr );
         }
         else  // Sol totalement reflechissant
         {
@@ -1001,8 +970,8 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
     else if (fromSource || toRecepteur)
     {
         //              Etape avant la reflexion
-        OSegment3D seg(ptDebut, ptReflex);
-        rr = seg.longueur();
+        OSegment3D seg1(ptDebut, ptReflex);
+        rr = seg1.longueur();
 
         EtapeCourante._Absorption = _absoNulle;
 
@@ -1011,28 +980,13 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
         //              Etape Apres reflexion
         EtapeCourante._pt = ptReflex;
 
-        TYTerrain* pTerrain = NULL;
-
-        seg = OSegment3D(ptReflex, ptFin);// Segment Point de reflexion->Point de reception
-        rr = rr + seg.longueur(); // Longueur parcourue sur le trajet reflechi
+        OSegment3D seg2 = OSegment3D(ptReflex, ptFin);// Segment Point de reflexion->Point de reception
+        rr = rr + seg2.longueur(); // Longueur parcourue sur le trajet reflechi
 
         // 3 cas :
         if (_useSol)
         {
-            EtapeCourante._Absorption = getReflexionSpectrumAt( ptDebut, OVector3D(ptDebut, ptReflex), rr );
-            //double angleA = M_PI;
-            //if (toRecepteur)
-            //{
-            //    angleA = OVector3D(ptReflex, segPente._ptA).angle(OVector3D(ptReflex, ptDebut));// Angle d'incidence
-            //}
-
-            //pTerrain = _pTopographie->terrainAt(ptReflex);
-            //if (!pTerrain) { pTerrain = _pTopographie->getDefTerrain(); }
-            //if (pTerrain) // Une zone de terrain a ete definie
-            //{
-            //    pSol = pTerrain->getSol();
-            //    if (pSol) { EtapeCourante._Absorption = pSol->abso(angleA, rr, *_pAtmo); }
-            //}
+            EtapeCourante._Absorption = getReflexionSpectrumAt( seg1, rr );
         }
         else  // Sol totalement reflechissant
         {
@@ -1128,16 +1082,10 @@ void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection
             // Si le chemin reflechi n'est pas coupe, on peut calculer la reflexion
             if (!intersect)
             {
-                //pSurfaceGeoNode = SI.pSurfGeoNode;
-                //if (pSurfaceGeoNode) { pSurface = dynamic_cast<TYAcousticSurface*>(pSurfaceGeoNode->getElement()); }
-
-                //if (pSurface == NULL) { continue; } // Si la face n'est pas d'infrastructure on passe a la suivante
-
                 SpectreAbso = dynamic_cast<tympan::AcousticBuildingMaterial*>(inter.material)->asEyring();
                 SpectreAbso = SpectreAbso.mult(-1.0).sum(1.0);
 
-
-                ////
+                //// DO NOT REMOVE -- MAY BE REUSED
                 //// Reflexion sur un cylindre, d'apres ISO9613-2
                 ////
                 //TYAcousticCylinder* pCyl = NULL;
@@ -1357,29 +1305,33 @@ bool TYAcousticModel::solve(TYTrajet& trajet)
     return true;
 }
 
-OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OPoint3D& position, const OVector3D& direction, double length) const
+OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incident, double length) const
 {
     OSpectreComplex spectre;
 
-    // Search for primitive at reflexion
-    Ray ray( OPoint3Dtovec3(position), OVector3Dtovec3(direction) );
+    // Search for material at reflexion point
+    // Set position of ray begin 1000 meters over the original point to avoid underground point (seen from mean slope computation)
+    vec3 start = OPoint3Dtovec3(incident._ptB);
+    start.z += 1000.; 
+    Ray ray1( start, vec3(0., 0., -1.) );
 
     std::list<Intersection> LI;
 
-    double result = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray, LI ) );
+    double distance1 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray1, LI ) );
 
     assert( !LI.empty() );
 
     unsigned int indexFace = LI.begin()->p->getPrimitiveId();
-
-    // Find material
     tympan::AcousticMaterialBase *mat = _solver.getTabPolygon()[indexFace].material;
 
-    // Get incidence angle
-    double angle = -direction.angle( _solver.getTabPolygon()[indexFace].normal );
-    angle = M_PI/2. - angle;
+    // Angle estimation
+    OVector3D direction(incident._ptA, incident._ptB);
+    direction.normalize();
 
-    // Get correct spectrum
+    double angle = ( direction * -1 ).angle( _solver.getTabPolygon()[indexFace].normal );
+    angle = ABS(M_PI/2. - angle);
+
+    // Compute reflexion spectrum
     spectre = mat->get_absorption(angle, length);
 
     return spectre;
@@ -1388,6 +1340,9 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OPoint3D& position
 void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) const
 {
     // Search for primitives under the two segment extremities
+
+    // To begin : initialize slope
+    slope = director;
 
     // first one
     Ray ray1( OPoint3Dtovec3(director._ptA), vec3(0., 0., -1.) );
