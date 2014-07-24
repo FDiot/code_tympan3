@@ -5,7 +5,7 @@ from https://bitbucket.org/TYMPAN/code_tympan/downloads/ and uncompress
 it in this directory (where NN is the version number of the archive,
 currently NN=01) :
 
-https://bitbucket.org/TYMPAN/code_tympan/downloads/Code_TYMPAN-4.2.6_third-party-01.zip
+https://bitbucket.org/TYMPAN/code_tympan/downloads/Code_TYMPAN-4.2.7_third-party-01.zip
 
 NB : The authentication use HTTP Digest Auth (which is broken in wget, 
      use curl --digest instead to download from command line).
@@ -24,6 +24,10 @@ This archive should contain :
    For now and awaiting its intergration upstream, this is available from
    http://medionilaura-cgal-bindings.googlecode.com/archive/issue-50.zip
    (NB current head commit ID 1c469653776b)
+ * rply-1.1.3 : a PLY file format C library under MIT Licence from
+   http://w3.impa.br/~diego/software/rply/rply-1.1.3.tar.gz
+ * python-plyfile : a PLY file format python library under GNU GPL v3 License from
+   https://github.com/dranjan/python-plyfile/archive/master.zip       
 
 Note about Dime: there is not tagged version. Thus, the name is followed by the
 SHA1 of the changeset. For now, Logilab forked the Dime project on Bitbucket at
