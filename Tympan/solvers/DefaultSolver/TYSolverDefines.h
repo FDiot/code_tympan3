@@ -24,16 +24,18 @@
 #define __TY_SOLVERDEFINES__
 
 #include <deque>
-#include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
+
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/solver/entities.hpp"
 #include "Tympan/models/common/3d.h"
 
 struct TYStructSurfIntersect
 {
-    TYAcousticSurfaceGeoNode* pSurfGeoNode; //Geonode de la surface
-    OMatrix matInv; // Matrice inverse pour les faces d'infrastructure
-    TYTabPoint3D tabPoint; // Tableau de point utilise pour la preselection
+    TabPoint3D tabPoint; // Tableau de point utilise pour la preselection
+    OVector3D normal; // Normal to the face
     bool isEcran;   // Est un ecran
     bool isInfra; // Face d'infrastructure
+    tympan::AcousticMaterialBase* material; 
 };
 
 // Structure de donnees simple pour la gestion des intersections
@@ -42,6 +44,9 @@ struct TYSIntersection
     OSegment3D segInter[2]; // Segment d'intersection face/plan vertical[0] ou horizontal[1]
     bool noIntersect; // Indique qu'une face ne doit pas etre testee pour l'intersection
     bool bIntersect[2]; // Booleen qui indique si la face coupe le plan vertical ([0]) ou horizontal([1])
+    bool isEcran;   // Est un ecran
+    bool isInfra; // Face d'infrastructure
+    tympan::AcousticMaterialBase* material;
 };
 
 // Structure de donnees simple pour decrire le plan pour conserver les point qui definissent le plan de travail

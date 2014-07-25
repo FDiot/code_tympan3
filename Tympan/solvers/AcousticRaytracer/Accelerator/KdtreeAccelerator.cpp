@@ -168,7 +168,7 @@ void KdtreeAccelerator::generateMidKdTree(int currentProfondeur, BBox& localBox,
     generateMidKdTree(currentProfondeur + 1, secondBox, n1, prims1);
 }
 
-decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
+decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result) const
 {
 
     decimal tmin, tmax, intermin = -1.;
@@ -187,7 +187,7 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
 
     // Traverse kd-tree nodes in order for ray
     bool hit = false;
-    KDNode* node = &tableNode[0];
+    KDNode* node = const_cast<KDNode*>( &tableNode[0] );
     while (node != NULL)
     {
         // Bail out if we found a hit closer than the current node
@@ -206,11 +206,11 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result)
             if (belowFirst)
             {
                 firstChild = node + 1;
-                secondChild = &tableNode[node->AboveChild()];
+                secondChild = const_cast<KDNode*>( &tableNode[node->AboveChild()] );
             }
             else
             {
-                firstChild = &tableNode[node->AboveChild()];
+                firstChild = const_cast<KDNode*>( &tableNode[node->AboveChild()] );
                 secondChild = node + 1;
             }
 

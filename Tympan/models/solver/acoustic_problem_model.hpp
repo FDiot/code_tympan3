@@ -70,6 +70,10 @@ public:
     AcousticReceptor& receptor(receptor_idx idx)
     { return all_receptors[idx]; }
 
+    const AcousticReceptor& receptor(receptor_idx idx) const
+    { return all_receptors[idx]; }
+
+
     size_t nmaterials() const //TODO move to implementation file
     { return  all_materials.size(); }
 
@@ -108,6 +112,11 @@ public:
      */
     receptor_idx make_receptor(
         const Point& position_);
+
+
+    const nodes_pool_t& nodes() const { return all_nodes; }
+    const triangle_pool_t& triangles() const  { return all_triangles; }
+    const material_pool_t& materials() const { return all_materials; }
 
 public: // XXX Could / should be protected but this complicates testing
 

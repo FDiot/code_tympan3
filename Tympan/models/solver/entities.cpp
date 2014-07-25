@@ -22,6 +22,15 @@ AcousticBuildingMaterial::AcousticBuildingMaterial(
     const ComplexSpectrum& spectrum_
 ) : AcousticMaterialBase(name_), spectrum(spectrum_) {}
 
+ComplexSpectrum AcousticBuildingMaterial::asEyring() const
+{
+    ComplexSpectrum eyring(spectrum);
+
+    // 1-e^(-alphaS)
+
+    return eyring.exp(-1.0).mult(-1.0).sum(1.0);
+}
+
 // ---------
 AcousticGroundMaterial::AcousticGroundMaterial(
     const string& name_, double resistivity_ ) :
@@ -397,7 +406,7 @@ TYComplex AcousticGroundMaterial::sgnReIm(const TYComplex& W, const TYComplex& G
 
 // ---------
 
-const double AtmosphericConditions::Z_ref = 200.0;
+const double AtmosphericConditions::Z_ref = 400.0;
 const double AtmosphericConditions::reference_pressure = 101325.0;
 const double AtmosphericConditions::reference_temperature = 293.15;
 const double AtmosphericConditions::absolute_zero = 273.15;
@@ -483,7 +492,7 @@ double AtmosphericConditions::compute_hm() const
     return hygrometry * prSat_prRef * pr_rel;
 }
 
-Spectrum AtmosphericConditions::compute_length_absorption(double length)
+Spectrum AtmosphericConditions::compute_length_absorption(double length) const
 {
     return absorption_spectrum.mult(-(length / 2.0)).toGPhy();
 }

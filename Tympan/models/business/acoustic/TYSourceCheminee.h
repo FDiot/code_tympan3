@@ -23,22 +23,6 @@
 
 #include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
 
-// Nombre de valeurs de Ka dans le tableau
-#ifdef NB_KA
-#   undef NB_KA
-#   define NB_KA 38
-#else
-#   define NB_KA 38
-#endif
-
-// Nombre de valeurs de theta dans le tableau
-#ifdef NB_THETA
-#   undef NB_THETA
-#   define NB_THETA 21
-#else
-#   define NB_THETA 21
-#endif
-
 class OSegment3D;
 
 /**
@@ -100,7 +84,7 @@ public:
     /**
      * Calcul de la puissance apparente de la source dans la direction du segment
      */
-    OSpectre lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& atmos, const int& expGeo = 0, const int& regime = -1) const;
+    //OSpectre lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& atmos, const int& expGeo = 0, const int& regime = -1) const;
 
 
     // Fonctions privees
@@ -121,10 +105,6 @@ protected:
     ///Le rectangle acoustique associe a cette source.
     //    LPTYAcousticRectangle _pAcousticRectangle;
     LPTYRectangle _pAcousticRectangle;
-
-private:
-    // Tableaux utilises dans le calcul de la directivite.
-    static const double _tabQ[NB_KA][NB_THETA];
 };
 
 

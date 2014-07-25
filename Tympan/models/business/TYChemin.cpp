@@ -63,7 +63,7 @@ bool TYChemin::operator!=(const TYChemin& other) const
     return !operator==(other);
 }
 
-void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const TYAtmosphere& atmos)
+void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const tympan::AtmosphericConditions& atmos)
 {
     unsigned int i;
 
@@ -73,21 +73,23 @@ void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const TYAtmosphere& 
     {
         case CHEMIN_DIRECT: // S*A*e^(i.k.Rd) avec A =attenuation atmosphere et S=directivite de la source
             _attenuation = tabEtapes[0]._Absorption; //directivite de la source (S)
-            _attenuation = _attenuation.mult(atmos.getAtt(_longueur)); // S*A (A = attenuation atmospherique)
+//            _attenuation = _attenuation.mult(atmos.getAtt(_longueur)); // S*A (A = attenuation atmospherique)
+            _attenuation = _attenuation.mult(atmos.compute_length_absorption(_longueur)); // S*A (A = attenuation atmospherique)
 
-            phase = atmos.getKAcoust().mult(_longueur); // = kRd
+//            phase = atmos.getKAcoust().mult(_longueur); // = kRd
+            phase = atmos.get_k().mult(_longueur); // = kRd
             _attenuation.setPhase(phase); // =e^(i.kRd) //*/
 
             break;
 
         case CHEMIN_SOL: //S*A*Q*e^(i.k.Rr)/Rr  //avec Q absorption du sol
             _attenuation = tabEtapes[0]._Absorption; //directivite de la source (S)
-            _attenuation = _attenuation.mult(atmos.getAtt(_longueur));// S*A (A = attenuation atmospherique)
+            _attenuation = _attenuation.mult(atmos.compute_length_absorption(_longueur));// S*A (A = attenuation atmospherique)
 
             _attenuation = _attenuation.mult(tabEtapes[1]._Absorption); // S*A*Q
             _attenuation = _attenuation.mult(_distance / _longueur) ; //S*A*Q*Rd / Rr
 
-            phase = atmos.getKAcoust().mult(_longueur); // = kRr
+            phase = atmos.get_k().mult(_longueur); // = kRr
             phase = phase.sum(tabEtapes[1]._Absorption.getPhase()); // kRr + epsilon (epsilon = phase du coeff de reflexion du sol
 
             _attenuation.setPhase(phase);
@@ -96,9 +98,9 @@ void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const TYAtmosphere& 
 
         case CHEMIN_ECRAN: //= S*A*Q/D*e^(i.k.Rd + eps) avec Q=module du coefficient de reflexion du sol et D=attenuation diffraction
             _attenuation = tabEtapes[0]._Absorption; // S = Directivite de la source
-            _attenuation = _attenuation.mult(atmos.getAtt(_longueur)); // S*A (A = attenuation atmospherique)
+            _attenuation = _attenuation.mult(atmos.compute_length_absorption(_longueur)); // S*A (A = attenuation atmospherique)
 
-            phase = atmos.getKAcoust().mult(_longueur); // = kRr
+            phase = atmos.get_k().mult(_longueur); // = kRr
 
             // On fait le produit des absorptions des etapes a partir de la seconde jusqu'a l'avant derniere
             // la derniere portant l'effet de diffraction
@@ -115,9 +117,9 @@ void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const TYAtmosphere& 
 
         case CHEMIN_REFLEX:// S*A*Q*e^(i.k.Rr + eps)/Rr avec Q coefficient de reflexion de la paroi, eps = 0
             _attenuation = tabEtapes[0]._Absorption; // S = Directivite de la source
-            _attenuation = _attenuation.mult(atmos.getAtt(_longueur));// S*A (A = attenuation atmospherique)
+            _attenuation = _attenuation.mult(atmos.compute_length_absorption(_longueur));// S*A (A = attenuation atmospherique)
 
-            phase = atmos.getKAcoust().mult(_longueur); // = kRr
+            phase = atmos.get_k().mult(_longueur); // = kRr
 
             // On fait le produit des absorptions des etapes ) partir de la deuxieme
             for (i = 1; i < tabEtapes.size(); i++)

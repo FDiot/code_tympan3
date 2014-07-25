@@ -13,11 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-
 #include "TYAcousticModel.h"
 #include "TYAcousticPathFinder.h"
 #include "TYFaceSelector.h"
@@ -25,60 +20,39 @@
 #include "TYTask.h"
 #include "Tympan/models/business/TYTrajet.h"
 
-TYTask::TYTask(TYSolver& solver, TYTrajet& trajet, int nNbTrajets)
-    : _solver(solver), _trajet(trajet), _nNbTrajets(nNbTrajets), _tabIntersect(0)
+TYTask::TYTask(TYSolver& solver, const tympan::nodes_pool_t& nodes, const tympan::triangle_pool_t& triangles, const tympan::material_pool_t& materials, TYTrajet& trajet, int nNbTrajets)
+    : _solver(solver), 
+    _trajet(trajet), 
+    _nodes(nodes),
+    _triangles(triangles),
+    _materials(materials), 
+    _nNbTrajets(nNbTrajets) 
 {
 
 }
 
 TYTask::~TYTask()
 {
-    if (_tabIntersect)
-    {
-        delete [] _tabIntersect;
-    }
 }
 
 void TYTask::main()
 {
-    TYTabPoint3D ptsTop;
-    TYTabPoint3D ptsLeft;
-    TYTabPoint3D ptsRight;
-
-    // Recupere un pointeur sur le noeud geometrique de la source ponctuelle
-    TYSourcePonctuelleGeoNode* pSrcGeoNode = _trajet.getSourcePonctuelle();
-
-    // Recupere les pointeur sur la source ponctuelle et le point de calcul
-    TYSourcePonctuelle* pSrc = NULL;
-    if (pSrcGeoNode) { pSrc = dynamic_cast<TYSourcePonctuelle*>(pSrcGeoNode->getElement()); }
-
-    TYPointCalcul* pPointCalc = dynamic_cast<TYPointCalcul*>(_trajet.getPointCalcul()->getElement());
-    if (!(pSrc && pPointCalc)) { return; }
+    TabPoint3D ptsTop;
+    TabPoint3D ptsLeft;
+    TabPoint3D ptsRight;
 
     // Construction du rayon SR
     OSegment3D rayon;
     _trajet.getPtSetPtRfromOSeg3D(rayon);
 
-    // Initialisation du tableau des intersections
-    if (!_tabIntersect)
-    {
-        _tabIntersect = new TYSIntersection[_solver.getTabPolygonSize()];
-    }
-
     // On selectionne les faces de la scene concernes par le calcul acoustique pour la paire concernee
-    _solver.getFaceSelector()->selectFaces(_tabIntersect, pSrcGeoNode, rayon);
+    _solver.getFaceSelector()->selectFaces(_tabIntersect, rayon);
 
     // On calcul les trajets acoustiques horizontaux et verticaux reliant la paire source/recepteur
-    _solver.getAcousticPathFinder()->computePath(_tabIntersect, rayon, ptsTop, ptsLeft, ptsRight, _nNbTrajets);
+    _solver.getAcousticPathFinder()->computePath(_tabIntersect, rayon, ptsTop, ptsLeft, ptsRight);
 
     // On effectue les calculs acoustiques en utilisant les formules du modele acoustique
     _solver.getAcousticModel()->compute(_tabIntersect, rayon, _trajet, ptsTop, ptsLeft, ptsRight);
-
-    if (_tabIntersect)
-    {
-        delete [] _tabIntersect;
-    }
-    _tabIntersect = NULL;
 
     ptsTop.clear();
     ptsLeft.clear();

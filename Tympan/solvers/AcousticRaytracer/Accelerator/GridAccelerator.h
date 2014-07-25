@@ -63,7 +63,7 @@ public:
 
     virtual bool build();
 
-    virtual decimal traverse(Ray* r, std::list<Intersection> &result);
+    virtual decimal traverse(Ray* r, std::list<Intersection> &result) const;
 
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
     int getMaxProfondeur() { return maxProfondeur; }

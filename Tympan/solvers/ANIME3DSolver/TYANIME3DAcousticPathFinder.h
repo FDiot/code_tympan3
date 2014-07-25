@@ -27,7 +27,19 @@
 class TYANIME3DAcousticPathFinder
 {
 public:
-    TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize, TYTabSourcePonctuelleGeoNode& tabSources, TYTabPointCalculGeoNode& tabRecepteurs, tab_acoustic_path& tabTYRays);
+    //TYANIME3DAcousticPathFinder(    TYStructSurfIntersect* tabPolygon, 
+    //                                const size_t& tabPolygonSize, 
+    //                                TYTabSourcePonctuelleGeoNode& tabSources, 
+    //                                TYTabPointCalculGeoNode& tabRecepteurs,
+    //                                const tympan::AcousticProblemModel& aproblem_,
+    //                                tab_acoustic_path& tabTYRays);
+
+    TYANIME3DAcousticPathFinder(    TYStructSurfIntersect* tabPolygon, 
+                                    const size_t& tabPolygonSize, 
+                                    const tympan::AcousticProblemModel& aproblem_,
+                                    tab_acoustic_path& tabTYRays);
+
+
     virtual ~TYANIME3DAcousticPathFinder();
 
     bool exec();
@@ -43,12 +55,6 @@ private :
      * \return Renvoie 0 pour le sens S->R et 1 pour le sens R->S
      */
     unsigned int getTabsSAndR(vector<vec3>& sources, vector<vec3>& recepteurs);
-
-    /*!
-     * \fn TYPoint computePosGlobalPoint (const TYGeometryNode* pNode);
-     * \brief Calcule la position d'un point (source ou recepteur) dans le repere global
-     */
-    OPoint3D computePosGlobalPoint(const TYGeometryNode* pNode);
 
     /*!
      * \fn void transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
@@ -110,13 +116,15 @@ private:
     const size_t& _tabPolygonSize;
 
     /*!< List of sources used by the solver */
-    TYTabSourcePonctuelleGeoNode& _tabSources;
+    //TYTabSourcePonctuelleGeoNode& _tabSources;
 
     /*!< List of receptors used by the solver */
-    TYTabPointCalculGeoNode& _tabRecepteurs;
+    //TYTabPointCalculGeoNode& _tabRecepteurs;
 
     /// tableau de l'ensemble des rayons métier Code_TYMPAN
     tab_acoustic_path& _tabTYRays;
+
+    const tympan::AcousticProblemModel& _aproblem;
 };
 
 #endif // __TYANIME3DACOUSTICPATHFINDER__
