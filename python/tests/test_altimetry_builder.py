@@ -2,7 +2,7 @@ import unittest
 
 
 from tympan.altimetry.datamodel import (InconsistentGeometricModel,
-                                 LevelCurve)
+                                        LevelCurve, InfrastructureLandtake)
 from tympan.altimetry import mesh
 from tympan.altimetry.builder import Builder
 
@@ -83,6 +83,21 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                       'ids': set(['{Grass area}', '{Level curve A}'])}),
             (pM, {'altitude': self.level_curve_B.altitude,}),
         ])
+
+    def test_vertices_by_feature(self):
+        coords = rect(9, 9, 10, 10)
+        self.building = InfrastructureLandtake(coords,
+                                               parent_site=self.mainsite,
+                                               id="{some building}")
+        self.builder.merge_subsites()
+        self.builder.build_altimetric_base()
+        self.builder.build_triangulation()
+
+        vertices = self.builder.vertices_for_feature[self.building.id]
+
+        for i, v in enumerate(vertices):
+            self.assertEquals(v.point(), mesh.to_cgal_point(coords[i % len(coords)]))
+
 
 if __name__ == '__main__':
     from utils import main
