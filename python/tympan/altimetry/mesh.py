@@ -485,7 +485,6 @@ class InfoWithIDsAndAltitude(object):
                         "Intersecting constraints with different altitudes",
                         ids=self.ids)
 
-
 class ElevationMesh(MeshedCDTWithInfo):
     """ An elevation mesh associates an altitude to its vertices.
 

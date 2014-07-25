@@ -17,6 +17,7 @@ class Builder(object):
         self.cleaned = None # The cleaned and merged site
         self.alti = ReferenceElevationMesh() # Altimetric base
         self.mesh = None
+        self.vertices_for_feature = {} # List of vertex handle for a given feature
 
     @property
     def equivalent_site(self):
@@ -43,7 +44,7 @@ class Builder(object):
                 # NB: polygons' coordinates sequences are automatically closed
             else:
                 raise TypeError("Only level curves or waterbodies are expected")
-            vertices = mesher.insert_polyline(
+            vertices, _ = mesher.insert_polyline(
                 points, id=feature.id, **properties)
         return vertices
 
@@ -61,6 +62,7 @@ class Builder(object):
         assert self.mesh is not None
         for feature in self.equivalent_site.non_altimetric_features:
             vertices = self.insert_feature(feature, **feature.build_properties())
+            self.vertices_for_feature[feature.id] = vertices
         self.mesh.update_info_for_vertices()
 
     def compute_elevations(self):
