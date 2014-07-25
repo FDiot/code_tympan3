@@ -49,6 +49,7 @@ except ImportError:
         # Adjusting sys.path in order to find modules shipped with Code_TYMPAN
         sys.path.append(CGAL_BINDINGS_PATH)
         from CGAL import CGAL_Kernel
-    except ImportError:
-        raise ImportError("The `CGAL_BINDINGS_PATH` does NOT point to the directory "
-                          "holding cgal-bindings binary modules but to %s" % CGAL_BINDINGS_PATH)
+    except ImportError as exc:
+        raise ImportError("Could not load the CGAL bindings even when looking in the "
+                          "`CGAL_BINDINGS_PATH` environment variable (%s). "
+                          "The errors is : %s" % (CGAL_BINDINGS_PATH, exc.message))
