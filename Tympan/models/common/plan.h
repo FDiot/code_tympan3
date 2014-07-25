@@ -17,6 +17,7 @@
 #define TY_MC_PLAN
 
 #include <ostream>
+#include <deque>
 
 #include "Tympan/models/common/3d.h"
 
@@ -213,6 +214,12 @@ public:
      *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
      */
     int intersectsPlan(const OPlan& plan, OVector3D& vectorIntersec);
+
+    /**
+     * \fn int intersectsSurface(const std::deque<OPoint3D>& tabPoints, OSegment3D& segment);
+     * \brief compute intersection between a plan and a surface defined by his bounds
+     */
+    int intersectsSurface(const TabPoint3D& contour, OSegment3D& segment) const;
 
     /**
      * \fn bool isInPlan(const OPoint3D& pt);

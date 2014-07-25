@@ -45,8 +45,6 @@ public:
     ~TYCalculParcours();
     void InitChangementVariable2D3D(bool bAxeXMoinsSignifiant);
 
-    int NumPlanCoupe;
-
     void AjouterSegmentCoupe(double* ptA, double* ptB, bool isInfra, bool isEcran);
     void AjouterSegmentSR(double* ptA, double* ptB);
     void PointTrajetGauche(int i, double* pt);

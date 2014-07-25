@@ -25,6 +25,21 @@ struct compVec
 {
     bool operator()(const vec3& _v1, const vec3& _v2) const
     {
+// The original version (not commented) always false. If the aim of this is to verify that two point are same it must be
+        //if (    (fabs(_v1.x - _v2.x) < 0.001) &&
+        //        (fabs(_v1.y - _v2.y) < 0.001) &&
+        //        (fabs(_v1.z - _v2.z) < 0.001) ) 
+        //{
+        //    return true;
+        //}
+        //else
+        //{
+        //    return false;
+        //}
+
+        //return false;
+
+// The original version from Matthieu DREHER
         if (fabs(_v1.x - _v2.x) > 0.001)
         {
             return _v1.x < _v2.x;
@@ -63,10 +78,13 @@ public:
 
     BBox getGlobalBox() { return globalBox; }
 
-    Accelerator* getAccelerator() { return accelerator; }
+    Accelerator* getAccelerator() const { return accelerator; }
 
     std::vector<Shape*>* getShapes() { return &shapes; }
     std::vector<vec3>* getVertices() { return &vertices; }
+
+    const std::vector<Shape*>* getShapes() const { return &shapes; }
+    const std::vector<vec3>* getVertices() const { return &vertices; }
 
     bool finish();
 

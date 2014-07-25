@@ -47,7 +47,7 @@ public:
 
     virtual bool build() { return false; }
 
-    virtual decimal traverse(Ray* r, std::list<Intersection> &result) { return -1.; }
+    virtual decimal traverse(Ray* r, std::list<Intersection> &result) const { return -1.; }
 
 protected:
 	void defineLeafFunction()
