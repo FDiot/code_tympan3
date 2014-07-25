@@ -442,95 +442,48 @@ class MeshedCDTWithInfo(object):
             assert locate_type == OUTSIDE_AFFINE_HULL
             raise InconsistentGeometricModel("Degenerate triangulation (0D or 1D)")
 
-class FaceFlooder(object):
-    """This is a base class for implementing the family of flood algorithms
 
-    Flood algorithms are a way of walking through a mesh to mark or
-    process faces, edges and vertices. It consists of starting at some
-    seed point and processing adjacents faces (potentially under
-    condition on the edge connecting them).
-    """
+class VertexWithIDsAndAltitude(object):
+    ALTITUDE_TOLERANCE = 0.1
 
-    def __init__(self, mesher):
-        self.visited = set()
-        self.frontier = set()
-        self.border = set()
-        self.mesher = mesher
+    def __init__(self, altitude=UNSPECIFIED_ALTITUDE, id=None, **kwargs):
+        self.altitude = float(altitude)
+        self.ids = kwargs.pop('ids', set((id and [id]) or []))
 
-    def add_to_frontier(self, element):
-        if element not in self.visited:
-            self.frontier.add(element)
+    def merge_ids(self, other_info):
+        ids = getattr(other_info, "ids", None)
+        if ids is None: return
+        self.ids.update(ids)
 
-    def links_for(self, face_handle):
-        """ Return an iterable on edges with adjacent faces
-        """
-        for i in xrange(3):
-            edge = (face_handle, i)
-            yield edge
+    def merge_altitude(self, other_info):
+        alti = getattr(other_info, "altitude", UNSPECIFIED_ALTITUDE)
+        if alti is not UNSPECIFIED_ALTITUDE:
+            if self.altitude is UNSPECIFIED_ALTITUDE:
+                self.altitude = alti
+            else:
+                delta = abs(alti - self.altitude)
+                if delta > self.ALTITUDE_TOLERANCE:
+                    raise InconsistentGeometricModel(
+                        "Intersecting constraints with different altitudes",
+                        ids=self.ids)
 
-    def follow_link(self, edge):
-        """ Follow the edge to the adjacent face if the face
-        is finite and self.should_follow(edge) is True.
-        """
-        cdt = self.mesher.cdt
-        (fh, i) = edge
-        neighbor = fh.neighbor(i)
-        if not cdt.is_infinite(neighbor) and self.should_follow(fh, edge, neighbor):
-            return neighbor
+    def merge_with(self, other_info):
+        self.merge_ids(other_info)
+        self.merge_altitude(other_info)
+        return self # so as to enable using reduce
+
+    def __repr__(self):
+        args = ", ".join(["%s=%r" % kv for kv in self.__dict__.iteritems()])
+        return "".join(["VertexWithIDsAndAltitude(", args, ")"])
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__): # XXX type(other) is type(self)
+            return self.__dict__ == other.__dict__
         else:
-            return None
+            return False
 
-    def should_follow(self, from_face, edge, to_face):
-        """Override this method to define which edges stop the flood"""
-        raise NotImplementedError
-
-    def visit_epilog(self, element):
-        """Override this method if some action needs to be taken on an element
-        after all potential neighbor have been considered and
-        scheduled for visit in case they should.
-        """
-        return element
-
-    def visit_one(self):
-        """Process the next element in the frontier: consider all potential
-        links to neighbors (as returned by ``links_for``) and, for
-        the links which should be followed to a neighbor (as
-        indicated by ``follow_link``) mark the neighbor for visit if
-        is has no already been visited.
-
-        Returns the value returned by ``visit_epilog`` called at the end.
-
-        Raises IndexError if the frontier is empty
-
-        """
-        next_one = self.frontier.pop()
-        for link in self.links_for(next_one):
-            neighbor = self.follow_link(link)
-            if not neighbor:
-                self.border.add(link)
-                continue
-            if neighbor in self.visited:
-                continue
-            self.frontier.add(neighbor)
-        self.visited.add(next_one)
-        return self.visit_epilog(next_one)
-
-    def flood_from(self, seeds):
-        """Walk faces reachable from the given seeds
-
-        ``seeds`` must be an iterable over elements.  The first seed
-        is added to the frontier and the graph is flooded from this
-        point until the frontier is emppty.  Then the next seed is
-        added to the frontier if it was not yet visted and the process
-        starts again until seeds are all considered.
-        """
-        for seed in seeds:
-            if seed in self.visited:
-                continue
-            self.add_to_frontier(seed)
-            while(self.frontier):
-                self.visit_one()
-
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
 
 class ElevationMesh(MeshedCDTWithInfo):
@@ -539,48 +492,7 @@ class ElevationMesh(MeshedCDTWithInfo):
     This altitude can be unspecified (yet) and represented as UNSPECIFIED_ALTITUDE
     """
 
-    class VertexInfo(object):
-        ALTITUDE_TOLERANCE = 0.1
-
-        def __init__(self, altitude=UNSPECIFIED_ALTITUDE, id=None, **kwargs):
-            self.altitude = float(altitude)
-            self.ids = kwargs.pop('ids', set((id and [id]) or []))
-
-        def merge_ids(self, other_info):
-            ids = getattr(other_info, "ids", None)
-            if ids is None: return
-            self.ids.update(ids)
-
-        def merge_altitude(self, other_info):
-            alti = getattr(other_info, "altitude", UNSPECIFIED_ALTITUDE)
-            if alti is not UNSPECIFIED_ALTITUDE:
-                if self.altitude is UNSPECIFIED_ALTITUDE:
-                    self.altitude = alti
-                else:
-                    delta = abs(alti - self.altitude)
-                    if delta > self.ALTITUDE_TOLERANCE:
-                        raise InconsistentGeometricModel(
-                            "Intersecting constraints with different altitudes",
-                            ids=self.ids)
-
-        def merge_with(self, other_info):
-            self.merge_ids(other_info)
-            self.merge_altitude(other_info)
-            return self # so as to enable using reduce
-
-        def __repr__(self):
-            args = ", ".join(["%s=%r" % kv for kv in self.__dict__.iteritems()])
-            return "".join(["VertexInfo(", args, ")"])
-
-        def __eq__(self, other):
-            if isinstance(other, self.__class__): # XXX type(other) is type(self)
-                return self.__dict__ == other.__dict__
-            else:
-                return False
-
-        def __ne__(self, other):
-            return not self.__eq__(other)
-
+    VertexInfo = VertexWithIDsAndAltitude
 
     EdgeInfo = VertexInfo
 
@@ -702,3 +614,93 @@ class ReferenceElevationMesh(ElevationMesh):
             orig_info = self.vertices_info[orig_vh]
             dest_info = newone.vertices_info[dest_vh]
             dest_info.merge_with(orig_info)
+
+
+class FaceFlooder(object):
+    """This is a base class for implementing the family of flood algorithms
+
+    Flood algorithms are a way of walking through a mesh to mark or
+    process faces, edges and vertices. It consists of starting at some
+    seed point and processing adjacents faces (potentially under
+    condition on the edge connecting them).
+    """
+
+    def __init__(self, mesher):
+        self.visited = set()
+        self.frontier = set()
+        self.border = set()
+        self.mesher = mesher
+
+    def add_to_frontier(self, element):
+        if element not in self.visited:
+            self.frontier.add(element)
+
+    def links_for(self, face_handle):
+        """ Return an iterable on edges with adjacent faces
+        """
+        for i in xrange(3):
+            edge = (face_handle, i)
+            yield edge
+
+    def follow_link(self, edge):
+        """ Follow the edge to the adjacent face if the face
+        is finite and self.should_follow(edge) is True.
+        """
+        cdt = self.mesher.cdt
+        (fh, i) = edge
+        neighbor = fh.neighbor(i)
+        if not cdt.is_infinite(neighbor) and self.should_follow(fh, edge, neighbor):
+            return neighbor
+        else:
+            return None
+
+    def should_follow(self, from_face, edge, to_face):
+        """Override this method to define which edges stop the flood"""
+        raise NotImplementedError
+
+    def visit_epilog(self, element):
+        """Override this method if some action needs to be taken on an element
+        after all potential neighbor have been considered and
+        scheduled for visit in case they should.
+        """
+        return element
+
+    def visit_one(self):
+        """Process the next element in the frontier: consider all potential
+        links to neighbors (as returned by ``links_for``) and, for
+        the links which should be followed to a neighbor (as
+        indicated by ``follow_link``) mark the neighbor for visit if
+        is has no already been visited.
+
+        Returns the value returned by ``visit_epilog`` called at the end.
+
+        Raises IndexError if the frontier is empty
+
+        """
+        next_one = self.frontier.pop()
+        for link in self.links_for(next_one):
+            neighbor = self.follow_link(link)
+            if not neighbor:
+                self.border.add(link)
+                continue
+            if neighbor in self.visited:
+                continue
+            self.frontier.add(neighbor)
+        self.visited.add(next_one)
+        return self.visit_epilog(next_one)
+
+    def flood_from(self, seeds):
+        """Walk faces reachable from the given seeds
+
+        ``seeds`` must be an iterable over elements.  The first seed
+        is added to the frontier and the graph is flooded from this
+        point until the frontier is emppty.  Then the next seed is
+        added to the frontier if it was not yet visted and the process
+        starts again until seeds are all considered.
+        """
+        for seed in seeds:
+            if seed in self.visited:
+                continue
+            self.add_to_frontier(seed)
+            while(self.frontier):
+                self.visit_one()
