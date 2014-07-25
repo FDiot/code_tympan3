@@ -85,7 +85,7 @@ Cython
         write Python code with C/C++ declarations. The cython code is then
         translated into C/C++ and compiled as a Python library. It is used in
         Code_TYMPAN to interface Python code with TYMPAN C++ libraries. A version
-        0.19 or above is required.
+        0.20 or above is required.
 
 Shapely
         Shapely_ is a Python package for manipulation and analysis of planar 
