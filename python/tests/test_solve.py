@@ -4,12 +4,14 @@ import unittest
 import numpy as np
 
 from utils import (TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC,
-                   tybusiness, bus2solv)
+                   no_output)
 
+with no_output():
+    import tympan.models.business as tybusiness
+    import tympan.business2solver as bus2solv
 
 class TestTympan(TympanTC):
     pass
-
 
 def make_test_with_file(test_file):
     """ For a TEST_xx_NO_RESU.xml file from data/project-panel, load and
