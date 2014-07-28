@@ -747,9 +747,11 @@ class EdgeInfoWithMaterial(InfoWithIDsAndAltitude):
                   material=None, id=None, **kwargs):
         super(EdgeInfoWithMaterial, self).__init__(altitude, id=id, **kwargs)
         self.material_boundary = material is not None
+        self.landtake_boundary = material == HIDDEN_MATERIAL
 
     def merge_material_boundary(self, other):
         self.material_boundary |= other.material_boundary
+        self.landtake_boundary |= other.landtake_boundary
 
     def merge_with(self, other_info):
         super(EdgeInfoWithMaterial, self).merge_with(other_info)
@@ -759,14 +761,19 @@ class EdgeInfoWithMaterial(InfoWithIDsAndAltitude):
 
 class MaterialFaceFlooder(FaceFlooder):
 
-    def __init__(self, mesher):
-        super(MaterialFaceFlooder, self).__init__(mesher)
+    def is_material_border(self, edge):
+        return any(info.material_boundary
+                   for info in self.mesher.iter_constraints_info_overlapping(edge))
+
+    def should_follow(self, from_face, edge, to_face):
+        return not self.is_material_border(edge)
+
+
+class LandtakeFaceFlooder(MaterialFaceFlooder):
 
     def is_landtake_border(self, edge):
-        for info in self.mesher.iter_constraints_info_overlapping(edge):
-            if info.material_boundary:
-                return True
-        return False
+        return any(info.landtake_boundary
+                   for info in self.mesher.iter_constraints_info_overlapping(edge))
 
     def should_follow(self, from_face, edge, to_face):
         return not self.is_landtake_border(edge)

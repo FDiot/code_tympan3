@@ -3,8 +3,9 @@ import os
 runVisualTests = os.environ.get('RUN_VISUAL_TESTS', False)
 
 from shapely.geometry import MultiLineString
-from tympan.altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
-                                 WaterBody, SiteNode)
+from tympan.altimetry.datamodel import (LevelCurve, MaterialArea,
+                                        GroundMaterial, WaterBody,
+                                        SiteNode, HIDDEN_MATERIAL)
 from tympan.altimetry import mesh
 
 def rect(x1, y1, x2, y2):
@@ -133,7 +134,7 @@ class MesherTestUtilsMixin(object):
             material='concrete', altitude=0, id='border')
         hole = self.mesher.insert_polyline( # NB CW
             reversed([(2, 2), (5, 2), (5, 4), (2, 4)]), close_it=True,
-            material='hidden', id='hole')
+            material=HIDDEN_MATERIAL, id='hole')
         line = self.mesher.insert_polyline(
             [(1, 4), (4, 1)], altitude=20, id='line')
         return (border, hole, line)
