@@ -371,6 +371,30 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         self.assertEqual(mesher2.vertices_info[vD].altitude, slope*0.5)
 
 
+class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
+
+    def setUp(self):
+        self.mesher = mesh.MaterialMesh()
+
+    def test_material_boundary_info(self):
+        cdt = self.mesher.cdt
+        (border, hole, line) = self.build_simple_scene()
+        (va, vb), _ = line
+        self.mesher.update_info_for_edges()
+
+        if runVisualTests:
+            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
+            plotter.plot_edges()
+            plotter.show()
+
+        for edge in self.mesher.iter_edges_for_input_constraint(va, vb):
+            self.assertFalse(self.mesher.edges_info[edge].material_boundary)
+        for edge in self.mesher.iter_edges_for_input_polyline(hole[0], close_it=True):
+            edge = mesh.sorted_vertex_pair(*edge) # Important
+            self.assertTrue(self.mesher.edges_info[edge].material_boundary)
+
+
+
 if __name__ == '__main__':
     from utils import main
     main()

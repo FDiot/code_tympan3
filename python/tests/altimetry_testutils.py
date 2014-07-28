@@ -130,10 +130,10 @@ class MesherTestUtilsMixin(object):
     def build_simple_scene(self):
         border = self.mesher.insert_polyline( #NB CCW
             [(0, 0), (6, 0), (6, 5), (0, 5)], close_it=True,
-            material='concrete', altitude=0)
+            material='concrete', altitude=0, id='border')
         hole = self.mesher.insert_polyline( # NB CW
             reversed([(2, 2), (5, 2), (5, 4), (2, 4)]), close_it=True,
-            material='hidden')
+            material='hidden', id='hole')
         line = self.mesher.insert_polyline(
-            [(1, 4), (4, 1)], altitude=20)
+            [(1, 4), (4, 1)], altitude=20, id='line')
         return (border, hole, line)
