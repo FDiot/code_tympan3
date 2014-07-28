@@ -344,36 +344,25 @@ class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
 
     def test_flood(self):
 
-        class FaceFlooderForMarkingHoles(mesh.FaceFlooder):
-
-            def __init__(self, mesher):
-                super(FaceFlooderForMarkingHoles, self).__init__(mesher)
-
-            def is_landtake_border(self, edge):
-                for info in self.mesher.iter_constraints_info_overlapping(edge):
-                    if info.material_boundary:
-                        return True
-                return False
-
-            def should_follow(self, from_face, edge, to_face):
-                return not self.is_landtake_border(edge)
-
         (border, hole, line) = self.build_simple_scene()
 
-        faces_left, faces_right = mesh.left_and_right_faces(
-            self.mesher.iter_faces_for_input_polyline(hole[0], close_it=True))
-        flooder = FaceFlooderForMarkingHoles(self.mesher)
-        flooder.flood_from([faces_right[0]]) # A single face is enough
-        seeds_for_holes = [self.mesher.point_for_face(f) for f in flooder.visited]
+        flooder = self.mesher.flood_polygon(mesh.MaterialFaceFlooder, hole[0],  close_it=True)
 
         if runVisualTests:
             plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
             plotter.plot_edges()
-            visu.plot_points_seq(plotter.ax, seeds_for_holes, marker='*')
+            seeds = [self.mesher.point_for_face(f) for f in flooder.visited]
+            visu.plot_points_seq(plotter.ax, seeds, marker='*')
             plotter.show()
 
-        self.assertEqual(len(seeds_for_holes), 4)
+        face_in, expected_None = self.mesher.locate((3, 3))
+        self.assertIsNone(expected_None)
+        face_out, expected_None = self.mesher.locate((3, 4.5))
+        self.assertIsNone(expected_None)
 
+        self.assertEqual(len(flooder.visited), 4)
+        self.assertIn(face_in, flooder.visited)
+        self.assertNotIn(face_out, flooder.visited)
 
     def test_material_boundary_info(self):
         cdt = self.mesher.cdt
@@ -391,7 +380,6 @@ class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         for edge in self.mesher.iter_edges_for_input_polyline(hole[0], close_it=True):
             edge = mesh.sorted_vertex_pair(*edge) # Important
             self.assertTrue(self.mesher.edges_info[edge].material_boundary)
-
 
 
 if __name__ == '__main__':
