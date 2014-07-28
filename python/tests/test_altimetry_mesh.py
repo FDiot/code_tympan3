@@ -211,40 +211,6 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         visu.plot_points_seq(plotter.ax, points_right, marker='>')
         plotter.show()
 
-    def test_flood(self):
-
-        class FaceFlooderForMarkingHoles(mesh.FaceFlooder):
-
-            def __init__(self, mesher):
-                super(FaceFlooderForMarkingHoles, self).__init__(mesher)
-
-            def is_landtake_border(self, edge):
-                for info in self.mesher.iter_constraints_info_overlapping(edge):
-                    if "material" in info and info["material"]=='hidden':
-                        return True
-                return False
-
-            def should_follow(self, from_face, edge, to_face):
-                return not self.is_landtake_border(edge)
-
-        (border, hole, line) = self.build_simple_scene()
-
-        faces_left, faces_right = mesh.left_and_right_faces(
-            self.mesher.iter_faces_for_input_polyline(hole[0], close_it=True))
-        flooder = FaceFlooderForMarkingHoles(self.mesher)
-        flooder.flood_from([faces_right[0]]) # A single face is enough
-        seeds_for_holes = [self.mesher.point_for_face(f) for f in flooder.visited]
-        self.assertEqual(len(seeds_for_holes), 4)
-
-        if runVisualTests:
-            self.mesher.refine_mesh(hole_seeds=seeds_for_holes,
-                                    size_criterion=0.4, shape_criterion=0)
-
-            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
-            plotter.plot_edges()
-            visu.plot_points_seq(plotter.ax, seeds_for_holes, marker='*')
-            plotter.show()
-
     def test_copy(self):
         cdt = self.mesher.cdt
         (vA, vB, vC, _, _) = self.build_triangle()
@@ -375,6 +341,39 @@ class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
 
     def setUp(self):
         self.mesher = mesh.MaterialMesh()
+
+    def test_flood(self):
+
+        class FaceFlooderForMarkingHoles(mesh.FaceFlooder):
+
+            def __init__(self, mesher):
+                super(FaceFlooderForMarkingHoles, self).__init__(mesher)
+
+            def is_landtake_border(self, edge):
+                for info in self.mesher.iter_constraints_info_overlapping(edge):
+                    if info.material_boundary:
+                        return True
+                return False
+
+            def should_follow(self, from_face, edge, to_face):
+                return not self.is_landtake_border(edge)
+
+        (border, hole, line) = self.build_simple_scene()
+
+        faces_left, faces_right = mesh.left_and_right_faces(
+            self.mesher.iter_faces_for_input_polyline(hole[0], close_it=True))
+        flooder = FaceFlooderForMarkingHoles(self.mesher)
+        flooder.flood_from([faces_right[0]]) # A single face is enough
+        seeds_for_holes = [self.mesher.point_for_face(f) for f in flooder.visited]
+
+        if runVisualTests:
+            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
+            plotter.plot_edges()
+            visu.plot_points_seq(plotter.ax, seeds_for_holes, marker='*')
+            plotter.show()
+
+        self.assertEqual(len(seeds_for_holes), 4)
+
 
     def test_material_boundary_info(self):
         cdt = self.mesher.cdt
