@@ -757,6 +757,21 @@ class EdgeInfoWithMaterial(InfoWithIDsAndAltitude):
         return self # so as to enable using reduce
 
 
+class MaterialFaceFlooder(FaceFlooder):
+
+    def __init__(self, mesher):
+        super(MaterialFaceFlooder, self).__init__(mesher)
+
+    def is_landtake_border(self, edge):
+        for info in self.mesher.iter_constraints_info_overlapping(edge):
+            if info.material_boundary:
+                return True
+        return False
+
+    def should_follow(self, from_face, edge, to_face):
+        return not self.is_landtake_border(edge)
+
+
 class MaterialMesh(ElevationMesh):
     """An elevation mesh with a material assigned to each face
     """
@@ -773,3 +788,20 @@ class MaterialMesh(ElevationMesh):
         d = self.merge_info_for_edges(
             merge_function, edges=edges, init_map=self.edges_info)
         self.edges_info.update(d)
+
+    def flood_polygon(self, flooder_class, vertices, flood_right=False, close_it=False):
+        """Flood the inside of a polygon given by its vertices list using the
+        specified class of Flooder.
+
+        By default flood on the left side of the boudary, which is the
+        inner of the polygon if it is conter-clock-wise oriented. You
+        can specify flood_right=True if you fill the outside of if the
+        polygon is clock-wise-oriented.
+
+        """
+        faces_left, faces_right = left_and_right_faces(
+            self.iter_faces_for_input_polyline(vertices, close_it=True))
+        seed_faces = faces_right if flood_right else faces_left
+        flooder = flooder_class(self)
+        flooder.flood_from(seed_faces)
+        return flooder
