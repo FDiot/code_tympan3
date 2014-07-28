@@ -443,17 +443,35 @@ class MeshedCDTWithInfo(object):
             raise InconsistentGeometricModel("Degenerate triangulation (0D or 1D)")
 
 
-class VertexWithIDsAndAltitude(object):
+class InfoWithIDsAndAltitude(object):
     ALTITUDE_TOLERANCE = 0.1
 
-    def __init__(self, altitude=UNSPECIFIED_ALTITUDE, id=None, **kwargs):
-        self.altitude = float(altitude)
+    def  __init__(self, altitude=UNSPECIFIED_ALTITUDE, id=None, **kwargs):
         self.ids = kwargs.pop('ids', set((id and [id]) or []))
+        self.altitude = float(altitude)
 
     def merge_ids(self, other_info):
         ids = getattr(other_info, "ids", None)
         if ids is None: return
         self.ids.update(ids)
+
+    def merge_with(self, other_info):
+        self.merge_ids(other_info)
+        self.merge_altitude(other_info)
+        return self # so as to enable using reduce
+
+    def __repr__(self):
+        args = ", ".join(["%s=%r" % kv for kv in self.__dict__.iteritems()])
+        return "%s(%s)" % (self.__class__.__name__, args)
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__): # XXX type(other) is type(self)
+            return self.__dict__ == other.__dict__
+        else:
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
     def merge_altitude(self, other_info):
         alti = getattr(other_info, "altitude", UNSPECIFIED_ALTITUDE)
@@ -467,24 +485,6 @@ class VertexWithIDsAndAltitude(object):
                         "Intersecting constraints with different altitudes",
                         ids=self.ids)
 
-    def merge_with(self, other_info):
-        self.merge_ids(other_info)
-        self.merge_altitude(other_info)
-        return self # so as to enable using reduce
-
-    def __repr__(self):
-        args = ", ".join(["%s=%r" % kv for kv in self.__dict__.iteritems()])
-        return "".join(["VertexWithIDsAndAltitude(", args, ")"])
-
-    def __eq__(self, other):
-        if isinstance(other, self.__class__): # XXX type(other) is type(self)
-            return self.__dict__ == other.__dict__
-        else:
-            return False
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
 
 class ElevationMesh(MeshedCDTWithInfo):
     """ An elevation mesh associates an altitude to its vertices.
@@ -492,9 +492,9 @@ class ElevationMesh(MeshedCDTWithInfo):
     This altitude can be unspecified (yet) and represented as UNSPECIFIED_ALTITUDE
     """
 
-    VertexInfo = VertexWithIDsAndAltitude
+    VertexInfo = InfoWithIDsAndAltitude
 
-    EdgeInfo = VertexInfo
+    EdgeInfo = InfoWithIDsAndAltitude
 
     def __init__(self):
         super(ElevationMesh, self).__init__()
