@@ -7,7 +7,7 @@ from tympan.altimetry import mesh
 from tympan.altimetry.builder import Builder
 
 from altimetry_testutils import (MesherTestUtilsMixin, TestFeatures,
-                                 rect, runVisualTests, left_and_right_faces)
+                                 rect, runVisualTests)
 
 if runVisualTests:
     from tympan.altimetry import visu

@@ -703,3 +703,10 @@ class FaceFlooder(object):
             self.add_to_frontier(seed)
             while(self.frontier):
                 self.visit_one()
+
+
+def left_and_right_faces(faces_it):
+    """Takes an iterable on pair (left_face, right_face) and return the
+    pair of the list of all left faces and the list of all right faces
+    """
+    return zip(*list(faces_it))

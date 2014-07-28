@@ -2,7 +2,7 @@ import unittest
 
 from tympan.altimetry.datamodel import InconsistentGeometricModel
 from tympan.altimetry import mesh
-from altimetry_testutils import MesherTestUtilsMixin, runVisualTests, left_and_right_faces
+from altimetry_testutils import MesherTestUtilsMixin, runVisualTests
 
 if runVisualTests:
     from tympan.altimetry import visu
@@ -182,7 +182,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         f3 = self.mesher.face_for_vertices(vQ, vM, vD)
         self.assertIsNotNone(f3)
 
-        faces_left, faces_right = left_and_right_faces(
+        faces_left, faces_right = mesh.left_and_right_faces(
             self.mesher.iter_faces_for_input_constraint(vM, vN))
         if runVisualTests:
             plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
@@ -214,7 +214,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
         plotter.plot_edges()
 
-        faces_left, faces_right = left_and_right_faces(
+        faces_left, faces_right = mesh.left_and_right_faces(
             self.mesher.iter_faces_for_input_polyline(hole[0], close_it=True))
         points_left = [self.mesher.point_for_face(f) for f in faces_left]
         points_right = [self.mesher.point_for_face(f) for f in faces_right]
@@ -240,7 +240,8 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
         (border, hole, line) = self.build_simple_scene()
 
-        faces_left, faces_right = left_and_right_faces(self.mesher.iter_faces_for_input_polyline(hole[0], close_it=True))
+        faces_left, faces_right = mesh.left_and_right_faces(
+            self.mesher.iter_faces_for_input_polyline(hole[0], close_it=True))
         flooder = FaceFlooderForMarkingHoles(self.mesher)
         flooder.flood_from([faces_right[0]]) # A single face is enough
         seeds_for_holes = [self.mesher.point_for_face(f) for f in flooder.visited]
