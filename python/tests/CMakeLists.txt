@@ -37,3 +37,11 @@ foreach(testfile ${ALTIMETRY_TESTS_SCRIPTS})
     "CGAL_BINDINGS_PATH=${NATIVE_CGAL_BINDINGS_PYTHON_DIR}")
 endforeach (testfile)
 
+# Configure the script enabling to launch test manually from the command line
+if(SYS_NATIVE_WIN)
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/SetEnvTympanTests.bat.in
+    ${CMAKE_BINARY_DIR}/SetEnvTympanTests.bat @ONLY)
+elseif(SYS_LINUX)
+  configure_file(${PROJECT_SOURCE_DIR}/cmake/SetEnvTympanTests.sh.in
+     ${CMAKE_BINARY_DIR}/SetEnvTympanTests.sh @ONLY)
+endif()
