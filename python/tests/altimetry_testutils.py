@@ -10,13 +10,6 @@ from tympan.altimetry import mesh
 def rect(x1, y1, x2, y2):
     return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
 
-def left_and_right_faces(faces_it):
-    """Takes an iterable on pair (left_face, right_face) and return the
-    pair of the list of all left faces and the list of all right faces
-    """
-    return zip(*list(faces_it))
-
-
 class TestFeatures(object):
 
     big_rect_coords = rect(0, 0, 12, 10)
