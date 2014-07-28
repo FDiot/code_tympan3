@@ -128,17 +128,6 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
                               [{'id': 'H', 'altitude': 10},
                                {'id': 'V', 'color': 'blue'}])
 
-    def build_simple_scene(self):
-        border = self.mesher.insert_polyline( #NB CCW
-            [(0, 0), (6, 0), (6, 5), (0, 5)], close_it=True,
-            material='concrete', altitude=0)
-        hole = self.mesher.insert_polyline( # NB CW
-            reversed([(2, 2), (5, 2), (5, 4), (2, 4)]), close_it=True,
-            material='hidden')
-        line = self.mesher.insert_polyline(
-            [(1, 4), (4, 1)], altitude=20)
-        return (border, hole, line)
-
     def test_faces_from_edge(self):
         # NB ABCD is given in counter-clock-wise orientation
         (vA, vB, vC, vD), _ = self.mesher.insert_polyline(
