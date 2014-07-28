@@ -27,15 +27,6 @@ configure_file(
     @ONLY
 )
 
-if(SYS_NATIVE_WIN)
-  configure_file(${PROJECT_SOURCE_DIR}/cmake/SetEnvTympanTests.bat.in
-    ${CMAKE_CURRENT_BINARY_DIR}/SetEnvTympanTests.bat @ONLY)
-elseif(SYS_LINUX)
-  configure_file(${PROJECT_SOURCE_DIR}/cmake/SetEnvTympanTests.sh.in
-     ${CMAKE_CURRENT_BINARY_DIR}/SetEnvTympanTests.sh @ONLY)
-endif()
-
-
 add_subdirectory(test_utils)
 
 add_executable(test_example test_example.cpp)
