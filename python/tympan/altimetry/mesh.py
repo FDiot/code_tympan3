@@ -40,7 +40,7 @@ _PROXIMITY_THRESHOLD = 0.01
 Edge.__iter__= lambda this: iter((this[0], this[1]))
 
 
-from . datamodel import InconsistentGeometricModel
+from . datamodel import InconsistentGeometricModel, DEFAULT_MATERIAL, HIDDEN_MATERIAL
 
 
 UNSPECIFIED_ALTITUDE = float('nan')
@@ -312,6 +312,27 @@ class MeshedCDTWithInfo(object):
                 raise
         return d
 
+    def merge_info_for_edges(self, merge_function, edges=None, init_map=None):
+        """Reduce the list of information available on a edges to a single one.
+
+        This method works by calling repeatedly merge_function to
+        merge two infos into a single one, starting with informatiosn
+        drawn from init_map (or default constructed if init_map is not
+        given or does not contains the vertex).
+        """
+        init_map = init_map or {}
+        d = {}
+        for v_pair, info_list in self.fetch_constraint_infos_for_edges(edges=edges).iteritems():
+            v_pair = sorted_vertex_pair(*v_pair)
+            info = init_map.get(v_pair, self.EdgeInfo())
+            try:
+                d[v_pair] = reduce(merge_function, info_list, info)
+            except InconsistentGeometricModel as exc:
+                pa, pb = (v.point() for v in v_pair)
+                exc.witness_point = ((pa.x() + pb.x())/2.0, (pa.y() + pb.y())/2.0)
+                raise
+        return d
+
     def segment_for_edge(self, edge):
         if isinstance(edge[0], Face_handle):
             return self.cdt.segment(edge)
@@ -337,7 +358,7 @@ class MeshedCDTWithInfo(object):
         else:
             return centroid(*(fh.vertex(i).point() for i in xrange(3)))
 
-    def iter_faces_for_input_constraint(self, va, vb):
+    def iter_edges_for_input_constraint(self, va, vb):
         # CAUTION the CGAL method vertices_in_constraint does NOT
         # always return the vertices in the order from va to vb
         constraint_direction = Segment(va.point(), vb.point()).direction()
@@ -348,7 +369,19 @@ class MeshedCDTWithInfo(object):
             else:
                 return (v1, v0)
         for v0, v1 in ilinks(self.cdt.vertices_in_constraint(va, vb)):
-            v0, v1 = same_direction_as_constraint(v0, v1)
+            yield same_direction_as_constraint(v0, v1)
+
+    def iter_faces_for_input_constraint(self, va, vb):
+        for v0, v1 in self.iter_edges_for_input_constraint(va, vb):
+            yield self.faces_for_edge(v0, v1)
+
+    def iter_edges_for_input_polyline(self, poly, close_it=False):
+        for constraint in ilinks(iter(poly), close_it=close_it):
+            for v0, v1 in self.iter_edges_for_input_constraint(*constraint):
+                yield (v0, v1)
+
+    def iter_faces_for_input_polyline(self, poly, close_it=False):
+        for v0, v1 in self.iter_edges_for_input_polyline(poly, close_it=close_it):
             yield self.faces_for_edge(v0, v1)
 
     def py_vertex(self, vh):
@@ -376,11 +409,6 @@ class MeshedCDTWithInfo(object):
             return fh.object()
         else:
             return None
-
-    def iter_faces_for_input_polyline(self, poly, close_it=False):
-        for constraint in ilinks(iter(poly), close_it=close_it):
-            for faces_left_right in self.iter_faces_for_input_constraint(*constraint):
-                yield faces_left_right
 
     def refine_mesh(self, hole_seeds=None, size_criterion=0, shape_criterion=0.125):
         """Refine the triangulation into a regular mesh.
@@ -710,3 +738,38 @@ def left_and_right_faces(faces_it):
     pair of the list of all left faces and the list of all right faces
     """
     return zip(*list(faces_it))
+
+
+class EdgeInfoWithMaterial(InfoWithIDsAndAltitude):
+    """ Add a flag if the edge is a boundary for materials """
+
+    def  __init__(self, altitude=UNSPECIFIED_ALTITUDE,
+                  material=None, id=None, **kwargs):
+        super(EdgeInfoWithMaterial, self).__init__(altitude, id=id, **kwargs)
+        self.material_boundary = material is not None
+
+    def merge_material_boundary(self, other):
+        self.material_boundary |= other.material_boundary
+
+    def merge_with(self, other_info):
+        super(EdgeInfoWithMaterial, self).merge_with(other_info)
+        self.merge_material_boundary(other_info)
+        return self # so as to enable using reduce
+
+
+class MaterialMesh(ElevationMesh):
+    """An elevation mesh with a material assigned to each face
+    """
+
+    EdgeInfo = EdgeInfoWithMaterial
+
+    def __init__(self):
+        super(MaterialMesh, self).__init__()
+        # edges_info is indexed by *sorted* vertices pair
+        self.edges_info = defaultdict(self.EdgeInfo)
+
+    def update_info_for_edges(self, edges=None, init_map=None):
+        merge_function = lambda i1, i2: i1.merge_with(i2)
+        d = self.merge_info_for_edges(
+            merge_function, edges=edges, init_map=self.edges_info)
+        self.edges_info.update(d)
