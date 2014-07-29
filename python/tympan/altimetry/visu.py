@@ -33,7 +33,9 @@ from  datamodel import *
 MATERIAL_COLORS = {
     "grass": "green",
     "Water": "blue",
-    HIDDEN_MATERIAL.id: 'none'
+    "concrete": "yellow",
+    HIDDEN_MATERIAL.id: 'magenta',
+    DEFAULT_MATERIAL.id: '0.30'
 }
 
 def plot_linear_shape(ax, shape, **opts):
@@ -140,7 +142,7 @@ def plot_segment(ax, s, **kwargs):
 class MeshedCDTPlotter(object):
 
     style_edge = {'linewidth': 1, 'color':'black'}
-    style_constrained_edge = {'linewidth': 3}
+    style_constrained_edge = {'linewidth': 3, 'linestyle':'dashed'}
     style_annotations = {'textcoords': 'offset points',
                          'xytext': (5, 5)}
 

@@ -5,7 +5,8 @@ runVisualTests = os.environ.get('RUN_VISUAL_TESTS', False)
 from shapely.geometry import MultiLineString
 from tympan.altimetry.datamodel import (LevelCurve, MaterialArea,
                                         GroundMaterial, WaterBody,
-                                        SiteNode, HIDDEN_MATERIAL)
+                                        SiteNode, InfrastructureLandtake,
+                                        HIDDEN_MATERIAL)
 from tympan.altimetry import mesh
 
 def rect(x1, y1, x2, y2):
@@ -27,6 +28,7 @@ class TestFeatures(object):
     level_curve_B_coords =[(8.0, 4.0), (8.0, 7.0), (12.0, 7.0)]
     cleaned_level_B_shape = MultiLineString([[(8.0, 6.0), (8.0, 7.0), (11.0, 7.0)]])
     altitude_B = 20.0
+    landtake_coords = rect(2, 7, 4, 8)
 
     def build_features(self):
         self.mainsite = SiteNode(self.big_rect_coords, id="{Main site ID}")
@@ -47,6 +49,9 @@ class TestFeatures(object):
         self.out_of_subsite = MaterialArea(rect(9, 9, 10, 10),
                                        material=self.grass,
                                        parent_site=self.subsite, id="{Out of subsite area}")
+        self.building = InfrastructureLandtake(self.landtake_coords,
+                                               parent_site=self.mainsite, id="{Building}")
+
 
     def build_more_features_in_subsites(self):
         self.subsubsite = SiteNode(rect(6, 6.5, 7, 7.5), id="{SubSubsite ID}",

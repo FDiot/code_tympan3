@@ -8,7 +8,10 @@ from .datamodel import (InconsistentGeometricModel,
                         DEFAULT_MATERIAL,
                         elementary_shapes)
 from .merge import recursively_merge_all_subsites
-from .mesh import ElevationMesh, ReferenceElevationMesh,Vertex_handle
+from .mesh import (ElevationMesh, ReferenceElevationMesh,
+                   Vertex_handle,
+                   LandtakeFaceFlooder, MaterialFaceFlooder)
+
 
 class Builder(object):
 
@@ -18,10 +21,19 @@ class Builder(object):
         self.alti = ReferenceElevationMesh() # Altimetric base
         self.mesh = None
         self.vertices_for_feature = {} # List of vertex handle for a given feature
+        self.material_by_face = {}
 
     @property
     def equivalent_site(self):
         return self.cleaned.equivalent_site
+
+    def complete_processing(self):
+        self.merge_subsites()
+        self.build_altimetric_base()
+        self.build_triangulation()
+        self.compute_informations()
+        self.compute_elevations()
+        self.fill_material_and_landtakes()
 
     def merge_subsites(self):
         assert self.cleaned is None
@@ -55,6 +67,7 @@ class Builder(object):
             props = level_curve.build_properties()
             assert 'altitude' in props
             vertices = self.insert_feature(level_curve, mesher=self.alti, **props)
+            self.vertices_for_feature[level_curve.id] = vertices
         self.alti.update_info_for_vertices()
         self.mesh = self.alti.copy_as_ElevationMesh()
 
@@ -63,7 +76,43 @@ class Builder(object):
         for feature in self.equivalent_site.non_altimetric_features:
             vertices = self.insert_feature(feature, **feature.build_properties())
             self.vertices_for_feature[feature.id] = vertices
+
+    def refine_triangulation(self):
+        # TODO insert refine step here
+        pass
+
+    def compute_informations(self):
         self.mesh.update_info_for_vertices()
+        self.mesh.update_info_for_edges()
 
     def compute_elevations(self):
         self.mesh.update_altitude_from_reference(self.alti.point_altitude)
+
+    def fill_polygonal_feature(self, feature, flooder_class):
+        assert self.mesh is not None
+        if feature.id not in self.mainsite.features_by_id:
+            raise ValueError("Only features already inserted can be filled ID:%s"
+                             % feature.id)
+        vertices = self.vertices_for_feature[feature.id]
+        close_it = vertices[0] != vertices[-1]
+        flooder = self.mesh.flood_polygon(flooder_class, vertices,
+                                            close_it=close_it)
+        affected_faces =[fh for fh in flooder.visited
+                         if fh not in self.material_by_face]
+        for fh in affected_faces:
+            self.material_by_face[fh] = feature.material
+        return affected_faces
+
+    def fill_material_and_landtakes(self):
+        assert self.mesh is not None
+        assert len(self.material_by_face)==0
+        for landtake in self.mainsite.landtakes:
+            self.fill_polygonal_feature(landtake,
+                                        flooder_class=LandtakeFaceFlooder)
+        for material_area_id in self.cleaned.material_areas_inner_first():
+            material_area = self.equivalent_site.features_by_id[material_area_id]
+            self.fill_polygonal_feature(material_area,
+                                        flooder_class=MaterialFaceFlooder)
+        for fh in self.mesh.cdt.finite_faces():
+            if fh not in self.material_by_face:
+                self.material_by_face[fh] = DEFAULT_MATERIAL
