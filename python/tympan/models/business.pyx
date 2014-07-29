@@ -195,6 +195,27 @@ cdef class Site:
         return typrojet2project(self.thisptr.getRealPointer().getProjet())
 
     @property
+    def ground_contour(self):
+        """ Return the ground contour of the infrastructure as a list of list
+        containing 'Point3D' cython object (a sublist = the contour of a volume)
+        """
+        cpp_contours = cy.declare(map[OGenID, deque[tycommon.OPoint3D]])
+        cpp_contours_iter = cy.declare(map[OGenID, deque[tycommon.OPoint3D]].iterator)
+        self.thisptr.getRealPointer().getFacesOnGround(cpp_contours)
+        cpp_contours_iter = cpp_contours.begin()
+        contours = {}
+        while cpp_contours_iter != cpp_contours.end():
+            cpp_volumenode_id = deref(cpp_contours_iter).first.toString().toStdString()
+            cpp_volumenode_contour = cy.declare(deque[tycommon.OPoint3D])
+            cpp_volumenode_contour = deref(cpp_contours_iter).second
+            contours.setdefault(cpp_volumenode_id, [])
+            for i in xrange(cpp_volumenode_contour.size()):
+                contours[cpp_volumenode_id].append(
+                    tycommon.opoint3d2point3d(cpp_volumenode_contour[i]))
+            inc(cpp_contours_iter)
+        return contours
+
+    @property
     def acoustic_surfaces(self):
         """ Retrieve the acoustic surfaces of the site and return them as a list
             of 'AcousticSurface' cython objects.

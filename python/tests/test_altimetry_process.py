@@ -11,7 +11,7 @@ import tympan.altimetry.process_altimetry as tyalti
 
 class TestProcessAltimetry(TympanTC):
 
-    def test_process_single_landtake(self):
+    def test_process_site_landtake(self):
         with self.no_output():
             asite = tyalti.process_site_altimetry(
                 osp.join(TEST_PROBLEM_DIR, '1_PROJET_Site_emprise_seule.xml'))
@@ -125,6 +125,19 @@ class TestProcessAltimetry(TympanTC):
                           (109.0, 66.0), (122.0, -4.0), (75.0, -48.0),
                           (26.0, -62.0), (3.0, -115.0), (-33.0, -153.0),
                           (-75.0, -136.0)])
+
+    def test_process_infrastructure_landtake(self):
+        with self.no_output():
+            asite = tyalti.process_site_altimetry(osp.join(TEST_PROBLEM_DIR,
+                                                           'site_with_two_joined_buildings.xml'))
+        infra_landtakes = asite.landtakes
+        # As there are 2 buildings in the input project we expect to find 2
+        # infrastructure landtakes
+        self.assertEqual(len(infra_landtakes), 2)
+        self.assertEqual(infra_landtakes[0].build_coordinates()[0],
+                         [(20.0,10.0),(30.0,10.0),(30.0,0.0),(20.0,0.0)])
+        self.assertEqual(infra_landtakes[1].build_coordinates()[0],
+                         [(0.0,10.0),(20.0,10.0),(20.0,0.0),(0.0,0.0)])
 
 
 if __name__ == '__main__':
