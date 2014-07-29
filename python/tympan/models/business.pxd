@@ -104,6 +104,7 @@ cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
         const double getAltiEmprise() const
         const vector[SmartPtr[TYGeometryNode]]& getListSiteNode() const
         bool getUseEmpriseAsCrbNiv() const
+        void getFacesOnGround(map[OGenID, deque[tycommon.OPoint3D]]& tabContours) const
 
 cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):

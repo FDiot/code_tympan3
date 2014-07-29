@@ -75,6 +75,13 @@ def export_site_topo(cysite):
             altitude=cylcurve.altitude,
             id=cylcurve.elem_id)
         asite.add_child(alcurve)
+    # Ground contour (infrastructure landtake)
+    for (cy_id, cy_volume_contour) in cysite.ground_contour.items():
+        infra_landtake = altimetry.InfrastructureLandtake(
+            coords=cypoints2acoords(cy_volume_contour),
+            id=cy_id
+            )
+        asite.add_child(infra_landtake)
     # Recurse
     cysubsites = cysite.subsites
     for cysbsite in cysubsites:
