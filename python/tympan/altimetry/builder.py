@@ -5,7 +5,7 @@ Provide chaining of the step required to build the altimetry of a compound site.
 from shapely import geometry
 
 from .datamodel import (InconsistentGeometricModel,
-                        DEFAULT_MATERIAL, HIDDEN_MATERIAL,
+                        DEFAULT_MATERIAL,
                         elementary_shapes)
 from .merge import recursively_merge_all_subsites
 from .mesh import ElevationMesh, ReferenceElevationMesh,Vertex_handle
