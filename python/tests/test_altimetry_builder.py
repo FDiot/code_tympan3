@@ -32,6 +32,11 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         plotter = visu.MeshedCDTPlotter(self.builder.mesh, title=self._testMethodName)
         plotter.plot_edges()
         cleaned.equivalent_site.plot(plotter.ax, alt_geom_map=cleaned.geom)
+
+        fh, expected_None = self.builder.mesh.locate_point((4, 4))
+        self.assertIsNone(expected_None)
+        plotter.plot_face(fh, material_id='Water')
+
         plotter.show()
 
     def check_vertices_props(self, mesher, points_and_expectations):
