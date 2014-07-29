@@ -454,6 +454,9 @@ class MeshedCDTWithInfo(object):
 
         cf. http://doc.cgal.org/latest/Mesh_2/index.html#secMesh_2_criteria
         """
+        if shape_criterion > 0.125:
+            raise ValueError("0.125 is the best shape criterion still providing"
+                             " warranted termination of the refinement.")
         criteria = Mesh_criteria(shape_criterion, size_criterion)
         hole_seeds = hole_seeds or []
         CGAL_refine_Delaunay_mesh(self.cdt, hole_seeds, criteria)
