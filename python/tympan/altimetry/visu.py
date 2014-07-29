@@ -24,6 +24,7 @@ Notably relies upon:
 from warnings import warn
 
 from matplotlib import pyplot as plt
+from matplotlib import patches as mpatches
 from shapely import geometry as geom
 from descartes import PolygonPatch
 
@@ -31,7 +32,8 @@ from  datamodel import *
 
 MATERIAL_COLORS = {
     "grass": "green",
-    "Water": "blue"
+    "Water": "blue",
+    HIDDEN_MATERIAL.id: 'none'
 }
 
 def plot_linear_shape(ax, shape, **opts):
@@ -88,12 +90,23 @@ def plot_PolygonalFeature(this, ax, alt_geom_map=None, **kwargs):
 PolygonalTympanFeature.plot = plot_PolygonalFeature
 
 def plot_MaterialArea(this, ax, **kwargs):
-    color = MATERIAL_COLORS.get(this.material_id, 'none')
-    opts = {'facecolor' : color}
+    color = MATERIAL_COLORS.get(this.material_id, 'gray')
+    opts = {'edgecolor' : color,
+            'hatch':'/',
+            'alpha':.80}
     opts.update(kwargs)
     super(MaterialArea, this).plot(ax, **opts)
     return ax
 MaterialArea.plot = plot_MaterialArea
+
+def plot_InfrastructureLandtake(this, ax, **kwargs):
+    opts = {'edgecolor' : 'black',
+            'hatch':'\\\\',
+            'alpha':1.0}
+    opts.update(kwargs)
+    super(InfrastructureLandtake, this).plot(ax, **opts)
+    return ax
+InfrastructureLandtake.plot = plot_InfrastructureLandtake
 
 def plot_SiteNode(this, ax, recursive=False, **kwargs):
     super(SiteNode, this).plot(ax, alpha=1, edgecolor='black')
@@ -171,3 +184,17 @@ class MeshedCDTPlotter(object):
     def annotate_finite_face(self, face, text, **kwargs):
         p = self.mesher.point_for_face(face)
         return self.annotate_at(p.x(), p.y(), text, **kwargs)
+
+    def plot_face(self, fh, material_id=None, **kwargs):
+        triangle = [(p.x(), p.y()) for p in self.mesher.triangle_for_face(fh)]
+        if material_id is None:
+            color = 'none'
+        else:
+            color = MATERIAL_COLORS.get(material_id, 'gray')
+        plot_opts = {'edgecolor':'none',
+                     'facecolor':color,
+                     'alpha':0.4,
+                     'zorder':-1}
+        plot_opts.update(kwargs)
+        poly = mpatches.Polygon(triangle, fill=True, **plot_opts)
+        self.ax.add_patch(poly)

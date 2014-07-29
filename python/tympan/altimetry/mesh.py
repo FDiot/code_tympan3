@@ -351,12 +351,18 @@ class MeshedCDTWithInfo(object):
         else:
             return (face2, face1)
 
+    def triangle_for_face(self, fh):
+        if self.cdt.is_infinite(fh):
+            return None
+        else:
+            return [fh.vertex(i).point() for i in xrange(3)]
+
     def point_for_face(self, fh):
         "Return a point in the interior of the face, or None if face is infinite"
         if self.cdt.is_infinite(fh):
             return None
         else:
-            return centroid(*(fh.vertex(i).point() for i in xrange(3)))
+            return centroid(*self.triangle_for_face(fh))
 
     def iter_edges_for_input_constraint(self, va, vb):
         # CAUTION the CGAL method vertices_in_constraint does NOT
@@ -757,7 +763,6 @@ class EdgeInfoWithMaterial(InfoWithIDsAndAltitude):
         super(EdgeInfoWithMaterial, self).merge_with(other_info)
         self.merge_material_boundary(other_info)
         return self # so as to enable using reduce
-
 
 class MaterialFaceFlooder(FaceFlooder):
 
