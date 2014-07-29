@@ -2,6 +2,7 @@ import unittest
 
 
 from tympan.altimetry.datamodel import (InconsistentGeometricModel,
+                                        MaterialArea,
                                         LevelCurve, InfrastructureLandtake)
 from tympan.altimetry import mesh
 from tympan.altimetry.builder import Builder
@@ -28,15 +29,16 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
     def test_plot(self):
         self.builder.merge_subsites()
         self.builder.build_altimetric_base()
+        self.builder.build_triangulation()
+        self.builder.fill_material_and_landtakes()
         cleaned = self.builder.cleaned
         plotter = visu.MeshedCDTPlotter(self.builder.mesh, title=self._testMethodName)
-        plotter.plot_edges()
         cleaned.equivalent_site.plot(plotter.ax, alt_geom_map=cleaned.geom)
+        plotter.plot_edges()
 
         fh, expected_None = self.builder.mesh.locate_point((4, 4))
         self.assertIsNone(expected_None)
-        plotter.plot_face(fh, material_id='Water')
-
+        plotter.plot_face(fh, material_id='concrete')
         plotter.show()
 
     def check_vertices_props(self, mesher, points_and_expectations):
@@ -67,6 +69,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.builder.merge_subsites()
         self.builder.build_altimetric_base()
         self.builder.build_triangulation()
+        self.builder.compute_informations()
 
         self.check_vertices_props( self.builder.mesh, [
             ((1, 1), {'altitude': self.altitude_A,
@@ -79,6 +82,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.builder.merge_subsites()
         self.builder.build_altimetric_base()
         self.builder.build_triangulation()
+        self.builder.compute_informations()
         pM = (8.5, 6.5) # in the corner of Level curve B
         vM = self.builder.mesh.insert_point(pM)
         self.builder.compute_elevations()
@@ -97,11 +101,50 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.builder.merge_subsites()
         self.builder.build_altimetric_base()
         self.builder.build_triangulation()
+        self.builder.compute_informations()
 
         vertices = self.builder.vertices_for_feature[self.building.id]
 
         for i, v in enumerate(vertices):
             self.assertEquals(v.point(), mesh.to_cgal_point(coords[i % len(coords)]))
+
+    @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
+    def test_plot_complete_processing(self):
+        self.builder.complete_processing()
+        cleaned = self.builder.cleaned
+        plotter = visu.MeshedCDTPlotter(self.builder.mesh, title=self._testMethodName)
+        cleaned.equivalent_site.plot(plotter.ax, alt_geom_map=cleaned.geom)
+        plotter.plot_edges()
+
+        for fh in self.builder.mesh.cdt.finite_faces():
+            material = self.builder.material_by_face.get(fh)
+            if material is None : continue
+            plotter.plot_face(fh, material_id=material.id)
+        plotter.show()
+
+    @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
+    def test_plot_landtake_flooding(self):
+        self.builder.merge_subsites()
+        self.builder.build_altimetric_base()
+        self.builder.build_triangulation()
+        self.builder.compute_informations()
+        self.builder.compute_elevations()
+
+        flood_seeds = self.builder.fill_polygonal_feature(self.building, mesh.LandtakeFaceFlooder)
+
+        cleaned = self.builder.cleaned
+        plotter = visu.MeshedCDTPlotter(self.builder.mesh, title=self._testMethodName)
+        cleaned.equivalent_site.plot(plotter.ax, alt_geom_map=cleaned.geom)
+        plotter.plot_edges()
+
+        for fh in flood_seeds:
+            marks = [self.builder.mesh.point_for_face(f) for f in flood_seeds]
+            visu.plot_points_seq(plotter.ax, marks, marker='*')
+        for fh in self.builder.mesh.cdt.finite_faces():
+            material = self.builder.material_by_face.get(fh)
+            if material is None : continue
+            plotter.plot_face(fh, material_id=material.id)
+        plotter.show()
 
 
 if __name__ == '__main__':
