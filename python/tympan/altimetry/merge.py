@@ -1,6 +1,9 @@
-"""
-Merging sub-sites for the computation of the altimetry.
+"""Merging sub-sites for the computation of the altimetry.
 
+
+The main entry point is the function recursively_merge_all_subsites.
+It uses the class SiteNodeGeometryCleaner to perform a recursive merge
+of all the site note of a compound site to build a single site.
 """
 
 
@@ -8,6 +11,18 @@ from collections import defaultdict
 
 from shapely import geometry
 from . datamodel import SiteNode, InconsistentGeometricModel
+
+
+def recursively_merge_all_subsites(rootsite):
+    """Merges all subsites and their subsites and so on into this merger."""
+    cleaned = SiteNodeGeometryCleaner(rootsite)
+    cleaned.process_all_features()
+    subsites_to_be_processed = list(rootsite.subsites)
+    while subsites_to_be_processed:
+        current_site = subsites_to_be_processed.pop()
+        cleaned.merge_subsite(current_site)
+        subsites_to_be_processed.extend(current_site.subsites)
+    return cleaned
 
 def build_site_shape_with_hole(site):
     site.ensure_ok()
@@ -25,7 +40,7 @@ class SiteNodeGeometryCleaner(object):
     More precisely this class is build from a root SiteNode. Then the
     ``process_*`` method walk through the geometrical elements (level
     curves, material areas, landtakes, ...) and associate them with a
-    geometry warranted to be within the site landtake and outisite the
+    geometry we are sure to be within the site landtake and outside the
     landtake of any subsite.
 
     The level curves are cut and the polygonal features are filtered
@@ -42,7 +57,7 @@ class SiteNodeGeometryCleaner(object):
     feature IDs.
 
     An equivalent site is maintained with the original features.  The
-    class also implement a __get_item__ method so that both the new
+    class also implement a __getitem__ method so that both the new
     geometry and the original properties can be accessed with ``geom,
     info = cleaner[feature_id]``.
     """
@@ -183,16 +198,3 @@ class SiteNodeGeometryCleaner(object):
 
     def material_areas_inner_first(self):
         return list(self._sorted_material_areas)
-
-
-
-def recursively_merge_all_subsites(rootsite):
-    """Merges all subsites and their subsites and so on into this merger."""
-    cleaned = SiteNodeGeometryCleaner(rootsite)
-    cleaned.process_all_features()
-    subsites_to_be_processed = rootsite.subsites
-    while subsites_to_be_processed:
-        current_site = subsites_to_be_processed.pop()
-        cleaned.merge_subsite(current_site)
-        subsites_to_be_processed.extend(current_site.subsites)
-    return cleaned
