@@ -22,7 +22,7 @@ cdef typrojet2project(TYProjet* proj):
     lib)
     """
     project = Project()
-    project.thisptr._pObj = proj
+    project.thisptr = SmartPtr[TYProjet](proj)
     return project
 
 cdef tymateriauconstruction2material(SmartPtr[TYMateriauConstruction] mat):
