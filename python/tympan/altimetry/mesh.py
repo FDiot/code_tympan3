@@ -108,13 +108,33 @@ class MeshedCDTWithInfo(object):
             vmap[orig_vh] = dest_vh
         return vmap
 
-    def copy(self, class_=None, deep=False):
+    def copy(self, class_=None, deep=False, vmap=None):
+        """Return a copy of self as a new mesher.
+
+        The copy wraps a copy of the underlying CGAL CDT and a copy of the
+        input information stored by self. If deep==True the information is
+        copied using the standard copy.deepcopy function, otherwise (the
+        default) a shallow copy is made with copy.copy.
+
+        In order to port information from self to the copy, a vertex handle
+        mapping from self's vertices to the copy's vertices is built. If a
+        dictionnary like object is provided as vmap optional argument, it is
+        expected to be empty and will be updated with the computed map (useful
+        for overrides of copy).
+
+        And if a copy of self as an other type is desired, the class_ argument
+        provides for specifying the desired type. USE WITH CAUTION, this
+        option is mainly aimed at internal use for copy_as_ElevationMesh.
+        """
+        vmap = {} if vmap is None else vmap
+        if len(vmap) != 0:
+            raise ValueError("The vertice map output argument is expected to be empty")
         class_ =  type(self) if class_ is None else class_
         # Copying a CDT is tricky
         # See http://code.google.com/p/cgal-bindings/issues/detail?id=49
         newone = class_()
         newone.cdt = self.cdt.deepcopy()
-        vmap = self.vertices_map_to_other_mesh(newone)
+        vmap.update(self.vertices_map_to_other_mesh(newone))
         for orig_vh, orig_info in self._input_vertices_infos.iteritems():
             dest_vh = vmap[orig_vh]
             dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
@@ -569,14 +589,17 @@ class ElevationMesh(MeshedCDTWithInfo):
         for vh, info in self._input_vertices_infos.iteritems():
             self.vertices_info[vh] = info # TODO Consider copying ?
 
-    def copy(self, class_=None, deep=False):
-        newone = super(ElevationMesh, self).copy(class_=class_, deep=deep)
-        vmap = self.vertices_map_to_other_mesh(newone)
-        for orig_vh, dest_vh in vmap.iteritems():
-            orig_info = self.vertices_info[orig_vh]
+    def copy(self, class_=None, deep=False, vmap=None):
+        vmap = {} if vmap is None else vmap
+        newone = super(ElevationMesh, self).copy(class_=class_, deep=deep, vmap=vmap)
+        for orig_vh, orig_info in self.vertices_info.iteritems():
+            dest_vh = vmap[orig_vh]
             dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
             newone.vertices_info[dest_vh] = dest_info
-        # TODO copy edges_info
+        for (orig_va, orig_vb), orig_info in self.edges_info.iteritems():
+            dest_va, dest_vb = vmap[orig_va], vmap[orig_vb]
+            dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
+            newone.edges_info[(dest_va, dest_vb)] = dest_info
         return newone
 
     def clear_caches(self):
@@ -696,13 +719,6 @@ class ReferenceElevationMesh(ElevationMesh):
 
     def copy_as_ElevationMesh(self):
         return self.copy(class_=ElevationMesh)
-        for dest_vh in newone.cdt.finite_vertices():
-            _, orig_vh = self.locate_point(dest_vh.point())
-            assert isinstance(orig_vh, Vertex_handle)
-            assert orig_vh.point() == dest_vh.point()
-            orig_info = self.vertices_info[orig_vh]
-            dest_info = newone.vertices_info[dest_vh]
-            dest_info.merge_with(orig_info)
 
 
 class FaceFlooder(object):
