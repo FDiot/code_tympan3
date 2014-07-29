@@ -340,7 +340,7 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
 class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
 
     def setUp(self):
-        self.mesher = mesh.MaterialMesh()
+        self.mesher = mesh.ElevationMesh()
 
     def test_flood(self):
 
