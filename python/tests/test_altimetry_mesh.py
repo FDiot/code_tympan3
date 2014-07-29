@@ -399,6 +399,9 @@ class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         face_in_both, expected_None = self.mesher.locate_point((3.25, 3))
         self.assertIsNone(expected_None)
         self.assertIn(face_in_both, flooder.visited)
+        face_out, expected_None = self.mesher.locate_point((1, 1.25))
+        self.assertIsNone(expected_None)
+        self.assertNotIn(face_out, flooder.visited)
 
     def test_flood_two_materials(self):
         (border, hole, line) = self.build_simple_scene()

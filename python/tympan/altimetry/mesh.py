@@ -557,7 +557,8 @@ class EdgeInfoWithMaterial(InfoWithIDsAndAltitude):
                   material=None, id=None, **kwargs):
         super(EdgeInfoWithMaterial, self).__init__(altitude, id=id, **kwargs)
         self.material_boundary = material is not None
-        self.landtake_boundary = material == HIDDEN_MATERIAL
+        assert material is None or isinstance(material, str) #XXX
+        self.landtake_boundary = material == HIDDEN_MATERIAL.id
 
     def merge_material_boundary(self, other):
         self.material_boundary |= other.material_boundary

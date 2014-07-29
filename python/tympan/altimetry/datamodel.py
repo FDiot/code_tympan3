@@ -281,7 +281,8 @@ class SiteNode(PolygonalTympanFeature):
                  self.children["InfrastructureLandtake"] )
 
 
-class InfrastructureLandtake(PolygonalTympanFeature):
+class InfrastructureLandtake(MaterialArea):
 
     def __init__(self, coords, **kwargs):
-        super(InfrastructureLandtake, self).__init__(coords, **kwargs)
+        super(InfrastructureLandtake, self).__init__(
+            coords, material=HIDDEN_MATERIAL, **kwargs)
