@@ -65,6 +65,8 @@ class GeometricFeature(object):
         else:
             self._coords = _preproc_point_seq(coords_or_shape)
             self._shape = None # to cache the Shapely shape
+        if id:
+            assert isinstance(id, basestring), 'id "%r" is not a string' % id
         self.id = id
 
     def set_shape(self, shape):
