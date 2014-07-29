@@ -88,7 +88,7 @@ Cython
         0.20 or above is required.
 
 Shapely
-        Shapely_ is a Python package for manipulation and analysis of planar 
+        Shapely_ is a Python package for manipulation and analysis of planar
         geometric objects. Version 1.3 is suggested.
 
 SWIG
@@ -220,9 +220,14 @@ Cython
         installation instructions)
 
 Shapely
-        Shapely can be installed through the dedicated executable installer,
-        which contains the required GEOS DLL. It can be downloaded from:
-        http://pypi.python.org/pypi/Shapely#downloads (choose python 2.7 version)
+
+        Shapely can be installed through the dedicated executable
+        installer, which contains the required GEOS DLL. It can be
+        downloaded as a python(x,y) additional plugin from:
+        http://code.google.com/p/pythonxy/wiki/AdditionalPlugins
+
+        Currently you can get directly version 1.3.2-2 from :
+        https://sourceforge.net/projects/python-xy/files/plugins/shapely-1.3.2-2_py27.exe
 
 SWIG
         A prebuilt executable of SWIG can be retrieved from
