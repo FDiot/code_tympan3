@@ -22,6 +22,8 @@ class Builder(object):
         self.mesh = None
         self.vertices_for_feature = {} # List of vertex handle for a given feature
         self.material_by_face = {}
+        self.size_criterion = 0.0 # zero means no size criterion
+        self.shape_criterion = 0.125
 
     @property
     def equivalent_site(self):
@@ -31,6 +33,7 @@ class Builder(object):
         self.merge_subsites()
         self.build_altimetric_base()
         self.build_triangulation()
+        self.refine_triangulation()
         self.compute_informations()
         self.compute_elevations()
         self.fill_material_and_landtakes()
@@ -78,8 +81,9 @@ class Builder(object):
             self.vertices_for_feature[feature.id] = vertices
 
     def refine_triangulation(self):
-        # TODO insert refine step here
-        pass
+        # TODO (optional) flood landtake in order to mark them as not to be refined
+        self.mesh.refine_mesh(size_criterion=self.size_criterion,
+                              shape_criterion=self.shape_criterion)
 
     def compute_informations(self):
         self.mesh.update_info_for_vertices()
