@@ -2,6 +2,7 @@
 Provide chaining of the step required to build the altimetry of a compound site.
 """
 
+import numpy as np
 from shapely import geometry
 
 from .datamodel import (InconsistentGeometricModel,
@@ -120,3 +121,62 @@ class Builder(object):
         for fh in self.mesh.cdt.finite_faces():
             if fh not in self.material_by_face:
                 self.material_by_face[fh] = DEFAULT_MATERIAL
+
+    def _build_mesh_data(self):
+        """Process mesh from the CDT and materials data and return numpy
+        arrays suitable for export to a .ply file.
+        """
+        vertices, vertices_id = [], {}
+        for idx, vh in enumerate(self.mesh.cdt.finite_vertices()):
+            vertices_id[vh] = idx
+            point = self.mesh.point3d_for_vertex(vh)
+            vertices.append((point.x(), point.y(), point.z()))
+        vertices = np.array(vertices)
+        materials, materials_id = [], {}
+        for fh, mat in self.material_by_face.iteritems():
+            matid = map(ord, mat.id)
+            assert len(matid) <= 36
+            matid = matid + [ord('\0')] * (36 - len(matid))
+            if matid not in materials:
+                materials.append(matid)
+            idx = materials.index(matid)
+            materials_id[fh] = idx
+        materials = np.array(materials)
+        faces, faces_materials = [], []
+        for fh in self.mesh.cdt.finite_faces():
+            faces.append([vertices_id[fh.vertex(i)] for i in range(3)])
+            faces_materials.append(materials_id[fh])
+        faces = np.array(faces)
+        faces_materials = np.array(faces_materials)
+        return vertices, faces, materials, faces_materials
+
+    def export_to_ply(self, fname):
+        """Export mesh data to a PLY file"""
+        vertices, faces, materials, faces_materials = self._build_mesh_data()
+        header = '\r\n'.join(['ply',
+                              'format ascii 1.0',
+                              'element vertex {nvertices}',
+                              'property float x',
+                              'property float y',
+                              'property float z',
+                              'element face {nfaces}',
+                              'property list uchar int vertex_indices',
+                              'property int material_index',
+                              'element material {nmaterials}',
+                              'property list uchar uchar id',
+                              'end_header\r\n'])
+        with open(fname, 'w') as f:
+            f.write(header.format(nvertices=vertices.shape[0],
+                                  nfaces=faces.shape[0],
+                                  nmaterials=materials.shape[0]))
+            np.savetxt(f, vertices, fmt='%.18g', newline='\r\n')
+            # Insert a column with the number of face vertices.
+            pfaces = np.concatenate(
+                [np.ones((faces.shape[0], 1)) * faces.shape[1],
+                 faces, faces_materials[:, np.newaxis]], axis=1)
+            np.savetxt(f, pfaces, fmt='%d', newline='\r\n')
+            # Insert a column with the lenght of the list of material id.
+            pmaterials = np.concatenate(
+                [np.ones((materials.shape[0], 1)) * materials.shape[1],
+                 materials], axis=1)
+            np.savetxt(f, pmaterials, fmt='%d', newline='\r\n')
