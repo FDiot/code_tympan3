@@ -293,12 +293,14 @@ class MeshedCDTWithInfo(object):
         return vertices_info
 
     def merge_info_for_vertices(self, merge_function, vertices=None, init_map=None):
-        """Reduce the list of information available on a vertices to a single one.
+        """Reduce the list of information available on each vertex to a single information.
 
         This method works by calling repeatedly merge_function to
         merge two infos into a single one, starting with informatiosn
         drawn from init_map (or default constructed if init_map is not
         given or does not contains the vertex).
+
+        If vertices is None all vertices are considered.
 
         """
         init_map = init_map or {}
@@ -313,12 +315,14 @@ class MeshedCDTWithInfo(object):
         return d
 
     def merge_info_for_edges(self, merge_function, edges=None, init_map=None):
-        """Reduce the list of information available on a edges to a single one.
+        """Reduce the list of information available on each edges to a single information.
 
         This method works by calling repeatedly merge_function to
         merge two infos into a single one, starting with informatiosn
         drawn from init_map (or default constructed if init_map is not
         given or does not contains the vertex).
+
+        If edges is None all edges are considered.
         """
         init_map = init_map or {}
         d = {}
@@ -391,10 +395,12 @@ class MeshedCDTWithInfo(object):
             yield self.faces_for_edge(v0, v1)
 
     def py_vertex(self, vh):
+        """ Return a pure python representation of the vertex, intended for debugging"""
         p = vh.point()
         return ((p.x(), p.y()))
 
     def py_face(self, face):
+        """ Return a pure python representation of the face, intended for debugging"""
         return ["FACE"] + [self.py_vertex(face.vertex(i)) for i in xrange(3)]
 
     def py_edge(self, edge):
@@ -484,15 +490,31 @@ class InfoWithIDsAndAltitude(object):
         self.ids = kwargs.pop('ids', set((id and [id]) or []))
         self.altitude = float(altitude)
 
+    def merge_with(self, other_info):
+        """ Merges all information provided by ``other`` into self.
+
+        Returns self to enable chaining or merge via reduce.
+        """
+        self.merge_ids(other_info)
+        self.merge_altitude(other_info)
+        return self # so as to enable using reduce
+
     def merge_ids(self, other_info):
         ids = getattr(other_info, "ids", None)
         if ids is None: return
         self.ids.update(ids)
 
-    def merge_with(self, other_info):
-        self.merge_ids(other_info)
-        self.merge_altitude(other_info)
-        return self # so as to enable using reduce
+    def merge_altitude(self, other_info):
+        alti = getattr(other_info, "altitude", UNSPECIFIED_ALTITUDE)
+        if alti is not UNSPECIFIED_ALTITUDE:
+            if self.altitude is UNSPECIFIED_ALTITUDE:
+                self.altitude = alti
+            else:
+                delta = abs(alti - self.altitude)
+                if delta > self.ALTITUDE_TOLERANCE:
+                    raise InconsistentGeometricModel(
+                        "Intersecting constraints with different altitudes",
+                        ids=self.ids)
 
     def __repr__(self):
         args = ", ".join(["%s=%r" % kv for kv in self.__dict__.iteritems()])
@@ -507,17 +529,6 @@ class InfoWithIDsAndAltitude(object):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def merge_altitude(self, other_info):
-        alti = getattr(other_info, "altitude", UNSPECIFIED_ALTITUDE)
-        if alti is not UNSPECIFIED_ALTITUDE:
-            if self.altitude is UNSPECIFIED_ALTITUDE:
-                self.altitude = alti
-            else:
-                delta = abs(alti - self.altitude)
-                if delta > self.ALTITUDE_TOLERANCE:
-                    raise InconsistentGeometricModel(
-                        "Intersecting constraints with different altitudes",
-                        ids=self.ids)
 
 class ElevationMesh(MeshedCDTWithInfo):
     """ An elevation mesh associates an altitude to its vertices.
