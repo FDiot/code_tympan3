@@ -530,6 +530,25 @@ class InfoWithIDsAndAltitude(object):
         return not self.__eq__(other)
 
 
+class EdgeInfoWithMaterial(InfoWithIDsAndAltitude):
+    """ Add a flag if the edge is a boundary for materials """
+
+    def  __init__(self, altitude=UNSPECIFIED_ALTITUDE,
+                  material=None, id=None, **kwargs):
+        super(EdgeInfoWithMaterial, self).__init__(altitude, id=id, **kwargs)
+        self.material_boundary = material is not None
+        self.landtake_boundary = material == HIDDEN_MATERIAL
+
+    def merge_material_boundary(self, other):
+        self.material_boundary |= other.material_boundary
+        self.landtake_boundary |= other.landtake_boundary
+
+    def merge_with(self, other_info):
+        super(EdgeInfoWithMaterial, self).merge_with(other_info)
+        self.merge_material_boundary(other_info)
+        return self # so as to enable using reduce
+
+
 class ElevationMesh(MeshedCDTWithInfo):
     """ An elevation mesh associates an altitude to its vertices.
 
@@ -538,16 +557,17 @@ class ElevationMesh(MeshedCDTWithInfo):
 
     VertexInfo = InfoWithIDsAndAltitude
 
-    EdgeInfo = InfoWithIDsAndAltitude
+    EdgeInfo = EdgeInfoWithMaterial
 
     def __init__(self):
         super(ElevationMesh, self).__init__()
         self.vertices_info = defaultdict(self.VertexInfo)
+        self.edges_info = defaultdict(self.EdgeInfo)
         self._init_vertices_info_from_input()
 
     def _init_vertices_info_from_input(self):
         for vh, info in self._input_vertices_infos.iteritems():
-            self.vertices_info[vh] = info # XXX or copy ?
+            self.vertices_info[vh] = info # TODO Consider copying ?
 
     def copy(self, class_=None, deep=False):
         newone = super(ElevationMesh, self).copy(class_=class_, deep=deep)
@@ -556,15 +576,17 @@ class ElevationMesh(MeshedCDTWithInfo):
             orig_info = self.vertices_info[orig_vh]
             dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
             newone.vertices_info[dest_vh] = dest_info
+        # TODO copy edges_info
         return newone
 
     def clear_caches(self):
         self.vertices_info.clear()
+        self.edges_info.clear()
         self._init_vertices_info_from_input()
 
     def insert_point(self, point, **kwargs):
         vh = super(ElevationMesh, self).insert_point(point, **kwargs)
-        self.vertices_info[vh] = self.input_vertex_infos(vh) # XXX or copy ?
+        self.vertices_info[vh] = self.input_vertex_infos(vh) # TODO Consider copying ?
         return vh
 
     def point3d_for_vertex(self, vh):
@@ -590,6 +612,12 @@ class ElevationMesh(MeshedCDTWithInfo):
             merge_function, vertices=vertices, init_map=self.vertices_info)
         self.vertices_info.update(d)
 
+    def update_info_for_edges(self, edges=None, init_map=None):
+        merge_function = lambda i1, i2: i1.merge_with(i2)
+        d = self.merge_info_for_edges(
+            merge_function, edges=edges, init_map=self.edges_info)
+        self.edges_info.update(d)
+
     def update_altitude_from_reference(self, reference):
         for vh in self.cdt.finite_vertices():
             try:
@@ -599,6 +627,23 @@ class ElevationMesh(MeshedCDTWithInfo):
             if input_altitude is UNSPECIFIED_ALTITUDE:
                 info = self.vertices_info[vh]
                 info.altitude = reference(vh.point())
+
+    def flood_polygon(self, flooder_class, vertices, flood_right=False, close_it=False):
+        """Flood the inside of a polygon given by its vertices list using the
+        specified class of Flooder.
+
+        By default flood on the left side of the boudary, which is the
+        inner of the polygon if it is conter-clock-wise oriented. You
+        can specify flood_right=True if you fill the outside of if the
+        polygon is clock-wise-oriented.
+
+        """
+        faces_left, faces_right = left_and_right_faces(
+            self.iter_faces_for_input_polyline(vertices, close_it=True))
+        seed_faces = faces_right if flood_right else faces_left
+        flooder = flooder_class(self)
+        flooder.flood_from(seed_faces)
+        return flooder
 
 
 class ReferenceElevationMesh(ElevationMesh):
@@ -757,24 +802,6 @@ def left_and_right_faces(faces_it):
     return zip(*list(faces_it))
 
 
-class EdgeInfoWithMaterial(InfoWithIDsAndAltitude):
-    """ Add a flag if the edge is a boundary for materials """
-
-    def  __init__(self, altitude=UNSPECIFIED_ALTITUDE,
-                  material=None, id=None, **kwargs):
-        super(EdgeInfoWithMaterial, self).__init__(altitude, id=id, **kwargs)
-        self.material_boundary = material is not None
-        self.landtake_boundary = material == HIDDEN_MATERIAL
-
-    def merge_material_boundary(self, other):
-        self.material_boundary |= other.material_boundary
-        self.landtake_boundary |= other.landtake_boundary
-
-    def merge_with(self, other_info):
-        super(EdgeInfoWithMaterial, self).merge_with(other_info)
-        self.merge_material_boundary(other_info)
-        return self # so as to enable using reduce
-
 class MaterialFaceFlooder(FaceFlooder):
 
     def is_material_border(self, edge):
@@ -793,38 +820,3 @@ class LandtakeFaceFlooder(MaterialFaceFlooder):
 
     def should_follow(self, from_face, edge, to_face):
         return not self.is_landtake_border(edge)
-
-
-class MaterialMesh(ElevationMesh):
-    """An elevation mesh with a material assigned to each face
-    """
-
-    EdgeInfo = EdgeInfoWithMaterial
-
-    def __init__(self):
-        super(MaterialMesh, self).__init__()
-        # edges_info is indexed by *sorted* vertices pair
-        self.edges_info = defaultdict(self.EdgeInfo)
-
-    def update_info_for_edges(self, edges=None, init_map=None):
-        merge_function = lambda i1, i2: i1.merge_with(i2)
-        d = self.merge_info_for_edges(
-            merge_function, edges=edges, init_map=self.edges_info)
-        self.edges_info.update(d)
-
-    def flood_polygon(self, flooder_class, vertices, flood_right=False, close_it=False):
-        """Flood the inside of a polygon given by its vertices list using the
-        specified class of Flooder.
-
-        By default flood on the left side of the boudary, which is the
-        inner of the polygon if it is conter-clock-wise oriented. You
-        can specify flood_right=True if you fill the outside of if the
-        polygon is clock-wise-oriented.
-
-        """
-        faces_left, faces_right = left_and_right_faces(
-            self.iter_faces_for_input_polyline(vertices, close_it=True))
-        seed_faces = faces_right if flood_right else faces_left
-        flooder = flooder_class(self)
-        flooder.flood_from(seed_faces)
-        return flooder
