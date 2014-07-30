@@ -6,6 +6,7 @@
  * @author Anthony Truchet <anthony.truchet@logilab.fr>
  *
  */
+#include <cassert>
 
 #include <boost/exception/errinfo_file_name.hpp>
 #include <boost/exception/errinfo_at_line.hpp>
@@ -13,7 +14,7 @@
 
 #include "rply.h"
 
-#include "altimetry_file_reader.h"
+#include "altimetry_file_reader_impl.h"
 
 // section with C linkage for RPLY callbacks
 extern "C" {
@@ -21,40 +22,10 @@ extern "C" {
     static int face_cb(p_ply_argument argument);
 } // extern C
 
+
+
 namespace tympan {
 
-    /**
-     * @brief read an Altimetry from a PLY file.
-     */
-    class AltimetryPLYReader:
-        public IMeshReader
-    {
-    public:
-        typedef enum {X, Y, Z, NUM_vertex_properties} vertex_properties;
-        typedef enum {VertexIndices, NUM_face_properties} face_properties;
-
-        AltimetryPLYReader(const std::string filename);
-        virtual ~AltimetryPLYReader();
-
-
-        /// Implements interface \c IMeshReader
-        /// @{
-        virtual const points_array_t& points() {return _points;};
-        virtual const faces_array_t&  faces()  {return _faces;};
-        virtual void read();
-        /// @}
-
-        /// Data attributes
-        /// @{
-    public:
-        const std::string _filename;
-    protected:
-        points_array_t _points;
-        faces_array_t _faces;
-        p_ply _ply;
-        /// @}
-
-    }; // AltimetryPLYReader
 
     //========== Implementation of free functions ==========
 
@@ -67,7 +38,8 @@ namespace tympan {
     //========== Implementation of AltimetryPLYReader methods ==========
 
     AltimetryPLYReader::AltimetryPLYReader(const std::string filename) :
-        _filename(filename)
+        _filename(filename),
+        _ply(nullptr), _nvertices(-1), _nfaces(-1)
     {
         // Opens the PLY file, no error callback is given
         _ply = ply_open(_filename.c_str(), NULL, 0, NULL);
@@ -89,6 +61,26 @@ namespace tympan {
 
     void AltimetryPLYReader::read()
     {
+        setup_callbacks();
+        read_data();
+    }
+
+    void AltimetryPLYReader::setup_callbacks()
+    {
+        long n;
+        assert(_nvertices==-1 && _nfaces==-1);
+        n = ply_set_read_cb(_ply, "vertex", "x", vertex_cb, this, X);
+        _nvertices = n;
+        n = ply_set_read_cb(_ply, "vertex", "y", vertex_cb, this, Y);
+        assert(n==_nvertices);
+        n = ply_set_read_cb(_ply, "vertex", "z", vertex_cb, this, Z);
+        assert(n==_nvertices);
+        _nfaces = ply_set_read_cb(_ply, "face", "vertex_indices",
+                                  face_cb, this, VertexIndices);
+    }
+
+    void AltimetryPLYReader::read_data()
+    {
         if(!ply_read(_ply))
             throw mesh_io_error("Reading the PLY data")
                 << tympan_source_loc
@@ -97,23 +89,23 @@ namespace tympan {
 
 }; // namespace tympan
 
-//========== C callback must be defined outside the namespace ==========
+//========== C callback must be defined outside the namespace tympan ==========
 
 using namespace tympan;
 
 /**
  * @brief macro which extract all relevant callback information form RPLY
  */
-#define DECLARE_AND_FETCH_PLY_CALLBACK_INFO                     \
-    long idata;                                                 \
-    void* pdata;                                                \
-    tympan::AltimetryPLYReader *p_reader;                       \
-    long instance_index;                                        \
-    p_ply_element element;                                      \
-    double value;                                               \
-    ply_get_argument_user_data(argument, &pdata, &idata);       \
-    p_reader = (tympan::AltimetryPLYReader*) pdata;             \
-    ply_get_argument_element(argument, &element, &instance_index);\
+#define DECLARE_AND_FETCH_PLY_CALLBACK_INFO                             \
+    long idata;                                                         \
+    void* pdata;                                                        \
+    tympan::AltimetryPLYReader *p_reader;                               \
+    long instance_index;                                                \
+    p_ply_element element;                                              \
+    double value;                                                       \
+    ply_get_argument_user_data(argument, &pdata, &idata);               \
+    p_reader = (tympan::AltimetryPLYReader*) pdata;                     \
+    ply_get_argument_element(argument, &element, &instance_index);      \
     value = ply_get_argument_value(argument);
 // END OF DECLARE_AND_FETCH_PLY_CALLBACK_INFO
 

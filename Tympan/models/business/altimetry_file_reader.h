@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef TYMPAN__ALTIMETRYREADER_HPP__INCLUDED
-#define TYMPAN__ALTIMETRYREADER_HPP__INCLUDED
+#ifndef TYMPAN__ALTIMETRYREADER_H__INCLUDED
+#define TYMPAN__ALTIMETRYREADER_H__INCLUDED
 
 #include <memory>
 #include <deque>
@@ -38,12 +38,12 @@ namespace tympan {
         /**
          * @brief Getter for the points read
          */
-        virtual const points_array_t& points() = 0;
+        virtual const points_array_t& points() const = 0;
 
         /**
          * @brief Getter for the faces read
          */
-        virtual const faces_array_t& faces() = 0;
+        virtual const faces_array_t& faces() const = 0;
 
         /**
          * @brief read the file whose name was given at reader's construction time
@@ -57,4 +57,4 @@ namespace tympan {
 
 }; // namespace tympan
 
-#endif // TYMPAN__ALTIMETRYREADER_HPP__INCLUDED
+#endif // TYMPAN__ALTIMETRYREADER_H__INCLUDED
