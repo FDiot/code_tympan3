@@ -28,6 +28,7 @@
 #include "Tympan/core/defines.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/xml_project_util.h"
+#include "Tympan/models/business/subprocess_util.h"
 #include "Tympan/gui/app/os.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYProjetFrame.h"
@@ -120,7 +121,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
 
         logger.info(TR("id_msg_go_calcul"));
 
-        if (!python(args))
+        if (!python_gui(args))
         {
             return false;
         }
