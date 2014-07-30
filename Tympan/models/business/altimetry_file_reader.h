@@ -14,10 +14,17 @@
 #include <deque>
 #include <string>
 
+#include "Tympan/core/exceptions.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/triangle.h"
 
 namespace tympan {
+
+    struct mesh_io_error: /*virtual*/ std::runtime_error, virtual tympan::exception
+    {
+        mesh_io_error(const std::string& desc) : std::runtime_error(desc) {};
+    };
+
 
     class IMeshReader
     {
