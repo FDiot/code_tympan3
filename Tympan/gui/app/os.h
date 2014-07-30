@@ -23,8 +23,10 @@
 #define TY_G_A_OS
 
 #include <qstring.h>
+#include <QTemporaryFile>
 
 bool python(QStringList args);
 bool must_keep_tmp_files();
+bool init_tmp_file(QTemporaryFile& tmp_file, bool keep_file=false);
 
 #endif // TY_G_A_OS
