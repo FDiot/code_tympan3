@@ -18,6 +18,7 @@
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/triangle.h"
 
+
 namespace tympan {
 
     struct mesh_io_error: /*virtual*/ std::runtime_error, virtual tympan::exception
