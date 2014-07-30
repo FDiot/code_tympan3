@@ -109,9 +109,11 @@ The following options are taken into account:
   python process to a debugger (MSVC debugger under Windows, for example), and
   then enter *run* in the terminal to start the script execution and thus
   C++ code debugging.
-- **xml**: when Tympan executable is run, the two temporary XML files used to
-  communicate with the python script (input and output projects) are not removed
-  after the computation, and their path is displayed by Code_TYMPAN logging system.
+- **keep_tmp_files**: when Tympan executable is run, the input and output
+  temporary files used to communicate with the subprocesses running python
+  scripts (in charge of running an acoustic simulation or of computing the
+  site altimetry) are not removed when the subprocess returns, and their paths are
+  displayed by Code_TYMPAN logging system.
 - **monothread** : disables the multithreading, computations will be run with just
   one thread.
 

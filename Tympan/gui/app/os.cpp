@@ -114,6 +114,21 @@ QString _get_python_interp()
 #endif
 }
 
+bool must_keep_tmp_files()
+{
+    QStringList appli_env(QProcess::systemEnvironment());
+    int tympan_debug_idx = appli_env.indexOf(QRegExp("^TYMPAN_DEBUG=(.*)"));
+    if (tympan_debug_idx >= 0)
+    {
+        QString debug_option = appli_env[tympan_debug_idx].split('=')[1];
+        if (debug_option.contains("keep_tmp_files", Qt::CaseInsensitive))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 
 bool python(QStringList args)
 {
