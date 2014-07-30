@@ -129,6 +129,18 @@ bool must_keep_tmp_files()
     return false;
 }
 
+bool init_tmp_file(QTemporaryFile& tmp_file, bool keep_file)
+{
+    if (!tmp_file.open())
+    {
+        return false;
+    }
+    tmp_file.close();
+    // Prevent from automatic file removal
+    if (keep_file)
+        tmp_file.setAutoRemove(false);
+    return true;
+}
 
 bool python(QStringList args)
 {

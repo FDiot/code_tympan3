@@ -69,20 +69,26 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
 
     TYProjet *pProject = pCalcul->getProjet();
     OMessageManager& logger =  *OMessageManager::get();
-    // Start chrono
-    OChronoTime startTime;
 
-        logger.debug("Computation through Python script");
-        // Temporary XML file to give the current acoustic problem to the python
-        // script
+        bool keep_tmp_files = must_keep_tmp_files();
+        // Temporary XML files to give the current acoustic problem to the python
+        // script and get the results
         QTemporaryFile problemfile;
-        if (!problemfile.open())
+        QTemporaryFile resultfile;
+        if(!init_tmp_file(problemfile, keep_tmp_files)
+                || !init_tmp_file(resultfile, keep_tmp_files))
         {
-            logger.error(
-                    "Could not open temporary file to export current project. Computation won't be done");
+            logger.error("Creation de fichier temporaire impossible. Veuillez verifier l'espace disque disponible.");
             return false;
         }
-        problemfile.close();
+        if(keep_tmp_files)
+        {
+            logger.debug(
+                    "Le calcul va s'executer en mode debug.\nLes fichiers temporaires ne seront pas supprimes une fois le calcul termine.\nProjet courant non calcule: %s  Projet avec les resultats du calcul: %s.",
+                    problemfile.fileName().toStdString().c_str(),
+                    resultfile.fileName().toStdString().c_str());
+        }
+
         // Serialize current project
         try
         {
@@ -96,26 +102,6 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
                     "Could not export current project. Computation won't be done");
             logger.debug(msg.str().c_str());
             return false;
-        }
-        // Initialize result file
-        QTemporaryFile resultfile;
-        if (!resultfile.open())
-        {
-            logger.error(
-                    "Could not open temporary file to retrieve computation results.");
-            return false;
-        }
-        resultfile.close();
-
-        if(must_keep_tmp_files())
-        {
-            // Don't remove the temporary files once python script is done
-            problemfile.setAutoRemove(false);
-            resultfile.setAutoRemove(false);
-            logger.debug(
-                    "The computation will run in debug mode. Temporary files won't be removed afterwards. Input file: %s  Output file: %s.",
-                    problemfile.fileName().toStdString().c_str(),
-                    resultfile.fileName().toStdString().c_str());
         }
 
         // Call python script "solve_project.py" with: the name of the file
