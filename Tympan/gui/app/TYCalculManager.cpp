@@ -107,22 +107,15 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         }
         resultfile.close();
 
-        QStringList appli_env(QProcess::systemEnvironment());
-        int tympan_debug_idx = appli_env.indexOf(QRegExp("^TYMPAN_DEBUG=(.*)"));
-        if (tympan_debug_idx >= 0)
+        if(must_keep_tmp_files())
         {
-            QString debug_option = appli_env[tympan_debug_idx].split('=')[1];
-            if (debug_option.contains("xml", Qt::CaseInsensitive))
-            {
-                // If we are in debug mode, don't remove the temporary files once python
-                // script is done
-                problemfile.setAutoRemove(false);
-                resultfile.setAutoRemove(false);
-                logger.debug(
-                        "The computation will run in debug mode. XML temporary files won't be removed afterwards. Input file: %s  Output file: %s.",
-                        problemfile.fileName().toStdString().c_str(),
-                        resultfile.fileName().toStdString().c_str());
-            }
+            // Don't remove the temporary files once python script is done
+            problemfile.setAutoRemove(false);
+            resultfile.setAutoRemove(false);
+            logger.debug(
+                    "The computation will run in debug mode. Temporary files won't be removed afterwards. Input file: %s  Output file: %s.",
+                    problemfile.fileName().toStdString().c_str(),
+                    resultfile.fileName().toStdString().c_str());
         }
 
         // Call python script "solve_project.py" with: the name of the file

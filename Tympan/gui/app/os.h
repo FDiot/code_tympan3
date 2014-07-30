@@ -25,5 +25,6 @@
 #include <qstring.h>
 
 bool python(QStringList args);
+bool must_keep_tmp_files();
 
 #endif // TY_G_A_OS
