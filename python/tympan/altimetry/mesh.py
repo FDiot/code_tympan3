@@ -401,6 +401,11 @@ class MeshedCDTWithInfo(object):
         for v0, v1 in ilinks(self.cdt.vertices_in_constraint(va, vb)):
             yield same_direction_as_constraint(v0, v1)
 
+    def iter_vertices_for_input_polyline(self, poly, close_it=False):
+        for va, vb in ilinks(iter(poly), close_it=close_it):
+            for v in self.cdt.vertices_in_constraint(va, vb):
+                yield v
+
     def iter_faces_for_input_constraint(self, va, vb):
         for v0, v1 in self.iter_edges_for_input_constraint(va, vb):
             yield self.faces_for_edge(v0, v1)

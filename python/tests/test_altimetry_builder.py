@@ -1,9 +1,10 @@
 import tempfile
 import unittest
 
+from numpy.testing.utils import assert_allclose
 
 from tympan.altimetry.datamodel import (InconsistentGeometricModel,
-                                        MaterialArea,
+                                        MaterialArea, HIDDEN_MATERIAL,
                                         LevelCurve, InfrastructureLandtake)
 from tympan.altimetry import mesh
 from tympan.altimetry.builder import Builder
@@ -146,6 +147,17 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             if material is None : continue
             plotter.plot_face(fh, material_id=material.id)
         plotter.show()
+
+    def test_join_with_landtakes(self):
+        self.builder.complete_processing()
+        # fetch infrastructure landtakes faces assuming they have
+        # HIDDEN_MATERIAL.
+        landtake_faces = (fh for fh, mat in
+                            self.builder.material_by_face.iteritems()
+                          if mat == HIDDEN_MATERIAL)
+        altitudes = [self.builder.mesh.vertices_info[fh.vertex(i)].altitude
+                     for fh in landtake_faces for i in range(3)]
+        assert_allclose(altitudes, altitudes[0])
 
     def test_ply_export(self):
         from plyfile import PlyData

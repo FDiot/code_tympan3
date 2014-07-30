@@ -2,6 +2,8 @@
 Provide chaining of the step required to build the altimetry of a compound site.
 """
 
+from itertools import chain
+
 import numpy as np
 from shapely import geometry
 
@@ -38,6 +40,7 @@ class Builder(object):
         self.compute_informations()
         self.compute_elevations()
         self.fill_material_and_landtakes()
+        self.join_with_landtakes()
 
     def merge_subsites(self):
         assert self.cleaned is None
@@ -101,7 +104,7 @@ class Builder(object):
         vertices = self.vertices_for_feature[feature.id]
         close_it = vertices[0] != vertices[-1]
         flooder = self.mesh.flood_polygon(flooder_class, vertices,
-                                            close_it=close_it)
+                                          close_it=close_it)
         affected_faces =[fh for fh in flooder.visited
                          if fh not in self.material_by_face]
         for fh in affected_faces:
@@ -121,6 +124,36 @@ class Builder(object):
         for fh in self.mesh.cdt.finite_faces():
             if fh not in self.material_by_face:
                 self.material_by_face[fh] = DEFAULT_MATERIAL
+
+    def join_with_landtakes(self):
+        """Join the altimetry to the landtakes.
+
+        For each infrastructure land-take, compute the mean altitude of the
+        vertices of the corresponding input constraint (e.g. 4 points defining
+        the contour): this altitude is about to become THE altitude of the
+        whole piece of infrastructure.
+
+        Then update the altitude of all vertices (those of the meshed contour
+        and those of inside faces) to the mean altitude: this is akin to an
+        earth work and will ensure the machine or building is flat on the
+        ground.
+
+        NB: This has the restriction that building in a strong slopes
+        are not well supported: they produce artifact in the altimetry.
+        """
+        for landtake in self.equivalent_site.landtakes:
+            polyline = self.vertices_for_feature[landtake.id]
+            mean_alt = np.mean([self.mesh.vertices_info[vh].altitude
+                                for vh in polyline])
+            close_it = polyline[0] != polyline[-1]
+            contour_vertices = self.mesh.iter_vertices_for_input_polyline(
+                polyline, close_it=close_it)
+            flooder = self.mesh.flood_polygon(LandtakeFaceFlooder, polyline,
+                                              close_it=close_it)
+            inside_vertices = set((fh.vertex(i) for fh in flooder.visited
+                                   for i in xrange(3)))
+            for vh in chain(contour_vertices, inside_vertices):
+                self.mesh.vertices_info[vh].altitude = mean_alt
 
     def _build_mesh_data(self):
         """Process mesh from the CDT and materials data and return numpy
