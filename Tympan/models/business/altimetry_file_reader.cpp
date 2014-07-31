@@ -20,6 +20,7 @@
 extern "C" {
     static int vertex_cb(p_ply_argument argument);
     static int face_cb(p_ply_argument argument);
+    static void error_cb(p_ply ply, const char *message);
 } // extern C
 
 
@@ -43,7 +44,7 @@ namespace tympan {
         _ply(nullptr), _nvertices(-1), _nfaces(-1)
     {
         // Opens the PLY file, no error callback is given
-        _ply = ply_open(_filename.c_str(), NULL, 0, NULL);
+        _ply = ply_open(_filename.c_str(), ::error_cb, 0 /*unused*/, this);
         if(_ply==NULL)
             throw mesh_io_error("Opening PLY file")
                 << tympan_source_loc
@@ -150,6 +151,14 @@ namespace tympan {
         return true;
     }
 
+    void AltimetryPLYReader::error_cb(p_ply ply, const char *message)
+    {
+        assert(_ply==NULL || ply==_ply);
+        throw mesh_io_error(message)
+            << tympan_source_loc
+            << boost::errinfo_file_name(_filename);
+    }
+
 }; // namespace tympan
 
 //========== C callback must be defined outside the namespace tympan ==========
@@ -195,4 +204,15 @@ static int face_cb(p_ply_argument argument) {
     ply_get_argument_property(argument, &property, &length, &value_index);
     return p_reader->face_cb(face_property, instance_index,
                              length, value_index, value);
+}
+
+/// @brief C callback called by RPLY in case of erro
+void error_cb(p_ply ply, const char *message)
+{
+    long idata;
+    void* pdata;
+    tympan::AltimetryPLYReader *p_reader;
+    ply_get_ply_user_data(ply, &pdata, &idata);
+    p_reader = (tympan::AltimetryPLYReader*) pdata;
+    p_reader->error_cb(ply, message);
 }

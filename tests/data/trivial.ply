@@ -1,14 +1,21 @@
 ply
 format ascii 1.0
-comment Minimal PLY file with mandatory elements names
+comment PLY file with material (and color for easier visualisation)
 element vertex 3
 property float x
 property float y
 property float z
 element face 1
 property list uchar int vertex_indices
+property int material_index
+property uchar red
+property uchar green
+property uchar blue
+element material 4
+property list uchar uchar id
 end_header
 -1 0 0 
 0 1 0 
 1 0 0
-3 1 0 2
+3 1 0 2 0 0 0 127
+36 95 95 100 101 102 97 117 108 116 95 95 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
