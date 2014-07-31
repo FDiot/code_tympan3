@@ -71,6 +71,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     TYProjet *pProject = pCalcul->getProjet();
     OMessageManager& logger =  *OMessageManager::get();
 
+        // Is the debug option "TYMPAN_DEBUG=keep_tmp_files" enabled?
         bool keep_tmp_files = must_keep_tmp_files();
         // Temporary XML files to give the current acoustic problem to the python
         // script and get the results
@@ -82,14 +83,6 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             logger.error("Creation de fichier temporaire impossible. Veuillez verifier l'espace disque disponible.");
             return false;
         }
-        if(keep_tmp_files)
-        {
-            logger.debug(
-                    "Le calcul va s'executer en mode debug.\nLes fichiers temporaires ne seront pas supprimes une fois le calcul termine.\nProjet courant non calcule: %s  Projet avec les resultats du calcul: %s.",
-                    problemfile.fileName().toStdString().c_str(),
-                    resultfile.fileName().toStdString().c_str());
-        }
-
         // Serialize current project
         try
         {
@@ -104,8 +97,15 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             logger.debug(msg.str().c_str());
             return false;
         }
+        if(keep_tmp_files)
+        {
+            logger.debug(
+                    "Le calcul va s'executer en mode debug.\nLes fichiers temporaires ne seront pas supprimes une fois le calcul termine.\nProjet courant non calcule: %s  Projet avec les resultats du calcul: %s.",
+                    problemfile.fileName().toStdString().c_str(),
+                    resultfile.fileName().toStdString().c_str());
+        }
 
-        // Call python script "solve_project.py" with: the name of the file
+        // Call python script "solve_tympan_project.py" with: the name of the file
         // containing the problem, the name of the file where to record
         // the result and the directory containing the solver plugin to use
         // to solve the acoustic problem
