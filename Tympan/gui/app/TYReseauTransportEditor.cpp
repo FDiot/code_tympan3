@@ -64,9 +64,10 @@ void TYReseauTransportEditor::endReseauTransport()
         TYProjet* pProjet = getTYApp()->getCurProjet();
         if (pProjet)
         {
-            pProjet->getSite()->updateAltimetrie(true);
+            pProjet->getSite()->altimetryNeedsUpdate();
         }
 
+        // XXX does it still make sense now altimetry isn't updated anymore here ?
         for (unsigned int i = 0; i < pReseauTransport->getTabPoint().size(); i++)
         {
             pReseauTransport->getTabPoint()[i]._z = 0.0;
@@ -91,7 +92,6 @@ void TYReseauTransportEditor::endReseauTransport()
                 }
             }
 
-            pProjet->getSite()->updateAltiInfra(true);
 
             TYAction* pAction = new TYAddElementToInfraAction((LPTYElement&) pReseauTransport, pSite->getInfrastructure(), _pModeler, TR("id_action_addrestrans"));
             _pModeler->getActionManager()->addAction(pAction);

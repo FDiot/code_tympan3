@@ -48,8 +48,6 @@ LPTYProjet load_project(const char* filename)
             << boost::errinfo_file_name(filename);
     }
 
-    // Update site node
-    project->getSite()->update();
     return project;
 }
 

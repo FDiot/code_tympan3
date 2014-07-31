@@ -159,6 +159,7 @@ TEST(TYAltimetryTest, dummy_grid)
     LPTYAltimetrie pAlti = pTopo->getAltimetrie();
 
     // Update the altimetry
+    pSite->altimetryNeedsUpdate();
     ASSERT_TRUE(pSite->updateAltimetrie(true));
 
     // 2 triangles should give a 1x1 accelerating grid
@@ -191,6 +192,7 @@ TEST(TYAltimetryTest, simple_grid)
     LPTYCourbeNiveau pHill = addHillToSimpleSite(pSite);
 
     // Update the altimetry and check the altitude of an inner point
+    pSite->altimetryNeedsUpdate();
     ASSERT_TRUE(pSite->updateAltimetrie(true));
 
     // 10 triangles should give a 2x2 accelerating grid
@@ -239,6 +241,7 @@ TEST(TYAltimetryTest, simple_terrain)
     LPTYAltimetrie pAlti = pTopo->getAltimetrie();
 
     // Update the altimetry and check the altitude of an inner point
+    pSite->altimetryNeedsUpdate();
     ASSERT_TRUE(pSite->updateAltimetrie(true));
 
     // Check altitude in the middle of the future terrain

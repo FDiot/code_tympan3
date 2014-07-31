@@ -324,6 +324,7 @@ cdef class Site:
         # Not calling this method leads to a segmentation fault since the array
         # doesn't exist then.
         self.thisptr.getRealPointer().getTopographie().getRealPointer().sortTerrainsBySurface()
+        self.thisptr.getRealPointer().updateAltimetrie(True)
         self.thisptr.getRealPointer().updateAltiInfra(True)
         self.thisptr.getRealPointer().updateAcoustique(True)
 

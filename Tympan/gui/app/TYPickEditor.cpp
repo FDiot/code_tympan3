@@ -1041,17 +1041,13 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             pRemovedEltParent = pTopo;
 
             // On altimetrise aussi le sous-site (si s'en est un !)
-            // XXX See ticket https://extranet.logilab.fr/ticket/1484188
-            if (pSiteParent && !pSiteParent->getRoot()) { pSiteParent->updateAltimetrie(true); }
+            if (pSiteParent && !pSiteParent->getRoot()) { pSiteParent->altimetryNeedsUpdate(); }
 
-            // On met a jour l'altimetrie globale du site
+            // On demande la mise à jour de l'altimetrie globale du site
             TYProjet* pProjet = getTYApp()->getCurProjet();
             if (pProjet)
             {
-                pProjet->getSite()->updateAltimetrie(true);
-                pProjet->getSite()->updateAltiInfra(true);
-                pProjet->updateAltiRecepteurs();
-
+                pProjet->getSite()->altimetryNeedsUpdate();
                 pProjet->getSite()->getTopographie()->updateGraphicTree();
             }
 

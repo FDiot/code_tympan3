@@ -298,11 +298,6 @@ void TYOpenElementDialog::openElement(LPTYElement pElt)
             // Mise a jour des elements du projet
             // Directement projet courant, la "place" etant libre
             getTYApp()->setCurProjet(pProjet);
-
-            //// Mise a jour des elements du projet
-            //TYSiteNode* pSite = pProjet->getSite();
-            //TYCalcul* pCalcul = pProjet->getCurrentCalcul();
-            //if (pSite && pCalcul) pSite->update();
         }
         // L'element est un SiteNode
         else
@@ -311,9 +306,8 @@ void TYOpenElementDialog::openElement(LPTYElement pElt)
             LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pElt._pObj);
             if (pSite._pObj != nullptr)
             {
-                // XXX See ticket https://extranet.logilab.fr/ticket/1484188
                 getTYApp()->setCurSiteNode(pSite);
-                pSite->updateAltimetrie();
+                pSite->altimetryNeedsUpdate();
             }
             else if (dynamic_cast<TYBatiment*>(pElt._pObj) != nullptr)
             {

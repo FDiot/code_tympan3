@@ -80,7 +80,8 @@ TYSiteNode::TYSiteNode() :  _pProjet(NULL),
     _root(false),
     _SIGType(TYMPAN),
     _SIG_X(0.0),
-    _SIG_Y(0.0)
+    _SIG_Y(0.0),
+    _alti_needs_update (false)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -482,6 +483,9 @@ void TYSiteNode::loadTopoFile()
 
 /*virtual*/ bool TYSiteNode::updateAltimetrie(const bool& force) // force = false
 {
+    if (!_alti_needs_update)  return true;
+    _alti_needs_update = false;
+
     ostringstream msg;
     OMessageManager& logger =  *OMessageManager::get();
     try
