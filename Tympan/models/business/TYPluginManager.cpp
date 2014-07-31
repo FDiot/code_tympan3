@@ -210,13 +210,13 @@ SolverInterface* TYPluginManager::getSolver() const
 
 SolverInterface* TYPluginManager::getSolver(const OGenID& uuid) const
 {
-    TYPlugin* plugin = getPlugin(uuid);
+    Plugin* plugin = getPlugin(uuid);
     if (plugin != nullptr)
         return plugin->getSolver();
     return nullptr;
 }
 
-TYPlugin* TYPluginManager::getPlugin(const OGenID& uuid) const
+Plugin* TYPluginManager::getPlugin(const OGenID& uuid) const
 {
     for (TYPluginList::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it)
         if ((*it)->getPlugin()->getUUID() == uuid)

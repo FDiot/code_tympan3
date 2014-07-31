@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,15 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#ifndef __TYPLUGIN__
-#define __TYPLUGIN__
+#ifndef TY_PLUGIN
+#define TY_PLUGIN
 
 #include <string>
 
 #include "Tympan/core/defines.h"
 #include "Tympan/core/idgen.h"
 #include "Tympan/core/interfaces.h"
-
 
 #pragma warning(disable: 4251)
 
@@ -45,11 +44,11 @@ typedef struct
 } pluginInfos;
 
 
-class TYPlugin
+class Plugin
 {
 public:
-    TYPlugin() : _pSolver(0) { }
-    ~TYPlugin() { if (_pSolver) { delete _pSolver; } }
+    Plugin() : _pSolver(0) { }
+    ~Plugin() { if (_pSolver) { delete _pSolver; } }
 
     // Set des informations
     void setName(const QString& name) { _name = name; }
@@ -92,4 +91,4 @@ private:
     OGenID _uuid;
 };
 
-#endif // __TYPLUGIN__
+#endif // TY_PLUGIN

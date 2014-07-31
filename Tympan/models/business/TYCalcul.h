@@ -27,9 +27,9 @@
 
 #include <memory>
 
+#include "Tympan/core/plugin.h"
 #include "Tympan/models/business/material/TYAtmosphere.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
-#include "Tympan/models/business/TYPlugin.h"
 #include "Tympan/models/business/TYRay.h"
 #include "Tympan/models/business/TYMaillage.h"
 #include "Tympan/models/business/TYPointControl.h"
@@ -784,10 +784,10 @@ public:
     void setGeomPrecision(const double& geomPrecision) { this->_geomPrecision = _geomPrecision; }
 
     /**
-     * \fn void setPlugin(TYPlugin* plugin)
+     * \fn void setPlugin(Plugin* plugin)
      * \brief Set solver plugin
      */
-    void setPlugin(TYPlugin* plugin){ _plugin = plugin; }
+    void setPlugin(Plugin* plugin){ _plugin = plugin; }
 
     /**
      * -     * \fn OGenID getSolverId()
@@ -874,7 +874,7 @@ protected:
     // Membres
 protected:
     // solver to be used to solve this "calcul"
-    TYPlugin* _plugin;
+    Plugin* _plugin;
     OGenID _solverId;
 
     ///Numero du Calcul.

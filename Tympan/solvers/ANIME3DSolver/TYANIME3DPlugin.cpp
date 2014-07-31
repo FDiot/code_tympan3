@@ -20,15 +20,15 @@
  * \date 04 avril 2011
  */
 
-#include "Tympan/models/business/TYPlugin.h"
+#include "Tympan/core/plugin.h"
 #include "TYANIME3DSolver.h"
 
 // Variable globale
-TYPlugin* plugin;
+Plugin* plugin;
 
 extern "C" PLUGIN_DECL void startPlugin(bool console)
 {
-    plugin = new TYPlugin();
+    plugin = new Plugin();
 
     // Information sur le plugin
     plugin->setName("ANIME3DSolver");
@@ -41,7 +41,7 @@ extern "C" PLUGIN_DECL void startPlugin(bool console)
     plugin->setSolver(new TYANIME3DSolver());
 }
 
-extern "C" PLUGIN_DECL TYPlugin* getPlugin()
+extern "C" PLUGIN_DECL Plugin* getPlugin()
 {
     // On renvoi le plugin
     return plugin;

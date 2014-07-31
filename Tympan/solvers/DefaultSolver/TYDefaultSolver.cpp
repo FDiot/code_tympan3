@@ -13,15 +13,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "TYSolver.h"
+#include "Tympan/solvers/DefaultSolver/TYSolver.h"
 #include "TYDefaultSolver.h"
 
 // Variable globale
-TYPlugin* plugin;
+Plugin* plugin;
 
 void startPlugin(bool console)
 {
-    plugin = new TYPlugin();
+    plugin = new Plugin();
 
     // Information sur le plugin
     plugin->setName("DefaultSolver");
@@ -34,7 +34,7 @@ void startPlugin(bool console)
     plugin->setSolver(new TYSolver());
 }
 
-TYPlugin* getPlugin()
+Plugin* getPlugin()
 {
     // On renvoi le plugin
     return plugin;

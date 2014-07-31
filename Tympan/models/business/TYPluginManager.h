@@ -24,7 +24,7 @@
 #include "Tympan/core/defines.h"
 #include "Tympan/core/interfaces.h"
 #include "Tympan/core/smartptr.h"
-#include "TYPlugin.h"
+#include "Tympan/core/plugin.h"
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #    define LIB_HANDLE hInstance
@@ -43,7 +43,7 @@ typedef struct HINSTANCE__* hInstance;
 #endif
 
 typedef void (*TYPGStartPlugin)(bool console);
-typedef TYPlugin* (*TYPGGetPlugin)();
+typedef Plugin* (*TYPGGetPlugin)();
 typedef void (*TYPGStopPlugin)();
 
 struct TYPluginData
@@ -136,7 +136,7 @@ public:
     // Decharge les plugins charges de la memoire
     void unloadPlugins();
 
-    TYPlugin* getPlugin(const OGenID& uuid) const;
+    Plugin* getPlugin(const OGenID& uuid) const;
 
     // Fonction de haut-niveau permettant le retour directe de l'objet TYSolver courant
     SolverInterface* getSolver() const;
