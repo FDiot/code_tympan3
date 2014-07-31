@@ -13,14 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#include "Tympan/models/business/TYPlugin.h"
+#include "Tympan/core/plugin.h"
 
 extern "C" PLUGIN_DECL void startPlugin(bool console);
 
-extern "C" PLUGIN_DECL TYPlugin* getPlugin();
+extern "C" PLUGIN_DECL Plugin* getPlugin();
 
 extern "C" PLUGIN_DECL void stopPlugin();
