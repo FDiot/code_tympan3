@@ -115,7 +115,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         absolute_plugins_path.append(PLUGINS_PATH);
         QString absolute_pyscript_path (QCoreApplication::applicationDirPath());
         absolute_pyscript_path.append("/");
-        absolute_pyscript_path.append(PYSCRIPT);
+        absolute_pyscript_path.append(SOLVE_PYSCRIPT);
         args << absolute_pyscript_path << problemfile.fileName() << resultfile.fileName()
             << absolute_plugins_path;
 

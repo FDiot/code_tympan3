@@ -47,6 +47,7 @@
 #define TY_TIME_LIMIT_          "illimitee"
 
 #define PYMODULES_DIR "@PYMODULES_DIR@"
-#define PYSCRIPT "@PYSCRIPT@"
+#define SOLVE_PYSCRIPT "@SOLVE_PYSCRIPT@"
+#define ALTIMETRY_PYSCRIPT "@ALTIMETRY_PYSCRIPT@"
 
 #endif //TY_CONFIG
