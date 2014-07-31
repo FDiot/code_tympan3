@@ -1,4 +1,3 @@
-import sys
 import logging
 
 # open file in unbuffered mode so it get written asap, in case of later crash
@@ -8,7 +7,9 @@ logging.basicConfig(stream=stream, level=logging.DEBUG,
                     format='%(levelname)s:%(asctime)s - %(name)s - %(message)s')
 
 import tympan.models.business as tybusiness
-import tympan.altimetry.datamodel as altimetry
+from tympan.altimetry.datamodel import (SiteNode, LevelCurve, WaterBody,
+                                        GroundMaterial, MaterialArea,
+                                        InfrastructureLandtake)
 
 
 def process_site_altimetry(input_project, result_file):
@@ -46,16 +47,16 @@ def export_site_topo(cysite):
     """
     # Site landtake
     (points, cylcurve) = cysite.process_landtake()
-    asite = altimetry.SiteNode(coords=cypoints2acoords(points), id=cysite.elem_id)
+    asite = SiteNode(coords=cypoints2acoords(points), id=cysite.elem_id)
     if cylcurve is not None:
-        alcurve = altimetry.LevelCurve(
+        alcurve = LevelCurve(
             coords=cypoints2acoords(cylcurve.points),
             altitude=cylcurve.altitude,
             id=cylcurve.elem_id)
         asite.add_child(alcurve)
     # Water bodies
     for cylake in cysite.lakes:
-        allake = altimetry.WaterBody(
+        allake = WaterBody(
             coords=cypoints2acoords(cylake.level_curve.points),
             altitude=cylake.level_curve.altitude,
             id=cylake.elem_id)
@@ -64,23 +65,23 @@ def export_site_topo(cysite):
     for cymarea in cysite.material_areas:
         # Build a ground material
         cymaterial = cymarea.ground_material
-        almaterial = altimetry.GroundMaterial(cymaterial.elem_id)
+        almaterial = GroundMaterial(cymaterial.elem_id)
         # Build a material area made of the above defined ground material
-        almatarea = altimetry.MaterialArea(
+        almatarea = MaterialArea(
             coords=cypoints2acoords(cymarea.points),
             material=almaterial,
             id=cymarea.elem_id)
         asite.add_child(almatarea)
     # Level curves
     for cylcurve in cysite.level_curves:
-        alcurve = altimetry.LevelCurve(
+        alcurve = LevelCurve(
             coords=cypoints2acoords(cylcurve.points),
             altitude=cylcurve.altitude,
             id=cylcurve.elem_id)
         asite.add_child(alcurve)
     # Ground contour (infrastructure landtake)
     for (cy_id, cy_volume_contour) in cysite.ground_contour.items():
-        infra_landtake = altimetry.InfrastructureLandtake(
+        infra_landtake = InfrastructureLandtake(
             coords=cypoints2acoords(cy_volume_contour),
             id=cy_id
             )
