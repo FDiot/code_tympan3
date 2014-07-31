@@ -22,7 +22,7 @@
 
 Plugin* plugin;
 
-extern "C" PLUGIN_DECL void startPlugin(bool console)
+extern "C" PLUGIN_DECL void startPlugin()
 {
     plugin = new Plugin();
     // Information sur le plugin
