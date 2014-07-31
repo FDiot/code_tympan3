@@ -10,6 +10,7 @@ import tympan.models.business as tybusiness
 from tympan.altimetry.datamodel import (SiteNode, LevelCurve, WaterBody,
                                         GroundMaterial, MaterialArea,
                                         InfrastructureLandtake)
+from tympan.altimetry.builder import Builder
 
 
 def process_site_altimetry(input_project, result_file):
@@ -34,9 +35,10 @@ def process_site_altimetry(input_project, result_file):
     # Business model
     cysite = project.site
     asite = export_site_topo(cysite)
-    # XXX TODO: build altimetry from this site and fill result file with the
-    # resulting mesh (ply format)
-    return asite
+    # Build altimetry
+    builder = Builder(asite)
+    builder.complete_processing()
+    builder.export_to_ply(result_file)
 
 
 def export_site_topo(cysite):
