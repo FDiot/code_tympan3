@@ -27,8 +27,10 @@
 #include "Tympan/models/business/TYProgressManager.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/infrastructure/TYEcran.h"
+#include "Tympan/models/business/xml_project_util.h"
+#include "Tympan/models/business/subprocess_util.h"
 #include "Tympan/core/logging.h"
-
+#include "Tympan/core/config.h"
 #include <QDir>
 
 
@@ -519,23 +521,69 @@ void TYSiteNode::loadTopoFile()
 
 /*virtual*/ void TYSiteNode::do_updateAltimetrie(const bool& force) // force = false
 {
-    if (!getIsGeometryModified() && !force) { return; } //L'altimetrie est a jour
+    OMessageManager& logger = *OMessageManager::get();
 
+    // disables element names automatic generation (subsites fusion etc)
     TYNameManager::get()->enable(false);
 
-    OMessageManager::get()->info("Mise a jour altimetrie...");
-
-    /* This is the place where plug the AltimetryBuilder into :
-     *  1. pass the topographical elements to the AltimetryBuilder
-     *  2. get from it a table of points and triangles vertices
-     *  3. put that into the accelerating structure
-     *
-     */
-
-    // _pTopographie->getAltimetrie()->compute(collectPointsForAltimetrie(), getDelaunay());
+    logger.info("Mise a jour altimetrie...");
 
     std::deque<OPoint3D> points;
     std::deque<OTriangle> triangles;
+    // Is the debug option "TYMPAN_DEBUG=keep_tmp_files" enabled?
+    bool keep_tmp_files = must_keep_tmp_files();
+    // Will be used to export the current site topography/infrastructure
+    QTemporaryFile current_project;
+    // Here will go the mesh result in a PLY Polygon formatted file
+    //(see http://www.cs.virginia.edu/~gfx/Courses/2001/Advanced.spring.01/plylib/Ply.txt)
+    QTemporaryFile result_mesh;
+    if (!init_tmp_file(current_project, keep_tmp_files)
+            || !init_tmp_file(result_mesh, keep_tmp_files))
+    {
+        logger.error("Creation de fichier temporaire impossible. Veuillez verifier l'espace disque disponible.");
+        throw tympan::exception() << tympan_source_loc;
+    }
+    try
+    {
+        tympan::save_project(current_project.fileName().toUtf8().data(), _pProjet);
+    }
+    catch(const tympan::invalid_data& exc)
+    {
+        std::ostringstream msg;
+        msg << boost::diagnostic_information(exc);
+        logger.error(
+                "Could not export current project. Computation won't be done");
+        logger.debug(msg.str().c_str());
+        TYNameManager::get()->enable(true);
+        throw;
+    }
+    if(keep_tmp_files)
+    {
+        logger.debug(
+                "Le calcul va s'executer en mode debug.\nLes fichiers temporaires ne seront pas supprimes une fois le calcul termine.\nProjet courant non calcule: %s  Projet avec les resultats du calcul: %s.",
+                current_project.fileName().toStdString().c_str(),
+                result_mesh.fileName().toStdString().c_str());
+    }
+
+    // Call python script "process_site_altimetry.py" with: the name of the file
+    // containing the site description, and the name of the file where to record
+    // the result
+    QStringList args;
+    QString absolute_pyscript_path (QCoreApplication::applicationDirPath());
+    absolute_pyscript_path.append("/");
+    absolute_pyscript_path.append(ALTIMETRY_PYSCRIPT);
+    args << absolute_pyscript_path << current_project.fileName()
+        << result_mesh.fileName();
+    logger.info("Going to invoke python subprocess to compute altimetry with script: %s",
+            absolute_pyscript_path.toStdString().c_str());
+    string error_msg;
+    if (!python(args, error_msg))
+    {
+        TYNameManager::get()->enable(true);
+        throw tympan::exception() << tympan_source_loc;
+    }
+    // XXX TODO: read result and process it
+
     // Stub: for now, artifially build the mesh
     points.push_back(OPoint3D(-200.0, 200.0, 0.0));
     points.push_back(OPoint3D(200.0, 200.0, 0.0));
