@@ -8,8 +8,8 @@ import numpy as np
 from shapely import geometry
 
 from .datamodel import (InconsistentGeometricModel,
-                        DEFAULT_MATERIAL,
                         elementary_shapes)
+from . import datamodel
 from .merge import recursively_merge_all_subsites
 from .mesh import (ElevationMesh, ReferenceElevationMesh,
                    Vertex_handle,
@@ -123,7 +123,7 @@ class Builder(object):
                                         flooder_class=MaterialFaceFlooder)
         for fh in self.mesh.cdt.finite_faces():
             if fh not in self.material_by_face:
-                self.material_by_face[fh] = DEFAULT_MATERIAL
+                self.material_by_face[fh] = datamodel.DEFAULT_MATERIAL
 
     def join_with_landtakes(self):
         """Join the altimetry to the landtakes.
