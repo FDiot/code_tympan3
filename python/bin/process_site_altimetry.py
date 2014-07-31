@@ -10,7 +10,7 @@ logging.basicConfig(stream=stream, level=logging.DEBUG,
 import tympan.altimetry.process_altimetry as tyalti
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         err = "process_site_altimetry.py called with bad arguments."
         logging.error("%s Couldn't process altimetry.", err)
         sys.exit(-1) # XXX to be improved
@@ -18,7 +18,7 @@ if __name__ == '__main__':
     input_proj = sys.argv[1]
     # process altimetry
     try:
-        tyalti.process_altimetry(input_project=input_proj)
+        tyalti.process_site_altimetry(input_project=input_proj)
     except:
         logging.exception("process_altimetry.py couldn't process the altimetry.")
         sys.exit(-1)
