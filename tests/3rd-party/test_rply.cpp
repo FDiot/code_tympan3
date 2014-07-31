@@ -63,7 +63,7 @@ static int face_cb(p_ply_argument argument) {
 
 TEST(RPLY, read_trivial_file)
 {
-    std::string data_file_name = tympan::path_to_test_data("trivial.ply");
+    std::string data_file_name = tympan::path_to_test_data("trivial_material.ply");
     const long nvertices = 3, ntriangles= 1;
     spy_t spy;
 
