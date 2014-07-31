@@ -404,11 +404,9 @@ void TYProjet::setCurrentCalcul(LPTYCalcul pCurCalcul)
     // Calcul courant
     _pCurrentCalcul = pCurCalcul;
 
-    // Selection du solveur pour le calcul
-    TYPluginManager::get()->setCurrent(_pCurrentCalcul->getSolverId());
-    // Test de la selection du solveur si le solveur courant n'est pas celui du calcul
-    // car indisponible, un "flag" est mis
-    if (TYPluginManager::get()->getCurrent() != _pCurrentCalcul->getSolverId())
+    ;
+    // Test si le solveur du calcul est bien disponible
+    if (TYPluginManager::get()->exist(_pCurrentCalcul->getSolverId()))
     {
         _bStatusSolver = false;
     }

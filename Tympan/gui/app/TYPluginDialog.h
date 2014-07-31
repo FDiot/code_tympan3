@@ -27,9 +27,10 @@
 #ifndef __TY_PLUGIN_DIALOG__
 #define __TY_PLUGIN_DIALOG__
 
-#include "TYAppDefines.h"
-
 #include <qdialog.h>
+
+#include "Tympan/core/idgen.h"
+#include "TYAppDefines.h"
 
 class QTreeWidget;
 class QPushButton;
@@ -51,6 +52,9 @@ public:
      * Destructeur.
      */
     virtual ~TYPluginDialog();
+    // Current solver used
+    OGenID current_solver;
+
 
 protected slots:
     /// Mets a jour le SolverInterface courant
