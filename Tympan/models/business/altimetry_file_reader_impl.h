@@ -57,6 +57,7 @@ namespace tympan {
         bool face_cb(face_properties property, unsigned face_index,
                      unsigned nproperties, int property_index,
                      double value);
+        void error_cb(p_ply ply, const char *message);
         /// @}
 
         /// Data attributes
