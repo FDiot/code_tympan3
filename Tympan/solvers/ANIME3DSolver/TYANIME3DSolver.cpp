@@ -20,17 +20,16 @@
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/delaunay_maker.h"
-#include "Tympan/models/business/TYAcousticModelInterface.h"
 #include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
 #include "Tympan/solvers/AcousticRaytracer/global.h"
-#include "TYANIME3DRayTracerSetup.h"
-#include "TYANIME3DAcousticModel.h"
-#include "TYANIME3DAcousticPathFinder.h"
-#include "TYANIME3DFaceSelector.h"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSetup.h"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticModel.h"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DFaceSelector.h"
 #include "TYANIME3DSolver.h"
 
 

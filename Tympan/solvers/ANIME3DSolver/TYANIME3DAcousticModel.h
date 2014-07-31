@@ -16,6 +16,7 @@
 #ifndef __TYANIME3DACOUSTICMODEL__
 #define __TYANIME3DACOUSTICMODEL__
 
+#include "Tympan/core/interfaces.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DSolver.h"
 
 // Pour l'utilisation de la librairie standard STL.
@@ -44,7 +45,7 @@ class OBox2;
  * \class TYANIME3DAcousticModel
  * \brief Le modle acoustique de la mthode ANIME3D
  */
-class TYANIME3DAcousticModel : public TYAcousticModelInterface
+class TYANIME3DAcousticModel : public AcousticModelInterface
 {
 public:
     /// constructeurs
