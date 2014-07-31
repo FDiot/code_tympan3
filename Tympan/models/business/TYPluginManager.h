@@ -42,7 +42,7 @@ typedef struct HINSTANCE__* hInstance;
 #    define LIB_UNLOAD(a) dlclose(a)
 #endif
 
-typedef void (*TYPGStartPlugin)(bool console);
+typedef void (*TYPGStartPlugin)();
 typedef Plugin* (*TYPGGetPlugin)();
 typedef void (*TYPGStopPlugin)();
 
@@ -111,24 +111,21 @@ public:
     /*! Create a \c TYPluginData for each library file and update the list
         \c _plugins.
      \param file_list List of files to load.
-     \param with_graphical Is the graphical interface used?
      */
-    void createPlugins(const QFileInfoList& file_list, bool with_graphical);
+    void createPlugins(const QFileInfoList& file_list);
 
     //! Check the loaded plugin.
     /*! Check if the loaded object has the good methods.
      \param plugin_data The Plugin data related to the plugin to create.
-     \param with_graphical Is the graphical interface used?
      \return Start with success?
      */
-    bool startPlugin(TYPluginData* plugin_data, bool with_graphical);
+    bool startPlugin(TYPluginData* plugin_data);
 
     //! Load, check, create and start plugins.
     /*!
      \param directory Path to the dynamic library files (aka plugins) to load.
-     \param with_graphical Is the graphical interface used?
      */
-    bool loadPlugins(const QString& directory, bool with_graphical = true);
+    bool loadPlugins(const QString& directory);
 
     //! Load plugins (aka solvers) from the Qt interface.
     bool loadPluginsGraphicMode(const QString& directory);

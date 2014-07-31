@@ -70,8 +70,7 @@ QFileInfoList TYPluginManager::getPluginFileList(const QDir& directory) const
     return file_list;
 }
 
-void TYPluginManager::createPlugins(const QFileInfoList& file_list,
-                                    bool with_graphical)
+void TYPluginManager::createPlugins(const QFileInfoList& file_list)
 {
     QFileInfoList::const_iterator itfile = file_list.begin();
     for (itfile; itfile != file_list.end(); ++itfile)
@@ -119,7 +118,7 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
         }
 
         // Start the plugin and add it to the list '_plugins'. True if success.
-        bool success = startPlugin(plugin_data, with_graphical);
+        bool success = startPlugin(plugin_data);
         if (!success)
         {
             OMessageManager::get()->info(
@@ -133,11 +132,10 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
 }
 
 
-bool TYPluginManager::startPlugin(TYPluginData* plugin_data, bool with_graphical)
+bool TYPluginManager::startPlugin(TYPluginData* plugin_data)
 {
     // Start the plugin.
-    plugin_data->startPlugin(!with_graphical);
-
+    plugin_data->startPlugin();
     // If already exists in the list, stop and unload it.
     if (exist(plugin_data->getPlugin()->getUUID()))
     {
@@ -152,7 +150,7 @@ bool TYPluginManager::startPlugin(TYPluginData* plugin_data, bool with_graphical
 }
 
 
-bool TYPluginManager::loadPlugins(const QString& directory, bool with_graphical)
+bool TYPluginManager::loadPlugins(const QString& directory)
 {
     // Get the folder where there are plug-ins (aka solvers).
     QString dirPath = QDir::convertSeparators(directory);
@@ -171,7 +169,7 @@ bool TYPluginManager::loadPlugins(const QString& directory, bool with_graphical)
 
     // Load methods related to a plugin, check them and add the related plugin
     // to the list.
-    createPlugins(plugin_file_list, with_graphical);
+    createPlugins(plugin_file_list);
 
     // Check if there is unless the default plugin.
     if (!exist(OGenID(QString(DEFAULT_SOLVER_UUID))))
@@ -347,7 +345,7 @@ namespace tympan
     {
         LPTYPluginManager plugin_manager = TYPluginManager::get();
         plugin_manager->unloadPlugins();
-        plugin_manager->loadPlugins(path, false);
+        plugin_manager->loadPlugins(path);
         plugin_manager->setCurrent(comp->getSolverId());
         comp->setPlugin(plugin_manager->getPlugin(plugin_manager->getCurrent()));
     }
