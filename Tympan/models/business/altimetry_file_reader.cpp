@@ -117,10 +117,36 @@ namespace tympan {
         return true;
     }
 
-    bool  AltimetryPLYReader::face_cb(face_properties property, unsigned face_index,
-                                      unsigned nproperties, int property_index,
-                                      double value)
+    bool AltimetryPLYReader::face_cb(face_properties property, unsigned face_index,
+                                     unsigned nproperties, int property_index,
+                                     double value)
     {
+        switch(property)
+        {
+        case VertexIndices:
+            // Reading vertices index for the face, expected to be a triangle
+            if (nproperties != 3) {
+                // Should probably NOT raise a exception from within a C callback
+                // TODO properly report, e.g. with an error status in the reader
+                return false;
+            }
+            if (property_index==-1) { // RPLY is giving us the length
+                assert(value==3.0);   // Value should be equal to length
+                _faces.push_back(OTriangle(-1, -1, -1));
+            }
+            else {
+                assert(property_index<3);
+                assert(_faces.size()-1 == face_index); // Index consistency
+                const unsigned vertex_index = value;
+                OTriangle& triangle = _faces.back();
+                triangle.index(property_index) = vertex_index;
+                // Ensure consistency of the OTriangle redundant representation
+                triangle.vertex(property_index) = _points[vertex_index];
+            }
+            break;
+        default:
+            return false;
+        }
         return true;
     }
 
