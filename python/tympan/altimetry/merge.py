@@ -126,15 +126,16 @@ class SiteNodeGeometryCleaner(object):
         self.process_material_areas()
         self.process_infrastructure_landtakes()
 
-    def export_cleaned_geometries_into(self, hostcleaner):
-        """Create new geometry and info into the host site representing the
-        cleaned geometry for each feature of this cleaner
+    def import_cleaned_geometries_from(self, othercleaner):
+        """Create new geometry and info into the site of this cleaner
+        representing the cleaned geometry for each feature of the other
+        cleaner.
 
-        Info are shared between the self and the hostcleaner
+        Info are shared between the self and the other cleaner.
         """
-        for feature_id, shape in self.geom.iteritems():
-            hostcleaner._add_feature_with_new_shape(
-                self.feature_from_id(feature_id), shape)
+        for feature_id, shape in othercleaner.geom.iteritems():
+            self._add_feature_with_new_shape(
+                othercleaner.feature_from_id(feature_id), shape)
 
     def merge_subsite(self, subsite):
         """Merge the cleaned geometries for subsite into the self cleaner"""
@@ -145,7 +146,7 @@ class SiteNodeGeometryCleaner(object):
                    "overlapping its boundaries.")
             raise InconsistentGeometricModel(msg, subsite=subsite.id,
                                              ids=subcleaner.erroneous_overlap)
-        subcleaner.export_cleaned_geometries_into(self)
+        self.import_cleaned_geometries_from(subcleaner)
         self._merge_subsite_materials(subcleaner)
 
     def insert_position_for_sorted_material_area(self, inserted_area):
