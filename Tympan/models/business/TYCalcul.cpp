@@ -21,12 +21,10 @@
 #include <string>
 
 #include "Tympan/core/defines.h"
-#include "Tympan/core/interfaces.h"
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/TYProgressManager.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYXMLManager.h"
-#include "Tympan/models/business/TYPluginManager.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
@@ -1498,7 +1496,7 @@ bool TYCalcul::isCalculPossible(const int& nbSources, const int& nbRecepteurs, c
     return true;
 }
 
-bool TYCalcul::go()
+bool TYCalcul::go(SolverInterface* pSolver)
 {
     TYProjet* pProjet = getProjet();
 
@@ -1572,22 +1570,6 @@ bool TYCalcul::go()
     if (isCalculPossible(static_cast<int>(sources.size()), static_cast<int>(recepteurs.size()), pSite))
     {
         OMessageManager::get()->info("Calcul en cours...");
-
-        pluginInfos* pInfos = new pluginInfos();
-        _plugin->getInfos(pInfos);
-        OMessageManager::get()->info("***************************************************************");
-        OMessageManager::get()->info("                          APPEL DE LA DLL");
-        OMessageManager::get()->info("");
-        OMessageManager::get()->info("Nom         : %s", pInfos->_name.toAscii().data());
-        OMessageManager::get()->info("Version     : %s", pInfos->_version.toAscii().data());
-        OMessageManager::get()->info("Description : %s", pInfos->_description.toAscii().data());
-        OMessageManager::get()->info("Auteur      : %s", pInfos->_author.toAscii().data());
-        OMessageManager::get()->info("");
-        OMessageManager::get()->info("***************************************************************");
-        delete pInfos;
-        pInfos = NULL;
-
-        SolverInterface* pSolver = _plugin->getSolver();
         // XXX ... and pass the SolverDataModel built here.
         ret = pSolver->solve(*pSite, *this, *_acousticProblem, *_acousticResult);
         pSolver->purge();
@@ -1596,8 +1578,6 @@ bool TYCalcul::go()
         {
             _pResultat->purge();
         }
-
-
     }
     else
     {

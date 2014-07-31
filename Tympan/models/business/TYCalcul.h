@@ -27,7 +27,7 @@
 
 #include <memory>
 
-#include "Tympan/core/plugin.h"
+#include "Tympan/core/interfaces.h"
 #include "Tympan/models/business/material/TYAtmosphere.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/models/business/TYRay.h"
@@ -632,12 +632,12 @@ public:
     bool isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSiteNode pMergeSite);
 
     /**
-     * \fn bool go()
+     * \fn bool go(SolverInterface* pSolver)
      * \brief Lance l'execution du Calcul.
      * \return <code>true</code> si le calcul a reussi;
      *         <code>false</code> sinon.
      */
-    bool go();
+    bool go(SolverInterface* pSolver);
 
     /**
      * \fn void getCalculElements(LPTYSiteNode pSite)
@@ -784,12 +784,6 @@ public:
     void setGeomPrecision(const double& geomPrecision) { this->_geomPrecision = _geomPrecision; }
 
     /**
-     * \fn void setPlugin(Plugin* plugin)
-     * \brief Set solver plugin
-     */
-    void setPlugin(Plugin* plugin){ _plugin = plugin; }
-
-    /**
      * -     * \fn OGenID getSolverId()
      *       -     *     void setSolverId(const OGenID& iD)
      *       -     * \brief Get/Set du solveur ID
@@ -874,7 +868,6 @@ protected:
     // Membres
 protected:
     // solver to be used to solve this "calcul"
-    Plugin* _plugin;
     OGenID _solverId;
 
     ///Numero du Calcul.

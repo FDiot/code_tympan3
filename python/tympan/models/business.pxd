@@ -6,7 +6,7 @@ from libcpp.deque cimport deque
 from libcpp cimport bool
 from libcpp.map cimport map
 
-from tympan.core cimport unique_ptr, QString, SmartPtr, OGenID
+from tympan.core cimport unique_ptr, QString, SmartPtr, OGenID, SolverInterface
 from tympan.models cimport common as tycommon
 from tympan.models cimport solver as tysolver
 
@@ -112,7 +112,7 @@ cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
 
 cdef extern from "Tympan/models/business/TYCalcul.h":
     cdef cppclass TYCalcul (TYElement):
-        bool go()
+        bool go(SolverInterface *)
         unique_ptr[tysolver.AcousticProblemModel] _acousticProblem
         unique_ptr[tysolver.AcousticResultModel]  _acousticResult
         SmartPtr[TYResultat] getResultat()
@@ -123,6 +123,7 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         const vector[SmartPtr[TYGeometryNode]] getMaillages() const
         void setNbThread(unsigned int nbThread)
         void goPostprocessing()
+        const OGenID getSolverId()
 
 cdef extern from "Tympan/models/business/TYProjet.h":
     cdef cppclass TYProjet (TYElement):

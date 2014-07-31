@@ -162,14 +162,13 @@ class TYCalcul;
 
 namespace tympan
 {
-    //! Load the solver that was chosen to compute 'comp' (its ID is owned by 'comp'
+    //! Load some solver from plugin and returns it
     /*!
      * \param path Path to the solver libraries (plugins) to load, containing
      *      among others the default solver
-     * \param comp computation that will use the default solver to solve its
-     *      acoustic problem
+     * \param uuid identifier of the solver to load
      */
-    void load_solver(const char *path, TYCalcul *comp);
+    SolverInterface* load_solver(const char *path, OGenID uuid);
 
 } /* namespace tympan */
 

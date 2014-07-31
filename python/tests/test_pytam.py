@@ -20,8 +20,8 @@ class TestPyTam(TympanTC):
             "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
         computation = project.current_computation
         with self.no_output():
-            bus2solv.loadsolver(TEST_SOLVERS_DIR, computation)
-            self.assertTrue(computation.go())
+            solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, computation)
+            self.assertTrue(computation.go(solver))
             bus2solv_conv.postprocessing()
 
     def test_hierarchy(self):

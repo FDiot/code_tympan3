@@ -604,11 +604,12 @@ cdef class Computation:
         res.thisptr = self.thisptr.getRealPointer().getResultat()
         return res
 
-    def go(self):
+    @cy.locals(solver=tycommon.SolverInterface)
+    def go(self, solver):
         """ Solve the current acoustic problem. A solver must be loaded.
         """
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().go()
+        return self.thisptr.getRealPointer().go(solver.thisptr)
 
     def set_nthread(self, nthread):
         """ Set the number of threads used by the default solver to compute the

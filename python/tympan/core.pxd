@@ -37,3 +37,7 @@ cdef extern from "Tympan/core/idgen.h":
         OGenID(const OGenID& other)
         OGenID()
         const QString toString() const
+
+cdef extern from "Tympan/core/interfaces.h":
+    cdef cppclass SolverInterface:
+        SolverInterface()
