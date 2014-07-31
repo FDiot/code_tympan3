@@ -234,6 +234,7 @@ void TYAltimetrie::plugBackTriangulation(
         for (j = 0; j < 3; j++)
         {
             grid_index idx;
+            // idx is an output argument
             if (!getGridIndices(oTriangle.vertex(j), idx))
             {
                 throw tympan::logic_error("Point out of the altimetry's bounding box")
