@@ -66,11 +66,15 @@ public:
     bool checkConsistencyWrtPointsTab(const std::deque<OPoint3D>& points) const;
     std::string reportInconsistencyWrtPointsTab(const std::deque<OPoint3D>& points);
 
+    bool operator==(const OTriangle& other) const;
+
 private:
     //! A static table of \c OPoint3D.
     static OPoint3D OTriangle::* vertices_m_ptr[3];
     //! A static table of coordinate.
     static int OTriangle::* indices_m_ptr[3];
 };
+
+::std::ostream& operator<<(::std::ostream& os, const OTriangle& );
 
 #endif //TY_TRIANGLE
