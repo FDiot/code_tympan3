@@ -8,6 +8,7 @@
  */
 #include <cassert>
 
+#include <boost/foreach.hpp>
 #include <boost/exception/errinfo_file_name.hpp>
 #include <boost/exception/errinfo_at_line.hpp>
 #include <boost/exception/errinfo_errno.hpp>
@@ -112,7 +113,7 @@ namespace tympan {
         assert(_material_indices.size() == _nfaces);
         assert(_faces.size() == _nfaces);
         _material_by_face.reserve(_nfaces);
-        for(unsigned material_index : _material_indices)
+        BOOST_FOREACH(unsigned material_index, _material_indices)
         {
             if (material_index == -1) // No material attributed
                 _material_by_face.push_back("");

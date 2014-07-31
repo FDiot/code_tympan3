@@ -1,6 +1,8 @@
 //! \test test_ply_altimetry_reader
 #include "gtest/gtest.h"
 
+#include <boost/foreach.hpp>
+
 #include "Tympan/models/business/altimetry_file_reader.h"
 #include "Tympan/models/business/altimetry_file_reader_impl.h"
 
@@ -70,7 +72,7 @@ TEST(TestAltimetryReader, face_cb)
     bool ok = true;
     // Simulate input of the points
     unsigned vertex_index = 0;
-    for(const auto& p : points)
+    BOOST_FOREACH(const auto& p, points)
     {
         for(unsigned i=0; i<3; ++i)
             ok &= reader.vertex_cb((AltimetryPLYReader::vertex_properties)i,
