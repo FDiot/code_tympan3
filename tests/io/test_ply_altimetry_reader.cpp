@@ -88,3 +88,23 @@ TEST(TestAltimetryReader, face_cb)
     ASSERT_EQ(1, reader.faces().size());
     EXPECT_EQ(triangle, reader.faces().back());
 }
+
+TEST(TestAltimetryReader, trivial_read)
+{
+    // PLY files to read.
+    std::string alti_file = tympan::path_to_test_data("trivial.ply");
+    AltimetryPLYReader reader(alti_file);
+    const OPoint3D points[3] = {
+        OPoint3D(-1.0, 0.0, 0.0),
+        OPoint3D( 0.0, 1.0, 0.0),
+        OPoint3D( 1.0, 0.0, 0.0)};
+    OTriangle triangle(1, 0, 2); // Expected triangle defined by indices
+    for(unsigned i=0; i<3; ++i)
+        triangle.vertex(i) = points[i];
+
+    reader.read();
+
+    EXPECT_EQ(3, reader.points().size());
+    EXPECT_EQ(1, reader.faces().size());
+    EXPECT_EQ(triangle, reader.faces().front());
+}
