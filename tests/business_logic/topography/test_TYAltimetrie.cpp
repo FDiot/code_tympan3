@@ -46,9 +46,13 @@ TYAltimetrie* buildSlopeAltimetry(void)
     // Creating the altimetry
     std::deque<OPoint3D> points;
     std::deque<OTriangle> triangles;
-    // the false argument for use_emprise_as_level_curve is required
-    // because in this test the TYTopographie as no TYSiteNode as parent.
-    pTopo->computeAltimetricTriangulation(points, triangles, false);
+    // XXX  Stub:
+    points.push_back(OPoint3D(-200.0, 200.0, 0.0));
+    points.push_back(OPoint3D(200.0, 200.0, 0.0));
+    points.push_back(OPoint3D(200.0, -200.0, 0.0));
+    points.push_back(OPoint3D(-200.0, -200.0, 0.0));
+    triangles.push_back(OTriangle(1, 0, 2));
+    triangles.push_back(OTriangle(0, 3, 2));
     pAlti->plugBackTriangulation(points, triangles);
 
     //compute(pTopo->collectPointsForAltimetrie(false), 1.E-5);

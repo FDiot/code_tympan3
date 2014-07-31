@@ -136,7 +136,8 @@ cdef extern from "Tympan/models/business/TYProjet.h":
 
 cdef extern from "Tympan/models/business/topography/TYAltimetrie.h":
     cdef cppclass TYAltimetrie (TYElement):
-        pass
+        void plugBackTriangulation(deque[tycommon.OPoint3D]& points,
+                              deque[tycommon.OTriangle]& triangles)
 
 cdef extern from "Tympan/models/business/geoacoustic/TYAcousticSurface.h":
     cdef cppclass TYAcousticSurface (TYElement):

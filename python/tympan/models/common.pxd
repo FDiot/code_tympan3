@@ -22,7 +22,8 @@ cdef extern from "Tympan/models/common/3d.h":
         bool operator==(const OCoord3D& coord)
 
     cdef cppclass OPoint3D (OCoord3D):
-        pass
+        OPoint3D(double x, double y, double z)
+        OPoint3D()
 
     cdef cppclass OVector3D (OCoord3D):
         pass

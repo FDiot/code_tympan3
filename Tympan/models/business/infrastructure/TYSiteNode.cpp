@@ -536,14 +536,18 @@ void TYSiteNode::loadTopoFile()
 
     std::deque<OPoint3D> points;
     std::deque<OTriangle> triangles;
-    _pTopographie->computeAltimetricTriangulation(points, triangles, getUseEmpriseAsCrbNiv());
+    // Stub: for now, artifially build the mesh
+    points.push_back(OPoint3D(-200.0, 200.0, 0.0));
+    points.push_back(OPoint3D(200.0, 200.0, 0.0));
+    points.push_back(OPoint3D(200.0, -200.0, 0.0));
+    points.push_back(OPoint3D(-200.0, -200.0, 0.0));
+    triangles.push_back(OTriangle(1, 0, 2));
+    triangles.push_back(OTriangle(0, 3, 2));
+    // XXX Maybe add materials update here
     _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles);
 
-
     setIsGeometryModified(false);  // L'altimetrie est a jour
-
     OMessageManager::get()->info("Mise a jour altimetrie terminee.");
-
     TYNameManager::get()->enable(true);
 }
 

@@ -1008,42 +1008,6 @@ LPTYCourbeNiveauGeoNode TYTopographie::findCrbNiv(const LPTYCourbeNiveau pCrbNiv
     return NULL;
 }
 
-void TYTopographie::computeAltimetricTriangulation(
-    std::deque<OPoint3D>& points,
-    std::deque<OTriangle>& triangles,
-    bool use_emprise_as_level_curve)
-{
-
-    // we instanciate an AltimetryBuilder
-    p_alti_builder = std::move(tympan::make_altimetry_builder());
-
-    // We ask it to process this topography
-    p_alti_builder->process(*this, use_emprise_as_level_curve);
-    p_alti_builder->insertMaterialPolygonsInTriangulation();
-    if (p_alti_builder->number_of_faces() == 0)
-    {
-        return;
-    }
-
-    // We do update the materials
-    p_alti_builder->indexFacesMaterial();
-    // There should be a actual default ground material in the app
-    // But actually the default material in TYTerrain happens to be
-    // a new default constructed TYSol. So we do the same.
-    // TODO cf https://extranet.logilab.fr/ticket/1481980
-    LPTYSol def_mat(new TYSol());
-    p_alti_builder->labelFaces(def_mat);
-
-    //Fill points and triangle
-    p_alti_builder->exportMesh(points, triangles);
-
-    std::cerr << "Mise a jour altimetrie (Triangulation):  "
-              << number_of_vertices() << " points et "
-              << number_of_faces() << " triangles." << std::endl;
-
-    setIsGeometryModified(true); // For compatibility (XXX to be checked)
-}
-
 bool TYTopographie::penteMoy(const OSegment3D& seg, OSegment3D& penteMoy) const
 {
     /* ========================================================================================================
@@ -1455,5 +1419,10 @@ unsigned TYTopographie::number_of_faces() const
 
 void TYTopographie::exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>* p_materials)
 {
-    p_alti_builder->exportMesh(points, triangles, p_materials);
+     points.push_back(OPoint3D(-200.0, 200.0, 0.0));
+     points.push_back(OPoint3D(200.0, 200.0, 0.0));
+     points.push_back(OPoint3D(200.0, -200.0, 0.0));
+     points.push_back(OPoint3D(-200.0, -200.0, 0.0));
+     triangles.push_back(OTriangle(1, 0, 2));
+     triangles.push_back(OTriangle(0, 3, 2));
 }

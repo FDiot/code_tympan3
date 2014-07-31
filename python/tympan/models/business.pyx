@@ -324,7 +324,20 @@ cdef class Site:
         # Not calling this method leads to a segmentation fault since the array
         # doesn't exist then.
         self.thisptr.getRealPointer().getTopographie().getRealPointer().sortTerrainsBySurface()
-        self.thisptr.getRealPointer().updateAltimetrie(True)
+
+        # Here directly use python code
+        # and then  _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles);
+        # which allows to update the TYAltimetry object (needed by updateAltiInfra among others)
+        # XXX For now, use this stub which defines a very basic altimetry:
+        pts = cy.declare(deque[tycommon.OPoint3D])
+        tgles = cy.declare(deque[tycommon.OTriangle])
+        pts.push_back(tycommon.OPoint3D(-200.0, 200.0, 0.0))
+        pts.push_back(tycommon.OPoint3D(200.0, 200.0, 0.0))
+        pts.push_back(tycommon.OPoint3D(200.0, -200.0, 0.0))
+        pts.push_back(tycommon.OPoint3D(-200.0, -200.0, 0.0))
+        tgles.push_back(tycommon.OTriangle(1, 0, 2))
+        tgles.push_back(tycommon.OTriangle(0, 3, 2))
+        self.thisptr.getRealPointer().getTopographie().getRealPointer().getAltimetrie().getRealPointer().plugBackTriangulation(pts, tgles)
         self.thisptr.getRealPointer().updateAltiInfra(True)
         self.thisptr.getRealPointer().updateAcoustique(True)
 
