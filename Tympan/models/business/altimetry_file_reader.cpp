@@ -23,6 +23,7 @@ extern "C" {
 } // extern C
 
 
+static const double NaN = std::numeric_limits<double>::quiet_NaN();
 
 namespace tympan {
 
@@ -97,6 +98,22 @@ namespace tympan {
     bool  AltimetryPLYReader::vertex_cb(vertex_properties property, unsigned vertex_index,
                                         double value)
     {
+        switch(property)
+        {
+        case X:
+            // Insert a new point
+            _points.push_back(OPoint3D(NaN, NaN, NaN));
+            // Deliberate fall-through
+        case Y:
+        case Z:
+            // Store the coordinate
+            // NB the numerical value of ``property`` is the index of the vertex
+            assert(_points.size()-1 == vertex_index); // Index consistency
+            _points.back()._value[(unsigned)property] = value;
+            break;
+        default:
+            return false;
+        }
         return true;
     }
 
