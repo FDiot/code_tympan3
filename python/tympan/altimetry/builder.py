@@ -150,33 +150,68 @@ class Builder(object):
         faces_materials = np.array(faces_materials)
         return vertices, faces, materials, faces_materials
 
-    def export_to_ply(self, fname):
-        """Export mesh data to a PLY file"""
+    def export_to_ply(self, fname, color_faces=False):
+        """Export mesh data to a PLY file.
+
+        `color_faces` option adds colors to mesh faces, mostly for visual
+        debug.
+        """
         vertices, faces, materials, faces_materials = self._build_mesh_data()
-        header = '\r\n'.join(['ply',
-                              'format ascii 1.0',
-                              'element vertex {nvertices}',
-                              'property float x',
-                              'property float y',
-                              'property float z',
-                              'element face {nfaces}',
-                              'property list uchar int vertex_indices',
-                              'property int material_index',
-                              'element material {nmaterials}',
-                              'property list uchar uchar id',
-                              'end_header\r\n'])
+        header = self._ply_headers(color_faces=color_faces)
         with open(fname, 'w') as f:
             f.write(header.format(nvertices=vertices.shape[0],
                                   nfaces=faces.shape[0],
                                   nmaterials=materials.shape[0]))
             np.savetxt(f, vertices, fmt='%.18g', newline='\r\n')
-            # Insert a column with the number of face vertices.
-            pfaces = np.concatenate(
-                [np.ones((faces.shape[0], 1)) * faces.shape[1],
-                 faces, faces_materials[:, np.newaxis]], axis=1)
-            np.savetxt(f, pfaces, fmt='%d', newline='\r\n')
+            # Insert a leading column with the number of face vertices and a
+            # trailing one with face material.
+            fcols = [np.ones((faces.shape[0], 1)) * faces.shape[1],
+                     faces, faces_materials[:, np.newaxis]]
+            if color_faces:
+                # Then add faces colors.
+                fcols.append(self._color_faces(faces_materials))
+            np.savetxt(f, np.concatenate(fcols, axis=1), fmt='%d',
+                       newline='\r\n')
             # Insert a column with the lenght of the list of material id.
             pmaterials = np.concatenate(
                 [np.ones((materials.shape[0], 1)) * materials.shape[1],
                  materials], axis=1)
             np.savetxt(f, pmaterials, fmt='%d', newline='\r\n')
+
+    @staticmethod
+    def _ply_headers(color_faces=False):
+        """Generate PLY file header for mesh export"""
+        faces_headers = ['element face {nfaces}',
+                         'property list uchar int vertex_indices',
+                         'property int material_index']
+        if color_faces:
+            faces_headers += ['property uchar red',
+                              'property uchar green',
+                              'property uchar blue']
+        headers = (['ply',
+                    'format ascii 1.0',
+                    'element vertex {nvertices}',
+                    'property float x',
+                    'property float y',
+                    'property float z'] +
+                   faces_headers +
+                   ['element material {nmaterials}',
+                    'property list uchar uchar id',
+                    'end_header'])
+        return '\r\n'.join(headers) + '\r\n'
+
+    @staticmethod
+    def _color_faces(faces_materials):
+        """Return an array of shape (nfaces, 3) with colors for mesh faces
+        according to their material.
+        """
+        faces_colors = np.zeros((faces_materials.shape[0], 3))
+        try:
+            from matplotlib import cm
+        except ImportError:
+            return faces_colors
+        cmap = cm.get_cmap('jet')
+        materials, indices = np.unique(faces_materials, return_inverse=True)
+        nmats = len(materials)
+        colors = cmap(np.arange(nmats) / float(nmats - 1), bytes=True)[:, :-1]
+        return colors[indices, :]
