@@ -41,7 +41,7 @@ namespace tympan {
 
     AltimetryPLYReader::AltimetryPLYReader(const std::string filename) :
         _filename(filename),
-        _ply(nullptr), _nvertices(-1), _nfaces(-1)
+        _ply(nullptr), _nvertices(-1), _nfaces(-1), _nmaterials(-1)
     {
         // Opens the PLY file, no error callback is given
         _ply = ply_open(_filename.c_str(), ::error_cb, 0 /*unused*/, this);
@@ -66,6 +66,7 @@ namespace tympan {
         setup_callbacks();
         init_data();
         read_data();
+        build_material_by_face();
     }
 
     void AltimetryPLYReader::setup_callbacks()
@@ -80,12 +81,15 @@ namespace tympan {
         assert(n==_nvertices);
         _nfaces = ply_set_read_cb(_ply, "face", "vertex_indices",
                                   ::face_cb, this, VertexIndices);
+        _nmaterials=1; //XXX Stub
     }
 
     void AltimetryPLYReader::init_data()
     {
         _points.reserve(_nvertices);
         _faces.reserve(_nfaces);
+        _material_indices.reserve(_nfaces);
+        _materials.push_back("XXX STUB");
     }
 
     void AltimetryPLYReader::read_data()
@@ -94,6 +98,17 @@ namespace tympan {
             throw mesh_io_error("Reading the PLY data")
                 << tympan_source_loc
                 << boost::errinfo_file_name(_filename);
+    }
+
+    void AltimetryPLYReader::build_material_by_face()
+    {
+        assert(_material_by_face.empty());
+        _material_by_face.reserve(_nfaces);
+        for(unsigned material_index : _material_indices)
+        {
+            material_index=0; //XXX Stub
+            _material_by_face.push_back(_materials[material_index]);
+        }
     }
 
     bool  AltimetryPLYReader::vertex_cb(vertex_properties property, unsigned vertex_index,
@@ -134,6 +149,8 @@ namespace tympan {
             if (property_index==-1) { // RPLY is giving us the length
                 assert(value==3.0);   // Value should be equal to length
                 _faces.push_back(OTriangle(-1, -1, -1));
+                // Ensure _material_indices and _faces have same size
+                _material_indices.push_back(-1);
             }
             else {
                 assert(property_index<3);
@@ -144,6 +161,12 @@ namespace tympan {
                 // Ensure consistency of the OTriangle redundant representation
                 triangle.vertex(property_index) = _points[vertex_index];
             }
+            break;
+        case MaterialIndex:
+            assert(_material_indices.back()==-1);
+            assert(_material_indices.size()-1 == face_index); // Index consistency
+
+            _material_indices.back() = (unsigned) value;
             break;
         default:
             return false;

@@ -34,6 +34,8 @@ namespace tympan {
         typedef std::vector<OPoint3D> points_array_t;
         /// @brief Type of the faces array returned
         typedef std::vector<OTriangle> faces_array_t;
+        /// @brief Type of the material array returned
+        typedef std::vector<std::string> materials_array_t;
 
         /**
          * @brief Getter for the points read
@@ -44,6 +46,11 @@ namespace tympan {
          * @brief Getter for the faces read
          */
         virtual const faces_array_t& faces() const = 0;
+
+        /**
+         * @brief Getter for the faces read
+         */
+        virtual const materials_array_t& materials() const = 0;
 
         /**
          * @brief read the file whose name was given at reader's construction time

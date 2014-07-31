@@ -33,6 +33,7 @@ TEST(TestAltimetryReader, trivial_setup_callbacks)
     EXPECT_GT(3, reader.points().capacity());
     EXPECT_EQ(1, reader.nfaces());
     EXPECT_GT(1, reader.faces().capacity());
+    EXPECT_GT(1, reader.materials().capacity());
 }
 
 TEST(TestAltimetryReader, vertex_cb)
@@ -125,5 +126,7 @@ TEST(TestAltimetryReader, trivial_material_read)
 
     EXPECT_EQ(3, reader.points().size());
     EXPECT_EQ(1, reader.faces().size());
+    EXPECT_EQ(1, reader.materials().size());
     EXPECT_EQ(triangle, reader.faces().front());
+    EXPECT_EQ("XXX STUB", reader.materials().front());
 }

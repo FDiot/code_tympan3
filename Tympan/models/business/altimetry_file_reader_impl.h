@@ -24,7 +24,7 @@ namespace tympan {
     {
     public:
         typedef enum {X, Y, Z, NUM_vertex_properties} vertex_properties;
-        typedef enum {VertexIndices, NUM_face_properties} face_properties;
+        typedef enum {VertexIndices, MaterialIndex, NUM_face_properties} face_properties;
 
         AltimetryPLYReader(const std::string filename);
         virtual ~AltimetryPLYReader();
@@ -34,6 +34,7 @@ namespace tympan {
         /// @{
         virtual const points_array_t& points() const {return _points;};
         virtual const faces_array_t&  faces()  const {return _faces;};
+        virtual const materials_array_t& materials() const {return _material_by_face;};
         virtual void read();
         /// @}
 
@@ -42,6 +43,7 @@ namespace tympan {
         void setup_callbacks();
         void init_data();
         void read_data();
+        void build_material_by_face();
         /// @}
 
         /// Accessors
@@ -67,9 +69,14 @@ namespace tympan {
     protected:
         points_array_t _points;
         faces_array_t _faces;
+        std::vector<unsigned> _material_indices;
+        materials_array_t _materials;
+        materials_array_t _material_by_face;
+
         p_ply _ply;
         long _nvertices;
         long _nfaces;
+        long _nmaterials;
         /// @}
 
 
