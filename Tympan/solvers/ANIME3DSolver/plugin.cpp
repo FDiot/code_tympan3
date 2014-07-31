@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,35 +13,34 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/solvers/DefaultSolver/TYSolver.h"
-#include "TYDefaultSolver.h"
+/**
+ * \brief Le plugin associe au solveur ANIME3D
+ */
 
-// Variable globale
+#include "Tympan/core/plugin.h"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DSolver.h"
+
 Plugin* plugin;
 
-void startPlugin(bool console)
+extern "C" PLUGIN_DECL void startPlugin(bool console)
 {
     plugin = new Plugin();
-
     // Information sur le plugin
-    plugin->setName("DefaultSolver");
+    plugin->setName("ANIME3DSolver");
     plugin->setAuthor("Projet_Tympan");
     plugin->setVersion("1.0");
-    plugin->setDescription("Solveur acoustique par defaut integre a l'application Tympan");
-    plugin->setUUID(OGenID("{A98B320C-44C4-47a9-B689-1DD352DAA8B2}"));
-
+    plugin->setDescription("Plugin de la methode ANIME3D");
+    plugin->setUUID(OGenID("{2f0b51a7-37bd-414e-8908-baea85acef2c}"));
     // Creation du solver
-    plugin->setSolver(new TYSolver());
+    plugin->setSolver(new TYANIME3DSolver());
 }
 
-Plugin* getPlugin()
+extern "C" PLUGIN_DECL Plugin* getPlugin()
 {
-    // On renvoi le plugin
     return plugin;
 }
 
-void stopPlugin()
+extern "C" PLUGIN_DECL void stopPlugin()
 {
-    // On detruit le plugin
     delete plugin;
 }
