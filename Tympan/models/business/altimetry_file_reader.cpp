@@ -70,14 +70,14 @@ namespace tympan {
     {
         long n;
         assert(_nvertices==-1 && _nfaces==-1);
-        n = ply_set_read_cb(_ply, "vertex", "x", vertex_cb, this, X);
+        n = ply_set_read_cb(_ply, "vertex", "x", ::vertex_cb, this, X);
         _nvertices = n;
-        n = ply_set_read_cb(_ply, "vertex", "y", vertex_cb, this, Y);
+        n = ply_set_read_cb(_ply, "vertex", "y", ::vertex_cb, this, Y);
         assert(n==_nvertices);
-        n = ply_set_read_cb(_ply, "vertex", "z", vertex_cb, this, Z);
+        n = ply_set_read_cb(_ply, "vertex", "z", ::vertex_cb, this, Z);
         assert(n==_nvertices);
         _nfaces = ply_set_read_cb(_ply, "face", "vertex_indices",
-                                  face_cb, this, VertexIndices);
+                                  ::face_cb, this, VertexIndices);
     }
 
     void AltimetryPLYReader::init_data()
@@ -92,6 +92,19 @@ namespace tympan {
             throw mesh_io_error("Reading the PLY data")
                 << tympan_source_loc
                 << boost::errinfo_file_name(_filename);
+    }
+
+    bool  AltimetryPLYReader::vertex_cb(vertex_properties property, unsigned vertex_index,
+                                        double value)
+    {
+        return true;
+    }
+
+    bool  AltimetryPLYReader::face_cb(face_properties property, unsigned face_index,
+                                      unsigned nproperties, int property_index,
+                                      double value)
+    {
+        return true;
     }
 
 }; // namespace tympan
@@ -116,20 +129,27 @@ using namespace tympan;
     value = ply_get_argument_value(argument);
 // END OF DECLARE_AND_FETCH_PLY_CALLBACK_INFO
 
+/// @brief C callback called by RPLY :Extracts information from the PLY
+/// structure and delegate to vertex_cb method
 static int vertex_cb(p_ply_argument argument) {
     DECLARE_AND_FETCH_PLY_CALLBACK_INFO
     AltimetryPLYReader::vertex_properties vertex_property;
     assert(0 <= idata && idata < AltimetryPLYReader::NUM_vertex_properties);
     vertex_property = (AltimetryPLYReader::vertex_properties) idata;
-    // TODO Dispatch
-    return 1;
+    return p_reader->vertex_cb(vertex_property, instance_index, value);
 }
 
+/// @brief C callback called by RPLY :Extracts information from the PLY
+/// structure and delegate to face_cb method
 static int face_cb(p_ply_argument argument) {
     DECLARE_AND_FETCH_PLY_CALLBACK_INFO
     AltimetryPLYReader::face_properties face_property;
     assert(0 <= idata && idata < AltimetryPLYReader::NUM_face_properties);
     face_property = (AltimetryPLYReader::face_properties) idata;
-    // TODO Dispatch
-    return 1;
+    // Access to property list
+    long length, value_index;
+    p_ply_property property;
+    ply_get_argument_property(argument, &property, &length, &value_index);
+    return p_reader->face_cb(face_property, instance_index,
+                             length, value_index, value);
 }

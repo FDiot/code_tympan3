@@ -37,14 +37,26 @@ namespace tympan {
         virtual void read();
         /// @}
 
-        /// Internals methods
+        /// Internals methods for steps of the processing
         /// @{
         void setup_callbacks();
         void init_data();
         void read_data();
+        /// @}
 
+        /// Accessors
+        /// @{
         long nvertices() const {return _nvertices;}
         long nfaces()    const {return _nfaces;}
+        /// @}
+
+        /// Methods redirected to by the callbacks
+        /// @{
+        bool vertex_cb(vertex_properties property, unsigned vertex_index,
+                       double value);
+        bool face_cb(face_properties property, unsigned face_index,
+                     unsigned nproperties, int property_index,
+                     double value);
         /// @}
 
         /// Data attributes
