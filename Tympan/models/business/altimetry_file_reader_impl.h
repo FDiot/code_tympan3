@@ -25,6 +25,7 @@ namespace tympan {
     public:
         typedef enum {X, Y, Z, NUM_vertex_properties} vertex_properties;
         typedef enum {VertexIndices, MaterialIndex, NUM_face_properties} face_properties;
+        typedef enum {MaterialID, NUM_material_properties} material_properties;
 
         AltimetryPLYReader(const std::string filename);
         virtual ~AltimetryPLYReader();
@@ -59,6 +60,9 @@ namespace tympan {
         bool face_cb(face_properties property, unsigned face_index,
                      unsigned nproperties, int property_index,
                      double value);
+        bool material_cb(material_properties property, unsigned material_index,
+                         unsigned nproperties, int property_index,
+                         double value);
         void error_cb(p_ply ply, const char *message);
         /// @}
 

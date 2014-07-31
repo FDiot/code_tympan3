@@ -11,7 +11,7 @@ using namespace tympan;
 TEST(TestAltimetryReader, instanciation)
 {
     // PLY files to read.
-    std::string alti_file = tympan::path_to_test_data("trivial.ply");
+    std::string alti_file = tympan::path_to_test_data("trivial_material.ply");
 
     std::unique_ptr<IMeshReader> p_reader = make_altimetry_ply_reader(alti_file);
     EXPECT_TRUE(p_reader != nullptr);
@@ -24,7 +24,7 @@ TEST(TestAltimetryReader, instanciation)
 TEST(TestAltimetryReader, trivial_setup_callbacks)
 {
     // PLY files to read.
-    std::string alti_file = tympan::path_to_test_data("trivial.ply");
+    std::string alti_file = tympan::path_to_test_data("trivial_material.ply");
     AltimetryPLYReader reader(alti_file);
 
     reader.setup_callbacks();
@@ -39,7 +39,7 @@ TEST(TestAltimetryReader, trivial_setup_callbacks)
 TEST(TestAltimetryReader, vertex_cb)
 {
     // PLY files to read.
-    std::string alti_file = tympan::path_to_test_data("trivial.ply");
+    std::string alti_file = tympan::path_to_test_data("trivial_material.ply");
     AltimetryPLYReader reader(alti_file);
     const OPoint3D p(1.0, 2.0, 3.0);
     ASSERT_EQ(0, reader.points().size());
@@ -59,7 +59,7 @@ TEST(TestAltimetryReader, vertex_cb)
 TEST(TestAltimetryReader, face_cb)
 {
     // PLY files to read.
-    std::string alti_file = tympan::path_to_test_data("trivial.ply");
+    std::string alti_file = tympan::path_to_test_data("trivial_material.ply");
     AltimetryPLYReader reader(alti_file);
     const OPoint3D points[3] = {
         OPoint3D(0.0, 0.0, 0.0),
@@ -106,7 +106,7 @@ OTriangle build_trivial_face()
 TEST(TestAltimetryReader, trivial_read)
 {
     // PLY files to read.
-    std::string alti_file = tympan::path_to_test_data("trivial.ply");
+    std::string alti_file = tympan::path_to_test_data("trivial_material.ply");
     AltimetryPLYReader reader(alti_file);
     const OTriangle triangle(build_trivial_face());
     reader.read();
@@ -128,5 +128,5 @@ TEST(TestAltimetryReader, trivial_material_read)
     EXPECT_EQ(1, reader.faces().size());
     EXPECT_EQ(1, reader.materials().size());
     EXPECT_EQ(triangle, reader.faces().front());
-    EXPECT_EQ("XXX STUB", reader.materials().front());
+    EXPECT_EQ("__default__", reader.materials().front());
 }
