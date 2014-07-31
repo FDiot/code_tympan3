@@ -5,6 +5,8 @@ from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.deque cimport deque
 
+from tympan cimport core as tycore
+
 cdef extern from "Tympan/models/common/3d.h":
 
     cdef cppclass OMatrix:
@@ -85,4 +87,5 @@ cdef ospectre2spectrum(OSpectre os)
 cdef opoint3d2point3d(OPoint3D pt)
 cdef otriangle2triangle(OTriangle* tri)
 
-
+cdef class SolverInterface:
+    cdef tycore.SolverInterface* thisptr

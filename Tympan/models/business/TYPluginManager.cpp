@@ -283,11 +283,25 @@ bool TYPluginManager::exist(const QString& solverName)
 
 namespace tympan
 {
-    void load_solver(const char *path, TYCalcul *comp)
+    SolverInterface* load_solver(const char *path, OGenID uuid)
     {
         LPTYPluginManager plugin_manager = TYPluginManager::get();
         plugin_manager->unloadPlugins();
         plugin_manager->loadPlugins(path);
-        comp->setPlugin(plugin_manager->getPlugin(comp->getSolverId()));
+        Plugin *plugin = plugin_manager->getPlugin(uuid);
+        pluginInfos* pInfos = new pluginInfos();
+        plugin->getInfos(pInfos);
+        OMessageManager* mm = OMessageManager::get();
+        mm->info("***************************************************************");
+        mm->info("                          CHARGEMENT DE LA DLL");
+        mm->info("");
+        mm->info("Nom         : %s", pInfos->_name.toAscii().data());
+        mm->info("Version     : %s", pInfos->_version.toAscii().data());
+        mm->info("Description : %s", pInfos->_description.toAscii().data());
+        mm->info("Auteur      : %s", pInfos->_author.toAscii().data());
+        mm->info("");
+        mm->info("***************************************************************");
+        delete pInfos;
+        return plugin->getSolver();
     }
 } /* namespace tympan */

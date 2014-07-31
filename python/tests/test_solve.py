@@ -28,8 +28,8 @@ def make_test_with_file(test_file):
                 osp.join(TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation
             computation.set_nthread(1) # avoid segfaults due to multithreading
-            bus2solv.loadsolver(TEST_SOLVERS_DIR, computation)
-            result = computation.go()
+            solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, computation)
+            result = computation.go(solver)
             bus2solv_conv.postprocessing()
         self.assertTrue(result)
         # Load the expected result

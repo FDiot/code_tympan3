@@ -34,11 +34,14 @@ cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.
     b2ms.map_sources = map_sources
     return b2ms
 
-def loadsolver(foldername, tybusiness.Computation comp):
+def load_computation_solver(foldername, tybusiness.Computation comp):
     """ Load a solver plugin (looked for in the 'foldername' folder) that will
         be used to compute 'comp'
     """
-    load_solver(foldername, comp.thisptr.getRealPointer())
+    res = cy.declare(tycommon.SolverInterface)
+    res = tycommon.SolverInterface()
+    res.thisptr = load_solver(foldername, comp.thisptr.getRealPointer().getSolverId());
+    return res
 
 cdef class Business2SolverConverter:
     # Business model

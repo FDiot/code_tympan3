@@ -23,7 +23,8 @@ except ImportError:
     raise ImportError(err)
 
 
-def solve(input_project, output_project, solverdir, multithreading_on=True, interactive=False):
+def solve(input_project, output_project, solverdir, multithreading_on=True,
+          interactive=False):
     """ Solve an acoustic problem with Code_TYMPAN from
 
         Keywords arguments:
@@ -62,10 +63,10 @@ def solve(input_project, output_project, solverdir, multithreading_on=True, inte
     bus2solv_conv = bus2solv.Business2SolverConverter(comp, project.site)
     bus2solv_conv.build_solver_problem()
     # Load solver plugin
-    bus2solv.loadsolver(solverdir, comp)
+    solver = bus2solv.load_computation_solver(solverdir, comp)
     # Solve the problem and fill the acoustic result
     logging.debug("Calling C++ go method")
-    ret = comp.go()
+    ret = comp.go(solver)
     if ret is False:
         err = "Computation failed (C++ go method returned false)"
         logging.error(err)
