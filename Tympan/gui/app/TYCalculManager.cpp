@@ -74,20 +74,6 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     // Start chrono
     OChronoTime startTime;
 
-    if (!getTYApp()->_usePython)
-    {
-        logger.warning("Legacy computation (without Python)");
-        LPTYSiteNode pSite = pProject->getSite();
-        pSite->getTopographie()->sortTerrainsBySurface();
-        pSite->updateAltiInfra(true);
-        pSite->updateAcoustique(true);
-        pProject->updateAltiRecepteurs(pSite->getTopographie()->getAltimetrie());
-        pSite->setAtmosphere(pCalcul->getAtmosphere());
-        pCalcul->go();
-        pCalcul->goPostprocessing();
-    }
-    else
-    {
         logger.debug("Computation through Python script");
         // Temporary XML file to give the current acoustic problem to the python
         // script
@@ -260,7 +246,6 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         // the previous one from the project
         getTYApp()->getCurProjet()->remCalcul(pOldComp);
         getTYMainWnd()->getProjetFrame()->setProjet(pProject);
-    }
 
     // Compute and display computation time
     OChronoTime endTime;

@@ -223,9 +223,6 @@ private :
     bool createCacheDir();
     bool createWorkDir();
 
-public:
-    bool _usePython;
-
 private:
     ///Chemin d'origine de l'application.
     static QString* _originalCurrentDirPath;
