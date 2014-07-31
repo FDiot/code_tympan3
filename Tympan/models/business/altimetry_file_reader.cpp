@@ -20,6 +20,7 @@
 extern "C" {
     static int vertex_cb(p_ply_argument argument);
     static int face_cb(p_ply_argument argument);
+    static int material_cb(p_ply_argument argument);
     static void error_cb(p_ply ply, const char *message);
 } // extern C
 
@@ -79,17 +80,22 @@ namespace tympan {
         assert(n==_nvertices);
         n = ply_set_read_cb(_ply, "vertex", "z", ::vertex_cb, this, Z);
         assert(n==_nvertices);
-        _nfaces = ply_set_read_cb(_ply, "face", "vertex_indices",
+        n = ply_set_read_cb(_ply, "face", "vertex_indices",
                                   ::face_cb, this, VertexIndices);
-        _nmaterials=1; //XXX Stub
+        _nfaces = n;
+        n = ply_set_read_cb(_ply, "face", "material_index",
+                                  ::face_cb, this, MaterialIndex);
+        assert(n==_nfaces);
+        _nmaterials = ply_set_read_cb(_ply, "material", "id",
+                                  ::material_cb, this, MaterialID);
     }
 
     void AltimetryPLYReader::init_data()
     {
         _points.reserve(_nvertices);
         _faces.reserve(_nfaces);
-        _material_indices.reserve(_nfaces);
-        _materials.push_back("XXX STUB");
+        _material_indices.resize(_nfaces, -1);
+        _materials.reserve(_nmaterials);
     }
 
     void AltimetryPLYReader::read_data()
@@ -103,12 +109,21 @@ namespace tympan {
     void AltimetryPLYReader::build_material_by_face()
     {
         assert(_material_by_face.empty());
+        assert(_material_indices.size() == _nfaces);
+        assert(_faces.size() == _nfaces);
         _material_by_face.reserve(_nfaces);
         for(unsigned material_index : _material_indices)
         {
-            material_index=0; //XXX Stub
-            _material_by_face.push_back(_materials[material_index]);
+            if (material_index == -1) // No material attributed
+                _material_by_face.push_back("");
+            else if (material_index < _nmaterials)
+                _material_by_face.push_back(_materials[material_index]);
+            else
+                throw mesh_io_error("Invalid material index")
+                    << tympan_source_loc
+                    << boost::errinfo_file_name(_filename);
         }
+        assert(_material_by_face.size() == _nfaces);
     }
 
     bool  AltimetryPLYReader::vertex_cb(vertex_properties property, unsigned vertex_index,
@@ -149,8 +164,6 @@ namespace tympan {
             if (property_index==-1) { // RPLY is giving us the length
                 assert(value==3.0);   // Value should be equal to length
                 _faces.push_back(OTriangle(-1, -1, -1));
-                // Ensure _material_indices and _faces have same size
-                _material_indices.push_back(-1);
             }
             else {
                 assert(property_index<3);
@@ -163,10 +176,31 @@ namespace tympan {
             }
             break;
         case MaterialIndex:
-            assert(_material_indices.back()==-1);
-            assert(_material_indices.size()-1 == face_index); // Index consistency
+            assert(_material_indices[face_index]==-1);
+            _material_indices[face_index] = (unsigned) value;
+            break;
+        default:
+            return false;
+        }
+        return true;
+    }
 
-            _material_indices.back() = (unsigned) value;
+    bool AltimetryPLYReader::material_cb(material_properties property, unsigned material_index,
+                     unsigned nproperties, int property_index,
+                     double value)
+    {
+        switch(property)
+        {
+        case MaterialID:
+            if (property_index==-1) { // RPLY is giving us the length of the ID
+                assert(value == nproperties); // Value should be equal to length
+                _materials.push_back(std::string(nproperties, '-'));
+            }
+            else {
+                assert(property_index<nproperties);
+                assert(_materials.size()-1 == material_index); // Index consistency
+                _materials.back()[property_index] = (unsigned char) value;
+            }
             break;
         default:
             return false;
@@ -226,6 +260,21 @@ static int face_cb(p_ply_argument argument) {
     p_ply_property property;
     ply_get_argument_property(argument, &property, &length, &value_index);
     return p_reader->face_cb(face_property, instance_index,
+                             length, value_index, value);
+}
+
+/// @brief C callback called by RPLY : Extracts information from the PLY
+/// structure and delegate to material_cb method
+static int material_cb(p_ply_argument argument) {
+    DECLARE_AND_FETCH_PLY_CALLBACK_INFO
+    AltimetryPLYReader::material_properties material_property;
+    assert(0 <= idata && idata < AltimetryPLYReader::NUM_material_properties);
+    material_property = (AltimetryPLYReader::material_properties) idata;
+    // Access to property list
+    long length, value_index;
+    p_ply_property property;
+    ply_get_argument_property(argument, &property, &length, &value_index);
+    return p_reader->material_cb(material_property, instance_index,
                              length, value_index, value);
 }
 
