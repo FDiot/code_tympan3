@@ -33,9 +33,7 @@ extern "C"
 LPTYPluginManager TYPluginManager::_pInstance = 0;
 
 TYPluginManager::TYPluginManager()
-    : _current(QString(DEFAULT_SOLVER_UUID))
 {
-
 }
 
 TYPluginManager::~TYPluginManager()
@@ -201,11 +199,6 @@ void TYPluginManager::unloadPlugins()
     _plugins.clear();
 }
 
-SolverInterface* TYPluginManager::getSolver() const
-{
-    return getSolver(_current);
-}
-
 SolverInterface* TYPluginManager::getSolver(const OGenID& uuid) const
 {
     Plugin* plugin = getPlugin(uuid);
@@ -225,40 +218,19 @@ Plugin* TYPluginManager::getPlugin(const OGenID& uuid) const
     return nullptr;
 }
 
-
-void TYPluginManager::getInfos(pluginInfos* pInfos) const
-{
-    getInfos(pInfos, _current);
-}
-
 void TYPluginManager::getInfos(pluginInfos* pInfos, const OGenID& uuid) const
 {
-    // On cree le plugin correspondant a l'uuid
-    for (TYPluginList::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it)
-        if ((*it)->getPlugin()->getUUID() == uuid)
-        {
-            (*it)->getPlugin()->getInfos(pInfos);
-        }
-}
-
-QString TYPluginManager::getInfo(const QString& info)
-{
-    OGenID& uuid = _current;
-    return getInfo(info, uuid);
+    Plugin *plugin = getPlugin(uuid);
+    if (plugin)
+    {
+        plugin->getInfos(pInfos);
+    }
 }
 
 QString TYPluginManager::getInfo(const QString& info, const OGenID& uuid) const
 {
     pluginInfos* pInfos = new pluginInfos();
-
-    for (TYPluginList::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it)
-    {
-        if ((*it)->getPlugin()->getUUID() == uuid)
-        {
-            (*it)->getPlugin()->getInfos(pInfos);
-        }
-    }
-
+    getInfos(pInfos, uuid);
     if (info == "author")
     {
         return pInfos->_author;
@@ -275,38 +247,8 @@ QString TYPluginManager::getInfo(const QString& info, const OGenID& uuid) const
     {
         return pInfos->_name;
     }
-
-    return pInfos->_name;
-
 }
 
-
-void TYPluginManager::setCurrent(const OGenID& uuid)
-{
-    if (exist(uuid))
-    {
-        _current = uuid;
-    }
-}
-
-void TYPluginManager::setCurrent(const QString& solverName)
-{
-    for (TYPluginList::iterator it = _plugins.begin(); it != _plugins.end(); ++it)
-    {
-        if ((*it)->getPlugin()->getName() == solverName)
-        {
-            _current = (*it)->getPlugin()->getUUID();
-            return;
-        }
-    }
-    return;
-}
-
-
-OGenID TYPluginManager::getCurrent() const
-{
-    return _current;
-}
 
 TYPluginManager::TYPluginList& TYPluginManager::getPluginList()
 {
@@ -346,7 +288,6 @@ namespace tympan
         LPTYPluginManager plugin_manager = TYPluginManager::get();
         plugin_manager->unloadPlugins();
         plugin_manager->loadPlugins(path);
-        plugin_manager->setCurrent(comp->getSolverId());
-        comp->setPlugin(plugin_manager->getPlugin(plugin_manager->getCurrent()));
+        comp->setPlugin(plugin_manager->getPlugin(comp->getSolverId()));
     }
 } /* namespace tympan */

@@ -31,12 +31,16 @@
 
 #include "Tympan/models/business/TYPluginManager.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/gui/app/TYMainWindow.h"
+#include "Tympan/gui/app/TYProjetFrame.h"
 #include "TYPluginDialog.h"
 
 #define TR(id) OLocalizator::getString("TYPluginDialog", (id))
 
 TYPluginDialog::TYPluginDialog(QWidget* parent, const char* name, Qt::WFlags f)
-    : QDialog(parent, f)
+    : QDialog(parent, f),
+      current_solver(QString(DEFAULT_SOLVER_UUID))
 {
     setObjectName(name);
     setWindowTitle(TR("id_caption"));
@@ -61,6 +65,13 @@ TYPluginDialog::TYPluginDialog(QWidget* parent, const char* name, Qt::WFlags f)
     //_pPluginListView->setAllColumnsShowFocus(true);
     pLayout->addWidget(_pPluginListView, 0, 0);
 
+
+    if (getTYMainWnd()->getProjetFrame()->getProjet()
+        && getTYMainWnd()->getProjetFrame()->getProjet()->getCurrentCalcul())
+    {
+            current_solver = getTYMainWnd()->getProjetFrame()->getProjet()->getCurrentCalcul()->getSolverId();
+    }
+
     TYPluginManager::TYPluginList& plugins = TYPluginManager::get()->getPluginList();
     TYPluginManager::TYPluginList::iterator it = plugins.begin();
     for (; it != plugins.end(); ++it)
@@ -73,14 +84,12 @@ TYPluginDialog::TYPluginDialog(QWidget* parent, const char* name, Qt::WFlags f)
         labels.append((*it)->getPlugin()->getUUID().toString());
         labels.append((*it)->filename);
         QTreeWidgetItem* item = new QTreeWidgetItem(_pPluginListView, labels);
-
-        if ((*it)->getPlugin()->getUUID() == TYPluginManager::get()->getCurrent())
+        if ((*it)->getPlugin()->getUUID() == current_solver)
         {
             _pPluginListView->setCurrentItem(item);
             _pPluginListView->setItemSelected(item, true);
         }
     }
-
 
     // Push buttons
     QBoxLayout* pBtnLayout = new QHBoxLayout();
@@ -109,7 +118,7 @@ TYPluginDialog::~TYPluginDialog()
 
 void TYPluginDialog::updateCurrentPlugin()
 {
-    TYPluginManager::get()->setCurrent(OGenID(_pPluginListView->selectedItems()[0]->text(4)));
+    current_solver = OGenID(_pPluginListView->selectedItems()[0]->text(4));
     accept();
 }
 

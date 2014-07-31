@@ -1674,7 +1674,7 @@ void TYMainWindow::showPluginManager()
         if (_pProjetFrame->getProjet()->getCurrentCalcul())
             if (_pProjetFrame->getProjet()->getCurrentCalcul()->getState() == TYCalcul::Actif)
             {
-                _pProjetFrame->getProjet()->getCurrentCalcul()->setSolverId(TYPluginManager::get()->getCurrent());
+                _pProjetFrame->getProjet()->getCurrentCalcul()->setSolverId(pDlg->current_solver);
             }
 }
 

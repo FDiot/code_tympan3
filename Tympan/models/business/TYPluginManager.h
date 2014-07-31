@@ -127,40 +127,19 @@ public:
      */
     bool loadPlugins(const QString& directory);
 
-    //! Load plugins (aka solvers) from the Qt interface.
-    bool loadPluginsGraphicMode(const QString& directory);
-
     // Decharge les plugins charges de la memoire
     void unloadPlugins();
 
     Plugin* getPlugin(const OGenID& uuid) const;
 
-    // Fonction de haut-niveau permettant le retour directe de l'objet TYSolver courant
-    SolverInterface* getSolver() const;
-
     // Retourne un SolverInterface
     SolverInterface* getSolver(const OGenID& uuid) const;
 
     // Retourne les infos du solveur
-    void getInfos(pluginInfos* pInfos) const;
-
-    // Retourne les infos du solveur defini par uuid
     void getInfos(pluginInfos* pInfos, const OGenID& uuid) const;
 
-    /// Retourne l'info demandee
-    QString getInfo(const QString& info);
-
-    /// Retourne l'info demandée sur un solveur spécifique
+    /// Retourne une info spécifique du solveur
     QString getInfo(const QString& info, const OGenID& uuid) const;
-
-    // Set current solver uuid
-    void setCurrent(const OGenID& uuid);
-
-    // Set current solver name
-    void setCurrent(const QString& solverName);
-
-    // Get current solver uuid
-    OGenID getCurrent() const;
 
     // Get plug-ins list
     TYPluginList& getPluginList();
@@ -173,9 +152,6 @@ public:
 
 private:
     TYPluginList _plugins;
-
-    // Current plugin used
-    OGenID _current;
 
     // Instance unique
     static LPTYPluginManager _pInstance;
