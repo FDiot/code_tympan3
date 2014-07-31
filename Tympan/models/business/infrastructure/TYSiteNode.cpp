@@ -39,6 +39,8 @@
 TY_EXTENSION_INST(TYSiteNode);
 TY_EXT_GRAPHIC_INST(TYSiteNode);
 
+bool almost_equal(double a, double b, double precision);
+
 /*static*/ const std::string& TYSiteNode::getTopoFilePath()
 {
     if (_topoFilePath)
@@ -1133,6 +1135,120 @@ void TYSiteNode::getListFacesWithoutFloor(TYTabAcousticSurfaceGeoNode& tabFaces,
 
     file.close();
 
+}
+
+bool almost_equal(double a, double b, double precision)
+{
+    return abs(a -b) < abs(precision);
+}
+
+TYTabPoint3D TYSiteNode::groundBasedFace(TYTabAcousticSurfaceGeoNode volumes, OMatrix matrix) const
+{
+    double min_height (100000.);
+    TYTabPoint3D groundbased_face;
+    // Go through all the faces of the input volumes (which is either a machine
+    // or a building)
+    for (int i = 0; i < volumes.size(); i++)
+    {
+        // Compute global matrix for the current face
+        OMatrix global_matrix = matrix * volumes[i]->getMatrix();
+        volumes[i]->setMatrix(global_matrix);
+        TYAcousticSurface *pFace = dynamic_cast<TYAcousticSurface*>(volumes[i]->getElement());
+
+        // Take the contour of the acoustic face, move the points to a global scale
+        // and make a polygon with them
+        TYTabPoint3D contour = pFace->getOContour();
+        TYPolygon poly;
+        for (unsigned int j = 0; j < contour.size(); j++)
+        {
+            contour[j] = global_matrix * contour[j];
+            poly.getPoints().push_back( TYPoint(contour[j]) );
+        }
+        poly.updateNormal();
+        OVector3D normal = poly.normal();
+
+        // We are looking for the floor-based face of the volumes. We keep the
+        // current face if it is parallel to the ground
+        if ( !almost_equal( abs(normal.scalar(OVector3D(0., 0., 1.)) ), 1., 10e-6))
+        {
+            continue;
+        }
+        // Compare it's height with the previous one to stay with the face the
+        // closest from the floor
+        if ( min_height > contour[0]._z )
+        {
+            // We found a closest one, update the result as well as the smallest
+            // known height from the ground
+            groundbased_face = contour;
+            min_height = contour[0]._z;
+        }
+    }
+    return groundbased_face;
+}
+
+void TYSiteNode::getFacesOnGround(std::map<TYUUID, TYTabPoint3D>& tabContours) const
+{   // !!!!!
+    // Beware: machines and buildings are actually volume nodes, that means
+    // they are made of one or more volumes. Here we are using the method
+    // "acousticFaces" defined in TYAcousticVolumeNode that returns all the acoustic
+    // faces of all the volumes of the volume node, without making any
+    // distinction between the volumes
+
+    // Buildings
+    for (int i = 0; i < _pInfrastructure->getListBatiment().size(); i++)
+    {
+        // Si ce batiment est actif pour le calcul
+        LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
+
+        if (pBatiment && pBatiment->isInCurrentCalcul())
+        {
+            // Matrice de changement de repere pour ce batiment
+            OMatrix matrix = _pInfrastructure->getListBatiment()[i]->getMatrix();
+            LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(0));
+
+            // Old Code_TYMPAN version could use a floor as a screen so, that case should be treated
+            bool bEtageEcran = false;
+            if (pEtage)
+            {
+                bEtageEcran = !pEtage->getClosed();
+            }
+            if (bEtageEcran)
+            {
+                pEtage->setacousticFacesPourCalcul(true);
+            }
+            // Get the base of the building
+            TYTabPoint3D base(groundBasedFace(pBatiment->acousticFaces(), matrix));
+            // Check it is on the ground
+            if (almost_equal(base[0]._z, 0, 10e-6))
+            {
+                tabContours[pBatiment->getID()] = base;
+            }
+        }
+    }
+
+    // Machines
+    TYTabAcousticSurfaceGeoNode acoustic_faces;
+    for (int i = 0; i < _pInfrastructure->getListMachine().size(); i++)
+    {
+        // Si cette machine est active pour le calcul
+        LPTYMachine pMachine = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement());
+
+        if (pMachine && pMachine->isInCurrentCalcul())
+        {
+            // Matrice de changement de repere pour cette machine
+            OMatrix matrix = _pInfrastructure->getListMachine()[i]->getMatrix();
+            TYMachine *machine = TYMachine::safeDownCast(
+                    _pInfrastructure->getMachine(i)->getElement());
+            acoustic_faces = pMachine->acousticFaces();
+            // Get the base of the machine
+            TYTabPoint3D base(groundBasedFace(acoustic_faces, matrix));
+            // Check it is on the ground
+            if (almost_equal(base[0]._z, 0, 10e-6))
+            {
+                tabContours[pMachine->getID()] = base;
+            }
+        }
+    }
 }
 
 void TYSiteNode::getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const
