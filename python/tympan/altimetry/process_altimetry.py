@@ -11,19 +11,20 @@ import tympan.models.business as tybusiness
 import tympan.altimetry.datamodel as altimetry
 
 
-def process_site_altimetry(input_project):
+def process_site_altimetry(input_project, result_file):
     """ Build an altimetry from the topography of the site described in the
         'input_project' XML file
 
         Keywords argument:
             input_project -- XML file containing the serialized project
                 containing the site whose altimetry must be processed.
+            result_file -- ply file that will be filled with the altimetry mesh
 
         The execution is logged into 'tympan.log', created in the directory of
         the input XML project (the one opened from the Code_TYMPAN GUI)
     """
     tybusiness.init_tympan_registry()
-    # Load an existing project and retrieve its calcul to solve it
+    # Load an existing project
     try:
         project = tybusiness.Project.from_xml(input_project)
     except RuntimeError:
@@ -32,6 +33,8 @@ def process_site_altimetry(input_project):
     # Business model
     cysite = project.site
     asite = export_site_topo(cysite)
+    # XXX TODO: build altimetry from this site and fill result file with the
+    # resulting mesh (ply format)
     return asite
 
 

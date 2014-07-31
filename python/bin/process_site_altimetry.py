@@ -16,9 +16,10 @@ if __name__ == '__main__':
         sys.exit(-1) # XXX to be improved
     # read command-line argument
     input_proj = sys.argv[1]
-    # process altimetry
+    result_file = sys.argv[2]
+    # process input project and build altimetry
     try:
-        tyalti.process_site_altimetry(input_project=input_proj)
+        tyalti.process_site_altimetry(input_project=input_proj, result_file=result_file)
     except:
         logging.exception("process_altimetry.py couldn't process the altimetry.")
         sys.exit(-1)

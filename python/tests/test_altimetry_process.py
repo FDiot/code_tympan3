@@ -8,13 +8,16 @@ from numpy.testing import assert_allclose
 from utils import TympanTC, TEST_PROBLEM_DIR
 
 import tympan.altimetry.process_altimetry as tyalti
+# must be passed to process altimetry. Its content will be ignored
+result_file = 'out.ply'
 
 class TestProcessAltimetry(TympanTC):
 
     def test_process_site_landtake(self):
         with self.no_output():
             asite = tyalti.process_site_altimetry(
-                osp.join(TEST_PROBLEM_DIR, '1_PROJET_Site_emprise_seule.xml'))
+                osp.join(TEST_PROBLEM_DIR, '1_PROJET_Site_emprise_seule.xml'),
+                result_file)
         landtake = asite.build_coordinates()[0]
         self.assertEqual(asite.id, "{f1a57b76-c918-4f63-a74b-7c67b7179df9}")
         self.assertEqual(landtake, [(-200.0,200.0), (200.0, 200.0),
@@ -35,7 +38,7 @@ class TestProcessAltimetry(TympanTC):
         """
         with self.no_output():
             asite = tyalti.process_site_altimetry(
-                osp.join(TEST_PROBLEM_DIR, 'site_with_subsite.xml'))
+                osp.join(TEST_PROBLEM_DIR, 'site_with_subsite.xml'), result_file)
         # Main site:
         self.assertEqual(asite.id, "{5634c66e-2ad9-4d6f-a569-e0449337cea2}")
         landtake = asite.build_coordinates()[0]
@@ -68,7 +71,8 @@ class TestProcessAltimetry(TympanTC):
     def test_process_level_curve(self):
         with self.no_output():
             asite = tyalti.process_site_altimetry(
-                osp.join(TEST_PROBLEM_DIR, '2_PROJET_Site_une_courbe_seule.xml'))
+                osp.join(TEST_PROBLEM_DIR, '2_PROJET_Site_une_courbe_seule.xml'),
+                        result_file)
         level_curves = asite.level_curves
         self.assertEqual(len(level_curves), 1)
         lcurve = level_curves[0]
@@ -81,7 +85,8 @@ class TestProcessAltimetry(TympanTC):
     def test_process_water_body(self):
         with self.no_output():
             asite = tyalti.process_site_altimetry(
-                osp.join(TEST_PROBLEM_DIR, '7_PROJET_Site_emprise_seule_avec_plan_eau.xml'))
+                osp.join(TEST_PROBLEM_DIR, '7_PROJET_Site_emprise_seule_avec_plan_eau.xml'),
+                        result_file)
         mat_areas = asite.material_areas # water bodies are treated as material areas
         # There is 1 water body + 1 default material area (there is always one)
         # (here just check the water body)
@@ -100,7 +105,8 @@ class TestProcessAltimetry(TympanTC):
         with self.no_output():
             asite = tyalti.process_site_altimetry(
                 osp.join(TEST_PROBLEM_DIR,
-                         '10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml'))
+                         '10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml'),
+                         result_file)
         areas = asite.material_areas
         # There are 2 material areas + 1 water body
         self.assertEqual(len(areas), 3)
@@ -129,7 +135,8 @@ class TestProcessAltimetry(TympanTC):
     def test_process_infrastructure_landtake(self):
         with self.no_output():
             asite = tyalti.process_site_altimetry(osp.join(TEST_PROBLEM_DIR,
-                                                           'site_with_two_joined_buildings.xml'))
+                                                           'site_with_two_joined_buildings.xml'),
+                                                 result_file)
         infra_landtakes = asite.landtakes
         # As there are 2 buildings in the input project we expect to find 2
         # infrastructure landtakes
