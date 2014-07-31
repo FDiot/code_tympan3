@@ -570,13 +570,14 @@ void TYSiteModelerFrame::updateVisibilityElementSite()
 
 void TYSiteModelerFrame::calculAltimetrie()
 {
+    // Called when pAltiBtn button is pressed
     if (!_pSite) { return; }
 
     TYApplication::setOverrideCursor(Qt::WaitCursor);
 
     writeOutputMsg(TR("id_msg_calculalti"));
 
-    _pSite->update();
+    _pSite->update(); // calls update altimetry
 
     if (_pProjet)
     {

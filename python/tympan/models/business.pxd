@@ -96,6 +96,7 @@ cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
                           vector[bool]& EstUnIndexDeFaceEcran)
         SmartPtr[TYTopographie] getTopographie()
         SmartPtr[TYInfrastructure] getInfrastructure()
+        bool updateAltimetrie(const bool& force)
         void updateAltiInfra(const bool& force)
         void updateAcoustique(const bool& force)
         void update(const bool& force)

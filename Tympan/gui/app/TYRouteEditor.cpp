@@ -66,9 +66,9 @@ void TYRouteEditor::endRoute()
         TYProjet* pProjet = getTYApp()->getCurProjet();
         if (pProjet)
         {
-            pProjet->getSite()->updateAltimetrie(true);
+            pProjet->getSite()->altimetryNeedsUpdate();
         }
-
+        // XXX does it make sense if altimetry isn't updated here ?
         for (unsigned int i = 0; i < pRoute->getTabPoint().size(); i++)
         {
             pRoute->getTabPoint()[i]._z = 0.0;
@@ -88,7 +88,6 @@ void TYRouteEditor::endRoute()
                 }
             }
 
-            pProjet->getSite()->updateAltiInfra(true);
 
             TYAction* pAction = new TYAddElementToInfraAction((LPTYElement&) pRoute, pSite->getInfrastructure(), _pModeler, TR("id_action_addroute"));
             _pModeler->getActionManager()->addAction(pAction);

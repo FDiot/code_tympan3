@@ -425,8 +425,7 @@ void TYProjet::setCurrentCalcul(LPTYCalcul pCurCalcul)
 #endif
     this->setIsGeometryModified(true);
 
-    _pSite->update(true);
-    _pSite->updateAcoustique(true);
+    _pSite->altimetryNeedsUpdate();
 }
 
 bool TYProjet::updateAltiPointControle(TYPointControl* pPtControl, const TYAltimetrie* pAlti)

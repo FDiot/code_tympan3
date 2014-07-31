@@ -18,6 +18,7 @@
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
+#include "TympanTestsConfig.hpp"
 #include "test_utils/ProjectLoader.hpp"
 
 using namespace tympan;
@@ -31,10 +32,12 @@ using std::endl;
 TEST_F(BuildingFromSiteFixture, check_size)
 {
 
-    load_file("../data/tiny_site.xml");
+    std::string filename = tympan::path_to_test_data("tiny_site.xml");
+    load_file(filename.c_str());
 
     // Get a pointer to the TYSiteNode.
     LPTYSiteNode site_ptr = project->getSite();
+    site_ptr->update();
 
     // Get the number of points.
     unsigned int points_number = site_ptr->getTopographie()->number_of_vertices();

@@ -808,8 +808,6 @@ void TYCalcul::clearResult()
 
     }
 
-    updateAltiRecepteurs();
-
     _pResultat->purge();
 
     _mapElementRegime.clear();
@@ -988,7 +986,7 @@ bool TYCalcul::remToSelection(TYElement* pElt, bool recursif /*=true*/)
     if (pSite != nullptr)
     {
         // Dans ce cas, on remonte au site racine et on fait l'update de tout
-        pSite->getProjet()->getSite()->update(true);
+        pSite->getProjet()->getSite()->altimetryNeedsUpdate();
     }
 
     return ret;

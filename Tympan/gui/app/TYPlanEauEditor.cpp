@@ -53,9 +53,7 @@ void TYPlanEauEditor::slotKeyPressed(int key)
         case Qt::Key_Space:
             if (_active)
             {
-                // XXX See ticket https://extranet.logilab.fr/ticket/1484188
-                ((TYSiteModelerFrame*)_pModeler)->getSite()->updateAltimetrie();
-                ((TYSiteModelerFrame*)_pModeler)->getSite()->updateAltiInfra();
+                ((TYSiteModelerFrame*)_pModeler)->getSite()->altimetryNeedsUpdate();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateGraphicTree();
                 _pInteractor->updateGL();
             }
@@ -89,16 +87,13 @@ void TYPlanEauEditor::endPlanEau()
             _pModeler->getActionManager()->addAction(pAction);
 
             // On altimetrise aussi le sous-site (si s'en est un !)
-            // XXX See ticket https://extranet.logilab.fr/ticket/1484188
-            if (!pSite->getRoot()) { pSite->updateAltimetrie(true); }
+            if (!pSite->getRoot()) { pSite->altimetryNeedsUpdate(); }
 
-            // On met a jour l'altimetrie globale du site
+            // On demande la mise à jour de l'altimetrie globale du site
             TYProjet* pProjet = getTYApp()->getCurProjet();
             if (pProjet)
             {
-                pProjet->getSite()->updateAltimetrie(true);
-                pProjet->getSite()->updateAltiInfra(true);
-                pProjet->updateAltiRecepteurs();
+                pProjet->getSite()->altimetryNeedsUpdate();
                 pProjet->getSite()->getTopographie()->updateGraphicTree();
             }
 
