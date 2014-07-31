@@ -37,4 +37,13 @@ public:
     virtual void purge() { }
 };
 
+
+class AcousticModelInterface
+{
+public:
+    AcousticModelInterface() { }
+    virtual ~AcousticModelInterface() { }
+};
+
+
 #endif // TY_INTERFACES

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,18 +13,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #include <deque>
-#include "TYAcousticModel.h"
+
+#include "Tympan/core/defines.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/models/business/infrastructure/TYTopographie.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
-#include "Tympan/core/defines.h"
-#include "TYSolver.h"
+#include "Tympan/solvers/DefaultSolver/TYSolver.h"
+#include "TYAcousticModel.h"
 
 TYAcousticModel::TYAcousticModel(TYSolver& solver)
     : _expGeo(1),
