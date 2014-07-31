@@ -7,6 +7,7 @@ logging.basicConfig(stream=stream, level=logging.DEBUG,
                     format='%(levelname)s:%(asctime)s - %(name)s - %(message)s')
 
 import tympan.models.business as tybusiness
+from tympan.altimetry import datamodel
 from tympan.altimetry.datamodel import (SiteNode, LevelCurve, WaterBody,
                                         GroundMaterial, MaterialArea,
                                         InfrastructureLandtake)
@@ -58,6 +59,7 @@ def export_site_topo(cysite):
             id=cylcurve.elem_id)
         asite.add_child(alcurve)
     # Water bodies
+    # XXX set water material here (in datamodel)
     for cylake in cysite.lakes:
         allake = WaterBody(
             coords=cypoints2acoords(cylake.level_curve.points),
@@ -65,14 +67,19 @@ def export_site_topo(cysite):
             id=cylake.elem_id)
         asite.add_child(allake)
     # Other material areas
+    default_material = None
     for cymarea in cysite.material_areas:
         # Build a ground material
         cymaterial = cymarea.ground_material
         almaterial = GroundMaterial(cymaterial.elem_id)
         coords = cypoints2acoords(cymarea.points)
-        if not coords:
-            continue
         # Build a material area made of the above defined ground material
+        coords = cypoints2acoords(cymarea.points)
+        if not coords:
+            assert not default_material, "Found several default materials"
+            default_material = cymaterial.elem_id
+            datamodel.DEFAULT_MATERIAL = almaterial
+            continue
         almatarea = MaterialArea(
             coords=coords,
             material=almaterial,
