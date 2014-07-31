@@ -40,6 +40,7 @@ namespace tympan {
         /// Internals methods
         /// @{
         void setup_callbacks();
+        void init_data();
         void read_data();
 
         long nvertices() const {return _nvertices;}

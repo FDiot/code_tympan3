@@ -62,6 +62,7 @@ namespace tympan {
     void AltimetryPLYReader::read()
     {
         setup_callbacks();
+        init_data();
         read_data();
     }
 
@@ -77,6 +78,12 @@ namespace tympan {
         assert(n==_nvertices);
         _nfaces = ply_set_read_cb(_ply, "face", "vertex_indices",
                                   face_cb, this, VertexIndices);
+    }
+
+    void AltimetryPLYReader::init_data()
+    {
+        _points.reserve(_nvertices);
+        _faces.reserve(_nfaces);
     }
 
     void AltimetryPLYReader::read_data()

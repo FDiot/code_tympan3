@@ -11,7 +11,7 @@
 #define TYMPAN__ALTIMETRYREADER_H__INCLUDED
 
 #include <memory>
-#include <deque>
+#include <vector>
 #include <string>
 
 #include "Tympan/core/exceptions.h"
@@ -31,9 +31,9 @@ namespace tympan {
     {
     public:
         /// @brief Type of the points array returned
-        typedef std::deque<OPoint3D> points_array_t;
+        typedef std::vector<OPoint3D> points_array_t;
         /// @brief Type of the faces array returned
-        typedef std::deque<OTriangle> faces_array_t;
+        typedef std::vector<OTriangle> faces_array_t;
 
         /**
          * @brief Getter for the points read
