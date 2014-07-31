@@ -13,16 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
 
-
-
-
-#include "TYPluginManager.h"
-#include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "TYPluginManager.h"
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #   define WIN32_LEAN_AND_MEAN
@@ -209,12 +203,12 @@ void TYPluginManager::unloadPlugins()
     _plugins.clear();
 }
 
-TYSolverInterface* TYPluginManager::getSolver() const
+SolverInterface* TYPluginManager::getSolver() const
 {
     return getSolver(_current);
 }
 
-TYSolverInterface* TYPluginManager::getSolver(const OGenID& uuid) const
+SolverInterface* TYPluginManager::getSolver(const OGenID& uuid) const
 {
     TYPlugin* plugin = getPlugin(uuid);
     if (plugin != nullptr)

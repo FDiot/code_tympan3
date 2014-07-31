@@ -14,16 +14,10 @@
 */
 
 #include "Tympan/models/common/3d.h"
-
-#include "Tympan/models/business/TYAcousticModelInterface.h"
-#include "Tympan/models/business/TYSolverInterface.h"
-
-#include "Tympan/models/business/TYCalcul.h"
-
 #include "Tympan/models/common/acoustic_path.h"
-
+#include "Tympan/models/business/TYAcousticModelInterface.h"
+#include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/solvers/AcousticRaytracer/global.h"
-
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DAcousticModel.h"
 

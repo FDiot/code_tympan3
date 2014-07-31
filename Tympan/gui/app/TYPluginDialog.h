@@ -53,7 +53,7 @@ public:
     virtual ~TYPluginDialog();
 
 protected slots:
-    /// Mets a jour le TYSolverInterface courant
+    /// Mets a jour le SolverInterface courant
     void updateCurrentPlugin();
 
     /// Active ou non le bouton _pOkBtn
