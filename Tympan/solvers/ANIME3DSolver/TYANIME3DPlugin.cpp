@@ -20,7 +20,6 @@
  * \date 04 avril 2011
  */
 
-#include "Tympan/models/business/TYSolverInterface.h"
 #include "Tympan/models/business/TYPlugin.h"
 #include "TYANIME3DSolver.h"
 

@@ -13,19 +13,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TYPLUGIN__
 #define __TYPLUGIN__
 
-#pragma warning(disable: 4251)
+#include <string>
 
 #include "Tympan/core/defines.h"
+#include "Tympan/core/idgen.h"
+#include "Tympan/core/interfaces.h"
+
+
+#pragma warning(disable: 4251)
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #   ifdef _PLUGIN_DLL
@@ -37,10 +35,6 @@
 #   define PLUGIN_DECL
 #endif
 
-#include <string>
-
-#include "Tympan/core/idgen.h"
-#include "TYSolverInterface.h"
 
 typedef struct
 {
@@ -49,6 +43,7 @@ typedef struct
     QString _version;
     QString _description;
 } pluginInfos;
+
 
 class TYPlugin
 {
@@ -80,14 +75,14 @@ public:
     OGenID getUUID() const { return _uuid; }
 
     // Set du solver
-    void setSolver(TYSolverInterface* solver) { _pSolver = solver; }
+    void setSolver(SolverInterface* solver) { _pSolver = solver; }
 
     // Get du solver
-    TYSolverInterface* getSolver() const { return _pSolver; }
+    SolverInterface* getSolver() const { return _pSolver; }
 
 private:
-    // Pointeur sur le TYSolverInterface
-    TYSolverInterface* _pSolver;
+    // Pointeur sur le SolverInterface
+    SolverInterface* _pSolver;
 
     // Informations sur le plugin
     QString _name;

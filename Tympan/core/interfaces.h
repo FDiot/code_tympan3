@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,40 +13,28 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
+#ifndef TY_INTERFACES
+#define TY_INTERFACES
 
-#ifndef __TY_SOLVERINTERFACE__
-#define __TY_SOLVERINTERFACE__
-
-class TYCalcul;
-class TYSiteNode;
+class TYCalcul; // XXX
+class TYSiteNode; // XXX
 
 namespace tympan {
     class AcousticProblemModel;
     class AcousticResultModel;
 } // namespace tympan
 
-class TYSolverInterface
+class SolverInterface
 {
 public:
-    TYSolverInterface() { }
-    virtual ~TYSolverInterface() { }
+    SolverInterface() { }
+    virtual ~SolverInterface() { }
 
     virtual bool solve(const TYSiteNode& site, TYCalcul& calcul,
-            const tympan::AcousticProblemModel& aproblem,
-            tympan::AcousticResultModel& aresult) = 0;
+                       const tympan::AcousticProblemModel& aproblem,
+                       tympan::AcousticResultModel& aresult) = 0;
 
     virtual void purge() { }
-
-protected:
-    //virtual void createFaceSelector() = 0;
-    //virtual void createAcousticPathFinder() = 0;
-    //virtual void createAcousticModel() = 0;
 };
 
-#endif // __TY_SOLVERINTERFACE__
+#endif // TY_INTERFACES

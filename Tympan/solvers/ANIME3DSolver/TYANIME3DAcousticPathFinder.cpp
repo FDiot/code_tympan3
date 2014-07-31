@@ -16,35 +16,28 @@
 #include <vector>
 using std::vector;
 
-
-#include "Tympan/models/business/TYSolverInterface.h"
-
 #include "Tympan/models/common/triangle.h"
-//#include "Tympan/models/business/TYRay.h"
-
 #include "Tympan/solvers/AcousticRaytracer/global.h"
+#include "Tympan/solvers/AnalyticRayTracer/meteoLin.h"
+#include "Tympan/solvers/AnalyticRayTracer/Lancer.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/FaceSelector.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/LengthSelector.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/DiffractionSelector.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/ReflectionSelector.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/SelectorManager.h"
+#include "Tympan/solvers/AcousticRaytracer/Tools/Conversion_tools.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Triangle.h"
-
-#include "Tympan/solvers/AnalyticRayTracer/meteoLin.h"
-#include "Tympan/solvers/AnalyticRayTracer/Lancer.h"
-
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Sampler.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/UniformSphericSampler.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Latitude2DSampler.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/RandomSphericSampler.h"
-#include "Tympan/solvers/AcousticRaytracer/Engine/Simulation.h"    //Classe de base pour utiliser le lancer de rayons
-#include "Tympan/solvers/AcousticRaytracer/Tools/Conversion_tools.h"
-
+#include "Tympan/solvers/AcousticRaytracer/Engine/Simulation.h"
 #include "TYANIME3DRayTracerSetup.h"
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DAcousticPathFinder.h"
+
 
 #define _USE_METEO_
 

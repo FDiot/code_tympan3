@@ -13,14 +13,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/models/business/TYSolverInterface.h"
-
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
-
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Triangulate.h"
-
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DFaceSelector.h"
+
 
 TYANIME3DFaceSelector::TYANIME3DFaceSelector(const TYSiteNode& Site) : _site(Site)
 {

@@ -21,6 +21,7 @@
 #include <string>
 
 #include "Tympan/core/defines.h"
+#include "Tympan/core/interfaces.h"
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/TYProgressManager.h"
 #include "Tympan/models/business/OLocalizator.h"
@@ -1586,7 +1587,7 @@ bool TYCalcul::go()
         delete pInfos;
         pInfos = NULL;
 
-        TYSolverInterface* pSolver = _plugin->getSolver();
+        SolverInterface* pSolver = _plugin->getSolver();
         // XXX ... and pass the SolverDataModel built here.
         ret = pSolver->solve(*pSite, *this, *_acousticProblem, *_acousticResult);
         pSolver->purge();

@@ -13,13 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TY_PLUGINMANAGER__
 #define __TY_PLUGINMANAGER__
 
@@ -29,6 +22,7 @@
 #include <qstringlist.h>
 
 #include "Tympan/core/defines.h"
+#include "Tympan/core/interfaces.h"
 #include "Tympan/core/smartptr.h"
 #include "TYPlugin.h"
 
@@ -145,10 +139,10 @@ public:
     TYPlugin* getPlugin(const OGenID& uuid) const;
 
     // Fonction de haut-niveau permettant le retour directe de l'objet TYSolver courant
-    TYSolverInterface* getSolver() const;
+    SolverInterface* getSolver() const;
 
-    // Retourne un TYSolverInterface
-    TYSolverInterface* getSolver(const OGenID& uuid) const;
+    // Retourne un SolverInterface
+    SolverInterface* getSolver(const OGenID& uuid) const;
 
     // Retourne les infos du solveur
     void getInfos(pluginInfos* pInfos) const;

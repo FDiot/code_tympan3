@@ -13,21 +13,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TY_SOLVER__
 #define __TY_SOLVER__
 
-#include "TYSolverDefines.h"
-#include "Tympan/models/business/TYSolverInterface.h"
-
+#include "Tympan/core/interfaces.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
+#include "Tympan/solvers/DefaultSolver/TYSolverDefines.h"
 
 class OThreadPool;
 
@@ -35,7 +27,7 @@ class TYAcousticModel;
 class TYAcousticPathFinder;
 class TYFaceSelector;
 
-class TYSolver : public TYSolverInterface
+class TYSolver : public SolverInterface
 {
 public:
     TYSolver();
