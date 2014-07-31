@@ -414,6 +414,22 @@ public:
     void getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran) const;
     void getListFacesWithoutFloor(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned int& nbFaceInfra, std::vector<bool>& EstUnIndexDeFaceEcran, std::vector<std::pair<int, int> >& indices, std::vector<int>& etages) const;
 
+    /*!
+     * brief : Attempt to find the faces placed on the ground among the machines
+     * and the buildings of the site
+     * TYUUID: volume node id (volume nodes are buildings or machines)
+     * TYTabPoint3D: points defining the ground contour of the volume node in a
+     *  global scale
+     */
+    void getFacesOnGround(std::map<TYUUID, TYTabPoint3D>& tabContours) const;
+
+    /*!
+     * brief: from a series of acoustic surfaces (forming an acoustic volume node)
+     * and a transform matrix allowing to convert them to a global scale,
+     * return the points constituting the acoustic surface placed on the ground
+     */
+    TYTabPoint3D groundBasedFace(TYTabAcousticSurfaceGeoNode volume, OMatrix matrix) const;
+
     /// Get/Set du choix du systeme de repere du SIG
     int getSIGType() { return _SIGType; }
     const int getSIGType() const { return _SIGType; }

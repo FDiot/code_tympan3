@@ -1,0 +1,1062 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
+<Tympan>
+ <Version>4.1.14 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
+ <Projet id="{200b0ff8-6713-4455-a2cb-a1372a6bf4b7}" name="Projet 0">
+  <auteur></auteur>
+  <dateCreation>2001-10-01</dateCreation>
+  <dateModif>2001-10-01</dateModif>
+  <delaunayTolerence>0.0001</delaunayTolerence>
+  <distMaxBetweenPoints>200</distMaxBetweenPoints>
+  <useDefGeomVal>1</useDefGeomVal>
+  <currentCalculID>{b23f73ff-fbac-4fcb-b19e-825644f7c225}</currentCalculID>
+  <SiteNode id="{235edc62-972a-4e74-9fb3-f6a04a6c406b}" name="Site 0">
+   <echelle>1</echelle>
+   <useEmpriseAsCrbNiv>0</useEmpriseAsCrbNiv>
+   <useTopoFile>0</useTopoFile>
+   <topoFile></topoFile>
+   <altiEmprise>0</altiEmprise>
+   <Segment id="{9f9d1ab8-0318-4577-9282-5e267246ce76}" name="Segment 0">
+    <Color g="1" r="1" b="1"/>
+    <Point x="0.000" y="0.000" z="0.000"/>
+    <Point x="0.000" y="1.000" z="0.000"/>
+   </Segment>
+   <Point x="0.000" y="0.000" z="0.000"/>
+   <Topographie id="{941963e2-9d96-4a0c-8ef0-203e0e1a93ef}" name="Topographie 0">
+    <Emprise>
+     <Point x="-200.000" y="200.000" z="0.000"/>
+     <Point x="200.000" y="200.000" z="0.000"/>
+     <Point x="200.000" y="-200.000" z="0.000"/>
+     <Point x="-200.000" y="-200.000" z="0.000"/>
+    </Emprise>
+    <ListCrbNiv/>
+    <ListTerrain>
+     <GeometryNode id="{360a0d04-fdf8-4fd9-9613-d1ec330dc4a3}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{b6359aad-c5c1-4a5e-b65a-f3b3432dc547}" name="Repère 0">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <Terrain id="{daf77f57-a4a7-4a51-b720-60b162bda8ec}" name="Terrain par defaut">
+       <Color g="0.333333" r="0" b="0"/>
+       <Sol id="{ff74eb44-9009-4a3d-bde3-935c2bd5fa7d}" name="Sol 0">
+        <resistivite>20000</resistivite>
+        <epaisseur>1</epaisseur>
+        <active>0</active>
+        <miroir>0</miroir>
+       </Sol>
+       <nbPoints>0</nbPoints>
+      </Terrain>
+     </GeometryNode>
+    </ListTerrain>
+    <ListCrsEau/>
+    <ListPlanEau/>
+    <Altimetrie id="{13dacae7-c9fd-4609-9537-c40728d9cdf5}" name="Altimétrie 0"/>
+    <DefaultTerrain>0</DefaultTerrain>
+   </Topographie>
+   <Infrastructure id="{b1a74da3-a57b-4c1f-acbb-4be38dd98165}" name="Infrastructure 0">
+    <ListRoute/>
+    <ListResTrans/>
+    <ListBatiment>
+     <GeometryNode id="{eaf71431-4485-4d21-a5b7-ef14d3529af0}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{902deeb3-230b-465e-80a0-8c1c9491692d}" name="">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <Batiment id="{78a66744-4818-4078-9d39-e3cf7c6c8ada}" name="Construction 0">
+       <Color g="1" r="1" b="1"/>
+       <densiteSrcsH>25</densiteSrcsH>
+       <densiteSrcsV>25</densiteSrcsV>
+       <curRegime>0</curRegime>
+       <nbRegimes>1</nbRegimes>
+       <nextRegime>1</nextRegime>
+       <Regime id="{bdbebd3e-1399-4c77-add4-093640b32975}" name="Régime 0">
+        <isRayonnant>1</isRayonnant>
+        <useAtt>0</useAtt>
+        <typeDistribution>0</typeDistribution>
+       </Regime>
+       <nbChild>1</nbChild>
+       <GeometryNode id="{a849165c-172d-4635-86f2-61ae1c9dddbe}" name="">
+        <hauteur>0.000</hauteur>
+        <Repere id="{f33aadd8-99b3-456c-b1ac-1ff6a64fa329}" name="Repère 4">
+         <Point x="10.000000000000" y="5.000000000000" z="100.000000000000"/>
+         <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+         <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+         <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+        </Repere>
+        <Etage id="{0c16b1d1-0b8b-4ef9-9345-73dae359b543}" name="Etage 0">
+         <Color g="1" r="1" b="1"/>
+         <densiteSrcsH>25</densiteSrcsH>
+         <densiteSrcsV>25</densiteSrcsV>
+         <curRegime>0</curRegime>
+         <nbRegimes>1</nbRegimes>
+         <nextRegime>1</nextRegime>
+         <Regime id="{139d9919-0dbf-42a3-807b-2fedaefb1a68}" name="Régime 0">
+          <isRayonnant>1</isRayonnant>
+          <useAtt>0</useAtt>
+          <typeDistribution>0</typeDistribution>
+         </Regime>
+         <MateriauConstruction id="{59214ebb-f365-45fc-b3cb-cc9df374b4da}" name="Matériau de construction 0">
+          <masseVol>2500</masseVol>
+          <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+           <type>0</type>
+           <fMin>16</fMin>
+           <fMax>16000</fMax>
+           <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+          </Spectre>
+          <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+           <type>1</type>
+           <fMin>16</fMin>
+           <fMax>16000</fMax>
+           <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+          </Spectre>
+         </MateriauConstruction>
+         <forceNormales>0</forceNormales>
+         <typeReverberation>0</typeReverberation>
+         <closed>1</closed>
+         <Paroi id="{a418dce4-e7b4-4683-bc19-edca8590dc43}" name="Paroi 1">
+          <epaisseur>1</epaisseur>
+          <MateriauConstruction id="{f5de9690-7bf1-492a-b0c6-4cd5ccec68a6}" name="Matériau de construction 4">
+           <masseVol>2500</masseVol>
+           <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+            <type>0</type>
+            <fMin>16</fMin>
+            <fMax>16000</fMax>
+            <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+           </Spectre>
+           <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+            <type>1</type>
+            <fMin>16</fMin>
+            <fMax>16000</fMax>
+            <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+           </Spectre>
+          </MateriauConstruction>
+          <MateriauConstruction id="{6f16ec26-f472-49de-9405-8c3314808bb5}" name="Matériau de construction 5">
+           <masseVol>2500</masseVol>
+           <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+            <type>0</type>
+            <fMin>16</fMin>
+            <fMax>16000</fMax>
+            <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+           </Spectre>
+           <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+            <type>1</type>
+            <fMin>16</fMin>
+            <fMax>16000</fMax>
+            <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+           </Spectre>
+          </MateriauConstruction>
+          <MateriauConstruction id="{8a05c0df-9c2d-439e-8312-2ccb4f373b52}" name="Matériau de construction 6">
+           <masseVol>2500</masseVol>
+           <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+            <type>0</type>
+            <fMin>16</fMin>
+            <fMax>16000</fMax>
+            <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+           </Spectre>
+           <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+            <type>1</type>
+            <fMin>16</fMin>
+            <fMax>16000</fMax>
+            <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+           </Spectre>
+          </MateriauConstruction>
+         </Paroi>
+         <ListMur>
+          <GeometryNode id="{dc070783-833a-420c-a19e-64d17bf14ad5}" name="Noeud de géométrie 0">
+           <hauteur>0.000</hauteur>
+           <Repere id="{7101834f-87dc-4d0c-9ad6-af52dc3b46a6}" name="Repère 5">
+            <Point x="-10.000000000000" y="0.000000000000" z="2.500000000000"/>
+            <Vector x="0.000000000000" y="-1.000000000000" z="0.000000000000"/>
+            <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+            <Vector x="-1.000000000000" y="0.000000000000" z="0.000000000000"/>
+           </Repere>
+           <Mur id="{4bad0a64-4e5c-449b-9079-166368c4a863}" name="Mur 0">
+            <Color g="0.619608" r="0.619608" b="0"/>
+            <densiteSrcsH>25</densiteSrcsH>
+            <densiteSrcsV>25</densiteSrcsV>
+            <curRegime>0</curRegime>
+            <nbRegimes>1</nbRegimes>
+            <nextRegime>1</nextRegime>
+            <Regime id="{aacb80aa-081b-42dc-b498-06c8e9154712}" name="Régime 0">
+             <isRayonnant>1</isRayonnant>
+             <useAtt>0</useAtt>
+             <typeDistribution>0</typeDistribution>
+            </Regime>
+            <Rectangle id="{e89c5ef6-e82a-4911-b92d-7cf41d765f76}" name="Rectangle 3">
+             <Point x="-5.000" y="2.500" z="0.000"/>
+             <Point x="5.000" y="2.500" z="0.000"/>
+             <Point x="5.000" y="-2.500" z="0.000"/>
+             <Point x="-5.000" y="-2.500" z="0.000"/>
+            </Rectangle>
+            <nbChild>1</nbChild>
+            <GeometryNode id="{9ce2f628-8e89-40c9-814a-b364e5a8bba9}" name="">
+             <hauteur>0.000</hauteur>
+             <Repere id="{a707dcac-1d65-4353-9f5e-7b6a806ffe88}" name="Repère 9">
+              <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+              <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+              <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+              <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+             </Repere>
+             <MurElement id="{42e6159b-19cc-485b-a8b1-88ef74da8b34}" name="Fenêtre 0">
+              <Color g="0.619608" r="0.619608" b="0"/>
+              <densiteSrcsH>25</densiteSrcsH>
+              <densiteSrcsV>25</densiteSrcsV>
+              <curRegime>0</curRegime>
+              <nbRegimes>1</nbRegimes>
+              <nextRegime>1</nextRegime>
+              <Regime id="{45403fa8-561e-44c3-8875-38c28349f1f2}" name="Régime 0">
+               <isRayonnant>1</isRayonnant>
+               <useAtt>0</useAtt>
+               <typeDistribution>0</typeDistribution>
+              </Regime>
+              <isSub>0</isSub>
+              <Rectangle id="{bd4c9ac5-800a-48cf-a1f4-dd323d30977b}" name="Rectangle 5">
+               <Point x="-5.000" y="2.500" z="0.000"/>
+               <Point x="5.000" y="2.500" z="0.000"/>
+               <Point x="5.000" y="-2.500" z="0.000"/>
+               <Point x="-5.000" y="-2.500" z="0.000"/>
+              </Rectangle>
+              <SourceSurfacic id="{ee0e9722-8747-4475-a2f8-0a279d266c63}" name="Source surfacique 3">
+               <nbSrcs>0</nbSrcs>
+               <densiteSrcsH>25</densiteSrcsH>
+               <densiteSrcsV>25</densiteSrcsV>
+               <srcsCorr>0</srcsCorr>
+              </SourceSurfacic>
+              <Paroi id="{9f28ebde-d7b1-467a-92c3-5792ae4a5c01}" name="Paroi 4">
+               <epaisseur>1</epaisseur>
+               <MateriauConstruction id="{fa2f4131-b0cc-45b9-9ca4-344c41086617}" name="Matériau de construction 13">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+               <MateriauConstruction id="{ec0c485f-5bfa-4d70-b92c-a1519ed4eba1}" name="Matériau de construction 14">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+               <MateriauConstruction id="{fbd9bd14-1310-48f8-b4aa-ae301af65a9a}" name="Matériau de construction 15">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+              </Paroi>
+             </MurElement>
+            </GeometryNode>
+            <paroiLocked>0</paroiLocked>
+            <Paroi id="{94be8e0e-e971-43a5-ac55-1d08d2e61972}" name="Paroi 3">
+             <epaisseur>0.5</epaisseur>
+             <MateriauConstruction id="{e0dc0346-7560-4f7e-a582-3b230c6ecea2}" name="Matériau de construction 10">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+             <MateriauConstruction id="{b09b097d-58ec-473b-9acf-995c3ca21700}" name="Matériau de construction 11">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+             <MateriauConstruction id="{037d5d47-f1aa-4dcc-9d46-0f6f793a3f22}" name="Matériau de construction 12">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+            </Paroi>
+           </Mur>
+          </GeometryNode>
+          <GeometryNode id="{3dc3005a-1bcd-472d-957e-d93b2dfacfc6}" name="Noeud de géométrie 1">
+           <hauteur>0.000</hauteur>
+           <Repere id="{7101834f-87dc-4d0c-9ad6-af52dc3b46a6}" name="Repère 5">
+            <Point x="0.000000000000" y="5.000000000000" z="2.500000000000"/>
+            <Vector x="-1.000000000000" y="0.000000000000" z="0.000000000000"/>
+            <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+            <Vector x="0.000000000000" y="1.000000000000" z="-0.000000000000"/>
+           </Repere>
+           <Mur id="{8996aeee-67ed-4a3d-ad27-63bc8dd24a2d}" name="Mur 1">
+            <Color g="0.619608" r="0.619608" b="0"/>
+            <densiteSrcsH>25</densiteSrcsH>
+            <densiteSrcsV>25</densiteSrcsV>
+            <curRegime>0</curRegime>
+            <nbRegimes>1</nbRegimes>
+            <nextRegime>1</nextRegime>
+            <Regime id="{2c476d02-0f76-4e84-ac13-05fc968788c9}" name="Régime 0">
+             <isRayonnant>1</isRayonnant>
+             <useAtt>0</useAtt>
+             <typeDistribution>0</typeDistribution>
+            </Regime>
+            <Rectangle id="{cce07c12-41da-46c9-8a15-64cfeef526f3}" name="Rectangle 6">
+             <Point x="-10.000" y="2.500" z="0.000"/>
+             <Point x="10.000" y="2.500" z="0.000"/>
+             <Point x="10.000" y="-2.500" z="0.000"/>
+             <Point x="-10.000" y="-2.500" z="0.000"/>
+            </Rectangle>
+            <nbChild>1</nbChild>
+            <GeometryNode id="{97ca2a4b-73e2-4e45-b898-9021b1f78465}" name="">
+             <hauteur>0.000</hauteur>
+             <Repere id="{e4ec3d85-990a-4c17-97b4-b23abf1ca46f}" name="Repère 14">
+              <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+              <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+              <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+              <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+             </Repere>
+             <MurElement id="{b9700ce5-fd91-442f-8e78-1041d9f70073}" name="Fenêtre 1">
+              <Color g="0.619608" r="0.619608" b="0"/>
+              <densiteSrcsH>25</densiteSrcsH>
+              <densiteSrcsV>25</densiteSrcsV>
+              <curRegime>0</curRegime>
+              <nbRegimes>1</nbRegimes>
+              <nextRegime>1</nextRegime>
+              <Regime id="{802c544d-d5f8-49f4-9a01-3bc9f931837e}" name="Régime 0">
+               <isRayonnant>1</isRayonnant>
+               <useAtt>0</useAtt>
+               <typeDistribution>0</typeDistribution>
+              </Regime>
+              <isSub>0</isSub>
+              <Rectangle id="{fb16d1a7-4316-48c3-bf2f-70251138b15a}" name="Rectangle 8">
+               <Point x="-10.000" y="2.500" z="0.000"/>
+               <Point x="10.000" y="2.500" z="0.000"/>
+               <Point x="10.000" y="-2.500" z="0.000"/>
+               <Point x="-10.000" y="-2.500" z="0.000"/>
+              </Rectangle>
+              <SourceSurfacic id="{797f64a8-db9b-4f40-9351-00c0180366b4}" name="Source surfacique 5">
+               <nbSrcs>0</nbSrcs>
+               <densiteSrcsH>25</densiteSrcsH>
+               <densiteSrcsV>25</densiteSrcsV>
+               <srcsCorr>0</srcsCorr>
+              </SourceSurfacic>
+              <Paroi id="{3dd1a872-9658-47e3-831f-398c5cbee5e6}" name="Paroi 6">
+               <epaisseur>1</epaisseur>
+               <MateriauConstruction id="{fece608f-19cc-4b92-9d45-735dc833f536}" name="Matériau de construction 19">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+               <MateriauConstruction id="{9b18dc72-f130-4253-9c62-4ba823a51cc7}" name="Matériau de construction 20">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+               <MateriauConstruction id="{43d4b6c1-433b-4f0c-8bda-47ac1d64b437}" name="Matériau de construction 21">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+              </Paroi>
+             </MurElement>
+            </GeometryNode>
+            <paroiLocked>0</paroiLocked>
+            <Paroi id="{ff29a969-e634-4935-961b-e290d699f159}" name="Paroi 5">
+             <epaisseur>0.5</epaisseur>
+             <MateriauConstruction id="{d84d7699-2e37-46ee-937a-ef212f5ecde5}" name="Matériau de construction 16">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+             <MateriauConstruction id="{9c8ecb75-587b-4c6a-84c8-0ec1b158d069}" name="Matériau de construction 17">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+             <MateriauConstruction id="{1b367823-f28d-48d3-a952-89d1aad8fe3a}" name="Matériau de construction 18">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+            </Paroi>
+           </Mur>
+          </GeometryNode>
+          <GeometryNode id="{e2da36d2-64a2-4399-ba6c-e7b0473f1e6a}" name="Noeud de géométrie 2">
+           <hauteur>0.000</hauteur>
+           <Repere id="{7101834f-87dc-4d0c-9ad6-af52dc3b46a6}" name="Repère 5">
+            <Point x="10.000000000000" y="0.000000000000" z="2.500000000000"/>
+            <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+            <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+            <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+           </Repere>
+           <Mur id="{77ce6d8a-c4b3-4b7b-a540-fd6df58ccae4}" name="Mur 2">
+            <Color g="0.619608" r="0.619608" b="0"/>
+            <densiteSrcsH>25</densiteSrcsH>
+            <densiteSrcsV>25</densiteSrcsV>
+            <curRegime>0</curRegime>
+            <nbRegimes>1</nbRegimes>
+            <nextRegime>1</nextRegime>
+            <Regime id="{c854c36f-f450-4e93-8a50-e928f8fddd93}" name="Régime 0">
+             <isRayonnant>1</isRayonnant>
+             <useAtt>0</useAtt>
+             <typeDistribution>0</typeDistribution>
+            </Regime>
+            <Rectangle id="{32a01e20-b51e-4a4b-a192-8b666afde6d3}" name="Rectangle 9">
+             <Point x="-5.000" y="2.500" z="0.000"/>
+             <Point x="5.000" y="2.500" z="0.000"/>
+             <Point x="5.000" y="-2.500" z="0.000"/>
+             <Point x="-5.000" y="-2.500" z="0.000"/>
+            </Rectangle>
+            <nbChild>1</nbChild>
+            <GeometryNode id="{bf639888-ad1d-4592-847f-380a61d994e2}" name="">
+             <hauteur>0.000</hauteur>
+             <Repere id="{a46d067d-9602-4833-9f61-eeaa5803ddf3}" name="Repère 19">
+              <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+              <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+              <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+              <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+             </Repere>
+             <MurElement id="{b89d7791-1541-4219-aa2c-5b058f510537}" name="Fenêtre 2">
+              <Color g="0.619608" r="0.619608" b="0"/>
+              <densiteSrcsH>25</densiteSrcsH>
+              <densiteSrcsV>25</densiteSrcsV>
+              <curRegime>0</curRegime>
+              <nbRegimes>1</nbRegimes>
+              <nextRegime>1</nextRegime>
+              <Regime id="{83e18e95-a98e-4c6b-b3d7-1dc9d5cb7d31}" name="Régime 0">
+               <isRayonnant>1</isRayonnant>
+               <useAtt>0</useAtt>
+               <typeDistribution>0</typeDistribution>
+              </Regime>
+              <isSub>0</isSub>
+              <Rectangle id="{037ed995-6bdc-4950-91f5-d7b113035b6b}" name="Rectangle 11">
+               <Point x="-5.000" y="2.500" z="0.000"/>
+               <Point x="5.000" y="2.500" z="0.000"/>
+               <Point x="5.000" y="-2.500" z="0.000"/>
+               <Point x="-5.000" y="-2.500" z="0.000"/>
+              </Rectangle>
+              <SourceSurfacic id="{a341e2d1-871f-4e9f-bdae-d5d7c0eba034}" name="Source surfacique 7">
+               <nbSrcs>0</nbSrcs>
+               <densiteSrcsH>25</densiteSrcsH>
+               <densiteSrcsV>25</densiteSrcsV>
+               <srcsCorr>0</srcsCorr>
+              </SourceSurfacic>
+              <Paroi id="{5c651d76-efcf-4a1e-8906-9a3dfa4d5d9d}" name="Paroi 8">
+               <epaisseur>1</epaisseur>
+               <MateriauConstruction id="{0c98e683-88fb-48b1-ad1d-8ec3adfdbfea}" name="Matériau de construction 25">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+               <MateriauConstruction id="{5c11b1de-c5b5-4053-9fdc-a358c21304a1}" name="Matériau de construction 26">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+               <MateriauConstruction id="{d5d993d9-86f7-4537-b625-58a2ba27f48b}" name="Matériau de construction 27">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+              </Paroi>
+             </MurElement>
+            </GeometryNode>
+            <paroiLocked>0</paroiLocked>
+            <Paroi id="{4158a68d-56ba-4d7c-96f1-60df716f6740}" name="Paroi 7">
+             <epaisseur>0.5</epaisseur>
+             <MateriauConstruction id="{f5790626-b131-424e-b6da-002c3b43d3a3}" name="Matériau de construction 22">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+             <MateriauConstruction id="{b58d44fa-581c-492c-8af7-6f343ba10d57}" name="Matériau de construction 23">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+             <MateriauConstruction id="{db4de8e7-1eeb-4927-b484-4fcb5698c5bd}" name="Matériau de construction 24">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+            </Paroi>
+           </Mur>
+          </GeometryNode>
+          <GeometryNode id="{34563d74-d8ff-4410-a09a-b7c35928d8c3}" name="Noeud de géométrie 3">
+           <hauteur>0.000</hauteur>
+           <Repere id="{7101834f-87dc-4d0c-9ad6-af52dc3b46a6}" name="Repère 5">
+            <Point x="0.000000000000" y="-5.000000000000" z="2.500000000000"/>
+            <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+            <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+            <Vector x="0.000000000000" y="-1.000000000000" z="0.000000000000"/>
+           </Repere>
+           <Mur id="{1665033b-75a1-4196-a81b-6a5b3461ad47}" name="Mur 3">
+            <Color g="0.619608" r="0.619608" b="0"/>
+            <densiteSrcsH>25</densiteSrcsH>
+            <densiteSrcsV>25</densiteSrcsV>
+            <curRegime>0</curRegime>
+            <nbRegimes>1</nbRegimes>
+            <nextRegime>1</nextRegime>
+            <Regime id="{c39f6289-0b57-4fe6-869c-4ad22bb65860}" name="Régime 0">
+             <isRayonnant>1</isRayonnant>
+             <useAtt>0</useAtt>
+             <typeDistribution>0</typeDistribution>
+            </Regime>
+            <Rectangle id="{49c0699c-233c-4ffa-87f4-a96d8c8df768}" name="Rectangle 12">
+             <Point x="-10.000" y="2.500" z="0.000"/>
+             <Point x="10.000" y="2.500" z="0.000"/>
+             <Point x="10.000" y="-2.500" z="0.000"/>
+             <Point x="-10.000" y="-2.500" z="0.000"/>
+            </Rectangle>
+            <nbChild>1</nbChild>
+            <GeometryNode id="{93fbac6c-2ecf-47e0-86c3-67c718b2f02c}" name="">
+             <hauteur>0.000</hauteur>
+             <Repere id="{939a0d92-00a9-483e-9122-829f7a3d5cd2}" name="Repère 24">
+              <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+              <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+              <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+              <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+             </Repere>
+             <MurElement id="{b83bdc2c-a0ca-4cd1-965f-abfe3ee666c0}" name="Fenêtre 3">
+              <Color g="0.619608" r="0.619608" b="0"/>
+              <densiteSrcsH>25</densiteSrcsH>
+              <densiteSrcsV>25</densiteSrcsV>
+              <curRegime>0</curRegime>
+              <nbRegimes>1</nbRegimes>
+              <nextRegime>1</nextRegime>
+              <Regime id="{ab674d43-fbbc-48a2-84b1-7427c9731224}" name="Régime 0">
+               <isRayonnant>1</isRayonnant>
+               <useAtt>0</useAtt>
+               <typeDistribution>0</typeDistribution>
+              </Regime>
+              <isSub>0</isSub>
+              <Rectangle id="{754d1217-f244-4776-8e24-e5bfd6eb5918}" name="Rectangle 14">
+               <Point x="-10.000" y="2.500" z="0.000"/>
+               <Point x="10.000" y="2.500" z="0.000"/>
+               <Point x="10.000" y="-2.500" z="0.000"/>
+               <Point x="-10.000" y="-2.500" z="0.000"/>
+              </Rectangle>
+              <SourceSurfacic id="{e59fcc55-ffd7-4a5a-a5aa-b613e30671af}" name="Source surfacique 9">
+               <nbSrcs>0</nbSrcs>
+               <densiteSrcsH>25</densiteSrcsH>
+               <densiteSrcsV>25</densiteSrcsV>
+               <srcsCorr>0</srcsCorr>
+              </SourceSurfacic>
+              <Paroi id="{12c2c387-d9be-46d0-9f74-789227b69547}" name="Paroi 10">
+               <epaisseur>1</epaisseur>
+               <MateriauConstruction id="{09deabeb-c2ab-4691-bb13-0f70cea5ac90}" name="Matériau de construction 31">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+               <MateriauConstruction id="{d01ae4d1-9f2f-4c7e-a74f-b2fc5c2a0c5e}" name="Matériau de construction 32">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+               <MateriauConstruction id="{899277cf-f268-400d-a7ed-4bbdf69dc7dc}" name="Matériau de construction 33">
+                <masseVol>2500</masseVol>
+                <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+                 <type>0</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+                </Spectre>
+                <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+                 <type>1</type>
+                 <fMin>16</fMin>
+                 <fMax>16000</fMax>
+                 <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+                </Spectre>
+               </MateriauConstruction>
+              </Paroi>
+             </MurElement>
+            </GeometryNode>
+            <paroiLocked>0</paroiLocked>
+            <Paroi id="{19cdab24-4aae-45df-a850-2e70f284f706}" name="Paroi 9">
+             <epaisseur>0.5</epaisseur>
+             <MateriauConstruction id="{54fa9aa6-052c-4e38-baad-b6229b9af44b}" name="Matériau de construction 28">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+             <MateriauConstruction id="{ce6a2172-6a43-43ce-9cfb-f599a14e4de9}" name="Matériau de construction 29">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+             <MateriauConstruction id="{d0219efe-dcab-4370-8614-4643316f59fe}" name="Matériau de construction 30">
+              <masseVol>2500</masseVol>
+              <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+               <type>0</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+              </Spectre>
+              <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+               <type>1</type>
+               <fMin>16</fMin>
+               <fMax>16000</fMax>
+               <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+              </Spectre>
+             </MateriauConstruction>
+            </Paroi>
+           </Mur>
+          </GeometryNode>
+         </ListMur>
+         <Dalle id="{75a732e0-e8f2-4b63-a40a-7346d34559f1}" name="Dalle 0">
+          <Color g="211" r="211" b="0"/>
+          <densiteSrcsH>0</densiteSrcsH>
+          <densiteSrcsV>0</densiteSrcsV>
+          <curRegime>0</curRegime>
+          <nbRegimes>1</nbRegimes>
+          <nextRegime>1</nextRegime>
+          <Regime id="{339db85a-b8f5-453a-b176-923fc69bb875}" name="Régime 0">
+           <isRayonnant>0</isRayonnant>
+           <useAtt>0</useAtt>
+           <typeDistribution>0</typeDistribution>
+          </Regime>
+          <isSub>0</isSub>
+          <Rectangle id="{65f81dd7-884d-4bd0-b374-739be39749f2}" name="Rectangle 1">
+           <Point x="-0.500" y="0.500" z="0.000"/>
+           <Point x="0.500" y="0.500" z="0.000"/>
+           <Point x="0.500" y="-0.500" z="0.000"/>
+           <Point x="-0.500" y="-0.500" z="0.000"/>
+          </Rectangle>
+          <SourceSurfacic id="{a79ab98c-c147-4854-9a89-ec0dd7bfa297}" name="Source surfacique 0">
+           <nbSrcs>0</nbSrcs>
+           <densiteSrcsH>0</densiteSrcsH>
+           <densiteSrcsV>0</densiteSrcsV>
+           <srcsCorr>0</srcsCorr>
+          </SourceSurfacic>
+          <Polygon id="{20f282bd-88a4-410a-8f50-3066c18d78eb}" name="Polygone 1">
+           <Point x="-10.000" y="5.000" z="0.000"/>
+           <Point x="10.000" y="5.000" z="0.000"/>
+           <Point x="10.000" y="-5.000" z="0.000"/>
+           <Point x="-10.000" y="-5.000" z="0.000"/>
+          </Polygon>
+          <paroiLocked>0</paroiLocked>
+          <Paroi id="{976c3312-5be2-423a-9315-ed897764cca7}" name="Paroi 0">
+           <epaisseur>1</epaisseur>
+           <MateriauConstruction id="{7d6a16f4-2f28-4fcc-9ff8-2b1a8d586f54}" name="Matériau de construction 1">
+            <masseVol>2500</masseVol>
+            <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+             <type>0</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+            </Spectre>
+            <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+             <type>1</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+            </Spectre>
+           </MateriauConstruction>
+           <MateriauConstruction id="{bb1d047f-6277-44c3-8800-b44bacba63a0}" name="Matériau de construction 2">
+            <masseVol>2500</masseVol>
+            <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+             <type>0</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+            </Spectre>
+            <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+             <type>1</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+            </Spectre>
+           </MateriauConstruction>
+           <MateriauConstruction id="{1ad222f1-3cbf-4cec-90e7-235682f910df}" name="Matériau de construction 3">
+            <masseVol>2500</masseVol>
+            <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+             <type>0</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+            </Spectre>
+            <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+             <type>1</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+            </Spectre>
+           </MateriauConstruction>
+          </Paroi>
+         </Dalle>
+         <Dalle id="{73ae388b-6b52-4af3-a219-6c4b19961f8e}" name="Dalle 1">
+          <Color g="211" r="211" b="0"/>
+          <densiteSrcsH>25</densiteSrcsH>
+          <densiteSrcsV>25</densiteSrcsV>
+          <curRegime>0</curRegime>
+          <nbRegimes>1</nbRegimes>
+          <nextRegime>1</nextRegime>
+          <Regime id="{3db70ec3-e1e7-4871-8532-1dc6144ddb11}" name="Régime 0">
+           <isRayonnant>1</isRayonnant>
+           <useAtt>0</useAtt>
+           <typeDistribution>0</typeDistribution>
+          </Regime>
+          <isSub>0</isSub>
+          <Rectangle id="{cd552b2b-3dbb-46b9-a083-48bf1ed5bbcc}" name="Rectangle 2">
+           <Point x="-0.500" y="0.500" z="0.000"/>
+           <Point x="0.500" y="0.500" z="0.000"/>
+           <Point x="0.500" y="-0.500" z="0.000"/>
+           <Point x="-0.500" y="-0.500" z="0.000"/>
+          </Rectangle>
+          <SourceSurfacic id="{1566fca3-1fbd-4688-9e95-d539f11cdb67}" name="Source surfacique 1">
+           <nbSrcs>0</nbSrcs>
+           <densiteSrcsH>25</densiteSrcsH>
+           <densiteSrcsV>25</densiteSrcsV>
+           <srcsCorr>0</srcsCorr>
+          </SourceSurfacic>
+          <Polygon id="{a3321a7e-00e9-4b55-b086-53f7b0652e4f}" name="Polygone 2">
+           <Point x="-10.000" y="-5.000" z="5.000"/>
+           <Point x="10.000" y="-5.000" z="5.000"/>
+           <Point x="10.000" y="5.000" z="5.000"/>
+           <Point x="-10.000" y="5.000" z="5.000"/>
+          </Polygon>
+          <paroiLocked>0</paroiLocked>
+          <Paroi id="{08931d57-0461-4e48-a5fb-e63472b0b5e5}" name="Paroi 2">
+           <epaisseur>1</epaisseur>
+           <MateriauConstruction id="{1c9738bd-ad40-4e7b-8d61-b61fb72d1635}" name="Matériau de construction 7">
+            <masseVol>2500</masseVol>
+            <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+             <type>0</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+            </Spectre>
+            <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+             <type>1</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+            </Spectre>
+           </MateriauConstruction>
+           <MateriauConstruction id="{b719eafe-6697-4430-ab28-8a526ab63152}" name="Matériau de construction 8">
+            <masseVol>2500</masseVol>
+            <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+             <type>0</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+            </Spectre>
+            <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+             <type>1</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+            </Spectre>
+           </MateriauConstruction>
+           <MateriauConstruction id="{1f4ce003-d402-431b-bb1b-83e30fa00ff1}" name="Matériau de construction 9">
+            <masseVol>2500</masseVol>
+            <Spectre id="{2e13af77-4581-42bb-af81-37534ee0da73}" name="Spectre 15">
+             <type>0</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000 15.000</freqTab>
+            </Spectre>
+            <Spectre id="{9e5c6d24-4924-4287-9e2e-4b30174d9a77}" name="Spectre 17">
+             <type>1</type>
+             <fMin>16</fMin>
+             <fMax>16000</fMax>
+             <freqTab form="0">0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200 0.200</freqTab>
+            </Spectre>
+           </MateriauConstruction>
+          </Paroi>
+         </Dalle>
+         <ListMachine/>
+         <ListSource/>
+         <TabEtatElement>
+          <Regime num="0"/>
+         </TabEtatElement>
+         <TabRegimeElement>
+          <Regime num="0"/>
+         </TabRegimeElement>
+        </Etage>
+       </GeometryNode>
+      </Batiment>
+     </GeometryNode>
+    </ListBatiment>
+    <ListMachine/>
+    <ListSource/>
+   </Infrastructure>
+   <root>1</root>
+   <repere>0</repere>
+   <SIG_X>0</SIG_X>
+   <SIG_Y>0</SIG_Y>
+  </SiteNode>
+  <PointsControl/>
+  <Calcul isUpTodate="0" id="{b23f73ff-fbac-4fcb-b19e-825644f7c225}" name="Calcul 0">
+   <numero>1</numero>
+   <auteur>Auteur</auteur>
+   <dateCreation>2001-10-01</dateCreation>
+   <dateModif>2001-10-01</dateModif>
+   <comment>Commentaire</comment>
+   <solverId>{a98b320c-44c4-47a9-b689-1dd352daa8b2}</solverId>
+   <etat>1</etat>
+   <expansGeo>0</expansGeo>
+   <useSol>1</useSol>
+   <typeCalculSol>0</typeCalculSol>
+   <condFav>0</condFav>
+   <useVegetation>0</useVegetation>
+   <useAtmosphere>1</useAtmosphere>
+   <useEcran>1</useEcran>
+   <calculTrajetHorizontaux>1</calculTrajetHorizontaux>
+   <useReflexion>0</useReflexion>
+   <interference>0</interference>
+   <h1>10</h1>
+   <distanceSRMin>0.3</distanceSRMin>
+   <freqMinSpectre>16</freqMinSpectre>
+   <freqMaxSpectre>16000</freqMaxSpectre>
+   <ListID>
+    <Element id="{235edc62-972a-4e74-9fb3-f6a04a6c406b}"/>
+    <Element id="{200b0ff8-6713-4455-a2cb-a1372a6bf4b7}"/>
+    <Element id="{78a66744-4818-4078-9d39-e3cf7c6c8ada}"/>
+    <Element id="{b1a74da3-a57b-4c1f-acbb-4be38dd98165}"/>
+   </ListID>
+   <EmissionAccVolNodes>
+    <EmissionAccVolNode accVolNodeId="{200b0ff8-6713-4455-a2cb-a1372a6bf4b7}" state="1"/>
+    <EmissionAccVolNode accVolNodeId="{78a66744-4818-4078-9d39-e3cf7c6c8ada}" state="1"/>
+   </EmissionAccVolNodes>
+   <RegimeAccNode>
+    <RegimeAccNode accVolNodeId="{200b0ff8-6713-4455-a2cb-a1372a6bf4b7}" state="0"/>
+    <RegimeAccNode accVolNodeId="{78a66744-4818-4078-9d39-e3cf7c6c8ada}" state="0"/>
+   </RegimeAccNode>
+   <Atmosphere id="{3f982668-a3b8-484b-bf59-53ce64c99938}" name="Atmosphère 0">
+    <pression>101325</pression>
+    <temperature>20</temperature>
+    <hygrometrie>70</hygrometrie>
+    <vitVent>0</vitVent>
+    <dirVent>0</dirVent>
+    <A>0</A>
+    <B>0</B>
+    <C>5e-06</C>
+    <D>0</D>
+    <stability_class>0</stability_class>
+    <Spectre id="{05fa31f8-0b48-4603-a2dc-e49eb0dafa63}" name="Spectre 0">
+     <type>0</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">0.00001 0.00001 0.00001 0.00002 0.00004 0.00006 0.00009 0.00014 0.00022 0.00034 0.00052 0.00078 0.00113 0.00160 0.00216 0.00280 0.00348 0.00419 0.00498 0.00592 0.00718 0.00902 0.01180 0.01613 0.02291 0.03358 0.05035 0.07662 0.11751 0.18053 0.27624</freqTab>
+    </Spectre>
+   </Atmosphere>
+   <Resultat id="{7e7ce3ce-cb89-46a5-a476-8c2cead2fe0f}" name="Résultat 0">
+    <ListSources/>
+    <ListRecepteurs/>
+    <ListSpectres/>
+    <ListLw/>
+   </Resultat>
+  </Calcul>
+ </Projet>
+</Tympan>
