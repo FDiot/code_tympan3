@@ -254,7 +254,7 @@ protected:
     /// \brief Clear the grid and reinitialise it as a copy of \c other
     void copyAcceleratingGrid(const TYAltimetrie& other);
 
-    /// Tableau ordonne des faces
+    // Grille accélératrice contenant une liste de polygones pour chaque case
     TYTabLPPolygon** _pSortedFaces;
 
     /// Size along each dimension of the accelerating grid
