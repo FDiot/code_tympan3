@@ -384,20 +384,6 @@ public:
         setIsGeometryModified(true);
     }
 
-
-    /**
-     * @brief computes the triangulation underlying the Altimetry
-     *
-     * This function expect empty deques and will clear the deque passed.
-     *
-     * @param points output argument filled with the vertices of the triangulation
-     * @param triangles output argument filled with the faces of the triangulation
-     */
-    void computeAltimetricTriangulation(
-        std::deque<OPoint3D>& points,
-        std::deque<OTriangle>& triangles,
-        bool use_emprise_as_level_curve = true);
-
     /**
      * Calcule la pente moyenne pour le segment donne.
      *
