@@ -17,12 +17,6 @@
  * \file TYCalculManager.h
  * \brief Gestionnaire des calculs acoustiques. Il fait l'interface entre l'IHM et le gestionnaire de donnees
  * pour la partie calcul (fichier header)
- * \author Projet_Tympan
- *
- *
- *
- *
- *
  */
 
 
@@ -53,12 +47,6 @@ public:
      * \brief Destructeur.
      */
     virtual ~TYCalculManager();
-
-    /**
-     * \fn LPTYCalcul getCurrent()
-     * \brief Set/Get du Calcul courant.
-     */
-    LPTYCalcul getCurrent() { return _pCurrentCalcul; }
 
     /**
      * \fn bool askForResetResultat()
