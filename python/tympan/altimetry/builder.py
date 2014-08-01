@@ -181,7 +181,7 @@ class Builder(object):
         faces_materials = np.array(faces_materials)
         return vertices, faces, materials, faces_materials
 
-    def export_to_ply(self, fname, color_faces=False):
+    def export_to_ply(self, fname, color_faces=True):
         """Export mesh data to a PLY file.
 
         `color_faces` option adds colors to mesh faces, mostly for visual
@@ -209,7 +209,7 @@ class Builder(object):
                 f.write(('{}' + (' {}' * n) + '\r\n').format(n, *matid))
 
     @staticmethod
-    def _ply_headers(color_faces=False):
+    def _ply_headers(color_faces=True):
         """Generate PLY file header for mesh export"""
         faces_headers = ['element face {nfaces}',
                          'property list uchar int vertex_indices',
