@@ -171,10 +171,9 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             self.assertEqual(vertices.count, 92)
             self.assertEqual(faces.count, 152)
             self.assertEqual(materials.count, 4)
-            materials_id = [''.join(map(chr, data)).strip('\x00')
-                            for data, in materials.data]
-            self.assertIn('grass', materials_id)
-            self.assertIn('Water', materials_id)
+            materials_id = [''.join(map(chr, data)) for data, in materials.data]
+            self.assertItemsEqual(materials_id, ['__default__', '__hidden__',
+                                                 'grass', 'Water'])
 
 
 if __name__ == '__main__':

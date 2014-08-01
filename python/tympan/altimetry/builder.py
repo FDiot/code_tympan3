@@ -157,7 +157,8 @@ class Builder(object):
 
     def _build_mesh_data(self):
         """Process mesh from the CDT and materials data and return numpy
-        arrays suitable for export to a .ply file.
+        arrays (except for `materials` which is a list of list) suitable for
+        export to a .ply file.
         """
         vertices, vertices_id = [], {}
         for idx, vh in enumerate(self.mesh.cdt.finite_vertices()):
@@ -168,13 +169,10 @@ class Builder(object):
         materials, materials_id = [], {}
         for fh, mat in self.material_by_face.iteritems():
             matid = map(ord, mat.id)
-            assert len(matid) <= 36
-            matid = matid + [ord('\0')] * (36 - len(matid))
             if matid not in materials:
                 materials.append(matid)
             idx = materials.index(matid)
             materials_id[fh] = idx
-        materials = np.array(materials)
         faces, faces_materials = [], []
         for fh in self.mesh.cdt.finite_faces():
             faces.append([vertices_id[fh.vertex(i)] for i in range(3)])
@@ -194,7 +192,7 @@ class Builder(object):
         with open(fname, 'w') as f:
             f.write(header.format(nvertices=vertices.shape[0],
                                   nfaces=faces.shape[0],
-                                  nmaterials=materials.shape[0]))
+                                  nmaterials=len(materials)))
             np.savetxt(f, vertices, fmt='%.18g', newline='\r\n')
             # Insert a leading column with the number of face vertices and a
             # trailing one with face material.
@@ -205,11 +203,10 @@ class Builder(object):
                 fcols.append(self._color_faces(faces_materials))
             np.savetxt(f, np.concatenate(fcols, axis=1), fmt='%d',
                        newline='\r\n')
-            # Insert a column with the lenght of the list of material id.
-            pmaterials = np.concatenate(
-                [np.ones((materials.shape[0], 1)) * materials.shape[1],
-                 materials], axis=1)
-            np.savetxt(f, pmaterials, fmt='%d', newline='\r\n')
+            # Write materials.
+            for matid in materials:
+                n = len(matid)
+                f.write(('{}' + (' {}' * n) + '\r\n').format(n, *matid))
 
     @staticmethod
     def _ply_headers(color_faces=False):
