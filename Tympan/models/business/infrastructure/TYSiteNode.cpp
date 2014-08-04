@@ -15,6 +15,7 @@
 
 #include <cstdlib>
 #include <cassert>
+#include<locale.h>
 
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYSiteNodeWidget.h"
@@ -580,9 +581,16 @@ void TYSiteNode::loadTopoFile()
         TYNameManager::get()->enable(true);
         throw tympan::exception() << tympan_source_loc;
     }
+    // CAUTION: reader uses rply C library which calls strtod (stdlib) to read float
+    // and double values. strtod is locale dependent. It means that if decimal
+    // separator is set to ',' instead of '.' in LC_NUMERIC, float values from
+    // the ply file won't be read. To make sure this doesn't happen, temporarily
+    // set the locale and then put back the original value after file reading.
+    char *saved_locale = setlocale(LC_NUMERIC, "C");
     // XXX TODO: read result and process it (triangles, nodes, materials)
     tympan::AltimetryPLYReader reader(result_mesh.fileName().toStdString());
     reader.read();
+    setlocale(LC_NUMERIC, saved_locale);
     std::deque<OPoint3D> points = reader.points();
     std::deque<OTriangle> triangles = reader.faces();
     std::vector<std::string> materials = reader.materials();
