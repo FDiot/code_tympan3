@@ -28,4 +28,6 @@ install(FILES ${PYTHONPLYFILE_SOURCES}
 install(FILES ${PYTHONPLYFILE_SOURCES} 
   DESTINATION "${TYMPAN_CythonModules_Debug}/"
   CONFIGURATIONS Debug)
-
+install(TARGETS ${RPLY_LIB} ARCHIVE DESTINATION lib
+                           LIBRARY DESTINATION lib
+                           RUNTIME DESTINATION . )
