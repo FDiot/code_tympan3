@@ -93,10 +93,7 @@ namespace tympan {
 
     void AltimetryPLYReader::init_data()
     {
-        _points.reserve(_nvertices);
-        _faces.reserve(_nfaces);
         _material_indices.resize(_nfaces, -1);
-        _materials.reserve(_nmaterials);
     }
 
     void AltimetryPLYReader::read_data()

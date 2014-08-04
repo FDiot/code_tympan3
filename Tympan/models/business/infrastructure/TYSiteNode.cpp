@@ -21,7 +21,7 @@
 #include "Tympan/gui/gl/TYSiteNodeGraphic.h"
 #endif
 
-
+#include "Tympan/models/business/altimetry_file_reader_impl.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYProgressManager.h"
@@ -528,8 +528,6 @@ void TYSiteNode::loadTopoFile()
 
     logger.info("Mise a jour altimetrie...");
 
-    std::deque<OPoint3D> points;
-    std::deque<OTriangle> triangles;
     // Is the debug option "TYMPAN_DEBUG=keep_tmp_files" enabled?
     bool keep_tmp_files = must_keep_tmp_files();
     // Will be used to export the current site topography/infrastructure
@@ -582,15 +580,13 @@ void TYSiteNode::loadTopoFile()
         TYNameManager::get()->enable(true);
         throw tympan::exception() << tympan_source_loc;
     }
-    // XXX TODO: read result and process it
+    // XXX TODO: read result and process it (triangles, nodes, materials)
+    tympan::AltimetryPLYReader reader(result_mesh.fileName().toStdString());
+    reader.read();
+    std::deque<OPoint3D> points = reader.points();
+    std::deque<OTriangle> triangles = reader.faces();
+    std::vector<std::string> materials = reader.materials();
 
-    // Stub: for now, artifially build the mesh
-    points.push_back(OPoint3D(-200.0, 200.0, 0.0));
-    points.push_back(OPoint3D(200.0, 200.0, 0.0));
-    points.push_back(OPoint3D(200.0, -200.0, 0.0));
-    points.push_back(OPoint3D(-200.0, -200.0, 0.0));
-    triangles.push_back(OTriangle(1, 0, 2));
-    triangles.push_back(OTriangle(0, 3, 2));
     // XXX Maybe add materials update here
     _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles);
 
