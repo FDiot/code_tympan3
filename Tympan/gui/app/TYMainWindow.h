@@ -287,7 +287,6 @@ public slots:
     void launchImporter();
 
     /**
-    /**
      * Creation d'un modeleur a partir d'un type
      */
     void makeModeler(TYElement* pElt);
