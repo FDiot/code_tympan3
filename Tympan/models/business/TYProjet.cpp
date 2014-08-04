@@ -406,7 +406,7 @@ void TYProjet::setCurrentCalcul(LPTYCalcul pCurCalcul)
 
     ;
     // Test si le solveur du calcul est bien disponible
-    if (TYPluginManager::get()->exist(_pCurrentCalcul->getSolverId()))
+    if (!TYPluginManager::get()->exist(_pCurrentCalcul->getSolverId()))
     {
         _bStatusSolver = false;
     }
