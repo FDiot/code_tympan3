@@ -32,10 +32,7 @@ TEST(TestAltimetryReader, trivial_setup_callbacks)
     reader.setup_callbacks();
 
     EXPECT_EQ(3, reader.nvertices());
-    EXPECT_GT(3, reader.points().capacity());
     EXPECT_EQ(1, reader.nfaces());
-    EXPECT_GT(1, reader.faces().capacity());
-    EXPECT_GT(1, reader.materials().capacity());
 }
 
 TEST(TestAltimetryReader, vertex_cb)

@@ -31,9 +31,9 @@ namespace tympan {
     {
     public:
         /// @brief Type of the points array returned
-        typedef std::vector<OPoint3D> points_array_t;
+        typedef std::deque<OPoint3D> points_array_t;
         /// @brief Type of the faces array returned
-        typedef std::vector<OTriangle> faces_array_t;
+        typedef std::deque<OTriangle> faces_array_t;
         /// @brief Type of the material array returned
         typedef std::vector<std::string> materials_array_t;
 
