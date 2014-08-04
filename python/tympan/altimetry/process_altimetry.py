@@ -39,6 +39,7 @@ def process_site_altimetry(input_project, result_file):
     builder = Builder(asite)
     builder.complete_processing()
     builder.export_to_ply(result_file)
+    return asite
 
 
 def export_site_topo(cysite):
@@ -68,9 +69,12 @@ def export_site_topo(cysite):
         # Build a ground material
         cymaterial = cymarea.ground_material
         almaterial = GroundMaterial(cymaterial.elem_id)
+        coords = cypoints2acoords(cymarea.points)
+        if not coords:
+            continue
         # Build a material area made of the above defined ground material
         almatarea = MaterialArea(
-            coords=cypoints2acoords(cymarea.points),
+            coords=coords,
             material=almaterial,
             id=cymarea.elem_id)
         asite.add_child(almatarea)

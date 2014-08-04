@@ -88,10 +88,9 @@ class TestProcessAltimetry(TympanTC):
                 osp.join(TEST_PROBLEM_DIR, '7_PROJET_Site_emprise_seule_avec_plan_eau.xml'),
                         result_file)
         mat_areas = asite.material_areas # water bodies are treated as material areas
-        # There is 1 water body + 1 default material area (there is always one)
-        # (here just check the water body)
-        self.assertEqual(len(mat_areas), 2)
-        lake = mat_areas[1]
+        # There is 1 water body (default material area isn't taken into account)
+        self.assertEqual(len(mat_areas), 1)
+        lake = mat_areas[0]
         self.assertEqual(lake.build_coordinates()[0],
                          [(-83.0, -104.0), (-137.0, -80.0), (-141.0, -45.0),
                           (-117.0, 7.0), (-90.0, 22.0), (-49.0, 21.0),
