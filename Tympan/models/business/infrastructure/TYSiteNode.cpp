@@ -587,17 +587,13 @@ void TYSiteNode::loadTopoFile()
     // the ply file won't be read. To make sure this doesn't happen, temporarily
     // set the locale and then put back the original value after file reading.
     char *saved_locale = setlocale(LC_NUMERIC, "C");
-    // XXX TODO: read result and process it (triangles, nodes, materials)
     tympan::AltimetryPLYReader reader(result_mesh.fileName().toStdString());
     reader.read();
     setlocale(LC_NUMERIC, saved_locale);
     std::deque<OPoint3D> points = reader.points();
     std::deque<OTriangle> triangles = reader.faces();
-    std::vector<std::string> materials = reader.materials();
-
-    // XXX Maybe add materials update here
-    _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles);
-
+    std::deque<std::string> material_ids = reader.materials();
+    _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles, material_ids);
     setIsGeometryModified(false);  // L'altimetrie est a jour
     OMessageManager::get()->info("Mise a jour altimetrie terminee.");
     TYNameManager::get()->enable(true);

@@ -66,7 +66,7 @@ def solve(input_project, output_project, solverdir, multithreading_on=True,
     builder.complete_processing()
     vertices, faces, materials, faces_materials = builder.build_mesh_data()
     # Update site and the project before building the solver model
-    site.update_altimetry(vertices, faces)
+    site.update_altimetry(vertices, faces, materials, faces_materials)
     project.update()
     # Build an acoustic problem from the site of the computation
     bus2solv_conv = bus2solv.Business2SolverConverter(comp, project.site)

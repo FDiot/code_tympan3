@@ -17,7 +17,7 @@
 #include "Tympan/models/business/topography/TYAltimetrie.h"
 #include "Tympan/models/business/infrastructure/TYTopographie.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
-
+#include "Tympan/models/business/material/TYSol.h"
 
 TYAltimetrie* buildSlopeAltimetry(void)
 {
@@ -46,6 +46,8 @@ TYAltimetrie* buildSlopeAltimetry(void)
     // Creating the altimetry
     std::deque<OPoint3D> points;
     std::deque<OTriangle> triangles;
+    std::deque<std::string> materials;
+    LPTYSol stub_ground_mat;
     // XXX  Stub:
     points.push_back(OPoint3D(-200.0, 200.0, 0.0));
     points.push_back(OPoint3D(200.0, 200.0, 0.0));
@@ -53,7 +55,9 @@ TYAltimetrie* buildSlopeAltimetry(void)
     points.push_back(OPoint3D(-200.0, -200.0, 0.0));
     triangles.push_back(OTriangle(1, 0, 2));
     triangles.push_back(OTriangle(0, 3, 2));
-    pAlti->plugBackTriangulation(points, triangles);
+    materials.push_back("matid1");
+    materials.push_back("matid2");
+    pAlti->plugBackTriangulation(points, triangles, materials);
 
     //compute(pTopo->collectPointsForAltimetrie(false), 1.E-5);
 

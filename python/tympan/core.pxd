@@ -21,7 +21,7 @@ cdef extern from "memory" namespace "std":
 cdef extern from "Qt/qstring.h":
     cdef cppclass QString:
         string toStdString()
-
+        QString(const char*)
 
 # Tympan #######################################################################
 
@@ -36,6 +36,7 @@ cdef extern from "Tympan/core/idgen.h":
     cdef cppclass OGenID:
         OGenID(const OGenID& other)
         OGenID()
+        OGenID(const QString& string_id)
         const QString toString() const
 
 cdef extern from "Tympan/core/interfaces.h":
