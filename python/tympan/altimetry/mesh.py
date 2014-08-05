@@ -723,7 +723,10 @@ class ReferenceElevationMesh(ElevationMesh):
                                              witness_point=(p.x(), p.y()))
         p3 = inter.get_Point_3()
         alti = p3.z()
-        assert abs((p3-p2).squared_length()-alti**2) <= _PROXIMITY_THRESHOLD*abs(alti)
+        dist = abs((p3-p2).squared_length()-alti**2)
+        assert dist <= _PROXIMITY_THRESHOLD * 1e-3  + _PROXIMITY_THRESHOLD * (alti**2), (
+            "unexpected distance between point and its projection : %f (threshold = %f, altitude = %f)"
+            % (dist, _PROXIMITY_THRESHOLD, alti))
         return alti
 
     def copy_as_ElevationMesh(self):
