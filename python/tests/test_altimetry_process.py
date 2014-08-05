@@ -107,23 +107,19 @@ class TestProcessAltimetry(TympanTC):
                          '10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml'),
                          result_file)
         areas = asite.material_areas
-        # There are 2 material areas + 1 water body
-        self.assertEqual(len(areas), 3)
-        # Check material area 1
-        self.assertEqual(areas[0].id, "{4f084d7d-fc0b-4f1e-aaae-939cee5fa200}")
-        self.assertEqual(len(areas[0].build_coordinates()[0]), 0) # no points
-        self.assertEqual(areas[0].material_id, "{715dbf77-3d40-423d-9cae-2bd2dfdd5af9}")
-        # Check material area 2
-        self.assertEqual(areas[1].id, "{28bf9ef3-eb38-4de4-9921-8b76bf164f09}")
-        self.assertEqual(areas[1].build_coordinates()[0],
+        # There is 1 material area + 1 water body
+        self.assertEqual(len(areas), 2)
+        # Check material area
+        self.assertEqual(areas[0].id, "{28bf9ef3-eb38-4de4-9921-8b76bf164f09}")
+        self.assertEqual(areas[0].build_coordinates()[0],
                          [(-13.0, 176.0), (-60.0, 161.0), (-87.0, 140.0),
                           (-91.0, 103.0), (-75.0, 83.0), (-44.0, 76.0),
                           (29.0, 93.0), (112.0, 123.0), (125.0, 173.0),
                           (77.0, 185.0), (17.0, 185.0), (-4.0, 178.0)])
-        self.assertEqual(areas[1].material_id, "{6fb2a2c5-e329-4c8a-9ec9-311072bddc73}")
+        self.assertEqual(areas[0].material_id, "{6fb2a2c5-e329-4c8a-9ec9-311072bddc73}")
         # Check water body
-        self.assertEqual(areas[2].id, "{1d99f26d-83df-4404-94a4-7e3c5eccce13}")
-        self.assertEqual(areas[2].build_coordinates()[0],
+        self.assertEqual(areas[1].id, "{1d99f26d-83df-4404-94a4-7e3c5eccce13}")
+        self.assertEqual(areas[1].build_coordinates()[0],
                          [(-83.0, -104.0), (-137.0, -80.0), (-141.0, -45.0),
                           (-117.0, 7.0), (-90.0, 22.0), (-49.0, 21.0),
                           (-19.0, 24.0), (-2.0, 64.0), (54.0, 95.0),
