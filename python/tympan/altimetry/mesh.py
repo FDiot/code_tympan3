@@ -3,6 +3,7 @@ Provide triangulation and meshing of a clean, single site, geometry.
 """
 from collections import defaultdict
 import copy
+from warnings import warn
 
 from shapely import geometry as sh_geom
 
@@ -142,7 +143,9 @@ class MeshedCDTWithInfo(object):
         for (orig_va, orig_vb), orig_info in self._input_constraints_infos.iteritems():
             dest_va, dest_vb = vmap[orig_va], vmap[orig_vb]
             dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
-            newone._input_constraints_infos[(dest_va, dest_vb)] = dest_info
+            if sorted_vertex_pair(dest_va, dest_vb) != (dest_va, dest_vb):
+                warn("Vertex pair unexpectedly not sorted during copy", RuntimeWarning)
+            newone._input_constraints_infos[sorted_vertex_pair(dest_va, dest_vb)] = dest_info
         return newone
 
     def count_edges(self):
