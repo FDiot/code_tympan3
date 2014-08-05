@@ -155,7 +155,7 @@ class Builder(object):
             for vh in chain(contour_vertices, inside_vertices):
                 self.mesh.vertices_info[vh].altitude = mean_alt
 
-    def _build_mesh_data(self):
+    def build_mesh_data(self):
         """Process mesh from the CDT and materials data and return numpy
         arrays (except for `materials` which is a list of list) suitable for
         export to a .ply file.
@@ -187,7 +187,7 @@ class Builder(object):
         `color_faces` option adds colors to mesh faces, mostly for visual
         debug.
         """
-        vertices, faces, materials, faces_materials = self._build_mesh_data()
+        vertices, faces, materials, faces_materials = self.build_mesh_data()
         header = self._ply_headers(color_faces=color_faces)
         with open(fname, 'w') as f:
             f.write(header.format(nvertices=vertices.shape[0],
