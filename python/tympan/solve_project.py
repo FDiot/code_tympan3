@@ -22,6 +22,8 @@ except ImportError:
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
     raise ImportError(err)
 
+from tympan.altimetry.builder import Builder
+from tympan.altimetry import process_altimetry
 
 def solve(input_project, output_project, solverdir, multithreading_on=True,
           interactive=False):
@@ -56,9 +58,16 @@ def solve(input_project, output_project, solverdir, multithreading_on=True,
     # Solver model
     solver_problem = comp.acoustic_problem
     solver_result = comp.acoustic_result
-    # Update site before building the solver model
-    project.update_site()
-    project.update_altimetry_on_receptors()
+    # Recompute altimetry
+    # Rebuild topography with altimetry data model
+    alti_site = process_altimetry.export_site_topo(site)
+    # Compute altimetry and retrieve the resulting mesh
+    builder =  Builder(alti_site)
+    builder.complete_processing()
+    vertices, faces, materials, faces_materials = builder.build_mesh_data()
+    # Update site and the project before building the solver model
+    site.update_altimetry(vertices, faces)
+    project.update()
     # Build an acoustic problem from the site of the computation
     bus2solv_conv = bus2solv.Business2SolverConverter(comp, project.site)
     bus2solv_conv.build_solver_problem()

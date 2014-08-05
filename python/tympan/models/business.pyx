@@ -313,33 +313,30 @@ cdef class Site:
             pylist.append(child)
         return pylist
 
-    def update(self):
-        """ Updates a site:
-            - "Sort" terrains contained in a topography
-            - Updates the altimetry of the infrastructure elements
-            - Updates the acoustic of the infrastructure elements
+    def update_altimetry(self, vertices, faces):
+        """ Sends the given altimetry mesh to the C++ TYAltimetry class
+        Once it's done, update the altimetry of the site infrastructure and receptors
         """
         # This method actually leads to the dynamic allocation of an array of
         # TYGeometryNode that will be accessed by some other method(s) later on.
         # Not calling this method leads to a segmentation fault since the array
         # doesn't exist then.
         self.thisptr.getRealPointer().getTopographie().getRealPointer().sortTerrainsBySurface()
-
-        # Here directly use python code
-        # and then  _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles);
-        # which allows to update the TYAltimetry object (needed by updateAltiInfra among others)
-        # XXX For now, use this stub which defines a very basic altimetry:
+        # XXX what about the materials ?
         pts = cy.declare(deque[tycommon.OPoint3D])
         tgles = cy.declare(deque[tycommon.OTriangle])
-        pts.push_back(tycommon.OPoint3D(-200.0, 200.0, 0.0))
-        pts.push_back(tycommon.OPoint3D(200.0, 200.0, 0.0))
-        pts.push_back(tycommon.OPoint3D(200.0, -200.0, 0.0))
-        pts.push_back(tycommon.OPoint3D(-200.0, -200.0, 0.0))
-        tgles.push_back(tycommon.OTriangle(1, 0, 2))
-        tgles.push_back(tycommon.OTriangle(0, 3, 2))
-        self.thisptr.getRealPointer().getTopographie().getRealPointer().getAltimetrie().getRealPointer().plugBackTriangulation(pts, tgles)
+        for i in xrange(vertices.shape[0]):
+            pts.push_back(tycommon.OPoint3D(vertices[i][0], vertices[i][1],
+                                            vertices[i][2]))
+        for i in xrange(faces.shape[0]):
+            tgles.push_back(tycommon.OTriangle(faces[i][0], faces[i][1],
+                                               faces[i][2]))
+        alti = cy.declare(SmartPtr[TYAltimetrie])
+        alti = self.thisptr.getRealPointer().getTopographie().getRealPointer().getAltimetrie()
+        alti.getRealPointer().plugBackTriangulation(pts, tgles)
         self.thisptr.getRealPointer().updateAltiInfra(True)
         self.thisptr.getRealPointer().updateAcoustique(True)
+        self.thisptr.getRealPointer().getProjet().updateAltiRecepteurs(alti.getRealPointer())
 
     def process_landtake(self):
         """ Return a list of 'Point3D' cython objects representing the landtake
@@ -678,29 +675,16 @@ cdef class Project:
     def __cinit__(self):
         self.thisptr = SmartPtr[TYProjet]()
 
-    def update_site(self):
-        """ Update the project site (altimetry, atmosphere, inactive mesh points
-            detection).
+    def update(self):
+        """ Update the project (atmosphere, inactive mesh points detection).
         """
-        self.site.update()
         computation = cy.declare(cy.pointer(TYCalcul))
         computation = self.thisptr.getRealPointer().getCurrentCalcul().getRealPointer()
         atmosphere = cy.declare(SmartPtr[TYAtmosphere])
         atmosphere = computation.getAtmosphere()
         self.thisptr.getRealPointer().getSite().getRealPointer().setAtmosphere(atmosphere)
-        # detect and deactivate the mesh points that are inside machines or buildings
+        # detect and disable the mesh points that are inside machines or buildings
         computation.selectActivePoint(self.thisptr.getRealPointer().getSite())
-
-    def update_altimetry_on_receptors(self):
-        """ Call Tympan method to update the acoustic receptors
-            (TYPointControl objects) with regard to the current altimetry
-        """
-        site = cy.declare(cy.pointer(TYSiteNode))
-        site = self.thisptr.getRealPointer().getSite().getRealPointer()
-        alti = cy.declare(cy.pointer(TYAltimetrie))
-        # Retrieve current altimetry from the site topography
-        alti = site.getTopographie().getRealPointer().getAltimetrie().getRealPointer()
-        self.thisptr.getRealPointer().updateAltiRecepteurs(alti)
 
     @property
     def current_computation(self):
