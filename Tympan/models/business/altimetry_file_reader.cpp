@@ -109,7 +109,6 @@ namespace tympan {
         assert(_material_by_face.empty());
         assert(_material_indices.size() == _nfaces);
         assert(_faces.size() == _nfaces);
-        _material_by_face.reserve(_nfaces);
         BOOST_FOREACH(unsigned material_index, _material_indices)
         {
             if (material_index == -1) // No material attributed

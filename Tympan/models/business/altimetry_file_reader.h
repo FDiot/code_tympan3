@@ -35,7 +35,7 @@ namespace tympan {
         /// @brief Type of the faces array returned
         typedef std::deque<OTriangle> faces_array_t;
         /// @brief Type of the material array returned
-        typedef std::vector<std::string> materials_array_t;
+        typedef std::deque<std::string> materials_array_t;
 
         /**
          * @brief Getter for the points read

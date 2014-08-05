@@ -199,8 +199,8 @@ cdef class Site:
         """ Return the ground contour of the infrastructure as a list of list
         containing 'Point3D' cython object (a sublist = the contour of a volume)
         """
-        cpp_contours = cy.declare(map[OGenID, deque[tycommon.OPoint3D]])
-        cpp_contours_iter = cy.declare(map[OGenID, deque[tycommon.OPoint3D]].iterator)
+        cpp_contours = cy.declare(cppmap[OGenID, deque[tycommon.OPoint3D]])
+        cpp_contours_iter = cy.declare(cppmap[OGenID, deque[tycommon.OPoint3D]].iterator)
         self.thisptr.getRealPointer().getFacesOnGround(cpp_contours)
         cpp_contours_iter = cpp_contours.begin()
         contours = {}
@@ -290,7 +290,7 @@ cdef class Site:
             corresponding lists of micro sources.
         """
         assert self.thisptr.getRealPointer() != NULL
-        map_elt_srcs = cy.declare(map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]])
+        map_elt_srcs = cy.declare(cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]])
         infra = cy.declare(cy.pointer(TYInfrastructure))
         infra = self.thisptr.getRealPointer().getInfrastructure().getRealPointer()
         infra.getAllSrcs(comp.thisptr.getRealPointer(), map_elt_srcs)
@@ -313,7 +313,7 @@ cdef class Site:
             pylist.append(child)
         return pylist
 
-    def update_altimetry(self, vertices, faces):
+    def update_altimetry(self, vertices, faces, materials, materials_idx):
         """ Sends the given altimetry mesh to the C++ TYAltimetry class
         Once it's done, update the altimetry of the site infrastructure and receptors
         """
@@ -322,18 +322,22 @@ cdef class Site:
         # Not calling this method leads to a segmentation fault since the array
         # doesn't exist then.
         self.thisptr.getRealPointer().getTopographie().getRealPointer().sortTerrainsBySurface()
-        # XXX what about the materials ?
         pts = cy.declare(deque[tycommon.OPoint3D])
         tgles = cy.declare(deque[tycommon.OTriangle])
+        mat_ids = cy.declare(deque[string])
         for i in xrange(vertices.shape[0]):
             pts.push_back(tycommon.OPoint3D(vertices[i][0], vertices[i][1],
                                             vertices[i][2]))
         for i in xrange(faces.shape[0]):
             tgles.push_back(tycommon.OTriangle(faces[i][0], faces[i][1],
                                                faces[i][2]))
+        for matidx in materials_idx:
+            matid = materials[materials_idx[matidx]]
+            matid = ''.join(map(chr, matid))
+            mat_ids.push_back(matid)
         alti = cy.declare(SmartPtr[TYAltimetrie])
         alti = self.thisptr.getRealPointer().getTopographie().getRealPointer().getAltimetrie()
-        alti.getRealPointer().plugBackTriangulation(pts, tgles)
+        alti.getRealPointer().plugBackTriangulation(pts, tgles, mat_ids)
         self.thisptr.getRealPointer().updateAltiInfra(True)
         self.thisptr.getRealPointer().updateAcoustique(True)
         self.thisptr.getRealPointer().getProjet().updateAltiRecepteurs(alti.getRealPointer())

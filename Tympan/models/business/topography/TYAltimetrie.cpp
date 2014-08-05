@@ -32,7 +32,7 @@
   #include "Tympan/gui/gl/TYAltimetrieGraphic.h"
 #endif
 #include "TYAltimetrie.h"
-
+#include"Tympan/models/business/material/TYSol.h"
 
 #undef min
 #undef max
@@ -152,11 +152,26 @@ int TYAltimetrie::fromXML(DOM_Element domElement)
 
 void TYAltimetrie::plugBackTriangulation(
     const std::deque<OPoint3D>& vertices,
-    std::deque<OTriangle>& triangles)
+    std::deque<OTriangle>& triangles,
+    const std::deque<std::string>& material_ids)
 {
     const unsigned nbTriangles = triangles.size();
     unsigned i; // Index over triangles
     unsigned j; // Index over {0, 1, 2} for vertices of triangles
+
+    _vertices = vertices;
+    _faces = triangles;
+    for (int i = 0; i < material_ids.size(); i++)
+    {
+        // Increments reference counter since it is owned by the element itself
+        // and not by the smart pointer
+        LPTYSol ground_mat = dynamic_cast<TYSol*>(TYElement::getInstance(
+                    OGenID(QString(material_ids[i].c_str()))));
+        if (ground_mat != nullptr)
+        {
+            _materials.push_back(ground_mat);
+        }
+    }
 
     // Purge de la liste des faces
     _listFaces.clear();

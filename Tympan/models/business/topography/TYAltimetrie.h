@@ -103,7 +103,8 @@ public:
      */
     void plugBackTriangulation(
         const std::deque<OPoint3D>& points,
-        std::deque<OTriangle>& triangles);
+        std::deque<OTriangle>& triangles,
+        const std::deque<std::string>& material_ids);
 
     /**
      * Set/Get de la liste des faces.
@@ -264,6 +265,11 @@ protected:
     /// Step along each dimension of the accelerating grid
     double _gridDX;
     double _gridDY;
+
+    // Altimetry mesh
+    std::deque<OPoint3D>  _vertices;
+    std::deque<OTriangle> _faces;
+    std::deque<LPTYSol> _materials;
 };
 
 

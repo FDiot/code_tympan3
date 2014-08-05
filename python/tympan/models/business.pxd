@@ -4,7 +4,7 @@ from libcpp.string cimport string
 from libcpp.vector cimport vector
 from libcpp.deque cimport deque
 from libcpp cimport bool
-from libcpp.map cimport map
+from libcpp.map cimport map as cppmap
 
 from tympan.core cimport unique_ptr, QString, SmartPtr, OGenID, SolverInterface
 from tympan.models cimport common as tycommon
@@ -41,6 +41,9 @@ cdef extern from "Tympan/models/business/TYMaillage.h" namespace "TYMaillage":
         Actif
         Inactif
 
+cdef extern from "Tympan/models/business/TYElement.h" namespace "TYElement":
+    TYElement* getInstance(OGenID)
+
 cdef extern from "Tympan/models/business/TYElement.h":
     TYAcousticSurface* downcast_acoustic_surface "downcast<TYAcousticSurface>"(TYElement *)
     # Occurences of downcast_acoustic_surface in Cython will be directly
@@ -60,6 +63,7 @@ cdef extern from "Tympan/models/business/TYElement.h":
     TYPlanEau* downcast_plan_eau "downcast<TYPlanEau>"(TYElement*)
     TYTerrain* downcast_terrain "downcast<TYTerrain>"(TYElement*)
     TYSiteNode* downcast_sitenode "downcast<TYSiteNode>"(TYElement*)
+    TYSol* downcast_sol "downcast<TYSol>"(TYElement*)
 
 # This is because it seems unsupported to declare a map containing pointers
 # http://trac.cython.org/cython_trac/ticket/793
@@ -72,7 +76,7 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         size_t getNbOfRecepteurs() const
         size_t getNbOfSources() const
         tycommon.OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
-        map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
+        cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
         void setResultMatrix(tysolver.SpectrumMatrix matrix)
 
@@ -105,11 +109,11 @@ cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
         const double getAltiEmprise() const
         const vector[SmartPtr[TYGeometryNode]]& getListSiteNode() const
         bool getUseEmpriseAsCrbNiv() const
-        void getFacesOnGround(map[OGenID, deque[tycommon.OPoint3D]]& tabContours) const
+        void getFacesOnGround(cppmap[OGenID, deque[tycommon.OPoint3D]]& tabContours) const
 
 cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
-        void getAllSrcs(const TYCalcul* pCalcul, map[TYElem_ptr,
+        void getAllSrcs(const TYCalcul* pCalcul, cppmap[TYElem_ptr,
                         vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs)
 
 cdef extern from "Tympan/models/business/TYCalcul.h":
@@ -118,7 +122,7 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         unique_ptr[tysolver.AcousticProblemModel] _acousticProblem
         unique_ptr[tysolver.AcousticResultModel]  _acousticResult
         SmartPtr[TYResultat] getResultat()
-        void getAllSources(map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
+        void getAllSources(cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
                       vector[SmartPtr[TYGeometryNode]])
         SmartPtr[TYAtmosphere] getAtmosphere()
         void selectActivePoint(SmartPtr[TYSiteNode] pSite)
@@ -136,8 +140,9 @@ cdef extern from "Tympan/models/business/TYProjet.h":
 
 cdef extern from "Tympan/models/business/topography/TYAltimetrie.h":
     cdef cppclass TYAltimetrie (TYElement):
-        void plugBackTriangulation(deque[tycommon.OPoint3D]& points,
-                              deque[tycommon.OTriangle]& triangles)
+        void plugBackTriangulation(const deque[tycommon.OPoint3D]& points,
+                                   const deque[tycommon.OTriangle]& triangles,
+                                   const deque[string]& materials)
 
 cdef extern from "Tympan/models/business/geoacoustic/TYAcousticSurface.h":
     cdef cppclass TYAcousticSurface (TYElement):
