@@ -60,7 +60,14 @@ def export_site_topo(cysite):
         asite.add_child(alcurve)
     # Water bodies
     # XXX set water material here (in datamodel)
+    water_material = None
     for cylake in cysite.lakes:
+        # Build water material
+        cywater = cylake.ground_material
+        alwater = GroundMaterial(cywater.elem_id)
+        if not water_material:
+            water_material = cywater.elem_id
+            datamodel.MATERIAL_WATER = alwater
         allake = WaterBody(
             coords=cypoints2acoords(cylake.level_curve.points),
             altitude=cylake.level_curve.altitude,

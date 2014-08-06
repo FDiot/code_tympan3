@@ -485,6 +485,14 @@ cdef class Lake:
     matrix = cy.declare(tycommon.OMatrix) # to get Lake pos in a global scale
 
     @property
+    def ground_material(self):
+        """ Return the water material the material area is made of as a 'Ground'
+        cython object """
+        ground = Ground()
+        ground.thisptr = self.thisptr.getSol()
+        return ground
+
+    @property
     def elem_id(self):
         """ Return Lake id as a string """
         return tyelement_id(self.thisptr)
