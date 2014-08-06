@@ -252,7 +252,7 @@ cdef class Site:
         ptopo = cy.declare(cy.pointer(TYTopographie))
         ptopo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
         # Retrieve topography mesh as c++ objects
-        ptopo.exportMesh(pts, tgles, cy.address(mats))
+        ptopo.exportMesh(pts, tgles, mats)
         # Retrieve points
         points = []
         itp = cy.declare(deque[tycommon.OPoint3D].iterator)

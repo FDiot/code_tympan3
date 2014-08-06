@@ -467,10 +467,10 @@ public:
      *
      * @param points output argument filled with the vertices of the triangulation
      * @param triangles output argument filled with the faces of the triangulation
-     * @param p_materials optionnal output argument filled with the materials of the faces
+     * @param materials output argument filled with the materials of the faces
      *
      */
-    void exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>* p_materials = NULL);
+    void exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>& materials);
 
 private :
 
