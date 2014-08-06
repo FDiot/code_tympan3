@@ -110,6 +110,7 @@ cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
         const vector[SmartPtr[TYGeometryNode]]& getListSiteNode() const
         bool getUseEmpriseAsCrbNiv() const
         void getFacesOnGround(cppmap[OGenID, deque[tycommon.OPoint3D]]& tabContours) const
+        void uuid2tysol(const deque[string]& material_ids, deque[SmartPtr[TYSol]]& materials)
 
 cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
@@ -142,7 +143,7 @@ cdef extern from "Tympan/models/business/topography/TYAltimetrie.h":
     cdef cppclass TYAltimetrie (TYElement):
         void plugBackTriangulation(const deque[tycommon.OPoint3D]& points,
                                    const deque[tycommon.OTriangle]& triangles,
-                                   const deque[string]& materials)
+                                   const deque[SmartPtr[TYSol]]& materials)
 
 cdef extern from "Tympan/models/business/geoacoustic/TYAcousticSurface.h":
     cdef cppclass TYAcousticSurface (TYElement):

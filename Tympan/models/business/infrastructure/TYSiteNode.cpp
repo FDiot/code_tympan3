@@ -593,10 +593,53 @@ void TYSiteNode::loadTopoFile()
     std::deque<OPoint3D> points = reader.points();
     std::deque<OTriangle> triangles = reader.faces();
     std::deque<std::string> material_ids = reader.materials();
-    _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles, material_ids);
+    std::deque<LPTYSol> materials;
+    uuid2tysol(material_ids, materials);
+    _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles, materials);
     setIsGeometryModified(false);  // L'altimetrie est a jour
     OMessageManager::get()->info("Mise a jour altimetrie terminee.");
     TYNameManager::get()->enable(true);
+}
+
+void TYSiteNode::uuid2tysol(const std::deque<std::string>& material_ids, std::deque<LPTYSol>& materials)
+{
+    OMessageManager& logger = *OMessageManager::get();
+    // Build a dictionnary UUID --> corresponding TYSol
+    std::map<string, LPTYSol> uuid2tysol;
+    // Terrain
+    const TYTabTerrainGeoNode& terrains = _pTopographie->getListTerrain();
+    for (int i = 0; i < terrains.size(); i ++)
+    {
+        TYTerrain* terrain = dynamic_cast<TYTerrain*> (terrains[i]->getElement());
+        assert(terrain != nullptr);
+        LPTYSol sol = terrain->getSol();
+        uuid2tysol.insert(std::make_pair(sol->getID().toString().toStdString(), sol));
+    }
+    // WaterBody
+    const TYTabPlanEauGeoNode& waterbodies = _pTopographie->getListPlanEau();
+    for (int i = 0; i < waterbodies.size(); i ++)
+    {
+        TYPlanEau* waterbody = dynamic_cast<TYPlanEau*> (waterbodies[i]->getElement());
+        assert(waterbody != nullptr);
+        LPTYSol sol = waterbody->getSol();
+        uuid2tysol.insert(std::make_pair(sol->getID().toString().toStdString(), sol));
+    }
+
+    // For each material UUID, retrieve the TYSol and adds it to the materials deque
+    for (int i = 0; i < material_ids.size(); i++)
+    {
+        std::map<string, LPTYSol>::const_iterator mat = uuid2tysol.find(material_ids[i]);
+        if (mat != uuid2tysol.end())
+        {
+            materials.push_back(uuid2tysol.find(material_ids[i])->second);
+        }
+        else
+        {
+            logger.error("Unknown material retrieved from altimetry mesh: id = %s. Using default material instead",
+                    material_ids[i].c_str());
+            materials.push_back(_pTopographie->getDefTerrain()->getSol());
+        }
+    }
 }
 
 // TODO : Split the huge method based on the type of infrastructure
