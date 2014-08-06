@@ -200,6 +200,9 @@ public:
     /** \brief Integer coordinates into the grid */
     struct grid_index { unsigned pi, qi; } ;
 
+    void exportMesh(std::deque<OPoint3D>&  vertices, std::deque<OTriangle>& faces,
+            std::deque<LPTYSol>& materials);
+
 protected:
     FRIEND_TEST(TYAltimetryTest, dummy_grid);
     FRIEND_TEST(TYAltimetryTest, simple_grid);

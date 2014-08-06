@@ -1419,10 +1419,5 @@ unsigned TYTopographie::number_of_faces() const
 
 void TYTopographie::exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>& materials)
 {
-     points.push_back(OPoint3D(-200.0, 200.0, 0.0));
-     points.push_back(OPoint3D(200.0, 200.0, 0.0));
-     points.push_back(OPoint3D(200.0, -200.0, 0.0));
-     points.push_back(OPoint3D(-200.0, -200.0, 0.0));
-     triangles.push_back(OTriangle(1, 0, 2));
-     triangles.push_back(OTriangle(0, 3, 2));
+    _pAltimetrie->exportMesh(points, triangles, materials);
 }
