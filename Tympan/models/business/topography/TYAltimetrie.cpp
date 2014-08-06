@@ -149,6 +149,20 @@ int TYAltimetrie::fromXML(DOM_Element domElement)
     return 1;
 }
 
+void TYAltimetrie::exportMesh(std::deque<OPoint3D>&  vertices,
+        std::deque<OTriangle>& faces,
+        std::deque<LPTYSol>& materials)
+{
+    assert(vertices.empty() &&
+            "'vertices' output argument must be passed empty to TYAltimetrie::exportMesh");
+    assert(faces.empty() &&
+            "'faces' output argument must be passed empty to TYAltimetrie::exportMesh");
+    assert(materials.empty() &&
+            "'materials' output argument must be passed empty to TYAltimetrie::exportMesh");
+    vertices = _vertices;
+    faces = _faces;
+    materials = _materials;
+}
 
 void TYAltimetrie::plugBackTriangulation(
     const std::deque<OPoint3D>& vertices,
