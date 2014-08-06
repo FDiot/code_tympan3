@@ -332,12 +332,14 @@ cdef class Site:
             tgles.push_back(tycommon.OTriangle(faces[i][0], faces[i][1],
                                                faces[i][2]))
         for matidx in materials_idx:
-            matid = materials[materials_idx[matidx]]
+            matid = materials[matidx]
             matid = ''.join(map(chr, matid))
             mat_ids.push_back(matid)
+        cppmats = cy.declare(deque[SmartPtr[TYSol]])
+        self.thisptr.getRealPointer().uuid2tysol(mat_ids, cppmats)
         alti = cy.declare(SmartPtr[TYAltimetrie])
         alti = self.thisptr.getRealPointer().getTopographie().getRealPointer().getAltimetrie()
-        alti.getRealPointer().plugBackTriangulation(pts, tgles, mat_ids)
+        alti.getRealPointer().plugBackTriangulation(pts, tgles, cppmats)
         self.thisptr.getRealPointer().updateAltiInfra(True)
         self.thisptr.getRealPointer().updateAcoustique(True)
         self.thisptr.getRealPointer().getProjet().updateAltiRecepteurs(alti.getRealPointer())

@@ -167,7 +167,7 @@ void TYAltimetrie::exportMesh(std::deque<OPoint3D>&  vertices,
 void TYAltimetrie::plugBackTriangulation(
     const std::deque<OPoint3D>& vertices,
     std::deque<OTriangle>& triangles,
-    const std::deque<std::string>& material_ids)
+    const std::deque<LPTYSol>& materials)
 {
     const unsigned nbTriangles = triangles.size();
     unsigned i; // Index over triangles
@@ -175,17 +175,7 @@ void TYAltimetrie::plugBackTriangulation(
 
     _vertices = vertices;
     _faces = triangles;
-    for (int i = 0; i < material_ids.size(); i++)
-    {
-        // Increments reference counter since it is owned by the element itself
-        // and not by the smart pointer
-        LPTYSol ground_mat = dynamic_cast<TYSol*>(TYElement::getInstance(
-                    OGenID(QString(material_ids[i].c_str()))));
-        if (ground_mat != nullptr)
-        {
-            _materials.push_back(ground_mat);
-        }
-    }
+    _materials = materials;
 
     // Purge de la liste des faces
     _listFaces.clear();

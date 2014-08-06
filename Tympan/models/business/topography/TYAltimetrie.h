@@ -104,7 +104,7 @@ public:
     void plugBackTriangulation(
         const std::deque<OPoint3D>& points,
         std::deque<OTriangle>& triangles,
-        const std::deque<std::string>& material_ids);
+        const std::deque<LPTYSol>& materials);
 
     /**
      * Set/Get de la liste des faces.

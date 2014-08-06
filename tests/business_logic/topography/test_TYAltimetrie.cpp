@@ -46,7 +46,7 @@ TYAltimetrie* buildSlopeAltimetry(void)
     // Creating the altimetry
     std::deque<OPoint3D> points;
     std::deque<OTriangle> triangles;
-    std::deque<std::string> materials;
+    std::deque<LPTYSol> materials;
     LPTYSol stub_ground_mat;
     // XXX  Stub:
     points.push_back(OPoint3D(-200.0, 200.0, 0.0));
@@ -55,8 +55,8 @@ TYAltimetrie* buildSlopeAltimetry(void)
     points.push_back(OPoint3D(-200.0, -200.0, 0.0));
     triangles.push_back(OTriangle(1, 0, 2));
     triangles.push_back(OTriangle(0, 3, 2));
-    materials.push_back("matid1");
-    materials.push_back("matid2");
+    materials.push_back(stub_ground_mat);
+    materials.push_back(stub_ground_mat);
     pAlti->plugBackTriangulation(points, triangles, materials);
 
     //compute(pTopo->collectPointsForAltimetrie(false), 1.E-5);

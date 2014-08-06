@@ -367,6 +367,8 @@ class TYSiteNode: public TYElement
      */
     void altimetryNeedsUpdate(){_alti_needs_update = true;}
 
+    void uuid2tysol(const std::deque<std::string>& material_ids, std::deque<LPTYSol>& materials);
+
 protected:
     /**
      * Mise a jour de l'altimetrie.
