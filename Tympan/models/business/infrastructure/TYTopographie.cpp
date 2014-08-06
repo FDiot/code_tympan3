@@ -1417,7 +1417,7 @@ unsigned TYTopographie::number_of_vertices() const
 unsigned TYTopographie::number_of_faces() const
 { return p_alti_builder->number_of_faces(); }
 
-void TYTopographie::exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>* p_materials)
+void TYTopographie::exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>& materials)
 {
      points.push_back(OPoint3D(-200.0, 200.0, 0.0));
      points.push_back(OPoint3D(200.0, 200.0, 0.0));

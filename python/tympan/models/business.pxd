@@ -189,7 +189,7 @@ cdef extern from "Tympan/models/business/material/TYSol.h":
 
 cdef extern from "Tympan/models/business/infrastructure/TYTopographie.h":
     cdef cppclass TYTopographie (TYElement):
-        void exportMesh(deque[tycommon.OPoint3D] &, deque[tycommon.OTriangle] &, deque[SmartPtr[TYSol]] *)
+        void exportMesh(deque[tycommon.OPoint3D] &, deque[tycommon.OTriangle] &, deque[SmartPtr[TYSol]] &)
         SmartPtr[TYAltimetrie] getAltimetrie()
         void sortTerrainsBySurface()
         const vector[SmartPtr[TYGeometryNode]]& getListPlanEau() const
