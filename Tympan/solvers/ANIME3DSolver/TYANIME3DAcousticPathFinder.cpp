@@ -35,10 +35,9 @@ using std::vector;
 #include "Tympan/solvers/AcousticRaytracer/Geometry/RandomSphericSampler.h"
 #include "Tympan/solvers/AcousticRaytracer/Engine/Simulation.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
-#include "TYANIME3DRayTracerSetup.h"
-#include "TYANIME3DRayTracerSolverAdapter.h"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSolverAdapter.h"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DSolver.h"
-#include "TYANIME3DAcousticPathFinder.h"
 
 #define _USE_METEO_
 

@@ -25,7 +25,6 @@
 #include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
 #include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "Tympan/models/business/TYPointCalcul.h"
-#include "Tympan/models/business/TYSolverInterface.h"
 #include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
 
