@@ -662,6 +662,16 @@ class ElevationMesh(MeshedCDTWithInfo):
             if input_altitude is UNSPECIFIED_ALTITUDE:
                 info = self.vertices_info[vh]
                 info.altitude = reference(vh.point())
+                if info.altitude is UNSPECIFIED_ALTITUDE:
+                    warn("Found a vertex with an unspecified altitude in the mesh (%f, %f)"
+                         % (vh.point().x(), vh.point().y()), RuntimeWarning)
+                    # XXX this happens when the point is outside the convex hull
+                    # of the triangulation (see ReferenceElevationMesh.point_altitude)
+                    # In that case, don't keep unspecified altitudes because it
+                    # leads to an exception (raised in ElevationMesh.point3d_for_vertex)
+                    # XXX Would it be better to remove the point somewhere
+                    # before entering this method ?
+                    info.altitude = 0
 
     def flood_polygon(self, flooder_class, vertices, flood_right=False, close_it=False):
         """Flood the inside of a polygon given by its vertices list using the
