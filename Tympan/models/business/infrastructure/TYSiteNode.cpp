@@ -536,8 +536,7 @@ void TYSiteNode::loadTopoFile()
         std::ostringstream msg;
         msg << boost::diagnostic_information(exc);
         logger.error(
-                "Could not export current project. Computation won't be done");
-        logger.debug(msg.str().c_str());
+                "Impossible d'exporter le projet courant pour calculer l'altimetrie.");
         TYNameManager::get()->enable(true);
         throw;
     }
@@ -558,12 +557,14 @@ void TYSiteNode::loadTopoFile()
     absolute_pyscript_path.append(ALTIMETRY_PYSCRIPT);
     args << absolute_pyscript_path << current_project.fileName()
         << result_mesh.fileName();
-    logger.info("Going to invoke python subprocess to compute altimetry with script: %s",
+    logger.info(
+            "Lancement d'un sous-processus python pour calculer l'altimetrie avec le script: %s",
             absolute_pyscript_path.toStdString().c_str());
     string error_msg;
     if (!python(args, error_msg))
     {
         TYNameManager::get()->enable(true);
+        logger.error("Echec du calcul de l'altimetrie");
         throw tympan::exception() << tympan_source_loc;
     }
     // CAUTION: reader uses rply C library which calls strtod (stdlib) to read float
