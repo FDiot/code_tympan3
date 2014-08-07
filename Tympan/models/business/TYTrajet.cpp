@@ -13,19 +13,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-
 #include "TYTrajet.h"
 
 
-TYTrajet::TYTrajet(TYSourcePonctuelleGeoNode* pSrc /*=NULL*/, TYPointCalculGeoNode* pPtCalcul /*=NULL*/) :
-    _pSrc(pSrc),
-    _pPtCalcul(pPtCalcul),
+TYTrajet::TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_) :
+    asrc(asrc_),
+    arcpt(arcpt_),
     _distance(0.0)
 {
+    _ptS = asrc.position;
+    _ptR = arcpt.position;
+    _distance = _ptS.distFrom(_ptR);
 }
 
 
-TYTrajet::TYTrajet(const TYTrajet& other)
+TYTrajet::TYTrajet(const TYTrajet& other) : asrc(other.asrc), arcpt(other.arcpt)
 {
     *this = other;
 }
@@ -33,22 +35,12 @@ TYTrajet::TYTrajet(const TYTrajet& other)
 TYTrajet::~TYTrajet()
 {
     reset();
-    _pSrc = NULL;
-    _pPtCalcul = NULL;
 }
 
 void TYTrajet::reset()
 {
     _chemins.clear();
     _cheminsDirect.clear();
-
-    for (unsigned int i = 0; i < _tabRays.size(); i++)
-    {
-        if (_tabRays[i]) { delete _tabRays[i]; }
-        _tabRays[i] = NULL;
-    }
-
-    _tabRays.clear();
 }
 
 
@@ -56,13 +48,15 @@ TYTrajet& TYTrajet::operator=(const TYTrajet& other)
 {
     if (this != &other)
     {
-        _pSrc = other._pSrc;
-        _pPtCalcul = other._pPtCalcul;
         _chemins = other._chemins;
         _ptS = other._ptS;
         _ptR = other._ptR;
         _distance = other._distance;
         _sLP = other._sLP;
+        asrc = other.asrc;
+        arcpt = other.arcpt;
+        asrc_idx = other.asrc_idx;
+        arcpt_idx = other.arcpt_idx;
     }
     return *this;
 }
@@ -71,13 +65,17 @@ bool TYTrajet::operator==(const TYTrajet& other) const
 {
     if (this != &other)
     {
-        if (_pSrc != other._pSrc) { return false; }
-        if (_pPtCalcul != other._pPtCalcul) { return false; }
         if (_chemins != other._chemins) { return false; }
         if (_ptS != other._ptS) { return false; }
         if (_ptR != other._ptR) { return false; }
         if (_distance != other._distance) { return false; }
+        if (_sLP != other._sLP) { return false; };
+        //if (asrc != other.asrc) { return false; };
+        //if (arcpt != other.arcpt) ;
+        if (asrc_idx != other.asrc_idx) { return false; };
+        if (arcpt_idx != other.arcpt_idx) { return false; };
     }
+
     return true;
 }
 
@@ -101,7 +99,7 @@ OSpectre TYTrajet::getPNoOp()
     return _chemins[0].getAttenuation();
 }
 
-OSpectre TYTrajet::getPEnergetique(const TYAtmosphere& atmos)
+OSpectre TYTrajet::getPEnergetique(const tympan::AtmosphericConditions& atmos)
 {
     OSpectre s = OSpectre::getEmptyLinSpectre();
     OSpectreComplex sTemp;
@@ -171,7 +169,7 @@ OSpectre TYTrajet::getPEnergetique(const TYAtmosphere& atmos)
     return s;
 }
 
-OSpectre TYTrajet::getPInterference(const TYAtmosphere& atmos)
+OSpectre TYTrajet::getPInterference(const tympan::AtmosphericConditions& atmos)
 {
     unsigned int i, j;
     int firstReflex = -1;
@@ -312,7 +310,7 @@ OSpectre TYTrajet::getPInterference(const TYAtmosphere& atmos)
 
             }
 
-            attDirect = sCarreModuleDirect.sum(sProduitCroiseDirect); //.abs() ;
+            attDirect = sCarreModuleDirect.sum(sProduitCroiseDirect); //.abs();
         }
 
         // On remplace la contribution du trajet direct pour toutes les frequences ou cela est necessaire
@@ -331,7 +329,7 @@ OSpectre TYTrajet::getPInterference(const TYAtmosphere& atmos)
 #define CALCUL_AVEC_LISSAGE
 
 #ifdef CALCUL_AVEC_LISSAGE
-OSpectre TYTrajet::correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const TYAtmosphere& atmos, const double& ri, const double& rj) const
+OSpectre TYTrajet::correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const tympan::AtmosphericConditions& atmos, const double& ri, const double& rj) const
 {
     const double dp6 = pow(2, (1.0 / 6.0));
     const double invdp6 = 1.0 / dp6;
@@ -339,7 +337,7 @@ OSpectre TYTrajet::correctTiers(const OSpectreComplex& si, const OSpectreComplex
     OSpectre cosTemp;
     OSpectre s;
 
-    OSpectre sTemp = atmos.getKAcoust().mult(ri - rj); // k(ri-rj)
+    OSpectre sTemp = atmos.get_k().mult(ri - rj); // k(ri-rj)
 
     if (ri == rj)
     {

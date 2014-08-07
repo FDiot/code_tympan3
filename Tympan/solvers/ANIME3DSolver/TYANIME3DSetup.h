@@ -13,30 +13,34 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#ifndef TYANIME3D_SETUP_H
+#define TYANIME3D_SETUP_H
 
-#ifndef __TYFACESELECTOR__
-#define __TYFACESELECTOR__
-
-#include "Tympan/models/business/TYFaceSelectorInterface.h"
-#include "TYSolverDefines.h"
-
-class TYSolver;
-
-class TYFaceSelector : public TYFaceSelectorInterface
+/**
+* \namespace TYANIME3DSetUp
+* \brief Functions to load solver parameters
+*/
+namespace ANIME3DSetup
 {
-public:
-    TYFaceSelector(TYSolver& solver);
-    virtual ~TYFaceSelector();
+    /*!
+     * \brief set values
+     */
+    void exec();
 
-    virtual void selectFaces(std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon);
+    /*!
+    * \fn virtual void initGlobalValues()
+    * \brief  Parametres par defaut du lancer de rayons pour le solveur ANIME3D
+    */
+    void initGlobalValues();
 
-protected :
-    // Reference sur le solver
-    TYSolver& _solver;
+    /*!
+    * \fn virtual void loadParameters()
+    * \brief  Lecture des parametres lancer de rayons pour le solveur ANIME3D dans le fichier ANIME3DRayTracerParameters.txt
+    * \return Renvoie vrai si l'ensemble des operations se sont bien deroulees.
+    */
+    bool loadParameters();
+	
+    double getParam(char* ligne);
+}
 
-private  :
-    bool buildPlans(TYSPlan* plan, const OSegment3D& rayon);
-    bool CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourante, TYSIntersection& Intersect, OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3, const int& indice) const;
-};
-
-#endif // __TYFACESELECTOR__
+#endif //TYANIME3DRAYTRACERSETUP_H

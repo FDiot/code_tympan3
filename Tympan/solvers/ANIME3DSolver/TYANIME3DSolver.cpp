@@ -29,9 +29,9 @@
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSetup.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticModel.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DSetup.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DFaceSelector.h"
 #include "TYANIME3DSolver.h"
-
 
 typedef std::vector<TYTrajet> TabTrajet;
 
@@ -55,11 +55,11 @@ void TYANIME3DSolver::purge()
     _tabPolygon = NULL;
 }
 
-void TYANIME3DSolver::init(const TYSiteNode& site, TYCalcul& calcul)
+void TYANIME3DSolver::init()
 {
-    site.getInfrastructure()->getAllSrcs(&calcul, _tabSources);
+    ANIME3DSetup::exec();
 
-    calcul.getAllRecepteurs(_tabRecepteurs); // recuperation des recepteurs
+    _pAtmos = std::unique_ptr<tympan::AtmosphericConditions>( new tympan::AtmosphericConditions(globalAtmosPressure, globalAtmosTemperature, globalAtmosHygrometry) ); 
 
     _tabRay.clear();
 }
@@ -69,50 +69,80 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
         tympan::AcousticResultModel& aresult)
 {
     // Rcupration (once for all) des sources et des rcepteurs
-    init(site, calcul);
+    init();
 
     // Construction de la liste des faces utilise pour le calcul
-    TYANIME3DFaceSelector fs(site);
+    TYANIME3DFaceSelector fs(aproblem);
     bool bRet = fs.exec(_tabPolygon, _tabPolygonSize);
 
     if (!bRet) { return false; }
 
     // Ray tracing computation
-    TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, _tabSources, _tabRecepteurs, _tabRay);
+    TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, aproblem, _tabRay);
     apf.exec();
 
     ////////////////////////////////////////////////////////////
     // Calculs acoustiques sur les rayons via la methode ANIME3D
     ////////////////////////////////////////////////////////////
 
-    TYANIME3DAcousticModel aam(calcul, site, _tabRay, _tabPolygon, _tabSources, _tabRecepteurs);
+    TYANIME3DAcousticModel aam(_tabRay, _tabPolygon, aproblem, *_pAtmos);
 
     // calcul de la matrice de pression totale pour chaque couple (S,R)
     OTab2DSpectreComplex tabSpectre = aam.ComputeAcousticModel();
+    OSpectre sLP; // spectre de pression pour chaque couple (S,R)
 
-    TabTrajet& trajets = calcul.getTabTrajet();  // recuperation du tableau de trajets
+    tympan::SpectrumMatrix& matrix = aresult.get_data();
+    matrix.resize(aproblem.nreceptors(), aproblem.nsources());
 
-    trajets.clear(); // nettoyage des trajets
-
-    OSpectre sLP; // puissance de la source et spectre de pression pour chaque couple (S,R)
-    TYTrajet traj;
-
-    for (int i = 0; i < _tabSources.size(); i++) // boucle sur les sources
+    for (int i = 0; i < aproblem.nsources(); i++) // boucle sur les sources
     {
-        for (int j = 0; j < _tabRecepteurs.size(); j++) // boucle sur les recepteurs
+        for (int j = 0; j < aproblem.nreceptors(); j++) // boucle sur les recepteurs
         {
             tabSpectre[i][j].setEtat(SPECTRE_ETAT_LIN);
             sLP = tabSpectre[i][j];
             sLP.setType(SPECTRE_TYPE_LP);
 
             tabSpectre[i][j] = sLP.toDB();  // conversion du tableau resultat en dB
-
-            traj.setSourcePonctuelle(_tabSources[i]);
-            traj.setPointCalcul(_tabRecepteurs[j]);
-            traj.setSpectre(tabSpectre[i][j]);
-            trajets.push_back(traj);
+            matrix(j, i) = tabSpectre[i][j];
         }
     }
+
+
+
+
+//  --- BEGIN ---
+//	Code below is only for compatibility reasons and must be suppressed when result matrix will be implemented correctly in TYResultat
+
+    // build trajects and return count of
+    size_t count = buildTrajects( const_cast<tympan::AcousticProblemModel&>(aproblem) );
+
+
+    for (unsigned int i = 0; i < aproblem.nsources(); i++) // boucle sur les sources
+    {
+        for (unsigned int j = 0; j < aproblem.nreceptors(); j++) // boucle sur les recepteurs
+        {
+            TYTrajet traj(  const_cast<tympan::AcousticSource&>(aproblem.source(i)), 
+                            const_cast<tympan::AcousticReceptor&>(aproblem.receptor(j)) );
+            traj.asrc_idx = i;
+            traj.arcpt_idx = j;
+
+            tabSpectre[i][j].setEtat(SPECTRE_ETAT_LIN);
+            sLP = tabSpectre[i][j];
+            sLP.setType(SPECTRE_TYPE_LP);
+
+            tabSpectre[i][j] = sLP.toDB();  // conversion du tableau resultat en dB
+
+            //traj.setSourcePonctuelle(_tabSources[i]);
+            //traj.setPointCalcul(_tabRecepteurs[j]);
+            traj.setSpectre(tabSpectre[i][j]);
+            _tabTrajets.push_back(traj);
+        }
+    }
+ 
+	calcul.getTabTrajet().clear();
+	calcul.getTabTrajet() = _tabTrajets;
+
+//  ---  END  ---
 
     if (globalUseMeteo && globalOverSampleD)
     {
@@ -133,4 +163,24 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
     // END : COMPLEMENTS "DECORATIFS"
 
     return true;
+}
+
+size_t TYANIME3DSolver::buildTrajects(tympan::AcousticProblemModel& aproblem)
+{
+    _tabTrajets.reserve( aproblem.nsources() * aproblem.nreceptors() );
+
+    for(unsigned int i=0; i< aproblem.nsources(); i++)
+    {
+        for (unsigned int j = 0; j<aproblem.nreceptors(); j++)
+        {
+            double distance = aproblem.source(i).position.distFrom(aproblem.receptor(j).position);
+            TYTrajet trajet(aproblem.source(i), aproblem.receptor(j));
+            trajet.setDistance(distance);
+            trajet.asrc_idx = i;
+            trajet.arcpt_idx = j;
+            _tabTrajets.push_back(trajet);
+        }
+    }
+
+	return _tabTrajets.size();
 }

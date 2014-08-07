@@ -17,19 +17,21 @@
 #ifndef __TY_ANIME3DSOLVER__
 #define __TY_ANIME3DSOLVER__
 
+#include <memory>
 #include "Tympan/core/interfaces.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/acoustic_path.h"
+#include "Tympan/models/solver/entities.hpp"
 #include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
 #include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "Tympan/models/business/TYPointCalcul.h"
+#include "Tympan/models/business/TYSolverInterface.h"
+#include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
-
 
 class TYANIME3DAcousticModel;
 class TYANIME3DAcousticPathFinder;
 class TYANIME3DFaceSelector;
-
 class Lancer;
 
 //Structure permettant de stocker les informations de Tympan dans un format aisement convertible
@@ -38,9 +40,8 @@ class Lancer;
 //Exemple : le dev peut choisir de conserver la resistivite plutot que le G.
 struct TYStructSurfIntersect
 {
-    TYAcousticSurfaceGeoNode* pSurfGeoNode; //Geonode de la surface
     OMatrix matInv;                         // Matrice inverse pour les faces d'infrastructure
-    TYTabPoint tabPoint;                    // Tableau de point utilise pour la preselection
+    TabPoint3D tabPoint;                    // Tableau de point utilise pour la preselection
     bool isEcran;                           // Est un ecran
     bool isInfra;                           // Face d'infrastructure
     OVector3D normal;                       //Normale de la surface
@@ -51,6 +52,7 @@ struct TYStructSurfIntersect
     int idEtage;                            //Indice de l'etage
     OSpectreComplex spectreAbso;            //Spectre d'absorption
     double G;                               //Coefficient d'impedance
+    tympan::AcousticMaterialBase *material;  //triangle material
 };
 
 
@@ -85,7 +87,7 @@ public:
     * \fn void init(const TYSiteNode&, TYCalcul&)
     * \brief Initialize some data structures used by ANIME3D
     */
-    void init(const TYSiteNode& site, TYCalcul& calcul);
+    void init();
 
 
     /*!
@@ -114,10 +116,24 @@ protected:
     FILE logs;
 
     /*!< List of sources used by the solver */
-    TYTabSourcePonctuelleGeoNode _tabSources;
+    //TYTabSourcePonctuelleGeoNode _tabSources;
 
     /*!< List of receptors used by the solver */
-    TYTabPointCalculGeoNode _tabRecepteurs;
+    //TYTabPointCalculGeoNode _tabRecepteurs;
+
+    tympan::source_pool_t all_sources;
+    tympan::receptor_pool_t all_receptors;
+
+private:
+    /**
+     * \fn size_t buildValidTrajects(tympan::AcousticProblemModel& aproblem)
+     * \brief construit le tableau des trajets et la matrice resultat en supprimant les points trop proches d'une source
+     */
+   size_t buildTrajects(tympan::AcousticProblemModel& aproblem);
+
+   std::vector<TYTrajet> _tabTrajets; 
+
+   std::unique_ptr<tympan::AtmosphericConditions> _pAtmos;
 };
 
 #endif // __TY_ANIME3DSOLVER__

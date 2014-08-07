@@ -95,6 +95,8 @@ file(GLOB TYMPAN_SOLVER_DEFAULT_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/DefaultSolver/*/*.cpp solvers/DefaultSolver/*/*.h
     solvers/ConvexHullFinder/*.cpp solvers/ConvexHullFinder/*.h
     solvers/ConvexHullFinder/*/*.cpp solvers/ConvexHullFinder/*/*.h
+    solvers/AcousticRaytracer/*.cpp solvers/AcousticRaytracer/*.h
+    solvers/AcousticRaytracer/*/*.cpp solvers/AcousticRaytracer/*/*.h
 )
 set_property(SOURCE ${TYMPAN_SOLVER_DEFAULT_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
 link_directories(${CGAL_LIBRARIES_DIR})

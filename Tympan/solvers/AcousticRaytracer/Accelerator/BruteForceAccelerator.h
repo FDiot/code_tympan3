@@ -36,6 +36,6 @@ public:
 
     virtual bool build() { return true; }
 
-    virtual decimal traverse(Ray* r, std::list<Intersection> &result);
+    virtual decimal traverse(Ray* r, std::list<Intersection> &result) const;
 };
 #endif

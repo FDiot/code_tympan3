@@ -61,25 +61,6 @@ class TYCalcul: public TYElement
 
 public:
     /**
-     * \fn enum Constants
-     * brief Constantes liees au calcul.
-     *
-     * Le nombre de couples sources recepteurs est limite a 2 exposant 32. Le
-     * nombre total de bits utilises pour representer un couple source recepteur
-     * ne doit pas depasser 32.
-     *
-     */
-    enum Constants
-    {
-        NB_BITS_SOURCES = 10,                           /**< Nombre de bits utilises pour indexer les sources. */
-        NB_BITS_RECEPTEURS = 22,                        /**< Nombre de bits utilises pour indexer les recepteurs. */
-        MAX_SOURCES = 1 << NB_BITS_SOURCES,             /**< Nombre maxi de sources (puissance de 2 obligatoire). */
-        MAX_RECEPTEURS = 1 << NB_BITS_RECEPTEURS,       /**< Nombre maxi de sources (puissance de 2 obligatoire). */
-        MASQUE_INDEX_SOURCES = MAX_SOURCES - 1,         /**< Masque pour acceeder a l'index d'une source dans un couple. */
-        MASQUE_INDEX_RECEPTEUR = MAX_RECEPTEURS - 1,    /**< Masque pour acceeder a l'index d'une source dans un couple. */
-    };
-
-    /**
      * \fn enum CalculState
      * \brief Les differents etats possible pour un calcul.
      */
@@ -347,31 +328,6 @@ public:
     void setCondFav(bool cond) { _condFav = cond; }
 
     /**
-     * \fn void setFreqMinFreq(float freq)
-     * \brief Set de la frequence minimale de la bande de frequence des spectres.
-     */
-    void setFreqMinFreq(float freq);
-    /**
-     * \fn float getFreqMinFreq()
-     * \brief Get de la frequence minimale de la bande de frequence des spectres.
-     * \return _freqMinSpectre
-     */
-    float getFreqMinFreq() const { return _freqMinSpectre; }
-
-    /**
-     * \fn void setFreqMaxFreq(float freq)
-     * \brief Set de la frequence maximale de la bande de frequence des spectres.
-     */
-    void setFreqMaxFreq(float freq);
-    /**
-     * \fn float getFreqMaxFreq()
-     * \brief Get de la frequence maximale de la bande de frequence des spectres.
-     * \return _freqMaxSpectre
-     */
-    float getFreqMaxFreq() const { return _freqMaxSpectre; }
-
-
-    /**
      *\fn void setElementSelection(TYListID selection)
      *\brief Set de la selection d'elements actifs dans ce Calcul.
      */
@@ -606,12 +562,6 @@ public:
     void selectActivePoint(const LPTYSiteNode pSite);
 
     /**
-     * \fn void buildValidTrajects(const TYTabSourcePonctuelleGeoNode& sources, TYTabPointCalculGeoNode& recepteurs)
-     * \brief construit le tableau des trajets et la matrice resultat en supprimant les points trop proches d'une source
-     */
-    void buildValidTrajects(const TYTabSourcePonctuelleGeoNode& sources, TYTabPointCalculGeoNode& recepteurs);
-
-    /**
      * \fn void getAllRecepteurs(TYTabPointCalculGeoNode& tabRecepteur)
      * \brief Construit la liste des recepteurs
      */
@@ -708,7 +658,7 @@ public:
 
     /**
      * \fn void setModifiable(bool modify)
-     * \brief Set attribut modifiable
+     * \brief Set attribut modifiable 
      */
     void setState(int state);
 
@@ -757,33 +707,6 @@ public:
     const double getSeuilConfondu() const { return _seuilConfondus; }
 
     /**
-     * \fn bool getUseExternalSoft()
-     *     void setUseExternalSoft(const bool & use)
-     * \brief Indique si le calcul fait appel a une fonction interne
-     * \return _useExternal
-     */
-    bool getUseExternalSoft() { return _useExternal; }
-    void setUseExternalSoft(const bool& use) { _useExternal = use; }
-
-    /**
-     * \fn unsigned short getExternal()
-     *     void setExternal(const unsigned short& ref)
-     * \brief Get/Set du numero de la methode externe appelee
-     * \return _refExternal
-     */
-    unsigned short getExternal() { return _refExternal; }
-    void setExternal(const unsigned short& ref) { _refExternal = ref; }
-
-    /**
-     * \fn double getGeomPrecision()
-     *     void setGeomPrecision(const double& geomPrecision)
-     * \brief Get/Set de la precision sur la connaissance de la geometrie du modele
-     * \return _geomPrecision
-     */
-    double getGeomPrecision() { return _geomPrecision; }
-    void setGeomPrecision(const double& geomPrecision) { this->_geomPrecision = _geomPrecision; }
-
-    /**
      * -     * \fn OGenID getSolverId()
      *       -     *     void setSolverId(const OGenID& iD)
      *       -     * \brief Get/Set du solveur ID
@@ -792,43 +715,6 @@ public:
     void setSolverId(const OGenID& iD) { _solverId = iD; }
     const OGenID getSolverId() const { return _solverId; }
     OGenID getSolverId() { return _solverId; }
-
-    /**
-     * \fn  bool HARM_AveragingEnabled()
-     *      bool HARM_airAbsorptionEnabled()
-     *      bool HARM_turbulenceScatteringEnabled()
-     *      bool HARM_diffHaddenPierceEnabled()
-     *      bool HARM_randomTerrainEnabled()
-     *      unsigned int HARM_getOptions()
-     *      unsigned short getTypeSaisieMeteo()
-     *      unsigned int getNbTHread()
-     * \fn void HARM_SetAveragingEnabled(const bool& b)
-     *     void HARM_SetAirAbsorptionEnabled(const bool& b)
-     *     void HARM_SetTurbulenceScatteringEnabled(const bool& b)
-     *     void HARM_SetDiffHaddenPierceEnabled(const bool& b)
-     *     void HARM_SetRandomTerrainEnabled(const bool& b)
-     * \brief Get/Set des proprietes du calcul harmonoise
-     * \return HARM_averaging
-     *         HARM_airAbsorption
-     *         HARM_turbulenceScattering
-     *         HARM_diffHaddenPierce
-     *         HARM_randomTerrain
-     *         _typeSaisieMeteo
-     *         _nbThread
-     */
-    bool HARM_AveragingEnabled()            { return HARM_averaging             !=  0 ? true : false ; }
-    bool HARM_airAbsorptionEnabled()        { return HARM_airAbsorption         !=  0 ? true : false ; }
-    bool HARM_turbulenceScatteringEnabled() { return HARM_turbulenceScattering  !=  0 ? true : false ; }
-    bool HARM_diffHaddenPierceEnabled()     { return HARM_diffHaddenPierce      !=  0 ? true : false ; }
-    bool HARM_randomTerrainEnabled()        { return HARM_randomTerrain         !=  0 ? true : false ; }
-
-    void HARM_SetAveragingEnabled(const bool& b)            { HARM_averaging             = b !=  0 ? 2  : 0 ; }
-    void HARM_SetAirAbsorptionEnabled(const bool& b)        { HARM_airAbsorption         = b !=  0 ? 4  : 0 ; }
-    void HARM_SetTurbulenceScatteringEnabled(const bool& b) { HARM_turbulenceScattering  = b !=  0 ? 8  : 0 ; }
-    void HARM_SetDiffHaddenPierceEnabled(const bool& b)     { HARM_diffHaddenPierce      = b !=  0 ? 16 : 0 ; }
-    void HARM_SetRandomTerrainEnabled(const bool& b)        { HARM_randomTerrain         = b !=  0 ? 32 : 0 ; }
-
-    unsigned int HARM_getOptions() { return (HARM_averaging | HARM_airAbsorption | HARM_turbulenceScattering | HARM_diffHaddenPierce | HARM_randomTerrain); }
 
     unsigned short getTypeSaisieMeteo() const { return _typeSaisieMeteo; }
 
@@ -919,32 +805,11 @@ protected:
     ///Distance minimale entre une source et un recepteur
     double _distanceSRMin;
 
-    ///Precision sur la connaissance de la geometrie du modele exprime en pour-cent
-    double _geomPrecision;
-
     /// Distance minimale entre deux points consideres comme confondus
     double _seuilConfondus;
 
-    /// Parametres de calcul harmonoise
-    unsigned int HARM_averaging; // Lissage ou pas
-    unsigned int HARM_airAbsorption; // Prise en compte de l'absorption atmospherique
-    unsigned int HARM_turbulenceScattering; // Prise en compte de la diffusion turbulente
-    unsigned int HARM_diffHaddenPierce; // Formule de diffraction de Hadde-Pierce
-    unsigned int HARM_randomTerrain; // Perturbation aleatoire du profil du terrain
-
-    ///Frequence minimale pour les spectres.
-    float _freqMinSpectre;
-    ///Frequence maximale pour les spectres.
-    float _freqMaxSpectre;
-
     /// Etat du calcul actif/bloque
     int _state;
-
-    /// Utilisation d'un calcul externe
-    bool _useExternal;
-
-    /// Type de calcul
-    unsigned short _refExternal;
 
     unsigned short _typeSaisieMeteo;
 

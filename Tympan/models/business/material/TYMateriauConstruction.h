@@ -92,12 +92,6 @@ public:
     const TYSpectre& getSpectreAbso() const { return _spectreAbso; }
 
     /**
-     * Calcul du spectre d'absorption de Eyring
-     */
-
-    TYSpectre getSpectreAbsoEyring()const;
-
-    /**
      * Set/Get du spectre d'absorption.
      */
     void setSpectreAbso(const TYSpectre& abso) { _spectreAbso = abso; _spectreAbso.setParent(this); }
