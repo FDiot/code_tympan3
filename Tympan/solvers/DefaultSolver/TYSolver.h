@@ -19,7 +19,6 @@
 #include <vector>
 #include <memory>
 #include "Tympan/core/interfaces.h"
-#include "Tympan/models/business/TYSolverInterface.h"
 #include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
@@ -43,11 +42,11 @@ public:
 
     const std::vector<TYStructSurfIntersect>& getTabPolygon() const { return _tabPolygon; }
 
-    TYFaceSelector* getFaceSelector() { return _faceSelector._Myptr; }
-    TYAcousticPathFinder* getAcousticPathFinder() { return _acousticPathFinder._Myptr; }
-    TYAcousticModel* getAcousticModel() { return _acousticModel._Myptr; }
+    TYFaceSelector* getFaceSelector() { return _faceSelector.get();}
+    TYAcousticPathFinder* getAcousticPathFinder() { return _acousticPathFinder.get(); }
+    TYAcousticModel* getAcousticModel() { return _acousticModel.get(); }
 
-    const Scene* getScene() const { return _scene._Myptr; }
+    const Scene* getScene() const { return _scene.get(); }
 
 protected:
     std::unique_ptr<TYFaceSelector> make_face_selector();
