@@ -105,9 +105,6 @@ class GeometricFeature(object):
     def as_geojson(self):
         return json.dumps(self.build_feature(), sort_keys=True)
 
-    def __repr__(self):
-        return self.as_geojson
-
     @property
     def __geo_interface__(self):
         return self.build_geometry()
@@ -167,6 +164,9 @@ class TympanFeature(GeometricFeature):
             assert "site" not in p
             p["site"] = self.parent_site_id
         return p
+
+    def __str__(self):
+        return "TympanFeature %s #%s (type %s)" % (self.__class__.__name__, self.id, self.tympan_type)
 
 
 class LevelCurve(TympanFeature):
