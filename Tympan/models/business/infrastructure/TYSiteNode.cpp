@@ -1144,111 +1144,87 @@ bool almost_equal(double a, double b, double precision)
     return abs(a -b) < abs(precision);
 }
 
-TYTabPoint3D TYSiteNode::groundBasedFace(TYTabAcousticSurfaceGeoNode volumes, OMatrix matrix) const
+void TYSiteNode::groundBasedFaces(const TYTabAcousticVolumeGeoNode& volumes,
+        const OMatrix& global_matrix, std::map<TYUUID, TYTabPoint3D>& contours) const
 {
-    double min_height (100000.);
-    TYTabPoint3D groundbased_face;
-    // Go through all the faces of the input volumes (which is either a machine
-    // or a building)
-    for (int i = 0; i < volumes.size(); i++)
+    // Go through all the faces of the all the input volumes
+    for (unsigned int i = 0; i < volumes.size(); i ++)
     {
-        // Compute global matrix for the current face
-        OMatrix global_matrix = matrix * volumes[i]->getMatrix();
-        volumes[i]->setMatrix(global_matrix);
-        TYAcousticSurface *pFace = dynamic_cast<TYAcousticSurface*>(volumes[i]->getElement());
+        OMatrix matrix = volumes[i]->getMatrix();
+        matrix = global_matrix * matrix;
+        TYAcousticVolume* volume = dynamic_cast<TYAcousticVolume*>(volumes[i]->getElement());
+        assert (volume != nullptr &&
+                "found an object which isn't a  TYAcousticVolume in a TYTabAcousticVolumeGeoNode");
+        TYTabAcousticSurfaceGeoNode faces = volume->acousticFaces();
+        for (unsigned int j = 0; j < faces.size(); j++)
+        {
+            // Compute global matrix for the current face
+            OMatrix face_matrix = matrix * faces[j]->getMatrix();
+            faces[j]->setMatrix(face_matrix);
+            TYAcousticSurface *pFace = dynamic_cast<TYAcousticSurface*>(faces[j]->getElement());
 
-        // Take the contour of the acoustic face, move the points to a global scale
-        // and make a polygon with them
-        TYTabPoint3D contour = pFace->getOContour();
-        TYPolygon poly;
-        for (unsigned int j = 0; j < contour.size(); j++)
-        {
-            contour[j] = global_matrix * contour[j];
-            poly.getPoints().push_back( TYPoint(contour[j]) );
-        }
-        poly.updateNormal();
-        OVector3D normal = poly.normal();
-
-        // We are looking for the floor-based face of the volumes. We keep the
-        // current face if it is parallel to the ground
-        if ( !almost_equal( abs(normal.scalar(OVector3D(0., 0., 1.)) ), 1., 10e-6))
-        {
-            continue;
-        }
-        // Compare it's height with the previous one to stay with the face the
-        // closest from the floor
-        if ( min_height > contour[0]._z )
-        {
-            // We found a closest one, update the result as well as the smallest
-            // known height from the ground
-            groundbased_face = contour;
-            min_height = contour[0]._z;
+            // Take the contour of the acoustic face, move the points to a global scale
+            // and make a polygon with them
+            TYTabPoint3D contour = pFace->getOContour();
+            TYPolygon poly;
+            for (unsigned int k = 0; k < contour.size(); k++)
+            {
+                contour[k] = face_matrix * contour[k];
+                poly.getPoints().push_back( TYPoint(contour[k]) );
+            }
+            // Compute polygon' normal
+            poly.updateNormal();
+            OVector3D normal = poly.normal();
+            // We are looking for the floor-based face of the volumes. We keep the
+            // current face if it is parallel to the ground
+            if ( !almost_equal( abs(normal.scalar(OVector3D(0., 0., 1.)) ), 1., 10e-6))
+                continue;
+            // only keep the face if it is on the ground, i.e. z == 0
+            if (almost_equal(contour[0]._z, 0, 10e-6))
+            {
+                contours[volume->getID()] = contour;
+            }
         }
     }
-    return groundbased_face;
 }
 
-void TYSiteNode::getFacesOnGround(std::map<TYUUID, TYTabPoint3D>& tabContours) const
-{   // !!!!!
-    // Beware: machines and buildings are actually volume nodes, that means
-    // they are made of one or more volumes. Here we are using the method
-    // "acousticFaces" defined in TYAcousticVolumeNode that returns all the acoustic
-    // faces of all the volumes of the volume node, without making any
-    // distinction between the volumes
-
+void TYSiteNode::getFacesOnGround(std::map<TYUUID, TYTabPoint3D>& contours) const
+{
+    assert(contours.empty() &&
+            "Output argument 'contours' is supposed to be empty when calling 'TYSiteNode::getFacesOnGround'");
     // Buildings
-    for (int i = 0; i < _pInfrastructure->getListBatiment().size(); i++)
+    for (unsigned int i = 0; i < _pInfrastructure->getListBatiment().size(); i++)
     {
-        // Si ce batiment est actif pour le calcul
-        LPTYBatiment pBatiment = TYBatiment::safeDownCast(_pInfrastructure->getBatiment(i)->getElement());
-
-        if (pBatiment && pBatiment->isInCurrentCalcul())
+        // If this building is active in the current simulation
+        LPTYBatiment pBuilding = dynamic_cast<TYBatiment*>(_pInfrastructure->getBatiment(i)->getElement());
+        assert(pBuilding != nullptr && "found an object which is not a TYBatiment in _pInfrastructure->getListBatiment()");
+        if (pBuilding->isInCurrentCalcul())
         {
-            // Matrice de changement de repere pour ce batiment
-            OMatrix matrix = _pInfrastructure->getListBatiment()[i]->getMatrix();
-            LPTYEtage pEtage = TYEtage::safeDownCast(pBatiment->getAcousticVol(0));
-
-            // Old Code_TYMPAN version could use a floor as a screen so, that case should be treated
-            bool bEtageEcran = false;
-            if (pEtage)
-            {
-                bEtageEcran = !pEtage->getClosed();
-            }
-            if (bEtageEcran)
-            {
-                pEtage->setacousticFacesPourCalcul(true);
-            }
+            // Building transform matrix
+            OMatrix matrix = _pInfrastructure->getBatiment(i)->getMatrix();
+            TYTabAcousticVolumeGeoNode& building_volumes = pBuilding->getTabAcousticVol();
+            // 1 TYTabPoint3D per volume face on the ground. Indeed there may be several,
+            // since buildings and machines are volume nodes wghich means they
+            // are made of one or more volumes.
+            std::deque<TYTabPoint3D> base_faces;
             // Get the base of the building
-            TYTabPoint3D base(groundBasedFace(pBatiment->acousticFaces(), matrix));
-            // Check it is on the ground
-            if (almost_equal(base[0]._z, 0, 10e-6))
-            {
-                tabContours[pBatiment->getID()] = base;
-            }
+            groundBasedFaces(building_volumes, matrix, contours);
         }
     }
-
     // Machines
-    TYTabAcousticSurfaceGeoNode acoustic_faces;
     for (int i = 0; i < _pInfrastructure->getListMachine().size(); i++)
     {
         // Si cette machine est active pour le calcul
-        LPTYMachine pMachine = TYMachine::safeDownCast(_pInfrastructure->getMachine(i)->getElement());
-
-        if (pMachine && pMachine->isInCurrentCalcul())
+        LPTYMachine pMachine = dynamic_cast<TYMachine*>(_pInfrastructure->getMachine(i)->getElement());
+        assert(pMachine != nullptr && "found an object which is not a TYMachine in _pInfrastructure->getListMachine()");
+        if (pMachine->isInCurrentCalcul())
         {
             // Matrice de changement de repere pour cette machine
-            OMatrix matrix = _pInfrastructure->getListMachine()[i]->getMatrix();
-            TYMachine *machine = TYMachine::safeDownCast(
-                    _pInfrastructure->getMachine(i)->getElement());
-            acoustic_faces = pMachine->acousticFaces();
+            OMatrix matrix = _pInfrastructure->getMachine(i)->getMatrix();
+            TYTabAcousticVolumeGeoNode machine_volumes = pMachine->getTabAcousticVol();
+            std::deque<TYTabPoint3D> base_faces;
             // Get the base of the machine
-            TYTabPoint3D base(groundBasedFace(acoustic_faces, matrix));
-            // Check it is on the ground
-            if (almost_equal(base[0]._z, 0, 10e-6))
-            {
-                tabContours[pMachine->getID()] = base;
-            }
+            groundBasedFaces(machine_volumes, matrix, contours);
         }
     }
 }

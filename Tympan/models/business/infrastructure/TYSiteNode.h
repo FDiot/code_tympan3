@@ -426,17 +426,19 @@ public:
      * brief : Attempt to find the faces placed on the ground among the machines
      * and the buildings of the site
      * TYUUID: volume node id (volume nodes are buildings or machines)
-     * TYTabPoint3D: points defining the ground contour of the volume node in a
-     *  global scale
+     * deque<TYTabPoint3D>: series of points defining the contour of the face of
+     *  the volumes that are on the ground in a global scale
      */
-    void getFacesOnGround(std::map<TYUUID, TYTabPoint3D>& tabContours) const;
+    void getFacesOnGround(std::map<TYUUID, TYTabPoint3D>& contours) const;
 
     /*!
-     * brief: from a series of acoustic surfaces (forming an acoustic volume node)
+     * brief: from a series of acoustic volumes (forming an acoustic volume node)
      * and a transform matrix allowing to convert them to a global scale,
      * return the points constituting the acoustic surface placed on the ground
      */
-    TYTabPoint3D groundBasedFace(TYTabAcousticSurfaceGeoNode volume, OMatrix matrix) const;
+    void groundBasedFaces(const TYTabAcousticVolumeGeoNode& volumes,
+                          const OMatrix& global_matrix,
+                          std::map<TYUUID, TYTabPoint3D>& contours) const;
 
     /// Get/Set du choix du systeme de repere du SIG
     int getSIGType() { return _SIGType; }
