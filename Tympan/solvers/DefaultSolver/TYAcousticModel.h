@@ -30,8 +30,12 @@ public:
     TYAcousticModel(TYSolver& solver);
     virtual ~TYAcousticModel();
 
-    virtual void compute(const TYSIntersection* tabIntersect, const OSegment3D& rayon, TYTrajet& trajet, TYTabPoint3D& ptsTop, TYTabPoint3D& ptsLeft, TYTabPoint3D& ptsRight);
-    void init(const TYSiteNode& site, const TYCalcul& calcul);
+    virtual void compute(   const std::deque<TYSIntersection>& tabIntersect, 
+                            const OSegment3D& rayon, TYTrajet& trajet, 
+                            TabPoint3D& ptsTop, TabPoint3D& ptsLeft, 
+                            TabPoint3D& ptsRight );
+
+    void init(const TYCalcul& calcul);
 
     /**
      * Calcule le chemin sur un segment a partir de la liste des points du parcours
@@ -49,7 +53,9 @@ public:
      * @return <code>true</code> si le calcul a reussi;
      *         <code>false</code> sinon.
      */
-    virtual bool computeCheminsAvecEcran(const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, const TYTabPoint3D& pts, const bool vertical, TYTabChemin& TabChemin, double distance) const;
+    virtual bool computeCheminsAvecEcran(   const OSegment3D& rayon, const tympan::AcousticSource& source, 
+                                            const TabPoint3D& pts, const bool vertical, 
+                                            TYTabChemin& TabChemin, double distance ) const;
 
     /**
      * Calcule la liste des chemins generes par la reflexion sur les parois verticales.
@@ -60,29 +66,31 @@ public:
      * @param tabChemin La liste des chemins generes par la reflexion.
      * @param tabFaces Ensemble des faces du site.
      */
-    void computeCheminReflexion(const TYSIntersection* tabIntersect, const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const;
+    void computeCheminReflexion(    const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, 
+                                    const tympan::AcousticSource& source, TYTabChemin& TabChemins, 
+                                    double distance ) const;
 
-    /**
-     * Calcule les spectres d'attenuation caracteristiques de la vegetation
-     * pour chaque terrain survole par rayon.
-     *
-     * @param rayon Un segment representant le rayon acoustique.
-     * @param tabSegSp Le tableau dans lequel sont stockes les spectres d'attenuation et segments associes.
-     * @param penteMoyenne La pente moyenne sur le rayon.
-     */
-    void getSpectreAttVegetation(const OSegment3D& rayon, const OSegment3D& penteMoyenne, TYTabStructSegLPSp& tabSegSp) const;
+    ///**
+    // * Calcule les spectres d'attenuation caracteristiques de la vegetation
+    // * pour chaque terrain survole par rayon.
+    // *
+    // * @param rayon Un segment representant le rayon acoustique.
+    // * @param tabSegSp Le tableau dans lequel sont stockes les spectres d'attenuation et segments associes.
+    // * @param penteMoyenne La pente moyenne sur le rayon.
+    // */
+    //void getSpectreAttVegetation(const OSegment3D& rayon, const OSegment3D& penteMoyenne, TYTabStructSegLPSp& tabSegSp) const;
 
-    /**
-     * Calcule le chemin direct en tenant compte de la vegetation.
-     *
-     * @param rayon Un segment representant le rayon acoustique.
-     * @param Atmo L'atmosphere courante.
-     * @param pSrcGeoNode La source ponctuelle.
-     * @param penteMoyenne La pente moyenne sur le rayon.
-     *
-     * @return Le chemin determine.
-     */
-    void computeCheminAvecVeg(const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, const OSegment3D& penteMoyenne, TYTabChemin& TabChemin, double distance) const;
+    ///**
+    // * Calcule le chemin direct en tenant compte de la vegetation.
+    // *
+    // * @param rayon Un segment representant le rayon acoustique.
+    // * @param Atmo L'atmosphere courante.
+    // * @param pSrcGeoNode La source ponctuelle.
+    // * @param penteMoyenne La pente moyenne sur le rayon.
+    // *
+    // * @return Le chemin determine.
+    // */
+    //void computeCheminAvecVeg(const OSegment3D& rayon, const tympan::AcousticSource& source, const OSegment3D& penteMoyenne, TYTabChemin& TabChemin, double distance) const;
 
     /**
      * Calcule les chemins avec reflexion au sol s'il n'y a pas d'ecran.
@@ -95,7 +103,7 @@ public:
      * @param tabChemin La liste des chemins generes (1 ou 2 sous conditions favorables).
      * @param penteMoyenne La pente moyenne sur le rayon.
      */
-    void computeCheminSansEcran(const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const;
+    void computeCheminSansEcran(const OSegment3D& rayon, const tympan::AcousticSource& source, TYTabChemin& TabChemins, double distance) const;
 
     /**
      * Calcule les chemin pour un terrain parfaitement plat et reflechissant
@@ -104,7 +112,7 @@ public:
      * @param pSrcGeoNode La source ponctuelle emittrice.
      * @param tabChemin La liste des chemins generes (1 ou 2 sous conditions favorables).
      */
-    void computeCheminAPlat(const OSegment3D& rayon, const TYSourcePonctuelleGeoNode* pSrcGeoNode, TYTabChemin& TabChemins, double distance) const;
+    void computeCheminAPlat(const OSegment3D& rayon, const tympan::AcousticSource& source, TYTabChemin& TabChemins, double distance) const;
 
 
     /**
@@ -147,7 +155,7 @@ public:
      * @return bool <code>true</code> si le calcul est juste;
      *              <code>false</code> sinon.
      */
-    bool addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFin, const OSegment3D& penteMoyenne, const TYSourcePonctuelleGeoNode* pSrcGeoNode, const bool& fromSource, const bool& toRecepteur, TYTabEtape& Etapes, double& longueur) const;
+    bool addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFin, const OSegment3D& penteMoyenne, const tympan::AcousticSource& source, const bool& fromSource, const bool& toRecepteur, TYTabEtape& Etapes, double& longueur) const;
 
     /**
      * Ajoute le trajet direct a chacun des chemins.
@@ -159,10 +167,18 @@ public:
      */
     bool solve(TYTrajet& trajet);
 
-    /**
-     * Renvoi le materiau de la face rencontree par le rayon incident
+private :
+    /*!
+     * \fn OSpectreComplex getReflexionSpectrumAt(const OSegment3D& incident, double length) const
+     * \brief Find Reflexion spectrum at point defined by the end of an incident segment.
      */
-    TYMateriauConstruction* getMateriauFace(TYAcousticSurface* pSurf, const OSegment3D& seg) const;
+    OSpectreComplex getReflexionSpectrumAt(const OSegment3D& incident, double length) const;
+
+    /*!
+     * \fn void meanSlope(const OSegment3D& director, OSegment3D& slope) const
+     * \brief Create a segment corresponding to the projection of "director" segment on the ground
+     */
+    void meanSlope(const OSegment3D& director, OSegment3D& slope) const;
 
 private:
     int  _expGeo;
@@ -177,8 +193,9 @@ private:
     bool _interference;
     double _seuilConfondus;
     double _paramH;
-    TYAtmosphere* _pAtmo;
-    TYTopographie* _pTopographie;
+
+    std::unique_ptr<tympan::AtmosphericConditions> pSolverAtmos;
+
     OSpectre _lambda;
     OSpectreComplex _absoNulle;
 

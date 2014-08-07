@@ -87,7 +87,7 @@ bool GridAccelerator::build()
     return true;
 }
 
-decimal GridAccelerator::traverse(Ray* r, std::list<Intersection> &result)
+decimal GridAccelerator::traverse(Ray* r, std::list<Intersection> &result) const
 {
     decimal rayT;
     decimal intermin = -1.;
