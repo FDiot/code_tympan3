@@ -1408,15 +1408,6 @@ int compareSurfaceTerrains(const void* elem1, const void* elem2)
     return (sgn);
 }
 
-const tympan::IAltimetryBuilder& TYTopographie::getAltimetryBuilder() const
-{ return *p_alti_builder; }
-
-unsigned TYTopographie::number_of_vertices() const
-{ return p_alti_builder->number_of_vertices(); }
-
-unsigned TYTopographie::number_of_faces() const
-{ return p_alti_builder->number_of_faces(); }
-
 void TYTopographie::exportMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles, std::deque<LPTYSol>& materials)
 {
     _pAltimetrie->exportMesh(points, triangles, materials);

@@ -105,9 +105,3 @@ TEST_F(TriangulatePolygonTest, non_simple_face)
     ASSERT_THROW(triangulate(pts), tympan::invalid_data);
 }
 
-
-TEST(AltimetryBuilder, instanciantion)
-{
-    auto p_alti_builder = tympan::make_altimetry_builder();
-    ASSERT_TRUE(static_cast<bool>(p_alti_builder));
-}

@@ -24,8 +24,6 @@
 #include "Tympan/models/business/topography/TYAltimetrie.h"
 #include "Tympan/models/business/material/TYSol.h"
 
-#include "Tympan/models/business/cgal_bridge.h"
-
 ///Structure contenant un segment et un terrain.
 typedef struct
 {
@@ -446,21 +444,6 @@ public:
     OColor getEmpriseColor() const { return _empriseColor; };
 
     /**
-     * @brief Get number of vertices
-     * @return number of vertices (aka points) of the altimetry
-     */
-    unsigned number_of_vertices() const;
-
-    /**
-     * @brief Get number of faces
-     * @return number of faces (aka triangles) of the altimetry
-     */
-    unsigned number_of_faces() const;
-
-
-    const tympan::IAltimetryBuilder& getAltimetryBuilder() const;
-
-    /**
      * @brief Export the altimetry as a triangular mesh
      *
      * This function expect empty deques and will clear the deque passed.
@@ -504,8 +487,6 @@ protected:
     /// Seuils confondus
     double _seuilConfondus;
 
-    /// The AltimetryBuilder used to build the Altimetry
-    std::unique_ptr< tympan::IAltimetryBuilder > p_alti_builder;
 
 private :
     std::vector<TYStructElemPts> _tabElemPts; // Tableau des terrains

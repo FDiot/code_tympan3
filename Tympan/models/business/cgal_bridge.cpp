@@ -12,7 +12,6 @@
 
 #include "Tympan/models/business/cgal_tools.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
-#include "Tympan/models/business/AltimetryBuilder.h"
 #include "Tympan/models/business/exceptions.h"
 
 namespace tympan
@@ -105,16 +104,5 @@ namespace tympan
         return  std::unique_ptr<ITYPolygonTriangulator>(
             new TYPolygonTriangulator(poly));
     } // ITYPolygonTriangulator* make_polygon_triangulator()
-
-
-    std::unique_ptr<IAltimetryBuilder>
-    make_altimetry_builder()
-    {
-        return std::unique_ptr<IAltimetryBuilder>(new AltimetryBuilder());
-    }; // make_altimetry_builder
-
-
-    IAltimetryBuilder::NonComparablePolygons::NonComparablePolygons(const std::string& desc)
-        : ::tympan::invalid_data(desc) {}
 
 } // namespace tympan

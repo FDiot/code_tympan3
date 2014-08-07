@@ -496,21 +496,6 @@ void TYSiteNode::loadTopoFile()
         do_updateAltimetrie(force);
         return true;
     }
-    catch (const tympan::IAltimetryBuilder::NonComparablePolygons& exc)
-    {
-        logger.error("Invalid ground material polygons prevented to update the altimetry");
-        // TODO move here reporting code from AltimetryBuilder
-        msg << boost::diagnostic_information(exc);
-        logger.debug(msg.str().c_str());
-        return false;
-    }
-    catch (const tympan::invalid_data& exc)
-    {
-        msg << boost::diagnostic_information(exc);
-        logger.error("Invalid data prevented to update the altimetry (set log level to debug for diagnosic)");
-        logger.debug(msg.str().c_str());
-        return false;
-    }
     catch (const tympan::exception& exc)
     {
         msg << boost::diagnostic_information(exc);
