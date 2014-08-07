@@ -199,10 +199,10 @@ cdef class SolverModelBuilder:
             mat_cspec = tycommon.OSpectreComplex(mat_spec.thisobj)
             mat_name = cy.declare(string)
             mat_name = buildmat.name
-            pmat = self.model.make_material(mat_name, mat_cspec)
             actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
             # Set the material of the surface
             for i in xrange(tgles_idx.size):
+                pmat = self.model.make_material(mat_name, mat_cspec)
                 actri = cy.address(self.model.triangle(tgles_idx[i]))
                 actri.made_of = pmat
 
@@ -221,7 +221,7 @@ cdef class SolverModelBuilder:
             node._y = pt.y
             node._z = pt.z
             map_to_model_node_idx[i] = self.model.make_node(node)
-            map_to_model_tgle_idx = np.empty(len(triangles))
+        map_to_model_tgle_idx = np.empty(len(triangles))
         for (i, tri) in enumerate(triangles):
             map_to_model_tgle_idx[i] = self.model.make_triangle(
                 map_to_model_node_idx[tri.p1],
