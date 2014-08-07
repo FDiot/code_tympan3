@@ -3,7 +3,7 @@ Provide chaining of the step required to build the altimetry of a compound site.
 """
 
 from itertools import chain
-
+from warnings import warn
 import numpy as np
 from shapely import geometry
 
@@ -61,8 +61,12 @@ class Builder(object):
                     raise ValueError("Polygons with holes are not (yet) supported")
                 points = polyline.exterior.coords[:]
                 # NB: polygons' coordinates sequences are automatically closed
+            elif isinstance(polyline, geometry.Point):
+                warn('Found an isolated point in the altimetry features', RuntimeWarning)
+                continue
             else:
-                raise TypeError("Only level curves or waterbodies are expected")
+                raise TypeError("Only level curves or waterbodies are expected, "
+                                "not %s found in %s" % (polyline, feature))
             vertices, _ = mesher.insert_polyline(
                 points, id=feature.id, **properties)
         return vertices
