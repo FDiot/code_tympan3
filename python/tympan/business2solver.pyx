@@ -172,6 +172,9 @@ cdef class Business2SolverConverter:
         result_matrix = cy.address(aresult.thisptr.get_data())
         for i in xrange(to_be_removed_receptors.size()):
             result_matrix.clearReceptor(to_be_removed_receptors[i])
+            remove_me = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
+            remove_me = solv2bus_receptors[to_be_removed_receptors[i]]
+            bus2solv_receptors.erase(remove_me)
             solv2bus_receptors.erase(to_be_removed_receptors[i])
 
 
