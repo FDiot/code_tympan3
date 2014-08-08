@@ -52,6 +52,13 @@ namespace tympan
         return data[receptor_idx][sources_idx];
     }
 
+    void SpectrumMatrix::setSpectre(size_t receptor_idx, size_t sources_idx, Spectrum spectrum)
+    {
+        assert(receptor_idx < nb_receptors());
+        assert(sources_idx < nb_sources());
+        data[receptor_idx][sources_idx] = spectrum;
+    }
+
     const std::vector<Spectrum>& SpectrumMatrix::by_receptor(size_t receptor_idx) const
     {
         assert(receptor_idx < nb_receptors());

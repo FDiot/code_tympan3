@@ -35,6 +35,7 @@ public:
 
     const Spectrum& operator()(size_t receptor_idx, size_t sources_idx) const;
     Spectrum& operator()(size_t receptor_idx, size_t sources_idx);
+    void setSpectre(size_t receptor_idx, size_t sources_idx, Spectrum spectrum);
 
     const std::vector<Spectrum>& by_receptor(size_t receptor_idx) const;
 
