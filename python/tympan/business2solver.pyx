@@ -49,6 +49,8 @@ cdef class Business2SolverConverter:
     # Business model
     comp = cy.declare(tybusiness.Computation)
     site = cy.declare(tybusiness.Site)
+    _nsources = cy.declare(int)
+    _nreceptors = cy.declare(int)
 
     @cy.locals(comp=tybusiness.Computation, site=tybusiness.Site)
     def __cinit__(self, comp, site):
@@ -63,9 +65,19 @@ cdef class Business2SolverConverter:
     def solver_result(self):
         return self.comp.acoustic_result
 
+    @property
+    def nsources(self):
+        return self._nsources
+
+    @property
+    def nreceptors(self):
+        return self._nreceptors
+
     def build_solver_problem(self):
         builder = SolverModelBuilder(self.solver_problem)
         builder.fill_problem(self.site, self.comp)
+        self._nsources = builder.nsources
+        self._nreceptors = builder.nreceptors
 
     def postprocessing(self):
         # update business receptors cumulative spectra
@@ -180,10 +192,20 @@ cdef class Business2SolverConverter:
 
 cdef class SolverModelBuilder:
     model = cy.declare(cy.pointer(tysolver.AcousticProblemModel))
+    _nsources = cy.declare(int)
+    _nreceptors = cy.declare(int)
 
     @cy.locals(model=tysolver.ProblemModel)
     def __cinit__(self, model):
         self.model = model.thisptr
+
+    @property
+    def nsources(self):
+        return self._nsources
+
+    @property
+    def nreceptors(self):
+        return self._nreceptors
 
     @cy.locals(site=tybusiness.Site, comp=tybusiness.Computation)
     def fill_problem(self, site, comp):
@@ -192,8 +214,8 @@ cdef class SolverModelBuilder:
         """
         self.process_altimetry(site)
         self.process_infrastructure(site)
-        self.build_sources(site, comp)
-        self.build_receptors(site, comp)
+        self._nsources = self.build_sources(site, comp)
+        self._nreceptors = self.build_receptors(site, comp)
 
     @cy.locals(site=tybusiness.Site, comp=tybusiness.Computation)
     def build_sources(self, site, comp):
@@ -211,6 +233,7 @@ cdef class SolverModelBuilder:
         sources_of_elt = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         its = cy.declare(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
         its = macro2micro_sources.begin()
+        nb_sources = 0
         # For each business macro source (ex: machine, building...)
         while its != macro2micro_sources.end():
             sources_of_elt = deref(its).second
@@ -238,7 +261,9 @@ cdef class SolverModelBuilder:
                     source_idx = self.model.make_source(ppoint[0], subsource.getSpectre()[0])
                     # Record where it has been stored
                     bus2solv_sources[sources_of_elt[i]] = source_idx
+                    nb_sources += 1
             inc(its)
+        return nb_sources
 
     @cy.locals(site=tybusiness.Site, comp=tybusiness.Computation)
     def build_receptors(self, site, comp):
@@ -253,6 +278,7 @@ cdef class SolverModelBuilder:
         control_points = project.getPointsControl()
         n_ctrl_pts = control_points.size()
         rec_idx = cy.declare(size_t)
+        nb_receptors = 0
         for i in xrange(n_ctrl_pts):
             # if control point state == active (with respect to the current computation)
             if control_points[i].getRealPointer().getEtat(comp.thisptr.getRealPointer()):
@@ -261,6 +287,7 @@ cdef class SolverModelBuilder:
                 rec_idx = self.model.make_receptor((control_points[i].getRealPointer())[0])
                 bus2solv_receptors[control_points[i].getRealPointer()] = rec_idx
                 solv2bus_receptors[rec_idx] = control_points[i].getRealPointer()
+                nb_receptors += 1
         # Then add mesh points to the acoustic problem model
         meshes = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         meshes = comp.thisptr.getRealPointer().getMaillages()
@@ -290,6 +317,8 @@ cdef class SolverModelBuilder:
                     solv2bus_receptors[rec_idx] = mesh_points[j].getRealPointer()
                     # We won't keep mesh points in the final result matrix
                     to_be_removed_receptors.push_back(rec_idx)
+                    nb_receptors += 1
+        return nb_receptors
 
 
     @cy.locals(site=tybusiness.Site)
