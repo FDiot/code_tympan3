@@ -19,8 +19,10 @@ bus2solv_receptors = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t
 # solver receptors to business receptors
 solv2bus_receptors = cy.declare(map[size_t, cy.pointer(tybusiness.TYPointCalcul)])
 # business source to micro sources (both business model)
-bus2solv_sources = cy.declare(map[cy.pointer(tybusiness.TYSourcePonctuelle), deque[size_t]])
-
+macro2micro_sources = cy.declare(map[tybusiness.TYElem_ptr,
+                                     vector[SmartPtr[tybusiness.TYGeometryNode]]])
+# business micro sources (TYSourcePonctuelle contained in TYGeometryNode) to solver source indices
+bus2solv_sources = cy.declare(map[SmartPtr[tybusiness.TYGeometryNode], size_t])
 # Receptors that are mesh points and therefore will be removed from the final
 # result matrix after the solver computation:
 to_be_removed_receptors = cy.declare(deque[size_t])
@@ -124,30 +126,32 @@ cdef class Business2SolverConverter:
         rec_it = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t].iterator)
         rec_it = bus2solv_receptors.begin()
         rec_counter = 0
+        # Go through all the business receptors
         while rec_it != bus2solv_receptors.end():
             receptor = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
             receptor = deref(rec_it).first
-            source_it = cy.declare(map[cy.pointer(tybusiness.TYSourcePonctuelle), deque[size_t]].iterator)
-            source_it = bus2solv_sources.begin()
+            source_it = cy.declare(map[tybusiness.TYElem_ptr,
+                                       vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
+            source_it = macro2micro_sources.begin()
             source_counter = 0
-            while source_it != bus2solv_sources.end():
+            # Go through all the business infrastructure sources
+            while source_it != macro2micro_sources.end():
                 valid_spectrum = True
                 cumul_spectrum = cy.declare(tycommon.OSpectre)
                 cumul_spectrum.setDefaultValue(0.0)
-                sources = cy.declare(deque[size_t])
-                sources = deref(source_it).second
-                for i in xrange(sources.size()):
+                subsources = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
+                subsources = deref(source_it).second
+                # Go through all their business subsources
+                for i in xrange(subsources.size()):
+                    # Get solver result for this subsource
+                    subsource_idx = bus2solv_sources[subsources[i]] # solver idx
                     cur_spectrum = cy.declare(tycommon.OSpectre)
-                    cur_spectrum = result_matrix.element(deref(rec_it).second, sources[i])
-                    # receptor id, source id (solver model)
+                    cur_spectrum = result_matrix.element(deref(rec_it).second, subsource_idx)
                     cumul_spectrum.sum(cur_spectrum)
                     valid_spectrum &= cur_spectrum.isValid()
                 cumul_spectrum.setValid(valid_spectrum)
                 cumul_spectrum.setType(tycommon.SPECTRE_TYPE_LP)
-                # XXX should use 'element' but error ("cannot assign or delete this")
-                condensate_matrix.setSpectre(rec_counter,
-                                             source_counter,
-                                             cumul_spectrum)
+                condensate_matrix.setSpectre(rec_counter, source_counter, cumul_spectrum)
                 source_counter += 1
                 inc(source_it)
             rec_counter += 1
@@ -195,39 +199,43 @@ cdef class SolverModelBuilder:
             spectrum).
             Add these acoustic sources to the acoustic problem model.
         """
-        emitter2sources = cy.declare(map[tybusiness.TYElem_ptr,
-                                         vector[SmartPtr[tybusiness.TYGeometryNode]]])
         infra = cy.declare(cy.pointer(tybusiness.TYInfrastructure))
         infra = site.thisptr.getRealPointer().getInfrastructure().getRealPointer()
-        infra.getAllSrcs(comp.thisptr.getRealPointer(), emitter2sources)
+        # Retrieve all the infrastructure sources, each one linked to a list of
+        # sub-sources
+        infra.getAllSrcs(comp.thisptr.getRealPointer(), macro2micro_sources)
         sources = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         sources_of_elt = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         its = cy.declare(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
-        its = emitter2sources.begin()
-        while its != emitter2sources.end():
+        its = macro2micro_sources.begin()
+        # For each business macro source (ex: machine, building...)
+        while its != macro2micro_sources.end():
             sources_of_elt = deref(its).second
-            nbusiness_sources = sources_of_elt.size()
-            for i in xrange(nbusiness_sources):
+            macro_source = cy.declare(cy.pointer(tybusiness.TYElement))
+            macro_source = deref(its).first
+            nsubsources = sources_of_elt.size()
+            # For each of the micro sources making the macro one
+            for i in xrange(nsubsources):
+                # TYGeometryNode objects contain TYSourcePonctuelle objects as their element
                 if sources_of_elt[i].getRealPointer() != NULL:
-                    sources.push_back(sources_of_elt[i])
+                    # Get it
+                    subsource_elt = cy.declare(cy.pointer(tybusiness.TYElement))
+                    subsource_elt = sources_of_elt[i].getRealPointer().getElement()
+                    subsource = cy.declare(cy.pointer(tybusiness.TYSourcePonctuelle))
+                    subsource = tybusiness.downcast_source_ponctuelle(subsource_elt)
+                    ppoint = subsource.getPos().getRealPointer()
+                    point3d  = cy.declare(tycommon.OPoint3D)
+                    # Convert its position to the global frame
+                    point3d = tycommon.dot(sources_of_elt[i].getRealPointer().getMatrix(),
+                                           ppoint[0])
+                    ppoint[0]._x = point3d._x
+                    ppoint[0]._y = point3d._y
+                    ppoint[0]._z = point3d._z
+                    # Add it to the solver model
+                    source_idx = self.model.make_source(ppoint[0], subsource.getSpectre()[0])
+                    # Record where it has been stored
+                    bus2solv_sources[sources_of_elt[i]] = source_idx
             inc(its)
-        nsources = sources.size()
-        pelt = cy.declare(cy.pointer(tybusiness.TYElement))
-        psource = cy.declare(cy.pointer(tybusiness.TYSourcePonctuelle))
-        ppoint = cy.declare(cy.pointer(tybusiness.TYPoint))
-        source_idx = cy.declare(size_t)
-        # TYGeometryNode objects contain TYSourcePonctuelle objects as their element
-        for i in xrange(nsources):
-            pelt = sources[i].getRealPointer().getElement()
-            psource = tybusiness.downcast_source_ponctuelle(pelt)
-            ppoint = psource.getPos().getRealPointer()
-            point3d  = cy.declare(tycommon.OPoint3D)
-            point3d = tycommon.dot(sources[i].getRealPointer().getMatrix(), ppoint[0])
-            ppoint[0]._x = point3d._x
-            ppoint[0]._y = point3d._y
-            ppoint[0]._z = point3d._z
-            source_idx = self.model.make_source(ppoint[0], psource.getSpectre()[0])
-            bus2solv_sources[psource].push_back(source_idx)
 
     @cy.locals(site=tybusiness.Site, comp=tybusiness.Computation)
     def build_receptors(self, site, comp):
