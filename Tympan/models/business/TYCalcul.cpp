@@ -1495,29 +1495,6 @@ bool TYCalcul::go(SolverInterface* pSolver)
 
 void TYCalcul::goPostprocessing()
 {
-    OMessageManager::get()->info("Contruction matrice resultat");
-    // Puisque le calcul est OK on va construire la matrice resultat
-    _pResultat->buildSources(sources);
-    _pResultat->buildRecepteurs(recepteurs);
-    _pResultat->buildMatrix();
-
-    int rem_rec = 0;
-    // Suppression des points de maillage de la matrice
-    for (unsigned int i = 0; i < recepteurs.size(); i++)
-    {
-        TYMaillage* pMail = dynamic_cast<TYMaillage*>(
-                recepteurs[i]->getElement()->getParent());
-        if (pMail != nullptr)
-        {
-            rem_rec ++;
-            _pResultat->remSpectres(static_cast<TYPointCalcul*>(recepteurs[i]->getElement()));
-        }
-    }
-
-    OMessageManager::get()->info("Finalisation des resultats (post-traitement)...");
-    // Condensation des sources sur les emetteurs
-    _pResultat->condensate();
-
     _pResultat->buildMapSourceSpectre();
     updateGraphicMaillage();
 
