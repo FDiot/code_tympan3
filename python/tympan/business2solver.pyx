@@ -68,12 +68,12 @@ cdef class Business2SolverConverter:
         builder.fill_problem(self.site, self.comp)
 
     def postprocessing(self):
+        # update business receptors cumulative spectra
+        self.update_business_receptors()
+        self.remove_mesh_points_from_results()
+        # condensate result matrix
+        self.update_business_result_matrix()
         self.comp.thisptr.getRealPointer().goPostprocessing()
-        # Update business receptors cumulative spectra
-#        self.update_business_receptors()
-#        self.remove_mesh_points_from_results()
-         # Condensate result matrix
-#        self.update_business_result_matrix()
 
     def update_business_receptors(self):
         """ Once the acoustic problem has been solved, send back the acoustic results
