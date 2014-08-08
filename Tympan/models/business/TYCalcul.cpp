@@ -1419,30 +1419,14 @@ bool TYCalcul::go(SolverInterface* pSolver)
         OMessageManager::get()->info("+++ UN RESULTAT MESURE NE PEUX FAIRE L'OBJET D'UN CALCUL +++");
         return true; // Si le calcul est bloque, il ne peut etre execute
     }
-
-    bool ret = true;
     // Reset des resultats precedents
     _pResultat->purge();
-
-    // Nettoyage du tableau des trajets
-    _tabTrajets.clear();
-
     // Nettoyage du tableau de rayon
     _tabRays.clear();
-
-    // Regroupement des sites et mise a jour de l'altimetrie et des sols
-    // Creation de la liste des recepteurs
-    OMessageManager::get()->info("Mise a jour du Site");
-
-    // NB This is the place to assert the "no sub-site assumption"
-    // required by some variant of the software
-
-
     // There shouldn't be any subsites at this level --> don't call merge but
     // make sure of it
     LPTYSiteNode pSite = pProjet->getSite();
     assert (pSite->getListSiteNode().size() == 0);
-
     TYNameManager::get()->enable(false);
 
     // #define EXPORT_MERGED_SITE
@@ -1458,37 +1442,15 @@ bool TYCalcul::go(SolverInterface* pSolver)
     xmlManager.save("merged.xml");
 
 #endif
+    OMessageManager::get()->info("Calcul en cours...");
+    bool ret = true;
+    // XXX remove pSite, pCalcul...
+    ret = pSolver->solve(*pSite, *this, *_acousticProblem, *_acousticResult);
+    pSolver->purge();
 
-    OMessageManager::get()->info("Recuperation de la liste des sources");
-    TYMapElementTabSources& mapElementSources = _pResultat->getMapEmetteurSrcs();
-    pSite->getInfrastructure()->getAllSrcs(this, mapElementSources);
-
-    OMessageManager::get()->info("Creation des sources");
-    getAllSources(mapElementSources, sources);
-
-    OMessageManager::get()->info("Selection des points de reception actifs");
-    selectActivePoint(pSite);
-
-    OMessageManager::get()->info("Creation des recepteurs");
-    getAllRecepteurs(recepteurs);
-
-    // XXX Instantiate and call the SolverDataModelBuilder here ...
-    if (isCalculPossible(static_cast<int>(sources.size()), static_cast<int>(recepteurs.size()), pSite))
+    if (!ret)
     {
-        OMessageManager::get()->info("Calcul en cours...");
-        // XXX ... and pass the SolverDataModel built here.
-        ret = pSolver->solve(*pSite, *this, *_acousticProblem, *_acousticResult);
-        pSolver->purge();
-
-        if (!ret)
-        {
-            _pResultat->purge();
-        }
-    }
-    else
-    {
-        OMessageManager::get()->info("Calcul impossible: arrt.");
-        ret = false;
+        _pResultat->purge();
     }
     return ret;
 }
@@ -1497,11 +1459,6 @@ void TYCalcul::goPostprocessing()
 {
     _pResultat->buildMapSourceSpectre();
     updateGraphicMaillage();
-
-    sources.clear();
-    recepteurs.clear();
-    _tabTrajets.clear();
-
     // Le calcul a proprement parler est termine
     // Il est necessaire de reattribuer les parents des elements du site merges
     getProjet()->getSite()->reparent();
