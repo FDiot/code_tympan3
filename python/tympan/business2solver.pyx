@@ -117,15 +117,19 @@ cdef class Business2SolverConverter:
         # Retrieve result matrix XXX we shouldn't have to use comp to retrieve the matrix
         aresult = cy.declare(tysolver.ResultModel)
         aresult = self.comp.acoustic_result
-        result_matrix = cy.declare(cy.pointer(tysolver.SpectrumMatrix))
-        result_matrix = cy.address(aresult.thisptr.get_data())
+        result_matrix = cy.declare(tysolver.SpectrumMatrix)
+        result_matrix = aresult.thisptr.get_data()
+        condensate_matrix = cy.declare(tysolver.SpectrumMatrix)
+        condensate_matrix.resize(bus2solv_receptors.size(), macro2micro_sources.size())
         rec_it = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t].iterator)
         rec_it = bus2solv_receptors.begin()
+        rec_counter = 0
         while rec_it != bus2solv_receptors.end():
             receptor = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
             receptor = deref(rec_it).first
             source_it = cy.declare(map[cy.pointer(tybusiness.TYSourcePonctuelle), deque[size_t]].iterator)
             source_it = bus2solv_sources.begin()
+            source_counter = 0
             while source_it != bus2solv_sources.end():
                 valid_spectrum = True
                 cumul_spectrum = cy.declare(tycommon.OSpectre)
@@ -140,11 +144,17 @@ cdef class Business2SolverConverter:
                     valid_spectrum &= cur_spectrum.isValid()
                 cumul_spectrum.setValid(valid_spectrum)
                 cumul_spectrum.setType(tycommon.SPECTRE_TYPE_LP)
+                # XXX should use 'element' but error ("cannot assign or delete this")
+                condensate_matrix.setSpectre(rec_counter,
+                                             source_counter,
+                                             cumul_spectrum)
+                source_counter += 1
                 inc(source_it)
+            rec_counter += 1
             inc(rec_it)
         busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
         busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
-        busresult.setResultMatrix(result_matrix[0])
+        busresult.setResultMatrix(condensate_matrix)
         # XXX   buildMapSourceSpectre()
 
     def remove_mesh_points_from_results(self):
