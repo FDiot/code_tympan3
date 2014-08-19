@@ -22,6 +22,7 @@
 #include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
+#include "Tympan/core/interfaces.h"
 #include "Tympan/solvers/DefaultSolver/TYSolverDefines.h"
 
 class OThreadPool;

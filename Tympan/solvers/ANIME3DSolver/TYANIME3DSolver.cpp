@@ -26,7 +26,7 @@
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
 #include "Tympan/solvers/AcousticRaytracer/global.h"
-#include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSetup.h"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DSetup.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticModel.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DFaceSelector.h"
