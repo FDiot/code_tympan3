@@ -13,6 +13,19 @@ from tympan.models cimport solver as tysolver
 from tympan.models cimport common as tycommon
 
 
+# business / solver mappings
+# business receptors (control and mesh points) to solver receptors indices
+bus2solv_receptors = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t])
+# solver receptors to business receptors
+solv2bus_receptors = cy.declare(map[size_t, cy.pointer(tybusiness.TYPointCalcul)])
+# business source to micro sources (both business model)
+bus2solv_sources = cy.declare(map[cy.pointer(tybusiness.TYSourcePonctuelle), deque[size_t]])
+
+# Receptors that are mesh points and therefore will be removed from the final
+# result matrix after the solver computation:
+to_be_removed_receptors = cy.declare(deque[size_t])
+
+
 cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]] map_sources):
     """ factory function: return a Business2MicroSource (python object) from a
         map (TYElement*, SmartPtr[TYGeometryNode]) (cpp lib)
@@ -26,6 +39,32 @@ def loadsolver(foldername, tybusiness.Computation comp):
         be used to compute 'comp'
     """
     load_solver(foldername, comp.thisptr.getRealPointer())
+
+cdef class Business2SolverConverter:
+    # Business model
+    comp = cy.declare(tybusiness.Computation)
+    site = cy.declare(tybusiness.Site)
+
+    @cy.locals(comp=tybusiness.Computation, site=tybusiness.Site)
+    def __cinit__(self, comp, site):
+        self.comp = comp
+        self.site = site
+
+    @property
+    def solver_problem(self):
+        return self.comp.acoustic_problem
+
+    @property
+    def solver_result(self):
+        return self.comp.acoustic_result
+
+    def build_solver_problem(self):
+        builder = SolverModelBuilder(self.solver_problem)
+        builder.fill_problem(self.site, self.comp)
+
+    def postprocessing(self):
+        self.comp.thisptr.getRealPointer().goPostprocessing()
+
 
 
 cdef class SolverModelBuilder:
@@ -52,18 +91,19 @@ cdef class SolverModelBuilder:
             spectrum).
             Add these acoustic sources to the acoustic problem model.
         """
+        emitter2sources = cy.declare(map[tybusiness.TYElem_ptr,
+                                         vector[SmartPtr[tybusiness.TYGeometryNode]]])
         infra = cy.declare(cy.pointer(tybusiness.TYInfrastructure))
         infra = site.thisptr.getRealPointer().getInfrastructure().getRealPointer()
-        map_elt_srcs = cy.declare(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]])
-        infra.getAllSrcs(comp.thisptr.getRealPointer(), map_elt_srcs)
+        infra.getAllSrcs(comp.thisptr.getRealPointer(), emitter2sources)
         sources = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         sources_of_elt = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         its = cy.declare(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
-        its = map_elt_srcs.begin()
-        while its != map_elt_srcs.end():
+        its = emitter2sources.begin()
+        while its != emitter2sources.end():
             sources_of_elt = deref(its).second
-            nsources = sources_of_elt.size()
-            for i in xrange(nsources):
+            nbusiness_sources = sources_of_elt.size()
+            for i in xrange(nbusiness_sources):
                 if sources_of_elt[i].getRealPointer() != NULL:
                     sources.push_back(sources_of_elt[i])
             inc(its)
@@ -71,6 +111,7 @@ cdef class SolverModelBuilder:
         pelt = cy.declare(cy.pointer(tybusiness.TYElement))
         psource = cy.declare(cy.pointer(tybusiness.TYSourcePonctuelle))
         ppoint = cy.declare(cy.pointer(tybusiness.TYPoint))
+        source_idx = cy.declare(size_t)
         # TYGeometryNode objects contain TYSourcePonctuelle objects as their element
         for i in xrange(nsources):
             pelt = sources[i].getRealPointer().getElement()
@@ -81,7 +122,8 @@ cdef class SolverModelBuilder:
             ppoint[0]._x = point3d._x
             ppoint[0]._y = point3d._y
             ppoint[0]._z = point3d._z
-            self.model.make_source(ppoint[0], psource.getSpectre()[0])
+            source_idx = self.model.make_source(ppoint[0], psource.getSpectre()[0])
+            bus2solv_sources[psource].push_back(source_idx)
 
     @cy.locals(site=tybusiness.Site, comp=tybusiness.Computation)
     def build_receptors(self, site, comp):
@@ -91,16 +133,19 @@ cdef class SolverModelBuilder:
         """
         project = cy.declare(cy.pointer(tybusiness.TYProjet))
         project = site.thisptr.getRealPointer().getProjet()
-        # First add isolated receptors to the acoustic problem model
+        # First add user-defined receptors to the acoustic problem model
         control_points = cy.declare(vector[SmartPtr[tybusiness.TYPointControl]])
         control_points = project.getPointsControl()
         n_ctrl_pts = control_points.size()
+        rec_idx = cy.declare(size_t)
         for i in xrange(n_ctrl_pts):
             # if control point state == active (with respect to the current computation)
             if control_points[i].getRealPointer().getEtat(comp.thisptr.getRealPointer()):
                 # inheritance: TYPointControl > TYPointCalcul > TYPoint > tycommon.OPoint3D > OCoord3D
                 # call to tycommon.OPoint3D copy constructor to record control point coordinates
-                self.model.make_receptor((control_points[i].getRealPointer())[0])
+                rec_idx = self.model.make_receptor((control_points[i].getRealPointer())[0])
+                bus2solv_receptors[control_points[i].getRealPointer()] = rec_idx
+                solv2bus_receptors[rec_idx] = control_points[i].getRealPointer()
         # Then add mesh points to the acoustic problem model
         meshes = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         meshes = comp.thisptr.getRealPointer().getMaillages()
@@ -125,7 +170,12 @@ cdef class SolverModelBuilder:
                     mesh_points[j].getRealPointer()._x = point3d._x
                     mesh_points[j].getRealPointer()._y = point3d._y
                     mesh_points[j].getRealPointer()._z = point3d._z
-                    self.model.make_receptor((mesh_points[j].getRealPointer())[0])
+                    rec_idx = self.model.make_receptor((mesh_points[j].getRealPointer())[0])
+                    bus2solv_receptors[mesh_points[j].getRealPointer()] = rec_idx
+                    solv2bus_receptors[rec_idx] = mesh_points[j].getRealPointer()
+                    # We won't keep mesh points in the final result matrix
+                    to_be_removed_receptors.push_back(rec_idx)
+
 
     @cy.locals(site=tybusiness.Site)
     def process_infrastructure(self, site):

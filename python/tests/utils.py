@@ -117,13 +117,6 @@ def no_output(to=os.devnull, err_to=None):
             yield
 
 
-with no_output():
-    import tympan.models.business as tybusiness
-    import tympan.models.solver as tysolver
-    import tympan.business2solver as bus2solv
-    tybusiness.init_tympan_registry()
-
-
 class TympanTC(unittest.TestCase):
 
     @classmethod
@@ -136,11 +129,13 @@ class TympanTC(unittest.TestCase):
 
     def load_project(self, *path):
         with self.no_output():
+            import tympan.models.business as tybusiness
+            import tympan.business2solver as bus2solv
+            tybusiness.init_tympan_registry()
             project = tybusiness.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
             project.update_site()
             project.update_altimetry_on_receptors()
-            computation = project.current_computation
-            model = computation.acoustic_problem
-            builder = bus2solv.SolverModelBuilder(model)
-            builder.fill_problem(project.site, computation)
-        return project
+            comp = project.current_computation
+            bus2solv_conv = bus2solv.Business2SolverConverter(comp, project.site)
+            bus2solv_conv.build_solver_problem()
+        return project, bus2solv_conv

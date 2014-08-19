@@ -19,12 +19,10 @@
 #include <vector>
 #include <memory>
 
-#include "TYSolverDefines.h"
-#include "Tympan/models/business/TYSolverInterface.h"
 #include "Tympan/models/business/TYTrajet.h"
-
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
+#include "Tympan/solvers/DefaultSolver/TYSolverDefines.h"
 
 class OThreadPool;
 
@@ -33,7 +31,7 @@ class TYAcousticPathFinder;
 class TYFaceSelector;
 class Scene;
 
-class TYSolver : public TYSolverInterface
+class TYSolver : public SolverInterface
 {
 public:
     TYSolver();

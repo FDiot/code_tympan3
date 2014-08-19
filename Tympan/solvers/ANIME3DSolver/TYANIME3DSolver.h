@@ -18,12 +18,10 @@
 #define __TY_ANIME3DSOLVER__
 
 #include <memory>
-#include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
 
 #include "Tympan/models/common/3d.h"
-#include "Tympan/models/common/Acoustic_path.h"
+#include "Tympan/models/common/acoustic_path.h"
 #include "Tympan/models/solver/entities.hpp"
-#include "Tympan/models/business/TYSolverInterface.h"
 #include "Tympan/models/business/TYTrajet.h"
 
 
@@ -60,7 +58,7 @@ struct TYStructSurfIntersect
  * \brief Le solver associe a la methode ANIME3D
  */
 
-class TYANIME3DSolver : public TYSolverInterface
+class TYANIME3DSolver : public SolverInterface
 {
 public:
     /**

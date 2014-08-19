@@ -13,17 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/models/business/TYSolverInterface.h"
-
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
-
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Triangulate.h"
-
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 
 
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DFaceSelector.h"
+
 
 TYANIME3DFaceSelector::TYANIME3DFaceSelector(const tympan::AcousticProblemModel& aproblem_) : aproblem(aproblem_)
 {

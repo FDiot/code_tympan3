@@ -76,8 +76,6 @@
 #include "Tympan/gui/widgets/TYPrintDialog.h"
 #include "Tympan/gui/app/TYElementPicker.h"
 #include "Tympan/gui/app/TYCameraEditor.h"
-#include "Tympan/gui/app/TYCameraZoneEditor.h"
-#include "Tympan/gui/app/TYCameraStepEditor.h"
 #include "Tympan/gui/app/TYDistanceEditor.h"
 #include "Tympan/gui/app/TYPositionEditor.h"
 #include "Tympan/gui/app/TYPickEditor.h"
@@ -449,8 +447,6 @@ TYModelerFrame::TYModelerFrame(QWidget* parent, const char* name, Qt::WFlags f)
 
     // Editors
     _pCameraEditor = new TYCameraEditor(this);
-    _pCameraZoneEditor = new TYCameraZoneEditor(this);
-    _pCameraStepEditor = new TYCameraStepEditor(this);
     _pDistanceEditor = new TYDistanceEditor(this);
     _pPositionEditor = new TYPositionEditor(this);
 
@@ -498,8 +494,6 @@ TYModelerFrame::~TYModelerFrame()
 
 
     delete _pCameraEditor;
-    delete _pCameraZoneEditor;
-    delete _pCameraStepEditor;
     delete _pDistanceEditor;
     delete _pPositionEditor;
     delete _pPickEditor;
@@ -660,11 +654,6 @@ void TYModelerFrame::setViewType(int view)
         _pElement->getGraphicObject()->update(true);
     }
 
-    if (_lastEditorMode == CameraStepMode)
-    {
-        setEditorMode(CameraMode);
-    }
-
     _pView->getRenderer()->updateDisplayList();
     // Updates
     updateView();
@@ -736,14 +725,6 @@ void TYModelerFrame::setEditorMode(int mode)
                 //fit();
                 getPickEditor()->useHighlight(true);
                 _pCurrentEditor = _pCameraEditor;
-                break;
-            case CameraZoneMode:
-                getPickEditor()->useHighlight(true);
-                _pCurrentEditor = _pCameraZoneEditor;
-                break;
-            case CameraStepMode:
-                getPickEditor()->useHighlight(true);
-                _pCurrentEditor = _pCameraStepEditor;
                 break;
             case DistanceMode:
                 _pCurrentEditor = _pDistanceEditor;

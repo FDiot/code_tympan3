@@ -1,4 +1,6 @@
-echo "Adding paths to Code_TYMPAN (Debug) runtime dependencies to PATH"
-set PATH=%PATH%;@TYMPAN_3RDPARTY_DLL_NATIVE_DIRS@
- 
+echo "Configuring environment to enable running Code_TYMPAN manually tests from CLI"
+
+set PATH=%PATH%;@CGAL_BINDINGS_LIB_DIR@;@TYMPAN_3RDPARTY_DLL_NATIVE_DIRS@ 
 set TYMPAN_TESTS_DATA_DIR=@TYMPAN_TESTS_DATA_DIR_NATIVE@
+set PYTHONPATH=@PYTHONPATH@;%PYTHONPATH%
+set CGAL_BINDINGS_PATH=@NATIVE_CGAL_BINDINGS_PYTHON_DIR@

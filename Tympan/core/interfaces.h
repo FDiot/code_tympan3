@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,14 +13,37 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
+#ifndef TY_INTERFACES
+#define TY_INTERFACES
 
-#include "Tympan/models/business/TYPlugin.h"
+class TYCalcul; // XXX
+class TYSiteNode; // XXX
 
-extern "C" PLUGIN_DECL void startPlugin(bool console);
+namespace tympan {
+    class AcousticProblemModel;
+    class AcousticResultModel;
+} // namespace tympan
 
-extern "C" PLUGIN_DECL TYPlugin* getPlugin();
+class SolverInterface
+{
+public:
+    SolverInterface() { }
+    virtual ~SolverInterface() { }
 
-extern "C" PLUGIN_DECL void stopPlugin();
+    virtual bool solve(const TYSiteNode& site, TYCalcul& calcul,
+                       const tympan::AcousticProblemModel& aproblem,
+                       tympan::AcousticResultModel& aresult) = 0;
+
+    virtual void purge() { }
+};
+
+
+class AcousticModelInterface
+{
+public:
+    AcousticModelInterface() { }
+    virtual ~AcousticModelInterface() { }
+};
+
+
+#endif // TY_INTERFACES

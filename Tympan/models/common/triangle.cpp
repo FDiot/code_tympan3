@@ -71,6 +71,19 @@ OTriangle::OTriangle(OPoint3D A, OPoint3D B, OPoint3D C)
     _p1 = _p2 = _p3 = std::numeric_limits<unsigned>::max();
 }
 
+bool OTriangle::operator==(const OTriangle& other) const
+{
+    // XXX This test for representation equlity NOT triangle equality
+    // We should try any direct permutation of the vertices
+    for(unsigned i=0; i<3; ++i)
+    {
+        if((this->vertex(i) != other.vertex(i)) ||
+           (this->index(i) != other.index(i)))
+            return false;
+    }
+    return true;
+}
+
 OTriangle::~OTriangle()
 {
 }
@@ -129,4 +142,13 @@ std::string OTriangle::reportInconsistencyWrtPointsTab(const std::deque<OPoint3D
     ss << "B " << _B << " ?= P(p2) " << points[_p2] << endl;
     ss << "C " << _C << " ?= P(p3) " << points[_p3] << endl;
     return ss.str();
+}
+
+::std::ostream& operator<<(::std::ostream& os, const OTriangle& t)
+{
+    os << "OTriangle(";
+    for (unsigned i = 0; i < 3; i++)
+        os << t.index(i) << ", " << t.vertex(i) << ", ";
+    os <<")";
+    return os;
 }

@@ -84,6 +84,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         pProject->updateAltiRecepteurs(pSite->getTopographie()->getAltimetrie());
         pSite->setAtmosphere(pCalcul->getAtmosphere());
         pCalcul->go();
+        pCalcul->goPostprocessing();
     }
     else
     {

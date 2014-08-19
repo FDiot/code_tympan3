@@ -55,8 +55,6 @@ TYAcousticVolumeNodeWidget::TYAcousticVolumeNodeWidget(TYAcousticVolumeNode* pEl
 
     _interW = new TYAcousticInterfaceWidget(dynamic_cast<TYAcousticInterface*>(pElement), this);
 
-	//  _volumeW = new TYVolumeInterfaceWidget(pElement, this);
-
     // Pour les element principaux, on desactive la possibilite de changer l'etat
     // (cette propriete est pilotee directement par le calcul)
     _interW->setCheckBoxRayonnantState(false);
@@ -70,7 +68,6 @@ TYAcousticVolumeNodeWidget::TYAcousticVolumeNodeWidget(TYAcousticVolumeNode* pEl
 
     _acousticVolumeNodeLayout->addWidget(_elmW, iln, 0);
     _acousticVolumeNodeLayout->addWidget(_colorW, ++iln, 0);
-    //  _acousticVolumeNodeLayout->addWidget(_volumeW, ++iln, 0);
     _acousticVolumeNodeLayout->addWidget(_interW, ++iln, 0);
 
     QGroupBox* pGroupBoxAccVols = new QGroupBox(this);
@@ -139,9 +136,7 @@ void TYAcousticVolumeNodeWidget::updateContent()
 {
     _elmW->updateContent();
     _colorW->updateContent();
-    //  _volumeW->updateContent();
     _interW->updateContent();
-
     updateFromSubVol();
 }
 
@@ -149,7 +144,6 @@ void TYAcousticVolumeNodeWidget::apply()
 {
     _elmW->apply();
     _colorW->apply();
-    //  _volumeW->apply();
     _interW->apply();
 
     applyToSubVol();

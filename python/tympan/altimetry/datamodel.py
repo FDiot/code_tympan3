@@ -65,6 +65,8 @@ class GeometricFeature(object):
         else:
             self._coords = _preproc_point_seq(coords_or_shape)
             self._shape = None # to cache the Shapely shape
+        if id:
+            assert isinstance(id, basestring), 'id "%r" is not a string' % id
         self.id = id
 
     def set_shape(self, shape):
@@ -281,7 +283,8 @@ class SiteNode(PolygonalTympanFeature):
                  self.children["InfrastructureLandtake"] )
 
 
-class InfrastructureLandtake(PolygonalTympanFeature):
+class InfrastructureLandtake(MaterialArea):
 
     def __init__(self, coords, **kwargs):
-        super(InfrastructureLandtake, self).__init__(coords, **kwargs)
+        super(InfrastructureLandtake, self).__init__(
+            coords, material=HIDDEN_MATERIAL, **kwargs)

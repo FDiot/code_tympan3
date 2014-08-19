@@ -18,13 +18,18 @@ cdef extern from "Tympan/models/business/xml_project_util.h" namespace "tympan":
 cdef extern from "Tympan/models/business/init_registry.h" namespace "tympan":
     void init_registry()
 
+cdef extern from "Tympan/core/smartptr.h":
+    cdef cppclass IRefCount:
+        int getRefCount() const
+        int incRef()
 
 cdef extern from "Tympan/models/business/TYElement.h":
-    cdef cppclass TYElement:
+    cdef cppclass TYElement(IRefCount):
         QString getName()
         const char* getClassName() const
         TYElement* getParent()
         OGenID getID()
+        void setIsAcousticModified(bool isModified)
 
 cdef extern from "Tympan/models/business/TYMaillage.h":
     cdef cppclass TYMaillage:
@@ -51,6 +56,10 @@ cdef extern from "Tympan/models/business/TYElement.h":
     TYSourcePonctuelle* downcast_source_ponctuelle "downcast<TYSourcePonctuelle>"(TYElement *)
     TYMaillage* downcast_maillage "downcast<TYMaillage>"(TYElement *)
     TYPointControl* downcast_point_control "downcast<TYPointControl>"(TYElement *)
+    TYCourbeNiveau* downcast_courbe_niveau "downcast<TYCourbeNiveau>"(TYElement*)
+    TYPlanEau* downcast_plan_eau "downcast<TYPlanEau>"(TYElement*)
+    TYTerrain* downcast_terrain "downcast<TYTerrain>"(TYElement*)
+    TYSiteNode* downcast_sitenode "downcast<TYSiteNode>"(TYElement*)
 
 # This is because it seems unsupported to declare a map containing pointers
 # http://trac.cython.org/cython_trac/ticket/793
@@ -65,6 +74,7 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         tycommon.OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
         map[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
+        void setResultMatrix(tysolver.SpectrumMatrix matrix)
 
 cdef extern from "Tympan/models/business/acoustic/TYSource.h":
     cdef cppclass TYSource(TYElement):
@@ -91,6 +101,9 @@ cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
         void update(const bool& force)
         void setAtmosphere(const SmartPtr[TYAtmosphere]& pAtmosphere)
         TYProjet* getProjet()
+        const double getAltiEmprise() const
+        const vector[SmartPtr[TYGeometryNode]]& getListSiteNode() const
+        bool getUseEmpriseAsCrbNiv() const
 
 cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
@@ -109,6 +122,7 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         void selectActivePoint(SmartPtr[TYSiteNode] pSite)
         const vector[SmartPtr[TYGeometryNode]] getMaillages() const
         void setNbThread(unsigned int nbThread)
+        void goPostprocessing()
 
 cdef extern from "Tympan/models/business/TYProjet.h":
     cdef cppclass TYProjet (TYElement):
@@ -139,10 +153,26 @@ cdef extern from "Tympan/models/business/geometry/TYPoint.h":
 cdef extern from "Tympan/models/business/TYPointCalcul.h":
     cdef cppclass TYPointCalcul (TYPoint):
         bool getEtat(TYCalcul* pCalcul)
+        void setSpectre(const TYSpectre& spectre, TYCalcul* pCalcul)
 
 cdef extern from "Tympan/models/business/TYPointControl.h":
     cdef cppclass TYPointControl (TYPointCalcul):
         pass
+
+cdef extern from "Tympan/models/business/topography/TYCourbeNiveau.h":
+    cdef cppclass TYCourbeNiveau(TYElement):
+        const vector[TYPoint]& getListPoints() const
+        double getAltitude() const
+        TYCourbeNiveau(const vector[TYPoint]& pts, double alt)
+
+cdef extern from "Tympan/models/business/topography/TYTerrain.h":
+    cdef cppclass TYTerrain(TYElement):
+        SmartPtr[TYSol] getSol()
+        const vector[TYPoint]& getListPoints() const
+
+cdef extern from "Tympan/models/business/topography/TYPlanEau.h":
+    cdef cppclass TYPlanEau(TYTerrain):
+        SmartPtr[TYCourbeNiveau] getCrbNiv()
 
 cdef extern from "Tympan/models/business/material/TYSol.h":
     cdef cppclass TYSol (TYElement):
@@ -153,6 +183,10 @@ cdef extern from "Tympan/models/business/infrastructure/TYTopographie.h":
         void exportMesh(deque[tycommon.OPoint3D] &, deque[tycommon.OTriangle] &, deque[SmartPtr[TYSol]] *)
         SmartPtr[TYAltimetrie] getAltimetrie()
         void sortTerrainsBySurface()
+        const vector[SmartPtr[TYGeometryNode]]& getListPlanEau() const
+        const vector[SmartPtr[TYGeometryNode]]& getListTerrain() const
+        const vector[SmartPtr[TYGeometryNode]]& getListCrbNiv() const
+        const vector[TYPoint]& getEmprise() const
 
 cdef extern from "Tympan/models/business/material/TYMateriauConstruction.h":
     cdef cppclass TYMateriauConstruction (TYElement):
@@ -160,14 +194,14 @@ cdef extern from "Tympan/models/business/material/TYMateriauConstruction.h":
 
 cdef extern from "Tympan/models/business/acoustic/TYSpectre.h":
     cdef cppclass TYSpectre (TYElement, tycommon.OSpectre):
-        pass
-
+        TYSpectre(const tycommon.OSpectre& spectre)
 
 cdef class Computation:
     cdef SmartPtr[TYCalcul] thisptr
 
 cdef class Site:
     cdef SmartPtr[TYSiteNode] thisptr
+    cdef tycommon.OMatrix matrix
 
 cdef class Material:
     cdef SmartPtr[TYMateriauConstruction] thisptr

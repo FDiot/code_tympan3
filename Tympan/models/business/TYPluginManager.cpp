@@ -13,16 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
 
-
-
-
-#include "TYPluginManager.h"
-#include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYCalcul.h"
+#include "TYPluginManager.h"
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #   define WIN32_LEAN_AND_MEAN
@@ -39,9 +33,7 @@ extern "C"
 LPTYPluginManager TYPluginManager::_pInstance = 0;
 
 TYPluginManager::TYPluginManager()
-    : _current(QString(DEFAULT_SOLVER_UUID))
 {
-
 }
 
 TYPluginManager::~TYPluginManager()
@@ -76,8 +68,7 @@ QFileInfoList TYPluginManager::getPluginFileList(const QDir& directory) const
     return file_list;
 }
 
-void TYPluginManager::createPlugins(const QFileInfoList& file_list,
-                                    bool with_graphical)
+void TYPluginManager::createPlugins(const QFileInfoList& file_list)
 {
     QFileInfoList::const_iterator itfile = file_list.begin();
     for (itfile; itfile != file_list.end(); ++itfile)
@@ -125,7 +116,7 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
         }
 
         // Start the plugin and add it to the list '_plugins'. True if success.
-        bool success = startPlugin(plugin_data, with_graphical);
+        bool success = startPlugin(plugin_data);
         if (!success)
         {
             OMessageManager::get()->info(
@@ -139,11 +130,10 @@ void TYPluginManager::createPlugins(const QFileInfoList& file_list,
 }
 
 
-bool TYPluginManager::startPlugin(TYPluginData* plugin_data, bool with_graphical)
+bool TYPluginManager::startPlugin(TYPluginData* plugin_data)
 {
     // Start the plugin.
-    plugin_data->startPlugin(!with_graphical);
-
+    plugin_data->startPlugin();
     // If already exists in the list, stop and unload it.
     if (exist(plugin_data->getPlugin()->getUUID()))
     {
@@ -158,7 +148,7 @@ bool TYPluginManager::startPlugin(TYPluginData* plugin_data, bool with_graphical
 }
 
 
-bool TYPluginManager::loadPlugins(const QString& directory, bool with_graphical)
+bool TYPluginManager::loadPlugins(const QString& directory)
 {
     // Get the folder where there are plug-ins (aka solvers).
     QString dirPath = QDir::convertSeparators(directory);
@@ -177,7 +167,7 @@ bool TYPluginManager::loadPlugins(const QString& directory, bool with_graphical)
 
     // Load methods related to a plugin, check them and add the related plugin
     // to the list.
-    createPlugins(plugin_file_list, with_graphical);
+    createPlugins(plugin_file_list);
 
     // Check if there is unless the default plugin.
     if (!exist(OGenID(QString(DEFAULT_SOLVER_UUID))))
@@ -209,20 +199,15 @@ void TYPluginManager::unloadPlugins()
     _plugins.clear();
 }
 
-TYSolverInterface* TYPluginManager::getSolver() const
+SolverInterface* TYPluginManager::getSolver(const OGenID& uuid) const
 {
-    return getSolver(_current);
-}
-
-TYSolverInterface* TYPluginManager::getSolver(const OGenID& uuid) const
-{
-    TYPlugin* plugin = getPlugin(uuid);
+    Plugin* plugin = getPlugin(uuid);
     if (plugin != nullptr)
         return plugin->getSolver();
     return nullptr;
 }
 
-TYPlugin* TYPluginManager::getPlugin(const OGenID& uuid) const
+Plugin* TYPluginManager::getPlugin(const OGenID& uuid) const
 {
     for (TYPluginList::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it)
         if ((*it)->getPlugin()->getUUID() == uuid)
@@ -233,40 +218,19 @@ TYPlugin* TYPluginManager::getPlugin(const OGenID& uuid) const
     return nullptr;
 }
 
-
-void TYPluginManager::getInfos(pluginInfos* pInfos) const
-{
-    getInfos(pInfos, _current);
-}
-
 void TYPluginManager::getInfos(pluginInfos* pInfos, const OGenID& uuid) const
 {
-    // On cree le plugin correspondant a l'uuid
-    for (TYPluginList::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it)
-        if ((*it)->getPlugin()->getUUID() == uuid)
-        {
-            (*it)->getPlugin()->getInfos(pInfos);
-        }
-}
-
-QString TYPluginManager::getInfo(const QString& info)
-{
-    OGenID& uuid = _current;
-    return getInfo(info, uuid);
+    Plugin *plugin = getPlugin(uuid);
+    if (plugin)
+    {
+        plugin->getInfos(pInfos);
+    }
 }
 
 QString TYPluginManager::getInfo(const QString& info, const OGenID& uuid) const
 {
     pluginInfos* pInfos = new pluginInfos();
-
-    for (TYPluginList::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it)
-    {
-        if ((*it)->getPlugin()->getUUID() == uuid)
-        {
-            (*it)->getPlugin()->getInfos(pInfos);
-        }
-    }
-
+    getInfos(pInfos, uuid);
     if (info == "author")
     {
         return pInfos->_author;
@@ -283,38 +247,8 @@ QString TYPluginManager::getInfo(const QString& info, const OGenID& uuid) const
     {
         return pInfos->_name;
     }
-
-    return pInfos->_name;
-
 }
 
-
-void TYPluginManager::setCurrent(const OGenID& uuid)
-{
-    if (exist(uuid))
-    {
-        _current = uuid;
-    }
-}
-
-void TYPluginManager::setCurrent(const QString& solverName)
-{
-    for (TYPluginList::iterator it = _plugins.begin(); it != _plugins.end(); ++it)
-    {
-        if ((*it)->getPlugin()->getName() == solverName)
-        {
-            _current = (*it)->getPlugin()->getUUID();
-            return;
-        }
-    }
-    return;
-}
-
-
-OGenID TYPluginManager::getCurrent() const
-{
-    return _current;
-}
 
 TYPluginManager::TYPluginList& TYPluginManager::getPluginList()
 {
@@ -353,8 +287,7 @@ namespace tympan
     {
         LPTYPluginManager plugin_manager = TYPluginManager::get();
         plugin_manager->unloadPlugins();
-        plugin_manager->loadPlugins(path, false);
-        plugin_manager->setCurrent(comp->getSolverId());
-        comp->setPlugin(plugin_manager->getPlugin(plugin_manager->getCurrent()));
+        plugin_manager->loadPlugins(path);
+        comp->setPlugin(plugin_manager->getPlugin(comp->getSolverId()));
     }
 } /* namespace tympan */

@@ -2,7 +2,7 @@ import unittest
 
 from tympan.altimetry.datamodel import InconsistentGeometricModel
 from tympan.altimetry import mesh
-from altimetry_testutils import MesherTestUtilsMixin, runVisualTests, left_and_right_faces
+from altimetry_testutils import MesherTestUtilsMixin, runVisualTests, rect
 
 if runVisualTests:
     from tympan.altimetry import visu
@@ -128,17 +128,6 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
                               [{'id': 'H', 'altitude': 10},
                                {'id': 'V', 'color': 'blue'}])
 
-    def build_simple_scene(self):
-        border = self.mesher.insert_polyline( #NB CCW
-            [(0, 0), (6, 0), (6, 5), (0, 5)], close_it=True,
-            material='concrete', altitude=0)
-        hole = self.mesher.insert_polyline( # NB CW
-            reversed([(2, 2), (5, 2), (5, 4), (2, 4)]), close_it=True,
-            material='hidden')
-        line = self.mesher.insert_polyline(
-            [(1, 4), (4, 1)], altitude=20)
-        return (border, hole, line)
-
     def test_faces_from_edge(self):
         # NB ABCD is given in counter-clock-wise orientation
         (vA, vB, vC, vD), _ = self.mesher.insert_polyline(
@@ -182,7 +171,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         f3 = self.mesher.face_for_vertices(vQ, vM, vD)
         self.assertIsNotNone(f3)
 
-        faces_left, faces_right = left_and_right_faces(
+        faces_left, faces_right = mesh.left_and_right_faces(
             self.mesher.iter_faces_for_input_constraint(vM, vN))
         if runVisualTests:
             plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
@@ -214,46 +203,13 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
         plotter.plot_edges()
 
-        faces_left, faces_right = left_and_right_faces(
+        faces_left, faces_right = mesh.left_and_right_faces(
             self.mesher.iter_faces_for_input_polyline(hole[0], close_it=True))
         points_left = [self.mesher.point_for_face(f) for f in faces_left]
         points_right = [self.mesher.point_for_face(f) for f in faces_right]
         visu.plot_points_seq(plotter.ax, points_left, marker='<')
         visu.plot_points_seq(plotter.ax, points_right, marker='>')
         plotter.show()
-
-    def test_flood(self):
-
-        class FaceFlooderForMarkingHoles(mesh.FaceFlooder):
-
-            def __init__(self, mesher):
-                super(FaceFlooderForMarkingHoles, self).__init__(mesher)
-
-            def is_landtake_border(self, edge):
-                for info in self.mesher.iter_constraints_info_overlapping(edge):
-                    if "material" in info and info["material"]=='hidden':
-                        return True
-                return False
-
-            def should_follow(self, from_face, edge, to_face):
-                return not self.is_landtake_border(edge)
-
-        (border, hole, line) = self.build_simple_scene()
-
-        faces_left, faces_right = left_and_right_faces(self.mesher.iter_faces_for_input_polyline(hole[0], close_it=True))
-        flooder = FaceFlooderForMarkingHoles(self.mesher)
-        flooder.flood_from([faces_right[0]]) # A single face is enough
-        seeds_for_holes = [self.mesher.point_for_face(f) for f in flooder.visited]
-        self.assertEqual(len(seeds_for_holes), 4)
-
-        if runVisualTests:
-            self.mesher.refine_mesh(hole_seeds=seeds_for_holes,
-                                    size_criterion=0.4, shape_criterion=0)
-
-            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
-            plotter.plot_edges()
-            visu.plot_points_seq(plotter.ax, seeds_for_holes, marker='*')
-            plotter.show()
 
     def test_copy(self):
         cdt = self.mesher.cdt
@@ -379,6 +335,97 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
         self.assert_basic_counts(faces=3, vertices=4, edges=6, constrained=1, mesher=mesher2)
         self.assertEqual(mesher2.vertices_info[vD].altitude, slope*0.5)
+
+
+class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
+
+    def setUp(self):
+        self.mesher = mesh.ElevationMesh()
+
+    def test_flood(self):
+
+        (border, hole, line) = self.build_simple_scene()
+
+        flooder = self.mesher.flood_polygon(mesh.MaterialFaceFlooder,
+                                            hole[0], close_it=True,
+                                            flood_right=True) # hole is CW
+
+        if runVisualTests:
+            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
+            plotter.plot_edges()
+            seeds = [self.mesher.point_for_face(f) for f in flooder.visited]
+            visu.plot_points_seq(plotter.ax, seeds, marker='*')
+            plotter.show()
+
+        face_in, expected_None = self.mesher.locate_point((3, 3))
+        self.assertIsNone(expected_None)
+        face_out, expected_None = self.mesher.locate_point((3, 4.5))
+        self.assertIsNone(expected_None)
+
+        self.assertEqual(len(flooder.visited), 4)
+        self.assertIn(face_in, flooder.visited)
+        self.assertNotIn(face_out, flooder.visited)
+
+    def test_material_boundary_info(self):
+        cdt = self.mesher.cdt
+        (border, hole, line) = self.build_simple_scene()
+        (va, vb), _ = line
+        self.mesher.update_info_for_edges()
+
+        for edge in self.mesher.iter_edges_for_input_constraint(va, vb):
+            self.assertFalse(self.mesher.edges_info[edge].material_boundary)
+        for edge in self.mesher.iter_edges_for_input_polyline(hole[0], close_it=True):
+            edge = mesh.sorted_vertex_pair(*edge) # Important
+            self.assertTrue(self.mesher.edges_info[edge].material_boundary)
+
+    def test_landtake_flood_overwrite_material(self):
+        (border, hole, line) = self.build_simple_scene()
+        pond = self.mesher.insert_polyline( #NB CCW
+            rect(3, 2.5, 4, 3.5), close_it=True,
+            material='water', altitude=0, id='pond')
+        self.mesher.update_info_for_edges()
+
+        flooder = self.mesher.flood_polygon(mesh.LandtakeFaceFlooder,
+                                            hole[0], close_it=True,
+                                            flood_right=True) # hole is CW
+
+        if runVisualTests:
+            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
+            plotter.plot_edges()
+            marks = [self.mesher.point_for_face(f) for f in flooder.visited]
+            visu.plot_points_seq(plotter.ax, marks, marker='*')
+            plotter.show()
+
+        face_in_both, expected_None = self.mesher.locate_point((3.25, 3))
+        self.assertIsNone(expected_None)
+        self.assertIn(face_in_both, flooder.visited)
+        face_out, expected_None = self.mesher.locate_point((1, 1.25))
+        self.assertIsNone(expected_None)
+        self.assertNotIn(face_out, flooder.visited)
+
+    def test_flood_two_materials(self):
+        (border, hole, line) = self.build_simple_scene()
+        pond = self.mesher.insert_polyline( #NB CCW
+            rect(0.5, 0.5, 1.5, 1.5), close_it=True,
+            material='water', altitude=0, id='pond')
+        self.mesher.update_info_for_edges()
+
+        flooder = self.mesher.flood_polygon(mesh.MaterialFaceFlooder,
+                                            border[0], close_it=True)
+
+        if runVisualTests:
+            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
+            plotter.plot_edges()
+            marks = [self.mesher.point_for_face(f) for f in flooder.visited]
+            visu.plot_points_seq(plotter.ax, marks, marker='*')
+            plotter.show()
+
+        face_in_pond, expected_None = self.mesher.locate_point((1, 1.25))
+        self.assertIsNone(expected_None)
+        self.assertNotIn(face_in_pond, flooder.visited)
+        face_in_hole, expected_None = self.mesher.locate_point((3.25, 3))
+        self.assertIsNone(expected_None)
+        self.assertNotIn(face_in_hole, flooder.visited)
 
 
 if __name__ == '__main__':

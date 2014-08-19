@@ -9,3 +9,7 @@ foreach (testfile ${TESTS_SRC})
              RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}" 
              LIBS test_utils ${TYMPAN_MODULES} RoadEmissionNMPB)
 endforeach (testfile)
+
+target_link_libraries(test_rply ${RPLY_LIB})
+set_property(TARGET test_rply 
+  APPEND PROPERTY INCLUDE_DIRECTORIES ${RPLY_INCLUDE_DIRECTORY})

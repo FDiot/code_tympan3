@@ -46,22 +46,6 @@ TYModelerToolbar::TYModelerToolbar(QButtonGroup* pBtnGroup /*= 0*/, QMainWindow*
     _toolButtonCamera->setCheckable(true);
     addWidget(_toolButtonCamera);
 
-    _toolButtonCameraZone = new QToolButton(this);
-    _toolButtonCameraZone->setIcon(QPixmap(IMG("id_icon_camerazone")));
-    _toolButtonCameraZone->setText(TR("id_menuitem_camerazone"));
-    _toolButtonCameraZone->setToolTip(TR("id_menuitem_camerazone"));
-    _toolButtonCameraZone->setStatusTip(TR("id_menuitem_camerazone"));
-    _toolButtonCameraZone->setCheckable(true);
-    addWidget(_toolButtonCameraZone);
-
-    _toolButtonCameraStep = new QToolButton(this);
-    _toolButtonCameraStep->setIcon(QPixmap(IMG("id_icon_camerastep")));
-    _toolButtonCameraStep->setText(TR("id_menuitem_camerastep"));
-    _toolButtonCameraStep->setToolTip(TR("id_menuitem_camerastep"));
-    _toolButtonCameraStep->setStatusTip(TR("id_menuitem_camerastep"));
-    _toolButtonCameraStep->setCheckable(true);
-    addWidget(_toolButtonCameraStep);
-
     _toolButtonDistance = new QToolButton(this);
     _toolButtonDistance->setIcon(QPixmap(IMG("id_icon_distance")));
     _toolButtonDistance->setText(TR("id_menuitem_distance"));
@@ -107,8 +91,6 @@ TYModelerToolbar::~TYModelerToolbar()
 void TYModelerToolbar::activeButtons(bool active)
 {
     _toolButtonCamera->setEnabled(active);
-    _toolButtonCameraZone->setEnabled(active);
-    _toolButtonCameraStep->setEnabled(active);
     _toolButtonDistance->setEnabled(active);
     _toolButtonMoving->setEnabled(active);
     _toolButtonRotation->setEnabled(active);
@@ -128,10 +110,6 @@ void TYModelerToolbar::addToButtonGroup(QButtonGroup* pBtnGroup)
 
     pBtnGroup->addButton(_toolButtonCamera, TYModelerFrame::CameraMode);
     _toolButtonCamera->setChecked(false);
-    pBtnGroup->addButton(_toolButtonCameraZone, TYModelerFrame::CameraZoneMode);
-    _toolButtonCameraZone->setChecked(false);
-    pBtnGroup->addButton(_toolButtonCameraStep, TYModelerFrame::CameraStepMode);
-    _toolButtonCameraStep->setChecked(false);
     pBtnGroup->addButton(_toolButtonDistance, TYModelerFrame::DistanceMode);
     _toolButtonDistance->setChecked(false);
     pBtnGroup->addButton(_toolButtonMoving, TYModelerFrame::MovingMode);
@@ -147,8 +125,6 @@ void TYModelerToolbar::removeFromButtonGroup(QButtonGroup* pBtnGroup)
     Q_CHECK_PTR(pBtnGroup);
 
     pBtnGroup->removeButton(_toolButtonCamera);
-    pBtnGroup->removeButton(_toolButtonCameraZone);
-    pBtnGroup->removeButton(_toolButtonCameraStep);
     pBtnGroup->removeButton(_toolButtonDistance);
     pBtnGroup->removeButton(_toolButtonMoving);
     pBtnGroup->removeButton(_toolButtonRotation);
@@ -165,25 +141,16 @@ void TYModelerToolbar::activeCameraButtons(int view)
 {
     if (view == TYModelerFrame::PerspView)
     {
-        _toolButtonCameraStep->setEnabled(true);
-        _toolButtonCameraZone->setEnabled(false);
-
         // CLM-NT35 : Empecher de deplacer/tourner en vue perspective/mobile
         getTYMainWnd()->getModelerToolbar()->activeModif(false);
     }
     else if (view == TYModelerFrame::FreeView)
     {
-        _toolButtonCameraStep->setEnabled(false);
-        _toolButtonCameraZone->setEnabled(false);
-
         // CLM-NT35 : Empecher de deplacer/tourner en vue perspective/mobile
         getTYMainWnd()->getModelerToolbar()->activeModif(false);
     }
     else
     {
-        _toolButtonCameraStep->setEnabled(false);
-        _toolButtonCameraZone->setEnabled(true);
-
         // CLM-NT35 : Empecher de deplacer/tourner en vue perspective/mobile
         getTYMainWnd()->getModelerToolbar()->activeModif(true);
     }

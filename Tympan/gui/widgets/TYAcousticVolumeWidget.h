@@ -39,7 +39,6 @@ class QGridLayout;
 class QLabel;
 class TYColorInterfaceWidget;
 class TYAcousticInterfaceWidget;
-class TYVolumeInterfaceWidget;
 class TYElementWidget;
 class QGroupBox;
 class QPushButton;
@@ -96,7 +95,6 @@ protected:
     QPushButton* _pushButtonMat;
 
     TYAcousticInterfaceWidget* _interW;
-    TYVolumeInterfaceWidget* _volumeW;
     TYColorInterfaceWidget* _colorW;
     TYElementWidget* _elmW;
 };
