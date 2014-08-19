@@ -4,12 +4,14 @@ import unittest
 import numpy as np
 
 from utils import (TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC,
-                   tybusiness, bus2solv)
+                   no_output)
 
+with no_output():
+    import tympan.models.business as tybusiness
+    import tympan.business2solver as bus2solv
 
 class TestTympan(TympanTC):
     pass
-
 
 def make_test_with_file(test_file):
     """ For a TEST_xx_NO_RESU.xml file from data/project-panel, load and
@@ -22,11 +24,13 @@ def make_test_with_file(test_file):
     def test_with_file(self):
         # Load and solve the project
         with self.no_output():
-            project = self.load_project(osp.join(TEST_PROBLEM_DIR, test_file))
+            (project, bus2solv_conv) = self.load_project(
+                osp.join(TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation
             computation.set_nthread(1) # avoid segfaults due to multithreading
             bus2solv.loadsolver(TEST_SOLVERS_DIR, computation)
             result = computation.go()
+            bus2solv_conv.postprocessing()
         self.assertTrue(result)
         # Load the expected result
         result_file = osp.join(TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')

@@ -52,7 +52,7 @@ def make_sources_test_with_file(project_file, sources_file):
               by values -- see compare_floats())
             * Then the lines are compared 2 by 2
         """
-        project = self.load_project(project_file)
+        (project, _) = self.load_project(project_file)
         model = project.current_computation.acoustic_problem
         nexpected_sources = sum(1 for line in open(sources_file))
         # Check no sources are missing
@@ -87,7 +87,7 @@ def make_receptors_test_with_file(project_file, receptors_file):
             Operates as in make_sources_test_with_file (see above), except here
             we are just dealing with positions and not spetrums.
         """
-        project = self.load_project(project_file)
+        (project, _) = self.load_project(project_file)
         model = project.current_computation.acoustic_problem
         # Check no receptors are missing
         nexpected_receptors = sum(1 for line in open(receptors_file))

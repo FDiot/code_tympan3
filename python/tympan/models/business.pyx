@@ -22,7 +22,7 @@ cdef typrojet2project(TYProjet* proj):
     lib)
     """
     project = Project()
-    project.thisptr._pObj = proj
+    project.thisptr = SmartPtr[TYProjet](proj)
     return project
 
 cdef tymateriauconstruction2material(SmartPtr[TYMateriauConstruction] mat):
@@ -39,6 +39,25 @@ cdef tysol2ground(SmartPtr[TYSol] grnd):
     ground = Ground()
     ground.thisptr = grnd
     return ground
+
+cdef tyelement_id(TYElement* elem):
+    """ Return the id of the element contained in the TYGeometryNode as a string
+    """
+    return elem.getID().toString().toStdString()
+
+cdef cpp2cypoints(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
+    """ Return a list of 'Point3D' cython objects from the c++ 'TYPoint' contained
+    in the vector 'cpp_points'.
+    Convert them to a global scale with the transform matrix 'matrix'
+    """
+    points = []
+    for i in xrange(cpp_points.size()):
+        cpp_point = cy.declare(tycommon.OPoint3D)
+        cpp_point = tycommon.dot(matrix, cpp_points[i])
+        cy_point = cy.declare(tycommon.Point3D)
+        cy_point = tycommon.opoint3d2point3d(cpp_point)
+        points.append(cy_point)
+    return points
 
 def init_tympan_registry():
     """ Trigger the registration of Tympan business classes (TY* classes).
@@ -141,7 +160,33 @@ cdef class Ground:
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getName().toStdString()
 
+    @property
+    def elem_id(self):
+        """ Return Ground id as a string """
+        return tyelement_id(self.thisptr.getRealPointer())
+
+
 cdef class Site:
+
+    @property
+    def elem_id(self):
+        """ Return SiteNode id as a string """
+        return tyelement_id(self.thisptr.getRealPointer())
+
+    @property
+    def subsites(self):
+        """ return a list containg the site subsites as 'Site' cython objects"""
+        subsite_geonodes = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        subsite_geonodes = self.thisptr.getRealPointer().getListSiteNode()
+        subsites = []
+        for i in xrange(subsite_geonodes.size()):
+            cpp_site = cy.declare(cy.pointer(TYSiteNode))
+            cpp_site = downcast_sitenode(subsite_geonodes[i].getRealPointer().getElement())
+            site = Site()
+            site.matrix = subsite_geonodes[i].getRealPointer().getMatrix()
+            site.thisptr = SmartPtr[TYSiteNode](cpp_site)
+            subsites.append(site)
+        return subsites
 
     @property
     def project(self):
@@ -215,7 +260,6 @@ cdef class Site:
             inc(itg)
         return (points, triangles, grounds)
 
-
     @cy.locals(comp=Computation)
     def fetch_sources(self, comp):
         """ Explore business infrastructure to retrieve its acoustic sources
@@ -261,6 +305,161 @@ cdef class Site:
         self.thisptr.getRealPointer().getTopographie().getRealPointer().sortTerrainsBySurface()
         self.thisptr.getRealPointer().updateAltiInfra(True)
         self.thisptr.getRealPointer().updateAcoustique(True)
+
+    def process_landtake(self):
+        """ Return a list of 'Point3D' cython objects representing the landtake
+        of the site. If 'use_landtake_as_level_curve' is true or if no level
+        curves are defined for the site, the landtake will be used as a level
+        curve and a 'LevelCurve' cython object will be returned as well
+        """
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        cpp_points = cy.declare(vector[TYPoint])
+        cpp_points = topo.getEmprise()
+        points = cpp2cypoints(cpp_points, self.matrix)
+        cpp_lcurves = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        cpp_lcurves = topo.getListCrbNiv()
+        make_level_curve = self.thisptr.getRealPointer().getUseEmpriseAsCrbNiv()
+        if make_level_curve or cpp_lcurves.empty():
+            alti = self.thisptr.getRealPointer().getAltiEmprise()
+            level_curve = LevelCurve()
+            level_curve.thisptr = new TYCourbeNiveau(cpp_points, alti)
+            level_curve.matrix = self.matrix
+            level_curve._altitude = alti
+            return (points, level_curve)
+        return (points, None)
+
+    @property
+    def lakes(self):
+        """ Return the lakes of the topography as a list of 'Lake' cython objects """
+        lakes = []
+        material_areas = []
+        cpp_lakes = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        cpp_lakes = topo.getListPlanEau()
+        for i in xrange(cpp_lakes.size()):
+            cpp_lake = cy.declare(cy.pointer(TYPlanEau))
+            cpp_lake = downcast_plan_eau(cpp_lakes[i].getRealPointer().getElement())
+            lake = Lake()
+            lake.thisptr = cpp_lake
+            lake.matrix = cpp_lakes[i].getRealPointer().getMatrix()
+            lake.thisgeonodeptr = cpp_lakes[i]
+            lakes.append(lake)
+        return lakes
+
+    @property
+    def material_areas(self):
+        """ Return the material areas of the topography as a list of
+        'MaterialArea' cython objects """
+        mareas = []
+        cpp_mat_areas = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        cpp_mat_areas = topo.getListTerrain()
+        for i in xrange (cpp_mat_areas.size()):
+            cpp_mat_area = cy.declare(cy.pointer(TYTerrain))
+            cpp_mat_area = downcast_terrain(
+                cpp_mat_areas[i].getRealPointer().getElement())
+            area = MaterialArea()
+            area.thisptr = cpp_mat_area
+            area.matrix = cpp_mat_areas[i].getRealPointer().getMatrix()
+            area.thisgeonodeptr = cpp_mat_areas[i]
+            mareas.append(area)
+        return mareas
+
+    @property
+    def level_curves(self):
+        """ Return the level curves of the topography as a list of 'LevelCurve'
+        cython objects """
+        lcurves = []
+        cpp_lcurves = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        topo = cy.declare(cy.pointer(TYTopographie))
+        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        cpp_lcurves = topo.getListCrbNiv()
+        for i in xrange (cpp_lcurves.size()):
+            cpp_lcurve = cy.declare(cy.pointer(TYCourbeNiveau))
+            cpp_lcurve = downcast_courbe_niveau(
+                cpp_lcurves[i].getRealPointer().getElement())
+            lcurve = LevelCurve()
+            lcurve.thisptr = cpp_lcurve
+            lcurve.matrix = cpp_lcurves[i].getRealPointer().getMatrix()
+            lcurve._altitude = cpp_lcurve.getAltitude()
+            lcurve.thisgeonodeptr = cpp_lcurves[i]
+            lcurves.append(lcurve)
+        return lcurves
+
+
+cdef class MaterialArea:
+    thisgeonodeptr = cy.declare(SmartPtr[TYGeometryNode])
+    thisptr = cy.declare(cy.pointer(TYTerrain))
+    matrix = cy.declare(tycommon.OMatrix)
+
+    @property
+    def ground_material(self):
+        """ Return the ground material the material area is made of as a 'Ground'
+        cython object """
+        ground = Ground()
+        ground.thisptr = self.thisptr.getSol()
+        return ground
+
+    @property
+    def points(self):
+        # retrieve material area points
+        cpp_points = cy.declare(vector[TYPoint])
+        cpp_points = self.thisptr.getListPoints()
+        return cpp2cypoints(cpp_points, self.matrix)
+
+    @property
+    def elem_id(self):
+        """ Return MaterialArea id as a string """
+        return tyelement_id(self.thisptr)
+
+
+cdef class LevelCurve:
+    thisgeonodeptr = cy.declare(SmartPtr[TYGeometryNode])
+    thisptr = cy.declare(cy.pointer(TYCourbeNiveau))
+    matrix = cy.declare(tycommon.OMatrix)
+    _altitude = cy.declare(double)
+
+    @property
+    def points(self):
+        """ Returns the successive points of the level curve as a list of
+        'Point3D' cython objects
+        """
+        # retrieve level curve points
+        cpp_points = cy.declare(vector[TYPoint])
+        cpp_points = self.thisptr.getListPoints()
+        return cpp2cypoints(cpp_points, self.matrix)
+
+    @property
+    def altitude(self):
+        """ Return the altitude of the level curve (float value) """
+        return self._altitude
+
+    @property
+    def elem_id(self):
+        """ Return LevelCurve id as a string """
+        return tyelement_id(self.thisptr)
+
+
+cdef class Lake:
+    thisgeonodeptr = cy.declare(SmartPtr[TYGeometryNode])
+    thisptr = cy.declare(cy.pointer(TYPlanEau))
+    matrix = cy.declare(tycommon.OMatrix) # to get Lake pos in a global scale
+
+    @property
+    def elem_id(self):
+        """ Return Lake id as a string """
+        return tyelement_id(self.thisptr)
+
+    @property
+    def level_curve(self):
+        """ Return the lake's level curve as a 'LevelCurve' cython object
+        """
+        lev_curve = LevelCurve()
+        lev_curve.thisptr = self.thisptr.getCrbNiv().getRealPointer()
+        return lev_curve
 
 
 cdef class Result:

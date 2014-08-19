@@ -36,3 +36,4 @@ cdef extern from "Tympan/core/idgen.h":
     cdef cppclass OGenID:
         OGenID(const OGenID& other)
         OGenID()
+        const QString toString() const

@@ -3,19 +3,14 @@ import os
 runVisualTests = os.environ.get('RUN_VISUAL_TESTS', False)
 
 from shapely.geometry import MultiLineString
-from tympan.altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
-                                 WaterBody, SiteNode)
+from tympan.altimetry.datamodel import (LevelCurve, MaterialArea,
+                                        GroundMaterial, WaterBody,
+                                        SiteNode, InfrastructureLandtake,
+                                        HIDDEN_MATERIAL)
 from tympan.altimetry import mesh
 
 def rect(x1, y1, x2, y2):
     return [(x1, y1), (x2, y1), (x2, y2), (x1, y2)]
-
-def left_and_right_faces(faces_it):
-    """Takes an iterable on pair (left_face, right_face) and return the
-    pair of the list of all left faces and the list of all right faces
-    """
-    return zip(*list(faces_it))
-
 
 class TestFeatures(object):
 
@@ -33,6 +28,7 @@ class TestFeatures(object):
     level_curve_B_coords =[(8.0, 4.0), (8.0, 7.0), (12.0, 7.0)]
     cleaned_level_B_shape = MultiLineString([[(8.0, 6.0), (8.0, 7.0), (11.0, 7.0)]])
     altitude_B = 20.0
+    landtake_coords = rect(2, 7, 4, 8)
 
     def build_features(self):
         self.mainsite = SiteNode(self.big_rect_coords, id="{Main site ID}")
@@ -53,6 +49,9 @@ class TestFeatures(object):
         self.out_of_subsite = MaterialArea(rect(9, 9, 10, 10),
                                        material=self.grass,
                                        parent_site=self.subsite, id="{Out of subsite area}")
+        self.building = InfrastructureLandtake(self.landtake_coords,
+                                               parent_site=self.mainsite, id="{Building}")
+
 
     def build_more_features_in_subsites(self):
         self.subsubsite = SiteNode(rect(6, 6.5, 7, 7.5), id="{SubSubsite ID}",
@@ -133,3 +132,14 @@ class MesherTestUtilsMixin(object):
         (faceABC,) = cdt.finite_faces()
         self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
         return (vA, vB, vC, edgeAB, faceABC)
+
+    def build_simple_scene(self):
+        border = self.mesher.insert_polyline( #NB CCW
+            [(0, 0), (6, 0), (6, 5), (0, 5)], close_it=True,
+            material='concrete', altitude=0, id='border')
+        hole = self.mesher.insert_polyline( # NB CW
+            reversed([(2, 2), (5, 2), (5, 4), (2, 4)]), close_it=True,
+            material=HIDDEN_MATERIAL.id, id='hole')
+        line = self.mesher.insert_polyline(
+            [(1, 4), (4, 1)], altitude=20, id='line')
+        return (border, hole, line)

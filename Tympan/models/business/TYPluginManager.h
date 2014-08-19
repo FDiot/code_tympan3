@@ -13,13 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TY_PLUGINMANAGER__
 #define __TY_PLUGINMANAGER__
 
@@ -29,8 +22,9 @@
 #include <qstringlist.h>
 
 #include "Tympan/core/defines.h"
+#include "Tympan/core/interfaces.h"
 #include "Tympan/core/smartptr.h"
-#include "TYPlugin.h"
+#include "Tympan/core/plugin.h"
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #    define LIB_HANDLE hInstance
@@ -48,8 +42,8 @@ typedef struct HINSTANCE__* hInstance;
 #    define LIB_UNLOAD(a) dlclose(a)
 #endif
 
-typedef void (*TYPGStartPlugin)(bool console);
-typedef TYPlugin* (*TYPGGetPlugin)();
+typedef void (*TYPGStartPlugin)();
+typedef Plugin* (*TYPGGetPlugin)();
 typedef void (*TYPGStopPlugin)();
 
 struct TYPluginData
@@ -117,59 +111,35 @@ public:
     /*! Create a \c TYPluginData for each library file and update the list
         \c _plugins.
      \param file_list List of files to load.
-     \param with_graphical Is the graphical interface used?
      */
-    void createPlugins(const QFileInfoList& file_list, bool with_graphical);
+    void createPlugins(const QFileInfoList& file_list);
 
     //! Check the loaded plugin.
     /*! Check if the loaded object has the good methods.
      \param plugin_data The Plugin data related to the plugin to create.
-     \param with_graphical Is the graphical interface used?
      \return Start with success?
      */
-    bool startPlugin(TYPluginData* plugin_data, bool with_graphical);
+    bool startPlugin(TYPluginData* plugin_data);
 
     //! Load, check, create and start plugins.
     /*!
      \param directory Path to the dynamic library files (aka plugins) to load.
-     \param with_graphical Is the graphical interface used?
      */
-    bool loadPlugins(const QString& directory, bool with_graphical = true);
-
-    //! Load plugins (aka solvers) from the Qt interface.
-    bool loadPluginsGraphicMode(const QString& directory);
+    bool loadPlugins(const QString& directory);
 
     // Decharge les plugins charges de la memoire
     void unloadPlugins();
 
-    TYPlugin* getPlugin(const OGenID& uuid) const;
+    Plugin* getPlugin(const OGenID& uuid) const;
 
-    // Fonction de haut-niveau permettant le retour directe de l'objet TYSolver courant
-    TYSolverInterface* getSolver() const;
-
-    // Retourne un TYSolverInterface
-    TYSolverInterface* getSolver(const OGenID& uuid) const;
+    // Retourne un SolverInterface
+    SolverInterface* getSolver(const OGenID& uuid) const;
 
     // Retourne les infos du solveur
-    void getInfos(pluginInfos* pInfos) const;
-
-    // Retourne les infos du solveur defini par uuid
     void getInfos(pluginInfos* pInfos, const OGenID& uuid) const;
 
-    /// Retourne l'info demandee
-    QString getInfo(const QString& info);
-
-    /// Retourne l'info demandée sur un solveur spécifique
+    /// Retourne une info spécifique du solveur
     QString getInfo(const QString& info, const OGenID& uuid) const;
-
-    // Set current solver uuid
-    void setCurrent(const OGenID& uuid);
-
-    // Set current solver name
-    void setCurrent(const QString& solverName);
-
-    // Get current solver uuid
-    OGenID getCurrent() const;
 
     // Get plug-ins list
     TYPluginList& getPluginList();
@@ -182,9 +152,6 @@ public:
 
 private:
     TYPluginList _plugins;
-
-    // Current plugin used
-    OGenID _current;
 
     // Instance unique
     static LPTYPluginManager _pInstance;

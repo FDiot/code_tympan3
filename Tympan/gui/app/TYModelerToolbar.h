@@ -87,10 +87,6 @@ protected:
     QToolButton* _toolButtonCamera;
     ///Bouton fly navigation (flyCamera).
     QToolButton* _toolButtonFlyCamera;
-    ///Bouton navigation par zones.
-    QToolButton* _toolButtonCameraZone;
-    ///Bouton navigation par steps.
-    QToolButton* _toolButtonCameraStep;
     ///Bouton mesure de distance.
     QToolButton* _toolButtonDistance;
     ///Bouton deplacement d'objets.

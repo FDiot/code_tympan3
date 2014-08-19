@@ -22,7 +22,6 @@
 
 // CGAL related Includes
 #include "Tympan/models/business/cgal_tools.h"
-#include "Tympan/core/exceptions.h"
 
 #include <boost/ptr_container/ptr_deque.hpp>
 // http://www.boost.org/doc/libs/1_52_0/libs/ptr_container/doc/examples.html

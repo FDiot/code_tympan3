@@ -1,5 +1,5 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
+ * Copyright (C) <2012-2014> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 2 of the License, or
@@ -13,19 +13,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
+#ifndef TY_PLUGIN
+#define TY_PLUGIN
 
-#ifndef __TYPLUGIN__
-#define __TYPLUGIN__
-
-#pragma warning(disable: 4251)
+#include <string>
 
 #include "Tympan/core/defines.h"
+#include "Tympan/core/idgen.h"
+#include "Tympan/core/interfaces.h"
+
+#pragma warning(disable: 4251)
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #   ifdef _PLUGIN_DLL
@@ -37,10 +34,6 @@
 #   define PLUGIN_DECL
 #endif
 
-#include <string>
-
-#include "Tympan/core/idgen.h"
-#include "TYSolverInterface.h"
 
 typedef struct
 {
@@ -50,11 +43,12 @@ typedef struct
     QString _description;
 } pluginInfos;
 
-class TYPlugin
+
+class Plugin
 {
 public:
-    TYPlugin() : _pSolver(0) { }
-    ~TYPlugin() { if (_pSolver) { delete _pSolver; } }
+    Plugin() : _pSolver(0) { }
+    ~Plugin() { if (_pSolver) { delete _pSolver; } }
 
     // Set des informations
     void setName(const QString& name) { _name = name; }
@@ -80,14 +74,14 @@ public:
     OGenID getUUID() const { return _uuid; }
 
     // Set du solver
-    void setSolver(TYSolverInterface* solver) { _pSolver = solver; }
+    void setSolver(SolverInterface* solver) { _pSolver = solver; }
 
     // Get du solver
-    TYSolverInterface* getSolver() const { return _pSolver; }
+    SolverInterface* getSolver() const { return _pSolver; }
 
 private:
-    // Pointeur sur le TYSolverInterface
-    TYSolverInterface* _pSolver;
+    // Pointeur sur le SolverInterface
+    SolverInterface* _pSolver;
 
     // Informations sur le plugin
     QString _name;
@@ -97,4 +91,4 @@ private:
     OGenID _uuid;
 };
 
-#endif // __TYPLUGIN__
+#endif // TY_PLUGIN

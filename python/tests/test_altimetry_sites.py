@@ -194,7 +194,7 @@ class AltimetryMergerTC(unittest.TestCase, TestFeatures):
         cleaner_subsite = SiteNodeGeometryCleaner(self.subsite)
         cleaner_subsite.process_level_curves()
 
-        cleaner_subsite.export_cleaned_geometries_into(cleaner_mainsite)
+        cleaner_mainsite.import_cleaned_geometries_from(cleaner_subsite)
 
         self.assertTrue(cleaner_mainsite.geom['{Level curve B}'].equals(
             self.cleaned_level_B_shape))

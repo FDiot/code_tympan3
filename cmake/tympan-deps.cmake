@@ -14,6 +14,7 @@ include(tympan-deps-gtest)
 include(tympan-deps-dime)
 include(tympan-deps-nmpb)
 include(tympan-deps-cgalbindings)
+include(tympan-deps-ply)
 
 if(SYS_NATIVE_WIN)
   set(LD_VARNAME "PATH")

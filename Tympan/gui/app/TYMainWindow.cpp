@@ -862,10 +862,6 @@ void TYMainWindow::windowsMenuAboutToShow()
         QWidget* internal_window = windows.at(i);
 #endif
         if (!internal_window) { break; } // Securite
-        if (QString(internal_window->metaObject()->className()).compare("TYDrawSpectres") == 0)
-        {
-            continue;
-        }
 
         QAction* id = _pWindowsMenu->addAction(internal_window->windowTitle(),
                                                this, SLOT(windowsMenuActivated()));
@@ -1678,7 +1674,7 @@ void TYMainWindow::showPluginManager()
         if (_pProjetFrame->getProjet()->getCurrentCalcul())
             if (_pProjetFrame->getProjet()->getCurrentCalcul()->getState() == TYCalcul::Actif)
             {
-                _pProjetFrame->getProjet()->getCurrentCalcul()->setSolverId(TYPluginManager::get()->getCurrent());
+                _pProjetFrame->getProjet()->getCurrentCalcul()->setSolverId(pDlg->current_solver);
             }
 }
 
