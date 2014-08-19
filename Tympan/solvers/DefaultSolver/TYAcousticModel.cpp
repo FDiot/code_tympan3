@@ -24,6 +24,8 @@
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Shape.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
 #include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
+#include "TYAcousticModel.h"
+#include "TYSolver.h"
 
 TYAcousticModel::TYAcousticModel(TYSolver& solver)
     : _expGeo(1),
