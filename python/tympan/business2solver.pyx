@@ -128,6 +128,7 @@ cdef class Business2SolverConverter:
         (business receptor, micro source), will now contain 1 cumulative spectrum per
         pair (business receptor, business source)
         """
+        result_sources = cy.declare(map[tybusiness.TYElem_ptr, int])
         # Retrieve result matrix XXX we shouldn't have to use comp to retrieve the matrix
         aresult = cy.declare(tysolver.ResultModel)
         aresult = self.comp.acoustic_result
@@ -164,6 +165,7 @@ cdef class Business2SolverConverter:
                 cumul_spectrum.setValid(valid_spectrum)
                 cumul_spectrum.setType(tycommon.SPECTRE_TYPE_LP)
                 condensate_matrix.setSpectre(rec_counter, source_counter, cumul_spectrum)
+                result_sources[deref(source_it).first] = source_counter
                 source_counter += 1
                 inc(source_it)
             rec_counter += 1
@@ -171,6 +173,7 @@ cdef class Business2SolverConverter:
         busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
         busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
         busresult.setResultMatrix(condensate_matrix)
+        busresult.setSources(result_sources)
         # XXX   buildMapSourceSpectre()
 
     def remove_mesh_points_from_results(self):
