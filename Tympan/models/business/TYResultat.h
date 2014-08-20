@@ -336,6 +336,7 @@ public:
 
     void setResultMatrix(tympan::SpectrumMatrix matrix){ _matrix = matrix; }
     tympan::SpectrumMatrix& getResultMatrix(){ return _matrix; }
+    void setSources(TYMapElementIndex sources){ _sources = sources;}
 
 private:
     /**
