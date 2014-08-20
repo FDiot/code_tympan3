@@ -81,6 +81,7 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         void setResultMatrix(tysolver.SpectrumMatrix matrix)
         tysolver.SpectrumMatrix& getResultMatrix()
         void setSources(cppmap[TYElem_ptr, int])
+        void addRecepteur(TYPointCalcul* pRecepteur)
 
 cdef extern from "Tympan/models/business/acoustic/TYSource.h":
     cdef cppclass TYSource(TYElement):
