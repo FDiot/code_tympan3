@@ -128,6 +128,8 @@ cdef class Business2SolverConverter:
         (business receptor, micro source), will now contain 1 cumulative spectrum per
         pair (business receptor, business source)
         """
+        busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
+        busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
         result_sources = cy.declare(map[tybusiness.TYElem_ptr, int])
         # Retrieve result matrix XXX we shouldn't have to use comp to retrieve the matrix
         aresult = cy.declare(tysolver.ResultModel)
@@ -143,6 +145,7 @@ cdef class Business2SolverConverter:
         while rec_it != bus2solv_receptors.end():
             receptor = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
             receptor = deref(rec_it).first
+            busresult.addRecepteur(receptor)
             source_it = cy.declare(map[tybusiness.TYElem_ptr,
                                        vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
             source_it = macro2micro_sources.begin()
@@ -170,8 +173,6 @@ cdef class Business2SolverConverter:
                 inc(source_it)
             rec_counter += 1
             inc(rec_it)
-        busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
-        busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
         busresult.setResultMatrix(condensate_matrix)
         busresult.setSources(result_sources)
         # XXX   buildMapSourceSpectre()
