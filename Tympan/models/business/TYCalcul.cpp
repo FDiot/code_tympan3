@@ -1459,9 +1459,6 @@ bool TYCalcul::go()
     OMessageManager::get()->info("Creation des sources");
     getAllSources(mapElementSources, sources);
 
-    OMessageManager::get()->info("Selection des points de reception actifs");
-    selectActivePoint(pSite);
-
     OMessageManager::get()->info("Creation des recepteurs");
     getAllRecepteurs(recepteurs);
 
