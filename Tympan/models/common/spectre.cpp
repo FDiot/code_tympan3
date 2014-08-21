@@ -20,6 +20,9 @@
 #include "spectre.h"
 
 
+#include <iostream>
+using namespace std;
+
 // Frequence de travail minimale
 double OSpectre::_fMin = 16;
 
@@ -311,6 +314,16 @@ OSpectre OSpectre::sum(const OSpectre& spectre) const
         s._module[i] = this->_module[i] + spectre._module[i];
     }
     return s;
+}
+
+void OSpectre::printme() const
+{
+    cout << "Spectrum values: ";
+    for (unsigned int i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
+    {
+        cout << _module[i] << " ";
+    }
+    cout << endl;
 }
 
 OSpectre OSpectre::sum(const double& valeur) const
