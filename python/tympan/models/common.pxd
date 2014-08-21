@@ -66,6 +66,7 @@ cdef extern from "Tympan/models/common/spectre.h":
         OSpectre sum(const OSpectre& spectre) const
         bool isValid() const
         void setValid(const bool& valid)
+        void printme() const
 
     cdef cppclass OSpectreComplex (OSpectre):
         OSpectreComplex()

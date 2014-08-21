@@ -167,6 +167,7 @@ cdef extern from "Tympan/models/business/TYPointCalcul.h":
     cdef cppclass TYPointCalcul (TYPoint):
         bool getEtat(TYCalcul* pCalcul)
         void setSpectre(const TYSpectre& spectre, TYCalcul* pCalcul)
+        TYSpectre* getSpectre(TYCalcul* pCalcul)
 
 cdef extern from "Tympan/models/business/TYPointControl.h":
     cdef cppclass TYPointControl (TYPointCalcul):

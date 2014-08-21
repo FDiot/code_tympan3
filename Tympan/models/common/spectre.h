@@ -281,7 +281,7 @@ public:
 
     /// Construit un spectre de ponderation C
     static OSpectre pondC();
-
+    virtual void printme() const;
     /**
      * Retourne un spectre representant la longueur d'onde associee a chaque frequence
      * @param double Vitesse de propagation de l'onde
