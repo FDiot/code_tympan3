@@ -14,7 +14,7 @@
 */
 
 /**
- * \file TYDirectiviteWidget.cpp
+ * \file TYDirectivityWidget.cpp
  * \brief outil IHM pourla directivite
  *
  *
@@ -32,12 +32,12 @@
 #include <QHeaderView>
 
 
-#include "TYDirectiviteWidget.h"
+#include "TYDirectivityWidget.h"
 
-#define TR(id) OLocalizator::getString("TYDirectiviteWidget", (id))
+#define TR(id) OLocalizator::getString("TYDirectivityWidget", (id))
 
 
-TYDirectiviteWidget::TYDirectiviteWidget(TYDirectivity* pElement, QWidget* _pParent /*=NULL*/):
+TYDirectivityWidget::TYDirectivityWidget(TYDirectivity* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
     resize(300, 240);
@@ -71,11 +71,11 @@ TYDirectiviteWidget::TYDirectiviteWidget(TYDirectivity* pElement, QWidget* _pPar
 }
 
 
-TYDirectiviteWidget::~TYDirectiviteWidget()
+TYDirectivityWidget::~TYDirectivityWidget()
 {
 }
 
-void TYDirectiviteWidget::updateContent()
+void TYDirectivityWidget::updateContent()
 {
     _elmW->updateContent();
 
@@ -87,13 +87,13 @@ void TYDirectiviteWidget::updateContent()
     _table->setRowCount(0);
 }
 
-void TYDirectiviteWidget::apply()
+void TYDirectivityWidget::apply()
 {
     _elmW->apply();
     emit modified();
 }
 
-void TYDirectiviteWidget::showContextMenu(const QPoint& pos)
+void TYDirectivityWidget::showContextMenu(const QPoint& pos)
 {
     QTableWidgetItem* item = _table->itemAt(pos);
     if (item)

@@ -79,22 +79,18 @@ public:
      * Destructeur.
      */
     virtual ~TYDirectivity();
-
     ///Operateur =.
     TYDirectivity& operator=(const TYDirectivity& other);
     ///Operateur ==.
     bool operator==(const TYDirectivity& other) const;
     ///Operateur !=.
     bool operator!=(const TYDirectivity& other) const;
-
     virtual bool deepCopy(const TYElement* pOther, bool copyId = true);
-
     virtual std::string toString() const;
 
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-public :
     OVector3D DirectivityVector;
 
 };
@@ -133,7 +129,7 @@ public:
     TYComputedDirectivity() :   TYDirectivity(),
                                 Type(Surface),
                                 SpecificSize(1.) {}
-    YComputedDirectivity(OVector3D& vec, int type, double size) :
+    TYComputedDirectivity(OVector3D& vec, int type, double size) :
         TYDirectivity(vec),
         Type(type),
         SpecificSize(size) {}

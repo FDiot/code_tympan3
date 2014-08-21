@@ -27,10 +27,12 @@
 #include<boost/foreach.hpp>
 
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYDirectiviteWidget.h"
+#include "Tympan/gui/widgets/TYDirectivityWidget.h"
 #endif
 
 #include "TYDirectivity.h"
+
+TY_EXTENSION_INST(TYDirectivity);
 
 TYDirectivity::TYDirectivity() : 
         DirectivityVector( OVector3D(0., 0., 1.) )
