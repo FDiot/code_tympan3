@@ -116,7 +116,11 @@ cdef class Business2SolverConverter:
             for i in xrange(spectra.size()):
                 cumul_spectrum = cumul_spectrum.sum(spectra[i])
             cumul_spectrum.setType(tycommon.SPECTRE_TYPE_LP) # enum TYSpectreType from OSpectre
-            receptor.setSpectre(tybusiness.TYSpectre(cumul_spectrum.toDB()),
+            # The values retrieved from the solver are linear. We want to convert
+            # them to DB.
+            cumul_spectrum.setEtat(tycommon.SPECTRE_ETAT_LIN)
+            cumul_spectrum = cumul_spectrum.toDB()
+            receptor.setSpectre(tybusiness.TYSpectre(cumul_spectrum),
                                 self.comp.thisptr.getRealPointer())
             inc(it)
         busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
@@ -167,6 +171,10 @@ cdef class Business2SolverConverter:
                     valid_spectrum &= cur_spectrum.isValid()
                 cumul_spectrum.setValid(valid_spectrum)
                 cumul_spectrum.setType(tycommon.SPECTRE_TYPE_LP)
+                # The values retrieved from the solver are linear. We want to convert
+                # them to DB.
+                cumul_spectrum.setEtat(tycommon.SPECTRE_ETAT_LIN)
+                cumul_spectrum = cumul_spectrum.toDB()
                 condensate_matrix.setSpectre(rec_counter, source_counter, cumul_spectrum)
                 result_sources[deref(source_it).first] = source_counter
                 source_counter += 1
