@@ -1350,6 +1350,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
     std::list<Intersection> LI;
 
     double distance1 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray1, LI ) );
+    assert( !LI.empty() );
 
     assert( distance1 > 0. );
 
