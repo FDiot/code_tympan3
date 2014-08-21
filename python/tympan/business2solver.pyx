@@ -269,8 +269,31 @@ cdef class SolverModelBuilder:
                     ppoint[0]._x = point3d._x
                     ppoint[0]._y = point3d._y
                     ppoint[0]._z = point3d._z
+                    # Directivity
+                    # solver model directivity
+                    pdirectivity = cy.declare(cy.pointer(tysolver.SourceDirectivityInterface))
+                    # business model directivity
+                    pbus_directivity = cy.declare(cy.pointer(tybusiness.TYDirectivity))
+                    pbus_directivity = subsource.getDirectivity()
+                    # Check if the acoustic source is a user-defined one
+                    pusersource = cy.declare(cy.pointer(tybusiness.TYUserSourcePonctuelle))
+                    pusersource = tybusiness.downcast_user_source_ponctuelle(subsource_elt)
+                    if pusersource != NULL:
+                        pdirectivity = new tysolver.SphericalSourceDirectivity()
+                    else: #  it is a computed acoustic source
+                        pcompdirectivity = cy.declare(cy.pointer(tybusiness.TYComputedDirectivity))
+                        pcompdirectivity = tybusiness.downcast_computed_directivity(pbus_directivity)
+                        if pcompdirectivity.Type == tybusiness.Surface:
+                            pdirectivity = new tysolver.VolumeFaceDirectivity(
+                                pcompdirectivity.DirectivityVector, pcompdirectivity.SpecificSize)
+                        elif pcompdirectivity.Type == tybusiness.Baffled:
+                            pdirectivity = new tysolver.BaffledFaceDirectivity(
+                                pcompdirectivity.DirectivityVector, pcompdirectivity.SpecificSize)
+                        else: # Chimney
+                            pdirectivity = new tysolver.ChimneyFaceDirectivity(
+                                pcompdirectivity.DirectivityVector, pcompdirectivity.SpecificSize)
                     # Add it to the solver model
-                    source_idx = self.model.make_source(ppoint[0], subsource.getSpectre()[0])
+                    source_idx = self.model.make_source(ppoint[0], subsource.getSpectre()[0], pdirectivity)
                     # Record where it has been stored
                     bus2solv_sources[sources_of_elt[i]] = source_idx
                     nb_sources += 1

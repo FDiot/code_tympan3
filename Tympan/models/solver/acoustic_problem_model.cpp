@@ -93,10 +93,11 @@ material_ptr_t AcousticProblemModel::make_material(const string& name, const Com
 
 source_idx AcousticProblemModel::make_source(
         const Point& point,
-        const Spectrum& spectrum)
+        const Spectrum& spectrum,
+        SourceDirectivityInterface* directivity)
 {
 
-    all_sources.push_back(AcousticSource(point, spectrum));
+    all_sources.push_back(AcousticSource(point, spectrum, directivity));
     return all_sources.size() - 1;
 }
 

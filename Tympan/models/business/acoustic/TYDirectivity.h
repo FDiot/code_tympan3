@@ -142,5 +142,10 @@ public:
     double SpecificSize; /*!< Support (face/volume) size */
 };
 
+template<typename T>
+T *downcast_tydirectivity(TYDirectivity * dir)
+{
+    return dynamic_cast<T*>(dir);
+}
 
 #endif // __TY_DIRECTIVITY__

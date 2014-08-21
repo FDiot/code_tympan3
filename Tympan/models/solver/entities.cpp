@@ -986,10 +986,11 @@ int BaffledFaceDirectivity::find_Ka_idx(double ka)
 //
 AcousticSource::AcousticSource(
     const Point& position_,
-    const Spectrum& spectrum_ )
+    const Spectrum& spectrum_ ,
+    SourceDirectivityInterface* directivity_)
     : position(position_)
     , spectrum(spectrum_)
-    , directivity(new SphericalSourceDirectivity())
+    , directivity(directivity_)
 {}
 
 // ---------
