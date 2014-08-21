@@ -22,7 +22,7 @@
 
 
 #include "Tympan/models/business/TYElement.h"
-
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 
 struct ConstraintDirectivityElement
 {

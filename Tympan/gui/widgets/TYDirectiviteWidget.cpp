@@ -21,8 +21,6 @@
  */
 
 
-
-
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/acoustic/TYDirectivity.h"
 
@@ -87,28 +85,11 @@ void TYDirectiviteWidget::updateContent()
         _table->takeItem(i, 1);
     }
     _table->setRowCount(0);
-
-    int i;
-    for (i = 0; i < getElement()->getTabAnglesVal().size(); i++)
-    {
-        _table->setRowCount(_table->rowCount() + 1);
-        _table->setItem(i, 0, new QTableWidgetItem(QString().setNum(getElement()->getTabAnglesVal()[i]._theta, 'f', 2)));
-        _table->setItem(i, 1, new QTableWidgetItem(QString().setNum(getElement()->getTabAnglesVal()[i]._phi, 'f', 2)));
-        _table->setItem(i, 2, new QTableWidgetItem(QString().setNum(getElement()->getTabAnglesVal()[i]._val, 'f', 2)));
-    }
 }
 
 void TYDirectiviteWidget::apply()
 {
     _elmW->apply();
-
-    for (int i = _table->rowCount() - 1; i >= 0; i--)
-    {
-        getElement()->getTabAnglesVal()[i]._theta = _table->item(i, 0)->text().toDouble();
-        getElement()->getTabAnglesVal()[i]._phi = _table->item(i, 1)->text().toDouble();
-        getElement()->getTabAnglesVal()[i]._val = _table->item(i, 2)->text().toDouble();
-    }
-
     emit modified();
 }
 
@@ -130,26 +111,6 @@ void TYDirectiviteWidget::showContextMenu(const QPoint& pos)
         }
 
         QAction* pRet = pMenu->exec(pos);
-
-        if (pRet == pDelAction)
-        {
-            TYDirectiviteAnglesValueTab::iterator ite;
-            ite = getElement()->getTabAnglesVal().begin();
-            int i = 0;
-            while (i < row) {ite++; i++;}
-            getElement()->getTabAnglesVal().erase(ite);
-            updateContent();
-        }
-
-        if (pRet == pAddAction)
-        {
-            TYDirectiviteAnglesValue newValue;
-            newValue._theta = 0;
-            newValue._phi = 0;
-            newValue._val = 0;
-            getElement()->getTabAnglesVal().push_back(newValue);
-            updateContent();
-        }
     }
 }
 
