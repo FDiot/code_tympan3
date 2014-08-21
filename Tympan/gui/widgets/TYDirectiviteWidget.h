@@ -45,7 +45,7 @@ class QTableWidget;
  * \class TYDirectiviteWidget
  * \brief classe de l'objet IHM pour la directivite
  */
-class TYDirectivityWidget : public TYWidget
+class TYDirectiviteWidget : public TYWidget
 {
     Q_OBJECT
 
@@ -56,11 +56,11 @@ public:
     /**
      * Constructeur.
      */
-    TYDirectivityWidget(TYDirectivity* pElement, QWidget* _pParent = NULL);
+    TYDirectiviteWidget(TYDirectivity* pElement, QWidget* _pParent = NULL);
     /**
      * Destructeur.
      */
-    virtual ~TYDirectivityWidget();
+    virtual ~TYDirectiviteWidget();
 
 
 public slots:

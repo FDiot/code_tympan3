@@ -27,18 +27,10 @@
 #include<boost/foreach.hpp>
 
 #if TY_USE_IHM
-#include "Tympan/GraphicIHM/DataManagerIHM/TYDirectiviteWidget.h"
+#include "Tympan/gui/widgets/TYDirectiviteWidget.h"
 #endif
 
-#ifdef TYMPAN_USE_PRECOMPILED_HEADER
-#include "Tympan/MetierSolver/DataManagerMetier/TYPHMetier.h"
-#endif // TYMPAN_USE_PRECOMPILED_HEADER
-
-
-
-
-
-TY_EXTENSION_INST(TYDirectivity);
+#include "TYDirectivity.h"
 
 TYDirectivity::TYDirectivity() : 
         DirectivityVector( OVector3D(0., 0., 1.) )
@@ -189,7 +181,7 @@ int TYUserDefinedDirectivity::fromXML(DOM_Element domElement)
 void TYUserDefinedDirectivity::LoadFromCsv(std::string fileName)
 {
     DirectivityTable.clear(); // cleaning table
-    ifstream input(fileName, ios::in);
+    std::ifstream input(fileName, std::ios::in);
 
     using namespace std;
     using namespace boost;
