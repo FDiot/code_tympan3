@@ -47,6 +47,10 @@ cdef extern from "Tympan/models/common/spectre.h":
 
     const unsigned int TY_SPECTRE_DEFAULT_NB_ELMT
 
+    cdef enum TYSpectreEtat:
+        SPECTRE_ETAT_DB
+        SPECTRE_ETAT_LIN
+
     cdef enum TYSpectreType:
         SPECTRE_TYPE_ATT
         SPECTRE_TYPE_ABSO
@@ -60,6 +64,7 @@ cdef extern from "Tympan/models/common/spectre.h":
         bool operator!=(const OSpectre& other) const
         OSpectre toDB()
         void setType(TYSpectreType type)
+        void setEtat(TYSpectreEtat etat)
         double * getTabValReel()
         unsigned int getNbValues() const
         void setDefaultValue(const double& valeur)
