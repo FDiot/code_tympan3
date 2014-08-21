@@ -105,7 +105,8 @@ public:
      */
     source_idx make_source(
         const Point& point_,
-        const Spectrum& spectrum_);
+        const Spectrum& spectrum_,
+        SourceDirectivityInterface* directivity);
 
     /**
      * @brief Push a new acoustic receptor into the model

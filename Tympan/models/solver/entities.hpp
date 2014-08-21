@@ -199,7 +199,8 @@ class SphericalSourceDirectivity :
       public SourceDirectivityInterface
 {
 public:
-     virtual Spectrum lwAdjustment(Vector direction, double distance)
+    SphericalSourceDirectivity(){};
+    virtual Spectrum lwAdjustment(Vector direction, double distance)
      { return Spectrum(1.0); }
 };
 
@@ -319,7 +320,8 @@ class AcousticSource:
 public:
     AcousticSource(
             const Point& point_,
-            const Spectrum& spectrum_);
+            const Spectrum& spectrum_,
+            SourceDirectivityInterface* directivity);
 
     virtual ~AcousticSource() {};
 

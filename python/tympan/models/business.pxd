@@ -57,6 +57,7 @@ cdef extern from "Tympan/models/business/TYElement.h":
     #  ("'T' is not a type identifier")
     # However "T max[T](T a, T b)" is actually supported in cython 0.20.
     TYSourcePonctuelle* downcast_source_ponctuelle "downcast<TYSourcePonctuelle>"(TYElement *)
+    TYUserSourcePonctuelle* downcast_user_source_ponctuelle "downcast<TYUserSourcePonctuelle>"(TYElement *)
     TYMaillage* downcast_maillage "downcast<TYMaillage>"(TYElement *)
     TYPointControl* downcast_point_control "downcast<TYPointControl>"(TYElement *)
     TYCourbeNiveau* downcast_courbe_niveau "downcast<TYCourbeNiveau>"(TYElement*)
@@ -64,6 +65,9 @@ cdef extern from "Tympan/models/business/TYElement.h":
     TYTerrain* downcast_terrain "downcast<TYTerrain>"(TYElement*)
     TYSiteNode* downcast_sitenode "downcast<TYSiteNode>"(TYElement*)
     TYSol* downcast_sol "downcast<TYSol>"(TYElement*)
+
+cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h":
+    TYComputedDirectivity* downcast_computed_directivity "downcast_tydirectivity<TYComputedDirectivity>"(TYDirectivity *)
 
 # This is because it seems unsupported to declare a map containing pointers
 # http://trac.cython.org/cython_trac/ticket/793
@@ -83,6 +87,27 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         void setSources(cppmap[TYElem_ptr, int])
         void addRecepteur(TYPointCalcul* pRecepteur)
 
+cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h" namespace "TYComputedDirectivity":
+    cdef enum DirectivityType:
+        Surface
+        Baffled
+        Chimney
+
+cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h":
+    cdef cppclass TYDirectivity(TYElement):
+        TYDirectivity()
+        tycommon.OVector3D DirectivityVector
+
+    cdef cppclass TYComputedDirectivity(TYDirectivity, TYElement):
+        TYComputedDirectivity()
+        TYComputedDirectivity(tycommon.OVector3D& vec, int type, double size)
+        double SpecificSize
+        DirectivityType Type
+
+    cdef cppclass TYUserDefinedDirectivity(TYDirectivity, TYElement):
+        TYUserDefinedDirectivity()
+        TYUserDefinedDirectivity(tycommon.OVector3D& vec)
+
 cdef extern from "Tympan/models/business/acoustic/TYSource.h":
     cdef cppclass TYSource(TYElement):
         TYSpectre* getSpectre() const
@@ -90,6 +115,11 @@ cdef extern from "Tympan/models/business/acoustic/TYSource.h":
 cdef extern from "Tympan/models/business/acoustic/TYSourcePonctuelle.h":
     cdef cppclass TYSourcePonctuelle(TYSource):
         SmartPtr[TYPoint] getPos()
+        TYDirectivity* getDirectivity() const
+
+cdef extern from "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h":
+    cdef cppclass TYUserSourcePonctuelle(TYSourcePonctuelle):
+        pass
 
 cdef extern from "Tympan/models/business/material/TYAtmosphere.h":
     cdef cppclass TYAtmosphere (TYElement):

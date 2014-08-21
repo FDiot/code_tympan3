@@ -2,7 +2,7 @@
 """
 from libcpp.string cimport string
 
-from tympan.models.common cimport OPoint3D, OSpectre, OSpectreComplex
+from tympan.models.common cimport OPoint3D, OSpectre, OSpectreComplex, OVector3D
 from tympan.core cimport shared_ptr
 from libcpp.vector cimport vector
 
@@ -28,7 +28,7 @@ cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "ty
         shared_ptr[AcousticMaterialBase] make_material(const string& name, const OSpectreComplex& spectrum)
         size_t make_triangle(size_t n1, size_t n2, size_t n3)
         size_t make_node(const OPoint3D&)
-        size_t make_source(const OPoint3D& point_, const OSpectre& spectrum_)
+        size_t make_source(const OPoint3D& point_, const OSpectre& spectrum_, const SourceDirectivityInterface* directivity_)
         size_t make_receptor(const OPoint3D& point_)
 
 cdef extern from "Tympan/models/solver/acoustic_result_model.hpp" namespace "tympan":
@@ -52,6 +52,7 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
     cdef cppclass AcousticSource(BaseEntity):
         OPoint3D position
         OSpectre spectrum
+        SourceDirectivityInterface* directivity
 
     cdef cppclass AcousticReceptor(BaseEntity):
         OPoint3D position
@@ -73,19 +74,20 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
         pass
 
     cdef cppclass SphericalSourceDirectivity(BaseEntity, SourceDirectivityInterface):
-        pass
+        SphericalSourceDirectivity()
 
     cdef cppclass CommonFaceDirectivity(BaseEntity, SourceDirectivityInterface):
-        pass
+        CommonFaceDirectivity() # XXX
+        CommonFaceDirectivity(const OVector3D& support_normal_, double support_size_)
 
     cdef cppclass VolumeFaceDirectivity(CommonFaceDirectivity):
-        pass
+        VolumeFaceDirectivity(const OVector3D& support_normal_, double support_size_)
 
     cdef cppclass ChimneyFaceDirectivity(CommonFaceDirectivity):
-        pass
+        ChimneyFaceDirectivity(const OVector3D& support_normal_, double support_size_)
 
     cdef cppclass BaffledFaceDirectivity(CommonFaceDirectivity):
-        pass
+        BaffledFaceDirectivity(const OVector3D& support_normal_, double support_size_)
 
 
 cdef acousticproblemmodel2problemmodel(AcousticProblemModel* apm)
