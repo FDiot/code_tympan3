@@ -14,7 +14,7 @@
 */
 
 /**
- * \file TYDirectiviteWidget.h
+ * \file TYDirectivityWidget.h
  * \brief outil IHM pourla directivite (fichier header)
  * \author Projet_Tympan
  *
@@ -42,10 +42,10 @@ class QTableWidget;
 
 
 /**
- * \class TYDirectiviteWidget
+ * \class TYDirectivityWidget
  * \brief classe de l'objet IHM pour la directivite
  */
-class TYDirectiviteWidget : public TYWidget
+class TYDirectivityWidget : public TYWidget
 {
     Q_OBJECT
 
@@ -56,11 +56,11 @@ public:
     /**
      * Constructeur.
      */
-    TYDirectiviteWidget(TYDirectivity* pElement, QWidget* _pParent = NULL);
+    TYDirectivityWidget(TYDirectivity* pElement, QWidget* _pParent = NULL);
     /**
      * Destructeur.
      */
-    virtual ~TYDirectiviteWidget();
+    virtual ~TYDirectivityWidget();
 
 
 public slots:

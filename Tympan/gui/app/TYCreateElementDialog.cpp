@@ -47,7 +47,7 @@ static char* _listMainElement[] =
     "TYAcousticRectangleNode", "TYAcousticRectangle",    "TYAcousticSemiCircle",  "TYAcousticSemiCylinder", "TYAcousticSurfaceNode",/*02*/
     "TYAcousticSurface",       "TYBoucheSurface",        "TYChemineeSurface",     "TYAcousticVolumeNode",   "TYAcousticVolume",     /*03*/
     "TYAltimetrie",            "TYAtmosphere",           "TYAttenuateur",         "TYBatiment",             "TYBox",                /*04*/
-    "TYCalcul",                "TYCourbeNiveau",         "TYCoursEau",            "TYDalle",                "TYDirectivite",        /*05*/
+    "TYCalcul",                "TYCourbeNiveau",         "TYCoursEau",            "TYDalle",                "TYDirectivity",        /*05*/
     "TYElement",               "TYEtage",                "TYInfrastructure",      "TYLinearMaillage",       "TYMachine",            /*06*/
     "TYMaillage",              "TYMateriauConstruction", "TYMurElement",          "TYMur",                  "TYParoi",              /*07*/
     "TYPlanEau",               "TYPointCalcul",          "TYPointControl",        "TYPoint",                "TYPolygon",            /*08*/
