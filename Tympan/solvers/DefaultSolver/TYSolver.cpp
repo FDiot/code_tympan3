@@ -167,7 +167,7 @@ bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul, const t
         SI.tabPoint.push_back(pts[0]);
         SI.tabPoint.push_back(pts[1]);
         SI.tabPoint.push_back(pts[2]);
-        SI.material = const_cast<tympan::AcousticMaterialBase*>(&aproblem.material(i));
+        SI.material = triangles[i].made_of.get();
 
         _tabPolygon.push_back(SI);
     }
