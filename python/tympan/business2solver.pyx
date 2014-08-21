@@ -163,7 +163,7 @@ cdef class Business2SolverConverter:
                     subsource_idx = bus2solv_sources[subsources[i]] # solver idx
                     cur_spectrum = cy.declare(tycommon.OSpectre)
                     cur_spectrum = result_matrix.element(deref(rec_it).second, subsource_idx)
-                    cumul_spectrum.sum(cur_spectrum)
+                    cumul_spectrum = cumul_spectrum.sum(cur_spectrum)
                     valid_spectrum &= cur_spectrum.isValid()
                 cumul_spectrum.setValid(valid_spectrum)
                 cumul_spectrum.setType(tycommon.SPECTRE_TYPE_LP)
