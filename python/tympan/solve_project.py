@@ -71,7 +71,6 @@ def solve(input_project, output_project, solverdir, multithreading_on=True,
     # Build an acoustic problem from the site of the computation
     bus2solv_conv = bus2solv.Business2SolverConverter(comp, project.site)
     bus2solv_conv.build_solver_problem()
-    # TODO: check number of sources and receptors OK? (see TYCalcul::isCalculPossible())
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  bus2solv_conv.nsources, bus2solv_conv.nreceptors)
     # Load solver plugin

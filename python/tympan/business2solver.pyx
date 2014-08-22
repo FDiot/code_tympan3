@@ -192,7 +192,6 @@ cdef class Business2SolverConverter:
             inc(rec_it)
         busresult.setResultMatrix(condensate_matrix)
         busresult.setSources(result_sources)
-        # XXX   buildMapSourceSpectre()
 
     def remove_mesh_points_from_results(self):
         """ In the final result matrix we don't keep mesh points (they were generated

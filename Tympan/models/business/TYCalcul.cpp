@@ -1376,12 +1376,15 @@ bool TYCalcul::go(SolverInterface* pSolver)
     xmlManager.save("merged.xml");
 #endif
 
-    OMessageManager::get()->info("Calcul en cours...");
-    bool ret = true;
-    // XXX remove pCalcul (once parameters will have been removed from this class)
-    ret = pSolver->solve(*this, *_acousticProblem, *_acousticResult);
-    pSolver->purge();
-
+    bool ret = false;
+    if ( isCalculPossible(_acousticProblem->nsources(), _acousticProblem->nreceptors(), pProjet->getSite()))
+    {
+        OMessageManager::get()->info("Calcul en cours...");
+        // XXX remove pCalcul (once parameters will have been removed from this class)
+        ret = pSolver->solve(*this, *_acousticProblem, *_acousticResult);
+        pSolver->purge();
+        OMessageManager::get()->info("Calcul en termine.");
+    }
     if (!ret)
     {
         _pResultat->purge();
