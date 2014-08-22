@@ -33,6 +33,8 @@ cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "ty
 
 cdef extern from "Tympan/models/solver/acoustic_result_model.hpp" namespace "tympan":
     cdef cppclass SpectrumMatrix:
+        SpectrumMatrix()
+        SpectrumMatrix(const SpectrumMatrix& matrix)
         const vector[OSpectre]& by_receptor(size_t receptor_idx) const
         OSpectre& element "operator()"(size_t receptor_idx, size_t sources_idx)
         void setSpectre(size_t receptor_idx, size_t sources_idx, OSpectre spectrum)

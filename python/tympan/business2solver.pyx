@@ -51,6 +51,8 @@ cdef class Business2SolverConverter:
     site = cy.declare(tybusiness.Site)
     _nsources = cy.declare(int)
     _nreceptors = cy.declare(int)
+    # transitional result matrix (from solver matrix to condensed business matrix)
+    transitional_result_matrix = cy.declare(cy.pointer(tysolver.SpectrumMatrix))
 
     @cy.locals(comp=tybusiness.Computation, site=tybusiness.Site)
     def __cinit__(self, comp, site):
@@ -80,22 +82,24 @@ cdef class Business2SolverConverter:
         self._nreceptors = builder.nreceptors
 
     def postprocessing(self):
+        # Retrieve solver result matrix
+        solver_result = cy.declare(cy.pointer(tysolver.AcousticResultModel))
+        solver_result = self.comp.thisptr.getRealPointer()._acousticResult.get()
+        solver_result_matrix = cy.declare(tysolver.SpectrumMatrix)
+        solver_result_matrix = solver_result.get_data()
+        self.transitional_result_matrix = new tysolver.SpectrumMatrix(solver_result_matrix)
         # update business receptors cumulative spectra
         self.update_business_receptors()
         self.remove_mesh_points_from_results()
         # condensate result matrix
         self.update_business_result_matrix()
         self.comp.thisptr.getRealPointer().goPostprocessing()
+        del self.transitional_result_matrix
 
     def update_business_receptors(self):
         """ Once the acoustic problem has been solved, send back the acoustic results
         to the business receptors
         """
-        # Retrieve result matrix
-        solver_result = cy.declare(cy.pointer(tysolver.AcousticResultModel))
-        solver_result = self.comp.thisptr.getRealPointer()._acousticResult.get()
-        solver_result_matrix = cy.declare(tysolver.SpectrumMatrix)
-        solver_result_matrix = solver_result.get_data()
         # resize business result matrix with the number of enabled sources and receptors:
         business_result = cy.declare(tybusiness.Result)
         business_result = self.comp.result
@@ -109,7 +113,7 @@ cdef class Business2SolverConverter:
             receptor = deref(it).first
             # retrieve receptor spectra
             spectra = cy.declare(vector[tycommon.OSpectre])
-            spectra = solver_result_matrix.by_receptor(deref(it).second)
+            spectra = self.transitional_result_matrix[0].by_receptor(deref(it).second)
             # receptor cumulative spectrum
             cumul_spectrum = cy.declare(tycommon.OSpectre)
             cumul_spectrum.setDefaultValue(0.0)
@@ -135,11 +139,6 @@ cdef class Business2SolverConverter:
         busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
         busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
         result_sources = cy.declare(map[tybusiness.TYElem_ptr, int])
-        # Retrieve result matrix XXX we shouldn't have to use comp to retrieve the matrix
-        aresult = cy.declare(tysolver.ResultModel)
-        aresult = self.comp.acoustic_result
-        result_matrix = cy.declare(tysolver.SpectrumMatrix)
-        result_matrix = aresult.thisptr.get_data()
         condensate_matrix = cy.declare(tysolver.SpectrumMatrix)
         condensate_matrix.resize(bus2solv_receptors.size(), macro2micro_sources.size())
         rec_it = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t].iterator)
@@ -166,7 +165,8 @@ cdef class Business2SolverConverter:
                     # Get solver result for this subsource
                     subsource_idx = bus2solv_sources[subsources[i]] # solver idx
                     cur_spectrum = cy.declare(tycommon.OSpectre)
-                    cur_spectrum = result_matrix.element(deref(rec_it).second, subsource_idx)
+                    cur_spectrum = self.transitional_result_matrix[0].element(
+                        deref(rec_it).second, subsource_idx)
                     cumul_spectrum = cumul_spectrum.sum(cur_spectrum)
                     valid_spectrum &= cur_spectrum.isValid()
                 cumul_spectrum.setValid(valid_spectrum)
@@ -190,12 +190,8 @@ cdef class Business2SolverConverter:
         for the solver resolution but once computation is done we settle for a synthetic
         result
         """
-        aresult = cy.declare(tysolver.ResultModel)
-        aresult = self.comp.acoustic_result
-        result_matrix = cy.declare(cy.pointer(tysolver.SpectrumMatrix))
-        result_matrix = cy.address(aresult.thisptr.get_data())
         for i in xrange(to_be_removed_receptors.size()):
-            result_matrix.clearReceptor(to_be_removed_receptors[i])
+            self.transitional_result_matrix[0].clearReceptor(to_be_removed_receptors[i])
             remove_me = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
             remove_me = solv2bus_receptors[to_be_removed_receptors[i]]
             bus2solv_receptors.erase(remove_me)
