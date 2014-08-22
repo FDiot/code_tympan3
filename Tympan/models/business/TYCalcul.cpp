@@ -1394,7 +1394,12 @@ bool TYCalcul::go(SolverInterface* pSolver)
 
 void TYCalcul::goPostprocessing()
 {
+    // Create result map (business sources --> micro sources)
+    TYMapElementTabSources& mapElementSources = _pResultat->getMapEmetteurSrcs();
+    getProjet()->getSite()->getInfrastructure()->getAllSrcs(this, mapElementSources);
+    // build sources spectra
     _pResultat->buildMapSourceSpectre();
+
     updateGraphicMaillage();
     // Le calcul a proprement parler est termine
     // Il est necessaire de reattribuer les parents des elements du site merges
