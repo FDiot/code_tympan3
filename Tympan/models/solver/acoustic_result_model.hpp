@@ -28,6 +28,7 @@ public:
 
     SpectrumMatrix();
     SpectrumMatrix(size_t nb_receptors, size_t nb_sources);
+    SpectrumMatrix(const SpectrumMatrix& matrix);
     virtual ~SpectrumMatrix() {};
 
     size_t nb_sources()   const { return _nb_sources; };

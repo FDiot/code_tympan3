@@ -19,6 +19,22 @@ namespace tympan
 
     SpectrumMatrix::SpectrumMatrix() : _nb_sources(0) {}
 
+    SpectrumMatrix::SpectrumMatrix(const SpectrumMatrix& matrix)
+    {
+        // Build matrix
+        resize(matrix.data.size(), matrix._nb_sources);
+        // number of sources
+        _nb_sources = matrix._nb_sources;
+        // Copy spectra
+        for (size_t i = 0; i < data.size(); i++)
+        {
+            for(size_t j = 0; j < _nb_sources; j++)
+            {
+                data[i][j] = matrix.data[i][j];
+            }
+        }
+    }
+
      void SpectrumMatrix::resize(size_t nb_receptors, size_t nb_sources)
      {
         _nb_sources = nb_sources;
