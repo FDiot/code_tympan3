@@ -106,43 +106,6 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
         }
     }
 
-
-
-
-//  --- BEGIN ---
-//	Code below is only for compatibility reasons and must be suppressed when result matrix will be implemented correctly in TYResultat
-
-    // build trajects and return count of
-    size_t count = buildTrajects( const_cast<tympan::AcousticProblemModel&>(aproblem) );
-
-
-    for (unsigned int i = 0; i < aproblem.nsources(); i++) // boucle sur les sources
-    {
-        for (unsigned int j = 0; j < aproblem.nreceptors(); j++) // boucle sur les recepteurs
-        {
-            TYTrajet traj(  const_cast<tympan::AcousticSource&>(aproblem.source(i)), 
-                            const_cast<tympan::AcousticReceptor&>(aproblem.receptor(j)) );
-            traj.asrc_idx = i;
-            traj.arcpt_idx = j;
-
-            tabSpectre[i][j].setEtat(SPECTRE_ETAT_LIN);
-            sLP = tabSpectre[i][j];
-            sLP.setType(SPECTRE_TYPE_LP);
-
-            tabSpectre[i][j] = sLP.toDB();  // conversion du tableau resultat en dB
-
-            //traj.setSourcePonctuelle(_tabSources[i]);
-            //traj.setPointCalcul(_tabRecepteurs[j]);
-            traj.setSpectre(tabSpectre[i][j]);
-            _tabTrajets.push_back(traj);
-        }
-    }
- 
-	calcul.getTabTrajet().clear();
-	calcul.getTabTrajet() = _tabTrajets;
-
-//  ---  END  ---
-
     if (globalUseMeteo && globalOverSampleD)
     {
         for (unsigned int i = 0; i < _tabRay.size(); i++)
@@ -150,8 +113,6 @@ bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
             _tabRay[i]->tyRayCorrection( apf.get_geometry_modifier() );
         }
     }
-
-//    calcul.setTabRays(_tabRay);
 
     // BEGIN : COMPLEMENTS "DECORATIFS"
     ostringstream fic_out;

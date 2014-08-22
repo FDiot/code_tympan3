@@ -562,18 +562,6 @@ public:
     void selectActivePoint(const LPTYSiteNode pSite);
 
     /**
-     * \fn void getAllRecepteurs(TYTabPointCalculGeoNode& tabRecepteur)
-     * \brief Construit la liste des recepteurs
-     */
-    void getAllRecepteurs(TYTabPointCalculGeoNode& tabRecepteur);
-
-    /**
-     * \fn void getAllSources(TYMapElementTabSources& mapElementSources, TYTabSourcePonctuelleGeoNode& tabSources)
-     * \brief Construit la liste des sources a partir du tableau associatif "Machine"/liste de sources
-     */
-    void getAllSources(TYMapElementTabSources& mapElementSources, TYTabSourcePonctuelleGeoNode& tabSources);
-
-    /**
      * \fn bool isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSite pMergeSite)
      *\brief verification des calculs
      *   Verifie que le calcul est possible: au moins une source, au moins un
@@ -650,13 +638,6 @@ public:
     void setTypeCalculSol(const int& typeCalcul) { _typeCalculSol = typeCalcul; }
 
     /**
-     * \fn std::vector<TYTrajet>& getTabTrajet()
-     * \brief Recuperation du tableau des trajets
-     * \return _tabTrajets
-     */
-    std::vector<TYTrajet>& getTabTrajet() { return _tabTrajets; }
-
-    /**
      * \fn void setModifiable(bool modify)
      * \brief Set attribut modifiable 
      */
@@ -721,25 +702,6 @@ public:
     unsigned int getNbTHread() const { return _nbThread; }
     void setNbThread(unsigned int nbThread) { _nbThread = nbThread; }
 
-    /*!
-    * \fn void addRay(LPTYRay &ray)
-    * \brief Ajoute un rayon issue du lancer de rayon convertie au format Tympan.
-    * \param ray : Référence vers un rayon Tympan à ajouter
-    */
-    void addRay(LPTYRay ray) { _tabRays.push_back(ray);}
-
-    /*!
-    * \fn TYTabRay getAllRays()
-    * \brief Renvoie un tableau contenant tous les rayons trouvés par le lancer de rayons.
-    * \return Renvoie le tableau de rayons Tympan
-    */
-    TYTabRay& getAllRays() { return _tabRays; }
-
-    /*!
-     * \fn void setTabRay(const TYTabRay& tabRay)
-     * \brief set the vector of TYRays
-     */
-    void setTabRays(const TYTabRay& tabRays) { _tabRays = tabRays; }
     void goPostprocessing();
     std::unique_ptr<tympan::AcousticResultModel>  _acousticResult;
     std::unique_ptr<tympan::AcousticProblemModel> _acousticProblem;
@@ -833,19 +795,8 @@ protected:
     ///Resultat.
     LPTYResultat _pResultat;
 
-    /// Tableau des trajets du calcul
-    std::vector<TYTrajet> _tabTrajets; // Tableau des trajets
-
     /// Nombre de process de calcul simultane
     unsigned int _nbThread;
-
-    //Rayons valides produit par le lancer de rayons
-    TYTabRay _tabRays;
-
-    // XXX Temporary (won't be needed anymore as soon as the solvers are
-    // independent from the business model)
-    TYTabPointCalculGeoNode recepteurs;
-    TYTabSourcePonctuelleGeoNode sources;
 };
 
 #include "TYProjet.h"

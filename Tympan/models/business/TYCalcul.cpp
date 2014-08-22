@@ -1220,11 +1220,10 @@ bool TYCalcul::updateAltiRecepteurs(const TYAltimetrie* pAlti)
 
     return modified;
 }
-//*/
+
 void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
 {
     int i, j;
-
 
     // Recuperation des volumes
     TYInfrastructure* pInfra = pSite->getInfrastructure();
@@ -1306,62 +1305,6 @@ void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
     tabVolNodeGeoNode.clear();
 }
 
-void TYCalcul::getAllRecepteurs(TYTabPointCalculGeoNode& tabRecepteur)
-{
-    unsigned int i, j;
-    tabRecepteur.clear();
-    TYPointCalculGeoNode* pPointCalculNode = NULL;
-
-    // D'abord les points isoles
-    TYTabLPPointControl tabPointsControl = getProjet()->getPointsControl();
-    for (i = 0; i < tabPointsControl.size(); i++)
-    {
-        if (tabPointsControl[i]->getEtat(this)) // On ne prend que les points actifs
-        {
-            pPointCalculNode = new TYPointCalculGeoNode((LPTYElement&) tabPointsControl[i]);
-            if (!pPointCalculNode) { continue; }
-            tabRecepteur.push_back(pPointCalculNode);
-        }
-    }
-
-    // Ensuite les points des maillages
-    for (i = 0 ; i < _maillages.size(); i++)
-    {
-        if (getMaillage(i)->getState() != TYMaillage::Actif) { continue; }
-
-        TYTabLPPointCalcul tabPointCalcul = getMaillage(i)->getPtsCalcul();
-        OMatrix matrix = _maillages[i]->getMatrix();
-
-        // Changement de repere
-        for (j = 0; j < tabPointCalcul.size(); j++)
-        {
-            if (tabPointCalcul[j]->getEtat(this))// On ne prend que les points actifs
-            {
-                pPointCalculNode = new TYPointCalculGeoNode((LPTYElement)tabPointCalcul[j], matrix);
-                if (!pPointCalculNode) { continue; }
-                tabRecepteur.push_back(pPointCalculNode);
-            }
-        }
-    }
-
-}
-
-void TYCalcul::getAllSources(TYMapElementTabSources& mapElementSources, TYTabSourcePonctuelleGeoNode& tabSources)
-{
-    TYMapElementTabSources::iterator it;
-
-    for (it = mapElementSources.begin(); it != mapElementSources.end(); it++)
-    {
-        TYTabSourcePonctuelleGeoNode tabSrc = (*it).second;
-
-        for (unsigned int i = 0 ; i < tabSrc.size() ; i++)
-        {
-            if (!tabSrc[i]) { continue; } // Au cas ou une source ne serait pas definie
-            tabSources.push_back(tabSrc[i]);
-        }
-    }
-}
-
 bool TYCalcul::isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSiteNode pMergeSite)
 {
     OMessageManager::get()->info("Nombre de sources : %d", nbSources);
@@ -1421,27 +1364,18 @@ bool TYCalcul::go(SolverInterface* pSolver)
     }
     // Reset des resultats precedents
     _pResultat->purge();
-    // Nettoyage du tableau de rayon
-    _tabRays.clear();
-    // There shouldn't be any subsites at this level --> don't call merge but
-    // make sure of it
-    LPTYSiteNode pSite = pProjet->getSite();
-    assert (pSite->getListSiteNode().size() == 0);
     TYNameManager::get()->enable(false);
 
-    // #define EXPORT_MERGED_SITE
+// XXX is it still of any use ?
 #ifdef EXPORT_MERGED_SITE
-
     QString docName = "Tympan";
     QString version = "3.7";
-
     TYXMLManager xmlManager;
-
     xmlManager.createDoc(docName, version);
     xmlManager.addElement(pSite);
     xmlManager.save("merged.xml");
-
 #endif
+
     OMessageManager::get()->info("Calcul en cours...");
     bool ret = true;
     // XXX remove pSite, pCalcul...
