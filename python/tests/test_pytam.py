@@ -14,15 +14,6 @@ _HERE = osp.realpath(osp.dirname(__file__))
 
 class TestPyTam(TympanTC):
 
-    def test_solve(self):
-        (project, bus2solv_conv) = self.load_project(
-            'projects-panel',
-            "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
-        computation = project.current_computation
-        with self.no_output():
-            solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, computation)
-            self.assertTrue(computation.go(solver))
-            bus2solv_conv.postprocessing()
 
     def test_hierarchy(self):
         (project, _) = self.load_project('projects-panel',
