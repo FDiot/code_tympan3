@@ -1378,8 +1378,8 @@ bool TYCalcul::go(SolverInterface* pSolver)
 
     OMessageManager::get()->info("Calcul en cours...");
     bool ret = true;
-    // XXX remove pSite, pCalcul...
-    ret = pSolver->solve(*pSite, *this, *_acousticProblem, *_acousticResult);
+    // XXX remove pCalcul (once parameters will have been removed from this class)
+    ret = pSolver->solve(*this, *_acousticProblem, *_acousticResult);
     pSolver->purge();
 
     if (!ret)

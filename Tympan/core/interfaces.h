@@ -30,8 +30,7 @@ public:
     SolverInterface() { }
     virtual ~SolverInterface() { }
 
-    virtual bool solve(const TYSiteNode& site, TYCalcul& calcul,
-                       const tympan::AcousticProblemModel& aproblem,
+    virtual bool solve(TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem,
                        tympan::AcousticResultModel& aresult) = 0;
 
     virtual void purge() { }

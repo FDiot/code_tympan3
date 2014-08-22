@@ -63,7 +63,7 @@ void TYANIME3DSolver::init()
     _tabRay.clear();
 }
 
-bool TYANIME3DSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
+bool TYANIME3DSolver::solve(TYCalcul& calcul,
         const tympan::AcousticProblemModel& aproblem,
         tympan::AcousticResultModel& aresult)
 {

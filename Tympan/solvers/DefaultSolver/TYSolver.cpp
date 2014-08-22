@@ -59,8 +59,7 @@ TYSolver::~TYSolver()
     _pool = NULL;}
 
 
-bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
-        const tympan::AcousticProblemModel& aproblem,
+bool TYSolver::solve(TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem,
         tympan::AcousticResultModel& aresult)
 {
     // Creation de la collection de thread
@@ -80,7 +79,7 @@ bool TYSolver::solve(const TYSiteNode& site, TYCalcul& calcul,
     if (!_acousticModel) { _acousticModel = make_acoustic_model(); }
 
     // On calcule la structure
-    if (buildCalcStruct(site, calcul, aproblem))
+    if (buildCalcStruct(aproblem))
     {
         appendTriangleToScene();
     }
@@ -137,7 +136,7 @@ std::unique_ptr<TYAcousticModel> TYSolver::make_acoustic_model()
     return std::unique_ptr<TYAcousticModel>( new TYAcousticModel(*this) );
 }
 
-bool TYSolver::buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem)
+bool TYSolver::buildCalcStruct(const tympan::AcousticProblemModel& aproblem)
 {
     bool cancel = false;
 

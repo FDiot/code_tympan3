@@ -36,7 +36,7 @@ public:
     TYSolver();
     virtual ~TYSolver();
 
-    virtual bool solve(const TYSiteNode& site, TYCalcul& calcul,
+    virtual bool solve(TYCalcul& calcul,
             const tympan::AcousticProblemModel& aproblem,
             tympan::AcousticResultModel& aresult);
 
@@ -58,7 +58,7 @@ protected:
     std::unique_ptr<TYAcousticModel> _acousticModel;
 
 private:
-    bool buildCalcStruct(const TYSiteNode& site, TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem);
+    bool buildCalcStruct(const tympan::AcousticProblemModel& aproblem);
 
     /*!
     * \fn bool appendTriangleToScene()
