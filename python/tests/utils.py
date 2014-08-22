@@ -26,7 +26,7 @@ import os
 import os.path as osp
 import unittest
 from contextlib import contextmanager
-
+import numpy as np
 
 _HERE = osp.realpath(osp.dirname(__file__))
 PROJECT_BASE = osp.abspath(osp.join(_HERE, '..', '..'))
@@ -69,6 +69,21 @@ def config_cython_extensions_path():
         assert osp.isdir(TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % TEST_SOLVERS_DIR
     else:
         print 'WARNING: no config specification or unknown config (%s)' % config
+
+def compare_floats(x, y):
+    """ Compare x and y which are float arrays:
+        Go through them, considering x[i] and y[i] equal up to a 3 decimal
+        precision. Then when they sufficiently differ, return -1 if x[i] < y[i]
+        and 1 otherwise. 0 is returned if the arrays are equal.
+    """
+    from itertools import izip
+    for xi, yi in izip(x, y):
+        if not np.allclose(xi, yi, atol=1e-03):
+            if xi < yi:
+                return -1
+            else:
+                return 1
+    return 0 # arrays are equal
 
 def main():
     # The build configuration (Debug or Release) to be tested is added as

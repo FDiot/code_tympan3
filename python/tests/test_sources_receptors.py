@@ -3,29 +3,14 @@ import os, os.path as osp
 import unittest
 import re
 import numpy as np
-from itertools import izip
 from numpy.testing import assert_allclose
 
-from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, TEST_RESULT_DIR, TympanTC
+from utils import (TEST_DATA_DIR, TEST_SOLVERS_DIR, TEST_RESULT_DIR, TympanTC,
+                   compare_floats)
 
 
 _TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'computed-projects-panel')
 assert osp.isdir(_TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % _TEST_PROBLEM_DIR
-
-
-def compare_floats(x, y):
-    """ Compare x and y which are float arrays:
-        Go through them, considering x[i] and y[i] equal up to a 3 decimal
-        precision. Then when they sufficiently differ, return -1 if x[i] < y[i]
-        and 1 otherwise. 0 is returned if the arrays are equal.
-    """
-    for xi, yi in izip(x, y):
-        if not np.allclose(xi, yi, atol=1e-03):
-            if xi < yi:
-                return -1
-            else:
-                return 1
-    return 0 # arrays are equal
 
 
 class TestTympan(TympanTC):
