@@ -96,6 +96,9 @@ cdef class Business2SolverConverter:
         self.comp.thisptr.getRealPointer().goPostprocessing()
         # Clear intermediate data
         del self.transitional_result_matrix
+        self.clear()
+
+    def clear(self):
         bus2solv_receptors.clear()
         solv2bus_receptors.clear()
         macro2micro_sources.clear()
