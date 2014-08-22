@@ -94,7 +94,13 @@ cdef class Business2SolverConverter:
         # condensate result matrix
         self.update_business_result_matrix()
         self.comp.thisptr.getRealPointer().goPostprocessing()
+        # Clear intermediate data
         del self.transitional_result_matrix
+        bus2solv_receptors.clear()
+        solv2bus_receptors.clear()
+        macro2micro_sources.clear()
+        bus2solv_sources.clear()
+        to_be_removed_receptors.clear()
 
     def update_business_receptors(self):
         """ Once the acoustic problem has been solved, send back the acoustic results
