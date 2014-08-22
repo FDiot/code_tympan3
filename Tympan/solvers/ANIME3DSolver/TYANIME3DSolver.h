@@ -76,11 +76,11 @@ public:
     ~TYANIME3DSolver();
 
     /*!
-    * \fn bool solve(const TYSiteNode&, TYCalcul&, const AcousticProblemModel&, AcousticResultModel&)
+    * \fn bool solve(TYCalcul&, const AcousticProblemModel&, AcousticResultModel&)
     * \brief Methode principale de resolution avec la methode ANIME3D
     */
-    virtual bool solve(const TYSiteNode& site, TYCalcul& calcul,
-            const tympan::AcousticProblemModel& aproblem, tympan::AcousticResultModel& aresult);
+    virtual bool solve(TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem,
+            tympan::AcousticResultModel& aresult);
 
     /*!
     * \fn void init(const TYSiteNode&, TYCalcul&)
