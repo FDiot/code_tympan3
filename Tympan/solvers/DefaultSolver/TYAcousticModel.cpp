@@ -886,12 +886,15 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
 
     // Liaison avec reflexion
     //              Calcul du point de reflexion
+    int symOK = 0;
+
     EtapeCourante._pt = ptDebut;
     if (segPente.longueur() > 0) // Si la pente moyenne est definie, on prend le point symetrique
     {
-        segPente.symetrieOf(ptDebut, ptSym);
+        symOK = segPente.symetrieOf(ptDebut, ptSym);
     }
-    else // Sinon on prend une simple symetrie par rapport a z
+
+    if ( symOK == 0 ) // Sinon on prend une simple symetrie par rapport a z
     {
         ptSym = ptDebut;
         ptSym._z = 2 * segPente._ptA._z - ptSym._z;
@@ -902,12 +905,14 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
     if (result == 0) // Si pas d'intersection trouvee, on passe au plan B
     {
         OPoint3D ptSymFin;
+        symOK = 0;
 
         if (segPente.longueur() > 0) // Si la pente moyenne est definie, on prend le point symetrique
         {
-            segPente.symetrieOf(ptFin, ptSymFin);
+            symOK = segPente.symetrieOf(ptFin, ptSymFin);
         }
-        else // Sinon on prend une simple symetrie par rapport a z
+
+        if ( symOK == 0 ) // Sinon on prend une simple symetrie par rapport a z
         {
             ptSymFin = ptFin;
             ptSymFin._z = 2 * segPente._ptB._z - ptSymFin._z;
@@ -1314,6 +1319,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
     vec3 start = OPoint3Dtovec3(incident._ptB);
     start.z += 1000.; 
     Ray ray1( start, vec3(0., 0., -1.) );
+    ray1.maxt = 20000;
 
     std::list<Intersection> LI;
 
