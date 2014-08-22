@@ -119,7 +119,10 @@ bool TYFaceSelector::buildPlans(TYSPlan* plan, const OSegment3D& rayon)
     return true;
 }
 
-bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourante, TYSIntersection& Intersect, OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3, const int& indice) const
+bool TYFaceSelector::CalculSegmentCoupe( const TYStructSurfIntersect& FaceCourante, 
+                                         TYSIntersection& Intersect, 
+                                         OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3, 
+                                         const int& indice) const
 {
     bool bRes = false;
 
@@ -135,6 +138,10 @@ bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourant
         Intersect.isInfra = FaceCourante.isInfra;
         Intersect.material = FaceCourante.material;
         bRes = true;
+    }
+    else
+    {
+        Intersect.bIntersect[indice] = false;
     }
 
 	return  bRes;
