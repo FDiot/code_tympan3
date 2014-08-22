@@ -1,14 +1,14 @@
 import os, os.path as osp
 import unittest
-
 import numpy as np
 
 from utils import (TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC,
-                   no_output)
+                   no_output, compare_floats)
 
 with no_output():
     import tympan.models.business as tybusiness
     import tympan.business2solver as bus2solv
+
 
 class TestTympan(TympanTC):
     pass
@@ -55,18 +55,22 @@ def make_test_with_file(test_file):
                 check_nsources = True
         if check_nsources:
             self.assertEqual(current_result.nsources, expected_result.nsources)
-        # check spectrums
-        for i in xrange(current_result.nreceptors):
-            for j in xrange(current_result.nsources):
-                curr_spectrum = current_result.spectrum(i, j)
-                expected_spectrum = expected_result.spectrum(i, j)
-                # Both spectrums must have the same number of elements
-                self.assertEqual(curr_spectrum.nvalues, expected_spectrum.nvalues)
-                # Let's compare the values in dB
-                curr_spectrum = curr_spectrum.to_dB()
-                expected_spectrum = expected_spectrum.to_dB()
-                np.testing.assert_almost_equal(curr_spectrum.values,
-                                               expected_spectrum.values, decimal=1)
+        current_spectra = np.array(list(current_result.spectrum(i, j).values
+                                        for i in xrange(current_result.nreceptors)
+                                        for j in xrange(current_result.nsources)))
+        expected_spectra = np.array(list(expected_result.spectrum(i, j).values
+                                        for i in xrange(current_result.nreceptors)
+                                        for j in xrange(current_result.nsources)))
+        if current_result.nsources + current_result.nreceptors > 1:
+            # Order the two spectra lists because spectra are not always kept in the same order
+            current_spectra = sorted(current_spectra, cmp=compare_floats)
+            expected_spectra = sorted(expected_spectra, cmp=compare_floats)
+
+        for i in xrange(len(current_spectra)):
+            # All spectra must have the same number of elements
+            self.assertEqual(current_spectra[i].size, expected_spectra[i].size)
+            np.testing.assert_almost_equal(current_spectra[i],
+                                           expected_spectra[i], decimal=1)
     return test_with_file
 
 
