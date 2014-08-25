@@ -1,5 +1,6 @@
 import tempfile
 import unittest
+import os
 
 from numpy.testing.utils import assert_allclose
 
@@ -162,19 +163,23 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
     def test_ply_export(self):
         from plyfile import PlyData
         self.builder.complete_processing()
-        with tempfile.NamedTemporaryFile() as f:
-            self.builder.export_to_ply(f.name)
-            data = PlyData.read(f.name)
-            vertices = data['vertex']
-            faces = data['face']
-            materials = data['material']
-            self.assertEqual(vertices.count, 92)
-            self.assertEqual(faces.count, 152)
-            self.assertEqual(materials.count, 4)
-            materials_id = [''.join(map(chr, data)) for data, in materials.data]
-            self.assertItemsEqual(materials_id, ['__default__', '__hidden__',
-                                                 'grass', 'Water'])
-
+        try:
+            # delete=False and manual removal to avoid pb on windows platform
+            # (though proper fix would imply stream based api)
+            with tempfile.NamedTemporaryFile(delete=False) as f:
+                self.builder.export_to_ply(f.name)
+                data = PlyData.read(f.name)
+                vertices = data['vertex']
+                faces = data['face']
+                materials = data['material']
+                self.assertEqual(vertices.count, 92)
+                self.assertEqual(faces.count, 152)
+                self.assertEqual(materials.count, 4)
+                materials_id = [''.join(map(chr, data)) for data, in materials.data]
+                self.assertItemsEqual(materials_id, ['__default__', '__hidden__',
+                                                     'grass', 'Water'])
+        finally:
+            os.remove(f.name)
 
 if __name__ == '__main__':
     from utils import main
