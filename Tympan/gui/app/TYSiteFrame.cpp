@@ -808,13 +808,6 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
                         if (pProjet)
                         {
                             pProjet->getSite()->altimetryNeedsUpdate();
-                            /*
-                            pProjet->getSite()->updateAltimetrie(true);
-                            pProjet->getSite()->updateAltiInfra(true);
-                            pProjet->updateAltiRecepteurs();
-
-                            pProjet->getSite()->getTopographie()->updateGraphicTree();
-                            */
                         }
                     }
                 }
@@ -1537,7 +1530,8 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
     if (_pCurrentCalcul)
     {
         if (reallyAdd) { _pCurrentCalcul->addToSelection(pElt); }
-        _pSiteNodeRoot->update(true);
+        _pSiteNodeRoot->altimetryNeedsUpdate();
+         _pSiteNodeRoot->updateAcoustique(true);
         _pSiteNodeRoot->getGraphicObject()->update(true);
         updateList();
         TYElement::setIsSavedOk(true);
@@ -1569,7 +1563,8 @@ void TYSiteFrame::newElt(const char* className, TYElement* pElement)
     if ((dynamic_cast<TYSiteNode*>(pElt) != nullptr) && _pCurrentCalcul)
     {
         _pCurrentCalcul->addToSelection(pElt);
-        _pSiteNodeRoot->update();
+        _pSiteNodeRoot->altimetryNeedsUpdate();
+        _pSiteNodeRoot->updateAcoustique();
         _pSiteNodeRoot->getGraphicObject()->update(true);
         updateList();
         TYElement::setIsSavedOk(true);

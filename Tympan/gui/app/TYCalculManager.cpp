@@ -222,7 +222,8 @@ bool TYCalculManager::updateAcoustic(TYElement* pElement)
     TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pElement);
     if (pSite != nullptr)
     {
-        pSite->update();
+        pSite->altimetryNeedsUpdate();
+        pSite->updateAcoustique();
     }
     LPTYAcousticVolumeNode pAccVolNode = dynamic_cast<TYAcousticVolumeNode*>(pElement);
     if (pAccVolNode._pObj != nullptr)

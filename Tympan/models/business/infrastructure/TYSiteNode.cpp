@@ -1415,7 +1415,8 @@ bool TYSiteNode::update(TYElement* pElem)
             TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pParent);
             if (pSite != nullptr)
             {
-                pSite->update();
+                pSite->altimetryNeedsUpdate();
+                pSite->updateAcoustique();
                 ret = true;
                 break; // On a trouvé, on peut sortir
             }
