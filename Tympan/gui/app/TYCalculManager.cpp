@@ -71,87 +71,87 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     TYProjet *pProject = pCalcul->getProjet();
     OMessageManager& logger =  *OMessageManager::get();
 
-        // Is the debug option "TYMPAN_DEBUG=keep_tmp_files" enabled?
-        bool keep_tmp_files = must_keep_tmp_files();
-        // Temporary XML files to give the current acoustic problem to the python
-        // script and get the results
-        QTemporaryFile problemfile;
-        QTemporaryFile resultfile;
-        if(!init_tmp_file(problemfile, keep_tmp_files)
-                || !init_tmp_file(resultfile, keep_tmp_files))
-        {
-            logger.error("Creation de fichier temporaire impossible. Veuillez verifier l'espace disque disponible.");
-            return false;
-        }
-        // Serialize current project
-        try
-        {
-            save_project(problemfile.fileName().toUtf8().data(), pProject);
-        }
-        catch(const tympan::invalid_data& exc)
-        {
-            ostringstream msg;
-            msg << boost::diagnostic_information(exc);
-            logger.error(
-                    "Could not export current project. Computation won't be done");
-            logger.debug(msg.str().c_str());
-            return false;
-        }
-        if(keep_tmp_files)
-        {
-            logger.debug(
-                    "Le calcul va s'executer en mode debug.\nLes fichiers temporaires ne seront pas supprimes une fois le calcul termine.\nProjet courant non calcule: %s  Projet avec les resultats du calcul: %s.",
-                    problemfile.fileName().toStdString().c_str(),
-                    resultfile.fileName().toStdString().c_str());
-        }
+    // Is the debug option "TYMPAN_DEBUG=keep_tmp_files" enabled?
+    bool keep_tmp_files = must_keep_tmp_files();
+    // Temporary XML files to give the current acoustic problem to the python
+    // script and get the results
+    QTemporaryFile problemfile;
+    QTemporaryFile resultfile;
+    if(!init_tmp_file(problemfile, keep_tmp_files)
+            || !init_tmp_file(resultfile, keep_tmp_files))
+    {
+        logger.error("Creation de fichier temporaire impossible. Veuillez verifier l'espace disque disponible.");
+        return false;
+    }
+    // Serialize current project
+    try
+    {
+        save_project(problemfile.fileName().toUtf8().data(), pProject);
+    }
+    catch(const tympan::invalid_data& exc)
+    {
+        ostringstream msg;
+        msg << boost::diagnostic_information(exc);
+        logger.error(
+                "Could not export current project. Computation won't be done");
+        logger.debug(msg.str().c_str());
+        return false;
+    }
+    if(keep_tmp_files)
+    {
+        logger.debug(
+                "Le calcul va s'executer en mode debug.\nLes fichiers temporaires ne seront pas supprimes une fois le calcul termine.\nProjet courant non calcule: %s  Projet avec les resultats du calcul: %s.",
+                problemfile.fileName().toStdString().c_str(),
+                resultfile.fileName().toStdString().c_str());
+    }
 
-        // Call python script "solve_tympan_project.py" with: the name of the file
-        // containing the problem, the name of the file where to record
-        // the result and the directory containing the solver plugin to use
-        // to solve the acoustic problem
-        QStringList args;
-        QString absolute_plugins_path (QCoreApplication::applicationDirPath());
-        absolute_plugins_path.append("/");
-        absolute_plugins_path.append(PLUGINS_PATH);
-        QString absolute_pyscript_path (QCoreApplication::applicationDirPath());
-        absolute_pyscript_path.append("/");
-        absolute_pyscript_path.append(SOLVE_PYSCRIPT);
-        args << absolute_pyscript_path << problemfile.fileName() << resultfile.fileName()
-            << absolute_plugins_path;
+    // Call python script "solve_tympan_project.py" with: the name of the file
+    // containing the problem, the name of the file where to record
+    // the result and the directory containing the solver plugin to use
+    // to solve the acoustic problem
+    QStringList args;
+    QString absolute_plugins_path (QCoreApplication::applicationDirPath());
+    absolute_plugins_path.append("/");
+    absolute_plugins_path.append(PLUGINS_PATH);
+    QString absolute_pyscript_path (QCoreApplication::applicationDirPath());
+    absolute_pyscript_path.append("/");
+    absolute_pyscript_path.append(SOLVE_PYSCRIPT);
+    args << absolute_pyscript_path << problemfile.fileName() << resultfile.fileName()
+        << absolute_plugins_path;
 
-        logger.info(TR("id_msg_go_calcul"));
+    logger.info(TR("id_msg_go_calcul"));
 
-        if (!python_gui(args))
-        {
-            return false;
-        }
-        // Then read the result to update the internal model
-        LPTYProjet result;
-        try
-        {
-            result = load_project(resultfile.fileName().toUtf8().data());
-        }
-        catch(const tympan::invalid_data& exc)
-        {
-            ostringstream msg;
-            msg << boost::diagnostic_information(exc);
-            logger.error("Could not import computed project. No results available.");
-            logger.debug(msg.str().c_str());
-            QMessageBox msgBox;
-            msgBox.setText("Le fichier de resultats n'a pas pu etre lu.");
-            msgBox.exec();
-            return false;
-        }
-        // Update the current project with the results of the current acoustic
-        // problem
-        TYCalcul* pOldComp = pCalcul;
-        pProject = result.getRealPointer();
-        pCalcul = pProject->getCurrentCalcul();
-        getTYApp()->getCurProjet()->setCurrentCalcul(pCalcul);
-        // Can't remove current computation so first assign it and then remove
-        // the previous one from the project
-        getTYApp()->getCurProjet()->remCalcul(pOldComp);
-        getTYMainWnd()->getProjetFrame()->setProjet(pProject);
+    if (!python_gui(args))
+    {
+        return false;
+    }
+    // Then read the result to update the internal model
+    LPTYProjet result;
+    try
+    {
+        result = load_project(resultfile.fileName().toUtf8().data());
+    }
+    catch(const tympan::invalid_data& exc)
+    {
+        ostringstream msg;
+        msg << boost::diagnostic_information(exc);
+        logger.error("Could not import computed project. No results available.");
+        logger.debug(msg.str().c_str());
+        QMessageBox msgBox;
+        msgBox.setText("Le fichier de resultats n'a pas pu etre lu.");
+        msgBox.exec();
+        return false;
+    }
+    // Update the current project with the results of the current acoustic
+    // problem
+    TYCalcul* pOldComp = pCalcul;
+    pProject = result.getRealPointer();
+    pCalcul = pProject->getCurrentCalcul();
+    getTYApp()->getCurProjet()->setCurrentCalcul(pCalcul);
+    // Can't remove current computation so first assign it and then remove
+    // the previous one from the project
+    getTYApp()->getCurProjet()->remCalcul(pOldComp);
+    getTYMainWnd()->getProjetFrame()->setProjet(pProject);
 
     // Update graphics
     pCalcul->getParent()->updateGraphicTree();
