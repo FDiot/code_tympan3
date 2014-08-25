@@ -35,6 +35,9 @@ target_link_libraries(tympan_common
     ${QT_QTCORE_LIBRARY}
     # Boost isn't linked as the "header only library" part is used
 )
+if (WIN32)
+    target_link_libraries(tympan_common winmm.lib)
+endif ()
 install_tympan_component(tympan_common)
 
 
