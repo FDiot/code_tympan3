@@ -2,9 +2,9 @@
 #define __TYMPAN_TESTS_CONFIG__
 
 #define TYMPAN_TESTS_DATA_DIR "@TYMPAN_TESTS_DATA_DIR_NATIVE@"
+#define TYMPAN_PYTHON_SCRIPTS "@TYMPAN_PYTHON_SCRIPTS_NATIVE@"
 
 #include <string>
-
 #include <QDir>
 #include <QFile>
 
@@ -12,6 +12,13 @@ namespace tympan {
     inline std::string path_to_test_data(const char* rel_path)
     {
         QString qpath = QDir(TYMPAN_TESTS_DATA_DIR).absoluteFilePath(QString(rel_path));
+        std::string path = QDir::toNativeSeparators(qpath).toStdString();
+        return path;
+    }
+
+    inline std::string path_to_python_scripts(const char* rel_path)
+    {
+        QString qpath = QDir(TYMPAN_PYTHON_SCRIPTS).absoluteFilePath(QString(rel_path));
         std::string path = QDir::toNativeSeparators(qpath).toStdString();
         return path;
     }
