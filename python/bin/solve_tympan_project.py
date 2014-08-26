@@ -34,7 +34,7 @@ except ImportError:
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
+    if len(sys.argv) != 5:
         err = "bin/solve_tympan_project.py called with bad arguments"
         logging.error("%s Couldn't solve acoustic problem.", err)
         stream.close()
@@ -42,11 +42,13 @@ if __name__ == '__main__':
     # read command-line arguments
     input_proj = sys.argv[1]
     output_proj = sys.argv[2]
-    solverdir = sys.argv[3]
+    output_mesh = sys.argv[3]
+    solverdir = sys.argv[4]
     # solve problem
     try:
         tysolve.solve(input_project=input_proj,
                       output_project=output_proj,
+                      output_mesh=output_mesh,
                       solverdir=solverdir,
                       multithreading_on=multithreading_on,
                       interactive=interactive)

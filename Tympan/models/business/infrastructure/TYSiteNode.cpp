@@ -567,24 +567,32 @@ void TYSiteNode::loadTopoFile()
         logger.error("Echec du calcul de l'altimetrie");
         throw tympan::exception() << tympan_source_loc;
     }
+    std::deque<OPoint3D> points;
+    std::deque<OTriangle> triangles;
+    std::deque<LPTYSol> materials;
+    readMesh(points, triangles, materials, result_mesh.fileName());
+    _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles, materials);
+    setIsGeometryModified(false);  // L'altimetrie est a jour
+    OMessageManager::get()->info("Mise a jour altimetrie terminee.");
+    TYNameManager::get()->enable(true);
+}
+
+void TYSiteNode::readMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles,
+        std::deque<LPTYSol>& materials, const QString& filename)
+{
     // CAUTION: reader uses rply C library which calls strtod (stdlib) to read float
     // and double values. strtod is locale dependent. It means that if decimal
     // separator is set to ',' instead of '.' in LC_NUMERIC, float values from
     // the ply file won't be read. To make sure this doesn't happen, temporarily
     // set the locale and then put back the original value after file reading.
     char *saved_locale = setlocale(LC_NUMERIC, "C");
-    tympan::AltimetryPLYReader reader(result_mesh.fileName().toStdString());
+    tympan::AltimetryPLYReader reader(filename.toStdString());
     reader.read();
     setlocale(LC_NUMERIC, saved_locale);
-    std::deque<OPoint3D> points = reader.points();
-    std::deque<OTriangle> triangles = reader.faces();
+    points = reader.points();
+    triangles = reader.faces();
     std::deque<std::string> material_ids = reader.materials();
-    std::deque<LPTYSol> materials;
     uuid2tysol(material_ids, materials);
-    _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles, materials);
-    setIsGeometryModified(false);  // L'altimetrie est a jour
-    OMessageManager::get()->info("Mise a jour altimetrie terminee.");
-    TYNameManager::get()->enable(true);
 }
 
 void TYSiteNode::uuid2tysol(const std::deque<std::string>& material_ids, std::deque<LPTYSol>& materials)
