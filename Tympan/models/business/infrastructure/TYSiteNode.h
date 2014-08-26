@@ -379,6 +379,12 @@ protected:
     virtual void do_updateAltimetrie(const bool& force = false);
 
 public:
+    /*
+     * Reads a mesh from 'filename' ply file, and puts it in 'points', 'triangles'
+     * and 'materials'.
+     */
+    void readMesh(std::deque<OPoint3D>& points, std::deque<OTriangle>& triangles,
+            std::deque<LPTYSol>& materials, const QString& filename);
 
     /**
      * Mise a jour de l'altitude pour les elements de l'infrastructure.

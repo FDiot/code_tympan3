@@ -32,6 +32,7 @@
 #include "Tympan/gui/app/os.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYProjetFrame.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYMessageManager.h"
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "TYCalculManager.h"
@@ -77,8 +78,10 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     // script and get the results
     QTemporaryFile problemfile;
     QTemporaryFile resultfile;
+    QTemporaryFile meshfile;
     if(!init_tmp_file(problemfile, keep_tmp_files)
-            || !init_tmp_file(resultfile, keep_tmp_files))
+            || !init_tmp_file(resultfile, keep_tmp_files)
+            || !init_tmp_file(meshfile, keep_tmp_files))
     {
         logger.error("Creation de fichier temporaire impossible. Veuillez verifier l'espace disque disponible.");
         return false;
@@ -100,9 +103,10 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     if(keep_tmp_files)
     {
         logger.debug(
-                "Le calcul va s'executer en mode debug.\nLes fichiers temporaires ne seront pas supprimes une fois le calcul termine.\nProjet courant non calcule: %s  Projet avec les resultats du calcul: %s.",
+                "Le calcul va s'executer en mode debug.\nLes fichiers temporaires ne seront pas supprimes une fois le calcul termine.\nProjet courant non calcule: %s. Projet avec les resultats du calcul: %s. Mesh de l'altimetrie au format ply: %s",
                 problemfile.fileName().toStdString().c_str(),
-                resultfile.fileName().toStdString().c_str());
+                resultfile.fileName().toStdString().c_str(),
+                meshfile.fileName().toStdString().c_str());
     }
 
     // Call python script "solve_tympan_project.py" with: the name of the file
@@ -117,7 +121,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     absolute_pyscript_path.append("/");
     absolute_pyscript_path.append(SOLVE_PYSCRIPT);
     args << absolute_pyscript_path << problemfile.fileName() << resultfile.fileName()
-        << absolute_plugins_path;
+        <<  meshfile.fileName() << absolute_plugins_path;
 
     logger.info(TR("id_msg_go_calcul"));
 
@@ -152,7 +156,17 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     // the previous one from the project
     getTYApp()->getCurProjet()->remCalcul(pOldComp);
     getTYMainWnd()->getProjetFrame()->setProjet(pProject);
-
+    // Update site altimetry with the mesh retrieved from the ply file
+    LPTYSiteNode pSite = pProject->getSite();
+    std::deque<OPoint3D> points;
+    std::deque<OTriangle> triangles;
+    std::deque<LPTYSol> materials;
+    pSite->readMesh(points, triangles, materials, meshfile.fileName());
+    pSite->getTopographie()->getAltimetrie()->plugBackTriangulation(points,
+            triangles, materials);
+    pSite->updateAltiInfra();
+    pSite->updateAcoustique();
+    pProject->updateAltiRecepteurs();
     // Update graphics
     pCalcul->getParent()->updateGraphicTree();
     pCalcul->updateGraphicTree();

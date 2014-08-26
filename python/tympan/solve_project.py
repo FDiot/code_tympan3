@@ -25,7 +25,7 @@ except ImportError:
 from tympan.altimetry.builder import Builder
 from tympan.altimetry import process_altimetry
 
-def solve(input_project, output_project, solverdir, multithreading_on=True,
+def solve(input_project, output_project, output_mesh, solverdir, multithreading_on=True,
           interactive=False):
     """ Solve an acoustic problem with Code_TYMPAN from
 
@@ -34,7 +34,15 @@ def solve(input_project, output_project, solverdir, multithreading_on=True,
             "calcul" to solve
         output_project -- XML file where to put the project updated with the
             results of the computation
+        output_mesh -- a file in which to put the altimetry mesh once computed (ply format)
         solvedir -- directory containing the solver plugin
+        -------
+        optional (debug):
+        multithreading_on -- set it to False to solve the acoustic problem with only
+            one thread
+        interactive -- if True, pdb debugger will be invoked before running solving
+            the acoustic problem, so that the program can be executed in interactive
+            mode.
 
         The execution is logged into 'tympan.log', created in the directory of
         the input XML project (the one opened from the Code_TYMPAN GUI)
@@ -64,6 +72,7 @@ def solve(input_project, output_project, solverdir, multithreading_on=True,
     # Compute altimetry and retrieve the resulting mesh
     builder =  Builder(alti_site)
     builder.complete_processing()
+    builder.export_to_ply(output_mesh)
     vertices, faces, materials, faces_materials = builder.build_mesh_data()
     # Update site and the project before building the solver model
     site.update_altimetry(vertices, faces, materials, faces_materials)
