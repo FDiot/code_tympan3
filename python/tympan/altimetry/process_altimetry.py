@@ -59,7 +59,6 @@ def export_site_topo(cysite):
             id=cylcurve.elem_id)
         asite.add_child(alcurve)
     # Water bodies
-    # XXX set water material here (in datamodel)
     water_material = None
     for cylake in cysite.lakes:
         # Build water material
