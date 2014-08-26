@@ -1362,6 +1362,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
     unsigned int indexFace = LI.begin()->p->getPrimitiveId();
 
     // Second one
+    LI.clear();
     Ray ray2( OPoint3Dtovec3(director._ptB), vec3(0., 0., -1.) );
 
     double distance2 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray2, LI ) );
