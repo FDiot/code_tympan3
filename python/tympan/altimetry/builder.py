@@ -46,13 +46,12 @@ class Builder(object):
         assert self.cleaned is None
         self.cleaned = recursively_merge_all_subsites(self.mainsite)
 
-    def insert_feature(self, feature, mesher=None, **properties):
+    def insert_feature(self, feature, mesher, **properties):
         try:
             shape = self.cleaned.geom[feature.id]
         except KeyError:
             # The element was filtered out (e.g. it was outside of its sub-site)
             return None
-        mesher = mesher or self.mesh
         for polyline in elementary_shapes(shape):
             if isinstance(polyline, geometry.LineString):
                 points = polyline.coords[:]
@@ -77,7 +76,7 @@ class Builder(object):
         for level_curve in self.equivalent_site.level_curves:
             props = level_curve.build_properties()
             assert 'altitude' in props
-            vertices = self.insert_feature(level_curve, mesher=self.alti, **props)
+            vertices = self.insert_feature(level_curve, self.alti, **props)
             self.vertices_for_feature[level_curve.id] = vertices
         self.alti.update_info_for_vertices()
         self.mesh = self.alti.copy_as_ElevationMesh()
@@ -85,7 +84,8 @@ class Builder(object):
     def build_triangulation(self):
         assert self.mesh is not None
         for feature in self.equivalent_site.non_altimetric_features:
-            vertices = self.insert_feature(feature, **feature.build_properties())
+            vertices = self.insert_feature(feature, self.mesh,
+                                           **feature.build_properties())
             self.vertices_for_feature[feature.id] = vertices
 
     def refine_triangulation(self):
