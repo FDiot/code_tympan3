@@ -166,7 +166,7 @@ class TympanFeature(GeometricFeature):
         return p
 
     def __str__(self):
-        return "TympanFeature %s #%s (type %s)" % (self.__class__.__name__, self.id, self.tympan_type)
+        return "%s #%s" % (self.__class__.__name__, self.id)
 
 
 class LevelCurve(TympanFeature):
