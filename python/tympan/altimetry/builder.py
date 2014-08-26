@@ -18,8 +18,9 @@ from .mesh import (ElevationMesh, ReferenceElevationMesh,
 
 class Builder(object):
 
-    def __init__(self, mainsite):
+    def __init__(self, mainsite, allow_features_outside_mainsite=True):
         self.mainsite = mainsite
+        self._allow_outside = allow_features_outside_mainsite
         self.cleaned = None # The cleaned and merged site
         self.alti = ReferenceElevationMesh() # Altimetric base
         self.mesh = None
@@ -44,7 +45,8 @@ class Builder(object):
 
     def merge_subsites(self):
         assert self.cleaned is None
-        self.cleaned = recursively_merge_all_subsites(self.mainsite)
+        self.cleaned = recursively_merge_all_subsites(
+            self.mainsite, allow_outside=self._allow_outside)
 
     def insert_feature(self, feature, mesher, **properties):
         try:

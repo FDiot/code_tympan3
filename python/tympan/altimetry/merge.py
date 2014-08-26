@@ -10,12 +10,22 @@ of all the site note of a compound site to build a single site.
 from collections import defaultdict
 
 from shapely import geometry
-from . datamodel import SiteNode, InconsistentGeometricModel
+from . datamodel import SiteNode, InconsistentGeometricModel, SiteLandtake
 
 
-def recursively_merge_all_subsites(rootsite):
+def recursively_merge_all_subsites(rootsite, allow_outside=True):
     """Merges all subsites and their subsites and so on into this merger."""
     cleaned = SiteNodeGeometryCleaner(rootsite)
+    if not allow_outside:
+        for feature in rootsite.level_curves:
+            # Perhaps consider also other types of features?
+            if isinstance(feature, SiteLandtake):
+                # Do not consider site landtake equivalent level curve which
+                # is by definition coincident with site geometry.
+                continue
+            if not cleaned.siteshape.contains(feature.shape):
+                raise RuntimeError('%s is not strictly contained in main site' %
+                                   feature)
     cleaned.process_all_features()
     subsites_to_be_processed = list(rootsite.subsites)
     while subsites_to_be_processed:

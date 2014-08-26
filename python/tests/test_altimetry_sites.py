@@ -268,6 +268,11 @@ class AltimetryMergerTC(unittest.TestCase, TestFeatures):
         geom, info = cleaner[self.subgrass.id]
         self.assertEqual(info['material'], self.grass.id)
 
+    def test_recursive_merge_outside_not_allowed(self):
+        with self.assertRaises(RuntimeError) as cm:
+            recursively_merge_all_subsites(self.mainsite, allow_outside=False)
+        self.assertIn("{Level curve A}", str(cm.exception))
+
     def test_recursive_merge(self):
         self.build_more_features_in_subsites()
         cleaner = recursively_merge_all_subsites(self.mainsite)

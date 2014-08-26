@@ -37,7 +37,7 @@ def process_site_altimetry(input_project, result_file):
     cysite = project.site
     asite = export_site_topo(cysite, mainsite=True)
     # Build altimetry
-    builder = Builder(asite)
+    builder = Builder(asite, allow_features_outside_mainsite=False)
     builder.complete_processing()
     builder.export_to_ply(result_file)
     return asite
