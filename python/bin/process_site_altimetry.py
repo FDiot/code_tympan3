@@ -20,7 +20,6 @@ if __name__ == '__main__':
     # process input project and build altimetry
     try:
         tyalti.process_site_altimetry(input_project=input_proj, result_file=result_file)
-    except:
-        logging.exception("process_altimetry.py couldn't process the altimetry.")
-        sys.exit(-1)
-    sys.exit(0)
+    except Exception as exc:
+        logging.exception("process_altimetry.py couldn't process the altimetry:\n%s", exc)
+        raise
