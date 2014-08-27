@@ -240,7 +240,7 @@ class WaterBody(MaterialArea, LevelCurve):
 class SiteNode(PolygonalTympanFeature):
 
     CHILDREN_TYPES = ("LevelCurve", "MaterialArea", "WaterBody",
-                      "InfrastructureLandtake", "SiteNode")
+                      "SiteLandtake", "InfrastructureLandtake", "SiteNode")
 
     def __init__(self, coords, **kwargs):
         super(SiteNode, self).__init__(coords, **kwargs)
@@ -253,10 +253,13 @@ class SiteNode(PolygonalTympanFeature):
     def add_child(self, child):
         self.children[child.tympan_type].append(child)
         self.features_by_id[child.id] = child
+        assert len(self.children["SiteLandtake"]) <= 1, (
+            "No more than one site landtake is allowed (%s already got %s)" %
+            (self, self.children["SiteLandtake"]))
 
     @property
     def level_curves(self):
-        return self._iter_children("LevelCurve", "WaterBody")
+        return self._iter_children("LevelCurve", "SiteLandtake", "WaterBody")
 
     @property
     def material_areas(self):
@@ -267,13 +270,17 @@ class SiteNode(PolygonalTympanFeature):
         return self.children["SiteNode"][:]
 
     @property
+    def site_landtake(self):
+        return self.children["SiteLandtake"]
+
+    @property
     def landtakes(self):
         return self.children["InfrastructureLandtake"][:]
 
     @property
     def all_features(self):
         return self._iter_children('LevelCurve', 'MaterialArea', 'WaterBody',
-                                   'InfrastructureLandtake')
+                                   'InfrastructureLandtake', 'SiteLandtake')
 
     def _iter_children(self, *args):
         return chain(*[self.children[k] for k in args])
@@ -282,6 +289,10 @@ class SiteNode(PolygonalTympanFeature):
     def non_altimetric_features(self):
         return ( self.children["MaterialArea"] +
                  self.children["InfrastructureLandtake"] )
+
+
+class SiteLandtake(LevelCurve):
+    """When the main site landtake is considered as a level curve"""
 
 
 class InfrastructureLandtake(MaterialArea):
