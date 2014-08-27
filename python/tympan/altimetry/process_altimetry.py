@@ -10,7 +10,7 @@ import tympan.models.business as tybusiness
 from tympan.altimetry import datamodel
 from tympan.altimetry.datamodel import (SiteNode, LevelCurve, WaterBody,
                                         GroundMaterial, MaterialArea,
-                                        InfrastructureLandtake)
+                                        InfrastructureLandtake, SiteLandtake)
 from tympan.altimetry.builder import Builder
 
 
@@ -35,7 +35,7 @@ def process_site_altimetry(input_project, result_file):
         raise
     # Business model
     cysite = project.site
-    asite = export_site_topo(cysite)
+    asite = export_site_topo(cysite, mainsite=True)
     # Build altimetry
     builder = Builder(asite)
     builder.complete_processing()
@@ -43,17 +43,18 @@ def process_site_altimetry(input_project, result_file):
     return asite
 
 
-def export_site_topo(cysite):
-    """ Extract the topography of tympan site and build an altimetry from it
+def export_site_topo(cysite, mainsite=False):
+    """ Extract the topography of tympan site `cysite`
 
-        Keyword argument:
-            cy_site -- cython site to process in order to build an altimetry site
+    If `mainsite` is True the site is assumed to be the parent possibly
+    containing sub-sites.
     """
     # Site landtake
     (points, cylcurve) = cysite.process_landtake()
     asite = SiteNode(coords=cypoints2acoords(points), id=cysite.elem_id)
     if cylcurve is not None:
-        alcurve = LevelCurve(
+        lctype = SiteLandtake if mainsite else LevelCurve
+        alcurve = lctype(
             coords=cypoints2acoords(cylcurve.points),
             altitude=cylcurve.altitude,
             id=cylcurve.elem_id)
