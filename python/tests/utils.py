@@ -58,17 +58,17 @@ _CYTHON_EXTENSION_DIR = {
 assert frozenset(_SOLVERS_DIR) == frozenset(_CYTHON_EXTENSION_DIR)
 _KNOWN_CONFIGURATIONS = frozenset(_SOLVERS_DIR)
 
-config = len(sys.argv) > 1 and sys.argv[1]
+CONFIG = len(sys.argv) > 1 and sys.argv[1] in _KNOWN_CONFIGURATIONS and sys.argv[1]
 
 def config_cython_extensions_path():
-    if config in _KNOWN_CONFIGURATIONS:
-        TEST_CYTHON_EXTENSION_DIR = _CYTHON_EXTENSION_DIR[config]
+    if CONFIG:
+        TEST_CYTHON_EXTENSION_DIR = _CYTHON_EXTENSION_DIR[CONFIG]
         assert osp.isdir(TEST_CYTHON_EXTENSION_DIR ), "The test cython dir does not exists '%s'" % TEST_CYTHON_EXTENSION_DIR
         sys.path.append(TEST_CYTHON_EXTENSION_DIR)
-        TEST_SOLVERS_DIR = _SOLVERS_DIR[config]
+        TEST_SOLVERS_DIR = _SOLVERS_DIR[CONFIG]
         assert osp.isdir(TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % TEST_SOLVERS_DIR
     else:
-        print 'WARNING: no config specification or unknown config (%s)' % config
+        print 'WARNING: no config specification or unknown config'
 
 def compare_floats(x, y):
     """ Compare x and y which are float arrays:
@@ -89,7 +89,7 @@ def main():
     # The build configuration (Debug or Release) to be tested is added as
     # first argument by CTest and need to be removed from sys.argv not to
     # confuse unittest
-    if config:
+    if CONFIG:
         del sys.argv[1]
     unittest.main()
 
