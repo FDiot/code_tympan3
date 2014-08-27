@@ -22,7 +22,7 @@ class TestProcessAltimetry(TympanTC):
         self.assertEqual(asite.id, "{f1a57b76-c918-4f63-a74b-7c67b7179df9}")
         self.assertEqual(landtake, [(-200.0,200.0), (200.0, 200.0),
                                     (200.0, -200.0), (-200.0, -200.0)])
-        level_curves = asite.level_curves
+        level_curves = list(asite.level_curves)
         # No level curves are explicitely defined in the XML project, but
         # useEmpriseAsCrbNiv option is set to 1 so a level curve will have been
         # defined with the coordinates of the site and an altitude of 0 meters
@@ -49,8 +49,8 @@ class TestProcessAltimetry(TympanTC):
         # defined for this project, one will have been created
         # with the coordinates of the site and an altitude of 0 meters
         # (altiEmprise = 0)
-        self.assertEqual(len(asite.level_curves), 1)
-        lcurve = asite.level_curves[0]
+        self.assertEqual(len(list(asite.level_curves)), 1)
+        lcurve = next(asite.level_curves)
         self.assertEqual(lcurve.altitude, 0)
         self.assertEqual(lcurve.build_coordinates()[0], landtake)
         # Subsite
@@ -61,7 +61,7 @@ class TestProcessAltimetry(TympanTC):
         sbsite_landtake = subsite.build_coordinates()[0]
         self.assertEqual(sbsite_landtake, [(-83.0,98.0), (-40.0, 73.0),
                                            (-98.0, 28.0), (-105.0, 82.0)])
-        sbsite_level_curves = subsite.level_curves
+        sbsite_level_curves = list(subsite.level_curves)
         # same as above
         self.assertEqual(len(sbsite_level_curves), 1)
         sbsite_lcurve = sbsite_level_curves[0]
@@ -73,7 +73,7 @@ class TestProcessAltimetry(TympanTC):
             asite = tyalti.process_site_altimetry(
                 osp.join(TEST_PROBLEM_DIR, '2_PROJET_Site_une_courbe_seule.xml'),
                         result_file)
-        level_curves = asite.level_curves
+        level_curves = list(asite.level_curves)
         self.assertEqual(len(level_curves), 1)
         lcurve = level_curves[0]
         self.assertEqual(lcurve.id, "{393923e3-359c-4ce4-811e-3b4662415312}")
@@ -87,7 +87,7 @@ class TestProcessAltimetry(TympanTC):
             asite = tyalti.process_site_altimetry(
                 osp.join(TEST_PROBLEM_DIR, '7_PROJET_Site_emprise_seule_avec_plan_eau.xml'),
                         result_file)
-        mat_areas = asite.material_areas # water bodies are treated as material areas
+        mat_areas = list(asite.material_areas) # water bodies are treated as material areas
         # There is 1 water body (default material area isn't taken into account)
         self.assertEqual(len(mat_areas), 1)
         lake = mat_areas[0]
@@ -106,7 +106,7 @@ class TestProcessAltimetry(TympanTC):
                 osp.join(TEST_PROBLEM_DIR,
                          '10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml'),
                          result_file)
-        areas = asite.material_areas
+        areas = list(asite.material_areas)
         # There is 1 material area + 1 water body
         self.assertEqual(len(areas), 2)
         # Check material area

@@ -10,6 +10,7 @@ to easily load test data from a GeoJSON_ file.
 .. _GeoJSON: http://geojson.org/geojson-spec.html
 """
 
+from itertools import chain
 import json
 
 from shapely import geometry
@@ -255,11 +256,11 @@ class SiteNode(PolygonalTympanFeature):
 
     @property
     def level_curves(self):
-        return self.children["LevelCurve"] + self.children["WaterBody"]
+        return self._iter_children("LevelCurve", "WaterBody")
 
     @property
     def material_areas(self):
-        return self.children["MaterialArea"] + self.children["WaterBody"]
+        return self._iter_children("MaterialArea", "WaterBody")
 
     @property
     def subsites(self):
@@ -271,11 +272,11 @@ class SiteNode(PolygonalTympanFeature):
 
     @property
     def all_features(self):
-        # TODO Use itertools.chain
-        return ( self.children["LevelCurve"] +
-                 self.children["MaterialArea"] +
-                 self.children["WaterBody"] +
-                 self.children["InfrastructureLandtake"] )
+        return self._iter_children('LevelCurve', 'MaterialArea', 'WaterBody',
+                                   'InfrastructureLandtake')
+
+    def _iter_children(self, *args):
+        return chain(*[self.children[k] for k in args])
 
     @property
     def non_altimetric_features(self):
