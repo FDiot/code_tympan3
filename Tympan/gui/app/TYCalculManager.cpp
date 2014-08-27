@@ -77,8 +77,11 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     // Temporary XML files to give the current acoustic problem to the python
     // script and get the results
     QTemporaryFile problemfile;
+    problemfile.setFileTemplate(QDir::tempPath() + QString("/XXXXXX.xml"));
     QTemporaryFile resultfile;
+    resultfile.setFileTemplate(QDir::tempPath() + QString("/XXXXXX.xml"));
     QTemporaryFile meshfile;
+    meshfile.setFileTemplate(QDir::tempPath() + QString("/XXXXXX.ply"));
     if(!init_tmp_file(problemfile, keep_tmp_files)
             || !init_tmp_file(resultfile, keep_tmp_files)
             || !init_tmp_file(meshfile, keep_tmp_files))

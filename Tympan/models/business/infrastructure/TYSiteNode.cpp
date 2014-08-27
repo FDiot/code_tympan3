@@ -518,9 +518,11 @@ void TYSiteNode::loadTopoFile()
     bool keep_tmp_files = must_keep_tmp_files();
     // Will be used to export the current site topography/infrastructure
     QTemporaryFile current_project;
+    current_project.setFileTemplate(QDir::tempPath() + QString("/XXXXXX.xml"));
     // Here will go the mesh result in a PLY Polygon formatted file
     //(see http://www.cs.virginia.edu/~gfx/Courses/2001/Advanced.spring.01/plylib/Ply.txt)
     QTemporaryFile result_mesh;
+    result_mesh.setFileTemplate(QDir::tempPath() + QString("/XXXXXX.ply"));
     if (!init_tmp_file(current_project, keep_tmp_files)
             || !init_tmp_file(result_mesh, keep_tmp_files))
     {
