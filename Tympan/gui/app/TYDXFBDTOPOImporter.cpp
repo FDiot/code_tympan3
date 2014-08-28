@@ -27,10 +27,8 @@
 #include <dime/sections/EntitiesSection.h>
 #include <dime/sections/HeaderSection.h>
 #include <dime/entities/Entity.h>
-
 #include "TYDXFBDTOPOImporter.h"
 #include "TYDXFBDTOPOSpecifications.h"
-
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 
 
@@ -141,7 +139,9 @@ bool TYDXFBDTopoImporter::import(const char* FullBDDPath, LPTYSiteNode* pSiteIn)
     //////////////////////////////////////////////////////////////////////////
     importField(nMaxTerrain, model, Offset, pTYTopographie);
 
-    pSite->altimetryNeedsUpdate();
+    // Notify the altimetry is not uptodate
+    pSite->setAltimetryUpToDate(false);
+
     //////////////////////////////////////////////////////////////////////////
     //
     //          I N F R A S T R U C T U R E
