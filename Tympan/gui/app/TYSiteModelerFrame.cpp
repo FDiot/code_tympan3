@@ -194,6 +194,17 @@ void TYSiteModelerFrame::init()
     _pCtrlLayout->addWidget(_pAltiBtn, 0);
     _pCtrlLayout->addStretch(1);
     _pAltiBtn->setFixedSize(24, 24);
+    // Check if altimetry is up to date on the root site node.
+    // If it is, no need to enable the button triggering its computation
+    if (_pSite != nullptr &&_pSite->getProjet() != nullptr)
+    {
+        LPTYSiteNode rootSite = _pSite->getProjet()->getSite();
+        if (rootSite->getAltimetryUpToDate())
+        {
+            _pAltiBtn->setEnabled(false);
+        }
+    }
+
     connect(_pAltiBtn, SIGNAL(clicked()), this, SLOT(calculAltimetrie()));
 
     // Vue de dessus
@@ -567,6 +578,14 @@ void TYSiteModelerFrame::updateVisibilityElementSite()
     //_pSite->setUseTopoFile(_showImageSite);
 }
 
+void TYSiteModelerFrame::enableAltimetryComputation()
+{
+    _pAltiBtn->setEnabled(true);
+}
+void TYSiteModelerFrame::disableAltimetryComputation()
+{
+    _pAltiBtn->setEnabled(false);
+}
 void TYSiteModelerFrame::calculAltimetrie()
 {
     // Called when _pAltiBtn button is pressed
@@ -588,6 +607,7 @@ void TYSiteModelerFrame::calculAltimetrie()
     getView()->getRenderer()->updateDisplayList();
     updateView();
 
+    _pAltiBtn->setEnabled(false);
     TYApplication::restoreOverrideCursor();
 }
 

@@ -156,6 +156,11 @@ public slots:
      * Calcul l'altimetrie a partir des courbes de niveau.
      */
     void calculAltimetrie();
+    /*
+     * Enables/Disables button allowing to compute the altimetry on root site node
+     */
+    void enableAltimetryComputation();
+    void disableAltimetryComputation();
 
     /**
      * Mets a jour l'opacite de la transparence en fonction du
