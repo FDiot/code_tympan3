@@ -171,6 +171,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
             triangles, materials);
     pSite->updateAltiInfra();
     pSite->updateAcoustique();
+    pSite->setAltimetryUpToDate(true);
     pProject->updateAltiRecepteurs();
     // Update graphics
     pCalcul->getParent()->updateGraphicTree();
