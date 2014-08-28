@@ -1044,7 +1044,7 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             TYProjet* pProjet = getTYApp()->getCurProjet();
             if (pProjet)
             {
-                pProjet->getSite()->altimetryNeedsUpdate();
+                getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
                 pProjet->getSite()->getTopographie()->updateGraphicTree();
             }
 

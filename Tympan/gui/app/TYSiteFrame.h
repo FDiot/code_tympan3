@@ -119,6 +119,11 @@ public:
      */
     void setDMaxDefault(TYElementListItem* item);
 
+    void altimetryNeedsUpdate() { emit altimetryOutdated(); }
+
+signals:
+     void altimetryOutdated();
+
 public slots:
     /**
      * Set/get le site node root.

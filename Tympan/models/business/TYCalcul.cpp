@@ -937,15 +937,6 @@ bool TYCalcul::remToSelection(TYElement* pElt, bool recursif /*=true*/)
 
         ret = true;
     }
-
-    // Si c'est un siteNode, on fait une mise à jour de l'altimétrie
-    TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pElt);
-    if (pSite != nullptr)
-    {
-        // Dans ce cas, on remonte au site racine et on fait l'update de tout
-        pSite->getProjet()->getSite()->altimetryNeedsUpdate();
-    }
-
     return ret;
 }
 

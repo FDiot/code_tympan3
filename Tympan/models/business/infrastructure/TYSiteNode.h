@@ -361,12 +361,6 @@ class TYSiteNode: public TYElement
      */
     virtual bool updateAltimetrie(const bool& force = false);
 
-    /*
-     * Call this method when changes requiring an altimetry update are brought
-     * to the site (like adding an infrastructure element to it)
-     */
-    void altimetryNeedsUpdate(){_alti_needs_update = true;}
-
     void uuid2tysol(const std::deque<std::string>& material_ids, std::deque<LPTYSol>& materials);
 
 protected:
@@ -486,9 +480,6 @@ protected:
 
     /// Utilisation de l'emprise comme courbe de niveau
     bool _bEmpriseAsCrbNiv;
-
-    // The site altimetry must be updated
-    bool _alti_needs_update;
 
     /// Altitude associee a l'emprise (s'il y a lieu)
     double _altiEmprise;

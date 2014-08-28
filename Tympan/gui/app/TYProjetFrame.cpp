@@ -730,7 +730,10 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                     _pCurrentCalcul = pCalcul;
 
                     LPTYSiteNode pSite = _pProjet->getSite();
-                    if (pSite && pCalcul) { pSite->getInfrastructure()->updateAcoustic(pCalcul); }
+                    if (pSite && pCalcul) {
+                        getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
+                        pSite->getInfrastructure()->updateAcoustic(pCalcul);
+                    }
 
                     emit changeCurrentCalcul(pCalcul);
 

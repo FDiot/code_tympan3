@@ -25,6 +25,7 @@
 #include "Tympan/models/business/infrastructure/TYRoute.h"
 #include "Tympan/gui/widgets/TYRouteWidget.h"
 #include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
 #include "Tympan/gui/app/TYActions.h"
@@ -66,7 +67,7 @@ void TYRouteEditor::endRoute()
         TYProjet* pProjet = getTYApp()->getCurProjet();
         if (pProjet)
         {
-            pProjet->getSite()->altimetryNeedsUpdate();
+            getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
         }
         // Make sure altimetry was initialized before using it
         if (pSite->getTopographie()->getAltimetrie()->containsData())

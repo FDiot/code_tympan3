@@ -800,13 +800,7 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
                 {
                     if (pSiteParent)   // Non NULL uniquement pour les courbes de niveau et les plan d'eau
                     {
-
-                        // On met a jour l'altimetrie globale du site
-                        TYProjet* pProjet = getTYApp()->getCurProjet();
-                        if (pProjet)
-                        {
-                            pProjet->getSite()->altimetryNeedsUpdate();
-                        }
+                        emit altimetryOutdated();
                     }
                 }
             }
@@ -1528,7 +1522,7 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
     if (_pCurrentCalcul)
     {
         if (reallyAdd) { _pCurrentCalcul->addToSelection(pElt); }
-        _pSiteNodeRoot->altimetryNeedsUpdate();
+        emit altimetryOutdated();
          _pSiteNodeRoot->updateAcoustique(true);
         _pSiteNodeRoot->getGraphicObject()->update(true);
         updateList();
@@ -1561,7 +1555,7 @@ void TYSiteFrame::newElt(const char* className, TYElement* pElement)
     if ((dynamic_cast<TYSiteNode*>(pElt) != nullptr) && _pCurrentCalcul)
     {
         _pCurrentCalcul->addToSelection(pElt);
-        _pSiteNodeRoot->altimetryNeedsUpdate();
+        emit altimetryOutdated();
         _pSiteNodeRoot->updateAcoustique();
         _pSiteNodeRoot->getGraphicObject()->update(true);
         updateList();

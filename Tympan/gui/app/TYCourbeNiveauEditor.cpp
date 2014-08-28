@@ -27,6 +27,7 @@
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/gui/gl/TYCourbeNiveauGraphic.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
 #include "Tympan/gui/app/TYRenderWindowInteractor.h"
 #include "Tympan/gui/app/TYActions.h"
@@ -64,7 +65,7 @@ void TYCourbeNiveauEditor::slotKeyPressed(int key)
         case Qt::Key_Space:
             if (_active)
             {
-                ((TYSiteModelerFrame*)_pModeler)->getSite()->altimetryNeedsUpdate();
+                getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateGraphic();
                 _pInteractor->updateGL();
             }
@@ -102,7 +103,7 @@ void TYCourbeNiveauEditor::endCourbeNiveau()
             TYProjet* pProjet = getTYApp()->getCurProjet();
             if (pProjet)
             {
-                pProjet->getSite()->altimetryNeedsUpdate();
+                getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
                 pProjet->getSite()->getTopographie()->updateGraphicTree();
             }
 

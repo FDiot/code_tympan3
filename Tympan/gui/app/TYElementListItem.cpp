@@ -27,6 +27,7 @@
 #include "Tympan/gui/widgets/TYWidget.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
 #include "TYElementListItem.h"
 
 
@@ -241,6 +242,7 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
                 if (_pElement->isA("TYSiteNode"))
                 {
                     TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(_pElement.getRealPointer());
+                    getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
                     LPTYCalcul pCalc = NULL;
                     if (getTYApp()->getCurProjet() && pSite)
                     {
