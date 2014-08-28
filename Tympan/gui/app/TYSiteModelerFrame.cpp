@@ -595,7 +595,14 @@ void TYSiteModelerFrame::calculAltimetrie()
 
     writeOutputMsg(TR("id_msg_calculalti"));
 
-    _pSite->update(); // calls update altimetry
+    // Retrieve the root SiteNode to compute altimetry
+    LPTYSiteNode rootSite = _pSite->getProjet()->getSite();
+    // One global altimetry update for all the sites
+    rootSite->updateAltimetrie();
+    // This method uses the altimetry above-computed to update the infrastructure
+    // as well as the receptors and sources and recurses on the current site and
+    // all its subsites
+    rootSite->update();
 
     if (_pProjet)
     {
