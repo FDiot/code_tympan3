@@ -1040,9 +1040,6 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
 
             pRemovedEltParent = pTopo;
 
-            // On altimetrise aussi le sous-site (si s'en est un !)
-            if (pSiteParent && !pSiteParent->getRoot()) { pSiteParent->altimetryNeedsUpdate(); }
-
             // On demande la mise à jour de l'altimetrie globale du site
             TYProjet* pProjet = getTYApp()->getCurProjet();
             if (pProjet)

@@ -98,9 +98,6 @@ void TYCourbeNiveauEditor::endCourbeNiveau()
             TYAction* pAction = new TYAddElementToTopoAction((LPTYElement&) _pCrbNiv, pSite->getTopographie(), _pModeler, TR("id_action_addcrbniv"));
             _pModeler->getActionManager()->addAction(pAction);
 
-            // On altimetrise aussi le sous-site (si s'en est un !)
-            if (!pSite->getRoot()) { pSite->altimetryNeedsUpdate(); }
-
             // On demande la mise à jour de l'altimetrie globale du site
             TYProjet* pProjet = getTYApp()->getCurProjet();
             if (pProjet)

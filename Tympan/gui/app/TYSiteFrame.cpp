@@ -800,8 +800,6 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
                 {
                     if (pSiteParent)   // Non NULL uniquement pour les courbes de niveau et les plan d'eau
                     {
-                        // On altimetrise aussi le sous-site (si s'en est un !)
-                        if (!pSiteParent->getRoot()) { pSiteParent->altimetryNeedsUpdate(); }
 
                         // On met a jour l'altimetrie globale du site
                         TYProjet* pProjet = getTYApp()->getCurProjet();
