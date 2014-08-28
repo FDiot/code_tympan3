@@ -203,6 +203,8 @@ public:
     void exportMesh(std::deque<OPoint3D>&  vertices, std::deque<OTriangle>& faces,
             std::deque<LPTYSol>& materials);
 
+    bool containsData(){ return (_gridSX != 0) && (_gridSY != 0); }
+
 protected:
     FRIEND_TEST(TYAltimetryTest, dummy_grid);
     FRIEND_TEST(TYAltimetryTest, simple_grid);

@@ -68,11 +68,14 @@ void TYRouteEditor::endRoute()
         {
             pProjet->getSite()->altimetryNeedsUpdate();
         }
-        // XXX does it make sense if altimetry isn't updated here ?
-        for (unsigned int i = 0; i < pRoute->getTabPoint().size(); i++)
+        // Make sure altimetry was initialized before using it
+        if (pSite->getTopographie()->getAltimetrie()->containsData())
         {
-            pRoute->getTabPoint()[i]._z = 0.0;
-            pSite->getTopographie()->getAltimetrie()->updateAltitude(pRoute->getTabPoint()[i]);
+            for (unsigned int i = 0; i < pRoute->getTabPoint().size(); i++)
+            {
+                pRoute->getTabPoint()[i]._z = 0.0;
+                pSite->getTopographie()->getAltimetrie()->updateAltitude(pRoute->getTabPoint()[i]);
+            }
         }
 
         if (pSite->getInfrastructure()->addRoute(pRoute))

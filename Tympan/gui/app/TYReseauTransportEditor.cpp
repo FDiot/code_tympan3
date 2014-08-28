@@ -67,16 +67,19 @@ void TYReseauTransportEditor::endReseauTransport()
             pProjet->getSite()->altimetryNeedsUpdate();
         }
 
-        // XXX does it still make sense now altimetry isn't updated anymore here ?
-        for (unsigned int i = 0; i < pReseauTransport->getTabPoint().size(); i++)
+        // Make sure altimetry was initialized before using it
+        if (pSite->getTopographie()->getAltimetrie()->containsData())
         {
-            pReseauTransport->getTabPoint()[i]._z = 0.0;
+            for (unsigned int i = 0; i < pReseauTransport->getTabPoint().size(); i++)
+            {
+                pReseauTransport->getTabPoint()[i]._z = 0.0;
 
-            // Altitude
-            pSite->getTopographie()->getAltimetrie()->updateAltitude(pReseauTransport->getTabPoint()[i]);
+                // Altitude
+                pSite->getTopographie()->getAltimetrie()->updateAltitude(pReseauTransport->getTabPoint()[i]);
 
-            // Ajout de la hauteur moyenne
-            pReseauTransport->getTabPoint()[i]._z += pReseauTransport->getHauteurMoyenne();
+                // Ajout de la hauteur moyenne
+                pReseauTransport->getTabPoint()[i]._z += pReseauTransport->getHauteurMoyenne();
+            }
         }
 
         if (pSite->getInfrastructure()->addResTrans(pReseauTransport))
