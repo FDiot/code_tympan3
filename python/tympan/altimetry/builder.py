@@ -54,6 +54,7 @@ class Builder(object):
         except KeyError:
             # The element was filtered out (e.g. it was outside of its sub-site)
             return None
+        vertices = []
         for polyline in elementary_shapes(shape):
             if isinstance(polyline, geometry.LineString):
                 points = polyline.coords[:]
