@@ -669,7 +669,6 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
                             pSite->update(pElement);
                         }
 
-                        //                      pProjet->updateAltiRecepteurs();
                         pProjet->updateGraphicTree();
                     }
                 }
