@@ -304,9 +304,11 @@ void TYVerticalMaillageEditor::slotMouseReleased(int x, int y, Qt::MouseButton b
                             TYAction* pAction = new TYAddMaillageToCalculAction((LPTYMaillageGeoNode&) pMaillageGeoNode, pSiteModeler->getProjet()->getCurrentCalcul(), _pModeler, TR("id_action_addrectmaillage"));
                             _pModeler->getActionManager()->addAction(pAction);
 
-                            // Altimetrisation du maillage
-                            pSiteModeler->getProjet()->getCurrentCalcul()->updateAltiMaillage(pMaillageGeoNode);
-
+                            if(pProjet->getSite()->getTopographie()->getAltimetrie()->containsData())
+                            {
+                                // Altimetrisation du maillage
+                                pSiteModeler->getProjet()->getCurrentCalcul()->updateAltiMaillage(pMaillageGeoNode);
+                            }
                             pMaillage->updateGraphicTree();
                         }
                     }

@@ -251,8 +251,11 @@ void TYBoundaryNoiseMapEditor::dialogConfirmed(double height, double thickness, 
                                                                 pSiteModeler->getProjet()->getCurrentCalcul(), _pModeler, TR("id_action_add_boundarynoisemap"));
             _pModeler->getActionManager()->addAction(pAction);
 
-            // Compte the noise map altimetry
-            pCalcul->updateAltiMaillage(pBoundaryNoiseMapGeoNode);
+            if (pProjet->getSite()->getTopographie()->getAltimetrie()->containsData())
+            {
+                // Compte the noise map altimetry
+                pCalcul->updateAltiMaillage(pBoundaryNoiseMapGeoNode);
+            }
             pBoundaryNoiseMap->updateGraphicTree();
         }
     }

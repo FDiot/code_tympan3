@@ -67,11 +67,14 @@ void TYVegetationEditor::endVegetation()
         TYTabPoint tabPts = this->getSavedPoints();
 
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
-
-        for (unsigned int i = 0; i < tabPts.size(); i++)
+        // Make sure altimetry was initialized before using it
+        if (pSite->getTopographie()->getAltimetrie()->containsData())
         {
-            tabPts[i]._z = 0.0;
-            pSite->getTopographie()->getAltimetrie()->updateAltitude(tabPts[i]);
+            for (unsigned int i = 0; i < tabPts.size(); i++)
+            {
+                tabPts[i]._z = 0.0;
+                pSite->getTopographie()->getAltimetrie()->updateAltitude(tabPts[i]);
+            }
         }
 
         pTerrain->setListPoints(tabPts);

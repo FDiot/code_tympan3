@@ -261,7 +261,7 @@ void TYMaillageWidget::apply()
     {
         getElement()->setHauteur(_lineEditHauteur->text().toDouble());
         TYCalcul* pCalcul = (TYCalcul*)getElement()->getParent();
-        if (pCalcul)
+        if (pCalcul && pCalcul->getSite()->getTopographie()->getAltimetrie()->containsData())
         {
             pCalcul->updateAltiRecepteurs();
         }
