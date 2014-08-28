@@ -105,7 +105,7 @@ class Builder(object):
 
     def fill_polygonal_feature(self, feature, flooder_class):
         assert self.mesh is not None
-        if feature.id not in self.mainsite.features_by_id:
+        if feature.id not in datamodel.SiteNode.recursive_features_ids(self.mainsite):
             raise ValueError("Only features already inserted can be filled ID:%s"
                              % feature.id)
         vertices = self.vertices_for_feature[feature.id]

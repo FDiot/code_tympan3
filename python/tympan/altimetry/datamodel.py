@@ -257,6 +257,15 @@ class SiteNode(PolygonalTympanFeature):
             "No more than one site landtake is allowed (%s already got %s)" %
             (self, self.children["SiteLandtake"]))
 
+    @staticmethod
+    def recursive_features_ids(site):
+        if site is None:
+            return []
+        feature_ids = [feature.id for feature in site.all_features]
+        for subsite in site.subsites:
+                feature_ids.extend(SiteNode.recursive_features_ids(subsite))
+        return feature_ids
+
     @property
     def level_curves(self):
         return self._iter_children("LevelCurve", "SiteLandtake", "WaterBody")
