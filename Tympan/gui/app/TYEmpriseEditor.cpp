@@ -31,6 +31,7 @@
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "Tympan/gui/app/TYRenderWindowInteractor.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
 #include "TYEmpriseEditor.h"
@@ -57,7 +58,7 @@ void TYEmpriseEditor::slotKeyPressed(int key)
         case Qt::Key_Space:
             if (_active)
             {
-                ((TYSiteModelerFrame*)_pModeler)->getSite()->altimetryNeedsUpdate();
+                getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateGraphic();
                 _pInteractor->updateGL();
             }

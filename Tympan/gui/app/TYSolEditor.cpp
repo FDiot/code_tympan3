@@ -32,6 +32,7 @@
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
 #include "TYSolEditor.h"
 
 
@@ -71,7 +72,7 @@ void TYSolEditor::endSol()
         // but should instead be handled with exceptions.
         if (pSite->getTopographie()->addTerrain(pTerrain))
         {
-            pSite->altimetryNeedsUpdate();
+            getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
             if(pSite->getTopographie()->getAltimetrie()->containsData())
             {
                 for (unsigned int i = 0; i < tabPts.size(); i++)

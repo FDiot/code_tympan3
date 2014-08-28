@@ -41,6 +41,7 @@
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
 #include "TYOpenElementDialog.h"
 
 #ifdef TY_USE_DXF
@@ -307,7 +308,7 @@ void TYOpenElementDialog::openElement(LPTYElement pElt)
             if (pSite._pObj != nullptr)
             {
                 getTYApp()->setCurSiteNode(pSite);
-                pSite->altimetryNeedsUpdate();
+                getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
             }
             else if (dynamic_cast<TYBatiment*>(pElt._pObj) != nullptr)
             {

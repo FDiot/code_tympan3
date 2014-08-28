@@ -83,8 +83,7 @@ TYSiteNode::TYSiteNode() :  _pProjet(NULL),
     _root(false),
     _SIGType(TYMPAN),
     _SIG_X(0.0),
-    _SIG_Y(0.0),
-    _alti_needs_update (false)
+    _SIG_Y(0.0)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -486,9 +485,6 @@ void TYSiteNode::loadTopoFile()
 
 /*virtual*/ bool TYSiteNode::updateAltimetrie(const bool& force) // force = false
 {
-    if (!_alti_needs_update)  return true;
-    _alti_needs_update = false;
-
     ostringstream msg;
     OMessageManager& logger =  *OMessageManager::get();
     try
@@ -1425,7 +1421,6 @@ bool TYSiteNode::update(TYElement* pElem)
             TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pParent);
             if (pSite != nullptr)
             {
-                pSite->altimetryNeedsUpdate();
                 pSite->updateAcoustique();
                 ret = true;
                 break; // On a trouvé, on peut sortir

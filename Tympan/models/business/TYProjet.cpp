@@ -404,7 +404,6 @@ void TYProjet::setCurrentCalcul(LPTYCalcul pCurCalcul)
     // Calcul courant
     _pCurrentCalcul = pCurCalcul;
 
-    ;
     // Test si le solveur du calcul est bien disponible
     if (!TYPluginManager::get()->exist(_pCurrentCalcul->getSolverId()))
     {
@@ -424,8 +423,6 @@ void TYProjet::setCurrentCalcul(LPTYCalcul pCurCalcul)
     _pCurrentCalcul->updateGraphicTree();
 #endif
     this->setIsGeometryModified(true);
-
-    _pSite->altimetryNeedsUpdate();
 }
 
 bool TYProjet::updateAltiPointControle(TYPointControl* pPtControl, const TYAltimetrie* pAlti)
