@@ -1126,6 +1126,12 @@ void TYMainWindow::notifyAltimetryOutdated()
 {
     // Ask the sites for an update
     _pSiteFrame->getSiteNodeRoot()->setAltimetryUpToDate(false);
+    // If the current modeler is a Site modeler: enable the button to compute altimetry
+    TYSiteModelerFrame* site_modeler = dynamic_cast<TYSiteModelerFrame*>(_pCurrentModeler);
+    if(site_modeler != nullptr)
+    {
+        site_modeler->enableAltimetryComputation();
+    }
 }
 
 void TYMainWindow::saveCurSiteMode(int mode)
