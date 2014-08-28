@@ -60,7 +60,6 @@
 #include "TYSiteModelerFrame.h"
 
 
-
 #define TR(id) OLocalizator::getString("TYSiteModelerFrame", (id))
 #define IMG(id) OLocalizator::getPicture("TYSiteModelerFrame", (id))
 
@@ -188,14 +187,14 @@ void TYSiteModelerFrame::init()
     _pCtrlLayout->addSpacing(10);
 
     // Btn MaJ Altimetrie
-    QToolButton* pAltiBtn = new QToolButton(this);
-    pAltiBtn->setIcon(QPixmap(IMG("id_icon_calculalti_btn")));
-    pAltiBtn->setText(TR("id_calculalti_btn"));
-    pAltiBtn->setToolTip(TR("id_calculalti_btn"));
-    _pCtrlLayout->addWidget(pAltiBtn, 0);
+    _pAltiBtn = new QToolButton(this);
+    _pAltiBtn->setIcon(QPixmap(IMG("id_icon_calculalti_btn")));
+    _pAltiBtn->setText(TR("id_calculalti_btn"));
+    _pAltiBtn->setToolTip(TR("id_calculalti_btn"));
+    _pCtrlLayout->addWidget(_pAltiBtn, 0);
     _pCtrlLayout->addStretch(1);
-    pAltiBtn->setFixedSize(24, 24);
-    connect(pAltiBtn, SIGNAL(clicked()), this, SLOT(calculAltimetrie()));
+    _pAltiBtn->setFixedSize(24, 24);
+    connect(_pAltiBtn, SIGNAL(clicked()), this, SLOT(calculAltimetrie()));
 
     // Vue de dessus
     setViewType(TopView);
@@ -570,7 +569,7 @@ void TYSiteModelerFrame::updateVisibilityElementSite()
 
 void TYSiteModelerFrame::calculAltimetrie()
 {
-    // Called when pAltiBtn button is pressed
+    // Called when _pAltiBtn button is pressed
     if (!_pSite) { return; }
 
     TYApplication::setOverrideCursor(Qt::WaitCursor);
@@ -586,9 +585,7 @@ void TYSiteModelerFrame::calculAltimetrie()
     }
 
     _pSite->updateGraphicTree();
-
     getView()->getRenderer()->updateDisplayList();
-
     updateView();
 
     TYApplication::restoreOverrideCursor();
