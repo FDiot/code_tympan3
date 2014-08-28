@@ -33,6 +33,8 @@
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYProjetFrame.h"
 #include "Tympan/gui/app/TYSiteFrame.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
 #include "Tympan/gui/app/TYMessageManager.h"
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "TYCalculManager.h"
@@ -173,6 +175,14 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     // Update graphics
     pCalcul->getParent()->updateGraphicTree();
     pCalcul->updateGraphicTree();
+    TYSiteModelerFrame* psiteframe = dynamic_cast<TYSiteModelerFrame*>(getTYMainWnd()->getCurrentModeler());
+    if (psiteframe != nullptr)
+    {
+        psiteframe->setSite(pSite);
+        psiteframe->disableAltimetryComputation();
+        psiteframe->getView()->getRenderer()->updateDisplayList();
+        psiteframe->updateView();
+    }
     getTYMainWnd()->updateModelers(false, false);
     TYElement::setIsSavedOk(true);
     // Update projet frame
