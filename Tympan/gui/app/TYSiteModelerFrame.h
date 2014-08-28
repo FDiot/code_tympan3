@@ -93,7 +93,6 @@ public:
      */
     bool getShowCrbNiv() { return _showCrbNiv; }
 
-
     /**
      * Mise a jour de la comboBox des maillages disponibles
      */
@@ -128,7 +127,6 @@ public:
         NbOfSiteModelerMode,
         SilosMode
     };
-
 
 public slots:
     virtual void setViewType(int view);
@@ -196,6 +194,8 @@ protected:
     ///Un pointeur sur le site a editer.
     LPTYSiteNode _pSite;
 
+    // To compute altimetry
+    QToolButton* _pAltiBtn;
     ///Bouton pour l'affichage des courbes de niveau.
     QToolButton* _pShowCrbNivBtn;
     ///Indique si on affiche ou masque les courbes de niveau.
