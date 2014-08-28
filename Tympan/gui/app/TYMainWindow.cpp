@@ -426,6 +426,7 @@ TYMainWindow::TYMainWindow():
     _pSiteDockWnd->setWidget(_pSiteFrame);
     _pSiteDockWnd->setObjectName("SiteDockWnd");
     addDockWidget(Qt::LeftDockWidgetArea, _pSiteDockWnd);
+    connect(_pSiteFrame, SIGNAL(altimetryOutdated()), this, SLOT(notifyAltimetryOutdated()));
 
     // Fenetre Output
     _pOutputDockWnd = new QDockWidget(TR("id_toolbar_output"), this);
@@ -1119,6 +1120,12 @@ void TYMainWindow::subWindowActivated()
         connectDefaultActionManager();
         _pCurrentModeler = NULL;
     }
+}
+
+void TYMainWindow::notifyAltimetryOutdated()
+{
+    // Ask the sites for an update
+    _pSiteFrame->getSiteNodeRoot()->setAltimetryUpToDate(false);
 }
 
 void TYMainWindow::saveCurSiteMode(int mode)
