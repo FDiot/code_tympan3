@@ -457,6 +457,14 @@ public:
     /// Export au format csv sur un flux transmis
     virtual void exportCSV(std::ofstream& ofs);
 
+    /* Check if the altimetry is up-to-date. This is checked only on the root sites
+     */
+    bool getAltimetryUpToDate(){ return _alti_uptodate; }
+
+    /* Inform a root site that its altimetry is outdated.
+     */
+    void setAltimetryUpToDate(bool uptodate){ _alti_uptodate = uptodate; }
+
 protected:
     /**
      * Methode interne utilisee par 'merge()' pour recopier les composants
@@ -528,6 +536,10 @@ protected:
 
     ///Flag de modification de l'image de fond.
     bool _isTopoFileModified;
+
+    // Indicates whether the altimetry is up-to-date on this site (this value
+    // is checked only on the root sites)
+    bool _alti_uptodate;
 
 };
 
