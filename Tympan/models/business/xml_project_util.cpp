@@ -47,7 +47,7 @@ LPTYProjet load_project(const char* filename)
         throw tympan::invalid_data("No project was found in the XML file")
             << boost::errinfo_file_name(filename);
     }
-
+    project->getSite()->setAltimetryUpToDate(false);
     return project;
 }
 
