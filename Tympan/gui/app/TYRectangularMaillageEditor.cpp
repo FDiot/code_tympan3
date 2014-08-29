@@ -269,7 +269,7 @@ void TYRectangularMaillageEditor::slotMouseReleased(int x, int y, Qt::MouseButto
                             // Ajout de l'action creation de maillage pour mettre le undo
                             _pModeler->getActionManager()->addAction(pAction);
 
-                            if(pProjet->getSite()->getTopographie()->getAltimetrie()->containsData())
+                            if(pProjet->getSite()->getAltimetry()->containsData())
                             {
                                 // Mise a jour de l'altimetrie du maillage
                                 pCalcul->updateAltiMaillage(pMaillageGeoNode);

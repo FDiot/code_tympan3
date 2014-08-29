@@ -565,11 +565,11 @@ void TYSiteModelerFrame::updateVisibilityElementSite()
         }
 
         sites[i]->getElement()->getGraphicObject()->setVisible(false);
-        TYSiteNode::safeDownCast(sites[i]->getElement())->getTopographie()->getAltimetrie()->getGraphicObject()->setVisible(_showAltimetrie);
+        TYSiteNode::safeDownCast(sites[i]->getElement())->getAltimetry()->getGraphicObject()->setVisible(_showAltimetrie);
     }
 
     // Pour l'altimetrie (seul le site root a une alti)
-    _pSite->getTopographie()->getAltimetrie()->getGraphicObject()->setVisible(_showAltimetrie);
+    _pSite->getAltimetry()->getGraphicObject()->setVisible(_showAltimetrie);
 
     // Mise a jour de la transparence de l'altimetrie
     updateAltiOpacity();

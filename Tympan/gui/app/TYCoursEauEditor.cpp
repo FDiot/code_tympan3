@@ -61,12 +61,12 @@ void TYCoursEauEditor::endCoursEau()
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
 
         // Make sure altimetry was initialized before using it
-        if (pSite->getTopographie()->getAltimetrie()->containsData())
+        if (pSite->getAltimetry()->containsData())
         {
             for (unsigned int i = 0; i < pCoursEau->getTabPoint().size(); i++)
             {
                 pCoursEau->getTabPoint()[i]._z = 0.0;
-                pSite->getTopographie()->getAltimetrie()->updateAltitude(pCoursEau->getTabPoint()[i]);
+                pSite->getAltimetry()->updateAltitude(pCoursEau->getTabPoint()[i]);
             }
         }
 

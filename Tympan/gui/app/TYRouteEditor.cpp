@@ -70,12 +70,12 @@ void TYRouteEditor::endRoute()
             getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
         }
         // Make sure altimetry was initialized before using it
-        if (pSite->getTopographie()->getAltimetrie()->containsData())
+        if (pSite->getAltimetry()->containsData())
         {
             for (unsigned int i = 0; i < pRoute->getTabPoint().size(); i++)
             {
                 pRoute->getTabPoint()[i]._z = 0.0;
-                pSite->getTopographie()->getAltimetrie()->updateAltitude(pRoute->getTabPoint()[i]);
+                pSite->getAltimetry()->updateAltitude(pRoute->getTabPoint()[i]);
             }
         }
 

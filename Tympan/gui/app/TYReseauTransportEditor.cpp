@@ -69,14 +69,14 @@ void TYReseauTransportEditor::endReseauTransport()
         }
 
         // Make sure altimetry was initialized before using it
-        if (pSite->getTopographie()->getAltimetrie()->containsData())
+        if (pSite->getAltimetry()->containsData())
         {
             for (unsigned int i = 0; i < pReseauTransport->getTabPoint().size(); i++)
             {
                 pReseauTransport->getTabPoint()[i]._z = 0.0;
 
                 // Altitude
-                pSite->getTopographie()->getAltimetrie()->updateAltitude(pReseauTransport->getTabPoint()[i]);
+                pSite->getAltimetry()->updateAltitude(pReseauTransport->getTabPoint()[i]);
 
                 // Ajout de la hauteur moyenne
                 pReseauTransport->getTabPoint()[i]._z += pReseauTransport->getHauteurMoyenne();

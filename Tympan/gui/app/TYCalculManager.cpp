@@ -167,8 +167,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     std::deque<OTriangle> triangles;
     std::deque<LPTYSol> materials;
     pSite->readMesh(points, triangles, materials, meshfile.fileName());
-    pSite->getTopographie()->getAltimetrie()->plugBackTriangulation(points,
-            triangles, materials);
+    pSite->getAltimetry()->plugBackTriangulation(points, triangles, materials);
     pSite->updateAltiInfra();
     pSite->updateAcoustique();
     pSite->setAltimetryUpToDate(true);

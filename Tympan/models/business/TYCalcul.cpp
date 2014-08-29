@@ -1073,7 +1073,7 @@ void TYCalcul::updateGraphicMaillage()
 
 bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode)
 {
-    TYAltimetrie* pAlti = getProjet()->getSite()->getTopographie()->getAltimetrie()._pObj;
+    TYAltimetrie* pAlti = getProjet()->getSite()->getAltimetry()._pObj;
     return updateAltiMaillage(pMaillageGeoNode, pAlti);
 }
 
@@ -1186,7 +1186,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
 
 bool TYCalcul::updateAltiRecepteurs()
 {
-    TYAltimetrie* pAlti = getProjet()->getSite()->getTopographie()->getAltimetrie();
+    TYAltimetrie* pAlti = getProjet()->getSite()->getAltimetry();
     return updateAltiRecepteurs(pAlti);
 }
 

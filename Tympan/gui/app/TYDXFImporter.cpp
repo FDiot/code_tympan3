@@ -379,7 +379,7 @@ LPTYBatiment TYDXFImporter::BuildConstruction(TYTabPoint* pts, double dHauteur, 
     // Hauteur au sol : nulle (=>on ne peut pas faire d'etage au dessus d'un autre)
     centre._z = 0;
     OPoint3D centre2(centre._x, centre._y, 0.0);
-    pTYTopographie->getAltimetrie()->altitude(centre2);
+    pSite->getAltimetry()->altitude(centre2);
     centre._z = centre2._z;
 
     // Repere de l'etage dans le bâtiment

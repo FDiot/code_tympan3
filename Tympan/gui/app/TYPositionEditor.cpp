@@ -754,13 +754,14 @@ void TYPositionEditor::initEditCrbNiv(TYElement* pElt)
 
     // On ne peut rien faire sans le parent...
     if (!pParent) { return; }
+    LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pParent->getParent());
 
     // On recupere le GeoNode associe
     _pEditGeoNode = (TYGeometryNode*) pParent->findCrbNiv(pCrbNiv).getRealPointer();
     if (!_pEditGeoNode) { return; }
 
     // On marque l'alti comme modifiee ici car on ne peut plus le faire apres
-    pParent->getAltimetrie()->setIsGeometryModified(true);
+    pSite->getAltimetry()->setIsGeometryModified(true);
 
     if (_mode == Edition)
     {
@@ -797,24 +798,25 @@ void TYPositionEditor::initEditCrsEau(TYElement* pElt)
 
     // On positionne l'element courant
     _pEditElement = pElt;
-
     TYCoursEau* pCrsEau = TYCoursEau::safeDownCast(_pEditElement);
     TYTopographie* pParent = TYTopographie::safeDownCast(pCrsEau->getParent());
 
     // On ne peut rien faire sans le parent...
     if (!pParent) { return; }
+    LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pParent->getParent());
+    assert(pSite != nullptr && "The parent of a TYTopographie element must be a TYSiteNode");
 
     // On recupere le GeoNode associe
     _pEditGeoNode = (TYGeometryNode*) pParent->findCrsEau(pCrsEau).getRealPointer();
     if (!_pEditGeoNode) { return; }
 
     // We tag the altimetry as modified since we can't do it later
-    pParent->getAltimetrie()->setIsGeometryModified(true);
+    pSite->getAltimetry()->setIsGeometryModified(true);
 
     if (_mode == Edition)
     {
         TYTabPoint& pts = pCrsEau->getTabPoint();
-        editPolyLine(pCrsEau, pts, false, pParent->getAltimetrie());
+        editPolyLine(pCrsEau, pts, false, pSite->getAltimetry());
     }
     else
     {
@@ -851,18 +853,20 @@ void TYPositionEditor::initEditPlanEau(TYElement* pElt)
 
     // On ne peut rien faire sans le parent...
     if (!pParent) { return; }
+    LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pParent->getParent());
+    assert(pSite != nullptr && "The parent of a TYTopographie element must be a TYSiteNode");
 
     // On recupere le GeoNode associe
     _pEditGeoNode = (TYGeometryNode*) pParent->findPlanEau(pPlanEau).getRealPointer();
     if (!_pEditGeoNode) { return; }
 
     // On marque l'alti comme modifiee ici car on ne peut plus le faire apres
-    pParent->getAltimetrie()->setIsGeometryModified(true);
+    pSite->getAltimetry()->setIsGeometryModified(true);
 
     if (_mode == Edition)
     {
         TYTabPoint& pts = pPlanEau->getListPoints();
-        editPolyLine(pPlanEau, pts, true, pParent->getAltimetrie());
+        editPolyLine(pPlanEau, pts, true, pSite->getAltimetry());
     }
     else
     {
@@ -899,18 +903,20 @@ void TYPositionEditor::initEditTerrain(TYElement* pElt)
 
     // On ne peut rien faire sans le parent...
     if (!pParent) { return; }
+    LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pParent->getParent());
+    assert(pSite != nullptr && "The parent of a TYTopographie element must be a TYSiteNode");
 
     // On recupere le GeoNode associe
     _pEditGeoNode = (TYGeometryNode*) pParent->findTerrain(pTerrain).getRealPointer();
     if (!_pEditGeoNode) { return; }
 
     // We tag the altimetry as modified since we can't do it later
-    pParent->getAltimetrie()->setIsGeometryModified(true);
+    pSite->getAltimetry()->setIsGeometryModified(true);
 
     if (_mode == Edition)
     {
         TYTabPoint& pts = pTerrain->getListPoints();
-        editPolyLine(pTerrain, pts, true, pParent->getAltimetrie());
+        editPolyLine(pTerrain, pts, true, pSite->getAltimetry());
     }
     else
     {

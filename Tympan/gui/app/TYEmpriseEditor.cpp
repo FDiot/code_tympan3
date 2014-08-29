@@ -80,8 +80,9 @@ void TYEmpriseEditor::endEmprise()
                 getSavedPoints()[i]._z = 0.0;
             }
 
-            // La topo du site en edition
-            LPTYTopographie pTopo = ((TYSiteModelerFrame*)_pModeler)->getSite()->getTopographie();
+            // Le site en edition
+            LPTYSiteNode pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
+            LPTYTopographie pTopo = pSite->getTopographie();
 
             // Action
             TYAction* pAction = new TYSetEmpriseTopoAction(pTopo, getSavedPoints(), _pModeler, TR("id_action_setemprise"));
@@ -89,7 +90,7 @@ void TYEmpriseEditor::endEmprise()
 
             // On assigne les points saisies pour l'emprise de la topo
             pTopo->setEmprise(getSavedPoints());
-            pTopo->getAltimetrie()->setIsGeometryModified(true);
+            pSite->getAltimetry()->setIsGeometryModified(true);
 
             // Update
             pTopo->updateGraphicTree();

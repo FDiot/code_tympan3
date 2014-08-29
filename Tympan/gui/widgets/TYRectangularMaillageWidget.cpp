@@ -140,7 +140,7 @@ void TYRectangularMaillageWidget::apply()
 
         // La densite a changee, il faut mettre a jour l'altimetrie
         LPTYCalcul pCalcul = TYCalcul::safeDownCast(getElement()->getParent());
-        if (pCalcul && pCalcul->getSite()->getTopographie()->getAltimetrie()->containsData())
+        if (pCalcul && pCalcul->getSite()->getAltimetry()->containsData())
         {
             pCalcul->updateAltiRecepteurs();
         }

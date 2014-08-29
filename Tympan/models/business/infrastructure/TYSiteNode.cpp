@@ -573,7 +573,7 @@ void TYSiteNode::loadTopoFile()
     std::deque<OTriangle> triangles;
     std::deque<LPTYSol> materials;
     readMesh(points, triangles, materials, result_mesh.fileName());
-    _pTopographie->getAltimetrie()->plugBackTriangulation(points, triangles, materials);
+    getAltimetry()->plugBackTriangulation(points, triangles, materials);
     setIsGeometryModified(false);  // L'altimetrie est a jour
     OMessageManager::get()->info("Mise a jour altimetrie terminee.");
     TYNameManager::get()->enable(true);
@@ -644,7 +644,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
 {
     TYNameManager::get()->enable(false);
 
-    TYAltimetrie* pAlti = _pTopographie->getAltimetrie();
+    TYAltimetrie* pAlti = getAltimetry();
     bool modified = false;
     OPoint3D pt;
     register unsigned int i, j;
@@ -1127,13 +1127,14 @@ void TYSiteNode::getListFacesWithoutFloor(TYTabAcousticSurfaceGeoNode& tabFaces,
     //            and thus be stored or exracted from the Altimetry ?
     //            or is this data pulling from the solver to be replaced by data
     //            pushing from the site to the model
-    TYTabLPPolygon& listFacesAlti = _pTopographie->getAltimetrie()->getListFaces();
+    LPTYAltimetrie pAlti = getAltimetry();
+    TYTabLPPolygon& listFacesAlti = pAlti->getListFaces();
     unsigned int nbFacesAlti = static_cast<uint32>(listFacesAlti.size());
 
     for (i = 0; i < nbFacesAlti; i++)
     {
         LPTYAcousticPolygon pAccPolygon = new TYAcousticPolygon();
-        pAccPolygon->setParent(_pTopographie->getAltimetrie());
+        pAccPolygon->setParent(pAlti);
 
         // Geomtrie
         *pAccPolygon->getPolygon() = *listFacesAlti.at(i);
@@ -1147,6 +1148,20 @@ void TYSiteNode::getListFacesWithoutFloor(TYTabAcousticSurfaceGeoNode& tabFaces,
 
     file.close();
 
+}
+
+LPTYAltimetrie TYSiteNode::getAltimetry() const
+{
+    // As there is one only altimetry for all the subsites of the root site,
+    // retrieve the altimetry from the root site and not from the current site.
+    TYSiteNode const* rootsite = this;
+    while(rootsite != nullptr && !rootsite->getRoot())
+    {
+        rootsite = dynamic_cast<TYSiteNode*> (rootsite->getParent());
+    }
+    if (rootsite != nullptr)
+        return rootsite->getTopographie()->getAltimetrie();
+    throw tympan::invalid_data("No root site node in current TYMPAN objects hierarchy.");
 }
 
 bool almost_equal(double a, double b, double precision)
@@ -1329,13 +1344,13 @@ void TYSiteNode::getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned in
     //EstUnIndexDeFaceEcran n'est pas a affecter, car les faces d'infrastructures sont separees de celles de l'alti,
     //donc sachant ou commence les faces d'alti, le test "est un ecran" n'a pas de sens pour ces dernieres
 
-    TYTabLPPolygon& listFacesAlti = _pTopographie->getAltimetrie()->getListFaces();
+    TYTabLPPolygon& listFacesAlti = getAltimetry()->getListFaces();
     unsigned int nbFacesAlti = static_cast<uint32>(listFacesAlti.size());
 
     for (i = 0; i < nbFacesAlti; i++)
     {
         LPTYAcousticPolygon pAccPolygon = new TYAcousticPolygon();
-        pAccPolygon->setParent(_pTopographie->getAltimetrie());
+        pAccPolygon->setParent(getAltimetry());
 
         // Geomtrie
         *pAccPolygon->getPolygon() = *listFacesAlti.at(i);

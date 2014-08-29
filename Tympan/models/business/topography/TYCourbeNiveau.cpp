@@ -15,6 +15,7 @@
 
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/infrastructure/TYTopographie.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "TYCourbeNiveau.h"
 
 #if TY_USE_IHM
@@ -200,7 +201,9 @@ void TYCourbeNiveau::setListPoints(const TYTabPoint& pts)
         if (pTopo)
         {
             // L'alti n'est plus a jour non plus...
-            pTopo->getAltimetrie()->setIsGeometryModified(true);
+            LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pTopo->getParent());
+            assert(pSite != nullptr && "The parent of a TYTopographie element must be a TYSiteNode");
+            pSite->getAltimetry()->setIsGeometryModified(true);
             break;
         }
 
@@ -244,7 +247,9 @@ void TYCourbeNiveau::applyAlitudeToPoints()
         if (pTopo)
         {
             // L'alti n'est plus a jour non plus...
-            pTopo->getAltimetrie()->setIsGeometryModified(true);
+            LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pTopo->getParent());
+            assert(pSite != nullptr && "The parent of a TYTopographie element must be a TYSiteNode");
+            pSite->getAltimetry()->setIsGeometryModified(true);
             break;
         }
 

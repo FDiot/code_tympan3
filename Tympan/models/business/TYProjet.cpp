@@ -48,6 +48,7 @@ TYProjet::TYProjet() :  _auteur(""),
 
     _pSite = new TYSiteNode();
     _pSite->setParent(this);
+    _pSite->setRoot(true);
 
     _pSite->setProjet(this); // Definit le projet courant
 
@@ -459,7 +460,7 @@ bool TYProjet::updateAltiPointControle(TYPointControl* pPtControl, const TYAltim
 
 bool TYProjet::updateAltiRecepteurs()
 {
-    TYAltimetrie* pAlti = getSite()->getTopographie()->getAltimetrie()._pObj;
+    TYAltimetrie* pAlti = getSite()->getAltimetry()._pObj;
     return updateAltiRecepteurs(pAlti);
 }
 

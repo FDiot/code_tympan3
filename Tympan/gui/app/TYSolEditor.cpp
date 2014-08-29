@@ -73,12 +73,12 @@ void TYSolEditor::endSol()
         if (pSite->getTopographie()->addTerrain(pTerrain))
         {
             getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
-            if(pSite->getTopographie()->getAltimetrie()->containsData())
+            if(pSite->getAltimetry()->containsData())
             {
                 for (unsigned int i = 0; i < tabPts.size(); i++)
                 {
                     tabPts[i]._z = 0.0;
-                    pSite->getTopographie()->getAltimetrie()->updateAltitude(tabPts[i]);
+                    pSite->getAltimetry()->updateAltitude(tabPts[i]);
                 }
             }
             TYAction* pAction = new TYAddElementToTopoAction(

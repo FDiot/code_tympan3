@@ -41,7 +41,7 @@ void update_altimetry(LPTYSiteNode pSite)
     std::deque<OTriangle> triangles;
     std::deque<LPTYSol> materials;
     pSite->readMesh(points, triangles, materials, mesh.fileName());
-    pSite->getTopographie()->getAltimetrie()->plugBackTriangulation(points, triangles, materials);
+    pSite->getAltimetry()->plugBackTriangulation(points, triangles, materials);
 }
 
 
@@ -76,7 +76,7 @@ TEST(TYAltimetryTest, update_point_altitude)
     pProjet->setSite(pSite);
     LPTYTopographie pTopo = pSite->getTopographie();
     update_altimetry(pSite);
-    LPTYAltimetrie pAlti = pTopo->getAltimetrie();
+    LPTYAltimetrie pAlti = pSite->getAltimetry();
 
     // Positive tests : Points lie in the convex hull of the altimetry
     OPoint3D pt(-70., 0., 0.);
@@ -171,7 +171,7 @@ TEST(TYAltimetryTest, dummy_grid)
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     pProjet->setSite(pSite);
     LPTYTopographie pTopo = pSite->getTopographie();
-    LPTYAltimetrie pAlti = pTopo->getAltimetrie();
+    LPTYAltimetrie pAlti = pSite->getAltimetry();
     update_altimetry(pSite);
 
     // 2 triangles should give a 1x1 accelerating grid
@@ -200,7 +200,7 @@ TEST(TYAltimetryTest, simple_grid)
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     pProjet->setSite(pSite);
     LPTYTopographie pTopo = pSite->getTopographie();
-    LPTYAltimetrie pAlti = pTopo->getAltimetrie();
+    LPTYAltimetrie pAlti = pSite->getAltimetry();
     LPTYCourbeNiveau pHill = addHillToSimpleSite(pSite);
     update_altimetry(pSite);
 
@@ -250,7 +250,7 @@ TEST(TYAltimetryTest, simple_terrain)
     LPTYSiteNode pSite = buildSiteSimpleAltimetry();
     pProjet->setSite(pSite);
     LPTYTopographie pTopo = pSite->getTopographie();
-    LPTYAltimetrie pAlti = pTopo->getAltimetrie();
+    LPTYAltimetrie pAlti = pSite->getAltimetry();
     update_altimetry(pSite);
 
     // Check altitude in the middle of the future terrain

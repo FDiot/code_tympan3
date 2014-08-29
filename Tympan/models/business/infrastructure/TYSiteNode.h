@@ -461,6 +461,11 @@ public:
      */
     bool getAltimetryUpToDate(){ return _alti_uptodate; }
 
+    /* Return the site altimetry (retrieved from the rootsite of the hierarchy,
+     * which can be the current site node or one of its parents
+     */
+    LPTYAltimetrie getAltimetry() const;
+
     /* Inform a root site that its altimetry is outdated.
      */
     void setAltimetryUpToDate(bool uptodate){ _alti_uptodate = uptodate; }

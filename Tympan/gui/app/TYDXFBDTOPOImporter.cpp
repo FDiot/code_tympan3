@@ -426,7 +426,7 @@ void TYDXFBDTopoImporter::importTransmissionNetwork(int nMaxReseauTransportNRJ,
                 pTYReseauTransport->setTension(ReseauTransportNRJ[k].dTension);
             }
             pTYReseauTransport->setTabPoint(pts[i]);
-            double dHauteurMoyenne = pTYTopographie->getAltimetrie()->HauteurMoyenne(pts[i]);
+            double dHauteurMoyenne = pSite->getAltimetry()->HauteurMoyenne(pts[i]);
             if (dHauteurMoyenne == 0)
             {
                 dHauteurMoyenne = ReseauTransportNRJ[k].dHauteurMoyenneSiIncalculable;

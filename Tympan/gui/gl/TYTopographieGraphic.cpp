@@ -20,6 +20,7 @@
 
 
 #include "Tympan/models/business/infrastructure/TYTopographie.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/gui/gl/TYAltimetrieGraphic.h"
 #include "TYTopographieGraphic.h"
 
@@ -65,8 +66,12 @@ void TYTopographieGraphic::getChilds(TYListPtrTYElementGraphic& childs, bool rec
     }
 
     // Altimetrie
+    // 1 altimetry for all the site hierarchy. From the topography, retrieve the parent
+    // site, and from this site, the root site and its altimetry.
     TYTopographie* pTYTopographie = getElement();
-    LPTYAltimetrie altimetrie =  pTYTopographie->getAltimetrie();
+    LPTYSiteNode pParentSite = dynamic_cast<TYSiteNode*>(pTYTopographie->getParent());
+    assert(pParentSite != nullptr && "The parent of a TYTopographie element must be a TYSiteNode");
+    LPTYAltimetrie altimetrie =  pParentSite->getAltimetry();
     Localchilds.push_back(altimetrie->getGraphicObject());
 
 
@@ -126,7 +131,9 @@ void TYTopographieGraphic::display(GLenum mode /*= GL_RENDER*/)
 
     // Altimetrie
     TYTopographie* pTYTopographie = getElement();
-    LPTYAltimetrie altimetrie =  pTYTopographie->getAltimetrie();
+    LPTYSiteNode pParentSite = dynamic_cast<TYSiteNode*>(pTYTopographie->getParent());
+    assert(pParentSite != nullptr && "The parent of a TYTopographie element must be a TYSiteNode");
+    LPTYAltimetrie altimetrie =  pParentSite->getAltimetry();
     LPTYElementGraphic ElementGraphic = altimetrie->getGraphicObject();
     ElementGraphic->display(mode);
 
@@ -172,7 +179,9 @@ void TYTopographieGraphic::setBackgroundImage(QString sTopoFileName, int semiX, 
 {
     // Altimetrie
     TYTopographie* pTYTopographie = getElement();
-    LPTYAltimetrie altimetrie =  pTYTopographie->getAltimetrie();
+    LPTYSiteNode pParentSite = dynamic_cast<TYSiteNode*>(pTYTopographie->getParent());
+    assert(pParentSite != nullptr && "The parent of a TYTopographie element must be a TYSiteNode");
+    LPTYAltimetrie altimetrie =  pParentSite->getAltimetry();
     LPTYElementGraphic ElementGraphic = altimetrie->getGraphicObject();
     ((TYAltimetrieGraphic*)((TYElementGraphic*)ElementGraphic))->setBackgroundImage(sTopoFileName, semiX, semiY, ptPosition, bgOrientation);
 }
@@ -181,7 +190,9 @@ void TYTopographieGraphic::unsetBackgroundImage()
 {
     // Altimetrie
     TYTopographie* pTYTopographie = getElement();
-    LPTYAltimetrie altimetrie =  pTYTopographie->getAltimetrie();
+    LPTYSiteNode pParentSite = dynamic_cast<TYSiteNode*>(pTYTopographie->getParent());
+    assert(pParentSite != nullptr && "The parent of a TYTopographie element must be a TYSiteNode");
+    LPTYAltimetrie altimetrie =  pParentSite->getAltimetry();
     LPTYElementGraphic ElementGraphic = altimetrie->getGraphicObject();
     ((TYAltimetrieGraphic*)((TYElementGraphic*)ElementGraphic))->unsetBackgroundImage();
 }
