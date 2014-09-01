@@ -526,18 +526,8 @@ void TYSiteModelerFrame::updateVisibilityElementSite()
     // Collecte les site nodes de facon recursive
     TYTabSiteNodeGeoNode sites;
 
-    // Si le site est un site node
-    LPTYSiteNode pSiteNode = TYSiteNode::safeDownCast(_pSite);
-    if (pSiteNode)
-    {
-        // On collecte l'ensemble des sites
-        sites = pSiteNode->collectSites();
-    }
-    else
-    {
-        // Sinon on ajoute seulement le site dans la collection
-        sites.push_back(new TYSiteNodeGeoNode((LPTYElement)_pSite));
-    }
+    // On collecte l'ensemble des sites
+    sites = _pSite->collectSites();
 
     // Pour chaque site
     for (unsigned int i = 0; i < sites.size(); i++)
