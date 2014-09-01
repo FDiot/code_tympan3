@@ -12,7 +12,7 @@
 #include <boost/algorithm/string/trim.hpp>
 #include <boost/foreach.hpp>
 
-#include "test_utils/misc.hpp"
+#include "testutils.h"
 
 using namespace std;
 using namespace boost;

@@ -7,6 +7,6 @@ foreach (testfile ${TESTS_SRC})
   configure_gtest_target(TARGET ${basename}
              FOLDER ${CURRENT_FOLDER}
              RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
-             LIBS test_utils ${TYMPAN_MODULES} )
+             LIBS testutils ${TYMPAN_MODULES} )
 endforeach (testfile)
 

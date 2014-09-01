@@ -7,9 +7,10 @@
 #include<algorithm>    // copy
 #include<iterator>     // ostream_operator
 
-#include "test_utils/misc.hpp"
-
 #include <boost/foreach.hpp>
+
+#include "testutils.h"
+#include "TympanTestsConfig.hpp"
 
 using namespace std;
 
@@ -57,3 +58,12 @@ TEST(TestTestUtils, readCsvAsTableOf)
 
     //print_table_of<double>(table);
 } // TEST(TestTestUtils, csvAsDouble)
+
+
+TEST_F(BuildingFromSiteFixture, loading)
+{
+    std::string filename = tympan::path_to_test_data
+        ("projects-panel/1_PROJET_Site_emprise_seule.xml");
+    load_file(filename.c_str());
+    EXPECT_TRUE(project);
+}

@@ -1,8 +1,11 @@
 /**
- * @file misc.hpp
+ * @file testutils.h
  *
  * @brief Misc utilities for testing.
  */
+
+#ifndef TY_TESTUTILS
+#define TY_TESTUTILS
 
 #include<iostream>
 #include<deque>
@@ -45,3 +48,38 @@ std::deque<std::deque<T> > readCsvAsTableOf(std::istream& in)
     }
     return table;
 }
+
+
+/* ********** loads a project from an XML project file ********** */
+
+#include <cstring>
+#include <QString>
+
+#include "gtest/gtest.h"
+
+#include "Tympan/models/business/xml_project_util.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/infrastructure/TYSiteNode.h"
+
+
+class BuildingFromSiteFixture: public ::testing::Test
+{
+
+public:
+    // static void SetUpTestCase()
+
+    // Load the project file `filename` into the `project` member
+    virtual void load_file(const char filename[])
+    {
+        using namespace tympan;
+        project = load_project(filename); // This output to `project`
+        LPTYSiteNode site = project->getSite();
+        ASSERT_TRUE(site) << "Invalid root site";
+    }
+
+    // virtual void SetUp() {}
+
+    LPTYProjet project;
+};
+
+#endif /* TY_TESTUTILS */

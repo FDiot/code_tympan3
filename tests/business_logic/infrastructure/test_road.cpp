@@ -8,7 +8,7 @@
 
 #include "gtest/gtest.h"
 
-#include "test_utils/misc.hpp"
+#include "testutils.h"
 #include "TympanTestsConfig.hpp"
 
 #include <QtXml>
