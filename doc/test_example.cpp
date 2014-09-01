@@ -4,7 +4,15 @@
  *
  *  Created on: 6 nov. 2012
  *      Author: Anthony Truchet <anthony.truchet@logilab.fr>
- */
+
+CMakeLists.txt extract:
+
+add_executable(test_example test_example.cpp)
+configure_gtest_target(TARGET test_example
+  RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
+  FOLDER ${CURRENT_FOLDER})
+
+*/
 
 
 #include "gtest/gtest.h"
