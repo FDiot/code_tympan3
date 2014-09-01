@@ -1,22 +1,15 @@
 # CMakeLists for test cases with GoogleTest framework.
-set(CURRENT_FOLDER "Tests")
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-  APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG _DEBUG)
-
+set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} APPEND PROPERTY
+    COMPILE_DEFINITIONS_DEBUG _DEBUG)
 # GTest has already been loaded as external project by tympan-deps-gtest.cmake
-include_directories (${GTEST_INCLUDE_DIR})
-link_directories (${GTEST_BINARY_DIR})
-
-# Find Thread. Using some 'CMAKE_THREAD_*' variables to check the thread lib.
-find_package (Threads)
+include_directories(${GTEST_INCLUDE_DIR})
+link_directories(${GTEST_BINARY_DIR})
 
 include_directories(.)
-
-set (TYMPAN_MODULES tympan_common tympan_lib)
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 # Configure the headers for the tests
 set(TYMPAN_TESTS_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/data")
 set(TYMPAN_PYTHON_SCRIPTS "${CMAKE_CURRENT_BINARY_DIR}/../bin")
@@ -30,37 +23,63 @@ configure_file(
     @ONLY
 )
 
+# Copy data
 file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
+# Build testutils library
 file(GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/testutils.cpp )
 add_library(testutils STATIC ${TESTS_SRC} )
-set_property(TARGET testutils PROPERTY FOLDER ${CURRENT_FOLDER})
-add_dependencies(testutils GTest ${TYMPAN_MODULES} )
-# 'CMAKE_THREAD_LIBS_INIT' can be empty on Windows.
-target_link_libraries(testutils gtest ${CMAKE_THREAD_LIBS_INIT} ${TYMPAN_MODULES})
+set_property(TARGET testutils PROPERTY FOLDER "Tests")
+add_dependencies(testutils GTest tympan_common tympan_lib )
+target_link_libraries(testutils gtest tympan_common tympan_lib)
 
-# Unit tests dedicated to this directory only.
-add_subdirectory(tests)
+# Specific tests configuration
+# Needed to import DXF files.
+add_definitions(-DTY_USE_DXF -DDIME_NOT_DLL)
+# Needed for DXF files import.
+set(DXF_DEPEND_FILES
+    ${PROJECT_SOURCE_DIR}/Tympan/gui/app/TYDXFBDTOPOImporter.cpp
+    ${PROJECT_SOURCE_DIR}/Tympan/gui/app/TYDXFImporter.cpp)
+set(PYTHONPATH
+   "${CMAKE_BINARY_DIR}/${TYMPAN_CythonModules_${CMAKE_BUILD_TYPE}}")
+# Configure PYTHONPATH and CGAL_BINDINGS_PATH (test_m_b_altimetrie uses python
+# altimetry)
+build_native_path_list(NATIVE_PYTHONPATH "${PYTHONPATH}")
+build_native_path_list(NATIVE_CGAL_BINDINGS_PYTHON_DIR "${CGAL_BINDINGS_PYTHON_DIR}")
 
-add_subdirectory(business_logic)
-add_subdirectory(gui)
-add_subdirectory(io)
-add_subdirectory(SolverDataModel)
-
-file (GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp )
-
+# Find all CPP test files.
+file(GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp)
+# Need specific handling, see below
+list(REMOVE_ITEM TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_gui_bdtopoimporter.cpp)
+# XXX doesn't compile
+list(REMOVE_ITEM TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_acousticraytracer_ray.cpp)
 # Main loop for all CPP test files.
 foreach (testfile ${TESTS_SRC})
-  get_filename_component (basename ${testfile} NAME_WE)
-  add_executable(${basename} ${testfile} testmain.cpp)
-  configure_gtest_target(TARGET ${basename}
-             FOLDER ${CURRENT_FOLDER}
-             RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
-             LIBS testutils ${TYMPAN_MODULES})
+    get_filename_component (basename ${testfile} NAME_WE)
+    add_executable(${basename} ${testfile} testmain.cpp)
+    configure_gtest_target(TARGET ${basename}
+        FOLDER "Tests"
+        RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
+        LIBS testutils tympan_common tympan_lib)
 endforeach (testfile)
-
+# More specific tests configuration
 target_link_libraries(test_3rdparty_nmpb2008 RoadEmissionNMPB)
 target_link_libraries(test_3rdparty_rply ${RPLY_LIB})
-set_property(TARGET test_3rdparty_rply
-  APPEND PROPERTY INCLUDE_DIRECTORIES ${RPLY_INCLUDE_DIRECTORY})
+set_property(TARGET test_3rdparty_rply APPEND PROPERTY
+    INCLUDE_DIRECTORIES ${RPLY_INCLUDE_DIRECTORY})
+set_property(TEST test_m_b_altimetrie APPEND PROPERTY
+    ENVIRONMENT "PYTHONPATH=${NATIVE_PYTHONPATH}")
+set_property(TEST test_m_b_altimetrie APPEND PROPERTY
+    ENVIRONMENT "CGAL_BINDINGS_PATH=${NATIVE_CGAL_BINDINGS_PYTHON_DIR}")
+# Specific case of test_gui_bdtopoimporter.cpp
+add_executable(test_gui_bdtopoimporter
+    test_gui_bdtopoimporter.cpp ${DXF_DEPEND_FILES} testmain.cpp)
+configure_gtest_target(TARGET test_gui_bdtopoimporter
+    FOLDER "Tests"
+    RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
+    LIBS testutils ${TYMPAN_MODULES} dime)
+
+
+
+

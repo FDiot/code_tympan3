@@ -1,5 +1,0 @@
-add_subdirectory(common)
-add_subdirectory(tools)
-add_subdirectory(topography)
-add_subdirectory(infrastructure)
-#add_subdirectory(acousticRayTracer)

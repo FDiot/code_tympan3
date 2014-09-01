@@ -24,6 +24,7 @@
 class Recepteur : public Sphere
 {
 public:
+    Recepteur() {};
 
 	Recepteur(const vec3& pos, const decimal& r) : Sphere(pos, r) 
 	{
