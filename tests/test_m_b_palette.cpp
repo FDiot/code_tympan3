@@ -218,7 +218,7 @@ TEST(TestTYPalette, test_3_colors)
 
 TEST(TestTYPalette, load_legacy_from_file)
 {
-    QString filename = QString::fromUtf8("../../data/legacy_3_colors_Palette.xml");
+    QString filename = QString::fromUtf8("./data/legacy_3_colors_Palette.xml");
     LPTYPalette p_palette(TYPalette::loadPaletteFromFile(filename));
     ASSERT_TRUE(p_palette);
     check_3_colors(p_palette);
