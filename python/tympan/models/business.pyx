@@ -340,9 +340,9 @@ cdef class Site:
         alti = cy.declare(SmartPtr[TYAltimetrie])
         alti = self.thisptr.getRealPointer().getTopographie().getRealPointer().getAltimetrie()
         alti.getRealPointer().plugBackTriangulation(pts, tgles, cppmats)
-        self.thisptr.getRealPointer().updateAltiInfra(True)
-        self.thisptr.getRealPointer().updateAcoustique(True)
-        self.thisptr.getRealPointer().getProjet().updateAltiRecepteurs(alti.getRealPointer())
+        # Recursively update the acoustic, the altimetry of the infrastructure
+        # elements and the altimetry of the acoustic receptors
+        self.thisptr.getRealPointer().update(True)
 
     def process_landtake(self):
         """ Return a list of 'Point3D' cython objects representing the landtake
