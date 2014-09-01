@@ -10,7 +10,7 @@
 
 #include <string>
 
-#include "TympanTestsConfig.hpp"
+#include "TympanTestsConfig.h"
 
 #include <iostream>
 #include <fstream>
@@ -21,7 +21,7 @@
 #include "gtest/gtest.h"
 
 #include "testutils.h"
-#include "TympanTestsConfig.hpp"
+#include "TympanTestsConfig.h"
 #include "Tympan/models/solver/entities.hpp"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 

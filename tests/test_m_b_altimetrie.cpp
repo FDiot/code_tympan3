@@ -21,7 +21,7 @@
 #include "Tympan/models/business/altimetry_file_reader_impl.h"
 #include "Tympan/models/business/subprocess_util.h"
 #include "Tympan/models/business/xml_project_util.h"
-#include "TympanTestsConfig.hpp"
+#include "TympanTestsConfig.h"
 
 static  const double precision = 1e-6;
 

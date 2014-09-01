@@ -9,7 +9,7 @@
 #include "gtest/gtest.h"
 
 #include "testutils.h"
-#include "TympanTestsConfig.hpp"
+#include "TympanTestsConfig.h"
 
 #include <QtXml>
 #include <QDir>

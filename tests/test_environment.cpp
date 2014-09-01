@@ -13,7 +13,7 @@
 
 #include <QDir>
 
-#include "TympanTestsConfig.hpp"
+#include "TympanTestsConfig.h"
 
 using std::cout;
 using std::cerr;

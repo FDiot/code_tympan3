@@ -6,7 +6,7 @@
 #include "Tympan/models/business/altimetry_file_reader.h"
 #include "Tympan/models/business/altimetry_file_reader_impl.h"
 
-#include "TympanTestsConfig.hpp"
+#include "TympanTestsConfig.h"
 
 using namespace tympan;
 

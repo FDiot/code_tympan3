@@ -16,7 +16,7 @@
 #include "Tympan/gui/app/TYDXFBDTOPOImporter.h"
 
 #include "testutils.h"
-#include "TympanTestsConfig.hpp"
+#include "TympanTestsConfig.h"
 
 using std::cout;
 using std::endl;
