@@ -32,11 +32,6 @@ configure_file(
 
 add_subdirectory(test_utils)
 
-add_executable(test_example test_example.cpp)
-configure_gtest_target(TARGET test_example
-  RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
-  FOLDER ${CURRENT_FOLDER})
-
 add_executable(print_environment test_environment.cpp)
 configure_gtest_target(TARGET print_environment
   RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
