@@ -183,7 +183,7 @@ cdef class Site:
             cpp_site = cy.declare(cy.pointer(TYSiteNode))
             cpp_site = downcast_sitenode(subsite_geonodes[i].getRealPointer().getElement())
             site = Site()
-            site.matrix = subsite_geonodes[i].getRealPointer().getMatrix()
+            site.matrix = self.matrix.dot(subsite_geonodes[i].getRealPointer().getMatrix())
             site.thisptr = SmartPtr[TYSiteNode](cpp_site)
             subsites.append(site)
         return subsites
@@ -381,7 +381,7 @@ cdef class Site:
             cpp_lake = downcast_plan_eau(cpp_lakes[i].getRealPointer().getElement())
             lake = Lake()
             lake.thisptr = cpp_lake
-            lake.matrix = cpp_lakes[i].getRealPointer().getMatrix()
+            lake.matrix = self.matrix.dot(cpp_lakes[i].getRealPointer().getMatrix())
             lake.thisgeonodeptr = cpp_lakes[i]
             lakes.append(lake)
         return lakes
@@ -401,7 +401,7 @@ cdef class Site:
                 cpp_mat_areas[i].getRealPointer().getElement())
             area = MaterialArea()
             area.thisptr = cpp_mat_area
-            area.matrix = cpp_mat_areas[i].getRealPointer().getMatrix()
+            area.matrix = self.matrix.dot(cpp_mat_areas[i].getRealPointer().getMatrix())
             area.thisgeonodeptr = cpp_mat_areas[i]
             mareas.append(area)
         return mareas
@@ -421,7 +421,7 @@ cdef class Site:
                 cpp_lcurves[i].getRealPointer().getElement())
             lcurve = LevelCurve()
             lcurve.thisptr = cpp_lcurve
-            lcurve.matrix = cpp_lcurves[i].getRealPointer().getMatrix()
+            lcurve.matrix = self.matrix.dot(cpp_lcurves[i].getRealPointer().getMatrix())
             lcurve._altitude = cpp_lcurve.getAltitude()
             lcurve.thisgeonodeptr = cpp_lcurves[i]
             lcurves.append(lcurve)

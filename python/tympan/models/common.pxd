@@ -10,7 +10,7 @@ from tympan cimport core as tycore
 cdef extern from "Tympan/models/common/3d.h":
 
     cdef cppclass OMatrix:
-        pass
+        OMatrix dot "operator*"(const OMatrix& mat)
     OPoint3D dot "operator*"(const OMatrix& mat, const OPoint3D& point)
     # because "import operator*" triggers a syntax error
 
