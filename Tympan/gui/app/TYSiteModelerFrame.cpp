@@ -575,7 +575,6 @@ void TYSiteModelerFrame::updateVisibilityElementSite()
     updateAltiOpacity();
 
     _pSite->getGraphicObject()->setVisible(_showImageSite);
-    //_pSite->setUseTopoFile(_showImageSite);
 }
 
 void TYSiteModelerFrame::enableAltimetryComputation()

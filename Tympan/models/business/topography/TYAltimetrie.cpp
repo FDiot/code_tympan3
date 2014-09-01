@@ -278,10 +278,6 @@ void TYAltimetrie::plugBackTriangulation(
     setIsGeometryModified(false);
 }
 
-// The method compute is obsolete and thus commented out
-// Asignificant part of it has been moved into the plugBackTriangulation method
-// void TYAltimetrie::compute(const TYTabPoint& points, const double& delaunay)//virtual
-
 bool TYAltimetrie::addFace(LPTYPolygon pFace)
 {
     assert(pFace);
