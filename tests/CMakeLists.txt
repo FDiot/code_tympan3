@@ -30,6 +30,9 @@ configure_file(
     @ONLY
 )
 
+file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 add_subdirectory(test_utils)
 
 add_executable(print_environment test_environment.cpp)
@@ -37,11 +40,24 @@ configure_gtest_target(TARGET print_environment
   RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
   FOLDER ${CURRENT_FOLDER})
 
-file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-
 add_subdirectory(business_logic)
 add_subdirectory(gui)
 add_subdirectory(io)
 add_subdirectory(SolverDataModel)
-add_subdirectory(3rd-party)
+
+file (GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp )
+
+# Main loop for all CPP test files.
+foreach (testfile ${TESTS_SRC})
+  get_filename_component (basename ${testfile} NAME_WE)
+  add_executable(${basename} ${testfile} test_main.cpp)
+  configure_gtest_target(TARGET ${basename}
+             FOLDER ${CURRENT_FOLDER}
+             RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
+             LIBS testutils ${TYMPAN_MODULES})
+endforeach (testfile)
+
+target_link_libraries(test_3rdparty_nmpb2008 RoadEmissionNMPB)
+target_link_libraries(test_3rdparty_rply ${RPLY_LIB})
+set_property(TARGET test_3rdparty_rply
+  APPEND PROPERTY INCLUDE_DIRECTORIES ${RPLY_INCLUDE_DIRECTORY})
