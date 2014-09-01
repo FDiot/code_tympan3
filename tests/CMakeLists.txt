@@ -33,12 +33,15 @@ configure_file(
 file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-add_subdirectory(test_utils)
+file(GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/testutils.cpp )
+add_library(testutils STATIC ${TESTS_SRC} )
+set_property(TARGET testutils PROPERTY FOLDER ${CURRENT_FOLDER})
+add_dependencies(testutils GTest ${TYMPAN_MODULES} )
+# 'CMAKE_THREAD_LIBS_INIT' can be empty on Windows.
+target_link_libraries(testutils gtest ${CMAKE_THREAD_LIBS_INIT} ${TYMPAN_MODULES})
 
-add_executable(print_environment test_environment.cpp)
-configure_gtest_target(TARGET print_environment
-  RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
-  FOLDER ${CURRENT_FOLDER})
+# Unit tests dedicated to this directory only.
+add_subdirectory(tests)
 
 add_subdirectory(business_logic)
 add_subdirectory(gui)
