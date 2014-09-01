@@ -10,7 +10,7 @@
 #include <boost/foreach.hpp>
 
 #include "testutils.h"
-#include "TympanTestsConfig.hpp"
+#include "TympanTestsConfig.h"
 
 using namespace std;
 

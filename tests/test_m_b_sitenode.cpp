@@ -7,7 +7,7 @@
  */
 
 #include "gtest/gtest.h"
-#include "tests/TympanTestsConfig.hpp"
+#include "tests/TympanTestsConfig.h"
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/models/business/xml_project_util.h"

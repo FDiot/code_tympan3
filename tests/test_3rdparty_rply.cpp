@@ -17,7 +17,7 @@ using std::string;
 using std::deque;
 
 #include "gtest/gtest.h"
-#include "TympanTestsConfig.hpp"
+#include "TympanTestsConfig.h"
 
 #include "rply.h"
 
