@@ -242,16 +242,19 @@ cdef class SolverModelBuilder:
         """
         infra = cy.declare(cy.pointer(tybusiness.TYInfrastructure))
         infra = site.thisptr.getRealPointer().getInfrastructure().getRealPointer()
-        # Retrieve all the infrastructure sources, each one linked to a list of
-        # sub-sources
-        infra.getAllSrcs(comp.thisptr.getRealPointer(), macro2micro_sources)
+        # Retrieve all the infrastructure sources for the current site, each
+        # one linked to a list of sub-sources
+        infra_sources = cy.declare(map[tybusiness.TYElem_ptr,
+                                     vector[SmartPtr[tybusiness.TYGeometryNode]]])
+        infra.getAllSrcs(comp.thisptr.getRealPointer(), infra_sources)
+        # Go through the sources of the current site and build solver sources accordingly
         sources = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         sources_of_elt = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         its = cy.declare(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
-        its = macro2micro_sources.begin()
+        its = infra_sources.begin()
         nb_sources = 0
         # For each business macro source (ex: machine, building...)
-        while its != macro2micro_sources.end():
+        while its != infra_sources.end():
             sources_of_elt = deref(its).second
             macro_source = cy.declare(cy.pointer(tybusiness.TYElement))
             macro_source = deref(its).first
@@ -300,8 +303,13 @@ cdef class SolverModelBuilder:
                     source_idx = self.model.make_source(ppoint[0], subsource.getSpectre()[0], pdirectivity)
                     # Record where it has been stored
                     bus2solv_sources[sources_of_elt[i]] = source_idx
+                    # Copy source mapping to macro2micro_sources
+                    macro2micro_sources[deref(its).first] = deref(its).second
                     nb_sources += 1
             inc(its)
+        # Recurse on subsites
+        for subsite in site.subsites:
+            nb_sources += self.build_sources(subsite, comp)
         return nb_sources
 
     @cy.locals(site=tybusiness.Site, comp=tybusiness.Computation)
@@ -385,6 +393,9 @@ cdef class SolverModelBuilder:
                 pmat = self.model.make_material(mat_name, mat_cspec)
                 actri = cy.address(self.model.triangle(tgles_idx[i]))
                 actri.made_of = pmat
+        # Recurse on subsites
+        for subsite in site.subsites:
+            self.process_infrastructure(subsite)
 
     def process_mesh(self, points, triangles):
         """ Create nodes and acoustic triangles in the model to represent the
@@ -408,7 +419,6 @@ cdef class SolverModelBuilder:
                 map_to_model_node_idx[tri.p2],
                 map_to_model_node_idx[tri.p3])
         return (map_to_model_node_idx, map_to_model_tgle_idx)
-
 
     @cy.locals(site=tybusiness.Site)
     def process_altimetry(self, site):
@@ -435,3 +445,6 @@ cdef class SolverModelBuilder:
             mat_res = ground.resistivity
             pmat = self.model.make_material(mat_name, mat_res)
             actri.made_of = pmat
+        # Recurse on subsites
+        for subsite in site.subsites:
+            self.process_altimetry(subsite)
