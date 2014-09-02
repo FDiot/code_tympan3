@@ -35,14 +35,8 @@
 #include <QVBoxLayout>
 #include <QBoxLayout>
 #include <QHeaderView>
-// CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
-  #include <QMdiArea>
-  #include <QMdiSubWindow>
-#else
-  #include <QWorkspace>
-#endif
-// CLM-NT35 End
+#include <QMdiArea>
+#include <QMdiSubWindow>
 
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/OLocalizator.h"
@@ -514,20 +508,12 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
 
                         if (pGraphicObject->getHighlightState())
                         {
-                            // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
                             QList<QMdiSubWindow*> windows =    getTYMainWnd()->getWorkspace()->subWindowList();
-#else
-                            QList<QWidget*> windows =  getTYMainWnd()->getWorkspace()->windowList();
-#endif
-                            // CLM-NT35 End
+
                             for (int i = 0; i < int(windows.count()); ++i)
                             {
-#ifdef USE_QMDIAREA
                                 QWidget* internal_window = windows.at(i)->widget();
-#else
-                                QWidget* internal_window = windows.at(i);
-#endif
+
                                 QString qClassName = internal_window->metaObject()->className();
                                 if (qClassName == QString("TYSiteModelerFrame"))
                                 {
@@ -551,20 +537,13 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                                 NxVec3 oBoxMax = NxVec3(oBox._max._x, oBox._max._z, -oBox._max._y);
                                 NxVec3 oBoxCenter = oBoxMin + ((oBoxMax - oBoxMin) / 2);
                                 NxVec3 center = repereCenter + oBoxCenter;
-                                // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
+
                                 QList<QMdiSubWindow*> windows =    getTYMainWnd()->getWorkspace()->subWindowList();
-#else
-                                QList<QWidget*> windows =  getTYMainWnd()->getWorkspace()->windowList();
-#endif
-                                // CLM-NT35 End
+
                                 for (int i = 0; i < int(windows.count()); ++i)
                                 {
-#ifdef USE_QMDIAREA
                                     QWidget* internal_window = windows.at(i)->widget();
-#else
-                                    QWidget* internal_window = windows.at(i);
-#endif
+
                                     if (dynamic_cast<TYModelerFrame*>(internal_window) != nullptr)
                                     {
                                         TYRenderWindowInteractor* pView = ((TYModelerFrame*) internal_window)->getView();
@@ -579,20 +558,12 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                         //il faut un update avant d'enlever l'etat de "locate" sur l'objet
                         if (!pGraphicObject->getHighlightState())
                         {
-                            // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
                             QList<QMdiSubWindow*> windows =    getTYMainWnd()->getWorkspace()->subWindowList();
-#else
-                            QList<QWidget*> windows =  getTYMainWnd()->getWorkspace()->windowList();
-#endif
-                            // CLM-NT35 End
+
                             for (int i = 0; i < int(windows.count()); ++i)
                             {
-#ifdef USE_QMDIAREA
                                 QWidget* internal_window = windows.at(i)->widget();
-#else
-                                QWidget* internal_window = windows.at(i);
-#endif
+
                                 QString qClassName = internal_window->metaObject()->className();
                                 if (qClassName == QString("TYSiteModelerFrame"))
                                 {
