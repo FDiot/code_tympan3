@@ -72,7 +72,18 @@ TYSiteModelerFrame::TYSiteModelerFrame(QWidget* parent, const char* name, Qt::WF
 {
     init();
     setProjet(new TYProjet());
-
+    if (_pSite != nullptr && _pSite->getProjet() != nullptr)
+    {
+        LPTYSiteNode rootSite = _pSite->getProjet()->getSite();
+        if (rootSite->getAltimetryUpToDate())
+        {
+            _pAltiBtn->setEnabled(false);
+        }
+        else
+        {
+            _pAltiBtn->setEnabled(true);
+        }
+    }
     setSelectMaillageBox(TR("id_none_select_maillage"));
     updateSelectMaillageBox();
     updateVisibilityElementSite();
@@ -85,7 +96,18 @@ TYSiteModelerFrame::TYSiteModelerFrame(LPTYProjet pProjet, QWidget* parent, cons
 
     assert(pProjet);
     setProjet(pProjet);
-
+    if (_pSite != nullptr && _pSite->getProjet() != nullptr)
+    {
+        LPTYSiteNode rootSite = _pSite->getProjet()->getSite();
+        if (rootSite->getAltimetryUpToDate())
+        {
+            _pAltiBtn->setEnabled(false);
+        }
+        else
+        {
+            _pAltiBtn->setEnabled(true);
+        }
+    }
     setSelectMaillageBox(TR("id_none_select_maillage"));
     updateSelectMaillageBox();
     updateVisibilityElementSite();
@@ -98,7 +120,20 @@ TYSiteModelerFrame::TYSiteModelerFrame(LPTYSiteNode pSite, QWidget* parent, cons
 
     assert(pSite);
     setSite(pSite);
-
+    // Check if altimetry is up to date on the root site node.
+    // If it is, no need to enable the button triggering its computation
+    if (_pSite->getProjet() != nullptr)
+    {
+        LPTYSiteNode rootSite = _pSite->getProjet()->getSite();
+        if (rootSite->getAltimetryUpToDate())
+        {
+            _pAltiBtn->setEnabled(false);
+        }
+        else
+        {
+            _pAltiBtn->setEnabled(true);
+        }
+    }
     setSelectMaillageBox(TR("id_none_select_maillage"));
     updateSelectMaillageBox();
     updateVisibilityElementSite();
@@ -194,17 +229,7 @@ void TYSiteModelerFrame::init()
     _pCtrlLayout->addWidget(_pAltiBtn, 0);
     _pCtrlLayout->addStretch(1);
     _pAltiBtn->setFixedSize(24, 24);
-    // Check if altimetry is up to date on the root site node.
-    // If it is, no need to enable the button triggering its computation
-    if (_pSite != nullptr &&_pSite->getProjet() != nullptr)
-    {
-        LPTYSiteNode rootSite = _pSite->getProjet()->getSite();
-        if (rootSite->getAltimetryUpToDate())
-        {
-            _pAltiBtn->setEnabled(false);
-        }
-    }
-
+    _pAltiBtn->setEnabled(false);
     connect(_pAltiBtn, SIGNAL(clicked()), this, SLOT(calculAltimetrie()));
 
     // Vue de dessus
