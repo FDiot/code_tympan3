@@ -23,13 +23,7 @@
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "TYCustomPopupMenu.h"
 
-// CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
-  #include <QMdiArea>
-#else
-  #include <QWorkspace>
-#endif
-// CLM-NT35 End
+#include <QMdiArea>
 
 
 TYCustomPopupMenu::TYCustomPopupMenu(QWidget* parent)

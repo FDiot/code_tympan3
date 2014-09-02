@@ -28,19 +28,12 @@
 #include <qdialog.h>
 #include <qfiledialog.h>
 #include <qmessagebox.h>
-//Added by qt3to4:
 #include <QPixmap>
 #include <QVBoxLayout>
 #include <QBoxLayout>
 #include <QHeaderView>
-// CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
-  #include <QMdiArea>
-  #include <QMdiSubWindow>
-#else
-  #include <QWorkspace>
-#endif
-// CLM-NT35 End
+#include <QMdiArea>
+#include <QMdiSubWindow>
 
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/OLocalizator.h"
@@ -58,8 +51,6 @@
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "TYSiteFrame.h"
-
-
 
 #define TR(id) OLocalizator::getString("TYSiteFrame", (id))
 #define IMG(id) OLocalizator::getPicture("TYSiteFrame", (id))
@@ -1249,18 +1240,12 @@ void TYSiteFrame::localise(TYElement* pElement, TYElementGraphic* pGraphicObject
         pGraphicObject->highlight(!pGraphicObject->getHighlightState());
         if (pGraphicObject->getHighlightState())
         {
-#ifdef USE_QMDIAREA
             QList<QMdiSubWindow*> windows = getTYMainWnd()->getWorkspace()->subWindowList();
-#else
-            QList<QWidget*> windows = getTYMainWnd()->getWorkspace()->windowList();
-#endif
+
             for (int i = 0; i < int(windows.count()); ++i)
             {
-#ifdef USE_QMDIAREA
                 QWidget* internal_window = windows.at(i)->widget();
-#else
-                QWidget* internal_window = windows.at(i);
-#endif
+
                 QString qClassName = internal_window->metaObject()->className();
                 if (qClassName == QString("TYSiteModelerFrame"))
                 {
@@ -1283,18 +1268,13 @@ void TYSiteFrame::localise(TYElement* pElement, TYElementGraphic* pGraphicObject
                 NxVec3 oBoxMax = NxVec3(oBox._max._x, oBox._max._z, -oBox._max._y);
                 NxVec3 oBoxCenter = oBoxMin + ((oBoxMax - oBoxMin) / 2);
                 NxVec3 center = repereCenter + oBoxCenter;
-#ifdef USE_QMDIAREA
+
                 QList<QMdiSubWindow*> windows = getTYMainWnd()->getWorkspace()->subWindowList();
-#else
-                QList<QWidget*> windows = getTYMainWnd()->getWorkspace()->windowList();
-#endif
+
                 for (int i = 0; i < int(windows.count()); ++i)
                 {
-#ifdef USE_QMDIAREA
                     QWidget* internal_window = windows.at(i)->widget();
-#else
-                    QWidget* internal_window = windows.at(i);
-#endif
+
                     if (dynamic_cast<TYModelerFrame*>(internal_window) != nullptr)
                     {
                         TYRenderWindowInteractor* pView = ((TYModelerFrame*) internal_window)->getView();
@@ -1313,18 +1293,12 @@ void TYSiteFrame::localise(TYElement* pElement, TYElementGraphic* pGraphicObject
         //il faut un update avant d'enlever l'etat de "locate" sur l'objet
         if (!pGraphicObject->getHighlightState())
         {
-#ifdef USE_QMDIAREA
             QList<QMdiSubWindow*> windows = getTYMainWnd()->getWorkspace()->subWindowList();
-#else
-            QList<QWidget*> windows = getTYMainWnd()->getWorkspace()->windowList();
-#endif
+
             for (int i = 0; i < int(windows.count()); ++i)
             {
-#ifdef USE_QMDIAREA
                 QWidget* internal_window = windows.at(i)->widget();
-#else
-                QWidget* internal_window = windows.at(i);
-#endif
+
                 QString qClassName = internal_window->metaObject()->className();
                 if (qClassName == QString("TYSiteModelerFrame"))
                 {
@@ -1388,6 +1362,7 @@ void TYSiteFrame::importFromLib(const unsigned int& filter, TYElement* pElement)
         }
     }
 }
+
 void TYSiteFrame::addEltXML(const char* className, TYElement* pElement)
 {
     assert(pElement);
