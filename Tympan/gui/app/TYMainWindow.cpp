@@ -22,14 +22,6 @@
 //Added by qt3to4:
 #include <QPixmap>
 #include <QCloseEvent>
-// CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
-  #include <QMdiArea>
-  #include <QMdiSubWindow>
-#else
-  #include <QWorkspace>
-#endif
-// CLM-NT35 End
 #include <qaction.h>
 #include <qdir.h>
 #include <qslider.h>
@@ -50,6 +42,8 @@
 #include <qtextbrowser.h>
 #include <qtextstream.h>
 #include <QDockWidget>
+#include <QMdiArea>
+#include <QMdiSubWindow>
 
 #include "Tympan/core/config.h"
 #include "Tympan/models/business/acoustic/TYSpectre.h"
@@ -83,7 +77,6 @@
 #include "Tympan/gui/app/TYApplication.h"
 #include "TYMainWindow.h"
 
-
 #define TR(id) OLocalizator::getString("TYMainWindow", (id))
 #define IMG(id) OLocalizator::getPicture("TYMainWindow", (id))
 
@@ -109,13 +102,8 @@ TYMainWindow::TYMainWindow():
     _closeAndQuit = true;
 
     // Gestion du workspace
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
     _pWorkspace = new QMdiArea();
-#else
-    _pWorkspace = new QWorkspace();
-#endif
-    // CLM-NT35 End
+
     setCentralWidget(_pWorkspace);
 
 
@@ -443,11 +431,8 @@ TYMainWindow::TYMainWindow():
     QObject::connect(_pProjetFrame, SIGNAL(changeCurrentCalcul(LPTYCalcul)), _pSiteFrame, SLOT(setCurrentCalcul(LPTYCalcul)));
     QObject::connect(_pProjetFrame, SIGNAL(changeSite(LPTYSiteNode)), _pSiteFrame, SLOT(setSiteNodeRoot(LPTYSiteNode)));
     QObject::connect(_pProjetFrame, SIGNAL(changeCurrentCalcul(LPTYCalcul)), this, SLOT(updateCurCalcul()));
-#ifdef USE_QMDIAREA
     QObject::connect(_pWorkspace, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated()));
-#else
-    QObject::connect(_pWorkspace, SIGNAL(windowActivated(QWidget*)), this, SLOT(subWindowActivated()));
-#endif
+
     // Connecte l'Action Manager de l'Application
     connectDefaultActionManager();
 
@@ -629,13 +614,8 @@ void TYMainWindow::makeBatimentModeler(LPTYBatiment pBatiment)
 {
     TYBatimentModelerFrame* pBatimentModeler = new TYBatimentModelerFrame(NULL, _pWorkspace, "TYBatimentModelerFrame");
     pBatimentModeler->setAttribute(WA_DeleteOnClose);
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
     _pWorkspace->addSubWindow(pBatimentModeler)->setObjectName("TYBatimentModelerFrame");
-#else
-    _pWorkspace->addWindow(pBatimentModeler)->setObjectName("TYBatimentModelerFrame");
-#endif
-    // CLM-NT35 End
+
     QObject::connect(pBatimentModeler, SIGNAL(editorModeChanged(int)), this, SLOT(saveCurBatimentMode(int)));
     QObject::connect(pBatimentModeler, SIGNAL(frameResized()), this, SLOT(refreshWindowTitle()));
 
@@ -650,13 +630,9 @@ void TYMainWindow::makeMachineModeler(LPTYMachine pMachine)
 {
     TYMachineModelerFrame* pMachineModeler = new TYMachineModelerFrame(NULL, _pWorkspace, "TYMachineModelerFrame");
     pMachineModeler->setAttribute(WA_DeleteOnClose);
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
+
     _pWorkspace->addSubWindow(pMachineModeler)->setObjectName("TYMachineModelerFrame");
-#else
-    _pWorkspace->addWindow(pMachineModeler)->setObjectName("TYMachineModelerFrame");
-#endif
-    // CLM-NT35 End
+
     QObject::connect(pMachineModeler, SIGNAL(editorModeChanged(int)), this, SLOT(saveCurMachineMode(int)));
     QObject::connect(pMachineModeler, SIGNAL(frameResized()), this, SLOT(refreshWindowTitle()));
 
@@ -671,13 +647,9 @@ void TYMainWindow::makeSiteModeler(LPTYSiteNode pSite)
 {
     TYSiteModelerFrame* pSiteModeler = new TYSiteModelerFrame(pSite, _pWorkspace, "TYSiteModelerFrame");
     pSiteModeler->setAttribute(WA_DeleteOnClose);
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
+
     _pWorkspace->addSubWindow(pSiteModeler)->setObjectName("TYSiteModelerFrame");
-#else
-    _pWorkspace->addWindow(pSiteModeler)->setObjectName("TYSiteModelerFrame");
-#endif
-    // CLM-NT35 End
+
     QObject::connect(pSiteModeler, SIGNAL(editorModeChanged(int)), this, SLOT(saveCurSiteMode(int)));
     QObject::connect(pSiteModeler, SIGNAL(frameResized()), this, SLOT(refreshWindowTitle()));
 
@@ -689,13 +661,9 @@ void TYMainWindow::makeProjetModeler(LPTYProjet pProjet)
 {
     TYSiteModelerFrame* pSiteModeler = new TYSiteModelerFrame(pProjet, _pWorkspace, "TYSiteModelerFrame");
     pSiteModeler->setAttribute(WA_DeleteOnClose);
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
+
     _pWorkspace->addSubWindow(pSiteModeler)->setObjectName("TYSiteModelerFrame");
-#else
-    _pWorkspace->addWindow(pSiteModeler)->setObjectName("TYSiteModelerFrame");
-#endif
-    // CLM-NT35 End
+
     QObject::connect(pSiteModeler, SIGNAL(editorModeChanged(int)), this, SLOT(saveCurSiteMode(int)));
     QObject::connect(pSiteModeler, SIGNAL(frameResized()), this, SLOT(refreshWindowTitle()));
 
@@ -730,20 +698,12 @@ void TYMainWindow::connectDefaultActionManager()
 
 void TYMainWindow::updateModelers(bool clipping /*=true*/, bool axesAndGrid /*=true*/, bool displayList/*=true*/)
 {
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
     QList<QMdiSubWindow*> windows = _pWorkspace->subWindowList();
-#else
-    QList<QWidget*> windows = _pWorkspace->windowList();
-#endif
-    // CLM-NT35 End
+
     for (int i = 0; i < int(windows.count()); ++i)
     {
-#ifdef USE_QMDIAREA
         QWidget* internal_window = windows.at(i)->widget();
-#else
-        QWidget* internal_window = windows.at(i);
-#endif
+
         TYModelerFrame* pInW = dynamic_cast<TYModelerFrame*>(internal_window);
         if (pInW != nullptr)
         {
@@ -764,19 +724,12 @@ void TYMainWindow::updateModelers(bool clipping /*=true*/, bool axesAndGrid /*=t
 
 void TYMainWindow::updateModelersElementGraphic(bool force /* = false */)
 {
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
     QList<QMdiSubWindow*> windows = _pWorkspace->subWindowList();
-#else
-    QList<QWidget*> windows = _pWorkspace->windowList();
-#endif
+
     for (int i = 0; i < int(windows.count()); ++i)
     {
-#ifdef USE_QMDIAREA
         QWidget* internal_window = windows.at(i)->widget();
-#else
-        QWidget* internal_window = windows.at(i);
-#endif
+
         TYModelerFrame* pInW = dynamic_cast<TYModelerFrame*>(internal_window);
         if (pInW != nullptr)
         {
@@ -788,20 +741,11 @@ void TYMainWindow::updateModelersElementGraphic(bool force /* = false */)
 
 void TYMainWindow::closeModeler(const TYElement* pElement)
 {
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
     QList<QMdiSubWindow*> windows = _pWorkspace->subWindowList();
-#else
-    QList<QWidget*> windows = _pWorkspace->windowList();
-#endif
 
     for (int i = 0; i < int(windows.count()); ++i)
     {
-#ifdef USE_QMDIAREA
         QWidget* internal_window = windows.at(i)->widget();
-#else
-        QWidget* internal_window = windows.at(i);
-#endif
         QWidget* container_window = windows.at(i);
 
         if (dynamic_cast<TYModelerFrame*>(internal_window) != nullptr)
@@ -835,12 +779,8 @@ void TYMainWindow::windowsMenuAboutToShow()
     QAction* cascadeId = _pWindowsMenu->addAction(TR("id_menuitem_cascade"), _pWorkspace, SLOT(cascade()));
     QAction* tileId = _pWindowsMenu->addAction(TR("id_menuitem_tile"), _pWorkspace, SLOT(tile()));
 
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
     QList<QMdiSubWindow*> windows = _pWorkspace->subWindowList();
-#else
-    QList<QWidget*> windows = _pWorkspace->windowList();
-#endif
+
     if (windows.isEmpty())
     {
         cascadeId->setEnabled(false);
@@ -857,23 +797,14 @@ void TYMainWindow::windowsMenuAboutToShow()
 
     for (int i = 0; i < int(windows.count()); ++i)
     {
-#ifdef USE_QMDIAREA
         QWidget* internal_window = windows.at(i)->widget();
-#else
-        QWidget* internal_window = windows.at(i);
-#endif
+
         if (!internal_window) { break; } // Securite
 
         QAction* id = _pWindowsMenu->addAction(internal_window->windowTitle(),
                                                this, SLOT(windowsMenuActivated()));
         id->setData(i);
-        // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
         id->setChecked(_pWorkspace->activeSubWindow() == windows.at(i));
-#else
-        id->setChecked(_pWorkspace->activeWindow() == windows.at(i));
-#endif
-        // CLM-NT35 End
     }
 }
 
@@ -881,13 +812,8 @@ void TYMainWindow::windowsMenuActivated()
 {
     QAction* action = (QAction*)sender();
     int id = action->data().toInt();
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
+
     QWidget* pWidget = _pWorkspace->subWindowList().at(id)->widget();
-#else
-    QWidget* pWidget = _pWorkspace->windowList().at(id);
-#endif
-    // CLM-NT35 End
 
     if (pWidget)
     {
@@ -920,19 +846,12 @@ void TYMainWindow::setDefaultCameraMode()
 void TYMainWindow::subWindowActivated()
 {
     QWidget* pW = NULL;
-#ifdef USE_QMDIAREA
     QMdiSubWindow* subWindow = _pWorkspace->activeSubWindow();
     if (_pWorkspace->subWindowList().count() > 0 && subWindow)
     {
         pW = subWindow->widget();
     }
-#else
-    QWidget* subWindow = _pWorkspace->activeWindow();
-    if (_pWorkspace->windowList().count() > 0 && subWindow)
-    {
-        pW = subWindow;
-    }
-#endif
+
     _pPrintAction->setEnabled(false);
 
     // Toolbars modeler
@@ -1321,13 +1240,10 @@ void TYMainWindow::open()
         TYApplication::setCurrentFileName(fileName);
         getTYApp()->setCurrentDirName(pDlg->getDirName());
 
-
         TYElement::setIsSavedOk(false); // Tous les elements sont up to date apres le chargement
 
         TYApplication::restoreOverrideCursor();
     }
-
-
 }
 
 void TYMainWindow::open(vector<LPTYElement>& tabElem, const bool& bRegenerate /*=false*/)
@@ -1384,13 +1300,7 @@ void TYMainWindow::close()
     if (_closeAndQuit)
     {
         // Fermeture de toutes les fenetres
-        // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
         QList<QMdiSubWindow*> windows = _pWorkspace->subWindowList();
-#else
-        QList<QWidget*> windows = _pWorkspace->windowList();
-#endif
-        // CLM-NT35 End
 
         for (int i = 0; i < int(windows.count()); ++i)
         {

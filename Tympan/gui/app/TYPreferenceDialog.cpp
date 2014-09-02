@@ -32,16 +32,9 @@
 #include <qpushbutton.h>
 #include <qvalidator.h>
 #include <qfiledialog.h>
-//Added by qt3to4:
 #include <QHideEvent>
-// CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
-  #include <QMdiSubWindow>
-  #include <QMdiArea>
-#else
-  #include <QWorkspace>
-#endif
-// CLM-NT35 End
+#include <QMdiSubWindow>
+#include <QMdiArea>
 
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/OLocalizator.h"
@@ -53,7 +46,6 @@
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "TYPreferenceDialog.h"
-
 
 #define TR(id) OLocalizator::getString("TYPreferenceDialog", (id))
 
@@ -1947,20 +1939,12 @@ void TYPreferenceDialog::savePreferences()
     // On restaure le directory courant precedent
     TYPreferenceManager::setCurrentDirectory(oldDir);
 
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
     QList<QMdiSubWindow*> windows = getTYMainWnd()->getWorkspace()->subWindowList();
-#else
-    QList<QWidget*> windows = getTYMainWnd()->getWorkspace()->windowList();
-#endif
-    // CLM-NT35 End
+
     for (int i = 0; i < int(windows.count()); ++i)
     {
-#ifdef USE_QMDIAREA
         QWidget* internal_window = windows.at(i)->widget();
-#else
-        QWidget* internal_window = windows.at(i);
-#endif
+
         TYModelerFrame* pM = dynamic_cast<TYModelerFrame*>(internal_window);
         if (pM != nullptr)
         {
