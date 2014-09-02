@@ -32,6 +32,7 @@
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "Tympan/gui/app/TYRenderWindowInteractor.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYBatimentModelerFrame.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
 #include "TYSilosEditor.h"
@@ -233,6 +234,7 @@ void TYSilosEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::
                 pAction = new TYAddElementToInfraAction(pBatNode, pSite->getInfrastructure(), _pModeler, TR("id_action_addetage"));
 
             }
+            getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
 
             if (pAction != NULL) { _pModeler->getActionManager()->addAction(pAction); }
             TYElement::setIsSavedOk(true);
