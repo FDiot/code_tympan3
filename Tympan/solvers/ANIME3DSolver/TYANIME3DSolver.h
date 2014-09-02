@@ -111,8 +111,8 @@ protected:
     /// Nombre de polygones presents dans _tabPolygon
     size_t _tabPolygonSize;
 
-    Logger logger;
-    FILE logs;
+    //Logger logger;
+    //FILE logs;
 
     /*!< List of sources used by the solver */
     //TYTabSourcePonctuelleGeoNode _tabSources;
