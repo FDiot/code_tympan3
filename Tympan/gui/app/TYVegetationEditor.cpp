@@ -28,6 +28,7 @@
 #include "Tympan/gui/widgets/TYSolWidget.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYActions.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
@@ -62,6 +63,7 @@ void TYVegetationEditor::endVegetation()
 
     if (pTerrain->edit(_pModeler) == QDialog::Accepted)
     {
+        getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
         //LPTYTerrain pTerrain = new TYTerrain();
         //pTerrain->setSol(pSol);
         TYTabPoint tabPts = this->getSavedPoints();

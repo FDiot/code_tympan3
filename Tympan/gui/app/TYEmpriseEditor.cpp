@@ -74,6 +74,7 @@ void TYEmpriseEditor::endEmprise()
     {
         if (_pModeler->askForResetResultat())
         {
+            getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
             // On met les points a altitude 0
             for (unsigned int i = 0; i < getSavedPoints().size(); i++)
             {
