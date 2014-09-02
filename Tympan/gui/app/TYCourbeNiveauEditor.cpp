@@ -100,10 +100,10 @@ void TYCourbeNiveauEditor::endCourbeNiveau()
             _pModeler->getActionManager()->addAction(pAction);
 
             // On demande la mise à jour de l'altimetrie globale du site
+            getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
             TYProjet* pProjet = getTYApp()->getCurProjet();
             if (pProjet)
             {
-                getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
                 pProjet->getSite()->getTopographie()->updateGraphicTree();
             }
 

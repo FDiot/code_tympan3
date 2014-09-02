@@ -63,12 +63,7 @@ void TYRouteEditor::endRoute()
 
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
 
-        // On met a jour l'altimetrie globale du site
-        TYProjet* pProjet = getTYApp()->getCurProjet();
-        if (pProjet)
-        {
-            getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
-        }
+        getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
         // Make sure altimetry was initialized before using it
         if (pSite->getAltimetry()->containsData())
         {
@@ -99,6 +94,7 @@ void TYRouteEditor::endRoute()
             // repasse en mode camera selection
             getTYMainWnd()->setDefaultCameraMode();
 
+            TYProjet* pProjet = getTYApp()->getCurProjet();
             pProjet->getSite()->updateGraphicTree();
             pProjet->getSite()->updateGraphic();
             refreshSiteFrame();

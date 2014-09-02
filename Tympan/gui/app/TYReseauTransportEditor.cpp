@@ -62,11 +62,7 @@ void TYReseauTransportEditor::endReseauTransport()
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
 
         // On met a jour l'altimetrie globale du site
-        TYProjet* pProjet = getTYApp()->getCurProjet();
-        if (pProjet)
-        {
-            getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
-        }
+        getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
 
         // Make sure altimetry was initialized before using it
         if (pSite->getAltimetry()->containsData())
@@ -100,6 +96,7 @@ void TYReseauTransportEditor::endReseauTransport()
             TYAction* pAction = new TYAddElementToInfraAction((LPTYElement&) pReseauTransport, pSite->getInfrastructure(), _pModeler, TR("id_action_addrestrans"));
             _pModeler->getActionManager()->addAction(pAction);
 
+            TYProjet* pProjet = getTYApp()->getCurProjet();
             pProjet->getSite()->getInfrastructure()->updateGraphicTree();
             pProjet->getSite()->updateGraphic();
             refreshSiteFrame();
