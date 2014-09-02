@@ -553,9 +553,7 @@ void TYSiteModelerFrame::updateVisibilityElementSite()
         {
             pTabPlanEauGeoNode->at(j)->getElement()->getGraphicObject()->setVisible(_showAltimetrie);
         }
-
         sites[i]->getElement()->getGraphicObject()->setVisible(false);
-        TYSiteNode::safeDownCast(sites[i]->getElement())->getAltimetry()->getGraphicObject()->setVisible(_showAltimetrie);
     }
 
     // Pour l'altimetrie (seul le site root a une alti)
