@@ -28,13 +28,8 @@
 #define __TY_MAIN_WINDOW__
 
 #include <qmainwindow.h>
-//Added by qt3to4:
-#include <QCloseEvent>
-#include <QMenu>
-
-#include "Tympan/models/business/TYProjet.h"
 #include "Tympan/gui/app/TYAppDefines.h"
-#include "TYMainWindow.h"
+#include "Tympan/models/business/TYProjet.h"
 
 class QAction;
 class QToolBar;
@@ -43,15 +38,9 @@ class QDockWidget;
 class QToolButton;
 class QButtonGroup;
 class QTextBrowser;
-// CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
+class QCloseEvent;
 class QMdiArea;
 class QMdiSubWindow;
-#else
-class QWorkspace;
-#endif
-// CLM-NT35 End
-
 
 class TYSpectreManager;
 class TYMaillageManager;
@@ -74,13 +63,7 @@ public:
      */
     virtual ~TYMainWindow();
 
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
     QMdiArea* getWorkspace() { return _pWorkspace; }
-#else
-    QWorkspace* getWorkspace() { return _pWorkspace; }
-#endif
-    // CLM-NT35 End
 
     TYModelerFrame* getCurrentModeler() { return _pCurrentModeler; }
 
@@ -424,12 +407,8 @@ protected:
 
 protected:
     ///Workspace pour la gestion MDI.
-    // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
     QMdiArea* _pWorkspace;
-#else
-    QWorkspace* _pWorkspace;
-#endif
+
     // CLM-NT35 End
 
     ///Modeler en cours d'affichage

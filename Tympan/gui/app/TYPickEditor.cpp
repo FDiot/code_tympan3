@@ -30,19 +30,12 @@
 #include <qcursor.h>
 #include <qinputdialog.h>
 #include <QMessageBox>
-//Added by qt3to4:
 #include <QBoxLayout>
 #include <QPixmap>
 #include <QGridLayout>
 #include <QHBoxLayout>
-// CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
-  #include <QMdiArea>
-  #include <QMdiSubWindow>
-#else
-  #include <QWorkspace>
-#endif
-// CLM-NT35 End
+#include <QMdiArea>
+#include <QMdiSubWindow>
 
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/OLocalizator.h"
@@ -701,26 +694,14 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             TYMur* pMur = (LPTYMur&) pElts->at(rectFound);
             pFaceMdF = new TYFaceModelerFrame(pMur, getTYMainWnd()->getWorkspace(), "face modeler");
             pFaceMdF->setAttribute(Qt::WA_DeleteOnClose);
-            // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
             getTYMainWnd()->getWorkspace()->addSubWindow(pFaceMdF)->setObjectName("TYFaceModelerFrame");
-#else
-            getTYMainWnd()->getWorkspace()->addWindow(pFaceMdF)->setObjectName("TYFaceModelerFrame");
-#endif
-            // CLM-NT35 End
         }
         else
         {
             TYAcousticRectangleNode* pAccRectNode = (LPTYAcousticRectangleNode&) pElts->at(rectFound);
             pFaceMdF = new TYFaceModelerFrame(pAccRectNode, getTYMainWnd()->getWorkspace(), "face modeler");
             pFaceMdF->setAttribute(Qt::WA_DeleteOnClose);
-            // CLM-NT35: Gestion MDI avec QT4.7
-#ifdef USE_QMDIAREA
             getTYMainWnd()->getWorkspace()->addSubWindow(pFaceMdF)->setObjectName("TYFaceModelerFrame");
-#else
-            getTYMainWnd()->getWorkspace()->addWindow(pFaceMdF)->setObjectName("TYFaceModelerFrame");
-#endif
-            // CLM-NT35 End
         }
 
         pFaceMdF->showMaximized();
