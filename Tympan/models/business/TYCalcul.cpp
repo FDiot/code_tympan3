@@ -1320,19 +1320,10 @@ bool TYCalcul::isCalculPossible(const int& nbSources, const int& nbRecepteurs, c
 
         return false;
     }
-    else if (nbSources > MAX_SOURCES)
-    {
-        OMessageManager::get()->info("Le nombre de sources est trop grand. Le maximum est de %d.", MAX_SOURCES);
-    }
 
     if (nbRecepteurs == 0)
     {
         OMessageManager::get()->info("Pas de recepteur");
-        return false;
-    }
-    else if (nbRecepteurs > MAX_RECEPTEURS)
-    {
-        OMessageManager::get()->info("Le nombre de recepteurs est trop grand. Le maximum est de %d.", MAX_RECEPTEURS);
         return false;
     }
 

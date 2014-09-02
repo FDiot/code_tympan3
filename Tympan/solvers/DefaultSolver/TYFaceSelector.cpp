@@ -54,7 +54,7 @@ void TYFaceSelector::selectFaces(std::deque<TYSIntersection>& tabIntersect, cons
         if ((SI.tabPoint.size() == 0)) { continue; }
 
         // Plan vertical = 0 / Plan horizontal = 1
-        TYSIntersection intersection; 
+        TYSIntersection intersection;
         bool bVertical = CalculSegmentCoupe(SI, intersection, plan[0].pt1, plan[0].pt2, plan[0].pt3, 0);
         bool bHorizontal = CalculSegmentCoupe(SI, intersection, plan[1].pt1, plan[1].pt2, plan[1].pt3, 1);
 
@@ -119,14 +119,14 @@ bool TYFaceSelector::buildPlans(TYSPlan* plan, const OSegment3D& rayon)
     return true;
 }
 
-bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourante, TYSIntersection& Intersect, OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3, const int& indice) const
+bool TYFaceSelector::CalculSegmentCoupe( const TYStructSurfIntersect& FaceCourante,
+                                         TYSIntersection& Intersect,
+                                         OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3,
+                                         const int& indice) const
 {
     bool bRes = false;
-
     OSegment3D segInter;
-
     OPlan planRayon(pt1, pt2, pt3);
-    
     if ( planRayon.intersectsSurface(FaceCourante.tabPoint, segInter) )
     {
         Intersect.bIntersect[indice] = true;
@@ -136,6 +136,9 @@ bool TYFaceSelector::CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourant
         Intersect.material = FaceCourante.material;
         bRes = true;
     }
-
-	return  bRes;
+    else
+    {
+        Intersect.bIntersect[indice] = false;
+    }
+    return  bRes;
 }
