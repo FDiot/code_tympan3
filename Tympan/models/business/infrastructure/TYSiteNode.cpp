@@ -631,7 +631,7 @@ void TYSiteNode::uuid2tysol(const std::deque<std::string>& material_ids, std::de
         }
         else
         {
-            logger.error("Unknown material retrieved from altimetry mesh: id = %s. Using default material instead",
+            logger.debug("Unknown material retrieved from altimetry mesh: id = %s. Using default material instead",
                     material_ids[i].c_str());
             materials.push_back(_pTopographie->getDefTerrain()->getSol());
         }
