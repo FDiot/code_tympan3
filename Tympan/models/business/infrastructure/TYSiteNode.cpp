@@ -565,8 +565,8 @@ void TYSiteNode::loadTopoFile()
     string error_msg;
     if (!python(args, error_msg))
     {
+        logger.error("Echec du calcul de l'altimetrie: %s", error_msg.c_str());
         TYNameManager::get()->enable(true);
-        logger.error("Echec du calcul de l'altimetrie");
         throw tympan::exception() << tympan_source_loc;
     }
     std::deque<OPoint3D> points;

@@ -24,6 +24,7 @@
 
 #include "Tympan/models/business/subprocess_util.h"
 #include "Tympan/gui/app/TYApplication.h"
+#include "Tympan/core/logging.h"
 #include "os.h"
 
 bool python_gui(QStringList args)
@@ -36,8 +37,10 @@ bool python_gui(QStringList args)
     bool computation_ok = python(args, error_msg);
     if (!computation_ok && !error_msg.empty())
     {
+        OMessageManager& logger = *OMessageManager::get();
+        logger.error("Echec du calcul acoustique: %s", error_msg.c_str());
         QMessageBox msgBox;
-        msgBox.setText(error_msg.c_str());
+        msgBox.setText("Echec du calcul acoustique. Veuillez consulter le journal d'erreurs.\n");
         msgBox.exec();
     }
     // Enable GUI

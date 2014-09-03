@@ -165,10 +165,8 @@ bool python(QStringList args, std::string& error_msg)
     {
         std::ostringstream msg;
         msg << boost::diagnostic_information(exc);
-        logger.error(
-                "Impossible de trouver l'interpreteur python pour executer le script.");
-        logger.debug(msg.str().c_str());
-        error_msg = "L'interpreteur python n'a pas pu etre trouve.\nVeuillez verifier que la variable d'environnement TYMPAN_PYTHON_INTERP est correctement positionnee";
+        error_msg = "L'interpreteur python n'a pas pu etre trouve.\nVeuillez verifier que la variable d'environnement TYMPAN_PYTHON_INTERP est correctement positionnee\n";
+        error_msg.append(msg.str());
         return false;
     }
     python.start(python_interp, args);
@@ -197,9 +195,8 @@ bool python(QStringList args, std::string& error_msg)
     int pystatus = python.exitStatus();
     if (pystatus == 1)
     {
-        logger.error("Le sous-process python a termine avec une erreur: %d",
-                     python.error());
-        error_msg = "Le calcul a echoue, veuillez reessayer.";
+        error_msg = "Le sous-process python a termine avec le code d'erreur ";
+        error_msg.append(std::to_string(python.error()));
         return false;
     }
     // Compute and display computation time
