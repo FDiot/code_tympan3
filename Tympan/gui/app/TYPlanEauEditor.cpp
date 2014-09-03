@@ -26,7 +26,6 @@
 #include "Tympan/gui/app/TYRenderWindowInteractor.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
-#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYActions.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
@@ -54,7 +53,6 @@ void TYPlanEauEditor::slotKeyPressed(int key)
         case Qt::Key_Space:
             if (_active)
             {
-                getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateGraphicTree();
                 _pInteractor->updateGL();
             }
@@ -87,8 +85,6 @@ void TYPlanEauEditor::endPlanEau()
             TYAction* pAction = new TYAddElementToTopoAction((LPTYElement&) _pPlanEau, pSite->getTopographie(), _pModeler, TR("id_action_addplaneau"));
             _pModeler->getActionManager()->addAction(pAction);
 
-            getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
-            // On demande la mise à jour de l'altimetrie globale du site
             TYProjet* pProjet = getTYApp()->getCurProjet();
             if (pProjet)
             {

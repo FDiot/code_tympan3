@@ -786,13 +786,6 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
                 {
                     QMessageBox::warning(this, "Tympan", TR("id_warning_notsuppr"));
                 }
-                else
-                {
-                    if (pSiteParent)   // Non NULL uniquement pour les courbes de niveau et les plan d'eau
-                    {
-                        emit altimetryOutdated();
-                    }
-                }
             }
             else if (ret == selectAll)
             {
@@ -1496,8 +1489,7 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
     if (_pCurrentCalcul)
     {
         if (reallyAdd) { _pCurrentCalcul->addToSelection(pElt); }
-        emit altimetryOutdated();
-         _pSiteNodeRoot->updateAcoustique(true);
+        _pSiteNodeRoot->updateAcoustique(true);
         _pSiteNodeRoot->getGraphicObject()->update(true);
         updateList();
         TYElement::setIsSavedOk(true);
@@ -1529,7 +1521,6 @@ void TYSiteFrame::newElt(const char* className, TYElement* pElement)
     if ((dynamic_cast<TYSiteNode*>(pElt) != nullptr) && _pCurrentCalcul)
     {
         _pCurrentCalcul->addToSelection(pElt);
-        emit altimetryOutdated();
         _pSiteNodeRoot->updateAcoustique();
         _pSiteNodeRoot->getGraphicObject()->update(true);
         updateList();
