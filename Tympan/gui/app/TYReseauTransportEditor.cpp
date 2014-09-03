@@ -26,7 +26,6 @@
 #include "Tympan/gui/app/TYRenderWindowInteractor.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
-#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYActions.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
@@ -60,9 +59,6 @@ void TYReseauTransportEditor::endReseauTransport()
         pReseauTransport->setTabPoint(this->getSavedPoints());
 
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
-
-        // On met a jour l'altimetrie globale du site
-        getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
 
         // Make sure altimetry was initialized before using it
         if (pSite->getAltimetry()->containsData())

@@ -31,7 +31,6 @@
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "Tympan/gui/app/TYRenderWindowInteractor.h"
-#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
 #include "TYEmpriseEditor.h"
@@ -58,7 +57,6 @@ void TYEmpriseEditor::slotKeyPressed(int key)
         case Qt::Key_Space:
             if (_active)
             {
-                getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
                 ((TYSiteModelerFrame*)_pModeler)->getSite()->updateGraphic();
                 _pInteractor->updateGL();
             }
@@ -74,7 +72,6 @@ void TYEmpriseEditor::endEmprise()
     {
         if (_pModeler->askForResetResultat())
         {
-            getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
             // On met les points a altitude 0
             for (unsigned int i = 0; i < getSavedPoints().size(); i++)
             {

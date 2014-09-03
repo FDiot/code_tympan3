@@ -25,7 +25,6 @@
 #include "Tympan/models/business/topography/TYCoursEau.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
-#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYActions.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
@@ -57,7 +56,6 @@ void TYCoursEauEditor::endCoursEau()
 
     if (pCoursEau->edit(_pModeler) == QDialog::Accepted)
     {
-        getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
         pCoursEau->setTabPoint(this->getSavedPoints());
 
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();

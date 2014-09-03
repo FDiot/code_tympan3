@@ -72,18 +72,7 @@ TYSiteModelerFrame::TYSiteModelerFrame(QWidget* parent, const char* name, Qt::WF
 {
     init();
     setProjet(new TYProjet());
-    if (_pSite != nullptr && _pSite->getProjet() != nullptr)
-    {
-        LPTYSiteNode rootSite = _pSite->getProjet()->getSite();
-        if (rootSite->getAltimetryUpToDate())
-        {
-            _pAltiBtn->setEnabled(false);
-        }
-        else
-        {
-            _pAltiBtn->setEnabled(true);
-        }
-    }
+    _pAltiBtn->setEnabled(true);
     setSelectMaillageBox(TR("id_none_select_maillage"));
     updateSelectMaillageBox();
     updateVisibilityElementSite();
@@ -96,18 +85,7 @@ TYSiteModelerFrame::TYSiteModelerFrame(LPTYProjet pProjet, QWidget* parent, cons
 
     assert(pProjet);
     setProjet(pProjet);
-    if (_pSite != nullptr && _pSite->getProjet() != nullptr)
-    {
-        LPTYSiteNode rootSite = _pSite->getProjet()->getSite();
-        if (rootSite->getAltimetryUpToDate())
-        {
-            _pAltiBtn->setEnabled(false);
-        }
-        else
-        {
-            _pAltiBtn->setEnabled(true);
-        }
-    }
+    _pAltiBtn->setEnabled(true);
     setSelectMaillageBox(TR("id_none_select_maillage"));
     updateSelectMaillageBox();
     updateVisibilityElementSite();
@@ -124,15 +102,7 @@ TYSiteModelerFrame::TYSiteModelerFrame(LPTYSiteNode pSite, QWidget* parent, cons
     // If it is, no need to enable the button triggering its computation
     if (_pSite->getProjet() != nullptr)
     {
-        LPTYSiteNode rootSite = _pSite->getProjet()->getSite();
-        if (rootSite->getAltimetryUpToDate())
-        {
-            _pAltiBtn->setEnabled(false);
-        }
-        else
-        {
-            _pAltiBtn->setEnabled(true);
-        }
+        _pAltiBtn->setEnabled(true);
     }
     setSelectMaillageBox(TR("id_none_select_maillage"));
     updateSelectMaillageBox();
@@ -590,14 +560,6 @@ void TYSiteModelerFrame::updateVisibilityElementSite()
     _pSite->getGraphicObject()->setVisible(_showImageSite);
 }
 
-void TYSiteModelerFrame::enableAltimetryComputation()
-{
-    _pAltiBtn->setEnabled(true);
-}
-void TYSiteModelerFrame::disableAltimetryComputation()
-{
-    _pAltiBtn->setEnabled(false);
-}
 void TYSiteModelerFrame::calculAltimetrie()
 {
     // Called when _pAltiBtn button is pressed
@@ -630,7 +592,6 @@ void TYSiteModelerFrame::calculAltimetrie()
     getView()->getRenderer()->updateDisplayList();
     updateView();
 
-    _pAltiBtn->setEnabled(false);
     TYApplication::restoreOverrideCursor();
 }
 

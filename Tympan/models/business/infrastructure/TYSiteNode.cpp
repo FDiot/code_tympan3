@@ -83,8 +83,7 @@ TYSiteNode::TYSiteNode() :  _pProjet(NULL),
     _root(false),
     _SIGType(TYMPAN),
     _SIG_X(0.0),
-    _SIG_Y(0.0),
-    _alti_uptodate(false)
+    _SIG_Y(0.0)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -134,7 +133,6 @@ TYSiteNode& TYSiteNode::operator=(const TYSiteNode& other)
         _SIGType = other._SIGType;
         _SIG_X = other._SIG_X;
         _SIG_Y = other._SIG_Y;
-        _alti_uptodate = other._alti_uptodate;
     }
     return *this;
 }
@@ -193,7 +191,6 @@ bool TYSiteNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _SIGType = pOtherSite->_SIGType;
     _SIG_X = pOtherSite->_SIG_X;
     _SIG_Y = pOtherSite->_SIG_Y;
-    _alti_uptodate = pOtherSite->_alti_uptodate;
 
     _listSiteNode.clear();
     for (unsigned int i = 0; i < pOtherSite->_listSiteNode.size(); i++)
@@ -493,7 +490,6 @@ void TYSiteNode::loadTopoFile()
     try
     {
         do_updateAltimetrie(force);
-        _alti_uptodate = true;
         return true;
     }
     catch (const tympan::exception& exc)
