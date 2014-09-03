@@ -195,8 +195,16 @@ bool python(QStringList args, std::string& error_msg)
     if(!err_output.isEmpty())
     {
         error_msg = err_output.toStdString();
-        error_msg.append("\nVeuillez lire tympan.log pour plus d'information.");
-        return false;
+        // It is an error and not a warning
+        if (!err_output.contains("RuntimeWarning"))
+        {
+            error_msg.append("\nVeuillez lire tympan.log pour plus d'information.");
+            return false;
+        }
+        else
+        {
+            logger.warning(error_msg.c_str());
+        }
     }
 
     int pystatus = python.exitStatus();
