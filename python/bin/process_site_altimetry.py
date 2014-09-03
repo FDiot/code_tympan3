@@ -22,4 +22,3 @@ if __name__ == '__main__':
         tyalti.process_site_altimetry(input_project=input_proj, result_file=result_file)
     except Exception as exc:
         logging.exception("process_altimetry.py couldn't process the altimetry:\n%s", exc)
-        raise
