@@ -1,4 +1,5 @@
 import logging
+import sys
 
 # open file in unbuffered mode so it get written asap, in case of later crash
 # due to underlying C code
@@ -38,8 +39,12 @@ def process_site_altimetry(input_project, result_file):
     asite = export_site_topo(cysite, mainsite=True)
     # Build altimetry
     builder = Builder(asite, allow_features_outside_mainsite=False)
-    builder.complete_processing()
-    builder.export_to_ply(result_file)
+    try:
+        builder.complete_processing()
+        builder.export_to_ply(result_file)
+    except Exception as exc:
+        sys.stderr.write(exc.message)
+        raise
     return asite
 
 
