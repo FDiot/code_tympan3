@@ -499,7 +499,7 @@ void TYSiteNode::loadTopoFile()
     catch (const tympan::exception& exc)
     {
         msg << boost::diagnostic_information(exc);
-        logger.error("An error prevented to update the altimetry (set log level to debug for diagnosic)");
+        logger.error("An error prevented to update the altimetry (set log level to debug for diagnostic)");
         logger.debug(msg.str().c_str());
         return false;
     }
