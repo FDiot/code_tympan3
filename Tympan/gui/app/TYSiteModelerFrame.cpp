@@ -611,15 +611,19 @@ void TYSiteModelerFrame::calculAltimetrie()
     LPTYSiteNode rootSite = _pSite->getProjet()->getSite();
     // One global altimetry update for all the sites
     rootSite->updateAltimetrie();
-    // This method uses the altimetry above-computed to update the infrastructure
-    // as well as the receptors and sources and recurses on the current site and
-    // all its subsites
-    rootSite->update();
-
-    if (_pProjet)
+    // Check altimetry update went well before using it
+    if(rootSite->getAltimetry()->containsData())
     {
-        writeOutputMsg(TR("id_msg_updatealtimaillages"));
-        _pProjet->updateAltiRecepteurs();
+        // This method uses the altimetry above-computed to update the infrastructure
+        // as well as the receptors and sources and recurses on the current site and
+        // all its subsites
+        rootSite->update();
+
+        if (_pProjet)
+        {
+            writeOutputMsg(TR("id_msg_updatealtimaillages"));
+            _pProjet->updateAltiRecepteurs();
+        }
     }
 
     _pSite->updateGraphicTree();
