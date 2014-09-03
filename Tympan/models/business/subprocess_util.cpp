@@ -149,8 +149,7 @@ bool python(QStringList args, std::string& error_msg)
     QProcess python;
     float comp_duration (0.);
     bool comp_finished (false);
-    // Send python script output to the current process std::out/err
-    python.setProcessChannelMode(QProcess::ForwardedChannels);
+
     // Set PYTHONPATH to python subprocess
     QStringList env(_python_qprocess_environment());
     python.setEnvironment(env);
@@ -191,6 +190,14 @@ bool python(QStringList args, std::string& error_msg)
         }
     }
     while(!comp_finished);
+
+    QString err_output (python.readAllStandardError());
+    if(!err_output.isEmpty())
+    {
+        error_msg = err_output.toStdString();
+        error_msg.append("\nVeuillez lire tympan.log pour plus d'information.");
+        return false;
+    }
 
     int pystatus = python.exitStatus();
     if (pystatus == 1)
