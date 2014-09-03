@@ -35,7 +35,7 @@ bool python_gui(QStringList args)
 
     string error_msg;
     bool computation_ok = python(args, error_msg);
-    if (!computation_ok && !error_msg.empty())
+    if (!computation_ok)
     {
         OMessageManager& logger = *OMessageManager::get();
         logger.error("Echec du calcul acoustique: %s", error_msg.c_str());
