@@ -8,6 +8,9 @@ from numpy.testing import assert_allclose
 from utils import TympanTC, TEST_PROBLEM_DIR
 
 import tympan.altimetry.process_altimetry as tyalti
+from tympan.altimetry.builder import Builder
+import tympan.models.business as tybusiness
+import tympan.business2solver as bus2solv
 # must be passed to process altimetry. Its content will be ignored
 result_file = 'out.ply'
 
@@ -140,6 +143,31 @@ class TestProcessAltimetry(TympanTC):
                          [(20.0,10.0),(30.0,10.0),(30.0,0.0),(20.0,0.0)])
         self.assertEqual(infra_landtakes[1].build_coordinates()[0],
                          [(0.0,10.0),(20.0,10.0),(20.0,0.0),(0.0,0.0)])
+
+
+    def test_source_altimetry(self):
+        with self.no_output():
+            tybusiness.init_tympan_registry()
+            project = tybusiness.Project.from_xml(
+                osp.join(TEST_PROBLEM_DIR,
+                         '14_PROJET_GRAND_SITE_VIDE_AVEC_SOUS_SITE_Deplace_et_tourne.xml'))
+            alti_site = tyalti.export_site_topo(project.site)
+            # Compute altimetry and retrieve the resulting mesh
+            builder =  Builder(alti_site)
+            builder.complete_processing()
+            vertices, faces, materials, faces_materials = builder.build_mesh_data()
+            # Apply new altimetry on the site infrastructure
+            project.site.update_altimetry(vertices, faces, materials, faces_materials)
+            project.update()
+            # Build solver model and check source altimetry
+            bus2solv_conv = bus2solv.Business2SolverConverter(project.current_computation,
+                                                              project.site)
+            bus2solv_conv.build_solver_problem()
+            solver_model = bus2solv_conv.solver_problem
+            # 1 source
+            self.assertEqual(solver_model.nsources, 1)
+            # source is on the hillock, which is 25 m high. It is at 2m high above the ground
+            self.assertAlmostEqual(solver_model.source(0).position.z, 27)
 
 
 if __name__ == '__main__':
