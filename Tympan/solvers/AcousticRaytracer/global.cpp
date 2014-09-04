@@ -112,7 +112,7 @@ bool globalUseMeteo;				// [ANIME3D] Takes meteo in account
 float globalOverSampleD;			// [ANIME3D] Rays oversampling rate (if meteo -see above-)
 bool globalUseFresnelArea;			// [ANIME3D] Use Fresnel area
 float globalAnime3DSigma;			// [ANIME3D] Value of relative uncertainty
-float globalAnime3DForceC;			// [ANIME3D] Force "C" parameter
+int globalAnime3DForceC;			// [ANIME3D] Force "C" parameter
 
 ////////////////////////////////
 // Mode DEBUG
