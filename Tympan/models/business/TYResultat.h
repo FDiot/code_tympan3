@@ -174,12 +174,6 @@ public:
     bool setSpectre(TYPointCalcul* pRecepteur, TYSourcePonctuelle* pSource, OSpectre& Spectre);
 
     /**
-     * \fn bool setSpectre(const TYTrajet& trajet)
-     * \brief Assigne un spectre a un couple S-R  defini par un trajet
-     */
-    bool setSpectre(const TYTrajet& trajet);
-
-    /**
      * \fn bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre & Spectre)
      * \brief Assigne un spectre a un couple S-R.
      */
@@ -259,12 +253,6 @@ public:
      * \brief Regroupe les contributions par element englobant
      */
     void condensate();
-
-    /**
-     * \fn bool cumulSpectres(std::vector<TYTrajet>& tabTrajets
-     * \brief Cumule les spectres aux points de calcul apres alimentation par un tableau de trajets
-     */
-    bool cumulSpectres(std::vector<TYTrajet>& tabTrajets);
 
     /**
      * \fn bool cumulSpectres()

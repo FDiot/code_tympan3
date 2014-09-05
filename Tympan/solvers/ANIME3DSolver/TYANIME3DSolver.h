@@ -25,7 +25,6 @@
 #include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
 #include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "Tympan/models/business/TYPointCalcul.h"
-#include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
 
 class TYANIME3DAcousticModel;
@@ -124,14 +123,6 @@ protected:
     tympan::receptor_pool_t all_receptors;
 
 private:
-    /**
-     * \fn size_t buildValidTrajects(tympan::AcousticProblemModel& aproblem)
-     * \brief construit le tableau des trajets et la matrice resultat en supprimant les points trop proches d'une source
-     */
-   size_t buildTrajects(tympan::AcousticProblemModel& aproblem);
-
-   std::vector<TYTrajet> _tabTrajets; 
-
    std::unique_ptr<tympan::AtmosphericConditions> _pAtmos;
 };
 

@@ -25,8 +25,6 @@
 
 
 #include "TYChemin.h"
-#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
-#include "TYPointCalcul.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/solver/entities.hpp"
 

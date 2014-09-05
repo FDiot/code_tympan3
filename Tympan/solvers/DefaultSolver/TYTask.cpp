@@ -18,7 +18,7 @@
 #include "TYFaceSelector.h"
 #include "TYSolver.h"
 #include "TYTask.h"
-#include "Tympan/models/business/TYTrajet.h"
+#include "Tympan/solvers/DefaultSolver/TYTrajet.h"
 
 TYTask::TYTask(TYSolver& solver, const tympan::nodes_pool_t& nodes, const tympan::triangle_pool_t& triangles, const tympan::material_pool_t& materials, TYTrajet& trajet, int nNbTrajets)
     : _solver(solver), 
