@@ -17,7 +17,7 @@
  *
  */
 
-#include "Tympan/models/business/TYTrajet.h"
+#include "Tympan/solvers/DefaultSolver/TYTrajet.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/solvers/DefaultSolver/threading.h"

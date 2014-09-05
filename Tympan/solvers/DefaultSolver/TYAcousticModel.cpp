@@ -17,7 +17,7 @@
 #include <list>
 #include "Tympan/core/defines.h"
 #include "Tympan/models/business/TYCalcul.h"
-#include "Tympan/models/business/TYTrajet.h"
+#include "Tympan/solvers/DefaultSolver/TYTrajet.h"
 #include "Tympan/models/business/infrastructure/TYTopographie.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/solvers/DefaultSolver/TYSolver.h"

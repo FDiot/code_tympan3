@@ -20,7 +20,6 @@
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/delaunay_maker.h"
-#include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
@@ -125,22 +124,3 @@ bool TYANIME3DSolver::solve(TYCalcul& calcul,
     return true;
 }
 
-size_t TYANIME3DSolver::buildTrajects(tympan::AcousticProblemModel& aproblem)
-{
-    _tabTrajets.reserve( aproblem.nsources() * aproblem.nreceptors() );
-
-    for(unsigned int i=0; i< aproblem.nsources(); i++)
-    {
-        for (unsigned int j = 0; j<aproblem.nreceptors(); j++)
-        {
-            double distance = aproblem.source(i).position.distFrom(aproblem.receptor(j).position);
-            TYTrajet trajet(aproblem.source(i), aproblem.receptor(j));
-            trajet.setDistance(distance);
-            trajet.asrc_idx = i;
-            trajet.arcpt_idx = j;
-            _tabTrajets.push_back(trajet);
-        }
-    }
-
-	return _tabTrajets.size();
-}

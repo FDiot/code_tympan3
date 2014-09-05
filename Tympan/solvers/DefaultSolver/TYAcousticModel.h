@@ -17,7 +17,7 @@
 #define __TYACOUSTICMODEL__
 
 #include "Tympan/core/interfaces.h"
-#include "Tympan/models/business/TYChemin.h"
+#include "Tympan/solvers/DefaultSolver/TYChemin.h"
 #include "Tympan/solvers/DefaultSolver/TYSolverDefines.h"
 
 class TYTrajet;

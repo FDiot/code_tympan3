@@ -25,7 +25,6 @@ int TYSurfaceInterface::intersects(const TYSurfaceInterface* pSurf, OSegment3D& 
     if (!pSurf) { return INTERS_NULLE; }
 
     int res = INTERS_NULLE;
-    int i = 0;
     bool ptAFind = false, ptBFind = false;
     OPoint3D ptTmp;
 
@@ -34,7 +33,7 @@ int TYSurfaceInterface::intersects(const TYSurfaceInterface* pSurf, OSegment3D& 
     size_t nbPts = contour2.size();
 
     // Pour chaque segment composant le contour 2
-    for (i = 0; i < nbPts; i++)
+    for (size_t i = 0; i < nbPts; i++)
     {
         // On chercher les points d'intersection entre les segments du contour 2 et cette surface
         if (this->intersects(OSegment3D(contour2[i], contour2[(i + 1) % nbPts]), ptTmp) != INTERS_NULLE)
@@ -59,7 +58,7 @@ int TYSurfaceInterface::intersects(const TYSurfaceInterface* pSurf, OSegment3D& 
     nbPts = contour1.size();
 
     // Pour chaque segment composant le contour 2
-    for (i = 0; i < nbPts; i++)
+    for (size_t i = 0; i < nbPts; i++)
     {
         // On chercher les points d'intersection entre les segments du contour 1 et la surface a tester
         if (pSurf->intersects(OSegment3D(contour1[i], contour1[(i + 1) % nbPts]), ptTmp) != INTERS_NULLE)

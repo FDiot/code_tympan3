@@ -21,7 +21,6 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/TYProgressManager.h"
 #include "Tympan/models/business/TYCalcul.h"
-#include "Tympan/models/business/TYTrajet.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
 #include "TYResultat.h"
@@ -391,16 +390,6 @@ bool TYResultat::setSpectre(TYPointCalcul* pRecepteur, TYSourcePonctuelle* pSour
     return setSpectre(indexRecepteur, indexSource, Spectre);
 }
 
-bool TYResultat::setSpectre(const TYTrajet& trajet)
-{
-	tympan::source_idx src_idx = trajet.asrc_idx;
-	tympan::receptor_idx rcpt_idx = trajet.arcpt_idx;;
-
-    OSpectre spectre = trajet.getSpectre();
-
-    return setSpectre(rcpt_idx, src_idx, spectre);
-}
-
 bool TYResultat::setSpectre(int indexRecepteur, int indexSource, OSpectre& Spectre)
 {
     return setSpectre(indexRecepteur, indexSource, Spectre, _matrix);
@@ -585,16 +574,6 @@ void TYResultat::condensate()
 
     // Construction de la map source/puissance de source
     buildMapSourceSpectre();
-}
-
-bool TYResultat::cumulSpectres(std::vector<TYTrajet>& tabTrajets)
-{
-    for (unsigned int i = 0; i < tabTrajets.size(); i++)
-    {
-        setSpectre(tabTrajets[i]);
-    }
-
-    return cumulSpectres();
 }
 
 bool TYResultat::cumulSpectres()
