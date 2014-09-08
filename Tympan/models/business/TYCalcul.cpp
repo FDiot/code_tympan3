@@ -67,7 +67,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _expansGeo = 0; // 4pi
     _typeCalculSol = 0; // Sol Local
     _condFav = false;
-    _useVegetation = false;
     _useAtmosphere = true;
     _bCalculTrajetsHorizontaux = true;
     _interference = false;
@@ -93,15 +92,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     else
     {
         TYPreferenceManager::setInt(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo", _typeSaisieMeteo);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "UseVegetationCalculDefault"))
-    {
-        _useVegetation = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "UseVegetationCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "UseVegetationCalculDefault", _useVegetation);
     }
 
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault"))
@@ -217,7 +207,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _expansGeo = other._expansGeo;
         _upTodate = other._upTodate;
         _condFav = other._condFav;
-        _useVegetation = other._useVegetation;
         _useAtmosphere = other._useAtmosphere;
         _interference = other._interference;
         _state = other._state;
@@ -248,7 +237,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_expansGeo != other._expansGeo) { return false; }
         if (_upTodate != other._upTodate) { return false; }
         if (_condFav != other._condFav) { return false; }
-        if (_useVegetation != other._useVegetation) { return false; }
         if (_useAtmosphere != other._useAtmosphere) { return false; }
         if (_interference != other._interference) { return false; }
         if (_state != other._state) { return false; }
@@ -290,7 +278,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _expansGeo = pOtherCalcul->_expansGeo;
     _upTodate = pOtherCalcul->_upTodate;
     _condFav = pOtherCalcul->_condFav;
-    _useVegetation = pOtherCalcul->_useVegetation;
     _useAtmosphere = pOtherCalcul->_useAtmosphere;
     _interference = pOtherCalcul->_interference;
     _state = pOtherCalcul->_state;
@@ -351,7 +338,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementIntValue(domNewElem, "expansGeo", _expansGeo);
     TYXMLTools::addElementIntValue(domNewElem, "typeCalculSol", _typeCalculSol);
     TYXMLTools::addElementIntValue(domNewElem, "condFav", _condFav);
-    TYXMLTools::addElementIntValue(domNewElem, "useVegetation", _useVegetation);
     TYXMLTools::addElementIntValue(domNewElem, "useAtmosphere", _useAtmosphere);
     TYXMLTools::addElementIntValue(domNewElem, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux);
     TYXMLTools::addElementIntValue(domNewElem, "interference", _interference);
@@ -467,7 +453,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementIntValue(elemCur, "expansGeo", _expansGeo, getOk[5]);
         TYXMLTools::getElementIntValue(elemCur, "typeCalculSol", _typeCalculSol, getOk[17]);
         TYXMLTools::getElementBoolValue(elemCur, "condFav", _condFav, getOk[7]);
-        TYXMLTools::getElementBoolValue(elemCur, "useVegetation", _useVegetation, getOk[8]);
         TYXMLTools::getElementBoolValue(elemCur, "useAtmosphere", _useAtmosphere, getOk[9]);
         TYXMLTools::getElementBoolValue(elemCur, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux, getOk[18]);
         TYXMLTools::getElementBoolValue(elemCur, "interference", _interference, getOk[12]);

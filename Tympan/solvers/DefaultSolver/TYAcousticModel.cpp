@@ -36,7 +36,6 @@ TYAcousticModel::TYAcousticModel(TYSolver& solver)
       _conditionFav(false),
       _useAtmo(true),
       _bCalculTrajetsHorizontaux(true),
-      _useVegetation(false),
       _interference(false),
       _seuilConfondus(0.01),
       _paramH(10.0),
@@ -69,13 +68,8 @@ void TYAcousticModel::init(const TYCalcul& calcul)
 
     pSolverAtmos = std::unique_ptr<tympan::AtmosphericConditions> ( new tympan::AtmosphericConditions(pression, temperature, hygrometrie) );
 
-
-    // Prise en compte de la vegetation
-    _useVegetation = calcul.getUseVegetation();
-
     // Prise en compte de l'atmosphere (divergence geometrique)
     _useAtmo = calcul.getUseAtmosphere();
-
 
     // Calcul avec interference
     _interference = calcul.getInterference();
@@ -248,14 +242,6 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
     OSegment3D penteMoyenne;
     meanSlope(rayon, penteMoyenne);
 
-
-    //// 1. Chemin direct avec vegetation
-    //if (_useVegetation)
-    //{
-    //    computeCheminAvecVeg(rayon, source, penteMoyenne, TabChemin, distance);
-
-    //    if (TabChemin.size() > 0) { return; }
-    //}
 
     // 1. Conditions homogenes sans vegetation
     TYTabEtape Etapes;

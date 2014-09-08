@@ -219,18 +219,6 @@ public:
     void setUseAnechoic(const bool anechoic = false) { _anechoic = anechoic; }
 
     /**
-     *\fn   bool getUseVegetation()
-     *\brief Get du test de la prise ou non en compte de la vegetation.
-     *\return _useVegetation
-     */
-    bool getUseVegetation() const { return _useVegetation; }
-    /**
-     *\fn   void setUseVegetation(bool use)
-     *\brief Set du test de la prise ou non en compte de la vegetation.
-     */
-    void setUseVegetation(bool use) { _useVegetation = use; }
-
-    /**
      * \fn bool getUseAtmosphere()
      *\brief Get du test de la prise ou non en compte de l'atmosphere.
      *\return _useAtmosphere
@@ -697,8 +685,6 @@ protected:
     bool _anechoic;
     ///Conditions favorables ou non a la propagation.
     bool _condFav;
-    ///Prise ou non en compte de la vegetation.
-    bool _useVegetation;
     ///Prise ou non en compte de l'atmosphere.
     bool _useAtmosphere;
     /// Calcul des trajets horizontaux

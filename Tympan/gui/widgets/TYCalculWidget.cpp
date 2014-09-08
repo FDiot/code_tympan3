@@ -147,15 +147,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     groupBoxFlagLayout->addWidget(_comboBoxTypeSol, 1, 3);
     updateBoxSol();
 
-    // Calcul avec vegetation
-    _labelUseVegetation = new QLabel(_groupBoxFlag);
-    _labelUseVegetation->setText(TR("id_usevegetation_label"));
-    groupBoxFlagLayout->addWidget(_labelUseVegetation, 2, 0);
-
-    _checkBoxUseVegetation = new QCheckBox(_groupBoxFlag);
-    _checkBoxUseVegetation->setText(TR(""));
-    groupBoxFlagLayout->addWidget(_checkBoxUseVegetation, 2, 1);
-
     _labelParcoursLateraux = new QLabel(_groupBoxFlag);
     _labelParcoursLateraux->setText(TR("id_parcours_lateraux"));
     groupBoxFlagLayout->addWidget(_labelParcoursLateraux, 3, 2);
@@ -406,7 +397,6 @@ void TYCalculWidget::updateContent()
     _lineEditParamH->setEnabled(_pRadioButtonCondFav->isChecked());
 
     _lineEditDistanceSRMin->setText(num.setNum(getElement()->getDistanceSRMin(), 'f', 2));
-    _checkBoxUseVegetation->setChecked(getElement()->getUseVegetation());
     _checkBoxUseAtmosphere->setChecked(getElement()->getUseAtmosphere());
 
     _checkBoxParcoursLateraux->setChecked(getElement()->getCalculTrajetsHorizontaux());
@@ -530,7 +520,6 @@ void TYCalculWidget::apply()
     getElement()->setCondFav(_pRadioButtonCondFav->isChecked());
 
     getElement()->setParamH(_lineEditParamH->text().toDouble());
-    getElement()->setUseVegetation(_checkBoxUseVegetation->isChecked());
     getElement()->setUseAtmosphere(_checkBoxUseAtmosphere->isChecked());
 
     getElement()->setCalculTrajetsHorizontaux(_checkBoxParcoursLateraux->isChecked());

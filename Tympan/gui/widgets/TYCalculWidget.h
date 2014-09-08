@@ -135,8 +135,6 @@ protected:
 
     QLineEdit* _lineEditParamH;
     QLabel* _labelParamH;
-    QCheckBox* _checkBoxUseVegetation;
-    QLabel* _labelUseVegetation;
     QCheckBox* _checkBoxUseAtmosphere;
     QLabel* _labelUseAtmosphere;
 
