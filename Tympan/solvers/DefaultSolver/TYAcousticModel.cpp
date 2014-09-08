@@ -108,9 +108,9 @@ void TYAcousticModel::init(const TYCalcul& calcul)
 }
 
 
-void TYAcousticModel::compute(  const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, 
-                                TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, 
-                                TabPoint3D& ptsRight )
+void TYAcousticModel::compute(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon,
+                              TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
+                              TabPoint3D& ptsRight )
 {
     bool vertical = true, horizontal = false;
 
@@ -1009,8 +1009,8 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
     return res;
 }
 
-void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, 
-                                                const tympan::AcousticSource& source, TYTabChemin& TabChemins, 
+void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon,
+                                                const tympan::AcousticSource& source, TYTabChemin& TabChemins,
                                                 double distance ) const
 {
     if (!_useReflex) { return; }
@@ -1317,7 +1317,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
     // Search for material at reflexion point
     // Set position of ray begin 1000 meters over the original point to avoid underground point (seen from mean slope computation)
     vec3 start = OPoint3Dtovec3(incident._ptB);
-    start.z += 1000.; 
+    start.z += 1000.;
     Ray ray1( start, vec3(0., 0., -1.) );
     ray1.maxt = 20000;
 
