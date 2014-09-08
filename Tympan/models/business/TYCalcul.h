@@ -206,19 +206,6 @@ public:
     void setIsUpTodate(bool upTodate) { _upTodate = upTodate; }
 
     /**
-     * \fn  bool getUseSol()
-     * \brief Get du test de la prise ou non en compte du sol.
-     * \return _useSol
-     */
-    bool getUseSol() const { return _useSol; }
-
-    /**
-     * \fn  void setUseSol(bool use)
-     * \brief Set du test de la prise ou non en compte du sol.
-     */
-    void setUseSol(bool use) { _useSol = use; }
-
-    /**
      *\fn bool getUseAnechoic()
      *\brief Get des conditions anechoiques (true) ou semi-anechoi��que (false = default)
      *\return _anechoic
@@ -726,8 +713,6 @@ protected:
 
     ///Expansion geometrique (0 : 2pi, 1 : 4pi).
     int _expansGeo;
-    ///sol reel/sol reflechissant.
-    bool _useSol;
 
     /// Type de calcul du sol
     int _typeCalculSol;

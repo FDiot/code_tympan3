@@ -745,14 +745,6 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
 
         ofs << pCalcul->getName().toStdString() << ';';
         ofs << pCalcul->getUseAtmosphere() << ';';
-        if (pCalcul->getUseSol())
-        {
-            ofs << "réel" << ';';
-        }
-        else
-        {
-            ofs << "réfléchissant" << ';';
-        }
         ofs << pCalcul->getCalculTrajetsHorizontaux() << ';';
         ofs << pCalcul->getUseVegetation() << ';';
         ofs << pCalcul->getUseEcran() << ';';
