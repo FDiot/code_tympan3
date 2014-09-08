@@ -95,13 +95,6 @@ public:
     virtual void purge();
 
 protected:
-    /*!
-     * \fn void saveAndOverSampleRay(const double& dMin = 0.0)
-     * \brief Transforme les ray en TYRay et ajoute des points intermediaires sur les rayons
-     */
-    void saveAndOverSampleRay(const TYSiteNode& site, TYCalcul& calcul, const unsigned int& sens = 0, const double& dMin = 0.0);
-
-protected:
     tab_acoustic_path _tabRay;
 
     /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face

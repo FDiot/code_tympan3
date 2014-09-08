@@ -30,10 +30,10 @@ public:
     TYAcousticModel(TYSolver& solver);
     virtual ~TYAcousticModel();
 
-    virtual void compute(   const std::deque<TYSIntersection>& tabIntersect, 
-                            const OSegment3D& rayon, TYTrajet& trajet, 
-                            TabPoint3D& ptsTop, TabPoint3D& ptsLeft, 
-                            TabPoint3D& ptsRight );
+    virtual void compute(const std::deque<TYSIntersection>& tabIntersect,
+                         const OSegment3D& rayon, TYTrajet& trajet,
+                         TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
+                         TabPoint3D& ptsRight );
 
     void init(const TYCalcul& calcul);
 
@@ -53,9 +53,9 @@ public:
      * @return <code>true</code> si le calcul a reussi;
      *         <code>false</code> sinon.
      */
-    virtual bool computeCheminsAvecEcran(   const OSegment3D& rayon, const tympan::AcousticSource& source, 
-                                            const TabPoint3D& pts, const bool vertical, 
-                                            TYTabChemin& TabChemin, double distance ) const;
+    virtual bool computeCheminsAvecEcran(const OSegment3D& rayon, const tympan::AcousticSource& source,
+                                         const TabPoint3D& pts, const bool vertical,
+                                         TYTabChemin& TabChemin, double distance ) const;
 
     /**
      * Calcule la liste des chemins generes par la reflexion sur les parois verticales.
@@ -66,9 +66,9 @@ public:
      * @param tabChemin La liste des chemins generes par la reflexion.
      * @param tabFaces Ensemble des faces du site.
      */
-    void computeCheminReflexion(    const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, 
-                                    const tympan::AcousticSource& source, TYTabChemin& TabChemins, 
-                                    double distance ) const;
+    void computeCheminReflexion(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon,
+                                const tympan::AcousticSource& source, TYTabChemin& TabChemins,
+                                double distance ) const;
 
     ///**
     // * Calcule les spectres d'attenuation caracteristiques de la vegetation
