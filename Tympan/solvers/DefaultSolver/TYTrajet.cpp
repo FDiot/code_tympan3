@@ -326,9 +326,6 @@ OSpectre TYTrajet::getPInterference(const tympan::AtmosphericConditions& atmos)
     return s;
 }
 
-#define CALCUL_AVEC_LISSAGE
-
-#ifdef CALCUL_AVEC_LISSAGE
 OSpectre TYTrajet::correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const tympan::AtmosphericConditions& atmos, const double& ri, const double& rj) const
 {
     const double dp6 = pow(2, (1.0 / 6.0));
@@ -363,22 +360,5 @@ OSpectre TYTrajet::correctTiers(const OSpectreComplex& si, const OSpectreComplex
 
     return s;
 }
-
-#else // CALCUL_SANS_LISSAGE
-OSpectre TYTrajet::correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const TYAtmosphere& atmos, const double& ri, const double& rj) const
-{
-    const double dp6 = pow(2, (1.0 / 6.0));
-    const double invdp6 = 1.0 / dp6;
-    const double dfSur2f = (dp6 - invdp6) / 2.0;  // df/2f
-    OSpectre cosTemp;
-    OSpectre s;
-
-    OSpectre sTemp = atmos.getKAcoust().mult(ri - rj); // k(ri-rj)
-
-    s = sTemp.cos(); // cos(k(ri-rj))
-
-    return s;
-}
-#endif // CALCUL_AVEC_LISSAGE
 
 

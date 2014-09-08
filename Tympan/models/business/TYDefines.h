@@ -286,10 +286,6 @@ class TYResultat;
 ///Smart pointer sur TYResultat.
 typedef SmartPtr<TYResultat> LPTYResultat;
 
-class TYAtmosphere;
-///Smart pointer sur TYAtmosphere.
-typedef SmartPtr<TYAtmosphere> LPTYAtmosphere;
-
 class TYMateriauConstruction;
 ///Smart pointer sur TYMateriauConstruction.
 typedef SmartPtr<TYMateriauConstruction> LPTYMateriauConstruction;

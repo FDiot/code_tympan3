@@ -13,13 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TY_TRAJET__
 #define __TY_TRAJET__
 
@@ -163,13 +156,13 @@ public:
 
 
     /**
-     * \fn OSpectre getPEnergetique(const TYAtmosphere& atmos)
+     * \fn OSpectre getPEnergetique(const tympan::AtmosphericConditions& atmos)
      * \brief Calcule la pression acoustique en module phase sur le trajet
      */
     OSpectre getPEnergetique(const tympan::AtmosphericConditions& atmos);
 
     /**
-     * \fn OSpectre getPInterference(const TYAtmosphere& atmos)
+     * \fn OSpectre getPInterference(const tympan::AtmosphericConditions& atmos)
      * \brief Calcule la pression quadratique sur le trajet
      */
     OSpectre getPInterference(const tympan::AtmosphericConditions& atmos);

@@ -357,13 +357,6 @@ TYElementListItem* TYSiteFrame::addToList(LPTYBatiment pElement, TYElementListIt
     return NULL;
 }
 
-TYElementListItem* TYSiteFrame::addToList(LPTYAtmosphere pElement, TYElementListItem* parent /*=NULL*/)
-{
-    // Atmosphere
-    TYElementListItem* pRootItem  = addEltToList(pElement, parent);
-
-    return pRootItem;
-}
 
 void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
 {

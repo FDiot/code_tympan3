@@ -30,7 +30,6 @@
 
 #include "TYAppDefines.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
-#include "Tympan/models/business/material/TYAtmosphere.h"
 #include "Tympan/models/business/TYCalcul.h"
 
 class QMenuBar;
@@ -180,11 +179,6 @@ public slots:
      * Si le parent est NULL, l'item est ajoute a la racine.
      */
     TYElementListItem* addToList(LPTYBatiment pElement, TYElementListItem* parent = NULL);
-    /**
-     * Ajoute un element a la liste.
-     * Si le parent est NULL, l'item est ajoute a la racine.
-     */
-    TYElementListItem* addToList(LPTYAtmosphere pElement, TYElementListItem* parent = NULL);
 
     /**
      * Supprime un element dans l'infrastructure.

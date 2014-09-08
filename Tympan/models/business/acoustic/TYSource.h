@@ -22,7 +22,6 @@
 
 #include "Tympan/models/business/TYElement.h"
 #include "TYSpectre.h"
-#include "Tympan/models/business/material/TYAtmosphere.h"
 #include "Tympan/models/business/TYColorInterface.h"
 
 

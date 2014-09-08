@@ -28,7 +28,6 @@
 #include <memory>
 
 #include "Tympan/core/interfaces.h"
-#include "Tympan/models/business/material/TYAtmosphere.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/models/business/TYRay.h"
 #include "Tympan/models/business/TYMaillage.h"
@@ -267,19 +266,6 @@ public:
     const TYMapPtrElementInt& getMapElementRegime() const { return _mapElementRegime; }
 
     /**
-     * \fn LPTYAtmosphere getAtmosphere() { return _pAtmosphere; }
-     * \brief Get de l'atmosphere.
-     * \return _pAtmosphere
-     */
-    LPTYAtmosphere getAtmosphere() { return _pAtmosphere; }
-    /**
-     * \fn const LPTYAtmosphere getAtmosphere() const
-     * \brief Get de l'atmosphere.
-     * \return _pAtmosphere
-     */
-    const LPTYAtmosphere getAtmosphere() const { return _pAtmosphere; }
-
-    /**
      *\fn TYTabMaillageGeoNode& getMaillages() { return _maillages; }
      *\brief Get de la collection de maillages.
      *\return _maillages
@@ -514,9 +500,6 @@ protected:
     TYMapPtrElementBool _emitAcVolNode;
     ///Regime des elemenst de la scene
     TYMapPtrElementInt _mapElementRegime;
-
-    ///Atmosphere.
-    LPTYAtmosphere _pAtmosphere;
 
     ///Collections de Maillages.
     TYTabMaillageGeoNode _maillages;

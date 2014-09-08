@@ -13,13 +13,6 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TY_CHEMIN__
 #define __TY_CHEMIN__
 
@@ -73,10 +66,9 @@ public:
     bool operator!=(const TYChemin& other) const;
 
     /**
-     * \fn void calcAttenuation(const TYTabEtape& tabEtapes, const TYAtmosphere & atmos)
+     * \fn void calcAttenuation(const TYTabEtape& tabEtapes, const tympan::AtmosphericConditions & atmos)
      * \brief Calcule l'attenuation globale du chemin
      */
-//    void calcAttenuation(const TYTabEtape& tabEtapes, const TYAtmosphere& atmos);
     void calcAttenuation(const TYTabEtape& tabEtapes, const tympan::AtmosphericConditions& atmos);
 
     /**

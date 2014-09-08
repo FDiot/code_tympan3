@@ -56,14 +56,10 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _dateModif = "2001-10-01";
     _numero = 1;
 
-    _pAtmosphere = new TYAtmosphere();
-    _pAtmosphere->setParent(this);
-
     _pResultat = new TYResultat();
     _pResultat->setParent(this);
 
     _upTodate = true;
-
     _state = TYCalcul::Actif; // A sa creation, le calcul est actif
 
     // Le solveur par defaut est le solveur standard de TYMPAN
@@ -99,7 +95,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _comment = other._comment;
         _upTodate = other._upTodate;
         _state = other._state;
-        _pAtmosphere = other._pAtmosphere;
         _maillages = other._maillages;
         _pResultat = other._pResultat;
         _elementSelection = other._elementSelection;
@@ -122,7 +117,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_numero != other._numero) { return false; }
         if (_upTodate != other._upTodate) { return false; }
         if (_state != other._state) { return false; }
-        if (_pAtmosphere != other._pAtmosphere) { return false; }
         if (_maillages != other._maillages) { return false; }
         if (_pResultat != other._pResultat) { return false; }
         if (_emitAcVolNode != other._emitAcVolNode) { return false; }
@@ -157,7 +151,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _upTodate = pOtherCalcul->_upTodate;
     _state = pOtherCalcul->_state;
 
-    _pAtmosphere->deepCopy(pOtherCalcul->_pAtmosphere, copyId);
     _pResultat->deepCopy(pOtherCalcul->_pResultat, copyId);
 
     _elementSelection = pOtherCalcul->_elementSelection;
@@ -251,9 +244,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
         tmpNode.setAttribute("accVolNodeId", (*iter4).first->getID().toString());
         tmpNode.setAttribute("state", QString(intToStr((*iter4).second).c_str()));
     }
-
-    // Atmosphere
-    _pAtmosphere->toXML(domNewElem);
 
     // Maillages
     unsigned int i;
@@ -406,9 +396,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         else if (elemCur.nodeName() == "EtatAtts") // Etats des attenuateurs
         {
         }
-
-        // Atmosphere
-        _pAtmosphere->callFromXMLIfEqual(elemCur);
 
         // CLM-NT33: Compatibilitité avec ancien format XML
         // Points de controle

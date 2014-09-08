@@ -55,15 +55,15 @@ void TYAcousticModel::init(const TYCalcul& calcul)
     // Calcul en conditions favorables
     _conditionFav = config->PropaConditions;
     // Definit l'atmosphere courante du site
-    double pression = calcul.getAtmosphere()._pObj->getPression();
-    double temperature = calcul.getAtmosphere()._pObj->getTemperature();
-    double hygrometrie = calcul.getAtmosphere()._pObj->getHygrometrie();
+    double pression = config->AtmosPressure;
+    double temperature = config->AtmosTemperature;
+    double hygrometrie = config->AtmosHygrometry;
 
     pSolverAtmos = std::unique_ptr<tympan::AtmosphericConditions> ( new tympan::AtmosphericConditions(pression, temperature, hygrometrie) );
     // Calcul avec interference
     _interference = config->ModSummation;
     // On calcul tout de suite le spectre de longueur d'onde
-    _lambda = OSpectre::getLambda(pSolverAtmos->compute_c()); //_pAtmo->getVitSon());
+    _lambda = OSpectre::getLambda(pSolverAtmos->compute_c());
     // Coefficient multiplicateur pour le calcul des reflexions supplementaires en condition favorable
     _paramH = config->H1parameter;
 }
