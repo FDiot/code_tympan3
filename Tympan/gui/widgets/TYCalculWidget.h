@@ -105,12 +105,6 @@ public slots:
     void updateUseEcran();
 
     /**
-     * Choix du calcul des reflexions
-     * Ce choix impose le calcul des trajets lateraux
-     */
-    void updateUseReflexion();
-
-    /**
      * Affiche un menu contextuel.
      */
     virtual void contextMenuEvent(QContextMenuEvent* e);
@@ -161,8 +155,6 @@ protected:
     QLabel* _labelParcoursLateraux;
     QCheckBox* _checkBoxParcoursLateraux;
 
-    QCheckBox* _checkBoxUseReflexion;
-    QLabel* _labelUseReflexion;
     QLineEdit* _lineEditDistanceSRMin;
     QGroupBox* _groupBox;
     QGroupBox* _groupBoxFlag;
