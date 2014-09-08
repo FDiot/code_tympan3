@@ -22,10 +22,9 @@
 #include "Tympan/models/common/delaunay_maker.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/solver/config.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
-#include "Tympan/solvers/AcousticRaytracer/global.h"
-#include "Tympan/solvers/ANIME3DSolver/TYANIME3DSetup.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticModel.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DFaceSelector.h"
@@ -55,9 +54,8 @@ void TYANIME3DSolver::purge()
 
 void TYANIME3DSolver::init()
 {
-    ANIME3DSetup::exec();
-
-    _pAtmos = std::unique_ptr<tympan::AtmosphericConditions>( new tympan::AtmosphericConditions(globalAtmosPressure, globalAtmosTemperature, globalAtmosHygrometry) ); 
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
+    _pAtmos = std::unique_ptr<tympan::AtmosphericConditions>( new tympan::AtmosphericConditions(config->AtmosPressure, config->AtmosTemperature, config->AtmosHygrometry) );
 
     _tabRay.clear();
 }
@@ -66,6 +64,7 @@ bool TYANIME3DSolver::solve(TYCalcul& calcul,
         const tympan::AcousticProblemModel& aproblem,
         tympan::AcousticResultModel& aresult)
 {
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     // Rcupration (once for all) des sources et des rcepteurs
     init();
 
@@ -105,7 +104,7 @@ bool TYANIME3DSolver::solve(TYCalcul& calcul,
         }
     }
 
-    if (globalUseMeteo && globalOverSampleD)
+    if (config->UseMeteo && config->OverSampleD)
     {
         for (unsigned int i = 0; i < _tabRay.size(); i++)
         {

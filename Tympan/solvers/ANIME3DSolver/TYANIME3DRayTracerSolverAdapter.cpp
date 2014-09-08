@@ -13,6 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/ValidRay.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/PostTreatment.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/FaceSelector.h"
@@ -32,35 +33,36 @@
 
 bool TYANIME3DRayTracerSolverAdapter::postTreatmentScene(Scene* scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs)
 {
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
 	selectorManagerValidation.addSelector( new CleanerSelector<Ray>() );
-	selectorManagerValidation.addSelector( new LengthSelector<Ray>(globalMaxLength) );
+	selectorManagerValidation.addSelector( new LengthSelector<Ray>(config->MaxLength) );
 
-	if (globalUsePostFilters)
+	if (config->UsePostFilters)
 	{
 #ifdef _DEBUG
-		if (globalDebugUseCloseEventSelector)
+		if (config->DebugUseCloseEventSelector)
 #endif
 		selectorManagerValidation.addSelector( new CloseEventSelector<Ray>() );
 #ifdef _DEBUG
-		if (globalDebugUseDiffractionAngleSelector)
+		if (config->DebugUseDiffractionAngleSelector)
 #endif
 		selectorManagerValidation.addSelector( new DiffractionAngleSelector<Ray>() );
 #ifdef _DEBUG
-		if (globalDebugUseDiffractionPathSelector)
+		if (config->DebugUseDiffractionPathSelector)
 #endif
-		selectorManagerValidation.addSelector( new DiffractionPathSelector<Ray>(globalMaxPathDifference) );
+		selectorManagerValidation.addSelector( new DiffractionPathSelector<Ray>(config->MaxPathDifference) );
 #ifdef _DEBUG
-		if (globalDebugUseFermatSelector)
+		if (config->DebugUseFermatSelector)
 #endif
-		selectorManagerValidation.addSelector( new FermatSelector<Ray>() ); 
+		selectorManagerValidation.addSelector( new FermatSelector<Ray>() );
 #ifdef _DEBUG
-		if (globalDebugUseFaceSelector)
+		if (config->DebugUseFaceSelector)
 #endif
 		selectorManagerValidation.addSelector( new FaceSelector<Ray>(HISTORY_PRIMITIVE) );
 	}
- 
-	selectorManagerIntersection.addSelector( new DiffractionSelector<Ray>(globalMaxDiffraction) );
-    selectorManagerIntersection.addSelector( new ReflectionSelector<Ray>(globalMaxReflexion, globalUseSol) );
+
+	selectorManagerIntersection.addSelector( new DiffractionSelector<Ray>(config->MaxDiffraction) );
+    selectorManagerIntersection.addSelector( new ReflectionSelector<Ray>(config->MaxReflexion, config->UseSol) );
 
     // Ajoute des cylindres sur les arretes diffractantes
     PostTreatment::constructEdge(scene);
@@ -70,26 +72,27 @@ bool TYANIME3DRayTracerSolverAdapter::postTreatmentScene(Scene* scene, std::vect
 
 bool TYANIME3DRayTracerSolverAdapter::valideIntersection(Ray* r, Intersection* inter)
 {
-    if (r->events.size() > static_cast<unsigned int>(globalMaxProfondeur)) { return false; }
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
+    if (r->events.size() > static_cast<unsigned int>(config->MaxProfondeur)) { return false; }
 
     bool isValid = false;
 
     // cas d'un triangle (sol)
     if ( ( inter->forme == TRIANGLE ) &&
-		 ( r->nbReflexion < static_cast<unsigned int>(globalMaxReflexion) ) &&
-		 !( !globalUseSol && inter->p->isSol() ) )
+		 ( r->nbReflexion < static_cast<unsigned int>(config->MaxReflexion) ) &&
+		 !( !config->UseSol && inter->p->isSol() ) )
     {
         isValid = ValidRay::validTriangleWithSpecularReflexion(r, inter);
     }
 
     // cas du cylindre (arrete de diffraction)
-    else if (inter->forme == CYLINDRE && r->nbDiffraction < static_cast<unsigned int>(globalMaxDiffraction))
+    else if (inter->forme == CYLINDRE && r->nbDiffraction < static_cast<unsigned int>(config->MaxDiffraction))
     {
         isValid = ValidRay::validCylindreWithDiffraction(r, inter);
     }
 
 #ifdef _ALLOW_TARGETING_
-    if (isValid && globalEnableFullTargets) { ValidRay::appendDirectionToEvent(r->events.back(), targetManager); }
+    if (isValid && config->EnableFullTargets) { ValidRay::appendDirectionToEvent(r->events.back(), targetManager); }
 #endif //_ALLOW_TARGETING_
 
     return (isValid); //(isValid && selectorManagerIntersection.appendData(r));
@@ -110,7 +113,7 @@ bool TYANIME3DRayTracerSolverAdapter::valideRayon(Ray* r)
 
 bool TYANIME3DRayTracerSolverAdapter::invalidRayon(Ray* r)
 {
-    if (!globalKeepDebugRay)
+    if (!tympan::SolverConfiguration::get()->KeepDebugRay)
     {
         delete r;
 		r = NULL;

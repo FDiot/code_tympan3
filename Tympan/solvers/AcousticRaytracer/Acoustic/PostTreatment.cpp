@@ -13,14 +13,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "PostTreatment.h"
 #include <set>
 #include <vector>
 #include <map>
+
+#include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
-#include "Tympan/solvers/AcousticRaytracer/global.h"
+#include "PostTreatment.h"
 
 typedef std::pair<unsigned int, unsigned int> segment;
 typedef std::map<segment , std::vector<Shape*> > mapSegmentShapes;
@@ -91,7 +92,7 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
     angleOuverture = 2. * acos(angle);
 
     // Utilisation d'une valeur globale pour la gestion de l'angle minimal
-    float angleMax = globalAngleDiffMin * M_PI / 180;
+    float angleMax = tympan::SolverConfiguration::get()->AngleDiffMin * M_PI / 180;
 
     if (!p1->getMaterial()->isNatural && !p2->getMaterial()->isNatural)
     {
@@ -132,7 +133,7 @@ bool PostTreatment::constructEdge(Scene* scene)
             if (itset1 == validSegment.end() && itset2 == validSegment.end() && isAcceptableEdge(it->first, it->second.at(0), it->second.at(1), angleOuverture))
             {
                 validSegment.insert(it->first);
-                Cylindre* cylindre = new Cylindre(it->second.at(0), it->second.at(1), scene->getVertices(), it->first.first, it->first.second, globalCylindreThick);
+                Cylindre* cylindre = new Cylindre(it->second.at(0), it->second.at(1), scene->getVertices(), it->first.first, it->first.second, tympan::SolverConfiguration::get()->CylindreThick);
                 cylindre->setAngleOuverture(angleOuverture);
                 scene->addShape(cylindre);
                 ss << "Ajout du segment (" << it->first.first << "," << it->first.second << ")" << std::endl;

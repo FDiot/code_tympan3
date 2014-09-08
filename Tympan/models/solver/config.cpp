@@ -27,16 +27,16 @@ SolverConfiguration::SolverConfiguration()
     AtmosTemperature=20.;
     AtmosHygrometry=60.;
     AnalyticC0=340.;
-    WindDirection=0.;
     AnalyticGradC=0.;
     AnalyticGradV=0.;
+    WindDirection=0.;
 
     RayTracingOrder=0;
     Discretization=2;
     NbRaysPerSource=10000;
     MaxLength=5000;
     SizeReceiver=2.;
-    Accelerator=3;
+    Accelerator=1; // XXX 3 for ANIME3D Solver?
     MaxTreeDepth=12;
     AngleDiffMin=5.;
     CylindreThick=0.3f;

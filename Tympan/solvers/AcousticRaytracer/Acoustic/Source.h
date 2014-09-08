@@ -16,18 +16,18 @@
 #ifndef SOURCE_H
 #define SOURCE_H
 
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Sampler.h"
-#include "Spectre.h"
 #include <string>
-
-#include "Tympan/solvers/AcousticRaytracer/Base.h"
-
-#ifdef _ALLOW_TARGETING_
-#include "Tympan/solvers/AcousticRaytracer/Tools/TargetManager.h"
-#endif //_ALLOW_TARGETING_
-
 #include <iostream>
-#include "Tympan/solvers/AcousticRaytracer/global.h"
+
+#include "Tympan/solvers/AcousticRaytracer/Geometry/Sampler.h"
+#include "Tympan/solvers/AcousticRaytracer/Base.h"
+#ifdef _ALLOW_TARGETING_
+  #include "Tympan/solvers/AcousticRaytracer/Tools/TargetManager.h"
+#endif //_ALLOW_TARGETING_
+#include "Spectre.h"
+
+
+
 
 class Source : public Base
 {

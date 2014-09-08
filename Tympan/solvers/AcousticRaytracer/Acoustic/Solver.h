@@ -16,14 +16,12 @@
 #ifndef SOLVER_H
 #define SOLVER_H
 
-#include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
 #include <vector>
 #include <deque>
 
-
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
+#include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
 #include "Recepteur.h"
-#include "Tympan/solvers/AcousticRaytracer/global.h"
 
 /*!
 * \file Solver.h
@@ -58,19 +56,6 @@ public:
     {
     }
 
-    /*!
-    * \fn initGlobalValues()
-    * \brief Initialise les valeures globales pour la simulation. Definie aussi bien les valeurs de la simulation que du solver.
-    */
-    virtual void initGlobalValues()
-    {
-        globalMaxProfondeur = 0;            //Nombre d'evenements autorises pour un rayon, globalMaxProfondeur inclu
-        globalNbRaysPerSource = 100;        //Nombre de rayons lances par les sources
-        globalSizeReceiver = 1;             //Diametre de la sphere representant le recepteur
-        globalAccelerator = 1;              //Choix de la structure acceleratrice. 0 : BruteForce, 1 : GridAccelerator, 2 : BVH, 3 : KdTree, other : GridAccelerator
-        globalMaxTreeDepth = 0;
-        globalUseSol = false;
-    }
 
     /*!
     * \fn virtual bool postTreatmentScene(Scene *scene)
