@@ -173,15 +173,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _checkBoxParcoursLateraux->setText(TR(""));
     groupBoxFlagLayout->addWidget(_checkBoxParcoursLateraux, 3, 3);
 
-    // Calcul avec reflexion
-    _labelUseReflexion = new QLabel(_groupBoxFlag);
-    _labelUseReflexion->setText(TR("id_usereflexion_label"));
-    groupBoxFlagLayout->addWidget(_labelUseReflexion, 4, 0);
-
-    _checkBoxUseReflexion = new QCheckBox(_groupBoxFlag);
-    _checkBoxUseReflexion->setText(TR(""));
-    groupBoxFlagLayout->addWidget(_checkBoxUseReflexion, 4, 1);
-
     // Calcul en conditions favorables (1)
 
     QButtonGroup* buttonGroupCondFavHomo = new QButtonGroup();
@@ -356,7 +347,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     connect(pPushButtonTableEtats, SIGNAL(clicked()), _etatsWidget, SLOT(show()));
     connect(_pushButtonResultat, SIGNAL(clicked()), this, SLOT(editResultat()));
     connect(_checkBoxUseEcran, SIGNAL(clicked()), this, SLOT(updateUseEcran()));
-    connect(_checkBoxUseReflexion, SIGNAL(clicked()), this, SLOT(updateUseReflexion()));
 }
 
 TYCalculWidget::~TYCalculWidget()
@@ -432,10 +422,6 @@ void TYCalculWidget::updateContent()
     _checkBoxUseEcran->setChecked(getElement()->getUseEcran());
     _checkBoxParcoursLateraux->setChecked(getElement()->getCalculTrajetsHorizontaux());
     _checkBoxParcoursLateraux->setEnabled(_checkBoxUseEcran->isChecked());
-
-    // Le checkBox de reflexion n'est active que si on fait un calcul d'ecran
-    _checkBoxUseReflexion->setEnabled(_checkBoxUseEcran->isChecked());
-    _checkBoxUseReflexion->setChecked(getElement()->getUseReflexion());
 
     _radioButtonEnergetique->setChecked(!getElement()->getInterference());
     _radioButtonInterference->setChecked(getElement()->getInterference());
@@ -562,8 +548,6 @@ void TYCalculWidget::apply()
     getElement()->setUseEcran(_checkBoxUseEcran->isChecked());
     getElement()->setCalculTrajetsHorizontaux(_checkBoxParcoursLateraux->isChecked());
 
-    getElement()->setUseReflexion(_checkBoxUseReflexion->isChecked());
-
     getElement()->setInterference(_radioButtonInterference->isChecked());
 
     getElement()->setDateModif(_editDateModif->date().currentDate().toString(Qt::ISODate));
@@ -642,15 +626,6 @@ void TYCalculWidget::editResultat()
 void TYCalculWidget::updateUseEcran()
 {
     _checkBoxParcoursLateraux->setEnabled(_checkBoxUseEcran->isChecked());
-    _checkBoxUseReflexion->setEnabled(_checkBoxUseEcran->isChecked());
-
-    // Si le calcul d'ecran est desactive, la checkbox de reflexion est decoche
-    if (! _checkBoxUseEcran->isChecked()) { _checkBoxUseReflexion->setChecked(false); }
-}
-
-void TYCalculWidget::updateUseReflexion()
-{
-    _checkBoxParcoursLateraux->setChecked(true);
 }
 
 void TYCalculWidget::updateBoxSol()

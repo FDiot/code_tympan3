@@ -255,18 +255,6 @@ public:
     void setUseEcran(bool use) { _useEcran = use; }
 
     /**
-     * \fn bool getUseReflexion()
-     * \brief Get du test de la prise ou non en compte de la reflexion.
-     * \return _useReflexion
-     */
-    bool getUseReflexion() const { return _useReflexion; }
-    /**
-     * \fn void setUseReflexion(bool use)
-     * \brief Set du test de la prise ou non en compte de la reflexion.
-     */
-    void setUseReflexion(bool use) { _useReflexion = use; }
-
-    /**
      * \fn  bool getInterference()
      * \brief Get du test du flag de calcul energetique ou avec interference.
      * \return _interference
@@ -731,8 +719,6 @@ protected:
     bool _bCalculTrajetsHorizontaux;
 
 
-    ///Prise ou non de la reflexion.
-    bool _useReflexion;
     ///Calcul energetique ou avec interference.
     bool _interference;
 

@@ -807,13 +807,11 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     _pCheckBoxUseAtmosphere = new QCheckBox(TR("id_useatmosphere_label"));
     _pCheckBoxUseVegetation = new QCheckBox(TR("id_usevegetation_label"));
     _pCheckBoxUseEcran = new QCheckBox(TR("id_useecran_label"));
-    _pCheckBoxUseReflexion = new QCheckBox(TR("id_usereflexion_label"));
     _pCheckBoxInterference = new QCheckBox(TR("id_interference_label"));
 
     QGridLayout* groupBoxLayout = new QGridLayout();
     groupBoxLayout->addWidget(_pCheckBoxUseEcran, 0, 1);
     groupBoxLayout->addWidget(_pCheckBoxUseAtmosphere, 1, 0);
-    groupBoxLayout->addWidget(_pCheckBoxUseReflexion, 1, 1);
     groupBoxLayout->addWidget(_pCheckBoxUseVegetation, 2, 0);
     groupBoxLayout->addWidget(_pCheckBoxInterference, 2, 1);
     groupBoxLayout->addWidget(_pCheckBoxCondFav, 3, 0);
@@ -1381,10 +1379,6 @@ void TYPreferenceDialog::loadPreferences()
 
 
     // Acoustique
-    if (TYPreferenceManager::exists("UseReflexionCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseReflexion->setChecked(TYPreferenceManager::getBool("UseReflexionCalculDefault"));
-    }
     if (TYPreferenceManager::exists("UseEcranCalculDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseEcran->setChecked(TYPreferenceManager::getBool("UseEcranCalculDefault"));
@@ -1851,7 +1845,6 @@ void TYPreferenceDialog::savePreferences()
     TYPreferenceManager::setBool("CondFavCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxCondFav->isChecked());
     TYPreferenceManager::setBool("UseAtmosphereCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->isChecked());
     TYPreferenceManager::setBool("UseVegetationCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseVegetation->isChecked());
-    TYPreferenceManager::setBool("UseReflexionCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseReflexion->isChecked());
     TYPreferenceManager::setBool("InterferenceCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->isChecked());
     TYPreferenceManager::setBool("UseEcranCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseEcran->isChecked());
     if (((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo2Pi->isChecked())

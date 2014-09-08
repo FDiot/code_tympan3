@@ -60,13 +60,9 @@ void TYAcousticModel::init(const TYCalcul& calcul)
     // Calcul avec sol reel
     _useSol = config->UseRealGround;
     // Calcul avec reflexion sur les parois verticales
-    _useReflex = calcul.getUseReflexion();
-
-
+    _useReflex = config->UseReflection;
     // Calcul en conditions favorables
     _conditionFav = calcul.getCondFav();
-
-
     // Definit l'atmosphere courante du site
     double pression = calcul.getAtmosphere()._pObj->getPression();
     double temperature = calcul.getAtmosphere()._pObj->getTemperature();

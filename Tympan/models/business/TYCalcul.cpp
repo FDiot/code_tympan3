@@ -69,10 +69,8 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _condFav = false;
     _useVegetation = false;
     _useAtmosphere = true;
-    _useReflexion = false;
     _useEcran = true;
     _bCalculTrajetsHorizontaux = true;
-    _useReflexion = false;
     _interference = false;
 
     _state = TYCalcul::Actif; // A sa creation, le calcul est actif
@@ -96,15 +94,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     else
     {
         TYPreferenceManager::setInt(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo", _typeSaisieMeteo);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "UseReflexionCalculDefault"))
-    {
-        _useReflexion = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "UseReflexionCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "UseReflexionCalculDefault", _useReflexion);
     }
 
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "UseEcranCalculDefault"))
@@ -241,7 +230,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _useVegetation = other._useVegetation;
         _useAtmosphere = other._useAtmosphere;
         _useEcran = other._useEcran;
-        _useReflexion = other._useReflexion;
         _interference = other._interference;
         _state = other._state;
         _h1 = other._h1;
@@ -274,7 +262,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_useVegetation != other._useVegetation) { return false; }
         if (_useAtmosphere != other._useAtmosphere) { return false; }
         if (_useEcran != other._useEcran) { return false; }
-        if (_useReflexion != other._useReflexion) { return false; }
         if (_interference != other._interference) { return false; }
         if (_state != other._state) { return false; }
         if (_h1 != other._h1) { return false; }
@@ -318,7 +305,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _useVegetation = pOtherCalcul->_useVegetation;
     _useAtmosphere = pOtherCalcul->_useAtmosphere;
     _useEcran = pOtherCalcul->_useEcran;
-    _useReflexion = pOtherCalcul->_useReflexion;
     _interference = pOtherCalcul->_interference;
     _state = pOtherCalcul->_state;
     _h1 = pOtherCalcul->_h1;
@@ -382,7 +368,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementIntValue(domNewElem, "useAtmosphere", _useAtmosphere);
     TYXMLTools::addElementIntValue(domNewElem, "useEcran", _useEcran);
     TYXMLTools::addElementIntValue(domNewElem, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux);
-    TYXMLTools::addElementIntValue(domNewElem, "useReflexion", _useReflexion);
     TYXMLTools::addElementIntValue(domNewElem, "interference", _interference);
     TYXMLTools::addElementDoubleValue(domNewElem, "h1", _h1);
     TYXMLTools::addElementDoubleValue(domNewElem, "distanceSRMin", _distanceSRMin);
@@ -500,7 +485,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementBoolValue(elemCur, "useAtmosphere", _useAtmosphere, getOk[9]);
         TYXMLTools::getElementBoolValue(elemCur, "useEcran", _useEcran, getOk[10]);
         TYXMLTools::getElementBoolValue(elemCur, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux, getOk[18]);
-        TYXMLTools::getElementBoolValue(elemCur, "useReflexion", _useReflexion, getOk[11]);
         TYXMLTools::getElementBoolValue(elemCur, "interference", _interference, getOk[12]);
         TYXMLTools::getElementDoubleValue(elemCur, "h1", _h1, getOk[13]);
         TYXMLTools::getElementDoubleValue(elemCur, "distanceSRMin", _distanceSRMin, getOk[14]);
