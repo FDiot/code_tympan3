@@ -193,11 +193,13 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
     etape2.setPoint(rayon._ptA);
 
     OPoint3D ptSym;
+    int symOK = 0;
     if (penteMoyenne.longueur() > 0) // Si la pente moyenne est definie, on prend le point symetrique
     {
-        penteMoyenne.symetrieOf(rayon._ptA, ptSym);
+        symOK = penteMoyenne.symetrieOf(rayon._ptA, ptSym);
     }
-    else // Sinon on prend une simple symetrie par rapport a z
+
+    if (symOK == 0) // Sinon on prend une simple symetrie par rapport a z
     {
         ptSym = rayon._ptA;
         ptSym._z = 2 * penteMoyenne._ptA._z - ptSym._z;
@@ -205,7 +207,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
 
     // Calcul du point de reflexion
     OPoint3D ptReflex;
-    penteMoyenne.intersects(OSegment3D(ptSym, rayon._ptB), ptReflex, _seuilConfondus);
+    int result = penteMoyenne.intersects(OSegment3D(ptSym, rayon._ptB), ptReflex, _seuilConfondus);
 
     //              2. Etape avant la reflexion
     OSegment3D seg1(rayon._ptA, ptReflex); // On part de la source vers le point de reflexion
@@ -1289,7 +1291,7 @@ bool TYAcousticModel::solve(TYTrajet& trajet)
 
     rD2 = rD2 * rD2 ;
 
-    double divGeom = pSolverAtmos->Z_ref / (PIM4 * rD2);
+    double divGeom = pSolverAtmos->compute_z() / (PIM4 * rD2);
 
     OSpectre& SLp = trajet.getSpectre();
 
