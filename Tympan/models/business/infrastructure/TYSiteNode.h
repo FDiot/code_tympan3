@@ -462,6 +462,12 @@ public:
      */
     LPTYAltimetrie getAltimetry() const;
 
+    /* Transform matrix allowing to move the site to a global frame.
+     * If the site is the root site, this matrix should be equal to the identity
+     * matrix.
+     */
+    OMatrix getGlobalMatrix() const;
+
 protected:
     /**
      * Methode interne utilisee par 'merge()' pour recopier les composants

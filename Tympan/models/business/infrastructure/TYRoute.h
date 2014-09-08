@@ -166,9 +166,12 @@ public:
     *
     * \param alti the altimetry the altitude must be updated from
     * \param the GeoNode associated with this Road
+    * \param globalMatrix is the matrix allowing to move 'pGeoNode' to a global frame. If
+     * 'pGeoNode' is in the root site node, it is equal to the identity matrix.
     * \return whether the update succeeded.
     */
-    virtual bool updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode);
+    virtual bool updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode,
+            OMatrix globalMatrix);
 
     const RoadTrafficComponent& getNMPB08RoadTrafficComponent(
         enum TrafficRegimes regime, enum TYTrafic::VehicleTypes vehic_type) const;
@@ -270,8 +273,11 @@ protected:
 
     /**
      * Distribution des sources
+     * 'globalMatrix' is the matrix allowing to move 'pGeoNode' to a global frame. If
+     * 'pGeoNode' is in the root site node, it is equal to the identity matrix.
      */
-    virtual void distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode);
+    virtual void distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode,
+            OMatrix globalMatrix);
 
     /// Get/Set de l'offset des sources de la route
     double getOffSet() { return _offSet; }
