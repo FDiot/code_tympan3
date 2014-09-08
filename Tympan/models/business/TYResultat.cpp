@@ -746,7 +746,6 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
         ofs << pCalcul->getName().toStdString() << ';';
         ofs << pCalcul->getUseAtmosphere() << ';';
         ofs << pCalcul->getCalculTrajetsHorizontaux() << ';';
-        ofs << pCalcul->getUseVegetation() << ';';
         if (pCalcul->getCondFav())
         {
             ofs << "Favorables" << ';';

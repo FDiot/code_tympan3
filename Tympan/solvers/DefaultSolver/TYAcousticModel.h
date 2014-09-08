@@ -188,7 +188,6 @@ private:
     bool _conditionFav;
     bool _useAtmo;
     bool _bCalculTrajetsHorizontaux;
-    bool _useVegetation;
     bool _interference;
     double _seuilConfondus;
     double _paramH;

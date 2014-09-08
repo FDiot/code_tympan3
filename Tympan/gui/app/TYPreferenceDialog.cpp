@@ -805,12 +805,10 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     _pLineEditDistanceSRMin = new QLineEdit();
     QLabel* pLabelDistanceSRMin = new QLabel(TR("id_distancesrmin_label"));
     _pCheckBoxUseAtmosphere = new QCheckBox(TR("id_useatmosphere_label"));
-    _pCheckBoxUseVegetation = new QCheckBox(TR("id_usevegetation_label"));
     _pCheckBoxInterference = new QCheckBox(TR("id_interference_label"));
 
     QGridLayout* groupBoxLayout = new QGridLayout();
     groupBoxLayout->addWidget(_pCheckBoxUseAtmosphere, 1, 0);
-    groupBoxLayout->addWidget(_pCheckBoxUseVegetation, 2, 0);
     groupBoxLayout->addWidget(_pCheckBoxInterference, 2, 1);
     groupBoxLayout->addWidget(_pCheckBoxCondFav, 3, 0);
     groupBoxLayout->addWidget(pLabelParamH, 4, 0);
@@ -1377,10 +1375,6 @@ void TYPreferenceDialog::loadPreferences()
 
 
     // Acoustique
-    if (TYPreferenceManager::exists("UseVegetationCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseVegetation->setChecked(TYPreferenceManager::getBool("UseVegetationCalculDefault"));
-    }
     if (TYPreferenceManager::exists("UseAtmosphereCalculDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->setChecked(TYPreferenceManager::getBool("UseAtmosphereCalculDefault"));
@@ -1838,7 +1832,6 @@ void TYPreferenceDialog::savePreferences()
     // Acoustique
     TYPreferenceManager::setBool("CondFavCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxCondFav->isChecked());
     TYPreferenceManager::setBool("UseAtmosphereCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->isChecked());
-    TYPreferenceManager::setBool("UseVegetationCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseVegetation->isChecked());
     TYPreferenceManager::setBool("InterferenceCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->isChecked());
     if (((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo2Pi->isChecked())
     {

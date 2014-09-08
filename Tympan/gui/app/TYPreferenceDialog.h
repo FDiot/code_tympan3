@@ -208,7 +208,6 @@ public:
 
     QCheckBox* _pCheckBoxCondFav;
     QCheckBox* _pCheckBoxUseAtmosphere;
-    QCheckBox* _pCheckBoxUseVegetation;
     QCheckBox* _pCheckBoxInterference;
     QButtonGroup* _pExpansGeoButtonGroup;
     QRadioButton* _pRadioButtonExpansGeo2Pi;
