@@ -184,7 +184,6 @@ private:
     int  _expGeo;
     int  _typeCalculSol;
     bool _useSol;
-    bool _useEcran;
     bool _useReflex;
     bool _conditionFav;
     bool _useAtmo;

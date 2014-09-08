@@ -806,11 +806,9 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     QLabel* pLabelDistanceSRMin = new QLabel(TR("id_distancesrmin_label"));
     _pCheckBoxUseAtmosphere = new QCheckBox(TR("id_useatmosphere_label"));
     _pCheckBoxUseVegetation = new QCheckBox(TR("id_usevegetation_label"));
-    _pCheckBoxUseEcran = new QCheckBox(TR("id_useecran_label"));
     _pCheckBoxInterference = new QCheckBox(TR("id_interference_label"));
 
     QGridLayout* groupBoxLayout = new QGridLayout();
-    groupBoxLayout->addWidget(_pCheckBoxUseEcran, 0, 1);
     groupBoxLayout->addWidget(_pCheckBoxUseAtmosphere, 1, 0);
     groupBoxLayout->addWidget(_pCheckBoxUseVegetation, 2, 0);
     groupBoxLayout->addWidget(_pCheckBoxInterference, 2, 1);
@@ -1379,10 +1377,6 @@ void TYPreferenceDialog::loadPreferences()
 
 
     // Acoustique
-    if (TYPreferenceManager::exists("UseEcranCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseEcran->setChecked(TYPreferenceManager::getBool("UseEcranCalculDefault"));
-    }
     if (TYPreferenceManager::exists("UseVegetationCalculDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseVegetation->setChecked(TYPreferenceManager::getBool("UseVegetationCalculDefault"));
@@ -1846,7 +1840,6 @@ void TYPreferenceDialog::savePreferences()
     TYPreferenceManager::setBool("UseAtmosphereCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->isChecked());
     TYPreferenceManager::setBool("UseVegetationCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseVegetation->isChecked());
     TYPreferenceManager::setBool("InterferenceCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->isChecked());
-    TYPreferenceManager::setBool("UseEcranCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseEcran->isChecked());
     if (((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo2Pi->isChecked())
     {
         TYPreferenceManager::setBool("ExpansGeo2PiCalculDefault", false);

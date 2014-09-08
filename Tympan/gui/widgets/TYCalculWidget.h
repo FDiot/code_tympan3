@@ -100,11 +100,6 @@ public slots:
     void editMaillage(QTreeWidgetItem*);
 
     /**
-     * Choix du calcul des parcours lateraux pour les ecrans
-     */
-    void updateUseEcran();
-
-    /**
      * Affiche un menu contextuel.
      */
     virtual void contextMenuEvent(QContextMenuEvent* e);
@@ -150,8 +145,6 @@ protected:
     QRadioButton* _radioButtonInterference;
 
     // Utilisation des ecrans
-    QLabel* _labelUseEcran;
-    QCheckBox* _checkBoxUseEcran;
     QLabel* _labelParcoursLateraux;
     QCheckBox* _checkBoxParcoursLateraux;
 

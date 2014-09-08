@@ -243,18 +243,6 @@ public:
     void setUseAtmosphere(const bool use = true);
 
     /**
-     *\fn bool getUseEcran()
-     *\brief Get du test de la prise ou non en compte des murs, batiments et machines.
-     *\return _useEcran
-     */
-    bool getUseEcran() const { return _useEcran; }
-    /**
-     *\fn void setUseEcran(bool use)
-     *\brief Set du test de la prise ou non en compte des murs, batiments et machines.
-     */
-    void setUseEcran(bool use) { _useEcran = use; }
-
-    /**
      * \fn  bool getInterference()
      * \brief Get du test du flag de calcul energetique ou avec interference.
      * \return _interference
@@ -713,8 +701,6 @@ protected:
     bool _useVegetation;
     ///Prise ou non en compte de l'atmosphere.
     bool _useAtmosphere;
-    ///Prise ou non en compte des murs, batiments et machines presents dans le site.
-    bool _useEcran;
     /// Calcul des trajets horizontaux
     bool _bCalculTrajetsHorizontaux;
 

@@ -156,15 +156,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _checkBoxUseVegetation->setText(TR(""));
     groupBoxFlagLayout->addWidget(_checkBoxUseVegetation, 2, 1);
 
-    // Utilisation d'ecrans
-    _labelUseEcran = new QLabel(_groupBoxFlag);
-    _labelUseEcran->setText(TR("id_useecran_label"));
-    groupBoxFlagLayout->addWidget(_labelUseEcran, 3, 0);
-
-    _checkBoxUseEcran = new QCheckBox(_groupBoxFlag);
-    _checkBoxUseEcran->setText(TR(""));
-    groupBoxFlagLayout->addWidget(_checkBoxUseEcran, 3, 1);
-
     _labelParcoursLateraux = new QLabel(_groupBoxFlag);
     _labelParcoursLateraux->setText(TR("id_parcours_lateraux"));
     groupBoxFlagLayout->addWidget(_labelParcoursLateraux, 3, 2);
@@ -346,7 +337,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 
     connect(pPushButtonTableEtats, SIGNAL(clicked()), _etatsWidget, SLOT(show()));
     connect(_pushButtonResultat, SIGNAL(clicked()), this, SLOT(editResultat()));
-    connect(_checkBoxUseEcran, SIGNAL(clicked()), this, SLOT(updateUseEcran()));
 }
 
 TYCalculWidget::~TYCalculWidget()
@@ -419,9 +409,7 @@ void TYCalculWidget::updateContent()
     _checkBoxUseVegetation->setChecked(getElement()->getUseVegetation());
     _checkBoxUseAtmosphere->setChecked(getElement()->getUseAtmosphere());
 
-    _checkBoxUseEcran->setChecked(getElement()->getUseEcran());
     _checkBoxParcoursLateraux->setChecked(getElement()->getCalculTrajetsHorizontaux());
-    _checkBoxParcoursLateraux->setEnabled(_checkBoxUseEcran->isChecked());
 
     _radioButtonEnergetique->setChecked(!getElement()->getInterference());
     _radioButtonInterference->setChecked(getElement()->getInterference());
@@ -545,7 +533,6 @@ void TYCalculWidget::apply()
     getElement()->setUseVegetation(_checkBoxUseVegetation->isChecked());
     getElement()->setUseAtmosphere(_checkBoxUseAtmosphere->isChecked());
 
-    getElement()->setUseEcran(_checkBoxUseEcran->isChecked());
     getElement()->setCalculTrajetsHorizontaux(_checkBoxParcoursLateraux->isChecked());
 
     getElement()->setInterference(_radioButtonInterference->isChecked());
@@ -621,11 +608,6 @@ void TYCalculWidget::editMaillage(QTreeWidgetItem* item)
 void TYCalculWidget::editResultat()
 {
     getElement()->getResultat()->edit(this);
-}
-
-void TYCalculWidget::updateUseEcran()
-{
-    _checkBoxParcoursLateraux->setEnabled(_checkBoxUseEcran->isChecked());
 }
 
 void TYCalculWidget::updateBoxSol()
