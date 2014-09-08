@@ -121,10 +121,6 @@ cdef extern from "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h":
     cdef cppclass TYUserSourcePonctuelle(TYSourcePonctuelle):
         pass
 
-cdef extern from "Tympan/models/business/material/TYAtmosphere.h":
-    cdef cppclass TYAtmosphere (TYElement):
-        pass
-
 cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
     cdef cppclass TYSiteNode (TYElement):
         void getChilds (vector[SmartPtr[TYElement]] &elts, bool recursive)
@@ -157,7 +153,6 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         SmartPtr[TYResultat] getResultat()
         void getAllSources(cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
                       vector[SmartPtr[TYGeometryNode]])
-        SmartPtr[TYAtmosphere] getAtmosphere()
         void selectActivePoint(SmartPtr[TYSiteNode] pSite)
         const vector[SmartPtr[TYGeometryNode]] getMaillages() const
         void goPostprocessing()

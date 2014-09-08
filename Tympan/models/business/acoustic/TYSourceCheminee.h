@@ -81,11 +81,6 @@ public:
     //    const LPTYAcousticRectangle getAcousticRectangle() const { return _pAcousticRectangle; }
     const LPTYRectangle getAcousticRectangle() const { return _pAcousticRectangle; }
 
-    /**
-     * Calcul de la puissance apparente de la source dans la direction du segment
-     */
-    //OSpectre lwApparenteSrcDest(const OSegment3D& seg, const TYAtmosphere& atmos, const int& expGeo = 0, const int& regime = -1) const;
-
 
     // Fonctions privees
 private:

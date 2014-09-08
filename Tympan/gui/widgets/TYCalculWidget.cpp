@@ -42,7 +42,6 @@
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYPluginManager.h"
 #include "Tympan/gui/widgets/TYEtatsWidget.h"
-#include "Tympan/gui/widgets/TYAtmosphereWidget.h"
 #include "TYCalculWidget.h"
 
 
@@ -140,11 +139,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     groupBoxFlagLayout->addWidget(_checkBoxParcoursLateraux, 3, 3);
 
     _tabWidget->insertTab(1, _groupBoxFlag, TR("id_opt_calc"));
-
-    // Onglet meteo
-    _meteoWidget = new TYAtmosphereWidget(getElement()->getAtmosphere(), _tabWidget);
-
-    _tabWidget->insertTab(2, _meteoWidget, TR("id_opt_meteo"));
 
     // Onglet Points de controle
     _tableauPointControle = new QTableWidget();
@@ -266,8 +260,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 
 TYCalculWidget::~TYCalculWidget()
 {
-    delete _meteoWidget;
-    _meteoWidget = NULL;
     delete _etatsWidget;
     _etatsWidget = NULL;
 }
@@ -433,9 +425,6 @@ void TYCalculWidget::apply()
     getElement()->setDateModif(_editDateModif->date().currentDate().toString(Qt::ISODate));
     getElement()->setDateCreation(_editDateCreation->date().toString(Qt::ISODate));
 
-    // Actualisation des parametres de l'atmosphere
-    _meteoWidget->apply();
-
     // Mise a jour des points de controles
     TYTabLPPointControl& tabPoints = getElement()->getProjet()->getPointsControl();
     int row = 0;
@@ -473,16 +462,6 @@ void TYCalculWidget::apply()
     getElement()->setStatusPartialResult(bEtat1) ; //(_checkBoxStoreGlobalMatrix->isChecked());
 
     emit modified();
-}
-
-void TYCalculWidget::editAtmosphere()
-{
-    int ret = getElement()->getAtmosphere()->edit(this);
-
-    if (ret == QDialog::Accepted)
-    {
-        _lineEditNomAtmosphere->setText(getElement()->getAtmosphere()->getName());
-    }
 }
 
 void TYCalculWidget::editMaillage(QTreeWidgetItem* item)

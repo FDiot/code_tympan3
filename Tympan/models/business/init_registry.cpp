@@ -15,7 +15,6 @@
 #include "Tympan/models/business/infrastructure/TYParoi.h"
 #include "Tympan/models/business/material/TYMateriauConstruction.h"
 #include "Tympan/models/business/material/TYVegetation.h"
-#include "Tympan/models/business/material/TYAtmosphere.h"
 #include "Tympan/models/business/material/TYSol.h"
 #include "Tympan/models/business/geometry/TYPoint.h"
 #include "Tympan/models/business/geometry/TYRepere.h"
@@ -94,7 +93,6 @@ void init_registry()
     // models/business/material
     OPrototype::add_factory("TYMateriauConstruction", std::move(build_factory<TYMateriauConstruction>()));
     OPrototype::add_factory("TYVegetation", std::move(build_factory<TYVegetation>()));
-    OPrototype::add_factory("TYAtmosphere", std::move(build_factory<TYAtmosphere>()));
     OPrototype::add_factory("TYSol", std::move(build_factory<TYSol>()));
     // models/business/geometry
     OPrototype::add_factory("TYPoint", std::move(build_factory<TYPoint>()));

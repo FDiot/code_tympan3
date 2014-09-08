@@ -26,6 +26,7 @@
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/TYMaillage.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/infrastructure/TYEcran.h"
 #include "Tympan/models/business/infrastructure/TYEtage.h"
 #include "Tympan/models/business/infrastructure/TYInfrastructure.h"

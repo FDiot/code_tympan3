@@ -814,44 +814,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     groupBox1->setTitle(TR("id_default_sol"));
     groupBox1->setLayout(groupBox1Layout);
 
-    //Atmosphere
-    QLabel* pLabelPression = new QLabel(TR("id_pression_label"));
-    _pLineEditPression = new QLineEdit();
-    QLabel* pUnitPression = new QLabel(TR("id_unite_pression"));
-    QLabel* pLabelTemperature = new QLabel(TR("id_temperature_label"));
-    _pLineEditTemperature = new QLineEdit();
-    QLabel* pUnitTemp = new QLabel(TR("id_unite_temp"));
-    QLabel* pLabelHygrometrie = new QLabel(TR("id_hygrometrie_label"));
-    _pLineEditHygrometrie = new QLineEdit();
-    QLabel* pUnitHygro = new QLabel(TR("id_unite_hygro"));
-    QLabel* pLabelVitVent = new QLabel(TR("id_vitvent_label"));
-    _pLineEditVitVent = new QLineEdit();
-    QLabel* pUnitVitVent = new QLabel(TR("id_unite_vitvent"));
-    QLabel* pLabelDirVent = new QLabel(TR("id_dirvent_label"));
-    _pLineEditDirVent = new QLineEdit();
-    QLabel* pUnitDirVent = new QLabel(TR("id_unite_dirvent"));
-
-    QGridLayout* groupBox2Layout = new QGridLayout();
-    groupBox2Layout->addWidget(pLabelPression, 0, 0);
-    groupBox2Layout->addWidget(_pLineEditPression, 0, 1);
-    groupBox2Layout->addWidget(pUnitPression, 0, 2);
-    groupBox2Layout->addWidget(pLabelTemperature, 1, 0);
-    groupBox2Layout->addWidget(_pLineEditTemperature, 1, 1);
-    groupBox2Layout->addWidget(pUnitTemp, 1, 2);
-    groupBox2Layout->addWidget(pLabelHygrometrie, 2, 0);
-    groupBox2Layout->addWidget(_pLineEditHygrometrie, 2, 1);
-    groupBox2Layout->addWidget(pUnitHygro, 2, 2);
-    groupBox2Layout->addWidget(pLabelVitVent, 3, 0);
-    groupBox2Layout->addWidget(_pLineEditVitVent, 3, 1);
-    groupBox2Layout->addWidget(pUnitVitVent, 3, 2);
-    groupBox2Layout->addWidget(pLabelDirVent, 4, 0);
-    groupBox2Layout->addWidget(_pLineEditDirVent, 4, 1);
-    groupBox2Layout->addWidget(pUnitDirVent, 4, 2);
-
-    QGroupBox* groupBox2 = new QGroupBox();
-    groupBox2->setTitle(TR("id_default_atmo"));
-    groupBox2->setLayout(groupBox2Layout);
-
     //Materiau de construction
     QLabel* pLabelMasseVol = new QLabel(TR("id_masse_vol_label"));
     _pLineEditMasseVol = new QLineEdit();
@@ -890,7 +852,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
 
     QVBoxLayout* pTabLayout = new QVBoxLayout();
     pTabLayout->addWidget(groupBox1);
-    pTabLayout->addWidget(groupBox2);
     pTabLayout->addWidget(groupBox3);
     pTabLayout->addWidget(groupBox4);
     pTabLayout->addStretch(1);
@@ -1344,26 +1305,6 @@ void TYPreferenceDialog::loadPreferences()
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEpaisseur->setText(QString().setNum(TYPreferenceManager::getDouble("EpaisSolDefault")));
     }
-    if (TYPreferenceManager::exists("PressionAtmoDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditPression->setText(QString().setNum(TYPreferenceManager::getDouble("PressionAtmoDefault")));
-    }
-    if (TYPreferenceManager::exists("TempAtmoDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditTemperature->setText(QString().setNum(TYPreferenceManager::getDouble("TempAtmoDefault")));
-    }
-    if (TYPreferenceManager::exists("HygroAtmoDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditHygrometrie->setText(QString().setNum(TYPreferenceManager::getDouble("HygroAtmoDefault")));
-    }
-    if (TYPreferenceManager::exists("VitVentAtmoDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditVitVent->setText(QString().setNum(TYPreferenceManager::getDouble("VitVentAtmoDefault")));
-    }
-    if (TYPreferenceManager::exists("DirVentAtmoDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDirVent->setText(QString().setNum(TYPreferenceManager::getDouble("DirVentAtmoDefault")));
-    }
     if (TYPreferenceManager::exists("MasseVolMatDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditMasseVol->setText(QString().setNum(TYPreferenceManager::getDouble("MasseVolMatDefault")));
@@ -1761,11 +1702,6 @@ void TYPreferenceDialog::savePreferences()
     {
         TYPreferenceManager::setDouble("EpaisSolDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEpaisseur->text().toDouble());
     }
-    TYPreferenceManager::setDouble("PressionAtmoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditPression->text().toDouble());
-    TYPreferenceManager::setDouble("TempAtmoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditTemperature->text().toDouble());
-    TYPreferenceManager::setDouble("HygroAtmoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditHygrometrie->text().toDouble());
-    TYPreferenceManager::setDouble("VitVentAtmoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditVitVent->text().toDouble());
-    TYPreferenceManager::setDouble("DirVentAtmoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDirVent->text().toDouble());
 
     TYPreferenceManager::setDouble("MasseVolMatDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditMasseVol->text().toDouble());
     TYPreferenceManager::setSpectre("SpectreTransmDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pSpectreAttMatConst);

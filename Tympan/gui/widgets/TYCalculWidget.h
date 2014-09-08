@@ -57,7 +57,6 @@ class QTabWidget;
 class QRadioButton;
 class QButtonGroup;
 class QComboBox;
-class TYAtmosphereWidget;
 
 /**
  * \class TYCalculWidget
@@ -86,10 +85,6 @@ public slots:
     virtual void updateContent();
     virtual void apply();
 
-    /**
-     * Edite la widget de l'atmosphere.
-     */
-    void editAtmosphere();
     /**
      * Edite la widget du resultat.
      */
@@ -134,12 +129,8 @@ protected:
 
     QGroupBox* _groupBox;
     QGroupBox* _groupBoxFlag;
-    QGroupBox* _groupBoxAtmosphere;
     QGroupBox* _groupBoxMaillage;
     QGroupBox* _groupBoxResultat;
-
-    QLineEdit* _lineEditNomAtmosphere;
-    QPushButton* _pushButtonAtmosphere;
 
     // Presentation des resultats
     QLineEdit* _lineEditNomResultat;
@@ -162,9 +153,6 @@ protected:
 
     /// Gestion des differentes options sous forme d'onglet
     QTabWidget* _tabWidget;
-
-    /// Onglet de description de la meteo
-    TYAtmosphereWidget* _meteoWidget;
 
     /// Onglet des points de controle
     QTableWidget* _tableauPointControle;
