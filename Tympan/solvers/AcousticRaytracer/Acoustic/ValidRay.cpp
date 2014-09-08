@@ -13,13 +13,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "ValidRay.h"
-#include "SpecularReflexion.h"
+#include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Sphere.h"
+#include "ValidRay.h"
+#include "SpecularReflexion.h"
 #include "Diffraction.h"
 #include "DoNothing.h"
-#include "Tympan/solvers/AcousticRaytracer/global.h"
 
 bool ValidRay::validRayWithDoNothingEvent(Ray *r, Intersection* inter)
 {
@@ -46,11 +46,11 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
     vec3 normale = inter->p->getNormal(impact);
     if (normale.dot(r->direction) > 0.) { return false; }
 
-	if (globalUsePathDifValidation && !pathDiffValidationForReflection(r, impact)) // Validation sur la différence de marche due aux diffractions
+	if (tympan::SolverConfiguration::get()->UsePathDifValidation && !pathDiffValidationForReflection(r, impact)) // Validation sur la différence de marche due aux diffractions
 	{
 		return false;
-	}    
-	    
+	}
+
 	SpecularReflexion* newEvent = new SpecularReflexion(impact, r->direction, inter->p);
 	QSharedPointer<Event> SPEv(newEvent);
 
@@ -87,23 +87,23 @@ bool ValidRay::pathDiffValidationForReflection(Ray * r, const vec3& impact)
 {
 	vec3 origin = r->computeLocalOrigin( r->getLastPertinentEventOrSource(SPECULARREFLEXION) );
 	computeCumulDistance(r, impact);
-		
+
 	// We compute the true path length difference between actual position and the last reflection or source
-	r->cumulDelta += ( r->cumulDistance - impact.distance(origin) ); 
+	r->cumulDelta += ( r->cumulDistance - impact.distance(origin) );
 	r->cumulDistance = 0.;
 
-	return ( r->cumulDelta <= globalMaxPathDifference );
+	return ( r->cumulDelta <= tympan::SolverConfiguration::get()->MaxPathDifference );
 }
 
 bool ValidRay::pathDiffValidationForDiffraction(Ray *r, const vec3& impact)
 {
 	vec3 origin = r->computeLocalOrigin( r->getLastPertinentEventOrSource(SPECULARREFLEXION) );
 	computeCumulDistance(r, impact);
-		
-	// We compute the true path length difference between actual position and the last reflection or source
-	decimal currentCumulDelta = r->cumulDelta + ( r->cumulDistance - impact.distance(origin) ); 
 
-	return ( currentCumulDelta <= globalMaxPathDifference );
+	// We compute the true path length difference between actual position and the last reflection or source
+	decimal currentCumulDelta = r->cumulDelta + ( r->cumulDistance - impact.distance(origin) );
+
+	return ( currentCumulDelta <= tympan::SolverConfiguration::get()->MaxPathDifference );
 }
 
 bool ValidRay::computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre, vec3& impact)
@@ -142,11 +142,12 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 
 	vec3 impact = r->position + r->direction * inter->t;
 
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
 // Test if creating a new diffraction is allowed (depends on path length difference)
-	if ( globalUsePathDifValidation && !pathDiffValidationForDiffraction(r, impact) )
+	if ( config->UsePathDifValidation && !pathDiffValidationForDiffraction(r, impact) )
 	{
 		return false;
-	}   
+	}
 
 // Compute real impact of the ray on the ridge
 	// Define first segment
@@ -154,11 +155,11 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 	if ( !computeRealImpact(r, inter, cylindre, realImpact) ) { return false; }
 
 // Valid creation of event using distance from the ridge (if needed)
-	if ( globalDiffractionUseDistanceAsFilter && !isRayClosestFromRidge(r, impact, realImpact) ) 
-	{ 
-		return ValidRay::validRayWithDoNothingEvent(r, inter); 
+	if ( config->DiffractionUseDistanceAsFilter && !isRayClosestFromRidge(r, impact, realImpact) )
+	{
+		return ValidRay::validRayWithDoNothingEvent(r, inter);
 	}
-	
+
 // Create diffraction event
     vec3 from = realImpact - r->position;
     from.normalize();
@@ -167,17 +168,17 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 
 // define the number of rays to throw
 	unsigned int diff_nb_rays = 0;
-	if ( globalNbRayWithDiffraction > 0 )
+	if ( config->NbRayWithDiffraction > 0 )
 	{
-		diff_nb_rays = globalNbRayWithDiffraction; 
+		diff_nb_rays = config->NbRayWithDiffraction;
 	}
 	else
 	{
 		diff_nb_rays = r->getSource()->getSampler()->computeDiffractionNbr(M_PIDIV2 - newEvent->getAngle());
 	}
 
-// Reduce (if needed) number of rays thrown depending on the diffraction order 
-	if ( globalDiffractionDropDownNbRays )
+// Reduce (if needed) number of rays thrown depending on the diffraction order
+	if ( config->DiffractionDropDownNbRays )
 	{
 		diff_nb_rays = diff_nb_rays / pow( static_cast<float>(2), static_cast<int>(r->nbDiffraction) );
 	}

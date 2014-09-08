@@ -13,6 +13,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#ifndef RANDOM_SPHERIC_SAMPLER
+#define RANDOM_SPHERIC_SAMPLER
+
 // Rajout de libraires pour creation fichier externe de sortie
 #include <iostream>
 #include <fstream>
@@ -20,14 +23,12 @@
 #include <vector>
 #include <string>
 #include <math.h>
-#include "Tympan/solvers/AcousticRaytracer/global.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Sampler.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/UnitConverter.h"
+
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real.hpp>
 
-#ifndef RANDOM_SPHERIC_SAMPLER
-#define RANDOM_SPHERIC_SAMPLER
+#include "Tympan/solvers/AcousticRaytracer/Geometry/Sampler.h"
+#include "Tympan/solvers/AcousticRaytracer/Tools/UnitConverter.h"
 
 class RandomSphericSampler: public Sampler
 {

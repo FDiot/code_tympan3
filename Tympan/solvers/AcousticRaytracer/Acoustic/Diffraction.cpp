@@ -13,13 +13,14 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/UnitConverter.h"
 #include "Diffraction.h"
 
 
-bool responseAngleLimiter(const vec3& from, const vec3& N1, const vec3& N2, vec3 &T) 
-{ 
+bool responseAngleLimiter(const vec3& from, const vec3& N1, const vec3& N2, vec3 &T)
+{
 	decimal FT = from * T;
 
 	if ( ( 1. - FT ) < EPSILON_4 ) { return true; } // Vecteur limite tangent au plan de propagation
@@ -29,23 +30,23 @@ bool responseAngleLimiter(const vec3& from, const vec3& N1, const vec3& N2, vec3
 	decimal F1 = from * N1;
 	decimal F2 = from * N2;
 
-	if ( (F1 * F2) > 0.) { return false; } 
+	if ( (F1 * F2) > 0.) { return false; }
 
 	decimal T1 = T * N1;
 	decimal T2 = T * N2;
 
 
 	if ( (F1 <= 0.) && ( (T1 > EPSILON_4 ) || ( (ABS(T2) - ABS(F2)) > EPSILON_4 ) ) )
-	{ 
-		return false; 
+	{
+		return false;
 	}
 
 	if ( (F2 <= 0.) && ( ( T2 > EPSILON_4 ) || ( (ABS(T1) - ABS(F1)) > EPSILON_4 ) ) )
-	{ 
-		return false; 
+	{
+		return false;
 	}
 
-	return true; 
+	return true;
 }
 
 bool responseAlwaysYes(const vec3& from, const vec3& N1, const vec3& N2, vec3 &T) { return true; }
@@ -67,12 +68,12 @@ void getThetaRegular(const decimal& angleOuverture, const decimal & delta_theta,
 
 
 Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cylindre* c):
-						Event(position, incomingDirection, (Shape*)(c)) 
-{ 
-	name = "unknown diffraction"; 
-	nbResponseLeft = initialNbResponse = 200; 
-	type = DIFFRACTION; 
-	buildRepere(); 
+						Event(position, incomingDirection, (Shape*)(c))
+{
+	name = "unknown diffraction";
+	nbResponseLeft = initialNbResponse = 200;
+	type = DIFFRACTION;
+	buildRepere();
 	computeAngle();
 
 	computeDTheta();
@@ -80,7 +81,8 @@ Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cy
 	N1 = dynamic_cast<Cylindre*>(shape)->getFirstShape()->getNormal();
 	N2 = dynamic_cast<Cylindre*>(shape)->getSecondShape()->getNormal();
 
-	if (globalDiffractionFilterRayAtCreation)
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
+	if (config->DiffractionFilterRayAtCreation)
 	{
 		responseValidator = responseAngleLimiter;
 	}
@@ -89,9 +91,9 @@ Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cy
 		responseValidator = responseAlwaysYes;
 	}
 
-	if (globalDiffractionUseRandomSampler) // Tir des rayons aléatoires sur le cone de Keller
+	if (config->DiffractionUseRandomSampler) // Tir des rayons aléatoires sur le cone de Keller
 	{
-		getTheta = getThetaRandom; 
+		getTheta = getThetaRandom;
 	}
 	else
 	{
@@ -152,7 +154,7 @@ bool Diffraction::getResponse(vec3& r, bool force)
 		r = localRepere.vectorFromLocalToGlobal(localResponse);
 
 		bRep = (*responseValidator)(from, N1, N2, r);
-	} 
+	}
 	while(!bRep);
 
 	return true;
