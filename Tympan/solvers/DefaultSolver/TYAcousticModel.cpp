@@ -32,7 +32,6 @@ TYAcousticModel::TYAcousticModel(TYSolver& solver)
     : _expGeo(1),
       _typeCalculSol(0),
       _useSol(true),
-      _useEcran(true),
       _useReflex(false),
       _conditionFav(false),
       _useAtmo(true),
@@ -69,10 +68,6 @@ void TYAcousticModel::init(const TYCalcul& calcul)
     double hygrometrie = calcul.getAtmosphere()._pObj->getHygrometrie();
 
     pSolverAtmos = std::unique_ptr<tympan::AtmosphericConditions> ( new tympan::AtmosphericConditions(pression, temperature, hygrometrie) );
-
-
-    // Calcul avec prise en compte des ecrans
-    _useEcran = calcul.getUseEcran();
 
 
     // Prise en compte de la vegetation
