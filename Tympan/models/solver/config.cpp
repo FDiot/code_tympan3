@@ -67,6 +67,7 @@ SolverConfiguration::SolverConfiguration()
     AnalyticTypeTransfo=1;
 
     NbThreads=4;
+    UseRealGround=1;
 
     UseMeteo=0;
     OverSampleD=0;

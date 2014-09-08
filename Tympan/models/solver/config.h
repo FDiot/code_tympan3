@@ -72,7 +72,7 @@ public:
     //float MinSRDistance;
 
     int NbThreads;
-    //bool UseRealGround;
+    bool UseRealGround;
     //bool UseVegetation;
     //bool UseScreen;
     //bool UseLateralDiffraction;

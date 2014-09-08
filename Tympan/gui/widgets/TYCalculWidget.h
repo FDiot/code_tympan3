@@ -131,10 +131,6 @@ protected:
     QLabel* _labelDateModif;
     QLabel* _labelComment;
 
-    // Utilisation du sol
-    QCheckBox* _checkBoxUseSol;
-    QLabel* _labelUseSol;
-
     QRadioButton* _pRadioButtonSolReflechissant;
     QRadioButton* _pRadioButtonSolReel;
 

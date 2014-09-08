@@ -799,7 +799,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     groupButtonLayout->addWidget(_pRadioButtonExpansGeo4Pi, 0, 1);
 
     QLabel* pLabelExpansGeo = new QLabel(TR("id_expansgeo_label"));
-    _pCheckBoxUseSol = new QCheckBox(TR("id_usesol_label"));
     _pCheckBoxCondFav = new QCheckBox(TR("id_condfav_label"));
     _pLineEditParamH = new QLineEdit();
     QLabel* pLabelParamH = new QLabel(TR("id_paramh_label"));
@@ -812,7 +811,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     _pCheckBoxInterference = new QCheckBox(TR("id_interference_label"));
 
     QGridLayout* groupBoxLayout = new QGridLayout();
-    groupBoxLayout->addWidget(_pCheckBoxUseSol, 0, 0);
     groupBoxLayout->addWidget(_pCheckBoxUseEcran, 0, 1);
     groupBoxLayout->addWidget(_pCheckBoxUseAtmosphere, 1, 0);
     groupBoxLayout->addWidget(_pCheckBoxUseReflexion, 1, 1);
@@ -1403,10 +1401,6 @@ void TYPreferenceDialog::loadPreferences()
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxCondFav->setChecked(TYPreferenceManager::getBool("CondFavCalculDefault"));
     }
-    if (TYPreferenceManager::exists("UseSolCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseSol->setChecked(TYPreferenceManager::getBool("UseSolCalculDefault"));
-    }
     if (TYPreferenceManager::exists("ExpansGeo2PiCalculDefault"))
     {
         if (TYPreferenceManager::getBool("ExpansGeo2PiCalculDefault"))
@@ -1854,7 +1848,6 @@ void TYPreferenceDialog::savePreferences()
     TYPreferenceManager::setFloat("MaillageOpacity", float(((ColorsTab*)tabWidget->widget(2))->_pMailOpacitySlider->value()) / 100.0f);
 
     // Acoustique
-    TYPreferenceManager::setBool("UseSolCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseSol->isChecked());
     TYPreferenceManager::setBool("CondFavCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxCondFav->isChecked());
     TYPreferenceManager::setBool("UseAtmosphereCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->isChecked());
     TYPreferenceManager::setBool("UseVegetationCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseVegetation->isChecked());

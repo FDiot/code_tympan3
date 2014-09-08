@@ -416,8 +416,6 @@ void TYCalculWidget::updateContent()
     _comboSolver->setCurrentIndex(currentSolverIndex);
 
     // Choix concernant le sol
-    _pRadioButtonSolReflechissant->setChecked(!getElement()->getUseSol());
-    _pRadioButtonSolReel->setChecked(getElement()->getUseSol());
     _comboBoxTypeSol->setCurrentIndex(getElement()->getTypeCalculSol());
     _comboBoxTypeSol->setEnabled(false);
 
@@ -552,8 +550,6 @@ void TYCalculWidget::apply()
         getElement()->setState(TYCalcul::Locked);
         if (getElement()->getResultat()) { getElement()->getResultat()->purge(); }
     }
-
-    getElement()->setUseSol(_pRadioButtonSolReel->isChecked());
 
     getElement()->setTypeCalculSol(_comboBoxTypeSol->currentIndex());
 

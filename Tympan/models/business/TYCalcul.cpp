@@ -65,7 +65,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _upTodate = true;
 
     _expansGeo = 0; // 4pi
-    _useSol = true;
     _typeCalculSol = 0; // Sol Local
     _condFav = false;
     _useVegetation = false;
@@ -143,15 +142,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     else
     {
         TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "CondFavCalculDefault", _condFav);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "UseSolCalculDefault"))
-    {
-        _useSol = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "UseSolCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "UseSolCalculDefault", _useSol);
     }
 
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "InterferenceCalculDefault"))
@@ -247,7 +237,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _comment = other._comment;
         _expansGeo = other._expansGeo;
         _upTodate = other._upTodate;
-        _useSol = other._useSol;
         _condFav = other._condFav;
         _useVegetation = other._useVegetation;
         _useAtmosphere = other._useAtmosphere;
@@ -281,7 +270,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_numero != other._numero) { return false; }
         if (_expansGeo != other._expansGeo) { return false; }
         if (_upTodate != other._upTodate) { return false; }
-        if (_useSol != other._useSol) { return false; }
         if (_condFav != other._condFav) { return false; }
         if (_useVegetation != other._useVegetation) { return false; }
         if (_useAtmosphere != other._useAtmosphere) { return false; }
@@ -326,7 +314,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _comment = pOtherCalcul->_comment;
     _expansGeo = pOtherCalcul->_expansGeo;
     _upTodate = pOtherCalcul->_upTodate;
-    _useSol = pOtherCalcul->_useSol;
     _condFav = pOtherCalcul->_condFav;
     _useVegetation = pOtherCalcul->_useVegetation;
     _useAtmosphere = pOtherCalcul->_useAtmosphere;
@@ -389,7 +376,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "solverId", _solverId.toString());
     TYXMLTools::addElementIntValue(domNewElem, "etat", _state);  // 16/08/2005 Possibilite de bloquer un calcul
     TYXMLTools::addElementIntValue(domNewElem, "expansGeo", _expansGeo);
-    TYXMLTools::addElementIntValue(domNewElem, "useSol", _useSol);
     TYXMLTools::addElementIntValue(domNewElem, "typeCalculSol", _typeCalculSol);
     TYXMLTools::addElementIntValue(domNewElem, "condFav", _condFav);
     TYXMLTools::addElementIntValue(domNewElem, "useVegetation", _useVegetation);
@@ -508,7 +494,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[20]);
         TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[19]);
         TYXMLTools::getElementIntValue(elemCur, "expansGeo", _expansGeo, getOk[5]);
-        TYXMLTools::getElementBoolValue(elemCur, "useSol", _useSol, getOk[6]);
         TYXMLTools::getElementIntValue(elemCur, "typeCalculSol", _typeCalculSol, getOk[17]);
         TYXMLTools::getElementBoolValue(elemCur, "condFav", _condFav, getOk[7]);
         TYXMLTools::getElementBoolValue(elemCur, "useVegetation", _useVegetation, getOk[8]);
