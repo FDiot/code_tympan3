@@ -15,7 +15,7 @@ AcousticMaterialBase::AcousticMaterialBase(
 ) : name(name_) {}
 
 // ---------
-AtmosphericConditions *AcousticGroundMaterial::atmosphere = new AtmosphericConditions(101300., 20., 70.);
+AtmosphericConditions *AcousticGroundMaterial::atmosphere = new AtmosphericConditions(101325., 20., 70.);
 
 AcousticBuildingMaterial::AcousticBuildingMaterial(
     const string& name_,
@@ -499,7 +499,7 @@ Spectrum AtmosphericConditions::compute_length_absorption(double length) const
 
 // ---------
 
-    AtmosphericConditions *CommonFaceDirectivity::atmosphere = new AtmosphericConditions(101300., 20., 70.);
+    AtmosphericConditions *CommonFaceDirectivity::atmosphere = new AtmosphericConditions(101325., 20., 70.);
 
 // ---------
 /*static*/ const double VolumeFaceDirectivity::_tabRA[] = {  1.0,
