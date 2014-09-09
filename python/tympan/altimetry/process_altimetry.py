@@ -1,5 +1,6 @@
 import logging
 import sys
+from warnings import warn
 
 # open file in unbuffered mode so it get written asap, in case of later crash
 # due to underlying C code
@@ -55,9 +56,17 @@ def export_site_topo(cysite, mainsite=False):
     asite = SiteNode(coords=cypoints2acoords(points), id=cysite.elem_id)
     if cylcurve is not None:
         lctype = SiteLandtake if mainsite else LevelCurve
+        if cylcurve.points[0] != cylcurve.points[-1]:
+            warn('main site landtake (or surrounding level curve) does not '
+                 'appear to be closed; closing it for altimetry processing',
+                 RuntimeWarning)
+            close_it = True
+        else:
+            close_it = False
         alcurve = lctype(
             coords=cypoints2acoords(cylcurve.points),
             altitude=cylcurve.altitude,
+            close_it=close_it,
             id=cylcurve.elem_id)
         asite.add_child(alcurve)
     # Water bodies
