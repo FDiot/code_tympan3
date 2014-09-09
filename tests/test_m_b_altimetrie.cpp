@@ -265,3 +265,19 @@ TEST(TYAltimetryTest, simple_terrain)
     EXPECT_TRUE(pAlti->updateAltitude(pt));
     EXPECT_NEAR(level_curve_A_alti, pt._z, precision);
 }
+
+TEST(TYAltimetryTest, receptor)
+{
+    LPTYProjet proj = tympan::load_project(tympan::path_to_test_data(
+                "projects-panel/DIFFRACTION_CONSTRUCTION_1_POINT_NO_RESU.xml").c_str());
+    // There should be 1 receptor
+    TYTabLPPointControl points = proj->getPointsControl();
+    EXPECT_EQ(points.size(), 1);
+    // Before altimetry update, the receptor should be on the ground (z = 0)
+    LPTYPointControl point = proj->getPointControl(0);
+    EXPECT_NEAR(point->_z, 0, precision);
+    update_altimetry(proj->getSite());
+    proj->getSite()->update();
+    // Check the receptor altitude was correctly updated (2m above the ground)
+    EXPECT_NEAR(point->_z, 2, precision);
+}
