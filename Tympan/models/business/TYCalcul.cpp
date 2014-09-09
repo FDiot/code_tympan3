@@ -660,12 +660,6 @@ void TYCalcul::clearResult()
     setIsGeometryModified(true);
 }
 
-void TYCalcul::setElementSelection(TYListID selection)
-{
-    _elementSelection = selection;
-    setIsGeometryModified(true);
-}
-
 void TYCalcul::clearSelection()
 {
     _elementSelection.clear();

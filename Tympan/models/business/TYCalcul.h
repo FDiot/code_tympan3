@@ -241,11 +241,6 @@ public:
     void setCondFav(bool cond) { _condFav = cond; }
 
     /**
-     *\fn void setElementSelection(TYListID selection)
-     *\brief Set de la selection d'elements actifs dans ce Calcul.
-     */
-    void setElementSelection(TYListID selection);
-    /**
      *\fn TYListID getElementSelection()
      *\brief Get de la selection d'elements actifs dans ce Calcul.
      *\return _elementSelection
@@ -304,11 +299,6 @@ public:
      * \return _emitAcVolNode
      */
     const TYMapPtrElementBool& getEmitAcVolNode() const { return _emitAcVolNode; }
-    /**
-     * \fn  void setEmitAcVolNode(const TYMapPtrElementBool& etat)
-     * \brief Set du tableau contenant l'etat de chaque volumeNode en emission.
-     */
-    void setEmitAcVolNode(const TYMapPtrElementBool& etat) { _emitAcVolNode = etat; }
 
     /**
      * \fn TYMapPtrElementInt& getMapElementRegime()
@@ -323,12 +313,6 @@ public:
      * \return _mapElementRegime
      */
     const TYMapPtrElementInt& getMapElementRegime() const { return _mapElementRegime; }
-
-    /**
-     * \fn void setMapElementRegime(const TYMapPtrElementInt& mapElementRegime)
-     * \brief Set du tableau des regimes
-     */
-    void setMapElementRegime(const TYMapPtrElementInt& mapElementRegime) { _mapElementRegime = mapElementRegime; }
 
     /**
      * \fn LPTYAtmosphere getAtmosphere() { return _pAtmosphere; }
@@ -355,11 +339,6 @@ public:
      *\return _maillages
      */
     const TYTabMaillageGeoNode& getMaillages() const { return _maillages; }
-    /**
-     *\fn void setMaillages(const TYTabMaillageGeoNode& maillages) { _maillages = maillages; setIsGeometryModified(true); }
-     *\brief Set de la collection de maillages.
-     */
-    void setMaillages(const TYTabMaillageGeoNode& maillages) { _maillages = maillages; setIsGeometryModified(true); }
 
     /**
      *\fn bool addMaillage(LPTYMaillageGeoNode pMaillageGeoNode)
@@ -430,12 +409,6 @@ public:
      */
     const LPTYResultat getResultat() const { return _pResultat; }
     LPTYResultat getResultat() { return _pResultat; }
-
-    /**
-     * \fn const LPTYResultat getResultat()
-     * \brief Set du resultat.
-     */
-    void setResultat(const LPTYResultat pResultat) { _pResultat = pResultat; _pResultat->setParent(this); }
 
     /**
      * \fn bool updateAltiRecepteurs()
@@ -566,12 +539,10 @@ public:
 
     /**
      * \fn double getSeuilConfondu()
-     *     void setSeuilConfondu(const double & seuil)
-     * \brief Get/Set de la valeur de distance minimale entre deux points
+     * \brief Get de la valeur de distance minimale entre deux points
      * \return _seuilConfondus
      */
 
-    void setSeuilConfondu(const double& seuil) { _seuilConfondus = seuil; }
     double getSeuilConfondu() { return _seuilConfondus; }
     const double getSeuilConfondu() const { return _seuilConfondus; }
 
