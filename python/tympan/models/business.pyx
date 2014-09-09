@@ -82,6 +82,7 @@ cdef class Element:
 
 cdef class AcousticSurface:
     thisptr = cy.declare(cy.pointer(TYAcousticSurface))
+    thisgeonodeptr = cy.declare(SmartPtr[TYGeometryNode])
 
     def __cinit__(self):
         self.thisptr = NULL
@@ -233,6 +234,7 @@ cdef class Site:
             pelt = cy.declare(cy.pointer(TYElement))
             pElt = face_list[i].getRealPointer().getElement()
             surf.thisptr = downcast_acoustic_surface(pElt)
+            surf.thisgeonodeptr = face_list[i]
             # 'face_list' can contain topography elements. Not relevant here.
             if surf.thisptr == NULL:
                 continue
@@ -542,6 +544,7 @@ cdef class Result:
 
 cdef class Mesh:
     thisptr = cy.declare(cy.pointer(TYMaillage))
+    thisgeonodeptr =  cy.declare(SmartPtr[TYGeometryNode])
     matrix = cy.declare(tycommon.OMatrix) # local to global transformation
 
     @property
@@ -638,6 +641,7 @@ cdef class Computation:
             mesh.matrix = geomaill[i].getRealPointer().getMatrix()
             mesh.thisptr = downcast_maillage(geomaill[i].getRealPointer().getElement())
             meshes.append(mesh)
+            mesh.thisgeonodeptr = geomaill[i]
         return meshes
 
     @property
