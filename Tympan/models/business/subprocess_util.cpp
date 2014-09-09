@@ -211,7 +211,7 @@ bool python(QStringList args, std::string& error_msg)
     if (pystatus == 1)
     {
         error_msg = "Le sous-process python a termine avec le code d'erreur ";
-        error_msg.append(std::to_string(python.error()));
+        error_msg.append(std::to_string(static_cast<unsigned long long>(python.error())));
         return false;
     }
     // Compute and display computation time
