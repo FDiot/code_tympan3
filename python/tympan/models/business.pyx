@@ -686,13 +686,10 @@ cdef class Project:
         self.thisptr = SmartPtr[TYProjet]()
 
     def update(self):
-        """ Update the project (atmosphere, inactive mesh points detection).
+        """ Update the project (inactive mesh points detection).
         """
         computation = cy.declare(cy.pointer(TYCalcul))
         computation = self.thisptr.getRealPointer().getCurrentCalcul().getRealPointer()
-        atmosphere = cy.declare(SmartPtr[TYAtmosphere])
-        atmosphere = computation.getAtmosphere()
-        self.thisptr.getRealPointer().getSite().getRealPointer().setAtmosphere(atmosphere)
         # detect and disable the mesh points that are inside machines or buildings
         computation.selectActivePoint(self.thisptr.getRealPointer().getSite())
 

@@ -1386,11 +1386,6 @@ void TYSiteNode::getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned in
 
 }
 
-void TYSiteNode::setAtmosphere(const LPTYAtmosphere& pAtmosphere)
-{
-    _pTopographie->updateSol(*pAtmosphere);
-}
-
 void TYSiteNode::setChildsNotInCurrentCalcul()
 {
     TYTabSiteNodeGeoNode& tabGeoNode = getListSiteNode();

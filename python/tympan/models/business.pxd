@@ -137,7 +137,6 @@ cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
         void updateAltiInfra(const bool& force)
         void updateAcoustique(const bool& force)
         void update(const bool& force)
-        void setAtmosphere(const SmartPtr[TYAtmosphere]& pAtmosphere)
         TYProjet* getProjet()
         const double getAltiEmprise() const
         const vector[SmartPtr[TYGeometryNode]]& getListSiteNode() const
