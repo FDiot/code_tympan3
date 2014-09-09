@@ -72,7 +72,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _state = TYCalcul::Actif; // A sa creation, le calcul est actif
 
     _distanceSRMin = 0.3;
-    _anechoic = false; // Par defaut : conditions semi-anechoiques
 
     _seuilConfondus = TYSEUILCONFONDUS;
 
@@ -181,7 +180,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _elementSelection = other._elementSelection;
         _emitAcVolNode = other._emitAcVolNode;
         _mapElementRegime = other._mapElementRegime;
-        _anechoic = other._anechoic;
         _solverId = other._solverId;
     }
     return *this;
@@ -209,7 +207,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_emitAcVolNode != other._emitAcVolNode) { return false; }
         if (_mapElementRegime != other._mapElementRegime) { return false; }
         if (_elementSelection != other._elementSelection) { return false; }
-        if (_anechoic != other._anechoic) { return false; }
         if (_solverId != other._solverId) { return false; }
     }
     return true;
@@ -242,7 +239,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _interference = pOtherCalcul->_interference;
     _state = pOtherCalcul->_state;
     _distanceSRMin = pOtherCalcul->_distanceSRMin;
-    _anechoic = pOtherCalcul->_anechoic;
 
     _pAtmosphere->deepCopy(pOtherCalcul->_pAtmosphere, copyId);
     _pResultat->deepCopy(pOtherCalcul->_pResultat, copyId);
