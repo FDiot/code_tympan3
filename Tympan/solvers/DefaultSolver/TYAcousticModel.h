@@ -187,7 +187,6 @@ private:
     bool _useReflex;
     bool _conditionFav;
     bool _useAtmo;
-    bool _bCalculTrajetsHorizontaux;
     bool _interference;
     double _seuilConfondus;
     double _paramH;

@@ -35,7 +35,6 @@ TYAcousticModel::TYAcousticModel(TYSolver& solver)
       _useReflex(false),
       _conditionFav(false),
       _useAtmo(true),
-      _bCalculTrajetsHorizontaux(true),
       _interference(false),
       _seuilConfondus(0.01),
       _paramH(10.0),
@@ -67,26 +66,16 @@ void TYAcousticModel::init(const TYCalcul& calcul)
     double hygrometrie = calcul.getAtmosphere()._pObj->getHygrometrie();
 
     pSolverAtmos = std::unique_ptr<tympan::AtmosphericConditions> ( new tympan::AtmosphericConditions(pression, temperature, hygrometrie) );
-
     // Prise en compte de l'atmosphere (divergence geometrique)
     _useAtmo = calcul.getUseAtmosphere();
-
     // Calcul avec interference
     _interference = calcul.getInterference();
-
     // On calcul tout de suite le spectre de longueur d'onde
     _lambda = OSpectre::getLambda(pSolverAtmos->compute_c()); //_pAtmo->getVitSon());
-
-    /// Calcul reflexion sur sol locale ou etendue
+    // Calcul reflexion sur sol locale ou etendue
     _typeCalculSol = calcul.getTypeCalculSol();
-
-
     // Distance minimale entre deux points consideres comme confondus
     _seuilConfondus = calcul.getSeuilConfondu();
-
-    /// Calcul des trajets horizontaux
-    _bCalculTrajetsHorizontaux = calcul.getCalculTrajetsHorizontaux();
-
     // Coefficient multiplicateur pour le calcul des reflexions supplementaires en condition favorable
     _paramH = config->H1parameter;
 }
