@@ -209,9 +209,6 @@ public:
     QCheckBox* _pCheckBoxCondFav;
     QCheckBox* _pCheckBoxUseAtmosphere;
     QCheckBox* _pCheckBoxInterference;
-    QButtonGroup* _pExpansGeoButtonGroup;
-    QRadioButton* _pRadioButtonExpansGeo2Pi;
-    QRadioButton* _pRadioButtonExpansGeo4Pi;
     QLineEdit* _pLineEditDistanceSRMin;
     QLineEdit* _pLineEditResistivite;
     QLineEdit* _pLineEditEpaisseur;

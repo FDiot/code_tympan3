@@ -64,7 +64,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
 
     _upTodate = true;
 
-    _expansGeo = 0; // 4pi
     _typeCalculSol = 0; // Sol Local
     _condFav = false;
     _useAtmosphere = true;
@@ -130,29 +129,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
         TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "DistanceSRMinCalculDefault", _distanceSRMin);
     }
 
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "ExpansGeo2PiCalculDefault"))
-    {
-        if (TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "ExpansGeo2PiCalculDefault"))
-        {
-            _expansGeo = 1;
-        }
-        else
-        {
-            _expansGeo = 0;
-        }
-    }
-    else
-    {
-        if (_expansGeo == 1)
-        {
-            TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "ExpansGeo2PiCalculDefault", true);
-        }
-        else
-        {
-            TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "ExpansGeo2PiCalculDefault", false);
-        }
-    }
-
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
     {
         _seuilConfondus = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus");
@@ -194,7 +170,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _dateCreation = other._dateCreation;
         _dateModif = other._dateModif;
         _comment = other._comment;
-        _expansGeo = other._expansGeo;
         _upTodate = other._upTodate;
         _condFav = other._condFav;
         _useAtmosphere = other._useAtmosphere;
@@ -223,7 +198,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_dateModif != other._dateModif) { return false; }
         if (_comment != other._comment) { return false; }
         if (_numero != other._numero) { return false; }
-        if (_expansGeo != other._expansGeo) { return false; }
         if (_upTodate != other._upTodate) { return false; }
         if (_condFav != other._condFav) { return false; }
         if (_useAtmosphere != other._useAtmosphere) { return false; }
@@ -263,7 +237,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _dateCreation = pOtherCalcul->_dateCreation;
     _dateModif = pOtherCalcul->_dateModif;
     _comment = pOtherCalcul->_comment;
-    _expansGeo = pOtherCalcul->_expansGeo;
     _upTodate = pOtherCalcul->_upTodate;
     _condFav = pOtherCalcul->_condFav;
     _useAtmosphere = pOtherCalcul->_useAtmosphere;
@@ -322,7 +295,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "comment", _comment);
     TYXMLTools::addElementStringValue(domNewElem, "solverId", _solverId.toString());
     TYXMLTools::addElementIntValue(domNewElem, "etat", _state);  // 16/08/2005 Possibilite de bloquer un calcul
-    TYXMLTools::addElementIntValue(domNewElem, "expansGeo", _expansGeo);
     TYXMLTools::addElementIntValue(domNewElem, "typeCalculSol", _typeCalculSol);
     TYXMLTools::addElementIntValue(domNewElem, "condFav", _condFav);
     TYXMLTools::addElementIntValue(domNewElem, "useAtmosphere", _useAtmosphere);
@@ -436,7 +408,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementStringValue(elemCur, "comment", _comment, getOk[4]);
         TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[20]);
         TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[19]);
-        TYXMLTools::getElementIntValue(elemCur, "expansGeo", _expansGeo, getOk[5]);
         TYXMLTools::getElementIntValue(elemCur, "typeCalculSol", _typeCalculSol, getOk[17]);
         TYXMLTools::getElementBoolValue(elemCur, "condFav", _condFav, getOk[7]);
         TYXMLTools::getElementBoolValue(elemCur, "useAtmosphere", _useAtmosphere, getOk[9]);
