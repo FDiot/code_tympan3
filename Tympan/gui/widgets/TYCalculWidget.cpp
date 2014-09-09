@@ -140,13 +140,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     groupBoxFlagLayout->addWidget(groupBoxSolRefReel, 1, 0, 1, 2);
 
     // Choix du type de calcul avec sol
-    QLabel* labelTypeCalcul = new QLabel(_groupBoxFlag);
-    labelTypeCalcul->setText(TR("id_label_sol_calc"));
-    groupBoxFlagLayout->addWidget(labelTypeCalcul, 1, 2);
-    _comboBoxTypeSol = new QComboBox(_groupBoxFlag);
-    groupBoxFlagLayout->addWidget(_comboBoxTypeSol, 1, 3);
-    updateBoxSol();
-
     _labelParcoursLateraux = new QLabel(_groupBoxFlag);
     _labelParcoursLateraux->setText(TR("id_parcours_lateraux"));
     groupBoxFlagLayout->addWidget(_labelParcoursLateraux, 3, 2);
@@ -378,9 +371,6 @@ void TYCalculWidget::updateContent()
     _comboSolver->setCurrentIndex(currentSolverIndex);
 
     // Choix concernant le sol
-    _comboBoxTypeSol->setCurrentIndex(getElement()->getTypeCalculSol());
-    _comboBoxTypeSol->setEnabled(false);
-
     _pRadioButtonCondHomo->setChecked(!getElement()->getCondFav());
     _pRadioButtonCondFav->setChecked(getElement()->getCondFav());
 
@@ -503,8 +493,6 @@ void TYCalculWidget::apply()
         if (getElement()->getResultat()) { getElement()->getResultat()->purge(); }
     }
 
-    getElement()->setTypeCalculSol(_comboBoxTypeSol->currentIndex());
-
     getElement()->setCondFav(_pRadioButtonCondFav->isChecked());
 
     getElement()->setUseAtmosphere(_checkBoxUseAtmosphere->isChecked());
@@ -585,20 +573,6 @@ void TYCalculWidget::editResultat()
 {
     getElement()->getResultat()->edit(this);
 }
-
-void TYCalculWidget::updateBoxSol()
-{
-    int nbMethod = TR("id_nb_sol_calc").toInt();
-    QString str, label;
-    for (int i = 0; i < nbMethod; i++)
-    {
-        label = "id_sol_calc";
-        label += QString().setNum(i);
-        str = TR(label);
-        _comboBoxTypeSol->insertItem(i, str);
-    }
-}
-
 
 void TYCalculWidget::contextMenuEvent(QContextMenuEvent* e)
 {
