@@ -39,12 +39,8 @@ def process_site_altimetry(input_project, result_file):
     asite = export_site_topo(cysite, mainsite=True)
     # Build altimetry
     builder = Builder(asite, allow_features_outside_mainsite=False)
-    try:
-        builder.complete_processing()
-        builder.export_to_ply(result_file)
-    except Exception as exc:
-        sys.stderr.write(exc.message)
-        raise
+    builder.complete_processing()
+    builder.export_to_ply(result_file)
     return asite
 
 

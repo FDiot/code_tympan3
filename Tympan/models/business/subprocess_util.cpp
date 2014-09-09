@@ -192,8 +192,8 @@ bool python(QStringList args, std::string& error_msg)
     if(!err_output.isEmpty())
     {
         error_msg = err_output.toStdString();
-        // It is an error and not a warning
-        if (!err_output.contains("RuntimeWarning"))
+        // If there is an error among the possible warnings
+        if (err_output.contains("Error"))
         {
             error_msg.append("\nVeuillez lire tympan.log pour plus d'information.");
             return false;
