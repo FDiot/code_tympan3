@@ -12,7 +12,11 @@ set(RPLY_DIR "${CMAKE_SOURCE_DIR}/3rdparty/rply-1.1.3"
   CACHE PATH "The root directory for the RPLY source tree")
 set(RPLY_SOURCES "${RPLY_DIR}/rply.c")
 set(RPLY_INCLUDE_DIRECTORY "${RPLY_DIR}")
-add_library(rply SHARED ${RPLY_SOURCES})
+if(SYS_NATIVE_WIN)
+    add_library(rply STATIC ${RPLY_SOURCES})
+else(SYS_NATIVE_WIN)
+    add_library(rply SHARED ${RPLY_SOURCES})
+endif(SYS_NATIVE_WIN)
 set(RPLY_LIB rply)
 
 set(PYTHONPLYFILE_DIR "${CMAKE_SOURCE_DIR}/3rdparty/python-plyfile"
