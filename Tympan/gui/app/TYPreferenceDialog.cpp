@@ -800,8 +800,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
 
     QLabel* pLabelExpansGeo = new QLabel(TR("id_expansgeo_label"));
     _pCheckBoxCondFav = new QCheckBox(TR("id_condfav_label"));
-    _pLineEditParamH = new QLineEdit();
-    QLabel* pLabelParamH = new QLabel(TR("id_paramh_label"));
     _pLineEditDistanceSRMin = new QLineEdit();
     QLabel* pLabelDistanceSRMin = new QLabel(TR("id_distancesrmin_label"));
     _pCheckBoxUseAtmosphere = new QCheckBox(TR("id_useatmosphere_label"));
@@ -811,8 +809,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     groupBoxLayout->addWidget(_pCheckBoxUseAtmosphere, 1, 0);
     groupBoxLayout->addWidget(_pCheckBoxInterference, 2, 1);
     groupBoxLayout->addWidget(_pCheckBoxCondFav, 3, 0);
-    groupBoxLayout->addWidget(pLabelParamH, 4, 0);
-    groupBoxLayout->addWidget(_pLineEditParamH, 4, 1);
     groupBoxLayout->addWidget(pLabelDistanceSRMin, 5, 0);
     groupBoxLayout->addWidget(_pLineEditDistanceSRMin, 5, 1);
     groupBoxLayout->addWidget(pLabelExpansGeo, 6, 0);
@@ -1398,10 +1394,6 @@ void TYPreferenceDialog::loadPreferences()
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->setChecked(TYPreferenceManager::getBool("InterferenceCalculDefault"));
     }
-    if (TYPreferenceManager::exists("ParamHCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditParamH->setText(QString().setNum(TYPreferenceManager::getDouble("ParamHCalculDefault")));
-    }
     if (TYPreferenceManager::exists("DistanceSRMinCalculDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDistanceSRMin->setText(QString().setNum(TYPreferenceManager::getDouble("DistanceSRMinCalculDefault")));
@@ -1843,10 +1835,6 @@ void TYPreferenceDialog::savePreferences()
     }
 
     qValidator.setBottom(0.001);
-    if (qValidator.validate(aQString = ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditParamH->text(), res) == QValidator::Acceptable)
-    {
-        TYPreferenceManager::setDouble("ParamHCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditParamH->text().toDouble());
-    }
     TYPreferenceManager::setDouble("DistanceSRMinCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDistanceSRMin->text().toDouble());
     TYPreferenceManager::setDouble("ResisSolDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditResistivite->text().toDouble());
     if (qValidator.validate(aQString = ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEpaisseur->text(), res) == QValidator::Acceptable)

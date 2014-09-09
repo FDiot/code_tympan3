@@ -133,8 +133,6 @@ protected:
     QRadioButton* _pRadioButtonCondFav;
     QRadioButton* _pRadioButtonCondHomo;
 
-    QLineEdit* _lineEditParamH;
-    QLabel* _labelParamH;
     QCheckBox* _checkBoxUseAtmosphere;
     QLabel* _labelUseAtmosphere;
 

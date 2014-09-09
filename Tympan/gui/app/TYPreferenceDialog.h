@@ -212,7 +212,6 @@ public:
     QButtonGroup* _pExpansGeoButtonGroup;
     QRadioButton* _pRadioButtonExpansGeo2Pi;
     QRadioButton* _pRadioButtonExpansGeo4Pi;
-    QLineEdit* _pLineEditParamH;
     QLineEdit* _pLineEditDistanceSRMin;
     QLineEdit* _pLineEditResistivite;
     QLineEdit* _pLineEditEpaisseur;

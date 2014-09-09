@@ -173,15 +173,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 
     groupBoxFlagLayout->addWidget(groupBoxCondFavHomo, 5, 0, 1, 2);
 
-    // Calcul en conditions favorables (2) : Parametre de distance relative des reflexions supplementaires
-    _labelParamH = new QLabel(_groupBoxFlag);
-    _labelParamH->setText(TR("id_paramh_label"));
-    groupBoxFlagLayout->addWidget(_labelParamH, 5, 2);
-
-    _lineEditParamH = new QLineEdit(_groupBoxFlag);
-    _lineEditParamH->setText(num.setNum(getElement()->getParamH(), 'f', 2));
-    groupBoxFlagLayout->addWidget(_lineEditParamH, 5, 3);
-
     QButtonGroup* buttonGroupIE = new QButtonGroup();
     _radioButtonEnergetique = new QRadioButton(TR("id_calcul_energetique"));
     buttonGroupIE->addButton(_radioButtonEnergetique, 0);
@@ -393,9 +384,6 @@ void TYCalculWidget::updateContent()
     _pRadioButtonCondHomo->setChecked(!getElement()->getCondFav());
     _pRadioButtonCondFav->setChecked(getElement()->getCondFav());
 
-    _lineEditParamH->setText(num.setNum(getElement()->getParamH(), 'f', 2));
-    _lineEditParamH->setEnabled(_pRadioButtonCondFav->isChecked());
-
     _lineEditDistanceSRMin->setText(num.setNum(getElement()->getDistanceSRMin(), 'f', 2));
     _checkBoxUseAtmosphere->setChecked(getElement()->getUseAtmosphere());
 
@@ -519,7 +507,6 @@ void TYCalculWidget::apply()
 
     getElement()->setCondFav(_pRadioButtonCondFav->isChecked());
 
-    getElement()->setParamH(_lineEditParamH->text().toDouble());
     getElement()->setUseAtmosphere(_checkBoxUseAtmosphere->isChecked());
 
     getElement()->setCalculTrajetsHorizontaux(_checkBoxParcoursLateraux->isChecked());

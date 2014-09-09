@@ -754,7 +754,6 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
         {
             ofs << "Homogènes" << ';';
         }
-        ofs << pCalcul->getParamH() << ';';
         if (pCalcul->getInterference())
         {
             ofs << "Interférences" << ';';
