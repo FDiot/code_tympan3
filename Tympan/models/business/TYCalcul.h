@@ -180,19 +180,6 @@ public:
     void setComment(const QString& comment) { _comment = comment; }
 
     /**
-     *\fn int getExpansGeo()
-     *\brief Get de l'expansion geometrique (0 : 2pi, 1 : 4pi)
-     *\return _expansGeo
-     */
-    int getExpansGeo() const { return _expansGeo; }
-
-    /**
-     *\fn void setExpansGeo(int exp)
-     *\brief Set de l'expansion geometrique (0 : 2pi, 1 : 4pi)
-     */
-    void setExpansGeo(int exp) { _expansGeo = exp; }
-
-    /**
      * \fn  bool getIsUpTodate()
      * \brief Get de l'etat calcul a jour ou non par rapport a l'infrastructure.
      * \return _upTodate
@@ -662,9 +649,6 @@ protected:
 
     ///etat a jour du calcul
     bool _upTodate;
-
-    ///Expansion geometrique (0 : 2pi, 1 : 4pi).
-    int _expansGeo;
 
     /// Type de calcul du sol
     int _typeCalculSol;

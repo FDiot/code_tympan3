@@ -181,7 +181,6 @@ private :
     void meanSlope(const OSegment3D& director, OSegment3D& slope) const;
 
 private:
-    int  _expGeo;
     int  _typeCalculSol;
     bool _useSol;
     bool _useReflex;

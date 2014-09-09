@@ -788,17 +788,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     _pSpectreAbsoMatConst = new TYSpectre();
     _pMaillage = new TYMaillage();
 
-    //Paremetres de calcul
-    _pRadioButtonExpansGeo2Pi = new QRadioButton(TR("id_typeexpans_4pi"));
-    _pRadioButtonExpansGeo4Pi = new QRadioButton(TR("id_typeexpans_2pi"));
-    _pExpansGeoButtonGroup = new QButtonGroup();
-    _pExpansGeoButtonGroup->addButton(_pRadioButtonExpansGeo2Pi);
-    _pExpansGeoButtonGroup->addButton(_pRadioButtonExpansGeo4Pi);
-    QGridLayout* groupButtonLayout = new QGridLayout();
-    groupButtonLayout->addWidget(_pRadioButtonExpansGeo2Pi, 0, 0);
-    groupButtonLayout->addWidget(_pRadioButtonExpansGeo4Pi, 0, 1);
-
-    QLabel* pLabelExpansGeo = new QLabel(TR("id_expansgeo_label"));
     _pCheckBoxCondFav = new QCheckBox(TR("id_condfav_label"));
     _pLineEditDistanceSRMin = new QLineEdit();
     QLabel* pLabelDistanceSRMin = new QLabel(TR("id_distancesrmin_label"));
@@ -811,8 +800,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     groupBoxLayout->addWidget(_pCheckBoxCondFav, 3, 0);
     groupBoxLayout->addWidget(pLabelDistanceSRMin, 5, 0);
     groupBoxLayout->addWidget(_pLineEditDistanceSRMin, 5, 1);
-    groupBoxLayout->addWidget(pLabelExpansGeo, 6, 0);
-    groupBoxLayout->addLayout(groupButtonLayout, 6, 1);
 
     QGroupBox* groupBox = new QGroupBox();
     groupBox->setTitle(TR("id_default_param_calcul"));
@@ -1379,17 +1366,6 @@ void TYPreferenceDialog::loadPreferences()
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxCondFav->setChecked(TYPreferenceManager::getBool("CondFavCalculDefault"));
     }
-    if (TYPreferenceManager::exists("ExpansGeo2PiCalculDefault"))
-    {
-        if (TYPreferenceManager::getBool("ExpansGeo2PiCalculDefault"))
-        {
-            ((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo4Pi->setChecked(true);
-        }
-        else
-        {
-            ((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo2Pi->setChecked(true);
-        }
-    }
     if (TYPreferenceManager::exists("InterferenceCalculDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->setChecked(TYPreferenceManager::getBool("InterferenceCalculDefault"));
@@ -1825,14 +1801,6 @@ void TYPreferenceDialog::savePreferences()
     TYPreferenceManager::setBool("CondFavCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxCondFav->isChecked());
     TYPreferenceManager::setBool("UseAtmosphereCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->isChecked());
     TYPreferenceManager::setBool("InterferenceCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->isChecked());
-    if (((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo2Pi->isChecked())
-    {
-        TYPreferenceManager::setBool("ExpansGeo2PiCalculDefault", false);
-    }
-    else if (((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo4Pi->isChecked())
-    {
-        TYPreferenceManager::setBool("ExpansGeo2PiCalculDefault", true);
-    }
 
     qValidator.setBottom(0.001);
     TYPreferenceManager::setDouble("DistanceSRMinCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDistanceSRMin->text().toDouble());

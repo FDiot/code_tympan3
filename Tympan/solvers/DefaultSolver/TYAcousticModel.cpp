@@ -29,8 +29,7 @@
 #include "TYSolver.h"
 
 TYAcousticModel::TYAcousticModel(TYSolver& solver)
-    : _expGeo(1),
-      _typeCalculSol(0),
+    : _typeCalculSol(0),
       _useSol(true),
       _useReflex(false),
       _conditionFav(false),
@@ -52,8 +51,6 @@ TYAcousticModel::~TYAcousticModel()
 void TYAcousticModel::init(const TYCalcul& calcul)
 {
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
-    // Calcul de l'expansion geometrique
-    _expGeo = calcul.getExpansGeo();
     // Calcul avec sol reel
     _useSol = config->UseRealGround;
     // Calcul avec reflexion sur les parois verticales
