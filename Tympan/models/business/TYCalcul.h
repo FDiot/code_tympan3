@@ -193,19 +193,6 @@ public:
     void setIsUpTodate(bool upTodate) { _upTodate = upTodate; }
 
     /**
-     *\fn bool getUseAnechoic()
-     *\brief Get des conditions anechoiques (true) ou semi-anechoi��que (false = default)
-     *\return _anechoic
-     */
-    bool getUseAnechoic() { return _anechoic; }
-
-    /**
-     *\fn void setUseAnechoic(const bool anechoic = false)
-     *\brief Set des conditions anechoiques (true) ou semi-anechoique (false = default)
-     */
-    void setUseAnechoic(const bool anechoic = false) { _anechoic = anechoic; }
-
-    /**
      * \fn bool getUseAtmosphere()
      *\brief Get du test de la prise ou non en compte de l'atmosphere.
      *\return _useAtmosphere
@@ -630,15 +617,12 @@ protected:
     ///etat a jour du calcul
     bool _upTodate;
 
-    ///avec ou sans sol (anechoique ou semi-anechoique)
-    bool _anechoic;
     ///Conditions favorables ou non a la propagation.
     bool _condFav;
     ///Prise ou non en compte de l'atmosphere.
     bool _useAtmosphere;
     /// Calcul des trajets horizontaux
     bool _bCalculTrajetsHorizontaux;
-
 
     ///Calcul energetique ou avec interference.
     bool _interference;
