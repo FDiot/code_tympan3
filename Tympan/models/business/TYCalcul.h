@@ -532,12 +532,6 @@ public:
     void setStatusPartialResult(const bool& status) { _pResultat->setPartialState(status); }
 
     /**
-     * \fn bool getSaveRay()
-     * \brief Return the status of ray persistence
-     */
-    bool getSaveRay() const { return _bSaveRay; }
-
-    /**
      * \fn double getSeuilConfondu()
      * \brief Get de la valeur de distance minimale entre deux points
      * \return _seuilConfondus
@@ -587,6 +581,8 @@ protected:
 
     ///etat a jour du calcul
     bool _upTodate;
+    /// Etat du calcul actif/bloque
+    int _state;
 
     ///Conditions favorables ou non a la propagation.
     bool _condFav;
@@ -594,24 +590,14 @@ protected:
     bool _useAtmosphere;
     /// Calcul des trajets horizontaux
     bool _bCalculTrajetsHorizontaux;
-
     ///Calcul energetique ou avec interference.
     bool _interference;
-
-    /// Sauvegarde des rayon (TYRay)
-    bool _bSaveRay;
-
     ///Distance minimale entre une source et un recepteur
     double _distanceSRMin;
-
     /// Distance minimale entre deux points consideres comme confondus
     double _seuilConfondus;
 
-    /// Etat du calcul actif/bloque
-    int _state;
-
     unsigned short _typeSaisieMeteo;
-
 
     /// Site sur lequel va s'effectuer le calcul
     LPTYSiteNode _pSiteCalcul;
