@@ -539,26 +539,6 @@ public:
     void setCalculTrajetsHorizontaux(const bool& bCalculTrajetsHorizontaux) { _bCalculTrajetsHorizontaux = bCalculTrajetsHorizontaux; }
 
     /**
-     * \fn int getTypeCalculSol()
-     * \brief Get du type de calcul de reflexion sur le sol local ou autre methode de calcul
-     * \return _typeCalculSol
-     */
-    int getTypeCalculSol() { return _typeCalculSol; }
-
-    /**
-     * \fn const int getTypeCalculSol()const
-     * \brief Get du type de calcul de reflexion sur le sol local ou autre methode de calcul
-     * \return _typeCalculSol
-     */
-    const int getTypeCalculSol() const { return _typeCalculSol; }
-
-    /**
-     * \fn void setTypeCalculSol(const int& typeCalcul)
-     * \brief Set du type de calcul de reflexion sur le sol local ou autre methode de calcul
-     */
-    void setTypeCalculSol(const int& typeCalcul) { _typeCalculSol = typeCalcul; }
-
-    /**
      * \fn void setModifiable(bool modify)
      * \brief Set attribut modifiable 
      */
@@ -649,9 +629,6 @@ protected:
 
     ///etat a jour du calcul
     bool _upTodate;
-
-    /// Type de calcul du sol
-    int _typeCalculSol;
 
     ///avec ou sans sol (anechoique ou semi-anechoique)
     bool _anechoic;

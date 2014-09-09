@@ -29,8 +29,7 @@
 #include "TYSolver.h"
 
 TYAcousticModel::TYAcousticModel(TYSolver& solver)
-    : _typeCalculSol(0),
-      _useSol(true),
+    : _useSol(true),
       _useReflex(false),
       _conditionFav(false),
       _useAtmo(true),
@@ -69,8 +68,6 @@ void TYAcousticModel::init(const TYCalcul& calcul)
     _interference = calcul.getInterference();
     // On calcul tout de suite le spectre de longueur d'onde
     _lambda = OSpectre::getLambda(pSolverAtmos->compute_c()); //_pAtmo->getVitSon());
-    // Calcul reflexion sur sol locale ou etendue
-    _typeCalculSol = calcul.getTypeCalculSol();
     // Distance minimale entre deux points consideres comme confondus
     _seuilConfondus = calcul.getSeuilConfondu();
     // Coefficient multiplicateur pour le calcul des reflexions supplementaires en condition favorable
