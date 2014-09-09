@@ -78,7 +78,7 @@ public:
     //bool UseLateralDiffraction;
     bool UseReflection;
     //bool PropaConditions;
-    //float H1parameter;
+    float H1parameter;
     //bool ModSummation;
 
     bool UseMeteo;

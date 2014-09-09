@@ -73,7 +73,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
 
     _state = TYCalcul::Actif; // A sa creation, le calcul est actif
 
-    _h1 = 10.0;
     _distanceSRMin = 0.3;
     _anechoic = false; // Par defaut : conditions semi-anechoiques
 
@@ -120,15 +119,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     else
     {
         TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "InterferenceCalculDefault", _interference);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "ParamHCalculDefault"))
-    {
-        _h1 = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "ParamHCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "ParamHCalculDefault", _h1);
     }
 
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "DistanceSRMinCalculDefault"))
@@ -210,7 +200,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _useAtmosphere = other._useAtmosphere;
         _interference = other._interference;
         _state = other._state;
-        _h1 = other._h1;
         _distanceSRMin = other._distanceSRMin;
         _pAtmosphere = other._pAtmosphere;
         _maillages = other._maillages;
@@ -240,7 +229,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_useAtmosphere != other._useAtmosphere) { return false; }
         if (_interference != other._interference) { return false; }
         if (_state != other._state) { return false; }
-        if (_h1 != other._h1) { return false; }
         if (_distanceSRMin != other._distanceSRMin) { return false; }
         if (_pAtmosphere != other._pAtmosphere) { return false; }
         if (_maillages != other._maillages) { return false; }
@@ -281,7 +269,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _useAtmosphere = pOtherCalcul->_useAtmosphere;
     _interference = pOtherCalcul->_interference;
     _state = pOtherCalcul->_state;
-    _h1 = pOtherCalcul->_h1;
     _distanceSRMin = pOtherCalcul->_distanceSRMin;
     _anechoic = pOtherCalcul->_anechoic;
 
@@ -341,7 +328,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementIntValue(domNewElem, "useAtmosphere", _useAtmosphere);
     TYXMLTools::addElementIntValue(domNewElem, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux);
     TYXMLTools::addElementIntValue(domNewElem, "interference", _interference);
-    TYXMLTools::addElementDoubleValue(domNewElem, "h1", _h1);
     TYXMLTools::addElementDoubleValue(domNewElem, "distanceSRMin", _distanceSRMin);
 
     // Ajout du site node sur lequel s'effectue le calcul
@@ -456,7 +442,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementBoolValue(elemCur, "useAtmosphere", _useAtmosphere, getOk[9]);
         TYXMLTools::getElementBoolValue(elemCur, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux, getOk[18]);
         TYXMLTools::getElementBoolValue(elemCur, "interference", _interference, getOk[12]);
-        TYXMLTools::getElementDoubleValue(elemCur, "h1", _h1, getOk[13]);
         TYXMLTools::getElementDoubleValue(elemCur, "distanceSRMin", _distanceSRMin, getOk[14]);
 
         if (!getOk[17]) { _typeCalculSol = 0; } // Par defaut, calcul avec sol local

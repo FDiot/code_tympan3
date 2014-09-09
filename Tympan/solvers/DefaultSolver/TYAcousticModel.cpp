@@ -84,12 +84,11 @@ void TYAcousticModel::init(const TYCalcul& calcul)
     // Distance minimale entre deux points consideres comme confondus
     _seuilConfondus = calcul.getSeuilConfondu();
 
-
     /// Calcul des trajets horizontaux
     _bCalculTrajetsHorizontaux = calcul.getCalculTrajetsHorizontaux();
 
     // Coefficient multiplicateur pour le calcul des reflexions supplementaires en condition favorable
-    _paramH = calcul.getParamH();
+    _paramH = config->H1parameter;
 }
 
 

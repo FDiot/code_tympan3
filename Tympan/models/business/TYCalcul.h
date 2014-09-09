@@ -243,18 +243,6 @@ public:
     void setInterference(bool use) { _interference = use; }
 
     /**
-     *\fn double getParamH()
-     *\brief Get du parametre h1.
-     *\return _h1
-     */
-    double getParamH() const { return _h1; }
-    /**
-     *\fn void setParamH(double h1)
-     *\brief Set du parametre h1.
-     */
-    void setParamH(double h1) { _h1 = h1; }
-
-    /**
      *\fn void setDistanceSRMin(const double& dist)
      *\brief Set du parametre _distanceSRMin
      */
@@ -697,8 +685,6 @@ protected:
     /// Sauvegarde des rayon (TYRay)
     bool _bSaveRay;
 
-    ///Parametre h1 pour un calcul avec conditions favorables.
-    double _h1;
     ///Distance minimale entre une source et un recepteur
     double _distanceSRMin;
 

@@ -69,6 +69,7 @@ SolverConfiguration::SolverConfiguration()
     NbThreads=4;
     UseRealGround=1;
     UseReflection=1;
+    H1parameter=10.;
 
     UseMeteo=0;
     OverSampleD=0;
