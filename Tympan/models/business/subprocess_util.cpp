@@ -162,10 +162,7 @@ bool python(QStringList args, std::string& error_msg)
     }
     catch(const tympan::invalid_data& exc)
     {
-        std::ostringstream msg;
-        msg << boost::diagnostic_information(exc);
         error_msg = "L'interpreteur python n'a pas pu etre trouve.\nVeuillez verifier que la variable d'environnement TYMPAN_PYTHON_INTERP est correctement positionnee\n";
-        error_msg.append(msg.str());
         return false;
     }
     python.start(python_interp, args);
