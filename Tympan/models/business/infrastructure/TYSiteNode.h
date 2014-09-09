@@ -343,11 +343,6 @@ class TYSiteNode: public TYElement
     virtual bool remFromCalcul();
 
     /**
-     * Donne atmosphere à utiliser pour topographie
-     */
-    virtual void setAtmosphere(const LPTYAtmosphere& pAtmosphere);
-
-    /**
      * Precalcul du nombre d'onde dans le sol des que les caracteristiques de
      * l'atmosphere sont connus. Fonction executees au lancement du calcul.
      */

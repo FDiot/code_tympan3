@@ -1008,26 +1008,6 @@ LPTYCourbeNiveauGeoNode TYTopographie::findCrbNiv(const LPTYCourbeNiveau pCrbNiv
     return NULL;
 }
 
-void TYTopographie::updateSol(const TYAtmosphere& atmo)
-{
-    // Traitement des terrains defini sur le site
-    LPTYTerrain terrain = NULL;
-    LPTYSol sol = NULL;
-
-    for (unsigned int i = 0 ; i < _listTerrain.size() ; i++)
-    {
-        terrain = dynamic_cast<TYTerrain*>(_listTerrain[i]->getElement());
-        if (terrain->isA("TYPlanEau"))
-        {
-            continue;
-        }
-        else
-        {
-            sol = terrain->getSol();
-        }
-    }
-}
-
 double TYTopographie::getTopoSize(OSegment3D& segDiagonale)
 {
     double longueur = 0;

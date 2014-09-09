@@ -383,12 +383,6 @@ public:
     }
 
     /**
-     * Met a jour les caracteristique des sols definis dans la topo
-     * Calcul du nombre d'onde dans le sol en fonction de l'atmosphere
-     */
-    void updateSol(const TYAtmosphere& atmo);
-
-    /**
      * Retourne la dimension caracteristique de la topographie (diagonale de la boite englobante)
      */
     double getTopoSize(OSegment3D& segDiagonale);
