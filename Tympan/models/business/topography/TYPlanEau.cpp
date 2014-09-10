@@ -50,7 +50,7 @@ TYPlanEau::TYPlanEau()
     _pCrbNiv->setParent(this);
 
     _pSol->setEpaisseur(1);
-    _pSol->setMiroir(true);
+    _pSol->setResistivite(100000.);
 }
 
 TYPlanEau::TYPlanEau(const TYPlanEau& other)
@@ -63,7 +63,6 @@ TYPlanEau::TYPlanEau(const TYTabPoint& pts, double alt)
     _pCrbNiv = new TYCourbeNiveau();
     _pCrbNiv->setListPoints(pts);
     _pCrbNiv->setAltitude(alt);
-    _pSol->setMiroir(true);
 }
 
 TYPlanEau::~TYPlanEau()
@@ -132,9 +131,6 @@ int TYPlanEau::fromXML(DOM_Element domElement)
         elemCur = childs.item(i).toElement();
         _pCrbNiv->callFromXMLIfEqual(elemCur);
     }
-
-    // On force le "sol" comme reflechissant pour les fichiers anciens
-    _pSol->setMiroir(true);
 
     return 1;
 }

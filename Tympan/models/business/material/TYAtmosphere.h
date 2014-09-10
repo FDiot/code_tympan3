@@ -22,15 +22,6 @@
 
 #include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/acoustic/TYSpectre.h"
-#include "Tympan/models/business/geometry/TYSegment.h"
-
-///Pression de reference exprimee en Pascal.
-#define TY_EDF_PR 101325.0
-///Zero absolu (Kelvin).
-#define TY_EDF_0K 273.15
-///Temperature de reference (20° C) exprimee en Kelvin.
-#define TY_EDF_T0 293.15
-
 
 /**
  * Classe de definition d'une atmosphere.
@@ -76,7 +67,7 @@ public:
     /**
      * Set/Get de la pression.
      */
-    void setPression(double press);
+    void setPression(double pression) { _pression = pression; }
 
     /**
      * Set/Get de la temperature.
@@ -85,7 +76,7 @@ public:
     /**
      * Set/Get de la temperature.
      */
-    void setTemperature(double temp);
+    void setTemperature(double temp) { _temperature = temp; }
 
     /**
      * Set/Get de l'hygrometrie.
@@ -94,129 +85,17 @@ public:
     /**
      * Set/Get de l'hygrometrie.
      */
-    void setHygrometrie(double hygro);
-    /**
-     * Set/Get de la vitesse du vent.
-     */
-    double getVitVent() const { return _vitVent; }
-    /**
-     * Set/Get de la vitesse du vent.
-     */
-    void setVitVent(double vit) { _vitVent = vit; }
-    /**
-     * Get/Set de la vitesse du son
-     */
-    double getVitSon() const { return _vitSon; }
+    void setHygrometrie(double hygro) { _hygrometrie = hygro; }
 
     /**
      * Get/Set de la vitesse du son
      */
-    void setVitSon(const double& val) { _vitSon = val; }
-
-    /**
-     * Set/Get de la direction du vent.
-     */
-    double getDirVent() const { return _dirVent; }
-    /**
-     * Set/Get de la direction du vent.
-     */
-    void setDirVent(double dir) { _dirVent = dir; }
-
-    /**
-     * Get/Set de l'impedance specifique de l'air
-     */
-    double getImpedanceSpecifique() const { return _impedanceSpecifique; }
-
-    /**
-     * Get/Set de l'impedence specifique
-     */
-    void setImpedanceSpecifique(const double& val) { _impedanceSpecifique = val; }
-
-    /**
-     * Lecture de la fraction molaire d'humidite (utilise par les cas tests)
-     */
-    double getFractionMolaire() { return _h_molaire; }
-    const double getFractionMolaire() const { return _h_molaire; }
-
-    /**
-     * Fonction qui recalcule l'ensemble des proprietes de l'atmosphere
-     * Cette fonction est appelee a chaque changement d'un parametre
-     */
-    void calculProprietes();
-
-    /**
-     * Get du spectre de nombre d'onde
-     */
-    OSpectre& getKAcoust() { return _spectreKAcoust; }
-    const OSpectre& getKAcoust() const { return _spectreKAcoust; }
+    double getVitSon() const;
 
     /**
      * Set/Get du spectre d'attenuation.
      */
-    TYSpectre& getSpectreAtt() { return _spectreAtt; }
-
-    /**
-     * Set/Get du spectre d'attenuation.
-     */
-    const TYSpectre& getSpectreAtt() const { return _spectreAtt; }
-    /**
-     * Set/Get du spectre d'attenuation.
-     */
-    void setSpectreAtt(const TYSpectre& Att) { _spectreAtt = Att; _spectreAtt.setParent(this); }
-
-    /**
-     * Calcul du spectre d'attenuation pour un segment donne.
-     *
-     * @param seg Segment pour lequel est calcule le spectre d'attenuation
-     */
-    OSpectre getAtt(const TYSegment& seg) const;
-
-    /**
-     * Calcul du spectre d'attenuation pour une longueur de traversee donnee
-     *
-     * @param distance double representant la longueur du trajet parcouru dans l'atmosphere
-     * @return un LPTYSpectre
-     */
-    OSpectre getAtt(const double& distance) const;
-
-    /// Methodes specifiques a HARMONOISE
-
-    /**
-     * Get du profil turbulent.
-     */
-    void getProfilMeteo(double& A, double& B, double& C, double& D) { A = _A; B = _B; C = _C; D = _D; }
-    void setProfilMeteo(const double& A, const double& B, const double& C, const double& D) { _A = A; _B = B; _C = C; _D = D; }
-
-    /**
-     * Get/Set de la classe meteo
-     */
-    int getClasseMeteo() { return _stabilityClass; }
-    const int getClasseMeteo() const { return _stabilityClass; }
-
-    void setClasseMeteo(const int& stability) { _stabilityClass = stability; }
-
-protected:
-    /**
-     * Calcule la fraction molaire de vapeur.
-     */
-    void hrToFMol();
-
-    /**
-     * Calcul du spectre d'attenuation atmospherique d'apres ISO9613.
-     */
-    void calculSpectre();
-    /**
-     * Calcul de la vitesse du son
-     */
-    void calculC();
-    /**
-     * Calcul du spectre de nombre d'onde acoustique
-     */
-    void calculK();
-    /**
-     * calcul de l'impedance caracteristique de l'air rho0.c
-     */
-    void calculImpedance();
+    TYSpectre getSpectreAtt();
 
     // Membres
 protected:
@@ -226,43 +105,6 @@ protected:
     double _temperature;
     ///Hygrometrie en pourcentage d'humidite relative.
     double _hygrometrie;
-    /// Hygrometrie exprimee en fraction molaire de vapeur d'eau
-    double _h_molaire;
-    ///Vitesse du vent en m/s.
-    double _vitVent;
-    ///Direction du vent.
-    double _dirVent;
-    ///Vitesse du son
-    double _vitSon;
-    ///Impedance caracteristique de l'air (rho.C)
-    double _impedanceSpecifique;
-    ///Spectre d'attenuation.
-    TYSpectre _spectreAtt;
-    ///Spectre de nombre d'onde
-    OSpectre _spectreKAcoust;
-
-    /// SPECIFIQUE HARMONOISE
-    /// Description du profil du champ sonore et de la turbulence
-    double _A; // linear sound speed gradient
-    double _B; // logarithmic sound speed gradient
-    double _C; // turbulence strength
-    double _D; // displacement height
-
-    /// Classe meteo
-    int _stabilityClass;
-
-
-
-public:
-    ///Impedance de reference de l'air
-    static const double _impedanceRef;
-
-    /**
-        BIBLIOGRAPHIE :
-
-      [1] Harmonoise Programming the P2P propagation model : Page 26
-
-    */
 };
 
 

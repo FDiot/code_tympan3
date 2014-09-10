@@ -22,8 +22,6 @@
 
 #include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/acoustic/TYSpectre.h"
-#include "Tympan/models/business/geometry/TYSegment.h"
-#include "TYAtmosphere.h"
 
 /**
  * Classe de definition d'une vegetation.
@@ -83,22 +81,6 @@ public:
      * Set/Get du spectre d'attenuation.
      */
     void setSpectreAtt(TYSpectre* pAtt) ;
-
-    /**
-     * Calcul du spectre d'attenuation pour le segment seg.
-     *
-     * @param seg Segment pour lequel est fourni le spectre d'attenuation.
-     */
-    OSpectre getAtt(const OSegment3D& seg, const TYAtmosphere& Atmo) const;
-
-    /**
-     *
-     * Calcul du spectre d'attenuation sur une distance donnee
-     *
-     * @param distance Longueur du trajet parcouru dans la foret
-     */
-    OSpectre getAtt(const double& distance, const TYAtmosphere& Atmo) const;
-
 
     // Membres
 protected:

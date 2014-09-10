@@ -22,7 +22,6 @@
 
 
 #include "TYVegetation.h"
-#include "TYAtmosphere.h"
 
 /**
  * Classe de definition d'un sol.
@@ -69,13 +68,7 @@ public:
     /**
      * Set/Get de la resistivite.
      */
-    void setResistivite(double res) { _resistivite = res; calculZc(); }
-
-    /*!
-     * \fn double getG() { return min(pow(300.0 / sol->getResistivite(), 0.57), 1.0); }
-     * \brief Compute equivalent ISO 9613 ground absorption
-     */
-    double getG() { return MIN(pow(300.0 / _resistivite, 0.57), 1.0); }
+    void setResistivite(double res) { _resistivite = res; }
 
     /**
      * Set/Get de l'epaisseur.
@@ -86,22 +79,6 @@ public:
      * Set/Get de l'epaisseur.
      */
     void setEpaisseur(double epais) { _epaisseur = epais; }
-
-    /**
-     * Set/Get de l'impedance.
-     */
-    OSpectreComplex getImpedance() { return _pImpedance; }
-
-    /**
-     * Set/Get de l'impedance.
-     */
-    const OSpectreComplex getImpedance() const { return _pImpedance; }
-
-    /**
-     * Set/Get de l'impedance.
-     */
-    void setImpedance(const OSpectreComplex imp) { _pImpedance = imp; }
-
 
     /**
      * Get de l'indicateur de vegetation.
@@ -133,128 +110,6 @@ public:
      */
     TYVegetation* useVegetation(bool state = true);
 
-    /**
-     * Calule le spectre d'absorption du sol
-     * en fonction de l'angle d'incidence de l'onde acoustique.
-     *
-     * @param angle Angle d'incidence de l'onde acoustique.
-     * @param Rr distance du trajet reflechi sur le sole entre le point de reflexion et le point suivant
-     * @param pAtmo atmosphere courante du calcul
-     */
-    OSpectreComplex abso(const double& angle, const double& rR, const TYAtmosphere& Atmo) const;
-
-protected:
-    /**
-     * Calcul de Zc, impedance caracteristique du sol a partir de
-     * la resistance a l'ecoulement du sol exprimee en kRayl.
-     * d'apres la formulation de DELANY-BAZLEY
-     *
-     * @return Le spectre de l'impedence caracteristique du sol
-     */
-    void calculZc();
-
-    /**
-     * Calcul de l'impedance specifique du sol Zc
-     */
-    OSpectreComplex calculZs(const double phi, const TYAtmosphere& atmos) const;
-
-    /**
-     * Calcul de w d'apres : "H. JONASSON : The propagation and screening of wheel/rail noise"
-     *
-     * @param rR distance du trajet reflechi sur le sol entre la source et le point recepteur
-     * @param phi angle d'incidence de l'onde acoustique
-     *
-     * @return w un OSpectreComplex
-     */
-    OSpectreComplex calculW(const OSpectreComplex& Zs, const double rR, const double phi, const TYAtmosphere& atmos) const;
-
-public:  //Temporairement
-    /**
-     * Calcul de la fonction Fw facteur de perte pour l'effet de sol
-     *
-     * @param w LPTYSpectre
-     * @return fw LPTYSpectre representant le facteur de perte
-     */
-    OSpectreComplex calculFw(const OSpectreComplex& w) const;
-
-    /**
-     * Calcul de K, nombre d'onde dans la surface du sol
-     * d'apres la formulation de DELANY-BAZLEY
-     *
-     * @return Le spectre du nombre d'onde dans la surface du sol
-     */
-    void calculNombreDOnde(const TYAtmosphere& atmos);
-
-    /**
-     * Get/Set du statut totalement reflechissant
-     */
-    void setMiroir(const bool& bMiroir) { _bMiroir = bMiroir; }
-    bool getMiroir() { return _bMiroir; }
-    const bool getMiroir() const { return _bMiroir; }
-
-    /**
-     * \fn calculQ(const double& angle, const double& rR, const TYAtmosphere& Atmo) const
-     * \brief Calcul du coefficient de reflexion du sol en ondes spheriques
-     * \param angle Angle d'incidence de l'onde acoustique
-     * \param rR distance du trajet reflechi sur le sol entre le point de reflexion et le point suivant
-     * \param pAtmo atmosphere courante du calcul
-     * \return Q OSpectreComplex
-     */
-    OSpectreComplex calculQ(const double& angle, const double& rR, const TYAtmosphere& Atmo) const;
-
-protected:
-    /**
-     * Calcul du coefficient de reflexion du sol en onde plane
-     *
-     * @param phi Angle d'incidence de l'onde acoustique
-     *
-     * @return rP OSpectreComplex
-     */
-    OSpectreComplex calculRp(const OSpectreComplex& Zs, const double& phi) const;
-
-    /**
-     * Calcul du coefficient de reflexion du sol en ondes spheriques
-     *
-     * @param phi Angle d'incidence de l'onde acoustique
-     * @param rp coefficient de reflexion du sol en ondes planes
-     *
-     * @return Q OSpectreComplex
-     */
-    OSpectreComplex calculQ(const double& phi, const OSpectreComplex& rp, const OSpectreComplex& fw) const ;
-
-    /**
-     * \fn calculQ(const double& phi, const OSpectreComplex & fw) const
-     * \brief Calcul du coefficient de reflexion du sol en ondes spheriques
-     * \param phi Angle d'incidence de l'onde acoustique
-     * \param fw spectre
-     * \return Q OSpectreComplex
-     */
-    OSpectreComplex calculQ(const double& phi, const OSpectreComplex& fw) const;
-
-
-
-private:
-    /**
-     * Fonctions utilisees dans le calcul de la fonction Fw
-     *
-     * @param un complexe appartenant au vecteur [w]
-     *
-     * @return un complexe repondant au cas specifie
-     */
-    TYComplex erfcCas1(const TYComplex& wValue) const;
-    inline TYComplex erfcCas2(const TYComplex& wValue) const;
-    inline TYComplex erfcCas3(const TYComplex& wValue) const;
-
-    /**
-     * Fonction utilisee dans le traitement du signe de G
-     *
-     * @param TYComplex W Valeur locale de la fonction W
-     * @param TYComplex G Valeur locale de la fonction G
-     *
-     * @return TYComplex
-     */
-    inline TYComplex sgnReIm(const TYComplex& W, const TYComplex& G) const ;
-
 
     // Membres
 protected:
@@ -263,15 +118,6 @@ protected:
 
     ///Epaisseur du sol.
     double _epaisseur;
-
-    ///Statut totalement reflechissant
-    bool _bMiroir;
-
-    ///Spectre d'impedance caracteristique du sol.
-    OSpectreComplex _pImpedance;
-
-    ///Spectre de nombre d'onde
-    OSpectreComplex _pNombreDOnde;
 
     ///Vegetation eventuelle.
     TYVegetation* _pVegetation;

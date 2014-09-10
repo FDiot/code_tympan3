@@ -13,18 +13,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #if TY_USE_IHM
 #include "Tympan/gui/widgets/TYVegetationWidget.h"
 #endif
 
-
-#include "Tympan/models/common/3d.h"
 #include "Tympan/core/logging.h"
-
 
 #include "TYVegetation.h"
 
@@ -132,46 +125,3 @@ void TYVegetation::setSpectreAtt(TYSpectre* pAtt)
     if (_pSpectreAtt->getEtat() != SPECTRE_ETAT_LIN) { *_pSpectreAtt = _pSpectreAtt->toGPhy(); } //Passage en lineaire si necessaire
 }
 
-OSpectre TYVegetation::getAtt(const OSegment3D& seg, const TYAtmosphere& Atmo) const
-{
-
-    return getAtt(seg.longueur(), Atmo);
-}
-
-OSpectre TYVegetation::getAtt(const double& distance, const TYAtmosphere& Atmo) const
-{
-    OSpectre s;
-    OSpectre sAttAtmo = Atmo.getAtt(distance); // L'absorption de l'atmosphere s'ajoute a l'absorption de la vegetation
-
-    s.setType(SPECTRE_TYPE_ATT); // Spectre d'attenuation
-
-    if (distance < 10.0)
-    {
-        s.setDefaultValue(0.0);  // Pas d'attenuation pour les distances inferieures a 10 metres
-        return s;
-    }
-
-    for (unsigned int i = 0 ; i < _pSpectreAtt->getNbValues(); i++)
-    {
-
-        if (distance < 20.0)
-        {
-            double valeur = (TYSpectre::getTabFreqNorm()[i] < 250 ?  0.0 : 1.0);
-            s.getTabValReel()[i] = valeur;
-        }
-
-        if (distance < 200.0)
-        {
-            s = _pSpectreAtt->mult(distance);
-        }
-        else
-        {
-            s = _pSpectreAtt->mult(200.0);
-        }
-    }
-
-    s = s.toGPhy();
-    s = s.mult(sAttAtmo); // Prise en compte de l'absorption atmospherique
-
-    return s;
-}

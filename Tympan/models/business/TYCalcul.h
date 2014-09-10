@@ -429,11 +429,6 @@ public:
      * \return _pAtmosphere
      */
     const LPTYAtmosphere getAtmosphere() const { return _pAtmosphere; }
-    /**
-     * \fn void setAtmosphere(const LPTYAtmosphere pAtmo)
-     * \brief Set de l'atmosphere.
-     */
-    void setAtmosphere(const LPTYAtmosphere pAtmo);
 
     /**
      *\fn TYTabMaillageGeoNode& getMaillages() { return _maillages; }
