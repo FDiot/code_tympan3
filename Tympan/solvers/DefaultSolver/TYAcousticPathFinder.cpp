@@ -13,31 +13,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
 
-
-#include "TYAcousticPathFinder.h"
 #include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/ConvexHullFinder/TYCalculParcours.h"
 #include "TYSolver.h"
+#include "TYAcousticPathFinder.h"
 
 TYAcousticPathFinder::TYAcousticPathFinder(TYSolver& solver)
     : _solver(solver),
       _bCalcTrajetHorizontaux(false)
 {
-
 }
 
 TYAcousticPathFinder::~TYAcousticPathFinder()
 {
-
 }
 
 void TYAcousticPathFinder::init(TYCalcul& calcul)
 {
-    _bCalcTrajetHorizontaux = calcul.getCalculTrajetsHorizontaux();
+    _bCalcTrajetHorizontaux = tympan::SolverConfiguration::get()->UseLateralDiffraction;
 }
 
 void TYAcousticPathFinder::computePath(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, TabPoint3D& ptsRight)

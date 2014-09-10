@@ -65,7 +65,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _upTodate = true;
 
     _useAtmosphere = true;
-    _bCalculTrajetsHorizontaux = true;
     _interference = false;
 
     _state = TYCalcul::Actif; // A sa creation, le calcul est actif
@@ -263,7 +262,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "solverId", _solverId.toString());
     TYXMLTools::addElementIntValue(domNewElem, "etat", _state);  // 16/08/2005 Possibilite de bloquer un calcul
     TYXMLTools::addElementIntValue(domNewElem, "useAtmosphere", _useAtmosphere);
-    TYXMLTools::addElementIntValue(domNewElem, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux);
     TYXMLTools::addElementIntValue(domNewElem, "interference", _interference);
 
     // Ajout du site node sur lequel s'effectue le calcul
@@ -373,7 +371,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[20]);
         TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[19]);
         TYXMLTools::getElementBoolValue(elemCur, "useAtmosphere", _useAtmosphere, getOk[9]);
-        TYXMLTools::getElementBoolValue(elemCur, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux, getOk[18]);
         TYXMLTools::getElementBoolValue(elemCur, "interference", _interference, getOk[12]);
 
         // Selection

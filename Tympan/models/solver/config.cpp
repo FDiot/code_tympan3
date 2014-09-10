@@ -68,6 +68,7 @@ SolverConfiguration::SolverConfiguration()
 
     NbThreads=4;
     UseRealGround=1;
+    UseLateralDiffraction=1;
     UseReflection=1;
     PropaConditions=0;
     H1parameter=10.;
