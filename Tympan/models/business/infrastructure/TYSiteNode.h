@@ -457,18 +457,16 @@ public:
     /// Export au format csv sur un flux transmis
     virtual void exportCSV(std::ofstream& ofs);
 
-    /* Check if the altimetry is up-to-date. This is checked only on the root sites
-     */
-    bool getAltimetryUpToDate(){ return _alti_uptodate; }
-
     /* Return the site altimetry (retrieved from the rootsite of the hierarchy,
      * which can be the current site node or one of its parents
      */
     LPTYAltimetrie getAltimetry() const;
 
-    /* Inform a root site that its altimetry is outdated.
+    /* Transform matrix allowing to move the site to a global frame.
+     * If the site is the root site, this matrix should be equal to the identity
+     * matrix.
      */
-    void setAltimetryUpToDate(bool uptodate){ _alti_uptodate = uptodate; }
+    OMatrix getGlobalMatrix() const;
 
 protected:
     /**
@@ -541,10 +539,6 @@ protected:
 
     ///Flag de modification de l'image de fond.
     bool _isTopoFileModified;
-
-    // Indicates whether the altimetry is up-to-date on this site (this value
-    // is checked only on the root sites)
-    bool _alti_uptodate;
 
 };
 

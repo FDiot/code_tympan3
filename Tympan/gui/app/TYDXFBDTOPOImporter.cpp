@@ -139,9 +139,6 @@ bool TYDXFBDTopoImporter::import(const char* FullBDDPath, LPTYSiteNode* pSiteIn)
     //////////////////////////////////////////////////////////////////////////
     importField(nMaxTerrain, model, Offset, pTYTopographie);
 
-    // Notify the altimetry is not uptodate
-    pSite->setAltimetryUpToDate(false);
-
     //////////////////////////////////////////////////////////////////////////
     //
     //          I N F R A S T R U C T U R E

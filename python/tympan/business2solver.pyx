@@ -270,9 +270,11 @@ cdef class SolverModelBuilder:
                     subsource = tybusiness.downcast_source_ponctuelle(subsource_elt)
                     ppoint = subsource.getPos().getRealPointer()
                     point3d  = cy.declare(tycommon.OPoint3D)
+                    # Site transform matrix * source transform matrix
+                    globalmatrix = cy.declare(tycommon.OMatrix)
+                    globalmatrix = site.matrix.dot(sources_of_elt[i].getRealPointer().getMatrix())
                     # Convert its position to the global frame
-                    point3d = tycommon.dot(sources_of_elt[i].getRealPointer().getMatrix(),
-                                           ppoint[0])
+                    point3d = tycommon.dot(globalmatrix, ppoint[0])
                     ppoint[0]._x = point3d._x
                     ppoint[0]._y = point3d._y
                     ppoint[0]._z = point3d._z

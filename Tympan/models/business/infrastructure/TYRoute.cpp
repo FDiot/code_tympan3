@@ -403,13 +403,14 @@ bool TYRoute::updateAcoustic(const bool& force) //force = false
     return true;
 }
 
-bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
+bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode,
+        OMatrix globalMatrix)
 {
     assert(pGeoNode->getElement() == static_cast<TYElement*>(this) &&
            "Inconsistent arguments : the geoNode passed must point on `this` !");
 
     // Transform representing this element pose relative to the world
-    const OMatrix& matrix = pGeoNode->getMatrix();
+    const OMatrix& matrix = globalMatrix * pGeoNode->getMatrix();
     OMatrix matrixinv = matrix.getInvert();
 
     // Road heigth relative to the ground
@@ -436,7 +437,7 @@ bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNod
     // We create sources along the acoustic line...
     // and then project them on the altimetry and add the required offset
     // Note this is distriSrcs(const TYAltimetrie&) NOT base class distriSrcs()
-    distriSrcs(alti, pGeoNode);
+    distriSrcs(alti, pGeoNode, globalMatrix);
 
     updateComputedDeclivity();
 
@@ -445,7 +446,8 @@ bool TYRoute::updateAltitudes(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNod
 }
 
 
-void TYRoute::distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
+void TYRoute::distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode,
+        OMatrix globalMatrix)
 {
     assert(pGeoNode->getElement() == static_cast<TYElement*>(this) &&
            "Inconsistent arguments : the geoNode passed must point on `this` !");
@@ -453,7 +455,7 @@ void TYRoute::distriSrcs(const TYAltimetrie& alti, LPTYRouteGeoNode pGeoNode)
     TYAcousticLine::distriSrcs();
 
     // Transform representing this element pose relative to the world
-    const OMatrix& matrix = pGeoNode->getMatrix();
+    const OMatrix& matrix = globalMatrix * pGeoNode->getMatrix();
     OMatrix matrixinv = matrix.getInvert();
     // Road heigth relative to the ground
     double hauteur = pGeoNode->getHauteur();
