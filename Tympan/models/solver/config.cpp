@@ -72,6 +72,7 @@ SolverConfiguration::SolverConfiguration()
     UseReflection=1;
     PropaConditions=0;
     H1parameter=10.;
+    ModSummation=0;
 
     UseMeteo=0;
     OverSampleD=0;

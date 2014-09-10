@@ -65,7 +65,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _upTodate = true;
 
     _useAtmosphere = true;
-    _interference = false;
 
     _state = TYCalcul::Actif; // A sa creation, le calcul est actif
 
@@ -93,15 +92,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     else
     {
         TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault", _useAtmosphere);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "InterferenceCalculDefault"))
-    {
-        _interference = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "InterferenceCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "InterferenceCalculDefault", _interference);
     }
 
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
@@ -147,7 +137,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _comment = other._comment;
         _upTodate = other._upTodate;
         _useAtmosphere = other._useAtmosphere;
-        _interference = other._interference;
         _state = other._state;
         _pAtmosphere = other._pAtmosphere;
         _maillages = other._maillages;
@@ -172,7 +161,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_numero != other._numero) { return false; }
         if (_upTodate != other._upTodate) { return false; }
         if (_useAtmosphere != other._useAtmosphere) { return false; }
-        if (_interference != other._interference) { return false; }
         if (_state != other._state) { return false; }
         if (_pAtmosphere != other._pAtmosphere) { return false; }
         if (_maillages != other._maillages) { return false; }
@@ -208,7 +196,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _comment = pOtherCalcul->_comment;
     _upTodate = pOtherCalcul->_upTodate;
     _useAtmosphere = pOtherCalcul->_useAtmosphere;
-    _interference = pOtherCalcul->_interference;
     _state = pOtherCalcul->_state;
 
     _pAtmosphere->deepCopy(pOtherCalcul->_pAtmosphere, copyId);
@@ -262,7 +249,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "solverId", _solverId.toString());
     TYXMLTools::addElementIntValue(domNewElem, "etat", _state);  // 16/08/2005 Possibilite de bloquer un calcul
     TYXMLTools::addElementIntValue(domNewElem, "useAtmosphere", _useAtmosphere);
-    TYXMLTools::addElementIntValue(domNewElem, "interference", _interference);
 
     // Ajout du site node sur lequel s'effectue le calcul
     DOM_Document domDoc = domElement.ownerDocument();
@@ -371,7 +357,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[20]);
         TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[19]);
         TYXMLTools::getElementBoolValue(elemCur, "useAtmosphere", _useAtmosphere, getOk[9]);
-        TYXMLTools::getElementBoolValue(elemCur, "interference", _interference, getOk[12]);
 
         // Selection
         if (elemCur.nodeName() == "ListID")

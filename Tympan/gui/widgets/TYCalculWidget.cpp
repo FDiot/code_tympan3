@@ -148,23 +148,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _checkBoxParcoursLateraux->setText(TR(""));
     groupBoxFlagLayout->addWidget(_checkBoxParcoursLateraux, 3, 3);
 
-
-    QButtonGroup* buttonGroupIE = new QButtonGroup();
-    _radioButtonEnergetique = new QRadioButton(TR("id_calcul_energetique"));
-    buttonGroupIE->addButton(_radioButtonEnergetique, 0);
-    _radioButtonInterference = new QRadioButton(TR("id_calcul_interference"));
-    buttonGroupIE->addButton(_radioButtonInterference, 1);
-
-    QGridLayout* groupBoxIELayout = new QGridLayout();
-    groupBoxIELayout->addWidget(_radioButtonEnergetique, 0, 0);
-    groupBoxIELayout->addWidget(_radioButtonInterference, 0, 1);
-
-    QGroupBox* groupBoxCondIE = new QGroupBox();
-    groupBoxCondIE->setTitle(TR(""));
-    groupBoxCondIE->setLayout(groupBoxIELayout);
-
-    groupBoxFlagLayout->addWidget(groupBoxCondIE, 6, 0, 1, 2);
-
     _tabWidget->insertTab(1, _groupBoxFlag, TR("id_opt_calc"));
 
     // Onglet meteo
@@ -348,9 +331,6 @@ void TYCalculWidget::updateContent()
 
     _checkBoxUseAtmosphere->setChecked(getElement()->getUseAtmosphere());
 
-    _radioButtonEnergetique->setChecked(!getElement()->getInterference());
-    _radioButtonInterference->setChecked(getElement()->getInterference());
-
     _checkBoxStoreGlobalMatrix->setChecked(getElement()->getStatusPartialResult());
 
 
@@ -463,8 +443,6 @@ void TYCalculWidget::apply()
     }
 
     getElement()->setUseAtmosphere(_checkBoxUseAtmosphere->isChecked());
-
-    getElement()->setInterference(_radioButtonInterference->isChecked());
 
     getElement()->setDateModif(_editDateModif->date().currentDate().toString(Qt::ISODate));
     getElement()->setDateCreation(_editDateCreation->date().toString(Qt::ISODate));

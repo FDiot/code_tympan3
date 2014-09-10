@@ -79,7 +79,7 @@ public:
     bool UseReflection;
     bool PropaConditions;
     float H1parameter;
-    //bool ModSummation;
+    bool ModSummation;
 
     bool UseMeteo;
     float OverSampleD;

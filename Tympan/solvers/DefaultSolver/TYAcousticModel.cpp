@@ -65,7 +65,7 @@ void TYAcousticModel::init(const TYCalcul& calcul)
     // Prise en compte de l'atmosphere (divergence geometrique)
     _useAtmo = calcul.getUseAtmosphere();
     // Calcul avec interference
-    _interference = calcul.getInterference();
+    _interference = config->ModSummation;
     // On calcul tout de suite le spectre de longueur d'onde
     _lambda = OSpectre::getLambda(pSolverAtmos->compute_c()); //_pAtmo->getVitSon());
     // Distance minimale entre deux points consideres comme confondus

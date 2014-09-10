@@ -789,11 +789,9 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     _pMaillage = new TYMaillage();
 
     _pCheckBoxUseAtmosphere = new QCheckBox(TR("id_useatmosphere_label"));
-    _pCheckBoxInterference = new QCheckBox(TR("id_interference_label"));
 
     QGridLayout* groupBoxLayout = new QGridLayout();
     groupBoxLayout->addWidget(_pCheckBoxUseAtmosphere, 1, 0);
-    groupBoxLayout->addWidget(_pCheckBoxInterference, 2, 1);
 
     QGroupBox* groupBox = new QGroupBox();
     groupBox->setTitle(TR("id_default_param_calcul"));
@@ -1356,10 +1354,6 @@ void TYPreferenceDialog::loadPreferences()
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->setChecked(TYPreferenceManager::getBool("UseAtmosphereCalculDefault"));
     }
-    if (TYPreferenceManager::exists("InterferenceCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->setChecked(TYPreferenceManager::getBool("InterferenceCalculDefault"));
-    }
     if (TYPreferenceManager::exists("ResisSolDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditResistivite->setText(QString().setNum(TYPreferenceManager::getDouble("ResisSolDefault")));
@@ -1785,7 +1779,6 @@ void TYPreferenceDialog::savePreferences()
 
     // Acoustique
     TYPreferenceManager::setBool("UseAtmosphereCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->isChecked());
-    TYPreferenceManager::setBool("InterferenceCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->isChecked());
 
     qValidator.setBottom(0.001);
     TYPreferenceManager::setDouble("ResisSolDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditResistivite->text().toDouble());
