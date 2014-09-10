@@ -32,7 +32,6 @@ TYAcousticModel::TYAcousticModel(TYSolver& solver)
     : _useSol(true),
       _useReflex(false),
       _conditionFav(false),
-      _useAtmo(true),
       _interference(false),
       _paramH(10.0),
       _solver(solver)
@@ -61,8 +60,6 @@ void TYAcousticModel::init(const TYCalcul& calcul)
     double hygrometrie = calcul.getAtmosphere()._pObj->getHygrometrie();
 
     pSolverAtmos = std::unique_ptr<tympan::AtmosphericConditions> ( new tympan::AtmosphericConditions(pression, temperature, hygrometrie) );
-    // Prise en compte de l'atmosphere (divergence geometrique)
-    _useAtmo = calcul.getUseAtmosphere();
     // Calcul avec interference
     _interference = config->ModSummation;
     // On calcul tout de suite le spectre de longueur d'onde

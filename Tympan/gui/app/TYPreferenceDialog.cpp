@@ -788,15 +788,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     _pSpectreAbsoMatConst = new TYSpectre();
     _pMaillage = new TYMaillage();
 
-    _pCheckBoxUseAtmosphere = new QCheckBox(TR("id_useatmosphere_label"));
-
-    QGridLayout* groupBoxLayout = new QGridLayout();
-    groupBoxLayout->addWidget(_pCheckBoxUseAtmosphere, 1, 0);
-
-    QGroupBox* groupBox = new QGroupBox();
-    groupBox->setTitle(TR("id_default_param_calcul"));
-    groupBox->setLayout(groupBoxLayout);
-
     //Sol
     QLabel* pLabelResistivite = new QLabel(TR("id_resistivite_label"));
     _pLineEditResistivite = new QLineEdit();
@@ -898,7 +889,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     groupBox4->setLayout(groupBox4Layout);
 
     QVBoxLayout* pTabLayout = new QVBoxLayout();
-    pTabLayout->addWidget(groupBox);
     pTabLayout->addWidget(groupBox1);
     pTabLayout->addWidget(groupBox2);
     pTabLayout->addWidget(groupBox3);
@@ -1346,10 +1336,6 @@ void TYPreferenceDialog::loadPreferences()
 
 
     // Acoustique
-    if (TYPreferenceManager::exists("UseAtmosphereCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->setChecked(TYPreferenceManager::getBool("UseAtmosphereCalculDefault"));
-    }
     if (TYPreferenceManager::exists("ResisSolDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditResistivite->setText(QString().setNum(TYPreferenceManager::getDouble("ResisSolDefault")));
@@ -1769,8 +1755,6 @@ void TYPreferenceDialog::savePreferences()
     TYPreferenceManager::setFloat("MaillageOpacity", float(((ColorsTab*)tabWidget->widget(2))->_pMailOpacitySlider->value()) / 100.0f);
 
     // Acoustique
-    TYPreferenceManager::setBool("UseAtmosphereCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->isChecked());
-
     qValidator.setBottom(0.001);
     TYPreferenceManager::setDouble("ResisSolDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditResistivite->text().toDouble());
     if (qValidator.validate(aQString = ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEpaisseur->text(), res) == QValidator::Acceptable)

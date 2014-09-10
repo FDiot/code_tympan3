@@ -206,7 +206,6 @@ public:
     AcoustiqueTab(QWidget* parent = 0);
     virtual ~AcoustiqueTab();
 
-    QCheckBox* _pCheckBoxUseAtmosphere;
     QLineEdit* _pLineEditResistivite;
     QLineEdit* _pLineEditEpaisseur;
     QLineEdit* _pLineEditPression;

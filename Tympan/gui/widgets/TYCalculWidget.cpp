@@ -114,15 +114,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _groupBoxFlag->setLayout(groupBoxFlagLayout);
 
 
-    // Utilisation de l'atmosphere
-    _labelUseAtmosphere = new QLabel(_groupBoxFlag);
-    _labelUseAtmosphere->setText(TR("id_useatmosphere_label"));
-    groupBoxFlagLayout->addWidget(_labelUseAtmosphere, 0, 0);
-
-    _checkBoxUseAtmosphere = new QCheckBox(_groupBoxFlag);
-    _checkBoxUseAtmosphere->setText(TR(""));
-    groupBoxFlagLayout->addWidget(_checkBoxUseAtmosphere, 0, 1);
-
     QButtonGroup* buttonGroupSolRefReel = new QButtonGroup();
     _pRadioButtonSolReel = new QRadioButton(TR("id_usesol_reel_label"));
     buttonGroupSolRefReel->addButton(_pRadioButtonSolReel, 0);
@@ -329,10 +320,7 @@ void TYCalculWidget::updateContent()
     // On affiche le regime courant
     _comboSolver->setCurrentIndex(currentSolverIndex);
 
-    _checkBoxUseAtmosphere->setChecked(getElement()->getUseAtmosphere());
-
     _checkBoxStoreGlobalMatrix->setChecked(getElement()->getStatusPartialResult());
-
 
     _editDateModif->setDate(date.currentDate());
     _editDateCreation->setDate(date.fromString(getElement()->getDateCreation(), Qt::ISODate));
@@ -441,8 +429,6 @@ void TYCalculWidget::apply()
         getElement()->setState(TYCalcul::Locked);
         if (getElement()->getResultat()) { getElement()->getResultat()->purge(); }
     }
-
-    getElement()->setUseAtmosphere(_checkBoxUseAtmosphere->isChecked());
 
     getElement()->setDateModif(_editDateModif->date().currentDate().toString(Qt::ISODate));
     getElement()->setDateCreation(_editDateCreation->date().toString(Qt::ISODate));
