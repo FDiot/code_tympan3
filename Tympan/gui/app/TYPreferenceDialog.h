@@ -206,7 +206,6 @@ public:
     AcoustiqueTab(QWidget* parent = 0);
     virtual ~AcoustiqueTab();
 
-    QCheckBox* _pCheckBoxCondFav;
     QCheckBox* _pCheckBoxUseAtmosphere;
     QCheckBox* _pCheckBoxInterference;
     QLineEdit* _pLineEditDistanceSRMin;

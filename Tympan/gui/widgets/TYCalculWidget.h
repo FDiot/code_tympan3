@@ -128,11 +128,6 @@ protected:
     // Affichage du type de calcul
     QComboBox* _comboSolver;
 
-    QCheckBox* _checkBoxCondFav;
-    QLabel* _labelCondFav;
-    QRadioButton* _pRadioButtonCondFav;
-    QRadioButton* _pRadioButtonCondHomo;
-
     QCheckBox* _checkBoxUseAtmosphere;
     QLabel* _labelUseAtmosphere;
 
