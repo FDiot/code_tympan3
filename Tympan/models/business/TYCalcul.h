@@ -485,8 +485,6 @@ public:
     const OGenID getSolverId() const { return _solverId; }
     OGenID getSolverId() { return _solverId; }
 
-    unsigned short getTypeSaisieMeteo() const { return _typeSaisieMeteo; }
-
     void goPostprocessing();
     std::unique_ptr<tympan::AcousticResultModel>  _acousticResult;
     std::unique_ptr<tympan::AcousticProblemModel> _acousticProblem;
@@ -521,8 +519,6 @@ protected:
 
     ///Prise ou non en compte de l'atmosphere.
     bool _useAtmosphere;
-
-    unsigned short _typeSaisieMeteo;
 
     /// Site sur lequel va s'effectuer le calcul
     LPTYSiteNode _pSiteCalcul;
