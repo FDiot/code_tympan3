@@ -101,6 +101,15 @@ Noteworthy points
   - the display artefacts for the road and other linear
     infrastructures are reduced.
 
+* The mesh is automatically refined using a triangle shape quality criterion
+  (set to the default value recommended by CGAL). It is possible to specify a
+  *size criterion* as well. Both options (``shape_criterion`` and
+  ``size_criterion``) are attributes of the altimetry ``Builder`` instance and
+  can be changed before running the ``complete_processing`` method (in
+  ``process__altimetry`` script). Beware that setting a ``size_criterion`` to
+  a non-zero value can significantly increase the refinement step computation
+  time.
+
 
 Sub-sites and land-take
 -----------------------
