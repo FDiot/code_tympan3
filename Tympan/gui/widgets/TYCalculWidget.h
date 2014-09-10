@@ -139,7 +139,6 @@ protected:
     QLabel* _labelParcoursLateraux;
     QCheckBox* _checkBoxParcoursLateraux;
 
-    QLineEdit* _lineEditDistanceSRMin;
     QGroupBox* _groupBox;
     QGroupBox* _groupBoxFlag;
     QGroupBox* _groupBoxAtmosphere;

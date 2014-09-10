@@ -165,13 +165,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 
     groupBoxFlagLayout->addWidget(groupBoxCondIE, 6, 0, 1, 2);
 
-    // Distance Source/Recepteur minimale
-    QLabel* plabelDistanceSRMin = new QLabel(TR("id_distancesrmin"), _groupBoxFlag);
-    groupBoxFlagLayout->addWidget(plabelDistanceSRMin, 7, 0);
-
-    _lineEditDistanceSRMin = new QLineEdit(_groupBoxFlag);
-    groupBoxFlagLayout->addWidget(_lineEditDistanceSRMin, 7, 1, 1, 1);
-
     _tabWidget->insertTab(1, _groupBoxFlag, TR("id_opt_calc"));
 
     // Onglet meteo
@@ -353,7 +346,6 @@ void TYCalculWidget::updateContent()
     // On affiche le regime courant
     _comboSolver->setCurrentIndex(currentSolverIndex);
 
-    _lineEditDistanceSRMin->setText(num.setNum(getElement()->getDistanceSRMin(), 'f', 2));
     _checkBoxUseAtmosphere->setChecked(getElement()->getUseAtmosphere());
 
     _checkBoxParcoursLateraux->setChecked(getElement()->getCalculTrajetsHorizontaux());
@@ -480,7 +472,6 @@ void TYCalculWidget::apply()
 
     getElement()->setDateModif(_editDateModif->date().currentDate().toString(Qt::ISODate));
     getElement()->setDateCreation(_editDateCreation->date().toString(Qt::ISODate));
-    getElement()->setDistanceSRMin(_lineEditDistanceSRMin->text().toDouble());
 
     // Actualisation des parametres de l'atmosphere
     _meteoWidget->apply();

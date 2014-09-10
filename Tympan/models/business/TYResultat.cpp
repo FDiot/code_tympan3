@@ -732,7 +732,6 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
         ofs << "Atmosphère" << ';';
         ofs << "Trajets horizontaux" << ';';
         ofs << "Calcul" << ';';
-        ofs << "Distance [SR] minimale" << ';';
         ofs << '\n';
 
         ofs << pCalcul->getName().toStdString() << ';';
@@ -746,7 +745,6 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
         {
             ofs << "Energétique" << ';';
         }
-        ofs << pCalcul->getDistanceSRMin() << ';';
         ofs << '\n';
         ofs << '\n';
     }

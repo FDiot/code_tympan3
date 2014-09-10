@@ -788,16 +788,12 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     _pSpectreAbsoMatConst = new TYSpectre();
     _pMaillage = new TYMaillage();
 
-    _pLineEditDistanceSRMin = new QLineEdit();
-    QLabel* pLabelDistanceSRMin = new QLabel(TR("id_distancesrmin_label"));
     _pCheckBoxUseAtmosphere = new QCheckBox(TR("id_useatmosphere_label"));
     _pCheckBoxInterference = new QCheckBox(TR("id_interference_label"));
 
     QGridLayout* groupBoxLayout = new QGridLayout();
     groupBoxLayout->addWidget(_pCheckBoxUseAtmosphere, 1, 0);
     groupBoxLayout->addWidget(_pCheckBoxInterference, 2, 1);
-    groupBoxLayout->addWidget(pLabelDistanceSRMin, 5, 0);
-    groupBoxLayout->addWidget(_pLineEditDistanceSRMin, 5, 1);
 
     QGroupBox* groupBox = new QGroupBox();
     groupBox->setTitle(TR("id_default_param_calcul"));
@@ -1364,10 +1360,6 @@ void TYPreferenceDialog::loadPreferences()
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->setChecked(TYPreferenceManager::getBool("InterferenceCalculDefault"));
     }
-    if (TYPreferenceManager::exists("DistanceSRMinCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDistanceSRMin->setText(QString().setNum(TYPreferenceManager::getDouble("DistanceSRMinCalculDefault")));
-    }
     if (TYPreferenceManager::exists("ResisSolDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditResistivite->setText(QString().setNum(TYPreferenceManager::getDouble("ResisSolDefault")));
@@ -1796,7 +1788,6 @@ void TYPreferenceDialog::savePreferences()
     TYPreferenceManager::setBool("InterferenceCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->isChecked());
 
     qValidator.setBottom(0.001);
-    TYPreferenceManager::setDouble("DistanceSRMinCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDistanceSRMin->text().toDouble());
     TYPreferenceManager::setDouble("ResisSolDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditResistivite->text().toDouble());
     if (qValidator.validate(aQString = ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEpaisseur->text(), res) == QValidator::Acceptable)
     {
