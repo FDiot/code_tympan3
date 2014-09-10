@@ -70,8 +70,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
 
     _state = TYCalcul::Actif; // A sa creation, le calcul est actif
 
-    _distanceSRMin = 0.3;
-
     _seuilConfondus = TYSEUILCONFONDUS;
 
     // Le solveur par defaut est le solveur standard de TYMPAN
@@ -105,15 +103,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     else
     {
         TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "InterferenceCalculDefault", _interference);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "DistanceSRMinCalculDefault"))
-    {
-        _distanceSRMin = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "DistanceSRMinCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "DistanceSRMinCalculDefault", _distanceSRMin);
     }
 
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
@@ -161,7 +150,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _useAtmosphere = other._useAtmosphere;
         _interference = other._interference;
         _state = other._state;
-        _distanceSRMin = other._distanceSRMin;
         _pAtmosphere = other._pAtmosphere;
         _maillages = other._maillages;
         _pResultat = other._pResultat;
@@ -187,7 +175,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_useAtmosphere != other._useAtmosphere) { return false; }
         if (_interference != other._interference) { return false; }
         if (_state != other._state) { return false; }
-        if (_distanceSRMin != other._distanceSRMin) { return false; }
         if (_pAtmosphere != other._pAtmosphere) { return false; }
         if (_maillages != other._maillages) { return false; }
         if (_pResultat != other._pResultat) { return false; }
@@ -224,7 +211,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _useAtmosphere = pOtherCalcul->_useAtmosphere;
     _interference = pOtherCalcul->_interference;
     _state = pOtherCalcul->_state;
-    _distanceSRMin = pOtherCalcul->_distanceSRMin;
 
     _pAtmosphere->deepCopy(pOtherCalcul->_pAtmosphere, copyId);
     _pResultat->deepCopy(pOtherCalcul->_pResultat, copyId);
@@ -279,7 +265,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementIntValue(domNewElem, "useAtmosphere", _useAtmosphere);
     TYXMLTools::addElementIntValue(domNewElem, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux);
     TYXMLTools::addElementIntValue(domNewElem, "interference", _interference);
-    TYXMLTools::addElementDoubleValue(domNewElem, "distanceSRMin", _distanceSRMin);
 
     // Ajout du site node sur lequel s'effectue le calcul
     DOM_Document domDoc = domElement.ownerDocument();
@@ -390,7 +375,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementBoolValue(elemCur, "useAtmosphere", _useAtmosphere, getOk[9]);
         TYXMLTools::getElementBoolValue(elemCur, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux, getOk[18]);
         TYXMLTools::getElementBoolValue(elemCur, "interference", _interference, getOk[12]);
-        TYXMLTools::getElementDoubleValue(elemCur, "distanceSRMin", _distanceSRMin, getOk[14]);
 
         // Selection
         if (elemCur.nodeName() == "ListID")

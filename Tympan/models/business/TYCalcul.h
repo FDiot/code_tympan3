@@ -217,18 +217,6 @@ public:
     void setInterference(bool use) { _interference = use; }
 
     /**
-     *\fn void setDistanceSRMin(const double& dist)
-     *\brief Set du parametre _distanceSRMin
-     */
-    void setDistanceSRMin(const double& dist) { _distanceSRMin = dist; }
-    /**
-     *\fn double getDistanceSRMin()
-     *\brief Get du parametre _distanceSRMin
-     *\return _distanceSRMin
-     */
-    double getDistanceSRMin() { return _distanceSRMin; }
-
-    /**
      *\fn TYListID getElementSelection()
      *\brief Get de la selection d'elements actifs dans ce Calcul.
      *\return _elementSelection
@@ -578,8 +566,6 @@ protected:
     bool _bCalculTrajetsHorizontaux;
     ///Calcul energetique ou avec interference.
     bool _interference;
-    ///Distance minimale entre une source et un recepteur
-    double _distanceSRMin;
     /// Distance minimale entre deux points consideres comme confondus
     double _seuilConfondus;
 
