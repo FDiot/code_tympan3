@@ -71,18 +71,8 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     // Le solveur par defaut est le solveur standard de TYMPAN
     _solverId = OGenID("{A98B320C-44C4-47a9-B689-1DD352DAA8B2}");
 
-    _typeSaisieMeteo = 0;
 
 #if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo"))
-    {
-        _typeSaisieMeteo = TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo");
-    }
-    else
-    {
-        TYPreferenceManager::setInt(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo", _typeSaisieMeteo);
-    }
-
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault"))
     {
         _useAtmosphere = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault");
@@ -91,7 +81,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     {
         TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault", _useAtmosphere);
     }
-
 #endif
     setUseAtmosphere(_useAtmosphere);
 
