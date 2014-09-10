@@ -730,17 +730,9 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
     {
         ofs << "Calcul" << ';';
         ofs << "Atmosphère" << ';';
-        ofs << "Sol" << ';';
         ofs << "Trajets horizontaux" << ';';
-        ofs << "Végétation" << ';';
-        ofs << "Ecran" << ';';
-        ofs << "Réflexion" << ';';
-        ofs << "Conditions" << ';';
-        ofs << "H1" << ';';
         ofs << "Calcul" << ';';
         ofs << "Distance [SR] minimale" << ';';
-        ofs << "Fréquence minimale" << ';';
-        ofs << "Fréquence maximale" << ';';
         ofs << '\n';
 
         ofs << pCalcul->getName().toStdString() << ';';
