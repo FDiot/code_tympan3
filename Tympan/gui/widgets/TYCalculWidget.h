@@ -131,10 +131,6 @@ protected:
     QCheckBox* _checkBoxUseAtmosphere;
     QLabel* _labelUseAtmosphere;
 
-    // Calcul Energetique ou interferences
-    QRadioButton* _radioButtonEnergetique;
-    QRadioButton* _radioButtonInterference;
-
     // Utilisation des ecrans
     QLabel* _labelParcoursLateraux;
     QCheckBox* _checkBoxParcoursLateraux;

@@ -205,18 +205,6 @@ public:
     void setUseAtmosphere(const bool use = true);
 
     /**
-     * \fn  bool getInterference()
-     * \brief Get du test du flag de calcul energetique ou avec interference.
-     * \return _interference
-     */
-    bool getInterference() const { return _interference; }
-    /**
-     * \fn  void setInterference(bool use)
-     * \brief Set du test du flag de calcul energetique ou avec interference.
-     */
-    void setInterference(bool use) { _interference = use; }
-
-    /**
      *\fn TYListID getElementSelection()
      *\brief Get de la selection d'elements actifs dans ce Calcul.
      *\return _elementSelection
@@ -542,8 +530,6 @@ protected:
 
     ///Prise ou non en compte de l'atmosphere.
     bool _useAtmosphere;
-    ///Calcul energetique ou avec interference.
-    bool _interference;
     /// Distance minimale entre deux points consideres comme confondus
     double _seuilConfondus;
 

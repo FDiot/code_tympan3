@@ -207,7 +207,6 @@ public:
     virtual ~AcoustiqueTab();
 
     QCheckBox* _pCheckBoxUseAtmosphere;
-    QCheckBox* _pCheckBoxInterference;
     QLineEdit* _pLineEditResistivite;
     QLineEdit* _pLineEditEpaisseur;
     QLineEdit* _pLineEditPression;
