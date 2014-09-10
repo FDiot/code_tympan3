@@ -83,8 +83,7 @@ TYSiteNode::TYSiteNode() :  _pProjet(NULL),
     _root(false),
     _SIGType(TYMPAN),
     _SIG_X(0.0),
-    _SIG_Y(0.0),
-    _alti_uptodate(false)
+    _SIG_Y(0.0)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -134,7 +133,6 @@ TYSiteNode& TYSiteNode::operator=(const TYSiteNode& other)
         _SIGType = other._SIGType;
         _SIG_X = other._SIG_X;
         _SIG_Y = other._SIG_Y;
-        _alti_uptodate = other._alti_uptodate;
     }
     return *this;
 }
@@ -193,7 +191,6 @@ bool TYSiteNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _SIGType = pOtherSite->_SIGType;
     _SIG_X = pOtherSite->_SIG_X;
     _SIG_Y = pOtherSite->_SIG_Y;
-    _alti_uptodate = pOtherSite->_alti_uptodate;
 
     _listSiteNode.clear();
     for (unsigned int i = 0; i < pOtherSite->_listSiteNode.size(); i++)
@@ -493,13 +490,12 @@ void TYSiteNode::loadTopoFile()
     try
     {
         do_updateAltimetrie(force);
-        _alti_uptodate = true;
         return true;
     }
     catch (const tympan::exception& exc)
     {
         msg << boost::diagnostic_information(exc);
-        logger.error("An error prevented to update the altimetry (set log level to debug for diagnosic)");
+        logger.error("An error prevented to update the altimetry (set log level to debug for diagnostic)");
         logger.debug(msg.str().c_str());
         return false;
     }
@@ -565,8 +561,8 @@ void TYSiteNode::loadTopoFile()
     string error_msg;
     if (!python(args, error_msg))
     {
+        logger.error("Echec du calcul de l'altimetrie: %s", error_msg.c_str());
         TYNameManager::get()->enable(true);
-        logger.error("Echec du calcul de l'altimetrie");
         throw tympan::exception() << tympan_source_loc;
     }
     std::deque<OPoint3D> points;
@@ -631,7 +627,7 @@ void TYSiteNode::uuid2tysol(const std::deque<std::string>& material_ids, std::de
         }
         else
         {
-            logger.error("Unknown material retrieved from altimetry mesh: id = %s. Using default material instead",
+            logger.debug("Unknown material retrieved from altimetry mesh: id = %s. Using default material instead",
                     material_ids[i].c_str());
             materials.push_back(_pTopographie->getDefTerrain()->getSol());
         }
@@ -664,6 +660,10 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
     bool cancel = false;
     bool bNoPbAlti = true;
 
+    // If the site node isn't a root site, compute its global transform matrix
+    // to look for the altitudes at the right place
+    OMatrix globalMatrix = getGlobalMatrix();
+
     // Mise a jour de l'altitude pour les points des routes
     for (j = 0; j < _pInfrastructure->getListRoute().size() && !cancel; j++)
     {
@@ -676,7 +676,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         LPTYRouteGeoNode pGeoNode = _pInfrastructure->getListRoute()[j];
         TYRoute* pRoute = _pInfrastructure->getRoute(j);
 
-        bNoPbAlti &= pRoute->updateAltitudes(*pAlti, pGeoNode);
+        bNoPbAlti &= pRoute->updateAltitudes(*pAlti, pGeoNode, globalMatrix);
         modified = true; // As long as there is a road, it will be updated anyways.
     }
 
@@ -692,7 +692,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         double hauteur = pResTrans->getHauteurMoyenne();
 
         // Matrice pour la position de cette element
-        OMatrix matrix = _pInfrastructure->getListResTrans()[j]->getMatrix();
+        OMatrix matrix = globalMatrix * _pInfrastructure->getListResTrans()[j]->getMatrix();
         OMatrix matrixinv = matrix.getInvert();
 
         for (i = 0; i < pResTrans->getTabPoint().size(); i++)
@@ -730,7 +730,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         TYBatiment* pBat = TYBatiment::safeDownCast(pBatGeoNode->getElement());
 
         // Recuperation de l'origine de l'element
-        pt = pBatGeoNode->getORepere3D()._origin;
+        pt = globalMatrix * pBatGeoNode->getORepere3D()._origin;
 
         // Hauteur par rapport au sol
         double hauteur = pBatGeoNode->getHauteur();
@@ -766,7 +766,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         TYMachine* pMachine = TYMachine::safeDownCast(pMachineGeoNode->getElement());
 
         // Recuperation de l'origine de l'element
-        pt = pMachineGeoNode->getORepere3D()._origin;
+        pt = globalMatrix * pMachineGeoNode->getORepere3D()._origin;
 
         // Hauteur par rapport au sol
         double hauteur = pMachineGeoNode->getHauteur();
@@ -801,7 +801,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         LPTYUserSourcePonctuelle pSrc = TYUserSourcePonctuelle::safeDownCast(_pInfrastructure->getSrc(j)->getElement());
 
         // Matrice pour la position de cette element
-        OMatrix matrix = _pInfrastructure->getSrcs()[j]->getMatrix();
+        OMatrix matrix = globalMatrix * _pInfrastructure->getSrcs()[j]->getMatrix();
         OMatrix matrixinv = matrix.getInvert();
 
         // Passage au repere du site
@@ -837,7 +837,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         TYCoursEau* pCrsEau = _pTopographie->getCrsEau(j);
 
         // Matrice pour la position de cette element
-        OMatrix matrix = _pTopographie->getListCrsEau()[j]->getMatrix();
+        OMatrix matrix = globalMatrix * _pTopographie->getListCrsEau()[j]->getMatrix();
         OMatrix matrixinv = matrix.getInvert();
 
         for (i = 0; i < pCrsEau->getTabPoint().size(); i++)
@@ -871,7 +871,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         TYTerrain* pTerrain = _pTopographie->getTerrain(j);
 
         // Matrice pour la position de cette element
-        OMatrix matrix = _pTopographie->getListTerrain()[j]->getMatrix();
+        OMatrix matrix = globalMatrix * _pTopographie->getListTerrain()[j]->getMatrix();
         OMatrix matrixinv = matrix.getInvert();
 
         for (i = 0; i < pTerrain->getListPoints().size(); i++)
@@ -1162,6 +1162,30 @@ LPTYAltimetrie TYSiteNode::getAltimetry() const
     if (rootsite != nullptr)
         return rootsite->getTopographie()->getAltimetrie();
     throw tympan::invalid_data("No root site node in current TYMPAN objects hierarchy.");
+}
+
+OMatrix TYSiteNode::getGlobalMatrix() const
+{
+    if (getRoot())
+    {
+        return OMatrix(); // identity matrix at the root site
+    }
+    TYSiteNode const* parentsite = dynamic_cast<TYSiteNode*> (getParent());
+    if (parentsite == nullptr)
+    {
+        return OMatrix();
+        // should throw an exception
+    }
+
+    for(int i = 0; i < parentsite->_listSiteNode.size(); i++)
+    {
+        TYSiteNode const* subsite =  dynamic_cast<TYSiteNode*>(parentsite->_listSiteNode[i]->getElement());
+        if(subsite->getID() == getID())
+        {
+            return parentsite->getGlobalMatrix() * parentsite->_listSiteNode[i]->getMatrix();
+        }
+    }
+    return OMatrix(); // this should not happen
 }
 
 bool almost_equal(double a, double b, double precision)

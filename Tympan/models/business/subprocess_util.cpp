@@ -149,8 +149,7 @@ bool python(QStringList args, std::string& error_msg)
     QProcess python;
     float comp_duration (0.);
     bool comp_finished (false);
-    // Send python script output to the current process std::out/err
-    python.setProcessChannelMode(QProcess::ForwardedChannels);
+
     // Set PYTHONPATH to python subprocess
     QStringList env(_python_qprocess_environment());
     python.setEnvironment(env);
@@ -163,12 +162,7 @@ bool python(QStringList args, std::string& error_msg)
     }
     catch(const tympan::invalid_data& exc)
     {
-        std::ostringstream msg;
-        msg << boost::diagnostic_information(exc);
-        logger.error(
-                "Impossible de trouver l'interpreteur python pour executer le script.");
-        logger.debug(msg.str().c_str());
-        error_msg = "L'interpreteur python n'a pas pu etre trouve.\nVeuillez verifier que la variable d'environnement TYMPAN_PYTHON_INTERP est correctement positionnee";
+        error_msg = "L'interpreteur python n'a pas pu etre trouve.\nVeuillez verifier que la variable d'environnement TYMPAN_PYTHON_INTERP est correctement positionnee\n";
         return false;
     }
     python.start(python_interp, args);
@@ -194,12 +188,27 @@ bool python(QStringList args, std::string& error_msg)
     }
     while(!comp_finished);
 
+    QString err_output (python.readAllStandardError());
+    if(!err_output.isEmpty())
+    {
+        error_msg = err_output.toStdString();
+        // It is an error and not a warning
+        if (!err_output.contains("RuntimeWarning"))
+        {
+            error_msg.append("\nVeuillez lire tympan.log pour plus d'information.");
+            return false;
+        }
+        else
+        {
+            logger.warning(error_msg.c_str());
+        }
+    }
+
     int pystatus = python.exitStatus();
     if (pystatus == 1)
     {
-        logger.error("Le sous-process python a termine avec une erreur: %d",
-                     python.error());
-        error_msg = "Le calcul a echoue, veuillez reessayer.";
+        error_msg = "Le sous-process python a termine avec le code d'erreur ";
+        error_msg.append(std::to_string(static_cast<unsigned long long>(python.error())));
         return false;
     }
     // Compute and display computation time

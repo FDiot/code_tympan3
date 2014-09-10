@@ -170,7 +170,6 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     pSite->getAltimetry()->plugBackTriangulation(points, triangles, materials);
     pSite->updateAltiInfra();
     pSite->updateAcoustique();
-    pSite->setAltimetryUpToDate(true);
     pProject->updateAltiRecepteurs();
     // Update graphics
     pCalcul->getParent()->updateGraphicTree();
@@ -179,7 +178,6 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     if (psiteframe != nullptr)
     {
         psiteframe->setSite(pSite);
-        psiteframe->disableAltimetryComputation();
         psiteframe->getView()->getRenderer()->updateDisplayList();
         psiteframe->updateView();
     }

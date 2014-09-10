@@ -381,9 +381,6 @@ private slots:
     void updateUndoRedo(bool undoAvailable, bool redoAvailable,
                         const QString& undoCmd, const QString& redoCmd);
 
-    void notifyAltimetryOutdated();
-
-
 signals:
     /**
      * Signal qu'un undo est demande.

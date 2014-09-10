@@ -43,7 +43,6 @@
 #include "Tympan/models/common/3d.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
 #include "Tympan/gui/app/TYBatimentModelerFrame.h"
-#include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYActions.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
@@ -282,7 +281,6 @@ void TYEtageEditor::endEtage()
 
                 // Update
                 _pModeler->updateView();
-                getTYMainWnd()->getSiteFrame()->altimetryNeedsUpdate();
             }
         }
         else // Build an "Ecran"
