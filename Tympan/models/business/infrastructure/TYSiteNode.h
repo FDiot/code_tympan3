@@ -343,12 +343,6 @@ class TYSiteNode: public TYElement
     virtual bool remFromCalcul();
 
     /**
-     * Precalcul du nombre d'onde dans le sol des que les caracteristiques de
-     * l'atmosphere sont connus. Fonction executees au lancement du calcul.
-     */
-    void updateSol();
-
-    /**
      * This method mainly calls \c do_updateAltimetrie and handle exceptions
      * be capturing them and returning a success status.
      *

@@ -2539,19 +2539,6 @@ void TYEtage::findFaceMachineSol()
     OPlan planSol = _pSol->plan();
     double distance = 0.0;
 
-    double seuilConfondus = TYSEUILCONFONDUS;
-
-#if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
-    {
-        seuilConfondus = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus", seuilConfondus);
-    }
-#endif
-
     for (i = 0; i < accFaces.size(); i++)
     {
         // La face
@@ -2576,7 +2563,7 @@ void TYEtage::findFaceMachineSol()
         if (planFace.distancePlanParallel(planSol, distance))
         {
             // Si la face est posee au sol (avec une tolerance)
-            if (ABS(distance) <= seuilConfondus)
+            if (ABS(distance) <= TYSEUILCONFONDUS)
             {
                 // On "desactive" cette face de la machine
                 pSurface->setDensiteSrcs(0.0);

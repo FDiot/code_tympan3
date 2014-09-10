@@ -476,15 +476,6 @@ public:
     void setStatusPartialResult(const bool& status) { _pResultat->setPartialState(status); }
 
     /**
-     * \fn double getSeuilConfondu()
-     * \brief Get de la valeur de distance minimale entre deux points
-     * \return _seuilConfondus
-     */
-
-    double getSeuilConfondu() { return _seuilConfondus; }
-    const double getSeuilConfondu() const { return _seuilConfondus; }
-
-    /**
      * -     * \fn OGenID getSolverId()
      *       -     *     void setSolverId(const OGenID& iD)
      *       -     * \brief Get/Set du solveur ID
@@ -530,8 +521,6 @@ protected:
 
     ///Prise ou non en compte de l'atmosphere.
     bool _useAtmosphere;
-    /// Distance minimale entre deux points consideres comme confondus
-    double _seuilConfondus;
 
     unsigned short _typeSaisieMeteo;
 

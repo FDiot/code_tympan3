@@ -186,7 +186,6 @@ private:
     bool _conditionFav;
     bool _useAtmo;
     bool _interference;
-    double _seuilConfondus;
     double _paramH;
 
     std::unique_ptr<tympan::AtmosphericConditions> pSolverAtmos;

@@ -413,23 +413,7 @@ void TYPolygon::transform(const OMatrix& matrix)
 bool TYPolygon::isValid() const
 {
     printf("TYPolygon::isValid non implemente.\n");
-    bool res = false;
-
-#if TY_USE_IHM
-    double seuilConfondus = TYSEUILCONFONDUS;
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
-    {
-        seuilConfondus = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus", seuilConfondus);
-    }
-
-#endif
-
-    return res;
+    return false;
 }
 
 ORepere3D TYPolygon::getORepere3D() const
