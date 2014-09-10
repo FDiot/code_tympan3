@@ -16,22 +16,13 @@
 /**
  * \file TYReseauTransportGraphic.cpp
  * \brief Representation graphique d'un reseau electrique
- *
- *
  */
 
-
-
-
 #include "Tympan/models/business/infrastructure/TYReseauTransport.h"
-
-#include "Tympan/models/business/TYPreferenceManager.h"
-
-
 #include "TYReseauTransportGraphic.h"
+
 
 TYReseauTransportGraphic::TYReseauTransportGraphic(TYReseauTransport* pElement) :
     TYAcousticLineGraphic(pElement)
 {
-
 }

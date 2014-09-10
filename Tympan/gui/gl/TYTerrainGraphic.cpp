@@ -21,7 +21,6 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/topography/TYTerrain.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
 #include "TYTerrainGraphic.h"
 

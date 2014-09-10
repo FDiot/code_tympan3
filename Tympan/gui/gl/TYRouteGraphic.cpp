@@ -16,18 +16,9 @@
 /**
  * \file TYRouteGraphic.cpp
  * \brief Representation graphique d'une route
- *
- *
  */
 
-
-
-
 #include "Tympan/models/business/infrastructure/TYRoute.h"
-
-#include "Tympan/models/business/TYPreferenceManager.h"
-
-
 #include "TYRouteGraphic.h"
 
 TYRouteGraphic::TYRouteGraphic(TYRoute* pElement) :

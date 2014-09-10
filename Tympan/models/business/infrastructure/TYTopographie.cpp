@@ -16,11 +16,10 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
 #if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYTopographieWidget.h"
   #include "Tympan/gui/gl/TYTopographieGraphic.h"
 #endif
-
-
 #include "TYTopographie.h"
 
 TY_EXTENSION_INST(TYTopographie);

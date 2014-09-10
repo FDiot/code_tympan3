@@ -14,6 +14,7 @@
 */
 
 #include "Tympan/core/logging.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/infrastructure/TYTopographie.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "TYCourbeNiveau.h"

@@ -113,7 +113,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _dateModif = other._dateModif;
         _comment = other._comment;
         _upTodate = other._upTodate;
-        _useAtmosphere = other._useAtmosphere;
         _state = other._state;
         _pAtmosphere = other._pAtmosphere;
         _maillages = other._maillages;
@@ -137,7 +136,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_comment != other._comment) { return false; }
         if (_numero != other._numero) { return false; }
         if (_upTodate != other._upTodate) { return false; }
-        if (_useAtmosphere != other._useAtmosphere) { return false; }
         if (_state != other._state) { return false; }
         if (_pAtmosphere != other._pAtmosphere) { return false; }
         if (_maillages != other._maillages) { return false; }
@@ -172,7 +170,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _dateModif = pOtherCalcul->_dateModif;
     _comment = pOtherCalcul->_comment;
     _upTodate = pOtherCalcul->_upTodate;
-    _useAtmosphere = pOtherCalcul->_useAtmosphere;
     _state = pOtherCalcul->_state;
 
     _pAtmosphere->deepCopy(pOtherCalcul->_pAtmosphere, copyId);
@@ -225,7 +222,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "comment", _comment);
     TYXMLTools::addElementStringValue(domNewElem, "solverId", _solverId.toString());
     TYXMLTools::addElementIntValue(domNewElem, "etat", _state);  // 16/08/2005 Possibilite de bloquer un calcul
-    TYXMLTools::addElementIntValue(domNewElem, "useAtmosphere", _useAtmosphere);
 
     // Ajout du site node sur lequel s'effectue le calcul
     DOM_Document domDoc = domElement.ownerDocument();
@@ -333,7 +329,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementStringValue(elemCur, "comment", _comment, getOk[4]);
         TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[20]);
         TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[19]);
-        TYXMLTools::getElementBoolValue(elemCur, "useAtmosphere", _useAtmosphere, getOk[9]);
 
         // Selection
         if (elemCur.nodeName() == "ListID")

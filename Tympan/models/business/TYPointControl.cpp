@@ -16,6 +16,7 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "TYPointControl.h"
 

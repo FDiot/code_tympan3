@@ -16,7 +16,6 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/core/chrono.h"
 #include "Tympan/models/common/3d.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYFaceSetWidget.h"

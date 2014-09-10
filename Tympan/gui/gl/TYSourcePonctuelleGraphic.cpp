@@ -16,17 +16,13 @@
 /**
  * \file TYSourcePonctuelleGraphic.cpp
  * \brief Representation graphique d'une source ponctuelle
- *
- *
  */
 
 
-
-
-#include "TYSourcePonctuelleGraphic.h"
-
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYSourcePonctuelleGraphic.h"
 
 
 ///Taille de la source par defaut.

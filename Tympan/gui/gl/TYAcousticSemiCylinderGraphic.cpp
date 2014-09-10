@@ -16,20 +16,12 @@
 /**
  * \file TYAcousticSemiCylinderGraphic.cpp
  * \brief Repri¿½sentation graphique d'un 1/2 cylindre acoustique
- *
- *
  */
 
-
-
-
-
-
-#include "Tympan/gui/gl/TYAcousticSemiCylinderGraphic.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticSemiCylinder.h"
+#include "Tympan/gui/gl/TYAcousticSemiCylinderGraphic.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
-
-
 #include "TYAcousticSemiCylinderGraphic.h"
 
 TYAcousticSemiCylinderGraphic::TYAcousticSemiCylinderGraphic(TYAcousticSemiCylinder* pElement) :

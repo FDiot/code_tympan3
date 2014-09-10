@@ -16,18 +16,13 @@
 /**
  * \file TYAcousticCylinderGraphic.cpp
  * \brief Repri¿½sentation graphique d'un cylindre accoustique
- *
- *
  */
 
 
-
-
-#include "Tympan/gui/gl/TYAcousticCylinderGraphic.h"
-
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticCylinder.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
-
+#include "Tympan/gui/gl/TYAcousticCylinderGraphic.h"
 #include "TYAcousticCylinderGraphic.h"
 
 TYAcousticCylinderGraphic::TYAcousticCylinderGraphic(TYAcousticCylinder* pElement) :

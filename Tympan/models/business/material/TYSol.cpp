@@ -13,16 +13,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYSolWidget.h"
-#endif
-
 #include "Tympan/core/logging.h"
-
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYSolWidget.h"
+  #include "Tympan/models/business/TYPreferenceManager.h"
+#endif
 #include "TYSol.h"
 
 TY_EXTENSION_INST(TYSol);

@@ -16,19 +16,13 @@
 /**
  * \file TYAcousticSemiCircleGraphic.cpp
  * \brief Repri¿½sentation graphique d'1/2 cercle acoustique
- *
- *
  */
 
 
-
-
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticSemiCircle.h"
-
 #include "Tympan/gui/gl/TYPickingTable.h"
-
-
 #include "TYAcousticSemiCircleGraphic.h"
 
 TYAcousticSemiCircleGraphic::TYAcousticSemiCircleGraphic(TYAcousticSemiCircle* pElement) :
