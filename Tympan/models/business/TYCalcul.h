@@ -455,26 +455,6 @@ public:
     LPTYSiteNode getSite();
 
     /**
-     * \fn bool getCalculTrajetsHorizontaux()
-     * \brief Get du calcul des trajets horizontaux
-     * \return _bCalculTrajetsHorizontaux
-     */
-    bool getCalculTrajetsHorizontaux() { return _bCalculTrajetsHorizontaux; }
-
-    /**
-     * \fn const bool getCalculTrajetsHorizontaux()const
-     * \brief Get du calcul des trajets horizontaux
-     * \return _bCalculTrajetsHorizontaux
-     */
-    const bool getCalculTrajetsHorizontaux() const { return _bCalculTrajetsHorizontaux; }
-
-    /**
-     * \fn void setCalculTrajetsHorizontaux(const bool& bCalculTrajetsHorizontaux)
-     * \brief Set du calcul des trajets horizontaux
-     */
-    void setCalculTrajetsHorizontaux(const bool& bCalculTrajetsHorizontaux) { _bCalculTrajetsHorizontaux = bCalculTrajetsHorizontaux; }
-
-    /**
      * \fn void setModifiable(bool modify)
      * \brief Set attribut modifiable 
      */
@@ -562,8 +542,6 @@ protected:
 
     ///Prise ou non en compte de l'atmosphere.
     bool _useAtmosphere;
-    /// Calcul des trajets horizontaux
-    bool _bCalculTrajetsHorizontaux;
     ///Calcul energetique ou avec interference.
     bool _interference;
     /// Distance minimale entre deux points consideres comme confondus

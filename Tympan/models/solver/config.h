@@ -75,7 +75,7 @@ public:
     bool UseRealGround;
     //bool UseVegetation;
     //bool UseScreen;
-    //bool UseLateralDiffraction;
+    bool UseLateralDiffraction;
     bool UseReflection;
     bool PropaConditions;
     float H1parameter;

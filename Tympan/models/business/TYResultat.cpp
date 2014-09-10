@@ -730,13 +730,11 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
     {
         ofs << "Calcul" << ';';
         ofs << "Atmosphère" << ';';
-        ofs << "Trajets horizontaux" << ';';
         ofs << "Calcul" << ';';
         ofs << '\n';
 
         ofs << pCalcul->getName().toStdString() << ';';
         ofs << pCalcul->getUseAtmosphere() << ';';
-        ofs << pCalcul->getCalculTrajetsHorizontaux() << ';';
         if (pCalcul->getInterference())
         {
             ofs << "Interférences" << ';';

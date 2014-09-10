@@ -348,8 +348,6 @@ void TYCalculWidget::updateContent()
 
     _checkBoxUseAtmosphere->setChecked(getElement()->getUseAtmosphere());
 
-    _checkBoxParcoursLateraux->setChecked(getElement()->getCalculTrajetsHorizontaux());
-
     _radioButtonEnergetique->setChecked(!getElement()->getInterference());
     _radioButtonInterference->setChecked(getElement()->getInterference());
 
@@ -465,8 +463,6 @@ void TYCalculWidget::apply()
     }
 
     getElement()->setUseAtmosphere(_checkBoxUseAtmosphere->isChecked());
-
-    getElement()->setCalculTrajetsHorizontaux(_checkBoxParcoursLateraux->isChecked());
 
     getElement()->setInterference(_radioButtonInterference->isChecked());
 
