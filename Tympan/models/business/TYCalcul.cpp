@@ -1501,38 +1501,7 @@ void TYCalcul::getCalculElements(LPTYSiteNode pSite)
 void TYCalcul::setUseAtmosphere(const bool use /*=true*/)
 {
     _useAtmosphere = use;
-
-    if (!_useAtmosphere)
-    {
-        TYSpectre attenuationNulle;
-
-        attenuationNulle.setType(SPECTRE_TYPE_ATT); // Spectre d'attenuation
-        attenuationNulle.setDefaultValue(1e-20);// Spectre d'attenuation nulle
-
-        _pAtmosphere->setSpectreAtt(attenuationNulle);
-    }
-    else
-    {
-        _pAtmosphere->calculProprietes();
-    }
 }
-
-void TYCalcul::setAtmosphere(const LPTYAtmosphere pAtmo)
-{
-    _pAtmosphere = pAtmo;
-    _pAtmosphere->setParent(this);
-
-    if (!_useAtmosphere) // Si flag "calcul sans attenuation atmospherique" alors attenuation nulle
-    {
-        TYSpectre attenuationNulle;
-
-        attenuationNulle.setType(SPECTRE_TYPE_ATT); // Spectre d'attenuation
-        attenuationNulle.setDefaultValue(1e-20);// Spectre d'attenuation nulle
-
-        _pAtmosphere->setSpectreAtt(attenuationNulle);
-    }
-}
-
 
 void TYCalcul::setState(int state)
 {

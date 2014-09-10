@@ -29,7 +29,9 @@ public:
      * \brief Compute absorption spectrum in dB/m
      * \brief This spectrum will be used to compute absorption for a given distance
      */
-    void compute_absorption_spectrum(); 
+    void compute_absorption_spectrum();
+
+    Spectrum get_absorption_spectrum() const { return absorption_spectrum; }
 
     double compute_c() const; //!< compute sound speed
 

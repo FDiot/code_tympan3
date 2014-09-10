@@ -74,9 +74,6 @@ public slots:
      */
     void editSpectre();
 
-protected :
-    void updateBoxClasseMeteo();
-
     // Membres
 protected:
     QGroupBox* _groupBox;
@@ -88,10 +85,7 @@ protected:
     QLineEdit* _lineEditHygrometrie;
     QLabel* _labelVitSon;
     QLineEdit* _lineEditVitSon;
-    QLineEdit* _lineEditVitVent;
-    QLabel* _labelVitVent;
-    QLineEdit* _lineEditDirVent;
-    QLabel* _labelDirVent;
+
     QGroupBox* _groupBoxSpectreAtt;
     QLineEdit* _lineEditNomSpectre;
     QPushButton* _pushButtonSpectre;
@@ -101,22 +95,6 @@ protected:
     QGridLayout* _groupBoxSpectreAttLayout;
 
     TYElementWidget* _elmW;
-
-    /// Specifique harmonoise
-    QLabel* _labelA;
-    QLabel* _labelB;
-    QLabel* _labelC;
-    QLabel* _labelD;
-    QLineEdit* _lineEditA;
-    QLineEdit* _lineEditB;
-    QLineEdit* _lineEditC;
-    QLineEdit* _lineEditD;
-
-    QLabel* _labelClasseMeteo;
-    QComboBox* _comboBoxClasseMeteo;
-
-    QGroupBox* _groupBoxMeteo1;
-    QGroupBox* _groupBoxMeteo2;
 };
 
 

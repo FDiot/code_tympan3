@@ -77,8 +77,6 @@ TYAtmosphereWidget::TYAtmosphereWidget(TYAtmosphere* pElement, QWidget* _pParent
     pUnitTemp->setText(TR("id_unite_temp"));
     _groupBoxLayout->addWidget(pUnitTemp, 1, 2);
 
-    connect(_lineEditTemperature, SIGNAL(lostFocus()), this, SLOT(changeCelerite()));
-
     _labelHygrometrie = new QLabel(_groupBox);
     _labelHygrometrie->setText(TR("id_hygrometrie_label"));
     _groupBoxLayout->addWidget(_labelHygrometrie, 2, 0);
@@ -119,79 +117,9 @@ TYAtmosphereWidget::TYAtmosphereWidget(TYAtmosphere* pElement, QWidget* _pParent
     _groupBoxSpectreAttLayout->addWidget(_pushButtonSpectre, 0, 1);
 
     _atmosphereLayout->addWidget(_groupBoxSpectreAtt, 2, 0);
+
+    connect(_lineEditTemperature, SIGNAL(lostFocus()), this, SLOT(changeCelerite()));
     connect(_pushButtonSpectre, SIGNAL(clicked()), this, SLOT(editSpectre()));
-
-    // Description de la meteo
-
-    // 1. Outils de saisie sous la forme classe meteo
-    _groupBoxMeteo1 = new QGroupBox(this);
-    _groupBoxMeteo1->setTitle(TR(""));
-    QGridLayout* groupBoxMeteo1Layout = new QGridLayout();
-    _groupBoxMeteo1->setLayout(groupBoxMeteo1Layout);
-
-    // Vitesse du vent
-    _labelVitVent = new QLabel(_groupBoxMeteo1);
-    _labelVitVent->setText(TR("id_vitvent_label"));
-    groupBoxMeteo1Layout->addWidget(_labelVitVent, 0, 0);
-    _lineEditVitVent = new QLineEdit(_groupBoxMeteo1);
-    groupBoxMeteo1Layout->addWidget(_lineEditVitVent, 0, 1);
-    QLabel* pUnitVitVent = new QLabel(_groupBoxMeteo1);
-    pUnitVitVent->setText(TR("id_unite_vitvent"));
-    groupBoxMeteo1Layout->addWidget(pUnitVitVent, 0, 2);
-
-    // direction du vent
-    _labelDirVent = new QLabel(_groupBoxMeteo1);
-    _labelDirVent->setText(TR("id_dirvent_label"));
-    groupBoxMeteo1Layout->addWidget(_labelDirVent, 1, 0);
-    _lineEditDirVent = new QLineEdit(_groupBoxMeteo1);
-    groupBoxMeteo1Layout->addWidget(_lineEditDirVent, 1, 1);
-    QLabel* pUnitDirVent = new QLabel(_groupBoxMeteo1);
-    pUnitDirVent->setText(TR("id_unite_dirvent"));
-    groupBoxMeteo1Layout->addWidget(pUnitDirVent, 1, 2);
-
-    // Classe meteo
-    QLabel* labelClasseMeteo = new QLabel(_groupBoxMeteo1);
-    labelClasseMeteo->setText(TR("id_classe_meteo_label"));
-    groupBoxMeteo1Layout->addWidget(labelClasseMeteo, 2, 0);
-    _comboBoxClasseMeteo = new QComboBox(_groupBoxMeteo1);
-    groupBoxMeteo1Layout->addWidget(_comboBoxClasseMeteo, 2, 1);
-    updateBoxClasseMeteo();
-
-    _atmosphereLayout->addWidget(_groupBoxMeteo1, 3, 0);
-    _groupBoxMeteo1->hide();
-
-    // 2. Outil de saisie sous la forme de parametres de turbulence
-    _groupBoxMeteo2 = new QGroupBox(this);
-    _groupBoxMeteo2->setTitle(TR(""));
-    QGridLayout* groupBoxMeteo2Layout = new QGridLayout();
-    _groupBoxMeteo2->setLayout(groupBoxMeteo2Layout);
-
-    _labelA = new QLabel(_groupBoxMeteo2);
-    _labelA->setText(TR("id_meteo_A_label"));
-    groupBoxMeteo2Layout->addWidget(_labelA, 0, 0);
-    _lineEditA = new QLineEdit(_groupBoxMeteo2);
-    groupBoxMeteo2Layout->addWidget(_lineEditA, 0, 1);
-
-    _labelB = new QLabel(_groupBoxMeteo2);
-    _labelB->setText(TR("id_meteo_B_label"));
-    groupBoxMeteo2Layout->addWidget(_labelB, 1, 0);
-    _lineEditB = new QLineEdit(_groupBoxMeteo2);
-    groupBoxMeteo2Layout->addWidget(_lineEditB, 1, 1);
-
-    _labelC = new QLabel(_groupBoxMeteo2);
-    _labelC->setText(TR("id_meteo_C_label"));
-    groupBoxMeteo2Layout->addWidget(_labelC, 2, 0);
-    _lineEditC = new QLineEdit(_groupBoxMeteo2);
-    groupBoxMeteo2Layout->addWidget(_lineEditC, 2, 1);
-
-    _labelD = new QLabel(_groupBoxMeteo2);
-    _labelD->setText(TR("id_meteo_D_label"));
-    groupBoxMeteo2Layout->addWidget(_labelD, 3, 0);
-    _lineEditD = new QLineEdit(_groupBoxMeteo2);
-    groupBoxMeteo2Layout->addWidget(_lineEditD, 3, 1);
-
-    _atmosphereLayout->addWidget(_groupBoxMeteo2, 3, 0);
-    _groupBoxMeteo2->hide();
 
     updateContent();
 }
@@ -204,66 +132,15 @@ void TYAtmosphereWidget::updateContent()
 {
     QString num;
 
-    // DTn : Desactive 20110905
-    //if (getElement()->getParent()) // Desactivation des elements si le calcul est bloque
-    //{
-    //  TYCalcul* pCalc = (TYCalcul*) getElement()->getParent(); // L'atmosphere ne peut avoir d'autre parent qu'un calcul
-
-    //  if (pCalc->getState()==TYCalcul::Locked)
-    //  {
-    //      _elmW->setEnabled(false);
-    //      _groupBox->setEnabled(false);
-    //  }
-    //}
-
     _elmW->updateContent();
 
     _lineEditPression->setText(num.setNum(getElement()->getPression(), 'f', 2));
     _lineEditVitSon->setText(num.setNum(getElement()->getVitSon(), 'f', 2));
     _lineEditVitSon->setEnabled(false);
 
-    _lineEditVitVent->setText(num.setNum(getElement()->getVitVent(), 'f', 2));
-    _lineEditDirVent->setText(num.setNum(getElement()->getDirVent(), 'f', 2));
     _lineEditTemperature->setText(num.setNum(getElement()->getTemperature(), 'f', 2));
     _lineEditHygrometrie->setText(num.setNum(getElement()->getHygrometrie(), 'f', 2));
     _lineEditNomSpectre->setText(getElement()->getSpectreAtt().getName());
-
-
-#ifdef TY_RECHERCHE
-    double A, B, C, D;
-
-    getElement()->getProfilMeteo(A, B, C, D);
-
-    _lineEditA->setText(num.setNum(A, 'f', 2));
-    _lineEditB->setText(num.setNum(B, 'f', 2));
-    _lineEditC->setText(num.setNum(C, 'G', 2));
-    _lineEditD->setText(num.setNum(D, 'f', 2));
-
-    _comboBoxClasseMeteo->setCurrentIndex(getElement()->getClasseMeteo());
-
-    // Montre soit l'interface "saisie turbulence" soit "Classe meteo" selon choix utilisateur
-    int typeSaisieMeteo = 1;
-#if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo"))
-    {
-        typeSaisieMeteo = TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo");
-    }
-    else
-    {
-        TYPreferenceManager::setInt(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo", typeSaisieMeteo);
-    }
-
-#endif // TY_USE_IHM
-
-    if (typeSaisieMeteo == 0)
-    {
-        _groupBoxMeteo2->show();
-    }
-    else
-    {
-        _groupBoxMeteo1->show();
-    }
-#endif
 }
 
 void TYAtmosphereWidget::apply()
@@ -273,19 +150,6 @@ void TYAtmosphereWidget::apply()
     getElement()->setPression(_lineEditPression->text().toDouble());
     getElement()->setTemperature(_lineEditTemperature->text().toDouble());
     getElement()->setHygrometrie(_lineEditHygrometrie->text().toDouble());
-    getElement()->setDirVent(_lineEditDirVent->text().toDouble());
-    getElement()->setVitVent(_lineEditVitVent->text().toDouble());
-
-    double A, B, C, D;
-
-    A = _lineEditA->text().toDouble();
-    B = _lineEditB->text().toDouble();
-    C = _lineEditC->text().toDouble();
-    D = _lineEditD->text().toDouble();
-
-    getElement()->setProfilMeteo(A, B, C, D);
-    getElement()->setClasseMeteo(_comboBoxClasseMeteo->currentIndex());
-
 
     emit modified();
 }
@@ -315,17 +179,4 @@ void TYAtmosphereWidget::editSpectre()
 
     // On remet la precision d'affichage a la valeur anterieure
     TYSpectre::setXMLPrecision(oldPrecision);
-}
-
-void TYAtmosphereWidget::updateBoxClasseMeteo()
-{
-    int nbMethod = TR("id_nb_classe_meteo").toInt();
-    QString str, label;
-    for (int i = 0; i < nbMethod; i++)
-    {
-        label = "id_classe_meteo";
-        label += QString().setNum(i);
-        str = TR(label);
-        _comboBoxClasseMeteo->insertItem(i, str);
-    }
 }

@@ -383,45 +383,6 @@ public:
     }
 
     /**
-     * Calcule la pente moyenne pour le segment donne.
-     *
-     * @param seg Segment pour lequel on calcul la pente moyenne.
-     * @param penteMoy Segment resultant representant la pente moyenne.
-     *
-     * @return <code>false</code> si le segment passe est valide
-     *         (inclu dans la zone de travail); <code>false</code> sinon.
-     */
-    bool penteMoy(const OSegment3D& seg, OSegment3D& penteMoy) const;
-
-    /**
-     * Calcul du sol moyen pour un segment donne.
-     *
-     * @param seg Segment pour lequel on calcul le sol moyen.
-     *
-     * @return Le sol moyen calcule pour le segment donne.
-     */
-    LPTYTerrain solMoy(const OSegment3D& seg, const TYAtmosphere& atmo);
-
-    /**
-     * Recherche le terrain pour un point donne de la topographie.
-     *
-     * @param pt Point de la topographie.
-     *
-     * @return La reference du terrain pour le point passe.
-     */
-    TYTerrain* terrainAt(const OPoint3D& pt);
-
-    /**
-     * Retourne la liste des terrains traverses par un segment donne
-     * et les sous_segments associes.
-     *
-     * @param seg Segment traversant la topographie.
-     *
-     * @return Un tableau de structure contenant les terrains et segments associes.
-     */
-    TYTabStructSegPtrTer sols(const OSegment3D& seg);
-
-    /**
      * Met a jour les caracteristique des sols definis dans la topo
      * Calcul du nombre d'onde dans le sol en fonction de l'atmosphere
      */

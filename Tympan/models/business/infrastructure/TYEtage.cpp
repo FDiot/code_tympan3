@@ -19,6 +19,8 @@
 #include "Tympan/core/defines.h"
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/models/solver/entities.hpp"
+
 #include "Tympan/models/business/TYPreferenceManager.h"
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYEtageWidget.h"
@@ -2221,7 +2223,7 @@ OSpectre TYEtage::champDirect(const OPoint3D& unPoint)
 {
     OSpectre s = OSpectre::getEmptyLinSpectre();
     OSpectre sTemp = OSpectre::getEmptyLinSpectre();
-    TYAtmosphere atmos;
+    tympan::AtmosphericConditions atmos(101325., 20., 70.);
 
     unsigned int i, j;
     double distance;
@@ -2257,7 +2259,7 @@ OSpectre TYEtage::champDirect(const OPoint3D& unPoint)
                 // Affectation de la directivite a la puissance de la source
                 sTemp = OSpectre::getEmptyLinSpectre(1.0); //pSrc->lwApparenteSrcDest(SR, atmos); // Q
                 sTemp = sTemp.mult(pSrc->getSpectre()->toGPhy()); // W
-                sTemp = sTemp.mult(atmos.getImpedanceSpecifique() / (4 * M_PI * distance * distance)); // Q.W.rho.C / 4.pi.di¿½
+                sTemp = sTemp.mult( atmos.compute_z() / (4 * M_PI * distance * distance) ); // Q.W.rho.C / 4.pi.di¿½
 
                 //Cumul des spectres
                 s = s.sum(sTemp);
@@ -2279,7 +2281,7 @@ OSpectre TYEtage::champDirect(const OPoint3D& unPoint)
             // Affectation de la directivite a la puissance de la source
             sTemp = OSpectre::getEmptyLinSpectre(1.); //pSrc->lwApparenteSrcDest(SR, atmos); // Directivite de la source Q
             sTemp = sTemp.mult(pSrc->getSpectre()->toGPhy());  // Puissance W
-            sTemp = sTemp.mult(atmos.getImpedanceSpecifique() / (4 * M_PI * distance * distance)); // Q.W.rho.C/(4.pi.di¿½)
+            sTemp = sTemp.mult( atmos.compute_z() / (4 * M_PI * distance * distance) ); // Q.W.rho.C/(4.pi.di¿½)
 
             //Cumul des spectres
             s = s.sum(sTemp);
@@ -2316,13 +2318,13 @@ void TYEtage::calculChampReverbere()
 void TYEtage::calculChampRevSabine()
 {
     unsigned int i, j;
-    TYAtmosphere atmos;
+    tympan::AtmosphericConditions atmos(101325., 20., 70.);
 
     // Effet de salle ((4.Rho.C / (alpha.S))-(4/S) - Tr.C.AbsoATm)
     _reverb = TYSpectre::getEmptyLinSpectre(4.0); // Spectre initialise a la valeur 4
 
     _reverb = _reverb.div(_absoSabine.mult(_surfAbsorbante)); // 4/(alpha.S)
-    _reverb = _reverb.mult(atmos.getImpedanceSpecifique()); // 4.Rho.C/(alpha.S)
+    _reverb = _reverb.mult( atmos.compute_z() ); // 4.Rho.C/(alpha.S)
 
     // Champ Reverbere : W*(Effet de salle)
     OSpectre sTemp = OSpectre::getEmptyLinSpectre();
@@ -2371,7 +2373,7 @@ void TYEtage::calculChampRevKuttruff()
 {
     _reverb = TYSpectre::getEmptyLinSpectre();
     OSpectre sTemp;
-    TYAtmosphere atmos;
+    tympan::AtmosphericConditions atmos(101325., 20., 70.);
 
     OPoint3D unPoint; // DT 20060520 juste pour que ca compile (le point devrait etre passe en parametre
 
@@ -2382,7 +2384,7 @@ void TYEtage::calculChampRevKuttruff()
     OSpectre diffAlpha = (_absoSabine.subst(1.0)).mult(-1.0);   // 1-alpha
     OSpectre deltaAlpha = diffAlpha.div(_absoSabine);           // (1-alpha) / alpha
     // diffAlphaGeom = rho*c*(1-alpha) / (pi*hi¿½)
-    OSpectre diffAlphaGeom = diffAlpha.mult(atmos.getImpedanceSpecifique() / (M_PI * h2)); //rho*c = 400;
+    OSpectre diffAlphaGeom = diffAlpha.mult(atmos.compute_z() / (M_PI * h2)); //rho*c = 400;
 
 
     // b = Log((0.6 + alpha)/alpha)
@@ -2662,7 +2664,7 @@ TYSpectre TYEtage::getPuissanceRayonnee(LPTYAcousticSurface pCurrentSurf, const 
     TYSpectre s = TYSpectre::getEmptyLinSpectre();
     OSpectre spectreAtt;
     OPoint3D posSrc;
-    TYAtmosphere atmos;
+    tympan::AtmosphericConditions atmos(101325., 20., 70.);
 
     // Une sous-face de mur doit etre de type MurElement
     LPTYMurElement pMurElt = TYMurElement::safeDownCast(pCurrentSurf);
@@ -2701,7 +2703,7 @@ TYSpectre TYEtage::getPuissanceRayonnee(LPTYAcousticSurface pCurrentSurf, const 
 
         s = s.sum(champDirect(posSrc));
 
-        s = s.mult(surf / atmos.getImpedanceSpecifique()); // W = P² * S / (rho.C)
+        s = s.mult( surf / atmos.compute_z() ); // W = P² * S / (rho.C)
         //      s = s.sum(_reverb);// Pi¿½ = champDirect + champReverbere
 
         //      s = s.div(4.0); // DT 20100106 car le cas test paroi transparente de collais pas
