@@ -64,7 +64,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
 
     _upTodate = true;
 
-    _condFav = false;
     _useAtmosphere = true;
     _bCalculTrajetsHorizontaux = true;
     _interference = false;
@@ -97,16 +96,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     else
     {
         TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault", _useAtmosphere);
-    }
-
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "CondFavCalculDefault"))
-    {
-        _condFav = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "CondFavCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "CondFavCalculDefault", _condFav);
     }
 
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "InterferenceCalculDefault"))
@@ -169,7 +158,6 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _dateModif = other._dateModif;
         _comment = other._comment;
         _upTodate = other._upTodate;
-        _condFav = other._condFav;
         _useAtmosphere = other._useAtmosphere;
         _interference = other._interference;
         _state = other._state;
@@ -196,7 +184,6 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_comment != other._comment) { return false; }
         if (_numero != other._numero) { return false; }
         if (_upTodate != other._upTodate) { return false; }
-        if (_condFav != other._condFav) { return false; }
         if (_useAtmosphere != other._useAtmosphere) { return false; }
         if (_interference != other._interference) { return false; }
         if (_state != other._state) { return false; }
@@ -234,7 +221,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _dateModif = pOtherCalcul->_dateModif;
     _comment = pOtherCalcul->_comment;
     _upTodate = pOtherCalcul->_upTodate;
-    _condFav = pOtherCalcul->_condFav;
     _useAtmosphere = pOtherCalcul->_useAtmosphere;
     _interference = pOtherCalcul->_interference;
     _state = pOtherCalcul->_state;
@@ -290,7 +276,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "comment", _comment);
     TYXMLTools::addElementStringValue(domNewElem, "solverId", _solverId.toString());
     TYXMLTools::addElementIntValue(domNewElem, "etat", _state);  // 16/08/2005 Possibilite de bloquer un calcul
-    TYXMLTools::addElementIntValue(domNewElem, "condFav", _condFav);
     TYXMLTools::addElementIntValue(domNewElem, "useAtmosphere", _useAtmosphere);
     TYXMLTools::addElementIntValue(domNewElem, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux);
     TYXMLTools::addElementIntValue(domNewElem, "interference", _interference);
@@ -402,7 +387,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementStringValue(elemCur, "comment", _comment, getOk[4]);
         TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[20]);
         TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[19]);
-        TYXMLTools::getElementBoolValue(elemCur, "condFav", _condFav, getOk[7]);
         TYXMLTools::getElementBoolValue(elemCur, "useAtmosphere", _useAtmosphere, getOk[9]);
         TYXMLTools::getElementBoolValue(elemCur, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux, getOk[18]);
         TYXMLTools::getElementBoolValue(elemCur, "interference", _interference, getOk[12]);

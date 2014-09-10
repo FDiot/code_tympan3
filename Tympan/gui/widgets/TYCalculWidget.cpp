@@ -148,23 +148,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _checkBoxParcoursLateraux->setText(TR(""));
     groupBoxFlagLayout->addWidget(_checkBoxParcoursLateraux, 3, 3);
 
-    // Calcul en conditions favorables (1)
-
-    QButtonGroup* buttonGroupCondFavHomo = new QButtonGroup();
-    _pRadioButtonCondHomo = new QRadioButton(TR("id_condhomo_label"));
-    buttonGroupCondFavHomo->addButton(_pRadioButtonCondHomo, 0);
-    _pRadioButtonCondFav = new QRadioButton(TR("id_condfav_label"));
-    buttonGroupCondFavHomo->addButton(_pRadioButtonCondFav, 1);
-
-    QGridLayout* groupBoxCondFavHomoLayout = new QGridLayout();
-    groupBoxCondFavHomoLayout->addWidget(_pRadioButtonCondHomo, 0, 0);
-    groupBoxCondFavHomoLayout->addWidget(_pRadioButtonCondFav, 0, 1);
-
-    QGroupBox* groupBoxCondFavHomo = new QGroupBox();
-    groupBoxCondFavHomo->setTitle(TR(""));
-    groupBoxCondFavHomo->setLayout(groupBoxCondFavHomoLayout);
-
-    groupBoxFlagLayout->addWidget(groupBoxCondFavHomo, 5, 0, 1, 2);
 
     QButtonGroup* buttonGroupIE = new QButtonGroup();
     _radioButtonEnergetique = new QRadioButton(TR("id_calcul_energetique"));
@@ -370,10 +353,6 @@ void TYCalculWidget::updateContent()
     // On affiche le regime courant
     _comboSolver->setCurrentIndex(currentSolverIndex);
 
-    // Choix concernant le sol
-    _pRadioButtonCondHomo->setChecked(!getElement()->getCondFav());
-    _pRadioButtonCondFav->setChecked(getElement()->getCondFav());
-
     _lineEditDistanceSRMin->setText(num.setNum(getElement()->getDistanceSRMin(), 'f', 2));
     _checkBoxUseAtmosphere->setChecked(getElement()->getUseAtmosphere());
 
@@ -492,8 +471,6 @@ void TYCalculWidget::apply()
         getElement()->setState(TYCalcul::Locked);
         if (getElement()->getResultat()) { getElement()->getResultat()->purge(); }
     }
-
-    getElement()->setCondFav(_pRadioButtonCondFav->isChecked());
 
     getElement()->setUseAtmosphere(_checkBoxUseAtmosphere->isChecked());
 

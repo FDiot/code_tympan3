@@ -77,7 +77,7 @@ public:
     //bool UseScreen;
     //bool UseLateralDiffraction;
     bool UseReflection;
-    //bool PropaConditions;
+    bool PropaConditions;
     float H1parameter;
     //bool ModSummation;
 

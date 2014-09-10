@@ -788,7 +788,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     _pSpectreAbsoMatConst = new TYSpectre();
     _pMaillage = new TYMaillage();
 
-    _pCheckBoxCondFav = new QCheckBox(TR("id_condfav_label"));
     _pLineEditDistanceSRMin = new QLineEdit();
     QLabel* pLabelDistanceSRMin = new QLabel(TR("id_distancesrmin_label"));
     _pCheckBoxUseAtmosphere = new QCheckBox(TR("id_useatmosphere_label"));
@@ -797,7 +796,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     QGridLayout* groupBoxLayout = new QGridLayout();
     groupBoxLayout->addWidget(_pCheckBoxUseAtmosphere, 1, 0);
     groupBoxLayout->addWidget(_pCheckBoxInterference, 2, 1);
-    groupBoxLayout->addWidget(_pCheckBoxCondFav, 3, 0);
     groupBoxLayout->addWidget(pLabelDistanceSRMin, 5, 0);
     groupBoxLayout->addWidget(_pLineEditDistanceSRMin, 5, 1);
 
@@ -1362,10 +1360,6 @@ void TYPreferenceDialog::loadPreferences()
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->setChecked(TYPreferenceManager::getBool("UseAtmosphereCalculDefault"));
     }
-    if (TYPreferenceManager::exists("CondFavCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxCondFav->setChecked(TYPreferenceManager::getBool("CondFavCalculDefault"));
-    }
     if (TYPreferenceManager::exists("InterferenceCalculDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->setChecked(TYPreferenceManager::getBool("InterferenceCalculDefault"));
@@ -1798,7 +1792,6 @@ void TYPreferenceDialog::savePreferences()
     TYPreferenceManager::setFloat("MaillageOpacity", float(((ColorsTab*)tabWidget->widget(2))->_pMailOpacitySlider->value()) / 100.0f);
 
     // Acoustique
-    TYPreferenceManager::setBool("CondFavCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxCondFav->isChecked());
     TYPreferenceManager::setBool("UseAtmosphereCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->isChecked());
     TYPreferenceManager::setBool("InterferenceCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->isChecked());
 

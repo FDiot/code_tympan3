@@ -229,18 +229,6 @@ public:
     double getDistanceSRMin() { return _distanceSRMin; }
 
     /**
-     * \fn bool getCondFav()
-     * \brief Get du test des conditions favorables ou non a la propagation.
-     * return _condFav
-     */
-    bool getCondFav() const { return _condFav; }
-    /**
-     * \fn void setCondFav(bool cond)
-     * \brief Set du test des conditions favorables ou non a la propagation.
-     */
-    void setCondFav(bool cond) { _condFav = cond; }
-
-    /**
      *\fn TYListID getElementSelection()
      *\brief Get de la selection d'elements actifs dans ce Calcul.
      *\return _elementSelection
@@ -584,8 +572,6 @@ protected:
     /// Etat du calcul actif/bloque
     int _state;
 
-    ///Conditions favorables ou non a la propagation.
-    bool _condFav;
     ///Prise ou non en compte de l'atmosphere.
     bool _useAtmosphere;
     /// Calcul des trajets horizontaux
