@@ -22,6 +22,7 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/topography/TYAltimetrie.h"
 #if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYRouteWidget.h"
   #include "Tympan/gui/gl/TYRouteGraphic.h"
 #endif

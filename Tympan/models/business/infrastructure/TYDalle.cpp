@@ -13,16 +13,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYDalleWidget.h"
-#include "Tympan/gui/gl/TYDalleGraphic.h"
+  #include "Tympan/models/business/TYPreferenceManager.h"
+  #include "Tympan/gui/widgets/TYDalleWidget.h"
+  #include "Tympan/gui/gl/TYDalleGraphic.h"
 #endif
-
-
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/infrastructure/TYEtage.h"
 #include "TYDalle.h"

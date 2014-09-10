@@ -16,18 +16,13 @@
 /**
  * \file TYAcousticCircleGraphic.cpp
  * \brief Repri¿½sentation graphique d'un cercle accoustique
- *
- *
  */
 
 
-
-
-#include "TYAcousticCircleGraphic.h"
-
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticCircle.h"
-
 #include "Tympan/gui/gl/TYPickingTable.h"
+#include "TYAcousticCircleGraphic.h"
 
 TYAcousticCircleGraphic::TYAcousticCircleGraphic(TYAcousticCircle* pElement) :
     TYElementGraphic(pElement)

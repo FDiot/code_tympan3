@@ -13,17 +13,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYSourceWidget.h"
+  #include "Tympan/gui/widgets/TYSourceWidget.h"
 #endif
-
-
-
 #include "TYSource.h"
+
 
 TY_EXTENSION_INST(TYSource);
 
@@ -33,23 +27,6 @@ TYSource::TYSource()
 
     _pSpectre = new TYSpectre();
     _pSpectre->setType(SPECTRE_TYPE_LW);
-
-    //float r = 255.0f, g = 0.0f, b = 0.0f;
-
-    //#if TY_USE_IHM
-    //if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SrcPonctGraphicColorR"))
-    //{
-    //  TYPreferenceManager::getColor(TYDIRPREFERENCEMANAGER, "SrcPonctGraphicColor", r, g, b);
-    //}
-    //else
-    //{
-    //  TYPreferenceManager::setColor(TYDIRPREFERENCEMANAGER, "SrcPonctGraphicColor", r, g, b);
-    //}
-
-    //#endif
-
-    //// Couleur de preference.
-    //setColor(OColor(r/255, g/255, b/255));
 }
 
 TYSource::TYSource(const TYSource& other)
@@ -66,7 +43,6 @@ TYSource& TYSource::operator=(const TYSource& other)
     if (this != &other)
     {
         TYElement::operator =(other);
-        //      TYColorInterface::operator =(other);
         _pSpectre = other._pSpectre;
     }
     return *this;
@@ -77,7 +53,6 @@ bool TYSource::operator==(const TYSource& other) const
     if (this != &other)
     {
         if (TYElement::operator !=(other)) { return false; }
-        //      if ( TYColorInterface::operator !=(other)) return false;
         if (_pSpectre != other._pSpectre) { return false; }
     }
     return true;
@@ -94,8 +69,6 @@ bool TYSource::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 
     TYSource* pOtherSrc = (TYSource*) pOther;
 
-    //  TYColorInterface::deepCopy((TYColorInterface*)pOtherSrc, copyId);
-
     _pSpectre->deepCopy(pOtherSrc->_pSpectre, copyId);
 
     return true;
@@ -109,10 +82,6 @@ std::string TYSource::toString() const
 DOM_Element TYSource::toXML(DOM_Element& domElement)
 {
     DOM_Element domNewElem = TYElement::toXML(domElement);
-    //  TYColorInterface::toXML(domNewElem);
-
-    //  *_pSpectre = _pSpectre->toDB();
-    //  _pSpectre->toXML(domNewElem);
 
     return domNewElem;
 }
@@ -120,8 +89,6 @@ DOM_Element TYSource::toXML(DOM_Element& domElement)
 int TYSource::fromXML(DOM_Element domElement)
 {
     TYElement::fromXML(domElement);
-
-    //  TYColorInterface::fromXML(domElement);
 
     DOM_Element elemCur;
     QDomNodeList childs = domElement.childNodes();
@@ -139,7 +106,6 @@ void TYSource::setRegime(TYSpectre& Spectre, int regime /*=-1*/)
 {
     // Type Puissance
     Spectre.setType(SPECTRE_TYPE_LW);
-
     // Ajout
     _pSpectre = new TYSpectre(Spectre);
 }

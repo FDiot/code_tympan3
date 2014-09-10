@@ -14,11 +14,10 @@
 */
 
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYMurWidget.h"
-#include "Tympan/gui/gl/TYMurGraphic.h"
+  #include "Tympan/models/business/TYPreferenceManager.h"
+  #include "Tympan/gui/widgets/TYMurWidget.h"
+  #include "Tympan/gui/gl/TYMurGraphic.h"
 #endif
-
-
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/infrastructure/TYMurElement.h"

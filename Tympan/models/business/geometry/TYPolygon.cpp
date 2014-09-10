@@ -22,7 +22,6 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/core/chrono.h"
 #include "Tympan/models/common/3d.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #include "Tympan/models/business/cgal_bridge.h"
 #include "TYRectangle.h"

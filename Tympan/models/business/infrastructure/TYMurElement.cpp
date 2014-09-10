@@ -14,8 +14,9 @@
 */
 
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYMurElementWidget.h"
-#include "Tympan/gui/gl/TYMurElementGraphic.h"
+  #include "Tympan/models/business/TYPreferenceManager.h"
+  #include "Tympan/gui/widgets/TYMurElementWidget.h"
+  #include "Tympan/gui/gl/TYMurElementGraphic.h"
 #endif
 
 #include "Tympan/core/logging.h"

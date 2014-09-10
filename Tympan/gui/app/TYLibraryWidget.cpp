@@ -29,6 +29,7 @@
 #include <QKeyEvent>
 
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "TYLibraryWidget.h"

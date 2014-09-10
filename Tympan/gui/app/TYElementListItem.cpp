@@ -21,7 +21,6 @@
 #include <qpixmap.h>
 
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYPluginManager.h"
 #include "Tympan/gui/widgets/TYWidget.h"
