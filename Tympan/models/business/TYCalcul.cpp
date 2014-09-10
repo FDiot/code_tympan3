@@ -68,8 +68,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
 
     _state = TYCalcul::Actif; // A sa creation, le calcul est actif
 
-    _seuilConfondus = TYSEUILCONFONDUS;
-
     // Le solveur par defaut est le solveur standard de TYMPAN
     _solverId = OGenID("{A98B320C-44C4-47a9-B689-1DD352DAA8B2}");
 
@@ -93,16 +91,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     {
         TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault", _useAtmosphere);
     }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
-    {
-        _seuilConfondus = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus", _seuilConfondus);
-    }
-
 
 #endif
     setUseAtmosphere(_useAtmosphere);

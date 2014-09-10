@@ -34,7 +34,6 @@ TYAcousticModel::TYAcousticModel(TYSolver& solver)
       _conditionFav(false),
       _useAtmo(true),
       _interference(false),
-      _seuilConfondus(0.01),
       _paramH(10.0),
       _solver(solver)
 {
@@ -68,8 +67,6 @@ void TYAcousticModel::init(const TYCalcul& calcul)
     _interference = config->ModSummation;
     // On calcul tout de suite le spectre de longueur d'onde
     _lambda = OSpectre::getLambda(pSolverAtmos->compute_c()); //_pAtmo->getVitSon());
-    // Distance minimale entre deux points consideres comme confondus
-    _seuilConfondus = calcul.getSeuilConfondu();
     // Coefficient multiplicateur pour le calcul des reflexions supplementaires en condition favorable
     _paramH = config->H1parameter;
 }
@@ -171,7 +168,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
 
     // Calcul du point de reflexion
     OPoint3D ptReflex;
-    int result = penteMoyenne.intersects(OSegment3D(ptSym, rayon._ptB), ptReflex, _seuilConfondus);
+    int result = penteMoyenne.intersects(OSegment3D(ptSym, rayon._ptB), ptReflex, TYSEUILCONFONDUS);
 
     //              2. Etape avant la reflexion
     OSegment3D seg1(rayon._ptA, ptReflex); // On part de la source vers le point de reflexion
@@ -261,9 +258,9 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
         double hauteurA = 0.0, hauteurB = 0.0;
         if (penteMoyenne.longueur() > 0)
         {
-            penteMoyenne.projection(rayon._ptA, ptProj, _seuilConfondus);
+            penteMoyenne.projection(rayon._ptA, ptProj, TYSEUILCONFONDUS);
             hauteurA = rayon._ptA._z - ptProj._z;
-            penteMoyenne.projection(rayon._ptB, ptProj, _seuilConfondus);
+            penteMoyenne.projection(rayon._ptB, ptProj, TYSEUILCONFONDUS);
             hauteurB = rayon._ptB._z - ptProj._z;
         }
         else
@@ -301,7 +298,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
 
             if (penteMoyenne.longueur() > 0)
             {
-                penteMoyenne.projection(rayon._ptA, projA, _seuilConfondus);
+                penteMoyenne.projection(rayon._ptA, projA, TYSEUILCONFONDUS);
             }
             else
             {
@@ -357,7 +354,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             // Calcul du point de reflexion
             if (penteMoyenne.longueur() > 0)
             {
-                penteMoyenne.projection(rayon._ptB, projB, _seuilConfondus);
+                penteMoyenne.projection(rayon._ptB, projB, TYSEUILCONFONDUS);
             }
             else
             {
@@ -646,7 +643,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
         ptSym._z = 2 * segPente._ptA._z - ptSym._z;
     }
 
-    int result = segPente.intersects(OSegment3D(ptSym, ptFin), ptReflex, _seuilConfondus);
+    int result = segPente.intersects(OSegment3D(ptSym, ptFin), ptReflex, TYSEUILCONFONDUS);
 
     if (result == 0) // Si pas d'intersection trouvee, on passe au plan B
     {
@@ -682,7 +679,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
     //          1/ le depart et l'arrivee ne sont pas sur le sol
     //          2/ le depart ou l'arrivee sont sur le sol et sont soit la source, soit le recepteur
     //          3/ ni 1, ni 2, dans ce cas, les segments ne sont pas produits
-    if ((ptSym.distFrom(ptReflex) > _seuilConfondus) && (ptFin.distFrom(ptReflex) > _seuilConfondus))
+    if ((ptSym.distFrom(ptReflex) > TYSEUILCONFONDUS) && (ptFin.distFrom(ptReflex) > TYSEUILCONFONDUS))
     {
         //              Etape avant la reflexion
         OSegment3D seg1(ptDebut, ptReflex);

@@ -439,9 +439,6 @@ protected:
     /// Liste des terrains tries (on fait expres un tableau a part pour ne pas perturber le terrain par defaut)
     TYTerrainGeoNode** _pSortedTerrains;
 
-    /// Seuils confondus
-    double _seuilConfondus;
-
 
 private :
     std::vector<TYStructElemPts> _tabElemPts; // Tableau des terrains

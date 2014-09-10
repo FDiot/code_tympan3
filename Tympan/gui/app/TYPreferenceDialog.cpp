@@ -1117,10 +1117,6 @@ void TYPreferenceDialog::loadPreferences()
     {
         ((GeometrieTab*)tabWidget->widget(0))->_pResoCylEdit->setText(QString().setNum(TYPreferenceManager::getFloat("ResolutionCircle")));
     }
-    if (TYPreferenceManager::exists("SeuilConfondus"))
-    {
-        ((GeometrieTab*)tabWidget->widget(0))->_pSeuilDistNulEdit->setText(QString().setNum(TYPreferenceManager::getFloat("SeuilConfondus")));
-    }
     if (TYPreferenceManager::exists("DistMinPtCrbNiv"))
     {
         ((GeometrieTab*)tabWidget->widget(0))->_pDistMinPtCrbNivEdit->setText(QString().setNum(TYPreferenceManager::getFloat("DistMinPtCrbNiv")));
@@ -1617,11 +1613,6 @@ void TYPreferenceDialog::savePreferences()
         TYPreferenceManager::setFloat("ResolutionCircle", ((GeometrieTab*)tabWidget->widget(0))-> _pResoCylEdit->text().toFloat());
     }
     qValidator.setBottom(0.001);
-    if (qValidator.validate(aQString = ((GeometrieTab*)tabWidget->widget(0))->_pSeuilDistNulEdit->text(), res) == QValidator::Acceptable)
-    {
-        TYPreferenceManager::setFloat("SeuilConfondus", ((GeometrieTab*)tabWidget->widget(0))->_pSeuilDistNulEdit->text().toFloat());
-    }
-    qValidator.setBottom(1);
     if (qValidator.validate(aQString = ((GeometrieTab*)tabWidget->widget(0))->_pDistMinPtCrbNivEdit->text(), res) == QValidator::Acceptable)
     {
         TYPreferenceManager::setFloat("DistMinPtCrbNiv", ((GeometrieTab*)tabWidget->widget(0))->_pDistMinPtCrbNivEdit->text().toFloat());

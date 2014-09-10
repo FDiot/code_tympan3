@@ -582,26 +582,13 @@ bool TYRectangle::isValid() const
     plans[2] = OPlan(_pts[0], _pts[2], _pts[3]);
     plans[3] = OPlan(_pts[1], _pts[2], _pts[3]);
 
-    double seuilConfondus = TYSEUILCONFONDUS;
-
-#if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
-    {
-        seuilConfondus = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus", seuilConfondus);
-    }
-#endif
-
     // On arrondi avec la prise en compte du seuil de precision
     for (i = 0; i < 4; i++)
     {
-        plans[i]._a = ROUND(plans[i]._a / seuilConfondus);
-        plans[i]._b = ROUND(plans[i]._b / seuilConfondus);
-        plans[i]._c = ROUND(plans[i]._c / seuilConfondus);
-        plans[i]._d = ROUND(plans[i]._d / seuilConfondus);
+        plans[i]._a = ROUND(plans[i]._a / TYSEUILCONFONDUS);
+        plans[i]._b = ROUND(plans[i]._b / TYSEUILCONFONDUS);
+        plans[i]._c = ROUND(plans[i]._c / TYSEUILCONFONDUS);
+        plans[i]._d = ROUND(plans[i]._d / TYSEUILCONFONDUS);
     }
 
     // Les plans doivent etre les memes
@@ -620,7 +607,7 @@ bool TYRectangle::isValid() const
     // Les vecteurs doivent etre orthogonaux => produit scalaire nul
     for (i = 0; i < 3; i++)
     {
-        if (ABS(vecs[i].scalar(vecs[i + 1])) > seuilConfondus) { return false; }
+        if (ABS(vecs[i].scalar(vecs[i + 1])) > TYSEUILCONFONDUS) { return false; }
     }
 
     return true;

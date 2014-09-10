@@ -33,7 +33,6 @@ static int compareSurfaceTerrains(const void* elem1, const void* elem2);
 
 TYTopographie::TYTopographie()
 {
-    _seuilConfondus = 0.002;
     _name = TYNameManager::get()->generateName(getClassName());
 
     _pAltimetrie = new TYAltimetrie();
@@ -50,15 +49,6 @@ TYTopographie::TYTopographie()
     float sizeY = TAILLETOPOY;
 
 #if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
-    {
-        _seuilConfondus = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus", _seuilConfondus);
-    }
-
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "DefaultDimX"))
     {
         sizeX = TYPreferenceManager::getFloat(TYDIRPREFERENCEMANAGER, "DefaultDimX");

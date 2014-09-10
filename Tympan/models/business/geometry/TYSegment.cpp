@@ -196,19 +196,6 @@ int TYSegment::intersects(const TYSegment& seg, TYPoint& pt) const
     TYPoint ptA, ptB;
     double mua, mub;
 
-    double seuilConfondus = TYSEUILCONFONDUS;
-
-#if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
-    {
-        seuilConfondus = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus", seuilConfondus);
-    }
-#endif
-
     // Calcul le segment le plus court entre les 2 segments dont on recherche l'eventuelle intersection
     if (OGeometrie::shortestSegBetween2Lines(this->_ptA, this->_ptB, seg._ptA, seg._ptB, ptA, ptB, &mua, &mub))
     {
@@ -220,7 +207,7 @@ int TYSegment::intersects(const TYSegment& seg, TYPoint& pt) const
             // que les 2 points constituant ce segment sont quasi confondus
             OVector3D vecSeg(ptA, ptB);
 
-            if (vecSeg.norme() <= seuilConfondus)
+            if (vecSeg.norme() <= TYSEUILCONFONDUS)
             {
                 res = INTERS_OUI;
 
