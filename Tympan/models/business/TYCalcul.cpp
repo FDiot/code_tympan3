@@ -64,25 +64,10 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
 
     _upTodate = true;
 
-    _useAtmosphere = true;
-
     _state = TYCalcul::Actif; // A sa creation, le calcul est actif
 
     // Le solveur par defaut est le solveur standard de TYMPAN
     _solverId = OGenID("{A98B320C-44C4-47a9-B689-1DD352DAA8B2}");
-
-
-#if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault"))
-    {
-        _useAtmosphere = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault", _useAtmosphere);
-    }
-#endif
-    setUseAtmosphere(_useAtmosphere);
 
     _pParent = pParent;
 }
@@ -1282,11 +1267,6 @@ void TYCalcul::getCalculElements(LPTYSiteNode pSite)
             pResTrans->setInCurrentCalcul(true);
         }
     }
-}
-
-void TYCalcul::setUseAtmosphere(const bool use /*=true*/)
-{
-    _useAtmosphere = use;
 }
 
 void TYCalcul::setState(int state)

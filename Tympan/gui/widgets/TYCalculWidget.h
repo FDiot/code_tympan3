@@ -128,9 +128,6 @@ protected:
     // Affichage du type de calcul
     QComboBox* _comboSolver;
 
-    QCheckBox* _checkBoxUseAtmosphere;
-    QLabel* _labelUseAtmosphere;
-
     // Utilisation des ecrans
     QLabel* _labelParcoursLateraux;
     QCheckBox* _checkBoxParcoursLateraux;

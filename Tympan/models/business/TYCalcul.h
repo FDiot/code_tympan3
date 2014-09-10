@@ -193,18 +193,6 @@ public:
     void setIsUpTodate(bool upTodate) { _upTodate = upTodate; }
 
     /**
-     * \fn bool getUseAtmosphere()
-     *\brief Get du test de la prise ou non en compte de l'atmosphere.
-     *\return _useAtmosphere
-     */
-    bool getUseAtmosphere() const { return _useAtmosphere; }
-    /**
-     * \fn void setUseAtmosphere(const bool use = true)
-     *\brief Set du test de la prise ou non en compte de l'atmosphere.
-     */
-    void setUseAtmosphere(const bool use = true);
-
-    /**
      *\fn TYListID getElementSelection()
      *\brief Get de la selection d'elements actifs dans ce Calcul.
      *\return _elementSelection
@@ -516,9 +504,6 @@ protected:
     bool _upTodate;
     /// Etat du calcul actif/bloque
     int _state;
-
-    ///Prise ou non en compte de l'atmosphere.
-    bool _useAtmosphere;
 
     /// Site sur lequel va s'effectuer le calcul
     LPTYSiteNode _pSiteCalcul;
