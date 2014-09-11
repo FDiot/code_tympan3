@@ -483,13 +483,13 @@ void TYSiteNode::loadTopoFile()
     setIsGeometryModified(true);
 }
 
-/*virtual*/ bool TYSiteNode::updateAltimetrie(const bool& force) // force = false
+/*virtual*/ bool TYSiteNode::updateAltimetrie()
 {
     ostringstream msg;
     OMessageManager& logger =  *OMessageManager::get();
     try
     {
-        do_updateAltimetrie(force);
+        do_updateAltimetrie();
         return true;
     }
     catch (const tympan::exception& exc)
@@ -501,7 +501,7 @@ void TYSiteNode::loadTopoFile()
     }
 }
 
-/*virtual*/ void TYSiteNode::do_updateAltimetrie(const bool& force) // force = false
+/*virtual*/ void TYSiteNode::do_updateAltimetrie()
 {
     OMessageManager& logger = *OMessageManager::get();
 
@@ -636,7 +636,7 @@ void TYSiteNode::uuid2tysol(const std::deque<std::string>& material_ids, std::de
 
 // TODO : Split the huge method based on the type of infrastructure
 // See https://extranet.logilab.fr/ticket/1508248
-void TYSiteNode::updateAltiInfra(const bool& force) // force = false
+void TYSiteNode::updateAltiInfra()
 {
     TYNameManager::get()->enable(false);
 
@@ -1476,7 +1476,7 @@ bool TYSiteNode::update(TYElement* pElem)
 void TYSiteNode::update(const bool& force) // Force = false
 {
     // Altimetrisation des infrastructures du site
-    updateAltiInfra(force);
+    updateAltiInfra();
 
     // Mise a jour de l'acoustique des elements du site
     updateAcoustique(force);

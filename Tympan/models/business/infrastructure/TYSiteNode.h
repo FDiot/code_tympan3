@@ -348,7 +348,7 @@ class TYSiteNode: public TYElement
      *
      * \return weather the update succeeded
      */
-    virtual bool updateAltimetrie(const bool& force = false);
+    virtual bool updateAltimetrie();
 
     void uuid2tysol(const std::deque<std::string>& material_ids, std::deque<LPTYSol>& materials);
 
@@ -359,7 +359,7 @@ protected:
      * TYTopographie, mais elle peut etre surchargee pour des besoins specifiques
      * lors du calcul de l'altimetrie.
      */
-    virtual void do_updateAltimetrie(const bool& force = false);
+    virtual void do_updateAltimetrie();
 
 public:
     /*
@@ -373,7 +373,7 @@ public:
      * Mise a jour de l'altitude pour les elements de l'infrastructure.
      * Le parametre force contraint l'altimetrisation des objets
      */
-    virtual void updateAltiInfra(const bool& force = false);
+    virtual void updateAltiInfra();
 
     /**
      * Mise a jour de l'acoustique des elements presents dans le site
