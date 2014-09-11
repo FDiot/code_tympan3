@@ -71,6 +71,7 @@ public:
 
     //float MinSRDistance;
 
+    int NbThreads;
     //bool UseRealGround;
     //bool UseVegetation;
     //bool UseScreen;

@@ -694,9 +694,6 @@ public:
 
     unsigned short getTypeSaisieMeteo() const { return _typeSaisieMeteo; }
 
-    unsigned int getNbTHread() const { return _nbThread; }
-    void setNbThread(unsigned int nbThread) { _nbThread = nbThread; }
-
     void goPostprocessing();
     std::unique_ptr<tympan::AcousticResultModel>  _acousticResult;
     std::unique_ptr<tympan::AcousticProblemModel> _acousticProblem;
@@ -789,9 +786,6 @@ protected:
 
     ///Resultat.
     LPTYResultat _pResultat;
-
-    /// Nombre de process de calcul simultane
-    unsigned int _nbThread;
 };
 
 #include "TYProjet.h"

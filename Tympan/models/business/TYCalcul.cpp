@@ -89,8 +89,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
 
     _typeSaisieMeteo = 0;
 
-    _nbThread = 4;
-
 #if TY_USE_IHM
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo"))
     {
@@ -216,14 +214,6 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     }
 
 
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
-    {
-        _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
-    }
-    else
-    {
-        TYPreferenceManager::setUInt(TYDIRPREFERENCEMANAGER, "NbThread", static_cast<unsigned long>(_nbThread));
-    }
 #endif
     setUseAtmosphere(_useAtmosphere);
 
@@ -1393,16 +1383,6 @@ void TYCalcul::goPostprocessing()
     TYNameManager::get()->enable(true);
 
     setIsAcousticModified(true); // Les données acoustiques ont été actualisées
-
-    // Restaure default number of thread (sorry this is not clean)
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
-    {
-        _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
-    }
-    else
-    {
-        TYPreferenceManager::setUInt(TYDIRPREFERENCEMANAGER, "NbThread", static_cast<unsigned long>(_nbThread));
-    }
 }
 
 void TYCalcul::getCalculElements(LPTYSiteNode pSite)
