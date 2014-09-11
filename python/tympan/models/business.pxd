@@ -161,7 +161,6 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         SmartPtr[TYAtmosphere] getAtmosphere()
         void selectActivePoint(SmartPtr[TYSiteNode] pSite)
         const vector[SmartPtr[TYGeometryNode]] getMaillages() const
-        void setNbThread(unsigned int nbThread)
         void goPostprocessing()
         const OGenID getSolverId()
 

@@ -660,13 +660,6 @@ cdef class Computation:
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().go(solver.thisptr)
 
-    def set_nthread(self, nthread):
-        """ Set the number of threads used by the default solver to compute the
-            acoustic problem
-        """
-        assert self.thisptr.getRealPointer() != NULL
-        self.thisptr.getRealPointer().setNbThread(nthread)
-
     @property
     def acoustic_problem(self):
         """ Return an acoustic problem model (geometric representation as

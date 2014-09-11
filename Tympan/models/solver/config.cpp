@@ -66,6 +66,8 @@ SolverConfiguration::SolverConfiguration()
 
     AnalyticTypeTransfo=1;
 
+    NbThreads=4;
+
     UseMeteo=0;
     OverSampleD=0;
     UseFresnelArea=0;

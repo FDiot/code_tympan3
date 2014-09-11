@@ -991,15 +991,6 @@ void TYPreferenceDialog::loadPreferences()
         ((GeneralTab*)tabWidget->widget(4))->_pHistoSizeEdit->setText(QString().setNum(10));
     }
 
-    if (TYPreferenceManager::exists("NbThread"))
-    {
-        ((GeneralTab*)tabWidget->widget(4))->_pThreadEdit->setText(QString().setNum(TYPreferenceManager::getInt("NbThread")));
-    }
-    else
-    {
-        ((GeneralTab*)tabWidget->widget(4))->_pThreadEdit->setText(QString().setNum(4));
-    }
-
     if (TYPreferenceManager::exists("BiblioPath"))
     {
         ((GeneralTab*)tabWidget->widget(4))->_pLibraryPathEdit->setText(TYPreferenceManager::getString("BiblioPath"));
@@ -1549,11 +1540,6 @@ void TYPreferenceDialog::savePreferences()
     }
 
     getTYApp()->getActionManager()->setHistorySize(((GeneralTab*)tabWidget->widget(4))->_pHistoSizeEdit->text().toInt());
-
-    if (qValidator.validate(aQString = ((GeneralTab*)tabWidget->widget(4))->_pThreadEdit->text(), res) == QValidator::Acceptable)
-    {
-        TYPreferenceManager::setInt("NbThread", ((GeneralTab*)tabWidget->widget(4))->_pThreadEdit->text().toInt());
-    }
 
     //repertoire de la bibliotheque
     QDir libraryPath(((GeneralTab*)tabWidget->widget(4))->_pLibraryPathEdit->text());
