@@ -60,8 +60,37 @@ void TYFaceSelector::selectFaces(std::deque<TYSIntersection>& tabIntersect, cons
 
         if (bVertical || bHorizontal) { tabIntersect.push_back(intersection); }
     }
+
+    reorder_intersect(tabIntersect); // Put infrastructure elements on top
 }
 
+void TYFaceSelector::reorder_intersect(std::deque<TYSIntersection>& tabIntersect)
+{
+    std::deque<unsigned int> indices;
+    std::deque<TYSIntersection> temp;
+
+    // 1 st pass : put infrastructure on top
+    for (size_t i=0; i<tabIntersect.size(); i++)
+    {
+        if (tabIntersect[i].isInfra) 
+        { 
+            temp.push_back(tabIntersect[i]); 
+        }
+        else
+        {
+            indices.push_back(i);
+        }
+    }
+
+    // 2nd pass : put remainings after
+    for (size_t i=0; i<indices.size(); i++)
+    {
+        temp.push_back(tabIntersect[indices[i]]);
+    }
+
+    // last : replace tabIntersect
+    tabIntersect = temp;
+}
 
 bool TYFaceSelector::buildPlans(TYSPlan* plan, const OSegment3D& rayon)
 {
@@ -125,20 +154,22 @@ bool TYFaceSelector::CalculSegmentCoupe( const TYStructSurfIntersect& FaceCouran
                                          const int& indice) const
 {
     bool bRes = false;
+    Intersect.isInfra = false;
+    Intersect.isEcran = false;
+    Intersect.noIntersect = false;
+    Intersect.bIntersect[indice] = false;
+
     OSegment3D segInter;
     OPlan planRayon(pt1, pt2, pt3);
     if ( planRayon.intersectsSurface(FaceCourante.tabPoint, segInter) )
     {
         Intersect.bIntersect[indice] = true;
         Intersect.segInter[indice] = segInter;
-        Intersect.isEcran = FaceCourante.isEcran;
-        Intersect.isInfra = FaceCourante.isInfra;
+        Intersect.isInfra = FaceCourante.is_infra();
+        Intersect.isEcran = Intersect.isInfra;
         Intersect.material = FaceCourante.material;
         bRes = true;
     }
-    else
-    {
-        Intersect.bIntersect[indice] = false;
-    }
+
     return  bRes;
 }
