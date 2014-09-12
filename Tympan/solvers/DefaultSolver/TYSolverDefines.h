@@ -34,8 +34,14 @@ struct TYStructSurfIntersect
     TabPoint3D tabPoint; // Tableau de point utilise pour la preselection
     OVector3D normal; // Normal to the face
     bool isEcran;   // Est un ecran
-    bool isInfra; // Face d'infrastructure
     tympan::AcousticMaterialBase* material; 
+
+    bool is_infra() const 
+    { 
+        tympan::AcousticBuildingMaterial* pMat = dynamic_cast<tympan::AcousticBuildingMaterial*>(material);
+
+        return (pMat == nullptr) ? false : true; 
+    }
 };
 
 // Structure de donnees simple pour la gestion des intersections
