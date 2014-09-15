@@ -27,8 +27,8 @@
 
 #include "Tympan/core/defines.h"
 #include "Tympan/core/chrono.h"
+#include "Tympan/core/logging.h"
 #include "Tympan/core/exceptions.h"
-#include "Tympan/gui/app/TYMessageManager.h"
 #include "subprocess_util.h"
 
 #if defined _DEBUG
@@ -149,7 +149,6 @@ bool python(QStringList args, std::string& error_msg)
     QProcess python;
     float comp_duration (0.);
     bool comp_finished (false);
-
     // Set PYTHONPATH to python subprocess
     QStringList env(_python_qprocess_environment());
     python.setEnvironment(env);

@@ -13,21 +13,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYUserSourcePonctuelleWidget.h"
-#endif
-
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/common/3d.h"
-
-#include "Tympan/core/logging.h"
-
-
-
+#if TY_USE_IHM
+  #include "Tympan/gui/widgets/TYUserSourcePonctuelleWidget.h"
+#endif
 #include "TYUserSourcePonctuelle.h"
 
 TY_EXTENSION_INST(TYUserSourcePonctuelle);
