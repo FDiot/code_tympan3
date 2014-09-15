@@ -56,8 +56,8 @@ TYSolver::~TYSolver()
     _pool = NULL;}
 
 
-bool TYSolver::solve(TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem,
-        tympan::AcousticResultModel& aresult)
+bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
+                     tympan::AcousticResultModel& aresult)
 {
     // Creation de la collection de thread
     _pool = new OThreadPool(tympan::SolverConfiguration::get()->NbThreads);
@@ -85,10 +85,10 @@ bool TYSolver::solve(TYCalcul& calcul, const tympan::AcousticProblemModel& aprob
     }
 
     // Initialisation du path finder
-    _acousticPathFinder->init(calcul);
+    _acousticPathFinder->init();
 
     // Initialisation du acoustic model
-    _acousticModel->init(calcul);
+    _acousticModel->init();
 
     // On reset la thread pool
     _pool->begin(count);

@@ -35,7 +35,7 @@ public:
                          TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
                          TabPoint3D& ptsRight );
 
-    void init(const TYCalcul& calcul);
+    void init();
 
     /**
      * Calcule le chemin sur un segment a partir de la liste des points du parcours

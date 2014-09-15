@@ -60,9 +60,8 @@ void TYANIME3DSolver::init()
     _tabRay.clear();
 }
 
-bool TYANIME3DSolver::solve(TYCalcul& calcul,
-        const tympan::AcousticProblemModel& aproblem,
-        tympan::AcousticResultModel& aresult)
+bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
+                            tympan::AcousticResultModel& aresult)
 {
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     // Rcupration (once for all) des sources et des rcepteurs

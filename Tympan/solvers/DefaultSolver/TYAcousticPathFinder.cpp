@@ -30,7 +30,7 @@ TYAcousticPathFinder::~TYAcousticPathFinder()
 {
 }
 
-void TYAcousticPathFinder::init(TYCalcul& calcul)
+void TYAcousticPathFinder::init()
 {
     _bCalcTrajetHorizontaux = tympan::SolverConfiguration::get()->UseLateralDiffraction;
 }
