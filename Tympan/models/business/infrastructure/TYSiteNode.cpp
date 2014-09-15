@@ -1495,11 +1495,9 @@ void TYSiteNode::update(const bool& force) // Force = false
     }
 
     // Si le site est dans un projet, on altimétrise les points de controle
-    if (_pProjet)
+    if (_pProjet && getRoot())
     {
-        TYCalcul* pCalcul = _pProjet->getCurrentCalcul()._pObj;
-        assert(pCalcul);
-        pCalcul->updateAltiRecepteurs();
+        _pProjet->updateAltiRecepteurs();
     }
 }
 

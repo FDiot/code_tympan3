@@ -13,6 +13,7 @@ if __name__ == '__main__':
     if len(sys.argv) != 3:
         err = "process_site_altimetry.py called with bad arguments."
         logging.error("%s Couldn't process altimetry.", err)
+        sys.stderr.write('Error: ' + err)
         sys.exit(-1) # XXX to be improved
     # read command-line argument
     input_proj = sys.argv[1]
@@ -21,4 +22,5 @@ if __name__ == '__main__':
     try:
         tyalti.process_site_altimetry(input_project=input_proj, result_file=result_file)
     except Exception as exc:
+        sys.stderr.write('Error: ' + exc.message)
         logging.exception("process_altimetry.py couldn't process the altimetry:\n%s", exc)
