@@ -33,6 +33,7 @@ Main developers' tasks
    building
    testing
    debugging
+   deploying
 
 Computations and algorithms
 ---------------------------
