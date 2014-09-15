@@ -28,9 +28,9 @@ if tympan_debug is not None:
 try:
     import tympan.solve_project as tysolve
 except ImportError:
-    err = "bin/solve_tympan_project.py script couldn't find tympan.solve_project module."
+    err = "bin/solve_tympan_project.py couldn't find tympan.solve_project module."
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
-    raise ImportError(err)
+    sys.stderr.write('Error: ' + err + '. Check PYTHONPATH and path to Tympan libraries.')
 
 
 if __name__ == '__main__':
@@ -52,8 +52,9 @@ if __name__ == '__main__':
                       solverdir=solverdir,
                       multithreading_on=multithreading_on,
                       interactive=interactive)
-    except:
-        logging.exception("tympan.solve_project.py module couldn't solve the acoustic problem.")
+    except Exception as exc:
+        sys.stderr.write('Error: ' + exc.message)
+        logging.exception("tympan.solve_project.py couldn't solve the acoustic problem:\n%s", exc)
         stream.close()
         sys.exit(-1)
     stream.close()

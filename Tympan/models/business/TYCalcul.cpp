@@ -1186,7 +1186,11 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
 bool TYCalcul::updateAltiRecepteurs()
 {
     TYAltimetrie* pAlti = getProjet()->getSite()->getAltimetry();
-    return updateAltiRecepteurs(pAlti);
+    if ( pAlti->containsData() )
+    {
+        return updateAltiRecepteurs(pAlti);
+    }
+    return false;
 }
 
 bool TYCalcul::updateAltiRecepteurs(const TYAltimetrie* pAlti)
