@@ -54,7 +54,6 @@ public:
     bool EnableFullTargets;
     float TargetsDensity;
 
-
     //int CurveRaySampler;
     float InitialAngleTheta;
     //float FinalAngleTheta;
@@ -104,6 +103,7 @@ private:
 };
 
 } // namespace tympan
+
 
 
 #endif // TY_MS_CONFIG
