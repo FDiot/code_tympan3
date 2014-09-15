@@ -23,13 +23,13 @@ LPSolverConfiguration SolverConfiguration::_pInstance = 0;
 
 SolverConfiguration::SolverConfiguration()
 {
-    AtmosPressure=101300.;
-    AtmosTemperature=20.;
-    AtmosHygrometry=60.;
-    AnalyticC0=340.;
-    AnalyticGradC=0.;
-    AnalyticGradV=0.;
-    WindDirection=0.;
+    AtmosPressure = 101300.;
+    AtmosTemperature = 20.;
+    AtmosHygrometry = 60.;
+    AnalyticC0 = 340.;
+    AnalyticGradC = 0.;
+    AnalyticGradV = 0.;
+    WindDirection = 0.;
 
     RayTracingOrder=0;
     Discretization=2;
@@ -44,47 +44,47 @@ SolverConfiguration::SolverConfiguration()
     UseSol=0;
     MaxReflexion=0;
     MaxDiffraction=2;
-    DiffractionUseRandomSampler=0;
-    NbRayWithDiffraction=0;
-    DiffractionDropDownNbRays=1;
-    DiffractionFilterRayAtCreation=0;
-    UsePathDifValidation=0;
-    MaxPathDifference=25.;
-    DiffractionUseDistanceAsFilter=1;
-    KeepDebugRay=0;
-    UsePostFilters=1;
+    DiffractionUseRandomSampler = false;
+    NbRayWithDiffraction = 0;
+    DiffractionDropDownNbRays = true;
+    DiffractionFilterRayAtCreation = false;
+    UsePathDifValidation = true;
+    MaxPathDifference = 25.;
+    DiffractionUseDistanceAsFilter = true;
+    KeepDebugRay = false;
+    UsePostFilters = true;
 
-    EnableFullTargets=0;
-    TargetsDensity=0.1f;
+    EnableFullTargets = false;
+    TargetsDensity = 0.1f;
 
-    InitialAngleTheta=0.;
-    InitialAnglePhi=0.;
-    AnalyticNbRay=20;
-    AnalyticTMax=10.;
-    AnalyticH=0.1;
-    AnalyticDMax=3000;
+    InitialAngleTheta = 0.;
+    InitialAnglePhi = 0.;
+    AnalyticNbRay = 20;
+    AnalyticTMax = 10.;
+    AnalyticH = 0.1;
+    AnalyticDMax = 3000;
 
-    AnalyticTypeTransfo=1;
+    AnalyticTypeTransfo = 1;
 
-    NbThreads=4;
-    UseRealGround=1;
-    UseLateralDiffraction=1;
-    UseReflection=1;
-    PropaConditions=0;
-    H1parameter=10.;
-    ModSummation=0;
+    NbThreads = 4;
+    UseRealGround = true;
+    UseLateralDiffraction = true;
+    UseReflection = true;
+    PropaConditions = false;
+    H1parameter = 10.;
+    ModSummation = false;
 
-    UseMeteo=0;
-    OverSampleD=0;
-    UseFresnelArea=0;
-    Anime3DSigma=0.;
-    Anime3DForceC=1;
+    UseMeteo = false;
+    OverSampleD = 0;
+    UseFresnelArea = false;
+    Anime3DSigma = 0.;
+    Anime3DForceC = 1;
 
-    DebugUseCloseEventSelector=1;
-    DebugUseDiffractionAngleSelector=1;
-    DebugUseDiffractionPathSelector=1;
-    DebugUseFermatSelector=1;
-    DebugUseFaceSelector=1;
+    DebugUseCloseEventSelector = true;
+    DebugUseDiffractionAngleSelector = true;
+    DebugUseDiffractionPathSelector = true;
+    DebugUseFermatSelector = true;
+    DebugUseFaceSelector = true;
 
 }
 
