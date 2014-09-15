@@ -1129,8 +1129,7 @@ bool TYCalcul::go(SolverInterface* pSolver)
     if ( isCalculPossible(_acousticProblem->nsources(), _acousticProblem->nreceptors(), pProjet->getSite()))
     {
         OMessageManager::get()->info("Calcul en cours...");
-        // XXX remove pCalcul (once parameters will have been removed from this class)
-        ret = pSolver->solve(*this, *_acousticProblem, *_acousticResult);
+        ret = pSolver->solve(*_acousticProblem, *_acousticResult);
         pSolver->purge();
         OMessageManager::get()->info("Calcul en termine.");
     }

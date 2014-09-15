@@ -16,9 +16,6 @@
 #ifndef TY_INTERFACES
 #define TY_INTERFACES
 
-class TYCalcul; // XXX
-class TYSiteNode; // XXX
-
 namespace tympan {
     class AcousticProblemModel;
     class AcousticResultModel;
@@ -30,7 +27,7 @@ public:
     SolverInterface() { }
     virtual ~SolverInterface() { }
 
-    virtual bool solve(TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem,
+    virtual bool solve(const tympan::AcousticProblemModel& aproblem,
                        tympan::AcousticResultModel& aresult) = 0;
 
     virtual void purge() { }

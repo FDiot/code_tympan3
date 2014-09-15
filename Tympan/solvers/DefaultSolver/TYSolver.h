@@ -37,9 +37,8 @@ public:
     TYSolver();
     virtual ~TYSolver();
 
-    virtual bool solve(TYCalcul& calcul,
-            const tympan::AcousticProblemModel& aproblem,
-            tympan::AcousticResultModel& aresult);
+    virtual bool solve(const tympan::AcousticProblemModel& aproblem,
+                       tympan::AcousticResultModel& aresult);
 
     const std::vector<TYStructSurfIntersect>& getTabPolygon() const { return _tabPolygon; }
 

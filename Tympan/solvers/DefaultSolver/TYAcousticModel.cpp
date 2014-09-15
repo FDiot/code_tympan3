@@ -45,7 +45,7 @@ TYAcousticModel::~TYAcousticModel()
 
 }
 
-void TYAcousticModel::init(const TYCalcul& calcul)
+void TYAcousticModel::init()
 {
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     // Calcul avec sol reel
