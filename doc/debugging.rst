@@ -118,5 +118,9 @@ The following options are taken into account:
   one thread.
 
 
+Known bugs
+~~~~~~~~~~
 
-
+* If ``Pythonx,y - mingw`` is in the path under Windows, it corrupts the environment
+  and *Code_TYMPAN*'s behaviour isn't guaranteed (more particularly, the
+  Python scripts may crash).
