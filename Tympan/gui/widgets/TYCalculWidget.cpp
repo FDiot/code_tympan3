@@ -106,12 +106,15 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _tabWidget = new QTabWidget(this);
 
     // DEFINITION DE L'ONGLET CALCUL
-
     _groupBoxFlag = new QGroupBox(_tabWidget);
     _groupBoxFlag->setTitle(TR(""));
     QGridLayout* groupBoxFlagLayout = new QGridLayout();
     _groupBoxFlag->setLayout(groupBoxFlagLayout);
 
+    // Will contain solver parameters as a single text bloc
+    _solverParams = new QTextEdit(QString("Solver parameters"), _groupBoxFlag);
+    _solverParams->setReadOnly(true);
+    groupBoxFlagLayout->addWidget(_solverParams, 0, 0, 5, 1);
 
     QButtonGroup* buttonGroupSolRefReel = new QButtonGroup();
     _pRadioButtonSolReel = new QRadioButton(TR("id_usesol_reel_label"));
@@ -127,11 +130,11 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     groupBoxSolRefReel->setTitle(TR(""));
     groupBoxSolRefReel->setLayout(groupBoxSolRefReelLayout);
 
-    groupBoxFlagLayout->addWidget(groupBoxSolRefReel, 1, 0, 1, 2);
+    groupBoxFlagLayout->addWidget(groupBoxSolRefReel, 0, 1, 1, 2);
 
     // Choix du type de calcul avec sol
-    groupBoxFlagLayout->addWidget(_checkBoxParcoursLateraux, 3, 3);
     _checkBoxParcoursLateraux = new QCheckBox(TR("id_parcours_lateraux"), _groupBoxFlag);
+    groupBoxFlagLayout->addWidget(_checkBoxParcoursLateraux, 1, 1);
 
     _tabWidget->insertTab(1, _groupBoxFlag, TR("id_opt_calc"));
 
@@ -256,7 +259,7 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 TYCalculWidget::~TYCalculWidget()
 {
     delete _etatsWidget;
-    _etatsWidget = NULL;
+    delete _solverParams;
 }
 
 void TYCalculWidget::updateContent()

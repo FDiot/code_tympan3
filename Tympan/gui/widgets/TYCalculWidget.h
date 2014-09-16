@@ -158,6 +158,9 @@ protected:
 
     /// Onglet des points de controle
     QTableWidget* _tableauMaillages;
+
+    // Solver parameters
+    QTextEdit* _solverParams;
 };
 
 
