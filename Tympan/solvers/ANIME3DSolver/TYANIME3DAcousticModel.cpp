@@ -15,7 +15,6 @@
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/acoustic_path.h"
-#include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/solver/config.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DSolver.h"
@@ -68,7 +67,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
     int idFace = 0, rayNbr = 0, reflIndice = 0, nbFacesFresnel = 0;
 
     acoustic_path* ray = NULL;
-    TYSol* pSol = NULL;
+//    TYSol* pSol = NULL;
 
     OPoint3D Prefl, Pprec, Psuiv;    //pt de reflexion, pt precedent et suivant
 
@@ -97,7 +96,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
         sum1 = zero;
         pond = zero;
 
-        pSol = NULL;
+//        pSol = NULL;
 
         for (int j = 0; j < tabRefl.size(); j++)
         {

@@ -16,7 +16,8 @@
 #include <deque>
 #include <list>
 #include "Tympan/core/defines.h"
-#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/solver/config.h"
+#include "Tympan/models/common/plan.h"
 #include "Tympan/solvers/DefaultSolver/TYTrajet.h"
 #include "Tympan/models/business/infrastructure/TYTopographie.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"

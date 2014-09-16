@@ -23,11 +23,12 @@
 #ifndef __TY_ETAPE__
 #define __TY_ETAPE__
 
-
-#include "Tympan/models/business/topography/TYTerrain.h"
+#include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/spectre.h"
 
 #include <vector>
 #include <deque>
+
 
 /**
  * \file TYEtape.h

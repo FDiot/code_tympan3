@@ -20,8 +20,6 @@
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/delaunay_maker.h"
-#include "Tympan/models/business/TYCalcul.h"
-#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/models/solver/config.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
