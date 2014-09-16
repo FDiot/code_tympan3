@@ -273,9 +273,9 @@ int TYCalcul::fromXML(DOM_Element domElement)
 
     purge();
 
-    bool getOk[21];
+    bool getOk[7];
     unsigned int i;
-    for (i = 0; i < 21; i++) { getOk[i] = false; }
+    for (i = 0; i < 7; i++) { getOk[i] = false; }
     int retVal = -1;
     LPTYMaillageGeoNode pMaillageGeoNode = new TYMaillageGeoNode(NULL, this);
 
@@ -302,8 +302,8 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementStringValue(elemCur, "dateCreation", _dateCreation, getOk[2]);
         TYXMLTools::getElementStringValue(elemCur, "dateModif", _dateModif, getOk[3]);
         TYXMLTools::getElementStringValue(elemCur, "comment", _comment, getOk[4]);
-        TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[20]);
-        TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[19]);
+        TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[5]);
+        TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[6]);
 
         // Selection
         if (elemCur.nodeName() == "ListID")
@@ -441,7 +441,7 @@ int TYCalcul::fromXML(DOM_Element domElement)
         _pResultat->callFromXMLIfEqual(elemCur, &readOk);
     }
 
-    if (getOk[20]) { _solverId.FromString(strSolverId); } // Recuperation de l'Id du solveur
+    if (getOk[5]) { _solverId.FromString(strSolverId); } // Recuperation de l'Id du solveur
 
     // On supprime les IDs de la selection des elements non presents dans le site
     TYListID::iterator next = tempElementSelection.begin();
