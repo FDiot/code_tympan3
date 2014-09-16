@@ -30,8 +30,6 @@
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DFaceSelector.h"
 #include "TYANIME3DSolver.h"
 
-typedef std::vector<TYTrajet> TabTrajet;
-
 TYANIME3DSolver::TYANIME3DSolver()
 {
     _tabPolygon = NULL;
