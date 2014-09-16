@@ -315,6 +315,17 @@ void TYCalculWidget::updateContent()
     _editDateModif->setDate(date.currentDate());
     _editDateCreation->setDate(date.fromString(getElement()->getDateCreation(), Qt::ISODate));
 
+    // Display solver parameters
+    QString parameters = getElement()->getSolverParams();
+    if (!parameters.isEmpty())
+    {
+        _solverParams->setText(parameters);
+    }
+    else
+    {
+        _solverParams->setText("Pas de parametres solveur connus pour ce calcul.");
+    }
+
 
     // Remplissage du tableau des points de controle
     _tableauPointControle->setEnabled(true);
