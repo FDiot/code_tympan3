@@ -18,13 +18,13 @@
 #define __TY_ANIME3DSOLVER__
 
 #include <memory>
+#include <QList>
+
 #include "Tympan/core/interfaces.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/triangle.h"
 #include "Tympan/models/common/acoustic_path.h"
 #include "Tympan/models/solver/entities.hpp"
-#include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
-#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
-#include "Tympan/models/business/TYPointCalcul.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
 
 class TYANIME3DAcousticModel;
