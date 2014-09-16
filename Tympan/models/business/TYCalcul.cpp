@@ -200,6 +200,7 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "comment", _comment);
     TYXMLTools::addElementStringValue(domNewElem, "solverId", _solverId.toString());
     TYXMLTools::addElementIntValue(domNewElem, "etat", _state);  // 16/08/2005 Possibilite de bloquer un calcul
+    TYXMLTools::addElementStringValue(domNewElem, "solverParams", _solverParams);
 
     // Ajout du site node sur lequel s'effectue le calcul
     DOM_Document domDoc = domElement.ownerDocument();
@@ -273,9 +274,9 @@ int TYCalcul::fromXML(DOM_Element domElement)
 
     purge();
 
-    bool getOk[7];
+    bool getOk[8];
     unsigned int i;
-    for (i = 0; i < 7; i++) { getOk[i] = false; }
+    for (i = 0; i < 8; i++) { getOk[i] = false; }
     int retVal = -1;
     LPTYMaillageGeoNode pMaillageGeoNode = new TYMaillageGeoNode(NULL, this);
 
@@ -304,6 +305,7 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementStringValue(elemCur, "comment", _comment, getOk[4]);
         TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[5]);
         TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[6]);
+        TYXMLTools::getElementStringValue(elemCur, "solverParams", _solverParams, getOk[7]);
 
         // Selection
         if (elemCur.nodeName() == "ListID")
