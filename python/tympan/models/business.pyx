@@ -627,6 +627,18 @@ cdef class Computation:
         self.thisptr = SmartPtr[TYCalcul]()
 
     @property
+    def solver_parameters(self):
+        return self.thisptr.getRealPointer().getSolverParams().toStdString()
+
+#    @solver_parameters.setter
+#    def solver_parameters(self, params):
+    # XXX couldn't make it work:
+    # "computation.solver_parameters = 'whatever'" triggers a TypeError
+    # ("'property' object is not callable")
+    def set_solver_parameters(self, params):
+        self.thisptr.getRealPointer().setSolverParams(QString(params))
+
+    @property
     def meshes(self):
         """ Return the meshes of the computation (a list containing Mesh cython
             objects)
