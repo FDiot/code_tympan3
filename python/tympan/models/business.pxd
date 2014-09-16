@@ -157,6 +157,8 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         const vector[SmartPtr[TYGeometryNode]] getMaillages() const
         void goPostprocessing()
         const OGenID getSolverId()
+        QString getSolverParams()
+        void setSolverParams(QString params)
 
 cdef extern from "Tympan/models/business/TYProjet.h":
     cdef cppclass TYProjet (TYElement):
