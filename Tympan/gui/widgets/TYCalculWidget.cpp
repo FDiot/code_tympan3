@@ -130,13 +130,8 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     groupBoxFlagLayout->addWidget(groupBoxSolRefReel, 1, 0, 1, 2);
 
     // Choix du type de calcul avec sol
-    _labelParcoursLateraux = new QLabel(_groupBoxFlag);
-    _labelParcoursLateraux->setText(TR("id_parcours_lateraux"));
-    groupBoxFlagLayout->addWidget(_labelParcoursLateraux, 3, 2);
-
-    _checkBoxParcoursLateraux = new QCheckBox(_groupBoxFlag);
-    _checkBoxParcoursLateraux->setText(TR(""));
     groupBoxFlagLayout->addWidget(_checkBoxParcoursLateraux, 3, 3);
+    _checkBoxParcoursLateraux = new QCheckBox(TR("id_parcours_lateraux"), _groupBoxFlag);
 
     _tabWidget->insertTab(1, _groupBoxFlag, TR("id_opt_calc"));
 

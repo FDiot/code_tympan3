@@ -124,7 +124,6 @@ protected:
     QComboBox* _comboSolver;
 
     // Utilisation des ecrans
-    QLabel* _labelParcoursLateraux;
     QCheckBox* _checkBoxParcoursLateraux;
 
     QGroupBox* _groupBox;
