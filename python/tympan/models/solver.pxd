@@ -6,7 +6,8 @@ from libcpp.string cimport string
 from libcpp.vector cimport vector
 
 from tympan.core cimport shared_ptr, SmartPtr
-from tympan.models.common cimport OPoint3D, OSpectre, OSpectreComplex, OVector3D
+from tympan.models.common cimport (OPoint3D, OSpectre, OSpectreComplex, OVector3D,
+                                   SpectrumMatrix)
 
 
 cdef class ProblemModel:
@@ -35,17 +36,6 @@ cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "ty
         size_t make_receptor(const OPoint3D& point_)
 
 cdef extern from "Tympan/models/solver/acoustic_result_model.hpp" namespace "tympan":
-    cdef cppclass SpectrumMatrix:
-        SpectrumMatrix()
-        SpectrumMatrix(const SpectrumMatrix& matrix)
-        const vector[OSpectre]& by_receptor(size_t receptor_idx) const
-        OSpectre& element "operator()"(size_t receptor_idx, size_t sources_idx)
-        void setSpectre(size_t receptor_idx, size_t sources_idx, OSpectre spectrum)
-        void resize(size_t nb_receptors, size_t nb_sources)
-        size_t nb_sources() const
-        size_t nb_receptors() const
-        void clearReceptor(size_t receptor_idx)
-
     cdef cppclass AcousticResultModel:
         SpectrumMatrix& get_data()
 

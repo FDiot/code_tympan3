@@ -13,6 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "Tympan/models/common/spectrum_matrix.h"
 #include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/DefaultSolver/threading.h"
 #include "Tympan/solvers/DefaultSolver/TYTrajet.h"
