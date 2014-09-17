@@ -71,7 +71,7 @@ namespace ANIME3DSetup
 		globalUseSol = 0;						// [ACOUSTICRAYTRACER] Allow ground reflections
 		globalMaxReflexion = 0;					// [ACOUSTICRAYTRACER] Maximum reflections events for a ray
 		globalMaxDiffraction = 2;				// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
-		globalDiffractionUseRandomSampler = 0;	// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution 
+		globalDiffractionUseRandomSampler = 0;	// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution
 		globalNbRayWithDiffraction = 0;			// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
 		globalDiffractionDropDownNbRays = 1;	// [ACOUSTICRAYTRACER] Drop down number of rays thrown after a diffraction
 		globalDiffractionFilterRayAtCreation = 0;	// [ACOUSTICRAYTRACER] Do not create rays outside the correct angle
@@ -139,7 +139,7 @@ namespace ANIME3DSetup
 		globalOverSampleD = 0;					// [ANIME3D] Rays oversampling rate (if meteo -see above-)
 		globalUseFresnelArea = 0;				// [ANIME3D] Use Fresnel area
 		globalAnime3DSigma = 0.;				// [ANIME3D] Value of relative uncertainty
-		globalAnime3DForceC = 1.;				// [ANIME3D] Force "C" parameter
+		globalAnime3DForceC = 1;				// [ANIME3D] Force "C" parameter
 
 	////////////////////////////////
 	// Mode DEBUG
@@ -233,7 +233,7 @@ namespace ANIME3DSetup
 		// [ACOUSTICRAYTRACER] Maximum diffraction events for a ray
 		if (params.getline(ligne, 132)) { globalMaxDiffraction = static_cast<int>( getParam(ligne) ); }
 
-		// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution 
+		// [ACOUSTICRAYTRACER] Use random sampler instead of regular distribution
 		if (params.getline(ligne, 132)) { globalDiffractionUseRandomSampler = static_cast<bool>( getParam(ligne) ); }
 
 		// [ACOUSTICRAYTRACER] Number of ray thrown after diffraction (<0 = depends of sources, 0 = distance filter, >0 = forced)
@@ -258,8 +258,8 @@ namespace ANIME3DSetup
 		if (params.getline(ligne, 132)) { globalKeepDebugRay = static_cast<bool>( getParam(ligne) ); }
 
 		// [ACOUSTICRAYTRACER] Use of post-filters
-		if (params.getline(ligne, 132)) { globalUsePostFilters = static_cast<bool>( getParam(ligne) ); }	
-		
+		if (params.getline(ligne, 132)) { globalUsePostFilters = static_cast<bool>( getParam(ligne) ); }
+
 	////////////////////////////
 	// Targeting parameters
 	////////////////////////////
@@ -376,26 +376,26 @@ namespace ANIME3DSetup
 		if (params.getline(ligne, 132)) { globalAnime3DSigma = static_cast<float>( getParam(ligne) ); }
 
 		// [ANIME3D] Force "C" parameter
-		if (params.getline(ligne, 132)) { globalAnime3DForceC = static_cast<float>( getParam(ligne) ); }
+		if (params.getline(ligne, 132)) { globalAnime3DForceC = static_cast<int>( getParam(ligne) ); }
 
 	////////////////////////////////
 	// Mode DEBUG
 	////////////////////////////////
 
 		// [DEBUG] allow use of closeEventSelector
-		if (params.getline(ligne, 132)) { globalDebugUseCloseEventSelector = static_cast<bool>( getParam(ligne) ); }			
-		
+		if (params.getline(ligne, 132)) { globalDebugUseCloseEventSelector = static_cast<bool>( getParam(ligne) ); }
+
 		// [DEBUG] allow use of diffraction angle selector
-		if (params.getline(ligne, 132)) { globalDebugUseDiffractionAngleSelector = static_cast<bool>( getParam(ligne) ); }	
-		
+		if (params.getline(ligne, 132)) { globalDebugUseDiffractionAngleSelector = static_cast<bool>( getParam(ligne) ); }
+
 		// [DEBUG] allow use of diffraction path length selector
-		if (params.getline(ligne, 132)) { globalDebugUseDiffractionPathSelector = static_cast<bool>( getParam(ligne) ); }		
-		
+		if (params.getline(ligne, 132)) { globalDebugUseDiffractionPathSelector = static_cast<bool>( getParam(ligne) ); }
+
 		// [DEBUG] allow use of Fermat selector
-		if (params.getline(ligne, 132)) { globalDebugUseFermatSelector = static_cast<bool>( getParam(ligne) ); }				
-		
+		if (params.getline(ligne, 132)) { globalDebugUseFermatSelector = static_cast<bool>( getParam(ligne) ); }
+
 		// [DEBUG] allow use of (doubled) faces selector
-		if (params.getline(ligne, 132)) { globalDebugUseFaceSelector = static_cast<bool>( getParam(ligne) ); }				
+		if (params.getline(ligne, 132)) { globalDebugUseFaceSelector = static_cast<bool>( getParam(ligne) ); }
 
 
 		params.close();
