@@ -104,6 +104,10 @@ def export_site_topo(cysite, mainsite=False):
         asite.add_child(almatarea)
     # Level curves
     for cylcurve in cysite.level_curves:
+        if len(cylcurve.points) == 1:
+            warn('Level curve %s is made of a single point: ignoring it.' % cylcurve.elem_id,
+                 RuntimeWarning)
+            continue
         alcurve = LevelCurve(
             coords=cypoints2acoords(cylcurve.points),
             altitude=cylcurve.altitude,
