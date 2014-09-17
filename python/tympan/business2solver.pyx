@@ -52,7 +52,7 @@ cdef class Business2SolverConverter:
     _nsources = cy.declare(int)
     _nreceptors = cy.declare(int)
     # transitional result matrix (from solver matrix to condensed business matrix)
-    transitional_result_matrix = cy.declare(cy.pointer(tysolver.SpectrumMatrix))
+    transitional_result_matrix = cy.declare(cy.pointer(tycommon.SpectrumMatrix))
 
     @cy.locals(comp=tybusiness.Computation, site=tybusiness.Site)
     def __cinit__(self, comp, site):
@@ -85,9 +85,9 @@ cdef class Business2SolverConverter:
         # Retrieve solver result matrix
         solver_result = cy.declare(cy.pointer(tysolver.AcousticResultModel))
         solver_result = self.comp.thisptr.getRealPointer()._acousticResult.get()
-        solver_result_matrix = cy.declare(tysolver.SpectrumMatrix)
+        solver_result_matrix = cy.declare(tycommon.SpectrumMatrix)
         solver_result_matrix = solver_result.get_data()
-        self.transitional_result_matrix = new tysolver.SpectrumMatrix(solver_result_matrix)
+        self.transitional_result_matrix = new tycommon.SpectrumMatrix(solver_result_matrix)
         # update business receptors cumulative spectra
         self.update_business_receptors()
         self.remove_mesh_points_from_results()
@@ -112,7 +112,7 @@ cdef class Business2SolverConverter:
         # resize business result matrix with the number of enabled sources and receptors:
         business_result = cy.declare(tybusiness.Result)
         business_result = self.comp.result
-        business_result_matrix = cy.declare(cy.pointer(tysolver.SpectrumMatrix))
+        business_result_matrix = cy.declare(cy.pointer(tycommon.SpectrumMatrix))
         business_result_matrix = cy.address(business_result.thisptr.getRealPointer().getResultMatrix())
         business_result_matrix.resize(self.solver_problem.nreceptors, self.solver_problem.nsources)
         it = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t].iterator)
@@ -148,7 +148,7 @@ cdef class Business2SolverConverter:
         busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
         busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
         result_sources = cy.declare(map[tybusiness.TYElem_ptr, int])
-        condensate_matrix = cy.declare(tysolver.SpectrumMatrix)
+        condensate_matrix = cy.declare(tycommon.SpectrumMatrix)
         condensate_matrix.resize(bus2solv_receptors.size(), macro2micro_sources.size())
         rec_it = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t].iterator)
         rec_it = bus2solv_receptors.begin()
