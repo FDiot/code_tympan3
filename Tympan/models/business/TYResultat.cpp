@@ -212,10 +212,14 @@ int TYResultat::fromXML(DOM_Element domElement)
 
                     TYPointCalcul* pPtCalcul = TYPointCalcul::safeDownCast(TYElement::getInstance(srcRec));
 
-                    assert(pPtCalcul);
                     if (pPtCalcul)
                     {
                         _recepteurs[pPtCalcul] = index;
+                    }
+                    else
+                    {
+                        QString message = "One or more receptor(s) not found";
+                        OMessageManager::get()->error(message);
                     }
                 }
             }
