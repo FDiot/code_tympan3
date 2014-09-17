@@ -697,11 +697,11 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
                 totalRayLength = _tabTYRays[k]->getLength();
                 mod = (_pressAcoustEff[k]).getModule();
 
-                if (((int) globalAnime3DForceC) == 0)
+                if ((globalAnime3DForceC) == 0)
                 {
                     C = 0.0; // = defaultSolver "energetique"
                 }
-                else if (((int) globalAnime3DForceC) == 1)
+                else if ((globalAnime3DForceC) == 1)
                 {
                     C = 1.0; // = defaultSolver "interferences"
                 }
