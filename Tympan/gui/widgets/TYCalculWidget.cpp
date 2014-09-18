@@ -113,8 +113,7 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 
     // Will contain solver parameters as a single text bloc
     _solverParams = new QTextEdit(QString(""), _groupBoxFlag);
-    _solverParams->setReadOnly(true);
-    _solverParams->setText(getElement()->solverParams);
+    _solverParams->setPlainText(getElement()->solverParams);
     groupBoxFlagLayout->addWidget(_solverParams, 0, 0, 5, 1);
 
     QButtonGroup* buttonGroupSolRefReel = new QButtonGroup();
@@ -317,7 +316,7 @@ void TYCalculWidget::updateContent()
     _editDateCreation->setDate(date.fromString(getElement()->getDateCreation(), Qt::ISODate));
 
     // Display solver parameters
-    _solverParams->setText(getElement()->solverParams);
+    _solverParams->setPlainText(getElement()->solverParams);
 
     // Remplissage du tableau des points de controle
     _tableauPointControle->setEnabled(true);
@@ -461,6 +460,9 @@ void TYCalculWidget::apply()
     // Mise a jour du statut de sauvegarde des resultats partiels
     bool bEtat1 = _checkBoxStoreGlobalMatrix->isChecked();
     getElement()->setStatusPartialResult(bEtat1) ; //(_checkBoxStoreGlobalMatrix->isChecked());
+
+    // Update solver parameters in the TYCalcul
+    getElement()->solverParams = _solverParams->toPlainText();
 
     emit modified();
 }
