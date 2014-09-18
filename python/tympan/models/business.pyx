@@ -626,17 +626,13 @@ cdef class Computation:
     def __cinit__(self):
         self.thisptr = SmartPtr[TYCalcul]()
 
-    @property
-    def solver_parameters(self):
+    def get_solver_parameters(self):
         return self.thisptr.getRealPointer().getSolverParams().toStdString()
 
-#    @solver_parameters.setter
-#    def solver_parameters(self, params):
-    # XXX couldn't make it work:
-    # "computation.solver_parameters = 'whatever'" triggers a TypeError
-    # ("'property' object is not callable")
     def set_solver_parameters(self, params):
         self.thisptr.getRealPointer().setSolverParams(QString(params))
+
+    solver_parameters = property(get_solver_parameters, set_solver_parameters)
 
     @property
     def meshes(self):
