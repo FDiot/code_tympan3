@@ -33,6 +33,31 @@ class TestSolveProject(TympanTC):
         self.assertEqual(str(cm.exception),
                          """bad option value for AtmosPressure: \'"ooops"\'\nbad option value for Discretization: \'2.5\'""")
 
+    def test_solve_project_without_receptor_and_source(self):
+        # This site has no source and no receptor
+        input_proj = osp.join(TEST_DATA_DIR, 'empty_site.xml')
+        with self.assertRaises(RuntimeError) as cm:
+            self.run_solve(input_proj)
+        self.assertEqual(str(cm.exception),
+                         "You must have at least one source and one receptor to run a simulation.")
+
+    def test_solve_project_without_source(self):
+        # This site has no source
+        input_proj = osp.join(TEST_DATA_DIR, 'empty_site_receptor.xml')
+        with self.assertRaises(RuntimeError) as cm:
+            self.run_solve(input_proj)
+        self.assertEqual(str(cm.exception),
+                         "You must have at least one source and one receptor to run a simulation.")
+
+    def test_solve_project_without_receptor(self):
+        # This site has no receptor
+        input_proj = osp.join(TEST_DATA_DIR, 'empty_site_source.xml')
+        with self.assertRaises(RuntimeError) as cm:
+            self.run_solve(input_proj)
+        self.assertEqual(str(cm.exception),
+                         "You must have at least one source and one receptor to run a simulation.")
+
+
 
 if __name__ == '__main__':
     from utils import main
