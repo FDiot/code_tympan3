@@ -161,7 +161,6 @@ protected:
 
     // Solver parameters
     QTextEdit* _solverParams;
-    QString _defaultSolverParams;
 };
 
 

@@ -26,6 +26,7 @@
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
+#include "Tympan/models/business/DefaultSolverConfig.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/models/solver/acoustic_result_model.hpp"
 #include "TYCalcul.h"
@@ -66,6 +67,8 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _solverId = OGenID("{A98B320C-44C4-47a9-B689-1DD352DAA8B2}");
 
     _pParent = pParent;
+
+    solverParams = DEFAULT_SOLVER_CONFIG;
 }
 
 TYCalcul::TYCalcul(const TYCalcul& other)
