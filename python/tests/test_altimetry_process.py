@@ -23,7 +23,7 @@ class TestProcessAltimetry(TympanTC):
                 result_file)
         landtake = asite.build_coordinates()[0]
         self.assertEqual(asite.id, "{f1a57b76-c918-4f63-a74b-7c67b7179df9}")
-        self.assertEqual(landtake, [(-200.0,200.0), (200.0, 200.0),
+        self.assertEqual(landtake, [(-200.0, 200.0), (200.0, 200.0),
                                     (200.0, -200.0), (-200.0, -200.0)])
         level_curves = list(asite.level_curves)
         # No level curves are explicitely defined in the XML project, but
@@ -33,12 +33,12 @@ class TestProcessAltimetry(TympanTC):
         self.assertEqual(len(level_curves), 1)
         lcurve = level_curves[0]
         self.assertEqual(lcurve.altitude, 0)
-        self.assertEqual(lcurve.build_coordinates()[0], landtake)
+        # Level curve should be closed
+        self.assertEqual(lcurve.build_coordinates()[0],
+                         [(-200.0, 200.0), (200.0, 200.0), (200.0, -200.0),
+                          (-200.0, -200.0), (-200.0, 200.0)])
 
     def test_process_subsite(self):
-        """ Open a project with a site and a subsite and check the altimetry
-        created accordingly
-        """
         with self.no_output():
             asite = tyalti.process_site_altimetry(
                 osp.join(TEST_PROBLEM_DIR, 'site_with_subsite.xml'), result_file)
@@ -55,7 +55,9 @@ class TestProcessAltimetry(TympanTC):
         self.assertEqual(len(list(asite.level_curves)), 1)
         lcurve = next(asite.level_curves)
         self.assertEqual(lcurve.altitude, 0)
-        self.assertEqual(lcurve.build_coordinates()[0], landtake)
+        self.assertEqual(lcurve.build_coordinates()[0],
+                        [(-94.0,117.0), (41.0, 114.0), (37.0, -16.0),
+                         (-153.0, -27.0), (-94.0,117.0)])
         # Subsite
         subsites = asite.subsites
         self.assertEqual(len(subsites), 1) # Check there is just 1 subsite
@@ -69,7 +71,9 @@ class TestProcessAltimetry(TympanTC):
         self.assertEqual(len(sbsite_level_curves), 1)
         sbsite_lcurve = sbsite_level_curves[0]
         self.assertEqual(sbsite_lcurve.altitude, 0)
-        self.assertEqual(sbsite_lcurve.build_coordinates()[0], sbsite_landtake)
+        self.assertEqual(sbsite_lcurve.build_coordinates()[0],
+                        [(-83.0,98.0), (-40.0, 73.0), (-98.0, 28.0),
+                        (-105.0, 82.0), (-83.0,98.0)])
 
     def test_process_level_curve(self):
         with self.no_output():
