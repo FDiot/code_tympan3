@@ -156,10 +156,7 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     TYCalcul* pOldComp = pCalcul;
     pProject = result.getRealPointer();
     pCalcul = pProject->getCurrentCalcul();
-    getTYApp()->getCurProjet()->setCurrentCalcul(pCalcul);
-    // Can't remove current computation so first assign it and then remove
-    // the previous one from the project
-    getTYApp()->getCurProjet()->remCalcul(pOldComp);
+    getTYApp()->setCurProjet(result);
     getTYMainWnd()->getProjetFrame()->setProjet(pProject);
     // Update site altimetry with the mesh retrieved from the ply file
     LPTYSiteNode pSite = pProject->getSite();
