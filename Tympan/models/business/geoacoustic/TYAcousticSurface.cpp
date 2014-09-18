@@ -285,7 +285,7 @@ int TYAcousticSurface::intersects(const OPoint3D& pt) const
     return _pBoundingRect->intersects(pt);
 }
 
-LPTYMateriauConstruction TYAcousticSurface::getMateriau()
+LPTYMateriauConstruction TYAcousticSurface::getMateriau() const
 {
     LPTYMateriauConstruction pMat = NULL;
 
@@ -311,10 +311,6 @@ LPTYMateriauConstruction TYAcousticSurface::getMateriau()
     return pMat;
 }
 
-const LPTYMateriauConstruction TYAcousticSurface::getMateriau() const
-{
-    return ((TYAcousticSurface*) this)->getMateriau();
-}
 
 TYSpectre TYAcousticSurface::setGlobalLW(const TYSpectre& spectre, const double& surfGlobale, const int& regime/*=-1*/)
 {
