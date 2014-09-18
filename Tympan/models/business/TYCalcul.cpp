@@ -200,7 +200,7 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "comment", _comment);
     TYXMLTools::addElementStringValue(domNewElem, "solverId", _solverId.toString());
     TYXMLTools::addElementIntValue(domNewElem, "etat", _state);  // 16/08/2005 Possibilite de bloquer un calcul
-    TYXMLTools::addElementStringValue(domNewElem, "solverParams", _solverParams);
+    TYXMLTools::addElementStringValue(domNewElem, "solverParams", solverParams);
 
     // Ajout du site node sur lequel s'effectue le calcul
     DOM_Document domDoc = domElement.ownerDocument();
@@ -305,7 +305,7 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementStringValue(elemCur, "comment", _comment, getOk[4]);
         TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[5]);
         TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[6]);
-        TYXMLTools::getElementStringValue(elemCur, "solverParams", _solverParams, getOk[7]);
+        TYXMLTools::getElementStringValue(elemCur, "solverParams", solverParams, getOk[7]);
 
         // Selection
         if (elemCur.nodeName() == "ListID")

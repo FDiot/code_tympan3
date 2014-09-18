@@ -459,12 +459,11 @@ public:
     const OGenID getSolverId() const { return _solverId; }
     OGenID getSolverId() { return _solverId; }
 
-    QString getSolverParams(){ return _solverParams; }
-    void setSolverParams(QString params){ _solverParams = params; }
-
     void goPostprocessing();
     std::unique_ptr<tympan::AcousticResultModel>  _acousticResult;
     std::unique_ptr<tympan::AcousticProblemModel> _acousticProblem;
+    // Solver parameters for this computation
+    QString solverParams;
 
 protected:
     /**
@@ -488,8 +487,6 @@ protected:
     QString _dateModif;
     ///Commentaires.
     QString _comment;
-    // Solver parameters for this computation
-    QString _solverParams;
 
     ///etat a jour du calcul
     bool _upTodate;
