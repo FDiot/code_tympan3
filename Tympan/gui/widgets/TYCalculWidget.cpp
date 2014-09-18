@@ -114,18 +114,7 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     // Will contain solver parameters as a single text bloc
     _solverParams = new QTextEdit(QString(""), _groupBoxFlag);
     _solverParams->setReadOnly(true);
-    QString params_filename(QCoreApplication::applicationDirPath());
-    params_filename.append("/resources/solver_config.ini");
-    QFile params_file(params_filename);
-    if (!params_file.open(QIODevice::ReadOnly | QIODevice::Text))
-    {
-        _defaultSolverParams = QString("Pas de parametres solveur connus pour ce calcul.");
-    }
-    else
-    {
-        _defaultSolverParams = QString(params_file.readAll());
-    }
-    _solverParams->setText(_defaultSolverParams);
+    _solverParams->setText(getElement()->solverParams);
     groupBoxFlagLayout->addWidget(_solverParams, 0, 0, 5, 1);
 
     QButtonGroup* buttonGroupSolRefReel = new QButtonGroup();
@@ -328,15 +317,7 @@ void TYCalculWidget::updateContent()
     _editDateCreation->setDate(date.fromString(getElement()->getDateCreation(), Qt::ISODate));
 
     // Display solver parameters
-    QString parameters = getElement()->getSolverParams();
-    if (!parameters.isEmpty())
-    {
-        _solverParams->setText(parameters);
-    }
-    else
-    {
-        _solverParams->setText(_defaultSolverParams);
-    }
+    _solverParams->setText(getElement()->solverParams);
 
     // Remplissage du tableau des points de controle
     _tableauPointControle->setEnabled(true);
