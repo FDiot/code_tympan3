@@ -249,6 +249,9 @@ http://xinyustudio.wordpress.com/2012/07/18/setup-cgal-in-windows-7-step-by-step
 http://xinyustudio.wordpress.com/2012/07/18/setup-cgal-in-windows-7-using-cmake-command-line/
 
 
+**Beware** : under Windows, when setup is completed, **make sure that ``Pythonx,y - mingw``
+doesn't appear in the path** (it could be something like ``C:\MinGW32-xy\bin``).
+
 
 Compiling CGAL
 ==============
