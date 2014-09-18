@@ -627,10 +627,10 @@ cdef class Computation:
         self.thisptr = SmartPtr[TYCalcul]()
 
     def get_solver_parameters(self):
-        return self.thisptr.getRealPointer().getSolverParams().toStdString()
+        return self.thisptr.getRealPointer().solverParams.toStdString()
 
     def set_solver_parameters(self, params):
-        self.thisptr.getRealPointer().setSolverParams(QString(params))
+        self.thisptr.getRealPointer().solverParams = QString(params)
 
     solver_parameters = property(get_solver_parameters, set_solver_parameters)
 
