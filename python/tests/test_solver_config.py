@@ -4,7 +4,7 @@ import tempfile
 from utils import TympanTC, no_output
 from tympan.models.business import Project
 
-class TestSolver(TympanTC):
+class TestSolverConfig(TympanTC):
 
     def test_parameters_serialization(self):
         config = (
@@ -27,7 +27,7 @@ class TestSolver(TympanTC):
                 configured_project = Project.from_xml(f.name)
             # Check configuration didn't disappear
             self.assertEqual(configured_project.current_computation.solver_parameters,
-                         config)
+                             config)
         f.close()
         os.unlink(f.name)
 
