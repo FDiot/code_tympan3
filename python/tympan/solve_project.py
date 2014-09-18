@@ -116,7 +116,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
     bus2solv_conv.build_solver_problem()
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  bus2solv_conv.nsources, bus2solv_conv.nreceptors)
-    if (bus2solv_conv.nsources == 0 or bus2solv_conv.nreceptors == 0):
+    if bus2solv_conv.nsources == 0 or bus2solv_conv.nreceptors == 0:
         err = "You must have at least one source and one receptor to run a simulation."
         raise RuntimeError(err)
     # Load solver plugin
