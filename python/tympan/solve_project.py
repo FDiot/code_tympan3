@@ -1,5 +1,9 @@
 import sys
+import os
+import io
 import logging
+import ConfigParser
+from StringIO import StringIO
 
 # open file in unbuffered mode so it get written asap, in case of later crash
 # due to underlying C code
@@ -22,10 +26,23 @@ except ImportError:
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
     raise ImportError(err)
 
+from tympan import SOLVER_CONFIG_ATTRIBUTES
 from tympan.altimetry.builder import Builder
 from tympan.altimetry import process_altimetry
+from tympan.models.solver import Configuration
 
-def solve(input_project, output_project, output_mesh, solverdir, multithreading_on=True,
+CONVERTERS = {
+    'bool': bool,
+    'int': int,
+    'float': float,
+    'double': float,
+}
+
+CONFIG_MAP = dict((optname, CONVERTERS[opttype]) for opttype, optname in SOLVER_CONFIG_ATTRIBUTES)
+
+
+def solve(input_project, output_project, output_mesh, solverdir,
+          multithreading_on=True,
           interactive=False):
     """ Solve an acoustic problem with Code_TYMPAN from
 
@@ -61,11 +78,28 @@ def solve(input_project, output_project, output_mesh, solverdir, multithreading_
     # Business model
     site = project.site
     comp = project.current_computation
-    if not multithreading_on:
-        comp.set_nthread(1)
     # Solver model
     solver_problem = comp.acoustic_problem
     solver_result = comp.acoustic_result
+    parser = ConfigParser.RawConfigParser()
+    # keep param names case
+    parser.optionxform = str
+    # Setup solver configuration
+    parser.readfp(StringIO(comp.solver_parameters))
+    solver_config = Configuration.get()
+    errors = []
+    for section in parser.sections():
+        for optname, value in parser.items(section):#solver_config.items(section):
+            try:
+                value = CONFIG_MAP[optname](value)
+            except ValueError:
+                errors.append('bad option value for %s: %r' % (optname, value))
+                continue
+            getattr(solver_config, optname, value)
+    if errors:
+        raise ConfigParser.Error(os.linesep.join(errors))
+    if not multithreading_on:
+        solver_config.NbThreads = 1
     # Recompute altimetry
     # Rebuild topography with altimetry data model
     alti_site = process_altimetry.export_site_topo(site)
