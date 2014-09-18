@@ -19,7 +19,7 @@ class TestSolver(TympanTC):
         # No initial config
         self.assertTrue(not project.current_computation.solver_parameters)
         # Set a solver configuration to it
-        project.current_computation.set_solver_parameters(config)
+        project.current_computation.solver_parameters = config
         # Export to XML and reimport it
         with tempfile.NamedTemporaryFile(suffix='.xml', delete=False) as f:
             project.to_xml(f.name)
