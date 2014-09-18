@@ -17,7 +17,7 @@
 #ifndef __TYFACESELECTOR__
 #define __TYFACESELECTOR__
 
-#include "Tympan/models/business/TYFaceSelectorInterface.h"
+#include "Tympan/models/solver/TYFaceSelectorInterface.h"
 #include "TYSolverDefines.h"
 
 class TYSolver;
