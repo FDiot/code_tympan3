@@ -91,6 +91,7 @@ install_tympan_component(tympan_lib)
 # solvers ######################################################################
 
 file(GLOB TYMPAN_SOLVER_DEFAULT_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    models/solver/*.cpp models/solver/*.h models/solver/*.hpp
     solvers/DefaultSolver/*.cpp solvers/DefaultSolver/*.h
     solvers/DefaultSolver/*/*.cpp solvers/DefaultSolver/*/*.h
     solvers/ConvexHullFinder/*.cpp solvers/ConvexHullFinder/*.h
@@ -105,13 +106,13 @@ set_property(TARGET tympan_solver_default PROPERTY FOLDER "Tympan/solvers/Defaul
 target_link_libraries(tympan_solver_default
     ${QT_QTCORE_LIBRARY} # threading QMutex, QThread, QWaitCondition
     tympan_common
-    tympan_lib
 )
 configure_tympan_plugin(tympan_solver_default)
 install_tympan_plugin(tympan_solver_default)
 
 
 file(GLOB TYMPAN_SOLVER_ANIME3D_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    models/solver/*.cpp models/solver/*.h models/solver/*.hpp
     solvers/ANIME3DSolver/*.cpp solvers/ANIME3DSolver/*.h
     solvers/ANIME3DSolver/*/*.cpp solvers/ANIME3DSolver/*/*.h
     solvers/AcousticRaytracer/*.cpp solvers/AcousticRaytracer/*.h
@@ -126,7 +127,6 @@ set_property(TARGET tympan_solver_anime3d PROPERTY FOLDER "Tympan/solvers/ANIME3
 target_link_libraries(tympan_solver_anime3d
     ${QT_QTCORE_LIBRARY} # qlist, QTime, QMutex QSharedPointer QTime
     tympan_common
-    tympan_lib
 )
 configure_tympan_plugin(tympan_solver_anime3d)
 install_tympan_plugin(tympan_solver_anime3d)
