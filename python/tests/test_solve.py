@@ -31,7 +31,7 @@ def make_test_with_file(test_file):
                 osp.join(TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation
             solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, computation)
-            result = computation.go(solver)
+            result = solver.solve_problem(bus2solv_conv.solver_problem, bus2solv_conv.solver_result)
             bus2solv_conv.postprocessing()
         self.assertTrue(result)
         # Load the expected result

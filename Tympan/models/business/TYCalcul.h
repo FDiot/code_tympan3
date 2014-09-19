@@ -27,7 +27,6 @@
 
 #include <memory>
 
-#include "Tympan/core/interfaces.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/models/business/TYRay.h"
 #include "Tympan/models/business/TYMaillage.h"
@@ -35,11 +34,6 @@
 #include "Tympan/models/business/TYResultat.h"
 
 class TYProjet;
-namespace tympan {
-    class AcousticProblemModel;
-    class AcousticResultModel;
-} // namespace tympan
-
 
 /**
  * \file TYCalcul.h
@@ -381,22 +375,6 @@ public:
     void selectActivePoint(const LPTYSiteNode pSite);
 
     /**
-     * \fn bool isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSite pMergeSite)
-     *\brief verification des calculs
-     *   Verifie que le calcul est possible: au moins une source, au moins un
-     *   recepteur, pas de depassement du max de sources et de recepteurs.
-     */
-    bool isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSiteNode pMergeSite);
-
-    /**
-     * \fn bool go(SolverInterface* pSolver)
-     * \brief Lance l'execution du Calcul.
-     * \return <code>true</code> si le calcul a reussi;
-     *         <code>false</code> sinon.
-     */
-    bool go(SolverInterface* pSolver);
-
-    /**
      * \fn void getCalculElements(LPTYSiteNode pSite)
      * \brief Recupere tous les elements de la scene qui participent au calcul.
      * \param pSite Site a partir duquel se fait la selection.
@@ -460,8 +438,6 @@ public:
     OGenID getSolverId() { return _solverId; }
 
     void goPostprocessing();
-    std::unique_ptr<tympan::AcousticResultModel>  _acousticResult;
-    std::unique_ptr<tympan::AcousticProblemModel> _acousticProblem;
     // Solver parameters for this computation
     QString solverParams;
 

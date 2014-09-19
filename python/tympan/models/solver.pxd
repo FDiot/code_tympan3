@@ -5,17 +5,33 @@ from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-from tympan.core cimport shared_ptr, SmartPtr
 from tympan.models.common cimport (OPoint3D, OSpectre, OSpectreComplex, OVector3D,
                                    SpectrumMatrix)
+from tympan.core cimport SolverInterface#, SmartPtr, shared_ptr
 
+# XXX importing SmartPtr and shared_ptr from tympan.core set a cyclical dependency
+# between tympan.core and tympan.models.solver, since tympan.core declares
+# SolverInterface::solve() which takes the solver model as a parameter.
+cdef extern from "boost/shared_ptr.hpp" namespace "boost":
+    cdef cppclass shared_ptr[T]:
+        shared_ptr(T*)
+        shared_ptr()
+        T *get()
+cdef extern from "Tympan/core/smartptr.h":
+    cdef cppclass SmartPtr[T]:
+        SmartPtr()
+        SmartPtr(T*)
+        T* getRealPointer()
+        T* _pObj
 
 cdef class ProblemModel:
-    cdef AcousticProblemModel* thisptr
+    cdef shared_ptr[AcousticProblemModel] thisptr
 
 cdef class ResultModel:
-    cdef AcousticResultModel* thisptr
+    cdef shared_ptr[AcousticResultModel] thisptr
 
+cdef class Solver:
+    cdef SolverInterface* thisptr
 
 cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "tympan":
     cdef cppclass AcousticProblemModel:
@@ -83,11 +99,6 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
 
     cdef cppclass BaffledFaceDirectivity(CommonFaceDirectivity):
         BaffledFaceDirectivity(const OVector3D& support_normal_, double support_size_)
-
-
-cdef acousticproblemmodel2problemmodel(AcousticProblemModel* apm)
-cdef acousticresultmodel2resultmodel(AcousticResultModel* arm)
-
 
 cdef extern from "Tympan/models/solver/config.h" namespace "tympan::SolverConfiguration":
     SmartPtr[SolverConfiguration] get()
