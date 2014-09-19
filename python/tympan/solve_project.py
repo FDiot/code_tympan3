@@ -118,6 +118,8 @@ def solve(input_project, output_project, output_mesh, solverdir,
     errors = []
     if bus2solv_conv.nsources == 0:
         errors.append('You must have at least one source to run a simulation.')
+        for (elt_id, elt_name) in site.outdated_elements:
+            errors.append('Update failed on element %s (id %s)' % (elt_name, elt_id))
     if bus2solv_conv.nreceptors == 0:
         errors.append('You must have at least one receptor to run a simulation.')
     if errors:
