@@ -78,13 +78,9 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Business model
     site = project.site
     comp = project.current_computation
-    # Solver model
-    solver_problem = comp.acoustic_problem
-    solver_result = comp.acoustic_result
-    parser = ConfigParser.RawConfigParser()
-    # keep param names case
-    parser.optionxform = str
     # Setup solver configuration
+    parser = ConfigParser.RawConfigParser()
+    parser.optionxform = str # keep param names case
     parser.readfp(StringIO(comp.solver_parameters))
     solver_config = Configuration.get()
     errors = []
@@ -114,6 +110,9 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Build an acoustic problem from the site of the computation
     bus2solv_conv = bus2solv.Business2SolverConverter(comp, project.site)
     bus2solv_conv.build_solver_problem()
+    # Solver model
+    solver_problem = bus2solv_conv.solver_problem
+    solver_result = bus2solv_conv.solver_result
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  bus2solv_conv.nsources, bus2solv_conv.nreceptors)
     if bus2solv_conv.nsources == 0 or bus2solv_conv.nreceptors == 0:
@@ -121,11 +120,10 @@ def solve(input_project, output_project, output_mesh, solverdir,
         raise RuntimeError(err)
     # Load solver plugin
     solver = bus2solv.load_computation_solver(solverdir, comp)
-    # Solve the problem and fill the acoustic result
-    logging.debug("Calling C++ go method")
-    ret = comp.go(solver)
+    logging.debug("Calling C++ SolverInterface::solve() method")
+    ret = solver.solve(solver_problem, solver_result)
     if ret is False:
-        err = "Computation failed (C++ go method returned false)"
+        err = "Computation failed (C++ SolverInterface::solve() method returned false)"
         logging.error(err)
         raise RuntimeError(err)
     # Export solver results to the business model

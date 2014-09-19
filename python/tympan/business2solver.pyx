@@ -40,15 +40,19 @@ def load_computation_solver(foldername, tybusiness.Computation comp):
     """ Load a solver plugin (looked for in the 'foldername' folder) that will
         be used to compute 'comp'
     """
-    res = cy.declare(tycommon.SolverInterface)
-    res = tycommon.SolverInterface()
-    res.thisptr = load_solver(foldername, comp.thisptr.getRealPointer().getSolverId());
-    return res
+    solver = cy.declare(tysolver.Solver)
+    solver = tysolver.Solver()
+    solver.thisptr = load_solver(foldername, comp.thisptr.getRealPointer().getSolverId());
+    return solver
 
 cdef class Business2SolverConverter:
     # Business model
     comp = cy.declare(tybusiness.Computation)
     site = cy.declare(tybusiness.Site)
+    # Solver model
+    model = cy.declare(tysolver.ProblemModel)
+    result = cy.declare(tysolver.ResultModel)
+    # number of sources & receptors
     _nsources = cy.declare(int)
     _nreceptors = cy.declare(int)
     # transitional result matrix (from solver matrix to condensed business matrix)
@@ -58,14 +62,16 @@ cdef class Business2SolverConverter:
     def __cinit__(self, comp, site):
         self.comp = comp
         self.site = site
+        self.model = tysolver.ProblemModel()
+        self.result = tysolver.ResultModel()
 
     @property
     def solver_problem(self):
-        return self.comp.acoustic_problem
+        return self.model
 
     @property
     def solver_result(self):
-        return self.comp.acoustic_result
+        return self.result
 
     @property
     def nsources(self):
@@ -84,7 +90,7 @@ cdef class Business2SolverConverter:
     def postprocessing(self):
         # Retrieve solver result matrix
         solver_result = cy.declare(cy.pointer(tysolver.AcousticResultModel))
-        solver_result = self.comp.thisptr.getRealPointer()._acousticResult.get()
+        solver_result = self.result.thisptr.get()
         solver_result_matrix = cy.declare(tycommon.SpectrumMatrix)
         solver_result_matrix = solver_result.get_data()
         self.transitional_result_matrix = new tycommon.SpectrumMatrix(solver_result_matrix)
@@ -207,7 +213,7 @@ cdef class Business2SolverConverter:
 
 
 cdef class SolverModelBuilder:
-    model = cy.declare(cy.pointer(tysolver.AcousticProblemModel))
+    model = cy.declare(shared_ptr[tysolver.AcousticProblemModel])
     _nsources = cy.declare(int)
     _nreceptors = cy.declare(int)
 
@@ -302,7 +308,7 @@ cdef class SolverModelBuilder:
                             pdirectivity = new tysolver.ChimneyFaceDirectivity(
                                 pcompdirectivity.DirectivityVector, pcompdirectivity.SpecificSize)
                     # Add it to the solver model
-                    source_idx = self.model.make_source(ppoint[0], subsource.getSpectre()[0], pdirectivity)
+                    source_idx = self.model.get().make_source(ppoint[0], subsource.getSpectre()[0], pdirectivity)
                     # Record where it has been stored
                     bus2solv_sources[sources_of_elt[i]] = source_idx
                     # Copy source mapping to macro2micro_sources
@@ -333,7 +339,7 @@ cdef class SolverModelBuilder:
             if control_points[i].getRealPointer().getEtat(comp.thisptr.getRealPointer()):
                 # inheritance: TYPointControl > TYPointCalcul > TYPoint > tycommon.OPoint3D > OCoord3D
                 # call to tycommon.OPoint3D copy constructor to record control point coordinates
-                rec_idx = self.model.make_receptor((control_points[i].getRealPointer())[0])
+                rec_idx = self.model.get().make_receptor((control_points[i].getRealPointer())[0])
                 bus2solv_receptors[control_points[i].getRealPointer()] = rec_idx
                 solv2bus_receptors[rec_idx] = control_points[i].getRealPointer()
                 nb_receptors += 1
@@ -361,7 +367,7 @@ cdef class SolverModelBuilder:
                     mesh_points[j].getRealPointer()._x = point3d._x
                     mesh_points[j].getRealPointer()._y = point3d._y
                     mesh_points[j].getRealPointer()._z = point3d._z
-                    rec_idx = self.model.make_receptor((mesh_points[j].getRealPointer())[0])
+                    rec_idx = self.model.get().make_receptor((mesh_points[j].getRealPointer())[0])
                     bus2solv_receptors[mesh_points[j].getRealPointer()] = rec_idx
                     solv2bus_receptors[rec_idx] = mesh_points[j].getRealPointer()
                     # We won't keep mesh points in the final result matrix
@@ -392,8 +398,8 @@ cdef class SolverModelBuilder:
             actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
             # Set the material of the surface
             for i in xrange(tgles_idx.size):
-                pmat = self.model.make_material(mat_name, mat_cspec)
-                actri = cy.address(self.model.triangle(tgles_idx[i]))
+                pmat = self.model.get().make_material(mat_name, mat_cspec)
+                actri = cy.address(self.model.get().triangle(tgles_idx[i]))
                 actri.made_of = pmat
         # Recurse on subsites
         for subsite in site.subsites:
@@ -413,10 +419,10 @@ cdef class SolverModelBuilder:
             node._x = pt.x
             node._y = pt.y
             node._z = pt.z
-            map_to_model_node_idx[i] = self.model.make_node(node)
+            map_to_model_node_idx[i] = self.model.get().make_node(node)
         map_to_model_tgle_idx = np.empty(len(triangles))
         for (i, tri) in enumerate(triangles):
-            map_to_model_tgle_idx[i] = self.model.make_triangle(
+            map_to_model_tgle_idx[i] = self.model.get().make_triangle(
                 map_to_model_node_idx[tri.p1],
                 map_to_model_node_idx[tri.p2],
                 map_to_model_node_idx[tri.p3])
@@ -436,7 +442,7 @@ cdef class SolverModelBuilder:
         pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
         # Set the material of each triangle
         for (i, ground) in enumerate(grounds):
-            actri = cy.address(self.model.triangle(tgles_idx[i]))
+            actri = cy.address(self.model.get().triangle(tgles_idx[i]))
             _ground = cy.declare(tybusiness.Ground)
             _ground = ground
             grnd = cy.declare(SmartPtr[tybusiness.TYSol])
@@ -445,7 +451,7 @@ cdef class SolverModelBuilder:
             mat_name = grnd.getRealPointer().getName().toStdString()
             mat_res = cy.declare(double)
             mat_res = ground.resistivity
-            pmat = self.model.make_material(mat_name, mat_res)
+            pmat = self.model.get().make_material(mat_name, mat_res)
             actri.made_of = pmat
         # Recurse on subsites
         for subsite in site.subsites:

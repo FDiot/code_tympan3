@@ -27,8 +27,6 @@
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/DefaultSolverConfig.h"
-#include "Tympan/models/solver/acoustic_problem_model.hpp"
-#include "Tympan/models/solver/acoustic_result_model.hpp"
 #include "TYCalcul.h"
 
 #if TY_USE_IHM
@@ -46,8 +44,6 @@ TY_EXT_GRAPHIC_INST(TYCalcul);
 #define MAX_RECEPTEURS 131072
 
 TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
-    : _acousticProblem(tympan::make_AcousticProblemModel())
-    , _acousticResult(tympan::make_AcousticResultModel())
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -1066,83 +1062,6 @@ void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
     }
 
     tabVolNodeGeoNode.clear();
-}
-
-bool TYCalcul::isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSiteNode pMergeSite)
-{
-    OMessageManager::get()->info("Nombre de sources : %d", nbSources);
-    OMessageManager::get()->info("Nombre de recepteurs : %d", nbRecepteurs);
-    OMessageManager::get()->info("Nombre de trajets potentiels : %d", nbSources * nbRecepteurs);
-
-    if (nbSources == 0)
-    {
-        OMessageManager::get()->info("Pas de source");
-
-        // On indique quels elements (s'il y en a), n'ont pas pu  etre mis a jour
-        vector<LPTYElement> tabElemNOk = pMergeSite->getInfrastructure()->getTabElemNOk();
-        if (tabElemNOk.size() != 0)
-        {
-            OMessageManager::get()->info("\n Les elements suivants ont echoue dans leur mise a jour :");
-            for (unsigned int i = 0 ; i < tabElemNOk.size() ; i++)
-            {
-                OMessageManager::get()->info(tabElemNOk[i]->getName().toAscii().data());
-            }
-            OMessageManager::get()->info("\n\n");
-        }
-
-        return false;
-    }
-
-    if (nbRecepteurs == 0)
-    {
-        OMessageManager::get()->info("Pas de recepteur");
-        return false;
-    }
-
-    return true;
-}
-
-bool TYCalcul::go(SolverInterface* pSolver)
-{
-    TYProjet* pProjet = getProjet();
-
-    if (!pProjet)
-    {
-        return false;
-    }
-
-    if (_state == TYCalcul::Locked)
-    {
-        OMessageManager::get()->info("+++ UN RESULTAT MESURE NE PEUX FAIRE L'OBJET D'UN CALCUL +++");
-        return true; // Si le calcul est bloque, il ne peut etre execute
-    }
-    // Reset des resultats precedents
-    _pResultat->purge();
-    TYNameManager::get()->enable(false);
-
-// XXX is it still of any use ?
-#ifdef EXPORT_MERGED_SITE
-    QString docName = "Tympan";
-    QString version = "3.7";
-    TYXMLManager xmlManager;
-    xmlManager.createDoc(docName, version);
-    xmlManager.addElement(pSite);
-    xmlManager.save("merged.xml");
-#endif
-
-    bool ret = false;
-    if ( isCalculPossible(_acousticProblem->nsources(), _acousticProblem->nreceptors(), pProjet->getSite()))
-    {
-        OMessageManager::get()->info("Calcul en cours...");
-        ret = pSolver->solve(*_acousticProblem, *_acousticResult);
-        pSolver->purge();
-        OMessageManager::get()->info("Calcul en termine.");
-    }
-    if (!ret)
-    {
-        _pResultat->purge();
-    }
-    return ret;
 }
 
 void TYCalcul::goPostprocessing()

@@ -661,30 +661,6 @@ cdef class Computation:
         res.thisptr = self.thisptr.getRealPointer().getResultat()
         return res
 
-    @cy.locals(solver=tycommon.SolverInterface)
-    def go(self, solver):
-        """ Solve the current acoustic problem. A solver must be loaded.
-        """
-        assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().go(solver.thisptr)
-
-    @property
-    def acoustic_problem(self):
-        """ Return an acoustic problem model (geometric representation as
-            used by the solvers)
-        """
-        assert self.thisptr.getRealPointer() != NULL
-        return tysolver.acousticproblemmodel2problemmodel(
-            self.thisptr.getRealPointer()._acousticProblem.get())
-
-    @property
-    def acoustic_result(self):
-        """ Return an acoustic result model (geometric representation as used
-        by the solvers)
-        """
-        assert self.thisptr.getRealPointer() != NULL
-        return tysolver.acousticresultmodel2resultmodel(
-            self.thisptr.getRealPointer()._acousticResult.get())
 
 
 cdef class Project:
