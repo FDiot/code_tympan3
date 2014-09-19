@@ -89,7 +89,6 @@ def export_site_topo(cysite, mainsite=False):
         # Build a ground material
         cymaterial = cymarea.ground_material
         almaterial = GroundMaterial(cymaterial.elem_id)
-        coords = cypoints2acoords(cymarea.points)
         # Build a material area made of the above defined ground material
         coords = cypoints2acoords(cymarea.points)
         if not coords:
