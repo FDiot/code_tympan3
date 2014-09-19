@@ -387,6 +387,7 @@ cdef class Site:
             level_curve = LevelCurve()
             level_curve.thisptr = new TYCourbeNiveau(cpp_points, alti)
             level_curve.matrix = self.matrix
+            level_curve.altitude_set = True
             level_curve._altitude = alti
             return (points, level_curve)
         return (points, None)
@@ -446,7 +447,6 @@ cdef class Site:
             lcurve = LevelCurve()
             lcurve.thisptr = cpp_lcurve
             lcurve.matrix = self.matrix.dot(cpp_lcurves[i].getRealPointer().getMatrix())
-            lcurve._altitude = cpp_lcurve.getAltitude()
             lcurve.thisgeonodeptr = cpp_lcurves[i]
             lcurves.append(lcurve)
         return lcurves
@@ -483,6 +483,10 @@ cdef class LevelCurve:
     thisptr = cy.declare(cy.pointer(TYCourbeNiveau))
     matrix = cy.declare(tycommon.OMatrix)
     _altitude = cy.declare(double)
+    altitude_set = cy.declare(bool)
+
+    def __cinit__(self):
+        self.altitude_set = False
 
     @property
     def points(self):
@@ -497,6 +501,8 @@ cdef class LevelCurve:
     @property
     def altitude(self):
         """ Return the altitude of the level curve (float value) """
+        if not self.altitude_set:
+            return self.thisptr.getAltitude()
         return self._altitude
 
     @property
@@ -682,7 +688,6 @@ cdef class Computation:
         res = Result()
         res.thisptr = self.thisptr.getRealPointer().getResultat()
         return res
-
 
 
 cdef class Project:
