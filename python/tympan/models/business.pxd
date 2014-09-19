@@ -144,6 +144,7 @@ cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
         void getAllSrcs(const TYCalcul* pCalcul, cppmap[TYElem_ptr,
                         vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs)
+        vector[SmartPtr[TYElement]] getTabElemNOk()
 
 cdef extern from "Tympan/models/business/TYCalcul.h":
     cdef cppclass TYCalcul (TYElement):

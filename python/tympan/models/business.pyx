@@ -190,6 +190,28 @@ cdef class Site:
         return subsites
 
     @property
+    def outdated_elements(self):
+        """ Goes through the infrastructure elements whose acoustic wasn't
+        correctly updated, and retrieve their name and ids.
+        Return a list of tuples (elt_id, elt_name)
+        """
+        infra = cy.declare(cy.pointer(TYInfrastructure))
+        infra = self.thisptr.getRealPointer().getInfrastructure().getRealPointer()
+        outdated = cy.declare(vector[SmartPtr[TYElement]])
+        outdated = infra.getTabElemNOk()
+        nb_outdated = outdated.size()
+        outdated_info = []
+        for i in xrange(nb_outdated):
+            elt = cy.declare(cy.pointer(TYElement))
+            elt = outdated[i].getRealPointer()
+            outdated_info.append((elt.getID().toString().toStdString(),
+                                  elt.getName().toStdString()))
+        for subsite in self.subsites:
+            outdated_info.extend(subsite.outdated_elements)
+        return outdated_info
+
+
+    @property
     def project(self):
         """ Return the parent project of the site as a 'Project' cython object
         """
