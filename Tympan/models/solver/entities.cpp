@@ -996,27 +996,7 @@ AcousticSource::AcousticSource(
 // ---------
 
 AcousticReceptor::AcousticReceptor(
-    const Point& position_
-) : position(position_) {}
-
-// ---------
-
-AcousticProblem::AcousticProblem(
-    const string& name_
-) : name(name_) {}
-
-// ---------
-
-SiteElement::SiteElement() {}
-
-SiteAcousticReceptor::SiteAcousticReceptor(
-    unsigned int id_
-) : id(id_) {}
-
-// ---------
-
-Site::Site(
-    unsigned int id_
-) : id(id_) {}
+        const Point& position_
+        ) : position(position_) {}
 
 } /* namespace tympan */
