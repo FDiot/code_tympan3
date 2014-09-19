@@ -71,6 +71,12 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
         return false;
     }
 
+    if (pCalcul->getState() == TYCalcul::Locked)
+    {
+        OMessageManager::get()->info("+++ UN RESULTAT MESURE NE PEUX FAIRE L'OBJET D'UN CALCUL +++");
+        return true; // Si le calcul est bloque, il ne peut etre execute
+    }
+
     TYProjet *pProject = pCalcul->getProjet();
     OMessageManager& logger =  *OMessageManager::get();
 
