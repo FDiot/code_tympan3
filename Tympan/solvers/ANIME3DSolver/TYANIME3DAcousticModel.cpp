@@ -24,7 +24,7 @@
 TYANIME3DAcousticModel::TYANIME3DAcousticModel( tab_acoustic_path& tabRayons,
                                                 TYStructSurfIntersect* tabStruct,
                                                 const tympan::AcousticProblemModel& aproblem,
-                                                tympan::AtmosphericConditions& atmos) :
+                                                AtmosphericConditions& atmos) :
     _tabTYRays(tabRayons),
     _tabSurfIntersect(tabStruct),
     _aproblem(aproblem),

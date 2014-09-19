@@ -99,7 +99,7 @@ OSpectre TYTrajet::getPNoOp()
     return _chemins[0].getAttenuation();
 }
 
-OSpectre TYTrajet::getPEnergetique(const tympan::AtmosphericConditions& atmos)
+OSpectre TYTrajet::getPEnergetique(const AtmosphericConditions& atmos)
 {
     OSpectre s = OSpectre::getEmptyLinSpectre();
     OSpectreComplex sTemp;
@@ -169,7 +169,7 @@ OSpectre TYTrajet::getPEnergetique(const tympan::AtmosphericConditions& atmos)
     return s;
 }
 
-OSpectre TYTrajet::getPInterference(const tympan::AtmosphericConditions& atmos)
+OSpectre TYTrajet::getPInterference(const AtmosphericConditions& atmos)
 {
     unsigned int i, j;
     int firstReflex = -1;
@@ -326,7 +326,7 @@ OSpectre TYTrajet::getPInterference(const tympan::AtmosphericConditions& atmos)
     return s;
 }
 
-OSpectre TYTrajet::correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const tympan::AtmosphericConditions& atmos, const double& ri, const double& rj) const
+OSpectre TYTrajet::correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const AtmosphericConditions& atmos, const double& ri, const double& rj) const
 {
     const double dp6 = pow(2, (1.0 / 6.0));
     const double invdp6 = 1.0 / dp6;

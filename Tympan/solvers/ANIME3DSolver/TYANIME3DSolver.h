@@ -116,7 +116,7 @@ protected:
     tympan::receptor_pool_t all_receptors;
 
 private:
-   std::unique_ptr<tympan::AtmosphericConditions> _pAtmos;
+   std::unique_ptr<AtmosphericConditions> _pAtmos;
 };
 
 #endif // __TY_ANIME3DSOLVER__

@@ -19,7 +19,7 @@
 #include "Tympan/core/defines.h"
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
-#include "Tympan/models/solver/entities.hpp"
+#include "Tympan/models/common/atmospheric_conditions.h"
 
 #include "Tympan/models/business/TYPreferenceManager.h"
 #if TY_USE_IHM
@@ -2221,7 +2221,7 @@ OSpectre TYEtage::champDirect(const OPoint3D& unPoint)
 {
     OSpectre s = OSpectre::getEmptyLinSpectre();
     OSpectre sTemp = OSpectre::getEmptyLinSpectre();
-    tympan::AtmosphericConditions atmos(101325., 20., 70.);
+    AtmosphericConditions atmos(101325., 20., 70.);
 
     unsigned int i, j;
     double distance;
@@ -2316,7 +2316,7 @@ void TYEtage::calculChampReverbere()
 void TYEtage::calculChampRevSabine()
 {
     unsigned int i, j;
-    tympan::AtmosphericConditions atmos(101325., 20., 70.);
+    AtmosphericConditions atmos(101325., 20., 70.);
 
     // Effet de salle ((4.Rho.C / (alpha.S))-(4/S) - Tr.C.AbsoATm)
     _reverb = TYSpectre::getEmptyLinSpectre(4.0); // Spectre initialise a la valeur 4
@@ -2371,7 +2371,7 @@ void TYEtage::calculChampRevKuttruff()
 {
     _reverb = TYSpectre::getEmptyLinSpectre();
     OSpectre sTemp;
-    tympan::AtmosphericConditions atmos(101325., 20., 70.);
+    AtmosphericConditions atmos(101325., 20., 70.);
 
     OPoint3D unPoint; // DT 20060520 juste pour que ca compile (le point devrait etre passe en parametre
 
@@ -2649,7 +2649,7 @@ TYSpectre TYEtage::getPuissanceRayonnee(LPTYAcousticSurface pCurrentSurf, const 
     TYSpectre s = TYSpectre::getEmptyLinSpectre();
     OSpectre spectreAtt;
     OPoint3D posSrc;
-    tympan::AtmosphericConditions atmos(101325., 20., 70.);
+    AtmosphericConditions atmos(101325., 20., 70.);
 
     // Une sous-face de mur doit etre de type MurElement
     LPTYMurElement pMurElt = TYMurElement::safeDownCast(pCurrentSurf);
