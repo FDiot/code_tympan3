@@ -31,7 +31,9 @@ class TestSolveProject(TympanTC):
         with self.assertRaises(ConfigParser.Error) as cm:
             self.run_solve(input_proj)
         self.assertEqual(str(cm.exception),
-                         """bad option value for AtmosPressure: \'"ooops"\'\nbad option value for Discretization: \'2.5\'""")
+                         os.linesep.join(
+                             ["""bad option value for AtmosPressure: \'"ooops"\'""",
+                              """bad option value for Discretization: \'2.5\'"""]))
 
     def test_solve_project_without_receptor_and_source(self):
         # This site has no source and no receptor
@@ -39,7 +41,9 @@ class TestSolveProject(TympanTC):
         with self.assertRaises(RuntimeError) as cm:
             self.run_solve(input_proj)
         self.assertEqual(str(cm.exception),
-                         "You must have at least one source to run a simulation.\nYou must have at least one receptor to run a simulation.")
+                         os.linesep.join(
+                             ['You must have at least one source to run a simulation.',
+                              'You must have at least one receptor to run a simulation.']))
 
     def test_solve_project_without_source(self):
         # This site has no source
