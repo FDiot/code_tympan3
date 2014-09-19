@@ -127,7 +127,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Load solver plugin and run it on the current computation
     solver = bus2solv.load_computation_solver(solverdir, comp)
     logging.debug("Calling C++ SolverInterface::solve() method")
-    ret = solver.solve(solver_problem, solver_result)
+    ret = solver.solve_problem(solver_problem, solver_result)
     if ret is False:
         err = "Computation failed (C++ SolverInterface::solve() method returned false)"
         logging.error(err)
