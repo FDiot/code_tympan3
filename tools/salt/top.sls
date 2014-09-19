@@ -1,0 +1,4 @@
+base:
+  '*':
+    - cpp
+    - tympan
