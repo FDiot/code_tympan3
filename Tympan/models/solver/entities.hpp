@@ -352,18 +352,6 @@ typedef size_t receptor_idx;
 
 // -------------------
 
-class AcousticProblem:
-    public virtual BaseEntity
-{
-public:
-    AcousticProblem(const string& name_);
-    virtual ~AcousticProblem() {};
-
-    string name;
-};
-
-// -------------------
-
 class GlobalContribution:
     public virtual BaseEntity
 {
@@ -372,41 +360,6 @@ public:
     virtual ~GlobalContribution() {};
 
     // XXX Add some attrs?
-};
-
-// -------------------
-
-class SiteElement:
-    public virtual BaseEntity
-{
-public:
-    SiteElement();
-    virtual ~SiteElement() {};
-
-};
-
-// -------------------
-
-class SiteAcousticReceptor:
-    public virtual BaseEntity
-{
-public:
-    SiteAcousticReceptor(unsigned int id_);
-    virtual ~SiteAcousticReceptor() {};
-
-    unsigned int id;
-};
-
-// -------------------
-
-class Site:
-    public virtual BaseEntity
-{
-public:
-    Site(unsigned int id_);
-    virtual ~Site() {};
-
-    unsigned int id;
 };
 
 // -------------------
