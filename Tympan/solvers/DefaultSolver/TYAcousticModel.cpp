@@ -60,7 +60,7 @@ void TYAcousticModel::init()
     double temperature = config->AtmosTemperature;
     double hygrometrie = config->AtmosHygrometry;
 
-    pSolverAtmos = std::unique_ptr<tympan::AtmosphericConditions> ( new tympan::AtmosphericConditions(pression, temperature, hygrometrie) );
+    pSolverAtmos = std::unique_ptr<AtmosphericConditions> ( new AtmosphericConditions(pression, temperature, hygrometrie) );
     // Calcul avec interference
     _interference = config->ModSummation;
     // On calcul tout de suite le spectre de longueur d'onde

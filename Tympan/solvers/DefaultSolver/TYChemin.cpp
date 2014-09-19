@@ -63,7 +63,7 @@ bool TYChemin::operator!=(const TYChemin& other) const
     return !operator==(other);
 }
 
-void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const tympan::AtmosphericConditions& atmos)
+void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const AtmosphericConditions& atmos)
 {
     unsigned int i;
 

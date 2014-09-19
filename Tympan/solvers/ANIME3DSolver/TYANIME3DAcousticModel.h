@@ -54,7 +54,7 @@ public:
     TYANIME3DAcousticModel( tab_acoustic_path& tabRayons, 
                             TYStructSurfIntersect* tabStruct,
                             const tympan::AcousticProblemModel& aproblem,
-                            tympan::AtmosphericConditions& atmos);
+                            AtmosphericConditions& atmos);
 
     /// destructeur
     virtual ~TYANIME3DAcousticModel();
@@ -172,7 +172,7 @@ private:
     // Problem data
     const tympan::AcousticProblemModel& _aproblem;
 
-    tympan::AtmosphericConditions& _atmos;
+    AtmosphericConditions& _atmos;
 };
 
 

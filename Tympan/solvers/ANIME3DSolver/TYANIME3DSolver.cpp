@@ -52,7 +52,7 @@ void TYANIME3DSolver::purge()
 void TYANIME3DSolver::init()
 {
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
-    _pAtmos = std::unique_ptr<tympan::AtmosphericConditions>( new tympan::AtmosphericConditions(config->AtmosPressure, config->AtmosTemperature, config->AtmosHygrometry) );
+    _pAtmos = std::unique_ptr<AtmosphericConditions>( new AtmosphericConditions(config->AtmosPressure, config->AtmosTemperature, config->AtmosHygrometry) );
 
     _tabRay.clear();
 }

@@ -188,7 +188,7 @@ private:
     bool _interference;
     double _paramH;
 
-    std::unique_ptr<tympan::AtmosphericConditions> pSolverAtmos;
+    std::unique_ptr<AtmosphericConditions> pSolverAtmos;
 
     OSpectre _lambda;
     OSpectreComplex _absoNulle;

@@ -19,8 +19,7 @@
 
 #include <deque>
 #include "TYEtape.h"
-#include "Tympan/models/solver/entities.hpp"
-
+#include "Tympan/models/common/atmospheric_conditions.h"
 
 /**
  * \file TYChemin.h
@@ -66,10 +65,10 @@ public:
     bool operator!=(const TYChemin& other) const;
 
     /**
-     * \fn void calcAttenuation(const TYTabEtape& tabEtapes, const tympan::AtmosphericConditions & atmos)
+     * \fn void calcAttenuation(const TYTabEtape& tabEtapes, const AtmosphericConditions & atmos)
      * \brief Calcule l'attenuation globale du chemin
      */
-    void calcAttenuation(const TYTabEtape& tabEtapes, const tympan::AtmosphericConditions& atmos);
+    void calcAttenuation(const TYTabEtape& tabEtapes, const AtmosphericConditions& atmos);
 
     /**
      * \fn OSpectreComplex& getAttenuation()
