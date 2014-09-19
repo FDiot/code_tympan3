@@ -39,7 +39,7 @@ class TestSolveProject(TympanTC):
         with self.assertRaises(RuntimeError) as cm:
             self.run_solve(input_proj)
         self.assertEqual(str(cm.exception),
-                         "You must have at least one source and one receptor to run a simulation.")
+                         "You must have at least one source to run a simulation.\nYou must have at least one receptor to run a simulation.")
 
     def test_solve_project_without_source(self):
         # This site has no source
@@ -47,7 +47,7 @@ class TestSolveProject(TympanTC):
         with self.assertRaises(RuntimeError) as cm:
             self.run_solve(input_proj)
         self.assertEqual(str(cm.exception),
-                         "You must have at least one source and one receptor to run a simulation.")
+                         "You must have at least one source to run a simulation.")
 
     def test_solve_project_without_receptor(self):
         # This site has no receptor
@@ -55,7 +55,7 @@ class TestSolveProject(TympanTC):
         with self.assertRaises(RuntimeError) as cm:
             self.run_solve(input_proj)
         self.assertEqual(str(cm.exception),
-                         "You must have at least one source and one receptor to run a simulation.")
+                         "You must have at least one receptor to run a simulation.")
 
 
 
