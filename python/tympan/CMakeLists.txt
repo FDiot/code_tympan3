@@ -15,7 +15,7 @@ set_source_files_properties(${CYTHON_SOURCES}
 
 cython_add_module(business2solver business2solver.pyx)
 configure_cython_module(business2solver ${destination})
-target_link_libraries(business2solver tympan_lib tympan_common)
+target_link_libraries(business2solver tympan_lib tympan_common tympan_solver_model)
 install_cython_module(business2solver ${destination})
 
 add_subdirectory(models)
