@@ -13,30 +13,21 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TYACOUSTICPATHFINDER__
 #define __TYACOUSTICPATHFINDER__
 
-#include "Tympan/models/business/TYAcousticPathFinderInterface.h"
 #include "TYSolverDefines.h"
 
 class TYSolver;
-class TYCalcul;
 
-class TYAcousticPathFinder : public TYAcousticPathFinderInterface
+class TYAcousticPathFinder
 {
 public:
     TYAcousticPathFinder(TYSolver& solver);
     virtual ~TYAcousticPathFinder();
 
     virtual void computePath(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, TabPoint3D& ptsRight);
-    virtual void init(TYCalcul& calcul);
+    virtual void init();
 
 private :
     // Reference sur le solver

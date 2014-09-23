@@ -788,48 +788,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     _pSpectreAbsoMatConst = new TYSpectre();
     _pMaillage = new TYMaillage();
 
-    //Paremetres de calcul
-    _pRadioButtonExpansGeo2Pi = new QRadioButton(TR("id_typeexpans_4pi"));
-    _pRadioButtonExpansGeo4Pi = new QRadioButton(TR("id_typeexpans_2pi"));
-    _pExpansGeoButtonGroup = new QButtonGroup();
-    _pExpansGeoButtonGroup->addButton(_pRadioButtonExpansGeo2Pi);
-    _pExpansGeoButtonGroup->addButton(_pRadioButtonExpansGeo4Pi);
-    QGridLayout* groupButtonLayout = new QGridLayout();
-    groupButtonLayout->addWidget(_pRadioButtonExpansGeo2Pi, 0, 0);
-    groupButtonLayout->addWidget(_pRadioButtonExpansGeo4Pi, 0, 1);
-
-    QLabel* pLabelExpansGeo = new QLabel(TR("id_expansgeo_label"));
-    _pCheckBoxUseSol = new QCheckBox(TR("id_usesol_label"));
-    _pCheckBoxCondFav = new QCheckBox(TR("id_condfav_label"));
-    _pLineEditParamH = new QLineEdit();
-    QLabel* pLabelParamH = new QLabel(TR("id_paramh_label"));
-    _pLineEditDistanceSRMin = new QLineEdit();
-    QLabel* pLabelDistanceSRMin = new QLabel(TR("id_distancesrmin_label"));
-    _pCheckBoxUseAtmosphere = new QCheckBox(TR("id_useatmosphere_label"));
-    _pCheckBoxUseVegetation = new QCheckBox(TR("id_usevegetation_label"));
-    _pCheckBoxUseEcran = new QCheckBox(TR("id_useecran_label"));
-    _pCheckBoxUseReflexion = new QCheckBox(TR("id_usereflexion_label"));
-    _pCheckBoxInterference = new QCheckBox(TR("id_interference_label"));
-
-    QGridLayout* groupBoxLayout = new QGridLayout();
-    groupBoxLayout->addWidget(_pCheckBoxUseSol, 0, 0);
-    groupBoxLayout->addWidget(_pCheckBoxUseEcran, 0, 1);
-    groupBoxLayout->addWidget(_pCheckBoxUseAtmosphere, 1, 0);
-    groupBoxLayout->addWidget(_pCheckBoxUseReflexion, 1, 1);
-    groupBoxLayout->addWidget(_pCheckBoxUseVegetation, 2, 0);
-    groupBoxLayout->addWidget(_pCheckBoxInterference, 2, 1);
-    groupBoxLayout->addWidget(_pCheckBoxCondFav, 3, 0);
-    groupBoxLayout->addWidget(pLabelParamH, 4, 0);
-    groupBoxLayout->addWidget(_pLineEditParamH, 4, 1);
-    groupBoxLayout->addWidget(pLabelDistanceSRMin, 5, 0);
-    groupBoxLayout->addWidget(_pLineEditDistanceSRMin, 5, 1);
-    groupBoxLayout->addWidget(pLabelExpansGeo, 6, 0);
-    groupBoxLayout->addLayout(groupButtonLayout, 6, 1);
-
-    QGroupBox* groupBox = new QGroupBox();
-    groupBox->setTitle(TR("id_default_param_calcul"));
-    groupBox->setLayout(groupBoxLayout);
-
     //Sol
     QLabel* pLabelResistivite = new QLabel(TR("id_resistivite_label"));
     _pLineEditResistivite = new QLineEdit();
@@ -855,44 +813,6 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     QGroupBox* groupBox1 = new QGroupBox();
     groupBox1->setTitle(TR("id_default_sol"));
     groupBox1->setLayout(groupBox1Layout);
-
-    //Atmosphere
-    QLabel* pLabelPression = new QLabel(TR("id_pression_label"));
-    _pLineEditPression = new QLineEdit();
-    QLabel* pUnitPression = new QLabel(TR("id_unite_pression"));
-    QLabel* pLabelTemperature = new QLabel(TR("id_temperature_label"));
-    _pLineEditTemperature = new QLineEdit();
-    QLabel* pUnitTemp = new QLabel(TR("id_unite_temp"));
-    QLabel* pLabelHygrometrie = new QLabel(TR("id_hygrometrie_label"));
-    _pLineEditHygrometrie = new QLineEdit();
-    QLabel* pUnitHygro = new QLabel(TR("id_unite_hygro"));
-    QLabel* pLabelVitVent = new QLabel(TR("id_vitvent_label"));
-    _pLineEditVitVent = new QLineEdit();
-    QLabel* pUnitVitVent = new QLabel(TR("id_unite_vitvent"));
-    QLabel* pLabelDirVent = new QLabel(TR("id_dirvent_label"));
-    _pLineEditDirVent = new QLineEdit();
-    QLabel* pUnitDirVent = new QLabel(TR("id_unite_dirvent"));
-
-    QGridLayout* groupBox2Layout = new QGridLayout();
-    groupBox2Layout->addWidget(pLabelPression, 0, 0);
-    groupBox2Layout->addWidget(_pLineEditPression, 0, 1);
-    groupBox2Layout->addWidget(pUnitPression, 0, 2);
-    groupBox2Layout->addWidget(pLabelTemperature, 1, 0);
-    groupBox2Layout->addWidget(_pLineEditTemperature, 1, 1);
-    groupBox2Layout->addWidget(pUnitTemp, 1, 2);
-    groupBox2Layout->addWidget(pLabelHygrometrie, 2, 0);
-    groupBox2Layout->addWidget(_pLineEditHygrometrie, 2, 1);
-    groupBox2Layout->addWidget(pUnitHygro, 2, 2);
-    groupBox2Layout->addWidget(pLabelVitVent, 3, 0);
-    groupBox2Layout->addWidget(_pLineEditVitVent, 3, 1);
-    groupBox2Layout->addWidget(pUnitVitVent, 3, 2);
-    groupBox2Layout->addWidget(pLabelDirVent, 4, 0);
-    groupBox2Layout->addWidget(_pLineEditDirVent, 4, 1);
-    groupBox2Layout->addWidget(pUnitDirVent, 4, 2);
-
-    QGroupBox* groupBox2 = new QGroupBox();
-    groupBox2->setTitle(TR("id_default_atmo"));
-    groupBox2->setLayout(groupBox2Layout);
 
     //Materiau de construction
     QLabel* pLabelMasseVol = new QLabel(TR("id_masse_vol_label"));
@@ -931,9 +851,7 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     groupBox4->setLayout(groupBox4Layout);
 
     QVBoxLayout* pTabLayout = new QVBoxLayout();
-    pTabLayout->addWidget(groupBox);
     pTabLayout->addWidget(groupBox1);
-    pTabLayout->addWidget(groupBox2);
     pTabLayout->addWidget(groupBox3);
     pTabLayout->addWidget(groupBox4);
     pTabLayout->addStretch(1);
@@ -989,15 +907,6 @@ void TYPreferenceDialog::loadPreferences()
     else
     {
         ((GeneralTab*)tabWidget->widget(4))->_pHistoSizeEdit->setText(QString().setNum(10));
-    }
-
-    if (TYPreferenceManager::exists("NbThread"))
-    {
-        ((GeneralTab*)tabWidget->widget(4))->_pThreadEdit->setText(QString().setNum(TYPreferenceManager::getInt("NbThread")));
-    }
-    else
-    {
-        ((GeneralTab*)tabWidget->widget(4))->_pThreadEdit->setText(QString().setNum(4));
     }
 
     if (TYPreferenceManager::exists("BiblioPath"))
@@ -1158,10 +1067,6 @@ void TYPreferenceDialog::loadPreferences()
     if (TYPreferenceManager::exists("ResolutionCircle"))
     {
         ((GeometrieTab*)tabWidget->widget(0))->_pResoCylEdit->setText(QString().setNum(TYPreferenceManager::getFloat("ResolutionCircle")));
-    }
-    if (TYPreferenceManager::exists("SeuilConfondus"))
-    {
-        ((GeometrieTab*)tabWidget->widget(0))->_pSeuilDistNulEdit->setText(QString().setNum(TYPreferenceManager::getFloat("SeuilConfondus")));
     }
     if (TYPreferenceManager::exists("DistMinPtCrbNiv"))
     {
@@ -1392,53 +1297,6 @@ void TYPreferenceDialog::loadPreferences()
 
 
     // Acoustique
-    if (TYPreferenceManager::exists("UseReflexionCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseReflexion->setChecked(TYPreferenceManager::getBool("UseReflexionCalculDefault"));
-    }
-    if (TYPreferenceManager::exists("UseEcranCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseEcran->setChecked(TYPreferenceManager::getBool("UseEcranCalculDefault"));
-    }
-    if (TYPreferenceManager::exists("UseVegetationCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseVegetation->setChecked(TYPreferenceManager::getBool("UseVegetationCalculDefault"));
-    }
-    if (TYPreferenceManager::exists("UseAtmosphereCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->setChecked(TYPreferenceManager::getBool("UseAtmosphereCalculDefault"));
-    }
-    if (TYPreferenceManager::exists("CondFavCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxCondFav->setChecked(TYPreferenceManager::getBool("CondFavCalculDefault"));
-    }
-    if (TYPreferenceManager::exists("UseSolCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseSol->setChecked(TYPreferenceManager::getBool("UseSolCalculDefault"));
-    }
-    if (TYPreferenceManager::exists("ExpansGeo2PiCalculDefault"))
-    {
-        if (TYPreferenceManager::getBool("ExpansGeo2PiCalculDefault"))
-        {
-            ((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo4Pi->setChecked(true);
-        }
-        else
-        {
-            ((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo2Pi->setChecked(true);
-        }
-    }
-    if (TYPreferenceManager::exists("InterferenceCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->setChecked(TYPreferenceManager::getBool("InterferenceCalculDefault"));
-    }
-    if (TYPreferenceManager::exists("ParamHCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditParamH->setText(QString().setNum(TYPreferenceManager::getDouble("ParamHCalculDefault")));
-    }
-    if (TYPreferenceManager::exists("DistanceSRMinCalculDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDistanceSRMin->setText(QString().setNum(TYPreferenceManager::getDouble("DistanceSRMinCalculDefault")));
-    }
     if (TYPreferenceManager::exists("ResisSolDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditResistivite->setText(QString().setNum(TYPreferenceManager::getDouble("ResisSolDefault")));
@@ -1446,26 +1304,6 @@ void TYPreferenceDialog::loadPreferences()
     if (TYPreferenceManager::exists("EpaisSolDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEpaisseur->setText(QString().setNum(TYPreferenceManager::getDouble("EpaisSolDefault")));
-    }
-    if (TYPreferenceManager::exists("PressionAtmoDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditPression->setText(QString().setNum(TYPreferenceManager::getDouble("PressionAtmoDefault")));
-    }
-    if (TYPreferenceManager::exists("TempAtmoDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditTemperature->setText(QString().setNum(TYPreferenceManager::getDouble("TempAtmoDefault")));
-    }
-    if (TYPreferenceManager::exists("HygroAtmoDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditHygrometrie->setText(QString().setNum(TYPreferenceManager::getDouble("HygroAtmoDefault")));
-    }
-    if (TYPreferenceManager::exists("VitVentAtmoDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditVitVent->setText(QString().setNum(TYPreferenceManager::getDouble("VitVentAtmoDefault")));
-    }
-    if (TYPreferenceManager::exists("DirVentAtmoDefault"))
-    {
-        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDirVent->setText(QString().setNum(TYPreferenceManager::getDouble("DirVentAtmoDefault")));
     }
     if (TYPreferenceManager::exists("MasseVolMatDefault"))
     {
@@ -1549,11 +1387,6 @@ void TYPreferenceDialog::savePreferences()
     }
 
     getTYApp()->getActionManager()->setHistorySize(((GeneralTab*)tabWidget->widget(4))->_pHistoSizeEdit->text().toInt());
-
-    if (qValidator.validate(aQString = ((GeneralTab*)tabWidget->widget(4))->_pThreadEdit->text(), res) == QValidator::Acceptable)
-    {
-        TYPreferenceManager::setInt("NbThread", ((GeneralTab*)tabWidget->widget(4))->_pThreadEdit->text().toInt());
-    }
 
     //repertoire de la bibliotheque
     QDir libraryPath(((GeneralTab*)tabWidget->widget(4))->_pLibraryPathEdit->text());
@@ -1707,11 +1540,6 @@ void TYPreferenceDialog::savePreferences()
         TYPreferenceManager::setFloat("ResolutionCircle", ((GeometrieTab*)tabWidget->widget(0))-> _pResoCylEdit->text().toFloat());
     }
     qValidator.setBottom(0.001);
-    if (qValidator.validate(aQString = ((GeometrieTab*)tabWidget->widget(0))->_pSeuilDistNulEdit->text(), res) == QValidator::Acceptable)
-    {
-        TYPreferenceManager::setFloat("SeuilConfondus", ((GeometrieTab*)tabWidget->widget(0))->_pSeuilDistNulEdit->text().toFloat());
-    }
-    qValidator.setBottom(1);
     if (qValidator.validate(aQString = ((GeometrieTab*)tabWidget->widget(0))->_pDistMinPtCrbNivEdit->text(), res) == QValidator::Acceptable)
     {
         TYPreferenceManager::setFloat("DistMinPtCrbNiv", ((GeometrieTab*)tabWidget->widget(0))->_pDistMinPtCrbNivEdit->text().toFloat());
@@ -1868,38 +1696,12 @@ void TYPreferenceDialog::savePreferences()
     TYPreferenceManager::setFloat("MaillageOpacity", float(((ColorsTab*)tabWidget->widget(2))->_pMailOpacitySlider->value()) / 100.0f);
 
     // Acoustique
-    TYPreferenceManager::setBool("UseSolCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseSol->isChecked());
-    TYPreferenceManager::setBool("CondFavCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxCondFav->isChecked());
-    TYPreferenceManager::setBool("UseAtmosphereCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseAtmosphere->isChecked());
-    TYPreferenceManager::setBool("UseVegetationCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseVegetation->isChecked());
-    TYPreferenceManager::setBool("UseReflexionCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseReflexion->isChecked());
-    TYPreferenceManager::setBool("InterferenceCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxInterference->isChecked());
-    TYPreferenceManager::setBool("UseEcranCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pCheckBoxUseEcran->isChecked());
-    if (((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo2Pi->isChecked())
-    {
-        TYPreferenceManager::setBool("ExpansGeo2PiCalculDefault", false);
-    }
-    else if (((AcoustiqueTab*)tabWidget->widget(3))->_pRadioButtonExpansGeo4Pi->isChecked())
-    {
-        TYPreferenceManager::setBool("ExpansGeo2PiCalculDefault", true);
-    }
-
     qValidator.setBottom(0.001);
-    if (qValidator.validate(aQString = ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditParamH->text(), res) == QValidator::Acceptable)
-    {
-        TYPreferenceManager::setDouble("ParamHCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditParamH->text().toDouble());
-    }
-    TYPreferenceManager::setDouble("DistanceSRMinCalculDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDistanceSRMin->text().toDouble());
     TYPreferenceManager::setDouble("ResisSolDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditResistivite->text().toDouble());
     if (qValidator.validate(aQString = ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEpaisseur->text(), res) == QValidator::Acceptable)
     {
         TYPreferenceManager::setDouble("EpaisSolDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEpaisseur->text().toDouble());
     }
-    TYPreferenceManager::setDouble("PressionAtmoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditPression->text().toDouble());
-    TYPreferenceManager::setDouble("TempAtmoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditTemperature->text().toDouble());
-    TYPreferenceManager::setDouble("HygroAtmoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditHygrometrie->text().toDouble());
-    TYPreferenceManager::setDouble("VitVentAtmoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditVitVent->text().toDouble());
-    TYPreferenceManager::setDouble("DirVentAtmoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditDirVent->text().toDouble());
 
     TYPreferenceManager::setDouble("MasseVolMatDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditMasseVol->text().toDouble());
     TYPreferenceManager::setSpectre("SpectreTransmDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pSpectreAttMatConst);

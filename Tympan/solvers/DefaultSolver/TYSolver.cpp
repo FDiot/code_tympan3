@@ -13,14 +13,10 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#include "Tympan/solvers/DefaultSolver/TYTrajet.h"
-#include "Tympan/models/business/TYCalcul.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
+#include "Tympan/models/common/spectrum_matrix.h"
+#include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/DefaultSolver/threading.h"
+#include "Tympan/solvers/DefaultSolver/TYTrajet.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
@@ -59,12 +55,11 @@ TYSolver::~TYSolver()
     _pool = NULL;}
 
 
-bool TYSolver::solve(TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem,
-        tympan::AcousticResultModel& aresult)
+bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
+                     tympan::AcousticResultModel& aresult)
 {
     // Creation de la collection de thread
-    const unsigned int nbThread = calcul.getNbTHread();
-    _pool = new OThreadPool(nbThread);
+    _pool = new OThreadPool(tympan::SolverConfiguration::get()->NbThreads);
 
     // build trajects and return count of
     size_t count = buildTrajects( const_cast<tympan::AcousticProblemModel&>(aproblem) );
@@ -89,10 +84,10 @@ bool TYSolver::solve(TYCalcul& calcul, const tympan::AcousticProblemModel& aprob
     }
 
     // Initialisation du path finder
-    _acousticPathFinder->init(calcul);
+    _acousticPathFinder->init();
 
     // Initialisation du acoustic model
-    _acousticModel->init(calcul);
+    _acousticModel->init();
 
     // On reset la thread pool
     _pool->begin(count);

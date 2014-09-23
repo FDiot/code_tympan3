@@ -26,8 +26,7 @@
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
-#include "Tympan/models/solver/acoustic_problem_model.hpp"
-#include "Tympan/models/solver/acoustic_result_model.hpp"
+#include "Tympan/models/business/DefaultSolverConfig.h"
 #include "TYCalcul.h"
 
 #if TY_USE_IHM
@@ -45,8 +44,6 @@ TY_EXT_GRAPHIC_INST(TYCalcul);
 #define MAX_RECEPTEURS 131072
 
 TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
-    : _acousticProblem(tympan::make_AcousticProblemModel())
-    , _acousticResult(tympan::make_AcousticResultModel())
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -56,178 +53,18 @@ TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
     _dateModif = "2001-10-01";
     _numero = 1;
 
-    _pAtmosphere = new TYAtmosphere();
-    _pAtmosphere->setParent(this);
-
     _pResultat = new TYResultat();
     _pResultat->setParent(this);
 
     _upTodate = true;
-
-    _expansGeo = 0; // 4pi
-    _useSol = true;
-    _typeCalculSol = 0; // Sol Local
-    _condFav = false;
-    _useVegetation = false;
-    _useAtmosphere = true;
-    _useReflexion = false;
-    _useEcran = true;
-    _bCalculTrajetsHorizontaux = true;
-    _useReflexion = false;
-    _interference = false;
-
     _state = TYCalcul::Actif; // A sa creation, le calcul est actif
-
-    _h1 = 10.0;
-    _distanceSRMin = 0.3;
-    _anechoic = false; // Par defaut : conditions semi-anechoiques
-
-    _seuilConfondus = TYSEUILCONFONDUS;
 
     // Le solveur par defaut est le solveur standard de TYMPAN
     _solverId = OGenID("{A98B320C-44C4-47a9-B689-1DD352DAA8B2}");
 
-    _typeSaisieMeteo = 0;
-
-    _nbThread = 4;
-
-#if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo"))
-    {
-        _typeSaisieMeteo = TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo");
-    }
-    else
-    {
-        TYPreferenceManager::setInt(TYDIRPREFERENCEMANAGER, "TypeSaisieMeteo", _typeSaisieMeteo);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "UseReflexionCalculDefault"))
-    {
-        _useReflexion = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "UseReflexionCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "UseReflexionCalculDefault", _useReflexion);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "UseEcranCalculDefault"))
-    {
-        _useEcran = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "UseEcranCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "UseEcranCalculDefault", _useEcran);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "UseVegetationCalculDefault"))
-    {
-        _useVegetation = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "UseVegetationCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "UseVegetationCalculDefault", _useVegetation);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault"))
-    {
-        _useAtmosphere = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "AtmosphereCalculDefault", _useAtmosphere);
-    }
-
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "CondFavCalculDefault"))
-    {
-        _condFav = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "CondFavCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "CondFavCalculDefault", _condFav);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "UseSolCalculDefault"))
-    {
-        _useSol = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "UseSolCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "UseSolCalculDefault", _useSol);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "InterferenceCalculDefault"))
-    {
-        _interference = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "InterferenceCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "InterferenceCalculDefault", _interference);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "ParamHCalculDefault"))
-    {
-        _h1 = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "ParamHCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "ParamHCalculDefault", _h1);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "DistanceSRMinCalculDefault"))
-    {
-        _distanceSRMin = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "DistanceSRMinCalculDefault");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "DistanceSRMinCalculDefault", _distanceSRMin);
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "ExpansGeo2PiCalculDefault"))
-    {
-        if (TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "ExpansGeo2PiCalculDefault"))
-        {
-            _expansGeo = 1;
-        }
-        else
-        {
-            _expansGeo = 0;
-        }
-    }
-    else
-    {
-        if (_expansGeo == 1)
-        {
-            TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "ExpansGeo2PiCalculDefault", true);
-        }
-        else
-        {
-            TYPreferenceManager::setBool(TYDIRPREFERENCEMANAGER, "ExpansGeo2PiCalculDefault", false);
-        }
-    }
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
-    {
-        _seuilConfondus = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus", _seuilConfondus);
-    }
-
-
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
-    {
-        _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
-    }
-    else
-    {
-        TYPreferenceManager::setUInt(TYDIRPREFERENCEMANAGER, "NbThread", static_cast<unsigned long>(_nbThread));
-    }
-#endif
-    setUseAtmosphere(_useAtmosphere);
-
     _pParent = pParent;
+
+    solverParams = DEFAULT_SOLVER_CONFIG;
 }
 
 TYCalcul::TYCalcul(const TYCalcul& other)
@@ -255,25 +92,13 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _dateCreation = other._dateCreation;
         _dateModif = other._dateModif;
         _comment = other._comment;
-        _expansGeo = other._expansGeo;
         _upTodate = other._upTodate;
-        _useSol = other._useSol;
-        _condFav = other._condFav;
-        _useVegetation = other._useVegetation;
-        _useAtmosphere = other._useAtmosphere;
-        _useEcran = other._useEcran;
-        _useReflexion = other._useReflexion;
-        _interference = other._interference;
         _state = other._state;
-        _h1 = other._h1;
-        _distanceSRMin = other._distanceSRMin;
-        _pAtmosphere = other._pAtmosphere;
         _maillages = other._maillages;
         _pResultat = other._pResultat;
         _elementSelection = other._elementSelection;
         _emitAcVolNode = other._emitAcVolNode;
         _mapElementRegime = other._mapElementRegime;
-        _anechoic = other._anechoic;
         _solverId = other._solverId;
     }
     return *this;
@@ -289,25 +114,13 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_dateModif != other._dateModif) { return false; }
         if (_comment != other._comment) { return false; }
         if (_numero != other._numero) { return false; }
-        if (_expansGeo != other._expansGeo) { return false; }
         if (_upTodate != other._upTodate) { return false; }
-        if (_useSol != other._useSol) { return false; }
-        if (_condFav != other._condFav) { return false; }
-        if (_useVegetation != other._useVegetation) { return false; }
-        if (_useAtmosphere != other._useAtmosphere) { return false; }
-        if (_useEcran != other._useEcran) { return false; }
-        if (_useReflexion != other._useReflexion) { return false; }
-        if (_interference != other._interference) { return false; }
         if (_state != other._state) { return false; }
-        if (_h1 != other._h1) { return false; }
-        if (_distanceSRMin != other._distanceSRMin) { return false; }
-        if (_pAtmosphere != other._pAtmosphere) { return false; }
         if (_maillages != other._maillages) { return false; }
         if (_pResultat != other._pResultat) { return false; }
         if (_emitAcVolNode != other._emitAcVolNode) { return false; }
         if (_mapElementRegime != other._mapElementRegime) { return false; }
         if (_elementSelection != other._elementSelection) { return false; }
-        if (_anechoic != other._anechoic) { return false; }
         if (_solverId != other._solverId) { return false; }
     }
     return true;
@@ -334,21 +147,9 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _dateCreation = pOtherCalcul->_dateCreation;
     _dateModif = pOtherCalcul->_dateModif;
     _comment = pOtherCalcul->_comment;
-    _expansGeo = pOtherCalcul->_expansGeo;
     _upTodate = pOtherCalcul->_upTodate;
-    _useSol = pOtherCalcul->_useSol;
-    _condFav = pOtherCalcul->_condFav;
-    _useVegetation = pOtherCalcul->_useVegetation;
-    _useAtmosphere = pOtherCalcul->_useAtmosphere;
-    _useEcran = pOtherCalcul->_useEcran;
-    _useReflexion = pOtherCalcul->_useReflexion;
-    _interference = pOtherCalcul->_interference;
     _state = pOtherCalcul->_state;
-    _h1 = pOtherCalcul->_h1;
-    _distanceSRMin = pOtherCalcul->_distanceSRMin;
-    _anechoic = pOtherCalcul->_anechoic;
 
-    _pAtmosphere->deepCopy(pOtherCalcul->_pAtmosphere, copyId);
     _pResultat->deepCopy(pOtherCalcul->_pResultat, copyId);
 
     _elementSelection = pOtherCalcul->_elementSelection;
@@ -398,18 +199,7 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "comment", _comment);
     TYXMLTools::addElementStringValue(domNewElem, "solverId", _solverId.toString());
     TYXMLTools::addElementIntValue(domNewElem, "etat", _state);  // 16/08/2005 Possibilite de bloquer un calcul
-    TYXMLTools::addElementIntValue(domNewElem, "expansGeo", _expansGeo);
-    TYXMLTools::addElementIntValue(domNewElem, "useSol", _useSol);
-    TYXMLTools::addElementIntValue(domNewElem, "typeCalculSol", _typeCalculSol);
-    TYXMLTools::addElementIntValue(domNewElem, "condFav", _condFav);
-    TYXMLTools::addElementIntValue(domNewElem, "useVegetation", _useVegetation);
-    TYXMLTools::addElementIntValue(domNewElem, "useAtmosphere", _useAtmosphere);
-    TYXMLTools::addElementIntValue(domNewElem, "useEcran", _useEcran);
-    TYXMLTools::addElementIntValue(domNewElem, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux);
-    TYXMLTools::addElementIntValue(domNewElem, "useReflexion", _useReflexion);
-    TYXMLTools::addElementIntValue(domNewElem, "interference", _interference);
-    TYXMLTools::addElementDoubleValue(domNewElem, "h1", _h1);
-    TYXMLTools::addElementDoubleValue(domNewElem, "distanceSRMin", _distanceSRMin);
+    TYXMLTools::addElementStringValue(domNewElem, "solverParams", solverParams);
 
     // Ajout du site node sur lequel s'effectue le calcul
     DOM_Document domDoc = domElement.ownerDocument();
@@ -455,9 +245,6 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
         tmpNode.setAttribute("state", QString(intToStr((*iter4).second).c_str()));
     }
 
-    // Atmosphere
-    _pAtmosphere->toXML(domNewElem);
-
     // Maillages
     unsigned int i;
     for (i = 0; i < _maillages.size(); i++)
@@ -486,9 +273,9 @@ int TYCalcul::fromXML(DOM_Element domElement)
 
     purge();
 
-    bool getOk[21];
+    bool getOk[8];
     unsigned int i;
-    for (i = 0; i < 21; i++) { getOk[i] = false; }
+    for (i = 0; i < 8; i++) { getOk[i] = false; }
     int retVal = -1;
     LPTYMaillageGeoNode pMaillageGeoNode = new TYMaillageGeoNode(NULL, this);
 
@@ -515,22 +302,9 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementStringValue(elemCur, "dateCreation", _dateCreation, getOk[2]);
         TYXMLTools::getElementStringValue(elemCur, "dateModif", _dateModif, getOk[3]);
         TYXMLTools::getElementStringValue(elemCur, "comment", _comment, getOk[4]);
-        TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[20]);
-        TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[19]);
-        TYXMLTools::getElementIntValue(elemCur, "expansGeo", _expansGeo, getOk[5]);
-        TYXMLTools::getElementBoolValue(elemCur, "useSol", _useSol, getOk[6]);
-        TYXMLTools::getElementIntValue(elemCur, "typeCalculSol", _typeCalculSol, getOk[17]);
-        TYXMLTools::getElementBoolValue(elemCur, "condFav", _condFav, getOk[7]);
-        TYXMLTools::getElementBoolValue(elemCur, "useVegetation", _useVegetation, getOk[8]);
-        TYXMLTools::getElementBoolValue(elemCur, "useAtmosphere", _useAtmosphere, getOk[9]);
-        TYXMLTools::getElementBoolValue(elemCur, "useEcran", _useEcran, getOk[10]);
-        TYXMLTools::getElementBoolValue(elemCur, "calculTrajetHorizontaux", _bCalculTrajetsHorizontaux, getOk[18]);
-        TYXMLTools::getElementBoolValue(elemCur, "useReflexion", _useReflexion, getOk[11]);
-        TYXMLTools::getElementBoolValue(elemCur, "interference", _interference, getOk[12]);
-        TYXMLTools::getElementDoubleValue(elemCur, "h1", _h1, getOk[13]);
-        TYXMLTools::getElementDoubleValue(elemCur, "distanceSRMin", _distanceSRMin, getOk[14]);
-
-        if (!getOk[17]) { _typeCalculSol = 0; } // Par defaut, calcul avec sol local
+        TYXMLTools::getElementStringValue(elemCur, "solverId", strSolverId, getOk[5]);
+        TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[6]);
+        TYXMLTools::getElementStringValue(elemCur, "solverParams", solverParams, getOk[7]);
 
         // Selection
         if (elemCur.nodeName() == "ListID")
@@ -624,9 +398,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
         {
         }
 
-        // Atmosphere
-        _pAtmosphere->callFromXMLIfEqual(elemCur);
-
         // CLM-NT33: Compatibilitité avec ancien format XML
         // Points de controle
         if (elemCur.nodeName() == "PointsControl")
@@ -671,7 +442,7 @@ int TYCalcul::fromXML(DOM_Element domElement)
         _pResultat->callFromXMLIfEqual(elemCur, &readOk);
     }
 
-    if (getOk[20]) { _solverId.FromString(strSolverId); } // Recuperation de l'Id du solveur
+    if (getOk[5]) { _solverId.FromString(strSolverId); } // Recuperation de l'Id du solveur
 
     // On supprime les IDs de la selection des elements non presents dans le site
     TYListID::iterator next = tempElementSelection.begin();
@@ -781,12 +552,6 @@ void TYCalcul::clearResult()
     _mapElementRegime.clear();
     _emitAcVolNode.clear();
 
-    setIsGeometryModified(true);
-}
-
-void TYCalcul::setElementSelection(TYListID selection)
-{
-    _elementSelection = selection;
     setIsGeometryModified(true);
 }
 
@@ -1156,10 +921,7 @@ bool TYCalcul::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
             pt._z += ((TYRectangularMaillage*) pMaillage)->getRectangle()->getSizeY() / 2.0;
         }
 
-        ORepere3D repere = pMaillageGeoNode->getORepere3D();
-        // On assigne la nouvelle altitude
-        repere._origin._z = pt._z;
-        pMaillageGeoNode->setRepere(repere);
+        pMaillageGeoNode->getORepere3D()._origin._z = pt._z;
 
         modified = true;
     }
@@ -1299,84 +1061,6 @@ void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
     tabVolNodeGeoNode.clear();
 }
 
-bool TYCalcul::isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSiteNode pMergeSite)
-{
-    OMessageManager::get()->info("Nombre de sources : %d", nbSources);
-    OMessageManager::get()->info("Nombre de recepteurs : %d", nbRecepteurs);
-    OMessageManager::get()->info("Nombre de trajets potentiels : %d", nbSources * nbRecepteurs);
-
-    if (nbSources == 0)
-    {
-        OMessageManager::get()->info("Pas de source");
-
-        // On indique quels elements (s'il y en a), n'ont pas pu  etre mis a jour
-        vector<LPTYElement> tabElemNOk = pMergeSite->getInfrastructure()->getTabElemNOk();
-        if (tabElemNOk.size() != 0)
-        {
-            OMessageManager::get()->info("\n Les elements suivants ont echoue dans leur mise a jour :");
-            for (unsigned int i = 0 ; i < tabElemNOk.size() ; i++)
-            {
-                OMessageManager::get()->info(tabElemNOk[i]->getName().toAscii().data());
-            }
-            OMessageManager::get()->info("\n\n");
-        }
-
-        return false;
-    }
-
-    if (nbRecepteurs == 0)
-    {
-        OMessageManager::get()->info("Pas de recepteur");
-        return false;
-    }
-
-    return true;
-}
-
-bool TYCalcul::go(SolverInterface* pSolver)
-{
-    TYProjet* pProjet = getProjet();
-
-    if (!pProjet)
-    {
-        return false;
-    }
-
-    if (_state == TYCalcul::Locked)
-    {
-        OMessageManager::get()->info("+++ UN RESULTAT MESURE NE PEUX FAIRE L'OBJET D'UN CALCUL +++");
-        return true; // Si le calcul est bloque, il ne peut etre execute
-    }
-    // Reset des resultats precedents
-    _pResultat->purge();
-    TYNameManager::get()->enable(false);
-
-// XXX is it still of any use ?
-#ifdef EXPORT_MERGED_SITE
-    QString docName = "Tympan";
-    QString version = "3.7";
-    TYXMLManager xmlManager;
-    xmlManager.createDoc(docName, version);
-    xmlManager.addElement(pSite);
-    xmlManager.save("merged.xml");
-#endif
-
-    bool ret = false;
-    if ( isCalculPossible(_acousticProblem->nsources(), _acousticProblem->nreceptors(), pProjet->getSite()))
-    {
-        OMessageManager::get()->info("Calcul en cours...");
-        // XXX remove pCalcul (once parameters will have been removed from this class)
-        ret = pSolver->solve(*this, *_acousticProblem, *_acousticResult);
-        pSolver->purge();
-        OMessageManager::get()->info("Calcul en termine.");
-    }
-    if (!ret)
-    {
-        _pResultat->purge();
-    }
-    return ret;
-}
-
 void TYCalcul::goPostprocessing()
 {
     // Create result map (business sources --> micro sources)
@@ -1393,16 +1077,6 @@ void TYCalcul::goPostprocessing()
     TYNameManager::get()->enable(true);
 
     setIsAcousticModified(true); // Les données acoustiques ont été actualisées
-
-    // Restaure default number of thread (sorry this is not clean)
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "NbThread"))
-    {
-        _nbThread = static_cast<unsigned int>(TYPreferenceManager::getInt(TYDIRPREFERENCEMANAGER, "NbThread"));
-    }
-    else
-    {
-        TYPreferenceManager::setUInt(TYDIRPREFERENCEMANAGER, "NbThread", static_cast<unsigned long>(_nbThread));
-    }
 }
 
 void TYCalcul::getCalculElements(LPTYSiteNode pSite)
@@ -1500,11 +1174,6 @@ void TYCalcul::getCalculElements(LPTYSiteNode pSite)
             pResTrans->setInCurrentCalcul(true);
         }
     }
-}
-
-void TYCalcul::setUseAtmosphere(const bool use /*=true*/)
-{
-    _useAtmosphere = use;
 }
 
 void TYCalcul::setState(int state)

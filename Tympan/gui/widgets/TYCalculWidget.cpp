@@ -42,7 +42,6 @@
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYPluginManager.h"
 #include "Tympan/gui/widgets/TYEtatsWidget.h"
-#include "Tympan/gui/widgets/TYAtmosphereWidget.h"
 #include "TYCalculWidget.h"
 
 
@@ -107,21 +106,15 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _tabWidget = new QTabWidget(this);
 
     // DEFINITION DE L'ONGLET CALCUL
-
     _groupBoxFlag = new QGroupBox(_tabWidget);
     _groupBoxFlag->setTitle(TR(""));
     QGridLayout* groupBoxFlagLayout = new QGridLayout();
     _groupBoxFlag->setLayout(groupBoxFlagLayout);
 
-
-    // Utilisation de l'atmosphere
-    _labelUseAtmosphere = new QLabel(_groupBoxFlag);
-    _labelUseAtmosphere->setText(TR("id_useatmosphere_label"));
-    groupBoxFlagLayout->addWidget(_labelUseAtmosphere, 0, 0);
-
-    _checkBoxUseAtmosphere = new QCheckBox(_groupBoxFlag);
-    _checkBoxUseAtmosphere->setText(TR(""));
-    groupBoxFlagLayout->addWidget(_checkBoxUseAtmosphere, 0, 1);
+    // Will contain solver parameters as a single text bloc
+    _solverParams = new QTextEdit(QString(""), _groupBoxFlag);
+    _solverParams->setPlainText(getElement()->solverParams);
+    groupBoxFlagLayout->addWidget(_solverParams, 0, 0, 5, 1);
 
     QButtonGroup* buttonGroupSolRefReel = new QButtonGroup();
     _pRadioButtonSolReel = new QRadioButton(TR("id_usesol_reel_label"));
@@ -137,107 +130,13 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     groupBoxSolRefReel->setTitle(TR(""));
     groupBoxSolRefReel->setLayout(groupBoxSolRefReelLayout);
 
-    groupBoxFlagLayout->addWidget(groupBoxSolRefReel, 1, 0, 1, 2);
+    groupBoxFlagLayout->addWidget(groupBoxSolRefReel, 0, 1, 1, 2);
 
     // Choix du type de calcul avec sol
-    QLabel* labelTypeCalcul = new QLabel(_groupBoxFlag);
-    labelTypeCalcul->setText(TR("id_label_sol_calc"));
-    groupBoxFlagLayout->addWidget(labelTypeCalcul, 1, 2);
-    _comboBoxTypeSol = new QComboBox(_groupBoxFlag);
-    groupBoxFlagLayout->addWidget(_comboBoxTypeSol, 1, 3);
-    updateBoxSol();
-
-    // Calcul avec vegetation
-    _labelUseVegetation = new QLabel(_groupBoxFlag);
-    _labelUseVegetation->setText(TR("id_usevegetation_label"));
-    groupBoxFlagLayout->addWidget(_labelUseVegetation, 2, 0);
-
-    _checkBoxUseVegetation = new QCheckBox(_groupBoxFlag);
-    _checkBoxUseVegetation->setText(TR(""));
-    groupBoxFlagLayout->addWidget(_checkBoxUseVegetation, 2, 1);
-
-    // Utilisation d'ecrans
-    _labelUseEcran = new QLabel(_groupBoxFlag);
-    _labelUseEcran->setText(TR("id_useecran_label"));
-    groupBoxFlagLayout->addWidget(_labelUseEcran, 3, 0);
-
-    _checkBoxUseEcran = new QCheckBox(_groupBoxFlag);
-    _checkBoxUseEcran->setText(TR(""));
-    groupBoxFlagLayout->addWidget(_checkBoxUseEcran, 3, 1);
-
-    _labelParcoursLateraux = new QLabel(_groupBoxFlag);
-    _labelParcoursLateraux->setText(TR("id_parcours_lateraux"));
-    groupBoxFlagLayout->addWidget(_labelParcoursLateraux, 3, 2);
-
-    _checkBoxParcoursLateraux = new QCheckBox(_groupBoxFlag);
-    _checkBoxParcoursLateraux->setText(TR(""));
-    groupBoxFlagLayout->addWidget(_checkBoxParcoursLateraux, 3, 3);
-
-    // Calcul avec reflexion
-    _labelUseReflexion = new QLabel(_groupBoxFlag);
-    _labelUseReflexion->setText(TR("id_usereflexion_label"));
-    groupBoxFlagLayout->addWidget(_labelUseReflexion, 4, 0);
-
-    _checkBoxUseReflexion = new QCheckBox(_groupBoxFlag);
-    _checkBoxUseReflexion->setText(TR(""));
-    groupBoxFlagLayout->addWidget(_checkBoxUseReflexion, 4, 1);
-
-    // Calcul en conditions favorables (1)
-
-    QButtonGroup* buttonGroupCondFavHomo = new QButtonGroup();
-    _pRadioButtonCondHomo = new QRadioButton(TR("id_condhomo_label"));
-    buttonGroupCondFavHomo->addButton(_pRadioButtonCondHomo, 0);
-    _pRadioButtonCondFav = new QRadioButton(TR("id_condfav_label"));
-    buttonGroupCondFavHomo->addButton(_pRadioButtonCondFav, 1);
-
-    QGridLayout* groupBoxCondFavHomoLayout = new QGridLayout();
-    groupBoxCondFavHomoLayout->addWidget(_pRadioButtonCondHomo, 0, 0);
-    groupBoxCondFavHomoLayout->addWidget(_pRadioButtonCondFav, 0, 1);
-
-    QGroupBox* groupBoxCondFavHomo = new QGroupBox();
-    groupBoxCondFavHomo->setTitle(TR(""));
-    groupBoxCondFavHomo->setLayout(groupBoxCondFavHomoLayout);
-
-    groupBoxFlagLayout->addWidget(groupBoxCondFavHomo, 5, 0, 1, 2);
-
-    // Calcul en conditions favorables (2) : Parametre de distance relative des reflexions supplementaires
-    _labelParamH = new QLabel(_groupBoxFlag);
-    _labelParamH->setText(TR("id_paramh_label"));
-    groupBoxFlagLayout->addWidget(_labelParamH, 5, 2);
-
-    _lineEditParamH = new QLineEdit(_groupBoxFlag);
-    _lineEditParamH->setText(num.setNum(getElement()->getParamH(), 'f', 2));
-    groupBoxFlagLayout->addWidget(_lineEditParamH, 5, 3);
-
-    QButtonGroup* buttonGroupIE = new QButtonGroup();
-    _radioButtonEnergetique = new QRadioButton(TR("id_calcul_energetique"));
-    buttonGroupIE->addButton(_radioButtonEnergetique, 0);
-    _radioButtonInterference = new QRadioButton(TR("id_calcul_interference"));
-    buttonGroupIE->addButton(_radioButtonInterference, 1);
-
-    QGridLayout* groupBoxIELayout = new QGridLayout();
-    groupBoxIELayout->addWidget(_radioButtonEnergetique, 0, 0);
-    groupBoxIELayout->addWidget(_radioButtonInterference, 0, 1);
-
-    QGroupBox* groupBoxCondIE = new QGroupBox();
-    groupBoxCondIE->setTitle(TR(""));
-    groupBoxCondIE->setLayout(groupBoxIELayout);
-
-    groupBoxFlagLayout->addWidget(groupBoxCondIE, 6, 0, 1, 2);
-
-    // Distance Source/Recepteur minimale
-    QLabel* plabelDistanceSRMin = new QLabel(TR("id_distancesrmin"), _groupBoxFlag);
-    groupBoxFlagLayout->addWidget(plabelDistanceSRMin, 7, 0);
-
-    _lineEditDistanceSRMin = new QLineEdit(_groupBoxFlag);
-    groupBoxFlagLayout->addWidget(_lineEditDistanceSRMin, 7, 1, 1, 1);
+    _checkBoxParcoursLateraux = new QCheckBox(TR("id_parcours_lateraux"), _groupBoxFlag);
+    groupBoxFlagLayout->addWidget(_checkBoxParcoursLateraux, 1, 1);
 
     _tabWidget->insertTab(1, _groupBoxFlag, TR("id_opt_calc"));
-
-    // Onglet meteo
-    _meteoWidget = new TYAtmosphereWidget(getElement()->getAtmosphere(), _tabWidget);
-
-    _tabWidget->insertTab(2, _meteoWidget, TR("id_opt_meteo"));
 
     // Onglet Points de controle
     _tableauPointControle = new QTableWidget();
@@ -355,16 +254,12 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 
     connect(pPushButtonTableEtats, SIGNAL(clicked()), _etatsWidget, SLOT(show()));
     connect(_pushButtonResultat, SIGNAL(clicked()), this, SLOT(editResultat()));
-    connect(_checkBoxUseEcran, SIGNAL(clicked()), this, SLOT(updateUseEcran()));
-    connect(_checkBoxUseReflexion, SIGNAL(clicked()), this, SLOT(updateUseReflexion()));
 }
 
 TYCalculWidget::~TYCalculWidget()
 {
-    delete _meteoWidget;
-    _meteoWidget = NULL;
     delete _etatsWidget;
-    _etatsWidget = NULL;
+    delete _solverParams;
 }
 
 void TYCalculWidget::updateContent()
@@ -415,39 +310,13 @@ void TYCalculWidget::updateContent()
     // On affiche le regime courant
     _comboSolver->setCurrentIndex(currentSolverIndex);
 
-    // Choix concernant le sol
-    _pRadioButtonSolReflechissant->setChecked(!getElement()->getUseSol());
-    _pRadioButtonSolReel->setChecked(getElement()->getUseSol());
-    _comboBoxTypeSol->setCurrentIndex(getElement()->getTypeCalculSol());
-    _comboBoxTypeSol->setEnabled(false);
-
-    _pRadioButtonCondHomo->setChecked(!getElement()->getCondFav());
-    _pRadioButtonCondFav->setChecked(getElement()->getCondFav());
-
-    _lineEditParamH->setText(num.setNum(getElement()->getParamH(), 'f', 2));
-    _lineEditParamH->setEnabled(_pRadioButtonCondFav->isChecked());
-
-    _lineEditDistanceSRMin->setText(num.setNum(getElement()->getDistanceSRMin(), 'f', 2));
-    _checkBoxUseVegetation->setChecked(getElement()->getUseVegetation());
-    _checkBoxUseAtmosphere->setChecked(getElement()->getUseAtmosphere());
-
-    _checkBoxUseEcran->setChecked(getElement()->getUseEcran());
-    _checkBoxParcoursLateraux->setChecked(getElement()->getCalculTrajetsHorizontaux());
-    _checkBoxParcoursLateraux->setEnabled(_checkBoxUseEcran->isChecked());
-
-    // Le checkBox de reflexion n'est active que si on fait un calcul d'ecran
-    _checkBoxUseReflexion->setEnabled(_checkBoxUseEcran->isChecked());
-    _checkBoxUseReflexion->setChecked(getElement()->getUseReflexion());
-
-    _radioButtonEnergetique->setChecked(!getElement()->getInterference());
-    _radioButtonInterference->setChecked(getElement()->getInterference());
-
     _checkBoxStoreGlobalMatrix->setChecked(getElement()->getStatusPartialResult());
-
 
     _editDateModif->setDate(date.currentDate());
     _editDateCreation->setDate(date.fromString(getElement()->getDateCreation(), Qt::ISODate));
 
+    // Display solver parameters
+    _solverParams->setPlainText(getElement()->solverParams);
 
     // Remplissage du tableau des points de controle
     _tableauPointControle->setEnabled(true);
@@ -553,29 +422,8 @@ void TYCalculWidget::apply()
         if (getElement()->getResultat()) { getElement()->getResultat()->purge(); }
     }
 
-    getElement()->setUseSol(_pRadioButtonSolReel->isChecked());
-
-    getElement()->setTypeCalculSol(_comboBoxTypeSol->currentIndex());
-
-    getElement()->setCondFav(_pRadioButtonCondFav->isChecked());
-
-    getElement()->setParamH(_lineEditParamH->text().toDouble());
-    getElement()->setUseVegetation(_checkBoxUseVegetation->isChecked());
-    getElement()->setUseAtmosphere(_checkBoxUseAtmosphere->isChecked());
-
-    getElement()->setUseEcran(_checkBoxUseEcran->isChecked());
-    getElement()->setCalculTrajetsHorizontaux(_checkBoxParcoursLateraux->isChecked());
-
-    getElement()->setUseReflexion(_checkBoxUseReflexion->isChecked());
-
-    getElement()->setInterference(_radioButtonInterference->isChecked());
-
     getElement()->setDateModif(_editDateModif->date().currentDate().toString(Qt::ISODate));
     getElement()->setDateCreation(_editDateCreation->date().toString(Qt::ISODate));
-    getElement()->setDistanceSRMin(_lineEditDistanceSRMin->text().toDouble());
-
-    // Actualisation des parametres de l'atmosphere
-    _meteoWidget->apply();
 
     // Mise a jour des points de controles
     TYTabLPPointControl& tabPoints = getElement()->getProjet()->getPointsControl();
@@ -613,17 +461,10 @@ void TYCalculWidget::apply()
     bool bEtat1 = _checkBoxStoreGlobalMatrix->isChecked();
     getElement()->setStatusPartialResult(bEtat1) ; //(_checkBoxStoreGlobalMatrix->isChecked());
 
+    // Update solver parameters in the TYCalcul
+    getElement()->solverParams = _solverParams->toPlainText();
+
     emit modified();
-}
-
-void TYCalculWidget::editAtmosphere()
-{
-    int ret = getElement()->getAtmosphere()->edit(this);
-
-    if (ret == QDialog::Accepted)
-    {
-        _lineEditNomAtmosphere->setText(getElement()->getAtmosphere()->getName());
-    }
 }
 
 void TYCalculWidget::editMaillage(QTreeWidgetItem* item)
@@ -642,34 +483,6 @@ void TYCalculWidget::editResultat()
 {
     getElement()->getResultat()->edit(this);
 }
-
-void TYCalculWidget::updateUseEcran()
-{
-    _checkBoxParcoursLateraux->setEnabled(_checkBoxUseEcran->isChecked());
-    _checkBoxUseReflexion->setEnabled(_checkBoxUseEcran->isChecked());
-
-    // Si le calcul d'ecran est desactive, la checkbox de reflexion est decoche
-    if (! _checkBoxUseEcran->isChecked()) { _checkBoxUseReflexion->setChecked(false); }
-}
-
-void TYCalculWidget::updateUseReflexion()
-{
-    _checkBoxParcoursLateraux->setChecked(true);
-}
-
-void TYCalculWidget::updateBoxSol()
-{
-    int nbMethod = TR("id_nb_sol_calc").toInt();
-    QString str, label;
-    for (int i = 0; i < nbMethod; i++)
-    {
-        label = "id_sol_calc";
-        label += QString().setNum(i);
-        str = TR(label);
-        _comboBoxTypeSol->insertItem(i, str);
-    }
-}
-
 
 void TYCalculWidget::contextMenuEvent(QContextMenuEvent* e)
 {

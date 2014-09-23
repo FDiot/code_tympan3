@@ -13,18 +13,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
-#if TY_USE_IHM
-#include "Tympan/gui/widgets/TYMateriauConstructionWidget.h"
-#endif
-
-
 #include "Tympan/core/logging.h"
-
-
+#if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
+  #include "Tympan/gui/widgets/TYMateriauConstructionWidget.h"
+#endif
 #include "TYMateriauConstruction.h"
 
 TYSpectre* TYMateriauConstruction::_defSpectreTrans = NULL;

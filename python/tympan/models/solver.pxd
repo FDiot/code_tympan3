@@ -1,17 +1,37 @@
+"""THIS FILE IS GENERATED, DON'T EDIT IT"""
 """solver models for Code_TYMPAN, headers
 """
+from libcpp cimport bool
 from libcpp.string cimport string
-
-from tympan.models.common cimport OPoint3D, OSpectre, OSpectreComplex, OVector3D
-from tympan.core cimport shared_ptr
 from libcpp.vector cimport vector
 
+from tympan.models.common cimport (OPoint3D, OSpectre, OSpectreComplex, OVector3D,
+                                   SpectrumMatrix)
+from tympan.core cimport SolverInterface#, SmartPtr, shared_ptr
+
+# XXX importing SmartPtr and shared_ptr from tympan.core set a cyclical dependency
+# between tympan.core and tympan.models.solver, since tympan.core declares
+# SolverInterface::solve() which takes the solver model as a parameter.
+cdef extern from "boost/shared_ptr.hpp" namespace "boost":
+    cdef cppclass shared_ptr[T]:
+        shared_ptr(T*)
+        shared_ptr()
+        T *get()
+cdef extern from "Tympan/core/smartptr.h":
+    cdef cppclass SmartPtr[T]:
+        SmartPtr()
+        SmartPtr(T*)
+        T* getRealPointer()
+        T* _pObj
+
 cdef class ProblemModel:
-    cdef AcousticProblemModel* thisptr
+    cdef shared_ptr[AcousticProblemModel] thisptr
 
 cdef class ResultModel:
-    cdef AcousticResultModel* thisptr
+    cdef shared_ptr[AcousticResultModel] thisptr
 
+cdef class Solver:
+    cdef SolverInterface* thisptr
 
 cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "tympan":
     cdef cppclass AcousticProblemModel:
@@ -32,17 +52,6 @@ cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "ty
         size_t make_receptor(const OPoint3D& point_)
 
 cdef extern from "Tympan/models/solver/acoustic_result_model.hpp" namespace "tympan":
-    cdef cppclass SpectrumMatrix:
-        SpectrumMatrix()
-        SpectrumMatrix(const SpectrumMatrix& matrix)
-        const vector[OSpectre]& by_receptor(size_t receptor_idx) const
-        OSpectre& element "operator()"(size_t receptor_idx, size_t sources_idx)
-        void setSpectre(size_t receptor_idx, size_t sources_idx, OSpectre spectrum)
-        void resize(size_t nb_receptors, size_t nb_sources)
-        size_t nb_sources() const
-        size_t nb_receptors() const
-        void clearReceptor(size_t receptor_idx)
-
     cdef cppclass AcousticResultModel:
         SpectrumMatrix& get_data()
 
@@ -91,6 +100,64 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
     cdef cppclass BaffledFaceDirectivity(CommonFaceDirectivity):
         BaffledFaceDirectivity(const OVector3D& support_normal_, double support_size_)
 
+cdef extern from "Tympan/models/solver/config.h" namespace "tympan::SolverConfiguration":
+    SmartPtr[SolverConfiguration] get()
 
-cdef acousticproblemmodel2problemmodel(AcousticProblemModel* apm)
-cdef acousticresultmodel2resultmodel(AcousticResultModel* arm)
+
+cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
+    cdef cppclass SolverConfiguration:
+        double AtmosPressure
+        double AtmosTemperature
+        double AtmosHygrometry
+        double AnalyticC0
+        double WindDirection
+        double AnalyticGradC
+        double AnalyticGradV
+        int RayTracingOrder
+        int Discretization
+        int NbRaysPerSource
+        float MaxLength
+        float SizeReceiver
+        int Accelerator
+        int MaxTreeDepth
+        float AngleDiffMin
+        float CylindreThick
+        int MaxProfondeur
+        bool UseSol
+        int MaxReflexion
+        int MaxDiffraction
+        bool DiffractionUseRandomSampler
+        int NbRayWithDiffraction
+        bool DiffractionDropDownNbRays
+        bool DiffractionFilterRayAtCreation
+        bool UsePathDifValidation
+        float MaxPathDifference
+        bool DiffractionUseDistanceAsFilter
+        bool KeepDebugRay
+        bool UsePostFilters
+        bool EnableFullTargets
+        float TargetsDensity
+        float InitialAngleTheta
+        float InitialAnglePhi
+        int AnalyticNbRay
+        double AnalyticTMax
+        double AnalyticH
+        double AnalyticDMax
+        int AnalyticTypeTransfo
+        int NbThreads
+        bool UseRealGround
+        bool UseLateralDiffraction
+        bool UseReflection
+        bool PropaConditions
+        float H1parameter
+        bool ModSummation
+        bool UseMeteo
+        float OverSampleD
+        bool UseFresnelArea
+        float Anime3DSigma
+        int Anime3DForceC
+        bool DebugUseCloseEventSelector
+        bool DebugUseDiffractionAngleSelector
+        bool DebugUseDiffractionPathSelector
+        bool DebugUseFermatSelector
+        bool DebugUseFaceSelector

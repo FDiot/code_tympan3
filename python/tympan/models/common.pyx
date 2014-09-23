@@ -89,7 +89,3 @@ cdef class Point3D:
         return self.thisobj._z
 
 
-cdef class SolverInterface:
-
-    def __cinit__(self):
-        self.thisptr = NULL

@@ -44,7 +44,6 @@ install_tympan_component(tympan_common)
 # main library #################################################################
 
 file(GLOB TYMPAN_LIB_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-    models/solver/*.cpp models/solver/*.h models/solver/*.hpp
     models/business/*.cpp models/business/*.h
     models/business/*/*.cpp models/business/*/*.h
     gui/*.cpp gui/*.h
@@ -90,6 +89,16 @@ install_tympan_component(tympan_lib)
 
 # solvers ######################################################################
 
+######### Solver model #########################################################
+file(GLOB TYMPAN_SOLVER_MODEL_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    models/solver/*.cpp models/solver/*.h models/solver/*.hpp
+    )
+add_library(tympan_solver_model ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_SOLVER_MODEL_SRCS})
+set_property(TARGET tympan_solver_model PROPERTY FOLDER "Tympan/solver")
+install_tympan_component(tympan_solver_model)
+
+
+######### Solver plugins #######################################################
 file(GLOB TYMPAN_SOLVER_DEFAULT_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/DefaultSolver/*.cpp solvers/DefaultSolver/*.h
     solvers/DefaultSolver/*/*.cpp solvers/DefaultSolver/*/*.h
@@ -105,7 +114,7 @@ set_property(TARGET tympan_solver_default PROPERTY FOLDER "Tympan/solvers/Defaul
 target_link_libraries(tympan_solver_default
     ${QT_QTCORE_LIBRARY} # threading QMutex, QThread, QWaitCondition
     tympan_common
-    tympan_lib
+    tympan_solver_model
 )
 configure_tympan_plugin(tympan_solver_default)
 install_tympan_plugin(tympan_solver_default)
@@ -126,7 +135,7 @@ set_property(TARGET tympan_solver_anime3d PROPERTY FOLDER "Tympan/solvers/ANIME3
 target_link_libraries(tympan_solver_anime3d
     ${QT_QTCORE_LIBRARY} # qlist, QTime, QMutex QSharedPointer QTime
     tympan_common
-    tympan_lib
+    tympan_solver_model
 )
 configure_tympan_plugin(tympan_solver_anime3d)
 install_tympan_plugin(tympan_solver_anime3d)

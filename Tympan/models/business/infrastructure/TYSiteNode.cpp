@@ -483,13 +483,13 @@ void TYSiteNode::loadTopoFile()
     setIsGeometryModified(true);
 }
 
-/*virtual*/ bool TYSiteNode::updateAltimetrie(const bool& force) // force = false
+/*virtual*/ bool TYSiteNode::updateAltimetrie()
 {
     ostringstream msg;
     OMessageManager& logger =  *OMessageManager::get();
     try
     {
-        do_updateAltimetrie(force);
+        do_updateAltimetrie();
         return true;
     }
     catch (const tympan::exception& exc)
@@ -501,7 +501,7 @@ void TYSiteNode::loadTopoFile()
     }
 }
 
-/*virtual*/ void TYSiteNode::do_updateAltimetrie(const bool& force) // force = false
+/*virtual*/ void TYSiteNode::do_updateAltimetrie()
 {
     OMessageManager& logger = *OMessageManager::get();
 
@@ -636,7 +636,7 @@ void TYSiteNode::uuid2tysol(const std::deque<std::string>& material_ids, std::de
 
 // TODO : Split the huge method based on the type of infrastructure
 // See https://extranet.logilab.fr/ticket/1508248
-void TYSiteNode::updateAltiInfra(const bool& force) // force = false
+void TYSiteNode::updateAltiInfra()
 {
     TYNameManager::get()->enable(false);
 
@@ -741,13 +741,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         // Recherche de l'altitude
         bNoPbAlti &= pAlti->updateAltitude(pt);
 
-        ORepere3D repere = pBatGeoNode->getORepere3D();
-
-        // On repositionne la nouvelle origine
-        repere._origin._z = pt._z + hauteur;
-
-        // Mise a jour de la matrice du GeoNode
-        pBatGeoNode->setRepere(repere);
+        pBatGeoNode->getORepere3D()._origin._z = pt._z + hauteur;
 
         pBat->setIsGeometryModified(false);
         pBat = NULL;
@@ -777,12 +771,7 @@ void TYSiteNode::updateAltiInfra(const bool& force) // force = false
         // Recherche de l'altitude
         bNoPbAlti &= pAlti->updateAltitude(pt);
 
-        ORepere3D repere = pMachineGeoNode->getORepere3D();
-
-        // On repositionne la nouvelle origine
-        repere._origin._z = pt._z + hauteur;
-
-        pMachineGeoNode->setRepere(repere);
+        pMachineGeoNode->getORepere3D()._origin._z = pt._z + hauteur;
 
         pMachine->setIsGeometryModified(false);
         pMachine = NULL;
@@ -1386,11 +1375,6 @@ void TYSiteNode::getListFaces(TYTabAcousticSurfaceGeoNode& tabFaces, unsigned in
 
 }
 
-void TYSiteNode::setAtmosphere(const LPTYAtmosphere& pAtmosphere)
-{
-    _pTopographie->updateSol(*pAtmosphere);
-}
-
 void TYSiteNode::setChildsNotInCurrentCalcul()
 {
     TYTabSiteNodeGeoNode& tabGeoNode = getListSiteNode();
@@ -1481,7 +1465,7 @@ bool TYSiteNode::update(TYElement* pElem)
 void TYSiteNode::update(const bool& force) // Force = false
 {
     // Altimetrisation des infrastructures du site
-    updateAltiInfra(force);
+    updateAltiInfra();
 
     // Mise a jour de l'acoustique des elements du site
     updateAcoustique(force);

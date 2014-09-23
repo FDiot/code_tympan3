@@ -16,11 +16,10 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
 #if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYTopographieWidget.h"
   #include "Tympan/gui/gl/TYTopographieGraphic.h"
 #endif
-
-
 #include "TYTopographie.h"
 
 TY_EXTENSION_INST(TYTopographie);
@@ -33,7 +32,6 @@ static int compareSurfaceTerrains(const void* elem1, const void* elem2);
 
 TYTopographie::TYTopographie()
 {
-    _seuilConfondus = 0.002;
     _name = TYNameManager::get()->generateName(getClassName());
 
     _pAltimetrie = new TYAltimetrie();
@@ -50,15 +48,6 @@ TYTopographie::TYTopographie()
     float sizeY = TAILLETOPOY;
 
 #if TY_USE_IHM
-    if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "SeuilConfondus"))
-    {
-        _seuilConfondus = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus");
-    }
-    else
-    {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "SeuilConfondus", _seuilConfondus);
-    }
-
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "DefaultDimX"))
     {
         sizeX = TYPreferenceManager::getFloat(TYDIRPREFERENCEMANAGER, "DefaultDimX");
@@ -1006,26 +995,6 @@ LPTYCourbeNiveauGeoNode TYTopographie::findCrbNiv(const LPTYCourbeNiveau pCrbNiv
     }
 
     return NULL;
-}
-
-void TYTopographie::updateSol(const TYAtmosphere& atmo)
-{
-    // Traitement des terrains defini sur le site
-    LPTYTerrain terrain = NULL;
-    LPTYSol sol = NULL;
-
-    for (unsigned int i = 0 ; i < _listTerrain.size() ; i++)
-    {
-        terrain = dynamic_cast<TYTerrain*>(_listTerrain[i]->getElement());
-        if (terrain->isA("TYPlanEau"))
-        {
-            continue;
-        }
-        else
-        {
-            sol = terrain->getSol();
-        }
-    }
 }
 
 double TYTopographie::getTopoSize(OSegment3D& segDiagonale)

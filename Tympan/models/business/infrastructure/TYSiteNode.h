@@ -343,23 +343,12 @@ class TYSiteNode: public TYElement
     virtual bool remFromCalcul();
 
     /**
-     * Donne atmosphere à utiliser pour topographie
-     */
-    virtual void setAtmosphere(const LPTYAtmosphere& pAtmosphere);
-
-    /**
-     * Precalcul du nombre d'onde dans le sol des que les caracteristiques de
-     * l'atmosphere sont connus. Fonction executees au lancement du calcul.
-     */
-    void updateSol();
-
-    /**
      * This method mainly calls \c do_updateAltimetrie and handle exceptions
      * be capturing them and returning a success status.
      *
      * \return weather the update succeeded
      */
-    virtual bool updateAltimetrie(const bool& force = false);
+    virtual bool updateAltimetrie();
 
     void uuid2tysol(const std::deque<std::string>& material_ids, std::deque<LPTYSol>& materials);
 
@@ -370,7 +359,7 @@ protected:
      * TYTopographie, mais elle peut etre surchargee pour des besoins specifiques
      * lors du calcul de l'altimetrie.
      */
-    virtual void do_updateAltimetrie(const bool& force = false);
+    virtual void do_updateAltimetrie();
 
 public:
     /*
@@ -384,7 +373,7 @@ public:
      * Mise a jour de l'altitude pour les elements de l'infrastructure.
      * Le parametre force contraint l'altimetrisation des objets
      */
-    virtual void updateAltiInfra(const bool& force = false);
+    virtual void updateAltiInfra();
 
     /**
      * Mise a jour de l'acoustique des elements presents dans le site

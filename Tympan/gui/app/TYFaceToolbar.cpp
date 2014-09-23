@@ -23,7 +23,6 @@
 #include <qbuttongroup.h>
 
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/gui/app/TYFaceModelerFrame.h"
 #include "TYFaceToolbar.h"
 

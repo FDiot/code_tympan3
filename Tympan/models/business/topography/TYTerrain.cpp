@@ -18,6 +18,7 @@
 #include "TYTerrain.h"
 
 #if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYTerrainWidget.h"
   #include "Tympan/gui/gl/TYTerrainGraphic.h"
 #endif

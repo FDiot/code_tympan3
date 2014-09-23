@@ -19,9 +19,10 @@
  */
 
 
+#include "Tympan/core/defines.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYLinearMaillage.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
-#include "Tympan/core/defines.h"
 #include "Tympan/gui/OSizeManager.h"
 #include "Tympan/gui/gl/TYPaletteGraphic.h"
 #include "Tympan/gui/gl/TYPanelGraphic.h"

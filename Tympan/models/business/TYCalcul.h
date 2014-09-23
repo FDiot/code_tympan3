@@ -27,8 +27,6 @@
 
 #include <memory>
 
-#include "Tympan/core/interfaces.h"
-#include "Tympan/models/business/material/TYAtmosphere.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/models/business/TYRay.h"
 #include "Tympan/models/business/TYMaillage.h"
@@ -36,11 +34,6 @@
 #include "Tympan/models/business/TYResultat.h"
 
 class TYProjet;
-namespace tympan {
-    class AcousticProblemModel;
-    class AcousticResultModel;
-} // namespace tympan
-
 
 /**
  * \file TYCalcul.h
@@ -180,19 +173,6 @@ public:
     void setComment(const QString& comment) { _comment = comment; }
 
     /**
-     *\fn int getExpansGeo()
-     *\brief Get de l'expansion geometrique (0 : 2pi, 1 : 4pi)
-     *\return _expansGeo
-     */
-    int getExpansGeo() const { return _expansGeo; }
-
-    /**
-     *\fn void setExpansGeo(int exp)
-     *\brief Set de l'expansion geometrique (0 : 2pi, 1 : 4pi)
-     */
-    void setExpansGeo(int exp) { _expansGeo = exp; }
-
-    /**
      * \fn  bool getIsUpTodate()
      * \brief Get de l'etat calcul a jour ou non par rapport a l'infrastructure.
      * \return _upTodate
@@ -205,133 +185,6 @@ public:
      */
     void setIsUpTodate(bool upTodate) { _upTodate = upTodate; }
 
-    /**
-     * \fn  bool getUseSol()
-     * \brief Get du test de la prise ou non en compte du sol.
-     * \return _useSol
-     */
-    bool getUseSol() const { return _useSol; }
-
-    /**
-     * \fn  void setUseSol(bool use)
-     * \brief Set du test de la prise ou non en compte du sol.
-     */
-    void setUseSol(bool use) { _useSol = use; }
-
-    /**
-     *\fn bool getUseAnechoic()
-     *\brief Get des conditions anechoiques (true) ou semi-anechoi��que (false = default)
-     *\return _anechoic
-     */
-    bool getUseAnechoic() { return _anechoic; }
-
-    /**
-     *\fn void setUseAnechoic(const bool anechoic = false)
-     *\brief Set des conditions anechoiques (true) ou semi-anechoique (false = default)
-     */
-    void setUseAnechoic(const bool anechoic = false) { _anechoic = anechoic; }
-
-    /**
-     *\fn   bool getUseVegetation()
-     *\brief Get du test de la prise ou non en compte de la vegetation.
-     *\return _useVegetation
-     */
-    bool getUseVegetation() const { return _useVegetation; }
-    /**
-     *\fn   void setUseVegetation(bool use)
-     *\brief Set du test de la prise ou non en compte de la vegetation.
-     */
-    void setUseVegetation(bool use) { _useVegetation = use; }
-
-    /**
-     * \fn bool getUseAtmosphere()
-     *\brief Get du test de la prise ou non en compte de l'atmosphere.
-     *\return _useAtmosphere
-     */
-    bool getUseAtmosphere() const { return _useAtmosphere; }
-    /**
-     * \fn void setUseAtmosphere(const bool use = true)
-     *\brief Set du test de la prise ou non en compte de l'atmosphere.
-     */
-    void setUseAtmosphere(const bool use = true);
-
-    /**
-     *\fn bool getUseEcran()
-     *\brief Get du test de la prise ou non en compte des murs, batiments et machines.
-     *\return _useEcran
-     */
-    bool getUseEcran() const { return _useEcran; }
-    /**
-     *\fn void setUseEcran(bool use)
-     *\brief Set du test de la prise ou non en compte des murs, batiments et machines.
-     */
-    void setUseEcran(bool use) { _useEcran = use; }
-
-    /**
-     * \fn bool getUseReflexion()
-     * \brief Get du test de la prise ou non en compte de la reflexion.
-     * \return _useReflexion
-     */
-    bool getUseReflexion() const { return _useReflexion; }
-    /**
-     * \fn void setUseReflexion(bool use)
-     * \brief Set du test de la prise ou non en compte de la reflexion.
-     */
-    void setUseReflexion(bool use) { _useReflexion = use; }
-
-    /**
-     * \fn  bool getInterference()
-     * \brief Get du test du flag de calcul energetique ou avec interference.
-     * \return _interference
-     */
-    bool getInterference() const { return _interference; }
-    /**
-     * \fn  void setInterference(bool use)
-     * \brief Set du test du flag de calcul energetique ou avec interference.
-     */
-    void setInterference(bool use) { _interference = use; }
-
-    /**
-     *\fn double getParamH()
-     *\brief Get du parametre h1.
-     *\return _h1
-     */
-    double getParamH() const { return _h1; }
-    /**
-     *\fn void setParamH(double h1)
-     *\brief Set du parametre h1.
-     */
-    void setParamH(double h1) { _h1 = h1; }
-
-    /**
-     *\fn void setDistanceSRMin(const double& dist)
-     *\brief Set du parametre _distanceSRMin
-     */
-    void setDistanceSRMin(const double& dist) { _distanceSRMin = dist; }
-    /**
-     *\fn double getDistanceSRMin()
-     *\brief Get du parametre _distanceSRMin
-     *\return _distanceSRMin
-     */
-    double getDistanceSRMin() { return _distanceSRMin; }
-
-    /**
-     * \fn bool getCondFav()
-     * \brief Get du test des conditions favorables ou non a la propagation.
-     * return _condFav
-     */
-    bool getCondFav() const { return _condFav; }
-    /**
-     * \fn void setCondFav(bool cond)
-     * \brief Set du test des conditions favorables ou non a la propagation.
-     */
-    void setCondFav(bool cond) { _condFav = cond; }
-
-    /**
-     *\fn void setElementSelection(TYListID selection)
-     *\brief Set de la selection d'elements actifs dans ce Calcul.
-     */
-    void setElementSelection(TYListID selection);
     /**
      *\fn TYListID getElementSelection()
      *\brief Get de la selection d'elements actifs dans ce Calcul.
@@ -391,11 +244,6 @@ public:
      * \return _emitAcVolNode
      */
     const TYMapPtrElementBool& getEmitAcVolNode() const { return _emitAcVolNode; }
-    /**
-     * \fn  void setEmitAcVolNode(const TYMapPtrElementBool& etat)
-     * \brief Set du tableau contenant l'etat de chaque volumeNode en emission.
-     */
-    void setEmitAcVolNode(const TYMapPtrElementBool& etat) { _emitAcVolNode = etat; }
 
     /**
      * \fn TYMapPtrElementInt& getMapElementRegime()
@@ -412,25 +260,6 @@ public:
     const TYMapPtrElementInt& getMapElementRegime() const { return _mapElementRegime; }
 
     /**
-     * \fn void setMapElementRegime(const TYMapPtrElementInt& mapElementRegime)
-     * \brief Set du tableau des regimes
-     */
-    void setMapElementRegime(const TYMapPtrElementInt& mapElementRegime) { _mapElementRegime = mapElementRegime; }
-
-    /**
-     * \fn LPTYAtmosphere getAtmosphere() { return _pAtmosphere; }
-     * \brief Get de l'atmosphere.
-     * \return _pAtmosphere
-     */
-    LPTYAtmosphere getAtmosphere() { return _pAtmosphere; }
-    /**
-     * \fn const LPTYAtmosphere getAtmosphere() const
-     * \brief Get de l'atmosphere.
-     * \return _pAtmosphere
-     */
-    const LPTYAtmosphere getAtmosphere() const { return _pAtmosphere; }
-
-    /**
      *\fn TYTabMaillageGeoNode& getMaillages() { return _maillages; }
      *\brief Get de la collection de maillages.
      *\return _maillages
@@ -442,11 +271,6 @@ public:
      *\return _maillages
      */
     const TYTabMaillageGeoNode& getMaillages() const { return _maillages; }
-    /**
-     *\fn void setMaillages(const TYTabMaillageGeoNode& maillages) { _maillages = maillages; setIsGeometryModified(true); }
-     *\brief Set de la collection de maillages.
-     */
-    void setMaillages(const TYTabMaillageGeoNode& maillages) { _maillages = maillages; setIsGeometryModified(true); }
 
     /**
      *\fn bool addMaillage(LPTYMaillageGeoNode pMaillageGeoNode)
@@ -519,12 +343,6 @@ public:
     LPTYResultat getResultat() { return _pResultat; }
 
     /**
-     * \fn const LPTYResultat getResultat()
-     * \brief Set du resultat.
-     */
-    void setResultat(const LPTYResultat pResultat) { _pResultat = pResultat; _pResultat->setParent(this); }
-
-    /**
      * \fn bool updateAltiRecepteurs()
      * \brief Mets a jour l'altitude des maillage
      *   Mets a jour l'altitude des maillage en fonction de l'altimetrie du site associe au projet parent a ce calcul.
@@ -557,22 +375,6 @@ public:
     void selectActivePoint(const LPTYSiteNode pSite);
 
     /**
-     * \fn bool isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSite pMergeSite)
-     *\brief verification des calculs
-     *   Verifie que le calcul est possible: au moins une source, au moins un
-     *   recepteur, pas de depassement du max de sources et de recepteurs.
-     */
-    bool isCalculPossible(const int& nbSources, const int& nbRecepteurs, const LPTYSiteNode pMergeSite);
-
-    /**
-     * \fn bool go(SolverInterface* pSolver)
-     * \brief Lance l'execution du Calcul.
-     * \return <code>true</code> si le calcul a reussi;
-     *         <code>false</code> sinon.
-     */
-    bool go(SolverInterface* pSolver);
-
-    /**
      * \fn void getCalculElements(LPTYSiteNode pSite)
      * \brief Recupere tous les elements de la scene qui participent au calcul.
      * \param pSite Site a partir duquel se fait la selection.
@@ -591,46 +393,6 @@ public:
      * \return _pSiteCalcul
      */
     LPTYSiteNode getSite();
-
-    /**
-     * \fn bool getCalculTrajetsHorizontaux()
-     * \brief Get du calcul des trajets horizontaux
-     * \return _bCalculTrajetsHorizontaux
-     */
-    bool getCalculTrajetsHorizontaux() { return _bCalculTrajetsHorizontaux; }
-
-    /**
-     * \fn const bool getCalculTrajetsHorizontaux()const
-     * \brief Get du calcul des trajets horizontaux
-     * \return _bCalculTrajetsHorizontaux
-     */
-    const bool getCalculTrajetsHorizontaux() const { return _bCalculTrajetsHorizontaux; }
-
-    /**
-     * \fn void setCalculTrajetsHorizontaux(const bool& bCalculTrajetsHorizontaux)
-     * \brief Set du calcul des trajets horizontaux
-     */
-    void setCalculTrajetsHorizontaux(const bool& bCalculTrajetsHorizontaux) { _bCalculTrajetsHorizontaux = bCalculTrajetsHorizontaux; }
-
-    /**
-     * \fn int getTypeCalculSol()
-     * \brief Get du type de calcul de reflexion sur le sol local ou autre methode de calcul
-     * \return _typeCalculSol
-     */
-    int getTypeCalculSol() { return _typeCalculSol; }
-
-    /**
-     * \fn const int getTypeCalculSol()const
-     * \brief Get du type de calcul de reflexion sur le sol local ou autre methode de calcul
-     * \return _typeCalculSol
-     */
-    const int getTypeCalculSol() const { return _typeCalculSol; }
-
-    /**
-     * \fn void setTypeCalculSol(const int& typeCalcul)
-     * \brief Set du type de calcul de reflexion sur le sol local ou autre methode de calcul
-     */
-    void setTypeCalculSol(const int& typeCalcul) { _typeCalculSol = typeCalcul; }
 
     /**
      * \fn void setModifiable(bool modify)
@@ -666,23 +428,6 @@ public:
     void setStatusPartialResult(const bool& status) { _pResultat->setPartialState(status); }
 
     /**
-     * \fn bool getSaveRay()
-     * \brief Return the status of ray persistence
-     */
-    bool getSaveRay() const { return _bSaveRay; }
-
-    /**
-     * \fn double getSeuilConfondu()
-     *     void setSeuilConfondu(const double & seuil)
-     * \brief Get/Set de la valeur de distance minimale entre deux points
-     * \return _seuilConfondus
-     */
-
-    void setSeuilConfondu(const double& seuil) { _seuilConfondus = seuil; }
-    double getSeuilConfondu() { return _seuilConfondus; }
-    const double getSeuilConfondu() const { return _seuilConfondus; }
-
-    /**
      * -     * \fn OGenID getSolverId()
      *       -     *     void setSolverId(const OGenID& iD)
      *       -     * \brief Get/Set du solveur ID
@@ -692,14 +437,9 @@ public:
     const OGenID getSolverId() const { return _solverId; }
     OGenID getSolverId() { return _solverId; }
 
-    unsigned short getTypeSaisieMeteo() const { return _typeSaisieMeteo; }
-
-    unsigned int getNbTHread() const { return _nbThread; }
-    void setNbThread(unsigned int nbThread) { _nbThread = nbThread; }
-
     void goPostprocessing();
-    std::unique_ptr<tympan::AcousticResultModel>  _acousticResult;
-    std::unique_ptr<tympan::AcousticProblemModel> _acousticProblem;
+    // Solver parameters for this computation
+    QString solverParams;
 
 protected:
     /**
@@ -726,50 +466,8 @@ protected:
 
     ///etat a jour du calcul
     bool _upTodate;
-
-    ///Expansion geometrique (0 : 2pi, 1 : 4pi).
-    int _expansGeo;
-    ///sol reel/sol reflechissant.
-    bool _useSol;
-
-    /// Type de calcul du sol
-    int _typeCalculSol;
-
-    ///avec ou sans sol (anechoique ou semi-anechoique)
-    bool _anechoic;
-    ///Conditions favorables ou non a la propagation.
-    bool _condFav;
-    ///Prise ou non en compte de la vegetation.
-    bool _useVegetation;
-    ///Prise ou non en compte de l'atmosphere.
-    bool _useAtmosphere;
-    ///Prise ou non en compte des murs, batiments et machines presents dans le site.
-    bool _useEcran;
-    /// Calcul des trajets horizontaux
-    bool _bCalculTrajetsHorizontaux;
-
-
-    ///Prise ou non de la reflexion.
-    bool _useReflexion;
-    ///Calcul energetique ou avec interference.
-    bool _interference;
-
-    /// Sauvegarde des rayon (TYRay)
-    bool _bSaveRay;
-
-    ///Parametre h1 pour un calcul avec conditions favorables.
-    double _h1;
-    ///Distance minimale entre une source et un recepteur
-    double _distanceSRMin;
-
-    /// Distance minimale entre deux points consideres comme confondus
-    double _seuilConfondus;
-
     /// Etat du calcul actif/bloque
     int _state;
-
-    unsigned short _typeSaisieMeteo;
-
 
     /// Site sur lequel va s'effectuer le calcul
     LPTYSiteNode _pSiteCalcul;
@@ -781,17 +479,11 @@ protected:
     ///Regime des elemenst de la scene
     TYMapPtrElementInt _mapElementRegime;
 
-    ///Atmosphere.
-    LPTYAtmosphere _pAtmosphere;
-
     ///Collections de Maillages.
     TYTabMaillageGeoNode _maillages;
 
     ///Resultat.
     LPTYResultat _pResultat;
-
-    /// Nombre de process de calcul simultane
-    unsigned int _nbThread;
 };
 
 #include "TYProjet.h"

@@ -17,6 +17,7 @@
 #include "TYPlanEau.h"
 
 #if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYPlanEauWidget.h"
   #include "Tympan/gui/gl/TYPlanEauGraphic.h"
 #endif

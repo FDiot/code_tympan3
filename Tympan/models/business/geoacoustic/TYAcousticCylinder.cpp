@@ -17,6 +17,7 @@
 #include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticRectangle.h"
 #if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYAcousticCylinderWidget.h"
   #include "Tympan/gui/gl/TYAcousticCylinderGraphic.h"
 #endif

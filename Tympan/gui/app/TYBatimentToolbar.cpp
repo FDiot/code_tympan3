@@ -24,7 +24,6 @@
 #include <QToolBar>
 
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/gui/app/TYBatimentModelerFrame.h"
 #include "TYBatimentToolbar.h"
 

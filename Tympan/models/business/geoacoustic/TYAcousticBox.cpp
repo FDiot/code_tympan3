@@ -17,6 +17,7 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticVolumeNode.h"
 #if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYAcousticBoxWidget.h"
   #include "Tympan/gui/gl/TYAcousticBoxGraphic.h"
 #endif

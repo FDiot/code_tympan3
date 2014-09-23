@@ -175,7 +175,6 @@ TYElementListItem* TYProjetFrame::addToList(LPTYCalcul pElement, TYElementListIt
     setCalculItemState(pRootItem, pElement->getIsUpTodate());
 
     unsigned int i;
-    new TYElementListItem(pRootItem, pElement->getAtmosphere(), NULL);
     new TYElementListItem(pRootItem, NULL, NULL, QStringList(TR("id_Etats_item")));
 
     TYElementListItem* pListMaillageItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_maillages_item")));

@@ -383,12 +383,6 @@ public:
     }
 
     /**
-     * Met a jour les caracteristique des sols definis dans la topo
-     * Calcul du nombre d'onde dans le sol en fonction de l'atmosphere
-     */
-    void updateSol(const TYAtmosphere& atmo);
-
-    /**
      * Retourne la dimension caracteristique de la topographie (diagonale de la boite englobante)
      */
     double getTopoSize(OSegment3D& segDiagonale);
@@ -444,9 +438,6 @@ protected:
 
     /// Liste des terrains tries (on fait expres un tableau a part pour ne pas perturber le terrain par defaut)
     TYTerrainGeoNode** _pSortedTerrains;
-
-    /// Seuils confondus
-    double _seuilConfondus;
 
 
 private :

@@ -16,17 +16,9 @@
 /**
  * \file TYCoursEauGraphic.cpp
  * \brief Representation graphique d'un cours d'eau
- *
- *
  */
 
-
-
-
 #include "Tympan/models/business/topography/TYCoursEau.h"
-
-#include "Tympan/models/business/TYPreferenceManager.h"
-
 #include "TYCoursEauGraphic.h"
 
 TYCoursEauGraphic::TYCoursEauGraphic(TYCoursEau* pElement) :

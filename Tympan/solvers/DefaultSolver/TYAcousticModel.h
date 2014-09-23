@@ -30,12 +30,12 @@ public:
     TYAcousticModel(TYSolver& solver);
     virtual ~TYAcousticModel();
 
-    virtual void compute(   const std::deque<TYSIntersection>& tabIntersect, 
-                            const OSegment3D& rayon, TYTrajet& trajet, 
-                            TabPoint3D& ptsTop, TabPoint3D& ptsLeft, 
-                            TabPoint3D& ptsRight );
+    virtual void compute(const std::deque<TYSIntersection>& tabIntersect,
+                         const OSegment3D& rayon, TYTrajet& trajet,
+                         TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
+                         TabPoint3D& ptsRight );
 
-    void init(const TYCalcul& calcul);
+    void init();
 
     /**
      * Calcule le chemin sur un segment a partir de la liste des points du parcours
@@ -53,9 +53,9 @@ public:
      * @return <code>true</code> si le calcul a reussi;
      *         <code>false</code> sinon.
      */
-    virtual bool computeCheminsAvecEcran(   const OSegment3D& rayon, const tympan::AcousticSource& source, 
-                                            const TabPoint3D& pts, const bool vertical, 
-                                            TYTabChemin& TabChemin, double distance ) const;
+    virtual bool computeCheminsAvecEcran(const OSegment3D& rayon, const tympan::AcousticSource& source,
+                                         const TabPoint3D& pts, const bool vertical,
+                                         TYTabChemin& TabChemin, double distance ) const;
 
     /**
      * Calcule la liste des chemins generes par la reflexion sur les parois verticales.
@@ -66,9 +66,9 @@ public:
      * @param tabChemin La liste des chemins generes par la reflexion.
      * @param tabFaces Ensemble des faces du site.
      */
-    void computeCheminReflexion(    const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, 
-                                    const tympan::AcousticSource& source, TYTabChemin& TabChemins, 
-                                    double distance ) const;
+    void computeCheminReflexion(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon,
+                                const tympan::AcousticSource& source, TYTabChemin& TabChemins,
+                                double distance ) const;
 
     ///**
     // * Calcule les spectres d'attenuation caracteristiques de la vegetation
@@ -181,20 +181,14 @@ private :
     void meanSlope(const OSegment3D& director, OSegment3D& slope) const;
 
 private:
-    int  _expGeo;
-    int  _typeCalculSol;
     bool _useSol;
-    bool _useEcran;
     bool _useReflex;
     bool _conditionFav;
     bool _useAtmo;
-    bool _bCalculTrajetsHorizontaux;
-    bool _useVegetation;
     bool _interference;
-    double _seuilConfondus;
     double _paramH;
 
-    std::unique_ptr<tympan::AtmosphericConditions> pSolverAtmos;
+    std::unique_ptr<AtmosphericConditions> pSolverAtmos;
 
     OSpectre _lambda;
     OSpectreComplex _absoNulle;

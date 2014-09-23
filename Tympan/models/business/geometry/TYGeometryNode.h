@@ -154,15 +154,7 @@ public:
     ORepere3D& getORepere3D()
     { return _repere; }
 
-    /**
-     * Set/Get du repere.
-     */
     void setRepere(const ORepere3D& repere) { _repere = repere; }
-
-    /**
-     * Set/Get du repere.
-     */
-    void setRepere(const TYRepere& rep) { _repere = rep; }
 
     /**
      * Set/Get de la matrice de changement de repere.

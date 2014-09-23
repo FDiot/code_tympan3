@@ -190,6 +190,28 @@ cdef class Site:
         return subsites
 
     @property
+    def outdated_elements(self):
+        """ Goes through the infrastructure elements whose acoustic wasn't
+        correctly updated, and retrieve their name and ids.
+        Return a list of tuples (elt_id, elt_name)
+        """
+        infra = cy.declare(cy.pointer(TYInfrastructure))
+        infra = self.thisptr.getRealPointer().getInfrastructure().getRealPointer()
+        outdated = cy.declare(vector[SmartPtr[TYElement]])
+        outdated = infra.getTabElemNOk()
+        nb_outdated = outdated.size()
+        outdated_info = []
+        for i in xrange(nb_outdated):
+            elt = cy.declare(cy.pointer(TYElement))
+            elt = outdated[i].getRealPointer()
+            outdated_info.append((elt.getID().toString().toStdString(),
+                                  elt.getName().toStdString()))
+        for subsite in self.subsites:
+            outdated_info.extend(subsite.outdated_elements)
+        return outdated_info
+
+
+    @property
     def project(self):
         """ Return the parent project of the site as a 'Project' cython object
         """
@@ -365,6 +387,7 @@ cdef class Site:
             level_curve = LevelCurve()
             level_curve.thisptr = new TYCourbeNiveau(cpp_points, alti)
             level_curve.matrix = self.matrix
+            level_curve.altitude_set = True
             level_curve._altitude = alti
             return (points, level_curve)
         return (points, None)
@@ -424,7 +447,6 @@ cdef class Site:
             lcurve = LevelCurve()
             lcurve.thisptr = cpp_lcurve
             lcurve.matrix = self.matrix.dot(cpp_lcurves[i].getRealPointer().getMatrix())
-            lcurve._altitude = cpp_lcurve.getAltitude()
             lcurve.thisgeonodeptr = cpp_lcurves[i]
             lcurves.append(lcurve)
         return lcurves
@@ -461,6 +483,10 @@ cdef class LevelCurve:
     thisptr = cy.declare(cy.pointer(TYCourbeNiveau))
     matrix = cy.declare(tycommon.OMatrix)
     _altitude = cy.declare(double)
+    altitude_set = cy.declare(bool)
+
+    def __cinit__(self):
+        self.altitude_set = False
 
     @property
     def points(self):
@@ -475,6 +501,8 @@ cdef class LevelCurve:
     @property
     def altitude(self):
         """ Return the altitude of the level curve (float value) """
+        if not self.altitude_set:
+            return self.thisptr.getAltitude()
         return self._altitude
 
     @property
@@ -626,6 +654,14 @@ cdef class Computation:
     def __cinit__(self):
         self.thisptr = SmartPtr[TYCalcul]()
 
+    def get_solver_parameters(self):
+        return self.thisptr.getRealPointer().solverParams.toStdString()
+
+    def set_solver_parameters(self, params):
+        self.thisptr.getRealPointer().solverParams = QString(params)
+
+    solver_parameters = property(get_solver_parameters, set_solver_parameters)
+
     @property
     def meshes(self):
         """ Return the meshes of the computation (a list containing Mesh cython
@@ -653,38 +689,6 @@ cdef class Computation:
         res.thisptr = self.thisptr.getRealPointer().getResultat()
         return res
 
-    @cy.locals(solver=tycommon.SolverInterface)
-    def go(self, solver):
-        """ Solve the current acoustic problem. A solver must be loaded.
-        """
-        assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().go(solver.thisptr)
-
-    def set_nthread(self, nthread):
-        """ Set the number of threads used by the default solver to compute the
-            acoustic problem
-        """
-        assert self.thisptr.getRealPointer() != NULL
-        self.thisptr.getRealPointer().setNbThread(nthread)
-
-    @property
-    def acoustic_problem(self):
-        """ Return an acoustic problem model (geometric representation as
-            used by the solvers)
-        """
-        assert self.thisptr.getRealPointer() != NULL
-        return tysolver.acousticproblemmodel2problemmodel(
-            self.thisptr.getRealPointer()._acousticProblem.get())
-
-    @property
-    def acoustic_result(self):
-        """ Return an acoustic result model (geometric representation as used
-        by the solvers)
-        """
-        assert self.thisptr.getRealPointer() != NULL
-        return tysolver.acousticresultmodel2resultmodel(
-            self.thisptr.getRealPointer()._acousticResult.get())
-
 
 cdef class Project:
     thisptr = cy.declare(SmartPtr[TYProjet])
@@ -693,13 +697,10 @@ cdef class Project:
         self.thisptr = SmartPtr[TYProjet]()
 
     def update(self):
-        """ Update the project (atmosphere, inactive mesh points detection).
+        """ Update the project (inactive mesh points detection).
         """
         computation = cy.declare(cy.pointer(TYCalcul))
         computation = self.thisptr.getRealPointer().getCurrentCalcul().getRealPointer()
-        atmosphere = cy.declare(SmartPtr[TYAtmosphere])
-        atmosphere = computation.getAtmosphere()
-        self.thisptr.getRealPointer().getSite().getRealPointer().setAtmosphere(atmosphere)
         # detect and disable the mesh points that are inside machines or buildings
         computation.selectActivePoint(self.thisptr.getRealPointer().getSite())
 

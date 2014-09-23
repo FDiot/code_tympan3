@@ -17,7 +17,8 @@
 using std::vector;
 
 #include "Tympan/models/common/triangle.h"
-#include "Tympan/solvers/AcousticRaytracer/global.h"
+#include "Tympan/models/solver/config.h"
+#include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/solvers/AnalyticRayTracer/meteoLin.h"
 #include "Tympan/solvers/AnalyticRayTracer/Lancer.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/FaceSelector.h"
@@ -34,7 +35,6 @@ using std::vector;
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Latitude2DSampler.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/RandomSphericSampler.h"
 #include "Tympan/solvers/AcousticRaytracer/Engine/Simulation.h"
-#include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSolverAdapter.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DSolver.h"
@@ -42,7 +42,7 @@ using std::vector;
 #define _USE_METEO_
 
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize,
-                                                         const tympan::AcousticProblemModel& aproblem_, tab_acoustic_path& tabTYRays) : 
+                                                         const tympan::AcousticProblemModel& aproblem_, tab_acoustic_path& tabTYRays) :
     _tabPolygon(tabPolygon),
     _tabPolygonSize(tabPolygonSize),
     _aproblem(aproblem_),
@@ -107,7 +107,9 @@ bool TYANIME3DAcousticPathFinder::exec()
 
 unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, vector<vec3>& recepteurs)
 {
-    unsigned int sens = globalRayTracingOrder;
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
+
+    unsigned int sens = config->RayTracingOrder;
 
     // Recuperation de la position des sources du projet
     vector<vec3> srcs;
@@ -132,7 +134,7 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
     }
 
     // Choix du traitement S->R ou R->S
-    switch (globalRayTracingOrder)
+    switch (config->RayTracingOrder)
     {
         case 0 :
             sources = srcs;
@@ -237,8 +239,8 @@ void TYANIME3DAcousticPathFinder::appendRecepteurToSimulation(vector<vec3>& rece
     //Conversion du recepteur Tympan en recepteur lancer de rayons
     for (unsigned int i = 0; i < recepteurs.size(); i++)
     {
-        Recepteur recep(recepteurs[i], globalSizeReceiver);
-        //recep.setShape(new Sphere(recepteurs[i], globalSizeReceiver));
+        Recepteur recep(recepteurs[i], tympan::SolverConfiguration::get()->SizeReceiver);
+        //recep.setShape(new Sphere(recepteurs[i], tympan::SolverConfiguration::get()->SizeReceiver));
         recep.setId(idRecepteur);
 
         _rayTracing.addRecepteur(recep);
@@ -250,26 +252,27 @@ void TYANIME3DAcousticPathFinder::appendRecepteurToSimulation(vector<vec3>& rece
 
 void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources)
 {
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     //Conversion des sources Tympan en sources lancer de rayons
     int idSource = 0;
     for (unsigned int i = 0; i < sources.size(); i++)
     {
         Source source;
-        switch (globalDiscretization)
+        switch (config->Discretization)
         {
             case 0 :
-                source.setSampler(new RandomSphericSampler(globalNbRaysPerSource));
+                source.setSampler(new RandomSphericSampler(config->NbRaysPerSource));
                 break;
             case 1 :
-                source.setSampler(new UniformSphericSampler(globalNbRaysPerSource));
-                globalNbRaysPerSource = dynamic_cast<UniformSphericSampler*>(source.getSampler())->getRealNbRays();
+                source.setSampler(new UniformSphericSampler(config->NbRaysPerSource));
+                config->NbRaysPerSource = dynamic_cast<UniformSphericSampler*>(source.getSampler())->getRealNbRays();
                 break;
             case 2 :
-                source.setSampler(new UniformSphericSampler2(globalNbRaysPerSource));
-                globalNbRaysPerSource = dynamic_cast<UniformSphericSampler2*>(source.getSampler())->getRealNbRays();
+                source.setSampler(new UniformSphericSampler2(config->NbRaysPerSource));
+                config->NbRaysPerSource = dynamic_cast<UniformSphericSampler2*>(source.getSampler())->getRealNbRays();
                 break;
             case 3 :
-                source.setSampler(new Latitude2DSampler(globalNbRaysPerSource));
+                source.setSampler(new Latitude2DSampler(config->NbRaysPerSource));
                 dynamic_cast<Latitude2DSampler*>(source.getSampler())->setStartPhi(0.);
                 dynamic_cast<Latitude2DSampler*>(source.getSampler())->setEndPhi(360.);
                 dynamic_cast<Latitude2DSampler*>(source.getSampler())->setStartTheta(0.);
@@ -277,7 +280,7 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
         }
 
         source.setPosition(sources[i]);
-        source.setInitialRayCount(globalNbRaysPerSource);
+        source.setInitialRayCount(config->NbRaysPerSource);
         source.setId(idSource);
 
         ss << "Ajout d'une source en (" << sources[i].x << "," << sources[i].y << "," << sources[i].y << ")" << endl;
@@ -354,34 +357,35 @@ void TYANIME3DAcousticPathFinder::set_source_idx_and_receptor_idx_to_acoustic_pa
 
 void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>& sources )
 {
-    if (globalUseMeteo)
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
+    if (config->UseMeteo)
     {
         // Creation du lancer de rayons courbes
         Lancer CurveRayShot;
 
         // Parametrage du lancer de rayons courbe
         CurveRayShot.clear();
-        CurveRayShot.setDMax(globalAnalyticDMax);
+        CurveRayShot.setDMax(config->AnalyticDMax);
 
-        CurveRayShot.setTMax(globalAnalyticTMax);
-        CurveRayShot.setTimeStep(globalAnalyticH);
-        CurveRayShot.setNbRay(globalAnalyticNbRay);
-        dynamic_cast<meteoLin*>(CurveRayShot._weather)->setGradC(globalAnalyticGradC);
-        dynamic_cast<meteoLin*>(CurveRayShot._weather)->setGradV(globalAnalyticGradV);
-        CurveRayShot._weather->setWindAngle(globalWindDirection);
-        CurveRayShot._weather->setC0(globalAnalyticC0);
+        CurveRayShot.setTMax(config->AnalyticTMax);
+        CurveRayShot.setTimeStep(config->AnalyticH);
+        CurveRayShot.setNbRay(config->AnalyticNbRay);
+        dynamic_cast<meteoLin*>(CurveRayShot._weather)->setGradC(config->AnalyticGradC);
+        dynamic_cast<meteoLin*>(CurveRayShot._weather)->setGradV(config->AnalyticGradV);
+        CurveRayShot._weather->setWindAngle(config->WindDirection);
+        CurveRayShot._weather->setC0(config->AnalyticC0);
         CurveRayShot.setLaunchType(1);                                 // Indique que l'on tire les rayons sur un plan horizontal
 
-        dynamic_cast<Latitude2DSampler*>(CurveRayShot.getSampler())->setStartTheta(globalInitialAnglePhi);
+        dynamic_cast<Latitude2DSampler*>(CurveRayShot.getSampler())->setStartTheta(config->InitialAnglePhi);
 
-        CurveRayShot.initialAngleTheta = globalInitialAngleTheta;     // Angle de tir vertical (theta) des rayons
+        CurveRayShot.initialAngleTheta = config->InitialAngleTheta;     // Angle de tir vertical (theta) des rayons
 
         // Choix de la source
         CurveRayShot.addSource(sources[0]);   // At this time source is the firs one
 
         // Transformation de la geometrie
         transformer.clear();
-        transformer.setMethode(globalAnalyticTypeTransfo);
+        transformer.setMethode(config->AnalyticTypeTransfo);
         transformer.trianguleNappe(CurveRayShot);
     }
 }

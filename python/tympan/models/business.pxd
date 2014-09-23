@@ -6,7 +6,7 @@ from libcpp.deque cimport deque
 from libcpp cimport bool
 from libcpp.map cimport map as cppmap
 
-from tympan.core cimport unique_ptr, QString, SmartPtr, OGenID, SolverInterface
+from tympan.core cimport QString, SmartPtr, OGenID, SolverInterface
 from tympan.models cimport common as tycommon
 from tympan.models cimport solver as tysolver
 
@@ -82,8 +82,8 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         tycommon.OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
         cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
-        void setResultMatrix(tysolver.SpectrumMatrix matrix)
-        tysolver.SpectrumMatrix& getResultMatrix()
+        void setResultMatrix(tycommon.SpectrumMatrix matrix)
+        tycommon.SpectrumMatrix& getResultMatrix()
         void setSources(cppmap[TYElem_ptr, int])
         void addRecepteur(TYPointCalcul* pRecepteur)
 
@@ -121,10 +121,6 @@ cdef extern from "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h":
     cdef cppclass TYUserSourcePonctuelle(TYSourcePonctuelle):
         pass
 
-cdef extern from "Tympan/models/business/material/TYAtmosphere.h":
-    cdef cppclass TYAtmosphere (TYElement):
-        pass
-
 cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
     cdef cppclass TYSiteNode (TYElement):
         void getChilds (vector[SmartPtr[TYElement]] &elts, bool recursive)
@@ -133,11 +129,10 @@ cdef extern from "Tympan/models/business/infrastructure/TYSiteNode.h":
                           vector[bool]& EstUnIndexDeFaceEcran)
         SmartPtr[TYTopographie] getTopographie()
         SmartPtr[TYInfrastructure] getInfrastructure()
-        bool updateAltimetrie(const bool& force)
-        void updateAltiInfra(const bool& force)
+        bool updateAltimetrie()
+        void updateAltiInfra()
         void updateAcoustique(const bool& force)
         void update(const bool& force)
-        void setAtmosphere(const SmartPtr[TYAtmosphere]& pAtmosphere)
         TYProjet* getProjet()
         const double getAltiEmprise() const
         const vector[SmartPtr[TYGeometryNode]]& getListSiteNode() const
@@ -149,21 +144,18 @@ cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
     cdef cppclass TYInfrastructure (TYElement):
         void getAllSrcs(const TYCalcul* pCalcul, cppmap[TYElem_ptr,
                         vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs)
+        vector[SmartPtr[TYElement]] getTabElemNOk()
 
 cdef extern from "Tympan/models/business/TYCalcul.h":
     cdef cppclass TYCalcul (TYElement):
-        bool go(SolverInterface *)
-        unique_ptr[tysolver.AcousticProblemModel] _acousticProblem
-        unique_ptr[tysolver.AcousticResultModel]  _acousticResult
         SmartPtr[TYResultat] getResultat()
         void getAllSources(cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
                       vector[SmartPtr[TYGeometryNode]])
-        SmartPtr[TYAtmosphere] getAtmosphere()
         void selectActivePoint(SmartPtr[TYSiteNode] pSite)
         const vector[SmartPtr[TYGeometryNode]] getMaillages() const
-        void setNbThread(unsigned int nbThread)
         void goPostprocessing()
         const OGenID getSolverId()
+        QString solverParams
 
 cdef extern from "Tympan/models/business/TYProjet.h":
     cdef cppclass TYProjet (TYElement):

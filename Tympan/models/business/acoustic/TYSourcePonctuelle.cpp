@@ -25,6 +25,7 @@
 #include "Tympan/models/business/infrastructure/TYMachine.h"
 #include "Tympan/models/business/infrastructure/TYEtage.h"
 #if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYSourcePonctuelleWidget.h"
   #include "Tympan/gui/gl/TYSourcePonctuelleGraphic.h"
 #endif

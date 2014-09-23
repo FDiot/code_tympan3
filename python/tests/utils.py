@@ -36,7 +36,7 @@ assert osp.isdir(TEST_DATA_DIR), "The test data dir does not exists '%s'" % TEST
 
 TEST_SOLVERS_DIR = osp.join(PROJECT_BASE, 'pluginsd')
 if not osp.isdir(TEST_SOLVERS_DIR):
-    solver_dir = osp.abspath(osp.join(_HERE, '..', '..', 'plugins'))
+    TEST_SOLVERS_DIR = osp.abspath(osp.join(_HERE, '..', '..', 'plugins'))
 assert osp.isdir(TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % TEST_SOLVERS_DIR
 
 TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'projects-panel')

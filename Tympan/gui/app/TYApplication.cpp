@@ -25,6 +25,7 @@
 
 #include "Tympan/core/config.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYProgressManager.h"
 #include "Tympan/models/business/TYPluginManager.h"
