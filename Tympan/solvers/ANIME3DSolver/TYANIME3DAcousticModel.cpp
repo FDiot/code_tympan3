@@ -15,17 +15,16 @@
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/acoustic_path.h"
-#include "Tympan/models/business/TYCalcul.h"
-#include "Tympan/solvers/AcousticRaytracer/global.h"
-#include "Tympan/solvers/ANIME3DSolver/TYANIME3DSolver.h"
+#include "Tympan/models/solver/config.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
+#include "Tympan/solvers/ANIME3DSolver/TYANIME3DSolver.h"
 #include "TYANIME3DAcousticModel.h"
 
 
-TYANIME3DAcousticModel::TYANIME3DAcousticModel( tab_acoustic_path& tabRayons, 
+TYANIME3DAcousticModel::TYANIME3DAcousticModel( tab_acoustic_path& tabRayons,
                                                 TYStructSurfIntersect* tabStruct,
                                                 const tympan::AcousticProblemModel& aproblem,
-                                                tympan::AtmosphericConditions& atmos) :
+                                                AtmosphericConditions& atmos) :
     _tabTYRays(tabRayons),
     _tabSurfIntersect(tabStruct),
     _aproblem(aproblem),
@@ -45,7 +44,7 @@ TYANIME3DAcousticModel::TYANIME3DAcousticModel( tab_acoustic_path& tabRayons,
     _K = _atmos.get_k();
     _lambda = OSpectre::getLambda(_c);
 
-    _useFresnelArea = globalUseFresnelArea;
+    _useFresnelArea = tympan::SolverConfiguration::get()->UseFresnelArea;
 }
 
 TYANIME3DAcousticModel::~TYANIME3DAcousticModel()
@@ -68,7 +67,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
     int idFace = 0, rayNbr = 0, reflIndice = 0, nbFacesFresnel = 0;
 
     acoustic_path* ray = NULL;
-    TYSol* pSol = NULL;
+//    TYSol* pSol = NULL;
 
     OPoint3D Prefl, Pprec, Psuiv;    //pt de reflexion, pt precedent et suivant
 
@@ -97,7 +96,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
         sum1 = zero;
         pond = zero;
 
-        pSol = NULL;
+//        pSol = NULL;
 
         for (int j = 0; j < tabRefl.size(); j++)
         {
@@ -615,9 +614,9 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff()
     OPoint3D S, P0; // pt de la source et pt du 1er evenement
     OSegment3D seg; // premier segment du rayon
     OSpectre directivite, wSource; // fonction de directivite et spectre de puissance de la source
-    
+
     //TYSourcePonctuelle* source = NULL; // source
-    
+
     OSpectreComplex prodAbs; // produit des differentes absorptions
     double totalRayLength; // Computes the total ray length including reflections only (diffractions are not included)
 
@@ -641,7 +640,7 @@ void TYANIME3DAcousticModel::ComputePressionAcoustEff()
         double length = S.distFrom(P0);
 
         directivite = source.directivity->lwAdjustment(vec, length);
-        wSource = source.spectrum.toGPhy(); 
+        wSource = source.spectrum.toGPhy();
 
         prodAbs = _absAtm[i] * _absRefl[i] * _absDiff[i];
 
@@ -665,7 +664,8 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
     OSpectre mod;           // module et module au carre
     const OSpectre K2 = _K * _K;            // nombre d'onde au carre
 
-    double incerRel = globalAnime3DSigma;  // incertitude relative sur la taille du rayon au carree
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
+    float incerRel = config->Anime3DSigma;  // incertitude relative sur la taille du rayon au carree
 
     // constante pour la definition du facteur de coherence
     double cst = (pow(2., 1. / 6.) - pow(2., -1. / 6.)) * (pow(2., 1. / 6.) - pow(2., -1. / 6.)) / 3.0 + incerRel * incerRel;
@@ -697,11 +697,11 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
                 totalRayLength = _tabTYRays[k]->getLength();
                 mod = (_pressAcoustEff[k]).getModule();
 
-                if ((globalAnime3DForceC) == 0)
+                if ((config->Anime3DForceC) == 0)
                 {
                     C = 0.0; // = defaultSolver "energetique"
                 }
-                else if ((globalAnime3DForceC) == 1)
+                else if ((config->Anime3DForceC) == 1)
                 {
                     C = 1.0; // = defaultSolver "interferences"
                 }

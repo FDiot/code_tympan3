@@ -4,7 +4,7 @@
 /* From this threshold (in meters), two elements are considered as at the same
  * position
  * */
-#define TYSEUILCONFONDUS        0.01        // 1 cm
+#define TYSEUILCONFONDUS        0.001        // 1 mm
 
 /* Initial platform/compiler-related stuff to set.
  */

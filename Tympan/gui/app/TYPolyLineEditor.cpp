@@ -24,6 +24,7 @@
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/geometry/TYPoint.h"
 #include "Tympan/gui/tools/OGLLineElement.h"
 #include "Tympan/gui/tools/OGLSphereElement.h"

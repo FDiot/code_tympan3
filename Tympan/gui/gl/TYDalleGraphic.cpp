@@ -16,18 +16,9 @@
 /**
  * \file TYDalleGraphic.cpp
  * \brief Representation graphique d'une dalle
- *
- *
  */
 
-
-
-
 #include "Tympan/models/business/infrastructure/TYDalle.h"
-
-#include "Tympan/models/business/TYPreferenceManager.h"
-
-
 #include "TYDalleGraphic.h"
 
 TYDalleGraphic::TYDalleGraphic(TYDalle* pElement) :

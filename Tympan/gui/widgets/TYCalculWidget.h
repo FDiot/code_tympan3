@@ -57,7 +57,6 @@ class QTabWidget;
 class QRadioButton;
 class QButtonGroup;
 class QComboBox;
-class TYAtmosphereWidget;
 
 /**
  * \class TYCalculWidget
@@ -87,10 +86,6 @@ public slots:
     virtual void apply();
 
     /**
-     * Edite la widget de l'atmosphere.
-     */
-    void editAtmosphere();
-    /**
      * Edite la widget du resultat.
      */
     void editResultat();
@@ -98,17 +93,6 @@ public slots:
      * Edite la widget du maillage.
      */
     void editMaillage(QTreeWidgetItem*);
-
-    /**
-     * Choix du calcul des parcours lateraux pour les ecrans
-     */
-    void updateUseEcran();
-
-    /**
-     * Choix du calcul des reflexions
-     * Ce choix impose le calcul des trajets lateraux
-     */
-    void updateUseReflexion();
 
     /**
      * Affiche un menu contextuel.
@@ -131,10 +115,6 @@ protected:
     QLabel* _labelDateModif;
     QLabel* _labelComment;
 
-    // Utilisation du sol
-    QCheckBox* _checkBoxUseSol;
-    QLabel* _labelUseSol;
-
     QRadioButton* _pRadioButtonSolReflechissant;
     QRadioButton* _pRadioButtonSolReel;
 
@@ -143,39 +123,13 @@ protected:
     // Affichage du type de calcul
     QComboBox* _comboSolver;
 
-    QCheckBox* _checkBoxCondFav;
-    QLabel* _labelCondFav;
-    QRadioButton* _pRadioButtonCondFav;
-    QRadioButton* _pRadioButtonCondHomo;
-
-    QLineEdit* _lineEditParamH;
-    QLabel* _labelParamH;
-    QCheckBox* _checkBoxUseVegetation;
-    QLabel* _labelUseVegetation;
-    QCheckBox* _checkBoxUseAtmosphere;
-    QLabel* _labelUseAtmosphere;
-
-    // Calcul Energetique ou interferences
-    QRadioButton* _radioButtonEnergetique;
-    QRadioButton* _radioButtonInterference;
-
     // Utilisation des ecrans
-    QLabel* _labelUseEcran;
-    QCheckBox* _checkBoxUseEcran;
-    QLabel* _labelParcoursLateraux;
     QCheckBox* _checkBoxParcoursLateraux;
 
-    QCheckBox* _checkBoxUseReflexion;
-    QLabel* _labelUseReflexion;
-    QLineEdit* _lineEditDistanceSRMin;
     QGroupBox* _groupBox;
     QGroupBox* _groupBoxFlag;
-    QGroupBox* _groupBoxAtmosphere;
     QGroupBox* _groupBoxMaillage;
     QGroupBox* _groupBoxResultat;
-
-    QLineEdit* _lineEditNomAtmosphere;
-    QPushButton* _pushButtonAtmosphere;
 
     // Presentation des resultats
     QLineEdit* _lineEditNomResultat;
@@ -199,14 +153,14 @@ protected:
     /// Gestion des differentes options sous forme d'onglet
     QTabWidget* _tabWidget;
 
-    /// Onglet de description de la meteo
-    TYAtmosphereWidget* _meteoWidget;
-
     /// Onglet des points de controle
     QTableWidget* _tableauPointControle;
 
     /// Onglet des points de controle
     QTableWidget* _tableauMaillages;
+
+    // Solver parameters
+    QTextEdit* _solverParams;
 };
 
 

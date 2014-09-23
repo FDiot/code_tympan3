@@ -17,5 +17,5 @@ install_cython_module(business ${destination})
 
 cython_add_module(solver solver.pyx)
 configure_cython_module(solver ${destination})
-target_link_libraries(solver tympan_common tympan_lib)
+target_link_libraries(solver tympan_common tympan_solver_model)
 install_cython_module(solver ${destination})

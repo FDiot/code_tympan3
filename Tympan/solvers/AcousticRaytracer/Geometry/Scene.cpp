@@ -13,14 +13,15 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Scene.h"
+#include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/AcousticRaytracer/Accelerator/BruteForceAccelerator.h"
 #include "Tympan/solvers/AcousticRaytracer/Accelerator/KdtreeAccelerator.h"
 #include "Tympan/solvers/AcousticRaytracer/Accelerator/BvhAccelerator.h"
 #include "Tympan/solvers/AcousticRaytracer/Accelerator/GridAccelerator.h"
-#include "Triangle.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
-#include "Tympan/solvers/AcousticRaytracer/global.h"
+
+#include "Triangle.h"
+#include "Scene.h"
 
 void Scene::clean()
 {
@@ -29,13 +30,9 @@ void Scene::clean()
         delete shapes.at(i);
     }
     shapes.clear();
-
     registeredVertices.clear();
-
     vertices.clear();
-
     globalBox.isNull = true;
-
     if (accelerator) { delete accelerator; }
 }
 
@@ -48,7 +45,7 @@ bool Scene::finish()
         ss << "(" << vertices.at(i).x << "," << vertices.at(i).y << "," << vertices.at(i).z << ")" << std::endl;
     }
     ss << "La scene comporte " << shapes.size() << " shapes." << std::endl;
-    switch (globalAccelerator)
+    switch (tympan::SolverConfiguration::get()->Accelerator)
     {
         case 0 :
             accelerator = new BruteForceAccelerator(&shapes, globalBox);
@@ -57,7 +54,9 @@ bool Scene::finish()
             accelerator = new GridAccelerator(&shapes, globalBox);
             break;
         case 2 :
-            accelerator = new BvhAccelerator(&shapes, globalBox, globalMaxTreeDepth, "middle");
+            accelerator = new BvhAccelerator(&shapes, globalBox,
+                                             tympan::SolverConfiguration::get()->MaxTreeDepth,
+                                             "middle");
             break;
         case 3 :
             accelerator = new KdtreeAccelerator(&shapes, globalBox);

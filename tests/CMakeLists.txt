@@ -31,8 +31,8 @@ file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/testutils.cpp )
 add_library(testutils STATIC ${TESTS_SRC} )
 set_property(TARGET testutils PROPERTY FOLDER "Tests")
-add_dependencies(testutils GTest tympan_common tympan_lib )
-target_link_libraries(testutils gtest tympan_common tympan_lib)
+add_dependencies(testutils GTest tympan_common tympan_lib tympan_solver_model)
+target_link_libraries(testutils gtest tympan_common tympan_lib tympan_solver_model)
 
 # Specific tests configuration
 # Needed to import DXF files.

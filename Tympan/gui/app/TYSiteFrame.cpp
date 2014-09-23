@@ -357,13 +357,6 @@ TYElementListItem* TYSiteFrame::addToList(LPTYBatiment pElement, TYElementListIt
     return NULL;
 }
 
-TYElementListItem* TYSiteFrame::addToList(LPTYAtmosphere pElement, TYElementListItem* parent /*=NULL*/)
-{
-    // Atmosphere
-    TYElementListItem* pRootItem  = addEltToList(pElement, parent);
-
-    return pRootItem;
-}
 
 void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
 {
@@ -775,13 +768,6 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
             }
             else if (ret == del)
             {
-                TYSiteNode* pSiteParent = NULL;
-                if (pElement->isA("TYCourbeNiveau") || pElement->isA("PlanEau"))
-                {
-                    // Recup du site parent en vue de son actualisation
-                    pSiteParent = TYSiteNode::safeDownCast(pElement->getParent()->getParent());
-                }
-
                 if (eltItem && !supprime(eltItem))
                 {
                     QMessageBox::warning(this, "Tympan", TR("id_warning_notsuppr"));

@@ -13,19 +13,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- *
- *
- *
- */
-
 #ifndef __TY_TRAJET__
 #define __TY_TRAJET__
 
 
 #include "TYChemin.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/atmospheric_conditions.h"
 #include "Tympan/models/solver/entities.hpp"
 
 /**
@@ -163,19 +157,19 @@ public:
 
 
     /**
-     * \fn OSpectre getPEnergetique(const TYAtmosphere& atmos)
+     * \fn OSpectre getPEnergetique(const AtmosphericConditions& atmos)
      * \brief Calcule la pression acoustique en module phase sur le trajet
      */
-    OSpectre getPEnergetique(const tympan::AtmosphericConditions& atmos);
+    OSpectre getPEnergetique(const AtmosphericConditions& atmos);
 
     /**
-     * \fn OSpectre getPInterference(const TYAtmosphere& atmos)
+     * \fn OSpectre getPInterference(const AtmosphericConditions& atmos)
      * \brief Calcule la pression quadratique sur le trajet
      */
-    OSpectre getPInterference(const tympan::AtmosphericConditions& atmos);
+    OSpectre getPInterference(const AtmosphericConditions& atmos);
 
 private:
-    OSpectre correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const tympan::AtmosphericConditions& atmos, const double& ri, const double& rj) const;
+    OSpectre correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const AtmosphericConditions& atmos, const double& ri, const double& rj) const;
 
 public :
     // Business source

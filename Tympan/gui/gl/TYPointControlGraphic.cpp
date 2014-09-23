@@ -21,6 +21,7 @@
 
 #include "Tympan/models/business/TYPointControl.h"
 #include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/gui/gl/TYPickingTable.h"
 #include "TYPointControlGraphic.h"
 

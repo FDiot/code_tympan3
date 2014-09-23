@@ -4,8 +4,23 @@
 from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.deque cimport deque
+from libcpp.vector cimport vector
 
 from tympan cimport core as tycore
+
+
+cdef extern from "Tympan/models/common/spectrum_matrix.h" namespace "tympan":
+    cdef cppclass SpectrumMatrix:
+        SpectrumMatrix()
+        SpectrumMatrix(const SpectrumMatrix& matrix)
+        const vector[OSpectre]& by_receptor(size_t receptor_idx) const
+        OSpectre& element "operator()"(size_t receptor_idx, size_t sources_idx)
+        void setSpectre(size_t receptor_idx, size_t sources_idx, OSpectre spectrum)
+        void resize(size_t nb_receptors, size_t nb_sources)
+        size_t nb_sources() const
+        size_t nb_receptors() const
+        void clearReceptor(size_t receptor_idx)
+
 
 cdef extern from "Tympan/models/common/3d.h":
 

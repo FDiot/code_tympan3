@@ -17,7 +17,6 @@
 #define CLEANER_SELECTOR
 
 #include "Selector.h"
-#include "Tympan/solvers/AcousticRaytracer/global.h"
 
 template<typename T>
 class CleanerSelector : public Selector<T>
@@ -39,7 +38,7 @@ public :
     {
         vector< QSharedPointer<Event> > *events = r->getEvents();
 		if (events->size() == 0) { return SELECTOR_ACCEPT; }
-		
+
 		vector< QSharedPointer<Event> >::iterator it = events->begin();
 		while(it != events->end())
 		{
@@ -48,10 +47,10 @@ public :
 				it  = events->erase(it);
 				continue;
 			}
-			
+
 			it++;
 		}
-		
+
         return SELECTOR_REPLACE;
     }
 
@@ -60,7 +59,7 @@ public :
     {
          vector< QSharedPointer<Event> > *events = r->getEvents();
 		if (events->size() == 0) { return true; }
-		
+
 		vector< QSharedPointer<Event> >::iterator it = events->begin();
 		while(it != events->end())
 		{
@@ -69,10 +68,10 @@ public :
 				it  = events->erase(it);
 				continue;
 			}
-			
+
 			it++;
 		}
-	
+
         return true;
     }
 

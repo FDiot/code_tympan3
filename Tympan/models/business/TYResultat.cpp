@@ -496,148 +496,6 @@ LPTYPointCalcul TYResultat::getRecepteur(const int& indexRecepteur)
     return pPoint;
 }
 
-void TYResultat::condensate()
-{
-    unsigned int i, j;
-
-    // Le cas echeant, on conserve la matrice brute pour pourvoir fournir un resultat partiel
-    if (_bPartial)
-    {
-        _backupSources = _sources;
-        _backupMatrix = _matrix;
-    }
-
-    TYMapElementIndex emetteurs;
-
-    TYMapElementIndex::iterator itPt;
-
-    // On construit d'abord la table d'index des emetteurs...
-    TYMapElementTabSources::iterator itCS;
-    TYElement* pElement = NULL;
-
-    for (itCS = _mapEmetteurSources.begin(), j = 0; itCS != _mapEmetteurSources.end(); itCS++, j++)
-    {
-        pElement = (TYElement*)(*itCS).first;
-        // On rajoute l'element dans la liste des sources condensee
-        emetteurs[pElement] = j;
-    }
-
-    // ... ce qui qui permet de construire la matrice de resultat
-    // Creation de la matrice qui va recevoir les spectres regroupe(condenses)
-    tympan::SpectrumMatrix condensateMatrix(_recepteurs.size(), emetteurs.size());
-
-    TYPointCalcul* pPoint = NULL;
-    int indexRecepteur = 0, indexEmetteur = 0;
-    bool bValid = true; // Permettra de valider un spectre pour un couple source/recepteur
-    TYTabSourcePonctuelleGeoNode tabSourceNode;
-    OSpectre spectreCumule = OSpectre::getEmptyLinSpectre();
-    TYSourcePonctuelle* pSource = NULL;
-
-    // On boucle sur les recepteurs et sur les sources condensee
-    for (itPt = _recepteurs.begin(); itPt != _recepteurs.end(); itPt++)
-    {
-        pPoint = TYPointCalcul::safeDownCast((*itPt).first);
-
-        indexRecepteur = (*itPt).second;
-
-        for (itCS = _mapEmetteurSources.begin(); itCS != _mapEmetteurSources.end(); itCS++)
-        {
-            bValid = true; // Permettra de valider un spectre pour un couple source/recepteur
-
-            indexEmetteur = emetteurs[(*itCS).first];
-            tabSourceNode = (*itCS).second;
-
-            spectreCumule.setDefaultValue(0.0);
-
-            // On boucle sur toutes les sources associees a l'element
-            for (i = 0; i < tabSourceNode.size(); i++)
-            {
-                pSource = TYSourcePonctuelle::safeDownCast(tabSourceNode[i]->getElement());
-                OSpectre s = getSpectre(pPoint, pSource);
-
-                bValid &= s.isValid();  // Si un spectre est invalide le couple est invalide
-
-                // On cumule les spectres
-                spectreCumule = spectreCumule.sum(s);
-            }
-
-            spectreCumule.setValid(bValid);
-            spectreCumule.setType(SPECTRE_TYPE_LP);
-            condensateMatrix(indexRecepteur, indexEmetteur) = spectreCumule;
-        }
-    }
-
-    // On remplace le tableau _sources par le tableau emetteur
-    _sources.clear();
-    _sources = emetteurs;
-
-    // On remplace ma matrice source-recepteur (_matrix) par la matrice que l'on vient de constuire
-
-    _matrix.clear();
-    _matrix = condensateMatrix;
-
-    // Construction de la map source/puissance de source
-    buildMapSourceSpectre();
-}
-
-bool TYResultat::cumulSpectres()
-{
-    unsigned int i;
-    bool cancel = false,
-         ret = true;
-
-#if TY_USE_IHM
-    TYProgressManager::setMessage("Calcule les resultats aux points");
-    TYProgressManager::set(static_cast<int>(getNbOfRecepteurs()));
-#endif // TY_USE_IHM
-
-    OSpectre SCumul = OSpectre::getEmptyLinSpectre();
-    OTabSpectre tabSp;
-
-    TYMapElementIndex::iterator itRecepteur;
-
-    TYCalcul* pCalcul = TYCalcul::safeDownCast(getParent());
-
-    for (itRecepteur = _recepteurs.begin() ; itRecepteur != _recepteurs.end() ; itRecepteur++)
-    {
-#if TY_USE_IHM
-        TYProgressManager::step(cancel);
-#endif // TY_USE_IHM
-        if (cancel)
-        {
-            ret = false;
-            return ret;
-        }
-
-        TYPointCalcul* pPoint = TYPointCalcul::safeDownCast((*itRecepteur).first);
-
-        // initialisation du spectre de cumul
-        SCumul.setDefaultValue(0.0);
-
-        // Recuperation des spectres associes au point
-        tabSp = getSpectres(pPoint);
-
-        // Cumul des spectres sur le point
-        for (i = 0; i < tabSp.size(); i++)
-        {
-            SCumul = SCumul.sum(tabSp[i]);
-        }
-
-        // Spectre de pression (une bonne conversion)
-        SCumul.setType(SPECTRE_TYPE_LP);
-        // Ecriture du spectre au point de calcul
-        pPoint->setSpectre(SCumul.toDB(), pCalcul);//temp);
-
-    }
-
-    TYProgressManager::stepToEnd();
-
-    // Le resultat est maintenant a jour
-    setIsAcousticModified(false);
-
-    return ret;
-}
-
 void TYResultat::saveSpectre(const std::string& filename, TYCalcul* pSubstCalcul/*=NULL*/)
 {
     const TYTabFreq tabFreq = TYSpectre::getTabFreqNorm(SPECTRE_FORM_TIERS);
@@ -729,52 +587,8 @@ void TYResultat::saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul)
     if (pCalcul != NULL)
     {
         ofs << "Calcul" << ';';
-        ofs << "Atmosphère" << ';';
-        ofs << "Sol" << ';';
-        ofs << "Trajets horizontaux" << ';';
-        ofs << "Végétation" << ';';
-        ofs << "Ecran" << ';';
-        ofs << "Réflexion" << ';';
-        ofs << "Conditions" << ';';
-        ofs << "H1" << ';';
-        ofs << "Calcul" << ';';
-        ofs << "Distance [SR] minimale" << ';';
-        ofs << "Fréquence minimale" << ';';
-        ofs << "Fréquence maximale" << ';';
         ofs << '\n';
-
         ofs << pCalcul->getName().toStdString() << ';';
-        ofs << pCalcul->getUseAtmosphere() << ';';
-        if (pCalcul->getUseSol())
-        {
-            ofs << "réel" << ';';
-        }
-        else
-        {
-            ofs << "réfléchissant" << ';';
-        }
-        ofs << pCalcul->getCalculTrajetsHorizontaux() << ';';
-        ofs << pCalcul->getUseVegetation() << ';';
-        ofs << pCalcul->getUseEcran() << ';';
-        ofs << pCalcul->getUseReflexion() << ';';
-        if (pCalcul->getCondFav())
-        {
-            ofs << "Favorables" << ';';
-        }
-        else
-        {
-            ofs << "Homogènes" << ';';
-        }
-        ofs << pCalcul->getParamH() << ';';
-        if (pCalcul->getInterference())
-        {
-            ofs << "Interférences" << ';';
-        }
-        else
-        {
-            ofs << "Energétique" << ';';
-        }
-        ofs << pCalcul->getDistanceSRMin() << ';';
         ofs << '\n';
         ofs << '\n';
     }
@@ -965,7 +779,6 @@ void TYResultat::saveValue(const std::string& filename, const int& affichage, do
         ofs.close();
     }
 }
-
 
 void TYResultat::setPartialState(const bool& bPartial)
 {

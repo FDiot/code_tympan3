@@ -18,13 +18,13 @@
 #define __TY_ANIME3DSOLVER__
 
 #include <memory>
+#include <QList>
+
 #include "Tympan/core/interfaces.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/triangle.h"
 #include "Tympan/models/common/acoustic_path.h"
 #include "Tympan/models/solver/entities.hpp"
-#include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
-#include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
-#include "Tympan/models/business/TYPointCalcul.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
 
 class TYANIME3DAcousticModel;
@@ -75,14 +75,14 @@ public:
     ~TYANIME3DSolver();
 
     /*!
-    * \fn bool solve(TYCalcul&, const AcousticProblemModel&, AcousticResultModel&)
+    * \fn bool solve(const AcousticProblemModel&, AcousticResultModel&)
     * \brief Methode principale de resolution avec la methode ANIME3D
     */
-    virtual bool solve(TYCalcul& calcul, const tympan::AcousticProblemModel& aproblem,
-            tympan::AcousticResultModel& aresult);
+    virtual bool solve(const tympan::AcousticProblemModel& aproblem,
+                       tympan::AcousticResultModel& aresult);
 
     /*!
-    * \fn void init(const TYSiteNode&, TYCalcul&)
+    * \fn void init()
     * \brief Initialize some data structures used by ANIME3D
     */
     void init();
@@ -93,13 +93,6 @@ public:
      * \brief Clean memory after being used in a calcul
      */
     virtual void purge();
-
-protected:
-    /*!
-     * \fn void saveAndOverSampleRay(const double& dMin = 0.0)
-     * \brief Transforme les ray en TYRay et ajoute des points intermediaires sur les rayons
-     */
-    void saveAndOverSampleRay(const TYSiteNode& site, TYCalcul& calcul, const unsigned int& sens = 0, const double& dMin = 0.0);
 
 protected:
     tab_acoustic_path _tabRay;
@@ -123,7 +116,7 @@ protected:
     tympan::receptor_pool_t all_receptors;
 
 private:
-   std::unique_ptr<tympan::AtmosphericConditions> _pAtmos;
+   std::unique_ptr<AtmosphericConditions> _pAtmos;
 };
 
 #endif // __TY_ANIME3DSOLVER__

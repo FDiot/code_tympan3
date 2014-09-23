@@ -39,7 +39,7 @@ def make_sources_test_with_file(project_file, sources_file):
         """
         (project, bus2solv_conv) = self.load_project(project_file)
         bus2solv_conv.clear()
-        model = project.current_computation.acoustic_problem
+        model = bus2solv_conv.solver_problem
         nexpected_sources = sum(1 for line in open(sources_file))
         # Check no sources are missing
         self.assertEqual(nexpected_sources, model.nsources)
@@ -75,7 +75,7 @@ def make_receptors_test_with_file(project_file, receptors_file):
         """
         (project, bus2solv_conv) = self.load_project(project_file)
         bus2solv_conv.clear()
-        model = project.current_computation.acoustic_problem
+        model = bus2solv_conv.solver_problem
         # Check no receptors are missing
         nexpected_receptors = sum(1 for line in open(receptors_file))
         self.assertEqual(nexpected_receptors, model.nreceptors)

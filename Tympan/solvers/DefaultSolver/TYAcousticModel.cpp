@@ -16,7 +16,8 @@
 #include <deque>
 #include <list>
 #include "Tympan/core/defines.h"
-#include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/solver/config.h"
+#include "Tympan/models/common/plan.h"
 #include "Tympan/solvers/DefaultSolver/TYTrajet.h"
 #include "Tympan/solvers/DefaultSolver/TYSolver.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
@@ -27,17 +28,10 @@
 #include "TYSolver.h"
 
 TYAcousticModel::TYAcousticModel(TYSolver& solver)
-    : _expGeo(1),
-      _typeCalculSol(0),
-      _useSol(true),
-      _useEcran(true),
+    : _useSol(true),
       _useReflex(false),
       _conditionFav(false),
-      _useAtmo(true),
-      _bCalculTrajetsHorizontaux(true),
-      _useVegetation(false),
       _interference(false),
-      _seuilConfondus(0.01),
       _paramH(10.0),
       _solver(solver)
 {
@@ -50,68 +44,33 @@ TYAcousticModel::~TYAcousticModel()
 
 }
 
-void TYAcousticModel::init(const TYCalcul& calcul)
+void TYAcousticModel::init()
 {
-    // Calcul de l'expansion geometrique
-    _expGeo = calcul.getExpansGeo();
-
-
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     // Calcul avec sol reel
-    _useSol = calcul.getUseSol();
-
-
+    _useSol = config->UseRealGround;
     // Calcul avec reflexion sur les parois verticales
-    _useReflex = calcul.getUseReflexion();
-
-
+    _useReflex = config->UseReflection;
     // Calcul en conditions favorables
-    _conditionFav = calcul.getCondFav();
-
-
+    _conditionFav = config->PropaConditions;
     // Definit l'atmosphere courante du site
-    double pression = calcul.getAtmosphere()._pObj->getPression();
-    double temperature = calcul.getAtmosphere()._pObj->getTemperature();
-    double hygrometrie = calcul.getAtmosphere()._pObj->getHygrometrie();
+    double pression = config->AtmosPressure;
+    double temperature = config->AtmosTemperature;
+    double hygrometrie = config->AtmosHygrometry;
 
-    pSolverAtmos = std::unique_ptr<tympan::AtmosphericConditions> ( new tympan::AtmosphericConditions(pression, temperature, hygrometrie) );
-
-
-    // Calcul avec prise en compte des ecrans
-    _useEcran = calcul.getUseEcran();
-
-
-    // Prise en compte de la vegetation
-    _useVegetation = calcul.getUseVegetation();
-
-    // Prise en compte de l'atmosphere (divergence geometrique)
-    _useAtmo = calcul.getUseAtmosphere();
-
-
+    pSolverAtmos = std::unique_ptr<AtmosphericConditions> ( new AtmosphericConditions(pression, temperature, hygrometrie) );
     // Calcul avec interference
-    _interference = calcul.getInterference();
-
+    _interference = config->ModSummation;
     // On calcul tout de suite le spectre de longueur d'onde
-    _lambda = OSpectre::getLambda(pSolverAtmos->compute_c()); //_pAtmo->getVitSon());
-
-    /// Calcul reflexion sur sol locale ou etendue
-    _typeCalculSol = calcul.getTypeCalculSol();
-
-
-    // Distance minimale entre deux points consideres comme confondus
-    _seuilConfondus = calcul.getSeuilConfondu();
-
-
-    /// Calcul des trajets horizontaux
-    _bCalculTrajetsHorizontaux = calcul.getCalculTrajetsHorizontaux();
-
+    _lambda = OSpectre::getLambda(pSolverAtmos->compute_c());
     // Coefficient multiplicateur pour le calcul des reflexions supplementaires en condition favorable
-    _paramH = calcul.getParamH();
+    _paramH = config->H1parameter;
 }
 
 
-void TYAcousticModel::compute(  const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, 
-                                TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, 
-                                TabPoint3D& ptsRight )
+void TYAcousticModel::compute(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon,
+                              TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
+                              TabPoint3D& ptsRight )
 {
     bool vertical = true, horizontal = false;
 
@@ -205,7 +164,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
 
     // Calcul du point de reflexion
     OPoint3D ptReflex;
-    int result = penteMoyenne.intersects(OSegment3D(ptSym, rayon._ptB), ptReflex, _seuilConfondus);
+    int result = penteMoyenne.intersects(OSegment3D(ptSym, rayon._ptB), ptReflex, TYSEUILCONFONDUS);
 
     //              2. Etape avant la reflexion
     OSegment3D seg1(rayon._ptA, ptReflex); // On part de la source vers le point de reflexion
@@ -259,14 +218,6 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
     meanSlope(rayon, penteMoyenne);
 
 
-    //// 1. Chemin direct avec vegetation
-    //if (_useVegetation)
-    //{
-    //    computeCheminAvecVeg(rayon, source, penteMoyenne, TabChemin, distance);
-
-    //    if (TabChemin.size() > 0) { return; }
-    //}
-
     // 1. Conditions homogenes sans vegetation
     TYTabEtape Etapes;
     addEtapesSol(rayon._ptA, rayon._ptB, penteMoyenne, source, true, true, Etapes, rr);
@@ -303,9 +254,9 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
         double hauteurA = 0.0, hauteurB = 0.0;
         if (penteMoyenne.longueur() > 0)
         {
-            penteMoyenne.projection(rayon._ptA, ptProj, _seuilConfondus);
+            penteMoyenne.projection(rayon._ptA, ptProj, TYSEUILCONFONDUS);
             hauteurA = rayon._ptA._z - ptProj._z;
-            penteMoyenne.projection(rayon._ptB, ptProj, _seuilConfondus);
+            penteMoyenne.projection(rayon._ptB, ptProj, TYSEUILCONFONDUS);
             hauteurB = rayon._ptB._z - ptProj._z;
         }
         else
@@ -343,7 +294,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
 
             if (penteMoyenne.longueur() > 0)
             {
-                penteMoyenne.projection(rayon._ptA, projA, _seuilConfondus);
+                penteMoyenne.projection(rayon._ptA, projA, TYSEUILCONFONDUS);
             }
             else
             {
@@ -374,15 +325,6 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             if (_useSol)
             {
                 etape._Absorption = getReflexionSpectrumAt( seg, rr );
-                //double angle = OVector3D(ptReflex, projA).angle(OVector3D(ptReflex, rayon._ptA));
-
-                //pTerrain = _pTopographie->terrainAt(ptReflex);
-                //if (!pTerrain) { pTerrain = _pTopographie->getDefTerrain(); }
-                //if (pTerrain) // Une zone de terrain a ete definie
-                //{
-                //    pSol = pTerrain->getSol();
-                //    if (pSol) { etape._Absorption = pSol->abso(angle, rr, *_pAtmo); }
-                //}
             }
             else  // Calcul sol reflechissant
             {
@@ -408,7 +350,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             // Calcul du point de reflexion
             if (penteMoyenne.longueur() > 0)
             {
-                penteMoyenne.projection(rayon._ptB, projB, _seuilConfondus);
+                penteMoyenne.projection(rayon._ptB, projB, TYSEUILCONFONDUS);
             }
             else
             {
@@ -437,15 +379,6 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             if (_useSol)
             {
                 etape._Absorption = getReflexionSpectrumAt( seg, rr );
-                //double angle = OVector3D(ptReflex, projA).angle(OVector3D(ptReflex, rayon._ptA));
-
-                //pTerrain = _pTopographie->terrainAt(ptReflex);
-                //if (!pTerrain) { pTerrain = _pTopographie->getDefTerrain(); }
-                //if (pTerrain) // Une zone de terrain a ete definie
-                //{
-                //    pSol = pTerrain->getSol();
-                //    if (pSol) { etape._Absorption = pSol->abso(angle, rr, *_pAtmo); }
-                //}
             }
             else  // Calcul sol reflechissant
             {
@@ -464,201 +397,6 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
     }
 }
 
-//void TYAcousticModel::computeCheminAvecVeg(const OSegment3D& rayon, const tympan::AcousticSource& source, const OSegment3D& penteMoyenne, TYTabChemin& TabChemin, double distance) const
-//{
-//    double longueur = 0.0;
-//    OSegment3D seg;
-//
-//    TYChemin chemin;
-//
-//    TYTabStructSegLPSp tabSegSp;
-//    //
-//    TYTabEtape tabEtapes;
-//
-//    getSpectreAttVegetation(rayon, penteMoyenne, tabSegSp);
-//
-//    if (tabSegSp.size() == 0) { return ; }  // Si pas de vegetation detectee, on retourne l'ensemble des chemins sans obstacles
-//
-//    // Etape 1 : Avant la foret
-//    seg = OSegment3D(rayon._ptA, tabSegSp[0]._segment._ptA);
-//    longueur += seg.longueur();
-//
-//    // Calcul de l'absorption (directivite) de la source
-//    TYEtape Etape;
-//
-//    Etape._pt = rayon._ptA;
-//    Etape._Absorption = source.directivity->lwAdjustment(OVector3D(rayon._ptA, rayon._ptB), rayon.longueur());
-//
-//    // On rentre dans la foret, loup y es tu ?
-//    OPoint3D ext;
-//    OPoint3D lastPoint(rayon._ptA);
-//    OSpectre spectreAtt = OSpectre::getEmptyLinSpectre(); // On cumule les attenuations des differents segments
-//
-//    OPoint3D currentPoint;
-//    OSegment3D currentSeg;
-//
-//    for (unsigned int i = 0; i < tabSegSp.size(); i++)
-//    {
-//        currentPoint._x = tabSegSp[i]._segment._ptA._x;
-//        currentPoint._y = tabSegSp[i]._segment._ptA._y;
-//        currentPoint._z = tabSegSp[i]._segment._ptA._z;
-//
-//        currentSeg._ptA = lastPoint;
-//        currentSeg._ptB = currentPoint;
-//        longueur += currentSeg.longueur();
-//
-//        // On somme les attenuation vegetation (attenuation atmospherique comprise)
-//        spectreAtt = spectreAtt.sum(*tabSegSp[i]._spectreAtt);
-//
-//        if (i != (tabSegSp.size() - 1))
-//        {
-//            ext = OPoint3D(tabSegSp[i + 1]._segment._ptA);
-//        }
-//        else
-//        {
-//            ext = OPoint3D(rayon._ptB);
-//        }
-//
-//        if (OPoint3D(tabSegSp[i]._segment._ptB) != ext)
-//        {
-//            /*
-//                        TYEtape Etape;
-//                        Etape.setPoint(tabSegSp[i]._segment._ptB);
-//                        tabEtapes.push_back(Etape);
-//            */
-//        }
-//
-//        lastPoint = currentPoint;
-//    }
-//
-//    Etape._Attenuation = spectreAtt;
-//    tabEtapes.push_back(Etape);
-//
-//    chemin.setType(CHEMIN_DIRECT);
-//    chemin.setLongueur(longueur);
-//    chemin.setDistance(distance);
-//    chemin.calcAttenuation(tabEtapes, *pSolverAtmos);
-//
-//    TabChemin.push_back(chemin);
-//
-//    // Cleaning tab of segments crossing forest
-//    for (unsigned int i = 0; i < tabSegSp.size(); i++)
-//    {
-//        if (tabSegSp[i]._spectreAtt != NULL) { delete tabSegSp[i]._spectreAtt; tabSegSp[i]._spectreAtt = NULL; }
-//    }
-//    tabSegSp.clear();
-//}
-//
-//void TYAcousticModel::getSpectreAttVegetation(const OSegment3D& rayon, const OSegment3D& penteMoyenne, TYTabStructSegLPSp& tabSegSp) const
-//{
-//    TYStructSegLPSp elmt;
-//    elmt._spectreAtt = NULL;
-//
-//    double  hveg, hA, hB, l;
-//    OPoint3D ptCenter, ptMid, projA, projB, pt, ptTmp;
-//    double R = TY_EDF_FOREST_RAYON;
-//
-//    // Recuperation des terrains et des segments associes le long du rayon
-//    TYTabStructSegPtrTer tabSegTer;
-//    tabSegTer = _pTopographie->sols(rayon);
-//
-//    // Calcul du centre ptCenter du cercle de rayon R passant par les extremites du rayon
-//    // 2 cercles correspondent a ce critere,
-//    // on garde celui dont le centre a l'altitude la plus faible
-//    ptMid = rayon.centreOf();
-//    ptCenter = rayon.centerOfCurvedPath(R);
-//    if (ptCenter._z > ptMid._z)
-//    {
-//        ptCenter._z = ptMid._z - (ptCenter._z - ptMid._z);
-//    }
-//
-//    // Construction du segment segCenter parallele au rayon passant par ptCenter
-//    OVector3D vectCenter(ptCenter);
-//    OVector3D vectMid(rayon._ptA, ptMid);
-//    OVector3D A(vectCenter - vectMid);
-//    OVector3D B(vectCenter + vectMid);
-//    OSegment3D segCenter(A, B);
-//    OVector3D vectAB(A, B);
-//    vectAB.normalize();
-//
-//    for (unsigned int i = 0; i < tabSegTer.size(); i++)
-//    {
-//        // Pour chaque terrain traverse qui possede une vegetation
-//        // on calcule le segment et le spectre associe
-//        if (tabSegTer[i]._terrain->getSol()->getVegetActive())
-//        {
-//            // On considere le segment courant associe a chaque terrain
-//            OSegment3D segTmp(tabSegTer[i]._segment);
-//            OSegment3D seg;
-//            // Calcul de la projection du segment courant sur le rayon
-//            rayon.projection(segTmp._ptA, seg._ptA, _seuilConfondus);
-//            rayon.projection(segTmp._ptB, seg._ptB, _seuilConfondus);
-//            TYVegetation* pVeg = tabSegTer[i]._terrain->getSol()->getVegetation();
-//
-//            // Calcul de la projection du segment courant sur segCenter
-//            segCenter.projection(seg._ptA, projA, _seuilConfondus);
-//            segCenter.projection(seg._ptB, projB, _seuilConfondus);
-//            // Hauteur de vegetation par rapport a segCenter
-//            hveg = pVeg->getHauteur() + OVector3D(segTmp._ptA, projA).norme();
-//
-//            // Hauteur du premier point du segment courant par rapport a segCenter
-//            hA = sqrt(R * R - OVector3D(projA, ptCenter).norme() * OVector3D(projA, ptCenter).norme());
-//            // Hauteur du deuxieme point du segment courant par rapport a segCenter
-//            hB = sqrt(R * R - OVector3D(projB, ptCenter).norme() * OVector3D(projB, ptCenter).norme());
-//            // Distance par rapport a ptCenter et en projection sur segCenter
-//            // de l'extremite de la vegetation
-//            l = sqrt(ABS(R * R - hveg * hveg));
-//
-//            // Si le premier point est en dessous de la vegetation
-//            if (hA < hveg)
-//            {
-//                // Si le deuxieme point est en dessous de la vegetation
-//                if (hB < hveg)
-//                {
-//                    // Si la vegetation est au dessus du cercle
-//                    // le segment est entierement dans la vegetation
-//                    if (hveg > R)
-//                    {
-//                        elmt._segment = seg;
-//                        elmt._spectreAtt = new OSpectre(pVeg->getAtt(seg, *_pAtmo));
-//                        tabSegSp.push_back(elmt);
-//                    }
-//                    else
-//                    {
-//                        ptTmp = OPoint3D(vectCenter - vectAB * l);
-//                        seg.projection(ptTmp, pt, _seuilConfondus);
-//
-//                        elmt._segment = OSegment3D(seg._ptA, pt);
-//                        elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
-//                        tabSegSp.push_back(elmt);
-//
-//                        ptTmp = OPoint3D(vectCenter + vectAB * l);
-//                        seg.projection(ptTmp, pt, _seuilConfondus);
-//                        elmt._segment = OSegment3D(pt, seg._ptB);
-//                        elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
-//                        tabSegSp.push_back(elmt);
-//                    }
-//                }
-//                else
-//                {
-//                    ptTmp = OPoint3D(vectCenter - vectAB * l);
-//                    seg.projection(ptTmp, pt, _seuilConfondus);
-//                    elmt._segment = OSegment3D(seg._ptA, pt);
-//                    elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
-//                    tabSegSp.push_back(elmt);
-//                }
-//            }
-//            else if (hB < hveg)
-//            {
-//                ptTmp = OPoint3D(vectCenter + vectAB * l);
-//                seg.projection(ptTmp, pt, _seuilConfondus);
-//                elmt._segment = OSegment3D(pt, seg._ptB);
-//                elmt._spectreAtt = new OSpectre(pVeg->getAtt(elmt._segment, *_pAtmo));
-//                tabSegSp.push_back(elmt);
-//            }
-//        }
-//    }
-//}
 
 bool TYAcousticModel::computeCheminsAvecEcran(const OSegment3D& rayon, const tympan::AcousticSource& source, const TabPoint3D& pts, const bool vertical, TYTabChemin& TabChemins, double distance) const
 {
@@ -901,7 +639,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
         ptSym._z = 2 * segPente._ptA._z - ptSym._z;
     }
 
-    int result = segPente.intersects(OSegment3D(ptSym, ptFin), ptReflex, _seuilConfondus);
+    int result = segPente.intersects(OSegment3D(ptSym, ptFin), ptReflex, TYSEUILCONFONDUS);
 
     if (result == 0) // Si pas d'intersection trouvee, on passe au plan B
     {
@@ -937,7 +675,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
     //          1/ le depart et l'arrivee ne sont pas sur le sol
     //          2/ le depart ou l'arrivee sont sur le sol et sont soit la source, soit le recepteur
     //          3/ ni 1, ni 2, dans ce cas, les segments ne sont pas produits
-    if ((ptSym.distFrom(ptReflex) > _seuilConfondus) && (ptFin.distFrom(ptReflex) > _seuilConfondus))
+    if ((ptSym.distFrom(ptReflex) > TYSEUILCONFONDUS) && (ptFin.distFrom(ptReflex) > TYSEUILCONFONDUS))
     {
         //              Etape avant la reflexion
         OSegment3D seg1(ptDebut, ptReflex);
@@ -1010,8 +748,8 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
     return res;
 }
 
-void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, 
-                                                const tympan::AcousticSource& source, TYTabChemin& TabChemins, 
+void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon,
+                                                const tympan::AcousticSource& source, TYTabChemin& TabChemins,
                                                 double distance ) const
 {
     if (!_useReflex) { return; }
@@ -1313,7 +1051,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
     // Search for material at reflexion point
     // Set position of ray begin 1000 meters over the original point to avoid underground point (seen from mean slope computation)
     vec3 start = OPoint3Dtovec3(incident._ptB);
-    start.z += 1000.; 
+    start.z += 1000.;
     Ray ray1( start, vec3(0., 0., -1.) );
     ray1.maxt = 20000;
 

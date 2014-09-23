@@ -45,7 +45,6 @@
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYElementWidget.h"
   #include "Tympan/gui/gl/TYElementGraphic.h"
-  #include "TYPreferenceManager.h"
 #endif // TY_USE_IHM
 #include "TYDefines.h"
 #include "TYXMLTools.h"

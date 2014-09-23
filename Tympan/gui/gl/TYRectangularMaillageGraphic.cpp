@@ -21,6 +21,7 @@
 
 #include "Tympan/core/color.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYCalcul.h"

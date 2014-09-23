@@ -16,6 +16,7 @@
 
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/TYPluginManager.h"
+#include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "TYProjet.h"
 
@@ -564,29 +565,7 @@ void TYProjet::forceUseDefault()
 {
     _delaunayTolerance = getDefaultDelaunayTolerence();
     _maxDistBetweenPoints = getDefaultDMax();
-
-    //
-    //#if TY_USE_IHM
-    //  if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "DelaunayTolerance"))
-    //  {
-    //      _delaunayTolerance = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "DelaunayTolerance");
-    //  }
-    //  else
-    //  {
-    //      TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "DelaunayTolerance", _delaunayTolerance);
-    //  }
-    //
-    //  if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "DistMinPtCrbNiv"))
-    //  {
-    //      _maxDistBetweenPoints = TYPreferenceManager::getDouble(TYDIRPREFERENCEMANAGER, "DistMinPtCrbNiv");
-    //  }
-    //  else
-    //  {
-    //      TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "DistMinPtCrbNiv", _maxDistBetweenPoints);
-    //  }
-    //#endif
-
-    verifGeometricParam();
+   verifGeometricParam();
 }
 
 const double TYProjet::getDefaultDelaunayTolerence() const

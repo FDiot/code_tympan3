@@ -14,7 +14,6 @@ _HERE = osp.realpath(osp.dirname(__file__))
 
 class TestPyTam(TympanTC):
 
-
     def test_hierarchy(self):
         (project, _) = self.load_project('projects-panel',
                                "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
@@ -26,8 +25,8 @@ class TestPyTam(TympanTC):
     def test_base(self):
         # XXX This test uses expected bad values provided by the current
         # implementation
-        (project, _) = self.load_project('solver_export', "base.xml")
-        model = project.current_computation.acoustic_problem
+        (project, bus2solv_conv) = self.load_project('solver_export', "base.xml")
+        model = bus2solv_conv.solver_problem
         self.assertEqual(model.npoints, 6) # OK
         self.assertEqual(model.ntriangles, 5) # XXX should be 4
         self.assertEqual(model.nmaterials, 5) # XXX should be 1

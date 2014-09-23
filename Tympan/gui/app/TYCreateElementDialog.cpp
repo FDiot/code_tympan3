@@ -38,7 +38,7 @@
 
 #ifdef _DEBUG
 ///Le nombre d'elements selectionnables.
-static const int nbMainElts = 61;
+static const int nbMainElts = 60;
 
 ///Le type des elements selectionnables.
 static char* _listMainElement[] =
@@ -46,7 +46,7 @@ static char* _listMainElement[] =
     "TYAcousticBox",           "TYAcousticCircle",       "TYAcousticCylinder",    "TYAcousticLine",         "TYAcousticPolygon",    /*01*/
     "TYAcousticRectangleNode", "TYAcousticRectangle",    "TYAcousticSemiCircle",  "TYAcousticSemiCylinder", "TYAcousticSurfaceNode",/*02*/
     "TYAcousticSurface",       "TYBoucheSurface",        "TYChemineeSurface",     "TYAcousticVolumeNode",   "TYAcousticVolume",     /*03*/
-    "TYAltimetrie",            "TYAtmosphere",           "TYAttenuateur",         "TYBatiment",             "TYBox",                /*04*/
+    "TYAltimetrie",            "TYAttenuateur",         "TYBatiment",             "TYBox",                /*04*/
     "TYCalcul",                "TYCourbeNiveau",         "TYCoursEau",            "TYDalle",                "TYDirectivity",        /*05*/
     "TYElement",               "TYEtage",                "TYInfrastructure",      "TYLinearMaillage",       "TYMachine",            /*06*/
     "TYMaillage",              "TYMateriauConstruction", "TYMurElement",          "TYMur",                  "TYParoi",              /*07*/
@@ -65,7 +65,7 @@ static const int nbMainElts = 14;
 static char* _listMainElement[] =
 {
     "TYProjet",      "TYSiteNode",             "TYBatiment",      "TYMachine",       "TYSpectre",   /*1*/
-    "TYAttenuateur", "TYMateriauConstruction", "TYSol",           "TYParoi",         "TYAtmosphere",/*2*/
+    "TYAttenuateur", "TYMateriauConstruction", "TYSol",           "TYParoi",         /*2*/
     "TYVegetation",  "TYSourcePonctuelle",     "TYSourceBafflee", "TYSourceCheminee"
 };
 #endif // _DEBUG

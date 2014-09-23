@@ -164,11 +164,7 @@ void TYBoxEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, Qt::Ke
                     snapToGrid(org._x, org._y, dummy);
                 }
 
-                ORepere3D repere = pBoxGeoNode->getORepere3D();
-
-                repere._origin = org;
-
-                pBoxGeoNode->setRepere(repere);
+		pBoxGeoNode->getORepere3D()._origin = org;
 
                 // Ajout a la machine
                 getMachine()->addAcousticVol((LPTYAcousticVolumeGeoNode&) pBoxGeoNode);

@@ -25,7 +25,7 @@
 
 #include <cstddef>
 
-#include "Tympan/models/solver/acoustic_result_model.hpp"
+#include "Tympan/models/common/spectrum_matrix.h"
 #include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "TYPointCalcul.h"
 
@@ -154,13 +154,6 @@ public:
     void buildMatrix();
 
     /**
-     * \fn int getIndexSource(TYSourcePonctuelle* pSource)
-     * \brief Retourne l'index d'une source
-     * \return _sources[pSource]:l'index d'une source
-     */
-    int getIndexSource(TYSourcePonctuelle* pSource) { return _sources[pSource]; }
-
-    /**
      * \fn  int getIndexRecepteur(TYPointCalcul* pRecepteur)
      * \brief Retourne l'index d'un recepteur
      * \return _recepteurs[pRecepteur]:l'index d'un recepteur
@@ -247,18 +240,6 @@ public:
      * \return _mapEmetteurSources le tableau associatif "emetteur/Liste de sources"
      */
     TYMapElementTabSources& getMapEmetteurSrcs() { return _mapEmetteurSources; }
-
-    /**
-     * \fn void condensate()
-     * \brief Regroupe les contributions par element englobant
-     */
-    void condensate();
-
-    /**
-     * \fn bool cumulSpectres()
-     * \brief Cumule les spectres aux points de calculs
-     */
-    bool cumulSpectres();
 
     /**
      * \fn void saveSpectre(const std::string& filename, TYCalcul* pSubstCalcul=NULL)

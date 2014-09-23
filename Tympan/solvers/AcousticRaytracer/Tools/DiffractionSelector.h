@@ -17,7 +17,6 @@
 #define DIFFRACTION_SELECTOR
 
 #include "Selector.h"
-#include "Tympan/solvers/AcousticRaytracer/global.h"
 
 template<typename T>
 class DiffractionSelector : public Selector<T>

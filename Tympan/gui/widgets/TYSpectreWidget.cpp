@@ -211,8 +211,6 @@ void TYSpectreWidget::updateContent()
 
     TYElement* pParent = _pTmpSpectre->getParent();
 
-    if (pParent && pParent->isA("TYAtmosphere")) { unite = "dB/m"; }
-
     QStringList stringList;
     stringList.append(TR("id_freq"));
     stringList.append(unite);

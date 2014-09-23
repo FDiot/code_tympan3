@@ -8,7 +8,10 @@ from utils import (TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC
 with no_output():
     import tympan.models.business as tybusiness
     import tympan.business2solver as bus2solv
+    from tympan.models.solver import Configuration
 
+# avoid segfaults due to multithreading
+Configuration.get().NbThreads = 1
 
 class TestTympan(TympanTC):
     pass
@@ -27,9 +30,8 @@ def make_test_with_file(test_file):
             (project, bus2solv_conv) = self.load_project(
                 osp.join(TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation
-            computation.set_nthread(1) # avoid segfaults due to multithreading
             solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, computation)
-            result = computation.go(solver)
+            result = solver.solve_problem(bus2solv_conv.solver_problem, bus2solv_conv.solver_result)
             bus2solv_conv.postprocessing()
         self.assertTrue(result)
         # Load the expected result

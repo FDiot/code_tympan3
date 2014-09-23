@@ -18,6 +18,7 @@
 #include "TYCoursEau.h"
 
 #if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYCoursEauWidget.h"
   #include "Tympan/gui/gl/TYCoursEauGraphic.h"
 #endif

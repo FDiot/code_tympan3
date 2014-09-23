@@ -2,12 +2,16 @@
 """
 
 from libcpp.string cimport string
+from libcpp cimport bool
+from tympan.models.solver cimport AcousticProblemModel, AcousticResultModel
 
 # STL ##########################################################################
 
 cdef extern from "boost/shared_ptr.hpp" namespace "boost":
 
     cdef cppclass shared_ptr[T]:
+        shared_ptr(T*)
+        shared_ptr()
         T *get()
 
 cdef extern from "memory" namespace "std":
@@ -42,3 +46,5 @@ cdef extern from "Tympan/core/idgen.h":
 cdef extern from "Tympan/core/interfaces.h":
     cdef cppclass SolverInterface:
         SolverInterface()
+        void purge()
+        bool solve(const AcousticProblemModel& aproblem, const AcousticResultModel& aresult)

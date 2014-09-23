@@ -18,6 +18,7 @@
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #if TY_USE_IHM
+  #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYAcousticCircleWidget.h"
   #include "Tympan/gui/gl/TYAcousticCircleGraphic.h"
 #endif

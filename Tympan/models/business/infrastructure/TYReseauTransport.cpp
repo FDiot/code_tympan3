@@ -13,18 +13,13 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #if TY_USE_IHM
-#include "Tympan/gui/widgets/TYReseauTransportWidget.h"
-#include "Tympan/gui/gl/TYReseauTransportGraphic.h"
+  #include "Tympan/models/business/TYPreferenceManager.h"
+  #include "Tympan/gui/widgets/TYReseauTransportWidget.h"
+  #include "Tympan/gui/gl/TYReseauTransportGraphic.h"
 #endif
-
-
-#include "TYReseauTransport.h"
 #include "Tympan/core/logging.h"
+#include "TYReseauTransport.h"
 
 
 TY_EXTENSION_INST(TYReseauTransport);

@@ -24,15 +24,16 @@
 #include "TympanTestsConfig.h"
 #include "Tympan/models/solver/entities.hpp"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
+#include "Tympan/models/common/atmospheric_conditions.h"
 
 using namespace std;
-tympan::AtmosphericConditions functionnalResults_initAtmosphereFromRow(const deque<double>& row)
+AtmosphericConditions functionnalResults_initAtmosphereFromRow(const deque<double>& row)
 {
     double pressure = row[0];
 	double temperature = row[1];
 	double hygrometry = row[2];
 
-	return tympan::AtmosphericConditions(pressure, temperature, hygrometry);
+	return AtmosphericConditions(pressure, temperature, hygrometry);
 }
 
 TEST(AcousticEntities, AtmosphericAbsorption)
@@ -59,7 +60,7 @@ TEST(AcousticEntities, AtmosphericAbsorption)
     BOOST_FOREACH(const deque<double>& row, table)
     {
         ++row_num;
-		tympan::AtmosphericConditions atm = functionnalResults_initAtmosphereFromRow(row);
+		AtmosphericConditions atm = functionnalResults_initAtmosphereFromRow(row);
 		computed_value = atm.get_absorption_value( row[3] );
 
         // Tabbed value is done in dB/km computed must be multiplied by 1000 for comparison
@@ -72,7 +73,7 @@ TEST(AcousticEntities, AtmosphericAbsorption)
 
 TEST(AcousticEntities, SoundSpeed)
 {
-    tympan::AtmosphericConditions atm(101325., 43., 70.);
+    AtmosphericConditions atm(101325., 43., 70.);
     double estimated_sound_speed = 331. + 0.6 * 43.;
     double computed_sound_speed = atm.compute_c();
 
