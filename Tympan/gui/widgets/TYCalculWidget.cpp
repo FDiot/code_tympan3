@@ -116,26 +116,6 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _solverParams->setPlainText(getElement()->solverParams);
     groupBoxFlagLayout->addWidget(_solverParams, 0, 0, 5, 1);
 
-    QButtonGroup* buttonGroupSolRefReel = new QButtonGroup();
-    _pRadioButtonSolReel = new QRadioButton(TR("id_usesol_reel_label"));
-    buttonGroupSolRefReel->addButton(_pRadioButtonSolReel, 0);
-    _pRadioButtonSolReflechissant = new QRadioButton(TR("id_usesol_refl_label"));
-    buttonGroupSolRefReel->addButton(_pRadioButtonSolReflechissant, 1);
-
-    QGridLayout* groupBoxSolRefReelLayout = new QGridLayout();
-    groupBoxSolRefReelLayout->addWidget(_pRadioButtonSolReel, 0, 0);
-    groupBoxSolRefReelLayout->addWidget(_pRadioButtonSolReflechissant, 0, 1);
-
-    QGroupBox* groupBoxSolRefReel = new QGroupBox();
-    groupBoxSolRefReel->setTitle(TR(""));
-    groupBoxSolRefReel->setLayout(groupBoxSolRefReelLayout);
-
-    groupBoxFlagLayout->addWidget(groupBoxSolRefReel, 0, 1, 1, 2);
-
-    // Choix du type de calcul avec sol
-    _checkBoxParcoursLateraux = new QCheckBox(TR("id_parcours_lateraux"), _groupBoxFlag);
-    groupBoxFlagLayout->addWidget(_checkBoxParcoursLateraux, 1, 1);
-
     _tabWidget->insertTab(1, _groupBoxFlag, TR("id_opt_calc"));
 
     // Onglet Points de controle
