@@ -18,7 +18,14 @@
 
 namespace Tools
 {
-void fromRadianToCarthesien(decimal tetha, decimal phi, vec3& result)
+void fromRadianToCarthesien(decimal theta, decimal phi, vec3& result)
+{
+    result.x = cos(theta) * cos(phi);
+    result.y = cos(theta) * sin(phi);
+    result.z = sin(theta);
+}
+
+void fromRadianToCarthesien2(decimal tetha, decimal phi, vec3& result)
 {
     //std::cout<<"phi : "<<phi<<", tetha : "<<tetha<<std::endl;
     result.x = sin(tetha) * cos(phi);

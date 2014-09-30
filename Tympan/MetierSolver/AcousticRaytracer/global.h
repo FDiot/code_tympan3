@@ -26,6 +26,7 @@ extern int globalAccelerator;           //Choix de la structure acceleratrice. 0
 extern int globalMaxTreeDepth;          //Profondeur maximale autorisee pour le BVH ou KdTree.
 extern bool globalUseSol;               //Utilisation du sol (ou pas -cas NMPB-)
 extern bool globalKeepDebugRay;         //Permet de conserver les rayons qui ont ete invalides pendant la propagation.
+extern int globalDiscretization;        //Permet de choisir entre des rayons aléatoires ou déterministes (discretisation source)
 
 ////////////////////////////
 // NMPB value
@@ -55,14 +56,18 @@ extern double globalAnalyticDMax;       // Distance de propagation maximale des 
 extern double globalAnalyticTMax;       // Temps de propagation maximal des rayons courbes
 extern double globalAnalyticH;          // Pas de temps de calcul pour la propagation des rayons courbes
 extern int globalAnalyticNbRay;         // Nombre de rayons tires pour le lancer de rayons courbes
-extern float globalAnalyticAnglePhi;    // Angle de tir vertical (phi) des rayons
+extern float globalAnalyticAngleTheta;    // Angle de tir vertical (theta) des rayons
 
 extern double globalAnalyticGradC;      // Gradient vertical de celerite
 extern double globalAnalyticGradV;      // Gradient vertical de vitesse de vent
 extern double globalAnalyticC0;         // Celerite du son initiale
 extern int globalAnalyticTypeTransfo;   // Methode de transformation -- TOUJOURS = 1 -- pas d'autre methode definie
-//extern bool globalRestitModifiedGeom;   // Indique si l'on souhaite recuperer la geometrie transformee
+extern bool globalRestitModifiedGeom;   // Indique si l'on souhaite recuperer la geometrie transformee
 extern double globalOverSampleD;            // [0 +[ (0 pas de surechantillonnage) Indique le taux de surechantillonnage des rayons
 extern double globalWindDirection;          // Direction du vent (un vent a 0 est dirige du nord vers le sud)
 
+extern bool globalUseFresnelArea;       // take into account the fresnel area
+extern float globalAnime3DSigma;        // incertitude relative sur la taille du rayon au carree
+extern float globalAnime3DForceC;       // Force C à 0.0 -> globalAnime3DForceC=0; 1.0 -> globalAnime3DForceC = 1 ou autre valeur dépendant de globalAnime3DSigma
+extern bool globalUsePostFilters;       // Utilisation (!=0) ou non (0) des filtres post lancer de rayons
 #endif

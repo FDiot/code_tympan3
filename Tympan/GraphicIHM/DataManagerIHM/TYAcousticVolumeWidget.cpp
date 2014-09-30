@@ -45,8 +45,8 @@ TYAcousticVolumeWidget::TYAcousticVolumeWidget(TYAcousticVolume* pElement, QWidg
     setLayout(_acousticVolumeLayout);
 
     _elmW = new TYElementWidget(pElement, this);
-    _colorW = new TYColorInterfaceWidget(pElement, this);
-    _interW = new TYAcousticInterfaceWidget(pElement, this);
+    _colorW = new TYColorInterfaceWidget(dynamic_cast<TYColorInterface*>(pElement), this);
+    _interW = new TYAcousticInterfaceWidget(dynamic_cast<TYAcousticInterface*>(pElement), this);
     //  _volumeW = new TYVolumeInterfaceWidget(pElement, this);
 
     unsigned int iln = 0;

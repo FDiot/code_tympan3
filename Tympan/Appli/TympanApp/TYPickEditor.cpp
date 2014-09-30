@@ -1059,7 +1059,7 @@ void TYPickEditor::showPopupMenu(LPTYElementCollection pElts)
             if (copyTopoRetCodes[popupRet]->isA("TYCourbeNiveau"))
             {
                 // Nouvelle element
-                LPTYCourbeNiveauGeoNode pCopy = new TYCourbeNiveauGeoNode(new TYCourbeNiveau);
+                LPTYCourbeNiveauGeoNode pCopy = new TYCourbeNiveauGeoNode(new TYCourbeNiveau());
                 pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
 
                 // Duplication
@@ -1712,8 +1712,8 @@ void TYPickEditor::showRotationDialog(TYGeometryNode* pGeoNode)
 
             if (pDlg->getConcatenateStatus()) //az--
             {
-	        tyMat = Repere.asMatrix();
-                tyMatTmpConcat = tyMat
+	            tyMat = Repere.asMatrix();
+                tyMatTmpConcat = tyMat;
             }
 
             tyMat = tyMat * tyMatTmpZ * tyMatTmpY * tyMatTmpX * tyMatTmpConcat;

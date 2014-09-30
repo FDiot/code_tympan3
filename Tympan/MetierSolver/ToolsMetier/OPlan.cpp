@@ -154,7 +154,7 @@ int OPlan::intersectsSegment(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D&
 
         double z = ps1 + _d;
 
-        if (ABS(z) < EPSILON_PRECIS)
+        if (ABS(z) < EPSILON_13)
         {
             res = INTERS_CONFONDU;
         }
@@ -201,7 +201,7 @@ int OPlan::intersectsSegment(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D&
 
         double z = vecPt1.scalar(n) + _d;
 
-        if (ABS(z) < EPSILON_PRECIS)
+        if (ABS(z) < EPSILON_13)
         {
             res = INTERS_CONFONDU;
         }
@@ -219,7 +219,7 @@ bool OPlan::isInPlan(const OPoint3D& pt)
 
     double z = vecPt1.scalar(n) + _d;
 
-    if (ABS(z) < EPSILON_PRECIS)
+    if (ABS(z) < EPSILON_13)
     {
         res = true;
     }
@@ -259,19 +259,19 @@ int OPlan::intersectsPlan(const OPlan& plan, OVector3D& vectorIntersec)
     double  Dyz = _b * plan._c - plan._b * _c;
     double  Dzx = _c * plan._a - plan._c * _a;
 
-    if (ABS(Dxy) >= EPSILON_PRECIS)
+    if (ABS(Dxy) >= EPSILON_13)
     {
         vectorIntersec._x = Dyz / Dxy;
         vectorIntersec._y = Dzx / Dxy;
         vectorIntersec._z = 1.0;
     }
-    else if (ABS(Dyz) >= EPSILON_PRECIS)
+    else if (ABS(Dyz) >= EPSILON_13)
     {
         vectorIntersec._x = 1.0;
         vectorIntersec._y = Dzx / Dyz;
         vectorIntersec._z = Dxy / Dyz;
     }
-    else if (ABS(Dzx) >= EPSILON_PRECIS)
+    else if (ABS(Dzx) >= EPSILON_13)
     {
         vectorIntersec._x = Dyz / Dzx;
         vectorIntersec._y = 1.0;
@@ -310,6 +310,41 @@ double OPlan::angle(const OPlan& plan)
 double OPlan::distance(const OPoint3D& pt)
 {
     return ((_a * pt._x + _b * pt._y + _c * pt._z + _d) / OVector3D(pt).norme());
+}
+
+
+OPoint3D OPlan::symPtPlan(const OPoint3D& pt)
+{
+    OPoint3D ptSym;
+
+    // D'abord on calcule K
+    double K = -(_a * pt._x + _b * pt._y + _c * pt._z + _d) / (_a * _a + _b * _b + _c * _c);
+
+    // On calcule les coordonnées du point projeté sur le plan
+    double x1 = K * _a + pt._x;
+    double y1 = K * _b + pt._y;
+    double z1 = K * _c + pt._z;
+
+    // On calcule enfin les coordonnées du point symétrique
+    ptSym._x = 2 * x1 - pt._x;
+    ptSym._y = 2 * y1 - pt._y;
+    ptSym._z = 2 * z1 - pt._z;
+
+    return ptSym;
+}
+
+OPoint3D  OPlan::projPtPlan(const OPoint3D& pt)
+{
+    OPoint3D ptProj;
+    // D'abord on calcule K
+    double K = -(_a * pt._x + _b * pt._y + _c * pt._z + _d) / (_a * _a + _b * _b + _c * _c);
+
+    // On calcule les coordonnées du point projeté sur le plan
+    ptProj._x = K * _a + pt._x;
+    ptProj._y = K * _b + pt._y;
+    ptProj._z = K * _c + pt._z;
+
+    return ptProj;
 }
 
 bool OPlan::distancePlanParallel(const OPlan& plan, double& distance)

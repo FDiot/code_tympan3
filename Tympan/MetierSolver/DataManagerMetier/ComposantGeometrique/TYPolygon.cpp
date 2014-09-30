@@ -267,7 +267,6 @@ int TYPolygon::intersects(const OSegment3D& seg, OPoint3D& pt) const
 int TYPolygon::intersects(const OSegment3D& seg, OPoint3D& pt, bool insideTest) const
 {
     int res = INTERS_NULLE;
-    //  int i = 0;
 
     // Minimum 3 points
     if (getNbPts() < 3)
@@ -474,13 +473,7 @@ TYRectangle TYPolygon::getBoundingRect() const
     }
 
     // Changement de repere
-    OMatrix matrix;
-
-    matrix = getRepere().asMatrix();
-    if (!matrix)
-    {
-        return BoundingRect;
-    }
+    OMatrix matrix = getRepere().asMatrix();
 
     matrix.invert();
 

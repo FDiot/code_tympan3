@@ -39,9 +39,11 @@ qt4_wrap_cpp(${MODULE_NAME}_MOC_SRCS ${${MODULE_NAME}_MOC_HDRS})
 
 # Beware: those "modules" aka libraries must be given in reverse dependency order
 # XXX Check whether tympan_acoustic_raytracer must be linked here or in solver modules
-set(TYMPAN_MODULES  tympan_acoustic_raytracer tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
-		    tympan_tools_metier tympan_tools_graphics
-		    tympan_tools
+set(TYMPAN_MODULES  
+  # tympan_acoustic_raytracer 
+  tympan_dm_metier tympan_dm_graphics tympan_dm_ihm  tympan_dm_core
+  tympan_tools_metier tympan_tools_graphics
+  tympan_tools
 )
 
 set_precompiled_header(${MODULE_NAME} CXX

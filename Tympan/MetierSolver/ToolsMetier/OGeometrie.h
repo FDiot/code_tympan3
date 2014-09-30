@@ -19,14 +19,15 @@
  *
  */
 
+
 #ifndef __O_GEOMETRIE_H
 #define __O_GEOMETRIE_H
-
 
 #include "OPoint3D.h"
 #include "OVector3D.h"
 #include "OBox.h"
 #include <cmath>
+
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -41,10 +42,9 @@
 ///Pas d'intersection.
 #define INTERS_NULLE    0
 
-///Epsilon
-#define EPSILON         0.0000001
-///Epsilon precis.
-#define EPSILON_PRECIS  0.0000000000001
+#define EPSILON_6  0.000001         // 10e-6
+#define EPSILON_7  0.0000001        // 10e-7
+#define EPSILON_13 0.0000000000001  // 10e-13
 
 #ifndef M_PI
 ///Pi.
@@ -246,6 +246,17 @@ inline int BORNE(int a)
 {
     return (int) BORNE((double) a, 0, 255);
 }
+
+
+//OCoord3D operator + (const OCoord3D& coord, const OVector3D& vect)
+//{
+//  return OCoord3D( coord._x + vect._x, coord._y + vect._y, coord._z + vect._z );
+//}
+
+//OPoint3D operator + (const OPoint3D& coord, const OVector3D& vect)
+//{
+//  return OPoint3D( coord._x + vect._x, coord._y + vect._y, coord._z + vect._z );
+//}
 
 
 ////////////////////////////////////////////////////////////////////////////////

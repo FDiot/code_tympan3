@@ -1142,7 +1142,7 @@ bool TYSetGeometriqueParcours::AppartienneMemePolyligne(TYPointParcours* a, TYPo
 
                     norme1 = (v1.norme() * v3.norme());
                     cosVal1 = v1.scalar(v3) / norme1; // should be > 0
-                    if (ABS(cosVal1 - 1.0f) < EPSILON_PRECIS)
+                    if (ABS(cosVal1 - 1.0f) < EPSILON_13)
                     {
                         t1 = true;
                     }
@@ -1152,7 +1152,7 @@ bool TYSetGeometriqueParcours::AppartienneMemePolyligne(TYPointParcours* a, TYPo
 
                     norme2 = (v2.norme() * v3.norme());
                     cosVal2 = v2.scalar(v3) / norme2; // should be > 0
-                    if (ABS(cosVal2 - 1.0f) < EPSILON_PRECIS)
+                    if (ABS(cosVal2 - 1.0f) < EPSILON_13)
                     {
                         t2 = true;
                     }
@@ -1164,7 +1164,7 @@ bool TYSetGeometriqueParcours::AppartienneMemePolyligne(TYPointParcours* a, TYPo
 
                     norme2 = (v2.norme() * v4.norme());
                     cosVal2 = v2.scalar(v4) / norme2; // should be > 0
-                    if (ABS(cosVal2 - 1.0f) < EPSILON_PRECIS)
+                    if (ABS(cosVal2 - 1.0f) < EPSILON_13)
                     {
                         t2 = true;
                     }
@@ -1174,7 +1174,7 @@ bool TYSetGeometriqueParcours::AppartienneMemePolyligne(TYPointParcours* a, TYPo
 
                     norme1 = (v1.norme() * v4.norme());
                     cosVal1 = v1.scalar(v4) / norme1; // should be > 0
-                    if (ABS(cosVal1 - 1.0f) < EPSILON_PRECIS)
+                    if (ABS(cosVal1 - 1.0f) < EPSILON_13)
                     {
                         t1 = true;
                     }

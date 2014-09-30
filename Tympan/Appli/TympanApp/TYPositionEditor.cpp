@@ -1554,7 +1554,7 @@ bool TYPositionEditor::rotate(ORepere3D* pRepere, bool enableX /*=true*/, bool e
         if (vpNormal[2] != 0) { tyMatTmpY.setRotationOy(vpNormal[2]*M_PI * angle / 180); }
         if (vpNormal[1] != 0) { tyMatTmpZ.setRotationOz(-vpNormal[1]*M_PI * angle / 180); }
 
-        tyMat = pRepere.asMatrix() * tyMatTmpZ * tyMatTmpY * tyMatTmpX;
+        tyMat = pRepere->asMatrix() * tyMatTmpZ * tyMatTmpY * tyMatTmpX;
 
         OPoint3D org = pRepere->_origin; // On conserve l'origine de depart
         pRepere->set(tyMat);
