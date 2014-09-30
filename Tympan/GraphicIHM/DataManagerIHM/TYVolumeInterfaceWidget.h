@@ -43,7 +43,7 @@ class TYAcousticVolumeNodeWidget;
  * \class TYVolumeInterfaceWidget
  * \brief classe de l'objet IHM pour la gestion des objets de type VolumeInterface
  */
-class TYVolumeInterfaceWidget : public TYWidget
+class TYVolumeInterfaceWidget : public QWidget
 {
     Q_OBJECT
 

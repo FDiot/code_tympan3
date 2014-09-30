@@ -27,8 +27,8 @@
 #define MIN(A,B) (((A)>(B))?(B):(A))
 #define minP(A,B,C) ( (((A).C) > ((B).C)) ? (B) : (A) )
 #define coeff_ang(PA,PB) ( ((PB)._y - (PA)._y) / ((PB)._x - (PA)._x) )
-#define EPS 0.00001
 
+const double EPSILON_5 = 0.00001;
 
 /*static*/ bool OGeometrie::intersDemiSegmentAvecSegment(const OPoint3D& ptS, const OPoint3D& ptA, const OPoint3D& ptB)
 {
@@ -36,7 +36,7 @@
 
     if (ptS._y == MAX(ptA._y, ptB._y) || ptS._y == MIN(ptA._y, ptB._y))
     {
-        eps = EPS;
+        eps = EPSILON_5;
     }
 
     if ((ptS._y + eps) > MAX(ptA._y, ptB._y) || (ptS._y + eps) < MIN(ptA._y, ptB._y) || ptS._x > MAX(ptA._x, ptB._x))
@@ -165,7 +165,7 @@
 
         m1m2 = vec1.norme() * vec2.norme();
 
-        if (m1m2 <= EPSILON)
+        if (m1m2 <= EPSILON_6)
         {
             // We are on a node, consider this inside
             return true;
@@ -183,7 +183,7 @@
     }
 
     // Le total des angles doit etre egal a 2Pi (a Epsilon pres)
-    return ((ABS(anglesum) > (M_2PI - EPSILON)) && (ABS(anglesum) < (M_2PI + EPSILON)));
+    return ((ABS(anglesum) > (M_2PI - EPSILON_6)) && (ABS(anglesum) < (M_2PI + EPSILON_6)));
 }
 
 
@@ -234,7 +234,7 @@
     p43._y = pt4._y - pt3._y;
     p43._z = pt4._z - pt3._z;
 
-    if ((ABS(p43._x) < EPSILON) && (ABS(p43._y) < EPSILON) && (ABS(p43._z) < EPSILON))
+    if ((ABS(p43._x) < EPSILON_6) && (ABS(p43._y) < EPSILON_6) && (ABS(p43._z) < EPSILON_6))
     {
         return false;
     }
@@ -243,7 +243,7 @@
     p21._y = pt2._y - pt1._y;
     p21._z = pt2._z - pt1._z;
 
-    if ((ABS(p21._x) < EPSILON) && (ABS(p21._y) < EPSILON) && (ABS(p21._z) < EPSILON))
+    if ((ABS(p21._x) < EPSILON_6) && (ABS(p21._y) < EPSILON_6) && (ABS(p21._z) < EPSILON_6))
     {
         return false;
     }
@@ -256,7 +256,7 @@
 
     denom = d2121 * d4343 - d4321 * d4321;
 
-    if (ABS(denom) < EPSILON)
+    if (ABS(denom) < EPSILON_6)
     {
         return false;
     }

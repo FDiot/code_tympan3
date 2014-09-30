@@ -150,7 +150,6 @@ void TYCalculParcours::AjouterSegmentSR(double* ptA, double* ptB)
     double dDeltaY = fabs(ptA[1] - ptB[1]);
     InitChangementVariable2D3D(dDeltaX < dDeltaY);
 
-    //InitChangementVariable2D3D(ptA[0] == ptB[0]);
     AjouterSegment(ptA, ptB, false, false, _geoSR);
 }
 
@@ -359,7 +358,6 @@ int TYCalculParcours::Traite(
         int nNbPointsSelectiones = _geoImporterDXF->SelectionnePointsEntreSetRetDuCoteDeSR(_geoSR, TableauDePointsSelectionnes, _geoImporterDXF->_nNbPointTotal);
 
         TYPointParcours** TableauDePointsEC = new TYPointParcours*[nNbPointsSelectiones];
-        //int nNbPointsEC = TYSetGeometriqueParcours::EnveloppeConvexeLes2PremiersPointsEtantLesPlusBas(TableauDePointsSelectionnes, nNbPointsSelectiones, TableauDePointsEC);
 
         int nNbPointsEC;
         bool bWrong = false;
@@ -393,7 +391,7 @@ int TYCalculParcours::Traite(
                         idx = i - 1;
                         break; // on s'arrete ici...
                     }
-                    else if (ABS(TYPointParcours::Scalaire(A, B)) < EPSILON_PRECIS)
+                    else if (ABS(TYPointParcours::Scalaire(A, B)) < EPSILON_13)
                     {
                         // on autorise les angles a 90i¿½ que lors du suivis du contour d'un obstacle
                         if (!_geoImporterDXF->AppartienneMemePolyligne(TableauDePointsEC[i - 2], TableauDePointsEC[i - 1], TableauDePointsEC[i]))

@@ -55,32 +55,26 @@ public:
      * \fn OBox2(const OBox & box, ORepere3D & repere)
      * \brief Constructor from a box and its local coordinate system
      * \param box The box define in the local coordinate system
+     */
+    OBox2(const OBox& box);
+
+    /**
+     * \fn OBox2(const double& length, const double& width, const double& height);
+     * \brief build a box centered on [0, 0, 0] from its length, width and height
+     */
+    OBox2(const double& length, const double& width, const double& height);
+
+private : // Set private for security seems to an "af hoc" adaptation and is used only by an internal member function
+    /**
+     * \fn OBox2(const OBox & box, ORepere3D & repere)
+     * \brief Constructor from a box and its local coordinate system
+     * \param box The box define in the local coordinate system
      * \param repere The global coordinate system of the box
+     * \param centre Is the box centre, this point is the middle of [S'R]
      */
-    OBox2(const OBox& box, const ORepere3D& repere);
+    OBox2(const OBox2& box, const ORepere3D& repere, const OPoint3D& centre);
 
-    /**
-     * \fn OBox2(const OCoord3D& min,const OCoord3D & max, ORepere3D & repere)
-     * \brief Constructor from a 2 3D points and its local coordinate system
-     * \param min  The minimum point.
-     * \param max  The maximum point.
-     * \param repere The local coordinate system (where the box's sides are parallel to its axes)
-     */
-
-    OBox2(const OCoord3D& min, const OCoord3D& max, const ORepere3D& repere);
-
-    /**
-     * \fn OBox2(const ORepere3D, const OCoord3D& min, const OCoord3D& max);
-     * \brief Constructor : from a local coordinate system centered inside the box
-     * \param repere Local coordinate system from the box center
-     * \param min The minimum point i.e. the one on the left bottom corner.
-     * \param max The maximum point i.e. the one on the right upper corner.
-    */
-    OBox2(const ORepere3D repere, const OCoord3D& A, const OCoord3D& B, const OCoord3D& C,
-          const OCoord3D& D, const OCoord3D& E, const OCoord3D& F, const OCoord3D& G,
-          const OCoord3D& H);
-
-
+public :
     /**
      * Destructor.
      */
@@ -118,16 +112,6 @@ public:
      */
     OPoint3D BoxCoord(int N) const;
 
-
-    /**
-     *\fn OVector3D getRotationOzOy(double alpha, double theta, OVector3D V);
-     *\brief Returns a vector after 2 rotations around Oz and Oy axis.
-     *\param alpha is the first angle needed to rotate around Oz.
-     *\param theta is the second angle needed to rotate around Oy.
-     *\param V is the initial vector.
-    */
-    OVector3D GetRotationOzOy(double alpha, double theta, OVector3D V);
-
     /**
      * \fn bool isInside(const OPoint3D& pt) const
      * \brief Test whether the point is inside the box or not.
@@ -143,32 +127,17 @@ public:
     virtual bool isInside2D(const OPoint3D& pt) const;
 
     /**
-     * \fn bool isInContact(const OBox2& box) const
-     * \brief Test whether the boxes are in contact or not.
-     * \param box The box to test.
-     */
-    //virtual bool isInContact(const OBox2& box) const;
-
-    /**
-     * \fn void Enlarge(const OPoint3D& pt)
-     * \brief Enlarge the box with the point if the point is outside the box.
-     * \param pt The point to test/make it larger.
-     */
-    //virtual void Enlarge(const OPoint3D& pt);
-
-    /**
-     * \fn void Enlarge(const OBox2& box)
-     * \brief Enlarge this box with the box passed if this box does not contain the box passed.
-     * \param box The box to test.
-     */
-    //virtual void Enlarge(const OBox2& box);
-
-    /**
      * \fn void Translate(const OPoint3D& vectorTranslate)
      * \brief Translate this box
      * \param vector translation.
      */
-    virtual void Translate(const OPoint3D& vectorTranslate);
+    virtual void Translate(const OVector3D& vect);
+
+    /**
+     * fn OBox2 boxRotation(const OVector3D& v1, const OVector3D& v2)
+     * brief return a box rotated by two vectors
+     */
+    OBox2 boxRotation(const OPoint3D& O, const OPoint3D& P2);
 
     /**
      *\fn void BoxRotationOzOy(const OBox2& box);
@@ -176,6 +145,32 @@ public:
      *\param box is an OBox2.
      */
     void BoxRotationOzOy(double alpha, double theta);
+
+    /**
+     * \fn void moveAndRotate(const OPoint3D& origin, const OVector3D& vec);
+     * \brief Move and rotate the box
+     */
+    void moveAndRotate(const OPoint3D& origin, const OVector3D& vec);
+
+
+private:
+    /**
+     * fn OBox2 rotInXOYOnly(const OVector3D& v1, const OVector3D& v2)
+     * brief return a box rotated by two vectors
+     */
+    OBox2 rotInXOYOnly(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2);
+
+    /**
+     * fn OBox2 rotInXOZOnly(const OVector3D& v1, const OVector3D& v2)
+     * brief return a box rotated by two vectors
+     */
+    OBox2 rotInXOZOnly(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2);
+
+    /**
+     * fn OBox2 rot3D(const OVector3D& v1, const OVector3D& v2)
+     * brief return a box rotated by two vectors
+     */
+    OBox2 rot3D(const OVector3D& v1, const OVector3D& v2, const OPoint3D& O, const OPoint3D& P2);
 
 public:
     ORepere3D _repere;
