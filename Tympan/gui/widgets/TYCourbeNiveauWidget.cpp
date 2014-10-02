@@ -18,27 +18,21 @@
  * \file TYCourbeNiveauWidget.cpp
  * \brief Outil IHM pour une courbe de niveau
  *
- *
  */
 
-
-
-
-
 #include <qradiobutton.h>
-//Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/topography/TYCourbeNiveau.h"
+#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
+#include "TabPointsWidget.h"
 #include "TYCourbeNiveauWidget.h"
 
 #define TR(id) OLocalizator::getString("TYCourbeNiveauWidget", (id))
-
-#include "Tympan/models/business/topography/TYCourbeNiveau.h"
-#include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
 
 
 TYCourbeNiveauWidget::TYCourbeNiveauWidget(TYCourbeNiveau* pElement, QWidget* _pParent /*=NULL*/):
@@ -63,16 +57,10 @@ TYCourbeNiveauWidget::TYCourbeNiveauWidget(TYCourbeNiveau* pElement, QWidget* _p
     _groupBoxLayout = new QGridLayout();
     _groupBox->setLayout(_groupBoxLayout);
 
-    _listViewTabPt = new QTreeWidget(_groupBox);
-    QStringList stringList;
-    stringList.append(TR("id_x"));
-    stringList.append(TR("id_y"));
-    stringList.append(TR("id_z"));
-    _listViewTabPt->setColumnCount(3);
-    _listViewTabPt->setHeaderLabels(stringList);
-    _listViewTabPt->setSelectionMode(QTreeWidget::NoSelection);
+    _tabPoints = new TabPointsWidget(pElement->getListPoints(), _groupBox);
+    _tabPoints->setEnabled(true);
 
-    _groupBoxLayout->addWidget(_listViewTabPt, 0, 0);
+    _groupBoxLayout->addWidget(_tabPoints, 0, 0);
 
     _courbeNiveauLayout->addWidget(_groupBox, 2, 0);
 
@@ -148,15 +136,7 @@ void TYCourbeNiveauWidget::updateContent()
     // On reconnecte apres modification
     connect(_lineEditDistMax, SIGNAL(textChanged(const QString&)), this, SLOT(updateUseDefault()));
 
-    _listViewTabPt->clear();
-
-    for (unsigned int i = 0; i < getElement()->getListPoints().size(); i++)
-    {
-        QTreeWidgetItem* item = new QTreeWidgetItem(_listViewTabPt, 0);
-        item->setText(0, QString().setNum(getElement()->getListPoints()[i]._x, 'f', 2));
-        item->setText(1, QString().setNum(getElement()->getListPoints()[i]._y, 'f', 2));
-        item->setText(2, QString().setNum(getElement()->getListPoints()[i]._z, 'f', 2));
-    }
+    _tabPoints->update();
 }
 
 void TYCourbeNiveauWidget::apply()
@@ -176,6 +156,8 @@ void TYCourbeNiveauWidget::apply()
 
     getElement()->setIsGeometryModified(true);
 
+    _tabPoints->apply();
+
     emit modified();
 }
 
@@ -189,7 +171,6 @@ void TYCourbeNiveauWidget::setDefaultValue()
     _statusDMax = false;
 
     _pElement->setIsGeometryModified(true);
-    //  getElement()->setIsDMaxDefault(false);
 
     // On reconnecte apres modification
     connect(_lineEditDistMax, SIGNAL(textChanged(const QString&)), this, SLOT(updateUseDefault()));
@@ -198,6 +179,5 @@ void TYCourbeNiveauWidget::setDefaultValue()
 void TYCourbeNiveauWidget::updateUseDefault()
 {
     // Recuperation de la valeur par defaut
-    //  getElement()->setIsDMaxDefault(true);
     _statusDMax = true;
 }

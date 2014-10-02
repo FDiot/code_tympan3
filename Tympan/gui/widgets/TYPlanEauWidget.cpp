@@ -18,8 +18,6 @@
  * \brief outil IHM pour un plan d'eau
  */
 
-
-//Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
@@ -30,11 +28,9 @@
 
 #define TR(id) OLocalizator::getString("TYPlanEauWidget", (id))
 
-
 TYPlanEauWidget::TYPlanEauWidget(TYPlanEau* pElement, QWidget* _pParent /*=NULL*/):
     TYWidget(pElement, _pParent)
 {
-
     _terrainW = new TYTerrainWidget(pElement, this);
     _terrainW->setLayoutSpacing(0, 0);
 
