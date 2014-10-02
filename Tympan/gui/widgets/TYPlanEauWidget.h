@@ -18,20 +18,12 @@
  * \brief outil IHM pour un plan d'eau (fichier header)
  * \author Projet_Tympan
  *
- *
- *
- *
- *
  */
 
 #ifndef __TY_PLAN_EAU_WIDGET__
 #define __TY_PLAN_EAU_WIDGET__
 
-
 #include "TYWidget.h"
-//Added by qt3to4:
-#include <QGridLayout>
-#include <QLabel>
 
 class TYPlanEau;
 class QLabel;
@@ -41,7 +33,6 @@ class QGroupBox;
 class QPushButton;
 class TYTerrainWidget;
 class QCheckBox;
-
 
 /**
  * \class TYPlanEauWidget

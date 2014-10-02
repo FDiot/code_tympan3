@@ -1215,6 +1215,12 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_apply_btn" value="Appliquer"/>
 		</message>
 	</class>
+	<class name="TabPointsWidget">
+		<message>
+			<string id="id_insert_row_item" value="Insérer un point"/>
+			<string id="id_delete_row_item" value="Supprimer un point"/>
+		</message>
+	</class>
 	<class name="TYAtmosphereWidget">
 		<message>
 			<string id="id_pression_label" value="Pression"/>

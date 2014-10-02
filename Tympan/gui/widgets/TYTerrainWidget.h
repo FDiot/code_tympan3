@@ -18,25 +18,16 @@
  * \brief outil IHM pour un terrain (fichier header)
  * \author Projet_Tympan
  *
- *
- *
- *
- *
  */
 
 #ifndef __TY_TERRAIN_WIDGET__
 #define __TY_TERRAIN_WIDGET__
 
-
-#include "TYWidget.h"
-#include <qlayout.h>
-//Added by qt3to4:
 #include <QGridLayout>
-#include <QLabel>
+#include "TYWidget.h"
 
 class TYTerrain;
 class QLineEdit;
-class QGridLayout;
 class QLabel;
 class QTreeWidget;
 class QTabWidget;
@@ -46,6 +37,7 @@ class QTreeWidgetItem;
 class TYElementWidget;
 class TYColorInterfaceWidget;
 class TYSolWidget;
+class TabPointsWidget;
 
 /**
  * \class TYTerrainWidget
@@ -86,28 +78,16 @@ public:
      */
     void disableSolWidget();
 
-
 public slots:
     virtual void updateContent();
     virtual void apply();
-
-    /**
-     * Edite la widget du sol.
-     */
-    //  void editSol();
-
 
     // Membres
 protected:
 
     QGroupBox* _groupBoxEdit;
-    //QLabel* _labelType;
-    //QLineEdit* _lineEditType;
-    //   QGroupBox* _groupBoxSol;
-    //   QPushButton* _pushButtonSol;
-    //   QLineEdit* _lineEditNomSol;
     QGroupBox* _groupBox;
-    QTreeWidget* _listViewTabPt;
+    TabPointsWidget *_tabPoints;
 
     QGridLayout* _terrainLayout;
     QGridLayout* _groupBoxEditLayout;
@@ -120,6 +100,5 @@ protected:
 
     QTabWidget* _tabWidget;
 };
-
 
 #endif // __TY_TERRAIN_WIDGET__

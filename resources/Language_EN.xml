@@ -1213,6 +1213,12 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_apply_btn" value="Apply"/>
 		</message>
 	</class>
+	<class name="TabPointsWidget">
+		<message>
+			<string id="id_insert_row_item" value="IInsert point"/>
+			<string id="id_delete_row_item" value="Delete point"/>
+		</message>
+	</class>
 	<class name="TYAtmosphereWidget">
 		<message>
 			<string id="id_pression_label" value="Atmospheric Pressure"/>
