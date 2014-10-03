@@ -197,6 +197,12 @@ void TYPolyLineEditor::slotKeyPressed(int key)
 
                 //}
 
+                // Set all z values to 0
+                for (size_t i=0; i<_savedPoints.size(); i++)
+                {
+                    _savedPoints[i]._z = 0.0;
+                }
+
                 emit(endedSavingPoints());
 
                 init();
