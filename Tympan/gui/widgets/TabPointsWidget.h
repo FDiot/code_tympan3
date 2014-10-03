@@ -18,6 +18,9 @@ public slots:
 	void tabValueChanged(int, int);
     virtual void contextMenuEvent(QContextMenuEvent* e);
 	
+private : 
+    void setAttributes(int row);
+    void initRow(int row);
 private:
 	TYTabPoint& _listPoints;
 	

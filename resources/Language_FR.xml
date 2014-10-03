@@ -1218,6 +1218,7 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 	<class name="TabPointsWidget">
 		<message>
 			<string id="id_insert_row_item" value="Insérer un point"/>
+			<string id="id_append_row_item" value="Ajoute un point"/>
 			<string id="id_delete_row_item" value="Supprimer un point"/>
 		</message>
 	</class>
