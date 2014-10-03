@@ -41,6 +41,7 @@ class QRadioButton;
 class QLabel;
 class QLineEdit;
 class QBoxLayout;
+class TabPointsWidget;
 
 /**
  * \class TYEtageEditor
@@ -63,7 +64,12 @@ public slots:
     void endEtage();
 
 protected:
-
+    bool testCrossSegment(TYTabPoint& tabPts, bool &onlyEcran);
+    void forceNormals(TYTabPoint& tabPts);
+    void initZ(TYTabPoint& tabPts);
+    void computeCenter(const double initialOffset, TYTabPoint& tabPts, TYRepere &rep);
+    void buildFloor(TYTabPoint& tabPts, TYRepere& rep, double hauteur, bool closed);
+    void buildScreen(TYTabPoint& tabPts, TYRepere& rep,  double height, double thickness);
 };
 
 class TYEtageEditorPropertiesDlg : public QDialog
@@ -71,7 +77,7 @@ class TYEtageEditorPropertiesDlg : public QDialog
     Q_OBJECT
 
 public:
-    TYEtageEditorPropertiesDlg(QWidget* parent, bool onlyEcran = false);
+    TYEtageEditorPropertiesDlg(QWidget* parent, TYTabPoint &tabPts, bool onlyEcran = false);
     ~TYEtageEditorPropertiesDlg();
 
     /**
@@ -103,6 +109,8 @@ protected slots:
      */
     void toggleButton(int i);
 
+    virtual void accept();
+
 private:
     QRadioButton*   _pBatBtn;
     QRadioButton*   _pEcranBtn;
@@ -116,6 +124,7 @@ private:
     QBoxLayout*     _pEcranOuBatLayout;
     QBoxLayout*     _pBtnLayout;
 
+    TabPointsWidget *_tabPtsW;
 };
 
 #endif // __TY_ETAGE_EDITOR__
