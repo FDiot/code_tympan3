@@ -77,9 +77,6 @@ void TYEtageEditor::endEtage()
         return;
     }
 
-    // set z to 0 for all points
-    initZ(tabPts);
-
     // Test validity of polyline
     if (tabPts.size() >= 3)
     {
