@@ -29,9 +29,6 @@
 
 
 #include "TYWidget.h"
-//Added by qt3to4:
-#include <QGridLayout>
-#include <QLabel>
 
 class TYAcousticLine;
 class QLineEdit;
@@ -44,6 +41,7 @@ class QCheckBox;
 class TYSourceWidget;
 class QButtonGroup;
 class QRadioButton;
+class TabPointsWidget;
 
 /**
  * \class TYAcousticLineWidget
@@ -181,6 +179,8 @@ protected:
     QGroupBox* _groupBoxDensite;
     QGridLayout* _groupBoxDensiteLayout;
     QLineEdit* _lineEditDensiteSrcs;
+
+    TabPointsWidget *_pTabPtsW;
 
     TYSourceWidget* _elmW;
 };
