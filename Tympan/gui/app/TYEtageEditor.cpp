@@ -46,6 +46,7 @@
 #include "Tympan/gui/app/TYActions.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
+#include "Tympan/gui/widgets/TabPointsWidget.h"
 #include "TYEtageEditor.h"
 
 
@@ -67,49 +68,23 @@ TYEtageEditor::~TYEtageEditor()
 
 void TYEtageEditor::endEtage()
 {
-    size_t i = 0, j = 0;
-
-    // On teste si la polyligne ne se coupe pas elle-meme...
     bool invalid = false;
     bool onlyEcran = false;
     TYTabPoint tabPts = this->getSavedPoints();
-    size_t nbPts = tabPts.size();
 
-    if (!_pModeler->askForResetResultat())
+    if ( !(getSavedPoints().size() > 1) || (!_pModeler->askForResetResultat()) )
     {
         return;
     }
 
-    if (nbPts >= 3)
+    // set z to 0 for all points
+    initZ(tabPts);
+
+    // Test validity of polyline
+    if (tabPts.size() >= 3)
     {
-        TYPoint pt;
-
-        for (i = 0; (i < nbPts) && !invalid; i++)
-        {
-            TYSegment seg1(tabPts[i], tabPts[(i + 1) % nbPts]);
-
-            for (j = 0; (j < nbPts) && !invalid; j++)
-            {
-                TYSegment seg2(tabPts[j], tabPts[(j + 1) % nbPts]);
-                // Test if at least one vertex is in common
-                if ((seg1._ptA != seg2._ptA) && (seg1._ptB != seg2._ptB) && (seg1._ptA != seg2._ptB) && (seg1._ptB != seg2._ptA))
-                {
-                    // Test si il y a intersection
-                    if (seg1.intersects(seg2, pt) != INTERS_NULLE)
-                    {
-                        // Si l'intersection intervient entre les points extremes du tab
-                        if ((i == nbPts - 1) || (j == nbPts - 1))
-                        {
-                            onlyEcran = true;
-                        }
-                        else
-                        {
-                            invalid = true;
-                        }
-                    }
-                }
-            }
-        }
+       // On teste si la polyligne ne se coupe pas elle-meme...
+       invalid = testCrossSegment(tabPts, onlyEcran);
     }
     else
     {
@@ -125,59 +100,16 @@ void TYEtageEditor::endEtage()
     }
     else
     {
-        if (tabPts.size() > 2)
-        {
-            // Si l'etage est valide, on teste le sens de construction (pour les etages uniquement):
-            // ==> si la somme des produits croises des segments est negative, le sens de construction est correct
-            // Sinon, on inverse le sens des points du dernier au premier
-            double somme = 0;
-            for (i = 1; i < tabPts.size() - 1; i++)
-            {
-                OVector3D v1(tabPts[i - 1], tabPts[i]);
-                OVector3D v2(tabPts[i], tabPts[i + 1]);
-                v1.normalize();
-                v2.normalize();
-
-                somme = somme + v1.cross(v2)._z;
-            }
-
-            if (somme > 0) // Inversion du sens de construction
-            {
-                TYTabPoint tabPtsTemp = tabPts;
-                tabPts.clear();
-                vector<TYPoint>::reverse_iterator it;
-                for (it = tabPtsTemp.rbegin(); it != tabPtsTemp.rend(); it++)
-                {
-                    tabPts.push_back((*it));
-                }
-            }
-
-            //OVector3D v1(tabPts[0], tabPts[1]);
-            //OVector3D v2(tabPts[1], tabPts[2]);
-            //v1.normalize();
-            //v2.normalize();
-            //if ((v1.cross(v2)._z) > 0)
-            //{
-            //  // Inversion du sens de construction
-            //  TYTabPoint tabPtsTemp = tabPts;
-            //  tabPts.clear();
-            //  vector<TYPoint>::reverse_iterator it;
-            //  for (it=tabPtsTemp.rbegin(); it!=tabPtsTemp.rend(); it++)
-            //  {
-            //      tabPts.push_back((*it));
-            //  }
-            //}
-        }
-
+        forceNormals(tabPts);
         writeDebugMsg("Etage valide !!!");
     }
 
-
-    TYEtageEditorPropertiesDlg* pDlg = new TYEtageEditorPropertiesDlg(_pModeler, onlyEcran);
+    TYEtageEditorPropertiesDlg* pDlg = new TYEtageEditorPropertiesDlg(_pModeler, tabPts, onlyEcran);
 
     // Affiche la boite de dialogue
     int ret = pDlg->exec();
 
+    size_t nbPts = tabPts.size();
 
     if (ret == QDialog::Accepted)
     {
@@ -187,17 +119,111 @@ void TYEtageEditor::endEtage()
 
         if (hauteur <= 0) { return; }
 
-        // L'etage, dans son repere, est en z=0
-        for (i = 0; i < nbPts; i++)
+        // Compute volume's center position
+        TYRepere rep;
+        computeCenter(pDlg->getHauteurSol(), tabPts, rep);
+
+        if (closed) // Build an etage...
         {
-            tabPts[i]._z = 0.0;
+            buildFloor(tabPts, rep, hauteur, closed);
+        }
+        else // Build an "Ecran"
+        {
+            buildScreen(tabPts, rep,  hauteur, epaisseur);
         }
 
+        // repasse en mode camera selection
+        // XXX The bug goes here
+        getTYMainWnd()->setDefaultCameraMode();
+    }
+
+}
+
+bool TYEtageEditor::testCrossSegment(TYTabPoint& tabPts, bool &onlyEcran)
+{
+    TYPoint pt;
+    bool invalid(false);
+    unsigned int nbPts = tabPts.size();
+
+    for (unsigned int i = 0; (i < nbPts) && !invalid; i++)
+    {
+        TYSegment seg1(tabPts[i], tabPts[(i + 1) % nbPts]);
+
+        for (unsigned int j = 0; (j < nbPts) && !invalid; j++)
+        {
+            TYSegment seg2(tabPts[j], tabPts[(j + 1) % nbPts]);
+            // Test if at least one vertex is in common
+            if ((seg1._ptA != seg2._ptA) && (seg1._ptB != seg2._ptB) && (seg1._ptA != seg2._ptB) && (seg1._ptB != seg2._ptA))
+            {
+                // Test si il y a intersection
+                if (seg1.intersects(seg2, pt) != INTERS_NULLE)
+                {
+                    // Si l'intersection intervient entre les points extremes du tab
+                    if ((i == nbPts - 1) || (j == nbPts - 1))
+                    {
+                        onlyEcran = true;
+                    }
+                    else
+                    {
+                        invalid = true;
+                    }
+                }
+            }
+        }
+    }
+
+    return invalid;
+}
+
+void TYEtageEditor::forceNormals(TYTabPoint& tabPts)
+{
+    if (tabPts.size() > 2)
+    {
+        // Si l'etage est valide, on teste le sens de construction (pour les etages uniquement):
+        // ==> si la somme des produits croises des segments est negative, le sens de construction est correct
+        // Sinon, on inverse le sens des points du dernier au premier
+        double somme = 0;
+        for (unsigned int i=1; i < tabPts.size() - 1; i++)
+        {
+            OVector3D v1(tabPts[i - 1], tabPts[i]);
+            OVector3D v2(tabPts[i], tabPts[i + 1]);
+            v1.normalize();
+            v2.normalize();
+
+            somme = somme + v1.cross(v2)._z;
+        }
+
+        if (somme > 0) // Inversion du sens de construction
+        {
+            TYTabPoint tabPtsTemp = tabPts;
+            tabPts.clear();
+            vector<TYPoint>::reverse_iterator it;
+            for (it = tabPtsTemp.rbegin(); it != tabPtsTemp.rend(); it++)
+            {
+                tabPts.push_back((*it));
+            }
+        }
+    }
+}
+
+void TYEtageEditor::initZ(TYTabPoint& tabPts)
+{
+    // L'etage, dans son repere, est en z=0
+    for (size_t i = 0; i < tabPts.size(); i++)
+    {
+        tabPts[i]._z = 0.0;
+    }
+}
+
+void TYEtageEditor::computeCenter(const double initialOffset, TYTabPoint& tabPts, TYRepere &rep)
+{
+        size_t nbPts = tabPts.size();
+    
         // On calcul le centre de gravite de l'etage pour l'utiliser comme repere dans le bâtiment
         OVector3D centre(0.0, 0.0, 0.0);
 
         // On effectue la moyenne en (X,Y) des points au sol
-        for (i = 0; i < nbPts; i++)
+        for (size_t i = 0; i < nbPts; i++)
         {
             centre._x += tabPts[i]._x;
             centre._y += tabPts[i]._y;
@@ -208,155 +234,150 @@ void TYEtageEditor::endEtage()
         centre._y /= nbPts;
 
         // On translate les points saisies en tenant compte du centre
-        for (i = 0; i < nbPts; i++)
+        for (size_t i = 0; i < nbPts; i++)
         {
             tabPts[i] = OVector3D(tabPts[i]) - centre;
         }
 
         // Hauteur au sol saisie
-        centre._z = pDlg->getHauteurSol();
+        centre._z = initialOffset;
 
         // Repere de l'etage dans le bâtiment
-        TYRepere rep;
         rep._origin = centre;
-
-        if (closed) // Build an etage...
-        {
-            LPTYEtage pEtage = new TYEtage();
-
-            // Construction des murs
-            pEtage->setMurs(tabPts, hauteur, closed);
-
-            // Recuperation ou construction du bâtiment
-            TYBatiment* pBat = NULL;
-            bool added = false;
-
-            if (QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0)
-            {
-                pBat = ((TYBatimentModelerFrame*) _pModeler)->getBatiment();
-
-                // Ajout de l'etage au bâtiment
-                if (pBat && (added = pBat->addAcousticVol((LPTYAcousticVolume&) pEtage, rep)))
-                {
-                    // Action
-                    TYAction* pAction = new TYAddAccVolToAccVolNodeAction((LPTYAcousticVolume&) pEtage, pBat, _pModeler, TR("id_action_addetage"));
-                    _pModeler->getActionManager()->addAction(pAction);
-                }
-            }
-            else if (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0)
-            {
-                pBat = new TYBatiment();
-                LPTYInfrastructure pInfra = ((TYSiteModelerFrame*) _pModeler)->getSite()->getInfrastructure();
-                pInfra->addBatiment(pBat, rep);
-
-                // Ajout de l'etage au bâtiment
-                if (pBat && (added = pBat->addAcousticVol((LPTYAcousticVolume&) pEtage, TYRepere())))
-                {
-                    // Action
-                    TYAction* pAction = new TYAddElementToInfraAction(pBat, pInfra, _pModeler, TR("id_action_addetage"));
-                    _pModeler->getActionManager()->addAction(pAction);
-                }
-                else
-                {
-                    pInfra->remBatiment(pBat);
-                }
-            }
-
-            if (added && pBat)
-            {
-                // On ajoute ce bat a la selection du calcul courant
-                if (getTYApp()->getCurProjet() && _pModeler->isElementInCurrentProjet())
-                {
-                    LPTYCalcul pCalcul = getTYApp()->getCurProjet()->getCurrentCalcul();
-
-                    if (pCalcul)
-                    {
-                        pCalcul->addToSelection(pBat);
-                    }
-                }
-                refreshSiteFrame();
-
-                pBat->updateGraphicTree();
-                _pModeler->getView()->getRenderer()->updateDisplayList();
-
-                // Update
-                _pModeler->updateView();
-            }
-        }
-        else // Build an "Ecran"
-        {
-            LPTYEcran pEcran = new TYEcran();
-
-            // XBH: Le code ci-dessous est a adapter pour placer les ecrans au bon endroit dans la hierarchie d'objets.
-
-            // Construction des murs
-            pEcran->setElements(tabPts, hauteur, epaisseur);
-
-            // Recuperation ou construction du bâtiment
-            TYBatiment* pBat = NULL;
-            bool added = false;
-
-            if (QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0)
-            {
-                pBat = ((TYBatimentModelerFrame*) _pModeler)->getBatiment();
-
-                // Ajout de l'ecran au bâtiment
-                if (pBat && (added = pBat->addAcousticVol((LPTYAcousticVolume&) pEcran, rep)))
-                {
-                    // Action
-                    TYAction* pAction = new TYAddAccVolToAccVolNodeAction((LPTYAcousticVolume&) pEcran, pBat, _pModeler, TR("id_action_addecran"));
-                    _pModeler->getActionManager()->addAction(pAction);
-                }
-            }
-            else if (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0)
-            {
-                pBat = new TYBatiment();
-                LPTYInfrastructure pInfra = ((TYSiteModelerFrame*) _pModeler)->getSite()->getInfrastructure();
-                pInfra->addBatiment(pBat, rep);
-
-                // Ajout de l'ecran a l'infrastructure...
-                if (pBat && (added = pBat->addAcousticVol((LPTYAcousticVolume&) pEcran, TYRepere())))
-                {
-                    // Action
-                    TYAction* pAction = new TYAddElementToInfraAction(pBat, pInfra, _pModeler, TR("id_action_addecran"));
-                    _pModeler->getActionManager()->addAction(pAction);
-                }
-                else
-                {
-                    pInfra->remBatiment(pBat);
-                }
-            }
-
-            if (added && pBat)
-            {
-                // On ajoute ce bat a la selection du calcul courant
-                if (getTYApp()->getCurProjet() && _pModeler->isElementInCurrentProjet())
-                {
-                    LPTYCalcul pCalcul = getTYApp()->getCurProjet()->getCurrentCalcul();
-
-                    if (pCalcul)
-                    {
-                        pCalcul->addToSelection(pBat);
-                    }
-                }
-                refreshSiteFrame();
-
-                _pModeler->getView()->getRenderer()->updateDisplayList();
-
-                // Update
-                pBat->updateGraphicTree();
-                _pModeler->updateView();
-            }
-        }
-
-        // repasse en mode camera selection
-        // XXX The bug goes here
-        getTYMainWnd()->setDefaultCameraMode();
-    }
-
 }
 
-TYEtageEditorPropertiesDlg::TYEtageEditorPropertiesDlg(QWidget* parent, bool onlyEcran) : QDialog(parent)
+void TYEtageEditor::buildFloor(TYTabPoint& tabPts, TYRepere& rep, double hauteur, bool closed)
+{
+        LPTYEtage pEtage = new TYEtage();
+
+        // Construction des murs
+        pEtage->setMurs(tabPts, hauteur, closed);
+
+        // Recuperation ou construction du bâtiment
+        TYBatiment* pBat = NULL;
+        bool added = false;
+
+        if (QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0)
+        {
+            pBat = ((TYBatimentModelerFrame*) _pModeler)->getBatiment();
+
+            // Ajout de l'etage au bâtiment
+            if (pBat && (added = pBat->addAcousticVol((LPTYAcousticVolume&) pEtage, rep)))
+            {
+                // Action
+                TYAction* pAction = new TYAddAccVolToAccVolNodeAction((LPTYAcousticVolume&) pEtage, pBat, _pModeler, TR("id_action_addetage"));
+                _pModeler->getActionManager()->addAction(pAction);
+            }
+        }
+        else if (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0)
+        {
+            pBat = new TYBatiment();
+            LPTYInfrastructure pInfra = ((TYSiteModelerFrame*) _pModeler)->getSite()->getInfrastructure();
+            pInfra->addBatiment(pBat, rep);
+
+            // Ajout de l'etage au bâtiment
+            if (pBat && (added = pBat->addAcousticVol((LPTYAcousticVolume&) pEtage, TYRepere())))
+            {
+                // Action
+                TYAction* pAction = new TYAddElementToInfraAction(pBat, pInfra, _pModeler, TR("id_action_addetage"));
+                _pModeler->getActionManager()->addAction(pAction);
+            }
+            else
+            {
+                pInfra->remBatiment(pBat);
+            }
+        }
+
+        if (added && pBat)
+        {
+            // On ajoute ce bat a la selection du calcul courant
+            if (getTYApp()->getCurProjet() && _pModeler->isElementInCurrentProjet())
+            {
+                LPTYCalcul pCalcul = getTYApp()->getCurProjet()->getCurrentCalcul();
+
+                if (pCalcul)
+                {
+                    pCalcul->addToSelection(pBat);
+                }
+            }
+            refreshSiteFrame();
+
+            pBat->updateGraphicTree();
+            _pModeler->getView()->getRenderer()->updateDisplayList();
+
+            // Update
+            _pModeler->updateView();
+        }
+}
+
+void TYEtageEditor::buildScreen(TYTabPoint& tabPts, TYRepere& rep,  double height, double thickness)
+{
+        LPTYEcran pEcran = new TYEcran();
+
+        // Construction des murs
+        pEcran->setElements(tabPts, height, thickness);
+
+        // Recuperation ou construction du bâtiment
+        TYBatiment* pBat = NULL;
+        bool added = false;
+
+        if (QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0)
+        {
+            pBat = ((TYBatimentModelerFrame*) _pModeler)->getBatiment();
+
+            // Ajout de l'ecran au bâtiment
+            if (pBat && (added = pBat->addAcousticVol((LPTYAcousticVolume&) pEcran, rep)))
+            {
+                // Action
+                TYAction* pAction = new TYAddAccVolToAccVolNodeAction((LPTYAcousticVolume&) pEcran, pBat, _pModeler, TR("id_action_addecran"));
+                _pModeler->getActionManager()->addAction(pAction);
+            }
+        }
+        else if (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0)
+        {
+            pBat = new TYBatiment();
+            LPTYInfrastructure pInfra = ((TYSiteModelerFrame*) _pModeler)->getSite()->getInfrastructure();
+            pInfra->addBatiment(pBat, rep);
+
+            // Ajout de l'ecran a l'infrastructure...
+            if (pBat && (added = pBat->addAcousticVol((LPTYAcousticVolume&) pEcran, TYRepere())))
+            {
+                // Action
+                TYAction* pAction = new TYAddElementToInfraAction(pBat, pInfra, _pModeler, TR("id_action_addecran"));
+                _pModeler->getActionManager()->addAction(pAction);
+            }
+            else
+            {
+                pInfra->remBatiment(pBat);
+            }
+        }
+
+        if (added && pBat)
+        {
+            // On ajoute ce bat a la selection du calcul courant
+            if (getTYApp()->getCurProjet() && _pModeler->isElementInCurrentProjet())
+            {
+                LPTYCalcul pCalcul = getTYApp()->getCurProjet()->getCurrentCalcul();
+
+                if (pCalcul)
+                {
+                    pCalcul->addToSelection(pBat);
+                }
+            }
+            refreshSiteFrame();
+
+            _pModeler->getView()->getRenderer()->updateDisplayList();
+
+            // Update
+            pBat->updateGraphicTree();
+            _pModeler->updateView();
+        }
+}
+
+
+// ********* PROPERTY DIALOG DEFINITION *********************
+
+TYEtageEditorPropertiesDlg::TYEtageEditorPropertiesDlg(QWidget* parent, TYTabPoint &tabPts, bool onlyEcran) : QDialog(parent)
 {
     _pBatBtn = NULL;
     _pEcranBtn = NULL;
@@ -392,21 +413,10 @@ TYEtageEditorPropertiesDlg::TYEtageEditorPropertiesDlg(QWidget* parent, bool onl
     _pHauteurLineEdit->setText(QString().setNum(hauteur, 'f', 2));
     _pHauteurLayout->addWidget(_pHauteurLineEdit);
 
-    // Hauteur par rapport au sol
-    _pHauteurSolLayout = new QHBoxLayout();
-    _pHauteurSolLayout->setMargin(10);
-    pLayout->addLayout(_pHauteurSolLayout, 1, 0);
-    QLabel* pHauteurSolLabelName = new QLabel(this);
-    pHauteurSolLabelName->setText(TR("id_hauteur_sol_label"));
-    _pHauteurSolLayout->addWidget(pHauteurSolLabelName);
-    _pHauteurSolLineEdit = new QLineEdit(this);
-    _pHauteurSolLineEdit->setText(QString().setNum(0.0, 'f', 2));
-    _pHauteurSolLayout->addWidget(_pHauteurSolLineEdit);
-
     // Epaisseur pour les ecrans
     _pEpaisseurLayout = new QHBoxLayout();
     _pEpaisseurLayout->setMargin(10);
-    pLayout->addLayout(_pEpaisseurLayout, 2, 0);
+    pLayout->addLayout(_pEpaisseurLayout, 1, 0);
     _pEpaisseurLabelName = new QLabel(this);
     _pEpaisseurLabelName->setText(TR("id_epaisseur_ecran_label"));
     _pEpaisseurLayout->addWidget(_pEpaisseurLabelName);
@@ -428,6 +438,17 @@ TYEtageEditorPropertiesDlg::TYEtageEditorPropertiesDlg(QWidget* parent, bool onl
     _pEpaisseurLayout->addWidget(_pEpaisseurLineEdit);
     _pEpaisseurLabelName->setEnabled(false);
     _pEpaisseurLineEdit->setEnabled(false);
+
+    // Hauteur par rapport au sol
+    _pHauteurSolLayout = new QHBoxLayout();
+    _pHauteurSolLayout->setMargin(10);
+    pLayout->addLayout(_pHauteurSolLayout, 2, 0);
+    QLabel* pHauteurSolLabelName = new QLabel(this);
+    pHauteurSolLabelName->setText(TR("id_hauteur_sol_label"));
+    _pHauteurSolLayout->addWidget(pHauteurSolLabelName);
+    _pHauteurSolLineEdit = new QLineEdit(this);
+    _pHauteurSolLineEdit->setText(QString().setNum(0.0, 'f', 2));
+    _pHauteurSolLayout->addWidget(_pHauteurSolLineEdit);
 
     // Ecran ou bâtiment
     _pEcranOuBatLayout = new QHBoxLayout();
@@ -463,9 +484,21 @@ TYEtageEditorPropertiesDlg::TYEtageEditorPropertiesDlg(QWidget* parent, bool onl
 
     QObject::connect(pEcranOuBatBtnGroup, SIGNAL(buttonClicked(int)), this, SLOT(toggleButton(int)));
 
+    // Geometrie
+    _tabPtsW = new TabPointsWidget(tabPts, this);
+    _tabPtsW->update();
+    QHBoxLayout *tabPointsLayout = new QHBoxLayout();
+    tabPointsLayout->setMargin(10);
+    pLayout->addLayout(tabPointsLayout, 4, 0);
+    tabPointsLayout->addWidget(_tabPtsW);
+
+
+
+
+
     // Btns Ok et Cancel
     _pBtnLayout = new QHBoxLayout();
-    pLayout->addLayout(_pBtnLayout, 4, 0);
+    pLayout->addLayout(_pBtnLayout, 5, 0);
 
     _pBtnLayout->addStretch(1);
 
@@ -512,4 +545,10 @@ void TYEtageEditorPropertiesDlg::toggleButton(int i)
         _pEpaisseurLabelName->setEnabled(false);
         _pEpaisseurLineEdit->setEnabled(false);
     }
+}
+
+void TYEtageEditorPropertiesDlg::accept()
+{
+    _tabPtsW->apply();
+    QDialog::accept();
 }

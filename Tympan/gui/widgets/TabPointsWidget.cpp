@@ -69,7 +69,7 @@ void TabPointsWidget::tabValueChanged(int row, int col)
 	// If value is not a valid number, get the original value in points list
 	if (!ok)
 	{
-		item(row, col)->setText(QString().setNum(_listPoints[row]._value[col], 'f', 2));
+		item(row, col)->setText(QString().setNum(0.0, 'f', 2));
 	}
 }
 
