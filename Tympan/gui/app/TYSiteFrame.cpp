@@ -263,17 +263,6 @@ TYElementListItem* TYSiteFrame::addToList(LPTYMateriauConstruction pElement, TYE
     return pRootItem;
 }
 
-TYElementListItem* TYSiteFrame::addToList(LPTYSol pElement, TYElementListItem* parent /*=NULL*/)
-{
-    // Sol
-    TYElementListItem* pRootItem  = addEltToList(pElement, parent);
-    if (pElement->getVegetActive())
-    {
-        new TYElementListItem(pRootItem, pElement->getVegetation());
-    }
-    return pRootItem;
-}
-
 TYElementListItem* TYSiteFrame::addToList(LPTYSpectre pElement, TYElementListItem* parent /*=NULL*/)
 {
     // Spectre

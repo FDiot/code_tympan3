@@ -99,6 +99,7 @@ void TYPlanEauWidget::updateContent()
 {
     _terrainW->updateContent();
     _terrainW->disableSolWidget();
+    _terrainW->disableVegetationWidget();
 
     _lineEditAltitude->setText(QString().setNum(getElement()->getAltitude(), 'f', 2));
 

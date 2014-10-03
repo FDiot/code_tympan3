@@ -18,10 +18,6 @@
  * \brief outil IHM pour une vegetation (fichier header)
  * \author Projet_Tympan
  *
- *
- *
- *
- *
  */
 
 #ifndef __TY_VEGETATION_WIDGET__
@@ -29,9 +25,6 @@
 
 
 #include "TYWidget.h"
-//Added by qt3to4:
-#include <QGridLayout>
-#include <QLabel>
 
 class TYVegetation;
 class QLineEdit;

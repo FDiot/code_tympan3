@@ -117,7 +117,7 @@ void TYTerrainGraphic::bindTexture()
     _pPolygon->getGraphicObject()->setTexture(false);
 
     // Si le sol est de type vegetation...
-    if (getElement()->getSol()->getVegetActive())
+    if (getElement()->isUsingVegetation())
     {
         // On active le texturing.
         _pPolygon->getGraphicObject()->setTexture();

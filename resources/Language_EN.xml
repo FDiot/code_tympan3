@@ -1265,12 +1265,9 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_epaisseur_label" value="Thickness"/>
 			<string id="id_unite_resistivite" value="kRayl"/>
 			<string id="id_unite_epaisseur" value="m"/>
-			<string id="id_vegetactive_label" value="Vegetation active"/>
 			<string id="id_spectreimp" value="Spectre d'impédance"/>
-			<string id="id_vegetation" value="Vegetation"/>
 			<string id="id_proprietes_button" value="Properties"/>
 			<string id="id_edit_resistivite" value="Choose..."/>
-			<string id="id_get_from_bdd" value="Import Database"/>
 		</message>
 	</class>
 	<class name="TYSolResistanceDialog">
@@ -1887,6 +1884,8 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_y" value="Y"/>
 			<string id="id_z" value="Z"/>
 			<string id="id_tabpt" value="Points List"/>
+			<string id="id_vegetation" value="Vegetation"/>
+			<string id="id_vegetactive_label" value="Vegetation active"/>
 			<string id="id_proprietes_button" value="Properties"/>
 		</message>
 	</class>

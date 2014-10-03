@@ -18,18 +18,12 @@
  * \brief outil IHM pour un sol (fichier header)
  * \author Projet_Tympan
  *
- *
- *
- *
- *
  */
 
 #ifndef __TY_SOL_WIDGET__
 #define __TY_SOL_WIDGET__
 
-
 #include "TYWidget.h"
-//Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
@@ -67,40 +61,22 @@ public:
 public slots:
     virtual void updateContent();
     virtual void apply();
-
-    /**
-     * Edite la widget de la vegetation.
-     */
-    void editVegetation();
-    /**
-     * .
-     */
-    void useVegetation();
-
     void editResistivite();
 
     // Membres
 protected:
 
     QGroupBox* _groupBox;
-    QLabel* _labelVegetActive;
     QLineEdit* _lineEditEpaisseur;
     QLineEdit* _lineEditResistivite;
     QLabel* _labelEpaisseur;
-    QCheckBox* _checkBoxVegetActive;
     QLabel* _labelResistivite;
 
-    QGroupBox* _groupBoxVegetation;
-    QLineEdit* _lineEditNomVegetation;
-    QPushButton* _pushButtonVegetation;
     QPushButton* _pushButtonResistivite;
-
 
 protected:
     QGridLayout* _solLayout;
     QGridLayout* _groupBoxLayout;
-
-    QGridLayout* _groupBoxVegetationLayout;
 
     TYElementWidget* _elmW;
 };

@@ -64,20 +64,17 @@ void TYPlanEauEditor::slotKeyPressed(int key)
 
 void TYPlanEauEditor::endPlanEau()
 {
-    if (!_pModeler->askForResetResultat())
+    if ( !(getSavedPoints().size() > 2) || (!_pModeler->askForResetResultat()) )
     {
         return;
     }
 
-    bool ok = false;
-    double alti = QInputDialog::getDouble(getTYMainWnd(), getTYMainWnd()->windowTitle(), TR("id_msg_getaltitude"), 0, -10000, 10000, 2, &ok);
+    TYTabPoint tabPts = this->getSavedPoints();
+    _pPlanEau = new TYPlanEau();
+    _pPlanEau->setListPoints(tabPts);
 
-    if (ok && (this->getSavedPoints().size() != 0))
+    if (_pPlanEau->edit(_pModeler) == QDialog::Accepted)
     {
-        _pPlanEau = new TYPlanEau();
-        _pPlanEau->setListPoints(this->getSavedPoints());
-        _pPlanEau->setAltitude(alti);
-
         TYSiteNode* pSite = ((TYSiteModelerFrame*) _pModeler)->getSite();
 
         if (pSite->getTopographie()->addPlanEau(_pPlanEau))
