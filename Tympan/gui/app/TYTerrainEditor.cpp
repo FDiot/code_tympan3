@@ -14,7 +14,7 @@
 */
 
 /**
- * \file TYSolEditor.cpp
+ * \file TYTerrainEditor.cpp
  * \brief Construit un sol a partir des points saisis
  */
 
@@ -32,23 +32,23 @@
 #include "Tympan/gui/app/TYMainWindow.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
-#include "TYSolEditor.h"
+#include "TYTerrainEditor.h"
 
 
-#define TR(id) OLocalizator::getString("TYSolEditor", (id))
+#define TR(id) OLocalizator::getString("TYTerrainEditor", (id))
 
 
-TYSolEditor::TYSolEditor(TYModelerFrame* pModeler) :
+TYTerrainEditor::TYTerrainEditor(TYModelerFrame* pModeler) :
     TYPolyLineEditor(pModeler)
 {
-    QObject::connect(this, SIGNAL(endedSavingPoints()), this, SLOT(endSol()));
+    QObject::connect(this, SIGNAL(endedSavingPoints()), this, SLOT(endTerrain()));
 }
 
-TYSolEditor::~TYSolEditor()
+TYTerrainEditor::~TYTerrainEditor()
 {
 }
 
-void TYSolEditor::endSol()
+void TYTerrainEditor::endTerrain()
 {
     if ( !(getSavedPoints().size() > 2) || (!_pModeler->askForResetResultat()) )
     {

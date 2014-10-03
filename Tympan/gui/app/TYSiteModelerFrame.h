@@ -224,13 +224,12 @@ protected:
     TYEmpriseEditor* _pEmpriseEditor;
     TYCourbeNiveauEditor* _pCourbeNiveauEditor;
     TYPlanEauEditor* _pPlanEauEditor;
-    TYSolEditor* _pSolEditor;
+    TYTerrainEditor* _pTerrainEditor;
     TYRouteEditor* _pRouteEditor;
     TYReseauTransportEditor* _pReseauTransportEditor;
     TYEtageEditor* _pEtageEditor;
     TYSilosEditor* _pSilosEditor;
     TYCoursEauEditor* _pCoursEauEditor;
-    TYVegetationEditor* _pVegetationEditor;
     TYSourceEditor* _pSourceEditor;
     TYPointCalculEditor* _pPointCalculEditor;
     TYRectangularMaillageEditor* _pRectangularMaillageEditor;

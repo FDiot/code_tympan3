@@ -1037,9 +1037,9 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_action_addroutedeblai" value="New Road avec calcul de déblai"/>
 		</message>
 	</class>
-	<class name="TYSolEditor">
+	<class name="TYTerrainEditor">
 		<message>
-			<string id="id_action_addsol" value="New ground"/>
+			<string id="id_action_addsol" value="New terrain"/>
 		</message>
 	</class>
 	<class name="TYSourseEditor">
