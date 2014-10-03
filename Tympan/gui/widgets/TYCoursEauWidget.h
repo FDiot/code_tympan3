@@ -18,10 +18,6 @@
  * \brief Outil IHM pour un cours d'eau (fichier header)
  * \author Projet_Tympan
  *
- *
- *
- *
- *
  */
 
 #ifndef __TY_COURSEAU_WIDGET__

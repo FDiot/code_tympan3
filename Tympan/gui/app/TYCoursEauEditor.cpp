@@ -47,28 +47,17 @@ TYCoursEauEditor::~TYCoursEauEditor()
 
 void TYCoursEauEditor::endCoursEau()
 {
-    if (!_pModeler->askForResetResultat())
+    if ( !(getSavedPoints().size() > 1) || (!_pModeler->askForResetResultat()) )
     {
         return;
     }
 
     LPTYCoursEau pCoursEau = new TYCoursEau();
+    pCoursEau->setTabPoint( getSavedPoints() );
 
     if (pCoursEau->edit(_pModeler) == QDialog::Accepted)
     {
-        pCoursEau->setTabPoint(this->getSavedPoints());
-
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
-
-        // Make sure altimetry was initialized before using it
-        if (pSite->getAltimetry()->containsData())
-        {
-            for (unsigned int i = 0; i < pCoursEau->getTabPoint().size(); i++)
-            {
-                pCoursEau->getTabPoint()[i]._z = 0.0;
-                pSite->getAltimetry()->updateAltitude(pCoursEau->getTabPoint()[i]);
-            }
-        }
 
         if (pSite->getTopographie()->addCrsEau(pCoursEau))
         {
