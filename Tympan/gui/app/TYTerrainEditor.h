@@ -14,41 +14,35 @@
 */
 
 /**
- * \file TYSolEditor.h
+ * \file TYTerrainEditor.h
  * \brief Construit un sol a partir des points saisis (fichier header)
- *
- *
  *
  */
 
-/**
- * \class TYSolEditor
- * \brief Construit un sol a partir des points saisis
- */
-#ifndef __TY_SOL_EDITOR__
-#define __TY_SOL_EDITOR__
+#ifndef __TY_TERRAIN_EDITOR__
+#define __TY_TERRAIN_EDITOR__
 
 
 #include "TYPolyLineEditor.h"
 #include "Tympan/models/business/TYDefines.h"
 
 
-class TYSolEditor : public TYPolyLineEditor
+class TYTerrainEditor : public TYPolyLineEditor
 {
     Q_OBJECT
 
 public:
-    TYSolEditor(TYModelerFrame* pModeler);
-    ~TYSolEditor();
+    TYTerrainEditor(TYModelerFrame* pModeler);
+    ~TYTerrainEditor();
 
 public slots:
     /**
      * Construit un sol a partir des points saisis.
      */
-    void endSol();
+    void endTerrain();
 
 protected:
 
 };
 
-#endif // __TY_SOL_EDITOR__
+#endif // __TY_TERRAIN_EDITOR__

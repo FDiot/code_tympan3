@@ -160,7 +160,8 @@ int TYTerrain::fromXML(DOM_Element domElement)
     TYColorInterface::fromXML(domElement);
 
     _listPoints.clear();
-    if (_pVegetation) { delete _pVegetation; }
+    _vegetActive = false;
+    if (_pVegetation) { _pVegetation = nullptr; }
     
     // A new vegetation is created in case of vegetation reading
     // will be destroyed if not used
@@ -200,10 +201,9 @@ int TYTerrain::fromXML(DOM_Element domElement)
         }
     }
 
-    if (!bVegetDone && _pVegetation)
+    if (!_vegetActive && _pVegetation)
     {
-        delete _pVegetation;
-        _pVegetation = NULL;
+        _pVegetation = nullptr;
     }
 
     return 1;

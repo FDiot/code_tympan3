@@ -43,13 +43,12 @@
 #include "Tympan/gui/app/TYEmpriseEditor.h"
 #include "Tympan/gui/app/TYCourbeNiveauEditor.h"
 #include "Tympan/gui/app/TYPlanEauEditor.h"
-#include "Tympan/gui/app/TYSolEditor.h"
+#include "Tympan/gui/app/TYTerrainEditor.h"
 #include "Tympan/gui/app/TYRouteEditor.h"
 #include "Tympan/gui/app/TYReseauTransportEditor.h"
 #include "Tympan/gui/app/TYEtageEditor.h"
 #include "Tympan/gui/app/TYSilosEditor.h"
 #include "Tympan/gui/app/TYCoursEauEditor.h"
-#include "Tympan/gui/app/TYVegetationEditor.h"
 #include "Tympan/gui/app/TYSourceEditor.h"
 #include "Tympan/gui/app/TYPointCalculEditor.h"
 #include "Tympan/gui/app/TYRectangularMaillageEditor.h"
@@ -157,13 +156,12 @@ void TYSiteModelerFrame::init()
     _pEmpriseEditor = new TYEmpriseEditor(this);
     _pCourbeNiveauEditor = new TYCourbeNiveauEditor(this);
     _pPlanEauEditor = new TYPlanEauEditor(this);
-    _pSolEditor = new TYSolEditor(this);
+    _pTerrainEditor = new TYTerrainEditor(this);
     _pRouteEditor = new TYRouteEditor(this);
     _pReseauTransportEditor = new TYReseauTransportEditor(this);
     _pEtageEditor = new TYEtageEditor(this);
     _pSilosEditor = new TYSilosEditor(this);
     _pCoursEauEditor = new TYCoursEauEditor(this);
-    _pVegetationEditor = new TYVegetationEditor(this);
     _pSourceEditor = new TYSourceEditor(this);
     _pPointCalculEditor = new TYPointCalculEditor(this);
     _pRectangularMaillageEditor = new TYRectangularMaillageEditor(this);
@@ -223,13 +221,12 @@ TYSiteModelerFrame::~TYSiteModelerFrame()
     delete _pEmpriseEditor;
     delete _pCourbeNiveauEditor;
     delete _pPlanEauEditor;
-    delete _pSolEditor;
+    delete _pTerrainEditor;
     delete _pRouteEditor;
     delete _pReseauTransportEditor;
     delete _pEtageEditor;
     delete _pSilosEditor;
     delete _pCoursEauEditor;
-    delete _pVegetationEditor;
     delete _pSourceEditor;
     delete _pPointCalculEditor;
     delete _pRectangularMaillageEditor;
@@ -404,10 +401,7 @@ void TYSiteModelerFrame::setEditorMode(int mode)
                 _pCurrentEditor = _pCourbeNiveauEditor;
                 break;
             case TerrainMode:
-                _pCurrentEditor = _pSolEditor;
-                break;
-            case VegetationMode:
-                _pCurrentEditor = _pVegetationEditor;
+                _pCurrentEditor = _pTerrainEditor;
                 break;
             case PlanEauMode:
                 _pCurrentEditor = _pPlanEauEditor;
