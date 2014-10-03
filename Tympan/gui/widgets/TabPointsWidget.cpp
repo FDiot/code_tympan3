@@ -35,9 +35,8 @@ void TabPointsWidget::update()
         setItem(row, 0, new QTableWidgetItem((QString().setNum(_listPoints[row]._x, 'f', 2))));
         setItem(row, 1, new QTableWidgetItem((QString().setNum(_listPoints[row]._y, 'f', 2))));
         setItem(row, 2, new QTableWidgetItem((QString().setNum(_listPoints[row]._z, 'f', 2))));
-        item(row, 0)->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		item(row, 1)->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		item(row, 2)->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+        setAttributes(row);
     }
 		
    	connect ( this, SIGNAL( cellChanged(int, int) ), this, SLOT(tabValueChanged(int, int)) );
@@ -73,6 +72,20 @@ void TabPointsWidget::tabValueChanged(int row, int col)
 	}
 }
 
+void TabPointsWidget::setAttributes(int row)
+{
+    item(row, 0)->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	item(row, 1)->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+	item(row, 2)->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+}
+
+void TabPointsWidget::initRow(int row)
+{
+    setItem(row, 0, new QTableWidgetItem((QString().setNum(0.0, 'f', 2))));
+    setItem(row, 1, new QTableWidgetItem((QString().setNum(0.0, 'f', 2))));
+    setItem(row, 2, new QTableWidgetItem((QString().setNum(0.0, 'f', 2))));
+}
+
 void TabPointsWidget::contextMenuEvent(QContextMenuEvent* e)
 {
     QPoint point = mapFrom(this, e->pos());
@@ -90,11 +103,12 @@ void TabPointsWidget::contextMenuEvent(QContextMenuEvent* e)
             col = col >= 0 ? col : 0; // Securite
             col = col < columnCount() ? col : columnCount()-1;
 
-            QAction *insertLine = NULL, *deleteLine = NULL;
+            QAction *insertLine = NULL, *appendLine = NULL, *deleteLine = NULL;
 
             QMenu* pPopup = new QMenu(this);
 
             insertLine = pPopup->addAction( TR("id_insert_row_item") );
+            appendLine = pPopup->addAction( TR("id_append_row_item") );
             deleteLine = pPopup->addAction( TR("id_delete_row_item") );
 
             QAction* ret = pPopup->exec(mapToGlobal(point));
@@ -102,13 +116,17 @@ void TabPointsWidget::contextMenuEvent(QContextMenuEvent* e)
             if (ret == insertLine)
             {
                 insertRow(row);
-                setItem(row, 0, new QTableWidgetItem((QString().setNum(0.0, 'f', 2))));
-                setItem(row, 1, new QTableWidgetItem((QString().setNum(0.0, 'f', 2))));
-                setItem(row, 2, new QTableWidgetItem((QString().setNum(0.0, 'f', 2))));
-                
-                item(row, 0)->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		        item(row, 1)->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-		        item(row, 2)->setFlags(Qt::ItemIsEditable | Qt::ItemIsSelectable | Qt::ItemIsEnabled);
+
+                initRow(row);
+                setAttributes(row);
+            }
+            else if (ret == appendLine)
+            {
+                setRowCount( rowCount() + 1 );
+                size_t lastRow = rowCount() - 1;
+
+                initRow(lastRow);
+                setAttributes(lastRow);
             }
             else if (ret == deleteLine)
             {

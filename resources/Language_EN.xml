@@ -1215,7 +1215,8 @@ Choose No to Open the New Site in a Modeler."/>
 	</class>
 	<class name="TabPointsWidget">
 		<message>
-			<string id="id_insert_row_item" value="IInsert point"/>
+			<string id="id_insert_row_item" value="Insert point"/>
+			<string id="id_append_row_item" value="Append point"/>
 			<string id="id_delete_row_item" value="Delete point"/>
 		</message>
 	</class>
