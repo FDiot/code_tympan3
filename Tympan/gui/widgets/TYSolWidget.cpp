@@ -48,10 +48,6 @@ TYSolWidget::TYSolWidget(TYSol* pElement, QWidget* _pParent /*=NULL*/):
     _groupBoxLayout = new QGridLayout();
     _groupBox->setLayout(_groupBoxLayout);
 
-    _labelVegetActive = new QLabel(_groupBox);
-    _labelVegetActive->setText(TR("id_vegetactive_label"));
-    _groupBoxLayout->addWidget(_labelVegetActive, 2, 0);
-
     _lineEditEpaisseur = new QLineEdit(_groupBox);
     _groupBoxLayout->addWidget(_lineEditEpaisseur, 1, 1);
     QLabel* pUnitEpais = new QLabel(_groupBox);
@@ -72,32 +68,12 @@ TYSolWidget::TYSolWidget(TYSol* pElement, QWidget* _pParent /*=NULL*/):
     _labelEpaisseur->setText(TR("id_epaisseur_label"));
     _groupBoxLayout->addWidget(_labelEpaisseur, 1, 0);
 
-    _checkBoxVegetActive = new QCheckBox(_groupBox);
-    _groupBoxLayout->addWidget(_checkBoxVegetActive, 2, 1);
-
     _labelResistivite = new QLabel(_groupBox);
     _labelResistivite->setText(TR("id_resistivite_label"));
     _groupBoxLayout->addWidget(_labelResistivite, 0, 0);
 
     _solLayout->addWidget(_groupBox, 1, 0);
 
-    _groupBoxVegetation = new QGroupBox(this);
-    _groupBoxVegetation->setTitle(TR("id_vegetation"));
-    _groupBoxVegetationLayout = new QGridLayout();
-    _groupBoxVegetation->setLayout(_groupBoxVegetationLayout);
-
-    _lineEditNomVegetation = new QLineEdit(_groupBoxVegetation);
-    _lineEditNomVegetation->setEnabled(FALSE);
-    _groupBoxVegetationLayout->addWidget(_lineEditNomVegetation, 0, 0);
-
-    _pushButtonVegetation = new QPushButton(_groupBoxVegetation);
-    _pushButtonVegetation->setText(TR("id_proprietes_button"));
-    _groupBoxVegetationLayout->addWidget(_pushButtonVegetation, 0, 1);
-
-    _solLayout->addWidget(_groupBoxVegetation, 2, 0);
-
-    connect(_pushButtonVegetation, SIGNAL(clicked()), this, SLOT(editVegetation()));
-    connect(_checkBoxVegetActive, SIGNAL(clicked()), this, SLOT(useVegetation()));
     connect(_pushButtonResistivite, SIGNAL(clicked()), this, SLOT(editResistivite()));
 
     updateContent();
@@ -115,16 +91,6 @@ void TYSolWidget::updateContent()
 
     _lineEditResistivite->setText(num.setNum(getElement()->getResistivite(), 'f', 2));
     _lineEditEpaisseur->setText(num.setNum(getElement()->getEpaisseur(), 'f', 2));
-
-    bool bVegActive = getElement()->getVegetActive();
-    _checkBoxVegetActive->setChecked(bVegActive);
-    _groupBoxVegetation->setEnabled(bVegActive);
-
-    if (bVegActive)
-    {
-        TYVegetation* pVeg = getElement()->getVegetation();
-        if (pVeg) { _lineEditNomVegetation->setText(pVeg->getName()); }
-    }
 }
 
 void TYSolWidget::apply()
@@ -141,25 +107,8 @@ void TYSolWidget::apply()
     epaisseur = epaisseur <= 0.01 ? 0.01 : epaisseur;
     getElement()->setEpaisseur(epaisseur);
 
-    getElement()->useVegetation(_checkBoxVegetActive->isChecked());
 
     emit modified();
-}
-
-void TYSolWidget::editVegetation()
-{
-    int ret = getElement()->getVegetation()->edit(this);
-
-    if (ret == QDialog::Accepted)
-    {
-        _lineEditNomVegetation->setText(getElement()->getVegetation()->getName());
-    }
-}
-
-void TYSolWidget::useVegetation()
-{
-    getElement()->useVegetation(_checkBoxVegetActive->isChecked());
-    _groupBoxVegetation->setEnabled(_checkBoxVegetActive->isChecked());
 }
 
 void TYSolWidget::editResistivite()

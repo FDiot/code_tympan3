@@ -25,6 +25,7 @@
 
 #include <QGridLayout>
 #include "TYWidget.h"
+#include "Tympan/models/business/TYDefines.h"
 
 class TYTerrain;
 class QLineEdit;
@@ -34,9 +35,11 @@ class QTabWidget;
 class QGroupBox;
 class QPushButton;
 class QTreeWidgetItem;
+class QCheckBox;
 class TYElementWidget;
 class TYColorInterfaceWidget;
 class TYSolWidget;
+class TYVegetationWidget;
 class TabPointsWidget;
 
 /**
@@ -74,13 +77,16 @@ public:
 
     /**
      * Permet de desactiver le widget Terrain (cas du plan d'eau).
-     *
      */
     void disableSolWidget();
+    void disableVegetationWidget();
+
 
 public slots:
     virtual void updateContent();
     virtual void apply();
+
+    void useVegetation();
 
     // Membres
 protected:
@@ -98,7 +104,16 @@ protected:
     TYColorInterfaceWidget* _colorW;
     TYSolWidget* _solW;
 
+    // Vegetation
+    QCheckBox* _checkBoxVegetActive;
+    QLabel* _labelVegetActive;
+    TYVegetationWidget* _vegetationWidget;
+
+    QGridLayout* _groupBoxVegetationLayout;
+
     QTabWidget* _tabWidget;
+
+    LPTYVegetation _pVegetation;
 };
 
 #endif // __TY_TERRAIN_WIDGET__

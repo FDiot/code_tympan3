@@ -18,10 +18,6 @@
  * \brief outil IHM pour un objet metier de type TYElement (fichier header)
  * \author Projet_Tympan
  *
- *
- *
- *
- *
  */
 
 #ifndef __TY_WIDGET__
@@ -84,6 +80,7 @@ public:
      */
     static QString getDisplayName(TYElement* pElt);
 
+    void setElement(TYElement *pElement) { _pElement = pElement; }
 
 public slots:
     /**

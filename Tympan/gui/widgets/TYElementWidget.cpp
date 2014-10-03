@@ -44,7 +44,6 @@ TYElementWidget::TYElementWidget(TYElement* pElement, QWidget* _pParent /*=NULL*
     setWindowTitle(TR("id_caption"));
 
     _lineEditName = new QLineEdit("lineEditName");
-    _lineEditName->setText(getElement()->getName());
 
     _labelName = new QLabel("labelName");
     _labelName->setText(TR("id_name_label"));
@@ -72,12 +71,18 @@ TYElementWidget::~TYElementWidget()
 
 void TYElementWidget::updateContent()
 {
-    _lineEditName->setText(getElement()->getName());
+    if (getElement() != nullptr)
+    {
+        _lineEditName->setText(getElement()->getName());
+    }
 }
 
 void TYElementWidget::apply()
 {
-    getElement()->setName(_lineEditName->text());
+    if (getElement() != nullptr)
+    {
+        getElement()->setName(_lineEditName->text());
+    }
 
     TYElement::setIsSavedOk(true); // Il faut sauvegarder le fichier
 

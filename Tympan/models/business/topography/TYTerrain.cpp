@@ -15,6 +15,7 @@
 
 
 #include "Tympan/core/logging.h"
+#include "Tympan/models/business/material/TYSol.h"
 #include "TYTerrain.h"
 
 #if TY_USE_IHM
@@ -27,11 +28,9 @@
 TY_EXTENSION_INST(TYTerrain);
 TY_EXT_GRAPHIC_INST(TYTerrain);
 
-TYTerrain::TYTerrain()
+TYTerrain::TYTerrain() : _vegetActive(false), _pVegetation(nullptr)
 {
     _name = TYNameManager::get()->generateName(getClassName());
-
-    //  _type = 1;
 
     _pSol = new TYSol();
     _pSol->setParent(this);
@@ -72,8 +71,9 @@ TYTerrain& TYTerrain::operator=(const TYTerrain& other)
     {
         TYElement::operator =(other);
         TYColorInterface::operator =(other);
-        //      _type = other._type;
         _pSol = other._pSol;
+        _vegetActive = other._vegetActive;
+        _pVegetation = other._pVegetation;
         _listPoints = other._listPoints;
     }
     return *this;
@@ -85,8 +85,9 @@ bool TYTerrain::operator==(const TYTerrain& other) const
     {
         if (TYElement::operator !=(other)) { return false; }
         if (TYColorInterface::operator !=(other)) { return false; }
-        //      if ( _type != other._type ) return false;
         if (_pSol != other._pSol) { return false; }
+        if (_pVegetation != other._pVegetation) { return false; }
+        if (_vegetActive != other._vegetActive) { return false; }
         if (!(_listPoints == other._listPoints)) { return false; }
     }
     return true;
@@ -105,9 +106,14 @@ bool TYTerrain::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 
     TYTerrain* pOtherTerrain = (TYTerrain*) pOther;
 
-    //  _type = pOtherTerrain->_type;
-
     _pSol->deepCopy(pOtherTerrain->_pSol, copyId);
+
+    _vegetActive = pOtherTerrain->_vegetActive;
+
+    if (_pVegetation)
+    {
+        _pVegetation->deepCopy(pOtherTerrain->_pVegetation, copyId);
+    }
 
     _listPoints.clear();
     for (unsigned int i = 0; i < pOtherTerrain->_listPoints.size(); i++)
@@ -131,8 +137,12 @@ DOM_Element TYTerrain::toXML(DOM_Element& domElement)
 
     TYColorInterface::toXML(domNewElem);
 
-    //  TYXMLTools::addElementIntValue(domNewElem, "type", _type);
     _pSol->toXML(domNewElem);
+
+    TYXMLTools::addElementIntValue(domNewElem, "active", _vegetActive);
+
+    if (_vegetActive && _pVegetation) { _pVegetation->toXML(domNewElem); }
+
     TYXMLTools::addElementUIntValue(domNewElem, "nbPoints", _listPoints.size());
 
     for (unsigned int i = 0; i < _listPoints.size(); i++)
@@ -150,8 +160,16 @@ int TYTerrain::fromXML(DOM_Element domElement)
     TYColorInterface::fromXML(domElement);
 
     _listPoints.clear();
+    if (_pVegetation) { delete _pVegetation; }
+    
+    // A new vegetation is created in case of vegetation reading
+    // will be destroyed if not used
+    _pVegetation = new TYVegetation();
 
     bool nbPointsOk = false;
+    bool bVegetDone = false;
+    bool activeOk = false;
+
     int nbPoints = 0;
     TYPoint pt;
     DOM_Element elemCur;
@@ -162,6 +180,13 @@ int TYTerrain::fromXML(DOM_Element domElement)
         elemCur = childs.item(i).toElement();
 
         _pSol->callFromXMLIfEqual(elemCur);
+
+        TYXMLTools::getElementBoolValue(elemCur, "active", _vegetActive, activeOk);
+
+        if (_vegetActive && !bVegetDone)
+        {
+            bVegetDone = _pVegetation->callFromXMLIfEqual(elemCur);
+        }
 
         TYXMLTools::getElementIntValue(elemCur, "nbPoints", nbPoints, nbPointsOk);
         if (nbPointsOk)
@@ -175,6 +200,12 @@ int TYTerrain::fromXML(DOM_Element domElement)
         }
     }
 
+    if (!bVegetDone && _pVegetation)
+    {
+        delete _pVegetation;
+        _pVegetation = NULL;
+    }
+
     return 1;
 }
 
@@ -182,4 +213,23 @@ double TYTerrain::surface()
 {
     TYPolygon polygon(_listPoints);
     return polygon.surface();
+}
+
+void TYTerrain::useVegetation(bool state /*= true*/)
+{
+    _vegetActive = state;
+
+    if (_vegetActive)
+    {
+        if (_pVegetation == nullptr)
+        {
+            _pVegetation = new TYVegetation();
+            _pVegetation->setParent(this);
+        }
+    }
+    else
+    {
+        if (_pVegetation) { delete _pVegetation; }
+        _pVegetation = NULL;
+    }
 }

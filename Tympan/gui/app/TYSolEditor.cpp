@@ -50,7 +50,7 @@ TYSolEditor::~TYSolEditor()
 
 void TYSolEditor::endSol()
 {
-    if (!_pModeler->askForResetResultat())
+    if ( !(getSavedPoints().size() > 2) || (!_pModeler->askForResetResultat()) )
     {
         return;
     }
@@ -58,39 +58,26 @@ void TYSolEditor::endSol()
     LPTYTerrain pTerrain = new TYTerrain();
     LPTYSol pSol = new TYSol();
     pTerrain->setSol(pSol);
+    pTerrain->setListPoints(getSavedPoints());
 
     if (pTerrain->edit(_pModeler) == QDialog::Accepted)
     {
-        //LPTYTerrain pTerrain = new TYTerrain();
-        //pTerrain->setSol(pSol);
-        TYTabPoint tabPts = this->getSavedPoints();
-
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
 
         // This hardly readable cascade of if is better than no reporting
         // but should instead be handled with exceptions.
         if (pSite->getTopographie()->addTerrain(pTerrain))
         {
-            if(pSite->getAltimetry()->containsData())
-            {
-                for (unsigned int i = 0; i < tabPts.size(); i++)
-                {
-                    tabPts[i]._z = 0.0;
-                    pSite->getAltimetry()->updateAltitude(tabPts[i]);
-                }
-            }
             TYAction* pAction = new TYAddElementToTopoAction(
                 (LPTYElement&) pTerrain, pSite->getTopographie(), _pModeler,
                 TR("id_action_addsol"));
             _pModeler->getActionManager()->addAction(pAction);
 
-            pTerrain->setListPoints(tabPts);
-
             pSite->getTopographie()->updateGraphicTree();
             updateSiteFrame();
             _pModeler->getView()->getRenderer()->updateDisplayList();
             _pModeler->updateView();
-        } // (pSite->getTopographie()->addTerrain(pTerrain))
+        }
 
         // repasse en mode camera selection
         getTYMainWnd()->setDefaultCameraMode();

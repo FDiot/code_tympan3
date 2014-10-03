@@ -50,15 +50,16 @@ TYVegetationEditor::~TYVegetationEditor()
 
 void TYVegetationEditor::endVegetation()
 {
-    if (!_pModeler->askForResetResultat())
+    if ( !(getSavedPoints().size() > 2) || (!_pModeler->askForResetResultat()) )
     {
         return;
     }
 
     LPTYTerrain pTerrain = new TYTerrain();
     LPTYSol pSol = new TYSol();
-    pSol->useVegetation(true);
+    pTerrain->useVegetation(true);
     pTerrain->setSol(pSol);
+    pTerrain->setListPoints(getSavedPoints());
 
     if (pTerrain->edit(_pModeler) == QDialog::Accepted)
     {
