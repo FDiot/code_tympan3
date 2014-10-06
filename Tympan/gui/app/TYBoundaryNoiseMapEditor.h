@@ -38,7 +38,7 @@
 #include "Tympan/models/business/TYDefines.h"
 
 class QDoubleSpinBox;
-
+class TabPointsWidget;
 /**
  * \class TYBoundaryNoiseMapEditor
  * \brief Creation of a \c TYBoundaryNoiseMap
@@ -87,6 +87,10 @@ protected:
 
     /// Thickness spin box.
     QDoubleSpinBox* _pThicknessSpinBox;
+
+    /// Geometry description
+    TabPointsWidget *_tabPtsW;
+
 };
 
 

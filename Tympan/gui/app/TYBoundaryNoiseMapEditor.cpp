@@ -44,6 +44,7 @@
 #include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticSurface.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticVolume.h"
+#include "Tympan/gui/widgets/TabPointsWidget.h"
 #include "Tympan/gui/app/TYActions.h"
 #include "Tympan/gui/app/TYSiteModelerFrame.h"
 #include "Tympan/gui/app/TYApplication.h"
@@ -81,7 +82,7 @@ void TYBoundaryNoiseMapEditor::endBoundaryNoiseMap()
 
 bool TYBoundaryNoiseMapEditor::checkValidity(bool& forceOpened)
 {
-    if (!_pModeler->askForResetResultat())
+    if ( !(getSavedPoints().size() > 1) || (!_pModeler->askForResetResultat()) )
     {
         return false;
     }
@@ -174,8 +175,15 @@ void TYBoundaryNoiseMapEditor::createPropertiesDlg(bool forceOpened)
     pEditLayout->addWidget(new QLabel(TR("id_density_label")), 3, 0);
     pEditLayout->addWidget(_pDensitySpinBox, 3, 1);
 
+    // Geometry
+    QBoxLayout* pGeomLayout = new QVBoxLayout();
+    _tabPtsW = new TabPointsWidget(getSavedPoints(), nullptr);
+    _tabPtsW->update();
+    pGeomLayout->addWidget(_tabPtsW);
+    pLayout->addLayout(pGeomLayout, 1, 0);
+
     QBoxLayout* pBtnLayout = new QHBoxLayout();
-    pLayout->addLayout(pBtnLayout, 1, 0);
+    pLayout->addLayout(pBtnLayout, 2, 0);
 
     pBtnLayout->addStretch(1);
 
@@ -220,11 +228,14 @@ void TYBoundaryNoiseMapEditor::createPropertiesDlg(bool forceOpened)
 
 void TYBoundaryNoiseMapEditor::dialogConfirmed(double height, double thickness, bool closed, double density, bool forceOpened)
 {
+    _tabPtsW->apply();
+
     /// XXX Ticket #644892. Check if the polyline hasn't been deleted by the TYPolyLineEditor::close() function
     if (this->getSavedPoints().empty())
     {
         return;
     }
+
     // We create the BoundaryNoiseMap entity
     TYSiteModelerFrame* pSiteModeler = (TYSiteModelerFrame*) _pModeler;
 

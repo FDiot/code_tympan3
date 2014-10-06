@@ -47,33 +47,17 @@ TYReseauTransportEditor::~TYReseauTransportEditor()
 
 void TYReseauTransportEditor::endReseauTransport()
 {
-    if (!_pModeler->askForResetResultat())
+    if ( !(getSavedPoints().size() > 1) || (!_pModeler->askForResetResultat()) )
     {
         return;
     }
 
     LPTYReseauTransport pReseauTransport = new TYReseauTransport();
+    pReseauTransport->setTabPoint(getSavedPoints());
 
     if (pReseauTransport->edit(_pModeler) == QDialog::Accepted)
     {
-        pReseauTransport->setTabPoint(this->getSavedPoints());
-
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
-
-        // Make sure altimetry was initialized before using it
-        if (pSite->getAltimetry()->containsData())
-        {
-            for (unsigned int i = 0; i < pReseauTransport->getTabPoint().size(); i++)
-            {
-                pReseauTransport->getTabPoint()[i]._z = 0.0;
-
-                // Altitude
-                pSite->getAltimetry()->updateAltitude(pReseauTransport->getTabPoint()[i]);
-
-                // Ajout de la hauteur moyenne
-                pReseauTransport->getTabPoint()[i]._z += pReseauTransport->getHauteurMoyenne();
-            }
-        }
 
         if (pSite->getInfrastructure()->addResTrans(pReseauTransport))
         {
@@ -87,7 +71,6 @@ void TYReseauTransportEditor::endReseauTransport()
                     pCalcul->addToSelection(pReseauTransport);
                 }
             }
-
 
             TYAction* pAction = new TYAddElementToInfraAction((LPTYElement&) pReseauTransport, pSite->getInfrastructure(), _pModeler, TR("id_action_addrestrans"));
             _pModeler->getActionManager()->addAction(pAction);
