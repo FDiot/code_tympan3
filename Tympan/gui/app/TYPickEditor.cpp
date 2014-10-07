@@ -1896,6 +1896,7 @@ void TYPickEditor::showDimensionsDialog(TYAcousticVolume* pAccVol)
 
 void TYPickEditor::showPanel(TYElement* pElt)
 {
+    _pModeler->updateView();
     hidePanel(_pLastRolloverElt);
 
     if (!pElt)
@@ -1918,21 +1919,27 @@ void TYPickEditor::showPanel(TYElement* pElt)
         pTYElementGraphic->setVisible();
 
         // Position dans la scene 3D
-        double worldPos[4];
-        displayToWorld(x, y, 0.0, worldPos);
+        QPoint curPos = _pModeler->getView()->mapFromGlobal(QCursor::pos());
+        // Calcul des coords
+        float* pos = new float[3];
+
+        if ( !(_pModeler->computeCurPos(curPos.x(), curPos.y(), pos)) ) { return ; }
+        double X=pos[0], Y=-pos[2], Z=pos[1];
+        delete [] pos;
+        
         switch (_pModeler->getCurrentView())
         {
             case TYModelerFrame::TopView:
-                pPanel->setFirstPos("X : " + doubleToStrPre(worldPos[0], 1));
-                pPanel->setSecondPos("Y : " + doubleToStrPre(-worldPos[2], 1));
+                pPanel->setFirstPos("X : " + doubleToStrPre(X, 1));
+                pPanel->setSecondPos("Y : " + doubleToStrPre(Y, 1));
                 break;
             case TYModelerFrame::LeftView:
-                pPanel->setFirstPos("Y : " + doubleToStrPre(-worldPos[2], 1));
-                pPanel->setSecondPos("Z : " + doubleToStrPre(worldPos[1], 1));
+                pPanel->setFirstPos("Y : " + doubleToStrPre(Y, 1));
+                pPanel->setSecondPos("Z : " + doubleToStrPre(Z, 1));
                 break;
             case TYModelerFrame::FrontView:
-                pPanel->setFirstPos("X : " + doubleToStrPre(worldPos[0], 1));
-                pPanel->setSecondPos("Z : " + doubleToStrPre(worldPos[1], 1));
+                pPanel->setFirstPos("X : " + doubleToStrPre(X, 1));
+                pPanel->setSecondPos("Z : " + doubleToStrPre(Z, 1));
                 break;
         }
 
@@ -1951,13 +1958,13 @@ void TYPickEditor::showPanel(TYElement* pElt)
            switch (_pModeler->getCurrentView())
             {
                 case TYModelerFrame::TopView:
-                    minDistSquare = std::sqrt(std::pow(coord._x - worldPos[0], 2) + std::pow(coord._y + worldPos[2], 2));
+                    minDistSquare = std::sqrt(std::pow(coord._x - X, 2) + std::pow(coord._y - Y, 2));
                     break;
                 case TYModelerFrame::LeftView:
-                    minDistSquare = std::sqrt(std::pow(coord._y + worldPos[2], 2) + std::pow(coord._z - worldPos[1], 2));
+                    minDistSquare = std::sqrt(std::pow(coord._y - Y, 2) + std::pow(coord._z - Z, 2));
                     break;
                 case TYModelerFrame::FrontView:
-                    minDistSquare = std::sqrt(std::pow(coord._x - worldPos[0], 2) + std::pow(coord._z - worldPos[1], 2));
+                    minDistSquare = std::sqrt(std::pow(coord._x - X, 2) + std::pow(coord._z - Z, 2));
                     break;
             }
 
@@ -1974,13 +1981,13 @@ void TYPickEditor::showPanel(TYElement* pElt)
             switch (_pModeler->getCurrentView())
             {
                 case TYModelerFrame::TopView:
-                    distSquare = std::sqrt(std::pow(coord._x - worldPos[0], 2) + std::pow(coord._y + worldPos[2], 2));
+                    distSquare = std::sqrt(std::pow(coord._x - X, 2) + std::pow(coord._y - Y, 2));
                     break;
                 case TYModelerFrame::LeftView:
-                    distSquare = std::sqrt(std::pow(coord._y + worldPos[2], 2) + std::pow(coord._z - worldPos[1], 2));
+                    distSquare = std::sqrt(std::pow(coord._y - Y, 2) + std::pow(coord._z - Z, 2));
                     break;
                 case TYModelerFrame::FrontView:
-                    distSquare = std::sqrt(std::pow(coord._x - worldPos[0], 2) + std::pow(coord._z - worldPos[1], 2));
+                    distSquare = std::sqrt(std::pow(coord._x - X, 2) + std::pow(coord._z - Z, 2));
                     break;
             }
 
