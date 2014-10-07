@@ -25,10 +25,12 @@
 #include <QLabel>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QCheckBox>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/topography/TYCourbeNiveau.h"
 #include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
+#include "Tympan/models/business/TYDefines.h"
 #include "TabPointsWidget.h"
 #include "TYCourbeNiveauWidget.h"
 
@@ -62,7 +64,14 @@ TYCourbeNiveauWidget::TYCourbeNiveauWidget(TYCourbeNiveau* pElement, QWidget* _p
 
     _groupBoxLayout->addWidget(_tabPoints, 0, 0);
 
+    // Gestion de la cloture de la courbe de niveau
+    _pClosedCheckBox = new QCheckBox();
+    _groupBoxLayout->addWidget(new QLabel(TR("id_closed_label")), 1, 0);
+    _groupBoxLayout->addWidget(_pClosedCheckBox, 1, 1);
+
     _courbeNiveauLayout->addWidget(_groupBox, 2, 0);
+
+
 
     // Choix de l'altitude de la courbe de niveau
     _groupBoxAlt = new QGroupBox(this);
@@ -136,6 +145,10 @@ void TYCourbeNiveauWidget::updateContent()
     // On reconnecte apres modification
     connect(_lineEditDistMax, SIGNAL(textChanged(const QString&)), this, SLOT(updateUseDefault()));
 
+    bool closed = dynamic_cast<TYCourbeNiveau *>(_pElement)->isClosed();
+    // If closed, remove the last point (== 1st point)
+    cleanTabPoints( dynamic_cast<TYCourbeNiveau *>(_pElement)->getListPoints(), closed );  
+    _pClosedCheckBox->setChecked( closed );
     _tabPoints->update();
 }
 
@@ -157,6 +170,15 @@ void TYCourbeNiveauWidget::apply()
     getElement()->setIsGeometryModified(true);
 
     _tabPoints->apply();
+
+    if ( _pClosedCheckBox->isChecked() )
+    { 
+        dynamic_cast<TYCourbeNiveau *>(_pElement)->close(true); 
+    }
+    else
+    {
+        dynamic_cast<TYCourbeNiveau *>(_pElement)->close(false);
+    }
 
     emit modified();
 }
@@ -180,4 +202,12 @@ void TYCourbeNiveauWidget::updateUseDefault()
 {
     // Recuperation de la valeur par defaut
     _statusDMax = true;
+}
+
+void TYCourbeNiveauWidget::cleanTabPoints(TYTabPoint &tabPts, bool closed)
+{
+    if (closed)
+    {
+        tabPts.pop_back();
+    }
 }

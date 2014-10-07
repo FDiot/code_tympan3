@@ -99,7 +99,7 @@ public:
     /**
      * Fermeture d'une courbe de niveau
      */
-    void close();
+    void close(bool closed);
 
     /**
      * Set/Get de l'_altitude.
@@ -168,6 +168,8 @@ public:
      */
     virtual void updateColor();
 
+    bool isClosed() const { return _closed; }
+
 
 
     // Membres
@@ -182,6 +184,9 @@ protected:
     double _altitude;
     ///Liste de points.
     TYTabPoint _listPoints;
+
+    /// close status
+    bool _closed;
 };
 
 
