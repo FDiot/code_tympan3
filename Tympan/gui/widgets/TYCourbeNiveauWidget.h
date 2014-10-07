@@ -29,6 +29,7 @@
 #define __TY_COURBENIVEAU_WIDGET__
 
 #include "TYWidget.h"
+#include "Tympan/models/business/TYDefines.h"
 #include <QGridLayout>
 
 class TYCourbeNiveau;
@@ -72,9 +73,14 @@ public slots:
     virtual void setDefaultValue();
 
     // Membres
+private :
+    // remove the last point when closed
+    void cleanTabPoints(TYTabPoint &tabPts, bool closed);
+
 protected:
     QGroupBox* _groupBox;
     TabPointsWidget *_tabPoints;
+    QCheckBox *_pClosedCheckBox;
 
     QGroupBox* _groupBoxAlt;
     QLabel* _labelAltitude;

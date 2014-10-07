@@ -30,9 +30,10 @@ TY_EXT_GRAPHIC_INST(TYCourbeNiveau);
 
 /*static*/ double TYCourbeNiveau::_defaultDistMax = setDefaultDistMax();
 
-TYCourbeNiveau::TYCourbeNiveau() :  _isDMaxDefault(false),
-    _altitude(0.0)
-
+TYCourbeNiveau::TYCourbeNiveau() :  
+    _isDMaxDefault(false),
+    _altitude(0.0), 
+    _closed(false)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -52,6 +53,7 @@ TYCourbeNiveau::TYCourbeNiveau(const TYTabPoint& pts, double alt)
     setAltitude(alt);
     _distMax = _defaultDistMax;
     _isDMaxDefault = false;
+    _closed = false;
 
     updateColor();
 }
@@ -67,6 +69,7 @@ TYCourbeNiveau& TYCourbeNiveau::operator=(const TYCourbeNiveau& other)
         TYElement::operator =(other);
         TYColorInterface::operator =(other);
         _altitude = other._altitude;
+        _closed = other._closed;
         _listPoints = other._listPoints;
     }
     return *this;
@@ -79,6 +82,7 @@ bool TYCourbeNiveau::operator==(const TYCourbeNiveau& other) const
         if (TYElement::operator !=(other)) { return false; }
         if (TYColorInterface::operator !=(other)) { return false; }
         if (_altitude != other._altitude) { return false; }
+        if (_closed != other._closed ) { return false; }
         if (!(_listPoints == other._listPoints)) { return false; }
     }
     return true;
@@ -98,6 +102,8 @@ bool TYCourbeNiveau::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     TYCourbeNiveau* pOtherCrbNiv = (TYCourbeNiveau*) pOther;
 
     _altitude = pOtherCrbNiv->_altitude;
+
+    _closed = pOtherCrbNiv->_closed;
 
     _listPoints.clear();
     for (unsigned int i = 0; i < pOtherCrbNiv->_listPoints.size(); i++)
@@ -122,6 +128,7 @@ DOM_Element TYCourbeNiveau::toXML(DOM_Element& domElement)
     TYColorInterface::toXML(domNewElem);
 
     TYXMLTools::addElementDoubleValue(domNewElem, "altitude", _altitude);
+    TYXMLTools::addElementBoolValue(domNewElem, "closed", _closed);
 
     if (_isDMaxDefault == true) // Si on utilise une valeur specifique, on l'enregistre
     {
@@ -144,9 +151,11 @@ int TYCourbeNiveau::fromXML(DOM_Element domElement)
 
     TYColorInterface::fromXML(domElement);
 
+    _closed = false;
     _listPoints.clear();
 
     bool altitudeOk = false;
+    bool closedOk = false;
     bool nbPointsOk = false;
     bool distMaxOk = false;
     int nbPoints = 0;
@@ -158,6 +167,7 @@ int TYCourbeNiveau::fromXML(DOM_Element domElement)
     {
         elemCur = childs.item(i).toElement();
         TYXMLTools::getElementDoubleValue(elemCur, "altitude", _altitude, altitudeOk);
+        TYXMLTools::getElementBoolValue(elemCur, "closed", _closed, closedOk);
         TYXMLTools::getElementDoubleValue(elemCur, "distmaxpts", _distMax, distMaxOk);
         TYXMLTools::getElementIntValue(elemCur, "nbPoints", nbPoints, nbPointsOk);
         if (nbPointsOk)
@@ -213,12 +223,24 @@ void TYCourbeNiveau::setListPoints(const TYTabPoint& pts)
     }
 }
 
-void TYCourbeNiveau::close()
+void TYCourbeNiveau::close(bool closed)
 {
-    if (_listPoints.size() == 0) { return; }
+    if (_listPoints.size() < 3) 
+    { 
+        _closed = false; 
+        return; 
+    }
 
     // Fermeture de la courbe en ajoutant le premier point a la fin de la liste
-    _listPoints.push_back(_listPoints[0]);
+    if (closed)
+    {
+        _listPoints.push_back(_listPoints[0]);
+        _closed = true;
+    }
+    else
+    {
+        _closed = false;
+    }
 }
 
 void TYCourbeNiveau::setAltitude(double alt)

@@ -1912,6 +1912,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_x" value="X"/>
 			<string id="id_y" value="Y"/>
 			<string id="id_z" value="Z"/>
+			<string id="id_closed_label" value="Close"/>
 			<string id="id_tabpt" value="Points List"/>
 		</message>
 	</class>

@@ -18,7 +18,6 @@ TabPointsWidget::TabPointsWidget(TYTabPoint& listPoints, QWidget *parent) : QTab
     stringList.append("Z");
 
     setHorizontalHeaderLabels(stringList);
-	setRowCount( _listPoints.size() );
 
     setSelectionBehavior(QAbstractItemView::SelectRows);
 	
@@ -30,6 +29,8 @@ void TabPointsWidget::update()
 	// Filling the table
     disconnect ( this, SIGNAL( cellChanged(int, int) ), this, SLOT(tabValueChanged(int, int)) );
 
+    clearContents();
+    setRowCount( _listPoints.size() );
     for (size_t row = 0; row < _listPoints.size(); row++)
     {
         setItem(row, 0, new QTableWidgetItem((QString().setNum(_listPoints[row]._x, 'f', 2))));

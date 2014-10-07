@@ -1917,6 +1917,7 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_x" value="X"/>
 			<string id="id_y" value="Y"/>
 			<string id="id_z" value="Z"/>
+			<string id="id_closed_label" value="Fermer"/>
 			<string id="id_tabpt" value="Liste des points"/>
 		</message>
 	</class>
