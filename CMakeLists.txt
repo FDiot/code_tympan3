@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 
 set(${PROJECT_NAME}_VERSION_MAJOR 3)
 set(${PROJECT_NAME}_VERSION_MINOR 9)
-set(${PROJECT_NAME}_VERSION_PATCH 0)
+set(${PROJECT_NAME}_VERSION_PATCH 1)
 
 if (${CMAKE_VERSION} VERSION_GREATER 2.8.4)
   # This is necessary as of CMake version 2.8.8
