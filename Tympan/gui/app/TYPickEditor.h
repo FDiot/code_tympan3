@@ -102,6 +102,8 @@ protected slots:
     void showPanel(TYElement* pElt);
     void hidePanel(TYElement* pElt);
 
+private : 
+    bool realWorldPosition(OPoint3D& pt);
 
 protected:
     ///Le picker du modeler.

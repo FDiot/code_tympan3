@@ -346,3 +346,101 @@ void TYCourbeNiveau::setIsDMaxDefault(const bool& etat)
     setColor(color);
 }
 
+TYTabPoint::iterator TYCourbeNiveau::getPointRef(const TYPoint& pt)
+{
+    double distance = 1.E9, dist_tmp = 0.0;
+    TYTabPoint::iterator iterRet = _listPoints.begin();
+    for (TYTabPoint::iterator iter = _listPoints.begin(); iter != _listPoints.end(); iter++)
+    {
+        dist_tmp = (*iter).distFrom(pt);
+        if (dist_tmp < distance)
+        {
+            distance = dist_tmp;
+            iterRet = iter;
+        }
+    }
+
+    return iterRet;
+}
+
+LPTYCourbeNiveau TYCourbeNiveau::split(const TYPoint& pt)
+{
+    LPTYCourbeNiveau pCurve = nullptr;
+
+    // find an iterator to the closest point
+    TYTabPoint::iterator iterP = getPointRef(pt);
+    if (iterP._Ptr == nullptr) { return pCurve; } 
+
+    // Cas d'une courbe fermee
+    if ( _closed )
+    {
+        // The the curve is restructured putting pt at begin and opening the curve
+        restructure(iterP);
+        _closed = false;
+        return pCurve; // nulle à ce stade
+    }
+    
+    // Cas d'une courbe ouverte
+    // pt est le dernier point de la liste
+    //      --> on supprime le dernier point
+    //      --> la nouvelle courbe n'est pas crée
+    TYTabPoint::iterator iterLast = _listPoints.end();
+    iterLast--;
+    if (iterP == iterLast) 
+    { 
+        _listPoints.erase(iterLast);
+        return pCurve; // nulle à ce stade
+    } 
+
+    pCurve = new TYCourbeNiveau();
+    pCurve->setParent(_pParent);
+
+    // On recopie tous les points à partir du point suivant le point donne
+    TYTabPoint::iterator iter = iterP;
+    while( iter != _listPoints.end() )
+    {
+        pCurve->addPoint( (*iter) );
+        iter = _listPoints.erase(iter);
+    }
+
+    // 2 cas
+    // 1. le point pt etait le 1er ou le 2eme
+    //      --> la courbe resultat = la courbe initiale (pt = 1er point)
+    //      --> le resultat est la courbe initiale moins le 1er (pt = 2eme point)
+    //      --> la nouvelle courbe remplace la courbe initiale
+    // 2. le point pt etait le dernier
+    //      --> la courbe resultat est vide
+    if (_listPoints.size() < 2)
+    {
+        setListPoints( pCurve->getListPoints() );
+        pCurve._pObj = nullptr;
+    }
+    else if (pCurve->getListPoints().size() == 0)
+    {
+        pCurve._pObj = nullptr;
+    }
+
+    return pCurve;
+}
+
+void TYCourbeNiveau::restructure(TYTabPoint::iterator itPt)
+{
+    if ( !_closed ) { return; }
+    
+    TYTabPoint tab;
+
+    // On part du point jusqu'à la fin de la liste de points
+    for (TYTabPoint::iterator it=itPt; it!=_listPoints.end(); it++)
+    {
+        tab.push_back( (*it) );
+    }
+
+    // On ajoute ensuite les points à partir du 2nd (le 1er etant identique au dernier !)
+    // jusqu'au point (non inclu)
+    for (TYTabPoint::iterator it=++_listPoints.begin(); it!=itPt; it++)
+    {
+        tab.push_back( (*it) );
+    }
+
+    _listPoints = tab;
+}

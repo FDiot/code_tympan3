@@ -272,12 +272,10 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
     QAction* hauteurEcran = NULL;
     QAction* epaisseurEcran = NULL;
     QAction* editFace = NULL;
-    QAction* showModelerSite = NULL;
-    QAction* showModelerMachine = NULL;
-    QAction* showModelerBatiment = NULL;
     QAction* code = NULL;
     QAction* inverseNormales = NULL;
-    int etageFound = -2, ecranFound = -2, rectFound = -2, volumeFound = -2;
+    QAction* split = NULL;
+    int etageFound = -2, ecranFound = -2, rectFound = -2, volumeFound = -2, levelCurveFound = -2;
 
     for (unsigned int i = 0; i < pElts->size(); i++)
     {
@@ -306,12 +304,6 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             // Calcul acoustique
             code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_calcul"))), TR("id_popup_calculer"));
             calculVolNodeRetCodes[code] = (LPTYAcousticVolumeNode&) pElts->at(i);
-
-            // Si on est dans un modeleur de site/projet, on permet d'ouvrir un modeleur
-            if (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0)
-            {
-                pSelected = pElts->at(i);
-            }
 
             if ((i + 1 < pElts->size()) &&
                     (dynamic_cast<TYInfrastructure*>(pElts->at(i + 1)._pObj) != nullptr))
@@ -525,6 +517,12 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                 remPtControlRetCodes[code] = (LPTYPointControl&) pElts->at(i);
             }
         }
+        else if (dynamic_cast<TYCourbeNiveau*>(pElts->at(i)._pObj) != nullptr)
+        {
+            split = pPopup->addAction(TR("id_popup_split"));
+            levelCurveFound = i;
+        }
+
         // Site
         else if (dynamic_cast<TYSiteNode*>(pElts->at(i)._pObj) != nullptr)
         {
@@ -707,24 +705,50 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
         pFaceMdF->showMaximized();
         pFaceMdF->fit();
     }
-    else if (popupRet == showModelerMachine)
-    {
-        getTYMainWnd()->makeMachineModeler((TYMachine*) pSelected);
-        getTYMainWnd()->updateModelers();
-    }
-    else if (popupRet == showModelerBatiment)
-    {
-        getTYMainWnd()->makeBatimentModeler((LPTYBatiment&) pSelected);
-    }
-    else if (popupRet == showModelerSite)
-    {
-        getTYMainWnd()->makeSiteModeler((TYSiteNode*) pSelected);
-    }
     else if (popupRet == inverseNormales)
     {
         TYAcousticVolume* pVol = TYAcousticVolume::safeDownCast(pElts->at(volumeFound));
         if (pVol) { pVol->inverseNormales(); }
         pVol->setNormalStatus();
+    }
+    else if (popupRet == split)
+    {
+        OPoint3D pt;
+        if ( realWorldPosition(pt) )
+        {
+            TYCourbeNiveau *pCurrentCurve = dynamic_cast<TYCourbeNiveau*>( pElts->at(levelCurveFound)._pObj );
+            TYTopographie* pTopo = dynamic_cast<TYTopographie*>(pCurrentCurve->getParent());
+
+            if (pCurrentCurve != nullptr)
+            {
+                LPTYCourbeNiveau newCurve = pCurrentCurve->split(pt);
+                if (newCurve._pObj != nullptr)
+                {
+                    // Copie du geonode de l'actuelle courbe
+                    TYGeometryNode *pCurrentGeoNode = TYGeometryNode::GetGeoNode(pCurrentCurve);
+                    LPTYGeometryNode pNewGeoNode = new TYGeometryNode();
+                    pNewGeoNode->deepCopy(pCurrentGeoNode, false);
+
+                    // Association du geonode avec la nouvelle courbe
+                    pNewGeoNode->setElement( (LPTYElement) newCurve);
+
+                    // Ajout de la nouvelle courbe au projet
+                    if (pTopo != nullptr)
+                    {
+                        pTopo->addCrbNiv(pNewGeoNode);
+                    }
+
+                    pAddedElt = (LPTYElement) newCurve;
+                }
+
+                bUpdateDisplayList = true; // DT++
+                pTopo->updateGraphicTree();
+                pTopo->updateGraphic();
+                updateSiteFrame();
+                // La scene a ete modifiee
+                TYElement::setIsSavedOk(true);
+            }
+        }
     }
     else if (retCodes.find(popupRet) != retCodes.end())
     {
@@ -1896,7 +1920,6 @@ void TYPickEditor::showDimensionsDialog(TYAcousticVolume* pAccVol)
 
 void TYPickEditor::showPanel(TYElement* pElt)
 {
-    _pModeler->updateView();
     hidePanel(_pLastRolloverElt);
 
     if (!pElt)
@@ -1907,25 +1930,20 @@ void TYPickEditor::showPanel(TYElement* pElt)
     LPTYMaillage pMaillage = dynamic_cast<TYMaillage*>(pElt);
     if (pMaillage != nullptr)
     {
-        double x = _lastMovedCurPos.x();
-        double y = _pInteractor->height() - _lastMovedCurPos.y();
-
         LPTYPanel pPanel = pMaillage->getPanel();
 
-        // Position du curseur
+        // Position du curseur (repere modeleur)
+        double x = _lastMovedCurPos.x();
+        double y = _pInteractor->height() - _lastMovedCurPos.y();
         TYElementGraphic* pTYElementGraphic = pPanel->getGraphicObject();
         ((TYPanelGraphic*)pTYElementGraphic)->setPosX(x);
         ((TYPanelGraphic*)pTYElementGraphic)->setPosY(y);
         pTYElementGraphic->setVisible();
 
-        // Position dans la scene 3D
-        QPoint curPos = _pModeler->getView()->mapFromGlobal(QCursor::pos());
-        // Calcul des coords
-        float* pos = new float[3];
-
-        if ( !(_pModeler->computeCurPos(curPos.x(), curPos.y(), pos)) ) { return ; }
-        double X=pos[0], Y=-pos[2], Z=pos[1];
-        delete [] pos;
+        // Position dans le repère "monde"
+        OPoint3D pt;
+        if ( realWorldPosition(pt) == false ) { return ; }
+        double X=pt._x, Y=pt._y, Z=pt._z;
         
         switch (_pModeler->getCurrentView())
         {
@@ -2045,3 +2063,27 @@ void TYPickEditor::hidePanel(TYElement* pElt)
     }
 }
 
+bool TYPickEditor::realWorldPosition(OPoint3D& pt)
+{
+    dynamic_cast<TYModelerFrame*>(_pModeler)->updateView();
+
+    // Position dans la scene 3D
+    QPoint curPos = _lastPressedCurPos;
+
+    // Calcul des coords
+    float* pos = new float[3];
+
+    if ( !(_pModeler->computeCurPos(curPos.x(), curPos.y(), pos)) ) 
+    { 
+        delete [] pos;
+        return false; 
+    }
+
+    pt._x = pos[0];
+    pt._y = -pos[2]; 
+    pt._z = pos[1];
+    
+    delete [] pos;
+
+    return true;
+}

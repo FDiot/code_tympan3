@@ -69,6 +69,7 @@ public:
 public slots:
     virtual void updateContent();
     virtual void apply();
+    virtual void reject();
     virtual void updateUseDefault();
     virtual void setDefaultValue();
 

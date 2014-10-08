@@ -350,6 +350,7 @@ bool TYGeometryNode::operator!=(const TYGeometryNode& other) const
 
 bool TYGeometryNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
+    TYElement::deepCopy(pOther, copyId);
     TYGeometryNode* pOtherGeoNode = NULL;
     if (pOther) { pOtherGeoNode = (TYGeometryNode*) pOther; }
     if (!pOtherGeoNode || !pOtherGeoNode->getElement()) { return false; }
