@@ -268,6 +268,9 @@ void TYBoundaryNoiseMapEditor::dialogConfirmed(double height, double thickness, 
                 pCalcul->updateAltiMaillage(pBoundaryNoiseMapGeoNode);
             }
             pBoundaryNoiseMap->updateGraphicTree();
+
+            _pModeler->updateView();
+            dynamic_cast<TYSiteModelerFrame *>(_pModeler)->updateSelectMaillageBox();
         }
     }
 }

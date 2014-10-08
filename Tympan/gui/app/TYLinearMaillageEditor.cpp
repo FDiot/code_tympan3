@@ -299,6 +299,7 @@ void TYLinearMaillageEditor::slotMouseReleased(int x, int y, Qt::MouseButton but
         _pModeler->getView()->getRenderer()->updateDisplayList();
 
         _pModeler->updateView();
+        dynamic_cast<TYSiteModelerFrame *>(_pModeler)->updateSelectMaillageBox();
 
         TYApplication::restoreOverrideCursor();
     }

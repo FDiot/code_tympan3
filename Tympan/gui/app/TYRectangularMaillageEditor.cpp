@@ -293,6 +293,7 @@ void TYRectangularMaillageEditor::slotMouseReleased(int x, int y, Qt::MouseButto
         refreshProjectFrame();
         _pModeler->getView()->getRenderer()->updateDisplayList();
         _pModeler->updateView();
+        dynamic_cast<TYSiteModelerFrame *>(_pModeler)->updateSelectMaillageBox();
 
         TYApplication::restoreOverrideCursor();
     }

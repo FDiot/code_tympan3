@@ -454,8 +454,6 @@ void TYSiteModelerFrame::updateView(bool clipping /*=true*/, bool axesAndGrid /*
 {
     // Appel de la methode parent
     TYModelerFrame::updateView(clipping, axesAndGrid);
-
-    updateSelectMaillageBox();
 }
 
 void TYSiteModelerFrame::showCrbNiv(bool show)
