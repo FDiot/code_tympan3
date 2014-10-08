@@ -183,6 +183,15 @@ void TYCourbeNiveauWidget::apply()
     emit modified();
 }
 
+void TYCourbeNiveauWidget::reject()
+{
+    TYCourbeNiveau* pCourbe = dynamic_cast<TYCourbeNiveau *>(_pElement);
+    if ( (pCourbe != nullptr) && (pCourbe->isClosed()) )
+    {
+        pCourbe->close(true);
+    }
+}
+
 void TYCourbeNiveauWidget::setDefaultValue()
 {
     // On deconnecte la detection de modification du texte

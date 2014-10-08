@@ -935,6 +935,7 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_action_resizecyl" value="Redimensionner le cylindre"/>
 			<string id="id_action_resizesemicyl" value="Redimensionner le demi-cylindre"/>
 			<string id="id_popup_normales" value="Inverser les normales"/>
+			<string id="id_popup_split" value="Couper à ce point"/>
 		</message>
 		<picture>
 			<image id="id_icon_editeelt" value="property.png"/>

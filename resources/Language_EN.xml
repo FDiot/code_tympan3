@@ -934,6 +934,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_action_resizecyl" value="Resize cylinder"/>
 			<string id="id_action_resizesemicyl" value="Resize half-cylinder"/>
 			<string id="id_popup_normales" value="Reverse normals"/>
+			<string id="id_popup_split" value="Cut at this point"/>
 		</message>
 		<picture>
 			<image id="id_icon_editeelt" value="property.png"/>

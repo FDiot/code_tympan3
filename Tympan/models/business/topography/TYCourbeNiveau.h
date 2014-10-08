@@ -170,7 +170,18 @@ public:
 
     bool isClosed() const { return _closed; }
 
+    /*!
+     * \brief return an iterator to the curve point closest to the point passed 
+     */
+    TYTabPoint::iterator getPointRef(const TYPoint& pt);
 
+    /*!
+     * \brief return a new level curve by spliting the actual one at indicated point
+     */
+    LPTYCourbeNiveau split(const TYPoint& pt);
+
+private:
+    void restructure(TYTabPoint::iterator itPt);
 
     // Membres
 protected:
