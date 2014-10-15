@@ -96,13 +96,36 @@ public slots:
 
 protected slots:
     virtual void showPopupMenu(std::shared_ptr<LPTYElementArray> pElts);
-    void showPositionDialog(TYGeometryNode* pGeoNode);
+    void showPositionDialog(TYGeometryNode* pGeoNode, bool activeHeight);
     void showRotationDialog(TYGeometryNode* pGeoNode);
     void showDimensionsDialog(TYAcousticVolume* pAccVol);
     void showPanel(TYElement* pElt);
     void hidePanel(TYElement* pElt);
 
 private : 
+    void siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts);
+    void machineModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts);
+    void batimentModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts);
+    void manageProperties(TYElement *pElement);
+    void copySite(TYElement *pElement);
+    void remSite(TYElement *pElement);
+    void splitCurve(TYElement *pElement);
+    void copyMaillage(TYElement *pElement);
+    void remMaillage(TYElement *pElement);
+    void copyPtCtrl(TYElement *pElement);
+    void remPtCtrl(TYElement *pElement);
+    void remTopoElmt(TYElement *pElement);
+    void copyTopoElmt(TYElement *pElement); 
+    void remInfraElmt(TYElement *pElement);
+    void copyInfraElmt(TYElement *pElement);
+    void setVolumeSize(TYElement *pElement);
+    void removeVolume(TYElement *pElement);
+    void copyVolume(TYElement *pElement);
+    void openFaceModeler(TYElement *pElement);
+    void inverseNormal(TYElement *pElement);
+    void floorHeight(TYElement *pElement);
+    void screenHeight(TYElement *pElement);
+    void screenThick(TYElement *pElement);
     bool realWorldPosition(OPoint3D& pt);
 
 protected:

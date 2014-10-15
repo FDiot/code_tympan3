@@ -138,7 +138,7 @@ void TYFaceModelerPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pE
     }
     else if (posRetCodes.find(popupRet) != posRetCodes.end())
     {
-        showPositionDialog(posRetCodes[popupRet]);
+        showPositionDialog(posRetCodes[popupRet], false);
         if (pParent) { pParent->updateGrid(); }
     }
     else if (remAccRectRetCodes.find(popupRet) != remAccRectRetCodes.end())
