@@ -87,10 +87,12 @@ bool TYAcousticSurfaceNode::deepCopy(const TYElement* pOther, bool copyId /*=tru
     {
         TYAcousticSurface* pNewChild = (TYAcousticSurface*) pOtherAccSurfNode->getAcousticSurf(i)->clone();
         pNewChild->deepCopy(pOtherAccSurfNode->getAcousticSurf(i), copyId);
+        pNewChild->setParent(this);
         addAcousticSurf(pNewChild, pOtherAccSurfNode->_tabAcousticSurf[i]->getORepere3D());
     }
 
     _pBoundingRect->deepCopy(pOtherAccSurfNode->_pBoundingRect, copyId);
+    _pBoundingRect->setParent(this);
 
     return true;
 }
@@ -606,7 +608,9 @@ void TYAcousticSurfaceNode::setRegimeName(const QString& name)
 
 bool TYAcousticSurfaceNode::addAcousticSurf(LPTYAcousticSurface pAccSurf, const TYRepere& repere)
 {
-    return addAcousticSurf(new TYAcousticSurfaceGeoNode(repere, (LPTYElement) pAccSurf));
+    TYAcousticSurfaceGeoNode *pSurfGeoNode = new TYAcousticSurfaceGeoNode( repere, (LPTYElement) pAccSurf );
+    pSurfGeoNode->setParent(pAccSurf->getParent());
+    return addAcousticSurf(pSurfGeoNode);
 }
 
 bool TYAcousticSurfaceNode::addAcousticSurf(LPTYAcousticSurface pAccSurf)

@@ -90,6 +90,8 @@ bool TYInfrastructure::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYRouteGeoNode pRouteGeoNode = new TYRouteGeoNode(NULL, this);
         pRouteGeoNode->deepCopy(pOtherInfra->_listRoute[i], copyId);
+        pRouteGeoNode->getElement()->setParent(this);
+        pRouteGeoNode->setParent(this);
         addRoute(pRouteGeoNode);
     }
 
@@ -98,6 +100,8 @@ bool TYInfrastructure::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYReseauTransportGeoNode pResTransGeoNode = new TYReseauTransportGeoNode(NULL, this);
         pResTransGeoNode->deepCopy(pOtherInfra->_listResTrans[i], copyId);
+        pResTransGeoNode->getElement()->setParent(this);
+        pResTransGeoNode->setParent(this);
         addResTrans(pResTransGeoNode);
     }
 
@@ -106,6 +110,8 @@ bool TYInfrastructure::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYBatimentGeoNode pBatGeoNode = new TYBatimentGeoNode(NULL, this);
         pBatGeoNode->deepCopy(pOtherInfra->_listBatiment[i], copyId);
+        pBatGeoNode->getElement()->setParent(this);
+        pBatGeoNode->setParent(this);
         addBatiment(pBatGeoNode);
     }
 
@@ -114,6 +120,8 @@ bool TYInfrastructure::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYMachineGeoNode pMachineGeoNode = new TYMachineGeoNode(NULL, this);
         pMachineGeoNode->deepCopy(pOtherInfra->_listMachine[i], copyId);
+        pMachineGeoNode->getElement()->setParent(this);
+        pMachineGeoNode->setParent(this);
         addMachine(pMachineGeoNode);
     }
 
@@ -122,6 +130,8 @@ bool TYInfrastructure::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYSourcePonctuelleGeoNode pSrcGeoNode = new TYSourcePonctuelleGeoNode(NULL, this);
         pSrcGeoNode->deepCopy(pOtherInfra->_listSrc[i], copyId);
+        pSrcGeoNode->getElement()->setParent(this);
+        pSrcGeoNode->setParent(this);
         addSrc(pSrcGeoNode);
     }
 
