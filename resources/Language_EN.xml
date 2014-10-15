@@ -2266,6 +2266,18 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="TYUserSrcRegime" value="Working Cond."/>
 		</message>
 	</class>
+	<class name="TYDimensionDialog">
+		<message>
+			<string id="id_caption" value="Sizes"/>
+			<string id="id_x_label" value="X"/>
+			<string id="id_y_label" value="Y"/>
+			<string id="id_z_label" value="Z"/>
+			<string id="id_diameter_label" value="Diameter"/>
+			<string id="id_hauteur_label" value="Height"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Cancel"/>
+		</message>
+	</class>
 	<class name="TYPositionDialog">
 		<message>
 			<string id="id_caption" value="Position"/>
