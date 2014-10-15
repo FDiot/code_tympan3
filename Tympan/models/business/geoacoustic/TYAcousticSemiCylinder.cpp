@@ -127,9 +127,13 @@ bool TYAcousticSemiCylinder::deepCopy(const TYElement* pOther, bool copyId /*=tr
     TYAcousticSemiCylinder* pOtherSemiCyl = (TYAcousticSemiCylinder*) pOther;
 
     _pEnveloppe->deepCopy(pOtherSemiCyl->_pEnveloppe, copyId);
+    _pEnveloppe->setParent(this);
     _pAccRect->deepCopy(pOtherSemiCyl->_pAccRect, copyId);
+    _pAccRect->setParent(this);
     _pSemiCircTop->deepCopy(pOtherSemiCyl->_pSemiCircTop, copyId);
+    _pSemiCircTop->setParent(this);
     _pSemiCircBottom->deepCopy(pOtherSemiCyl->_pSemiCircBottom, copyId);
+    _pSemiCircBottom->setParent(this);
 
     _volEnglob = volEnglob();
     calculRayonSphere(_volEnglob);

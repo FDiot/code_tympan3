@@ -138,7 +138,6 @@ bool TYTopographie::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     TYTopographie* pOtherTopo = (TYTopographie*) pOther;
 
     _DefTerrainIdx = pOtherTopo->_DefTerrainIdx;
-    _pAltimetrie->deepCopy(pOtherTopo->_pAltimetrie, copyId);
 
     _listCrbNiv.clear();
     unsigned int i;
@@ -146,6 +145,8 @@ bool TYTopographie::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYCourbeNiveauGeoNode pCrbNivGeoNode = new TYCourbeNiveauGeoNode(NULL, this);
         pCrbNivGeoNode->deepCopy(pOtherTopo->_listCrbNiv[i], copyId);
+        pCrbNivGeoNode->getElement()->setParent(this);
+        pCrbNivGeoNode->setParent(this);
         _listCrbNiv.push_back(pCrbNivGeoNode);
     }
 
@@ -154,6 +155,8 @@ bool TYTopographie::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYTerrainGeoNode pTerrainGeoNode = new TYTerrainGeoNode(NULL, this);
         pTerrainGeoNode->deepCopy(pOtherTopo->_listTerrain[i], copyId);
+        pTerrainGeoNode->getElement()->setParent(this);
+        pTerrainGeoNode->setParent(this);
         _listTerrain.push_back(pTerrainGeoNode);
     }
 
@@ -162,6 +165,8 @@ bool TYTopographie::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYCoursEauGeoNode pCrsEauGeoNode = new TYCoursEauGeoNode(NULL, this);
         pCrsEauGeoNode->deepCopy(pOtherTopo->_listCrsEau[i], copyId);
+        pCrsEauGeoNode->getElement()->setParent(this);
+        pCrsEauGeoNode->setParent(this);
         _listCrsEau.push_back(pCrsEauGeoNode);
     }
 
@@ -170,6 +175,8 @@ bool TYTopographie::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYPlanEauGeoNode pPlanEauGeoNode = new TYPlanEauGeoNode(NULL, this);
         pPlanEauGeoNode->deepCopy(pOtherTopo->_listPlanEau[i], copyId);
+        pPlanEauGeoNode->getElement()->setParent(this);
+        pPlanEauGeoNode->setParent(this);
         _listPlanEau.push_back(pPlanEauGeoNode);
     }
 
