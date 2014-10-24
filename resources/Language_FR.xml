@@ -935,6 +935,7 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_action_resizecyl" value="Redimensionner le cylindre"/>
 			<string id="id_action_resizesemicyl" value="Redimensionner le demi-cylindre"/>
 			<string id="id_popup_normales" value="Inverser les normales"/>
+			<string id="id_popup_split" value="Couper à ce point"/>
 		</message>
 		<picture>
 			<image id="id_icon_editeelt" value="property.png"/>
@@ -1039,9 +1040,9 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_action_addroutedeblai" value="Nouvelle route avec calcul de déblai"/>
 		</message>
 	</class>
-	<class name="TYSolEditor">
+	<class name="TYTerrainEditor">
 		<message>
-			<string id="id_action_addsol" value="Nouveau sol"/>
+			<string id="id_action_addsol" value="Nouveau terrain"/>
 		</message>
 	</class>
 	<class name="TYSourseEditor">
@@ -1215,6 +1216,13 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_apply_btn" value="Appliquer"/>
 		</message>
 	</class>
+	<class name="TabPointsWidget">
+		<message>
+			<string id="id_insert_row_item" value="Insérer un point"/>
+			<string id="id_append_row_item" value="Ajoute un point"/>
+			<string id="id_delete_row_item" value="Supprimer un point"/>
+		</message>
+	</class>
 	<class name="TYAtmosphereWidget">
 		<message>
 			<string id="id_pression_label" value="Pression"/>
@@ -1261,12 +1269,9 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_epaisseur_label" value="Epaisseur"/>
 			<string id="id_unite_resistivite" value="kRayl"/>
 			<string id="id_unite_epaisseur" value="m"/>
-			<string id="id_vegetactive_label" value="Végétation active"/>
 			<string id="id_spectreimp" value="Spectre d'impédance"/>
-			<string id="id_vegetation" value="Végétation"/>
 			<string id="id_proprietes_button" value="Propriétés"/>
 			<string id="id_edit_resistivite" value="Choisir..."/>
-			<string id="id_get_from_bdd" value="Import BDD"/>
 		</message>
 	</class>
 	<class name="TYSolResistanceDialog">
@@ -1886,6 +1891,8 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_y" value="Y"/>
 			<string id="id_z" value="Z"/>
 			<string id="id_tabpt" value="Liste des points"/>
+			<string id="id_vegetation" value="Végétation"/>
+			<string id="id_vegetactive_label" value="Végétation active"/>
 			<string id="id_proprietes_button" value="Propriétés"/>
 		</message>
 	</class>
@@ -1911,6 +1918,7 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_x" value="X"/>
 			<string id="id_y" value="Y"/>
 			<string id="id_z" value="Z"/>
+			<string id="id_closed_label" value="Fermer"/>
 			<string id="id_tabpt" value="Liste des points"/>
 		</message>
 	</class>
@@ -2263,6 +2271,18 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="TYRegime" value="Régime"/>
 			<string id="TYScalarBar" value="Barre de légende"/>
 			<string id="TYUserSrcRegime" value="Régime"/>
+		</message>
+	</class>
+	<class name="TYDimensionDialog">
+		<message>
+			<string id="id_caption" value="Dimensions"/>
+			<string id="id_x_label" value="X"/>
+			<string id="id_y_label" value="Y"/>
+			<string id="id_z_label" value="Z"/>
+			<string id="id_diameter_label" value="Diamètre"/>
+			<string id="id_hauteur_label" value="Hauteur"/>
+			<string id="id_ok_btn" value="Valider"/>
+			<string id="id_cancel_btn" value="Annuler"/>
 		</message>
 	</class>
 	<class name="TYPositionDialog">

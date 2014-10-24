@@ -25,7 +25,7 @@ Tests are divided into different folders:
   - `SolverDataModel`: test entities and relations which occur in the data model
     related to the solver part.
 
-  - `test_utils`: Classes and functions used in some test cases (load an XML
+  - `testutils`: Classes and functions used in some test cases (load an XML
     project file for instance). Useful when you would like to factorize some
     code which occurres in several places. Contain a folder `tests` which tests
     just these classes & functions.

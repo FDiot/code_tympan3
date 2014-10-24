@@ -1,7 +1,4 @@
-project(TYMPAN_Python)
-cmake_minimum_required(VERSION 2.8.5)
-
-set(CURRENT_FOLDER "Python")
+set(CURRENT_FOLDER "python")
 
 find_package(PythonInterp REQUIRED)
 # Cython integration adapted from https://github.com/thewtex/cython-cmake-example/
@@ -11,15 +8,11 @@ include(UseCython)
 
 include(tympan-utils-python)
 
-set(TYMPAN_PythonModules         "pymodules")
-set(TYMPAN_CythonModules_Debug   "cython_d")
-set(TYMPAN_CythonModules_Release "cython")
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories (${GTEST_INCLUDE_DIR})
 
-# Process the CMakeLists.txt in the 'src' subdirectory.
-add_subdirectory( src )
+add_subdirectory( tympan )
+add_subdirectory( bin )
 
 # Process the CMakeLists.txt in the 'tests' subdirectory.
 add_subdirectory( tests )
