@@ -13,12 +13,16 @@ include(tympan-build-options NO_POLICY_SCOPE)
 # Detect and handle the platform
 include(tympan-platform)
 include(tympan-utils) 
+
+set(TYMPAN_PythonModules         "python")
+set(TYMPAN_CythonModules_Debug   "cython_d")
+set(TYMPAN_CythonModules_Release "cython")
+
 # This file configures the dependencies of Code_TYMPAN 
 include(tympan-deps)
 
 include_directories(${CMAKE_SOURCE_DIR})
 include_directories(${CMAKE_BINARY_DIR})
-
 # Recurse into main sources directory...
 add_subdirectory(Tympan)
 

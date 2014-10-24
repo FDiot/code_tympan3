@@ -13,7 +13,7 @@
 
 #include <QDir>
 
-#include "TympanTestsConfig.hpp"
+#include "TympanTestsConfig.h"
 
 using std::cout;
 using std::cerr;
@@ -25,6 +25,15 @@ TEST(TestEnvironment, Path)
     ASSERT_FALSE(path == NULL);
     cout << "PATH = " << path << endl;
 }
+
+TEST(TestEnvironment, LdPath)
+{
+    char* path = std::getenv("LD_LIBRARY_PATH");
+    if(path == NULL)
+        path = "";
+    cout << "LD_LIBRARY_PATH = " << path << endl;
+}
+
 
 TEST(TestEnvironment, TestDataPath)
 {

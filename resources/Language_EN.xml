@@ -934,6 +934,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_action_resizecyl" value="Resize cylinder"/>
 			<string id="id_action_resizesemicyl" value="Resize half-cylinder"/>
 			<string id="id_popup_normales" value="Reverse normals"/>
+			<string id="id_popup_split" value="Cut at this point"/>
 		</message>
 		<picture>
 			<image id="id_icon_editeelt" value="property.png"/>
@@ -1037,9 +1038,9 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_action_addroutedeblai" value="New Road avec calcul de déblai"/>
 		</message>
 	</class>
-	<class name="TYSolEditor">
+	<class name="TYTerrainEditor">
 		<message>
-			<string id="id_action_addsol" value="New ground"/>
+			<string id="id_action_addsol" value="New terrain"/>
 		</message>
 	</class>
 	<class name="TYSourseEditor">
@@ -1213,6 +1214,13 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_apply_btn" value="Apply"/>
 		</message>
 	</class>
+	<class name="TabPointsWidget">
+		<message>
+			<string id="id_insert_row_item" value="Insert point"/>
+			<string id="id_append_row_item" value="Append point"/>
+			<string id="id_delete_row_item" value="Delete point"/>
+		</message>
+	</class>
 	<class name="TYAtmosphereWidget">
 		<message>
 			<string id="id_pression_label" value="Atmospheric Pressure"/>
@@ -1259,12 +1267,9 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_epaisseur_label" value="Thickness"/>
 			<string id="id_unite_resistivite" value="kRayl"/>
 			<string id="id_unite_epaisseur" value="m"/>
-			<string id="id_vegetactive_label" value="Vegetation active"/>
 			<string id="id_spectreimp" value="Spectre d'impédance"/>
-			<string id="id_vegetation" value="Vegetation"/>
 			<string id="id_proprietes_button" value="Properties"/>
 			<string id="id_edit_resistivite" value="Choose..."/>
-			<string id="id_get_from_bdd" value="Import Database"/>
 		</message>
 	</class>
 	<class name="TYSolResistanceDialog">
@@ -1881,6 +1886,8 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_y" value="Y"/>
 			<string id="id_z" value="Z"/>
 			<string id="id_tabpt" value="Points List"/>
+			<string id="id_vegetation" value="Vegetation"/>
+			<string id="id_vegetactive_label" value="Vegetation active"/>
 			<string id="id_proprietes_button" value="Properties"/>
 		</message>
 	</class>
@@ -1906,6 +1913,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_x" value="X"/>
 			<string id="id_y" value="Y"/>
 			<string id="id_z" value="Z"/>
+			<string id="id_closed_label" value="Close"/>
 			<string id="id_tabpt" value="Points List"/>
 		</message>
 	</class>
@@ -2256,6 +2264,18 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="TYRegime" value="Working Cond."/>
 			<string id="TYScalarBar" value="Legend"/>
 			<string id="TYUserSrcRegime" value="Working Cond."/>
+		</message>
+	</class>
+	<class name="TYDimensionDialog">
+		<message>
+			<string id="id_caption" value="Sizes"/>
+			<string id="id_x_label" value="X"/>
+			<string id="id_y_label" value="Y"/>
+			<string id="id_z_label" value="Z"/>
+			<string id="id_diameter_label" value="Diameter"/>
+			<string id="id_hauteur_label" value="Height"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Cancel"/>
 		</message>
 	</class>
 	<class name="TYPositionDialog">

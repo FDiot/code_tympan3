@@ -32,6 +32,13 @@ set(TYMPAN_3RDPARTY_NMPB2008 "${CMAKE_SOURCE_DIR}/3rdparty/NMPB2008.zip"
 set(TYMPAN_3RDPARTY_NMPB2008_MD5  "419f04812a8d3cd75c68cfee59b0c51b"
     CACHE STRING "Checksum for the TYMPAN_3RDPARTY_NMPB2008 archive.")
 
+#NB: Source URL for CGAL bindings with installation patch
+# http://medionilaura-cgal-bindings.googlecode.com/archive/issue-50.zip
+set(TYMPAN_3RDPARTY_CGAL_BINDINGS "${CMAKE_SOURCE_DIR}/3rdparty/cgal-bindings.zip"
+    CACHE STRING "Where to fetch the external project CGAL_bindings")
+set(TYMPAN_3RDPARTY_CGAL_BINDINGS_MD5  "ae7e309dc8507fd45d5d0fd98de18b94"
+    CACHE STRING "Checksum for the TYMPAN_3RDPARTY_CGAL_BINDINGS archive.")
+
 ## If you are having trouble getting CMake find boost you probably want to set
 # set(Boost_DEBUG TRUE)
 
@@ -40,8 +47,6 @@ set(TYMPAN_3RDPARTY_NMPB2008_MD5  "419f04812a8d3cd75c68cfee59b0c51b"
 ## the BOOST_ROOT *environment* variable instead.
 # set(BOOST_ROOT ""
 #     CACHE PATH "The prefix where boost is installed" )
-
-option(LOGILAB_USE_PRECOMPILED_HEADER "Enable pre-compiled headers" OFF)
 
 ## For now, some modules of Code_TYMPAN do not compile when this macro is not defined.
 ## => We Discard the option and set TRUE by default.
