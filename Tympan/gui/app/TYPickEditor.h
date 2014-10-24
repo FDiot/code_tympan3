@@ -127,6 +127,7 @@ private :
     void screenHeight(TYElement *pElement);
     void screenThick(TYElement *pElement);
     bool realWorldPosition(OPoint3D& pt);
+    void updateCopyPosition(LPTYGeometryNode &pNode);
 
 protected:
     ///Le picker du modeler.
