@@ -275,12 +275,12 @@ void TYPickEditor::siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
 {
     // Check site existance
     TYSiteModelerFrame* pModelerFrame = dynamic_cast<TYSiteModelerFrame*> (_pModeler);
-    TYSiteNode* pCurrentSite = nullptr;
+    TYSiteNode* pModelerSite = nullptr;
     if (pModelerFrame) 
     {
-        pCurrentSite = pModelerFrame->getSite();
+        pModelerSite = pModelerFrame->getSite();
     }
-    if ( pCurrentSite == nullptr ) { return; }
+    if ( pModelerSite == nullptr ) { return; }
 
     QMenu* pPopup = new QMenu(NULL);
 
@@ -309,82 +309,88 @@ void TYPickEditor::siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
 
     QFont font = pPopup->font();
     font.setBold(true);
+    TYElement *elem_0 = nullptr; // Currrent element
+    TYElement *elem_1 = nullptr; // next in queue
+    TYElement *elem_2 = nullptr; // 2nd level next in queue
     for (unsigned int i = 0; i < pElts->size(); i++)
     {
-        // Edition des proprietes de l'element
-        if (TYSiteNode::safeDownCast(pElts->at(i)) && TYSiteNode::safeDownCast(pElts->at(i))->getRoot())
+        elem_0 = pElts->at(i); // Currrent element
+        if ( (i+1) < pElts->size() ) { elem_1 = pElts->at(i + 1)._pObj; }
+        if ( (i+2) < pElts->size() ) { elem_2 = pElts->at(i + 2)._pObj; }
+
+
+        TYSiteNode *pCurrentSite = dynamic_cast<TYSiteNode*>(elem_0);
+
+        // Edition des proprietes de l'element (quelque soit l'element)
+        QString labelTxt;
+        if ( (pCurrentSite != nullptr) && (pCurrentSite->getRoot()) )
         {
-            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_editeelt"))), TR("id_popup_siteroot"));
-            code->setFont(font);
+            labelTxt = TR("id_popup_siteroot");
         }
         else
         {
-            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_editeelt"))), TYWidget::getDisplayName(pElts->at(i)));
-            code->setFont(font);
+            labelTxt = TYWidget::getDisplayName(pElts->at(i));
         }
+        code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_editeelt"))), labelTxt);
+        code->setFont(font);
         retCodes[code] = i;
 
-        // Cas de l'acoustic volume node dans le modeler de son site parent
-        if (dynamic_cast<TYSiteNode*>(pElts->at(i)._pObj) != nullptr)
+        if (pCurrentSite != nullptr)
         {
-            LPTYSiteNode pSiteNode = (LPTYSiteNode&) pElts->at(i);
-
-            if ((i + 1 < pElts->size()) &&
-                    (dynamic_cast<TYSiteNode*>(pElts->at(i + 1)._pObj) != nullptr))
-                // On est bien dans un site imbrique dans un autre
+            // Recherche du site parent
+            TYSiteNode *pCurrentSiteParent = nullptr;
+            if (i+1 < pElts->size())
             {
-                LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElts->at(i + 1));
+                pCurrentSiteParent = dynamic_cast<TYSiteNode*>(elem_1);
+            }
 
-                // Position / rotation / suppression
-                if ((pSite) && (pSite == pCurrentSite))
-                {
-                    // Les actions suivantes ne peuvent etre faites que dans le siteframe du site englobant le site picke
-                    // GeoNode
-                    TYGeometryNode* pEltGeoNode = TYGeometryNode::GetGeoNode(pSiteNode); 
+            if (pCurrentSiteParent == pModelerSite)
+            {
+                // GeoNode
+                TYGeometryNode* pEltGeoNode = TYGeometryNode::GetGeoNode(pCurrentSite); 
 
-                    // Position via le parent (GeoNode)
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
-                    posRetCodes[code] = pEltGeoNode;
+                // Position
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
+                posRetCodes[code] = pEltGeoNode;
 
-                    // Rotation via le parent (GeoNode)
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
-                    rotRetCodes[code] = pEltGeoNode;
+                // Rotation
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
+                rotRetCodes[code] = pEltGeoNode;
 
-                    // Duplication
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                    copySiteNodeRetCodes[code] = pSiteNode;
+                // Duplication
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
+                copySiteNodeRetCodes[code] = pCurrentSite;
 
-                    // Suppression
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
-                    remSiteNodeRetCodes[code] = pSiteNode;
-                }
+                // Suppression
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
+                remSiteNodeRetCodes[code] = pCurrentSite;
             }
         }
-        else if (dynamic_cast<TYAcousticVolume*>(pElts->at(i)._pObj) != nullptr)
+        
+        if (dynamic_cast<TYAcousticVolume*>(elem_0) != nullptr)
         {
             // Dans tous les cas, on offre la possibilite d'inverser la normales des faces
             volumeFound = i;
             inverseNormales = pPopup->addAction(TR("id_popup_normales"));
         }
-        else if (dynamic_cast<TYMaillage*>(pElts->at(i)._pObj) != nullptr)
+        
+        TYMaillage *pMaillage = dynamic_cast<TYMaillage*>(elem_0);        
+        if ( pMaillage != nullptr )
         {
             // Calcul parent
-            if ((i + 1 < pElts->size()) &&
-                    (dynamic_cast<TYCalcul*>(pElts->at(i + 1)._pObj) != nullptr))
+            if ( dynamic_cast<TYCalcul*>(elem_1) != nullptr )
             {
-                LPTYMaillage pMaillage = (LPTYMaillage&) pElts->at(i);
-
                 // Si le maillage est bien present dans le calcul
-                LPTYMaillageGeoNode pMaillageGeoNode = ((LPTYCalcul&) pElts->at(i + 1))->findMaillage(pMaillage);
-                if (pMaillageGeoNode)
+                TYMaillageGeoNode* pMaillageGeoNode = TYGeometryNode::GetGeoNode(elem_0);
+                if (pMaillageGeoNode != nullptr)
                 {
                     // Position via le parent (GeoNode)
                     code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
-                    posRetCodes[code] = (TYGeometryNode*) pMaillageGeoNode.getRealPointer();
+                    posRetCodes[code] = dynamic_cast<TYGeometryNode*>(pMaillageGeoNode);
 
                     // Rotation via le parent (GeoNode)
                     code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
-                    rotRetCodes[code] = (TYGeometryNode*) pMaillageGeoNode.getRealPointer();
+                    rotRetCodes[code] = dynamic_cast<TYGeometryNode*>(pMaillageGeoNode);
 
                     // Duplication
                     code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
@@ -396,84 +402,77 @@ void TYPickEditor::siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                 }
             }
         }
-        else if (dynamic_cast<TYPointControl*>(pElts->at(i)._pObj) != nullptr)
+
+        TYPointControl *pPointCtrl = dynamic_cast<TYPointControl*>(pElts->at(i)._pObj);
+        if (pPointCtrl != nullptr)
         {
             // Projet parent
-            if ((i + 1 < pElts->size()) &&
-                    (dynamic_cast<TYProjet*>(pElts->at(i + 1)._pObj) != nullptr))
+            if ( dynamic_cast<TYProjet*>(elem_1) != nullptr )
             {
                 // Duplication
                 code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                copyPtControlRetCodes[code] = (LPTYPointControl&) pElts->at(i);
+                copyPtControlRetCodes[code] = pPointCtrl;
 
                 // Suppression
                 code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
-                remPtControlRetCodes[code] = (LPTYPointControl&) pElts->at(i);
+                remPtControlRetCodes[code] = pPointCtrl;
             }
         }
-        else if ((i + 1 < pElts->size()) && (pElts->at(i + 1)->isA("TYTopographie")))
+
+        if (dynamic_cast<TYTopographie*>(elem_1) != nullptr)
         {
 
-            if ((i + 2) < pElts->size())
+            TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(elem_2);
+            if (pSite == pModelerSite)
             {
-                LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pElts->at(i + 2)._pObj);
-
                 // On ne peut dupliquer ou supprimer que dans le modeler de son site
-                if ((pSite._pObj != nullptr) && (pSite == pCurrentSite))
+                if (dynamic_cast<TYCourbeNiveau*>(pElts->at(i)._pObj) != nullptr)
                 {
-                    if (dynamic_cast<TYCourbeNiveau*>(pElts->at(i)._pObj) != nullptr)
-                    {
-                        split = pPopup->addAction(TR("id_popup_split"));
-                        levelCurveFound = i;
-                    }
-                    // Duplication
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                    copyTopoRetCodes[code] = pElts->at(i);
-
-                    // Suppression
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
-                    remTopoRetCodes[code] = pElts->at(i);
+                    split = pPopup->addAction(TR("id_popup_split"));
+                    levelCurveFound = i;
                 }
+                // Duplication
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
+                copyTopoRetCodes[code] = pElts->at(i);
+
+                // Suppression
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
+                remTopoRetCodes[code] = pElts->at(i);
             }
         }
-        else if ( (i + 1) < pElts->size() && pElts->at(i + 1)->isA("TYInfrastructure") )
+
+        if ( dynamic_cast<TYInfrastructure*>(elem_1) != nullptr )
         {
             // Acoustic computation is always possible
-            if ( dynamic_cast<TYAcousticVolumeNode*>( pElts->at(i)._pObj ) )
+            if ( dynamic_cast<TYAcousticVolumeNode*>( elem_0 ) )
             {
                 // Calcul acoustique
                 code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_calcul"))), TR("id_popup_calculer"));
-                calculVolNodeRetCodes[code] = (LPTYAcousticVolumeNode&) pElts->at(i);
+                calculVolNodeRetCodes[code] = dynamic_cast<TYAcousticVolumeNode*>( elem_0 );
             }
 
             // Geometric changes only possible in parent site meodeler
-            if ((i + 2) < pElts->size())
+            TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(elem_2);
+            if (pSite == pModelerSite)
             {
-                LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pElts->at(i + 2)._pObj);
-                TYSiteModelerFrame* pmodelerFrame = (TYSiteModelerFrame*) _pModeler;
+                // GeoNode
+                TYGeometryNode* pEltGeoNode = TYGeometryNode::GetGeoNode( elem_0 );
 
-                // On ne peut dupliquer ou supprimer que dans le modeler de son site
-                if ((pSite._pObj != nullptr) && (pSite == pmodelerFrame->getSite()))
-                {
-                    // GeoNode
-                    TYGeometryNode* pEltGeoNode = TYGeometryNode::GetGeoNode( pElts->at(i)._pObj );
+                // Position via le parent (GeoNode)
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
+                posRetCodes[code] = pEltGeoNode;
 
-                    // Position via le parent (GeoNode)
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
-                    posRetCodes[code] = pEltGeoNode;
+                // Rotation via le parent (GeoNode)
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
+                rotRetCodes[code] = pEltGeoNode;
 
-                    // Rotation via le parent (GeoNode)
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
-                    rotRetCodes[code] = pEltGeoNode;
+                // Duplication
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
+                copyInfraRetCodes[code] = elem_0;
 
-                    // Duplication
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                    copyInfraRetCodes[code] = pElts->at(i);
-
-                    // Suppression
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
-                    remInfraRetCodes[code] = pElts->at(i);
-                }
+                // Suppression
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
+                remInfraRetCodes[code] = elem_0;
             }
         }
         // Ajoute un separateur entre les elements
@@ -1271,7 +1270,7 @@ void TYPickEditor::copySite(TYElement* pElement)
 
     if (pParent == nullptr) { return; }
 
-    TYSiteNodeGeoNode *pGeoNode = (dynamic_cast<TYSiteNode*>(pParent))->findSiteNode(dynamic_cast<TYSiteNode*>(pElement));
+    TYSiteNodeGeoNode *pGeoNode = TYGeometryNode::GetGeoNode(pElement);
 
     // Nouvel element du meme type que l'objet a dupliquer (clone)
     LPTYSiteNodeGeoNode pCopy = new TYSiteNodeGeoNode( dynamic_cast<TYSiteNode*>(pElement->clone()) );
@@ -1320,7 +1319,7 @@ void TYPickEditor::remSite(TYElement *pElement)
     if (pParent == nullptr) { return; }
 
     LPTYSiteNode pSiteParent = dynamic_cast<TYSiteNode*> (pParent);
-    LPTYSiteNodeGeoNode pGeoNode = pSiteParent->findSiteNode(dynamic_cast<TYSiteNode*>(pElement));
+    LPTYSiteNodeGeoNode pGeoNode = TYGeometryNode::GetGeoNode(pElement);
 
     if ( pSiteParent->remSiteNode( (LPTYSiteNode&)pElement ) )
     {
@@ -1377,7 +1376,7 @@ void TYPickEditor::copyMaillage(TYElement *pElement)
     TYElement *pParent = pElement->getParent();
     if (pParent == nullptr) { return; }
 
-    LPTYMaillageGeoNode pGeoNode = (dynamic_cast<TYCalcul*>(pParent))->findMaillage(dynamic_cast<TYMaillage*>(pElement));
+    TYMaillageGeoNode *pGeoNode = TYGeometryNode::GetGeoNode(pElement);
 
     // Nouvel element du meme type que l'objet a dupliquer (clone)
     LPTYMaillageGeoNode pCopy = new TYMaillageGeoNode(dynamic_cast<TYMaillage*>(pElement->clone()));
@@ -1416,7 +1415,7 @@ void TYPickEditor::remMaillage(TYElement *pElement)
     TYElement *pParent = pElement->getParent();
     if (pParent == nullptr) { return; }
 
-    LPTYMaillageGeoNode pGeoNode = (dynamic_cast<TYCalcul*>(pParent))->findMaillage(dynamic_cast<TYMaillage*>(pElement));
+    TYMaillageGeoNode *pGeoNode = TYGeometryNode::GetGeoNode(pElement);
     LPTYCalcul pCalculParent = dynamic_cast<TYCalcul*>(pParent);
 
     if ( pCalculParent->remMaillage(dynamic_cast<TYMaillage*>(pElement)) )
@@ -1681,8 +1680,7 @@ void TYPickEditor::copyInfraElmt(TYElement *pElement)
         // Duplication
         pCopy->deepCopy(pInfra->findBatiment((LPTYBatiment&) pElement), false);
         pCopy->setParent(pElement->getParent());
-
-        boundBox = TYBatiment::safeDownCast(pCopy->getElement())->volEnglob();
+        updateCopyPosition(pCopy);
 
         // Ajout
         pInfra->addBatiment(pCopy);
@@ -1704,9 +1702,8 @@ void TYPickEditor::copyInfraElmt(TYElement *pElement)
         // Duplication
         pCopy->deepCopy(pInfra->findMachine((LPTYMachine&) pElement), false);
         pCopy->setParent(pElement->getParent());
-
-        boundBox = TYMachine::safeDownCast(pCopy->getElement())->volEnglob();
-
+        updateCopyPosition(pCopy);
+        
         // Ajout
         pInfra->addMachine(pCopy);
     }
@@ -1842,7 +1839,7 @@ void TYPickEditor::copyVolume(TYElement *pElement)
     if (pElement == nullptr) { return; }
     TYAcousticVolumeNode *pVolParent = dynamic_cast<TYAcousticVolumeNode*>(pElement->getParent());
     if (pVolParent == nullptr) { return; }
-    TYAcousticVolumeGeoNode *pGeoNode = pVolParent->findAcousticVol(dynamic_cast<TYAcousticVolume*>(pElement));
+    TYAcousticVolumeGeoNode *pGeoNode = TYGeometryNode::GetGeoNode(pElement);
     if (pGeoNode == nullptr) { return; }
 
     // Nouvel element du meme type que l'objet a dupliquer (clone)
@@ -1955,4 +1952,11 @@ void TYPickEditor::screenThick(TYElement *pElement)
             pEcran->updateGraphic();
         }
     }
+}
+
+void TYPickEditor::updateCopyPosition(LPTYGeometryNode &pNode)
+{
+    TYBox boundBox = dynamic_cast<TYAcousticVolumeNode*>(pNode->getElement())->volEnglob();
+
+    pNode->getORepere3D()._origin = pNode->getORepere3D()._origin + OCoord3D(boundBox._sizeX/2., boundBox._sizeY/2., 0.);
 }
