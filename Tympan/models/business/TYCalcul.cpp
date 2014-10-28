@@ -744,27 +744,17 @@ bool TYCalcul::addMaillage(LPTYMaillage pMaillage)
 bool TYCalcul::remMaillage(const LPTYMaillage pMaillage)
 {
     assert(pMaillage);
-    bool ret = false;
-    TYTabMaillageGeoNode::iterator ite;
 
-    for (ite = _maillages.begin(); ite != _maillages.end(); ite++)
-    {
-        if (TYMaillage::safeDownCast((*ite)->getElement()) == pMaillage)
-        {
-            _maillages.erase(ite);
-            ret = true;
-            setIsGeometryModified(true);
-            break;
-        }
-    }
+    TYGeometryNode *pNode = TYGeometryNode::GetGeoNode(dynamic_cast<TYElement*>(pMaillage._pObj));
 
-    return ret;
+    return remMaillage(pNode);
 }
 
 bool TYCalcul::remMaillage(const LPTYMaillageGeoNode pMaillageGeoNode)
 {
     assert(pMaillageGeoNode);
     bool ret = false;
+
     TYTabMaillageGeoNode::iterator ite;
 
     for (ite = _maillages.begin(); ite != _maillages.end(); ite++)
