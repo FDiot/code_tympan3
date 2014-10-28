@@ -1383,15 +1383,24 @@ void TYPickEditor::copyMaillage(TYElement *pElement)
 
     // Duplication
     pCopy->deepCopy(pGeoNode, false);
-    pCopy->setParent(pElement->getParent());
+    pCopy->setParent(pParent);
 
     // Ajout
     if ((dynamic_cast<TYCalcul*>(pParent))->addMaillage(pCopy))
     {
+        TYRectangularMaillage *pMaillage = dynamic_cast<TYRectangularMaillage*>(pCopy->getElement());
+        double x = 10., y = 10.;
+        if (pMaillage != nullptr)
+        {
+            LPTYRectangle pRect = pMaillage->getRectangle();
+            x = pRect->getSizeX() / 2.;
+            y = pRect->getSizeY() / 2.;
+        }
+        
         ORepere3D repere = pCopy->getORepere3D();
         // Offset
-        repere._origin._x += 10.0;
-        repere._origin._y -= 10.0;
+        repere._origin._x += x;
+        repere._origin._y -= y;
 
         pCopy->setRepere(repere);
 
@@ -1415,7 +1424,7 @@ void TYPickEditor::remMaillage(TYElement *pElement)
     TYElement *pParent = pElement->getParent();
     if (pParent == nullptr) { return; }
 
-    TYMaillageGeoNode *pGeoNode = TYGeometryNode::GetGeoNode(pElement);
+    LPTYMaillageGeoNode pGeoNode = TYGeometryNode::GetGeoNode(pElement);
     LPTYCalcul pCalculParent = dynamic_cast<TYCalcul*>(pParent);
 
     if ( pCalculParent->remMaillage(dynamic_cast<TYMaillage*>(pElement)) )
