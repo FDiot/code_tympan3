@@ -35,12 +35,19 @@ class Builder(object):
 
     def complete_processing(self):
         self.merge_subsites()
+        # First get an ElevationMesh (possibly with vertices missing altitude,
+        # in order to be able to add non-altimetric features).
         self.build_altimetric_base()
         self.build_triangulation()
         self.refine_triangulation()
         self.compute_informations()
+        # From this point, all vertices in the mesh have an altitude.
         self.compute_elevations()
         self.fill_material_and_landtakes()
+        # Finally update the altitude of infrastructure landtakes by
+        # averaging using their contour altitude. From this point, the mesh
+        # altitudes is completely determined and no change are supposed to
+        # occur.
         self.join_with_landtakes()
 
     def merge_subsites(self):
