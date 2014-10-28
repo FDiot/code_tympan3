@@ -6,7 +6,6 @@ from altimetry_testutils import MesherTestUtilsMixin, runVisualTests, rect
 
 if runVisualTests:
     from tympan.altimetry import visu
-    from matplotlib import pyplot as plt
 
 class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
@@ -15,25 +14,25 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
     def test_insert_point(self):
         points = [mesh.Point(1, 1)]
-        self.mesher.insert_polyline(map(mesh.to_cgal_point, points))
+        self.mesher.insert_polyline(points)
         self.assert_basic_counts(vertices=1, faces=0)
 
     def test_insert_3_point(self):
         points = [(1, 1), (1, 2), (3, 4)]
         self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
-                               connected=False)
+                                    connected=False)
         self.assert_basic_counts(vertices=3, faces=1, edges=3, constrained=0)
 
     def test_insert_triangle(self):
         points = [(1, 1), (1, 2), (3, 4)]
         self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
-                               close_it = True)
+                                    close_it=True)
         self.assert_basic_counts(vertices=3, faces=1, edges=3, constrained=3)
 
     def test_insert_vee(self):
         points = [(-1, 2), (0, 0), (1, 2)]
         self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
-                               close_it=False) # the default by the way
+                                    close_it=False) # the default by the way
         self.assert_basic_counts(vertices=3, faces=1, edges=3, constrained=2)
 
     def test_info_simple_polyline(self):
@@ -142,8 +141,8 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         self.assertTrue(self.mesher.cdt.is_infinite(face_left))
 
     def test_find_single_face(self):
-        (v1, v2, v3), _ = self.mesher.insert_polyline( [(1, 1), (1, 2), (3, 4)],
-                                                       close_it = True)
+        (v1, v2, v3), _ = self.mesher.insert_polyline(
+            [(1, 1), (1, 2), (3, 4)], close_it=True)
         face, = self.mesher.cdt.finite_faces()
 
         found_face = self.mesher.face_for_vertices(v1, v2, v3)
@@ -219,7 +218,8 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
         vD = mesher2.insert_point((1, -1), altitude=20.0)
         self.assert_basic_counts(faces=1, vertices=3, edges=3, constrained=1)
-        self.assert_basic_counts(faces=2, vertices=4, edges=5, constrained=1, mesher=mesher2)
+        self.assert_basic_counts(faces=2, vertices=4, edges=5, constrained=1,
+                                 mesher=mesher2)
 
         # Test use of faces and edges identifier across the copy
         vmap = self.mesher.vertices_map_to_other_mesh(mesher2)
@@ -274,7 +274,7 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         self.assertEqual(self.mesher.point_altitude((0, 0)), 0) # vertex
         self.assertEqual(self.mesher.point_altitude((0.5, 0.5)), slope*0.5) # edge
         self.assertIs(self.mesher.point_altitude((1, -1)),
-                         mesh.UNSPECIFIED_ALTITUDE) #out of bounds
+                      mesh.UNSPECIFIED_ALTITUDE) #out of bounds
         self.assertEqual(self.mesher.point_altitude((1, 0.5)), slope*0.5) # face
 
     def test_crossing_level_lines_same_altitude_merge_info(self):
