@@ -39,7 +39,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         self.mesher = mesh.MeshedCDTWithInfo()
 
     def test_insert_point(self):
-        points = [mesh.Point(1, 1)]
+        points = [mesh.to_cgal_point((1, 1))]
         self.mesher.insert_polyline(points)
         self.assert_basic_counts(vertices=1, faces=0)
 

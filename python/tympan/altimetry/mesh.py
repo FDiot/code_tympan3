@@ -6,19 +6,16 @@ import copy
 from warnings import warn
 
 import numpy as np
-from shapely import geometry as sh_geom
+from shapely.geometry import Point, LineString
 
 from CGAL.CGAL_Kernel import (
-    Point_2 as Point,
-    Vector_2 as Vector,
-    Triangle_2 as Triangle,
+    Point_2,
     Segment_2 as Segment,
     Point_3,
     Vector_3,
     Triangle_3,
     Line_3,
     Ref_int,
-    Object as CGAL_Object,
     centroid,
     intersection)
 from CGAL.CGAL_Mesh_2 import (
@@ -49,13 +46,13 @@ UNSPECIFIED_ALTITUDE = float('nan')
 UNSPECIFIED_MATERIAL = None
 
 def to_cgal_point(pt):
-    if isinstance(pt, Point):
+    if isinstance(pt, Point_2):
         return pt
-    elif isinstance(pt, sh_geom.Point):
-        return Point(pt.x, pt.y)
+    elif isinstance(pt, Point):
+        return Point_2(pt.x, pt.y)
     elif isinstance(pt, (tuple, list)):
         assert len(pt) == 2
-        return Point(*pt)
+        return Point_2(*pt)
     else:
         raise TypeError("Don't know how to make a CGAL Point_2 from", pt)
 
@@ -538,12 +535,12 @@ class MeshedCDTWithInfo(object):
         the origin (first point) of the segment and only contains unique
         points.
         """
-        if not isinstance(segment, sh_geom.LineString):
-            segment = sh_geom.LineString(segment)
+        if not isinstance(segment, LineString):
+            segment = LineString(segment)
         points = list(self._segment_intersection_points(segment))
         # Sort points by distance to the segment origine.
         def closer_to_segment_origine(x, y):
-            dist = sh_geom.Point(segment.coords[0]).distance
+            dist = Point(segment.coords[0]).distance
             if dist(x) > dist(y):
                 return 1
             elif dist(x) < dist(y):
@@ -585,8 +582,8 @@ class MeshedCDTWithInfo(object):
 
     def _face_triangle(self, fh):
         """Return a shapely geometry LineString for given face."""
-        return sh_geom.LineString([self.py_vertex(fh.vertex(i % 3))
-                                   for i in xrange(4)])
+        return LineString([self.py_vertex(fh.vertex(i % 3))
+                           for i in xrange(4)])
 
 
 class InfoWithIDsAndAltitude(object):
