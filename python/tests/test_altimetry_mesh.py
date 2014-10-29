@@ -1,4 +1,7 @@
+from itertools import izip_longest
 import unittest
+
+from shapely.geometry import LineString, Point
 
 from tympan.altimetry.datamodel import InconsistentGeometricModel
 from tympan.altimetry import mesh
@@ -6,6 +9,29 @@ from altimetry_testutils import MesherTestUtilsMixin, runVisualTests, rect
 
 if runVisualTests:
     from tympan.altimetry import visu
+
+
+TestFailureException = unittest.TestCase.failureException
+
+
+def assert_geometry_equal(actual, expected):
+    """Assert that two shapely.geometry objects are equal"""
+    if not expected.equals(actual):
+        raise TestFailureException('%s != %s' % (actual, expected))
+
+
+def assert_geometry_items_equal(actual, expected):
+    """Assert that two sequences of shapely.geomety objects are equal"""
+    marker = object()
+    for idx, (a, e) in enumerate(izip_longest(actual, expected,
+                                              fillvalue=marker)):
+        if a is marker or e is marker:
+            raise TestFailureException(
+                'sequences have different number of elements')
+        if not e.equals(a):
+            raise TestFailureException(
+                'elements %d mismatch: %s != %s' % (idx, a, e))
+
 
 class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
@@ -254,6 +280,36 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         degenerate_mesher.insert_point((0, 0))
         with self.assertRaises(InconsistentGeometricModel):
             degenerate_mesher.locate_point((0, 1))
+
+    def test_segment_intersection(self):
+        points = [(1, 1), (1, 3), (3, 1)]
+        self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
+                                    close_it=True)
+        # No intersection.
+        segment = (0, 0), (0, 3)
+        inter = list(self.mesher.segment_intersection_points(segment))
+        self.assertEqual(inter, [])
+        # One intersection.
+        segment = (0, 1.5), (1.1, 1.5)
+        inter = list(self.mesher.segment_intersection_points(segment))
+        self.assertEqual(len(inter), 1)
+        assert_geometry_equal(inter[0], Point((1, 1.5)))
+        # Two intersections, points only.
+        segment = (0, 2), (4, 2)
+        inter = list(self.mesher.segment_intersection_points(segment))
+        assert_geometry_items_equal(inter, [Point((1, 2)), Point((2, 2))])
+
+    def test_segment_intersection_2elements(self):
+        points = [(1, 3), (3, 1), (3, 3)]
+        self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
+                                    close_it=True)
+        points = [(1, 1), (1, 3), (3, 1)]
+        self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
+                                    close_it=True)
+        segment = (0, 2), (4, 2)
+        inter = list(self.mesher.segment_intersection_points(segment))
+        assert_geometry_items_equal(
+            inter, [Point((1, 2)), Point((2, 2)), Point((3, 2))])
 
 
 class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
