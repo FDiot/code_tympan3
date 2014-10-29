@@ -818,6 +818,50 @@ class ReferenceElevationMesh(ElevationMesh):
         return self.copy(class_=ElevationMesh)
 
 
+class ElevationProfile(object):
+    """2D profile built from the intersection of a segment with a mesh CDT.
+
+    mesh: a ReferenceElevationMesh
+    segment: a LineString (shapely.geometry)
+    """
+    def __init__(self, mesh, segment):
+        self._mesh = mesh
+        if not isinstance(segment, LineString):
+            segment = LineString(segment)
+        if len(segment.coords) != 2:
+            raise ValueError('expecting a segment with two points')
+        self._segment = segment
+        self.points = mesh.segment_intersection_points(segment)
+        if not self.points:
+            raise ValueError(
+                'no point found by intersecting the segment and the mesh')
+
+    @property
+    def direction(self):
+        """Direction vector (in horizontal plane) of the profile as a numpy
+        array.
+        """
+        start, end = self._segment.coords
+        v = np.array(end) - np.array(start)
+        return v / np.linalg.norm(v)
+
+    @property
+    def _segment_origin(self):
+        return Point(self._segment.coords[0])
+
+    def _point_at_distance(self, dist):
+        """Return a Point object located at `dist` from segment origin"""
+        return Point(np.array(self._segment_origin) + dist * self.direction)
+
+    def point_altitude(self, dist):
+        """Return the altitude of a point located at `dist` from segment
+        origin. This is the altitude of the mesh triangle the point belongs
+        to.
+        """
+        p = self._point_at_distance(dist)
+        return self._mesh.point_altitude(p)
+
+
 class FaceFlooder(object):
     """This is a base class for implementing the family of flood algorithms
 
