@@ -1,10 +1,13 @@
+from functools import partial
 from itertools import izip_longest
 import unittest
 
+import numpy as np
 from numpy.testing import assert_array_equal
-from shapely.geometry import LineString, Point
+from shapely.geometry import LineString, Point, Polygon
 
-from tympan.altimetry.datamodel import InconsistentGeometricModel
+from tympan.altimetry.datamodel import (InconsistentGeometricModel,
+                                        GroundMaterial)
 from tympan.altimetry import mesh
 from altimetry_testutils import MesherTestUtilsMixin, runVisualTests, rect
 
@@ -487,14 +490,19 @@ class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
 
 class ElevationProfileTC(unittest.TestCase):
 
+    rectangles = [
+        [(1, 1), (4, 1), (4, 4), (1, 4)],
+        [(1.5, 1.5), (3.5, 1.5), (3.5, 3.5), (1.5, 3.5)],
+        [(2, 2), (3, 2), (3, 3), (2, 3)],
+    ]
+    altitudes = (0, 0, 2)
+    materials = (0, 1, 2)
+
     def setUp(self):
         self.mesh = mesh.ReferenceElevationMesh()
         # Three squares inside each others, with an outer zone at altitude 0
         # and an inner zone at altitude 2.
-        for points, alt in (
-                ([(1, 1), (4, 1), (4, 4), (1, 4)], 0),
-                ([(1.5, 1.5), (3.5, 1.5), (3.5, 3.5), (1.5, 3.5)], 0),
-                ([(2, 2), (3, 2), (3, 3), (2, 3)], 2)):
+        for points, alt in zip(self.rectangles, self.altitudes):
             self.mesh.insert_polyline(map(mesh.to_cgal_point, points),
                                       altitude=alt, close_it=True)
 
@@ -529,6 +537,78 @@ class ElevationProfileTC(unittest.TestCase):
         self.assertEqual(profile(1), 0)
         self.assertEqual(profile(2), 2)
         self.assertTrue(0 < profile(1.7) < 2)
+
+    @staticmethod
+    def _polygon_from_face(fh):
+        coords = [(fh.vertex(i).point().x(), fh.vertex(i).point().y())
+                  for i in range(3)]
+        return Polygon(coords)
+
+    def _material_by_face(self):
+        material_by_face = {}
+        # Map rectangles to a material.
+        material_by_rectangle = [
+            (Polygon(rect), mat)
+            for mat, rect in zip(self.materials, self.rectangles)]
+        for fh in self.mesh.cdt.finite_faces():
+            # Some point inside the face triangle.
+            point = self._polygon_from_face(fh).representative_point()
+            # Loop on rectangles from inner-most one.
+            for rect, mat in reversed(material_by_rectangle):
+                if rect.contains(point):
+                    material_by_face[fh] = GroundMaterial(
+                        id_=mat, resistivity=mat)
+                    break
+            else:
+                # Should not occur.
+                raise Exception(
+                    'could not find a rectangle containing %s' % point)
+        return material_by_face
+
+    def test_material_by_face(self):
+        """Test _material_by_face test method"""
+        material_by_face = self._material_by_face()
+        for point, mat in zip([(1.2, 1.2), (1.7, 1.7), (2.2, 2.2)],
+                              self.materials):
+            fh, _ = self.mesh.locate_point(mesh.to_cgal_point(point))
+            self.assertEqual(material_by_face[fh].id, mat)
+
+    def test_point_data_with_material(self):
+        """Test `point_data` method, using `material_by_face` dict."""
+        segment = LineString([(2.5, 0), (2.5, 5)])
+        profile = mesh.ElevationProfile(self.mesh, segment)
+        # `point_material` returns the material at a given point.
+        point_material = partial(profile.point_data,
+                                 face_data=self._material_by_face())
+        # Ouside domain.
+        self.assertIs(point_material(0.1), mesh.UNSPECIFIED_MATERIAL)
+        # Inside first rectangle.
+        self.assertEqual(point_material(1.2).id, 0)
+        # Inside second rectangle.
+        self.assertEqual(point_material(1.7).id, 1)
+        # Inside inner-most rectangle.
+        self.assertEqual(point_material(2.5).id, 2)
+
+    def assert_within(self, value, bounds):
+        lb, ub = bounds
+        if not lb <= value <= ub:
+            self.fail('%s not within bounds %s' % (value, bounds))
+
+    def test_sigma_interpolation(self):
+        segment = LineString([(2.5, 0), (2.5, 5)])
+        profile = mesh.ElevationProfile(self.mesh, segment)
+        material_by_face = self._material_by_face()
+        # Build an interpolator `sigma` on material resistivity.
+        sigma_by_face = dict((fh, mat.resistivity)
+                             for fh, mat in material_by_face.items())
+        sigma = profile.face_data_interpolator(sigma_by_face)
+        # Inside first rectangle.
+        self.assert_within(sigma(1.2), [0, 1])
+        self.assert_within(sigma(3.6), [0, 1])
+        # Inside second rectangle.
+        self.assert_within(sigma(1.7), [1, 2])
+        # Middle of inner-most rectangle.
+        self.assertGreaterEqual(sigma(2.5), 2)
 
 
 if __name__ == '__main__':
