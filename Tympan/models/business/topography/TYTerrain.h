@@ -21,10 +21,10 @@
 #define __TY_TERRAIN__
 
 
-#include "Tympan/models/business/material/TYSol.h"
+#include "Tympan/models/business/TYDefines.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
 #include "Tympan/models/business/TYColorInterface.h"
-
+#include "Tympan/models/business/material/TYSol.h"
 
 /**
  * Permet d'attribuer des proprietes acoustiques a une zone d'altimetrie.
@@ -65,15 +65,6 @@ public:
     virtual int fromXML(DOM_Element domElement);
 
     /**
-     * Set/Get du type.
-     */
-    //  int getType() const { return _type; }
-    /**
-     * Set/Get du type.
-     */
-    //  void setType(int type) { _type = type; }
-
-    /**
      * Set/Get du materiau.
      */
     LPTYSol getSol() const { return _pSol;}
@@ -83,6 +74,32 @@ public:
      * Set/Get du materiau.
      */
     void setSol(const LPTYSol pSol) { _pSol = pSol; _pSol->setParent(this); }
+
+    /**
+     * Get de l'indicateur de vegetation.
+     */
+    bool isVegetActive() { return _vegetActive; }
+
+    /**
+     * Set/Get de la vegetation.
+     */
+    LPTYVegetation getVegetation() const { return _pVegetation; }
+
+    /**
+     * Set/Get de la vegetation.
+     */
+    void setVegetation(LPTYVegetation pVeget) { _pVegetation = pVeget; _pVegetation->setParent(this); }
+
+    /**
+     * Active ou non l'utilisation de la vegetation et retourne une
+     * reference sur celle-ci.
+     *
+     * @param state Etat d'utilisation de la vegetation.
+     *
+     * @return Le pointeur sur la vegetation.
+     */
+    void useVegetation(bool state = true);
+    bool isUsingVegetation() { return _vegetActive; }
 
     /**
      * Set/Get de la liste de points.
@@ -102,18 +119,20 @@ public:
      */
     double surface();
 
-
-
     // Membres
 protected:
-    ///Type.
-    //  int _type;
     ///Materiau.
     LPTYSol _pSol;
+
+    ///Vegetation eventuelle.
+    LPTYVegetation _pVegetation;
+
+    ///Etat d'utilisation de la vegetation.
+    bool _vegetActive;
+
     ///Liste de points.
     TYTabPoint _listPoints;
 };
-
 
 ///Noeud geometrique de type TYTerrain.
 typedef TYGeometryNode TYTerrainGeoNode;

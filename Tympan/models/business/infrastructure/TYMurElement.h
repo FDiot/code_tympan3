@@ -78,6 +78,12 @@ public:
     virtual int intersects(const OSegment3D& seg, OPoint3D& pt) const;
 
     /**
+     * Retourne le materiau de construction associe a cette Surface
+     * via son volume parent, s'il existe.
+     */
+    virtual LPTYMateriauConstruction getMateriau() const { return _pParoi->getMatFace2(); }
+
+    /**
      * Set/Get de la paroi.
      */
     LPTYParoi getParoi() { return _pParoi; }

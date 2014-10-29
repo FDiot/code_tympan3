@@ -19,8 +19,6 @@
 #include "Tympan/models/solver/config.h"
 #include "Tympan/models/common/plan.h"
 #include "Tympan/solvers/DefaultSolver/TYTrajet.h"
-#include "Tympan/models/business/infrastructure/TYTopographie.h"
-#include "Tympan/models/business/infrastructure/TYSiteNode.h"
 #include "Tympan/solvers/DefaultSolver/TYSolver.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Shape.h"
@@ -761,10 +759,6 @@ void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection
     OPoint3D ptSym;
     OSpectre SpectreAbso;
 
-    // XBH: remontee des declarations de variables hors de la boucle
-    TYAcousticSurfaceGeoNode* pSurfaceGeoNode = NULL;
-    TYAcousticSurface* pSurface = NULL;
-
     OSegment3D seg; // Segment source image->recepteur
     OSegment3D segMontant; // Segment source-> point de reflexion
     OSegment3D segDescendant; // Segment point de reflexion->recepteur
@@ -803,13 +797,13 @@ void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection
             // Si on traverse un autre ecran, qui peut etre de la topo, le chemin de reflexion n'est pas pris en compte
             while ((j < nbFaces) && (!intersect))
             {
-                if ((j == i) || !(inter.bIntersect[1]))
+                if (j == i)
                 {
                     j++;
                     continue; // Si la face ne peut interagir on passe a la suivante
                 }
 
-                segInter = inter.segInter[1];
+                segInter = tabIntersect[j].segInter[1];
 
                 // On teste si segInter intersecte le segment montant ou
                 // le segment descendant dans le plan global).
@@ -1034,7 +1028,6 @@ bool TYAcousticModel::solve(TYTrajet& trajet)
     OSpectre& SLp = trajet.getSpectre();
 
     // W.rho.c / (4pi*rdi¿½)
-
     SLp = trajet.asrc.spectrum.mult(divGeom);
 
     //  (W.rho.c/4.pi.Rdi¿½)*Attenuations du trajet

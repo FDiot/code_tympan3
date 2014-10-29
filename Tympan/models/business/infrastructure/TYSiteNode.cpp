@@ -184,7 +184,9 @@ bool TYSiteNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _useTopoFile = pOtherSite->_useTopoFile;
     _isTopoFileModified = pOtherSite->_isTopoFileModified;
     _pTopographie->deepCopy(pOtherSite->_pTopographie, copyId);
+    _pTopographie->setParent(this);
     _pInfrastructure->deepCopy(pOtherSite->_pInfrastructure, copyId);
+    _pInfrastructure->setParent(this);
     _orientation.deepCopy(&pOtherSite->_orientation, copyId);
     _position.deepCopy(&pOtherSite->_position, copyId);
     _root = pOtherSite->_root;
@@ -197,6 +199,8 @@ bool TYSiteNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYSiteNodeGeoNode pSiteNodeGeoNode = new TYSiteNodeGeoNode(NULL, this);
         pSiteNodeGeoNode->deepCopy(pOtherSite->_listSiteNode[i], copyId);
+        pSiteNodeGeoNode->getElement()->setParent(this);
+        pSiteNodeGeoNode->setParent(this);
         _listSiteNode.push_back(pSiteNodeGeoNode);
     }
 

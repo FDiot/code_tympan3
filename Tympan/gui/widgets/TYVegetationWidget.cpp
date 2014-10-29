@@ -20,15 +20,10 @@
  *
  */
 
-
-
-
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/material/TYVegetation.h"
-//Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
-
 
 #include "TYVegetationWidget.h"
 
@@ -39,7 +34,6 @@ TYVegetationWidget::TYVegetationWidget(TYVegetation* pElement, QWidget* _pParent
     TYWidget(pElement, _pParent)
 {
     QString num;
-
 
     _elmW = new TYElementWidget(pElement, this);
 
@@ -60,7 +54,6 @@ TYVegetationWidget::TYVegetationWidget(TYVegetation* pElement, QWidget* _pParent
     _groupBoxLayout->addWidget(_labelHauteur, 0, 0);
 
     _lineEditHauteur = new QLineEdit(_groupBox);
-    _lineEditHauteur->setText(num.setNum(getElement()->getHauteur(), 'f', 2));
     _groupBoxLayout->addWidget(_lineEditHauteur, 0, 1);
     QLabel* pUnitHauteur = new QLabel(_groupBox);
     pUnitHauteur->setText(TR("id_unite_hauteur"));
@@ -74,8 +67,6 @@ TYVegetationWidget::TYVegetationWidget(TYVegetation* pElement, QWidget* _pParent
     _groupBoxSpectreAtt->setLayout(_groupBoxSpectreAttLayout);
 
     _lineEditNomSpectreAtt = new QLineEdit(_groupBoxSpectreAtt);
-    _lineEditNomSpectreAtt->setText(getElement()->getSpectreAtt()->getName());
-    _lineEditNomSpectreAtt->setEnabled(FALSE);
     _groupBoxSpectreAttLayout->addWidget(_lineEditNomSpectreAtt, 0, 0);
 
     _pushButtonSpectreAtt = new QPushButton(_groupBoxSpectreAtt);
@@ -95,21 +86,25 @@ TYVegetationWidget::~TYVegetationWidget()
 
 void TYVegetationWidget::updateContent()
 {
-    QString num;
+    if ( getElement() )
+    {
+        _elmW->updateContent();
 
-    _elmW->updateContent();
-
-    _lineEditHauteur->setText(num.setNum(getElement()->getHauteur(), 'f', 2));
-    _lineEditNomSpectreAtt->setText(getElement()->getSpectreAtt()->getName());
+        _lineEditHauteur->setText(QString().setNum(getElement()->getHauteur(), 'f', 2));
+        _lineEditNomSpectreAtt->setText(getElement()->getSpectreAtt()->getName());
+    }
 }
 
 void TYVegetationWidget::apply()
 {
-    _elmW->apply();
+    if ( getElement() )
+    {
+        _elmW->apply();
 
-    getElement()->setHauteur(_lineEditHauteur->text().toDouble());
+        getElement()->setHauteur(_lineEditHauteur->text().toDouble());
 
-    emit modified();
+        emit modified();
+    }
 }
 
 void TYVegetationWidget::editSpectre()

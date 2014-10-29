@@ -148,6 +148,7 @@ bool TYEtage::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
         LPTYMurGeoNode pMurGeoNode = new TYMurGeoNode(NULL, this);
         pMurGeoNode->deepCopy(pOtherEtage->_tabMur[i], copyId);
         pMurGeoNode->getElement()->setParent(this);
+        pMurGeoNode->setParent(this);
         _tabMur.push_back(pMurGeoNode);
     }
 
@@ -156,6 +157,8 @@ bool TYEtage::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYSourcePonctuelleGeoNode pSourceGeoNode = new TYSourcePonctuelleGeoNode(new TYSourcePonctuelle);
         pSourceGeoNode->deepCopy(pOtherEtage->_tabSources[i], copyId);
+        pSourceGeoNode->getElement()->setParent(this);
+        pSourceGeoNode->setParent(this);
         _tabSources.push_back(pSourceGeoNode);
     }
 
@@ -164,6 +167,8 @@ bool TYEtage::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     {
         LPTYMachineGeoNode pMachineGeoNode = new TYMachineGeoNode(new TYMachine);
         pMachineGeoNode->deepCopy(pOtherEtage->_tabMachine[i], copyId);
+        pMachineGeoNode->getElement()->setParent(this);
+        pMachineGeoNode->setParent(this);
         _tabMachine.push_back(pMachineGeoNode);
     }
 

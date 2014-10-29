@@ -13,13 +13,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-/*
- *
- */
-
 #ifndef __TY_SOL__
 #define __TY_SOL__
-
 
 #include "TYVegetation.h"
 
@@ -80,37 +75,6 @@ public:
      */
     void setEpaisseur(double epais) { _epaisseur = epais; }
 
-    /**
-     * Get de l'indicateur de vegetation.
-     */
-    bool getVegetActive() { return _vegetActive; }
-
-    /**
-     * Set/Get de la vegetation.
-     */
-    TYVegetation* getVegetation() { return _pVegetation; }
-
-    /**
-     * Set/Get de la vegetation.
-     */
-    const TYVegetation* getVegetation() const { return _pVegetation; }
-
-    /**
-     * Set/Get de la vegetation.
-     */
-    void setVegetation(TYVegetation* pVeget) { _pVegetation = pVeget; _pVegetation->setParent(this); }
-
-    /**
-     * Active ou non l'utilisation de la vegetation et retourne une
-     * reference sur celle-ci.
-     *
-     * @param state Etat d'utilisation de la vegetation.
-     *
-     * @return La reference sur la vegetation.
-     */
-    TYVegetation* useVegetation(bool state = true);
-
-
     // Membres
 protected:
     ///Resistance a l'ecoulement.
@@ -119,12 +83,7 @@ protected:
     ///Epaisseur du sol.
     double _epaisseur;
 
-    ///Vegetation eventuelle.
-    TYVegetation* _pVegetation;
 
-    ///Etat d'utilisation de la vegetation.
-    bool _vegetActive;
 };
-
 
 #endif // __TY_SOL__

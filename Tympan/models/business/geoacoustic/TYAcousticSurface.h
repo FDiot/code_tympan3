@@ -132,12 +132,7 @@ public:
      * Retourne le materiau de construction associe a cette Surface
      * via son volume parent, s'il existe.
      */
-    LPTYMateriauConstruction getMateriau();
-    /**
-     * Retourne le materiau de construction associe a cette Surface
-     * via son volume parent, s'il existe.
-     */
-    const LPTYMateriauConstruction getMateriau() const;
+    virtual LPTYMateriauConstruction getMateriau() const;
 
     /**
      * Indique a la surface le spectre global du volume pour lui

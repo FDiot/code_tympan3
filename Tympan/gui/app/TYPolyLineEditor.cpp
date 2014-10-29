@@ -166,34 +166,41 @@ void TYPolyLineEditor::slotKeyPressed(int key)
         case Qt::Key_Enter:
             if (_active)
             {
-                int nbpoints = static_cast<int>(_savedPoints.size());
+                // Commented until we could understand what it does
+//                int nbpoints = static_cast<int>(_savedPoints.size());
+//
+//              //if (nbpoints >= 3)
+                //{
+                //    OVector3D normale;
+                //    OPoint3D* pts = new OPoint3D[nbpoints];
 
-                if (nbpoints >= 3)
+                //    for (unsigned int i = 0; i < nbpoints; i++)
+                //    {
+                //        pts[i] = _savedPoints[i];
+                //    }
+
+                //    OGeometrie::computeNormal(pts, nbpoints, normale);
+
+                //    OVector3D viewnormale;
+                //    OGLCamera* camera = _pInteractor->getRenderer()->getActiveCamera();
+                //    if (!camera->fromTo.sameDirection(NxVec3(normale._x, normale._y, normale._z)))
+                //    {
+                //        _savedPoints.clear();
+
+                //        for (long i = (nbpoints - 1); i >= 0; i--)
+                //        {
+                //            _savedPoints.push_back(pts[i]);
+                //        }
+                //    }
+
+                //    delete [] pts;
+
+                //}
+
+                // Set all z values to 0
+                for (size_t i=0; i<_savedPoints.size(); i++)
                 {
-                    OVector3D normale;
-                    OPoint3D* pts = new OPoint3D[nbpoints];
-
-                    for (unsigned int i = 0; i < nbpoints; i++)
-                    {
-                        pts[i] = _savedPoints[i];
-                    }
-
-                    OGeometrie::computeNormal(pts, nbpoints, normale);
-
-                    OVector3D viewnormale;
-                    OGLCamera* camera = _pInteractor->getRenderer()->getActiveCamera();
-                    if (!camera->fromTo.sameDirection(NxVec3(normale._x, normale._y, normale._z)))
-                    {
-                        _savedPoints.clear();
-
-                        for (long i = (nbpoints - 1); i >= 0; i--)
-                        {
-                            _savedPoints.push_back(pts[i]);
-                        }
-                    }
-
-                    delete [] pts;
-
+                    _savedPoints[i]._z = 0.0;
                 }
 
                 emit(endedSavingPoints());

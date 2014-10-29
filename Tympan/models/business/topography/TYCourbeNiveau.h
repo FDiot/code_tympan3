@@ -99,7 +99,7 @@ public:
     /**
      * Fermeture d'une courbe de niveau
      */
-    void close();
+    void close(bool closed);
 
     /**
      * Set/Get de l'_altitude.
@@ -168,7 +168,20 @@ public:
      */
     virtual void updateColor();
 
+    bool isClosed() const { return _closed; }
 
+    /*!
+     * \brief return an iterator to the curve point closest to the point passed 
+     */
+    TYTabPoint::iterator getPointRef(const TYPoint& pt);
+
+    /*!
+     * \brief return a new level curve by spliting the actual one at indicated point
+     */
+    LPTYCourbeNiveau split(const TYPoint& pt);
+
+private:
+    void restructure(TYTabPoint::iterator itPt);
 
     // Membres
 protected:
@@ -182,6 +195,9 @@ protected:
     double _altitude;
     ///Liste de points.
     TYTabPoint _listPoints;
+
+    /// close status
+    bool _closed;
 };
 
 

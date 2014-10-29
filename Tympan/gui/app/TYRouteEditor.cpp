@@ -49,28 +49,17 @@ TYRouteEditor::~TYRouteEditor()
 
 void TYRouteEditor::endRoute()
 {
-    if (!_pModeler->askForResetResultat())
+    if ( !(getSavedPoints().size() > 1) || (!_pModeler->askForResetResultat()) )
     {
         return;
     }
 
     LPTYRoute pRoute = new TYRoute();
+    pRoute->setTabPoint(this->getSavedPoints());
 
     if (pRoute->edit(_pModeler) == QDialog::Accepted)
     {
-        pRoute->setTabPoint(this->getSavedPoints());
-
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
-
-        // Make sure altimetry was initialized before using it
-        if (pSite->getAltimetry()->containsData())
-        {
-            for (unsigned int i = 0; i < pRoute->getTabPoint().size(); i++)
-            {
-                pRoute->getTabPoint()[i]._z = 0.0;
-                pSite->getAltimetry()->updateAltitude(pRoute->getTabPoint()[i]);
-            }
-        }
 
         if (pSite->getInfrastructure()->addRoute(pRoute))
         {

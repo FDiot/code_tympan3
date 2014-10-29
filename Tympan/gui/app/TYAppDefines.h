@@ -81,10 +81,9 @@ class TYSemiCylinderEditor;
 class TYSilosEditor;
 class TYSiteFrame;
 class TYSiteModelerFrame;
-class TYSolEditor;
 class TYSourceEditor;
+class TYTerrainEditor;
 class TYTopoToolbar;
-class TYVegetationEditor;
 class TYVerticalMaillageEditor;
 class TYBoundaryNoiseMapEditor;
 

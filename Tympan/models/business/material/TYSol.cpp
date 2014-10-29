@@ -24,12 +24,10 @@ TY_EXTENSION_INST(TYSol);
 
 TYSol::TYSol():
     _resistivite(20000),
-    _epaisseur(1.0),
-    _vegetActive(false)
+    _epaisseur(1.0)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
-    _pVegetation = NULL;
 
 #if TY_USE_IHM
     if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "ResisSolDefault"))
@@ -59,12 +57,6 @@ TYSol::TYSol(const TYSol& other)
 
 TYSol::~TYSol()
 {
-    if (_pVegetation)
-    {
-        delete _pVegetation;
-    }
-
-    _pVegetation = NULL;
 }
 
 TYSol& TYSol::operator=(const TYSol& other)
@@ -74,8 +66,6 @@ TYSol& TYSol::operator=(const TYSol& other)
         TYElement::operator =(other);
         _resistivite = other._resistivite;
         _epaisseur = other._epaisseur;
-        _vegetActive = other._vegetActive;
-        _pVegetation = other._pVegetation;
     }
     return *this;
 }
@@ -87,8 +77,6 @@ bool TYSol::operator==(const TYSol& other) const
         if (TYElement::operator !=(other)) { return false; }
         if (_resistivite != other._resistivite) { return false; }
         if (_epaisseur != other._epaisseur) { return false; }
-        if (_pVegetation != other._pVegetation) { return false; }
-        if (_vegetActive != other._vegetActive) { return false; }
     }
     return true;
 }
@@ -106,12 +94,6 @@ bool TYSol::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 
     _resistivite = pOtherSol->_resistivite;
     _epaisseur = pOtherSol->_epaisseur;
-    _vegetActive = pOtherSol->_vegetActive;
-
-    if (_pVegetation)
-    {
-        _pVegetation->deepCopy(pOtherSol->_pVegetation, copyId);
-    }
 
     return true;
 }
@@ -127,9 +109,6 @@ DOM_Element TYSol::toXML(DOM_Element& domElement)
 
     TYXMLTools::addElementDoubleValue(domNewElem, "resistivite", _resistivite);
     TYXMLTools::addElementDoubleValue(domNewElem, "epaisseur", _epaisseur);
-    TYXMLTools::addElementIntValue(domNewElem, "active", _vegetActive);
-
-    if (_vegetActive && _pVegetation) { _pVegetation->toXML(domNewElem); }
 
     return domNewElem;
 }
@@ -140,11 +119,6 @@ int TYSol::fromXML(DOM_Element domElement)
 
     bool resistiviteOk = false;
     bool epaisseurOk = false;
-    bool activeOk = false;
-    bool bVegetDone = false;
-
-    if (_pVegetation) { delete _pVegetation; }
-    _pVegetation = new TYVegetation();
 
     DOM_Element elemCur;
     QDomNodeList childs = domElement.childNodes();
@@ -154,37 +128,8 @@ int TYSol::fromXML(DOM_Element domElement)
 
         TYXMLTools::getElementDoubleValue(elemCur, "resistivite", _resistivite, resistiviteOk);
         TYXMLTools::getElementDoubleValue(elemCur, "epaisseur", _epaisseur, epaisseurOk);
-        TYXMLTools::getElementBoolValue(elemCur, "active", _vegetActive, activeOk);
-
-        if (_vegetActive && !bVegetDone)
-        {
-            bVegetDone = _pVegetation->callFromXMLIfEqual(elemCur);
-        }
-    }
-
-    if (!bVegetDone && _pVegetation)
-    {
-        delete _pVegetation;
-        _pVegetation = NULL;
     }
 
     return 1;
 }
 
-TYVegetation* TYSol::useVegetation(bool state /*= true*/)
-{
-    _vegetActive = state;
-
-    if (_vegetActive)
-    {
-        _pVegetation = new TYVegetation();
-        _pVegetation->setParent(this);
-    }
-    else
-    {
-        if (_pVegetation) { delete _pVegetation; }
-        _pVegetation = NULL;
-    }
-
-    return _pVegetation;
-}

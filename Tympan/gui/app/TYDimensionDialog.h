@@ -14,73 +14,64 @@
 */
 
 /**
- * \file TYPlanEauWidget.h
- * \brief outil IHM pour un plan d'eau (fichier header)
+ * \file TYDimensionDialog.h
+ * \brief boite de dialogue pour la gestion des dimensions des volumes (fichier header)
  * \author Projet_Tympan
  *
  */
 
-#ifndef __TY_PLAN_EAU_WIDGET__
-#define __TY_PLAN_EAU_WIDGET__
+#ifndef __TY_DIMENSION_DIALOG__
+#define __TY_DIMENSION_DIALOG__
 
-#include "TYWidget.h"
 
-class TYPlanEau;
-class QLabel;
+#include "TYAppDefines.h"
+#include <qdialog.h>
+#include <qlayout.h>
+//Added by qt3to4:
+#include <QGridLayout>
+#include <QLabel>
+
+class OPoint3D;
 class QLineEdit;
 class QGridLayout;
+class QLabel;
 class QGroupBox;
-class QPushButton;
-class TYTerrainWidget;
-class QCheckBox;
+class TYElementWidget;
+class TYAcousticVolume;
 
 /**
- * \class TYPlanEauWidget
- * \brief Classe de l'objet IHM pour un plan d'eau
+ * \class TYDimensionDialog
+ * \brief boite de dialogue pour la gestion des dimensions des volumes
  */
-class TYPlanEauWidget : public TYWidget
+class TYDimensionDialog : public QDialog
 {
     Q_OBJECT
-
-    TY_DECL_METIER_WIDGET(TYPlanEau)
 
     // Methodes
 public:
     /**
      * Constructeur.
      */
-    TYPlanEauWidget(TYPlanEau* pElement, QWidget* _pParent = NULL);
+    TYDimensionDialog(TYAcousticVolume* pElement, QWidget* _pParent = NULL);
     /**
      * Destructeur.
      */
-    virtual ~TYPlanEauWidget();
-
+    virtual ~TYDimensionDialog();
 
 public slots:
     virtual void updateContent();
     virtual void apply();
-    virtual void updateUseDefault();
-    virtual void setDefaultValue();
 
     // Membres
 protected:
-    QGroupBox* _groupBoxAlt;
-    QLabel* _labelAltitude;
-    QLineEdit* _lineEditAltitude;
+    QLineEdit* _pXLineEdit;
+    QLineEdit* _pYLineEdit;
+    QLineEdit* _pZLineEdit;
+    QLineEdit* _pDiamLineEdit;
+    QLineEdit* _pHauteurLineEdit;
 
-    QGroupBox* _groupBoxDistMax;
-    QLabel* _labelDistMax;
-    QLineEdit* _lineEditDistMax;
-    QGridLayout* _groupBoxDistLayout;
-
-    QPushButton* _pushButtonUseDefault;
-    QLabel* _labelUseDefault;
-
-    QGridLayout* _planEauLayout;
-    QGridLayout* _groupBoxAltLayout;
-
-    TYTerrainWidget* _terrainW;
+	TYAcousticVolume *_pElement;
 };
 
 
-#endif // __TY_PLAN_EAU_WIDGET__
+#endif // __TY_DIMENSION_DIALOG__

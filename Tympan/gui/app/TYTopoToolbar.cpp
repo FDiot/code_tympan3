@@ -93,15 +93,6 @@ TYTopoToolbar::TYTopoToolbar(QButtonGroup* pBtnGroup, QMainWindow* parent /*= 0*
     addWidget(_toolButtonTerrain);
     pBtnGroup->addButton(_toolButtonTerrain, TYSiteModelerFrame::TerrainMode);
 
-    _toolButtonVeg = new QToolButton(this);
-    _toolButtonVeg->setIcon(QPixmap(IMG("id_icon_veg")));
-    _toolButtonVeg->setText(TR("id_menuitem_veg"));
-    _toolButtonVeg->setToolTip(TR("id_menuitem_veg"));
-    _toolButtonVeg->setStatusTip(TR("id_menuitem_veg"));
-    _toolButtonVeg->setCheckable(true);
-    addWidget(_toolButtonVeg);
-    pBtnGroup->addButton(_toolButtonVeg, TYSiteModelerFrame::VegetationMode);
-
     _toolButtonPlanEau = new QToolButton(this);
     _toolButtonPlanEau->setIcon(QPixmap(IMG("id_icon_planeau")));
     _toolButtonPlanEau->setText(TR("id_menuitem_planeau"));
@@ -133,7 +124,6 @@ void TYTopoToolbar::activeButtons(bool active)
     _toolButtonEmprise->setEnabled(active);
     _toolButtonCrbNiv->setEnabled(active);
     _toolButtonTerrain->setEnabled(active);
-    _toolButtonVeg->setEnabled(active);
     _toolButtonPlanEau->setEnabled(active);
     _toolButtonCrsEau->setEnabled(active);
 }

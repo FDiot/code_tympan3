@@ -337,8 +337,8 @@ void TYDXFBDTopoImporter::importField(int nMaxTerrain, const dimeModel model[],
                 pTerrain->getSol()->setEpaisseur(Terrains[k].Epaisseur);
                 if (Terrains[k].HauteurVegetation > 0)
                 {
-                    TYVegetation* current_vegetation =
-                        pTerrain->getSol()->useVegetation(true);
+                    pTerrain->useVegetation(true);
+                    TYVegetation* current_vegetation = pTerrain->getVegetation()._pObj; 
                     current_vegetation->setHauteur(Terrains[k].HauteurVegetation);
                 }
                 SetName(pTerrain, Terrains[k].sCalque, i + 1);

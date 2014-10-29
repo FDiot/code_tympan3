@@ -77,19 +77,16 @@ void TYCourbeNiveauEditor::endCourbeNiveau()
 {
     bool ok = false;
 
-    if (!_pModeler->askForResetResultat())
+    if ( !(getSavedPoints().size() > 1) || (!_pModeler->askForResetResultat()) )
     {
         return;
     }
 
-    double alti = QInputDialog::getDouble(getTYMainWnd(), getTYMainWnd()->windowTitle(), TR("id_msg_getaltitude"), 0, -10000, 10000, 2, &ok);
+    _pCrbNiv = new TYCourbeNiveau();
+    _pCrbNiv->setListPoints(this->getSavedPoints());
 
-    if (ok && (this->getSavedPoints().size() != 0))
+    if ( _pCrbNiv->edit(_pModeler) == QDialog::Accepted)
     {
-        _pCrbNiv = new TYCourbeNiveau();
-        _pCrbNiv->setListPoints(this->getSavedPoints());
-        _pCrbNiv->setAltitude(alti);
-
         TYSiteNode* pSite = ((TYSiteModelerFrame*) _pModeler)->getSite();
 
         if (pSite->getTopographie()->addCrbNiv(_pCrbNiv))

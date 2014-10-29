@@ -254,8 +254,8 @@ bool TYAcousticBox::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     for (int i = 0; i < 6; i++)
     {
         _faces[i]->deepCopy(((TYAcousticBox*) pOther)->getFace(i), copyId);
-        _faces[i]->setParent(this);
         _faces[i]->getElement()->setParent(this);
+        _faces[i]->setParent(this);
     }
 
     _volEnglob = volEnglob();

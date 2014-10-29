@@ -115,16 +115,8 @@ protected:
     QLabel* _labelDateModif;
     QLabel* _labelComment;
 
-    QRadioButton* _pRadioButtonSolReflechissant;
-    QRadioButton* _pRadioButtonSolReel;
-
-    QComboBox* _comboBoxTypeSol;
-
     // Affichage du type de calcul
     QComboBox* _comboSolver;
-
-    // Utilisation des ecrans
-    QCheckBox* _checkBoxParcoursLateraux;
 
     QGroupBox* _groupBox;
     QGroupBox* _groupBoxFlag;

@@ -184,3 +184,4 @@ int TYMurElement::intersects(const OSegment3D& seg, OPoint3D& pt) const
 {
     return TYAcousticRectangle::intersects(seg, pt);
 }
+

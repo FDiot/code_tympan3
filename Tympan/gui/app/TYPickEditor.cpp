@@ -58,6 +58,7 @@
 #include "Tympan/gui/app/TYRenderWindowInteractor.h"
 #include "Tympan/gui/app/TYRotationDialog.h"
 #include "Tympan/gui/app/TYPositionDialog.h"
+#include "Tympan/gui/app/TYDimensionDialog.h"
 #include "Tympan/gui/app/TYActions.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
@@ -244,261 +245,152 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
         return;
     }
 
+    if (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0)
+    {
+        siteModelerPopupMenu(pElts);
+    }
+    else if (QString(_pModeler->metaObject()->className()).compare("TYMachineModelerFrame") == 0)
+    {
+        machineModelerPopupMenu(pElts);
+    }
+    else if (QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0)
+    {
+        batimentModelerPopupMenu(pElts);
+    }
+
+    // Deselection
+    resetPicker();
+
+    TYProjet* pProjet = getTYApp()->getCurProjet();
+    if (pProjet)
+    {
+        pProjet->getSite()->getTopographie()->updateGraphicTree();
+    }
+    // Update
+    getTYMainWnd()->updateModelers(true, true, true);//xbh++
+
+}
+
+void TYPickEditor::siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
+{
+    // Check site existance
+    TYSiteModelerFrame* pModelerFrame = dynamic_cast<TYSiteModelerFrame*> (_pModeler);
+    TYSiteNode* pModelerSite = nullptr;
+    if (pModelerFrame) 
+    {
+        pModelerSite = pModelerFrame->getSite();
+    }
+    if ( pModelerSite == nullptr ) { return; }
+
     QMenu* pPopup = new QMenu(NULL);
 
     std::map<QAction*, int> retCodes;
     std::map<QAction*, TYGeometryNode*> posRetCodes;
     std::map<QAction*, TYGeometryNode*> rotRetCodes;
-    std::map<QAction*, TYAcousticVolume*> dimVolRetCodes;
-    std::map<QAction*, TYAcousticVolume*> remVolRetCodes;
-    std::map<QAction*, TYAcousticVolume*> copyVolRetCodes;
-    std::map<QAction*, TYMachine*> remMachineRetCodes;
-    std::map<QAction*, TYMachine*> copyMachineRetCodes;
-    std::map<QAction*, TYElement*> remTopoRetCodes;
-    std::map<QAction*, TYElement*> copyTopoRetCodes;
-    std::map<QAction*, TYElement*> remInfraRetCodes;
-    std::map<QAction*, TYElement*> copyInfraRetCodes;
-    std::map<QAction*, TYMaillage*> remMaillageRetCodes;
+    std::map<QAction*, TYSiteNode*> copySiteNodeRetCodes;
+    std::map<QAction*, TYSiteNode*> remSiteNodeRetCodes;
+    std::map<QAction*, TYAcousticVolumeNode*> calculVolNodeRetCodes;
+    QAction* inverseNormales = NULL;
     std::map<QAction*, TYMaillage*> copyMaillageRetCodes;
+    std::map<QAction*, TYMaillage*> remMaillageRetCodes;
     std::map<QAction*, TYPointControl*> copyPtControlRetCodes;
     std::map<QAction*, TYPointControl*> remPtControlRetCodes;
-    std::map<QAction*, TYSiteNode*> remSiteNodeRetCodes;
-    std::map<QAction*, TYSiteNode*> copySiteNodeRetCodes;
-    std::map<QAction*, TYAcousticVolumeNode*> calculVolNodeRetCodes;
+    QAction* split = NULL;
+    std::map<QAction*, TYElement*> copyTopoRetCodes;
+    std::map<QAction*, TYElement*> remTopoRetCodes;
+    std::map<QAction*, TYElement*> copyInfraRetCodes;
+    std::map<QAction*, TYElement*> remInfraRetCodes;
+    QAction* code = NULL;
+
     LPTYElement pRemovedEltParent = NULL;
     LPTYElement pAddedElt = NULL;
-    TYElement* pSelected = NULL;
-    QAction* hauteurEtage = NULL;
-    QAction* hauteurEcran = NULL;
-    QAction* epaisseurEcran = NULL;
-    QAction* editFace = NULL;
-    QAction* showModelerSite = NULL;
-    QAction* showModelerMachine = NULL;
-    QAction* showModelerBatiment = NULL;
-    QAction* code = NULL;
-    QAction* inverseNormales = NULL;
-    int etageFound = -2, ecranFound = -2, rectFound = -2, volumeFound = -2;
 
+    int volumeFound = -2, levelCurveFound = -2;
+
+    QFont font = pPopup->font();
+    font.setBold(true);
+    TYElement *elem_0 = nullptr; // Currrent element
+    TYElement *elem_1 = nullptr; // next in queue
+    TYElement *elem_2 = nullptr; // 2nd level next in queue
     for (unsigned int i = 0; i < pElts->size(); i++)
     {
-        if (i > 0)
-        {
-            // On separe l'element picke de ses parents
-            pPopup->addSeparator();
-        }
+        elem_0 = pElts->at(i); // Currrent element
+        if ( (i+1) < pElts->size() ) { elem_1 = pElts->at(i + 1)._pObj; }
+        if ( (i+2) < pElts->size() ) { elem_2 = pElts->at(i + 2)._pObj; }
 
-        QFont font = pPopup->font();
-        font.setBold(true);
-        if (TYSiteNode::safeDownCast(pElts->at(i)) && TYSiteNode::safeDownCast(pElts->at(i))->getRoot())
+
+        TYSiteNode *pCurrentSite = dynamic_cast<TYSiteNode*>(elem_0);
+
+        // Edition des proprietes de l'element (quelque soit l'element)
+        QString labelTxt;
+        if ( (pCurrentSite != nullptr) && (pCurrentSite->getRoot()) )
         {
-            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_editeelt"))), TR("id_popup_siteroot"));
-            code->setFont(font);
+            labelTxt = TR("id_popup_siteroot");
         }
         else
         {
-            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_editeelt"))), TYWidget::getDisplayName(pElts->at(i)));
-            code->setFont(font);
+            labelTxt = TYWidget::getDisplayName(pElts->at(i));
         }
+        code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_editeelt"))), labelTxt);
+        code->setFont(font);
         retCodes[code] = i;
 
-        if (pElts->at(i)->isA("TYBatiment"))
+        if (pCurrentSite != nullptr)
         {
-            // Calcul acoustique
-            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_calcul"))), TR("id_popup_calculer"));
-            calculVolNodeRetCodes[code] = (LPTYAcousticVolumeNode&) pElts->at(i);
-
-            // Si on est dans un modeleur de site/projet, on permet d'ouvrir un modeleur
-            if (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0)
+            // Recherche du site parent
+            TYSiteNode *pCurrentSiteParent = nullptr;
+            if (i+1 < pElts->size())
             {
-                pSelected = pElts->at(i);
+                pCurrentSiteParent = dynamic_cast<TYSiteNode*>(elem_1);
             }
 
-            if ((i + 1 < pElts->size()) &&
-                    (dynamic_cast<TYInfrastructure*>(pElts->at(i + 1)._pObj) != nullptr))
+            if (pCurrentSiteParent == pModelerSite)
             {
-                if ((QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") != 0) &&
-                    (QString(_pModeler->metaObject()->className()).compare("TYMachineModelerFrame") != 0))
-                {
-                    // Si le batiment est dans le modeler de son site parent on a acces a sa position
-                    if (((i + 2) < pElts->size()) &&
-                            (dynamic_cast<TYSiteNode*>(pElts->at(i + 2)._pObj) != nullptr))
-                    {
-                        LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElts->at(i + 2));
-                        TYSiteModelerFrame* pmodelerFrame = (TYSiteModelerFrame*) _pModeler;
+                // GeoNode
+                TYGeometryNode* pEltGeoNode = TYGeometryNode::GetGeoNode(pCurrentSite); 
 
-                        // GeoNode
-                        TYGeometryNode* pEltGeoNode = (TYGeometryNode*)((LPTYInfrastructure&) pElts->at(i + 1))->findBatiment((LPTYBatiment&) pElts->at(i)).getRealPointer();
+                // Position
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
+                posRetCodes[code] = pEltGeoNode;
 
-                        if ((pSite) && (pSite == pmodelerFrame->getSite()))
-                        {
-                            // Position via le parent (GeoNode)
-                            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
-                            posRetCodes[code] = pEltGeoNode;
+                // Rotation
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
+                rotRetCodes[code] = pEltGeoNode;
 
-                            // Rotation via le parent (GeoNode)
-                            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
-                            rotRetCodes[code] = pEltGeoNode;
-                        }
-                    }
-                }
+                // Duplication
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
+                copySiteNodeRetCodes[code] = pCurrentSite;
+
+                // Suppression
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
+                remSiteNodeRetCodes[code] = pCurrentSite;
             }
         }
-        else if ((dynamic_cast<TYAcousticRectangleNode*>(pElts->at(i)._pObj) != nullptr) &&
-                 ((QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0) ||
-                  (QString(_pModeler->metaObject()->className()).compare("TYMachineModelerFrame") == 0)))
-        {
-            // On permet d'editer une face uniquement dans un modeleur de batiment ou de machine
-            rectFound = i;
-            editFace = pPopup->addAction(TR("id_popup_editface"));
-        }
-        else if (dynamic_cast<TYAcousticVolume*>(pElts->at(i)._pObj) != nullptr)
+        
+        if (dynamic_cast<TYAcousticVolume*>(elem_0) != nullptr)
         {
             // Dans tous les cas, on offre la possibilite d'inverser la normales des faces
             volumeFound = i;
             inverseNormales = pPopup->addAction(TR("id_popup_normales"));
-
-            // Possibilite de modification du volume node uniquement dans un modeleur adapte
-            if ((QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0) ||
-                (QString(_pModeler->metaObject()->className()).compare("TYMachineModelerFrame") == 0))
-            {
-                if ((pElts->at(i)->isA("TYEtage")) &&
-                    (QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0))
-                {
-                    // Hauteur etage
-                    etageFound = i;
-                    hauteurEtage = pPopup->addAction(TR("id_popup_hauteur"));
-                }
-                else if ((pElts->at(i)->isA("TYEcran")) &&
-                         (QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0))
-                {
-                    // Hauteur ecran
-                    ecranFound = i;
-                    hauteurEcran = pPopup->addAction(TR("id_popup_hauteur"));
-                    epaisseurEcran = pPopup->addAction(TR("id_popup_epaisseur"));
-                }
-                // Deux solutions (sous reserve qu'il existe un element i+1):
-                //          1/ On est dans un modeleur de batiment et l'objet suivant est un batiment
-                //          2/ On est dans un modeleur de machine et l'objet suivant est une machine
-                if ((i + 1 < pElts->size())                                   &&
-                    (((QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0)           &&
-                      (pElts->at(i + 1)->isA("TYBatiment")))           ||
-                     ((QString(_pModeler->metaObject()->className()).compare("TYMachineModelerFrame") == 0)           &&
-                      (pElts->at(i + 1)->isA("TYMachine")))))
-                {
-                    // GeoNode
-                    TYGeometryNode* pEltGeoNode = (TYGeometryNode*)((LPTYAcousticVolumeNode&) pElts->at(i + 1))->findAcousticVol((LPTYAcousticVolume&) pElts->at(i)).getRealPointer();
-
-                    // Position via le parent (GeoNode)
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
-                    posRetCodes[code] = pEltGeoNode;
-
-                    // Rotation via le parent (GeoNode)
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
-                    rotRetCodes[code] = pEltGeoNode;
-
-                    if ((pElts->at(i)->isA("TYAcousticBox"))            ||
-                        (pElts->at(i)->isA("TYAcousticCylinder"))      ||
-                        (pElts->at(i)->isA("TYAcousticSemiCylinder")))
-                    {
-                        // Dimensions box, cyl et demi cyl
-                        code = pPopup->addAction(TR("id_popup_dimension"));
-                        dimVolRetCodes[code] = (LPTYAcousticVolume&) pElts->at(i);
-                    }
-
-                    // Duplication
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                    copyVolRetCodes[code] = (LPTYAcousticVolume&) pElts->at(i);
-
-                    // Suppression
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
-                    remVolRetCodes[code] = (LPTYAcousticVolume&) pElts->at(i);
-                }
-            }
         }
-        else if (dynamic_cast<TYMachine*>(pElts->at(i)._pObj) != nullptr)
-        {
-            // Calcul acoustique
-            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_calcul"))), TR("id_popup_calculer"));
-            calculVolNodeRetCodes[code] = (LPTYAcousticVolumeNode&) pElts->at(i);
-
-            // Machine
-            bool bMachineDansUnEtage = (i + 1 < pElts->size()) &&
-                (dynamic_cast<TYEtage*>(pElts->at(i + 1)._pObj) != nullptr); //az++
-            bool bMachineDansUneInfrastructure = (i + 1 < pElts->size()) &&
-                (dynamic_cast<TYInfrastructure*>(pElts->at(i + 1)._pObj) != nullptr);
-            bool bBatimentModeler = QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0;
-            bool bSiteModeler = QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0;
-            if ((bMachineDansUnEtage && bBatimentModeler) ||
-                (bMachineDansUneInfrastructure && bSiteModeler))
-            {
-                pSelected = pElts->at(i);
-
-                // GeoNode
-                TYGeometryNode* pEltGeoNode;
-
-                bool bCanBeMoved = false;
-
-                if (bMachineDansUnEtage) // et donc dans un modeleur de batiment
-                {
-                    pEltGeoNode = (TYGeometryNode*)((LPTYEtage&) pElts->at(i + 1))->findMachine((LPTYMachine&) pElts->at(i)).getRealPointer();
-                    bCanBeMoved = true; // Catch me if you can !
-                }
-                else // Machine dans un modeleur de site
-                {
-                    pEltGeoNode = (TYGeometryNode*)((LPTYInfrastructure&) pElts->at(i + 1))->findMachine((LPTYMachine&) pElts->at(i)).getRealPointer();
-
-                    // Si la machine est dans le modeler de son site parent on a acces a sa position
-                    if (((i + 2) < pElts->size()) &&
-                            (dynamic_cast<TYSiteNode*>(pElts->at(i + 2)._pObj) != nullptr))
-                    {
-                        LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElts->at(i + 2));
-                        TYSiteModelerFrame* pmodelerFrame = (TYSiteModelerFrame*) _pModeler;
-
-                        // GeoNode
-                        TYGeometryNode* pEltGeoNode = (TYGeometryNode*)((LPTYInfrastructure&) pElts->at(i + 1))->findBatiment((LPTYBatiment&) pElts->at(i)).getRealPointer();
-
-                        if ((pSite) && (pSite == pmodelerFrame->getSite()))
-                        {
-                            bCanBeMoved = true;
-                        }
-                        else
-                        {
-                            bCanBeMoved = false;
-                        }
-                    }
-                }
-
-                if (bCanBeMoved)
-                {
-                    // Position via le parent (GeoNode)
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
-                    posRetCodes[code] = pEltGeoNode;
-
-                    // Rotation via le parent (GeoNode)
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
-                    rotRetCodes[code] = pEltGeoNode;
-                }
-            }
-        }
-        else if (dynamic_cast<TYMaillage*>(pElts->at(i)._pObj) != nullptr)
+        
+        TYMaillage *pMaillage = dynamic_cast<TYMaillage*>(elem_0);        
+        if ( pMaillage != nullptr )
         {
             // Calcul parent
-            if ((i + 1 < pElts->size()) &&
-                    (dynamic_cast<TYCalcul*>(pElts->at(i + 1)._pObj) != nullptr))
+            if ( dynamic_cast<TYCalcul*>(elem_1) != nullptr )
             {
-                LPTYMaillage pMaillage = (LPTYMaillage&) pElts->at(i);
-
                 // Si le maillage est bien present dans le calcul
-                LPTYMaillageGeoNode pMaillageGeoNode = ((LPTYCalcul&) pElts->at(i + 1))->findMaillage(pMaillage);
-                if (pMaillageGeoNode)
+                TYMaillageGeoNode* pMaillageGeoNode = TYGeometryNode::GetGeoNode(elem_0);
+                if (pMaillageGeoNode != nullptr)
                 {
                     // Position via le parent (GeoNode)
                     code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
-                    posRetCodes[code] = (TYGeometryNode*) pMaillageGeoNode.getRealPointer();
+                    posRetCodes[code] = dynamic_cast<TYGeometryNode*>(pMaillageGeoNode);
 
                     // Rotation via le parent (GeoNode)
                     code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
-                    rotRetCodes[code] = (TYGeometryNode*) pMaillageGeoNode.getRealPointer();
+                    rotRetCodes[code] = dynamic_cast<TYGeometryNode*>(pMaillageGeoNode);
 
                     // Duplication
                     code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
@@ -510,1022 +402,448 @@ void TYPickEditor::showPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                 }
             }
         }
-        else if (dynamic_cast<TYPointControl*>(pElts->at(i)._pObj) != nullptr)
+
+        TYPointControl *pPointCtrl = dynamic_cast<TYPointControl*>(pElts->at(i)._pObj);
+        if (pPointCtrl != nullptr)
         {
             // Projet parent
-            if ((i + 1 < pElts->size()) &&
-                    (dynamic_cast<TYProjet*>(pElts->at(i + 1)._pObj) != nullptr))
+            if ( dynamic_cast<TYProjet*>(elem_1) != nullptr )
             {
                 // Duplication
                 code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                copyPtControlRetCodes[code] = (LPTYPointControl&) pElts->at(i);
+                copyPtControlRetCodes[code] = pPointCtrl;
 
                 // Suppression
                 code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
-                remPtControlRetCodes[code] = (LPTYPointControl&) pElts->at(i);
+                remPtControlRetCodes[code] = pPointCtrl;
             }
         }
-        // Site
-        else if (dynamic_cast<TYSiteNode*>(pElts->at(i)._pObj) != nullptr)
-        {
-            LPTYSiteNode pSiteNode = (LPTYSiteNode&) pElts->at(i);
 
-            if ((i + 1 < pElts->size()) &&
-                    (dynamic_cast<TYSiteNode*>(pElts->at(i + 1)._pObj) != nullptr))
-                // On est bien dans un site imbrique dans un autre
-            {
-                LPTYSiteNode pSite = TYSiteNode::safeDownCast(pElts->at(i + 1));
-
-                if (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0) // On est bien dans un modeleur de site
-                {
-                    TYSiteModelerFrame* pmodelerFrame = (TYSiteModelerFrame*) _pModeler;
-
-                    if ((pSite) && (pSite == pmodelerFrame->getSite()))
-                    {
-                        // Les actions suivantes ne peuvent etre faites que dans le siteframe du site englobant le site picke
-                        // GeoNode
-                        TYGeometryNode* pEltGeoNode = (TYGeometryNode*)((LPTYSiteNode&) pElts->at(i + 1))->findSiteNode(pSiteNode).getRealPointer();
-
-                        // Ouverture d'un modeleur sur le site
-                        pSelected = pElts->at(i);
-
-                        // Position via le parent (GeoNode)
-                        code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
-                        posRetCodes[code] = pEltGeoNode;
-
-                        // Rotation via le parent (GeoNode)
-                        code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
-                        rotRetCodes[code] = pEltGeoNode;
-
-                        // Duplication
-                        code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                        copySiteNodeRetCodes[code] = pSiteNode;
-
-                        // Suppression
-                        code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
-                        remSiteNodeRetCodes[code] = pSiteNode;
-                    }
-                }
-            }
-        }
-        // Elts de Topo
-        if ((i + 1 < pElts->size()) && (pElts->at(i + 1)->isA("TYTopographie")))
+        if (dynamic_cast<TYTopographie*>(elem_1) != nullptr)
         {
 
-            if ((i + 2) < pElts->size())
+            TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(elem_2);
+            if (pSite == pModelerSite)
             {
-                LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pElts->at(i + 2)._pObj);
-                TYSiteModelerFrame* pmodelerFrame = (TYSiteModelerFrame*) _pModeler;
-
                 // On ne peut dupliquer ou supprimer que dans le modeler de son site
-                if ((pSite._pObj != nullptr) && (pSite == pmodelerFrame->getSite()))
+                if (dynamic_cast<TYCourbeNiveau*>(pElts->at(i)._pObj) != nullptr)
                 {
-                    // Duplication
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                    copyTopoRetCodes[code] = pElts->at(i);
-
-                    // Suppression
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
-                    remTopoRetCodes[code] = pElts->at(i);
+                    split = pPopup->addAction(TR("id_popup_split"));
+                    levelCurveFound = i;
                 }
-            }
-    }
-        // Elts d'Infra
-        else if ((i + 1 < pElts->size()) && (pElts->at(i + 1)->isA("TYInfrastructure")) && (QString(_pModeler->metaObject()->className()).compare("TYSiteModelerFrame") == 0))
-        {
-            if ((i + 2) < pElts->size())
-            {
-                LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pElts->at(i + 2)._pObj);
-                TYSiteModelerFrame* pmodelerFrame = (TYSiteModelerFrame*) _pModeler;
+                // Duplication
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
+                copyTopoRetCodes[code] = pElts->at(i);
 
-                // On ne peut dupliquer ou supprimer que dans le modeler de son site
-                if ((pSite._pObj != nullptr) && (pSite == pmodelerFrame->getSite()))
-                {
-                    // Duplication
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                    copyInfraRetCodes[code] = pElts->at(i);
-
-                    // Suppression
-                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
-                    remInfraRetCodes[code] = pElts->at(i);
-                }
+                // Suppression
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
+                remTopoRetCodes[code] = pElts->at(i);
             }
         }
+
+        if ( dynamic_cast<TYInfrastructure*>(elem_1) != nullptr )
+        {
+            // Acoustic computation is always possible
+            if ( dynamic_cast<TYAcousticVolumeNode*>( elem_0 ) )
+            {
+                // Calcul acoustique
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_calcul"))), TR("id_popup_calculer"));
+                calculVolNodeRetCodes[code] = dynamic_cast<TYAcousticVolumeNode*>( elem_0 );
+            }
+
+            // Geometric changes only possible in parent site meodeler
+            TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(elem_2);
+            if (pSite == pModelerSite)
+            {
+                // GeoNode
+                TYGeometryNode* pEltGeoNode = TYGeometryNode::GetGeoNode( elem_0 );
+
+                // Position via le parent (GeoNode)
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
+                posRetCodes[code] = pEltGeoNode;
+
+                // Rotation via le parent (GeoNode)
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
+                rotRetCodes[code] = pEltGeoNode;
+
+                // Duplication
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
+                copyInfraRetCodes[code] = elem_0;
+
+                // Suppression
+                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
+                remInfraRetCodes[code] = elem_0;
+            }
+        }
+        // Ajoute un separateur entre les elements
+        pPopup->addSeparator();
     }
 
     // Gestion du choix de l'utilisateur
-
     pPopup->setMouseTracking(true);
     bool bUpdateDisplayList = false;
     QAction* popupRet = pPopup->exec(QCursor::pos());
     if (popupRet == NULL) { return; }
     qApp->processEvents();
 
-    if (popupRet == hauteurEtage)
+    if (retCodes.find(popupRet) != retCodes.end())
     {
-        if (_pModeler->askForResetResultat())
-        {
-            TYEtage* pEtage = (LPTYEtage&) pElts->at(etageFound);
-
-            bool ok = false;
-            double hauteur = QInputDialog::getDouble(_pModeler, "", TR("id_msg_gethauteur"), pEtage->getHauteur(), 0, 1000, 2, &ok);
-
-            if (ok)
-            {
-                pEtage->setHauteur(hauteur);
-                pEtage->updateGraphic();
-                bUpdateDisplayList = true;
-                _pInteractor->updateGL();
-            }
-        }
-    }
-    if (popupRet == hauteurEcran)
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            TYEcran* pEcran = (LPTYEcran&) pElts->at(ecranFound);
-
-            bool ok = false;
-            double hauteur = QInputDialog::getDouble(_pModeler, "", TR("id_msg_gethauteur_ecran"), pEcran->getHauteur(), 0, 1000, 2, &ok);
-
-            if (ok)
-            {
-                pEcran->setHauteur(hauteur);
-                pEcran->updateGeometry();
-                pEcran->updateGraphic();
-                bUpdateDisplayList = true;
-                _pInteractor->updateGL();
-            }
-        }
-    }
-    if (popupRet == epaisseurEcran)
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            TYEcran* pEcran = (LPTYEcran&) pElts->at(ecranFound);
-
-            bool ok = false;
-            double epaisseur = QInputDialog::getDouble(_pModeler, "", TR("id_msg_getepaisseur_ecran"), pEcran->getEpaisseur(), 0, 1000, 2, &ok);
-
-            if (ok)
-            {
-                pEcran->setEpaisseur(epaisseur);
-                pEcran->updateGeometry();
-                pEcran->updateGraphic();
-                bUpdateDisplayList = true;
-                _pInteractor->updateGL();
-            }
-        }
-    }
-    else if (calculVolNodeRetCodes.find(popupRet) != calculVolNodeRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            getTYApp()->getCalculManager()->updateAcoustic(calculVolNodeRetCodes[popupRet]);
-        }
-    }
-    else if (popupRet == editFace)
-    {
-        bUpdateDisplayList = true;
-        TYFaceModelerFrame* pFaceMdF;
-
-        if (strcmp(pElts->at(rectFound)->getClassName(), "TYMur") == 0)
-        {
-            TYMur* pMur = (LPTYMur&) pElts->at(rectFound);
-            pFaceMdF = new TYFaceModelerFrame(pMur, getTYMainWnd()->getWorkspace(), "face modeler");
-            pFaceMdF->setAttribute(Qt::WA_DeleteOnClose);
-            getTYMainWnd()->getWorkspace()->addSubWindow(pFaceMdF)->setObjectName("TYFaceModelerFrame");
-        }
-        else
-        {
-            TYAcousticRectangleNode* pAccRectNode = (LPTYAcousticRectangleNode&) pElts->at(rectFound);
-            pFaceMdF = new TYFaceModelerFrame(pAccRectNode, getTYMainWnd()->getWorkspace(), "face modeler");
-            pFaceMdF->setAttribute(Qt::WA_DeleteOnClose);
-            getTYMainWnd()->getWorkspace()->addSubWindow(pFaceMdF)->setObjectName("TYFaceModelerFrame");
-        }
-
-        pFaceMdF->showMaximized();
-        pFaceMdF->fit();
-    }
-    else if (popupRet == showModelerMachine)
-    {
-        getTYMainWnd()->makeMachineModeler((TYMachine*) pSelected);
-        getTYMainWnd()->updateModelers();
-    }
-    else if (popupRet == showModelerBatiment)
-    {
-        getTYMainWnd()->makeBatimentModeler((LPTYBatiment&) pSelected);
-    }
-    else if (popupRet == showModelerSite)
-    {
-        getTYMainWnd()->makeSiteModeler((TYSiteNode*) pSelected);
-    }
-    else if (popupRet == inverseNormales)
-    {
-        TYAcousticVolume* pVol = TYAcousticVolume::safeDownCast(pElts->at(volumeFound));
-        if (pVol) { pVol->inverseNormales(); }
-        pVol->setNormalStatus();
-    }
-    else if (retCodes.find(popupRet) != retCodes.end())
-    {
-        // Affiche le widget de l'element
-        int ret = pElts->at(retCodes[popupRet])->edit(_pModeler);
-
-        if (ret == QDialog::Accepted)
-        {
-            // Mise a jour du projet
-            TYProjet* pProjet = getTYApp()->getCurProjet();
-            if (pProjet)
-            {
-                TYSiteNode* pSite = pProjet->getSite();
-                if (pSite)
-                {
-                    pSite->update(pElts->at(retCodes[popupRet]));
-                    getTYMainWnd()->getSiteFrame()->updateList();
-                }
-            }
-
-            // Mise a jour graphic
-            if ((dynamic_cast<TYAcousticSurface*>(pElts->at(retCodes[popupRet])._pObj) != nullptr)
-                   ||
-                (dynamic_cast<TYAcousticSurfaceNode*>(pElts->at(retCodes[popupRet])._pObj) != nullptr)
-                   ||
-                (dynamic_cast<TYAcousticCylinder*>(pElts->at(retCodes[popupRet])._pObj) != nullptr)
-                   ||
-                (dynamic_cast<TYAcousticSemiCylinder*>(pElts->at(retCodes[popupRet])._pObj) != nullptr))
-            {
-                pElts->at(retCodes[popupRet])->updateGraphicTree();
-                bUpdateDisplayList = false;
-            }
-            else if (pElts->at(retCodes[popupRet])->isA("TYRectangularMaillage"))
-            {
-                TYRectangularMaillage* pRectMaillage = (LPTYRectangularMaillage&) pElts->at(retCodes[popupRet]);
-                pRectMaillage->updateGraphic();
-                bUpdateDisplayList = true; // DT++
-            }
-            else if (pElts->at(retCodes[popupRet])->isA("TYCourbeNiveau") ||
-                     pElts->at(retCodes[popupRet])->isA("TYPlanEau"))
-            {
-                bUpdateDisplayList = true; // DT++
-            }
-            else
-            {
-                pElts->at(retCodes[popupRet])->updateGraphic();
-            }
-        }
-    }
-    else if (dimVolRetCodes.find(popupRet) != dimVolRetCodes.end())
-    {
-        // On preserve la dimension en hauteur de l'objet
-        TYAcousticVolume* pVol = TYAcousticVolume::safeDownCast(dimVolRetCodes[popupRet]);
-        float sizeX = 0, sizeY = 0, sizeZ = 0;
-
-        if (pVol != NULL)
-        {
-            if (pVol->isA("TYAcousticBox"))
-            {
-                TYAcousticBox* pBox = (TYAcousticBox*) pVol;
-                pBox->getDimension(sizeX, sizeY, sizeZ);
-            }
-            else if (pVol->isA("TYAcousticCylinder"))
-            {
-                sizeZ = ((TYAcousticCylinder*) pVol)->getHauteur();
-            }
-            else if (pVol->isA("TYAcousticSemiCylinder"))
-            {
-                sizeZ = ((TYAcousticSemiCylinder*) pVol)->getHauteur();
-            }
-        }
-
-        // Affichage de la boite de dialogue
-        showDimensionsDialog(dimVolRetCodes[popupRet]);
-
-        // Modification de la position pour tenir compte des nouvelles dimensions
-        LPTYAcousticVolumeNode pParent = (TYAcousticVolumeNode*) pVol->getParent();
-        LPTYAcousticVolumeGeoNode pGeoNode = pParent->findAcousticVol(pVol);
-
-        if (pGeoNode)
-        {
-            ORepere3D repere = pGeoNode->getORepere3D();
-            TYPoint org = repere._origin;
-            // On retire l'ancienne hauteur
-            org._z -= sizeZ / 2;
-
-            // on ajoute la nouvelle
-            if (pVol->isA("TYAcousticBox"))
-            {
-                TYAcousticBox* pAccBox = (TYAcousticBox*) pVol;
-                pAccBox->getDimension(sizeX, sizeY, sizeZ);
-            }
-            else if (pVol->isA("TYAcousticCylinder"))
-            {
-                sizeZ = ((TYAcousticCylinder*) pVol)->getHauteur();
-            }
-            else if (pVol->isA("TYAcousticSemiCylinder"))
-            {
-                sizeZ = ((TYAcousticSemiCylinder*) pVol)->getHauteur();
-            }
-
-            org._z += sizeZ / 2;
-
-            repere._origin = org;
-            pGeoNode->setRepere(repere);
-        }
-
-        if ((dynamic_cast<TYAcousticSurface*>(pElts->at(retCodes[popupRet])._pObj) != nullptr)
-            || (dynamic_cast<TYAcousticSurfaceNode*>(pElts->at(retCodes[popupRet])._pObj) != nullptr)
-            || (dynamic_cast<TYAcousticCylinder*>(pElts->at(retCodes[popupRet])._pObj) != nullptr))
-        {
-            pElts->at(retCodes[popupRet])->updateGraphicTree();
-        }
-        else if (pElts->at(retCodes[popupRet])->isA("TYRectangularMaillage"))
-        {
-            TYRectangularMaillage* pRectMaillage = (LPTYRectangularMaillage&) pElts->at(retCodes[popupRet]);
-            pRectMaillage->updateGraphic();
-        }
-        else
-        {
-            pElts->at(retCodes[popupRet])->updateGraphic();
-        }
-        bUpdateDisplayList = true;
+        TYElement *pElement = pElts->at(retCodes[popupRet]);
+        manageProperties(pElement);
     }
     else if (posRetCodes.find(popupRet) != posRetCodes.end())
     {
-        showPositionDialog(posRetCodes[popupRet]);
-        bUpdateDisplayList = true;
-        getTYMainWnd()->updateModelers(false);
+        bool bHeight = true;
+        if ( dynamic_cast<TYGeometryNode*>(posRetCodes[popupRet])->getElement()->isA("TYSiteNode") ) 
+        { 
+            bHeight = false; 
+        }
+        showPositionDialog(posRetCodes[popupRet], bHeight);
     }
     else if (rotRetCodes.find(popupRet) != rotRetCodes.end())
     {
         showRotationDialog(rotRetCodes[popupRet]);
-        bUpdateDisplayList = true;
-        getTYMainWnd()->updateModelers(false);
     }
-    else if (remVolRetCodes.find(popupRet) != remVolRetCodes.end())
+    else if (popupRet == inverseNormales)
     {
-        if (_pModeler->askForResetResultat())
+        inverseNormal(pElts->at(volumeFound)._pObj);
+    }
+    else if (_pModeler->askForResetResultat() )
+    {
+        if (copySiteNodeRetCodes.find(popupRet) != copySiteNodeRetCodes.end())
         {
-            LPTYAcousticVolumeNode pParent = (TYAcousticVolumeNode*) remVolRetCodes[popupRet]->getParent();
-            LPTYAcousticVolumeGeoNode pGeoNode = pParent->findAcousticVol(remVolRetCodes[popupRet]);
-
-            if (pParent->remAcousticVol(remVolRetCodes[popupRet]))
-            {
-                TYAction* pAction = new TYRemAccVolToAccVolNodeAction(pGeoNode, (TYAcousticVolumeNode*) remVolRetCodes[popupRet]->getParent(), _pModeler, TR("id_action_remvol"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                pRemovedEltParent = pParent;
-            }
-
-            updateSiteFrame();
-            getTYMainWnd()->updateModelers(false);
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
+            copySite(copySiteNodeRetCodes[popupRet]);
+        }
+        else if (remSiteNodeRetCodes.find(popupRet) != remSiteNodeRetCodes.end())
+        {
+            remSite(remSiteNodeRetCodes[popupRet]);
+        }
+        else if (calculVolNodeRetCodes.find(popupRet) != calculVolNodeRetCodes.end())
+        {
+            getTYApp()->getCalculManager()->updateAcoustic(calculVolNodeRetCodes[popupRet]);
+        }
+        else if (popupRet == split)
+        {
+            splitCurve(pElts->at(levelCurveFound)._pObj);
+        }
+        else if (copyMaillageRetCodes.find(popupRet) != copyMaillageRetCodes.end())
+        {
+            copyMaillage(copyMaillageRetCodes[popupRet]);
+        }
+        else if (remMaillageRetCodes.find(popupRet) != remMaillageRetCodes.end())
+        {
+            remMaillage(remMaillageRetCodes[popupRet]);
+        }
+        else if (copyPtControlRetCodes.find(popupRet) != copyPtControlRetCodes.end())
+        {
+            copyPtCtrl(copyPtControlRetCodes[popupRet]);
+        }
+        else if (remPtControlRetCodes.find(popupRet) != remPtControlRetCodes.end())
+        {
+            remPtCtrl(remPtControlRetCodes[popupRet]);
+        }
+        else if (remTopoRetCodes.find(popupRet) != remTopoRetCodes.end())
+        {
+            remTopoElmt(remTopoRetCodes[popupRet]); 
+        }
+        else if (copyTopoRetCodes.find(popupRet) != copyTopoRetCodes.end())
+        {
+            copyTopoElmt(copyTopoRetCodes[popupRet]);
+        }
+        else if (remInfraRetCodes.find(popupRet) != remInfraRetCodes.end())
+        {
+            remInfraElmt(remInfraRetCodes[popupRet]);
+        }
+        else if (copyInfraRetCodes.find(popupRet) != copyInfraRetCodes.end())
+        {
+            copyInfraElmt(copyInfraRetCodes[popupRet]);
         }
     }
-    else if (copyVolRetCodes.find(popupRet) != copyVolRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            LPTYAcousticVolumeGeoNode pGeoNode = ((TYAcousticVolumeNode*) copyVolRetCodes[popupRet]->getParent())->findAcousticVol(copyVolRetCodes[popupRet]);
-
-            // Nouvel element du meme type que l'objet a dupliquer (clone)
-            LPTYAcousticVolumeGeoNode pCopy = new TYAcousticVolumeGeoNode((TYAcousticVolume*) copyVolRetCodes[popupRet]->clone());
-
-            // Duplication
-            pCopy->deepCopy(pGeoNode, false);
-
-            // Ajout
-            if (((TYAcousticVolumeNode*) copyVolRetCodes[popupRet]->getParent())->addAcousticVol(pCopy))
-            {
-                // Offset
-                ORepere3D repere = pCopy->getORepere3D();
-
-                if (dynamic_cast<TYEtage*>(pCopy->getElement()) != nullptr)
-                {
-                    TYElement* pElt = pCopy->getElement();
-                    repere._origin._z += ((TYEtage*)pElt)->getHauteur();
-                }
-                else
-                {
-                    repere._origin._x += 20.0;
-                    repere._origin._y -= 20.0;
-                }
-
-                pCopy->setRepere(repere);
-                // Update Graphic
-                pCopy->updateGraphicTree();
-
-                // Action
-                TYAction* pAction = new TYAddAccVolToAccVolNodeAction(pCopy, (TYAcousticVolumeNode*) copyVolRetCodes[popupRet]->getParent(), _pModeler, TR("id_action_addvol"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                pAddedElt = pCopy->getElement();
-            }
-
-            updateSiteFrame();
-            bUpdateDisplayList = true; // DT++
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (copyMachineRetCodes.find(popupRet) != copyMachineRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            LPTYMachineGeoNode pGeoNode = ((TYEtage*) copyMachineRetCodes[popupRet]->getParent())->findMachine(copyMachineRetCodes[popupRet]);
-
-            // Nouvel element du meme type que l'objet a dupliquer (clone)
-            LPTYMachineGeoNode pCopy = new TYMachineGeoNode((TYMachine*) copyMachineRetCodes[popupRet]->clone());
-
-            // Duplication
-            pCopy->deepCopy(pGeoNode, false);
-
-            // Ajout
-            if (((TYEtage*) copyMachineRetCodes[popupRet]->getParent())->addMachine(pCopy))
-            {
-                ORepere3D repere = pCopy->getORepere3D();
-                // Offset
-                repere._origin._x += 5.0;
-                repere._origin._y -= 5.0;
-
-                pCopy->setRepere(repere);
-
-                // Update Graphic
-                pCopy->updateGraphicTree();
-
-                // Action
-                TYAction* pAction = new TYAddMachineToEtageAction(pCopy, (TYEtage*) copyMachineRetCodes[popupRet]->getParent(), _pModeler, TR("id_action_addmachine"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                pAddedElt = pCopy->getElement();
-            }
-
-            updateSiteFrame();
-            getTYMainWnd()->updateModelers(false);
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (remMachineRetCodes.find(popupRet) != remMachineRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            LPTYMachineGeoNode pGeoNode = ((TYEtage*) remMachineRetCodes[popupRet]->getParent())->findMachine(remMachineRetCodes[popupRet]);
-            LPTYEtage pParent = (TYEtage*) remMachineRetCodes[popupRet]->getParent();
-
-            if (pParent->remMachine(remMachineRetCodes[popupRet]))
-            {
-                TYAction* pAction = new TYRemMachineToEtageAction(pGeoNode, (TYEtage*) remMachineRetCodes[popupRet]->getParent(), _pModeler, TR("id_action_remmachine"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                pRemovedEltParent = pParent;
-            }
-
-            updateSiteFrame();
-            getTYMainWnd()->updateModelers(false);
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (remTopoRetCodes.find(popupRet) != remTopoRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            TYTopographie* pTopo = (TYTopographie*) remTopoRetCodes[popupRet]->getParent();
-            // On recupere le site parent
-            TYSiteNode* pSiteParent = TYSiteNode::safeDownCast(pTopo->getParent());
-
-            TYAction* pAction = new TYRemElementToTopoAction(remTopoRetCodes[popupRet], pTopo, _pModeler, TR("id_action_remelttopo"));
-            _pModeler->getActionManager()->addAction(pAction);
-
-            if (remTopoRetCodes[popupRet]->isA("TYCourbeNiveau"))
-            {
-                pTopo->remCrbNiv((LPTYCourbeNiveau&) remTopoRetCodes[popupRet]);
-            }
-            else if (remTopoRetCodes[popupRet]->isA("TYTerrain"))
-            {
-                pTopo->remTerrain((LPTYTerrain&) remTopoRetCodes[popupRet]);
-            }
-            else if (remTopoRetCodes[popupRet]->isA("TYCoursEau"))
-            {
-                pTopo->remCrsEau((LPTYCoursEau&) remTopoRetCodes[popupRet]);
-            }
-            else if (remTopoRetCodes[popupRet]->isA("TYPlanEau"))
-            {
-                pTopo->remPlanEau((LPTYPlanEau&) remTopoRetCodes[popupRet]);
-            }
-
-            pRemovedEltParent = pTopo;
-
-            TYProjet* pProjet = getTYApp()->getCurProjet();
-            if (pProjet)
-            {
-                pProjet->getSite()->getTopographie()->updateGraphicTree();
-            }
-
-            bUpdateDisplayList = true; // DT++
-
-            updateSiteFrame();
-            getTYMainWnd()->updateModelers(true, true, true);
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (copyTopoRetCodes.find(popupRet) != copyTopoRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            TYTopographie* pTopo = (TYTopographie*) copyTopoRetCodes[popupRet]->getParent();
-            SmartPtr<TYGeometryNode > pCopyTmp = NULL;
-
-            if (copyTopoRetCodes[popupRet]->isA("TYCourbeNiveau"))
-            {
-                // Nouvelle element
-                LPTYCourbeNiveauGeoNode pCopy = new TYCourbeNiveauGeoNode(new TYCourbeNiveau());
-                pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
-
-                // Duplication
-                pCopy->deepCopy(pTopo->findCrbNiv((LPTYCourbeNiveau&) copyTopoRetCodes[popupRet]), false);
-
-                // Ajout
-                pTopo->addCrbNiv(pCopy);
-            }
-            else if (copyTopoRetCodes[popupRet]->isA("TYTerrain"))
-            {
-                // Nouvelle element
-                LPTYTerrainGeoNode pCopy = new TYTerrainGeoNode(new TYTerrain);
-                pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
-
-                // Duplication
-                pCopy->deepCopy(pTopo->findTerrain((LPTYTerrain&) copyTopoRetCodes[popupRet]), false);
-
-                // Ajout
-                pTopo->addTerrain(pCopy);
-            }
-            else if (copyTopoRetCodes[popupRet]->isA("TYCoursEau"))
-            {
-                // Nouvelle element
-                LPTYCoursEauGeoNode pCopy = new TYCoursEauGeoNode(new TYCoursEau);
-                pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
-
-                // Duplication
-                pCopy->deepCopy(pTopo->findCrsEau((LPTYCoursEau&) copyTopoRetCodes[popupRet]), false);
-
-                // Ajout
-                pTopo->addCrsEau(pCopy);
-            }
-            else if (copyTopoRetCodes[popupRet]->isA("TYPlanEau"))
-            {
-                // Nouvelle element
-                LPTYPlanEauGeoNode pCopy = new TYPlanEauGeoNode(new TYPlanEau);
-                pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
-
-                // Duplication
-                pCopy->deepCopy(pTopo->findPlanEau((LPTYPlanEau&) copyTopoRetCodes[popupRet]), false);
-
-                // Ajout
-                pTopo->addPlanEau(pCopy);
-            }
-
-            if (pCopyTmp)
-            {
-                ORepere3D repere = pCopyTmp->getORepere3D();
-                // Offset
-                repere._origin._x += 50.0;
-                repere._origin._y -= 50.0;
-                pCopyTmp->setRepere(repere);
-
-                // Action
-                TYAction* pAction = new TYAddElementToTopoAction(pCopyTmp, pTopo, _pModeler, TR("id_action_addelttopo"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                // Update graphic
-                pCopyTmp->updateGraphicTree();
-
-                pAddedElt = pCopyTmp->getElement();
-            }
-
-            updateSiteFrame();
-            getTYMainWnd()->updateModelers(false);
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (remInfraRetCodes.find(popupRet) != remInfraRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            TYInfrastructure* pInfra = (TYInfrastructure*) remInfraRetCodes[popupRet]->getParent();
-
-            TYAction* pAction = new TYRemElementToInfraAction(remInfraRetCodes[popupRet], pInfra, _pModeler, TR("id_action_remeltinfra"));
-            _pModeler->getActionManager()->addAction(pAction);
-
-            if (remInfraRetCodes[popupRet]->isA("TYRoute"))
-            {
-                pInfra->remRoute((LPTYRoute&) remInfraRetCodes[popupRet]);
-            }
-            else if (remInfraRetCodes[popupRet]->isA("TYReseauTransport"))
-            {
-                pInfra->remResTrans((LPTYReseauTransport&) remInfraRetCodes[popupRet]);
-            }
-            else if (remInfraRetCodes[popupRet]->isA("TYBatiment"))
-            {
-                pInfra->remBatiment((LPTYBatiment&) remInfraRetCodes[popupRet]);
-            }
-            else if (remInfraRetCodes[popupRet]->isA("TYMachine"))
-            {
-                pInfra->remMachine((LPTYMachine&) remInfraRetCodes[popupRet]);
-            }
-            else if (remInfraRetCodes[popupRet]->isA("TYUserSourcePonctuelle"))
-            {
-                pInfra->remSrc((LPTYUserSourcePonctuelle&) remInfraRetCodes[popupRet]);
-            }
-
-            pRemovedEltParent = pInfra;
-
-            updateSiteFrame(); // Mise a jour de l'arborescence du site
-            getTYMainWnd()->updateModelers(false);
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (copyInfraRetCodes.find(popupRet) != copyInfraRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            TYInfrastructure* pInfra = (TYInfrastructure*) copyInfraRetCodes[popupRet]->getParent();
-            SmartPtr<TYGeometryNode > pCopyTmp = NULL;
-            TYBox boundBox;
-
-            if (copyInfraRetCodes[popupRet]->isA("TYRoute"))
-            {
-                // Nouvelle element
-                LPTYRouteGeoNode pCopy = new TYRouteGeoNode(new TYRoute);
-                pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
-
-                // Duplication
-                pCopy->deepCopy(pInfra->findRoute((LPTYRoute&) copyInfraRetCodes[popupRet]), false);
-
-                // Ajout
-                pInfra->addRoute(pCopy);
-
-                updateSiteFrame(); // Mise a jour de l'arborescence du site
-                getTYMainWnd()->updateModelers(false);
-
-                // On l'ajoute dans le calcul courant (si calcul courant il y a !)
-                if (getTYApp()->getCurProjet() && getTYApp()->getCurProjet()->getCurrentCalcul())
-                {
-                    getTYApp()->getCurProjet()->getCurrentCalcul()->addToSelection(pCopy->getElement());
-                }
-            }
-            else if (copyInfraRetCodes[popupRet]->isA("TYReseauTransport"))
-            {
-                // Nouvelle element
-                LPTYReseauTransportGeoNode pCopy = new TYReseauTransportGeoNode(new TYReseauTransport);
-                pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
-
-                // Duplication
-                pCopy->deepCopy(pInfra->findResTrans((LPTYReseauTransport&) copyInfraRetCodes[popupRet]), false);
-
-                // Ajout
-                pInfra->addResTrans(pCopy);
-
-                updateSiteFrame(); // Mise a jour de l'arborescence du site
-                getTYMainWnd()->updateModelers(false);
-
-                // On l'ajoute dans le calcul courant (si calcul courant il y a !)
-                if (getTYApp()->getCurProjet() && getTYApp()->getCurProjet()->getCurrentCalcul())
-                {
-                    getTYApp()->getCurProjet()->getCurrentCalcul()->addToSelection(pCopy->getElement());
-                }
-            }
-            else if (copyInfraRetCodes[popupRet]->isA("TYBatiment"))
-            {
-                // Nouvelle element
-                LPTYBatimentGeoNode pCopy = new TYBatimentGeoNode(new TYBatiment);
-                pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
-
-                // Duplication
-                pCopy->deepCopy(pInfra->findBatiment((LPTYBatiment&) copyInfraRetCodes[popupRet]), false);
-
-                boundBox = TYBatiment::safeDownCast(pCopy->getElement())->volEnglob();
-
-                // Ajout
-                pInfra->addBatiment(pCopy);
-
-                updateSiteFrame(); // Mise a jour de l'arborescence du site
-                getTYMainWnd()->updateModelers(false);
-
-                // On l'ajoute dans le calcul courant (si calcul courant il y a !)
-                if (getTYApp()->getCurProjet() && getTYApp()->getCurProjet()->getCurrentCalcul())
-                {
-                    getTYApp()->getCurProjet()->getCurrentCalcul()->addToSelection(pCopy->getElement());
-                }
-
-                // Message d'alerte sur le fonctionnement des machine dupliquees
-                OMessageManager::get()->info("**********************************************************************\n");
-                OMessageManager::get()->info("*                      ATTENTION !!!                                 *\n\n\n");
-                OMessageManager::get()->info("* Les machines a l'interieur du batiment duplique ne sont pas active *\n\n");
-                OMessageManager::get()->info("*                PENSEZ A LES REACTIVER                              *\n\n");
-                OMessageManager::get()->info("**********************************************************************\n");
-
-            }
-            else if (copyInfraRetCodes[popupRet]->isA("TYMachine"))
-            {
-                // Nouvelle element
-                LPTYMachineGeoNode pCopy = new TYMachineGeoNode(new TYMachine);
-                pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
-
-                // Duplication
-                pCopy->deepCopy(pInfra->findMachine((LPTYMachine&) copyInfraRetCodes[popupRet]), false);
-
-                boundBox = TYMachine::safeDownCast(pCopy->getElement())->volEnglob();
-
-                // Ajout
-                pInfra->addMachine(pCopy);
-
-                updateSiteFrame(); // Mise a jour de l'arborescence du site
-                getTYMainWnd()->updateModelers(false);
-
-                // On l'ajoute dans le calcul courant (si calcul courant il y a !)
-                if (getTYApp()->getCurProjet() && getTYApp()->getCurProjet()->getCurrentCalcul())
-                {
-                    getTYApp()->getCurProjet()->getCurrentCalcul()->addToSelection(pCopy->getElement());
-                }
-            }
-            else if (copyInfraRetCodes[popupRet]->isA("TYUserSourcePonctuelle"))
-            {
-                // Nouvelle element
-                LPTYSourcePonctuelleGeoNode pCopy = new TYSourcePonctuelleGeoNode(new TYSourcePonctuelle);
-                pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
-
-                // Duplication
-                pCopy->deepCopy(pInfra->findSrc((LPTYUserSourcePonctuelle&) copyInfraRetCodes[popupRet]), false);
-
-                // Ajout
-                pInfra->addSrc(pCopy);
-
-                // Offset
-                TYUserSourcePonctuelle::safeDownCast(pCopy->getElement())->getPos()->_x += 10;
-                TYUserSourcePonctuelle::safeDownCast(pCopy->getElement())->getPos()->_y -= 10;
-
-                // Update graphic
-                pCopy->updateGraphicTree();
-
-                updateSiteFrame(); // Mise a jour de l'arborescence du site
-                getTYMainWnd()->updateModelers(false);
-
-                // On l'ajoute dans le calcul courant (si calcul courant il y a !)
-                if (getTYApp()->getCurProjet() && getTYApp()->getCurProjet()->getCurrentCalcul())
-                {
-                    getTYApp()->getCurProjet()->getCurrentCalcul()->addToSelection(pCopy->getElement());
-                }
-            }
-
-            if (pCopyTmp)
-            {
-                if (!copyInfraRetCodes[popupRet]->isA("TYUserSourcePonctuelle"))
-                {
-                    ORepere3D repere = pCopyTmp->getORepere3D();
-
-                    // Offset proportionnel a la taille de l'objet
-                    repere._origin._x += boundBox._sizeX; //10.0;
-                    repere._origin._y -= boundBox._sizeY; //10.0;
-
-                    pCopyTmp->setRepere(repere);
-                }
-
-                // Action
-                TYAction* pAction = new TYAddElementToInfraAction(pCopyTmp, pInfra, _pModeler, TR("id_action_addeltinfra"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                // Update graphic
-                pCopyTmp->updateGraphicTree();
-
-                pAddedElt = pCopyTmp->getElement();
-                updateSiteFrame(); // Mise a jour de l'arborescence du site
-                getTYMainWnd()->updateModelers(false);
-            }
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (copyMaillageRetCodes.find(popupRet) != copyMaillageRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            LPTYMaillageGeoNode pGeoNode = ((TYCalcul*) copyMaillageRetCodes[popupRet]->getParent())->findMaillage(copyMaillageRetCodes[popupRet]);
-
-            // Nouvel element du meme type que l'objet a dupliquer (clone)
-            LPTYMaillageGeoNode pCopy = new TYMaillageGeoNode((TYMaillage*) copyMaillageRetCodes[popupRet]->clone());
-
-            // Duplication
-            pCopy->deepCopy(pGeoNode, false);
-
-            // Ajout
-            if (((TYCalcul*) copyMaillageRetCodes[popupRet]->getParent())->addMaillage(pCopy))
-            {
-                ORepere3D repere = pCopy->getORepere3D();
-                // Offset
-                repere._origin._x += 10.0;
-                repere._origin._y -= 10.0;
-
-                pCopy->setRepere(repere);
-
-                // Update Graphic
-                pCopy->updateGraphicTree();
-
-                // Action
-                TYAction* pAction = new TYAddMaillageToCalculAction(pCopy, (TYCalcul*) copyMaillageRetCodes[popupRet]->getParent(), _pModeler, TR("id_action_addmaillage"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                refreshProjectFrame();
-                getTYMainWnd()->updateModelers(false);
-                bUpdateDisplayList = true;
-            }
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (remMaillageRetCodes.find(popupRet) != remMaillageRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            LPTYMaillageGeoNode pGeoNode = ((TYCalcul*) remMaillageRetCodes[popupRet]->getParent())->findMaillage(remMaillageRetCodes[popupRet]);
-            LPTYCalcul pParent = (TYCalcul*) remMaillageRetCodes[popupRet]->getParent();
-
-            if (pParent->remMaillage(remMaillageRetCodes[popupRet]))
-            {
-                TYAction* pAction = new TYRemMaillageToCalculAction(pGeoNode, (TYCalcul*) remMaillageRetCodes[popupRet]->getParent(), _pModeler, TR("id_action_remmaillage"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                pRemovedEltParent = pParent;
-            }
-
-            refreshProjectFrame();
-            getTYMainWnd()->updateModelers(false);
-            bUpdateDisplayList = true;
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (copyPtControlRetCodes.find(popupRet) != copyPtControlRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            // Nouvel element du meme type que l'objet a dupliquer (clone)
-            LPTYPointControl pCopy = (TYPointControl*) copyPtControlRetCodes[popupRet]->clone();
-
-            // Duplication
-            pCopy->deepCopy((TYPointControl*) copyPtControlRetCodes[popupRet], false);
-
-            // Ajout
-            if (((TYProjet*) copyPtControlRetCodes[popupRet]->getParent())->addPointControl(pCopy))
-            {
-                // Offset
-                pCopy->_x += 10.0;
-                pCopy->_y -= 10.0;
-
-                // Update Graphic
-                pCopy->updateGraphicTree();
-
-                // Action
-                TYAction* pAction = new TYAddPointControlAction((TYProjet*) copyPtControlRetCodes[popupRet]->getParent(), pCopy, _pModeler, TR("id_action_addptcontrol"));
-                _pModeler->getActionManager()->addAction(pAction);
-            }
-
-            refreshProjectFrame();
-            getTYMainWnd()->updateModelers(false);
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (remPtControlRetCodes.find(popupRet) != remPtControlRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            LPTYProjet pParent = (TYProjet*) remPtControlRetCodes[popupRet]->getParent();
-
-            if (pParent->remPointControl(remPtControlRetCodes[popupRet]))
-            {
-                TYAction* pAction = new TYRemPointControlAction((TYProjet*) remPtControlRetCodes[popupRet]->getParent(), (LPTYPointControl&) remPtControlRetCodes[popupRet], _pModeler, TR("id_action_remptcontrol"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                pRemovedEltParent = pParent;
-            }
-
-            refreshProjectFrame();
-            getTYMainWnd()->updateModelers(false);
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (copySiteNodeRetCodes.find(popupRet) != copySiteNodeRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            LPTYSiteNodeGeoNode pGeoNode = ((TYSiteNode*) copySiteNodeRetCodes[popupRet]->getParent())->findSiteNode(copySiteNodeRetCodes[popupRet]);
-
-            // Nouvel element du meme type que l'objet a dupliquer (clone)
-            LPTYSiteNodeGeoNode pCopy = new TYSiteNodeGeoNode((TYSiteNode*) copySiteNodeRetCodes[popupRet]->clone());
-
-            // Duplication
-            pCopy->deepCopy(pGeoNode, false);
-
-            // Ajout
-            if (((TYSiteNode*) copySiteNodeRetCodes[popupRet]->getParent())->addSiteNode(pCopy))
-            {
-                ORepere3D repere = pCopy->getORepere3D();
-                // Offset
-                repere._origin._x += 100.0;
-                repere._origin._y -= 100.0;
-
-                pCopy->setRepere(repere);
-
-                LPTYCalcul pCalc = NULL;
-                TYSiteNode* pSite = NULL;
-                pSite = dynamic_cast<TYSiteNode*>(pCopy->getElement()) ;
-                if (getTYApp()->getCurProjet() && pSite)
-                {
-                    pCalc = getTYApp()->getCurProjet()->getCurrentCalcul();
-                    if (pCalc) { pCalc->getCalculElements(pSite); }
-                }
-
-                // Update Graphic
-                pCopy->updateGraphicTree();
-
-                // Action
-                TYAction* pAction = new TYAddSiteNodeToSiteNodeAction(pCopy, (TYSiteNode*) copySiteNodeRetCodes[popupRet]->getParent(), _pModeler, TR("id_action_addsitenode"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                pAddedElt = pCopy->getElement();
-            }
-
-            updateSiteFrame();
-            getTYMainWnd()->updateModelers(false);
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-    else if (remSiteNodeRetCodes.find(popupRet) != remSiteNodeRetCodes.end())
-    {
-        if (_pModeler->askForResetResultat())
-        {
-            LPTYSiteNodeGeoNode pGeoNode = ((TYSiteNode*) remSiteNodeRetCodes[popupRet]->getParent())->findSiteNode(remSiteNodeRetCodes[popupRet]);
-            LPTYSiteNode pParent = (TYSiteNode*) remSiteNodeRetCodes[popupRet]->getParent();
-
-            if (pParent->remSiteNode(remSiteNodeRetCodes[popupRet]))
-            {
-                TYAction* pAction = new TYRemSiteNodeToSiteNodeAction(pGeoNode, (TYSiteNode*) remSiteNodeRetCodes[popupRet]->getParent(), _pModeler, TR("id_action_remsitenode"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                pRemovedEltParent = pParent;
-            }
-
-            updateSiteFrame();
-            getTYMainWnd()->updateModelers(false);
-
-            // La scene a ete modifiee
-            TYElement::setIsSavedOk(true);
-        }
-    }
-
-    // Deselection
-    resetPicker();
-
-    // Si un element a ete supprime
-    if (pRemovedEltParent)
-    {
-        pRemovedEltParent->updateGraphicTree();
-    }
-
-    // Si un element a ete ajoute
-    if (pAddedElt && _pModeler->isElementInCurrentCalcul())
-    {
-        getTYApp()->getCurProjet()->getCurrentCalcul()->addToSelection(pAddedElt);
-        pAddedElt->updateGraphicTree();
-    }
-
-    // Update
-    getTYMainWnd()->updateModelers(true, true, bUpdateDisplayList);//xbh++
 
     delete pPopup;
 }
 
-void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
+void TYPickEditor::machineModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
+{
+    QMenu* pPopup = new QMenu(NULL);
+
+    std::map<QAction*, int> retCodes;
+    std::map<QAction*, TYAcousticVolumeNode*> calculVolNodeRetCodes;
+    QAction* inverseNormales = NULL;
+    std::map<QAction*, TYGeometryNode*> posRetCodes;
+    std::map<QAction*, TYGeometryNode*> rotRetCodes;
+    std::map<QAction*, TYAcousticVolume*> dimVolRetCodes;
+    std::map<QAction*, TYAcousticVolume*> remVolRetCodes;
+    std::map<QAction*, TYAcousticVolume*> copyVolRetCodes;
+    QAction* editFace = NULL;
+    QAction* code = NULL;
+
+    LPTYElement pRemovedEltParent = NULL;
+    LPTYElement pAddedElt = NULL;
+
+    int rectFound = -2, volumeFound = -2;
+
+    QFont font = pPopup->font();
+    font.setBold(true);
+    for (unsigned int i = 0; i < pElts->size(); i++)
+    {
+        // Edition des proprietes de l'element
+        code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_editeelt"))), TYWidget::getDisplayName(pElts->at(i)));
+        code->setFont(font);
+        retCodes[code] = i;
+
+        // Calcul des proprietes acoustiques
+        if ( dynamic_cast<TYAcousticVolumeNode*>( pElts->at(i)._pObj ) )
+        {
+            // Calcul acoustique
+            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_calcul"))), TR("id_popup_calculer"));
+            calculVolNodeRetCodes[code] = (LPTYAcousticVolumeNode&) pElts->at(i);
+        }
+        else if (dynamic_cast<TYAcousticVolume*>(pElts->at(i)._pObj) != nullptr)
+        {
+            // Dans tous les cas, on offre la possibilite d'inverser la normales des faces
+            volumeFound = i;
+            inverseNormales = pPopup->addAction(TR("id_popup_normales"));
+            
+            // Gestion position / rotation 
+            TYGeometryNode* pEltGeoNode = TYGeometryNode::GetGeoNode( pElts->at(i)._pObj);
+            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
+            posRetCodes[code] = pEltGeoNode;
+
+            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
+            rotRetCodes[code] = pEltGeoNode;
+
+            // Dimensions
+            code = pPopup->addAction(TR("id_popup_dimension"));
+            dimVolRetCodes[code] = (LPTYAcousticVolume&) pElts->at(i);
+
+            // Duplication
+            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
+            copyVolRetCodes[code] = (LPTYAcousticVolume&) pElts->at(i);
+
+            // Suppression
+            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
+            remVolRetCodes[code] = (LPTYAcousticVolume&) pElts->at(i);
+        }
+        else if ( dynamic_cast<TYAcousticRectangleNode*>(pElts->at(i)._pObj) != nullptr )
+        {
+            // On permet d'editer une face uniquement dans un modeleur de batiment ou de machine
+            rectFound = i;
+            editFace = pPopup->addAction(TR("id_popup_editface"));
+        }
+
+        // Ajoute un separateur entre les elements
+        pPopup->addSeparator();
+    }
+
+    // Gestion du choix de l'utilisateur
+    pPopup->setMouseTracking(true);
+    bool bUpdateDisplayList = false;
+    QAction* popupRet = pPopup->exec(QCursor::pos());
+    if (popupRet == NULL) { return; }
+    qApp->processEvents();
+
+    if (retCodes.find(popupRet) != retCodes.end())
+    {
+        TYElement *pElement = pElts->at(retCodes[popupRet]);
+        manageProperties(pElement);
+    }
+    else if (posRetCodes.find(popupRet) != posRetCodes.end())
+    {
+        showPositionDialog(posRetCodes[popupRet], false);
+    }
+    else if (rotRetCodes.find(popupRet) != rotRetCodes.end())
+    {
+        showRotationDialog(rotRetCodes[popupRet]);
+    }
+    else if (dimVolRetCodes.find(popupRet) != dimVolRetCodes.end())
+    {
+        TYElement *pElement = dimVolRetCodes[popupRet];
+        setVolumeSize(pElement);
+    }
+    else if (popupRet == editFace)
+    {
+        TYElement *pElement = pElts->at(rectFound)._pObj;
+        openFaceModeler(pElement);
+    }
+    else if (popupRet == inverseNormales)
+    {
+        inverseNormal(pElts->at(volumeFound)._pObj);
+    }
+    else if (_pModeler->askForResetResultat())
+    {
+        if (calculVolNodeRetCodes.find(popupRet) != calculVolNodeRetCodes.end())
+        {
+            getTYApp()->getCalculManager()->updateAcoustic(calculVolNodeRetCodes[popupRet]);
+        }
+        else if (remVolRetCodes.find(popupRet) != remVolRetCodes.end())
+        {
+            removeVolume(remVolRetCodes[popupRet]);
+        }
+        else if (copyVolRetCodes.find(popupRet) != copyVolRetCodes.end())
+        {
+            copyVolume(copyVolRetCodes[popupRet]);
+        }
+    }
+
+    delete pPopup;
+}
+
+void TYPickEditor::batimentModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
+{
+    QMenu* pPopup = new QMenu(NULL);
+
+    QAction* code = NULL;
+    std::map<QAction*, int> retCodes;
+    std::map<QAction*, TYAcousticVolumeNode*> calculVolNodeRetCodes;
+    QAction* inverseNormales = NULL;
+    std::map<QAction*, TYGeometryNode*> posRetCodes;
+    std::map<QAction*, TYGeometryNode*> rotRetCodes;
+    QAction* hauteurEtage = NULL;
+    QAction* hauteurEcran = NULL;
+    QAction* epaisseurEcran = NULL;
+    QAction* editFace = NULL;
+    std::map<QAction*, TYAcousticVolume*> remVolRetCodes;
+    std::map<QAction*, TYAcousticVolume*> copyVolRetCodes;
+    std::map<QAction*, TYAcousticVolume*> dimVolRetCodes;
+
+    LPTYElement pRemovedEltParent = NULL;
+    LPTYElement pAddedElt = NULL;
+
+    int etageFound = -2, ecranFound = -2, rectFound = -2, volumeFound = -2;
+
+    QFont font = pPopup->font();
+    font.setBold(true);
+    for (unsigned int i = 0; i < pElts->size(); i++)
+    {
+        // Edition des proprietes de l'element
+        code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_editeelt"))), TYWidget::getDisplayName(pElts->at(i)));
+        code->setFont(font);
+        retCodes[code] = i;
+
+        // Calcul des proprietes acoustiques
+        if ( dynamic_cast<TYAcousticVolumeNode*>( pElts->at(i)._pObj ) )
+        {
+            // Calcul acoustique
+            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_calcul"))), TR("id_popup_calculer"));
+            calculVolNodeRetCodes[code] = (LPTYAcousticVolumeNode&) pElts->at(i);
+        }    
+        else if (dynamic_cast<TYAcousticVolume*>(pElts->at(i)._pObj) != nullptr)
+        {
+            // Dans tous les cas, on offre la possibilite d'inverser la normales des faces
+            volumeFound = i;
+            inverseNormales = pPopup->addAction(TR("id_popup_normales"));
+
+            // Gestion position / rotation 
+            TYGeometryNode* pEltGeoNode = TYGeometryNode::GetGeoNode( pElts->at(i)._pObj );
+
+            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_moving"))), TR("id_popup_position"));
+            posRetCodes[code] = pEltGeoNode;
+
+            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
+            rotRetCodes[code] = pEltGeoNode;            
+            
+            // Dimensions
+            if ( pElts->at(i)->isA("TYEtage") )
+            {
+                etageFound = i;
+                hauteurEtage = pPopup->addAction(TR("id_popup_hauteur"));
+            }
+            else if ( pElts->at(i)->isA("TYEcran") )
+            {
+                ecranFound = i;
+                hauteurEcran = pPopup->addAction(TR("id_popup_hauteur"));
+                epaisseurEcran = pPopup->addAction(TR("id_popup_epaisseur"));
+            }
+
+            // Duplication
+            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
+            copyVolRetCodes[code] = (LPTYAcousticVolume&) pElts->at(i);
+
+            // Suppression
+            code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
+            remVolRetCodes[code] = (LPTYAcousticVolume&) pElts->at(i);
+        }
+        else if ( dynamic_cast<TYAcousticRectangleNode*>(pElts->at(i)._pObj) != nullptr )
+        {
+            // On permet d'editer une face uniquement dans un modeleur de batiment ou de machine
+            rectFound = i;
+            editFace = pPopup->addAction(TR("id_popup_editface"));
+        }
+
+        // Ajoute un separateur entre les elements
+        pPopup->addSeparator();
+    }
+
+    // Gestion du choix de l'utilisateur
+    pPopup->setMouseTracking(true);
+    bool bUpdateDisplayList = false;
+    QAction* popupRet = pPopup->exec(QCursor::pos());
+    if (popupRet == NULL) { return; }
+    qApp->processEvents();
+
+    if (retCodes.find(popupRet) != retCodes.end())
+    {
+        TYElement *pElement = pElts->at(retCodes[popupRet]);
+        manageProperties(pElement);
+    }
+    else if (posRetCodes.find(popupRet) != posRetCodes.end())
+    {
+        bool bHeight = false;
+        if (posRetCodes[popupRet]->isA("TYMachine")) { bHeight = true; }
+        showPositionDialog(posRetCodes[popupRet], bHeight);
+    }
+    else if (rotRetCodes.find(popupRet) != rotRetCodes.end())
+    {
+        showRotationDialog(rotRetCodes[popupRet]);
+    }
+    else if (popupRet == editFace)
+    {
+        TYElement *pElement = pElts->at(rectFound)._pObj;
+        openFaceModeler(pElement);
+    }
+    else if (popupRet == hauteurEtage)
+    {
+        floorHeight(pElts->at(etageFound)._pObj);
+    }
+    else if (popupRet == hauteurEcran)
+    {
+        screenHeight(pElts->at(ecranFound)._pObj);
+    }
+    else if (popupRet == epaisseurEcran)
+    {
+        screenThick(pElts->at(ecranFound)._pObj);
+    }
+    else if (popupRet == inverseNormales)
+    {
+        inverseNormal(pElts->at(volumeFound)._pObj);
+    }
+    else if (dimVolRetCodes.find(popupRet) != dimVolRetCodes.end())
+    {
+        TYElement *pElement = dimVolRetCodes[popupRet];
+        setVolumeSize(pElement);
+    }
+    else if (_pModeler->askForResetResultat())
+    {
+        if (calculVolNodeRetCodes.find(popupRet) != calculVolNodeRetCodes.end())
+        {
+            getTYApp()->getCalculManager()->updateAcoustic(calculVolNodeRetCodes[popupRet]);
+        }
+        else if (remVolRetCodes.find(popupRet) != remVolRetCodes.end())
+        {
+            removeVolume(remVolRetCodes[popupRet]);
+        }
+        else if (copyVolRetCodes.find(popupRet) != copyVolRetCodes.end())
+        {
+            copyVolume(copyVolRetCodes[popupRet]);
+        }
+    }
+
+    delete pPopup;
+}
+
+
+void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode, bool activeHeight)
 {
     assert(pGeoNode);
 
@@ -1560,18 +878,7 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
 
     // Affiche la boite de dialogue
     TYPositionDialog* pDlg = new TYPositionDialog(pTempGeoNode, _pModeler);
-
-    if ((QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0) &&
-        (pElement->isA("TYMachine")))
-    {
-        pDlg->setHauteurEnabled(true); // Activation de la hauteur pour les elements de volumes nodes
-    }
-    else if ((QString(_pModeler->metaObject()->className()).compare("TYBatimentModelerFrame") == 0) ||
-             (QString(_pModeler->metaObject()->className()).compare("TYMachineModelerFrame") == 0)  ||
-             (pElement->isA("TYSiteNode")))
-    {
-        pDlg->setHauteurEnabled(false); // Desactivation de la hauteur pour les elements de volumes nodes
-    }
+    pDlg->setHauteurEnabled(activeHeight); // Activation ou non de la hauteur pour les elements de volumes nodes
 
     int ret = pDlg->exec();
 
@@ -1586,7 +893,7 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
             // On passe newZero dans le repere local s'il y a lieu
             if (pRootGeometryNode)
             {
-	      newZero = pRootGeometryNode->localToGlobal() * newZero;
+	            newZero = pRootGeometryNode->localToGlobal() * newZero;
             }
 
             //exprimons newZero dans le repere du GeoNode:
@@ -1621,7 +928,6 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode)
     delete pDlg;
     pDlg = NULL;
 }
-
 
 void TYPickEditor::showRotationDialog(TYGeometryNode* pGeoNode)
 {
@@ -1735,102 +1041,9 @@ void TYPickEditor::showDimensionsDialog(TYAcousticVolume* pAccVol)
 {
     if (!pAccVol) { return; }
 
-    QDialog* pDlg = new QDialog(_pModeler);
-    pDlg->setWindowTitle(TR("id_popup_dimension"));
+    TYAcousticVolume *pBackupVolume = dynamic_cast<TYAcousticVolume*>(pAccVol->clone());
 
-    QGridLayout* pLayout = new QGridLayout();
-    pDlg->setLayout(pLayout);
-
-    QBoxLayout* pEditLayout = new QHBoxLayout();
-    pEditLayout->setMargin(10);
-    pLayout->addLayout(pEditLayout, 0, 1);
-
-    QLineEdit* pXLineEdit = NULL;
-    QLineEdit* pYLineEdit = NULL;
-    QLineEdit* pZLineEdit = NULL;
-    QLineEdit* pDiamLineEdit = NULL;
-    QLineEdit* pHauteurLineEdit = NULL;
-
-    if (pAccVol->isA("TYAcousticBox"))
-    {
-        TYAcousticBox* pAccBox = (TYAcousticBox*) pAccVol;
-        float sizeX, sizeY, sizeZ;
-        pAccBox->getDimension(sizeX, sizeY, sizeZ);
-
-        // Size X
-        QLabel* pXLabelName = new QLabel(pDlg);
-        pXLabelName->setText(TR("id_x_label"));
-        pEditLayout->addWidget(pXLabelName);
-        pXLineEdit = new QLineEdit(pDlg);
-        pXLineEdit->setFixedWidth(60);
-        pXLineEdit->setText(QString().setNum(sizeX, 'f', 2));
-        pEditLayout->addWidget(pXLineEdit);
-
-        // Size Y
-        pEditLayout->addSpacing(10);
-        QLabel* pYLabelName = new QLabel(pDlg);
-        pYLabelName->setText(TR("id_y_label"));
-        pEditLayout->addWidget(pYLabelName);
-        pYLineEdit = new QLineEdit(pDlg);
-        pYLineEdit->setFixedWidth(60);
-        pYLineEdit->setText(QString().setNum(sizeY, 'f', 2));
-        pEditLayout->addWidget(pYLineEdit);
-
-        // Size Z
-        pEditLayout->addSpacing(10);
-        QLabel* pZLabelName = new QLabel(pDlg);
-        pZLabelName->setText(TR("id_z_label"));
-        pEditLayout->addWidget(pZLabelName);
-        pZLineEdit = new QLineEdit(pDlg);
-        pZLineEdit->setFixedWidth(60);
-        pZLineEdit->setText(QString().setNum(sizeZ, 'f', 2));
-        pEditLayout->addWidget(pZLineEdit);
-    }
-    else if (pAccVol->isA("TYAcousticCylinder") || pAccVol->isA("TYAcousticSemiCylinder"))
-    {
-        // Diametre
-        QLabel* pDiamLabelName = new QLabel(pDlg);
-        pDiamLabelName->setText(TR("id_diameter_label"));
-        pEditLayout->addWidget(pDiamLabelName);
-        pDiamLineEdit = new QLineEdit(pDlg);
-        pDiamLineEdit->setFixedWidth(60);
-        pEditLayout->addWidget(pDiamLineEdit);
-
-        // Hauteur
-        pEditLayout->addSpacing(10);
-        QLabel* pHauteurLabelName = new QLabel(pDlg);
-        pHauteurLabelName->setText(TR("id_hauteur_label"));
-        pEditLayout->addWidget(pHauteurLabelName);
-        pHauteurLineEdit = new QLineEdit(pDlg);
-        pHauteurLineEdit->setFixedWidth(60);
-        pEditLayout->addWidget(pHauteurLineEdit);
-
-        if (pAccVol->isA("TYAcousticCylinder"))
-        {
-            pDiamLineEdit->setText(QString().setNum(((TYAcousticCylinder*) pAccVol)->getDiameter(), 'f', 2));
-            pHauteurLineEdit->setText(QString().setNum(((TYAcousticCylinder*) pAccVol)->getHauteur(), 'f', 2));
-        }
-        else if (pAccVol->isA("TYAcousticSemiCylinder"))
-        {
-            pDiamLineEdit->setText(QString().setNum(((TYAcousticSemiCylinder*) pAccVol)->getDiameter(), 'f', 2));
-            pHauteurLineEdit->setText(QString().setNum(((TYAcousticSemiCylinder*) pAccVol)->getHauteur(), 'f', 2));
-        }
-    }
-
-    QBoxLayout* pBtnLayout = new QHBoxLayout();
-    pLayout->addLayout(pBtnLayout, 1, 1);
-
-    pBtnLayout->addStretch(1);
-
-    QPushButton* pButtonOK = new QPushButton(TR("id_ok_btn"), pDlg);
-    pButtonOK->setDefault(true);
-    QObject::connect(pButtonOK, SIGNAL(clicked()), pDlg, SLOT(accept()));
-    pBtnLayout->addWidget(pButtonOK);
-
-    QPushButton* pButtonCancel = new QPushButton(TR("id_cancel_btn"), pDlg);
-    pButtonCancel->setShortcut(Qt::Key_Escape);
-    QObject::connect(pButtonCancel, SIGNAL(clicked()), pDlg, SLOT(reject()));
-    pBtnLayout->addWidget(pButtonCancel);
+    TYDimensionDialog *pDlg = new TYDimensionDialog(pAccVol, _pModeler);
 
     // Affiche la boite de dialogue
     int ret = pDlg->exec();
@@ -1838,45 +1051,12 @@ void TYPickEditor::showDimensionsDialog(TYAcousticVolume* pAccVol)
     // Applique les modificatins si necessaire
     if (ret == QDialog::Accepted)
     {
-        if (_pModeler->askForResetResultat())
+        if (! _pModeler->askForResetResultat())
         {
-            if (pAccVol->isA("TYAcousticBox"))
-            {
-                float sizeX = pXLineEdit->text().toDouble();
-                float sizeY = pYLineEdit->text().toDouble();
-                float sizeZ = pZLineEdit->text().toDouble();
-
-                TYAction* pAction = new TYResizeAccBoxAction((TYAcousticBox*) pAccVol,
-                                                             sizeX, sizeY, sizeZ, _pModeler, TR("id_action_resizebox"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                ((TYAcousticBox*) pAccVol)->setDimension(sizeX, sizeY, sizeZ);
-            }
-            else if (pAccVol->isA("TYAcousticCylinder"))
-            {
-                double diameter = pDiamLineEdit->text().toDouble();
-                double hauteur = pHauteurLineEdit->text().toDouble();
-
-                TYAction* pAction = new TYResizeAccCylAction((TYAcousticCylinder*) pAccVol,
-                                                             diameter, hauteur, _pModeler, TR("id_action_resizecyl"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                ((TYAcousticCylinder*) pAccVol)->setDiameter(diameter);
-                ((TYAcousticCylinder*) pAccVol)->setHauteur(hauteur);
-            }
-            else if (pAccVol->isA("TYAcousticSemiCylinder"))
-            {
-                double diameter = pDiamLineEdit->text().toDouble();
-                double hauteur = pHauteurLineEdit->text().toDouble();
-
-                TYAction* pAction = new TYResizeAccSemiCylAction((TYAcousticSemiCylinder*) pAccVol,
-                                                                 diameter, hauteur, _pModeler, TR("id_action_resizesemicyl"));
-                _pModeler->getActionManager()->addAction(pAction);
-
-                ((TYAcousticSemiCylinder*) pAccVol)->setDiameter(diameter);
-                ((TYAcousticSemiCylinder*) pAccVol)->setHauteur(hauteur);
-            }
-
+            *pAccVol = *pBackupVolume;
+        }
+        else
+        {
             pAccVol->setIsGeometryModified(true);
             pAccVol->getParent()->setIsGeometryModified(true);
 
@@ -1889,9 +1069,6 @@ void TYPickEditor::showDimensionsDialog(TYAcousticVolume* pAccVol)
             TYElement::setIsSavedOk(true);
         }
     }
-
-    delete pBtnLayout;
-    delete pEditLayout;
 }
 
 void TYPickEditor::showPanel(TYElement* pElt)
@@ -1906,33 +1083,34 @@ void TYPickEditor::showPanel(TYElement* pElt)
     LPTYMaillage pMaillage = dynamic_cast<TYMaillage*>(pElt);
     if (pMaillage != nullptr)
     {
-        double x = _lastMovedCurPos.x();
-        double y = _pInteractor->height() - _lastMovedCurPos.y();
-
         LPTYPanel pPanel = pMaillage->getPanel();
 
-        // Position du curseur
+        // Position du curseur (repere modeleur)
+        double x = _lastMovedCurPos.x();
+        double y = _pInteractor->height() - _lastMovedCurPos.y();
         TYElementGraphic* pTYElementGraphic = pPanel->getGraphicObject();
         ((TYPanelGraphic*)pTYElementGraphic)->setPosX(x);
         ((TYPanelGraphic*)pTYElementGraphic)->setPosY(y);
         pTYElementGraphic->setVisible();
 
-        // Position dans la scene 3D
-        double worldPos[4];
-        displayToWorld(x, y, 0.0, worldPos);
+        // Position dans le repère "monde"
+        OPoint3D pt;
+        if ( realWorldPosition(pt) == false ) { return ; }
+        double X=pt._x, Y=pt._y, Z=pt._z;
+        
         switch (_pModeler->getCurrentView())
         {
             case TYModelerFrame::TopView:
-                pPanel->setFirstPos("X : " + doubleToStrPre(worldPos[0], 1));
-                pPanel->setSecondPos("Y : " + doubleToStrPre(-worldPos[2], 1));
+                pPanel->setFirstPos("X : " + doubleToStrPre(X, 1));
+                pPanel->setSecondPos("Y : " + doubleToStrPre(Y, 1));
                 break;
             case TYModelerFrame::LeftView:
-                pPanel->setFirstPos("Y : " + doubleToStrPre(-worldPos[2], 1));
-                pPanel->setSecondPos("Z : " + doubleToStrPre(worldPos[1], 1));
+                pPanel->setFirstPos("Y : " + doubleToStrPre(Y, 1));
+                pPanel->setSecondPos("Z : " + doubleToStrPre(Z, 1));
                 break;
             case TYModelerFrame::FrontView:
-                pPanel->setFirstPos("X : " + doubleToStrPre(worldPos[0], 1));
-                pPanel->setSecondPos("Z : " + doubleToStrPre(worldPos[1], 1));
+                pPanel->setFirstPos("X : " + doubleToStrPre(X, 1));
+                pPanel->setSecondPos("Z : " + doubleToStrPre(Z, 1));
                 break;
         }
 
@@ -1951,13 +1129,13 @@ void TYPickEditor::showPanel(TYElement* pElt)
            switch (_pModeler->getCurrentView())
             {
                 case TYModelerFrame::TopView:
-                    minDistSquare = std::sqrt(std::pow(coord._x - worldPos[0], 2) + std::pow(coord._y + worldPos[2], 2));
+                    minDistSquare = std::sqrt(std::pow(coord._x - X, 2) + std::pow(coord._y - Y, 2));
                     break;
                 case TYModelerFrame::LeftView:
-                    minDistSquare = std::sqrt(std::pow(coord._y + worldPos[2], 2) + std::pow(coord._z - worldPos[1], 2));
+                    minDistSquare = std::sqrt(std::pow(coord._y - Y, 2) + std::pow(coord._z - Z, 2));
                     break;
                 case TYModelerFrame::FrontView:
-                    minDistSquare = std::sqrt(std::pow(coord._x - worldPos[0], 2) + std::pow(coord._z - worldPos[1], 2));
+                    minDistSquare = std::sqrt(std::pow(coord._x - X, 2) + std::pow(coord._z - Z, 2));
                     break;
             }
 
@@ -1974,13 +1152,13 @@ void TYPickEditor::showPanel(TYElement* pElt)
             switch (_pModeler->getCurrentView())
             {
                 case TYModelerFrame::TopView:
-                    distSquare = std::sqrt(std::pow(coord._x - worldPos[0], 2) + std::pow(coord._y + worldPos[2], 2));
+                    distSquare = std::sqrt(std::pow(coord._x - X, 2) + std::pow(coord._y - Y, 2));
                     break;
                 case TYModelerFrame::LeftView:
-                    distSquare = std::sqrt(std::pow(coord._y + worldPos[2], 2) + std::pow(coord._z - worldPos[1], 2));
+                    distSquare = std::sqrt(std::pow(coord._y - Y, 2) + std::pow(coord._z - Z, 2));
                     break;
                 case TYModelerFrame::FrontView:
-                    distSquare = std::sqrt(std::pow(coord._x - worldPos[0], 2) + std::pow(coord._z - worldPos[1], 2));
+                    distSquare = std::sqrt(std::pow(coord._x - X, 2) + std::pow(coord._z - Z, 2));
                     break;
             }
 
@@ -2038,3 +1216,756 @@ void TYPickEditor::hidePanel(TYElement* pElt)
     }
 }
 
+bool TYPickEditor::realWorldPosition(OPoint3D& pt)
+{
+    dynamic_cast<TYModelerFrame*>(_pModeler)->updateView();
+
+    // Position dans la scene 3D
+    QPoint curPos = _lastPressedCurPos;
+
+    // Calcul des coords
+    float* pos = new float[3];
+
+    if ( !(_pModeler->computeCurPos(curPos.x(), curPos.y(), pos)) ) 
+    { 
+        delete [] pos;
+        return false; 
+    }
+
+    pt._x = pos[0];
+    pt._y = -pos[2]; 
+    pt._z = pos[1];
+    
+    delete [] pos;
+
+    return true;
+}
+
+void TYPickEditor::manageProperties(TYElement *pElement)
+{
+    if ( (pElement != nullptr) && (pElement->edit(_pModeler) == QDialog::Accepted) )
+    {
+        // Mise a jour du projet
+        TYProjet* pProjet = getTYApp()->getCurProjet();
+        if (pProjet)
+        {
+            TYSiteNode* pSite = pProjet->getSite();
+            if (pSite)
+            {
+                pSite->update(pElement);
+                getTYMainWnd()->getSiteFrame()->updateList();
+            }
+        }
+
+        pElement->updateGraphicTree();
+        pElement->updateGraphic();
+    }
+}
+
+void TYPickEditor::copySite(TYElement* pElement)
+{
+    if (pElement == nullptr) { return; }
+
+    TYElement *pParent = pElement->getParent();
+
+    if (pParent == nullptr) { return; }
+
+    TYSiteNodeGeoNode *pGeoNode = TYGeometryNode::GetGeoNode(pElement);
+
+    // Nouvel element du meme type que l'objet a dupliquer (clone)
+    LPTYSiteNodeGeoNode pCopy = new TYSiteNodeGeoNode( dynamic_cast<TYSiteNode*>(pElement->clone()) );
+
+    // Duplication
+    pCopy->deepCopy(pGeoNode, false);
+    pCopy->setParent( pElement->getParent() );
+
+    // Ajout
+    if (dynamic_cast<TYSiteNode*>(pParent)->addSiteNode(pCopy))
+    {
+        ORepere3D repere = pCopy->getORepere3D();
+        // Offset
+        repere._origin._x += 100.0;
+        repere._origin._y -= 100.0;
+
+        pCopy->setRepere(repere);
+
+        LPTYCalcul pCalc = NULL;
+        TYSiteNode* pSite = NULL;
+        pSite = dynamic_cast<TYSiteNode*>(pCopy->getElement()) ;
+        if (getTYApp()->getCurProjet() && pSite)
+        {
+            pCalc = getTYApp()->getCurProjet()->getCurrentCalcul();
+            if (pCalc) { pCalc->getCalculElements(pSite); }
+        }
+
+        // Update Graphic
+        pCopy->updateGraphicTree();
+
+        // Action
+        TYAction* pAction = new TYAddSiteNodeToSiteNodeAction(pCopy, dynamic_cast<TYSiteNode*>(pParent), _pModeler, TR("id_action_addsitenode"));
+        _pModeler->getActionManager()->addAction(pAction);
+    }
+
+    updateSiteFrame();
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+
+void TYPickEditor::remSite(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYElement *pParent = pElement->getParent();
+    if (pParent == nullptr) { return; }
+
+    LPTYSiteNode pSiteParent = dynamic_cast<TYSiteNode*> (pParent);
+    LPTYSiteNodeGeoNode pGeoNode = TYGeometryNode::GetGeoNode(pElement);
+
+    if ( pSiteParent->remSiteNode( (LPTYSiteNode&)pElement ) )
+    {
+        TYAction* pAction = new TYRemSiteNodeToSiteNodeAction(pGeoNode, pSiteParent, _pModeler, TR("id_action_remsitenode"));
+        _pModeler->getActionManager()->addAction(pAction);
+    }
+
+    updateSiteFrame();
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+
+void TYPickEditor::splitCurve(TYElement *pElement)
+{
+    OPoint3D pt;
+    if ( realWorldPosition(pt) )
+    {
+        TYCourbeNiveau *pCurrentCurve = dynamic_cast<TYCourbeNiveau*>( pElement );
+        TYTopographie* pTopo = dynamic_cast<TYTopographie*>(pCurrentCurve->getParent());
+
+        if (pCurrentCurve != nullptr)
+        {
+            LPTYCourbeNiveau newCurve = pCurrentCurve->split(pt);
+            if (newCurve._pObj != nullptr)
+            {
+                // Copie du geonode de l'actuelle courbe
+                TYGeometryNode *pCurrentGeoNode = TYGeometryNode::GetGeoNode(pCurrentCurve);
+                LPTYGeometryNode pNewGeoNode = new TYGeometryNode();
+                pNewGeoNode->deepCopy(pCurrentGeoNode, false);
+
+                // Association du geonode avec la nouvelle courbe
+                pNewGeoNode->setElement( (LPTYElement) newCurve);
+
+                // Ajout de la nouvelle courbe au projet
+                if (pTopo != nullptr)
+                {
+                    pTopo->addCrbNiv(pNewGeoNode);
+                }
+            }
+
+            pTopo->updateGraphicTree();
+            pTopo->updateGraphic();
+            updateSiteFrame();
+            // La scene a ete modifiee
+            TYElement::setIsSavedOk(true);
+        }
+    }
+}
+
+void TYPickEditor::copyMaillage(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYElement *pParent = pElement->getParent();
+    if (pParent == nullptr) { return; }
+
+    TYMaillageGeoNode *pGeoNode = TYGeometryNode::GetGeoNode(pElement);
+
+    // Nouvel element du meme type que l'objet a dupliquer (clone)
+    LPTYMaillageGeoNode pCopy = new TYMaillageGeoNode(dynamic_cast<TYMaillage*>(pElement->clone()));
+
+    // Duplication
+    pCopy->deepCopy(pGeoNode, false);
+    pCopy->setParent(pParent);
+
+    // Ajout
+    if ((dynamic_cast<TYCalcul*>(pParent))->addMaillage(pCopy))
+    {
+        TYRectangularMaillage *pMaillage = dynamic_cast<TYRectangularMaillage*>(pCopy->getElement());
+        double x = 10., y = 10.;
+        if (pMaillage != nullptr)
+        {
+            LPTYRectangle pRect = pMaillage->getRectangle();
+            x = pRect->getSizeX() / 2.;
+            y = pRect->getSizeY() / 2.;
+        }
+        
+        ORepere3D repere = pCopy->getORepere3D();
+        // Offset
+        repere._origin._x += x;
+        repere._origin._y -= y;
+
+        pCopy->setRepere(repere);
+
+        // Update Graphic
+        pCopy->updateGraphicTree();
+
+        // Action
+        TYAction* pAction = new TYAddMaillageToCalculAction(pCopy, (dynamic_cast<TYCalcul*>(pParent)), _pModeler, TR("id_action_addmaillage"));
+        _pModeler->getActionManager()->addAction(pAction);
+
+        refreshProjectFrame();
+    }
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+
+void TYPickEditor::remMaillage(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYElement *pParent = pElement->getParent();
+    if (pParent == nullptr) { return; }
+
+    LPTYMaillageGeoNode pGeoNode = TYGeometryNode::GetGeoNode(pElement);
+    LPTYCalcul pCalculParent = dynamic_cast<TYCalcul*>(pParent);
+
+    if ( pCalculParent->remMaillage(dynamic_cast<TYMaillage*>(pElement)) )
+    {
+        TYAction* pAction = new TYRemMaillageToCalculAction(pGeoNode, dynamic_cast<TYCalcul*>(pParent), _pModeler, TR("id_action_remmaillage"));
+        _pModeler->getActionManager()->addAction(pAction);
+    }
+
+    refreshProjectFrame();
+    getTYMainWnd()->updateModelers(false);
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+
+void TYPickEditor::copyPtCtrl(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYElement *pParent = pElement->getParent();
+    if (pParent == nullptr) { return; }
+
+    // Nouvel element du meme type que l'objet a dupliquer (clone)
+    LPTYPointControl pCopy = dynamic_cast<TYPointControl*>(pElement->clone());
+
+    // Duplication
+    pCopy->deepCopy(dynamic_cast<TYPointControl*>(pElement), false);
+    pCopy->setParent(pElement->getParent());
+
+    // Ajout
+    if ( (dynamic_cast<TYProjet*>(pParent))->addPointControl(pCopy) )
+    {
+        // Offset
+        pCopy->_x += 10.0;
+        pCopy->_y -= 10.0;
+
+        // Update Graphic
+        pCopy->updateGraphicTree();
+
+        // Action
+        TYAction* pAction = new TYAddPointControlAction(dynamic_cast<TYProjet*>(pParent), pCopy, _pModeler, TR("id_action_addptcontrol"));
+        _pModeler->getActionManager()->addAction(pAction);
+    }
+
+    refreshProjectFrame();
+    getTYMainWnd()->updateModelers(false);
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+void TYPickEditor::remPtCtrl(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    LPTYProjet pParent = dynamic_cast<TYProjet*>(pElement->getParent());
+    if (pParent == nullptr) { return; }
+
+    if ( pParent->remPointControl( dynamic_cast<TYPointControl*>(pElement) ) )
+    {
+        TYAction* pAction = new TYRemPointControlAction(pParent, dynamic_cast<TYPointControl*>(pElement), _pModeler, TR("id_action_remptcontrol"));
+        _pModeler->getActionManager()->addAction(pAction);
+    }
+
+    refreshProjectFrame();
+    getTYMainWnd()->updateModelers(false);
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+void TYPickEditor::remTopoElmt(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYTopographie* pTopo = dynamic_cast<TYTopographie*>(pElement->getParent());
+    if (pTopo == nullptr) { return; }
+
+    // On recupere le site parent
+    TYSiteNode* pSiteParent = TYSiteNode::safeDownCast(pTopo->getParent());
+
+    TYAction* pAction = new TYRemElementToTopoAction(pElement, pTopo, _pModeler, TR("id_action_remelttopo"));
+    _pModeler->getActionManager()->addAction(pAction);
+
+    if (pElement->isA("TYCourbeNiveau"))
+    {
+        pTopo->remCrbNiv((LPTYCourbeNiveau&) pElement);
+    }
+    else if (pElement->isA("TYTerrain"))
+    {
+        pTopo->remTerrain((LPTYTerrain&) pElement);
+    }
+    else if (pElement->isA("TYCoursEau"))
+    {
+        pTopo->remCrsEau((LPTYCoursEau&) pElement);
+    }
+    else if (pElement->isA("TYPlanEau"))
+    {
+        pTopo->remPlanEau((LPTYPlanEau&) pElement);
+    }
+
+    updateSiteFrame();
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+void TYPickEditor::copyTopoElmt(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYTopographie* pTopo = dynamic_cast<TYTopographie*>(pElement->getParent());
+    if (pTopo == nullptr) { return; }
+
+    SmartPtr<TYGeometryNode > pCopyTmp = NULL;
+
+    if (pElement->isA("TYCourbeNiveau"))
+    {
+        // Nouvelle element
+        LPTYCourbeNiveauGeoNode pCopy = new TYCourbeNiveauGeoNode(new TYCourbeNiveau());
+        pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
+
+        // Duplication
+        pCopy->deepCopy(pTopo->findCrbNiv((LPTYCourbeNiveau&) pElement), false);
+        pCopy->setParent(pElement->getParent());
+
+        // Ajout
+        pTopo->addCrbNiv(pCopy);
+    }
+    else if (pElement->isA("TYTerrain"))
+    {
+        // Nouvelle element
+        LPTYTerrainGeoNode pCopy = new TYTerrainGeoNode(new TYTerrain);
+        pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
+
+        // Duplication
+        pCopy->deepCopy(pTopo->findTerrain((LPTYTerrain&) pElement), false);
+        pCopy->setParent(pElement->getParent());
+
+        // Ajout
+        pTopo->addTerrain(pCopy);
+    }
+    else if (pElement->isA("TYCoursEau"))
+    {
+        // Nouvelle element
+        LPTYCoursEauGeoNode pCopy = new TYCoursEauGeoNode(new TYCoursEau);
+        pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
+
+        // Duplication
+        pCopy->deepCopy(pTopo->findCrsEau((LPTYCoursEau&) pElement), false);
+        pCopy->setParent(pElement->getParent());
+
+        // Ajout
+        pTopo->addCrsEau(pCopy);
+    }
+    else if (pElement->isA("TYPlanEau"))
+    {
+        // Nouvelle element
+        LPTYPlanEauGeoNode pCopy = new TYPlanEauGeoNode(new TYPlanEau);
+        pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
+
+        // Duplication
+        pCopy->deepCopy(pTopo->findPlanEau((LPTYPlanEau&) pElement), false);
+        pCopy->setParent(pElement->getParent());
+
+        // Ajout
+        pTopo->addPlanEau(pCopy);
+    }
+
+    //if (pCopyTmp)
+    //{
+    //    ORepere3D repere = pCopyTmp->getORepere3D();
+    //    // Offset
+    //    repere._origin._x += 50.0;
+    //    repere._origin._y -= 50.0;
+    //    pCopyTmp->setRepere(repere);
+
+    //    // Action
+    //    TYAction* pAction = new TYAddElementToTopoAction(pCopyTmp, pTopo, _pModeler, TR("id_action_addelttopo"));
+    //    _pModeler->getActionManager()->addAction(pAction);
+
+    //    // Update graphic
+    //    pCopyTmp->updateGraphicTree();
+    //}
+
+    updateSiteFrame();
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+void TYPickEditor::remInfraElmt(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYInfrastructure* pInfra = dynamic_cast<TYInfrastructure*>(pElement->getParent());
+    if (pInfra == nullptr) { return; }
+
+    TYAction* pAction = new TYRemElementToInfraAction(pElement, pInfra, _pModeler, TR("id_action_remeltinfra"));
+    _pModeler->getActionManager()->addAction(pAction);
+
+    if (pElement->isA("TYRoute"))
+    {
+        pInfra->remRoute((LPTYRoute&) pElement);
+    }
+    else if (pElement->isA("TYReseauTransport"))
+    {
+        pInfra->remResTrans((LPTYReseauTransport&) pElement);
+    }
+    else if (pElement->isA("TYBatiment"))
+    {
+        pInfra->remBatiment((LPTYBatiment&) pElement);
+    }
+    else if (pElement->isA("TYMachine"))
+    {
+        pInfra->remMachine((LPTYMachine&) pElement);
+    }
+    else if (pElement->isA("TYUserSourcePonctuelle"))
+    {
+        pInfra->remSrc((LPTYUserSourcePonctuelle&) pElement);
+    }
+
+    updateSiteFrame(); // Mise a jour de l'arborescence du site
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+void TYPickEditor::copyInfraElmt(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYInfrastructure* pInfra = dynamic_cast<TYInfrastructure*>( pElement->getParent() );
+    if (pInfra == nullptr) { return; }
+
+    SmartPtr<TYGeometryNode > pCopyTmp = NULL;
+    TYBox boundBox;
+
+    LPTYGeometryNode pCopy = nullptr;
+
+    if (pElement->isA("TYRoute"))
+    {
+        // Nouvelle element
+        pCopy = new TYRouteGeoNode(new TYRoute);
+        pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
+
+        // Duplication
+        pCopy->deepCopy(pInfra->findRoute((LPTYRoute&) pElement), false);
+        pCopy->setParent(pElement->getParent());
+
+        // Ajout
+        pInfra->addRoute(pCopy);
+    }
+    else if (pElement->isA("TYReseauTransport"))
+    {
+        // Nouvel element
+        pCopy = new TYReseauTransportGeoNode(new TYReseauTransport);
+        pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
+
+        // Duplication
+        pCopy->deepCopy(pInfra->findResTrans((LPTYReseauTransport&) pElement), false);
+        pCopy->setParent(pElement->getParent());
+
+        // Ajout
+        pInfra->addResTrans(pCopy);
+    }
+    else if (pElement->isA("TYBatiment"))
+    {
+        // Nouvelle element
+        pCopy = new TYBatimentGeoNode(new TYBatiment);
+        pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
+
+        // Duplication
+        pCopy->deepCopy(pInfra->findBatiment((LPTYBatiment&) pElement), false);
+        pCopy->setParent(pElement->getParent());
+        updateCopyPosition(pCopy);
+
+        // Ajout
+        pInfra->addBatiment(pCopy);
+
+        // Message d'alerte sur le fonctionnement des machine dupliquees
+        OMessageManager::get()->info("**********************************************************************\n");
+        OMessageManager::get()->info("*                      ATTENTION !!!                                 *\n\n\n");
+        OMessageManager::get()->info("* Les machines a l'interieur du batiment duplique ne sont pas active *\n\n");
+        OMessageManager::get()->info("*                PENSEZ A LES REACTIVER                              *\n\n");
+        OMessageManager::get()->info("**********************************************************************\n");
+
+    }
+    else if (pElement->isA("TYMachine"))
+    {
+        // Nouvelle element
+        pCopy = new TYMachineGeoNode(new TYMachine);
+        pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
+
+        // Duplication
+        pCopy->deepCopy(pInfra->findMachine((LPTYMachine&) pElement), false);
+        pCopy->setParent(pElement->getParent());
+        updateCopyPosition(pCopy);
+        
+        // Ajout
+        pInfra->addMachine(pCopy);
+    }
+    else if (pElement->isA("TYUserSourcePonctuelle"))
+    {
+        // Nouvelle element
+        pCopy = new TYSourcePonctuelleGeoNode(new TYSourcePonctuelle);
+        pCopyTmp = (SmartPtr<TYGeometryNode >&) pCopy;
+
+        // Duplication
+        pCopy->deepCopy(pInfra->findSrc((LPTYUserSourcePonctuelle&) pElement), false);
+        pCopy->setParent(pElement->getParent());
+
+        // Ajout
+        pInfra->addSrc(pCopy);
+
+        // Offset
+        TYUserSourcePonctuelle::safeDownCast(pCopy->getElement())->getPos()->_x += 10;
+        TYUserSourcePonctuelle::safeDownCast(pCopy->getElement())->getPos()->_y -= 10;
+    }
+
+    //if (pCopyTmp)
+    //{
+    //    if (!pElement->isA("TYUserSourcePonctuelle"))
+    //    {
+    //        ORepere3D repere = pCopyTmp->getORepere3D();
+
+    //        // Offset proportionnel a la taille de l'objet
+    //        repere._origin._x += boundBox._sizeX; //10.0;
+    //        repere._origin._y -= boundBox._sizeY; //10.0;
+
+    //        pCopyTmp->setRepere(repere);
+    //    }
+
+    //    // Action
+    //    TYAction* pAction = new TYAddElementToInfraAction(pCopyTmp, pInfra, _pModeler, TR("id_action_addeltinfra"));
+    //    _pModeler->getActionManager()->addAction(pAction);
+    //}
+
+    // On l'ajoute dans le calcul courant (si calcul courant il y a !)
+    if (pCopy && getTYApp()->getCurProjet() && getTYApp()->getCurProjet()->getCurrentCalcul())
+    {
+        getTYApp()->getCurProjet()->getCurrentCalcul()->addToSelection(pCopy->getElement());
+    }    
+    
+    updateSiteFrame(); // Mise a jour de l'arborescence du site
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+void TYPickEditor::setVolumeSize(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    // On preserve la dimension en hauteur de l'objet
+    TYAcousticVolume* pVol = dynamic_cast<TYAcousticVolume*>(pElement);
+    if (pVol == nullptr) { return; }
+
+    float sizeX = 0, sizeY = 0, sizeZ = 0;
+
+    if (pVol != NULL)
+    {
+        if (pVol->isA("TYAcousticBox"))
+        {
+            TYAcousticBox* pBox = (TYAcousticBox*) pVol;
+            pBox->getDimension(sizeX, sizeY, sizeZ);
+        }
+        else if (pVol->isA("TYAcousticCylinder"))
+        {
+            sizeZ = ((TYAcousticCylinder*) pVol)->getHauteur();
+        }
+        else if (pVol->isA("TYAcousticSemiCylinder"))
+        {
+            sizeZ = ((TYAcousticSemiCylinder*) pVol)->getHauteur();
+        }
+    }
+
+    // Affichage de la boite de dialogue
+    showDimensionsDialog(pVol);
+
+    // Modification de la position pour tenir compte des nouvelles dimensions
+    LPTYAcousticVolumeNode pParent = (TYAcousticVolumeNode*) pVol->getParent();
+    LPTYAcousticVolumeGeoNode pGeoNode = pParent->findAcousticVol(pVol);
+
+    if (pGeoNode)
+    {
+        ORepere3D repere = pGeoNode->getORepere3D();
+        TYPoint org = repere._origin;
+        // On retire l'ancienne hauteur
+        org._z -= sizeZ / 2;
+
+        // on ajoute la nouvelle
+        if (pVol->isA("TYAcousticBox"))
+        {
+            TYAcousticBox* pAccBox = (TYAcousticBox*) pVol;
+            pAccBox->getDimension(sizeX, sizeY, sizeZ);
+        }
+        else if (pVol->isA("TYAcousticCylinder"))
+        {
+            sizeZ = ((TYAcousticCylinder*) pVol)->getHauteur();
+        }
+        else if (pVol->isA("TYAcousticSemiCylinder"))
+        {
+            sizeZ = ((TYAcousticSemiCylinder*) pVol)->getHauteur();
+        }
+
+        org._z += sizeZ / 2;
+
+        repere._origin = org;
+        pGeoNode->setRepere(repere);
+    }
+}
+void TYPickEditor::removeVolume(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYAcousticVolumeNode *pParent = dynamic_cast<TYAcousticVolumeNode*>(pElement->getParent());
+    if (pParent == nullptr) { return; }
+    TYAcousticVolumeGeoNode *pGeoNode = pParent->findAcousticVol(dynamic_cast<TYAcousticVolume*>(pElement));
+    if (pGeoNode == nullptr) { return; }
+
+    if (pParent->remAcousticVol(dynamic_cast<TYAcousticVolume*>(pElement)))
+    {
+        TYAction* pAction = new TYRemAccVolToAccVolNodeAction(pGeoNode, pParent, _pModeler, TR("id_action_remvol"));
+        _pModeler->getActionManager()->addAction(pAction);
+    }
+
+    updateSiteFrame();
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+void TYPickEditor::copyVolume(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYAcousticVolumeNode *pVolParent = dynamic_cast<TYAcousticVolumeNode*>(pElement->getParent());
+    if (pVolParent == nullptr) { return; }
+    TYAcousticVolumeGeoNode *pGeoNode = TYGeometryNode::GetGeoNode(pElement);
+    if (pGeoNode == nullptr) { return; }
+
+    // Nouvel element du meme type que l'objet a dupliquer (clone)
+    LPTYAcousticVolumeGeoNode pCopy = new TYAcousticVolumeGeoNode(dynamic_cast<TYAcousticVolume*> (pElement->clone()));
+
+    // Duplication
+    pCopy->deepCopy(pGeoNode, false);
+
+    // Ajout
+    if (pVolParent->addAcousticVol(pCopy))
+    {
+        // Offset
+        ORepere3D repere = pCopy->getORepere3D();
+
+        if (dynamic_cast<TYEtage*>(pCopy->getElement()) != nullptr)
+        {
+            TYElement* pElt = pCopy->getElement();
+            repere._origin._z += ((TYEtage*)pElt)->getHauteur();
+        }
+        else
+        {
+            repere._origin._x += 20.0;
+            repere._origin._y -= 20.0;
+        }
+
+        pCopy->setRepere(repere);
+        // Update Graphic
+        pCopy->updateGraphicTree();
+
+        // Action
+        TYAction* pAction = new TYAddAccVolToAccVolNodeAction(pCopy, pVolParent, _pModeler, TR("id_action_addvol"));
+        _pModeler->getActionManager()->addAction(pAction);
+    }
+
+    updateSiteFrame();
+
+    // La scene a ete modifiee
+    TYElement::setIsSavedOk(true);
+}
+void TYPickEditor::openFaceModeler(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYAcousticRectangleNode* pAccRectNode = dynamic_cast<TYAcousticRectangleNode*>(pElement);
+    if (pAccRectNode == nullptr) { return; }
+
+    TYFaceModelerFrame* pFaceMdF;
+    pFaceMdF = new TYFaceModelerFrame(pAccRectNode, getTYMainWnd()->getWorkspace(), "face modeler");
+    pFaceMdF->setAttribute(Qt::WA_DeleteOnClose);
+    getTYMainWnd()->getWorkspace()->addSubWindow(pFaceMdF)->setObjectName("TYFaceModelerFrame");
+
+    pFaceMdF->showMaximized();
+    pFaceMdF->fit();
+}
+void TYPickEditor::inverseNormal(TYElement *pElement)
+{
+    if (pElement == nullptr) { return; }
+    TYAcousticVolume* pVol = dynamic_cast<TYAcousticVolume*>(pElement);
+
+    if (pVol) { pVol->inverseNormales(); }
+    pVol->setNormalStatus();
+}
+void TYPickEditor::floorHeight(TYElement *pElement)
+{
+    if (_pModeler->askForResetResultat())
+    {
+        if (pElement == nullptr) { return; }
+        TYEtage* pEtage = dynamic_cast<TYEtage*>(pElement);
+        if (pEtage == nullptr) { return; }
+
+        bool ok = false;
+        double hauteur = QInputDialog::getDouble(_pModeler, "", TR("id_msg_gethauteur"), pEtage->getHauteur(), 0, 1000, 2, &ok);
+
+        if (ok)
+        {
+            pEtage->setHauteur(hauteur);
+            pEtage->updateGraphic();
+        }
+    }
+}
+void TYPickEditor::screenHeight(TYElement *pElement)
+{
+    if (_pModeler->askForResetResultat())
+    {
+        TYEcran* pEcran = dynamic_cast<TYEcran*>(pElement);
+
+        bool ok = false;
+        double hauteur = QInputDialog::getDouble(_pModeler, "", TR("id_msg_gethauteur_ecran"), pEcran->getHauteur(), 0, 1000, 2, &ok);
+
+        if (ok)
+        {
+            pEcran->setHauteur(hauteur);
+            pEcran->updateGeometry();
+            pEcran->updateGraphic();
+        }
+    }
+}
+void TYPickEditor::screenThick(TYElement *pElement)
+{
+    if (_pModeler->askForResetResultat())
+    {
+        TYEcran* pEcran = dynamic_cast<TYEcran*>(pElement);
+
+        bool ok = false;
+        double epaisseur = QInputDialog::getDouble(_pModeler, "", TR("id_msg_getepaisseur_ecran"), pEcran->getEpaisseur(), 0, 1000, 2, &ok);
+
+        if (ok)
+        {
+            pEcran->setEpaisseur(epaisseur);
+            pEcran->updateGeometry();
+            pEcran->updateGraphic();
+        }
+    }
+}
+
+void TYPickEditor::updateCopyPosition(LPTYGeometryNode &pNode)
+{
+    TYBox boundBox = dynamic_cast<TYAcousticVolumeNode*>(pNode->getElement())->volEnglob();
+
+    pNode->getORepere3D()._origin = pNode->getORepere3D()._origin + OCoord3D(boundBox._sizeX/2., boundBox._sizeY/2., 0.);
+}
