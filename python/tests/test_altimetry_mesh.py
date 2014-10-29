@@ -522,6 +522,14 @@ class ElevationProfileTC(unittest.TestCase):
         self.assertEqual(profile.point_altitude(2.5), 2.0)
         self.assertEqual(profile.point_altitude(1.5), 0.0)
 
+    def test_interpolation(self):
+        segment = LineString([(2.5, 0), (2.5, 5)])
+        profile = mesh.ElevationProfile(self.mesh, segment)
+        self.assertEqual(profile(0), 0)
+        self.assertEqual(profile(1), 0)
+        self.assertEqual(profile(2), 2)
+        self.assertTrue(0 < profile(1.7) < 2)
+
 
 if __name__ == '__main__':
     from utils import main

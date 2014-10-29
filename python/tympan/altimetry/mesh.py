@@ -6,6 +6,7 @@ import copy
 from warnings import warn
 
 import numpy as np
+from scipy.interpolate import InterpolatedUnivariateSpline
 from shapely.geometry import Point, LineString
 
 from CGAL.CGAL_Kernel import (
@@ -823,6 +824,17 @@ class ElevationProfile(object):
 
     mesh: a ReferenceElevationMesh
     segment: a LineString (shapely.geometry)
+
+    Example:
+
+    >>> profile = ElevationProfile(mesh, ((0, 0), (1, 1)))
+    >>> # Evaluate the profile a distance 0.5 from segment origin.
+    >>> profile(0.5)
+    >>> # Evaluate the profile for an array of distances.
+    >>> h = profile(np.arange(0, 1, 0.1))
+    >>> # Compute the first and second derivative of the profile.
+    >>> dh = h.gradient()
+    >>> d2h = dh.gradient()
     """
     def __init__(self, mesh, segment):
         self._mesh = mesh
@@ -835,6 +847,18 @@ class ElevationProfile(object):
         if not self.points:
             raise ValueError(
                 'no point found by intersecting the segment and the mesh')
+        # Cached spline.
+        self._spline = None
+
+    @property
+    def spline(self):
+        """The underlying interpolating spline"""
+        if not self._spline:
+            origin = self._segment_origin
+            distances = [origin.distance(p) for p in self.points]
+            altitudes = [self.point_altitude(p) for p in self.points]
+            self._spline = InterpolatedUnivariateSpline(distances, altitudes, k=1)
+        return self._spline
 
     @property
     def direction(self):
@@ -860,6 +884,10 @@ class ElevationProfile(object):
         """
         p = self._point_at_distance(dist)
         return self._mesh.point_altitude(p)
+
+    def __call__(self, dist):
+        """Interpolated altitude at distance `dist` from segment origin."""
+        return self.spline(dist)
 
 
 class FaceFlooder(object):
