@@ -532,6 +532,62 @@ class MeshedCDTWithInfo(object):
         """
         return [material_by_face[fh] for fh in self.cdt.finite_faces()]
 
+    def segment_intersection_points(self, segment):
+        """Return the list of intersection points between the mesh CDT and a
+        segment. This is list sorted according to the distance of points to
+        the origin (first point) of the segment and only contains unique
+        points.
+        """
+        if not isinstance(segment, sh_geom.LineString):
+            segment = sh_geom.LineString(segment)
+        points = list(self._segment_intersection_points(segment))
+        # Sort points by distance to the segment origine.
+        def closer_to_segment_origine(x, y):
+            dist = sh_geom.Point(segment.coords[0]).distance
+            if dist(x) > dist(y):
+                return 1
+            elif dist(x) < dist(y):
+                return -1
+            else:
+                return 0
+        points.sort(cmp=closer_to_segment_origine)
+        # Eliminate identical adjacent points.
+        if len(points) < 2:
+            return points
+        points =  [p for i, p in enumerate(points)
+                   if not p.equals(points[i-1])]
+        return points
+
+    def _segment_intersection_points(self, segment):
+        """Yield interection points between the mesh CDT and a segment."""
+        for fh in self.cdt.finite_faces():
+            triangle = self._face_triangle(fh)
+            inter = triangle.intersection(segment)
+            if not inter:
+                # No intersection.
+                continue
+            try:
+                inter = iter(inter)
+            except TypeError:
+                # Got a single Point or a LineString.
+                if isinstance(inter, Point):
+                    yield inter
+                elif isinstance(inter, LineString):
+                    for coord in inter.coords:
+                        yield Point(coord)
+                else:
+                    raise Exception('unhandled interection object %r' % inter)
+            else:
+                # Got a collection of points.
+                for i in inter:
+                    assert isinstance(i, Point), i
+                    yield i
+
+    def _face_triangle(self, fh):
+        """Return a shapely geometry LineString for given face."""
+        return sh_geom.LineString([self.py_vertex(fh.vertex(i % 3))
+                                   for i in xrange(4)])
+
 
 class InfoWithIDsAndAltitude(object):
     ALTITUDE_TOLERANCE = 0.1
