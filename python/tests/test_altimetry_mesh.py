@@ -1,6 +1,7 @@
 from itertools import izip_longest
 import unittest
 
+from numpy.testing import assert_array_equal
 from shapely.geometry import LineString, Point
 
 from tympan.altimetry.datamodel import InconsistentGeometricModel
@@ -482,6 +483,44 @@ class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         face_in_hole, expected_None = self.mesher.locate_point((3.25, 3))
         self.assertIsNone(expected_None)
         self.assertNotIn(face_in_hole, flooder.visited)
+
+
+class ElevationProfileTC(unittest.TestCase):
+
+    def setUp(self):
+        self.mesh = mesh.ReferenceElevationMesh()
+        # Three squares inside each others, with an outer zone at altitude 0
+        # and an inner zone at altitude 2.
+        for points, alt in (
+                ([(1, 1), (4, 1), (4, 4), (1, 4)], 0),
+                ([(1.5, 1.5), (3.5, 1.5), (3.5, 3.5), (1.5, 3.5)], 0),
+                ([(2, 2), (3, 2), (3, 3), (2, 3)], 2)):
+            self.mesh.insert_polyline(map(mesh.to_cgal_point, points),
+                                      altitude=alt, close_it=True)
+
+    def test__point_at_distance(self):
+        segment = LineString([(2, 2), (3, 2)])
+        origin = Point(segment.coords[0])
+        profile = mesh.ElevationProfile(self.mesh, segment)
+        p = profile._point_at_distance(0)
+        self.assertEqual(origin.distance(p), 0)
+        self.assertEqual(p.coords[0], origin.coords[0])
+        p = profile._point_at_distance(3)
+        self.assertEqual(origin.distance(p), 3)
+        self.assertEqual(p.coords[0], (5, 2))
+
+    def test_direction(self):
+        segment = LineString([(2, 0), (2, 4)])
+        profile = mesh.ElevationProfile(self.mesh, segment)
+        assert_array_equal(profile.direction, [0, 1])
+
+    def test_point_altitude(self):
+        segment = LineString([(2.5, 0), (2.5, 4)])
+        profile = mesh.ElevationProfile(self.mesh, segment)
+        self.assertIs(profile.point_altitude(0.5),
+                      mesh.UNSPECIFIED_ALTITUDE)
+        self.assertEqual(profile.point_altitude(2.5), 2.0)
+        self.assertEqual(profile.point_altitude(1.5), 0.0)
 
 
 if __name__ == '__main__':
