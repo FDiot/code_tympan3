@@ -850,14 +850,29 @@ class ElevationProfile(object):
         # Cached spline.
         self._spline = None
 
+    def face_data_interpolator(self, face_data):
+        """Return an interpolator on profile points for data associated with
+        mesh faces through the `face_data` dict.
+        """
+        distances = self._point_distances()
+        point_data = [self.point_data(d, face_data) for d in distances]
+        return self.point_data_interpolator(point_data, distances)
+
+    def point_data_interpolator(self, point_data, _distances=None):
+        """Return an interpolator on profile points for data associated with
+        profile points through the `point_data` sequence.
+        """
+        distances = _distances or self._point_distances()
+        if len(distances) != len(point_data):
+            raise ValueError('incompatible number of data points')
+        return InterpolatedUnivariateSpline(distances, point_data, k=1)
+
     @property
     def spline(self):
         """The underlying interpolating spline"""
         if not self._spline:
-            origin = self._segment_origin
-            distances = [origin.distance(p) for p in self.points]
             altitudes = [self.point_altitude(p) for p in self.points]
-            self._spline = InterpolatedUnivariateSpline(distances, altitudes, k=1)
+            self._spline = self.point_data_interpolator(altitudes)
         return self._spline
 
     @property
@@ -877,6 +892,11 @@ class ElevationProfile(object):
         """Return a Point object located at `dist` from segment origin"""
         return Point(np.array(self._segment_origin) + dist * self.direction)
 
+    def _point_distances(self):
+        """Return the list of point distances"""
+        origin = self._segment_origin
+        return [origin.distance(p) for p in self.points]
+
     def point_altitude(self, dist):
         """Return the altitude of a point located at `dist` from segment
         origin. This is the altitude of the mesh triangle the point belongs
@@ -884,6 +904,35 @@ class ElevationProfile(object):
         """
         p = self._point_at_distance(dist)
         return self._mesh.point_altitude(p)
+
+    def point_data(self, dist, face_data, default=None):
+        """Return some "data" at a point located at `dist` from segment origin
+        based on the mesh face the point belongs to and the `face_data`
+        mapping which relates mesh face handles to these "data". `default` is
+        used if the face is not found in the `face_data` map.
+
+        For instance, given a `material_by_face` map::
+
+            material = profile.point_data(dist, material_by_face)
+
+        will return the material of a point located at `dist` from segment
+        origin in the profile.
+        """
+        p = self._point_at_distance(dist)
+        # See ReferenceElevationMesh.point_altitude for logic.
+        fh, vh_or_i = self._mesh.locate_point(to_cgal_point(p))
+        if fh is None:
+            # Point outside the convex hull.
+            return default
+        if isinstance(vh_or_i, Vertex_handle):
+            # Point is a vertex.
+            raise NotImplementedError('point is on a vertex')
+        if isinstance(vh_or_i, int):
+            # Point is on an edge.
+            if self._mesh.cdt.is_infinite(fh): # get a finite face if needed
+                fh, _ = self._mesh.mirror_half_edge(fh, vh_or_i)
+                assert not self._mesh.cdt.is_infinite(fh)
+        return face_data.get(fh, default)
 
     def __call__(self, dist):
         """Interpolated altitude at distance `dist` from segment origin."""
