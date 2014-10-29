@@ -88,6 +88,7 @@ bool TYAcousticVolumeNode::deepCopy(const TYElement* pOther, bool copyId /*=true
     {
         TYAcousticVolume* pNewChild = (TYAcousticVolume*) pOtherAccVolNode->getAcousticVol(i)->clone();
         pNewChild->deepCopy(pOtherAccVolNode->getAcousticVol(i), copyId);
+        pNewChild->setParent(this);
         addAcousticVol(pNewChild, pOtherAccVolNode->_tabAcousticVol[i]->getORepere3D(), false);
     }
 
@@ -759,7 +760,9 @@ bool TYAcousticVolumeNode::addAcousticVol(LPTYAcousticVolumeGeoNode pAccVolGeoNo
 
 bool TYAcousticVolumeNode::addAcousticVol(LPTYAcousticVolume pAccVol, const TYRepere& repere, bool recursif)
 {
-    return addAcousticVol(new TYAcousticVolumeGeoNode(repere, (LPTYElement)pAccVol), recursif);
+    TYAcousticVolumeGeoNode *pVolGeoNode = new TYAcousticVolumeGeoNode(repere, (LPTYElement)pAccVol);
+    pVolGeoNode->setParent(pAccVol->getParent());
+    return addAcousticVol(pVolGeoNode, recursif);
 }
 
 bool TYAcousticVolumeNode::addAcousticVol(LPTYAcousticVolume pAccVol, bool recursif)

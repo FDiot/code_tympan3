@@ -18,34 +18,29 @@
  * \brief outil IHM pour un terrain (fichier header)
  * \author Projet_Tympan
  *
- *
- *
- *
- *
  */
 
 #ifndef __TY_TERRAIN_WIDGET__
 #define __TY_TERRAIN_WIDGET__
 
-
-#include "TYWidget.h"
-#include <qlayout.h>
-//Added by qt3to4:
 #include <QGridLayout>
-#include <QLabel>
+#include "TYWidget.h"
+#include "Tympan/models/business/TYDefines.h"
 
 class TYTerrain;
 class QLineEdit;
-class QGridLayout;
 class QLabel;
 class QTreeWidget;
 class QTabWidget;
 class QGroupBox;
 class QPushButton;
 class QTreeWidgetItem;
+class QCheckBox;
 class TYElementWidget;
 class TYColorInterfaceWidget;
 class TYSolWidget;
+class TYVegetationWidget;
+class TabPointsWidget;
 
 /**
  * \class TYTerrainWidget
@@ -82,32 +77,23 @@ public:
 
     /**
      * Permet de desactiver le widget Terrain (cas du plan d'eau).
-     *
      */
     void disableSolWidget();
+    void disableVegetationWidget();
 
 
 public slots:
     virtual void updateContent();
     virtual void apply();
 
-    /**
-     * Edite la widget du sol.
-     */
-    //  void editSol();
-
+    void useVegetation();
 
     // Membres
 protected:
 
     QGroupBox* _groupBoxEdit;
-    //QLabel* _labelType;
-    //QLineEdit* _lineEditType;
-    //   QGroupBox* _groupBoxSol;
-    //   QPushButton* _pushButtonSol;
-    //   QLineEdit* _lineEditNomSol;
     QGroupBox* _groupBox;
-    QTreeWidget* _listViewTabPt;
+    TabPointsWidget *_tabPoints;
 
     QGridLayout* _terrainLayout;
     QGridLayout* _groupBoxEditLayout;
@@ -118,8 +104,16 @@ protected:
     TYColorInterfaceWidget* _colorW;
     TYSolWidget* _solW;
 
-    QTabWidget* _tabWidget;
-};
+    // Vegetation
+    QCheckBox* _checkBoxVegetActive;
+    QLabel* _labelVegetActive;
+    TYVegetationWidget* _vegetationWidget;
 
+    QGridLayout* _groupBoxVegetationLayout;
+
+    QTabWidget* _tabWidget;
+
+    LPTYVegetation _pVegetation;
+};
 
 #endif // __TY_TERRAIN_WIDGET__

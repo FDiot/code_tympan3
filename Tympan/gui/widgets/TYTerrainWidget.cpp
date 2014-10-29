@@ -18,24 +18,25 @@
  * \brief outil IHM pour un terrain
  */
 
-
-//Added by qt3to4:
-#include <QGridLayout>
+#include <qlayout.h>
 #include <QLabel>
+#include <qcheckbox.h>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/topography/TYTerrain.h"
+#include "Tympan/models/business/material/TYVegetation.h"
 #include "Tympan/gui/widgets/TYColorInterfaceWidget.h"
 #include "Tympan/gui/widgets/TYSolWidget.h"
+#include "TabPointsWidget.h"
+#include "TYVegetationWidget.h"
 #include "TYTerrainWidget.h"
 
 #define TR(id) OLocalizator::getString("TYTerrainWidget", (id))
 
-
 TYTerrainWidget::TYTerrainWidget(TYTerrain* pElement, QWidget* _pParent /*=NULL*/):
-    TYWidget(pElement, _pParent)
+    TYWidget(pElement, _pParent), _pVegetation(nullptr)
 {
     unsigned short lnW = 0;
 
@@ -50,64 +51,50 @@ TYTerrainWidget::TYTerrainWidget(TYTerrain* pElement, QWidget* _pParent /*=NULL*
     _terrainLayout->addWidget(_elmW, lnW++, 0);
     _terrainLayout->addWidget(_colorW, lnW++, 0);
 
-    //   _groupBoxEdit = new QGroupBox( this );
-    //   _groupBoxEdit->setTitle( TR( "" ) );
-    //   _groupBoxEditLayout = new QGridLayout();
-    //_groupBoxEdit->setLayout(_groupBoxEditLayout);
+    _groupBox = new QGroupBox(this);
+    _groupBox->setTitle(TR(""));
+    _groupBoxLayout = new QGridLayout();
+    _groupBox->setLayout(_groupBoxLayout);
+    _labelVegetActive = new QLabel(_groupBox);
+    _labelVegetActive->setText(TR("id_vegetactive_label"));
+    _groupBoxLayout->addWidget(_labelVegetActive, 0, 0);
+    _checkBoxVegetActive = new QCheckBox(_groupBox);
+    _groupBoxLayout->addWidget(_checkBoxVegetActive, 0, 1);
 
-    //_labelType = new QLabel( _groupBoxEdit );
-    //_labelType->setText( TR( "id_type_label" ) );
-    //_groupBoxEditLayout->addWidget( _labelType, 0, 0 );
-
-    //_lineEditType = new QLineEdit( _groupBoxEdit );
-    //_groupBoxEditLayout->addWidget( _lineEditType, 0, 1 );
-
-    //_terrainLayout->addWidget( _groupBoxEdit, 2, 0 );
+    _terrainLayout->addWidget(_groupBox, lnW++, 0);
 
     _tabWidget = new QTabWidget(this);
 
     _solW = new TYSolWidget(getElement()->getSol(), _tabWidget);
-
     _tabWidget->insertTab(1, _solW, TR("id_sol"));
 
-    //_groupBoxSol = new QGroupBox( this);
-    //   _groupBoxSol->setTitle( TR( "id_sol" ) );
-    //   _groupBoxSolLayout = new QGridLayout();
-    //_groupBoxSol->setLayout(_groupBoxSolLayout);
-
-    //   _pushButtonSol = new QPushButton( _groupBoxSol );
-    //   _pushButtonSol->setText( TR( "id_proprietes_button" ) );
-    //   _groupBoxSolLayout->addWidget( _pushButtonSol, 0, 1 );
-
-    //   _lineEditNomSol = new QLineEdit( _groupBoxSol );
-    //   _lineEditNomSol->setEnabled( FALSE );
-    //   _groupBoxSolLayout->addWidget( _lineEditNomSol, 0, 0 );
+    if (getElement()->isUsingVegetation() && getElement()->getVegetation() != nullptr)
+    {
+        _vegetationWidget = new TYVegetationWidget(getElement()->getVegetation(), _tabWidget);
+    }
+    else
+    {
+        _vegetationWidget = new TYVegetationWidget(getElement()->getVegetation(), _tabWidget);
+    }
+    _tabWidget->insertTab(2, _vegetationWidget, TR("id_vegetation"));
 
     _groupBox = new QGroupBox(_tabWidget);
     _groupBox->setTitle(TR("id_pts"));
     _groupBoxLayout = new QGridLayout();
     _groupBox->setLayout(_groupBoxLayout);
 
-    _listViewTabPt = new QTreeWidget(_groupBox);
-    QStringList stringList;
-    stringList.append(TR("id_x"));
-    stringList.append(TR("id_y"));
-    stringList.append(TR("id_z"));
-    _listViewTabPt->setColumnCount(3);
-    _listViewTabPt->setHeaderLabels(stringList);
-    _listViewTabPt->setSelectionMode(QTreeWidget::NoSelection);
+    _tabPoints = new TabPointsWidget(pElement->getListPoints(), _groupBox);
+    _tabPoints->setEnabled(true);
 
-    _groupBoxLayout->addWidget(_listViewTabPt, 0, 0);
+    _groupBoxLayout->addWidget(_tabPoints, 0, 0);
 
-    _tabWidget->insertTab(2, _groupBox, TR("id_geometrie"));
-
-    //  _terrainLayout->addWidget( _groupBoxSol, lnW++, 0 );
+    _tabWidget->insertTab(3, _groupBox, TR("id_geometrie"));
 
     _terrainLayout->addWidget(_tabWidget, lnW++, 0);
 
-    updateContent();
+    connect(_checkBoxVegetActive, SIGNAL(clicked()), this, SLOT(useVegetation()));
 
-    //  connect(_pushButtonSol,SIGNAL(clicked()),this,SLOT(editSol()));
+    updateContent();
 }
 
 TYTerrainWidget::~TYTerrainWidget()
@@ -122,17 +109,11 @@ void TYTerrainWidget::updateContent()
     _colorW->updateContent();
     _solW->updateContent();
 
-    //  _lineEditNomSol->setText( getElement()->getSol()->getName() );
-    //    _lineEditType->setText( num.setNum(getElement()->getType()) );
+    bool bVegActive = getElement()->isUsingVegetation();
+    _checkBoxVegetActive->setChecked(bVegActive);
+    _vegetationWidget->setEnabled(bVegActive);
 
-    _listViewTabPt->clear();
-    for (unsigned int i = 0; i < getElement()->getListPoints().size(); i++)
-    {
-        QTreeWidgetItem* item = new QTreeWidgetItem(_listViewTabPt, 0);
-        item->setText(0, num.setNum(getElement()->getListPoints()[i]._x, 'f', 2));
-        item->setText(1, num.setNum(getElement()->getListPoints()[i]._y, 'f', 2));
-        item->setText(2, num.setNum(getElement()->getListPoints()[i]._z, 'f', 2));
-    }
+    _tabPoints->update();
 }
 
 void TYTerrainWidget::apply()
@@ -140,8 +121,15 @@ void TYTerrainWidget::apply()
     _elmW->apply();
     _colorW->apply();
     _solW->apply();
+   getElement()->useVegetation(_checkBoxVegetActive->isChecked());
 
-    //  getElement()->setType( _lineEditType->text().toInt( ) );
+   if ( (getElement()->isUsingVegetation()) && 
+        (_pVegetation != nullptr) )
+   {
+       getElement()->setVegetation(_pVegetation);
+   }
+
+    _tabPoints->apply();
 
     emit modified();
 }
@@ -151,14 +139,30 @@ void TYTerrainWidget::disableSolWidget()
     _tabWidget->removeTab(0);
 }
 
+void TYTerrainWidget::disableVegetationWidget()
+{
+    // Efface le widget d'activation de la vegatation
+    _checkBoxVegetActive->setEnabled(false);
+    _tabWidget->removeTab(0);
+}
 
-//void TYTerrainWidget::editSol()
-//{
-//  int ret = getElement()->getSol()->edit(this);
-//
-//  if (ret == QDialog::Accepted) {
-//      _lineEditNomSol->setText( getElement()->getSol()->getName() );
-//  }
-//}
+void TYTerrainWidget::useVegetation()
+{
+    getElement()->useVegetation(_checkBoxVegetActive->isChecked());
 
+    if (_checkBoxVegetActive->isChecked())
+    {
+        _pVegetation = getElement()->getVegetation();
+
+        // If no vegetation create it
+        if (_pVegetation == nullptr)
+        {
+            _pVegetation = new TYVegetation();
+        }
+
+        _vegetationWidget->setElement(_pVegetation);
+        _vegetationWidget->update();
+        _vegetationWidget->setEnabled(_checkBoxVegetActive->isChecked());
+    }
+}
 

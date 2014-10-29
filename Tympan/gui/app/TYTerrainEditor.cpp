@@ -14,78 +14,67 @@
 */
 
 /**
- * \file TYVegetationEditor.cpp
- * \brief Construit un Vegetation a partir des points saisis
+ * \file TYTerrainEditor.cpp
+ * \brief Construit un sol a partir des points saisis
  */
 
 
 #include <qinputdialog.h>
 
+#include "Tympan/core/logging.h"
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/material/TYSol.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/material/TYSol.h"
 #include "Tympan/models/business/topography/TYTerrain.h"
 #include "Tympan/gui/widgets/TYSolWidget.h"
-#include "Tympan/gui/app/TYModelerFrame.h"
-#include "Tympan/gui/app/TYSiteModelerFrame.h"
 #include "Tympan/gui/app/TYActions.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
-#include "TYVegetationEditor.h"
+#include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
+#include "TYTerrainEditor.h"
 
 
+#define TR(id) OLocalizator::getString("TYTerrainEditor", (id))
 
-#define TR(id) OLocalizator::getString("TYVegetationEditor", (id))
 
-
-TYVegetationEditor::TYVegetationEditor(TYModelerFrame* pModeler) :
+TYTerrainEditor::TYTerrainEditor(TYModelerFrame* pModeler) :
     TYPolyLineEditor(pModeler)
 {
-    QObject::connect(this, SIGNAL(endedSavingPoints()), this, SLOT(endVegetation()));
+    QObject::connect(this, SIGNAL(endedSavingPoints()), this, SLOT(endTerrain()));
 }
 
-TYVegetationEditor::~TYVegetationEditor()
+TYTerrainEditor::~TYTerrainEditor()
 {
 }
 
-void TYVegetationEditor::endVegetation()
+void TYTerrainEditor::endTerrain()
 {
-    if (!_pModeler->askForResetResultat())
+    if ( !(getSavedPoints().size() > 2) || (!_pModeler->askForResetResultat()) )
     {
         return;
     }
 
     LPTYTerrain pTerrain = new TYTerrain();
     LPTYSol pSol = new TYSol();
-    pSol->useVegetation(true);
     pTerrain->setSol(pSol);
+    pTerrain->setListPoints(getSavedPoints());
 
     if (pTerrain->edit(_pModeler) == QDialog::Accepted)
     {
-        //LPTYTerrain pTerrain = new TYTerrain();
-        //pTerrain->setSol(pSol);
-        TYTabPoint tabPts = this->getSavedPoints();
-
         TYSiteNode* pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
-        // Make sure altimetry was initialized before using it
-        if (pSite->getAltimetry()->containsData())
-        {
-            for (unsigned int i = 0; i < tabPts.size(); i++)
-            {
-                tabPts[i]._z = 0.0;
-                pSite->getAltimetry()->updateAltitude(tabPts[i]);
-            }
-        }
 
-        pTerrain->setListPoints(tabPts);
-
+        // This hardly readable cascade of if is better than no reporting
+        // but should instead be handled with exceptions.
         if (pSite->getTopographie()->addTerrain(pTerrain))
         {
-            TYAction* pAction = new TYAddElementToTopoAction((LPTYElement&) pTerrain, pSite->getTopographie(), _pModeler, TR("id_action_addvegetation"));
+            TYAction* pAction = new TYAddElementToTopoAction(
+                (LPTYElement&) pTerrain, pSite->getTopographie(), _pModeler,
+                TR("id_action_addsol"));
             _pModeler->getActionManager()->addAction(pAction);
 
             pSite->getTopographie()->updateGraphicTree();
-            refreshSiteFrame();
+            updateSiteFrame();
             _pModeler->getView()->getRenderer()->updateDisplayList();
             _pModeler->updateView();
         }

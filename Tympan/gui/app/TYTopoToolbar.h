@@ -64,8 +64,6 @@ protected:
     QToolButton* _toolButtonCrbNiv;
     ///Bouton terrain.
     QToolButton* _toolButtonTerrain;
-    ///Bouton vegetation.
-    QToolButton* _toolButtonVeg;
     ///Bouton plan d'eau.
     QToolButton* _toolButtonPlanEau;
     ///Bouton cours d'eau.

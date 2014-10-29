@@ -22,13 +22,13 @@
 #include <qcombobox.h>
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
-//Added by qt3to4:
 #include <QGridLayout>
 #include <QLabel>
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticLine.h"
 #include "Tympan/gui/widgets/TYSourceWidget.h"
+#include "TabPointsWidget.h"
 #include "TYAcousticLineWidget.h"
 
 #define TR(id) OLocalizator::getString("TYAcousticLineWidget", (id))
@@ -141,6 +141,7 @@ TYAcousticLineWidget::TYAcousticLineWidget(TYAcousticLine* pElement, QWidget* _p
 
     _acousticLineLayout->addWidget(buttonGroupBox, 5, 0);
 
+    // Largeur de la rivière
     _groupBoxLine = new QGroupBox(this);
     _groupBoxLine->setTitle(TR(""));
     _groupBoxLineLayout = new QGridLayout();
@@ -158,12 +159,22 @@ TYAcousticLineWidget::TYAcousticLineWidget(TYAcousticLine* pElement, QWidget* _p
 
     _acousticLineLayout->addWidget(_groupBoxLine, 6, 0);
 
+    // Editeur de points
+    QGroupBox *groupBoxTableau = new QGroupBox(this);
+    groupBoxTableau->setTitle(TR(""));
+    QGridLayout *groupBoxTableauLayout = new QGridLayout();
+    groupBoxTableau->setLayout(groupBoxTableauLayout);
+
+    _pTabPtsW = new TabPointsWidget(pElement->getTabPoint(), groupBoxTableau);
+    groupBoxTableauLayout->addWidget(_pTabPtsW, 0, 0);
+
+    _acousticLineLayout->addWidget(groupBoxTableau, 7, 0);
+
     updateContent();
 
     connect(_pushButtonNewRegime, SIGNAL(clicked()), this, SLOT(createNewRegime()));
     connect(_pushButtonRemRegime, SIGNAL(clicked()), this, SLOT(deleteRegime()));
     connect(_comboBoxSelectRegime, SIGNAL(activated(int)), this, SLOT(changeRegime(int)));
-    //  connect(_checkBoxIsRayonnant,  SIGNAL(clicked()), this, SLOT(updateRayonnant()));
     connect(_checkBoxUseAtt, SIGNAL(clicked()), this, SLOT(useAttenuateur()));
     connect(_pushButtonSpectreAtt, SIGNAL(clicked()), this, SLOT(editAtt()));
     connect(_pRadioButtonImposee, SIGNAL(clicked()), this, SLOT(showSpectre()));
@@ -189,6 +200,9 @@ void TYAcousticLineWidget::updateContent()
     _pushButtonRemRegime->setEnabled(getElement()->getIsRegimeChangeAble());
     _comboBoxSelectRegime->setEnabled(true);
     _pushButtonNewRegime->setEnabled(getElement()->getIsRegimeChangeAble());
+
+    // Edition du tabbleau de points
+    _pTabPtsW->update();
 }
 
 void TYAcousticLineWidget::apply()
@@ -196,7 +210,6 @@ void TYAcousticLineWidget::apply()
     _elmW->apply();
     getElement()->setLargeur(_lineEditLargeur->text().toDouble());
     getElement()->getSrcLineic()->setDensiteSrcs(_lineEditDensiteSrcs->text().toDouble());
-    //  getElement()->setIsRayonnant( _checkBoxIsRayonnant->isChecked() );
     getElement()->setUseAtt(_checkBoxUseAtt->isChecked());
 
     if (_pRadioButtonCalculee->isChecked())
@@ -210,7 +223,10 @@ void TYAcousticLineWidget::apply()
 
     getElement()->updateCurrentRegime();
 
+    _pTabPtsW->apply();
+
     _pElement->setIsAcousticModified(true);
+    _pElement->setIsGeometryModified(true);
 
     emit modified();
 }

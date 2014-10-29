@@ -154,11 +154,7 @@ public slots:
      * Si le parent est NULL, l'item est ajoute a la racine.
      */
     TYElementListItem* addToList(LPTYMateriauConstruction pElement, TYElementListItem* parent = NULL);
-    /**
-     * Ajoute un element a la liste.
-     * Si le parent est NULL, l'item est ajoute a la racine.
-     */
-    TYElementListItem* addToList(LPTYSol pElement, TYElementListItem* parent = NULL);
+
     /**
      * Ajoute un element a la liste.
      * Si le parent est NULL, l'item est ajoute a la racine.

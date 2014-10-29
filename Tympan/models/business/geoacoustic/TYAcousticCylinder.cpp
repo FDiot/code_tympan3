@@ -121,8 +121,11 @@ bool TYAcousticCylinder::deepCopy(const TYElement* pOther, bool copyId /*=true*/
     TYAcousticCylinder* pOtherCyl = (TYAcousticCylinder*) pOther;
 
     _pEnveloppe->deepCopy(pOtherCyl->_pEnveloppe, copyId);
+    _pEnveloppe->setParent(this);
     _pCircTop->deepCopy(pOtherCyl->_pCircTop, copyId);
+    _pCircTop->setParent(this);
     _pCircBottom->deepCopy(pOtherCyl->_pCircBottom, copyId);
+    _pCircBottom->setParent(this);
 
     _volEnglob = volEnglob();
     calculRayonSphere(_volEnglob);

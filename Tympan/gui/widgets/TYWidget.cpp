@@ -48,64 +48,73 @@ TYWidget::~TYWidget()
 
 /*static*/ int TYWidget::edit(TYElement* pElement, QWidget* pParent /*=NULL*/)
 {
-    assert(pElement);
     QDialog* pDlg = new QDialog(pParent);
     pDlg->setModal(true);
-    pDlg->setWindowTitle(getDisplayName(pElement));
 
-    QWidget* pMainWidget = pElement->getEditWidget();
-    pMainWidget->setParent(pDlg);
+    int ret = QDialog::Rejected;
 
-    QBoxLayout* pLayout = new QVBoxLayout();
-    pLayout->addWidget(pMainWidget);
-    pDlg->setLayout(pLayout);
-
-    // On recupere les settings
-    TYPreferenceManager::loadGeometryFromPreferences(pMainWidget->metaObject()->className(), pDlg);
-
-    QPushButton* pButtonOK = new QPushButton(TR("id_ok_btn"), pDlg);
-    pButtonOK->setDefault(true);
-    connect(pButtonOK, SIGNAL(clicked()), pDlg, SLOT(accept()));
-
-    QPushButton* pButtonCancel = new QPushButton(TR("id_cancel_btn"), pDlg);
-    pButtonCancel->setShortcut(Qt::Key_Escape);
-    connect(pButtonCancel, SIGNAL(clicked()), pDlg, SLOT(reject()));
-
-
-    pLayout->addSpacing(5);
-    QBoxLayout* pBtnLayout = new QHBoxLayout();
-    pBtnLayout->setMargin(10);
-    pLayout->addLayout(pBtnLayout);
-
-    pBtnLayout->addStretch();
-    pBtnLayout->addWidget(pButtonOK);
-    pBtnLayout->addSpacing(5);
-    pBtnLayout->addWidget(pButtonCancel);
-
-    // Affiche la boite de dialogue
-    int ret = pDlg->exec();
-
-    // Applique les modificatins si necessaire
-    if (ret == QDialog::Accepted)
+    if (pElement != nullptr)
     {
-        ((TYWidget*)pMainWidget)->apply();
+        pDlg->setWindowTitle(getDisplayName(pElement));
+
+        QWidget* pMainWidget = pElement->getEditWidget();
+        pMainWidget->setParent(pDlg);
+
+        QBoxLayout* pLayout = new QVBoxLayout();
+        pLayout->addWidget(pMainWidget);
+        pDlg->setLayout(pLayout);
+
+        // On recupere les settings
+        TYPreferenceManager::loadGeometryFromPreferences(pMainWidget->metaObject()->className(), pDlg);
+
+        QPushButton* pButtonOK = new QPushButton(TR("id_ok_btn"), pDlg);
+        pButtonOK->setDefault(true);
+        connect(pButtonOK, SIGNAL(clicked()), pDlg, SLOT(accept()));
+
+        QPushButton* pButtonCancel = new QPushButton(TR("id_cancel_btn"), pDlg);
+        pButtonCancel->setShortcut(Qt::Key_Escape);
+        connect(pButtonCancel, SIGNAL(clicked()), pDlg, SLOT(reject()));
+
+
+        pLayout->addSpacing(5);
+        QBoxLayout* pBtnLayout = new QHBoxLayout();
+        pBtnLayout->setMargin(10);
+        pLayout->addLayout(pBtnLayout);
+
+        pBtnLayout->addStretch();
+        pBtnLayout->addWidget(pButtonOK);
+        pBtnLayout->addSpacing(5);
+        pBtnLayout->addWidget(pButtonCancel);
+
+        // Affiche la boite de dialogue
+        ret = pDlg->exec();
+
+        // Applique les modificatins si necessaire
+        if (ret == QDialog::Accepted)
+        {
+            ((TYWidget*)pMainWidget)->apply();
+        }
+        else // Reject
+        {
+            ((TYWidget*)pMainWidget)->reject();
+        }
+
+        // On sauve les settings
+        TYPreferenceManager::saveGeometryToPreferences(pMainWidget->metaObject()->className(), pDlg);
+
+        // Liberation de la memoire
+        if (pParent)
+        {
+            pDlg->setParent(0);
+        }
+
+        disconnect(pButtonOK, SIGNAL(clicked()), pDlg, SLOT(accept()));
+        disconnect(pButtonCancel, SIGNAL(clicked()), pDlg, SLOT(reject()));
     }
-    else // Reject
+    else
     {
-        ((TYWidget*)pMainWidget)->reject();
+        ret = QDialog::Rejected;;
     }
-
-    // On sauve les settings
-    TYPreferenceManager::saveGeometryToPreferences(pMainWidget->metaObject()->className(), pDlg);
-
-    // Liberation de la memoire
-    if (pParent)
-    {
-        pDlg->setParent(0);
-    }
-
-    disconnect(pButtonOK, SIGNAL(clicked()), pDlg, SLOT(accept()));
-    disconnect(pButtonCancel, SIGNAL(clicked()), pDlg, SLOT(reject()));
 
     delete pDlg;
 
@@ -115,7 +124,7 @@ TYWidget::~TYWidget()
 
 /*static*/ QString TYWidget::getDisplayName(TYElement* pElt)
 {
-    Q_ASSERT(pElt);
+    if (pElt == nullptr) { return QString(); }
 
     return OLocalizator::getString("DisplayName", pElt->getClassName());
 }

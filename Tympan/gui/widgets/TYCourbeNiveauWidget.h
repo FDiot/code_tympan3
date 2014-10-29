@@ -28,11 +28,9 @@
 #ifndef __TY_COURBENIVEAU_WIDGET__
 #define __TY_COURBENIVEAU_WIDGET__
 
-
 #include "TYWidget.h"
-//Added by qt3to4:
+#include "Tympan/models/business/TYDefines.h"
 #include <QGridLayout>
-#include <QLabel>
 
 class TYCourbeNiveau;
 class QLineEdit;
@@ -45,6 +43,7 @@ class QTreeWidgetItem;
 class TYElementWidget;
 class TYColorInterfaceWidget;
 class QCheckBox;
+class TabPointsWidget;
 
 /**
  * \class TYCourbeNiveauWidget
@@ -67,18 +66,23 @@ public:
      */
     virtual ~TYCourbeNiveauWidget();
 
-
 public slots:
     virtual void updateContent();
     virtual void apply();
+    virtual void reject();
     virtual void updateUseDefault();
     virtual void setDefaultValue();
 
     // Membres
-protected:
+private :
+    // remove the last point when closed
+    void cleanTabPoints(TYTabPoint &tabPts, bool closed);
 
+protected:
     QGroupBox* _groupBox;
-    QTreeWidget* _listViewTabPt;
+    TabPointsWidget *_tabPoints;
+    QCheckBox *_pClosedCheckBox;
+
     QGroupBox* _groupBoxAlt;
     QLabel* _labelAltitude;
     QLineEdit* _lineEditAltitude;
