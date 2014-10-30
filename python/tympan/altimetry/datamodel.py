@@ -48,8 +48,12 @@ class InconsistentGeometricModel(Exception):
 
 class GroundMaterial(object):
 
-    def __init__(self, id_):
+    def __init__(self, id_, resistivity=None):
         self.id = id_
+        self.resistivity = resistivity
+
+    def __str__(self):
+        return '%s #%s' % (self.__class__.__name__, self.id)
 
 
 MATERIAL_WATER = GroundMaterial("Water")
