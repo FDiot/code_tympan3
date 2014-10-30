@@ -167,6 +167,26 @@ cdef class Ground:
         return tyelement_id(self.thisptr.getRealPointer())
 
 
+cdef class Vegetation:
+
+    @property
+    def height(self):
+        """The vegetation height"""
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getHauteur()
+
+    def name(self):
+        """ Return a string representing the name of the element
+        """
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getName().toStdString()
+
+    @property
+    def elem_id(self):
+        """Vegetation id"""
+        return tyelement_id(self.thisptr.getRealPointer())
+
+
 cdef class Site:
 
     @property
@@ -476,6 +496,17 @@ cdef class MaterialArea:
     def elem_id(self):
         """ Return MaterialArea id as a string """
         return tyelement_id(self.thisptr)
+
+    def has_vegetation(self):
+        """Return True if the material area has vegetation"""
+        return self.thisptr.isVegetActive()
+
+    @property
+    def vegetation(self):
+        """The vegetation associated with material area"""
+        vegetation = Vegetation()
+        vegetation.thisptr = self.thisptr.getVegetation()
+        return vegetation
 
 
 cdef class LevelCurve:
