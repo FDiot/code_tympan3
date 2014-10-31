@@ -17,7 +17,6 @@
 #include<math.h>
 #include<stdio.h>
 
-#include "Tympan/core/defines.h"
 #include "3d.h"
 
 #define MAX(A,B) (((A)>(B))?(A):(B))
