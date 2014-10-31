@@ -1,7 +1,7 @@
 #ifndef __TABPOINTSWIDGET_H__
 #define __TABPOINTSWIDGET_H__
 
-#include <QTableWidget.h>
+#include <qtablewidget.h>
 #include "Tympan/models/business/TYDefines.h"
 
 class TabPointsWidget : public QTableWidget
