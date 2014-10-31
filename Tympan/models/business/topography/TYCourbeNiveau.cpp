@@ -369,7 +369,6 @@ LPTYCourbeNiveau TYCourbeNiveau::split(const TYPoint& pt)
 
     // find an iterator to the closest point
     TYTabPoint::iterator iterP = getPointRef(pt);
-    if (iterP._Ptr == nullptr) { return pCurve; } 
 
     // Cas d'une courbe fermee
     if ( _closed )
