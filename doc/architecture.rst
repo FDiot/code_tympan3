@@ -74,7 +74,7 @@ high-level functionality (constrained triangulations and domain
 meshing) upon CGAL features ; its API relies on CGAL types and does
 not depend on other Tympan types.
 
-The ``cgal_bridge`` module in ``DataManagerMetier`` exposes interfaces
+The ``cgal_bridge`` module in ``business`` exposes interfaces
 to those features expressed with the main Tympan datatypes and ensures
 the conversions.
 
@@ -94,24 +94,24 @@ Business Logic
    *Business Logic* is the part of the code which is not technical. Deal with
    "real life" models: buildings, machine, fields, etc.
 
-See the different sub-directories in ``MetierSolver/DataManagerMetier``:
+See the different sub-directories in ``Tympan/models``:
 
-  - ``DataManagerMetier``: objects which describe a site, acoustic objects
+  - ``business``: objects which describe a site, acoustic objects
     (sources, receptor, paths), materials, machines, etc.
-  - ``SolverDataModel``: the current work which describes a data model for the
-    solvers. This is a part of the `Future Architecture`_;
+  - ``solver``: the current work which describes a data model for the
+    solvers.
 
-Code_TYMPAN offers a way to build the ``DataManagerMetier`` objects from
+Code_TYMPAN offers a way to build the ``business`` objects from
 a string representing their class name. This feature (mostly used during XML
 deserialization) is implemented in the ``OPrototype`` class through a factory
 pattern. To use this facility, it is first necessary to register all the objects
 that will need it. This is handled by the ``init_registry()`` method
-(from ``Tympan/MetierSolver/DataManagerMetier/init_registry.h``), that must be
+(from ``Tympan/models/business/init_registry.h``), that must be
 ran before any call to the methods specified by ``OPrototype`` interface.
 
 For now, the splitting between the business logic objects and the `Graphical User
 Interface`_ is not clear. In other words, you can have a strong dependency
-between ``MetierSolver/DataManagerMetier`` and graphical widgets described in
+between ``models/business`` and graphical widgets described in
 ``gui/widgets``. One of the objectives described in the section
 `Future Architecture`_ is to split these parts.
 
