@@ -34,11 +34,17 @@
 ///Pas d'intersection.
 #define INTERS_NULLE    0
 
+#define EPSILON_3  0.001            // 10e-3
 #define EPSILON_5  0.00001          // 10e-5
 #define EPSILON_6  0.000001         // 10e-6
 #define EPSILON_7  0.0000001        // 10e-7
 #define EPSILON_13 0.0000000000001  // 10e-13
 #define EPSILON_50 1.e-50
+
+/* From this threshold (in meters), two elements are considered as at the same
+ * position
+ * */
+#define TYSEUILCONFONDUS EPSILON_3  // 1 mm
 
 #ifndef M_PI
 ///Pi.
