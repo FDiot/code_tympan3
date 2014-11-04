@@ -369,12 +369,10 @@ cdef class Site:
         pts = cy.declare(deque[tycommon.OPoint3D])
         tgles = cy.declare(deque[tycommon.OTriangle])
         mat_ids = cy.declare(deque[string])
-        for i in xrange(vertices.shape[0]):
-            pts.push_back(tycommon.OPoint3D(vertices[i][0], vertices[i][1],
-                                            vertices[i][2]))
-        for i in xrange(faces.shape[0]):
-            tgles.push_back(tycommon.OTriangle(faces[i][0], faces[i][1],
-                                               faces[i][2]))
+        for x, y, z in vertices:
+            pts.push_back(tycommon.OPoint3D(x, y, z))
+        for e0, e1, e2 in faces:
+            tgles.push_back(tycommon.OTriangle(e0, e1, e2))
         for matidx in materials_idx:
             matid = materials[matidx]
             matid = ''.join(map(chr, matid))
