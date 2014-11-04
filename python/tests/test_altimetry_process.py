@@ -8,13 +8,10 @@ from utils import TympanTC, TEST_PROBLEM_DIR
 
 from tympan import Simulation
 try:
-    import tympan.altimetry.process_altimetry as tyalti
     import tympan.business2solver as bus2solv
     MISSING_EXT = False
 except ImportError:
     MISSING_EXT = True
-
-from tympan.altimetry._export import _build_mesh_data
 
 
 @unittest.skipIf(MISSING_EXT, 'could not import Tympan extension modules')
@@ -168,10 +165,8 @@ class TestProcessAltimetry(TympanTC):
             project = sml._project
             # Compute altimetry and retrieve the resulting mesh
             _, mesh, material_by_face = sml.altimetry()
-            vertices, faces, materials, faces_materials = _build_mesh_data(
-                mesh, material_by_face)
             # Apply new altimetry on the site infrastructure
-            project.site.update_altimetry(vertices, faces, materials, faces_materials)
+            project.site.update_altimetry(mesh, material_by_face)
             project.update()
             # Build solver model and check source altimetry
             bus2solv_conv = bus2solv.Business2SolverConverter(project.current_computation,

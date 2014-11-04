@@ -9,9 +9,22 @@ def export_to_ply(mesh, material_by_face, fname, color_faces=True):
     `color_faces` option adds colors to mesh faces, mostly for visual
     debug.
     """
-    vertices, faces, materials, faces_materials = _build_mesh_data(
-        mesh, material_by_face)
+    # Fetch vertices and faces arrays.
+    vertices, faces = mesh.as_arrays()
+    # Build a list of materials and a list faces' material with identical
+    # indexing.
+    materials = []
+    faces_materials = mesh.faces_material(material_by_face)
+    for idx, mat in enumerate(faces_materials):
+        matid = map(ord, mat.id)
+        if matid not in materials:
+            materials.append(matid)
+        faces_materials[idx] = materials.index(matid)
+    # Need a column array for further concatenation.
+    faces_materials = np.array(faces_materials).reshape(-1, 1)
+    # Set PLY file header.
     header = _ply_headers(color_faces=color_faces)
+    # Write PLY file.
     with open(fname, 'w') as f:
         f.write(header.format(nvertices=vertices.shape[0],
                               nfaces=faces.shape[0],
@@ -20,7 +33,7 @@ def export_to_ply(mesh, material_by_face, fname, color_faces=True):
         # Insert a leading column with the number of face vertices and a
         # trailing one with face material.
         fcols = [np.ones((faces.shape[0], 1)) * faces.shape[1],
-                 faces, faces_materials[:, np.newaxis]]
+                 faces, faces_materials]
         if color_faces:
             # Then add faces colors.
             fcols.append(_color_faces(faces_materials))
@@ -30,33 +43,6 @@ def export_to_ply(mesh, material_by_face, fname, color_faces=True):
         for matid in materials:
             n = len(matid)
             f.write(('{}' + (' {}' * n) + '\r\n').format(n, *matid))
-
-
-def _build_mesh_data(mesh, material_by_face):
-    """Process mesh from the CDT and materials data and return numpy
-    arrays (except for `materials` which is a list of list) suitable for
-    export to a .ply file.
-    """
-    vertices, vertices_id = [], {}
-    for idx, vh in enumerate(mesh.cdt.finite_vertices()):
-        vertices_id[vh] = idx
-        point = mesh.point3d_for_vertex(vh)
-        vertices.append((point.x(), point.y(), point.z()))
-    vertices = np.array(vertices)
-    materials, materials_id = [], {}
-    for fh, mat in material_by_face.iteritems():
-        matid = map(ord, mat.id)
-        if matid not in materials:
-            materials.append(matid)
-        idx = materials.index(matid)
-        materials_id[fh] = idx
-    faces, faces_materials = [], []
-    for fh in mesh.cdt.finite_faces():
-        faces.append([vertices_id[fh.vertex(i)] for i in range(3)])
-        faces_materials.append(materials_id[fh])
-    faces = np.array(faces)
-    faces_materials = np.array(faces_materials)
-    return vertices, faces, materials, faces_materials
 
 
 def _ply_headers(color_faces=True):

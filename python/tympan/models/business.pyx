@@ -357,7 +357,7 @@ cdef class Site:
             pylist.append(child)
         return pylist
 
-    def update_altimetry(self, vertices, faces, materials, materials_idx):
+    def update_altimetry(self, altimetry_mesh, material_by_face):
         """ Sends the given altimetry mesh to the C++ TYAltimetry class
         Once it's done, update the altimetry of the site infrastructure and receptors
         """
@@ -369,14 +369,13 @@ cdef class Site:
         pts = cy.declare(deque[tycommon.OPoint3D])
         tgles = cy.declare(deque[tycommon.OTriangle])
         mat_ids = cy.declare(deque[string])
+        vertices, faces = altimetry_mesh.as_arrays()
         for x, y, z in vertices:
             pts.push_back(tycommon.OPoint3D(x, y, z))
         for e0, e1, e2 in faces:
             tgles.push_back(tycommon.OTriangle(e0, e1, e2))
-        for matidx in materials_idx:
-            matid = materials[matidx]
-            matid = ''.join(map(chr, matid))
-            mat_ids.push_back(matid)
+        for mat in altimetry_mesh.faces_material(material_by_face):
+            mat_ids.push_back(mat.id)
         cppmats = cy.declare(deque[SmartPtr[TYSol]])
         self.thisptr.getRealPointer().uuid2tysol(mat_ids, cppmats)
         alti = cy.declare(SmartPtr[TYAltimetrie])
