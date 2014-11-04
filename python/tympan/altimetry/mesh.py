@@ -5,6 +5,7 @@ from collections import defaultdict
 import copy
 from warnings import warn
 
+import numpy as np
 from shapely import geometry as sh_geom
 
 from CGAL.CGAL_Kernel import (
@@ -512,6 +513,24 @@ class MeshedCDTWithInfo(object):
         else:
             assert locate_type == OUTSIDE_AFFINE_HULL
             raise InconsistentGeometricModel("Degenerate triangulation (0D or 1D)")
+
+    # Export utilities.
+    def as_arrays(self):
+        """Return vertices and faces as Numpy arrays."""
+        vertices, vertices_id = [], {}
+        for idx, vh in enumerate(self.cdt.finite_vertices()):
+            vertices_id[vh] = idx
+            point = self.point3d_for_vertex(vh)
+            vertices.append((point.x(), point.y(), point.z()))
+        faces = [[vertices_id[fh.vertex(i)] for i in range(3)]
+                 for fh in self.cdt.finite_faces()]
+        return np.array(vertices), np.array(faces)
+
+    def faces_material(self, material_by_face):
+        """Return the list of faces' material given a `material_by_face`
+        mapping.
+        """
+        return [material_by_face[fh] for fh in self.cdt.finite_faces()]
 
 
 class InfoWithIDsAndAltitude(object):

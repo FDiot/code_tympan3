@@ -28,7 +28,6 @@ except ImportError:
 
 from tympan import SOLVER_CONFIG_ATTRIBUTES, Simulation
 from tympan.altimetry import export_to_ply
-from tympan.altimetry._export import _build_mesh_data
 from tympan.models.solver import Configuration
 
 CONVERTERS = {
@@ -101,10 +100,8 @@ def solve(input_project, output_project, output_mesh, solverdir,
     sml = Simulation(project)
     _, mesh, material_by_face = sml.altimetry()
     export_to_ply(mesh, material_by_face, output_mesh)
-    vertices, faces, materials, faces_materials = _build_mesh_data(
-        mesh, material_by_face)
     # Update site and the project before building the solver model
-    site.update_altimetry(vertices, faces, materials, faces_materials)
+    site.update_altimetry(mesh, material_by_face)
     project.update()
     # Build an acoustic problem from the site of the computation
     bus2solv_conv = bus2solv.Business2SolverConverter(comp, project.site)
