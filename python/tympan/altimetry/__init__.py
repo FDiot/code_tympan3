@@ -29,6 +29,8 @@ from __future__ import absolute_import
 import sys, os
 import os.path as osp
 
+from ._export import export_to_ply
+
 
 _HERE = osp.realpath(osp.dirname(__file__))
 _PROJECT_BASE = osp.abspath(osp.join(_HERE, '..', '..', '..'))

@@ -148,6 +148,7 @@ class TympanTC(unittest.TestCase):
             import tympan.business2solver as bus2solv
             from tympan.altimetry.builder import Builder
             from tympan.altimetry import process_altimetry
+            from tympan.altimetry._export import _build_mesh_data
             tybusiness.init_tympan_registry()
             # read acoustic project
             project = tybusiness.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
@@ -156,7 +157,9 @@ class TympanTC(unittest.TestCase):
             alti_site = process_altimetry.export_site_topo(site)
             builder =  Builder(alti_site)
             builder.complete_processing()
-            vertices, faces, materials, faces_materials = builder.build_mesh_data()
+            mesh, material_by_face = builder.mesh, builder.material_by_face
+            vertices, faces, materials, faces_materials = _build_mesh_data(
+                mesh, material_by_face)
             site.update_altimetry(vertices, faces, materials, faces_materials)
             project.update()
             # build solver model
