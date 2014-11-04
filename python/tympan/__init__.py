@@ -1,3 +1,5 @@
+from ._simulation import Simulation
+
 # solver parameters description
 SOLVER_CONFIG_ATTRIBUTES = [
         ('double', 'AtmosPressure'),
