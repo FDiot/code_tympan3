@@ -9,7 +9,7 @@ logging.basicConfig(stream=stream, level=logging.DEBUG,
                     format='%(levelname)s:%(asctime)s - %(name)s - %(message)s')
 
 import tympan.models.business as tybusiness
-from tympan.altimetry import datamodel
+from tympan.altimetry import datamodel, export_to_ply
 from tympan.altimetry.datamodel import (SiteNode, LevelCurve, WaterBody,
                                         GroundMaterial, MaterialArea,
                                         VegetationArea,
@@ -42,7 +42,8 @@ def process_site_altimetry(input_project, result_file):
     # Build altimetry
     builder = Builder(asite, allow_features_outside_mainsite=False)
     builder.complete_processing()
-    builder.export_to_ply(result_file)
+    mesh, material_by_face = builder.mesh, builder.material_by_face
+    export_to_ply(mesh, material_by_face, result_file)
     return asite
 
 

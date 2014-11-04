@@ -28,7 +28,8 @@ except ImportError:
 
 from tympan import SOLVER_CONFIG_ATTRIBUTES
 from tympan.altimetry.builder import Builder
-from tympan.altimetry import process_altimetry
+from tympan.altimetry import process_altimetry, export_to_ply
+from tympan.altimetry._export import _build_mesh_data
 from tympan.models.solver import Configuration
 
 CONVERTERS = {
@@ -102,8 +103,10 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Compute altimetry and retrieve the resulting mesh
     builder =  Builder(alti_site)
     builder.complete_processing()
-    builder.export_to_ply(output_mesh)
-    vertices, faces, materials, faces_materials = builder.build_mesh_data()
+    mesh, material_by_face = builder.mesh, builder.material_by_face
+    export_to_ply(mesh, material_by_face, output_mesh)
+    vertices, faces, materials, faces_materials = _build_mesh_data(
+        mesh, material_by_face)
     # Update site and the project before building the solver model
     site.update_altimetry(vertices, faces, materials, faces_materials)
     project.update()

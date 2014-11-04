@@ -6,7 +6,7 @@ from numpy.testing.utils import assert_allclose
 
 from tympan.altimetry.datamodel import (InconsistentGeometricModel, HIDDEN_MATERIAL,
                                         LevelCurve, InfrastructureLandtake)
-from tympan.altimetry import mesh
+from tympan.altimetry import mesh, export_to_ply
 from tympan.altimetry.builder import Builder
 
 from altimetry_testutils import (MesherTestUtilsMixin, TestFeatures,
@@ -162,11 +162,12 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
     def test_ply_export(self):
         from plyfile import PlyData
         self.builder.complete_processing()
+        mesh, material_by_face = self.builder.mesh, self.builder.material_by_face
         try:
             # delete=False and manual removal to avoid pb on windows platform
             # (though proper fix would imply stream based api)
             with tempfile.NamedTemporaryFile(delete=False) as f:
-                self.builder.export_to_ply(f.name)
+                export_to_ply(mesh, material_by_face, f.name)
                 data = PlyData.read(f.name)
                 vertices = data['vertex']
                 faces = data['face']

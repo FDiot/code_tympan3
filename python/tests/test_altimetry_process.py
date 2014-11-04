@@ -16,6 +16,7 @@ try:
 except ImportError:
     MISSING_EXT = True
 
+from tympan.altimetry._export import _build_mesh_data
 # must be passed to process altimetry. Its content will be ignored
 result_file = 'out.ply'
 
@@ -186,7 +187,9 @@ class TestProcessAltimetry(TympanTC):
             # Compute altimetry and retrieve the resulting mesh
             builder =  Builder(alti_site)
             builder.complete_processing()
-            vertices, faces, materials, faces_materials = builder.build_mesh_data()
+            mesh, material_by_face = builder.mesh, builder.material_by_face
+            vertices, faces, materials, faces_materials = _build_mesh_data(
+                mesh, material_by_face)
             # Apply new altimetry on the site infrastructure
             project.site.update_altimetry(vertices, faces, materials, faces_materials)
             project.update()
