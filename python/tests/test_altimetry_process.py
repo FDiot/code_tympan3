@@ -149,6 +149,26 @@ class TestProcessAltimetry(TympanTC):
                          [(0.0,10.0),(20.0,10.0),(20.0,0.0),(0.0,0.0)])
 
 
+    def test_process_vegetation_area(self):
+        with self.no_output():
+            asite = tyalti.process_site_altimetry(
+                osp.join(TEST_PROBLEM_DIR, 'Site_avec_2_terrain_1_avec_veget_1_sans.xml'),
+                result_file)
+        matarea = list(asite.material_areas)
+        self.assertEqual(len(matarea), 2)
+        try:
+            vegarea = asite.features_by_id['{60260543-0297-4cec-aacc-cb63492d1171}']
+        except KeyError:
+            self.fail('vegetation area not found in altimetry site')
+        self.assertEqual(vegarea.height, 10)
+        print vegarea.material
+        builder = Builder(asite)
+        builder.complete_processing()
+        vegfaces = [fh for fh, mat in builder.material_by_face.items()
+                    if mat == vegarea.material]
+        # Just check there are faces in the vegetation area.
+        self.assertTrue(vegfaces)
+
     def test_source_altimetry(self):
         with self.no_output():
             tybusiness.init_tympan_registry()
