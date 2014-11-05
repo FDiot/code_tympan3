@@ -70,6 +70,15 @@ class AltimetryDataTC(unittest.TestCase):
         self.assertIn(level_curve_B, self.subsite_A.children["LevelCurve"])
         self.assertEqual(level_curve_B.parent_site_id, "{Sub-site A ID}")
 
+    def test_parent_site(self):
+        level_curve_B =  LevelCurve(self.level_curve_B_coords, altitude=20.0,
+                                    id=None)
+        self.assertIsNone(self.subsite_A.parent_site)
+        level_curve_B.parent_site = self.subsite_A
+        self.assertIn(level_curve_B, self.subsite_A.children["LevelCurve"])
+        del level_curve_B.parent_site
+        self.assertNotIn(level_curve_B, self.subsite_A.children['LevelCurve'])
+
     def test_cached_shape_property(self):
         level_curve_B =  LevelCurve(self.level_curve_B_coords, altitude=20.0, id=None)
         self.assertIsNone(level_curve_B._shape)
