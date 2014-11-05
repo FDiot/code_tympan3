@@ -84,8 +84,8 @@ def ilinks(it, close_it=False):
         yield (prev, first)
 
 class MeshedCDTWithInfo(object):
-    """
-    This call provide the meshing of a geometry with arbitrary informations attached
+    """ This class provides the meshing of a geometry with arbitrary
+    information attached.
     """
     EdgeInfo = dict
     VertexInfo = dict

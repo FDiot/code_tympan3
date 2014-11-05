@@ -205,6 +205,8 @@ cdef extern from "Tympan/models/business/topography/TYTerrain.h":
     cdef cppclass TYTerrain(TYElement):
         SmartPtr[TYSol] getSol()
         const vector[TYPoint]& getListPoints() const
+        bool isVegetActive()
+        SmartPtr[TYVegetation] getVegetation()
 
 cdef extern from "Tympan/models/business/topography/TYPlanEau.h":
     cdef cppclass TYPlanEau(TYTerrain):
@@ -213,6 +215,10 @@ cdef extern from "Tympan/models/business/topography/TYPlanEau.h":
 cdef extern from "Tympan/models/business/material/TYSol.h":
     cdef cppclass TYSol (TYElement):
         double getResistivite()
+
+cdef extern from "Tympan/models/business/material/TYVegetation.h":
+    cdef cppclass TYVegetation (TYElement):
+        double getHauteur()
 
 cdef extern from "Tympan/models/business/infrastructure/TYTopographie.h":
     cdef cppclass TYTopographie (TYElement):
@@ -247,6 +253,9 @@ cdef class Material:
 
 cdef class Ground:
     cdef SmartPtr[TYSol] thisptr
+
+cdef class Vegetation:
+    cdef SmartPtr[TYVegetation] thisptr
 
 cdef pointcalcul2receptor(SmartPtr[TYPointCalcul] ptcalc)
 cdef typrojet2project(TYProjet* proj)
