@@ -726,6 +726,37 @@ class ElevationMesh(MeshedCDTWithInfo):
             merge_function, edges=edges, init_map=self.edges_info)
         self.edges_info.update(d)
 
+    def altitude_for_input_vertex(self, vh):
+        alti = self.input_vertex_infos(vh).altitude
+        assert alti is not UNSPECIFIED_ALTITUDE
+        return alti
+
+    def point_altitude(self, p, face_hint=None):
+        p = to_cgal_point(p)
+        fh, vh_or_i = self.locate_point(p, face_hint=face_hint)
+        if fh is None: # point p is out of the convex hull of the triangulation
+            return UNSPECIFIED_ALTITUDE
+        if isinstance(vh_or_i, Vertex_handle): # point p is a vertex
+            return self.altitude_for_input_vertex(vh_or_i)
+        if isinstance(vh_or_i, int): # point is on an edge
+            if self.cdt.is_infinite(fh): # get a finite face if needed
+                fh, _ = self.mirror_half_edge(fh, vh_or_i)
+                assert not self.cdt.is_infinite(fh)
+        triangle = self.triangle3d_for_face(fh)
+        p2 = Point_3(p.x(), p.y(), 0)
+        vline = Line_3(p2, Z_VECTOR)
+        inter = intersection(triangle, vline)
+        if not inter.is_Point_3():
+            raise InconsistentGeometricModel("Can not compute elevation",
+                                             witness_point=(p.x(), p.y()))
+        p3 = inter.get_Point_3()
+        alti = p3.z()
+        dist = abs((p3-p2).squared_length()-alti**2)
+        assert dist <= _PROXIMITY_THRESHOLD * 1e-3  + _PROXIMITY_THRESHOLD * (alti**2), (
+            "unexpected distance between point and its projection : %f (threshold = %f, altitude = %f)"
+            % (dist, _PROXIMITY_THRESHOLD, alti))
+        return alti
+
     def update_altitude_from_reference(self, reference):
         for vh in self.cdt.finite_vertices():
             try:
@@ -783,37 +814,6 @@ class ReferenceElevationMesh(ElevationMesh):
         if 'altitude' not in kwargs:
             raise TypeError('altitude is mandatory for *reference* elevation meshes')
         return super(ReferenceElevationMesh, self).insert_polyline(polyline, **kwargs)
-
-    def altitude_for_input_vertex(self, vh):
-        alti = self.input_vertex_infos(vh).altitude
-        assert alti is not UNSPECIFIED_ALTITUDE
-        return alti
-
-    def point_altitude(self, p, face_hint=None):
-        p = to_cgal_point(p)
-        fh, vh_or_i = self.locate_point(p, face_hint=face_hint)
-        if fh is None: # point p is out of the convex hull of the triangulation
-            return UNSPECIFIED_ALTITUDE
-        if isinstance(vh_or_i, Vertex_handle): # point p is a vertex
-            return self.altitude_for_input_vertex(vh_or_i)
-        if isinstance(vh_or_i, int): # point is on an edge
-            if self.cdt.is_infinite(fh): # get a finite face if needed
-                fh, _ = self.mirror_half_edge(fh, vh_or_i)
-                assert not self.cdt.is_infinite(fh)
-        triangle = self.triangle3d_for_face(fh)
-        p2 = Point_3(p.x(), p.y(), 0)
-        vline = Line_3(p2, Z_VECTOR)
-        inter = intersection(triangle, vline)
-        if not inter.is_Point_3():
-            raise InconsistentGeometricModel("Can not compute elevation",
-                                             witness_point=(p.x(), p.y()))
-        p3 = inter.get_Point_3()
-        alti = p3.z()
-        dist = abs((p3-p2).squared_length()-alti**2)
-        assert dist <= _PROXIMITY_THRESHOLD * 1e-3  + _PROXIMITY_THRESHOLD * (alti**2), (
-            "unexpected distance between point and its projection : %f (threshold = %f, altitude = %f)"
-            % (dist, _PROXIMITY_THRESHOLD, alti))
-        return alti
 
     def copy_as_ElevationMesh(self):
         return self.copy(class_=ElevationMesh)
