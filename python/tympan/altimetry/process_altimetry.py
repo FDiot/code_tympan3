@@ -12,6 +12,7 @@ import tympan.models.business as tybusiness
 from tympan.altimetry import datamodel
 from tympan.altimetry.datamodel import (SiteNode, LevelCurve, WaterBody,
                                         GroundMaterial, MaterialArea,
+                                        VegetationArea,
                                         InfrastructureLandtake, SiteLandtake)
 from tympan.altimetry.builder import Builder
 
@@ -90,16 +91,12 @@ def export_site_topo(cysite, mainsite=False):
         cymaterial = cymarea.ground_material
         almaterial = GroundMaterial(cymaterial.elem_id)
         # Build a material area made of the above defined ground material
-        coords = cypoints2acoords(cymarea.points)
-        if not coords:
+        if not cymarea.points:
             assert not default_material, "Found several default materials"
             default_material = cymaterial.elem_id
             datamodel.DEFAULT_MATERIAL = almaterial
             continue
-        almatarea = MaterialArea(
-            coords=coords,
-            material=almaterial,
-            id=cymarea.elem_id)
+        almatarea = build_material_area(cymarea, almaterial)
         asite.add_child(almatarea)
     # Level curves
     for cylcurve in cysite.level_curves:
@@ -137,3 +134,18 @@ def cypoints2acoords(points):
     return coords
 
 
+def build_material_area(ty_materialarea, altimetry_groundmaterial):
+    """Build a MaterialArea in altimetry data model from a Tympan material
+    area and an altimetry GroundMaterial.
+
+    This may be a plain MaterialArea or a VegetationArea.
+    """
+    kwargs = {}
+    if ty_materialarea.has_vegetation():
+        kwargs['height'] = ty_materialarea.vegetation.height
+        cls = VegetationArea
+    else:
+        cls = MaterialArea
+    return cls(coords=cypoints2acoords(ty_materialarea.points),
+               material=altimetry_groundmaterial,
+               id=ty_materialarea.elem_id, **kwargs)

@@ -230,6 +230,13 @@ class MaterialArea(PolygonalTympanFeature):
         return d
 
 
+class VegetationArea(MaterialArea):
+
+    def __init__(self, coords, material, height, **kwargs):
+        self.height = height
+        super(VegetationArea, self).__init__(coords, material, **kwargs)
+
+
 class WaterBody(MaterialArea, LevelCurve):
     geometric_type = "Polygon"
 

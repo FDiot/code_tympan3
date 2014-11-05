@@ -167,6 +167,26 @@ cdef class Ground:
         return tyelement_id(self.thisptr.getRealPointer())
 
 
+cdef class Vegetation:
+
+    @property
+    def height(self):
+        """The vegetation height"""
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getHauteur()
+
+    def name(self):
+        """ Return a string representing the name of the element
+        """
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getName().toStdString()
+
+    @property
+    def elem_id(self):
+        """Vegetation id"""
+        return tyelement_id(self.thisptr.getRealPointer())
+
+
 cdef class Site:
 
     @property
@@ -349,12 +369,10 @@ cdef class Site:
         pts = cy.declare(deque[tycommon.OPoint3D])
         tgles = cy.declare(deque[tycommon.OTriangle])
         mat_ids = cy.declare(deque[string])
-        for i in xrange(vertices.shape[0]):
-            pts.push_back(tycommon.OPoint3D(vertices[i][0], vertices[i][1],
-                                            vertices[i][2]))
-        for i in xrange(faces.shape[0]):
-            tgles.push_back(tycommon.OTriangle(faces[i][0], faces[i][1],
-                                               faces[i][2]))
+        for x, y, z in vertices:
+            pts.push_back(tycommon.OPoint3D(x, y, z))
+        for e0, e1, e2 in faces:
+            tgles.push_back(tycommon.OTriangle(e0, e1, e2))
         for matidx in materials_idx:
             matid = materials[matidx]
             matid = ''.join(map(chr, matid))
@@ -476,6 +494,17 @@ cdef class MaterialArea:
     def elem_id(self):
         """ Return MaterialArea id as a string """
         return tyelement_id(self.thisptr)
+
+    def has_vegetation(self):
+        """Return True if the material area has vegetation"""
+        return self.thisptr.isVegetActive()
+
+    @property
+    def vegetation(self):
+        """The vegetation associated with material area"""
+        vegetation = Vegetation()
+        vegetation.thisptr = self.thisptr.getVegetation()
+        return vegetation
 
 
 cdef class LevelCurve:
