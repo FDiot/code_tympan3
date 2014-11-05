@@ -260,7 +260,7 @@ class WaterBody(MaterialArea, LevelCurve):
 
 class SiteNode(PolygonalTympanFeature):
 
-    CHILDREN_TYPES = ("LevelCurve", "MaterialArea", "WaterBody",
+    CHILDREN_TYPES = ("LevelCurve", "MaterialArea", "VegetationArea", "WaterBody",
                       "SiteLandtake", "InfrastructureLandtake", "SiteNode")
 
     def __init__(self, coords, **kwargs):
@@ -298,7 +298,8 @@ class SiteNode(PolygonalTympanFeature):
 
     @property
     def material_areas(self):
-        return self._iter_children("MaterialArea", "WaterBody")
+        return self._iter_children("MaterialArea", "VegetationArea",
+                                   "WaterBody")
 
     @property
     def subsites(self):
@@ -314,16 +315,18 @@ class SiteNode(PolygonalTympanFeature):
 
     @property
     def all_features(self):
-        return self._iter_children('LevelCurve', 'MaterialArea', 'WaterBody',
-                                   'InfrastructureLandtake', 'SiteLandtake')
+        """All child features but site nodes"""
+        features_type = set(self.CHILDREN_TYPES) - set(["SiteNode"])
+        return self._iter_children(*features_type)
 
     def _iter_children(self, *args):
         return chain(*[self.children[k] for k in args])
 
     @property
     def non_altimetric_features(self):
-        return ( self.children["MaterialArea"] +
-                 self.children["InfrastructureLandtake"] )
+        return (self.children["MaterialArea"] +
+                self.children["VegetationArea"] +
+                self.children["InfrastructureLandtake"] )
 
 
 class SiteLandtake(LevelCurve):

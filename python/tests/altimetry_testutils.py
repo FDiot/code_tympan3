@@ -4,8 +4,9 @@ runVisualTests = os.environ.get('RUN_VISUAL_TESTS', False)
 
 from shapely.geometry import MultiLineString
 from tympan.altimetry.datamodel import (LevelCurve, MaterialArea,
-                                        GroundMaterial, WaterBody,
-                                        SiteNode, InfrastructureLandtake,
+                                        VegetationArea, GroundMaterial,
+                                        WaterBody, SiteNode,
+                                        InfrastructureLandtake,
                                         HIDDEN_MATERIAL)
 from tympan.altimetry import mesh
 
@@ -16,12 +17,14 @@ class TestFeatures(object):
 
     big_rect_coords = rect(0, 0, 12, 10)
     grass = GroundMaterial("grass")
+    pine = GroundMaterial("pine")
 
     level_curve_A_coords = [(-1, -1), (2, 2), (4, 2)]
     cleaned_level_A_shape = MultiLineString([[(0, 0), (2, 2), (4, 2)]])
 
     altitude_A = 10.0
     grass_area_coords = [(1.0, 1.0), (11.0, 1.0), (1.0, 9.0), (1.0, 1.0)]
+    pine_area_coords = [(0, 9.5), (12, 9.5), (12, 10), (0, 10)]
     waterbody_coords = [(3, 3), (5, 4), (3, 5)]
     altitude_water = 5.0
     subsite_A_coords = rect(6, 6, 11, 8)
@@ -38,6 +41,9 @@ class TestFeatures(object):
         self.grass_area = MaterialArea(self.grass_area_coords,
                                        material=self.grass,
                                        parent_site=self.mainsite, id="{Grass area}")
+        self.veg_area = VegetationArea(self.pine_area_coords,
+                                       material=self.pine, height=5,
+                                       parent_site=self.mainsite, id="{Pine area}")
         self.waterbody= WaterBody(self.waterbody_coords,
                                    altitude=self.altitude_water,
                                    parent_site=self.mainsite, id="{Water body}")
