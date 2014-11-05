@@ -196,7 +196,7 @@ class SiteNodeGeometryCleaner(object):
 
     def check_issues_with_material_area_order(self):
         """ Diagnostic helper: returns violation of the ordering for material area"""
-        problems = []
+        problems = set([])
         for i, area_i_id in enumerate(self._sorted_material_areas):
             for j in xrange(i+1, len(self._sorted_material_areas)):
                 area_j_id = self._sorted_material_areas[j]
@@ -204,8 +204,8 @@ class SiteNodeGeometryCleaner(object):
                 area_j_geom = self.geom[area_j_id]
                 if not (area_i_geom.within(area_j_geom) or
                         area_i_geom.disjoint(area_j_geom)):
-                    problems.append((area_id, ))
-        return problems
+                    problems.add((area_i_id, area_j_id))
+        return list(problems)
 
     def material_areas_inner_first(self):
         return list(self._sorted_material_areas)

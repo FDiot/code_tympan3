@@ -256,6 +256,19 @@ class AltimetryMergerTC(unittest.TestCase, TestFeatures):
         cleaner.process_material_areas()
         self.assertEqual(cleaner.check_issues_with_material_area_order(), [])
 
+    def test_sorting_material_problems(self):
+        # Build a material area which touches another one.
+        grass_area_coords = [(0, 9), (12, 9), (12, 10), (0, 10)]
+        other_grass = MaterialArea(grass_area_coords,
+                                   material=self.grass,
+                                   parent_site=self.mainsite,
+                                   id="{Other grass area}")
+        self.mainsite.add_child(other_grass)
+        cleaner = SiteNodeGeometryCleaner(self.mainsite)
+        cleaner.process_material_areas()
+        problems = cleaner.check_issues_with_material_area_order()
+        self.assertEqual(problems, [('{Grass area}', '{Other grass area}')])
+
     def test_merge_subsite_material(self):
         self.subgrass = MaterialArea(rect(6, 7, 7, 8), material=self.grass,
                                      id="{Grass in subsite}",
