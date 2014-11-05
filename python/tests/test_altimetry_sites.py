@@ -127,11 +127,11 @@ class AltimetryDataTC(unittest.TestCase):
                                     parent_site=mainsite, id=None)
         waterbody=  WaterBody(self.waterbody_coords, altitude=5,
                               parent_site=mainsite, id=None)
-        material_area_A = MaterialArea(self.material_area_A_coords, material=self.grass,
-                                       parent_site=mainsite, id=None)
+        mainsite.add_child(self.material_area_A)
 
         self.assertItemsEqual(mainsite.level_curves, [level_curve_A, waterbody])
-        self.assertItemsEqual(mainsite.material_areas, [material_area_A, waterbody])
+        self.assertItemsEqual(mainsite.material_areas,
+                              [self.material_area_A, waterbody])
         self.assertItemsEqual(mainsite.subsites, [subsite])
         self.assertItemsEqual(subsite.level_curves, [level_curve_B])
 
