@@ -1,12 +1,8 @@
 #ifndef TY_C_DEFINES
 #define TY_C_DEFINES
 
-/* From this threshold (in meters), two elements are considered as at the same
- * position
- * */
-#define TYSEUILCONFONDUS        0.001        // 1 mm
-
-/* Initial platform/compiler-related stuff to set.
+/* 
+    Initial platform/compiler-related stuff to set.
  */
 #define TY_PLATFORM_WIN32 1
 #define TY_PLATFORM_WIN64 2
