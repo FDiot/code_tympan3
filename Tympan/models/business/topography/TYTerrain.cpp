@@ -229,7 +229,21 @@ void TYTerrain::useVegetation(bool state /*= true*/)
     }
     else
     {
-        if (_pVegetation) { delete _pVegetation; }
-        _pVegetation = NULL;
+        if (_pVegetation) { _pVegetation = nullptr; }
+    }
+}
+
+void TYTerrain::setVegetation(LPTYVegetation pVeget) 
+{ 
+    _pVegetation = pVeget;
+
+    if (_pVegetation != nullptr)
+    {
+        _vegetActive = true;
+        _pVegetation->setParent(this);
+    }
+    else
+    {
+        _vegetActive = false;
     }
 }
