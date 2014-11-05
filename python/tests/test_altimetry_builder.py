@@ -4,8 +4,7 @@ import os
 
 from numpy.testing.utils import assert_allclose
 
-from tympan.altimetry.datamodel import (InconsistentGeometricModel,
-                                        MaterialArea, HIDDEN_MATERIAL,
+from tympan.altimetry.datamodel import (InconsistentGeometricModel, HIDDEN_MATERIAL,
                                         LevelCurve, InfrastructureLandtake)
 from tympan.altimetry import mesh
 from tympan.altimetry.builder import Builder
