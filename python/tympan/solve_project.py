@@ -26,9 +26,8 @@ except ImportError:
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
     raise ImportError(err)
 
-from tympan import SOLVER_CONFIG_ATTRIBUTES
-from tympan.altimetry.builder import Builder
-from tympan.altimetry import process_altimetry, export_to_ply
+from tympan import SOLVER_CONFIG_ATTRIBUTES, Simulation
+from tympan.altimetry import export_to_ply
 from tympan.altimetry._export import _build_mesh_data
 from tympan.models.solver import Configuration
 
@@ -99,11 +98,8 @@ def solve(input_project, output_project, output_mesh, solverdir,
         solver_config.NbThreads = 1
     # Recompute altimetry
     # Rebuild topography with altimetry data model
-    alti_site = process_altimetry.export_site_topo(site)
-    # Compute altimetry and retrieve the resulting mesh
-    builder =  Builder(alti_site)
-    builder.complete_processing()
-    mesh, material_by_face = builder.mesh, builder.material_by_face
+    sml = Simulation(project)
+    _, mesh, material_by_face = sml.altimetry()
     export_to_ply(mesh, material_by_face, output_mesh)
     vertices, faces, materials, faces_materials = _build_mesh_data(
         mesh, material_by_face)

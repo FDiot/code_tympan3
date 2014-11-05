@@ -1,26 +1,45 @@
+"""Main script for altimetry processing from Code_TYMPAN GUI"""
+
 import sys
 import logging
 
-# open file in unbuffered mode so it get written asap, in case of later crash
-# due to underlying C code
-stream = open('tympan.log', 'a', 0)
-logging.basicConfig(stream=stream, level=logging.DEBUG,
-                    format='%(levelname)s:%(asctime)s - %(name)s - %(message)s')
+from tympan import Simulation
+from tympan.altimetry import export_to_ply
 
-import tympan.altimetry.process_altimetry as tyalti
+
+def set_logger(fpath='tympan.log'):
+    """Configure logging"""
+    # open file in unbuffered mode so it get written asap, in case of later crash
+    # due to underlying C code
+    stream = open(fpath, 'a', 0)
+    logging.basicConfig(stream=stream, level=logging.DEBUG,
+                        format='%(levelname)s:%(asctime)s - %(name)s - %(message)s')
+
+
+def main(input_project, result_file):
+    """Process altimetry from `input_project` and save to `result_file` (PLY
+    format).
+    """
+    try:
+        try:
+            sml = Simulation.from_xml(input_project)
+        except RuntimeError:
+            logging.exception("Couldn't load the acoustic project from %s file", input_project)
+            raise
+        _, mesh, material_by_face = sml.altimetry(allow_features_outside_mainsite=True)
+        export_to_ply(mesh, material_by_face, result_file)
+    except Exception as exc:
+        sys.stderr.write('Error: %s' % exc)
+        logging.exception("Error processing the altimetry:\n%s", exc)
+
 
 if __name__ == '__main__':
+    set_logger()
     if len(sys.argv) != 3:
-        err = "process_site_altimetry.py called with bad arguments."
+        err = "%s called with bad arguments." % __file__
         logging.error("%s Couldn't process altimetry.", err)
         sys.stderr.write('Error: ' + err)
         sys.exit(-1) # XXX to be improved
-    # read command-line argument
-    input_proj = sys.argv[1]
+    input_project = sys.argv[1]
     result_file = sys.argv[2]
-    # process input project and build altimetry
-    try:
-        tyalti.process_site_altimetry(input_project=input_proj, result_file=result_file)
-    except Exception as exc:
-        sys.stderr.write('Error: ' + exc.message)
-        logging.exception("process_altimetry.py couldn't process the altimetry:\n%s", exc)
+    main(input_project, result_file)
