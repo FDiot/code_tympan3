@@ -10,10 +10,10 @@ from shapely import geometry
 from shapely.geometry import MultiLineString, LineString
 
 # NB Importing altimetry configures path to find CGAL bindings
-from tympan.altimetry.datamodel import (LevelCurve, MaterialArea, GroundMaterial,
-                                 WaterBody, SiteNode, PolygonalTympanFeature,
-                                 InconsistentGeometricModel, MATERIAL_WATER,
-                                 elementary_shapes)
+from tympan.altimetry.datamodel import (
+    LevelCurve, MaterialArea, VegetationArea, GroundMaterial, WaterBody,
+    SiteNode, PolygonalTympanFeature, InconsistentGeometricModel,
+    MATERIAL_WATER, elementary_shapes)
 from tympan.altimetry.merge import (SiteNodeGeometryCleaner, build_site_shape_with_hole,
                              recursively_merge_all_subsites)
 
@@ -125,13 +125,17 @@ class AltimetryDataTC(unittest.TestCase):
                                     parent_site=subsite, id=None)
         level_curve_A =  LevelCurve(self.level_curve_A_coords, altitude=10.0,
                                     parent_site=mainsite, id=None)
-        waterbody=  WaterBody(self.waterbody_coords, altitude=5,
+        waterbody = WaterBody(self.waterbody_coords, altitude=5,
                               parent_site=mainsite, id=None)
+        vegarea = VegetationArea([(1, 1), (1, 3), (3, 1)],
+                                 material=GroundMaterial('pine'), height=3,
+                                 id=None)
+        vegarea.parent_site = mainsite
         mainsite.add_child(self.material_area_A)
 
         self.assertItemsEqual(mainsite.level_curves, [level_curve_A, waterbody])
         self.assertItemsEqual(mainsite.material_areas,
-                              [self.material_area_A, waterbody])
+                              [self.material_area_A, waterbody, vegarea])
         self.assertItemsEqual(mainsite.subsites, [subsite])
         self.assertItemsEqual(subsite.level_curves, [level_curve_B])
 
