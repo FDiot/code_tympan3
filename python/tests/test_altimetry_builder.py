@@ -6,7 +6,7 @@ from numpy.testing.utils import assert_allclose
 
 from tympan.altimetry.datamodel import (InconsistentGeometricModel, HIDDEN_MATERIAL,
                                         LevelCurve, InfrastructureLandtake)
-from tympan.altimetry import mesh, export_to_ply
+from tympan.altimetry import mesh, export_to_ply, builder
 from tympan.altimetry.builder import Builder
 
 from altimetry_testutils import (MesherTestUtilsMixin, TestFeatures,
@@ -29,7 +29,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
 
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot(self):
-        self.builder.merge_subsites()
+        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
         self.builder.build_altimetric_base()
         self.builder.build_triangulation()
         self.builder.fill_material_and_landtakes()
@@ -55,7 +55,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                     self.assertEqual(getattr(info, k), v)
 
     def test_build_altimetric_base(self):
-        self.builder.merge_subsites()
+        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
         for id_ in ["{Mainsite ref altitude}", "{Subsub level curve}"]:
             self.assertIn(id_, self.builder.equivalent_site.features_by_id)
             self.assertIn(id_, self.builder.cleaned.geom)
@@ -68,7 +68,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.check_vertices_props(self.builder.mesh, common_expectations)
 
     def test_build_triangulation(self):
-        self.builder.merge_subsites()
+        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
         self.builder.build_altimetric_base()
         self.builder.build_triangulation()
         self.builder.compute_informations()
@@ -81,7 +81,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         ])
 
     def test_compute_elevations(self):
-        self.builder.merge_subsites()
+        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
         self.builder.build_altimetric_base()
         self.builder.build_triangulation()
         self.builder.compute_informations()
@@ -100,7 +100,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.building = InfrastructureLandtake(coords,
                                                parent_site=self.mainsite,
                                                id="{some building}")
-        self.builder.merge_subsites()
+        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
         self.builder.build_altimetric_base()
         self.builder.build_triangulation()
         self.builder.compute_informations()
@@ -126,7 +126,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
 
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot_landtake_flooding(self):
-        self.builder.merge_subsites()
+        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
         self.builder.build_altimetric_base()
         self.builder.build_triangulation()
         self.builder.compute_informations()
