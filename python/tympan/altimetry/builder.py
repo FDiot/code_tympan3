@@ -34,7 +34,8 @@ class Builder(object):
         return self.cleaned.equivalent_site
 
     def complete_processing(self):
-        self.merge_subsites()
+        self.cleaned = recursively_merge_all_subsites(
+            self.mainsite, allow_outside=self._allow_outside)
         # First get an ElevationMesh (possibly with vertices missing altitude,
         # in order to be able to add non-altimetric features).
         self.build_altimetric_base()
@@ -49,11 +50,6 @@ class Builder(object):
         # altitudes is completely determined and no change are supposed to
         # occur.
         self.join_with_landtakes()
-
-    def merge_subsites(self):
-        assert self.cleaned is None
-        self.cleaned = recursively_merge_all_subsites(
-            self.mainsite, allow_outside=self._allow_outside)
 
     def insert_feature(self, feature, mesher, **properties):
         try:
