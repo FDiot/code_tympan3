@@ -19,30 +19,29 @@ from .mesh import (ElevationMesh, ReferenceElevationMesh,
 def build_altimetry(mainsite, allow_features_outside_mainsite=True):
     """Return the results of altimetry building from a site tree model."""
     builder = Builder(mainsite)
-    builder.cleaned = recursively_merge_all_subsites(
+    cleaner = recursively_merge_all_subsites(
         mainsite, allow_outside=allow_features_outside_mainsite)
     # First get an ElevationMesh (possibly with vertices missing altitude,
     # in order to be able to add non-altimetric features).
-    builder.build_altimetric_base()
-    builder.build_triangulation()
+    builder.build_altimetric_base(cleaner)
+    builder.build_triangulation(cleaner)
     builder.refine_triangulation()
     builder.compute_informations()
     # From this point, all vertices in the mesh have an altitude.
     builder.compute_elevations()
-    builder.fill_material_and_landtakes()
+    builder.fill_material_and_landtakes(cleaner)
     # Finally update the altitude of infrastructure landtakes by
     # averaging using their contour altitude. From this point, the mesh
     # altitudes is completely determined and no change are supposed to
     # occur.
-    builder.join_with_landtakes()
-    return builder.equivalent_site, builder.mesh, builder.material_by_face
+    builder.join_with_landtakes(cleaner.equivalent_site)
+    return cleaner.equivalent_site, builder.mesh, builder.material_by_face
 
 
 class Builder(object):
 
     def __init__(self, mainsite):
         self.mainsite = mainsite
-        self.cleaned = None # The cleaned and merged site
         self.alti = ReferenceElevationMesh() # Altimetric base
         self.mesh = None
         self._vertices_for_feature = {} # List of vertex handle for a given feature
@@ -50,13 +49,10 @@ class Builder(object):
         self.size_criterion = 0.0 # zero means no size criterion
         self.shape_criterion = 0.125
 
-    @property
-    def equivalent_site(self):
-        return self.cleaned.equivalent_site
-
-    def insert_feature(self, feature, mesher, **properties):
+    @staticmethod
+    def insert_feature(cleaner, feature, mesher, **properties):
         try:
-            shape = self.cleaned.geom[feature.id]
+            shape = cleaner.geom[feature.id]
         except KeyError:
             # The element was filtered out (e.g. it was outside of its sub-site)
             return None
@@ -79,21 +75,20 @@ class Builder(object):
                 points, id=feature.id, **properties)
         return vertices
 
-    def build_altimetric_base(self):
-        assert self.cleaned is not None
+    def build_altimetric_base(self, cleaner):
         assert self.mesh is None
-        for level_curve in self.equivalent_site.level_curves:
+        for level_curve in cleaner.equivalent_site.level_curves:
             props = level_curve.build_properties()
             assert 'altitude' in props
-            vertices = self.insert_feature(level_curve, self.alti, **props)
+            vertices = self.insert_feature(cleaner, level_curve, self.alti, **props)
             self._vertices_for_feature[level_curve.id] = vertices
         self.alti.update_info_for_vertices()
         self.mesh = self.alti.copy_as_ElevationMesh()
 
-    def build_triangulation(self):
+    def build_triangulation(self, cleaner):
         assert self.mesh is not None
-        for feature in self.equivalent_site.non_altimetric_features:
-            vertices = self.insert_feature(feature, self.mesh,
+        for feature in cleaner.equivalent_site.non_altimetric_features:
+            vertices = self.insert_feature(cleaner, feature, self.mesh,
                                            **feature.build_properties())
             self._vertices_for_feature[feature.id] = vertices
 
@@ -124,21 +119,21 @@ class Builder(object):
             self.material_by_face[fh] = feature.material
         return affected_faces
 
-    def fill_material_and_landtakes(self):
+    def fill_material_and_landtakes(self, cleaner):
         assert self.mesh is not None
         assert len(self.material_by_face)==0
         for landtake in self.mainsite.landtakes:
             self.fill_polygonal_feature(landtake,
                                         flooder_class=LandtakeFaceFlooder)
-        for material_area_id in self.cleaned.material_areas_inner_first():
-            material_area = self.equivalent_site.features_by_id[material_area_id]
+        for material_area_id in cleaner.material_areas_inner_first():
+            material_area = cleaner.equivalent_site.features_by_id[material_area_id]
             self.fill_polygonal_feature(material_area,
                                         flooder_class=MaterialFaceFlooder)
         for fh in self.mesh.cdt.finite_faces():
             if fh not in self.material_by_face:
                 self.material_by_face[fh] = datamodel.DEFAULT_MATERIAL
 
-    def join_with_landtakes(self):
+    def join_with_landtakes(self, equivalent_site):
         """Join the altimetry to the landtakes.
 
         For each infrastructure land-take, compute the mean altitude of the
@@ -154,7 +149,7 @@ class Builder(object):
         NB: This has the restriction that building in a strong slopes
         are not well supported: they produce artifact in the altimetry.
         """
-        for landtake in self.equivalent_site.landtakes:
+        for landtake in equivalent_site.landtakes:
             polyline = self._vertices_for_feature[landtake.id]
             mean_alt = np.mean([self.mesh.vertices_info[vh].altitude
                                 for vh in polyline])
