@@ -101,11 +101,21 @@ class MeshBuilder(object):
         alti.update_info_for_vertices()
         return alti
 
+    def _copy_mesh(self, altimesh):
+        """Return a copy of reference altimetry mesh and update
+        vertices_for_feature map.
+        """
+        vmap = {}
+        mesh = altimesh.copy(class_=ElevationMesh, vmap=vmap)
+        for fid, vertices in self.vertices_for_feature.items():
+            self.vertices_for_feature[fid] = [vmap[vh] for vh in vertices]
+        return mesh
+
     def _build_triangulation(self, altimesh):
         """Return an elevation mesh, copied from the base mesh with non
         altimetric features inserted.
         """
-        mesh = altimesh.copy_as_ElevationMesh()
+        mesh = self._copy_mesh(altimesh)
         for feature in self._cleaner.equivalent_site.non_altimetric_features:
             vertices = self._insert_feature(feature, mesh,
                                             **feature.build_properties())

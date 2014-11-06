@@ -388,7 +388,7 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         (vA, vB, vC, edgeAB, faceABC) = self.build_triangle()
         slope = self.mesher.altitude_for_input_vertex(vC) / vC.point().y()
 
-        mesher2 = self.mesher.copy_as_ElevationMesh()
+        mesher2 = self.mesher.copy(class_=mesh.ElevationMesh)
         vD = mesher2.insert_point((1, 0.5)) # Altitude is missing and this should be OK
         mesher2.update_altitude_from_reference(self.mesher.point_altitude)
 
