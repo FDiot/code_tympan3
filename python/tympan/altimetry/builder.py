@@ -24,7 +24,7 @@ class Builder(object):
         self.cleaned = None # The cleaned and merged site
         self.alti = ReferenceElevationMesh() # Altimetric base
         self.mesh = None
-        self.vertices_for_feature = {} # List of vertex handle for a given feature
+        self._vertices_for_feature = {} # List of vertex handle for a given feature
         self.material_by_face = {}
         self.size_criterion = 0.0 # zero means no size criterion
         self.shape_criterion = 0.125
@@ -87,7 +87,7 @@ class Builder(object):
             props = level_curve.build_properties()
             assert 'altitude' in props
             vertices = self.insert_feature(level_curve, self.alti, **props)
-            self.vertices_for_feature[level_curve.id] = vertices
+            self._vertices_for_feature[level_curve.id] = vertices
         self.alti.update_info_for_vertices()
         self.mesh = self.alti.copy_as_ElevationMesh()
 
@@ -96,7 +96,7 @@ class Builder(object):
         for feature in self.equivalent_site.non_altimetric_features:
             vertices = self.insert_feature(feature, self.mesh,
                                            **feature.build_properties())
-            self.vertices_for_feature[feature.id] = vertices
+            self._vertices_for_feature[feature.id] = vertices
 
     def refine_triangulation(self):
         # TODO (optional) flood landtake in order to mark them as not to be refined
@@ -115,7 +115,7 @@ class Builder(object):
         if feature.id not in datamodel.SiteNode.recursive_features_ids(self.mainsite):
             raise ValueError("Only features already inserted can be filled ID:%s"
                              % feature.id)
-        vertices = self.vertices_for_feature[feature.id]
+        vertices = self._vertices_for_feature[feature.id]
         close_it = vertices[0] != vertices[-1]
         flooder = self.mesh.flood_polygon(flooder_class, vertices,
                                           close_it=close_it)
@@ -156,7 +156,7 @@ class Builder(object):
         are not well supported: they produce artifact in the altimetry.
         """
         for landtake in self.equivalent_site.landtakes:
-            polyline = self.vertices_for_feature[landtake.id]
+            polyline = self._vertices_for_feature[landtake.id]
             mean_alt = np.mean([self.mesh.vertices_info[vh].altitude
                                 for vh in polyline])
             close_it = polyline[0] != polyline[-1]

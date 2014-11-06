@@ -105,7 +105,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.builder.build_triangulation()
         self.builder.compute_informations()
 
-        vertices = self.builder.vertices_for_feature[self.building.id]
+        vertices = self.builder._vertices_for_feature[self.building.id]
 
         for i, v in enumerate(vertices):
             self.assertEquals(v.point(), mesh.to_cgal_point(coords[i % len(coords)]))
