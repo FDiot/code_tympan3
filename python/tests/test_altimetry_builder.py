@@ -7,7 +7,6 @@ from numpy.testing.utils import assert_allclose
 from tympan.altimetry.datamodel import (InconsistentGeometricModel, HIDDEN_MATERIAL,
                                         LevelCurve, InfrastructureLandtake)
 from tympan.altimetry import mesh, export_to_ply, builder
-from tympan.altimetry.builder import Builder
 
 from altimetry_testutils import (MesherTestUtilsMixin, TestFeatures,
                                  rect, runVisualTests)
@@ -25,19 +24,15 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.landtake_level_curve = LevelCurve(
             self.big_rect_coords, altitude=self.altitude_A, close_it=True,
             parent_site=self.mainsite, id="{Mainsite ref altitude}")
-        self.builder = Builder(self.mainsite)
 
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot(self):
-        cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        self.builder.build_altimetric_base(cleaner)
-        self.builder.build_triangulation(cleaner)
-        self.builder.fill_material_and_landtakes(cleaner)
-        plotter = visu.MeshedCDTPlotter(self.builder.mesh, title=self._testMethodName)
-        cleaner.equivalent_site.plot(plotter.ax, alt_geom_map=cleaner.geom)
+        equivalent_site, mesh, _ = builder.build_altimetry(self.mainsite)
+        plotter = visu.MeshedCDTPlotter(mesh, title=self._testMethodName)
+        equivalent_site.plot(plotter.ax, alt_geom_map=equivalent_site._cleaner.geom)
         plotter.plot_edges()
 
-        fh, expected_None = self.builder.mesh.locate_point((4, 4))
+        fh, expected_None = mesh.locate_point((4, 4))
         self.assertIsNone(expected_None)
         plotter.plot_face(fh, material_id='concrete')
         plotter.show()
@@ -58,21 +53,17 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         for id_ in ["{Mainsite ref altitude}", "{Subsub level curve}"]:
             self.assertIn(id_, cleaner.equivalent_site.features_by_id)
             self.assertIn(id_, cleaner.geom)
-
-        self.builder.build_altimetric_base(cleaner)
-        self.assertIsNotNone(self.builder.mesh)
-
+        alti = builder.MeshBuilder(cleaner)._build_altimetric_base()
         common_expectations = [((0, 0), {'altitude': self.altitude_A})]
-        self.check_vertices_props(self.builder.alti, common_expectations)
-        self.check_vertices_props(self.builder.mesh, common_expectations)
+        self.check_vertices_props(alti, common_expectations)
 
     def test_build_triangulation(self):
         cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        self.builder.build_altimetric_base(cleaner)
-        self.builder.build_triangulation(cleaner)
-        self.builder.compute_informations()
-
-        self.check_vertices_props( self.builder.mesh, [
+        mbuilder = builder.MeshBuilder(cleaner)
+        alti = mbuilder._build_altimetric_base()
+        bmesh = mbuilder._build_triangulation(alti)
+        mbuilder._compute_informations(bmesh)
+        self.check_vertices_props(bmesh, [
             ((1, 1), {'altitude': self.altitude_A,
                       'ids': set(['{Grass area}', '{Level curve A}'])}),
             ((1, 9), {'altitude': mesh.UNSPECIFIED_ALTITUDE,
@@ -81,14 +72,15 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
 
     def test_compute_elevations(self):
         cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        self.builder.build_altimetric_base(cleaner)
-        self.builder.build_triangulation(cleaner)
-        self.builder.compute_informations()
+        mbuilder = builder.MeshBuilder(cleaner)
+        alti = mbuilder._build_altimetric_base()
+        bmesh = mbuilder._build_triangulation(alti)
+        mbuilder._compute_informations(bmesh)
         pM = (8.5, 6.5) # in the corner of Level curve B
-        vM = self.builder.mesh.insert_point(pM)
-        self.builder.compute_elevations()
+        vM = bmesh.insert_point(pM)
+        mbuilder._compute_elevations(bmesh, alti)
 
-        self.check_vertices_props( self.builder.mesh, [
+        self.check_vertices_props(bmesh, [
             ((1, 1), {'altitude': self.altitude_A,
                       'ids': set(['{Grass area}', '{Level curve A}'])}),
             (pM, {'altitude': self.level_curve_B.altitude,}),
@@ -100,11 +92,12 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                                                parent_site=self.mainsite,
                                                id="{some building}")
         cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        self.builder.build_altimetric_base(cleaner)
-        self.builder.build_triangulation(cleaner)
-        self.builder.compute_informations()
+        mbuilder = builder.MeshBuilder(cleaner)
+        alti = mbuilder._build_altimetric_base()
+        bmesh = mbuilder._build_triangulation(alti)
+        mbuilder._compute_informations(bmesh)
 
-        vertices = self.builder._vertices_for_feature[self.building.id]
+        vertices = mbuilder.vertices_for_feature[self.building.id]
 
         for i, v in enumerate(vertices):
             self.assertEquals(v.point(), mesh.to_cgal_point(coords[i % len(coords)]))
@@ -127,22 +120,22 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot_landtake_flooding(self):
         cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        self.builder.build_altimetric_base(cleaner)
-        self.builder.build_triangulation(cleaner)
-        self.builder.compute_informations()
-        self.builder.compute_elevations()
+        mbuilder = builder.MeshBuilder(cleaner)
+        bmesh = mbuilder.build_mesh(refine=False)
 
-        flood_seeds = self.builder.fill_polygonal_feature(self.building, mesh.LandtakeFaceFlooder)
+        mfiller = builder.MeshFiller(bmesh, mbuilder.vertices_for_feature)
+        flood_seeds = mfiller._fill_polygonal_feature(
+            self.building, mesh.LandtakeFaceFlooder)
 
-        plotter = visu.MeshedCDTPlotter(self.builder.mesh, title=self._testMethodName)
+        plotter = visu.MeshedCDTPlotter(bmesh, title=self._testMethodName)
         cleaner.equivalent_site.plot(plotter.ax, alt_geom_map=cleaner.geom)
         plotter.plot_edges()
 
         for fh in flood_seeds:
-            marks = [self.builder.mesh.point_for_face(f) for f in flood_seeds]
+            marks = [bmesh.point_for_face(f) for f in flood_seeds]
             visu.plot_points_seq(plotter.ax, marks, marker='*')
-        for fh in self.builder.mesh.cdt.finite_faces():
-            material = self.builder.material_by_face.get(fh)
+        for fh in bmesh.cdt.finite_faces():
+            material = mfiller.material_by_face.get(fh)
             if material is None : continue
             plotter.plot_face(fh, material_id=material.id)
         plotter.show()
