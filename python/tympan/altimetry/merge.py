@@ -82,6 +82,7 @@ class SiteNodeGeometryCleaner(object):
         self.erroneous_overlap = []
         self._sorted_material_areas = []
         self.equivalent_site = SiteNode(sitenode.build_coordinates()[0], id=None)
+        self.equivalent_site._cleaner = self # For tests.
 
     def _add_feature_with_new_shape(self, feature, shape):
         assert not isinstance(feature, SiteNode)

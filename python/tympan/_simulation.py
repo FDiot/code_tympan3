@@ -7,7 +7,7 @@ from tympan.altimetry.datamodel import (SiteNode, LevelCurve, WaterBody,
                                         GroundMaterial, MaterialArea,
                                         VegetationArea,
                                         InfrastructureLandtake, SiteLandtake)
-from tympan.altimetry.builder import Builder
+from tympan.altimetry.builder import build_altimetry
 
 
 def points_to_coords(points):
@@ -138,13 +138,12 @@ class Simulation(object):
         """Return the altimetry site, mesh and associated material to mesh
         faces mapping.
 
-        The altimetry site is the result from converting Tympan site
-        topography into an altimetry site (using an internal data model).
+        The altimetry site is the result from first converting Tympan site
+        topography into an altimetry site (using an internal data model) and
+        then cleaning the latter by merging features.
         """
         altimetry_site = self._build_altimetry_site()
-        builder = Builder(altimetry_site, **kwargs)
-        builder.complete_processing()
-        return altimetry_site, builder.mesh, builder.material_by_face
+        return build_altimetry(altimetry_site)
 
     def _build_altimetry_site(self):
         """Build a Site model from altimetry data model using a TYSite"""
