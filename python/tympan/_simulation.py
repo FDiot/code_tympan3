@@ -15,6 +15,11 @@ def points_to_coords(points):
     return [(p.x, p.y) for p in points]
 
 
+def ground_material_from_business(material):
+    """Return a GroundMaterial from a business model material"""
+    return GroundMaterial(material.elem_id, material.resistivity)
+
+
 def build_material_area(ty_materialarea, altimetry_groundmaterial):
     """Build a MaterialArea in altimetry data model from a Tympan material
     area and an altimetry GroundMaterial.
@@ -63,7 +68,7 @@ def altimetry_site_from_topography(ty_site, mainsite=False):
     for cylake in ty_site.lakes:
         # Build water material
         cywater = cylake.ground_material
-        alwater = GroundMaterial(cywater.elem_id)
+        alwater = ground_material_from_business(cywater)
         if not water_material:
             water_material = cywater.elem_id
             datamodel.MATERIAL_WATER = alwater
@@ -77,7 +82,7 @@ def altimetry_site_from_topography(ty_site, mainsite=False):
     for cymarea in ty_site.material_areas:
         # Build a ground material
         cymaterial = cymarea.ground_material
-        almaterial = GroundMaterial(cymaterial.elem_id)
+        almaterial = ground_material_from_business(cymaterial)
         # Build a material area made of the above defined ground material
         if not cymarea.points:
             assert not default_material, "Found several default materials"

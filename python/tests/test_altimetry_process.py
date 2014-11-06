@@ -111,6 +111,7 @@ class TestProcessAltimetry(TympanTC):
         self.assertEqual(len(areas), 2)
         # Check material area
         self.assertEqual(areas[0].id, "{28bf9ef3-eb38-4de4-9921-8b76bf164f09}")
+        self.assertEqual(areas[0].material.resistivity, 1300)
         self.assertEqual(areas[0].build_coordinates()[0],
                          [(-13.0, 176.0), (-60.0, 161.0), (-87.0, 140.0),
                           (-91.0, 103.0), (-75.0, 83.0), (-44.0, 76.0),
@@ -119,6 +120,7 @@ class TestProcessAltimetry(TympanTC):
         self.assertEqual(areas[0].material_id, "{6fb2a2c5-e329-4c8a-9ec9-311072bddc73}")
         # Check water body
         self.assertEqual(areas[1].id, "{1d99f26d-83df-4404-94a4-7e3c5eccce13}")
+        self.assertEqual(areas[1].material.resistivity, 20000)
         self.assertEqual(areas[1].build_coordinates()[0],
                          [(-83.0, -104.0), (-137.0, -80.0), (-141.0, -45.0),
                           (-117.0, 7.0), (-90.0, 22.0), (-49.0, 21.0),
