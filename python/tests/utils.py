@@ -146,7 +146,6 @@ class TympanTC(unittest.TestCase):
         with self.no_output():
             import tympan.models.business as tybusiness
             import tympan.business2solver as bus2solv
-            from tympan.altimetry.builder import Builder
             from tympan import Simulation
             # read acoustic project
             tybusiness.init_tympan_registry()
