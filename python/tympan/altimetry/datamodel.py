@@ -306,6 +306,10 @@ class SiteNode(PolygonalTympanFeature):
                                    "WaterBody")
 
     @property
+    def vegetation_areas(self):
+        return self._iter_children("VegetationArea")
+
+    @property
     def subsites(self):
         return self.children["SiteNode"][:]
 
