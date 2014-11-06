@@ -124,7 +124,7 @@ class MeshedCDTWithInfo(object):
 
         And if a copy of self as an other type is desired, the class_ argument
         provides for specifying the desired type. USE WITH CAUTION, this
-        option is mainly aimed at internal use for copy_as_ElevationMesh.
+        option is mainly aimed at internal use for with ElevationMesh.
         """
         vmap = {} if vmap is None else vmap
         if len(vmap) != 0:
@@ -814,9 +814,6 @@ class ReferenceElevationMesh(ElevationMesh):
         if 'altitude' not in kwargs:
             raise TypeError('altitude is mandatory for *reference* elevation meshes')
         return super(ReferenceElevationMesh, self).insert_polyline(polyline, **kwargs)
-
-    def copy_as_ElevationMesh(self):
-        return self.copy(class_=ElevationMesh)
 
 
 class ElevationProfile(object):
