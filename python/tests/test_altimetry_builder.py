@@ -29,13 +29,12 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
 
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot(self):
-        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
-        self.builder.build_altimetric_base()
-        self.builder.build_triangulation()
-        self.builder.fill_material_and_landtakes()
-        cleaned = self.builder.cleaned
+        cleaner = builder.recursively_merge_all_subsites(self.mainsite)
+        self.builder.build_altimetric_base(cleaner)
+        self.builder.build_triangulation(cleaner)
+        self.builder.fill_material_and_landtakes(cleaner)
         plotter = visu.MeshedCDTPlotter(self.builder.mesh, title=self._testMethodName)
-        cleaned.equivalent_site.plot(plotter.ax, alt_geom_map=cleaned.geom)
+        cleaner.equivalent_site.plot(plotter.ax, alt_geom_map=cleaner.geom)
         plotter.plot_edges()
 
         fh, expected_None = self.builder.mesh.locate_point((4, 4))
@@ -55,12 +54,12 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                     self.assertEqual(getattr(info, k), v)
 
     def test_build_altimetric_base(self):
-        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
+        cleaner = builder.recursively_merge_all_subsites(self.mainsite)
         for id_ in ["{Mainsite ref altitude}", "{Subsub level curve}"]:
-            self.assertIn(id_, self.builder.equivalent_site.features_by_id)
-            self.assertIn(id_, self.builder.cleaned.geom)
+            self.assertIn(id_, cleaner.equivalent_site.features_by_id)
+            self.assertIn(id_, cleaner.geom)
 
-        self.builder.build_altimetric_base()
+        self.builder.build_altimetric_base(cleaner)
         self.assertIsNotNone(self.builder.mesh)
 
         common_expectations = [((0, 0), {'altitude': self.altitude_A})]
@@ -68,9 +67,9 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.check_vertices_props(self.builder.mesh, common_expectations)
 
     def test_build_triangulation(self):
-        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
-        self.builder.build_altimetric_base()
-        self.builder.build_triangulation()
+        cleaner = builder.recursively_merge_all_subsites(self.mainsite)
+        self.builder.build_altimetric_base(cleaner)
+        self.builder.build_triangulation(cleaner)
         self.builder.compute_informations()
 
         self.check_vertices_props( self.builder.mesh, [
@@ -81,9 +80,9 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         ])
 
     def test_compute_elevations(self):
-        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
-        self.builder.build_altimetric_base()
-        self.builder.build_triangulation()
+        cleaner = builder.recursively_merge_all_subsites(self.mainsite)
+        self.builder.build_altimetric_base(cleaner)
+        self.builder.build_triangulation(cleaner)
         self.builder.compute_informations()
         pM = (8.5, 6.5) # in the corner of Level curve B
         vM = self.builder.mesh.insert_point(pM)
@@ -100,9 +99,9 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.building = InfrastructureLandtake(coords,
                                                parent_site=self.mainsite,
                                                id="{some building}")
-        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
-        self.builder.build_altimetric_base()
-        self.builder.build_triangulation()
+        cleaner = builder.recursively_merge_all_subsites(self.mainsite)
+        self.builder.build_altimetric_base(cleaner)
+        self.builder.build_triangulation(cleaner)
         self.builder.compute_informations()
 
         vertices = self.builder._vertices_for_feature[self.building.id]
@@ -127,17 +126,16 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
 
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot_landtake_flooding(self):
-        self.builder.cleaned = builder.recursively_merge_all_subsites(self.mainsite)
-        self.builder.build_altimetric_base()
-        self.builder.build_triangulation()
+        cleaner = builder.recursively_merge_all_subsites(self.mainsite)
+        self.builder.build_altimetric_base(cleaner)
+        self.builder.build_triangulation(cleaner)
         self.builder.compute_informations()
         self.builder.compute_elevations()
 
         flood_seeds = self.builder.fill_polygonal_feature(self.building, mesh.LandtakeFaceFlooder)
 
-        cleaned = self.builder.cleaned
         plotter = visu.MeshedCDTPlotter(self.builder.mesh, title=self._testMethodName)
-        cleaned.equivalent_site.plot(plotter.ax, alt_geom_map=cleaned.geom)
+        cleaner.equivalent_site.plot(plotter.ax, alt_geom_map=cleaner.geom)
         plotter.plot_edges()
 
         for fh in flood_seeds:
