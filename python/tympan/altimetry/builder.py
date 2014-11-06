@@ -16,11 +16,32 @@ from .mesh import (ElevationMesh, ReferenceElevationMesh,
                    LandtakeFaceFlooder, MaterialFaceFlooder)
 
 
+def build_altimetry(mainsite, allow_features_outside_mainsite=True):
+    """Return the results of altimetry building from a site tree model."""
+    builder = Builder(mainsite)
+    builder.cleaned = recursively_merge_all_subsites(
+        mainsite, allow_outside=allow_features_outside_mainsite)
+    # First get an ElevationMesh (possibly with vertices missing altitude,
+    # in order to be able to add non-altimetric features).
+    builder.build_altimetric_base()
+    builder.build_triangulation()
+    builder.refine_triangulation()
+    builder.compute_informations()
+    # From this point, all vertices in the mesh have an altitude.
+    builder.compute_elevations()
+    builder.fill_material_and_landtakes()
+    # Finally update the altitude of infrastructure landtakes by
+    # averaging using their contour altitude. From this point, the mesh
+    # altitudes is completely determined and no change are supposed to
+    # occur.
+    builder.join_with_landtakes()
+    return builder.equivalent_site, builder.mesh, builder.material_by_face
+
+
 class Builder(object):
 
-    def __init__(self, mainsite, allow_features_outside_mainsite=True):
+    def __init__(self, mainsite):
         self.mainsite = mainsite
-        self._allow_outside = allow_features_outside_mainsite
         self.cleaned = None # The cleaned and merged site
         self.alti = ReferenceElevationMesh() # Altimetric base
         self.mesh = None
@@ -32,24 +53,6 @@ class Builder(object):
     @property
     def equivalent_site(self):
         return self.cleaned.equivalent_site
-
-    def complete_processing(self):
-        self.cleaned = recursively_merge_all_subsites(
-            self.mainsite, allow_outside=self._allow_outside)
-        # First get an ElevationMesh (possibly with vertices missing altitude,
-        # in order to be able to add non-altimetric features).
-        self.build_altimetric_base()
-        self.build_triangulation()
-        self.refine_triangulation()
-        self.compute_informations()
-        # From this point, all vertices in the mesh have an altitude.
-        self.compute_elevations()
-        self.fill_material_and_landtakes()
-        # Finally update the altitude of infrastructure landtakes by
-        # averaging using their contour altitude. From this point, the mesh
-        # altitudes is completely determined and no change are supposed to
-        # occur.
-        self.join_with_landtakes()
 
     def insert_feature(self, feature, mesher, **properties):
         try:
