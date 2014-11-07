@@ -102,6 +102,13 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         for i, v in enumerate(vertices):
             self.assertEquals(v.point(), mesh.to_cgal_point(coords[i % len(coords)]))
 
+    def test_materials(self):
+        equivalent_site, bmesh, material_by_face = builder.build_altimetry(
+            self.mainsite)
+        materials_id = set(mat.id for mat in material_by_face.values())
+        self.assertItemsEqual(materials_id, ['__default__', '__hidden__',
+                                             'grass', 'pine', 'Water'])
+
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot_complete_processing(self):
         equivalent_site, mesh, material_by_face = builder.build_altimetry(
@@ -165,10 +172,10 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                 materials = data['material']
                 self.assertEqual(vertices.count, 119)
                 self.assertEqual(faces.count, 198)
-                self.assertEqual(materials.count, 5)
                 materials_id = [''.join(map(chr, data)) for data, in materials.data]
                 self.assertItemsEqual(materials_id, ['__default__', '__hidden__',
                                                      'grass', 'pine', 'Water'])
+                self.assertEqual(materials.count, 5)
         finally:
             os.remove(f.name)
 
