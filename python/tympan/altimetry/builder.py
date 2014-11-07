@@ -19,19 +19,20 @@ def build_altimetry(mainsite, allow_features_outside_mainsite=True):
     """Return the results of altimetry building from a site tree model."""
     cleaner = recursively_merge_all_subsites(
         mainsite, allow_outside=allow_features_outside_mainsite)
-    builder = MeshBuilder(cleaner)
+    merged_site = cleaner.merged_site()
+    builder = MeshBuilder(merged_site)
     mesh = builder.build_mesh()
     filler = MeshFiller(mesh, builder.vertices_for_feature)
     filler.fill_material_and_landtakes(mainsite, cleaner)
     builder.join_with_landtakes(mesh)
-    return cleaner.equivalent_site, mesh, filler.material_by_face
+    return merged_site, mesh, filler.material_by_face
 
 
 class MeshBuilder(object):
     """Build an elevation mesh from a site cleaner."""
 
-    def __init__(self, cleaner):
-        self._cleaner = cleaner
+    def __init__(self, site):
+        self._site = site
         self.size_criterion = 0.0 # zero means no size criterion
         self.shape_criterion = 0.125
         self.vertices_for_feature = {}
@@ -64,7 +65,7 @@ class MeshBuilder(object):
     def _insert_feature(self, feature, mesher, **properties):
         """Insert a `feature` into a mesh."""
         try:
-            shape = self._cleaner.geom[feature.id]
+            shape = self._site.features_by_id[feature.id].shape
         except KeyError:
             # The element was filtered out (e.g. it was outside of its sub-site)
             return None
@@ -93,7 +94,7 @@ class MeshBuilder(object):
         The mesh is built by walking the equivalent site for level curves *only*.
         """
         alti = ReferenceElevationMesh() # Altimetric base
-        for level_curve in self._cleaner.equivalent_site.level_curves:
+        for level_curve in self._site.level_curves:
             props = level_curve.build_properties()
             assert 'altitude' in props
             vertices = self._insert_feature(level_curve, alti, **props)
@@ -116,7 +117,7 @@ class MeshBuilder(object):
         altimetric features inserted.
         """
         mesh = self._copy_mesh(altimesh)
-        for feature in self._cleaner.equivalent_site.non_altimetric_features:
+        for feature in self._site.non_altimetric_features:
             vertices = self._insert_feature(feature, mesh,
                                             **feature.build_properties())
             self.vertices_for_feature[feature.id] = vertices
@@ -138,8 +139,7 @@ class MeshBuilder(object):
         NB: This has the restriction that building in a strong slopes
         are not well supported: they produce artifact in the altimetry.
         """
-        equivalent_site = self._cleaner.equivalent_site
-        for landtake in equivalent_site.landtakes:
+        for landtake in self._site.landtakes:
             polyline = self.vertices_for_feature[landtake.id]
             mean_alt = np.mean([mesh.vertices_info[vh].altitude
                                 for vh in polyline])

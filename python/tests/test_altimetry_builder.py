@@ -53,13 +53,15 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         for id_ in ["{Mainsite ref altitude}", "{Subsub level curve}"]:
             self.assertIn(id_, cleaner.equivalent_site.features_by_id)
             self.assertIn(id_, cleaner.geom)
-        alti = builder.MeshBuilder(cleaner)._build_altimetric_base()
+        msite = cleaner.merged_site()
+        alti = builder.MeshBuilder(msite)._build_altimetric_base()
         common_expectations = [((0, 0), {'altitude': self.altitude_A})]
         self.check_vertices_props(alti, common_expectations)
 
     def test_build_triangulation(self):
         cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        mbuilder = builder.MeshBuilder(cleaner)
+        msite = cleaner.merged_site()
+        mbuilder = builder.MeshBuilder(msite)
         alti = mbuilder._build_altimetric_base()
         bmesh = mbuilder._build_triangulation(alti)
         mbuilder._compute_informations(bmesh)
@@ -72,7 +74,8 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
 
     def test_compute_elevations(self):
         cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        mbuilder = builder.MeshBuilder(cleaner)
+        msite = cleaner.merged_site()
+        mbuilder = builder.MeshBuilder(msite)
         alti = mbuilder._build_altimetric_base()
         bmesh = mbuilder._build_triangulation(alti)
         mbuilder._compute_informations(bmesh)
@@ -92,7 +95,8 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                                                parent_site=self.mainsite,
                                                id="{some building}")
         cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        mbuilder = builder.MeshBuilder(cleaner)
+        msite = cleaner.merged_site()
+        mbuilder = builder.MeshBuilder(msite)
         alti = mbuilder._build_altimetric_base()
         bmesh = mbuilder._build_triangulation(alti)
         mbuilder._compute_informations(bmesh)
@@ -127,7 +131,8 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot_landtake_flooding(self):
         cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        mbuilder = builder.MeshBuilder(cleaner)
+        site = cleaner.merged_site()
+        mbuilder = builder.MeshBuilder(msite)
         bmesh = mbuilder.build_mesh(refine=False)
 
         mfiller = builder.MeshFiller(bmesh, mbuilder.vertices_for_feature)
