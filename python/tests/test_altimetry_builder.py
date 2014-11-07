@@ -146,8 +146,10 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         for fh in flood_seeds:
             marks = [bmesh.point_for_face(f) for f in flood_seeds]
             visu.plot_points_seq(plotter.ax, marks, marker='*')
+        material_by_faces = mfiller.fill_material_and_landtakes(
+            self.mainsite, cleaner)
         for fh in bmesh.cdt.finite_faces():
-            material = mfiller.material_by_face.get(fh)
+            material = material_by_face.get(fh)
             if material is None : continue
             plotter.plot_face(fh, material_id=material.id)
         plotter.show()

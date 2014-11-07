@@ -23,9 +23,9 @@ def build_altimetry(mainsite, allow_features_outside_mainsite=True):
     builder = MeshBuilder(merged_site)
     mesh = builder.build_mesh()
     filler = MeshFiller(mesh, builder.vertices_for_feature)
-    filler.fill_material_and_landtakes(mainsite, cleaner)
+    material_by_face = filler.fill_material_and_landtakes(mainsite, cleaner)
     builder.join_with_landtakes(mesh)
-    return merged_site, mesh, filler.material_by_face
+    return merged_site, mesh, material_by_face
 
 
 class MeshBuilder(object):
@@ -160,23 +160,31 @@ class MeshFiller(object):
     def __init__(self, mesh, vertices_for_feature):
         self._mesh = mesh
         self._vertices_for_feature = vertices_for_feature
-        self.material_by_face = {}
 
     def fill_material_and_landtakes(self, mainsite, cleaner):
         """Build the face to material mapping."""
-        assert len(self.material_by_face) == 0
+        material_by_face = {}
+
+        def fill_feature(feature, floodercls):
+            """Update material_by_face with feature's faces using specified
+            flooder.
+            """
+            self._check_feature_inserted(feature, mainsite)
+            faces = self._faces_for_polygonal_feature(
+                feature, flooder_class=floodercls)
+            for fh in faces:
+                if fh not in material_by_face:
+                    material_by_face[fh] = feature.material
+
         for landtake in mainsite.landtakes:
-            self._check_feature_inserted(landtake, mainsite)
-            self._fill_polygonal_feature(landtake,
-                                         flooder_class=LandtakeFaceFlooder)
+            fill_feature(landtake, LandtakeFaceFlooder)
         for material_area_id in cleaner.material_areas_inner_first():
             material_area = cleaner.equivalent_site.features_by_id[material_area_id]
-            self._check_feature_inserted(material_area, mainsite)
-            self._fill_polygonal_feature(material_area,
-                                         flooder_class=MaterialFaceFlooder)
+            fill_feature(material_area, MaterialFaceFlooder)
         for fh in self._mesh.cdt.finite_faces():
-            if fh not in self.material_by_face:
-                self.material_by_face[fh] = datamodel.DEFAULT_MATERIAL
+            if fh not in material_by_face:
+                material_by_face[fh] = datamodel.DEFAULT_MATERIAL
+        return material_by_face
 
     @staticmethod
     def _check_feature_inserted(feature, site):
@@ -184,13 +192,10 @@ class MeshFiller(object):
             raise ValueError("Only features already inserted can be filled ID:%s"
                              % feature.id)
 
-    def _fill_polygonal_feature(self, feature, flooder_class):
+    def _faces_for_polygonal_feature(self, feature, flooder_class):
+        """Return the list of faces within a polygonal feature"""
         vertices = self._vertices_for_feature[feature.id]
         close_it = vertices[0] != vertices[-1]
         flooder = self._mesh.flood_polygon(flooder_class, vertices,
                                            close_it=close_it)
-        affected_faces = [fh for fh in flooder.visited
-                          if fh not in self.material_by_face]
-        for fh in affected_faces:
-            self.material_by_face[fh] = feature.material
-        return affected_faces
+        return flooder.visited
