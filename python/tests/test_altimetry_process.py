@@ -7,6 +7,8 @@ from numpy.testing import assert_allclose
 from utils import TympanTC, TEST_PROBLEM_DIR
 
 from tympan import Simulation
+from tympan.altimetry.datamodel import VegetationArea
+from tympan.altimetry import builder
 try:
     import tympan.business2solver as bus2solv
     MISSING_EXT = False
@@ -145,7 +147,7 @@ class TestProcessAltimetry(TympanTC):
                          'Site_avec_2_terrain_1_avec_veget_1_sans.xml')
         with self.no_output():
             sml = Simulation.from_xml(fpath)
-        asite, _, material_by_face = sml.altimetry()
+        asite, _, feature_by_face = sml.altimetry()
         matarea = list(asite.material_areas)
         self.assertEqual(len(matarea), 2)
         try:
@@ -153,8 +155,8 @@ class TestProcessAltimetry(TympanTC):
         except KeyError:
             self.fail('vegetation area not found in altimetry site')
         self.assertEqual(vegarea.height, 10)
-        vegfaces = [fh for fh, mat in material_by_face.items()
-                    if mat == vegarea.material]
+        vegfaces = [fh for fh, feature in feature_by_face.items()
+                    if isinstance(feature, VegetationArea)]
         # Just check there are faces in the vegetation area.
         self.assertTrue(vegfaces)
 
@@ -166,8 +168,9 @@ class TestProcessAltimetry(TympanTC):
             sml = Simulation.from_xml(fpath)
             project = sml._project
             # Compute altimetry and retrieve the resulting mesh
-            _, mesh, material_by_face = sml.altimetry()
+            _, mesh, feature_by_face = sml.altimetry()
             # Apply new altimetry on the site infrastructure
+            material_by_face = builder.material_by_face(feature_by_face)
             project.site.update_altimetry(mesh, material_by_face)
             project.update()
             # Build solver model and check source altimetry

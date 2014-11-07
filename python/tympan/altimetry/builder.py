@@ -25,7 +25,7 @@ def build_altimetry(mainsite, allow_features_outside_mainsite=True):
     filler = MeshFiller(mesh, builder.vertices_for_feature)
     feature_by_face = filler.fill_material_and_landtakes(mainsite, cleaner)
     builder.join_with_landtakes(mesh)
-    return merged_site, mesh, material_by_face(feature_by_face)
+    return merged_site, mesh, feature_by_face
 
 
 def material_by_face(feature_by_face):
