@@ -8,6 +8,7 @@ of all the site note of a compound site to build a single site.
 
 
 from collections import defaultdict
+from copy import copy
 
 from shapely import geometry
 from . datamodel import SiteNode, InconsistentGeometricModel, SiteLandtake
@@ -96,6 +97,16 @@ class SiteNodeGeometryCleaner(object):
 
     def feature_from_id(self, id):
         return self.equivalent_site.features_by_id[id]
+
+    def merged_site(self):
+        """Return the merged site"""
+        merged_site = SiteNode(self.sitenode.build_coordinates()[0],
+                               id=self.sitenode.id)
+        for feature_id, shape in self.geom.iteritems():
+            feature = copy(self.feature_from_id(feature_id))
+            feature.set_shape(shape)
+            merged_site.add_child(feature)
+        return merged_site
 
     def __getitem__(self, feature_id):
         return self.geom[feature_id], self.feature_from_id(feature_id).build_properties()

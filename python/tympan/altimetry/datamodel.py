@@ -78,6 +78,8 @@ class GeometricFeature(object):
         self._shape = shape
         if isinstance(shape, geometry.base.BaseMultipartGeometry):
             self._coords = [subshape.coords for subshape in shape.geoms]
+        elif isinstance(shape, geometry.Polygon):
+            self._coords = shape.exterior.coords
         else:
             self._coords = shape.coords
 
