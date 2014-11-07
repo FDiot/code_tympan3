@@ -147,14 +147,16 @@ class TympanTC(unittest.TestCase):
             import tympan.models.business as tybusiness
             import tympan.business2solver as bus2solv
             from tympan import Simulation
+            from tympan.altimetry import builder
             # read acoustic project
             tybusiness.init_tympan_registry()
             project = tybusiness.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
             site = project.site
             # Build a Simulation and compute altimetry.
             sml = Simulation(project)
-            _, mesh, material_by_face = sml.altimetry()
+            _, mesh, feature_by_face = sml.altimetry()
             # update site altimetry
+            material_by_face = builder.material_by_face(feature_by_face)
             site.update_altimetry(mesh, material_by_face)
             project.update()
             # build solver model

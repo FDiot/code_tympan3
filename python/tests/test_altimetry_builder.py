@@ -107,21 +107,22 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             self.assertEquals(v.point(), mesh.to_cgal_point(coords[i % len(coords)]))
 
     def test_materials(self):
-        equivalent_site, bmesh, material_by_face = builder.build_altimetry(
+        equivalent_site, bmesh, feature_by_face = builder.build_altimetry(
             self.mainsite)
+        material_by_face = builder.material_by_face(feature_by_face)
         materials_id = set(mat.id for mat in material_by_face.values())
         self.assertItemsEqual(materials_id, ['__default__', '__hidden__',
                                              'grass', 'pine', 'Water'])
 
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot_complete_processing(self):
-        equivalent_site, mesh, material_by_face = builder.build_altimetry(
+        equivalent_site, mesh, feature_by_face = builder.build_altimetry(
             self.mainsite)
         plotter = visu.MeshedCDTPlotter(mesh, title=self._testMethodName)
         equivalent_site.plot(
             plotter.ax, alt_geom_map=equivalent_site._cleaner.geom)
         plotter.plot_edges()
-
+        material_by_face = builder.material_by_face(feature_by_face)
         for fh in mesh.cdt.finite_faces():
             material = material_by_face.get(fh)
             if material is None : continue
@@ -146,8 +147,8 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         for fh in flood_seeds:
             marks = [bmesh.point_for_face(f) for f in flood_seeds]
             visu.plot_points_seq(plotter.ax, marks, marker='*')
-        material_by_faces = mfiller.fill_material_and_landtakes(
-            self.mainsite, cleaner)
+        material_by_face = builder.material_by_face(
+            mfiller.fill_material_and_landtakes(self.mainsite, cleaner))
         for fh in bmesh.cdt.finite_faces():
             material = material_by_face.get(fh)
             if material is None : continue
@@ -155,19 +156,18 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         plotter.show()
 
     def test_join_with_landtakes(self):
-        equivalent_site, mesh, material_by_face = builder.build_altimetry(
+        equivalent_site, mesh, feature_by_face = builder.build_altimetry(
             self.mainsite)
-        # fetch infrastructure landtakes faces assuming they have
-        # HIDDEN_MATERIAL.
-        landtake_faces = (fh for fh, mat in material_by_face.iteritems()
-                          if mat == HIDDEN_MATERIAL)
+        landtake_faces = (fh for fh, feature in feature_by_face.iteritems()
+                          if isinstance(feature, InfrastructureLandtake))
         altitudes = [mesh.vertices_info[fh.vertex(i)].altitude
                      for fh in landtake_faces for i in range(3)]
         assert_allclose(altitudes, altitudes[0])
 
     def test_ply_export(self):
         from plyfile import PlyData
-        _, mesh, material_by_face = builder.build_altimetry(self.mainsite)
+        _, mesh, feature_by_face = builder.build_altimetry(self.mainsite)
+        material_by_face = builder.material_by_face(feature_by_face)
         try:
             # delete=False and manual removal to avoid pb on windows platform
             # (though proper fix would imply stream based api)

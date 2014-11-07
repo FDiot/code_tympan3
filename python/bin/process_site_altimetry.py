@@ -4,7 +4,7 @@ import sys
 import logging
 
 from tympan import Simulation
-from tympan.altimetry import export_to_ply
+from tympan.altimetry import export_to_ply, builder
 
 
 def set_logger(fpath='tympan.log'):
@@ -26,7 +26,8 @@ def main(input_project, result_file):
         except RuntimeError:
             logging.exception("Couldn't load the acoustic project from %s file", input_project)
             raise
-        _, mesh, material_by_face = sml.altimetry(allow_features_outside_mainsite=True)
+        _, mesh, feature_by_face = sml.altimetry(allow_features_outside_mainsite=True)
+        material_by_face = builder.material_by_face(feature_by_face)
         export_to_ply(mesh, material_by_face, result_file)
     except Exception as exc:
         sys.stderr.write('Error: %s' % exc)
