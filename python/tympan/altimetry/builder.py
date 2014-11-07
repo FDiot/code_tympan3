@@ -23,9 +23,18 @@ def build_altimetry(mainsite, allow_features_outside_mainsite=True):
     builder = MeshBuilder(merged_site)
     mesh = builder.build_mesh()
     filler = MeshFiller(mesh, builder.vertices_for_feature)
-    material_by_face = filler.fill_material_and_landtakes(mainsite, cleaner)
+    feature_by_face = filler.fill_material_and_landtakes(mainsite, cleaner)
     builder.join_with_landtakes(mesh)
-    return merged_site, mesh, material_by_face
+    return merged_site, mesh, material_by_face(feature_by_face)
+
+
+def material_by_face(feature_by_face):
+    """Return a material_by_face mapping given a feature_by_face mapping"""
+    m2f = {}
+    for fh, feature in feature_by_face.iteritems():
+        material = feature.material if feature else datamodel.DEFAULT_MATERIAL
+        m2f[fh] = material
+    return m2f
 
 
 class MeshBuilder(object):
@@ -162,19 +171,19 @@ class MeshFiller(object):
         self._vertices_for_feature = vertices_for_feature
 
     def fill_material_and_landtakes(self, mainsite, cleaner):
-        """Build the face to material mapping."""
-        material_by_face = {}
+        """Build the face to geometrical feature mapping."""
+        feature_by_face = {}
 
         def fill_feature(feature, floodercls):
-            """Update material_by_face with feature's faces using specified
+            """Update feature_by_face with feature's faces using specified
             flooder.
             """
             self._check_feature_inserted(feature, mainsite)
             faces = self._faces_for_polygonal_feature(
                 feature, flooder_class=floodercls)
             for fh in faces:
-                if fh not in material_by_face:
-                    material_by_face[fh] = feature.material
+                if fh not in feature_by_face:
+                    feature_by_face[fh] = feature
 
         for landtake in mainsite.landtakes:
             fill_feature(landtake, LandtakeFaceFlooder)
@@ -182,9 +191,9 @@ class MeshFiller(object):
             material_area = cleaner.equivalent_site.features_by_id[material_area_id]
             fill_feature(material_area, MaterialFaceFlooder)
         for fh in self._mesh.cdt.finite_faces():
-            if fh not in material_by_face:
-                material_by_face[fh] = datamodel.DEFAULT_MATERIAL
-        return material_by_face
+            if fh not in feature_by_face:
+                feature_by_face[fh] = None
+        return feature_by_face
 
     @staticmethod
     def _check_feature_inserted(feature, site):
