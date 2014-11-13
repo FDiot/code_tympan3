@@ -214,8 +214,8 @@ class LevelCurve(TympanFeature):
 class PolygonalTympanFeature(TympanFeature):
     geometric_type = "Polygon"
 
-    def __init__(self, coords, **kwargs):
-        self.holes = [_preproc_point_seq(hole) for hole in kwargs.pop("holes", [])]
+    def __init__(self, coords, holes=(), **kwargs):
+        self.holes = [_preproc_point_seq(hole) for hole in holes]
         super(PolygonalTympanFeature, self).__init__(coords, **kwargs)
 
     def build_coordinates(self):
