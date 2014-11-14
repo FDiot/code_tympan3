@@ -589,6 +589,19 @@ class ElevationProfileTC(unittest.TestCase):
         # Inside inner-most rectangle.
         self.assertEqual(point_material(2.5).id, 2)
 
+    def test_point_data_vertex(self):
+        """Test `point_data` method when the point is on a vertex."""
+        # Beginning of segment is on a vertex of the mesh (first point of
+        # outer rectangle).
+        segment = LineString([(1, 1), (2, 3)])
+        profile = mesh.ElevationProfile(self.mesh, segment)
+        # Point on a vertex.
+        p = self.rectangles[0][0]
+        fh, vh = self.mesh.locate_point(p)
+        self.assertIsInstance(vh, mesh.Vertex_handle)
+        d = profile.point_data(0, face_data=self._material_by_face())
+        self.assertEqual(d.id, 0)
+
     def assert_within(self, value, bounds):
         lb, ub = bounds
         if not lb <= value <= ub:

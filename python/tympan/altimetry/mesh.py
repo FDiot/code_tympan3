@@ -906,7 +906,10 @@ class ElevationProfile(object):
         """Return some "data" at a point located at `dist` from segment origin
         based on the mesh face the point belongs to and the `face_data`
         mapping which relates mesh face handles to these "data". `default` is
-        used if the face is not found in the `face_data` map.
+        used if the face is not found in the `face_data` map or the the point
+        if outside the mesh convex hull. In case the point is located on a
+        mesh vertex, the data of any of the mesh faces which the vertex
+        belongs to will be used.
 
         For instance, given a `material_by_face` map::
 
@@ -923,7 +926,11 @@ class ElevationProfile(object):
             return default
         if isinstance(vh_or_i, Vertex_handle):
             # Point is a vertex.
-            raise NotImplementedError('point is on a vertex')
+            for fh in self._mesh.cdt.finite_faces():
+                if fh.has_vertex(vh_or_i):
+                    break
+            else:
+                return default
         if isinstance(vh_or_i, int):
             # Point is on an edge.
             if self._mesh.cdt.is_infinite(fh): # get a finite face if needed
