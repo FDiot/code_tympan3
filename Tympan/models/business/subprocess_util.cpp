@@ -145,7 +145,7 @@ bool python(QStringList args, std::string& error_msg)
     OMessageManager& logger =  *OMessageManager::get();
     // Start chrono
     OChronoTime startTime;
-    logger.debug("Lancement du script python...");
+    logger.debug("Lancement du script python: %s", args.join(" ").toStdString().c_str());
     QProcess python;
     float comp_duration (0.);
     bool comp_finished (false);
