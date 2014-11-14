@@ -143,7 +143,7 @@ class Simulation(object):
         then cleaning the latter by merging features.
         """
         altimetry_site = self._build_altimetry_site()
-        return build_altimetry(altimetry_site)
+        return build_altimetry(altimetry_site, **kwargs)
 
     def _build_altimetry_site(self):
         """Build a Site model from altimetry data model using a TYSite"""
