@@ -134,6 +134,7 @@ DOM_Element TYProjet::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "auteur", _auteur);
     TYXMLTools::addElementStringValue(domNewElem, "dateCreation", _dateCreation);
     TYXMLTools::addElementStringValue(domNewElem, "dateModif", _dateModif);
+    TYXMLTools::addElementStringValue(domNewElem, "comment", _comment);
     TYXMLTools::addElementDoubleValue(domNewElem, "delaunayTolerence", _delaunayTolerance);
     TYXMLTools::addElementDoubleValue(domNewElem, "distMaxBetweenPoints", _maxDistBetweenPoints);
     TYXMLTools::addElementBoolValue(domNewElem, "useDefGeomVal", _useDefaultGeomVal);
