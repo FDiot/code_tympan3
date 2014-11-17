@@ -7,13 +7,20 @@ from numpy.testing import assert_allclose
 
 from utils import TympanTC, TEST_PROBLEM_DIR
 
-import tympan.altimetry.process_altimetry as tyalti
 from tympan.altimetry.builder import Builder
-import tympan.models.business as tybusiness
-import tympan.business2solver as bus2solv
+try:
+    import tympan.altimetry.process_altimetry as tyalti
+    import tympan.models.business as tybusiness
+    import tympan.business2solver as bus2solv
+    MISSING_EXT = False
+except ImportError:
+    MISSING_EXT = True
+
 # must be passed to process altimetry. Its content will be ignored
 result_file = 'out.ply'
 
+
+@unittest.skipIf(MISSING_EXT, 'could not import Tympan extension modules')
 class TestProcessAltimetry(TympanTC):
 
     def test_process_site_landtake(self):
