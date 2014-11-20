@@ -119,6 +119,4 @@ for project_file in os.listdir(_TEST_PROBLEM_DIR):
                                                                          receptor_file_path))
 
 if __name__ == '__main__':
-    from utils import main, config_cython_extensions_path
-    config_cython_extensions_path()
-    main()
+    unittest.main()

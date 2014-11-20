@@ -25,5 +25,4 @@ class TestAltimetry(unittest.TestCase):
                 ') the error was: ' + exc.message)
 
 if __name__ == '__main__':
-    from utils import main
-    main()
+    unittest.main()

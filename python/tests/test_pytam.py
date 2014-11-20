@@ -5,7 +5,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-from utils import TEST_DATA_DIR, TEST_SOLVERS_DIR, TympanTC, no_output
+from utils import TEST_DATA_DIR, TympanTC, no_output
 
 with no_output():
     import tympan.business2solver as bus2solv
@@ -85,6 +85,4 @@ class TestPyTam(TympanTC):
         # TODO to be completed: cf. ticket #1468184
 
 if __name__ == '__main__':
-    from utils import main, config_cython_extensions_path
-    config_cython_extensions_path()
-    main()
+    unittest.main()

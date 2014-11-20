@@ -625,5 +625,4 @@ class ElevationProfileTC(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    from utils import main
-    main()
+    unittest.main()

@@ -31,5 +31,5 @@ class TestSolverConfig(TympanTC):
 
 
 if __name__ == '__main__':
-    from utils import main
-    main()
+    import unittest
+    unittest.main()
