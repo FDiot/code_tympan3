@@ -6,7 +6,7 @@ from numpy.testing import assert_allclose
 
 from utils import TympanTC, TEST_PROBLEM_DIR
 
-from tympan import Simulation
+from tympan.simulation import Simulation
 from tympan.altimetry.datamodel import VegetationArea
 from tympan.altimetry import builder
 try:

@@ -26,7 +26,8 @@ except ImportError:
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
     raise ImportError(err)
 
-from tympan import SOLVER_CONFIG_ATTRIBUTES, Simulation
+from tympan import SOLVER_CONFIG_ATTRIBUTES
+from tympan.simulation import Simulation
 from tympan.altimetry import export_to_ply, builder
 from tympan.models.solver import Configuration
 
