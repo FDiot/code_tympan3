@@ -3,7 +3,6 @@ import numpy  as np
 import unittest
 import tempfile
 
-from utils import main
 
 DEBUG_TMP_FILES = os.environ.get('DEBUG_TMP_FILES', False)
 
@@ -38,4 +37,4 @@ class PLYFileTC(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    main()
+    unittest.main()

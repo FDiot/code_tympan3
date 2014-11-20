@@ -13,12 +13,6 @@ TEST_DATA_DIR
 
 TEST_SOLVERS_DIR
     absolute path to the directory holding the solvers
-
-Handle the configuration of sys.path to find either the Debug or
-Release the cython module.
-
-THIS EXPECTS THE NAME OF THE BUILD CONFIG TO BE TESTED IS PASSED
-AS FIRST ARGUMENT TO THE SCRIPT
 """
 
 import sys
@@ -28,16 +22,20 @@ import unittest
 from contextlib import contextmanager
 import numpy as np
 
+# Environment variables.
+
 _HERE = osp.realpath(osp.dirname(__file__))
 PROJECT_BASE = osp.abspath(osp.join(_HERE, '..', '..'))
 
 TEST_DATA_DIR = osp.join(PROJECT_BASE, 'tests', 'data')
 assert osp.isdir(TEST_DATA_DIR), "The test data dir does not exists '%s'" % TEST_DATA_DIR
 
-TEST_SOLVERS_DIR = osp.join(PROJECT_BASE, 'pluginsd')
-if not osp.isdir(TEST_SOLVERS_DIR):
-    TEST_SOLVERS_DIR = osp.abspath(osp.join(_HERE, '..', '..', 'plugins'))
-assert osp.isdir(TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % TEST_SOLVERS_DIR
+for d in ('pluginsd', 'plugins'):
+    TEST_SOLVERS_DIR = osp.join(PROJECT_BASE, d)
+    if osp.isdir(TEST_SOLVERS_DIR):
+        break
+else:
+    raise RuntimeError("The test solver plugins dir wasn't found")
 
 TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'projects-panel')
 assert osp.isdir(TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % TEST_PROBLEM_DIR
@@ -45,30 +43,8 @@ assert osp.isdir(TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" 
 TEST_RESULT_DIR = osp.join(TEST_DATA_DIR, 'expected')
 assert osp.isdir(TEST_RESULT_DIR), "The test result dir does not exists '%s'" % TEST_RESULT_DIR
 
-_SOLVERS_DIR = {
-    'Release' : osp.abspath(osp.join(PROJECT_BASE, 'plugins')),
-    'Debug'   : osp.abspath(osp.join(PROJECT_BASE, 'pluginsd'))
-}
 
-_CYTHON_EXTENSION_DIR = {
-    'Release' : osp.abspath(osp.join(PROJECT_BASE, 'cython')),
-    'Debug'   : osp.abspath(osp.join(PROJECT_BASE, 'cython_d'))
-}
-
-assert frozenset(_SOLVERS_DIR) == frozenset(_CYTHON_EXTENSION_DIR)
-_KNOWN_CONFIGURATIONS = frozenset(_SOLVERS_DIR)
-
-CONFIG = len(sys.argv) > 1 and sys.argv[1] in _KNOWN_CONFIGURATIONS and sys.argv[1]
-
-def config_cython_extensions_path():
-    if CONFIG:
-        TEST_CYTHON_EXTENSION_DIR = _CYTHON_EXTENSION_DIR[CONFIG]
-        assert osp.isdir(TEST_CYTHON_EXTENSION_DIR ), "The test cython dir does not exists '%s'" % TEST_CYTHON_EXTENSION_DIR
-        sys.path.append(TEST_CYTHON_EXTENSION_DIR)
-        TEST_SOLVERS_DIR = _SOLVERS_DIR[CONFIG]
-        assert osp.isdir(TEST_SOLVERS_DIR), "The test solver plugins dir does not exists '%s'" % TEST_SOLVERS_DIR
-    else:
-        print 'WARNING: no config specification or unknown config'
+# Utilities.
 
 def compare_floats(x, y):
     """ Compare x and y which are float arrays:
@@ -85,14 +61,6 @@ def compare_floats(x, y):
                 return 1
     return 0 # arrays are equal
 
-def main():
-    # The build configuration (Debug or Release) to be tested is added as
-    # first argument by CTest and need to be removed from sys.argv not to
-    # confuse unittest
-    if CONFIG:
-        del sys.argv[1]
-    unittest.main()
-
 
 # low level output redirection, see
 # http://stackoverflow.com/questions/4675728/redirect-stdout-to-a-file-in-python/22434262#22434262
@@ -106,7 +74,7 @@ def fileno(file_or_fd):
 @contextmanager
 def stdout_redirected(to=os.devnull, stdout=None):
     if stdout is None:
-       stdout = sys.stdout
+        stdout = sys.stdout
 
     stdout_fd = fileno(stdout)
     # copy stdout_fd before it is overwritten
@@ -125,7 +93,7 @@ def stdout_redirected(to=os.devnull, stdout=None):
 
 @contextmanager
 def no_output(to=os.devnull, err_to=None):
-    if err_to is None :
+    if err_to is None:
         err_to = to
     with stdout_redirected(to=to, stdout=sys.stdout):
         with stdout_redirected(to=err_to, stdout=sys.stderr):

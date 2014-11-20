@@ -185,6 +185,4 @@ class TestProcessAltimetry(TympanTC):
 
 
 if __name__ == '__main__':
-    from utils import main, config_cython_extensions_path
-    config_cython_extensions_path()
-    main()
+    unittest.main()

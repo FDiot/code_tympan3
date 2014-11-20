@@ -361,5 +361,4 @@ class VisualisationTC(unittest.TestCase, TestFeatures):
         cleaner.equivalent_site.plot(self.ax, alt_geom_map=cleaner.geom)
 
 if __name__ == '__main__':
-    from utils import main
-    main()
+    unittest.main()

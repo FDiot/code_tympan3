@@ -187,5 +187,4 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             os.remove(f.name)
 
 if __name__ == '__main__':
-    from utils import main
-    main()
+    unittest.main()

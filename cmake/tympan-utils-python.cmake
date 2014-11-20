@@ -52,7 +52,7 @@ function(add_python_test)
   add_test( 
     NAME ${_TARGET}
     # [WORKING_DIRECTORY dir]
-    COMMAND ${PYTHON_EXECUTABLE} "${_SCRIPT}" $<CONFIGURATION> -v 
+    COMMAND ${PYTHON_EXECUTABLE} "${_SCRIPT}" -v 
     )
   _common_test_config()
 
