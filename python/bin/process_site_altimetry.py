@@ -3,7 +3,7 @@
 import sys
 import logging
 
-from tympan import Simulation
+from tympan.simulation import Simulation
 from tympan.altimetry import export_to_ply, builder
 
 
