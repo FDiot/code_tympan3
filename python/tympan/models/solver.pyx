@@ -127,8 +127,21 @@ cdef class ResultModel:
 
 cdef class Solver:
 
-    def solve_problem(self, ProblemModel problem, ResultModel result):
-        return self.thisptr.solve(problem.thisptr.get()[0], result.thisptr.get()[0])
+    @cy.locals(model=ProblemModel)
+    @cy.returns((bool, ResultModel))
+    def solve_problem(self, model):
+        """Solve the acoustic problem by calling the underlying
+        SolverInterface::solve() C++ method.
+
+        Raises a RuntimeError in case of computation failure.
+        """
+        result = ResultModel()
+        if not self.thisptr.solve(model.thisptr.get()[0],
+                                  result.thisptr.get()[0]):
+            raise RuntimeError(
+                'Computation failed (C++ SolverInterface::solve() method '
+                'returned false)')
+        return result
 
     def purge(self):
         self.thisptr.purge()
