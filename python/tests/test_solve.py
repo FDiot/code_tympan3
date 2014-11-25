@@ -7,6 +7,7 @@ from utils import (TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC
 
 with no_output():
     import tympan.models.business as tybusiness
+    import tympan.models.solver as tysolver
     import tympan.business2solver as bus2solv
     from tympan.models.solver import Configuration
 
@@ -31,11 +32,12 @@ def make_test_with_file(test_file):
                 osp.join(TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation
             solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, computation)
+            solver_result = tysolver.ResultModel()
             bus2solv_conv = bus2solv.Business2SolverConverter(
                 computation, project.site)
-            result = solver.solve_problem(model, bus2solv_conv.solver_result)
-            bus2solv_conv.postprocessing(model)
-        self.assertTrue(result)
+            success = solver.solve_problem(model, solver_result)
+            bus2solv_conv.postprocessing(model, solver_result)
+        self.assertTrue(success)
         # Load the expected result
         result_file = osp.join(TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
         with self.no_output():
