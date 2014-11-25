@@ -172,8 +172,7 @@ class TestProcessAltimetry(TympanTC):
             _, mesh, feature_by_face = builder.build_altimetry(asite)
             # Apply new altimetry on the site infrastructure
             material_by_face = builder.material_by_face(feature_by_face)
-            project.site.update_altimetry(mesh, material_by_face)
-            project.update()
+            project.update_site_altimetry(mesh, material_by_face)
             # Build solver model and check source altimetry
             bus2solv_conv = bus2solv.Business2SolverConverter(project.current_computation,
                                                               project.site)
