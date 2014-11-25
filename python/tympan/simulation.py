@@ -1,7 +1,7 @@
 """Simulation for Code_TYMPAN."""
 from warnings import warn
 
-from tympan.models.business import Project, init_tympan_registry
+from tympan.models.business import Project
 from tympan.altimetry import datamodel
 from tympan.altimetry.datamodel import (SiteNode, LevelCurve, WaterBody,
                                         GroundMaterial, MaterialArea,
@@ -127,7 +127,6 @@ class Simulation(object):
     @classmethod
     def from_xml(cls, fpath):
         """Build a Simulation by loading a project from a XML file."""
-        init_tympan_registry()
         project = Project.from_xml(fpath)
         return cls(project)
 

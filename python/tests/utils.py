@@ -117,7 +117,6 @@ class TympanTC(unittest.TestCase):
             from tympan.simulation import Simulation
             from tympan.altimetry import builder
             # read acoustic project
-            tybusiness.init_tympan_registry()
             project = tybusiness.Project.from_xml(osp.join(TEST_DATA_DIR, *path))
             site = project.site
             # Build a Simulation and compute altimetry.
