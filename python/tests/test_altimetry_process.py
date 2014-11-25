@@ -6,10 +6,10 @@ from numpy.testing import assert_allclose
 
 from utils import TympanTC, TEST_PROBLEM_DIR
 
-from tympan.simulation import Simulation
 from tympan.altimetry.datamodel import VegetationArea
 from tympan.altimetry import builder
 try:
+    from tympan.models.business import Project
     import tympan.business2solver as bus2solv
     MISSING_EXT = False
 except ImportError:
@@ -23,8 +23,8 @@ class TestProcessAltimetry(TympanTC):
         """Build altimetry site from TYProject and Site as read from XML file"""
         fpath = osp.join(TEST_PROBLEM_DIR, xmlfile)
         with self.no_output():
-            sml = Simulation.from_xml(fpath)
-        return sml._build_altimetry_site()
+            project = Project.from_xml(fpath)
+        return builder.build_sitenode(project.site)
 
     def test_process_site_landtake(self):
         asite = self.altimetry_site('1_PROJET_Site_emprise_seule.xml')
@@ -146,8 +146,9 @@ class TestProcessAltimetry(TympanTC):
         fpath = osp.join(TEST_PROBLEM_DIR,
                          'Site_avec_2_terrain_1_avec_veget_1_sans.xml')
         with self.no_output():
-            sml = Simulation.from_xml(fpath)
-        asite, _, feature_by_face = sml.altimetry()
+            project = Project.from_xml(fpath)
+        asite = builder.build_sitenode(project.site)
+        _, _, feature_by_face = builder.build_altimetry(asite)
         matarea = list(asite.material_areas)
         self.assertEqual(len(matarea), 2)
         try:
@@ -165,10 +166,10 @@ class TestProcessAltimetry(TympanTC):
             TEST_PROBLEM_DIR,
             '14_PROJET_GRAND_SITE_VIDE_AVEC_SOUS_SITE_Deplace_et_tourne.xml')
         with self.no_output():
-            sml = Simulation.from_xml(fpath)
-            project = sml._project
+            project = Project.from_xml(fpath)
+            asite = builder.build_sitenode(project.site)
             # Compute altimetry and retrieve the resulting mesh
-            _, mesh, feature_by_face = sml.altimetry()
+            _, mesh, feature_by_face = builder.build_altimetry(asite)
             # Apply new altimetry on the site infrastructure
             material_by_face = builder.material_by_face(feature_by_face)
             project.site.update_altimetry(mesh, material_by_face)

@@ -27,7 +27,6 @@ except ImportError:
     raise ImportError(err)
 
 from tympan import SOLVER_CONFIG_ATTRIBUTES
-from tympan.simulation import Simulation
 from tympan.altimetry import export_to_ply, builder
 from tympan.models.solver import Configuration
 
@@ -96,9 +95,8 @@ def solve(input_project, output_project, output_mesh, solverdir,
     if not multithreading_on:
         solver_config.NbThreads = 1
     # Recompute altimetry
-    # Rebuild topography with altimetry data model
-    sml = Simulation(project)
-    _, mesh, feature_by_face = sml.altimetry()
+    asite = builder.build_sitenode(project.site)
+    _, mesh, feature_by_face = builder.build_altimetry(asite)
     material_by_face = builder.material_by_face(feature_by_face)
     export_to_ply(mesh, material_by_face, output_mesh)
     # Update site and the project before building the solver model
