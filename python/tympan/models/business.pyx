@@ -770,6 +770,7 @@ cdef class Project:
     def from_xml(filepath):
         """ Build a project (TYProject) from a xml file
         """
+        init_tympan_registry()
         project = Project()
         # if an exception is raised from the C++ code, it will be converted to
         # RuntimeError python exception. what() message should be preserved.

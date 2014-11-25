@@ -68,7 +68,6 @@ def solve(input_project, output_project, output_mesh, solverdir,
         import pdb
         pdb.set_trace()
     ret = False
-    tybusiness.init_tympan_registry()
     # Load an existing project and retrieve its calcul to solve it
     try:
         project = tybusiness.Project.from_xml(input_project)
