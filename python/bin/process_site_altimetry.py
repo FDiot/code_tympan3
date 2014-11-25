@@ -3,7 +3,7 @@
 import sys
 import logging
 
-from tympan.simulation import Simulation
+from tympan.models.business import Project
 from tympan.altimetry import export_to_ply, builder
 
 
@@ -22,11 +22,13 @@ def main(input_project, result_file):
     """
     try:
         try:
-            sml = Simulation.from_xml(input_project)
+            project = Project.from_xml(input_project)
         except RuntimeError:
             logging.exception("Couldn't load the acoustic project from %s file", input_project)
             raise
-        _, mesh, feature_by_face = sml.altimetry(allow_features_outside_mainsite=True)
+        asite = builder.build_sitenode(project.site)
+        _, mesh, feature_by_face = builder.build_altimetry(
+            asite, allow_features_outside_mainsite=True)
         material_by_face = builder.material_by_face(feature_by_face)
         export_to_ply(mesh, material_by_face, result_file)
     except Exception as exc:
