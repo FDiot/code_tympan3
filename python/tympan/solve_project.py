@@ -106,15 +106,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
     solver_problem = project.build_model()
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  solver_problem.nsources, solver_problem.nreceptors)
-    errors = []
-    if solver_problem.nsources == 0:
-        errors.append('You must have at least one source to run a simulation.')
-        for (elt_id, elt_name) in site.outdated_elements:
-            errors.append('Update failed on element %s (id %s)' % (elt_name, elt_id))
-    if solver_problem.nreceptors == 0:
-        errors.append('You must have at least one receptor to run a simulation.')
-    if errors:
-        raise RuntimeError(os.linesep.join(errors))
+    _check_solver_model(solver_problem, site)
     # Load solver plugin and run it on the current computation
     solver = bus2solv.load_computation_solver(solverdir, comp)
     logging.debug("Calling C++ SolverInterface::solve() method")
@@ -133,3 +125,21 @@ def solve(input_project, output_project, output_mesh, solverdir,
     except ValueError:
         logging.exception("Couldn't export the acoustic results to %s file", output_project)
         raise
+
+
+def _check_solver_model(model, site):
+    """Various checks for a solver model, to be performed before computation.
+
+    Raises a RuntimeError in case of incomplete modelling.
+    """
+    errors = []
+    if model.nsources == 0:
+        errors.append(
+            'You must have at least one source to run a simulation.')
+        for id_, name in site.outdated_elements:
+            errors.append('Update failed on element %s (id %s)' % (name, id_))
+    if model.nreceptors == 0:
+        errors.append(
+            'You must have at least one receptor to run a simulation.')
+    if errors:
+        raise RuntimeError(os.linesep.join(errors))
