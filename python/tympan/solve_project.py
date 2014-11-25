@@ -100,8 +100,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
     material_by_face = builder.material_by_face(feature_by_face)
     export_to_ply(mesh, material_by_face, output_mesh)
     # Update site and the project before building the solver model
-    site.update_altimetry(mesh, material_by_face)
-    project.update()
+    project.update_site_altimetry(mesh, material_by_face)
     # Build an acoustic problem from the site of the computation
     bus2solv_conv = bus2solv.Business2SolverConverter(comp, project.site)
     bus2solv_conv.build_solver_problem()
