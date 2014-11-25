@@ -14,6 +14,7 @@ logging.basicConfig(stream=stream, level=logging.DEBUG,
 
 try:
     import tympan.models.business as tybusiness
+    import tympan.models.solver as tysolver
 except ImportError:
     err = "solve_project.py module couldn't find tympan.models.business cython library."
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
@@ -102,8 +103,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Update site and the project before building the solver model
     project.update_site_altimetry(mesh, material_by_face)
     # Solver model
-    solver_problem, bus2solv_conv = project.build_model()
-    solver_result = bus2solv_conv.solver_result
+    solver_problem = project.build_model()
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  solver_problem.nsources, solver_problem.nreceptors)
     errors = []
@@ -118,13 +118,15 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Load solver plugin and run it on the current computation
     solver = bus2solv.load_computation_solver(solverdir, comp)
     logging.debug("Calling C++ SolverInterface::solve() method")
+    solver_result = tysolver.ResultModel()
     ret = solver.solve_problem(solver_problem, solver_result)
     if ret is False:
         err = "Computation failed (C++ SolverInterface::solve() method returned false)"
         logging.error(err)
         raise RuntimeError(err)
     # Export solver results to the business model
-    bus2solv_conv.postprocessing()
+    bus2solv_conv = Business2SolverConverter(comp, site)
+    bus2solv_conv.postprocessing(model)
     # Reserialize project
     try:
         project.to_xml(output_project)
