@@ -52,9 +52,6 @@ cdef class Business2SolverConverter:
     # Solver model
     model = cy.declare(tysolver.ProblemModel)
     result = cy.declare(tysolver.ResultModel)
-    # number of sources & receptors
-    _nsources = cy.declare(int)
-    _nreceptors = cy.declare(int)
     # transitional result matrix (from solver matrix to condensed business matrix)
     transitional_result_matrix = cy.declare(cy.pointer(tycommon.SpectrumMatrix))
 
@@ -73,17 +70,9 @@ cdef class Business2SolverConverter:
     def solver_result(self):
         return self.result
 
-    @property
-    def nsources(self):
-        return self._nsources
-
-    @property
-    def nreceptors(self):
-        return self._nreceptors
-
     def build_solver_problem(self):
         builder = SolverModelBuilder(self.solver_problem)
-        self._nsources, self._nreceptors = builder.fill_problem(self.site, self.comp)
+        builder.fill_problem(self.site, self.comp)
 
     def postprocessing(self):
         # Retrieve solver result matrix
@@ -226,7 +215,10 @@ cdef class SolverModelBuilder:
         self.process_infrastructure(site)
         nsources = self.build_sources(site, comp)
         nreceptors = self.build_receptors(site, comp)
-        return nsources, nreceptors
+        # Check consistency of number of sources / receptors.
+        model = self.model.get()
+        assert model.nsources() == nsources, (model.nsources(), nsources)
+        assert model.nreceptors() == nreceptors, (model.nreceptors(), nreceptors)
 
     @cy.locals(site=tybusiness.Site, comp=tybusiness.Computation)
     def build_sources(self, site, comp):

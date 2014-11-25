@@ -7,6 +7,7 @@ from cython.operator cimport dereference as deref, preincrement as inc
 from tympan.models cimport common as tycommon
 from tympan.models cimport solver as tysolver
 from tympan.business2solver cimport business2microsource
+from tympan.business2solver import Business2SolverConverter
 
 
 cdef pointcalcul2receptor(SmartPtr[TYPointCalcul] ptcalc):
@@ -770,6 +771,13 @@ cdef class Project:
             urec.thisptr = ctrl_pts[i]
             control_points.append(urec)
         return control_points
+
+    def build_model(self):
+        """Build an acoustic problem from the site of the computation."""
+        converter = Business2SolverConverter(self.current_computation,
+                                             self.site)
+        converter.build_solver_problem()
+        return converter.solver_problem, converter
 
     @staticmethod
     def from_xml(filepath):
