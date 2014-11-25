@@ -15,7 +15,7 @@ class TestSolverConfig(TympanTC):
                 tata=0
             ''')
         # Open a basic project that doesn't have solver parameters
-        (project, _) = self.load_project('', 'empty_site.xml')
+        project, _ = self.load_project('', 'empty_site.xml')
         # Set a custom solver configuration to it
         project.current_computation.solver_parameters = config
         # Export to XML and reimport it

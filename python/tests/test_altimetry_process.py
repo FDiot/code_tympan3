@@ -174,10 +174,7 @@ class TestProcessAltimetry(TympanTC):
             material_by_face = builder.material_by_face(feature_by_face)
             project.update_site_altimetry(mesh, material_by_face)
             # Build solver model and check source altimetry
-            bus2solv_conv = bus2solv.Business2SolverConverter(project.current_computation,
-                                                              project.site)
-            bus2solv_conv.build_solver_problem()
-        solver_model = bus2solv_conv.solver_problem
+            solver_model = project.build_model()
         # 1 source
         self.assertEqual(solver_model.nsources, 1)
         # source is on the hillock, which is 25 m high. It is at 2m high above the ground
