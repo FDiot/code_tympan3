@@ -101,20 +101,17 @@ def solve(input_project, output_project, output_mesh, solverdir,
     export_to_ply(mesh, material_by_face, output_mesh)
     # Update site and the project before building the solver model
     project.update_site_altimetry(mesh, material_by_face)
-    # Build an acoustic problem from the site of the computation
-    bus2solv_conv = bus2solv.Business2SolverConverter(comp, project.site)
-    bus2solv_conv.build_solver_problem()
     # Solver model
-    solver_problem = bus2solv_conv.solver_problem
+    solver_problem, bus2solv_conv = project.build_model()
     solver_result = bus2solv_conv.solver_result
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
-                 bus2solv_conv.nsources, bus2solv_conv.nreceptors)
+                 solver_problem.nsources, solver_problem.nreceptors)
     errors = []
-    if bus2solv_conv.nsources == 0:
+    if solver_problem.nsources == 0:
         errors.append('You must have at least one source to run a simulation.')
         for (elt_id, elt_name) in site.outdated_elements:
             errors.append('Update failed on element %s (id %s)' % (elt_name, elt_id))
-    if bus2solv_conv.nreceptors == 0:
+    if solver_problem.nreceptors == 0:
         errors.append('You must have at least one receptor to run a simulation.')
     if errors:
         raise RuntimeError(os.linesep.join(errors))
