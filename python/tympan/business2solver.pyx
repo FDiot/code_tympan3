@@ -83,9 +83,7 @@ cdef class Business2SolverConverter:
 
     def build_solver_problem(self):
         builder = SolverModelBuilder(self.solver_problem)
-        builder.fill_problem(self.site, self.comp)
-        self._nsources = builder.nsources
-        self._nreceptors = builder.nreceptors
+        self._nsources, self._nreceptors = builder.fill_problem(self.site, self.comp)
 
     def postprocessing(self):
         # Retrieve solver result matrix
@@ -214,20 +212,10 @@ cdef class Business2SolverConverter:
 
 cdef class SolverModelBuilder:
     model = cy.declare(shared_ptr[tysolver.AcousticProblemModel])
-    _nsources = cy.declare(int)
-    _nreceptors = cy.declare(int)
 
     @cy.locals(model=tysolver.ProblemModel)
     def __cinit__(self, model):
         self.model = model.thisptr
-
-    @property
-    def nsources(self):
-        return self._nsources
-
-    @property
-    def nreceptors(self):
-        return self._nreceptors
 
     @cy.locals(site=tybusiness.Site, comp=tybusiness.Computation)
     def fill_problem(self, site, comp):
@@ -236,8 +224,9 @@ cdef class SolverModelBuilder:
         """
         self.process_altimetry(site)
         self.process_infrastructure(site)
-        self._nsources = self.build_sources(site, comp)
-        self._nreceptors = self.build_receptors(site, comp)
+        nsources = self.build_sources(site, comp)
+        nreceptors = self.build_receptors(site, comp)
+        return nsources, nreceptors
 
     @cy.locals(site=tybusiness.Site, comp=tybusiness.Computation)
     def build_sources(self, site, comp):
