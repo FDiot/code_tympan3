@@ -126,7 +126,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
         raise RuntimeError(err)
     # Export solver results to the business model
     bus2solv_conv = Business2SolverConverter(comp, site)
-    bus2solv_conv.postprocessing(model)
+    bus2solv_conv.postprocessing(model, solver_result)
     # Reserialize project
     try:
         project.to_xml(output_project)

@@ -46,11 +46,9 @@ def load_computation_solver(foldername, tybusiness.Computation comp):
     return solver
 
 cdef class Business2SolverConverter:
-    # Business model
+
     comp = cy.declare(tybusiness.Computation)
     site = cy.declare(tybusiness.Site)
-    # Solver model
-    result = cy.declare(tysolver.ResultModel)
     # transitional result matrix (from solver matrix to condensed business matrix)
     transitional_result_matrix = cy.declare(cy.pointer(tycommon.SpectrumMatrix))
 
@@ -58,22 +56,15 @@ cdef class Business2SolverConverter:
     def __cinit__(self, comp, site):
         self.comp = comp
         self.site = site
-        self.result = tysolver.ResultModel()
 
-    @property
-    def solver_result(self):
-        return self.result
-
-    @cy.locals(model=tysolver.ProblemModel)
-    def postprocessing(self, model):
+    @cy.locals(model=tysolver.ProblemModel, result=tysolver.ResultModel)
+    def postprocessing(self, model, result):
         # Retrieve solver result matrix
-        solver_result = cy.declare(cy.pointer(tysolver.AcousticResultModel))
-        solver_result = self.result.thisptr.get()
         solver_result_matrix = cy.declare(tycommon.SpectrumMatrix)
-        solver_result_matrix = solver_result.get_data()
+        solver_result_matrix = result.thisptr.get().get_data()
         self.transitional_result_matrix = new tycommon.SpectrumMatrix(solver_result_matrix)
         # update business receptors cumulative spectra
-        self.update_business_receptors(model)
+        self.update_business_receptors(model, result)
         self.remove_mesh_points_from_results()
         # condensate result matrix
         self.update_business_result_matrix()
@@ -89,8 +80,8 @@ cdef class Business2SolverConverter:
         bus2solv_sources.clear()
         to_be_removed_receptors.clear()
 
-    @cy.locals(model=tysolver.ProblemModel)
-    def update_business_receptors(self, model):
+    @cy.locals(model=tysolver.ProblemModel, result=tysolver.ResultModel)
+    def update_business_receptors(self, model, result):
         """ Once the acoustic problem has been solved, send back the acoustic results
         to the business receptors
         """
