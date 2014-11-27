@@ -9,6 +9,16 @@ import tympan.solve_project as tysolve
 
 class TestSolveProject(TympanTC):
 
+    def setUp(self):
+        self.output_proj = None
+        self.output_mesh = None
+
+    def tearDown(self):
+        if self.output_proj and osp.exists(self.output_proj):
+            self.remove_file(output_proj)
+        if self.output_mesh and osp.exists(self.output_mesh):
+            self.remove_file(output_mesh)
+
     def remove_file(self, f):
         f.close()
         os.unlink(f.name)
@@ -16,15 +26,8 @@ class TestSolveProject(TympanTC):
     def run_solve(self, input_project):
         output_proj = tempfile.NamedTemporaryFile(suffix='.xml', delete=False)
         output_mesh = tempfile.NamedTemporaryFile(suffix='.ply', delete=False)
-        try:
-            with no_output():
-                tysolve.solve(input_project, output_proj, output_mesh.name, TEST_SOLVERS_DIR)
-        except:
-            self.remove_file(output_proj)
-            self.remove_file(output_mesh)
-            raise
-        self.remove_file(output_proj)
-        self.remove_file(output_mesh)
+        with no_output():
+            tysolve.solve(input_project, output_proj, output_mesh.name, TEST_SOLVERS_DIR)
 
     def test_solver_project_no_sources(self):
         input_proj = osp.join(
