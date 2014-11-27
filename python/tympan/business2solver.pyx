@@ -348,7 +348,7 @@ cdef class SolverModelBuilder:
         """
         for surface in site.acoustic_surfaces:
             (points, triangles) = surface.export_mesh()
-            (nodes_idx, tgles_idx) = self.process_mesh(points, triangles)
+            (nodes_idx, tgles_idx) = process_mesh(self.model, points, triangles)
             # Get the building material for the surface
             pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
             buildmat = cy.declare(tybusiness.Material)
@@ -369,29 +369,6 @@ cdef class SolverModelBuilder:
         for subsite in site.subsites:
             self.process_infrastructure(subsite)
 
-    def process_mesh(self, points, triangles):
-        """ Create nodes and acoustic triangles in the model to represent the
-        mesh given in argument.
-        The mesh must be given as a list of 'Point3D' python objects ('points')
-        and a list of 'Triangle' python objects ('triangles')
-        Returns 2 np arrays containing the indices of these nodes and triangles
-        in the model once created.
-        """
-        map_to_model_node_idx = np.empty(len(points))
-        for (i, pt) in enumerate(points):
-            node = cy.declare(tycommon.OPoint3D)
-            node._x = pt.x
-            node._y = pt.y
-            node._z = pt.z
-            map_to_model_node_idx[i] = self.model.get().make_node(node)
-        map_to_model_tgle_idx = np.empty(len(triangles))
-        for (i, tri) in enumerate(triangles):
-            map_to_model_tgle_idx[i] = self.model.get().make_triangle(
-                map_to_model_node_idx[tri.p1],
-                map_to_model_node_idx[tri.p2],
-                map_to_model_node_idx[tri.p3])
-        return (map_to_model_node_idx, map_to_model_tgle_idx)
-
     @cy.locals(site=tybusiness.Site)
     def process_altimetry(self, site):
         """ Call Tympan methods to make a mesh (points, triangles, materials)
@@ -400,7 +377,7 @@ cdef class SolverModelBuilder:
             in basic classes 'understandable' by the solvers (see entities.hpp).
         """
         (points, triangles, grounds) = site.export_topo_mesh()
-        (nodes_idx, tgles_idx) = self.process_mesh(points, triangles)
+        (nodes_idx, tgles_idx) = process_mesh(self.model, points, triangles)
         # make material
         actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
         pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
@@ -420,3 +397,29 @@ cdef class SolverModelBuilder:
         # Recurse on subsites
         for subsite in site.subsites:
             self.process_altimetry(subsite)
+
+@cy.locals(model=shared_ptr[tysolver.AcousticProblemModel])
+cdef process_mesh(model, points, triangles):
+    """ Create nodes and acoustic triangles in the model to represent the
+    mesh given in argument.
+    The mesh must be given as a list of 'Point3D' python objects ('points')
+    and a list of 'Triangle' python objects ('triangles')
+    Returns 2 np arrays containing the indices of these nodes and triangles
+    in the model once created.
+    """
+    map_to_model_node_idx = np.empty(len(points))
+    for (i, pt) in enumerate(points):
+        node = cy.declare(tycommon.OPoint3D)
+        node._x = pt.x
+        node._y = pt.y
+        node._z = pt.z
+        map_to_model_node_idx[i] = model.get().make_node(node)
+    map_to_model_tgle_idx = np.empty(len(triangles))
+    for (i, tri) in enumerate(triangles):
+        map_to_model_tgle_idx[i] = model.get().make_triangle(
+            map_to_model_node_idx[tri.p1],
+            map_to_model_node_idx[tri.p2],
+            map_to_model_node_idx[tri.p3])
+    return (map_to_model_node_idx, map_to_model_tgle_idx)
+
+
