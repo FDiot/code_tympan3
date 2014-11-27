@@ -194,7 +194,7 @@ cdef class SolverModelBuilder:
         """ Fill the acoustic problem model: build an acoustic mesh, sources
             and receptors.
         """
-        self.process_altimetry(site)
+        process_altimetry(self.model, site)
         process_infrastructure(self.model, site)
         nsources = self.build_sources(site, comp)
         nreceptors = self.build_receptors(site, comp)
@@ -340,35 +340,34 @@ cdef class SolverModelBuilder:
         return nb_receptors
 
 
-
-    @cy.locals(site=tybusiness.Site)
-    def process_altimetry(self, site):
-        """ Call Tympan methods to make a mesh (points, triangles, materials)
-            out of the site altimetry. Read and export this mesh to the
-            acoustic problem model (see also process_mesh), converting the data
-            in basic classes 'understandable' by the solvers (see entities.hpp).
-        """
-        (points, triangles, grounds) = site.export_topo_mesh()
-        (nodes_idx, tgles_idx) = process_mesh(self.model, points, triangles)
-        # make material
-        actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
-        pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
-        # Set the material of each triangle
-        for (i, ground) in enumerate(grounds):
-            actri = cy.address(self.model.get().triangle(tgles_idx[i]))
-            _ground = cy.declare(tybusiness.Ground)
-            _ground = ground
-            grnd = cy.declare(SmartPtr[tybusiness.TYSol])
-            grnd = _ground.thisptr
-            mat_name = cy.declare(string)
-            mat_name = grnd.getRealPointer().getName().toStdString()
-            mat_res = cy.declare(double)
-            mat_res = ground.resistivity
-            pmat = self.model.get().make_material(mat_name, mat_res)
-            actri.made_of = pmat
-        # Recurse on subsites
-        for subsite in site.subsites:
-            self.process_altimetry(subsite)
+@cy.locals(model=shared_ptr[tysolver.AcousticProblemModel], site=tybusiness.Site)
+cdef process_altimetry(model, site):
+    """ Call Tympan methods to make a mesh (points, triangles, materials)
+        out of the site altimetry. Read and export this mesh to the
+        acoustic problem model (see also process_mesh), converting the data
+        in basic classes 'understandable' by the solvers (see entities.hpp).
+    """
+    (points, triangles, grounds) = site.export_topo_mesh()
+    (nodes_idx, tgles_idx) = process_mesh(model, points, triangles)
+    # make material
+    actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
+    pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
+    # Set the material of each triangle
+    for (i, ground) in enumerate(grounds):
+        actri = cy.address(model.get().triangle(tgles_idx[i]))
+        _ground = cy.declare(tybusiness.Ground)
+        _ground = ground
+        grnd = cy.declare(SmartPtr[tybusiness.TYSol])
+        grnd = _ground.thisptr
+        mat_name = cy.declare(string)
+        mat_name = grnd.getRealPointer().getName().toStdString()
+        mat_res = cy.declare(double)
+        mat_res = ground.resistivity
+        pmat = model.get().make_material(mat_name, mat_res)
+        actri.made_of = pmat
+    # Recurse on subsites
+    for subsite in site.subsites:
+        process_altimetry(model, subsite)
 
 @cy.locals(model=shared_ptr[tysolver.AcousticProblemModel], site=tybusiness.Site)
 cdef process_infrastructure(model, site):
@@ -422,5 +421,4 @@ cdef process_mesh(model, points, triangles):
             map_to_model_node_idx[tri.p2],
             map_to_model_node_idx[tri.p3])
     return (map_to_model_node_idx, map_to_model_tgle_idx)
-
 
