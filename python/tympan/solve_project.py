@@ -77,24 +77,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Business model
     site = project.site
     comp = project.current_computation
-    # Setup solver configuration
-    parser = ConfigParser.RawConfigParser()
-    parser.optionxform = str # keep param names case
-    parser.readfp(StringIO(comp.solver_parameters))
-    solver_config = Configuration.get()
-    errors = []
-    for section in parser.sections():
-        for optname, value in parser.items(section):#solver_config.items(section):
-            try:
-                value = CONFIG_MAP[optname](value)
-            except ValueError:
-                errors.append('bad option value for %s: %r' % (optname, value))
-                continue
-            getattr(solver_config, optname, value)
-    if errors:
-        raise ConfigParser.Error(os.linesep.join(errors))
-    if not multithreading_on:
-        solver_config.NbThreads = 1
+    _set_solver_config(comp, multithreading_on)
     # Recompute altimetry
     asite = builder.build_sitenode(project.site)
     _, mesh, feature_by_face = builder.build_altimetry(asite)
@@ -125,6 +108,25 @@ def solve(input_project, output_project, output_mesh, solverdir,
         logging.exception("Couldn't export the acoustic results to %s file", output_project)
         raise
 
+def _set_solver_config(comp, multithreading_on=True):
+    """ Setup solver configuration """
+    parser = ConfigParser.RawConfigParser()
+    parser.optionxform = str # keep param names case
+    parser.readfp(StringIO(comp.solver_parameters))
+    solver_config = Configuration.get()
+    errors = []
+    for section in parser.sections():
+        for optname, value in parser.items(section):
+            try:
+                value = CONFIG_MAP[optname](value)
+            except ValueError:
+                errors.append('bad option value for %s: %r' % (optname, value))
+                continue
+            getattr(solver_config, optname, value)
+    if errors:
+        raise ConfigParser.Error(os.linesep.join(errors))
+    if not multithreading_on:
+        solver_config.NbThreads = 1
 
 def _check_solver_model(model, site):
     """Various checks for a solver model, to be performed before computation.
