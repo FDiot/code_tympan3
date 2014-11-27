@@ -181,27 +181,18 @@ cdef class Business2SolverConverter:
             bus2solv_receptors.erase(remove_me)
             solv2bus_receptors.erase(to_be_removed_receptors[i])
 
-
-cdef class SolverModelBuilder:
-    model = cy.declare(shared_ptr[tysolver.AcousticProblemModel])
-
-    @cy.locals(model=tysolver.ProblemModel)
-    def __cinit__(self, model):
-        self.model = model.thisptr
-
-    @cy.locals(site=tybusiness.Site, comp=tybusiness.Computation)
-    def fill_problem(self, site, comp):
-        """ Fill the acoustic problem model: build an acoustic mesh, sources
-            and receptors.
-        """
-        process_altimetry(self.model, site)
-        process_infrastructure(self.model, site)
-        nsources = build_sources(self.model, site, comp)
-        nreceptors = build_receptors(self.model, site, comp)
-        # Check consistency of number of sources / receptors.
-        model = self.model.get()
-        assert model.nsources() == nsources, (model.nsources(), nsources)
-        assert model.nreceptors() == nreceptors, (model.nreceptors(), nreceptors)
+cdef fill_problem(tysolver.ProblemModel model, tybusiness.Site site, tybusiness.Computation comp):
+    """ Fill the acoustic problem model: build an acoustic mesh, sources
+        and receptors.
+    """
+    process_altimetry(model.thisptr, site)
+    process_infrastructure(model.thisptr, site)
+    nsources = build_sources(model.thisptr, site, comp)
+    nreceptors = build_receptors(model.thisptr, site, comp)
+    # Check consistency of number of sources / receptors.
+    model_ptr = model.thisptr.get()
+    assert model_ptr.nsources() == nsources, (model_ptr.nsources(), nsources)
+    assert model_ptr.nreceptors() == nreceptors, (model_ptr.nreceptors(), nreceptors)
 
 @cy.locals(model=shared_ptr[tysolver.AcousticProblemModel], site=tybusiness.Site, comp=tybusiness.Computation)
 cdef build_sources(model, site, comp):

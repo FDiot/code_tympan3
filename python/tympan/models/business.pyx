@@ -6,8 +6,7 @@ from cython.operator cimport dereference as deref, preincrement as inc
 
 from tympan.models cimport common as tycommon
 from tympan.models cimport solver as tysolver
-from tympan.business2solver cimport business2microsource
-from tympan.business2solver import SolverModelBuilder
+from tympan.business2solver cimport business2microsource, fill_problem
 
 
 cdef pointcalcul2receptor(SmartPtr[TYPointCalcul] ptcalc):
@@ -775,8 +774,7 @@ cdef class Project:
     def build_model(self):
         """Build an acoustic problem from the site of the computation."""
         model = tysolver.ProblemModel()
-        builder = SolverModelBuilder(model)
-        builder.fill_problem(self.site, self.current_computation)
+        fill_problem(model, self.site, self.current_computation)
         return model
 
     @staticmethod
