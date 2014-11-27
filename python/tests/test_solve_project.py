@@ -26,6 +26,16 @@ class TestSolveProject(TympanTC):
         self.remove_file(output_proj)
         self.remove_file(output_mesh)
 
+    def test_solver_project_no_sources(self):
+        input_proj = osp.join(
+            TEST_DATA_DIR, 'projects-panel',
+            '11_PROJET_GRAND_SITE_VIDE_AVEC_SOUS_SITE_AU_CENTRE.xml')
+        with self.assertRaises(RuntimeError) as cm:
+            self.run_solve(input_proj)
+        self.assertIn(
+            'You must have at least one source to run a simulation.',
+            str(cm.exception))
+
     def test_solver_config_errors(self):
         input_proj = osp.join(TEST_DATA_DIR, 'empty_site_config_ko.xml')
         with self.assertRaises(ConfigParser.Error) as cm:
