@@ -63,6 +63,11 @@ class TestSolveProject(TympanTC):
                               'TEST_SOURCE_PONCTUELLE_NO_RESU.xml')
         self.assertFalse(self.run_solve_subprocess(input_proj))
 
+    def test_solver_project_ok(self):
+        input_proj = osp.join(TEST_DATA_DIR, 'projects-panel',
+                              'TEST_SOURCE_PONCTUELLE_NO_RESU.xml')
+        self.run_solve(input_proj)
+
     def test_solver_config_errors(self):
         input_proj = osp.join(TEST_DATA_DIR, 'empty_site_config_ko.xml')
         with self.assertRaises(ConfigParser.Error) as cm:
