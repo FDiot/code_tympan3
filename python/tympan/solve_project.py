@@ -29,6 +29,7 @@ except ImportError:
 from tympan import SOLVER_CONFIG_ATTRIBUTES
 from tympan.altimetry import export_to_ply, builder
 from tympan.models.solver import Configuration
+from tympan.business2solver import Business2SolverConverter
 
 CONVERTERS = {
     'bool': bool,
@@ -116,7 +117,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
         raise
     # Export solver results to the business model
     bus2solv_conv = Business2SolverConverter(comp, site)
-    bus2solv_conv.postprocessing(model, solver_result)
+    bus2solv_conv.postprocessing(solver_problem, solver_result)
     # Reserialize project
     try:
         project.to_xml(output_project)
