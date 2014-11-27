@@ -86,21 +86,21 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Update site and the project before building the solver model
     project.update_site_altimetry(mesh, material_by_face)
     # Solver model
-    solver_problem = project.build_model()
+    model = project.build_model()
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
-                 solver_problem.nsources, solver_problem.nreceptors)
-    _check_solver_model(solver_problem, site)
+                 model.nsources, model.nreceptors)
+    _check_solver_model(model, site)
     # Load solver plugin and run it on the current computation
     solver = bus2solv.load_computation_solver(solverdir, comp)
     logging.debug("Calling C++ SolverInterface::solve() method")
     try:
-        solver_result = solver.solve_problem(solver_problem)
+        solver_result = solver.solve_problem(model)
     except RuntimeError as exc:
         logging.error(str(exc))
         raise
     # Export solver results to the business model
     bus2solv_conv = Business2SolverConverter(comp, site)
-    bus2solv_conv.postprocessing(solver_problem, solver_result)
+    bus2solv_conv.postprocessing(model, solver_result)
     # Reserialize project
     try:
         project.to_xml(output_project)
