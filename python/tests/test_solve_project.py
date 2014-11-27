@@ -34,7 +34,8 @@ class TestSolveProject(TympanTC):
     def run_solve(self, input_project):
         output_proj, output_mesh = self.build_tempfiles()
         with no_output():
-            tysolve.solve(input_project, output_proj, output_mesh.name, TEST_SOLVERS_DIR)
+            tysolve.solve(input_project, output_proj.name, output_mesh.name,
+                          TEST_SOLVERS_DIR)
 
     def run_solve_subprocess(self, input_project):
         output_proj, output_mesh = self.build_tempfiles()
