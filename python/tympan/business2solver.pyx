@@ -195,7 +195,7 @@ cdef class SolverModelBuilder:
             and receptors.
         """
         self.process_altimetry(site)
-        self.process_infrastructure(site)
+        process_infrastructure(self.model, site)
         nsources = self.build_sources(site, comp)
         nreceptors = self.build_receptors(site, comp)
         # Check consistency of number of sources / receptors.
@@ -340,34 +340,6 @@ cdef class SolverModelBuilder:
         return nb_receptors
 
 
-    @cy.locals(site=tybusiness.Site)
-    def process_infrastructure(self, site):
-        """ Set a few 'geometric' entities such as nodes
-            Create geometric entities, fill dedicated container and relate them
-            according to the relation definitions.
-        """
-        for surface in site.acoustic_surfaces:
-            (points, triangles) = surface.export_mesh()
-            (nodes_idx, tgles_idx) = process_mesh(self.model, points, triangles)
-            # Get the building material for the surface
-            pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
-            buildmat = cy.declare(tybusiness.Material)
-            buildmat = surface.material
-            mat_spec = cy.declare(tycommon.Spectrum)
-            mat_spec = buildmat.spectrum
-            mat_cspec = cy.declare(tycommon.OSpectreComplex)
-            mat_cspec = tycommon.OSpectreComplex(mat_spec.thisobj)
-            mat_name = cy.declare(string)
-            mat_name = buildmat.name
-            actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
-            # Set the material of the surface
-            for i in xrange(tgles_idx.size):
-                pmat = self.model.get().make_material(mat_name, mat_cspec)
-                actri = cy.address(self.model.get().triangle(tgles_idx[i]))
-                actri.made_of = pmat
-        # Recurse on subsites
-        for subsite in site.subsites:
-            self.process_infrastructure(subsite)
 
     @cy.locals(site=tybusiness.Site)
     def process_altimetry(self, site):
@@ -397,6 +369,35 @@ cdef class SolverModelBuilder:
         # Recurse on subsites
         for subsite in site.subsites:
             self.process_altimetry(subsite)
+
+@cy.locals(model=shared_ptr[tysolver.AcousticProblemModel], site=tybusiness.Site)
+cdef process_infrastructure(model, site):
+    """ Set a few 'geometric' entities such as nodes
+        Create geometric entities, fill dedicated container and relate them
+        according to the relation definitions.
+    """
+    for surface in site.acoustic_surfaces:
+        (points, triangles) = surface.export_mesh()
+        (nodes_idx, tgles_idx) = process_mesh(model, points, triangles)
+        # Get the building material for the surface
+        pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
+        buildmat = cy.declare(tybusiness.Material)
+        buildmat = surface.material
+        mat_spec = cy.declare(tycommon.Spectrum)
+        mat_spec = buildmat.spectrum
+        mat_cspec = cy.declare(tycommon.OSpectreComplex)
+        mat_cspec = tycommon.OSpectreComplex(mat_spec.thisobj)
+        mat_name = cy.declare(string)
+        mat_name = buildmat.name
+        actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
+        # Set the material of the surface
+        for i in xrange(tgles_idx.size):
+            pmat = model.get().make_material(mat_name, mat_cspec)
+            actri = cy.address(model.get().triangle(tgles_idx[i]))
+            actri.made_of = pmat
+    # Recurse on subsites
+    for subsite in site.subsites:
+        process_infrastructure(model, subsite)
 
 @cy.locals(model=shared_ptr[tysolver.AcousticProblemModel])
 cdef process_mesh(model, points, triangles):
