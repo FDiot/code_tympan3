@@ -181,21 +181,14 @@ cdef class Business2SolverConverter:
             bus2solv_receptors.erase(remove_me)
             solv2bus_receptors.erase(to_be_removed_receptors[i])
 
-cdef fill_problem(tysolver.ProblemModel model, tybusiness.Site site, tybusiness.Computation comp):
-    """ Fill the acoustic problem model: build an acoustic mesh, sources
-        and receptors.
+cdef build_mesh(tysolver.ProblemModel model, tybusiness.Site site, tybusiness.Computation comp):
+    """ Retrieve a mesh from business site topography and altimetry and inject it into
+    the solver model.
     """
     process_altimetry(model.thisptr, site)
     process_infrastructure(model.thisptr, site)
-    nsources = build_sources(model.thisptr, site, comp)
-    nreceptors = build_receptors(model.thisptr, site, comp)
-    # Check consistency of number of sources / receptors.
-    model_ptr = model.thisptr.get()
-    assert model_ptr.nsources() == nsources, (model_ptr.nsources(), nsources)
-    assert model_ptr.nreceptors() == nreceptors, (model_ptr.nreceptors(), nreceptors)
 
-@cy.locals(model=shared_ptr[tysolver.AcousticProblemModel], site=tybusiness.Site, comp=tybusiness.Computation)
-cdef build_sources(model, site, comp):
+cdef build_sources(tysolver.ProblemModel model, tybusiness.Site site, tybusiness.Computation comp):
     """ Retrieve the sources from the site infrastructure (TYSourcePonctuelle),
         and make acoustic sources from them (using their position and their
         spectrum).
@@ -263,7 +256,7 @@ cdef build_sources(model, site, comp):
                         pdirectivity = new tysolver.ChimneyFaceDirectivity(
                             pcompdirectivity.DirectivityVector, pcompdirectivity.SpecificSize)
                 # Add it to the solver model
-                source_idx = model.get().make_source(ppoint[0], subsource.getSpectre()[0], pdirectivity)
+                source_idx = model.thisptr.get().make_source(ppoint[0], subsource.getSpectre()[0], pdirectivity)
                 # Record where it has been stored
                 bus2solv_sources[sources_of_elt[i]] = source_idx
                 # Copy source mapping to macro2micro_sources
@@ -273,10 +266,10 @@ cdef build_sources(model, site, comp):
     # Recurse on subsites
     for subsite in site.subsites:
         nb_sources += build_sources(model, subsite, comp)
+    assert model.thisptr.get().nsources() == nb_sources, (model.thisptr.get().nsources(), nb_sources)
     return nb_sources
 
-@cy.locals(model=shared_ptr[tysolver.AcousticProblemModel], site=tybusiness.Site, comp=tybusiness.Computation)
-cdef build_receptors(model, site, comp):
+cdef build_receptors(tysolver.ProblemModel model, tybusiness.Site site, tybusiness.Computation comp):
     """ Retrieve the mesh points (TYPointCalcul, TYPointControl) used in the
         current computation (the active ones), build the acoustic receptors
         using their position and add them to the acoustic problem model.
@@ -294,7 +287,7 @@ cdef build_receptors(model, site, comp):
         if control_points[i].getRealPointer().getEtat(comp.thisptr.getRealPointer()):
             # inheritance: TYPointControl > TYPointCalcul > TYPoint > tycommon.OPoint3D > OCoord3D
             # call to tycommon.OPoint3D copy constructor to record control point coordinates
-            rec_idx = model.get().make_receptor((control_points[i].getRealPointer())[0])
+            rec_idx = model.thisptr.get().make_receptor((control_points[i].getRealPointer())[0])
             bus2solv_receptors[control_points[i].getRealPointer()] = rec_idx
             solv2bus_receptors[rec_idx] = control_points[i].getRealPointer()
             nb_receptors += 1
@@ -322,12 +315,13 @@ cdef build_receptors(model, site, comp):
                 mesh_points[j].getRealPointer()._x = point3d._x
                 mesh_points[j].getRealPointer()._y = point3d._y
                 mesh_points[j].getRealPointer()._z = point3d._z
-                rec_idx = model.get().make_receptor((mesh_points[j].getRealPointer())[0])
+                rec_idx = model.thisptr.get().make_receptor((mesh_points[j].getRealPointer())[0])
                 bus2solv_receptors[mesh_points[j].getRealPointer()] = rec_idx
                 solv2bus_receptors[rec_idx] = mesh_points[j].getRealPointer()
                 # We won't keep mesh points in the final result matrix
                 to_be_removed_receptors.push_back(rec_idx)
                 nb_receptors += 1
+    assert model.thisptr.get().nreceptors() == nb_receptors, (model.thisptr.get().nreceptors(), nb_receptors)
     return nb_receptors
 
 
