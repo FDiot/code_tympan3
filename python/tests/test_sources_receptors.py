@@ -7,7 +7,7 @@ from numpy.testing import assert_allclose
 
 from utils import (TEST_DATA_DIR, TEST_SOLVERS_DIR, TEST_RESULT_DIR, TympanTC,
                    compare_floats)
-
+import tympan.business2solver as bus2solv
 
 _TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'computed-projects-panel')
 assert osp.isdir(_TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % _TEST_PROBLEM_DIR
@@ -37,6 +37,26 @@ class SourceAdditionTC(TympanTC):
         self.assertEqual(src2.position.y, 2.)
         self.assertEqual(src2.position.z, 10.)
         assert_allclose(src2.spectrum.to_dB().values, freq*2)
+
+    def test_computation_with_manually_added_source(self):
+        power_lvl = np.array([10.0] * 31, dtype=float)
+        ref_proj, ref_model = self.load_project('site_receptor_source.xml')
+        assert ref_model.nsources == 1
+        assert ref_model.nreceptors == 1
+        ref_src = ref_model.source(0)
+        assert (ref_src.position.x, ref_src.position.y, ref_src.position.z) == (3., 3., 2.)
+        assert_allclose(ref_src.spectrum.to_dB().values, power_lvl)
+        solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, ref_proj.current_computation)
+        ref_result = solver.solve_problem(ref_model).spectrum(0, 0).values
+        # do the same with a manually added source (the xml project is the same as
+        # 'site_receptor_source.xml' except the source has been removed)
+        proj, model = self.load_project('site_receptor.xml')
+        assert model.nsources == 0
+        assert model.nreceptors == 1
+        model.add_source((3., 3., 2.), power_lvl, 0)
+        solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, proj.current_computation)
+        result = solver.solve_problem(model).spectrum(0, 0).values
+        assert_allclose(ref_result, result)
 
 
 class TestTympan(TympanTC):
