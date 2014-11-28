@@ -145,8 +145,14 @@ cdef class ProblemModel:
 
 
 cdef class ResultModel:
+
     def __cinit__(self):
         self.thisptr = shared_ptr[AcousticResultModel](new AcousticResultModel())
+
+    def spectrum(self, id_receptor, id_source):
+        spec = cy.declare(tycommon.OSpectre)
+        spec = self.thisptr.get().get_data().element(id_receptor, id_source)
+        return tycommon.ospectre2spectrum(spec)
 
 
 cdef class Solver:
