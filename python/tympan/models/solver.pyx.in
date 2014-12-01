@@ -38,6 +38,7 @@ cdef class ProblemModel:
         assert self.thisptr.get() != NULL
         return self.thisptr.get().nmaterials()
 
+    @cy.locals(spectrum_values=np.ndarray)
     def add_source(self, position, spectrum_values, shift):
         """ position is a (x, y, z) tuple; spectrum_values is a np array containing the
         DB values of a power spectrum, shift is the number of the first frequence for which
@@ -50,9 +51,8 @@ cdef class ProblemModel:
         pos = tycommon.OPoint3D(position[0], position[1], position[2])
         # spectrum
         nb_val = spectrum_values.shape[0]
-        cdef np.ndarray[double, ndim=1, mode="c"] vals = spectrum_values
         spec = cy.declare(tycommon.OSpectre)
-        spec = tycommon.OSpectre(&vals[0], nb_val, shift)
+        spec = tycommon.OSpectre(<double *> spectrum_values.data, nb_val, shift)
         spec.setEtat(tycommon.SPECTRE_ETAT_DB)
         spec.setType(tycommon.SPECTRE_TYPE_LW)
         # directivity
