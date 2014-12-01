@@ -68,7 +68,8 @@ TYTerrainWidget::TYTerrainWidget(TYTerrain* pElement, QWidget* _pParent /*=NULL*
     _solW = new TYSolWidget(getElement()->getSol(), _tabWidget);
     _tabWidget->insertTab(1, _solW, TR("id_sol"));
 
-    _vegetationWidget = new TYVegetationWidget(getElement()->getVegetation(), _tabWidget);
+    _pVegetation = getElement()->getVegetation();
+    _vegetationWidget = new TYVegetationWidget(_pVegetation, _tabWidget);
 
     _tabWidget->insertTab(2, _vegetationWidget, TR("id_vegetation"));
 
