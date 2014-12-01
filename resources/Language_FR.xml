@@ -1297,7 +1297,7 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_unite_hauteur" value="m"/>
 			<string id="id_spectreatt" value="Spectre d'atténuation"/>
 			<string id="id_proprietes_button" value="Propriétés"/>
-			<string id="id_get_from_bdd" value="Import BDD"/>
+			<string id="id_foliageactivelabel_label" value = "Feuillage actif"/>
 		</message>
 	</class>
 	<class name="TYDirectiviteWidget">

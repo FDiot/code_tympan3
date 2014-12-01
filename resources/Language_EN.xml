@@ -1295,7 +1295,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_unite_hauteur" value="m"/>
 			<string id="id_spectreatt" value="Attenuation Spectra"/>
 			<string id="id_proprietes_button" value="Properties"/>
-			<string id="id_get_from_bdd" value="Import Database"/>
+			<string id="id_foliageactivelabel_label" value="Foliage active"/>
 		</message>
 	</class>
 	<class name="TYDirectiviteWidget">
