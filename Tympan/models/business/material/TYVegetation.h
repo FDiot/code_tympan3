@@ -20,6 +20,7 @@
 #ifndef __TY_VEGETATION__
 #define __TY_VEGETATION__
 
+#include <qstring.h>
 #include "Tympan/models/business/TYElement.h"
 #include "Tympan/models/business/acoustic/TYSpectre.h"
 
@@ -60,6 +61,12 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
+    /*!
+     * \brief Get/Set de l'existence de feuillage
+     */
+    void setFoliageStatus(bool bStatus) { _bFoliage = bStatus; }
+    bool getFoliageStatus() const { return _bFoliage; }
+
     /**
      * Set/Get de la hauteur.
      */
@@ -82,8 +89,14 @@ public:
      */
     void setSpectreAtt(TYSpectre* pAtt) ;
 
+public:
+    static QString _vegeName[];
+    static unsigned int getIndexVegetation( QString &vegeName); 
+
     // Membres
 protected:
+    /// Foliage
+    bool _bFoliage;
     ///Hauteur.
     double _hauteur;
     ///Spectre d'attenuation.

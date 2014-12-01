@@ -23,11 +23,12 @@
 
 TY_EXTENSION_INST(TYVegetation);
 
-TYVegetation::TYVegetation()
-{
-    _name = TYNameManager::get()->generateName(getClassName());
+QString TYVegetation::_vegeName[] = { "pine", "spruce", "birch", "aspen", "oak" };
 
-    _hauteur = 10;
+TYVegetation::TYVegetation() : _hauteur(10.), _bFoliage(false)
+{
+    //_name = TYNameManager::get()->generateName(getClassName());
+    _name = _vegeName[0];
 
     _pSpectreAtt = new TYSpectre();
     _pSpectreAtt->setType(SPECTRE_TYPE_ATT);
@@ -52,6 +53,7 @@ TYVegetation& TYVegetation::operator=(const TYVegetation& other)
         TYElement::operator =(other);
         _pSpectreAtt = other._pSpectreAtt;
         _hauteur = other._hauteur;
+        _bFoliage = other._bFoliage;
     }
     return *this;
 }
@@ -63,6 +65,7 @@ bool TYVegetation::operator==(const TYVegetation& other) const
         if (TYElement::operator !=(other)) { return false; }
         if (_pSpectreAtt != other._pSpectreAtt) { return false; }
         if (_hauteur != other._hauteur) { return false; }
+        if (_bFoliage != other._bFoliage) { return false; }
     }
     return true;
 }
@@ -79,6 +82,7 @@ bool TYVegetation::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     TYVegetation* pOtherVeget = (TYVegetation*) pOther;
 
     _hauteur = pOtherVeget->_hauteur;
+    _bFoliage = pOtherVeget->_bFoliage;
 
     _pSpectreAtt->deepCopy(pOtherVeget->_pSpectreAtt, copyId);
 
@@ -94,6 +98,7 @@ DOM_Element TYVegetation::toXML(DOM_Element& domElement)
 {
     DOM_Element domNewElem = TYElement::toXML(domElement);
 
+    TYXMLTools::addElementBoolValue(domNewElem, "foliage", _bFoliage);
     TYXMLTools::addElementDoubleValue(domNewElem, "hauteur", _hauteur);
     _pSpectreAtt->toXML(domNewElem);
 
@@ -104,12 +109,13 @@ int TYVegetation::fromXML(DOM_Element domElement)
 {
     TYElement::fromXML(domElement);
 
-    bool hauteurOk = false;
+    bool hauteurOk = false, foliageOK = false;
     DOM_Element elemCur;
     QDomNodeList childs = domElement.childNodes();
     for (unsigned int i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
+        TYXMLTools::getElementBoolValue(elemCur, "foliage", _bFoliage, foliageOK);
         TYXMLTools::getElementDoubleValue(elemCur, "hauteur", _hauteur, hauteurOk);
         _pSpectreAtt->callFromXMLIfEqual(elemCur);
     }
@@ -125,3 +131,14 @@ void TYVegetation::setSpectreAtt(TYSpectre* pAtt)
     if (_pSpectreAtt->getEtat() != SPECTRE_ETAT_LIN) { *_pSpectreAtt = _pSpectreAtt->toGPhy(); } //Passage en lineaire si necessaire
 }
 
+unsigned int TYVegetation::getIndexVegetation( QString &vegeName)
+{
+    unsigned int retValue = 0;
+
+    for (unsigned int i=0; i<5; i++)
+    {
+        if ( vegeName == _vegeName[i] ) { return i; }
+    }
+
+    return retValue;
+}

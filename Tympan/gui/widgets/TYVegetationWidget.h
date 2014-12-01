@@ -32,6 +32,8 @@ class QGridLayout;
 class QLabel;
 class QPushButton;
 class QGroupBox;
+class QCheckBox;
+class QComboBox;
 class TYElementWidget;
 
 /**
@@ -65,10 +67,18 @@ public slots:
      */
     void editSpectre();
 
+private :
+    void updateComboVegetation();
+
     // Membres
 protected:
 
     QGroupBox* _groupBox;
+
+    QComboBox *_comboBoxSelectVegeName;
+
+    QLabel *_labelFoliageActive;
+    QCheckBox *_checkBoxFoliageActive;
     QLabel* _labelHauteur;
     QLineEdit* _lineEditHauteur;
     QGroupBox* _groupBoxSpectreAtt;

@@ -126,6 +126,7 @@ void TYTerrainWidget::apply()
    if ( (getElement()->isUsingVegetation()) && 
         (_pVegetation != nullptr) )
    {
+       _vegetationWidget->apply();
        getElement()->setVegetation(_pVegetation);
    }
 

@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,8 @@
 #include "Tympan/models/business/material/TYVegetation.h"
 #include <QGridLayout>
 #include <QLabel>
+#include <qcheckbox.h>
+#include <qcombobox.h>
 
 #include "TYVegetationWidget.h"
 
@@ -35,29 +37,41 @@ TYVegetationWidget::TYVegetationWidget(TYVegetation* pElement, QWidget* _pParent
 {
     QString num;
 
-    _elmW = new TYElementWidget(pElement, this);
-
     resize(300, 200);
     setWindowTitle(TR("id_caption"));
     _vegetationLayout = new QGridLayout();
     setLayout(_vegetationLayout);
 
-    _vegetationLayout->addWidget(_elmW, 0, 0);
+//    _elmW = new TYElementWidget(pElement, this);
+
+
+    _comboBoxSelectVegeName = new QComboBox(this);
+    _comboBoxSelectVegeName->setEditable(true);
+
+    _vegetationLayout->addWidget(_comboBoxSelectVegeName, 0, 0);
 
     _groupBox = new QGroupBox(this);
     _groupBox->setTitle(TR(""));
     _groupBoxLayout = new QGridLayout();
     _groupBox->setLayout(_groupBoxLayout);
 
+    // Gestion du feuillage
+    _labelFoliageActive = new QLabel(_groupBox);
+    _labelFoliageActive->setText(TR("id_foliageactivelabel_label"));
+    _groupBoxLayout->addWidget(_labelFoliageActive, 0, 0);
+    _checkBoxFoliageActive = new QCheckBox(_groupBox);
+    _groupBoxLayout->addWidget(_checkBoxFoliageActive, 0, 1);
+
+    // Hauteur de la hauteur de la végétation
     _labelHauteur = new QLabel(_groupBox);
     _labelHauteur->setText(TR("id_hauteur_label"));
-    _groupBoxLayout->addWidget(_labelHauteur, 0, 0);
+    _groupBoxLayout->addWidget(_labelHauteur, 1, 0);
 
     _lineEditHauteur = new QLineEdit(_groupBox);
-    _groupBoxLayout->addWidget(_lineEditHauteur, 0, 1);
+    _groupBoxLayout->addWidget(_lineEditHauteur, 1, 1);
     QLabel* pUnitHauteur = new QLabel(_groupBox);
     pUnitHauteur->setText(TR("id_unite_hauteur"));
-    _groupBoxLayout->addWidget(pUnitHauteur, 0, 2);
+    _groupBoxLayout->addWidget(pUnitHauteur, 1, 2);
 
     _vegetationLayout->addWidget(_groupBox, 1, 0);
 
@@ -88,8 +102,11 @@ void TYVegetationWidget::updateContent()
 {
     if ( getElement() )
     {
-        _elmW->updateContent();
+//        _elmW->updateContent();
 
+        updateComboVegetation(); // Remplit le combobox
+
+        _checkBoxFoliageActive->setChecked( getElement()->getFoliageStatus() );
         _lineEditHauteur->setText(QString().setNum(getElement()->getHauteur(), 'f', 2));
         _lineEditNomSpectreAtt->setText(getElement()->getSpectreAtt()->getName());
     }
@@ -99,13 +116,15 @@ void TYVegetationWidget::apply()
 {
     if ( getElement() )
     {
-        _elmW->apply();
+//        _elmW->apply();
 
+        getElement()->setName(_comboBoxSelectVegeName->itemText(_comboBoxSelectVegeName->currentIndex()));
+        getElement()->setFoliageStatus( _checkBoxFoliageActive->isChecked() );
         getElement()->setHauteur(_lineEditHauteur->text().toDouble());
 
         emit modified();
     }
-}
+} 
 
 void TYVegetationWidget::editSpectre()
 {
@@ -115,5 +134,15 @@ void TYVegetationWidget::editSpectre()
     {
         _lineEditNomSpectreAtt->setText(getElement()->getSpectreAtt()->getName());
     }
+}
+
+void TYVegetationWidget::updateComboVegetation()
+{
+    for(unsigned int i=0; i<5; i++)
+    {
+        _comboBoxSelectVegeName->insertItem(i, TYVegetation::_vegeName[i]);
+    }
+
+    _comboBoxSelectVegeName->setCurrentIndex( TYVegetation::getIndexVegetation(getElement()->getName()) );
 }
 
