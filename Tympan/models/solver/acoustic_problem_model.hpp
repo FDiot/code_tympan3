@@ -50,38 +50,38 @@ public:
     { return  all_receptors.size(); }
 
     AcousticTriangle& triangle(triangle_idx tri_idx)
-    { return all_triangles[tri_idx]; }
+    { return all_triangles.at(tri_idx); }
 
     const AcousticTriangle& triangle(triangle_idx tri_idx) const
-    { return all_triangles[tri_idx]; }
+    { return all_triangles.at(tri_idx); }
 
     Point& node(node_idx idx)
-    { return all_nodes[idx]; }
+    { return all_nodes.at(idx); }
 
     const Point& node(node_idx idx) const
-    { return all_nodes[idx]; }
+    { return all_nodes.at(idx); }
 
     AcousticSource& source(source_idx idx)
-    { return all_sources[idx]; }
+    { return all_sources.at(idx); }
 
     const AcousticSource& source(source_idx idx) const
-    { return all_sources[idx]; }
+    { return all_sources.at(idx); }
 
     AcousticReceptor& receptor(receptor_idx idx)
-    { return all_receptors[idx]; }
+    { return all_receptors.at(idx); }
 
     const AcousticReceptor& receptor(receptor_idx idx) const
-    { return all_receptors[idx]; }
+    { return all_receptors.at(idx); }
 
 
     size_t nmaterials() const //TODO move to implementation file
     { return  all_materials.size(); }
 
     const AcousticMaterialBase& material(size_t mat_idx) const
-    { return *all_materials[mat_idx]; }
+    { return *all_materials.at(mat_idx); }
 
     AcousticMaterialBase& material(size_t mat_idx)
-    { return *all_materials[mat_idx]; }
+    { return *all_materials.at(mat_idx); }
 
     /**
      * @brief Push a representation of a ground material into the model
