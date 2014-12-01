@@ -88,7 +88,7 @@ public:
     /**
      * Set/Get de la vegetation.
      */
-    void setVegetation(LPTYVegetation pVeget) { _pVegetation = pVeget; _pVegetation->setParent(this); }
+    void setVegetation(LPTYVegetation pVeget);
 
     /**
      * Active ou non l'utilisation de la vegetation et retourne une
