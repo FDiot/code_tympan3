@@ -90,8 +90,6 @@ TYVegetationWidget::TYVegetationWidget(TYVegetation* pElement, QWidget* _pParent
     _vegetationLayout->addWidget(_groupBoxSpectreAtt, 2, 0);
 
     connect(_pushButtonSpectreAtt, SIGNAL(clicked()), this, SLOT(editSpectre()));
-
-    updateContent();
 }
 
 TYVegetationWidget::~TYVegetationWidget()
@@ -138,6 +136,7 @@ void TYVegetationWidget::editSpectre()
 
 void TYVegetationWidget::updateComboVegetation()
 {
+    _comboBoxSelectVegeName->clear();
     for(unsigned int i=0; i<5; i++)
     {
         _comboBoxSelectVegeName->insertItem(i, TYVegetation::_vegeName[i]);
