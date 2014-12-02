@@ -91,7 +91,8 @@
         <epaisseur>1</epaisseur>
        </Sol>
        <active>1</active>
-       <Vegetation id="{f940bde6-7cc7-4ec4-9f62-ae89112ff03a}" name="Végétation 9">
+       <Vegetation id="{f940bde6-7cc7-4ec4-9f62-ae89112ff03a}" name="aspen">
+        <foliage>1</foliage>
         <hauteur>10</hauteur>
         <Spectre id="{2cea2198-a4c9-458f-b3f8-d240de22f196}" name="Spectre 501">
          <type>0</type>

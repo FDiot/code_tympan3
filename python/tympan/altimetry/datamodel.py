@@ -252,8 +252,11 @@ class MaterialArea(PolygonalTympanFeature):
 
 class VegetationArea(MaterialArea):
 
-    def __init__(self, coords, material, height, **kwargs):
+    def __init__(self, coords, material, height, variety=None, foliage=None,
+                 **kwargs):
         self.height = height
+        self.variety = variety
+        self.foliage = foliage
         super(VegetationArea, self).__init__(coords, material, **kwargs)
 
 

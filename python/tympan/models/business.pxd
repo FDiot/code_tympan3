@@ -219,6 +219,7 @@ cdef extern from "Tympan/models/business/material/TYSol.h":
 cdef extern from "Tympan/models/business/material/TYVegetation.h":
     cdef cppclass TYVegetation (TYElement):
         double getHauteur()
+        bool getFoliageStatus()
 
 cdef extern from "Tympan/models/business/infrastructure/TYTopographie.h":
     cdef cppclass TYTopographie (TYElement):
