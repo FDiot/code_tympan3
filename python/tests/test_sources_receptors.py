@@ -13,9 +13,34 @@ _TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'computed-projects-panel')
 assert osp.isdir(_TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % _TEST_PROBLEM_DIR
 
 
-class TestTympan(TympanTC):
-    pass
+class SourceAdditionTC(TympanTC):
 
+    def test_add_sources_to_model(self):
+        project, model = self.load_project('projects-panel',
+                                           'TEST_SOURCE_PONCTUELLE_NO_RESU.xml')
+        self.assertEqual(model.nsources, 1)
+        self.assertEqual(model.nreceptors, 6)
+        freq = np.array([100.0] * 31, dtype=float)
+        sources = [((1., 1., 0.), freq, 0), ((2., 2., 10.), freq*2, 0)]
+        src_ids = []
+        for (pos, spec, shift) in sources:
+            src_ids.append(model.add_source(pos, spec, shift))
+        self.assertEqual(model.nsources, 3)
+        self.assertEqual(model.nreceptors, 6)
+        src1 = model.source(src_ids[0])
+        self.assertEqual(src1.position.x, 1.)
+        self.assertEqual(src1.position.y, 1.)
+        self.assertEqual(src1.position.z, 0.)
+        assert_allclose(src1.spectrum.to_dB().values, freq)
+        src2 = model.source(src_ids[1])
+        self.assertEqual(src2.position.x, 2.)
+        self.assertEqual(src2.position.y, 2.)
+        self.assertEqual(src2.position.z, 10.)
+        assert_allclose(src2.spectrum.to_dB().values, freq*2)
+
+
+class TestTympan(TympanTC):
+    """Place holder class to be filled with methods below"""
 
 def make_sources_test_with_file(project_file, sources_file):
     """ For a N_*.xml file from data/computed-projects-panel, load

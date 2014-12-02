@@ -30,6 +30,8 @@ cdef extern from "Tympan/models/common/3d.h":
     # because "import operator*" triggers a syntax error
 
     cdef cppclass OCoord3D:
+        OCoord3D()
+        OCoord3D(double x, double y, double z)
         double _x
         double _y
         double _z
@@ -37,11 +39,11 @@ cdef extern from "Tympan/models/common/3d.h":
         bool operator==(const OCoord3D& coord)
 
     cdef cppclass OPoint3D (OCoord3D):
-        OPoint3D(double x, double y, double z)
         OPoint3D()
+        OPoint3D(double x, double y, double z)
 
     cdef cppclass OVector3D (OCoord3D):
-        pass
+        OVector3D(double x, double y, double z)
 
 
 cdef extern from "Tympan/models/common/triangle.h":
@@ -75,9 +77,12 @@ cdef extern from "Tympan/models/common/spectre.h":
 
     cdef cppclass OSpectre:
         OSpectre()
+        OSpectre(double defaultValue)
+        OSpectre(const double* valeurs, unsigned nbVal, unsigned decalage)
         bool operator==(const OSpectre& other) const
         bool operator!=(const OSpectre& other) const
         OSpectre toDB()
+        OSpectre toGPhy()
         void setType(TYSpectreType type)
         void setEtat(TYSpectreEtat etat)
         double * getTabValReel()

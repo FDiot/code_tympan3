@@ -4,6 +4,7 @@
 import cython as cy
 
 import numpy as np
+cimport numpy as np
 
 from tympan.models cimport common as tycommon
 from tympan.core cimport unique_ptr, shared_ptr
@@ -36,6 +37,29 @@ cdef class ProblemModel:
         """
         assert self.thisptr.get() != NULL
         return self.thisptr.get().nmaterials()
+
+    def add_source(self, position, spectrum_values, shift):
+        """ position is a (x, y, z) tuple; spectrum_values is a np array containing the
+        DB values of a power spectrum, shift is the number of the first frequence for which
+        a DB value is given (frequences start at 16 Hz and end at 16000Hz, 31 values in total).
+        Add the corresponding acoustic source to the solver model (the acoustic
+        source is created with a SphericalFaceDirectivity)
+        """
+        # position
+        pos = cy.declare(tycommon.OPoint3D)
+        pos = tycommon.OPoint3D(position[0], position[1], position[2])
+        # spectrum
+        nb_val = spectrum_values.shape[0]
+        cdef np.ndarray[double, ndim=1, mode="c"] vals = spectrum_values
+        spec = cy.declare(tycommon.OSpectre)
+        spec = tycommon.OSpectre(&vals[0], nb_val, shift)
+        spec.setEtat(tycommon.SPECTRE_ETAT_DB)
+        spec.setType(tycommon.SPECTRE_TYPE_LW)
+        # directivity
+        pdirectivity = cy.declare(cy.pointer(SourceDirectivityInterface))
+        pdirectivity = new SphericalSourceDirectivity()
+        source_idx = self.thisptr.get().make_source(pos, spec.toGPhy(), pdirectivity)
+        return source_idx
 
     @property
     def nsources(self):

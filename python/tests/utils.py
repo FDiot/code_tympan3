@@ -127,4 +127,6 @@ class TympanTC(unittest.TestCase):
             # build solver model
             comp = project.current_computation
             model = project.build_model()
+            project.set_model_sources(model)
+            project.set_model_receptors(model)
         return project, model

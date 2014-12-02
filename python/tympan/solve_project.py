@@ -87,6 +87,8 @@ def solve(input_project, output_project, output_mesh, solverdir,
     project.update_site_altimetry(mesh, material_by_face)
     # Solver model
     model = project.build_model()
+    project.set_model_sources(model)
+    project.set_model_receptors(model)
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  model.nsources, model.nreceptors)
     _check_solver_model(model, site)

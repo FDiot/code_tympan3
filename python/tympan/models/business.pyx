@@ -782,9 +782,13 @@ cdef class Project:
         """Build an acoustic problem from the site of the computation."""
         model = tysolver.ProblemModel()
         build_mesh(model, self.site, self.current_computation)
-        build_sources(model, self.site, self.current_computation)
-        build_receptors(model, self.site, self.current_computation)
         return model
+
+    def set_model_sources(self, model):
+        build_sources(model, self.site, self.current_computation)
+
+    def set_model_receptors(self, model):
+        build_receptors(model, self.site, self.current_computation)
 
     @staticmethod
     def from_xml(filepath):

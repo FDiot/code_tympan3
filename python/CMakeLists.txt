@@ -10,6 +10,12 @@ include(tympan-utils-python)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 include_directories (${GTEST_INCLUDE_DIR})
+if(SYS_NATIVE_WIN)
+    execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c"
+        "import numpy; print numpy.get_include()"
+        OUTPUT_VARIABLE NUMPY_INCLUDE_DIR)
+    include_directories(${NUMPY_INCLUDE_DIR})
+endif()
 
 add_subdirectory( tympan )
 add_subdirectory( bin )
