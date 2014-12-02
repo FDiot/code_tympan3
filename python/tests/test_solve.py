@@ -28,14 +28,12 @@ def make_test_with_file(test_file):
     def test_with_file(self):
         # Load and solve the project
         with self.no_output():
-            project, model = self.load_project(
+            project, model, conv = self.load_project(
                 osp.join(TEST_PROBLEM_DIR, test_file))
             computation = project.current_computation
             solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, computation)
             solver_result = solver.solve_problem(model)
-            bus2solv_conv = bus2solv.Business2SolverConverter(
-                computation, project.site)
-            bus2solv_conv.postprocessing(model, solver_result)
+            conv.postprocessing(solver_result)
         # Load the expected result
         result_file = osp.join(TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
         with self.no_output():

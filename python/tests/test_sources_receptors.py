@@ -16,7 +16,7 @@ assert osp.isdir(_TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'"
 class SourceAdditionTC(TympanTC):
 
     def test_add_sources_to_model(self):
-        project, model = self.load_project('projects-panel',
+        project, model, _ = self.load_project('projects-panel',
                                            'TEST_SOURCE_PONCTUELLE_NO_RESU.xml')
         self.assertEqual(model.nsources, 1)
         self.assertEqual(model.nreceptors, 6)
@@ -40,7 +40,7 @@ class SourceAdditionTC(TympanTC):
 
     def test_computation_with_manually_added_source(self):
         power_lvl = np.array([10.0] * 31, dtype=float)
-        ref_proj, ref_model = self.load_project('site_receptor_source.xml')
+        ref_proj, ref_model, _ = self.load_project('site_receptor_source.xml')
         assert ref_model.nsources == 1
         assert ref_model.nreceptors == 1
         ref_src = ref_model.source(0)
@@ -50,7 +50,7 @@ class SourceAdditionTC(TympanTC):
         ref_result = solver.solve_problem(ref_model).spectrum(0, 0).values
         # do the same with a manually added source (the xml project is the same as
         # 'site_receptor_source.xml' except the source has been removed)
-        proj, model = self.load_project('site_receptor.xml')
+        proj, model, _ = self.load_project('site_receptor.xml')
         assert model.nsources == 0
         assert model.nreceptors == 1
         model.add_source((3., 3., 2.), power_lvl, 0)
@@ -59,7 +59,7 @@ class SourceAdditionTC(TympanTC):
         assert_allclose(ref_result, result)
 
     def test_value(self):
-        proj, model = self.load_project('site_receptor.xml')
+        proj, model, _ = self.load_project('site_receptor.xml')
         power_lvl = np.array([10., 10., 10., 15., 15., 15., 20., 20., 20., 20., 50.],
                              dtype=float)
         model.add_source((3., 3., 2.),  power_lvl, 0)
@@ -94,7 +94,7 @@ def make_sources_test_with_file(project_file, sources_file):
               by values -- see compare_floats())
             * Then the lines are compared 2 by 2
         """
-        project, model = self.load_project(project_file)
+        project, model, _ = self.load_project(project_file)
         nexpected_sources = sum(1 for line in open(sources_file))
         # Check no sources are missing
         self.assertEqual(nexpected_sources, model.nsources)
@@ -128,7 +128,7 @@ def make_receptors_test_with_file(project_file, receptors_file):
             Operates as in make_sources_test_with_file (see above), except here
             we are just dealing with positions and not spetrums.
         """
-        project, model = self.load_project(project_file)
+        project, model, _ = self.load_project(project_file)
         # Check no receptors are missing
         nexpected_receptors = sum(1 for line in open(receptors_file))
         self.assertEqual(nexpected_receptors, model.nreceptors)

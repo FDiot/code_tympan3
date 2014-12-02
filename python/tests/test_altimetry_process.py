@@ -11,6 +11,7 @@ from tympan.altimetry import builder
 try:
     from tympan.models.business import Project
     import tympan.business2solver as bus2solv
+    from tympan.models.solver import ProblemModel
     MISSING_EXT = False
 except ImportError:
     MISSING_EXT = True
@@ -176,9 +177,13 @@ class TestProcessAltimetry(TympanTC):
             material_by_face = builder.material_by_face(feature_by_face)
             project.update_site_altimetry(mesh, material_by_face)
             # Build solver model and check source altimetry
-            solver_model = project.build_model()
-            project.set_model_sources(solver_model)
-            project.set_model_receptors(solver_model)
+            solver_model = ProblemModel()
+            converter = bus2solv.Business2SolverConverter(project.current_computation,
+                                                          project.site,
+                                                          solver_model)
+            converter.build_mesh()
+            converter.build_sources()
+            converter.build_receptors()
         # 1 source
         self.assertEqual(solver_model.nsources, 1)
         # source is on the hillock, which is 25 m high. It is at 2m high above the ground
