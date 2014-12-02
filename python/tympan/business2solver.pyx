@@ -13,21 +13,6 @@ from tympan.models cimport solver as tysolver
 from tympan.models cimport common as tycommon
 
 
-# business / solver mappings
-# business receptors (control and mesh points) to solver receptors indices
-bus2solv_receptors = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t])
-# solver receptors to business receptors
-solv2bus_receptors = cy.declare(map[size_t, cy.pointer(tybusiness.TYPointCalcul)])
-# business source to micro sources (both business model)
-macro2micro_sources = cy.declare(map[tybusiness.TYElem_ptr,
-                                     vector[SmartPtr[tybusiness.TYGeometryNode]]])
-# business micro sources (TYSourcePonctuelle contained in TYGeometryNode) to solver source indices
-bus2solv_sources = cy.declare(map[SmartPtr[tybusiness.TYGeometryNode], size_t])
-# Receptors that are mesh points and therefore will be removed from the final
-# result matrix after the solver computation:
-to_be_removed_receptors = cy.declare(deque[size_t])
-
-
 cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]] map_sources):
     """ factory function: return a Business2MicroSource (python object) from a
         map (TYElement*, SmartPtr[TYGeometryNode]) (cpp lib)
@@ -52,6 +37,19 @@ cdef class Business2SolverConverter:
     model = cy.declare(tysolver.ProblemModel)
     # transitional result matrix (from solver matrix to condensed business matrix)
     transitional_result_matrix = cy.declare(cy.pointer(tycommon.SpectrumMatrix))
+    # business / solver mappings
+    # business receptors (control and mesh points) to solver receptors indices
+    bus2solv_receptors = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t])
+    # solver receptors to business receptors
+    solv2bus_receptors = cy.declare(map[size_t, cy.pointer(tybusiness.TYPointCalcul)])
+    # business source to micro sources (both business model)
+    macro2micro_sources = cy.declare(map[tybusiness.TYElem_ptr,
+                                         vector[SmartPtr[tybusiness.TYGeometryNode]]])
+    # business micro sources (TYSourcePonctuelle contained in TYGeometryNode) to solver source indices
+    bus2solv_sources = cy.declare(map[SmartPtr[tybusiness.TYGeometryNode], size_t])
+    # Receptors that are mesh points and therefore will be removed from the final
+    # result matrix after the solver computation:
+    to_be_removed_receptors = cy.declare(deque[size_t])
 
     @cy.locals(comp=tybusiness.Computation, site=tybusiness.Site, model=tysolver.ProblemModel)
     def __cinit__(self, comp, site, model):
@@ -73,14 +71,6 @@ cdef class Business2SolverConverter:
         self.comp.thisptr.getRealPointer().goPostprocessing()
         # Clear intermediate data
         del self.transitional_result_matrix
-        self.clear()
-
-    def clear(self):
-        bus2solv_receptors.clear()
-        solv2bus_receptors.clear()
-        macro2micro_sources.clear()
-        bus2solv_sources.clear()
-        to_be_removed_receptors.clear()
 
     @cy.locals(result=tysolver.ResultModel)
     def update_business_receptors(self, result):
@@ -94,8 +84,8 @@ cdef class Business2SolverConverter:
         business_result_matrix = cy.address(business_result.thisptr.getRealPointer().getResultMatrix())
         business_result_matrix.resize(self.model.nreceptors, self.model.nsources)
         it = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t].iterator)
-        it = bus2solv_receptors.begin()
-        while it != bus2solv_receptors.end():
+        it = self.bus2solv_receptors.begin()
+        while it != self.bus2solv_receptors.end():
             receptor = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
             receptor = deref(it).first
             # retrieve receptor spectra
@@ -127,21 +117,21 @@ cdef class Business2SolverConverter:
         busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
         result_sources = cy.declare(map[tybusiness.TYElem_ptr, int])
         condensate_matrix = cy.declare(tycommon.SpectrumMatrix)
-        condensate_matrix.resize(bus2solv_receptors.size(), macro2micro_sources.size())
+        condensate_matrix.resize(self.bus2solv_receptors.size(), self.macro2micro_sources.size())
         rec_it = cy.declare(map[cy.pointer(tybusiness.TYPointCalcul), size_t].iterator)
-        rec_it = bus2solv_receptors.begin()
+        rec_it = self.bus2solv_receptors.begin()
         rec_counter = 0
         # Go through all the business receptors
-        while rec_it != bus2solv_receptors.end():
+        while rec_it != self.bus2solv_receptors.end():
             receptor = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
             receptor = deref(rec_it).first
             busresult.addRecepteur(receptor)
             source_it = cy.declare(map[tybusiness.TYElem_ptr,
                                        vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
-            source_it = macro2micro_sources.begin()
+            source_it = self.macro2micro_sources.begin()
             source_counter = 0
             # Go through all the business infrastructure sources
-            while source_it != macro2micro_sources.end():
+            while source_it != self.macro2micro_sources.end():
                 valid_spectrum = True
                 cumul_spectrum = cy.declare(tycommon.OSpectre)
                 cumul_spectrum.setDefaultValue(0.0)
@@ -150,7 +140,7 @@ cdef class Business2SolverConverter:
                 # Go through all their business subsources
                 for i in xrange(subsources.size()):
                     # Get solver result for this subsource
-                    subsource_idx = bus2solv_sources[subsources[i]] # solver idx
+                    subsource_idx = self.bus2solv_sources[subsources[i]] # solver idx
                     cur_spectrum = cy.declare(tycommon.OSpectre)
                     cur_spectrum = self.transitional_result_matrix[0].element(
                         deref(rec_it).second, subsource_idx)
@@ -176,12 +166,12 @@ cdef class Business2SolverConverter:
         for the solver resolution but once computation is done we settle for a synthetic
         result
         """
-        for i in xrange(to_be_removed_receptors.size()):
-            self.transitional_result_matrix[0].clearReceptor(to_be_removed_receptors[i])
+        for i in xrange(self.to_be_removed_receptors.size()):
+            self.transitional_result_matrix[0].clearReceptor(self.to_be_removed_receptors[i])
             remove_me = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
-            remove_me = solv2bus_receptors[to_be_removed_receptors[i]]
-            bus2solv_receptors.erase(remove_me)
-            solv2bus_receptors.erase(to_be_removed_receptors[i])
+            remove_me = self.solv2bus_receptors[self.to_be_removed_receptors[i]]
+            self.bus2solv_receptors.erase(remove_me)
+            self.solv2bus_receptors.erase(self.to_be_removed_receptors[i])
 
     def build_mesh(self):
         """ Retrieve a mesh from business site topography and altimetry and inject it into
@@ -264,9 +254,9 @@ cdef class Business2SolverConverter:
                     # Add it to the solver model
                     source_idx = self.model.thisptr.get().make_source(ppoint[0], subsource.getSpectre()[0], pdirectivity)
                     # Record where it has been stored
-                    bus2solv_sources[sources_of_elt[i]] = source_idx
+                    self.bus2solv_sources[sources_of_elt[i]] = source_idx
                     # Copy source mapping to macro2micro_sources
-                    macro2micro_sources[deref(its).first] = deref(its).second
+                    self.macro2micro_sources[deref(its).first] = deref(its).second
                     nb_sources += 1
             inc(its)
         # Recurse on subsites
@@ -295,8 +285,8 @@ cdef class Business2SolverConverter:
                 # inheritance: TYPointControl > TYPointCalcul > TYPoint > tycommon.OPoint3D > OCoord3D
                 # call to tycommon.OPoint3D copy constructor to record control point coordinates
                 rec_idx = self.model.thisptr.get().make_receptor((control_points[i].getRealPointer())[0])
-                bus2solv_receptors[control_points[i].getRealPointer()] = rec_idx
-                solv2bus_receptors[rec_idx] = control_points[i].getRealPointer()
+                self.bus2solv_receptors[control_points[i].getRealPointer()] = rec_idx
+                self.solv2bus_receptors[rec_idx] = control_points[i].getRealPointer()
                 nb_receptors += 1
         # Then add mesh points to the acoustic problem model
         meshes = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
@@ -323,10 +313,10 @@ cdef class Business2SolverConverter:
                     mesh_points[j].getRealPointer()._y = point3d._y
                     mesh_points[j].getRealPointer()._z = point3d._z
                     rec_idx = self.model.thisptr.get().make_receptor((mesh_points[j].getRealPointer())[0])
-                    bus2solv_receptors[mesh_points[j].getRealPointer()] = rec_idx
-                    solv2bus_receptors[rec_idx] = mesh_points[j].getRealPointer()
+                    self.bus2solv_receptors[mesh_points[j].getRealPointer()] = rec_idx
+                    self.solv2bus_receptors[rec_idx] = mesh_points[j].getRealPointer()
                     # We won't keep mesh points in the final result matrix
-                    to_be_removed_receptors.push_back(rec_idx)
+                    self.to_be_removed_receptors.push_back(rec_idx)
                     nb_receptors += 1
         assert (self.model.thisptr.get().nreceptors() == nb_receptors,
                 (self.model.thisptr.get().nreceptors(), nb_receptors))

@@ -64,7 +64,6 @@ class TestSolveProject(TympanTC):
         self.assertFalse(self.run_solve_subprocess(input_proj))
 
     def test_solver_project_ok(self):
-        self.skipTest('segfault due to global variables in business2solver')
         input_proj = osp.join(TEST_DATA_DIR, 'projects-panel',
                               'TEST_SOURCE_PONCTUELLE_NO_RESU.xml')
         self.run_solve(input_proj)
