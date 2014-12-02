@@ -183,6 +183,12 @@ cdef class Vegetation:
         return self.thisptr.getRealPointer().getName().toStdString()
 
     @property
+    def foliage(self):
+        """Does the vegetation has foliage?"""
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getFoliageStatus()
+
+    @property
     def elem_id(self):
         """Vegetation id"""
         return tyelement_id(self.thisptr.getRealPointer())

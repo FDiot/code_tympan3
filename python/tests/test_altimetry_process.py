@@ -156,6 +156,8 @@ class TestProcessAltimetry(TympanTC):
         except KeyError:
             self.fail('vegetation area not found in altimetry site')
         self.assertEqual(vegarea.height, 10)
+        self.assertTrue(vegarea.foliage)
+        self.assertEqual(vegarea.variety, 'aspen')
         vegfaces = [fh for fh, feature in feature_by_face.items()
                     if isinstance(feature, VegetationArea)]
         # Just check there are faces in the vegetation area.

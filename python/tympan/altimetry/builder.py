@@ -38,6 +38,8 @@ def build_material_area(ty_materialarea, altimetry_groundmaterial):
     kwargs = {}
     if ty_materialarea.has_vegetation():
         kwargs['height'] = ty_materialarea.vegetation.height
+        kwargs['variety'] = ty_materialarea.vegetation.name()
+        kwargs['foliage'] = ty_materialarea.vegetation.foliage
         cls = VegetationArea
     else:
         cls = MaterialArea
