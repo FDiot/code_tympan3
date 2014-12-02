@@ -91,7 +91,7 @@ public:
 
 public:
     static QString _vegeName[];
-    static unsigned int getIndexVegetation( QString &vegeName); 
+    static unsigned int getIndexVegetation(const QString &vegeName);
 
     // Membres
 protected:

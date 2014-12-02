@@ -131,7 +131,7 @@ void TYVegetation::setSpectreAtt(TYSpectre* pAtt)
     if (_pSpectreAtt->getEtat() != SPECTRE_ETAT_LIN) { *_pSpectreAtt = _pSpectreAtt->toGPhy(); } //Passage en lineaire si necessaire
 }
 
-unsigned int TYVegetation::getIndexVegetation( QString &vegeName)
+unsigned int TYVegetation::getIndexVegetation(const QString &vegeName)
 {
     unsigned int retValue = 0;
 
