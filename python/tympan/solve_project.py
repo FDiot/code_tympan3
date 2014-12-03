@@ -29,7 +29,8 @@ except ImportError:
 from tympan import SOLVER_CONFIG_ATTRIBUTES
 from tympan.altimetry import export_to_ply, builder
 from tympan.models.solver import Configuration, ProblemModel
-from tympan.business2solver import Business2SolverConverter, load_computation_solver
+from tympan.business2solver import (load_computation_solver, build_solver_model,
+                                    update_business_model)
 
 CONVERTERS = {
     'bool': bool,
@@ -86,11 +87,8 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Update site and the project before building the solver model
     project.update_site_altimetry(mesh, material_by_face)
     # Solver model
-    model = ProblemModel()
-    converter = Business2SolverConverter(comp, site, model)
-    converter.build_mesh()
-    converter.build_sources()
-    converter.build_receptors()
+    model_handler = build_solver_model(project)
+    model = model_handler.model
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  model.nsources, model.nreceptors)
     _check_solver_model(model, site)
@@ -103,7 +101,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
         logging.error(str(exc))
         raise
     # Export solver results to the business model
-    converter.postprocessing(solver_result)
+    update_business_model(model_handler, solver_result)
     # Reserialize project
     try:
         project.to_xml(output_project)

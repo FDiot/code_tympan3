@@ -125,11 +125,4 @@ class TympanTC(unittest.TestCase):
             # update site altimetry
             material_by_face = builder.material_by_face(feature_by_face)
             project.update_site_altimetry(mesh, material_by_face)
-            # build solver model
-            comp = project.current_computation
-            model = ProblemModel()
-            conv = bus2solv.Business2SolverConverter(comp, site, model)
-            conv.build_mesh()
-            conv.build_sources()
-            conv.build_receptors()
-        return project, model, conv
+        return project
