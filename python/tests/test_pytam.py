@@ -15,7 +15,7 @@ _HERE = osp.realpath(osp.dirname(__file__))
 class TestPyTam(TympanTC):
 
     def test_hierarchy(self):
-        project, _, _ = self.load_project(
+        project = self.load_project(
             'projects-panel',
             "10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml")
         site = project.site
@@ -26,7 +26,8 @@ class TestPyTam(TympanTC):
     def test_base(self):
         # XXX This test uses expected bad values provided by the current
         # implementation
-        project, model, _ = self.load_project('solver_export', "base.xml")
+        project = self.load_project('solver_export', "base.xml")
+        model = bus2solv.build_solver_model(project).model
         self.assertEqual(model.npoints, 6) # OK
         self.assertEqual(model.ntriangles, 5) # XXX should be 4
         self.assertEqual(model.nmaterials, 5) # XXX should be 1
@@ -42,9 +43,9 @@ class TestPyTam(TympanTC):
         """
         # load a xml project, build an acoustic problem from it and retrieve
         # its triangular mesh to make sure it contains the correct data
-        project, _, _ = self.load_project("tiny_site.xml")
+        project = self.load_project("tiny_site.xml")
         with self.no_output():
-            model = project.current_computation.acoustic_problem
+            model = bus2solv.build_solver_model(project).model
             # exports in nodes_test the nodes coordinates (x,y,z) and in triangles_test
             # the triangle nodes indices (position in the nodes_test array)
             (nodes_test, triangles_test) = model.export_triangular_mesh()
@@ -78,8 +79,8 @@ class TestPyTam(TympanTC):
 
     @unittest.skip("Implementation to be fixed")
     def test_ground_materials(self):
-        project, _, _ = self.load_project('solver_export', "ground_materials.xml")
-        model = project.current_computation.acoustic_problem
+        project = self.load_project('solver_export', "ground_materials.xml")
+        model = bus2solv.build_solver_model(project).model
         self.assertEqual(model.nmaterials(), 3)
         # XXX FIXME: the default material is replicated once per triangle
         # TODO to be completed: cf. ticket #1468184
