@@ -728,7 +728,8 @@ class ElevationMesh(MeshedCDTWithInfo):
 
     def altitude_for_input_vertex(self, vh):
         alti = self.input_vertex_infos(vh).altitude
-        assert alti is not UNSPECIFIED_ALTITUDE
+        assert alti is not UNSPECIFIED_ALTITUDE, \
+            'vertex {} has no altitude specified'.format(self.py_vertex(vh))
         return alti
 
     def point_altitude(self, p, face_hint=None):
@@ -736,7 +737,9 @@ class ElevationMesh(MeshedCDTWithInfo):
         fh, vh_or_i = self.locate_point(p, face_hint=face_hint)
         if fh is None: # point p is out of the convex hull of the triangulation
             return UNSPECIFIED_ALTITUDE
-        if isinstance(vh_or_i, Vertex_handle): # point p is a vertex
+        if (isinstance(vh_or_i, Vertex_handle)
+                and vh_or_i in self._input_vertices_infos):
+            # Point is on a vertex, which is part of an input constraint.
             return self.altitude_for_input_vertex(vh_or_i)
         if isinstance(vh_or_i, int): # point is on an edge
             if self.cdt.is_infinite(fh): # get a finite face if needed
