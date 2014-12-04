@@ -857,10 +857,16 @@ class ElevationProfile(object):
 
     def point_data_interpolator(self, point_data, _distances=None):
         """Return an interpolator on profile points for data associated with
-        profile points through the `point_data` sequence.
+        profile points through `point_data`.
+
+        `point_data` may be a sequence of same lenght that distances or a
+        callable giving data as a function of the distance to the segment
+        origin.
         """
         distances = _distances or self._point_distances()
-        if len(distances) != len(point_data):
+        if callable(point_data):
+            point_data = map(point_data, distances)
+        elif len(distances) != len(point_data):
             raise ValueError('incompatible number of data points')
         return InterpolatedUnivariateSpline(distances, point_data, k=1)
 
@@ -868,8 +874,7 @@ class ElevationProfile(object):
     def spline(self):
         """The underlying interpolating spline"""
         if not self._spline:
-            altitudes = [self.point_altitude(p) for p in self.points]
-            self._spline = self.point_data_interpolator(altitudes)
+            self._spline = self.point_data_interpolator(self.point_altitude)
         return self._spline
 
     @property

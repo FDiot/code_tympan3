@@ -495,7 +495,7 @@ class ElevationProfileTC(unittest.TestCase):
         [(1.5, 1.5), (3.5, 1.5), (3.5, 3.5), (1.5, 3.5)],
         [(2, 2), (3, 2), (3, 3), (2, 3)],
     ]
-    altitudes = (0, 0, 2)
+    altitudes = (1, 2, 3)
     materials = (0, 1, 2)
 
     def setUp(self):
@@ -527,16 +527,15 @@ class ElevationProfileTC(unittest.TestCase):
         profile = mesh.ElevationProfile(self.mesh, segment)
         self.assertIs(profile.point_altitude(0.5),
                       mesh.UNSPECIFIED_ALTITUDE)
-        self.assertEqual(profile.point_altitude(2.5), 2.0)
-        self.assertEqual(profile.point_altitude(1.5), 0.0)
+        self.assertEqual(profile.point_altitude(2.5), 3.0)
+        self.assertEqual(profile.point_altitude(1.5), 2.0)
 
     def test_interpolation(self):
         segment = LineString([(2.5, 0), (2.5, 5)])
         profile = mesh.ElevationProfile(self.mesh, segment)
-        self.assertEqual(profile(0), 0)
-        self.assertEqual(profile(1), 0)
-        self.assertEqual(profile(2), 2)
-        self.assertTrue(0 < profile(1.7) < 2)
+        self.assertEqual(profile(1), 1)
+        self.assertEqual(profile(2), 3)
+        self.assertTrue(2 < profile(1.7) < 3)
 
     @staticmethod
     def _polygon_from_face(fh):
