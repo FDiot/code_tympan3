@@ -2,7 +2,7 @@ import os
 import tempfile
 
 from utils import TympanTC, no_output
-from tympan.models.business import Project
+from tympan.models._business import Project
 
 class TestSolverConfig(TympanTC):
 

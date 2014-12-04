@@ -4,9 +4,9 @@
 import cython as cy
 from cython.operator cimport dereference as deref, preincrement as inc
 
-from tympan.models cimport common as tycommon
-from tympan.models cimport solver as tysolver
-from tympan.business2solver cimport business2microsource
+from tympan.models cimport _common as tycommon
+from tympan.models cimport _solver as tysolver
+from tympan._business2solver cimport business2microsource
 
 
 cdef pointcalcul2receptor(SmartPtr[TYPointCalcul] ptcalc):

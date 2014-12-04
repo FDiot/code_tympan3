@@ -6,9 +6,9 @@ from libcpp.deque cimport deque
 from libcpp cimport bool
 from libcpp.map cimport map as cppmap
 
-from tympan.core cimport QString, SmartPtr, OGenID, SolverInterface
-from tympan.models cimport common as tycommon
-from tympan.models cimport solver as tysolver
+from tympan._core cimport QString, SmartPtr, OGenID, SolverInterface
+from tympan.models cimport _common as tycommon
+from tympan.models cimport _solver as tysolver
 
 
 cdef extern from "Tympan/models/business/xml_project_util.h" namespace "tympan":

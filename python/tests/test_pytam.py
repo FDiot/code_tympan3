@@ -8,7 +8,7 @@ from numpy.testing import assert_allclose
 from utils import TEST_DATA_DIR, TympanTC, no_output
 
 with no_output():
-    import tympan.business2solver as bus2solv
+    import tympan._business2solver as bus2solv
 
 _HERE = osp.realpath(osp.dirname(__file__))
 

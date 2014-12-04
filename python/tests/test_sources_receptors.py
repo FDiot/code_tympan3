@@ -7,7 +7,7 @@ from numpy.testing import assert_allclose
 
 from utils import (TEST_DATA_DIR, TEST_SOLVERS_DIR, TEST_RESULT_DIR, TympanTC,
                    compare_floats)
-import tympan.business2solver as bus2solv
+import tympan._business2solver as bus2solv
 
 _TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'computed-projects-panel')
 assert osp.isdir(_TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % _TEST_PROBLEM_DIR

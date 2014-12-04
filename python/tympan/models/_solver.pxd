@@ -1,13 +1,13 @@
+"""THIS FILE IS GENERATED, DON'T EDIT IT"""
 """solver models for Code_TYMPAN, headers
 """
 from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.vector cimport vector
 
-from tympan.core cimport SolverInterface
-from tympan.models.common cimport (OPoint3D, OSpectre, OSpectreComplex, OVector3D,
-                                   SpectrumMatrix)
-
+from tympan._core cimport SolverInterface
+from tympan.models._common cimport (OPoint3D, OSpectre, OSpectreComplex,
+                                    OVector3D, SpectrumMatrix)
 
 # XXX importing SmartPtr and shared_ptr from tympan.core set a cyclical dependency
 # between tympan.core and tympan.models.solver, since tympan.core declares
@@ -104,3 +104,61 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
 cdef extern from "Tympan/models/solver/config.h" namespace "tympan::SolverConfiguration":
     SmartPtr[SolverConfiguration] get()
 
+
+cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
+    cdef cppclass SolverConfiguration:
+        double AtmosPressure
+        double AtmosTemperature
+        double AtmosHygrometry
+        double AnalyticC0
+        double WindDirection
+        double AnalyticGradC
+        double AnalyticGradV
+        int RayTracingOrder
+        int Discretization
+        int NbRaysPerSource
+        float MaxLength
+        float SizeReceiver
+        int Accelerator
+        int MaxTreeDepth
+        float AngleDiffMin
+        float CylindreThick
+        int MaxProfondeur
+        bool UseSol
+        int MaxReflexion
+        int MaxDiffraction
+        bool DiffractionUseRandomSampler
+        int NbRayWithDiffraction
+        bool DiffractionDropDownNbRays
+        bool DiffractionFilterRayAtCreation
+        bool UsePathDifValidation
+        float MaxPathDifference
+        bool DiffractionUseDistanceAsFilter
+        bool KeepDebugRay
+        bool UsePostFilters
+        bool EnableFullTargets
+        float TargetsDensity
+        float InitialAngleTheta
+        float InitialAnglePhi
+        int AnalyticNbRay
+        double AnalyticTMax
+        double AnalyticH
+        double AnalyticDMax
+        int AnalyticTypeTransfo
+        int NbThreads
+        bool UseRealGround
+        bool UseLateralDiffraction
+        bool UseReflection
+        bool PropaConditions
+        float H1parameter
+        bool ModSummation
+        bool UseMeteo
+        float OverSampleD
+        bool UseFresnelArea
+        float Anime3DSigma
+        int Anime3DForceC
+        bool DebugUseCloseEventSelector
+        bool DebugUseDiffractionAngleSelector
+        bool DebugUseDiffractionPathSelector
+        bool DebugUseFermatSelector
+        bool DebugUseFaceSelector

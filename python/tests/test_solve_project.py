@@ -7,7 +7,7 @@ import ConfigParser
 
 from utils import (TympanTC, no_output, TEST_DATA_DIR, TEST_SOLVERS_DIR,
                    PROJECT_BASE)
-from tympan.models.business import Project
+from tympan.models._business import Project
 import tympan.solve_project as tysolve
 
 class TestSolveProject(TympanTC):
