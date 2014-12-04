@@ -7,11 +7,11 @@ from libcpp.deque cimport deque
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-from tympan.core cimport shared_ptr
-from tympan.models cimport business as tybusiness
-from tympan.models cimport solver as tysolver
-from tympan.models.solver import ModelHandler
-from tympan.models cimport common as tycommon
+from tympan._core cimport shared_ptr
+from tympan.models cimport _business as tybusiness
+from tympan.models cimport _solver as tysolver
+from tympan.models._solver import ModelHandler
+from tympan.models cimport _common as tycommon
 
 
 cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]] map_sources):

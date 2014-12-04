@@ -7,8 +7,8 @@ import cython as cy
 import numpy as np
 cimport numpy as np
 
-from tympan.models cimport common as tycommon
-from tympan.core cimport unique_ptr, shared_ptr
+from tympan.models cimport _common as tycommon
+from tympan._core cimport unique_ptr, shared_ptr
 
 
 class ModelHandler(object):

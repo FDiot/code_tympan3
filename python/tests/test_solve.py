@@ -6,10 +6,10 @@ from utils import (TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC
                    no_output, compare_floats)
 
 with no_output():
-    import tympan.models.business as tybusiness
-    import tympan.models.solver as tysolver
-    import tympan.business2solver as bus2solv
-    from tympan.models.solver import Configuration
+    import tympan.models._business as tybusiness
+    import tympan.models._solver as tysolver
+    import tympan._business2solver as bus2solv
+    from tympan.models._solver import Configuration
 
 # avoid segfaults due to multithreading
 Configuration.get().NbThreads = 1

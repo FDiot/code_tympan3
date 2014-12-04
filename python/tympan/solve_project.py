@@ -13,14 +13,14 @@ logging.basicConfig(stream=stream, level=logging.DEBUG,
 
 
 try:
-    import tympan.models.business as tybusiness
+    import tympan.models._business as tybusiness
 except ImportError:
     err = "solve_project.py module couldn't find tympan.models.business cython library."
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
     raise ImportError(err)
 
 try:
-    import tympan.business2solver as bus2solv
+    import tympan._business2solver as bus2solv
 except ImportError:
     err = "solve_project.py module couldn't find tympan.business2solver cython library."
     logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
@@ -28,9 +28,9 @@ except ImportError:
 
 from tympan import SOLVER_CONFIG_ATTRIBUTES
 from tympan.altimetry import export_to_ply, builder
-from tympan.models.solver import Configuration, ProblemModel
-from tympan.business2solver import (load_computation_solver, build_solver_model,
-                                    update_business_model)
+from tympan.models._solver import Configuration, ProblemModel
+from tympan._business2solver import (load_computation_solver, build_solver_model,
+                                     update_business_model)
 
 CONVERTERS = {
     'bool': bool,
