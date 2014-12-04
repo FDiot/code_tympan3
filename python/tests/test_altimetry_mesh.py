@@ -337,6 +337,23 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
                       mesh.UNSPECIFIED_ALTITUDE) #out of bounds
         self.assertEqual(self.mesher.point_altitude((1, 0.5)), slope*0.5) # face
 
+    def test_point_altitude_refined_mesh(self):
+        vA, vB, vC, edgeAB, faceABC = self.build_triangle()
+        self.mesher.refine_mesh()
+        self.mesher.update_info_for_vertices()
+        self.mesher.update_info_for_edges()
+        non_input_node = None  # a vertex that is not an input constraint.
+        for vh in self.mesher.cdt.finite_vertices():
+            if vh not in self.mesher._input_vertices_infos:
+                non_input_node = self.mesher.py_vertex(vh)
+                break
+        else:
+            self.fail('fail to find a vertex that is not an input constraint')
+        alti = self.mesher.point_altitude(non_input_node)
+        # The non-input node is ouside the triangle at coordinate (1, 0) and
+        # thus altitude 0.
+        self.assertEqual(alti, 0)
+
     def test_crossing_level_lines_same_altitude_merge_info(self):
         (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments(V_altitude=10)
         altitudes = self.mesher.merge_info_for_vertices(
