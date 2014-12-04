@@ -777,18 +777,6 @@ cdef class Project:
             control_points.append(urec)
         return control_points
 
-#    def build_model(self):
-        #"""Build an acoustic problem from the site of the computation."""
-        #model = tysolver.ProblemModel()
-        #build_mesh(model, self.site, self.current_computation)
-        #return model
-
-    #def set_model_sources(self, model):
-        #build_sources(model, self.site, self.current_computation)
-
-    #def set_model_receptors(self, model):
-        #build_receptors(model, self.site, self.current_computation)
-
     @staticmethod
     def from_xml(filepath):
         """ Build a project (TYProject) from a xml file
