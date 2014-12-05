@@ -197,6 +197,10 @@ cdef class SolverSource:
         assert self.thisptr != NULL
         return tycommon.ospectre2spectrum(self.thisptr.spectrum)
 
+    def value(self, freq):
+        """The spectrum value corresponding to the 'freq' frequency (linear, power)"""
+        return self.thisptr.spectrum.getValueReal(freq)
+
 
 cdef class SolverReceptor:
     thisptr = cy.declare(cy.pointer(AcousticReceptor))
