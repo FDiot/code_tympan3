@@ -87,6 +87,7 @@ cdef extern from "Tympan/models/common/spectre.h":
         void setEtat(TYSpectreEtat etat)
         double * getTabValReel()
         unsigned int getNbValues() const
+        double getValueReal(double freq)
         void setDefaultValue(const double& valeur)
         OSpectre sum(const OSpectre& spectre) const
         bool isValid() const
