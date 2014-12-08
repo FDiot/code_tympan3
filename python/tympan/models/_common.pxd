@@ -93,6 +93,7 @@ cdef extern from "Tympan/models/common/spectre.h":
         bool isValid() const
         void setValid(const bool& valid)
         void printme() const
+        double valGlobDBA()
 
     cdef cppclass OSpectreComplex (OSpectre):
         OSpectreComplex()

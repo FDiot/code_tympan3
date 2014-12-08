@@ -5,12 +5,46 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-from utils import TEST_DATA_DIR, TympanTC, no_output
-from tympan.models.solver import Model
+from utils import (TEST_DATA_DIR, TEST_PROBLEM_DIR, TEST_SOLVERS_DIR, TympanTC,
+                   no_output)
+from tympan.models.solver import Model, Solver
 
 _HERE = osp.realpath(osp.dirname(__file__))
 
 class TestPyTam(TympanTC):
+
+    def _compute_project(self, test_file):
+        with self.no_output():
+            project = self.load_project(test_file)
+            model = Model.from_project(project)
+            solver = Solver.from_project(project, TEST_SOLVERS_DIR)
+            # avoid segfaults due to multithreading
+            solver.nthreads = 1
+            solver_result = solver.solve(model)
+            project.import_result(model, solver_result)
+        return project
+
+    def test_solve_check_business_result_one_source(self):
+        input_proj = osp.join(TEST_PROBLEM_DIR, 'TEST_FACE_NO_RESU.xml')
+        project = self._compute_project(input_proj)
+        result = project.current_computation.result
+        self.assertEqual(result.nsources, 1)
+        self.assertEqual(result.nreceptors, 6)
+        actual = [result.spectrum(i, 0).dBA for i in range(6)]
+        expected = [result.receptor(i).dBA for i in range(6)]
+        assert_allclose(actual, expected)
+
+    def test_solve_check_business_result_two_sources(self):
+        input_proj = osp.join(TEST_DATA_DIR, 'test_restitution_results.xml')
+        project = self._compute_project(input_proj)
+        result = project.current_computation.result
+        self.assertEqual(result.nsources, 2)
+        self.assertEqual(result.nreceptors, 6)
+        # because first source has a very low emission spectrum and therefore
+        # doesn't contribute to the result
+        actual = [result.spectrum(i, 1).dBA for i in range(6)]
+        expected = [result.receptor(i).dBA for i in range(6)]
+        assert_allclose(actual, expected)
 
     def test_hierarchy(self):
         project = self.load_project(

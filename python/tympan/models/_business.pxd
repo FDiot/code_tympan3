@@ -86,6 +86,7 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         tycommon.SpectrumMatrix& getResultMatrix()
         void setSources(cppmap[TYElem_ptr, int])
         void addRecepteur(TYPointCalcul* pRecepteur)
+        int getIndexRecepteur(TYPointCalcul* pRecepteur)
 
 cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h" namespace "TYComputedDirectivity":
     cdef enum DirectivityType:
@@ -190,6 +191,7 @@ cdef extern from "Tympan/models/business/TYPointCalcul.h":
         bool getEtat(TYCalcul* pCalcul)
         void setSpectre(const TYSpectre& spectre, TYCalcul* pCalcul)
         TYSpectre* getSpectre(TYCalcul* pCalcul)
+        double getValA()
 
 cdef extern from "Tympan/models/business/TYPointControl.h":
     cdef cppclass TYPointControl (TYPointCalcul):
