@@ -656,6 +656,12 @@ cdef class Receptor:
             return True
         return False
 
+    @property
+    def dBA(self):
+        """Balanced spectrum value in DBA (for audible frequencies)"""
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getValA()
+
 
 cdef class UserReceptor:
     thisptr = cy.declare(SmartPtr[TYPointControl])

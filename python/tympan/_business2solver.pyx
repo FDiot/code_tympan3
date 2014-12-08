@@ -133,6 +133,7 @@ cdef class Business2SolverConverter:
             receptor = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
             receptor = deref(rec_it).first
             busresult.addRecepteur(receptor)
+            receptor_id = busresult.getIndexRecepteur(receptor)
             source_it = cy.declare(map[tybusiness.TYElem_ptr,
                                        vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
             source_it = self.macro2micro_sources.begin()
@@ -159,7 +160,7 @@ cdef class Business2SolverConverter:
                 # them to DB.
                 cumul_spectrum.setEtat(tycommon.SPECTRE_ETAT_LIN)
                 cumul_spectrum = cumul_spectrum.toDB()
-                condensate_matrix.setSpectre(rec_counter, source_counter, cumul_spectrum)
+                condensate_matrix.setSpectre(receptor_id, source_counter, cumul_spectrum)
                 result_sources[deref(source_it).first] = source_counter
                 source_counter += 1
                 inc(source_it)
