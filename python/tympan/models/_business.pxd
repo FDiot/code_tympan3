@@ -60,6 +60,7 @@ cdef extern from "Tympan/models/business/TYElement.h":
     TYUserSourcePonctuelle* downcast_user_source_ponctuelle "downcast<TYUserSourcePonctuelle>"(TYElement *)
     TYMaillage* downcast_maillage "downcast<TYMaillage>"(TYElement *)
     TYPointControl* downcast_point_control "downcast<TYPointControl>"(TYElement *)
+    TYPointCalcul* downcast_point_calcul "downcast<TYPointCalcul>"(TYElement *)
     TYCourbeNiveau* downcast_courbe_niveau "downcast<TYCourbeNiveau>"(TYElement*)
     TYPlanEau* downcast_plan_eau "downcast<TYPlanEau>"(TYElement*)
     TYTerrain* downcast_terrain "downcast<TYTerrain>"(TYElement*)
