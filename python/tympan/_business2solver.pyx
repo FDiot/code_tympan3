@@ -45,6 +45,8 @@ cdef class Business2SolverConverter:
     # Receptors that are mesh points and therefore will be removed from the final
     # result matrix after the solver computation:
     to_be_removed_receptors = cy.declare(list)
+    # business source uuids to solver source indices
+    bus2solv_sources = cy.declare(dict)
 
     # transitional result matrix (from solver matrix to condensed business matrix)
     transitional_result_matrix = cy.declare(cy.pointer(tycommon.SpectrumMatrix))
@@ -56,8 +58,6 @@ cdef class Business2SolverConverter:
     # business source to micro sources (both business model)
     macro2micro_sources = cy.declare(map[tybusiness.TYElem_ptr,
                                          vector[SmartPtr[tybusiness.TYGeometryNode]]])
-    # business micro sources (TYSourcePonctuelle contained in TYGeometryNode) to solver source indices
-    bus2solv_sources = cy.declare(map[SmartPtr[tybusiness.TYGeometryNode], size_t])
 
     @cy.locals(comp=tybusiness.Computation, site=tybusiness.Site)
     def __cinit__(self, comp, site):
@@ -65,6 +65,7 @@ cdef class Business2SolverConverter:
         self.site = site
         self.bus2solv_receptors = dict()
         self.to_be_removed_receptors = []
+        self.bus2solv_sources = dict()
 
     @cy.locals(model=tysolver.ProblemModel, result=tysolver.ResultModel)
     def postprocessing(self, model, result):
@@ -154,7 +155,8 @@ cdef class Business2SolverConverter:
                 # Go through all their business subsources
                 for i in xrange(subsources.size()):
                     # Get solver result for this subsource
-                    subsource_idx = self.bus2solv_sources[subsources[i]] # solver idx
+                    subsource_idx = self.bus2solv_sources[
+                        subsources[i].getRealPointer().getID().toString().toStdString()]
                     cur_spectrum = cy.declare(tycommon.OSpectre)
                     cur_spectrum = self.transitional_result_matrix[0].element(
                         self.bus2solv_receptors[brec_id], subsource_idx)
@@ -272,7 +274,7 @@ cdef class Business2SolverConverter:
                     # Add it to the solver model
                     source_idx = model.thisptr.get().make_source(ppoint[0], subsource.getSpectre()[0], pdirectivity)
                     # Record where it has been stored
-                    self.bus2solv_sources[sources_of_elt[i]] = source_idx
+                    self.bus2solv_sources[id_str(sources_of_elt[i].getRealPointer())] = source_idx
                     # Copy source mapping to macro2micro_sources
                     self.macro2micro_sources[deref(its).first] = deref(its).second
                     nb_sources += 1
