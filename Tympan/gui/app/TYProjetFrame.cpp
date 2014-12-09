@@ -746,11 +746,9 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                     LPTYCalcul calcul = new TYCalcul();
                     _pProjet->addCalcul(calcul);
 
-                    if (calcul->edit(this) == QDialog::Accepted)
-                    {
-                        updateList();
-                        TYElement::setIsSavedOk(true);
-                    }
+                    calcul->edit(this);
+                    updateList();
+                    TYElement::setIsSavedOk(true);
                 }
 
                 delete pMenu;
