@@ -311,7 +311,12 @@ int TYTopographie::fromXML(DOM_Element domElement)
                 elemCur2 = childs2.item(j).toElement();
                 if (pCrbNivGeoNode->callFromXMLIfEqual(elemCur2))
                 {
-                    addCrbNiv(pCrbNivGeoNode);
+                    // Remove level curve defined with less than to points
+                    if (dynamic_cast<TYCourbeNiveau*>(pCrbNivGeoNode->getElement())->getListPoints().size() >= 2)
+                    {
+                        addCrbNiv(pCrbNivGeoNode);
+                    }
+
                     pCrbNivGeoNode = new TYCourbeNiveauGeoNode(NULL, this);
                 }
             }
