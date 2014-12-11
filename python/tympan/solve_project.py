@@ -1,9 +1,5 @@
-import sys
 import os
-import io
 import logging
-import ConfigParser
-from StringIO import StringIO
 
 # open file in unbuffered mode so it get written asap, in case of later crash
 # due to underlying C code
@@ -11,35 +7,9 @@ stream = open('tympan.log', 'a', 0)
 logging.basicConfig(stream=stream, level=logging.DEBUG,
                     format='%(levelname)s:%(asctime)s - %(name)s - %(message)s')
 
-
-try:
-    import tympan.models._business as tybusiness
-except ImportError:
-    err = "solve_project.py module couldn't find tympan.models.business cython library."
-    logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
-    raise ImportError(err)
-
-try:
-    import tympan._business2solver as bus2solv
-except ImportError:
-    err = "solve_project.py module couldn't find tympan.business2solver cython library."
-    logging.critical("%s Check PYTHONPATH and path to Tympan libraries.", err)
-    raise ImportError(err)
-
-from tympan import SOLVER_CONFIG_ATTRIBUTES
 from tympan.altimetry import export_to_ply, builder
-from tympan.models._solver import Configuration, ProblemModel
-from tympan._business2solver import (load_computation_solver, build_solver_model,
-                                     update_business_model)
-
-CONVERTERS = {
-    'bool': bool,
-    'int': int,
-    'float': float,
-    'double': float,
-}
-
-CONFIG_MAP = dict((optname, CONVERTERS[opttype]) for opttype, optname in SOLVER_CONFIG_ATTRIBUTES)
+from tympan.models.project import Project
+from tympan.models.solver import Model, Solver
 
 
 def solve(input_project, output_project, output_mesh, solverdir,
@@ -71,14 +41,10 @@ def solve(input_project, output_project, output_mesh, solverdir,
     ret = False
     # Load an existing project and retrieve its calcul to solve it
     try:
-        project = tybusiness.Project.from_xml(input_project)
+        project = Project.from_xml(input_project)
     except RuntimeError:
         logging.exception("Couldn't load the acoustic project from %s file", input_project)
         raise
-    # Business model
-    site = project.site
-    comp = project.current_computation
-    _set_solver_config(comp, multithreading_on)
     # Recompute altimetry
     asite = builder.build_sitenode(project.site)
     _, mesh, feature_by_face = builder.build_altimetry(asite)
@@ -87,47 +53,28 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Update site and the project before building the solver model
     project.update_site_altimetry(mesh, material_by_face)
     # Solver model
-    model_handler = build_solver_model(project)
-    model = model_handler.model
+    model = Model.from_project(project)
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  model.nsources, model.nreceptors)
-    _check_solver_model(model, site)
     # Load solver plugin and run it on the current computation
-    solver = load_computation_solver(solverdir, comp)
+    solver = Solver.from_project(project, solverdir)
+    if not multithreading_on:
+        solver.nthread = 1
+    _check_solver_model(model, project.site)
     logging.debug("Calling C++ SolverInterface::solve() method")
     try:
-        solver_result = solver.solve_problem(model)
+        solver_result = solver.solve(model)
     except RuntimeError as exc:
         logging.error(str(exc))
         raise
     # Export solver results to the business model
-    update_business_model(model_handler, solver_result)
+    project.import_result(model, solver_result)
     # Reserialize project
     try:
         project.to_xml(output_project)
     except ValueError:
         logging.exception("Couldn't export the acoustic results to %s file", output_project)
         raise
-
-def _set_solver_config(comp, multithreading_on=True):
-    """ Setup solver configuration """
-    parser = ConfigParser.RawConfigParser()
-    parser.optionxform = str # keep param names case
-    parser.readfp(StringIO(comp.solver_parameters))
-    solver_config = Configuration.get()
-    errors = []
-    for section in parser.sections():
-        for optname, value in parser.items(section):
-            try:
-                value = CONFIG_MAP[optname](value)
-            except ValueError:
-                errors.append('bad option value for %s: %r' % (optname, value))
-                continue
-            getattr(solver_config, optname, value)
-    if errors:
-        raise ConfigParser.Error(os.linesep.join(errors))
-    if not multithreading_on:
-        solver_config.NbThreads = 1
 
 def _check_solver_model(model, site):
     """Various checks for a solver model, to be performed before computation.

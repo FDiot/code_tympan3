@@ -10,7 +10,6 @@ from libcpp.string cimport string
 from tympan._core cimport shared_ptr
 from tympan.models cimport _business as tybusiness
 from tympan.models cimport _solver as tysolver
-from tympan.models._solver import ModelHandler
 from tympan.models cimport _common as tycommon
 
 
@@ -27,27 +26,6 @@ def load_computation_solver(foldername, tybusiness.Computation comp):
     solver = tysolver.Solver()
     solver.thisptr = load_solver(foldername, comp.thisptr.getRealPointer().getSolverId());
     return solver
-
-def build_solver_model(project, set_sources=True, set_receptors=True):
-    """ Build a solver model from a 'Project' cython object. if 'set_sources' is
-    true, the business sources read from the project will be converted into solver
-    micro sources and added to the solver model. Same thing for 'set_receptors'
-    parameter. If 'set_sources' and 'set_receptors' are false, the returned
-    solver model will only contain a mesh.
-    Returns a ModelHandler object containing a cython 'ProblemModel'."""
-    model = tysolver.ProblemModel()
-    conv = Business2SolverConverter(project.current_computation, project.site)
-    conv.build_mesh(model)
-    if set_sources:
-        conv.build_sources(model)
-    if set_receptors:
-        conv.build_receptors(model)
-    model_handler = ModelHandler(model, conv)
-    return model_handler
-
-def update_business_model(model_handler, solver_result):
-    """ Send solver results back to business model after a solver computation """
-    model_handler._converter.postprocessing(model_handler.model, solver_result)
 
 cdef class Business2SolverConverter:
     """Offer mappings between solver and business models

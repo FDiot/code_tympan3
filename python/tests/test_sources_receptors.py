@@ -7,7 +7,7 @@ from numpy.testing import assert_allclose
 
 from utils import (TEST_DATA_DIR, TEST_SOLVERS_DIR, TEST_RESULT_DIR, TympanTC,
                    compare_floats)
-import tympan._business2solver as bus2solv
+from tympan.models.solver import Model, Solver
 
 _TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'computed-projects-panel')
 assert osp.isdir(_TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % _TEST_PROBLEM_DIR
@@ -17,7 +17,7 @@ class SourceAdditionTC(TympanTC):
 
     def test_add_sources_to_model(self):
         project = self.load_project('projects-panel', 'TEST_SOURCE_PONCTUELLE_NO_RESU.xml')
-        model = bus2solv.build_solver_model(project).model
+        model = Model.from_project(project)
         self.assertEqual(model.nsources, 1)
         self.assertEqual(model.nreceptors, 6)
         freq = np.array([100.0] * 31, dtype=float)
@@ -41,28 +41,28 @@ class SourceAdditionTC(TympanTC):
     def test_computation_with_manually_added_source(self):
         power_lvl = np.array([10.0] * 31, dtype=float)
         ref_proj = self.load_project('site_receptor_source.xml')
-        ref_model = bus2solv.build_solver_model(ref_proj).model
+        ref_model = Model.from_project(ref_proj)
         assert ref_model.nsources == 1
         assert ref_model.nreceptors == 1
         ref_src = ref_model.source(0)
         assert (ref_src.position.x, ref_src.position.y, ref_src.position.z) == (3., 3., 2.)
         assert_allclose(ref_src.spectrum.to_dB().values, power_lvl)
-        solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, ref_proj.current_computation)
-        ref_result = solver.solve_problem(ref_model).spectrum(0, 0).values
+        solver = Solver.from_project(ref_proj, TEST_SOLVERS_DIR)
+        ref_result = solver.solve(ref_model).spectrum(0, 0).values
         # do the same with a manually added source (the xml project is the same as
         # 'site_receptor_source.xml' except the source has been removed)
         proj = self.load_project('site_receptor.xml')
-        model = bus2solv.build_solver_model(proj).model
+        model = Model.from_project(proj)
         assert model.nsources == 0
         assert model.nreceptors == 1
         model.add_source((3., 3., 2.), power_lvl, 0)
-        solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, proj.current_computation)
-        result = solver.solve_problem(model).spectrum(0, 0).values
+        solver = Solver.from_project(proj, TEST_SOLVERS_DIR)
+        result = solver.solve(model).spectrum(0, 0).values
         assert_allclose(ref_result, result)
 
     def test_value(self):
         proj = self.load_project('site_receptor.xml')
-        model = bus2solv.build_solver_model(proj).model
+        model = Model.from_project(proj)
         power_lvl = np.array([10., 10., 10., 15., 15., 15., 20., 20., 20., 20., 50.],
                              dtype=float)
         model.add_source((3., 3., 2.),  power_lvl, 0)
@@ -98,7 +98,7 @@ def make_sources_test_with_file(project_file, sources_file):
             * Then the lines are compared 2 by 2
         """
         project = self.load_project(project_file)
-        model = bus2solv.build_solver_model(project).model
+        model = Model.from_project(project, set_receptors=False)
         nexpected_sources = sum(1 for line in open(sources_file))
         # Check no sources are missing
         self.assertEqual(nexpected_sources, model.nsources)
@@ -133,7 +133,7 @@ def make_receptors_test_with_file(project_file, receptors_file):
             we are just dealing with positions and not spetrums.
         """
         project = self.load_project(project_file)
-        model = bus2solv.build_solver_model(project).model
+        model = Model.from_project(project, set_sources=False)
         # Check no receptors are missing
         nexpected_receptors = sum(1 for line in open(receptors_file))
         self.assertEqual(nexpected_receptors, model.nreceptors)

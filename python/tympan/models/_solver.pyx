@@ -11,16 +11,6 @@ from tympan.models cimport _common as tycommon
 from tympan._core cimport unique_ptr, shared_ptr
 
 
-class ModelHandler(object):
-    """ Ties together a SolverProblem and the converter used to build it from
-    the business model (allows to send back solver results to the business model)/
-    """
-
-    def __init__(self, model, converter):
-        self.model = model
-        self._converter = converter
-
-
 cdef class ProblemModel:
     """Solver model"""
 
