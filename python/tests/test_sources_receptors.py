@@ -58,6 +58,18 @@ class SourceAdditionTC(TympanTC):
         result = solver.solve_problem(model).spectrum(0, 0).values
         assert_allclose(ref_result, result)
 
+    def test_value(self):
+        proj, model = self.load_project('site_receptor.xml')
+        power_lvl = np.array([10., 10., 10., 15., 15., 15., 20., 20., 20., 20., 50.],
+                             dtype=float)
+        model.add_source((3., 3., 2.),  power_lvl, 0)
+        assert model.nsources == 1
+        source = model.source(0)
+        self.assertAlmostEqual(source.value(16.0), 1e-11)
+        self.assertAlmostEqual(source.value(63.0), 1e-11)
+        self.assertAlmostEqual(source.value(100.0), 1e-10)
+        self.assertEqual(source.value(160.0), 1e-7)
+
 
 class TestTympan(TympanTC):
     """Place holder class to be filled with methods below"""
