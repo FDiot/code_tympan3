@@ -9,9 +9,8 @@ from utils import TympanTC, TEST_PROBLEM_DIR
 from tympan.altimetry.datamodel import VegetationArea
 from tympan.altimetry import builder
 try:
-    from tympan.models.business import Project
-    import tympan.business2solver as bus2solv
-    from tympan.models.solver import ProblemModel
+    from tympan.models.project import Project
+    from tympan.models.solver import Model
     MISSING_EXT = False
 except ImportError:
     MISSING_EXT = True
@@ -177,12 +176,11 @@ class TestProcessAltimetry(TympanTC):
             material_by_face = builder.material_by_face(feature_by_face)
             project.update_site_altimetry(mesh, material_by_face)
             # Build solver model and check source altimetry
-            model_handler = bus2solv.build_solver_model(project)
-            solver_model = model_handler.model
+            model = Model.from_project(project, set_receptors=False)
         # 1 source
-        self.assertEqual(solver_model.nsources, 1)
+        self.assertEqual(model.nsources, 1)
         # source is on the hillock, which is 25 m high. It is at 2m high above the ground
-        self.assertAlmostEqual(solver_model.source(0).position.z, 27)
+        self.assertAlmostEqual(model.source(0).position.z, 27)
 
 
 if __name__ == '__main__':

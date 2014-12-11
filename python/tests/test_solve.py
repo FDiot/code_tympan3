@@ -4,15 +4,8 @@ import numpy as np
 
 from utils import (TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC,
                    no_output, compare_floats)
-
-with no_output():
-    import tympan.models._business as tybusiness
-    import tympan.models._solver as tysolver
-    import tympan._business2solver as bus2solv
-    from tympan.models._solver import Configuration
-
-# avoid segfaults due to multithreading
-Configuration.get().NbThreads = 1
+from tympan.models.project import Project
+from tympan.models.solver import Model, Solver
 
 class TestTympan(TympanTC):
     pass
@@ -29,17 +22,18 @@ def make_test_with_file(test_file):
         # Load and solve the project
         with self.no_output():
             project = self.load_project(osp.join(TEST_PROBLEM_DIR, test_file))
-            model_handler = bus2solv.build_solver_model(project)
-            computation = project.current_computation
-            solver = bus2solv.load_computation_solver(TEST_SOLVERS_DIR, computation)
-            solver_result = solver.solve_problem(model_handler.model)
-            bus2solv.update_business_model(model_handler, solver_result)
+            model = Model.from_project(project)
+            solver = Solver.from_project(project, TEST_SOLVERS_DIR)
+            # avoid segfaults due to multithreading
+            solver.nthreads = 1
+            solver_result = solver.solve(model)
+            project.import_result(model, solver_result)
         # Load the expected result
         result_file = osp.join(TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
         with self.no_output():
-            expected_result_project = tybusiness.Project.from_xml(result_file)
+            expected_result_project = Project.from_xml(result_file)
         # Compare results
-        current_result = computation.result
+        current_result = project.current_computation.result
         expected_result = expected_result_project.current_computation.result
         # Check we have the same number of receptors
         self.assertEqual(current_result.nreceptors, expected_result.nreceptors)
