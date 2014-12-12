@@ -28,8 +28,9 @@ except ImportError:
 
 from tympan import SOLVER_CONFIG_ATTRIBUTES
 from tympan.altimetry import export_to_ply, builder
-from tympan.models.solver import Configuration
-from tympan.business2solver import Business2SolverConverter
+from tympan.models.solver import Configuration, ProblemModel
+from tympan.business2solver import (load_computation_solver, build_solver_model,
+                                    update_business_model)
 
 CONVERTERS = {
     'bool': bool,
@@ -86,14 +87,13 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Update site and the project before building the solver model
     project.update_site_altimetry(mesh, material_by_face)
     # Solver model
-    model = project.build_model()
-    project.set_model_sources(model)
-    project.set_model_receptors(model)
+    model_handler = build_solver_model(project)
+    model = model_handler.model
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  model.nsources, model.nreceptors)
     _check_solver_model(model, site)
     # Load solver plugin and run it on the current computation
-    solver = bus2solv.load_computation_solver(solverdir, comp)
+    solver = load_computation_solver(solverdir, comp)
     logging.debug("Calling C++ SolverInterface::solve() method")
     try:
         solver_result = solver.solve_problem(model)
@@ -101,8 +101,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
         logging.error(str(exc))
         raise
     # Export solver results to the business model
-    bus2solv_conv = Business2SolverConverter(comp, site)
-    bus2solv_conv.postprocessing(model, solver_result)
+    update_business_model(model_handler, solver_result)
     # Reserialize project
     try:
         project.to_xml(output_project)

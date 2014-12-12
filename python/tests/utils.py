@@ -113,6 +113,7 @@ class TympanTC(unittest.TestCase):
     def load_project(self, *path):
         with self.no_output():
             from tympan.models.business import Project
+            from tympan.models.solver import ProblemModel
             import tympan.business2solver as bus2solv
             from tympan.altimetry import builder
             # read acoustic project
@@ -124,9 +125,4 @@ class TympanTC(unittest.TestCase):
             # update site altimetry
             material_by_face = builder.material_by_face(feature_by_face)
             project.update_site_altimetry(mesh, material_by_face)
-            # build solver model
-            comp = project.current_computation
-            model = project.build_model()
-            project.set_model_sources(model)
-            project.set_model_receptors(model)
-        return project, model
+        return project
