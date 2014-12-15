@@ -47,6 +47,8 @@ cdef class Business2SolverConverter:
     to_be_removed_receptors = cy.declare(list)
     # business source uuids to solver source indices
     bus2solv_sources = cy.declare(dict)
+    # macro source uuid to micro source uuid (both from business model)
+    macro2micro_sources = cy.declare(dict)
 
     # transitional result matrix (from solver matrix to condensed business matrix)
     transitional_result_matrix = cy.declare(cy.pointer(tycommon.SpectrumMatrix))
@@ -55,9 +57,6 @@ cdef class Business2SolverConverter:
     # compilation error. One solution would be to use CObjects
     # (PyCObject_FromVoidPtr/PyCObject_AsVoidPtr) to add and get back the pointer.
     instances_mapping = cy.declare(map[string, cy.pointer(tybusiness.TYElement)])
-    # business source to micro sources (both business model)
-    macro2micro_sources = cy.declare(map[tybusiness.TYElem_ptr,
-                                         vector[SmartPtr[tybusiness.TYGeometryNode]]])
 
     @cy.locals(comp=tybusiness.Computation, site=tybusiness.Site)
     def __cinit__(self, comp, site):
@@ -66,6 +65,7 @@ cdef class Business2SolverConverter:
         self.bus2solv_receptors = dict()
         self.to_be_removed_receptors = []
         self.bus2solv_sources = dict()
+        self.macro2micro_sources = dict()
 
     @cy.locals(model=tysolver.ProblemModel, result=tysolver.ResultModel)
     def postprocessing(self, model, result):
@@ -132,7 +132,7 @@ cdef class Business2SolverConverter:
         busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
         result_sources = cy.declare(map[tybusiness.TYElem_ptr, int])
         condensate_matrix = cy.declare(tycommon.SpectrumMatrix)
-        condensate_matrix.resize(len(self.bus2solv_receptors), self.macro2micro_sources.size())
+        condensate_matrix.resize(len(self.bus2solv_receptors), len(self.macro2micro_sources))
         rec_counter = 0
         # Go through all the business receptors
         for brec_id in self.bus2solv_receptors:
@@ -141,22 +141,16 @@ cdef class Business2SolverConverter:
                 deref(self.instances_mapping.find(brec_id)).second)
             busresult.addRecepteur(receptor)
             receptor_id = busresult.getIndexRecepteur(receptor)
-            source_it = cy.declare(map[tybusiness.TYElem_ptr,
-                                       vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
-            source_it = self.macro2micro_sources.begin()
             source_counter = 0
             # Go through all the business infrastructure sources
-            while source_it != self.macro2micro_sources.end():
+            for macro_source_id in self.macro2micro_sources:
                 valid_spectrum = True
                 cumul_spectrum = cy.declare(tycommon.OSpectre)
                 cumul_spectrum.setDefaultValue(0.0)
-                subsources = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
-                subsources = deref(source_it).second
                 # Go through all their business subsources
-                for i in xrange(subsources.size()):
+                for micro_source_id in self.macro2micro_sources[macro_source_id]:
                     # Get solver result for this subsource
-                    subsource_idx = self.bus2solv_sources[
-                        subsources[i].getRealPointer().getID().toString().toStdString()]
+                    subsource_idx = self.bus2solv_sources[micro_source_id]
                     cur_spectrum = cy.declare(tycommon.OSpectre)
                     cur_spectrum = self.transitional_result_matrix[0].element(
                         self.bus2solv_receptors[brec_id], subsource_idx)
@@ -169,9 +163,9 @@ cdef class Business2SolverConverter:
                 cumul_spectrum.setEtat(tycommon.SPECTRE_ETAT_LIN)
                 cumul_spectrum = cumul_spectrum.toDB()
                 condensate_matrix.setSpectre(receptor_id, source_counter, cumul_spectrum)
-                result_sources[deref(source_it).first] = source_counter
+                macro_source = deref(self.instances_mapping.find(macro_source_id)).second
+                result_sources[macro_source] = source_counter
                 source_counter += 1
-                inc(source_it)
             rec_counter += 1
         busresult.setResultMatrix(condensate_matrix)
         busresult.setSources(result_sources)
@@ -226,8 +220,8 @@ cdef class Business2SolverConverter:
         # For each business macro source (ex: machine, building...)
         while its != infra_sources.end():
             sources_of_elt = deref(its).second
-            macro_source = cy.declare(cy.pointer(tybusiness.TYElement))
-            macro_source = deref(its).first
+            macro_source_id = id_str(deref(its).first)
+            self.macro2micro_sources[macro_source_id] = []
             nsubsources = sources_of_elt.size()
             # For each of the micro sources making the macro one
             for i in xrange(nsubsources):
@@ -274,9 +268,10 @@ cdef class Business2SolverConverter:
                     # Add it to the solver model
                     source_idx = model.thisptr.get().make_source(ppoint[0], subsource.getSpectre()[0], pdirectivity)
                     # Record where it has been stored
-                    self.bus2solv_sources[id_str(sources_of_elt[i].getRealPointer())] = source_idx
+                    self.bus2solv_sources[id_str(subsource_elt)] = source_idx
                     # Copy source mapping to macro2micro_sources
-                    self.macro2micro_sources[deref(its).first] = deref(its).second
+                    self.macro2micro_sources[macro_source_id].append(id_str(subsource))
+                    self.instances_mapping[macro_source_id] = subsource
                     nb_sources += 1
             inc(its)
         # Recurse on subsites
