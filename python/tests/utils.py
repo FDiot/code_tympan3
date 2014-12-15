@@ -112,9 +112,9 @@ class TympanTC(unittest.TestCase):
 
     def load_project(self, *path):
         with self.no_output():
-            from tympan.models.business import Project
-            from tympan.models.solver import ProblemModel
-            import tympan.business2solver as bus2solv
+            from tympan.models._business import Project
+            from tympan.models._solver import ProblemModel
+            import tympan._business2solver as bus2solv
             from tympan.altimetry import builder
             # read acoustic project
             project = Project.from_xml(osp.join(TEST_DATA_DIR, *path))

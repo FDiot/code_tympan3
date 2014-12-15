@@ -1,10 +1,10 @@
 from libcpp.map cimport map
 from libcpp.vector cimport vector
 
-from tympan.core cimport SmartPtr, OGenID, SolverInterface
-from tympan.models cimport business as tybusiness
-from tympan.models cimport common as tycommon
-from tympan.models cimport solver as tysolver
+from tympan._core cimport SmartPtr, OGenID, SolverInterface
+from tympan.models cimport _business as tybusiness
+from tympan.models cimport _common as tycommon
+from tympan.models cimport _solver as tysolver
 
 cdef class Business2MicroSource:
     cdef map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]] map_sources

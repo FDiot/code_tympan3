@@ -3,7 +3,7 @@
 import sys
 import logging
 
-from tympan.models.business import Project
+from tympan.models._business import Project
 from tympan.altimetry import export_to_ply, builder
 
 
