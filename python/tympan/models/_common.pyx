@@ -7,25 +7,19 @@ import numpy as np
 
 
 cdef ospectre2spectrum(OSpectre os):
-    """factory function: return a Spectrum (python object) from an OSpectre (cpp
-    lib)
-    """
+    """Spectrum (cython object) wrapping an OSpectre (c++)"""
     spectrum = Spectrum()
     spectrum.thisobj = os
     return spectrum
 
 cdef opoint3d2point3d(OPoint3D pt):
-    """factory function: return a Point3D (python object) from an Point3D (cpp
-    lib)
-    """
+    """Point3D (cython object) wrapping a Point3D (c++)"""
     point = Point3D()
     point.thisobj = pt
     return point
 
 cdef otriangle2triangle(OTriangle* tri):
-    """factory function: return a Triangle (python object) from an OTriangle
-    (cpp lib)
-    """
+    """Triangle (cython object) wrapping an OTriangle(c++)"""
     assert tri != NULL
     triangle = cy.declare(Triangle)
     triangle = Triangle()
@@ -38,21 +32,18 @@ cdef class Spectrum:
 
     @property
     def nvalues(self):
-        """ Return the number of values contained in the spectrum
-        """
+        """Number of values contained in the spectrum"""
         return self.thisobj.getNbValues()
 
     @property
     def values(self):
-        """ Return the values of the spectrum
-        """
+        """Values of the spectrum"""
         cdef cyarray cy_array = <double[:self.nvalues]> self.thisobj.getTabValReel()
         spec_val = np.array(cy_array, dtype=np.double)
         return spec_val
 
     def to_dB(self):
-        """ Convert the spectrum to a dB scale
-        """
+        """Convert the spectrum to a dB scale (by default: linear)"""
         return ospectre2spectrum(self.thisobj.toDB())
 
 
@@ -87,5 +78,3 @@ cdef class Point3D:
     @property
     def z(self):
         return self.thisobj._z
-
-

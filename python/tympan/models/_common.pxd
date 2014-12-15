@@ -6,7 +6,7 @@ from libcpp.string cimport string
 from libcpp.deque cimport deque
 from libcpp.vector cimport vector
 
-from tympan cimport core as tycore
+from tympan cimport _core as tycore
 
 
 cdef extern from "Tympan/models/common/spectrum_matrix.h" namespace "tympan":

@@ -7,25 +7,22 @@ from libcpp.deque cimport deque
 from libcpp.vector cimport vector
 from libcpp.string cimport string
 
-from tympan.core cimport shared_ptr
-from tympan.models cimport business as tybusiness
-from tympan.models cimport solver as tysolver
-from tympan.models.solver import ModelHandler
-from tympan.models cimport common as tycommon
+from tympan._core cimport shared_ptr
+from tympan.models cimport _business as tybusiness
+from tympan.models cimport _solver as tysolver
+from tympan.models._solver import ModelHandler
+from tympan.models cimport _common as tycommon
 
 
 cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]] map_sources):
-    """ factory function: return a Business2MicroSource (python object) from a
-        map (TYElement*, SmartPtr[TYGeometryNode]) (cpp lib)
+    """Business2MicroSource wrapping a map (TYElement*, SmartPtr[TYGeometryNode])
     """
     b2ms = Business2MicroSource()
     b2ms.map_sources = map_sources
     return b2ms
 
 def load_computation_solver(foldername, tybusiness.Computation comp):
-    """ Load a solver plugin (looked for in the 'foldername' folder) that will
-        be used to compute 'comp'
-    """
+    """Load a solver plugin (from 'foldername' folder) to compute 'comp'"""
     solver = cy.declare(tysolver.Solver)
     solver = tysolver.Solver()
     solver.thisptr = load_solver(foldername, comp.thisptr.getRealPointer().getSolverId());
@@ -53,7 +50,12 @@ def update_business_model(model_handler, solver_result):
     model_handler._converter.postprocessing(model_handler.model, solver_result)
 
 cdef class Business2SolverConverter:
+    """Offer mappings between solver and business models
 
+    Allows to build a solver model from a business site, and keeps business/solver
+    mappings so as to make it possible to send back solver results to the
+    business model after a solver computation.
+    """
     comp = cy.declare(tybusiness.Computation)
     site = cy.declare(tybusiness.Site)
 
@@ -80,6 +82,8 @@ cdef class Business2SolverConverter:
 
     @cy.locals(model=tysolver.ProblemModel, result=tysolver.ResultModel)
     def postprocessing(self, model, result):
+        """Post-process solver result to reinject them to the business result
+        """
         # Retrieve solver result matrix
         solver_result_matrix = cy.declare(tycommon.SpectrumMatrix)
         solver_result_matrix = result.thisptr.get().get_data()
@@ -95,7 +99,9 @@ cdef class Business2SolverConverter:
 
     @cy.locals(model=tysolver.ProblemModel, result=tysolver.ResultModel)
     def update_business_receptors(self, model, result):
-        """ Once the acoustic problem has been solved, send back the acoustic results
+        """Update business receptor by cumulating spectra perceived from the sources
+
+        Once the acoustic problem has been solved, send back the acoustic results
         to the business receptors
         """
         # resize business result matrix with the number of enabled sources and receptors:
@@ -130,9 +136,11 @@ cdef class Business2SolverConverter:
         busresult.setIsAcousticModified(False)
 
     def update_business_result_matrix(self):
-        """ Condensate result matrix (originally contains 1 spectrum per pair
-        (business receptor, micro source), will now contain 1 cumulative spectrum per
-        pair (business receptor, business source)
+        """Condensate result matrix
+
+        It originally contains 1 spectrum per pair (business receptor, micro source),
+        and will now contain 1 cumulative spectrum per pair
+        (business receptor, business source)
         """
         busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
         busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
@@ -183,7 +191,9 @@ cdef class Business2SolverConverter:
         busresult.setSources(result_sources)
 
     def remove_mesh_points_from_results(self):
-        """ In the final result matrix we don't keep mesh points (they were generated
+        """Remove mesh points from the receptors in the result matrix
+
+        In the final result matrix we don't keep mesh points (they were generated
         for the solver resolution but once computation is done we settle for a synthetic
         result
         """
@@ -196,7 +206,9 @@ cdef class Business2SolverConverter:
 
     @cy.locals(model=tysolver.ProblemModel)
     def build_mesh(self, model):
-        """ Retrieve a mesh from business site topography and altimetry and inject it into
+        """Build site mesh into the model
+
+        Retrieve a mesh from business site topography and altimetry and inject it into
         the solver model.
         """
         self.process_altimetry(model, self.site)
@@ -208,10 +220,12 @@ cdef class Business2SolverConverter:
 
     @cy.locals(model=tysolver.ProblemModel, site=tybusiness.Site)
     def _build_sources(self, model, site):
-        """ Retrieve the sources from the site infrastructure (TYSourcePonctuelle),
-            and make acoustic sources from them (using their position and their
-            spectrum).
-            Add these acoustic sources to the acoustic problem model.
+        """Build acoustic sources into the model, given that of the site
+
+        Retrieve the sources from the site infrastructure (TYSourcePonctuelle),
+        and make acoustic sources from them (using their position and their
+        spectrum).
+        Add these acoustic sources to the acoustic problem model.
         """
         infra = cy.declare(cy.pointer(tybusiness.TYInfrastructure))
         infra = site.thisptr.getRealPointer().getInfrastructure().getRealPointer()
@@ -291,9 +305,11 @@ cdef class Business2SolverConverter:
 
     @cy.locals(model=tysolver.ProblemModel)
     def build_receptors(self, model):
-        """ Retrieve the mesh points (TYPointCalcul, TYPointControl) used in the
-            current computation (the active ones), build the acoustic receptors
-            using their position and add them to the acoustic problem model.
+        """Insert receptors into the solver model from the business project
+
+        Retrieve the mesh points (TYPointCalcul, TYPointControl) used in the
+        current computation (the active ones), build the acoustic receptors
+        using their position and add them to the acoustic problem model.
         """
         project = cy.declare(cy.pointer(tybusiness.TYProjet))
         project = self.site.thisptr.getRealPointer().getProjet()
@@ -348,10 +364,11 @@ cdef class Business2SolverConverter:
 
     @cy.locals(model=tysolver.ProblemModel, site=tybusiness.Site)
     cdef process_altimetry(self, model, site):
-        """ Call Tympan methods to make a mesh (points, triangles, materials)
-            out of the site altimetry. Read and export this mesh to the
-            acoustic problem model (see also _process_mesh), converting the data
-            in basic classes 'understandable' by the solvers (see entities.hpp).
+        """Call Tympan methods to make a mesh out of the site altimetry.
+
+        Read and export this mesh to the acoustic problem model
+        (see also _process_mesh), converting the data in basic classes
+        'understandable' by the solvers (see entities.hpp).
         """
         (points, triangles, grounds) = site.export_topo_mesh()
         (nodes_idx, tgles_idx) = self._process_mesh(model, points, triangles)
@@ -377,9 +394,11 @@ cdef class Business2SolverConverter:
 
     @cy.locals(model=tysolver.ProblemModel, site=tybusiness.Site)
     def process_infrastructure(self, model, site):
-        """ Set a few 'geometric' entities such as nodes
-            Create geometric entities, fill dedicated container and relate them
-            according to the relation definitions.
+        """Go through site infrastructure and enrich solver model accordingly
+
+        Set a few 'geometric' entities such as nodes.
+        Create geometric entities, fill dedicated container and relate them
+        according to the relation definitions.
         """
         for surface in site.acoustic_surfaces:
             (points, triangles) = surface.export_mesh()
@@ -406,7 +425,9 @@ cdef class Business2SolverConverter:
 
     @cy.locals(model=tysolver.ProblemModel)
     def _process_mesh(self, model, points, triangles):
-        """ Create nodes and acoustic triangles in the model to represent the
+        """Add a mesh to the solver model
+
+        Create nodes and acoustic triangles in the model to represent the
         mesh given in argument.
         The mesh must be given as a list of 'Point3D' python objects ('points')
         and a list of 'Triangle' python objects ('triangles')

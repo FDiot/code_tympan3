@@ -3,7 +3,7 @@
 
 from libcpp.string cimport string
 from libcpp cimport bool
-from tympan.models.solver cimport AcousticProblemModel, AcousticResultModel
+from tympan.models._solver cimport AcousticProblemModel, AcousticResultModel
 
 # STL ##########################################################################
 
