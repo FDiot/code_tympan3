@@ -5,8 +5,7 @@ import sys
 import tempfile
 import ConfigParser
 
-from utils import (TympanTC, no_output, TEST_DATA_DIR, TEST_SOLVERS_DIR,
-                   PROJECT_BASE)
+from utils import TympanTC, TEST_DATA_DIR, TEST_SOLVERS_DIR, PROJECT_BASE
 import tympan.solve_project as tysolve
 
 class TestSolveProject(TympanTC):
@@ -32,9 +31,8 @@ class TestSolveProject(TympanTC):
 
     def run_solve(self, input_project):
         output_proj, output_mesh = self.build_tempfiles()
-        with no_output():
-            tysolve.solve(input_project, output_proj.name, output_mesh.name,
-                          TEST_SOLVERS_DIR)
+        tysolve.solve(input_project, output_proj.name, output_mesh.name,
+                      TEST_SOLVERS_DIR)
 
     def run_solve_subprocess(self, input_project):
         output_proj, output_mesh = self.build_tempfiles()

@@ -1,4 +1,6 @@
+from tympan.models import filter_output
 from tympan.models._business import Project as cyProject
+
 
 class Project(object):
     """Acoustic project describing an industrial site"""
@@ -12,17 +14,7 @@ class Project(object):
     def __getattr__(self, name):
         return getattr(self._project, name)
 
-    @classmethod
-    def from_xml(cls, fpath):
-        """Create a project from a XML file path"""
-        cyproject = cls.cyclass.from_xml(fpath)
-        return cls(cyproject)
-
-    def import_result(self, model, solver_result):
-        """Update project's site acoustic according to solver result"""
-        model._converter.postprocessing(model._model, solver_result)
-
-    def update_site_altimetry(self, *args):
+    def update_site_altimetry(self, mesh, material_by_face, verbose=False):
         """Update the altitude of the site infrastructure items
 
         Params:
@@ -33,4 +25,15 @@ class Project(object):
         Site infrastructure items whose altitude can be updated are machines,
         buildings, sources, receptors, etc.
         """
-        self._project._update_site_altimetry(*args)
+        with filter_output(verbose):
+            self._project._update_site_altimetry(mesh, material_by_face)
+
+    @classmethod
+    def from_xml(cls, fpath, verbose=False):
+        """Create a project from a XML file path"""
+        with filter_output(verbose):
+            return cls(cls.cyclass.from_xml(fpath))
+
+    def import_result(self, model, solver_result):
+        """Update project's site acoustic according to solver result"""
+        model._converter.postprocessing(model._model, solver_result)

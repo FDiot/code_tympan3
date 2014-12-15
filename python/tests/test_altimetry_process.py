@@ -22,8 +22,7 @@ class TestProcessAltimetry(TympanTC):
     def altimetry_site(self, xmlfile):
         """Build altimetry site from TYProject and Site as read from XML file"""
         fpath = osp.join(TEST_PROBLEM_DIR, xmlfile)
-        with self.no_output():
-            project = Project.from_xml(fpath)
+        project = Project.from_xml(fpath)
         return builder.build_sitenode(project.site)
 
     def test_process_site_landtake(self):
@@ -145,8 +144,7 @@ class TestProcessAltimetry(TympanTC):
     def test_process_vegetation_area(self):
         fpath = osp.join(TEST_PROBLEM_DIR,
                          'Site_avec_2_terrain_1_avec_veget_1_sans.xml')
-        with self.no_output():
-            project = Project.from_xml(fpath)
+        project = Project.from_xml(fpath)
         asite = builder.build_sitenode(project.site)
         _, _, feature_by_face = builder.build_altimetry(asite)
         matarea = list(asite.material_areas)
@@ -167,16 +165,15 @@ class TestProcessAltimetry(TympanTC):
         fpath = osp.join(
             TEST_PROBLEM_DIR,
             '14_PROJET_GRAND_SITE_VIDE_AVEC_SOUS_SITE_Deplace_et_tourne.xml')
-        with self.no_output():
-            project = Project.from_xml(fpath)
-            asite = builder.build_sitenode(project.site)
-            # Compute altimetry and retrieve the resulting mesh
-            _, mesh, feature_by_face = builder.build_altimetry(asite)
-            # Apply new altimetry on the site infrastructure
-            material_by_face = builder.material_by_face(feature_by_face)
-            project.update_site_altimetry(mesh, material_by_face)
-            # Build solver model and check source altimetry
-            model = Model.from_project(project, set_receptors=False)
+        project = Project.from_xml(fpath)
+        asite = builder.build_sitenode(project.site)
+        # Compute altimetry and retrieve the resulting mesh
+        _, mesh, feature_by_face = builder.build_altimetry(asite)
+        # Apply new altimetry on the site infrastructure
+        material_by_face = builder.material_by_face(feature_by_face)
+        project.update_site_altimetry(mesh, material_by_face)
+        # Build solver model and check source altimetry
+        model = Model.from_project(project, set_receptors=False)
         # 1 source
         self.assertEqual(model.nsources, 1)
         # source is on the hillock, which is 25 m high. It is at 2m high above the ground

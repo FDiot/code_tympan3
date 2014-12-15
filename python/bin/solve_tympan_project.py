@@ -51,7 +51,7 @@ if __name__ == '__main__':
                       output_mesh=output_mesh,
                       solverdir=solverdir,
                       multithreading_on=multithreading_on,
-                      interactive=interactive)
+                      interactive=interactive, verbose=True)
     except Exception as exc:
         sys.stderr.write('Error: ' + exc.message)
         logging.exception("tympan.solve_project.py couldn't solve the acoustic problem:\n%s", exc)
