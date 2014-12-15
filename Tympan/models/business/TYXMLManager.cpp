@@ -134,8 +134,6 @@ int TYXMLManager::load(const QString& fileName, LPTYElementArray& eltCollection)
     }
 
     // On desactive la sauvegarde des instances de type TYElement et derivees
-    TYElement::setLogInstances(false);
-    TYElement::purgeInstances();
 
     if (readOk == -1) // La relecture du calcul s'est mal effectuee
     {
@@ -216,8 +214,6 @@ int TYXMLManager::loadFromString(const QString& xmlString, LPTYElementArray& elt
     }
 
     // On desactive la sauvegarde des instances de type TYElement et derivees
-    TYElement::setLogInstances(false);
-    TYElement::purgeInstances();
 
     return 1;
 }
