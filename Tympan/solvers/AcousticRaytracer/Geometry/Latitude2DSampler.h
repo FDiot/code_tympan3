@@ -37,7 +37,7 @@ public:
         _endTheta(M_PI),
         _startPhi(0),
         _endPhi(M_PI),
-        _deltaPhi(0.),
+        _deltaPhi(0.f),
         _i(0)
     {
         init();
