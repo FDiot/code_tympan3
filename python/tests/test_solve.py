@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 
 from utils import (TEST_SOLVERS_DIR, TEST_PROBLEM_DIR, TEST_RESULT_DIR, TympanTC,
-                   no_output, compare_floats)
+                   compare_floats)
 from tympan.models.project import Project
 from tympan.models.solver import Model, Solver
 
@@ -20,18 +20,16 @@ def make_test_with_file(test_file):
     """
     def test_with_file(self):
         # Load and solve the project
-        with self.no_output():
-            project = self.load_project(osp.join(TEST_PROBLEM_DIR, test_file))
-            model = Model.from_project(project)
-            solver = Solver.from_project(project, TEST_SOLVERS_DIR)
-            # avoid segfaults due to multithreading
-            solver.nthreads = 1
-            solver_result = solver.solve(model)
-            project.import_result(model, solver_result)
+        project = self.load_project(osp.join(TEST_PROBLEM_DIR, test_file))
+        model = Model.from_project(project)
+        solver = Solver.from_project(project, TEST_SOLVERS_DIR)
+        # avoid segfaults due to multithreading
+        solver.nthreads = 1
+        solver_result = solver.solve(model)
+        project.import_result(model, solver_result)
         # Load the expected result
         result_file = osp.join(TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
-        with self.no_output():
-            expected_result_project = Project.from_xml(result_file)
+        expected_result_project = Project.from_xml(result_file)
         # Compare results
         current_result = project.current_computation.result
         expected_result = expected_result_project.current_computation.result

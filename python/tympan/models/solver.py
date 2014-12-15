@@ -3,6 +3,7 @@ from StringIO import StringIO
 import os
 
 from tympan import SOLVER_CONFIG_ATTRIBUTES
+from tympan.models import filter_output
 from tympan.models import _solver as cysolver
 from tympan._business2solver import Business2SolverConverter, load_computation_solver
 
@@ -94,14 +95,15 @@ class Solver(object):
         return self._solver.solve_problem(model._model)
 
     @classmethod
-    def from_project(cls, project, solverdir):
+    def from_project(cls, project, solverdir, verbose=False):
         """Load and configure solver
 
         'solverdir' is the directory where one can find the solver library. The
         configuration is read from the project.
         """
         _set_solver_config(project.current_computation)
-        solver = load_computation_solver(solverdir, project.current_computation)
+        with filter_output(verbose):
+            solver = load_computation_solver(solverdir, project.current_computation)
         return cls(solver)
 
 def _set_solver_config(comp):

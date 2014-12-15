@@ -13,8 +13,7 @@ from tympan.models.solver import Model, Solver
 
 
 def solve(input_project, output_project, output_mesh, solverdir,
-          multithreading_on=True,
-          interactive=False):
+          multithreading_on=True, interactive=False, verbose=False):
     """ Solve an acoustic problem with Code_TYMPAN from
 
         Keywords arguments:
@@ -41,7 +40,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
     ret = False
     # Load an existing project and retrieve its calcul to solve it
     try:
-        project = Project.from_xml(input_project)
+        project = Project.from_xml(input_project, verbose)
     except RuntimeError:
         logging.exception("Couldn't load the acoustic project from %s file", input_project)
         raise
@@ -51,13 +50,13 @@ def solve(input_project, output_project, output_mesh, solverdir,
     material_by_face = builder.material_by_face(feature_by_face)
     export_to_ply(mesh, material_by_face, output_mesh)
     # Update site and the project before building the solver model
-    project.update_site_altimetry(mesh, material_by_face)
+    project.update_site_altimetry(mesh, material_by_face, verbose)
     # Solver model
     model = Model.from_project(project)
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  model.nsources, model.nreceptors)
     # Load solver plugin and run it on the current computation
-    solver = Solver.from_project(project, solverdir)
+    solver = Solver.from_project(project, solverdir, verbose)
     if not multithreading_on:
         solver.nthread = 1
     _check_solver_model(model, project.site)

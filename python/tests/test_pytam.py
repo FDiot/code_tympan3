@@ -5,8 +5,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-from utils import (TEST_DATA_DIR, TEST_PROBLEM_DIR, TEST_SOLVERS_DIR, TympanTC,
-                   no_output)
+from utils import TEST_DATA_DIR, TEST_PROBLEM_DIR, TEST_SOLVERS_DIR, TympanTC
 from tympan.models.solver import Model, Solver
 
 _HERE = osp.realpath(osp.dirname(__file__))
@@ -14,14 +13,13 @@ _HERE = osp.realpath(osp.dirname(__file__))
 class TestPyTam(TympanTC):
 
     def _compute_project(self, test_file):
-        with self.no_output():
-            project = self.load_project(test_file)
-            model = Model.from_project(project)
-            solver = Solver.from_project(project, TEST_SOLVERS_DIR)
-            # avoid segfaults due to multithreading
-            solver.nthreads = 1
-            solver_result = solver.solve(model)
-            project.import_result(model, solver_result)
+        project = self.load_project(test_file)
+        model = Model.from_project(project)
+        solver = Solver.from_project(project, TEST_SOLVERS_DIR)
+        # avoid segfaults due to multithreading
+        solver.nthreads = 1
+        solver_result = solver.solve(model)
+        project.import_result(model, solver_result)
         return project
 
     def test_solve_check_business_result_one_source(self):
