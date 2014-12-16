@@ -112,6 +112,41 @@ QString _get_python_interp()
 #endif
 }
 
+std::string _read_environment_variables(QStringList env)
+{
+    std::string variables = "\nVariables d'environnement:\n";
+    int pythonpath_index = env.indexOf(QRegExp("^PYTHONPATH=(.*)", Qt::CaseInsensitive));
+    if (pythonpath_index >= 0)
+    {
+        variables += env[pythonpath_index].toStdString() + "\n";
+    }
+    else
+    {
+        variables += "PYTHONPATH absente\n";
+    }
+#if TY_PLATFORM == TY_PLATFORM_WIN32 || TY_PLATFORM == TY_PLATFORM_WIN64
+    int path_index = env.indexOf(QRegExp("^Path=(.*)", Qt::CaseInsensitive));
+    if (path_index >= 0)
+    {
+        variables += env[path_index].toStdString() + "\n";
+    }
+    else
+    {
+        variables += "Path absente\n";
+    }
+    int python_interp_index = env.indexOf(QRegExp("^TYMPAN_PYTHON_INTERP=(.*)"));
+    if(python_interp_index >= 0)
+    {
+        variables += env[python_interp_index].toStdString() + "\n";
+    }
+    else
+    {
+        variables += "TYMPAN_PYTHON_INTERP absente\n";
+    }
+#endif
+    return variables;
+}
+
 bool must_keep_tmp_files()
 {
     QStringList appli_env(QProcess::systemEnvironment());
@@ -162,6 +197,7 @@ bool python(QStringList args, std::string& error_msg)
     catch(const tympan::invalid_data& exc)
     {
         error_msg = "L'interpreteur python n'a pas pu etre trouve.\nVeuillez verifier que la variable d'environnement TYMPAN_PYTHON_INTERP est correctement positionnee\n";
+        error_msg.append(_read_environment_variables(env));
         return false;
     }
     python.start(python_interp, args);
@@ -194,7 +230,8 @@ bool python(QStringList args, std::string& error_msg)
         // If there is an error among the possible warnings
         if (err_output.contains("Error"))
         {
-            error_msg.append("\nVeuillez lire tympan.log pour plus d'information.");
+            error_msg.append(_read_environment_variables(env));
+            error_msg.append("Veuillez lire tympan.log pour plus d'information.\n");
             return false;
         }
         else
@@ -208,6 +245,7 @@ bool python(QStringList args, std::string& error_msg)
     {
         error_msg = "Le sous-process python a termine avec le code d'erreur ";
         error_msg.append(std::to_string(static_cast<unsigned long long>(python.error())));
+        error_msg.append(_read_environment_variables(env));
         return false;
     }
     // Compute and display computation time
