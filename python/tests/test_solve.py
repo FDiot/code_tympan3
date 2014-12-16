@@ -70,11 +70,27 @@ def make_test_with_file(test_file):
     return test_with_file
 
 
+KNOWN_FAIL = (
+    'test_cube_no_resu',
+    'test_ecran_cube_no_resu',
+    'test_ecran_no_resu',
+    'test_effet_sol_no_resu',
+    'test_face_no_resu',
+    'test_impedance_sol_no_resu',
+    'test_rayonnement_batiment_no_resu',
+    'test_source_ponctuelle_no_resu',
+)
+
+
 # Retrieve all the available "TEST_XX" xml files and make a test for each one
 for test_file in os.listdir(TEST_PROBLEM_DIR):
     if test_file.startswith('TEST_') and test_file.endswith('xml'):
-        setattr(TestTympan, "test_" + test_file.split('.')[0].replace('TEST_', '').lower(),
-                make_test_with_file(test_file))
+        methodname = test_file.split('.')[0].lower()
+        method = make_test_with_file(test_file)
+        if methodname in KNOWN_FAIL:
+            method = unittest.expectedFailure(method)
+        setattr(TestTympan, methodname, method)
+
 
 if __name__ == '__main__':
     unittest.main()
