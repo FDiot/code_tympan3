@@ -39,6 +39,36 @@ class Model(object):
             model._converter.build_receptors(model._model)
         return model
 
+    def add_source(self, position, spectrum_values, shift):
+        """Add an acoustic source to the model
+
+        Params:
+
+            - position is a (x, y, z) tuple
+            - spectrum_values is a np array containing the DB values of a power
+              spectrum
+            - shift is the number of the first frequence for which a DB value
+              is given (frequences start at 16 Hz and end at 16000Hz,
+              31 values in total).
+
+        Add the corresponding acoustic source to the solver model (the acoustic
+        source is created with a SphericalFaceDirectivity)
+        """
+        return self._model._add_source(position, spectrum_values, shift)
+
+    def export_triangular_mesh(self):
+        """Build a triangular mesh from the acoustic problem model
+
+        Return two nparrays:
+
+            - 'nodes': an array of nodes (of dimension 'npoints'X3), where
+            each line stands for a node and contains 3 coordinates)
+            - 'triangles': an array of triangles (of dimension 'ntriangles'X3),
+            where each line stands for a triangle and contains the indices of
+            its 3 vertices in the 'nodes' array.
+        """
+        return self._model._export_triangular_mesh()
+
     def __getattr__(self, name):
         return getattr(self._model, name)
 
