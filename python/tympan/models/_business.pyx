@@ -718,7 +718,7 @@ cdef class Project:
         # detect and disable the mesh points that are inside machines or buildings
         computation.selectActivePoint(self.thisptr.getRealPointer().getSite())
 
-    def update_site_altimetry(self, *args):
+    def _update_site_altimetry(self, *args):
         """Update site altimetry and project"""
         self.site.update_altimetry(*args)
         self.update()
