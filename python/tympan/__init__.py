@@ -16,12 +16,10 @@ Here goes an example of the typical use that can be done of this API:
 
     # Build a project from a site XML description
     project = Project.from_xml("my_project.xml")
-    # Build an simplified site from the project to feed the altimetry
-    site = builder.build_sitenode(project.site)
-    # Compute altimetry and update the site infrastructure accordingly
-    _, mesh, feature_by_face = builder.build_altimetry(site)
-    material_by_face = builder.material_by_face(feature_by_face)
-    project.update_site_altimetry(mesh, material_by_face)
+    # Compute altimetry from the site
+    altimetry_mesh = AltimetryMesh.from_site(project.site)
+    # Update the site infrastructure
+    project.update_site_altimetry(altimetry_mesh)
     # Build a simplified model from the project (the new infrastructure
     # altitudes will be taken into account)
     model = Model.from_project(project)
