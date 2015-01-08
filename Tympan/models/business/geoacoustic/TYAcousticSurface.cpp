@@ -226,7 +226,7 @@ bool TYAcousticSurface::setSrcsLw()
     for (size_t i = 0 ; i < nbSrcs ; i++)
     {
         //Affectation du spectre a la source i pour le regime j
-        TYSourcePonctuelle::safeDownCast(tabSrcs[i]->getElement())->setRegime(s);
+        TYSourcePonctuelle::safeDownCast(tabSrcs[i]->getElement())->setSpectre( new TYSpectre(s) );
     }
 
     return true;
