@@ -80,6 +80,9 @@ Descartes
             installed with this command: ``python setup.py install`` where
             ``python`` must be the intepreter we've just installed (should be ``C:\Python27\python.exe``)
 
+Scipy (version 0.14)
+            An unofficial windows binary can be found at `Gohlke website`_
+
 
 The resulting ``Python27`` directory won't be copied directly in C:\ in order to
 avoid potential conflicts with another python installation. Therefore, it is

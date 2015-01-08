@@ -5,14 +5,44 @@ import unittest
 import numpy as np
 from numpy.testing import assert_allclose
 
-from utils import TEST_DATA_DIR, TympanTC, no_output
-
-with no_output():
-    import tympan._business2solver as bus2solv
+from utils import TEST_DATA_DIR, TEST_PROBLEM_DIR, TEST_SOLVERS_DIR, TympanTC
+from tympan.models.solver import Model, Solver
 
 _HERE = osp.realpath(osp.dirname(__file__))
 
 class TestPyTam(TympanTC):
+
+    def _compute_project(self, test_file):
+        project = self.load_project(test_file)
+        model = Model.from_project(project)
+        solver = Solver.from_project(project, TEST_SOLVERS_DIR)
+        # avoid segfaults due to multithreading
+        solver.nthreads = 1
+        solver_result = solver.solve(model)
+        project.import_result(model, solver_result)
+        return project
+
+    def test_solve_check_business_result_one_source(self):
+        input_proj = osp.join(TEST_PROBLEM_DIR, 'TEST_FACE_NO_RESU.xml')
+        project = self._compute_project(input_proj)
+        result = project.current_computation.result
+        self.assertEqual(result.nsources, 1)
+        self.assertEqual(result.nreceptors, 6)
+        actual = [result.spectrum(i, 0).dBA for i in range(6)]
+        expected = [result.receptor(i).dBA for i in range(6)]
+        assert_allclose(actual, expected)
+
+    def test_solve_check_business_result_two_sources(self):
+        input_proj = osp.join(TEST_DATA_DIR, 'test_restitution_results.xml')
+        project = self._compute_project(input_proj)
+        result = project.current_computation.result
+        self.assertEqual(result.nsources, 2)
+        self.assertEqual(result.nreceptors, 6)
+        # because first source has a very low emission spectrum and therefore
+        # doesn't contribute to the result
+        actual = [result.spectrum(i, 1).dBA for i in range(6)]
+        expected = [result.receptor(i).dBA for i in range(6)]
+        assert_allclose(actual, expected)
 
     def test_hierarchy(self):
         project = self.load_project(
@@ -27,62 +57,13 @@ class TestPyTam(TympanTC):
         # XXX This test uses expected bad values provided by the current
         # implementation
         project = self.load_project('solver_export', "base.xml")
-        model = bus2solv.build_solver_model(project).model
+        model = Model.from_project(project)
         self.assertEqual(model.npoints, 6) # OK
         self.assertEqual(model.ntriangles, 5) # XXX should be 4
         self.assertEqual(model.nmaterials, 5) # XXX should be 1
         # FIXME the default material is replicated once per triangle.
         # TODO : how to test the altitude of a point ? or access a triangle at
         # some place ?
-        # TODO to be completed: cf. ticket #1468184
-
-    @unittest.skip("Mesh computation implementation has changed. Must be adjusted to the new one")
-    def test_mesh(self):
-        """
-        Check SolverModelBuilder.fill_problem (triangular mesh creation)
-        """
-        # load a xml project, build an acoustic problem from it and retrieve
-        # its triangular mesh to make sure it contains the correct data
-        project = self.load_project("tiny_site.xml")
-        with self.no_output():
-            model = bus2solv.build_solver_model(project).model
-            # exports in nodes_test the nodes coordinates (x,y,z) and in triangles_test
-            # the triangle nodes indices (position in the nodes_test array)
-            (nodes_test, triangles_test) = model.export_triangular_mesh()
-            # Dump actual exported mesh
-            np.savetxt(osp.join(_HERE, "test_mesh_nodes_actual.csv"),
-                       nodes_test,
-                       delimiter=';', fmt='%f')
-            np.savetxt(osp.join(_HERE, "test_mesh_triangles_actual.csv"),
-                       triangles_test,
-                       delimiter=';', fmt='%d')
-        nodes_ref = np.loadtxt(osp.join(TEST_DATA_DIR, "expected",
-                                        "test_mesh_nodes_ref.csv"),
-                               delimiter=';', dtype=np.float)
-        # nodes coordinates must be almost equal (milimeter precision)
-        assert_allclose(nodes_ref, nodes_test, atol=1e-03)
-        triangles_ref = np.loadtxt(osp.join(TEST_DATA_DIR, "expected",
-                                            "test_mesh_triangles_ref.csv"),
-                                   delimiter=';', dtype=np.uint)
-        # Put triangles in a set of set
-        tgles_set_ref = set()
-        tgles_set_test = set()
-        for i in xrange(triangles_ref.shape[0]):
-            tgles_set_ref.add(frozenset(
-                [triangles_ref[i][0], triangles_ref[i][1], triangles_ref[i][2]]))
-            tgles_set_test.add(frozenset(
-                [triangles_test[i][0], triangles_test[i][1], triangles_test[i][2]]))
-        # the indices must be strictly equal, but order of triangles and of
-        # their vertices is not important
-        self.assertEqual(set([]), tgles_set_ref.symmetric_difference(tgles_set_test))
-
-
-    @unittest.skip("Implementation to be fixed")
-    def test_ground_materials(self):
-        project = self.load_project('solver_export', "ground_materials.xml")
-        model = bus2solv.build_solver_model(project).model
-        self.assertEqual(model.nmaterials(), 3)
-        # XXX FIXME: the default material is replicated once per triangle
         # TODO to be completed: cf. ticket #1468184
 
 if __name__ == '__main__':

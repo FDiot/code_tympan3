@@ -1,8 +1,8 @@
 import os
 import tempfile
 
-from utils import TympanTC, no_output
-from tympan.models._business import Project
+from utils import TympanTC
+from tympan.models.project import Project
 
 class TestSolverConfig(TympanTC):
 
@@ -21,8 +21,7 @@ class TestSolverConfig(TympanTC):
         # Export to XML and reimport it
         with tempfile.NamedTemporaryFile(suffix='.xml', delete=False) as f:
             project.to_xml(f.name)
-            with no_output():
-                configured_project = Project.from_xml(f.name)
+            configured_project = Project.from_xml(f.name)
             # Check configuration didn't disappear
             self.assertEqual(configured_project.current_computation.solver_parameters,
                              config)

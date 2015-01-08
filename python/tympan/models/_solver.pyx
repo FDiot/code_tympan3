@@ -11,16 +11,6 @@ from tympan.models cimport _common as tycommon
 from tympan._core cimport unique_ptr, shared_ptr
 
 
-class ModelHandler(object):
-    """ Ties together a SolverProblem and the converter used to build it from
-    the business model (allows to send back solver results to the business model)/
-    """
-
-    def __init__(self, model, converter):
-        self.model = model
-        self._converter = converter
-
-
 cdef class ProblemModel:
     """Solver model"""
 
@@ -46,16 +36,8 @@ cdef class ProblemModel:
         return self.thisptr.get().nmaterials()
 
     @cy.locals(spectrum_values=np.ndarray)
-    def add_source(self, position, spectrum_values, shift):
-        """Add an acoustic source to the model
-
-        position is a (x, y, z) tuple; spectrum_values is a np array containing
-        the DB values of a power spectrum, shift is the number of the first
-        frequence for which a DB value is given (frequences start at 16 Hz and
-        end at 16000Hz, 31 values in total).
-        Add the corresponding acoustic source to the solver model (the acoustic
-        source is created with a SphericalFaceDirectivity)
-        """
+    def _add_source(self, position, spectrum_values, shift):
+        """Add an acoustic source to the model"""
         # position
         pos = cy.declare(tycommon.OPoint3D)
         pos = tycommon.OPoint3D(position[0], position[1], position[2])
@@ -120,16 +102,8 @@ cdef class ProblemModel:
             receptors.append(receptor)
         return receptors
 
-    def export_triangular_mesh(self):
-        """ Build a triangular mesh from the acoustic problem model.
-
-        Return two nparrays:
-            * 'nodes': an array of nodes (of dimension 'npoints'X3), where
-            each line stands for a node and contains 3 coordinates)
-            * 'triangles': an array of triangles (of dimension 'ntriangles'X3),
-            where each line stands for a triangle and contains the indices of
-            its 3 vertices in the 'nodes' array.
-        """
+    def _export_triangular_mesh(self):
+        """Build a triangular mesh from the acoustic problem model"""
         assert self.thisptr.get() != NULL
         nb_elts = cy.declare(cy.uint)
         actri = cy.declare(cy.pointer(AcousticTriangle))
