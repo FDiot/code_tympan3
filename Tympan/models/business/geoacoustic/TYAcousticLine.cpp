@@ -302,7 +302,7 @@ void TYAcousticLine::distriSrcs()
     int i, is;
     LPTYPoint pos;
     LPTYSourcePonctuelle pSource = NULL ;               // Source ponctuelle courante
-    TYSpectre Spectre;                                  // Spectre courant
+    LPTYSpectre Spectre = new TYSpectre();                                  // Spectre courant
 
     // On commence par supprimer les anciennes sources
     remAllSrcs();
@@ -341,7 +341,7 @@ void TYAcousticLine::distriSrcs()
             // Positionnement de la source
             pSource->getPos()->set(pos->_x, pos->_y, pos->_z);
 
-            pSource->setRegime(Spectre);
+            pSource->setSpectre(Spectre);
             _pSrcLineic->addSrc(pSource); // Ajout de la source ponctuelle a la source lineique
 
             pos->_x += deltaSourcesX;
@@ -400,14 +400,14 @@ bool TYAcousticLine::setSrcsLw()
         deltaSources = distance / nbSources ;
 
         // LW(source) = LW/metre * longueur associee a la source
-        TYSpectre s = getSpectre()->toGPhy().mult(deltaSources);
+        LPTYSpectre s = new TYSpectre( getSpectre()->toGPhy().mult(deltaSources) );
 
         // Saisie du spectre pour chacune des sources du segment
         for (unsigned int is = 0 ; is < nbSources ; is++, indexTab++)
         {
             if (indexTab >= tabSrcs.size()) { break; } // Securite
 
-            tabSrcs[indexTab]->setRegime(s);
+            tabSrcs[indexTab]->setSpectre(s);
         }
     }
 

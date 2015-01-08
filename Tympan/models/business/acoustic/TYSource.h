@@ -21,9 +21,6 @@
 #define __TY_SOURCE__
 
 #include "Tympan/models/business/TYElement.h"
-#include "TYSpectre.h"
-#include "Tympan/models/business/TYColorInterface.h"
-
 
 ///Tableau associatif Regime/Spectre.
 typedef std::map<int, LPTYSpectre> TYMapRegimeSpectre;
@@ -76,39 +73,7 @@ public:
      */
     virtual TYSpectre* getCurrentSpectre() const { return _pSpectre._pObj ; }
 
-
-    /**
-     * Associe un spectre a un regime donne.
-     *
-     * @param regime Le regime auquel on souhaite associe un spectre.
-     * @param spectre Le spectre a associer.
-     */
-    void setRegime(TYSpectre& spectre, int regime = -1);
-
-    /**
-     * Conversion spectre de pression en spectre de puissance acoustique.
-     *
-     * @param spectre de pression acoustique
-     * @param distance du point de mesure a la source
-     * @param regime Le regime de fonctionnement concerne.
-     */
-    TYSpectre toLW(const TYSpectre& pression, const double distance, int regime = -1) const;
-
-    /**
-     * Conversion spectre de puissance d'une source ponctuelle
-     * en spectre de puissance d'une source lineique.
-     *
-     * @param regime Le regime de fonctionnement concerne.
-     */
-    TYSpectre toLWLineic(int regime = -1) const;
-
-    /**
-     * Conversion spectre de puissance d'une source ponctuelle
-     * en spectre de puissance d'une source surfacique.
-     *
-     * @param regime Le regime de fonctionnement concerne.
-     */
-    TYSpectre toLWSurf(int regime = -1) const;
+    virtual void setSpectre(LPTYSpectre pSpectre) { _pSpectre = pSpectre; }
 
     // Membres
 protected:

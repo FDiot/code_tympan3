@@ -15,6 +15,7 @@
 
 #include "Tympan/core/logging.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/models/business/geometry/TYRectangle.h"
 #if TY_USE_IHM
   #include "Tympan/models/business/TYPreferenceManager.h"
   #include "Tympan/gui/widgets/TYTopographieWidget.h"
