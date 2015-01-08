@@ -5,7 +5,6 @@ import cython as cy
 from cython.operator cimport dereference as deref, preincrement as inc
 
 from tympan.models cimport _common as tycommon
-from tympan.models cimport _solver as tysolver
 from tympan._business2solver cimport business2microsource
 
 
@@ -656,6 +655,12 @@ cdef class Receptor:
             return True
         return False
 
+    @property
+    def dBA(self):
+        """Balanced spectrum value in DBA (for audible frequencies)"""
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getValA()
+
 
 cdef class UserReceptor:
     thisptr = cy.declare(SmartPtr[TYPointControl])
@@ -713,7 +718,7 @@ cdef class Project:
         # detect and disable the mesh points that are inside machines or buildings
         computation.selectActivePoint(self.thisptr.getRealPointer().getSite())
 
-    def update_site_altimetry(self, *args):
+    def _update_site_altimetry(self, *args):
         """Update site altimetry and project"""
         self.site.update_altimetry(*args)
         self.update()

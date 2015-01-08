@@ -43,6 +43,13 @@ Computations and algorithms
 
    meshing
 
+Python API
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   python_api
 
 Appendices
 ----------

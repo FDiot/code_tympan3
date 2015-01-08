@@ -3,7 +3,7 @@
 import sys
 import logging
 
-from tympan.models._business import Project
+from tympan.models.project import Project
 from tympan.altimetry import export_to_ply, builder
 
 
@@ -22,7 +22,7 @@ def main(input_project, result_file):
     """
     try:
         try:
-            project = Project.from_xml(input_project)
+            project = Project.from_xml(input_project, verbose=True)
         except RuntimeError:
             logging.exception("Couldn't load the acoustic project from %s file", input_project)
             raise

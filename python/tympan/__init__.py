@@ -1,3 +1,39 @@
+"""Code_TYMPAN: acoustic simulations based on C++ libraries
+
+Allows to:
+
+- Build a project from a XML file describing an industrial site
+- Compute and export the altimetry from the topography and infrastructures of the site
+- Create an abstract model from the "business" description, describing the
+  topography as a mesh, and with elementary sources and receptors
+- Run an acoustic simulation on an abstract model
+- Update the business model with the results of the altimetry computation or
+  with the result of the acoustic computation
+
+Here goes an example of the typical use that can be done of this API:
+
+.. code-block:: python
+
+    # Build a project from a site XML description
+    project = Project.from_xml("my_project.xml")
+    # Build an simplified site from the project to feed the altimetry
+    site = builder.build_sitenode(project.site)
+    # Compute altimetry and update the site infrastructure accordingly
+    _, mesh, feature_by_face = builder.build_altimetry(site)
+    material_by_face = builder.material_by_face(feature_by_face)
+    project.update_site_altimetry(mesh, material_by_face)
+    # Build a simplified model from the project (the new infrastructure
+    # altitudes will be taken into account)
+    model = Model.from_project(project)
+    # Load and configure the acoustic solver
+    solver = Solver.from_project(project, solverdir)
+    # Run the simulation
+    result = solver.solve(model)
+    # Update the project with the results of the computation
+    project.import_result(model, result)
+
+"""
+
 # solver parameters description
 SOLVER_CONFIG_ATTRIBUTES = [
         ('double', 'AtmosPressure'),

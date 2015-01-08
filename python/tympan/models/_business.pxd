@@ -60,6 +60,7 @@ cdef extern from "Tympan/models/business/TYElement.h":
     TYUserSourcePonctuelle* downcast_user_source_ponctuelle "downcast<TYUserSourcePonctuelle>"(TYElement *)
     TYMaillage* downcast_maillage "downcast<TYMaillage>"(TYElement *)
     TYPointControl* downcast_point_control "downcast<TYPointControl>"(TYElement *)
+    TYPointCalcul* downcast_point_calcul "downcast<TYPointCalcul>"(TYElement *)
     TYCourbeNiveau* downcast_courbe_niveau "downcast<TYCourbeNiveau>"(TYElement*)
     TYPlanEau* downcast_plan_eau "downcast<TYPlanEau>"(TYElement*)
     TYTerrain* downcast_terrain "downcast<TYTerrain>"(TYElement*)
@@ -86,6 +87,7 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         tycommon.SpectrumMatrix& getResultMatrix()
         void setSources(cppmap[TYElem_ptr, int])
         void addRecepteur(TYPointCalcul* pRecepteur)
+        int getIndexRecepteur(TYPointCalcul* pRecepteur)
 
 cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h" namespace "TYComputedDirectivity":
     cdef enum DirectivityType:
@@ -190,6 +192,7 @@ cdef extern from "Tympan/models/business/TYPointCalcul.h":
         bool getEtat(TYCalcul* pCalcul)
         void setSpectre(const TYSpectre& spectre, TYCalcul* pCalcul)
         TYSpectre* getSpectre(TYCalcul* pCalcul)
+        double getValA()
 
 cdef extern from "Tympan/models/business/TYPointControl.h":
     cdef cppclass TYPointControl (TYPointCalcul):
