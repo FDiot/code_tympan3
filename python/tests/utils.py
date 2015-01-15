@@ -75,14 +75,12 @@ class TympanTC(unittest.TestCase):
 
     def load_project(self, *path):
         from tympan.models.project import Project
-        from tympan.altimetry import builder
+        from tympan.altimetry import AltimetryMesh
         # read acoustic project
         project = Project.from_xml(osp.join(TEST_DATA_DIR, *path))
-        # compute altimetry (silently)
         with self.no_output():
-            alti_site = builder.build_sitenode(project.site)
-            _, mesh, feature_by_face = builder.build_altimetry(alti_site)
+            # compute altimetry (silently)
+            altimesh = AltimetryMesh.from_site(project.site)
             # update site altimetry
-            material_by_face = builder.material_by_face(feature_by_face)
-        project.update_site_altimetry(mesh, material_by_face)
+            project.update_site_altimetry(altimesh)
         return project

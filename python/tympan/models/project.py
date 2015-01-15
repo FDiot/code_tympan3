@@ -14,19 +14,19 @@ class Project(object):
     def __getattr__(self, name):
         return getattr(self._project, name)
 
-    def update_site_altimetry(self, mesh, material_by_face, verbose=False):
+    def update_site_altimetry(self, altimesh, verbose=False):
         """Update the altitude of the site infrastructure items
 
         Params:
 
-            - altimetry mesh: tympan.altimetry.mesh.ElevationMesh
-            - material_by_face: face id to material id mapping
+            - altimesh: tympan.altimetry.AltimetryMesh
 
         Site infrastructure items whose altitude can be updated are machines,
         buildings, sources, receptors, etc.
         """
         with filter_output(verbose):
-            self._project._update_site_altimetry(mesh, material_by_face)
+            self._project._update_site_altimetry(altimesh.mesh,
+                                                 altimesh.material_by_face())
 
     @classmethod
     def from_xml(cls, fpath, verbose=False):
