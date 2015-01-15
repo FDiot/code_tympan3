@@ -55,3 +55,30 @@ except ImportError:
         raise ImportError("Could not load the CGAL bindings even when looking in the "
                           "`CGAL_BINDINGS_PATH` environment variable (%s). "
                           "The errors is : %s" % (CGAL_BINDINGS_PATH, exc.message))
+
+
+class AltimetryMesh(object):
+    """Holds a merged SiteNode and a mesh (i.e. faces and nodes)"""
+    from tympan.altimetry import builder
+
+    def __init__(self, site, mesh, feature_by_face):
+        self.equivalent_site = site
+        self.mesh = mesh
+        self.feature_by_face = feature_by_face.copy()
+        self._material_by_face = None
+
+    @classmethod
+    def from_site(cls, site):
+        """Build an altimetry mesh from a tympan Site"""
+        asite = builder.build_sitenode(site)
+        # Compute altimetry and retrieve the resulting mesh
+        merged_site, mesh, feature_by_face = builder.build_altimetry(asite)
+        return cls(merged_site, mesh, feature_by_face)
+
+    def material_by_face(self):
+        """Return a material_by_face mapping"""
+        return builder.material_by_face(self.feature_by_face)
+
+    def to_ply(self, fpath):
+        """Export mesh content to 'fpath' (PLY format)"""
+        export_to_ply(self.mesh, self.material_by_face(), fpath)

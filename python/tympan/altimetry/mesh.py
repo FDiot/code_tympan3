@@ -94,9 +94,6 @@ class MeshedCDTWithInfo(object):
         self._input_vertices_infos = {}
         self._input_constraints_infos = {}
 
-    def clear_caches(self):
-        pass
-
     def vertices_map_to_other_mesh(self, other_mesh):
         vmap = {}
         for orig_vh in self.cdt.finite_vertices():
@@ -170,13 +167,11 @@ class MeshedCDTWithInfo(object):
         return self._input_vertices_infos[v]
 
     def insert_constraint(self, va, vb, **kwargs):
-        self.clear_caches()
         self.cdt.insert_constraint(va, vb)
         self._input_constraints_infos[sorted_vertex_pair(va, vb)] = self.EdgeInfo(**kwargs)
         return (va, vb) # Important to return the contrain in the input order
 
     def insert_point(self, point, **kwargs):
-        self.clear_caches()
         point = to_cgal_point(point)
         vertex = self.cdt.insert(point)
         self._input_vertices_infos[vertex] = self.VertexInfo(**kwargs)
@@ -668,11 +663,6 @@ class ElevationMesh(MeshedCDTWithInfo):
         super(ElevationMesh, self).__init__()
         self.vertices_info = defaultdict(self.VertexInfo)
         self.edges_info = defaultdict(self.EdgeInfo)
-        self._init_vertices_info_from_input()
-
-    def _init_vertices_info_from_input(self):
-        for vh, info in self._input_vertices_infos.iteritems():
-            self.vertices_info[vh] = info # TODO Consider copying ?
 
     def copy(self, class_=None, deep=False, vmap=None):
         vmap = {} if vmap is None else vmap
@@ -686,11 +676,6 @@ class ElevationMesh(MeshedCDTWithInfo):
             dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
             newone.edges_info[(dest_va, dest_vb)] = dest_info
         return newone
-
-    def clear_caches(self):
-        self.vertices_info.clear()
-        self.edges_info.clear()
-        self._init_vertices_info_from_input()
 
     def insert_point(self, point, **kwargs):
         vh = super(ElevationMesh, self).insert_point(point, **kwargs)
