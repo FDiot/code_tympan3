@@ -87,9 +87,9 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
     tympan::SpectrumMatrix& matrix = aresult.get_data();
     matrix.resize(aproblem.nreceptors(), aproblem.nsources());
 
-    for (int i = 0; i < aproblem.nsources(); i++) // boucle sur les sources
+    for (int i = 0; i < static_cast<int>(aproblem.nsources()); i++) // boucle sur les sources
     {
-        for (int j = 0; j < aproblem.nreceptors(); j++) // boucle sur les recepteurs
+        for (int j = 0; j < static_cast<int>(aproblem.nreceptors()); j++) // boucle sur les recepteurs
         {
             tabSpectre[i][j].setEtat(SPECTRE_ETAT_LIN);
             sLP = tabSpectre[i][j];
