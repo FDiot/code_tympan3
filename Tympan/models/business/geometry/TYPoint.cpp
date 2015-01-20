@@ -34,7 +34,7 @@ TYPoint::TYPoint(bool PutInInstanceList /*= false */): TYElement(NULL, PutInInst
 {
 }
 
-TYPoint::TYPoint(const TYPoint& other, bool PutInInstanceList /*= false */): TYElement(NULL, PutInInstanceList),
+TYPoint::TYPoint(const TYPoint& other, bool PutInInstanceList /*= false */): TYElement(other, false),
     OPoint3D(other)
 {
 }
