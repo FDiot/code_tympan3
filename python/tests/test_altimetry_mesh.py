@@ -3,7 +3,7 @@ from itertools import izip_longest
 import unittest
 
 import numpy as np
-from numpy.testing import assert_array_equal
+from numpy.testing import assert_array_equal, assert_almost_equal
 from shapely.geometry import LineString, Point, Polygon
 
 from tympan.altimetry.datamodel import (InconsistentGeometricModel,
@@ -522,6 +522,22 @@ class ElevationProfileTC(unittest.TestCase):
         for points, alt in zip(self.rectangles, self.altitudes):
             self.mesh.insert_polyline(map(mesh.to_cgal_point, points),
                                       altitude=alt, close_it=True)
+
+    def test_no_point_inside(self):
+        """Segment is outside mesh convex hull"""
+        segment = (0.2, 0.2), (1, 0.2)
+        profile = mesh.ElevationProfile(self.mesh, segment)
+        self.assertEqual(profile.points, [])
+        assert_almost_equal(profile.point_altitude(0), np.nan)
+        assert_almost_equal(profile.point_altitude(1), np.nan)
+
+    def test_segment_inside_face(self):
+        """The segment is completely within a face (no intersection)"""
+        segment = (2.2, 2.1), (2.8, 2.1)
+        profile = mesh.ElevationProfile(self.mesh, segment)
+        # Any point inside segment has the face altitude (interpolation is not
+        # used).
+        assert_array_equal(profile([0, 0.3, 0.6]), [3, 3, 3])
 
     def test__point_at_distance(self):
         segment = LineString([(2, 2), (3, 2)])
