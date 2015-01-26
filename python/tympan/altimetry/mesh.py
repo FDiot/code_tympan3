@@ -829,9 +829,6 @@ class ElevationProfile(object):
             raise ValueError('expecting a segment with two points')
         self._segment = segment
         self.points = mesh.segment_intersection_points(segment)
-        if not self.points:
-            raise ValueError(
-                'no point found by intersecting the segment and the mesh')
         # Cached spline.
         self._spline = None
 
@@ -860,7 +857,13 @@ class ElevationProfile(object):
 
     @property
     def spline(self):
-        """The underlying interpolating spline"""
+        """The underlying interpolating spline.
+
+        May be None if the segment does not intersect the mesh.
+        """
+        if not self.points:
+            # no points in segment, cannot build a spline.
+            return None
         if not self._spline:
             self._spline = self.point_data_interpolator(self.point_altitude)
         return self._spline
@@ -932,8 +935,15 @@ class ElevationProfile(object):
         return face_data.get(fh, default)
 
     def __call__(self, dist):
-        """Interpolated altitude at distance `dist` from segment origin."""
-        return self.spline(dist)
+        """Return the altitude at distance `dist` from segment origin.
+
+        Either it is interpolated if the segment intersects some mesh faces or
+        it is computed by mesh projection.
+        """
+        if self.spline is not None:
+            return self.spline(dist)
+        else:
+            return np.vectorize(self.point_altitude)(dist)
 
 
 class FaceFlooder(object):
