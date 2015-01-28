@@ -405,6 +405,10 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                     if (pElt->edit(this) == QDialog::Accepted)
                     {
                         eltItem->updateContent();
+                        if ( pElt->isA("TYCalcul") )
+                        {
+                            updateList();
+                        }
                     }
 
                     if (pElt->isA("TYRectangularMaillage"))

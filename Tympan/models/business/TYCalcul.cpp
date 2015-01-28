@@ -1188,12 +1188,12 @@ void TYCalcul::setState(int state)
     }
 }
 
-void TYCalcul::addPtCtrlToResult(TYPointControl* pPoint)
+bool TYCalcul::addPtCtrlToResult(TYPointControl* pPoint)
 {
-    _pResultat->addRecepteur(pPoint);
+    return _pResultat->addRecepteur(pPoint);
 }
 
-void TYCalcul::remPtCtrlFromResult(TYPointControl* pPoint)
+bool TYCalcul::remPtCtrlFromResult(TYPointControl* pPoint)
 {
-    _pResultat->remRecepteur(pPoint);
+    return _pResultat->remRecepteur(pPoint);
 }

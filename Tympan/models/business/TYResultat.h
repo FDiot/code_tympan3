@@ -125,15 +125,15 @@ public:
 
     /**
      * \fn void addRecepteur(TYPointCalcul* pRecepteur)
-     * \brief Ajoute un recepteur.
+     * \brief Ajoute un recepteur et indique s'il faut reconstruire la matrice
      */
-    void addRecepteur(TYPointCalcul* pRecepteur);
+    bool addRecepteur(TYPointCalcul* pRecepteur);
 
     /*!
-     * \brief Supprime un recepteur du tableau
+     * \brief Supprime un recepteur du tableau et indique s'il faut reconstruire la matrice
      * \param TYPointCalcul * pRecepteur : recepteur a supprimer
      */
-    void remRecepteur(TYPointCalcul* pRecepteur);
+    bool remRecepteur(TYPointCalcul* pRecepteur);
 
     /**
      * \fn void buildSources(const TYTabSourcePonctuelleGeoNode& sources)

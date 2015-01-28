@@ -348,9 +348,11 @@ void TYResultat::buildRecepteurs(const TYTabPointCalculGeoNode& recepteurs)
     }
 }
 
-void TYResultat::addRecepteur(TYPointCalcul* pRecepteur)
+bool TYResultat::addRecepteur(TYPointCalcul* pRecepteur)
 {
     assert(pRecepteur);
+
+    bool need_to_rebuild(false);
     // use two instructions to avoid order problem between compilers
     // G. Andrade
     TYMapElementIndex::iterator it = _recepteurs.find(pRecepteur);
@@ -358,14 +360,23 @@ void TYResultat::addRecepteur(TYPointCalcul* pRecepteur)
     {
         int idx = static_cast<int>(_recepteurs.size());
         _recepteurs[pRecepteur] = idx;
+        need_to_rebuild = true;
     }
+
+    return need_to_rebuild;
 }
 
-void TYResultat::remRecepteur(TYPointCalcul* pRecepteur)
+bool TYResultat::remRecepteur(TYPointCalcul* pRecepteur)
 {
     assert(pRecepteur);
+
+    bool need_to_rebuild(false);
     TYMapElementIndex::iterator it = _recepteurs.find(pRecepteur);
-    if (it != _recepteurs.end()) { _recepteurs.erase(it); }
+    if (it != _recepteurs.end()) 
+    { 
+        _recepteurs.erase(it);
+        need_to_rebuild = true;
+    }
 
     // Boucle sur les recepteurs pour les renumeroter
     unsigned int index = 0;
@@ -373,6 +384,8 @@ void TYResultat::remRecepteur(TYPointCalcul* pRecepteur)
     {
         (*it).second = index;
     }
+
+    return need_to_rebuild;
 }
 
 void TYResultat::buildMatrix()
