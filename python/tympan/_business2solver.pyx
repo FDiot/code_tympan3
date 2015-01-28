@@ -303,10 +303,10 @@ cdef class Business2SolverConverter:
                 # inheritance: TYPointControl > TYPointCalcul > TYPoint > tycommon.OPoint3D > OCoord3D
                 # call to tycommon.OPoint3D copy constructor to record control point coordinates
                 rec_idx = model.thisptr.get().make_receptor((control_points[i].getRealPointer())[0])
-            rec_uuid = id_str(control_points[i].getRealPointer())
-            self.bus2solv_receptors[rec_uuid] = rec_idx
-            self.instances_mapping[rec_uuid] = control_points[i].getRealPointer()
-            nb_receptors += 1
+                rec_uuid = id_str(control_points[i].getRealPointer())
+                self.bus2solv_receptors[rec_uuid] = rec_idx
+                self.instances_mapping[rec_uuid] = control_points[i].getRealPointer()
+                nb_receptors += 1
         # Then add mesh points to the acoustic problem model
         meshes = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         meshes = self.comp.thisptr.getRealPointer().getMaillages()
