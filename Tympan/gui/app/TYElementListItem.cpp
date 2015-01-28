@@ -101,14 +101,17 @@ void TYElementListItem::updateContent()
             TYPointControl* pPoint = TYPointControl::safeDownCast(_pElement);
             TYCalcul* pCalcul = static_cast<TYProjet*>(pPoint->getParent())->getCurrentCalcul();
             bInCurrentCalcul = pPoint->getEtat(pCalcul);
+            bool need_to_rebuild_result(false);
             if (bInCurrentCalcul)
             {
-                pCalcul->addPtCtrlToResult(pPoint);
+                need_to_rebuild_result |= pCalcul->addPtCtrlToResult(pPoint);
             }
             else
             {
-                pCalcul->remPtCtrlFromResult(pPoint);
+                need_to_rebuild_result |= pCalcul->remPtCtrlFromResult(pPoint);
             }
+            
+            if (need_to_rebuild_result) { pCalcul->getResultat()->buildMatrix(); }
         }
         else
         {
@@ -203,6 +206,17 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
                     pPoint->setEtat(state, _pCurrentCalcul);
                 }
 
+                bool need_to_rebuild_result(false);
+                if (state) // Ajout d'un point de controle
+                {
+                    need_to_rebuild_result |= _pCurrentCalcul->addPtCtrlToResult(pPoint);
+                }
+                else // Suppression d'un point de controle
+                {
+                    need_to_rebuild_result |= _pCurrentCalcul->remPtCtrlFromResult(pPoint);
+                }
+                    
+                if (need_to_rebuild_result) { _pCurrentCalcul->getResultat()->buildMatrix(); }
                 if (UpdateModelers)
                 {
                     if (_pElement->getParent())
