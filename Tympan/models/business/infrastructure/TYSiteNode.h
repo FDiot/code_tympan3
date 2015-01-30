@@ -443,6 +443,11 @@ public:
     const double getSIG_Y() const { return _SIG_Y; }
     void setSIG_Y(const double& SIG_Y) { _SIG_Y = SIG_Y; }
 
+    double getSIG_OFFSET() { return _SIG_OFFSET; }
+    const double getSIG_OFFSET() const { return _SIG_OFFSET; }
+    void setSIG_OFFSET(const double& SIG_OFFSET) { _SIG_OFFSET = SIG_OFFSET; }
+
+
     /// Export au format csv sur un flux transmis
     virtual void exportCSV(std::ofstream& ofs);
 
@@ -522,6 +527,7 @@ protected:
 
     double _SIG_X;
     double _SIG_Y;
+    double _SIG_OFFSET;
 
     ///Liste des sites.
     TYTabSiteNodeGeoNode _listSiteNode;

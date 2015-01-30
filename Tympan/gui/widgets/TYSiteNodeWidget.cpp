@@ -155,6 +155,12 @@ TYSiteNodeWidget::TYSiteNodeWidget(TYSiteNode* pElement, QWidget* _pParent /*=NU
     _lineEditSIG_Y = new QLineEdit(pGroupBoxData);
     pGroupBoxDataLayout->addWidget(_lineEditSIG_Y, 0, 5);
 
+    _labelSIG_OFFSET = new QLabel(pGroupBoxData);
+    _labelSIG_OFFSET->setText(TR("id_SIG_OFFSET"));
+    pGroupBoxDataLayout->addWidget(_labelSIG_OFFSET, 0, 6);
+    _lineEditSIG_OFFSET = new QLineEdit(pGroupBoxData);
+    pGroupBoxDataLayout->addWidget(_lineEditSIG_OFFSET, 0, 7);
+
     connect(_comboSIG, SIGNAL(activated(int)), this, SLOT(setSIGCoord(int)));
 
     _sitenodeLayout->addWidget(pGroupBoxData, ++wPos, 0);
@@ -288,6 +294,7 @@ void TYSiteNodeWidget::apply()
     getElement()->setSIGType(_comboSIG->currentIndex());
     getElement()->setSIG_X(_lineEditSIG_X->text().toFloat());
     getElement()->setSIG_Y(_lineEditSIG_Y->text().toFloat());
+    getElement()->setSIG_OFFSET(_lineEditSIG_OFFSET->text().toFloat());
 
     getElement()->setIsGeometryModified(true);
 
@@ -362,9 +369,11 @@ void TYSiteNodeWidget::updateSIGData()
         _comboSIG->setEnabled(true);
         _lineEditSIG_X->setEnabled(true);
         _lineEditSIG_Y->setEnabled(true);
+        _lineEditSIG_OFFSET->setEnabled(true);
         _comboSIG->setCurrentIndex(getElement()->getSIGType());
         _lineEditSIG_X->setText(QString().setNum(getElement()->getSIG_X()));
         _lineEditSIG_Y->setText(QString().setNum(getElement()->getSIG_Y()));
+        _lineEditSIG_OFFSET->setText(QString().setNum(getElement()->getSIG_OFFSET()));
     }
     else if (!getElement()->getRoot())
     {
@@ -373,6 +382,8 @@ void TYSiteNodeWidget::updateSIGData()
         _lineEditSIG_X->setEnabled(false);
         _lineEditSIG_Y->setText(QString().setNum(0.000));
         _lineEditSIG_Y->setEnabled(false);
+        _lineEditSIG_OFFSET->setText(QString().setNum(0.000));
+        _lineEditSIG_OFFSET->setEnabled(false);
     }
     else
     {
@@ -381,6 +392,8 @@ void TYSiteNodeWidget::updateSIGData()
         _lineEditSIG_X->setEnabled(false);
         _lineEditSIG_Y->setText(QString().setNum(0.000));
         _lineEditSIG_Y->setEnabled(false);
+        _lineEditSIG_OFFSET->setText(QString().setNum(0.000));
+        _lineEditSIG_OFFSET->setEnabled(false);
     }
 }
 
