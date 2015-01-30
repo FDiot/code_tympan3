@@ -163,7 +163,8 @@ protected:
     QLineEdit* _lineEditSIG_X;
     QLabel* _labelSIG_Y;
     QLineEdit* _lineEditSIG_Y;
-
+    QLabel* _labelSIG_OFFSET;
+    QLineEdit* _lineEditSIG_OFFSET;
 
     QGridLayout* _sitenodeLayout;
     QGridLayout* _groupBox_3Layout;
