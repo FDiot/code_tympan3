@@ -142,10 +142,6 @@ int TYAcousticSurfaceNode::fromXML(DOM_Element domElement)
         _pBoundingRect->callFromXMLIfEqual(elemCur);
 
         TYXMLTools::getElementIntValue(elemCur, "nbChild", nbChild, nbChildOk);
-        if (nbChildOk)
-        {
-            _tabAcousticSurf.reserve(nbChild);
-        }
 
         if (pAccSurfGeoNode->callFromXMLIfEqual(elemCur, &retVal))
         {
