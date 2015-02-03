@@ -243,10 +243,6 @@ int TYAcousticLine::fromXML(DOM_Element domElement)
         _pSrcLineic->callFromXMLIfEqual(elemCur);
 
         TYXMLTools::getElementIntValue(elemCur, "nbPoints", nbPoints, nbPointsOk);
-        if (nbPointsOk)
-        {
-            _tabPoint.reserve(nbPoints);
-        }
 
         if (point.callFromXMLIfEqual(elemCur))
         {
