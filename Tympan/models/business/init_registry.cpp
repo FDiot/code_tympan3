@@ -35,6 +35,7 @@
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYMaillage.h"
 #include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYRay.h"
 #include "Tympan/models/business/topography/TYAltimetrie.h"
 #include "Tympan/models/business/topography/TYPlanEau.h"
 #include "Tympan/models/business/topography/TYCoursEau.h"
@@ -115,6 +116,7 @@ void init_registry()
     OPrototype::add_factory("TYProjet", std::move(build_factory<TYProjet>()));
     OPrototype::add_factory("TYMaillage", std::move(build_factory<TYMaillage>()));
     OPrototype::add_factory("TYCalcul", std::move(build_factory<TYCalcul>()));
+    OPrototype::add_factory("TYRay", std::move(build_factory<TYRay>()));
     // models/business/topography
     OPrototype::add_factory("TYAltimetrie", std::move(build_factory<TYAltimetrie>()));
     OPrototype::add_factory("TYPlanEau", std::move(build_factory<TYPlanEau>()));
@@ -156,7 +158,6 @@ void init_registry()
     // These classes weren't registered initially. Make sure they really don't need
     // to be.
 //    OPrototype::add_factory("TYUserSrcRegime", std::move(build_factory<TYUserSrcRegime>()));
-//    OPrototype::add_factory("TYRay", std::move(build_factory<TYRay>()));
 //    OPrototype::add_factory("TYRegime", std::move(build_factory<TYRegime>()));
 }
 
