@@ -441,6 +441,14 @@ public:
     // Solver parameters for this computation
     QString solverParams;
 
+    /*!
+    * \fn TYTabRay getAllRays()
+    * \brief Renvoie un tableau contenant tous les rayons trouvés par le lancer de rayons.
+    * \return Renvoie le tableau de rayons Tympan
+    */
+    TYTabRay& getTabRays() { return _tabRays; }
+
+
 protected:
     /**
      * \fn void updateGraphicMaillage()
@@ -484,6 +492,9 @@ protected:
 
     ///Resultat.
     LPTYResultat _pResultat;
+
+    //Rayons valides produit par le lancer de rayons
+    TYTabRay _tabRays;
 };
 
 #include "TYProjet.h"

@@ -82,5 +82,14 @@ void TYCalculGraphic::display(GLenum mode /*= GL_RENDER*/)
         pMaillageGeoNode = pTabMaillage->operator[](i);
         pMaillageGeoNode->getGraphicObject()->display(mode);
     }
+
+    if (TYRayGraphic::_gVisible)
+    {
+        TYTabRay& tabRays = getElement()->getTabRays();
+        for (size_t i=0; i<tabRays.size(); i++)
+        {
+            tabRays.at(i)->getGraphicObject()->display(mode);
+        }
+    }
 }
 
