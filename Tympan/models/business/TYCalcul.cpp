@@ -634,7 +634,7 @@ void TYCalcul::addToSelection(TYElement* pElt, bool recursif /*=true*/)
             // Si un objet est ajoute son parent l'est forcemment
             addToSelection(pElt->getParent(), false);
         }
-        else
+        else if (dynamic_cast<TYUserSourcePonctuelle*>(pElt) != nullptr)
         {
             TYUserSourcePonctuelle* pSource = dynamic_cast<TYUserSourcePonctuelle*>(pElt);
             if (pSource != nullptr) { etat = pSource->getIsRayonnant(); }
