@@ -49,7 +49,7 @@ public:
      * \brief Build a TYRay from an acoustic_path
      */
     TYRay(const acoustic_path &ap) : TYElement(), acoustic_path(ap) {}
-
+    
     /*!
     * \fn TYRay( const TYRay &ray)
     * \brief Constructeur par copie d'un rayon
@@ -128,5 +128,11 @@ protected:
 typedef SmartPtr<TYRay> LPTYRay;
 
 typedef std::vector<LPTYRay> TYTabRay;
+
+/*!
+ * \fn TYRay(const acoustic_path &ap)
+ * \brief Build a TYRay from an acoustic_path (used by cython interface)
+*/
+SmartPtr<TYRay> build_ray(const acoustic_path& ap);
 
 #endif
