@@ -53,8 +53,6 @@ void TYANIME3DSolver::init()
 {
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     _pAtmos = std::unique_ptr<AtmosphericConditions>( new AtmosphericConditions(config->AtmosPressure, config->AtmosTemperature, config->AtmosHygrometry) );
-
-    _tabRay.clear();
 }
 
 bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
@@ -66,6 +64,9 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
     // Rcupration (once for all) des sources et des rcepteurs
     init();
 
+    // Recuperation du tableau de rayon de la structure resultat
+    tab_acoustic_path tabRays = aresult.get_path_data();
+
     // Construction de la liste des faces utilise pour le calcul
     TYANIME3DFaceSelector fs(aproblem);
     bool bRet = fs.exec(_tabPolygon, _tabPolygonSize);
@@ -73,14 +74,14 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
     if (!bRet) { return false; }
 
     // Ray tracing computation
-    TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, aproblem, _tabRay);
+    TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, aproblem, tabRays);
     apf.exec();
 
     ////////////////////////////////////////////////////////////
     // Calculs acoustiques sur les rayons via la methode ANIME3D
     ////////////////////////////////////////////////////////////
 
-    TYANIME3DAcousticModel aam(_tabRay, _tabPolygon, aproblem, *_pAtmos);
+    TYANIME3DAcousticModel aam(tabRays, _tabPolygon, aproblem, *_pAtmos);
 
     // calcul de la matrice de pression totale pour chaque couple (S,R)
     OTab2DSpectreComplex tabSpectre = aam.ComputeAcousticModel();
@@ -104,9 +105,9 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
 
     if (config->UseMeteo && config->OverSampleD)
     {
-        for (unsigned int i = 0; i < _tabRay.size(); i++)
+        for (unsigned int i = 0; i < tabRays.size(); i++)
         {
-            _tabRay[i]->tyRayCorrection( apf.get_geometry_modifier() );
+            tabRays[i]->tyRayCorrection( apf.get_geometry_modifier() );
         }
     }
 
@@ -114,7 +115,7 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
     ostringstream fic_out;
     fic_out << "rayons_infos.txt" << ends;
     ofstream fic(fic_out.str().c_str());
-    fic << "on a " << _tabRay.size() << " rayons dans cette scene" << endl; // nombre de rayons
+    fic << "on a " << tabRays.size() << " rayons dans cette scene" << endl; // nombre de rayons
     fic.close();
     // END : COMPLEMENTS "DECORATIFS"
 

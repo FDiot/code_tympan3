@@ -165,3 +165,9 @@ int TYRay::fromXML(DOM_Element domElement)
 
     return 1;
 }
+
+SmartPtr<TYRay> build_ray(const acoustic_path& ap)
+{
+    SmartPtr<TYRay> a_ray = new TYRay(ap);
+    return a_ray;
+}
