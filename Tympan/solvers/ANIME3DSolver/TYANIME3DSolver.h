@@ -97,8 +97,6 @@ public:
     virtual void purge();
 
 protected:
-    tab_acoustic_path _tabRay;
-
     /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face
     TYStructSurfIntersect* _tabPolygon;
 
