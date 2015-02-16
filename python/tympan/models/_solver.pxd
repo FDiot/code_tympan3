@@ -7,7 +7,7 @@ from libcpp.vector cimport vector
 
 from tympan._core cimport SolverInterface
 from tympan.models._common cimport (OPoint3D, OSpectre, OSpectreComplex,
-                                    OVector3D, SpectrumMatrix)
+                                    OVector3D, SpectrumMatrix, acoustic_path)
 
 # XXX importing SmartPtr and shared_ptr from tympan.core set a cyclical dependency
 # between tympan.core and tympan.models.solver, since tympan.core declares
@@ -55,6 +55,7 @@ cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "ty
 cdef extern from "Tympan/models/solver/acoustic_result_model.hpp" namespace "tympan":
     cdef cppclass AcousticResultModel:
         SpectrumMatrix& get_data()
+        vector[acoustic_path*]& get_path_data()
 
 cdef extern from "Tympan/models/solver/data_model_common.hpp":
     cdef cppclass BaseEntity:

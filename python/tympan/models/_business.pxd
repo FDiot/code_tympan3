@@ -155,6 +155,7 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
                       vector[SmartPtr[TYGeometryNode]])
         void selectActivePoint(SmartPtr[TYSiteNode] pSite)
         const vector[SmartPtr[TYGeometryNode]] getMaillages() const
+        vector[SmartPtr[TYRay]]& getTabRays()
         void goPostprocessing()
         const OGenID getSolverId()
         QString solverParams
@@ -198,6 +199,13 @@ cdef extern from "Tympan/models/business/TYPointCalcul.h":
 cdef extern from "Tympan/models/business/TYPointControl.h":
     cdef cppclass TYPointControl (TYPointCalcul):
         pass
+
+cdef extern from "Tympan/models/business/TYRay.h":
+    cdef cppclass TYRay (TYElement, tycommon.acoustic_path):
+        TYRay(tycommon.acoustic_path& ap)
+
+cdef extern from "Tympan/models/business/TYRay.h":
+        cdef SmartPtr[TYRay] build_ray(const tycommon.acoustic_path& ap)
 
 cdef extern from "Tympan/models/business/topography/TYCourbeNiveau.h":
     cdef cppclass TYCourbeNiveau(TYElement):
