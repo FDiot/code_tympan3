@@ -42,6 +42,7 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
     const tympan::nodes_pool_t& nodes = aproblem.nodes(); 
     const tympan::triangle_pool_t& triangles = aproblem.triangles();
 
+    tabPolygonSize = triangles.size();
     tabPolygon = new TYStructSurfIntersect[triangles.size()];
 
     for (unsigned int i=0; i<triangles.size(); i++)
@@ -58,6 +59,8 @@ bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, 
         tabPolygon[i].tabPoint.push_back(pts[1]);
         tabPolygon[i].tabPoint.push_back(pts[2]);
         tabPolygon[i].normal = normal;
+
+        tabPolygon[i].material = triangles[i].made_of.get();
     }
 
     return true;

@@ -149,6 +149,20 @@
     }
 }
 
+/*static*/ void TYXMLTools::getElementUIntValue(DOM_Element parentElem, DOMString nodeName, unsigned int& nodeValue, bool& ok)
+{
+    if (ok) { return; }
+
+    QString nodeValueStr;
+
+    getElementStringValue(parentElem, nodeName, nodeValueStr, ok);
+
+    if (ok)
+    {
+        nodeValue = nodeValueStr.toUInt();
+    }
+}
+
 /*static*/ bool TYXMLTools::getElementBoolValue(DOM_Element parentElem, DOMString nodeName, bool& nodeValue)
 {
     QString nodeValueStr;

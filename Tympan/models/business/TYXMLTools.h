@@ -176,6 +176,18 @@ public:
 
     /**
      * Verifie si le noeud passe correspond au nom passe et en extrait la donnee associee
+     * sous forme de <code>int</code>.
+     *
+     * @param parentElem    L'element XML parent.
+     * @param nodeName      Le nom de l'element XML a chercher.
+     * @param nodeValue     La valeur a remplir.
+     * @param ok            Si ok vaut <code>false</code> le noeud n'est pas parcouru.
+     *                      Sinon, si le noeud a ete trouve, il est mis a <code>true</code>.
+     */
+    static void getElementUIntValue(DOM_Element parentElem, DOMString nodeName, unsigned int& nodeValue, bool& ok);
+
+    /**
+     * Verifie si le noeud passe correspond au nom passe et en extrait la donnee associee
      * sous forme de <code>bool</code>.
      *
      * @param parentElem    L'element XML parent.

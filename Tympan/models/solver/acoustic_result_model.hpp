@@ -13,6 +13,7 @@
 #include <memory>
 
 #include "Tympan/models/common/spectrum_matrix.h"
+#include "Tympan/models/common/acoustic_path.h"
 #include "data_model_common.hpp"
 #include "entities.hpp"
 
@@ -26,10 +27,12 @@ public:
     virtual ~AcousticResultModel();
 
     SpectrumMatrix& get_data() { return acoustic_data; }
+    tab_acoustic_path& get_path_data() { return path_data; }
 
 protected: // data members
 
     SpectrumMatrix acoustic_data;
+    tab_acoustic_path path_data;
 
 };  // class AcousticResultModel
 

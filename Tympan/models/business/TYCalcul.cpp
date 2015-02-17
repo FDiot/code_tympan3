@@ -263,6 +263,13 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
         tmp.toXML(domNewElem);
     }
 
+    // Sauvegarde de rayons (chemins acoustiques)
+    DOM_Element listRaysNode = domDoc.createElement("ListRayons");
+    domNewElem.appendChild(listRaysNode);
+    for (size_t i=0; i<_tabRays.size(); i++)
+    {
+        _tabRays.at(i)->toXML(listRaysNode);
+    }
 
     return domNewElem;
 }
@@ -278,6 +285,8 @@ int TYCalcul::fromXML(DOM_Element domElement)
     for (i = 0; i < 8; i++) { getOk[i] = false; }
     int retVal = -1;
     LPTYMaillageGeoNode pMaillageGeoNode = new TYMaillageGeoNode(NULL, this);
+    LPTYRay aRay = new TYRay();
+    _tabRays.clear();
 
     // CLM-NT33: Compatibiltité ancien format XML
     LPTYPointControl pPointControl = new TYPointControl();
@@ -391,11 +400,23 @@ int TYCalcul::fromXML(DOM_Element domElement)
                 }
             }
         }
-        else if (elemCur.nodeName() == "ReflexionAccVolNodes") // Etats des AccVolNodes en reflexion
+        else if (elemCur.nodeName() == "ListRayons")
         {
-        }
-        else if (elemCur.nodeName() == "EtatAtts") // Etats des attenuateurs
-        {
+            DOM_Element elemCur2;
+            QDomNodeList childs2 = elemCur.childNodes();
+
+            for (size_t j = 0; j < childs2.length(); j++)
+            {
+                elemCur2 = childs2.item(j).toElement();
+                if (aRay->callFromXMLIfEqual(elemCur2, &retVal))
+                {
+                    if (retVal == 1)
+                    {
+                        _tabRays.push_back(aRay);
+                        aRay = new TYRay();
+                    }
+                }
+            }
         }
 
         // CLM-NT33: Compatibilitité avec ancien format XML
