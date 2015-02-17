@@ -45,6 +45,12 @@ public:
     TYRay();
 
     /*!
+     * \fn TYRay(const acoustic_path &ap)
+     * \brief Build a TYRay from an acoustic_path
+     */
+    TYRay(const acoustic_path &ap) : TYElement(), acoustic_path(ap) {}
+    
+    /*!
     * \fn TYRay( const TYRay &ray)
     * \brief Constructeur par copie d'un rayon
     */
@@ -63,7 +69,27 @@ public:
      * \fn bool deepCopy(TYRay *pOther)
      * \brief Deep copy of a ray mainly the events tab
      */
-    bool deepCopy(TYRay* pOther);
+    bool deepCopy(TYRay* pOther, bool copyId);
+
+    /**
+     * Construit une arborescence DOM a partir du noeud passe
+     * afin de sauvegarder les parametres au format XML.
+     *
+     * @param domElement Le noeud DOM parent a partir duquel l'arborescence doit etre creee.
+     *
+     * @return  Le noeud DOM nouvellement cree.
+     */
+    virtual DOM_Element toXML(DOM_Element& domElement) /* const */;
+
+    /**
+     * Extrait les informations a partir du noeud DOM passe afin de
+     * recuperer les parametres de la classe.
+     *
+     * @param domElement Le noeud DOM a partir duquel les parametres doivent etre recuperes.
+     *
+     * @return 1 si la recuperation des parametres a reussie.
+     */
+    virtual int fromXML(DOM_Element domElement);
 
     /*!
     * \fn void setSource(TYSourcePonctuelle *_source)
@@ -102,5 +128,11 @@ protected:
 typedef SmartPtr<TYRay> LPTYRay;
 
 typedef std::vector<LPTYRay> TYTabRay;
+
+/*!
+ * \fn TYRay(const acoustic_path &ap)
+ * \brief Build a TYRay from an acoustic_path (used by cython interface)
+*/
+SmartPtr<TYRay> build_ray(const acoustic_path& ap);
 
 #endif

@@ -21,6 +21,9 @@ cdef extern from "Tympan/models/common/spectrum_matrix.h" namespace "tympan":
         size_t nb_receptors() const
         void clearReceptor(size_t receptor_idx)
 
+cdef extern from "Tympan/models/common/acoustic_path.h":
+    cdef cppclass acoustic_path:
+        acoustic_path()
 
 cdef extern from "Tympan/models/common/3d.h":
 
