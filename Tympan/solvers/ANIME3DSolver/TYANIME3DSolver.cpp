@@ -65,7 +65,7 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
     init();
 
     // Recuperation du tableau de rayon de la structure resultat
-    tab_acoustic_path tabRays = aresult.get_path_data();
+    tab_acoustic_path& tabRays = aresult.get_path_data();
 
     // Construction de la liste des faces utilise pour le calcul
     TYANIME3DFaceSelector fs(aproblem);

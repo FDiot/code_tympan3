@@ -40,7 +40,7 @@
 namespace core_mathlib
 {
 // Activation or not (if commented) of targeting operations
-#define _ALLOW_TARGETING_ XXX
+//#define _ALLOW_TARGETING_ XXX
 
 
 typedef float decimal;
