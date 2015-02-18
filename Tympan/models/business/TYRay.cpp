@@ -145,16 +145,17 @@ int TYRay::fromXML(DOM_Element domElement)
             {
                 TYPoint pt;
                 elemCur2 = childs2.item(j).toElement();
-                if (pt.callFromXMLIfEqual(elemCur, &retVal))
+                if (pt.callFromXMLIfEqual(elemCur2, &retVal))
                 {
-                    if (retVal == 1) { _listPoints.push_back(pt); }
+                    _listPoints.push_back(pt);
                 }            
             }
         }
     }
 
     // Reconstitution des evenements
-    assert (event_kind_tab.size() == _listPoints.size() == nb_events);
+    assert ( ( event_kind_tab.size() == nb_events ) &&
+             ( _listPoints.size()    == nb_events ) );
     for (size_t i=0; i<nb_events; i++)
     {
         acoustic_event *ev = new acoustic_event(_listPoints.at(i));
