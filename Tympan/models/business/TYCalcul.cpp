@@ -84,6 +84,7 @@ TYProjet* TYCalcul::getProjet()
 
 TYCalcul& TYCalcul::operator=(const TYCalcul& other)
 {
+    _tabRays.clear();
     if (this != &other)
     {
         TYElement::operator =(other);
@@ -100,7 +101,9 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _emitAcVolNode = other._emitAcVolNode;
         _mapElementRegime = other._mapElementRegime;
         _solverId = other._solverId;
+        _tabRays = other._tabRays;
     }
+
     return *this;
 }
 
@@ -122,6 +125,7 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_mapElementRegime != other._mapElementRegime) { return false; }
         if (_elementSelection != other._elementSelection) { return false; }
         if (_solverId != other._solverId) { return false; }
+        if (_tabRays != other._tabRays) { return false; }
     }
     return true;
 }
@@ -169,6 +173,13 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
         pMaillage->duplicatePtCalcState(pOtherCalcul, this);
         // Ajout du maillage
         addMaillage(pMaillageGeoNode);
+    }
+
+    for (i=0; i<pOtherCalcul->_tabRays.size(); i++)
+    {
+        LPTYRay aRay = new TYRay();
+        aRay->deepCopy(pOtherCalcul->_tabRays.at(i), copyId);
+        _tabRays.push_back(aRay);
     }
 
     return true;
@@ -537,6 +548,7 @@ int TYCalcul::fromXML(DOM_Element domElement)
 void TYCalcul::purge()
 {
     remAllMaillage();
+    _tabRays.clear();
 
     clearSelection();
 
