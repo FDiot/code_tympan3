@@ -93,8 +93,8 @@ cdef class Business2SolverConverter:
         """
         solver_rays_tab = cy.declare(vector[cy.pointer(tycommon.acoustic_path)])
         solver_rays_tab = result.thisptr.get().get_path_data()
-        business_rays_tab = cy.declare(vector[SmartPtr[tybusiness.TYRay]])
-        business_rays_tab = self.comp.thisptr.getRealPointer().getTabRays()
+        business_rays_tab = cy.declare(cy.pointer(vector[SmartPtr[tybusiness.TYRay]]))
+        business_rays_tab = cy.address(self.comp.thisptr.getRealPointer().getTabRays())
         its = cy.declare(vector[cy.pointer(tycommon.acoustic_path)].iterator)
         its = solver_rays_tab.begin()
         while its != solver_rays_tab.end():
