@@ -26,7 +26,7 @@ acoustic_event build_from_RayEvent(const Event *rev)
                 tyrev.type = TYREFLEXION;
             }
 
-            tyrev.idFace1 = rev->getShape()->getFaceId();
+            tyrev.idFace1 = rev->getShape()->getPrimitiveId();
 
             break;
 
@@ -35,8 +35,8 @@ acoustic_event build_from_RayEvent(const Event *rev)
             cyl = dynamic_cast<Cylindre*>(const_cast<Event *>(rev)->getShape());
             if (cyl)
             {
-                tyrev.idFace1 = cyl->getFirstShape()->getFaceId();
-                tyrev.idFace2 = cyl->getSecondShape()->getFaceId();
+                tyrev.idFace1 = cyl->getFirstShape()->getPrimitiveId();
+                tyrev.idFace2 = cyl->getSecondShape()->getPrimitiveId();
             }
             break;
 
