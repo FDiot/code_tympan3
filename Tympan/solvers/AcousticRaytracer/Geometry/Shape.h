@@ -88,7 +88,7 @@ public:
     virtual vec3 getNormal(const vec3 pos = vec3()) { return vec3();}
 
     void setPrimitiveId(int id) { primitiveId = id; }
-    int getPrimitiveId() { return primitiveId; }
+    int getPrimitiveId() const { return primitiveId; }
 
     void setFaceId(int id) { faceId = id; }
     int getFaceId() const { return faceId; }
