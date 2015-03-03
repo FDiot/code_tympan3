@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
+<Tympan>
+ <Version>4.1.14 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
+ <Projet id="{7bd090fc-846a-4a60-a88b-a11d4c0124f7}" name="Projet 1">
+  <auteur></auteur>
+  <dateCreation>2001-10-01</dateCreation>
+  <dateModif>2001-10-01</dateModif>
+  <comment></comment>
+  <delaunayTolerence>0.0001</delaunayTolerence>
+  <distMaxBetweenPoints>200</distMaxBetweenPoints>
+  <useDefGeomVal>1</useDefGeomVal>
+  <currentCalculID>{fc5a5975-475e-48a4-985c-55e404a2ffd8}</currentCalculID>
+  <SiteNode id="{81d68b48-8347-4655-bfc1-dcc00b411788}" name="Site 3">
+   <echelle>1</echelle>
+   <useEmpriseAsCrbNiv>0</useEmpriseAsCrbNiv>
+   <useTopoFile>0</useTopoFile>
+   <topoFile></topoFile>
+   <altiEmprise>0</altiEmprise>
+   <Segment id="{5fdc692b-14db-4315-b167-a085e347b2e2}" name="Segment 3">
+    <Color g="1" r="1" b="1"/>
+    <Point x="0.000" y="0.000" z="0.000"/>
+    <Point x="0.000" y="1.000" z="0.000"/>
+   </Segment>
+   <Point x="0.000" y="0.000" z="0.000"/>
+   <Topographie id="{01c18090-d58f-445c-a4b0-393f6dae4e35}" name="Topographie 3">
+    <Emprise>
+     <Point x="-200.000" y="200.000" z="0.000"/>
+     <Point x="200.000" y="200.000" z="0.000"/>
+     <Point x="200.000" y="-200.000" z="0.000"/>
+     <Point x="-200.000" y="-200.000" z="0.000"/>
+    </Emprise>
+    <ListCrbNiv/>
+    <ListTerrain>
+     <GeometryNode id="{22ff80e1-a816-47ba-a858-ba8b9f49cc61}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{5d7cf1df-469e-4426-822a-53d983b992b1}" name="Repère 48">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <Terrain id="{01e5675d-a812-4152-9f09-a534bfc0162f}" name="Terrain par defaut">
+       <Color g="0.333333" r="0" b="0"/>
+       <Sol id="{9c019635-eb57-4e65-933b-b7d33734bfb1}" name="Sol 29">
+        <resistivite>20000</resistivite>
+        <epaisseur>1</epaisseur>
+       </Sol>
+       <active>0</active>
+       <nbPoints>0</nbPoints>
+      </Terrain>
+     </GeometryNode>
+    </ListTerrain>
+    <ListCrsEau/>
+    <ListPlanEau/>
+    <Altimetrie id="{e74ba6bc-8f47-4be5-a987-78b7c8903471}" name="Altimétrie 3"/>
+    <DefaultTerrain>0</DefaultTerrain>
+   </Topographie>
+   <Infrastructure id="{0b89c5c9-646e-4fa8-a5d8-4c0cd0799cf7}" name="Infrastructure 3">
+    <ListRoute/>
+    <ListResTrans/>
+    <ListBatiment/>
+    <ListMachine/>
+    <ListSource/>
+   </Infrastructure>
+   <root>1</root>
+   <repere>0</repere>
+   <SIG_X>0</SIG_X>
+   <SIG_Y>0</SIG_Y>
+  </SiteNode>
+  <PointsControl/>
+  <Calcul isUpTodate="1" id="{fc5a5975-475e-48a4-985c-55e404a2ffd8}" name="Calcul 3">
+   <numero>1</numero>
+   <auteur>Auteur</auteur>
+   <dateCreation>2001-10-01</dateCreation>
+   <dateModif>2001-10-01</dateModif>
+   <comment>Commentaire</comment>
+   <solverId>{a98b320c-44c4-47a9-b689-1dd352daa8b2}</solverId>
+   <etat>1</etat>
+   <solverParams>##############################################
+# Meteo related parameters
+#
+# Only considered by the ANIME3D solver
+##############################################
+[METEO]
+
+# Atmospheric pressure in pascal [type: double]
+# XXX 101325 dans TYAtmosphere.h
+AtmosPressure=101300.
+# Temperature in degres celsius [type: double]
+AtmosTemperature=20.
+# Hygrometry percent [type: double]
+# XXX 70 dans TYAtmosphere.h
+AtmosHygrometry=60.
+# initial (default) sound speed [type: double]
+AnalyticC0=340.
+# Wind direction 0 means from north to south [type: double]
+WindDirection=0.
+# Vertical temperature gradient [type: double]
+AnalyticGradC=0.
+# Vertical wind speed gradient [type: double]
+AnalyticGradV=0.
+
+
+##############################################
+# Acoustic ray tracer related parameters
+#
+# Only considered by the ANIME3D solver
+##############################################
+[ACOUSTICRAYTRACER]
+
+# Ray tracing order propagation (0=From, 1=from receptor, 2=auto) [int]
+RayTracingOrder=0
+# Sampler model 0=random, 1=uniform v1, 2= uniform v2, 3=horizontal [int]
+Discretization=2
+# Number of rays per source [int]
+NbRaysPerSource=100000
+# Maximum ray length in meter [float]
+MaxLength=5000
+# Receptor radius in meter [float]
+SizeReceiver=2.
+# Accelerating structure parameter (0=brut force, 1=grid, 2=BVH, 3=KDTree) [int]
+Accelerator=3
+# Maximal depth search for BVH or KDTree [int]
+MaxTreeDepth=12
+# Minimum dihedral angle to add a diffraction cylinder [float]
+AngleDiffMin=5.
+# Diffraction ridge size in meter [float]
+CylindreThick=0.3
+# Maximum events number for a ray [int]
+MaxProfondeur=10
+# Allow ground reflections [bool]
+UseSol=0
+# Maximum reflections events for a ray [int]
+MaxReflexion=0
+# Maximum diffraction events for a ray [int]
+MaxDiffraction=2
+# Use random sampler instead of regular distribution [bool]
+DiffractionUseRandomSampler=0
+# Number of ray thrown after diffraction (0 = based on source sampling, >0 = forced) [int]
+NbRayWithDiffraction=0
+# Drop down number of rays thrown after a diffraction [bool]
+DiffractionDropDownNbRays=1
+# Do not create rays outside the correct angle [bool]
+DiffractionFilterRayAtCreation=0
+# Allow use of path length difference validation [bool]
+UsePathDifValidation=0
+# Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB) [float]
+MaxPathDifference=25.
+# Allow suppressing rays passing to far from the ridge [bool]
+DiffractionUseDistanceAsFilter=1
+# Keep invalid rays [bool]
+KeepDebugRay=0
+# Use of post-filters [bool]
+UsePostFilters=1
+#
+# Targeting parameters #################
+#
+# Use targeting [bool]
+#EnableTargets=0
+# Sample ground in 2D [float]
+#SampleGround2D=0
+# Set target search after a diffuse event [bool]
+EnableFullTargets=0
+# Sampling density for interesting areas [float]
+TargetsDensity=0.1
+
+
+##############################################
+# Analytic ray tracer related parameters
+#
+# Only considered by the ANIME3D solver
+##############################################
+[ANALYTICRAYTRACER]
+# Sampler model 1=horizontal, 2=vertical, 3=uniform v1, 4=uniform v2 [int]
+#CurveRaySampler=1
+# Start vertical angle (theta) [float]
+InitialAngleTheta=0.
+# Final vertical angle (theta) [float]
+#FinalAngleTheta=0.
+# Start horizontal angle (phi) [float]
+InitialAnglePhi=0.
+# Final horizontal angle (phi) [float]
+#FinalAnglePhi=360.
+# Number of rays per source [int]
+AnalyticNbRay=20
+# Propagation time in second [double]
+AnalyticTMax=10.
+# Time step in second [double]
+AnalyticH=0.1
+# Maximum length propagation [double]
+AnalyticDMax=3000
+
+##############################################
+# Geometric transformer related parameters
+#
+# Only considered by the ANIME3D solver
+##############################################
+[GEOMTRANSFORMER]
+# Transformation method (1 is the only [good] response) [int]
+AnalyticTypeTransfo=1
+# Altimetry refinement parameter [float]
+#MeshRefinementValue=0
+# Restore modified altimetry after computing [bool]
+#RestitModifiedGeom=0
+
+##############################################
+# Preprocessing related parameters
+##############################################
+[PREPROCESSING]
+# Source-receptor minimal distance in meters [float]
+#MinSRDistance=0.3
+
+##############################################
+# Default solver related parameters
+#
+# Only considered by the default solver
+##############################################
+[DEFAULTSOLVER]
+NbThreads=4
+# Use of real ground (0) or totally reflective ground (1) [bool]
+UseRealGround=0
+# Takes vegetation into account [bool]
+#UseVegetation=0
+# Takes screens into account [bool]
+#UseScreen=1
+# Lateral diffractions computing (if screens on) [bool]
+UseLateralDiffraction=1
+# Takes reflections in account (first order only) [bool]
+UseReflection=1
+# Propagation conditions (non refracting / downward conditions (ISO 9613)) [bool]
+PropaConditions=0
+# H1 parameter (ISO 9613 downward conditions) [float]
+H1parameter=20.
+# Energetic (pÂ² summation) or interference (p summation) [bool]
+ModSummation=0
+
+##############################################
+# ANIME3D solver related parameters
+#
+# Only considered by the ANIME3D solver
+##############################################
+[ANIME3DSOLVER]
+# Takes meteo in account [bool]
+UseMeteo=0
+# Rays oversampling rate (if meteo -see above-) [float]
+OverSampleD=0
+# Use Fresnel area [bool]
+UseFresnelArea=0
+# Value of relative uncertainty [float]
+Anime3DSigma=0.
+# Force 'C' parameter to 0 or 1 (will be computed from totalRayLength for any other value) [int]
+Anime3DForceC=1
+
+##############################################
+# Debugging related parameters
+#
+# Only considered by the ANIME3D solver
+##############################################
+[DEBUG]
+# allow use of closeEventSelector [bool]
+DebugUseCloseEventSelector=1
+# allow use of diffraction angle selector [bool]
+DebugUseDiffractionAngleSelector=1
+# allow use of diffraction path length selector [bool]
+DebugUseDiffractionPathSelector=1
+# allow use of Fermat selector [bool]
+DebugUseFermatSelector=1
+# allow use of (doubled) faces selector [bool]
+DebugUseFaceSelector=1
+</solverParams>
+   <ListID>
+    <Element id="{81d68b48-8347-4655-bfc1-dcc00b411788}"/>
+    <Element id="{7bd090fc-846a-4a60-a88b-a11d4c0124f7}"/>
+   </ListID>
+   <EmissionAccVolNodes>
+    <EmissionAccVolNode accVolNodeId="{7bd090fc-846a-4a60-a88b-a11d4c0124f7}" state="1"/>
+   </EmissionAccVolNodes>
+   <RegimeAccNode>
+    <RegimeAccNode accVolNodeId="{7bd090fc-846a-4a60-a88b-a11d4c0124f7}" state="0"/>
+   </RegimeAccNode>
+   <Resultat id="{e27cff30-d9f0-465f-8352-36daecdcccb7}" name="Résultat 3">
+    <ListSources/>
+    <ListRecepteurs/>
+    <ListSpectres/>
+    <ListLw/>
+   </Resultat>
+  </Calcul>
+ </Projet>
+</Tympan>
