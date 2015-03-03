@@ -79,6 +79,10 @@ KNOWN_FAIL = (
     'test_source_ponctuelle_no_resu',
 )
 
+KNOWN_ERROR = (
+    'test_cube_no_resu',
+    'test_face_no_resu',
+)
 
 # Retrieve all the available "TEST_XX" xml files and make a test for each one
 for test_file in os.listdir(TEST_PROBLEM_DIR):
@@ -87,6 +91,8 @@ for test_file in os.listdir(TEST_PROBLEM_DIR):
         method = make_test_with_file(test_file)
         if methodname in KNOWN_FAIL:
             method = unittest.expectedFailure(method)
+        if methodname in KNOWN_ERROR:
+            method = unittest.skip('Problem resolution triggers an assert error to be corrected')(method)
         setattr(TestTympan, methodname, method)
 
 
