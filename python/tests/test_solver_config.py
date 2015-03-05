@@ -39,6 +39,22 @@ class TestSolverConfig(TympanTC):
         # 10. by default, 20. in the XML file
         self.assertEqual(solver_config.H1parameter, 20.)
 
+    def test_parameters_parsing(self):
+        # Open a basic project with a custom solver configuration
+        project = self.load_project('', 'test_solver_params.xml')
+        _set_solver_config(project.current_computation)
+        solver_config = cysolver.Configuration.get()
+        # bool
+        self.assertEqual(solver_config.UseReflection, True)
+        self.assertEqual(solver_config.PropaConditions, False)
+        # float
+        self.assertEqual(solver_config.H1parameter, 20.)
+        # double
+        self.assertEqual(solver_config.AnalyticC0, 340.)
+        #int
+        self.assertEqual(solver_config.Anime3DForceC, 1)
+
+
 
 if __name__ == '__main__':
     import unittest

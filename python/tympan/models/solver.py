@@ -8,7 +8,7 @@ from tympan.models import _solver as cysolver
 from tympan._business2solver import Business2SolverConverter, load_computation_solver
 
 _CONVERTERS = {
-    'bool': bool,
+    'bool': lambda x: bool(int(x)),
     'int': int,
     'float': float,
     'double': float,
