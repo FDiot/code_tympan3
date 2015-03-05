@@ -106,6 +106,7 @@ class Solver(object):
             solver = load_computation_solver(solverdir, project.current_computation)
         return cls(solver)
 
+
 def _set_solver_config(comp):
     """Setup solver configuration"""
     parser = ConfigParser.RawConfigParser()

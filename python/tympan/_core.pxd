@@ -3,7 +3,7 @@
 
 from libcpp.string cimport string
 from libcpp cimport bool
-from tympan.models._solver cimport AcousticProblemModel, AcousticResultModel
+from tympan.models._solver cimport AcousticProblemModel, AcousticResultModel, SolverConfiguration
 
 # STL ##########################################################################
 
@@ -47,4 +47,6 @@ cdef extern from "Tympan/core/interfaces.h":
     cdef cppclass SolverInterface:
         SolverInterface()
         void purge()
-        bool solve(const AcousticProblemModel& aproblem, const AcousticResultModel& aresult)
+        bool solve(const AcousticProblemModel& aproblem,
+                   const AcousticResultModel& aresult,
+                   SmartPtr[SolverConfiguration])

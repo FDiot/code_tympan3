@@ -25,6 +25,7 @@
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/models/common/acoustic_path.h"
 #include "Tympan/models/solver/entities.hpp"
+#include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
 
 class TYANIME3DAcousticModel;
@@ -79,7 +80,8 @@ public:
     * \brief Methode principale de resolution avec la methode ANIME3D
     */
     virtual bool solve(const tympan::AcousticProblemModel& aproblem,
-                       tympan::AcousticResultModel& aresult);
+                       tympan::AcousticResultModel& aresult,
+                       tympan::LPSolverConfiguration configuration);
 
     /*!
     * \fn void init()

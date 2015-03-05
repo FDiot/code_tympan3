@@ -56,8 +56,9 @@ TYSolver::~TYSolver()
 
 
 bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
-                     tympan::AcousticResultModel& aresult)
+                     tympan::AcousticResultModel& aresult, tympan::LPSolverConfiguration configuration)
 {
+    tympan::SolverConfiguration::set(configuration);
     // Creation de la collection de thread
     _pool = new OThreadPool(tympan::SolverConfiguration::get()->NbThreads);
 

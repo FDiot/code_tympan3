@@ -58,8 +58,10 @@ void TYANIME3DSolver::init()
 }
 
 bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
-                            tympan::AcousticResultModel& aresult)
+                            tympan::AcousticResultModel& aresult,
+                            tympan::LPSolverConfiguration configuration)
 {
+    tympan::SolverConfiguration::set(configuration);
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     // Rcupration (once for all) des sources et des rcepteurs
     init();
