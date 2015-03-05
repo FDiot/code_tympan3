@@ -97,6 +97,11 @@ LPSolverConfiguration SolverConfiguration::get()
     return _pInstance;
 }
 
+void SolverConfiguration::set(LPSolverConfiguration config)
+{
+    _pInstance = config;
+}
+
 SolverConfiguration::~SolverConfiguration()
 {
 }

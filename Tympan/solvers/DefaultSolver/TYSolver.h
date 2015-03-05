@@ -24,6 +24,7 @@
 #include "Tympan/models/solver/acoustic_result_model.hpp"
 #include "Tympan/core/interfaces.h"
 #include "Tympan/solvers/DefaultSolver/TYSolverDefines.h"
+#include "Tympan/models/solver/config.h"
 
 class OThreadPool;
 class TYAcousticModel;
@@ -38,7 +39,8 @@ public:
     virtual ~TYSolver();
 
     virtual bool solve(const tympan::AcousticProblemModel& aproblem,
-                       tympan::AcousticResultModel& aresult);
+                       tympan::AcousticResultModel& aresult,
+                       tympan::LPSolverConfiguration configuration);
 
     const std::vector<TYStructSurfIntersect>& getTabPolygon() const { return _tabPolygon; }
 
