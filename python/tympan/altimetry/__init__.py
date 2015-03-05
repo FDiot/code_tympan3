@@ -75,10 +75,14 @@ class AltimetryMesh(object):
         merged_site, mesh, feature_by_face = builder.build_altimetry(asite)
         return cls(merged_site, mesh, feature_by_face)
 
+    @property
     def material_by_face(self):
         """Return a material_by_face mapping"""
-        return builder.material_by_face(self.feature_by_face)
+        if self._material_by_face is None:
+            self._material_by_face = builder.material_by_face(
+                self.feature_by_face)
+        return self._material_by_face
 
     def to_ply(self, fpath):
         """Export mesh content to 'fpath' (PLY format)"""
-        export_to_ply(self.mesh, self.material_by_face(), fpath)
+        export_to_ply(self.mesh, self.material_by_face, fpath)
