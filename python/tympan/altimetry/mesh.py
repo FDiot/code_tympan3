@@ -1024,8 +1024,8 @@ class FaceFlooder(object):
 
         ``seeds`` must be an iterable over elements.  The first seed
         is added to the frontier and the graph is flooded from this
-        point until the frontier is emppty.  Then the next seed is
-        added to the frontier if it was not yet visted and the process
+        point until the frontier is empty.  Then the next seed is
+        added to the frontier if it has not beed visited yet and the process
         starts again until seeds are all considered.
         """
         for seed in seeds:
