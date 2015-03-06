@@ -170,10 +170,6 @@ int TYCourbeNiveau::fromXML(DOM_Element domElement)
         TYXMLTools::getElementBoolValue(elemCur, "closed", _closed, closedOk);
         TYXMLTools::getElementDoubleValue(elemCur, "distmaxpts", _distMax, distMaxOk);
         TYXMLTools::getElementIntValue(elemCur, "nbPoints", nbPoints, nbPointsOk);
-        if (nbPointsOk)
-        {
-            _listPoints.reserve(nbPoints);
-        }
 
         if (pt.callFromXMLIfEqual(elemCur))
         {

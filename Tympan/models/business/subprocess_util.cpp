@@ -79,8 +79,11 @@ QStringList _python_qprocess_environment()
     QRegExp path_regexp("^Path=(.*)", Qt::CaseInsensitive);
     int path_index = env.indexOf(path_regexp);
     QString path = env[path_index];
-    path.append(";");
-    path.append(QCoreApplication::applicationDirPath());
+    QRegExp equal_regexp("=",Qt::CaseInsensitive);// Position of the "=" symbol in the path QString
+	int equal_index = path.indexOf(equal_regexp)+1;
+	QString application_path(QCoreApplication::applicationDirPath());
+	application_path =QDir::toNativeSeparators(application_path);
+	path.insert(equal_index,application_path+";");//Insert the application path right after "PATH =".
     env.removeAt(path_index);
     env.append(path);
 #endif

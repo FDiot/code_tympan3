@@ -408,20 +408,23 @@ void TYCalculWidget::apply()
     // Mise a jour des points de controles
     TYTabLPPointControl& tabPoints = getElement()->getProjet()->getPointsControl();
     int row = 0;
+    bool need_to_rebuild_result(false);
     for (row = 0; row < _tableauPointControle->rowCount(); row++)
     {
         QTableWidgetItem* pCheck = (QTableWidgetItem*) _tableauPointControle->item(row, 4);
         if (pCheck->checkState() == Qt::Checked)
         {
             tabPoints[row]->setEtat(true, getElement());
-            getElement()->addPtCtrlToResult(tabPoints[row]);
+            need_to_rebuild_result |= getElement()->addPtCtrlToResult(tabPoints[row]);
         }
         else
         {
             tabPoints[row]->setEtat(false, getElement());
-            getElement()->remPtCtrlFromResult(tabPoints[row]);
+            need_to_rebuild_result |= getElement()->remPtCtrlFromResult(tabPoints[row]);
         }
     }
+
+    if (need_to_rebuild_result) { getElement()->getResultat()->buildMatrix(); }
 
     // Mise a jour des maillages
     for (row = 0; row < _tableauMaillages->rowCount(); row++)

@@ -83,7 +83,8 @@ TYSiteNode::TYSiteNode() :  _pProjet(NULL),
     _root(false),
     _SIGType(TYMPAN),
     _SIG_X(0.0),
-    _SIG_Y(0.0)
+    _SIG_Y(0.0),
+    _SIG_OFFSET(0.0)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -133,6 +134,7 @@ TYSiteNode& TYSiteNode::operator=(const TYSiteNode& other)
         _SIGType = other._SIGType;
         _SIG_X = other._SIG_X;
         _SIG_Y = other._SIG_Y;
+        _SIG_OFFSET = other._SIG_OFFSET;
     }
     return *this;
 }
@@ -159,7 +161,7 @@ bool TYSiteNode::operator==(const TYSiteNode& other) const
         if (_SIGType != other._SIGType) { return false; }
         if (_SIG_X != other._SIG_X) { return false; }
         if (_SIG_Y != other._SIG_Y) { return false; }
-
+        if (_SIG_OFFSET != other._SIG_OFFSET) { return false; }
     }
     return true;
 }
@@ -193,6 +195,7 @@ bool TYSiteNode::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _SIGType = pOtherSite->_SIGType;
     _SIG_X = pOtherSite->_SIG_X;
     _SIG_Y = pOtherSite->_SIG_Y;
+    _SIG_OFFSET = pOtherSite->_SIG_OFFSET;
 
     _listSiteNode.clear();
     for (unsigned int i = 0; i < pOtherSite->_listSiteNode.size(); i++)
@@ -250,6 +253,7 @@ DOM_Element TYSiteNode::toXML(DOM_Element& domElement)
     TYXMLTools::addElementIntValue(domNewElem, "repere", _SIGType);
     TYXMLTools::addElementDoubleValue(domNewElem, "SIG_X", _SIG_X);
     TYXMLTools::addElementDoubleValue(domNewElem, "SIG_Y", _SIG_Y);
+    TYXMLTools::addElementDoubleValue(domNewElem, "SIG_OFFSET", _SIG_OFFSET);
 
     for (unsigned int i = 0; i < _listSiteNode.size(); i++)
     {
@@ -298,6 +302,7 @@ int TYSiteNode::fromXML(DOM_Element domElement)
     bool repereOk = false;
     bool SIG_XOk = false;
     bool SIG_YOk = false;
+    bool SIG_OFFSETOk = false;
     int SIGType = 0;
 
     LPTYSiteNodeGeoNode pSiteNodeGeoNode = new TYSiteNodeGeoNode(NULL, this);
@@ -311,6 +316,7 @@ int TYSiteNode::fromXML(DOM_Element domElement)
         TYXMLTools::getElementIntValue(elemCur, "repere", SIGType, repereOk);
         TYXMLTools::getElementDoubleValue(elemCur, "SIG_X", _SIG_X, SIG_XOk);
         TYXMLTools::getElementDoubleValue(elemCur, "SIG_Y", _SIG_Y, SIG_YOk);
+        TYXMLTools::getElementDoubleValue(elemCur, "SIG_OFFSET", _SIG_OFFSET, SIG_OFFSETOk);
 
         if (pSiteNodeGeoNode->callFromXMLIfEqual(elemCur))
         {

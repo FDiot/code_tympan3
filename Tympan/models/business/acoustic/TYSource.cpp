@@ -16,6 +16,8 @@
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYSourceWidget.h"
 #endif
+
+#include "TYSpectre.h"
 #include "TYSource.h"
 
 
@@ -102,10 +104,3 @@ int TYSource::fromXML(DOM_Element domElement)
     return 1;
 }
 
-void TYSource::setRegime(TYSpectre& Spectre, int regime /*=-1*/)
-{
-    // Type Puissance
-    Spectre.setType(SPECTRE_TYPE_LW);
-    // Ajout
-    _pSpectre = new TYSpectre(Spectre);
-}

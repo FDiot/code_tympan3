@@ -119,7 +119,6 @@ void TYTerrainWidget::apply()
     _solW->apply();
     _vegetationWidget->apply();
 
-       _vegetationWidget->apply();
     getElement()->setVegetation(_pVegetation);
 
     _tabPoints->apply();

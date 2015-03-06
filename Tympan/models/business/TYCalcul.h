@@ -326,13 +326,13 @@ public:
         \brief Ajoute un point de controle au tableau des resultats
         \param : TYPoint* : Pointeur sur le point a ajouter
      */
-    void addPtCtrlToResult(TYPointControl* pPoint);
+    bool addPtCtrlToResult(TYPointControl* pPoint);
 
     /*!
         \brief Supprime un point de controle au tableau des resultats
         \param : TYPoint* : Pointeur sur le point a ajouter
      */
-    void remPtCtrlFromResult(TYPointControl* pPoint);
+    bool remPtCtrlFromResult(TYPointControl* pPoint);
 
     /**
      * \fn  LPTYResultat getResultat()
