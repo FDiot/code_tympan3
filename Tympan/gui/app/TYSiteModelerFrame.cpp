@@ -532,13 +532,13 @@ void TYSiteModelerFrame::updateVisibilityElementSite()
         pTabTerrainGeoNode = &(TYSiteNode::safeDownCast(sites[i]->getElement())->getTopographie()->getListTerrain());
         for (unsigned int j = 0; j < pTabTerrainGeoNode->size(); j++)
         {
-            pTabTerrainGeoNode->at(j)->getElement()->getGraphicObject()->setVisible(_showAltimetrie);
+            pTabTerrainGeoNode->at(j)->getElement()->getGraphicObject()->setVisible(_showCrbNiv);
         }
 
         pTabPlanEauGeoNode = &(TYSiteNode::safeDownCast(sites[i]->getElement())->getTopographie()->getListPlanEau());
         for (unsigned int j = 0; j < pTabPlanEauGeoNode->size(); j++)
         {
-            pTabPlanEauGeoNode->at(j)->getElement()->getGraphicObject()->setVisible(_showAltimetrie);
+            pTabPlanEauGeoNode->at(j)->getElement()->getGraphicObject()->setVisible(_showCrbNiv);
         }
         sites[i]->getElement()->getGraphicObject()->setVisible(false);
     }

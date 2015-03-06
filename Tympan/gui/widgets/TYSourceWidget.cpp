@@ -28,7 +28,7 @@
 #include <qmenu.h>
 #include <qbuttongroup.h>
 
-
+#include "Tympan/models/business/acoustic/TYSpectre.h"
 #include "TYSourceWidget.h"
 
 #define TR(id) OLocalizator::getString("TYSourceWidget", (id))

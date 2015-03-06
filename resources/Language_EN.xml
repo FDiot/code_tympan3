@@ -1958,6 +1958,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_system_coord" value="Locator"/>
 			<string id="id_SIG_X" value="X"/>
 			<string id="id_SIG_Y" value="Y"/>
+			<string id="id_SIG_OFFSET" value="OFFSET_Z"/>
 			<string id="id_echelle_label" value="Echelle"/>
 			<string id="id_unite_echelle" value=""/>
 			<string id="id_topofile_label" value="Background picture"/>

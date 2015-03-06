@@ -21,11 +21,9 @@
 #define __TY_SOURCEPONCTUELLE__
 
 #include "Tympan/models/business/geometry/TYPoint.h"
-#include "Tympan/models/business/geometry/TYSegment.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
-#include "TYSpectre.h"
+#include "Tympan/models/business/TYColorInterface.h"
 #include "TYSource.h"
-#include "TYAttenuateur.h"
 #include "TYDirectivity.h"
 
 

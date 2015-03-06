@@ -198,10 +198,6 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
         TYXMLTools::getElementDoubleValue(elemCur, "density", _density);
 
         TYXMLTools::getElementIntValue(elemCur, "nbPoints", nbPoints, nbPointsIsOk);
-        if (nbPointsIsOk)
-        {
-            _tabPoint.reserve(nbPoints);
-        }
 
         if (pt.callFromXMLIfEqual(elemCur))
         {

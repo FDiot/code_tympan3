@@ -634,7 +634,7 @@ void TYCalcul::addToSelection(TYElement* pElt, bool recursif /*=true*/)
             // Si un objet est ajoute son parent l'est forcemment
             addToSelection(pElt->getParent(), false);
         }
-        else
+        else if (dynamic_cast<TYUserSourcePonctuelle*>(pElt) != nullptr)
         {
             TYUserSourcePonctuelle* pSource = dynamic_cast<TYUserSourcePonctuelle*>(pElt);
             if (pSource != nullptr) { etat = pSource->getIsRayonnant(); }
@@ -1188,12 +1188,12 @@ void TYCalcul::setState(int state)
     }
 }
 
-void TYCalcul::addPtCtrlToResult(TYPointControl* pPoint)
+bool TYCalcul::addPtCtrlToResult(TYPointControl* pPoint)
 {
-    _pResultat->addRecepteur(pPoint);
+    return _pResultat->addRecepteur(pPoint);
 }
 
-void TYCalcul::remPtCtrlFromResult(TYPointControl* pPoint)
+bool TYCalcul::remPtCtrlFromResult(TYPointControl* pPoint)
 {
-    _pResultat->remRecepteur(pPoint);
+    return _pResultat->remRecepteur(pPoint);
 }

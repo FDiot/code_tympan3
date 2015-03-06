@@ -24,6 +24,7 @@
 #include "Tympan/models/business/acoustic/TYRegime.h"
 #include "Tympan/models/business/acoustic/TYSourceLineic.h"
 #include "Tympan/models/business/geometry/TYGeometryNode.h"
+#include "Tympan/models/business/TYColorInterface.h"
 #include "TYAcousticInterface.h"
 
 /**
