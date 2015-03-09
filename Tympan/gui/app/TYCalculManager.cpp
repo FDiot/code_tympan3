@@ -78,6 +78,10 @@ bool TYCalculManager::launch(LPTYCalcul pCalcul)
     }
 
     TYProjet *pProject = pCalcul->getProjet();
+    
+    // Clear "calcul" result data before computing (avoid problems when removing some elements)
+    pCalcul->clearResult();
+
     OMessageManager& logger =  *OMessageManager::get();
 
     // Is the debug option "TYMPAN_DEBUG=keep_tmp_files" enabled?
