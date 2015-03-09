@@ -1646,6 +1646,7 @@ bool TYEtage::setSrcsLw()
 
         // Mur courant
         LPTYMur pCurrentMur = TYMur::safeDownCast(_tabMur[i]->getElement());
+        LWMur = TYSpectre::getEmptyLinSpectre();
 
         // Si le mur est rayonnant, on calcule sa puissance
         if (pCurrentMur->getIsRayonnant())
@@ -1654,11 +1655,7 @@ bool TYEtage::setSrcsLw()
             double surfMur = pCurrentMur->activeSurface();
 
             // Si la puissance est calculee, la puissance du mur est mise a 0
-            if (pCurrentMur->getTypeDistribution() == TY_PUISSANCE_CALCULEE)
-            {
-                LWMur = TYSpectre::getEmptyLinSpectre();
-            }
-            else // La puissance est imposee
+            if (pCurrentMur->getTypeDistribution() == TY_PUISSANCE_IMPOSEE)
             {
                 LWMur = pCurrentMur->getCurrentSpectre().toGPhy();
             }
