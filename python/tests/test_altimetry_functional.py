@@ -25,6 +25,18 @@ class AltimetryFunctionalTC(unittest.TestCase):
         self.check_altitude_at(altim, coords, altitude_bounds)
         self.check_material_at(altim, coords, matid)
 
+    def test_alti_pente_cste(self):
+        fname = 'Site_pente_constante.xml'
+        altim = self.build_altimetry(fname)
+        # Test sur un point quelquonque
+        coords = (-125, 10)
+        altitude_bounds = (15, 15)
+        self.check_altitude_at(altim, coords, altitude_bounds)
+        # Test sur un point d'une courbe de niveau
+        coords = (0, -30)
+        altitude_bounds = (40, 40)
+        self.check_altitude_at(altim, coords, altitude_bounds)
+
     def build_altimetry(self, fname):
         """Return the AltimetryMesh instance from Tympan XML file name"""
         fpath = os.path.join(TEST_PROBLEM_DIR, fname)
