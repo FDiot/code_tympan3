@@ -3,6 +3,8 @@ import tempfile
 
 from utils import TympanTC
 from tympan.models.project import Project
+from tympan.models.solver import _set_solver_config
+from tympan.models import _solver as cysolver
 
 class TestSolverConfig(TympanTC):
 
@@ -27,6 +29,31 @@ class TestSolverConfig(TympanTC):
                              config)
         f.close()
         os.unlink(f.name)
+
+
+    def test_set_solver_config(self):
+        # Open a basic project with a custom solver configuration
+        project = self.load_project('', 'test_solver_params.xml')
+        _set_solver_config(project.current_computation)
+        solver_config = cysolver.Configuration.get()
+        # 10. by default, 20. in the XML file
+        self.assertEqual(solver_config.H1parameter, 20.)
+
+    def test_parameters_parsing(self):
+        # Open a basic project with a custom solver configuration
+        project = self.load_project('', 'test_solver_params.xml')
+        _set_solver_config(project.current_computation)
+        solver_config = cysolver.Configuration.get()
+        # bool
+        self.assertEqual(solver_config.UseReflection, True)
+        self.assertEqual(solver_config.PropaConditions, False)
+        # float
+        self.assertEqual(solver_config.H1parameter, 20.)
+        # double
+        self.assertEqual(solver_config.AnalyticC0, 340.)
+        #int
+        self.assertEqual(solver_config.Anime3DForceC, 1)
+
 
 
 if __name__ == '__main__':

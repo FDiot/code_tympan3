@@ -237,11 +237,13 @@ cdef class Business2SolverConverter:
         sources_of_elt = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         its = cy.declare(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
         its = infra_sources.begin()
+        business_src = cy.declare(tybusiness.TYElem_ptr)
         nb_sources = 0
         # For each business macro source (ex: machine, building...)
         while its != infra_sources.end():
+            business_src = deref(its).first
+            macro_source_id = id_str(business_src)
             sources_of_elt = deref(its).second
-            macro_source_id = id_str(deref(its).first)
             self.macro2micro_sources[macro_source_id] = []
             nsubsources = sources_of_elt.size()
             # For each of the micro sources making the macro one
@@ -292,7 +294,7 @@ cdef class Business2SolverConverter:
                     self.bus2solv_sources[id_str(subsource_elt)] = source_idx
                     # Copy source mapping to macro2micro_sources
                     self.macro2micro_sources[macro_source_id].append(id_str(subsource))
-                    self.instances_mapping[macro_source_id] = subsource
+                    self.instances_mapping[macro_source_id] = business_src
                     nb_sources += 1
             inc(its)
         # Recurse on subsites

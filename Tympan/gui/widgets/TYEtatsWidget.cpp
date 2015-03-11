@@ -310,12 +310,23 @@ void TYEtatsWidget::apply()
         {
             if (_tabPtrBatiment[row] == (*iterEmit).first)
             {
+                // Etat de fonctionnment
                 QTableWidgetItem* pCheck = (QTableWidgetItem*)_tableBatiment->item(row, 1);
-                (*iterEmit).second = (pCheck->checkState() == Qt::Checked);
+                bool isChecked = (pCheck->checkState() == Qt::Checked);
+                (*iterEmit).second = isChecked;
 
                 // Recup choix regime
                 QComboBox* pComboBox = (QComboBox*)_tableBatiment->cellWidget(row, 2);
-                (*iterRegime).second = pComboBox->currentIndex();
+                int currentRegime = pComboBox->currentIndex();
+                (*iterRegime).second = currentRegime;
+
+                // Information de l'objet reel
+                TYBatiment *pBat = dynamic_cast<TYBatiment*>((*iterEmit).first);
+                if (pBat) 
+                { 
+                    pBat->setIsRayonnant(isChecked);
+                    pBat->setCurRegime(currentRegime);
+                }
             }
 
             iterRegime++;
@@ -331,11 +342,20 @@ void TYEtatsWidget::apply()
             if (_tabPtrMachine[row] == (*iterEmit).first)
             {
                 QTableWidgetItem* pCheck = (QTableWidgetItem*)_tableMachine->item(row, 1);
-                (*iterEmit).second = (pCheck->checkState() == Qt::Checked);
+                bool isChecked = (pCheck->checkState() == Qt::Checked);
+                (*iterEmit).second = isChecked;
 
                 // Recup choix regime
                 QComboBox* pComboBox = (QComboBox*)_tableMachine->cellWidget(row, 2);
-                (*iterRegime).second = pComboBox->currentIndex();
+                int currentRegime = pComboBox->currentIndex();
+                (*iterRegime).second = currentRegime;
+
+                TYMachine *pMachine = dynamic_cast<TYMachine*>((*iterEmit).first);
+                if (pMachine)
+                {
+                    pMachine->setIsRayonnant(isChecked);
+                    pMachine->setCurRegime(currentRegime);
+                }
             }
 
             iterRegime++;
@@ -351,11 +371,20 @@ void TYEtatsWidget::apply()
             if (_tabPtrSourcePonctuelle[row] == (*iterEmit).first)
             {
                 QTableWidgetItem* pCheck = (QTableWidgetItem*)_tableSource->item(row, 1);
-                (*iterEmit).second = (pCheck->checkState() == Qt::Checked);
+                bool isChecked = (pCheck->checkState() == Qt::Checked);
+                (*iterEmit).second = isChecked;
 
                 // Recup choix regime
                 QComboBox* pComboBox = (QComboBox*)_tableSource->cellWidget(row, 2);
-                (*iterRegime).second = pComboBox->currentIndex();
+                int currentRegime = pComboBox->currentIndex();
+                (*iterRegime).second = currentRegime;
+
+                TYUserSourcePonctuelle *pSP = dynamic_cast<TYUserSourcePonctuelle*>((*iterEmit).first);
+                if (pSP)
+                {
+                    pSP->setIsRayonnant(isChecked);
+                    pSP->setCurrentRegime(currentRegime);
+                }            
             }
 
             iterRegime++;
@@ -371,11 +400,20 @@ void TYEtatsWidget::apply()
             if (_tabPtrSourceLin[row] == (*iterEmit).first)
             {
                 QTableWidgetItem* pCheck = (QTableWidgetItem*)_tableSourceLin->item(row, 1);
-                (*iterEmit).second = (pCheck->checkState() == Qt::Checked);
+                bool isChecked = (pCheck->checkState() == Qt::Checked);
+                (*iterEmit).second = isChecked;
 
                 // Recup choix regime
                 QComboBox* pComboBox = (QComboBox*)_tableSourceLin->cellWidget(row, 2);
-                (*iterRegime).second = pComboBox->currentIndex();
+                int currentRegime = pComboBox->currentIndex();
+                (*iterRegime).second = currentRegime;
+
+                TYAcousticLine *pAL = dynamic_cast<TYAcousticLine*>((*iterEmit).first);
+                if (pAL)
+                {
+                    pAL->setIsRayonnant(isChecked);
+                    pAL->setCurRegime(currentRegime);
+                }                 
             }
 
             iterRegime++;

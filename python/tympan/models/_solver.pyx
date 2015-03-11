@@ -146,7 +146,7 @@ cdef class Solver:
         """
         result = ResultModel()
         if not self.thisptr.solve(model.thisptr.get()[0],
-                                  result.thisptr.get()[0]):
+                                  result.thisptr.get()[0], get()):
             raise RuntimeError(
                 'Computation failed (C++ SolverInterface::solve() method '
                 'returned false)')

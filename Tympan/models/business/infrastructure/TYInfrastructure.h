@@ -407,20 +407,6 @@ public:
     LPTYUserSourcePonctuelleGeoNode findSrc(const LPTYUserSourcePonctuelle pSrc);
 
     /**
-     * Retourne la liste de toutes les sources de l'infrastructure.
-     *
-     * @return Un tableau de pointeurs de GeoNodes de sources ponctuelles.
-     */
-    void getAllSrcs(TYTabSourcePonctuelleGeoNode& tab);
-
-    /**
-     * Retourne la liste de toutes les sources de l'infrastructure actives dansle calcul.
-     *
-     * @return Un tableau de pointeurs de GeoNodes de sources ponctuelles.
-     */
-    void getAllSrcs(const TYCalcul* pCalcul, TYTabSourcePonctuelleGeoNode& tab);
-
-    /**
      * Retourne un tableau associatif des sources et de leur machine support
      */
     void getAllSrcs(const TYCalcul* pCalcul, TYMapElementTabSources& mapElementSrcs);
