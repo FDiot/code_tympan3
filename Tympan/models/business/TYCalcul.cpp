@@ -549,9 +549,6 @@ void TYCalcul::clearResult()
 
     _pResultat->purge();
 
-    _mapElementRegime.clear();
-    _emitAcVolNode.clear();
-
     setIsGeometryModified(true);
 }
 
