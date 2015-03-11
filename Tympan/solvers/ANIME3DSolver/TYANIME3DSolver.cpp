@@ -29,6 +29,8 @@
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DFaceSelector.h"
 #include "TYANIME3DSolver.h"
 
+#define __ONLY_RAYS__ // To test only raytracing without acoustics
+
 TYANIME3DSolver::TYANIME3DSolver()
 {
     _tabPolygon = NULL;
@@ -56,8 +58,10 @@ void TYANIME3DSolver::init()
 }
 
 bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
-                            tympan::AcousticResultModel& aresult)
+                            tympan::AcousticResultModel& aresult,
+                            tympan::LPSolverConfiguration configuration)
 {
+    tympan::SolverConfiguration::set(configuration);
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     // Rcupration (once for all) des sources et des rcepteurs
     init();
@@ -78,6 +82,7 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
     ////////////////////////////////////////////////////////////
     // Calculs acoustiques sur les rayons via la methode ANIME3D
     ////////////////////////////////////////////////////////////
+#ifndef __ONLY_RAYS__
 
     TYANIME3DAcousticModel aam(tabRays, _tabPolygon, aproblem, *_pAtmos);
 
@@ -100,6 +105,27 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
             matrix(j, i) = tabSpectre[i][j];
         }
     }
+
+#else
+
+    tympan::SpectrumMatrix& matrix = aresult.get_data();
+    matrix.resize(aproblem.nreceptors(), aproblem.nsources());
+
+    size_t nb_srcs = aproblem.nsources();
+    size_t nb_rcpt = aproblem.nreceptors();
+
+    for (int i = 0; i < static_cast<int>(aproblem.nsources()); i++) // boucle sur les sources
+    {
+        for (int j = 0; j < static_cast<int>(aproblem.nreceptors()); j++) // boucle sur les recepteurs
+        {
+            tympan::Spectrum sLP;
+            sLP.setType(SPECTRE_TYPE_LP);
+
+            matrix(j, i) = sLP;
+        }
+    }
+
+#endif //__ONLY_RAYS__
 
     if (config->UseMeteo && config->OverSampleD)
     {

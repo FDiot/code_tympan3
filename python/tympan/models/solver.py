@@ -8,7 +8,7 @@ from tympan.models import _solver as cysolver
 from tympan._business2solver import Business2SolverConverter, load_computation_solver
 
 _CONVERTERS = {
-    'bool': bool,
+    'bool': lambda x: bool(int(x)),
     'int': int,
     'float': float,
     'double': float,
@@ -106,6 +106,7 @@ class Solver(object):
             solver = load_computation_solver(solverdir, project.current_computation)
         return cls(solver)
 
+
 def _set_solver_config(comp):
     """Setup solver configuration"""
     parser = ConfigParser.RawConfigParser()
@@ -120,7 +121,7 @@ def _set_solver_config(comp):
             except ValueError:
                 errors.append('bad option value for %s: %r' % (optname, value))
                 continue
-            getattr(solver_config, optname, value)
+            setattr(solver_config, optname, value)
     if errors:
         raise ConfigParser.Error(os.linesep.join(errors))
 

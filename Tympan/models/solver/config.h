@@ -95,6 +95,7 @@ public:
     SolverConfiguration();
     ~SolverConfiguration();
     static LPSolverConfiguration get();
+    static void set(LPSolverConfiguration config);
 
 private:
 

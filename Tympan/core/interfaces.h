@@ -16,9 +16,13 @@
 #ifndef TY_INTERFACES
 #define TY_INTERFACES
 
+#include "Tympan/core/smartptr.h"
+
 namespace tympan {
     class AcousticProblemModel;
     class AcousticResultModel;
+    class SolverConfiguration;
+    typedef SmartPtr<SolverConfiguration> LPSolverConfiguration;
 } // namespace tympan
 
 class SolverInterface
@@ -28,7 +32,8 @@ public:
     virtual ~SolverInterface() { }
 
     virtual bool solve(const tympan::AcousticProblemModel& aproblem,
-                       tympan::AcousticResultModel& aresult) = 0;
+                       tympan::AcousticResultModel& aresult,
+                       tympan::LPSolverConfiguration configuration) = 0;
 
     virtual void purge() { }
 };

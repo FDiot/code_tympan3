@@ -26,7 +26,7 @@ class Project(object):
         """
         with filter_output(verbose):
             self._project._update_site_altimetry(altimesh.mesh,
-                                                 altimesh.material_by_face())
+                                                 altimesh.material_by_face)
 
     @classmethod
     def from_xml(cls, fpath, verbose=False):
