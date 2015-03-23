@@ -47,3 +47,4 @@ tests/desktop.ini
 python/.spyderworkspace
 python/bin/.spyderproject
 python/tests/.spyderproject
+*.pyc
