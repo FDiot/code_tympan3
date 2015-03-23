@@ -448,11 +448,14 @@ void TYAcousticCircle::exportMesh(
     // 1. We set all points to global repere
     //      Point[0] is the center
     OPoint3D center = geonode.localToGlobal() * getCenter();
-    points.push_back(center);
+
+    // Points are added inreverse order to have correct normal direction
     for (int i = 0; i < poly.size(); ++i)
     {
-        points.push_back(geonode.localToGlobal() * poly[i]);
+        points.push_front(geonode.localToGlobal() * poly[i]);
     }
+
+    points.push_front(center);
 
     // 2. Now, we create triangles
     for (int i = 1; i < resolution; ++i)
