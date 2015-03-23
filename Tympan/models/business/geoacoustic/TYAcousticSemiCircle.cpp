@@ -436,11 +436,12 @@ void TYAcousticSemiCircle::exportMesh(
     // 1. We set all points to global repere
     //      Center is the 1st point of the list
     OPoint3D center = geonode.localToGlobal() * getCenter(); // converted early to global r/ frame
-    points.push_back(center);
     for (int i = 0; i < poly.size(); ++i)
     {
-        points.push_back(geonode.localToGlobal() * poly[i]);
+        points.push_front(geonode.localToGlobal() * poly[i]);
     }
+    
+    points.push_front(center);
 
     // 2. Now, we create triangles
     for (int i = 1; i < (resolution+1); ++i) // resolution points = resolution+1 triangles
