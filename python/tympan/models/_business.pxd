@@ -164,9 +164,11 @@ cdef extern from "Tympan/models/business/TYProjet.h":
     cdef cppclass TYProjet (TYElement):
         TYProjet()
         SmartPtr[TYCalcul] getCurrentCalcul()
+        void setCurrentCalcul(SmartPtr[TYCalcul] pCurCalcul)
         SmartPtr[TYSiteNode] getSite()
         bool updateAltiRecepteurs(const TYAltimetrie* pAlti)
         vector[SmartPtr[TYPointControl]]& getPointsControl()
+        vector[SmartPtr[TYCalcul]]& getListCalcul()
 
 cdef extern from "Tympan/models/business/topography/TYAltimetrie.h":
     cdef cppclass TYAltimetrie (TYElement):
