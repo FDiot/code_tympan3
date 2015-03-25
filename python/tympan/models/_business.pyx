@@ -730,6 +730,11 @@ cdef class Project:
         self.site.update_altimetry(*args)
         self.update()
 
+    @cy.locals(comp=Computation)
+    def set_current_computation(self, comp):
+        """ set the current computation """
+        self.thisptr.getRealPointer().setCurrentCalcul(comp.thisptr)
+
     @property
     def current_computation(self):
         """The project current computation"""
@@ -737,6 +742,20 @@ cdef class Project:
         comp = Computation()
         comp.thisptr = self.thisptr.getRealPointer().getCurrentCalcul()
         return comp
+
+
+    @property
+    def computations(self):
+        tab_comp = cy.declare(vector[SmartPtr[TYCalcul]])
+        tab_comp = self.thisptr.getRealPointer().getListCalcul()
+        computations = []
+        ncomp = tab_comp.size()
+        for i in xrange(ncomp):
+            comp = Computation()
+            comp.thisptr = tab_comp[i]
+            computations.append(comp)
+        return computations
+
 
     @property
     def site(self):
