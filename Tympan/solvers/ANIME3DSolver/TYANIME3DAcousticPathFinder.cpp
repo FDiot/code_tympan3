@@ -39,8 +39,6 @@ using std::vector;
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DSolver.h"
 
-#define _USE_METEO_
-
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize,
                                                          const tympan::AcousticProblemModel& aproblem_, tab_acoustic_path& tabTYRays) :
     _tabPolygon(tabPolygon),
@@ -59,7 +57,6 @@ bool TYANIME3DAcousticPathFinder::exec()
     // Configuration du lancer de rayon geometriques (au debut pour initialiser les valeurs globales
     // Nettoyage de l'objet _rayTracing si il a ete utilise precedement
     _rayTracing.clean();
-
     // Ajout des parametres du _rayTracing liés à la methode acoustique
     TYANIME3DRayTracerSolverAdapter* solver = new TYANIME3DRayTracerSolverAdapter();
     _rayTracing.setSolver(solver);
@@ -100,7 +97,12 @@ bool TYANIME3DAcousticPathFinder::exec()
     convert_Rays_to_acoustic_path(sens);
 
     // This function corrects distances between events and angles at each event
+
+///* ======== DEBUT Zone inactive ****************
+
     sampleAndCorrection();
+
+ //++++++++++++++++++++ FIN ZONE INACTIVE +++++++++++++++*/
 
     return true;
 }
@@ -314,10 +316,12 @@ void TYANIME3DAcousticPathFinder::convert_Rays_to_acoustic_path(const unsigned i
 
 void TYANIME3DAcousticPathFinder::sampleAndCorrection()
 {
-    for (int i = 0; i < _tabTYRays.size(); i++)
+    for (size_t i = 0; i < _tabTYRays.size(); i++)
     {
         // Récupération des longueurs simples (éléments suivants)
         _tabTYRays.at(i)->nextLenghtCompute(transformer);
+
+/* +++++++++ DEBUT : Zone desactivee ++++++++++++++
 
         // Récupération des distances aux évènements pertinents
         _tabTYRays.at(i)->endLenghtCompute(transformer);
@@ -330,6 +334,9 @@ void TYANIME3DAcousticPathFinder::sampleAndCorrection()
 
         // Correction de la position des évènements
         _tabTYRays.at(i)->eventPosCompute(transformer);
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++ */
+
     }
 }
 
