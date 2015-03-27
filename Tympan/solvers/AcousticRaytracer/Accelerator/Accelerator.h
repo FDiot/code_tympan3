@@ -54,13 +54,13 @@ protected:
 	{
 		switch (intersectionChoice)
 		{
-			case leafTreatment::treatment::FIRST:
+			case leafTreatment::FIRST:
 				pLeafTreatmentFunction = leafTreatment::keepFirst;
 				break;
-			case leafTreatment::treatment::ALL_BEFORE_TRIANGLE:
+			case leafTreatment::ALL_BEFORE_TRIANGLE:
 				pLeafTreatmentFunction = leafTreatment::keepAllBeforeTriangle;
 				break;
-			case leafTreatment::treatment::ALL_BEFORE_VISIBLE:
+			case leafTreatment::ALL_BEFORE_VISIBLE:
 				pLeafTreatmentFunction = leafTreatment::keepAllBeforeVisible;
 				break;
 			default:
