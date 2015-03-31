@@ -92,17 +92,11 @@ bool TYANIME3DAcousticPathFinder::exec()
     _rayTracing.setEngine(); //PARALLELDEFAULT
     _rayTracing.launchSimulation();          //Traitement monothread
 
-
     // This function creates TYRays from Rays .
     convert_Rays_to_acoustic_path(sens);
 
     // This function corrects distances between events and angles at each event
-
-///* ======== DEBUT Zone inactive ****************
-
     sampleAndCorrection();
-
- //++++++++++++++++++++ FIN ZONE INACTIVE +++++++++++++++*/
 
     return true;
 }
@@ -309,6 +303,9 @@ void TYANIME3DAcousticPathFinder::convert_Rays_to_acoustic_path(const unsigned i
         // Connect TYSource & TYReceptor (will be obsolete in future solver data model)
         set_source_idx_and_receptor_idx_to_acoustic_path(sens, ray, tyRay);
 
+        tyRay->build_links_between_events();
+        tyRay->compute_shot_angle();
+
         // Ajoute le rayon au calcul
         _tabTYRays.push_back(tyRay);
     }
@@ -320,9 +317,6 @@ void TYANIME3DAcousticPathFinder::sampleAndCorrection()
     {
         // Récupération des longueurs simples (éléments suivants)
         _tabTYRays.at(i)->nextLenghtCompute(transformer);
-
-/* +++++++++ DEBUT : Zone desactivee ++++++++++++++
-
         // Récupération des distances aux évènements pertinents
         _tabTYRays.at(i)->endLenghtCompute(transformer);
 
@@ -334,9 +328,6 @@ void TYANIME3DAcousticPathFinder::sampleAndCorrection()
 
         // Correction de la position des évènements
         _tabTYRays.at(i)->eventPosCompute(transformer);
-
-// +++++++++++++++++++++++++++++++++++++++++++++++++ */
-
     }
 }
 
@@ -358,8 +349,8 @@ void TYANIME3DAcousticPathFinder::set_source_idx_and_receptor_idx_to_acoustic_pa
     //Les identifiants des recepteurs et sources sont construit pour correspondre a l'index des sources et recepteurs dans Tympan.
     assert (static_cast<unsigned int>(idRecep) < _aproblem.nreceptors() && static_cast<unsigned int>(idSource) < _aproblem.nsources());
 
-    tyRay->setSource(idSource); //(sourceP, posSourceGlobal);
-    tyRay->setRecepteur(idRecep); //(recepP, posReceptGlobal);
+    tyRay->setSource(idSource); 
+    tyRay->setRecepteur(idRecep); 
 }
 
 void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>& sources )

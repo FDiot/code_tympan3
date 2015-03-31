@@ -63,7 +63,7 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
 {
     tympan::SolverConfiguration::set(configuration);
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
-    // Rcupration (once for all) des sources et des rcepteurs
+    // Recupration (once for all) des sources et des rcepteurs
     init();
 
     // Recuperation du tableau de rayon de la structure resultat
@@ -72,17 +72,18 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
     // Construction de la liste des faces utilise pour le calcul
     TYANIME3DFaceSelector fs(aproblem);
     bool bRet = fs.exec(_tabPolygon, _tabPolygonSize);
-
     if (!bRet) { return false; }
 
     // Ray tracing computation
     TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, aproblem, tabRays);
-    apf.exec();
+    if ( !apf.exec() ) { return false; }
+
+#ifndef __ONLY_RAYS__
 
     ////////////////////////////////////////////////////////////
     // Calculs acoustiques sur les rayons via la methode ANIME3D
     ////////////////////////////////////////////////////////////
-#ifndef __ONLY_RAYS__
+
 
     TYANIME3DAcousticModel aam(tabRays, _tabPolygon, aproblem, *_pAtmos);
 
@@ -127,21 +128,14 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
 
 #endif //__ONLY_RAYS__
 
-    if (config->UseMeteo && config->OverSampleD)
-    {
-        for (unsigned int i = 0; i < tabRays.size(); i++)
-        {
-            tabRays[i]->tyRayCorrection( apf.get_geometry_modifier() );
-        }
-    }
-
-    // BEGIN : COMPLEMENTS "DECORATIFS"
-    ostringstream fic_out;
-    fic_out << "rayons_infos.txt" << ends;
-    ofstream fic(fic_out.str().c_str());
-    fic << "on a " << tabRays.size() << " rayons dans cette scene" << endl; // nombre de rayons
-    fic.close();
-    // END : COMPLEMENTS "DECORATIFS"
+    //// Allow to watch curved rays (as in meteo field) instead of right rays
+	//if (config->UseMeteo && config->OverSampleD)
+    //{
+    //    for (unsigned int i = 0; i < tabRays.size(); i++)
+    //    {
+    //        tabRays[i]->tyRayCorrection( apf.get_geometry_modifier() );
+    //    }
+    //}
 
     return true;
 }
