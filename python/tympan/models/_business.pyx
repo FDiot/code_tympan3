@@ -20,6 +20,13 @@ cdef typrojet2project(TYProjet* proj):
     project.thisptr = SmartPtr[TYProjet](proj)
     return project
 
+cdef make_typrojet():
+    """ Attempt to build a typrojey from nothing """
+    init_tympan_registry()
+    project = Project()
+    project.thisptr = SmartPtr[TYProjet](new TYProjet())
+    return project
+
 cdef tymateriauconstruction2material(SmartPtr[TYMateriauConstruction] mat):
     """Material cython object wrapping a SmartPtr[TYMateriauConstruction] (c++)
     """
@@ -723,6 +730,11 @@ cdef class Project:
         self.site.update_altimetry(*args)
         self.update()
 
+    @cy.locals(comp=Computation)
+    def set_current_computation(self, comp):
+        """ set the current computation """
+        self.thisptr.getRealPointer().setCurrentCalcul(comp.thisptr)
+
     @property
     def current_computation(self):
         """The project current computation"""
@@ -730,6 +742,20 @@ cdef class Project:
         comp = Computation()
         comp.thisptr = self.thisptr.getRealPointer().getCurrentCalcul()
         return comp
+
+
+    @property
+    def computations(self):
+        tab_comp = cy.declare(vector[SmartPtr[TYCalcul]])
+        tab_comp = self.thisptr.getRealPointer().getListCalcul()
+        computations = []
+        ncomp = tab_comp.size()
+        for i in xrange(ncomp):
+            comp = Computation()
+            comp.thisptr = tab_comp[i]
+            computations.append(comp)
+        return computations
+
 
     @property
     def site(self):
@@ -764,6 +790,10 @@ cdef class Project:
         # see http://docs.cython.org/src/userguide/wrapping_CPlusPlus.html#exceptions
         project.thisptr = load_project(filepath)
         return project
+
+    @staticmethod
+    def create():
+        return make_typrojet()
 
     def to_xml(self, filepath):
         """Export an acoustic project to a XML file"""
