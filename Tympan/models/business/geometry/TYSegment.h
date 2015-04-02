@@ -31,7 +31,7 @@ class TYRectangle;
 /**
  * Classe de definition d'un segment.
  */
-class TYSegment: public TYElement, public TYColorInterface
+class TYSegment: public TYElement, public OSegment3D, public TYColorInterface
 {
     OPROTODECL(TYSegment)
     TY_EXTENSION_DECL_ONLY(TYSegment)
@@ -57,11 +57,11 @@ public:
     virtual ~TYSegment();
 
     ///Operateur =.
-    TYSegment& operator=(const TYSegment& other);
+    virtual TYSegment& operator=(const TYSegment& other);
     ///Operateur ==.
-    bool operator==(const TYSegment& other) const;
+    virtual bool operator==(const TYSegment& other) const;
     ///Operateur !=.
-    bool operator!=(const TYSegment& other) const;
+    virtual bool operator!=(const TYSegment& other) const;
 
     virtual bool deepCopy(const TYElement* pOther, bool copyId = true);
 
@@ -71,78 +71,6 @@ public:
     virtual int fromXML(DOM_Element domElement);
 
     /**
-     * Multiplication avec une matrice.
-     *
-     * @param matrix La matrice a appliquer aux points de ce segment.
-     *
-     * @return Une copie de ce segment transforme.
-     */
-    TYSegment operator*(const OMatrix& matrix) const;
-
-    /**
-     * Retourne la longueur du segment.
-     */
-    double longueur() const;
-
-    /**
-     * Retourne le symetrique du point passe.
-     *
-     * @param pt Le point dont on veut le symetrique.
-     * @param ptSym Le point resultant de la symetrie.
-     *
-     * @return 1 si le calcul a reussi, 0 sinon.
-     */
-    int symetrieOf(const TYPoint& pt, TYPoint& ptSym) const;
-
-    /**
-     * Retourne le projete du point passe.
-     *
-     * @param pt Le point dont on veut le projete.
-     * @param ptProj Le point resultant de la projection.
-     *
-     * @return 1 si le calcul a reussi, 0 sinon.
-     */
-    int projection(const TYPoint& pt, TYPoint& ptProj) const;
-
-    /**
-     * Retourne le point d'intersection avec le segment passe.
-     *
-     * @param seg Segment dont on veut l'intersection.
-     * @param ptSym Le point resultant de l'intersection.
-     *
-     * @return INTERS_OUI (1) si l'intersection existe,
-     *         INTERS_CONFONDU (2) si les elements sont confondus,
-     *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
-     */
-    int intersects(const TYSegment& seg, TYPoint& pt) const;
-    /**
-     * Retourne la position du milieu du segment
-     *
-     * @return TYPoint
-     */
-    TYPoint centreOf() const;
-    /**
-     * Retourne la position du centre de l'arc de cercle de rayon R reliant les deux extremites du segment
-     *
-     * @return TYPoint Position du centre du cercle
-     */
-    TYPoint centerOfCurvedPath(const double& R) const;
-
-    /**
-     * Calcule la longueur du trajet de rayon R passant par les extremites du segment
-     * @param R rayon du cercle de rayon R
-     * @return un double
-     */
-    double lengthOfCurvedPath(const double& R);
-
-    /**
-     * Construit un OVector3D a partir d'un segment utile pour la directivite des sources
-     *
-     * @return une reference sur un vecteur3D
-     */
-    OVector3D toVector3D() const { return OVector3D(_ptA, _ptB); }
-
-    /**
      * \brief Comparison function for unordered segment
      *
      * \param s1 Segment 1.
@@ -150,13 +78,6 @@ public:
      * \return True if the two segments are equal
      */
     static bool unorderedIsEqual(const TYSegment& s1, const TYSegment& s2);
-
-    // Membres
-public:
-    ///Extremite A.
-    TYPoint _ptA;
-    ///Extremite B.
-    TYPoint _ptB;
 };
 
 

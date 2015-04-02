@@ -153,7 +153,7 @@ bool TYEtageEditor::testCrossSegment(TYTabPoint& tabPts, bool &onlyEcran)
             if ((seg1._ptA != seg2._ptA) && (seg1._ptB != seg2._ptB) && (seg1._ptA != seg2._ptB) && (seg1._ptB != seg2._ptA))
             {
                 // Test si il y a intersection
-                if (seg1.intersects(seg2, pt) != INTERS_NULLE)
+                if (seg1.intersects(seg2, pt, TYSEUILCONFONDUS) != INTERS_NULLE)
                 {
                     // Si l'intersection intervient entre les points extremes du tab
                     if ((i == nbPts - 1) || (j == nbPts - 1))
