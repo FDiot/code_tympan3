@@ -581,6 +581,7 @@ void TYCalcul::clearResult()
     }
 
     _pResultat->purge();
+	_tabRays.clear();
 
     setIsGeometryModified(true);
 }

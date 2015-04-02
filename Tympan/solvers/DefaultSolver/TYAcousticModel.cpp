@@ -792,7 +792,7 @@ void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection
             segDescendant._ptB = rayon._ptB;
 
             bool intersect = false;
-            int j = 0;
+            size_t j = 0;
 
             // Si on traverse un autre ecran, qui peut etre de la topo, le chemin de reflexion n'est pas pris en compte
             while ((j < nbFaces) && (!intersect))

@@ -39,8 +39,6 @@ using std::vector;
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DSolver.h"
 
-#define _USE_METEO_
-
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize,
                                                          const tympan::AcousticProblemModel& aproblem_, tab_acoustic_path& tabTYRays) :
     _tabPolygon(tabPolygon),
@@ -59,7 +57,6 @@ bool TYANIME3DAcousticPathFinder::exec()
     // Configuration du lancer de rayon geometriques (au debut pour initialiser les valeurs globales
     // Nettoyage de l'objet _rayTracing si il a ete utilise precedement
     _rayTracing.clean();
-
     // Ajout des parametres du _rayTracing liés à la methode acoustique
     TYANIME3DRayTracerSolverAdapter* solver = new TYANIME3DRayTracerSolverAdapter();
     _rayTracing.setSolver(solver);
@@ -94,7 +91,6 @@ bool TYANIME3DAcousticPathFinder::exec()
 
     _rayTracing.setEngine(); //PARALLELDEFAULT
     _rayTracing.launchSimulation();          //Traitement monothread
-
 
     // This function creates TYRays from Rays .
     convert_Rays_to_acoustic_path(sens);
@@ -307,6 +303,9 @@ void TYANIME3DAcousticPathFinder::convert_Rays_to_acoustic_path(const unsigned i
         // Connect TYSource & TYReceptor (will be obsolete in future solver data model)
         set_source_idx_and_receptor_idx_to_acoustic_path(sens, ray, tyRay);
 
+        tyRay->build_links_between_events();
+        tyRay->compute_shot_angle();
+
         // Ajoute le rayon au calcul
         _tabTYRays.push_back(tyRay);
     }
@@ -314,11 +313,10 @@ void TYANIME3DAcousticPathFinder::convert_Rays_to_acoustic_path(const unsigned i
 
 void TYANIME3DAcousticPathFinder::sampleAndCorrection()
 {
-    for (int i = 0; i < _tabTYRays.size(); i++)
+    for (size_t i = 0; i < _tabTYRays.size(); i++)
     {
         // Récupération des longueurs simples (éléments suivants)
         _tabTYRays.at(i)->nextLenghtCompute(transformer);
-
         // Récupération des distances aux évènements pertinents
         _tabTYRays.at(i)->endLenghtCompute(transformer);
 
@@ -351,8 +349,8 @@ void TYANIME3DAcousticPathFinder::set_source_idx_and_receptor_idx_to_acoustic_pa
     //Les identifiants des recepteurs et sources sont construit pour correspondre a l'index des sources et recepteurs dans Tympan.
     assert (static_cast<unsigned int>(idRecep) < _aproblem.nreceptors() && static_cast<unsigned int>(idSource) < _aproblem.nsources());
 
-    tyRay->setSource(idSource); //(sourceP, posSourceGlobal);
-    tyRay->setRecepteur(idRecep); //(recepP, posReceptGlobal);
+    tyRay->setSource(idSource); 
+    tyRay->setRecepteur(idRecep); 
 }
 
 void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>& sources )

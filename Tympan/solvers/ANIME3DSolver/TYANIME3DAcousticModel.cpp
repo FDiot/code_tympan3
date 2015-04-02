@@ -96,9 +96,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
         sum1 = zero;
         pond = zero;
 
-//        pSol = NULL;
-
-        for (int j = 0; j < tabRefl.size(); j++)
+        for (size_t j = 0; j < tabRefl.size(); j++)
         {
             reflIndice = tabRefl[j];
 
@@ -249,7 +247,7 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
 
         std::vector<int> tabDiff = currentRay->getIndexOfEvents(TYDIFFRACTION); // gets a vector where diff occur
 
-        for (int j = 0; j < tabDiff.size(); j++)
+        for (size_t j = 0; j < tabDiff.size(); j++)
         {
             diffIdx = tabDiff[j]; // Index de l'evenement diffraction courant
             acoustic_event* currentEv = currentRay->getEvents().at(diffIdx); // Evenement courant

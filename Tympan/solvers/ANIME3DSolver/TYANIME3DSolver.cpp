@@ -29,6 +29,8 @@
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DFaceSelector.h"
 #include "TYANIME3DSolver.h"
 
+#define __ONLY_RAYS__ // To test only raytracing without acoustics
+
 TYANIME3DSolver::TYANIME3DSolver()
 {
     _tabPolygon = NULL;
@@ -61,7 +63,7 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
 {
     tympan::SolverConfiguration::set(configuration);
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
-    // Rcupration (once for all) des sources et des rcepteurs
+    // Recupration (once for all) des sources et des rcepteurs
     init();
 
     // Recuperation du tableau de rayon de la structure resultat
@@ -70,16 +72,18 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
     // Construction de la liste des faces utilise pour le calcul
     TYANIME3DFaceSelector fs(aproblem);
     bool bRet = fs.exec(_tabPolygon, _tabPolygonSize);
-
     if (!bRet) { return false; }
 
     // Ray tracing computation
     TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, aproblem, tabRays);
-    apf.exec();
+    if ( !apf.exec() ) { return false; }
+
+#ifndef __ONLY_RAYS__
 
     ////////////////////////////////////////////////////////////
     // Calculs acoustiques sur les rayons via la methode ANIME3D
     ////////////////////////////////////////////////////////////
+
 
     TYANIME3DAcousticModel aam(tabRays, _tabPolygon, aproblem, *_pAtmos);
 
@@ -103,21 +107,35 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
         }
     }
 
-    if (config->UseMeteo && config->OverSampleD)
+#else
+
+    tympan::SpectrumMatrix& matrix = aresult.get_data();
+    matrix.resize(aproblem.nreceptors(), aproblem.nsources());
+
+    size_t nb_srcs = aproblem.nsources();
+    size_t nb_rcpt = aproblem.nreceptors();
+
+    for (int i = 0; i < static_cast<int>(aproblem.nsources()); i++) // boucle sur les sources
     {
-        for (unsigned int i = 0; i < tabRays.size(); i++)
+        for (int j = 0; j < static_cast<int>(aproblem.nreceptors()); j++) // boucle sur les recepteurs
         {
-            tabRays[i]->tyRayCorrection( apf.get_geometry_modifier() );
+            tympan::Spectrum sLP;
+            sLP.setType(SPECTRE_TYPE_LP);
+
+            matrix(j, i) = sLP;
         }
     }
 
-    // BEGIN : COMPLEMENTS "DECORATIFS"
-    ostringstream fic_out;
-    fic_out << "rayons_infos.txt" << ends;
-    ofstream fic(fic_out.str().c_str());
-    fic << "on a " << tabRays.size() << " rayons dans cette scene" << endl; // nombre de rayons
-    fic.close();
-    // END : COMPLEMENTS "DECORATIFS"
+#endif //__ONLY_RAYS__
+
+    //// Allow to watch curved rays (as in meteo field) instead of right rays
+	//if (config->UseMeteo && config->OverSampleD)
+    //{
+    //    for (unsigned int i = 0; i < tabRays.size(); i++)
+    //    {
+    //        tabRays[i]->tyRayCorrection( apf.get_geometry_modifier() );
+    //    }
+    //}
 
     return true;
 }
