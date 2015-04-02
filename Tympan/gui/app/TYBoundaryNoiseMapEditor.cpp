@@ -108,7 +108,7 @@ bool TYBoundaryNoiseMapEditor::checkValidity(bool& forceOpened)
             if ((seg1._ptA != seg2._ptA) && (seg1._ptB != seg2._ptB) && (seg1._ptA != seg2._ptB) && (seg1._ptB != seg2._ptA))
             {
                 // Test if there's an intersection
-                if (seg1.intersects(seg2, ptInter) != INTERS_NULLE)
+                if (seg1.intersects(seg2, ptInter, TYSEUILCONFONDUS) != INTERS_NULLE)
                 {
                     // If the intersection occurs between the extremal point of the array
                     if ((i == nbPts - 1) || (j == nbPts - 1))

@@ -373,6 +373,30 @@ OPoint3D::~OPoint3D()
 {
 }
 
+void OPoint3D::setFromOGL(float x, float y, float z)
+{
+    _x =   x;
+    _y = - z;
+    _z =   y;
+}
+
+void OPoint3D::setFromOGL(float coords[3])
+{
+    setFromOGL(coords[0], coords[1], coords[2]);
+}
+
+void OPoint3D::getToOGL(float& x, float& y, float& z)
+{
+    x =   _x;
+    y =   _z;
+    z = - _y;
+}
+
+void OPoint3D::getToOGL(float coords[3])
+{
+    getToOGL(coords[0], coords[1], coords[2]);
+}
+
 double OPoint3D::distFrom(const OPoint3D& pt) const
 {
     return OVector3D(*this, pt).norme();

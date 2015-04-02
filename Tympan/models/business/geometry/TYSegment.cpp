@@ -88,15 +88,15 @@ bool TYSegment::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 
     TYSegment* pOtherSeg = (TYSegment*) pOther;
 
-    _ptA.deepCopy(&pOtherSeg->_ptA, copyId);
-    _ptB.deepCopy(&pOtherSeg->_ptB, copyId);
+    _ptA = pOtherSeg->_ptA;
+    _ptB = pOtherSeg->_ptB;
 
     return true;
 }
 
 std::string TYSegment::toString() const
 {
-    std::string str = "TYSegment\n\tPtA=" + _ptA.toString() + "\n\tPtB=" + _ptB.toString();
+    std::string str = "TYSegment";
     return str;
 }
 
@@ -106,8 +106,10 @@ DOM_Element TYSegment::toXML(DOM_Element& domElement)
 
     TYColorInterface::toXML(domNewElem);
 
-    _ptA.toXML(domNewElem);
-    _ptB.toXML(domNewElem);
+    TYPoint ptA(_ptA), ptB(_ptB);
+
+    ptA.toXML(domNewElem);
+    ptB.toXML(domNewElem);
 
     return domNewElem;
 }
@@ -116,6 +118,8 @@ int TYSegment::fromXML(DOM_Element domElement)
 {
     int ptNb = 0;
     DOM_Element elemCur;
+    TYPoint ptA, ptB;
+
 
     TYElement::fromXML(domElement);
 
@@ -129,135 +133,19 @@ int TYSegment::fromXML(DOM_Element domElement)
         if (ptNb == 0)
         {
             // Increment l'indice si le pt A est trouve
-            _ptA.callFromXMLIfEqual(elemCur) ? ptNb++ : ptNb;
+            ptA.callFromXMLIfEqual(elemCur) ? ptNb++ : ptNb;
         }
         else if (ptNb == 1)
         {
             // Increment l'indice si le pt B est trouve
-            _ptB.callFromXMLIfEqual(elemCur) ? ptNb++ : ptNb;
+            ptB.callFromXMLIfEqual(elemCur) ? ptNb++ : ptNb;
         }
     }
+
+    _ptA = OPoint3D(ptA._x, ptA._y, ptA._z);
+    _ptB = OPoint3D(ptB._x, ptB._y, ptB._z);
 
     return 1;
-}
-
-TYSegment TYSegment::operator*(const OMatrix& matrix) const
-{
-    return TYSegment(matrix * _ptA, matrix * _ptB);
-}
-
-double TYSegment::longueur() const
-{
-    return OVector3D(_ptA, _ptB).norme();
-}
-
-int TYSegment::symetrieOf(const TYPoint& pt, TYPoint& ptSym) const
-{
-    int res = 0;
-
-    // Calcul le pt image a ptSym (pt source) par rapport a la droite definie passant
-    // par ce segment
-    double k = OGeometrie::symPointDroite(_ptA, _ptB, pt, ptSym);
-
-    // Le coefficient k indique si le segment [Point source / Point image] coupe
-    // ce segment, pour cela il faut : 0 < k < 1.
-    if ((0.0 <= k) && (k <= 1.0))
-    {
-        res = 1;
-    }
-
-    return res;
-}
-
-int TYSegment::projection(const TYPoint& pt, TYPoint& ptProj) const
-{
-    int res = 0;
-    TYPoint ptSym;
-
-    res = symetrieOf(pt, ptSym);
-    res = res && intersects(TYSegment(pt, ptSym), ptProj);
-
-    return res;
-}
-
-int TYSegment::intersects(const TYSegment& seg, TYPoint& pt) const
-{
-    int res = INTERS_NULLE;
-
-    TYPoint ptA, ptB;
-    double mua, mub;
-
-    // Calcul le segment le plus court entre les 2 segments dont on recherche l'eventuelle intersection
-    if (OGeometrie::shortestSegBetween2Lines(this->_ptA, this->_ptB, seg._ptA, seg._ptB, ptA, ptB, &mua, &mub))
-    {
-        // Les coefs mua et mub doivent etre compris entre 0 et 1 pour que les points constituant
-        // le segment trouve se trouve sur les segments respectifs a tester
-        if ((0.0 <= mua) && (mua <= 1.0) && (0.0 <= mub) && (mub <= 1.0))
-        {
-            // La norme du segment trouve doit etre inferieur a un seuil pour que l'on puisse admettre
-            // que les 2 points constituant ce segment sont quasi confondus
-            OVector3D vecSeg(ptA, ptB);
-
-            if (vecSeg.norme() <= TYSEUILCONFONDUS)
-            {
-                res = INTERS_OUI;
-
-                // Arbitrairement on prend le 1er point du segment trouve comme point d'intersection.
-                pt = ptA;
-            }
-        }
-    }
-
-    return res;
-}
-
-TYPoint TYSegment::centreOf() const
-{
-    TYPoint point;
-    double x, y, z;
-
-    x = ((_ptB._x - _ptA._x) / 2.0) + _ptA._x;
-    y = ((_ptB._y - _ptA._y) / 2.0) + _ptA._y;
-    z = ((_ptB._z - _ptA._z) / 2.0) + _ptA._z;
-
-    point.set(x, y , z);
-
-    return point;
-}
-
-TYPoint TYSegment::centerOfCurvedPath(const double& R) const
-{
-    TYPoint point;
-    TYPoint milieu = centreOf() ;
-    double demiLongueur = longueur() / 2;
-    double d, x, y, z, q;
-    x = milieu._x; y = milieu._y; z = milieu._z;
-
-    if (R > demiLongueur)
-    {
-        d = sqrt(R * R - demiLongueur * demiLongueur);
-
-        if (_ptA._z != _ptB._z)
-        {
-            d = d * SIGNE(_ptA._z - _ptB._z);
-            q = (_ptB._y - _ptA._y) / (_ptB._z - _ptA._z);
-            y = milieu._y + d / sqrt(1 + q * q);
-        }
-        z = milieu._z + sqrt(ABS(d * d - (y - milieu._y) * (y - milieu._y)));
-    }
-
-    point.setCoords(x, y, z);
-    return point;
-}
-
-double TYSegment::lengthOfCurvedPath(const double& R)
-{
-    // Longueur du cote du triangle rectangle
-    double cote = longueur() / 2.0;
-    // Angle d'ouverture du segment
-    double angle = 2 * asin(cote / R);
-
-    return angle * R;
 }
 
 bool TYSegment::unorderedIsEqual(const TYSegment& s1, const TYSegment& s2)

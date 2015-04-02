@@ -519,7 +519,45 @@ public:
      */
     virtual ~OPoint3D();
 
+     /**
+     * Assigne des valeurs a l'objet.
+     *
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param z Z coordinate.
+     */
+    virtual void set(double x, double y, double z);
+
     /**
+     * Compatibilite avec OGL.
+     * Effectue le changement de repere OGL vers Tympan.
+     */
+    virtual void setFromOGL(float x, float y, float z);
+    /**
+     * Compatibilite avec OGL.
+     * Effectue le changement de repere OGL vers Tympan.
+     */
+    virtual void setFromOGL(float coords[3]);
+    /**
+     * Compatibilite avec OGL.
+     * Effectue le changement de repere OGL vers Tympan.
+     */
+    virtual void setFromOGL(double coords[3])
+    {
+        setFromOGL(coords[0], coords[1], coords[2]);
+    }
+    /**
+     * Compatibilite avec OGL
+     * Effectue le changement de repere Tympan vers OGL.
+     */
+    virtual void getToOGL(float& x, float& y, float& z);
+    /**
+     * Compatibilite avec OGL.
+     * Effectue le changement de repere Tympan vers OGL.
+     */
+    virtual void getToOGL(float coords[3]);
+
+   /**
      * \fn double distFrom(const OPoint3D& pt) const;
      * \brief Computes the distance from this point to another.
      *
@@ -532,16 +570,6 @@ public:
      * \brief Computes the distance from this point to another in 2D plan
      */
     double dist2DFrom(const OPoint3D& pt) const;
-
-    /**
-     * \fn void set(double x, double y, double z);
-     * \brief initialize with 3 doubles.
-     *
-     * \param x X coordinate.
-     * \param y Y coordinate.
-     * \param z Z coordinate.
-     */
-    void set(double x, double y, double z);
 
     /// Compatibility alias for operator==
     bool isEqual(const OPoint3D& oPoint) const
@@ -1050,9 +1078,9 @@ public:
 
     virtual ~OSegment3D();
 
-    OSegment3D& operator=(const OSegment3D& other);
-    bool operator==(const OSegment3D& other) const;
-    bool operator!=(const OSegment3D& other) const;
+    virtual OSegment3D& operator=(const OSegment3D& other);
+    virtual bool operator==(const OSegment3D& other) const;
+    virtual bool operator!=(const OSegment3D& other) const;
 
     /**
      * \fn OSegment3D operator*(const OMatrix& matrix) const;
@@ -1062,13 +1090,13 @@ public:
      *
      * \return Une copie de ce segment transforme.
      */
-    OSegment3D operator*(const OMatrix& matrix) const;
+    virtual OSegment3D operator*(const OMatrix& matrix) const;
 
     /**
      * \fn double longueur() const;
      * \brief Retourne la longueur du segment.
      */
-    double longueur() const;
+    virtual double longueur() const;
 
     /**
      * \fn int symetrieOf(const OPoint3D& pt, OPoint3D& ptSym) const;
@@ -1079,7 +1107,7 @@ public:
      *
      * \return 1 si le calcul a reussi, 0 sinon.
      */
-    int symetrieOf(const OPoint3D& pt, OPoint3D& ptSym) const;
+    virtual int symetrieOf(const OPoint3D& pt, OPoint3D& ptSym) const;
 
     /**
      * \fn int projection(const OPoint3D& pt, OPoint3D& ptProj,double seuilConfondus) const;
@@ -1090,7 +1118,7 @@ public:
      *
      * \return 1 si le calcul a reussi, 0 sinon.
      */
-    int projection(const OPoint3D& pt, OPoint3D& ptProj, double seuilConfondus) const;
+    virtual int projection(const OPoint3D& pt, OPoint3D& ptProj, double seuilConfondus) const;
 
     /**
      * \fn int intersects(const OSegment3D& seg, OPoint3D & pt,double seuilConfondus) const;
@@ -1105,7 +1133,7 @@ public:
      *         INTERS_CONFONDU (2) si les elements sont confondus,
      *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
      */
-    int intersects(const OSegment3D& seg, OPoint3D& pt, double seuilConfondus) const;
+    virtual int intersects(const OSegment3D& seg, OPoint3D& pt, double seuilConfondus) const;
 
     /**
      * \fn OPoint3D centreOf() const;
@@ -1113,7 +1141,7 @@ public:
      *
      * \return OPoint3D
      */
-    OPoint3D centreOf() const;
+    virtual OPoint3D centreOf() const;
 
     /**
      * \fn OPoint3D centerOfCurvedPath(const double &R) const;
@@ -1121,7 +1149,7 @@ public:
      *
      * \return OPoint3D Position du centre du cercle
      */
-    OPoint3D centerOfCurvedPath(const double& R) const;
+    virtual OPoint3D centerOfCurvedPath(const double& R) const;
 
     /**
      * \fn double lengthOfCurvedPath(const double& R);
@@ -1129,7 +1157,7 @@ public:
      * \param R rayon du cercle de rayon R
      * \return un double
      */
-    double lengthOfCurvedPath(const double& R);
+    virtual double lengthOfCurvedPath(const double& R);
 
     /**
      * \fn OVector3D toVector3D() const
@@ -1137,13 +1165,13 @@ public:
      *
      * \return une reference sur un vecteur3D
      */
-    OVector3D toVector3D() const { return OVector3D(_ptA, _ptB); }
+    virtual OVector3D toVector3D() const { return OVector3D(_ptA, _ptB); }
 
     /**
      * \fn OSegment3D swap() const;
      * \brief Retourne le segment
      */
-    OSegment3D swap() const;
+    virtual OSegment3D swap() const;
 
 public:
     ///Extremite A.

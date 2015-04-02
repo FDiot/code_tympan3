@@ -60,42 +60,6 @@ public:
      */
     virtual ~TYPoint();
 
-    /**
-     * Assigne des valeurs a l'objet.
-     *
-     * @param x X coordinate.
-     * @param y Y coordinate.
-     * @param z Z coordinate.
-     */
-    void set(double x, double y, double z);
-
-    /**
-     * Compatibilite avec OGL.
-     * Effectue le changement de repere OGL vers Tympan.
-     */
-    void setFromOGL(float x, float y, float z);
-    /**
-     * Compatibilite avec OGL.
-     * Effectue le changement de repere OGL vers Tympan.
-     */
-    void setFromOGL(float coords[3]);
-    /**
-     * Compatibilite avec OGL.
-     * Effectue le changement de repere OGL vers Tympan.
-     */
-    void setFromOGL(double coords[3])
-    {setFromOGL(coords[0], coords[1], coords[2]);}
-    /**
-     * Compatibilite avec OGL
-     * Effectue le changement de repere Tympan vers OGL.
-     */
-    void getToOGL(float& x, float& y, float& z);
-    /**
-     * Compatibilite avec OGL.
-     * Effectue le changement de repere Tympan vers OGL.
-     */
-    void getToOGL(float coords[3]);
-
     ///Operateur =.
     TYPoint& operator=(const TYPoint& other);
     ///Operateur ==.
