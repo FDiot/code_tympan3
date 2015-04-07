@@ -22,7 +22,6 @@ class TestPyTam(TympanTC):
         project.import_result(model, solver_result)
         return project
 
-    @unittest.skip('Problem resolution triggers an assert error to be corrected')
     def test_solve_check_business_result_one_source(self):
         input_proj = osp.join(TEST_PROBLEM_DIR, 'TEST_FACE_NO_RESU.xml')
         project = self._compute_project(input_proj)
@@ -33,7 +32,6 @@ class TestPyTam(TympanTC):
         expected = [result.receptor(i).dBA for i in range(6)]
         assert_allclose(actual, expected)
 
-    @unittest.skip('Problem resolution triggers an assert error to be corrected')
     def test_solve_check_business_result_two_sources(self):
         input_proj = osp.join(TEST_DATA_DIR, 'test_restitution_results.xml')
         project = self._compute_project(input_proj)
