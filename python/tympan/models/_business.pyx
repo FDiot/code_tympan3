@@ -20,6 +20,11 @@ cdef typrojet2project(TYProjet* proj):
     project.thisptr = SmartPtr[TYProjet](proj)
     return project
 
+cdef make_computation():
+    comp = Computation()
+    comp.thisptr = SmartPtr[TYCalcul](new TYCalcul())
+    return comp
+
 cdef make_typrojet():
     """ Attempt to build a typrojey from nothing """
     init_tympan_registry()
@@ -583,15 +588,43 @@ cdef class Result:
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getNbOfRecepteurs()
 
+    @property
+    def sources(self):
+        """ get the list of sources known by the result """
+        tab_srcs = cy.declare(vector[SmartPtr[TYElement]])
+        tab_srcs = self.thisptr.getRealPointer().getSources()
+        sources = []
+        nsources = tab_srcs.size()
+        for i in xrange(nsources):
+            source = Element()
+            source.thisptr = tab_srcs[i]
+            sources.append(source)
+        return sources
+
+    @property
+    def receptors(self):
+        """ get the list of receptors known by the result """
+        tab_rcpts = cy.declare(vector[SmartPtr[TYElement]])
+        tab_rcpts = self.thisptr.getRealPointer().getReceptors()
+        receptors = []
+        nreceptors = tab_rcpts.size()
+        for i in xrange(nreceptors):
+            receptor = Element()
+            receptor.thisptr = tab_rcpts[i]
+            receptors.append(receptor)
+        return receptors
+
+
     def receptor(self, index):
         """The receptor of index 'index'"""
         assert self.thisptr.getRealPointer() != NULL
         return pointcalcul2receptor(self.thisptr.getRealPointer().getRecepteur(index))
 
+    @cy.locals(receptor=Element, source=Element)
     def spectrum(self, receptor, source):
         """The computed acoustic spectrum"""
         assert self.thisptr.getRealPointer() != NULL
-        return tycommon.ospectre2spectrum(self.thisptr.getRealPointer().getSpectre(receptor, source))
+        return tycommon.ospectre2spectrum(self.thisptr.getRealPointer().getSpectre(receptor.getRealPointer(), source.getRealPointer()))
 
 
 cdef class Mesh:
@@ -729,6 +762,12 @@ cdef class Project:
         """Update site altimetry and project"""
         self.site.update_altimetry(*args)
         self.update()
+
+    @cy.locals(comp=Computation)
+    def add_new_comp(self):
+        """ Add a new computation to the project """
+        comp = make_computation()
+        self.thisptr.getRealPointer().addCalcul(comp.thisptr)
 
     @cy.locals(comp=Computation)
     def set_current_computation(self, comp):
