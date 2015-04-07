@@ -88,6 +88,8 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         void setSources(cppmap[TYElem_ptr, int])
         void addRecepteur(TYPointCalcul* pRecepteur)
         int getIndexRecepteur(TYPointCalcul* pRecepteur)
+        vector[SmartPtr[TYElement]] getSources()
+        vector[SmartPtr[TYElement]] getReceptors()
 
 cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h" namespace "TYComputedDirectivity":
     cdef enum DirectivityType:
@@ -150,6 +152,7 @@ cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
 
 cdef extern from "Tympan/models/business/TYCalcul.h":
     cdef cppclass TYCalcul (TYElement):
+        TYCalcul()
         SmartPtr[TYResultat] getResultat()
         void getAllSources(cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
                       vector[SmartPtr[TYGeometryNode]])
@@ -165,6 +168,7 @@ cdef extern from "Tympan/models/business/TYProjet.h":
         TYProjet()
         SmartPtr[TYCalcul] getCurrentCalcul()
         void setCurrentCalcul(SmartPtr[TYCalcul] pCurCalcul)
+        void addCalcul(SmartPtr[TYCalcul] pCalcul)
         SmartPtr[TYSiteNode] getSite()
         bool updateAltiRecepteurs(const TYAltimetrie* pAlti)
         vector[SmartPtr[TYPointControl]]& getPointsControl()

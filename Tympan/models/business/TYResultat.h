@@ -121,7 +121,7 @@ public:
      * \fn void addSource(TYSourcePonctuelle* pSource)
      * \brief Ajoute une source.
      */
-    void addSource(TYSourcePonctuelle* pSource);
+    void addSource(TYElement* pSource);
 
     /**
      * \fn void addRecepteur(TYPointCalcul* pRecepteur)
@@ -240,6 +240,20 @@ public:
      * \return _mapEmetteurSources le tableau associatif "emetteur/Liste de sources"
      */
     TYMapElementTabSources& getMapEmetteurSrcs() { return _mapEmetteurSources; }
+
+    /*!
+     * \fn std::vector<TYElement*> getSources();
+     * \brief return the list of all sources (business sources)
+     */
+    std::vector<LPTYElement> getSources();
+
+
+    /*!
+     * \fn std::vector<TYElement*> getReceptors();
+     * \brief return the list of all sources (business sources)
+     */
+    std::vector<LPTYElement> getReceptors();
+
 
     /**
      * \fn void saveSpectre(const std::string& filename, TYCalcul* pSubstCalcul=NULL)

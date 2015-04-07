@@ -320,7 +320,7 @@ void TYResultat::purge()
     setIsAcousticModified(true);
 }
 
-void TYResultat::addSource(TYSourcePonctuelle* pSource)
+void TYResultat::addSource(TYElement* pSource)
 {
     // use two instructions to avoid order problem between compilers
     // G. Andrade
@@ -336,6 +336,30 @@ void TYResultat::buildSources(const TYTabSourcePonctuelleGeoNode& sources)
         pSource = TYSourcePonctuelle::safeDownCast(sources[i]->getElement());
         addSource(pSource);
     }
+}
+
+std::vector<LPTYElement> TYResultat::getSources()
+{
+    std::vector< SmartPtr<TYElement> > listSources(_sources.size());
+    std::map<TYElement*, int>::iterator it;
+    for (it=_sources.begin(); it!=_sources.end(); it++)
+    {
+        listSources.push_back(  SmartPtr<TYElement> ( (*it).first ) );
+    }
+    
+    return listSources;
+}
+
+std::vector<LPTYElement> TYResultat::getReceptors()
+{
+    std::vector< SmartPtr<TYElement> > listReceptors(_recepteurs.size());
+    std::map<TYElement*, int>::iterator it;
+    for (it=_recepteurs.begin(); it!=_recepteurs.end(); it++)
+    {
+        listReceptors.push_back(  SmartPtr<TYElement> ( (*it).first ) );
+    }
+    
+    return listReceptors;
 }
 
 void TYResultat::buildRecepteurs(const TYTabPointCalculGeoNode& recepteurs)
