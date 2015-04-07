@@ -13,6 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include "Tympan/core/logging.h"
 #include "Tympan/models/common/spectrum_matrix.h"
 #include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/DefaultSolver/threading.h"
@@ -59,6 +60,10 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
                      tympan::AcousticResultModel& aresult, tympan::LPSolverConfiguration configuration)
 {
     tympan::SolverConfiguration::set(configuration);
+    // Use grid accelerating structure instead of KDTree (default value)
+    OMessageManager::get()->warning(
+            "Overwriting Acccelerator solver parameter to 1 (grid accelerating structure)");
+    tympan::SolverConfiguration::get()->Accelerator = 1;
     // Creation de la collection de thread
     _pool = new OThreadPool(tympan::SolverConfiguration::get()->NbThreads);
 
