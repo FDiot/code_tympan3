@@ -643,7 +643,7 @@ public:
     /**
      * Set/Get du nom de l'element.
      */
-    QString getName() const { return _name; }
+    virtual QString getName() const { return _name; }
 
     /**
      * Set/Get de la reference sur le parent de cet element.

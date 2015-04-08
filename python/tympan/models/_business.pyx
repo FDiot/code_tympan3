@@ -85,8 +85,7 @@ cdef class Element:
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
-        astring = self.thisptr.getRealPointer().getName().toStdString()
-        return astring
+        return self.thisptr.getRealPointer().getName().toStdString()
 
 cdef class AcousticSurface:
     thisptr = cy.declare(cy.pointer(TYAcousticSurface))
@@ -770,6 +769,14 @@ cdef class Computation:
         res = Result()
         res.thisptr = self.thisptr.getRealPointer().getResultat()
         return res
+
+    @property
+    def name(self):
+        """The name of the element"""
+        assert self.thisptr.getRealPointer() != NULL
+        cpp_elem = cy.declare(cy.pointer(TYElement))
+        cpp_elem = downcast_Element(self.thisptr.getRealPointer())
+        return cpp_elem.getName().toStdString()
 
 
 cdef class Project:
