@@ -81,15 +81,19 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         size_t getNbOfRecepteurs() const
         size_t getNbOfSources() const
         tycommon.OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
+        tycommon.OSpectre getSpectre2(TYElement* pRecepteur, TYElement* pSource)
         cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
         void setResultMatrix(tycommon.SpectrumMatrix matrix)
         tycommon.SpectrumMatrix& getResultMatrix()
         void setSources(cppmap[TYElem_ptr, int])
-        void addRecepteur(TYPointCalcul* pRecepteur)
+        void addRecepteur(TYElement* pRecepteur)
+        void addSource(TYElement* pSource)
         int getIndexRecepteur(TYPointCalcul* pRecepteur)
         vector[SmartPtr[TYElement]] getSources()
         vector[SmartPtr[TYElement]] getReceptors()
+        bool setSpectre(TYElement* pRecepteur, TYElement* pSource, tycommon.OSpectre& Spectre)
+        void buildMatrix()
 
 cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h" namespace "TYComputedDirectivity":
     cdef enum DirectivityType:
