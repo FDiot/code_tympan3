@@ -24,7 +24,7 @@ cdef extern from "memory" namespace "std":
 
 cdef extern from "Qt/qstring.h":
     cdef cppclass QString:
-        string toStdString()
+        string toStdString() const
         QString(const char*)
 
 # Tympan #######################################################################

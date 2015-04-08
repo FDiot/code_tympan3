@@ -340,7 +340,8 @@ void TYResultat::buildSources(const TYTabSourcePonctuelleGeoNode& sources)
 
 std::vector<LPTYElement> TYResultat::getSources()
 {
-    std::vector< SmartPtr<TYElement> > listSources(_sources.size());
+    std::vector< SmartPtr<TYElement> > listSources;
+    listSources.reserve(_sources.size());
     std::map<TYElement*, int>::iterator it;
     for (it=_sources.begin(); it!=_sources.end(); it++)
     {
@@ -352,7 +353,8 @@ std::vector<LPTYElement> TYResultat::getSources()
 
 std::vector<LPTYElement> TYResultat::getReceptors()
 {
-    std::vector< SmartPtr<TYElement> > listReceptors(_recepteurs.size());
+    std::vector< SmartPtr<TYElement> > listReceptors;
+    listReceptors.reserve(_recepteurs.size());
     std::map<TYElement*, int>::iterator it;
     for (it=_recepteurs.begin(); it!=_recepteurs.end(); it++)
     {
