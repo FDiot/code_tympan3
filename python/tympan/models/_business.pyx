@@ -21,12 +21,14 @@ cdef typrojet2project(TYProjet* proj):
     return project
 
 cdef make_computation():
+    """ Create a new computation"""
+    init_tympan_registry()
     comp = Computation()
     comp.thisptr = SmartPtr[TYCalcul](new TYCalcul())
     return comp
 
 cdef make_typrojet():
-    """ Attempt to build a typrojey from nothing """
+    """ Attempt to build a typrojet from nothing """
     init_tympan_registry()
     project = Project()
     project.thisptr = SmartPtr[TYProjet](new TYProjet())
@@ -614,17 +616,40 @@ cdef class Result:
             receptors.append(receptor)
         return receptors
 
-
     def receptor(self, index):
         """The receptor of index 'index'"""
         assert self.thisptr.getRealPointer() != NULL
         return pointcalcul2receptor(self.thisptr.getRealPointer().getRecepteur(index))
 
+    def build_matrix(self):
+        """ Build the matrix knowing sources and receptors """
+        self.thisptr.getRealPointer().buildMatrix()
+
     @cy.locals(receptor=Element, source=Element)
     def spectrum(self, receptor, source):
         """The computed acoustic spectrum"""
         assert self.thisptr.getRealPointer() != NULL
-        return tycommon.ospectre2spectrum(self.thisptr.getRealPointer().getSpectre(receptor.getRealPointer(), source.getRealPointer()))
+        return tycommon.ospectre2spectrum(
+                        self.thisptr.getRealPointer().getSpectre2(
+                                        receptor.thisptr.getRealPointer(),
+                                        source.thisptr.getRealPointer()  )   )
+
+    @cy.locals(receptor=Element)
+    def add_receptor(self, receptor):
+        """ add a business receptor in result matrix """
+        self.thisptr.getRealPointer().addRecepteur(receptor.thisptr.getRealPointer())
+
+    @cy.locals(source=Element)
+    def add_source(self, source):
+        """ Add a new business source in result matrix """
+        self.thisptr.getRealPointer().addSource(source.thisptr.getRealPointer())
+
+    @cy.locals(receptor=Element, source=Element, spectrum=tycommon.Spectrum)
+    def set_spectrum(self, receptor, source, spectrum):
+        self.thisptr.getRealPointer().setSpectre(
+                                        receptor.thisptr.getRealPointer(),
+                                        source.thisptr.getRealPointer(),
+                                        spectrum.thisobj                    )
 
 
 cdef class Mesh:

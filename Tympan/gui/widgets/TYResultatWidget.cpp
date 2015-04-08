@@ -667,7 +667,7 @@ OSpectre TYResultatWidget::getSpectre(const int& row, const int& col, TYCalcul* 
 
             // Puis on recupere le spectre correspondant dans le calcul passe en parametre
             TYResultat* pResultat = pCalcul->getResultat();
-            spectre = pResultat->getSpectre(pRecepteur, pSource);
+            spectre = pResultat->getSpectre2(pRecepteur, pSource);
             spectre = spectre.toDB();
         }
     }

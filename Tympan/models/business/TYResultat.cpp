@@ -372,7 +372,7 @@ void TYResultat::buildRecepteurs(const TYTabPointCalculGeoNode& recepteurs)
     }
 }
 
-bool TYResultat::addRecepteur(TYPointCalcul* pRecepteur)
+bool TYResultat::addRecepteur(TYElement* pRecepteur)
 {
     assert(pRecepteur);
 
@@ -417,7 +417,7 @@ void TYResultat::buildMatrix()
     _matrix = tympan::SpectrumMatrix(_recepteurs.size(), _sources.size());
 }
 
-bool TYResultat::setSpectre(TYPointCalcul* pRecepteur, TYSourcePonctuelle* pSource, OSpectre& Spectre)
+bool TYResultat::setSpectre(TYElement* pRecepteur, TYElement* pSource, OSpectre& Spectre)
 {
 
     assert(pSource);
@@ -442,7 +442,7 @@ bool TYResultat::setSpectre(int indexRecepteur, int indexSource, OSpectre& Spect
     return true; // TODO return kept for compatibility reasons : to be changed to void later 
 }
 
-OSpectre TYResultat::getSpectre(TYPointCalcul* pRecepteur, TYElement* pSource)
+OSpectre TYResultat::getSpectre2(TYElement* pRecepteur, TYElement* pSource)
 {
     OSpectre spectre;
     spectre.setValid(false);

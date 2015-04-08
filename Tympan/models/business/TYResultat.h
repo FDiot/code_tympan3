@@ -127,7 +127,7 @@ public:
      * \fn void addRecepteur(TYPointCalcul* pRecepteur)
      * \brief Ajoute un recepteur et indique s'il faut reconstruire la matrice
      */
-    bool addRecepteur(TYPointCalcul* pRecepteur);
+    bool addRecepteur(TYElement* pRecepteur);
 
     /*!
      * \brief Supprime un recepteur du tableau et indique s'il faut reconstruire la matrice
@@ -164,7 +164,7 @@ public:
      * \fn bool setSpectre(TYPointCalcul* pRecepteur, TYSourcePonctuelle* pSource, OSpectre & Spectre)
      * \brief Assigne un spectre a un couple S-R.
      */
-    bool setSpectre(TYPointCalcul* pRecepteur, TYSourcePonctuelle* pSource, OSpectre& Spectre);
+    bool setSpectre(TYElement* pRecepteur, TYElement* pSource, OSpectre& Spectre);
 
     /**
      * \fn bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre & Spectre)
@@ -182,7 +182,7 @@ public:
      * \fn OSpectre getSpectre(TYPointCalcul* pRecepteur,TYElement* pSource)
      * \brief Retourne un spectre pour un couple S-R.
      */
-    OSpectre getSpectre(TYPointCalcul* pRecepteur, TYElement* pSource);
+    OSpectre getSpectre2(TYElement* pRecepteur, TYElement* pSource);
 
     /**
      * \fn OSpectre getSpectre(const int& indexRecepteur, const int& indexSource)
