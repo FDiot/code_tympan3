@@ -167,6 +167,10 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         const OGenID getSolverId()
         QString solverParams
 
+cdef extern from "Tympan/models/business/TYCalcul.h":
+    TYElement* downcast_Element "downcast<TYElement>"(TYCalcul *)
+
+
 cdef extern from "Tympan/models/business/TYProjet.h":
     cdef cppclass TYProjet (TYElement):
         TYProjet()
