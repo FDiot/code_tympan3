@@ -8,6 +8,7 @@ from tympan.models cimport _common as tycommon
 from tympan._business2solver cimport business2microsource
 
 
+
 cdef pointcalcul2receptor(SmartPtr[TYPointCalcul] ptcalc):
     """Receptor cython object wrapping a SmartPtr[TYPointCalcul] (c++)"""
     rec = Receptor()
@@ -80,11 +81,12 @@ cdef class Element:
     def __cinit__(self):
         self.thisptr = SmartPtr[TYElement]()
 
+    @property
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getName().toStdString()
-
+        astring = self.thisptr.getRealPointer().getName().toStdString()
+        return astring
 
 cdef class AcousticSurface:
     thisptr = cy.declare(cy.pointer(TYAcousticSurface))
