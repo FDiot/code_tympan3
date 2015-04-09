@@ -164,15 +164,15 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
 void TYANIME3DAcousticPathFinder::transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
 {
     // Pour toutes les sources
-    for (unsigned int i = 0; i < _aproblem.nsources(); i++)
+    for (unsigned int i = 0; i < sources.size(); i++)
     {
-        sources[i] = OPoint3Dtovec3( transformer.fonction_h( _aproblem.source(i).position ) );
+        sources[i] = OPoint3Dtovec3( transformer.fonction_h( vec3toOPoint3D( sources[i] ) ) );
     }
 
     // Pour tous les recepteurs
-    for (unsigned int i = 0; i < _aproblem.nreceptors(); i++)
+    for (unsigned int i = 0; i < recepteurs.size(); i++)
     {
-        recepteurs[i] = OPoint3Dtovec3( transformer.fonction_h( _aproblem.receptor(i).position ) );
+        recepteurs[i] = OPoint3Dtovec3( transformer.fonction_h( vec3toOPoint3D( recepteurs[i] ) ) );
     }
 }
 
@@ -251,24 +251,28 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     //Conversion des sources Tympan en sources lancer de rayons
     int idSource = 0;
+    int nbRaysPerSource = config->NbRaysPerSource;
+    int realNbRaysPerSource = 0;
     for (unsigned int i = 0; i < sources.size(); i++)
     {
         Source source;
         switch (config->Discretization)
         {
             case 0 :
-                source.setSampler(new RandomSphericSampler(config->NbRaysPerSource));
+                source.setSampler(new RandomSphericSampler(nbRaysPerSource));
+                realNbRaysPerSource = nbRaysPerSource;
                 break;
             case 1 :
-                source.setSampler(new UniformSphericSampler(config->NbRaysPerSource));
-                config->NbRaysPerSource = dynamic_cast<UniformSphericSampler*>(source.getSampler())->getRealNbRays();
+                source.setSampler(new UniformSphericSampler(nbRaysPerSource));
+                realNbRaysPerSource = dynamic_cast<UniformSphericSampler*>(source.getSampler())->getRealNbRays();
                 break;
             case 2 :
-                source.setSampler(new UniformSphericSampler2(config->NbRaysPerSource));
-                config->NbRaysPerSource = dynamic_cast<UniformSphericSampler2*>(source.getSampler())->getRealNbRays();
+                source.setSampler(new UniformSphericSampler2(nbRaysPerSource));
+                realNbRaysPerSource = dynamic_cast<UniformSphericSampler2*>(source.getSampler())->getRealNbRays();
                 break;
             case 3 :
                 source.setSampler(new Latitude2DSampler(config->NbRaysPerSource));
+                realNbRaysPerSource = nbRaysPerSource;
                 dynamic_cast<Latitude2DSampler*>(source.getSampler())->setStartPhi(0.);
                 dynamic_cast<Latitude2DSampler*>(source.getSampler())->setEndPhi(360.);
                 dynamic_cast<Latitude2DSampler*>(source.getSampler())->setStartTheta(0.);
@@ -276,10 +280,10 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
         }
 
         source.setPosition(sources[i]);
-        source.setInitialRayCount(config->NbRaysPerSource);
+        source.setInitialRayCount(realNbRaysPerSource);
         source.setId(idSource);
 
-        ss << "Ajout d'une source en (" << sources[i].x << "," << sources[i].y << "," << sources[i].y << ")" << endl;
+        ss << "Ajout d'une source (id=" << idSource << ") en (" << sources[i].x << "," << sources[i].y << "," << sources[i].y << ")" << endl;
 
         _rayTracing.addSource(source);
         idSource++;
