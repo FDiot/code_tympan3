@@ -22,7 +22,10 @@
 template<typename T>
 class DiffractionAngleSelector : public Selector<T>
 {
-
+/*!
+ * \brief : Select diffracted rays that are lauched in the shadow zone of the obstacle (closed angle)
+ *          Other are suppressed
+ */
 public :
     DiffractionAngleSelector() : Selector<T>() {}
     virtual Selector<T>* Copy()

@@ -21,6 +21,10 @@
 template<typename T>
 class FermatSelector : public Selector<T>
 {
+/*!
+ * \brief : Select rays passing at a distance less than the radius of the cone of associated with the 
+            (depending on the number of rays launched by the source and the distance covered by the ray).
+ */
 public :
     FermatSelector() : Selector<T>() {}
     virtual Selector<T>* Copy()
