@@ -23,7 +23,10 @@
 template<typename T>
 class ReflectionSelector : public Selector<T>
 {
-
+/*!
+ * \brief : disables the rays which have a number of reflection events greater than a given threshold 
+            or reflecting on the ground if it is disabled.
+ */
 public :
     ReflectionSelector(int _maxReflectionOrder = 1, bool _acceptGround = false, OPERATOR _op = LESS_OR_EQUAL) : Selector<T>()
     {
