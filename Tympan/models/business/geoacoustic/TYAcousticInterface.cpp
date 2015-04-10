@@ -24,7 +24,7 @@ TYAcousticInterface::TYAcousticInterface():
     _densiteSrcsH(25.0),
     _densiteSrcsV(25.0),
     _offsetSources(0.01),
-    _isRayonnant(true),
+    _isRayonnant(false),
     _regimeChangeAble(false),
     _typeDistribution(TY_PUISSANCE_CALCULEE),
     _useAtt(false)
