@@ -34,7 +34,7 @@ enum TYSpectreEtat { SPECTRE_ETAT_DB, SPECTRE_ETAT_LIN };
 static const unsigned int TY_SPECTRE_DEFAULT_NB_ELMT = 31;
 
 ///Valeur par defaut pour les spectres.
-static const double TY_SPECTRE_DEFAULT_VALUE = -200.0;
+static const double TY_SPECTRE_DEFAULT_VALUE = -100.0;
 
 ///Collection des frequences
 typedef std::vector<double> OTabFreq;
