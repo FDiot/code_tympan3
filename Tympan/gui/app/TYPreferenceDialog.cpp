@@ -785,7 +785,10 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     : QWidget(parent)
 {
     _pSpectreAttMatConst = new TYSpectre();
+	_pSpectreAttMatConst->setDefaultValue(15);
     _pSpectreAbsoMatConst = new TYSpectre();
+	_pSpectreAbsoMatConst->setDefaultValue(0.2);
+	
     _pMaillage = new TYMaillage();
 
     //Sol
