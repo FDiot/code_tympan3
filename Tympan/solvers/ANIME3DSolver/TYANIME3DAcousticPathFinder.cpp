@@ -83,13 +83,17 @@ bool TYANIME3DAcousticPathFinder::exec()
     //Une fois la scene convertie, on peut la post-traiter (ajouter de l'information : arretes de diffractions par ex)
     _rayTracing.getSolver()->postTreatmentScene(_rayTracing.getScene(), _rayTracing.getSources(), _rayTracing.getRecepteurs());
 
-    _rayTracing.getScene()->finish();
+    _rayTracing.getScene()->finish(tympan::SolverConfiguration::get()->Accelerator);
+
+#ifdef TEST_ACCELERATION_RECEPTORS
+    _rayTracing.get_receptors_landscape()->finish(1, leafTreatment::ALL); // Using grid accelerator
+#endif
 
     ////////////////////////////////////
     // Propagation des rayons
     ////////////////////////////////////
 
-    _rayTracing.setEngine(); //PARALLELDEFAULT
+    _rayTracing.setEngine(); //DEFAULT
     _rayTracing.launchSimulation();          //Traitement monothread
 
     // This function creates TYRays from Rays .

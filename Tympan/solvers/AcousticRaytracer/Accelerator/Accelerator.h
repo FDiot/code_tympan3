@@ -43,7 +43,7 @@ public:
     virtual ~Accelerator() { }
 
     leafTreatment::treatment getIntersectionChoice() { return intersectionChoice; }
-    void setIntersectionChoice(leafTreatment::treatment _intersectionChoice) { intersectionChoice = _intersectionChoice; }
+    void setIntersectionChoice(leafTreatment::treatment _intersectionChoice = leafTreatment::FIRST) { intersectionChoice = _intersectionChoice; }
 
     virtual bool build() { return false; }
 
@@ -63,6 +63,9 @@ protected:
 			case leafTreatment::ALL_BEFORE_VISIBLE:
 				pLeafTreatmentFunction = leafTreatment::keepAllBeforeVisible;
 				break;
+            case leafTreatment::ALL:
+                pLeafTreatmentFunction = leafTreatment::keepAll;
+                break;
 			default:
 				pLeafTreatmentFunction = leafTreatment::keepFirst;
 				break;
