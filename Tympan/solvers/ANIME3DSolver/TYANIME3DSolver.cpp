@@ -29,7 +29,7 @@
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DFaceSelector.h"
 #include "TYANIME3DSolver.h"
 
-#define __ONLY_RAYS__ // To test only raytracing without acoustics
+//#define __ONLY_RAYS__ // To test only raytracing without acoustics
 
 TYANIME3DSolver::TYANIME3DSolver()
 {
@@ -99,10 +99,8 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
         for (int j = 0; j < static_cast<int>(aproblem.nreceptors()); j++) // boucle sur les recepteurs
         {
             tabSpectre[i][j].setEtat(SPECTRE_ETAT_LIN);
-            sLP = tabSpectre[i][j];
-            sLP.setType(SPECTRE_TYPE_LP);
+            tabSpectre[i][j].setType(SPECTRE_TYPE_LP);
 
-            tabSpectre[i][j] = sLP.toDB();  // conversion du tableau resultat en dB
             matrix(j, i) = tabSpectre[i][j];
         }
     }

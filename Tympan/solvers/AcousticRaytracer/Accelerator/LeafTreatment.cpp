@@ -33,6 +33,9 @@ decimal keepFunction(treatment choice, std::list<Intersection> &currentIntersect
         case ALL_BEFORE_VISIBLE:
             return keepAllBeforeVisible(currentIntersections, currentTmin);
             break;
+        case leafTreatment::ALL:
+            return keepAll(currentIntersections, currentTmin);
+            break;
         default:
             return keepFirst(currentIntersections, currentTmin);
             break;
@@ -120,5 +123,20 @@ decimal keepAllBeforeVisible(std::list<Intersection> &currentIntersections, deci
     return tmin;
 }
 
+decimal keepAll(std::list<Intersection> &currentIntersections, decimal currentTmin)
+{
+    if (currentIntersections.empty()) { return currentTmin; }
+    decimal tmin = currentTmin;
+
+    for (std::list<Intersection>::iterator it = currentIntersections.begin(); it != currentIntersections.end(); it++)
+    {
+        if (tmin < 0. || it->t <= tmin)
+        {
+            tmin = it->t;
+        }
+    }
+
+    return tmin;
+}
 
 }; //namespace

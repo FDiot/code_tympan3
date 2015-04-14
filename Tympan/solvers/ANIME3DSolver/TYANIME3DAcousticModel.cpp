@@ -689,28 +689,30 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
 
             for (int k = 0; k < _nbRays; k++) // boucle sur les rayons allant de la source au recepteur
             {
-                const tympan::AcousticSource& source = _aproblem.source( _tabTYRays[i]->getSource_idx() );
-                const tympan::AcousticReceptor& receptor = _aproblem.receptor( _tabTYRays[i]->getRecepteur_idx() );
+                const unsigned int source_id = _tabTYRays[k]->getSource_idx();
+                const unsigned int receptor_id = _tabTYRays[k]->getRecepteur_idx();
 
-                totalRayLength = _tabTYRays[k]->getLength();
-                mod = (_pressAcoustEff[k]).getModule();
+                if ( (source_id == i ) && (receptor_id == j) )
+                {
+                    totalRayLength = _tabTYRays[k]->getLength();
+                    mod = (_pressAcoustEff[k]).getModule();
 
-                if ((config->Anime3DForceC) == 0)
-                {
-                    C = 0.0; // = defaultSolver "energetique"
-                }
-                else if ((config->Anime3DForceC) == 1)
-                {
-                    C = 1.0; // = defaultSolver "interferences"
-                }
-                else
-                {
-                    C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
-                }
+                    switch(config->Anime3DForceC)
+                    {
+                    case 0 : 
+                        C = 0.; // as energetic in defaultSolver
+                        break;
+                    case 1 : 
+                        C = 1.; // as "interference in defaultSolver
+                        break;
+                    default:
+                        C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
+                    }
 
-                sum3 = _pressAcoustEff[k] * C;
-                sum1 = sum1 + sum3;
-                sum2 = sum2 + mod * mod * (un - C * C);
+                    sum3 = _pressAcoustEff[k] * C;
+                    sum1 = sum1 + sum3;
+                    sum2 = sum2 + mod * mod * (un - C * C);
+                }
             }
 
             // Be carefull sum of p!= p of sum
