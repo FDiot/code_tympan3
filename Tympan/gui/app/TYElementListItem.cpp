@@ -108,7 +108,7 @@ void TYElementListItem::updateContent()
             }
             else
             {
-                need_to_rebuild_result |= pCalcul->remPtCtrlFromResult(pPoint);
+                pPoint->setEtat(true, pCalcul);
             }
             
             if (need_to_rebuild_result) { pCalcul->getResultat()->buildMatrix(); }
