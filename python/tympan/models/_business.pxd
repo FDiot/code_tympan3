@@ -26,6 +26,7 @@ cdef extern from "Tympan/core/smartptr.h":
 cdef extern from "Tympan/models/business/TYElement.h":
     cdef cppclass TYElement(IRefCount):
         QString getName()
+        void setName(string name)
         const char* getClassName() const
         TYElement* getParent()
         OGenID getID()
