@@ -87,6 +87,7 @@ cdef class Element:
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getName().toStdString()
 
+
 cdef class AcousticSurface:
     thisptr = cy.declare(cy.pointer(TYAcousticSurface))
     thisgeonodeptr = cy.declare(SmartPtr[TYGeometryNode])
@@ -777,6 +778,13 @@ cdef class Computation:
         cpp_elem = cy.declare(cy.pointer(TYElement))
         cpp_elem = downcast_Element(self.thisptr.getRealPointer())
         return cpp_elem.getName().toStdString()
+
+    def set_name(self, name):
+        """ Set the name of the computation """
+        assert self.thisptr.getRealPointer() != NULL
+        cpp_elem = cy.declare(cy.pointer(TYElement))
+        cpp_elem = downcast_Element(self.thisptr.getRealPointer())
+        cpp_elem.setName(name)
 
 
 cdef class Project:

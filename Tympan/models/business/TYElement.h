@@ -640,6 +640,9 @@ public:
      * Set/Get du nom de l'element.
      */
     void setName(QString name) { _name = name; }
+
+    void setName(std::string name) { _name = QString::fromStdString(name); }
+
     /**
      * Set/Get du nom de l'element.
      */
