@@ -6,6 +6,17 @@ from cython.view cimport array as cyarray
 import numpy as np
 
 
+cdef make_spectrum(np_array):
+    """ Make a Spectrum from an array of double values """
+    assert len(np_array) == 31
+    spectre = Spectrum()
+    spectre.thisobj = OSpectre()
+    cdef cyarray cy_array = <double[:len(np_array)]> spectre.thisobj.getTabValReel()
+    for i in range(len(np_array)):
+        cy_array[i] = np_array[i]
+
+    return spectre
+
 cdef ospectre2spectrum(OSpectre os):
     """Spectrum (cython object) wrapping an OSpectre (c++)"""
     spectrum = Spectrum()
