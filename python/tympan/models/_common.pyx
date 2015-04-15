@@ -6,7 +6,7 @@ from cython.view cimport array as cyarray
 import numpy as np
 
 
-cdef make_spectrum(np_array):
+def make_spectrum(np_array):
     """ Make a Spectrum from an array of double values """
     assert len(np_array) == 31
     spectre = Spectrum()
