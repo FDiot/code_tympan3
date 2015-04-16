@@ -321,12 +321,14 @@ public:
     tympan::SpectrumMatrix& getResultMatrix(){ return _matrix; }
     void setSources(TYMapElementIndex sources){ _sources = sources;}
 
+    void setHideLW(bool isHidden=false) { _hideLW = isHidden; }
+    bool isLWHidden() const { return _hideLW; }
+
 private:
     /**
      * Ecrit sur 2 lignes les parametres du calcul.
      */
     void saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul);
-
 
     // Membres
 protected:
@@ -349,6 +351,9 @@ protected:
 
     /// Tableau associatif "emetteur"/liste des sources de l'emetteur
     TYMapElementTabSources _mapEmetteurSources;
+
+    /// Show / hide power spectrum in result matrix
+    bool _hideLW;
 };
 
 
