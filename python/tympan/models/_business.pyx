@@ -729,8 +729,11 @@ cdef class Receptor:
     @cy.locals(spectrum=tycommon.Spectrum, comp=Computation)
     def set_spectrum(self, spectrum, comp):
         """ Set the spectrum for the given computation """
+        cpp_calc = cy.declare(cy.pointer(TYCalcul))
+        cpp_calc = downcast_calcul(comp.thisptr.getRealPointer())
+
         self.thisptr.getRealPointer().setSpectre(TYSpectre(spectrum.thisobj),
-                                                 comp.thisptr.getRealPointer())
+                                                 cpp_calc)
 
     @property
     def dBA(self):

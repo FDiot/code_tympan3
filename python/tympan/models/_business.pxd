@@ -67,6 +67,7 @@ cdef extern from "Tympan/models/business/TYElement.h":
     TYTerrain* downcast_terrain "downcast<TYTerrain>"(TYElement*)
     TYSiteNode* downcast_sitenode "downcast<TYSiteNode>"(TYElement*)
     TYSol* downcast_sol "downcast<TYSol>"(TYElement*)
+    TYCalcul* downcast_calcul "downcast<TYCalcul>"(TYElement*)
 
 cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h":
     TYComputedDirectivity* downcast_computed_directivity "downcast_tydirectivity<TYComputedDirectivity>"(TYDirectivity *)
