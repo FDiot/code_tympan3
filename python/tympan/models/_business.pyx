@@ -627,6 +627,10 @@ cdef class Result:
         """ Build the matrix knowing sources and receptors """
         self.thisptr.getRealPointer().buildMatrix()
 
+    def not_use_LW(self, abool=True):
+        """ set use of LW """
+        self.thisptr.getRealPointer().setHideLW(abool)
+
     @cy.locals(receptor=Element, source=Element)
     def spectrum(self, receptor, source):
         """The computed acoustic spectrum"""
@@ -721,6 +725,12 @@ cdef class Receptor:
         if self.thisptr.getRealPointer().getEtat(comp.thisptr.getRealPointer()):
             return True
         return False
+
+    @cy.locals(spectrum=tycommon.Spectrum, comp=Computation)
+    def set_spectrum(self, spectrum, comp):
+        """ Set the spectrum for the given computation """
+        self.thisptr.getRealPointer().setSpectre(TYSpectre(spectrum.thisobj),
+                                                 comp.thisptr.getRealPointer())
 
     @property
     def dBA(self):
