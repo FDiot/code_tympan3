@@ -95,6 +95,7 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         vector[SmartPtr[TYElement]] getReceptors()
         bool setSpectre(TYElement* pRecepteur, TYElement* pSource, tycommon.OSpectre& Spectre)
         void buildMatrix()
+        void setHideLW(bool isHidden)
 
 cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h" namespace "TYComputedDirectivity":
     cdef enum DirectivityType:
