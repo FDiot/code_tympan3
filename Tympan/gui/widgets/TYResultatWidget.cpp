@@ -275,6 +275,8 @@ void TYResultatWidget::updateContent()
 
     // On trie par ordre decroissant des niveaux du premier point
     sortCol(1) ;
+
+    _pTable->setColumnHidden( 1, getElement()->isLWHidden() );
 }
 
 void TYResultatWidget::updateHeaderLabel()

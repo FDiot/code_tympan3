@@ -35,7 +35,7 @@ TY_EXTENSION_INST(TYResultat);
 TY_EXT_GRAPHIC_INST(TYResultat);
 
 
-TYResultat::TYResultat() : _bPartial(false)
+TYResultat::TYResultat() : _bPartial(false), _hideLW(false)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -58,6 +58,7 @@ TYResultat& TYResultat::operator=(const TYResultat& other)
     {
         TYElement::operator =(other);
         _matrix = other._matrix;
+        _hideLW = other._hideLW;
     }
     return *this;
 }
@@ -67,6 +68,7 @@ bool TYResultat::operator==(const TYResultat& other) const
     if (this != &other)
     {
         if (TYElement::operator !=(other)) { return false; }
+        if (_hideLW != other._hideLW) { return false; }
         // if (!(_matrix == other._matrix)) { return false; } // XXX
     }
     return true;
@@ -86,11 +88,12 @@ DOM_Element TYResultat::toXML(DOM_Element& domElement)
 {
     DOM_Element domNewElem = TYElement::toXML(domElement);
     DOM_Document domDoc = domElement.ownerDocument();
-    TYMapElementIndex ::iterator iteSrc;
+    TYXMLTools::addElementBoolValue(domNewElem, "hide_lw", _hideLW);
+
     DOM_Element listSrc = domDoc.createElement("ListSources");
     domNewElem.appendChild(listSrc);
 
-
+    TYMapElementIndex ::iterator iteSrc;
     for (iteSrc = _sources.begin(); iteSrc != _sources.end(); iteSrc++)
     {
         DOM_Element resultEntry = domDoc.createElement("Source");
@@ -101,10 +104,10 @@ DOM_Element TYResultat::toXML(DOM_Element& domElement)
         resultEntry.setAttribute("index", QString(intToStr((*iteSrc).second).c_str()));
     }
 
-    TYMapElementIndex::iterator iteRec;
     DOM_Element listRec = domDoc.createElement("ListRecepteurs");
     domNewElem.appendChild(listRec);
 
+    TYMapElementIndex::iterator iteRec;
     for (iteRec = _recepteurs.begin(); iteRec != _recepteurs.end(); iteRec++)
     {
         DOM_Element resultEntry = domDoc.createElement("Recepteur");
@@ -117,8 +120,6 @@ DOM_Element TYResultat::toXML(DOM_Element& domElement)
 
     DOM_Element listSp = domDoc.createElement("ListSpectres");
     domNewElem.appendChild(listSp);
-
-
 
     size_t nbMatrixRcpts = _matrix.nb_receptors();
     size_t nbMatrixSrcs = _matrix.nb_sources();
@@ -167,12 +168,14 @@ int TYResultat::fromXML(DOM_Element domElement)
     _bPartial = false; // Les donnees partielles n'ont pas ete enregistrees
 
     unsigned int i;
+    bool bHideLwOk(false);
 
     DOM_Element elemCur;
     QDomNodeList childs = domElement.childNodes();
     for (i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
+        _hideLW = TYXMLTools::getElementBoolValue(elemCur, "hide_lw", bHideLwOk);
         if (elemCur.nodeName() == "ListSources")
         {
             // Source
@@ -183,8 +186,6 @@ int TYResultat::fromXML(DOM_Element domElement)
                 elemCur2 = childs2.item(j).toElement();
                 if (elemCur2.nodeName() == "Source")
                 {
-
-
                     QString srcId = TYXMLTools::getElementAttributeToString(elemCur2, "srcId");
                     int index = TYXMLTools::getElementAttributeToInt(elemCur2, "index");
 
@@ -388,6 +389,9 @@ bool TYResultat::addRecepteur(TYElement* pRecepteur)
         _recepteurs[pRecepteur] = idx;
         need_to_rebuild = true;
     }
+
+    // set the receptor ready for the TYCalcul (if needed)
+    dynamic_cast<TYPointCalcul*>(pRecepteur)->setEtat( true, dynamic_cast<TYCalcul*>(_pParent) );
 
     return need_to_rebuild;
 }
