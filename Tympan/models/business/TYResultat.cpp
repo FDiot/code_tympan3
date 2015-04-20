@@ -166,6 +166,7 @@ int TYResultat::fromXML(DOM_Element domElement)
 
     purge();
     _bPartial = false; // Les donnees partielles n'ont pas ete enregistrees
+	_hideLW = false;
 
     unsigned int i;
     bool bHideLwOk(false);
@@ -175,7 +176,7 @@ int TYResultat::fromXML(DOM_Element domElement)
     for (i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
-        _hideLW = TYXMLTools::getElementBoolValue(elemCur, "hide_lw", bHideLwOk);
+        bHideLwOk = TYXMLTools::getElementBoolValue(elemCur, "hide_lw", _hideLW);
         if (elemCur.nodeName() == "ListSources")
         {
             // Source
