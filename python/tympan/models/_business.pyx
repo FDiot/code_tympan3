@@ -8,6 +8,15 @@ from tympan.models cimport _common as tycommon
 from tympan._business2solver cimport business2microsource
 
 
+@cy.locals(elm=Element)
+def elemen2receptor(elm):
+    """ Convert an Element to a Receptor if possible """
+    ptcalc = cy.declare(cy.pointer(TYPointCalcul))
+    ptcalc = downcast_point_calcul(elm.thisptr.getRealPointer())
+    assert ptcalc != NULL
+    rec = Receptor()
+    rec.thisptr = SmartPtr[TYPointCalcul](ptcalc)
+    return rec
 
 cdef pointcalcul2receptor(SmartPtr[TYPointCalcul] ptcalc):
     """Receptor cython object wrapping a SmartPtr[TYPointCalcul] (c++)"""
