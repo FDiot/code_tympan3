@@ -13,6 +13,24 @@ _TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'computed-projects-panel')
 assert osp.isdir(_TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % _TEST_PROBLEM_DIR
 
 
+class SolverSourceTC(TympanTC):
+
+    def test_directivity_vector(self):
+        proj = self.load_project(osp.join('projects-panel', 'site_with_single_machine.xml'))
+        model = Model.from_project(proj)
+        vectors = {'{cfdf78a8-bc89-4583-afff-f238b6752f18}': [(-1, 0, 0), None],
+                   '{70420c97-5b97-4c5b-b429-ec2aaf801f0d}': [(1, 0, 0), None]}
+        for source in model.sources:
+            if source.face_id in vectors:
+                vectors[source.face_id][1] = (source.directivity_vector.vx,
+                                              source.directivity_vector.vy,
+                                              source.directivity_vector.vz)
+        for key, value in vectors.iteritems():
+            if value[1] is None:
+                self.fail('No directivity vector found for face %s' % key)
+            self.assertEqual(value[0], value[1])
+
+
 class SourceAdditionTC(TympanTC):
 
     def test_add_sources_to_model(self):

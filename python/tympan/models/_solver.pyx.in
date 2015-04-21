@@ -186,6 +186,18 @@ cdef class SolverSource:
         assert self.thisptr != NULL
         return tycommon.ospectre2spectrum(self.thisptr.spectrum)
 
+    @property
+    def directivity_vector(self):
+        """Source directivity vector in the global frame"""
+        assert self.thisptr != NULL
+        # Check the directivity of the source is a CommonFaceDirectivity directivity
+        cf_dir = cy.declare(cy.pointer(CommonFaceDirectivity))
+        cf_dir = dynamic_cast_commonface_dir(self.thisptr.directivity)
+        if cf_dir == NULL:
+            raise ValueError("The directivity of this source has no support normal vector")
+        # return its support normal vector
+        return tycommon.ovector3d2vector3d(cf_dir.get_normal())
+
     def value(self, freq):
         """The spectrum value corresponding to the 'freq' frequency (linear, power)"""
         return self.thisptr.spectrum.getValueReal(freq)

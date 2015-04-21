@@ -279,15 +279,19 @@ cdef class Business2SolverConverter:
                     else: #  it is a computed acoustic source
                         pcompdirectivity = cy.declare(cy.pointer(tybusiness.TYComputedDirectivity))
                         pcompdirectivity = tybusiness.downcast_computed_directivity(pbus_directivity)
+                        # compute global directivity
+                        glob_directivity = cy.declare(tycommon.OVector3D)
+                        glob_directivity = tycommon.OVector3D(pcompdirectivity.DirectivityVector)
+                        glob_directivity = tycommon.dot(globalmatrix, glob_directivity)
                         if pcompdirectivity.Type == tybusiness.Surface:
                             pdirectivity = new tysolver.VolumeFaceDirectivity(
-                                pcompdirectivity.DirectivityVector, pcompdirectivity.SpecificSize)
+                                glob_directivity, pcompdirectivity.SpecificSize)
                         elif pcompdirectivity.Type == tybusiness.Baffled:
                             pdirectivity = new tysolver.BaffledFaceDirectivity(
-                                pcompdirectivity.DirectivityVector, pcompdirectivity.SpecificSize)
+                                glob_directivity, pcompdirectivity.SpecificSize)
                         else: # Chimney
                             pdirectivity = new tysolver.ChimneyFaceDirectivity(
-                                pcompdirectivity.DirectivityVector, pcompdirectivity.SpecificSize)
+                                glob_directivity, pcompdirectivity.SpecificSize)
                     # Add it to the solver model
                     source_idx = model.thisptr.get().make_source(ppoint[0], subsource.getSpectre()[0],
                                                                  pdirectivity)
