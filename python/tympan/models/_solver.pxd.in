@@ -93,6 +93,7 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
     cdef cppclass CommonFaceDirectivity(BaseEntity, SourceDirectivityInterface):
         CommonFaceDirectivity() # XXX
         CommonFaceDirectivity(const OVector3D& support_normal_, double support_size_)
+        OVector3D get_normal()
 
     cdef cppclass VolumeFaceDirectivity(CommonFaceDirectivity):
         VolumeFaceDirectivity(const OVector3D& support_normal_, double support_size_)
@@ -102,6 +103,8 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
 
     cdef cppclass BaffledFaceDirectivity(CommonFaceDirectivity):
         BaffledFaceDirectivity(const OVector3D& support_normal_, double support_size_)
+
+    CommonFaceDirectivity* dynamic_cast_commonface_dir "dynamic_cast<tympan::CommonFaceDirectivity*>"(SourceDirectivityInterface *)
 
 cdef extern from "Tympan/models/solver/config.h" namespace "tympan::SolverConfiguration":
     SmartPtr[SolverConfiguration] get()

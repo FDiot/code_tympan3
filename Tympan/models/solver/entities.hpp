@@ -163,7 +163,9 @@ public:
                       support_size(support_size_) {}
 
     ~CommonFaceDirectivity() {}
-    
+
+    Vector get_normal(){ return support_normal; }
+
     static void set_atmosphere( AtmosphericConditions *atmosphere_ ) { atmosphere = atmosphere_; }
 
 protected :
