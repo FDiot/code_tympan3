@@ -74,6 +74,23 @@ class SourceAdditionTC(TympanTC):
         self.assertEqual(source.value(160.0), 1e-7)
 
 
+class SourceContainerTC(TympanTC):
+
+     def test_source_container(self):
+        """Check the id of the surface and volume containing the source"""
+        proj = self.load_project(osp.join('projects-panel', 'site_with_single_machine.xml'))
+        model = Model.from_project(proj)
+        for source in model.sources:
+            self.assertEqual(source.volume_id, "{91ed858c-8434-467a-bf14-bac2447a0ee7}")
+            # Face must be one of the 6 of the volume
+            self.assertIn(source.face_id, ["{70420c97-5b97-4c5b-b429-ec2aaf801f0d}",
+                                           "{14ce2c62-75d2-4173-b99d-b8a2d1a13da0}",
+                                           "{cfdf78a8-bc89-4583-afff-f238b6752f18}",
+                                           "{805043e8-7698-4c71-9516-f4ae9447c441}",
+                                           "{0c4a96f8-3b43-4313-9eae-af2a2237a2f4}",
+                                           "{e6f1e3a1-f45a-4d2c-bea0-1b3618343738}"])
+
+
 class TestTympan(TympanTC):
     """Place holder class to be filled with methods below"""
 

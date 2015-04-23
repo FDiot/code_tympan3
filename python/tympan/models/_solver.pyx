@@ -180,6 +180,24 @@ cdef class SolverSource:
         """The spectrum value corresponding to the 'freq' frequency (linear, power)"""
         return self.thisptr.spectrum.getValueReal(freq)
 
+    property volume_id:
+        """identifier of the volume containing the source"""
+        def __get__(self):
+            assert self.thisptr != NULL
+            return self.thisptr.volume_id
+        def __set__(self, volume_id):
+            assert self.thisptr != NULL
+            self.thisptr.volume_id = volume_id
+
+    property face_id:
+        """identifier of the face of the volume containing the source"""
+        def __get__(self):
+            assert self.thisptr != NULL
+            return self.thisptr.face_id
+        def __set__(self, face_id):
+            assert self.thisptr != NULL
+            self.thisptr.face_id = face_id
+
 
 cdef class SolverReceptor:
     thisptr = cy.declare(cy.pointer(AcousticReceptor))
