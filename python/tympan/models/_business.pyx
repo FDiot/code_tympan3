@@ -51,6 +51,49 @@ cdef cpp2cypoints(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
         points.append(cy_point)
     return points
 
+ctypedef TYElement* (*downcast_func_type)(TYElement *)
+
+cdef TYElement* get_volume(TYElement * elem):
+    """Try and downcast `elem` into a TYAcousticVolume. Return an TYAcousticVolume if it succeeds,
+    else NULL.
+    """
+    volume = cy.declare(cy.pointer(TYAcousticVolume))
+    volume = downcast_acoustic_volume(elem)
+    return volume
+
+cdef TYElement* get_surface_node(TYElement * elem):
+    """Try and downcast `elem` into a TYAcousticSurfaceNode. Return an TYAcousticSurfaceNode if it
+    succeeds, else NULL.
+    """
+    surface_node = cy.declare(cy.pointer(TYAcousticSurfaceNode))
+    surface_node = downcast_acoustic_surface_node(elem)
+    return surface_node
+
+cdef find_parent_id(TYElement * elem, downcast_func_type func):
+    """Find the identifier of the parent of the element `elem` corresponding to the downcast function
+    `func`
+    """
+    dest = cy.declare(cy.pointer(TYElement))
+    dest = NULL
+    while dest == NULL:
+        elem = elem.getParent()
+        if elem == NULL:
+            return
+        dest = func(elem)
+    return tyelement_id(dest)
+
+cdef find_volume_id(TYElement * elem):
+    """Find the identifier of the volume containing the element
+    """
+    acoustic_volume_id = find_parent_id(elem, get_volume)
+    return acoustic_volume_id
+
+cdef find_surface_node_id(TYElement * elem):
+    """Find the identifier of the surface node containing the element
+    """
+    acoustic_surface_node_id = find_parent_id(elem, get_surface_node)
+    return acoustic_surface_node_id
+
 def init_tympan_registry():
     """Trigger the registration of Tympan business classes (TY* classes).
 

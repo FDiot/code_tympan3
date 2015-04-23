@@ -64,6 +64,8 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
         OPoint3D position
         OSpectre spectrum
         SourceDirectivityInterface* directivity
+        string volume_id
+        string face_id
 
     cdef cppclass AcousticReceptor(BaseEntity):
         OPoint3D position

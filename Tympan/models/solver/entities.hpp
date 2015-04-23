@@ -274,6 +274,8 @@ public:
     Point position;
     Spectrum spectrum;
     SourceDirectivityInterface* directivity;
+    string volume_id;
+    string face_id;
 };
 
 typedef std::deque<AcousticSource> source_pool_t;

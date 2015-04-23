@@ -289,7 +289,19 @@ cdef class Business2SolverConverter:
                             pdirectivity = new tysolver.ChimneyFaceDirectivity(
                                 pcompdirectivity.DirectivityVector, pcompdirectivity.SpecificSize)
                     # Add it to the solver model
-                    source_idx = model.thisptr.get().make_source(ppoint[0], subsource.getSpectre()[0], pdirectivity)
+                    source_idx = model.thisptr.get().make_source(ppoint[0], subsource.getSpectre()[0],
+                                                                 pdirectivity)
+                    # if the source comes from an infrastructure element, add it
+                    # information about the face and volume that contain it
+                    if pusersource == NULL:
+                        source = model.source(source_idx)
+                        # Find face and volume of the source
+                        face_id = tybusiness.find_surface_node_id(subsource)
+                        if face_id is not None:
+                            source.face_id = face_id
+                        volume_id = tybusiness.find_volume_id(subsource)
+                        assert volume_id != None, 'no acoustic volume linked to the source'
+                        source.volume_id = volume_id
                     # Record where it has been stored
                     self.bus2solv_sources[id_str(subsource_elt)] = source_idx
                     # Copy source mapping to macro2micro_sources
