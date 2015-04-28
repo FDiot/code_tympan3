@@ -81,6 +81,8 @@ public slots:
 
     void calculDistribution();
 
+	virtual void closeEvent(QCloseEvent* pEvent);//closeEvent is overriden
+
 protected:
     ///Un pointeur sur le bâtiment a editer.
     LPTYBatiment _pBatiment;

@@ -77,6 +77,7 @@ public slots:
     virtual bool close();
 
     void calculDistribution();
+	virtual void closeEvent(QCloseEvent* pEvent); //CloseEvent is overriden
 
 
 protected:
