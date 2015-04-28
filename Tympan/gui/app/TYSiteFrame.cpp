@@ -648,19 +648,63 @@ void TYSiteFrame::contextMenuEvent(QContextMenuEvent* e)
 
                 pElement->updateGraphicTree();
             }
+			// Opening the modeler of an element from the siteframe
             else if (pElement && ret == showModeler)
             {
+				// If the element is a site
                 if (dynamic_cast<TYSiteNode*>(pElement) != nullptr)
                 {
                     getTYMainWnd()->makeSiteModeler((TYSiteNode*) pElement);
                 }
+				// If the element is a "Batiment"
                 else if (dynamic_cast<TYBatiment*>(eltItem->getElement()._pObj) != nullptr)
                 {
-                    getTYMainWnd()->makeBatimentModeler((TYBatiment*) pElement);
+					// eltItem is saved before it gets deleted automatically 
+					TYElementListItem newItem = *eltItem; 
+					// We test if the modeler is empty or not after the user updates the element
+					if(!getTYMainWnd()->makeBatimentModeler((TYBatiment*) pElement))
+					{
+						// If it's empty, we delete the element
+						LPTYElement pElt = pElement->getParent();
+						if (remFromList(&newItem))
+						{
+							// Mise a jour graphique du parent
+							pElt->updateGraphicTree();
+							TYElement::setIsSavedOk(true);
+							// Suppression de l'entree dans l'arborescence
+							newItem.remove();
+							// Mise a jour de l'arborescence
+							updateList();
+						}
+						else
+						{
+							QMessageBox::warning(this, "Tympan", TR("id_warning_notsuppr"));
+						}
+					}
                 }
+				// If the element is a "machine"
                 else if (dynamic_cast<TYMachine*>(eltItem->getElement()._pObj) != nullptr)
                 {
-                    getTYMainWnd()->makeMachineModeler((TYMachine*) pElement);
+					// Same as with the "Batiment"
+                    TYElementListItem newItem = *eltItem; 
+					if(!getTYMainWnd()->makeMachineModeler((TYMachine*) pElement))
+					{
+						LPTYElement pElt = pElement->getParent();
+						if (remFromList(&newItem))
+						{
+							// Mise a jour graphique du parent
+							pElt->updateGraphicTree();
+							TYElement::setIsSavedOk(true);
+							// Suppression de l'entree dans l'arborescence
+							newItem.remove();
+							// Mise a jour de l'arborescence
+							updateList();
+						}
+						else
+						{
+							QMessageBox::warning(this, "Tympan", TR("id_warning_notsuppr"));
+						}
+					}
                 }
             }
             else if (ret == highlight)
@@ -1367,10 +1411,10 @@ void TYSiteFrame::addElt(TYElement* pElement, TYElement* pElt)
     TYInfrastructure* pInfra = NULL;
     bool reallyAdd = true;  // Eviter qu'une machine dans un batiment soit connue du calcul (fenetre "etats")
 
-    TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pElt);
-    if (pSite != nullptr)
+    if (dynamic_cast<TYSiteNode*>(pElt) != nullptr)
     {
-        pSiteNode = TYSiteNode::safeDownCast(pElement);
+        TYSiteNode* pSite = dynamic_cast<TYSiteNode*>(pElt);
+		pSiteNode = TYSiteNode::safeDownCast(pElement);
 
         pSite->setRoot(false); // Le site ajoute n'est pas racine
 
@@ -1481,26 +1525,43 @@ void TYSiteFrame::newElt(const char* className, TYElement* pElement)
     catch(tympan::invalid_data& exc) {}
 
     assert (pElt);
-    if (pElement) { addElt(pElement, pElt); }
-
-    if ((dynamic_cast<TYSiteNode*>(pElt) != nullptr) ||
-        (dynamic_cast<TYAcousticVolumeNode*>(pElt) != nullptr))
+	
+	// If the new element is a site
+	if ((dynamic_cast<TYSiteNode*>(pElt) != nullptr))
     {
-        getTYMainWnd()->makeModeler(pElt);
+		// We add a site even if it's empty
+		if (pElement) {addElt(pElement, pElt);}
+		getTYMainWnd()->makeModeler(pElt);
+		if(_pCurrentCalcul)
+		{
+			_pCurrentCalcul->addToSelection(pElt);
+			_pSiteNodeRoot->updateAcoustique();
+			_pSiteNodeRoot->getGraphicObject()->update(true);
+			updateList();
+			TYElement::setIsSavedOk(true);
+		}
     }
+    
+	// If the new element is an Acoustic Volume
+	else if (dynamic_cast<TYAcousticVolumeNode*>(pElt) != nullptr)
+    {
+		// We add the element to the frame only if a volume was created in the modeler
+        if(getTYMainWnd()->makeModeler(pElt))
+		{
+			if (pElement) {addElt(pElement, pElt);}
+		}
+    }
+
+	//  If the new element is a punctual source
     else
-    {
-        pElt->edit(this);
+    {   //We add the element to the frame only if its parameters are accepted by the user
+		if(pElt->edit(this) == QDialog::Accepted)
+		{
+			if (pElement) { addElt(pElement, pElt);}
+		}
     }
 
-    if ((dynamic_cast<TYSiteNode*>(pElt) != nullptr) && _pCurrentCalcul)
-    {
-        _pCurrentCalcul->addToSelection(pElt);
-        _pSiteNodeRoot->updateAcoustique();
-        _pSiteNodeRoot->getGraphicObject()->update(true);
-        updateList();
-        TYElement::setIsSavedOk(true);
-    }
+
 }
 
 void TYSiteFrame::selectOrUnselectAll(TYElementListItem* item, const bool& bSelect)
