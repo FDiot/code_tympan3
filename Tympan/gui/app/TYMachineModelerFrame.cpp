@@ -174,6 +174,39 @@ void TYMachineModelerFrame::calculDistribution()
     }
 }
 
+void TYMachineModelerFrame::closeEvent(QCloseEvent* pEvent)
+{
+	TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
+	// If there is no volume in the modeler
+	if(_pMachine->getNbChild()==0)
+	{
+		// Displaying a warning message
+		QMessageBox::StandardButton msgBox = QMessageBox::warning(this,"","Le modeleur est vide. Etes-vous sûr de vouloir le fermer ?", QMessageBox::Yes|QMessageBox::No);
+		switch(msgBox)
+		{
+			// The user aborts the closing event
+			case QMessageBox::No:
+				pEvent->ignore();
+				break;
+			// The user ignores the warning
+			case QMessageBox::Yes:
+				emit frameResized();
+				emit aboutToClose();
+				break;
+			default:
+				pEvent->ignore();
+				return;
+		}
+	}
+	// If there are volumes, the signal is emited and the event accepted
+	else
+	{
+		pEvent->accept();
+		emit frameResized();
+		emit aboutToClose();
+	}
+}
+
 void TYMachineModelerFrame::updatePreferences()
 {
     // Grille
