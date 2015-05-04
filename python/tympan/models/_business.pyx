@@ -164,6 +164,11 @@ cdef class AcousticSurface:
         """
         return tymateriauconstruction2material(self.thisptr.getMateriau())
 
+    def volume_id(self):
+        """Find the identifier of the volume containing the acoustic surface
+        """
+        return find_volume_id(self.thisptr)
+
 
 cdef class Material:
 

@@ -429,11 +429,13 @@ cdef class Business2SolverConverter:
             mat_name = cy.declare(string)
             mat_name = buildmat.name
             actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
+            volume_id = surface.volume_id()
             # Set the material of the surface
             for i in xrange(tgles_idx.size):
                 pmat = model.thisptr.get().make_material(mat_name, mat_cspec)
                 actri = cy.address(model.thisptr.get().triangle(tgles_idx[i]))
                 actri.made_of = pmat
+                actri.volume_id = volume_id
         # Recurse on subsites
         for subsite in site.subsites:
             self.process_infrastructure(model, subsite)

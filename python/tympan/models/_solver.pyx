@@ -229,6 +229,13 @@ cdef class MeshTriangle:
     def __cinit__(self):
         self.thisptr = NULL
 
+    @property
+    def volume_id(self):
+        """Identifier of the volume containing the triangle"""
+        assert self.thisptr != NULL
+        if not self.thisptr.volume_id.empty():
+            return self.thisptr.volume_id
+        return None
 
 
 cdef class Configuration:

@@ -73,6 +73,7 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
     cdef cppclass AcousticTriangle:
         shared_ptr[AcousticMaterialBase] made_of
         size_t n[3]
+        string volume_id
 
     cdef cppclass AcousticMaterialBase:
         pass

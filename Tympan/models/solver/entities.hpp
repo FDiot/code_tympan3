@@ -123,7 +123,7 @@ public:
     AcousticTriangle(node_idx n1, node_idx n2, node_idx n3);
 
     node_idx n[3];
-
+    string volume_id;
     shared_ptr<AcousticMaterialBase> made_of;
 };
 
