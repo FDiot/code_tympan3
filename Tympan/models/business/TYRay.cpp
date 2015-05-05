@@ -110,7 +110,7 @@ int TYRay::fromXML(DOM_Element domElement)
     bool nbEventsOk = false;
     std::deque<int> event_kind_tab;
     std::deque<TYPoint> _listPoints;
-    size_t nb_events = 0;
+    unsigned int nb_events = 0;
     int retVal = 0;
     _events.clear();
 
