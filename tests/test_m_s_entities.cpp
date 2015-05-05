@@ -24,7 +24,9 @@
 #include "TympanTestsConfig.h"
 #include "Tympan/models/solver/entities.hpp"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
+#include "Tympan/models/solver/data_model_common.hpp"
 #include "Tympan/models/common/atmospheric_conditions.h"
+#include "Tympan/models/common/spectre.h"
 
 using namespace std;
 AtmosphericConditions functionnalResults_initAtmosphereFromRow(const deque<double>& row)
@@ -78,4 +80,41 @@ TEST(AcousticEntities, SoundSpeed)
     double computed_sound_speed = atm.compute_c();
 
     EXPECT_NEAR( estimated_sound_speed, computed_sound_speed, 1.0);
+}
+
+TEST(AcousticCentroid, Centroid)
+{
+    tympan::source_pool_t tabSources;
+    tympan::Point ref(0., 0., 0.);
+    tympan::Spectrum sp(100.);
+    tympan::SphericalSourceDirectivity *sd = new tympan::SphericalSourceDirectivity();
+
+    tympan::AcousticSource  s1(ref, sp, sd),
+                            s2(ref, sp, sd), 
+                            s3(ref, sp, sd), 
+                            s4(ref, sp, sd), 
+                            s5(ref, sp, sd), 
+                            s6(ref, sp, sd), 
+                            s7(ref, sp, sd), 
+                            s8(ref, sp, sd);
+
+    s1.position._x =  1., s1.position._y =  1., s1.position._z =  1.; tabSources.push_back(s1);
+    s2.position._x =  1., s2.position._y = -1., s2.position._z =  1.; tabSources.push_back(s2);
+    s3.position._x = -1., s3.position._y = -1., s3.position._z =  1.; tabSources.push_back(s3);
+    s4.position._x = -1., s4.position._y =  1., s4.position._z =  1.; tabSources.push_back(s4);
+    s5.position._x =  1., s5.position._y =  1., s5.position._z = -1.; tabSources.push_back(s5);
+    s6.position._x =  1., s6.position._y = -1., s6.position._z = -1.; tabSources.push_back(s6);
+    s7.position._x = -1., s7.position._y = -1., s7.position._z = -1.; tabSources.push_back(s7);
+    s8.position._x = -1., s8.position._y =  1., s8.position._z = -1.; tabSources.push_back(s8);
+
+    for (unsigned int i=0; i<tabSources.size(); i++)
+    {
+        tabSources[i].spectrum = sp;
+    }
+
+    tympan::Point centroid = tympan::ComputeAcousticCentroid(tabSources);
+
+    EXPECT_EQ(0., centroid._x);
+    EXPECT_EQ(0., centroid._y);
+    EXPECT_EQ(0., centroid._z);
 }
