@@ -18,6 +18,12 @@ cdef opoint3d2point3d(OPoint3D pt):
     point.thisobj = pt
     return point
 
+cdef ovector3d2vector3d(OVector3D vect):
+    """Vector3D (cython object) wrapping a OVector3D (c++)"""
+    vector = Vector3D()
+    vector.thisobj = vect
+    return vector
+
 cdef otriangle2triangle(OTriangle* tri):
     """Triangle (cython object) wrapping an OTriangle(c++)"""
     assert tri != NULL
@@ -82,4 +88,19 @@ cdef class Point3D:
 
     @property
     def z(self):
+        return self.thisobj._z
+
+
+cdef class Vector3D:
+
+    @property
+    def vx(self):
+        return self.thisobj._x
+
+    @property
+    def vy(self):
+        return self.thisobj._y
+
+    @property
+    def vz(self):
         return self.thisobj._z
