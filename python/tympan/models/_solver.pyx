@@ -102,6 +102,17 @@ cdef class ProblemModel:
             receptors.append(receptor)
         return receptors
 
+    @property
+    def triangles(self):
+        """All the acoustic triangles of the model"""
+        assert self.thisptr.get() != NULL
+        triangles = []
+        for i in xrange(self.ntriangles):
+            triangle = MeshTriangle()
+            triangle.thisptr = cy.address(self.thisptr.get().triangle(i))
+            triangles.append(triangle)
+        return triangles
+
     def _export_triangular_mesh(self):
         """Build a triangular mesh from the acoustic problem model"""
         assert self.thisptr.get() != NULL
@@ -210,6 +221,14 @@ cdef class SolverReceptor:
         """Return the acoustic source position (as a 'Point3D' object)"""
         assert self.thisptr != NULL
         return tycommon.opoint3d2point3d(self.thisptr.position)
+
+
+cdef class MeshTriangle:
+    thisptr = cy.declare(cy.pointer(AcousticTriangle))
+
+    def __cinit__(self):
+        self.thisptr = NULL
+
 
 
 cdef class Configuration:
