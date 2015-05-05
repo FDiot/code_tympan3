@@ -30,6 +30,7 @@ cdef extern from "Tympan/models/common/3d.h":
     cdef cppclass OMatrix:
         OMatrix dot "operator*"(const OMatrix& mat)
     OPoint3D dot "operator*"(const OMatrix& mat, const OPoint3D& point)
+    OVector3D dot "operator*"(const OMatrix& mat, const OVector3D& point)
     # because "import operator*" triggers a syntax error
 
     cdef cppclass OCoord3D:
@@ -47,6 +48,8 @@ cdef extern from "Tympan/models/common/3d.h":
 
     cdef cppclass OVector3D (OCoord3D):
         OVector3D(double x, double y, double z)
+        OVector3D()
+        OVector3D(const OVector3D &)
 
 
 cdef extern from "Tympan/models/common/triangle.h":
@@ -109,6 +112,9 @@ cdef class Spectrum:
 cdef class Point3D:
     cdef OPoint3D thisobj
 
+cdef class Vector3D:
+    cdef OVector3D thisobj
+
 cdef class Triangle:
     # because OTriangle has no default constructor so we can't have an OTriangle
     # allocated object as data member
@@ -117,6 +123,7 @@ cdef class Triangle:
 
 cdef ospectre2spectrum(OSpectre os)
 cdef opoint3d2point3d(OPoint3D pt)
+cdef ovector3d2vector3d(OVector3D pt)
 cdef otriangle2triangle(OTriangle* tri)
 
 cdef class SolverInterface:
