@@ -4,7 +4,8 @@ from __future__ import print_function
 #
 import argparse
 import os
-from project import Project
+import sys
+from tympan.models.project import Project
 from tympan.models.solver import Model, Solver
 from tympan.altimetry import AltimetryMesh
 
@@ -30,7 +31,7 @@ def run_calculations(project):
             'Please set the TYMPAN_SOLVERDIR environment variable')
 
     for calc in project.computations:
-        print('Select calculation')
+        print('Select calculation:', calc.name)
         project.set_current_computation(calc)
 
         print('Update altimetry')
@@ -46,7 +47,7 @@ def run_calculations(project):
         print('Launch solver')
         result = solver.solve(model)
 
-        print('Save results')
+        # print('Save results')
         # Import results to project
         project.import_result(model, result)
 
@@ -75,19 +76,19 @@ def main(tympan_xml, debug=0):
     run_calculations(project)
 
     # Save project to a temp xml file
+    print('Save project to new project file named tempall.xml')
     project.to_xml('tempall.xml')
+    
+    #  To avoid console output due to the loading of the xml  file (verbose=False not functional)
+    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
+    sys.exit('End of calculation(s) ') 
 
 
 if __name__ == '__main__':
-    print ("Entre dans le script")
     parser = argparse.ArgumentParser(description='Load  Code_TYMPAN XML file ')
-    print ("parser cree")
     parser.add_argument(
         'tympan_xml_file',
         help='the Code_TYMPAN XML file')
-    print ("Argument 1 ajouté")
     parser.add_argument('--debug',metavar='D', default=0, type=int, help='is debugging on ? D=1 : Yes / D=0 otherwise (default)')
-    print ("Argument 2 ajouté")
     args = parser.parse_args()
-    print ("Arguments parses")
     main(args.tympan_xml_file, args.debug)
