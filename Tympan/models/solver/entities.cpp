@@ -916,7 +916,7 @@ Point ComputeAcousticCentroid(source_pool_t &tabSources_)
 
     for(unsigned int i=0; i<tabSources_.size(); i++)
     {
-        tabLevels[i] = 10 * ::log10(tabSources_[i].spectrum.valGlobDBA());
+        tabLevels.push_back( 10 * ::log10( tabSources_[i].spectrum.valGlobDBA() ) );
     }
 
     for(unsigned int i=0; i<tabSources_.size(); i++)
