@@ -1,0 +1,4 @@
+echo "Adding to PATH to run Tympan (Release)"
+set PATH=%PATH%;@TYMPAN_3RDPARTY_DLL_NATIVE_DIRS@
+
+"@TYMPAN_EXE_FULL_PATH@\Tympan.exe"
