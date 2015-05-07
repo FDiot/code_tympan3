@@ -83,27 +83,19 @@ cdef class Business2SolverConverter:
         self.comp.thisptr.getRealPointer().goPostprocessing()
         # Clear intermediate data
         del self.transitional_result_matrix
-        #Try to catch rays from solver and to push them in business datas
+        # Try to catch rays from solver and to push them in business data
         self.update_business_rays_tab(result)
 
     @cy.locals(result=tysolver.ResultModel)
     def update_business_rays_tab(self, result):
+        """Recover acoustic paths from solver
         """
-        Recover acoustic pathes from solver
-        """
-        solver_rays_tab = cy.declare(vector[cy.pointer(tycommon.acoustic_path)])
-        solver_rays_tab = result.thisptr.get().get_path_data()
-        business_rays_tab = cy.declare(cy.pointer(vector[SmartPtr[tybusiness.TYRay]]))
-        business_rays_tab = cy.address(self.comp.thisptr.getRealPointer().getTabRays())
-        its = cy.declare(vector[cy.pointer(tycommon.acoustic_path)].iterator)
-        its = solver_rays_tab.begin()
-        while its != solver_rays_tab.end():
-            current_solv_ray = cy.declare(cy.pointer(tycommon.acoustic_path))
-            current_solv_ray = deref(its)
-            current_bus_ray = cy.declare(SmartPtr[tybusiness.TYRay])
-            current_bus_ray = tybusiness.build_ray(deref(current_solv_ray))
-            business_rays_tab.push_back(current_bus_ray)
-            inc(its)
+        solver_rays_tab = cy.declare(vector[cy.pointer(tycommon.acoustic_path)],
+                                     result.thisptr.get().get_path_data())
+        business_rays_tab = cy.declare(cy.pointer(vector[SmartPtr[tybusiness.TYRay]]),
+                                       cy.address(self.comp.thisptr.getRealPointer().getTabRays()))
+        for solver_ray in solver_rays_tab:
+            business_rays_tab.push_back(tybusiness.build_ray(deref(solver_ray)))
 
     @cy.locals(model=tysolver.ProblemModel, result=tysolver.ResultModel)
     def update_business_receptors(self, model, result):
