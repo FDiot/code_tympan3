@@ -67,7 +67,6 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
     int idFace = 0, rayNbr = 0, reflIndice = 0, nbFacesFresnel = 0;
 
     acoustic_path* ray = NULL;
-//    TYSol* pSol = NULL;
 
     OPoint3D Prefl, Pprec, Psuiv;    //pt de reflexion, pt precedent et suivant
 
@@ -185,13 +184,6 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
                     assert(material);
 
                     spectreAbs = material->get_absorption(angle, rr);
-
-                    //pSol = _topo->terrainAt(Prefl)->getSol();
-                    //std::cout << "Impedance sol = " << pSol->getResistivite() << std::endl;
-                    //pSol->calculNombreDOnde(_atmos);
-                    //spectreAbs = pSol->abso(angle, rr, _atmos);
-                    //spectreAbs = spectreAbs * (rd / rr);
-                    //std::cout << "A 500 Hz, Q = " << spectreAbs.getModule().getValueReal(500) << std::endl;
                 }
                 else
                 {
