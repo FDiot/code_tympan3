@@ -126,14 +126,14 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
 
 #endif //__ONLY_RAYS__
 
-    //// Allow to watch curved rays (as in meteo field) instead of right rays
-	//if (config->UseMeteo && config->OverSampleD)
-    //{
-    //    for (unsigned int i = 0; i < tabRays.size(); i++)
-    //    {
-    //        tabRays[i]->tyRayCorrection( apf.get_geometry_modifier() );
-    //    }
-    //}
+    // Allow to watch curved rays (as in meteo field) instead of right rays
+	if (config->UseMeteo && config->OverSampleD)
+    {
+        for (unsigned int i = 0; i < tabRays.size(); i++)
+        {
+            tabRays[i]->tyRayCorrection( apf.get_geometry_modifier() );
+        }
+    }
 
     return true;
 }
