@@ -260,7 +260,7 @@ public:
     * \fn void overSampleTYRay(TYRay* tyRay);
     * \brief Rajoute des evenements aux rayons de type TYRay
     */
-    virtual void overSample(const double& dMin);
+    virtual void overSample(IGeometryModifier& transformer, const double& dMin);
 
     /*!
     * \fn void sampleAndCorrection()
