@@ -322,7 +322,7 @@ public:
     bool solid_angle;
 };
 
-Point ComputeAcousticCentroid(source_pool_t &tabSources_);
+Point ComputeAcousticCentroid(const source_pool_t &tabSources_);
 
 } /* namespace tympan */
 

@@ -387,7 +387,11 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
         CurveRayShot.initialAngleTheta = config->InitialAngleTheta;     // Angle de tir vertical (theta) des rayons
 
         // Choix de la source
-        CurveRayShot.addSource(sources[0]);   // At this time source is the firs one
+        vec3 p = OPoint3Dtovec3( tympan::ComputeAcousticCentroid( _aproblem.sources() ) );
+        CurveRayShot.addSource(p);   // source is the centroid of all sources taking account of acoustic power 
+
+        // Lancer des rayons
+        CurveRayShot.run();
 
         // Transformation de la geometrie
         transformer.clear();
