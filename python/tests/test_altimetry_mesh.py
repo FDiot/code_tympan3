@@ -419,30 +419,6 @@ class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
     def setUp(self):
         self.mesher = mesh.ElevationMesh()
 
-    def test_flood(self):
-
-        (border, hole, line) = self.build_simple_scene()
-
-        flooder = self.mesher.flood_polygon(mesh.MaterialFaceFlooder,
-                                            hole[0], close_it=True,
-                                            flood_right=True) # hole is CW
-
-        if runVisualTests:
-            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
-            plotter.plot_edges()
-            seeds = [self.mesher.point_for_face(f) for f in flooder.visited]
-            visu.plot_points_seq(plotter.ax, seeds, marker='*')
-            plotter.show()
-
-        face_in, expected_None = self.mesher.locate_point((3, 3))
-        self.assertIsNone(expected_None)
-        face_out, expected_None = self.mesher.locate_point((3, 4.5))
-        self.assertIsNone(expected_None)
-
-        self.assertEqual(len(flooder.visited), 4)
-        self.assertIn(face_in, flooder.visited)
-        self.assertNotIn(face_out, flooder.visited)
-
     def test_material_boundary_info(self):
         cdt = self.mesher.cdt
         (border, hole, line) = self.build_simple_scene()
@@ -479,30 +455,6 @@ class MaterialMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         face_out, expected_None = self.mesher.locate_point((1, 1.25))
         self.assertIsNone(expected_None)
         self.assertNotIn(face_out, flooder.visited)
-
-    def test_flood_two_materials(self):
-        (border, hole, line) = self.build_simple_scene()
-        pond = self.mesher.insert_polyline( #NB CCW
-            rect(0.5, 0.5, 1.5, 1.5), close_it=True,
-            material='water', altitude=0, id='pond')
-        self.mesher.update_info_for_edges()
-
-        flooder = self.mesher.flood_polygon(mesh.MaterialFaceFlooder,
-                                            border[0], close_it=True)
-
-        if runVisualTests:
-            plotter = visu.MeshedCDTPlotter(self.mesher, title=self._testMethodName)
-            plotter.plot_edges()
-            marks = [self.mesher.point_for_face(f) for f in flooder.visited]
-            visu.plot_points_seq(plotter.ax, marks, marker='*')
-            plotter.show()
-
-        face_in_pond, expected_None = self.mesher.locate_point((1, 1.25))
-        self.assertIsNone(expected_None)
-        self.assertNotIn(face_in_pond, flooder.visited)
-        face_in_hole, expected_None = self.mesher.locate_point((3.25, 3))
-        self.assertIsNone(expected_None)
-        self.assertNotIn(face_in_hole, flooder.visited)
 
 
 class ElevationProfileTC(unittest.TestCase):
