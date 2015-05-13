@@ -1043,16 +1043,6 @@ def left_and_right_faces(faces_it):
     return zip(*list(faces_it))
 
 
-class MaterialFaceFlooder(FaceFlooder):
-
-    def is_material_border(self, edge):
-        return any(info.material_boundary
-                   for info in self.mesher.iter_constraints_info_overlapping(edge))
-
-    def should_follow(self, from_face, edge, to_face):
-        return not self.is_material_border(edge)
-
-
 class LandtakeFaceFlooder(FaceFlooder):
 
     def is_landtake_border(self, edge):
