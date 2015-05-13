@@ -1053,7 +1053,7 @@ class MaterialFaceFlooder(FaceFlooder):
         return not self.is_material_border(edge)
 
 
-class LandtakeFaceFlooder(MaterialFaceFlooder):
+class LandtakeFaceFlooder(FaceFlooder):
 
     def is_landtake_border(self, edge):
         return any(info.landtake_boundary
