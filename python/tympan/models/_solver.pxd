@@ -4,10 +4,12 @@
 from libcpp cimport bool
 from libcpp.string cimport string
 from libcpp.vector cimport vector
+from libcpp.deque cimport deque
 
 from tympan._core cimport SolverInterface
 from tympan.models._common cimport (OPoint3D, OSpectre, OSpectreComplex,
-                                    OVector3D, SpectrumMatrix, acoustic_path)
+                                    OVector3D, SpectrumMatrix, acoustic_path,
+                                    OBox2, Box)
 
 # XXX importing SmartPtr and shared_ptr from tympan.core set a cyclical dependency
 # between tympan.core and tympan.models.solver, since tympan.core declares
@@ -35,12 +37,17 @@ cdef class Solver:
     cdef SolverInterface* thisptr
 
 cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "tympan":
+
+    deque[size_t] scene_volume_intersection(deque[AcousticTriangle]& triangles, deque[OPoint3D]& nodes, OBox2& volume)
+
     cdef cppclass AcousticProblemModel:
         size_t npoints()
         size_t ntriangles()
         size_t nmaterials()
         size_t nsources()
         size_t nreceptors()
+        const deque[AcousticTriangle]& triangles()
+        const deque[OPoint3D]& nodes()
         AcousticTriangle &triangle(size_t tri_idx)
         AcousticSource& source(size_t idx)
         AcousticReceptor& receptor(size_t idx)

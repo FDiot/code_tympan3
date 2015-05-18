@@ -104,3 +104,13 @@ cdef class Vector3D:
     @property
     def vz(self):
         return self.thisobj._z
+
+
+cdef class Box:
+
+    def __init__(self, length, width, height):
+        """Build a 3D non iso-oriented box of dimensions (length, width, height)
+        expressed in meters. The box will be centered in (0, 0, 0)
+        """
+        self.thisobj = OBox2(length, width, height)
+
