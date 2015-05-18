@@ -2,6 +2,7 @@ import unittest
 import os.path as osp
 
 from tympan.models.solver import Model
+from tympan.models._common import Box
 from utils import TympanTC
 
 class TriangleContainerTC(TympanTC):
@@ -20,6 +21,39 @@ class TriangleContainerTC(TympanTC):
         # make sure we checked at least one topography triangle volume id, otherwise the test
         # doesn't stand for anything.
         self.assertTrue(found_a_topography_triangle)
+
+
+class FresnelZoneIntersectionTC(TympanTC):
+
+    def test_volume_inside_scene(self):
+        """Simple test with a planar scene and a cube on top of it"""
+        # build a model with two triangles (z=0)
+        model = Model()
+        model.add_node(0, 0, 0)
+        model.add_node(0, 1, 0)
+        model.add_node(1, 1, 0)
+        model.add_node(1, 0, 0)
+        model.add_triangle(0, 1, 2)
+        model.add_triangle(1, 2, 3)
+        # length, width, height centered in (0,0,0)
+        box = Box(1, 1, 1)
+        intersected_triangles = model.fresnel_zone_intersection(box)
+        self.assertEqual(intersected_triangles, [0, 1])
+
+    def test_volume_on_scene(self):
+        """Simple test with a squared planar scene and a cube on top of it"""
+        model = Model()
+        model.add_node(0, 0, 0)
+        model.add_node(0, 1, 0)
+        model.add_node(1, 1, 0)
+        model.add_node(2, 1, 0)
+        model.add_node(1, 2, 0)
+        model.add_triangle(0, 1, 2)
+        model.add_triangle(2, 3, 4)
+        # It is on the first triangle but not on the second one
+        box = Box(1, 1, 1)
+        intersected_triangles = model.fresnel_zone_intersection(box)
+        self.assertEqual(intersected_triangles, [0])
 
 
 if __name__ == '__main__':
