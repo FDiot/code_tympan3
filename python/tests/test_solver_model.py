@@ -55,6 +55,31 @@ class FresnelZoneIntersectionTC(TympanTC):
         intersected_triangles = model.fresnel_zone_intersection(box)
         self.assertEqual(intersected_triangles, [0])
 
+    def test_alti_mesh(self):
+        proj = self.load_project(osp.join('projects-panel', 'fresnel.xml'))
+        model = Model.from_project(proj)
+        length = 75
+        width = 75
+        height = 75
+        box = Box(length, width, height)
+        intersected_triangles = model.fresnel_zone_intersection(box)
+        all_triangles = model.triangles
+        self.assertEqual(len(all_triangles), 51)
+        for tri_idx, triangle in enumerate(all_triangles):
+            node_inside_box = False
+            for node in triangle.nodes:
+                x, y, z = model.node_coords(node)
+                if abs(x) <= length/2 and abs(y) <= width/2 and abs(z) <= height/2:
+                    node_inside_box = True
+            # If one of the node of the triangle is inside the box, make sure it is part of
+            # the intersected triangles
+            if node_inside_box:
+                self.assertIn(tri_idx, intersected_triangles)
+            # If the triangle isn't part of the intersected triangles, make sure it has no node
+            # inside the box.
+            if tri_idx not in intersected_triangles:
+                self.assertFalse(node_inside_box)
+
 
 if __name__ == '__main__':
     unittest.main()
