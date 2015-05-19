@@ -154,6 +154,12 @@ cdef class ProblemModel:
             nodes[i] = [point._x, point._y, point._z]
         return (nodes, triangles)
 
+    def node_coords(self, idx):
+        """Return a tuple with the 3D coordinates for the node of id 'idx'"""
+        assert self.thisptr.get() != NULL
+        _node = cy.declare(tycommon.OPoint3D, self.thisptr.get().node(idx))
+        return _node._x, _node._y, _node._z
+
 
 cdef class ResultModel:
     """Results of a computation ran by a solver on a solver model"""
@@ -271,6 +277,12 @@ cdef class MeshTriangle:
         if not self.thisptr.volume_id.empty():
             return self.thisptr.volume_id
         return None
+
+    @property
+    def nodes(self):
+        """Tuple containing the ids of the 3 nodes of the triangle"""
+        assert self.thisptr != NULL
+        return self.thisptr.n[0], self.thisptr.n[1], self.thisptr.n[2]
 
 
 cdef class Configuration:
