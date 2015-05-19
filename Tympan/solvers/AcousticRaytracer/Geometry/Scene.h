@@ -86,7 +86,7 @@ public:
     const std::vector<Shape*>* getShapes() const { return &shapes; }
     const std::vector<vec3>* getVertices() const { return &vertices; }
 
-    bool finish();
+    bool finish(int accelerator_id = 3, leafTreatment::treatment _intersectionChoice = leafTreatment::FIRST);
 
     bool getIndex(vec3& search, unsigned int& result);
     bool getVertex(unsigned int& search, vec3& result);

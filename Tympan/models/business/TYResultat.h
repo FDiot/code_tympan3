@@ -121,13 +121,13 @@ public:
      * \fn void addSource(TYSourcePonctuelle* pSource)
      * \brief Ajoute une source.
      */
-    void addSource(TYSourcePonctuelle* pSource);
+    void addSource(TYElement* pSource);
 
     /**
      * \fn void addRecepteur(TYPointCalcul* pRecepteur)
      * \brief Ajoute un recepteur et indique s'il faut reconstruire la matrice
      */
-    bool addRecepteur(TYPointCalcul* pRecepteur);
+    bool addRecepteur(TYElement* pRecepteur);
 
     /*!
      * \brief Supprime un recepteur du tableau et indique s'il faut reconstruire la matrice
@@ -164,7 +164,7 @@ public:
      * \fn bool setSpectre(TYPointCalcul* pRecepteur, TYSourcePonctuelle* pSource, OSpectre & Spectre)
      * \brief Assigne un spectre a un couple S-R.
      */
-    bool setSpectre(TYPointCalcul* pRecepteur, TYSourcePonctuelle* pSource, OSpectre& Spectre);
+    bool setSpectre(TYElement* pRecepteur, TYElement* pSource, OSpectre& Spectre);
 
     /**
      * \fn bool setSpectre(const int& indexRecepteur, const int& indexSource, OSpectre & Spectre)
@@ -182,7 +182,7 @@ public:
      * \fn OSpectre getSpectre(TYPointCalcul* pRecepteur,TYElement* pSource)
      * \brief Retourne un spectre pour un couple S-R.
      */
-    OSpectre getSpectre(TYPointCalcul* pRecepteur, TYElement* pSource);
+    OSpectre getSpectre2(TYElement* pRecepteur, TYElement* pSource);
 
     /**
      * \fn OSpectre getSpectre(const int& indexRecepteur, const int& indexSource)
@@ -240,6 +240,20 @@ public:
      * \return _mapEmetteurSources le tableau associatif "emetteur/Liste de sources"
      */
     TYMapElementTabSources& getMapEmetteurSrcs() { return _mapEmetteurSources; }
+
+    /*!
+     * \fn std::vector<TYElement*> getSources();
+     * \brief return the list of all sources (business sources)
+     */
+    std::vector<LPTYElement> getSources();
+
+
+    /*!
+     * \fn std::vector<TYElement*> getReceptors();
+     * \brief return the list of all sources (business sources)
+     */
+    std::vector<LPTYElement> getReceptors();
+
 
     /**
      * \fn void saveSpectre(const std::string& filename, TYCalcul* pSubstCalcul=NULL)
@@ -307,12 +321,14 @@ public:
     tympan::SpectrumMatrix& getResultMatrix(){ return _matrix; }
     void setSources(TYMapElementIndex sources){ _sources = sources;}
 
+    void setHideLW(bool isHidden=false) { _hideLW = isHidden; }
+    bool isLWHidden() const { return _hideLW; }
+
 private:
     /**
      * Ecrit sur 2 lignes les parametres du calcul.
      */
     void saveParamValue(std::ofstream& ofs, TYCalcul* pCalcul);
-
 
     // Membres
 protected:
@@ -335,6 +351,9 @@ protected:
 
     /// Tableau associatif "emetteur"/liste des sources de l'emetteur
     TYMapElementTabSources _mapEmetteurSources;
+
+    /// Show / hide power spectrum in result matrix
+    bool _hideLW;
 };
 
 

@@ -20,7 +20,9 @@
 
 class DoNothing : public Event
 {
-
+/*
+ * Event that is only a point in a ray path with no direction change
+ */
 public:
 
     DoNothing(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL):

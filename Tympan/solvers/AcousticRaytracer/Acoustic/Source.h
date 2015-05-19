@@ -61,6 +61,8 @@ public:
         else { sampler = NULL; }
         nbRayLeft = other.nbRayLeft;
         initialRayCount = other.initialRayCount;
+        id = other.id;
+        indice =other.indice;
     }
 #endif
 

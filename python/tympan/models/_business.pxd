@@ -26,6 +26,7 @@ cdef extern from "Tympan/core/smartptr.h":
 cdef extern from "Tympan/models/business/TYElement.h":
     cdef cppclass TYElement(IRefCount):
         QString getName()
+        void setName(string name)
         const char* getClassName() const
         TYElement* getParent()
         OGenID getID()
@@ -66,6 +67,7 @@ cdef extern from "Tympan/models/business/TYElement.h":
     TYTerrain* downcast_terrain "downcast<TYTerrain>"(TYElement*)
     TYSiteNode* downcast_sitenode "downcast<TYSiteNode>"(TYElement*)
     TYSol* downcast_sol "downcast<TYSol>"(TYElement*)
+    TYCalcul* downcast_calcul "downcast<TYCalcul>"(TYElement*)
     TYAcousticSurface* downcast_acoustic_surface "downcast<TYAcousticSurface>"(TYElement*)
     TYAcousticSurfaceNode* downcast_acoustic_surface_node "downcast<TYAcousticSurfaceNode>"(TYElement*)
     TYAcousticVolume* downcast_acoustic_volume "downcast<TYAcousticVolume>"(TYElement*)
@@ -84,13 +86,20 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         size_t getNbOfRecepteurs() const
         size_t getNbOfSources() const
         tycommon.OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
+        tycommon.OSpectre getSpectre2(TYElement* pRecepteur, TYElement* pSource)
         cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
         void setResultMatrix(tycommon.SpectrumMatrix matrix)
         tycommon.SpectrumMatrix& getResultMatrix()
         void setSources(cppmap[TYElem_ptr, int])
-        void addRecepteur(TYPointCalcul* pRecepteur)
+        void addRecepteur(TYElement* pRecepteur)
+        void addSource(TYElement* pSource)
         int getIndexRecepteur(TYPointCalcul* pRecepteur)
+        vector[SmartPtr[TYElement]] getSources()
+        vector[SmartPtr[TYElement]] getReceptors()
+        bool setSpectre(TYElement* pRecepteur, TYElement* pSource, tycommon.OSpectre& Spectre)
+        void buildMatrix()
+        void setHideLW(bool isHidden)
 
 cdef extern from "Tympan/models/business/acoustic/TYDirectivity.h" namespace "TYComputedDirectivity":
     cdef enum DirectivityType:
@@ -153,6 +162,7 @@ cdef extern from "Tympan/models/business/infrastructure/TYInfrastructure.h":
 
 cdef extern from "Tympan/models/business/TYCalcul.h":
     cdef cppclass TYCalcul (TYElement):
+        TYCalcul()
         SmartPtr[TYResultat] getResultat()
         void getAllSources(cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
                       vector[SmartPtr[TYGeometryNode]])
@@ -163,12 +173,20 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         const OGenID getSolverId()
         QString solverParams
 
+cdef extern from "Tympan/models/business/TYCalcul.h":
+    TYElement* downcast_Element "downcast<TYElement>"(TYCalcul *)
+
+
 cdef extern from "Tympan/models/business/TYProjet.h":
     cdef cppclass TYProjet (TYElement):
+        TYProjet()
         SmartPtr[TYCalcul] getCurrentCalcul()
+        void setCurrentCalcul(SmartPtr[TYCalcul] pCurCalcul)
+        void addCalcul(SmartPtr[TYCalcul] pCalcul)
         SmartPtr[TYSiteNode] getSite()
         bool updateAltiRecepteurs(const TYAltimetrie* pAlti)
         vector[SmartPtr[TYPointControl]]& getPointsControl()
+        vector[SmartPtr[TYCalcul]]& getListCalcul()
 
 cdef extern from "Tympan/models/business/topography/TYAltimetrie.h":
     cdef cppclass TYAltimetrie (TYElement):

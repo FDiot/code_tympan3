@@ -68,14 +68,7 @@ public:
 typedef std::vector<acoustic_event*> tab_acoustic_events;
 
 class Ray;
-
-struct IGeometryModifier
-{
-    virtual ~IGeometryModifier() {};
-
-    virtual OPoint3D fonction_h(const OPoint3D&) = 0;
-    virtual OPoint3D fonction_h_inverse(const OPoint3D&) = 0;
-};
+class IGeometryModifier;
 
 class acoustic_path
 {
@@ -267,7 +260,7 @@ public:
     * \fn void overSampleTYRay(TYRay* tyRay);
     * \brief Rajoute des evenements aux rayons de type TYRay
     */
-    virtual void overSample(const double& dMin);
+    virtual void overSample(IGeometryModifier& transformer, const double& dMin);
 
     /*!
     * \fn void sampleAndCorrection()
@@ -326,9 +319,6 @@ public:
     virtual double angleCorrection(const acoustic_event* ev1, acoustic_event* ev2, const acoustic_event* ev3, IGeometryModifier& transformer);
 
 	static void set_sampler_step(double sampler_step_) { sampler_step = sampler_step_; }
-
-private :
-
 
     /*!
      * \fn void build_links_between_events();
