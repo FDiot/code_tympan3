@@ -21,11 +21,19 @@
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/models/common/mathlib.h"
-#include "Tympan/models/common/acoustic_path.h"
 
 class Lancer;
 
 using namespace std;
+
+class IGeometryModifier
+{
+public:
+    virtual ~IGeometryModifier() {};
+
+    virtual OPoint3D fonction_h(const OPoint3D&) = 0;
+    virtual OPoint3D fonction_h_inverse(const OPoint3D&) = 0;
+};
 
 class geometry_modifier :
     public IGeometryModifier

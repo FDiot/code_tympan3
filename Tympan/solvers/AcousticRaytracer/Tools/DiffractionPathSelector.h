@@ -21,7 +21,9 @@
 template<typename T>
 class DiffractionPathSelector : public Selector<T>
 {
-
+/*!
+ * \brief : Invalid rays with path length difference (produced by diffraction effect) greater than a value
+ */
 public :
     DiffractionPathSelector(double _maximumDelta = 8) : Selector<T>() { maximumDelta = _maximumDelta; }
     virtual Selector<T>* Copy()

@@ -39,8 +39,6 @@ using std::vector;
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DSolver.h"
 
-#define _USE_METEO_
-
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize,
                                                          const tympan::AcousticProblemModel& aproblem_, tab_acoustic_path& tabTYRays) :
     _tabPolygon(tabPolygon),
@@ -59,7 +57,6 @@ bool TYANIME3DAcousticPathFinder::exec()
     // Configuration du lancer de rayon geometriques (au debut pour initialiser les valeurs globales
     // Nettoyage de l'objet _rayTracing si il a ete utilise precedement
     _rayTracing.clean();
-
     // Ajout des parametres du _rayTracing liés à la methode acoustique
     TYANIME3DRayTracerSolverAdapter* solver = new TYANIME3DRayTracerSolverAdapter();
     _rayTracing.setSolver(solver);
@@ -86,15 +83,18 @@ bool TYANIME3DAcousticPathFinder::exec()
     //Une fois la scene convertie, on peut la post-traiter (ajouter de l'information : arretes de diffractions par ex)
     _rayTracing.getSolver()->postTreatmentScene(_rayTracing.getScene(), _rayTracing.getSources(), _rayTracing.getRecepteurs());
 
-    _rayTracing.getScene()->finish();
+    _rayTracing.getScene()->finish(tympan::SolverConfiguration::get()->Accelerator);
+
+#ifdef TEST_ACCELERATION_RECEPTORS
+    _rayTracing.get_receptors_landscape()->finish(1, leafTreatment::ALL); // Using grid accelerator
+#endif
 
     ////////////////////////////////////
     // Propagation des rayons
     ////////////////////////////////////
 
-    _rayTracing.setEngine(); //PARALLELDEFAULT
+    _rayTracing.setEngine(); //DEFAULT
     _rayTracing.launchSimulation();          //Traitement monothread
-
 
     // This function creates TYRays from Rays .
     convert_Rays_to_acoustic_path(sens);
@@ -168,15 +168,15 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
 void TYANIME3DAcousticPathFinder::transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
 {
     // Pour toutes les sources
-    for (unsigned int i = 0; i < _aproblem.nsources(); i++)
+    for (unsigned int i = 0; i < sources.size(); i++)
     {
-        sources[i] = OPoint3Dtovec3( transformer.fonction_h( _aproblem.source(i).position ) );
+        sources[i] = OPoint3Dtovec3( transformer.fonction_h( vec3toOPoint3D( sources[i] ) ) );
     }
 
     // Pour tous les recepteurs
-    for (unsigned int i = 0; i < _aproblem.nreceptors(); i++)
+    for (unsigned int i = 0; i < recepteurs.size(); i++)
     {
-        recepteurs[i] = OPoint3Dtovec3( transformer.fonction_h( _aproblem.receptor(i).position ) );
+        recepteurs[i] = OPoint3Dtovec3( transformer.fonction_h( vec3toOPoint3D( recepteurs[i] ) ) );
     }
 }
 
@@ -255,24 +255,28 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
     //Conversion des sources Tympan en sources lancer de rayons
     int idSource = 0;
+    int nbRaysPerSource = config->NbRaysPerSource;
+    int realNbRaysPerSource = 0;
     for (unsigned int i = 0; i < sources.size(); i++)
     {
         Source source;
         switch (config->Discretization)
         {
             case 0 :
-                source.setSampler(new RandomSphericSampler(config->NbRaysPerSource));
+                source.setSampler(new RandomSphericSampler(nbRaysPerSource));
+                realNbRaysPerSource = nbRaysPerSource;
                 break;
             case 1 :
-                source.setSampler(new UniformSphericSampler(config->NbRaysPerSource));
-                config->NbRaysPerSource = dynamic_cast<UniformSphericSampler*>(source.getSampler())->getRealNbRays();
+                source.setSampler(new UniformSphericSampler(nbRaysPerSource));
+                realNbRaysPerSource = dynamic_cast<UniformSphericSampler*>(source.getSampler())->getRealNbRays();
                 break;
             case 2 :
-                source.setSampler(new UniformSphericSampler2(config->NbRaysPerSource));
-                config->NbRaysPerSource = dynamic_cast<UniformSphericSampler2*>(source.getSampler())->getRealNbRays();
+                source.setSampler(new UniformSphericSampler2(nbRaysPerSource));
+                realNbRaysPerSource = dynamic_cast<UniformSphericSampler2*>(source.getSampler())->getRealNbRays();
                 break;
             case 3 :
                 source.setSampler(new Latitude2DSampler(config->NbRaysPerSource));
+                realNbRaysPerSource = nbRaysPerSource;
                 dynamic_cast<Latitude2DSampler*>(source.getSampler())->setStartPhi(0.);
                 dynamic_cast<Latitude2DSampler*>(source.getSampler())->setEndPhi(360.);
                 dynamic_cast<Latitude2DSampler*>(source.getSampler())->setStartTheta(0.);
@@ -280,10 +284,10 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
         }
 
         source.setPosition(sources[i]);
-        source.setInitialRayCount(config->NbRaysPerSource);
+        source.setInitialRayCount(realNbRaysPerSource);
         source.setId(idSource);
 
-        ss << "Ajout d'une source en (" << sources[i].x << "," << sources[i].y << "," << sources[i].y << ")" << endl;
+        ss << "Ajout d'une source (id=" << idSource << ") en (" << sources[i].x << "," << sources[i].y << "," << sources[i].y << ")" << endl;
 
         _rayTracing.addSource(source);
         idSource++;
@@ -307,6 +311,9 @@ void TYANIME3DAcousticPathFinder::convert_Rays_to_acoustic_path(const unsigned i
         // Connect TYSource & TYReceptor (will be obsolete in future solver data model)
         set_source_idx_and_receptor_idx_to_acoustic_path(sens, ray, tyRay);
 
+        tyRay->build_links_between_events();
+        tyRay->compute_shot_angle();
+
         // Ajoute le rayon au calcul
         _tabTYRays.push_back(tyRay);
     }
@@ -314,11 +321,10 @@ void TYANIME3DAcousticPathFinder::convert_Rays_to_acoustic_path(const unsigned i
 
 void TYANIME3DAcousticPathFinder::sampleAndCorrection()
 {
-    for (int i = 0; i < _tabTYRays.size(); i++)
+    for (size_t i = 0; i < _tabTYRays.size(); i++)
     {
         // Récupération des longueurs simples (éléments suivants)
         _tabTYRays.at(i)->nextLenghtCompute(transformer);
-
         // Récupération des distances aux évènements pertinents
         _tabTYRays.at(i)->endLenghtCompute(transformer);
 
@@ -351,8 +357,8 @@ void TYANIME3DAcousticPathFinder::set_source_idx_and_receptor_idx_to_acoustic_pa
     //Les identifiants des recepteurs et sources sont construit pour correspondre a l'index des sources et recepteurs dans Tympan.
     assert (static_cast<unsigned int>(idRecep) < _aproblem.nreceptors() && static_cast<unsigned int>(idSource) < _aproblem.nsources());
 
-    tyRay->setSource(idSource); //(sourceP, posSourceGlobal);
-    tyRay->setRecepteur(idRecep); //(recepP, posReceptGlobal);
+    tyRay->setSource(idSource); 
+    tyRay->setRecepteur(idRecep); 
 }
 
 void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>& sources )
@@ -381,7 +387,11 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
         CurveRayShot.initialAngleTheta = config->InitialAngleTheta;     // Angle de tir vertical (theta) des rayons
 
         // Choix de la source
-        CurveRayShot.addSource(sources[0]);   // At this time source is the firs one
+        vec3 p = OPoint3Dtovec3( tympan::ComputeAcousticCentroid( _aproblem.sources() ) );
+        CurveRayShot.addSource(p);   // source is the centroid of all sources taking account of acoustic power 
+
+        // Lancer des rayons
+        CurveRayShot.run();
 
         // Transformation de la geometrie
         transformer.clear();

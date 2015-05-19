@@ -21,6 +21,8 @@
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Solver.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Recepteur.h"
 
+#define TEST_ACCELERATION_RECEPTORS
+
 typedef struct _validRay
 {
     Ray* r;     /*!< Pointeur vers le rayon traite. Ne dois pas etre NULL */
@@ -31,6 +33,50 @@ class Engine
 {
 
 public:
+#ifdef TEST_ACCELERATION_RECEPTORS
+    Engine() : scene(NULL), sources(NULL), solver(NULL), recepteurs(NULL), rayCounter(0) { }
+
+    Engine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, Scene *_recepteurs)
+    {
+        scene = _scene;
+        recepteurs = _recepteurs;
+        sources = _sources;
+        solver = _solver;
+        rayCounter = 0;
+    }
+
+    Engine(const Engine& other)
+    {
+        scene = other.scene;
+        recepteurs = other.recepteurs;
+        sources = other.sources;
+        solver = other.solver;
+        rayCounter = other.rayCounter;
+    }
+
+    virtual ~Engine() { }
+
+    Scene* getScene() { return scene; }
+    void setScene(Scene* _scene) { scene = _scene; }
+
+    std::vector<Source>* getSources() { return sources; }
+    void setSources(std::vector<Source> *_sources) { sources = _sources; }
+
+    Solver* getSolver() { return solver; }
+    void setSolver(Solver* _solver) { solver = _solver; }
+
+    virtual bool process() { return false;}
+
+    virtual void runStructureBenchmark() {}
+
+protected:
+    Scene* scene;
+    Scene *recepteurs;
+    std::vector<Source> *sources;
+    Solver* solver;
+
+    unsigned long long int rayCounter;
+#else
     Engine() : scene(NULL), sources(NULL), solver(NULL), recepteurs(NULL), rayCounter(0) { }
 
     Engine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, std::vector<Recepteur> *_recepteurs)
@@ -73,6 +119,6 @@ protected:
     Solver* solver;
 
     unsigned long long int rayCounter;
-
+#endif
 };
 #endif

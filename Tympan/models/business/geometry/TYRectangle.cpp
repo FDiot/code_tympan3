@@ -669,13 +669,13 @@ void TYRectangle::exportMesh(
     // exports triangle (0, 1, 2)
     OTriangle tri(0, 1, 2);
     // Use already converted to global r/ frame points
-    tri._A = points[0];
-    tri._B = points[1];
-    tri._C = points[2];
+    tri._p1 = 0; tri._A = points[0];
+    tri._p2 = 3; tri._B = points[3];
+    tri._p3 = 2; tri._C = points[2];
     triangles.push_back(tri);
     // exports triangle (0, 2, 3)
     tri._p1 = 0; tri._A = points[0];
     tri._p2 = 2; tri._B = points[2];
-    tri._p3 = 3; tri._C = points[3];
+    tri._p3 = 1; tri._C = points[1];
     triangles.push_back(tri);
 }
