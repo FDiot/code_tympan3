@@ -156,6 +156,7 @@ bool TYSolver::buildCalcStruct(const tympan::AcousticProblemModel& aproblem)
         TYStructSurfIntersect SI;
         OGeometrie::computeNormal(pts, 3, SI.normal);
 
+        SI.volume_id = triangles[i].volume_id;
         SI.tabPoint.push_back(pts[0]);
         SI.tabPoint.push_back(pts[1]);
         SI.tabPoint.push_back(pts[2]);

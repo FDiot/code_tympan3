@@ -46,13 +46,13 @@ void TYTask::main()
     _trajet.getPtSetPtRfromOSeg3D(rayon);
 
     // On selectionne les faces de la scene concernes par le calcul acoustique pour la paire concernee
-    _solver.getFaceSelector()->selectFaces(_tabIntersect, rayon);
+    _solver.getFaceSelector()->selectFaces(_tabIntersect, _trajet);
 
     // On calcul les trajets acoustiques horizontaux et verticaux reliant la paire source/recepteur
-    _solver.getAcousticPathFinder()->computePath(_tabIntersect, rayon, ptsTop, ptsLeft, ptsRight);
+    _solver.getAcousticPathFinder()->computePath(_tabIntersect, _trajet, ptsTop, ptsLeft, ptsRight);
 
     // On effectue les calculs acoustiques en utilisant les formules du modele acoustique
-    _solver.getAcousticModel()->compute(_tabIntersect, rayon, _trajet, ptsTop, ptsLeft, ptsRight);
+    _solver.getAcousticModel()->compute(_tabIntersect, _trajet, ptsTop, ptsLeft, ptsRight);
 
     ptsTop.clear();
     ptsLeft.clear();

@@ -139,7 +139,7 @@ public:
      * \brief Get/Set des points sources et recepteurs a partir d'un OSegment3D
      */
     void setPtSetPtRfromOSeg3D(const OSegment3D& seg) { _ptS = seg._ptA; _ptR = seg._ptB; }
-    void getPtSetPtRfromOSeg3D(OSegment3D& seg) { seg._ptA = _ptS, seg._ptB = _ptR; }
+    void getPtSetPtRfromOSeg3D(OSegment3D& seg) const { seg._ptA = _ptS, seg._ptB = _ptR; }
 
     /**
      * \fn TYSpectre& getSpectre()

@@ -68,11 +68,15 @@ void TYAcousticModel::init()
 }
 
 
-void TYAcousticModel::compute(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon,
-                              TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
-                              TabPoint3D& ptsRight )
+void TYAcousticModel::compute(  const std::deque<TYSIntersection>& tabIntersect, TYTrajet& trajet, 
+                                TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
+                                TabPoint3D& ptsRight )
 {
     bool vertical = true, horizontal = false;
+
+    // Construction du rayon SR
+    OSegment3D rayon;
+    trajet.getPtSetPtRfromOSeg3D(rayon);
 
     // Recuperation de la source
     tympan::AcousticSource& source = trajet.asrc;

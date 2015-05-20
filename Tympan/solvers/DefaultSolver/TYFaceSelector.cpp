@@ -19,7 +19,9 @@
 
 #include "Tympan/core/defines.h"
 #include "Tympan/models/common/plan.h"
+#include "Tympan/models/solver/entities.hpp"
 #include "TYFaceSelector.h"
+#include "TYTrajet.h"
 #include "TYSolver.h"
 
 TYFaceSelector::TYFaceSelector(TYSolver& solver)
@@ -33,23 +35,27 @@ TYFaceSelector::~TYFaceSelector()
 
 }
 
-void TYFaceSelector::selectFaces(std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon)
+void TYFaceSelector::selectFaces(std::deque<TYSIntersection>& tabIntersect, const TYTrajet& rayon)
 {
-    int i;
     short XY = 0, XZ = 1;
 
     // Construction des plans de coupe
     TYSPlan plan[2];
-    buildPlans(plan, rayon);
+    OSegment3D seg;
+    rayon.getPtSetPtRfromOSeg3D(seg);
+    buildPlans(plan, seg);
 
     size_t nbFaces = _solver.getTabPolygon().size();
 
+    // Recuperation de l'ID de la source
+    const string source_id = rayon.asrc.volume_id;
+
     // Test des faces qui coupent le plan vertical
-    for (i = 0; i < nbFaces; i++)
+    for (unsigned i = 0; i < nbFaces; i++)
     {
         const TYStructSurfIntersect& SI = _solver.getTabPolygon()[i];
 
-        if ((SI.tabPoint.size() == 0)) { continue; }
+        if ((SI.volume_id == source_id) || (SI.tabPoint.size() == 0)) { continue; }
 
         // Plan vertical = 0 / Plan horizontal = 1
         TYSIntersection intersection;
