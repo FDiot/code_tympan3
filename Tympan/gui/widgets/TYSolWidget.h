@@ -69,8 +69,12 @@ protected:
     QGroupBox* _groupBox;
     QLineEdit* _lineEditEpaisseur;
     QLineEdit* _lineEditResistivite;
+	QLineEdit* _lineEditEcartType;
+	QLineEdit* _lineEditLongueur;
     QLabel* _labelEpaisseur;
     QLabel* _labelResistivite;
+	QLabel* _labelEcartType;
+	QLabel* _labelLongueur;
 
     QPushButton* _pushButtonResistivite;
 
