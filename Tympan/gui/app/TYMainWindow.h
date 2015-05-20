@@ -272,16 +272,16 @@ public slots:
     /**
      * Creation d'un modeleur a partir d'un type
      */
-    void makeModeler(TYElement* pElt);
+    bool makeModeler(TYElement* pElt);
 
     /**
      * Instancie une novuelle fenetre Batiment Modeler.
      */
-    void makeBatimentModeler(LPTYBatiment pBatiment = NULL);
+    bool makeBatimentModeler(LPTYBatiment pBatiment = NULL);
     /**
      * Instancie une novuelle fenetre Machine Modeler.
      */
-    void makeMachineModeler(LPTYMachine pMachine = NULL);
+    bool makeMachineModeler(LPTYMachine pMachine = NULL);
     /**
      * Instancie une novuelle fenetre Site Modeler.
      */
