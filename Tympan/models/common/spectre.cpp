@@ -815,7 +815,26 @@ OSpectre OSpectre::toTOct() const
         return s;
     }
     s._type = _type;
-    if (_type != SPECTRE_TYPE_ABSO)
+    if (_type == SPECTRE_TYPE_ABSO || _type == SPECTRE_TYPE_AUTRE)
+    {
+        OSpectre travail = *this;
+        short indice = 2;
+        short nbOctValue = 9;
+        double valeur = 0.0;
+        for (short i = 0 ; i < nbOctValue ; i++, indice += 3)
+        {
+            valeur = travail._module[i];
+            s._module[indice] = valeur;
+            s._module[indice + 1] = valeur;
+            s._module[indice + 2] = valeur;
+        }
+        s._module[0]  = s._module[2];
+        s._module[1]  = s._module[2];
+        s._module[29] = s._module[28];
+        s._module[30] = s._module[28];
+        s._etat = SPECTRE_ETAT_DB;
+    }
+    else
     {
         OSpectre travail = this->toGPhy();
         short indice = 2;
@@ -837,26 +856,7 @@ OSpectre OSpectre::toTOct() const
             s._module[29] = 1;
             s._module[30] = 1;
         }
-        s = s.toDB();
-    }
-    else
-    {
-        OSpectre travail = *this;
-        short indice = 2;
-        short nbOctValue = 9;
-        double valeur = 0.0;
-        for (short i = 0 ; i < nbOctValue ; i++, indice += 3)
-        {
-            valeur = travail._module[i];
-            s._module[indice] = valeur;
-            s._module[indice + 1] = valeur;
-            s._module[indice + 2] = valeur;
-        }
-        s._module[0]  = 1;
-        s._module[1]  = 1;
-        s._module[29] = 1;
-        s._module[30] = 1;
-        s._etat = SPECTRE_ETAT_DB;
+        s = s.toDB();    
     }
     s._form = SPECTRE_FORM_TIERS; // indication explicite de la forme tiers d'octave
     return s;
@@ -877,7 +877,20 @@ OSpectre OSpectre::toOct() const
     }
     s._etat = SPECTRE_ETAT_LIN; // s aussi est en lin a ce moment
     s._type = _type;
-    if (_type != SPECTRE_TYPE_ABSO)
+    if (_type == SPECTRE_TYPE_ABSO || _type == SPECTRE_TYPE_AUTRE)
+    {
+        OSpectre travail = *this;
+        unsigned int indiceDepart = 2;
+        unsigned int indice = 0;
+        double valeur = 0.0;
+        for (unsigned int i = indiceDepart ; i < TY_SPECTRE_DEFAULT_NB_ELMT - 2 ; i += 3, indice++)
+        {
+            valeur = (travail._module[i] + travail._module[i + 1] + travail._module[i + 2]) / 3; // Moyenne des absos
+            s._module[indice] = valeur;
+        }
+        s._etat = SPECTRE_ETAT_DB;
+    }
+    else
     {
         OSpectre travail = this->toGPhy();
         unsigned int indiceDepart = 2;
@@ -891,19 +904,6 @@ OSpectre OSpectre::toOct() const
             s._module[indice] = valeur;
         }
         s = s.toDB();
-    }
-    else
-    {
-        OSpectre travail = *this;
-        unsigned int indiceDepart = 2;
-        unsigned int indice = 0;
-        double valeur = 0.0;
-        for (unsigned int i = indiceDepart ; i < TY_SPECTRE_DEFAULT_NB_ELMT - 2 ; i += 3, indice++)
-        {
-            valeur = (travail._module[i] + travail._module[i + 1] + travail._module[i + 2]) / 3; // Moyenne des absos
-            s._module[indice] = valeur;
-        }
-        s._etat = SPECTRE_ETAT_DB;
     }
     s._form = SPECTRE_FORM_OCT; // indication explicite de la forme octave
     return s;

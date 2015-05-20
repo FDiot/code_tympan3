@@ -15,7 +15,6 @@ class AltimetryFunctionalTC(unittest.TestCase):
     debug = False    # activate Tympan lib logs
     saveply = False  # save PLY file with mesh for visualisation
 
-    @unittest.expectedFailure
     def test_les_barthes(self):
         fname = 'Tympan_Les_Barthes_avec_vegetation_Pb.xml'
         altim = self.build_altimetry(fname)
