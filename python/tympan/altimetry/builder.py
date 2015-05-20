@@ -2,7 +2,7 @@
 Provide chaining of the step required to build the altimetry of a compound site.
 """
 
-from itertools import chain
+from itertools import chain, imap
 from warnings import warn
 import numpy as np
 from shapely import geometry
@@ -14,7 +14,7 @@ from .datamodel import (InconsistentGeometricModel, elementary_shapes,
 from . import datamodel
 from .merge import recursively_merge_all_subsites
 from .mesh import (ElevationMesh, ReferenceElevationMesh,
-                   LandtakeFaceFlooder, MaterialFaceFlooder)
+                   LandtakeFaceFlooder)
 
 
 # Altimetry side building utilities.
@@ -286,25 +286,32 @@ class MeshFiller(object):
     def fill_material_and_landtakes(self, mainsite, cleaner):
         """Build the face to geometrical feature mapping."""
         feature_by_face = {}
-
-        def fill_feature(feature, floodercls):
-            """Update feature_by_face with feature's faces using specified
-            flooder.
-            """
+        # Fill landtakes using the flooding algorithm.
+        for feature in mainsite.landtakes:
             self._check_feature_inserted(feature, mainsite)
             faces = self._faces_for_polygonal_feature(
-                feature, flooder_class=floodercls)
+                feature, flooder_class=LandtakeFaceFlooder)
             for fh in faces:
                 if fh not in feature_by_face:
                     feature_by_face[fh] = feature
-
-        for landtake in mainsite.landtakes:
-            fill_feature(landtake, LandtakeFaceFlooder)
-        for material_area_id in cleaner.material_areas_inner_first():
-            material_area = cleaner.equivalent_site.features_by_id[material_area_id]
-            fill_feature(material_area, MaterialFaceFlooder)
+        # Fill material areas by finding the underlying feature based on the
+        # position of face "middle point".
+        checked = set()
         for fh in self._mesh.cdt.finite_faces():
-            if fh not in feature_by_face:
+            if fh in feature_by_face:
+                continue
+            ring = geometry.polygon.LinearRing(
+                [self._mesh.py_vertex(fh.vertex(i)) for i in range(3)])
+            center = geometry.Point(ring.representative_point().coords[0])
+            for material_area_id in cleaner.material_areas_inner_first():
+                feature = cleaner.equivalent_site.features_by_id[material_area_id]
+                if feature not in checked:
+                    self._check_feature_inserted(feature, mainsite)
+                    checked.add(feature)
+                if feature.shape.exterior.contains(center):
+                    feature_by_face[fh] = feature
+                    break
+            else:
                 feature_by_face[fh] = None
         return feature_by_face
 
