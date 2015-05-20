@@ -1605,9 +1605,11 @@ void TYModelerFrame::closeEvent(QCloseEvent* pEvent)
 {
     TYPreferenceManager::saveGeometryToPreferences(metaObject()->className(), this);
     pEvent->accept();
+	emit frameResized();
+	emit aboutToClose();
 
     // CLM-NT35 : Gestion du maximized et titre fenetre principal
-    emit frameResized();
+    
 }
 
 void TYModelerFrame::enterEvent(QEvent* pEvent)
