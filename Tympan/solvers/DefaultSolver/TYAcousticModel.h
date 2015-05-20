@@ -31,8 +31,7 @@ public:
     virtual ~TYAcousticModel();
 
     virtual void compute(const std::deque<TYSIntersection>& tabIntersect,
-                         const OSegment3D& rayon, TYTrajet& trajet,
-                         TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
+                         TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
                          TabPoint3D& ptsRight );
 
     void init();
