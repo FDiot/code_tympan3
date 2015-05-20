@@ -108,7 +108,7 @@ void TYAcousticRectangleGraphic::display(GLenum mode /*= GL_RENDER*/)
             glColor4fv(color);
 
             getElement()->getSrcSurf()->getGraphicObject()->display(mode);
-            getElement()->getShape()->setInCurrentCalcul(getElement()->isInCurrentCalcul());
+//            getElement()->getShape()->setInCurrentCalcul(getElement()->isInCurrentCalcul());
             // Update shape
 
             if ((getElement()->getIsSub()) && (mode == GL_SELECT))
