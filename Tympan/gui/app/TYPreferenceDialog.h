@@ -208,6 +208,8 @@ public:
 
     QLineEdit* _pLineEditResistivite;
     QLineEdit* _pLineEditEpaisseur;
+	QLineEdit* _pLineEditEcartType;
+	QLineEdit* _pLineEditLongueur;
     QLineEdit* _pLineEditPression;
     QLineEdit* _pLineEditTemperature;
     QLineEdit* _pLineEditHygrometrie;

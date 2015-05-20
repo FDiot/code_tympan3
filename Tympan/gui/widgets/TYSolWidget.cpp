@@ -60,6 +60,18 @@ TYSolWidget::TYSolWidget(TYSol* pElement, QWidget* _pParent /*=NULL*/):
     pUnitResis->setText(TR("id_unite_resistivite"));
     _groupBoxLayout->addWidget(pUnitResis, 0, 2);
 
+	_lineEditEcartType = new QLineEdit(_groupBox);
+	_groupBoxLayout->addWidget(_lineEditEcartType,2,1);
+	QLabel* pUnitEcart = new QLabel(_groupBox);
+	pUnitEcart->setText("un");
+	_groupBoxLayout->addWidget(pUnitEcart,2,2);
+
+	_lineEditLongueur = new QLineEdit(_groupBox);
+	_groupBoxLayout->addWidget(_lineEditLongueur,3,1);
+	QLabel* pUnitLong = new QLabel(_groupBox);
+	pUnitLong->setText("m");
+	_groupBoxLayout->addWidget(pUnitLong,3,2);
+
     _pushButtonResistivite = new QPushButton(_groupBox);
     _pushButtonResistivite->setText(TR("id_edit_resistivite"));
     _groupBoxLayout->addWidget(_pushButtonResistivite, 0, 3);
@@ -71,6 +83,14 @@ TYSolWidget::TYSolWidget(TYSol* pElement, QWidget* _pParent /*=NULL*/):
     _labelResistivite = new QLabel(_groupBox);
     _labelResistivite->setText(TR("id_resistivite_label"));
     _groupBoxLayout->addWidget(_labelResistivite, 0, 0);
+
+	_labelEcartType = new QLabel(_groupBox);
+	_labelEcartType->setText("Ecart Type");
+	_groupBoxLayout->addWidget(_labelEcartType,2,0);
+
+	_labelLongueur = new QLabel(_groupBox);
+	_labelLongueur->setText("Longueur");
+	_groupBoxLayout->addWidget(_labelLongueur,3,0);
 
     _solLayout->addWidget(_groupBox, 1, 0);
 
@@ -91,6 +111,8 @@ void TYSolWidget::updateContent()
 
     _lineEditResistivite->setText(num.setNum(getElement()->getResistivite(), 'f', 2));
     _lineEditEpaisseur->setText(num.setNum(getElement()->getEpaisseur(), 'f', 2));
+	_lineEditEcartType->setText(num.setNum(getElement()->getEcartType(),'f',2));
+	_lineEditLongueur->setText(num.setNum(getElement()->getLongueur(),'f',2));
 }
 
 void TYSolWidget::apply()
@@ -107,6 +129,13 @@ void TYSolWidget::apply()
     epaisseur = epaisseur <= 0.01 ? 0.01 : epaisseur;
     getElement()->setEpaisseur(epaisseur);
 
+	double ecarttype = _lineEditEcartType->text().toDouble();
+    ecarttype = ecarttype < 0 ? 0 : ecarttype;
+	getElement()->setEcartType(ecarttype);
+
+	double longueur = _lineEditLongueur->text().toDouble();
+	longueur = longueur <0 ? 0: longueur;
+	getElement()->setLongueur(longueur);
 
     emit modified();
 }

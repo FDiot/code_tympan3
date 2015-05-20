@@ -798,6 +798,12 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     QLabel* pLabelEpaisseur = new QLabel(TR("id_epaisseur_label"));
     _pLineEditEpaisseur = new QLineEdit();
     QLabel* pUnitEpais = new QLabel(TR("id_unite_epaisseur"));
+	QLabel* pLabelEcartType = new QLabel("Ecart Type");
+    _pLineEditEcartType = new QLineEdit();
+    QLabel* pUnitET = new QLabel("un");
+	QLabel* pLabelLongueur = new QLabel("Longueur");
+    _pLineEditLongueur = new QLineEdit();
+    QLabel* pUnitLong = new QLabel("m");
     QGridLayout* groupBoxResistEpaiLayout = new QGridLayout();
     groupBoxResistEpaiLayout->addWidget(pLabelResistivite, 0, 0);
     groupBoxResistEpaiLayout->addWidget(_pLineEditResistivite, 0, 1);
@@ -805,6 +811,12 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     groupBoxResistEpaiLayout->addWidget(pLabelEpaisseur, 1, 0);
     groupBoxResistEpaiLayout->addWidget(_pLineEditEpaisseur, 1, 1);
     groupBoxResistEpaiLayout->addWidget(pUnitEpais, 1, 2);
+	groupBoxResistEpaiLayout->addWidget(pLabelEcartType, 2, 0);
+    groupBoxResistEpaiLayout->addWidget(_pLineEditEcartType, 2, 1);
+    groupBoxResistEpaiLayout->addWidget(pUnitET, 2, 2);
+	groupBoxResistEpaiLayout->addWidget(pLabelLongueur, 3, 0);
+    groupBoxResistEpaiLayout->addWidget(_pLineEditLongueur, 3, 1);
+    groupBoxResistEpaiLayout->addWidget(pUnitLong, 3, 2);
 
     QPushButton* pPushButtonResistivite = new QPushButton(TR("id_edit_resistivite"));
     connect(pPushButtonResistivite, SIGNAL(clicked()), this, SLOT(editResistivite()));
@@ -1308,6 +1320,14 @@ void TYPreferenceDialog::loadPreferences()
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEpaisseur->setText(QString().setNum(TYPreferenceManager::getDouble("EpaisSolDefault")));
     }
+	if (TYPreferenceManager::exists("EcartTypeDefault"))
+    {
+        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEcartType->setText(QString().setNum(TYPreferenceManager::getDouble("EcartTypeDefault")));
+    }
+	if (TYPreferenceManager::exists("LongueurDefault"))
+    {
+        ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditLongueur->setText(QString().setNum(TYPreferenceManager::getDouble("LongueurDefault")));
+    }
     if (TYPreferenceManager::exists("MasseVolMatDefault"))
     {
         ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditMasseVol->setText(QString().setNum(TYPreferenceManager::getDouble("MasseVolMatDefault")));
@@ -1705,7 +1725,14 @@ void TYPreferenceDialog::savePreferences()
     {
         TYPreferenceManager::setDouble("EpaisSolDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEpaisseur->text().toDouble());
     }
-
+	if (qValidator.validate(aQString = ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEcartType->text(), res) == QValidator::Acceptable)
+    {
+        TYPreferenceManager::setDouble("EcartTypeDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditEcartType->text().toDouble());
+    }
+	if (qValidator.validate(aQString = ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditLongueur->text(), res) == QValidator::Acceptable)
+    {
+        TYPreferenceManager::setDouble("LongueurDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditLongueur->text().toDouble());
+    }
     TYPreferenceManager::setDouble("MasseVolMatDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pLineEditMasseVol->text().toDouble());
     TYPreferenceManager::setSpectre("SpectreTransmDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pSpectreAttMatConst);
     TYPreferenceManager::setSpectre("SpectreAbsoDefault", ((AcoustiqueTab*)tabWidget->widget(3))->_pSpectreAbsoMatConst);

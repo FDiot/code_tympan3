@@ -75,6 +75,18 @@ public:
      */
     void setEpaisseur(double epais) { _epaisseur = epais; }
 
+	/**
+	 * Set/Get de l'ecart type
+	 */
+	double getEcartType() { return _ecarttype;}
+	void setEcartType(double ecarttype) {_ecarttype = ecarttype;}
+
+	/**
+	 * Set/Get de la longueur
+	 */
+	double getLongueur(){return _longueur;}
+	void setLongueur(double longueur){_longueur = longueur;}
+
     // Membres
 protected:
     ///Resistance a l'ecoulement.
@@ -82,6 +94,12 @@ protected:
 
     ///Epaisseur du sol.
     double _epaisseur;
+
+	///Ecart-type
+	double _ecarttype;
+
+	///Longueur 
+	double _longueur;
 
 
 };
