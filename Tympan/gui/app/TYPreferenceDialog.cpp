@@ -798,7 +798,7 @@ AcoustiqueTab::AcoustiqueTab(QWidget* parent)
     QLabel* pLabelEpaisseur = new QLabel(TR("id_epaisseur_label"));
     _pLineEditEpaisseur = new QLineEdit();
     QLabel* pUnitEpais = new QLabel(TR("id_unite_epaisseur"));
-	QLabel* pLabelEcartType = new QLabel("Ecart Type");
+	QLabel* pLabelEcartType = new QLabel("Ecart_Type");
     _pLineEditEcartType = new QLineEdit();
     QLabel* pUnitET = new QLabel("un");
 	QLabel* pLabelLongueur = new QLabel("Longueur");
