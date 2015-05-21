@@ -85,7 +85,7 @@ TYSolWidget::TYSolWidget(TYSol* pElement, QWidget* _pParent /*=NULL*/):
     _groupBoxLayout->addWidget(_labelResistivite, 0, 0);
 
 	_labelEcartType = new QLabel(_groupBox);
-	_labelEcartType->setText("Ecart Type");
+	_labelEcartType->setText("Ecart_Type");
 	_groupBoxLayout->addWidget(_labelEcartType,2,0);
 
 	_labelLongueur = new QLabel(_groupBox);

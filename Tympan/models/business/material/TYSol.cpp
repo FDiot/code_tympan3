@@ -135,7 +135,7 @@ DOM_Element TYSol::toXML(DOM_Element& domElement)
 
     TYXMLTools::addElementDoubleValue(domNewElem, "resistivite", _resistivite);
     TYXMLTools::addElementDoubleValue(domNewElem, "epaisseur", _epaisseur);
-	TYXMLTools::addElementDoubleValue(domNewElem, "ecart type", _ecarttype);
+	TYXMLTools::addElementDoubleValue(domNewElem, "ecart_type", _ecarttype);
 	TYXMLTools::addElementDoubleValue(domNewElem, "longueur", _longueur);
 
     return domNewElem;
@@ -158,7 +158,7 @@ int TYSol::fromXML(DOM_Element domElement)
 
         TYXMLTools::getElementDoubleValue(elemCur, "resistivite", _resistivite, resistiviteOk);
         TYXMLTools::getElementDoubleValue(elemCur, "epaisseur", _epaisseur, epaisseurOk);
-		TYXMLTools::getElementDoubleValue(elemCur, "ecart type", _ecarttype, epaisseurOk);
+		TYXMLTools::getElementDoubleValue(elemCur, "ecart_type", _ecarttype, epaisseurOk);
 		TYXMLTools::getElementDoubleValue(elemCur, "longueur", _longueur, epaisseurOk);
 
     }
