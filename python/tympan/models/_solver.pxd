@@ -7,7 +7,7 @@ from libcpp.vector cimport vector
 
 from tympan._core cimport SolverInterface
 from tympan.models._common cimport (OPoint3D, OSpectre, OSpectreComplex,
-                                    OVector3D, SpectrumMatrix, acoustic_path)
+                                    OVector3D, SpectrumMatrix)
 
 # XXX importing SmartPtr and shared_ptr from tympan.core set a cyclical dependency
 # between tympan.core and tympan.models.solver, since tympan.core declares
@@ -55,7 +55,6 @@ cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "ty
 cdef extern from "Tympan/models/solver/acoustic_result_model.hpp" namespace "tympan":
     cdef cppclass AcousticResultModel:
         SpectrumMatrix& get_data()
-        vector[acoustic_path*]& get_path_data()
 
 cdef extern from "Tympan/models/solver/data_model_common.hpp":
     cdef cppclass BaseEntity:
@@ -117,7 +116,6 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
         double AtmosPressure
         double AtmosTemperature
         double AtmosHygrometry
-        double AnalyticC0
         double WindDirection
         double AnalyticGradC
         double AnalyticGradV
@@ -143,24 +141,26 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
         bool DiffractionUseDistanceAsFilter
         bool KeepDebugRay
         bool UsePostFilters
-        bool EnableFullTargets
-        float TargetsDensity
         float InitialAngleTheta
+        float FinalAngleTheta
         float InitialAnglePhi
+        float FinalAnglePhi
         int AnalyticNbRay
         double AnalyticTMax
         double AnalyticH
         double AnalyticDMax
         int AnalyticTypeTransfo
+        float MeshRefinementValue
+        float MinSRDistance
         int NbThreads
         bool UseRealGround
+        bool UseScreen
         bool UseLateralDiffraction
         bool UseReflection
         bool PropaConditions
         float H1parameter
         bool ModSummation
         bool UseMeteo
-        float OverSampleD
         bool UseFresnelArea
         float Anime3DSigma
         int Anime3DForceC

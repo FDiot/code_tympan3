@@ -37,7 +37,6 @@ SOLVER_CONFIG_ATTRIBUTES = [
         ('double', 'AtmosPressure'),
         ('double', 'AtmosTemperature'),
         ('double', 'AtmosHygrometry'),
-        ('double', 'AnalyticC0'),
         ('double', 'WindDirection'),
         ('double', 'AnalyticGradC'),
         ('double', 'AnalyticGradV'),
@@ -65,20 +64,23 @@ SOLVER_CONFIG_ATTRIBUTES = [
         ('bool', 'KeepDebugRay'),
         ('bool', 'UsePostFilters'),
 
-        ('bool', 'EnableFullTargets'),
-        ('float', 'TargetsDensity'),
-
         ('float', 'InitialAngleTheta'),
+        ('float', 'FinalAngleTheta'),
         ('float', 'InitialAnglePhi'),
+        ('float', 'FinalAnglePhi'),
         ('int', 'AnalyticNbRay'),
         ('double', 'AnalyticTMax'),
         ('double', 'AnalyticH'),
         ('double', 'AnalyticDMax'),
 
         ('int', 'AnalyticTypeTransfo'),
+        ('float', 'MeshRefinementValue'),
+
+        ('float', 'MinSRDistance'),
 
         ('int', 'NbThreads'),
         ('bool', 'UseRealGround'),
+        ('bool', 'UseScreen'),
         ('bool', 'UseLateralDiffraction'),
         ('bool', 'UseReflection'),
         ('bool', 'PropaConditions'),
@@ -86,7 +88,6 @@ SOLVER_CONFIG_ATTRIBUTES = [
         ('bool', 'ModSummation'),
 
         ('bool', 'UseMeteo'),
-        ('float', 'OverSampleD'),
         ('bool', 'UseFresnelArea'),
         ('float', 'Anime3DSigma'),
         ('int', 'Anime3DForceC'),

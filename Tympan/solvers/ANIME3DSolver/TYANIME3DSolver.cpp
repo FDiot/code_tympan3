@@ -75,7 +75,7 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
     if (!bRet) { return false; }
 
     // Ray tracing computation
-    TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, aproblem, tabRays);
+    TYANIME3DAcousticPathFinder apf(_tabPolygon, _tabPolygonSize, aproblem, tabRays, *_pAtmos);
     if ( !apf.exec() ) { return false; }
 
 #ifndef __ONLY_RAYS__
@@ -127,7 +127,7 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
 #endif //__ONLY_RAYS__
 
     // Allow to watch curved rays (as in meteo field) instead of right rays
-	if (config->UseMeteo && config->OverSampleD)
+	if (config->UseMeteo)
     {
         for (unsigned int i = 0; i < tabRays.size(); i++)
         {

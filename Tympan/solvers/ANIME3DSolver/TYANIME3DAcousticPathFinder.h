@@ -24,6 +24,8 @@
  * \class TYANIME3DAcousticPathFinder
  * \brief La recherche de chemins acoustiques associee a la methode ANIME3D
  */
+class AtmosphericConditions;
+
 class TYANIME3DAcousticPathFinder
 {
 public:
@@ -37,7 +39,8 @@ public:
     TYANIME3DAcousticPathFinder(    TYStructSurfIntersect* tabPolygon, 
                                     const size_t& tabPolygonSize, 
                                     const tympan::AcousticProblemModel& aproblem_,
-                                    tab_acoustic_path& tabTYRays);
+                                    tab_acoustic_path& tabTYRays,
+                                    AtmosphericConditions& atmos);
 
 
     virtual ~TYANIME3DAcousticPathFinder();
@@ -115,14 +118,11 @@ private:
     /// Nombre de polygones presents dans _tabPolygon
     const size_t& _tabPolygonSize;
 
-    /*!< List of sources used by the solver */
-    //TYTabSourcePonctuelleGeoNode& _tabSources;
-
-    /*!< List of receptors used by the solver */
-    //TYTabPointCalculGeoNode& _tabRecepteurs;
-
     /// tableau de l'ensemble des rayons métier Code_TYMPAN
     tab_acoustic_path& _tabTYRays;
+
+    /// Conditions meteo
+    AtmosphericConditions& _atmos;
 
     const tympan::AcousticProblemModel& _aproblem;
 };

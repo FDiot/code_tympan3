@@ -17,6 +17,7 @@
 using std::vector;
 
 #include "Tympan/models/common/triangle.h"
+#include "Tympan/models/common/atmospheric_conditions.h"
 #include "Tympan/models/solver/config.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
 #include "Tympan/solvers/AnalyticRayTracer/meteoLin.h"
@@ -39,12 +40,16 @@ using std::vector;
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DSolver.h"
 
-TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(TYStructSurfIntersect* tabPolygon, const size_t& tabPolygonSize,
-                                                         const tympan::AcousticProblemModel& aproblem_, tab_acoustic_path& tabTYRays) :
+TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(   TYStructSurfIntersect* tabPolygon, 
+                                                            const size_t& tabPolygonSize,
+                                                            const tympan::AcousticProblemModel& aproblem_, 
+                                                            tab_acoustic_path& tabTYRays,
+                                                            AtmosphericConditions& atmos) :
     _tabPolygon(tabPolygon),
     _tabPolygonSize(tabPolygonSize),
     _aproblem(aproblem_),
-    _tabTYRays(tabTYRays)
+    _tabTYRays(tabTYRays),
+    _atmos(atmos)
 {
 }
 
@@ -321,6 +326,11 @@ void TYANIME3DAcousticPathFinder::convert_Rays_to_acoustic_path(const unsigned i
 
 void TYANIME3DAcousticPathFinder::sampleAndCorrection()
 {
+    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
+    double t_step(config->AnalyticH);
+    double c0(_atmos.compute_c());
+    acoustic_path::set_sampler_step(c0 * t_step);
+
     for (size_t i = 0; i < _tabTYRays.size(); i++)
     {
         // Récupération des longueurs simples (éléments suivants)
@@ -374,12 +384,12 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
         CurveRayShot.setDMax(config->AnalyticDMax);
 
         CurveRayShot.setTMax(config->AnalyticTMax);
-        CurveRayShot.setTimeStep(config->AnalyticH);
+        CurveRayShot.setTimeStep(config->AnalyticH); // Propagation time step
         CurveRayShot.setNbRay(config->AnalyticNbRay);
         dynamic_cast<meteoLin*>(CurveRayShot._weather)->setGradC(config->AnalyticGradC);
         dynamic_cast<meteoLin*>(CurveRayShot._weather)->setGradV(config->AnalyticGradV);
         CurveRayShot._weather->setWindAngle(config->WindDirection);
-        CurveRayShot._weather->setC0(config->AnalyticC0);
+        CurveRayShot._weather->setC0(_atmos.compute_c());
         CurveRayShot.setLaunchType(1);                                 // Indique que l'on tire les rayons sur un plan horizontal
 
         dynamic_cast<Latitude2DSampler*>(CurveRayShot.getSampler())->setStartTheta(config->InitialAnglePhi);
