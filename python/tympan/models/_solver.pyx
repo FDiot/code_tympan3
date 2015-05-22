@@ -250,6 +250,7 @@ cdef class MeshTriangle:
         return None
 
 
+
 cdef class Configuration:
     thisptr = cy.declare(SmartPtr[SolverConfiguration])
 
@@ -274,11 +275,6 @@ cdef class Configuration:
     def setAtmosHygrometry(self, value):
         self.thisptr.getRealPointer().AtmosHygrometry = value
     AtmosHygrometry = property(getAtmosHygrometry, setAtmosHygrometry)
-    def getAnalyticC0(self):
-        return self.thisptr.getRealPointer().AnalyticC0
-    def setAnalyticC0(self, value):
-        self.thisptr.getRealPointer().AnalyticC0 = value
-    AnalyticC0 = property(getAnalyticC0, setAnalyticC0)
     def getWindDirection(self):
         return self.thisptr.getRealPointer().WindDirection
     def setWindDirection(self, value):
@@ -404,26 +400,26 @@ cdef class Configuration:
     def setUsePostFilters(self, value):
         self.thisptr.getRealPointer().UsePostFilters = value
     UsePostFilters = property(getUsePostFilters, setUsePostFilters)
-    def getEnableFullTargets(self):
-        return self.thisptr.getRealPointer().EnableFullTargets
-    def setEnableFullTargets(self, value):
-        self.thisptr.getRealPointer().EnableFullTargets = value
-    EnableFullTargets = property(getEnableFullTargets, setEnableFullTargets)
-    def getTargetsDensity(self):
-        return self.thisptr.getRealPointer().TargetsDensity
-    def setTargetsDensity(self, value):
-        self.thisptr.getRealPointer().TargetsDensity = value
-    TargetsDensity = property(getTargetsDensity, setTargetsDensity)
     def getInitialAngleTheta(self):
         return self.thisptr.getRealPointer().InitialAngleTheta
     def setInitialAngleTheta(self, value):
         self.thisptr.getRealPointer().InitialAngleTheta = value
     InitialAngleTheta = property(getInitialAngleTheta, setInitialAngleTheta)
+    def getFinalAngleTheta(self):
+        return self.thisptr.getRealPointer().FinalAngleTheta
+    def setFinalAngleTheta(self, value):
+        self.thisptr.getRealPointer().FinalAngleTheta = value
+    FinalAngleTheta = property(getFinalAngleTheta, setFinalAngleTheta)
     def getInitialAnglePhi(self):
         return self.thisptr.getRealPointer().InitialAnglePhi
     def setInitialAnglePhi(self, value):
         self.thisptr.getRealPointer().InitialAnglePhi = value
     InitialAnglePhi = property(getInitialAnglePhi, setInitialAnglePhi)
+    def getFinalAnglePhi(self):
+        return self.thisptr.getRealPointer().FinalAnglePhi
+    def setFinalAnglePhi(self, value):
+        self.thisptr.getRealPointer().FinalAnglePhi = value
+    FinalAnglePhi = property(getFinalAnglePhi, setFinalAnglePhi)
     def getAnalyticNbRay(self):
         return self.thisptr.getRealPointer().AnalyticNbRay
     def setAnalyticNbRay(self, value):
@@ -449,6 +445,16 @@ cdef class Configuration:
     def setAnalyticTypeTransfo(self, value):
         self.thisptr.getRealPointer().AnalyticTypeTransfo = value
     AnalyticTypeTransfo = property(getAnalyticTypeTransfo, setAnalyticTypeTransfo)
+    def getMeshRefinementValue(self):
+        return self.thisptr.getRealPointer().MeshRefinementValue
+    def setMeshRefinementValue(self, value):
+        self.thisptr.getRealPointer().MeshRefinementValue = value
+    MeshRefinementValue = property(getMeshRefinementValue, setMeshRefinementValue)
+    def getMinSRDistance(self):
+        return self.thisptr.getRealPointer().MinSRDistance
+    def setMinSRDistance(self, value):
+        self.thisptr.getRealPointer().MinSRDistance = value
+    MinSRDistance = property(getMinSRDistance, setMinSRDistance)
     def getNbThreads(self):
         return self.thisptr.getRealPointer().NbThreads
     def setNbThreads(self, value):
@@ -459,6 +465,11 @@ cdef class Configuration:
     def setUseRealGround(self, value):
         self.thisptr.getRealPointer().UseRealGround = value
     UseRealGround = property(getUseRealGround, setUseRealGround)
+    def getUseScreen(self):
+        return self.thisptr.getRealPointer().UseScreen
+    def setUseScreen(self, value):
+        self.thisptr.getRealPointer().UseScreen = value
+    UseScreen = property(getUseScreen, setUseScreen)
     def getUseLateralDiffraction(self):
         return self.thisptr.getRealPointer().UseLateralDiffraction
     def setUseLateralDiffraction(self, value):
@@ -489,11 +500,6 @@ cdef class Configuration:
     def setUseMeteo(self, value):
         self.thisptr.getRealPointer().UseMeteo = value
     UseMeteo = property(getUseMeteo, setUseMeteo)
-    def getOverSampleD(self):
-        return self.thisptr.getRealPointer().OverSampleD
-    def setOverSampleD(self, value):
-        self.thisptr.getRealPointer().OverSampleD = value
-    OverSampleD = property(getOverSampleD, setOverSampleD)
     def getUseFresnelArea(self):
         return self.thisptr.getRealPointer().UseFresnelArea
     def setUseFresnelArea(self, value):
