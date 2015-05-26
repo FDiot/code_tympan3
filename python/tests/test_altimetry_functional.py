@@ -3,10 +3,12 @@
 import os.path
 import unittest
 
+from shapely.geometry.polygon import LinearRing
+
 from utils import TEST_PROBLEM_DIR
 
 from tympan.models.project import Project
-from tympan.altimetry import AltimetryMesh
+from tympan.altimetry import AltimetryMesh, datamodel
 
 
 class AltimetryFunctionalTC(unittest.TestCase):
@@ -18,11 +20,24 @@ class AltimetryFunctionalTC(unittest.TestCase):
     def test_les_barthes(self):
         fname = 'Tympan_Les_Barthes_avec_vegetation_Pb.xml'
         altim = self.build_altimetry(fname)
+        # first material area
         coords = (10, 10)
         matid = '{4e550506-88c8-4985-abc2-47d221235787}'
         altitude_bounds = (230, 240)
         self.check_altitude_at(altim, coords, altitude_bounds)
         self.check_material_at(altim, coords, matid)
+        # vegetation area
+        #  Build a polygon using contour points of the vegetation area and use
+        #  a representative point to query the underlying geometric feature.
+        contour = LinearRing([(-967., -409.), (-343., -1083.), (-1635., -774.)])
+        coords = contour.representative_point().coords[0]
+        featid = '{7cdf6eb7-6646-491d-953c-50e145efc408}'
+        fh, vh_or_i = altim.mesh.locate_point(coords)
+        feature = altim.feature_by_face[fh]
+        self.assertEqual(feature.id, featid)
+        self.assertIsInstance(feature, datamodel.VegetationArea)
+        self.assertFalse(feature.foliage)
+        self.assertEqual(feature.height, 10)
 
     def test_alti_pente_cste(self):
         fname = 'Site_pente_constante.xml'
