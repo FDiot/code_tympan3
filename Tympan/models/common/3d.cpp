@@ -429,7 +429,6 @@ TabPoint3D OPoint3D::checkPointsMaxDistance(const TabPoint3D& points, const doub
     {
         seg._ptB = points[i];
         dist = seg.longueur();
-        if (dist < TYSEUILCONFONDUS) { continue; } // elimination du point en doublon
         // Si les points sont trop eloignes...
         if (dist > distanceMax)
         {
