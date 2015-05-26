@@ -18,15 +18,78 @@
 #include "geometry_modifier.h"
 #include "Tympan/models/common/delaunay_maker.h"
 #include "Tympan/models/common/triangle.h"
+#include "Tympan/solvers/AcousticRaytracer/Geometry/Triangle.h"
 #include "Lancer.h"
 #include "RayCourb.h"
 
 using namespace std;
 
+#define GEOM_MODIFIER_ACCELERATING_STRUCTURE
+
 void geometry_modifier::clear()
 {
     Liste_triangles.clear();
 }
+
+void geometry_modifier::trianguleNappe(const Lancer& shot)
+{
+    unsigned int nbRay = shot.nbRay;
+    pos_center = shot.sources[0];
+
+    // 1- On creer nos triangles de Delaunay
+    ODelaunayMaker oDelaunayMaker(1e-5);
+
+    for (unsigned int i = 0; i < nbRay; ++i)                                                      // boucle sur les rayons lances
+    {
+        for (unsigned int j = 0; j < shot.MatRes[0][i].etapes.size(); ++j)                         // boucle sur les points du rayon
+        {
+            oDelaunayMaker.addVertex(vec3toOPoint3D(shot.MatRes[0][i].etapes[j].pos));
+        }
+    }
+
+    oDelaunayMaker.compute();
+
+    // 2- On a notre liste de triangles
+    Liste_triangles = oDelaunayMaker.getFaces();
+    Liste_vertex = oDelaunayMaker.getVertex();
+
+#ifdef GEOM_MODIFIER_ACCELERATING_STRUCTURE
+    append_triangles_to_scene();
+#endif //GEOM_MODIFIER_ACCELERATING_STRUCTURE
+}
+
+#ifdef GEOM_MODIFIER_ACCELERATING_STRUCTURE
+
+double geometry_modifier::interpo(const vec3* triangle, vec3 P)
+{
+    return 0;
+}
+
+vec3 geometry_modifier::fonction_h(const vec3& P)
+{
+    double h = compute_h(P);
+
+    return vec3(P.x, P.y, P.z - h + pos_center.z);
+}
+
+vec3 geometry_modifier::fonction_h_inverse(const vec3& P)
+{
+    double h = compute_h(P);
+
+    return vec3(P.x, P.y, P.z + h - pos_center.z);
+}
+
+double geometry_modifier::compute_h(const vec3& P)
+{
+    double offset = 2000.;
+    vec3 origine(P.x, P.y, (P.z + offset) );
+    Ray ray1( origine, vec3(0., 0., -1.) );
+
+    std::list<Intersection> LI;
+    return (P.z + offset) - static_cast<double>( _scene->getAccelerator()->traverse( &ray1, LI ) );
+}
+
+#else
 
 vec3 geometry_modifier::fonction_h(const vec3& P)
 {
@@ -60,7 +123,6 @@ vec3 geometry_modifier::fonction_h(const vec3& P)
 
     return R;
 }
-
 
 vec3 geometry_modifier::fonction_h_inverse(const vec3& P)
 {
@@ -99,30 +161,6 @@ vec3 geometry_modifier::fonction_h_inverse(const vec3& P)
     return R;
 }
 
-
-void geometry_modifier::trianguleNappe(const Lancer& shot)
-{
-    unsigned int nbRay = shot.nbRay;
-    pos_center = shot.sources[0];
-
-    // 1- On creer nos triangles de Delaunay
-    ODelaunayMaker oDelaunayMaker(1e-5);
-
-    for (unsigned int i = 0; i < nbRay; ++i)                                                      // boucle sur les rayons lances
-    {
-        for (unsigned int j = 0; j < shot.MatRes[0][i].etapes.size(); ++j)                         // boucle sur les points du rayon
-        {
-            oDelaunayMaker.addVertex(vec3toOPoint3D(shot.MatRes[0][i].etapes[j].pos));
-        }
-    }
-
-    oDelaunayMaker.compute();
-
-    // 2- On a notre liste de triangles
-    Liste_triangles = oDelaunayMaker.getFaces();
-    Liste_vertex = oDelaunayMaker.getVertex();
-}
-
 double geometry_modifier::interpo(const vec3* triangle, vec3 P)
 {
     // rend la coordonnee P.z
@@ -157,4 +195,30 @@ bool IsInTriangle(const vec3& P, const vec3* triangle)  // R2:: ?
     if (resultat3 < 0) { return false; }
 
     return true;
+}
+
+#endif //GEOM_MODIFIER_ACCELERATING_STRUCTURE
+
+
+void geometry_modifier::append_triangles_to_scene()
+{
+    vec3 pos;
+    for (int i = 0; i<Liste_triangles.size(); i++)
+    {
+        unsigned int a, b, c;
+
+        pos = OPoint3Dtovec3( Liste_vertex.at( Liste_triangles.at(i)._p1 ) );
+        _scene->addVertex(pos, a);
+
+        pos = OPoint3Dtovec3( Liste_vertex.at( Liste_triangles.at(i)._p2 ) );
+        _scene->addVertex(pos, b);
+
+        pos = OPoint3Dtovec3( Liste_vertex.at( Liste_triangles.at(i)._p3 ) );
+        _scene->addVertex(pos, c);
+
+        Triangle* face;
+        face = (Triangle*)_scene->addTriangle(a, b, c, nullptr);
+    }
+
+    _scene->finish(1); // Use grid accelerator
 }

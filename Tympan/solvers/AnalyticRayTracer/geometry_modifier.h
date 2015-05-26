@@ -21,6 +21,7 @@
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/models/common/mathlib.h"
+#include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
 
 class Lancer;
 
@@ -41,7 +42,7 @@ class geometry_modifier :
 public:
 
     // Constructeurs :
-    geometry_modifier() : methode(1) {}
+    geometry_modifier() : methode(1) { _scene = std::unique_ptr<Scene>( new Scene() ); }
     geometry_modifier(Lancer& L) : methode(1) {}
     geometry_modifier(geometry_modifier& r) : methode(r.methode) {}
 
@@ -103,14 +104,22 @@ public:
      */
     double interpo(const vec3* triangle, vec3 P);
 
-private :
-    int methode;                                               /*!< entier definissant la methode de transformation utilisee */
-    vec3 pos_center;
+    /*!
+     * \fn const scene* get_scene();
+     * \brief return the scene
+     */
+    const Scene* get_scene() { return _scene.get(); }
 
-    QList<OTriangle> Liste_triangles;                           /*!< Liste des triangles de la nappe interpolee */
-    QList<OPoint3D> Liste_vertex;                                   /*!< Liste des vertex de la triangulation */
-
 private :
+    void append_triangles_to_scene();
+    double compute_h(const vec3& P);
+
+    int methode;                        /*!< entier definissant la methode de transformation utilisee */
+    vec3 pos_center;                    /*!< Position de la source */
+
+    QList<OTriangle> Liste_triangles;   /*!< Liste des triangles de la nappe interpolee */
+    QList<OPoint3D> Liste_vertex;       /*!< Liste des vertex de la triangulation */
+    std::unique_ptr<Scene> _scene;      /*!< Support de la structure acceleratrice pour la nappe */
 };
 
 bool IsInTriangle(const vec3& P, const vec3* triangle);
