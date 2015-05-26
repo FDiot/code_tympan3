@@ -400,6 +400,11 @@ cdef class Configuration:
     def setUsePostFilters(self, value):
         self.thisptr.getRealPointer().UsePostFilters = value
     UsePostFilters = property(getUsePostFilters, setUsePostFilters)
+    def getCurveRaySampler(self):
+        return self.thisptr.getRealPointer().CurveRaySampler
+    def setCurveRaySampler(self, value):
+        self.thisptr.getRealPointer().CurveRaySampler = value
+    CurveRaySampler = property(getCurveRaySampler, setCurveRaySampler)
     def getInitialAngleTheta(self):
         return self.thisptr.getRealPointer().InitialAngleTheta
     def setInitialAngleTheta(self, value):

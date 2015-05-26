@@ -15,6 +15,8 @@ const char * DEFAULT_SOLVER_CONFIG =
 "# Hygrometry percent [type: double]\n"
 "# XXX 70 dans TYAtmosphere.h\n"
 "AtmosHygrometry=60.\n"
+"# Temperature gradient [type : double]\n"
+"AnalyticGradC=0.\n"
 "# Vertical wind speed gradient [type: double]\n"
 "AnalyticGradV=0.\n"
 "# Wind direction 0 means from north to south [type: double]\n"

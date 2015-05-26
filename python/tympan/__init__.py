@@ -64,6 +64,7 @@ SOLVER_CONFIG_ATTRIBUTES = [
         ('bool', 'KeepDebugRay'),
         ('bool', 'UsePostFilters'),
 
+        ('int', 'CurveRaySampler'),
         ('float', 'InitialAngleTheta'),
         ('float', 'FinalAngleTheta'),
         ('float', 'InitialAnglePhi'),
