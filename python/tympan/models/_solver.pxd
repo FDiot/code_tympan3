@@ -141,6 +141,7 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
         bool DiffractionUseDistanceAsFilter
         bool KeepDebugRay
         bool UsePostFilters
+        int CurveRaySampler
         float InitialAngleTheta
         float FinalAngleTheta
         float InitialAnglePhi
