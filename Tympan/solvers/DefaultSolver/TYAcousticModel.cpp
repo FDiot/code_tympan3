@@ -20,7 +20,7 @@
 #include "Tympan/models/common/plan.h"
 #include "Tympan/solvers/DefaultSolver/TYTrajet.h"
 #include "Tympan/solvers/DefaultSolver/TYSolver.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Shape.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
 #include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
