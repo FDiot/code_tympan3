@@ -49,7 +49,7 @@ public:
 
     Simulation& getRayTracer() { return _rayTracing; }
 
-    geometry_modifier& get_geometry_modifier() { return transformer; }
+    IGeometryModifier* get_geometry_modifier() { return transformer.get(); }
 
 private :
     /*!
@@ -110,7 +110,7 @@ private:
     Simulation _rayTracing;
 
     /// Objet _curveRayTracing pour le lancer de rayons courbes
-    geometry_modifier transformer;
+    std::unique_ptr<IGeometryModifier> transformer;
 
     /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face
     TYStructSurfIntersect* _tabPolygon;

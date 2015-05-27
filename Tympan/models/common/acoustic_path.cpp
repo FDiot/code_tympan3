@@ -232,7 +232,7 @@ void acoustic_path::setAngles(ACOUSTIC_EVENT_TYPES eventType)
     }
 }
 
-void acoustic_path::overSample(IGeometryModifier& transformer, const double& dMin)
+void acoustic_path::overSample(IGeometryModifier* transformer, const double& dMin)
 {
     if (dMin == 0.) { return; }
 
@@ -246,8 +246,8 @@ void acoustic_path::overSample(IGeometryModifier& transformer, const double& dMi
     while (iter != endIter)
     {
         // Recuperation des deux points initiaux, dans le repere de la geometrie deformee
-        tabPoints.push_back( transformer.fonction_h( (*iter)->pos ) );
-        tabPoints.push_back( transformer.fonction_h( (*(iter + 1))->pos ) );
+        tabPoints.push_back( vec3toOPoint3D( transformer->fonction_h( OPoint3Dtovec3( (*iter)->pos ) ) ) );
+        tabPoints.push_back( vec3toOPoint3D( transformer->fonction_h( OPoint3Dtovec3( (*(iter + 1))->pos ) ) ) );
 
         // Surechantillonnage du tableau de points
         tabPoints = OPoint3D::checkPointsMaxDistance(tabPoints, dMin);
@@ -317,7 +317,7 @@ void acoustic_path::compute_shot_angle()
     _events[0]->angletheta = angle;
 }
 
-void acoustic_path::sampleAndCorrection(IGeometryModifier& transformer)
+void acoustic_path::sampleAndCorrection(IGeometryModifier* transformer)
 {
         // Récupération des longueurs simples (éléments suivants)
         nextLenghtCompute(transformer);
@@ -335,7 +335,7 @@ void acoustic_path::sampleAndCorrection(IGeometryModifier& transformer)
         eventPosCompute(transformer);
 }
 
-void acoustic_path::nextLenghtCompute(IGeometryModifier& transformer)
+void acoustic_path::nextLenghtCompute(IGeometryModifier* transformer)
 {
     for (unsigned j = 0; j < _events.size() - 1; j++)
     {
@@ -344,7 +344,7 @@ void acoustic_path::nextLenghtCompute(IGeometryModifier& transformer)
     }
 }
 
-double acoustic_path::lengthCorrection(acoustic_event* ev1, const acoustic_event* ev2, IGeometryModifier& transformer)
+double acoustic_path::lengthCorrection(acoustic_event* ev1, const acoustic_event* ev2, IGeometryModifier* transformer)
 {
     TabPoint3D tabPoint = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, sampler_step);
     double length = 0.;
@@ -354,7 +354,7 @@ double acoustic_path::lengthCorrection(acoustic_event* ev1, const acoustic_event
     for (size_t i = 0; i < tabPoint.size(); i++)
     {
         OPoint3D& point = tabPoint[i];
-        point = transformer.fonction_h_inverse(point);
+        point = vec3toOPoint3D( transformer->fonction_h_inverse( OPoint3Dtovec3(point) ) );
     }
 
     for (size_t i = 0; i < tabPoint.size() - 1; i++)
@@ -365,7 +365,7 @@ double acoustic_path::lengthCorrection(acoustic_event* ev1, const acoustic_event
     return length;
 }
 
-void acoustic_path::endLenghtCompute(IGeometryModifier& transformer)
+void acoustic_path::endLenghtCompute(IGeometryModifier* transformer)
 {
     for (unsigned j = 0; j < _events.size() - 1; j++)
     {
@@ -374,7 +374,7 @@ void acoustic_path::endLenghtCompute(IGeometryModifier& transformer)
     }
 }
 
-void acoustic_path::prevNextLengthCompute(IGeometryModifier& transformer)
+void acoustic_path::prevNextLengthCompute(IGeometryModifier* transformer)
 {
     for (unsigned j = 1; j < _events.size() - 1; j++)
     {
@@ -383,7 +383,7 @@ void acoustic_path::prevNextLengthCompute(IGeometryModifier& transformer)
     }
 }
 
-void acoustic_path::angleCompute(IGeometryModifier& transformer)
+void acoustic_path::angleCompute(IGeometryModifier* transformer)
 {
     for (unsigned j = 1; j < _events.size() - 1; j++)
     {
@@ -392,19 +392,19 @@ void acoustic_path::angleCompute(IGeometryModifier& transformer)
     }
 }
 
-void acoustic_path::eventPosCompute(IGeometryModifier& transformer)
+void acoustic_path::eventPosCompute(IGeometryModifier* transformer)
 {
     for (unsigned i = 0; i < _events.size(); i++)
     {
         OPoint3D& point = _events[i]->pos;
-        point = transformer.fonction_h_inverse(point);
+        point = vec3toOPoint3D( transformer->fonction_h_inverse( OPoint3Dtovec3(point) ) );
     }
 }
 
 double acoustic_path::angleCorrection(const acoustic_event* ev1,
                                     acoustic_event* ev2,
                               const acoustic_event* ev3,
-                              IGeometryModifier& transformer)
+                              IGeometryModifier* transformer)
 {
     TabPoint3D tabPoint1 = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, sampler_step);
     TabPoint3D tabPoint2 = OPoint3D::checkPointsMaxDistance(ev2->pos, ev3->pos, sampler_step);
@@ -414,7 +414,7 @@ double acoustic_path::angleCorrection(const acoustic_event* ev1,
     for (int i = 0; i < 3; i++)
     {
         OPoint3D& point = points[i];
-        point = transformer.fonction_h_inverse(point);
+        point = vec3toOPoint3D( transformer->fonction_h_inverse( OPoint3Dtovec3(point) ) );
     }
 
     OVector3D vec1(points[1], points[0]);
@@ -423,7 +423,7 @@ double acoustic_path::angleCorrection(const acoustic_event* ev1,
     return (M_PI - vec1.angle(vec2)) / 2.;
 }
 
-void acoustic_path::tyRayCorrection(IGeometryModifier& transformer)
+void acoustic_path::tyRayCorrection(IGeometryModifier* transformer)
 {
     // Repositionnement des elements du rayon
     overSample(transformer, sampler_step);
@@ -433,6 +433,6 @@ void acoustic_path::tyRayCorrection(IGeometryModifier& transformer)
     for (unsigned int i = 0 ; i < listIndex.size() ; i++)
     {
         OPoint3D& point = _events[ listIndex[i] ]->pos;
-        point = transformer.fonction_h_inverse(point);
+        point = vec3toOPoint3D( transformer->fonction_h_inverse( OPoint3Dtovec3(point) ) );
     }
 }

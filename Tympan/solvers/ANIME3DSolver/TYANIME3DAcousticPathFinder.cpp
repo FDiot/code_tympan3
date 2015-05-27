@@ -175,13 +175,13 @@ void TYANIME3DAcousticPathFinder::transformSEtR(vector<vec3>& sources, vector<ve
     // Pour toutes les sources
     for (unsigned int i = 0; i < sources.size(); i++)
     {
-        sources[i] = OPoint3Dtovec3( transformer.fonction_h( vec3toOPoint3D( sources[i] ) ) );
+        sources[i] = transformer->fonction_h( sources[i] );
     }
 
     // Pour tous les recepteurs
     for (unsigned int i = 0; i < recepteurs.size(); i++)
     {
-        recepteurs[i] = OPoint3Dtovec3( transformer.fonction_h( vec3toOPoint3D( recepteurs[i] ) ) );
+        recepteurs[i] = transformer->fonction_h( recepteurs[i] );
     }
 }
 
@@ -210,15 +210,15 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
         double coord[3];
 
         _tabPolygon[i].tabPoint[0].getCoords(coord);
-        pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
+        pos = transformer->fonction_h( OPoint3Dtovec3(coord) );
         scene->addVertex(pos, a);
 
         _tabPolygon[i].tabPoint[1].getCoords(coord);
-        pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
+        pos = transformer->fonction_h( OPoint3Dtovec3(coord) );
         scene->addVertex(pos, b);
 
         _tabPolygon[i].tabPoint[2].getCoords(coord);
-        pos = transformer.fonction_h( OPoint3Dtovec3(coord) );
+        pos = transformer->fonction_h( OPoint3Dtovec3(coord) );
         scene->addVertex(pos, c);
 
         Triangle* face;
@@ -334,18 +334,18 @@ void TYANIME3DAcousticPathFinder::sampleAndCorrection()
     for (size_t i = 0; i < _tabTYRays.size(); i++)
     {
         // Récupération des longueurs simples (éléments suivants)
-        _tabTYRays.at(i)->nextLenghtCompute(transformer);
+        _tabTYRays.at(i)->nextLenghtCompute(transformer.get());
         // Récupération des distances aux évènements pertinents
-        _tabTYRays.at(i)->endLenghtCompute(transformer);
+        _tabTYRays.at(i)->endLenghtCompute(transformer.get());
 
         // Distance entre évènement précédent et suivant
-        _tabTYRays.at(i)->prevNextLengthCompute(transformer);
+        _tabTYRays.at(i)->prevNextLengthCompute(transformer.get());
 
         // Récupération des angles
-        _tabTYRays.at(i)->angleCompute(transformer);
+        _tabTYRays.at(i)->angleCompute(transformer.get());
 
         // Correction de la position des évènements
-        _tabTYRays.at(i)->eventPosCompute(transformer);
+        _tabTYRays.at(i)->eventPosCompute(transformer.get());
     }
 }
 
@@ -374,6 +374,7 @@ void TYANIME3DAcousticPathFinder::set_source_idx_and_receptor_idx_to_acoustic_pa
 void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>& sources )
 {
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
+
     if (config->UseMeteo)
     {
         // Creation du lancer de rayons courbes
@@ -404,8 +405,18 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
         CurveRayShot.run();
 
         // Transformation de la geometrie
-        transformer.clear();
-        transformer.setMethode(config->AnalyticTypeTransfo);
-        transformer.trianguleNappe(CurveRayShot);
+        switch(config->AnalyticTypeTransfo)
+        {
+        case 2 : 
+            transformer = std::unique_ptr<IGeometryModifier>( new geometry_modifier_spherical_correction );
+            break;
+        case 1 :
+        default:
+            transformer = std::unique_ptr<IGeometryModifier>( new geometry_modifier_z_correction ) ;
+            break;
+        }
+
+        transformer->clear();
+        transformer->buildNappe(CurveRayShot);
     }
 }

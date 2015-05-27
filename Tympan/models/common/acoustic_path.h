@@ -112,7 +112,7 @@ public:
      * \brief Curve acoustic_path with respect to meteo influence
      *        This is only for watching curved rays on screen
      */
-    virtual void tyRayCorrection(IGeometryModifier& transformer);
+    virtual void tyRayCorrection(IGeometryModifier* transformer);
 
     /*!
     * \fn void setSource(unsigned int source_idx_, OPoint3D& globalPosition);
@@ -260,7 +260,7 @@ public:
     * \fn void overSampleTYRay(TYRay* tyRay);
     * \brief Rajoute des evenements aux rayons de type TYRay
     */
-    virtual void overSample(IGeometryModifier& transformer, const double& dMin);
+    virtual void overSample(IGeometryModifier* transformer, const double& dMin);
 
     /*!
     * \fn void sampleAndCorrection()
@@ -268,38 +268,38 @@ public:
     * \ by calling the three previous functions
     * \ Creates two matrix which have corrected lengths and angles
     */
-    virtual void sampleAndCorrection(IGeometryModifier& transformer);
+    virtual void sampleAndCorrection(IGeometryModifier* transformer);
 
     /*!
      * \fn void endLenghtCompute(TYRay *tyRay)
      * \brief compute the length between an event and the next pertinent event
      *        (i.e. betwween a diffraction and the next reflection or receptor)
      */
-    virtual void endLenghtCompute(IGeometryModifier& transformer);
+    virtual void endLenghtCompute(IGeometryModifier* transformer);
 
     /*!
      * \fn void angleCompute(TYRay *tyRay)
      * \brief compute the angle between incident ray and the face
      */
-    virtual void angleCompute(IGeometryModifier& transformer);
+    virtual void angleCompute(IGeometryModifier* transformer);
 
     /*!
      * \fn void nextLenghtCompute(TYRay *tyRay)
      * \brief compute the length between an event and the next event
      */
-    virtual void nextLenghtCompute(IGeometryModifier& transformer);
+    virtual void nextLenghtCompute(IGeometryModifier* transformer);
 
     /*!
      * \fn void prevNextLengthCompute(TYRay *tyRay)
      * \brief Computes the length between event-1 and event+1
      */
-    virtual void prevNextLengthCompute(IGeometryModifier& transformer);
+    virtual void prevNextLengthCompute(IGeometryModifier* transformer);
 
     /*!
      * \fn void nextLenghtCompute(TYRay *tyRay)
      * \brief compute the length between an event and the next event
      */
-    virtual void eventPosCompute(IGeometryModifier& transformer);
+    virtual void eventPosCompute(IGeometryModifier* transformer);
 
     /*!
     * \fn void lengthCorrection()
@@ -307,7 +307,7 @@ public:
     * \ Works on over-sampled TYRays
     * \ Creates a vector which has all corrected path lengths
     */
-    virtual double lengthCorrection(acoustic_event* ev1, const acoustic_event* ev2, IGeometryModifier& transformer);
+    virtual double lengthCorrection(acoustic_event* ev1, const acoustic_event* ev2, IGeometryModifier* transformer);
 
     /*!
     * \fn void angleCorrection()
@@ -316,7 +316,7 @@ public:
     *        ev2 -> event to wich compute anngle
     *        ev3 -> next event
     */
-    virtual double angleCorrection(const acoustic_event* ev1, acoustic_event* ev2, const acoustic_event* ev3, IGeometryModifier& transformer);
+    virtual double angleCorrection(const acoustic_event* ev1, acoustic_event* ev2, const acoustic_event* ev3, IGeometryModifier* transformer);
 
 	static void set_sampler_step(double sampler_step_) { sampler_step = sampler_step_; }
 
