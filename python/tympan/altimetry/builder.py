@@ -296,15 +296,17 @@ class MeshFiller(object):
                     feature_by_face[fh] = feature
         # Fill material areas by finding the underlying feature based on the
         # position of face "middle point".
-        contours = _feature_contours(mainsite, cleaner)
+        features = _material_area_features(mainsite, cleaner)
         for fh in self._mesh.cdt.finite_faces():
             if fh in feature_by_face:
+                # Already inserted (landtake).
                 continue
-            ring = geometry.polygon.LinearRing(
-                [self._mesh.py_vertex(fh.vertex(i)) for i in range(3)])
-            center = geometry.Point(ring.representative_point().coords[0])
-            for shape, feature in contours:
-                if shape.contains(center):
+            point = self._mesh.point_for_face(fh)
+            assert point is not None, \
+                    'could not find a point inside face handle {}'.format(fh)
+            point = geometry.Point((point.x(), point.y()))
+            for feature in features:
+                if feature.shape.contains(point):
                     feature_by_face[fh] = feature
                     break
             else:
@@ -325,16 +327,17 @@ def _check_feature_inserted(feature, site):
         raise ValueError("Only features already inserted can be filled ID:%s"
                          % feature.id)
 
-def _feature_contours(mainsite, cleaner):
-    """Return the list of (contour, feature) where `contour` is the exterior
-    shape of feature corresponding to material areas found in `cleaner`.
+
+def _material_area_features(mainsite, cleaner):
+    """Return the list geometric features corresponding to material areas
+    found in `cleaner`.
     """
     checked = set()
-    contours = []
+    features = []
     for material_area_id in cleaner.material_areas_inner_first():
         feature = cleaner.equivalent_site.features_by_id[material_area_id]
         if feature not in checked:
             _check_feature_inserted(feature, mainsite)
             checked.add(feature)
-        contours.append((feature.shape.exterior, feature))
-    return contours
+        features.append(feature)
+    return features
