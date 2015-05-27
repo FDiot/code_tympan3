@@ -26,12 +26,12 @@ using namespace std;
 
 #define GEOM_MODIFIER_ACCELERATING_STRUCTURE
 
-void geometry_modifier::clear()
+void geometry_modifier_z_correction::clear()
 {
     Liste_triangles.clear();
 }
 
-void geometry_modifier::trianguleNappe(const Lancer& shot)
+void geometry_modifier_z_correction::buildNappe(const Lancer& shot)
 {
     unsigned int nbRay = shot.nbRay;
     pos_center = shot.sources[0];
@@ -60,26 +60,26 @@ void geometry_modifier::trianguleNappe(const Lancer& shot)
 
 #ifdef GEOM_MODIFIER_ACCELERATING_STRUCTURE
 
-double geometry_modifier::interpo(const vec3* triangle, vec3 P)
+double geometry_modifier_z_correction::interpo(const vec3* triangle, vec3 P)
 {
     return 0;
 }
 
-vec3 geometry_modifier::fonction_h(const vec3& P)
+vec3 geometry_modifier_z_correction::fonction_h(const vec3& P)
 {
     double h = compute_h(P);
 
     return vec3(P.x, P.y, P.z - h + pos_center.z);
 }
 
-vec3 geometry_modifier::fonction_h_inverse(const vec3& P)
+vec3 geometry_modifier_z_correction::fonction_h_inverse(const vec3& P)
 {
     double h = compute_h(P);
 
     return vec3(P.x, P.y, P.z + h - pos_center.z);
 }
 
-double geometry_modifier::compute_h(const vec3& P)
+double geometry_modifier_z_correction::compute_h(const vec3& P)
 {
     double offset = 2000.;
     vec3 origine(P.x, P.y, (P.z + offset) );
@@ -91,7 +91,7 @@ double geometry_modifier::compute_h(const vec3& P)
 
 #else
 
-vec3 geometry_modifier::fonction_h(const vec3& P)
+vec3 geometry_modifier_z_correction::fonction_h(const vec3& P)
 {
     // c'est notre fonction h(x,y) qui transforme notre geometrie
 
@@ -124,7 +124,7 @@ vec3 geometry_modifier::fonction_h(const vec3& P)
     return R;
 }
 
-vec3 geometry_modifier::fonction_h_inverse(const vec3& P)
+vec3 geometry_modifier_z_correction::fonction_h_inverse(const vec3& P)
 {
     // Fonction inverse de la fonction h.
 
@@ -161,7 +161,7 @@ vec3 geometry_modifier::fonction_h_inverse(const vec3& P)
     return R;
 }
 
-double geometry_modifier::interpo(const vec3* triangle, vec3 P)
+double geometry_modifier_z_correction::interpo(const vec3* triangle, vec3 P)
 {
     // rend la coordonnee P.z
 
@@ -177,30 +177,9 @@ double geometry_modifier::interpo(const vec3* triangle, vec3 P)
 
     return a * A.z + b * B.z + c * C.z;
 }
-
-bool IsInTriangle(const vec3& P, const vec3* triangle)  // R2:: ?
-{
-    vec2 A(triangle[0].x, triangle[0].y);
-    vec2 B(triangle[1].x, triangle[1].y);
-    vec2 C(triangle[2].x, triangle[2].y);
-    vec2 Q(P.x, P.y);
-
-    decimal resultat1 = area(A, B, Q);
-    if (resultat1 < 0) { return false; }
-
-    decimal resultat2 = area(B, C, Q);
-    if (resultat2 < 0) { return false; }
-
-    decimal resultat3 = area(C, A, Q);
-    if (resultat3 < 0) { return false; }
-
-    return true;
-}
-
 #endif //GEOM_MODIFIER_ACCELERATING_STRUCTURE
 
-
-void geometry_modifier::append_triangles_to_scene()
+void geometry_modifier_z_correction::append_triangles_to_scene()
 {
     vec3 pos;
     for (int i = 0; i<Liste_triangles.size(); i++)
@@ -222,3 +201,43 @@ void geometry_modifier::append_triangles_to_scene()
 
     _scene->finish(1); // Use grid accelerator
 }
+
+bool IsInTriangle(const vec3& P, const vec3* triangle)  // R2:: ?
+{
+    vec2 A(triangle[0].x, triangle[0].y);
+    vec2 B(triangle[1].x, triangle[1].y);
+    vec2 C(triangle[2].x, triangle[2].y);
+    vec2 Q(P.x, P.y);
+
+    decimal resultat1 = area(A, B, Q);
+    if (resultat1 < 0) { return false; }
+
+    decimal resultat2 = area(B, C, Q);
+    if (resultat2 < 0) { return false; }
+
+    decimal resultat3 = area(C, A, Q);
+    if (resultat3 < 0) { return false; }
+
+    return true;
+}
+
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    void geometry_modifier_spherical_correction::clear()
+    {
+    }
+
+    void geometry_modifier_spherical_correction::buildNappe(const Lancer& shot)
+    {
+    }
+
+    vec3 geometry_modifier_spherical_correction::fonction_h(const vec3& P)
+    {
+        vec3 pos;
+        return pos;
+    }
+
+    vec3 geometry_modifier_spherical_correction::fonction_h_inverse(const vec3& P)
+    {
+        vec3 pos;
+        return pos;
+    }
