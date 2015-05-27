@@ -30,12 +30,14 @@ PROJECT_BASE = osp.abspath(osp.join(_HERE, '..', '..'))
 TEST_DATA_DIR = osp.join(PROJECT_BASE, 'tests', 'data')
 assert osp.isdir(TEST_DATA_DIR), "The test data dir does not exists '%s'" % TEST_DATA_DIR
 
-for d in ('pluginsd', 'plugins'):
-    TEST_SOLVERS_DIR = osp.join(PROJECT_BASE, d)
-    if osp.isdir(TEST_SOLVERS_DIR):
-        break
-else:
-    raise RuntimeError("The test solver plugins dir wasn't found")
+TEST_SOLVERS_DIR = os.environ.get('TYMPAN_SOLVERDIR')
+if not TEST_SOLVERS_DIR:
+    for d in ('pluginsd', 'plugins'):
+        TEST_SOLVERS_DIR = osp.join(PROJECT_BASE, d)
+        if osp.isdir(TEST_SOLVERS_DIR):
+            break
+    else:
+        raise RuntimeError("The test solver plugins dir wasn't found")
 
 TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'projects-panel')
 assert osp.isdir(TEST_PROBLEM_DIR), "The test problem dir does not exists '%s'" % TEST_PROBLEM_DIR
