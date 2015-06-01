@@ -60,6 +60,10 @@ public:
     * \return rend les coordonnees du point transforme (point de l'espace original).
     */
     virtual vec3 fonction_h_inverse(const vec3& P) = 0;
+
+protected:
+    vec3 pos_center;                    /*!< Position de la source */
+
 };
 
 class geometry_modifier_z_correction :
@@ -96,8 +100,6 @@ private :
 
     void append_triangles_to_scene();
     double compute_h(const vec3& P);
-
-    vec3 pos_center;                    /*!< Position de la source */
 
     QList<OTriangle> Liste_triangles;   /*!< Liste des triangles de la nappe interpolee */
     QList<OPoint3D> Liste_vertex;       /*!< Liste des vertex de la triangulation */
