@@ -43,7 +43,10 @@ void geometry_modifier_z_correction::buildNappe(const Lancer& shot)
     {
         for (unsigned int j = 0; j < shot.MatRes[0][i].etapes.size(); ++j)                         // boucle sur les points du rayon
         {
-            oDelaunayMaker.addVertex(vec3toOPoint3D(shot.MatRes[0][i].etapes[j].pos));
+            // the mesh is corrected to reflect final geometry transformation 
+            vec3 pos(shot.MatRes[0][i].etapes[j].pos);
+            pos.z = -(pos.z-pos_center.z);
+            oDelaunayMaker.addVertex(vec3toOPoint3D(pos));
         }
     }
 
@@ -69,14 +72,14 @@ vec3 geometry_modifier_z_correction::fonction_h(const vec3& P)
 {
     double h = compute_h(P);
 
-    return vec3(P.x, P.y, P.z - h + pos_center.z);
+    return vec3(P.x, P.y, P.z + h);
 }
 
 vec3 geometry_modifier_z_correction::fonction_h_inverse(const vec3& P)
 {
     double h = compute_h(P);
 
-    return vec3(P.x, P.y, P.z + h - pos_center.z);
+    return vec3(P.x, P.y, P.z - h);
 }
 
 double geometry_modifier_z_correction::compute_h(const vec3& P)
