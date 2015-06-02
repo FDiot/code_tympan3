@@ -44,6 +44,7 @@
 #include <QDockWidget>
 #include <QMdiArea>
 #include <QMdiSubWindow>
+#include <qeventloop.h>
 
 #include "Tympan/core/config.h"
 #include "Tympan/models/business/acoustic/TYSpectre.h"
@@ -586,30 +587,36 @@ void TYMainWindow::about()
     pAboutTympan = NULL;
 }
 
-void TYMainWindow::makeModeler(TYElement* pElt)
+bool TYMainWindow::makeModeler(TYElement* pElt)
 {
-    if (!pElt) { return; }
+    if (!pElt) { return true; }
 
     TYProjet* pProj = dynamic_cast<TYProjet*>(pElt);
     if (pProj != nullptr)
     {
         makeProjetModeler(pProj);
+		return true;
     }
     else if (pElt->isA("TYSiteNode"))
     {
         makeSiteModeler(static_cast<TYSiteNode*>(pElt));
+		return true;
     }
     else if (pElt->isA("TYBatiment"))
     {
-        makeBatimentModeler(static_cast<TYBatiment*>(pElt));
+        return(makeBatimentModeler(static_cast<TYBatiment*>(pElt)));
     }
     else if (pElt->isA("TYMachine"))
     {
-        makeMachineModeler(static_cast<TYMachine*>(pElt));
+        return(makeMachineModeler(static_cast<TYMachine*>(pElt)));
     }
+	else
+	{
+		return true;
+	}
 }
 
-void TYMainWindow::makeBatimentModeler(LPTYBatiment pBatiment)
+bool TYMainWindow::makeBatimentModeler(LPTYBatiment pBatiment)
 {
     TYBatimentModelerFrame* pBatimentModeler = new TYBatimentModelerFrame(NULL, _pWorkspace, "TYBatimentModelerFrame");
     pBatimentModeler->setAttribute(WA_DeleteOnClose);
@@ -618,14 +625,23 @@ void TYMainWindow::makeBatimentModeler(LPTYBatiment pBatiment)
     QObject::connect(pBatimentModeler, SIGNAL(editorModeChanged(int)), this, SLOT(saveCurBatimentMode(int)));
     QObject::connect(pBatimentModeler, SIGNAL(frameResized()), this, SLOT(refreshWindowTitle()));
 
-    if (!pBatiment) { pBatiment = new TYBatiment(); }
+    if (!pBatiment) {pBatiment = new TYBatiment();}
     pBatimentModeler->setBatiment(pBatiment);
 
     pBatimentModeler->showMaximized();
     pBatimentModeler->fit();
+    
+	// Waiting for the "aboutToClose" signal to be emited before moving to the next step
+	QEventLoop loop;
+	connect(pBatimentModeler,SIGNAL(aboutToClose()),&loop,SLOT(quit()));
+    loop.exec();
+	// If there is no volume, the modeler maker returns false
+	if(pBatiment->getNbChild()==0){return false;}
+	else{return true;}
+
 }
 
-void TYMainWindow::makeMachineModeler(LPTYMachine pMachine)
+bool TYMainWindow::makeMachineModeler(LPTYMachine pMachine)
 {
     TYMachineModelerFrame* pMachineModeler = new TYMachineModelerFrame(NULL, _pWorkspace, "TYMachineModelerFrame");
     pMachineModeler->setAttribute(WA_DeleteOnClose);
@@ -640,6 +656,14 @@ void TYMainWindow::makeMachineModeler(LPTYMachine pMachine)
 
     pMachineModeler->showMaximized();
     pMachineModeler->fit();
+
+	// Waiting for the "aboutTpClose" signal to be emited before moving to the next step
+	QEventLoop loop;
+	connect(pMachineModeler,SIGNAL(aboutToClose()),&loop,SLOT(quit()));
+    loop.exec();
+	// If there is no volume, the modeler maker returns false
+	if(pMachine->getNbChild()==0){return false;}
+	else{return true;}
 }
 
 void TYMainWindow::makeSiteModeler(LPTYSiteNode pSite)

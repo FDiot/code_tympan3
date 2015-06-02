@@ -1637,6 +1637,8 @@ void TYPickEditor::remInfraElmt(TYElement *pElement)
     {
         pInfra->remSrc((LPTYUserSourcePonctuelle&) pElement);
     }
+	
+	
 
     updateSiteFrame(); // Mise a jour de l'arborescence du site
 
@@ -1832,12 +1834,10 @@ void TYPickEditor::removeVolume(TYElement *pElement)
     TYAcousticVolumeGeoNode *pGeoNode = pParent->findAcousticVol(dynamic_cast<TYAcousticVolume*>(pElement));
     if (pGeoNode == nullptr) { return; }
 
-    if (pParent->remAcousticVol(dynamic_cast<TYAcousticVolume*>(pElement)))
-    {
-        TYAction* pAction = new TYRemAccVolToAccVolNodeAction(pGeoNode, pParent, _pModeler, TR("id_action_remvol"));
-        _pModeler->getActionManager()->addAction(pAction);
-    }
-
+	// The action is added to the ActionManager before the object is deleted
+	TYAction* pAction = new TYRemAccVolToAccVolNodeAction(pGeoNode, pParent, _pModeler, TR("id_action_remvol"));
+    _pModeler->getActionManager()->addAction(pAction);
+    pParent->remAcousticVol(dynamic_cast<TYAcousticVolume*>(pElement));
     updateSiteFrame();
 
     // La scene a ete modifiee
