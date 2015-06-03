@@ -176,7 +176,7 @@ public:
      * \fn void setLauchType(const unsigned int &launchType)
      * \brief define how rays will be created;
      */
-    void setLaunchType(const unsigned int& launchType) { _launchType = launchType; init(); }
+    void setLaunchType(const unsigned int& launchType) { _launchType = launchType; init_sampler(); }
 
     /*!
      * \fn void addSource(const vec3& source)
@@ -186,7 +186,7 @@ public:
 
 
 private :
-    void init();
+    void init_sampler();
 
     void save(); /*!< save rays to a file */
 

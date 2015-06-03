@@ -391,7 +391,7 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
         dynamic_cast<meteoLin*>(CurveRayShot._weather)->setGradV(config->AnalyticGradV);
         CurveRayShot._weather->setWindAngle(config->WindDirection);
         CurveRayShot._weather->setC0(_atmos.compute_c());
-        CurveRayShot.setLaunchType(1);                                 // Indique que l'on tire les rayons sur un plan horizontal
+        CurveRayShot.setLaunchType(1); // Indique que l'on tire les rayons sur un plan horizontal
 
         dynamic_cast<Latitude2DSampler*>(CurveRayShot.getSampler())->setStartTheta(config->InitialAnglePhi);
 
