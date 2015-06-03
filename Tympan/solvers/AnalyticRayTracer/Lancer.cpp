@@ -35,8 +35,6 @@ Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001f), T
 
     _launchType = 1;            /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
     wantOutFile = true;                   /*!<  true if outputfile wanted */
-
-    init();
 }
 
 
@@ -60,8 +58,6 @@ Lancer::Lancer(Lancer& L)
 
     _launchType = L._launchType;
     wantOutFile = L.wantOutFile;
-
-    init();
 }
 
 Lancer::~Lancer()
@@ -69,7 +65,7 @@ Lancer::~Lancer()
     purgeMatRes();
 }
 
-void Lancer::init()
+void Lancer::init_sampler()
 {
     switch (_launchType)
     {
@@ -96,6 +92,8 @@ void Lancer::init()
         default :
             return; // do nothing
     }
+
+    _sampler->init();
 }
 
 void Lancer::purgeMatRes()

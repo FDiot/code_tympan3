@@ -81,18 +81,29 @@ public:
     }
 
     virtual bool isAcceptableSample(vec3 v) { return true; }
-    virtual void init() { _deltaPhi = (_endPhi - _startPhi) / static_cast<decimal>(_nb_rays - 1); _i = 0; }
+    virtual void init() 
+    { 
+        int decalage = 1;
+        if (_endPhi - M_2PI - _startPhi < EPSILON_6) // Diffusion a 360°
+        {
+            decalage = 0;
+        }
 
-    void setStartTheta(const decimal& startTheta) { _startTheta = startTheta * M_PIDIV180; init(); }
+        _deltaPhi = (_endPhi - _startPhi) / static_cast<decimal>(_nb_rays - decalage); 
+        
+        _i = 0; 
+    }
+
+    void setStartTheta(const decimal& startTheta) { _startTheta = startTheta * M_PIDIV180; }
     decimal getStartTheta() const { return _startTheta * M_180DIVPI; }
 
-    void setEndTheta(const decimal& endTheta) { _endTheta = endTheta * M_PIDIV180; init(); }
+    void setEndTheta(const decimal& endTheta) { _endTheta = endTheta * M_PIDIV180; }
     decimal getEndTheta() const { return _endTheta * M_180DIVPI; }
 
-    void setStartPhi(const decimal& startPhi) { _startPhi = startPhi * M_PIDIV180; init(); }
+    void setStartPhi(const decimal& startPhi) { _startPhi = startPhi * M_PIDIV180; }
     decimal getStartPhi() const { return _startPhi * M_180DIVPI; }
 
-    void setEndPhi(const decimal& endPhi) { _endPhi = endPhi * M_PIDIV180; init(); }
+    void setEndPhi(const decimal& endPhi) { _endPhi = endPhi * M_PIDIV180; }
     decimal getEndPhi() const { return _endPhi * M_180DIVPI; }
 
 private :
