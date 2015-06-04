@@ -126,7 +126,10 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
 
 #endif //__ONLY_RAYS__
 
-    // Allow to watch curved rays (as in meteo field) instead of right rays
+    // Do not keep rays (for a noise map for example)
+    if (config->Anime3DKeepRays == false) { tabRays.clear(); }
+
+    // Curve rays (as in meteo field) if meteo is activated
 	if (config->UseMeteo)
     {
         for (unsigned int i = 0; i < tabRays.size(); i++)

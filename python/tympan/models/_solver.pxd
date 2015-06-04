@@ -173,6 +173,7 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
         bool UseFresnelArea
         float Anime3DSigma
         int Anime3DForceC
+        bool Anime3DKeepRays
         bool DebugUseCloseEventSelector
         bool DebugUseDiffractionAngleSelector
         bool DebugUseDiffractionPathSelector

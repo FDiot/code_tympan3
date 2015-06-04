@@ -78,6 +78,7 @@ public:
     bool UseFresnelArea;
     float Anime3DSigma;
     int Anime3DForceC;
+    bool Anime3DKeepRays;
 
     bool DebugUseCloseEventSelector;
     bool DebugUseDiffractionAngleSelector;
