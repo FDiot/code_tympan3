@@ -285,7 +285,6 @@ cdef class MeshTriangle:
         return self.thisptr.n[0], self.thisptr.n[1], self.thisptr.n[2]
 
 
-
 cdef class Configuration:
     thisptr = cy.declare(SmartPtr[SolverConfiguration])
 
@@ -555,6 +554,11 @@ cdef class Configuration:
     def setAnime3DForceC(self, value):
         self.thisptr.getRealPointer().Anime3DForceC = value
     Anime3DForceC = property(getAnime3DForceC, setAnime3DForceC)
+    def getAnime3DKeepRays(self):
+        return self.thisptr.getRealPointer().Anime3DKeepRays
+    def setAnime3DKeepRays(self, value):
+        self.thisptr.getRealPointer().Anime3DKeepRays = value
+    Anime3DKeepRays = property(getAnime3DKeepRays, setAnime3DKeepRays)
     def getDebugUseCloseEventSelector(self):
         return self.thisptr.getRealPointer().DebugUseCloseEventSelector
     def setDebugUseCloseEventSelector(self, value):
