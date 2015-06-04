@@ -63,7 +63,6 @@ public:
 
 protected:
     vec3 pos_center;                    /*!< Position de la source */
-
 };
 
 class geometry_modifier_z_correction :
@@ -77,13 +76,13 @@ public:
     // Destructeur :
     ~geometry_modifier_z_correction() {}
 
-    virtual void clear();
-
     virtual void buildNappe(const Lancer& shot);
 
     virtual vec3 fonction_h(const vec3& P);
 
     virtual vec3 fonction_h_inverse(const vec3& P);
+
+    virtual void clear() {}
 
 private :
     /*!
@@ -98,32 +97,10 @@ private :
      */
     const Scene* get_scene() { return _scene.get(); }
 
-    void append_triangles_to_scene();
+    void append_triangles_to_scene(QList<OPoint3D>& Liste_vertex, QList<OTriangle>& Liste_triangles);
     double compute_h(const vec3& P);
 
-    QList<OTriangle> Liste_triangles;   /*!< Liste des triangles de la nappe interpolee */
-    QList<OPoint3D> Liste_vertex;       /*!< Liste des vertex de la triangulation */
     std::unique_ptr<Scene> _scene;      /*!< Support de la structure acceleratrice pour la nappe */
 };
-
-class geometry_modifier_spherical_correction :
-    public IGeometryModifier
-{
-public:
-    geometry_modifier_spherical_correction() {}
-    ~geometry_modifier_spherical_correction() {}
-
-    virtual void clear();
-
-    virtual void buildNappe(const Lancer& shot);
-
-    virtual vec3 fonction_h(const vec3& P);
-
-    virtual vec3 fonction_h_inverse(const vec3& P);
-
-private:
-};
-
-bool IsInTriangle(const vec3& P, const vec3* triangle);
 
 #endif //__GEOMETRY_MODIFIER_H
