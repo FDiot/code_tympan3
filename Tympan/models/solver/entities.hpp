@@ -326,8 +326,9 @@ public:
     bool solid_angle;
 };
 
-} /* namespace tympan */
+Point ComputeAcousticCentroid(const source_pool_t &tabSources_);
 
+} /* namespace tympan */
 
 
 #endif /* TYMPAN__ENTITIES_H__INCLUDED */

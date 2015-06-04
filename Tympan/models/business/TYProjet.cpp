@@ -35,11 +35,11 @@ TY_EXT_GRAPHIC_INST(TYProjet);
 bool TYProjet::gSaveValues = true;
 
 TYProjet::TYProjet() :  _auteur(""),
-    _dateCreation("2001-10-01"),
-    _dateModif("2001-10-01"),
-    _comment(""),
-    _pSite(NULL),
-    _pCurrentCalcul(NULL),
+    _dateCreation( "2001-10-01" ),
+    _dateModif( "2001-10-01" ),
+    _comment( "" ),
+    _pSite( new TYSiteNode() ),
+    _pCurrentCalcul( new TYCalcul() ),
     _delaunayTolerance(0.0001),
     _maxDistBetweenPoints(200.0),
     _useDefaultGeomVal(true),
@@ -47,14 +47,13 @@ TYProjet::TYProjet() :  _auteur(""),
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
-    _pSite = new TYSiteNode();
     _pSite->setParent(this);
     _pSite->setRoot(true);
 
     _pSite->setProjet(this); // Definit le projet courant
 
-    // On initialise le projet avec au moins un calcul
-    setCurrentCalcul(new TYCalcul());
+    _pCurrentCalcul->setParent(this);
+    _listCalcul.push_back(_pCurrentCalcul);
 
     // Ajout du site au calcul courant
     _pCurrentCalcul->addToSelection(_pSite, false);
@@ -325,11 +324,6 @@ bool TYProjet::addCalcul(LPTYCalcul pCalcul)
     pCalcul->setParent(this);
     _listCalcul.push_back(pCalcul);
 
-    //// Si le calcul ajoute est le 1er on le marque comme calcul courant
-    //if (_listCalcul.size() == 1) {
-    //  setCurrentCalcul(pCalcul);
-    //}
-
     return true;
 }
 
@@ -386,23 +380,6 @@ void TYProjet::setCurrentCalcul(LPTYCalcul pCurCalcul)
 
     // Statut solveur ok par defaut
     _bStatusSolver = true;
-
-    for (unsigned int i = 0; i < _listCalcul.size(); i++)
-    {
-        if (_listCalcul[i] == pCurCalcul)
-        {
-            // Il est present
-            present = true;
-            break;
-        }
-    }
-
-    // Non present ?
-    if (!present)
-    {
-        // On l'ajoute
-        addCalcul(pCurCalcul);
-    }
 
     // Calcul courant
     _pCurrentCalcul = pCurCalcul;

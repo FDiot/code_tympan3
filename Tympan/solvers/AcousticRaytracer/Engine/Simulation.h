@@ -64,6 +64,14 @@ public:
     */
     Scene* getScene() { return &scene; }
 
+#ifdef TEST_ACCELERATION_RECEPTORS
+    /*!
+     * \fn Scene* get_receptors_landscape();
+     * \brief return the geoemtric distribution of receptors
+     */
+    Scene* get_receptors_landscape() { return &receptors_landscape; }
+#endif
+
     /*!
     * \fn void setSolver(Solver *_solver)
     * \brief Fonction outil pour integrer un solveur acoustique a la simulation
@@ -110,7 +118,14 @@ public:
     * \brief Fonction outil pour placer rapidement un recepteur dans la simulation
     * \param r : recepteur a placer
     */
-    void addRecepteur(const Recepteur& r) { recepteurs.push_back(r); recepteurs.back().setId(compteurRecepteur); compteurRecepteur++;}
+    void addRecepteur(const Recepteur& r) { 
+        recepteurs.push_back(r); 
+        recepteurs.back().setId(compteurRecepteur);
+#ifdef TEST_ACCELERATION_RECEPTORS
+        receptors_landscape.addShape( new Recepteur(r) );
+#endif
+        compteurRecepteur++;
+    }
     /*!
     * \fn std::vector<Recepteur>& getRecepteurs()
     * \brief Renvoie la liste des recepteurs de la scene
@@ -123,10 +138,14 @@ public:
 
     void setEngine(engineChoice engine = DEFAULT) { engineC = engine; }
 
-    void runBenchmark() { engine = new DefaultEngine(&scene, &sources, solver, &recepteurs); engine->runStructureBenchmark(); }
+//    void runBenchmark() { engine = new DefaultEngine(&scene, &sources, solver, &recepteurs); engine->runStructureBenchmark(); }
 
 protected:
-    Scene scene;
+    Scene scene; // Description of the geometry in an accelerated structure
+#ifdef TEST_ACCELERATION_RECEPTORS
+    Scene receptors_landscape; // geometric distribution of receptors
+#endif
+
     Solver* solver;             /*!< Pointeur vers la "methode acoustique" */
     MaterialManager* materialManager;
 

@@ -19,7 +19,7 @@
 #include <QTime>
 #include <vector>
 
-#include "Tympan/models/common/mathlib.h"
+#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Event.h"
 #include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
 #include "DefaultEngine.h"

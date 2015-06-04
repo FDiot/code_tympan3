@@ -36,7 +36,7 @@ void Scene::clean()
     if (accelerator) { delete accelerator; }
 }
 
-bool Scene::finish()
+bool Scene::finish(int accelerator_id/* = 3*/, leafTreatment::treatment _intersectionChoice/* = leafTreatment::FIRST*/)
 {
 
     ss << "La scene comporte " << vertices.size() << " vertex." << std::endl;
@@ -45,7 +45,7 @@ bool Scene::finish()
         ss << "(" << vertices.at(i).x << "," << vertices.at(i).y << "," << vertices.at(i).z << ")" << std::endl;
     }
     ss << "La scene comporte " << shapes.size() << " shapes." << std::endl;
-    switch (tympan::SolverConfiguration::get()->Accelerator)
+    switch (accelerator_id)
     {
         case 0 :
             accelerator = new BruteForceAccelerator(&shapes, globalBox);
@@ -66,7 +66,7 @@ bool Scene::finish()
             break;
     }
 
-    accelerator->setIntersectionChoice(leafTreatment::FIRST);
+    accelerator->setIntersectionChoice(_intersectionChoice);
 
     return accelerator->build();
 }

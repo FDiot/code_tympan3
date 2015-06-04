@@ -275,6 +275,8 @@ void TYResultatWidget::updateContent()
 
     // On trie par ordre decroissant des niveaux du premier point
     sortCol(1) ;
+
+    _pTable->setColumnHidden( 1, getElement()->isLWHidden() );
 }
 
 void TYResultatWidget::updateHeaderLabel()
@@ -667,7 +669,7 @@ OSpectre TYResultatWidget::getSpectre(const int& row, const int& col, TYCalcul* 
 
             // Puis on recupere le spectre correspondant dans le calcul passe en parametre
             TYResultat* pResultat = pCalcul->getResultat();
-            spectre = pResultat->getSpectre(pRecepteur, pSource);
+            spectre = pResultat->getSpectre2(pRecepteur, pSource);
             spectre = spectre.toDB();
         }
     }

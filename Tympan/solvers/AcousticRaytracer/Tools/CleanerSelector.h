@@ -21,7 +21,10 @@
 template<typename T>
 class CleanerSelector : public Selector<T>
 {
-
+/*!
+ * \brief Clean DoNothing events from ray events list
+ * \      --> After ray validation DoNothing events are no longer useful
+ */
 public :
     CleanerSelector() : Selector<T>()
     {

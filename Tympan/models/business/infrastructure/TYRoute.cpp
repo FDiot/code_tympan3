@@ -89,9 +89,9 @@ TYRoute::TYRoute():
 
 
     // On nomme les regimes
-    _tabRegimes[0].setName("Jour"); // TODO i18n
-    _tabRegimes[1].setName("Soir"); // TODO i18n
-    _tabRegimes[2].setName("Nuit"); // TODO i18n
+    _tabRegimes[0].setName( std::string("Jour") ); // TODO i18n
+    _tabRegimes[1].setName( std::string("Soir") ); // TODO i18n
+    _tabRegimes[2].setName( std::string("Nuit") ); // TODO i18n
 
     setRoadTrafficArrayForRegime(Day);
 }

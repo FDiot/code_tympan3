@@ -27,9 +27,29 @@ void Simulation::clean()
     compteurRecepteur = 0;
 }
 
+#ifdef TEST_ACCELERATION_RECEPTORS
 bool Simulation::launchSimulation()
 {
-
+    ss << "Lancement de la simulation." << std::endl;
+    if (solver) { solver->clean(); }
+    if (engine) { delete engine; }
+    switch (engineC)
+    {
+        case DEFAULT:
+            engine = new DefaultEngine(&scene, &sources, solver, &receptors_landscape);
+            break;
+        case PARALLELDEFAULT:
+            engine = new ParallelDefaultEngine(&scene, &sources, solver, &receptors_landscape);
+            break;
+        default:
+            engine = new DefaultEngine(&scene, &sources, solver, &receptors_landscape);
+            break;
+    }
+    return engine->process();
+}
+#else
+bool Simulation::launchSimulation()
+{
     ss << "Lancement de la simulation." << std::endl;
     if (solver) { solver->clean(); }
     if (engine) { delete engine; }
@@ -45,5 +65,8 @@ bool Simulation::launchSimulation()
             engine = new DefaultEngine(&scene, &sources, solver, &recepteurs);
             break;
     }
+
     return engine->process();
 }
+#endif //TEST_ACCELERATION_RECEPTORS
+

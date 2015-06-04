@@ -1385,6 +1385,9 @@ void TYPickEditor::copyMaillage(TYElement *pElement)
     pCopy->deepCopy(pGeoNode, false);
     pCopy->setParent(pParent);
 
+    // Nettoyage
+    dynamic_cast<TYMaillage*>(pCopy->getElement())->clearResult();
+
     // Ajout
     if ((dynamic_cast<TYCalcul*>(pParent))->addMaillage(pCopy))
     {
@@ -1411,6 +1414,11 @@ void TYPickEditor::copyMaillage(TYElement *pElement)
         TYAction* pAction = new TYAddMaillageToCalculAction(pCopy, (dynamic_cast<TYCalcul*>(pParent)), _pModeler, TR("id_action_addmaillage"));
         _pModeler->getActionManager()->addAction(pAction);
 
+        // Mise à jour du modeleur
+        dynamic_cast<TYSiteModelerFrame*>(_pModeler)->updateSelectMaillageBox();
+        dynamic_cast<TYSiteModelerFrame*>(_pModeler)->updateElementGraphic(true);
+
+        // Mise à jour de l'arborescence de projet
         refreshProjectFrame();
     }
 
@@ -1433,8 +1441,10 @@ void TYPickEditor::remMaillage(TYElement *pElement)
         _pModeler->getActionManager()->addAction(pAction);
     }
 
+    dynamic_cast<TYSiteModelerFrame*>(_pModeler)->updateSelectMaillageBox();
+    dynamic_cast<TYSiteModelerFrame*>(_pModeler)->updateElementGraphic(true);
+
     refreshProjectFrame();
-    getTYMainWnd()->updateModelers(false);
 
     // La scene a ete modifiee
     TYElement::setIsSavedOk(true);
