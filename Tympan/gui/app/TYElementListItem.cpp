@@ -101,17 +101,6 @@ void TYElementListItem::updateContent()
             TYPointControl* pPoint = TYPointControl::safeDownCast(_pElement);
             TYCalcul* pCalcul = static_cast<TYProjet*>(pPoint->getParent())->getCurrentCalcul();
             bInCurrentCalcul = pPoint->getEtat(pCalcul);
-            bool need_to_rebuild_result(false);
-            if (bInCurrentCalcul)
-            {
-                need_to_rebuild_result |= pCalcul->addPtCtrlToResult(pPoint);
-            }
-            else
-            {
-                need_to_rebuild_result |= pCalcul->remPtCtrlFromResult(pPoint);
-            }
-            
-            if (need_to_rebuild_result) { pCalcul->getResultat()->buildMatrix(); }
         }
         else
         {

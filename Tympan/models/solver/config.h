@@ -21,7 +21,6 @@ public:
     double AtmosPressure;
     double AtmosTemperature;
     double AtmosHygrometry;
-    double AnalyticC0;
     double WindDirection;
     double AnalyticGradC;
     double AnalyticGradV;
@@ -49,31 +48,26 @@ public:
     bool KeepDebugRay;
     bool UsePostFilters;
 
-    //bool EnableTargets;
-    //float SampleGround2D;
-    bool EnableFullTargets;
-    float TargetsDensity;
-
-    //int CurveRaySampler;
+    int CurveRaySampler;
     float InitialAngleTheta;
-    //float FinalAngleTheta;
+    float FinalAngleTheta;
     float InitialAnglePhi;
-    //float FinalAnglePhi;
+    float FinalAnglePhi;
     int AnalyticNbRay;
     double AnalyticTMax;
     double AnalyticH;
     double AnalyticDMax;
 
     int AnalyticTypeTransfo;
-    //float MeshRefinementValue;
+    float MeshRefinementValue;
     //bool RestitModifiedGeom;
 
-    //float MinSRDistance;
+    float MinSRDistance;
 
     int NbThreads;
     bool UseRealGround;
     //bool UseVegetation;
-    //bool UseScreen;
+    bool UseScreen;
     bool UseLateralDiffraction;
     bool UseReflection;
     bool PropaConditions;
@@ -81,7 +75,6 @@ public:
     bool ModSummation;
 
     bool UseMeteo;
-    float OverSampleD;
     bool UseFresnelArea;
     float Anime3DSigma;
     int Anime3DForceC;

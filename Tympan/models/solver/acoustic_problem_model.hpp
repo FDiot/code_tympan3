@@ -126,6 +126,8 @@ public:
     const nodes_pool_t& nodes() const { return all_nodes; }
     const triangle_pool_t& triangles() const  { return all_triangles; }
     const material_pool_t& materials() const { return all_materials; }
+    const source_pool_t& sources() const { return all_sources; }
+    const receptor_pool_t& receptors() const { return all_receptors; }
 
 public: // XXX Could / should be protected but this complicates testing
 

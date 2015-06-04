@@ -67,7 +67,6 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
     int idFace = 0, rayNbr = 0, reflIndice = 0, nbFacesFresnel = 0;
 
     acoustic_path* ray = NULL;
-//    TYSol* pSol = NULL;
 
     OPoint3D Prefl, Pprec, Psuiv;    //pt de reflexion, pt precedent et suivant
 
@@ -96,9 +95,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
         sum1 = zero;
         pond = zero;
 
-//        pSol = NULL;
-
-        for (int j = 0; j < tabRefl.size(); j++)
+        for (size_t j = 0; j < tabRefl.size(); j++)
         {
             reflIndice = tabRefl[j];
 
@@ -187,13 +184,6 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
                     assert(material);
 
                     spectreAbs = material->get_absorption(angle, rr);
-
-                    //pSol = _topo->terrainAt(Prefl)->getSol();
-                    //std::cout << "Impedance sol = " << pSol->getResistivite() << std::endl;
-                    //pSol->calculNombreDOnde(_atmos);
-                    //spectreAbs = pSol->abso(angle, rr, _atmos);
-                    //spectreAbs = spectreAbs * (rd / rr);
-                    //std::cout << "A 500 Hz, Q = " << spectreAbs.getModule().getValueReal(500) << std::endl;
                 }
                 else
                 {
@@ -249,7 +239,7 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
 
         std::vector<int> tabDiff = currentRay->getIndexOfEvents(TYDIFFRACTION); // gets a vector where diff occur
 
-        for (int j = 0; j < tabDiff.size(); j++)
+        for (size_t j = 0; j < tabDiff.size(); j++)
         {
             diffIdx = tabDiff[j]; // Index de l'evenement diffraction courant
             acoustic_event* currentEv = currentRay->getEvents().at(diffIdx); // Evenement courant
@@ -691,28 +681,30 @@ OTab2DSpectreComplex TYANIME3DAcousticModel::ComputePressionAcoustTotalLevel()
 
             for (int k = 0; k < _nbRays; k++) // boucle sur les rayons allant de la source au recepteur
             {
-                const tympan::AcousticSource& source = _aproblem.source( _tabTYRays[i]->getSource_idx() );
-                const tympan::AcousticReceptor& receptor = _aproblem.receptor( _tabTYRays[i]->getRecepteur_idx() );
+                const unsigned int source_id = _tabTYRays[k]->getSource_idx();
+                const unsigned int receptor_id = _tabTYRays[k]->getRecepteur_idx();
 
-                totalRayLength = _tabTYRays[k]->getLength();
-                mod = (_pressAcoustEff[k]).getModule();
+                if ( (source_id == i ) && (receptor_id == j) )
+                {
+                    totalRayLength = _tabTYRays[k]->getLength();
+                    mod = (_pressAcoustEff[k]).getModule();
 
-                if ((config->Anime3DForceC) == 0)
-                {
-                    C = 0.0; // = defaultSolver "energetique"
-                }
-                else if ((config->Anime3DForceC) == 1)
-                {
-                    C = 1.0; // = defaultSolver "interferences"
-                }
-                else
-                {
-                    C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
-                }
+                    switch(config->Anime3DForceC)
+                    {
+                    case 0 : 
+                        C = 0.; // as energetic in defaultSolver
+                        break;
+                    case 1 : 
+                        C = 1.; // as "interference in defaultSolver
+                        break;
+                    default:
+                        C = (K2 * totalRayLength * totalRayLength * (-1) * cst).exp();
+                    }
 
-                sum3 = _pressAcoustEff[k] * C;
-                sum1 = sum1 + sum3;
-                sum2 = sum2 + mod * mod * (un - C * C);
+                    sum3 = _pressAcoustEff[k] * C;
+                    sum1 = sum1 + sum3;
+                    sum2 = sum2 + mod * mod * (un - C * C);
+                }
             }
 
             // Be carefull sum of p!= p of sum

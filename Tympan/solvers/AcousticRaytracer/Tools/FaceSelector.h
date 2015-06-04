@@ -33,7 +33,10 @@ enum TYPEHISTORY
 template<typename T>
 class FaceSelector : public Selector<T>
 {
-
+/*!
+ * \brief : if two or more rays have the same history (events on the same primitive)
+ *          Only one of them is kept
+ */
 public:
     FaceSelector(TYPEHISTORY _modeHistory = HISTORY_FACE) : Selector<T>() { modeHistory = _modeHistory; }
     virtual ~FaceSelector() {}

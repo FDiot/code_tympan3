@@ -27,14 +27,17 @@ enum treatment
 {
     FIRST = 0,
     ALL_BEFORE_TRIANGLE,
-    ALL_BEFORE_VISIBLE
+    ALL_BEFORE_VISIBLE,
+    ALL
 };
 
+// This fuction is only used by grid accelerator
 decimal keepFunction(treatment choice, std::list<Intersection> &currentIntersections, decimal currentTmin);
 
 decimal keepFirst(std::list<Intersection> &currentIntersections, decimal currentTmin);
 decimal keepAllBeforeTriangle(std::list<Intersection> &currentIntersections, decimal currentTmin);
 decimal keepAllBeforeVisible(std::list<Intersection> &currentIntersections, decimal currentTmin);
+decimal keepAll(std::list<Intersection> &currentIntersections, decimal currentTmin);
 
 };
 

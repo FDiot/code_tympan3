@@ -43,28 +43,25 @@ TY_EXT_GRAPHIC_INST(TYCalcul);
 #define MAX_SOURCES 1024
 #define MAX_RECEPTEURS 131072
 
-TYCalcul::TYCalcul(LPTYProjet pParent /*=NULL*/)
+TYCalcul::TYCalcul() : 
+            _auteur("Auteur"),
+            _comment("Commentaire"),
+            _dateCreation("2001-10-01"),
+            _dateModif("2001-10-01"),
+            _numero(1),
+            _pResultat(new TYResultat()),
+            _upTodate(true),
+            _state(TYCalcul::Actif),
+            _solverId( OGenID("{A98B320C-44C4-47a9-B689-1DD352DAA8B2}") ),
+            solverParams(DEFAULT_SOLVER_CONFIG)
 {
     _name = TYNameManager::get()->generateName(getClassName());
-
-    _auteur = "Auteur";
-    _comment = "Commentaire";
-    _dateCreation = "2001-10-01";
-    _dateModif = "2001-10-01";
-    _numero = 1;
-
-    _pResultat = new TYResultat();
     _pResultat->setParent(this);
+}
 
-    _upTodate = true;
-    _state = TYCalcul::Actif; // A sa creation, le calcul est actif
-
-    // Le solveur par defaut est le solveur standard de TYMPAN
-    _solverId = OGenID("{A98B320C-44C4-47a9-B689-1DD352DAA8B2}");
-
+TYCalcul::TYCalcul(LPTYProjet pParent)
+{
     _pParent = pParent;
-
-    solverParams = DEFAULT_SOLVER_CONFIG;
 }
 
 TYCalcul::TYCalcul(const TYCalcul& other)
@@ -581,6 +578,7 @@ void TYCalcul::clearResult()
     }
 
     _pResultat->purge();
+	_tabRays.clear();
 
     setIsGeometryModified(true);
 }
