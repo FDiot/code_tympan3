@@ -407,9 +407,6 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
         // Transformation de la geometrie
         switch(config->AnalyticTypeTransfo)
         {
-        case 2 : 
-            transformer = std::unique_ptr<IGeometryModifier>( new geometry_modifier_spherical_correction );
-            break;
         case 1 :
         default:
             transformer = std::unique_ptr<IGeometryModifier>( new geometry_modifier_z_correction ) ;
