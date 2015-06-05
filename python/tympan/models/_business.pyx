@@ -193,7 +193,19 @@ cdef class Ground:
         """Ground resistivity (floating point value)"""
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getResistivite()
-
+        
+    @property    
+    def deviation(self):
+        """Ground deviation (floating point value)"""
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getEcartType()
+        
+    @property
+    def length(self):
+        """Ground autocorrelation length (floating point value)"""
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getLongueur()
+        
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL

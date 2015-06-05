@@ -57,7 +57,7 @@ class AcousticGroundMaterial:
     public AcousticMaterialBase
 {
 public:
-    AcousticGroundMaterial(const string& name_, double resistivity_);
+    AcousticGroundMaterial(const string& name_, double resistivity_, double deviation_, double length_);
     virtual ~AcousticGroundMaterial() {};
 
     /*!
@@ -79,8 +79,8 @@ public:
 protected:
     void computeZc(); //!< compute characteristic impedance
     void computeK();  //!< compute wave nuber 
-	void computeZf(double angle); //!< compute effective impedance in rough ground
-    void computeZs(double angle, ComplexSpectrum& spectrum); //!< compute specific impedance
+    void computeZs(double angle, ComplexSpectrum Z, ComplexSpectrum& spectrum); //!< compute specific impedance
+	void computeZf(double angle, ComplexSpectrum Zs); //!< compute effective impedance in rough ground
     void computeRp(double angle, const ComplexSpectrum& Zs, ComplexSpectrum& Rp);  //!<compute reflexion coefficient for plane waves
     void computeW(double angle, double length, const ComplexSpectrum& Zs, ComplexSpectrum &W); //compute numeric distance
     void computeFw(ComplexSpectrum localW, ComplexSpectrum& Fw); // Compute function of numeric distance

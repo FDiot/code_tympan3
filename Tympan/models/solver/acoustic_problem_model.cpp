@@ -75,10 +75,10 @@ triangle_idx AcousticProblemModel::make_triangle(node_idx n1, node_idx n2, node_
     return all_triangles.size() - 1;
 }
 
-material_ptr_t AcousticProblemModel::make_material(const string& name, double resistivity)
+material_ptr_t AcousticProblemModel::make_material(const string& name, double resistivity, double deviation, double length)
 {
     material_ptr_t p_mat = tympan::static_pointer_cast<AcousticMaterialBase>(
-                               tympan::make_shared<AcousticGroundMaterial>(name, resistivity));
+                               tympan::make_shared<AcousticGroundMaterial>(name, resistivity, deviation, length));
     all_materials.push_back(p_mat);
     return p_mat;
 }
