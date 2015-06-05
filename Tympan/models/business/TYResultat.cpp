@@ -316,6 +316,7 @@ void TYResultat::purge()
     _mapEmetteurSources.clear();
     _backupSources.clear();
     _backupMatrix.clear();
+    _mapElementSpectre.clear();
 
     setIsAcousticModified(true);
 }
