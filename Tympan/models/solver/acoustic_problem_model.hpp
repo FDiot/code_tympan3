@@ -89,7 +89,7 @@ public:
      * @param resistivity the resistivity of the ground, expressed in kRayls (TO BE CONFIRMED)
      * @return a shared_ptr to the corresponding AcousticGroundMaterial instance
      */
-    material_ptr_t make_material(const string& name, double resistivity);
+    material_ptr_t make_material(const string& name, double resistivity, double deviation, double length);
 
     /**
      * @brief Push a representation of a building material into the model

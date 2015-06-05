@@ -405,7 +405,11 @@ cdef class Business2SolverConverter:
             mat_name = grnd.getRealPointer().getName().toStdString()
             mat_res = cy.declare(double)
             mat_res = ground.resistivity
-            pmat = model.thisptr.get().make_material(mat_name, mat_res)
+            mat_dev = cy.declare(double)
+            mat_dev = ground.deviation
+            mat_len = cy.declare(double)
+            mat_len = ground.length
+            pmat = model.thisptr.get().make_material(mat_name, mat_res,mat_dev,mat_len)
             actri.made_of = pmat
         # Recurse on subsites
         for subsite in site.subsites:

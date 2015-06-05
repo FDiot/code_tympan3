@@ -63,13 +63,13 @@ TYSolWidget::TYSolWidget(TYSol* pElement, QWidget* _pParent /*=NULL*/):
 	_lineEditEcartType = new QLineEdit(_groupBox);
 	_groupBoxLayout->addWidget(_lineEditEcartType,2,1);
 	QLabel* pUnitEcart = new QLabel(_groupBox);
-	pUnitEcart->setText("un");
+	pUnitEcart->setText(TR("id_unite_epaisseur"));
 	_groupBoxLayout->addWidget(pUnitEcart,2,2);
 
 	_lineEditLongueur = new QLineEdit(_groupBox);
 	_groupBoxLayout->addWidget(_lineEditLongueur,3,1);
 	QLabel* pUnitLong = new QLabel(_groupBox);
-	pUnitLong->setText("m");
+	pUnitLong->setText(TR("id_unite_epaisseur"));
 	_groupBoxLayout->addWidget(pUnitLong,3,2);
 
     _pushButtonResistivite = new QPushButton(_groupBox);
@@ -134,7 +134,7 @@ void TYSolWidget::apply()
 	getElement()->setEcartType(ecarttype);
 
 	double longueur = _lineEditLongueur->text().toDouble();
-	longueur = longueur <0 ? 0: longueur;
+	longueur = longueur <=0 ? 0.001: longueur;
 	getElement()->setLongueur(longueur);
 
     emit modified();
