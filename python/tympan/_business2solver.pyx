@@ -254,9 +254,6 @@ cdef class Business2SolverConverter:
                     globalmatrix = site.matrix.dot(sources_of_elt[i].getRealPointer().getMatrix())
                     # Convert its position to the global frame
                     point3d = tycommon.dot(globalmatrix, ppoint[0])
-                    ppoint[0]._x = point3d._x
-                    ppoint[0]._y = point3d._y
-                    ppoint[0]._z = point3d._z
                     # Directivity
                     # solver model directivity
                     pdirectivity = cy.declare(cy.pointer(tysolver.SourceDirectivityInterface))
@@ -285,7 +282,7 @@ cdef class Business2SolverConverter:
                             pdirectivity = new tysolver.ChimneyFaceDirectivity(
                                 glob_directivity, pcompdirectivity.SpecificSize)
                     # Add it to the solver model
-                    source_idx = model.thisptr.get().make_source(ppoint[0], subsource.getSpectre()[0],
+                    source_idx = model.thisptr.get().make_source(point3d, subsource.getSpectre()[0],
                                                                  pdirectivity)
                     # if the source comes from an infrastructure element, add it
                     # information about the face and volume that contain it
