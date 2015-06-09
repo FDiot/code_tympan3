@@ -124,7 +124,7 @@ const char * DEFAULT_SOLVER_CONFIG =
 "# Transformation method (1 is the only [good] response) [int]\n"
 "AnalyticTypeTransfo=1\n"
 "# Altimetry refinement parameter [float]\n"
-"MeshRefinementValue=0\n"
+"MeshElementSizeMax=0\n"
 "# Restore modified altimetry after computing [bool]\n"
 "#RestitModifiedGeom=0\n"
 "\n"

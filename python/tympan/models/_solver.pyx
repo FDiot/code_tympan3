@@ -484,11 +484,11 @@ cdef class Configuration:
     def setAnalyticTypeTransfo(self, value):
         self.thisptr.getRealPointer().AnalyticTypeTransfo = value
     AnalyticTypeTransfo = property(getAnalyticTypeTransfo, setAnalyticTypeTransfo)
-    def getMeshRefinementValue(self):
-        return self.thisptr.getRealPointer().MeshRefinementValue
-    def setMeshRefinementValue(self, value):
-        self.thisptr.getRealPointer().MeshRefinementValue = value
-    MeshRefinementValue = property(getMeshRefinementValue, setMeshRefinementValue)
+    def getMeshElementSizeMax(self):
+        return self.thisptr.getRealPointer().MeshElementSizeMax
+    def setMeshElementSizeMax(self, value):
+        self.thisptr.getRealPointer().MeshElementSizeMax = value
+    MeshElementSizeMax = property(getMeshElementSizeMax, setMeshElementSizeMax)
     def getMinSRDistance(self):
         return self.thisptr.getRealPointer().MinSRDistance
     def setMinSRDistance(self, value):

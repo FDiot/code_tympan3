@@ -75,7 +75,7 @@ SOLVER_CONFIG_ATTRIBUTES = [
         ('double', 'AnalyticDMax'),
 
         ('int', 'AnalyticTypeTransfo'),
-        ('float', 'MeshRefinementValue'),
+        ('float', 'MeshElementSizeMax'),
 
         ('float', 'MinSRDistance'),
 

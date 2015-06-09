@@ -159,7 +159,7 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
         double AnalyticH
         double AnalyticDMax
         int AnalyticTypeTransfo
-        float MeshRefinementValue
+        float MeshElementSizeMax
         float MinSRDistance
         int NbThreads
         bool UseRealGround
