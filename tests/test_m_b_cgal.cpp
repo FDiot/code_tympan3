@@ -15,7 +15,7 @@
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/plan.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
-#include "Tympan/models/business/cgal_tools.h"
+#include "Tympan/models/common/cgal_tools.h"
 #include "Tympan/models/business/cgal_bridge.h"
 
 using std::cout;

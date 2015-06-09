@@ -34,6 +34,8 @@ target_link_libraries(tympan_common
     # qstring in core/logging, quuid in core/idgen, qlist in models/common/delaunay_maker.h
     ${QT_QTCORE_LIBRARY}
     # Boost isn't linked as the "header only library" part is used
+    # CGAL for mesh/volume intersection and triangulation of the infrastructure
+    ${CGAL_LIBRARIES}
 )
 if (WIN32)
     target_link_libraries(tympan_common winmm.lib)
@@ -78,7 +80,6 @@ add_dependencies(tympan_lib
 )
 target_link_libraries(tympan_lib
     ${QT_LIBRARIES}
-    ${CGAL_LIBRARIES}
     ${OPENGL_LIBRARIES}
     RoadEmissionNMPB
     tympan_common

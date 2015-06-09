@@ -10,7 +10,7 @@
 
 #include <boost/foreach.hpp>
 
-#include "Tympan/models/business/cgal_tools.h"
+#include "Tympan/models/common/cgal_tools.h"
 #include "Tympan/models/business/geometry/TYPolygon.h"
 #include "Tympan/models/business/exceptions.h"
 

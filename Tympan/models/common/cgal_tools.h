@@ -28,6 +28,8 @@
 #include <CGAL/Polygon_2.h>
 #include <CGAL/Polygon_2_algorithms.h>
 #include <CGAL/centroid.h>
+#include <CGAL/box_intersection_d.h>
+#include <CGAL/intersections.h>
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/plan.h"
@@ -46,7 +48,9 @@ typedef CGAL::Vector_2<CGAL_Gt>                                    CGAL_Vector2;
 typedef CGAL::Vector_3<CGAL_Gt>                                    CGAL_Vector3;
 typedef CGAL::Polygon_2<CGAL_Gt>                                   CGAL_Polygon;
 typedef CGAL::Plane_3<CGAL_Gt>                                     CGAL_Plane;
-
+typedef CGAL::Triangle_3<CGAL_Gt>                                  CGAL_Triangle;
+typedef std::deque<CGAL_Triangle>                                  CGAL_Triangles;
+typedef CGAL::Box_intersection_d::Box_with_handle_d<double,3,CGAL_Triangles::iterator> CGAL_TBox;
 
 inline OPoint3D from_cgal(const CGAL_Point3& cp)
 { return OPoint3D(cp.x(), cp.y(), cp.z()); }
@@ -61,6 +65,14 @@ inline CGAL_Vector3 to_cgal(const OVector3D& op)
 { return CGAL_Vector3(op._x, op._y, op._z); }
 
 CGAL_Plane to_cgal(const OPlan& oplan);
+
+/**
+ * @brief Find the triangles from `triangle_soup` that are intersected by the 3D  parallelepipoid
+ * `query`
+ *
+ * The indices of these triangles are returned.
+ **/
+std::deque<size_t> intersected_triangles(CGAL_Triangles & triangle_soup, OBox2 query);
 
 /**
  * @brief This class provides triangulating simple polygons without holes

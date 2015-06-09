@@ -2,7 +2,7 @@
 Provide chaining of the step required to build the altimetry of a compound site.
 """
 
-from itertools import chain
+from itertools import chain, imap
 from warnings import warn
 import numpy as np
 from shapely import geometry
@@ -14,7 +14,7 @@ from .datamodel import (InconsistentGeometricModel, elementary_shapes,
 from . import datamodel
 from .merge import recursively_merge_all_subsites
 from .mesh import (ElevationMesh, ReferenceElevationMesh,
-                   LandtakeFaceFlooder, MaterialFaceFlooder)
+                   LandtakeFaceFlooder)
 
 
 # Altimetry side building utilities.
@@ -286,33 +286,32 @@ class MeshFiller(object):
     def fill_material_and_landtakes(self, mainsite, cleaner):
         """Build the face to geometrical feature mapping."""
         feature_by_face = {}
-
-        def fill_feature(feature, floodercls):
-            """Update feature_by_face with feature's faces using specified
-            flooder.
-            """
-            self._check_feature_inserted(feature, mainsite)
+        # Fill landtakes using the flooding algorithm.
+        for feature in mainsite.landtakes:
+            _check_feature_inserted(feature, mainsite)
             faces = self._faces_for_polygonal_feature(
-                feature, flooder_class=floodercls)
+                feature, flooder_class=LandtakeFaceFlooder)
             for fh in faces:
                 if fh not in feature_by_face:
                     feature_by_face[fh] = feature
-
-        for landtake in mainsite.landtakes:
-            fill_feature(landtake, LandtakeFaceFlooder)
-        for material_area_id in cleaner.material_areas_inner_first():
-            material_area = cleaner.equivalent_site.features_by_id[material_area_id]
-            fill_feature(material_area, MaterialFaceFlooder)
+        # Fill material areas by finding the underlying feature based on the
+        # position of face "middle point".
+        features = _material_area_features(mainsite, cleaner)
         for fh in self._mesh.cdt.finite_faces():
-            if fh not in feature_by_face:
+            if fh in feature_by_face:
+                # Already inserted (landtake).
+                continue
+            point = self._mesh.point_for_face(fh)
+            assert point is not None, \
+                    'could not find a point inside face handle {}'.format(fh)
+            point = geometry.Point((point.x(), point.y()))
+            for feature in features:
+                if feature.shape.contains(point):
+                    feature_by_face[fh] = feature
+                    break
+            else:
                 feature_by_face[fh] = None
         return feature_by_face
-
-    @staticmethod
-    def _check_feature_inserted(feature, site):
-        if feature.id not in datamodel.SiteNode.recursive_features_ids(site):
-            raise ValueError("Only features already inserted can be filled ID:%s"
-                             % feature.id)
 
     def _faces_for_polygonal_feature(self, feature, flooder_class):
         """Return the list of faces within a polygonal feature"""
@@ -321,3 +320,24 @@ class MeshFiller(object):
         flooder = self._mesh.flood_polygon(flooder_class, vertices,
                                            close_it=close_it)
         return flooder.visited
+
+
+def _check_feature_inserted(feature, site):
+    if feature.id not in datamodel.SiteNode.recursive_features_ids(site):
+        raise ValueError("Only features already inserted can be filled ID:%s"
+                         % feature.id)
+
+
+def _material_area_features(mainsite, cleaner):
+    """Return the list geometric features corresponding to material areas
+    found in `cleaner`.
+    """
+    checked = set()
+    features = []
+    for material_area_id in cleaner.material_areas_inner_first():
+        feature = cleaner.equivalent_site.features_by_id[material_area_id]
+        if feature not in checked:
+            _check_feature_inserted(feature, mainsite)
+            checked.add(feature)
+        features.append(feature)
+    return features

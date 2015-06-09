@@ -323,12 +323,11 @@ Resources
 CGAL packages
 -------------
 
-The packages used for the version 4.2.3 (June 2014) are
-CGAL_Polygons_ and CGAL_Triangulation_. The use of the package
-CGAL_Mesh_ is planned to handle the refinement of the altimetry.
-Those packages will be accessed from Python tanks to the `CGAL Bindings`_.
+The packages used are CGAL_Triangulation_ and CGAL_Kernel_ (geometry, triangulation and mesh
+construction) and CGAL_Mesh_ (mesh refinement).
+Those packages are accessed from Python tanks to the `CGAL Bindings`_.
 
-.. _`CGAL_Polygons`: http://doc.cgal.org/latest/Polygon/index.html#Chapter_2D_Polygon
+.. _`CGAL_Kernel`: http://doc.cgal.org/4.3/Kernel_d/group__PkgKernelD.html
 .. _`CGAL_Triangulation`: http://doc.cgal.org/latest/Triangulation_2/index.html
 .. _`CGAL_Mesh`: http://doc.cgal.org/latest/Mesh_2/index.html#Chapter_2D_Conforming_Triangulations_and_Meshes
 .. _`CGAL Bindings`: http://code.google.com/p/cgal-bindings/
