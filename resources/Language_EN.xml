@@ -472,8 +472,12 @@
 			<string id="id_unite_dirvent" value="°"/>
 			<string id="id_resistivite_label" value="Resistivity"/>
 			<string id="id_epaisseur_label" value="Thickness"/>
+			<string id="id_ecarttype_label" value="Deviance"/>
+			<string id="id_longueur_label" value="Correlation length"/>
 			<string id="id_unite_resistivite" value="kRayl"/>
 			<string id="id_unite_epaisseur" value="m"/>
+			<string id="id_unite_ecarttype" value="m"/>
+			<string id="id_unite_longueur" value="m"/>
 			<string id="id_edit_spectre_sol" value="Impedance"/>
 			<string id="id_edit_spectre_atmo" value="Impedance"/>
 			<string id="id_edit_resistivite" value="Resistivity"/>
@@ -1265,8 +1269,12 @@ Choose No to Open the New Site in a Modeler."/>
 		<message>
 			<string id="id_resistivite_label" value="Resistivity"/>
 			<string id="id_epaisseur_label" value="Thickness"/>
+			<string id="id_ecarttype_label" value="Deviance"/>
+			<string id="id_longueur_label" value="Correlation length"/>
 			<string id="id_unite_resistivite" value="kRayl"/>
 			<string id="id_unite_epaisseur" value="m"/>
+			<string id="id_unite_ecarttype" value="m"/>
+			<string id="id_unite_longueur" value="m"/>
 			<string id="id_spectreimp" value="Spectre d'impédance"/>
 			<string id="id_proprietes_button" value="Properties"/>
 			<string id="id_edit_resistivite" value="Choose..."/>

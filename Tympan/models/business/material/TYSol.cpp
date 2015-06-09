@@ -26,7 +26,7 @@ TYSol::TYSol():
     _resistivite(20000),
     _epaisseur(1.0),
 	_ecarttype(0),
-	_longueur(0)
+	_longueur(0.001)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -56,7 +56,7 @@ TYSol::TYSol():
     }
     else
     {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "EcartTypeDefault", _epaisseur);
+        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "EcartTypeDefault", _ecarttype);
     }
 
 	if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "LongueurDefault"))
@@ -65,7 +65,7 @@ TYSol::TYSol():
     }
     else
     {
-        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "LongueurDefault", _epaisseur);
+        TYPreferenceManager::setDouble(TYDIRPREFERENCEMANAGER, "LongueurDefault", _longueur);
     }
 #endif
 }
@@ -158,8 +158,8 @@ int TYSol::fromXML(DOM_Element domElement)
 
         TYXMLTools::getElementDoubleValue(elemCur, "resistivite", _resistivite, resistiviteOk);
         TYXMLTools::getElementDoubleValue(elemCur, "epaisseur", _epaisseur, epaisseurOk);
-		TYXMLTools::getElementDoubleValue(elemCur, "ecart_type", _ecarttype, epaisseurOk);
-		TYXMLTools::getElementDoubleValue(elemCur, "longueur", _longueur, epaisseurOk);
+		TYXMLTools::getElementDoubleValue(elemCur, "ecart_type", _ecarttype, ecarttypeOk);
+		TYXMLTools::getElementDoubleValue(elemCur, "longueur", _longueur, longueurOk);
 
     }
 
