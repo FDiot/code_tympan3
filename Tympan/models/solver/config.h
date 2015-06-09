@@ -59,11 +59,9 @@ public:
     double AnalyticDMax;
 
     int AnalyticTypeTransfo;
-    float MeshRefinementValue;
-    //bool RestitModifiedGeom;
+    float MeshElementSizeMax;
 
     float MinSRDistance;
-
     int NbThreads;
     bool UseRealGround;
     //bool UseVegetation;
