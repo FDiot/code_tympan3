@@ -472,7 +472,11 @@
 			<string id="id_unite_dirvent" value="°"/>
 			<string id="id_resistivite_label" value="Résistivité"/>
 			<string id="id_epaisseur_label" value="Epaisseur"/>
+			<string id="id_ecarttype_label" value="Ecart Type"/>
+			<string id="id_longueur_label" value="Longueur"/>
 			<string id="id_unite_resistivite" value="kRayl"/>
+			<string id="id_unite_ecarttype" value="m"/>
+			<string id="id_unite_longueur" value='m'/>
 			<string id="id_unite_epaisseur" value="m"/>
 			<string id="id_edit_spectre_sol" value="Impédance"/>
 			<string id="id_edit_spectre_atmo" value="Impédance"/>
@@ -1267,8 +1271,12 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 		<message>
 			<string id="id_resistivite_label" value="Résistivité"/>
 			<string id="id_epaisseur_label" value="Epaisseur"/>
+			<string id="id_ecarttype_label" value="Ecart Type"/>
+			<string id="id_longueur_label" value="Longueur"/>
 			<string id="id_unite_resistivite" value="kRayl"/>
 			<string id="id_unite_epaisseur" value="m"/>
+			<string id="id_unite_ecarttype" value="m"/>
+			<string id="id_unite_longueur" value="m"/>
 			<string id="id_spectreimp" value="Spectre d'impédance"/>
 			<string id="id_proprietes_button" value="Propriétés"/>
 			<string id="id_edit_resistivite" value="Choisir..."/>

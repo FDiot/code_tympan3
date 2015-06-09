@@ -63,13 +63,13 @@ TYSolWidget::TYSolWidget(TYSol* pElement, QWidget* _pParent /*=NULL*/):
 	_lineEditEcartType = new QLineEdit(_groupBox);
 	_groupBoxLayout->addWidget(_lineEditEcartType,2,1);
 	QLabel* pUnitEcart = new QLabel(_groupBox);
-	pUnitEcart->setText(TR("id_unite_epaisseur"));
+	pUnitEcart->setText(TR("id_unite_ecarttype"));
 	_groupBoxLayout->addWidget(pUnitEcart,2,2);
 
 	_lineEditLongueur = new QLineEdit(_groupBox);
 	_groupBoxLayout->addWidget(_lineEditLongueur,3,1);
 	QLabel* pUnitLong = new QLabel(_groupBox);
-	pUnitLong->setText(TR("id_unite_epaisseur"));
+	pUnitLong->setText(TR("id_unite_longueur"));
 	_groupBoxLayout->addWidget(pUnitLong,3,2);
 
     _pushButtonResistivite = new QPushButton(_groupBox);
@@ -85,11 +85,11 @@ TYSolWidget::TYSolWidget(TYSol* pElement, QWidget* _pParent /*=NULL*/):
     _groupBoxLayout->addWidget(_labelResistivite, 0, 0);
 
 	_labelEcartType = new QLabel(_groupBox);
-	_labelEcartType->setText("Ecart_Type");
+	_labelEcartType->setText(TR("id_ecarttype_label"));
 	_groupBoxLayout->addWidget(_labelEcartType,2,0);
 
 	_labelLongueur = new QLabel(_groupBox);
-	_labelLongueur->setText("Longueur");
+	_labelLongueur->setText(TR("id_longueur_label"));
 	_groupBoxLayout->addWidget(_labelLongueur,3,0);
 
     _solLayout->addWidget(_groupBox, 1, 0);
@@ -134,7 +134,7 @@ void TYSolWidget::apply()
 	getElement()->setEcartType(ecarttype);
 
 	double longueur = _lineEditLongueur->text().toDouble();
-	longueur = longueur <=0 ? 0.001: longueur;
+	longueur = longueur <=0 ? 0.0001: longueur;
 	getElement()->setLongueur(longueur);
 
     emit modified();
