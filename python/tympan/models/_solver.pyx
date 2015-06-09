@@ -3,9 +3,9 @@
 """
 
 import cython as cy
-
 import numpy as np
 cimport numpy as np
+from libcpp.deque cimport deque
 
 from tympan.models cimport _common as tycommon
 from tympan._core cimport unique_ptr, shared_ptr
@@ -34,6 +34,18 @@ cdef class ProblemModel:
         """Return the number of acoustic materials of the model"""
         assert self.thisptr.get() != NULL
         return self.thisptr.get().nmaterials()
+
+    def add_node(self, x, y, z):
+        """Add a node of double coordinates (x, y, z) to the model"""
+        assert self.thisptr.get() != NULL
+        node = cy.declare(tycommon.OPoint3D)
+        node = tycommon.OPoint3D(x, y, z)
+        self.thisptr.get().make_node(node)
+
+    def add_triangle(self, n1, n2, n3):
+        """Add a triangle of node indices (n1, n2, n3) to the model"""
+        assert self.thisptr.get() != NULL
+        self.thisptr.get().make_triangle(n1, n2, n3)
 
     @cy.locals(spectrum_values=np.ndarray)
     def _add_source(self, position, spectrum_values, shift):
@@ -113,6 +125,17 @@ cdef class ProblemModel:
             triangles.append(triangle)
         return triangles
 
+    def fresnel_zone_intersection(self, tycommon.Box box):
+        """Return the indices of the acoustic triangles of the model that are intersected by
+        the non iso-oriented box `box`
+
+        The box is an approximation for the Fresnel zone between a source and a receptor
+        """
+        triangles = cy.declare(deque[AcousticTriangle], self.thisptr.get().triangles())
+        nodes = cy.declare(deque[tycommon.OPoint3D], self.thisptr.get().nodes())
+        intersected = scene_volume_intersection(triangles, nodes, box.thisobj)
+        return [idx for idx in intersected]
+
     def _export_triangular_mesh(self):
         """Build a triangular mesh from the acoustic problem model"""
         assert self.thisptr.get() != NULL
@@ -130,6 +153,12 @@ cdef class ProblemModel:
             point = cy.address(self.thisptr.get().node(i))
             nodes[i] = [point._x, point._y, point._z]
         return (nodes, triangles)
+
+    def node_coords(self, idx):
+        """Return a tuple with the 3D coordinates for the node of id 'idx'"""
+        assert self.thisptr.get() != NULL
+        _node = cy.declare(tycommon.OPoint3D, self.thisptr.get().node(idx))
+        return _node._x, _node._y, _node._z
 
 
 cdef class ResultModel:
@@ -248,6 +277,12 @@ cdef class MeshTriangle:
         if not self.thisptr.volume_id.empty():
             return self.thisptr.volume_id
         return None
+
+    @property
+    def nodes(self):
+        """Tuple containing the ids of the 3 nodes of the triangle"""
+        assert self.thisptr != NULL
+        return self.thisptr.n[0], self.thisptr.n[1], self.thisptr.n[2]
 
 
 cdef class Configuration:

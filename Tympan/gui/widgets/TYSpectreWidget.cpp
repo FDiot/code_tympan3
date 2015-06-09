@@ -207,7 +207,8 @@ void TYSpectreWidget::updateContent()
 
     // Affichage de l'unite
     QString unite = "dB";
-    if (_pTmpSpectre->getType() == SPECTRE_TYPE_ABSO) { unite = ""; }
+    if ( _pTmpSpectre->getType() == SPECTRE_TYPE_ABSO ||
+         _pTmpSpectre->getType() == SPECTRE_TYPE_AUTRE ) { unite = ""; }
 
     TYElement* pParent = _pTmpSpectre->getParent();
 

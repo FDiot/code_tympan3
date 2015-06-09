@@ -51,6 +51,13 @@ cdef extern from "Tympan/models/common/3d.h":
         OVector3D()
         OVector3D(const OVector3D &)
 
+    cdef cppclass OBox:
+        pass
+
+    cdef cppclass OBox2(OBox):
+        OBox2()
+        OBox2(const double& length, const double& width, const double& height)
+
 
 cdef extern from "Tympan/models/common/triangle.h":
 
@@ -105,6 +112,8 @@ cdef extern from "Tympan/models/common/spectre.h":
         OSpectreComplex()
         OSpectreComplex(const OSpectre& other)
 
+cdef class Box:
+    cdef OBox2 thisobj
 
 cdef class Spectrum:
     cdef OSpectre thisobj

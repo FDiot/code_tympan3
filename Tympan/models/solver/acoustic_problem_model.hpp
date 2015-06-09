@@ -18,6 +18,14 @@
 
 namespace tympan
 {
+/**
+ * @brief Find the intersection between some triangles (`triangles`, `nodes`) and a volume (`volume`)
+ *
+ * @return the indices of the triangles from `triangles` that are intersected by the volume
+ **/
+std::deque<triangle_idx> scene_volume_intersection(const triangle_pool_t& triangles,
+                                                   const nodes_pool_t& nodes,
+                                                   const OBox2& volume);
 
 class AcousticProblemModel
 {

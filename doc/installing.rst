@@ -68,6 +68,8 @@ CGAL
         CGAL_ is a Computational Geometry library and itself depends
         upon both Boost and Qt4 and as such needs to be installed in a
         compatible way with your Qt and Boost installation.
+        CGAL is used in the Python code for altimetry mesh triangulation and refinement. It is also used
+        in the C++ code (business part) for infrastructure polygons triangulation.
 
         .. todo:: Specify version **required** ( 4.3.1 suggested)
 

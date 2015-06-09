@@ -3,10 +3,12 @@
 import os.path
 import unittest
 
+import numpy as np
+
 from utils import TEST_PROBLEM_DIR
 
 from tympan.models.project import Project
-from tympan.altimetry import AltimetryMesh
+from tympan.altimetry import AltimetryMesh, datamodel
 
 
 class AltimetryFunctionalTC(unittest.TestCase):
@@ -15,15 +17,26 @@ class AltimetryFunctionalTC(unittest.TestCase):
     debug = False    # activate Tympan lib logs
     saveply = False  # save PLY file with mesh for visualisation
 
-    @unittest.expectedFailure
     def test_les_barthes(self):
         fname = 'Tympan_Les_Barthes_avec_vegetation_Pb.xml'
         altim = self.build_altimetry(fname)
+        # first material area
         coords = (10, 10)
         matid = '{4e550506-88c8-4985-abc2-47d221235787}'
         altitude_bounds = (230, 240)
         self.check_altitude_at(altim, coords, altitude_bounds)
         self.check_material_at(altim, coords, matid)
+        # vegetation area
+        featid = '{7cdf6eb7-6646-491d-953c-50e145efc408}'
+        for coords in [(-1000., -800.), (-1400, -800), (-1400, -680),
+                       (-1000, -450), (-400, -1050)]:
+            fh, vh_or_i = altim.mesh.locate_point(coords)
+            feature = altim.feature_by_face[fh]
+            self.assertIsNotNone(feature, 'no feature found at {}'.format(coords))
+            self.assertEqual(feature.id, featid)
+            self.assertIsInstance(feature, datamodel.VegetationArea)
+            self.assertFalse(feature.foliage)
+            self.assertEqual(feature.height, 10)
 
     def test_alti_pente_cste(self):
         fname = 'Site_pente_constante.xml'
@@ -36,6 +49,21 @@ class AltimetryFunctionalTC(unittest.TestCase):
         coords = (0, -30)
         altitude_bounds = (40, 40)
         self.check_altitude_at(altim, coords, altitude_bounds)
+
+    def test_aquilon_vegetation(self):
+        fname = 'Modele_base_2D_1_source_1_recepteur_avec_vegetation.xml'
+        altim = self.build_altimetry(fname)
+        for x in np.linspace(-40, 150, 5):
+            for y in np.linspace(-90, 140, 5):
+                coords = (x, y)
+                fh, vh_or_i = altim.mesh.locate_point(coords)
+                feature = altim.feature_by_face[fh]
+                self.assertIsNotNone(feature, 'no feature found at {}'.format(coords))
+                self.assertEqual(feature.id, '{e7e68556-8896-4e9d-b085-d7f2d84e9afc}')
+                self.assertIsInstance(feature, datamodel.VegetationArea)
+                self.assertEqual(feature.foliage, 0)
+                self.assertEqual(feature.height, 10)
+                self.check_material_at(altim, coords, '{a1866425-3a58-49ef-8466-34f4febc34db}')
 
     def build_altimetry(self, fname):
         """Return the AltimetryMesh instance from Tympan XML file name"""

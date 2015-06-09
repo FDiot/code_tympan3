@@ -10,12 +10,32 @@
 #include <fstream>
 #include <iomanip>
 
-using namespace std;
-
+#include "Tympan/models/common/cgal_tools.h"
+#include "Tympan/models/common/triangle.h"
 #include "acoustic_problem_model.hpp"
+
+using namespace std;
 
 namespace tympan
 {
+
+deque<triangle_idx> scene_volume_intersection(const triangle_pool_t & triangle_soup,
+                                              const nodes_pool_t & nodes, const OBox2 & vol)
+{
+    // Build CGAL triangles from the triangle soup of the scene
+    deque<CGAL_Point3> cgal_nodes;
+    for(nodes_pool_t::const_iterator it = nodes.begin(); it != nodes.end(); it ++)
+    {
+        cgal_nodes.push_back(CGAL_Point3(it->_x, it->_y, it->_z));
+    }
+    CGAL_Triangles cgal_triangles;
+    for(triangle_pool_t::const_iterator it = triangle_soup.begin(); it != triangle_soup.end(); it ++)
+    {
+        cgal_triangles.push_back(CGAL_Triangle(cgal_nodes[it->n[0]], cgal_nodes[it->n[1]],
+                                               cgal_nodes[it->n[2]]));
+    }
+    return intersected_triangles(cgal_triangles, vol);
+}
 
 node_idx AcousticProblemModel::make_node(const Point& p)
 {
