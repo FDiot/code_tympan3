@@ -65,6 +65,26 @@ protected:
     vec3 pos_center;                    /*!< Position de la source */
 };
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class geometry_modifier_no_correction :
+    public IGeometryModifier
+{
+public:
+    geometry_modifier_no_correction() {}
+    ~geometry_modifier_no_correction() {}
+
+    virtual void clear() {}
+
+    virtual void buildNappe(const Lancer& shot) {}
+
+    virtual vec3 fonction_h(const vec3& P) { return P; }
+
+    virtual vec3 fonction_h_inverse(const vec3& P) { return P; }
+};
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 class geometry_modifier_z_correction :
     public IGeometryModifier
 {
