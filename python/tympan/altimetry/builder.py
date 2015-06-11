@@ -155,7 +155,7 @@ class MeshBuilder(object):
 
     def __init__(self, site):
         self._site = site
-        self.size_criterion = 0.0 # zero means no size criterion
+        self.size_criterion = 30.0 # zero means no size criterion
         self.shape_criterion = 0.125
         self.vertices_for_feature = {}
 
