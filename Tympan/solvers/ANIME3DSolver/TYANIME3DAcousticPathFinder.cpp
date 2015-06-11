@@ -375,6 +375,24 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
 {
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
 
+    // Geometry transformer choice
+    if (config->UseMeteo == false)
+    {
+        transformer = std::unique_ptr<IGeometryModifier>( new geometry_modifier_no_correction() ) ;    
+    }
+    else
+    {
+        switch(config->AnalyticTypeTransfo)
+        {
+        case 1 :
+        default:
+            transformer = std::unique_ptr<IGeometryModifier>( new geometry_modifier_z_correction() ) ;
+            break;
+        }
+    }
+
+    transformer->clear();
+
     if (config->UseMeteo)
     {
         // Creation du lancer de rayons courbes
@@ -404,16 +422,6 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
         // Lancer des rayons
         CurveRayShot.run();
 
-        // Transformation de la geometrie
-        switch(config->AnalyticTypeTransfo)
-        {
-        case 1 :
-        default:
-            transformer = std::unique_ptr<IGeometryModifier>( new geometry_modifier_z_correction ) ;
-            break;
-        }
-
-        transformer->clear();
         transformer->buildNappe(CurveRayShot);
     }
 }
