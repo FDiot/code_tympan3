@@ -18,7 +18,7 @@
 #include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/DefaultSolver/threading.h"
 #include "Tympan/solvers/DefaultSolver/TYTrajet.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Material.h"

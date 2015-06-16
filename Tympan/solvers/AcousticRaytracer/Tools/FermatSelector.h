@@ -21,6 +21,10 @@
 template<typename T>
 class FermatSelector : public Selector<T>
 {
+/*!
+ * \brief : Select rays passing at a distance less than the radius of the cone of associated with the 
+            (depending on the number of rays launched by the source and the distance covered by the ray).
+ */
 public :
     FermatSelector() : Selector<T>() {}
     virtual Selector<T>* Copy()
@@ -60,7 +64,7 @@ public :
 
 		decimal epaisseur = r->getThickness( trueLength, false );
 		decimal closestDistance = static_cast<Recepteur*> ( r->getRecepteur() )->getPosition().distance(closestPoint);
-		if ( closestDistance >= ( epaisseur/2. * 1.05 ) ) // Ajout de 5 % de marge supplémentaire 
+		if ( closestDistance >= ( epaisseur/2. /* * 1.05 */ ) ) // Ajout de 5 % de marge supplémentaire 
 		{
 			return false;
 		}

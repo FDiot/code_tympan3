@@ -96,7 +96,7 @@ public:
         if (_j > _n2)
         {
             computeThetaCalcul(++_i);
-            _phi0 = _d_phi / 2.;
+            _phi0 = _d_phi / 2.f;
             computeN2();
             _j = 1;
         }
@@ -115,7 +115,7 @@ public:
 
     virtual void init()
     {
-        _dr = sqrt(4. / static_cast<decimal>(_nb_rays));
+        _dr = sqrt(4.f / static_cast<decimal>(_nb_rays));
 
         computeN1();
 
@@ -136,7 +136,7 @@ public:
 private :
     inline void computeN1()
     {
-        decimal dh = 2 * _dr * sin(M_PI / 3); // high of a slice on equator
+        decimal dh = 2.f * _dr * static_cast<float>( sin(M_PI / 3.) ); // high of a slice on equator
         _d_theta = atan(dh);
         _n1 = static_cast<unsigned int>(floor(M_PI / _d_theta));
     }

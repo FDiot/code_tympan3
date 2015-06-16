@@ -78,6 +78,9 @@ void TYEmpriseEditor::endEmprise()
                 getSavedPoints()[i]._z = 0.0;
             }
 
+            // Close the polyline
+            getSavedPoints().push_back( getSavedPoints().at(0) );
+
             // Le site en edition
             LPTYSiteNode pSite = ((TYSiteModelerFrame*)_pModeler)->getSite();
             LPTYTopographie pTopo = pSite->getTopographie();

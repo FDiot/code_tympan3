@@ -20,20 +20,16 @@
 #ifndef POST_FILTER_H
 #define POST_FILTER_H
 
-//typedef std::map< signature, std::vector<Ray*> > families;
-//typedef std::list<Event*> sequence;
-//typedef std::map< sequence, std::vector<Ray*> > sequenceMap;
-typedef std::map< signature, std::vector<Ray*> > families;
+typedef std::map< signature, std::deque<Ray*> > families;
 typedef std::list<Event*> sequence;
-typedef std::map< sequence, std::vector<Ray*> > sequenceMap;
+typedef std::map< sequence, std::deque<Ray*> > sequenceMap;
 
 
-class postFilter : public Base
+class PostFilter : public Base
 {
 public:
-//	postFilter(std::vector<Ray*> *tabRay) : _tabRay(tabRay){}
-	postFilter(std::deque<Ray*> *tabRay) : _tabRay(tabRay){}
-    ~postFilter() { _tabRay = NULL; }
+	PostFilter(std::deque<Ray*> *tabRay) : _tabRays(tabRay){}
+    ~PostFilter() { _tabRays = NULL; }
 
     /*!
      * \fn unsigned int Process();
@@ -49,12 +45,32 @@ public:
      */
     inline virtual unsigned int buildFamilies(families& mapFamilies, typeevent typeEv)
     {
-        for (unsigned int i = 0; i < _tabRay->size(); i++)
+        for (unsigned int i = 0; i < _tabRays->size(); i++)
         {
-            mapFamilies[_tabRay->at(i)->getSignature(typeEv)].push_back(_tabRay->at(i));
+            mapFamilies[_tabRays->at(i)->getSignature(typeEv)].push_back(_tabRays->at(i));
         }
 
         return mapFamilies.size();
+    }
+
+    /*!
+     * \fn void rebuildTabRays(families& mapFamilies)
+     * \brief rebuild rays tab after treatment
+     */
+    inline virtual void rebuildTabRays(families& mapFamilies)
+    {
+        _tabRays->clear();
+
+        // Relecture des familles
+        std::map< signature, std::deque<Ray*> >::iterator it_families;
+        for (it_families = mapFamilies.begin(); it_families != mapFamilies.end(); it_families++)
+        {
+            std::deque<Ray*>& aTabRay= (*it_families).second; // Get list of Rays
+            for (unsigned int i=0; i<aTabRay.size(); i++)
+            {
+                _tabRays->push_back( aTabRay.at(i) );
+            }
+        }
     }
 
     /*!
@@ -102,18 +118,17 @@ protected:
         return res;
     }
 
-    inline virtual void cleanTab(std::vector<Ray*>& tabRays, vector<Ray*>::iterator& iter)
+    inline virtual std::deque<Ray*>::iterator erase_element(std::deque<Ray*>& tabRays, std::deque<Ray*>::iterator& iter)
     {
         delete(*iter);
         (*iter) = NULL;
 
-        tabRays.erase(iter);
+        return tabRays.erase(iter);
     }
 
 protected:
 
-	std::deque<Ray*> *_tabRay;
-//	std::vector<Ray*> *_tabRay;
+	std::deque<Ray*> *_tabRays;
 };
 
 #endif //POST_FILTER_H
