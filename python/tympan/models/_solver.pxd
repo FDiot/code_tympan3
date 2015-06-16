@@ -124,7 +124,6 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
         double AtmosPressure
         double AtmosTemperature
         double AtmosHygrometry
-        double AnalyticC0
         double WindDirection
         double AnalyticGradC
         double AnalyticGradV
@@ -150,27 +149,31 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
         bool DiffractionUseDistanceAsFilter
         bool KeepDebugRay
         bool UsePostFilters
-        bool EnableFullTargets
-        float TargetsDensity
+        int CurveRaySampler
         float InitialAngleTheta
+        float FinalAngleTheta
         float InitialAnglePhi
+        float FinalAnglePhi
         int AnalyticNbRay
         double AnalyticTMax
         double AnalyticH
         double AnalyticDMax
         int AnalyticTypeTransfo
+        float MeshElementSizeMax
+        float MinSRDistance
         int NbThreads
         bool UseRealGround
+        bool UseScreen
         bool UseLateralDiffraction
         bool UseReflection
         bool PropaConditions
         float H1parameter
         bool ModSummation
         bool UseMeteo
-        float OverSampleD
         bool UseFresnelArea
         float Anime3DSigma
         int Anime3DForceC
+        bool Anime3DKeepRays
         bool DebugUseCloseEventSelector
         bool DebugUseDiffractionAngleSelector
         bool DebugUseDiffractionPathSelector

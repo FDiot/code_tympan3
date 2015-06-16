@@ -21,7 +21,9 @@
 template<typename T>
 class LengthSelector : public Selector<T>
 {
-
+/*!
+ * \brief : disable rays which have traveled a distance greater than a given length
+ */
 public :
     LengthSelector(double _maxLength = 2000, OPERATOR _op = LESS_OR_EQUAL) : Selector<T>() { maxLength = _maxLength; op = _op;}
     virtual Selector<T>* Copy()

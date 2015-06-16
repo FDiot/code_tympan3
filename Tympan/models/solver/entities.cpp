@@ -989,4 +989,30 @@ AcousticReceptor::AcousticReceptor(
         const Point& position_
         ) : position(position_) {}
 
+
+Point ComputeAcousticCentroid(const source_pool_t &tabSources_)
+{
+    Point centroid;
+    double cumul_x=0., cumul_y=0., cumul_z=0., cumul_level = 0.;
+    std::deque<double> tabLevels;
+
+    for(unsigned int i=0; i<tabSources_.size(); i++)
+    {
+        tabLevels.push_back( ::pow( 10, tabSources_[i].spectrum.valGlobDBA() ) );
+    }
+
+    for(unsigned int i=0; i<tabSources_.size(); i++)
+    {
+        cumul_x = cumul_x + tabSources_[i].position._x * tabLevels[i];
+        cumul_y = cumul_y + tabSources_[i].position._y * tabLevels[i];
+        cumul_z = cumul_z + tabSources_[i].position._z * tabLevels[i];
+        cumul_level = cumul_level + tabLevels[i];
+    }
+
+    centroid._x = cumul_x / cumul_level;
+    centroid._y = cumul_y / cumul_level;
+    centroid._z = cumul_z / cumul_level;
+
+    return centroid;
+}
 } /* namespace tympan */

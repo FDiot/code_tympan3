@@ -302,6 +302,18 @@ inline OPoint3D vec3toOPoint3D(const vec3& _v) { return OPoint3D(static_cast<dou
  */
 inline vec3 OPoint3Dtovec3(const OPoint3D& _p) { return vec3(static_cast<float>(_p._x), static_cast<float>(_p._y), static_cast<float>(_p._z)); }
 
+/*!
+ * \fn OVector3D vec3ToOVector3D(const vec3& p)
+ * \brief convertit un vec3 en OVector3D
+ */
+inline OVector3D vec3toOVector3D(const vec3& _v) { return OVector3D(static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z)); }
+
+/*!
+ * \fn vec3 OVector3DTovec3(const OVector3D& _p)
+ * \brief convertit un OVector3D en vec3
+ */
+inline vec3 OVector3Dtovec3(const OVector3D& _v) { return vec3(static_cast<float>(_v._x), static_cast<float>(_v._y), static_cast<float>(_v._z)); }
+
 /*****************************************************************************/
 /*                                                                           */
 /* vec2                                                                      */

@@ -40,7 +40,7 @@ TYTopographie::TYTopographie()
 
     LPTYTerrain pDefTerrain = new TYTerrain();
     pDefTerrain->setParent(this);
-    pDefTerrain->setName("Terrain par defaut");
+    pDefTerrain->setName( std::string("Terrain par defaut") );
     addTerrain(pDefTerrain);
     _DefTerrainIdx = 0;
 
@@ -276,7 +276,7 @@ int TYTopographie::fromXML(DOM_Element domElement)
 
         // Compatibilite T3.2
         LPTYTerrain pDefTerrainT32 = new TYTerrain();
-        pDefTerrainT32->setName("Terrain par defaut");
+        pDefTerrainT32->setName( std::string("Terrain par defaut") );
         if (pDefTerrainT32->callFromXMLIfEqual(elemCur))
         {
             addTerrain(pDefTerrainT32);

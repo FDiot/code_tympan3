@@ -8,6 +8,16 @@ from tympan.models cimport _common as tycommon
 from tympan._business2solver cimport business2microsource
 
 
+@cy.locals(elm=Element)
+def elemen2receptor(elm):
+    """ Convert an Element to a Receptor if possible """
+    ptcalc = cy.declare(cy.pointer(TYPointCalcul))
+    ptcalc = downcast_point_calcul(elm.thisptr.getRealPointer())
+    assert ptcalc != NULL
+    rec = Receptor()
+    rec.thisptr = SmartPtr[TYPointCalcul](ptcalc)
+    return rec
+
 cdef pointcalcul2receptor(SmartPtr[TYPointCalcul] ptcalc):
     """Receptor cython object wrapping a SmartPtr[TYPointCalcul] (c++)"""
     rec = Receptor()
@@ -18,6 +28,20 @@ cdef typrojet2project(TYProjet* proj):
     """Project cython object wrapping a TYProjet (c++)"""
     project = Project()
     project.thisptr = SmartPtr[TYProjet](proj)
+    return project
+
+cdef make_computation():
+    """ Create a new computation"""
+    init_tympan_registry()
+    comp = Computation()
+    comp.thisptr = SmartPtr[TYCalcul](new TYCalcul())
+    return comp
+
+cdef make_typrojet():
+    """ Attempt to build a typrojet from nothing """
+    init_tympan_registry()
+    project = Project()
+    project.thisptr = SmartPtr[TYProjet](new TYProjet())
     return project
 
 cdef tymateriauconstruction2material(SmartPtr[TYMateriauConstruction] mat):
@@ -109,6 +133,7 @@ cdef class Element:
     def __cinit__(self):
         self.thisptr = SmartPtr[TYElement]()
 
+    @property
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
@@ -636,15 +661,70 @@ cdef class Result:
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getNbOfRecepteurs()
 
+    @property
+    def sources(self):
+        """ get the list of sources known by the result """
+        tab_srcs = cy.declare(vector[SmartPtr[TYElement]])
+        tab_srcs = self.thisptr.getRealPointer().getSources()
+        sources = []
+        nsources = tab_srcs.size()
+        for i in xrange(nsources):
+            source = Element()
+            source.thisptr = tab_srcs[i]
+            sources.append(source)
+        return sources
+
+    @property
+    def receptors(self):
+        """ get the list of receptors known by the result """
+        tab_rcpts = cy.declare(vector[SmartPtr[TYElement]])
+        tab_rcpts = self.thisptr.getRealPointer().getReceptors()
+        receptors = []
+        nreceptors = tab_rcpts.size()
+        for i in xrange(nreceptors):
+            receptor = Element()
+            receptor.thisptr = tab_rcpts[i]
+            receptors.append(receptor)
+        return receptors
+
     def receptor(self, index):
         """The receptor of index 'index'"""
         assert self.thisptr.getRealPointer() != NULL
         return pointcalcul2receptor(self.thisptr.getRealPointer().getRecepteur(index))
 
+    def build_matrix(self):
+        """ Build the matrix knowing sources and receptors """
+        self.thisptr.getRealPointer().buildMatrix()
+
+    def not_use_LW(self, abool=True):
+        """ set use of LW """
+        self.thisptr.getRealPointer().setHideLW(abool)
+
+    @cy.locals(receptor=Element, source=Element)
     def spectrum(self, receptor, source):
         """The computed acoustic spectrum"""
         assert self.thisptr.getRealPointer() != NULL
-        return tycommon.ospectre2spectrum(self.thisptr.getRealPointer().getSpectre(receptor, source))
+        return tycommon.ospectre2spectrum(
+                        self.thisptr.getRealPointer().getSpectre2(
+                                        receptor.thisptr.getRealPointer(),
+                                        source.thisptr.getRealPointer()  )   )
+
+    @cy.locals(receptor=Element)
+    def add_receptor(self, receptor):
+        """ add a business receptor in result matrix """
+        self.thisptr.getRealPointer().addRecepteur(receptor.thisptr.getRealPointer())
+
+    @cy.locals(source=Element)
+    def add_source(self, source):
+        """ Add a new business source in result matrix """
+        self.thisptr.getRealPointer().addSource(source.thisptr.getRealPointer())
+
+    @cy.locals(receptor=Element, source=Element, spectrum=tycommon.Spectrum)
+    def set_spectrum(self, receptor, source, spectrum):
+        self.thisptr.getRealPointer().setSpectre(
+                                        receptor.thisptr.getRealPointer(),
+                                        source.thisptr.getRealPointer(),
+                                        spectrum.thisobj                    )
 
 
 cdef class Mesh:
@@ -715,6 +795,15 @@ cdef class Receptor:
             return True
         return False
 
+    @cy.locals(spectrum=tycommon.Spectrum, comp=Computation)
+    def set_spectrum(self, spectrum, comp):
+        """ Set the spectrum for the given computation """
+        cpp_calc = cy.declare(cy.pointer(TYCalcul))
+        cpp_calc = downcast_calcul(comp.thisptr.getRealPointer())
+
+        self.thisptr.getRealPointer().setSpectre(TYSpectre(spectrum.thisobj),
+                                                 cpp_calc)
+
     @property
     def dBA(self):
         """Balanced spectrum value in DBA (for audible frequencies)"""
@@ -764,6 +853,21 @@ cdef class Computation:
         res.thisptr = self.thisptr.getRealPointer().getResultat()
         return res
 
+    @property
+    def name(self):
+        """The name of the element"""
+        assert self.thisptr.getRealPointer() != NULL
+        cpp_elem = cy.declare(cy.pointer(TYElement))
+        cpp_elem = downcast_Element(self.thisptr.getRealPointer())
+        return cpp_elem.getName().toStdString()
+
+    def set_name(self, name):
+        """ Set the name of the computation """
+        assert self.thisptr.getRealPointer() != NULL
+        cpp_elem = cy.declare(cy.pointer(TYElement))
+        cpp_elem = downcast_Element(self.thisptr.getRealPointer())
+        cpp_elem.setName(name)
+
 
 cdef class Project:
     thisptr = cy.declare(SmartPtr[TYProjet])
@@ -783,6 +887,17 @@ cdef class Project:
         self.site.update_altimetry(*args)
         self.update()
 
+    @cy.locals(comp=Computation)
+    def add_new_comp(self):
+        """ Add a new computation to the project """
+        comp = make_computation()
+        self.thisptr.getRealPointer().addCalcul(comp.thisptr)
+
+    @cy.locals(comp=Computation)
+    def set_current_computation(self, comp):
+        """ set the current computation """
+        self.thisptr.getRealPointer().setCurrentCalcul(comp.thisptr)
+
     @property
     def current_computation(self):
         """The project current computation"""
@@ -790,6 +905,20 @@ cdef class Project:
         comp = Computation()
         comp.thisptr = self.thisptr.getRealPointer().getCurrentCalcul()
         return comp
+
+
+    @property
+    def computations(self):
+        tab_comp = cy.declare(vector[SmartPtr[TYCalcul]])
+        tab_comp = self.thisptr.getRealPointer().getListCalcul()
+        computations = []
+        ncomp = tab_comp.size()
+        for i in xrange(ncomp):
+            comp = Computation()
+            comp.thisptr = tab_comp[i]
+            computations.append(comp)
+        return computations
+
 
     @property
     def site(self):
@@ -824,6 +953,10 @@ cdef class Project:
         # see http://docs.cython.org/src/userguide/wrapping_CPlusPlus.html#exceptions
         project.thisptr = load_project(filepath)
         return project
+
+    @staticmethod
+    def create():
+        return make_typrojet()
 
     def to_xml(self, filepath):
         """Export an acoustic project to a XML file"""

@@ -64,12 +64,13 @@ public:
     };
 
 
+    TYCalcul();
     /**
-     * \brief Constructeur.
+     * \brief build a calcul giving his parent.
      *  Constructeur de la classe TYCalcul.
      *  \param LPTYProjet  pParent=Nulle
      */
-    TYCalcul(LPTYProjet pParent = NULL);
+    TYCalcul(LPTYProjet pParent);
     /**
      *\brief Constructeur par copie.
      *  Constructeur par copie de la classe TYCalcul.

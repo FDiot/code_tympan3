@@ -26,7 +26,7 @@ SolverConfiguration::SolverConfiguration()
     AtmosPressure = 101300.;
     AtmosTemperature = 20.;
     AtmosHygrometry = 60.;
-    AnalyticC0 = 340.;
+    //AnalyticC0 = 340.;
     AnalyticGradC = 0.;
     AnalyticGradV = 0.;
     WindDirection = 0.;
@@ -54,8 +54,8 @@ SolverConfiguration::SolverConfiguration()
     KeepDebugRay = false;
     UsePostFilters = true;
 
-    EnableFullTargets = false;
-    TargetsDensity = 0.1f;
+    //EnableFullTargets = false;
+    //TargetsDensity = 0.1f;
 
     InitialAngleTheta = 0.;
     InitialAnglePhi = 0.;
@@ -75,7 +75,7 @@ SolverConfiguration::SolverConfiguration()
     ModSummation = false;
 
     UseMeteo = false;
-    OverSampleD = 0;
+    //OverSampleD = 0;
     UseFresnelArea = false;
     Anime3DSigma = 0.;
     Anime3DForceC = 1;
