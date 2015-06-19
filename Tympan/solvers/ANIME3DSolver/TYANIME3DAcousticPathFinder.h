@@ -60,12 +60,6 @@ private :
     unsigned int getTabsSAndR(vector<vec3>& sources, vector<vec3>& recepteurs);
 
     /*!
-     * \fn void transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
-     * \brief Adapte la position des sources et des recepteurs dans la geometrie transformee
-     */
-    void transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs);
-
-    /*!
     * \fn bool appendTriangleToScene()
     * \brief Convertion des triangles Tympan en primitives utilisables par le lancer de rayons.
     * \return Renvoie vrai si l'ensemble des primitives a bien pu etre importe dans la simulation.

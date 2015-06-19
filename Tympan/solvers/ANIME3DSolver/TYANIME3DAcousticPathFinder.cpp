@@ -73,9 +73,6 @@ bool TYANIME3DAcousticPathFinder::exec()
     // Create geometry transformer
     build_geometry_transformer( sources );
 
-    // Positionnement des sources et des recepteurs
-    transformSEtR(sources, recepteurs);
-
     //Ajout des triangles a l'objet Scene de _rayTracing
     appendTriangleToScene();
 
@@ -170,22 +167,6 @@ unsigned int TYANIME3DAcousticPathFinder::getTabsSAndR(vector<vec3>& sources, ve
     return sens;
 }
 
-void TYANIME3DAcousticPathFinder::transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
-{
-    // Pour toutes les sources
-    for (unsigned int i = 0; i < sources.size(); i++)
-    {
-        sources[i] = transformer->fonction_h( sources[i] );
-    }
-
-    // Pour tous les recepteurs
-    for (unsigned int i = 0; i < recepteurs.size(); i++)
-    {
-        recepteurs[i] = transformer->fonction_h( recepteurs[i] );
-    }
-}
-
-
 bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
 {
     if (_tabPolygon == NULL || _tabPolygonSize <= 0)
@@ -244,16 +225,13 @@ void TYANIME3DAcousticPathFinder::appendRecepteurToSimulation(vector<vec3>& rece
     //Conversion du recepteur Tympan en recepteur lancer de rayons
     for (unsigned int i = 0; i < recepteurs.size(); i++)
     {
-        Recepteur recep(recepteurs[i], tympan::SolverConfiguration::get()->SizeReceiver);
-        //recep.setShape(new Sphere(recepteurs[i], tympan::SolverConfiguration::get()->SizeReceiver));
+        Recepteur recep( transformer->fonction_h(recepteurs[i]), tympan::SolverConfiguration::get()->SizeReceiver );
         recep.setId(idRecepteur);
 
         _rayTracing.addRecepteur(recep);
-        ss << "Ajout d'un recepteur en (" << recepteurs[i].x << "," << recepteurs[i].y << "," << recepteurs[i].z << ")" << endl;
         idRecepteur++;
     }
 }
-
 
 void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources)
 {
@@ -288,7 +266,7 @@ void TYANIME3DAcousticPathFinder::appendSourceToSimulation(vector<vec3>& sources
                 dynamic_cast<Latitude2DSampler*>(source.getSampler())->setEndTheta(0.);
         }
 
-        source.setPosition(sources[i]);
+        source.setPosition( transformer->fonction_h(sources[i]) );
         source.setInitialRayCount(realNbRaysPerSource);
         source.setId(idSource);
 
@@ -333,18 +311,19 @@ void TYANIME3DAcousticPathFinder::sampleAndCorrection()
 
     for (size_t i = 0; i < _tabTYRays.size(); i++)
     {
-        // Récupération des longueurs simples (éléments suivants)
+        // Compute distance to the next event
         _tabTYRays.at(i)->nextLenghtCompute(transformer.get());
-        // Récupération des distances aux évènements pertinents
+
+        // Compute distance to the next "pertinent" event
         _tabTYRays.at(i)->endLenghtCompute(transformer.get());
 
-        // Distance entre évènement précédent et suivant
+        // Compute distance between previous and next event for each event
         _tabTYRays.at(i)->prevNextLengthCompute(transformer.get());
 
-        // Récupération des angles
+        // Compute incident angles for each event
         _tabTYRays.at(i)->angleCompute(transformer.get());
 
-        // Correction de la position des évènements
+        // Compute events position in real world
         _tabTYRays.at(i)->eventPosCompute(transformer.get());
     }
 }
