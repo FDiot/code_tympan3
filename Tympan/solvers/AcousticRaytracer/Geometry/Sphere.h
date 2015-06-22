@@ -58,6 +58,7 @@ public:
 
     void setPosition(vec3& _position) { position = _position; }
     vec3 getPosition() { return position; }
+    virtual int form() { return SPHERE; }
 
 protected:
     vec3 position;

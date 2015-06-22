@@ -138,6 +138,12 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
         }
     }
 
+    if (config->showScene)
+    {
+        apf.get_geometry_modifier()->save_to_file("computed_nappe.ply");
+        apf.getRayTracer().getScene()->export_to_ply("computing_scene.ply");
+    }
+
     return true;
 }
 
