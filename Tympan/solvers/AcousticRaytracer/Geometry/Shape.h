@@ -104,7 +104,7 @@ public:
     bool isSol() const { return _isSol; }
     void setIsSol(const bool& isSol) { _isSol = isSol; }
 
-
+    virtual int form() { return -1; }
 
 protected:
     BBox box;                                //Bounding box of the shape

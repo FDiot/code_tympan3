@@ -489,6 +489,11 @@ cdef class Configuration:
     def setMeshElementSizeMax(self, value):
         self.thisptr.getRealPointer().MeshElementSizeMax = value
     MeshElementSizeMax = property(getMeshElementSizeMax, setMeshElementSizeMax)
+    def getshowScene(self):
+        return self.thisptr.getRealPointer().showScene
+    def setshowScene(self, value):
+        self.thisptr.getRealPointer().showScene = value
+    showScene = property(getshowScene, setshowScene)
     def getMinSRDistance(self):
         return self.thisptr.getRealPointer().MinSRDistance
     def setMinSRDistance(self, value):

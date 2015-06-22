@@ -60,6 +60,7 @@ public:
 
     int AnalyticTypeTransfo;
     float MeshElementSizeMax;
+    bool showScene;
 
     float MinSRDistance;
     int NbThreads;

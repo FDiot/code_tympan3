@@ -17,6 +17,7 @@
 #define __GEOMETRY_MODIFIER_H
 
 #include <qlist.h>
+#include <string>
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/triangle.h"
@@ -61,6 +62,12 @@ public:
     */
     virtual vec3 fonction_h_inverse(const vec3& P) = 0;
 
+    /*!
+     * \fn void export()
+     * \brief export to a file
+     */
+    virtual void save_to_file(std::string fileName) = 0;
+
 protected:
     vec3 pos_center;                    /*!< Position de la source */
 };
@@ -71,7 +78,7 @@ class geometry_modifier_no_correction :
     public IGeometryModifier
 {
 public:
-    geometry_modifier_no_correction() {}
+    geometry_modifier_no_correction() : IGeometryModifier() {}
     ~geometry_modifier_no_correction() {}
 
     virtual void clear() {}
@@ -81,6 +88,8 @@ public:
     virtual vec3 fonction_h(const vec3& P) { return P; }
 
     virtual vec3 fonction_h_inverse(const vec3& P) { return P; }
+
+    virtual void save_to_file(std::string fileName) {}
 };
 
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -91,7 +100,7 @@ class geometry_modifier_z_correction :
 public:
 
     // Constructeurs :
-    geometry_modifier_z_correction() { _scene = std::unique_ptr<Scene>( new Scene() ); }
+    geometry_modifier_z_correction() : _scene( std::unique_ptr<Scene>( new Scene() ) ) {}
 
     // Destructeur :
     ~geometry_modifier_z_correction() {}
@@ -104,12 +113,7 @@ public:
 
     virtual void clear() {}
 
-private :
-    /*!
-     * \fn double interpo(const vec3* triangle, vec3 P);
-     * \brief return z position of point (P) inside a triangle
-     */
-    double interpo(const vec3* triangle, vec3 P);
+    virtual void save_to_file(std::string fileName) { _scene->export_to_ply(fileName); }
 
     /*!
      * \fn const scene* get_scene();
@@ -117,6 +121,7 @@ private :
      */
     const Scene* get_scene() { return _scene.get(); }
 
+private :
     void append_triangles_to_scene(QList<OPoint3D>& Liste_vertex, QList<OTriangle>& Liste_triangles);
     double compute_h(const vec3& P);
 

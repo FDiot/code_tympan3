@@ -52,11 +52,6 @@ void geometry_modifier_z_correction::buildNappe(const Lancer& shot)
     append_triangles_to_scene(Liste_vertex, Liste_triangles);
 }
 
-double geometry_modifier_z_correction::interpo(const vec3* triangle, vec3 P)
-{
-    return 0;
-}
-
 vec3 geometry_modifier_z_correction::fonction_h(const vec3& P)
 {
     double h = compute_h(P);

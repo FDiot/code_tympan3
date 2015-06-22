@@ -76,6 +76,7 @@ SOLVER_CONFIG_ATTRIBUTES = [
 
         ('int', 'AnalyticTypeTransfo'),
         ('float', 'MeshElementSizeMax'),
+        ('bool', 'showScene'),
 
         ('float', 'MinSRDistance'),
 
