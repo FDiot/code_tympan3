@@ -68,11 +68,16 @@ class AltimetryMesh(object):
         self._material_by_face = None
 
     @classmethod
-    def from_site(cls, site):
-        """Build an altimetry mesh from a tympan Site"""
+    def from_site(cls, site, **kwargs):
+        """Build an altimetry mesh from a tympan Site.
+
+        Extra keyword arguments are passed to the mesh builder (see
+        tympan.altimetry.builder.build_altimetry).
+        """
         asite = builder.build_sitenode(site)
         # Compute altimetry and retrieve the resulting mesh
-        merged_site, mesh, feature_by_face = builder.build_altimetry(asite)
+        merged_site, mesh, feature_by_face = builder.build_altimetry(
+            asite, **kwargs)
         return cls(merged_site, mesh, feature_by_face)
 
     @property
