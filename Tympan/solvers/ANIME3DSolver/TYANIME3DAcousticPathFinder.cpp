@@ -390,9 +390,11 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
         CurveRayShot._weather->setC0(_atmos.compute_c());
         CurveRayShot.setLaunchType(1); // Indique que l'on tire les rayons sur un plan horizontal
 
-        dynamic_cast<Latitude2DSampler*>(CurveRayShot.getSampler())->setStartTheta(config->InitialAnglePhi);
+        dynamic_cast<Latitude2DSampler*>(CurveRayShot.getSampler())->setStartPhi(config->InitialAnglePhi);
 
-        CurveRayShot.initialAngleTheta = config->InitialAngleTheta;     // Angle de tir vertical (theta) des rayons
+        dynamic_cast<Latitude2DSampler*>(CurveRayShot.getSampler())->setStartTheta(config->InitialAngleTheta);
+
+//        CurveRayShot.initialAngleTheta = config->InitialAngleTheta;     // Angle de tir vertical (theta) des rayons
 
         // Choix de la source
         vec3 p = OPoint3Dtovec3( tympan::ComputeAcousticCentroid( _aproblem.sources() ) );
