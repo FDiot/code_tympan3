@@ -174,29 +174,29 @@ void Scene::export_to_ply(std::string fileName)
     std::deque<std::string> file_content;
     
     // Create header
-    file_content.push_back( std::string("ply\r\n") );
-    file_content.push_back( std::string("format ascii 1.0\r\n") );
+    file_content.push_back( std::string("ply\n") );
+    file_content.push_back( std::string("format ascii 1.0\n") );
     file_content.push_back(   std::string("element vertex ") 
                             + std::to_string(nb_vertex) 
-                            + std::string("\r\n") );
-    file_content.push_back( std::string("property float x\r\n") );
-    file_content.push_back( std::string("property float y\r\n") );
-    file_content.push_back( std::string("property float z\r\n") );
+                            + std::string("\n") );
+    file_content.push_back( std::string("property float x\n") );
+    file_content.push_back( std::string("property float y\n") );
+    file_content.push_back( std::string("property float z\n") );
     file_content.push_back(   std::string("element face ") 
                             + std::to_string(nb_faces) 
-                            + std::string("\r\n") );
-    file_content.push_back( std::string("property list uchar int vertex_indices\r\n") );
-    file_content.push_back( std::string("property uchar red\r\n") );
-    file_content.push_back( std::string("property uchar green\r\n") );
-    file_content.push_back( std::string("property uchar blue\r\n") );
-    file_content.push_back( std::string("end_header\r\n") );
+                            + std::string("\n") );
+    file_content.push_back( std::string("property list uchar int vertex_indices\n") );
+    file_content.push_back( std::string("property uchar red\n") );
+    file_content.push_back( std::string("property uchar green\n") );
+    file_content.push_back( std::string("property uchar blue\n") );
+    file_content.push_back( std::string("end_header\n") );
     // Creation of vertex list
     std::string line;
     for (unsigned int i=0; i<vertices.size(); i++)
     {
         line = std::to_string( static_cast<long double>(vertices.at(i).x) ) + " " +
                std::to_string( static_cast<long double>(vertices.at(i).y) ) + " " +
-               std::to_string( static_cast<long double>(vertices.at(i).z) ) + "\r\n";
+               std::to_string( static_cast<long double>(vertices.at(i).z) ) + "\n";
         file_content.push_back( line );
     }
 
@@ -204,14 +204,17 @@ void Scene::export_to_ply(std::string fileName)
     vector<unsigned int>* vertice_index = nullptr;
     for (unsigned int i=0; i<shapes.size(); i++)
     {
-        if (shapes.at(i)->form() != FORM::TRIANGLE) { continue; }
+        if (shapes.at(i)->form() != FORM::TRIANGLE) 
+        {
+            continue; 
+        }
 
         vertice_index = shapes.at(i)->getLocalVertices();
         file_content.push_back( std::to_string(static_cast<long long>(3)) + " " +
                                 std::to_string(static_cast<long long>(vertice_index->at(0))) + " " +
                                 std::to_string(static_cast<long long>(vertice_index->at(1))) + " " + 
                                 std::to_string(static_cast<long long>(vertice_index->at(2))) + " " +
-                                std::string("0 255 0\r\n") );
+                                std::string("0 255 0\n") );
     }
 
     // Create the file
