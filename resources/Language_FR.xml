@@ -476,7 +476,7 @@
 			<string id="id_longueur_label" value="Longueur"/>
 			<string id="id_unite_resistivite" value="kRayl"/>
 			<string id="id_unite_ecarttype" value="m"/>
-			<string id="id_unite_longueur" value='m'/>
+			<string id="id_unite_longueur" value="m"/>
 			<string id="id_unite_epaisseur" value="m"/>
 			<string id="id_edit_spectre_sol" value="Impédance"/>
 			<string id="id_edit_spectre_atmo" value="Impédance"/>
@@ -2090,6 +2090,11 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_delaunay_label" value="Tolérence pour la triangulation de Delaunay"/>
 			<string id="id_useDefault_label" value="Utiliser les préférences utilisateur"/>
 			<string id="id_default_button" value="Défaut"/>
+			<string id="id_cell_posx" value="%1"/>
+			<string id="id_cell_posy" value="%1"/>
+			<string id="id_cell_posh" value="%1"/>
+			<string id="id_opt_pc" value="Récepteurs ponctuels"/>
+			<string id="id_tab_info" value="Infos"/>
 		</message>
 	</class>
 	<class name="TYCalculWidget">

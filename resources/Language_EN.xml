@@ -2085,6 +2085,11 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_delaunay_label" value="Tolerance for Delaunay triangulation"/>
 			<string id="id_useDefault_label" value="Use User Preferences"/>
 			<string id="id_default_button" value="Default"/>
+			<string id="id_cell_posx" value="%1"/>
+			<string id="id_cell_posy" value="%1"/>
+			<string id="id_cell_posh" value="%1"/>
+			<string id="id_opt_pc" value="Receivers"/>
+			<string id="id_tab_info" value="Infos"/>
 		</message>
 	</class>
 	<class name="TYCalculWidget">
