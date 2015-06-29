@@ -407,21 +407,10 @@ void TYCalculWidget::apply()
 
     // Mise a jour des points de controles
     TYTabLPPointControl& tabPoints = getElement()->getProjet()->getPointsControl();
-    double x=0., y=0., h=0.;
-    bool need_to_rebuild_result(false), ok(false);
-    for (int row = 0; row < _tableauPointControle->rowCount(); row++)
+    int row = 0;
+    bool need_to_rebuild_result(false);
+    for (row = 0; row < _tableauPointControle->rowCount(); row++)
     {
-        // Mise a jur du nom du point
-        tabPoints[row]->setName( _tableauPointControle->item(row, 0)->text() );
-
-        // Relecture des coordonnées du point
-        x = _tableauPointControle->item(row, 1)->text().toDouble(&ok);
-        y = _tableauPointControle->item(row, 2)->text().toDouble(&ok);
-        h = _tableauPointControle->item(row, 3)->text().toDouble(&ok);
-        tabPoints[row]->setCoords(x, y, 0.);
-        tabPoints[row]->setHauteur(h);
-
-        // Activation / desactivation du point
         QTableWidgetItem* pCheck = (QTableWidgetItem*) _tableauPointControle->item(row, 4);
         if (pCheck->checkState() == Qt::Checked)
         {
@@ -438,12 +427,8 @@ void TYCalculWidget::apply()
     if (need_to_rebuild_result) { getElement()->getResultat()->buildMatrix(); }
 
     // Mise a jour des maillages
-    for (int row = 0; row < _tableauMaillages->rowCount(); row++)
+    for (row = 0; row < _tableauMaillages->rowCount(); row++)
     {
-        // Set the name
-        getElement()->getMaillage(row)->setName( _tableauMaillages->item(row, 0)->text() );
-        
-        // Set active status
         QTableWidgetItem* pCheck = (QTableWidgetItem*) _tableauMaillages->item(row, 1);
         if (pCheck->checkState() == Qt::Checked)
         {
