@@ -46,6 +46,8 @@ class QTextEdit;
 class QDateEdit;
 class TYElementWidget;
 class QCheckBox;
+class QTabWidget;
+class QTableWidget;
 
 /**
  * \class TYProjetWidget
@@ -130,6 +132,12 @@ protected:
 
     QGroupBox* _groupBoxTab;
     QTreeWidget* _listViewTabCalcul;
+
+    // Use of tabs
+    QTabWidget* _tabWidget;
+
+    // Table des points de controle
+    QTableWidget*_tableauPointsControle;
 
     TYElementWidget* _elmW;
 };
