@@ -137,11 +137,6 @@ TYPointControlWidget::~TYPointControlWidget()
 
 void TYPointControlWidget::updateContent()
 {
-    if (getElement()->isLocked())
-    {
-        _lineEditHauteur->setEnabled(false);
-    }
-
     _colorW->updateContent();
     QString strSIG;
     int SIGType = getElement()->getSIGType();

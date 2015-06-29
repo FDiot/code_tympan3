@@ -79,17 +79,6 @@ public:
         _pPointCalculLayout->setSpacing(spacing);
     }
 
-private:
-    /**
-     * Affiche la liste des calculs existant
-     */
-    void updateComboCalcul();
-
-    /**
-     * Retourne le spectre (calcul) en cours de selection
-     */
-    TYCalcul* getSelectedCalcul();
-
 public slots:
     virtual void updateContent();
     virtual void apply();
@@ -121,7 +110,6 @@ protected:
 
     /// Choix du calcul associe au spectre
     QLabel* _labelSpectreCalcul;
-    QComboBox* _comboBoxSpectreCalul;
 
     TYElementWidget* _elmW;
 

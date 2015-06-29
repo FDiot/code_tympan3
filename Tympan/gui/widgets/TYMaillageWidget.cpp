@@ -226,7 +226,7 @@ void TYMaillageWidget::updateValMinMax()
     for (unsigned int i = 0; i < getElement()->getPtsCalcul().size(); i++)
     {
         pPoint = getElement()->getPtsCalcul()[i];
-        if (pPoint->getEtat(pCalcul) == false) { continue ; } // On ne prend pas en compte les points inactifs
+        if (pPoint->etat() == false) { continue ; } // On ne prend pas en compte les points inactifs
 
         switch (dataType)
         {

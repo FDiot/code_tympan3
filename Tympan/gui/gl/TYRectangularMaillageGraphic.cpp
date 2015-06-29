@@ -335,7 +335,7 @@ int TYRectangularMaillageGraphic::nextPoint(const TYTabLPPointCalcul* pPtsCalcul
 
     int indice = index2;
 
-    while ((pPtsCalcul->at(indice)->getEtat(pCalcul) == false) && (indice > 0))
+    while ((pPtsCalcul->at(indice)->etat() == false) && (indice > 0))
     {
         indice--;
     }

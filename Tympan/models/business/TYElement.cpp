@@ -334,6 +334,8 @@ bool TYElement::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     if (strcmp(pOther->getClassName(), getClassName()) != 0) { return false; }
 
     _name = pOther->_name;
+    _pParent = pOther->_pParent;
+    _inCurrentCalcul = pOther->_inCurrentCalcul;
     _copyCount = pOther->_copyCount;
 
     _copyCount++;

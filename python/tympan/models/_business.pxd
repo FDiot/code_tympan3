@@ -171,6 +171,8 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         vector[SmartPtr[TYRay]]& getTabRays()
         void goPostprocessing()
         const OGenID getSolverId()
+        bool addPtCtrlToResult(SmartPtr[TYPointControl] pPoint)
+        void setSpectre(const TYPointCalcul *pPoint, TYSpectre *pSpectre)
         QString solverParams
 
 cdef extern from "Tympan/models/business/TYCalcul.h":
@@ -219,7 +221,7 @@ cdef extern from "Tympan/models/business/geometry/TYPoint.h":
 
 cdef extern from "Tympan/models/business/TYPointCalcul.h":
     cdef cppclass TYPointCalcul (TYPoint):
-        bool getEtat(TYCalcul* pCalcul)
+        bool etat(TYCalcul* pCalcul)
         void setSpectre(const TYSpectre& spectre, TYCalcul* pCalcul)
         TYSpectre* getSpectre(TYCalcul* pCalcul)
         double getValA()
