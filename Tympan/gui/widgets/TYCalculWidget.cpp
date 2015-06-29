@@ -354,7 +354,7 @@ void TYCalculWidget::updateContent()
 
             QTableWidgetItem* pCheckItemActif = new QTableWidgetItem("");
 
-            if (tabPoints[row]->getEtat(getElement()))
+            if (getElement()->getPtCtrlStatus(tabPoints[row]->getID()))
             {
                 pCheckItemActif->setCheckState(Qt::Checked);
             }
@@ -443,12 +443,12 @@ void TYCalculWidget::apply()
         QTableWidgetItem* pCheck = (QTableWidgetItem*) _tableauPointControle->item(row, 4);
         if (pCheck->checkState() == Qt::Checked)
         {
-            tabPoints[row]->setEtat(true, getElement());
+            tabPoints[row]->setEtat(getElement()->getID(), true);
             need_to_rebuild_result |= getElement()->addPtCtrlToResult(tabPoints[row]);
         }
         else
         {
-            tabPoints[row]->setEtat(false, getElement());
+            tabPoints[row]->setEtat(getElement()->getID(), false);
             need_to_rebuild_result |= getElement()->remPtCtrlFromResult(tabPoints[row]);
         }
     }

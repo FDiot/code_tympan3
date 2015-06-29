@@ -264,11 +264,12 @@ bool TYProjet::addPointControl(LPTYPointControl pPointControl)
     assert(pPointControl);
 
     pPointControl->setParent(this);
+    _pointsControl.push_back(pPointControl);
+
     if (getCurrentCalcul()) // Uniquement pour la creation depuis un modeleur
     {
-        pPointControl->setEtat(true, getCurrentCalcul()); // Le point de controle est actif dans le calcul courant
+        getCurrentCalcul()->addPtCtrlToResult(pPointControl); // Le point de controle est actif dans le calcul courant
     }
-    _pointsControl.push_back(pPointControl);
 
     setIsGeometryModified(true);
 

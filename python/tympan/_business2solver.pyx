@@ -127,10 +127,15 @@ cdef class Business2SolverConverter:
             # them to DB.
             cumul_spectrum.setEtat(tycommon.SPECTRE_ETAT_LIN)
             cumul_spectrum = cumul_spectrum.toDB()
-            receptor.setSpectre(tybusiness.TYSpectre(cumul_spectrum),
-                                self.comp.thisptr.getRealPointer())
-        busresult = cy.declare(cy.pointer(tybusiness.TYResultat),
-                               self.comp.thisptr.getRealPointer().getResultat().getRealPointer())
+
+            #adaptation nouvelle structure TYPointControle
+            bus_spectrum = cy.declare(cy.pointer(tybusiness.TYSpectre))
+            bus_spectrum = new tybusiness.TYSpectre(cumul_spectrum)
+            self.comp.thisptr.getRealPointer().setSpectre(receptor, bus_spectrum)
+#            receptor.setSpectre(tybusiness.TYSpectre(cumul_spectrum),
+#                                self.comp.thisptr.getRealPointer())
+        busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
+        busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
         busresult.setIsAcousticModified(False)
 
     def update_business_result_matrix(self):
@@ -326,7 +331,7 @@ cdef class Business2SolverConverter:
         nb_receptors = 0
         for i in xrange(n_ctrl_pts):
             # if control point state == active (with respect to the current computation)
-            if control_points[i].getRealPointer().getEtat(self.comp.thisptr.getRealPointer()):
+            if control_points[i].getRealPointer().etat(self.comp.thisptr.getRealPointer()):
                 # inheritance: TYPointControl > TYPointCalcul > TYPoint > tycommon.OPoint3D > OCoord3D
                 # call to tycommon.OPoint3D copy constructor to record control point coordinates
                 rec_idx = model.thisptr.get().make_receptor((control_points[i].getRealPointer())[0])
@@ -350,7 +355,7 @@ cdef class Business2SolverConverter:
             n_mesh_points = mesh_points.size()
             for j in xrange(n_mesh_points):
                 # if control point state == active (with respect to the current computation)
-                if mesh_points[j].getRealPointer().getEtat(self.comp.thisptr.getRealPointer()):
+                if mesh_points[j].getRealPointer().etat(self.comp.thisptr.getRealPointer()):
                     # Move receptor to a global scale
                     point3d  = cy.declare(tycommon.OPoint3D,
                                           tycommon.dot(matrix, mesh_points[j].getRealPointer()[0]))

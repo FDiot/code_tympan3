@@ -156,7 +156,7 @@ int TYLinearMaillage::fromXML(DOM_Element domElement)
         for (i = 0; i < tabSpectre.size(); ++i)
         {
             TYPointCalcul* pPtCalcul = new TYPointCalcul(point);
-            pPtCalcul->setSpectre(*(tabSpectre[i]));
+            pPtCalcul->setSpectre(tabSpectre[i]);
             addPointCalcul(pPtCalcul);
 
             point._x += step._x;

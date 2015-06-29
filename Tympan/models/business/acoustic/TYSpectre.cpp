@@ -41,11 +41,9 @@ TYSpectre::TYSpectre(const TYSpectre& other)
     *this = other;
 }
 
-TYSpectre::TYSpectre(const OSpectre& spectre)
+TYSpectre::TYSpectre(const OSpectre& spectre) : TYElement(), OSpectre(spectre)
 {
     _name = TYNameManager::get()->generateName(getClassName());
-
-    OSpectre::operator = (spectre);
 
     _remarque = "";
     _isReadOnly = false;
