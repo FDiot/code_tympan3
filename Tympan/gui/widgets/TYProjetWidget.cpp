@@ -55,6 +55,9 @@ TYProjetWidget::TYProjetWidget(TYProjet* pElement, QWidget* _pParent /*=NULL*/):
     setLayout(_projetLayout);
     _projetLayout->addWidget(_elmW, 0, 0);
 
+    // Tab organization
+    _tabWidget = new QTabWidget(this);
+
     // Groupe identification (Auteur, Date creation/modification, commentaire)
     _groupBox = new QGroupBox(this);
     _groupBox->setTitle(TR(""));
@@ -101,11 +104,11 @@ TYProjetWidget::TYProjetWidget(TYProjet* pElement, QWidget* _pParent /*=NULL*/):
     _labelComment->setText(TR("id_comment_label"));
     _groupBoxLayout->addWidget(_labelComment, 4, 0);
 
-    _projetLayout->addWidget(_groupBox, 1, 0);
+    _tabWidget->addTab( _groupBox, TR("id_tab_info") );
 
-    // Groupe Site
+
+    // Onglet Site
     _groupBoxSite = new QGroupBox(this);
-    _groupBoxSite->setTitle(TR("id_site"));
     QGridLayout* groupBoxSiteLayout = new QGridLayout();
     _groupBoxSite->setLayout(groupBoxSiteLayout);
 
@@ -139,10 +142,14 @@ TYProjetWidget::TYProjetWidget(TYProjet* pElement, QWidget* _pParent /*=NULL*/):
     _pushButtonUseDefault->setText(TR("id_default_button"));
     groupBoxSiteLayout->addWidget(_pushButtonUseDefault, 3, 1) ;
 
-    _projetLayout->addWidget(_groupBoxSite, 2, 0);
+    _tabWidget->addTab(_groupBoxSite, TR("id_site")); 
 
-    // Groupe calcul
-    _groupBoxCurCalcul = new QGroupBox(this);
+    // Onglet calcul
+    QGroupBox *groupBoxCalculs = new QGroupBox(this);
+    QGridLayout *groupBoxCalculsLayout = new QGridLayout();
+    groupBoxCalculs->setLayout(groupBoxCalculsLayout);
+
+    _groupBoxCurCalcul = new QGroupBox(groupBoxCalculs);
     _groupBoxCurCalcul->setTitle(TR("id_curcalcul"));
     QGridLayout* groupBoxCurCalculLayout = new QGridLayout();
     _groupBoxCurCalcul->setLayout(groupBoxCurCalculLayout);
@@ -156,10 +163,10 @@ TYProjetWidget::TYProjetWidget(TYProjet* pElement, QWidget* _pParent /*=NULL*/):
 
     groupBoxCurCalculLayout->addWidget(_lineEditNomCurCalcul, 0, 0);
 
-    _projetLayout->addWidget(_groupBoxCurCalcul, 3, 0);
+    groupBoxCalculsLayout->addWidget(_groupBoxCurCalcul, 0, 0);
 
     // Groupe tableau des calculs
-    _groupBoxTab = new QGroupBox(this);
+    _groupBoxTab = new QGroupBox(groupBoxCalculs);
     _groupBoxTab->setTitle(TR("id_tabCalcul_box"));
     QGridLayout* groupBoxTabLayout = new QGridLayout();
     _groupBoxTab->setLayout(groupBoxTabLayout);
@@ -168,14 +175,30 @@ TYProjetWidget::TYProjetWidget(TYProjet* pElement, QWidget* _pParent /*=NULL*/):
     _listViewTabCalcul->setColumnCount(2);
     QStringList stringList;
     stringList.append(TR(""));
-    stringList.append(TR("id_Calcul"));
+    stringList.append(TR("id_calcul"));
     _listViewTabCalcul->setHeaderLabels(stringList);
     _listViewTabCalcul->setRootIsDecorated(TRUE);
     //_listViewTabCalcul->setHeaderHidden(true);
 
     groupBoxTabLayout->addWidget(_listViewTabCalcul, 0, 0);
 
-    _projetLayout->addWidget(_groupBoxTab, 4, 0);
+    groupBoxCalculsLayout->addWidget(_groupBoxTab, 1, 0);
+
+    _tabWidget->addTab(groupBoxCalculs, TR("id_calcul"));
+
+    // Onglet des points de controle
+    _tableauPointsControle = new QTableWidget();
+    _tableauPointsControle->setColumnCount(5);
+    _tableauPointsControle->setHorizontalHeaderItem(0, new QTableWidgetItem(TR("id_nom_pc")));
+    _tableauPointsControle->setHorizontalHeaderItem(1, new QTableWidgetItem(TR("id_pos_x")));
+    _tableauPointsControle->setHorizontalHeaderItem(2, new QTableWidgetItem(TR("id_pos_y")));
+    _tableauPointsControle->setHorizontalHeaderItem(3, new QTableWidgetItem(TR("id_pos_h")));
+    _tableauPointsControle->setHorizontalHeaderItem(4, new QTableWidgetItem(TR("id_actif")));
+
+    _tabWidget->addTab(_tableauPointsControle, TR("id_opt_pc"));
+
+
+    _projetLayout->addWidget(_tabWidget, 1, 0);
 
     updateContent();
 
@@ -220,6 +243,47 @@ void TYProjetWidget::updateContent()
         item->setText(0, QString().setNum(i));
         item->setText(1, getElement()->getListCalcul().at(i)->getName());
     }
+
+    // Remplissage du tableau des points de controle
+    TYProjet* pProjet = getElement();
+    if (pProjet)
+    {
+        TYTabLPPointControl& tabPoints = pProjet->getPointsControl();
+        unsigned int nbPoints = static_cast<uint32>(tabPoints.size());
+        _tableauPointsControle->setRowCount(nbPoints);
+
+        QString msg;
+        unsigned int row = 0;
+        for (row = 0; row < nbPoints; row++)
+        {
+            _tableauPointsControle->setItem(row, 0, new QTableWidgetItem(tabPoints[row]->getName()));
+
+            msg = QString(TR("id_cell_posx")).arg(tabPoints[row]->_x, 7, 'f', 1);
+            _tableauPointsControle->setItem(row, 1, new QTableWidgetItem(msg));
+
+            msg = QString(TR("id_cell_posy")).arg(tabPoints[row]->_y, 7, 'f', 1);
+            _tableauPointsControle->setItem(row, 2, new QTableWidgetItem(msg));
+
+            msg = QString(TR("id_cell_posh")).arg(tabPoints[row]->getHauteur(), 7, 'f', 1);
+            _tableauPointsControle->setItem(row, 3, new QTableWidgetItem(msg));
+
+            QTableWidgetItem* pCheckItemActif = new QTableWidgetItem("");
+
+            if (tabPoints[row]->getEtat(getElement()->getCurrentCalcul()))
+            {
+                pCheckItemActif->setCheckState(Qt::Checked);
+            }
+            else
+            {
+                pCheckItemActif->setCheckState(Qt::Unchecked);
+            }
+
+            _tableauPointsControle->setItem(row, 4, pCheckItemActif);
+
+            _tableauPointsControle->setRowHeight(row, 30);
+        }
+    }
+
 }
 
 void TYProjetWidget::apply()
@@ -236,6 +300,38 @@ void TYProjetWidget::apply()
 
     getElement()->setIsGeometryModified(true);
     getElement()->getSite()->setIsGeometryModified(true);
+
+    // Mise a jour des points de controles
+    TYTabLPPointControl& tabPoints = getElement()->getPointsControl();
+    double x=0., y=0., h=0.;
+    bool need_to_rebuild_result(false), ok(false);
+    for (int row = 0; row < _tableauPointsControle->rowCount(); row++)
+    {
+        // Mise a jur du nom du point
+        tabPoints[row]->setName( _tableauPointsControle->item(row, 0)->text() );
+
+        // Relecture des coordonnées du point
+        x = _tableauPointsControle->item(row, 1)->text().toDouble(&ok);
+        y = _tableauPointsControle->item(row, 2)->text().toDouble(&ok);
+        h = _tableauPointsControle->item(row, 3)->text().toDouble(&ok);
+        tabPoints[row]->setCoords(x, y, 0.);
+        tabPoints[row]->setHauteur(h);
+
+        // Activation / desactivation du point
+        QTableWidgetItem* pCheck = (QTableWidgetItem*) _tableauPointsControle->item(row, 4);
+        if (pCheck->checkState() == Qt::Checked)
+        {
+            tabPoints[row]->setEtat(true, getElement()->getCurrentCalcul());
+            need_to_rebuild_result |= getElement()->getCurrentCalcul()->addPtCtrlToResult(tabPoints[row]);
+        }
+        else
+        {
+            tabPoints[row]->setEtat(false, getElement()->getCurrentCalcul());
+            need_to_rebuild_result |= getElement()->getCurrentCalcul()->remPtCtrlFromResult(tabPoints[row]);
+        }
+    }
+
+    if (need_to_rebuild_result) { getElement()->getCurrentCalcul()->getResultat()->buildMatrix(); }
 
     emit modified();
 }
