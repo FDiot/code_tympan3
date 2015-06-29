@@ -175,7 +175,7 @@ int TYRectangularMaillage::fromXML(DOM_Element domElement)
             for (i = 0; i < x; ++i)
             {
                 TYPointCalcul* pPtCalcul = new TYPointCalcul(point);
-                pPtCalcul->setSpectre(*(tabSpectre[i + j * x]));
+                pPtCalcul->setSpectre(tabSpectre[i + j * x]);
                 addPointCalcul(pPtCalcul);
 
                 point._x += stepX._x;

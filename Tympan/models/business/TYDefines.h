@@ -365,10 +365,10 @@ typedef std::map<TYUUID, TYElement*> TYMapPtrElementUuid;
 typedef std::map<TYSourcePonctuelle*, bool> TYMapPtrSrcePonctBool;
 
 ///Tableau associant un spectre a un id (identifiant d'objet)
-typedef std::map<QString, TYSpectre*> TYMapIdSpectre;
+typedef std::map<TYUUID, TYSpectre*> TYMapIdSpectre;
 
 ///Tableau associant un booleen a un id (identifiant d'objet)
-typedef std::map<QString, bool> TYMapIdBool;
+typedef std::map<TYUUID, bool> TYMapIdBool;
 
 ///Etat d'utilisation des elements (utilise par les calculs)
 typedef std::map<TYElement*, bool> TYMapPtrElementBool;

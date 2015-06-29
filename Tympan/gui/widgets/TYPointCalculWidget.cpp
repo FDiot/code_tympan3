@@ -75,8 +75,6 @@ TYPointCalculWidget::TYPointCalculWidget(TYPointCalcul* pElement, QWidget* _pPar
     _labelSpectreCalcul = new QLabel(pGroupBoxSpectre);
     _labelSpectreCalcul->setText(TR("id_spectre_calcul"));
     pGroupBoxSpectreLayout->addWidget(_labelSpectreCalcul, 0, 0);
-    _comboBoxSpectreCalul = new QComboBox(pGroupBoxSpectre);
-    pGroupBoxSpectreLayout->addWidget(_comboBoxSpectreCalul, 0, 1);
 
     // Spectre
     _lineEditNomSpectre = new QLineEdit(pGroupBoxSpectre);
@@ -87,10 +85,6 @@ TYPointCalculWidget::TYPointCalculWidget(TYPointCalcul* pElement, QWidget* _pPar
     QObject::connect(pPushButtonSpectre, SIGNAL(clicked()), this, SLOT(editSpectre()));
     pGroupBoxSpectreLayout->addWidget(pPushButtonSpectre, 1, 1);
 
-    //   QPushButton * pShowResultatTreeDialogBtn = new QPushButton(TR("id_showresultattreedialog_button"), pGroupBoxSpectre);
-    //QObject::connect(pShowResultatTreeDialogBtn, SIGNAL( clicked() ), this, SLOT( showResultatTreeDialog() ));
-    //pGroupBoxSpectreLayout->addWidget(pShowResultatTreeDialogBtn, 2, 0, 1, 2);
-
     _pPointCalculLayout->addWidget(pGroupBoxSpectre, wLn++, 0);
 
     // Affichage de la position
@@ -100,8 +94,6 @@ TYPointCalculWidget::TYPointCalculWidget(TYPointCalcul* pElement, QWidget* _pPar
     _pPointCalculLayout->addWidget(_ptW, wLn++, 0);
 
     updateContent();
-
-    connect(_comboBoxSpectreCalul, SIGNAL(activated(int)), this, SLOT(changeCalcul(int)));
 }
 
 TYPointCalculWidget::~TYPointCalculWidget()
@@ -115,89 +107,39 @@ void TYPointCalculWidget::updateContent()
     _ptW->updateContent();
     _ptW->disableZ();
 
-    if (getElement()->isLocked())
-    {
-        _ptW->setEnabled(false);
-        _groupBoxState->setEnabled(false);
-    }
+    _lineEditNomSpectre->setText(getElement()->getSpectre()->getName());
 
-    updateComboCalcul();
-
-    _lineEditNomSpectre->setText(getElement()->getSpectre(getSelectedCalcul())->getName());
-
-    int bouton = getElement()->getEtat(getSelectedCalcul()) ? 1 : 0;
+    int bouton = getElement()->etat() ? 1 : 0;
     _buttonGroupState->button(bouton)->setChecked(true);
 
-}
-
-void TYPointCalculWidget::updateComboCalcul()
-{
-    _comboBoxSpectreCalul->clear();
-
-    // Remplissage du comboBox des calculs
-    if (_pElement->getParent()->isA("TYProjet"))
-    {
-        TYProjet* pProjet = TYProjet::safeDownCast(getElement()->getParent());
-        TYTabLPCalcul listCalcul = pProjet->getListCalcul();
-        for (int i = 0; i < listCalcul.size(); i++)
-        {
-            _comboBoxSpectreCalul->insertItem(i, listCalcul[i]->getName());
-        }
-
-    }
-    // On affiche la forme d'objet courante
-    _comboBoxSpectreCalul->setCurrentIndex(0);
 }
 
 void TYPointCalculWidget::apply()
 {
     _elmW->apply();
     _ptW->apply();
-    getElement()->setEtat(_buttonGroupState->checkedId(), getSelectedCalcul());
+    getElement()->setEtat(_buttonGroupState->checkedId());
     emit modified();
 }
 
 void TYPointCalculWidget::changeCalcul(int calcul)
 {
-    _lineEditNomSpectre->setText(getElement()->getSpectre(getSelectedCalcul())->getName());
+    _lineEditNomSpectre->setText(getElement()->getSpectre()->getName());
 
-    int bouton = getElement()->getEtat(getSelectedCalcul()) ? 1 : 0;
+    int bouton = getElement()->etat() ? 1 : 0;
     _buttonGroupState->button(bouton)->setChecked(true);
-}
-
-TYCalcul* TYPointCalculWidget::getSelectedCalcul()
-{
-    if (_pElement->getParent()->isA("TYProjet"))
-    {
-        int calcul = _comboBoxSpectreCalul->currentIndex();
-        TYProjet* pProjet = TYProjet::safeDownCast(getElement()->getParent());
-        return pProjet->getListCalcul()[calcul];
-    }
-    return NULL;
 }
 
 void TYPointCalculWidget::editSpectre()
 {
-    TYCalcul* pCalcul = getSelectedCalcul();
-    bool bSave = true;
+    LPTYSpectre sp = getElement()->getSpectre();
+    bool bSave = sp->getIsReadOnly();
 
-    if (pCalcul)
-    {
-        TYSpectre sp = *getElement()->getSpectre(pCalcul);
-        bSave = sp.getIsReadOnly();
+    sp->setIsReadOnly(true);
 
-        sp.setIsReadOnly(true);
+    int ret = sp->edit(this);
 
-        int ret = sp.edit(this);
-
-        if (ret == QDialog::Accepted)
-        {
-            getElement()->setSpectre(sp, getSelectedCalcul());
-            _lineEditNomSpectre->setText(getElement()->getSpectre(pCalcul)->getName());
-        }
-
-        sp.setIsReadOnly(bSave);
-    }
+    sp->setIsReadOnly(bSave);
 }
 
 //void TYPointCalculWidget::showResultatTreeDialog()

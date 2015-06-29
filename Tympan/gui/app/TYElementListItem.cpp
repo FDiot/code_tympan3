@@ -98,9 +98,8 @@ void TYElementListItem::updateContent()
         }
         else if (dynamic_cast<TYPointCalcul*>(_pElement._pObj) != nullptr)
         {
-            TYPointControl* pPoint = TYPointControl::safeDownCast(_pElement);
-            TYCalcul* pCalcul = static_cast<TYProjet*>(pPoint->getParent())->getCurrentCalcul();
-            bInCurrentCalcul = pPoint->getEtat(pCalcul);
+            TYPointControl* pPoint = dynamic_cast<TYPointControl*>(_pElement.getRealPointer());
+            bInCurrentCalcul = pPoint->etat();
         }
         else
         {
@@ -188,13 +187,8 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
         if (dynamic_cast<TYPointCalcul*>(_pElement._pObj) != nullptr)
         {
             TYPointControl* pPoint = static_cast<TYPointControl*>(_pElement.getRealPointer());
-            if (pPoint->getEtat(_pCurrentCalcul) != state)
+            if ( (pPoint->etat() != state) && (getTYApp()->getCalculManager()->askForResetResultat()) )
             {
-                if (getTYApp()->getCalculManager()->askForResetResultat())
-                {
-                    pPoint->setEtat(state, _pCurrentCalcul);
-                }
-
                 bool need_to_rebuild_result(false);
                 if (state) // Ajout d'un point de controle
                 {
@@ -220,7 +214,6 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
 
                     getTYMainWnd()->updateModelers(false, false, true);
                 }
-
             }
         }
         else if (_pCurrentCalcul->isInSelection(_pElement) != state)
@@ -298,6 +291,12 @@ void TYElementListItem::updateChilds()
         bool bInCurrentCalcul = false;
         if (pChkElt && childItem->isCheckable())
         {
+            if ( TYPointControl *pPoint = dynamic_cast<TYPointControl*>(pChkElt) )
+            {
+                childItem->QTreeWidgetItem::setCheckState(0, pPoint->etat() ? Qt::Checked : Qt::Unchecked);
+                continue; 
+            }
+
             if (_pCurrentCalcul)
             {
                 bInCurrentCalcul = _pCurrentCalcul->isInSelection(pChkElt);

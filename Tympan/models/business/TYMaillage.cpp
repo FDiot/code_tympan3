@@ -134,17 +134,6 @@ bool TYMaillage::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     return true;
 }
 
-void TYMaillage::duplicatePtCalcState(const TYCalcul* pCalculRef, TYCalcul* pCalculNew)
-{
-    QString idCalculRef = pCalculRef->getID().toString();
-    QString idCalculNew = pCalculNew->getID().toString();
-
-    for (unsigned int i = 0; i < _ptsCalcul.size(); i++)
-    {
-        _ptsCalcul[i]->duplicateEtat(idCalculRef, idCalculNew);
-    }
-}
-
 std::string TYMaillage::toString() const
 {
     return "TYMaillage";
@@ -241,8 +230,7 @@ bool TYMaillage::addPointCalcul(LPTYPointCalcul pPtCalcul)
     assert(pPtCalcul);
 
     pPtCalcul->setParent(this);
-    pPtCalcul->setIsSpectreUnique(true);
-    pPtCalcul->setEtat(true, static_cast<TYCalcul*>(getParent()));  // Active le point pour ce calcul
+    pPtCalcul->setEtat(true);  // Active le point pour ce calcul
     _ptsCalcul.push_back(pPtCalcul);
 
     setIsGeometryModified(true);
@@ -376,38 +364,38 @@ void TYMaillage::computeMesh(std::vector<MTriangle> &mesh) const
             id3 = getIndexPtCalcul(i, j + 1);
             id4 = getIndexPtCalcul(i + 1, j + 1);
 
-            if (id1 < 0 || !ptsCalcul[id1]->getEtat(pCalcul))
+            if (id1 < 0 || !ptsCalcul[id1]->etat())
             {
                 // Higher right triangle
                 if (id2 >= 0 && id4 >= 0 && id3 >= 0)
-                    if (ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                    if (ptsCalcul[id2]->etat() && ptsCalcul[id4]->etat() && ptsCalcul[id3]->etat())
                     {
                         mesh.push_back(computeTriangle(*ptsCalcul[id2], *ptsCalcul[id4], *ptsCalcul[id3]));
                     }
             }
-            else if (id2 < 0 || !ptsCalcul[id2]->getEtat(pCalcul))
+            else if (id2 < 0 || !ptsCalcul[id2]->etat())
             {
                 // Higher left triangle
                 if (id1 >= 0 && id4 >= 0 && id3 >= 0)
-                    if (ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                    if (ptsCalcul[id1]->etat() && ptsCalcul[id4]->etat() && ptsCalcul[id3]->etat())
                     {
                         mesh.push_back(computeTriangle(*ptsCalcul[id1], *ptsCalcul[id4], *ptsCalcul[id3]));
                     }
             }
-            else if (id3 < 0 || !ptsCalcul[id3]->getEtat(pCalcul))
+            else if (id3 < 0 || !ptsCalcul[id3]->etat())
             {
                 // Lower right triangle
                 if (id1 >= 0 && id2 >= 0 && id4 >= 0)
-                    if (ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul))
+                    if (ptsCalcul[id1]->etat() && ptsCalcul[id2]->etat() && ptsCalcul[id4]->etat())
                     {
                         mesh.push_back(computeTriangle(*ptsCalcul[id1], *ptsCalcul[id2], *ptsCalcul[id4]));
                     }
             }
-            else if (id4 < 0 || !ptsCalcul[id4]->getEtat(pCalcul))
+            else if (id4 < 0 || !ptsCalcul[id4]->etat())
             {
                 // Lower left triangle
                 if (id1 >= 0 && id2 >= 0 && id3 >= 0)
-                    if (ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                    if (ptsCalcul[id1]->etat() && ptsCalcul[id2]->etat() && ptsCalcul[id3]->etat())
                     {
                         mesh.push_back(computeTriangle(*ptsCalcul[id1], *ptsCalcul[id2], *ptsCalcul[id3]));
                     }
