@@ -65,12 +65,14 @@ public:
 
 
     TYCalcul();
-    /**
-     * \brief build a calcul giving his parent.
-     *  Constructeur de la classe TYCalcul.
-     *  \param LPTYProjet  pParent=Nulle
-     */
-    TYCalcul(LPTYProjet pParent);
+    
+    ///**
+    // * \brief build a calcul giving his parent.
+    // *  Constructeur de la classe TYCalcul.
+    // *  \param LPTYProjet  pParent=Nulle
+    // */
+    //TYCalcul(LPTYProjet pParent);
+
     /**
      *\brief Constructeur par copie.
      *  Constructeur par copie de la classe TYCalcul.
@@ -95,6 +97,16 @@ public:
 
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
+
+    /*!
+     * \brief Get the status of a point for this calcul
+     */
+    bool getPtCtrlStatus(const TYUUID& id_pt);
+
+    /*!
+     * \brief Set the status of a point for this calcul
+     */
+    void setPtCtrlStatus(const TYUUID& id_pt, bool bStatus);
 
     /**
      * \fn void purge()
@@ -192,12 +204,6 @@ public:
      *\return _elementSelection
      */
     TYListID getElementSelection() const { return _elementSelection; }
-
-    /**
-     *\fn void clearSelection()
-     *\brief Vide la selection d'elements actifs dans ce Calcul.
-     */
-    void clearSelection();
 
     /**
      * \fn bool addToSelection(TYUUID id)
@@ -327,13 +333,25 @@ public:
         \brief Ajoute un point de controle au tableau des resultats
         \param : TYPoint* : Pointeur sur le point a ajouter
      */
-    bool addPtCtrlToResult(TYPointControl* pPoint);
+    bool addPtCtrlToResult(LPTYPointControl pPoint);
 
     /*!
         \brief Supprime un point de controle au tableau des resultats
         \param : TYPoint* : Pointeur sur le point a ajouter
      */
-    bool remPtCtrlFromResult(TYPointControl* pPoint);
+    bool remPtCtrlFromResult(LPTYPointControl pPoint);
+
+    /*!
+     * Get the spectrum for a given control point
+     */
+    LPTYSpectre getSpectre(const TYUUID& id_pt);
+    LPTYSpectre getSpectre(const TYPointControl* pPoint);
+
+    /*!
+     * Set the spectrum for a given control point
+     */
+    void setSpectre(const TYUUID& id_pt, TYSpectre* pSpectre);
+    void setSpectre(TYPointCalcul* pPoint, TYSpectre* pSpectre);
 
     /**
      * \fn  LPTYResultat getResultat()
@@ -449,7 +467,8 @@ public:
     */
     TYTabRay& getTabRays() { return _tabRays; }
 
-
+private :
+    void clearCtrlPointsSpectrums(); 
 protected:
     /**
      * \fn void updateGraphicMaillage()
@@ -487,6 +506,9 @@ protected:
     TYMapPtrElementBool _emitAcVolNode;
     ///Regime des elemenst de la scene
     TYMapPtrElementInt _mapElementRegime;
+
+    // Map control point with spectrum
+    TYMapIdSpectre _mapPointCtrlSpectre;
 
     ///Collections de Maillages.
     TYTabMaillageGeoNode _maillages;

@@ -489,12 +489,12 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                 }
                 else if (ret == actif)
                 {
-                    ((TYPointControl*) eltItem->getElement().getRealPointer())->setEtat(true, _pCurrentCalcul);
+                    _pCurrentCalcul->addPtCtrlToResult(dynamic_cast<TYPointControl*>(eltItem->getElement().getRealPointer())); 
                     getTYMainWnd()->updateModelers(true, true, true);
                 }
                 else if (ret == inactif)
                 {
-                    ((TYPointControl*) eltItem->getElement().getRealPointer())->setEtat(false, _pCurrentCalcul);
+                    _pCurrentCalcul->remPtCtrlFromResult(dynamic_cast<TYPointControl*>(eltItem->getElement().getRealPointer()));
                     getTYMainWnd()->updateModelers(true, true, true);
                 }
                 else if (ret == highlight)

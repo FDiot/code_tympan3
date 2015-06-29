@@ -76,7 +76,7 @@ void TYPointControlGraphic::display(GLenum mode /*= GL_RENDER*/)
 {
     TYCalcul* pCalcul = static_cast<TYProjet*>(getElement()->getParent())->getCurrentCalcul();
     // Pas affiche si inactif
-    if (getElement()->getEtat(pCalcul) == false)
+    if (getElement()->etat() == false)
     {
         return;
     }

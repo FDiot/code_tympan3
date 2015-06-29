@@ -223,7 +223,7 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
         size_t nbSpectre = std::min(tabSpectre.size(), ptsCalcul.size());
         for (i = 0; i < nbSpectre; ++i)
         {
-            ptsCalcul[i]->setSpectre(*(tabSpectre[i]));
+            ptsCalcul[i]->setSpectre(tabSpectre[i]);
         }
     }
     delete pSpectre;

@@ -212,19 +212,19 @@ cdef class Ground:
         """Ground resistivity (floating point value)"""
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getResistivite()
-        
-    @property    
+
+    @property
     def deviation(self):
         """Ground deviation (floating point value)"""
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getEcartType()
-        
+
     @property
     def length(self):
         """Ground autocorrelation length (floating point value)"""
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getLongueur()
-        
+
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
@@ -773,17 +773,17 @@ cdef class Receptor:
         """ Return true if this receptor is active in computation 'comp', false
             otherwise
         """
-        if self.thisptr.getRealPointer().getEtat(comp.thisptr.getRealPointer()):
+        if self.thisptr.getRealPointer().etat(comp.thisptr.getRealPointer()):
             return True
         return False
 
-    @cy.locals(spectrum=tycommon.Spectrum, comp=Computation)
-    def set_spectrum(self, spectrum, comp):
-        """ Set the spectrum for the given computation """
-        cpp_calc = cy.declare(cy.pointer(TYCalcul),
-                              downcast_calcul(comp.thisptr.getRealPointer()))
-        self.thisptr.getRealPointer().setSpectre(TYSpectre(spectrum.thisobj),
-                                                 cpp_calc)
+#    @cy.locals(spectrum=tycommon.Spectrum, comp=Computation)
+#    def set_spectrum(self, spectrum, comp):
+#        """ Set the spectrum for the given computation """
+#        cpp_calc = cy.declare(cy.pointer(TYCalcul))
+#        cpp_calc = downcast_calcul(comp.thisptr.getRealPointer())
+#
+#        self.thisptr.getRealPointer().setSpectre(TYSpectre(spectrum.thisobj))
 
     @property
     def dBA(self):
@@ -809,6 +809,16 @@ cdef class Computation:
         self.thisptr.getRealPointer().solverParams = QString(params)
 
     solver_parameters = property(get_solver_parameters, set_solver_parameters)
+
+    @cy.locals(receptor=UserReceptor)
+    def addReceptor(self, receptor):
+        self.thisptr.getRealPointer().addPtCtrlToResult(receptor.thisptr)
+
+    @cy.locals(receptor=Receptor, spectrum=tycommon.Spectrum)
+    def set_spectrum(self, receptor, spectrum):
+        tyspectre = cy.declare(cy.pointer(TYSpectre))
+        tyspectre = new TYSpectre(spectrum.thisobj)
+        self.thisptr.getRealPointer().setSpectre(receptor.thisptr.getRealPointer(), tyspectre)
 
     @property
     def meshes(self):

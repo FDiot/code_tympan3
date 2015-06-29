@@ -59,10 +59,10 @@ TYCalcul::TYCalcul() :
     _pResultat->setParent(this);
 }
 
-TYCalcul::TYCalcul(LPTYProjet pParent)
-{
-    _pParent = pParent;
-}
+//TYCalcul::TYCalcul(LPTYProjet pParent)
+//{
+//    _pParent = pParent;
+//}
 
 TYCalcul::TYCalcul(const TYCalcul& other)
 {
@@ -121,6 +121,7 @@ bool TYCalcul::operator==(const TYCalcul& other) const
         if (_emitAcVolNode != other._emitAcVolNode) { return false; }
         if (_mapElementRegime != other._mapElementRegime) { return false; }
         if (_elementSelection != other._elementSelection) { return false; }
+        if (_mapPointCtrlSpectre != other._mapPointCtrlSpectre) { return false; }
         if (_solverId != other._solverId) { return false; }
         if (_tabRays != other._tabRays) { return false; }
     }
@@ -156,6 +157,11 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     _elementSelection = pOtherCalcul->_elementSelection;
     _emitAcVolNode = pOtherCalcul->_emitAcVolNode;
     _mapElementRegime = pOtherCalcul->_mapElementRegime;
+
+    // Use same points but initialize spectrum
+    _mapPointCtrlSpectre = pOtherCalcul->_mapPointCtrlSpectre;
+    clearCtrlPointsSpectrums();
+
     _solverId = pOtherCalcul->_solverId;
 
     unsigned int i;
@@ -165,9 +171,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
         // Dupplication du maillage
         LPTYMaillageGeoNode pMaillageGeoNode = new TYMaillageGeoNode(NULL, this);
         pMaillageGeoNode->deepCopy(pOtherCalcul->_maillages[i], copyId);
-        // Duplication des etats des points de calcul
-        TYMaillage* pMaillage = TYMaillage::safeDownCast(pMaillageGeoNode->getElement());
-        pMaillage->duplicatePtCalcState(pOtherCalcul, this);
         // Ajout du maillage
         addMaillage(pMaillageGeoNode);
     }
@@ -253,6 +256,18 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
         tmpNode.setAttribute("state", QString(intToStr((*iter4).second).c_str()));
     }
 
+    // Points de controle
+    DOM_Element resuRecepteursNode = domDoc.createElement("ResuCtrlPnts");
+    domNewElem.appendChild(resuRecepteursNode);
+    TYMapIdSpectre::iterator itRec;
+    for (itRec=_mapPointCtrlSpectre.begin(); itRec!=_mapPointCtrlSpectre.end(); itRec++)
+    {
+        DOM_Element tmpNode = domDoc.createElement("Recepteur");
+        resuRecepteursNode.appendChild(tmpNode);
+        tmpNode.setAttribute("receptor_id", (*itRec).first.toString());
+        (*itRec).second->toXML(tmpNode); 
+    }
+
     // Maillages
     unsigned int i;
     for (i = 0; i < _maillages.size(); i++)
@@ -284,9 +299,9 @@ DOM_Element TYCalcul::toXML(DOM_Element& domElement)
 
 int TYCalcul::fromXML(DOM_Element domElement)
 {
-    TYElement::fromXML(domElement);
+    purge(); // Cleaning before loading
 
-    purge();
+    TYElement::fromXML(domElement);
 
     bool getOk[8];
     unsigned int i;
@@ -404,6 +419,39 @@ int TYCalcul::fromXML(DOM_Element domElement)
                     if (pAccVolNode)
                     {
                         _mapElementRegime.insert(TYMapPtrElementInt::value_type(pAccVolNode, state));
+                    }
+                }
+            }
+        }
+        else if (elemCur.nodeName() == "ResuCtrlPnts")
+        {
+            DOM_Element elemCur2;
+            QDomNodeList childs2 = elemCur.childNodes();
+            LPTYSpectre spectrum = new TYSpectre();
+
+            for (unsigned int j = 0; j < childs2.length(); j++)
+            {
+                elemCur2 = childs2.item(j).toElement();
+                if (elemCur2.nodeName() == "Recepteur")
+                {
+                    QString strReceptor_id = TYXMLTools::getElementAttributeToString(elemCur2, "receptor_id");
+                    TYUUID receptor_id;
+                    receptor_id.FromString(strReceptor_id);
+                    
+                    // Get the spectrum
+                    DOM_Element elemCur3;
+                    QDomNodeList childs3 = elemCur2.childNodes();
+                    for (unsigned int k = 0; k < childs3.length(); k++)
+                    {
+                        elemCur3 = childs3.item(k).toElement();
+                        if ( spectrum->callFromXMLIfEqual(elemCur3, &retVal) )
+                        {
+                            if (retVal == 1)
+                            {
+                                _mapPointCtrlSpectre[receptor_id] = new TYSpectre(*spectrum);
+                                _mapPointCtrlSpectre[receptor_id]->incRef();
+                            }
+                        }
                     }
                 }
             }
@@ -547,11 +595,12 @@ void TYCalcul::purge()
     remAllMaillage();
     _tabRays.clear();
 
-    clearSelection();
+    _elementSelection.clear();
 
     _pResultat->purge();
     _mapElementRegime.clear();
     _emitAcVolNode.clear();
+    _mapPointCtrlSpectre.clear(); // Cleaning control point / spectrum association
 
     setIsGeometryModified(true);
 }
@@ -561,7 +610,7 @@ void TYCalcul::clearResult()
     TYTabLPPointControl::iterator ite;
     for (ite = getProjet()->getPointsControl().begin(); ite != getProjet()->getPointsControl().end(); ite++)
     {
-        (*ite)->purge(this);
+        clearCtrlPointsSpectrums();
 #if TY_USE_IHM
         (*ite)->updateGraphic();
 #endif
@@ -577,15 +626,10 @@ void TYCalcul::clearResult()
 
     }
 
+    clearCtrlPointsSpectrums();
     _pResultat->purge();
 	_tabRays.clear();
 
-    setIsGeometryModified(true);
-}
-
-void TYCalcul::clearSelection()
-{
-    _elementSelection.clear();
     setIsGeometryModified(true);
 }
 
@@ -1041,7 +1085,7 @@ void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
 
         for (j = 0; (int)j < nbPtsCalcul; j++)
         {
-            pMaillage->getPtsCalcul()[j]->setEtat(true, this);
+            pMaillage->getPtsCalcul()[j]->setEtat(true);
             tabPts.push_back(matrixMaillage * (*(pMaillage->getPtsCalcul()[j])));
         }
 
@@ -1062,7 +1106,7 @@ void TYCalcul::selectActivePoint(const LPTYSiteNode pSite)
                 if (pVolumeNode->isInside(pt))
                 {
                     // Desactivation de ce point de calcul
-                    pMaillage->getPtsCalcul()[k]->setEtat(false, this);
+                    pMaillage->getPtsCalcul()[k]->setEtat(false);
                 }
             }
 
@@ -1216,12 +1260,111 @@ void TYCalcul::setState(int state)
     }
 }
 
-bool TYCalcul::addPtCtrlToResult(TYPointControl* pPoint)
+bool TYCalcul::addPtCtrlToResult(LPTYPointControl pPoint)
 {
-    return _pResultat->addRecepteur(pPoint);
+    // Create point control entry if not done
+    TYUUID id_point = pPoint->getID();
+    if ( _mapPointCtrlSpectre.find(id_point) == _mapPointCtrlSpectre.end() )
+    {
+        LPTYSpectre spectre = new TYSpectre();
+        _mapPointCtrlSpectre[id_point] = spectre;
+        _mapPointCtrlSpectre[id_point]->incRef();
+
+        // Set control point on for this calcul
+        pPoint->setEtat(getID(), true);
+
+        return _pResultat->addRecepteur(pPoint);
+    }
+
+    return false;
 }
 
-bool TYCalcul::remPtCtrlFromResult(TYPointControl* pPoint)
+bool TYCalcul::remPtCtrlFromResult(LPTYPointControl pPoint)
 {
+    // Remove point control entry
+    TYMapIdSpectre::iterator it = _mapPointCtrlSpectre.find( pPoint->getID() );
+    if ( it != _mapPointCtrlSpectre.end() ) { _mapPointCtrlSpectre.erase(it); }
+
+    // Set control point off for this calcul
+    pPoint->setEtat(getID(), false);
+
     return _pResultat->remRecepteur(pPoint);
 }
+
+void TYCalcul::clearCtrlPointsSpectrums()
+{
+    TYMapIdSpectre::iterator it;
+    for (it=_mapPointCtrlSpectre.begin(); it!=_mapPointCtrlSpectre.end(); it++)
+    {
+        (*it).second = new TYSpectre();
+    }
+}
+
+LPTYSpectre  TYCalcul::getSpectre(const TYPointControl* pPoint)
+{
+    return getSpectre(pPoint->getID());
+}
+
+LPTYSpectre TYCalcul::getSpectre(const TYUUID& id_pt)
+{
+    TYMapIdSpectre::iterator it = _mapPointCtrlSpectre.find(id_pt);
+
+    if (it != _mapPointCtrlSpectre.end()) { return (*it).second; }
+
+    return new TYSpectre();
+}
+
+void TYCalcul::setSpectre(TYPointCalcul* pPoint, TYSpectre* pSpectre)
+{
+    TYMapIdSpectre::iterator it = _mapPointCtrlSpectre.find(pPoint->getID());
+
+    // Add only if the control point is known from the calcul
+    if (it != _mapPointCtrlSpectre.end()) 
+    { 
+        (*it).second = pSpectre;
+        (*it).second->incRef();
+    }
+    else // other case point is owned by a TYMaillage
+    {
+        if ( dynamic_cast<TYMaillage*>(pPoint->getParent()) )
+        {
+            pPoint->setSpectre( pSpectre );
+        }
+    }
+}
+
+
+void TYCalcul::setSpectre(const TYUUID& id_pt, TYSpectre* pSpectre)
+{
+    assert(true, "NOT IMPLEMENTED");
+}
+
+bool TYCalcul::getPtCtrlStatus(const TYUUID& id_pt)
+{
+    TYMapIdSpectre::iterator it = _mapPointCtrlSpectre.find(id_pt);
+
+    if (it != _mapPointCtrlSpectre.end()) { return true; }
+
+    return false;
+}
+
+void TYCalcul::setPtCtrlStatus(const TYUUID& id_pt, bool bStatus)
+{
+    // Suppression de la map des spectres aux points
+    TYMapIdSpectre::iterator it = _mapPointCtrlSpectre.find(id_pt);
+
+    if (it != _mapPointCtrlSpectre.end()) { _mapPointCtrlSpectre.erase(it); }
+
+    // Information du point de controle
+    TYElement *pElem = TYElement::getInstance(id_pt);
+    if (pElem)
+    {
+        TYPointControl *pPoint = dynamic_cast<TYPointControl*>(pElem);
+        if (pPoint)
+        {
+            pPoint->setEtat(getID(), bStatus);
+        }
+    }
+
+}
+
