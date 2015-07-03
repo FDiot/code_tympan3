@@ -222,7 +222,10 @@ int TYMaillage::fromXML(DOM_Element domElement)
 
 void TYMaillage::clearResult()
 {
-
+    for(unsigned int i=0; i<_ptsCalcul.size(); i++)
+    {
+        _ptsCalcul[i].getRealPointer()->setSpectre( new TYSpectre() );
+    }
 }
 
 bool TYMaillage::addPointCalcul(LPTYPointCalcul pPtCalcul)
@@ -289,7 +292,9 @@ void TYMaillage::make(const TYTabPoint& points)
 {
     for (unsigned int i = 0; i < points.size(); i++)
     {
-        addPointCalcul(new TYPointCalcul(points[i]));
+        LPTYPointCalcul pPoint = new TYPointCalcul(points[i]);
+        pPoint->setSpectre(new TYSpectre());
+        addPointCalcul(pPoint);
     }
 }
 
@@ -428,16 +433,21 @@ MTriangle TYMaillage::computeTriangle(TYPointCalcul& pt1, TYPointCalcul& pt2, TY
 
 double TYMaillage::getSpectrumValue(TYPointCalcul& pt) const
 {
-    switch (_dataType)
+    if (pt.getSpectre() != nullptr)
     {
-        case ValGlobalDBA:
-        default:
-            return pt.getValA(); //pSpectre->valGlobDBA();
-        case ValGlobalDBLin:
-            return pt.getValLin(); //pSpectre->valGlobDBLin();
-        case DataFreq:
-            return pt.getSpectre()->getValueReal(_dataFreq);
+        switch (_dataType)
+        {
+            case ValGlobalDBA:
+            default:
+                return pt.getSpectre().getRealPointer()->valGlobDBA();
+            case ValGlobalDBLin:
+                return pt.getSpectre().getRealPointer()->valGlobDBLin();
+            case DataFreq:
+                return pt.getSpectre()->getValueReal(_dataFreq);
+        }
     }
+
+    return 0.;
 }
 
 void TYMaillage::computeIsoCurve(std::vector<MTriangle> &mesh, std::vector<MPoint> &isoCurve) const

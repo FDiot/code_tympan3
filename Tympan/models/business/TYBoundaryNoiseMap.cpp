@@ -331,6 +331,7 @@ bool TYBoundaryNoiseMap::fromXMLString(const std::string& sXMLString)
 void TYBoundaryNoiseMap::clearResult()
 {
     make(_tabPoint, _thickness, _closed, _density);
+    TYMaillage::clearResult();
 }
 
 // XXX Add some comments.
@@ -427,7 +428,10 @@ void TYBoundaryNoiseMap::computePoints(double box_x_min, double box_x_max, doubl
                                                           _tabPoint[l]._x, _tabPoint[l]._y);
                 if (squared_distance <= squared_thick)
                 {
-                    addPointCalcul(new TYPointCalcul(TYPoint(current_x, current_y, _hauteur)));
+                    LPTYPointCalcul pPoint = new TYPointCalcul(TYPoint(current_x, current_y, _hauteur));
+                    pPoint->setSpectre(new TYSpectre());
+                    addPointCalcul(pPoint);
+                    
                     _ptsIndices[index2D] = _ptsCalcul.size() - 1;
                     break; //no need to test with other segments
                 }

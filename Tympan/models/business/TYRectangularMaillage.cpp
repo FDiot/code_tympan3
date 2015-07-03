@@ -299,6 +299,7 @@ bool TYRectangularMaillage::fromXMLString(const std::string& sXMLString)
 void TYRectangularMaillage::clearResult()
 {
     make(_pRect, _densiteX, _densiteY);
+    TYMaillage::clearResult();
 }
 
 void TYRectangularMaillage::make(LPTYRectangle pRect, double densiteX, double densiteY)
@@ -334,7 +335,9 @@ void TYRectangularMaillage::make(LPTYRectangle pRect, double densiteX, double de
             OPoint3D pos = startPt + (vecX * iX) + (vecY * iY);
 
             // Ajout du point au maillage
-            addPointCalcul(new TYPointCalcul(pos));
+            LPTYPointCalcul pPoint = new TYPointCalcul(pos);
+            pPoint->setSpectre(new TYSpectre());
+            addPointCalcul(pPoint);
         }
     }
 
