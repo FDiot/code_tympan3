@@ -228,9 +228,6 @@ int TYProjet::fromXML(DOM_Element domElement)
             }
         }
 
-        //Mise a jour des parametre pour la triangulation du site
-        verifGeometricParam();
-
         // Calculs
         pCalcul->setParent(this);
         if (pCalcul->callFromXMLIfEqual(elemCur, &readOk))
@@ -240,6 +237,33 @@ int TYProjet::fromXML(DOM_Element domElement)
         }
     }
 
+    //Mise a jour des parametre pour la triangulation du site
+    verifGeometricParam();
+
+    // Update TYCalcul control point spectrum if needed
+    // --> compatibility with previous TYPointControl management paradigm (see CS 0a6aab520874@EDF_RD)
+    for (unsigned int i=0; i<_pointsControl.size(); i++)
+    {
+        if (_pointsControl[i].getRealPointer()->getAllUses() != nullptr)
+        {
+            std::map<TYUUID, TYSpectre*> *compatibilityVector = static_cast< map<TYUUID, TYSpectre*>* > ( _pointsControl[i].getRealPointer()->getAllUses() );
+            std::map<TYUUID, TYSpectre*>::iterator it;
+            for (it=compatibilityVector->begin(); it!=compatibilityVector->end(); it++)
+            {
+                TYCalcul *pCalc = dynamic_cast<TYCalcul*>( getInstance( (*it).first ) );
+                if (pCalc == nullptr) { continue; }
+
+                TYSpectre *pSpectre = (*it).second;
+                pCalc->addPtCtrlToResult( _pointsControl[i] );
+                pCalc->setSpectre(_pointsControl[i].getRealPointer(), pSpectre);
+            }
+
+            // Cleaning map after use
+            compatibilityVector->clear();
+            _pointsControl[i].getRealPointer()->cleanAllUses();
+            compatibilityVector = nullptr;        
+        }
+    }
 
     // Identification du calcul courant
     bool bCurrentCalculFound = false;

@@ -272,6 +272,7 @@ bool TYLinearMaillage::fromXMLString(const std::string& sXMLString)
 void TYLinearMaillage::clearResult()
 {
     make(_pSeg, _densite);
+    TYMaillage::clearResult();
 }
 
 
@@ -304,7 +305,9 @@ void TYLinearMaillage::make(LPTYSegment pSeg, double densite)
         OPoint3D pos = startPt + (vec * i);
 
         // Ajout du point au maillage
-        addPointCalcul(new TYPointCalcul(pos));
+        LPTYPointCalcul pPoint = new TYPointCalcul(pos);
+        pPoint->setSpectre(new TYSpectre());
+        addPointCalcul(pPoint);
     }
 
     setIsGeometryModified(true);
