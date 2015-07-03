@@ -600,7 +600,14 @@ void TYCalcul::purge()
     _pResultat->purge();
     _mapElementRegime.clear();
     _emitAcVolNode.clear();
-    _mapPointCtrlSpectre.clear(); // Cleaning control point / spectrum association
+    
+    // Cleaning control point / spectrum association
+    std::map<TYUUID, TYSpectre*>::iterator it;
+    for (it=_mapPointCtrlSpectre.begin(); it!=_mapPointCtrlSpectre.end(); it++)
+    {
+        if ( (*it).second != nullptr ) { delete (*it).second; (*it).second=nullptr; }
+    }
+    _mapPointCtrlSpectre.clear();
 
     setIsGeometryModified(true);
 }

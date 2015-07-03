@@ -183,11 +183,51 @@ int TYPointControl::fromXML(DOM_Element domElement)
             idCalcul.FromString(strIdCalcul);
             bool bEtat = TYXMLTools::getElementAttributeToInt(elemCur, "Etat");
             _tabEtats[idCalcul] = bEtat;
-        }    
+        }
+        else if (elemCur.nodeName() == "Spectre")
+        {
+            std::map<TYUUID, TYSpectre*> *compatibilityVector = static_cast< map<TYUUID, TYSpectre*>* > ( getCompatibilityVector() );
+            TYSpectre* pSpectre = new TYSpectre();
+            pSpectre->callFromXMLIfEqual(elemCur);
+
+            // recupere le calcul associe au spectre
+            idCalcul = TYXMLTools::getElementAttributeToString(elemCur, "idCalcul");
+            compatibilityVector->operator[](idCalcul) = pSpectre;
+
+            _dBA = pSpectre->valGlobDBA();
+            _dBLin = pSpectre->valGlobDBLin();
+        }
+    }
+
+    // Cleaning compatibility data
+    std::map<TYUUID, TYSpectre*> *compatibilityVector = static_cast< map<TYUUID, TYSpectre*>* > ( getCompatibilityVector() );
+    std::map<TYUUID, TYSpectre*>::iterator it;
+    for (it=compatibilityVector->begin(); it!=compatibilityVector->end(); )
+    {
+        if ( _tabEtats[(*it).first] == false)
+        {
+            delete (*it).second;
+            it = compatibilityVector->erase( it );
+        }
+        else
+        {
+            it++;
+        }
     }
 
     return 1;
 }
+
+void* TYPointControl::getCompatibilityVector()
+{
+    if (_allUses == nullptr)
+    {
+        _allUses = new std::map<TYUUID, TYSpectre*>();
+    }
+
+    return _allUses;
+}
+
 
 //void TYPointControl::purge(TYCalcul* pCalcul)
 //{

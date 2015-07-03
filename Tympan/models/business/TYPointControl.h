@@ -172,6 +172,8 @@ public:
      */
     void duplicateEtat(const TYUUID& idCalculRef, const TYUUID& idCalculNew);
 
+    void* getCompatibilityVector();
+
 // Membres
 protected:
     ///L'etat du point pour un calcul donne
