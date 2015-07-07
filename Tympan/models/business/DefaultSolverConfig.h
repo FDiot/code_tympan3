@@ -173,6 +173,7 @@ const char * DEFAULT_SOLVER_CONFIG =
 "Anime3DSigma=0.\n"
 "# Force 'C' parameter to 0 or 1 (will be computed from totalRayLength for any other value) [int]\n"
 "Anime3DForceC=1\n"
-;
+"# Keep rays after computation\n"
+"Anime3DKeepRays=1\n";
 
 #endif
