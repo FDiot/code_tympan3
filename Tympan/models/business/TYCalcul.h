@@ -520,7 +520,6 @@ protected:
     TYTabRay _tabRays;
 };
 
-#include "TYProjet.h"
 
 
 #endif // __TY_CALCUL__
