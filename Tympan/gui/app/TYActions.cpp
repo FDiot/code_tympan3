@@ -18,6 +18,7 @@
  * \brief action qui necessite l'acces au modeler
  */
 
+#include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticSurfaceNode.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
