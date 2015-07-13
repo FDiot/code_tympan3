@@ -113,7 +113,7 @@ void TYRectangularMaillageGraphic::computeBoundingBox()
 void TYRectangularMaillageGraphic::display(GLenum mode) //GLenum mode = GL_RENDER
 {
     // Pas affiche si inactif
-    if (getElement()->getState() == TYMaillage::Inactif)
+    if (getElement()->etat() == false)
     {
         return;
     }

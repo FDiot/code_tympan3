@@ -131,40 +131,10 @@ int TYLinearMaillage::fromXML(DOM_Element domElement)
         TYXMLTools::getElementDoubleValue(elemCur, "densite", _densite, densiteOk);
 
         _pSeg->callFromXMLIfEqual(elemCur);
-
-        // Nouvelle version : si on trouve des spectres
-        if (pSpectre->callFromXMLIfEqual(elemCur))
-        {
-            tabSpectre.push_back(pSpectre);
-            pSpectre = new TYSpectre();
-            if (!spectreIsOk)
-            {
-                spectreIsOk = true;
-            }
-        }
     }
 
-    // Nouvelle version
-    if (spectreIsOk)
-    {
-        OVector3D step = _pSeg->toVector3D() * (1.0 / (double)tabSpectre.size());
-
-        double x0 = _pSeg->_ptA._x;
-        double y0 = _pSeg->_ptA._y;
-        TYPoint point(x0, y0, _hauteur);
-
-        for (i = 0; i < tabSpectre.size(); ++i)
-        {
-            TYPointCalcul* pPtCalcul = new TYPointCalcul(point);
-            pPtCalcul->setSpectre(tabSpectre[i]);
-            addPointCalcul(pPtCalcul);
-
-            point._x += step._x;
-            point._y += step._y;
-        }
-    }
-
-    delete pSpectre;
+    make(_pSeg, _densite);
+    TYMaillage::clearResult();
 
     return 1;
 }
@@ -271,7 +241,6 @@ bool TYLinearMaillage::fromXMLString(const std::string& sXMLString)
 
 void TYLinearMaillage::clearResult()
 {
-    make(_pSeg, _densite);
     TYMaillage::clearResult();
 }
 

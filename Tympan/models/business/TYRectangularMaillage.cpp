@@ -108,14 +108,6 @@ DOM_Element TYRectangularMaillage::toXML(DOM_Element& domElement)
 
     _pRect->toXML(domNewElem);
 
-    if (TYProjet::gSaveValues)
-    {
-        for (unsigned int i = 0; i < _ptsCalcul.size(); i++)
-        {
-            _ptsCalcul[i]->getSpectre()->toXML(domNewElem);
-        }
-    }
-
     return domNewElem;
 }
 
@@ -144,54 +136,10 @@ int TYRectangularMaillage::fromXML(DOM_Element domElement)
         TYXMLTools::getElementDoubleValue(elemCur, "densiteY", _densiteY, densiteYOk);
 
         _pRect->callFromXMLIfEqual(elemCur);
-
-        // Nouvelle version : si on trouve des spectres
-        if (pSpectre->callFromXMLIfEqual(elemCur))
-        {
-            tabSpectre.push_back(pSpectre);
-            pSpectre = new TYSpectre();
-            if (!spectreIsOk)
-            {
-                spectreIsOk = true;
-            }
-        }
     }
 
-    // Nouvelle version
-    if (spectreIsOk)
-    {
-        unsigned long x, y;
-        OVector3D stepX, stepY;
-        getDimensionsAndSteps(x, y, stepX, stepY);
-        _nbPointsX = x;
-
-        double x0 = _pRect->getMinX();
-        double y0 = _pRect->getMaxY();
-        TYPoint point(x0, y0, _hauteur);
-
-        // On calcul chaque points
-        for (j = 0; j < y; ++j)
-        {
-            for (i = 0; i < x; ++i)
-            {
-                TYPointCalcul* pPtCalcul = new TYPointCalcul(point);
-                pPtCalcul->setSpectre(tabSpectre[i + j * x]);
-                addPointCalcul(pPtCalcul);
-
-                point._x += stepX._x;
-            }
-
-            point._x = x0;
-            point._y += stepY._y;
-        }
-    }
-    else
-    {
-        // CLM-NT33 : Chargement de fichier avec maillage inexistant
-        make(_pRect, _densiteX, _densiteY);
-    }
-
-    delete pSpectre;
+    make(_pRect, _densiteX, _densiteY);
+    TYMaillage::clearResult();
 
     return 1;
 }

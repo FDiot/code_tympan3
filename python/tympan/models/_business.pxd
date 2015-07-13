@@ -34,7 +34,7 @@ cdef extern from "Tympan/models/business/TYElement.h":
 
 cdef extern from "Tympan/models/business/TYMaillage.h":
     cdef cppclass TYMaillage:
-        int getState()
+        bool etat()
         const vector[SmartPtr[TYPointCalcul]]& getPtsCalcul() const
 
 cdef extern from "Tympan/models/business/TYMaillage.h" namespace "TYMaillage":
@@ -166,8 +166,6 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
         SmartPtr[TYResultat] getResultat()
         void getAllSources(cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& mapElementSrcs,
                       vector[SmartPtr[TYGeometryNode]])
-        void selectActivePoint(SmartPtr[TYSiteNode] pSite)
-        const vector[SmartPtr[TYGeometryNode]] getMaillages() const
         vector[SmartPtr[TYRay]]& getTabRays()
         void goPostprocessing()
         const OGenID getSolverId()
@@ -185,10 +183,12 @@ cdef extern from "Tympan/models/business/TYProjet.h":
         SmartPtr[TYCalcul] getCurrentCalcul()
         void setCurrentCalcul(SmartPtr[TYCalcul] pCurCalcul)
         void addCalcul(SmartPtr[TYCalcul] pCalcul)
+        void selectActivePoint(SmartPtr[TYSiteNode] pSite)
         SmartPtr[TYSiteNode] getSite()
         bool updateAltiRecepteurs(const TYAltimetrie* pAlti)
         vector[SmartPtr[TYPointControl]]& getPointsControl()
         vector[SmartPtr[TYCalcul]]& getListCalcul()
+        vector[SmartPtr[TYGeometryNode]]& getMaillages()
 
 cdef extern from "Tympan/models/business/topography/TYAltimetrie.h":
     cdef cppclass TYAltimetrie (TYElement):

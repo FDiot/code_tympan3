@@ -26,6 +26,7 @@
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYProjet.h"
 #include "Tympan/gui/widgets/TYMaillageWidget.h"
 #include "TYRectangularMaillageWidget.h"
 
@@ -101,12 +102,6 @@ void TYRectangularMaillageWidget::updateContent()
 {
     _maillageW->updateContent();
 
-    if (getElement()->isLocked())
-    {
-        _lineEditDensiteX->setEnabled(false);
-        _lineEditDensiteY->setEnabled(false);
-    }
-
     if (getElement()->getRectangle())
     {
         _lineEditNomRectangle->setText(getElement()->getRectangle()->getName());
@@ -139,10 +134,10 @@ void TYRectangularMaillageWidget::apply()
         getElement()->make(getElement()->getRectangle(), densiteX, densiteY);
 
         // La densite a changee, il faut mettre a jour l'altimetrie
-        LPTYCalcul pCalcul = TYCalcul::safeDownCast(getElement()->getParent());
-        if (pCalcul && pCalcul->getSite()->getAltimetry()->containsData())
+        LPTYProjet pProj = dynamic_cast<TYProjet*>(getElement()->getParent());
+        if (pProj && pProj->getSite()->getAltimetry()->containsData())
         {
-            pCalcul->updateAltiRecepteurs();
+            pProj->updateAltiRecepteurs();
         }
     }
 

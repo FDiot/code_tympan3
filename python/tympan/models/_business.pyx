@@ -719,7 +719,7 @@ cdef class Mesh:
     def is_active(self):
         """True if the mesh is in an active state, false otherwise"""
         # enum value from MaillageState (class TYMaillage)
-        return self.thisptr.getState() == Actif
+        return self.thisptr.etat()
 
     @property
     def receptors(self):
@@ -821,22 +821,6 @@ cdef class Computation:
         self.thisptr.getRealPointer().setSpectre(receptor.thisptr.getRealPointer(), tyspectre)
 
     @property
-    def meshes(self):
-        """The meshes of the computation (a list of 'Mesh' cython objects)"""
-        assert self.thisptr.getRealPointer() != NULL
-        geomaill = cy.declare(vector[SmartPtr[TYGeometryNode]],
-                              self.thisptr.getRealPointer().getMaillages())
-        nmaill = geomaill.size()
-        meshes = []
-        for i in xrange(nmaill):
-            mesh = Mesh()
-            mesh.matrix = geomaill[i].getRealPointer().getMatrix()
-            mesh.thisptr = downcast_maillage(geomaill[i].getRealPointer().getElement())
-            meshes.append(mesh)
-            mesh.thisgeonodeptr = geomaill[i]
-        return meshes
-
-    @property
     def result(self):
         """Return an acoustic result (business representation)"""
         assert self.thisptr.getRealPointer() != NULL
@@ -868,10 +852,8 @@ cdef class Project:
 
     def update(self):
         """Update the project (inactive mesh points detection)"""
-        computation = cy.declare(cy.pointer(TYCalcul),
-                                 self.thisptr.getRealPointer().getCurrentCalcul().getRealPointer())
         # detect and disable the mesh points that are inside machines or buildings
-        computation.selectActivePoint(self.thisptr.getRealPointer().getSite())
+        self.thisptr.getRealPointer().selectActivePoint(self.thisptr.getRealPointer().getSite())
 
     def _update_site_altimetry(self, *args):
         """Update site altimetry and project"""
@@ -933,6 +915,22 @@ cdef class Project:
             urec.thisptr = ctrl_pts[i]
             control_points.append(urec)
         return control_points
+
+    @property
+    def meshes(self):
+        """The meshes of the computation (a list of 'Mesh' cython objects)"""
+        assert self.thisptr.getRealPointer() != NULL
+        geomaill = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        geomaill = self.thisptr.getRealPointer().getMaillages()
+        nmaill = geomaill.size()
+        meshes = []
+        for i in xrange(nmaill):
+            mesh = Mesh()
+            mesh.matrix = geomaill[i].getRealPointer().getMatrix()
+            mesh.thisptr = downcast_maillage(geomaill[i].getRealPointer().getElement())
+            meshes.append(mesh)
+            mesh.thisgeonodeptr = geomaill[i]
+        return meshes
 
     @staticmethod
     def from_xml(filepath):
