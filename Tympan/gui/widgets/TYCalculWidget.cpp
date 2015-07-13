@@ -285,23 +285,100 @@ void TYCalculWidget::updateContent()
 
     _elmW->updateContent();// Affichage du nom du calcul
 
+    // General infos
+    _editDateModif->setDate(date.currentDate());
+    _editDateCreation->setDate(date.fromString(getElement()->getDateCreation(), Qt::ISODate));
     _lineEditAuteur->setText(getElement()->getAuteur());
     _lineEditComment->setPlainText(getElement()->getComment());
 
     // Mise a jour de l'etat du calcul
-    if (getElement()->getState() == TYCalcul::Actif)
-    {
-        _pRadioButtonActif->setChecked(true);
-        _pRadioButtonLocked->setChecked(false);
-    }
-    else
-    {
-        _pRadioButtonActif->setChecked(false);
-        _pRadioButtonLocked->setChecked(true);
-    }
-
+    updateCalculState();
 
     // Choix du type de calcul
+    updateComboSolver();
+
+    // Keep partial results (or not)
+    _checkBoxStoreGlobalMatrix->setChecked(getElement()->getStatusPartialResult());
+
+    // Remplissage du tableau des points de controleet maillages
+    _tableauPointControle->setEnabled(true);
+    _tableauMaillages->setEnabled(true);
+
+    TYProjet* pProjet = getElement()->getProjet();
+    if (pProjet != NULL)
+    {
+        updateControlPointsTab(pProjet);
+        updateNoiseMapsTab(pProjet);
+    }
+}
+
+void TYCalculWidget::updateControlPointsTab(TYProjet* pProjet)
+{
+    TYTabLPPointControl& tabPoints = pProjet->getPointsControl();
+    unsigned int nbPoints = static_cast<uint32>(tabPoints.size());
+    _tableauPointControle->setRowCount(nbPoints);
+
+    QString msg;
+    unsigned int row = 0;
+    for (row = 0; row < nbPoints; row++)
+    {
+        _tableauPointControle->setItem(row, 0, new QTableWidgetItem(tabPoints[row]->getName()));
+
+        msg = QString(TR("id_cell_posx")).arg(tabPoints[row]->_x, 7, 'f', 1);
+        _tableauPointControle->setItem(row, 1, new QTableWidgetItem(msg));
+
+        msg = QString(TR("id_cell_posy")).arg(tabPoints[row]->_y, 7, 'f', 1);
+        _tableauPointControle->setItem(row, 2, new QTableWidgetItem(msg));
+
+        msg = QString(TR("id_cell_posh")).arg(tabPoints[row]->getHauteur(), 7, 'f', 1);
+        _tableauPointControle->setItem(row, 3, new QTableWidgetItem(msg));
+
+        QTableWidgetItem* pCheckItemActif = new QTableWidgetItem("");
+
+        if (getElement()->getPtCtrlStatus(tabPoints[row]->getID()))
+        {
+            pCheckItemActif->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            pCheckItemActif->setCheckState(Qt::Unchecked);
+        }
+
+        _tableauPointControle->setItem(row, 4, pCheckItemActif);
+
+        _tableauPointControle->setRowHeight(row, 30);
+    }
+}
+
+void TYCalculWidget::updateNoiseMapsTab(TYProjet* pProjet)
+{
+    int nbPoints =  static_cast<uint32>(pProjet->getMaillages().size());
+    _tableauMaillages->setRowCount(nbPoints);
+
+    LPTYMaillage pMaillage = NULL;
+
+    for (int row = 0; row < nbPoints; row++)
+    {
+        pMaillage = pProjet->getMaillage(row);
+        _tableauMaillages->setItem(row, 0, new QTableWidgetItem(pMaillage->getName()));
+
+        QTableWidgetItem* pCheckItemActif = new QTableWidgetItem("");
+        if (pMaillage->etat(getElement()) == true)
+        {
+            pCheckItemActif->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            pCheckItemActif->setCheckState(Qt::Unchecked);
+        }
+        _tableauMaillages->setItem(row, 1, pCheckItemActif);
+
+        _tableauMaillages->setRowHeight(row, 30);
+    }
+}
+
+void TYCalculWidget::updateComboSolver()
+{
     OGenID currentId = getElement()->getSolverId(); // Id du solveur courant
 
     LPTYPluginManager pPlug = TYPluginManager::get();
@@ -313,7 +390,7 @@ void TYCalculWidget::updateContent()
     OGenID id;
     for (iter = plugList.begin(), i = 0; iter != plugList.end(); iter++, i++)
     {
-        solverName = (*iter)->getPlugin()->getName();//->filename;
+        solverName = (*iter)->getPlugin()->getName();
         _comboSolver->insertItem(i, solverName);
 
         if ((*iter)->getPlugin()->getUUID() == currentId) { currentSolverIndex = i; }
@@ -321,79 +398,19 @@ void TYCalculWidget::updateContent()
 
     // On affiche le regime courant
     _comboSolver->setCurrentIndex(currentSolverIndex);
+}
 
-    _checkBoxStoreGlobalMatrix->setChecked(getElement()->getStatusPartialResult());
-
-    _editDateModif->setDate(date.currentDate());
-    _editDateCreation->setDate(date.fromString(getElement()->getDateCreation(), Qt::ISODate));
-
-    // Remplissage du tableau des points de controle
-    _tableauPointControle->setEnabled(true);
-
-    TYProjet* pProjet = getElement()->getProjet();
-    if (pProjet != NULL)
+void TYCalculWidget::updateCalculState()
+{
+    if (getElement()->getState() == TYCalcul::Actif)
     {
-        TYTabLPPointControl& tabPoints = pProjet->getPointsControl();
-        unsigned int nbPoints = static_cast<uint32>(tabPoints.size());
-        _tableauPointControle->setRowCount(nbPoints);
-
-        QString msg;
-        unsigned int row = 0;
-        for (row = 0; row < nbPoints; row++)
-        {
-            _tableauPointControle->setItem(row, 0, new QTableWidgetItem(tabPoints[row]->getName()));
-
-            msg = QString(TR("id_cell_posx")).arg(tabPoints[row]->_x, 7, 'f', 1);
-            _tableauPointControle->setItem(row, 1, new QTableWidgetItem(msg));
-
-            msg = QString(TR("id_cell_posy")).arg(tabPoints[row]->_y, 7, 'f', 1);
-            _tableauPointControle->setItem(row, 2, new QTableWidgetItem(msg));
-
-            msg = QString(TR("id_cell_posh")).arg(tabPoints[row]->getHauteur(), 7, 'f', 1);
-            _tableauPointControle->setItem(row, 3, new QTableWidgetItem(msg));
-
-            QTableWidgetItem* pCheckItemActif = new QTableWidgetItem("");
-
-            if (getElement()->getPtCtrlStatus(tabPoints[row]->getID()))
-            {
-                pCheckItemActif->setCheckState(Qt::Checked);
-            }
-            else
-            {
-                pCheckItemActif->setCheckState(Qt::Unchecked);
-            }
-
-            _tableauPointControle->setItem(row, 4, pCheckItemActif);
-
-            _tableauPointControle->setRowHeight(row, 30);
-        }
+        _pRadioButtonActif->setChecked(true);
+        _pRadioButtonLocked->setChecked(false);
     }
-
-    // Remplissage du tableau des maillages
-    _tableauMaillages->setEnabled(true);
-
-    int nbPoints =  static_cast<uint32>(getElement()->getMaillages().size());
-    _tableauMaillages->setRowCount(nbPoints);
-
-    LPTYMaillage pMaillage = NULL;
-
-    for (int row = 0; row < nbPoints; row++)
+    else
     {
-        pMaillage = getElement()->getMaillage(row);
-        _tableauMaillages->setItem(row, 0, new QTableWidgetItem(pMaillage->getName()));
-
-        QTableWidgetItem* pCheckItemActif = new QTableWidgetItem("");
-        if (pMaillage->getState() == TYMaillage::Actif)
-        {
-            pCheckItemActif->setCheckState(Qt::Checked);
-        }
-        else
-        {
-            pCheckItemActif->setCheckState(Qt::Unchecked);
-        }
-        _tableauMaillages->setItem(row, 1, pCheckItemActif);
-
-        _tableauMaillages->setRowHeight(row, 30);
+        _pRadioButtonActif->setChecked(false);
+        _pRadioButtonLocked->setChecked(true);
     }
 }
 
@@ -461,11 +478,11 @@ void TYCalculWidget::apply()
         QTableWidgetItem* pCheck = (QTableWidgetItem*) _tableauMaillages->item(row, 1);
         if (pCheck->checkState() == Qt::Checked)
         {
-            getElement()->getMaillage(row)->setState(TYMaillage::Actif);
+            getElement()->addMaillage( getElement()->getProjet()->getMaillage(row) );
         }
         else
         {
-            getElement()->getMaillage(row)->setState(TYMaillage::Inactif);
+            getElement()->remMaillage( getElement()->getProjet()->getMaillage(row) );
         }
     }
 
@@ -474,18 +491,6 @@ void TYCalculWidget::apply()
     getElement()->setStatusPartialResult(bEtat1) ; //(_checkBoxStoreGlobalMatrix->isChecked());
 
     emit modified();
-}
-
-void TYCalculWidget::editMaillage(QTreeWidgetItem* item)
-{
-    if (item->parent())
-    {
-        getElement()->getProjet()->getPointControl(item->text(0).toInt())->edit(_maillagesWidget);
-    }
-    else
-    {
-        getElement()->getMaillages()[item->text(0).toInt()]->getElement()->edit(_maillagesWidget);
-    }
 }
 
 void TYCalculWidget::editResultat()

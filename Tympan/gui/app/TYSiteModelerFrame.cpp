@@ -313,13 +313,11 @@ void TYSiteModelerFrame::setRenderMaillageModeSlot(int mode)
     // Les maillages ont leur propre type d'interpolation
     if (getProjet() && getProjet()->getCurrentCalcul())
     {
-        LPTYCalcul pCalcul = getProjet()->getCurrentCalcul();
-
         // Pour chaque maillage
-        for (unsigned int i = 0; i < pCalcul->getMaillages().size(); i++)
+        for (unsigned int i = 0; i < getProjet()->getMaillages().size(); i++)
         {
             // Recuperation de l'objet graphique du maillage
-            TYMaillage* pMaillage = pCalcul->getMaillage(i);
+            TYMaillage* pMaillage = getProjet()->getMaillage(i);
             TYElementGraphic* pMGraphic = pMaillage->getGraphicObject().getRealPointer();
 
             if (TYRectangularMaillageGraphic* pRectGraphic = dynamic_cast<TYRectangularMaillageGraphic*>(pMGraphic))
@@ -682,16 +680,14 @@ void TYSiteModelerFrame::updateSelectMaillageBox()
     // Les maillages ont leur propre type d'interpolation
     if (getProjet() && getProjet()->getCurrentCalcul())
     {
-        LPTYCalcul pCalcul = getProjet()->getCurrentCalcul();
-
         // Pour chaque maillage
-        for (unsigned int i = 0; i < pCalcul->getMaillages().size(); ++i)
+        for (unsigned int i = 0; i < getProjet()->getMaillages().size(); ++i)
         {
             // Recuperation du maillage
-            TYMaillage* pMaillage = pCalcul->getMaillage(i);
+            TYMaillage* pMaillage = getProjet()->getMaillage(i);
 
             // Si il est actif, on le fait apparaitre dans la liste
-            if (pMaillage->getState() == TYMaillage::Actif)
+            if (pMaillage->etat() == true)
             {
                 _pSelectMaillageBox->insertItem(counter++, pMaillage->getName());
             }
@@ -721,17 +717,15 @@ void TYSiteModelerFrame::setSelectMaillageBox(const QString& name)
 
     if (getProjet() && getProjet()->getCurrentCalcul())
     {
-        LPTYCalcul pCalcul = getProjet()->getCurrentCalcul();
-
         // Pour chaque maillage
-        for (unsigned int i = 0; i < pCalcul->getMaillages().size(); i++)
+        for (unsigned int i = 0; i < getProjet()->getMaillages().size(); i++)
         {
             // Recuperation de l'objet graphique du maillage
-            TYMaillage* pMaillage = pCalcul->getMaillage(i);
+            TYMaillage* pMaillage = getProjet()->getMaillage(i);
 
             if (isNull)
             {
-                if (pMaillage->getState() == TYMaillage::Actif)
+                if (pMaillage->etat() == true)
                 {
                     pMaillage->getGraphicObject()->setVisible(true);
                     if (pMaillage->getGraphicObject()->getHighlightState())
@@ -750,7 +744,7 @@ void TYSiteModelerFrame::setSelectMaillageBox(const QString& name)
             }
             else
             {
-                if (pMaillage->getState() == TYMaillage::Actif)
+                if (pMaillage->etat() == true)
                 {
                     pMaillage->getGraphicObject()->setVisible(false);
                     getView()->getRenderer()->updateDisplayList();

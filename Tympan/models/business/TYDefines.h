@@ -367,6 +367,9 @@ typedef std::map<TYSourcePonctuelle*, bool> TYMapPtrSrcePonctBool;
 ///Tableau associant un spectre a un id (identifiant d'objet)
 typedef std::map<TYUUID, TYSpectre*> TYMapIdSpectre;
 
+/// Tableau associant un id a un tableau de spectres
+typedef std::map< TYUUID, std::vector<TYSpectre*> >TYMapIdTabSpectre;
+
 ///Tableau associant un booleen a un id (identifiant d'objet)
 typedef std::map<TYUUID, bool> TYMapIdBool;
 

@@ -683,6 +683,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_column_name" value="Name"/>
 			<string id="id_list_maillages_item" value="Maps"/>
 			<string id="id_list_pointscontrol_item" value="Receiver"/>
+			<string id="id_list_maillages_item" value="Noise maps"/>
 			<string id="id_contextmenu_export" value="Export"/>
 			<string id="id_contextmenu_export_spectre" value="Export spectrum"/>
 			<string id="id_contextmenu_setas_spectre" value="Place spectra in..."/>
@@ -716,7 +717,9 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_contextmenu_highlight" value="Localize"/>
 			<string id="id_menu_gospectresmanager" value="Stard Spectra Manager"/>
 			<string id="id_contextmenu_selectAllPts" value="Select All"/>
-			<string id="id_contextmenu_unselectAllPts" value="Deselect All"/>
+			<string id="id_contextmenu_unselectAllPts" value="Unselect All"/>
+			<string id="id_contextmenu_selectAllMaps" value="Select All"/>
+			<string id="id_contextmenu_unselectAllMaps" value="Unselect All"/>
 			<string id="id_Etats_item" value="States"/>
 		</message>
 		<picture>
