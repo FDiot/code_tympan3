@@ -341,7 +341,7 @@ cdef class Business2SolverConverter:
                 nb_receptors += 1
         # Then add mesh points to the acoustic problem model
         meshes = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]],
-                            self.comp.thisptr.getRealPointer().getMaillages())
+                            project.getMaillages())
         mesh = cy.declare(cy.pointer(tybusiness.TYMaillage))
         mesh_points = cy.declare(vector[SmartPtr[tybusiness.TYPointCalcul]])
         nmeshes = meshes.size()
@@ -349,7 +349,7 @@ cdef class Business2SolverConverter:
             matrix = cy.declare(tycommon.OMatrix, meshes[i].getRealPointer().getMatrix())
             mesh = tybusiness.downcast_maillage(meshes[i].getRealPointer().getElement())
             # mesh point must be active
-            if mesh.getState() != tybusiness.Actif: # enum value from MaillageState (class TYMaillage)
+            if mesh.etat() == False: # enum value from MaillageState (class TYMaillage)
                 continue
             mesh_points = mesh.getPtsCalcul()
             n_mesh_points = mesh_points.size()

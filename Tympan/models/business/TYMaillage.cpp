@@ -21,6 +21,7 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYLinearMaillage.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "TYMaillage.h"
@@ -37,9 +38,6 @@ TYMaillage::TYMaillage()
 
     _hauteur = 2.0;
     _computeAlti = true;
-
-    _locked = false;
-    _state = TYMaillage::Actif;
 
     _dataType = ValGlobalDBA;
     _dataFreq = 100.0f;
@@ -147,7 +145,17 @@ DOM_Element TYMaillage::toXML(DOM_Element& domElement)
     TYXMLTools::addElementIntValue(domNewElem, "computeAlti", _computeAlti);
     TYXMLTools::addElementIntValue(domNewElem, "dataType", _dataType);
     TYXMLTools::addElementFloatValue(domNewElem, "dataFreq", _dataFreq);
-    TYXMLTools::addElementIntValue(domNewElem, "etat", _state);
+
+    DOM_Document domDoc = domElement.ownerDocument();
+    TYMapIdBool::iterator it_b;
+    for (it_b = _tabEtats.begin(); it_b != _tabEtats.end(); ++it_b)
+    {
+        DOM_Element tmpNode = domDoc.createElement("etatCalcul");
+        domNewElem.appendChild(tmpNode);
+
+        tmpNode.setAttribute("idCalcul", it_b->first.toString());
+        tmpNode.setAttribute("Etat", QString(intToStr(_tabEtats[it_b->first]).c_str()));
+    }
 
     // Sauvegarde de la palette
     _pPalette->toXML(domNewElem);
@@ -172,6 +180,7 @@ int TYMaillage::fromXML(DOM_Element domElement)
     float hueRange[2];
     float saturationRange[2];
     float valueRange[2];
+    TYUUID idCalcul;
 
     DOM_Element elemCur;
 
@@ -183,7 +192,14 @@ int TYMaillage::fromXML(DOM_Element domElement)
         TYXMLTools::getElementBoolValue(elemCur, "computeAlti", _computeAlti, getOk[1]);
         TYXMLTools::getElementIntValue(elemCur, "dataType", _dataType, getOk[2]);
         TYXMLTools::getElementFloatValue(elemCur, "dataFreq", _dataFreq, getOk[3]);
-        TYXMLTools::getElementIntValue(elemCur, "etat", _state, getOk[4]);
+
+        if (elemCur.nodeName() == "etatCalcul")
+        {
+            QString strIdCalcul = TYXMLTools::getElementAttributeToString(elemCur, "idCalcul");
+            idCalcul.FromString(strIdCalcul);
+            bool bEtat = TYXMLTools::getElementAttributeToInt(elemCur, "Etat");
+            _tabEtats[idCalcul] = bEtat;
+        }
 
         // Ancienne version, on recupere les points de calcul.
         if (pPtCalcul->callFromXMLIfEqual(elemCur))
@@ -218,6 +234,20 @@ int TYMaillage::fromXML(DOM_Element domElement)
     delete pPtCalcul;
 
     return 1;
+}
+
+void TYMaillage::updateFromCalcul(LPTYCalcul pCalcul)
+{
+    std::vector<TYSpectre*> *tabSpectre = pCalcul->getSpectrumDatas( getID() );
+
+    if (tabSpectre != nullptr)
+    {
+        TYTabLPPointCalcul& ptsCalcul = getPtsCalcul();
+        for (unsigned int i = 0; i < ptsCalcul.size() ; ++i)
+        {
+            ptsCalcul[i]->setSpectre(tabSpectre->at(i));
+        }
+    }
 }
 
 void TYMaillage::clearResult()
@@ -525,4 +555,48 @@ bool TYMaillage::computeIsoPoint(const OHPlane3D& plane, const MPoint& pt1, cons
         return true;
     }
     return false;
+}
+void TYMaillage::setEtat(const TYUUID& id_calc, bool etat)
+{
+    _tabEtats[id_calc] = etat;
+}
+
+bool TYMaillage::etat()
+{
+    TYUUID id_calc = dynamic_cast<TYProjet*>( getParent() )->getCurrentCalcul()->getID();
+
+    return etat(id_calc);
+}
+
+bool TYMaillage::etat(const TYUUID& id_calc)
+{
+    // Constrol point knows the calcul
+    TYMapIdBool::iterator it = _tabEtats.find(id_calc);
+    if ( it != _tabEtats.end() )
+    {
+        return (*it).second;
+    }
+    else
+    {
+        _tabEtats[id_calc] = false;
+    }
+
+    return false;
+}
+
+bool TYMaillage::etat(const TYCalcul* pCalc)
+{
+    assert(pCalc != nullptr);
+    return etat( pCalc->getID() );
+}
+
+void TYMaillage::copyEtats(TYMaillage* pOther)
+{
+    _tabEtats.clear(); //On vide la map actuelle
+
+    TYMapIdBool::iterator it_b;
+    for (it_b = pOther->_tabEtats.begin(); it_b != pOther->_tabEtats.end(); ++it_b)
+    {
+        _tabEtats[it_b->first] = it_b->second;
+    }
 }

@@ -1035,13 +1035,13 @@ void TYPositionEditor::initEditMaillage(TYElement* pElt)
     _pPicker->highlightElement(_pEditElement);
 
     TYMaillage* pMaillage = TYMaillage::safeDownCast(_pEditElement);
-    TYCalcul* pParent = TYCalcul::safeDownCast(pMaillage->getParent());
+    TYProjet* pProj = dynamic_cast<TYProjet*>(pMaillage->getParent());
 
     // On ne peut rien faire sans le parent...
-    if (!pParent) { return; }
+    if (!pProj) { return; }
 
     // On recupere le GeoNode associe
-    _pEditGeoNode = (TYGeometryNode*) pParent->findMaillage(pMaillage).getRealPointer();
+    _pEditGeoNode = (TYGeometryNode*) pProj->findMaillage(pMaillage).getRealPointer();
     if (!_pEditGeoNode) { return; }
 
     // Visu du highlight seulement

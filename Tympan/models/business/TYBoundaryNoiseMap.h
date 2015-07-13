@@ -87,7 +87,6 @@ public:
 
     bool fromXMLString(const std::string& sXMLString);
 
-
     /**
      * \brief Clear result.
      */

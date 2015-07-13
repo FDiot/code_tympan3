@@ -91,12 +91,7 @@ void TYLinearMaillageWidget::updateContent()
 {
     _maillageW->updateContent();
 
-    if (getElement()->isLocked())
-    {
-        _lineEditDensite->setEnabled(false);
-    }
-
-    if (getElement()->getSegment())
+   if (getElement()->getSegment())
     {
         _lineEditNomSegment->setText(getElement()->getSegment()->getName());
         _lineEditLongueur->setText(QString().setNum(getElement()->getSegment()->longueur(), 'f', 2));

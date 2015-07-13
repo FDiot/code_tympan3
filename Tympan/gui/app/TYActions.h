@@ -936,29 +936,29 @@ protected:
  * \brief Action d'ajout d'un maillage au calcul
  * \author Projet_Tympan
  */
-class TYAddMaillageToCalculAction : public TYModelerAction
+class TYAddMaillageToProjetAction : public TYModelerAction
 {
 public:
     /**
      * Constructeur.
      */
-    TYAddMaillageToCalculAction(LPTYMaillageGeoNode pMaillageGeoNode, LPTYCalcul pCalcul,
+    TYAddMaillageToProjetAction(LPTYMaillageGeoNode pMaillageGeoNode, LPTYProjet pProjet,
                                 TYModelerFrame* pModeler, const QString& actionName);
     /**
      * Constructeur.
      */
-    TYAddMaillageToCalculAction(LPTYMaillage pMaillage, LPTYCalcul pCalcul,
+    TYAddMaillageToProjetAction(LPTYMaillage pMaillage, LPTYProjet pProjet,
                                 TYModelerFrame* pModeler, const QString& actionName);
     /**
      * Destructeur.
      */
-    virtual ~TYAddMaillageToCalculAction();
+    virtual ~TYAddMaillageToProjetAction();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    LPTYCalcul _pCalcul;
+    LPTYProjet _pProjet;
     LPTYMaillageGeoNode _pMaillageGeoNode;
 };
 
@@ -968,29 +968,29 @@ protected:
  * \brief Action de suppression d'un maillage au calcul
  * \author Projet_Tympan
  */
-class TYRemMaillageToCalculAction : public TYModelerAction
+class TYRemMaillageToProjetAction : public TYModelerAction
 {
 public:
     /**
      * Constructeur.
      */
-    TYRemMaillageToCalculAction(LPTYMaillageGeoNode pMaillageGeoNode, LPTYCalcul pCalcul,
+    TYRemMaillageToProjetAction(LPTYMaillageGeoNode pMaillageGeoNode, LPTYProjet pProjet,
                                 TYModelerFrame* pModeler, const QString& actionName);
     /**
      * Constructeur.
      */
-    TYRemMaillageToCalculAction(LPTYMaillage pMaillage, LPTYCalcul pCalcul,
+    TYRemMaillageToProjetAction(LPTYMaillage pMaillage, LPTYProjet pProjet,
                                 TYModelerFrame* pModeler, const QString& actionName);
     /**
      * Destructeur.
      */
-    virtual ~TYRemMaillageToCalculAction();
+    virtual ~TYRemMaillageToProjetAction();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    LPTYCalcul _pCalcul;
+    LPTYProjet _pProjet;
     LPTYMaillageGeoNode _pMaillageGeoNode;
 };
 
