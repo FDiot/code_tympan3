@@ -184,12 +184,6 @@ TYMaillageWidget::~TYMaillageWidget()
 
 void TYMaillageWidget::updateContent()
 {
-    if (getElement()->isLocked())
-    {
-        _elmW->setEnabled(false);
-        _lineEditHauteur->setEnabled(false);
-    }
-
     _elmW->updateContent();
 
     // Positionne la valeur du comboBox;
@@ -260,10 +254,10 @@ void TYMaillageWidget::apply()
     if (getElement()->getHauteur() != _lineEditHauteur->text().toDouble())
     {
         getElement()->setHauteur(_lineEditHauteur->text().toDouble());
-        TYCalcul* pCalcul = (TYCalcul*)getElement()->getParent();
-        if (pCalcul && pCalcul->getSite()->getAltimetry()->containsData())
+        TYProjet* pProj = dynamic_cast<TYProjet*>(getElement()->getParent());
+        if (pProj && pProj->getSite()->getAltimetry()->containsData())
         {
-            pCalcul->updateAltiRecepteurs();
+            pProj->updateAltiRecepteurs();
         }
     }
 

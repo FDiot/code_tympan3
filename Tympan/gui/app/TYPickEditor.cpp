@@ -160,11 +160,10 @@ void TYPickEditor::slotMouseMoved(int x, int y, Qt::MouseButtons button, Qt::Key
     {
         // On cherche a savoir si au moins un maillage est visible
         bool hasMaillage = false;
-        LPTYCalcul pCalc = NULL;
-        if (getTYApp()->getCurProjet() && getTYApp()->getCurProjet()->getCurrentCalcul())
+        LPTYProjet pProj = getTYApp()->getCurProjet();
+        if (pProj != nullptr)
         {
-            pCalc = getTYApp()->getCurProjet()->getCurrentCalcul();
-            TYTabMaillageGeoNode& pMaillages = pCalc->getMaillages();
+            TYTabMaillageGeoNode& pMaillages = pProj->getMaillages();
             for (int i = 0; i < pMaillages.size(); ++i)
             {
                 if (pMaillages[i]->getGraphicObject()->getVisible())
@@ -1115,7 +1114,7 @@ void TYPickEditor::showPanel(TYElement* pElt)
         }
 
         // Valeur
-        LPTYMaillageGeoNode pMaillageGeoNode = TYCalcul::safeDownCast(pMaillage->getParent())->findMaillage(pMaillage);
+        LPTYMaillageGeoNode pMaillageGeoNode = dynamic_cast<TYProjet*>(pMaillage->getParent())->findMaillage(pMaillage);
 
         // On recupere la premiere distance
         OPoint3D coord;
@@ -1389,7 +1388,7 @@ void TYPickEditor::copyMaillage(TYElement *pElement)
     dynamic_cast<TYMaillage*>(pCopy->getElement())->clearResult();
 
     // Ajout
-    if ((dynamic_cast<TYCalcul*>(pParent))->addMaillage(pCopy))
+    if ((dynamic_cast<TYProjet*>(pParent))->addMaillage(pCopy))
     {
         TYRectangularMaillage *pMaillage = dynamic_cast<TYRectangularMaillage*>(pCopy->getElement());
         double x = 10., y = 10.;
@@ -1411,7 +1410,7 @@ void TYPickEditor::copyMaillage(TYElement *pElement)
         pCopy->updateGraphicTree();
 
         // Action
-        TYAction* pAction = new TYAddMaillageToCalculAction(pCopy, (dynamic_cast<TYCalcul*>(pParent)), _pModeler, TR("id_action_addmaillage"));
+        TYAction* pAction = new TYAddMaillageToProjetAction(pCopy, (dynamic_cast<TYProjet*>(pParent)), _pModeler, TR("id_action_addmaillage"));
         _pModeler->getActionManager()->addAction(pAction);
 
         // Mise à jour du modeleur
@@ -1433,11 +1432,14 @@ void TYPickEditor::remMaillage(TYElement *pElement)
     if (pParent == nullptr) { return; }
 
     LPTYMaillageGeoNode pGeoNode = TYGeometryNode::GetGeoNode(pElement);
-    LPTYCalcul pCalculParent = dynamic_cast<TYCalcul*>(pParent);
+    LPTYProjet pProjet = getTYApp()->getCurProjet();
 
-    if ( pCalculParent->remMaillage(dynamic_cast<TYMaillage*>(pElement)) )
+    if ( pProjet && pProjet->remMaillage(dynamic_cast<TYMaillage*>(pElement)) )
     {
-        TYAction* pAction = new TYRemMaillageToCalculAction(pGeoNode, dynamic_cast<TYCalcul*>(pParent), _pModeler, TR("id_action_remmaillage"));
+        TYAction* pAction = new TYRemMaillageToProjetAction(pGeoNode, 
+                                                            pProjet,
+                                                            _pModeler,
+                                                            TR("id_action_remmaillage"));
         _pModeler->getActionManager()->addAction(pAction);
     }
 

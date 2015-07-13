@@ -161,14 +161,14 @@ DOM_Element TYBoundaryNoiseMap::toXML(DOM_Element& domElement)
         _tabPoint[i].toXML(domNewElem);
     }
 
-    if (TYProjet::gSaveValues)
-    {
-        nbPoints = _ptsCalcul.size();
-        for (size_t i = 0; i < nbPoints; ++i)
-        {
-            _ptsCalcul[i]->getSpectre()->toXML(domNewElem);
-        }
-    }
+    //if (TYProjet::gSaveValues)
+    //{
+    //    nbPoints = _ptsCalcul.size();
+    //    for (size_t i = 0; i < nbPoints; ++i)
+    //    {
+    //        _ptsCalcul[i]->getSpectre()->toXML(domNewElem);
+    //    }
+    //}
 
     return domNewElem;
 }
@@ -212,21 +212,8 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
         }
     }
 
-    clearResult();
-
-    if (nbPointsIsOk)
-    {
-        // For each TYPointCalcul we set its spectrum value,
-        // the array of spectra and TYPointCalcul should be matched together
-        // because the position of TYPointCalcul are not stored
-        TYTabLPPointCalcul& ptsCalcul = getPtsCalcul();
-        size_t nbSpectre = std::min(tabSpectre.size(), ptsCalcul.size());
-        for (i = 0; i < nbSpectre; ++i)
-        {
-            ptsCalcul[i]->setSpectre(tabSpectre[i]);
-        }
-    }
-    delete pSpectre;
+    make(_tabPoint, _thickness, _closed, _density);
+    TYMaillage::clearResult();
 
     return 1;
 }
@@ -330,7 +317,6 @@ bool TYBoundaryNoiseMap::fromXMLString(const std::string& sXMLString)
 
 void TYBoundaryNoiseMap::clearResult()
 {
-    make(_tabPoint, _thickness, _closed, _density);
     TYMaillage::clearResult();
 }
 

@@ -140,12 +140,21 @@ TYElementListItem* TYProjetFrame::addToList(LPTYProjet pElement, TYElementListIt
     unsigned int i;
     TYElementListItem* pRootItem  = addEltToList(pElement, parent);
 
+    // Ajout des points de controle
     TYElementListItem* pListPointsControlItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_pointscontrol_item")));
     for (i = 0; i < pElement->getPointsControl().size(); i++)
     {
         new TYElementListItem(pListPointsControlItem, pElement->getPointControl(i), pElement->getCurrentCalcul(), QStringList(), true);
     }
 
+    // Ajout des maillages
+    TYElementListItem* pLisMaillagesItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_maillages_item")));
+    for (i=0; i<pElement->getMaillages().size(); i++)
+    {
+        new TYElementListItem(pLisMaillagesItem, pElement->getMaillage(i), pElement->getCurrentCalcul(), QStringList(), true);
+    }
+
+    // Ajout des calculs
     for (i = 0; i < pElement->getListCalcul().size(); i++)
     {
         addToList(pElement->getListCalcul()[i], pRootItem);
@@ -176,12 +185,6 @@ TYElementListItem* TYProjetFrame::addToList(LPTYCalcul pElement, TYElementListIt
 
     unsigned int i;
     new TYElementListItem(pRootItem, NULL, NULL, QStringList(TR("id_Etats_item")));
-
-    TYElementListItem* pListMaillageItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_maillages_item")));
-    for (i = 0; i < pElement->getMaillages().size(); i++)
-    {
-        new TYElementListItem(pListMaillageItem, pElement->getMaillage(i));
-    }
 
     new TYElementListItem(pRootItem, pElement->getResultat());
 
@@ -368,18 +371,18 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
             else if (dynamic_cast<TYMaillage*>(eltItem->getElement()._pObj) != nullptr) // Maillage
             {
                 // Si calcul parent bloque impossible de changer etat ou supprimer un point de controle
-                LPTYCalcul pCalc = TYCalcul::safeDownCast(eltItem->getElement()->getParent());
-                if (pCalc && pCalc->getState() == TYCalcul::Actif)
+                LPTYProjet pProj = dynamic_cast<TYProjet*>(eltItem->getElement()->getParent());
+                if (pProj)
                 {
                     mail_actif = pMenu->addAction(TR("id_contextmenu_ptactif"));
-                    if (((TYMaillage*) eltItem->getElement().getRealPointer())->getState() == TYMaillage::Actif)
+                    if (((TYMaillage*) eltItem->getElement().getRealPointer())->etat() == true)
                     {
                         mail_actif->setCheckable(true);
                         mail_actif->setChecked(true);
                     }
 
                     mail_inactif = pMenu->addAction(TR("id_contextmenu_ptinactif"));
-                    if (((TYMaillage*) eltItem->getElement().getRealPointer())->getState() == TYMaillage::Inactif)
+                    if (((TYMaillage*) eltItem->getElement().getRealPointer())->etat() == false)
                     {
                         mail_inactif->setCheckable(true);
                         mail_inactif->setChecked(true);
@@ -583,30 +586,37 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                     TYMaillage* pMail = dynamic_cast<TYMaillage*>(eltItem->getElement()._pObj);
                     if (pMail != nullptr)
                     {
-                        LPTYCalcul pCalcul = dynamic_cast<TYCalcul*>(
+                        TYProjet* pProj = dynamic_cast<TYProjet*>(
                                 eltItem->getElement()->getParent());
 
-                    if (pCalcul._pObj != nullptr)
-                    {
-                        if (pCalcul->remMaillage(pMail))
+                        if (pProj != nullptr)
                         {
-                            pCalcul->updateGraphic();
-                            getTYMainWnd()->updateModelers(false, false);
-                            updateList();
-                            TYElement::setIsSavedOk(true);
+                            if (pProj->remMaillage(pMail))
+                            {
+                                pProj->updateGraphic();
+                                getTYMainWnd()->updateModelers(false, false);
+                                updateList();
+                                TYElement::setIsSavedOk(true);
+                            }
                         }
                     }
-                    }
-
                 }
                 else if (ret == mail_actif)
                 {
-                    ((TYMaillage*) eltItem->getElement().getRealPointer())->setState(TYMaillage::Actif);
+                    TYProjet* pProj = dynamic_cast<TYProjet*>(eltItem->getElement()->getParent());
+                    if (pProj && pProj->getCurrentCalcul())
+                    {
+                        ((TYMaillage*) eltItem->getElement().getRealPointer())->setEtat( pProj->getCurrentCalcul()->getID(), true );
+                    }
                     getTYMainWnd()->updateModelers(true, true, true);
                 }
                 else if (ret == mail_inactif)
                 {
-                    ((TYMaillage*) eltItem->getElement().getRealPointer())->setState(TYMaillage::Inactif);
+                    TYProjet* pProj = dynamic_cast<TYProjet*>(eltItem->getElement()->getParent());
+                    if (pProj && pProj->getCurrentCalcul())
+                    {
+                        ((TYMaillage*) eltItem->getElement().getRealPointer())->setEtat( pProj->getCurrentCalcul()->getID(), false );
+                    }
                     getTYMainWnd()->updateModelers(true, true, true);
                 }
                 else if (ret == exportCsv)
@@ -805,6 +815,27 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                             selectOrUnselectAll(static_cast<TYElementListItem*>(item), false);
                         }
                     }
+            }
+        }
+        else if (eltItem->text(0) == "id_list_maillages_item")
+        {
+            QMenu* pMenu = new QMenu(this);
+            QAction* selectAllMaps = pMenu->addAction(TR("id_contextmenu_selectAllMaps"));
+            QAction* unselectAllMaps = pMenu->addAction(TR("id_contextmenu_unselectAllMaps"));
+
+            // Affiche popup
+            QAction* ret = pMenu->exec(_pListView->mapToGlobal(point));
+
+            if (ret)
+            {
+                if (ret == selectAllMaps)
+                {
+                    selectOrUnselectAll(static_cast<TYElementListItem*>(item), true);
+                }
+                else if (ret == unselectAllMaps)
+                {
+                    selectOrUnselectAll(static_cast<TYElementListItem*>(item), false);
+                }
             }
         }
         else if (eltItem->text(0) == "Etats")

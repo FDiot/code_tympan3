@@ -18,6 +18,8 @@
 #include "Tympan/models/business/TYPluginManager.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/TYProgressManager.h"
+#include "Tympan/models/business/TYRectangularMaillage.h"
 #include "TYProjet.h"
 
 #if TY_USE_IHM
@@ -152,10 +154,17 @@ DOM_Element TYProjet::toXML(DOM_Element& domElement)
     // Points de controle
     DOM_Element pointsControlNode = domDoc.createElement("PointsControl");
     domNewElem.appendChild(pointsControlNode);
-    unsigned int i;
-    for (i = 0; i < _pointsControl.size(); i++)
+    for (unsigned int i = 0; i < _pointsControl.size(); i++)
     {
         _pointsControl[i]->toXML(pointsControlNode);
+    }
+
+    // Noise Maps
+    DOM_Element noiseMapsNode = domDoc.createElement("NoiseMaps");
+    domNewElem.appendChild(noiseMapsNode);
+    for (unsigned int i = 0; i < _maillages.size(); i++)
+    {
+        _maillages[i]->toXML(noiseMapsNode);
     }
 
     // Calculs
@@ -171,7 +180,7 @@ int TYProjet::fromXML(DOM_Element domElement)
 {
     TYElement::fromXML(domElement);
 
-    _pCurrentCalcul = NULL;
+    _pCurrentCalcul = nullptr;
 
     remAllCalcul();
 
@@ -224,6 +233,24 @@ int TYProjet::fromXML(DOM_Element domElement)
                 {
                     addPointControl(pPointControl);
                     pPointControl = new TYPointControl();
+                }
+            }
+        }
+
+        // Noise maps
+        LPTYGeometryNode pGeoNode = new TYGeometryNode();
+        if (elemCur.nodeName() == "NoiseMaps")
+        {
+            DOM_Element elemCur2;
+            QDomNodeList childs2 = elemCur.childNodes();
+
+            for (unsigned int j = 0; j < childs2.length(); j++)
+            {
+                elemCur2 = childs2.item(j).toElement();
+                if (pGeoNode->callFromXMLIfEqual(elemCur2))
+                {
+                    addMaillage(pGeoNode);
+                    pGeoNode = new TYGeometryNode();
                 }
             }
         }
@@ -488,7 +515,10 @@ bool TYProjet::updateAltiRecepteurs(const TYAltimetrie* pAlti)
     // Why handling of PointControle and Recepteur are so different ?
 
     // Mise a jour de l'altitude pour les recepteurs du calcul
-    getCurrentCalcul()->updateAltiRecepteurs(pAlti);
+    for (unsigned int i=0; i<_maillages.size(); i++)
+    {
+        updateAltiMaillage(_maillages.at(i), pAlti);
+    }
 
     // Done
     if (!modified)
@@ -623,4 +653,315 @@ void TYProjet::setSite(const LPTYSiteNode pSite)
     _pSite->setRoot(true); // Ce site est forcemment le site racine
     _pSite->addToCalcul();
     setIsGeometryModified(true);
+}
+
+bool TYProjet::addMaillage(LPTYMaillageGeoNode pMaillageGeoNode)
+{
+    assert(pMaillageGeoNode);
+    assert(pMaillageGeoNode->getElement());
+
+    pMaillageGeoNode->setParent(this);
+    pMaillageGeoNode->getElement()->setParent(this);
+
+    _maillages.push_back(pMaillageGeoNode);
+
+    // Set in current calcul
+    if (getCurrentCalcul() != nullptr)
+    {
+        getCurrentCalcul()->addMaillage( dynamic_cast<TYMaillage*>(pMaillageGeoNode->getElement()) );
+    }
+
+    setIsGeometryModified(true);
+
+    return true;
+}
+
+bool TYProjet::addMaillage(LPTYMaillage pMaillage)
+{
+    return addMaillage(new TYMaillageGeoNode((LPTYElement)pMaillage));
+}
+
+bool TYProjet::remMaillage(const LPTYMaillage pMaillage)
+{
+    assert(pMaillage);
+
+    TYGeometryNode *pNode = TYGeometryNode::GetGeoNode(dynamic_cast<TYElement*>(pMaillage._pObj));
+
+    return remMaillage(pNode);
+}
+
+bool TYProjet::remMaillage(const LPTYMaillageGeoNode pMaillageGeoNode)
+{
+    assert(pMaillageGeoNode);
+    bool ret = false;
+
+    // Suppression dans tous les calculs
+    for (unsigned int i=0; i<_listCalcul.size(); i++)
+    {
+        _listCalcul.at(i)->remMaillage( dynamic_cast<TYMaillage*>(pMaillageGeoNode->getElement()) );
+    }
+
+    // Suppression de la liste des maillages du projet
+    TYTabMaillageGeoNode::iterator ite;
+
+    for (ite = _maillages.begin(); ite != _maillages.end(); ite++)
+    {
+        if ((*ite) == pMaillageGeoNode)
+        {
+            _maillages.erase(ite);
+            ret = true;
+            setIsGeometryModified(true);
+            break;
+        }
+    }
+
+    return ret;
+}
+
+bool TYProjet::remMaillage(QString idMaillage)
+{
+    bool ret = false;
+    TYTabMaillageGeoNode::iterator ite;
+
+    for (ite = _maillages.begin(); ite != _maillages.end(); ite++)
+    {
+        if ((*ite)->getElement()->getID().toString() == idMaillage)
+        {
+            _maillages.erase(ite);
+            ret = true;
+            setIsGeometryModified(true);
+            break;
+        }
+    }
+
+    return ret;
+}
+
+bool TYProjet::remAllMaillage()
+{
+    _maillages.clear();
+    setIsGeometryModified(true);
+
+    return true;
+}
+
+LPTYMaillageGeoNode TYProjet::findMaillage(const LPTYMaillage pMaillage)
+{
+    assert(pMaillage);
+    TYTabMaillageGeoNode::iterator ite;
+
+    for (ite = _maillages.begin(); ite != _maillages.end(); ite++)
+    {
+        if (TYMaillage::safeDownCast((*ite)->getElement()) == pMaillage)
+        {
+            return (*ite);
+        }
+    }
+
+    return NULL;
+}
+
+void TYProjet::updateGraphicMaillage()
+{
+#if TY_USE_IHM
+    for (unsigned int i = 0; i < getMaillages().size(); i++)
+    {
+        TYMaillage* pMaillage = getMaillage(i);
+        pMaillage->getGraphicObject()->update();
+    }
+#endif
+}
+
+bool TYProjet::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode)
+{
+    TYAltimetrie* pAlti = getSite()->getAltimetry()._pObj;
+    return updateAltiMaillage(pMaillageGeoNode, pAlti);
+}
+
+bool TYProjet::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYAltimetrie* pAlti)
+{
+    assert(pMaillageGeoNode);
+    assert(pAlti);
+
+    bool modified = true;
+
+    if (pMaillageGeoNode == NULL) { return false; }
+
+    TYPoint pt;
+    TYMaillage* pMaillage = TYMaillage::safeDownCast(pMaillageGeoNode->getElement());
+
+    if (pMaillage == NULL) { return false; }
+
+    OMatrix matrix = pMaillageGeoNode->getMatrix();
+    OMatrix matrixinv = matrix.getInvert();
+    TYTabLPPointCalcul& tabpoint = pMaillage->getPtsCalcul();
+
+    bool bNoPbAlti = true; // Permet de tester si tous les points sont altimtriss correctement.
+
+    if (pMaillage->getComputeAlti()) // Cas des maillages rectangulaires et lineaires horizontaux
+    {
+
+#if TY_USE_IHM
+        TYProgressManager::setMessage("Calcul des altitudes des points de maillage");
+        TYProgressManager::set(static_cast<uint32>(tabpoint.size()));
+#endif // TY_USE_IHM
+
+        for (unsigned int i = 0; i < tabpoint.size(); i++)
+        {
+
+#if TY_USE_IHM
+            bool cancel = false;
+            TYProgressManager::step(cancel);
+            if (cancel) { break; }
+#endif // TY_USE_IHM
+
+            pt = *tabpoint[i];
+            // Passage au repere du site
+            pt = matrix * pt;
+            pt._z = 0;
+
+            // Recherche de l'altitude
+            bNoPbAlti &= pAlti->updateAltitude(pt);
+
+            // Retour au repere d'origine
+            pt = matrixinv * pt;
+
+            // Ajout de l'offset en Z
+            pt._z += pMaillage->getHauteur();
+
+            // Application du calcul
+            tabpoint[i]->_x = pt._x;
+            tabpoint[i]->_y = pt._y;
+            tabpoint[i]->_z = pt._z;
+        }
+
+#if TY_USE_IHM
+        TYProgressManager::stepToEnd();
+#endif // TY_USE_IHM
+
+    }
+    else // Cas des maillages verticaux
+    {
+        // Init
+        pt = pMaillageGeoNode->getORepere3D()._origin;
+        pt._z = 0.0;
+
+        // Recherche de l'altitude
+        bNoPbAlti &= pAlti->updateAltitude(pt);
+
+        // Ajout de l'offset en Z
+        pt._z += pMaillage->getHauteur();
+
+        if (pMaillage->isA("TYRectangularMaillage"))
+        {
+            // Ajout d'un offset de la demi-hauteur (maillages verticaux)
+            pt._z += ((TYRectangularMaillage*) pMaillage)->getRectangle()->getSizeY() / 2.0;
+        }
+
+        pMaillageGeoNode->getORepere3D()._origin._z = pt._z;
+
+        modified = true;
+    }
+
+    if (!bNoPbAlti) // Certains point pas altimetrises
+    {
+        OMessageManager::get()->info(TR("msg_pbalti"));
+    }
+
+
+    // Done
+    if (modified)
+    {
+#if TY_USE_IHM
+        pMaillage->updateGraphicTree();
+#endif
+        setIsGeometryModified(true);
+        _pParent->setIsGeometryModified(true);
+    }
+
+    return modified;
+}
+
+void TYProjet::selectActivePoint(const LPTYSiteNode pSite)
+{
+    int i, j;
+
+    // Recuperation des volumes
+    TYInfrastructure* pInfra = pSite->getInfrastructure();
+    TYTabAcousticVolumeNodeGeoNode tabVolNodeGeoNode;
+
+    // On commence par recuperer la liste des machines et des btiments
+    // Batiments
+    for (j = 0; j < static_cast<int>(pInfra->getListBatiment().size()); j++)
+    {
+        // Si ce batiment est actif pour le calcul
+        if (TYBatiment::safeDownCast(pInfra->getBatiment(j)->getElement())->isInCurrentCalcul())
+        {
+            tabVolNodeGeoNode.push_back((LPTYAcousticVolumeNodeGeoNode&) pInfra->getListBatiment()[j]);
+        }
+    }
+
+    // Machines
+    for (j = 0; j < static_cast<int>(pInfra->getListMachine().size()); j++)
+    {
+        // Si cette machine est active pour le calcul
+        if (TYMachine::safeDownCast(pInfra->getMachine(j)->getElement())->isInCurrentCalcul())
+        {
+            tabVolNodeGeoNode.push_back((LPTYAcousticVolumeNodeGeoNode&) pInfra->getListMachine()[j]);
+        }
+    }
+
+    // Ensuite, on verifie si des points du maillage ne sont pas a l'interieur
+    vector <OPoint3D> tabPts;
+
+    for (i = 0; i < static_cast<int>(getMaillages().size()); i++)
+    {
+        TYMaillage* pMaillage = getMaillage(i);
+        TYMaillageGeoNode* pMaillageGeoNode = getMaillages()[i];
+
+        // Matrice pour la position de ce maillage
+        OMatrix matrixMaillage = pMaillageGeoNode->getMatrix();
+        // Nb de points de calcul dans ce maillage
+        size_t nbPtsCalcul = pMaillage->getPtsCalcul().size();
+
+        tabPts.reserve(nbPtsCalcul); // Reservation du nombre de points pour eviter les mouvements memoire
+
+        for (j = 0; (int)j < nbPtsCalcul; j++)
+        {
+            pMaillage->getPtsCalcul()[j]->setEtat(true);
+            tabPts.push_back(matrixMaillage * (*(pMaillage->getPtsCalcul()[j])));
+        }
+
+        // Detection des points a l'interieur de volumes
+        OPoint3D pt;
+        for (j = 0; j < tabVolNodeGeoNode.size(); j++)
+        {
+            OMatrix matrixVolNode = tabVolNodeGeoNode[j]->getMatrix();
+            matrixVolNode.invert();
+
+            LPTYAcousticVolumeNode pVolumeNode = TYAcousticVolumeNode::safeDownCast(tabVolNodeGeoNode[j]->getElement());
+            for (int k = 0; k < nbPtsCalcul; k++)
+            {
+                // Passage au repere du volume
+                pt = matrixVolNode * tabPts[k];
+
+                // Si le point se trouve a l'interieur de ce volume
+                if (pVolumeNode->isInside(pt))
+                {
+                    // Desactivation de ce point de calcul
+                    pMaillage->getPtsCalcul()[k]->setEtat(false);
+                }
+            }
+
+        }
+
+        // Le maillage et son GeoNode sont maintenant up to date
+        pMaillage->setIsGeometryModified(false);
+        pMaillageGeoNode->setIsGeometryModified(false);
+
+        // Vidage du tableau de points
+        tabPts.clear();
+    }
+
+    tabVolNodeGeoNode.clear();
 }

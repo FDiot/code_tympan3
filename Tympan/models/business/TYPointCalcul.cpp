@@ -268,25 +268,21 @@ TYPoint TYPointCalcul::getCoordSIG()
     TYPoint retPoint;
     LPTYMaillage pMail = TYMaillage::safeDownCast(getParent());
     LPTYMaillageGeoNode pMailNode = NULL;
-    LPTYCalcul pCalcul = NULL;
+    LPTYProjet pProjet = dynamic_cast<TYProjet*>( pMail->getParent() );
     OMatrix matrix;
 
     // Recuperation de la matrice de changement de repere du maillage
-    if (pMail)
+    if (pMail && pProjet)
     {
-        pCalcul = TYCalcul::safeDownCast(pMail->getParent());
-        if (pCalcul)
-        {
-            pMailNode = pCalcul->findMaillage(pMail);
-            if (pMailNode) { matrix = pMailNode->getMatrix(); }
-        }
+        pMailNode = pProjet->findMaillage(pMail);
+        if (pMailNode) { matrix = pMailNode->getMatrix(); }
     }
 
     retPoint = matrix * (*this);
 
     // Passage dans le repere du SIG
     LPTYSiteNode pSite = NULL;
-    if (pCalcul) { pSite = pCalcul->getSite(); }
+    if (pProjet) { pSite = pProjet->getSite(); }
     if (pSite)
     {
         retPoint._x += pSite->getSIG_X();

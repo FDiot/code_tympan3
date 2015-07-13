@@ -211,6 +211,100 @@ public:
     bool updateAltiPointControle(TYPointControl* pPtControl, const TYAltimetrie* pAlti);
 
 
+// ++++ DEBUT MAILLAGES ++++
+
+    /**
+     *\fn TYTabMaillageGeoNode& getMaillages() { return _maillages; }
+     *\brief Get de la collection de maillages.
+     *\return _maillages
+     */
+    TYTabMaillageGeoNode& getMaillages() { return _maillages; }
+
+    /**
+     *\fn const TYTabMaillageGeoNode& getMaillages() const
+     *\brief Get de la collection de maillages.
+     *\return _maillages
+     */
+    const TYTabMaillageGeoNode& getMaillages() const { return _maillages; }
+
+    /**
+     *\fn bool addMaillage(LPTYMaillageGeoNode pMaillageGeoNode)
+     *\brief  Ajout d'un maillage.
+     */
+    bool addMaillage(LPTYMaillageGeoNode pMaillageGeoNode);
+    /**
+     *\fn bool addMaillage(LPTYMaillage pMaillage)
+     *\brief  Ajout d'un maillage.
+     */
+    bool addMaillage(LPTYMaillage pMaillage);
+
+    /**
+     *\fn bool remMaillage(const LPTYMaillageGeoNode pMaillageGeoNode)
+     *\brief  Suppression d'un maillage.
+     */
+    bool remMaillage(const LPTYMaillageGeoNode pMaillageGeoNode);
+
+    /**
+     *\fn bool remMaillage(const LPTYMaillage pMaillage)
+     *\brief  Suppression d'un maillage.
+     */
+    bool remMaillage(const LPTYMaillage pMaillage);
+
+    /**
+     * \fn bool remMaillage(QString idMaillage)
+     * \brief Suppression d'un maillage a partir de son identifiant.
+     */
+    bool remMaillage(QString idMaillage);
+
+    /**
+     * \fn  bool remAllMaillage()
+     * \brief Suppression de tous les maillages.
+     */
+    bool remAllMaillage();
+
+    /**
+     * \fn LPTYMaillage getMaillage(int index)
+     * \brief Retourne un maillage a partir de son index.
+     * \return TYMaillage::safeDownCast(_maillages.at(index)->getElement())
+     */
+    LPTYMaillage getMaillage(int index) { return TYMaillage::safeDownCast(_maillages.at(index)->getElement()); }
+
+    /**
+     * \fn LPTYMaillageGeoNode findMaillage(const LPTYMaillage pMaillage).
+     * \brief Retrouve le GeoNode associe a un maillage.
+     * \param pMaillage L'element a chercher.
+     * \return Le GeoNode associe a l'element a chercher si trouve sinon NULL.
+     */
+    LPTYMaillageGeoNode findMaillage(const LPTYMaillage pMaillage);
+
+    /**
+     * \fn  bool updateAltiMaillage(TYMaillageGeoNode * pMaillageGeoNode, const TYAltimetrie* pAlti )
+     * \brief Met a niveau l'altimetrie d'un maillage
+     */
+    bool updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYAltimetrie* pAlti);
+
+    /**
+     * \fn bool updateAltiMaillage(TYMaillageGeoNode * pMaillageGeoNode)
+     * \brief Met a niveau l'altimetrie d'un maillage
+     */
+    bool updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode);  // Remis pour compatibilite
+    
+    /**
+     * \fn void selectActivePoint(const LPTYSite pSite)
+     * \brief Selectionne les points actifs du maillage
+     */
+    void selectActivePoint(const LPTYSiteNode pSite);
+
+protected:
+    /**
+     * \fn void updateGraphicMaillage()
+     * \brief Mets a jour l'objet graphique des maillage apres calcul.
+     */
+    void updateGraphicMaillage();
+
+// ++++ FIN MAILLAGES ++++
+
+public:
     /**
      * \fn TYTabLPCalcul& getListCalcul()
      * \brief Set/Get de la liste des Calcul.
@@ -392,6 +486,9 @@ protected:
 
     ///Liste des points de controles.
     TYTabLPPointControl _pointsControl;
+
+    ///Collections de Maillages.
+    TYTabMaillageGeoNode _maillages;
 
     ///Un pointeur sur le Calcul courant.
     LPTYCalcul _pCurrentCalcul;
