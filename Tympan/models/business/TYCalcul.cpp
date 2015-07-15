@@ -1346,8 +1346,8 @@ void TYCalcul::clearNoiseMapsSpectrums()
     {
         for (unsigned int i=0; i<(*it).second.size(); i++)
         {
-            delete (*it).second.at(i);
-            (*it).second.at(i) = new TYSpectre();
+            (*it).second.at(i)->deepCopy( new TYSpectre() );
+            (*it).second.at(i)->incRef();
         }
     }
 }
@@ -1380,7 +1380,8 @@ void TYCalcul::setSpectre(TYPointCalcul* pPoint, TYSpectre* pSpectre)
     {
         if ( dynamic_cast<TYMaillage*>(pPoint->getParent()) )
         {
-            pPoint->setSpectre( pSpectre );
+            TYSpectre *currentSpectre = pPoint->getSpectre().getRealPointer();
+            currentSpectre->deepCopy(pSpectre);
         }
     }
 }
@@ -1388,7 +1389,7 @@ void TYCalcul::setSpectre(TYPointCalcul* pPoint, TYSpectre* pSpectre)
 
 void TYCalcul::setSpectre(const TYUUID& id_pt, TYSpectre* pSpectre)
 {
-    assert(true, "NOT IMPLEMENTED");
+    assert(true && "NOT IMPLEMENTED");
 }
 
 bool TYCalcul::getPtCtrlStatus(const TYUUID& id_pt)
