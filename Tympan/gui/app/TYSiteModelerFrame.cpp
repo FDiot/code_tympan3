@@ -243,17 +243,16 @@ bool TYSiteModelerFrame::close()
 void TYSiteModelerFrame::setSite(LPTYSiteNode pSite)
 {
     QString caption(TR("id_caption") + " " + QString("%1").arg(_nbInstance));
+    setWindowTitle(caption);
 
-    if (_pSite)
+    // Hide previous site
+    if (_pSite) { _pSite->drawGraphic(false); }
+
+    if (pSite)
     {
-        _pSite->drawGraphic(false);
-    }
+        _pSite = pSite;
+        _pElement = pSite;
 
-    _pSite = pSite;
-    _pElement = pSite;
-
-    if (_pSite)
-    {
         _pProjet = TYProjet::safeDownCast(_pSite->getParent());
 
         if (_pProjet)
@@ -270,13 +269,10 @@ void TYSiteModelerFrame::setSite(LPTYSiteNode pSite)
         _pElement->drawGraphic();
     }
 
-    setWindowTitle(caption);
-
-    _pView->getRenderer()->setElement((LPTYElement&)_pSite);
+    _pView->getRenderer()->setElement( _pElement );
     getView()->getRenderer()->updateDisplayList();
 
     updateView();
-    //  fit();//az++
 }
 
 void TYSiteModelerFrame::setProjet(LPTYProjet pProjet)

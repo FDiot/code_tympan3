@@ -245,6 +245,7 @@ void TYMaillage::updateFromCalcul(LPTYCalcul pCalcul)
         TYTabLPPointCalcul& ptsCalcul = getPtsCalcul();
         for (unsigned int i = 0; i < ptsCalcul.size() ; ++i)
         {
+            tabSpectre->at(i)->incRef();
             ptsCalcul[i]->setSpectre(tabSpectre->at(i));
         }
     }
