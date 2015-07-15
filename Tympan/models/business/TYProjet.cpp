@@ -451,10 +451,18 @@ void TYProjet::setCurrentCalcul(LPTYCalcul pCurCalcul)
         _pSite->updateCurrentCalcul(aTYListID, true);
     }
 
+    // Mise à jour des maillages
+    for (unsigned int i=0; i<_maillages.size(); i++)
+    {
+        dynamic_cast<TYMaillage*>( _maillages.at(i)->getElement() )->updateFromCalcul( _pCurrentCalcul );
+    }
+
 #if TY_USE_IHM
-    _pCurrentCalcul->updateGraphicTree();
+    updateGraphicMaillage();
+    updateGraphic();
 #endif
-    this->setIsGeometryModified(true);
+    setIsGeometryModified(true);
+    setIsAcousticModified(true);
 }
 
 bool TYProjet::updateAltiPointControle(TYPointControl* pPtControl, const TYAltimetrie* pAlti)
@@ -876,7 +884,6 @@ bool TYProjet::updateAltiMaillage(TYMaillageGeoNode* pMaillageGeoNode, const TYA
         pMaillage->updateGraphicTree();
 #endif
         setIsGeometryModified(true);
-        _pParent->setIsGeometryModified(true);
     }
 
     return modified;

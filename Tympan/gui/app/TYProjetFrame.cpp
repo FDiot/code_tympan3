@@ -47,6 +47,7 @@
 #include "Tympan/gui/app/TYElementListItem.h"
 #include "Tympan/gui/app/TYRenderWindowInteractor.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
 #include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
@@ -718,13 +719,22 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                         pSite->getInfrastructure()->updateAcoustic(pCalcul);
                     }
 
-                    emit changeCurrentCalcul(pCalcul);
-
+                    // Mise à jour du modeleur
                     _pProjet->updateGraphicTree();
+                    _pProjet->updateGraphic();
+                    TYSiteModelerFrame* psiteframe = dynamic_cast<TYSiteModelerFrame*>(getTYMainWnd()->getCurrentModeler());
+                    if (psiteframe != nullptr)
+                    {
+                        psiteframe->setSite(pSite);
+                        psiteframe->getView()->getRenderer()->updateDisplayList();
+                        psiteframe->updateView();
+                    }
                     getTYMainWnd()->updateModelers(false, false);
+
                     updateList();
 
                     setCalculDone(true);
+                    emit changeCurrentCalcul(pCalcul);
                 }
                 else if (ret == goCalcul)
                 {
