@@ -377,7 +377,7 @@ void TYPickEditor::siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
         if ( pMaillage != nullptr )
         {
             // Calcul parent
-            if ( dynamic_cast<TYCalcul*>(elem_1) != nullptr )
+            if ( dynamic_cast<TYProjet*>(elem_1) != nullptr )
             {
                 // Si le maillage est bien present dans le calcul
                 TYMaillageGeoNode* pMaillageGeoNode = TYGeometryNode::GetGeoNode(elem_0);

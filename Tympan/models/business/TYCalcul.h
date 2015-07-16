@@ -376,7 +376,7 @@ public:
      * \fn getSpectrumDatas(TYUUID& id)
      * \brief Return spectrums for a given noise map
      */
-    std::vector<TYSpectre*> *getSpectrumDatas( const TYUUID& id);
+    std::vector<LPTYSpectre> *getSpectrumDatas( const TYUUID& id);
 
     /*!
      * \brief Add this maillage to calcul
@@ -393,6 +393,7 @@ public:
 private :
     void clearCtrlPointsSpectrums();
     void clearNoiseMapsSpectrums();
+    void copyNoiseMapSpectrums(TYMapIdTabSpectre& otherNoiseMap);
 
     // Membres
 protected:

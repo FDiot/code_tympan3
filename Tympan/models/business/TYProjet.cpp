@@ -558,6 +558,9 @@ LPTYCalcul TYProjet::duplicateCalcul(const LPTYCalcul pCalcul)
     // Duplication de l'etat des points de controle
     duplicatePtCalcState(pCalcul, pCalculCopy);
 
+    // Duplication de l'état des cartographies
+    duplicateNoiseMapState(pCalcul, pCalculCopy);
+
     // Ajout
     addCalcul(pCalculCopy);
 
@@ -572,6 +575,17 @@ void TYProjet::duplicatePtCalcState(const TYCalcul* pCalculRef, TYCalcul* pCalcu
     for (unsigned int i = 0; i < _pointsControl.size(); i++)
     {
         _pointsControl[i]->duplicateEtat(idCalculRef, idCalculNew);
+    }
+}
+
+void TYProjet::duplicateNoiseMapState(const TYCalcul* pCalculRef, TYCalcul* pCalculNew)
+{
+    QString idCalculRef = pCalculRef->getID().toString();
+    QString idCalculNew = pCalculNew->getID().toString();
+
+    for (unsigned int i=0; i<_maillages.size(); i++)
+    {
+        dynamic_cast<TYMaillage*>(_maillages[i]->getElement())->duplicateEtat(idCalculRef, idCalculNew);
     }
 }
 
