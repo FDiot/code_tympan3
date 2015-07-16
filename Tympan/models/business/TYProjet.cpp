@@ -273,8 +273,8 @@ int TYProjet::fromXML(DOM_Element domElement)
     {
         if (_pointsControl[i].getRealPointer()->getAllUses() != nullptr)
         {
-            std::map<TYUUID, TYSpectre*> *compatibilityVector = static_cast< map<TYUUID, TYSpectre*>* > ( _pointsControl[i].getRealPointer()->getAllUses() );
-            std::map<TYUUID, TYSpectre*>::iterator it;
+            std::map<TYUUID, LPTYSpectre> *compatibilityVector = static_cast< map<TYUUID, LPTYSpectre>* > ( _pointsControl[i].getRealPointer()->getAllUses() );
+            std::map<TYUUID, LPTYSpectre>::iterator it;
             for (it=compatibilityVector->begin(); it!=compatibilityVector->end(); it++)
             {
                 TYCalcul *pCalc = dynamic_cast<TYCalcul*>( getInstance( (*it).first ) );
@@ -288,6 +288,31 @@ int TYProjet::fromXML(DOM_Element domElement)
             // Cleaning map after use
             compatibilityVector->clear();
             _pointsControl[i].getRealPointer()->cleanAllUses();
+            compatibilityVector = nullptr;        
+        }
+    }
+
+    // update TYCalcul noise map spectrums if needed
+    // --> compatibility with previous TYMaillage management paradigm
+    for (unsigned int i=0; i<_maillages.size(); i++)
+    {
+        TYMaillage* pMaillage = dynamic_cast<TYMaillage*>( _maillages[i]->getElement() );
+        if (pMaillage->getAllUses() != nullptr)
+        {
+            TYTabLPSpectre *compatibilityVector = static_cast< TYTabLPSpectre* > ( pMaillage->getAllUses() );
+
+            // Balayage de tous les calculs
+            for (unsigned j=0; j<_listCalcul.size(); j++)
+            {
+                if ( pMaillage->etat(_listCalcul[j]) == true )
+                {
+                    _listCalcul[j]->setNoiseMapSpectrums( pMaillage, *compatibilityVector );
+                }
+            }
+
+            // Cleaning map after use
+            compatibilityVector->clear();
+            pMaillage->cleanAllUses();
             compatibilityVector = nullptr;        
         }
     }

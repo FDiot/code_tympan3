@@ -114,23 +114,38 @@ int TYLinearMaillage::fromXML(DOM_Element domElement)
     TYMaillage::fromXML(domElement);
 
     bool spectreIsOk = false;
-
     bool densiteOk = false;
+    bool bOldDatas = false;
 
-    unsigned int i;
-
-    TYSpectre* pSpectre = new TYSpectre();
-    TYTabLPSpectre tabSpectre;
+    LPTYSpectre pSpectre = new TYSpectre();
+    TYTabLPSpectre *compatibilityVector = new TYTabLPSpectre();
 
     DOM_Element elemCur;
 
     QDomNodeList childs = domElement.childNodes();
-    for (i = 0; i < childs.length(); i++)
+    for (unsigned int i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
         TYXMLTools::getElementDoubleValue(elemCur, "densite", _densite, densiteOk);
 
         _pSeg->callFromXMLIfEqual(elemCur);
+
+        // Old version : if we encounter spectra
+       if (pSpectre->callFromXMLIfEqual(elemCur))
+        {
+            bOldDatas = true;
+            compatibilityVector->push_back(pSpectre);
+            pSpectre = new TYSpectre();
+        }    
+    }
+
+    if (bOldDatas == true)
+    {
+        setAllUses( (void*)compatibilityVector );
+    }
+    else
+    {
+        delete compatibilityVector;
     }
 
     make(_pSeg, _densite);
