@@ -2093,6 +2093,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_cell_posh" value="%1"/>
 			<string id="id_opt_pc" value="Receivers"/>
 			<string id="id_tab_info" value="Infos"/>
+			<string id="id_opt_maillage" value="Noise Maps"/>
 		</message>
 	</class>
 	<class name="TYCalculWidget">
@@ -2170,7 +2171,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_pos_h" value="H"/>
 			<string id="id_actif" value="Active"/>
 			<string id="id_opt_pc" value="Receivers"/>
-			<string id="id_opt_maillage" value="Maps"/>
+			<string id="id_opt_maillage" value="Noise Maps"/>
 			<string id="id_cell_posx" value="%1"/>
 			<string id="id_cell_posy" value="%1"/>
 			<string id="id_cell_posh" value="%1"/>
