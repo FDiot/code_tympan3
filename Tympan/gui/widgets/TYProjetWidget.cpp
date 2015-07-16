@@ -198,6 +198,14 @@ TYProjetWidget::TYProjetWidget(TYProjet* pElement, QWidget* _pParent /*=NULL*/):
     _tabWidget->addTab(_tableauPointsControle, TR("id_opt_pc"));
 
 
+    // DEFINITION DE L'ONGLET MAILLAGES
+    _tableauMaillages = new QTableWidget();
+    _tableauMaillages->setColumnCount(2);
+    _tableauMaillages->setHorizontalHeaderItem(0, new QTableWidgetItem(TR("id_nom_pc")));
+    _tableauMaillages->setHorizontalHeaderItem(1, new QTableWidgetItem(TR("id_actif")));
+
+    _tabWidget->addTab(_tableauMaillages, TR("id_opt_maillage"));
+
     _projetLayout->addWidget(_tabWidget, 1, 0);
 
     updateContent();
@@ -248,43 +256,77 @@ void TYProjetWidget::updateContent()
     TYProjet* pProjet = getElement();
     if (pProjet)
     {
-        TYTabLPPointControl& tabPoints = pProjet->getPointsControl();
-        unsigned int nbPoints = static_cast<uint32>(tabPoints.size());
-        _tableauPointsControle->setRowCount(nbPoints);
-
-        QString msg;
-        unsigned int row = 0;
-        for (row = 0; row < nbPoints; row++)
-        {
-            _tableauPointsControle->setItem(row, 0, new QTableWidgetItem(tabPoints[row]->getName()));
-
-            msg = QString(TR("id_cell_posx")).arg(tabPoints[row]->_x, 7, 'f', 1);
-            _tableauPointsControle->setItem(row, 1, new QTableWidgetItem(msg));
-
-            msg = QString(TR("id_cell_posy")).arg(tabPoints[row]->_y, 7, 'f', 1);
-            _tableauPointsControle->setItem(row, 2, new QTableWidgetItem(msg));
-
-            msg = QString(TR("id_cell_posh")).arg(tabPoints[row]->getHauteur(), 7, 'f', 1);
-            _tableauPointsControle->setItem(row, 3, new QTableWidgetItem(msg));
-
-            QTableWidgetItem* pCheckItemActif = new QTableWidgetItem("");
-
-            if (tabPoints[row]->etat())
-            {
-                pCheckItemActif->setCheckState(Qt::Checked);
-            }
-            else
-            {
-                pCheckItemActif->setCheckState(Qt::Unchecked);
-            }
-
-            _tableauPointsControle->setItem(row, 4, pCheckItemActif);
-
-            _tableauPointsControle->setRowHeight(row, 30);
-        }
+        updateControlPointsTab();
+        updateNoiseMapsTab();
     }
 
 }
+
+void TYProjetWidget::updateControlPointsTab()
+{
+    TYTabLPPointControl& tabPoints = getElement()->getPointsControl();
+    unsigned int nbPoints = static_cast<uint32>(tabPoints.size());
+    _tableauPointsControle->setRowCount(nbPoints);
+
+    QString msg;
+    unsigned int row = 0;
+    for (row = 0; row < nbPoints; row++)
+    {
+        _tableauPointsControle->setItem(row, 0, new QTableWidgetItem(tabPoints[row]->getName()));
+
+        msg = QString(TR("id_cell_posx")).arg(tabPoints[row]->_x, 7, 'f', 1);
+        _tableauPointsControle->setItem(row, 1, new QTableWidgetItem(msg));
+
+        msg = QString(TR("id_cell_posy")).arg(tabPoints[row]->_y, 7, 'f', 1);
+        _tableauPointsControle->setItem(row, 2, new QTableWidgetItem(msg));
+
+        msg = QString(TR("id_cell_posh")).arg(tabPoints[row]->getHauteur(), 7, 'f', 1);
+        _tableauPointsControle->setItem(row, 3, new QTableWidgetItem(msg));
+
+        QTableWidgetItem* pCheckItemActif = new QTableWidgetItem("");
+
+        if (tabPoints[row]->etat())
+        {
+            pCheckItemActif->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            pCheckItemActif->setCheckState(Qt::Unchecked);
+        }
+
+        _tableauPointsControle->setItem(row, 4, pCheckItemActif);
+
+        _tableauPointsControle->setRowHeight(row, 30);
+    }
+}
+
+void TYProjetWidget::updateNoiseMapsTab()
+{
+    int nbPoints =  static_cast<uint32>(getElement()->getMaillages().size());
+    _tableauMaillages->setRowCount(nbPoints);
+
+    LPTYMaillage pMaillage = nullptr;
+
+    for (int row = 0; row < nbPoints; row++)
+    {
+        pMaillage = getElement()->getMaillage(row);
+        _tableauMaillages->setItem(row, 0, new QTableWidgetItem(pMaillage->getName()));
+
+        QTableWidgetItem* pCheckItemActif = new QTableWidgetItem("");
+        if ( pMaillage->etat( getElement()->getCurrentCalcul() ) == true )
+        {
+            pCheckItemActif->setCheckState(Qt::Checked);
+        }
+        else
+        {
+            pCheckItemActif->setCheckState(Qt::Unchecked);
+        }
+        _tableauMaillages->setItem(row, 1, pCheckItemActif);
+
+        _tableauMaillages->setRowHeight(row, 30);
+    }
+}
+
 
 void TYProjetWidget::apply()
 {
@@ -332,6 +374,24 @@ void TYProjetWidget::apply()
     }
 
     if (need_to_rebuild_result) { getElement()->getCurrentCalcul()->getResultat()->buildMatrix(); }
+
+    // Mise à jour des noise maps
+    for (int row = 0; row < _tableauMaillages->rowCount(); row++)
+    {
+        // Select or deselect
+        QTableWidgetItem* pCheck = (QTableWidgetItem*) _tableauMaillages->item(row, 1);
+        if (pCheck->checkState() == Qt::Checked)
+        {
+            getElement()->getCurrentCalcul()->addMaillage( getElement()->getMaillage(row) );
+        }
+        else
+        {
+            getElement()->getCurrentCalcul()->remMaillage( getElement()->getMaillage(row) );
+        }
+
+        // Rename
+        getElement()->getMaillage(row)->setName( _tableauMaillages->item(row, 0)->text() );
+    }
 
     emit modified();
 }

@@ -383,6 +383,13 @@ public:
      */
     void duplicatePtCalcState(const TYCalcul* pCalculRef, TYCalcul* pCalculNew);
 
+    /*!
+     * \brief copie l'etat des points de controle pour un calcul pour un autre calcul
+     * \param pCalculRef : Calcul dont l'etat pour les points doit etre copie
+     * \param pCalculNew : Calcul pour lequel l'etat doit etre duplique
+     */
+    void duplicateNoiseMapState(const TYCalcul* pCalculRef, TYCalcul* pCalculNew);
+
     /**
      * \fn void remElmtFromCalculs(TYElement* pElement)
      * \brief Supprime un element de tous les calculs

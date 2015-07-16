@@ -238,14 +238,13 @@ int TYMaillage::fromXML(DOM_Element domElement)
 
 void TYMaillage::updateFromCalcul(LPTYCalcul pCalcul)
 {
-    std::vector<TYSpectre*> *tabSpectre = pCalcul->getSpectrumDatas( getID() );
+    std::vector<LPTYSpectre> *tabSpectre = pCalcul->getSpectrumDatas( getID() );
 
     if (tabSpectre != nullptr)
     {
         TYTabLPPointCalcul& ptsCalcul = getPtsCalcul();
         for (unsigned int i = 0; i < ptsCalcul.size() ; ++i)
         {
-            tabSpectre->at(i)->incRef();
             ptsCalcul[i]->setSpectre(tabSpectre->at(i));
         }
     }
@@ -600,4 +599,9 @@ void TYMaillage::copyEtats(TYMaillage* pOther)
     {
         _tabEtats[it_b->first] = it_b->second;
     }
+}
+
+void TYMaillage::duplicateEtat(const TYUUID& idCalculRef, const TYUUID& idCalculNew)
+{
+    _tabEtats[idCalculNew] = _tabEtats[idCalculRef];
 }
