@@ -335,6 +335,14 @@ public:
     /// Copie du map calcul-etat
     void copyEtats(TYMaillage* pOther);
 
+    /*!
+     * \brief Duplique l'etat defini pour un calcul pour un autre calcul
+     * \param idCalculRef : Identifiant unique du calcul referent
+     * \param idCalculNew : Identifiant unique du calcul a recopier
+     */
+    void duplicateEtat(const TYUUID& idCalculRef, const TYUUID& idCalculNew);
+
+
     // Membres
 protected:
     ///Liste des points de calcul.

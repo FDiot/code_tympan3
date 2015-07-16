@@ -164,8 +164,7 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     clearCtrlPointsSpectrums();
 
     // Use Same NoiseMap but initialize spectrums
-    _noiseMapsSpectrums = pOtherCalcul->_noiseMapsSpectrums;
-    clearNoiseMapsSpectrums();
+    copyNoiseMapSpectrums(pOtherCalcul->_noiseMapsSpectrums);
 
     _solverId = pOtherCalcul->_solverId;
 
@@ -460,7 +459,6 @@ int TYCalcul::fromXML(DOM_Element domElement)
                             if (retVal == 1)
                             {
                                 _mapPointCtrlSpectre[receptor_id] = new TYSpectre(*spectrum);
-                                _mapPointCtrlSpectre[receptor_id]->incRef();
                             }
                         }
                     }
@@ -473,7 +471,7 @@ int TYCalcul::fromXML(DOM_Element domElement)
             QDomNodeList childs2 = elemCur.childNodes();
 
             LPTYSpectre spectrum = new TYSpectre();
-            std::vector<TYSpectre*> tabSpectre;
+            std::vector<LPTYSpectre> tabSpectre;
 
             for (unsigned int j = 0; j < childs2.length(); j++)
             {
@@ -651,7 +649,7 @@ void TYCalcul::purge()
     _emitAcVolNode.clear();
     
     // Cleaning control point / spectrum association
-    std::map<TYUUID, TYSpectre*>::iterator it;
+    std::map<TYUUID, LPTYSpectre>::iterator it;
     for (it=_mapPointCtrlSpectre.begin(); it!=_mapPointCtrlSpectre.end(); it++)
     {
         if ( (*it).second != nullptr ) { delete (*it).second; (*it).second=nullptr; }
@@ -1306,7 +1304,6 @@ bool TYCalcul::addPtCtrlToResult(LPTYPointControl pPoint)
     {
         LPTYSpectre spectre = new TYSpectre();
         _mapPointCtrlSpectre[id_point] = spectre;
-        _mapPointCtrlSpectre[id_point]->incRef();
 
         // Set control point on for this calcul
         pPoint->setEtat(getID(), true);
@@ -1347,8 +1344,23 @@ void TYCalcul::clearNoiseMapsSpectrums()
         for (unsigned int i=0; i<(*it).second.size(); i++)
         {
             (*it).second.at(i)->deepCopy( new TYSpectre() );
-            (*it).second.at(i)->incRef();
         }
+    }
+}
+
+void TYCalcul::copyNoiseMapSpectrums(TYMapIdTabSpectre& otherNoiseMap)
+{
+    TYMapIdTabSpectre::iterator it;
+    for (it=otherNoiseMap.begin(); it!=otherNoiseMap.end(); it++)
+    {
+        TYUUID id = (*it).first;
+        std::vector<LPTYSpectre> tabSpectres;
+        for (unsigned int i=0; i<(*it).second.size(); i++)
+        {
+            tabSpectres.push_back( new TYSpectre() );
+        }
+
+        _noiseMapsSpectrums[id] = tabSpectres;
     }
 }
 
@@ -1374,7 +1386,6 @@ void TYCalcul::setSpectre(TYPointCalcul* pPoint, TYSpectre* pSpectre)
     if (it != _mapPointCtrlSpectre.end()) 
     { 
         (*it).second = pSpectre;
-        (*it).second->incRef();
     }
     else // other case point is owned by a TYMaillage
     {
@@ -1421,7 +1432,7 @@ void TYCalcul::setPtCtrlStatus(const TYUUID& id_pt, bool bStatus)
 
 }
 
-std::vector<TYSpectre*> *TYCalcul::getSpectrumDatas(const TYUUID& id)
+std::vector<LPTYSpectre> *TYCalcul::getSpectrumDatas(const TYUUID& id)
 {
     TYMapIdTabSpectre::iterator it = _noiseMapsSpectrums.find(id);
 
@@ -1438,7 +1449,7 @@ bool TYCalcul::addMaillage(TYMaillage* pMaillage)
     if ( _noiseMapsSpectrums.find(id) != _noiseMapsSpectrums.end() ) { return false; }
 
     size_t nbPoints = pMaillage->getPtsCalcul().size();
-    std::vector<TYSpectre*> tabSpectres;
+    std::vector<LPTYSpectre> tabSpectres;
     for (unsigned int i=0; i<nbPoints; i++)
     {
         tabSpectres.push_back(new TYSpectre());
@@ -1458,11 +1469,6 @@ bool TYCalcul::remMaillage(TYMaillage* pMaillage)
 
     if ( it!=_noiseMapsSpectrums.end() )
     {
-        for (unsigned int i=0; i<(*it).second.size(); i++)
-        {
-            delete (*it).second.at(i);
-        }
-        
         _noiseMapsSpectrums.erase(it);
 
         pMaillage->setEtat(getID(), false);

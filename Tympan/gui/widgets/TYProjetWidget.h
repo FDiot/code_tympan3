@@ -101,6 +101,10 @@ public slots:
      */
     void updateDefault();
 
+private:
+    void updateControlPointsTab();
+    void updateNoiseMapsTab();
+
     // Membres
 protected:
 
@@ -138,6 +142,9 @@ protected:
 
     // Table des points de controle
     QTableWidget*_tableauPointsControle;
+
+    /// Onglet des points de controle
+    QTableWidget* _tableauMaillages;
 
     TYElementWidget* _elmW;
 };
