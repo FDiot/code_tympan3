@@ -165,7 +165,9 @@ int TYPointControl::fromXML(DOM_Element domElement)
 
     bool hauteurOk = false;
     bool formeObjetOk = false;
+    bool bOldDatas = false;
     TYUUID idCalcul;
+    std::map<TYUUID, LPTYSpectre> *compatibilityVector = new std::map<TYUUID, LPTYSpectre>();
 
     DOM_Element elemCur;
 
@@ -186,12 +188,13 @@ int TYPointControl::fromXML(DOM_Element domElement)
         }
         else if (elemCur.nodeName() == "Spectre")
         {
-            std::map<TYUUID, TYSpectre*> *compatibilityVector = static_cast< map<TYUUID, TYSpectre*>* > ( getCompatibilityVector() );
-            TYSpectre* pSpectre = new TYSpectre();
+            bOldDatas = true;
+            LPTYSpectre pSpectre = new TYSpectre();
             pSpectre->callFromXMLIfEqual(elemCur);
 
             // recupere le calcul associe au spectre
-            idCalcul = TYXMLTools::getElementAttributeToString(elemCur, "idCalcul");
+            QString strId = TYXMLTools::getElementAttributeToString(elemCur, "idCalcul");
+            idCalcul.FromString( strId );
             compatibilityVector->operator[](idCalcul) = pSpectre;
 
             _dBA = pSpectre->valGlobDBA();
@@ -199,33 +202,30 @@ int TYPointControl::fromXML(DOM_Element domElement)
         }
     }
 
-    // Cleaning compatibility data
-    std::map<TYUUID, TYSpectre*> *compatibilityVector = static_cast< map<TYUUID, TYSpectre*>* > ( getCompatibilityVector() );
-    std::map<TYUUID, TYSpectre*>::iterator it;
-    for (it=compatibilityVector->begin(); it!=compatibilityVector->end(); )
+    if (bOldDatas == true)
     {
-        if ( _tabEtats[(*it).first] == false)
+        // Cleaning compatibility data
+        std::map<TYUUID, LPTYSpectre>::iterator it;
+        for (it=compatibilityVector->begin(); it!=compatibilityVector->end(); )
         {
-            delete (*it).second;
-            it = compatibilityVector->erase( it );
+            if ( _tabEtats[(*it).first] == false)
+            {
+                it = compatibilityVector->erase( it );
+            }
+            else
+            {
+                it++;
+            }
         }
-        else
-        {
-            it++;
-        }
+
+        setAllUses( (void*)compatibilityVector );
+    }
+    else
+    {
+        delete compatibilityVector;
     }
 
     return 1;
-}
-
-void* TYPointControl::getCompatibilityVector()
-{
-    if (_allUses == nullptr)
-    {
-        _allUses = new std::map<TYUUID, TYSpectre*>();
-    }
-
-    return _allUses;
 }
 
 

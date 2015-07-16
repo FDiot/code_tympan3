@@ -390,6 +390,18 @@ public:
      */
     bool remMaillage(TYMaillage* pMaillage);
 
+    /*!
+     * \brief set spectrum vector for a given noise map
+     * \fn void setNoiseMapSpectrums(const TYMaillage* pMaillage, TYTabLPSpectre& tabSpectrum);
+     */
+    void setNoiseMapSpectrums(const TYMaillage* pMaillage, TYTabLPSpectre& tabSpectrum);
+
+    /*!
+     * \brief set spectrum vector for a given noise map
+     * \fn void setNoiseMapSpectrums(const TYUUID& id, TYTabLPSpectre& tabSpectrum);
+     */
+    void setNoiseMapSpectrums(const TYUUID& id, TYTabLPSpectre& tabSpectrum);
+
 private :
     void clearCtrlPointsSpectrums();
     void clearNoiseMapsSpectrums();

@@ -119,16 +119,15 @@ int TYRectangularMaillage::fromXML(DOM_Element domElement)
 
     bool densiteXOk = false;
     bool densiteYOk = false;
+    bool bOldDatas = false;
 
-    unsigned int i, j;
-
-    TYSpectre* pSpectre = new TYSpectre();
-    TYTabLPSpectre tabSpectre;
+    LPTYSpectre pSpectre = new TYSpectre();
+    TYTabLPSpectre *compatibilityVector = new TYTabLPSpectre();
 
     DOM_Element elemCur;
 
     QDomNodeList childs = domElement.childNodes();
-    for (i = 0; i < childs.length(); i++)
+    for (unsigned int i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
 
@@ -136,6 +135,23 @@ int TYRectangularMaillage::fromXML(DOM_Element domElement)
         TYXMLTools::getElementDoubleValue(elemCur, "densiteY", _densiteY, densiteYOk);
 
         _pRect->callFromXMLIfEqual(elemCur);
+
+        // Old version : if we encounter spectra
+       if (pSpectre->callFromXMLIfEqual(elemCur))
+        {
+            bOldDatas = true;
+            compatibilityVector->push_back(pSpectre);
+            pSpectre = new TYSpectre();
+        }    
+    }
+
+    if (bOldDatas == true)
+    {
+        setAllUses( (void*)compatibilityVector );
+    }
+    else
+    {
+        delete compatibilityVector;
     }
 
     make(_pRect, _densiteX, _densiteY);

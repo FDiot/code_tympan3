@@ -178,18 +178,19 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
     TYMaillage::fromXML(domElement);
 
     bool nbPointsIsOk = false;
+    bool bOldDatas = false;
 
-    unsigned int i;
     int nbPoints = 0;
     TYPoint pt;
 
-    TYSpectre* pSpectre = new TYSpectre();
-    TYTabLPSpectre tabSpectre;
+
+    LPTYSpectre pSpectre = new TYSpectre();
+    TYTabLPSpectre *compatibilityVector = new TYTabLPSpectre();
 
     DOM_Element elemCur;
 
     QDomNodeList childs = domElement.childNodes();
-    for (i = 0; i < childs.length(); i++)
+    for (unsigned int i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
 
@@ -204,12 +205,22 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
             _tabPoint.push_back(pt);
         }
 
-        // New version : if we encounter spectra
-        if (pSpectre->callFromXMLIfEqual(elemCur))
+        // Old version : if we encounter spectra
+       if (pSpectre->callFromXMLIfEqual(elemCur))
         {
-            tabSpectre.push_back(pSpectre);
+            bOldDatas = true;
+            compatibilityVector->push_back(pSpectre);
             pSpectre = new TYSpectre();
         }
+    }
+
+    if (bOldDatas == true)
+    {
+        setAllUses( (void*)compatibilityVector );
+    }
+    else
+    {
+        delete compatibilityVector;
     }
 
     make(_tabPoint, _thickness, _closed, _density);
