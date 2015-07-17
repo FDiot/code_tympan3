@@ -942,7 +942,9 @@ bool TYCalcul::addPtCtrlToResult(LPTYPointControl pPoint)
         // Set control point on for this calcul
         pPoint->setEtat(getID(), true);
 
-        return _pResultat->addRecepteur(pPoint);
+        if ( _pResultat->addRecepteur(pPoint) == true ) { _pResultat->buildMatrix(); }
+
+        return true;
     }
 
     return false;

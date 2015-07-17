@@ -154,6 +154,18 @@ protected:
      */
     void selectOrUnselectAll(TYElementListItem* item, const bool& bSelect);
 
+    /*!
+     * \brief void updateGraphics()
+     */
+    void updateGraphics();
+
+    /*!
+     * \brief highlight object
+     * \fn void highlight(TYElementGraphic* pGraphicObject);
+     */
+    void highlight_element(TYElementGraphic* pGraphicObject, TYElement* pElement);
+
+
 protected:
     QMenuBar* _pMenuBar;
     QTreeWidget* _pListView;
