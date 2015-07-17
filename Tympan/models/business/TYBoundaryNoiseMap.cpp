@@ -161,15 +161,6 @@ DOM_Element TYBoundaryNoiseMap::toXML(DOM_Element& domElement)
         _tabPoint[i].toXML(domNewElem);
     }
 
-    //if (TYProjet::gSaveValues)
-    //{
-    //    nbPoints = _ptsCalcul.size();
-    //    for (size_t i = 0; i < nbPoints; ++i)
-    //    {
-    //        _ptsCalcul[i]->getSpectre()->toXML(domNewElem);
-    //    }
-    //}
-
     return domNewElem;
 }
 
