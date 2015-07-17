@@ -965,7 +965,6 @@ void TYCalcul::clearCtrlPointsSpectrums()
     TYMapIdSpectre::iterator it;
     for (it=_mapPointCtrlSpectre.begin(); it!=_mapPointCtrlSpectre.end(); it++)
     {
-        delete (*it).second;
         (*it).second = new TYSpectre();
     }
 }
