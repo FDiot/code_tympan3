@@ -295,6 +295,8 @@ public:
      */
     void selectActivePoint(const LPTYSiteNode pSite);
 
+    virtual void updateGraphic();
+
 protected:
     /**
      * \fn void updateGraphicMaillage()
@@ -469,6 +471,12 @@ public:
     bool getStatusSolver() { return _bStatusSolver; }
     const bool getStatusSolver() const { return _bStatusSolver; }
     void setStatusSolver(const bool& bStatus) { _bStatusSolver = bStatus; }
+
+    /*!
+     * \brief clean status of control points and noise maps
+     * \fn void cleanReceptorsStatus(TYCalcul *pCalcul);
+     */
+    void cleanReceptorsStatus(TYCalcul *pCalcul);
 
 public:
     // CLM-NT33 : Sauvegarde sans resultats
