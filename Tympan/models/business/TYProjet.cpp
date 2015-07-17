@@ -358,10 +358,19 @@ bool TYProjet::remPointControl(LPTYPointControl pPointControl)
     assert(pPointControl);
     TYTabLPPointControl::iterator ite;
 
+
     for (ite = _pointsControl.begin(); ite != _pointsControl.end(); ite++)
     {
         if ((*ite) == pPointControl)
         {
+            // Nettoyage des calculs concernes
+            for (unsigned int i=0; i<this->_listCalcul.size(); i++)
+            {
+                if ( (*ite)->etat(_listCalcul[i]) == true )
+                {
+                    _listCalcul[i]->remPtCtrlFromResult( (*ite) ); 
+                }
+            }
             _pointsControl.erase(ite);
             ret = true;
             setIsGeometryModified(true);
