@@ -60,11 +60,6 @@ TYCalcul::TYCalcul() :
     _pResultat->setParent(this);
 }
 
-//TYCalcul::TYCalcul(LPTYProjet pParent)
-//{
-//    _pParent = pParent;
-//}
-
 TYCalcul::TYCalcul(const TYCalcul& other)
 {
     *this = other;
@@ -167,15 +162,6 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     copyNoiseMapSpectrums(pOtherCalcul->_noiseMapsSpectrums);
 
     _solverId = pOtherCalcul->_solverId;
-
-    //for (unsigned int i = 0; i < pOtherCalcul->_maillages.size(); i++)
-    //{
-    //    // Dupplication du maillage
-    //    LPTYMaillageGeoNode pMaillageGeoNode = new TYMaillageGeoNode(NULL, this);
-    //    pMaillageGeoNode->deepCopy(pOtherCalcul->_maillages[i], copyId);
-    //    // Ajout du maillage
-    //    addMaillage(pMaillageGeoNode);
-    //}
 
     for (unsigned int i=0; i<pOtherCalcul->_tabRays.size(); i++)
     {
@@ -651,6 +637,9 @@ void TYCalcul::purge()
     
     // Cleaning control point / spectrum association
     _mapPointCtrlSpectre.clear();
+
+    // Cleaning noise map / spectrums association
+    _noiseMapsSpectrums.clear();
 
     setIsGeometryModified(true);
 }

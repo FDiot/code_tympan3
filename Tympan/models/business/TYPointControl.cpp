@@ -228,25 +228,6 @@ int TYPointControl::fromXML(DOM_Element domElement)
     return 1;
 }
 
-
-//void TYPointControl::purge(TYCalcul* pCalcul)
-//{
-//    if (pCalcul == NULL)
-//    {
-//        TYMapIdSpectre::iterator it_s;
-//        for (it_s = _tabSpectre.begin(); it_s != _tabSpectre.end(); ++it_s)
-//        {
-//            delete it_s->second;
-//        }
-//        _tabSpectre.clear();
-//    }
-//    else
-//    {
-//        _tabSpectre[pCalcul->getID().toString()] = new TYSpectre();
-//        _tabSpectre[pCalcul->getID().toString()]->setType(SPECTRE_TYPE_LP);
-//    }
-//}
-
 void TYPointControl::toSIG()
 {
     TYProjet* pProjet = TYProjet::safeDownCast(getParent());
@@ -346,4 +327,19 @@ void TYPointControl::duplicateEtat(const TYUUID& idCalculRef, const TYUUID& idCa
 LPTYSpectre TYPointControl::getSpectre()
 {
     return dynamic_cast<TYProjet*>(getParent())->getCurrentCalcul()->getSpectre(this);
+}
+
+bool TYPointControl::remEtat(TYCalcul* pCalcul)
+{
+    assert(pCalcul);
+    TYUUID id = pCalcul->getID();
+
+    TYMapIdBool::iterator it = _tabEtats.find(id);
+    if ( it != _tabEtats.end() )
+    {
+        _tabEtats.erase(it);
+        return true;
+    }
+
+    return false;
 }

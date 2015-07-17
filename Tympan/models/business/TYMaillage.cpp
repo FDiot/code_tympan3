@@ -605,3 +605,18 @@ void TYMaillage::duplicateEtat(const TYUUID& idCalculRef, const TYUUID& idCalcul
 {
     _tabEtats[idCalculNew] = _tabEtats[idCalculRef];
 }
+
+bool TYMaillage::remEtat(TYCalcul* pCalcul)
+{
+    assert(pCalcul);
+    TYUUID id = pCalcul->getID();
+
+    TYMapIdBool::iterator it = _tabEtats.find(id);
+    if ( it != _tabEtats.end() )
+    {
+        _tabEtats.erase(it);
+        return true;
+    }
+
+    return false;
+}
