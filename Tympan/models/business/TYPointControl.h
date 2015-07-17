@@ -107,14 +107,6 @@ public:
      */
     double getHauteur() const { return _hauteur; }
 
-    ///**
-    // * \fn void purge()
-    // * \brief Mise a zero du resultat
-    // */
-    //void purge(TYCalcul* pCalcul);
-
-
-
     /**
      * \param objectCube, objectPyramid, objectSphere, objectStar
      * Les differents types d'objet graphique que l'on peut afficher.
@@ -164,6 +156,9 @@ public:
 
     /// Copie du map calcul-etat
     void copyEtats(TYPointControl* pOther);
+
+    /// Remove calcul from "etat" map
+    bool remEtat(TYCalcul* pCalcul);
 
     /*!
      * \brief Duplique l'etat defini pour un calcul pour un autre calcul

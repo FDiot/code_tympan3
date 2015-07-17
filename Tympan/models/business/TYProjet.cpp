@@ -418,6 +418,10 @@ bool TYProjet::remCalcul(const LPTYCalcul pCalcul)
     {
         if ((*ite) == pCalcul)
         {
+            // remove calcul from noise map and control point status list
+            cleanReceptorsStatus( (*ite) );
+
+            // Remove calcul from list
             _listCalcul.erase(ite);
             ret = true;
             break;
@@ -483,7 +487,6 @@ void TYProjet::setCurrentCalcul(LPTYCalcul pCurCalcul)
     }
 
 #if TY_USE_IHM
-    updateGraphicMaillage();
     updateGraphic();
 #endif
     setIsGeometryModified(true);
@@ -1010,4 +1013,23 @@ void TYProjet::selectActivePoint(const LPTYSiteNode pSite)
     }
 
     tabVolNodeGeoNode.clear();
+}
+
+void TYProjet::cleanReceptorsStatus(TYCalcul *pCalcul)
+{
+    for (unsigned int i=0; i<_pointsControl.size(); i++)
+    {
+        _pointsControl[i]->remEtat(pCalcul);
+    }
+
+    for (unsigned int i=0; i<_maillages.size(); i++)
+    {
+        dynamic_cast<TYMaillage*>(_maillages[i]->getElement())->remEtat(pCalcul);
+    }
+}
+
+void TYProjet::updateGraphic()
+{
+    updateGraphicMaillage();
+    TYElement::updateGraphic();
 }

@@ -342,6 +342,8 @@ public:
      */
     void duplicateEtat(const TYUUID& idCalculRef, const TYUUID& idCalculNew);
 
+    /// Remove calcul from "etat" map
+    bool remEtat(TYCalcul* pCalcul);
 
     // Membres
 protected:

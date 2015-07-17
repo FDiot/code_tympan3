@@ -184,7 +184,6 @@ TYElementListItem* TYProjetFrame::addToList(LPTYCalcul pElement, TYElementListIt
 
     setCalculItemState(pRootItem, pElement->getIsUpTodate());
 
-    unsigned int i;
     new TYElementListItem(pRootItem, NULL, NULL, QStringList(TR("id_Etats_item")));
 
     new TYElementListItem(pRootItem, pElement->getResultat());
@@ -697,8 +696,19 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                             pCalcul->updateGraphic();
                         }
                     }
+
+                    // Mise à jour du modeleur
                     _pProjet->updateGraphicTree();
+                    _pProjet->updateGraphic();
+                    TYSiteModelerFrame* psiteframe = dynamic_cast<TYSiteModelerFrame*>(getTYMainWnd()->getCurrentModeler());
+                    if (psiteframe != nullptr)
+                    {
+                        psiteframe->setSite( _pProjet->getSite() );
+                        psiteframe->getView()->getRenderer()->updateDisplayList();
+                        psiteframe->updateView();
+                    }
                     getTYMainWnd()->updateModelers(false, false);
+
                     updateList();
                 }
                 else if (ret == curCalcul)
