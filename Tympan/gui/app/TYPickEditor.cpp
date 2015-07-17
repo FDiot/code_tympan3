@@ -1474,6 +1474,8 @@ void TYPickEditor::copyPtCtrl(TYElement *pElement)
 
         // Update Graphic
         pCopy->updateGraphicTree();
+        
+        getTYApp()->getCalculManager()->askForResetResultat();
 
         // Action
         TYAction* pAction = new TYAddPointControlAction(dynamic_cast<TYProjet*>(pParent), pCopy, _pModeler, TR("id_action_addptcontrol"));
