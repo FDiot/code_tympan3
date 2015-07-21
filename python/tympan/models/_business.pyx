@@ -11,8 +11,8 @@ from tympan._business2solver cimport business2microsource
 @cy.locals(elm=Element)
 def elemen2receptor(elm):
     """ Convert an Element to a Receptor if possible """
-    ptcalc = cy.declare(cy.pointer(TYPointCalcul))
-    ptcalc = downcast_point_calcul(elm.thisptr.getRealPointer())
+    ptcalc = cy.declare(cy.pointer(TYPointCalcul),
+                        downcast_point_calcul(elm.thisptr.getRealPointer()))
     assert ptcalc != NULL
     rec = Receptor()
     rec.thisptr = SmartPtr[TYPointCalcul](ptcalc)
@@ -68,10 +68,8 @@ cdef cpp2cypoints(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
     """
     points = []
     for i in xrange(cpp_points.size()):
-        cpp_point = cy.declare(tycommon.OPoint3D)
-        cpp_point = tycommon.dot(matrix, cpp_points[i])
-        cy_point = cy.declare(tycommon.Point3D)
-        cy_point = tycommon.opoint3d2point3d(cpp_point)
+        cpp_point = cy.declare(tycommon.OPoint3D, tycommon.dot(matrix, cpp_points[i]))
+        cy_point = cy.declare(tycommon.Point3D, tycommon.opoint3d2point3d(cpp_point))
         points.append(cy_point)
     return points
 
@@ -81,24 +79,22 @@ cdef TYElement* get_volume(TYElement * elem):
     """Try and downcast `elem` into a TYAcousticVolume. Return an TYAcousticVolume if it succeeds,
     else NULL.
     """
-    volume = cy.declare(cy.pointer(TYAcousticVolume))
-    volume = downcast_acoustic_volume(elem)
+    volume = cy.declare(cy.pointer(TYAcousticVolume), downcast_acoustic_volume(elem))
     return volume
 
 cdef TYElement* get_surface_node(TYElement * elem):
     """Try and downcast `elem` into a TYAcousticSurfaceNode. Return an TYAcousticSurfaceNode if it
     succeeds, else NULL.
     """
-    surface_node = cy.declare(cy.pointer(TYAcousticSurfaceNode))
-    surface_node = downcast_acoustic_surface_node(elem)
+    surface_node = cy.declare(cy.pointer(TYAcousticSurfaceNode),
+                              downcast_acoustic_surface_node(elem))
     return surface_node
 
 cdef find_parent_id(TYElement * elem, downcast_func_type func):
     """Find the identifier of the parent of the element `elem` corresponding to the downcast function
     `func`
     """
-    dest = cy.declare(cy.pointer(TYElement))
-    dest = NULL
+    dest = cy.declare(cy.pointer(TYElement), NULL)
     while dest == NULL:
         elem = elem.getParent()
         if elem == NULL:
@@ -165,20 +161,18 @@ cdef class AcousticSurface:
         # scale
         self.thisptr.exportMesh(pts, tgles, TYGeometryNode(self.thisptr))
         points = []
-        itp = cy.declare(deque[tycommon.OPoint3D].iterator)
-        itp = pts.begin()
+        itp = cy.declare(deque[tycommon.OPoint3D].iterator, pts.begin())
         while itp != pts.end():
             points.append(tycommon.opoint3d2point3d(deref(itp)))
             inc(itp)
         triangles = []
-        itt = cy.declare(deque[tycommon.OTriangle].iterator)
-        itt = tgles.begin()
+        itt = cy.declare(deque[tycommon.OTriangle].iterator, tgles.begin())
         while itt != tgles.end():
             # Assert consistency of the tycommon.OPoint3D given in the mesh
             assert (deref(itt).checkConsistencyWrtPointsTab(pts),
                     deref(itt).reportInconsistencyWrtPointsTab(pts))
-            tri = cy.declare(cy.pointer(tycommon.OTriangle))
-            tri = new tycommon.OTriangle(deref(itt)._p1, deref(itt)._p2, deref(itt)._p3)
+            tri = cy.declare(cy.pointer(tycommon.OTriangle), 
+                             new tycommon.OTriangle(deref(itt)._p1, deref(itt)._p2, deref(itt)._p3))
             triangles.append(tycommon.otriangle2triangle(tri))
             inc(itt)
         return (points, triangles)
@@ -277,12 +271,13 @@ cdef class Site:
     @property
     def subsites(self):
         """List of the site subsites as 'Site' cython objects"""
-        subsite_geonodes = cy.declare(vector[SmartPtr[TYGeometryNode]])
-        subsite_geonodes = self.thisptr.getRealPointer().getListSiteNode()
+        subsite_geonodes = cy.declare(vector[SmartPtr[TYGeometryNode]],
+                                      self.thisptr.getRealPointer().getListSiteNode())
         subsites = []
         for i in xrange(subsite_geonodes.size()):
-            cpp_site = cy.declare(cy.pointer(TYSiteNode))
-            cpp_site = downcast_sitenode(subsite_geonodes[i].getRealPointer().getElement())
+            cpp_site = cy.declare(
+                cy.pointer(TYSiteNode),
+                downcast_sitenode(subsite_geonodes[i].getRealPointer().getElement()))
             site = Site()
             site.matrix = self.matrix.dot(subsite_geonodes[i].getRealPointer().getMatrix())
             site.thisptr = SmartPtr[TYSiteNode](cpp_site)
@@ -295,15 +290,13 @@ cdef class Site:
 
         Return a list of tuples (elt_id, elt_name)
         """
-        infra = cy.declare(cy.pointer(TYInfrastructure))
-        infra = self.thisptr.getRealPointer().getInfrastructure().getRealPointer()
-        outdated = cy.declare(vector[SmartPtr[TYElement]])
-        outdated = infra.getTabElemNOk()
+        infra = cy.declare(cy.pointer(TYInfrastructure), 
+                           self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
+        outdated = cy.declare(vector[SmartPtr[TYElement]], infra.getTabElemNOk())
         nb_outdated = outdated.size()
         outdated_info = []
         for i in xrange(nb_outdated):
-            elt = cy.declare(cy.pointer(TYElement))
-            elt = outdated[i].getRealPointer()
+            elt = cy.declare(cy.pointer(TYElement), outdated[i].getRealPointer())
             outdated_info.append((elt.getID().toString().toStdString(),
                                   elt.getName().toStdString()))
         for subsite in self.subsites:
@@ -330,8 +323,8 @@ cdef class Site:
         contours = {}
         while cpp_contours_iter != cpp_contours.end():
             cpp_volumenode_id = deref(cpp_contours_iter).first.toString().toStdString()
-            cpp_volumenode_contour = cy.declare(deque[tycommon.OPoint3D])
-            cpp_volumenode_contour = deref(cpp_contours_iter).second
+            cpp_volumenode_contour = cy.declare(deque[tycommon.OPoint3D],
+                                                deref(cpp_contours_iter).second)
             contours.setdefault(cpp_volumenode_id, [])
             for i in xrange(cpp_volumenode_contour.size()):
                 contours[cpp_volumenode_id].append(
@@ -345,16 +338,14 @@ cdef class Site:
         assert self.thisptr.getRealPointer() != NULL
         is_screen_face_idx = cy.declare(vector[bool])
         face_list = cy.declare(vector[SmartPtr[TYGeometryNode]])
-        nb_building_faces = cy.declare(cy.uint)
-        nb_building_faces = 0
+        nb_building_faces = cy.declare(cy.uint, 0)
         self.thisptr.getRealPointer().getListFaces(face_list, nb_building_faces,
                                                    is_screen_face_idx)
         surfaces = []
         for i in xrange(nb_building_faces):
             surf = AcousticSurface()
-            pelt = cy.declare(cy.pointer(TYElement))
-            pElt = face_list[i].getRealPointer().getElement()
-            surf.thisptr = downcast_acoustic_surface(pElt)
+            pelt = cy.declare(cy.pointer(TYElement), face_list[i].getRealPointer().getElement())
+            surf.thisptr = downcast_acoustic_surface(pelt)
             surf.thisgeonodeptr = face_list[i]
             # 'face_list' can contain topography elements. Not relevant here.
             if surf.thisptr == NULL:
@@ -374,8 +365,8 @@ cdef class Site:
         pts = cy.declare(deque[tycommon.OPoint3D])
         tgles = cy.declare(deque[tycommon.OTriangle])
         mats = cy.declare(deque[SmartPtr[TYSol]])
-        ptopo = cy.declare(cy.pointer(TYTopographie))
-        ptopo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        ptopo = cy.declare(cy.pointer(TYTopographie),
+                           self.thisptr.getRealPointer().getTopographie().getRealPointer())
         # Retrieve topography mesh as c++ objects
         ptopo.exportMesh(pts, tgles, mats)
         # Retrieve points
@@ -387,20 +378,18 @@ cdef class Site:
             inc(itp)
         # Retrieve triangles
         triangles = []
-        itt = cy.declare(deque[tycommon.OTriangle].iterator)
-        itt = tgles.begin()
+        itt = cy.declare(deque[tycommon.OTriangle].iterator, tgles.begin())
         while itt != tgles.end():
             # Assert consistency of the tycommon.OPoint3D given in the mesh
             assert (deref(itt).checkConsistencyWrtPointsTab(pts),
                     deref(itt).reportInconsistencyWrtPointsTab(pts))
-            tri = cy.declare(cy.pointer(tycommon.OTriangle))
-            tri = new tycommon.OTriangle(deref(itt)._p1, deref(itt)._p2, deref(itt)._p3)
+            tri = cy.declare(cy.pointer(tycommon.OTriangle),
+                             new tycommon.OTriangle(deref(itt)._p1, deref(itt)._p2, deref(itt)._p3))
             triangles.append(tycommon.otriangle2triangle(tri))
             inc(itt)
         # Retrieve ground materials
         grounds = []
-        itg = cy.declare(deque[SmartPtr[TYSol]].iterator)
-        itg = mats.begin()
+        itg = cy.declare(deque[SmartPtr[TYSol]].iterator, mats.begin())
         while itg != mats.end():
             grounds.append(tysol2ground(deref(itg)))
             inc(itg)
@@ -416,8 +405,8 @@ cdef class Site:
         """
         assert self.thisptr.getRealPointer() != NULL
         map_elt_srcs = cy.declare(cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]])
-        infra = cy.declare(cy.pointer(TYInfrastructure))
-        infra = self.thisptr.getRealPointer().getInfrastructure().getRealPointer()
+        infra = cy.declare(cy.pointer(TYInfrastructure),
+                           self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
         infra.getAllSrcs(comp.thisptr.getRealPointer(), map_elt_srcs)
         return business2microsource(map_elt_srcs)
 
@@ -457,8 +446,9 @@ cdef class Site:
             mat_ids.push_back(mat.id)
         cppmats = cy.declare(deque[SmartPtr[TYSol]])
         self.thisptr.getRealPointer().uuid2tysol(mat_ids, cppmats)
-        alti = cy.declare(SmartPtr[TYAltimetrie])
-        alti = self.thisptr.getRealPointer().getTopographie().getRealPointer().getAltimetrie()
+        alti = cy.declare(
+            SmartPtr[TYAltimetrie],
+            self.thisptr.getRealPointer().getTopographie().getRealPointer().getAltimetrie())
         alti.getRealPointer().plugBackTriangulation(pts, tgles, cppmats)
         # Recursively update the acoustic, the altimetry of the infrastructure
         # elements and the altimetry of the acoustic receptors
@@ -471,13 +461,11 @@ cdef class Site:
         curves are defined for the site, the landtake will be used as a level
         curve and a 'LevelCurve' cython object will be returned as well
         """
-        topo = cy.declare(cy.pointer(TYTopographie))
-        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
-        cpp_points = cy.declare(vector[TYPoint])
-        cpp_points = topo.getEmprise()
+        topo = cy.declare(cy.pointer(TYTopographie),
+                          self.thisptr.getRealPointer().getTopographie().getRealPointer())
+        cpp_points = cy.declare(vector[TYPoint], topo.getEmprise())
         points = cpp2cypoints(cpp_points, self.matrix)
-        cpp_lcurves = cy.declare(vector[SmartPtr[TYGeometryNode]])
-        cpp_lcurves = topo.getListCrbNiv()
+        cpp_lcurves = cy.declare(vector[SmartPtr[TYGeometryNode]], topo.getListCrbNiv())
         make_level_curve = self.thisptr.getRealPointer().getUseEmpriseAsCrbNiv()
         if make_level_curve or cpp_lcurves.empty():
             alti = self.thisptr.getRealPointer().getAltiEmprise()
@@ -494,13 +482,12 @@ cdef class Site:
         """The lakes of the topography as a list of 'Lake' cython objects"""
         lakes = []
         material_areas = []
-        cpp_lakes = cy.declare(vector[SmartPtr[TYGeometryNode]])
-        topo = cy.declare(cy.pointer(TYTopographie))
-        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
-        cpp_lakes = topo.getListPlanEau()
+        topo = cy.declare(cy.pointer(TYTopographie),
+                          self.thisptr.getRealPointer().getTopographie().getRealPointer())
+        cpp_lakes = cy.declare(vector[SmartPtr[TYGeometryNode]], topo.getListPlanEau())
         for i in xrange(cpp_lakes.size()):
-            cpp_lake = cy.declare(cy.pointer(TYPlanEau))
-            cpp_lake = downcast_plan_eau(cpp_lakes[i].getRealPointer().getElement())
+            cpp_lake = cy.declare(cy.pointer(TYPlanEau),
+                                  downcast_plan_eau(cpp_lakes[i].getRealPointer().getElement()))
             lake = Lake()
             lake.thisptr = cpp_lake
             lake.matrix = self.matrix.dot(cpp_lakes[i].getRealPointer().getMatrix())
@@ -513,13 +500,12 @@ cdef class Site:
         """The material areas of the topography as 'MaterialArea' cython objects"""
         mareas = []
         cpp_mat_areas = cy.declare(vector[SmartPtr[TYGeometryNode]])
-        topo = cy.declare(cy.pointer(TYTopographie))
-        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        topo = cy.declare(cy.pointer(TYTopographie),
+                          self.thisptr.getRealPointer().getTopographie().getRealPointer())
         cpp_mat_areas = topo.getListTerrain()
         for i in xrange (cpp_mat_areas.size()):
-            cpp_mat_area = cy.declare(cy.pointer(TYTerrain))
-            cpp_mat_area = downcast_terrain(
-                cpp_mat_areas[i].getRealPointer().getElement())
+            cpp_mat_area = cy.declare(cy.pointer(TYTerrain), downcast_terrain(
+                cpp_mat_areas[i].getRealPointer().getElement()))
             area = MaterialArea()
             area.thisptr = cpp_mat_area
             area.matrix = self.matrix.dot(cpp_mat_areas[i].getRealPointer().getMatrix())
@@ -533,13 +519,12 @@ cdef class Site:
         """
         lcurves = []
         cpp_lcurves = cy.declare(vector[SmartPtr[TYGeometryNode]])
-        topo = cy.declare(cy.pointer(TYTopographie))
-        topo = self.thisptr.getRealPointer().getTopographie().getRealPointer()
+        topo = cy.declare(cy.pointer(TYTopographie),
+                          self.thisptr.getRealPointer().getTopographie().getRealPointer())
         cpp_lcurves = topo.getListCrbNiv()
         for i in xrange (cpp_lcurves.size()):
-            cpp_lcurve = cy.declare(cy.pointer(TYCourbeNiveau))
-            cpp_lcurve = downcast_courbe_niveau(
-                cpp_lcurves[i].getRealPointer().getElement())
+            cpp_lcurve = cy.declare(cy.pointer(TYCourbeNiveau), downcast_courbe_niveau(
+                cpp_lcurves[i].getRealPointer().getElement()))
             lcurve = LevelCurve()
             lcurve.thisptr = cpp_lcurve
             lcurve.matrix = self.matrix.dot(cpp_lcurves[i].getRealPointer().getMatrix())
@@ -565,8 +550,7 @@ cdef class MaterialArea:
     def points(self):
         """The list of points delimiting the material area in a global scale"""
         # retrieve material area points
-        cpp_points = cy.declare(vector[TYPoint])
-        cpp_points = self.thisptr.getListPoints()
+        cpp_points = cy.declare(vector[TYPoint], self.thisptr.getListPoints())
         return cpp2cypoints(cpp_points, self.matrix)
 
     @property
@@ -601,8 +585,7 @@ cdef class LevelCurve:
         """The sequence of points forming the level curve ('Point3D' objects)
         """
         # retrieve level curve points
-        cpp_points = cy.declare(vector[TYPoint])
-        cpp_points = self.thisptr.getListPoints()
+        cpp_points = cy.declare(vector[TYPoint], self.thisptr.getListPoints())
         return cpp2cypoints(cpp_points, self.matrix)
 
     @property
@@ -664,8 +647,8 @@ cdef class Result:
     @property
     def sources(self):
         """ get the list of sources known by the result """
-        tab_srcs = cy.declare(vector[SmartPtr[TYElement]])
-        tab_srcs = self.thisptr.getRealPointer().getSources()
+        tab_srcs = cy.declare(vector[SmartPtr[TYElement]],
+                              self.thisptr.getRealPointer().getSources())
         sources = []
         nsources = tab_srcs.size()
         for i in xrange(nsources):
@@ -677,8 +660,8 @@ cdef class Result:
     @property
     def receptors(self):
         """ get the list of receptors known by the result """
-        tab_rcpts = cy.declare(vector[SmartPtr[TYElement]])
-        tab_rcpts = self.thisptr.getRealPointer().getReceptors()
+        tab_rcpts = cy.declare(vector[SmartPtr[TYElement]],
+                               self.thisptr.getRealPointer().getReceptors())
         receptors = []
         nreceptors = tab_rcpts.size()
         for i in xrange(nreceptors):
@@ -743,8 +726,7 @@ cdef class Mesh:
         """The receptors contained in the mesh as a list of 'Receptor' cython objects
         """
         assert self.thisptr != NULL
-        ptscalc = cy.declare(vector[SmartPtr[TYPointCalcul]])
-        ptscalc = self.thisptr.getPtsCalcul()
+        ptscalc = cy.declare(vector[SmartPtr[TYPointCalcul]], self.thisptr.getPtsCalcul())
         nptscalc = ptscalc.size()
         receptors = []
         for i in xrange(nptscalc):
@@ -782,8 +764,8 @@ cdef class Receptor:
     def is_control_point(self):
         """True if the receptor is a control point, false otherwise"""
         assert self.thisptr.getRealPointer() != NULL
-        control_point = cy.declare(cy.pointer(TYPointControl))
-        control_point = downcast_point_control(self.thisptr.getRealPointer())
+        control_point = cy.declare(cy.pointer(TYPointControl),
+                                   downcast_point_control(self.thisptr.getRealPointer()))
         return (control_point != NULL)
 
     @cy.locals(comp=Computation)
@@ -798,9 +780,8 @@ cdef class Receptor:
     @cy.locals(spectrum=tycommon.Spectrum, comp=Computation)
     def set_spectrum(self, spectrum, comp):
         """ Set the spectrum for the given computation """
-        cpp_calc = cy.declare(cy.pointer(TYCalcul))
-        cpp_calc = downcast_calcul(comp.thisptr.getRealPointer())
-
+        cpp_calc = cy.declare(cy.pointer(TYCalcul),
+                              downcast_calcul(comp.thisptr.getRealPointer()))
         self.thisptr.getRealPointer().setSpectre(TYSpectre(spectrum.thisobj),
                                                  cpp_calc)
 
@@ -833,8 +814,8 @@ cdef class Computation:
     def meshes(self):
         """The meshes of the computation (a list of 'Mesh' cython objects)"""
         assert self.thisptr.getRealPointer() != NULL
-        geomaill = cy.declare(vector[SmartPtr[TYGeometryNode]])
-        geomaill = self.thisptr.getRealPointer().getMaillages()
+        geomaill = cy.declare(vector[SmartPtr[TYGeometryNode]],
+                              self.thisptr.getRealPointer().getMaillages())
         nmaill = geomaill.size()
         meshes = []
         for i in xrange(nmaill):
@@ -857,15 +838,15 @@ cdef class Computation:
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
-        cpp_elem = cy.declare(cy.pointer(TYElement))
-        cpp_elem = downcast_Element(self.thisptr.getRealPointer())
+        cpp_elem = cy.declare(cy.pointer(TYElement),
+                              downcast_Element(self.thisptr.getRealPointer()))
         return cpp_elem.getName().toStdString()
 
     def set_name(self, name):
         """ Set the name of the computation """
         assert self.thisptr.getRealPointer() != NULL
-        cpp_elem = cy.declare(cy.pointer(TYElement))
-        cpp_elem = downcast_Element(self.thisptr.getRealPointer())
+        cpp_elem = cy.declare(cy.pointer(TYElement),
+                              downcast_Element(self.thisptr.getRealPointer()))
         cpp_elem.setName(name)
 
 
@@ -877,8 +858,8 @@ cdef class Project:
 
     def update(self):
         """Update the project (inactive mesh points detection)"""
-        computation = cy.declare(cy.pointer(TYCalcul))
-        computation = self.thisptr.getRealPointer().getCurrentCalcul().getRealPointer()
+        computation = cy.declare(cy.pointer(TYCalcul),
+                                 self.thisptr.getRealPointer().getCurrentCalcul().getRealPointer())
         # detect and disable the mesh points that are inside machines or buildings
         computation.selectActivePoint(self.thisptr.getRealPointer().getSite())
 
@@ -909,8 +890,8 @@ cdef class Project:
 
     @property
     def computations(self):
-        tab_comp = cy.declare(vector[SmartPtr[TYCalcul]])
-        tab_comp = self.thisptr.getRealPointer().getListCalcul()
+        tab_comp = cy.declare(vector[SmartPtr[TYCalcul]],
+                              self.thisptr.getRealPointer().getListCalcul())
         computations = []
         ncomp = tab_comp.size()
         for i in xrange(ncomp):
@@ -933,8 +914,8 @@ cdef class Project:
         """User-defined receptors (control points) as 'UserReceptor' cython objects
         """
         assert self.thisptr.getRealPointer() != NULL
-        ctrl_pts = cy.declare(vector[SmartPtr[TYPointControl]])
-        ctrl_pts = self.thisptr.getRealPointer().getPointsControl()
+        ctrl_pts = cy.declare(vector[SmartPtr[TYPointControl]],
+                              self.thisptr.getRealPointer().getPointsControl())
         n_ctrl_pts = ctrl_pts.size()
         control_points = []
         for i in xrange(n_ctrl_pts):

@@ -38,8 +38,7 @@ cdef ovector3d2vector3d(OVector3D vect):
 cdef otriangle2triangle(OTriangle* tri):
     """Triangle (cython object) wrapping an OTriangle(c++)"""
     assert tri != NULL
-    triangle = cy.declare(Triangle)
-    triangle = Triangle()
+    triangle = cy.declare(Triangle, Triangle())
     triangle.thisptr = tri
     return triangle
 
