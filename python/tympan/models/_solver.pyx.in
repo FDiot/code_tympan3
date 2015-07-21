@@ -37,8 +37,7 @@ cdef class ProblemModel:
     def add_node(self, x, y, z):
         """Add a node of double coordinates (x, y, z) to the model"""
         assert self.thisptr.get() != NULL
-        node = cy.declare(tycommon.OPoint3D)
-        node = tycommon.OPoint3D(x, y, z)
+        node = cy.declare(tycommon.OPoint3D, tycommon.OPoint3D(x, y, z))
         self.thisptr.get().make_node(node)
 
     def add_triangle(self, n1, n2, n3):
@@ -50,17 +49,17 @@ cdef class ProblemModel:
     def _add_source(self, position, spectrum_values, shift):
         """Add an acoustic source to the model"""
         # position
-        pos = cy.declare(tycommon.OPoint3D)
-        pos = tycommon.OPoint3D(position[0], position[1], position[2])
+        pos = cy.declare(tycommon.OPoint3D,
+                         tycommon.OPoint3D(position[0], position[1], position[2]))
         # spectrum
         nb_val = spectrum_values.shape[0]
-        spec = cy.declare(tycommon.OSpectre)
-        spec = tycommon.OSpectre(<double *> spectrum_values.data, nb_val, shift)
+        spec = cy.declare(tycommon.OSpectre,
+                          tycommon.OSpectre(<double *> spectrum_values.data, nb_val, shift))
         spec.setEtat(tycommon.SPECTRE_ETAT_DB)
         spec.setType(tycommon.SPECTRE_TYPE_LW)
         # directivity
-        pdirectivity = cy.declare(cy.pointer(SourceDirectivityInterface))
-        pdirectivity = new SphericalSourceDirectivity()
+        pdirectivity = cy.declare(cy.pointer(SourceDirectivityInterface),
+                                  new SphericalSourceDirectivity())
         source_idx = self.thisptr.get().make_source(pos, spec.toGPhy(), pdirectivity)
         return source_idx
 
@@ -138,9 +137,8 @@ cdef class ProblemModel:
     def _export_triangular_mesh(self):
         """Build a triangular mesh from the acoustic problem model"""
         assert self.thisptr.get() != NULL
-        nb_elts = cy.declare(cy.uint)
         actri = cy.declare(cy.pointer(AcousticTriangle))
-        nb_elts = self.thisptr.get().ntriangles()
+        nb_elts = cy.declare(cy.uint, self.thisptr.get().ntriangles())
         triangles = np.empty([nb_elts, 3], dtype=int)
         for i in xrange(nb_elts):
             actri = cy.address(self.thisptr.get().triangle(i))
@@ -169,8 +167,8 @@ cdef class ResultModel:
     def spectrum(self, id_receptor, id_source):
         """Return the power spectrum received by a receptor from a source
         """
-        spec = cy.declare(tycommon.OSpectre)
-        spec = self.thisptr.get().get_data().element(id_receptor, id_source)
+        spec = cy.declare(tycommon.OSpectre,
+                          self.thisptr.get().get_data().element(id_receptor, id_source))
         return tycommon.ospectre2spectrum(spec)
 
 
@@ -220,8 +218,8 @@ cdef class SolverSource:
         """Source directivity vector in the global frame"""
         assert self.thisptr != NULL
         # Check the directivity of the source is a CommonFaceDirectivity directivity
-        cf_dir = cy.declare(cy.pointer(CommonFaceDirectivity))
-        cf_dir = dynamic_cast_commonface_dir(self.thisptr.directivity)
+        cf_dir = cy.declare(cy.pointer(CommonFaceDirectivity),
+                            dynamic_cast_commonface_dir(self.thisptr.directivity))
         if cf_dir == NULL:
             raise ValueError("The directivity of this source has no support normal vector")
         # return its support normal vector

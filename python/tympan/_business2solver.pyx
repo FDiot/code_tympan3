@@ -22,8 +22,7 @@ cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.
 
 def load_computation_solver(foldername, tybusiness.Computation comp):
     """Load a solver plugin (from 'foldername' folder) to compute 'comp'"""
-    solver = cy.declare(tysolver.Solver)
-    solver = tysolver.Solver()
+    solver = cy.declare(tysolver.Solver, tysolver.Solver())
     solver.thisptr = load_solver(foldername, comp.thisptr.getRealPointer().getSolverId());
     return solver
 
@@ -72,8 +71,8 @@ cdef class Business2SolverConverter:
         """Post-process solver result to reinject them to the business result
         """
         # Retrieve solver result matrix
-        solver_result_matrix = cy.declare(tycommon.SpectrumMatrix)
-        solver_result_matrix = result.thisptr.get().get_data()
+        solver_result_matrix = cy.declare(tycommon.SpectrumMatrix,
+                                          result.thisptr.get().get_data())
         self.transitional_result_matrix = new tycommon.SpectrumMatrix(solver_result_matrix)
         # update business receptors cumulative spectra
         self.update_business_receptors(model, result)
@@ -105,10 +104,10 @@ cdef class Business2SolverConverter:
         to the business receptors
         """
         # resize business result matrix with the number of enabled sources and receptors:
-        business_result = cy.declare(tybusiness.Result)
-        business_result = self.comp.result
-        business_result_matrix = cy.declare(cy.pointer(tycommon.SpectrumMatrix))
-        business_result_matrix = cy.address(business_result.thisptr.getRealPointer().getResultMatrix())
+        business_result = cy.declare(tybusiness.Result, self.comp.result)
+        business_result_matrix = cy.declare(
+            cy.pointer(tycommon.SpectrumMatrix),
+            cy.address(business_result.thisptr.getRealPointer().getResultMatrix()))
         business_result_matrix.resize(model.nreceptors, model.nsources)
         for brec_id in self.bus2solv_receptors:
             receptor = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
@@ -130,8 +129,8 @@ cdef class Business2SolverConverter:
             cumul_spectrum = cumul_spectrum.toDB()
             receptor.setSpectre(tybusiness.TYSpectre(cumul_spectrum),
                                 self.comp.thisptr.getRealPointer())
-        busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
-        busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
+        busresult = cy.declare(cy.pointer(tybusiness.TYResultat),
+                               self.comp.thisptr.getRealPointer().getResultat().getRealPointer())
         busresult.setIsAcousticModified(False)
 
     def update_business_result_matrix(self):
@@ -141,8 +140,8 @@ cdef class Business2SolverConverter:
         and will now contain 1 cumulative spectrum per pair
         (business receptor, business source)
         """
-        busresult = cy.declare(cy.pointer(tybusiness.TYResultat))
-        busresult = self.comp.thisptr.getRealPointer().getResultat().getRealPointer()
+        busresult = cy.declare(cy.pointer(tybusiness.TYResultat),
+                               self.comp.thisptr.getRealPointer().getResultat().getRealPointer())
         result_sources = cy.declare(map[tybusiness.TYElem_ptr, int])
         condensate_matrix = cy.declare(tycommon.SpectrumMatrix)
         condensate_matrix.resize(len(self.bus2solv_receptors), len(self.macro2micro_sources))
@@ -217,8 +216,8 @@ cdef class Business2SolverConverter:
         spectrum).
         Add these acoustic sources to the acoustic problem model.
         """
-        infra = cy.declare(cy.pointer(tybusiness.TYInfrastructure))
-        infra = site.thisptr.getRealPointer().getInfrastructure().getRealPointer()
+        infra = cy.declare(cy.pointer(tybusiness.TYInfrastructure),
+                           site.thisptr.getRealPointer().getInfrastructure().getRealPointer())
         # Retrieve all the infrastructure sources for the current site, each
         # one linked to a list of sub-sources
         infra_sources = cy.declare(map[tybusiness.TYElem_ptr,
@@ -227,8 +226,9 @@ cdef class Business2SolverConverter:
         # Go through the sources of the current site and build solver sources accordingly
         sources = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
         sources_of_elt = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
-        its = cy.declare(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator)
-        its = infra_sources.begin()
+        its = cy.declare(map[tybusiness.TYElem_ptr,
+                             vector[SmartPtr[tybusiness.TYGeometryNode]]].iterator,
+                        infra_sources.begin())
         business_src = cy.declare(tybusiness.TYElem_ptr)
         nb_sources = 0
         # For each business macro source (ex: machine, building...)
@@ -244,44 +244,44 @@ cdef class Business2SolverConverter:
                 if sources_of_elt[i].getRealPointer() == NULL:
                     continue
                 # Get it
-                subsource_elt = cy.declare(cy.pointer(tybusiness.TYElement))
-                subsource_elt = sources_of_elt[i].getRealPointer().getElement()
-                subsource = cy.declare(cy.pointer(tybusiness.TYSourcePonctuelle))
-                subsource = tybusiness.downcast_source_ponctuelle(subsource_elt)
+                subsource_elt = cy.declare(cy.pointer(tybusiness.TYElement),
+                                           sources_of_elt[i].getRealPointer().getElement())
+                subsource = cy.declare(cy.pointer(tybusiness.TYSourcePonctuelle),
+                                       tybusiness.downcast_source_ponctuelle(subsource_elt))
                 ppoint = subsource.getPos().getRealPointer()
-                point3d  = cy.declare(tycommon.OPoint3D)
                 # Site transform matrix * source transform matrix
-                globalmatrix = cy.declare(tycommon.OMatrix)
-                globalmatrix = site.matrix.dot(sources_of_elt[i].getRealPointer().getMatrix())
+                globalmatrix = cy.declare(tycommon.OMatrix,
+                                          site.matrix.dot(sources_of_elt[i].getRealPointer().getMatrix()))
                 # Convert its position to the global frame
-                point3d = tycommon.dot(globalmatrix, ppoint[0])
+                point3d  = cy.declare(tycommon.OPoint3D, tycommon.dot(globalmatrix, ppoint[0]))
                 # Directivity
                 # solver model directivity
                 pdirectivity = cy.declare(cy.pointer(tysolver.SourceDirectivityInterface))
                 # business model directivity
-                pbus_directivity = cy.declare(cy.pointer(tybusiness.TYDirectivity))
-                pbus_directivity = subsource.getDirectivity()
+                pbus_directivity = cy.declare(cy.pointer(tybusiness.TYDirectivity),
+                                              subsource.getDirectivity())
                 # Check if the acoustic source is a user-defined one
-                pusersource = cy.declare(cy.pointer(tybusiness.TYUserSourcePonctuelle))
-                pusersource = tybusiness.downcast_user_source_ponctuelle(subsource_elt)
+                pusersource = cy.declare(cy.pointer(tybusiness.TYUserSourcePonctuelle),
+                                         tybusiness.downcast_user_source_ponctuelle(subsource_elt))
                 if pusersource != NULL:
                     pdirectivity = new tysolver.SphericalSourceDirectivity()
                 else: #  it is a computed acoustic source
-                    pcompdirectivity = cy.declare(cy.pointer(tybusiness.TYComputedDirectivity))
-                    pcompdirectivity = tybusiness.downcast_computed_directivity(pbus_directivity)
+                    pcompdirect = cy.declare(cy.pointer(tybusiness.TYComputedDirectivity),
+                                             tybusiness.downcast_computed_directivity(
+                                                 pbus_directivity))
                     # compute global directivity
-                    glob_directivity = cy.declare(tycommon.OVector3D)
-                    glob_directivity = tycommon.OVector3D(pcompdirectivity.DirectivityVector)
+                    glob_directivity = cy.declare(tycommon.OVector3D,
+                                                  tycommon.OVector3D(pcompdirect.DirectivityVector))
                     glob_directivity = tycommon.dot(globalmatrix, glob_directivity)
-                    if pcompdirectivity.Type == tybusiness.Surface:
-                        pdirectivity = new tysolver.VolumeFaceDirectivity(
-                            glob_directivity, pcompdirectivity.SpecificSize)
-                    elif pcompdirectivity.Type == tybusiness.Baffled:
-                        pdirectivity = new tysolver.BaffledFaceDirectivity(
-                            glob_directivity, pcompdirectivity.SpecificSize)
+                    if pcompdirect.Type == tybusiness.Surface:
+                        pdirectivity = new tysolver.VolumeFaceDirectivity(glob_directivity,
+                                                                          pcompdirect.SpecificSize)
+                    elif pcompdirect.Type == tybusiness.Baffled:
+                        pdirectivity = new tysolver.BaffledFaceDirectivity(glob_directivity,
+                                                                           pcompdirect.SpecificSize)
                     else: # Chimney
-                        pdirectivity = new tysolver.ChimneyFaceDirectivity(
-                            glob_directivity, pcompdirectivity.SpecificSize)
+                        pdirectivity = new tysolver.ChimneyFaceDirectivity(glob_directivity,
+                                                                           pcompdirect.SpecificSize)
                 # Add it to the solver model
                 source_idx = model.thisptr.get().make_source(point3d, subsource.getSpectre()[0],
                                                              pdirectivity)
@@ -318,11 +318,11 @@ cdef class Business2SolverConverter:
         current computation (the active ones), build the acoustic receptors
         using their position and add them to the acoustic problem model.
         """
-        project = cy.declare(cy.pointer(tybusiness.TYProjet))
-        project = self.site.thisptr.getRealPointer().getProjet()
+        project = cy.declare(cy.pointer(tybusiness.TYProjet),
+                             self.site.thisptr.getRealPointer().getProjet())
         # First add user-defined receptors to the acoustic problem model
-        control_points = cy.declare(vector[SmartPtr[tybusiness.TYPointControl]])
-        control_points = project.getPointsControl()
+        control_points = cy.declare(vector[SmartPtr[tybusiness.TYPointControl]],
+                                    project.getPointsControl())
         n_ctrl_pts = control_points.size()
         rec_idx = cy.declare(size_t)
         nb_receptors = 0
@@ -337,14 +337,13 @@ cdef class Business2SolverConverter:
                 self.instances_mapping[rec_uuid] = control_points[i].getRealPointer()
                 nb_receptors += 1
         # Then add mesh points to the acoustic problem model
-        meshes = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]])
-        meshes = self.comp.thisptr.getRealPointer().getMaillages()
+        meshes = cy.declare(vector[SmartPtr[tybusiness.TYGeometryNode]],
+                            self.comp.thisptr.getRealPointer().getMaillages())
         mesh = cy.declare(cy.pointer(tybusiness.TYMaillage))
         mesh_points = cy.declare(vector[SmartPtr[tybusiness.TYPointCalcul]])
         nmeshes = meshes.size()
         for i in xrange(nmeshes):
-            matrix = cy.declare(tycommon.OMatrix)
-            matrix = meshes[i].getRealPointer().getMatrix()
+            matrix = cy.declare(tycommon.OMatrix, meshes[i].getRealPointer().getMatrix())
             mesh = tybusiness.downcast_maillage(meshes[i].getRealPointer().getElement())
             # mesh point must be active
             if mesh.getState() != tybusiness.Actif: # enum value from MaillageState (class TYMaillage)
@@ -354,9 +353,9 @@ cdef class Business2SolverConverter:
             for j in xrange(n_mesh_points):
                 # if control point state == active (with respect to the current computation)
                 if mesh_points[j].getRealPointer().getEtat(self.comp.thisptr.getRealPointer()):
-                    point3d  = cy.declare(tycommon.OPoint3D)
                     # Move receptor to a global scale
-                    point3d = tycommon.dot(matrix, mesh_points[j].getRealPointer()[0])
+                    point3d  = cy.declare(tycommon.OPoint3D,
+                                          tycommon.dot(matrix, mesh_points[j].getRealPointer()[0]))
                     mesh_points[j].getRealPointer()._x = point3d._x
                     mesh_points[j].getRealPointer()._y = point3d._y
                     mesh_points[j].getRealPointer()._z = point3d._z
@@ -387,18 +386,13 @@ cdef class Business2SolverConverter:
         # Set the material of each triangle
         for (i, ground) in enumerate(grounds):
             actri = cy.address(model.thisptr.get().triangle(tgles_idx[i]))
-            _ground = cy.declare(tybusiness.Ground)
-            _ground = ground
+            _ground = cy.declare(tybusiness.Ground, ground)
             grnd = cy.declare(SmartPtr[tybusiness.TYSol])
             grnd = _ground.thisptr
-            mat_name = cy.declare(string)
-            mat_name = grnd.getRealPointer().getName().toStdString()
-            mat_res = cy.declare(double)
-            mat_res = ground.resistivity
-            mat_dev = cy.declare(double)
-            mat_dev = ground.deviation
-            mat_len = cy.declare(double)
-            mat_len = ground.length
+            mat_name = cy.declare(string, grnd.getRealPointer().getName().toStdString())
+            mat_res = cy.declare(double, ground.resistivity)
+            mat_dev = cy.declare(double, ground.deviation)
+            mat_len = cy.declare(double, ground.length)
             pmat = model.thisptr.get().make_material(mat_name, mat_res,mat_dev,mat_len)
             actri.made_of = pmat
         # Recurse on subsites
@@ -418,14 +412,11 @@ cdef class Business2SolverConverter:
             (nodes_idx, tgles_idx) = self._process_mesh(model, points, triangles)
             # Get the building material for the surface
             pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
-            buildmat = cy.declare(tybusiness.Material)
-            buildmat = surface.material
-            mat_spec = cy.declare(tycommon.Spectrum)
-            mat_spec = buildmat.spectrum
-            mat_cspec = cy.declare(tycommon.OSpectreComplex)
-            mat_cspec = tycommon.OSpectreComplex(mat_spec.thisobj)
-            mat_name = cy.declare(string)
-            mat_name = buildmat.name
+            buildmat = cy.declare(tybusiness.Material, surface.material)
+            mat_spec = cy.declare(tycommon.Spectrum, buildmat.spectrum)
+            mat_cspec = cy.declare(tycommon.OSpectreComplex,
+                                   tycommon.OSpectreComplex(mat_spec.thisobj))
+            mat_name = cy.declare(string, buildmat.name)
             actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
             volume_id = surface.volume_id()
             # Set the material of the surface
