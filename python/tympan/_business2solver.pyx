@@ -120,8 +120,8 @@ cdef class Business2SolverConverter:
             # receptor cumulative spectrum
             cumul_spectrum = cy.declare(tycommon.OSpectre)
             cumul_spectrum.setDefaultValue(0.0)
-            for i in xrange(spectra.size()):
-                cumul_spectrum = cumul_spectrum.sum(spectra[i])
+            for spectrum in spectra:
+                cumul_spectrum = cumul_spectrum.sum(spectrum)
             cumul_spectrum.setType(tycommon.SPECTRE_TYPE_LP) # enum TYSpectreType from OSpectre
             # The values retrieved from the solver are linear. We want to convert
             # them to DB.
@@ -239,19 +239,19 @@ cdef class Business2SolverConverter:
             self.macro2micro_sources[macro_source_id] = []
             nsubsources = sources_of_elt.size()
             # For each of the micro sources making the macro one
-            for i in xrange(nsubsources):
+            for ssource in sources_of_elt:
                 # TYGeometryNode objects contain TYSourcePonctuelle objects as their element
-                if sources_of_elt[i].getRealPointer() == NULL:
+                if ssource.getRealPointer() == NULL:
                     continue
                 # Get it
                 subsource_elt = cy.declare(cy.pointer(tybusiness.TYElement),
-                                           sources_of_elt[i].getRealPointer().getElement())
+                                           ssource.getRealPointer().getElement())
                 subsource = cy.declare(cy.pointer(tybusiness.TYSourcePonctuelle),
                                        tybusiness.downcast_source_ponctuelle(subsource_elt))
                 ppoint = subsource.getPos().getRealPointer()
                 # Site transform matrix * source transform matrix
                 globalmatrix = cy.declare(tycommon.OMatrix,
-                                          site.matrix.dot(sources_of_elt[i].getRealPointer().getMatrix()))
+                                          site.matrix.dot(ssource.getRealPointer().getMatrix()))
                 # Convert its position to the global frame
                 point3d  = cy.declare(tycommon.OPoint3D, tycommon.dot(globalmatrix, ppoint[0]))
                 # Directivity
