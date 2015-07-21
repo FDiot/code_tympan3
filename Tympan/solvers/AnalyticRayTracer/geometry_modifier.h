@@ -18,6 +18,7 @@
 
 #include <qlist.h>
 #include <string>
+#include <memory>
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/triangle.h"
