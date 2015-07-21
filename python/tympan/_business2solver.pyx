@@ -241,66 +241,67 @@ cdef class Business2SolverConverter:
             # For each of the micro sources making the macro one
             for i in xrange(nsubsources):
                 # TYGeometryNode objects contain TYSourcePonctuelle objects as their element
-                if sources_of_elt[i].getRealPointer() != NULL:
-                    # Get it
-                    subsource_elt = cy.declare(cy.pointer(tybusiness.TYElement))
-                    subsource_elt = sources_of_elt[i].getRealPointer().getElement()
-                    subsource = cy.declare(cy.pointer(tybusiness.TYSourcePonctuelle))
-                    subsource = tybusiness.downcast_source_ponctuelle(subsource_elt)
-                    ppoint = subsource.getPos().getRealPointer()
-                    point3d  = cy.declare(tycommon.OPoint3D)
-                    # Site transform matrix * source transform matrix
-                    globalmatrix = cy.declare(tycommon.OMatrix)
-                    globalmatrix = site.matrix.dot(sources_of_elt[i].getRealPointer().getMatrix())
-                    # Convert its position to the global frame
-                    point3d = tycommon.dot(globalmatrix, ppoint[0])
-                    # Directivity
-                    # solver model directivity
-                    pdirectivity = cy.declare(cy.pointer(tysolver.SourceDirectivityInterface))
-                    # business model directivity
-                    pbus_directivity = cy.declare(cy.pointer(tybusiness.TYDirectivity))
-                    pbus_directivity = subsource.getDirectivity()
-                    # Check if the acoustic source is a user-defined one
-                    pusersource = cy.declare(cy.pointer(tybusiness.TYUserSourcePonctuelle))
-                    pusersource = tybusiness.downcast_user_source_ponctuelle(subsource_elt)
-                    if pusersource != NULL:
-                        pdirectivity = new tysolver.SphericalSourceDirectivity()
-                    else: #  it is a computed acoustic source
-                        pcompdirectivity = cy.declare(cy.pointer(tybusiness.TYComputedDirectivity))
-                        pcompdirectivity = tybusiness.downcast_computed_directivity(pbus_directivity)
-                        # compute global directivity
-                        glob_directivity = cy.declare(tycommon.OVector3D)
-                        glob_directivity = tycommon.OVector3D(pcompdirectivity.DirectivityVector)
-                        glob_directivity = tycommon.dot(globalmatrix, glob_directivity)
-                        if pcompdirectivity.Type == tybusiness.Surface:
-                            pdirectivity = new tysolver.VolumeFaceDirectivity(
-                                glob_directivity, pcompdirectivity.SpecificSize)
-                        elif pcompdirectivity.Type == tybusiness.Baffled:
-                            pdirectivity = new tysolver.BaffledFaceDirectivity(
-                                glob_directivity, pcompdirectivity.SpecificSize)
-                        else: # Chimney
-                            pdirectivity = new tysolver.ChimneyFaceDirectivity(
-                                glob_directivity, pcompdirectivity.SpecificSize)
-                    # Add it to the solver model
-                    source_idx = model.thisptr.get().make_source(point3d, subsource.getSpectre()[0],
-                                                                 pdirectivity)
-                    # if the source comes from an infrastructure element, add it
-                    # information about the face and volume that contain it
-                    if pusersource == NULL:
-                        source = model.source(source_idx)
-                        # Find face and volume of the source
-                        face_id = tybusiness.find_surface_node_id(subsource)
-                        if face_id is not None:
-                            source.face_id = face_id
-                        volume_id = tybusiness.find_volume_id(subsource)
-                        assert volume_id != None, 'no acoustic volume linked to the source'
-                        source.volume_id = volume_id
-                    # Record where it has been stored
-                    self.bus2solv_sources[id_str(subsource_elt)] = source_idx
-                    # Copy source mapping to macro2micro_sources
-                    self.macro2micro_sources[macro_source_id].append(id_str(subsource))
-                    self.instances_mapping[macro_source_id] = business_src
-                    nb_sources += 1
+                if sources_of_elt[i].getRealPointer() == NULL:
+                    continue
+                # Get it
+                subsource_elt = cy.declare(cy.pointer(tybusiness.TYElement))
+                subsource_elt = sources_of_elt[i].getRealPointer().getElement()
+                subsource = cy.declare(cy.pointer(tybusiness.TYSourcePonctuelle))
+                subsource = tybusiness.downcast_source_ponctuelle(subsource_elt)
+                ppoint = subsource.getPos().getRealPointer()
+                point3d  = cy.declare(tycommon.OPoint3D)
+                # Site transform matrix * source transform matrix
+                globalmatrix = cy.declare(tycommon.OMatrix)
+                globalmatrix = site.matrix.dot(sources_of_elt[i].getRealPointer().getMatrix())
+                # Convert its position to the global frame
+                point3d = tycommon.dot(globalmatrix, ppoint[0])
+                # Directivity
+                # solver model directivity
+                pdirectivity = cy.declare(cy.pointer(tysolver.SourceDirectivityInterface))
+                # business model directivity
+                pbus_directivity = cy.declare(cy.pointer(tybusiness.TYDirectivity))
+                pbus_directivity = subsource.getDirectivity()
+                # Check if the acoustic source is a user-defined one
+                pusersource = cy.declare(cy.pointer(tybusiness.TYUserSourcePonctuelle))
+                pusersource = tybusiness.downcast_user_source_ponctuelle(subsource_elt)
+                if pusersource != NULL:
+                    pdirectivity = new tysolver.SphericalSourceDirectivity()
+                else: #  it is a computed acoustic source
+                    pcompdirectivity = cy.declare(cy.pointer(tybusiness.TYComputedDirectivity))
+                    pcompdirectivity = tybusiness.downcast_computed_directivity(pbus_directivity)
+                    # compute global directivity
+                    glob_directivity = cy.declare(tycommon.OVector3D)
+                    glob_directivity = tycommon.OVector3D(pcompdirectivity.DirectivityVector)
+                    glob_directivity = tycommon.dot(globalmatrix, glob_directivity)
+                    if pcompdirectivity.Type == tybusiness.Surface:
+                        pdirectivity = new tysolver.VolumeFaceDirectivity(
+                            glob_directivity, pcompdirectivity.SpecificSize)
+                    elif pcompdirectivity.Type == tybusiness.Baffled:
+                        pdirectivity = new tysolver.BaffledFaceDirectivity(
+                            glob_directivity, pcompdirectivity.SpecificSize)
+                    else: # Chimney
+                        pdirectivity = new tysolver.ChimneyFaceDirectivity(
+                            glob_directivity, pcompdirectivity.SpecificSize)
+                # Add it to the solver model
+                source_idx = model.thisptr.get().make_source(point3d, subsource.getSpectre()[0],
+                                                             pdirectivity)
+                # if the source comes from an infrastructure element, add it
+                # information about the face and volume that contain it
+                if pusersource == NULL:
+                    source = model.source(source_idx)
+                    # Find face and volume of the source
+                    face_id = tybusiness.find_surface_node_id(subsource)
+                    if face_id is not None:
+                        source.face_id = face_id
+                    volume_id = tybusiness.find_volume_id(subsource)
+                    assert volume_id != None, 'no acoustic volume linked to the source'
+                    source.volume_id = volume_id
+                # Record where it has been stored
+                self.bus2solv_sources[id_str(subsource_elt)] = source_idx
+                # Copy source mapping to macro2micro_sources
+                self.macro2micro_sources[macro_source_id].append(id_str(subsource))
+                self.instances_mapping[macro_source_id] = business_src
+                nb_sources += 1
             inc(its)
         # Recurse on subsites
         for subsite in site.subsites:
