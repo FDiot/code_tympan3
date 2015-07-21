@@ -145,7 +145,6 @@ cdef class Business2SolverConverter:
         result_sources = cy.declare(map[tybusiness.TYElem_ptr, int])
         condensate_matrix = cy.declare(tycommon.SpectrumMatrix)
         condensate_matrix.resize(len(self.bus2solv_receptors), len(self.macro2micro_sources))
-        rec_counter = 0
         # Go through all the business receptors
         for brec_id in self.bus2solv_receptors:
             receptor = cy.declare(cy.pointer(tybusiness.TYPointCalcul))
@@ -178,7 +177,6 @@ cdef class Business2SolverConverter:
                 macro_source = deref(self.instances_mapping.find(macro_source_id)).second
                 result_sources[macro_source] = source_counter
                 source_counter += 1
-            rec_counter += 1
         busresult.setResultMatrix(condensate_matrix)
         busresult.setSources(result_sources)
 
