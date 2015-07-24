@@ -1,20 +1,28 @@
 import ConfigParser
+import json
 from StringIO import StringIO
 import os
 
-from tympan import SOLVER_CONFIG_ATTRIBUTES
 from tympan.models import filter_output
 from tympan.models import _solver as cysolver
 from tympan._business2solver import Business2SolverConverter, load_computation_solver
 
 _CONVERTERS = {
-    'bool': lambda x: bool(int(x)),
+    'bool': lambda x: x.lower() == 'true',
     'int': int,
     'float': float,
     'double': float,
 }
 
-_CONFIG_MAP = dict((optname, _CONVERTERS[opttype]) for opttype, optname in SOLVER_CONFIG_ATTRIBUTES)
+_CONFIG_MODEL_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir, os.pardir,
+                                  os.pardir, 'resources', 'solver_config_datamodel.json')
+with open(_CONFIG_MODEL_FILE) as stream:
+    _CONFIG_MODEL = json.load(stream)
+_SOLVER_CONFIG_ATTRS = []
+for category, options in _CONFIG_MODEL.iteritems():
+    for option in options:
+        _SOLVER_CONFIG_ATTRS.append((options[option]['type'], option))
+_CONFIG_MAP = dict((optname, _CONVERTERS[opttype]) for opttype, optname in _SOLVER_CONFIG_ATTRS)
 
 
 class Model(object):
@@ -32,7 +40,7 @@ class Model(object):
         """Create a solver model from a project"""
         model = cls()
         model._converter = Business2SolverConverter(project.current_computation,
-                                              project.site)
+                                                    project.site)
         model._converter.build_mesh(model._model)
         if set_sources:
             model._converter.build_sources(model._model)
