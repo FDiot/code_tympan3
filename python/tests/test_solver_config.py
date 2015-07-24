@@ -50,7 +50,7 @@ class TestSolverConfig(TympanTC):
         # float
         self.assertEqual(solver_config.H1parameter, 20.)
         # double
-        self.assertEqual(solver_config.AnalyticC0, 340.)
+        self.assertEqual(solver_config.AnalyticDMax, 3000.)
         #int
         self.assertEqual(solver_config.Anime3DForceC, 1)
 
