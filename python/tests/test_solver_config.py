@@ -1,10 +1,16 @@
+import ConfigParser
+import io
+import json
 import os
 import tempfile
+import unittest
 
-from utils import TympanTC
+from utils import TympanTC, PROJECT_BASE
+from tympan.config_gui import _update_config_with_user_values
 from tympan.models.project import Project
 from tympan.models.solver import _set_solver_config
 from tympan.models import _solver as cysolver
+
 
 class TestSolverConfig(TympanTC):
 
@@ -30,7 +36,6 @@ class TestSolverConfig(TympanTC):
         f.close()
         os.unlink(f.name)
 
-
     def test_set_solver_config(self):
         # Open a basic project with a custom solver configuration
         project = self.load_project('', 'test_solver_params.xml')
@@ -51,9 +56,30 @@ class TestSolverConfig(TympanTC):
         self.assertEqual(solver_config.H1parameter, 20.)
         # double
         self.assertEqual(solver_config.AnalyticDMax, 3000.)
-        #int
+        # int
         self.assertEqual(solver_config.Anime3DForceC, 1)
 
+
+class TestSolverConfigGUI(unittest.TestCase):
+    def test_update_user_values(self):
+        datamodel_filepath = os.path.join(PROJECT_BASE, 'resources', 'solver_config_datamodel.json')
+        with open(datamodel_filepath) as stream:
+            config_model = json.load(stream)
+        user_config = io.StringIO(
+            u'[DEFAULTSOLVER]\nNbThreads=True\nUseRealGround=False\n[ANALYTICRAYTRACER]\n'
+            'CurveRaySampler=2.3\nInitialAngleTheta=1\nblop=whatever')
+        conf_parser = ConfigParser.ConfigParser()
+        conf_parser.readfp(user_config)
+        _update_config_with_user_values(config_model, conf_parser)
+        self.assertEqual(config_model['DEFAULTSOLVER']['NbThreads']['default'], 4)
+        self.assertEqual(config_model['DEFAULTSOLVER']['NbThreads']['value'], 4)
+        self.assertEqual(config_model['DEFAULTSOLVER']['UseRealGround']['default'], True)
+        self.assertEqual(config_model['DEFAULTSOLVER']['UseRealGround']['value'], False)
+        self.assertEqual(config_model['ANALYTICRAYTRACER']['CurveRaySampler']['default'], 1)
+        self.assertEqual(config_model['ANALYTICRAYTRACER']['CurveRaySampler']['value'], 1)
+        self.assertEqual(config_model['ANALYTICRAYTRACER']['InitialAngleTheta']['default'], 0.0)
+        self.assertEqual(config_model['ANALYTICRAYTRACER']['InitialAngleTheta']['value'], 1.0)
+        self.assertNotIn('blop', config_model['ANALYTICRAYTRACER'])
 
 
 if __name__ == '__main__':
