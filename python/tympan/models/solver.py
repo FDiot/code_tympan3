@@ -121,6 +121,8 @@ def _set_solver_config(comp):
             except ValueError:
                 errors.append('bad option value for %s: %r' % (optname, value))
                 continue
+            except KeyError:
+                continue
             setattr(solver_config, optname, value)
     if errors:
         raise ConfigParser.Error(os.linesep.join(errors))
