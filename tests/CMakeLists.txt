@@ -25,7 +25,6 @@ configure_file(
 
 # Copy data
 file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 # Build testutils library
 file(GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/testutils.cpp )
