@@ -2173,6 +2173,7 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_pos_h" value="H"/>
 			<string id="id_actif" value="Actif"/>
 			<string id="id_opt_pc" value="Récepteurs ponctuels"/>
+			<string id="id_param_solv" value="Paramètres solveur"/>
 			<string id="id_opt_maillage" value="Récepteurs surfaciques"/>
 			<string id="id_cell_posx" value="%1"/>
 			<string id="id_cell_posy" value="%1"/>

@@ -2158,6 +2158,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_typeexpans_2pi" value="2pi"/>
 			<string id="id_typeexpans_4pi" value="4pi"/>
 			<string id="id_opt_calc" value="Parameters"/>
+			<string id="id_param_solv" value="Solver parameters"/>
 			<string id="id_opt_meteo" value="Meteo"/>
 			<string id="id_info_calc" value="Infos"/>
 			<string id="id_nom_pc" value="Name"/>
