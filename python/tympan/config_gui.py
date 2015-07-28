@@ -1,7 +1,10 @@
 import ConfigParser
-from Tkinter import Label, Entry, Frame, Tk, Button
+from Tkinter import Label, Entry, Frame, Tk, Button, StringVar, IntVar, DoubleVar, BooleanVar
 import ttk
 import tkFont
+
+
+_TKINTER_VARS = {'int': IntVar, 'float': DoubleVar, 'double': DoubleVar, 'bool': BooleanVar}
 
 
 class ConfigWidget(Frame):
@@ -18,6 +21,7 @@ class ConfigWidget(Frame):
         """
         Frame.__init__(self, kwargs)
         self.config = config
+        self.entry_variables = None
         self.master.title('Solver parameters')
 
     def display_config(self):
@@ -27,14 +31,17 @@ class ConfigWidget(Frame):
         # Tabbed frame with the parameters organized by category
         notebook = ttk.Notebook(self.master)
         help_font = tkFont.Font(slant='italic', size=10)
-        entry_variables = {}
+        self.entry_variables = {}
         for tab, options in self.config.items():
-            entry_variables[tab] = {}
+            self.entry_variables[tab] = {}
             tab_frame = Frame(notebook)
             notebook.add(tab_frame, text=tab)
             for row, option in enumerate(options):
                 Label(tab_frame, text=option).grid(row=row)
-                param = Entry(tab_frame)
+                # link a tk inter dedicated variable to the parameter entry
+                self.entry_variables[tab][option] = _TKINTER_VARS[options[option]['type']]()
+                self.entry_variables[tab][option].set(options[option]['value'])
+                param = Entry(tab_frame, textvariable=self.entry_variables[tab][option])
                 param.grid(row=row, column=1)
                 help_msg = ''
                 if 'help' in options[option]:
