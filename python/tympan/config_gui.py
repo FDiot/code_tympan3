@@ -1,5 +1,5 @@
 import ConfigParser
-from Tkinter import Label, Entry, Frame, Tk
+from Tkinter import Label, Entry, Frame, Tk, Button
 import ttk
 import tkFont
 
@@ -24,6 +24,7 @@ class ConfigWidget(Frame):
         """Display the tabbed frame (one tab per category -- `self.config` keys, and one text field
         per parameter)
         """
+        # Tabbed frame with the parameters organized by category
         notebook = ttk.Notebook(self.master)
         help_font = tkFont.Font(slant='italic', size=10)
         entry_variables = {}
@@ -41,6 +42,13 @@ class ConfigWidget(Frame):
                 help_msg += '(type: %s)' % options[option]['type']
                 Label(tab_frame, text=help_msg, font=help_font).grid(row=row, column=2)
         notebook.pack(expand=True, fill='both')
+        # Buttons
+        buttons_frame = Frame(self.master)
+        self.cancel = Button(buttons_frame)
+        self.cancel['text'] = 'Annuler'
+        self.cancel['command'] = self.quit
+        self.cancel.grid(row=0, column=0)
+        buttons_frame.pack()
 
 
 def _update_config_with_user_values(config, user_config_parser):
