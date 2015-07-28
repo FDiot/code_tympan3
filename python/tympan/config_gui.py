@@ -51,11 +51,24 @@ class ConfigWidget(Frame):
         notebook.pack(expand=True, fill='both')
         # Buttons
         buttons_frame = Frame(self.master)
+        self.ok = Button(buttons_frame)
+        self.ok['text'] = 'OK'
+        self.ok['command'] = self.update_and_quit
+        self.ok.grid(row=0, column=0)
         self.cancel = Button(buttons_frame)
         self.cancel['text'] = 'Annuler'
         self.cancel['command'] = self.quit
-        self.cancel.grid(row=0, column=0)
+        self.cancel.grid(row=0, column=1)
         buttons_frame.pack()
+
+    def update_and_quit(self):
+        """Go through the widget text entries and retrieve their value to update `self.config` dict,
+        before exiting HMI
+        """
+        for tab, options in self.entry_variables.iteritems():
+            for option in options:
+                self.config[tab][option]['value'] = self.entry_variables[tab][option].get()
+        self.quit()
 
 
 def _update_config_with_user_values(config, user_config_parser):
