@@ -11,17 +11,18 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 
 # Generate initial solver parameters in DefaultSolverConfig.h
 set(GEN_SOLVER_PARAMS_HEADER_PYSCRIPT "${CMAKE_SOURCE_DIR}/tools/generate_solver_config_header.py")
-set(SOLVER_PARAMS_JSON "${CMAKE_SOURCE_DIR}/resources/solver_config_datamodel.json")
+set(SOLVER_PARAMS_JSON "resources/solver_config_datamodel.json")
 set(SOLVER_PARAMS_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/models/business/DefaultSolverConfig.h")
 add_custom_command(OUTPUT ${SOLVER_PARAMS_HEADER}
                   COMMAND ${PYTHON_EXECUTABLE} ${GEN_SOLVER_PARAMS_HEADER_PYSCRIPT}
-                          -p ${SOLVER_PARAMS_JSON} -o ${SOLVER_PARAMS_HEADER}
+                          -p "${CMAKE_SOURCE_DIR}/${SOLVER_PARAMS_JSON}" -o ${SOLVER_PARAMS_HEADER}
                   COMMENT "Generating models/business/DefaultSolverConfig.h ..."
                   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-                  DEPENDS ${SOLVER_PARAMS_JSON})
+                  DEPENDS "${CMAKE_SOURCE_DIR}/${SOLVER_PARAMS_JSON}")
 
 set(SOLVE_PYSCRIPT "bin/solve_tympan_project.py")
 set(ALTIMETRY_PYSCRIPT "bin/process_site_altimetry.py")
+set(SOLVER_PARAMS_GUI_PYSCRIPT "bin/solver_config_gui.py")
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/core/config.h.in
   ${CMAKE_CURRENT_BINARY_DIR}/core/config.h

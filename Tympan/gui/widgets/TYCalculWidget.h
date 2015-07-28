@@ -99,6 +99,11 @@ public slots:
      */
     virtual void contextMenuEvent(QContextMenuEvent* e);
 
+    /**
+     * Display a GUI allowing to see and modify solver parameters
+     */
+    void update_solver_params();
+
 
 protected:
     void updateBoxSol();
@@ -152,7 +157,7 @@ protected:
     QTableWidget* _tableauMaillages;
 
     // Solver parameters
-    QTextEdit* _solverParams;
+    QPushButton* _solver_params_btn;
 };
 
 

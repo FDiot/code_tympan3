@@ -34,6 +34,8 @@
 #include <QTextEdit>
 #include <QTreeWidgetItem>
 
+#include "Tympan/core/config.h"
+#include "Tympan/models/business/subprocess_util.h"
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYCalcul.h"
@@ -41,6 +43,7 @@
 #include "Tympan/models/business/TYLinearMaillage.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/TYPluginManager.h"
+#include "Tympan/gui/app/TYMessageManager.h"
 #include "Tympan/gui/widgets/TYEtatsWidget.h"
 #include "TYCalculWidget.h"
 
@@ -102,21 +105,7 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _calculLayout->addWidget(groupBoxCalcMethod, iln++, 0);
 
     // PARAMETRES DU CALCUL
-
     _tabWidget = new QTabWidget(this);
-
-    // DEFINITION DE L'ONGLET CALCUL
-    _groupBoxFlag = new QGroupBox(_tabWidget);
-    _groupBoxFlag->setTitle(TR(""));
-    QGridLayout* groupBoxFlagLayout = new QGridLayout();
-    _groupBoxFlag->setLayout(groupBoxFlagLayout);
-
-    // Will contain solver parameters as a single text bloc
-    _solverParams = new QTextEdit(QString(""), _groupBoxFlag);
-    _solverParams->setPlainText(getElement()->solverParams);
-    groupBoxFlagLayout->addWidget(_solverParams, 0, 0, 5, 1);
-
-    _tabWidget->insertTab(1, _groupBoxFlag, TR("id_opt_calc"));
 
     // Onglet Points de controle
     _tableauPointControle = new QTableWidget();
@@ -127,7 +116,7 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _tableauPointControle->setHorizontalHeaderItem(3, new QTableWidgetItem(TR("id_pos_h")));
     _tableauPointControle->setHorizontalHeaderItem(4, new QTableWidgetItem(TR("id_actif")));
 
-    _tabWidget->insertTab(3, _tableauPointControle, TR("id_opt_pc"));
+    _tabWidget->insertTab(1, _tableauPointControle, TR("id_opt_pc"));
 
     // DEFINITION DE L'ONGLET MAILLAGES
     _tableauMaillages = new QTableWidget();
@@ -135,7 +124,7 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
     _tableauMaillages->setHorizontalHeaderItem(0, new QTableWidgetItem(TR("id_nom_pc")));
     _tableauMaillages->setHorizontalHeaderItem(1, new QTableWidgetItem(TR("id_actif")));
 
-    _tabWidget->insertTab(4, _tableauMaillages, TR("id_opt_maillage"));
+    _tabWidget->insertTab(2, _tableauMaillages, TR("id_opt_maillage"));
 
     _calculLayout->addWidget(_tabWidget, iln++, 0);
 
@@ -189,8 +178,16 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 
     _calculLayout->addWidget(_groupBox, iln++, 0);
 
-    _tabWidget->insertTab(5, _groupBox, TR("id_info_calc"));
+    _tabWidget->insertTab(3, _groupBox, TR("id_info_calc"));
 
+    // Button allowing to update solver parameters
+    // A click on this button will display an intermediate GUI allowing to see and modify
+    // solver parameters
+    _solver_params_btn = new QPushButton(this);
+    _solver_params_btn->setText(TR("id_param_solv"));
+    _solver_params_btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    connect(_solver_params_btn, SIGNAL(clicked()), this, SLOT(update_solver_params()));
+    _calculLayout->addWidget(_solver_params_btn, iln++, 0, 1, 1);
 
     //  Bouton permettant d'acceder aux etats
     QGroupBox* pGroupBoxTableEtats = new QGroupBox(this);
@@ -239,7 +236,43 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 TYCalculWidget::~TYCalculWidget()
 {
     delete _etatsWidget;
-    delete _solverParams;
+    delete _solver_params_btn;
+}
+
+void TYCalculWidget::update_solver_params()
+{
+    OMessageManager& logger =  *OMessageManager::get();
+    QTemporaryFile input_ini_file, output_ini_file;
+    if(!init_tmp_file(input_ini_file, false) || !init_tmp_file(output_ini_file, false))
+    {
+        logger.error("Creation de fichier temporaire impossible. Veuillez verifier l'espace disque "
+                     "disponible.");
+        return;
+    }
+    // Write solver params to input_ini_file
+    input_ini_file.open();
+    QTextStream out(&input_ini_file);
+    out << getElement()->solverParams;
+    input_ini_file.close();
+    QStringList args;
+    QString pyscript_path(QCoreApplication::applicationDirPath());
+    pyscript_path.append("/");
+    pyscript_path.append(SOLVER_PARAMS_GUI_PYSCRIPT);
+    QString datamodel_path(QCoreApplication::applicationDirPath());
+    datamodel_path.append("/");
+    datamodel_path.append(SOLVER_PARAMS_JSON);
+    args << pyscript_path << QString("-m") << datamodel_path << QString("-i")
+         << input_ini_file.fileName() << QString("-o") << output_ini_file.fileName();
+    string error_msg;
+    if(!python(args, error_msg))
+    {
+        logger.error("Echec de la mise a jour des parametres solver: %s", error_msg.c_str());
+        TYNameManager::get()->enable(true);
+        throw tympan::exception() << tympan_source_loc;
+    }
+    output_ini_file.open();
+    getElement()->solverParams = output_ini_file.readAll();
+    output_ini_file.close();
 }
 
 void TYCalculWidget::updateContent()
@@ -249,7 +282,6 @@ void TYCalculWidget::updateContent()
 
     _elmW->setEnabled(true);
     _groupBox->setEnabled(true);
-    _groupBoxFlag->setEnabled(true);
 
     _elmW->updateContent();// Affichage du nom du calcul
 
@@ -294,9 +326,6 @@ void TYCalculWidget::updateContent()
 
     _editDateModif->setDate(date.currentDate());
     _editDateCreation->setDate(date.fromString(getElement()->getDateCreation(), Qt::ISODate));
-
-    // Display solver parameters
-    _solverParams->setPlainText(getElement()->solverParams);
 
     // Remplissage du tableau des points de controle
     _tableauPointControle->setEnabled(true);
@@ -443,9 +472,6 @@ void TYCalculWidget::apply()
     // Mise a jour du statut de sauvegarde des resultats partiels
     bool bEtat1 = _checkBoxStoreGlobalMatrix->isChecked();
     getElement()->setStatusPartialResult(bEtat1) ; //(_checkBoxStoreGlobalMatrix->isChecked());
-
-    // Update solver parameters in the TYCalcul
-    getElement()->solverParams = _solverParams->toPlainText();
 
     emit modified();
 }
