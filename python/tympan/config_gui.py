@@ -91,3 +91,17 @@ def _update_config_with_user_values(config, user_config_parser):
                 options[option]['value'] = options[option]['default']
             else:
                 options[option]['value'] = value
+
+
+def _update_user_config(config, user_config_parser):
+    """Update `user_config_parser` with `config` values
+    """
+    for tab, options in config.iteritems():
+        for option in options:
+            if options[option]['type'] == 'bool':
+                value = bool(options[option]['value'])
+            else:
+                value = options[option]['value']
+            if not user_config_parser.has_section(tab):
+                user_config_parser.add_section(tab)
+            user_config_parser.set(tab, option, str(value))
