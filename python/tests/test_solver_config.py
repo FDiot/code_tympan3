@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 from utils import TympanTC, PROJECT_BASE
-from tympan.config_gui import _update_config_with_user_values
+from tympan.config_gui import _update_config_with_user_values, _update_user_config
 from tympan.models.project import Project
 from tympan.models.solver import _set_solver_config
 from tympan.models import _solver as cysolver
@@ -61,25 +61,39 @@ class TestSolverConfig(TympanTC):
 
 
 class TestSolverConfigGUI(unittest.TestCase):
-    def test_update_user_values(self):
+    def setUp(self):
         datamodel_filepath = os.path.join(PROJECT_BASE, 'resources', 'solver_config_datamodel.json')
         with open(datamodel_filepath) as stream:
-            config_model = json.load(stream)
+            self.config_model = json.load(stream)
         user_config = io.StringIO(
             u'[DEFAULTSOLVER]\nNbThreads=True\nUseRealGround=False\n[ANALYTICRAYTRACER]\n'
             'CurveRaySampler=2.3\nInitialAngleTheta=1\nblop=whatever')
-        conf_parser = ConfigParser.ConfigParser()
-        conf_parser.readfp(user_config)
-        _update_config_with_user_values(config_model, conf_parser)
-        self.assertEqual(config_model['DEFAULTSOLVER']['NbThreads']['default'], 4)
-        self.assertEqual(config_model['DEFAULTSOLVER']['NbThreads']['value'], 4)
-        self.assertEqual(config_model['DEFAULTSOLVER']['UseRealGround']['default'], True)
-        self.assertEqual(config_model['DEFAULTSOLVER']['UseRealGround']['value'], False)
-        self.assertEqual(config_model['ANALYTICRAYTRACER']['CurveRaySampler']['default'], 1)
-        self.assertEqual(config_model['ANALYTICRAYTRACER']['CurveRaySampler']['value'], 1)
-        self.assertEqual(config_model['ANALYTICRAYTRACER']['InitialAngleTheta']['default'], 0.0)
-        self.assertEqual(config_model['ANALYTICRAYTRACER']['InitialAngleTheta']['value'], 1.0)
-        self.assertNotIn('blop', config_model['ANALYTICRAYTRACER'])
+        self.conf_parser = ConfigParser.ConfigParser()
+        self.conf_parser.readfp(user_config)
+
+    def test_update_config_with_user_values(self):
+        _update_config_with_user_values(self.config_model, self.conf_parser)
+        self.assertEqual(self.config_model['DEFAULTSOLVER']['NbThreads']['default'], 4)
+        self.assertEqual(self.config_model['DEFAULTSOLVER']['NbThreads']['value'], 4)
+        self.assertEqual(self.config_model['DEFAULTSOLVER']['UseRealGround']['default'], True)
+        self.assertEqual(self.config_model['DEFAULTSOLVER']['UseRealGround']['value'], False)
+        self.assertEqual(self.config_model['ANALYTICRAYTRACER']['CurveRaySampler']['default'], 1)
+        self.assertEqual(self.config_model['ANALYTICRAYTRACER']['CurveRaySampler']['value'], 1)
+        self.assertEqual(self.config_model['ANALYTICRAYTRACER']['InitialAngleTheta']['default'], 0.0)
+        self.assertEqual(self.config_model['ANALYTICRAYTRACER']['InitialAngleTheta']['value'], 1.0)
+        self.assertNotIn('blop', self.config_model['ANALYTICRAYTRACER'])
+
+    def test_update_user_config(self):
+        _update_config_with_user_values(self.config_model, self.conf_parser)
+        self.config_model['DEFAULTSOLVER']['NbThreads']['value'] = 1
+        self.config_model['ANALYTICRAYTRACER']['CurveRaySampler']['value'] = 3
+        self.config_model['ANALYTICRAYTRACER']['InitialAngleTheta']['value'] = 5.
+        _update_user_config(self.config_model, self.conf_parser)
+        self.assertEqual(self.conf_parser.getint('DEFAULTSOLVER', 'NbThreads'), 1)
+        self.assertEqual(self.conf_parser.getboolean('DEFAULTSOLVER', 'UseRealGround'), False)
+        self.assertEqual(self.conf_parser.getint('ANALYTICRAYTRACER', 'CurveRaySampler'), 3)
+        self.assertEqual(self.conf_parser.getfloat('ANALYTICRAYTRACER', 'InitialAngleTheta'), 5.0)
+        self.assertEqual(self.conf_parser.get('ANALYTICRAYTRACER', 'blop'), 'whatever')
 
 
 if __name__ == '__main__':
