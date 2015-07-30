@@ -8,7 +8,7 @@
  */
 
 #include <cassert>
-#include<algorithm>
+#include <algorithm>
 #include <functional>
 
 #include "cgal_tools.h"
@@ -21,6 +21,34 @@ CGAL_Plane to_cgal(const OPlan& oplan)
     CGAL_Point3 o(to_cgal(oplan.rframe._origin));
     CGAL_Vector3 n(to_cgal(oplan.rframe._vecK));
     return CGAL_Plane(o, n);
+}
+
+CGAL_Vector3 normalize(CGAL_Vector3 v)
+{
+    return v / sqrt(v.squared_length());
+}
+
+std::deque<CGAL_Point3> build_box(float w, float h, CGAL_Point3 pta, CGAL_Point3 ptb)
+{
+    // AB vector
+    CGAL_Vector3 pta_ptb(pta, ptb);
+    // We need to build a plane containing pt A and pt B. A third point is needed.
+    CGAL_Point3 some_point(0, 1, 0);  // have a try (Y axis)
+    // If AB vector and Asome_point vectors are colinear, use X axis instead of Y axis
+    if(CGAL::cross_product(pta_ptb, CGAL_Vector3(pta, some_point)) == CGAL::NULL_VECTOR)
+        some_point = CGAL_Point3(1, 0, 0);
+    // Build a plane with pt A, pt B and the arbitrary point and compute the orthogonal vector
+    CGAL_Vector3 ortho = normalize(CGAL::orthogonal_vector(pta, ptb, some_point));
+    // Compute another orthogonal vector
+    CGAL_Vector3 ortho2 = CGAL::cross_product(normalize(pta_ptb), ortho);
+    // Build the face containing pt A (add 2 perpendicular unit vectors respectively multiplied by
+    // w/2 and h/2 since the face dimension is l x h)
+    std::deque<CGAL_Point3> vertices;
+    vertices.push_back(pta - ortho*h/2 + ortho2*w/2); // orig
+    vertices.push_back(pta - ortho*h/2 + ortho2*w/2 + pta_ptb); // x
+    vertices.push_back(pta - ortho*h/2 - ortho2*w/2); // y
+    vertices.push_back(pta + ortho*h/2 + ortho2*w/2); // z
+    return vertices;
 }
 
 void intersection_report(std::deque<size_t>* intersected, CGAL_Triangles::iterator start_index,
@@ -37,7 +65,8 @@ void intersection_report(std::deque<size_t>* intersected, CGAL_Triangles::iterat
 // This implementation is inspired from http://doc.cgal.org/4.4/Box_intersection_d/index.html
 // (see parts "4 Minimal Example for Intersecting Boxes" and
 // "5 Example for Finding Intersecting 3D Triangles")
-std::deque<size_t> intersected_triangles(CGAL_Triangles & triangle_soup, OBox2 query)
+std::deque<size_t> intersected_triangles(CGAL_Triangles & triangle_soup,
+        std::deque<CGAL_Point3> query_box, float length, float width, float height)
 {
     std::deque<CGAL_TBox> boxes;
     // Put the triangles of the scene (triangle soup) in iso-oriented bounded boxes
@@ -48,24 +77,22 @@ std::deque<size_t> intersected_triangles(CGAL_Triangles & triangle_soup, OBox2 q
     // Create a triangle whose bounding box will have the dimensions of the "query" box,
     // choosing 3 nodes of the box as the triangle nodes (works because CGAL bounding box is
     // iso-oriented)
-    CGAL_Triangles query_triangles;
-    query_triangles.push_back(CGAL_Triangle(CGAL_Point3(query._C._x, query._C._y, query._C._z),
-                CGAL_Point3(query._A._x, query._A._y, query._A._z),
-                CGAL_Point3(query._E._x, query._E._y, query._E._z)));
-    std::deque<CGAL_TBox> query_boxes;
-    CGAL::Bbox_3 box = query_triangles.begin()->bbox();
+    CGAL_Triangles query_triangle;
+    query_triangle.push_back(CGAL_Triangle(query_box[0], query_box[1], query_box[2]));
+    std::deque<CGAL_TBox> query_tboxes;
+    CGAL::Bbox_3 box = query_triangle.begin()->bbox();
     // Make sure the new query box has the same dimensions as "query" OBox2
     double epsilon = 0.0001;
     double x_dim = abs(box.xmax() - box.xmin());
     double y_dim = abs(box.ymax() - box.ymin());
     double z_dim = abs(box.zmax() - box.zmin());
-    assert(abs(x_dim - query._length) < epsilon
-            && "The dimensions of CGAL query box doesn't match query parameter.");
-    assert(abs(y_dim - query._width) < epsilon
-            && "The dimensions of CGAL query box doesn't match query parameter.");
-    assert(abs(z_dim - query._height) < epsilon
-            && "The dimensions of CGAL query box doesn't match query parameter.");
-    query_boxes.push_back(CGAL_TBox(query_triangles.begin()->bbox(), query_triangles.begin()));
+    assert(abs(x_dim - length) < epsilon
+            && "The dimension X of CGAL query box doesn't match query parameter.");
+    assert(abs(y_dim - width) < epsilon
+            && "The dimension Y CGAL query box doesn't match query parameter.");
+    assert(abs(z_dim - height) < epsilon
+            && "The dimension Z of CGAL query box doesn't match query parameter.");
+    query_tboxes.push_back(CGAL_TBox(box, query_triangle.begin()));
     // Compute intersection between the triangles from the triangle soup and the box
     // from the query.
     // "intersected" will contain the indices of the triangles of the triangle soup
@@ -76,7 +103,7 @@ std::deque<size_t> intersected_triangles(CGAL_Triangles & triangle_soup, OBox2 q
     // but CGAL::box_intersection_d requires a callback function that only deals with 2 boxes).
     auto cgal_callback = std::bind(intersection_report, &intersected, triangle_soup.begin(),
                                    std::placeholders::_1, std::placeholders::_2);
-    CGAL::box_intersection_d(boxes.begin(), boxes.end(), query_boxes.begin(), query_boxes.end(),
+    CGAL::box_intersection_d(boxes.begin(), boxes.end(), query_tboxes.begin(), query_tboxes.end(),
                              cgal_callback);
     // remove duplicates (first order the triangle ids since std::unique only works on
     // an ordered container)

@@ -125,7 +125,8 @@ cdef class ProblemModel:
             triangles.append(triangle)
         return triangles
 
-    def fresnel_zone_intersection(self, tycommon.Box box):
+    @cy.locals(source=tycommon.Point3D, receptor=tycommon.Point3D)
+    def fresnel_zone_intersection(self, l, h, source, receptor):
         """Return the indices of the acoustic triangles of the model that are intersected by
         the non iso-oriented box `box`
 
@@ -133,7 +134,8 @@ cdef class ProblemModel:
         """
         triangles = cy.declare(deque[AcousticTriangle], self.thisptr.get().triangles())
         nodes = cy.declare(deque[tycommon.OPoint3D], self.thisptr.get().nodes())
-        intersected = scene_volume_intersection(triangles, nodes, box.thisobj)
+        intersected = scene_volume_intersection(triangles, nodes, l, h, source.thisobj,
+                                                receptor.thisobj)
         return [idx for idx in intersected]
 
     def _export_triangular_mesh(self):

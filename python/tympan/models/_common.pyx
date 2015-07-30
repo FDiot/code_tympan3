@@ -88,6 +88,11 @@ cdef class Triangle:
 
 cdef class Point3D:
 
+    def __init__(self, x=0, y=0, z=0):
+        self.thisobj._x = x
+        self.thisobj._y = y
+        self.thisobj._z = z
+
     @property
     def x(self):
         return self.thisobj._x
@@ -114,13 +119,3 @@ cdef class Vector3D:
     @property
     def vz(self):
         return self.thisobj._z
-
-
-cdef class Box:
-
-    def __init__(self, length, width, height):
-        """Build a 3D non iso-oriented box of dimensions (length, width, height)
-        expressed in meters. The box will be centered in (0, 0, 0)
-        """
-        self.thisobj = OBox2(length, width, height)
-
