@@ -9,6 +9,7 @@
 
 
 #include <cstdlib>
+#include <deque>
 
 #include "gtest/gtest.h"
 
@@ -36,6 +37,29 @@ TEST(cgal_tools, basic_types)
     CGAL_Vector3 cv(4, 5, 6);
     EXPECT_EQ(cv, to_cgal(from_cgal(cv)));
 
+}
+
+TEST(cgal_tools, build_box)
+{
+    using namespace tympan;
+    // start with a simple one (can be guessed knowing the third point of the plane: (0,1,0))
+    std::deque<CGAL_Point3> vertices = build_box(2, 4, CGAL_Point3(0, 0, 0),
+            CGAL_Point3(10, 0, 0));
+    EXPECT_EQ(vertices[0], CGAL_Point3(0, -1, -2));
+    EXPECT_EQ(vertices[1], CGAL_Point3(10, -1, -2));
+    EXPECT_EQ(vertices[2], CGAL_Point3(0, 1, -2));
+    EXPECT_EQ(vertices[3], CGAL_Point3(0, -1, 2));
+    // check box dimensions (check third plane point is recomputed in build_box())
+    vertices = build_box(2, 4, CGAL_Point3(9, 1, 0),  CGAL_Point3(0, 1, 0));
+    EXPECT_NEAR(9, sqrt(CGAL_Vector3(vertices[0], vertices[1]).squared_length()), 1e-10);
+    EXPECT_NEAR(2, sqrt(CGAL_Vector3(vertices[0], vertices[2]).squared_length()), 1e-10);
+    EXPECT_NEAR(4, sqrt(CGAL_Vector3(vertices[0], vertices[3]).squared_length()), 1e-10);
+    // same thing, with a weird rotated box
+    vertices = build_box(1, 5, CGAL_Point3(1, 2, 3),  CGAL_Point3(50, 35, 100));
+    EXPECT_NEAR(CGAL_Vector3(CGAL_Point3(1, 2, 3), CGAL_Point3(50, 35, 100)).squared_length(),
+            CGAL_Vector3(vertices[0], vertices[1]).squared_length(), 1e-10);
+    EXPECT_NEAR(1, sqrt(CGAL_Vector3(vertices[0], vertices[2]).squared_length()), 1e-10);
+    EXPECT_NEAR(5, sqrt(CGAL_Vector3(vertices[0], vertices[3]).squared_length()), 1e-10);
 }
 
 // To factorize with the two others geometrical tests
@@ -86,5 +110,6 @@ TEST(geometry_tools, triangulator)
         unsigned pt_idx = tri_indices.front()[i];
         EXPECT_EQ(poly[pt_idx], tri[i]);
     }
-
 }
+
+

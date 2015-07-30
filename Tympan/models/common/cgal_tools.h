@@ -51,6 +51,7 @@ typedef CGAL::Plane_3<CGAL_Gt>                                     CGAL_Plane;
 typedef CGAL::Triangle_3<CGAL_Gt>                                  CGAL_Triangle;
 typedef std::deque<CGAL_Triangle>                                  CGAL_Triangles;
 typedef CGAL::Box_intersection_d::Box_with_handle_d<double,3,CGAL_Triangles::iterator> CGAL_TBox;
+typedef CGAL::Aff_transformation_3<CGAL_Gt>                        CGAL_Transform3;
 
 inline OPoint3D from_cgal(const CGAL_Point3& cp)
 { return OPoint3D(cp.x(), cp.y(), cp.z()); }
@@ -67,12 +68,41 @@ inline CGAL_Vector3 to_cgal(const OVector3D& op)
 CGAL_Plane to_cgal(const OPlan& oplan);
 
 /**
- * @brief Find the triangles from `triangle_soup` that are intersected by the 3D  parallelepipoid
- * `query`
+ * @brief return 4 points defining a 3D parallelepiped
+ *
+ * @param w the width of the parallelepiped
+ * @param h the height of the parallelepiped
+ * @param pointa the center of one of the two faces of dimension w x h
+ * @param pointb the center of the other face of dimension w x h
+ *
+ * @return a deque containing the 4 vertices defining the 3D parallelepiped
+ *
+ * Points A and B delimit the length of the parallelepiped and form a segment placed in its center
+ *
+ * The vertices of the box that are returned are chosen so that (P1 - P0), (P2 - P0) and (P3 - P0)
+ * represent the axes of a non-orthonormal system of reference.
+ */
+std::deque<CGAL_Point3> build_box(float w, float h, CGAL_Point3 pta, CGAL_Point3 ptb);
+
+/**
+ * @brief Find the triangles from `triangle_soup` that are intersected by the 3D box including the
+ * points of `query_triangle`
+ *
+ * @param l expected length of the 3D box
+ * @param w expected width of the 3D box
+ * @param h expected height of the 3D box
+ * @param triangle_soup triangles whose intersection with query_triangle bounding box will be tested
+ * @param query_triangle 3 points forming a triangle representing a 3D (bounding) box
  *
  * The indices of these triangles are returned.
  **/
-std::deque<size_t> intersected_triangles(CGAL_Triangles & triangle_soup, OBox2 query);
+std::deque<size_t> intersected_triangles(CGAL_Triangles & triangle_soup,
+        std::deque<CGAL_Point3> query_triangle, float l, float w, float h);
+
+/**
+ * @brief normalize vector v
+ */
+CGAL_Vector3 normalize(CGAL_Vector3 v);
 
 /**
  * @brief This class provides triangulating simple polygons without holes
