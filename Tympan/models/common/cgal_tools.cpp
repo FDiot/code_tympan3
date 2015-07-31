@@ -26,9 +26,12 @@ CGAL_Plane to_cgal(const OPlan& oplan)
 void intersection_report(std::deque<size_t>* intersected, CGAL_Triangles::iterator start_index,
                          const CGAL_TBox& a, const CGAL_TBox& b)
 {
-    // XXX here we know the 2 boxes intersect, but we don't know for sure that the triangle of
-    // box a intersects with box b.
-    intersected->push_back(a.handle() - start_index);
+    // here we know the 2 boxes intersect, but we don't know for sure that the triangle of
+    // box a intersects with box b. Make sure it is the case before inserting the triangle
+    if(CGAL::do_intersect(*a.handle(), b.bbox()))
+    {
+        intersected->push_back(a.handle() - start_index);
+    }
 }
 
 // This implementation is inspired from http://doc.cgal.org/4.4/Box_intersection_d/index.html
