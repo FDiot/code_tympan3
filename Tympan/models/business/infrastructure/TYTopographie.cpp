@@ -493,7 +493,7 @@ bool TYTopographie::addPlanEau(LPTYPlanEauGeoNode pPlanEauGeoNode)
 {
     assert(pPlanEauGeoNode);
 
-    TYPlanEau* pPlanEau = dynamic_cast<TYPlanEau*>(pPlanEauGeoNode->getElement());
+    LPTYPlanEau pPlanEau = dynamic_cast<TYPlanEau*>(pPlanEauGeoNode->getElement());
 
     assert(pPlanEau);
 
