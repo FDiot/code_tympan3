@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RouteWidget</class>
+ <widget class="QWidget" name="RouteWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>450</width>
+    <height>620</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>450</width>
+    <height>620</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>434</width>
+     <height>600</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>400</width>
+     <height>600</height>
+    </size>
+   </property>
+   <property name="currentIndex">
+    <number>1</number>
+   </property>
+   <widget class="QWidget" name="page_trafic">
+    <attribute name="title">
+     <string>Traffic Global</string>
+    </attribute>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QFrame" name="frame">
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <widget class="QGroupBox" name="groupe_mode_calcul">
+          <property name="title">
+           <string>Détermination des spectres</string>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QRadioButton" name="radio_debits">
+             <property name="text">
+              <string>Débits horaires</string>
+             </property>
+             <property name="checked">
+              <bool>true</bool>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">groupe_boutons_mode_calcul</string>
+             </attribute>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radio_spectres">
+             <property name="text">
+              <string>Saisie directe</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">groupe_boutons_mode_calcul</string>
+             </attribute>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radio_tmja">
+             <property name="text">
+              <string>T.M.J.A.</string>
+             </property>
+             <attribute name="buttonGroup">
+              <string notr="true">groupe_boutons_mode_calcul</string>
+             </attribute>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="2" column="2">
+           <widget class="QSpinBox" name="periode_debit_vl_soir">
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="singleStep">
+             <number>50</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_31">
+            <property name="text">
+             <string>Vitesse PL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QSpinBox" name="vitesse_vl_jour">
+            <property name="minimum">
+             <number>20</number>
+            </property>
+            <property name="maximum">
+             <number>130</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>v/h</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="4">
+           <widget class="QLabel" name="label_33">
+            <property name="text">
+             <string>km/h</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QSpinBox" name="vitesse_pl_jour">
+            <property name="minimum">
+             <number>20</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="3">
+           <widget class="QSpinBox" name="periode_debit_pl_nuit">
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="singleStep">
+             <number>50</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QSpinBox" name="periode_debit_vl_nuit">
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="singleStep">
+             <number>50</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="3">
+           <widget class="QSpinBox" name="vitesse_pl_nuit">
+            <property name="minimum">
+             <number>20</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>Jour</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="QSpinBox" name="vitesse_pl_soir">
+            <property name="minimum">
+             <number>20</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QSpinBox" name="vitesse_vl_nuit">
+            <property name="minimum">
+             <number>20</number>
+            </property>
+            <property name="maximum">
+             <number>130</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>v/h</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="5">
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_32">
+            <property name="text">
+             <string>Vitesse VL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QSpinBox" name="periode_debit_pl_soir">
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="singleStep">
+             <number>50</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QSpinBox" name="periode_debit_vl_jour">
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="singleStep">
+             <number>50</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QSpinBox" name="vitesse_vl_soir">
+            <property name="minimum">
+             <number>20</number>
+            </property>
+            <property name="maximum">
+             <number>130</number>
+            </property>
+            <property name="singleStep">
+             <number>10</number>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="4">
+           <widget class="QLabel" name="label_30">
+            <property name="text">
+             <string>km/h</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>Soir</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QSpinBox" name="periode_debit_pl_jour">
+            <property name="maximum">
+             <number>10000</number>
+            </property>
+            <property name="singleStep">
+             <number>50</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>Nuit</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>Débit PL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Débit VL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="bouton_spectre_jour">
+            <property name="text">
+             <string>Éditer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QPushButton" name="bouton_spectre_nuit">
+            <property name="text">
+             <string>Éditer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QPushButton" name="bouton_spectre_soir">
+            <property name="text">
+             <string>Éditer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Spectres</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QPushButton" name="bouton_tmja">
+          <property name="text">
+           <string>Calcul débits à partir du T.M.J.A.</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="page_descr">
+    <attribute name="title">
+     <string>Description route</string>
+    </attribute>
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="6" column="0" colspan="5">
+      <widget class="QLabel" name="label_2">
+       <property name="text">
+        <string>NB : La formule de revêtement n'est pas sauvegardée : elle permet simplement de sélectionner la classe de revêtement.</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>Formule de revêtement</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>Classe de revêtement</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="route_ecoulement">
+       <item>
+        <property name="text">
+         <string>Constant</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Accélération</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Décélération</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Démarrage</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Arrêt</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="route_classe_revetement">
+       <item>
+        <property name="text">
+         <string>Défaut</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>R1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>R2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>R3</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>ans</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QSpinBox" name="route_age"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>Age</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QCheckBox" name="route_drainant">
+       <property name="text">
+        <string>Drainant</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>Écoulement</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4">
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="route_formule_revetement">
+       <item>
+        <property name="text">
+         <string>-</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBUM 0/6</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBDr 0/10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBTM 0/6 - type 2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBTM 0/6 - type 1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBTM 0/10 - type 2</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBSG 0/10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBTM 0/10 - type 1</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBUM 0/10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ECF</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBSG 0/14</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BBTM 0/14</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ES 6/10</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>BC</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>ES 10/14</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item row="5" column="0" colspan="5">
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>radio_debits</tabstop>
+  <tabstop>radio_spectres</tabstop>
+  <tabstop>radio_tmja</tabstop>
+  <tabstop>periode_debit_vl_jour</tabstop>
+  <tabstop>periode_debit_vl_soir</tabstop>
+  <tabstop>periode_debit_vl_nuit</tabstop>
+  <tabstop>periode_debit_pl_jour</tabstop>
+  <tabstop>periode_debit_pl_soir</tabstop>
+  <tabstop>periode_debit_pl_nuit</tabstop>
+  <tabstop>vitesse_vl_jour</tabstop>
+  <tabstop>vitesse_vl_soir</tabstop>
+  <tabstop>vitesse_vl_nuit</tabstop>
+  <tabstop>vitesse_pl_jour</tabstop>
+  <tabstop>vitesse_pl_soir</tabstop>
+  <tabstop>vitesse_pl_nuit</tabstop>
+  <tabstop>bouton_tmja</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>route_classe_revetement</tabstop>
+  <tabstop>route_drainant</tabstop>
+  <tabstop>route_age</tabstop>
+  <tabstop>route_ecoulement</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+ <buttongroups>
+  <buttongroup name="groupe_boutons_mode_calcul"/>
+ </buttongroups>
+</ui>
