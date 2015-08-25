@@ -1,24 +1,24 @@
 /*
- * Copyright (C) <2012> <EDF-R&D> <FRANCE>
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+* Copyright (C) <2012> <EDF-R&D> <FRANCE>
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License along
+* with this program; if not, write to the Free Software Foundation, Inc.,
+* 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
 /**
- * \file TYSolWidget.h
- * \brief outil IHM pour un sol (fichier header)
- * \author Projet_Tympan
- *
- */
+* \file TYSolWidget.h
+* \brief outil IHM pour un sol (fichier header)
+* \author Projet_Tympan
+*
+*/
 
 #ifndef __TY_SOL_WIDGET__
 #define __TY_SOL_WIDGET__
@@ -37,52 +37,52 @@ class QPushButton;
 class TYElementWidget;
 
 /**
- * \class TYSolWidget
- * \brief classe de l'objet IHM pour un sol
- */
+* \class TYSolWidget
+* \brief classe de l'objet IHM pour un sol
+*/
 class TYSolWidget : public TYWidget
 {
-    Q_OBJECT
+	Q_OBJECT
 
-    TY_DECL_METIER_WIDGET(TYSol)
+		TY_DECL_METIER_WIDGET(TYSol)
 
-    // Methodes
+		// Methodes
 public:
-    /**
-     * Constructeur.
-     */
-    TYSolWidget(TYSol* pElement, QWidget* _pParent = NULL);
-    /**
-     * Destructeur.
-     */
-    virtual ~TYSolWidget();
+	/**
+	* Constructeur.
+	*/
+	TYSolWidget(TYSol* pElement, QWidget* _pParent = NULL);
+	/**
+	* Destructeur.
+	*/
+	virtual ~TYSolWidget();
 
 
-public slots:
-    virtual void updateContent();
-    virtual void apply();
-    void editResistivite();
+	public slots:
+		virtual void updateContent();
+		virtual void apply();
+		void editResistivite();
 
-    // Membres
+		// Membres
 protected:
 
-    QGroupBox* _groupBox;
-    QLineEdit* _lineEditEpaisseur;
-    QLineEdit* _lineEditResistivite;
+	QGroupBox* _groupBox;
+	QLineEdit* _lineEditEpaisseur;
+	QLineEdit* _lineEditResistivite;
 	QLineEdit* _lineEditEcartType;
 	QLineEdit* _lineEditLongueur;
-    QLabel* _labelEpaisseur;
-    QLabel* _labelResistivite;
+	QLabel* _labelEpaisseur;
+	QLabel* _labelResistivite;
 	QLabel* _labelEcartType;
 	QLabel* _labelLongueur;
 
-    QPushButton* _pushButtonResistivite;
+	QPushButton* _pushButtonResistivite;
 
 protected:
-    QGridLayout* _solLayout;
-    QGridLayout* _groupBoxLayout;
+	QGridLayout* _solLayout;
+	QGridLayout* _groupBoxLayout;
 
-    TYElementWidget* _elmW;
+	TYElementWidget* _elmW;
 };
 
 
