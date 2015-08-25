@@ -959,7 +959,10 @@ bool TYCalcul::remPtCtrlFromResult(LPTYPointControl pPoint)
     // Set control point off for this calcul
     pPoint->setEtat(getID(), false);
 
-    return _pResultat->remRecepteur(pPoint);
+    // Cleaning results
+    _pResultat->purge();
+
+    return true;
 }
 
 void TYCalcul::clearCtrlPointsSpectrums()

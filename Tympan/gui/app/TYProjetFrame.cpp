@@ -609,6 +609,7 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                 if (ret == addPtControl)
                 {
                     LPTYPointControl pPtControl = new TYPointControl();
+                    pPtControl->setParent(_pProjet);
 
                     if (pPtControl->edit(this) == QDialog::Accepted)
                     {
