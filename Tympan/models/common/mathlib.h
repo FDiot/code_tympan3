@@ -55,6 +55,10 @@ typedef unsigned int bitSet; /*!< used to manage set of elements*/
 #define EPSILON_6           (decimal)0.000001 // 10e-6                      /*!< Approximation lors de la comparaison de 2 decimal */
 #endif
 
+#ifndef EPSILON_15
+#define EPSILON_15           (decimal)0.000000000000001 // 10e-15                      /*!< Approximation lors de la comparaison de 2 decimal */
+#endif
+
 #ifndef M_PI
 #define M_PI                (decimal)3.141592653589793238462643383279       /*!< PI */
 #endif

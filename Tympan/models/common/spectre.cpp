@@ -17,6 +17,7 @@
 
 #include <algorithm>
 
+#include "Tympan/models/common/mathlib.h"
 #include "spectre.h"
 
 
@@ -262,7 +263,7 @@ OSpectre OSpectre::toDB() const
     double dBVal = 0.0;
     for (i = 0; i < TY_SPECTRE_DEFAULT_NB_ELMT; i++)
     {
-        dBVal = 10.0 * log10(this->_module[i] / coef);
+        dBVal = 10.0 * log10( (_module[i]+EPSILON_15) / coef ); // EPSILON_15 has been added to avoir -infinite result
         s._module[i] = dBVal    ;
     }
     s._etat = SPECTRE_ETAT_DB;   // Etat explicite dB
