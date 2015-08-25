@@ -144,8 +144,14 @@ namespace tympan
 			for (int j=0; j<=100; j++)
 			{
 				u_alpha.push_back(j*intv_a);
-				double expression1a = (1.0/(k0_value*sqrt(2*k0_value - u_alpha[j]*u_alpha[j])))*((k0_value*k0_value+k_value*(k0_value-u_alpha[j]*u_alpha[j]))*(k0_value*k0_value+k_value*(k0_value-u_alpha[j]*u_alpha[j])))*GaussianSpectrum(k_value+(k0_value-u_alpha[j]*u_alpha[j]), deviation, length);
-				double expression2a = (1.0/(k0_value*sqrt(2*k0_value - u_alpha[j]*u_alpha[j])))*((k0_value*k0_value-k_value*(k0_value-u_alpha[j]*u_alpha[j]))*(k0_value*k0_value-k_value*(k0_value-u_alpha[j]*u_alpha[j])))*GaussianSpectrum(k_value-(k0_value-u_alpha[j]*u_alpha[j]), deviation, length);
+				double u_value = k0_value - u_alpha[j]*u_alpha[j];
+				double u_2value = 2*k0_value - u_alpha[j]*u_alpha[j]; 
+				double expression1a = 1.0/(k0_value*sqrt(u_2value))\
+					*((k0_value*k0_value+k_value*u_value)*(k0_value*k0_value+k_value*u_value))\
+					*gaussianSpectrum(k_value+u_value, deviation, length);
+				double expression2a = 1.0/(k0_value*sqrt(u_2value))\
+					*((k0_value*k0_value-k_value*u_value)*(k0_value*k0_value-k_value*u_value))\
+					*gaussianSpectrum(k_value-u_value, deviation, length);
 				integrande_alpha1.push_back(expression1a);
 				integrande_alpha2.push_back(expression2a);
 			}
@@ -163,8 +169,13 @@ namespace tympan
 			for (int j=0; j<=100; j++)
 			{
 				u_beta.push_back(j*intv_b);
-				double expression1b = (1.0/(k0_value*sqrt(k0_value*k0_value+u_beta[j]*u_beta[j])))*((k0_value*k0_value+k_value*sqrt(k0_value*k0_value+u_beta[j]*u_beta[j]))*(k0_value*k0_value+k_value*sqrt(k0_value*k0_value+u_beta[j]*u_beta[j])))*GaussianSpectrum(k_value+sqrt(k0_value*k0_value+u_beta[j]*u_beta[j]), deviation, length); 
-				double expression2b = (1.0/(k0_value*sqrt(k0_value*k0_value+u_beta[j]*u_beta[j])))*((k0_value*k0_value-k_value*sqrt(k0_value*k0_value+u_beta[j]*u_beta[j]))*(k0_value*k0_value-k_value*sqrt(k0_value*k0_value+u_beta[j]*u_beta[j])))*GaussianSpectrum(k_value-sqrt(k0_value*k0_value+u_beta[j]*u_beta[j]), deviation, length);
+				double u_value = k0_value*k0_value+u_beta[j]*u_beta[j];
+				double expression1b = 1.0/(k0_value*sqrt(u_value))\
+					*(k0_value*k0_value+k_value*sqrt(u_value))*(k0_value*k0_value+k_value*sqrt(u_value))\
+					*gaussianSpectrum(k_value+sqrt(u_value), deviation, length); 
+				double expression2b = 1.0/(k0_value*sqrt(u_value))\
+					*(k0_value*k0_value-k_value*sqrt(u_value))*(k0_value*k0_value-k_value*sqrt(u_value))\
+					*gaussianSpectrum(k_value-sqrt(u_value), deviation, length);
 				integrande_beta1.push_back(expression1b);
 				integrande_beta2.push_back(expression2b);
 			}
@@ -195,7 +206,7 @@ namespace tympan
 		Zf.setType(SPECTRE_TYPE_AUTRE);
 	}
 
-	double AcousticGroundMaterial::GaussianSpectrum(double k, double sigma, double lc)
+	double AcousticGroundMaterial::gaussianSpectrum(double k, double sigma, double lc)
 	{
 		return (sigma*sigma)*(lc/(2*sqrt(M_PI)))*exp(-1.0/4*((k*lc)*(k*lc)));
 	}

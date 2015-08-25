@@ -106,7 +106,7 @@ private:
     void limit_W_values(ComplexSpectrum& localW);
     void erfc_G_computation(const ComplexSpectrum& localW, ComplexSpectrum& G);
     void sgn_G_computation(const ComplexSpectrum& localW, ComplexSpectrum& G);
-	double GaussianSpectrum(double const k, double const sigma, double const lc);
+	double gaussianSpectrum(double const k, double const sigma, double const lc);
 	double trapz(std::vector<double> u, std::vector<double> integrande);
 protected :
     /// XXX \todo put SI unit.
