@@ -55,7 +55,11 @@ void TYFaceSelector::selectFaces(std::deque<TYSIntersection>& tabIntersect, cons
     {
         const TYStructSurfIntersect& SI = _solver.getTabPolygon()[i];
 
-        if ((SI.volume_id == source_id) || (SI.tabPoint.size() == 0)) { continue; }
+        // FIX issue #18 (obstacles are not detected correctly)
+        if ( (SI.volume_id.size() != 0) && (source_id.size() != 0) )
+        {
+            if ((SI.volume_id == source_id) || (SI.tabPoint.size() == 0)) { continue; }
+        }
 
         // Plan vertical = 0 / Plan horizontal = 1
         TYSIntersection intersection;
