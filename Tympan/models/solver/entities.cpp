@@ -1009,7 +1009,7 @@ namespace tympan
 
 		for(unsigned int i=0; i<tabSources_.size(); i++)
 		{
-			tabLevels.push_back( ::pow( 10, tabSources_[i].spectrum.valGlobDBA() ) );
+			tabLevels.push_back( ::pow( 10, tabSources_[i].spectrum.valGlobDBA()/10 ) );
 		}
 
 		for(unsigned int i=0; i<tabSources_.size(); i++)
