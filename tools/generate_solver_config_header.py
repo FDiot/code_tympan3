@@ -2,7 +2,6 @@
 definition (1 line = "param name=value").
 """
 import json
-import os
 import argparse
 
 
@@ -24,12 +23,12 @@ if __name__ == '__main__':
     with open(args.params_filepath) as stream:
         solver_config = json.load(stream)
     with open(args.output_filepath, 'w') as stream:
-        stream.write(os.linesep.join([
+        stream.write('\n'.join([
             "/* WARNING: I am an auto-generated header file, don't modify me !! */",
             '',
             '#ifndef TY_MODELS_BUSINESS_DEFAULT_SOLVER_CONFIG',
             '#define TY_MODELS_BUSINESS_DEFAULT_SOLVER_CONFIG',
             'const char * DEFAULT_SOLVER_CONFIG =']))
         for config_line in _get_solver_config(solver_config):
-            stream.write(config_line + os.linesep)
-        stream.write(';%s#endif' % os.linesep)
+            stream.write(config_line + '\n')
+        stream.write(';\n#endif')
