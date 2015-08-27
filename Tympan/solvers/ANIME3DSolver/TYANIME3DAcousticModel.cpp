@@ -222,7 +222,7 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
     double delta = 0.0, precDiff = 0.0, diffEnd = 0.0, precEnd = 0.0;
     OSpectre nbF;                // nbr de Fresnel de chq diffration
     OSpectreComplex absArrete;   // absorption sur chaque arrete
-    OSpectreComplex prod = OSpectre(1.0); // produit des absorptions sur chaque arrete
+    OSpectreComplex prod = OSpectreComplex(OSpectre(1.0)); // produit des absorptions sur chaque arrete
     OSpectre kDelta;             // intermediaire de calcul
     OSpectre mod;                // module du nombre complexe absArrete
     int signe = 1, diffIdx = 0;
@@ -235,7 +235,7 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
     {
         currentRay = _tabTYRays[i];
 
-        prod = OSpectre(1.0);
+        prod = OSpectreComplex(OSpectre(1.0));
 
         std::vector<int> tabDiff = currentRay->getIndexOfEvents(TYDIFFRACTION); // gets a vector where diff occur
 
@@ -253,15 +253,9 @@ void TYANIME3DAcousticModel::ComputeAbsDiff()
             n1 = _tabSurfIntersect[ currentEv->idFace1 ].normal; // normale de la 1ere face
             n2 = _tabSurfIntersect[ currentEv->idFace2 ].normal; // normale de la 2e face
             normal = n1 + n2; // somme des normales
-
-            if ((vDiffPrec.scalar(normal) > 0.0) && (vDiffSuiv.scalar(normal) > 0.0))
-            {
-                signe = -1;
-            }
-            else
-            {
-                signe = 1;
-            }
+            
+            // Because we only deal with diffraction in shadow zone, "signe" is set to 1
+            signe = 1; 
 
             delta = signe * (precDiff + diffEnd - precEnd);
             kDelta = _K * delta;
