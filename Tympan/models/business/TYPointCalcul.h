@@ -113,28 +113,28 @@ public:
      * \brief Get de la valeur globale A au point
      * \return _dBA
      */
-    double getValA() { return _dBA; }
+    double getValA() { return _spectre->valGlobDBA(); }
 
     /**
      * \fn const double getValA() const
      * \brief Get de la valeur globale A au point
      * \return _dBA
      */
-    const double getValA() const { return _dBA; }
+    const double getValA() const { return _spectre->valGlobDBA(); }
 
     /**
      * \fn double getValLin()
      * \brief Get de la valeur globale Lin au point
      * \return _dBLin
      */
-    double getValLin() { return _dBLin; }
+    double getValLin() { return _spectre->valGlobDBLin(); }
 
     /**
      * \fn const double getValLin() const
      * \brief Get de la valeur globale Lin au point
      * \return _dBLin
      */
-    const double getValLin() const { return _dBLin; }
+    const double getValLin() const { return _spectre->valGlobDBLin(); }
 
    /**
      * \fn  TYPoint getCoordSIG()
@@ -158,10 +158,6 @@ public:
     // Membres
 protected:
     LPTYSpectre _spectre;
-
-    /// Valeur en dBA et en dBLin au point de calcul
-    double _dBA;
-    double _dBLin;
 
 private:
     bool _etat;

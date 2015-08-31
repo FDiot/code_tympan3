@@ -196,9 +196,6 @@ int TYPointControl::fromXML(DOM_Element domElement)
             QString strId = TYXMLTools::getElementAttributeToString(elemCur, "idCalcul");
             idCalcul.FromString( strId );
             compatibilityVector->operator[](idCalcul) = pSpectre;
-
-            _dBA = pSpectre->valGlobDBA();
-            _dBLin = pSpectre->valGlobDBLin();
         }
     }
 

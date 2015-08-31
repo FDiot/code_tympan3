@@ -28,15 +28,10 @@ TY_EXTENSION_INST(TYPointCalcul);
 TYPointCalcul::TYPointCalcul() : TYPoint(true), _spectre(nullptr)
 {
     _name = TYNameManager::get()->generateName(getClassName());
-
-    _dBA = 0.0;
-    _dBLin = 0.0;
 }
 
 TYPointCalcul::TYPointCalcul(const TYPoint& other) : TYPoint(other, true)
 {
-    _dBA = 0.0;
-    _dBLin = 0.0;
 }
 
 TYPointCalcul::TYPointCalcul(const TYPointCalcul& other) : TYPoint(true)
@@ -55,9 +50,6 @@ TYPointCalcul& TYPointCalcul::operator=(TYPointCalcul& other)
         TYPoint::operator =(other);
 
         _spectre = new TYSpectre(*other._spectre);
-
-        _dBA = other._dBA;
-        _dBLin = other._dBLin;
     }
 
     return *this;
@@ -97,9 +89,6 @@ bool TYPointCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
         _spectre = new TYSpectre();
         _spectre->deepCopy(pOtherPtCalcul->getSpectre(), false);
     }
-
-    _dBA = pOtherPtCalcul->_dBA;
-    _dBLin = pOtherPtCalcul->_dBLin;
 
     return true;
 }
