@@ -131,7 +131,11 @@ void TYRectangularMaillageWidget::apply()
 
     if (((getElement()->getDensiteX() != densiteX) || (getElement()->getDensiteY() != densiteY)) && getElement()->getRectangle())
     {
+        // Rebuild the noise map
         getElement()->make(getElement()->getRectangle(), densiteX, densiteY);
+
+        // Update computation for new number of spectrums
+        dynamic_cast<TYProjet*>(getElement()->getParent())->updateCalculsWithMaillage(getElement());
 
         // La densite a changee, il faut mettre a jour l'altimetrie
         LPTYProjet pProj = dynamic_cast<TYProjet*>(getElement()->getParent());

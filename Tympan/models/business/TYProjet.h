@@ -227,6 +227,8 @@ public:
      */
     const TYTabMaillageGeoNode& getMaillages() const { return _maillages; }
 
+    void updateCalculsWithMaillage(TYMaillage *pMaillage);
+
     /**
      *\fn bool addMaillage(LPTYMaillageGeoNode pMaillageGeoNode)
      *\brief  Ajout d'un maillage.
