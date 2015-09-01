@@ -24,6 +24,7 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYLinearMaillage.h"
+#include "Tympan/models/business/TYProjet.h"
 #include "Tympan/gui/widgets/TYMaillageWidget.h"
 #include "TYLinearMaillageWidget.h"
 
@@ -116,6 +117,14 @@ void TYLinearMaillageWidget::apply()
     if ((getElement()->getDensite() != _lineEditDensite->text().toDouble()) && getElement()->getSegment())
     {
         getElement()->make(getElement()->getSegment(), _lineEditDensite->text().toDouble());
+        dynamic_cast<TYProjet*>(getElement()->getParent())->updateCalculsWithMaillage(getElement());
+
+        // La densite a changee, il faut mettre a jour l'altimetrie
+        LPTYProjet pProj = dynamic_cast<TYProjet*>(getElement()->getParent());
+        if (pProj && pProj->getSite()->getAltimetry()->containsData())
+        {
+            pProj->updateAltiRecepteurs();
+        }
     }
 
     emit modified();

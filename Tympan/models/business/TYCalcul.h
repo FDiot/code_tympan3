@@ -391,6 +391,11 @@ public:
     bool remMaillage(TYMaillage* pMaillage);
 
     /*!
+     * \brief update a noisemap after modification
+     */
+    bool updateMaillage(TYMaillage* pMaillage);
+
+    /*!
      * \brief set spectrum vector for a given noise map
      * \fn void setNoiseMapSpectrums(const TYMaillage* pMaillage, TYTabLPSpectre& tabSpectrum);
      */

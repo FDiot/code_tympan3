@@ -1100,6 +1100,24 @@ bool TYCalcul::addMaillage(TYMaillage* pMaillage)
     return true;
 }
 
+bool TYCalcul::updateMaillage(TYMaillage* pMaillage)
+{
+    TYUUID id = pMaillage->getID();
+
+    // Test if map is selected for this calcul
+    if ( _noiseMapsSpectrums.find(id) == _noiseMapsSpectrums.end() ) { return false; }
+
+    _noiseMapsSpectrums[id].clear(); // cleaning old noise map datas
+    size_t nbPoints = pMaillage->getPtsCalcul().size();
+    std::vector<LPTYSpectre> tabSpectres;
+    for (unsigned int i=0; i<nbPoints; i++)
+    {
+        tabSpectres.push_back(new TYSpectre());
+    }
+
+    _noiseMapsSpectrums[id] = tabSpectres;
+}
+
 bool TYCalcul::remMaillage(TYMaillage* pMaillage)
 {    
     TYUUID id = pMaillage->getID();

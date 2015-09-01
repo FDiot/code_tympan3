@@ -714,6 +714,14 @@ void TYProjet::setSite(const LPTYSiteNode pSite)
     setIsGeometryModified(true);
 }
 
+void TYProjet::updateCalculsWithMaillage(TYMaillage *pMaillage)
+{
+    for (unsigned int i=0; i<_listCalcul.size(); i++)
+    {
+        _listCalcul[i]->updateMaillage(pMaillage);
+    }
+}
+
 bool TYProjet::addMaillage(LPTYMaillageGeoNode pMaillageGeoNode)
 {
     assert(pMaillageGeoNode);
