@@ -906,14 +906,17 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode, bool activeHeigh
             }
 
             //exprimons newZero dans le repere du GeoNode:
-            newZero = pGeoNode->globalToLocal() * newZero;
+//            newZero = pGeoNode->globalToLocal() * newZero;
 
             //on modifie l'origine du GeoNode de newZero:
             ORepere3D repere = pGeoNode->getORepere3D();
             TYPoint oldOrg = repere._origin;
-            repere._origin._x = repere._origin._x + newZero._x;
-            repere._origin._y = repere._origin._y + newZero._y;
-            repere._origin._z = repere._origin._z + newZero._z;
+            //repere._origin._x = repere._origin._x + newZero._x;
+            //repere._origin._y = repere._origin._y + newZero._y;
+            //repere._origin._z = repere._origin._z + newZero._z;
+            repere._origin._x = newZero._x;
+            repere._origin._y = newZero._y;
+            repere._origin._z = newZero._z;
             pGeoNode->setRepere(repere);
 
             pGeoNode->setHauteur(pTempGeoNode->getHauteur());
