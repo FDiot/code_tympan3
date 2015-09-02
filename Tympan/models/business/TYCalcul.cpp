@@ -27,8 +27,8 @@
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "Tympan/models/business/DefaultSolverConfig.h"
-#include "TYProjet.h"
-#include "TYCalcul.h"
+#include "Tympan/models/business/TYProjet.h"
+#include "Tympan/models/business/TYCalcul.h"
 
 #if TY_USE_IHM
   #include "Tympan/gui/widgets/TYCalculWidget.h"
