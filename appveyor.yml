@@ -1,0 +1,81 @@
+version: 1.0.{build}
+configuration: Release
+platform: x86
+clone_folder: C:\tympan\src
+environment:
+  VisualStudioVersion: 10.0
+install:
+- ps: >-
+    Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+    $cachedir='C:\tympan\cache\'
+
+    $srcdir='C:\tympan\src\'
+
+    if (-Not (Test-Path $cachedir)) {
+      mkdir $cachedir
+    }
+
+    $thirdparties='Code_TYMPAN-4.7_third-party-05.zip'
+
+    $zipfile=$cachedir + $thirdparties
+
+    if (-Not (Test-Path $zipfile)) {
+      (new-object net.webclient).DownloadFile('https://bitbucket.org/TYMPAN/code_tympan/downloads/' + $thirdparties, $zipfile)
+    }
+
+    [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $srcdir + '3rdparty')
+cache:
+- C:\tympan\cache
+- C:\Miniconda\pkgs
+build_script:
+- cmd: >-
+    cd C:\tympan\
+
+    md build
+
+    cd build
+
+
+    echo %PATH%
+
+    set PATH=C:\Miniconda3;C:\Miniconda3\Scripts;C:\Miniconda3\Library\bin;C:\Miniconda3\libs
+
+    set PATH=C:\Program Files (x86)\MSBuild\12.0\Bin;%PATH%
+
+    set PATH=%PATH%;C:\Windows\system32;C:\Windows;C:\Program Files (x86)\CMake\bin;
+
+    echo %PATH%
+
+    set TYMPAN_PYTHON_INTERP=C:\Miniconda3\python.exe
+
+
+    conda install -y -q cython numpy scipy
+
+    conda install -y -q geos=3.4.2
+
+    conda install -y -q shapely -c lightmotif
+
+    conda install -y -q qt=4.8.7=vc10_9
+
+    conda install -y -q swig
+
+    conda install -y -q gmp mpfr -c salilab
+
+    conda install -y -q cgal=4.3 -c logilab
+
+    conda list
+
+
+    cmake -G"Visual Studio 10" -DCMAKE_BUILD_TYPE=Release -DPYTHON_LIBRARY=C:\Miniconda3\libs\Python34.lib ..\src
+
+
+    cmake --build . --config Release
+
+
+    cd ..
+test_script:
+- cmd: >-
+    cd build
+
+    ctest -C Release --output-on-failure

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
+<Tympan>
+ <Version>3.9.0 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
+ <Projet id="{2b09314d-9425-4c44-b927-d6779b5941d4}" name="Projet 2">
+  <auteur></auteur>
+  <dateCreation>2001-10-01</dateCreation>
+  <dateModif>2001-10-01</dateModif>
+  <delaunayTolerence>0.001</delaunayTolerence>
+  <distMaxBetweenPoints>50</distMaxBetweenPoints>
+  <useDefGeomVal>1</useDefGeomVal>
+  <currentCalculID>{245233a4-ebac-492b-853d-3c907e61d456}</currentCalculID>
+  <SiteNode id="{ae53af23-7b95-479d-9e9b-f135d2f9dd50}" name="Site 4">
+   <echelle>1</echelle>
+   <useEmpriseAsCrbNiv>0</useEmpriseAsCrbNiv>
+   <useTopoFile>0</useTopoFile>
+   <topoFile></topoFile>
+   <altiEmprise>0</altiEmprise>
+   <Segment id="{b8bd1cb8-9b37-41fc-9068-3e005023c88f}" name="Segment 76">
+    <Color g="1" r="1" b="1"/>
+    <Point x="0.000" y="0.000" z="0.000"/>
+    <Point x="0.000" y="1.000" z="0.000"/>
+   </Segment>
+   <Point x="0.000" y="0.000" z="0.000"/>
+   <Topographie id="{37aaea82-e2c6-4547-a892-561e61f09ccf}" name="Topographie 4">
+    <Emprise>
+     <Point x="-100.000" y="100.000" z="0.000"/>
+     <Point x="100.000" y="100.000" z="0.000"/>
+     <Point x="100.000" y="-100.000" z="0.000"/>
+     <Point x="-100.000" y="-100.000" z="0.000"/>
+    </Emprise>
+    <ListCrbNiv/>
+    <ListTerrain>
+     <GeometryNode id="{22b363b7-0d3e-4413-ac4e-305986ca0b32}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{e8e55ee6-5fc2-4ff4-b42a-d20b8b1acca0}" name="Repère 281">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <Terrain id="{73f477c6-4810-481c-b70b-60ed7faf742b}" name="Terrain par defaut">
+       <Color g="0.333333" r="0" b="0"/>
+       <Sol id="{a221695a-8559-4644-965f-18c364376822}" name="Sol 25">
+        <resistivite>3</resistivite>
+        <epaisseur>1</epaisseur>
+        <active>0</active>
+        <miroir>0</miroir>
+       </Sol>
+       <nbPoints>0</nbPoints>
+      </Terrain>
+     </GeometryNode>
+    </ListTerrain>
+    <ListCrsEau/>
+    <ListPlanEau/>
+    <Altimetrie id="{09e0070e-2e49-45f3-91c6-6f643a7c4158}" name="Altimétrie 4"/>
+    <DefaultTerrain>0</DefaultTerrain>
+   </Topographie>
+   <Infrastructure id="{84d9e731-5ea1-4f33-bfad-a381db43991f}" name="Infrastructure 4">
+    <ListRoute/>
+    <ListResTrans/>
+    <ListBatiment/>
+    <ListMachine/>
+    <ListSource>
+     <GeometryNode id="{ad7a4f7a-20c0-46db-a421-bfc5a9ecee2f}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{2ba8b8de-e8ea-45bd-a758-392221726e8e}" name="Repère 286">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <UserSourcePonctuelle id="{9230fb5c-3fce-4205-9916-56ff8a07473b}" name="SP 4pi">
+       <Color g="0" r="1" b="0"/>
+       <Point x="0.000" y="0.000" z="10000.500"/>
+       <Vector x="1.000" y="0.000" z="0.000"/>
+       <type>3</type>
+       <hauteur>10000.500</hauteur>
+       <typeRaynt>0</typeRaynt>
+       <formeObjet>0</formeObjet>
+       <curRegime>0</curRegime>
+       <nextRegime>3</nextRegime>
+       <UserSrcRegime id="{e6f50d97-61a2-407f-855c-f76a7d6f769e}" name="regime0">
+        <isRayonnant>1</isRayonnant>
+        <useAtt>0</useAtt>
+        <typeDistribution>1</typeDistribution>
+        <Spectre id="{7185c35c-45e0-46b9-beb6-f4b19efd82de}" name="Spectre 5580">
+         <type>2</type>
+         <fMin>16</fMin>
+         <fMax>16000</fMax>
+         <freqTab form="0">100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0</freqTab>
+        </Spectre>
+       </UserSrcRegime>
+      </UserSourcePonctuelle>
+     </GeometryNode>
+    </ListSource>
+   </Infrastructure>
+   <root>1</root>
+   <repere>0</repere>
+   <SIG_X>0</SIG_X>
+   <SIG_Y>0</SIG_Y>
+  </SiteNode>
+  <PointsControl>
+   <PointControl x="2.000" y="0.000" z="10000.500" id="{af621b6f-27dd-41c4-bb17-0a03638a0e53}" name="R0">
+    <etatCalcul idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" Etat="1"/>
+    <Spectre idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" id="{6143bb67-154a-4b55-ba22-c31f39d06aaa}" name="Spectre 130965">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>10000.500</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="10.000" y="0.000" z="10000.500" id="{8dd64be1-6f67-44f5-a7df-99da45d05e18}" name="R2">
+    <etatCalcul idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" Etat="1"/>
+    <Spectre idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" id="{352a1b8f-e83d-47a5-b660-8d0e3cc77195}" name="Spectre 130966">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>10000.500</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="20.000" y="0.000" z="10000.500" id="{012ef5bd-3650-4fbe-b2a3-206fe9e22006}" name="R3">
+    <etatCalcul idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" Etat="1"/>
+    <Spectre idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" id="{b265ae71-c0ef-42f5-9636-3a08adeb14ac}" name="Spectre 130967">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>10000.500</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="40.000" y="0.000" z="10000.500" id="{17939d12-61c4-4dfe-8b7b-c7f47ca89109}" name="R4">
+    <etatCalcul idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" Etat="1"/>
+    <Spectre idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" id="{4d852bcf-e5b9-48a6-b6dc-6f82b1488d1f}" name="Spectre 130968">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>10000.500</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="80.000" y="0.000" z="10000.500" id="{a2886ef3-6fae-4e74-9d59-f87b7646227e}" name="R5">
+    <etatCalcul idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" Etat="1"/>
+    <Spectre idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" id="{ca5156ae-664c-474d-8932-d191f8517c4a}" name="Spectre 130969">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>10000.500</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="5.000" y="0.000" z="10000.500" id="{2cf1f3c7-6c09-4b3e-b584-f2cfc852aa5e}" name="R1">
+    <etatCalcul idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" Etat="1"/>
+    <Spectre idCalcul="{245233a4-ebac-492b-853d-3c907e61d456}" id="{91ab04b8-f96b-47ab-94df-b2312a6b5454}" name="Spectre 130970">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>10000.500</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+  </PointsControl>
+  <Calcul isUpTodate="1" id="{245233a4-ebac-492b-853d-3c907e61d456}" name="Calcul 7">
+   <numero>1</numero>
+   <auteur>Auteur</auteur>
+   <dateCreation>2004-12-20</dateCreation>
+   <dateModif>2004-12-23</dateModif>
+   <comment>Commentaire</comment>
+   <solverId>{a98b320c-44c4-47a9-b689-1dd352daa8b2}</solverId>
+   <etat>1</etat>
+   <expansGeo>0</expansGeo>
+   <useSol>1</useSol>
+   <typeCalculSol>0</typeCalculSol>
+   <condFav>0</condFav>
+   <useVegetation>0</useVegetation>
+   <useAtmosphere>1</useAtmosphere>
+   <useEcran>1</useEcran>
+   <calculTrajetHorizontaux>1</calculTrajetHorizontaux>
+   <useReflexion>0</useReflexion>
+   <interference>0</interference>
+   <h1>10</h1>
+   <distanceSRMin>0.1</distanceSRMin>
+   <freqMinSpectre>16</freqMinSpectre>
+   <freqMaxSpectre>16000</freqMaxSpectre>
+   <ListID>
+    <Element id="{9230fb5c-3fce-4205-9916-56ff8a07473b}"/>
+   </ListID>
+   <EmissionAccVolNodes/>
+   <RegimeAccNode/>
+   <Atmosphere id="{4e9a89e5-d371-42dd-a42f-0a94db0b8108}" name="Atmosphère 7">
+    <pression>101325</pression>
+    <temperature>50</temperature>
+    <hygrometrie>100</hygrometrie>
+    <vitVent>0</vitVent>
+    <dirVent>0</dirVent>
+    <A>0</A>
+    <B>0</B>
+    <C>5e-006</C>
+    <D>0</D>
+    <stability_class>0</stability_class>
+    <Spectre id="{1b7ee2d5-fdaa-46b3-a017-1af79e968450}" name="Spectre 4776">
+     <type>0</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">0.00000 0.00000 0.00000 0.00001 0.00001 0.00002 0.00003 0.00004 0.00006 0.00010 0.00016 0.00026 0.00041 0.00064 0.00101 0.00159 0.00250 0.00391 0.00605 0.00924 0.01386 0.02027 0.02867 0.03894 0.05063 0.06322 0.07653 0.09118 0.10887 0.13257 0.16696</freqTab>
+    </Spectre>
+   </Atmosphere>
+   <Resultat id="{e3726d76-f04b-418e-9658-5e358e23d196}" name="Résultat 7">
+    <ListSources/>
+    <ListRecepteurs>
+     <Recepteur recId="{a2886ef3-6fae-4e74-9d59-f87b7646227e}" index="4"/>
+     <Recepteur recId="{2cf1f3c7-6c09-4b3e-b584-f2cfc852aa5e}" index="5"/>
+     <Recepteur recId="{af621b6f-27dd-41c4-bb17-0a03638a0e53}" index="0"/>
+     <Recepteur recId="{012ef5bd-3650-4fbe-b2a3-206fe9e22006}" index="2"/>
+     <Recepteur recId="{8dd64be1-6f67-44f5-a7df-99da45d05e18}" index="1"/>
+     <Recepteur recId="{17939d12-61c4-4dfe-8b7b-c7f47ca89109}" index="3"/>
+    </ListRecepteurs>
+    <ListSpectres/>
+    <ListLw>
+     <SourceLw srcId="{9230fb5c-3fce-4205-9916-56ff8a07473b}">
+      <Spectre id="{1fbb4177-21de-4ba6-b262-38adf98cebd1}" name="Spectre 130961">
+       <type>2</type>
+       <fMin>16</fMin>
+       <fMax>16000</fMax>
+       <freqTab form="0">100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0</freqTab>
+      </Spectre>
+     </SourceLw>
+    </ListLw>
+   </Resultat>
+  </Calcul>
+ </Projet>
+</Tympan>
