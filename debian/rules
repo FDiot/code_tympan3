@@ -1,0 +1,28 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+%:
+	dh $@ --parallel --with python2
+
+override_dh_auto_configure:
+	dh_auto_configure -- -DCMAKE_BUILD_TYPE=Release
+
+override_dh_clean:
+	dh_clean
+	find 3rdparty -name "*.pyc" -delete
+	rm -rf build
+	rm -rf CMakeFiles
+
+override_dh_auto_install:
+	dh_auto_install --destdir=debian/tmp
+
+override_dh_install:
+	dh_install --sourcedir=debian/tmp/usr
