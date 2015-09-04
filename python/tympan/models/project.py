@@ -27,6 +27,24 @@ class Project(object):
         with filter_output(verbose):
             self._project._update_site_altimetry(altimesh.mesh,
                                                  altimesh.material_by_face)
+    @property
+    def computations(self):
+        """Project computations"""
+        return self._project.computations
+
+    @property
+    def current_computation(self):
+        """Project current computation"""
+        return self._project.current_computation
+
+    @property
+    def site(self):
+        """Project site"""
+        return self._project.site
+
+    def to_xml(self, filepath):
+        """Export the project to a `filepath` XML file"""
+        self._project.to_xml(filepath)
 
     @classmethod
     def from_xml(cls, fpath, verbose=False):
