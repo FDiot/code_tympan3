@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
+<Tympan>
+ <Version>4.1.14 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
+ <Projet id="{7bd090fc-846a-4a60-a88b-a11d4c0124f7}" name="Projet 1">
+  <auteur></auteur>
+  <dateCreation>2001-10-01</dateCreation>
+  <dateModif>2001-10-01</dateModif>
+  <comment></comment>
+  <delaunayTolerence>0.0001</delaunayTolerence>
+  <distMaxBetweenPoints>200</distMaxBetweenPoints>
+  <useDefGeomVal>1</useDefGeomVal>
+  <currentCalculID>{fc5a5975-475e-48a4-985c-55e404a2ffd8}</currentCalculID>
+  <SiteNode id="{81d68b48-8347-4655-bfc1-dcc00b411788}" name="Site 3">
+   <echelle>1</echelle>
+   <useEmpriseAsCrbNiv>0</useEmpriseAsCrbNiv>
+   <useTopoFile>0</useTopoFile>
+   <topoFile></topoFile>
+   <altiEmprise>0</altiEmprise>
+   <Segment id="{5fdc692b-14db-4315-b167-a085e347b2e2}" name="Segment 3">
+    <Color g="1" r="1" b="1"/>
+    <Point x="0.000" y="0.000" z="0.000"/>
+    <Point x="0.000" y="1.000" z="0.000"/>
+   </Segment>
+   <Point x="0.000" y="0.000" z="0.000"/>
+   <Topographie id="{01c18090-d58f-445c-a4b0-393f6dae4e35}" name="Topographie 3">
+    <Emprise>
+     <Point x="-200.000" y="200.000" z="0.000"/>
+     <Point x="200.000" y="200.000" z="0.000"/>
+     <Point x="200.000" y="-200.000" z="0.000"/>
+     <Point x="-200.000" y="-200.000" z="0.000"/>
+    </Emprise>
+    <ListCrbNiv/>
+    <ListTerrain>
+     <GeometryNode id="{22ff80e1-a816-47ba-a858-ba8b9f49cc61}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{5d7cf1df-469e-4426-822a-53d983b992b1}" name="Repère 48">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <Terrain id="{01e5675d-a812-4152-9f09-a534bfc0162f}" name="Terrain par defaut">
+       <Color g="0.333333" r="0" b="0"/>
+       <Sol id="{9c019635-eb57-4e65-933b-b7d33734bfb1}" name="Sol 29">
+        <resistivite>20000</resistivite>
+        <epaisseur>1</epaisseur>
+       </Sol>
+       <active>0</active>
+       <nbPoints>0</nbPoints>
+      </Terrain>
+     </GeometryNode>
+    </ListTerrain>
+    <ListCrsEau/>
+    <ListPlanEau/>
+    <Altimetrie id="{e74ba6bc-8f47-4be5-a987-78b7c8903471}" name="Altimétrie 3"/>
+    <DefaultTerrain>0</DefaultTerrain>
+   </Topographie>
+   <Infrastructure id="{0b89c5c9-646e-4fa8-a5d8-4c0cd0799cf7}" name="Infrastructure 3">
+    <ListRoute/>
+    <ListResTrans/>
+    <ListBatiment/>
+    <ListMachine/>
+    <ListSource/>
+   </Infrastructure>
+   <root>1</root>
+   <repere>0</repere>
+   <SIG_X>0</SIG_X>
+   <SIG_Y>0</SIG_Y>
+  </SiteNode>
+  <PointsControl/>
+  <Calcul isUpTodate="1" id="{fc5a5975-475e-48a4-985c-55e404a2ffd8}" name="Calcul 3">
+   <numero>1</numero>
+   <auteur>Auteur</auteur>
+   <dateCreation>2001-10-01</dateCreation>
+   <dateModif>2001-10-01</dateModif>
+   <comment>Commentaire</comment>
+   <solverId>{a98b320c-44c4-47a9-b689-1dd352daa8b2}</solverId>
+   <etat>1</etat>
+   <solverParams>[ACOUSTICRAYTRACER]
+RayTracingOrder=0
+Discretization=2
+NbRaysPerSource=100000
+MaxLength=5000.0
+SizeReceiver=2.0
+Accelerator=3
+MaxTreeDepth=12
+AngleDiffMin=5.0
+CylindreThick=0.3
+MaxProfondeur=10
+UseSol=True
+MaxReflexion=2
+MaxDiffraction=2
+DiffractionUseRandomSampler=False
+NbRayWithDiffraction=0
+DiffractionDropDownNbRays=False
+DiffractionFilterRayAtCreation=True
+UsePathDifValidation=False
+MaxPathDifference=25.0
+DiffractionUseDistanceAsFilter=True
+KeepDebugRay=False
+UsePostFilters=True
+[DEFAULTSOLVER]
+NbThreads=4
+UseRealGround=True
+UseScreen=True
+UseLateralDiffraction=True
+UseReflection=True
+PropaConditions=False
+H1parameter=20.0
+ModSummation=False
+[ANALYTICRAYTRACER]
+CurveRaySampler=1
+InitialAngleTheta=0.0
+FinalAngleTheta=0.0
+InitialAnglePhi=0.0
+FinalAnglePhi=360.0
+AnalyticNbRay=20
+AnalyticTMax=10.0
+AnalyticH=0.1
+AnalyticDMax=3000.0
+[METEO]
+AtmosPressure=101300.0
+AtmosTemperature=20.0
+AtmosHygrometry=60.0
+WindDirection=0.0
+AnalyticGradC=0.0
+AnalyticGradV=0.0
+[PREPROCESSING]
+MinSRDistance=0.3
+[GEOMTRANSFORMER]
+AnalyticTypeTransfo=1
+MeshElementSizeMax=0.0
+showScene=False
+[DEBUG]
+DebugUseCloseEventSelector=True
+DebugUseDiffractionAngleSelector=True
+DebugUseDiffractionPathSelector=True
+DebugUseFermatSelector=True
+DebugUseFaceSelector=True
+[ANIME3DSOLVER]
+UseMeteo=False
+UseFresnelArea=False
+Anime3DSigma=0.0
+Anime3DForceC=1
+Anime3DKeepRays=True
+   </solverParams>
+   <ListID>
+    <Element id="{81d68b48-8347-4655-bfc1-dcc00b411788}"/>
+    <Element id="{7bd090fc-846a-4a60-a88b-a11d4c0124f7}"/>
+   </ListID>
+   <EmissionAccVolNodes>
+    <EmissionAccVolNode accVolNodeId="{7bd090fc-846a-4a60-a88b-a11d4c0124f7}" state="1"/>
+   </EmissionAccVolNodes>
+   <RegimeAccNode>
+    <RegimeAccNode accVolNodeId="{7bd090fc-846a-4a60-a88b-a11d4c0124f7}" state="0"/>
+   </RegimeAccNode>
+   <Resultat id="{e27cff30-d9f0-465f-8352-36daecdcccb7}" name="Résultat 3">
+    <ListSources/>
+    <ListRecepteurs/>
+    <ListSpectres/>
+    <ListLw/>
+   </Resultat>
+  </Calcul>
+ </Projet>
+</Tympan>
