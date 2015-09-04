@@ -78,6 +78,25 @@ class Model(object):
         """
         return self._model._export_triangular_mesh()
 
+    @property
+    def sources(self):
+        """Acoustic sources of the model"""
+        return self._model.sources
+
+    @property
+    def receptors(self):
+         """Acoustic receptors of the model"""
+         return self._model.receptors
+
+    @property
+    def triangles(self):
+        """Acoustic triangles of the model"""
+        return self._model.triangles
+
+    def node_coords(self, idx):
+        """Return a tuple with the 3D coordinates for the node of id 'idx'"""
+        return self._model.node_coords(idx)
+
     def __getattr__(self, name):
         return getattr(self._model, name)
 
