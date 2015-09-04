@@ -187,7 +187,11 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
                 }
                 else
                 {
-                    spectreAbs = _tabSurfIntersect[idFace].spectreAbso;  // Recuperation du spectre d'absorption
+                    unsigned int index_face = ray->getEvents().at(reflIndice)->idFace1;
+                    tympan::AcousticBuildingMaterial *material = dynamic_cast<tympan::AcousticBuildingMaterial*>( _tabSurfIntersect[index_face].material );
+                    assert(material);
+
+                    spectreAbs = material->get_absorption(angle, rr);
                 }
                 // ATTENTION ! : Il semble qu'on ne tienne compte que d'une seule reflexion : La derniere.
                 prod = spectreAbs;
