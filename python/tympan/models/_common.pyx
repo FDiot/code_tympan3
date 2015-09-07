@@ -4,18 +4,8 @@ import cython as cy
 from cython.view cimport array as cyarray
 
 import numpy as np
+cimport numpy as np
 
-
-def make_spectrum(np_array):
-    """ Make a Spectrum from an array of double values """
-    assert len(np_array) == 31
-    spectre = Spectrum()
-    spectre.thisobj = OSpectre()
-    cdef cyarray cy_array = <double[:len(np_array)]> spectre.thisobj.getTabValReel()
-    for i in range(len(np_array)):
-        cy_array[i] = np_array[i]
-
-    return spectre
 
 cdef ospectre2spectrum(OSpectre os):
     """Spectrum (cython object) wrapping an OSpectre (c++)"""
@@ -43,8 +33,15 @@ cdef otriangle2triangle(OTriangle* tri):
     return triangle
 
 
-
 cdef class Spectrum:
+
+    def __cinit__(self, np.ndarray[double, ndim=1] values=None):
+        """Build a Spectrum, possibly out of ndarray `values`"""
+        if values is None:
+            return
+        assert len(values) == 31
+        #self.thisobj = OSpectre(&values[0], 31, 0)
+        self.thisobj = OSpectre(<double *> values.data, 31, 0)
 
     @property
     def nvalues(self):

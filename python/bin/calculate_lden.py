@@ -7,9 +7,8 @@ import numpy as np
 import sys
 import os
 import csv
-import tympan.models._common as common
 import tympan.models._business as bus
-from tympan.models.project import Project
+from tympan.models.project import Project, Spectrum
 
 
 def set_op_data(fpath, sources):
@@ -262,9 +261,8 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     for src in S:
         irec = 0
         for rec in R:
-            spectre = common.make_spectrum(L_DEN[isrc,irec,:])
+            spectre = Spectrum(L_DEN[isrc,irec,:])
             project.current_computation.set_spectrum(rec, spectre)
-            project.current_computation.result.set_spectrum(rec,src,spectre)
             irec = irec + 1
         isrc = isrc + 1
 
@@ -279,9 +277,8 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
             lt = lt + np.power(10.,L_DEN[isrc,irec,:]/10.)
             isrc = isrc + 1
         LT = 10.*np.log10(lt)
-        Spectrum_LT = common.make_spectrum(LT)
+        Spectrum_LT = Spectrum(LT)
         project.current_computation.set_spectrum(bus.elemen2receptor(rec), Spectrum_LT)
-#        bus.elemen2receptor(rec).set_spectrum(Spectrum_LT, project.current_computation)
         irec = irec + 1
 
     #   Mask Lw column in the result table
