@@ -450,7 +450,7 @@ bool TYResultat::setSpectre(int indexRecepteur, int indexSource, OSpectre& Spect
     return true; // TODO return kept for compatibility reasons : to be changed to void later 
 }
 
-OSpectre TYResultat::getSpectre2(TYElement* pRecepteur, TYElement* pSource)
+OSpectre TYResultat::getSpectre(TYElement* pRecepteur, TYElement* pSource)
 {
     OSpectre spectre;
     spectre.setValid(false);
