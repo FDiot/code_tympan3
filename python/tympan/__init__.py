@@ -14,12 +14,8 @@ Here goes an example of the typical use that can be done of this API:
 
 .. code-block:: python
 
-    # Build a project from a site XML description
+    # Build a project from a site XML description (update site infrastructure altimetry)
     project = Project.from_xml("my_project.xml")
-    # Compute altimetry from the site
-    altimetry_mesh = AltimetryMesh.from_site(project.site)
-    # Update the site infrastructure
-    project.update_site_altimetry(altimetry_mesh)
     # Build a simplified model from the project (the new infrastructure
     # altitudes will be taken into account)
     model = Model.from_project(project)
@@ -36,11 +32,8 @@ with user-defined sources:
 
 .. code-block:: python
 
-    # Build a project from a XML model, but don't build the sources
+    # Build a project from a XML model
     project = Project.from_xml("my_project.xml")
-    # same steps as described above
-    altimetry_mesh = AltimetryMesh.from_site(project.site)
-    project.update_site_altimetry(altimetry_mesh)
     # build solver model, but don't use the project sources
     model = Model.from_project(project, set_sources=False)
     # Manually define the sources (position and spectrum) depending on your needs
