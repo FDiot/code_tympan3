@@ -26,7 +26,7 @@ def run_calculations(project):
     '''
     for calc in project.computations:
         print('Select calculation:', calc.name)
-        project.set_current_computation(calc)
+        project.select_computation(calc)
 
         print('Get Solver object from Tympan project located at %s' % ty_solverdir)
         solver = Solver.from_project(project, ty_solverdir)

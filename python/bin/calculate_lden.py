@@ -98,7 +98,7 @@ def get_sources_list(project, calculations_namelist):
     Sources = []
     for calc in project.computations:
         if calc.name in calculations_namelist:
-            project.set_current_computation(calc)
+            project.select_computation(calc, current=False)
             result =  calc.result
             for src in result.sources:
                    # print('Calcul:',calc.name,'Source:',src.name)
@@ -117,7 +117,7 @@ def get_receptors_list(project, calculations_namelist):
     Receptors = []
     for calc in project.computations:
         if calc.name in calculations_namelist:
-            project.set_current_computation(calc)
+            project.select_computation(calc, current=False)
             result =  calc.result
             for rec in result.receptors:
                    if rec.name not in Receptors_namelist:
@@ -239,10 +239,7 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     # print(L_DEN)
 
     # Add new computation
-    project.add_new_comp()
-    calc_list =  [calc for calc in project.computations]
-    last_calc = calc_list[-1]
-    project.set_current_computation(last_calc)
+    computation = project.add_computation()
     project.current_computation.set_name('LDEN')
     for src in S:
         project.current_computation.result.add_source(src)
