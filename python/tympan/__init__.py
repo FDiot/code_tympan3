@@ -40,10 +40,7 @@ with user-defined sources:
     model.add_source((100, 50, 0), np.array([150.0] * 31, dtype=float), 0)
     solver = Solver.from_project(project)
     result = solver.solve(model)
-    project.import_result(model, result)
-    # Compute cumulate spectrum response value (quadratic pressure) from the sources for each receptor
-    cumulate_spec = []
-    for receptor_idx in xrange(model.nreceptors):
-        cumulate_spec.append(sum(result.spectrum(receptor_idx, source_idx).values for source_idx in (0, 1)))
+    # retrieve combined spectra per receptor
+    combined_spectra = result.combined_spectra()
 """
 

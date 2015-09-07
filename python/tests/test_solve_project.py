@@ -3,10 +3,15 @@ import os
 import subprocess
 import sys
 import tempfile
+import unittest
 import ConfigParser
+
+import numpy as np
 
 from utils import TympanTC, TEST_DATA_DIR, TEST_SOLVERS_DIR, PROJECT_BASE
 import tympan.solve_project as tysolve
+from tympan.models.solver import Solver, Model
+
 
 class TestSolveProject(TympanTC):
 
@@ -106,6 +111,26 @@ class TestSolveProject(TympanTC):
             TEST_DATA_DIR, 'projects-panel',
             'TEST_CARTO_ANCIEN_MODELE.xml')
         self.run_solve(input_proj)
+
+class ProjectResultsTC(TympanTC):
+
+    def test_combined_spectra(self):
+        project = self.load_project(osp.join('projects-panel', 'TEST_CUBE_NO_RESU.xml'))
+        model = Model.from_project(project, set_sources=False)
+        model.add_source((-20, -30, 2), np.array([100.0] * 31, dtype=float), 0)
+        model.add_source((10, 50, 2), np.array([150.0] * 31, dtype=float), 0)
+        solver = Solver.from_project(project, solverdir=TEST_SOLVERS_DIR)
+        result = solver.solve(model)
+        combined_spectra = result.combined_spectra()
+        expected_spectra = np.array([2.0602e-03, 1.9806e-03, 1.8942e-03, 1.8005e-03, 1.6987e-03,
+                                     1.5867e-03, 1.4610e-03, 1.3166e-03, 1.1486e-03, 9.5532e-04,
+                                     7.4293e-04, 5.2950e-04, 3.4102e-04, 1.9865e-04, 1.0676e-04,
+                                     5.4570e-05, 2.7016e-05, 1.2721e-05, 5.3064e-06, 1.7143e-06,
+                                     3.4595e-07, 3.1354e-08, 7.6832e-10, 2.3192e-12, 2.5400e-16,
+                                     1.6487e-22, 1.3216e-23, 1.3216e-23, 1.3216e-23, 1.3216e-23,
+                                     1.3216e-23])
+        for rec in xrange(result.nreceptors):
+            np.testing.assert_almost_equal(combined_spectra[rec, :], expected_spectra, decimal=6)
 
 
 if __name__ == '__main__':
