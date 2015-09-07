@@ -4,7 +4,6 @@ import sys
 import logging
 
 from tympan.models.project import Project
-from tympan.altimetry import AltimetryMesh
 
 
 def set_logger(fpath='tympan.log'):
@@ -26,8 +25,7 @@ def main(input_project, result_file):
         except RuntimeError:
             logging.exception("Couldn't load the acoustic project from %s file", input_project)
             raise
-        altimesh = AltimetryMesh.from_site(project.site)
-        altimesh.to_ply(result_file)
+        project.export_altimetry(result_file)
     except Exception as exc:
         sys.stderr.write('Error: %s' % exc)
         logging.exception("Error processing the altimetry:\n%s", exc)

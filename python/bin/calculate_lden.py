@@ -85,8 +85,7 @@ def load_tympan_xml(tympan_xml):
     tympan_xml: filepath to xml tympan project file
     '''
     print('Opening Code_TYMPAN project from %s' % tympan_xml)
-    project = Project.from_xml(tympan_xml, verbose=False)
-
+    project = Project.from_xml(tympan_xml, verbose=False, update_altimetry=False)
     return project
 
 
