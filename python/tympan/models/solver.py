@@ -122,12 +122,18 @@ class Solver(object):
         return self._solver.solve_problem(model._model)
 
     @classmethod
-    def from_project(cls, project, solverdir, verbose=False):
+    def from_project(cls, project, solverdir=None, verbose=False):
         """Load and configure solver
 
-        'solverdir' is the directory where one can find the solver library. The
+        'solverdir' is the directory where one can find the solver library. If None, it will
+        be retrieved from "TYMPAN_SOLVERDIR" environment variable, which must be defined. The
         configuration is read from the project.
         """
+        try:
+            solverdir = solverdir or os.environ['TYMPAN_SOLVERDIR']
+        except KeyError:
+            raise RuntimeError('"TYMPAN_SOLVERDIR" environment variable must be set to path to the '
+                               'solver libraries directory')
         _set_solver_config(project.current_computation)
         with filter_output(verbose):
             solver = load_computation_solver(solverdir, project.current_computation)
