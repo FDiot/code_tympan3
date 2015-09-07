@@ -171,7 +171,7 @@ cdef class AcousticSurface:
             # Assert consistency of the tycommon.OPoint3D given in the mesh
             assert (deref(itt).checkConsistencyWrtPointsTab(pts),
                     deref(itt).reportInconsistencyWrtPointsTab(pts))
-            tri = cy.declare(cy.pointer(tycommon.OTriangle), 
+            tri = cy.declare(cy.pointer(tycommon.OTriangle),
                              new tycommon.OTriangle(deref(itt)._p1, deref(itt)._p2, deref(itt)._p3))
             triangles.append(tycommon.otriangle2triangle(tri))
             inc(itt)
@@ -290,7 +290,7 @@ cdef class Site:
 
         Return a list of tuples (elt_id, elt_name)
         """
-        infra = cy.declare(cy.pointer(TYInfrastructure), 
+        infra = cy.declare(cy.pointer(TYInfrastructure),
                            self.thisptr.getRealPointer().getInfrastructure().getRealPointer())
         outdated = cy.declare(vector[SmartPtr[TYElement]], infra.getTabElemNOk())
         nb_outdated = outdated.size()
@@ -302,7 +302,6 @@ cdef class Site:
         for subsite in self.subsites:
             outdated_info.extend(subsite.outdated_elements)
         return outdated_info
-
 
     @property
     def project(self):

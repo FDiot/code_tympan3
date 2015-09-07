@@ -235,11 +235,8 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     L1, L2, L3 = get_results(project, S, R, calculations_namelist)
 
     # LDEN
-
     _,_,_,L_DEN = calc_Lden(L1, L2, L3, OP)
     # print(L_DEN)
-
-
 
     # Add new computation
     project.add_new_comp()
