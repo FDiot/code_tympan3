@@ -860,13 +860,14 @@ cdef class Project:
         self.update()
 
     @cy.locals(comp=Computation)
-    def add_new_comp(self):
-        """ Add a new computation to the project """
+    def add_computation(self):
+        """Add a new computation to the project and return it"""
         comp = make_computation()
         self.thisptr.getRealPointer().addCalcul(comp.thisptr)
+        return comp
 
     @cy.locals(comp=Computation)
-    def set_current_computation(self, comp):
+    def select_computation(self, comp):
         """ set the current computation """
         self.thisptr.getRealPointer().setCurrentCalcul(comp.thisptr)
 
@@ -877,7 +878,6 @@ cdef class Project:
         comp = Computation()
         comp.thisptr = self.thisptr.getRealPointer().getCurrentCalcul()
         return comp
-
 
     @property
     def computations(self):

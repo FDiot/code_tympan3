@@ -38,6 +38,21 @@ class Project(object):
         self._build_altimetry_mesh()
         self._altimetry_mesh.to_ply(output_fpath)
 
+    def add_computation(self, current=True):
+        """Add a new empty computation to the project, set it as the default computation if
+        `current` is True and return it
+        """
+        comp = self._project.add_computation()
+        if current:
+            self._project.set_current_computation(comp)
+        return comp
+
+    def select_computation(self, computation):
+        """Set project current computation to `computation` (`computation` MUST be part of project'
+        computations)
+        """
+        self._project.select_computation(computation)
+
     @property
     def computations(self):
         """Project computations"""
