@@ -688,7 +688,7 @@ cdef class Result:
         """The computed acoustic spectrum"""
         assert self.thisptr.getRealPointer() != NULL
         return tycommon.ospectre2spectrum(
-                        self.thisptr.getRealPointer().getSpectre2(
+                        self.thisptr.getRealPointer().getSpectre(
                                         receptor.thisptr.getRealPointer(),
                                         source.thisptr.getRealPointer()  )   )
 

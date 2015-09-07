@@ -86,7 +86,7 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         size_t getNbOfRecepteurs() const
         size_t getNbOfSources() const
         tycommon.OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
-        tycommon.OSpectre getSpectre2(TYElement* pRecepteur, TYElement* pSource)
+        tycommon.OSpectre getSpectre(TYElement* pRecepteur, TYElement* pSource)
         cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
         void setResultMatrix(tycommon.SpectrumMatrix matrix)
