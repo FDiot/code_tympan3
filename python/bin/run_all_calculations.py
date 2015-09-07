@@ -24,11 +24,6 @@ def load_tympan_xml(tympan_xml):
 def run_calculations(project):
     ''' Run all calculations
     '''
-    ty_solverdir = os.environ.get('TYMPAN_SOLVERDIR')
-    if not ty_solverdir:
-        raise RuntimeError(
-            'Please set the TYMPAN_SOLVERDIR environment variable')
-
     for calc in project.computations:
         print('Select calculation:', calc.name)
         project.set_current_computation(calc)

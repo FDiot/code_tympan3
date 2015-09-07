@@ -20,8 +20,7 @@ Here goes an example of the typical use that can be done of this API:
     # altitudes will be taken into account)
     model = Model.from_project(project)
     # Load and configure the acoustic solver
-    solverdir = os.environ.get('TYMPAN_SOLVERDIR')
-    solver = Solver.from_project(project, solverdir)
+    solver = Solver.from_project(project)
     # Run the simulation
     result = solver.solve(model)
     # Update the project with the results of the computation
@@ -39,8 +38,7 @@ with user-defined sources:
     # Manually define the sources (position and spectrum) depending on your needs
     model.add_source((0, 0, 0), np.array([100.0] * 31, dtype=float), 0)
     model.add_source((100, 50, 0), np.array([150.0] * 31, dtype=float), 0)
-    tympan_solverdir = os.environ.get('TYMPAN_SOLVERDIR')
-    solver = Solver.from_project(project, ty_solverdir)
+    solver = Solver.from_project(project)
     result = solver.solve(model)
     project.import_result(model, result)
     # Compute cumulate spectrum response value (quadratic pressure) from the sources for each receptor
