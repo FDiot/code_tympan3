@@ -71,10 +71,10 @@ class Model(object):
         Return two nparrays:
 
             - 'nodes': an array of nodes (of dimension 'npoints'X3), where
-            each line stands for a node and contains 3 coordinates)
+              each line stands for a node and contains 3 coordinates)
             - 'triangles': an array of triangles (of dimension 'ntriangles'X3),
-            where each line stands for a triangle and contains the indices of
-            its 3 vertices in the 'nodes' array.
+              where each line stands for a triangle and contains the indices of
+              its 3 vertices in the 'nodes' array.
         """
         return self._model._export_triangular_mesh()
 
