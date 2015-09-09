@@ -121,62 +121,62 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan::SolverConfig
 
 cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
     cdef cppclass SolverConfiguration:
-        double AtmosPressure
-        double AtmosTemperature
-        double AtmosHygrometry
-        double WindDirection
-        double AnalyticGradC
-        double AnalyticGradV
+        float CylindreThick
+        bool DiffractionDropDownNbRays
+        bool KeepDebugRay
+        float MaxPathDifference
+        float SizeReceiver
+        bool DiffractionFilterRayAtCreation
+        int MaxReflexion
+        int MaxProfondeur
+        int MaxDiffraction
+        int MaxTreeDepth
+        bool UseSol
+        bool DiffractionUseDistanceAsFilter
         int RayTracingOrder
+        bool DiffractionUseRandomSampler
+        bool UsePathDifValidation
         int Discretization
+        int Accelerator
         int NbRaysPerSource
         float MaxLength
-        float SizeReceiver
-        int Accelerator
-        int MaxTreeDepth
         float AngleDiffMin
-        float CylindreThick
-        int MaxProfondeur
-        bool UseSol
-        int MaxReflexion
-        int MaxDiffraction
-        bool DiffractionUseRandomSampler
-        int NbRayWithDiffraction
-        bool DiffractionDropDownNbRays
-        bool DiffractionFilterRayAtCreation
-        bool UsePathDifValidation
-        float MaxPathDifference
-        bool DiffractionUseDistanceAsFilter
-        bool KeepDebugRay
         bool UsePostFilters
-        int CurveRaySampler
-        float InitialAngleTheta
-        float FinalAngleTheta
-        float InitialAnglePhi
-        float FinalAnglePhi
-        int AnalyticNbRay
+        int NbRayWithDiffraction
+        bool ModSummation
+        bool UseLateralDiffraction
+        bool UseRealGround
+        int NbThreads
+        bool PropaConditions
+        bool UseReflection
+        bool UseScreen
+        float H1parameter
         double AnalyticTMax
         double AnalyticH
+        int AnalyticNbRay
+        float FinalAngleTheta
         double AnalyticDMax
-        int AnalyticTypeTransfo
+        float InitialAnglePhi
+        int CurveRaySampler
+        float InitialAngleTheta
+        float FinalAnglePhi
+        double AtmosPressure
+        double WindDirection
+        double AnalyticGradC
+        double AtmosHygrometry
+        double AtmosTemperature
+        double AnalyticGradV
+        float MinSRDistance
         float MeshElementSizeMax
         bool showScene
-        float MinSRDistance
-        int NbThreads
-        bool UseRealGround
-        bool UseScreen
-        bool UseLateralDiffraction
-        bool UseReflection
-        bool PropaConditions
-        float H1parameter
-        bool ModSummation
-        bool UseMeteo
-        bool UseFresnelArea
-        float Anime3DSigma
-        int Anime3DForceC
-        bool Anime3DKeepRays
-        bool DebugUseCloseEventSelector
-        bool DebugUseDiffractionAngleSelector
+        int AnalyticTypeTransfo
         bool DebugUseDiffractionPathSelector
+        bool DebugUseDiffractionAngleSelector
+        bool DebugUseCloseEventSelector
         bool DebugUseFermatSelector
         bool DebugUseFaceSelector
+        float Anime3DSigma
+        bool UseFresnelArea
+        int Anime3DForceC
+        bool UseMeteo
+        bool Anime3DKeepRays

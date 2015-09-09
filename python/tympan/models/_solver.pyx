@@ -38,8 +38,7 @@ cdef class ProblemModel:
     def add_node(self, x, y, z):
         """Add a node of double coordinates (x, y, z) to the model"""
         assert self.thisptr.get() != NULL
-        node = cy.declare(tycommon.OPoint3D)
-        node = tycommon.OPoint3D(x, y, z)
+        node = cy.declare(tycommon.OPoint3D, tycommon.OPoint3D(x, y, z))
         self.thisptr.get().make_node(node)
 
     def add_triangle(self, n1, n2, n3):
@@ -51,17 +50,17 @@ cdef class ProblemModel:
     def _add_source(self, position, spectrum_values, shift):
         """Add an acoustic source to the model"""
         # position
-        pos = cy.declare(tycommon.OPoint3D)
-        pos = tycommon.OPoint3D(position[0], position[1], position[2])
+        pos = cy.declare(tycommon.OPoint3D,
+                         tycommon.OPoint3D(position[0], position[1], position[2]))
         # spectrum
         nb_val = spectrum_values.shape[0]
-        spec = cy.declare(tycommon.OSpectre)
-        spec = tycommon.OSpectre(<double *> spectrum_values.data, nb_val, shift)
+        spec = cy.declare(tycommon.OSpectre,
+                          tycommon.OSpectre(<double *> spectrum_values.data, nb_val, shift))
         spec.setEtat(tycommon.SPECTRE_ETAT_DB)
         spec.setType(tycommon.SPECTRE_TYPE_LW)
         # directivity
-        pdirectivity = cy.declare(cy.pointer(SourceDirectivityInterface))
-        pdirectivity = new SphericalSourceDirectivity()
+        pdirectivity = cy.declare(cy.pointer(SourceDirectivityInterface),
+                                  new SphericalSourceDirectivity())
         source_idx = self.thisptr.get().make_source(pos, spec.toGPhy(), pdirectivity)
         return source_idx
 
@@ -141,9 +140,8 @@ cdef class ProblemModel:
     def _export_triangular_mesh(self):
         """Build a triangular mesh from the acoustic problem model"""
         assert self.thisptr.get() != NULL
-        nb_elts = cy.declare(cy.uint)
         actri = cy.declare(cy.pointer(AcousticTriangle))
-        nb_elts = self.thisptr.get().ntriangles()
+        nb_elts = cy.declare(cy.uint, self.thisptr.get().ntriangles())
         triangles = np.empty([nb_elts, 3], dtype=int)
         for i in xrange(nb_elts):
             actri = cy.address(self.thisptr.get().triangle(i))
@@ -172,8 +170,8 @@ cdef class ResultModel:
     def spectrum(self, id_receptor, id_source):
         """Return the power spectrum received by a receptor from a source
         """
-        spec = cy.declare(tycommon.OSpectre)
-        spec = self.thisptr.get().get_data().element(id_receptor, id_source)
+        spec = cy.declare(tycommon.OSpectre,
+                          self.thisptr.get().get_data().element(id_receptor, id_source))
         return tycommon.ospectre2spectrum(spec)
 
 
@@ -223,8 +221,8 @@ cdef class SolverSource:
         """Source directivity vector in the global frame"""
         assert self.thisptr != NULL
         # Check the directivity of the source is a CommonFaceDirectivity directivity
-        cf_dir = cy.declare(cy.pointer(CommonFaceDirectivity))
-        cf_dir = dynamic_cast_commonface_dir(self.thisptr.directivity)
+        cf_dir = cy.declare(cy.pointer(CommonFaceDirectivity),
+                            dynamic_cast_commonface_dir(self.thisptr.directivity))
         if cf_dir == NULL:
             raise ValueError("The directivity of this source has no support normal vector")
         # return its support normal vector
@@ -296,46 +294,91 @@ cdef class Configuration:
         config.thisptr = get()
         return config
 
-    def getAtmosPressure(self):
-        return self.thisptr.getRealPointer().AtmosPressure
-    def setAtmosPressure(self, value):
-        self.thisptr.getRealPointer().AtmosPressure = value
-    AtmosPressure = property(getAtmosPressure, setAtmosPressure)
-    def getAtmosTemperature(self):
-        return self.thisptr.getRealPointer().AtmosTemperature
-    def setAtmosTemperature(self, value):
-        self.thisptr.getRealPointer().AtmosTemperature = value
-    AtmosTemperature = property(getAtmosTemperature, setAtmosTemperature)
-    def getAtmosHygrometry(self):
-        return self.thisptr.getRealPointer().AtmosHygrometry
-    def setAtmosHygrometry(self, value):
-        self.thisptr.getRealPointer().AtmosHygrometry = value
-    AtmosHygrometry = property(getAtmosHygrometry, setAtmosHygrometry)
-    def getWindDirection(self):
-        return self.thisptr.getRealPointer().WindDirection
-    def setWindDirection(self, value):
-        self.thisptr.getRealPointer().WindDirection = value
-    WindDirection = property(getWindDirection, setWindDirection)
-    def getAnalyticGradC(self):
-        return self.thisptr.getRealPointer().AnalyticGradC
-    def setAnalyticGradC(self, value):
-        self.thisptr.getRealPointer().AnalyticGradC = value
-    AnalyticGradC = property(getAnalyticGradC, setAnalyticGradC)
-    def getAnalyticGradV(self):
-        return self.thisptr.getRealPointer().AnalyticGradV
-    def setAnalyticGradV(self, value):
-        self.thisptr.getRealPointer().AnalyticGradV = value
-    AnalyticGradV = property(getAnalyticGradV, setAnalyticGradV)
+    def getCylindreThick(self):
+        return self.thisptr.getRealPointer().CylindreThick
+    def setCylindreThick(self, value):
+        self.thisptr.getRealPointer().CylindreThick = value
+    CylindreThick = property(getCylindreThick, setCylindreThick)
+    def getDiffractionDropDownNbRays(self):
+        return self.thisptr.getRealPointer().DiffractionDropDownNbRays
+    def setDiffractionDropDownNbRays(self, value):
+        self.thisptr.getRealPointer().DiffractionDropDownNbRays = value
+    DiffractionDropDownNbRays = property(getDiffractionDropDownNbRays, setDiffractionDropDownNbRays)
+    def getKeepDebugRay(self):
+        return self.thisptr.getRealPointer().KeepDebugRay
+    def setKeepDebugRay(self, value):
+        self.thisptr.getRealPointer().KeepDebugRay = value
+    KeepDebugRay = property(getKeepDebugRay, setKeepDebugRay)
+    def getMaxPathDifference(self):
+        return self.thisptr.getRealPointer().MaxPathDifference
+    def setMaxPathDifference(self, value):
+        self.thisptr.getRealPointer().MaxPathDifference = value
+    MaxPathDifference = property(getMaxPathDifference, setMaxPathDifference)
+    def getSizeReceiver(self):
+        return self.thisptr.getRealPointer().SizeReceiver
+    def setSizeReceiver(self, value):
+        self.thisptr.getRealPointer().SizeReceiver = value
+    SizeReceiver = property(getSizeReceiver, setSizeReceiver)
+    def getDiffractionFilterRayAtCreation(self):
+        return self.thisptr.getRealPointer().DiffractionFilterRayAtCreation
+    def setDiffractionFilterRayAtCreation(self, value):
+        self.thisptr.getRealPointer().DiffractionFilterRayAtCreation = value
+    DiffractionFilterRayAtCreation = property(getDiffractionFilterRayAtCreation, setDiffractionFilterRayAtCreation)
+    def getMaxReflexion(self):
+        return self.thisptr.getRealPointer().MaxReflexion
+    def setMaxReflexion(self, value):
+        self.thisptr.getRealPointer().MaxReflexion = value
+    MaxReflexion = property(getMaxReflexion, setMaxReflexion)
+    def getMaxProfondeur(self):
+        return self.thisptr.getRealPointer().MaxProfondeur
+    def setMaxProfondeur(self, value):
+        self.thisptr.getRealPointer().MaxProfondeur = value
+    MaxProfondeur = property(getMaxProfondeur, setMaxProfondeur)
+    def getMaxDiffraction(self):
+        return self.thisptr.getRealPointer().MaxDiffraction
+    def setMaxDiffraction(self, value):
+        self.thisptr.getRealPointer().MaxDiffraction = value
+    MaxDiffraction = property(getMaxDiffraction, setMaxDiffraction)
+    def getMaxTreeDepth(self):
+        return self.thisptr.getRealPointer().MaxTreeDepth
+    def setMaxTreeDepth(self, value):
+        self.thisptr.getRealPointer().MaxTreeDepth = value
+    MaxTreeDepth = property(getMaxTreeDepth, setMaxTreeDepth)
+    def getUseSol(self):
+        return self.thisptr.getRealPointer().UseSol
+    def setUseSol(self, value):
+        self.thisptr.getRealPointer().UseSol = value
+    UseSol = property(getUseSol, setUseSol)
+    def getDiffractionUseDistanceAsFilter(self):
+        return self.thisptr.getRealPointer().DiffractionUseDistanceAsFilter
+    def setDiffractionUseDistanceAsFilter(self, value):
+        self.thisptr.getRealPointer().DiffractionUseDistanceAsFilter = value
+    DiffractionUseDistanceAsFilter = property(getDiffractionUseDistanceAsFilter, setDiffractionUseDistanceAsFilter)
     def getRayTracingOrder(self):
         return self.thisptr.getRealPointer().RayTracingOrder
     def setRayTracingOrder(self, value):
         self.thisptr.getRealPointer().RayTracingOrder = value
     RayTracingOrder = property(getRayTracingOrder, setRayTracingOrder)
+    def getDiffractionUseRandomSampler(self):
+        return self.thisptr.getRealPointer().DiffractionUseRandomSampler
+    def setDiffractionUseRandomSampler(self, value):
+        self.thisptr.getRealPointer().DiffractionUseRandomSampler = value
+    DiffractionUseRandomSampler = property(getDiffractionUseRandomSampler, setDiffractionUseRandomSampler)
+    def getUsePathDifValidation(self):
+        return self.thisptr.getRealPointer().UsePathDifValidation
+    def setUsePathDifValidation(self, value):
+        self.thisptr.getRealPointer().UsePathDifValidation = value
+    UsePathDifValidation = property(getUsePathDifValidation, setUsePathDifValidation)
     def getDiscretization(self):
         return self.thisptr.getRealPointer().Discretization
     def setDiscretization(self, value):
         self.thisptr.getRealPointer().Discretization = value
     Discretization = property(getDiscretization, setDiscretization)
+    def getAccelerator(self):
+        return self.thisptr.getRealPointer().Accelerator
+    def setAccelerator(self, value):
+        self.thisptr.getRealPointer().Accelerator = value
+    Accelerator = property(getAccelerator, setAccelerator)
     def getNbRaysPerSource(self):
         return self.thisptr.getRealPointer().NbRaysPerSource
     def setNbRaysPerSource(self, value):
@@ -346,126 +389,61 @@ cdef class Configuration:
     def setMaxLength(self, value):
         self.thisptr.getRealPointer().MaxLength = value
     MaxLength = property(getMaxLength, setMaxLength)
-    def getSizeReceiver(self):
-        return self.thisptr.getRealPointer().SizeReceiver
-    def setSizeReceiver(self, value):
-        self.thisptr.getRealPointer().SizeReceiver = value
-    SizeReceiver = property(getSizeReceiver, setSizeReceiver)
-    def getAccelerator(self):
-        return self.thisptr.getRealPointer().Accelerator
-    def setAccelerator(self, value):
-        self.thisptr.getRealPointer().Accelerator = value
-    Accelerator = property(getAccelerator, setAccelerator)
-    def getMaxTreeDepth(self):
-        return self.thisptr.getRealPointer().MaxTreeDepth
-    def setMaxTreeDepth(self, value):
-        self.thisptr.getRealPointer().MaxTreeDepth = value
-    MaxTreeDepth = property(getMaxTreeDepth, setMaxTreeDepth)
     def getAngleDiffMin(self):
         return self.thisptr.getRealPointer().AngleDiffMin
     def setAngleDiffMin(self, value):
         self.thisptr.getRealPointer().AngleDiffMin = value
     AngleDiffMin = property(getAngleDiffMin, setAngleDiffMin)
-    def getCylindreThick(self):
-        return self.thisptr.getRealPointer().CylindreThick
-    def setCylindreThick(self, value):
-        self.thisptr.getRealPointer().CylindreThick = value
-    CylindreThick = property(getCylindreThick, setCylindreThick)
-    def getMaxProfondeur(self):
-        return self.thisptr.getRealPointer().MaxProfondeur
-    def setMaxProfondeur(self, value):
-        self.thisptr.getRealPointer().MaxProfondeur = value
-    MaxProfondeur = property(getMaxProfondeur, setMaxProfondeur)
-    def getUseSol(self):
-        return self.thisptr.getRealPointer().UseSol
-    def setUseSol(self, value):
-        self.thisptr.getRealPointer().UseSol = value
-    UseSol = property(getUseSol, setUseSol)
-    def getMaxReflexion(self):
-        return self.thisptr.getRealPointer().MaxReflexion
-    def setMaxReflexion(self, value):
-        self.thisptr.getRealPointer().MaxReflexion = value
-    MaxReflexion = property(getMaxReflexion, setMaxReflexion)
-    def getMaxDiffraction(self):
-        return self.thisptr.getRealPointer().MaxDiffraction
-    def setMaxDiffraction(self, value):
-        self.thisptr.getRealPointer().MaxDiffraction = value
-    MaxDiffraction = property(getMaxDiffraction, setMaxDiffraction)
-    def getDiffractionUseRandomSampler(self):
-        return self.thisptr.getRealPointer().DiffractionUseRandomSampler
-    def setDiffractionUseRandomSampler(self, value):
-        self.thisptr.getRealPointer().DiffractionUseRandomSampler = value
-    DiffractionUseRandomSampler = property(getDiffractionUseRandomSampler, setDiffractionUseRandomSampler)
-    def getNbRayWithDiffraction(self):
-        return self.thisptr.getRealPointer().NbRayWithDiffraction
-    def setNbRayWithDiffraction(self, value):
-        self.thisptr.getRealPointer().NbRayWithDiffraction = value
-    NbRayWithDiffraction = property(getNbRayWithDiffraction, setNbRayWithDiffraction)
-    def getDiffractionDropDownNbRays(self):
-        return self.thisptr.getRealPointer().DiffractionDropDownNbRays
-    def setDiffractionDropDownNbRays(self, value):
-        self.thisptr.getRealPointer().DiffractionDropDownNbRays = value
-    DiffractionDropDownNbRays = property(getDiffractionDropDownNbRays, setDiffractionDropDownNbRays)
-    def getDiffractionFilterRayAtCreation(self):
-        return self.thisptr.getRealPointer().DiffractionFilterRayAtCreation
-    def setDiffractionFilterRayAtCreation(self, value):
-        self.thisptr.getRealPointer().DiffractionFilterRayAtCreation = value
-    DiffractionFilterRayAtCreation = property(getDiffractionFilterRayAtCreation, setDiffractionFilterRayAtCreation)
-    def getUsePathDifValidation(self):
-        return self.thisptr.getRealPointer().UsePathDifValidation
-    def setUsePathDifValidation(self, value):
-        self.thisptr.getRealPointer().UsePathDifValidation = value
-    UsePathDifValidation = property(getUsePathDifValidation, setUsePathDifValidation)
-    def getMaxPathDifference(self):
-        return self.thisptr.getRealPointer().MaxPathDifference
-    def setMaxPathDifference(self, value):
-        self.thisptr.getRealPointer().MaxPathDifference = value
-    MaxPathDifference = property(getMaxPathDifference, setMaxPathDifference)
-    def getDiffractionUseDistanceAsFilter(self):
-        return self.thisptr.getRealPointer().DiffractionUseDistanceAsFilter
-    def setDiffractionUseDistanceAsFilter(self, value):
-        self.thisptr.getRealPointer().DiffractionUseDistanceAsFilter = value
-    DiffractionUseDistanceAsFilter = property(getDiffractionUseDistanceAsFilter, setDiffractionUseDistanceAsFilter)
-    def getKeepDebugRay(self):
-        return self.thisptr.getRealPointer().KeepDebugRay
-    def setKeepDebugRay(self, value):
-        self.thisptr.getRealPointer().KeepDebugRay = value
-    KeepDebugRay = property(getKeepDebugRay, setKeepDebugRay)
     def getUsePostFilters(self):
         return self.thisptr.getRealPointer().UsePostFilters
     def setUsePostFilters(self, value):
         self.thisptr.getRealPointer().UsePostFilters = value
     UsePostFilters = property(getUsePostFilters, setUsePostFilters)
-    def getCurveRaySampler(self):
-        return self.thisptr.getRealPointer().CurveRaySampler
-    def setCurveRaySampler(self, value):
-        self.thisptr.getRealPointer().CurveRaySampler = value
-    CurveRaySampler = property(getCurveRaySampler, setCurveRaySampler)
-    def getInitialAngleTheta(self):
-        return self.thisptr.getRealPointer().InitialAngleTheta
-    def setInitialAngleTheta(self, value):
-        self.thisptr.getRealPointer().InitialAngleTheta = value
-    InitialAngleTheta = property(getInitialAngleTheta, setInitialAngleTheta)
-    def getFinalAngleTheta(self):
-        return self.thisptr.getRealPointer().FinalAngleTheta
-    def setFinalAngleTheta(self, value):
-        self.thisptr.getRealPointer().FinalAngleTheta = value
-    FinalAngleTheta = property(getFinalAngleTheta, setFinalAngleTheta)
-    def getInitialAnglePhi(self):
-        return self.thisptr.getRealPointer().InitialAnglePhi
-    def setInitialAnglePhi(self, value):
-        self.thisptr.getRealPointer().InitialAnglePhi = value
-    InitialAnglePhi = property(getInitialAnglePhi, setInitialAnglePhi)
-    def getFinalAnglePhi(self):
-        return self.thisptr.getRealPointer().FinalAnglePhi
-    def setFinalAnglePhi(self, value):
-        self.thisptr.getRealPointer().FinalAnglePhi = value
-    FinalAnglePhi = property(getFinalAnglePhi, setFinalAnglePhi)
-    def getAnalyticNbRay(self):
-        return self.thisptr.getRealPointer().AnalyticNbRay
-    def setAnalyticNbRay(self, value):
-        self.thisptr.getRealPointer().AnalyticNbRay = value
-    AnalyticNbRay = property(getAnalyticNbRay, setAnalyticNbRay)
+    def getNbRayWithDiffraction(self):
+        return self.thisptr.getRealPointer().NbRayWithDiffraction
+    def setNbRayWithDiffraction(self, value):
+        self.thisptr.getRealPointer().NbRayWithDiffraction = value
+    NbRayWithDiffraction = property(getNbRayWithDiffraction, setNbRayWithDiffraction)
+    def getModSummation(self):
+        return self.thisptr.getRealPointer().ModSummation
+    def setModSummation(self, value):
+        self.thisptr.getRealPointer().ModSummation = value
+    ModSummation = property(getModSummation, setModSummation)
+    def getUseLateralDiffraction(self):
+        return self.thisptr.getRealPointer().UseLateralDiffraction
+    def setUseLateralDiffraction(self, value):
+        self.thisptr.getRealPointer().UseLateralDiffraction = value
+    UseLateralDiffraction = property(getUseLateralDiffraction, setUseLateralDiffraction)
+    def getUseRealGround(self):
+        return self.thisptr.getRealPointer().UseRealGround
+    def setUseRealGround(self, value):
+        self.thisptr.getRealPointer().UseRealGround = value
+    UseRealGround = property(getUseRealGround, setUseRealGround)
+    def getNbThreads(self):
+        return self.thisptr.getRealPointer().NbThreads
+    def setNbThreads(self, value):
+        self.thisptr.getRealPointer().NbThreads = value
+    NbThreads = property(getNbThreads, setNbThreads)
+    def getPropaConditions(self):
+        return self.thisptr.getRealPointer().PropaConditions
+    def setPropaConditions(self, value):
+        self.thisptr.getRealPointer().PropaConditions = value
+    PropaConditions = property(getPropaConditions, setPropaConditions)
+    def getUseReflection(self):
+        return self.thisptr.getRealPointer().UseReflection
+    def setUseReflection(self, value):
+        self.thisptr.getRealPointer().UseReflection = value
+    UseReflection = property(getUseReflection, setUseReflection)
+    def getUseScreen(self):
+        return self.thisptr.getRealPointer().UseScreen
+    def setUseScreen(self, value):
+        self.thisptr.getRealPointer().UseScreen = value
+    UseScreen = property(getUseScreen, setUseScreen)
+    def getH1parameter(self):
+        return self.thisptr.getRealPointer().H1parameter
+    def setH1parameter(self, value):
+        self.thisptr.getRealPointer().H1parameter = value
+    H1parameter = property(getH1parameter, setH1parameter)
     def getAnalyticTMax(self):
         return self.thisptr.getRealPointer().AnalyticTMax
     def setAnalyticTMax(self, value):
@@ -476,16 +454,76 @@ cdef class Configuration:
     def setAnalyticH(self, value):
         self.thisptr.getRealPointer().AnalyticH = value
     AnalyticH = property(getAnalyticH, setAnalyticH)
+    def getAnalyticNbRay(self):
+        return self.thisptr.getRealPointer().AnalyticNbRay
+    def setAnalyticNbRay(self, value):
+        self.thisptr.getRealPointer().AnalyticNbRay = value
+    AnalyticNbRay = property(getAnalyticNbRay, setAnalyticNbRay)
+    def getFinalAngleTheta(self):
+        return self.thisptr.getRealPointer().FinalAngleTheta
+    def setFinalAngleTheta(self, value):
+        self.thisptr.getRealPointer().FinalAngleTheta = value
+    FinalAngleTheta = property(getFinalAngleTheta, setFinalAngleTheta)
     def getAnalyticDMax(self):
         return self.thisptr.getRealPointer().AnalyticDMax
     def setAnalyticDMax(self, value):
         self.thisptr.getRealPointer().AnalyticDMax = value
     AnalyticDMax = property(getAnalyticDMax, setAnalyticDMax)
-    def getAnalyticTypeTransfo(self):
-        return self.thisptr.getRealPointer().AnalyticTypeTransfo
-    def setAnalyticTypeTransfo(self, value):
-        self.thisptr.getRealPointer().AnalyticTypeTransfo = value
-    AnalyticTypeTransfo = property(getAnalyticTypeTransfo, setAnalyticTypeTransfo)
+    def getInitialAnglePhi(self):
+        return self.thisptr.getRealPointer().InitialAnglePhi
+    def setInitialAnglePhi(self, value):
+        self.thisptr.getRealPointer().InitialAnglePhi = value
+    InitialAnglePhi = property(getInitialAnglePhi, setInitialAnglePhi)
+    def getCurveRaySampler(self):
+        return self.thisptr.getRealPointer().CurveRaySampler
+    def setCurveRaySampler(self, value):
+        self.thisptr.getRealPointer().CurveRaySampler = value
+    CurveRaySampler = property(getCurveRaySampler, setCurveRaySampler)
+    def getInitialAngleTheta(self):
+        return self.thisptr.getRealPointer().InitialAngleTheta
+    def setInitialAngleTheta(self, value):
+        self.thisptr.getRealPointer().InitialAngleTheta = value
+    InitialAngleTheta = property(getInitialAngleTheta, setInitialAngleTheta)
+    def getFinalAnglePhi(self):
+        return self.thisptr.getRealPointer().FinalAnglePhi
+    def setFinalAnglePhi(self, value):
+        self.thisptr.getRealPointer().FinalAnglePhi = value
+    FinalAnglePhi = property(getFinalAnglePhi, setFinalAnglePhi)
+    def getAtmosPressure(self):
+        return self.thisptr.getRealPointer().AtmosPressure
+    def setAtmosPressure(self, value):
+        self.thisptr.getRealPointer().AtmosPressure = value
+    AtmosPressure = property(getAtmosPressure, setAtmosPressure)
+    def getWindDirection(self):
+        return self.thisptr.getRealPointer().WindDirection
+    def setWindDirection(self, value):
+        self.thisptr.getRealPointer().WindDirection = value
+    WindDirection = property(getWindDirection, setWindDirection)
+    def getAnalyticGradC(self):
+        return self.thisptr.getRealPointer().AnalyticGradC
+    def setAnalyticGradC(self, value):
+        self.thisptr.getRealPointer().AnalyticGradC = value
+    AnalyticGradC = property(getAnalyticGradC, setAnalyticGradC)
+    def getAtmosHygrometry(self):
+        return self.thisptr.getRealPointer().AtmosHygrometry
+    def setAtmosHygrometry(self, value):
+        self.thisptr.getRealPointer().AtmosHygrometry = value
+    AtmosHygrometry = property(getAtmosHygrometry, setAtmosHygrometry)
+    def getAtmosTemperature(self):
+        return self.thisptr.getRealPointer().AtmosTemperature
+    def setAtmosTemperature(self, value):
+        self.thisptr.getRealPointer().AtmosTemperature = value
+    AtmosTemperature = property(getAtmosTemperature, setAtmosTemperature)
+    def getAnalyticGradV(self):
+        return self.thisptr.getRealPointer().AnalyticGradV
+    def setAnalyticGradV(self, value):
+        self.thisptr.getRealPointer().AnalyticGradV = value
+    AnalyticGradV = property(getAnalyticGradV, setAnalyticGradV)
+    def getMinSRDistance(self):
+        return self.thisptr.getRealPointer().MinSRDistance
+    def setMinSRDistance(self, value):
+        self.thisptr.getRealPointer().MinSRDistance = value
+    MinSRDistance = property(getMinSRDistance, setMinSRDistance)
     def getMeshElementSizeMax(self):
         return self.thisptr.getRealPointer().MeshElementSizeMax
     def setMeshElementSizeMax(self, value):
@@ -496,91 +534,26 @@ cdef class Configuration:
     def setshowScene(self, value):
         self.thisptr.getRealPointer().showScene = value
     showScene = property(getshowScene, setshowScene)
-    def getMinSRDistance(self):
-        return self.thisptr.getRealPointer().MinSRDistance
-    def setMinSRDistance(self, value):
-        self.thisptr.getRealPointer().MinSRDistance = value
-    MinSRDistance = property(getMinSRDistance, setMinSRDistance)
-    def getNbThreads(self):
-        return self.thisptr.getRealPointer().NbThreads
-    def setNbThreads(self, value):
-        self.thisptr.getRealPointer().NbThreads = value
-    NbThreads = property(getNbThreads, setNbThreads)
-    def getUseRealGround(self):
-        return self.thisptr.getRealPointer().UseRealGround
-    def setUseRealGround(self, value):
-        self.thisptr.getRealPointer().UseRealGround = value
-    UseRealGround = property(getUseRealGround, setUseRealGround)
-    def getUseScreen(self):
-        return self.thisptr.getRealPointer().UseScreen
-    def setUseScreen(self, value):
-        self.thisptr.getRealPointer().UseScreen = value
-    UseScreen = property(getUseScreen, setUseScreen)
-    def getUseLateralDiffraction(self):
-        return self.thisptr.getRealPointer().UseLateralDiffraction
-    def setUseLateralDiffraction(self, value):
-        self.thisptr.getRealPointer().UseLateralDiffraction = value
-    UseLateralDiffraction = property(getUseLateralDiffraction, setUseLateralDiffraction)
-    def getUseReflection(self):
-        return self.thisptr.getRealPointer().UseReflection
-    def setUseReflection(self, value):
-        self.thisptr.getRealPointer().UseReflection = value
-    UseReflection = property(getUseReflection, setUseReflection)
-    def getPropaConditions(self):
-        return self.thisptr.getRealPointer().PropaConditions
-    def setPropaConditions(self, value):
-        self.thisptr.getRealPointer().PropaConditions = value
-    PropaConditions = property(getPropaConditions, setPropaConditions)
-    def getH1parameter(self):
-        return self.thisptr.getRealPointer().H1parameter
-    def setH1parameter(self, value):
-        self.thisptr.getRealPointer().H1parameter = value
-    H1parameter = property(getH1parameter, setH1parameter)
-    def getModSummation(self):
-        return self.thisptr.getRealPointer().ModSummation
-    def setModSummation(self, value):
-        self.thisptr.getRealPointer().ModSummation = value
-    ModSummation = property(getModSummation, setModSummation)
-    def getUseMeteo(self):
-        return self.thisptr.getRealPointer().UseMeteo
-    def setUseMeteo(self, value):
-        self.thisptr.getRealPointer().UseMeteo = value
-    UseMeteo = property(getUseMeteo, setUseMeteo)
-    def getUseFresnelArea(self):
-        return self.thisptr.getRealPointer().UseFresnelArea
-    def setUseFresnelArea(self, value):
-        self.thisptr.getRealPointer().UseFresnelArea = value
-    UseFresnelArea = property(getUseFresnelArea, setUseFresnelArea)
-    def getAnime3DSigma(self):
-        return self.thisptr.getRealPointer().Anime3DSigma
-    def setAnime3DSigma(self, value):
-        self.thisptr.getRealPointer().Anime3DSigma = value
-    Anime3DSigma = property(getAnime3DSigma, setAnime3DSigma)
-    def getAnime3DForceC(self):
-        return self.thisptr.getRealPointer().Anime3DForceC
-    def setAnime3DForceC(self, value):
-        self.thisptr.getRealPointer().Anime3DForceC = value
-    Anime3DForceC = property(getAnime3DForceC, setAnime3DForceC)
-    def getAnime3DKeepRays(self):
-        return self.thisptr.getRealPointer().Anime3DKeepRays
-    def setAnime3DKeepRays(self, value):
-        self.thisptr.getRealPointer().Anime3DKeepRays = value
-    Anime3DKeepRays = property(getAnime3DKeepRays, setAnime3DKeepRays)
-    def getDebugUseCloseEventSelector(self):
-        return self.thisptr.getRealPointer().DebugUseCloseEventSelector
-    def setDebugUseCloseEventSelector(self, value):
-        self.thisptr.getRealPointer().DebugUseCloseEventSelector = value
-    DebugUseCloseEventSelector = property(getDebugUseCloseEventSelector, setDebugUseCloseEventSelector)
-    def getDebugUseDiffractionAngleSelector(self):
-        return self.thisptr.getRealPointer().DebugUseDiffractionAngleSelector
-    def setDebugUseDiffractionAngleSelector(self, value):
-        self.thisptr.getRealPointer().DebugUseDiffractionAngleSelector = value
-    DebugUseDiffractionAngleSelector = property(getDebugUseDiffractionAngleSelector, setDebugUseDiffractionAngleSelector)
+    def getAnalyticTypeTransfo(self):
+        return self.thisptr.getRealPointer().AnalyticTypeTransfo
+    def setAnalyticTypeTransfo(self, value):
+        self.thisptr.getRealPointer().AnalyticTypeTransfo = value
+    AnalyticTypeTransfo = property(getAnalyticTypeTransfo, setAnalyticTypeTransfo)
     def getDebugUseDiffractionPathSelector(self):
         return self.thisptr.getRealPointer().DebugUseDiffractionPathSelector
     def setDebugUseDiffractionPathSelector(self, value):
         self.thisptr.getRealPointer().DebugUseDiffractionPathSelector = value
     DebugUseDiffractionPathSelector = property(getDebugUseDiffractionPathSelector, setDebugUseDiffractionPathSelector)
+    def getDebugUseDiffractionAngleSelector(self):
+        return self.thisptr.getRealPointer().DebugUseDiffractionAngleSelector
+    def setDebugUseDiffractionAngleSelector(self, value):
+        self.thisptr.getRealPointer().DebugUseDiffractionAngleSelector = value
+    DebugUseDiffractionAngleSelector = property(getDebugUseDiffractionAngleSelector, setDebugUseDiffractionAngleSelector)
+    def getDebugUseCloseEventSelector(self):
+        return self.thisptr.getRealPointer().DebugUseCloseEventSelector
+    def setDebugUseCloseEventSelector(self, value):
+        self.thisptr.getRealPointer().DebugUseCloseEventSelector = value
+    DebugUseCloseEventSelector = property(getDebugUseCloseEventSelector, setDebugUseCloseEventSelector)
     def getDebugUseFermatSelector(self):
         return self.thisptr.getRealPointer().DebugUseFermatSelector
     def setDebugUseFermatSelector(self, value):
@@ -591,3 +564,28 @@ cdef class Configuration:
     def setDebugUseFaceSelector(self, value):
         self.thisptr.getRealPointer().DebugUseFaceSelector = value
     DebugUseFaceSelector = property(getDebugUseFaceSelector, setDebugUseFaceSelector)
+    def getAnime3DSigma(self):
+        return self.thisptr.getRealPointer().Anime3DSigma
+    def setAnime3DSigma(self, value):
+        self.thisptr.getRealPointer().Anime3DSigma = value
+    Anime3DSigma = property(getAnime3DSigma, setAnime3DSigma)
+    def getUseFresnelArea(self):
+        return self.thisptr.getRealPointer().UseFresnelArea
+    def setUseFresnelArea(self, value):
+        self.thisptr.getRealPointer().UseFresnelArea = value
+    UseFresnelArea = property(getUseFresnelArea, setUseFresnelArea)
+    def getAnime3DForceC(self):
+        return self.thisptr.getRealPointer().Anime3DForceC
+    def setAnime3DForceC(self, value):
+        self.thisptr.getRealPointer().Anime3DForceC = value
+    Anime3DForceC = property(getAnime3DForceC, setAnime3DForceC)
+    def getUseMeteo(self):
+        return self.thisptr.getRealPointer().UseMeteo
+    def setUseMeteo(self, value):
+        self.thisptr.getRealPointer().UseMeteo = value
+    UseMeteo = property(getUseMeteo, setUseMeteo)
+    def getAnime3DKeepRays(self):
+        return self.thisptr.getRealPointer().Anime3DKeepRays
+    def setAnime3DKeepRays(self, value):
+        self.thisptr.getRealPointer().Anime3DKeepRays = value
+    Anime3DKeepRays = property(getAnime3DKeepRays, setAnime3DKeepRays)
