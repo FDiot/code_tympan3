@@ -85,8 +85,18 @@ class Model(object):
 
     @property
     def receptors(self):
-         """Acoustic receptors of the model"""
-         return self._model.receptors
+        """Acoustic receptors of the model"""
+        return self._model.receptors
+
+    @property
+    def nsources(self):
+        """Return the number of acoustic sources involved in the model"""
+        return self._model.nsources
+
+    @property
+    def nreceptors(self):
+        """Return the number of acoustic receptors involved in the model"""
+        return self._model.nreceptors
 
     @property
     def triangles(self):
@@ -143,7 +153,7 @@ class Solver(object):
 def _set_solver_config(comp):
     """Setup solver configuration"""
     parser = ConfigParser.RawConfigParser()
-    parser.optionxform = str # keep param names case
+    parser.optionxform = str  # keep param names case
     parser.readfp(StringIO(comp.solver_parameters))
     solver_config = cysolver.Configuration.get()
     errors = []
@@ -159,4 +169,3 @@ def _set_solver_config(comp):
             setattr(solver_config, optname, value)
     if errors:
         raise ConfigParser.Error(os.linesep.join(errors))
-
