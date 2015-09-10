@@ -334,7 +334,7 @@ void TYPickEditor::siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
         code->setFont(font);
         retCodes[code] = i;
 
-        if (pCurrentSite != nullptr)
+        if (pCurrentSite != nullptr) // Current element is a site
         {
             // Recherche du site parent
             TYSiteNode *pCurrentSiteParent = nullptr;
@@ -462,8 +462,11 @@ void TYPickEditor::siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
                 posRetCodes[code] = pEltGeoNode;
 
                 // Rotation via le parent (GeoNode)
-                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
-                rotRetCodes[code] = pEltGeoNode;
+                if (dynamic_cast<TYUserSourcePonctuelle*>(elem_0) == nullptr) // a user_source cannot be oriented
+                {
+                    code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_rotation"))), TR("id_popup_rotation"));
+                    rotRetCodes[code] = pEltGeoNode;
+                }
 
                 // Duplication
                 code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
@@ -845,6 +848,13 @@ void TYPickEditor::batimentModelerPopupMenu(std::shared_ptr<LPTYElementArray> pE
 void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode, bool activeHeight)
 {
     assert(pGeoNode);
+
+    // Si c'est une source ponctuelle on fait autrement.
+    if (pGeoNode->getElement()->isA("TYUserSourcePonctuelle"))
+    {
+        pGeoNode->getElement()->edit(_pModeler);
+        return;
+    }
 
     // Recuperation de la hauteur de l'element
     double hauteur = pGeoNode->getHauteur();
