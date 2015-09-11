@@ -1,0 +1,1330 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
+<Tympan>
+ <Version>4.6.0 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
+ <Projet id="{c41a3b00-af5b-4499-a727-18977376c751}" name="Projet 0">
+  <auteur></auteur>
+  <dateCreation>2001-10-01</dateCreation>
+  <dateModif>2001-10-01</dateModif>
+  <comment></comment>
+  <delaunayTolerence>0.0001</delaunayTolerence>
+  <distMaxBetweenPoints>200</distMaxBetweenPoints>
+  <useDefGeomVal>1</useDefGeomVal>
+  <currentCalculID>{0e7f67c2-27d0-4b50-a2ae-d6f112613e7f}</currentCalculID>
+  <SiteNode id="{e24092e3-206d-44a9-99f1-86e133819a50}" name="Site 0">
+   <echelle>1</echelle>
+   <useEmpriseAsCrbNiv>0</useEmpriseAsCrbNiv>
+   <useTopoFile>0</useTopoFile>
+   <topoFile></topoFile>
+   <altiEmprise>0</altiEmprise>
+   <Segment id="{2af3c443-2322-490a-8b27-80831aa0de79}" name="Segment 0">
+    <Color g="1" r="1" b="1"/>
+    <Point x="0.000" y="0.000" z="0.000"/>
+    <Point x="0.000" y="1.000" z="0.000"/>
+   </Segment>
+   <Point x="0.000" y="0.000" z="0.000"/>
+   <Topographie id="{d4e0e622-d2c7-44a0-8bf1-ccbb9e5c2061}" name="Topographie 0">
+    <Emprise>
+     <Point x="-200.000" y="200.000" z="0.000"/>
+     <Point x="200.000" y="200.000" z="0.000"/>
+     <Point x="200.000" y="-200.000" z="0.000"/>
+     <Point x="-200.000" y="-200.000" z="0.000"/>
+    </Emprise>
+    <ListCrbNiv/>
+    <ListTerrain>
+     <GeometryNode id="{b6bf759e-d1d6-489b-bac9-9e75dd0d5d00}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{9f370edb-63f0-4a95-9f3f-2b27ef72b390}" name="Repère 0">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <Terrain id="{d7c234f4-4d6a-41db-ab24-e8e1b8c6dc19}" name="Terrain par defaut">
+       <Color g="0.333333" r="0" b="0"/>
+       <Sol id="{be1359a7-6228-4b44-b589-5af4d6b1d8b2}" name="Sol 0">
+        <resistivite>20000</resistivite>
+        <epaisseur>1</epaisseur>
+        <ecart_type>0</ecart_type>
+        <longueur>0.001</longueur>
+       </Sol>
+       <active>0</active>
+       <nbPoints>0</nbPoints>
+      </Terrain>
+     </GeometryNode>
+    </ListTerrain>
+    <ListCrsEau/>
+    <ListPlanEau/>
+    <Altimetrie id="{d2e7017b-2733-4b43-b92b-260f8cb8d123}" name="Altimétrie 0"/>
+    <DefaultTerrain>0</DefaultTerrain>
+   </Topographie>
+   <Infrastructure id="{035fb085-b729-4a16-bc23-2293019f4dbd}" name="Infrastructure 0">
+    <ListRoute/>
+    <ListResTrans/>
+    <ListBatiment/>
+    <ListMachine/>
+    <ListSource>
+     <GeometryNode id="{e1336dad-8962-4f02-8b9b-b4d33730c1db}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{7bfd6ad0-6ec6-4cc7-a71b-5a84b1b44085}" name="Repère 2">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <UserSourcePonctuelle id="{105e61d3-76ca-4286-831c-0ea2b47bdea0}" name="Source ponctuelle 0">
+       <Color g="0" r="1" b="0"/>
+       <Point x="-28.000" y="-39.000" z="2.000"/>
+       <Vector x="1.000" y="0.000" z="0.000"/>
+       <type>3</type>
+       <hauteur>2.000</hauteur>
+       <typeRaynt>0</typeRaynt>
+       <formeObjet>0</formeObjet>
+       <curRegime>0</curRegime>
+       <nextRegime>1</nextRegime>
+       <UserSrcRegime id="{0b4ff9c2-0d31-4d50-86bb-fc878902a80a}" name="Régime 0">
+        <isRayonnant>1</isRayonnant>
+        <useAtt>0</useAtt>
+        <typeDistribution>1</typeDistribution>
+        <Spectre id="{b9adaa9d-7184-4994-8f73-27d5befc0d0d}" name="Spectre 0">
+         <type>2</type>
+         <fMin>16</fMin>
+         <fMax>16000</fMax>
+         <freqTab form="0">100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0</freqTab>
+        </Spectre>
+       </UserSrcRegime>
+      </UserSourcePonctuelle>
+     </GeometryNode>
+    </ListSource>
+   </Infrastructure>
+   <root>1</root>
+   <repere>0</repere>
+   <SIG_X>0</SIG_X>
+   <SIG_Y>0</SIG_Y>
+   <SIG_OFFSET>0</SIG_OFFSET>
+  </SiteNode>
+  <PointsControl>
+   <PointControl x="-138.000" y="106.000" z="2.000" id="{1214fb9a-9837-4f56-988d-fdd74c0db858}" name="Récepteur ponctuel 0">
+    <etatCalcul idCalcul="{0b99af6a-7d7d-433d-9e7c-989fa3d3d90d}" Etat="0"/>
+    <etatCalcul idCalcul="{0e7f67c2-27d0-4b50-a2ae-d6f112613e7f}" Etat="0"/>
+    <Spectre idCalcul="{0b99af6a-7d7d-433d-9e7c-989fa3d3d90d}" id="{80fe7695-7262-4631-8174-084706383a47}" name="Spectre 32">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0</freqTab>
+    </Spectre>
+    <Spectre idCalcul="{0e7f67c2-27d0-4b50-a2ae-d6f112613e7f}" id="{386a7e96-de5e-4d1d-83b7-028d92341bd4}" name="Spectre 170">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="125.000" y="74.000" z="2.000" id="{14ed9fba-aed4-4ee0-ba3c-cd4321d62027}" name="Récepteur ponctuel 1">
+    <etatCalcul idCalcul="{0b99af6a-7d7d-433d-9e7c-989fa3d3d90d}" Etat="1"/>
+    <etatCalcul idCalcul="{0e7f67c2-27d0-4b50-a2ae-d6f112613e7f}" Etat="0"/>
+    <Spectre idCalcul="{0b99af6a-7d7d-433d-9e7c-989fa3d3d90d}" id="{38d74419-d427-4a17-9667-fa22430c726c}" name="Spectre 58">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">46.7 46.6 46.7 46.8 46.8 46.7 46.7 46.6 46.4 46.5 46.4 46.4 46.3 46.1 46.0 45.8 45.5 45.3 45.0 44.6 44.1 43.4 42.6 41.5 39.8 37.4 33.7 28.0 19.2 5.7 -14.4</freqTab>
+    </Spectre>
+    <Spectre idCalcul="{0e7f67c2-27d0-4b50-a2ae-d6f112613e7f}" id="{3a22dd78-11a2-4959-934f-6ca376a2d338}" name="Spectre 171">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="-93.000" y="-148.000" z="2.000" id="{3efab235-b3e1-4153-a109-1e8302fadbc1}" name="Récepteur ponctuel 2">
+    <etatCalcul idCalcul="{0b99af6a-7d7d-433d-9e7c-989fa3d3d90d}" Etat="1"/>
+    <etatCalcul idCalcul="{0e7f67c2-27d0-4b50-a2ae-d6f112613e7f}" Etat="0"/>
+    <Spectre idCalcul="{0b99af6a-7d7d-433d-9e7c-989fa3d3d90d}" id="{fe3cada2-c012-4e32-b03d-55f7007ace21}" name="Spectre 60">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">50.2 50.1 50.2 50.3 50.2 50.2 50.2 50.1 50.0 50.0 50.0 49.9 49.8 49.7 49.6 49.5 49.3 49.1 48.9 48.6 48.2 47.7 47.1 46.2 45.1 43.3 40.8 36.9 30.9 21.9 8.5</freqTab>
+    </Spectre>
+    <Spectre idCalcul="{0e7f67c2-27d0-4b50-a2ae-d6f112613e7f}" id="{4e3c0c68-91b4-4e15-8fee-f903d47d8366}" name="Spectre 172">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0 -100.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+  </PointsControl>
+  <Calcul isUpTodate="1" id="{0e7f67c2-27d0-4b50-a2ae-d6f112613e7f}" name="Calcul 0">
+   <numero>1</numero>
+   <auteur>Auteur</auteur>
+   <dateCreation>2001-10-01</dateCreation>
+   <dateModif>2001-10-01</dateModif>
+   <comment>Commentaire</comment>
+   <solverId>{a98b320c-44c4-47a9-b689-1dd352daa8b2}</solverId>
+   <etat>1</etat>
+   <solverParams>##############################################
+# Meteo related parameters
+##############################################
+[METEO]
+
+# Atmospheric pressure in pascal [type: double]
+# XXX 101325 dans TYAtmosphere.h
+AtmosPressure=101300.
+# Temperature in degres celsius [type: double]
+AtmosTemperature=20.
+# Hygrometry percent [type: double]
+# XXX 70 dans TYAtmosphere.h
+AtmosHygrometry=60.
+# Temperature gradient [type : double]
+AnalyticGradC=0.
+# Vertical wind speed gradient [type: double]
+AnalyticGradV=0.
+# Wind direction 0 means from north to south [type: double]
+WindDirection=0.
+
+
+##############################################
+# Acoustic ray tracer related parameters
+##############################################
+[ACOUSTICRAYTRACER]
+
+# Ray tracing order propagation (0=From, 1=from receptor, 2=auto) [int]
+RayTracingOrder=0
+# Sampler model 0=random, 1=uniform v1, 2= uniform v2, 3=horizontal [int]
+Discretization=2
+# Number of rays per source [int]
+NbRaysPerSource=100000
+# Maximum ray length in meter [float]
+MaxLength=5000
+# Receptor radius in meter [float]
+SizeReceiver=2.
+# Accelerating structure parameter (0=brut force, 1=grid, 2=BVH, 3=KDTree) [int]
+Accelerator=3
+# Maximal depth search for BVH or KDTree [int]
+MaxTreeDepth=12
+# Minimum dihedral angle to add a diffraction cylinder [float]
+AngleDiffMin=5.
+# Diffraction ridge size in meter [float]
+CylindreThick=0.3
+# Maximum events number for a ray [int]
+MaxProfondeur=10
+# Allow ground reflections [bool]
+UseSol=1
+# Maximum reflections events for a ray [int]
+MaxReflexion=2
+# Maximum diffraction events for a ray [int]
+MaxDiffraction=2
+# Use random sampler instead of regular distribution [bool]
+DiffractionUseRandomSampler=0
+# Number of ray thrown after diffraction (0 = based on source sampling, >0 = forced) [int]
+NbRayWithDiffraction=0
+# Drop down number of rays thrown after a diffraction [bool]
+DiffractionDropDownNbRays=0
+# Do not create rays outside the correct angle [bool]
+DiffractionFilterRayAtCreation=1
+# Allow use of path length difference validation [bool]
+UsePathDifValidation=0
+# Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB) [float]
+MaxPathDifference=25.
+# Allow suppressing rays passing to far from the ridge [bool]
+DiffractionUseDistanceAsFilter=1
+# Keep invalid rays [bool]
+KeepDebugRay=0
+# Use of post-filters [bool]
+UsePostFilters=1
+#
+##############################################
+# Debugging related parameters
+#
+# Only considered by the acoustic ray tracer
+##############################################
+[DEBUG]
+# allow use of closeEventSelector [bool]
+DebugUseCloseEventSelector=1
+# allow use of diffraction angle selector [bool]
+DebugUseDiffractionAngleSelector=1
+# allow use of diffraction path length selector [bool]
+DebugUseDiffractionPathSelector=1
+# allow use of Fermat selector [bool]
+DebugUseFermatSelector=1
+# allow use of (doubled) faces selector [bool]
+DebugUseFaceSelector=1
+
+##############################################
+# Analytic ray tracer related parameters
+#
+# Only considered by the ANIME3D solver
+##############################################
+[ANALYTICRAYTRACER]
+# Sampler model 1=horizontal, 2=vertical, 3=uniform v1, 4=uniform v2 [int]
+CurveRaySampler=1
+# Start vertical angle (theta) [float]
+InitialAngleTheta=0.
+# Final vertical angle (theta) [float]
+FinalAngleTheta=0.
+# Start horizontal angle (phi) [float]
+InitialAnglePhi=0.
+# Final horizontal angle (phi) [float]
+FinalAnglePhi=360.
+# Number of rays per source [int]
+AnalyticNbRay=20
+# Propagation time in second [double]
+AnalyticTMax=10.
+# Time step in second [double]
+AnalyticH=0.1
+# Maximum length propagation [double]
+AnalyticDMax=3000
+
+##############################################
+# Geometric transformer related parameters
+#
+# Only considered by the ANIME3D solver
+##############################################
+[GEOMTRANSFORMER]
+# Transformation method (1 is the only [good] response) [int]
+AnalyticTypeTransfo=1
+# Altimetry refinement parameter [float]
+MeshElementSizeMax=0
+#Allow viewing of the transformed
+showScene=0
+
+##############################################
+# Preprocessing related parameters
+##############################################
+[PREPROCESSING]
+# Source-receptor minimal distance in meters [float]
+MinSRDistance=0.3
+
+##############################################
+# Default solver related parameters
+#
+# Only considered by the default solver
+##############################################
+[DEFAULTSOLVER]
+NbThreads=4
+# Use of real ground (0) or totally reflective ground (1) [bool]
+UseRealGround=1
+# Takes vegetation into account [bool]
+#UseVegetation=0
+# Takes screens into account [bool]
+UseScreen=1
+# Lateral diffractions computing (if screens on) [bool]
+UseLateralDiffraction=1
+# Takes reflections in account (first order only) [bool]
+UseReflection=1
+# Propagation conditions (non refracting / downward conditions (ISO 9613)) [bool]
+PropaConditions=0
+# H1 parameter (ISO 9613 downward conditions) [float]
+H1parameter=10.
+# Energetic (pÂ² summation) or interference (p summation) [bool]
+ModSummation=0
+
+##############################################
+# ANIME3D solver related parameters
+#
+# Only considered by the ANIME3D solver
+##############################################
+[ANIME3DSOLVER]
+# Takes meteo in account [bool]
+UseMeteo=0
+# Use Fresnel area [bool]
+UseFresnelArea=0
+# Value of relative uncertainty [float]
+Anime3DSigma=0.
+# Force 'C' parameter to 0 or 1 (will be computed from totalRayLength for any other value) [int]
+Anime3DForceC=1
+</solverParams>
+   <ListID>
+    <Element id="{e24092e3-206d-44a9-99f1-86e133819a50}"/>
+    <Element id="{c41a3b00-af5b-4499-a727-18977376c751}"/>
+    <Element id="{105e61d3-76ca-4286-831c-0ea2b47bdea0}"/>
+    <Element id="{035fb085-b729-4a16-bc23-2293019f4dbd}"/>
+   </ListID>
+   <EmissionAccVolNodes>
+    <EmissionAccVolNode accVolNodeId="{105e61d3-76ca-4286-831c-0ea2b47bdea0}" state="1"/>
+   </EmissionAccVolNodes>
+   <RegimeAccNode>
+    <RegimeAccNode accVolNodeId="{105e61d3-76ca-4286-831c-0ea2b47bdea0}" state="0"/>
+   </RegimeAccNode>
+   <GeometryNode id="{a8c32105-8d38-4d38-b118-468321a2064f}" name="">
+    <hauteur>0.000</hauteur>
+    <Repere id="{cf81cb44-738d-4a0b-a000-7986ce8259dc}" name="Repère 16">
+     <Point x="-124.000000000000" y="117.000000000000" z="0.000000000000"/>
+     <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+     <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+     <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+    </Repere>
+    <RectangularMaillage id="{1650f854-791a-4ced-ac8b-4d3602730bd1}" name="Carto_rectangulaire horizontale">
+     <hauteur>2</hauteur>
+     <computeAlti>1</computeAlti>
+     <dataType>0</dataType>
+     <dataFreq>100</dataFreq>
+     <etat>0</etat>
+     <Palette id="{213f2f8f-ab9b-4d3e-a4a8-576a1dd47d53}" name="Palette 0">
+      <valueMin>40</valueMin>
+      <valueMax>75</valueMax>
+      <lookupTable nbColors="9">1290141951 1442775295 3523179519 4294922751 4294902015 4289331455 4283760895 3808428287 2818572543 </lookupTable>
+      <colorMap>
+       <colorMapEntry value="40" color="1290141951"/>
+       <colorMapEntry value="45" color="1442775295"/>
+       <colorMapEntry value="50" color="3523179519"/>
+       <colorMapEntry value="55" color="4294922751"/>
+       <colorMapEntry value="60" color="4294902015"/>
+       <colorMapEntry value="65" color="4289331455"/>
+       <colorMapEntry value="70" color="4283760895"/>
+       <colorMapEntry value="75" color="3808428287"/>
+       <colorMapEntry value="inf" color="2818572543"/>
+      </colorMap>
+     </Palette>
+     <densiteX>0.04</densiteX>
+     <densiteY>0.04</densiteY>
+     <Rectangle id="{48caafe9-42c0-459d-a256-69ab58f8b7ac}" name="Rectangle 1">
+      <Point x="-38.500" y="39.000" z="0.000"/>
+      <Point x="38.500" y="39.000" z="0.000"/>
+      <Point x="38.500" y="-39.000" z="0.000"/>
+      <Point x="-38.500" y="-39.000" z="0.000"/>
+     </Rectangle>
+     <Spectre id="{f9282a42-6ec7-4d6b-9607-f7423721ffd8}" name="Spectre 336">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">44.8 44.7 44.8 44.9 44.9 44.9 44.8 44.7 44.5 44.6 44.5 44.4 44.3 44.1 43.9 43.7 43.5 43.2 42.8 42.4 41.8 41.1 40.1 38.8 36.8 33.8 29.3 22.2 11.2 -5.6 -30.7</freqTab>
+     </Spectre>
+     <Spectre id="{1b2d928b-2982-4d5c-8314-52f72820bfa3}" name="Spectre 337">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">45.3 45.2 45.3 45.4 45.4 45.4 45.3 45.3 45.0 45.1 45.0 44.9 44.8 44.7 44.5 44.3 44.0 43.7 43.4 43.0 42.4 41.7 40.8 39.5 37.6 34.8 30.5 23.8 13.4 -2.4 -26.0</freqTab>
+     </Spectre>
+     <Spectre id="{ae7f8367-8dcf-4bad-b572-97e698798fc4}" name="Spectre 338">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">45.8 45.6 45.7 45.9 45.8 45.8 45.8 45.7 45.5 45.6 45.5 45.4 45.3 45.1 45.0 44.8 44.5 44.2 43.9 43.5 43.0 42.3 41.4 40.1 38.4 35.7 31.6 25.2 15.4 0.4 -22.1</freqTab>
+     </Spectre>
+     <Spectre id="{be3412b8-ddb7-4536-be3e-9a9a85e0e9fd}" name="Spectre 339">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">46.1 46.0 46.1 46.2 46.2 46.2 46.1 46.1 45.9 45.9 45.8 45.8 45.7 45.5 45.3 45.1 44.9 44.6 44.3 43.9 43.4 42.7 41.9 40.7 38.9 36.4 32.4 26.3 16.9 2.5 -19.0</freqTab>
+     </Spectre>
+     <Spectre id="{533e8f51-8ecf-4196-811f-a5a007015d6a}" name="Spectre 340">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">45.6 45.5 45.6 45.7 45.7 45.6 45.6 45.5 45.3 45.4 45.3 45.2 45.1 45.0 44.8 44.6 44.3 44.1 43.7 43.3 42.8 42.1 41.2 39.9 38.1 35.4 31.2 24.7 14.7 -0.6 -23.5</freqTab>
+     </Spectre>
+     <Spectre id="{93233540-e09b-4379-aba8-05797e2e0535}" name="Spectre 341">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">46.2 46.1 46.2 46.3 46.3 46.3 46.2 46.2 46.0 46.0 45.9 45.9 45.8 45.6 45.5 45.3 45.0 44.8 44.4 44.0 43.5 42.9 42.0 40.8 39.1 36.5 32.6 26.6 17.3 3.0 -18.2</freqTab>
+     </Spectre>
+     <Spectre id="{f04c9835-bb1c-4433-bcb6-04f96ed5fc88}" name="Spectre 342">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">46.8 46.7 46.7 46.9 46.8 46.8 46.8 46.7 46.5 46.6 46.5 46.4 46.3 46.2 46.0 45.9 45.6 45.4 45.1 44.7 44.2 43.5 42.7 41.6 40.0 37.6 33.9 28.2 19.5 6.1 -13.8</freqTab>
+     </Spectre>
+     <Spectre id="{2be5b775-c38d-4c5e-bd65-63303e17ee48}" name="Spectre 343">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">47.2 47.1 47.2 47.3 47.3 47.3 47.3 47.2 47.0 47.1 47.0 46.9 46.8 46.7 46.5 46.3 46.1 45.9 45.6 45.2 44.7 44.1 43.3 42.2 40.7 38.4 34.9 29.5 21.2 8.6 -10.3</freqTab>
+     </Spectre>
+     <Spectre id="{3c4f06d2-1225-48fd-89b1-73248d1138f1}" name="Spectre 344">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">46.4 46.3 46.4 46.5 46.5 46.5 46.4 46.4 46.2 46.2 46.1 46.1 46.0 45.8 45.7 45.5 45.2 45.0 44.7 44.3 43.8 43.1 42.3 41.1 39.4 36.9 33.1 27.2 18.1 4.2 -16.6</freqTab>
+     </Spectre>
+     <Spectre id="{7f0215ed-9627-441f-896a-57e98f888595}" name="Spectre 345">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">47.2 47.1 47.1 47.3 47.2 47.2 47.2 47.1 46.9 47.0 46.9 46.9 46.8 46.6 46.5 46.3 46.1 45.8 45.5 45.1 44.7 44.0 43.2 42.2 40.6 38.3 34.8 29.4 21.0 8.3 -10.7</freqTab>
+     </Spectre>
+     <Spectre id="{29b4667e-262e-465e-b3c2-88221e158123}" name="Spectre 346">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">47.9 47.8 47.9 48.0 48.0 47.9 47.9 47.8 47.7 47.7 47.6 47.6 47.5 47.4 47.2 47.1 46.8 46.6 46.3 46.0 45.5 44.9 44.2 43.1 41.7 39.5 36.3 31.3 23.6 11.9 -5.6</freqTab>
+     </Spectre>
+     <Spectre id="{c3d20522-6a4b-4169-b2cc-3509f9f062c1}" name="Spectre 347">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.5 48.4 48.5 48.6 48.6 48.5 48.5 48.5 48.3 48.3 48.3 48.2 48.1 48.0 47.9 47.7 47.5 47.3 47.0 46.7 46.2 45.7 45.0 44.0 42.6 40.6 37.5 32.9 25.7 14.8 -1.5</freqTab>
+     </Spectre>
+     <Spectre id="{44339537-baa6-451f-bdd4-bac3b2e02b8b}" name="Spectre 348">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">47.3 47.2 47.2 47.3 47.3 47.3 47.3 47.2 47.0 47.1 47.0 46.9 46.8 46.7 46.5 46.4 46.1 45.9 45.6 45.2 44.7 44.1 43.3 42.2 40.7 38.4 34.9 29.6 21.3 8.7 -10.2</freqTab>
+     </Spectre>
+     <Spectre id="{eb2e34f1-1272-4015-bb90-7ee35dcfb878}" name="Spectre 349">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.2 48.1 48.2 48.3 48.3 48.2 48.2 48.1 48.0 48.0 47.9 47.9 47.8 47.7 47.5 47.4 47.2 46.9 46.6 46.3 45.9 45.3 44.6 43.6 42.1 40.1 36.9 32.1 24.6 13.3 -3.6</freqTab>
+     </Spectre>
+     <Spectre id="{83c1d70d-1372-4794-b0b4-a0228ef8ea63}" name="Spectre 350">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.1 49.0 49.1 49.2 49.2 49.2 49.1 49.1 48.9 49.0 48.9 48.8 48.8 48.6 48.5 48.3 48.2 47.9 47.7 47.4 46.9 46.4 45.7 44.8 43.5 41.6 38.8 34.4 27.7 17.5 2.3</freqTab>
+     </Spectre>
+     <Spectre id="{6f99c494-f38a-4f7f-bedb-ec61c0efd4af}" name="Spectre 351">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.0 49.9 49.9 50.0 50.0 50.0 50.0 49.9 49.7 49.8 49.7 49.7 49.6 49.5 49.4 49.2 49.1 48.8 48.6 48.3 47.9 47.4 46.8 45.9 44.7 43.0 40.3 36.4 30.3 21.0 7.2</freqTab>
+     </Spectre>
+    </RectangularMaillage>
+   </GeometryNode>
+   <GeometryNode id="{f4cd8863-44a5-4c78-bd1b-d5face17eaae}" name="">
+    <hauteur>0.000</hauteur>
+    <Repere id="{889d97e2-f982-4d3a-9282-58e4d2a7a56b}" name="Repère 18">
+     <Point x="72.000000000000" y="93.000000000000" z="3.000000000000"/>
+     <Vector x="0.007999744012" y="-0.999968001536" z="0.000000000000"/>
+     <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+     <Vector x="-0.999968001536" y="-0.007999744012" z="0.000000000000"/>
+    </Repere>
+    <RectangularMaillage id="{695d6a67-47ea-4198-99e2-77cd64ec4e51}" name="Carto verticale">
+     <hauteur>2</hauteur>
+     <computeAlti>0</computeAlti>
+     <dataType>0</dataType>
+     <dataFreq>100</dataFreq>
+     <etat>0</etat>
+     <Palette id="{8821644f-50ae-4445-ac8f-f7bb0e30f296}" name="Palette 1">
+      <valueMin>40</valueMin>
+      <valueMax>75</valueMax>
+      <lookupTable nbColors="9">1290141951 1442775295 3523179519 4294922751 4294902015 4289331455 4283760895 3808428287 2818572543 </lookupTable>
+      <colorMap>
+       <colorMapEntry value="40" color="1290141951"/>
+       <colorMapEntry value="45" color="1442775295"/>
+       <colorMapEntry value="50" color="3523179519"/>
+       <colorMapEntry value="55" color="4294922751"/>
+       <colorMapEntry value="60" color="4294902015"/>
+       <colorMapEntry value="65" color="4289331455"/>
+       <colorMapEntry value="70" color="4283760895"/>
+       <colorMapEntry value="75" color="3808428287"/>
+       <colorMapEntry value="inf" color="2818572543"/>
+      </colorMap>
+     </Palette>
+     <densiteX>0.1</densiteX>
+     <densiteY>0.1</densiteY>
+     <Rectangle id="{8fc1744c-7e0a-4988-9ae8-0502c423a2f7}" name="Rectangle 3">
+      <Point x="-62.502" y="1.000" z="0.000"/>
+      <Point x="62.502" y="1.000" z="0.000"/>
+      <Point x="62.502" y="-1.000" z="0.000"/>
+      <Point x="-62.502" y="-1.000" z="0.000"/>
+     </Rectangle>
+     <Spectre id="{4760637c-9d61-4b67-a166-bcb1443c6445}" name="Spectre 369">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">45.5 45.4 45.5 45.6 45.6 45.6 45.5 45.5 45.3 45.3 45.2 45.1 45.0 44.9 44.7 44.4 44.2 43.9 43.6 43.2 42.7 42.0 41.1 39.8 38.0 35.1 30.9 24.3 14.1 -1.4 -24.4</freqTab>
+     </Spectre>
+     <Spectre id="{9dcfc52a-5129-437f-a05d-db0da9bfb685}" name="Spectre 370">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">45.9 45.8 45.9 46.0 46.0 45.9 45.9 45.8 45.6 45.7 45.6 45.5 45.4 45.2 45.1 44.9 44.6 44.3 44.0 43.6 43.1 42.5 41.6 40.4 38.6 35.9 31.8 25.4 15.7 0.9 -21.2</freqTab>
+     </Spectre>
+     <Spectre id="{a6d9639d-1533-4680-bb2f-43a22409b3b9}" name="Spectre 371">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">46.3 46.2 46.2 46.4 46.3 46.3 46.3 46.2 46.0 46.1 46.0 45.9 45.8 45.7 45.5 45.3 45.0 44.8 44.5 44.1 43.6 43.0 42.1 40.9 39.2 36.6 32.7 26.6 17.3 3.1 -18.0</freqTab>
+     </Spectre>
+     <Spectre id="{72543eb1-0fe1-44b6-a946-5953104ee30c}" name="Spectre 372">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">46.7 46.6 46.6 46.8 46.7 46.7 46.7 46.6 46.4 46.5 46.4 46.3 46.2 46.1 45.9 45.7 45.5 45.2 44.9 44.6 44.1 43.5 42.7 41.5 39.9 37.4 33.6 27.8 18.9 5.3 -14.8</freqTab>
+     </Spectre>
+     <Spectre id="{b58b4beb-aafb-428a-9e41-80e10745d52d}" name="Spectre 373">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">47.1 47.0 47.1 47.2 47.1 47.1 47.1 47.0 46.8 46.9 46.8 46.7 46.6 46.5 46.3 46.1 45.9 45.7 45.4 45.0 44.6 44.0 43.2 42.1 40.5 38.2 34.5 29.0 20.5 7.5 -11.7</freqTab>
+     </Spectre>
+     <Spectre id="{2ce5c53f-762c-4bcb-8d3f-0aeb6693eb52}" name="Spectre 374">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">47.5 47.4 47.5 47.6 47.6 47.5 47.5 47.4 47.3 47.3 47.2 47.2 47.1 46.9 46.8 46.6 46.4 46.2 45.9 45.5 45.1 44.6 43.8 42.7 41.2 38.9 35.5 30.2 22.0 9.7 -8.6</freqTab>
+     </Spectre>
+     <Spectre id="{a440a1a7-51a8-4001-866a-99bbde894fab}" name="Spectre 375">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">47.9 47.9 47.9 48.0 48.0 48.0 47.9 47.9 47.7 47.8 47.7 47.6 47.5 47.4 47.2 47.1 46.9 46.6 46.4 46.0 45.6 45.1 44.4 43.4 41.9 39.7 36.4 31.3 23.6 11.9 -5.6</freqTab>
+     </Spectre>
+     <Spectre id="{c33f87c7-43e7-41c7-862e-26b0a6128642}" name="Spectre 376">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.4 48.3 48.3 48.5 48.4 48.4 48.4 48.3 48.2 48.2 48.1 48.1 48.0 47.9 47.7 47.5 47.3 47.1 46.9 46.6 46.2 45.7 45.0 44.0 42.6 40.5 37.3 32.5 25.1 14.0 -2.6</freqTab>
+     </Spectre>
+     <Spectre id="{a5a6b16e-3fcd-4584-8233-2e4c3b64fadd}" name="Spectre 377">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.8 48.7 48.8 48.9 48.9 48.9 48.8 48.8 48.6 48.7 48.6 48.5 48.4 48.3 48.2 48.0 47.8 47.6 47.4 47.1 46.7 46.2 45.6 44.6 43.3 41.3 38.3 33.7 26.6 16.0 0.3</freqTab>
+     </Spectre>
+     <Spectre id="{d88f7e4d-fe24-4afb-a71f-b87002ebfa99}" name="Spectre 378">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.3 49.2 49.3 49.4 49.3 49.3 49.3 49.2 49.1 49.1 49.0 49.0 48.9 48.8 48.7 48.5 48.3 48.1 47.9 47.6 47.3 46.8 46.2 45.3 44.0 42.1 39.2 34.8 28.1 18.1 3.1</freqTab>
+     </Spectre>
+     <Spectre id="{4c601340-0d47-46cf-bdf6-3b98a20fa4c7}" name="Spectre 379">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.7 49.7 49.7 49.8 49.8 49.8 49.7 49.7 49.5 49.6 49.5 49.5 49.4 49.3 49.1 49.0 48.8 48.6 48.4 48.1 47.8 47.3 46.7 45.9 44.7 42.8 40.1 35.9 29.6 20.0 5.8</freqTab>
+     </Spectre>
+     <Spectre id="{f75d8e50-67f7-4ea5-b5df-1b4ea4242f2f}" name="Spectre 380">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.2 50.1 50.2 50.2 50.2 50.2 50.2 50.1 50.0 50.0 50.0 49.9 49.8 49.7 49.6 49.5 49.3 49.1 48.9 48.6 48.3 47.9 47.3 46.5 45.3 43.6 41.0 37.0 30.9 21.8 8.3</freqTab>
+     </Spectre>
+     <Spectre id="{bcc5e7cc-0f66-489d-9afc-88282386d18a}" name="Spectre 381">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.6 50.5 50.6 50.7 50.6 50.6 50.6 50.6 50.4 50.5 50.4 50.4 50.3 50.2 50.1 49.9 49.8 49.6 49.4 49.1 48.8 48.4 47.9 47.1 46.0 44.3 41.8 38.0 32.2 23.6 10.7</freqTab>
+     </Spectre>
+     <Spectre id="{95921576-71fa-480c-9991-f2a0dae659ac}" name="Spectre 382">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">45.5 45.4 45.5 45.6 45.6 45.6 45.5 45.5 45.3 45.3 45.2 45.2 45.1 44.9 44.7 44.5 44.3 44.0 43.7 43.2 42.7 42.0 41.1 39.8 38.0 35.3 31.1 24.5 14.4 -1.0 -24.0</freqTab>
+     </Spectre>
+     <Spectre id="{e55be158-f009-4676-9511-9d1e31d4a721}" name="Spectre 383">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">45.9 45.8 45.9 46.0 46.0 46.0 45.9 45.9 45.6 45.7 45.6 45.6 45.4 45.3 45.1 44.9 44.7 44.4 44.1 43.7 43.1 42.5 41.6 40.4 38.6 36.0 31.9 25.7 16.0 1.2 -20.8</freqTab>
+     </Spectre>
+     <Spectre id="{5587fe0e-de3b-4849-8a9f-163a840da1be}" name="Spectre 384">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">46.3 46.2 46.2 46.4 46.4 46.3 46.3 46.2 46.0 46.1 46.0 46.0 45.8 45.7 45.5 45.3 45.1 44.8 44.5 44.1 43.6 43.0 42.1 40.9 39.2 36.7 32.8 26.8 17.6 3.5 -17.6</freqTab>
+     </Spectre>
+     <Spectre id="{c664e0b2-0063-48d0-90c4-ae1f549a5234}" name="Spectre 385">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">46.7 46.6 46.6 46.8 46.8 46.7 46.7 46.6 46.4 46.5 46.4 46.4 46.2 46.1 46.0 45.8 45.5 45.3 45.0 44.6 44.1 43.4 42.6 41.5 39.8 37.4 33.7 28.0 19.1 5.7 -14.5</freqTab>
+     </Spectre>
+     <Spectre id="{d00c2496-04e9-4b4f-a584-1db90843623a}" name="Spectre 386">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">47.1 47.0 47.1 47.2 47.2 47.1 47.1 47.0 46.9 46.9 46.8 46.8 46.7 46.5 46.4 46.2 46.0 45.7 45.4 45.0 44.6 43.9 43.1 42.0 40.5 38.1 34.6 29.1 20.7 7.9 -11.3</freqTab>
+     </Spectre>
+     <Spectre id="{ca76718f-aedf-479c-8475-d513b3b53acc}" name="Spectre 387">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">47.5 47.4 47.5 47.6 47.6 47.6 47.5 47.5 47.3 47.3 47.3 47.2 47.1 47.0 46.8 46.6 46.4 46.2 45.9 45.5 45.1 44.5 43.7 42.6 41.1 38.9 35.5 30.3 22.3 10.0 -8.3</freqTab>
+     </Spectre>
+     <Spectre id="{61dd18d7-a2fb-4c1b-8fc7-62c8ce1c0806}" name="Spectre 388">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.0 47.9 47.9 48.0 48.0 48.0 48.0 47.9 47.7 47.8 47.7 47.6 47.5 47.4 47.3 47.1 46.9 46.7 46.4 46.0 45.6 45.0 44.2 43.2 41.8 39.6 36.4 31.4 23.8 12.1 -5.2</freqTab>
+     </Spectre>
+     <Spectre id="{76d72ad9-0070-4f11-952a-047d380f0e84}" name="Spectre 389">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.4 48.3 48.4 48.5 48.4 48.4 48.4 48.3 48.2 48.2 48.1 48.1 48.0 47.9 47.7 47.6 47.4 47.1 46.9 46.5 46.1 45.5 44.8 43.8 42.4 40.4 37.3 32.6 25.3 14.2 -2.3</freqTab>
+     </Spectre>
+     <Spectre id="{10128bd6-d5da-4570-87b7-5b7b0a16d4ab}" name="Spectre 390">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.8 48.8 48.8 48.9 48.9 48.9 48.8 48.8 48.6 48.7 48.6 48.6 48.5 48.4 48.2 48.1 47.9 47.6 47.4 47.0 46.6 46.1 45.4 44.4 43.1 41.1 38.2 33.7 26.8 16.3 0.6</freqTab>
+     </Spectre>
+     <Spectre id="{854256a2-03fe-4d75-a7d1-a9e8aa9f9d9d}" name="Spectre 391">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.3 49.2 49.3 49.4 49.3 49.3 49.3 49.2 49.1 49.1 49.1 49.0 48.9 48.8 48.7 48.5 48.3 48.1 47.9 47.5 47.1 46.6 46.0 45.0 43.8 41.9 39.1 34.8 28.2 18.3 3.4</freqTab>
+     </Spectre>
+     <Spectre id="{35cf9631-abf6-4563-a85d-e58bae48cd54}" name="Spectre 392">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.7 49.7 49.7 49.8 49.8 49.8 49.8 49.7 49.5 49.6 49.5 49.5 49.4 49.3 49.2 49.0 48.8 48.6 48.4 48.1 47.7 47.2 46.5 45.7 44.4 42.6 40.0 35.9 29.6 20.2 6.0</freqTab>
+     </Spectre>
+     <Spectre id="{aabbdca8-c923-484b-a92a-86e2cad8a367}" name="Spectre 393">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.2 50.1 50.2 50.3 50.2 50.2 50.2 50.1 50.0 50.1 50.0 49.9 49.9 49.8 49.6 49.5 49.3 49.1 48.9 48.6 48.2 47.7 47.1 46.3 45.1 43.4 40.8 36.9 31.0 22.0 8.6</freqTab>
+     </Spectre>
+     <Spectre id="{96aab691-d725-472a-ac94-f60458573249}" name="Spectre 394">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.6 50.5 50.6 50.7 50.7 50.7 50.6 50.6 50.4 50.5 50.4 50.4 50.3 50.2 50.1 49.9 49.8 49.6 49.3 49.1 48.7 48.2 47.6 46.8 45.7 44.1 41.6 37.9 32.2 23.7 10.9</freqTab>
+     </Spectre>
+    </RectangularMaillage>
+   </GeometryNode>
+   <GeometryNode id="{cd4ec2de-6b9c-42df-804d-dae59918d50a}" name="">
+    <hauteur>0.000</hauteur>
+    <Repere id="{b36a229a-0ccb-4159-97ab-16ef0d087a81}" name="Repère 20">
+     <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+     <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+     <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+     <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+    </Repere>
+    <BoundaryNoiseMap id="{4aa5bf4e-3565-471c-9a59-cee173fc581e}" name="Récepteur périmètrique">
+     <hauteur>2</hauteur>
+     <computeAlti>1</computeAlti>
+     <dataType>0</dataType>
+     <dataFreq>100</dataFreq>
+     <etat>0</etat>
+     <Palette id="{2fd12d66-c561-450b-b4c1-46dc5f801366}" name="Palette 2">
+      <valueMin>40</valueMin>
+      <valueMax>75</valueMax>
+      <lookupTable nbColors="9">1290141951 1442775295 3523179519 4294922751 4294902015 4289331455 4283760895 3808428287 2818572543 </lookupTable>
+      <colorMap>
+       <colorMapEntry value="40" color="1290141951"/>
+       <colorMapEntry value="45" color="1442775295"/>
+       <colorMapEntry value="50" color="3523179519"/>
+       <colorMapEntry value="55" color="4294922751"/>
+       <colorMapEntry value="60" color="4294902015"/>
+       <colorMapEntry value="65" color="4289331455"/>
+       <colorMapEntry value="70" color="4283760895"/>
+       <colorMapEntry value="75" color="3808428287"/>
+       <colorMapEntry value="inf" color="2818572543"/>
+      </colorMap>
+     </Palette>
+     <thickness>10</thickness>
+     <closed>0</closed>
+     <density>0.2</density>
+     <nbPoints>4</nbPoints>
+     <Point x="-139.000" y="-97.000" z="2.000"/>
+     <Point x="-83.000" y="-97.000" z="2.000"/>
+     <Point x="-83.000" y="-143.000" z="2.000"/>
+     <Point x="-139.000" y="-143.000" z="2.000"/>
+     <Spectre id="{869846db-a71e-477e-9416-e695d303a4a6}" name="Spectre 422">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.6 48.5 48.6 48.7 48.7 48.6 48.6 48.5 48.4 48.4 48.4 48.3 48.2 48.1 48.0 47.8 47.6 47.4 47.1 46.8 46.3 45.8 45.1 44.1 42.7 40.7 37.7 33.1 26.0 15.2 -0.9</freqTab>
+     </Spectre>
+     <Spectre id="{e785ebbe-0d1f-4932-9e93-fb9cee3f71a9}" name="Spectre 423">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.8 48.7 48.7 48.9 48.8 48.8 48.8 48.7 48.6 48.6 48.5 48.5 48.4 48.3 48.1 48.0 47.8 47.6 47.3 47.0 46.5 46.0 45.3 44.3 43.0 41.0 38.1 33.5 26.6 16.0 0.2</freqTab>
+     </Spectre>
+     <Spectre id="{6ed34507-1fe3-45a9-857f-6c2b44e5ff72}" name="Spectre 424">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.1 50.1 50.1 50.2 50.2 50.2 50.1 50.1 49.9 50.0 49.9 49.9 49.8 49.7 49.6 49.4 49.3 49.1 48.8 48.5 48.1 47.7 47.0 46.2 45.0 43.3 40.7 36.8 30.8 21.8 8.3</freqTab>
+     </Spectre>
+     <Spectre id="{92c8022c-02ce-43a0-944a-cb83248b7af0}" name="Spectre 425">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.3 50.2 50.3 50.4 50.3 50.3 50.3 50.2 50.1 50.2 50.1 50.0 50.0 49.9 49.7 49.6 49.4 49.2 49.0 48.7 48.3 47.8 47.2 46.4 45.2 43.5 41.0 37.1 31.3 22.4 9.1</freqTab>
+     </Spectre>
+     <Spectre id="{d31ae97a-0454-4463-96ca-4b7ee353b2fc}" name="Spectre 426">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.6 48.5 48.6 48.7 48.7 48.6 48.6 48.6 48.4 48.4 48.4 48.3 48.2 48.1 48.0 47.8 47.6 47.4 47.1 46.8 46.3 45.8 45.1 44.1 42.7 40.7 37.7 33.1 26.0 15.2 -0.9</freqTab>
+     </Spectre>
+     <Spectre id="{36c7d1af-4ebf-424f-8447-97bcf073b025}" name="Spectre 427">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.8 48.7 48.8 48.9 48.8 48.8 48.8 48.7 48.6 48.6 48.6 48.5 48.4 48.3 48.2 48.0 47.8 47.6 47.3 47.0 46.6 46.0 45.3 44.4 43.0 41.1 38.1 33.6 26.6 16.1 0.3</freqTab>
+     </Spectre>
+     <Spectre id="{f48f27da-c618-48fa-bb9a-9373ebc5367e}" name="Spectre 428">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.0 48.9 48.9 49.1 49.0 49.0 49.0 48.9 48.8 48.8 48.7 48.7 48.6 48.5 48.4 48.2 48.0 47.8 47.5 47.2 46.8 46.2 45.6 44.6 43.3 41.4 38.5 34.0 27.2 16.9 1.5</freqTab>
+     </Spectre>
+     <Spectre id="{d60c79fc-1f21-48c5-940a-7876188f857e}" name="Spectre 429">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.4 50.3 50.4 50.5 50.5 50.5 50.4 50.4 50.2 50.3 50.2 50.2 50.1 50.0 49.9 49.7 49.6 49.4 49.1 48.8 48.5 48.0 47.4 46.6 45.4 43.7 41.2 37.4 31.6 22.9 9.8</freqTab>
+     </Spectre>
+     <Spectre id="{7aafe108-de6e-4e49-ac71-ff5c5a5dac7a}" name="Spectre 430">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.6 50.5 50.6 50.7 50.6 50.6 50.6 50.5 50.4 50.4 50.4 50.3 50.3 50.2 50.0 49.9 49.7 49.5 49.3 49.0 48.6 48.2 47.6 46.8 45.6 44.0 41.5 37.8 32.1 23.5 10.7</freqTab>
+     </Spectre>
+     <Spectre id="{c36d0695-7791-4054-a34f-58e9b80ca180}" name="Spectre 431">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.7 50.7 50.7 50.8 50.8 50.8 50.7 50.7 50.5 50.6 50.5 50.5 50.4 50.3 50.2 50.1 49.9 49.7 49.5 49.2 48.8 48.4 47.8 47.0 45.9 44.2 41.8 38.1 32.5 24.1 11.5</freqTab>
+     </Spectre>
+     <Spectre id="{6682aba9-7d84-4cee-9f32-1a23061f033a}" name="Spectre 432">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">48.8 48.7 48.8 48.9 48.8 48.8 48.8 48.7 48.6 48.6 48.6 48.5 48.4 48.3 48.2 48.0 47.8 47.6 47.3 47.0 46.6 46.0 45.3 44.4 43.0 41.1 38.1 33.6 26.6 16.0 0.3</freqTab>
+     </Spectre>
+     <Spectre id="{53f3d1be-ae09-49f8-b81e-3530fa0bbfb2}" name="Spectre 433">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.0 48.9 49.0 49.1 49.0 49.0 49.0 48.9 48.8 48.8 48.8 48.7 48.6 48.5 48.4 48.2 48.0 47.8 47.5 47.2 46.8 46.3 45.6 44.6 43.3 41.4 38.5 34.1 27.3 16.9 1.5</freqTab>
+     </Spectre>
+     <Spectre id="{237fa543-88a7-4a77-af2a-fbbb818625f4}" name="Spectre 434">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.2 49.1 49.1 49.3 49.2 49.2 49.2 49.1 49.0 49.0 49.0 48.9 48.8 48.7 48.6 48.4 48.2 48.0 47.7 47.4 47.0 46.5 45.8 44.9 43.6 41.7 38.9 34.5 27.9 17.8 2.7</freqTab>
+     </Spectre>
+     <Spectre id="{58be3be0-f5fa-4648-8bc0-ea17f0475a46}" name="Spectre 435">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.7 50.6 50.7 50.8 50.8 50.7 50.7 50.7 50.5 50.6 50.5 50.5 50.4 50.3 50.2 50.0 49.9 49.7 49.4 49.2 48.8 48.3 47.7 46.9 45.8 44.2 41.8 38.1 32.5 24.0 11.3</freqTab>
+     </Spectre>
+     <Spectre id="{401f78b8-4925-4ef6-a0b8-831e15a1f45d}" name="Spectre 436">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.9 50.8 50.9 51.0 50.9 50.9 50.9 50.8 50.7 50.7 50.7 50.6 50.6 50.5 50.3 50.2 50.0 49.9 49.6 49.3 49.0 48.5 48.0 47.2 46.1 44.5 42.1 38.5 33.0 24.6 12.2</freqTab>
+     </Spectre>
+     <Spectre id="{1a89d97e-2dbc-4c25-bbfd-311eff1c88ee}" name="Spectre 437">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.1 51.0 51.0 51.1 51.1 51.1 51.1 51.0 50.9 50.9 50.8 50.8 50.7 50.6 50.5 50.4 50.2 50.0 49.8 49.5 49.2 48.7 48.2 47.4 46.3 44.7 42.4 38.8 33.4 25.2 13.1</freqTab>
+     </Spectre>
+     <Spectre id="{f3c6cf99-7ed5-40b3-b7a1-bb4b777ed79a}" name="Spectre 438">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.0 48.9 48.9 49.1 49.0 49.0 49.0 48.9 48.8 48.8 48.7 48.7 48.6 48.5 48.4 48.2 48.0 47.8 47.5 47.2 46.8 46.2 45.5 44.6 43.3 41.4 38.5 34.0 27.2 16.9 1.4</freqTab>
+     </Spectre>
+     <Spectre id="{78352765-5df1-4a01-98f9-4bd4c5489f06}" name="Spectre 439">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.2 49.1 49.1 49.3 49.2 49.2 49.2 49.1 49.0 49.0 49.0 48.9 48.8 48.7 48.6 48.4 48.2 48.0 47.7 47.4 47.0 46.5 45.8 44.9 43.6 41.7 38.9 34.5 27.9 17.8 2.7</freqTab>
+     </Spectre>
+     <Spectre id="{35239555-31c8-4264-b13e-996ee588e802}" name="Spectre 440">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.4 49.3 49.4 49.5 49.4 49.4 49.4 49.3 49.2 49.2 49.2 49.1 49.0 48.9 48.8 48.6 48.4 48.2 48.0 47.7 47.3 46.7 46.1 45.2 43.9 42.1 39.3 35.0 28.5 18.7 3.9</freqTab>
+     </Spectre>
+     <Spectre id="{62929f94-2184-43d0-bb19-79ff61584a15}" name="Spectre 441">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.0 50.9 51.0 51.1 51.0 51.0 51.0 51.0 50.8 50.9 50.8 50.8 50.7 50.6 50.5 50.3 50.2 50.0 49.8 49.5 49.1 48.7 48.1 47.3 46.2 44.6 42.3 38.7 33.3 25.1 12.9</freqTab>
+     </Spectre>
+     <Spectre id="{11744ccf-492d-41d4-9149-301b713af807}" name="Spectre 442">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.2 51.1 51.2 51.3 51.2 51.2 51.2 51.1 51.0 51.1 51.0 50.9 50.9 50.8 50.7 50.5 50.4 50.2 50.0 49.7 49.3 48.9 48.3 47.6 46.5 44.9 42.6 39.1 33.8 25.8 13.8</freqTab>
+     </Spectre>
+     <Spectre id="{c639dfe4-3306-47a3-a0c3-2335e4cbc80a}" name="Spectre 443">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.4 51.3 51.3 51.4 51.4 51.4 51.4 51.3 51.2 51.2 51.2 51.1 51.1 51.0 50.9 50.7 50.6 50.4 50.2 49.9 49.6 49.1 48.6 47.8 46.7 45.2 42.9 39.5 34.3 26.4 14.7</freqTab>
+     </Spectre>
+     <Spectre id="{3efff87c-faec-4f1d-96ee-0b211d30d7f0}" name="Spectre 444">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.2 49.1 49.1 49.2 49.2 49.2 49.2 49.1 48.9 49.0 48.9 48.9 48.8 48.7 48.5 48.4 48.2 48.0 47.7 47.4 47.0 46.5 45.8 44.9 43.6 41.7 38.8 34.5 27.8 17.7 2.6</freqTab>
+     </Spectre>
+     <Spectre id="{09b270cc-26f9-4346-81b4-567e0ec45335}" name="Spectre 445">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.4 49.3 49.3 49.5 49.4 49.4 49.4 49.3 49.2 49.2 49.1 49.1 49.0 48.9 48.8 48.6 48.4 48.2 48.0 47.6 47.2 46.7 46.1 45.2 43.9 42.0 39.2 35.0 28.5 18.6 3.9</freqTab>
+     </Spectre>
+     <Spectre id="{057b5fea-60f6-42da-949a-1590ad92120b}" name="Spectre 446">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.6 49.5 49.6 49.7 49.6 49.6 49.6 49.5 49.4 49.4 49.4 49.3 49.2 49.1 49.0 48.8 48.7 48.5 48.2 47.9 47.5 47.0 46.3 45.4 44.2 42.4 39.7 35.5 29.2 19.5 5.1</freqTab>
+     </Spectre>
+     <Spectre id="{c7c31a4c-1ac9-4462-9710-0d9fd11d0787}" name="Spectre 447">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.3 51.2 51.3 51.4 51.3 51.3 51.3 51.3 51.1 51.2 51.1 51.1 51.0 50.9 50.8 50.7 50.5 50.3 50.1 49.8 49.5 49.0 48.5 47.7 46.7 45.1 42.8 39.4 34.1 26.2 14.4</freqTab>
+     </Spectre>
+     <Spectre id="{93129e9a-f73e-40bf-aa1d-1b3a0854494e}" name="Spectre 448">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.5 51.4 51.5 51.6 51.5 51.5 51.5 51.5 51.3 51.4 51.3 51.3 51.2 51.1 51.0 50.9 50.7 50.5 50.3 50.0 49.7 49.3 48.7 48.0 46.9 45.4 43.2 39.8 34.7 26.9 15.3</freqTab>
+     </Spectre>
+     <Spectre id="{b3e7591b-e71a-4c30-9376-f4da362736c1}" name="Spectre 449">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.7 51.6 51.7 51.8 51.7 51.7 51.7 51.7 51.5 51.6 51.5 51.5 51.4 51.3 51.2 51.1 50.9 50.7 50.5 50.3 49.9 49.5 49.0 48.2 47.2 45.7 43.5 40.2 35.2 27.6 16.3</freqTab>
+     </Spectre>
+     <Spectre id="{83a04f54-6a64-4b99-8916-a8ff8b696125}" name="Spectre 450">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.3 49.3 49.3 49.4 49.4 49.4 49.4 49.3 49.1 49.2 49.1 49.1 49.0 48.9 48.7 48.6 48.4 48.2 47.9 47.6 47.2 46.7 46.0 45.1 43.8 42.0 39.2 34.9 28.4 18.5 3.7</freqTab>
+     </Spectre>
+     <Spectre id="{b1769089-aebf-4e66-9558-567d30b52c99}" name="Spectre 451">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.6 49.5 49.5 49.6 49.6 49.6 49.6 49.5 49.4 49.4 49.3 49.3 49.2 49.1 49.0 48.8 48.6 48.4 48.2 47.9 47.5 47.0 46.3 45.4 44.2 42.3 39.6 35.5 29.1 19.4 5.0</freqTab>
+     </Spectre>
+     <Spectre id="{31e59975-5414-41ca-b8d7-13ef3b14ac3b}" name="Spectre 452">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.8 49.7 49.8 49.9 49.8 49.8 49.8 49.7 49.6 49.6 49.6 49.5 49.4 49.3 49.2 49.1 48.9 48.7 48.4 48.1 47.7 47.2 46.6 45.7 44.5 42.7 40.1 36.0 29.8 20.4 6.3</freqTab>
+     </Spectre>
+     <Spectre id="{6e1b22c9-504f-40bb-ac31-496647d324fe}" name="Spectre 453">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.6 51.5 51.6 51.7 51.7 51.6 51.6 51.6 51.4 51.5 51.4 51.4 51.3 51.2 51.1 51.0 50.8 50.6 50.4 50.2 49.8 49.4 48.9 48.1 47.1 45.6 43.4 40.0 34.9 27.3 15.9</freqTab>
+     </Spectre>
+     <Spectre id="{15170ecd-7cf5-44b0-83c2-e56df18c1661}" name="Spectre 454">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.8 51.8 51.8 51.9 51.9 51.9 51.8 51.8 51.6 51.7 51.6 51.6 51.5 51.4 51.3 51.2 51.0 50.9 50.7 50.4 50.1 49.7 49.1 48.4 47.4 45.9 43.7 40.5 35.5 28.0 16.9</freqTab>
+     </Spectre>
+     <Spectre id="{e91c9a4c-f4a0-4a1b-b687-5149eb85b55d}" name="Spectre 455">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.0 52.0 52.0 52.1 52.1 52.1 52.0 52.0 51.9 51.9 51.8 51.8 51.7 51.6 51.5 51.4 51.3 51.1 50.9 50.6 50.3 49.9 49.4 48.7 47.7 46.2 44.1 40.9 36.0 28.7 17.9</freqTab>
+     </Spectre>
+     <Spectre id="{e63ed7bb-1739-40ab-be30-610da9f85333}" name="Spectre 456">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.5 49.4 49.5 49.6 49.6 49.6 49.5 49.5 49.3 49.4 49.3 49.3 49.2 49.1 48.9 48.8 48.6 48.4 48.1 47.8 47.4 46.9 46.2 45.4 44.1 42.3 39.5 35.4 29.0 19.2 4.7</freqTab>
+     </Spectre>
+     <Spectre id="{583b8d16-fa90-4c55-bbb1-ea2fda0272c0}" name="Spectre 457">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.8 49.7 49.7 49.8 49.8 49.8 49.8 49.7 49.6 49.6 49.5 49.5 49.4 49.3 49.2 49.0 48.8 48.6 48.4 48.1 47.7 47.2 46.5 45.7 44.4 42.7 40.0 35.9 29.7 20.2 6.1</freqTab>
+     </Spectre>
+     <Spectre id="{e95646c2-a9c2-4724-8f87-f55d24a1d5ba}" name="Spectre 458">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.0 49.9 50.0 50.1 50.0 50.0 50.0 50.0 49.8 49.9 49.8 49.7 49.7 49.6 49.4 49.3 49.1 48.9 48.6 48.3 48.0 47.5 46.8 46.0 44.8 43.0 40.4 36.5 30.4 21.2 7.5</freqTab>
+     </Spectre>
+     <Spectre id="{736fbb7c-75f4-42b7-8065-5228fa474d00}" name="Spectre 459">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.9 51.8 51.9 52.0 52.0 51.9 51.9 51.9 51.7 51.8 51.7 51.7 51.6 51.5 51.4 51.3 51.2 51.0 50.8 50.5 50.2 49.8 49.2 48.5 47.5 46.1 43.9 40.7 35.8 28.4 17.3</freqTab>
+     </Spectre>
+     <Spectre id="{ee38a24c-c8a6-46c5-a2aa-89aa84e29748}" name="Spectre 460">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.2 52.1 52.1 52.2 52.2 52.2 52.2 52.1 52.0 52.0 52.0 51.9 51.9 51.8 51.7 51.5 51.4 51.2 51.0 50.8 50.5 50.1 49.5 48.8 47.8 46.4 44.3 41.1 36.4 29.1 18.4</freqTab>
+     </Spectre>
+     <Spectre id="{89dd0192-1142-4293-aecb-1256cf685c95}" name="Spectre 461">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.4 52.3 52.3 52.4 52.4 52.4 52.4 52.3 52.2 52.3 52.2 52.2 52.1 52.0 51.9 51.8 51.6 51.5 51.3 51.0 50.7 50.3 49.8 49.1 48.1 46.8 44.7 41.6 36.9 29.9 19.4</freqTab>
+     </Spectre>
+     <Spectre id="{28ad8985-42c5-44e1-ac1f-8cba2d0f1542}" name="Spectre 462">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.7 49.6 49.7 49.8 49.8 49.7 49.7 49.7 49.5 49.6 49.5 49.4 49.3 49.2 49.1 49.0 48.8 48.6 48.3 48.0 47.6 47.1 46.5 45.6 44.4 42.6 39.9 35.8 29.5 20.0 5.8</freqTab>
+     </Spectre>
+     <Spectre id="{a1a01ba0-15b5-415b-b016-a5dedd4b663f}" name="Spectre 463">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.0 49.9 49.9 50.0 50.0 50.0 50.0 49.9 49.7 49.8 49.7 49.7 49.6 49.5 49.4 49.2 49.0 48.8 48.6 48.3 47.9 47.4 46.8 45.9 44.7 43.0 40.3 36.3 30.2 21.0 7.2</freqTab>
+     </Spectre>
+     <Spectre id="{d8394717-6f72-48eb-8a93-52df10c69a85}" name="Spectre 464">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.2 50.1 50.2 50.3 50.2 50.2 50.2 50.2 50.0 50.1 50.0 49.9 49.9 49.8 49.6 49.5 49.3 49.1 48.9 48.6 48.2 47.7 47.1 46.3 45.1 43.4 40.8 36.9 31.0 22.0 8.6</freqTab>
+     </Spectre>
+     <Spectre id="{a0450f61-49ae-4f0d-adfa-08a0aadbb32b}" name="Spectre 465">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.2 52.2 52.2 52.3 52.3 52.3 52.2 52.2 52.1 52.1 52.1 52.0 51.9 51.9 51.8 51.6 51.5 51.3 51.1 50.9 50.6 50.2 49.6 48.9 48.0 46.5 44.5 41.3 36.6 29.4 18.8</freqTab>
+     </Spectre>
+     <Spectre id="{b9a96805-0a6a-4cac-844c-711f479b7d36}" name="Spectre 466">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.5 52.4 52.5 52.5 52.5 52.5 52.5 52.4 52.3 52.4 52.3 52.3 52.2 52.1 52.0 51.9 51.7 51.6 51.4 51.1 50.8 50.4 49.9 49.3 48.3 46.9 44.9 41.8 37.2 30.3 19.9</freqTab>
+     </Spectre>
+     <Spectre id="{ba69a969-ef36-4880-ab5d-7ea8306ce36f}" name="Spectre 467">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.7 52.7 52.7 52.8 52.8 52.8 52.7 52.7 52.6 52.6 52.5 52.5 52.4 52.4 52.3 52.1 52.0 51.8 51.6 51.4 51.1 50.7 50.2 49.6 48.6 47.3 45.3 42.3 37.8 31.0 21.0</freqTab>
+     </Spectre>
+     <Spectre id="{9b902cff-c6e9-4f2d-8cc6-c129789be88e}" name="Spectre 468">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">49.9 49.8 49.8 50.0 49.9 49.9 49.9 49.8 49.7 49.7 49.7 49.6 49.5 49.4 49.3 49.1 49.0 48.8 48.5 48.2 47.8 47.3 46.7 45.8 44.6 42.8 40.2 36.2 30.0 20.7 6.8</freqTab>
+     </Spectre>
+     <Spectre id="{6b73af94-dda0-480d-a674-fb6629e7ccc5}" name="Spectre 469">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.1 50.1 50.1 50.2 50.2 50.2 50.1 50.1 49.9 50.0 49.9 49.9 49.8 49.7 49.6 49.4 49.2 49.0 48.8 48.5 48.1 47.6 47.0 46.2 45.0 43.3 40.7 36.8 30.8 21.7 8.2</freqTab>
+     </Spectre>
+     <Spectre id="{a43dfee0-df12-4570-b9b1-499b731ca6d8}" name="Spectre 470">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.4 50.3 50.4 50.5 50.4 50.4 50.4 50.3 50.2 50.3 50.2 50.1 50.1 50.0 49.8 49.7 49.5 49.3 49.1 48.8 48.4 48.0 47.3 46.5 45.4 43.7 41.2 37.4 31.6 22.8 9.6</freqTab>
+     </Spectre>
+     <Spectre id="{bc504e79-a7d7-4367-8eb0-9d619fe20421}" name="Spectre 471">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.6 52.5 52.5 52.6 52.6 52.6 52.6 52.5 52.4 52.4 52.4 52.3 52.3 52.2 52.1 52.0 51.8 51.7 51.5 51.2 50.9 50.5 50.0 49.3 48.4 47.0 45.0 42.0 37.4 30.5 20.3</freqTab>
+     </Spectre>
+     <Spectre id="{56ea537e-f5e7-438c-86db-2b78d5779845}" name="Spectre 472">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.8 52.8 52.8 52.9 52.9 52.9 52.8 52.8 52.7 52.7 52.6 52.6 52.5 52.5 52.4 52.2 52.1 51.9 51.8 51.5 51.2 50.8 50.4 49.7 48.8 47.4 45.5 42.5 38.1 31.4 21.4</freqTab>
+     </Spectre>
+     <Spectre id="{7889a9ea-e47d-4a08-8d19-185a59f1c807}" name="Spectre 473">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.1 53.0 53.1 53.1 53.1 53.1 53.1 53.0 52.9 53.0 52.9 52.9 52.8 52.7 52.6 52.5 52.4 52.2 52.0 51.8 51.5 51.2 50.7 50.0 49.1 47.8 45.9 43.0 38.7 32.2 22.6</freqTab>
+     </Spectre>
+     <Spectre id="{643b4cd1-f476-4467-ba23-ea2fb1f0ca87}" name="Spectre 474">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.1 50.0 50.0 50.1 50.1 50.1 50.1 50.0 49.8 49.9 49.8 49.8 49.7 49.6 49.5 49.3 49.2 49.0 48.7 48.4 48.0 47.5 46.9 46.1 44.9 43.1 40.5 36.6 30.5 21.4 7.8</freqTab>
+     </Spectre>
+     <Spectre id="{3456472a-5688-407a-9aec-359db278e53d}" name="Spectre 475">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.3 50.2 50.3 50.4 50.4 50.3 50.3 50.3 50.1 50.2 50.1 50.1 50.0 49.9 49.8 49.6 49.4 49.2 49.0 48.7 48.3 47.9 47.2 46.4 45.2 43.6 41.0 37.2 31.3 22.4 9.2</freqTab>
+     </Spectre>
+     <Spectre id="{a77c7287-c713-46b7-a5eb-b0d05c3ed76c}" name="Spectre 476">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.6 50.5 50.6 50.7 50.6 50.6 50.6 50.5 50.4 50.4 50.4 50.3 50.3 50.2 50.0 49.9 49.7 49.5 49.3 49.0 48.7 48.2 47.6 46.8 45.6 44.0 41.5 37.8 32.1 23.5 10.7</freqTab>
+     </Spectre>
+     <Spectre id="{dff3bc99-9c86-4e8a-85ca-ad62b40a35e6}" name="Spectre 477">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.9 52.8 52.9 52.9 52.9 52.9 52.9 52.8 52.7 52.8 52.7 52.7 52.6 52.5 52.4 52.3 52.2 52.0 51.8 51.6 51.3 50.9 50.4 49.8 48.8 47.5 45.6 42.6 38.2 31.5 21.7</freqTab>
+     </Spectre>
+     <Spectre id="{696c085d-9ca1-434a-97dc-a89b81675b4b}" name="Spectre 478">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.2 53.1 53.1 53.2 53.2 53.2 53.2 53.1 53.0 53.1 53.0 53.0 52.9 52.8 52.7 52.6 52.5 52.3 52.1 51.9 51.6 51.3 50.8 50.1 49.2 47.9 46.0 43.2 38.9 32.5 22.9</freqTab>
+     </Spectre>
+     <Spectre id="{0cf2c01e-c882-4c29-91b7-c8205754d91b}" name="Spectre 479">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.5 53.4 53.4 53.5 53.5 53.5 53.5 53.4 53.3 53.3 53.3 53.3 53.2 53.1 53.0 52.9 52.8 52.6 52.4 52.2 51.9 51.6 51.1 50.5 49.6 48.4 46.5 43.8 39.6 33.4 24.1</freqTab>
+     </Spectre>
+     <Spectre id="{67426c3c-f40e-446d-a3af-40b018c1b297}" name="Spectre 480">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.2 50.1 50.2 50.3 50.3 50.2 50.2 50.2 50.0 50.1 50.0 50.0 49.9 49.8 49.7 49.5 49.3 49.1 48.9 48.6 48.2 47.7 47.1 46.3 45.1 43.4 40.8 37.0 31.0 22.1 8.7</freqTab>
+     </Spectre>
+     <Spectre id="{0a8aa9ad-9cfc-41a2-a687-36e931522c20}" name="Spectre 481">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.5 50.4 50.5 50.6 50.5 50.5 50.5 50.4 50.3 50.4 50.3 50.2 50.2 50.1 49.9 49.8 49.6 49.4 49.2 48.9 48.5 48.1 47.5 46.6 45.5 43.8 41.4 37.6 31.8 23.1 10.2</freqTab>
+     </Spectre>
+     <Spectre id="{a29c82cc-1149-4507-8a24-1364963e6913}" name="Spectre 482">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.8 50.7 50.7 50.8 50.8 50.8 50.8 50.7 50.6 50.6 50.6 50.5 50.4 50.4 50.2 50.1 49.9 49.7 49.5 49.2 48.9 48.4 47.8 47.0 45.9 44.3 41.9 38.2 32.6 24.2 11.7</freqTab>
+     </Spectre>
+     <Spectre id="{3952420d-291f-4184-9309-25388da2e02c}" name="Spectre 483">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.2 53.1 53.2 53.3 53.2 53.2 53.2 53.2 53.0 53.1 53.0 53.0 52.9 52.9 52.8 52.6 52.5 52.4 52.2 51.9 51.7 51.3 50.8 50.2 49.3 48.0 46.1 43.3 39.0 32.6 23.1</freqTab>
+     </Spectre>
+     <Spectre id="{e3691ad9-f12a-495c-a719-d30e8a4632b7}" name="Spectre 484">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.5 53.5 53.5 53.6 53.6 53.5 53.5 53.5 53.4 53.4 53.4 53.3 53.3 53.2 53.1 53.0 52.8 52.7 52.5 52.3 52.0 51.7 51.2 50.6 49.7 48.5 46.6 43.9 39.8 33.5 24.4</freqTab>
+     </Spectre>
+     <Spectre id="{1d569801-0861-4dd4-83f7-be3510b99fb7}" name="Spectre 485">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.8 53.8 53.8 53.9 53.9 53.9 53.8 53.8 53.7 53.7 53.7 53.6 53.6 53.5 53.4 53.3 53.2 53.0 52.8 52.6 52.4 52.0 51.6 51.0 50.1 48.9 47.1 44.5 40.5 34.5 25.6</freqTab>
+     </Spectre>
+     <Spectre id="{8b0dc3cc-3465-4f87-9127-16616ec6431a}" name="Spectre 486">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.4 50.3 50.3 50.4 50.4 50.4 50.4 50.3 50.2 50.2 50.2 50.1 50.0 49.9 49.8 49.7 49.5 49.3 49.1 48.8 48.4 47.9 47.3 46.5 45.3 43.6 41.1 37.3 31.5 22.7 9.5</freqTab>
+     </Spectre>
+     <Spectre id="{9de1abcf-0e8c-4a05-821c-38779b1b64ba}" name="Spectre 487">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.7 50.6 50.6 50.7 50.7 50.7 50.7 50.6 50.5 50.5 50.5 50.4 50.3 50.2 50.1 50.0 49.8 49.6 49.4 49.1 48.7 48.3 47.7 46.9 45.7 44.1 41.7 38.0 32.3 23.8 11.1</freqTab>
+     </Spectre>
+     <Spectre id="{4d709fcf-367a-490a-a365-15a55cb3be53}" name="Spectre 488">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.0 50.9 50.9 51.0 51.0 51.0 51.0 50.9 50.8 50.8 50.8 50.7 50.6 50.5 50.4 50.3 50.1 49.9 49.7 49.4 49.1 48.6 48.0 47.3 46.2 44.6 42.2 38.6 33.2 24.9 12.6</freqTab>
+     </Spectre>
+     <Spectre id="{6e65924b-9857-4ccd-bd3e-3dd1e834a17e}" name="Spectre 489">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.3 51.2 51.2 51.3 51.3 51.3 51.3 51.2 51.1 51.1 51.1 51.0 50.9 50.9 50.7 50.6 50.4 50.3 50.0 49.8 49.4 49.0 48.4 47.7 46.6 45.0 42.7 39.3 34.0 26.0 14.1</freqTab>
+     </Spectre>
+     <Spectre id="{7227efef-9215-44a5-87dc-ca73b6a24905}" name="Spectre 490">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.6 51.5 51.5 51.6 51.6 51.6 51.6 51.5 51.4 51.4 51.4 51.3 51.3 51.2 51.1 50.9 50.8 50.6 50.4 50.1 49.8 49.4 48.8 48.1 47.0 45.5 43.3 39.9 34.8 27.1 15.7</freqTab>
+     </Spectre>
+     <Spectre id="{13b40d0c-3bc6-4836-89bf-3ac7814b1cbb}" name="Spectre 491">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.9 51.8 51.9 51.9 51.9 51.9 51.9 51.8 51.7 51.8 51.7 51.7 51.6 51.5 51.4 51.3 51.1 50.9 50.7 50.5 50.1 49.7 49.2 48.5 47.5 46.0 43.8 40.6 35.7 28.2 17.2</freqTab>
+     </Spectre>
+     <Spectre id="{7649d56c-ab1e-44a4-9de6-4236edae4469}" name="Spectre 492">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.2 52.1 52.2 52.3 52.2 52.2 52.2 52.2 52.0 52.1 52.0 52.0 51.9 51.8 51.7 51.6 51.4 51.3 51.1 50.8 50.5 50.1 49.6 48.9 47.9 46.5 44.4 41.3 36.5 29.3 18.7</freqTab>
+     </Spectre>
+     <Spectre id="{d85b7d2e-47ef-4178-85da-600998a0c871}" name="Spectre 493">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.5 52.5 52.5 52.6 52.6 52.6 52.5 52.5 52.4 52.4 52.3 52.3 52.2 52.2 52.1 51.9 51.8 51.6 51.4 51.2 50.9 50.5 50.0 49.3 48.4 47.0 45.0 41.9 37.3 30.4 20.1</freqTab>
+     </Spectre>
+     <Spectre id="{3c79710c-ee89-4c70-b18b-027d926a10a3}" name="Spectre 494">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.9 52.8 52.8 52.9 52.9 52.9 52.9 52.8 52.7 52.7 52.7 52.6 52.6 52.5 52.4 52.3 52.1 52.0 51.8 51.6 51.3 50.9 50.4 49.7 48.8 47.5 45.5 42.6 38.2 31.5 21.6</freqTab>
+     </Spectre>
+     <Spectre id="{40150ce9-6f7b-4d70-a6b2-952e20136037}" name="Spectre 495">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.2 53.1 53.2 53.3 53.2 53.2 53.2 53.2 53.0 53.1 53.0 53.0 52.9 52.8 52.7 52.6 52.5 52.3 52.2 51.9 51.6 51.3 50.8 50.2 49.3 48.0 46.1 43.3 39.0 32.5 23.0</freqTab>
+     </Spectre>
+     <Spectre id="{4e6e1b55-4289-4b18-9847-13be2a270aa9}" name="Spectre 496">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.5 53.5 53.5 53.6 53.6 53.6 53.5 53.5 53.4 53.4 53.4 53.3 53.3 53.2 53.1 53.0 52.9 52.7 52.5 52.3 52.0 51.7 51.2 50.6 49.7 48.5 46.7 43.9 39.8 33.6 24.4</freqTab>
+     </Spectre>
+     <Spectre id="{fd07c98b-ff14-48ee-8bc7-aaf4e4531b2c}" name="Spectre 497">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.9 53.8 53.8 53.9 53.9 53.9 53.9 53.8 53.7 53.8 53.7 53.7 53.6 53.5 53.4 53.3 53.2 53.1 52.9 52.7 52.4 52.1 51.6 51.0 50.2 49.0 47.2 44.6 40.6 34.6 25.8</freqTab>
+     </Spectre>
+     <Spectre id="{3bb225a6-258f-41cb-a161-860790b26d12}" name="Spectre 498">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">54.2 54.1 54.2 54.3 54.2 54.2 54.2 54.2 54.1 54.1 54.0 54.0 54.0 53.9 53.8 53.7 53.6 53.4 53.3 53.1 52.8 52.5 52.0 51.5 50.6 49.5 47.8 45.2 41.4 35.6 27.1</freqTab>
+     </Spectre>
+     <Spectre id="{687c9c17-bab4-4f37-b298-7c060883ec4c}" name="Spectre 499">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">50.8 50.7 50.8 50.9 50.9 50.9 50.8 50.8 50.6 50.7 50.6 50.6 50.5 50.4 50.3 50.2 50.0 49.8 49.6 49.3 48.9 48.5 47.9 47.1 46.0 44.4 42.0 38.3 32.8 24.4 11.9</freqTab>
+     </Spectre>
+     <Spectre id="{11aff499-dd1b-415a-8393-45dda936bdc1}" name="Spectre 500">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.1 51.1 51.1 51.2 51.2 51.2 51.1 51.1 50.9 51.0 50.9 50.9 50.8 50.7 50.6 50.5 50.3 50.1 49.9 49.6 49.3 48.8 48.3 47.5 46.4 44.8 42.5 39.0 33.6 25.6 13.5</freqTab>
+     </Spectre>
+     <Spectre id="{dd024981-42c4-48e6-be12-5ec3bdd992eb}" name="Spectre 501">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.5 51.4 51.4 51.5 51.5 51.5 51.5 51.4 51.3 51.3 51.3 51.2 51.1 51.0 50.9 50.8 50.6 50.5 50.2 50.0 49.6 49.2 48.7 47.9 46.9 45.3 43.1 39.7 34.5 26.7 15.1</freqTab>
+     </Spectre>
+     <Spectre id="{ceeb062e-aad9-4d49-84aa-ad1bec79af4c}" name="Spectre 502">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.8 51.7 51.7 51.8 51.8 51.8 51.8 51.7 51.6 51.6 51.6 51.5 51.5 51.4 51.3 51.1 51.0 50.8 50.6 50.3 50.0 49.6 49.1 48.3 47.3 45.8 43.7 40.4 35.4 27.8 16.6</freqTab>
+     </Spectre>
+     <Spectre id="{a7d12f4a-61ad-4fa9-a9d2-cea82bd5aa8c}" name="Spectre 503">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.1 52.0 52.1 52.2 52.1 52.1 52.1 52.1 51.9 52.0 51.9 51.9 51.8 51.7 51.6 51.5 51.3 51.2 51.0 50.7 50.4 50.0 49.5 48.8 47.8 46.3 44.2 41.0 36.2 29.0 18.2</freqTab>
+     </Spectre>
+     <Spectre id="{2c8b3989-5ed9-4ebe-85b0-9d13c01f0fde}" name="Spectre 504">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.4 52.4 52.4 52.5 52.5 52.5 52.4 52.4 52.3 52.3 52.3 52.2 52.2 52.1 52.0 51.8 51.7 51.5 51.3 51.1 50.8 50.4 49.9 49.2 48.2 46.9 44.8 41.7 37.1 30.1 19.7</freqTab>
+     </Spectre>
+     <Spectre id="{f5bec46a-52ed-44b4-916d-3fbd6b8f8680}" name="Spectre 505">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.8 52.7 52.8 52.8 52.8 52.8 52.8 52.7 52.6 52.7 52.6 52.6 52.5 52.4 52.3 52.2 52.1 51.9 51.7 51.5 51.2 50.8 50.3 49.6 48.7 47.4 45.4 42.4 38.0 31.2 21.3</freqTab>
+     </Spectre>
+     <Spectre id="{8f45beba-7d02-4b94-88a9-4037f51f3f33}" name="Spectre 506">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.1 53.1 53.1 53.2 53.2 53.2 53.1 53.1 53.0 53.0 53.0 52.9 52.9 52.8 52.7 52.6 52.4 52.3 52.1 51.9 51.6 51.2 50.7 50.1 49.2 47.9 46.0 43.1 38.8 32.4 22.8</freqTab>
+     </Spectre>
+     <Spectre id="{aca0647b-dd4f-4c91-a008-7fe0425e8a67}" name="Spectre 507">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.5 53.4 53.5 53.6 53.5 53.5 53.5 53.5 53.3 53.4 53.3 53.3 53.2 53.2 53.1 52.9 52.8 52.7 52.5 52.3 52.0 51.6 51.2 50.5 49.7 48.4 46.6 43.8 39.7 33.5 24.3</freqTab>
+     </Spectre>
+     <Spectre id="{b3f97023-aa8d-405a-a1f3-2429a02b3248}" name="Spectre 508">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.9 53.8 53.8 53.9 53.9 53.9 53.9 53.8 53.7 53.7 53.7 53.7 53.6 53.5 53.4 53.3 53.2 53.1 52.9 52.7 52.4 52.1 51.6 51.0 50.2 49.0 47.2 44.5 40.5 34.6 25.7</freqTab>
+     </Spectre>
+     <Spectre id="{7a122b39-6b9f-483c-aa1d-70b7881d3c80}" name="Spectre 509">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">54.2 54.2 54.2 54.3 54.3 54.2 54.2 54.2 54.1 54.1 54.1 54.0 54.0 53.9 53.8 53.7 53.6 53.4 53.3 53.1 52.8 52.5 52.1 51.5 50.7 49.5 47.8 45.2 41.4 35.7 27.2</freqTab>
+     </Spectre>
+     <Spectre id="{a4a6bf30-f32c-43da-b0ab-04b3562fbba7}" name="Spectre 510">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.3 51.2 51.3 51.4 51.3 51.3 51.3 51.3 51.1 51.2 51.1 51.1 51.0 50.9 50.8 50.7 50.5 50.3 50.1 49.8 49.5 49.0 48.5 47.7 46.6 45.1 42.8 39.4 34.1 26.2 14.4</freqTab>
+     </Spectre>
+     <Spectre id="{412e1330-4e71-4f07-a5e4-b1e1785597ff}" name="Spectre 511">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">51.6 51.6 51.6 51.7 51.7 51.7 51.6 51.6 51.4 51.5 51.4 51.4 51.3 51.2 51.1 51.0 50.8 50.7 50.4 50.2 49.9 49.4 48.9 48.1 47.1 45.6 43.4 40.1 35.0 27.3 16.0</freqTab>
+     </Spectre>
+     <Spectre id="{3215463a-6fe4-4047-86c3-6efd8bbfde2e}" name="Spectre 512">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.0 51.9 51.9 52.0 52.0 52.0 52.0 51.9 51.8 51.8 51.8 51.7 51.7 51.6 51.5 51.3 51.2 51.0 50.8 50.6 50.2 49.8 49.3 48.6 47.6 46.1 44.0 40.8 35.9 28.5 17.6</freqTab>
+     </Spectre>
+     <Spectre id="{268ac0f1-7772-470a-a748-aa803b9fd695}" name="Spectre 513">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.3 52.2 52.3 52.4 52.4 52.3 52.3 52.3 52.1 52.2 52.1 52.1 52.0 51.9 51.8 51.7 51.6 51.4 51.2 50.9 50.6 50.2 49.7 49.0 48.1 46.7 44.6 41.5 36.8 29.7 19.2</freqTab>
+     </Spectre>
+     <Spectre id="{1e3719ab-92a8-4d08-a513-bbee3472eeb5}" name="Spectre 514">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">52.7 52.6 52.6 52.7 52.7 52.7 52.7 52.6 52.5 52.5 52.5 52.5 52.4 52.3 52.2 52.1 51.9 51.8 51.6 51.3 51.0 50.7 50.2 49.5 48.6 47.2 45.2 42.2 37.7 30.9 20.7</freqTab>
+     </Spectre>
+     <Spectre id="{1141e6ab-9099-45b8-b086-ab5dd1397792}" name="Spectre 515">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.0 53.0 53.0 53.1 53.1 53.1 53.0 53.0 52.9 52.9 52.9 52.8 52.8 52.7 52.6 52.5 52.3 52.2 52.0 51.8 51.5 51.1 50.6 50.0 49.1 47.7 45.8 42.9 38.6 32.0 22.3</freqTab>
+     </Spectre>
+     <Spectre id="{0e249d53-f51e-46e0-b86f-71ae0673fad1}" name="Spectre 516">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.4 53.3 53.4 53.5 53.4 53.4 53.4 53.4 53.2 53.3 53.2 53.2 53.1 53.1 53.0 52.9 52.7 52.6 52.4 52.2 51.9 51.5 51.1 50.4 49.6 48.3 46.4 43.7 39.5 33.2 23.9</freqTab>
+     </Spectre>
+     <Spectre id="{67d9303e-3386-4851-be92-f936ae596853}" name="Spectre 517">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">53.8 53.7 53.8 53.8 53.8 53.8 53.8 53.7 53.6 53.7 53.6 53.6 53.5 53.5 53.4 53.3 53.1 53.0 52.8 52.6 52.3 52.0 51.5 50.9 50.1 48.9 47.1 44.4 40.4 34.4 25.5</freqTab>
+     </Spectre>
+     <Spectre id="{cd702353-885c-43b4-94d4-5244fe7efd72}" name="Spectre 518">
+      <type>3</type>
+      <fMin>16</fMin>
+      <fMax>16000</fMax>
+      <freqTab form="0">54.2 54.1 54.2 54.2 54.2 54.2 54.2 54.1 54.0 54.1 54.0 54.0 53.9 53.9 53.8 53.7 53.5 53.4 53.2 53.0 52.8 52.4 52.0 51.4 50.6 49.4 47.7 45.1 41.3 35.5 27.0</freqTab>
+     </Spectre>
+    </BoundaryNoiseMap>
+   </GeometryNode>
+   <Resultat id="{060554a0-f8d5-4a50-8184-cc484158638c}" name="Résultat 0">
+    <hide_lw>0</hide_lw>
+    <ListSources/>
+    <ListRecepteurs/>
+    <ListSpectres/>
+    <ListLw>
+     <SourceLw srcId="{105e61d3-76ca-4286-831c-0ea2b47bdea0}">
+      <Spectre id="{9140b370-8b5a-4007-992b-13d420955c0f}" name="Spectre 617">
+       <type>2</type>
+       <fMin>16</fMin>
+       <fMax>16000</fMax>
+       <freqTab form="0">100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0 100.0</freqTab>
+      </Spectre>
+     </SourceLw>
+    </ListLw>
+   </Resultat>
+   <ListRayons/>
+  </Calcul>
+ </Projet>
+</Tympan>

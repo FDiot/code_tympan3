@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
+<Tympan>
+ <Version>4.1.14 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
+ <Projet id="{1fd170c7-729c-482e-9a62-728670e8454e}" name="Projet 0">
+  <auteur></auteur>
+  <dateCreation>2001-10-01</dateCreation>
+  <dateModif>2001-10-01</dateModif>
+  <delaunayTolerence>0.0001</delaunayTolerence>
+  <distMaxBetweenPoints>200</distMaxBetweenPoints>
+  <useDefGeomVal>1</useDefGeomVal>
+  <currentCalculID>{c79571da-d1e1-4e8d-a0a9-beaf5a65220f}</currentCalculID>
+  <SiteNode id="{5634c66e-2ad9-4d6f-a569-e0449337cea2}" name="Site 0">
+   <echelle>1</echelle>
+   <useEmpriseAsCrbNiv>0</useEmpriseAsCrbNiv>
+   <useTopoFile>0</useTopoFile>
+   <topoFile></topoFile>
+   <altiEmprise>0</altiEmprise>
+   <Segment id="{e9e0d14a-0005-476c-91bd-f3e5881feaa7}" name="Segment 0">
+    <Color g="1" r="1" b="1"/>
+    <Point x="0.000" y="0.000" z="0.000"/>
+    <Point x="0.000" y="1.000" z="0.000"/>
+   </Segment>
+   <Point x="0.000" y="0.000" z="0.000"/>
+   <Topographie id="{289e143e-8dd7-45d8-a6fd-c470b2e02bc0}" name="Topographie 0">
+    <Emprise>
+     <Point x="-94.000" y="117.000" z="0.000"/>
+     <Point x="41.000" y="114.000" z="0.000"/>
+     <Point x="37.000" y="-16.000" z="0.000"/>
+     <Point x="-153.000" y="-27.000" z="0.000"/>
+    </Emprise>
+    <ListCrbNiv/>
+    <ListTerrain>
+     <GeometryNode id="{bb381853-dada-4733-ab5f-8e32c682cbd0}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{b788c04c-789f-4a12-bc02-688c728946be}" name="Repère 0">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <Terrain id="{3dd4285a-a082-45d4-b5dc-e7856fd40bb2}" name="Terrain par defaut">
+       <Color g="0.333333" r="0" b="0"/>
+       <Sol id="{61428ea0-5a7b-4358-a3b5-051fd423d6bf}" name="Sol 0">
+        <resistivite>20000</resistivite>
+        <epaisseur>1</epaisseur>
+        <active>0</active>
+        <miroir>0</miroir>
+       </Sol>
+       <nbPoints>0</nbPoints>
+      </Terrain>
+     </GeometryNode>
+    </ListTerrain>
+    <ListCrsEau/>
+    <ListPlanEau/>
+    <Altimetrie id="{6ee3e7fc-de86-46fc-b45c-738e3b427654}" name="Altimétrie 0"/>
+    <DefaultTerrain>0</DefaultTerrain>
+   </Topographie>
+   <Infrastructure id="{ed4431a9-f2a9-4f36-9946-f50a7287686c}" name="Infrastructure 0">
+    <ListRoute/>
+    <ListResTrans/>
+    <ListBatiment/>
+    <ListMachine/>
+    <ListSource>
+     <GeometryNode id="{e222cf24-5b83-4576-85c2-0cd25639f5bf}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{9141a4bf-9743-42f1-a81c-8b9861294bb6}" name="Repère 7">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <UserSourcePonctuelle id="{761830fb-5c70-4798-97ab-7bad65ddedce}" name="Source ponctuelle 0">
+       <Color g="0" r="1" b="0"/>
+       <Point x="-22.000" y="22.000" z="0.000"/>
+       <Vector x="1.000" y="0.000" z="0.000"/>
+       <type>3</type>
+       <hauteur>0.000</hauteur>
+       <typeRaynt>0</typeRaynt>
+       <formeObjet>0</formeObjet>
+       <curRegime>0</curRegime>
+       <nextRegime>1</nextRegime>
+       <UserSrcRegime id="{521899dd-7c86-466e-ae76-b86d304d8732}" name="Régime 0">
+        <isRayonnant>1</isRayonnant>
+        <useAtt>0</useAtt>
+        <typeDistribution>1</typeDistribution>
+        <Spectre id="{15e81bb9-66eb-4a8e-807a-09c24e125a75}" name="Spectre 1">
+         <type>2</type>
+         <fMin>16</fMin>
+         <fMax>16000</fMax>
+         <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+        </Spectre>
+       </UserSrcRegime>
+      </UserSourcePonctuelle>
+     </GeometryNode>
+    </ListSource>
+   </Infrastructure>
+   <root>1</root>
+   <repere>0</repere>
+   <SIG_X>0</SIG_X>
+   <SIG_Y>0</SIG_Y>
+   <GeometryNode id="{aab4deec-745a-4c83-aa8b-e95fd23db1e0}" name="">
+    <hauteur>0.000</hauteur>
+    <Repere id="{f52e6cc9-c207-495c-a916-738a2ea0cfda}" name="Repère 3">
+     <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+     <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+     <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+     <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+    </Repere>
+    <SiteNode id="{f69851a7-fa13-4cff-b024-3ef44f4e7a40}" name="Site 1">
+     <echelle>1</echelle>
+     <useEmpriseAsCrbNiv>0</useEmpriseAsCrbNiv>
+     <useTopoFile>0</useTopoFile>
+     <topoFile></topoFile>
+     <altiEmprise>0</altiEmprise>
+     <Segment id="{cbe27708-667b-4f21-94c9-c5b5e922e599}" name="Segment 1">
+      <Color g="1" r="1" b="1"/>
+      <Point x="0.000" y="0.000" z="0.000"/>
+      <Point x="0.000" y="1.000" z="0.000"/>
+     </Segment>
+     <Point x="0.000" y="0.000" z="0.000"/>
+     <Topographie id="{886ced7d-a541-4739-887a-c10fecdc2bc4}" name="Topographie 1">
+      <Emprise>
+       <Point x="-83.000" y="98.000" z="0.000"/>
+       <Point x="-40.000" y="73.000" z="0.000"/>
+       <Point x="-98.000" y="28.000" z="0.000"/>
+       <Point x="-105.000" y="82.000" z="0.000"/>
+      </Emprise>
+      <ListCrbNiv/>
+      <ListTerrain>
+       <GeometryNode id="{0f5979cd-52b4-462f-b7d8-8df53a9a318b}" name="">
+        <hauteur>0.000</hauteur>
+        <Repere id="{64a1dc10-da92-4e8c-9f30-9f17b32cd204}" name="Repère 2">
+         <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+         <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+         <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+         <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+        </Repere>
+        <Terrain id="{4bd397bb-6778-4f46-baa6-2e1c2ce2b0be}" name="Terrain par defaut">
+         <Color g="0.333333" r="0" b="0"/>
+         <Sol id="{4fbad86b-fdb0-4420-8add-d1c496ecf0f2}" name="Sol 1">
+          <resistivite>20000</resistivite>
+          <epaisseur>1</epaisseur>
+          <active>0</active>
+          <miroir>0</miroir>
+         </Sol>
+         <nbPoints>0</nbPoints>
+        </Terrain>
+       </GeometryNode>
+      </ListTerrain>
+      <ListCrsEau/>
+      <ListPlanEau/>
+      <Altimetrie id="{7d63e5e4-2e03-4c40-bb70-818210a4339a}" name="Altimétrie 1"/>
+      <DefaultTerrain>0</DefaultTerrain>
+     </Topographie>
+     <Infrastructure id="{33e32204-de74-42a5-a035-7c2fdb641f04}" name="Infrastructure 1">
+      <ListRoute/>
+      <ListResTrans/>
+      <ListBatiment/>
+      <ListMachine/>
+      <ListSource/>
+     </Infrastructure>
+     <root>0</root>
+     <repere>0</repere>
+     <SIG_X>0</SIG_X>
+     <SIG_Y>0</SIG_Y>
+    </SiteNode>
+   </GeometryNode>
+  </SiteNode>
+  <PointsControl/>
+  <Calcul isUpTodate="0" id="{c79571da-d1e1-4e8d-a0a9-beaf5a65220f}" name="Calcul 0">
+   <numero>1</numero>
+   <auteur>Auteur</auteur>
+   <dateCreation>2001-10-01</dateCreation>
+   <dateModif>2001-10-01</dateModif>
+   <comment>Commentaire</comment>
+   <solverId>{a98b320c-44c4-47a9-b689-1dd352daa8b2}</solverId>
+   <etat>1</etat>
+   <expansGeo>0</expansGeo>
+   <useSol>1</useSol>
+   <typeCalculSol>0</typeCalculSol>
+   <condFav>0</condFav>
+   <useVegetation>0</useVegetation>
+   <useAtmosphere>1</useAtmosphere>
+   <useEcran>1</useEcran>
+   <calculTrajetHorizontaux>1</calculTrajetHorizontaux>
+   <useReflexion>0</useReflexion>
+   <interference>0</interference>
+   <h1>10</h1>
+   <distanceSRMin>0.3</distanceSRMin>
+   <freqMinSpectre>16</freqMinSpectre>
+   <freqMaxSpectre>16000</freqMaxSpectre>
+   <ListID>
+    <Element id="{5634c66e-2ad9-4d6f-a569-e0449337cea2}"/>
+    <Element id="{1fd170c7-729c-482e-9a62-728670e8454e}"/>
+    <Element id="{f69851a7-fa13-4cff-b024-3ef44f4e7a40}"/>
+    <Element id="{761830fb-5c70-4798-97ab-7bad65ddedce}"/>
+    <Element id="{ed4431a9-f2a9-4f36-9946-f50a7287686c}"/>
+   </ListID>
+   <EmissionAccVolNodes>
+    <EmissionAccVolNode accVolNodeId="{1fd170c7-729c-482e-9a62-728670e8454e}" state="1"/>
+    <EmissionAccVolNode accVolNodeId="{761830fb-5c70-4798-97ab-7bad65ddedce}" state="1"/>
+   </EmissionAccVolNodes>
+   <RegimeAccNode>
+    <RegimeAccNode accVolNodeId="{1fd170c7-729c-482e-9a62-728670e8454e}" state="0"/>
+    <RegimeAccNode accVolNodeId="{761830fb-5c70-4798-97ab-7bad65ddedce}" state="0"/>
+   </RegimeAccNode>
+   <Atmosphere id="{6b2dab07-3aae-4a29-ab1f-7fd0ec6a0423}" name="Atmosphère 0">
+    <pression>101325</pression>
+    <temperature>20</temperature>
+    <hygrometrie>70</hygrometrie>
+    <vitVent>0</vitVent>
+    <dirVent>0</dirVent>
+    <A>0</A>
+    <B>0</B>
+    <C>5e-06</C>
+    <D>0</D>
+    <stability_class>0</stability_class>
+    <Spectre id="{2c9e3d04-5f5e-49b0-b446-b14e3bee8d35}" name="Spectre 0">
+     <type>0</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">0.00001 0.00001 0.00001 0.00002 0.00004 0.00006 0.00009 0.00014 0.00022 0.00034 0.00052 0.00078 0.00113 0.00160 0.00216 0.00280 0.00348 0.00419 0.00498 0.00592 0.00718 0.00902 0.01180 0.01613 0.02291 0.03358 0.05035 0.07662 0.11751 0.18053 0.27624</freqTab>
+    </Spectre>
+   </Atmosphere>
+   <Resultat id="{38aa4867-25e5-4a21-ab3f-9ad74a1e5697}" name="Résultat 0">
+    <ListSources/>
+    <ListRecepteurs/>
+    <ListSpectres/>
+    <ListLw/>
+   </Resultat>
+  </Calcul>
+ </Projet>
+</Tympan>

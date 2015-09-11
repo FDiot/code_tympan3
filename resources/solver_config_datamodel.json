@@ -1,0 +1,313 @@
+{
+  "METEO": {
+    "AnalyticGradV": {
+      "default": 0.0, 
+      "type": "double", 
+      "help": "Vertical wind speed gradient"
+    }, 
+    "AtmosPressure": {
+      "default": 101300.0, 
+      "type": "double", 
+      "help": "Atmospheric pressure in pascal"
+    }, 
+    "AnalyticGradC": {
+      "default": 0.0, 
+      "type": "double", 
+      "help": "Vertical temperature gradient"
+    }, 
+    "AtmosHygrometry": {
+      "default": 60.0, 
+      "type": "double", 
+      "help": "Hygrometry percent"
+    }, 
+    "AtmosTemperature": {
+      "default": 20.0, 
+      "type": "double", 
+      "help": "Temperature in degres celsius"
+    }, 
+    "WindDirection": {
+      "default": 0.0, 
+      "type": "double", 
+      "help": "0 means from north to south"
+    }
+  }, 
+  "ACOUSTICRAYTRACER": {
+    "CylindreThick": {
+      "default": 0.3, 
+      "type": "float", 
+      "help": "Diffraction ridge size in meter"
+    }, 
+    "DiffractionDropDownNbRays": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Drop down number of rays thrown after a diffraction"
+    }, 
+    "KeepDebugRay": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Keep invalid rays"
+    }, 
+    "MaxPathDifference": {
+      "default": 25.0, 
+      "type": "float", 
+      "help": "Maximum path length difference in meter (25 meters for 25 dB, 8 meters for 20 dB)"
+    }, 
+    "SizeReceiver": {
+      "default": 2.0, 
+      "type": "float", 
+      "help": "Receptor radius in meter"
+    }, 
+    "UsePostFilters": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Use of post-filters"
+    }, 
+    "DiffractionFilterRayAtCreation": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Do not create rays outside the correct angle"
+    }, 
+    "MaxDiffraction": {
+      "default": 2, 
+      "type": "int", 
+      "help": "Maximum diffraction events for a ray"
+    }, 
+    "MaxTreeDepth": {
+      "default": 12, 
+      "type": "int", 
+      "help": "Maximal depth search for BVH or KDTree"
+    }, 
+    "UseSol": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Allow ground reflections"
+    }, 
+    "DiffractionUseDistanceAsFilter": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Allow suppressing rays passing to far from the ridge"
+    }, 
+    "RayTracingOrder": {
+      "default": 0, 
+      "type": "int", 
+      "help": "Order propagation (0=From, 1=from receptor, 2=auto)"
+    }, 
+    "MaxProfondeur": {
+      "default": 10, 
+      "type": "int", 
+      "help": "Maximum events number for a ray"
+    }, 
+    "DiffractionUseRandomSampler": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Use random sampler instead of regular distribution"
+    }, 
+    "UsePathDifValidation": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Allow use of path length difference validation"
+    }, 
+    "Discretization": {
+      "default": 2, 
+      "type": "int", 
+      "help": "Sampler model (0=random, 1=uniform v1, 2=uniform v2, 3=horizontal)"
+    }, 
+    "Accelerator": {
+      "default": 3, 
+      "type": "int", 
+      "help": "Accelerating structure parameter (0=brut force, 1=grid, 2=BVH, 3=KDTree)"
+    }, 
+    "NbRaysPerSource": {
+      "default": 100000, 
+      "type": "int", 
+      "help": "Number of rays per source"
+    }, 
+    "MaxLength": {
+      "default": 5000.0, 
+      "type": "float", 
+      "help": "Maximum ray length in meter"
+    }, 
+    "AngleDiffMin": {
+      "default": 5.0, 
+      "type": "float", 
+      "help": "Minimum dihedral angle to add a diffraction cylinder"
+    }, 
+    "MaxReflexion": {
+      "default": 2, 
+      "type": "int", 
+      "help": "Maximum reflections events for a ray"
+    }, 
+    "NbRayWithDiffraction": {
+      "default": 0, 
+      "type": "int", 
+      "help": "Number of ray thrown after diffraction (0=based on source sampling, >0=forced)"
+    }
+  }, 
+  "GEOMTRANSFORMER": {
+    "MeshElementSizeMax": {
+      "default": 0.0, 
+      "type": "float", 
+      "help": "Altimetry refinement parameter"
+    }, 
+    "showScene": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Allow viewing of the transformed"
+    }, 
+    "AnalyticTypeTransfo": {
+      "default": 1, 
+      "type": "int", 
+      "help": "Transformation method (1 is the only [good] response)"
+    }
+  }, 
+  "DEFAULTSOLVER": {
+    "NbThreads": {
+      "default": 4, 
+      "type": "int", 
+      "help": "Number of threads used to run the computation"
+    }, 
+    "ModSummation": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Energetic (p\u00b2 summation) or interference (p summation)"
+    }, 
+    "PropaConditions": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Propagation conditions (non refracting / downward conditions (ISO 9613))"
+    }, 
+    "UseLateralDiffraction": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Lateral diffractions computing (if screens on)"
+    }, 
+    "H1parameter": {
+      "default": 10.0, 
+      "type": "float", 
+      "help": "H1 parameter (ISO 9613 downward conditions)"
+    }, 
+    "UseScreen": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Takes screens into account"
+    }, 
+    "UseRealGround": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Use of real ground (0) or totally reflective ground (1)"
+    }, 
+    "UseReflection": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Takes reflections in account (first order only)"
+    }
+  }, 
+  "DEBUG": {
+    "DebugUseDiffractionPathSelector": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Allow use of diffraction path length selector"
+    }, 
+    "DebugUseDiffractionAngleSelector": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Allow use of diffraction angle selector"
+    }, 
+    "DebugUseCloseEventSelector": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Allow use of closeEventSelector"
+    }, 
+    "DebugUseFermatSelector": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Allow use of Fermat selector"
+    }, 
+    "DebugUseFaceSelector": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Allow use of (doubled) faces selector"
+    }
+  }, 
+  "PREPROCESSING": {
+    "MinSRDistance": {
+      "default": 0.3, 
+      "type": "float", 
+      "help": "Source-receptor minimal distance in meters"
+    }
+  }, 
+  "ANALYTICRAYTRACER": {
+    "FinalAngleTheta": {
+      "default": 0.0, 
+      "type": "float", 
+      "help": "Final vertical angle (theta)"
+    }, 
+    "AnalyticTMax": {
+      "default": 10.0, 
+      "type": "double", 
+      "help": "Propagation time in second"
+    }, 
+    "InitialAnglePhi": {
+      "default": 0.0, 
+      "type": "float", 
+      "help": "Final horizontal angle (phi)"
+    }, 
+    "CurveRaySampler": {
+      "default": 1, 
+      "type": "int", 
+      "help": "Sampler model (1=horizontal, 2=vertical, 3=uniform v1, 4=uniform v2"
+    }, 
+    "AnalyticDMax": {
+      "default": 3000.0, 
+      "type": "double", 
+      "help": "Maximum length propagation"
+    }, 
+    "AnalyticH": {
+      "default": 0.1, 
+      "type": "double", 
+      "help": "Time step in second"
+    }, 
+    "InitialAngleTheta": {
+      "default": 0.0, 
+      "type": "float", 
+      "help": "Start vertical angle (theta)"
+    }, 
+    "AnalyticNbRay": {
+      "default": 20, 
+      "type": "int", 
+      "help": "Number of rays per source"
+    }, 
+    "FinalAnglePhi": {
+      "default": 360.0, 
+      "type": "float", 
+      "help": "Final horizontal angle (phi)"
+    }
+  }, 
+  "ANIME3DSOLVER": {
+    "Anime3DSigma": {
+      "default": 0.0, 
+      "type": "float", 
+      "help": "Value of relative uncertainty"
+    }, 
+    "UseFresnelArea": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Use Fresnel area"
+    }, 
+    "Anime3DForceC": {
+      "default": 1, 
+      "type": "int", 
+      "help": "Force \"C\" parameter to 0 or 1 (will be computed from totalRayLength for any other value)"
+    }, 
+    "UseMeteo": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Takes meteo into account"
+    }, 
+    "Anime3DKeepRays": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Keep rays after computation"
+    }
+  }
+}

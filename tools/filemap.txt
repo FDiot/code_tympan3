@@ -1,0 +1,13 @@
+exclude old2
+exclude old
+exclude Tympan-old
+exclude tympan/Dependencies
+exclude tympan-3.4.2/Dependencies
+exclude tympan-3.7.0/Dependencies
+exclude V3.6/tympan-3.7.0/Dependencies
+exclude Dependencies
+exclude VRetD/tympan-3.7.0/Dependencies
+exclude tympan-3.6/Dependencies
+exclude tympan-3.5.0/Dependencies
+exclude debian/tmp
+exclude VRetD/install
