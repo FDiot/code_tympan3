@@ -102,7 +102,22 @@ public slots:
     /**
      * Display a GUI allowing to see and modify solver parameters
      */
-    void update_solver_params();
+    void run_solver_params_gui();
+
+    /**
+     * Display all the solver parameters in a text field
+     */
+    void display_solver_params();
+
+    /**
+     * Update computation solver parameters with plain text solver parameters
+     */
+    void save_solver_params();
+
+    /**
+     * Close solver parameters plain text edition GUI
+     */
+    void close_solver_params();
 
 
 protected:
@@ -157,7 +172,8 @@ protected:
     QTableWidget* _tableauMaillages;
 
     // Solver parameters
-    QPushButton* _solver_params_btn;
+    QDialog *_solver_params_dialog;
+    QTextEdit *_solver_params;
 };
 
 

@@ -180,14 +180,28 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 
     _tabWidget->insertTab(3, _groupBox, TR("id_info_calc"));
 
-    // Button allowing to update solver parameters
+    // Buttons allowing to update solver parameters
+     QGroupBox *groupBox = new QGroupBox(this);
+     _calculLayout->addWidget(groupBox, iln++, 0, 1, 1);
+     QHBoxLayout *params_buttons_layout = new QHBoxLayout();
+    groupBox->setLayout(params_buttons_layout);
+    QLabel *params_button_label = new QLabel(groupBox);
+    params_button_label->setText(TR("id_param_solv_buttons"));
+    params_buttons_layout->addWidget(params_button_label);
     // A click on this button will display an intermediate GUI allowing to see and modify
     // solver parameters
-    _solver_params_btn = new QPushButton(this);
-    _solver_params_btn->setText(TR("id_param_solv"));
-    _solver_params_btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    connect(_solver_params_btn, SIGNAL(clicked()), this, SLOT(update_solver_params()));
-    _calculLayout->addWidget(_solver_params_btn, iln++, 0, 1, 1);
+    QPushButton *params_gui_btn = new QPushButton(groupBox);
+    params_gui_btn->setText(TR("id_param_solv_gui"));
+    params_gui_btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    connect(params_gui_btn, SIGNAL(clicked()), this, SLOT(run_solver_params_gui()));
+    params_buttons_layout->addWidget(params_gui_btn);
+    // A click on this button will display a simple dialog window with a text field containing all
+    // the solver parameters, ini format.
+    QPushButton *params_text_field_btn = new QPushButton(groupBox);
+    params_text_field_btn->setText(TR("id_param_solv_tf"));
+    params_text_field_btn->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    connect(params_text_field_btn, SIGNAL(clicked()), this, SLOT(display_solver_params()));
+    params_buttons_layout->addWidget(params_text_field_btn);
 
     //  Bouton permettant d'acceder aux etats
     QGroupBox* pGroupBoxTableEtats = new QGroupBox(this);
@@ -231,15 +245,46 @@ TYCalculWidget::TYCalculWidget(TYCalcul* pElement, QWidget* _pParent /*=NULL*/):
 
     connect(pPushButtonTableEtats, SIGNAL(clicked()), _etatsWidget, SLOT(show()));
     connect(_pushButtonResultat, SIGNAL(clicked()), this, SLOT(editResultat()));
+
+    // Build solver parameters plain text edition GUI
+    _solver_params_dialog = new QDialog(this);
+    _solver_params_dialog->setWindowTitle(TR("id_param_solv_plain_text"));
+    QGridLayout *layout = new QGridLayout();
+    _solver_params_dialog->setLayout(layout);
+    _solver_params = new QTextEdit(QString(""), _solver_params_dialog);
+    _solver_params_dialog->setModal(true);
+    layout->addWidget(_solver_params, 0, 0);
+    QDialogButtonBox *buttons = new QDialogButtonBox(QDialogButtonBox::Ok|QDialogButtonBox::Cancel,
+            Qt::Horizontal, _solver_params_dialog);
+    connect(buttons, SIGNAL(accepted()), this, SLOT(save_solver_params()));
+    connect(buttons, SIGNAL(rejected()), this, SLOT(close_solver_params()));
+    layout->addWidget(buttons, 1, 0);
+    _solver_params_dialog->resize(300, 600);
 }
 
 TYCalculWidget::~TYCalculWidget()
 {
     delete _etatsWidget;
-    delete _solver_params_btn;
 }
 
-void TYCalculWidget::update_solver_params()
+void TYCalculWidget::display_solver_params()
+{
+    _solver_params->setPlainText(getElement()->solverParams);
+    _solver_params_dialog->exec();
+}
+
+void TYCalculWidget::close_solver_params()
+{
+    _solver_params_dialog->close();
+}
+
+void TYCalculWidget::save_solver_params()
+{
+    getElement()->solverParams = _solver_params->toPlainText();
+    _solver_params_dialog->close();
+}
+
+void TYCalculWidget::run_solver_params_gui()
 {
     OMessageManager& logger =  *OMessageManager::get();
     QTemporaryFile input_ini_file, output_ini_file;
