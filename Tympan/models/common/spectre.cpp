@@ -1085,6 +1085,11 @@ OSpectreComplex OSpectreComplex::operator / (const OSpectreComplex& spectre) con
     return s;
 }
 
+OSpectreComplex OSpectreComplex::div(const OSpectreComplex& spectre) const
+{
+    return this->operator/(spectre);
+}
+
 void OSpectreComplex::setValue(const float& freq, const double& reel, const double& imag)
 {
     int indice = _mapFreqIndice[freq];

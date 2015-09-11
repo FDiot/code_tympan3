@@ -17,11 +17,6 @@
 #include "TYEtape.h"
 
 
-TYEtape::TYEtape()
-{
-    _type = -1;
-}
-
 TYEtape::TYEtape(const TYEtape& other)
 {
     *this = other;
@@ -35,10 +30,8 @@ TYEtape& TYEtape::operator=(const TYEtape& other)
 {
     if (this != &other)
     {
-        _type = other._type;
         _pt = other._pt;
-        _Absorption = other._Absorption;
-        _Attenuation = other._Attenuation;
+        _spectrum = other._spectrum;
     }
     return *this;
 }
@@ -47,10 +40,8 @@ bool TYEtape::operator==(const TYEtape& other) const
 {
     if (this != &other)
     {
-        if (_type != other._type) { return false; }
         if (_pt != other._pt) { return false; }
-        if (_Absorption != other._Absorption) { return false; }
-        if (_Attenuation != other._Attenuation) { return false; }
+        if (_spectrum != other._spectrum) { return false; }
     }
     return true;
 }
@@ -60,3 +51,8 @@ bool TYEtape::operator!=(const TYEtape& other) const
     return !operator==(other);
 }
 
+acoustic_event* TYEtape::asEvent()
+{
+    acoustic_event *returned_event = new acoustic_event();
+    return returned_event;
+}

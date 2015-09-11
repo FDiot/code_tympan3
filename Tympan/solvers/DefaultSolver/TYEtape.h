@@ -25,6 +25,7 @@
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/spectre.h"
+#include "Tympan/models/common/acoustic_path.h"
 
 #include <vector>
 #include <deque>
@@ -49,25 +50,11 @@ class TYEtape
     // Methodes
 public:
     /**
-     * \fn enum EtapeType
-     * \brief Indique le type de l'etape.
-     * \param   EtapeInfra:Reflexion sur un element d'infrastructure.
-                EtapeTopo: Reflexion sur un element de topographie (sol).
-                EtapeForet:Changement de milieu (on entre ou on sort d'une foret).
-     */
-    enum EtapeType
-    {
-        EtapeInfra,
-        EtapeTopo,
-        EtapeForet
-    };
-
-    /**
      *\fn TYEtape()
      *\brief Constructeur.
      * Constructeur de la classe TYEtape
      */
-    TYEtape();
+    TYEtape() {}
     /**
      * \fn TYEtape(const TYEtape& other)
      * \brief Constructeur par copie
@@ -89,17 +76,6 @@ public:
     bool operator==(const TYEtape& other) const;
     ///Operateur !=.
     bool operator!=(const TYEtape& other) const;
-    /**
-     * \fn int getType()
-     *         void setType(int etapeType)
-     * \brief Set/Get du type de cette etape.
-     * \return _type: type de l'etape
-     */
-    int getType() const { return _type; }
-    /**
-     * Set/Get du type de cette etape.
-     */
-    void setType(int etapeType) { _type = etapeType; }
 
     /**
      * \fn  OPoint3D getPoint()
@@ -120,15 +96,13 @@ public:
      * \brief Set/Get du spectre d'absorption associe au point de depart.
      * \return _Absorption: spectre d'absorption
      */
-    OSpectreComplex getAbsorption() { return _Absorption; }
+    OSpectreComplex& getAbsorption() { return _spectrum; }
+    const OSpectreComplex& getAbsorption() const { return _spectrum; }
+   
     /**
      * Set/Get du spectre d'absorption associe au point de depart.
      */
-    const OSpectreComplex getAbsorption() const { return _Absorption; }
-    /**
-     * Set/Get du spectre d'absorption associe au point de depart.
-     */
-    void setAbsorption(const OSpectreComplex& Abso) { _Absorption = Abso; }
+    void setAbsorption(const OSpectreComplex& Abso) { _spectrum = Abso; }
 
     /**
      * \fn OSpectre getAttenuation()
@@ -137,31 +111,24 @@ public:
      * \brief Set/Get du spectre d'attenuation associe a cette etape.
      * \return _Attenuation: spectre d'attenuation
      */
-    OSpectre getAttenuation() { return _Attenuation; }
-    /**
-     * Set/Get du spectre d'attenuation associe a cette etape.
-     */
-    const OSpectre getAttenuation() const { return _Attenuation; }
-    /**
-     * Set/Get du spectre d'attenuation associe a cette etape.
-     */
-    void setAttenuation(const OSpectre& Att) { _Attenuation = Att; }
+    OSpectreComplex& getAttenuation() { return _spectrum; }
+    const OSpectreComplex& getAttenuation() const { return _spectrum; }
 
+    /**
+     * Set/Get du spectre d'attenuation associe a cette etape.
+     */
+    void setAttenuation(const OSpectre& Att) { _spectrum = Att; }
+
+    // return as acoustic_event (allowing to watch path from source to receptor
+    acoustic_event* asEvent();
 
     // Membres
 public:
-    ///Le type de l'etape.
-    int _type;
-
     ///Le point de depart associe a cette etape.
     OPoint3D _pt;
 
-    ///Le spectre d'absorption associe au point de depart.
-    OSpectreComplex _Absorption;
-
-    ///Le spectre d'attenuation associe a l'etape.
-    OSpectre _Attenuation;
-
+    /// Spectre
+    OSpectreComplex _spectrum;
 };
 
 
