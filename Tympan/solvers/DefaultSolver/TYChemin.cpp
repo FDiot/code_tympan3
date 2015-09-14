@@ -15,7 +15,10 @@
 
 #include "TYChemin.h"
 
-TYChemin::TYChemin() :  _typeChemin(CHEMIN_DIRECT), _longueur(0.0), _distance(0.0)
+TYChemin::TYChemin() :  _typeChemin(CHEMIN_DIRECT), 
+                        _longueur(0.0), 
+                        _distance(0.0),
+                        _eq_path(nullptr)
 {
     _attenuation = OSpectreComplex::getEmptyLinSpectre();
 }
@@ -37,7 +40,7 @@ TYChemin& TYChemin::operator=(const TYChemin& other)
         _typeChemin = other._typeChemin;
         _distance = other._distance;
         _longueur = other._longueur;
-
+        _eq_path = other._eq_path;
         _attenuation = other._attenuation;
     }
 
@@ -51,7 +54,7 @@ bool TYChemin::operator==(const TYChemin& other) const
         if (_typeChemin != other._typeChemin) { return false; }
         if (_distance != other._distance) { return false; }
         if (_longueur != other._longueur) { return false; }
-
+        if (_eq_path != other._eq_path) { return false; };
         if (_attenuation != other._attenuation) { return false; }
     }
 
@@ -100,9 +103,9 @@ void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const AtmosphericCon
 
             phase = atmos.get_k().mult(_longueur); // = kRr
 
-            // On fait le produit des absorptions des etapes a partir de la seconde jusqu'a l'avant derniere
-            // la derniere portant l'effet de diffraction
-            for (i = 1; i < tabEtapes.size() - 1; i++)
+            // On fait le produit des absorptions des etapes a partir de la seconde jusqu'a l'avant avant derniere
+            // l'avant derniere portant l'effet de diffraction et la dernière le recepteur
+            for (i = 1; i < tabEtapes.size() - 2; i++)
             {
                 _attenuation = _attenuation.mult(tabEtapes[i].getAbsorption()); // S.A.Q
                 phase = phase.sum(tabEtapes[i].getAbsorption().getPhase()); // kRr + Somme des epsilon i
@@ -134,5 +137,17 @@ void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const AtmosphericCon
 
         default:
             break;
+    }
+
+    build_eq_path(tabEtapes);
+}
+
+void TYChemin::build_eq_path(const TYTabEtape& tabEtapes)
+{
+    _eq_path = new acoustic_path();
+
+    for (size_t i=0; i<tabEtapes.size(); i++)
+    {
+        _eq_path->addEvent(tabEtapes[i].asEvent());
     }
 }

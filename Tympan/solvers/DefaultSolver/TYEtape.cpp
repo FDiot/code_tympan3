@@ -31,6 +31,7 @@ TYEtape& TYEtape::operator=(const TYEtape& other)
     if (this != &other)
     {
         _pt = other._pt;
+        _type = other._type;
         _spectrum = other._spectrum;
     }
     return *this;
@@ -41,6 +42,7 @@ bool TYEtape::operator==(const TYEtape& other) const
     if (this != &other)
     {
         if (_pt != other._pt) { return false; }
+        if (_type != other._type) { return false; }
         if (_spectrum != other._spectrum) { return false; }
     }
     return true;
@@ -51,8 +53,10 @@ bool TYEtape::operator!=(const TYEtape& other) const
     return !operator==(other);
 }
 
-acoustic_event* TYEtape::asEvent()
+acoustic_event* TYEtape::asEvent() const
 {
     acoustic_event *returned_event = new acoustic_event();
+    returned_event->pos = _pt;
+    returned_event->type = _type;
     return returned_event;
 }
