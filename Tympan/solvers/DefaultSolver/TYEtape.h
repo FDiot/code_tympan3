@@ -54,7 +54,7 @@ public:
      *\brief Constructeur.
      * Constructeur de la classe TYEtape
      */
-    TYEtape() {}
+    TYEtape() : _spectrum(OSpectreComplex(TYComplex(1.,0.))) {}
     /**
      * \fn TYEtape(const TYEtape& other)
      * \brief Constructeur par copie
