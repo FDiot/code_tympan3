@@ -134,6 +134,8 @@ void TYBoucheSurface::setSourceBafflee(LPTYSourceBafflee pSrc)
     _pSrcSurf->remAllSrc();
 
     // Ajout
+    LPTYPoint pPoint = pSrc->getPos();
+    pPoint->_z+=_offsetSources;
     _pSrcSurf->addSrc(pSrc);
 
     // Cette face est son parent

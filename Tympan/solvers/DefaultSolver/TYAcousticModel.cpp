@@ -1089,7 +1089,9 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
     slope = director;
 
     // first one
-    Ray ray1( OPoint3Dtovec3(director._ptA), vec3(0., 0., -1.) );
+    OPoint3D pt = director._ptA;
+    pt._z += 1000.;
+    Ray ray1( OPoint3Dtovec3(pt), vec3(0., 0., -1.) );
 
     std::list<Intersection> LI;
 
@@ -1098,14 +1100,16 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
 
     // Second one
     LI.clear();
-    Ray ray2( OPoint3Dtovec3(director._ptB), vec3(0., 0., -1.) );
+    pt = director._ptB;
+    pt._z += 1000.;
+    Ray ray2( OPoint3Dtovec3(pt), vec3(0., 0., -1.) );
 
     double distance2 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray2, LI ) );
 
     assert( distance2 > 0. );
 
     // Compute projection on the ground of segment points suppose sol is under the points ...
-    slope._ptA._z = director._ptA._z - distance1;
-    slope._ptB._z = director._ptB._z - distance2;
+    slope._ptA._z = director._ptA._z - (distance1-1000.);
+    slope._ptB._z = director._ptB._z - (distance2-1000.);
 }
 
