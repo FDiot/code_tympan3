@@ -860,7 +860,9 @@ public:
     static void setRegenerateID(const bool& bRegenerate) { _bRegenerateID = bRegenerate; }
     static bool getRegenerateID() { return _bRegenerateID; }
 
-
+    void* getAllUses() { return _allUses; }
+    void setAllUses( void* allUses ) { _allUses = allUses; }
+    void cleanAllUses() { delete _allUses; _allUses = nullptr; }
 
 private:
     /**
@@ -904,6 +906,9 @@ protected:
 
     ///L'object graphique metier associe a cet element.
     LPTYElementGraphic _pGraphicObject;
+
+    /// Multi purpose void pointer (use for compatibility actually)
+    void *_allUses;
 
 private:
     ///Indique si on souhaite registrer toutes les instances de type TYElement et derivees.
