@@ -247,31 +247,29 @@ void TYBoundaryNoiseMapEditor::dialogConfirmed(double height, double thickness, 
     // XXX What's happen when the pointer is NULL?!
     if (pProjet)
     {
-        TYCalcul* pCalcul = pProjet->getCurrentCalcul();
-        // XXX What's happen when the pointer is NULL?!
-        if (pCalcul)
+        // Init
+        pBoundaryNoiseMap->setHauteur(height);
+        pBoundaryNoiseMap->make(this->getSavedPoints(), thickness, closed, density);
+
+        // Add action
+        TYAction* pAction = new TYAddMaillageToProjetAction( (LPTYMaillageGeoNode&) pBoundaryNoiseMapGeoNode,
+                                                                pProjet, 
+                                                                _pModeler,
+                                                                TR("id_action_add_boundarynoisemap"));
+        _pModeler->getActionManager()->addAction(pAction);
+
+        pProjet->addMaillage((LPTYMaillageGeoNode&) pBoundaryNoiseMapGeoNode);
+
+        if (pProjet->getSite()->getAltimetry()->containsData())
         {
-            pCalcul->addMaillage((LPTYMaillageGeoNode&) pBoundaryNoiseMapGeoNode);
-
-            // Init
-            pBoundaryNoiseMap->setHauteur(height);
-            pBoundaryNoiseMap->make(this->getSavedPoints(), thickness, closed, density);
-
-            // Add action
-            TYAction* pAction = new TYAddMaillageToCalculAction((LPTYMaillageGeoNode&) pBoundaryNoiseMapGeoNode,
-                                                                pSiteModeler->getProjet()->getCurrentCalcul(), _pModeler, TR("id_action_add_boundarynoisemap"));
-            _pModeler->getActionManager()->addAction(pAction);
-
-            if (pProjet->getSite()->getAltimetry()->containsData())
-            {
-                // Compte the noise map altimetry
-                pCalcul->updateAltiMaillage(pBoundaryNoiseMapGeoNode);
-            }
-            pBoundaryNoiseMap->updateGraphicTree();
-
-            _pModeler->updateView();
-            dynamic_cast<TYSiteModelerFrame *>(_pModeler)->updateSelectMaillageBox();
+            // Compte the noise map altimetry
+            pProjet->updateAltiMaillage(pBoundaryNoiseMapGeoNode);
         }
+
+        pBoundaryNoiseMap->updateGraphicTree();
+
+        _pModeler->updateView();
+        dynamic_cast<TYSiteModelerFrame *>(_pModeler)->updateSelectMaillageBox();
     }
 }
 

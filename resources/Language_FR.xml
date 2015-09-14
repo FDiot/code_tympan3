@@ -684,6 +684,7 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_column_name" value="Nom"/>
 			<string id="id_list_maillages_item" value="Récepteurs surfaciques"/>
 			<string id="id_list_pointscontrol_item" value="Récepteurs ponctuels"/>
+			<string id="id_list_maillages_item" value="Cartes de bruit"/>
 			<string id="id_contextmenu_export" value="Exporter"/>
 			<string id="id_contextmenu_export_spectre" value="Exporter le spectre"/>
 			<string id="id_contextmenu_setas_spectre" value="Positionner le spectre dans ..."/>
@@ -718,6 +719,8 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_menu_gospectresmanager" value="Lancer le manager de spectres"/>
 			<string id="id_contextmenu_selectAllPts" value="Tout sélectionner"/>
 			<string id="id_contextmenu_unselectAllPts" value="Tout déselectionner"/>
+			<string id="id_contextmenu_selectAllMaps" value="Tout sélectionner"/>
+			<string id="id_contextmenu_unselectAllMaps" value="Tout Désélectionner"/>
 			<string id="id_Etats_item" value="Etats"/>
 		</message>
 		<picture>
@@ -2095,6 +2098,7 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_cell_posh" value="%1"/>
 			<string id="id_opt_pc" value="Récepteurs ponctuels"/>
 			<string id="id_tab_info" value="Infos"/>
+			<string id="id_opt_maillage" value="Récepteurs surfaciques"/>
 		</message>
 	</class>
 	<class name="TYCalculWidget">

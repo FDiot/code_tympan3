@@ -243,17 +243,16 @@ bool TYSiteModelerFrame::close()
 void TYSiteModelerFrame::setSite(LPTYSiteNode pSite)
 {
     QString caption(TR("id_caption") + " " + QString("%1").arg(_nbInstance));
+    setWindowTitle(caption);
 
-    if (_pSite)
+    // Hide previous site
+    if (_pSite) { _pSite->drawGraphic(false); }
+
+    if (pSite)
     {
-        _pSite->drawGraphic(false);
-    }
+        _pSite = pSite;
+        _pElement = pSite;
 
-    _pSite = pSite;
-    _pElement = pSite;
-
-    if (_pSite)
-    {
         _pProjet = TYProjet::safeDownCast(_pSite->getParent());
 
         if (_pProjet)
@@ -270,13 +269,10 @@ void TYSiteModelerFrame::setSite(LPTYSiteNode pSite)
         _pElement->drawGraphic();
     }
 
-    setWindowTitle(caption);
-
-    _pView->getRenderer()->setElement((LPTYElement&)_pSite);
+    _pView->getRenderer()->setElement( _pElement );
     getView()->getRenderer()->updateDisplayList();
 
     updateView();
-    //  fit();//az++
 }
 
 void TYSiteModelerFrame::setProjet(LPTYProjet pProjet)
@@ -313,13 +309,11 @@ void TYSiteModelerFrame::setRenderMaillageModeSlot(int mode)
     // Les maillages ont leur propre type d'interpolation
     if (getProjet() && getProjet()->getCurrentCalcul())
     {
-        LPTYCalcul pCalcul = getProjet()->getCurrentCalcul();
-
         // Pour chaque maillage
-        for (unsigned int i = 0; i < pCalcul->getMaillages().size(); i++)
+        for (unsigned int i = 0; i < getProjet()->getMaillages().size(); i++)
         {
             // Recuperation de l'objet graphique du maillage
-            TYMaillage* pMaillage = pCalcul->getMaillage(i);
+            TYMaillage* pMaillage = getProjet()->getMaillage(i);
             TYElementGraphic* pMGraphic = pMaillage->getGraphicObject().getRealPointer();
 
             if (TYRectangularMaillageGraphic* pRectGraphic = dynamic_cast<TYRectangularMaillageGraphic*>(pMGraphic))
@@ -682,16 +676,14 @@ void TYSiteModelerFrame::updateSelectMaillageBox()
     // Les maillages ont leur propre type d'interpolation
     if (getProjet() && getProjet()->getCurrentCalcul())
     {
-        LPTYCalcul pCalcul = getProjet()->getCurrentCalcul();
-
         // Pour chaque maillage
-        for (unsigned int i = 0; i < pCalcul->getMaillages().size(); ++i)
+        for (unsigned int i = 0; i < getProjet()->getMaillages().size(); ++i)
         {
             // Recuperation du maillage
-            TYMaillage* pMaillage = pCalcul->getMaillage(i);
+            TYMaillage* pMaillage = getProjet()->getMaillage(i);
 
             // Si il est actif, on le fait apparaitre dans la liste
-            if (pMaillage->getState() == TYMaillage::Actif)
+            if (pMaillage->etat() == true)
             {
                 _pSelectMaillageBox->insertItem(counter++, pMaillage->getName());
             }
@@ -721,17 +713,15 @@ void TYSiteModelerFrame::setSelectMaillageBox(const QString& name)
 
     if (getProjet() && getProjet()->getCurrentCalcul())
     {
-        LPTYCalcul pCalcul = getProjet()->getCurrentCalcul();
-
         // Pour chaque maillage
-        for (unsigned int i = 0; i < pCalcul->getMaillages().size(); i++)
+        for (unsigned int i = 0; i < getProjet()->getMaillages().size(); i++)
         {
             // Recuperation de l'objet graphique du maillage
-            TYMaillage* pMaillage = pCalcul->getMaillage(i);
+            TYMaillage* pMaillage = getProjet()->getMaillage(i);
 
             if (isNull)
             {
-                if (pMaillage->getState() == TYMaillage::Actif)
+                if (pMaillage->etat() == true)
                 {
                     pMaillage->getGraphicObject()->setVisible(true);
                     if (pMaillage->getGraphicObject()->getHighlightState())
@@ -750,7 +740,7 @@ void TYSiteModelerFrame::setSelectMaillageBox(const QString& name)
             }
             else
             {
-                if (pMaillage->getState() == TYMaillage::Actif)
+                if (pMaillage->etat() == true)
                 {
                     pMaillage->getGraphicObject()->setVisible(false);
                     getView()->getRenderer()->updateDisplayList();

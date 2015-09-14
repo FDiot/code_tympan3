@@ -38,6 +38,7 @@
 using std::vector;
 typedef vector<TYElement*> tabPtrElement;
 
+class TYProjet;
 class TYCalcul;
 class TYEtatsWidget;
 class QLineEdit;
@@ -89,10 +90,6 @@ public slots:
      * Edite la widget du resultat.
      */
     void editResultat();
-    /**
-     * Edite la widget du maillage.
-     */
-    void editMaillage(QTreeWidgetItem*);
 
     /**
      * Affiche un menu contextuel.
@@ -122,6 +119,12 @@ public slots:
 
 protected:
     void updateBoxSol();
+
+private:
+    void updateControlPointsTab(TYProjet* pProjet);
+    void updateNoiseMapsTab(TYProjet* pProjet);
+    void updateComboSolver();
+    void updateCalculState();
 
     // Membres
 protected:

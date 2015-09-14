@@ -79,6 +79,7 @@ TYPointControl& TYPointControl::operator=(const TYPointControl& other)
     {
         TYPointCalcul::operator =(other);
         TYColorInterface::operator =(other);
+        copyEtats( const_cast<TYPointControl*>(&other) );// Copie les etats
         _hauteur = other._hauteur;
         _object = other._object;
         _statusSIG = other._statusSIG;
@@ -118,6 +119,7 @@ bool TYPointControl::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     if (!TYPointCalcul::deepCopy(pOther, copyId)) { return false; }
 
     TYPointControl* pOtherPtControl = (TYPointControl*) pOther;
+    copyEtats(pOtherPtControl);
 
     _hauteur = pOtherPtControl->_hauteur;
     _object = pOtherPtControl->_object;
@@ -140,6 +142,19 @@ DOM_Element TYPointControl::toXML(DOM_Element& domElement)
     TYXMLTools::addElementStringValue(domNewElem, "hauteur", doubleToStrPre(_hauteur, 3).data());
     TYXMLTools::addElementIntValue(domNewElem, "formeObjet", _object);
 
+    // Ajoute un noeud pour l'etat des points de calcul
+    DOM_Document domDoc = domElement.ownerDocument();
+
+    TYMapIdBool::iterator it_b;
+    for (it_b = _tabEtats.begin(); it_b != _tabEtats.end(); ++it_b)
+    {
+        DOM_Element tmpNode = domDoc.createElement("etatCalcul");
+        domNewElem.appendChild(tmpNode);
+
+        tmpNode.setAttribute("idCalcul", it_b->first.toString());
+        tmpNode.setAttribute("Etat", QString(intToStr(_tabEtats[it_b->first]).c_str()));
+    }
+
     return domNewElem;
 }
 
@@ -150,6 +165,9 @@ int TYPointControl::fromXML(DOM_Element domElement)
 
     bool hauteurOk = false;
     bool formeObjetOk = false;
+    bool bOldDatas = false;
+    TYUUID idCalcul;
+    std::map<TYUUID, LPTYSpectre> *compatibilityVector = new std::map<TYUUID, LPTYSpectre>();
 
     DOM_Element elemCur;
 
@@ -160,27 +178,54 @@ int TYPointControl::fromXML(DOM_Element domElement)
 
         TYXMLTools::getElementDoubleValue(elemCur, "hauteur", _hauteur, hauteurOk);
         TYXMLTools::getElementIntValue(elemCur, "formeObjet", _object, formeObjetOk);
+        
+        if (elemCur.nodeName() == "etatCalcul")
+        {
+            QString strIdCalcul = TYXMLTools::getElementAttributeToString(elemCur, "idCalcul");
+            idCalcul.FromString(strIdCalcul);
+            bool bEtat = TYXMLTools::getElementAttributeToInt(elemCur, "Etat");
+            _tabEtats[idCalcul] = bEtat;
+        }
+        else if (elemCur.nodeName() == "Spectre")
+        {
+            bOldDatas = true;
+            LPTYSpectre pSpectre = new TYSpectre();
+            pSpectre->callFromXMLIfEqual(elemCur);
+
+            // recupere le calcul associe au spectre
+            QString strId = TYXMLTools::getElementAttributeToString(elemCur, "idCalcul");
+            idCalcul.FromString( strId );
+            compatibilityVector->operator[](idCalcul) = pSpectre;
+
+            _dBA = pSpectre->valGlobDBA();
+            _dBLin = pSpectre->valGlobDBLin();
+        }
     }
 
-    return 1;
-}
-
-void TYPointControl::purge(TYCalcul* pCalcul)
-{
-    if (pCalcul == NULL)
+    if (bOldDatas == true)
     {
-        TYMapIdSpectre::iterator it_s;
-        for (it_s = _tabSpectre.begin(); it_s != _tabSpectre.end(); ++it_s)
+        // Cleaning compatibility data
+        std::map<TYUUID, LPTYSpectre>::iterator it;
+        for (it=compatibilityVector->begin(); it!=compatibilityVector->end(); )
         {
-            delete it_s->second;
+            if ( _tabEtats[(*it).first] == false)
+            {
+                it = compatibilityVector->erase( it );
+            }
+            else
+            {
+                it++;
+            }
         }
-        _tabSpectre.clear();
+
+        setAllUses( (void*)compatibilityVector );
     }
     else
     {
-        _tabSpectre[pCalcul->getID().toString()] = new TYSpectre();
-        _tabSpectre[pCalcul->getID().toString()]->setType(SPECTRE_TYPE_LP);
+        delete compatibilityVector;
     }
+
+    return 1;
 }
 
 void TYPointControl::toSIG()
@@ -229,3 +274,72 @@ int TYPointControl::getSIGType()
     return 0;
 }
 
+void TYPointControl::setEtat(const TYUUID& id_calc, bool etat)
+{
+    _tabEtats[id_calc] = etat;
+}
+
+bool TYPointControl::etat()
+{
+    TYUUID id_calc = dynamic_cast<TYProjet*>(getParent())->getCurrentCalcul()->getID();
+
+    return etat(id_calc);
+}
+
+bool TYPointControl::etat(const TYUUID& id_calc)
+{
+    // Constrol point knows the calcul
+    TYMapIdBool::iterator it = _tabEtats.find(id_calc);
+    if ( it != _tabEtats.end() )
+    {
+        return (*it).second;
+    }
+    else
+    {
+        _tabEtats[id_calc] = false;
+    }
+
+    return false;
+}
+
+bool TYPointControl::etat(const TYCalcul* pCalc)
+{
+    assert(pCalc != nullptr);
+    return etat( pCalc->getID() );
+}
+
+void TYPointControl::copyEtats(TYPointControl* pOther)
+{
+    _tabEtats.clear(); //On vide la map actuelle
+
+    TYMapIdBool::iterator it_b;
+    for (it_b = pOther->_tabEtats.begin(); it_b != pOther->_tabEtats.end(); ++it_b)
+    {
+        _tabEtats[it_b->first] = it_b->second;
+    }
+}
+
+void TYPointControl::duplicateEtat(const TYUUID& idCalculRef, const TYUUID& idCalculNew)
+{
+    _tabEtats[idCalculNew] = _tabEtats[idCalculRef];
+}
+
+LPTYSpectre TYPointControl::getSpectre()
+{
+    return dynamic_cast<TYProjet*>(getParent())->getCurrentCalcul()->getSpectre(this);
+}
+
+bool TYPointControl::remEtat(TYCalcul* pCalcul)
+{
+    assert(pCalcul);
+    TYUUID id = pCalcul->getID();
+
+    TYMapIdBool::iterator it = _tabEtats.find(id);
+    if ( it != _tabEtats.end() )
+    {
+        _tabEtats.erase(it);
+        return true;
+    }
+
+    return false;
+}

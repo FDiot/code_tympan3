@@ -20,29 +20,16 @@
  *
  */
 
-
-
-
 #include "Tympan/models/business/TYProjet.h"
-//Added by qt3to4:
-//#include <QSignal>
-
-
 #include "TYProjetGraphic.h"
 
 TYProjetGraphic::TYProjetGraphic(TYProjet* pElement) :
     TYElementGraphic(pElement)
 {
-#if TY_USE_IHM
-    //  _pUpdateSignal = new Q3Signal();
-#endif // TY_USE_IHM
 }
 
 TYProjetGraphic::~TYProjetGraphic()
 {
-#if TY_USE_IHM
-    //  delete _pUpdateSignal;
-#endif // TY_USE_IHM
 }
 
 void TYProjetGraphic::update(bool force /*=false*/)
@@ -79,6 +66,20 @@ void TYProjetGraphic::getChilds(TYListPtrTYElementGraphic& childs, bool recursif
             pTYElementGraphic->getChilds(childs, recursif);
         }
     }
+
+    // Maillage
+    TYTabMaillageGeoNode* pTabMaillage = &getElement()->getMaillages();
+    TYMaillageGeoNode* pMaillageGeoNode = NULL;
+    for (i = 0; i < pTabMaillage->size(); i++)
+    {
+        pMaillageGeoNode = pTabMaillage->operator[](i);
+        pTYElementGraphic = pMaillageGeoNode->getGraphicObject();
+        childs.push_back(pTYElementGraphic);
+        if (recursif)
+        {
+            pTYElementGraphic->getChilds(childs, recursif);
+        }
+    }
 }
 
 void TYProjetGraphic::display(GLenum mode /*= GL_RENDER*/)
@@ -93,6 +94,15 @@ void TYProjetGraphic::display(GLenum mode /*= GL_RENDER*/)
     for (i = 0; i < getElement()->getPointsControl().size(); i++)
     {
         getElement()->getPointControl(i)->getGraphicObject()->display(mode);
+    }
+
+    // Maillage
+    TYTabMaillageGeoNode* pTabMaillage = &getElement()->getMaillages();
+    TYMaillageGeoNode* pMaillageGeoNode = NULL;
+    for (i = 0; i < pTabMaillage->size(); i++)
+    {
+        pMaillageGeoNode = pTabMaillage->operator[](i);
+        pMaillageGeoNode->getGraphicObject()->display(mode);
     }
 
     // Calcul courant

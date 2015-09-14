@@ -80,17 +80,9 @@ public:
     virtual bool deepCopy(const TYElement* pOther, bool copyId = true);
 
     /// Copie du map calcul-spectre
-    void copySpectres(TYPointCalcul* pOther);
+    //void copySpectres(TYPointCalcul* pOther);
 
-    /// Copie du map calcul-etat
-    void copyEtats(TYPointCalcul* pOther);
 
-    /*!
-     * \brief Duplique l'etat defini pour un calcul pour un autre calcul
-     * \param idCalculRef : Identifiant unique du calcul referent
-     * \param idCalculNew : Identifiant unique du calcul a recopier
-     */
-    void duplicateEtat(const QString& idCalculRef, const QString& idCalculNew);
 
     virtual std::string toString() const;
 
@@ -102,13 +94,18 @@ public:
      * \fn void setSpectre(const TYSpectre & spectre, TYCalcul* pCalcul = NULL)
      * \brief Set du spectre resultat d'un calcul donne.
      */
-    void setSpectre(const TYSpectre& spectre, TYCalcul* pCalcul = NULL);
+    void setSpectre(const LPTYSpectre spectre) { _spectre = spectre; }
 
     /**
      * \fn  TYSpectre* getSpectre(TYCalcul* pCalcul = NULL, const bool& addToCalcul = false)
      * \brief Get du spectre resultat d'un calcul donne.
      */
-    TYSpectre* getSpectre(TYCalcul* pCalcul = NULL, const bool& addToCalcul = false);
+    virtual LPTYSpectre getSpectre() { return _spectre; };
+
+    virtual bool etat() { return _etat; }
+    virtual bool etat(const TYUUID& id_calc) { return _etat; }
+    virtual bool etat(const TYCalcul* pCalc) { return _etat; }
+    virtual void setEtat(const bool& etat) { _etat = etat; };
 
     /**
      * \fn double getValA()
@@ -139,36 +136,7 @@ public:
      */
     const double getValLin() const { return _dBLin; }
 
-    /**
-     * Set/Get de l'etat de ce point de calcul.
-     */
-    void setEtat(const bool& etat, TYCalcul* pCalcul = NULL);
-    bool getEtat(TYCalcul* pCalcul = NULL);
-    //  void setState(int state) { _state = state; setIsGeometryModified(true); }
-
-    /**
-     * Set/Get si le point de calcul n'est associe qu'a un seul spectre (maillage)
-     */
-    void setIsSpectreUnique(bool isSpectreUnique) { _isSpectreUnique = isSpectreUnique; }
-    bool getIsSpectreUnique() { return _isSpectreUnique; }
-
-    /**
-     * Set/Get de l'etat de ce point de calcul.
-     */
-    //  int getState() { return _state; }
-
-    /*
-     * \fn  bool isLocked()
-     *      const bool isLocked()
-     *      void setLocked(const bool& locked)
-     * \brief Set/Get de l'etat de blocage du point de calcul.
-     * \return _locked
-     */
-    bool isLocked() { return _locked; }
-    const bool isLocked() const { return _locked; }
-    void setLocked(const bool& locked) { _locked = locked; /*_pSpectre->setIsReadOnly(_locked);*/}
-
-    /**
+   /**
      * \fn  TYPoint getCoordSIG()
      * \brief Passage en coordonnees SIG
      */
@@ -189,24 +157,14 @@ public:
 
     // Membres
 protected:
-    ///Les spectres resultat des calculs en ce point.
-    TYMapIdSpectre _tabSpectre;
-
-    ///Indique que le point de calcul n'a qu'un seul spectre (cas des maillages)
-    bool _isSpectreUnique;
-
-    ///L'etat du point pour un calcul donne
-    TYMapIdBool _tabEtats;
-
-    ///Indique sur l'etat de ce point de calcul.
-    //  int _state;
-
-    /// Permet de bloquer le spectre si le calcul est verrouille
-    bool _locked;
+    LPTYSpectre _spectre;
 
     /// Valeur en dBA et en dBLin au point de calcul
     double _dBA;
     double _dBLin;
+
+private:
+    bool _etat;
 };
 
 

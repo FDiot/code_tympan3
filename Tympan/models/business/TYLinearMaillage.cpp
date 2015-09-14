@@ -114,57 +114,42 @@ int TYLinearMaillage::fromXML(DOM_Element domElement)
     TYMaillage::fromXML(domElement);
 
     bool spectreIsOk = false;
-
     bool densiteOk = false;
+    bool bOldDatas = false;
 
-    unsigned int i;
-
-    TYSpectre* pSpectre = new TYSpectre();
-    TYTabLPSpectre tabSpectre;
+    LPTYSpectre pSpectre = new TYSpectre();
+    TYTabLPSpectre *compatibilityVector = new TYTabLPSpectre();
 
     DOM_Element elemCur;
 
     QDomNodeList childs = domElement.childNodes();
-    for (i = 0; i < childs.length(); i++)
+    for (unsigned int i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
         TYXMLTools::getElementDoubleValue(elemCur, "densite", _densite, densiteOk);
 
         _pSeg->callFromXMLIfEqual(elemCur);
 
-        // Nouvelle version : si on trouve des spectres
-        if (pSpectre->callFromXMLIfEqual(elemCur))
+        // Old version : if we encounter spectra
+       if (pSpectre->callFromXMLIfEqual(elemCur))
         {
-            tabSpectre.push_back(pSpectre);
+            bOldDatas = true;
+            compatibilityVector->push_back(pSpectre);
             pSpectre = new TYSpectre();
-            if (!spectreIsOk)
-            {
-                spectreIsOk = true;
-            }
-        }
+        }    
     }
 
-    // Nouvelle version
-    if (spectreIsOk)
+    if (bOldDatas == true)
     {
-        OVector3D step = _pSeg->toVector3D() * (1.0 / (double)tabSpectre.size());
-
-        double x0 = _pSeg->_ptA._x;
-        double y0 = _pSeg->_ptA._y;
-        TYPoint point(x0, y0, _hauteur);
-
-        for (i = 0; i < tabSpectre.size(); ++i)
-        {
-            TYPointCalcul* pPtCalcul = new TYPointCalcul(point);
-            pPtCalcul->setSpectre(*(tabSpectre[i]));
-            addPointCalcul(pPtCalcul);
-
-            point._x += step._x;
-            point._y += step._y;
-        }
+        setAllUses( (void*)compatibilityVector );
+    }
+    else
+    {
+        delete compatibilityVector;
     }
 
-    delete pSpectre;
+    make(_pSeg, _densite);
+    TYMaillage::clearResult();
 
     return 1;
 }
@@ -271,7 +256,7 @@ bool TYLinearMaillage::fromXMLString(const std::string& sXMLString)
 
 void TYLinearMaillage::clearResult()
 {
-    make(_pSeg, _densite);
+    TYMaillage::clearResult();
 }
 
 
@@ -304,7 +289,9 @@ void TYLinearMaillage::make(LPTYSegment pSeg, double densite)
         OPoint3D pos = startPt + (vec * i);
 
         // Ajout du point au maillage
-        addPointCalcul(new TYPointCalcul(pos));
+        LPTYPointCalcul pPoint = new TYPointCalcul(pos);
+        pPoint->setSpectre(new TYSpectre());
+        addPointCalcul(pPoint);
     }
 
     setIsGeometryModified(true);

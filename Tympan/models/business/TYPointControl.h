@@ -108,14 +108,6 @@ public:
     double getHauteur() const { return _hauteur; }
 
     /**
-     * \fn void purge()
-     * \brief Mise a zero du resultat
-     */
-    void purge(TYCalcul* pCalcul);
-
-
-
-    /**
      * \param objectCube, objectPyramid, objectSphere, objectStar
      * Les differents types d'objet graphique que l'on peut afficher.
      */
@@ -152,10 +144,37 @@ public:
      */
     int getSIGType();
 
-    // Membres
-protected:
+    virtual LPTYSpectre getSpectre();
 
-    ///Object representant la source
+    /**
+     * Set/Get de l'etat de ce point de calcul.
+     */
+    virtual void setEtat(const TYUUID& id_calc, bool etat);
+    virtual bool etat();
+    virtual bool etat(const TYUUID& id_calc);
+    virtual bool etat(const TYCalcul* pCalc);
+
+    /// Copie du map calcul-etat
+    void copyEtats(TYPointControl* pOther);
+
+    /// Remove calcul from "etat" map
+    bool remEtat(TYCalcul* pCalcul);
+
+    /*!
+     * \brief Duplique l'etat defini pour un calcul pour un autre calcul
+     * \param idCalculRef : Identifiant unique du calcul referent
+     * \param idCalculNew : Identifiant unique du calcul a recopier
+     */
+    void duplicateEtat(const TYUUID& idCalculRef, const TYUUID& idCalculNew);
+
+    void* getCompatibilityVector();
+
+// Membres
+protected:
+    ///L'etat du point pour un calcul donne
+    TYMapIdBool _tabEtats;
+
+    ///shape of the point in GUI
     int _object;
 
     ///La hauteur du point par rapport a l'altitude.
