@@ -120,14 +120,13 @@ public:
     void setAttenuation(const OSpectre& Att) { _spectrum = Att; }
 
     // return as acoustic_event (allowing to watch path from source to receptor
-    acoustic_event* asEvent();
+    acoustic_event* asEvent() const;
 
     // Membres
 public:
     ///Le point de depart associe a cette etape.
     OPoint3D _pt;
-
-    /// Spectre
+    ACOUSTIC_EVENT_TYPES _type;      /*!< Type d'evenement */
     OSpectreComplex _spectrum;
 };
 
