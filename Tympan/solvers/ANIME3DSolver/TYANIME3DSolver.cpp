@@ -127,7 +127,16 @@ bool TYANIME3DSolver::solve(const tympan::AcousticProblemModel& aproblem,
 #endif //__ONLY_RAYS__
 
     // Do not keep rays (for a noise map for example)
-    if (config->Anime3DKeepRays == false) { tabRays.clear(); }
+    if (config->Anime3DKeepRays == false) 
+    { 
+        // Cleaning _tabrays
+        for (unsigned int i=0; i<tabRays.size(); i++)
+        {
+            delete tabRays[i];
+            tabRays[i] = nullptr;
+        }
+        tabRays.clear(); 
+    }
 
     // Curve rays (as in meteo field) if meteo is activated
 	if (config->UseMeteo)

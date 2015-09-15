@@ -113,7 +113,6 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
 
     // Recuperation du tableau de rayon de la structure resultat
     tab_acoustic_path& tabRays = aresult.get_path_data();
-    tabRays.clear();
     if (config->Anime3DKeepRays == true)
     {
         for (unsigned int i=0; i<_tabTrajets.size(); i++)
