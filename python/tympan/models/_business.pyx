@@ -169,8 +169,9 @@ cdef class AcousticSurface:
         itt = cy.declare(deque[tycommon.OTriangle].iterator, tgles.begin())
         while itt != tgles.end():
             # Assert consistency of the tycommon.OPoint3D given in the mesh
-            assert (deref(itt).checkConsistencyWrtPointsTab(pts),
-                    deref(itt).reportInconsistencyWrtPointsTab(pts))
+            check = deref(itt).checkConsistencyWrtPointsTab(pts)
+            if not check:
+                raise RuntimeError(deref(itt).reportInconsistencyWrtPointsTab(pts))
             tri = cy.declare(cy.pointer(tycommon.OTriangle), 
                              new tycommon.OTriangle(deref(itt)._p1, deref(itt)._p2, deref(itt)._p3))
             triangles.append(tycommon.otriangle2triangle(tri))
@@ -381,8 +382,9 @@ cdef class Site:
         itt = cy.declare(deque[tycommon.OTriangle].iterator, tgles.begin())
         while itt != tgles.end():
             # Assert consistency of the tycommon.OPoint3D given in the mesh
-            assert (deref(itt).checkConsistencyWrtPointsTab(pts),
-                    deref(itt).reportInconsistencyWrtPointsTab(pts))
+            check = deref(itt).checkConsistencyWrtPointsTab(pts)
+            if not check:
+                raise RuntimeError(deref(itt).reportInconsistencyWrtPointsTab(pts))
             tri = cy.declare(cy.pointer(tycommon.OTriangle),
                              new tycommon.OTriangle(deref(itt)._p1, deref(itt)._p2, deref(itt)._p3))
             triangles.append(tycommon.otriangle2triangle(tri))
@@ -442,6 +444,9 @@ cdef class Site:
             pts.push_back(tycommon.OPoint3D(x, y, z))
         for e0, e1, e2 in faces:
             tgles.push_back(tycommon.OTriangle(e0, e1, e2))
+            tgles.back()._A = pts[e0]
+            tgles.back()._B = pts[e1]
+            tgles.back()._C = pts[e2]
         for mat in altimetry_mesh.faces_material(material_by_face):
             mat_ids.push_back(mat.id)
         cppmats = cy.declare(deque[SmartPtr[TYSol]])
