@@ -842,6 +842,19 @@ cdef class Computation:
                               downcast_Element(self.thisptr.getRealPointer()))
         cpp_elem.setName(name)
 
+    def set_solver(self, solverdir, name):
+        """`solver_name` will be used to solve this computation"""
+        assert self.thisptr.getRealPointer() != NULL
+        load_solvers(solverdir)
+        solverid = cy.declare(OGenID, solver_id(name))
+        self.thisptr.getRealPointer().setSolverId(solverid)
+
+    @property
+    def solver_id(self):
+        """The identifier of the solver that will be used to solve the computation"""
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getSolverId().toString().toStdString()
+
 
 cdef class Project:
     thisptr = cy.declare(SmartPtr[TYProjet])

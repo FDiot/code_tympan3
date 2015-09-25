@@ -17,6 +17,7 @@
 #define __TY_PLUGINMANAGER__
 
 #include <list>
+#include <string>
 
 #include <qdir.h>
 #include <qstringlist.h>
@@ -150,6 +151,9 @@ public:
     // Verifie si le plugin existe
     bool exist(const QString& solverName);
 
+    // Retourne l'identifiant de solver correspondant au nom `solverName`
+    OGenID solverID(const QString& solverName);
+
 private:
     TYPluginList _plugins;
 
@@ -162,13 +166,23 @@ class TYCalcul;
 
 namespace tympan
 {
-    //! Load some solver from plugin and returns it
+    //! Load the solver plugins found in `path`
     /*!
      * \param path Path to the solver libraries (plugins) to load, containing
      *      among others the default solver
+     */
+    void load_solvers(const char *path);
+
+    //! Select a solver amongst the loaded solvers (a previous call to tympan::load_solvers() is
+    // needed)
+    /*!
      * \param uuid identifier of the solver to load
      */
-    SolverInterface* load_solver(const char *path, OGenID uuid);
+    SolverInterface* select_solver(OGenID uuid);
+
+    //! Return the id of the solver named `name` (a previous call to tympan::load_solvers() is
+    // needed)
+    OGenID solver_id(std::string name);
 
 } /* namespace tympan */
 
