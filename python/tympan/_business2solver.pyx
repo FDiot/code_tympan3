@@ -20,11 +20,15 @@ cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.
     b2ms.map_sources = map_sources
     return b2ms
 
-def load_computation_solver(foldername, tybusiness.Computation comp):
-    """Load a solver plugin (from 'foldername' folder) to compute 'comp'"""
+
+def select_acoustic_solver(foldername, tybusiness.Computation comp):
+    """Load a solver plugin (from `foldername` folder) to compute `comp`
+    """
+    load_solvers(foldername)
     solver = cy.declare(tysolver.Solver, tysolver.Solver())
-    solver.thisptr = load_solver(foldername, comp.thisptr.getRealPointer().getSolverId());
+    solver.thisptr = select_solver(comp.thisptr.getRealPointer().getSolverId());
     return solver
+
 
 cdef id_str(tybusiness.TYElement* elt):
     """Return 'elt' unique ID as a string"""

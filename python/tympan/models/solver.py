@@ -5,7 +5,7 @@ import os
 
 from tympan.models import filter_output
 from tympan.models import _solver as cysolver
-from tympan._business2solver import Business2SolverConverter, load_computation_solver
+from tympan._business2solver import Business2SolverConverter, select_acoustic_solver
 
 _CONVERTERS = {
     'bool': lambda x: x.lower() == 'true',
@@ -139,15 +139,23 @@ class Solver(object):
         be retrieved from "TYMPAN_SOLVERDIR" environment variable, which must be defined. The
         configuration is read from the project.
         """
-        try:
-            solverdir = solverdir or os.environ['TYMPAN_SOLVERDIR']
-        except KeyError:
-            raise RuntimeError('"TYMPAN_SOLVERDIR" environment variable must be set to path to the '
-                               'solver libraries directory')
+        solverdir = solverdir or fetch_solverdir()
         _set_solver_config(project.current_computation)
         with filter_output(verbose):
-            solver = load_computation_solver(solverdir, project.current_computation)
+            solver = select_acoustic_solver(solverdir, project.current_computation)
         return cls(solver)
+
+
+def fetch_solverdir():
+    """Try to retrieve solver plugins directory from 'TYMPAN_SOLVERDIR' environment variable
+
+    If the environment variable is not defines, raise a RuntimeError.
+    """
+    try:
+        return os.environ['TYMPAN_SOLVERDIR']
+    except KeyError:
+        raise RuntimeError('"TYMPAN_SOLVERDIR" environment variable must be set to path to the '
+                           'solver libraries directory')
 
 
 def _set_solver_config(comp):

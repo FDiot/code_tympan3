@@ -12,4 +12,5 @@ cdef class Business2MicroSource:
 cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]] map_elt_srcs)
 
 cdef extern from "Tympan/models/business/TYPluginManager.h" namespace "tympan":
-    SolverInterface* load_solver(const char *path, OGenID uuid)
+    void load_solvers(const char *path)
+    SolverInterface* select_solver(OGenID uuid) except +

@@ -5,7 +5,7 @@ import os
 import tempfile
 import unittest
 
-from utils import TympanTC, PROJECT_BASE
+from utils import TympanTC, PROJECT_BASE, TEST_DATA_DIR, TEST_SOLVERS_DIR
 from tympan.config_gui import _update_config_with_user_values, _update_user_config
 from tympan.models.project import Project
 from tympan.models.solver import _set_solver_config
@@ -94,6 +94,17 @@ class TestSolverConfigGUI(unittest.TestCase):
         self.assertEqual(self.conf_parser.getint('ANALYTICRAYTRACER', 'CurveRaySampler'), 3)
         self.assertEqual(self.conf_parser.getfloat('ANALYTICRAYTRACER', 'InitialAngleTheta'), 5.0)
         self.assertEqual(self.conf_parser.get('ANALYTICRAYTRACER', 'blop'), 'whatever')
+
+
+class TestSolverSelection(TympanTC):
+
+    def test_select_solver(self):
+        project = Project.from_xml(os.path.join(TEST_DATA_DIR, 'empty_site.xml'))
+        self.assertEqual(project.current_computation.solver_id,
+                         "{a98b320c-44c4-47a9-b689-1dd352daa8b2}")
+        project.set_solver('ANIME3DSolver', solverdir=TEST_SOLVERS_DIR)
+        self.assertEqual(project.current_computation.solver_id,
+                         "{2f0b51a7-37bd-414e-8908-baea85acef2c}")
 
 
 if __name__ == '__main__':

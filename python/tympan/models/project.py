@@ -2,6 +2,7 @@ from tympan.altimetry import AltimetryMesh
 from tympan.models import filter_output
 from tympan.models._business import Project as cyProject
 from tympan.models._common import Spectrum
+from tympan.models.solver import fetch_solverdir
 
 
 class Project(object):
@@ -63,6 +64,17 @@ class Project(object):
         """Project current computation"""
         return self._project.current_computation
 
+    def set_solver(self, solvername, computation=None, solverdir=None):
+        """Set solver `solvername` to computation `computation`
+
+        `solverdir` is the directory where one can find the solver library. If None, it will
+         be retrieved from "TYMPAN_SOLVERDIR" environment variable, which must be defined.
+         if `computation` is None, the solver will be set to the current computation of the project
+        """
+        solverdir = solverdir or fetch_solverdir()
+        computation = computation or self._project.current_computation
+        computation.set_solver(solverdir, solvername)
+
     @property
     def site(self):
         """Project site"""
@@ -90,4 +102,3 @@ class Project(object):
     def import_result(self, model, solver_result):
         """Update project's site acoustic according to solver result"""
         model._converter.postprocessing(model._model, solver_result)
-

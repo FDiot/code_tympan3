@@ -15,6 +15,7 @@
 
 
 #include "Tympan/core/logging.h"
+#include "Tympan/core/exceptions.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "TYPluginManager.h"
 
@@ -281,13 +282,35 @@ bool TYPluginManager::exist(const QString& solverName)
     return false;
 }
 
+OGenID TYPluginManager::solverID(const QString& solverName)
+{
+    for (TYPluginList::iterator it = _plugins.begin(); it != _plugins.end(); ++it)
+    {
+        if ((*it)->getPlugin()->getName() == solverName)
+        {
+            return (*it)->getPlugin()->getUUID();
+        }
+    }
+    throw tympan::invalid_data("Unknown solver name") << tympan_source_loc;
+}
+
+
 namespace tympan
 {
-    SolverInterface* load_solver(const char *path, OGenID uuid)
+    void load_solvers(const char *path)
     {
         LPTYPluginManager plugin_manager = TYPluginManager::get();
         plugin_manager->unloadPlugins();
         plugin_manager->loadPlugins(path);
+    }
+
+    SolverInterface* select_solver(OGenID uuid)
+    {
+        LPTYPluginManager plugin_manager = TYPluginManager::get();
+        if (plugin_manager->getPluginList().empty())
+        {
+            throw tympan::invalid_data("The solvers are not loaded") << tympan_source_loc;
+        }
         Plugin *plugin = plugin_manager->getPlugin(uuid);
         pluginInfos* pInfos = new pluginInfos();
         plugin->getInfos(pInfos);
@@ -303,5 +326,15 @@ namespace tympan
         mm->info("***************************************************************");
         delete pInfos;
         return plugin->getSolver();
+    }
+
+    OGenID solver_id(std::string name)
+    {
+        LPTYPluginManager plugin_manager = TYPluginManager::get();
+        if (plugin_manager->getPluginList().empty())
+        {
+            throw tympan::invalid_data("The solvers are not loaded") << tympan_source_loc;
+        }
+        return plugin_manager->solverID(QString::fromStdString(name));
     }
 } /* namespace tympan */
