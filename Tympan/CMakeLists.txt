@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 
+# from cmake 2.8.12, COMPILE_DEFINITION_DEBUG/RELEASE shouldn't be used anymore and should be
+# replaced by generator expressions (see https://cmake.org/cmake/help/v3.0/policy/CMP0043.html)
+# CMP0043 policy exists from major version 3.
+if (NOT(${CMAKE_MAJOR_VERSION} VERSION_LESS "3"))
+    cmake_policy(SET CMP0043 OLD)
+endif()
+
 # Adding GTest include in the non-test tree is required to enable gtest_prod.h
 include_directories (${GTEST_INCLUDE_DIR})
 
