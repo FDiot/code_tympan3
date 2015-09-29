@@ -161,11 +161,11 @@ class Solver(object):
     @property
     def nthread(self):
         """Number of threads used to run the computation"""
-        return self._solver.Configuration.get().NbThreads
+        return cysolver.Configuration.get().NbThreads
 
     @nthread.setter
     def nthread(self, nthr):
-        self._solver.Configuration.get().NbThreads = nthr
+        cysolver.Configuration.get().NbThreads = nthr
 
     def solve(self, model):
         """Solve the acoustic problem described in the model (run a computation)"""
