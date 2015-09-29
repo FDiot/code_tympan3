@@ -125,7 +125,7 @@ class Solver(object):
 
     def __init__(self, solver):
         """Create a solver from a solver cython object"""
-        self._solver = solver
+        super(Solver,self).__setattr__('_solver',solver)
 
     @classmethod
     def from_name(cls, name, parameters_file, solverdir=None, verbose=False):
@@ -157,15 +157,16 @@ class Solver(object):
             solver = _business2solver.acoustic_solver_from_computation(
                 project.current_computation, solverdir)
         return cls(solver)
-
-    @property
-    def nthread(self):
-        """Number of threads used to run the computation"""
-        return cysolver.Configuration.get().NbThreads
-
-    @nthread.setter
-    def nthread(self, nthr):
-        cysolver.Configuration.get().NbThreads = nthr
+    
+    def __getattr__(self,name):
+        """Retrieve the parameters in cysolver.Configuration"""
+        capital_name = 'get' + ''.join(s[0].upper() + s[1:] for s in name.split('_'))
+        return getattr(cysolver.Configuration.get(),capital_name)()
+        
+    def __setattr__(self,name,value):
+        """Setting the parameters in cysolver.Configuration"""
+        capital_name = 'set' + ''.join(s[0].upper() + s[1:] for s in name.split('_'))
+        return getattr(cysolver.Configuration.get(),capital_name)(value)
 
     def solve(self, model):
         """Solve the acoustic problem described in the model (run a computation)"""
