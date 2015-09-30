@@ -39,26 +39,11 @@ bool TYANIME3DRayTracerSolverAdapter::postTreatmentScene(Scene* scene, std::vect
 
 	if (config->UsePostFilters)
 	{
-#ifdef _DEBUG
-		if (config->DebugUseCloseEventSelector)
-#endif
-		selectorManagerValidation.addSelector( new CloseEventSelector<Ray>() );
-#ifdef _DEBUG
-		if (config->DebugUseDiffractionAngleSelector)
-#endif
-		selectorManagerValidation.addSelector( new DiffractionAngleSelector<Ray>() );
-#ifdef _DEBUG
-		if (config->DebugUseDiffractionPathSelector)
-#endif
-		selectorManagerValidation.addSelector( new DiffractionPathSelector<Ray>(config->MaxPathDifference) );
-#ifdef _DEBUG
-		if (config->DebugUseFermatSelector)
-#endif
-		selectorManagerValidation.addSelector( new FermatSelector<Ray>() );
-#ifdef _DEBUG
-		if (config->DebugUseFaceSelector)
-#endif
-		selectorManagerValidation.addSelector( new FaceSelector<Ray>(HISTORY_PRIMITIVE) );
+        if (config->DebugUseCloseEventSelector) { selectorManagerValidation.addSelector( new CloseEventSelector<Ray>() ); }
+        if (config->DebugUseDiffractionAngleSelector) { selectorManagerValidation.addSelector(new DiffractionAngleSelector<Ray>()); }
+        if (config->DebugUseDiffractionPathSelector) { selectorManagerValidation.addSelector(new DiffractionPathSelector<Ray>(config->MaxPathDifference)); }
+        if (config->DebugUseFermatSelector) { selectorManagerValidation.addSelector( new FermatSelector<Ray>() ); }
+        if (config->DebugUseFaceSelector) { selectorManagerValidation.addSelector( new FaceSelector<Ray>(HISTORY_PRIMITIVE) ); }
 	}
 
 	selectorManagerIntersection.addSelector( new DiffractionSelector<Ray>(config->MaxDiffraction) );

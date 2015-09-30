@@ -8,8 +8,7 @@ from libcpp.deque cimport deque
 
 from tympan._core cimport SolverInterface
 from tympan.models._common cimport (OPoint3D, OSpectre, OSpectreComplex,
-                                    OVector3D, SpectrumMatrix, acoustic_path,
-                                    OBox2, Box)
+                                    OVector3D, SpectrumMatrix, acoustic_path)
 
 # XXX importing SmartPtr and shared_ptr from tympan.core set a cyclical dependency
 # between tympan.core and tympan.models.solver, since tympan.core declares
@@ -38,7 +37,8 @@ cdef class Solver:
 
 cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "tympan":
 
-    deque[size_t] scene_volume_intersection(deque[AcousticTriangle]& triangles, deque[OPoint3D]& nodes, OBox2& volume)
+    deque[size_t] scene_volume_intersection(deque[AcousticTriangle]& triangles, deque[OPoint3D]& nodes,
+                                            float l, float h, OPoint3D source, OPoint3D receptor)
 
     cdef cppclass AcousticProblemModel:
         size_t npoints()
@@ -52,7 +52,7 @@ cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "ty
         AcousticSource& source(size_t idx)
         AcousticReceptor& receptor(size_t idx)
         OPoint3D& node(size_t idx)
-        shared_ptr[AcousticMaterialBase] make_material(const string& name, double resistivity)
+        shared_ptr[AcousticMaterialBase] make_material(const string& name, double resistivity, double deviation, double length)
         shared_ptr[AcousticMaterialBase] make_material(const string& name, const OSpectreComplex& spectrum)
         size_t make_triangle(size_t n1, size_t n2, size_t n3)
         size_t make_node(const OPoint3D&)
@@ -124,7 +124,6 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
         double AtmosPressure
         double AtmosTemperature
         double AtmosHygrometry
-        double AnalyticC0
         double WindDirection
         double AnalyticGradC
         double AnalyticGradV
@@ -150,27 +149,32 @@ cdef extern from "Tympan/models/solver/config.h" namespace "tympan":
         bool DiffractionUseDistanceAsFilter
         bool KeepDebugRay
         bool UsePostFilters
-        bool EnableFullTargets
-        float TargetsDensity
+        int CurveRaySampler
         float InitialAngleTheta
+        float FinalAngleTheta
         float InitialAnglePhi
+        float FinalAnglePhi
         int AnalyticNbRay
         double AnalyticTMax
         double AnalyticH
         double AnalyticDMax
         int AnalyticTypeTransfo
+        float MeshElementSizeMax
+        bool showScene
+        float MinSRDistance
         int NbThreads
         bool UseRealGround
+        bool UseScreen
         bool UseLateralDiffraction
         bool UseReflection
         bool PropaConditions
         float H1parameter
         bool ModSummation
         bool UseMeteo
-        float OverSampleD
         bool UseFresnelArea
         float Anime3DSigma
         int Anime3DForceC
+        bool Anime3DKeepRays
         bool DebugUseCloseEventSelector
         bool DebugUseDiffractionAngleSelector
         bool DebugUseDiffractionPathSelector

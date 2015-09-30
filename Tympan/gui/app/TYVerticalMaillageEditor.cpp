@@ -168,8 +168,12 @@ void TYVerticalMaillageEditor::slotMouseReleased(int x, int y, Qt::MouseButton b
         LPTYSegment pSeg = new TYSegment();
 
         float pt1[3], pt2[3];
-        NxVec3 point1 = OGLCamera::displayToWorld(NxVec3(_pOGLLineElement->getPoint1()[0], _pOGLLineElement->getPoint1()[1], _pOGLLineElement->getPoint1()[2]));
-        NxVec3 point2 = OGLCamera::displayToWorld(NxVec3(_pOGLLineElement->getPoint2()[0], _pOGLLineElement->getPoint2()[1], _pOGLLineElement->getPoint2()[2]));
+        NxVec3 point1 = OGLCamera::displayToWorld(NxVec3(   _pOGLLineElement->getPoint1()[0], 
+                                                            _pOGLLineElement->getPoint1()[1], 
+                                                            _pOGLLineElement->getPoint1()[2]));
+        NxVec3 point2 = OGLCamera::displayToWorld(NxVec3(   _pOGLLineElement->getPoint2()[0], 
+                                                            _pOGLLineElement->getPoint2()[1], 
+                                                            _pOGLLineElement->getPoint2()[2]));
         pt1[0] = point1.x;
         pt1[1] = point1.y;
         pt1[2] = point1.z;
@@ -288,29 +292,27 @@ void TYVerticalMaillageEditor::slotMouseReleased(int x, int y, Qt::MouseButton b
                     TYProjet* pProjet = pSiteModeler->getProjet();
                     if (pProjet)
                     {
-                        TYCalcul* pCalcul = pProjet->getCurrentCalcul();
-                        // Ajout au Calcul courant
-                        if (pCalcul)
+                        // Init
+                        pMaillage->setHauteur(pHauteurSolLineEdit->text().toDouble());
+                        pMaillage->make(pRectangle, pDensiteXLineEdit->text().toDouble(), pDensiteYLineEdit->text().toDouble());
+
+                        // On ne calcule pas l'alti des points pour ce type de maillage
+                        pMaillage->setComputeAlti(false);
+
+                        TYAction* pAction = new TYAddMaillageToProjetAction( (LPTYMaillageGeoNode&) pMaillageGeoNode, 
+                                                                                pProjet, 
+                                                                                _pModeler,
+                                                                                TR("id_action_addrectmaillage") );
+                        _pModeler->getActionManager()->addAction(pAction);
+
+                        pProjet->addMaillage((LPTYMaillageGeoNode&) pMaillageGeoNode);
+                        if(pProjet->getSite()->getAltimetry()->containsData())
                         {
-                            pCalcul->addMaillage((LPTYMaillageGeoNode&) pMaillageGeoNode);
-
-                            // Init
-                            pMaillage->setHauteur(pHauteurSolLineEdit->text().toDouble());
-                            pMaillage->make(pRectangle, pDensiteXLineEdit->text().toDouble(), pDensiteYLineEdit->text().toDouble());
-
-                            // On ne calcule pas l'alti des points pour ce type de maillage
-                            pMaillage->setComputeAlti(false);
-
-                            TYAction* pAction = new TYAddMaillageToCalculAction((LPTYMaillageGeoNode&) pMaillageGeoNode, pSiteModeler->getProjet()->getCurrentCalcul(), _pModeler, TR("id_action_addrectmaillage"));
-                            _pModeler->getActionManager()->addAction(pAction);
-
-                            if(pProjet->getSite()->getAltimetry()->containsData())
-                            {
-                                // Altimetrisation du maillage
-                                pSiteModeler->getProjet()->getCurrentCalcul()->updateAltiMaillage(pMaillageGeoNode);
-                            }
-                            pMaillage->updateGraphicTree();
+                            // Altimetrisation du maillage
+                            pProjet->updateAltiMaillage(pMaillageGeoNode);
                         }
+
+                        pMaillage->updateGraphicTree();
                     }
                 }
 

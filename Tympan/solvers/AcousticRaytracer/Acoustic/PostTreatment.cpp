@@ -68,10 +68,28 @@ void registerSegmentsFromShapes(Shape* shape, mapSegmentShapes& currentMap)
 
 bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOuverture)
 {
+    /*
+     we test if p1 vs p2 angle is greater than PI/2+angleMax
+     else they are considered as colinear and no diffraction cylinder is built
+               seg
+                |
+         p1     |p2/
+                | /
+      __________|/
+      comp      \
+                 \ normal
+                  \
 
+    */
+
+    // Minimal angle (other PI) between two face to allow building of a diffraction cylinder
+    float angleMax = tympan::SolverConfiguration::get()->AngleDiffMin * M_PI / 180;
+
+    // Compute "mean" normal between the two faces
     vec3 normal = p1->getNormal() + p2->getNormal();
     normal.normalize();
 
+    // Search for a segment of the shape different from seg
     std::vector<unsigned int>* vertices = p1->getLocalVertices();
     vec3 otherVertex;
     for (unsigned int i = 0; i < vertices->size(); i++)
@@ -83,24 +101,17 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
         }
     }
 
+    // Create "comp", a vector colinear with segment found ahead
     vec3 proj = otherVertex.closestPointOnLine(p1->getVertices()->at(seg.first), p1->getVertices()->at(seg.second));
 
     vec3 comp = otherVertex - proj;
     comp.normalize();
 
+    // Compute angle betwwen comp and tne "mean" normal
     decimal angle = comp.dot(normal);
     angleOuverture = 2. * acos(angle);
 
-    // Utilisation d'une valeur globale pour la gestion de l'angle minimal
-    float angleMax = tympan::SolverConfiguration::get()->AngleDiffMin * M_PI / 180;
-
-    if (!p1->getMaterial()->isNatural && !p2->getMaterial()->isNatural)
-    {
-        ss << "Angle d'ouverture : " << (angleOuverture * 360.) / (2 * M_PI) << std::endl;
-    }
-    //ss<<"Valeur en degre : "<<(M_PI / 2. + M_PI / 36.) * 360. / (2 * M_PI)<<std::endl;
-    //  if(angle < cos(M_PI / 2. + M_PI / 36.))
-    if (angle < cos(M_PI / 2. + angleMax))
+    if (angle < cos(M_PI / 2. + angleMax / 2.))
     {
         return true;
     }
@@ -110,7 +121,10 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
 
 bool PostTreatment::constructEdge(Scene* scene)
 {
+    // define diffraction cylinder diameter
+    float cylinderThick = tympan::SolverConfiguration::get()->CylindreThick;
 
+    // Create a list of segments common to two faces
     mapSegmentShapes segmentList;
     std::vector<Shape*> *shapes = scene->getShapes();
 
@@ -125,6 +139,7 @@ bool PostTreatment::constructEdge(Scene* scene)
 
     for (mapSegmentShapes::iterator it = segmentList.begin(); it != segmentList.end(); it++)
     {
+        // If segment is owned by 2 shapes, we test angle between them
         if (it->second.size() == 2)
         {
             std::set<segment>::iterator itset1 = validSegment.find(it->first);
@@ -133,7 +148,7 @@ bool PostTreatment::constructEdge(Scene* scene)
             if (itset1 == validSegment.end() && itset2 == validSegment.end() && isAcceptableEdge(it->first, it->second.at(0), it->second.at(1), angleOuverture))
             {
                 validSegment.insert(it->first);
-                Cylindre* cylindre = new Cylindre(it->second.at(0), it->second.at(1), scene->getVertices(), it->first.first, it->first.second, tympan::SolverConfiguration::get()->CylindreThick);
+                Cylindre* cylindre = new Cylindre(it->second.at(0), it->second.at(1), scene->getVertices(), it->first.first, it->first.second, cylinderThick);
                 cylindre->setAngleOuverture(angleOuverture);
                 scene->addShape(cylindre);
                 ss << "Ajout du segment (" << it->first.first << "," << it->first.second << ")" << std::endl;

@@ -17,6 +17,7 @@
 #include <cassert>
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/mathlib.h"
+#include "Tympan/solvers/AnalyticRayTracer/geometry_modifier.h"
 #include "acoustic_path.h"
 
 acoustic_event::acoustic_event():   distNextEvent(0.0),
@@ -77,7 +78,7 @@ acoustic_event& acoustic_event::operator=(const acoustic_event& other)
 
 // ===================================================================================================================================================
 
-double acoustic_path:: sampler_step = 1.0;
+double acoustic_path:: sampler_step = 20.0;
 
 acoustic_path::acoustic_path()
 {
@@ -119,9 +120,6 @@ acoustic_path& acoustic_path::operator=(const acoustic_path& other)
     {
         _events.push_back( new acoustic_event( *(other._events.at(i)) ) );
     }
-
-    build_links_between_events();
-    compute_shot_angle();
 
     return *this;
 }
@@ -234,7 +232,7 @@ void acoustic_path::setAngles(ACOUSTIC_EVENT_TYPES eventType)
     }
 }
 
-void acoustic_path::overSample(const double& dMin)
+void acoustic_path::overSample(IGeometryModifier* transformer, const double& dMin)
 {
     if (dMin == 0.) { return; }
 
@@ -247,9 +245,9 @@ void acoustic_path::overSample(const double& dMin)
     // On va traiter les evenements deux a deux
     while (iter != endIter)
     {
-        // Recuperation des deux points initiaux
-        tabPoints.push_back((*iter)->pos);
-        tabPoints.push_back((*(iter + 1))->pos);
+        // Recuperation des deux points initiaux, dans le repere de la geometrie deformee
+        tabPoints.push_back( vec3toOPoint3D( transformer->fonction_h( OPoint3Dtovec3( (*iter)->pos ) ) ) );
+        tabPoints.push_back( vec3toOPoint3D( transformer->fonction_h( OPoint3Dtovec3( (*(iter + 1))->pos ) ) ) );
 
         // Surechantillonnage du tableau de points
         tabPoints = OPoint3D::checkPointsMaxDistance(tabPoints, dMin);
@@ -319,7 +317,7 @@ void acoustic_path::compute_shot_angle()
     _events[0]->angletheta = angle;
 }
 
-void acoustic_path::sampleAndCorrection(IGeometryModifier& transformer)
+void acoustic_path::sampleAndCorrection(IGeometryModifier* transformer)
 {
         // Récupération des longueurs simples (éléments suivants)
         nextLenghtCompute(transformer);
@@ -337,7 +335,7 @@ void acoustic_path::sampleAndCorrection(IGeometryModifier& transformer)
         eventPosCompute(transformer);
 }
 
-void acoustic_path::nextLenghtCompute(IGeometryModifier& transformer)
+void acoustic_path::nextLenghtCompute(IGeometryModifier* transformer)
 {
     for (unsigned j = 0; j < _events.size() - 1; j++)
     {
@@ -346,19 +344,19 @@ void acoustic_path::nextLenghtCompute(IGeometryModifier& transformer)
     }
 }
 
-double acoustic_path::lengthCorrection(acoustic_event* ev1, const acoustic_event* ev2, IGeometryModifier& transformer)
+double acoustic_path::lengthCorrection(acoustic_event* ev1, const acoustic_event* ev2, IGeometryModifier* transformer)
 {
     TabPoint3D tabPoint = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, sampler_step);
+    double length = 0.;
 
     // Calculation with h for each event
     // Useful for lengths & angles
     for (size_t i = 0; i < tabPoint.size(); i++)
     {
         OPoint3D& point = tabPoint[i];
-        point = transformer.fonction_h_inverse(point);
+        point = vec3toOPoint3D( transformer->fonction_h_inverse( OPoint3Dtovec3(point) ) );
     }
 
-    double length = 0.;
     for (size_t i = 0; i < tabPoint.size() - 1; i++)
     {
         length += tabPoint[i].distFrom(tabPoint[i + 1]);
@@ -367,7 +365,7 @@ double acoustic_path::lengthCorrection(acoustic_event* ev1, const acoustic_event
     return length;
 }
 
-void acoustic_path::endLenghtCompute(IGeometryModifier& transformer)
+void acoustic_path::endLenghtCompute(IGeometryModifier* transformer)
 {
     for (unsigned j = 0; j < _events.size() - 1; j++)
     {
@@ -376,7 +374,7 @@ void acoustic_path::endLenghtCompute(IGeometryModifier& transformer)
     }
 }
 
-void acoustic_path::prevNextLengthCompute(IGeometryModifier& transformer)
+void acoustic_path::prevNextLengthCompute(IGeometryModifier* transformer)
 {
     for (unsigned j = 1; j < _events.size() - 1; j++)
     {
@@ -385,7 +383,7 @@ void acoustic_path::prevNextLengthCompute(IGeometryModifier& transformer)
     }
 }
 
-void acoustic_path::angleCompute(IGeometryModifier& transformer)
+void acoustic_path::angleCompute(IGeometryModifier* transformer)
 {
     for (unsigned j = 1; j < _events.size() - 1; j++)
     {
@@ -394,19 +392,19 @@ void acoustic_path::angleCompute(IGeometryModifier& transformer)
     }
 }
 
-void acoustic_path::eventPosCompute(IGeometryModifier& transformer)
+void acoustic_path::eventPosCompute(IGeometryModifier* transformer)
 {
     for (unsigned i = 0; i < _events.size(); i++)
     {
         OPoint3D& point = _events[i]->pos;
-        point = transformer.fonction_h_inverse(point);
+        point = vec3toOPoint3D( transformer->fonction_h_inverse( OPoint3Dtovec3(point) ) );
     }
 }
 
 double acoustic_path::angleCorrection(const acoustic_event* ev1,
                                     acoustic_event* ev2,
                               const acoustic_event* ev3,
-                              IGeometryModifier& transformer)
+                              IGeometryModifier* transformer)
 {
     TabPoint3D tabPoint1 = OPoint3D::checkPointsMaxDistance(ev1->pos, ev2->pos, sampler_step);
     TabPoint3D tabPoint2 = OPoint3D::checkPointsMaxDistance(ev2->pos, ev3->pos, sampler_step);
@@ -416,7 +414,7 @@ double acoustic_path::angleCorrection(const acoustic_event* ev1,
     for (int i = 0; i < 3; i++)
     {
         OPoint3D& point = points[i];
-        point = transformer.fonction_h_inverse(point);
+        point = vec3toOPoint3D( transformer->fonction_h_inverse( OPoint3Dtovec3(point) ) );
     }
 
     OVector3D vec1(points[1], points[0]);
@@ -425,20 +423,16 @@ double acoustic_path::angleCorrection(const acoustic_event* ev1,
     return (M_PI - vec1.angle(vec2)) / 2.;
 }
 
-void acoustic_path::tyRayCorrection(IGeometryModifier& transformer)
+void acoustic_path::tyRayCorrection(IGeometryModifier* transformer)
 {
     // Repositionnement des elements du rayon
-    for (unsigned i = 0; i < _events.size(); i++)
-    {
-        OPoint3D& point = _events[i]->pos;
-        point = transformer.fonction_h(point);
-    }
+    overSample(transformer, sampler_step);
 
-    overSample(sampler_step);
+    std::vector<int> listIndex = getIndexOfEvents(TYREFRACTION);
 
-    for (unsigned int i = 0 ; i < _events.size() ; i++)
+    for (unsigned int i = 0 ; i < listIndex.size() ; i++)
     {
-        OPoint3D& point = _events[i]->pos;
-        point = transformer.fonction_h(point);
+        OPoint3D& point = _events[ listIndex[i] ]->pos;
+        point = vec3toOPoint3D( transformer->fonction_h_inverse( OPoint3Dtovec3(point) ) );
     }
 }

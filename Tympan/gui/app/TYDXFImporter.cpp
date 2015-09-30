@@ -421,7 +421,7 @@ void TYDXFImporter::SetName(LPTYElement pTYElement, const char* sName, int nInst
 {
     static char sInstanceName[1024];
     sprintf(sInstanceName, "%s#%d", sName, nInstanceNumber);
-    pTYElement->setName(sName);
+    pTYElement->setName( std::string(sName) );
 }
 
 #endif

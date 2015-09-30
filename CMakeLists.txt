@@ -23,6 +23,10 @@ include(tympan-deps)
 
 include_directories(${CMAKE_SOURCE_DIR})
 include_directories(${CMAKE_BINARY_DIR})
+
+# Copy resources
+file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
 # Recurse into main sources directory...
 add_subdirectory(Tympan)
 

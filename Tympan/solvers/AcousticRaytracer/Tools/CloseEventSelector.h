@@ -23,7 +23,10 @@
 template<typename T>
 class CloseEventSelector : public Selector<T>
 {
-
+/*!
+ * \brief If two differents events of the same ray accurs on the same shape 
+ *        (for example a diffraction close to a reflection) the ray is rejected
+ */
 public :
     CloseEventSelector() : Selector<T>() {}
     virtual Selector<T>* Copy()

@@ -38,6 +38,7 @@
 using std::vector;
 typedef vector<TYElement*> tabPtrElement;
 
+class TYProjet;
 class TYCalcul;
 class TYEtatsWidget;
 class QLineEdit;
@@ -89,19 +90,41 @@ public slots:
      * Edite la widget du resultat.
      */
     void editResultat();
-    /**
-     * Edite la widget du maillage.
-     */
-    void editMaillage(QTreeWidgetItem*);
 
     /**
      * Affiche un menu contextuel.
      */
     virtual void contextMenuEvent(QContextMenuEvent* e);
 
+    /**
+     * Display a GUI allowing to see and modify solver parameters
+     */
+    void run_solver_params_gui();
+
+    /**
+     * Display all the solver parameters in a text field
+     */
+    void display_solver_params();
+
+    /**
+     * Update computation solver parameters with plain text solver parameters
+     */
+    void save_solver_params();
+
+    /**
+     * Close solver parameters plain text edition GUI
+     */
+    void close_solver_params();
+
 
 protected:
     void updateBoxSol();
+
+private:
+    void updateControlPointsTab(TYProjet* pProjet);
+    void updateNoiseMapsTab(TYProjet* pProjet);
+    void updateComboSolver();
+    void updateCalculState();
 
     // Membres
 protected:
@@ -152,7 +175,8 @@ protected:
     QTableWidget* _tableauMaillages;
 
     // Solver parameters
-    QTextEdit* _solverParams;
+    QDialog *_solver_params_dialog;
+    QTextEdit *_solver_params;
 };
 
 

@@ -142,9 +142,15 @@ void TYRectangularMaillageEditor::slotMouseReleased(int x, int y, Qt::MouseButto
         _moving = false;
 
         TYPoint pt0, pt1, pt2;
-        NxVec3 point0 = OGLCamera::displayToWorld(NxVec3(_pOGLRectangleElement->getPoint0()[0], _pOGLRectangleElement->getPoint0()[1], _pOGLRectangleElement->getPoint0()[2]));
-        NxVec3 point1 = OGLCamera::displayToWorld(NxVec3(_pOGLRectangleElement->getPoint1()[0], _pOGLRectangleElement->getPoint1()[1], _pOGLRectangleElement->getPoint1()[2]));
-        NxVec3 point2 = OGLCamera::displayToWorld(NxVec3(_pOGLRectangleElement->getPoint2()[0], _pOGLRectangleElement->getPoint2()[1], _pOGLRectangleElement->getPoint2()[2]));
+        NxVec3 point0 = OGLCamera::displayToWorld(NxVec3(   _pOGLRectangleElement->getPoint0()[0], 
+                                                            _pOGLRectangleElement->getPoint0()[1], 
+                                                            _pOGLRectangleElement->getPoint0()[2]));
+        NxVec3 point1 = OGLCamera::displayToWorld(NxVec3(   _pOGLRectangleElement->getPoint1()[0], 
+                                                            _pOGLRectangleElement->getPoint1()[1], 
+                                                            _pOGLRectangleElement->getPoint1()[2]));
+        NxVec3 point2 = OGLCamera::displayToWorld(NxVec3(   _pOGLRectangleElement->getPoint2()[0], 
+                                                            _pOGLRectangleElement->getPoint2()[1], 
+                                                            _pOGLRectangleElement->getPoint2()[2]));
         pt0._x = point0.x;
         pt0._y = -point0.z;
         pt0._z = point0.y;
@@ -251,32 +257,28 @@ void TYRectangularMaillageEditor::slotMouseReleased(int x, int y, Qt::MouseButto
                     LPTYRectangularMaillageGeoNode pMaillageGeoNode = new TYRectangularMaillageGeoNode(rep, (LPTYElement)pMaillage);
 
                     TYProjet* pProjet = pSiteModeler->getProjet();
-                    if (pProjet != NULL)
+                    if (pProjet != nullptr)
                     {
-                        TYCalcul* pCalcul = pProjet->getCurrentCalcul();
-                        // Ajout au Calcul courant
-                        if (pCalcul != NULL)
+                        pMaillage->setHauteur(pHauteurLineEdit->text().toDouble());
+                        pMaillage->make(pRectangle, pDensiteXLineEdit->text().toDouble(), pDensiteYLineEdit->text().toDouble());
+
+                        TYAction* pAction = new TYAddMaillageToProjetAction( (LPTYMaillageGeoNode&) pMaillageGeoNode,
+                                                                                pProjet,
+                                                                                _pModeler,
+                                                                                TR("id_action_addrectmaillage") );
+
+                        // Ajout de l'action creation de maillage pour mettre le undo
+                        _pModeler->getActionManager()->addAction(pAction);
+
+                        // Ajoute le maillage dans le calcul courant
+                        pProjet->addMaillage((LPTYMaillageGeoNode&) pMaillageGeoNode);
+                        if(pProjet->getSite()->getAltimetry()->containsData())
                         {
-                            // Init
-                            // Ajoute le maillage dans le calcul courant
-                            pCalcul->addMaillage((LPTYMaillageGeoNode&) pMaillageGeoNode);
-
-                            pMaillage->setHauteur(pHauteurLineEdit->text().toDouble());
-                            pMaillage->make(pRectangle, pDensiteXLineEdit->text().toDouble(), pDensiteYLineEdit->text().toDouble());
-
-                            TYAction* pAction = new TYAddMaillageToCalculAction((LPTYMaillageGeoNode&) pMaillageGeoNode, pCalcul, _pModeler, TR("id_action_addrectmaillage"));
-
-                            // Ajout de l'action creation de maillage pour mettre le undo
-                            _pModeler->getActionManager()->addAction(pAction);
-
-                            if(pProjet->getSite()->getAltimetry()->containsData())
-                            {
-                                // Mise a jour de l'altimetrie du maillage
-                                pCalcul->updateAltiMaillage(pMaillageGeoNode);
-                            }
-                            // Genere les objets graphiques representant le maillage
-                            pMaillage->updateGraphicTree();
+                            // Mise a jour de l'altimetrie du maillage
+                            pProjet->updateAltiMaillage(pMaillageGeoNode);
                         }
+                        // Genere les objets graphiques representant le maillage
+                        pMaillage->updateGraphicTree();
                     }
                 }
 

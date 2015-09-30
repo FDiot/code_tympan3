@@ -18,7 +18,7 @@
 #include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/DefaultSolver/threading.h"
 #include "Tympan/solvers/DefaultSolver/TYTrajet.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Material.h"
@@ -156,6 +156,7 @@ bool TYSolver::buildCalcStruct(const tympan::AcousticProblemModel& aproblem)
         TYStructSurfIntersect SI;
         OGeometrie::computeNormal(pts, 3, SI.normal);
 
+        SI.volume_id = triangles[i].volume_id;
         SI.tabPoint.push_back(pts[0]);
         SI.tabPoint.push_back(pts[1]);
         SI.tabPoint.push_back(pts[2]);

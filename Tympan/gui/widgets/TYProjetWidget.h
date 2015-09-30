@@ -46,6 +46,8 @@ class QTextEdit;
 class QDateEdit;
 class TYElementWidget;
 class QCheckBox;
+class QTabWidget;
+class QTableWidget;
 
 /**
  * \class TYProjetWidget
@@ -99,6 +101,10 @@ public slots:
      */
     void updateDefault();
 
+private:
+    void updateControlPointsTab();
+    void updateNoiseMapsTab();
+
     // Membres
 protected:
 
@@ -130,6 +136,15 @@ protected:
 
     QGroupBox* _groupBoxTab;
     QTreeWidget* _listViewTabCalcul;
+
+    // Use of tabs
+    QTabWidget* _tabWidget;
+
+    // Table des points de controle
+    QTableWidget*_tableauPointsControle;
+
+    /// Onglet des points de controle
+    QTableWidget* _tableauMaillages;
 
     TYElementWidget* _elmW;
 };

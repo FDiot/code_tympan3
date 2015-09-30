@@ -114,7 +114,7 @@ void TYBoundaryNoiseMapGraphic::display(GLenum mode /*= GL_RENDER*/)
         update();
     }
 
-    if (!_visible || getElement()->getState() == TYMaillage::Inactif)
+    if (!_visible || getElement()->etat() == false)
     {
         return;
     }

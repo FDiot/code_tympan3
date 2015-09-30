@@ -49,10 +49,10 @@ def make_test_with_file(test_file):
                 check_nsources = True
         if check_nsources:
             self.assertEqual(current_result.nsources, expected_result.nsources)
-        current_spectra = np.array(list(current_result.spectrum(i, j).values
+        current_spectra = np.array(list(current_result.spectrum(current_result.receptors[i],current_result.sources[j]).values
                                         for i in xrange(current_result.nreceptors)
                                         for j in xrange(current_result.nsources)))
-        expected_spectra = np.array(list(expected_result.spectrum(i, j).values
+        expected_spectra = np.array(list(expected_result.spectrum(expected_result.receptors[i],expected_result.sources[j]).values
                                         for i in xrange(current_result.nreceptors)
                                         for j in xrange(current_result.nsources)))
         if current_result.nsources + current_result.nreceptors > 1:
@@ -88,6 +88,7 @@ for test_file in os.listdir(TEST_PROBLEM_DIR):
         if methodname in KNOWN_FAIL:
             method = unittest.expectedFailure(method)
         setattr(TestTympan, methodname, method)
+        
 
 
 if __name__ == '__main__':

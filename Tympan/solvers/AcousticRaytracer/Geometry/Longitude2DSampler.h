@@ -33,10 +33,10 @@ public:
     Longitude2DSampler(const unsigned int& nbRays = 0,
                        const decimal& Theta = (decimal) M_PIDIV2,
                        const decimal& Phi = (decimal) M_2PI) : Sampler(nbRays, Theta, Phi),
-        _startTheta(0),
-        _endTheta(M_PI),
-        _startPhi(0),
-        _endPhi(M_PI),
+        _startTheta(0.f),
+        _endTheta( static_cast<float>(M_PI) ),
+        _startPhi(0.f),
+        _endPhi( static_cast<float>(M_PI) ),
         _deltaTheta(0.),
         _nMin(vec3(0., 0., 0.)),
         _i(0)
@@ -95,16 +95,16 @@ public:
     }
 
     void setStartTheta(const decimal& startTheta) { _startTheta = startTheta * M_PIDIV180; init(); }
-    unsigned int getStartTheta() const { return _startTheta * M_180DIVPI; }
+    decimal getStartTheta() const { return _startTheta * M_180DIVPI; }
 
     void setEndTheta(const decimal& endTheta) { _endTheta = endTheta * M_PIDIV180; init(); }
-    unsigned int getEndTheta() const { return _endTheta * M_180DIVPI; }
+    decimal getEndTheta() const { return _endTheta * M_180DIVPI; }
 
     void setStartPhi(const decimal& startPhi) { _startPhi = startPhi * M_PIDIV180; init(); }
-    unsigned int getStartPhi() const { return _startPhi * M_180DIVPI; }
+    decimal getStartPhi() const { return _startPhi * M_180DIVPI; }
 
     void setEndPhi(const decimal& endPhi) { _endPhi = endPhi * M_PIDIV180; init(); }
-    unsigned int getEndPhi() const { return _endPhi * M_180DIVPI; }
+    decimal getEndPhi() const { return _endPhi * M_180DIVPI; }
 
 private :
     decimal _startTheta;

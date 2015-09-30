@@ -47,6 +47,7 @@
 #include "Tympan/gui/app/TYElementListItem.h"
 #include "Tympan/gui/app/TYRenderWindowInteractor.h"
 #include "Tympan/gui/app/TYModelerFrame.h"
+#include "Tympan/gui/app/TYSiteModelerFrame.h"
 #include "Tympan/gui/app/TYSiteFrame.h"
 #include "Tympan/gui/app/TYApplication.h"
 #include "Tympan/gui/app/TYMainWindow.h"
@@ -140,12 +141,21 @@ TYElementListItem* TYProjetFrame::addToList(LPTYProjet pElement, TYElementListIt
     unsigned int i;
     TYElementListItem* pRootItem  = addEltToList(pElement, parent);
 
+    // Ajout des points de controle
     TYElementListItem* pListPointsControlItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_pointscontrol_item")));
     for (i = 0; i < pElement->getPointsControl().size(); i++)
     {
         new TYElementListItem(pListPointsControlItem, pElement->getPointControl(i), pElement->getCurrentCalcul(), QStringList(), true);
     }
 
+    // Ajout des maillages
+    TYElementListItem* pLisMaillagesItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_maillages_item")));
+    for (i=0; i<pElement->getMaillages().size(); i++)
+    {
+        new TYElementListItem(pLisMaillagesItem, pElement->getMaillage(i), pElement->getCurrentCalcul(), QStringList(), true);
+    }
+
+    // Ajout des calculs
     for (i = 0; i < pElement->getListCalcul().size(); i++)
     {
         addToList(pElement->getListCalcul()[i], pRootItem);
@@ -174,14 +184,7 @@ TYElementListItem* TYProjetFrame::addToList(LPTYCalcul pElement, TYElementListIt
 
     setCalculItemState(pRootItem, pElement->getIsUpTodate());
 
-    unsigned int i;
     new TYElementListItem(pRootItem, NULL, NULL, QStringList(TR("id_Etats_item")));
-
-    TYElementListItem* pListMaillageItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_maillages_item")));
-    for (i = 0; i < pElement->getMaillages().size(); i++)
-    {
-        new TYElementListItem(pListMaillageItem, pElement->getMaillage(i));
-    }
 
     new TYElementListItem(pRootItem, pElement->getResultat());
 
@@ -240,6 +243,8 @@ void TYProjetFrame::setCalculItemState(TYElementListItem* pCalcItem, bool state)
 
 void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
 {
+    assert( _pProjet != nullptr );
+
     //si on trouve un item associe
     QPoint point = _pListView->mapFrom(this, e->pos());
     QTreeWidgetItem* item = _pListView->itemAt(point.x(), point.y() - _pListView->header()->height());
@@ -265,8 +270,7 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
             QAction* remMaillage = NULL;
             QAction* changeSiteRoot = NULL;
             QAction* exportCsv = NULL;
-            QAction* actif = NULL, *inactif = NULL , *calc_actif = NULL, *calc_locked = NULL, *mail_actif = NULL, *mail_inactif = NULL;
-            QAction* exportInt = NULL;
+            QAction *calc_actif = NULL, *calc_locked = NULL;
 
             TYElementGraphic* pGraphicObject = NULL;
 
@@ -277,34 +281,30 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
             // Calcul
             if (eltItem->getElement()->isA("TYCalcul"))
             {
+                TYCalcul *pCalcul = dynamic_cast<TYCalcul*>( eltItem->getElement().getRealPointer() );
+                if ( pCalcul == nullptr) { return; }
+
                 // Suppression des resultats
                 remCalculRes = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_bin"))), TR("id_contextmenu_remcalculresult"));
                 pMenu->addSeparator();
 
                 // Calcul courant
-                if (_pProjet->getCurrentCalcul() != NULL)
-                {
-                    if (_pProjet->getCurrentCalcul()->getID() != eltItem->getElement()->getID())
-                    {
-                        curCalcul = pMenu->addAction(TR("id_contextmenu_setascurcalcul"));
-                        pMenu->addSeparator();
-                    }
-                }
-                else
+                if ( _pProjet->getCurrentCalcul() != nullptr && 
+                     _pProjet->getCurrentCalcul()->getID() != eltItem->getElement()->getID() )
                 {
                     curCalcul = pMenu->addAction(TR("id_contextmenu_setascurcalcul"));
                     pMenu->addSeparator();
                 }
 
                 calc_actif = pMenu->addAction(TR("id_contextmenu_ptactif"));
-                if (((TYCalcul*) eltItem->getElement().getRealPointer())->getState() == TYCalcul::Actif)
+                if ( pCalcul->getState() == TYCalcul::Actif )
                 {
                     calc_actif->setCheckable(true);
                     calc_actif->setChecked(true);
                 }
 
                 calc_locked = pMenu->addAction(TR("id_contextmenu_ptlocked"));
-                if (((TYCalcul*) eltItem->getElement().getRealPointer())->getState() == TYCalcul::Locked)
+                if ( pCalcul->getState() == TYCalcul::Locked )
                 {
                     calc_locked->setCheckable(true);
                     calc_locked->setChecked(true);
@@ -312,8 +312,9 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
 
                 pMenu->addSeparator();
 
-                // Lancer calcul (si le calcul est actif)
-                if (((TYCalcul*) eltItem->getElement().getRealPointer())->getState() == TYCalcul::Actif)
+                // Lancer calcul (si le calcul est actif et que c est le calcul courant
+                if ( pCalcul->getState() == TYCalcul::Actif &&
+                     pCalcul == _pProjet->getCurrentCalcul() )
                 {
                     goCalcul = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_calcul"))), TR("id_contextmenu_gocalcul"));
                     pMenu->addSeparator();
@@ -357,9 +358,6 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                     pMenu->addSeparator();
                 }
 
-                // Export
-                exportInt = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_export"))), TR("id_contextmenu_export"));
-                pMenu->addSeparator();
                 duplicatePtControl = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_contextmenu_dupptcontrol"));
                 pMenu->addSeparator();
                 remPtControl = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_contextmenu_remptcontrol"));
@@ -367,29 +365,21 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
             }
             else if (dynamic_cast<TYMaillage*>(eltItem->getElement()._pObj) != nullptr) // Maillage
             {
-                // Si calcul parent bloque impossible de changer etat ou supprimer un point de controle
-                LPTYCalcul pCalc = TYCalcul::safeDownCast(eltItem->getElement()->getParent());
-                if (pCalc && pCalc->getState() == TYCalcul::Actif)
+                // On recupere l'objet graphique de l'element
+                pGraphicObject = eltItem->getElement()->getGraphicObject()._pObj;
+                if (pGraphicObject)
                 {
-                    mail_actif = pMenu->addAction(TR("id_contextmenu_ptactif"));
-                    if (((TYMaillage*) eltItem->getElement().getRealPointer())->getState() == TYMaillage::Actif)
-                    {
-                        mail_actif->setCheckable(true);
-                        mail_actif->setChecked(true);
-                    }
-
-                    mail_inactif = pMenu->addAction(TR("id_contextmenu_ptinactif"));
-                    if (((TYMaillage*) eltItem->getElement().getRealPointer())->getState() == TYMaillage::Inactif)
-                    {
-                        mail_inactif->setCheckable(true);
-                        mail_inactif->setChecked(true);
-                    }
-                    pMenu->addSeparator();
-                    exportCsv = pMenu->addAction(TR("id_contextmenu_exportcsv"));
-                    pMenu->addSeparator();
-                    remMaillage = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_contextmenu_remmaillage"));
+                    highlight = pMenu->addAction(TR("id_contextmenu_highlight"));
+                    highlight->setCheckable(true);
+                    highlight->setChecked(pGraphicObject->getHighlightState());
                     pMenu->addSeparator();
                 }
+
+                pMenu->addSeparator();
+                exportCsv = pMenu->addAction(TR("id_contextmenu_exportcsv"));
+                pMenu->addSeparator();
+                remMaillage = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_contextmenu_remmaillage"));
+                pMenu->addSeparator();
             }
 
             // AFFICHAGE DU MENU
@@ -410,53 +400,23 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                             updateList();
                         }
                     }
-
-                    if (pElt->isA("TYRectangularMaillage"))
-                    {
-                        TYRectangularMaillage* pRectMaillage = (LPTYRectangularMaillage&) pElt;
-                        LPTYElementGraphic pMGr = pRectMaillage->getGraphicObject();
-                        pRectMaillage->updateGraphic();
-                    }
-                    else
-                    {
-                        pElt->updateGraphic();
-                    }
-
-                    getTYMainWnd()->updateModelers(true, true, true);
                 }
                 else if (ret == showModeler)
                 {
-
-                    if (dynamic_cast<TYProjet*>(eltItem->getElement()._pObj) != nullptr)
-                    {
-                        getTYMainWnd()->makeProjetModeler((TYProjet*) eltItem->getElement().getRealPointer());
-                    }
+                    getTYMainWnd()->makeProjetModeler( _pProjet );
+                    return;
                 }
                 else if (ret == remPtControl)
                 {
-                    if ((dynamic_cast<TYPointControl*>(eltItem->getElement()._pObj) != nullptr)
-                        && (dynamic_cast<TYProjet*>(eltItem->getElement()->getParent()) != nullptr))
+                    TYPointControl *pPoint = dynamic_cast<TYPointControl*> (eltItem->getElement().getRealPointer());
+                    if (QMessageBox::warning( this, "Tympan", TR("id_warning_suppr").arg(eltItem->getElement()->getName()), 
+                                                QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes )
                     {
-                        LPTYProjet pProjet = (TYProjet*) eltItem->getElement()->getParent();
-
-                        if (getTYApp()->getCalculManager()->askForResetResultat())
+                        if ( _pProjet->remPointControl(pPoint) )
                         {
-                            if (QMessageBox::warning(this, "Tympan", TR("id_warning_suppr").arg(eltItem->getElement()->getName()), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
-                            {
-                                if (pProjet->remPointControl((TYPointControl*) eltItem->getElement().getRealPointer()))
-                                {
-                                    // Reset du tableau des resultats des calculs
-                                    TYTabLPCalcul listCalcul = pProjet->getListCalcul();
-                                    for (int i = 0; i < listCalcul.size(); i++)
-                                    {
-                                        listCalcul[i]->getResultat()->purge();
-                                    }
-                                    pProjet->updateGraphic();
-                                    getTYMainWnd()->updateModelers(false, false);
-                                    updateList();
-                                    TYElement::setIsSavedOk(true);
-                                }
-                            }
+                            getTYApp()->getCalculManager()->askForResetResultat();
+                            updateList();
+                            TYElement::setIsSavedOk(true);
                         }
                     }
                 }
@@ -466,153 +426,37 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                             eltItem->getElement()._pObj);
                     if (pPointCtrl != nullptr)
                     {
-                        TYProjet* pProjet = dynamic_cast<TYProjet*>(
-                                eltItem->getElement()->getParent());
-                        if (pProjet != nullptr)
+                        TYPointControl* pPoint = _pProjet->duplicatePointControl(pPointCtrl);
+                        if (pPoint)
                         {
-                        if (getTYApp()->getCalculManager()->askForResetResultat())
-                        {
-                            TYPointControl* pPoint = pProjet->duplicatePointControl(pPointCtrl);
-                            if (pPoint)
-                            {
-                                pPoint->edit();
-                            }
+                            pPoint->edit();
+                            getTYApp()->getCalculManager()->askForResetResultat();
+                        }
 
-                            pProjet->updateGraphic();
-                            getTYMainWnd()->updateModelers(false, false);
-                            updateList();
-                            TYElement::setIsSavedOk(true);
-                        }
-                        }
+                        updateList();
                     }
-
-                }
-                else if (ret == actif)
-                {
-                    ((TYPointControl*) eltItem->getElement().getRealPointer())->setEtat(true, _pCurrentCalcul);
-                    getTYMainWnd()->updateModelers(true, true, true);
-                }
-                else if (ret == inactif)
-                {
-                    ((TYPointControl*) eltItem->getElement().getRealPointer())->setEtat(false, _pCurrentCalcul);
-                    getTYMainWnd()->updateModelers(true, true, true);
                 }
                 else if (ret == highlight)
                 {
-                    if (pGraphicObject)
-                    {
-                        bool bCenterOnLocate = false;
-                        if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "CenterOnLocate"))
-                        {
-                            bCenterOnLocate = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "CenterOnLocate");
-                        }
-                        // Toggle le highlight
-                        pGraphicObject->highlight(!pGraphicObject->getHighlightState());
-
-                        if (pGraphicObject->getHighlightState())
-                        {
-                            QList<QMdiSubWindow*> windows =    getTYMainWnd()->getWorkspace()->subWindowList();
-
-                            for (int i = 0; i < int(windows.count()); ++i)
-                            {
-                                QWidget* internal_window = windows.at(i)->widget();
-
-                                QString qClassName = internal_window->metaObject()->className();
-                                if (qClassName == QString("TYSiteModelerFrame"))
-                                {
-                                    TYRenderWindowInteractor* pView = ((TYModelerFrame*) internal_window)->getView();
-                                    pView->getRenderer()->addSelectedElement(eltItem->getElement());
-                                }
-                            }
-                        }
-
-                        if (bCenterOnLocate && pGraphicObject->getHighlightState())
-                        {
-                            pGraphicObject->computeBoundingBox();
-                            TYElement* pElement = eltItem->getElement()._pObj;
-                            TYGeometryNode* pGeoNode = TYGeometryNode::GetGeoNode(pElement);
-                            if (pGeoNode)
-                            {
-                                ORepere3D repere = pGeoNode->getORepere3D();
-                                NxVec3 repereCenter = NxVec3(repere._origin._x, repere._origin._z, -repere._origin._y);
-                                OBox oBox = pGraphicObject->GetBox();
-                                NxVec3 oBoxMin = NxVec3(oBox._min._x, oBox._min._z, -oBox._min._y);
-                                NxVec3 oBoxMax = NxVec3(oBox._max._x, oBox._max._z, -oBox._max._y);
-                                NxVec3 oBoxCenter = oBoxMin + ((oBoxMax - oBoxMin) / 2);
-                                NxVec3 center = repereCenter + oBoxCenter;
-
-                                QList<QMdiSubWindow*> windows =    getTYMainWnd()->getWorkspace()->subWindowList();
-
-                                for (int i = 0; i < int(windows.count()); ++i)
-                                {
-                                    QWidget* internal_window = windows.at(i)->widget();
-
-                                    if (dynamic_cast<TYModelerFrame*>(internal_window) != nullptr)
-                                    {
-                                        TYRenderWindowInteractor* pView = ((TYModelerFrame*) internal_window)->getView();
-                                        pView->getRenderer()->getActiveCamera()->setTo(center.get());
-                                    }
-                                }
-                            }
-                        }
-
-                        getTYMainWnd()->updateModelers();//az++ pour la fonction localiser
-
-                        //il faut un update avant d'enlever l'etat de "locate" sur l'objet
-                        if (!pGraphicObject->getHighlightState())
-                        {
-                            QList<QMdiSubWindow*> windows =    getTYMainWnd()->getWorkspace()->subWindowList();
-
-                            for (int i = 0; i < int(windows.count()); ++i)
-                            {
-                                QWidget* internal_window = windows.at(i)->widget();
-
-                                QString qClassName = internal_window->metaObject()->className();
-                                if (qClassName == QString("TYSiteModelerFrame"))
-                                {
-                                    getTYMainWnd()->updateModelers();//az++ pour localiser
-                                    TYRenderWindowInteractor* pView = ((TYModelerFrame*) internal_window)->getView();
-                                    pView->getRenderer()->removeSelectedElement(eltItem->getElement());
-                                }
-                            }
-                        }
-                    }
+                    highlight_element(pGraphicObject, eltItem->getElement().getRealPointer());
                 }
                 else if (ret == remMaillage)
                 {
                     TYMaillage* pMail = dynamic_cast<TYMaillage*>(eltItem->getElement()._pObj);
                     if (pMail != nullptr)
                     {
-                        LPTYCalcul pCalcul = dynamic_cast<TYCalcul*>(
-                                eltItem->getElement()->getParent());
-
-                    if (pCalcul._pObj != nullptr)
-                    {
-                        if (pCalcul->remMaillage(pMail))
+                        if ( _pProjet->remMaillage(pMail) )
                         {
-                            pCalcul->updateGraphic();
-                            getTYMainWnd()->updateModelers(false, false);
                             updateList();
                             TYElement::setIsSavedOk(true);
                         }
                     }
-                    }
-
-                }
-                else if (ret == mail_actif)
-                {
-                    ((TYMaillage*) eltItem->getElement().getRealPointer())->setState(TYMaillage::Actif);
-                    getTYMainWnd()->updateModelers(true, true, true);
-                }
-                else if (ret == mail_inactif)
-                {
-                    ((TYMaillage*) eltItem->getElement().getRealPointer())->setState(TYMaillage::Inactif);
-                    getTYMainWnd()->updateModelers(true, true, true);
                 }
                 else if (ret == exportCsv)
                 {
                     LPTYMaillage pMaillage = TYMaillage::safeDownCast(eltItem->getElement());
                     exportMaillageCSV(pMaillage);
+                    return;
                 }
                 else if (ret == changeSiteRoot)
                 {
@@ -637,11 +481,6 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
 
                     tabElem.clear();
                 }
-                else if (ret == exportInt)
-                {
-                    // Sauvegarde securisee
-                    getTYMainWnd()->saveAs(eltItem->getElement());
-                }
                 else if (ret == delCalcul)
                 {
                     TYElement* pElem = eltItem->getElement();
@@ -649,7 +488,8 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                     {
                         QMessageBox::warning(this, "Tympan", TR("id_warning_def_calc_suppr"));
                     }
-                    else if (QMessageBox::warning(this, "Tympan", TR("id_warning_suppr").arg(eltItem->getElement()->getName()), QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
+                    else if (QMessageBox::warning(this, "Tympan", TR("id_warning_suppr").arg(eltItem->getElement()->getName()), 
+                             QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes)
                     {
                         if (remFromList(eltItem))
                         {
@@ -686,8 +526,7 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                             pCalcul->updateGraphic();
                         }
                     }
-                    _pProjet->updateGraphicTree();
-                    getTYMainWnd()->updateModelers(false, false);
+
                     updateList();
                 }
                 else if (ret == curCalcul)
@@ -708,19 +547,17 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                         pSite->getInfrastructure()->updateAcoustic(pCalcul);
                     }
 
-                    emit changeCurrentCalcul(pCalcul);
-
-                    _pProjet->updateGraphicTree();
-                    getTYMainWnd()->updateModelers(false, false);
                     updateList();
 
                     setCalculDone(true);
+                    emit changeCurrentCalcul(pCalcul);
                 }
                 else if (ret == goCalcul)
                 {
                     if ((LPTYElement&) _pCurrentCalcul == eltItem->getElement())
                     {
                         getTYApp()->getCalculManager()->launch((TYCalcul*) eltItem->getElement().getRealPointer());
+                        return;
                     }
                 }
                 else if (ret == duplicateCalcul)
@@ -732,17 +569,16 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
 
                     updateList();
                     TYElement::setIsSavedOk(true);
+                    return;
                 }
                 else if (ret == calc_actif) // DT 16/08/2005 un calcul peut etre actif ou bloque
                 {
                     ((TYCalcul*) eltItem->getElement().getRealPointer())->setState(TYCalcul::Actif);
-                    getTYMainWnd()->updateModelers(false, false);
                     TYElement::setIsSavedOk(true);
                 }
                 else if (ret == calc_locked) // DT 16/08/2005 un calcul peut etre actif ou bloque
                 {
                     ((TYCalcul*) eltItem->getElement().getRealPointer())->setState(TYCalcul::Locked);
-                    getTYMainWnd()->updateModelers(false, false);
                     TYElement::setIsSavedOk(true);
                 }
                 else if (ret == addCalcul)
@@ -760,51 +596,60 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
         }
         else if (eltItem->text(0) == TR("id_list_pointscontrol_item"))
         {
-            LPTYProjet pProjet = dynamic_cast<TYProjet*>(
-                    ((TYElementListItem*) eltItem->parent())->getElement()._pObj);
-            // Le sous menu ne doit apparaitre que si le calcul est actif
-            if (pProjet._pObj != nullptr)
+            QMenu* pMenu = new QMenu(this);
+            QAction* addPtControl = pMenu->addAction(TR("id_contextmenu_addptcontrol"));
+            QAction* selectAllPts = pMenu->addAction(TR("id_contextmenu_selectAllPts"));
+            QAction* unselectAllPts = pMenu->addAction(TR("id_contextmenu_unselectAllPts"));
+
+            // Affiche popup
+            QAction* ret = pMenu->exec(_pListView->mapToGlobal(point));
+
+            if (ret)
             {
-                    QMenu* pMenu = new QMenu(this);
-                    QAction* addPtControl = pMenu->addAction(TR("id_contextmenu_addptcontrol"));
-                    QAction* selectAllPts = pMenu->addAction(TR("id_contextmenu_selectAllPts"));
-                    QAction* unselectAllPts = pMenu->addAction(TR("id_contextmenu_unselectAllPts"));
+                if (ret == addPtControl)
+                {
+                    LPTYPointControl pPtControl = new TYPointControl();
+                    pPtControl->setParent(_pProjet);
 
-                    // Affiche popup
-                    QAction* ret = pMenu->exec(_pListView->mapToGlobal(point));
-
-                    if (ret)
+                    if (pPtControl->edit(this) == QDialog::Accepted)
                     {
-                        if (ret == addPtControl)
+                        if (_pProjet->addPointControl(pPtControl))
                         {
-                            if (getTYApp()->getCalculManager()->askForResetResultat())
-                            {
-                                LPTYPointControl pPtControl = new TYPointControl();
-                                pPtControl->setParent(_pProjet);
-
-                                if (pPtControl->edit(this) == QDialog::Accepted)
-                                {
-                                    TYProjet* pProjet = (TYProjet*)((TYElementListItem*) eltItem->parent())->getElement().getRealPointer();
-
-                                    if (pProjet->addPointControl(pPtControl))
-                                    {
-                                        pProjet->updateGraphic();
-                                        getTYMainWnd()->updateModelers(false, false);
-                                        updateList();
-                                        TYElement::setIsSavedOk(true);
-                                    }
-                                }
-                            }
-                        }
-                        else if (ret == selectAllPts)
-                        {
-                            selectOrUnselectAll(static_cast<TYElementListItem*>(item), true);
-                        }
-                        else if (ret == unselectAllPts)
-                        {
-                            selectOrUnselectAll(static_cast<TYElementListItem*>(item), false);
+                            getTYApp()->getCalculManager()->askForResetResultat();
+                            updateList();
+                            TYElement::setIsSavedOk(true);
                         }
                     }
+                }
+                else if (ret == selectAllPts)
+                {
+                    selectOrUnselectAll(static_cast<TYElementListItem*>(item), true);
+                }
+                else if (ret == unselectAllPts)
+                {
+                    selectOrUnselectAll(static_cast<TYElementListItem*>(item), false);
+                }
+            }
+        }
+        else if (eltItem->text(0) == "id_list_maillages_item")
+        {
+            QMenu* pMenu = new QMenu(this);
+            QAction* selectAllMaps = pMenu->addAction(TR("id_contextmenu_selectAllMaps"));
+            QAction* unselectAllMaps = pMenu->addAction(TR("id_contextmenu_unselectAllMaps"));
+
+            // Affiche popup
+            QAction* ret = pMenu->exec(_pListView->mapToGlobal(point));
+
+            if (ret)
+            {
+                if (ret == selectAllMaps)
+                {
+                    selectOrUnselectAll(static_cast<TYElementListItem*>(item), true);
+                }
+                else if (ret == unselectAllMaps)
+                {
+                    selectOrUnselectAll(static_cast<TYElementListItem*>(item), false);
+                }
             }
         }
         else if (eltItem->text(0) == "Etats")
@@ -828,6 +673,8 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
             }
         }
     }
+
+    updateGraphics();
 }
 
 TYElementListItem* TYProjetFrame::addEltToList(LPTYElement pElement, TYElementListItem* parent /*=NULL*/)
@@ -903,8 +750,7 @@ void TYProjetFrame::doubleClic(QTreeWidgetItem* item, int column)
         pEtatWidget = NULL;
     }
 
-    getTYMainWnd()->updateModelers(true, true, true);
-    _pListView->collapseItem(item);
+    updateGraphics();
 }
 
 void TYProjetFrame::apply(QTreeWidgetItem* item, int col)
@@ -981,7 +827,103 @@ void TYProjetFrame::selectOrUnselectAll(TYElementListItem* item, const bool& bSe
             static_cast<TYElementListItem*>(item->child(i))->setOn(on, false);
         }
 
-        _pProjet->getGraphicObject()->update(true);
-        getTYMainWnd()->updateModelers(false, false);
+        updateGraphics();
+    }
+}
+
+void TYProjetFrame::updateGraphics()
+{
+    _pProjet->updateGraphicTree();
+    _pProjet->updateGraphic();
+    TYSiteModelerFrame* psiteframe = dynamic_cast<TYSiteModelerFrame*>(getTYMainWnd()->getCurrentModeler());
+
+    if (psiteframe != nullptr)
+    {
+        psiteframe->setSite( _pProjet->getSite() );
+        psiteframe->getView()->getRenderer()->updateDisplayList();
+        psiteframe->updateView();
+    }
+
+    getTYMainWnd()->updateModelers(false, false);
+}
+
+void TYProjetFrame::highlight_element(TYElementGraphic* pGraphicObject, TYElement* pElement)
+{
+    if (pGraphicObject)
+    {
+        bool bCenterOnLocate = false;
+        if (TYPreferenceManager::exists(TYDIRPREFERENCEMANAGER, "CenterOnLocate"))
+        {
+            bCenterOnLocate = TYPreferenceManager::getBool(TYDIRPREFERENCEMANAGER, "CenterOnLocate");
+        }
+        // Toggle le highlight
+        pGraphicObject->highlight(!pGraphicObject->getHighlightState());
+
+        if (pGraphicObject->getHighlightState())
+        {
+            QList<QMdiSubWindow*> windows =    getTYMainWnd()->getWorkspace()->subWindowList();
+
+            for (int i = 0; i < int(windows.count()); ++i)
+            {
+                QWidget* internal_window = windows.at(i)->widget();
+
+                QString qClassName = internal_window->metaObject()->className();
+                if (qClassName == QString("TYSiteModelerFrame"))
+                {
+                    TYRenderWindowInteractor* pView = ((TYModelerFrame*) internal_window)->getView();
+                    pView->getRenderer()->addSelectedElement(pElement);
+                }
+            }
+        }
+
+        if (bCenterOnLocate && pGraphicObject->getHighlightState())
+        {
+            pGraphicObject->computeBoundingBox();
+            TYGeometryNode* pGeoNode = TYGeometryNode::GetGeoNode(pElement);
+            if (pGeoNode)
+            {
+                ORepere3D repere = pGeoNode->getORepere3D();
+                NxVec3 repereCenter = NxVec3(repere._origin._x, repere._origin._z, -repere._origin._y);
+                OBox oBox = pGraphicObject->GetBox();
+                NxVec3 oBoxMin = NxVec3(oBox._min._x, oBox._min._z, -oBox._min._y);
+                NxVec3 oBoxMax = NxVec3(oBox._max._x, oBox._max._z, -oBox._max._y);
+                NxVec3 oBoxCenter = oBoxMin + ((oBoxMax - oBoxMin) / 2);
+                NxVec3 center = repereCenter + oBoxCenter;
+
+                QList<QMdiSubWindow*> windows =    getTYMainWnd()->getWorkspace()->subWindowList();
+
+                for (int i = 0; i < int(windows.count()); ++i)
+                {
+                    QWidget* internal_window = windows.at(i)->widget();
+
+                    if (dynamic_cast<TYModelerFrame*>(internal_window) != nullptr)
+                    {
+                        TYRenderWindowInteractor* pView = ((TYModelerFrame*) internal_window)->getView();
+                        pView->getRenderer()->getActiveCamera()->setTo(center.get());
+                    }
+                }
+            }
+        }
+
+        getTYMainWnd()->updateModelers();//az++ pour la fonction localiser
+
+        //il faut un update avant d'enlever l'etat de "locate" sur l'objet
+        if (!pGraphicObject->getHighlightState())
+        {
+            QList<QMdiSubWindow*> windows =    getTYMainWnd()->getWorkspace()->subWindowList();
+
+            for (int i = 0; i < int(windows.count()); ++i)
+            {
+                QWidget* internal_window = windows.at(i)->widget();
+
+                QString qClassName = internal_window->metaObject()->className();
+                if (qClassName == QString("TYSiteModelerFrame"))
+                {
+                    getTYMainWnd()->updateModelers();//az++ pour localiser
+                    TYRenderWindowInteractor* pView = ((TYModelerFrame*) internal_window)->getView();
+                    pView->getRenderer()->removeSelectedElement(pElement);
+                }
+            }
+        }
     }
 }
