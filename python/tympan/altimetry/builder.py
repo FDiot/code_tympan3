@@ -128,12 +128,13 @@ def build_sitenode(ty_site, mainsite=True):
 
 
 # Altimetry mesh building utilities.
-def build_altimetry(mainsite, allow_features_outside_mainsite=True):
+def build_altimetry(mainsite, allow_features_outside_mainsite=True,
+                    size_criterion=0.0):
     """Return the results of altimetry building from a site tree model."""
     cleaner = recursively_merge_all_subsites(
         mainsite, allow_outside=allow_features_outside_mainsite)
     merged_site = cleaner.merged_site()
-    builder = MeshBuilder(merged_site)
+    builder = MeshBuilder(merged_site, size_criterion=size_criterion)
     mesh = builder.build_mesh()
     filler = MeshFiller(mesh, builder.vertices_for_feature)
     feature_by_face = filler.fill_material_and_landtakes(mainsite, cleaner)
@@ -151,12 +152,24 @@ def material_by_face(feature_by_face):
 
 
 class MeshBuilder(object):
-    """Build an elevation mesh from a site cleaner."""
+    """Build an elevation mesh from a site cleaner.
 
-    def __init__(self, site):
+    Parameters
+    ----------
+    site: SiteNode
+        The site to build altimetry mesh for.
+    size_criterion: float, optional
+        Size criterion for mesh refinement, default to 0.0 (meaning no size
+        criterion) (see tympan.altimetry.mesh.Mesh.refine_mesh for details).
+    shape_criterion: float, optional
+        Shape criterion for mesh refinement, default to 0.125 (see
+        tympan.altimetry.mesh.Mesh.refine_mesh for details).
+    """
+
+    def __init__(self, site, size_criterion=0.0, shape_criterion=0.125):
         self._site = site
-        self.size_criterion = 0.0 # zero means no size criterion
-        self.shape_criterion = 0.125
+        self.size_criterion = size_criterion
+        self.shape_criterion = shape_criterion
         self.vertices_for_feature = {}
 
     def build_mesh(self, refine=True):
