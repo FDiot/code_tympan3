@@ -275,6 +275,8 @@ void TYResultatWidget::updateContent()
 
     // On trie par ordre decroissant des niveaux du premier point
     sortCol(1) ;
+
+    _pTable->setColumnHidden( 1, getElement()->isLWHidden() );
 }
 
 void TYResultatWidget::updateHeaderLabel()
@@ -465,7 +467,7 @@ void TYResultatWidget::contextMenuEvent(QContextMenuEvent* e)
                     TYCalcul* pCalcul = static_cast<TYCalcul*>(getElement()->getParent());
                     TYPointCalcul* pPoint = getElement()->getRecepteur(col - 2);
                     TYSpectre* pSpectre = NULL;
-                    if (pPoint) { pSpectre = pPoint->getSpectre(pCalcul, true); }
+                    if (pPoint) { pSpectre = pCalcul->getSpectre(pPoint->getID()); }
                     if (!pSpectre) { return; }
 
                     // Si c'est un resultat calcule, on ne peut pas changer les valeurs
@@ -655,7 +657,7 @@ OSpectre TYResultatWidget::getSpectre(const int& row, const int& col, TYCalcul* 
         if (row == 0)  // Ligne synthese
         {
             TYPointCalcul* pPoint = getElement()->getRecepteur(col - 2);
-            if (pPoint) { spectre = *pPoint->getSpectre(pCalcul); }
+            if (pPoint) { spectre = *pCalcul->getSpectre(pPoint->getID()); }
         }
         else // Contribution d'une source en un point
         {
@@ -667,7 +669,7 @@ OSpectre TYResultatWidget::getSpectre(const int& row, const int& col, TYCalcul* 
 
             // Puis on recupere le spectre correspondant dans le calcul passe en parametre
             TYResultat* pResultat = pCalcul->getResultat();
-            spectre = pResultat->getSpectre(pRecepteur, pSource);
+            spectre = pResultat->getSpectre2(pRecepteur, pSource);
             spectre = spectre.toDB();
         }
     }

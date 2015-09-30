@@ -18,6 +18,31 @@
 
 #include "DefaultEngine.h"
 
+#ifdef TEST_ACCELERATION_RECEPTORS
+class ParallelDefaultEngine : public Engine
+{
+
+public:
+
+    ParallelDefaultEngine() : Engine() { }
+
+    ParallelDefaultEngine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, Scene *_recepteurs)
+        : Engine(_scene, _sources, _solver, _recepteurs) {  }
+
+    ParallelDefaultEngine(const ParallelDefaultEngine& other)
+    {
+        scene = other.scene;
+        sources = other.sources;
+        solver = other.solver;
+        recepteurs = other.recepteurs;
+    }
+
+    virtual ~ParallelDefaultEngine() { }
+
+    virtual bool process();
+
+};
+#else
 class ParallelDefaultEngine : public Engine
 {
 
@@ -42,4 +67,5 @@ public:
 
 };
 
+#endif //TEST_ACCELERATION_RECEPTORS
 #endif

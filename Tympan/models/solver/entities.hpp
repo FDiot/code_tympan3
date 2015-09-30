@@ -57,7 +57,7 @@ class AcousticGroundMaterial:
     public AcousticMaterialBase
 {
 public:
-    AcousticGroundMaterial(const string& name_, double resistivity_);
+    AcousticGroundMaterial(const string& name_, double resistivity_, double deviation_, double length_);
     virtual ~AcousticGroundMaterial() {};
 
     /*!
@@ -70,15 +70,17 @@ public:
     const ComplexSpectrum& get_K() const  { return K; }
 
     void set_thickness( double thickness_ ) { thickness = thickness_; }
-
+	void set_deviation( double deviation_) { deviation = deviation_;}
+	void set_length( double length_) { length = length_;}
     double get_ISO9613_G();
 
     static void set_atmosphere( AtmosphericConditions *atmosphere_ ) { atmosphere = atmosphere_; }
 
 protected:
     void computeZc(); //!< compute characteristic impedance
-    void computeK();  //!< compute wave nuber in ground
-    void computeZs(double angle, ComplexSpectrum& spectrum); //!< compute specific impedance
+    void computeK();  //!< compute wave nuber 
+    void computeZs(double angle, ComplexSpectrum Z, ComplexSpectrum& spectrum); //!< compute specific impedance
+	void computeZf(double angle, ComplexSpectrum Zs); //!< compute effective impedance in rough ground
     void computeRp(double angle, const ComplexSpectrum& Zs, ComplexSpectrum& Rp);  //!<compute reflexion coefficient for plane waves
     void computeW(double angle, double length, const ComplexSpectrum& Zs, ComplexSpectrum &W); //compute numeric distance
     void computeFw(ComplexSpectrum localW, ComplexSpectrum& Fw); // Compute function of numeric distance
@@ -104,14 +106,18 @@ private:
     void limit_W_values(ComplexSpectrum& localW);
     void erfc_G_computation(const ComplexSpectrum& localW, ComplexSpectrum& G);
     void sgn_G_computation(const ComplexSpectrum& localW, ComplexSpectrum& G);
-
+	double gaussianSpectrum(double const k, double const sigma, double const lc);
+	double trapz(std::vector<double> u, std::vector<double> integrande);
 protected :
     /// XXX \todo put SI unit.
     double resistivity;
     double thickness;
+	double deviation;
+	double length;
 
     ComplexSpectrum Zc; //!< Characteriestic impedance
     ComplexSpectrum K;  //!< Wave number
+	ComplexSpectrum Zf; //!< Effective impedance
 };
 
 // -------------------
@@ -326,8 +332,9 @@ public:
     bool solid_angle;
 };
 
-} /* namespace tympan */
+Point ComputeAcousticCentroid(const source_pool_t &tabSources_);
 
+} /* namespace tympan */
 
 
 #endif /* TYMPAN__ENTITIES_H__INCLUDED */

@@ -71,6 +71,7 @@ void TYRectangleGraphic::display(GLenum mode /*= GL_RENDER*/)
 
     if (_visible)
     {
+        computeBoundingBox();
 
         glBegin(GL_QUADS);
 

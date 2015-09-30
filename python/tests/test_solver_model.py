@@ -2,7 +2,7 @@ import unittest
 import os.path as osp
 
 from tympan.models.solver import Model
-from tympan.models._common import Box
+from tympan.models._common import Point3D
 from utils import TympanTC
 
 class TriangleContainerTC(TympanTC):
@@ -35,9 +35,8 @@ class FresnelZoneIntersectionTC(TympanTC):
         model.add_node(1, 0, 0)
         model.add_triangle(0, 1, 2)
         model.add_triangle(1, 2, 3)
-        # length, width, height centered in (0,0,0)
-        box = Box(1, 1, 1)
-        intersected_triangles = model.fresnel_zone_intersection(box)
+        intersected_triangles = model.fresnel_zone_intersection(1, 1, Point3D(-0.5, 0, 0),
+                                                                Point3D(0.5, 0, 0))
         self.assertEqual(intersected_triangles, [0, 1])
 
     def test_volume_on_scene(self):
@@ -51,9 +50,21 @@ class FresnelZoneIntersectionTC(TympanTC):
         model.add_triangle(0, 1, 2)
         model.add_triangle(2, 3, 4)
         # It is on the first triangle but not on the second one
-        box = Box(1, 1, 1)
-        intersected_triangles = model.fresnel_zone_intersection(box)
+        intersected_triangles = model.fresnel_zone_intersection(1, 1, Point3D(-0.5, 0, 0),
+                                                                Point3D(0.5, 0, 0))
         self.assertEqual(intersected_triangles, [0])
+
+    def test_floating_volume_above_scene(self):
+        model = Model()
+        model.add_node(0, 0, 0)
+        model.add_node(0, 1, 0)
+        model.add_node(1, 1, 0)
+        model.add_node(1, 0, 0)
+        model.add_triangle(0, 1, 2)
+        model.add_triangle(1, 2, 3)
+        intersected_triangles = model.fresnel_zone_intersection(1, 1, Point3D(-0.5, 0, 2),
+                                                                Point3D(0.5, 0, 1))
+        self.assertEqual(intersected_triangles, [])
 
     def test_alti_mesh(self):
         proj = self.load_project(osp.join('projects-panel', 'fresnel.xml'))
@@ -61,8 +72,9 @@ class FresnelZoneIntersectionTC(TympanTC):
         length = 75
         width = 75
         height = 75
-        box = Box(length, width, height)
-        intersected_triangles = model.fresnel_zone_intersection(box)
+        intersected_triangles = model.fresnel_zone_intersection(width, height,
+                                                                Point3D(-length/2., 0, 0),
+                                                                Point3D(length/2., 0, 0))
         all_triangles = model.triangles
         self.assertEqual(len(all_triangles), 51)
         for tri_idx, triangle in enumerate(all_triangles):

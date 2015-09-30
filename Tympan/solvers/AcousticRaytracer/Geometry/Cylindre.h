@@ -41,6 +41,7 @@ public:
     Shape* getSecondShape() { return p2; }
 
     virtual bool sample(decimal density, std::vector<vec3>& samples);
+    virtual int form() { return CYLINDRE; }
 
 
 protected:

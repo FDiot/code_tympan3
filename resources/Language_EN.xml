@@ -472,8 +472,12 @@
 			<string id="id_unite_dirvent" value="°"/>
 			<string id="id_resistivite_label" value="Resistivity"/>
 			<string id="id_epaisseur_label" value="Thickness"/>
+			<string id="id_ecarttype_label" value="Deviance"/>
+			<string id="id_longueur_label" value="Correlation length"/>
 			<string id="id_unite_resistivite" value="kRayl"/>
 			<string id="id_unite_epaisseur" value="m"/>
+			<string id="id_unite_ecarttype" value="m"/>
+			<string id="id_unite_longueur" value="m"/>
 			<string id="id_edit_spectre_sol" value="Impedance"/>
 			<string id="id_edit_spectre_atmo" value="Impedance"/>
 			<string id="id_edit_resistivite" value="Resistivity"/>
@@ -679,6 +683,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_column_name" value="Name"/>
 			<string id="id_list_maillages_item" value="Maps"/>
 			<string id="id_list_pointscontrol_item" value="Receiver"/>
+			<string id="id_list_maillages_item" value="Noise maps"/>
 			<string id="id_contextmenu_export" value="Export"/>
 			<string id="id_contextmenu_export_spectre" value="Export spectrum"/>
 			<string id="id_contextmenu_setas_spectre" value="Place spectra in..."/>
@@ -712,7 +717,9 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_contextmenu_highlight" value="Localize"/>
 			<string id="id_menu_gospectresmanager" value="Stard Spectra Manager"/>
 			<string id="id_contextmenu_selectAllPts" value="Select All"/>
-			<string id="id_contextmenu_unselectAllPts" value="Deselect All"/>
+			<string id="id_contextmenu_unselectAllPts" value="Unselect All"/>
+			<string id="id_contextmenu_selectAllMaps" value="Select All"/>
+			<string id="id_contextmenu_unselectAllMaps" value="Unselect All"/>
 			<string id="id_Etats_item" value="States"/>
 		</message>
 		<picture>
@@ -1265,8 +1272,12 @@ Choose No to Open the New Site in a Modeler."/>
 		<message>
 			<string id="id_resistivite_label" value="Resistivity"/>
 			<string id="id_epaisseur_label" value="Thickness"/>
+			<string id="id_ecarttype_label" value="Deviance"/>
+			<string id="id_longueur_label" value="Correlation length"/>
 			<string id="id_unite_resistivite" value="kRayl"/>
 			<string id="id_unite_epaisseur" value="m"/>
+			<string id="id_unite_ecarttype" value="m"/>
+			<string id="id_unite_longueur" value="m"/>
 			<string id="id_spectreimp" value="Spectre d'impédance"/>
 			<string id="id_proprietes_button" value="Properties"/>
 			<string id="id_edit_resistivite" value="Choose..."/>
@@ -1805,6 +1816,12 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_import_ok" value="Element successfully imported from File : '%1'"/>
 			<string id="id_import_failed" value="Element cannot be imported from File : '%1'"/>
 			<string id="id_linear" value="Make linear palette"/>
+			<string id="id_caption_limits" value="Limits"/>
+			<string id="id_lb_label" value="Lower bound value"/>
+			<string id="id_ub_label" value="Upper bound value"/>
+			<string id="id_nb_label" value="Number of colors"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Cancel"/>
 		</message>
 	</class>
 	<class name="TYParoiWidget">
@@ -2077,6 +2094,12 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_delaunay_label" value="Tolerance for Delaunay triangulation"/>
 			<string id="id_useDefault_label" value="Use User Preferences"/>
 			<string id="id_default_button" value="Default"/>
+			<string id="id_cell_posx" value="%1"/>
+			<string id="id_cell_posy" value="%1"/>
+			<string id="id_cell_posh" value="%1"/>
+			<string id="id_opt_pc" value="Receivers"/>
+			<string id="id_tab_info" value="Infos"/>
+			<string id="id_opt_maillage" value="Noise Maps"/>
 		</message>
 	</class>
 	<class name="TYCalculWidget">
@@ -2145,6 +2168,10 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_typeexpans_2pi" value="2pi"/>
 			<string id="id_typeexpans_4pi" value="4pi"/>
 			<string id="id_opt_calc" value="Parameters"/>
+			<string id="id_param_solv_buttons" value="Solver parameters"/>
+			<string id="id_param_solv_gui" value="edition GUI"/>
+			<string id="id_param_solv_tf" value="plain text"/>
+			<string id="id_param_solv_plain_text" value="Solver parameters"/>
 			<string id="id_opt_meteo" value="Meteo"/>
 			<string id="id_info_calc" value="Infos"/>
 			<string id="id_nom_pc" value="Name"/>
@@ -2153,7 +2180,7 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_pos_h" value="H"/>
 			<string id="id_actif" value="Active"/>
 			<string id="id_opt_pc" value="Receivers"/>
-			<string id="id_opt_maillage" value="Maps"/>
+			<string id="id_opt_maillage" value="Noise Maps"/>
 			<string id="id_cell_posx" value="%1"/>
 			<string id="id_cell_posy" value="%1"/>
 			<string id="id_cell_posh" value="%1"/>

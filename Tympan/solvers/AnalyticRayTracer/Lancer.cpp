@@ -25,7 +25,7 @@
 #include "RayCourb.h"
 #include "Lancer.h"
 
-Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001), TMax(3.0), temps(NULL), dmax(1000), nbRay(20)
+Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001f), TMax(3.0f), temps(NULL), dmax(1000.f), nbRay(20)
 {
     _weather = new meteoLin();
     initialAngleTheta = 0.0;                /*!<  angle de tir initial selon theta */
@@ -35,8 +35,6 @@ Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001), TM
 
     _launchType = 1;            /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
     wantOutFile = true;                   /*!<  true if outputfile wanted */
-
-    init();
 }
 
 
@@ -60,8 +58,6 @@ Lancer::Lancer(Lancer& L)
 
     _launchType = L._launchType;
     wantOutFile = L.wantOutFile;
-
-    init();
 }
 
 Lancer::~Lancer()
@@ -69,7 +65,7 @@ Lancer::~Lancer()
     purgeMatRes();
 }
 
-void Lancer::init()
+void Lancer::init_sampler()
 {
     switch (_launchType)
     {
@@ -96,6 +92,8 @@ void Lancer::init()
         default :
             return; // do nothing
     }
+
+    _sampler->init();
 }
 
 void Lancer::purgeMatRes()
@@ -243,13 +241,13 @@ Step Lancer::compute_next_step(const Step& current_step)
     k3 = EqRay(current_step + k2 * 0.5) * h;
     k4 = EqRay(current_step + k3) * h;
 
-    return current_step + ((k1 + k2 * 2. + k3 * 2. + k4) * (1. / 6.));
+    return current_step + ((k1 + k2 * 2.f + k3 * 2.f + k4) * (1.f / 6.f));
 }
 
 
 void Lancer::createTemps()
 {
-    decimal T = 0.0;
+    decimal T = 0.0f;
     do
     {
         temps.push_back(T);

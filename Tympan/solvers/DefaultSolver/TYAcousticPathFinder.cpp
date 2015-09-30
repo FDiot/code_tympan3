@@ -33,9 +33,13 @@ void TYAcousticPathFinder::init()
     _bCalcTrajetHorizontaux = tympan::SolverConfiguration::get()->UseLateralDiffraction;
 }
 
-void TYAcousticPathFinder::computePath(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, TabPoint3D& ptsRight)
+void TYAcousticPathFinder::computePath(const std::deque<TYSIntersection>& tabIntersect, const TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, TabPoint3D& ptsRight)
 {
     bool dessus = true, lateral = false;
+
+    // Construction du rayon SR
+    OSegment3D rayon;
+    trajet.getPtSetPtRfromOSeg3D(rayon);
 
     // Determination du parcours et calcul des chemins
     //1. Parcours vertical
