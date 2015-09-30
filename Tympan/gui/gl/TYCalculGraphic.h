@@ -53,7 +53,6 @@ public:
     virtual void update(bool force = false);
     virtual void display(GLenum mode = GL_RENDER);
     virtual void getChilds(TYListPtrTYElementGraphic& childs, bool recursif = true);
-    virtual void computeBoundingBox();
 };
 
 

@@ -6,6 +6,17 @@ from cython.view cimport array as cyarray
 import numpy as np
 
 
+def make_spectrum(np_array):
+    """ Make a Spectrum from an array of double values """
+    assert len(np_array) == 31
+    spectre = Spectrum()
+    spectre.thisobj = OSpectre()
+    cdef cyarray cy_array = <double[:len(np_array)]> spectre.thisobj.getTabValReel()
+    for i in range(len(np_array)):
+        cy_array[i] = np_array[i]
+
+    return spectre
+
 cdef ospectre2spectrum(OSpectre os):
     """Spectrum (cython object) wrapping an OSpectre (c++)"""
     spectrum = Spectrum()
@@ -27,8 +38,7 @@ cdef ovector3d2vector3d(OVector3D vect):
 cdef otriangle2triangle(OTriangle* tri):
     """Triangle (cython object) wrapping an OTriangle(c++)"""
     assert tri != NULL
-    triangle = cy.declare(Triangle)
-    triangle = Triangle()
+    triangle = cy.declare(Triangle, Triangle())
     triangle.thisptr = tri
     return triangle
 
@@ -78,6 +88,11 @@ cdef class Triangle:
 
 cdef class Point3D:
 
+    def __init__(self, x=0, y=0, z=0):
+        self.thisobj._x = x
+        self.thisobj._y = y
+        self.thisobj._z = z
+
     @property
     def x(self):
         return self.thisobj._x
@@ -104,13 +119,3 @@ cdef class Vector3D:
     @property
     def vz(self):
         return self.thisobj._z
-
-
-cdef class Box:
-
-    def __init__(self, length, width, height):
-        """Build a 3D non iso-oriented box of dimensions (length, width, height)
-        expressed in meters. The box will be centered in (0, 0, 0)
-        """
-        self.thisobj = OBox2(length, width, height)
-

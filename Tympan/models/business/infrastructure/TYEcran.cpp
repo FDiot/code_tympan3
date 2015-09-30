@@ -365,9 +365,9 @@ TYPolygon* TYEcran::newFace(OVector3D s0, OVector3D s1, OVector3D s2, OVector3D 
     if (pFace != NULL)
     {
         vertices.clear();
-        vertices.push_back(s2);// s0 et s2 inverses pour probli¿½me de normale
-        vertices.push_back(s1);
         vertices.push_back(s0);
+        vertices.push_back(s1);
+        vertices.push_back(s2);
         vertices.push_back(s3);
         pFace->setPoints(vertices);
     }
@@ -414,7 +414,8 @@ bool TYEcran::setElements(TYTabPoint tabPts, double hauteur, double epaisseur)
     s2 = s0 + hauteur * zvec;
     s3 = s1 + hauteur * zvec;
 
-    pFace = newFace(s0, s1, s3, s2); // remarque: l'ordre des sommets est important car il definit le sens de la normale!!!
+    // Define 1st extremity
+    pFace = newFace(s0, s2, s3, s1); // order of point define normal of face
     if (pFace != NULL) { faces.push_back(pFace); }
 
     ls0 = s0;
@@ -426,6 +427,8 @@ bool TYEcran::setElements(TYTabPoint tabPts, double hauteur, double epaisseur)
     OPoint3D a1, b1, c1, d1; // (a1,b1) et (c1,d1) segment // au 1er segment
     OPoint3D a2, b2, c2, d2; // (a2,b2) et (c2,d2) segment // au segment suivant
     OPoint3D ptI1, ptI2;
+
+    // if number of segments > 1 loop on each segment from the 1st to the last
     for (size_t i = 1; i < count - 1; i++)
     {
         pt0 = tabPts[i - 1];
@@ -463,19 +466,19 @@ bool TYEcran::setElements(TYTabPoint tabPts, double hauteur, double epaisseur)
         s3 = s1 + hauteur * zvec;
 
         // bottom
-        pFace = newFace(ls0, s0, s1, ls1);
+        pFace = newFace(s0, ls0, ls1, s1);
         if (pFace != NULL) { faces.push_back(pFace); }
 
         // front
-        pFace = newFace(s1, s3, ls3, ls1);
+        pFace = newFace(s1, ls1, ls3, s3);
         if (pFace != NULL) { faces.push_back(pFace); }
 
         // top
-        pFace = newFace(ls3, s3, s2, ls2);
+        pFace = newFace(s3, ls3, ls2, s2);
         if (pFace != NULL) { faces.push_back(pFace); }
 
         // back
-        pFace = newFace(ls0, ls2, s2, s0);
+        pFace = newFace(ls0, s0, s2, ls2);
         if (pFace != NULL) { faces.push_back(pFace); }
 
         // keep previous vertice
@@ -501,23 +504,23 @@ bool TYEcran::setElements(TYTabPoint tabPts, double hauteur, double epaisseur)
     s3 = s1 + hauteur * zvec;
 
     // bottom
-    pFace = newFace(ls0, s0, s1, ls1);
+    pFace = newFace(s0, ls0, ls1, s1);
     if (pFace != NULL) { faces.push_back(pFace); }
 
     // front
-    pFace = newFace(s1, s3, ls3, ls1);
+    pFace = newFace(s1, ls1, ls3, s3);
     if (pFace != NULL) { faces.push_back(pFace); }
 
     // top
-    pFace = newFace(ls3, s3, s2, ls2);
+    pFace = newFace(s3, ls3, ls2, s2);
     if (pFace != NULL) { faces.push_back(pFace); }
 
     // back
-    pFace = newFace(ls0, ls2, s2, s0);
+    pFace = newFace(ls0, s0, s2, ls2);
     if (pFace != NULL) { faces.push_back(pFace); }
 
     // on bouche le cote de fin
-    pFace = newFace(s0, s2, s3, s1);
+    pFace = newFace(s0, s1, s3, s2);
     if (pFace != NULL) { faces.push_back(pFace); }
 
     // on sauve le tout

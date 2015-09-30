@@ -187,12 +187,16 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
     newEvent->setNbResponseLeft(diff_nb_rays); // Set the number of ray to throw
 
 // Add the event to the list
-
-	// The firts ray lauched follow the incoming ray
-    r->position = realImpact;
-    r->direction = from;
     r->events.push_back(SPEv);
-	r->nbDiffraction += 1;
+    r->nbDiffraction += 1;
+    vec3 newDir;
+    if (newEvent->getResponse(newDir))
+    {
+        r->position = realImpact;
+        r->direction = newDir;
+ 
+        return true;
+    }
 
     return true;
 }

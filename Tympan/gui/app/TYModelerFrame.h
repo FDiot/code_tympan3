@@ -404,6 +404,11 @@ public slots:
 
 
 signals:
+	/**
+	 * Indicates that the widget is about to be closed
+	 */
+    void aboutToClose(); 
+
     /**
      * Indique que le type de vue a change.
      */

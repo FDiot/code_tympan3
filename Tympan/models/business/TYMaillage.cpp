@@ -21,6 +21,7 @@
 #include "Tympan/core/logging.h"
 #include "Tympan/models/business/TYPreferenceManager.h"
 #include "Tympan/models/business/TYCalcul.h"
+#include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYLinearMaillage.h"
 #include "Tympan/models/business/TYRectangularMaillage.h"
 #include "TYMaillage.h"
@@ -37,9 +38,6 @@ TYMaillage::TYMaillage()
 
     _hauteur = 2.0;
     _computeAlti = true;
-
-    _locked = false;
-    _state = TYMaillage::Actif;
 
     _dataType = ValGlobalDBA;
     _dataFreq = 100.0f;
@@ -134,17 +132,6 @@ bool TYMaillage::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     return true;
 }
 
-void TYMaillage::duplicatePtCalcState(const TYCalcul* pCalculRef, TYCalcul* pCalculNew)
-{
-    QString idCalculRef = pCalculRef->getID().toString();
-    QString idCalculNew = pCalculNew->getID().toString();
-
-    for (unsigned int i = 0; i < _ptsCalcul.size(); i++)
-    {
-        _ptsCalcul[i]->duplicateEtat(idCalculRef, idCalculNew);
-    }
-}
-
 std::string TYMaillage::toString() const
 {
     return "TYMaillage";
@@ -158,7 +145,17 @@ DOM_Element TYMaillage::toXML(DOM_Element& domElement)
     TYXMLTools::addElementIntValue(domNewElem, "computeAlti", _computeAlti);
     TYXMLTools::addElementIntValue(domNewElem, "dataType", _dataType);
     TYXMLTools::addElementFloatValue(domNewElem, "dataFreq", _dataFreq);
-    TYXMLTools::addElementIntValue(domNewElem, "etat", _state);
+
+    DOM_Document domDoc = domElement.ownerDocument();
+    TYMapIdBool::iterator it_b;
+    for (it_b = _tabEtats.begin(); it_b != _tabEtats.end(); ++it_b)
+    {
+        DOM_Element tmpNode = domDoc.createElement("etatCalcul");
+        domNewElem.appendChild(tmpNode);
+
+        tmpNode.setAttribute("idCalcul", it_b->first.toString());
+        tmpNode.setAttribute("Etat", QString(intToStr(_tabEtats[it_b->first]).c_str()));
+    }
 
     // Sauvegarde de la palette
     _pPalette->toXML(domNewElem);
@@ -183,6 +180,7 @@ int TYMaillage::fromXML(DOM_Element domElement)
     float hueRange[2];
     float saturationRange[2];
     float valueRange[2];
+    TYUUID idCalcul;
 
     DOM_Element elemCur;
 
@@ -194,7 +192,14 @@ int TYMaillage::fromXML(DOM_Element domElement)
         TYXMLTools::getElementBoolValue(elemCur, "computeAlti", _computeAlti, getOk[1]);
         TYXMLTools::getElementIntValue(elemCur, "dataType", _dataType, getOk[2]);
         TYXMLTools::getElementFloatValue(elemCur, "dataFreq", _dataFreq, getOk[3]);
-        TYXMLTools::getElementIntValue(elemCur, "etat", _state, getOk[4]);
+
+        if (elemCur.nodeName() == "etatCalcul")
+        {
+            QString strIdCalcul = TYXMLTools::getElementAttributeToString(elemCur, "idCalcul");
+            idCalcul.FromString(strIdCalcul);
+            bool bEtat = TYXMLTools::getElementAttributeToInt(elemCur, "Etat");
+            _tabEtats[idCalcul] = bEtat;
+        }
 
         // Ancienne version, on recupere les points de calcul.
         if (pPtCalcul->callFromXMLIfEqual(elemCur))
@@ -231,9 +236,26 @@ int TYMaillage::fromXML(DOM_Element domElement)
     return 1;
 }
 
+void TYMaillage::updateFromCalcul(LPTYCalcul pCalcul)
+{
+    std::vector<LPTYSpectre> *tabSpectre = pCalcul->getSpectrumDatas( getID() );
+
+    if (tabSpectre != nullptr)
+    {
+        TYTabLPPointCalcul& ptsCalcul = getPtsCalcul();
+        for (unsigned int i = 0; i < ptsCalcul.size() ; ++i)
+        {
+            ptsCalcul[i]->setSpectre(tabSpectre->at(i));
+        }
+    }
+}
+
 void TYMaillage::clearResult()
 {
-
+    for(unsigned int i=0; i<_ptsCalcul.size(); i++)
+    {
+        _ptsCalcul[i].getRealPointer()->setSpectre( new TYSpectre() );
+    }
 }
 
 bool TYMaillage::addPointCalcul(LPTYPointCalcul pPtCalcul)
@@ -241,8 +263,7 @@ bool TYMaillage::addPointCalcul(LPTYPointCalcul pPtCalcul)
     assert(pPtCalcul);
 
     pPtCalcul->setParent(this);
-    pPtCalcul->setIsSpectreUnique(true);
-    pPtCalcul->setEtat(true, static_cast<TYCalcul*>(getParent()));  // Active le point pour ce calcul
+    pPtCalcul->setEtat(true);  // Active le point pour ce calcul
     _ptsCalcul.push_back(pPtCalcul);
 
     setIsGeometryModified(true);
@@ -301,7 +322,9 @@ void TYMaillage::make(const TYTabPoint& points)
 {
     for (unsigned int i = 0; i < points.size(); i++)
     {
-        addPointCalcul(new TYPointCalcul(points[i]));
+        LPTYPointCalcul pPoint = new TYPointCalcul(points[i]);
+        pPoint->setSpectre(new TYSpectre());
+        addPointCalcul(pPoint);
     }
 }
 
@@ -376,38 +399,38 @@ void TYMaillage::computeMesh(std::vector<MTriangle> &mesh) const
             id3 = getIndexPtCalcul(i, j + 1);
             id4 = getIndexPtCalcul(i + 1, j + 1);
 
-            if (id1 < 0 || !ptsCalcul[id1]->getEtat(pCalcul))
+            if (id1 < 0 || !ptsCalcul[id1]->etat())
             {
                 // Higher right triangle
                 if (id2 >= 0 && id4 >= 0 && id3 >= 0)
-                    if (ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                    if (ptsCalcul[id2]->etat() && ptsCalcul[id4]->etat() && ptsCalcul[id3]->etat())
                     {
                         mesh.push_back(computeTriangle(*ptsCalcul[id2], *ptsCalcul[id4], *ptsCalcul[id3]));
                     }
             }
-            else if (id2 < 0 || !ptsCalcul[id2]->getEtat(pCalcul))
+            else if (id2 < 0 || !ptsCalcul[id2]->etat())
             {
                 // Higher left triangle
                 if (id1 >= 0 && id4 >= 0 && id3 >= 0)
-                    if (ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                    if (ptsCalcul[id1]->etat() && ptsCalcul[id4]->etat() && ptsCalcul[id3]->etat())
                     {
                         mesh.push_back(computeTriangle(*ptsCalcul[id1], *ptsCalcul[id4], *ptsCalcul[id3]));
                     }
             }
-            else if (id3 < 0 || !ptsCalcul[id3]->getEtat(pCalcul))
+            else if (id3 < 0 || !ptsCalcul[id3]->etat())
             {
                 // Lower right triangle
                 if (id1 >= 0 && id2 >= 0 && id4 >= 0)
-                    if (ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id4]->getEtat(pCalcul))
+                    if (ptsCalcul[id1]->etat() && ptsCalcul[id2]->etat() && ptsCalcul[id4]->etat())
                     {
                         mesh.push_back(computeTriangle(*ptsCalcul[id1], *ptsCalcul[id2], *ptsCalcul[id4]));
                     }
             }
-            else if (id4 < 0 || !ptsCalcul[id4]->getEtat(pCalcul))
+            else if (id4 < 0 || !ptsCalcul[id4]->etat())
             {
                 // Lower left triangle
                 if (id1 >= 0 && id2 >= 0 && id3 >= 0)
-                    if (ptsCalcul[id1]->getEtat(pCalcul) && ptsCalcul[id2]->getEtat(pCalcul) && ptsCalcul[id3]->getEtat(pCalcul))
+                    if (ptsCalcul[id1]->etat() && ptsCalcul[id2]->etat() && ptsCalcul[id3]->etat())
                     {
                         mesh.push_back(computeTriangle(*ptsCalcul[id1], *ptsCalcul[id2], *ptsCalcul[id3]));
                     }
@@ -440,16 +463,21 @@ MTriangle TYMaillage::computeTriangle(TYPointCalcul& pt1, TYPointCalcul& pt2, TY
 
 double TYMaillage::getSpectrumValue(TYPointCalcul& pt) const
 {
-    switch (_dataType)
+    if (pt.getSpectre() != nullptr)
     {
-        case ValGlobalDBA:
-        default:
-            return pt.getValA(); //pSpectre->valGlobDBA();
-        case ValGlobalDBLin:
-            return pt.getValLin(); //pSpectre->valGlobDBLin();
-        case DataFreq:
-            return pt.getSpectre()->getValueReal(_dataFreq);
+        switch (_dataType)
+        {
+            case ValGlobalDBA:
+            default:
+                return pt.getSpectre().getRealPointer()->valGlobDBA();
+            case ValGlobalDBLin:
+                return pt.getSpectre().getRealPointer()->valGlobDBLin();
+            case DataFreq:
+                return pt.getSpectre()->getValueReal(_dataFreq);
+        }
     }
+
+    return 0.;
 }
 
 void TYMaillage::computeIsoCurve(std::vector<MTriangle> &mesh, std::vector<MPoint> &isoCurve) const
@@ -526,5 +554,69 @@ bool TYMaillage::computeIsoPoint(const OHPlane3D& plane, const MPoint& pt1, cons
         mp.scalar = ptInter._z;
         return true;
     }
+    return false;
+}
+void TYMaillage::setEtat(const TYUUID& id_calc, bool etat)
+{
+    _tabEtats[id_calc] = etat;
+}
+
+bool TYMaillage::etat()
+{
+    TYUUID id_calc = dynamic_cast<TYProjet*>( getParent() )->getCurrentCalcul()->getID();
+
+    return etat(id_calc);
+}
+
+bool TYMaillage::etat(const TYUUID& id_calc)
+{
+    // Constrol point knows the calcul
+    TYMapIdBool::iterator it = _tabEtats.find(id_calc);
+    if ( it != _tabEtats.end() )
+    {
+        return (*it).second;
+    }
+    else
+    {
+        _tabEtats[id_calc] = false;
+    }
+
+    return false;
+}
+
+bool TYMaillage::etat(const TYCalcul* pCalc)
+{
+    assert(pCalc != nullptr);
+    return etat( pCalc->getID() );
+}
+
+void TYMaillage::copyEtats(TYMaillage* pOther)
+{
+    _tabEtats.clear(); //On vide la map actuelle
+
+    TYMapIdBool::iterator it_b;
+    for (it_b = pOther->_tabEtats.begin(); it_b != pOther->_tabEtats.end(); ++it_b)
+    {
+        _tabEtats[it_b->first] = it_b->second;
+    }
+}
+
+void TYMaillage::duplicateEtat(const TYUUID& idCalculRef, const TYUUID& idCalculNew)
+{
+    _tabEtats[idCalculNew] = _tabEtats[idCalculRef];
+}
+
+bool TYMaillage::remEtat(TYCalcul* pCalcul)
+{
+    assert(pCalcul);
+    TYUUID id = pCalcul->getID();
+
+    TYMapIdBool::iterator it = _tabEtats.find(id);
+    if ( it != _tabEtats.end() )
+    {
+        _tabEtats.erase(it);
+        return true;
+    }
+
     return false;
 }

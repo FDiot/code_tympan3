@@ -179,8 +179,12 @@ void TYLinearMaillageEditor::slotMouseReleased(int x, int y, Qt::MouseButton but
         LPTYSegment pSeg = new TYSegment();
 
         float pt1[3], pt2[3];
-        NxVec3 point1 = OGLCamera::displayToWorld(NxVec3(_pOGLLineElement->getPoint1()[0], _pOGLLineElement->getPoint1()[1], _pOGLLineElement->getPoint1()[2]));
-        NxVec3 point2 = OGLCamera::displayToWorld(NxVec3(_pOGLLineElement->getPoint2()[0], _pOGLLineElement->getPoint2()[1], _pOGLLineElement->getPoint2()[2]));
+        NxVec3 point1 = OGLCamera::displayToWorld(NxVec3(   _pOGLLineElement->getPoint1()[0], 
+                                                            _pOGLLineElement->getPoint1()[1], 
+                                                            _pOGLLineElement->getPoint1()[2]));
+        NxVec3 point2 = OGLCamera::displayToWorld(NxVec3(   _pOGLLineElement->getPoint2()[0], 
+                                                            _pOGLLineElement->getPoint2()[1], 
+                                                            _pOGLLineElement->getPoint2()[2]));
         pt1[0] = point1.x;
         pt1[1] = point1.y;
         pt1[2] = point1.z;
@@ -262,25 +266,25 @@ void TYLinearMaillageEditor::slotMouseReleased(int x, int y, Qt::MouseButton but
                     TYProjet* pProjet = pSiteModeler->getProjet();
                     if (pProjet)
                     {
-                        TYCalcul* pCalcul = pProjet->getCurrentCalcul();
-                        if (pCalcul)
+                        // Init
+                        pMaillage->setHauteur(pHauteurLineEdit->text().toDouble());
+                        pMaillage->make(pSeg, pDensiteLineEdit->text().toDouble());
+
+                        // Ajout au Calcul courant
+                        TYAction* pAction = new TYAddMaillageToProjetAction( (LPTYMaillageGeoNode&) pMaillageGeoNode, 
+                                                                                pProjet, 
+                                                                                _pModeler,
+                                                                                TR("id_action_addlinearmaillage") );
+                        _pModeler->getActionManager()->addAction(pAction);
+
+                        pProjet->addMaillage((LPTYMaillageGeoNode&) pMaillageGeoNode);
+                        if(pProjet->getSite()->getAltimetry()->containsData())
                         {
-                            pCalcul->addMaillage((LPTYMaillageGeoNode&) pMaillageGeoNode);
-                            // Init
-                            pMaillage->setHauteur(pHauteurLineEdit->text().toDouble());
-                            pMaillage->make(pSeg, pDensiteLineEdit->text().toDouble());
-
-                            // Ajout au Calcul courant
-                            TYAction* pAction = new TYAddMaillageToCalculAction((LPTYMaillageGeoNode&) pMaillageGeoNode, pSiteModeler->getProjet()->getCurrentCalcul(), _pModeler, TR("id_action_addlinearmaillage"));
-                            _pModeler->getActionManager()->addAction(pAction);
-
-                            if(pProjet->getSite()->getAltimetry()->containsData())
-                            {
-                                // Altimetrisation du maillage
-                                pCalcul->updateAltiMaillage(pMaillageGeoNode);
-                            }
-                            pMaillage->updateGraphicTree();
+                            // Altimetrisation du maillage
+                            pProjet->updateAltiMaillage(pMaillageGeoNode);
                         }
+
+                        pMaillage->updateGraphicTree();
                     }
                 }
 

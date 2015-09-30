@@ -28,8 +28,10 @@ class TestPyTam(TympanTC):
         result = project.current_computation.result
         self.assertEqual(result.nsources, 1)
         self.assertEqual(result.nreceptors, 6)
-        actual = [result.spectrum(i, 0).dBA for i in range(6)]
+        actual = [result.spectrum(result.receptors[i],result.sources[0]).dBA for i in range(6)]
         expected = [result.receptor(i).dBA for i in range(6)]
+        actual.sort()
+        expected.sort()
         assert_allclose(actual, expected)
 
     def test_solve_check_business_result_two_sources(self):
@@ -40,8 +42,10 @@ class TestPyTam(TympanTC):
         self.assertEqual(result.nreceptors, 6)
         # because first source has a very low emission spectrum and therefore
         # doesn't contribute to the result
-        actual = [result.spectrum(i, 1).dBA for i in range(6)]
+        actual = [result.spectrum(result.receptors[i],result.sources[1]).dBA for i in range(6)]
         expected = [result.receptor(i).dBA for i in range(6)]
+        actual.sort()
+        expected.sort()
         assert_allclose(actual, expected)
 
     def test_hierarchy(self):
@@ -51,7 +55,7 @@ class TestPyTam(TympanTC):
         site = project.site
         childs = site.childs()
         for c in childs:
-            self.assertRegexpMatches(c.name(),'Infrastructure|Topographie')
+            self.assertRegexpMatches(c.name,'Infrastructure|Topographie')
 
     def test_base(self):
         # XXX This test uses expected bad values provided by the current

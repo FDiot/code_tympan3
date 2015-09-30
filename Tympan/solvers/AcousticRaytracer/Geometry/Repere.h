@@ -16,7 +16,7 @@
 #ifndef REPERE_H
 #define REPERE_H
 
-#include "Tympan/models/common/mathlib.h"
+#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Base.h"
 
 class Repere : public Base

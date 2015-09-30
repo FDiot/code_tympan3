@@ -21,7 +21,9 @@
 template<typename T>
 class DiffractionSelector : public Selector<T>
 {
-
+/*
+ * \brief : disable ray with a number of diffraction events greater than a threshold value
+*/
 public :
     DiffractionSelector(int _maxDiffractionOrder = 1, OPERATOR _op = LESS_OR_EQUAL) : Selector<T>()
     {

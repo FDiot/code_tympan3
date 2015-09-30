@@ -134,7 +134,7 @@ LPTYTerrain addTerrainToSimpleSite(LPTYSiteNode pSite)
         pTerrain->getListPoints().push_back(TYPoint(terrain_x[i], terrain_y[i], -100));
     }
     LPTYSol pSol = new TYSol();
-    pSol->setName("grass");
+    pSol->setName( std::string("grass") );
     pSol->setResistivite(3.14); // NB This is a dummy value
     pTerrain->setSol(pSol);
 #undef NB_POINTS_TERRAIN

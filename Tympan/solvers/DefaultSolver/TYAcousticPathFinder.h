@@ -26,7 +26,7 @@ public:
     TYAcousticPathFinder(TYSolver& solver);
     virtual ~TYAcousticPathFinder();
 
-    virtual void computePath(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, TabPoint3D& ptsRight);
+    virtual void computePath(const std::deque<TYSIntersection>& tabIntersect, const TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, TabPoint3D& ptsRight);
     virtual void init();
 
 private :

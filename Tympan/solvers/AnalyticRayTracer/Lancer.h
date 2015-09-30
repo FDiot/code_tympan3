@@ -176,7 +176,7 @@ public:
      * \fn void setLauchType(const unsigned int &launchType)
      * \brief define how rays will be created;
      */
-    void setLaunchType(const unsigned int& launchType) { _launchType = launchType; init(); }
+    void setLaunchType(const unsigned int& launchType) { _launchType = launchType; init_sampler(); }
 
     /*!
      * \fn void addSource(const vec3& source)
@@ -186,7 +186,7 @@ public:
 
 
 private :
-    void init();
+    void init_sampler();
 
     void save(); /*!< save rays to a file */
 
@@ -199,29 +199,28 @@ private :
 public :
     // Donnees membres :
 
-    vector<vec3> sources;                 /*!< vector contenant les sources */
-    vector<vec3> recepteurs;              /*!<  vector contenant les recepteurs */
-    vector<vec3*> _plan;                   /*!<  "liste" des objets definis par 3 points */
-    meteo* _weather;                        /*!<  meteo */
-    Sampler* _sampler;                      /*!< ray generator */
+    vector<vec3> sources;           /*!< vector contenant les sources */
+    vector<vec3> recepteurs;        /*!<  vector contenant les recepteurs */
+    vector<vec3*> _plan;            /*!<  "liste" des objets definis par 3 points */
+    meteo* _weather;                /*!<  meteo */
+    Sampler* _sampler;              /*!< ray generator */
 
-    decimal h;                                /*!<  pas de discretisation */
-    decimal TMax;                             /*!<  temps de propagation maximal */
-    vector<decimal> temps;                    /*!<  [0:h:temps_max] vecteur des temps ou l'on resouds */
-    decimal dmax;                             /*!<  distance maximale parcourue par les rayons */
-    decimal initialAngleTheta;                /*!<  angle de tir initial selon theta */
-    decimal finalAngleTheta;                  /*!<  angle de tir final selon theta */
-    decimal initialAnglePhi;                  /*!<  angle de tir initial selon phi */
-    decimal finalAnglePhi;                    /*!<  angle de tir final selon phi */
+    decimal h;                      /*!<  pas de discretisation */
+    decimal TMax;                   /*!<  temps de propagation maximal */
+    vector<decimal> temps;          /*!<  [0:h:temps_max] vecteur des temps ou l'on resouds */
+    decimal dmax;                   /*!<  distance maximale parcourue par les rayons */
+    decimal initialAngleTheta;      /*!<  angle de tir initial selon theta */
+    decimal finalAngleTheta;        /*!<  angle de tir final selon theta */
+    decimal initialAnglePhi;        /*!<  angle de tir initial selon phi */
+    decimal finalAnglePhi;          /*!<  angle de tir final selon phi */
 
-    unsigned int nbRay;                 /*!<  nombre de rayons que l'on lance */
-    unsigned int _launchType;            /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
-    bool wantOutFile;                   /*!<  true if outputfile wanted */
-    string ray_fileName;                /*!<  filename of file containing angles of rays */
-    string out_fileName;                /*!<  filename of the output file */
+    unsigned int nbRay;             /*!<  nombre de rayons que l'on lance */
+    unsigned int _launchType;       /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
+    bool wantOutFile;               /*!<  true if outputfile wanted */
+    string ray_fileName;            /*!<  filename of file containing angles of rays */
+    string out_fileName;            /*!<  filename of the output file */
 
-
-    vector<RayCourb*> MatRes;           /*!<  tableau contenant les rayons obtenus pour chaque source */
+    vector<RayCourb*> MatRes;       /*!<  tableau contenant les rayons obtenus pour chaque source */
 };
 
 /*!

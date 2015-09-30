@@ -31,6 +31,7 @@
 
 struct TYStructSurfIntersect
 {
+    string volume_id;
     TabPoint3D tabPoint; // Tableau de point utilise pour la preselection
     OVector3D normal; // Normal to the face
     bool isEcran;   // Est un ecran

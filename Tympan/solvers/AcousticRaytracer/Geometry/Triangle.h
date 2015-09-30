@@ -41,6 +41,8 @@ public:
 
     virtual bool sample(decimal density, std::vector<vec3>& samples);
 
+    virtual int form() { return TRIANGLE; }
+
 protected:
     vec3 p;
     vec3 u;

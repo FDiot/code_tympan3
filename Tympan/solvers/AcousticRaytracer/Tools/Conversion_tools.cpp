@@ -56,15 +56,16 @@ void build_event_list_from_Ray(int sens, Ray* ray, acoustic_path& ap)
     //Definition des Evenements.
     acoustic_event* e = NULL;
 
-    //Add source as an event
-    e = new acoustic_event();
-    e->type = TYSOURCE;
-    e->pos = OPoint3D(ray->source->getPosition().x, ray->source->getPosition().y, ray->source->getPosition().z);
-    e->angle = 0.0;
-    ap.getEvents().push_back(e);
-
     if (sens == 1) // Rays traveled from receptor to source
     {
+        //Add source as an event (the receptor is the source)
+        e = new acoustic_event();
+        e->type = TYSOURCE;
+        Recepteur* recep = (static_cast<Recepteur*>(ray->getRecepteur()));
+        e->pos = OPoint3D(recep->getPosition().x, recep->getPosition().y, recep->getPosition().z);
+        e->angle = 0.0;
+        ap.getEvents().push_back(e);
+
         //Creation des evenements de diffractions et reflexions
         std::vector<QSharedPointer<Event> >::reverse_iterator rit;
 
@@ -73,9 +74,22 @@ void build_event_list_from_Ray(int sens, Ray* ray, acoustic_path& ap)
             e = new acoustic_event( build_from_RayEvent( (*rit).data() ) );
             ap.getEvents().push_back(e);
         }
+
+        // Add receptor as an event (the source is the reeptor)
+        e = new acoustic_event();
+        e->type = TYRECEPTEUR;
+        e->pos = OPoint3D(ray->source->getPosition().x, ray->source->getPosition().y, ray->source->getPosition().z);
+        e->angle = 0.0;
+        ap.getEvents().push_back(e);
     }
     else // Rays traveled from source to receptor (normal
     {
+        //Add source as an event
+        e = new acoustic_event();
+        e->type = TYSOURCE;
+        e->pos = OPoint3D(ray->source->getPosition().x, ray->source->getPosition().y, ray->source->getPosition().z);
+        e->angle = 0.0;
+        ap.getEvents().push_back(e);
 
         //Creation des evenements de diffractions et reflexions
         std::vector<QSharedPointer<Event> >::iterator rit;
@@ -85,15 +99,16 @@ void build_event_list_from_Ray(int sens, Ray* ray, acoustic_path& ap)
             e = new acoustic_event( build_from_RayEvent( (*rit).data() ) );
             ap.getEvents().push_back(e);
         }
+
+        // Add receptor as an event
+        e = new acoustic_event();
+        e->type = TYRECEPTEUR;
+        Recepteur* recep = (static_cast<Recepteur*>(ray->getRecepteur()));
+        e->pos = OPoint3D(recep->getPosition().x, recep->getPosition().y, recep->getPosition().z);
+        e->angle = 0.0;
+        ap.getEvents().push_back(e);
     }
 
-    // Add receptor as an event
-    e = new acoustic_event();
-    e->type = TYRECEPTEUR;
-    Recepteur* recep = (static_cast<Recepteur*>(ray->getRecepteur()));
-    e->pos = OPoint3D(recep->getPosition().x, recep->getPosition().y, recep->getPosition().z);
-    e->angle = 0.0;
-    ap.getEvents().push_back(e);
 }
 
 acoustic_path build_from_Ray(int sens, Ray* ray)

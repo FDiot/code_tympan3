@@ -19,13 +19,16 @@
 namespace tympan
 {
 /**
- * @brief Find the intersection between some triangles (`triangles`, `nodes`) and a volume (`volume`)
+ * @brief Find the intersection between some triangles (`triangles`, `nodes`) and a volume given
+ * by a width, a height and 2 points delimiting the length. The volume is centered on the midpoint
+ * between the source and the receptor
  *
  * @return the indices of the triangles from `triangles` that are intersected by the volume
  **/
 std::deque<triangle_idx> scene_volume_intersection(const triangle_pool_t& triangles,
                                                    const nodes_pool_t& nodes,
-                                                   const OBox2& volume);
+                                                   float l, float h,
+                                                   OPoint3D source, OPoint3D receptor); // L
 
 class AcousticProblemModel
 {
@@ -97,7 +100,7 @@ public:
      * @param resistivity the resistivity of the ground, expressed in kRayls (TO BE CONFIRMED)
      * @return a shared_ptr to the corresponding AcousticGroundMaterial instance
      */
-    material_ptr_t make_material(const string& name, double resistivity);
+    material_ptr_t make_material(const string& name, double resistivity, double deviation, double length);
 
     /**
      * @brief Push a representation of a building material into the model
@@ -126,6 +129,8 @@ public:
     const nodes_pool_t& nodes() const { return all_nodes; }
     const triangle_pool_t& triangles() const  { return all_triangles; }
     const material_pool_t& materials() const { return all_materials; }
+    const source_pool_t& sources() const { return all_sources; }
+    const receptor_pool_t& receptors() const { return all_receptors; }
 
 public: // XXX Could / should be protected but this complicates testing
 

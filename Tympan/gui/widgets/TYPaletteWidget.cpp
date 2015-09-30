@@ -145,8 +145,12 @@ void TYPaletteWidget::resetPalette()
 
 void TYPaletteWidget::makeLinearPalette()
 {
-    getElement()->makeLinearPalette();
-    updateContent();
+    TYPaletteLimitsWidget *limits = new TYPaletteLimitsWidget(getElement(), this);
+    bool ret = limits->exec();
+    if (ret == QDialog::Accepted)
+    {
+        updateContent();
+    }
 }
 
 void TYPaletteWidget::loadPalette()
@@ -641,4 +645,67 @@ void PaletteEditor::addNoiseLevel()
 void PaletteEditor::deleteNoiseLevels()
 {
     qobject_cast<PaletteModel*>(p_table->model())->deleteSelectedRows();
+}
+
+// ================================================================================
+
+TYPaletteLimitsWidget::TYPaletteLimitsWidget(TYPalette* pElement, QWidget* _pParent) :
+                                QDialog(_pParent), _pElement(pElement)
+{
+    Q_ASSERT(pElement);
+    setWindowTitle(TR("id_caption_limits"));
+    resize(300, 174);
+
+    QGroupBox* _groupBox = new QGroupBox(this);
+    QGridLayout* internalLayout = new QGridLayout();
+    _groupBox->setLayout(internalLayout);
+    _label_lower_bound = new QLabel(_groupBox);
+    _label_lower_bound->setText(TR("id_lb_label"));
+    _label_upper_bound = new QLabel(_groupBox);
+    _label_upper_bound->setText(TR("id_ub_label"));
+    _label_nb_colors = new QLabel(_groupBox);
+    _label_nb_colors->setText(TR("id_nb_label"));
+    _lineEdit_lower_bound = new QLineEdit(_groupBox);
+    _lineEdit_upper_bound = new QLineEdit(_groupBox);
+    _lineEdit_nb_colors = new QLineEdit(_groupBox);
+    internalLayout->addWidget(_label_lower_bound, 0, 0);
+    internalLayout->addWidget(_lineEdit_lower_bound, 0, 1);
+    internalLayout->addWidget(_label_upper_bound, 1, 0);
+    internalLayout->addWidget(_lineEdit_upper_bound, 1, 1);
+    internalLayout->addWidget(_label_nb_colors, 2, 0);
+    internalLayout->addWidget(_lineEdit_nb_colors, 2, 1);
+
+    QBoxLayout* pBtnLayout = new QHBoxLayout();
+
+    pBtnLayout->addStretch(1);
+
+    QPushButton* pButtonOK = new QPushButton(TR("id_ok_btn"), this);
+    pButtonOK->setDefault(true);
+    QObject::connect(pButtonOK, SIGNAL(clicked()), this, SLOT(apply()));
+    pBtnLayout->addWidget(pButtonOK);
+
+    QPushButton* pButtonCancel = new QPushButton(TR("id_cancel_btn"), this);
+    pButtonCancel->setShortcut(Qt::Key_Escape);
+    QObject::connect(pButtonCancel, SIGNAL(clicked()), this, SLOT(reject()));
+    pBtnLayout->addWidget(pButtonCancel);
+
+    internalLayout->addLayout(pBtnLayout, 3, 1);
+    updateContent();
+}
+
+void TYPaletteLimitsWidget::updateContent()
+{
+    _lineEdit_lower_bound->setText(QString().setNum(_pElement->getValueMin(), 'f', 2));
+    _lineEdit_upper_bound->setText(QString().setNum(_pElement->getValueMax(), 'f', 2));
+    _lineEdit_nb_colors->setText(QString().setNum(_pElement->getNbColors()));
+}
+
+void TYPaletteLimitsWidget::apply()
+{
+   double lower_bound = _lineEdit_lower_bound->text().toDouble();
+   double upper_bound = _lineEdit_upper_bound->text().toDouble();
+   unsigned int nb_colors = _lineEdit_nb_colors->text().toUInt();
+
+   _pElement->makeLinearPalette(nb_colors, lower_bound, upper_bound);
+    accept();
 }
