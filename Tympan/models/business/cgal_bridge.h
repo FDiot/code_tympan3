@@ -15,6 +15,8 @@
 #include "Tympan/core/exceptions.h"
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/models/common/3d.h"
+#include "Tympan/models/common/cgal_tools.h"
+#include "Tympan/models/business/TYDefines.h"
 
 // Forward declarations
 #include "Tympan/core/smartptr.h"
@@ -57,6 +59,13 @@ namespace tympan
     std::unique_ptr<ITYPolygonTriangulator>
     make_polygon_triangulator(const TYPolygon& poly);
 
+    /**
+     * @brief Join a sequence of polygons into a single polygon.
+     *
+     * @param polygons input TYPolygon as a std::deque
+     * @param output TYPolygon result of the union of input polygons
+     */
+    void join_polygons(const std::deque<TYPolygon> polygons, TYPolygon& res);
 } // namespace tympan
 
 #endif // TYMPAN__CGAL_BRIDGE_HPP__INCLUDED
