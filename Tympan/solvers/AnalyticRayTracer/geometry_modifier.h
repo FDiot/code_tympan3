@@ -17,56 +17,34 @@
 #define __GEOMETRY_MODIFIER_H
 
 #include <qlist.h>
+#include <string>
+#include <memory>
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/triangle.h"
 #include "Tympan/models/common/mathlib.h"
-#include "Tympan/models/common/acoustic_path.h"
+#include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
 
 class Lancer;
 
 using namespace std;
 
-class geometry_modifier :
-    public IGeometryModifier
+class IGeometryModifier
 {
 public:
-
-    // Constructeurs :
-    geometry_modifier() : methode(1) {}
-    geometry_modifier(Lancer& L) : methode(1) {}
-    geometry_modifier(geometry_modifier& r) : methode(r.methode) {}
-
-    // Destructeur :
-    ~geometry_modifier() {}
+    virtual ~IGeometryModifier() {};
 
     /*!
     * \fn void Init()
     * \brief Efface tous les tableaux.
     */
-    void clear();
-
-    /*!
-    * \fn void setMethode(const unsigned int& meth)
-    * \brief Modification de la methode de transformation.
-    * \param meth methode que l'on souhaite utiliser pour transformer notre geometrie
-    */
-    void setMethode(const unsigned int& meth) {methode = meth;}
+    virtual void clear() = 0;
 
     /*!
      * \fn void trianguleNappe()
      * \brief creation de la nappe de rayons triangulee pour l'interpolation
      */
-    void trianguleNappe(const Lancer& shot);
-
-    /*!
-     * \fn QList<OTriangle>& getNappe()
-     * \brief Get de la nappe de rayons triangulee
-     */
-    QList<OTriangle>& getNappe() { return Liste_triangles; }
-
-    /* Fonction qui met dans le tableau Tableau les 4 points voisins du point P se trouvant entre x(i) et x(i+1) */
-    //  void find_voisin(vec3 P, map< pair<double, double>, double > plan, vec3* Tableau);
+    virtual void buildNappe(const Lancer& shot) = 0;
 
     /*!
     * \fn vec3 fonction_h (vec3 P)
@@ -74,9 +52,7 @@ public:
     * \param P point que l'on desire transformer
     * \return rend les coordonnees du point transforme.
     */
-    vec3 fonction_h(const vec3& P);
-    virtual OPoint3D fonction_h(const OPoint3D& P)
-    { return vec3toOPoint3D(fonction_h(OPoint3Dtovec3(P))); }
+    virtual vec3 fonction_h(const vec3& P) = 0;
 
     /*!
     * \fn vec3 fonction_h_inverse (vec3 P, QList<OTriangle> Liste_triangles)
@@ -85,26 +61,72 @@ public:
     * \param Liste_triangles liste des triangles de la geometrie
     * \return rend les coordonnees du point transforme (point de l'espace original).
     */
-    vec3 fonction_h_inverse(const vec3& P);
-    virtual OPoint3D fonction_h_inverse(const OPoint3D& P)
-    { return vec3toOPoint3D(fonction_h_inverse(OPoint3Dtovec3(P))); }
+    virtual vec3 fonction_h_inverse(const vec3& P) = 0;
 
     /*!
-     * \fn double interpo(const vec3* triangle, vec3 P);
-     * \brief return z position of point (P) inside a triangle
+     * \fn void export()
+     * \brief export to a file
      */
-    double interpo(const vec3* triangle, vec3 P);
+    virtual void save_to_file(std::string fileName) = 0;
 
-private :
-    int methode;                                               /*!< entier definissant la methode de transformation utilisee */
-    vec3 pos_center;
-
-    QList<OTriangle> Liste_triangles;                           /*!< Liste des triangles de la nappe interpolee */
-    QList<OPoint3D> Liste_vertex;                                   /*!< Liste des vertex de la triangulation */
-
-private :
+protected:
+    vec3 pos_center;                    /*!< Position de la source */
 };
 
-bool IsInTriangle(const vec3& P, const vec3* triangle);
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class geometry_modifier_no_correction :
+    public IGeometryModifier
+{
+public:
+    geometry_modifier_no_correction() : IGeometryModifier() {}
+    ~geometry_modifier_no_correction() {}
+
+    virtual void clear() {}
+
+    virtual void buildNappe(const Lancer& shot) {}
+
+    virtual vec3 fonction_h(const vec3& P) { return P; }
+
+    virtual vec3 fonction_h_inverse(const vec3& P) { return P; }
+
+    virtual void save_to_file(std::string fileName) {}
+};
+
+// +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+class geometry_modifier_z_correction :
+    public IGeometryModifier
+{
+public:
+
+    // Constructeurs :
+    geometry_modifier_z_correction() : _scene( std::unique_ptr<Scene>( new Scene() ) ) {}
+
+    // Destructeur :
+    ~geometry_modifier_z_correction() {}
+
+    virtual void buildNappe(const Lancer& shot);
+
+    virtual vec3 fonction_h(const vec3& P);
+
+    virtual vec3 fonction_h_inverse(const vec3& P);
+
+    virtual void clear() {}
+
+    virtual void save_to_file(std::string fileName) { _scene->export_to_ply(fileName); }
+
+    /*!
+     * \fn const scene* get_scene();
+     * \brief return the scene
+     */
+    const Scene* get_scene() { return _scene.get(); }
+
+private :
+    void append_triangles_to_scene(QList<OPoint3D>& Liste_vertex, QList<OTriangle>& Liste_triangles);
+    double compute_h(const vec3& P);
+
+    std::unique_ptr<Scene> _scene;      /*!< Support de la structure acceleratrice pour la nappe */
+};
 
 #endif //__GEOMETRY_MODIFIER_H

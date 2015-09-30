@@ -21,6 +21,7 @@
 #include "TYSolverDefines.h"
 
 class TYSolver;
+class TYTrajet;
 
 class TYFaceSelector : public TYFaceSelectorInterface
 {
@@ -28,7 +29,7 @@ public:
     TYFaceSelector(TYSolver& solver);
     virtual ~TYFaceSelector();
 
-    virtual void selectFaces(std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon);
+    virtual void selectFaces(std::deque<TYSIntersection>& tabIntersect, const TYTrajet& rayon);
 
 protected :
     // Reference sur le solver

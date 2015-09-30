@@ -108,14 +108,6 @@ DOM_Element TYRectangularMaillage::toXML(DOM_Element& domElement)
 
     _pRect->toXML(domNewElem);
 
-    if (TYProjet::gSaveValues)
-    {
-        for (unsigned int i = 0; i < _ptsCalcul.size(); i++)
-        {
-            _ptsCalcul[i]->getSpectre()->toXML(domNewElem);
-        }
-    }
-
     return domNewElem;
 }
 
@@ -127,16 +119,15 @@ int TYRectangularMaillage::fromXML(DOM_Element domElement)
 
     bool densiteXOk = false;
     bool densiteYOk = false;
+    bool bOldDatas = false;
 
-    unsigned int i, j;
-
-    TYSpectre* pSpectre = new TYSpectre();
-    TYTabLPSpectre tabSpectre;
+    LPTYSpectre pSpectre = new TYSpectre();
+    TYTabLPSpectre *compatibilityVector = new TYTabLPSpectre();
 
     DOM_Element elemCur;
 
     QDomNodeList childs = domElement.childNodes();
-    for (i = 0; i < childs.length(); i++)
+    for (unsigned int i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
 
@@ -145,53 +136,26 @@ int TYRectangularMaillage::fromXML(DOM_Element domElement)
 
         _pRect->callFromXMLIfEqual(elemCur);
 
-        // Nouvelle version : si on trouve des spectres
-        if (pSpectre->callFromXMLIfEqual(elemCur))
+        // Old version : if we encounter spectra
+       if (pSpectre->callFromXMLIfEqual(elemCur))
         {
-            tabSpectre.push_back(pSpectre);
+            bOldDatas = true;
+            compatibilityVector->push_back(pSpectre);
             pSpectre = new TYSpectre();
-            if (!spectreIsOk)
-            {
-                spectreIsOk = true;
-            }
-        }
+        }    
     }
 
-    // Nouvelle version
-    if (spectreIsOk)
+    if (bOldDatas == true)
     {
-        unsigned long x, y;
-        OVector3D stepX, stepY;
-        getDimensionsAndSteps(x, y, stepX, stepY);
-        _nbPointsX = x;
-
-        double x0 = _pRect->getMinX();
-        double y0 = _pRect->getMaxY();
-        TYPoint point(x0, y0, _hauteur);
-
-        // On calcul chaque points
-        for (j = 0; j < y; ++j)
-        {
-            for (i = 0; i < x; ++i)
-            {
-                TYPointCalcul* pPtCalcul = new TYPointCalcul(point);
-                pPtCalcul->setSpectre(*(tabSpectre[i + j * x]));
-                addPointCalcul(pPtCalcul);
-
-                point._x += stepX._x;
-            }
-
-            point._x = x0;
-            point._y += stepY._y;
-        }
+        setAllUses( (void*)compatibilityVector );
     }
     else
     {
-        // CLM-NT33 : Chargement de fichier avec maillage inexistant
-        make(_pRect, _densiteX, _densiteY);
+        delete compatibilityVector;
     }
 
-    delete pSpectre;
+    make(_pRect, _densiteX, _densiteY);
+    TYMaillage::clearResult();
 
     return 1;
 }
@@ -299,6 +263,7 @@ bool TYRectangularMaillage::fromXMLString(const std::string& sXMLString)
 void TYRectangularMaillage::clearResult()
 {
     make(_pRect, _densiteX, _densiteY);
+    TYMaillage::clearResult();
 }
 
 void TYRectangularMaillage::make(LPTYRectangle pRect, double densiteX, double densiteY)
@@ -334,7 +299,9 @@ void TYRectangularMaillage::make(LPTYRectangle pRect, double densiteX, double de
             OPoint3D pos = startPt + (vecX * iX) + (vecY * iY);
 
             // Ajout du point au maillage
-            addPointCalcul(new TYPointCalcul(pos));
+            LPTYPointCalcul pPoint = new TYPointCalcul(pos);
+            pPoint->setSpectre(new TYSpectre());
+            addPointCalcul(pPoint);
         }
     }
 

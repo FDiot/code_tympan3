@@ -161,15 +161,6 @@ DOM_Element TYBoundaryNoiseMap::toXML(DOM_Element& domElement)
         _tabPoint[i].toXML(domNewElem);
     }
 
-    if (TYProjet::gSaveValues)
-    {
-        nbPoints = _ptsCalcul.size();
-        for (size_t i = 0; i < nbPoints; ++i)
-        {
-            _ptsCalcul[i]->getSpectre()->toXML(domNewElem);
-        }
-    }
-
     return domNewElem;
 }
 
@@ -178,18 +169,19 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
     TYMaillage::fromXML(domElement);
 
     bool nbPointsIsOk = false;
+    bool bOldDatas = false;
 
-    unsigned int i;
     int nbPoints = 0;
     TYPoint pt;
 
-    TYSpectre* pSpectre = new TYSpectre();
-    TYTabLPSpectre tabSpectre;
+
+    LPTYSpectre pSpectre = new TYSpectre();
+    TYTabLPSpectre *compatibilityVector = new TYTabLPSpectre();
 
     DOM_Element elemCur;
 
     QDomNodeList childs = domElement.childNodes();
-    for (i = 0; i < childs.length(); i++)
+    for (unsigned int i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
 
@@ -204,29 +196,26 @@ int TYBoundaryNoiseMap::fromXML(DOM_Element domElement)
             _tabPoint.push_back(pt);
         }
 
-        // New version : if we encounter spectra
-        if (pSpectre->callFromXMLIfEqual(elemCur))
+        // Old version : if we encounter spectra
+       if (pSpectre->callFromXMLIfEqual(elemCur))
         {
-            tabSpectre.push_back(pSpectre);
+            bOldDatas = true;
+            compatibilityVector->push_back(pSpectre);
             pSpectre = new TYSpectre();
         }
     }
 
-    clearResult();
-
-    if (nbPointsIsOk)
+    if (bOldDatas == true)
     {
-        // For each TYPointCalcul we set its spectrum value,
-        // the array of spectra and TYPointCalcul should be matched together
-        // because the position of TYPointCalcul are not stored
-        TYTabLPPointCalcul& ptsCalcul = getPtsCalcul();
-        size_t nbSpectre = std::min(tabSpectre.size(), ptsCalcul.size());
-        for (i = 0; i < nbSpectre; ++i)
-        {
-            ptsCalcul[i]->setSpectre(*(tabSpectre[i]));
-        }
+        setAllUses( (void*)compatibilityVector );
     }
-    delete pSpectre;
+    else
+    {
+        delete compatibilityVector;
+    }
+
+    make(_tabPoint, _thickness, _closed, _density);
+    TYMaillage::clearResult();
 
     return 1;
 }
@@ -330,7 +319,7 @@ bool TYBoundaryNoiseMap::fromXMLString(const std::string& sXMLString)
 
 void TYBoundaryNoiseMap::clearResult()
 {
-    make(_tabPoint, _thickness, _closed, _density);
+    TYMaillage::clearResult();
 }
 
 // XXX Add some comments.
@@ -427,7 +416,10 @@ void TYBoundaryNoiseMap::computePoints(double box_x_min, double box_x_max, doubl
                                                           _tabPoint[l]._x, _tabPoint[l]._y);
                 if (squared_distance <= squared_thick)
                 {
-                    addPointCalcul(new TYPointCalcul(TYPoint(current_x, current_y, _hauteur)));
+                    LPTYPointCalcul pPoint = new TYPointCalcul(TYPoint(current_x, current_y, _hauteur));
+                    pPoint->setSpectre(new TYSpectre());
+                    addPointCalcul(pPoint);
+                    
                     _ptsIndices[index2D] = _ptsCalcul.size() - 1;
                     break; //no need to test with other segments
                 }

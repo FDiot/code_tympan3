@@ -20,7 +20,7 @@
 #include "Tympan/models/common/plan.h"
 #include "Tympan/solvers/DefaultSolver/TYTrajet.h"
 #include "Tympan/solvers/DefaultSolver/TYSolver.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Shape.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
 #include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
@@ -68,11 +68,15 @@ void TYAcousticModel::init()
 }
 
 
-void TYAcousticModel::compute(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon,
-                              TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
-                              TabPoint3D& ptsRight )
+void TYAcousticModel::compute(  const std::deque<TYSIntersection>& tabIntersect, TYTrajet& trajet, 
+                                TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
+                                TabPoint3D& ptsRight )
 {
     bool vertical = true, horizontal = false;
+
+    // Construction du rayon SR
+    OSegment3D rayon;
+    trajet.getPtSetPtRfromOSeg3D(rayon);
 
     // Recuperation de la source
     tympan::AcousticSource& source = trajet.asrc;
@@ -792,7 +796,7 @@ void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection
             segDescendant._ptB = rayon._ptB;
 
             bool intersect = false;
-            int j = 0;
+            size_t j = 0;
 
             // Si on traverse un autre ecran, qui peut etre de la topo, le chemin de reflexion n'est pas pris en compte
             while ((j < nbFaces) && (!intersect))

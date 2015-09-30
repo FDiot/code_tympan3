@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 
-#include "Tympan/models/common/mathlib.h"
+#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Base.h"
 #include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Material.h"
@@ -104,7 +104,7 @@ public:
     bool isSol() const { return _isSol; }
     void setIsSol(const bool& isSol) { _isSol = isSol; }
 
-
+    virtual int form() { return -1; }
 
 protected:
     BBox box;                                //Bounding box of the shape

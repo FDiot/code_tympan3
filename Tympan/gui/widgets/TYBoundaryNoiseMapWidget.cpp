@@ -27,6 +27,7 @@
 
 #include "Tympan/models/business/OLocalizator.h"
 #include "Tympan/models/business/TYBoundaryNoiseMap.h"
+#include "Tympan/models/business/TYProjet.h"
 #include "Tympan/gui/widgets/TYMaillageWidget.h"
 #include "TYBoundaryNoiseMapWidget.h"
 
@@ -114,6 +115,14 @@ void TYBoundaryNoiseMapWidget::apply()
     if (getElement()->getThickness() != thickness || getElement()->isClosed() != closed || getElement()->getDensity() != density)
     {
         getElement()->make(getElement()->getTabPoint(), thickness, closed, density);
+        dynamic_cast<TYProjet*>(getElement()->getParent())->updateCalculsWithMaillage(getElement());
+
+        // La densite a changee, il faut mettre a jour l'altimetrie
+        LPTYProjet pProj = dynamic_cast<TYProjet*>(getElement()->getParent());
+        if (pProj && pProj->getSite()->getAltimetry()->containsData())
+        {
+            pProj->updateAltiRecepteurs();
+        }
     }
 
     emit modified();

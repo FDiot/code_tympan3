@@ -36,53 +36,11 @@ void TYCalculGraphic::update(bool force /*=false*/)
 
 void TYCalculGraphic::getChilds(TYListPtrTYElementGraphic& childs, bool recursif /*=true*/)
 {
-    unsigned int i;
     TYElementGraphic* pTYElementGraphic = NULL;
-
-    // Maillage
-    TYTabMaillageGeoNode* pTabMaillage = &getElement()->getMaillages();
-    TYMaillageGeoNode* pMaillageGeoNode = NULL;
-    for (i = 0; i < pTabMaillage->size(); i++)
-    {
-        pMaillageGeoNode = pTabMaillage->operator[](i);
-        pTYElementGraphic = pMaillageGeoNode->getGraphicObject();
-        childs.push_back(pTYElementGraphic);
-        if (recursif)
-        {
-            pTYElementGraphic->getChilds(childs, recursif);
-        }
-    }
-}
-
-void TYCalculGraphic::computeBoundingBox()
-{
-    unsigned int i;
-    OBox reset;
-    _boundingBox = reset;
-
-    // Maillage
-    TYTabMaillageGeoNode* pTabMaillage = &getElement()->getMaillages();
-    TYMaillageGeoNode* pMaillageGeoNode = NULL;
-    for (i = 0; i < pTabMaillage->size(); i++)
-    {
-        pMaillageGeoNode = pTabMaillage->operator[](i);
-        pMaillageGeoNode->getGraphicObject()->computeBoundingBox();
-        _boundingBox.Enlarge(pMaillageGeoNode->getGraphicObject()->GetBox());
-    }
 }
 
 void TYCalculGraphic::display(GLenum mode /*= GL_RENDER*/)
 {
-    unsigned int i;
-    // Maillage
-    TYTabMaillageGeoNode* pTabMaillage = &getElement()->getMaillages();
-    TYMaillageGeoNode* pMaillageGeoNode = NULL;
-    for (i = 0; i < pTabMaillage->size(); i++)
-    {
-        pMaillageGeoNode = pTabMaillage->operator[](i);
-        pMaillageGeoNode->getGraphicObject()->display(mode);
-    }
-
     if (TYRayGraphic::_gVisible)
     {
         TYTabRay& tabRays = getElement()->getTabRays();

@@ -24,6 +24,8 @@
  * \class TYANIME3DAcousticPathFinder
  * \brief La recherche de chemins acoustiques associee a la methode ANIME3D
  */
+class AtmosphericConditions;
+
 class TYANIME3DAcousticPathFinder
 {
 public:
@@ -37,7 +39,8 @@ public:
     TYANIME3DAcousticPathFinder(    TYStructSurfIntersect* tabPolygon, 
                                     const size_t& tabPolygonSize, 
                                     const tympan::AcousticProblemModel& aproblem_,
-                                    tab_acoustic_path& tabTYRays);
+                                    tab_acoustic_path& tabTYRays,
+                                    AtmosphericConditions& atmos);
 
 
     virtual ~TYANIME3DAcousticPathFinder();
@@ -46,7 +49,7 @@ public:
 
     Simulation& getRayTracer() { return _rayTracing; }
 
-    geometry_modifier& get_geometry_modifier() { return transformer; }
+    IGeometryModifier* get_geometry_modifier() { return transformer.get(); }
 
 private :
     /*!
@@ -55,12 +58,6 @@ private :
      * \return Renvoie 0 pour le sens S->R et 1 pour le sens R->S
      */
     unsigned int getTabsSAndR(vector<vec3>& sources, vector<vec3>& recepteurs);
-
-    /*!
-     * \fn void transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs)
-     * \brief Adapte la position des sources et des recepteurs dans la geometrie transformee
-     */
-    void transformSEtR(vector<vec3>& sources, vector<vec3>& recepteurs);
 
     /*!
     * \fn bool appendTriangleToScene()
@@ -107,7 +104,7 @@ private:
     Simulation _rayTracing;
 
     /// Objet _curveRayTracing pour le lancer de rayons courbes
-    geometry_modifier transformer;
+    std::unique_ptr<IGeometryModifier> transformer;
 
     /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face
     TYStructSurfIntersect* _tabPolygon;
@@ -115,14 +112,11 @@ private:
     /// Nombre de polygones presents dans _tabPolygon
     const size_t& _tabPolygonSize;
 
-    /*!< List of sources used by the solver */
-    //TYTabSourcePonctuelleGeoNode& _tabSources;
-
-    /*!< List of receptors used by the solver */
-    //TYTabPointCalculGeoNode& _tabRecepteurs;
-
     /// tableau de l'ensemble des rayons métier Code_TYMPAN
     tab_acoustic_path& _tabTYRays;
+
+    /// Conditions meteo
+    AtmosphericConditions& _atmos;
 
     const tympan::AcousticProblemModel& _aproblem;
 };

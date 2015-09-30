@@ -40,34 +40,43 @@ def solve(input_project, output_project, output_mesh, solverdir,
     ret = False
     # Load an existing project and retrieve its calcul to solve it
     try:
+        logging.info("Trying to load project ...")
         project = Project.from_xml(input_project, verbose)
     except RuntimeError:
         logging.exception("Couldn't load the acoustic project from %s file", input_project)
         raise
+    logging.info("Project loaded !")
     # Recompute and export altimetry
     altimesh = AltimetryMesh.from_site(project.site)
     altimesh.to_ply(output_mesh)
     # Update site and the project before building the solver model
+    logging.info("Updating site ...")
     project.update_site_altimetry(altimesh, verbose)
     # Solver model
     model = Model.from_project(project)
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
                  model.nsources, model.nreceptors)
     # Load solver plugin and run it on the current computation
+    logging.info("Trying to load solver ...")
     solver = Solver.from_project(project, solverdir, verbose)
     if not multithreading_on:
         solver.nthread = 1
+    logging.info("Checking solver model ...")
     _check_solver_model(model, project.site)
     logging.debug("Calling C++ SolverInterface::solve() method")
     try:
         solver_result = solver.solve(model)
     except RuntimeError as exc:
         logging.error(str(exc))
+        logging.info("It doesn't work", str(exc))
         raise
+    logging.info("Solver computation done !")
     # Export solver results to the business model
+    logging.info("Loading results from solver ...")
     project.import_result(model, solver_result)
     # Reserialize project
     try:
+        logging.info("Trying to export result project to xml ...")
         project.to_xml(output_project)
     except ValueError:
         logging.exception("Couldn't export the acoustic results to %s file", output_project)

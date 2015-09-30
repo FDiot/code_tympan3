@@ -13,6 +13,11 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
+#include <deque>
+#include <string>
+#include <iostream>
+#include <fstream>
+
 #include "Tympan/models/solver/config.h"
 #include "Tympan/solvers/AcousticRaytracer/Accelerator/BruteForceAccelerator.h"
 #include "Tympan/solvers/AcousticRaytracer/Accelerator/KdtreeAccelerator.h"
@@ -36,7 +41,7 @@ void Scene::clean()
     if (accelerator) { delete accelerator; }
 }
 
-bool Scene::finish()
+bool Scene::finish(int accelerator_id/* = 3*/, leafTreatment::treatment _intersectionChoice/* = leafTreatment::FIRST*/)
 {
 
     ss << "La scene comporte " << vertices.size() << " vertex." << std::endl;
@@ -45,7 +50,7 @@ bool Scene::finish()
         ss << "(" << vertices.at(i).x << "," << vertices.at(i).y << "," << vertices.at(i).z << ")" << std::endl;
     }
     ss << "La scene comporte " << shapes.size() << " shapes." << std::endl;
-    switch (tympan::SolverConfiguration::get()->Accelerator)
+    switch (accelerator_id)
     {
         case 0 :
             accelerator = new BruteForceAccelerator(&shapes, globalBox);
@@ -66,7 +71,7 @@ bool Scene::finish()
             break;
     }
 
-    accelerator->setIntersectionChoice(leafTreatment::FIRST);
+    accelerator->setIntersectionChoice(_intersectionChoice);
 
     return accelerator->build();
 }
@@ -100,7 +105,6 @@ bool Scene::addVertex(const vec3& newVertex, unsigned int& index)
     if (it != registeredVertices.end())
     {
         index = it->second;
-        //std::cout<<"Le vertex ("<<newVertex.x<<","<<newVertex.y<<","<<newVertex.z<<") etait deja enregistre."<<std::endl;
         return false;
     }
     else
@@ -108,7 +112,6 @@ bool Scene::addVertex(const vec3& newVertex, unsigned int& index)
         index = vertices.size();
         vertices.push_back(newVertex);
         registeredVertices.insert(std::pair<vec3, unsigned int>(newVertex, index));
-        //std::cout<<"Enregistrement du vertex ("<<newVertex.x<<","<<newVertex.y<<","<<newVertex.z<<") ("<<registeredVertices.size()<<")"<<std::endl;
         return true;
     }
 }
@@ -149,4 +152,77 @@ void Scene::addBuilding(vec3 origine, vec3 dimension, Material* m)
 
     addTriangle(p5, p6, p7, m);
     addTriangle(p7, p8, p5, m);
+}
+
+std::vector<Shape*> Scene::getShapes(int shape_type)
+{
+    std::vector<Shape*> vec;
+    for (unsigned int i=0; i<shapes.size(); i++)
+    {
+        if (shapes.at(i)->form() == shape_type) { vec.push_back( shapes.at(i) ); }
+    }
+    return vec;
+}
+
+void Scene::export_to_ply(std::string fileName)
+{
+    // using long long cause of a limitation of MS visual studio 10 in std::to_string
+    long long nb_vertex = vertices.size();
+    long long nb_faces = shapes.size();
+
+    // Create the file content as a vector of string
+    std::deque<std::string> file_content;
+    
+    // Create header
+    file_content.push_back( std::string("ply\n") );
+    file_content.push_back( std::string("format ascii 1.0\n") );
+    file_content.push_back(   std::string("element vertex ") 
+                            + std::to_string(nb_vertex) 
+                            + std::string("\n") );
+    file_content.push_back( std::string("property float x\n") );
+    file_content.push_back( std::string("property float y\n") );
+    file_content.push_back( std::string("property float z\n") );
+    file_content.push_back(   std::string("element face ") 
+                            + std::to_string(nb_faces) 
+                            + std::string("\n") );
+    file_content.push_back( std::string("property list uchar int vertex_indices\n") );
+    file_content.push_back( std::string("property uchar red\n") );
+    file_content.push_back( std::string("property uchar green\n") );
+    file_content.push_back( std::string("property uchar blue\n") );
+    file_content.push_back( std::string("end_header\n") );
+    // Creation of vertex list
+    std::string line;
+    for (unsigned int i=0; i<vertices.size(); i++)
+    {
+        line = std::to_string( static_cast<long double>(vertices.at(i).x) ) + " " +
+               std::to_string( static_cast<long double>(vertices.at(i).y) ) + " " +
+               std::to_string( static_cast<long double>(vertices.at(i).z) ) + "\n";
+        file_content.push_back( line );
+    }
+
+    // Creation of faces list
+    vector<unsigned int>* vertice_index = nullptr;
+    for (unsigned int i=0; i<shapes.size(); i++)
+    {
+        if (shapes.at(i)->form() != FORM::TRIANGLE) 
+        {
+            continue; 
+        }
+
+        vertice_index = shapes.at(i)->getLocalVertices();
+        file_content.push_back( std::to_string(static_cast<long long>(3)) + " " +
+                                std::to_string(static_cast<long long>(vertice_index->at(0))) + " " +
+                                std::to_string(static_cast<long long>(vertice_index->at(1))) + " " + 
+                                std::to_string(static_cast<long long>(vertice_index->at(2))) + " " +
+                                std::string("0 255 0\n") );
+    }
+
+    // Create the file
+    ofstream out(fileName, ios::out);
+    for (unsigned int i=0; i<file_content.size(); i++)
+    {
+        out << file_content.at(i);
+    }
+
+    out.close();
 }

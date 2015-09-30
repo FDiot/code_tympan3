@@ -254,27 +254,6 @@ void TYCourbeNiveau::applyAlitudeToPoints()
     }
 
     setIsGeometryModified(true);
-
-    // Tant qu'il y a un parent
-    TYElement* pParent = getParent();
-    while (pParent)
-    {
-        // Tentative de cast du parent en Topo
-        TYTopographie* pTopo = TYTopographie::safeDownCast(pParent);
-
-        // Si le parent est effectivement une Topo
-        if (pTopo)
-        {
-            // L'alti n'est plus a jour non plus...
-            LPTYSiteNode pSite = dynamic_cast<TYSiteNode*>(pTopo->getParent());
-            assert(pSite != nullptr && "The parent of a TYTopographie element must be a TYSiteNode");
-            pSite->getAltimetry()->setIsGeometryModified(true);
-            break;
-        }
-
-        // Parent du parent...
-        pParent = pParent->getParent();
-    }
 }
 
 

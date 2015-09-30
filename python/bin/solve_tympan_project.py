@@ -46,6 +46,7 @@ if __name__ == '__main__':
     solverdir = sys.argv[4]
     # solve problem
     try:
+        logging.info("We are trying to execute the solver")
         tysolve.solve(input_project=input_proj,
                       output_project=output_proj,
                       output_mesh=output_mesh,

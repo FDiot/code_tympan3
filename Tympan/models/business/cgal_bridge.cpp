@@ -105,4 +105,48 @@ namespace tympan
             new TYPolygonTriangulator(poly));
     } // ITYPolygonTriangulator* make_polygon_triangulator()
 
+    // Convert a TYPolygon into a counter-clockwise oriented CGAL_Polygon.
+    CGAL_Polygon cgal_ccw_polygon(const TYPolygon& poly) {
+        CGAL_Polygon cpoly;
+        std::vector<TYPoint> pts = poly.getPoints();
+        for (int i = 0; i < pts.size(); i++) {
+            cpoly.push_back(CGAL_Point2(pts[i]._x, pts[i]._y));
+        }
+        if (cpoly.is_counterclockwise_oriented()) {
+            return cpoly;
+        }
+        // Reverse the polygon to make it counter-clockwise oriented.
+        CGAL_Polygon cpoly_;
+        for (CGAL_Polygon::Vertex_iterator vi = cpoly.vertices_begin(); vi != cpoly.vertices_end(); ++vi) {
+            cpoly_.insert(cpoly_.vertices_begin(), *vi);
+        }
+        return cpoly_;
+    }
+
+    void join_polygons(std::deque<TYPolygon> polygons, TYPolygon& out) {
+        std::vector<CGAL_Polygon> cpolys(polygons.size());
+        std::vector<TYPoint>& points = out.getPoints();
+        assert (points.size() == 0 &&
+                "join_polygons got an output polygon with points already defined");
+        if (polygons.size() == 1) {
+            // Only one polygon, no need to join, just copy its point.
+            points = polygons[0].getPoints();
+            return;
+        }
+        for (int i = 0; i < polygons.size(); i++) {
+            CGAL_Polygon cpoly = cgal_ccw_polygon(polygons[i]);
+            cpolys.push_back(cpoly);
+        }
+
+        std::list<CGAL_Polygon_with_holes_2> joined;
+        CGAL::join(cpolys.begin(), cpolys.end(), std::back_inserter(joined));
+
+        assert (joined.size() == 1 && "polygons join resulted in more than one polygon");
+        CGAL_Polygon boundary = joined.begin()->outer_boundary();
+
+        for (CGAL_Polygon::Vertex_iterator vi = boundary.vertices_begin();
+                vi != boundary.vertices_end(); ++vi) {
+            points.push_back(TYPoint(vi->x(), vi->y(), 0));
+        }
+    }
 } // namespace tympan
