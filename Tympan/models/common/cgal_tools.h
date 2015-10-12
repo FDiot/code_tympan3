@@ -27,9 +27,11 @@
 #include <CGAL/Constrained_triangulation_plus_2.h>
 #include <CGAL/Polygon_2.h>
 #include <CGAL/Polygon_2_algorithms.h>
+#include <CGAL/Polygon_with_holes_2.h>
 #include <CGAL/centroid.h>
 #include <CGAL/box_intersection_d.h>
 #include <CGAL/intersections.h>
+#include <CGAL/Boolean_set_operations_2.h>
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/plan.h"
@@ -47,6 +49,7 @@ typedef CGAL::Point_3<CGAL_Gt>                                     CGAL_Point3;
 typedef CGAL::Vector_2<CGAL_Gt>                                    CGAL_Vector2;
 typedef CGAL::Vector_3<CGAL_Gt>                                    CGAL_Vector3;
 typedef CGAL::Polygon_2<CGAL_Gt>                                   CGAL_Polygon;
+typedef CGAL::Polygon_with_holes_2<CGAL_Gt>                        CGAL_Polygon_with_holes_2;
 typedef CGAL::Plane_3<CGAL_Gt>                                     CGAL_Plane;
 typedef CGAL::Triangle_3<CGAL_Gt>                                  CGAL_Triangle;
 typedef std::deque<CGAL_Triangle>                                  CGAL_Triangles;
