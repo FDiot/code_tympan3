@@ -52,6 +52,16 @@ Three logs are available:
 * Still while running the subprocess, the log emitted by the C++ libraries
   (produced by ``OMessageManager``) is kept but redirected to the console.
 
+Did you correctly generate your build files ?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A good practice is to make a directory per build configuration (Debug/Release), and not to compile
+in both configurations in the same directory. Under Windows,
+when you use *cmake-gui* to generate *Code_TYMPAN.sln*, choose whether your build will be a Debug or a
+Release one, and then stick to it **(don't change this option from Visual Studio)**.
+
+It is important because this CMake parameter is used to configure environment variables, that will
+reference the debug or release version of the generated libraries.
+
 
 Is the environment correctly configured ?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
