@@ -529,15 +529,16 @@ bool TYPalette::savePaletteToFile(const QString& qFileName)
 
 }
 
-void TYPalette::makeLinearPalette()
+void TYPalette::makeLinearPalette(size_t nb_colors, float value_min, float value_max)
 {
     float hueRange[2], saturationRange[2], valueRange[2];
     getInfColor().getAsHSB(hueRange[0], saturationRange[0], valueRange[0]);
     getSupColor().getAsHSB(hueRange[1], saturationRange[1], valueRange[1]);
     OLookupTable lookupLinear;
 
-    const size_t nbColors = getNbColors();
-    TYColorManager::getLinearColorTable(nbColors, hueRange, saturationRange, valueRange, lookupLinear);
+    //const size_t nb_colors = getNbColors();
+    TYColorManager::getLinearColorTable(nb_colors, hueRange, saturationRange, valueRange, lookupLinear);
 
-    resetcolorMapFromColors(getValueMin(), getValueMax(), lookupLinear);
+    //resetcolorMapFromColors(getValueMin(), getValueMax(), lookupLinear);
+    resetcolorMapFromColors(value_min, value_max, lookupLinear);
 }

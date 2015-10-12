@@ -95,6 +95,7 @@ TYCalcul& TYCalcul::operator=(const TYCalcul& other)
         _mapElementRegime = other._mapElementRegime;
         _solverId = other._solverId;
         _tabRays = other._tabRays;
+        solverParams = other.solverParams;
     }
 
     return *this;
@@ -162,6 +163,7 @@ bool TYCalcul::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     copyNoiseMapSpectrums(pOtherCalcul->_noiseMapsSpectrums);
 
     _solverId = pOtherCalcul->_solverId;
+    solverParams = pOtherCalcul->solverParams;
 
     for (unsigned int i=0; i<pOtherCalcul->_tabRays.size(); i++)
     {
