@@ -27,6 +27,7 @@
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYProgressManager.h"
 #include "Tympan/models/business/OLocalizator.h"
+#include "Tympan/models/business/cgal_bridge.h"
 #include "Tympan/models/business/infrastructure/TYEcran.h"
 #include "Tympan/models/business/xml_project_util.h"
 #include "Tympan/models/business/subprocess_util.h"
@@ -1184,6 +1185,10 @@ void TYSiteNode::groundBasedFaces(const TYTabAcousticVolumeGeoNode& volumes,
         assert (volume != nullptr &&
                 "found an object which isn't a  TYAcousticVolume in a TYTabAcousticVolumeGeoNode");
         TYTabAcousticSurfaceGeoNode faces = volume->acousticFaces();
+        // Store polygons the face is made of (for some volumes, e.g. TYEcran,
+        // there may be more than one).
+        std::deque<TYPolygon> polygons;
+        TYTabPoint3D contour;
         for (unsigned int j = 0; j < faces.size(); j++)
         {
             // Compute global matrix for the current face
@@ -1193,7 +1198,7 @@ void TYSiteNode::groundBasedFaces(const TYTabAcousticVolumeGeoNode& volumes,
 
             // Take the contour of the acoustic face, move the points to a global scale
             // and make a polygon with them
-            TYTabPoint3D contour = pFace->getOContour();
+            contour = pFace->getOContour();
             TYPolygon poly;
             for (unsigned int k = 0; k < contour.size(); k++)
             {
@@ -1210,8 +1215,16 @@ void TYSiteNode::groundBasedFaces(const TYTabAcousticVolumeGeoNode& volumes,
             // only keep the face if it is on the ground, i.e. z == 0
             if (almost_equal(contour[0]._z, 0, 10e-6))
             {
-                contours[volume->getID()] = contour;
+                polygons.push_back(poly);
             }
+        }
+        if (polygons.size() != 0 ) {
+            // Join all face's polygons into a single one and retrieve its contour.
+            TYPolygon joined_polygon;
+            tympan::join_polygons(polygons, joined_polygon);
+            contour = joined_polygon.getOContour();
+            assert (contour.size() != 0 && "empty contour from joining face polygons");
+            contours[volume->getID()] = contour;
         }
     }
 }
