@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 2.8)
 
+# from cmake 2.8.12, COMPILE_DEFINITION_DEBUG/RELEASE shouldn't be used anymore and should be
+# replaced by generator expressions (see https://cmake.org/cmake/help/v3.0/policy/CMP0043.html)
+# CMP0043 policy exists from major version 3.
+if (NOT(${CMAKE_MAJOR_VERSION} VERSION_LESS "3"))
+    cmake_policy(SET CMP0043 OLD)
+endif()
+
 # Adding GTest include in the non-test tree is required to enable gtest_prod.h
 include_directories (${GTEST_INCLUDE_DIR})
 
@@ -9,6 +16,10 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 
 # Configuring source code ######################################################
 
+# use find_package from CMake module directory instead of the one found in
+# CMAKE_MODULE_PATH coming from CGAL
+cmake_policy(SET CMP0017 NEW)
+find_package(PythonInterp)
 # Generate initial solver parameters in DefaultSolverConfig.h
 set(GEN_SOLVER_PARAMS_HEADER_PYSCRIPT "${CMAKE_SOURCE_DIR}/tools/generate_solver_config_header.py")
 set(SOLVER_PARAMS_JSON "resources/solver_config_datamodel.json")

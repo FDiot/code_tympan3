@@ -1816,6 +1816,12 @@ Choose No to Open the New Site in a Modeler."/>
 			<string id="id_import_ok" value="Element successfully imported from File : '%1'"/>
 			<string id="id_import_failed" value="Element cannot be imported from File : '%1'"/>
 			<string id="id_linear" value="Make linear palette"/>
+			<string id="id_caption_limits" value="Limits"/>
+			<string id="id_lb_label" value="Lower bound value"/>
+			<string id="id_ub_label" value="Upper bound value"/>
+			<string id="id_nb_label" value="Number of colors"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Cancel"/>
 		</message>
 	</class>
 	<class name="TYParoiWidget">
