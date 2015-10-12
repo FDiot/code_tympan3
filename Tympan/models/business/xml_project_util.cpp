@@ -5,6 +5,8 @@
  *
  */
 
+#include <cstring>
+
 #include <boost/foreach.hpp>
 
 #include "Tympan/core/logging.h"
