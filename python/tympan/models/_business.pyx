@@ -212,19 +212,19 @@ cdef class Ground:
         """Ground resistivity (floating point value)"""
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getResistivite()
-        
-    @property    
+
+    @property
     def deviation(self):
         """Ground deviation (floating point value)"""
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getEcartType()
-        
+
     @property
     def length(self):
         """Ground autocorrelation length (floating point value)"""
         assert self.thisptr.getRealPointer() != NULL
         return self.thisptr.getRealPointer().getLongueur()
-        
+
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
@@ -719,7 +719,7 @@ cdef class Mesh:
     def is_active(self):
         """True if the mesh is in an active state, false otherwise"""
         # enum value from MaillageState (class TYMaillage)
-        return self.thisptr.getState() == Actif
+        return self.thisptr.etat()
 
     @property
     def receptors(self):
@@ -773,17 +773,17 @@ cdef class Receptor:
         """ Return true if this receptor is active in computation 'comp', false
             otherwise
         """
-        if self.thisptr.getRealPointer().getEtat(comp.thisptr.getRealPointer()):
+        if self.thisptr.getRealPointer().etat(comp.thisptr.getRealPointer()):
             return True
         return False
 
-    @cy.locals(spectrum=tycommon.Spectrum, comp=Computation)
-    def set_spectrum(self, spectrum, comp):
-        """ Set the spectrum for the given computation """
-        cpp_calc = cy.declare(cy.pointer(TYCalcul),
-                              downcast_calcul(comp.thisptr.getRealPointer()))
-        self.thisptr.getRealPointer().setSpectre(TYSpectre(spectrum.thisobj),
-                                                 cpp_calc)
+#    @cy.locals(spectrum=tycommon.Spectrum, comp=Computation)
+#    def set_spectrum(self, spectrum, comp):
+#        """ Set the spectrum for the given computation """
+#        cpp_calc = cy.declare(cy.pointer(TYCalcul))
+#        cpp_calc = downcast_calcul(comp.thisptr.getRealPointer())
+#
+#        self.thisptr.getRealPointer().setSpectre(TYSpectre(spectrum.thisobj))
 
     @property
     def dBA(self):
@@ -810,21 +810,15 @@ cdef class Computation:
 
     solver_parameters = property(get_solver_parameters, set_solver_parameters)
 
-    @property
-    def meshes(self):
-        """The meshes of the computation (a list of 'Mesh' cython objects)"""
-        assert self.thisptr.getRealPointer() != NULL
-        geomaill = cy.declare(vector[SmartPtr[TYGeometryNode]],
-                              self.thisptr.getRealPointer().getMaillages())
-        nmaill = geomaill.size()
-        meshes = []
-        for i in xrange(nmaill):
-            mesh = Mesh()
-            mesh.matrix = geomaill[i].getRealPointer().getMatrix()
-            mesh.thisptr = downcast_maillage(geomaill[i].getRealPointer().getElement())
-            meshes.append(mesh)
-            mesh.thisgeonodeptr = geomaill[i]
-        return meshes
+    @cy.locals(receptor=UserReceptor)
+    def addReceptor(self, receptor):
+        self.thisptr.getRealPointer().addPtCtrlToResult(receptor.thisptr)
+
+    @cy.locals(receptor=Receptor, spectrum=tycommon.Spectrum)
+    def set_spectrum(self, receptor, spectrum):
+        tyspectre = cy.declare(cy.pointer(TYSpectre))
+        tyspectre = new TYSpectre(spectrum.thisobj)
+        self.thisptr.getRealPointer().setSpectre(receptor.thisptr.getRealPointer(), tyspectre)
 
     @property
     def result(self):
@@ -858,10 +852,8 @@ cdef class Project:
 
     def update(self):
         """Update the project (inactive mesh points detection)"""
-        computation = cy.declare(cy.pointer(TYCalcul),
-                                 self.thisptr.getRealPointer().getCurrentCalcul().getRealPointer())
         # detect and disable the mesh points that are inside machines or buildings
-        computation.selectActivePoint(self.thisptr.getRealPointer().getSite())
+        self.thisptr.getRealPointer().selectActivePoint(self.thisptr.getRealPointer().getSite())
 
     def _update_site_altimetry(self, *args):
         """Update site altimetry and project"""
@@ -923,6 +915,22 @@ cdef class Project:
             urec.thisptr = ctrl_pts[i]
             control_points.append(urec)
         return control_points
+
+    @property
+    def meshes(self):
+        """The meshes of the computation (a list of 'Mesh' cython objects)"""
+        assert self.thisptr.getRealPointer() != NULL
+        geomaill = cy.declare(vector[SmartPtr[TYGeometryNode]])
+        geomaill = self.thisptr.getRealPointer().getMaillages()
+        nmaill = geomaill.size()
+        meshes = []
+        for i in xrange(nmaill):
+            mesh = Mesh()
+            mesh.matrix = geomaill[i].getRealPointer().getMatrix()
+            mesh.thisptr = downcast_maillage(geomaill[i].getRealPointer().getElement())
+            meshes.append(mesh)
+            mesh.thisgeonodeptr = geomaill[i]
+        return meshes
 
     @staticmethod
     def from_xml(filepath):

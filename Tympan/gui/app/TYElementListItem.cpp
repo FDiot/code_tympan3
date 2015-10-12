@@ -98,9 +98,13 @@ void TYElementListItem::updateContent()
         }
         else if (dynamic_cast<TYPointCalcul*>(_pElement._pObj) != nullptr)
         {
-            TYPointControl* pPoint = TYPointControl::safeDownCast(_pElement);
-            TYCalcul* pCalcul = static_cast<TYProjet*>(pPoint->getParent())->getCurrentCalcul();
-            bInCurrentCalcul = pPoint->getEtat(pCalcul);
+            TYPointControl* pPoint = dynamic_cast<TYPointControl*>(_pElement.getRealPointer());
+            bInCurrentCalcul = pPoint->etat();
+        }
+        else if (dynamic_cast<TYMaillage*>(_pElement.getRealPointer()) != nullptr)
+        {
+            TYMaillage* pMaillage = dynamic_cast<TYMaillage*>(_pElement.getRealPointer());
+            bInCurrentCalcul = pMaillage->etat();
         }
         else
         {
@@ -184,17 +188,12 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
         //  return;
         //}
 
-        // On traite a part le cas des points de controle
+        // On traite a part le cas des points de controle ...
         if (dynamic_cast<TYPointCalcul*>(_pElement._pObj) != nullptr)
         {
-            TYPointControl* pPoint = static_cast<TYPointControl*>(_pElement.getRealPointer());
-            if (pPoint->getEtat(_pCurrentCalcul) != state)
+            TYPointControl* pPoint = dynamic_cast<TYPointControl*>(_pElement.getRealPointer());
+            if ( (pPoint->etat() != state) && (getTYApp()->getCalculManager()->askForResetResultat()) )
             {
-                if (getTYApp()->getCalculManager()->askForResetResultat())
-                {
-                    pPoint->setEtat(state, _pCurrentCalcul);
-                }
-
                 bool need_to_rebuild_result(false);
                 if (state) // Ajout d'un point de controle
                 {
@@ -220,7 +219,36 @@ void TYElementListItem::setOn(bool state, bool UpdateModelers)
 
                     getTYMainWnd()->updateModelers(false, false, true);
                 }
+            }
+        }
+        else if (dynamic_cast<TYMaillage*>(_pElement._pObj) != nullptr) // ... et les maillages
+        {
+            TYMaillage* pMaillage = dynamic_cast<TYMaillage*>(_pElement.getRealPointer());
+            if ( (pMaillage->etat() != state) && (getTYApp()->getCalculManager()->askForResetResultat()) )
+            {
+                if (state) // Ajout d'un point de controle
+                {
+                    _pCurrentCalcul->addMaillage(pMaillage);
+                }
+                else // Suppression d'un point de controle
+                {
+                    _pCurrentCalcul->remMaillage(pMaillage);
+                }
+                    
+                if (UpdateModelers)
+                {
+                    if (_pElement->getParent())
+                    {
+                        _pElement->getParent()->setIsGeometryModified(true);
+                        _pElement->getParent()->updateGraphicTree();
+                    }
+                    else
+                    {
+                        _pElement->updateGraphic();
+                    }
 
+                    getTYMainWnd()->updateModelers(false, false, true);
+                }
             }
         }
         else if (_pCurrentCalcul->isInSelection(_pElement) != state)
@@ -298,6 +326,12 @@ void TYElementListItem::updateChilds()
         bool bInCurrentCalcul = false;
         if (pChkElt && childItem->isCheckable())
         {
+            if ( TYPointControl *pPoint = dynamic_cast<TYPointControl*>(pChkElt) )
+            {
+                childItem->QTreeWidgetItem::setCheckState(0, pPoint->etat() ? Qt::Checked : Qt::Unchecked);
+                continue; 
+            }
+
             if (_pCurrentCalcul)
             {
                 bInCurrentCalcul = _pCurrentCalcul->isInSelection(pChkElt);

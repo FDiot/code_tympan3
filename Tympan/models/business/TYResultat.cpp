@@ -393,7 +393,7 @@ bool TYResultat::addRecepteur(TYElement* pRecepteur)
     }
 
     // set the receptor ready for the TYCalcul (if needed)
-    dynamic_cast<TYPointCalcul*>(pRecepteur)->setEtat( true, dynamic_cast<TYCalcul*>(_pParent) );
+    dynamic_cast<TYPointCalcul*>(pRecepteur)->setEtat( true );
 
     return need_to_rebuild;
 }
@@ -575,10 +575,11 @@ void TYResultat::saveSpectre(const std::string& filename, TYCalcul* pSubstCalcul
 
             // On recupere le spectre au point
             TYPointCalcul* pPtCalc = getRecepteur(col);
-            OSpectre spectre = *pPtCalc->getSpectre(pCalcul);
+            OSpectre spectre = *pCalcul->getSpectre( pPtCalc->getID() );//*pPtCalc->getSpectre(pCalcul);
+            OSpectre otherSpectum = *pSubstCalcul->getSpectre(pPtCalc->getID());
             if (pSubstCalcul != NULL)
             {
-                spectre = getEmergence(spectre, *pPtCalc->getSpectre(pSubstCalcul));
+                spectre = getEmergence( spectre, otherSpectum ); //*pPtCalc->getSpectre(pSubstCalcul));
             }
             spectre.setType(SPECTRE_TYPE_LP);
             spectre.toDB();
@@ -721,22 +722,22 @@ void TYResultat::saveValue(const std::string& filename, const int& affichage, do
         for (col = 0; col < nbRecepteurs ; ++col)
         {
             TYPointCalcul* pPtCalc = getRecepteur(col);
-            OSpectre spectre = *pPtCalc->getSpectre(pCalcul);
+            LPTYSpectre spectre = pCalcul->getSpectre( pPtCalc->getID() );
 
-            spectre.setType(SPECTRE_TYPE_LP);
-            spectre.toDB();
+            spectre->setType(SPECTRE_TYPE_LP);
+            spectre->toDB();
 
             switch (affichage)
             {
                 case 1 :
-                    ofs << spectre.valGlobDBLin() << ';';
+                    ofs << spectre->valGlobDBLin() << ';';
                     break;
                 case 2 :
-                    ofs << spectre.getValueReal(freq) << ';';
+                    ofs << spectre->getValueReal(freq) << ';';
                     break;
                 case 0 :
                 default :
-                    ofs << spectre.valGlobDBA() << ';';
+                    ofs << spectre->valGlobDBA() << ';';
             }
         }
 
