@@ -87,14 +87,6 @@ public:
 
     virtual bool deepCopy(const TYElement* pOther, bool copyId = true);
 
-    /*!
-     * \brief copie l'etat des points de controle pour un calcul pour un autre calcul
-     * \param pCalculRef : Calcul dont l'etat pour les points doit etre copie
-     * \param pCalculNew : Calcul pour lequel l'etat doit etre duplique
-     */
-    void duplicatePtCalcState(const TYCalcul* pCalculRef, TYCalcul* pCalculNew);
-
-
     virtual std::string toString() const;
 
     virtual DOM_Element toXML(DOM_Element& domElement);
@@ -105,6 +97,11 @@ public:
      */
     virtual void clearResult();
 
+    /*!
+     * \brief get datas from calcul
+     * void updateFromCalcul(LPTYCalcul pCalcul)
+     */
+    virtual void updateFromCalcul(LPTYCalcul pCalcul);
 
     /**
      * \fn TYTabLPPointCalcul& getPtsCalcul()
@@ -231,28 +228,6 @@ public:
     void make(const TYTabPoint& points);
 
     /**
-     * \fn  void setState(const int& etat)
-     *      int getState()
-     *      const int getState()
-     * \brief Get/Set de l'etat du maillage
-     * \return _state
-     */
-    void setState(const int& etat) { _state = etat; }
-    int getState() { return _state; }
-    const int getState() const { return _state; }
-
-    /**
-     * \fn bool isLocked()
-     *     const bool isLocked()
-     *     void setLocked(const bool& locked)
-     * \brief Set/Get de l'etat de blocage du maillage.
-     * \return _locked
-     */
-    bool isLocked() { return _locked; }
-    const bool isLocked() const { return _locked; }
-    void setLocked(const bool& locked) { _locked = locked; }
-
-    /**
      * \fn enum MaillageDataType
      * \brief Les differents type pour les donnees a representer
      * \param ValGlobalDBA        La valeur globale du spectre en dBA.
@@ -349,10 +324,34 @@ public:
      */
     virtual void getDimensions(int& x, int& y) const {}
 
+    /**
+     * Set/Get de l'etat de ce maillage.
+     */
+    virtual void setEtat(const TYUUID& id_calc, bool etat);
+    virtual bool etat();
+    virtual bool etat(const TYUUID& id_calc);
+    virtual bool etat(const TYCalcul* pCalc);
+
+    /// Copie du map calcul-etat
+    void copyEtats(TYMaillage* pOther);
+
+    /*!
+     * \brief Duplique l'etat defini pour un calcul pour un autre calcul
+     * \param idCalculRef : Identifiant unique du calcul referent
+     * \param idCalculNew : Identifiant unique du calcul a recopier
+     */
+    void duplicateEtat(const TYUUID& idCalculRef, const TYUUID& idCalculNew);
+
+    /// Remove calcul from "etat" map
+    bool remEtat(TYCalcul* pCalcul);
+
     // Membres
 protected:
     ///Liste des points de calcul.
     TYTabLPPointCalcul _ptsCalcul;
+
+    ///L'etat du maillage pour un calcul donne
+    TYMapIdBool _tabEtats;
 
     ///La hauteur par rapport au sol (a l'altimetrie en fait) a laquelle se trouve ce maillage.
     double _hauteur;
@@ -365,12 +364,6 @@ protected:
 
     ///La frequence des donnees a representer lorsque _dataType vaut DataFreq.
     float _dataFreq;
-
-    /// Etat du maillage (Actif/Inactif)
-    int _state;
-
-    /// Permet de bloquer le maillage si le calcul est verrouille
-    bool _locked;
 
     ///Palette
     LPTYPalette _pPalette;

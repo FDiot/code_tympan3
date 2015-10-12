@@ -111,21 +111,15 @@ TYElementContainer& TYElement::getInstances()
     return *_instances;
 }
 
-TYElement::TYElement() : _bPutInInstanceList(true), _pParent(NULL), _copyCount(0)
+TYElement::TYElement() : _pParent(nullptr),
+                        _bPutInInstanceList(true), 
+                        _copyCount(0),
+                        _inCurrentCalcul(true),
+                        _isAcousticModified(true),
+                        _isGeometryModified(true),
+                        _pGraphicObject(nullptr),
+                        _allUses(nullptr)
 {
-    // regenerateID(); //XXX regenerate it on need only : let it null initialy
-
-    // On dit que l'element est present dans le Calcul courant dans
-    // le cas ou justement il n'y a pas de notion de calcul courant.
-    _inCurrentCalcul = true;
-
-    // Objet graphique
-    _pGraphicObject = NULL;
-
-    // Flags modifies
-    _isAcousticModified = true;
-    _isGeometryModified = true;
-
     if (_bPutInInstanceList)
     {
         addInstance();
@@ -133,31 +127,26 @@ TYElement::TYElement() : _bPutInInstanceList(true), _pParent(NULL), _copyCount(0
     ty_created_counter++;
 }
 
-TYElement::TYElement(TYElement* pParent, bool PutInInstanceList)
-    : _bPutInInstanceList(PutInInstanceList), _pParent(pParent), _copyCount(0)
+TYElement::TYElement(TYElement* pParent, bool PutInInstanceList) :
+                                        _pParent(pParent),
+                                        _bPutInInstanceList(PutInInstanceList),
+                                        _copyCount(0),
+                                        _inCurrentCalcul(true),
+                                        _isAcousticModified(true),
+                                        _isGeometryModified(true),
+                                        _pGraphicObject(nullptr),
+                                        _allUses(nullptr)
 {
-    // regenerateID(); //XXX regenerate it on need only : let it null initialy
-
-    // On dit que l'element est present dans le Calcul courant dans
-    // le cas ou justement il n'y a pas de notion de calcul courant.
-    _inCurrentCalcul = true;
-
-    // Objet graphique
-    _pGraphicObject = NULL;
-
-    // Flags modifies
-    _isAcousticModified = true;
-    _isGeometryModified = true;
-
     if (_bPutInInstanceList)
     {
         addInstance();
     }
+
     ty_created_counter++;
 }
 
-TYElement::TYElement(const TYElement& other, bool PutInInstanceList/*= true*/)
-    : _bPutInInstanceList(PutInInstanceList)
+TYElement::TYElement(const TYElement& other, bool PutInInstanceList/*= true*/) :
+                                        _bPutInInstanceList(PutInInstanceList)
 {
     *this = other;
 
@@ -181,7 +170,8 @@ TYElement::~TYElement()
     }
 #endif
 
-    _pParent = NULL;
+    _pParent = nullptr;
+
     ty_destroyed_counter++;
 }
 
@@ -302,6 +292,7 @@ TYElement& TYElement::operator = (const TYElement& other)
         _pParent = other._pParent;
         _inCurrentCalcul = other._inCurrentCalcul;
         _copyCount = other._copyCount;
+        _allUses = other._allUses;
 
         setIsGeometryModified(true);
         setIsAcousticModified(true);
@@ -334,7 +325,10 @@ bool TYElement::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
     if (strcmp(pOther->getClassName(), getClassName()) != 0) { return false; }
 
     _name = pOther->_name;
+    _pParent = pOther->_pParent;
+    _inCurrentCalcul = pOther->_inCurrentCalcul;
     _copyCount = pOther->_copyCount;
+    _allUses = pOther->_allUses;
 
     _copyCount++;
 

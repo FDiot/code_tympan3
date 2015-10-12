@@ -247,7 +247,7 @@ public:
     /**
      * \brief Make a linear palette from a min/max couple
      */
-    void makeLinearPalette();
+    void makeLinearPalette(size_t nb_colors, float value_min, float value_max);
 
 protected:
     color_map_type _colorMap;

@@ -18,6 +18,7 @@
  * \brief action qui necessite l'acces au modeler
  */
 
+#include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/TYCalcul.h"
 #include "Tympan/models/business/geoacoustic/TYAcousticSurfaceNode.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
@@ -1342,37 +1343,37 @@ void TYRemPointControlAction::redo()
 /***************************************************************************/
 
 
-TYAddMaillageToCalculAction::TYAddMaillageToCalculAction(LPTYMaillageGeoNode pMaillageGeoNode,
-                                                         LPTYCalcul pCalcul, TYModelerFrame* pModeler, const QString& actionName)
-    : TYModelerAction(pModeler, actionName), _pCalcul(pCalcul), _pMaillageGeoNode(pMaillageGeoNode)
+TYAddMaillageToProjetAction::TYAddMaillageToProjetAction(   LPTYMaillageGeoNode pMaillageGeoNode, LPTYProjet pProjet,
+                                                            TYModelerFrame* pModeler, const QString& actionName)
+    : TYModelerAction(pModeler, actionName), _pProjet(pProjet), _pMaillageGeoNode(pMaillageGeoNode)
 {
 }
 
-TYAddMaillageToCalculAction::TYAddMaillageToCalculAction(LPTYMaillage pMaillage,
-                                                         LPTYCalcul pCalcul, TYModelerFrame* pModeler, const QString& actionName)
-    : TYModelerAction(pModeler, actionName), _pCalcul(pCalcul)
+TYAddMaillageToProjetAction::TYAddMaillageToProjetAction(   LPTYMaillage pMaillage, LPTYProjet pProjet,
+                                                            TYModelerFrame* pModeler, const QString& actionName)
+    : TYModelerAction(pModeler, actionName), _pProjet(pProjet)
 {
-    _pMaillageGeoNode = _pCalcul->findMaillage(pMaillage);
+    _pMaillageGeoNode = pProjet->findMaillage(pMaillage);
 }
 
-TYAddMaillageToCalculAction::~TYAddMaillageToCalculAction()
+TYAddMaillageToProjetAction::~TYAddMaillageToProjetAction()
 {
 }
 
-void TYAddMaillageToCalculAction::undo()
+void TYAddMaillageToProjetAction::undo()
 {
-    if (_pCalcul->remMaillage(_pMaillageGeoNode))
+    if (_pProjet->remMaillage(_pMaillageGeoNode))
     {
-        _pCalcul->updateGraphicTree();
+        _pProjet->updateGraphicTree();
         _pInteractor->updateGL();
     }
 }
 
-void TYAddMaillageToCalculAction::redo()
+void TYAddMaillageToProjetAction::redo()
 {
-    if (_pCalcul->addMaillage(_pMaillageGeoNode))
+    if (_pProjet->addMaillage(_pMaillageGeoNode))
     {
-        _pCalcul->updateGraphicTree();
+        _pProjet->updateGraphicTree();
         _pInteractor->updateGL();
     }
 }
@@ -1381,37 +1382,37 @@ void TYAddMaillageToCalculAction::redo()
 /***************************************************************************/
 
 
-TYRemMaillageToCalculAction::TYRemMaillageToCalculAction(LPTYMaillageGeoNode pMaillageGeoNode,
-                                                         LPTYCalcul pCalcul, TYModelerFrame* pModeler, const QString& actionName)
-    : TYModelerAction(pModeler, actionName), _pCalcul(pCalcul), _pMaillageGeoNode(pMaillageGeoNode)
+TYRemMaillageToProjetAction::TYRemMaillageToProjetAction(LPTYMaillageGeoNode pMaillageGeoNode,
+                                                         LPTYProjet pProjet, TYModelerFrame* pModeler, const QString& actionName)
+    : TYModelerAction(pModeler, actionName), _pProjet(pProjet), _pMaillageGeoNode(pMaillageGeoNode)
 {
 }
 
-TYRemMaillageToCalculAction::TYRemMaillageToCalculAction(LPTYMaillage pMaillage,
-                                                         LPTYCalcul pCalcul, TYModelerFrame* pModeler, const QString& actionName)
-    : TYModelerAction(pModeler, actionName), _pCalcul(pCalcul)
+TYRemMaillageToProjetAction::TYRemMaillageToProjetAction(LPTYMaillage pMaillage,
+                                                         LPTYProjet pProjet, TYModelerFrame* pModeler, const QString& actionName)
+    : TYModelerAction(pModeler, actionName), _pProjet(pProjet)
 {
-    _pMaillageGeoNode = _pCalcul->findMaillage(pMaillage);
+    _pMaillageGeoNode = _pProjet->findMaillage(pMaillage);
 }
 
-TYRemMaillageToCalculAction::~TYRemMaillageToCalculAction()
+TYRemMaillageToProjetAction::~TYRemMaillageToProjetAction()
 {
 }
 
-void TYRemMaillageToCalculAction::undo()
+void TYRemMaillageToProjetAction::undo()
 {
-    if (_pCalcul->addMaillage(_pMaillageGeoNode))
+    if (_pProjet->addMaillage(_pMaillageGeoNode))
     {
-        _pCalcul->updateGraphicTree();
+        _pProjet->updateGraphicTree();
         _pInteractor->updateGL();
     }
 }
 
-void TYRemMaillageToCalculAction::redo()
+void TYRemMaillageToProjetAction::redo()
 {
-    if (_pCalcul->remMaillage(_pMaillageGeoNode))
+    if (_pProjet->remMaillage(_pMaillageGeoNode))
     {
-        _pCalcul->updateGraphicTree();
+        _pProjet->updateGraphicTree();
         _pInteractor->updateGL();
     }
 }

@@ -37,14 +37,14 @@ def get_op_data(fpath, sources):
           if not row['Sources'] in [src.name for src in sources]:
               print('Source named',row['Sources'],' is not in the xml file???')
               sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-              sys.exit('Error : Bad Sources Names format for Operating Conditions file ') 
+              sys.exit('Error : Bad Sources Names format for Operating Conditions file ')
         csvfile.seek(0)
         csvfile.readline()
         OP = []
         for row in reader:
             OP.append([float(row['Day']),float(row['Evening']),float(row['Night'])])
     return np.array(OP)
-       
+
 #          irow+=1
 
 #        ifield = 0
@@ -232,7 +232,7 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     OP = get_op_data(operating_conditions_file, S)
     # OP=np.array([[100., 100., 100.],[80.,70., 50.], [100., 100., 100.]])
 
-   
+
     # Get results for each period
     L1, L2, L3 = get_results(project, S, R, calculations_namelist)
 
@@ -241,7 +241,7 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     _,_,_,L_DEN = calc_Lden(L1, L2, L3, OP)
     # print(L_DEN)
 
-    
+
 
     # Add new computation
     project.add_new_comp()
@@ -252,23 +252,24 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     for src in S:
         project.current_computation.result.add_source(src)
     for rec in R:
-        project.current_computation.result.add_receptor(rec)    
+        project.current_computation.result.add_receptor(rec)
 
     # build the result matrix
     project.current_computation.result.build_matrix()
-    
+
     # fill the matrix
     isrc = 0
     for src in S:
         irec = 0
         for rec in R:
             spectre = common.make_spectrum(L_DEN[isrc,irec,:])
+            project.current_computation.set_spectrum(rec, spectre)
             project.current_computation.result.set_spectrum(rec,src,spectre)
             irec = irec + 1
         isrc = isrc + 1
-    
+
      # Affect LT i.e. the total LDEN to each receptor to allow the result table to show the global LDEN
-     
+
     [nsources, nreceptors, nfreq] =np.shape(L_DEN)
     irec = 0
     for rec in R:
@@ -279,12 +280,13 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
             isrc = isrc + 1
         LT = 10.*np.log10(lt)
         Spectrum_LT = common.make_spectrum(LT)
-        bus.elemen2receptor(rec).set_spectrum(Spectrum_LT, project.current_computation)
+        project.current_computation.set_spectrum(bus.elemen2receptor(rec), Spectrum_LT)
+#        bus.elemen2receptor(rec).set_spectrum(Spectrum_LT, project.current_computation)
         irec = irec + 1
-    
+
     #   Mask Lw column in the result table
     project.current_computation.result.not_use_LW()
-    
+
     # Save project to a temp xml file
     print('Writing results to LDEN_Included.xml')
     project.to_xml('LDEN_Included.xml')
@@ -292,7 +294,7 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
 
     #  To avoid console output due to the loading of the xml  file (verbose=False not functional)
     sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)
-    sys.exit('End of LDEN calculation ') 
+    sys.exit('End of LDEN calculation ')
 
 
 if __name__ == '__main__':

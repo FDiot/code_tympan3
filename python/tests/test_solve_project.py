@@ -99,7 +99,13 @@ class TestSolveProject(TympanTC):
             self.run_solve(input_proj)
         self.assertEqual(str(cm.exception),
                          "You must have at least one receptor to run a simulation.")
-
+   
+    def test_read_solve_older_noisemap_project(self):
+        # Test reading an old noise map project
+        input_proj = osp.join(
+            TEST_DATA_DIR, 'projects-panel',
+            'TEST_CARTO_ANCIEN_MODELE.xml')
+        self.run_solve(input_proj)
 
 
 if __name__ == '__main__':
