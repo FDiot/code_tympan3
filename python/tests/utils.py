@@ -63,6 +63,59 @@ def compare_floats(x, y):
                 return 1
     return 0 # arrays are equal
 
+def _test_solve_with_file(test_file, testobj):
+    """Run a tympan simulation on project `test_file` and compare the results with a computed
+    project.
+    """
+    from tympan.models.project import Project
+    from tympan.models.solver import Model, Solver
+    # Load and solve the project
+    project = testobj.load_project(osp.join(TEST_PROBLEM_DIR, test_file))
+    model = Model.from_project(project)
+    solver = Solver.from_project(project, TEST_SOLVERS_DIR)
+    # avoid segfaults due to multithreading
+    solver.nthreads = 1
+    solver_result = solver.solve(model)
+    project.import_result(model, solver_result)
+    # Load the expected result
+    result_file = osp.join(TEST_RESULT_DIR, test_file).replace('_NO_RESU', '')
+    expected_result_project = Project.from_xml(result_file)
+    # Compare results
+    current_result = project.current_computation.result
+    expected_result = expected_result_project.current_computation.result
+    # Check we have the same number of receptors
+    testobj.assertEqual(current_result.nreceptors, expected_result.nreceptors)
+    # Check if there is a control point (TYPointControl) among the receptors
+    # in the project.
+    # If not, we are not interested in checking the sources since the
+    # control points are the only receptors able to take into account the
+    # individual contributions of the sources.
+    # The sources here can be user sources, the machines and the buildings
+    # (TYUserSourcePonctuelle, TYMachine, TYBatiment)
+    check_nsources  = False
+    for i in xrange (current_result.nreceptors):
+        if current_result.receptor(i).is_control_point():
+            testobj.assertTrue(expected_result.receptor(i).is_control_point())
+            check_nsources = True
+    if check_nsources:
+        testobj.assertEqual(current_result.nsources, expected_result.nsources)
+    current_spectra = np.array(list(current_result.spectrum(i, j).values
+                                    for i in xrange(current_result.nreceptors)
+                                    for j in xrange(current_result.nsources)))
+    expected_spectra = np.array(list(expected_result.spectrum(i, j).values
+                                    for i in xrange(current_result.nreceptors)
+                                    for j in xrange(current_result.nsources)))
+    if current_result.nsources + current_result.nreceptors > 1:
+        # Order the two spectra lists because spectra are not always kept in the same order
+        current_spectra = sorted(current_spectra, cmp=compare_floats)
+        expected_spectra = sorted(expected_spectra, cmp=compare_floats)
+    for i in xrange(len(current_spectra)):
+        # All spectra must have the same number of elements
+        testobj.assertEqual(current_spectra[i].size, expected_spectra[i].size)
+        np.testing.assert_almost_equal(current_spectra[i],
+                                       expected_spectra[i], decimal=1)
+
+
 
 class TympanTC(unittest.TestCase):
 
