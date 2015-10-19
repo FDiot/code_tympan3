@@ -173,6 +173,35 @@ cdef class ResultModel:
                           self.thisptr.get().get_data().element(id_receptor, id_source))
         return tycommon.ospectre2spectrum(spec)
 
+    @property
+    def nreceptors(self):
+        return self.thisptr.get().get_data().nb_receptors()
+
+    @property
+    def nsources(self):
+        return self.thisptr.get().get_data().nb_sources()
+
+    def spectra(self):
+        """Return a 3D numpy array containing the result spectra per receptor and per source
+        (dimensions: (nreceptors, nsources, 31)). If no sources or no receptors, return None
+        """
+        if self.nsources == 0 or self.nreceptors == 0:
+            return None
+        _spectra = np.empty((self.nreceptors, self.nsources, 31))
+        for rec in xrange(self.nreceptors):
+            _spectra[rec, :, :]  =  np.vstack(self.spectrum(rec, source).values
+                                              for source in xrange(self.nsources))
+        return _spectra
+
+    def combined_spectra(self):
+        """Return a 2D numpy array of combined sources spectra values per receptor (or None if no
+        receptors)"""
+        if self.nreceptors == 0:
+            return None
+        if self.nsources == 0:
+            return np.zeros((self.nreceptors, 31))
+        return self.spectra().sum(axis=1)
+
 
 cdef class Solver:
 

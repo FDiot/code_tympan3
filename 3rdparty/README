@@ -1,14 +1,9 @@
-This is the third party dependencies directory for Code_TYMPAN 4.2.5
+This is the third party dependencies directory for Code_TYMPAN 4.x.y.
 
-You need to download the archive Code_TYMPAN-4.2.6_third-party-NN.zip
+You need to download the archive Code_TYMPAN-4.x.y_third-party-NN.zip
 from https://bitbucket.org/TYMPAN/code_tympan/downloads/ and uncompress
 it in this directory (where NN is the version number of the archive,
-currently NN=01) :
-
-https://bitbucket.org/TYMPAN/code_tympan/downloads/Code_TYMPAN-4.2.7_third-party-01.zip
-
-NB : The authentication use HTTP Digest Auth (which is broken in wget, 
-     use curl --digest instead to download from command line).
+currently NN=01).
 
 This archive should contain :
  * an INSTALL file
@@ -16,7 +11,7 @@ This archive should contain :
  * gtest-1.6.0.zip : the testing framework
  * dime-137851b034f6.zip: Dime library to read DXF files (i.e. AutoCAD files)
  * breathe-1.2.0: source only documentation utility from
-   https://github.com/michaeljones/breathe/archive/v1.2.0.zip: 
+   https://github.com/michaeljones/breathe/archive/v1.2.0.zip
  * NMPB2008.zip : the reference implementation for the NMPB2008 from CEREMA
                   (see Note 2 below : this is not publicly distributed for now)
  * cgalbindings.zip : a distribution of swig bindings of
@@ -27,7 +22,7 @@ This archive should contain :
  * rply-1.1.3 : a PLY file format C library under MIT Licence from
    http://w3.impa.br/~diego/software/rply/rply-1.1.3.tar.gz
  * python-plyfile : a PLY file format python library under GNU GPL v3 License from
-   https://github.com/dranjan/python-plyfile/archive/master.zip       
+   https://github.com/dranjan/python-plyfile/archive/master.zip
 
 Note about Dime: there is not tagged version. Thus, the name is followed by the
 SHA1 of the changeset. For now, Logilab forked the Dime project on Bitbucket at
@@ -53,4 +48,3 @@ this archive as they are better installed in a system dependent way :
  * Boost >= 1.46
  * CGAL >= 4.1
  * SWIG >= 2.0
-

@@ -7,9 +7,8 @@ import numpy as np
 import sys
 import os
 import csv
-import tympan.models._common as common
 import tympan.models._business as bus
-from tympan.models.project import Project
+from tympan.models.project import Project, Spectrum
 
 
 def set_op_data(fpath, sources):
@@ -86,8 +85,7 @@ def load_tympan_xml(tympan_xml):
     tympan_xml: filepath to xml tympan project file
     '''
     print('Opening Code_TYMPAN project from %s' % tympan_xml)
-    project = Project.from_xml(tympan_xml, verbose=False)
-
+    project = Project.from_xml(tympan_xml, verbose=False, update_altimetry=False)
     return project
 
 
@@ -100,7 +98,7 @@ def get_sources_list(project, calculations_namelist):
     Sources = []
     for calc in project.computations:
         if calc.name in calculations_namelist:
-            project.set_current_computation(calc)
+            project.select_computation(calc, current=False)
             result =  calc.result
             for src in result.sources:
                    # print('Calcul:',calc.name,'Source:',src.name)
@@ -119,7 +117,7 @@ def get_receptors_list(project, calculations_namelist):
     Receptors = []
     for calc in project.computations:
         if calc.name in calculations_namelist:
-            project.set_current_computation(calc)
+            project.select_computation(calc, current=False)
             result =  calc.result
             for rec in result.receptors:
                    if rec.name not in Receptors_namelist:
@@ -237,17 +235,11 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     L1, L2, L3 = get_results(project, S, R, calculations_namelist)
 
     # LDEN
-
     _,_,_,L_DEN = calc_Lden(L1, L2, L3, OP)
     # print(L_DEN)
 
-
-
     # Add new computation
-    project.add_new_comp()
-    calc_list =  [calc for calc in project.computations]
-    last_calc = calc_list[-1]
-    project.set_current_computation(last_calc)
+    computation = project.add_computation()
     project.current_computation.set_name('LDEN')
     for src in S:
         project.current_computation.result.add_source(src)
@@ -262,9 +254,8 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     for src in S:
         irec = 0
         for rec in R:
-            spectre = common.make_spectrum(L_DEN[isrc,irec,:])
+            spectre = Spectrum(L_DEN[isrc,irec,:])
             project.current_computation.set_spectrum(rec, spectre)
-            project.current_computation.result.set_spectrum(rec,src,spectre)
             irec = irec + 1
         isrc = isrc + 1
 
@@ -279,9 +270,8 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
             lt = lt + np.power(10.,L_DEN[isrc,irec,:]/10.)
             isrc = isrc + 1
         LT = 10.*np.log10(lt)
-        Spectrum_LT = common.make_spectrum(LT)
+        Spectrum_LT = Spectrum(LT)
         project.current_computation.set_spectrum(bus.elemen2receptor(rec), Spectrum_LT)
-#        bus.elemen2receptor(rec).set_spectrum(Spectrum_LT, project.current_computation)
         irec = irec + 1
 
     #   Mask Lw column in the result table

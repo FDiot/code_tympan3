@@ -1821,6 +1821,12 @@ Choisissez Non pour simplement ouvrir le nouveau site dans un modeleur."/>
 			<string id="id_import_ok" value="L'élément a été correctement importé depuis le fichier : '%1'"/>
 			<string id="id_import_failed" value="L'élément n'a pas pu être importé depuis le fichier : '%1'"/>
 			<string id="id_linear" value="Créer palette linéaire"/>
+			<string id="id_caption_limits" value="Limites"/>
+			<string id="id_lb_label" value="Valeur inférieure"/>
+			<string id="id_ub_label" value="Valeur Supérieure"/>
+			<string id="id_nb_label" value="Nombre de couleurs"/>
+			<string id="id_ok_btn" value="OK"/>
+			<string id="id_cancel_btn" value="Annuler"/>
 		</message>
 	</class>
 	<class name="TYParoiWidget">

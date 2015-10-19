@@ -5,7 +5,7 @@ import os
 
 from tympan.models import filter_output
 from tympan.models import _solver as cysolver
-from tympan._business2solver import Business2SolverConverter, load_computation_solver
+from tympan._business2solver import Business2SolverConverter, select_acoustic_solver
 
 _CONVERTERS = {
     'bool': lambda x: x.lower() == 'true',
@@ -71,12 +71,41 @@ class Model(object):
         Return two nparrays:
 
             - 'nodes': an array of nodes (of dimension 'npoints'X3), where
-            each line stands for a node and contains 3 coordinates)
+              each line stands for a node and contains 3 coordinates)
             - 'triangles': an array of triangles (of dimension 'ntriangles'X3),
-            where each line stands for a triangle and contains the indices of
-            its 3 vertices in the 'nodes' array.
+              where each line stands for a triangle and contains the indices of
+              its 3 vertices in the 'nodes' array.
         """
         return self._model._export_triangular_mesh()
+
+    @property
+    def sources(self):
+        """Acoustic sources of the model"""
+        return self._model.sources
+
+    @property
+    def receptors(self):
+        """Acoustic receptors of the model"""
+        return self._model.receptors
+
+    @property
+    def nsources(self):
+        """Return the number of acoustic sources involved in the model"""
+        return self._model.nsources
+
+    @property
+    def nreceptors(self):
+        """Return the number of acoustic receptors involved in the model"""
+        return self._model.nreceptors
+
+    @property
+    def triangles(self):
+        """Acoustic triangles of the model"""
+        return self._model.triangles
+
+    def node_coords(self, idx):
+        """Return a tuple with the 3D coordinates for the node of id 'idx'"""
+        return self._model.node_coords(idx)
 
     def __getattr__(self, name):
         return getattr(self._model, name)
@@ -103,22 +132,36 @@ class Solver(object):
         return self._solver.solve_problem(model._model)
 
     @classmethod
-    def from_project(cls, project, solverdir, verbose=False):
+    def from_project(cls, project, solverdir=None, verbose=False):
         """Load and configure solver
 
-        'solverdir' is the directory where one can find the solver library. The
+        'solverdir' is the directory where one can find the solver library. If None, it will
+        be retrieved from "TYMPAN_SOLVERDIR" environment variable, which must be defined. The
         configuration is read from the project.
         """
+        solverdir = solverdir or fetch_solverdir()
         _set_solver_config(project.current_computation)
         with filter_output(verbose):
-            solver = load_computation_solver(solverdir, project.current_computation)
+            solver = select_acoustic_solver(solverdir, project.current_computation)
         return cls(solver)
+
+
+def fetch_solverdir():
+    """Try to retrieve solver plugins directory from 'TYMPAN_SOLVERDIR' environment variable
+
+    If the environment variable is not defines, raise a RuntimeError.
+    """
+    try:
+        return os.environ['TYMPAN_SOLVERDIR']
+    except KeyError:
+        raise RuntimeError('"TYMPAN_SOLVERDIR" environment variable must be set to path to the '
+                           'solver libraries directory')
 
 
 def _set_solver_config(comp):
     """Setup solver configuration"""
     parser = ConfigParser.RawConfigParser()
-    parser.optionxform = str # keep param names case
+    parser.optionxform = str  # keep param names case
     parser.readfp(StringIO(comp.solver_parameters))
     solver_config = cysolver.Configuration.get()
     errors = []
@@ -134,4 +177,3 @@ def _set_solver_config(comp):
             setattr(solver_config, optname, value)
     if errors:
         raise ConfigParser.Error(os.linesep.join(errors))
-
