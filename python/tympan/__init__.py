@@ -14,21 +14,33 @@ Here goes an example of the typical use that can be done of this API:
 
 .. code-block:: python
 
-    # Build a project from a site XML description
+    # Build a project from a site XML description (update site infrastructure altimetry)
     project = Project.from_xml("my_project.xml")
-    # Compute altimetry from the site
-    altimetry_mesh = AltimetryMesh.from_site(project.site)
-    # Update the site infrastructure
-    project.update_site_altimetry(altimetry_mesh)
     # Build a simplified model from the project (the new infrastructure
     # altitudes will be taken into account)
     model = Model.from_project(project)
     # Load and configure the acoustic solver
-    solver = Solver.from_project(project, solverdir)
+    solver = Solver.from_project(project)
     # Run the simulation
     result = solver.solve(model)
     # Update the project with the results of the computation
     project.import_result(model, result)
 
+This API can be used to do other types of computations, here goes an example of how to do a computation
+with user-defined sources:
+
+.. code-block:: python
+
+    # Build a project from a XML model
+    project = Project.from_xml("my_project.xml")
+    # build solver model, but don't use the project sources
+    model = Model.from_project(project, set_sources=False)
+    # Manually define the sources (position and spectrum) depending on your needs
+    model.add_source((0, 0, 0), np.array([100.0] * 31, dtype=float), 0)
+    model.add_source((100, 50, 0), np.array([150.0] * 31, dtype=float), 0)
+    solver = Solver.from_project(project)
+    result = solver.solve(model)
+    # retrieve combined spectra per receptor
+    combined_spectra = result.combined_spectra()
 """
 

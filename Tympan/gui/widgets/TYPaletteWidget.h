@@ -45,6 +45,28 @@ class PaletteEditor;
 
 class TYPalette;
 
+class TYPaletteLimitsWidget : public QDialog
+{
+    Q_OBJECT
+
+public:
+    TYPaletteLimitsWidget(TYPalette* pElement, QWidget* _pParent = nullptr);
+
+public slots:
+    virtual void updateContent(); // Override
+    virtual void apply(); // Override
+protected:
+    TYPalette* _pElement;
+    QVBoxLayout* _layout;   
+    QGroupBox* _groupBox;
+    QLabel* _label_lower_bound;
+    QLabel* _label_upper_bound;
+    QLabel* _label_nb_colors;
+    QLineEdit* _lineEdit_lower_bound;
+    QLineEdit* _lineEdit_upper_bound;
+    QLineEdit* _lineEdit_nb_colors;
+};
+
 /**
  * \class TYPaletteWidget
  * \brief classe de l'objet IHM pour une palette

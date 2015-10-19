@@ -37,16 +37,16 @@ Datamodel
 Builder
 ~~~~~~~
 .. automodule:: tympan.altimetry.builder
-    :members:
+    :members: build_altimetry, material_by_face
 
-Merge
-~~~~~
-.. automodule:: tympan.altimetry.merge
-    :members:
+..Merge
+..~~~~~
+.... automodule:: tympan.altimetry.merge
+    ..:members:
 
 Mesh
 ~~~~
 .. automodule:: tympan.altimetry.mesh
-    :members:
+    :members: ElevationProfile
 
 
