@@ -744,11 +744,6 @@ void TYCalcul::clearResult()
     _pResultat->purge();
 
     // Cleaning _tabrays
-    for (unsigned int i=0; i<_tabRays.size(); i++)
-    {
-        delete _tabRays[i];
-        _tabRays[i] = nullptr;
-    }
 	_tabRays.clear();
 
     setIsGeometryModified(true);
