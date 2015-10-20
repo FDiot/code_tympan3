@@ -1,6 +1,8 @@
 #include "Tympan/models/common/atmospheric_conditions.h"
 
-#define M_PI 3.14159265
+#ifndef M_PI
+  #define M_PI        3.1415926535897932384626433832795
+#endif
 
 const double AtmosphericConditions::Z_ref = 400.0;
 const double AtmosphericConditions::reference_pressure = 101325.0;

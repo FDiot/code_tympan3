@@ -86,7 +86,7 @@ cdef extern from "Tympan/models/business/TYResultat.h":
         size_t getNbOfRecepteurs() const
         size_t getNbOfSources() const
         tycommon.OSpectre getSpectre(const int& indexRecepteur, const int& indexSource) const
-        tycommon.OSpectre getSpectre2(TYElement* pRecepteur, TYElement* pSource)
+        tycommon.OSpectre getSpectre(TYElement* pRecepteur, TYElement* pSource)
         cppmap[TYElem_ptr, vector[SmartPtr[TYGeometryNode]]]& getMapEmetteurSrcs()
         SmartPtr[TYPointCalcul] getRecepteur(const int& idx)
         void setResultMatrix(tycommon.SpectrumMatrix matrix)
@@ -168,6 +168,7 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
                       vector[SmartPtr[TYGeometryNode]])
         vector[SmartPtr[TYRay]]& getTabRays()
         void goPostprocessing()
+        void setSolverId(const OGenID& iD)
         const OGenID getSolverId()
         bool addPtCtrlToResult(SmartPtr[TYPointControl] pPoint)
         void setSpectre(const TYPointCalcul *pPoint, TYSpectre *pSpectre)
@@ -176,6 +177,9 @@ cdef extern from "Tympan/models/business/TYCalcul.h":
 cdef extern from "Tympan/models/business/TYCalcul.h":
     TYElement* downcast_Element "downcast<TYElement>"(TYCalcul *)
 
+cdef extern from "Tympan/models/business/TYPluginManager.h" namespace "tympan":
+    OGenID solver_id(string name)  except +
+    void load_solvers(const char* name)
 
 cdef extern from "Tympan/models/business/TYProjet.h":
     cdef cppclass TYProjet (TYElement):

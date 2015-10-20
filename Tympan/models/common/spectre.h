@@ -369,6 +369,7 @@ public:
     OSpectreComplex operator * (const double& coefficient) const;
     // Rapport de deux spectres complexes en module/phase
     virtual OSpectreComplex operator / (const OSpectreComplex& spectre) const;
+    virtual OSpectreComplex div(const OSpectreComplex& spectre) const;
 
     /// Set/Get du tableau des valeurs reelles
     virtual double* getTabValReel() { return _module; }

@@ -182,7 +182,7 @@ public:
      * \fn OSpectre getSpectre(TYPointCalcul* pRecepteur,TYElement* pSource)
      * \brief Retourne un spectre pour un couple S-R.
      */
-    OSpectre getSpectre2(TYElement* pRecepteur, TYElement* pSource);
+    OSpectre getSpectre(TYElement* pRecepteur, TYElement* pSource);
 
     /**
      * \fn OSpectre getSpectre(const int& indexRecepteur, const int& indexSource)

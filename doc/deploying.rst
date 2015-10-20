@@ -7,7 +7,7 @@ Windows installer
 Overview
 ========
 
-The windows installer is generated with `Inno Setup`_. The generation script can
+The Windows installer is generated with `Inno Setup`_. The generation script can
 be found in ``tools`` (``tympan_installer.iss``).
 
 .. _`Inno Setup`: http://www.jrsoftware.org/isinfo.php
@@ -51,22 +51,25 @@ bits installation).
 Once the installation is done, the ``python27.dll`` library has to be copied from
 ``C:\Windows\System32`` to the newly created python directory (should be ``C:\Python27``).
 
-Uppon this base are added (mostly using Windows installers):
+Uppon this base are added (mostly downloading a wheel and installing it with `pip`):
 
 Shapely (version 1.3)
             `Pypi installer`_ is convenient since it already embeds ``GEOS``,
             which is needed by shapely
 
+Six, Python-Dateutil, Pytz, Pyparsing
+           They are ``Matplotlib`` dependencies
+
 Matplotlib (version 1.4)
-            An unofficial windows binary can be found at `Gohlke website`_
+            An unofficial Windows binary can be found at `Gohlke website`_
             (choose ``matplotlib‑1.4.0.win32‑py2.7.exe``)
 
 Numpy (version 1.8)
-            An unofficial windows binary can be found at `Gohlke website`_
+            An unofficial Windows binary can be found at `Gohlke website`_
             (choose ``numpy‑MKL‑1.8.2.win32‑py2.7.exe``)
 
 Cython (version 0.20.2)
-            An unofficial windows binary can be found at `Gohlke website`_
+            An unofficial Windows binary can be found at `Gohlke website`_
             (choose ``Cython‑0.20.2.win32‑py2.7.exe``)
 
 Setuptools
@@ -83,6 +86,10 @@ Descartes
 Scipy (version 0.14)
             An unofficial windows binary can be found at `Gohlke website`_
 
+To install a wheel with `pip` (`download get_pip.py`_)::
+
+    C:\Python27\python.exe get_pip.py
+    C:\Python27\python.exe -m pip install my_wheel.whl
 
 The resulting ``Python27`` directory won't be copied directly in C:\ in order to
 avoid potential conflicts with another python installation. Therefore, it is
@@ -92,7 +99,7 @@ copied inside ``Code_TYMPAN`` install directory.
 .. _`Pypi installer`: http://pypi.python.org/pypi/Shapely
 .. _`Gohlke website`: http://www.lfd.uci.edu/~gohlke/pythonlibs/
 .. _`Python Package Index`:  https://pypi.python.org/pypi/descartes
-
+.. _`download get_pip.py`: https://pip.pypa.io/en/latest/installing.html#install-pip
 
 Copy of Microsoft Visual C++ 2010 Redistributable Package libraries
 -------------------------------------------------------------------

@@ -7,7 +7,6 @@ stream = open('tympan.log', 'a', 0)
 logging.basicConfig(stream=stream, level=logging.DEBUG,
                     format='%(levelname)s:%(asctime)s - %(name)s - %(message)s')
 
-from tympan.altimetry import AltimetryMesh
 from tympan.models.project import Project
 from tympan.models.solver import Model, Solver
 
@@ -41,17 +40,13 @@ def solve(input_project, output_project, output_mesh, solverdir,
     # Load an existing project and retrieve its calcul to solve it
     try:
         logging.info("Trying to load project ...")
-        project = Project.from_xml(input_project, verbose)
+        project = Project.from_xml(input_project, verbose=verbose)
     except RuntimeError:
         logging.exception("Couldn't load the acoustic project from %s file", input_project)
         raise
     logging.info("Project loaded !")
-    # Recompute and export altimetry
-    altimesh = AltimetryMesh.from_site(project.site)
-    altimesh.to_ply(output_mesh)
-    # Update site and the project before building the solver model
-    logging.info("Updating site ...")
-    project.update_site_altimetry(altimesh, verbose)
+    # Export altimetry
+    project.export_altimetry(output_mesh)
     # Solver model
     model = Model.from_project(project)
     logging.info("Solver model built.\nNumber of sources: %d\nNumber of receptors: %d",
