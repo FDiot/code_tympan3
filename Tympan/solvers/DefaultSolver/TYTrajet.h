@@ -20,6 +20,7 @@
 #include "TYChemin.h"
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/atmospheric_conditions.h"
+#include "Tympan/models/common/acoustic_path.h"
 #include "Tympan/models/solver/entities.hpp"
 
 /**
@@ -168,8 +169,12 @@ public:
      */
     OSpectre getPInterference(const AtmosphericConditions& atmos);
 
+    // Get the tab of rays
+    std::vector<acoustic_path*>& get_tab_rays() { return _tabRays;}
+
 private:
     OSpectre correctTiers(const OSpectreComplex& si, const OSpectreComplex& sj, const AtmosphericConditions& atmos, const double& ri, const double& rj) const;
+    void build_tab_rays();
 
 public :
     // Business source
@@ -201,5 +206,8 @@ protected:
     /// Spectre au point de reception du trajet integrant la divergence geometrique et la puissance de la source
     //TYSpectre _sLP;
     OSpectre _sLP;
+
+    /// Vector of rays equivalent to chemin
+    std::vector<acoustic_path*> _tabRays;
 };
 #endif // __TY_TRAJET__
