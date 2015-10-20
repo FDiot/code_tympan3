@@ -7,7 +7,7 @@ from numpy.testing import assert_allclose
 from utils import TympanTC, TEST_PROBLEM_DIR
 
 from tympan.altimetry.datamodel import VegetationArea
-from tympan.altimetry import builder, AltimetryMesh
+from tympan.altimetry import builder
 try:
     from tympan.models.project import Project
     from tympan.models.solver import Model
@@ -166,10 +166,6 @@ class TestProcessAltimetry(TympanTC):
             TEST_PROBLEM_DIR,
             '14_PROJET_GRAND_SITE_VIDE_AVEC_SOUS_SITE_Deplace_et_tourne.xml')
         project = Project.from_xml(fpath)
-        # Compute altimetry and retrieve the resulting mesh
-        altimesh = AltimetryMesh.from_site(project.site)
-        # Apply new altimetry on the site infrastructure
-        project.update_site_altimetry(altimesh)
         # Build solver model and check source altimetry
         model = Model.from_project(project, set_receptors=False)
         # 1 source

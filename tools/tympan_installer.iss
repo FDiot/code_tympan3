@@ -1,6 +1,6 @@
 [Setup]
 AppName=Code_TYMPAN
-AppVersion=4.2.9
+AppVersion=4.7.0
 DefaultDirName=C:\Code_TYMPAN
 DefaultGroupName=Code_TYMPAN
 OutputBaseFilename=setup_Code_TYMPAN
@@ -22,13 +22,16 @@ Source: "install-Code_TYMPAN\plugins\*"; DestDir: "{app}\plugins";
 Source: "install-Code_TYMPAN\resources\*"; DestDir: "{app}\resources"; Flags: recursesubdirs
 ; C++ libs
 Source: "install-Code_TYMPAN\lib\*"; DestDir: "{app}\libs";
-; 3rd party libraries
-Source: "install-Code_TYMPAN\*"; DestDir: "{app}";
+; 3rd party libraries + tympan executable
+Source: "install-Code_TYMPAN\*"; DestDir: "{app}"; Excludes: "runTympanRelease.bat"
 ; copy vc redist (post install)
 Source: "vcredist\*.dll"; DestDir: "{app}";
 
 [Registry]
 Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "CGAL_BINDINGS_PATH"; ValueData: "{app}\cython"; Flags: uninsdeletekey; Permissions: everyone-read
 Root: HKCU; Subkey: "Environment"; ValueType: string; ValueName: "TYMPAN_PYTHON_INTERP"; ValueData: "{app}\Python27\python.exe"; Flags: uninsdeletekey; Permissions: everyone-read
+Root: HKCU; Subkey: "Environment"; ValueType: expandsz; ValueName: "Path"; ValueData: "{olddata};{app}\cython;{app}\plugins;{app}"; Flags: uninsdeletevalue
+Root: HKCU; Subkey: "Environment"; ValueType: expandsz; ValueName: "PYTHONPATH"; ValueData: "{olddata};{app}\cython";  Flags: uninsdeletevalue
 
-
+[UninstallDelete]
+Type: filesandordirs; Name: "{app}"

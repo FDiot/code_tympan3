@@ -34,6 +34,7 @@ Main developers' tasks
    testing
    debugging
    deploying
+   debian_packaging
 
 Computations and algorithms
 ---------------------------
