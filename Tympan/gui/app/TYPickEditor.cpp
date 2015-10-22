@@ -1270,7 +1270,6 @@ void TYPickEditor::manageProperties(TYElement *pElement)
         }
 
         pElement->updateGraphicTree();
-        pElement->updateGraphic();
     }
 }
 
