@@ -226,31 +226,26 @@ bool python(QStringList args, std::string& error_msg)
     }
     while(!comp_finished);
 
-    QString err_output (python.readAllStandardError());
-    if(!err_output.isEmpty())
+    QString std_error(python.readAllStandardError());
+    int exit_code = python.exitCode();
+    if (python.exitStatus() != QProcess::NormalExit || exit_code != 0 )
     {
-        error_msg = err_output.toStdString();
-        // If there is an error among the possible warnings
-        if (err_output.contains("Error"))
-        {
-            error_msg.append(_read_environment_variables(env));
-            error_msg.append("Veuillez lire tympan.log pour plus d'information.\n");
-            return false;
-        }
-        else
-        {
-            logger.warning(error_msg.c_str());
-        }
-    }
-
-    int pystatus = python.exitStatus();
-    if (pystatus == 1)
-    {
-        error_msg = "Le sous-process python a termine avec le code d'erreur ";
-        error_msg.append(std::to_string(static_cast<unsigned long long>(python.error())));
+        error_msg = "Le sous-process python s'est terminé avec le code d'erreur ";
+        error_msg.append(std::to_string(exit_code));
+        error_msg.append("\n");
+        error_msg.append(std_error.toStdString());
         error_msg.append(_read_environment_variables(env));
+        error_msg.append("Veuillez lire tympan.log pour plus d'information.\n");
+        logger.error(error_msg.c_str());
         return false;
     }
+    else
+    {
+        logger.info("Le sous-processus Python s'est terminé correctement");
+        if (!std_error.isEmpty())
+            logger.warning(std_error.toStdString().c_str());
+    }
+
     // Compute and display computation time
     OChronoTime endTime;
     OChronoTime duration = endTime - startTime;
