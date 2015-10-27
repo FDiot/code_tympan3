@@ -316,19 +316,18 @@ cdef class Site:
 
         As a dict {volume node id: list of 'Point3D' cython object}
         """
-        cpp_contours = cy.declare(cppmap[OGenID, deque[tycommon.OPoint3D]])
-        cpp_contours_iter = cy.declare(cppmap[OGenID, deque[tycommon.OPoint3D]].iterator)
+        cpp_contours = cy.declare(cppmap[OGenID, deque[deque[tycommon.OPoint3D]]])
+        cpp_contours_iter = cy.declare(cppmap[OGenID, deque[deque[tycommon.OPoint3D]]].iterator)
         self.thisptr.getRealPointer().getFacesOnGround(cpp_contours)
         cpp_contours_iter = cpp_contours.begin()
         contours = {}
-        while cpp_contours_iter != cpp_contours.end():
-            cpp_volumenode_id = deref(cpp_contours_iter).first.toString().toStdString()
-            cpp_volumenode_contour = cy.declare(deque[tycommon.OPoint3D],
-                                                deref(cpp_contours_iter).second)
-            contours.setdefault(cpp_volumenode_id, [])
-            for i in xrange(cpp_volumenode_contour.size()):
-                contours[cpp_volumenode_id].append(
-                    tycommon.opoint3d2point3d(cpp_volumenode_contour[i]))
+        while cpp_contours_iter != cpp_contours.end():  # XXX can't we iterate on items???
+            volume_id = deref(cpp_contours_iter).first.toString().toStdString()
+            contours[volume_id] = [
+                [tycommon.opoint3d2point3d(contour[i])
+                 for i in xrange(contour.size())]
+                for contour in deref(cpp_contours_iter).second
+            ]
             inc(cpp_contours_iter)
         return contours
 

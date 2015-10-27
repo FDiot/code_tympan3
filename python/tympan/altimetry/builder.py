@@ -113,12 +113,10 @@ def build_sitenode(ty_site, mainsite=True):
             id=cylcurve.elem_id)
         altimetry_site.add_child(alcurve)
     # Ground contour (infrastructure landtake)
-    for (cy_id, cy_volume_contour) in ty_site.ground_contour.items():
-        infra_landtake = InfrastructureLandtake(
-            coords=points_to_coords(cy_volume_contour),
-            id=cy_id
-            )
-        altimetry_site.add_child(infra_landtake)
+    for id_, volume_contours in ty_site.ground_contour.items():
+        contours_coords = map(points_to_coords, volume_contours)
+        altimetry_site.add_child(
+            InfrastructureLandtake(*contours_coords, id=id_))
     # Recurse
     cysubsites = ty_site.subsites
     for cysbsite in cysubsites:
@@ -204,7 +202,7 @@ class MeshBuilder(object):
         except KeyError:
             # The element was filtered out (e.g. it was outside of its sub-site)
             return None
-        vertices = []
+        vertices_groups = []
         for polyline in elementary_shapes(shape):
             if isinstance(polyline, geometry.LineString):
                 points = polyline.coords[:]
@@ -221,7 +219,8 @@ class MeshBuilder(object):
                                 "not %s found in %s" % (polyline, feature))
             vertices, _ = mesher.insert_polyline(
                 points, id=feature.id, **properties)
-        return vertices
+            vertices_groups.append(vertices)
+        return vertices_groups
 
     def _build_altimetric_base(self):
         """Return an elevation mesh along with a feature to vertices mapping.
@@ -243,8 +242,9 @@ class MeshBuilder(object):
         """
         vmap = {}
         mesh = altimesh.copy(class_=ElevationMesh, vmap=vmap)
-        for fid, vertices in self.vertices_for_feature.items():
-            self.vertices_for_feature[fid] = [vmap[vh] for vh in vertices]
+        for fid, vertices_groups in self.vertices_for_feature.items():
+            self.vertices_for_feature[fid] = [[vmap[vh] for vh in vertices]
+                                              for vertices in vertices_groups]
         return mesh
 
     def _build_triangulation(self, altimesh):
@@ -275,18 +275,18 @@ class MeshBuilder(object):
         are not well supported: they produce artifact in the altimetry.
         """
         for landtake in self._site.landtakes:
-            polyline = self.vertices_for_feature[landtake.id]
-            mean_alt = np.mean([mesh.vertices_info[vh].altitude
-                                for vh in polyline])
-            close_it = polyline[0] != polyline[-1]
-            contour_vertices = mesh.iter_vertices_for_input_polyline(
-                polyline, close_it=close_it)
-            flooder = mesh.flood_polygon(LandtakeFaceFlooder, polyline,
-                                         close_it=close_it)
-            inside_vertices = set((fh.vertex(i) for fh in flooder.visited
-                                   for i in xrange(3)))
-            for vh in chain(contour_vertices, inside_vertices):
-                mesh.vertices_info[vh].altitude = mean_alt
+            for polyline in self.vertices_for_feature[landtake.id]:
+                mean_alt = np.mean([mesh.vertices_info[vh].altitude
+                                    for vh in polyline])
+                close_it = polyline[0] != polyline[-1]
+                contour_vertices = mesh.iter_vertices_for_input_polyline(
+                    polyline, close_it=close_it)
+                flooder = mesh.flood_polygon(LandtakeFaceFlooder, polyline,
+                                             close_it=close_it)
+                inside_vertices = set((fh.vertex(i) for fh in flooder.visited
+                                       for i in xrange(3)))
+                for vh in chain(contour_vertices, inside_vertices):
+                    mesh.vertices_info[vh].altitude = mean_alt
 
 
 class MeshFiller(object):
@@ -302,11 +302,11 @@ class MeshFiller(object):
         # Fill landtakes using the flooding algorithm.
         for feature in mainsite.landtakes:
             _check_feature_inserted(feature, mainsite)
-            faces = self._faces_for_polygonal_feature(
-                feature, flooder_class=LandtakeFaceFlooder)
-            for fh in faces:
-                if fh not in feature_by_face:
-                    feature_by_face[fh] = feature
+            for faces in self._faces_for_polygonal_feature(
+                    feature, flooder_class=LandtakeFaceFlooder):
+                for fh in faces:
+                    if fh not in feature_by_face:
+                        feature_by_face[fh] = feature
         # Fill material areas by finding the underlying feature based on the
         # position of face "middle point".
         features = _material_area_features(mainsite, cleaner)
@@ -328,11 +328,11 @@ class MeshFiller(object):
 
     def _faces_for_polygonal_feature(self, feature, flooder_class):
         """Return the list of faces within a polygonal feature"""
-        vertices = self._vertices_for_feature[feature.id]
-        close_it = vertices[0] != vertices[-1]
-        flooder = self._mesh.flood_polygon(flooder_class, vertices,
-                                           close_it=close_it)
-        return flooder.visited
+        for vertices in self._vertices_for_feature[feature.id]:
+            close_it = vertices[0] != vertices[-1]
+            flooder = self._mesh.flood_polygon(flooder_class, vertices,
+                                               close_it=close_it)
+            yield flooder.visited
 
 
 def _check_feature_inserted(feature, site):
