@@ -136,9 +136,9 @@ class TestProcessAltimetry(TympanTC):
         # As there are 2 buildings in the input project we expect to find 2
         # infrastructure landtakes
         self.assertEqual(len(infra_landtakes), 2)
-        self.assertEqual(infra_landtakes[0].build_coordinates()[0],
+        self.assertEqual(infra_landtakes[0].build_coordinates()[0][0][:-1],
                          [(20.0,10.0),(30.0,10.0),(30.0,0.0),(20.0,0.0)])
-        self.assertEqual(infra_landtakes[1].build_coordinates()[0],
+        self.assertEqual(infra_landtakes[1].build_coordinates()[0][0][:-1],
                          [(0.0,10.0),(20.0,10.0),(20.0,0.0),(0.0,0.0)])
 
     def test_process_vegetation_area(self):

@@ -2,10 +2,11 @@ import tempfile
 import unittest
 import os
 
-from numpy.testing.utils import assert_allclose
+import numpy as np
+from numpy.testing.utils import assert_allclose, assert_array_equal
 
 from tympan.altimetry.datamodel import (InconsistentGeometricModel, HIDDEN_MATERIAL,
-                                        LevelCurve, InfrastructureLandtake)
+                                        LevelCurve, InfrastructureLandtake, SiteNode)
 from tympan.altimetry import mesh, export_to_ply, builder
 
 from altimetry_testutils import (MesherTestUtilsMixin, TestFeatures,
@@ -89,6 +90,30 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             (pM, {'altitude': self.level_curve_B.altitude,}),
         ])
 
+    def test_multipolygon_infrastructure_landtake(self):
+        site_rect = rect(1, 1, 12, 12)
+        mainsite = SiteNode(site_rect, id="{Main site}")
+        rec, tri = rect(9, 9, 10, 10), [(2, 2), (2, 4), (3, 4)]
+        building = InfrastructureLandtake(rec, tri,
+                                          parent_site=mainsite,
+                                          id="{multipolygon building}")
+        coords = map(list, building._coords)
+        expected_coords = [
+            [(9, 9), (10, 9), (10, 10), (9, 10), (9, 9)],
+            [(2, 2), (2, 4), (3, 4), (2, 2)],
+        ]
+        self.assertEqual(coords, expected_coords)
+        cleaner = builder.recursively_merge_all_subsites(mainsite)
+        msite = cleaner.merged_site()
+        mbuilder = builder.MeshBuilder(msite)
+        alti = mbuilder._build_altimetric_base()
+        bmesh = mbuilder._build_triangulation(alti)
+        mbuilder._compute_informations(bmesh)
+        vertices = [
+            map(bmesh.py_vertex, vertices_groups)
+            for vertices_groups in mbuilder.vertices_for_feature[building.id]]
+        assert_array_equal(vertices, expected_coords)
+
     def test_vertices_by_feature(self):
         coords = rect(9, 9, 10, 10)
         self.building = InfrastructureLandtake(coords,
@@ -101,9 +126,10 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         bmesh = mbuilder._build_triangulation(alti)
         mbuilder._compute_informations(bmesh)
 
-        vertices = mbuilder.vertices_for_feature[self.building.id]
+        building_vertices = mbuilder.vertices_for_feature[self.building.id]
+        self.assertEqual(len(building_vertices), 1)
 
-        for i, v in enumerate(vertices):
+        for i, v in enumerate(building_vertices[0]):
             self.assertEquals(v.point(), mesh.to_cgal_point(coords[i % len(coords)]))
 
     def test_materials(self):
