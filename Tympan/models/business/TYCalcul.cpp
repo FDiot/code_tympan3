@@ -19,6 +19,7 @@
 
 #include <stdlib.h>
 #include <string>
+#include <qregexp.h>
 
 #include "Tympan/core/defines.h"
 #include "Tympan/core/logging.h"
@@ -34,7 +35,6 @@
   #include "Tympan/gui/widgets/TYCalculWidget.h"
   #include "Tympan/gui/gl/TYCalculGraphic.h"
 #endif
-
 
 TY_EXTENSION_INST(TYCalcul);
 TY_EXT_GRAPHIC_INST(TYCalcul);
@@ -301,9 +301,9 @@ int TYCalcul::fromXML(DOM_Element domElement)
 
     TYElement::fromXML(domElement);
 
-    bool getOk[8];
+    bool getOk[16];
     unsigned int i;
-    for (i = 0; i < 8; i++) { getOk[i] = false; }
+    for (i = 0; i < 16; i++) { getOk[i] = false; }
     int retVal = -1;
     LPTYMaillageGeoNode pMaillageGeoNode = new TYMaillageGeoNode(NULL, this);
     LPTYRay aRay = new TYRay();
@@ -314,6 +314,9 @@ int TYCalcul::fromXML(DOM_Element domElement)
     TYProjet* pProjet = getProjet();
 
     int etat = -1; // Etat du calcul
+    bool useSol, useVegetation, useAtmosphere, useEcran, useReflexion;
+    bool expansGeo, typeCaclulSol, condFav, calculTrajetHorizontaux, interference;    
+    float h1, distanceSRMin;
 
     TYListID tempElementSelection;
     QString strSolverId;
@@ -336,6 +339,53 @@ int TYCalcul::fromXML(DOM_Element domElement)
         TYXMLTools::getElementIntValue(elemCur, "etat", etat, getOk[6]);
         TYXMLTools::getElementStringValue(elemCur, "solverParams", solverParams, getOk[7]);
 
+        // Gestion de la compatibilité avec la version 3 de Code_TYMPAN
+        TYXMLTools::getElementBoolValue(elemCur, "useSol", useSol, getOk[8]);
+        TYXMLTools::getElementBoolValue(elemCur, "useEcran", useEcran, getOk[9]);
+        TYXMLTools::getElementBoolValue(elemCur, "useReflexion", useReflexion, getOk[10]);  
+        TYXMLTools::getElementBoolValue(elemCur, "interference", interference, getOk[11]);
+        TYXMLTools::getElementBoolValue(elemCur, "calculTrajetHorizontaux", calculTrajetHorizontaux, getOk[12]);
+        TYXMLTools::getElementBoolValue(elemCur, "condFav", condFav, getOk[13]);   
+        TYXMLTools::getElementFloatValue(elemCur, "h1", h1, getOk[14]);
+        TYXMLTools::getElementFloatValue(elemCur, "distanceSRMin", distanceSRMin, getOk[15]);    
+        
+        if (elemCur.nodeName() == "distanceSRMin")
+        {
+            // Conversion des boolean recuperes en string 
+            QString useSol_str, useEcran_str, useReflexion_str, interference_str, calculTrajetHorizontaux_str, condFav_str;
+            useSol ? useSol_str = "True": useSol_str = "False";
+            useEcran ? useEcran_str = "True": useEcran_str = "False";
+            useReflexion ? useReflexion_str = "True": useReflexion_str = "False";
+            interference ? interference_str = "True": interference_str = "False";
+            calculTrajetHorizontaux ? calculTrajetHorizontaux_str = "True" : calculTrajetHorizontaux_str = "False";
+            condFav ? condFav_str = "True" : condFav_str = "False";
+
+            // Creation des lignes a modifier dans le bloc de text de parametres
+            QString useRealGround = "UseRealGround=" + useSol_str;
+            QString useScreen = "UseScreen=" + useEcran_str; 
+            QString useReflection = "UseReflection=" + useReflexion_str;
+            QString modSummation = "ModSummation=" + interference_str;
+            QString useLateralDiffraction = "UseLateraDiffraction=" + calculTrajetHorizontaux_str;
+            QString propaConditions = "PropaConditions=" + condFav_str;
+            QString h1parameter = "H1parameter=" + QString::number(h1);
+            QString minSRDistance = "MinSRDistance=" + QString::number(distanceSRMin);
+
+            // Expressions regulières liées aux lignes recherchées
+            QRegExp useSol_reg("UseRealGround=(True|False)"), useEcran_reg("UseScreen=(True|False)"),
+                useReflexion_reg("UseReflection=(True|False)"),interference_reg("ModSummation=(True|False)"),
+                calculTrajetHorizontaux_reg("UseLateraDiffraction=(True|False)"),condFav_reg("PropaConditions=(True|False)"),
+                h1parameter_reg("H1parameter=[0-9]+.[0-9]*"),minSRDistance_reg("MinSRDistance=[0-9]+.[0-9]*");
+
+            // Rechercher et remplacer
+            solverParams.replace(useSol_reg,useRealGround);
+            solverParams.replace(useEcran_reg,useScreen);
+            solverParams.replace(useReflexion_reg,useReflection);
+            solverParams.replace(interference_reg,modSummation);
+            solverParams.replace(calculTrajetHorizontaux_reg,useLateralDiffraction);
+            solverParams.replace(condFav_reg,propaConditions);
+            solverParams.replace(h1parameter_reg,h1parameter);
+            solverParams.replace(minSRDistance_reg,minSRDistance);
+        }
         // Selection
         if (elemCur.nodeName() == "ListID")
         {
