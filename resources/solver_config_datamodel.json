@@ -305,7 +305,7 @@
       "help": "Takes meteo into account"
     }, 
     "Anime3DKeepRays": {
-      "default": true, 
+      "default": false, 
       "type": "bool", 
       "help": "Keep rays after computation"
     }
