@@ -1265,7 +1265,7 @@ void TYPickEditor::manageProperties(TYElement *pElement)
             if (pSite)
             {
                 pSite->update(pElement);
-                getTYMainWnd()->getSiteFrame()->updateList();
+				getTYMainWnd()->getSiteFrame()->updateList();
             }
         }
 

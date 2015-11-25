@@ -332,6 +332,12 @@ int TYProjet::fromXML(DOM_Element domElement)
     if (!bCurrentCalculFound && (_listCalcul.size() > 0)) { setCurrentCalcul(_listCalcul[0]); }
 
     if (readOk == -1) { return readOk; }
+
+	// A REVOIR _pElement ne devrait pas renvoyer le projet dans showsources/TYModelerFrame...
+	if (_pSite)
+    {
+		_pSite->update(_pSite);
+    }
     return 1;
 }
 
