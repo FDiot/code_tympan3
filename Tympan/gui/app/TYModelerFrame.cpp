@@ -805,6 +805,7 @@ void TYModelerFrame::showSources(bool show)
 
             // Update view
             updateView();
+            
         }
 
         TYApplication::restoreOverrideCursor();
@@ -1358,7 +1359,7 @@ void TYModelerFrame::updateView(bool clipping /*=true*/, bool axesAndGrid /*=tru
         _pOGLScalarBarElement->initPositions();
 
         //RNU
-        //      _pView->getRenderer()->updateDisplayList();
+        //_pView->getRenderer()->updateDisplayList();
 
         // Update la vue 3D
         _pView->updateGL();
