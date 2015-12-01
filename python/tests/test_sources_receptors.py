@@ -57,14 +57,15 @@ class SourceAdditionTC(TympanTC):
         assert_allclose(src2.spectrum.to_dB().values, freq*2)
 
     def test_computation_with_manually_added_source(self):
-        power_lvl = np.array([10.0] * 31, dtype=float)
+        power_lvl = 10. * np.ones(31)
         ref_proj = self.load_project('site_receptor_source.xml')
         ref_model = Model.from_project(ref_proj)
         assert ref_model.nsources == 1
         assert ref_model.nreceptors == 1
         ref_src = ref_model.source(0)
         assert (ref_src.position.x, ref_src.position.y, ref_src.position.z) == (3., 3., 2.)
-        assert_allclose(ref_src.spectrum.to_dB().values, power_lvl)
+        assert_allclose(ref_src.spectrum.to_dB().values, power_lvl,
+                        rtol=1e-4)
         solver = Solver.from_project(ref_proj, TEST_SOLVERS_DIR)
         ref_result = solver.solve(ref_model).spectrum(0, 0).values
         # do the same with a manually added source (the xml project is the same as
