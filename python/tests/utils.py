@@ -74,7 +74,7 @@ def _test_solve_with_file(test_file, testobj):
     model = Model.from_project(project)
     solver = Solver.from_project(project, TEST_SOLVERS_DIR)
     # avoid segfaults due to multithreading
-    solver.nthreads = 1
+    solver.nb_threads = 1
     solver_result = solver.solve(model)
     project.import_result(model, solver_result)
     # Load the expected result
