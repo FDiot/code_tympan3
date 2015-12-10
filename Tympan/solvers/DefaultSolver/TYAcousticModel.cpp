@@ -1129,7 +1129,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
     // first one
     OPoint3D pt = director._ptA;
     pt._z += 1000.;
-    Ray ray1( OPoint3Dtovec3(pt), vec3(0., 0., -1.) );
+    Ray ray1( OPoint3Dtovec3(pt), vec3(0.0001, 0.0001, -1.) );
 
     std::list<Intersection> LI;
 
@@ -1140,7 +1140,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
     LI.clear();
     pt = director._ptB;
     pt._z += 1000.;
-    Ray ray2( OPoint3Dtovec3(pt), vec3(0., 0., -1.) );
+    Ray ray2( OPoint3Dtovec3(pt), vec3(0.0001, 0.0001, -1.) );
 
     double distance2 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray2, LI ) );
 	// An error can occur if some elements are outside of the grip (emprise)
