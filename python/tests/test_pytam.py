@@ -17,7 +17,7 @@ class TestPyTam(TympanTC):
         model = Model.from_project(project)
         solver = Solver.from_project(project, TEST_SOLVERS_DIR)
         # avoid segfaults due to multithreading
-        solver.nthreads = 1
+        solver.nb_threads = 1
         solver_result = solver.solve(model)
         project.import_result(model, solver_result)
         return project
@@ -30,7 +30,7 @@ class TestPyTam(TympanTC):
         self.assertEqual(result.nsources, 1)
         self.assertEqual(result.nreceptors, 6)
         actual = [result.spectrum(result.receptors[i],result.sources[0]).dBA for i in range(6)]
-        expected = [result.receptor(i).dBA for i in range(6)]
+        expected = [result.receptor(i).spectrum.dBA for i in range(6)]
         actual.sort()
         expected.sort()
         assert_allclose(actual, expected)
@@ -45,7 +45,7 @@ class TestPyTam(TympanTC):
         # because first source has a very low emission spectrum and therefore
         # doesn't contribute to the result
         actual = [result.spectrum(result.receptors[i],result.sources[1]).dBA for i in range(6)]
-        expected = [result.receptor(i).dBA for i in range(6)]
+        expected = [result.receptor(i).spectrum.dBA for i in range(6)]
         actual.sort()
         expected.sort()
         assert_allclose(actual, expected)
