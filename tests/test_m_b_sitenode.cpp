@@ -1,6 +1,6 @@
 /**
- * \file test_ground_contour.cpp
- * \test test ground contour computation for some sites read from XML projects
+ * \file test_m_b_sitenode.cpp
+ * \test various tests regarding TYSiteNode business objects
  *
  *  Created on: july 2014
  *      Author: Laura Médioni <laura.medioni@logilab.fr>
@@ -10,7 +10,24 @@
 #include "tests/TympanTestsConfig.h"
 #include "Tympan/models/business/TYProjet.h"
 #include "Tympan/models/business/infrastructure/TYSiteNode.h"
+#include "Tympan/models/business/infrastructure/TYInfrastructure.h"
 #include "Tympan/models/business/xml_project_util.h"
+
+
+TEST(ExternalEntityTest, external_elements)
+{
+    LPTYProjet project = tympan::load_project(tympan::path_to_test_data(
+                "test_external_elements.xml").c_str());
+    LPTYInfrastructure infra_ptr = project->getSite()->getInfrastructure();
+    TYTabBatimentGeoNode buildings = infra_ptr->getListBatiment();
+    EXPECT_EQ(buildings.size(), 2);
+    TYTabMachineGeoNode machines = infra_ptr->getListMachine();
+    EXPECT_EQ(machines.size(), 2);
+    TYTabRouteGeoNode roads = infra_ptr->getListRoute();
+    EXPECT_EQ(roads.size(), 0);
+
+}
+
 
 TEST(GroundContourTest, single_machine_on_ground)
 {
