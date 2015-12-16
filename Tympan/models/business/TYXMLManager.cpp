@@ -129,6 +129,59 @@ int TYXMLManager::load(const QString& fileName, LPTYElementArray& eltCollection)
         return -2;
     }
 
+    // If the document contains any external elements, replace them by the
+    // content of the external file before elements creation
+    QDomNodeList ext_elements = _domDocument.documentElement().elementsByTagName(
+            QString("ExternalElement"));
+    int processed = 0;
+    while(processed < ext_elements.length())
+    {
+        QDomNode ext_element = ext_elements.item(processed);
+        QDomNamedNodeMap attrs = ext_element.attributes();
+        if (attrs.contains(QString("filename")))
+        {
+            QString ext_filepath = attrs.namedItem(QString("filename")).nodeValue();
+            // External file must be in the same directory as the main file
+            QDir dir = QFileInfo(fileName).absoluteDir();
+            ext_filepath = dir.filePath(ext_filepath);
+            QDomDocument extdoc;
+            try
+            {
+                extdoc = parse_xml_file(ext_filepath);
+            }
+            catch(tympan::invalid_data& exc)
+            {
+                OMessageManager::get()->error(exc.what());
+                processed++;
+                continue;
+            }
+            QDomNodeList elements = extdoc.documentElement().childNodes();
+            if (elements.isEmpty())
+            {
+                OMessageManager::get()->error("External XML project %s seems empty.",
+                         ext_filepath.toStdString().c_str());
+                processed++;
+                continue;
+            }
+            QDomNode parent = ext_element.parentNode();
+            // The first element of the external file will replace the ExternalElement markup.
+            // Then the following ones if any will be added to the parent of the
+            // ExternalElement markup.
+            // replaceChild removes element from "elements" list
+            parent.replaceChild(elements.item(0), ext_element);
+            for (int j = 0; j < elements.length(); j++)
+            {
+                parent.appendChild(elements.item(j));
+            }
+        }
+        else
+        {
+            // Si pas de fichier spécifié on ne peut pas lire l'entité
+            OMessageManager::get()->error("XML project contains an external element defined without a file name");
+            processed++;
+        }
+        ext_elements = _domDocument.documentElement().elementsByTagName(QString("ExternalElement"));
+    }
     create_tyelements(eltCollection);
     return 1;
 }
