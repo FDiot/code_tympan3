@@ -1,5 +1,6 @@
 """solver models for Code_TYMPAN
 """
+from itertools import zip_longest
 
 import cython as cy
 import numpy as np
@@ -40,12 +41,27 @@ cdef class ProblemModel:
         node = cy.declare(tycommon.OPoint3D, tycommon.OPoint3D(x, y, z))
         return self.thisptr.get().make_node(node)
 
-    def add_triangle(self, n1, n2, n3):
+    def add_triangle(self, n1, n2, n3, material_info=None):
         """Add a triangle of node indices (n1, n2, n3) to the model"""
         assert self.thisptr.get() != NULL
-        return self.thisptr.get().make_triangle(n1, n2, n3)
+        tri_idx = self.thisptr.get().make_triangle(n1, n2, n3)
+        if material_info is not None:
+            self._set_triangle_material(tri_idx, *material_info)
+        return tri_idx
 
-    def add_mesh(self, points, triangles):
+    def _set_triangle_material(self, idx, name, resistivity, deviation,
+                               length):
+        """Associate a material with specified properties to an acoustic
+        triangle at `idx`.
+        """
+        actri = cy.declare(cy.pointer(AcousticTriangle),
+                           cy.address(self.thisptr.get().triangle(idx)))
+        material = cy.declare(shared_ptr[AcousticMaterialBase],
+                              self.thisptr.get().make_material(
+                                  name, resistivity, deviation, length))
+        actri.made_of = material
+
+    def add_mesh(self, points, triangles, materials=()):
         """Add a mesh to the solver model.
 
         :param points: sequence of `Point3d`
@@ -55,8 +71,8 @@ cdef class ProblemModel:
             nodes and triangles in the model once created.
         """
         nodes = np.array([self.add_node(p.x, p.y, p.z) for p in points])
-        triangles = np.array([self.add_triangle(nodes[t.p1], nodes[t.p2], nodes[t.p3])
-                              for t in triangles])
+        triangles = np.array([self.add_triangle(nodes[t.p1], nodes[t.p2], nodes[t.p3], m)
+                              for t, m in zip_longest(triangles, materials)])
         return nodes, triangles
 
     @cy.locals(spectrum_values=np.ndarray)
