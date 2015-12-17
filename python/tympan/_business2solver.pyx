@@ -13,6 +13,17 @@ from tympan.models cimport _solver as tysolver
 from tympan.models cimport _common as tycommon
 
 
+@cy.locals(ground=tybusiness.Ground)
+def _acoustic_material(ground):
+    """Build material information from a Ground instance."""
+    grnd = cy.declare(SmartPtr[tybusiness.TYSol], ground.thisptr)
+    name = cy.declare(string, grnd.getRealPointer().getName().toStdString())
+    resistivity = cy.declare(double, ground.resistivity)
+    deviation = cy.declare(double, ground.deviation)
+    length = cy.declare(double, ground.length)
+    return name, resistivity, deviation, length
+
+
 cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]] map_sources):
     """Business2MicroSource wrapping a map (TYElement*, SmartPtr[TYGeometryNode])
     """
@@ -395,23 +406,9 @@ cdef class Business2SolverConverter:
         (see also model.add_mesh), converting the data in basic classes
         'understandable' by the solvers (see entities.hpp).
         """
-        (points, triangles, grounds) = site.export_topo_mesh()
-        nodes_idx, tgles_idx = model.add_mesh(points, triangles)
-        # make material
-        actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
-        pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
-        # Set the material of each triangle
-        for (i, ground) in enumerate(grounds):
-            actri = cy.address(model.thisptr.get().triangle(tgles_idx[i]))
-            _ground = cy.declare(tybusiness.Ground, ground)
-            grnd = cy.declare(SmartPtr[tybusiness.TYSol])
-            grnd = _ground.thisptr
-            mat_name = cy.declare(string, grnd.getRealPointer().getName().toStdString())
-            mat_res = cy.declare(double, ground.resistivity)
-            mat_dev = cy.declare(double, ground.deviation)
-            mat_len = cy.declare(double, ground.length)
-            pmat = model.thisptr.get().make_material(mat_name, mat_res,mat_dev,mat_len)
-            actri.made_of = pmat
+        points, triangles, grounds = site.export_topo_mesh()
+        materials = [_acoustic_material(ground) for ground in grounds]
+        model.add_mesh(points, triangles, materials)
         # Recurse on subsites
         for subsite in site.subsites:
             self.process_altimetry(model, subsite)
