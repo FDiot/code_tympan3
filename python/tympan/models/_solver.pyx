@@ -39,12 +39,26 @@ cdef class ProblemModel:
         """Add a node of double coordinates (x, y, z) to the model"""
         assert self.thisptr.get() != NULL
         node = cy.declare(tycommon.OPoint3D, tycommon.OPoint3D(x, y, z))
-        self.thisptr.get().make_node(node)
+        return self.thisptr.get().make_node(node)
 
     def add_triangle(self, n1, n2, n3):
         """Add a triangle of node indices (n1, n2, n3) to the model"""
         assert self.thisptr.get() != NULL
-        self.thisptr.get().make_triangle(n1, n2, n3)
+        return self.thisptr.get().make_triangle(n1, n2, n3)
+
+    def add_mesh(self, points, triangles):
+        """Add a mesh to the solver model.
+
+        :param points: sequence of `Point3d`
+        :param triangles: sequence of `Triangle`
+
+        :return: (nodes, triangles) Numpy arrays with the indices of these
+            nodes and triangles in the model once created.
+        """
+        nodes = np.array([self.add_node(p.x, p.y, p.z) for p in points])
+        triangles = np.array([self.add_triangle(nodes[t.p1], nodes[t.p2], nodes[t.p3])
+                              for t in triangles])
+        return nodes, triangles
 
     @cy.locals(spectrum_values=np.ndarray)
     def _add_source(self, position, spectrum_values, shift):

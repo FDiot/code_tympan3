@@ -392,11 +392,11 @@ cdef class Business2SolverConverter:
         """Call Tympan methods to make a mesh out of the site altimetry.
 
         Read and export this mesh to the acoustic problem model
-        (see also _process_mesh), converting the data in basic classes
+        (see also model.add_mesh), converting the data in basic classes
         'understandable' by the solvers (see entities.hpp).
         """
         (points, triangles, grounds) = site.export_topo_mesh()
-        (nodes_idx, tgles_idx) = self._process_mesh(model, points, triangles)
+        nodes_idx, tgles_idx = model.add_mesh(points, triangles)
         # make material
         actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
         pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
@@ -426,7 +426,7 @@ cdef class Business2SolverConverter:
         """
         for surface in site.acoustic_surfaces:
             (points, triangles) = surface.export_mesh()
-            (nodes_idx, tgles_idx) = self._process_mesh(model, points, triangles)
+            nodes_idx, tgles_idx = model.add_mesh(points, triangles)
             # Get the building material for the surface
             pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
             buildmat = cy.declare(tybusiness.Material, surface.material)
@@ -445,30 +445,3 @@ cdef class Business2SolverConverter:
         # Recurse on subsites
         for subsite in site.subsites:
             self.process_infrastructure(model, subsite)
-
-    @cy.locals(model=tysolver.ProblemModel)
-    def _process_mesh(self, model, points, triangles):
-        """Add a mesh to the solver model
-
-        Create nodes and acoustic triangles in the model to represent the
-        mesh given in argument.
-        The mesh must be given as a list of 'Point3D' python objects ('points')
-        and a list of 'Triangle' python objects ('triangles')
-        Returns 2 np arrays containing the indices of these nodes and triangles
-        in the model once created.
-        """
-        map_to_model_node_idx = np.empty(len(points))
-        for (i, pt) in enumerate(points):
-            node = cy.declare(tycommon.OPoint3D)
-            node._x = pt.x
-            node._y = pt.y
-            node._z = pt.z
-            map_to_model_node_idx[i] = model.thisptr.get().make_node(node)
-        map_to_model_tgle_idx = np.empty(len(triangles))
-        for (i, tri) in enumerate(triangles):
-            map_to_model_tgle_idx[i] = model.thisptr.get().make_triangle(
-                map_to_model_node_idx[tri.p1],
-                map_to_model_node_idx[tri.p2],
-                map_to_model_node_idx[tri.p3])
-        return (map_to_model_node_idx, map_to_model_tgle_idx)
-
