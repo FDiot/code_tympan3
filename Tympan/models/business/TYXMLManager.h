@@ -140,6 +140,16 @@ public:
 
     // Membres
 protected:
+
+     /**
+     * Crée les éléments métiers trouvés dans le document xml interne `_domDocument`
+     * et remplit la collection `eltCollection` avec ces éléments
+     *
+     * @param eltCollection La collection d'element a peupler.
+     *
+     */
+    void create_tyelements(LPTYElementArray& eltCollection);
+
     ///Le document XML.
     DOM_Document _domDocument;
 

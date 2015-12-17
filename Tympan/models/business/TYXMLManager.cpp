@@ -129,7 +129,13 @@ int TYXMLManager::load(const QString& fileName, LPTYElementArray& eltCollection)
         return -2;
     }
 
-    // On recupere l'element XML root du document
+    create_tyelements(eltCollection);
+    return 1;
+}
+
+void TYXMLManager::create_tyelements(LPTYElementArray& eltCollection)
+{
+     // On recupere l'element XML root du document
     _rootElement = _domDocument.documentElement();
 
     // Recense tous les elements enfants du root
@@ -185,8 +191,6 @@ int TYXMLManager::load(const QString& fileName, LPTYElementArray& eltCollection)
     }
 
     OMessageManager::get()->info("Fin du chargement.");
-
-    return 1;
 }
 
 int TYXMLManager::save(QString fileName)
@@ -207,50 +211,7 @@ int TYXMLManager::loadFromString(const QString& xmlString, LPTYElementArray& elt
         OMessageManager::get()->error(exc.what());
         return -2;
     }
-
-    // On recupere l'element XML root du document
-    _rootElement = _domDocument.documentElement();
-
-    // Recense tous les elements enfants du root
-    QDomNodeList nodeList = _rootElement.childNodes();
-
-    TYElement* pElt = NULL;
-    QString str;
-
-    // On active la sauvegarde des instances de type TYElement et derivees
-    TYElement::purgeInstances();
-    TYElement::setLogInstances(true);
-
-    int nodecount = nodeList.length();
-
-    // Pour chaque noeud enfant du noeud root
-    for (int i = 0; i < nodecount; i++)
-    {
-        // Utilisation de la Prototype Factory pour creer un nouvel element a partir
-        // du nom du noeud enfant trouve
-
-        // Les donnees metiers ne sont pas prefixees par TY...
-        str = "TY";
-        str += nodeList.item(i).nodeName();
-
-        try
-        {
-            pElt = dynamic_cast<TYElement*>(TYElement::findAndClone((char*)str.toAscii().data()));
-        }
-        catch(tympan::invalid_data& exc) {pElt = nullptr;}
-        if (pElt != nullptr)
-        {
-            // Si l'element a ete trouve
-            // Auto chargement des parametres par l'element
-            pElt->fromXML(nodeList.item(i).toElement());
-
-            // Ajout de l'element a la collection
-            eltCollection.push_back(pElt);
-        }
-    }
-
-    // On desactive la sauvegarde des instances de type TYElement et derivees
-
+    create_tyelements(eltCollection);
     return 1;
 }
 
