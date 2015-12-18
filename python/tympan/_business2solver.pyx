@@ -1,3 +1,4 @@
+from itertools import repeat
 import numpy as np
 import cython as cy
 from cython.operator cimport dereference as deref, preincrement as inc
@@ -22,6 +23,12 @@ def _acoustic_material(ground):
     deviation = cy.declare(double, ground.deviation)
     length = cy.declare(double, ground.length)
     return name, resistivity, deviation, length
+
+
+def _surface_acoustic_material(surface):
+    """Return material information from an AcousticSurface instance."""
+    material = cy.declare(tybusiness.Material, surface.material)
+    return material.name, material.spectrum.values, surface.volume_id()
 
 
 cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.TYGeometryNode]]] map_sources):
@@ -415,30 +422,14 @@ cdef class Business2SolverConverter:
 
     @cy.locals(model=tysolver.ProblemModel, site=tybusiness.Site)
     def process_infrastructure(self, model, site):
-        """Go through site infrastructure and enrich solver model accordingly
-
-        Set a few 'geometric' entities such as nodes.
-        Create geometric entities, fill dedicated container and relate them
-        according to the relation definitions.
-        """
+        """Fill solver model from site infrastructure."""
         for surface in site.acoustic_surfaces:
-            (points, triangles) = surface.export_mesh()
-            nodes_idx, tgles_idx = model.add_mesh(points, triangles)
-            # Get the building material for the surface
-            pmat = cy.declare(shared_ptr[tysolver.AcousticMaterialBase])
-            buildmat = cy.declare(tybusiness.Material, surface.material)
-            mat_spec = cy.declare(tycommon.Spectrum, buildmat.spectrum)
-            mat_cspec = cy.declare(tycommon.OSpectreComplex,
-                                   tycommon.OSpectreComplex(mat_spec.thisobj))
-            mat_name = cy.declare(string, buildmat.name)
-            actri = cy.declare(cy.pointer(tysolver.AcousticTriangle))
-            volume_id = surface.volume_id()
-            # Set the material of the surface
-            for i in xrange(tgles_idx.size):
-                pmat = model.thisptr.get().make_material(mat_name, mat_cspec)
-                actri = cy.address(model.thisptr.get().triangle(tgles_idx[i]))
-                actri.made_of = pmat
-                actri.volume_id = volume_id.encode('utf-8')
+            points, triangles = surface.export_mesh()
+            # All triangles share the same material, so repeat in material
+            # information.
+            materials = repeat(_surface_acoustic_material(surface),
+                               len(triangles))
+            model.add_mesh(points, triangles, materials)
         # Recurse on subsites
         for subsite in site.subsites:
             self.process_infrastructure(model, subsite)
