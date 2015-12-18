@@ -50,16 +50,26 @@ cdef class ProblemModel:
             self._set_triangle_material(tri_idx, *material_info)
         return tri_idx
 
-    def _set_triangle_material(self, idx, name, resistivity, deviation,
-                               length):
-        """Associate a material with specified properties to an acoustic
-        triangle at `idx`.
-        """
+    @cy.locals(material=shared_ptr[AcousticMaterialBase],
+               spectrum=tycommon.Spectrum,
+               c_spectrum=tycommon.OSpectreComplex)
+    def _set_triangle_material(self, idx, *material_info):
+        """Set material on triangle with `idx`."""
         actri = cy.declare(cy.pointer(AcousticTriangle),
                            cy.address(self.thisptr.get().triangle(idx)))
-        material = cy.declare(shared_ptr[AcousticMaterialBase],
-                              self.thisptr.get().make_material(
-                                  name, resistivity, deviation, length))
+        # Dispatch through make_material prototypes.
+        try:
+            name, resistivity, deviation, length = material_info
+            if isinstance(name, str):
+                name = name.encode('utf-8')
+            material = self.thisptr.get().make_material(
+                name, resistivity, deviation, length)
+        except ValueError:
+            name, spectrum_values, volume_id = material_info
+            spectrum = tycommon.Spectrum(spectrum_values)
+            c_spectrum = tycommon.OSpectreComplex(spectrum.thisobj)
+            material = self.thisptr.get().make_material(name, c_spectrum)
+            actri.volume_id = volume_id.encode('utf-8')
         actri.made_of = material
 
     def add_mesh(self, points, triangles, materials=()):
