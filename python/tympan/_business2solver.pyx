@@ -13,6 +13,8 @@ from tympan.models cimport _business as tybusiness
 from tympan.models cimport _solver as tysolver
 from tympan.models cimport _common as tycommon
 
+cdef point_coordinates(tycommon.OPoint3D point):
+    return point._x, point._y, point._z
 
 def points_as_array(points):
     """Return a Numpy array from `points` sequence of Point3D."""
@@ -376,7 +378,8 @@ cdef class Business2SolverConverter:
             if control_points[i].getRealPointer().etat(self.comp.thisptr.getRealPointer()):
                 # inheritance: TYPointControl > TYPointCalcul > TYPoint > tycommon.OPoint3D > OCoord3D
                 # call to tycommon.OPoint3D copy constructor to record control point coordinates
-                rec_idx = model.thisptr.get().make_receptor((control_points[i].getRealPointer())[0])
+                x, y, z = point_coordinates((control_points[i].getRealPointer())[0])
+                rec_idx = model.add_receptor(x, y, z)
                 rec_uuid = id_str(control_points[i].getRealPointer())
                 self.bus2solv_receptors[rec_uuid] = rec_idx
                 self.instances_mapping[rec_uuid] = control_points[i].getRealPointer()
@@ -404,7 +407,8 @@ cdef class Business2SolverConverter:
                     mesh_points[j].getRealPointer()._x = point3d._x
                     mesh_points[j].getRealPointer()._y = point3d._y
                     mesh_points[j].getRealPointer()._z = point3d._z
-                    rec_idx = model.thisptr.get().make_receptor((mesh_points[j].getRealPointer())[0])
+                    x, y, z = point_coordinates((mesh_points[j].getRealPointer())[0])
+                    rec_idx = model.add_receptor(x, y, z)
                     rec_uuid = id_str(mesh_points[j].getRealPointer())
                     self.bus2solv_receptors[rec_uuid] = rec_idx
                     self.instances_mapping[rec_uuid] = mesh_points[j].getRealPointer()

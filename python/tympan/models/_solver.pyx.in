@@ -134,6 +134,11 @@ cdef class ProblemModel:
             sources.append(source)
         return sources
 
+    @cy.locals(point=tycommon.OPoint3D)
+    def add_receptor(self, x, y, z):
+        point = tycommon.OPoint3D(x, y, z)
+        return self.thisptr.get().make_receptor(point)
+
     def receptor(self, idx):
         """Return the acoustic receptor (SolverReceptor object) of index 'idx'
         """
