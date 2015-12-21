@@ -354,6 +354,11 @@ cdef class MeshTriangle:
         assert self.thisptr != NULL
         return self.thisptr.n[0], self.thisptr.n[1], self.thisptr.n[2]
 
+    @property
+    def material_name(self):
+        assert self.thisptr != NULL
+        return self.thisptr.made_of.get().name.decode()
+
 
 cdef class Configuration:
     thisptr = cy.declare(SmartPtr[SolverConfiguration])
