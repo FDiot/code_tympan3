@@ -1,9 +1,10 @@
 import unittest
 import os.path as osp
 
-from tympan.models.solver import Model
+from tympan.models.solver import Model, Solver
 from tympan.models._common import Point3D
-from utils import TympanTC
+from utils import TympanTC, TEST_SOLVERS_DIR
+
 
 class TriangleContainerTC(TympanTC):
 
@@ -21,6 +22,14 @@ class TriangleContainerTC(TympanTC):
         # make sure we checked at least one topography triangle volume id, otherwise the test
         # doesn't stand for anything.
         self.assertTrue(found_a_topography_triangle)
+
+
+class SolverModelWithoutProjectTC(TympanTC):
+
+    def test_solver_from_name(self):
+        """Check Solver.from_name() / just ensure this does not crash"""
+        params_file = self.datapath('solverparams.ini')
+        solver = Solver.from_name('default', params_file, TEST_SOLVERS_DIR)
 
 
 class FresnelZoneIntersectionTC(TympanTC):

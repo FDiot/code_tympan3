@@ -5,7 +5,7 @@ import os
 
 from tympan.models import filter_output
 from tympan.models import _solver as cysolver
-from tympan._business2solver import Business2SolverConverter, select_acoustic_solver
+from tympan import _business2solver
 
 _CONVERTERS = {
     'bool': lambda x: x.lower() == 'true',
@@ -39,8 +39,8 @@ class Model(object):
     def from_project(cls, project, set_sources=True, set_receptors=True):
         """Create a solver model from a project"""
         model = cls()
-        model._converter = Business2SolverConverter(project.current_computation,
-                                                    project.site)
+        model._converter = _business2solver.Business2SolverConverter(
+            project.current_computation, project.site)
         model._converter.build_mesh(model._model)
         if set_sources:
             model._converter.build_sources(model._model)
@@ -114,9 +114,45 @@ class Model(object):
 class Solver(object):
     """Acoustic solver"""
 
+    _solvers = {
+        'default': 'DefaultSolver',
+        'anime3d': 'ANIME3DSolver',
+    }
+
     def __init__(self, solver):
         """Create a solver from a solver cython object"""
         self._solver = solver
+
+    @classmethod
+    def from_name(cls, name, parameters_file, solverdir=None, verbose=False):
+        """Return an instance of solver with `name`.
+
+        `name` can be "default" or "Anime3D" for instance.
+        """
+        solverdir = solverdir or fetch_solverdir()
+        with open(parameters_file) as fp:
+            _set_solver_config(fp)
+        solver_name = cls._solvers.get(name.lower(), name)
+        with filter_output(verbose):
+            solver = _business2solver.acoustic_solver_by_name(
+                solver_name, solverdir)
+        return cls(solver)
+
+    @classmethod
+    def from_project(cls, project, solverdir=None, verbose=False):
+        """Load and configure solver
+
+        'solverdir' is the directory where one can find the solver library. If None, it will
+        be retrieved from "TYMPAN_SOLVERDIR" environment variable, which must be defined. The
+        configuration is read from the project.
+        """
+        solverdir = solverdir or fetch_solverdir()
+        parameters_fp = StringIO(project.current_computation.solver_parameters.decode('utf-8'))
+        _set_solver_config(parameters_fp)
+        with filter_output(verbose):
+            solver = _business2solver.acoustic_solver_from_computation(
+                project.current_computation, solverdir)
+        return cls(solver)
 
     @property
     def nthread(self):
@@ -131,20 +167,6 @@ class Solver(object):
         """Solve the acoustic problem described in the model (run a computation)"""
         return self._solver.solve_problem(model._model)
 
-    @classmethod
-    def from_project(cls, project, solverdir=None, verbose=False):
-        """Load and configure solver
-
-        'solverdir' is the directory where one can find the solver library. If None, it will
-        be retrieved from "TYMPAN_SOLVERDIR" environment variable, which must be defined. The
-        configuration is read from the project.
-        """
-        solverdir = solverdir or fetch_solverdir()
-        _set_solver_config(project.current_computation)
-        with filter_output(verbose):
-            solver = select_acoustic_solver(solverdir, project.current_computation)
-        return cls(solver)
-
 
 def fetch_solverdir():
     """Try to retrieve solver plugins directory from 'TYMPAN_SOLVERDIR' environment variable
@@ -158,11 +180,11 @@ def fetch_solverdir():
                            'solver libraries directory')
 
 
-def _set_solver_config(comp):
+def _set_solver_config(parameters_fp):
     """Setup solver configuration"""
     parser = configparser.RawConfigParser()
     parser.optionxform = str  # keep param names case
-    parser.readfp(StringIO(comp.solver_parameters.decode('utf-8')))
+    parser.readfp(parameters_fp)
     solver_config = cysolver.Configuration.get()
     errors = []
     for section in parser.sections():

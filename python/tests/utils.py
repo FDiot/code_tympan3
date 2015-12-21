@@ -133,3 +133,7 @@ class TympanTC(unittest.TestCase):
         # read acoustic project
         project = Project.from_xml(osp.join(TEST_DATA_DIR, *path))
         return project
+
+    @staticmethod
+    def datapath(*args):
+        return osp.join(_HERE, 'data', *args)

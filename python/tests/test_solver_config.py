@@ -12,6 +12,12 @@ from tympan.models.solver import _set_solver_config
 from tympan.models import _solver as cysolver
 
 
+def _set_solver_config_from_computation(computation):
+    """Wrapper around _set_solver_config for testing purpose."""
+    parameters_fp = io.StringIO(computation.solver_parameters.decode())
+    return _set_solver_config(parameters_fp)
+
+
 class TestSolverConfig(TympanTC):
 
     def test_parameters_serialization(self):
@@ -40,7 +46,7 @@ class TestSolverConfig(TympanTC):
     def test_set_solver_config(self):
         # Open a basic project with a custom solver configuration
         project = self.load_project('', 'test_solver_params.xml')
-        _set_solver_config(project.current_computation)
+        _set_solver_config_from_computation(project.current_computation)
         solver_config = cysolver.Configuration.get()
         # 10. by default, 20. in the XML file
         self.assertEqual(solver_config.H1parameter, 20.)
@@ -48,7 +54,7 @@ class TestSolverConfig(TympanTC):
     def test_parameters_parsing(self):
         # Open a basic project with a custom solver configuration
         project = self.load_project('', 'test_solver_params.xml')
-        _set_solver_config(project.current_computation)
+        _set_solver_config_from_computation(project.current_computation)
         solver_config = cysolver.Configuration.get()
         # bool
         self.assertEqual(solver_config.UseReflection, True)
