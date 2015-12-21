@@ -1,5 +1,8 @@
-import unittest
 import os.path as osp
+import unittest
+
+import numpy as np
+from numpy.testing import assert_array_equal
 
 from tympan.models.solver import Model, Solver
 from tympan.models._common import Point3D
@@ -30,6 +33,24 @@ class SolverModelWithoutProjectTC(TympanTC):
         """Check Solver.from_name() / just ensure this does not crash"""
         params_file = self.datapath('solverparams.ini')
         solver = Solver.from_name('default', params_file, TEST_SOLVERS_DIR)
+
+    def test_add_mesh(self):
+        model = Model()
+        nodes = np.array([[0, 0, 0],
+                          [0, 1, 0],
+                          [1, 1, 0],
+                          [1, 0, 0]])
+        triangles = np.array([[0, 1, 2],
+                              [1, 2, 3]])
+        materials = [('mat1', 0.1, 2.3, 12),
+                     ('mat2', 0.2, 3.3, 23)]
+        nodes_idx, triangles_idx = model.add_mesh(nodes, triangles, materials)
+        assert_array_equal(np.array([model.node_coords(n) for n in range(4)]),
+                           nodes)
+        assert_array_equal(np.array([t.nodes for t in model.triangles]),
+                           triangles)
+        self.assertEqual([t.material_name for t in model.triangles],
+                         ['mat1', 'mat2'])
 
 
 class FresnelZoneIntersectionTC(TympanTC):

@@ -84,7 +84,7 @@ cdef extern from "Tympan/models/solver/entities.hpp" namespace "tympan":
         string volume_id
 
     cdef cppclass AcousticMaterialBase:
-        pass
+        string name
 
     cdef cppclass AcousticBuildingMaterial(AcousticMaterialBase):
         AcousticBuildingMaterial(const string& name_, const OSpectreComplex& spectrum)
