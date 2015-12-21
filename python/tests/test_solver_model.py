@@ -52,6 +52,13 @@ class SolverModelWithoutProjectTC(TympanTC):
         self.assertEqual([t.material_name for t in model.triangles],
                          ['mat1', 'mat2'])
 
+    def test_add_receptor(self):
+        model = Model()
+        coords = 0.7, 0.7, 0
+        model.add_receptor(*coords)
+        point = model.receptor(0).position
+        self.assertEqual((point.x, point.y, point.z), coords)
+
 
 class FresnelZoneIntersectionTC(TympanTC):
 

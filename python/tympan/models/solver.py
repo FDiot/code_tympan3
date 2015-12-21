@@ -65,6 +65,9 @@ class Model(object):
         """
         return self._model._add_source(position, spectrum_values, shift)
 
+    def add_receptor(self, x, y ,z):
+        return self._model.add_receptor(x, y, z)
+
     def export_triangular_mesh(self):
         """Build a triangular mesh from the acoustic problem model
 
