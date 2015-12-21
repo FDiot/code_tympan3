@@ -68,22 +68,23 @@ cdef class ProblemModel:
             spectrum = tycommon.Spectrum(spectrum_values)
             c_spectrum = tycommon.OSpectreComplex(spectrum.thisobj)
             material = self.thisptr.get().make_material(name, c_spectrum)
-            actri.volume_id = volume_id
+            actri.volume_id = volume_id.encode('utf-8')
         actri.made_of = material
 
-    def add_mesh(self, points, triangles, materials=()):
+    def add_mesh(self, nodes, triangles, materials=()):
         """Add a mesh to the solver model.
 
-        :param points: sequence of `Point3d`
-        :param triangles: sequence of `Triangle`
+        :param nodes: array of nodes coordinates (x, y, z)
+        :param triangles: array of triangle nodes indices
 
-        :return: (nodes, triangles) Numpy arrays with the indices of these
+        :return: (nodes_idx, triangles_idx) Numpy arrays with the indices of these
             nodes and triangles in the model once created.
         """
-        nodes = np.array([self.add_node(p.x, p.y, p.z) for p in points])
-        triangles = np.array([self.add_triangle(nodes[t.p1], nodes[t.p2], nodes[t.p3], m)
-                              for t, m in zip_longest(triangles, materials)])
-        return nodes, triangles
+        nodes_idx = np.array([self.add_node(x, y, z) for (x, y, z) in nodes])
+        triangles_idx = np.array(
+            [self.add_triangle(nodes_idx[p1], nodes_idx[p2], nodes_idx[p3], m)
+             for (p1, p2, p3), m in zip_longest(triangles, materials)])
+        return nodes_idx, triangles_idx
 
     @cy.locals(spectrum_values=np.ndarray)
     def _add_source(self, position, spectrum_values, shift):

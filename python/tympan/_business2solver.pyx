@@ -14,6 +14,16 @@ from tympan.models cimport _solver as tysolver
 from tympan.models cimport _common as tycommon
 
 
+def points_as_array(points):
+    """Return a Numpy array from `points` sequence of Point3D."""
+    return np.array([(p.x, p.y, p.z) for p in points])
+
+
+def triangles_as_array(triangles):
+    """Return a Numpy array from `triangles` sequence of Triangle."""
+    return np.array([(t.p1, t.p2, t.p3) for t in triangles])
+
+
 @cy.locals(ground=tybusiness.Ground)
 def _acoustic_material(ground):
     """Build material information from a Ground instance."""
@@ -415,7 +425,9 @@ cdef class Business2SolverConverter:
         """
         points, triangles, grounds = site.export_topo_mesh()
         materials = [_acoustic_material(ground) for ground in grounds]
-        model.add_mesh(points, triangles, materials)
+        nodes = points_as_array(points)
+        triangles = triangles_as_array(triangles)
+        model.add_mesh(nodes, triangles, materials)
         # Recurse on subsites
         for subsite in site.subsites:
             self.process_altimetry(model, subsite)
@@ -429,7 +441,9 @@ cdef class Business2SolverConverter:
             # information.
             materials = repeat(_surface_acoustic_material(surface),
                                len(triangles))
-            model.add_mesh(points, triangles, materials)
+            nodes = points_as_array(points)
+            triangles = triangles_as_array(triangles)
+            model.add_mesh(nodes, triangles, materials)
         # Recurse on subsites
         for subsite in site.subsites:
             self.process_infrastructure(model, subsite)
