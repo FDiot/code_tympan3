@@ -301,9 +301,9 @@ int TYCalcul::fromXML(DOM_Element domElement)
 
     TYElement::fromXML(domElement);
 
-    bool getOk[16];
+    bool getOk[19];
     unsigned int i;
-    for (i = 0; i < 16; i++) { getOk[i] = false; }
+    for (i = 0; i < 19; i++) { getOk[i] = false; }
     int retVal = -1;
     LPTYMaillageGeoNode pMaillageGeoNode = new TYMaillageGeoNode(NULL, this);
     LPTYRay aRay = new TYRay();
@@ -316,7 +316,7 @@ int TYCalcul::fromXML(DOM_Element domElement)
     int etat = -1; // Etat du calcul
     bool useSol, useVegetation, useAtmosphere, useEcran, useReflexion;
     bool expansGeo, typeCaclulSol, condFav, calculTrajetHorizontaux, interference;    
-    float h1, distanceSRMin;
+    float h1, distanceSRMin; 
 
     TYListID tempElementSelection;
     QString strSolverId;
@@ -386,6 +386,45 @@ int TYCalcul::fromXML(DOM_Element domElement)
             solverParams.replace(h1parameter_reg,h1parameter);
             solverParams.replace(minSRDistance_reg,minSRDistance);
         }
+		// Récupérer les parametres météo de la version 3
+		if( elemCur.nodeName() == "Atmosphere")
+		{
+			double pression = 0;
+			double temperature = 0;
+			double hygrometrie = 0;
+			DOM_Element elemCur2;
+			QDomNodeList childs2 = elemCur.childNodes();
+
+
+			for (unsigned int j = 0; j < childs2.length(); j++)
+			{
+				elemCur2 = childs2.item(j).toElement();
+				if(elemCur2.nodeName() == "pression")
+				{
+					TYXMLTools::getElementDoubleValue(elemCur2, "pression", pression, getOk[16]); 
+					QString atmosPressure = "AtmosPressure=" + QString::number(pression);
+					QRegExp atmosPressure_reg("AtmosPressure=[0-9]+.[0-9]*");
+					solverParams.replace(atmosPressure_reg,atmosPressure);
+					continue;
+				}
+				if(elemCur2.nodeName() == "temperature")
+				{
+					TYXMLTools::getElementDoubleValue(elemCur2, "temperature", temperature, getOk[17]);
+					QString atmosTemperature = "AtmosTemperature=" + QString::number(temperature);
+					QRegExp atmosTemperature_reg("AtmosTemperature=[0-9]+.[0-9]*");
+					solverParams.replace(atmosTemperature_reg,atmosTemperature);
+					continue;
+				}
+				if(elemCur2.nodeName() == "hygrometrie")
+				{
+					TYXMLTools::getElementDoubleValue(elemCur2, "hygrometrie", hygrometrie, getOk[18]);
+					QString atmosHygrometry = "AtmosHygrometry=" + QString::number(hygrometrie);
+					QRegExp atmosHygrometry_reg("AtmosHygrometry=[0-9]+.[0-9]*");
+					solverParams.replace(atmosHygrometry_reg,atmosHygrometry);
+					continue;
+				}
+			}
+		}
         // Selection
         if (elemCur.nodeName() == "ListID")
         {
