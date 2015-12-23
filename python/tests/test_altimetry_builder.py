@@ -213,6 +213,16 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                          "Intersecting constraints with different altitudes: "
                          "['{Mainsite ref altitude}', '{Other level curve}']")
 
+    def test_subsite_intersects_with_site(self):
+        self.mainsite.drop_child(self.subsite)
+        subsite = SiteNode(rect(-1, -1, 7, 5), id="{Intersecting subsite}",
+                           parent_site=self.mainsite)
+        with self.assertRaises(RuntimeError) as cm:
+            builder.recursively_merge_all_subsites(self.mainsite)
+        self.assertEqual(str(cm.exception),
+                         'SiteNode #{Intersecting subsite} is not strictly '
+                         'contained in main site')
+
     def test_join_with_landtakes(self):
         equivalent_site, mesh, feature_by_face = builder.build_altimetry(
             self.mainsite)
