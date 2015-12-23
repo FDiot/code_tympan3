@@ -22,7 +22,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         TestFeatures.build_features(self)
         TestFeatures.build_more_features_in_subsites(self)
         # NB Level curve A intersects this one : altitudes must be the same
-        self.landtake_level_curve = LevelCurve(
+        landtake_level_curve = LevelCurve(
             self.big_rect_coords, altitude=self.altitude_A, close_it=True,
             parent_site=self.mainsite, id="{Mainsite ref altitude}")
 
