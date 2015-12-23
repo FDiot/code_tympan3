@@ -197,6 +197,22 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.assertEqual(len(equivalent_site.landtakes), 1)
         self.assertEqual(equivalent_site.landtakes[0].id, '{Building}')
 
+    def test_intersecting_level_curves_error(self):
+        # build a new level curve that intersects site landtake level curve and
+        # has a different altitude
+        other_level_curve_coords = [(-2, -3), (1, 2)]
+        level_curve =  LevelCurve(other_level_curve_coords,
+                                  altitude = 20.,
+                                  parent_site=self.mainsite, id="{Other level curve}")
+        cleaner = builder.recursively_merge_all_subsites(self.mainsite)
+        msite = cleaner.merged_site()
+        mbuilder = builder.MeshBuilder(msite)
+        with self.assertRaises(InconsistentGeometricModel) as cm:
+            bmesh = mbuilder.build_mesh(refine=False)
+        self.assertEqual(str(cm.exception),
+                         "Intersecting constraints with different altitudes: "
+                         "['{Mainsite ref altitude}', '{Other level curve}']")
+
     def test_join_with_landtakes(self):
         equivalent_site, mesh, feature_by_face = builder.build_altimetry(
             self.mainsite)
