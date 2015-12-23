@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
 <!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
 <Tympan>
- <Version>3.9.0 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
+ <Version>3.10.0 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
  <Projet id="{61736b71-1c47-4b37-b79a-37b602f5216c}" name="Parking AESS2">
   <auteur></auteur>
   <dateCreation>2004-09-22</dateCreation>
   <dateModif>2004-10-12</dateModif>
+  <comment></comment>
   <delaunayTolerence>0.001</delaunayTolerence>
   <distMaxBetweenPoints>50</distMaxBetweenPoints>
   <useDefGeomVal>1</useDefGeomVal>
@@ -63,7 +64,7 @@
     <ListMachine>
      <GeometryNode id="{5816aef8-4c95-4423-a16e-f3e9904f63ee}" name="">
       <hauteur>0.000</hauteur>
-      <Repere id="{04b96ee3-4963-4a00-9828-aa2505cf9f91}" name="">
+      <Repere id="{89d81ab8-71e8-4da8-aab5-d7ef3f59ceef}" name="">
        <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
        <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
@@ -145,34 +146,34 @@
             <Point x="-0.700" y="-0.250" z="0.000"/>
            </Rectangle>
            <nbChild>1</nbChild>
-           <GeometryNode id="{6a39630c-d578-495f-90d1-bef50d6addb2}" name="">
+           <GeometryNode id="{9d9519b7-32aa-4c71-a178-3795baa166eb}" name="">
             <hauteur>0.000</hauteur>
-            <Repere id="{5e123627-a329-49da-a54c-128fae7813ab}" name="Repère 251">
+            <Repere id="{17621149-85d6-4cbd-9a6c-0bb7ab6e4f69}" name="Repère 246">
              <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
             </Repere>
-            <AcousticRectangle id="{d12ae8ac-a938-410b-a7b0-a2c58438f955}" name="Sous-face 50">
+            <AcousticRectangle id="{1974a675-ee1a-4aae-9dd5-ead0f5af2fad}" name="Sous-face 80">
              <Color g="0.0156863" r="0.180392" b="0.721569"/>
              <densiteSrcsH>0</densiteSrcsH>
              <densiteSrcsV>0</densiteSrcsV>
              <curRegime>0</curRegime>
              <nbRegimes>1</nbRegimes>
              <nextRegime>3</nextRegime>
-             <Regime id="{3abebc40-e3a8-4ef4-af20-eb05f1d56570}" name="regime0">
+             <Regime id="{18c77c4e-f8ae-41d6-9f48-9ecc2e9245b0}" name="regime0">
               <isRayonnant>0</isRayonnant>
               <useAtt>0</useAtt>
               <typeDistribution>0</typeDistribution>
              </Regime>
              <isSub>0</isSub>
-             <Rectangle id="{102e1ed1-0a3a-49c1-8d78-1cd8fcca96fb}" name="Rectangle 115">
+             <Rectangle id="{825c5c9d-053e-4ff2-9299-f5ad84113b8d}" name="Rectangle 127">
               <Point x="-0.700" y="0.250" z="0.000"/>
               <Point x="0.700" y="0.250" z="0.000"/>
               <Point x="0.700" y="-0.250" z="0.000"/>
               <Point x="-0.700" y="-0.250" z="0.000"/>
              </Rectangle>
-             <SourceSurfacic id="{f74c5563-6c78-405a-b691-32528e8362ac}" name="Source surfacique 50">
+             <SourceSurfacic id="{71352d77-98ec-4072-9d9d-372714b037e3}" name="Source surfacique 80">
               <nbSrcs>0</nbSrcs>
               <densiteSrcsH>0</densiteSrcsH>
               <densiteSrcsV>0</densiteSrcsV>
@@ -209,34 +210,34 @@
             <Point x="-0.015" y="-0.250" z="0.000"/>
            </Rectangle>
            <nbChild>1</nbChild>
-           <GeometryNode id="{bc84e6f7-a838-4b5e-b947-d8362e66d1e9}" name="">
+           <GeometryNode id="{387d47e7-3514-418a-8aca-178d91d14306}" name="">
             <hauteur>0.000</hauteur>
-            <Repere id="{8769c13f-3f85-4fc1-b8d7-72212dfc3064}" name="Repère 255">
+            <Repere id="{cfbe06db-c4a2-48ce-9717-eead71ff5a21}" name="Repère 250">
              <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
             </Repere>
-            <AcousticRectangle id="{11f3b7d2-49ea-488d-a8f4-cab00dbb36eb}" name="Sous-face 53">
+            <AcousticRectangle id="{f66162ca-118e-473d-96b5-b7d749302a4b}" name="Sous-face 83">
              <Color g="0.0156863" r="0.180392" b="0.721569"/>
              <densiteSrcsH>0</densiteSrcsH>
              <densiteSrcsV>0</densiteSrcsV>
              <curRegime>0</curRegime>
              <nbRegimes>1</nbRegimes>
              <nextRegime>3</nextRegime>
-             <Regime id="{ac6bb788-7a90-4ac1-8415-75b105ce2873}" name="regime0">
+             <Regime id="{1843f5ab-fbd8-4608-ac72-b4d06cbe4ac7}" name="regime0">
               <isRayonnant>0</isRayonnant>
               <useAtt>0</useAtt>
               <typeDistribution>0</typeDistribution>
              </Regime>
              <isSub>0</isSub>
-             <Rectangle id="{d8ba192e-c382-4982-9963-31f278c59a0a}" name="Rectangle 119">
+             <Rectangle id="{58a437e1-8afd-4756-b94c-63d3d0053c9e}" name="Rectangle 131">
               <Point x="-0.015" y="0.250" z="0.000"/>
               <Point x="0.015" y="0.250" z="0.000"/>
               <Point x="0.015" y="-0.250" z="0.000"/>
               <Point x="-0.015" y="-0.250" z="0.000"/>
              </Rectangle>
-             <SourceSurfacic id="{fe06d855-1d17-4c43-bbb0-2ee1ba62c513}" name="Source surfacique 53">
+             <SourceSurfacic id="{97d7a061-55e3-4ee2-ad1d-c67d28616d4a}" name="Source surfacique 83">
               <nbSrcs>0</nbSrcs>
               <densiteSrcsH>0</densiteSrcsH>
               <densiteSrcsV>0</densiteSrcsV>
@@ -273,34 +274,34 @@
             <Point x="-0.700" y="-0.250" z="0.000"/>
            </Rectangle>
            <nbChild>1</nbChild>
-           <GeometryNode id="{4c462ddb-dd52-4da1-8e02-7479fc3965e5}" name="">
+           <GeometryNode id="{6a2e38be-d9d1-4005-8334-a37a1b34e4ee}" name="">
             <hauteur>0.000</hauteur>
-            <Repere id="{20e1987d-9c9d-4d89-ad47-4c3ac2e1ef64}" name="Repère 259">
+            <Repere id="{14f93d52-035b-45e5-97c1-198e1cf71f25}" name="Repère 254">
              <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
             </Repere>
-            <AcousticRectangle id="{3a56c85c-ad94-4e45-8784-b95be3b0b8d7}" name="Sous-face 56">
+            <AcousticRectangle id="{96f508c1-b93a-4972-b20a-382b76502bb2}" name="Sous-face 86">
              <Color g="0.0156863" r="0.180392" b="0.721569"/>
              <densiteSrcsH>0</densiteSrcsH>
              <densiteSrcsV>0</densiteSrcsV>
              <curRegime>0</curRegime>
              <nbRegimes>1</nbRegimes>
              <nextRegime>3</nextRegime>
-             <Regime id="{f99688dc-1111-4a1c-a6be-c3a48c8959ad}" name="regime0">
+             <Regime id="{bf9b06b1-3723-4a48-b56e-2959e55ba995}" name="regime0">
               <isRayonnant>0</isRayonnant>
               <useAtt>0</useAtt>
               <typeDistribution>0</typeDistribution>
              </Regime>
              <isSub>0</isSub>
-             <Rectangle id="{e2ab908c-a104-4e48-a220-db5b6863595b}" name="Rectangle 123">
+             <Rectangle id="{5c2554b9-8199-4bd2-ada5-2e8a965e7727}" name="Rectangle 135">
               <Point x="-0.700" y="0.250" z="0.000"/>
               <Point x="0.700" y="0.250" z="0.000"/>
               <Point x="0.700" y="-0.250" z="0.000"/>
               <Point x="-0.700" y="-0.250" z="0.000"/>
              </Rectangle>
-             <SourceSurfacic id="{8a2d62c1-e774-441f-885a-13b6c390b542}" name="Source surfacique 56">
+             <SourceSurfacic id="{4a63a86c-57dd-4959-872c-5317bb8fc6f7}" name="Source surfacique 86">
               <nbSrcs>0</nbSrcs>
               <densiteSrcsH>0</densiteSrcsH>
               <densiteSrcsV>0</densiteSrcsV>
@@ -337,34 +338,34 @@
             <Point x="-0.015" y="-0.250" z="0.000"/>
            </Rectangle>
            <nbChild>1</nbChild>
-           <GeometryNode id="{66cd064f-8af0-415e-8269-20070b254a1b}" name="">
+           <GeometryNode id="{32e7b8a0-fa17-44cd-a3fe-4efb3908f256}" name="">
             <hauteur>0.000</hauteur>
-            <Repere id="{363539b9-2975-4c97-b39d-c91dba4e0ddd}" name="Repère 263">
+            <Repere id="{e2271b60-30fb-4133-a455-ba2cc8f22f9b}" name="Repère 258">
              <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
             </Repere>
-            <AcousticRectangle id="{4c93217c-50a4-4b06-9146-513c5295fccb}" name="Sous-face 59">
+            <AcousticRectangle id="{aca669e7-e859-4f56-8802-0490202f3544}" name="Sous-face 89">
              <Color g="0.0156863" r="0.180392" b="0.721569"/>
              <densiteSrcsH>0</densiteSrcsH>
              <densiteSrcsV>0</densiteSrcsV>
              <curRegime>0</curRegime>
              <nbRegimes>1</nbRegimes>
              <nextRegime>3</nextRegime>
-             <Regime id="{3a4f8687-d0c8-46e5-a5ae-46926619c81e}" name="regime0">
+             <Regime id="{d64b791b-7a6c-4f44-af75-ce30214b7003}" name="regime0">
               <isRayonnant>0</isRayonnant>
               <useAtt>0</useAtt>
               <typeDistribution>0</typeDistribution>
              </Regime>
              <isSub>0</isSub>
-             <Rectangle id="{d3e4056e-969c-4fcd-9203-89d6699f0af5}" name="Rectangle 127">
+             <Rectangle id="{08dfe15e-61eb-4de8-acec-0d652063092b}" name="Rectangle 139">
               <Point x="-0.015" y="0.250" z="0.000"/>
               <Point x="0.015" y="0.250" z="0.000"/>
               <Point x="0.015" y="-0.250" z="0.000"/>
               <Point x="-0.015" y="-0.250" z="0.000"/>
              </Rectangle>
-             <SourceSurfacic id="{69ab21a7-9525-4621-9fe9-637a38c84de0}" name="Source surfacique 59">
+             <SourceSurfacic id="{84635f13-8e5d-400d-947e-75b430d2cbcf}" name="Source surfacique 89">
               <nbSrcs>0</nbSrcs>
               <densiteSrcsH>0</densiteSrcsH>
               <densiteSrcsV>0</densiteSrcsV>
@@ -401,34 +402,34 @@
             <Point x="-0.015" y="-0.700" z="0.000"/>
            </Rectangle>
            <nbChild>1</nbChild>
-           <GeometryNode id="{710498c1-7f5c-423c-9cf1-77e6f13a5cb4}" name="">
+           <GeometryNode id="{7db26862-473d-4226-91d4-a9f4503a83a9}" name="">
             <hauteur>0.000</hauteur>
-            <Repere id="{648b791d-d2be-4c18-9b35-bc8cc62bb60b}" name="Repère 267">
+            <Repere id="{b17acf46-fb3a-4a56-9ee1-aca27fa781dc}" name="Repère 262">
              <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
             </Repere>
-            <AcousticRectangle id="{91d2d4d6-13e8-4457-bc62-4bb7c7133069}" name="Sous-face 62">
+            <AcousticRectangle id="{138d9649-acf7-4fb5-9b7b-4146cb6276b0}" name="Sous-face 92">
              <Color g="0.0156863" r="0.180392" b="0.721569"/>
              <densiteSrcsH>0</densiteSrcsH>
              <densiteSrcsV>0</densiteSrcsV>
              <curRegime>0</curRegime>
              <nbRegimes>1</nbRegimes>
              <nextRegime>3</nextRegime>
-             <Regime id="{8b7c5855-b657-44b8-b99a-2e397cac8e1b}" name="regime0">
+             <Regime id="{7fe62a65-56c4-4ecb-bb52-8635e094fb2c}" name="regime0">
               <isRayonnant>0</isRayonnant>
               <useAtt>0</useAtt>
               <typeDistribution>0</typeDistribution>
              </Regime>
              <isSub>0</isSub>
-             <Rectangle id="{2b2ad0c1-8754-4fba-8eb0-8f88d83ec887}" name="Rectangle 131">
+             <Rectangle id="{825aaea5-e820-46b7-879a-b059e0a8c1bf}" name="Rectangle 143">
               <Point x="-0.015" y="0.700" z="0.000"/>
               <Point x="0.015" y="0.700" z="0.000"/>
               <Point x="0.015" y="-0.700" z="0.000"/>
               <Point x="-0.015" y="-0.700" z="0.000"/>
              </Rectangle>
-             <SourceSurfacic id="{6cf8c01d-31a6-424a-b4cb-670204372c6d}" name="Source surfacique 62">
+             <SourceSurfacic id="{393bc692-853a-4b46-bfae-e784c77e9f98}" name="Source surfacique 92">
               <nbSrcs>0</nbSrcs>
               <densiteSrcsH>0</densiteSrcsH>
               <densiteSrcsV>0</densiteSrcsV>
@@ -465,34 +466,34 @@
             <Point x="-0.015" y="-0.700" z="0.000"/>
            </Rectangle>
            <nbChild>1</nbChild>
-           <GeometryNode id="{65b14255-23f1-4ae9-b99c-c8ad88871b12}" name="">
+           <GeometryNode id="{0f606efd-6dab-429d-adbd-d12ade404eed}" name="">
             <hauteur>0.000</hauteur>
-            <Repere id="{9f35b501-b50f-47db-9217-a88f8b950e31}" name="Repère 271">
+            <Repere id="{d8e4ec40-8859-4a91-aa6e-af22aa0a9f78}" name="Repère 266">
              <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
              <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
             </Repere>
-            <AcousticRectangle id="{09932c05-8bd3-4444-94c6-a81c907c748e}" name="Sous-face 65">
+            <AcousticRectangle id="{a0f95514-2568-4460-81b6-fc9d156cb80f}" name="Sous-face 95">
              <Color g="0.0156863" r="0.180392" b="0.721569"/>
              <densiteSrcsH>0</densiteSrcsH>
              <densiteSrcsV>0</densiteSrcsV>
              <curRegime>0</curRegime>
              <nbRegimes>1</nbRegimes>
              <nextRegime>3</nextRegime>
-             <Regime id="{16aae26c-1c86-4d00-b9e7-b840da1a7be9}" name="regime0">
+             <Regime id="{2ab0dfa3-9edd-48eb-a225-cfd78226babf}" name="regime0">
               <isRayonnant>0</isRayonnant>
               <useAtt>0</useAtt>
               <typeDistribution>0</typeDistribution>
              </Regime>
              <isSub>0</isSub>
-             <Rectangle id="{84cb43a7-f3fc-42e9-8780-322760b41821}" name="Rectangle 135">
+             <Rectangle id="{db47c281-232e-440d-b871-b790b9cb9193}" name="Rectangle 147">
               <Point x="-0.015" y="0.700" z="0.000"/>
               <Point x="0.015" y="0.700" z="0.000"/>
               <Point x="0.015" y="-0.700" z="0.000"/>
               <Point x="-0.015" y="-0.700" z="0.000"/>
              </Rectangle>
-             <SourceSurfacic id="{076dda31-df85-4cc0-9be7-a63e5bfd060f}" name="Source surfacique 65">
+             <SourceSurfacic id="{b2f8f2ff-b7a9-42c9-a1e2-b17d300db901}" name="Source surfacique 95">
               <nbSrcs>0</nbSrcs>
               <densiteSrcsH>0</densiteSrcsH>
               <densiteSrcsV>0</densiteSrcsV>
@@ -538,7 +539,7 @@
          <type>2</type>
          <fMin>16</fMin>
          <fMax>16000</fMax>
-         <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 72.0 73.0 75.0 76.5 78.0 79.0 79.5 81.7 81.5 84.5 86.5 87.0 86.5 84.0 80.5 75.0 65.0 -200.0 -200.0 -200.0</freqTab>
+         <freqTab form="0">-10.0 -10.0 -10.0 -10.0 -10.0 -10.0 -10.0 -10.0 -10.0 -10.0 -10.0 72.0 73.0 75.0 76.5 78.0 79.0 79.5 81.7 81.5 84.5 86.5 87.0 86.5 84.0 80.5 75.0 65.0 -10.0 -10.0 -10.0</freqTab>
         </Spectre>
        </UserSrcRegime>
       </UserSourcePonctuelle>
@@ -553,11 +554,11 @@
   <PointsControl>
    <PointControl x="8.000" y="0.000" z="0.150" id="{2fb3f547-1afd-4ea4-adf1-7fa7797d807a}" name="P1">
     <etatCalcul idCalcul="{a803e8bc-2c44-4b3c-9b9b-235532d44cd5}" Etat="1"/>
-    <Spectre idCalcul="{a803e8bc-2c44-4b3c-9b9b-235532d44cd5}" id="{230605fe-7bdc-42cc-a848-2923cda735a4}" name="">
+    <Spectre idCalcul="{a803e8bc-2c44-4b3c-9b9b-235532d44cd5}" id="{d66ce357-5c01-4550-9005-ad4236aeff72}" name="">
      <type>3</type>
      <fMin>16</fMin>
      <fMax>16000</fMax>
-     <freqTab form="0">-223.2 -223.2 -223.2 -223.2 -223.1 -223.2 -223.2 -223.2 -223.2 -223.2 -223.2 48.8 49.8 49.7 48.3 49.4 52.2 53.1 52.1 40.4 46.0 52.4 52.2 52.2 45.9 34.4 31.1 15.3 -248.6 -248.2 -247.5</freqTab>
+     <freqTab form="0">-33.2 -33.2 -33.2 -33.2 -33.1 -33.2 -33.2 -33.2 -33.2 -33.2 -33.2 48.8 49.8 49.7 48.3 49.4 52.2 53.1 52.1 40.4 46.0 52.4 52.2 52.2 45.9 34.4 31.1 15.3 -58.6 -58.2 -57.5</freqTab>
     </Spectre>
     <Color g="0" r="0.333333" b="1"/>
     <hauteur>0.150</hauteur>
@@ -565,11 +566,11 @@
    </PointControl>
    <PointControl x="4.000" y="0.000" z="0.150" id="{b9a28088-2060-4c62-acaa-51224bc471dd}" name="P2">
     <etatCalcul idCalcul="{a803e8bc-2c44-4b3c-9b9b-235532d44cd5}" Etat="1"/>
-    <Spectre idCalcul="{a803e8bc-2c44-4b3c-9b9b-235532d44cd5}" id="{7bafbcb1-5fa7-407e-b190-32fc1777214e}" name="">
+    <Spectre idCalcul="{a803e8bc-2c44-4b3c-9b9b-235532d44cd5}" id="{be4e4e40-7787-4008-a290-277934751654}" name="">
      <type>3</type>
      <fMin>16</fMin>
      <fMax>16000</fMax>
-     <freqTab form="0">-217.4 -217.4 -217.4 -217.4 -217.4 -217.4 -217.4 -217.4 -217.4 -217.4 -217.4 54.6 55.6 54.9 53.7 55.2 57.9 58.3 56.3 43.3 51.0 56.2 56.6 55.2 49.2 38.1 40.4 26.0 -240.7 -244.9 -240.3</freqTab>
+     <freqTab form="0">-27.4 -27.4 -27.4 -27.4 -27.4 -27.4 -27.4 -27.4 -27.4 -27.4 -27.4 54.6 55.6 54.9 53.7 55.2 57.9 58.3 56.3 43.3 51.0 56.2 56.6 55.2 49.2 38.1 40.4 26.0 -50.7 -54.9 -50.3</freqTab>
     </Spectre>
     <Color g="0" r="0.333333" b="1"/>
     <hauteur>0.150</hauteur>
@@ -620,12 +621,12 @@
     <Element id="{0bc39d8e-b139-41fd-aaa8-72d07149c6c2}"/>
    </ListID>
    <EmissionAccVolNodes>
-    <EmissionAccVolNode accVolNodeId="{733ce731-a752-457e-b8b2-074bf69fb24b}" state="0"/>
     <EmissionAccVolNode accVolNodeId="{0bc39d8e-b139-41fd-aaa8-72d07149c6c2}" state="1"/>
+    <EmissionAccVolNode accVolNodeId="{733ce731-a752-457e-b8b2-074bf69fb24b}" state="0"/>
    </EmissionAccVolNodes>
    <RegimeAccNode>
-    <RegimeAccNode accVolNodeId="{733ce731-a752-457e-b8b2-074bf69fb24b}" state="0"/>
     <RegimeAccNode accVolNodeId="{0bc39d8e-b139-41fd-aaa8-72d07149c6c2}" state="0"/>
+    <RegimeAccNode accVolNodeId="{733ce731-a752-457e-b8b2-074bf69fb24b}" state="0"/>
    </RegimeAccNode>
    <Atmosphere id="{e76cd734-2820-4942-8d3a-f0ab12ced68d}" name="Atmosphère 19">
     <pression>101325</pression>
@@ -655,29 +656,29 @@
     </ListRecepteurs>
     <ListSpectres>
      <SpectreInd indexRec="0" indexSrc="0">
-      <Spectre id="{5ef928f3-aff4-4947-b084-cab6eb742df8}" name="Spectre 4948">
+      <Spectre id="{73ecfd0d-98f8-4938-85c3-62a39ccec9d2}" name="Spectre 1538">
        <type>3</type>
        <fMin>16</fMin>
        <fMax>16000</fMax>
-       <freqTab form="0">-223.2 -223.2 -223.2 -223.2 -223.1 -223.2 -223.2 -223.2 -223.2 -223.2 -223.2 48.8 49.8 49.7 48.3 49.4 52.2 53.1 52.1 40.4 46.0 52.4 52.2 52.2 45.9 34.4 31.1 15.3 -248.6 -248.2 -247.5</freqTab>
+       <freqTab form="0">-33.2 -33.2 -33.2 -33.2 -33.1 -33.2 -33.2 -33.2 -33.2 -33.2 -33.2 48.8 49.8 49.7 48.3 49.4 52.2 53.1 52.1 40.4 46.0 52.4 52.2 52.2 45.9 34.4 31.1 15.3 -58.6 -58.2 -57.5</freqTab>
       </Spectre>
      </SpectreInd>
      <SpectreInd indexRec="1" indexSrc="0">
-      <Spectre id="{5ef928f3-aff4-4947-b084-cab6eb742df8}" name="Spectre 4948">
+      <Spectre id="{73ecfd0d-98f8-4938-85c3-62a39ccec9d2}" name="Spectre 1538">
        <type>3</type>
        <fMin>16</fMin>
        <fMax>16000</fMax>
-       <freqTab form="0">-217.4 -217.4 -217.4 -217.4 -217.4 -217.4 -217.4 -217.4 -217.4 -217.4 -217.4 54.6 55.6 54.9 53.7 55.2 57.9 58.3 56.3 43.3 51.0 56.2 56.6 55.2 49.2 38.1 40.4 26.0 -240.7 -244.9 -240.3</freqTab>
+       <freqTab form="0">-27.4 -27.4 -27.4 -27.4 -27.4 -27.4 -27.4 -27.4 -27.4 -27.4 -27.4 54.6 55.6 54.9 53.7 55.2 57.9 58.3 56.3 43.3 51.0 56.2 56.6 55.2 49.2 38.1 40.4 26.0 -50.7 -54.9 -50.3</freqTab>
       </Spectre>
      </SpectreInd>
     </ListSpectres>
     <ListLw>
      <SourceLw srcId="{0bc39d8e-b139-41fd-aaa8-72d07149c6c2}">
-      <Spectre id="{9210e185-8d63-4e11-a058-f07dac6188a0}" name="">
+      <Spectre id="{56978244-db69-416f-ab2d-5ff9ad16444e}" name="">
        <type>2</type>
        <fMin>16</fMin>
        <fMax>16000</fMax>
-       <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 72.0 73.0 75.0 76.5 78.0 79.0 79.5 81.7 81.5 84.5 86.5 87.0 86.5 84.0 80.5 75.0 65.0 -200.0 -200.0 -200.0</freqTab>
+       <freqTab form="0">-10.0 -10.0 -10.0 -10.0 -10.0 -10.0 -10.0 -10.0 -10.0 -10.0 -10.0 72.0 73.0 75.0 76.5 78.0 79.0 79.5 81.7 81.5 84.5 86.5 87.0 86.5 84.0 80.5 75.0 65.0 -10.0 -10.0 -10.0</freqTab>
       </Spectre>
      </SourceLw>
     </ListLw>
