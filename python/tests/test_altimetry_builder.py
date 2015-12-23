@@ -158,7 +158,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot_landtake_flooding(self):
         cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        site = cleaner.merged_site()
+        msite = cleaner.merged_site()
         mbuilder = builder.MeshBuilder(msite)
         bmesh = mbuilder.build_mesh(refine=False)
 
