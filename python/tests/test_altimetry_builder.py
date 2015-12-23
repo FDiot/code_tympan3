@@ -181,6 +181,22 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             plotter.plot_face(fh, material_id=material.id)
         plotter.show()
 
+    def test_building_outside_landtake(self):
+        # outside landtake
+        InfrastructureLandtake(rect(13, 12, 15, 17),
+                               parent_site=self.mainsite,
+                               id="{external building}")
+        # intersecting with landtake
+        InfrastructureLandtake(rect(10, 10, 13, 15),
+                               parent_site=self.mainsite,
+                               id="{intersecting building}")
+        equivalent_site, mesh, feature_by_face = builder.build_altimetry(
+            self.mainsite)
+        # it makes no sense having a site intersecting a building. Make sure
+        # none of these buildings will be taken into account.
+        self.assertEqual(len(equivalent_site.landtakes), 1)
+        self.assertEqual(equivalent_site.landtakes[0].id, '{Building}')
+
     def test_join_with_landtakes(self):
         equivalent_site, mesh, feature_by_face = builder.build_altimetry(
             self.mainsite)
@@ -211,6 +227,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                 self.assertEqual(materials.count, 5)
         finally:
             os.remove(f.name)
+
 
 if __name__ == '__main__':
     unittest.main()
