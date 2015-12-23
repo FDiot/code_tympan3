@@ -44,7 +44,7 @@ class TestFeatures(object):
         self.veg_area = VegetationArea(self.pine_area_coords,
                                        material=self.pine, height=5,
                                        parent_site=self.mainsite, id="{Pine area}")
-        self.waterbody= WaterBody(self.waterbody_coords,
+        self.waterbody = WaterBody(self.waterbody_coords,
                                    altitude=self.altitude_water,
                                    parent_site=self.mainsite, id="{Water body}")
         self.subsite = SiteNode(self.subsite_A_coords, id="{Subsite ID}",
