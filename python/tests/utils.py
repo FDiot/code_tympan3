@@ -99,10 +99,10 @@ def _test_solve_with_file(test_file, testobj):
             check_nsources = True
     if check_nsources:
         testobj.assertEqual(current_result.nsources, expected_result.nsources)
-    current_spectra = np.array(list(current_result.spectrum(i, j).values
+    current_spectra = np.array(list(current_result.spectrum(current_result.receptors[i], current_result.sources[j]).values
                                     for i in range(current_result.nreceptors)
                                     for j in range(current_result.nsources)))
-    expected_spectra = np.array(list(expected_result.spectrum(i, j).values
+    expected_spectra = np.array(list(expected_result.spectrum(expected_result.receptors[i], expected_result.sources[j]).values
                                     for i in range(current_result.nreceptors)
                                     for j in range(current_result.nsources)))
     if current_result.nsources + current_result.nreceptors > 1:
@@ -112,8 +112,8 @@ def _test_solve_with_file(test_file, testobj):
     for i in range(len(current_spectra)):
         # All spectra must have the same number of elements
         testobj.assertEqual(current_spectra[i].size, expected_spectra[i].size)
-        np.testing.assert_almost_equal(current_spectra[i],
-                                       expected_spectra[i], decimal=1)
+        np.testing.assert_allclose(current_spectra[i],
+                                       expected_spectra[i], rtol=1e-1)
 
 
 
