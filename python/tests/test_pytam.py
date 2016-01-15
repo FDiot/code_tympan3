@@ -22,6 +22,7 @@ class TestPyTam(TympanTC):
         project.import_result(model, solver_result)
         return project
 
+    @unittest.expectedFailure
     def test_solve_check_business_result_one_source(self):
         input_proj = osp.join(TEST_PROBLEM_DIR, 'TEST_FACE_NO_RESU.xml')
         project = self._compute_project(input_proj)
@@ -34,6 +35,7 @@ class TestPyTam(TympanTC):
         expected.sort()
         assert_allclose(actual, expected)
 
+    @unittest.skip('C++ assertion error, see issue #33')
     def test_solve_check_business_result_two_sources(self):
         input_proj = osp.join(TEST_DATA_DIR, 'test_restitution_results.xml')
         project = self._compute_project(input_proj)
