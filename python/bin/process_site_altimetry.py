@@ -20,16 +20,11 @@ def main(input_project, result_file):
     format).
     """
     try:
-        try:
-            project = Project.from_xml(input_project, verbose=True)
-        except RuntimeError:
-            logging.exception("Couldn't load the acoustic project from %s file", input_project)
-            raise
-        project.export_altimetry(result_file)
-    except Exception as exc:
-        sys.stderr.write('Error: %s' % exc)
-        logging.exception("Error processing the altimetry:\n%s", exc)
-
+        project = Project.from_xml(input_project, verbose=True)
+    except RuntimeError:
+        logging.exception("Couldn't load the acoustic project from %s file", input_project)
+        raise
+    project.export_altimetry(result_file)
 
 if __name__ == '__main__':
     set_logger()

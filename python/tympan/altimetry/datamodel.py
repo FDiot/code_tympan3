@@ -76,10 +76,12 @@ class GeometricFeature(object):
 
     def set_shape(self, shape):
         self._shape = shape
-        if isinstance(shape, geometry.base.BaseMultipartGeometry):
-            self._coords = [subshape.coords for subshape in shape.geoms]
+        if isinstance(shape, geometry.MultiPolygon):
+            self._coords = [subshape.exterior.coords for subshape in shape.geoms]
         elif isinstance(shape, geometry.Polygon):
             self._coords = shape.exterior.coords
+        elif isinstance(shape, geometry.base.BaseMultipartGeometry):
+            self._coords = [subshape.coords for subshape in shape.geoms]
         else:
             self._coords = shape.coords
 
@@ -347,7 +349,9 @@ class SiteLandtake(LevelCurve):
 
 
 class InfrastructureLandtake(MaterialArea):
+    geometric_type = "MultiPolygon"
 
-    def __init__(self, coords, **kwargs):
+    def __init__(self, *coords, **kwargs):
+        shape = geometry.MultiPolygon(map(geometry.Polygon, coords))
         super(InfrastructureLandtake, self).__init__(
-            coords, material=HIDDEN_MATERIAL, **kwargs)
+            shape, material=HIDDEN_MATERIAL, **kwargs)

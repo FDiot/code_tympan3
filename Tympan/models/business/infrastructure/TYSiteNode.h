@@ -418,7 +418,7 @@ public:
      * deque<TYTabPoint3D>: series of points defining the contour of the face of
      *  the volumes that are on the ground in a global scale
      */
-    void getFacesOnGround(std::map<TYUUID, TYTabPoint3D>& contours) const;
+    void getFacesOnGround(std::map<TYUUID, std::deque<TYTabPoint3D>>& contours) const;
 
     /*!
      * brief: from a series of acoustic volumes (forming an acoustic volume node)
@@ -427,7 +427,7 @@ public:
      */
     void groundBasedFaces(const TYTabAcousticVolumeGeoNode& volumes,
                           const OMatrix& global_matrix,
-                          std::map<TYUUID, TYTabPoint3D>& contours) const;
+                          std::map<TYUUID, std::deque<TYTabPoint3D>>& contours) const;
 
     /// Get/Set du choix du systeme de repere du SIG
     int getSIGType() { return _SIGType; }

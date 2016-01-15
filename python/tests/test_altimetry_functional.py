@@ -68,7 +68,8 @@ class AltimetryFunctionalTC(unittest.TestCase):
     def build_altimetry(self, fname):
         """Return the AltimetryMesh instance from Tympan XML file name"""
         fpath = os.path.join(TEST_PROBLEM_DIR, fname)
-        project = Project.from_xml(fpath, verbose=self.debug)
+        project = Project.from_xml(fpath, verbose=self.debug,
+                                   update_altimetry=False)
         altim = AltimetryMesh.from_site(project.site)
         site = altim.equivalent_site
         if self.saveply:

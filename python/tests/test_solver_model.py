@@ -76,7 +76,7 @@ class FresnelZoneIntersectionTC(TympanTC):
                                                                 Point3D(-length/2., 0, 0),
                                                                 Point3D(length/2., 0, 0))
         all_triangles = model.triangles
-        self.assertEqual(len(all_triangles), 51)
+        self.assertEqual(len(all_triangles), 182)
         for tri_idx, triangle in enumerate(all_triangles):
             node_inside_box = False
             for node in triangle.nodes:
