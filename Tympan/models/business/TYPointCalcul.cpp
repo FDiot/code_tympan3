@@ -25,9 +25,10 @@
 
 TY_EXTENSION_INST(TYPointCalcul);
 
-TYPointCalcul::TYPointCalcul() : TYPoint(true), _spectre(nullptr)
+TYPointCalcul::TYPointCalcul() : TYPoint(true)
 {
     _name = TYNameManager::get()->generateName(getClassName());
+    _spectre = new TYSpectre();
 }
 
 TYPointCalcul::TYPointCalcul(const TYPoint& other) : TYPoint(other, true)
@@ -174,19 +175,11 @@ int TYPointCalcul::fromXML(DOM_Element domElement)
         //    bool bEtat = TYXMLTools::getElementAttributeToInt(elemCur, "Etat");
         //    _tabEtats[idCalcul] = bEtat;
         //}
-        //else if (elemCur.nodeName() == "Spectre")
-        //{
-        //    TYSpectre* pSpectre = new TYSpectre();
-        //    pSpectre->setParent(this);
-        //    pSpectre->callFromXMLIfEqual(elemCur);
-
-        //    // recupere le calcul associe au spectre
-        //    idCalcul = TYXMLTools::getElementAttributeToString(elemCur, "idCalcul");
-        //    _tabSpectre[idCalcul] = pSpectre;
-
-        //    _dBA = pSpectre->valGlobDBA();
-        //    _dBLin = pSpectre->valGlobDBLin();
-        //}
+        else if (elemCur.nodeName() == "Spectre")
+        {
+            _spectre->setParent(this);
+            _spectre->callFromXMLIfEqual(elemCur);
+        }
 
         // Cree et remplit le tableau des etats des points de controle si non existant
         //if (bOldEtat && (idCalcul != ""))
