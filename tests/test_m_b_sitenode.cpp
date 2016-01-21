@@ -193,3 +193,22 @@ TEST(GroundContourTest, two_screens_multiple_segment)
     EXPECT_NEAR(points[3]._x, -136, 1.e-2);
     EXPECT_NEAR(points[3]._y, -67.15, 1.e-2);
 }
+
+TEST(GroundContourTest, single_traversing_cylinder)
+// This functional test has a cylinder with a low face at a negative altitude.
+{
+    LPTYProjet project = tympan::load_project(tympan::path_to_test_data(
+            "projects-panel/cylindre.xml").c_str());
+
+    // Get a pointer to the TYSiteNode.
+    LPTYSiteNode site_ptr = project->getSite();
+
+    // Retrieve ground contour
+    map<TYUUID, TYTabPoint3D> groundbased_faces;
+    site_ptr->getFacesOnGround(groundbased_faces);
+    map<TYUUID, TYTabPoint3D>::iterator faces_it = groundbased_faces.begin();
+
+    // Get one face, with a negatize altitude.
+    EXPECT_EQ(groundbased_faces.size(), 1);
+    EXPECT_EQ((*faces_it).second[0]._z, -9);
+}

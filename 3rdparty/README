@@ -16,9 +16,8 @@ This archive should contain :
                   (see Note 2 below : this is not publicly distributed for now)
  * cgalbindings.zip : a distribution of swig bindings of
    CGAL which provides support for an installation target in CMake.
-   For now and awaiting its intergration upstream, this is available from
-   http://medionilaura-cgal-bindings.googlecode.com/archive/issue-50.zip
-   (NB current head commit ID 1c469653776b)
+   The changes currently live in the `install-rules` branch of Logilab's fork
+   at https://github.com/logilab/cgal-swig-bindings
  * rply-1.1.3 : a PLY file format C library under MIT Licence from
    http://w3.impa.br/~diego/software/rply/rply-1.1.3.tar.gz
  * python-plyfile : a PLY file format python library under GNU GPL v3 License from
