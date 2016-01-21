@@ -612,7 +612,7 @@ class InfoWithIDsAndAltitude(object):
                 delta = abs(alti - self.altitude)
                 if delta > self.ALTITUDE_TOLERANCE:
                     raise InconsistentGeometricModel(
-                        "Intersecting constraints with different altitudes",
+                        "Intersecting constraints with different altitudes: {ids}",
                         ids=self.ids)
 
     def __repr__(self):

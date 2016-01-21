@@ -40,6 +40,10 @@ def build_site_shape_with_hole(site):
     exterior = site.shape.exterior
     if site.shape.interiors:
         raise ValueError("The site is not expected to already have holes")
+    for hole in site.subsites:
+        if not site.shape.contains(hole.shape):
+            raise RuntimeError('%s is not strictly contained in main site' %
+                               hole)
     holes = [hole.shape.exterior
              for hole in site.subsites]
     return geometry.Polygon(exterior, holes)

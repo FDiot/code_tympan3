@@ -27,7 +27,6 @@
 #include "Tympan/models/business/TYXMLManager.h"
 #include "Tympan/models/business/TYProgressManager.h"
 #include "Tympan/models/business/OLocalizator.h"
-#include "Tympan/models/business/cgal_bridge.h"
 #include "Tympan/models/business/infrastructure/TYEcran.h"
 #include "Tympan/models/business/xml_project_util.h"
 #include "Tympan/models/business/subprocess_util.h"
@@ -1174,7 +1173,7 @@ bool almost_equal(double a, double b, double precision)
 }
 
 void TYSiteNode::groundBasedFaces(const TYTabAcousticVolumeGeoNode& volumes,
-        const OMatrix& global_matrix, std::map<TYUUID, TYTabPoint3D>& contours) const
+        const OMatrix& global_matrix, std::map<TYUUID, std::deque<TYTabPoint3D>>& contours) const
 {
     // Go through all the faces of the all the input volumes
     for (unsigned int i = 0; i < volumes.size(); i ++)
@@ -1185,10 +1184,8 @@ void TYSiteNode::groundBasedFaces(const TYTabAcousticVolumeGeoNode& volumes,
         assert (volume != nullptr &&
                 "found an object which isn't a  TYAcousticVolume in a TYTabAcousticVolumeGeoNode");
         TYTabAcousticSurfaceGeoNode faces = volume->acousticFaces();
-        // Store polygons the face is made of (for some volumes, e.g. TYEcran,
-        // there may be more than one).
-        std::deque<TYPolygon> polygons;
         TYTabPoint3D contour;
+        double tol = 10e-6;
         for (unsigned int j = 0; j < faces.size(); j++)
         {
             // Compute global matrix for the current face
@@ -1210,26 +1207,18 @@ void TYSiteNode::groundBasedFaces(const TYTabAcousticVolumeGeoNode& volumes,
             OVector3D normal = poly.normal();
             // We are looking for the floor-based face of the volumes. We keep the
             // current face if it is parallel to the ground
-            if ( !almost_equal( abs(normal.scalar(OVector3D(0., 0., 1.)) ), 1., 10e-6))
+            if ( !almost_equal( abs(normal.scalar(OVector3D(0., 0., 1.)) ), 1., tol))
                 continue;
-            // only keep the face if it is on the ground, i.e. z == 0
-            if (almost_equal(contour[0]._z, 0, 10e-6))
+            // only keep the face if it is on or below the ground
+            if (contour[0]._z < tol)
             {
-                polygons.push_back(poly);
+                contours[volume->getID()].push_back(contour);
             }
-        }
-        if (polygons.size() != 0 ) {
-            // Join all face's polygons into a single one and retrieve its contour.
-            TYPolygon joined_polygon;
-            tympan::join_polygons(polygons, joined_polygon);
-            contour = joined_polygon.getOContour();
-            assert (contour.size() != 0 && "empty contour from joining face polygons");
-            contours[volume->getID()] = contour;
         }
     }
 }
 
-void TYSiteNode::getFacesOnGround(std::map<TYUUID, TYTabPoint3D>& contours) const
+void TYSiteNode::getFacesOnGround(std::map<TYUUID, std::deque<TYTabPoint3D>>& contours) const
 {
     assert(contours.empty() &&
             "Output argument 'contours' is supposed to be empty when calling 'TYSiteNode::getFacesOnGround'");

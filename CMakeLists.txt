@@ -1,5 +1,5 @@
 project(Code_TYMPAN)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 # Set path for additionnal CMake modules provides with Tympan
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)

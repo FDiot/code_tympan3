@@ -2,10 +2,11 @@ import tempfile
 import unittest
 import os
 
-from numpy.testing.utils import assert_allclose
+import numpy as np
+from numpy.testing.utils import assert_allclose, assert_array_equal
 
 from tympan.altimetry.datamodel import (InconsistentGeometricModel, HIDDEN_MATERIAL,
-                                        LevelCurve, InfrastructureLandtake)
+                                        LevelCurve, InfrastructureLandtake, SiteNode)
 from tympan.altimetry import mesh, export_to_ply, builder
 
 from altimetry_testutils import (MesherTestUtilsMixin, TestFeatures,
@@ -21,7 +22,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         TestFeatures.build_features(self)
         TestFeatures.build_more_features_in_subsites(self)
         # NB Level curve A intersects this one : altitudes must be the same
-        self.landtake_level_curve = LevelCurve(
+        landtake_level_curve = LevelCurve(
             self.big_rect_coords, altitude=self.altitude_A, close_it=True,
             parent_site=self.mainsite, id="{Mainsite ref altitude}")
 
@@ -89,6 +90,30 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             (pM, {'altitude': self.level_curve_B.altitude,}),
         ])
 
+    def test_multipolygon_infrastructure_landtake(self):
+        site_rect = rect(1, 1, 12, 12)
+        mainsite = SiteNode(site_rect, id="{Main site}")
+        rec, tri = rect(9, 9, 10, 10), [(2, 2), (2, 4), (3, 4)]
+        building = InfrastructureLandtake(rec, tri,
+                                          parent_site=mainsite,
+                                          id="{multipolygon building}")
+        coords = map(list, building._coords)
+        expected_coords = [
+            [(9, 9), (10, 9), (10, 10), (9, 10), (9, 9)],
+            [(2, 2), (2, 4), (3, 4), (2, 2)],
+        ]
+        self.assertEqual(coords, expected_coords)
+        cleaner = builder.recursively_merge_all_subsites(mainsite)
+        msite = cleaner.merged_site()
+        mbuilder = builder.MeshBuilder(msite)
+        alti = mbuilder._build_altimetric_base()
+        bmesh = mbuilder._build_triangulation(alti)
+        mbuilder._compute_informations(bmesh)
+        vertices = [
+            map(bmesh.py_vertex, vertices_groups)
+            for vertices_groups in mbuilder.vertices_for_feature[building.id]]
+        assert_array_equal(vertices, expected_coords)
+
     def test_vertices_by_feature(self):
         coords = rect(9, 9, 10, 10)
         self.building = InfrastructureLandtake(coords,
@@ -101,9 +126,10 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         bmesh = mbuilder._build_triangulation(alti)
         mbuilder._compute_informations(bmesh)
 
-        vertices = mbuilder.vertices_for_feature[self.building.id]
+        building_vertices = mbuilder.vertices_for_feature[self.building.id]
+        self.assertEqual(len(building_vertices), 1)
 
-        for i, v in enumerate(vertices):
+        for i, v in enumerate(building_vertices[0]):
             self.assertEquals(v.point(), mesh.to_cgal_point(coords[i % len(coords)]))
 
     def test_materials(self):
@@ -132,7 +158,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
     def test_plot_landtake_flooding(self):
         cleaner = builder.recursively_merge_all_subsites(self.mainsite)
-        site = cleaner.merged_site()
+        msite = cleaner.merged_site()
         mbuilder = builder.MeshBuilder(msite)
         bmesh = mbuilder.build_mesh(refine=False)
 
@@ -154,6 +180,48 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             if material is None : continue
             plotter.plot_face(fh, material_id=material.id)
         plotter.show()
+
+    def test_building_outside_landtake(self):
+        # outside landtake
+        InfrastructureLandtake(rect(13, 12, 15, 17),
+                               parent_site=self.mainsite,
+                               id="{external building}")
+        # intersecting with landtake
+        InfrastructureLandtake(rect(10, 10, 13, 15),
+                               parent_site=self.mainsite,
+                               id="{intersecting building}")
+        equivalent_site, mesh, feature_by_face = builder.build_altimetry(
+            self.mainsite)
+        # it makes no sense having a site intersecting a building. Make sure
+        # none of these buildings will be taken into account.
+        self.assertEqual(len(equivalent_site.landtakes), 1)
+        self.assertEqual(equivalent_site.landtakes[0].id, '{Building}')
+
+    def test_intersecting_level_curves_error(self):
+        # build a new level curve that intersects site landtake level curve and
+        # has a different altitude
+        other_level_curve_coords = [(-2, -3), (1, 2)]
+        level_curve =  LevelCurve(other_level_curve_coords,
+                                  altitude = 20.,
+                                  parent_site=self.mainsite, id="{Other level curve}")
+        cleaner = builder.recursively_merge_all_subsites(self.mainsite)
+        msite = cleaner.merged_site()
+        mbuilder = builder.MeshBuilder(msite)
+        with self.assertRaises(InconsistentGeometricModel) as cm:
+            bmesh = mbuilder.build_mesh(refine=False)
+        self.assertEqual(str(cm.exception),
+                         "Intersecting constraints with different altitudes: "
+                         "['{Mainsite ref altitude}', '{Other level curve}']")
+
+    def test_subsite_intersects_with_site(self):
+        self.mainsite.drop_child(self.subsite)
+        subsite = SiteNode(rect(-1, -1, 7, 5), id="{Intersecting subsite}",
+                           parent_site=self.mainsite)
+        with self.assertRaises(RuntimeError) as cm:
+            builder.recursively_merge_all_subsites(self.mainsite)
+        self.assertEqual(str(cm.exception),
+                         'SiteNode #{Intersecting subsite} is not strictly '
+                         'contained in main site')
 
     def test_join_with_landtakes(self):
         equivalent_site, mesh, feature_by_face = builder.build_altimetry(
@@ -185,6 +253,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                 self.assertEqual(materials.count, 5)
         finally:
             os.remove(f.name)
+
 
 if __name__ == '__main__':
     unittest.main()
