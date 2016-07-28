@@ -408,10 +408,6 @@ void TYPickEditor::siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             // Projet parent
             if ( dynamic_cast<TYProjet*>(elem_1) != nullptr )
             {
-                // Duplication
-                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                copyPtControlRetCodes[code] = pPointCtrl;
-
                 // Suppression
                 code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
                 remPtControlRetCodes[code] = pPointCtrl;
