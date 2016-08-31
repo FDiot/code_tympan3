@@ -710,7 +710,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
         if (fromSource)   // Si on part d'une source, on tient compte de la directivite de celle-ci
         {
             EtapeCourante._type = TYSOURCE;
-            EtapeCourante.setAbsorption( source.directivity->lwAdjustment(OVector3D(ptDebut, ptReflex), ptDebut.distFrom(ptReflex) ) );
+            EtapeCourante.setAbsorption((source.directivity->lwAdjustment(OVector3D(ptDebut, ptReflex), ptDebut.distFrom(ptReflex))).racine());
         }
         else
         {
@@ -1131,7 +1131,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
     Ray ray2( OPoint3Dtovec3(pt), vec3(0., 0., -1.) );
 
     double distance2 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray2, LI ) );
-
+	// An error can occur if some elements are outside of the grip (emprise)
     assert( distance2 > 0. );
 
     // Compute projection on the ground of segment points suppose sol is under the points ...
