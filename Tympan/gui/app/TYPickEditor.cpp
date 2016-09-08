@@ -1229,7 +1229,7 @@ bool TYPickEditor::realWorldPosition(OPoint3D& pt)
     dynamic_cast<TYModelerFrame*>(_pModeler)->updateView();
 
     // Position dans la scene 3D
-    QPoint curPos = _lastPressedCurPos;
+    QPoint curPos = _lastMovedCurPos;
 
     // Calcul des coords
     float* pos = new float[3];
