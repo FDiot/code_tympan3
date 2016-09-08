@@ -598,7 +598,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
     if (fromSource)   // Si on part d'une source, on tient compte de la directivite de celle-ci
     {
         EtapeCourante._type = TYSOURCE;
-        EtapeCourante.setAbsorption( source.directivity->lwAdjustment( OVector3D(ptDebut, ptFin), ptDebut.distFrom(ptFin) ) );
+        EtapeCourante.setAbsorption((source.directivity->lwAdjustment( OVector3D(ptDebut, ptFin), ptDebut.distFrom(ptFin))).racine());
     }
     else
     {
