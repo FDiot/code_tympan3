@@ -189,7 +189,7 @@ void TYPickEditor::slotMouseMoved(int x, int y, Qt::MouseButtons button, Qt::Key
                     // Picking
                     if (!_pPicker->pick(x, _pInteractor->height() - y))
                     {
-                        hidePanel(_pLastRolloverElt);
+                        hidePanel();
                     }
 
                     // Deconnection
@@ -209,7 +209,7 @@ void TYPickEditor::slotWheeled(int x, int y, int delta, Qt::KeyboardModifiers st
     {
         if(dynamic_cast<TYMaillage*>(_pLastRolloverElt) != nullptr)
         {
-            hidePanel(_pLastRolloverElt);
+            hidePanel();
             _pModeler->getView()->updateGL();
         }
     }
@@ -230,7 +230,7 @@ void TYPickEditor::slotMouseLeave()
     {
         if(dynamic_cast<TYMaillage*>(_pLastRolloverElt) != nullptr)
         {
-            hidePanel(_pLastRolloverElt);
+            hidePanel();
             _pModeler->getView()->updateGL();
         }
     }
@@ -1081,7 +1081,7 @@ void TYPickEditor::showDimensionsDialog(TYAcousticVolume* pAccVol)
 
 void TYPickEditor::showPanel(TYElement* pElt)
 {
-    hidePanel(_pLastRolloverElt);
+    hidePanel();
 
     if (!pElt)
     {
@@ -1201,26 +1201,27 @@ void TYPickEditor::showPanel(TYElement* pElt)
     }
     else
     {
-        hidePanel(_pLastRolloverElt);
+        hidePanel();
     }
 
     _pLastRolloverElt = pElt;
 }
 
-void TYPickEditor::hidePanel(TYElement* pElt)
+void TYPickEditor::hidePanel()
 {
-    if (!pElt)
+    if (!_pLastRolloverElt)
     {
         return;
     }
 
-    LPTYMaillage pMaillage = dynamic_cast<TYMaillage*>(pElt);
+    LPTYMaillage pMaillage = dynamic_cast<TYMaillage*>(_pLastRolloverElt);
     if (pMaillage != nullptr)
     {
         pMaillage->getPanel()->getGraphicObject()->setVisible(false);
 
         // On met a jour uniquement le maillage
         _pModeler->getView()->getRenderer()->updateDisplayList();
+		_pLastRolloverElt = 0;
     }
 }
 
