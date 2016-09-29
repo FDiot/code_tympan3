@@ -95,7 +95,7 @@ void TYPickEditor::slotMousePressed(int x, int y, Qt::MouseButton button, Qt::Ke
     {
         if(dynamic_cast<TYMaillage*>(_pLastRolloverElt) != nullptr)
         {
-            hidePanel(_pLastRolloverElt);
+            hidePanel();
             _pModeler->getView()->updateGL();
         }
     }
