@@ -1082,7 +1082,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
     // Set position of ray begin 1000 meters over the original point to avoid underground point (seen from mean slope computation)
     vec3 start = OPoint3Dtovec3(incident._ptB);
     start.z += 1000.;
-    Ray ray1( start, vec3(0., 0., -1.) );
+    Ray ray1( start, vec3(0.001, 0.001, -1.) );
     ray1.maxt = 20000;
 
     std::list<Intersection> LI;
@@ -1093,6 +1093,18 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
 
     unsigned int indexFace = LI.begin()->p->getPrimitiveId();
     tympan::AcousticMaterialBase *mat = _solver.getTabPolygon()[indexFace].material;
+
+	// Avoid cases where the reflexion point is below a "floating" volumic source
+	while(_solver.getTabPolygon()[indexFace].is_infra()){
+		start.z = _solver.getTabPolygon()[indexFace].tabPoint[0]._z;
+		Ray ray(start, vec3(0,0,-1));
+		ray.maxt = 20000;
+		std::list<Intersection> LI2;
+		distance1 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray, LI2 ) );
+		assert( !LI2.empty() );
+		indexFace = LI2.begin()->p->getPrimitiveId();
+		mat = _solver.getTabPolygon()[indexFace].material;
+	}
 
     // Angle estimation
     OVector3D direction(incident._ptA, incident._ptB);
