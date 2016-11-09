@@ -98,7 +98,7 @@ namespace tympan
 			k_value = atmosphere->get_k().getTabValReel()[i];
 
 			K.getTabValReel()[i] = k_value * (1 + 10.8 * pow(FSurSigma, -0.7));
-			K.getTabValImag()[i] = k_value * (10.3 * pow(FSurSigma,  0.59));
+			K.getTabValImag()[i] = k_value * (10.3 * pow(FSurSigma, -0.59));
 		}
 
 		K.setType(SPECTRE_TYPE_AUTRE);
