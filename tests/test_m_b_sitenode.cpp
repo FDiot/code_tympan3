@@ -221,11 +221,11 @@ TEST(GroundContourTest, single_traversing_cylinder)
     LPTYSiteNode site_ptr = project->getSite();
 
     // Retrieve ground contour
-    map<TYUUID, TYTabPoint3D> groundbased_faces;
+    map<TYUUID, deque<TYTabPoint3D>> groundbased_faces;
     site_ptr->getFacesOnGround(groundbased_faces);
-    map<TYUUID, TYTabPoint3D>::iterator faces_it = groundbased_faces.begin();
+    map<TYUUID, deque<TYTabPoint3D>>::iterator faces_it = groundbased_faces.begin();
 
     // Get one face, with a negatize altitude.
     EXPECT_EQ(groundbased_faces.size(), 1);
-    EXPECT_EQ((*faces_it).second[0]._z, -9);
+    EXPECT_EQ((*faces_it).second[0][0]._z, -9);
 }
