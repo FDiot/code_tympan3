@@ -29,7 +29,7 @@ set(TYMPAN_3RDPARTY_DIME_MD5  "8d144a016b3fb1cb1ac606d39ec7fccb"
 
 set(TYMPAN_3RDPARTY_NMPB2008 "${CMAKE_SOURCE_DIR}/3rdparty/NMPB2008.zip"
   CACHE STRING "Where to fetch the external project NMBP2008")
-set(TYMPAN_3RDPARTY_NMPB2008_MD5  "38671c7e8ab34c25d2e9edc8165c38ff"
+set(TYMPAN_3RDPARTY_NMPB2008_MD5  "45673b866477c7b3c988df668c33fa25"
     CACHE STRING "Checksum for the TYMPAN_3RDPARTY_NMPB2008 archive.")
 
 #NB: Source URL for CGAL bindings with installation patch
