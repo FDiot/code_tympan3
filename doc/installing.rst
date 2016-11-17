@@ -80,7 +80,7 @@ CGAL
                   - 4.4 is quite young at the time of this writing (may 2014)
 
 Python
-        A Python_ interpreter is required, version 2.7
+        A Python_ interpreter is required, version 3.3 or above
 
 Cython
         Cython_ is a programming language inspired from Python, allowing to
@@ -172,11 +172,11 @@ this command.
 
 **Installation of python and cython** ::
 
-    $ sudo aptitude install python cython
+    $ sudo aptitude install python3 cython
 
 **Installation of shapely** ::
 
-    $ sudo aptitude install python-shapely
+    $ sudo aptitude install python3-shapely
 
 **Installation of swig** ::
 
@@ -362,6 +362,10 @@ directory) and run CMake in it, telling it where you have **built**
   ~/projets$ mkdir build-Code_TYMPAN
   ~/projets$ cd build-Code_TYMPAN
   ~/projets/build-Code_TYMPAN$  ccmake ../Code_TYMPAN
+
+If Python 3 interpreter can't be found by CMake, you can run CMake with the
+following option ::
+  ~/projets/build-Code_TYMPAN$ ccmake ../Code_TYMPAN -DPYTHON_EXECUTABLE=path_to_python3_interp
 
 CMake is likely not to find CGAL 4, and possibly Boost. You have to
 set some CMake variables (or alternatively environment variables) in

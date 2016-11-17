@@ -19,7 +19,8 @@ set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 # use find_package from CMake module directory instead of the one found in
 # CMAKE_MODULE_PATH coming from CGAL
 cmake_policy(SET CMP0017 NEW)
-find_package(PythonInterp)
+find_package(PythonInterp 3)
+
 # Generate initial solver parameters in DefaultSolverConfig.h
 set(GEN_SOLVER_PARAMS_HEADER_PYSCRIPT "${CMAKE_SOURCE_DIR}/tools/generate_solver_config_header.py")
 set(SOLVER_PARAMS_JSON "resources/solver_config_datamodel.json")
