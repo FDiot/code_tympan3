@@ -75,7 +75,7 @@ class AltimetryFunctionalTC(unittest.TestCase):
         if self.saveply:
             plyfile =  os.path.abspath(fname.split('.')[0] + '.ply')
             altim.to_ply(plyfile)
-            print 'PLY file saved at ', plyfile
+            print('PLY file saved at ', plyfile)
         return altim
 
     def assertWithin(self, value, lower, upper):

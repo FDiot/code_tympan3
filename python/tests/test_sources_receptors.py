@@ -25,7 +25,7 @@ class SolverSourceTC(TympanTC):
                 vectors[source.face_id][1] = (source.directivity_vector.vx,
                                               source.directivity_vector.vy,
                                               source.directivity_vector.vz)
-        for key, value in vectors.iteritems():
+        for key, value in vectors.items():
             if value[1] is None:
                 self.fail('No directivity vector found for face %s' % key)
             self.assertEqual(value[0], value[1])

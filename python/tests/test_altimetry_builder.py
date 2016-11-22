@@ -43,7 +43,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             fh, vh = mesher.locate_point(point)
             self.assertIsInstance(vh, mesh.Vertex_handle)
             info = mesher.vertices_info[vh]
-            for k, v in expected.iteritems():
+            for k, v in expected.items():
                 if v is mesh.UNSPECIFIED_ALTITUDE:
                     self.assertIs(getattr(info, k), mesh.UNSPECIFIED_ALTITUDE)
                 else:
@@ -97,7 +97,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         building = InfrastructureLandtake(rec, tri,
                                           parent_site=mainsite,
                                           id="{multipolygon building}")
-        coords = map(list, building._coords)
+        coords = list(map(list, building._coords))
         expected_coords = [
             [(9, 9), (10, 9), (10, 10), (9, 10), (9, 9)],
             [(2, 2), (2, 4), (3, 4), (2, 2)],
@@ -110,7 +110,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         bmesh = mbuilder._build_triangulation(alti)
         mbuilder._compute_informations(bmesh)
         vertices = [
-            map(bmesh.py_vertex, vertices_groups)
+            list(map(bmesh.py_vertex, vertices_groups))
             for vertices_groups in mbuilder.vertices_for_feature[building.id]]
         assert_array_equal(vertices, expected_coords)
 
@@ -130,13 +130,13 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         self.assertEqual(len(building_vertices), 1)
 
         for i, v in enumerate(building_vertices[0]):
-            self.assertEquals(v.point(), mesh.to_cgal_point(coords[i % len(coords)]))
+            self.assertEqual(v.point(), mesh.to_cgal_point(coords[i % len(coords)]))
 
     def test_materials(self):
         equivalent_site, bmesh, feature_by_face = builder.build_altimetry(
             self.mainsite)
         material_by_face = builder.material_by_face(feature_by_face)
-        materials_id = set(mat.id for mat in material_by_face.values())
+        materials_id = set(mat.id for mat in list(material_by_face.values()))
         self.assertItemsEqual(materials_id, ['__default__', '__hidden__',
                                              'grass', 'pine', 'Water'])
 
@@ -226,7 +226,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
     def test_join_with_landtakes(self):
         equivalent_site, mesh, feature_by_face = builder.build_altimetry(
             self.mainsite)
-        landtake_faces = (fh for fh, feature in feature_by_face.iteritems()
+        landtake_faces = (fh for fh, feature in feature_by_face.items()
                           if isinstance(feature, InfrastructureLandtake))
         altitudes = [mesh.vertices_info[fh.vertex(i)].altitude
                      for fh in landtake_faces for i in range(3)]

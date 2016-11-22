@@ -57,7 +57,7 @@ class TestPyTam(TympanTC):
         site = project.site
         childs = site.childs()
         for c in childs:
-            self.assertRegexpMatches(c.name,'Infrastructure|Topographie')
+            self.assertRegex(c.name,'Infrastructure|Topographie')
 
     def test_base(self):
         # XXX This test uses expected bad values provided by the current

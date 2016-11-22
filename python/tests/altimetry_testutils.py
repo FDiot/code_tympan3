@@ -86,8 +86,8 @@ class MesherTestUtilsMixin(object):
             self.assertEqual(count_constrained, constrained)
 
     def build_two_overlapping_segments(self):
-        segment1 = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
-        segment2 = map(mesh.to_cgal_point, [(0, 1), (0, 3)])
+        segment1 = list(map(mesh.to_cgal_point, [(0, 0), (0, 2)]))
+        segment2 = list(map(mesh.to_cgal_point, [(0, 1), (0, 3)]))
         (vA, vB), (cAB,) = self.mesher.insert_polyline(
             segment1, id="1", altitude=10)
         (vC, vD), (cCD,) = self.mesher.insert_polyline(
@@ -106,8 +106,8 @@ class MesherTestUtilsMixin(object):
             return None
 
     def build_two_crossing_segments(self, V_altitude=None):
-        h_segment = map(mesh.to_cgal_point, [(-1, 0), (1, 0)])
-        v_segment = map(mesh.to_cgal_point, [(0, -1), (0, 1)])
+        h_segment = list(map(mesh.to_cgal_point, [(-1, 0), (1, 0)]))
+        v_segment = list(map(mesh.to_cgal_point, [(0, -1), (0, 1)]))
         (vA, vB), (cAB,) = self.mesher.insert_polyline(
             h_segment, id="H", altitude=10)
         if V_altitude is None:

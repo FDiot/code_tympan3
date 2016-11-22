@@ -2,7 +2,7 @@
 Provide chaining of the step required to build the altimetry of a compound site.
 """
 
-from itertools import chain, imap
+from itertools import chain
 from warnings import warn
 import numpy as np
 from shapely import geometry
@@ -113,8 +113,8 @@ def build_sitenode(ty_site, mainsite=True):
             id=cylcurve.elem_id)
         altimetry_site.add_child(alcurve)
     # Ground contour (infrastructure landtake)
-    for id_, volume_contours in ty_site.ground_contour.items():
-        contours_coords = map(points_to_coords, volume_contours)
+    for id_, volume_contours in list(ty_site.ground_contour.items()):
+        contours_coords = list(map(points_to_coords, volume_contours))
         altimetry_site.add_child(
             InfrastructureLandtake(*contours_coords, id=id_))
     # Recurse
@@ -143,7 +143,7 @@ def build_altimetry(mainsite, allow_features_outside_mainsite=True,
 def material_by_face(feature_by_face):
     """Return a material_by_face mapping given a feature_by_face mapping"""
     m2f = {}
-    for fh, feature in feature_by_face.iteritems():
+    for fh, feature in feature_by_face.items():
         material = feature.material if feature else datamodel.DEFAULT_MATERIAL
         m2f[fh] = material
     return m2f
@@ -242,7 +242,7 @@ class MeshBuilder(object):
         """
         vmap = {}
         mesh = altimesh.copy(class_=ElevationMesh, vmap=vmap)
-        for fid, vertices_groups in self.vertices_for_feature.items():
+        for fid, vertices_groups in list(self.vertices_for_feature.items()):
             self.vertices_for_feature[fid] = [[vmap[vh] for vh in vertices]
                                               for vertices in vertices_groups]
         return mesh
@@ -284,7 +284,7 @@ class MeshBuilder(object):
                 flooder = mesh.flood_polygon(LandtakeFaceFlooder, polyline,
                                              close_it=close_it)
                 inside_vertices = set((fh.vertex(i) for fh in flooder.visited
-                                       for i in xrange(3)))
+                                       for i in range(3)))
                 for vh in chain(contour_vertices, inside_vertices):
                     mesh.vertices_info[vh].altitude = mean_alt
 

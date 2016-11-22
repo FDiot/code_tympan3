@@ -28,7 +28,7 @@ from matplotlib import patches as mpatches
 from shapely import geometry as geom
 from descartes import PolygonPatch
 
-from  datamodel import *
+from  .datamodel import *
 
 MATERIAL_COLORS = {
     "grass": "green",
@@ -129,7 +129,7 @@ def plot_points_seq(ax, points, **kwargs):
     plot_opts = {'linestyle':'',
                  'marker':'o'}
     plot_opts.update(kwargs)
-    xs, ys = zip(*[(p.x(), p.y()) for p in points])
+    xs, ys = list(zip(*[(p.x(), p.y()) for p in points]))
     return ax.plot(xs, ys, **plot_opts)
 
 def plot_segment(ax, s, **kwargs):
