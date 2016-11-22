@@ -54,8 +54,8 @@ def compare_floats(x, y):
         precision. Then when they sufficiently differ, return -1 if x[i] < y[i]
         and 1 otherwise. 0 is returned if the arrays are equal.
     """
-    from itertools import izip
-    for xi, yi in izip(x, y):
+    
+    for xi, yi in zip(x, y):
         if not np.allclose(xi, yi, atol=1e-03):
             if xi < yi:
                 return -1
@@ -93,23 +93,23 @@ def _test_solve_with_file(test_file, testobj):
     # The sources here can be user sources, the machines and the buildings
     # (TYUserSourcePonctuelle, TYMachine, TYBatiment)
     check_nsources  = False
-    for i in xrange (current_result.nreceptors):
+    for i in range (current_result.nreceptors):
         if current_result.receptor(i).is_control_point():
             testobj.assertTrue(expected_result.receptor(i).is_control_point())
             check_nsources = True
     if check_nsources:
         testobj.assertEqual(current_result.nsources, expected_result.nsources)
     current_spectra = np.array(list(current_result.spectrum(i, j).values
-                                    for i in xrange(current_result.nreceptors)
-                                    for j in xrange(current_result.nsources)))
+                                    for i in range(current_result.nreceptors)
+                                    for j in range(current_result.nsources)))
     expected_spectra = np.array(list(expected_result.spectrum(i, j).values
-                                    for i in xrange(current_result.nreceptors)
-                                    for j in xrange(current_result.nsources)))
+                                    for i in range(current_result.nreceptors)
+                                    for j in range(current_result.nsources)))
     if current_result.nsources + current_result.nreceptors > 1:
         # Order the two spectra lists because spectra are not always kept in the same order
         current_spectra = sorted(current_spectra, cmp=compare_floats)
         expected_spectra = sorted(expected_spectra, cmp=compare_floats)
-    for i in xrange(len(current_spectra)):
+    for i in range(len(current_spectra)):
         # All spectra must have the same number of elements
         testobj.assertEqual(current_spectra[i].size, expected_spectra[i].size)
         np.testing.assert_almost_equal(current_spectra[i],

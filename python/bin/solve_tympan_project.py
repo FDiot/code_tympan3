@@ -18,10 +18,10 @@ if tympan_debug is not None:
         multithreading_on = False
     if 'interactive' in tympan_debug.lower():
         process_id = os.getpid()
-        print ("bin/solve_tympan_project.py : l'application est prete pour le debuggage. Entrez 'run' une fois que "
+        print(("bin/solve_tympan_project.py : l'application est prete pour le debuggage. Entrez 'run' une fois que "
                "ce processus python (id: %d) aura ete rattache au debugger.\n"
                "Attention, ce mode de debuggage n'est disponible que si "
-               "solve_tympan_project.py est appele directement depuis une console interactive." % process_id)
+               "solve_tympan_project.py est appele directement depuis une console interactive." % process_id))
         logging.debug("Running solve_project.py in debug mode...")
         interactive =True
 

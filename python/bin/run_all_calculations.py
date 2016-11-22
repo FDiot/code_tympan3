@@ -1,6 +1,6 @@
 # coding: utf-8
 """How to run all the calculations xml file"""
-from __future__ import print_function
+
 #
 import argparse
 import os

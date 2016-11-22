@@ -4,7 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
-import ConfigParser
+import configparser
 
 import numpy as np
 
@@ -72,7 +72,7 @@ class TestSolveProject(TympanTC):
 
     def test_solver_config_errors(self):
         input_proj = osp.join(TEST_DATA_DIR, 'empty_site_config_ko.xml')
-        with self.assertRaises(ConfigParser.Error) as cm:
+        with self.assertRaises(configparser.Error) as cm:
             self.run_solve(input_proj)
         self.assertEqual(str(cm.exception),
                          os.linesep.join(
@@ -129,7 +129,7 @@ class ProjectResultsTC(TympanTC):
                                      3.4595e-07, 3.1354e-08, 7.6832e-10, 2.3192e-12, 2.5400e-16,
                                      1.6487e-22, 1.3216e-23, 1.3216e-23, 1.3216e-23, 1.3216e-23,
                                      1.3216e-23])
-        for rec in xrange(result.nreceptors):
+        for rec in range(result.nreceptors):
             np.testing.assert_almost_equal(combined_spectra[rec, :], expected_spectra, decimal=6)
 
 

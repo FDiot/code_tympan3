@@ -31,6 +31,8 @@ from CGAL.CGAL_Triangulation_2 import  (
     Ref_Locate_type_2 as Ref_locate_type,
     VERTEX, EDGE, FACE, OUTSIDE_CONVEX_HULL, OUTSIDE_AFFINE_HULL
 )
+import collections
+from functools import reduce
 
 Z_VECTOR = Vector_3(0, 0, 1)
 _PROXIMITY_THRESHOLD = 0.01
@@ -132,11 +134,11 @@ class MeshedCDTWithInfo(object):
         newone = class_()
         newone.cdt = self.cdt.deepcopy()
         vmap.update(self.vertices_map_to_other_mesh(newone))
-        for orig_vh, orig_info in self._input_vertices_infos.iteritems():
+        for orig_vh, orig_info in self._input_vertices_infos.items():
             dest_vh = vmap[orig_vh]
             dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
             newone._input_vertices_infos[dest_vh] = dest_info
-        for (orig_va, orig_vb), orig_info in self._input_constraints_infos.iteritems():
+        for (orig_va, orig_vb), orig_info in self._input_constraints_infos.items():
             dest_va, dest_vb = vmap[orig_va], vmap[orig_vb]
             dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
             if sorted_vertex_pair(dest_va, dest_vb) != (dest_va, dest_vb):
@@ -152,7 +154,7 @@ class MeshedCDTWithInfo(object):
             count_edges += 1
         return count_edges, count_constrained
 
-    def input_constraint_infos(self, (va, vb)):
+    def input_constraint_infos(self, xxx_todo_changeme):
         """Get the constraint informations associated to the given pair of vertices
 
         NB: Input constraints are represented as a pair of vertices,
@@ -161,6 +163,7 @@ class MeshedCDTWithInfo(object):
         performed.
 
         """
+        (va, vb) = xxx_todo_changeme
         return self._input_constraints_infos[sorted_vertex_pair(va, vb)]
 
     def input_vertex_infos(self, v):
@@ -322,7 +325,7 @@ class MeshedCDTWithInfo(object):
         """
         init_map = init_map or {}
         d = {}
-        for v, info_list in self.fetch_constraint_infos_for_vertices(vertices=vertices).iteritems():
+        for v, info_list in self.fetch_constraint_infos_for_vertices(vertices=vertices).items():
             info = self._input_vertices_infos.get(v, init_map.get(v, self.VertexInfo()))
             try:
                 d[v] = reduce(merge_function, info_list, info)
@@ -343,7 +346,7 @@ class MeshedCDTWithInfo(object):
         """
         init_map = init_map or {}
         d = {}
-        for v_pair, info_list in self.fetch_constraint_infos_for_edges(edges=edges).iteritems():
+        for v_pair, info_list in self.fetch_constraint_infos_for_edges(edges=edges).items():
             v_pair = sorted_vertex_pair(*v_pair)
             info = init_map.get(v_pair, self.EdgeInfo())
             try:
@@ -376,7 +379,7 @@ class MeshedCDTWithInfo(object):
         if self.cdt.is_infinite(fh):
             return None
         else:
-            return [fh.vertex(i).point() for i in xrange(3)]
+            return [fh.vertex(i).point() for i in range(3)]
 
     def point_for_face(self, fh):
         "Return a point in the interior of the face, or None if face is infinite"
@@ -423,7 +426,7 @@ class MeshedCDTWithInfo(object):
 
     def py_face(self, face):
         """ Return a pure python representation of the face, intended for debugging"""
-        return ["FACE"] + [self.py_vertex(face.vertex(i)) for i in xrange(3)]
+        return ["FACE"] + [self.py_vertex(face.vertex(i)) for i in range(3)]
 
     def py_edge(self, edge):
         """Return a python representation of the edge either as a pair of
@@ -579,7 +582,7 @@ class MeshedCDTWithInfo(object):
     def _face_triangle(self, fh):
         """Return a shapely geometry LineString for given face."""
         return LineString([self.py_vertex(fh.vertex(i % 3))
-                           for i in xrange(4)])
+                           for i in range(4)])
 
 
 class InfoWithIDsAndAltitude(object):
@@ -616,7 +619,7 @@ class InfoWithIDsAndAltitude(object):
                         ids=self.ids)
 
     def __repr__(self):
-        args = ", ".join(["%s=%r" % kv for kv in self.__dict__.iteritems()])
+        args = ", ".join(["%s=%r" % kv for kv in self.__dict__.items()])
         return "%s(%s)" % (self.__class__.__name__, args)
 
     def __eq__(self, other):
@@ -667,11 +670,11 @@ class ElevationMesh(MeshedCDTWithInfo):
     def copy(self, class_=None, deep=False, vmap=None):
         vmap = {} if vmap is None else vmap
         newone = super(ElevationMesh, self).copy(class_=class_, deep=deep, vmap=vmap)
-        for orig_vh, orig_info in self.vertices_info.iteritems():
+        for orig_vh, orig_info in self.vertices_info.items():
             dest_vh = vmap[orig_vh]
             dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
             newone.vertices_info[dest_vh] = dest_info
-        for (orig_va, orig_vb), orig_info in self.edges_info.iteritems():
+        for (orig_va, orig_vb), orig_info in self.edges_info.items():
             dest_va, dest_vb = vmap[orig_va], vmap[orig_vb]
             dest_info = copy.deepcopy(orig_info) if deep else copy.copy(orig_info)
             newone.edges_info[(dest_va, dest_vb)] = dest_info
@@ -696,7 +699,7 @@ class ElevationMesh(MeshedCDTWithInfo):
             return None
         else:
             t = Triangle_3(*(self.point3d_for_vertex(fh.vertex(i))
-                             for i in xrange(3)))
+                             for i in range(3)))
             return t
 
     def update_info_for_vertices(self, vertices=None, init_map=None):
@@ -849,8 +852,8 @@ class ElevationProfile(object):
         origin.
         """
         distances = _distances or self._point_distances()
-        if callable(point_data):
-            point_data = map(point_data, distances)
+        if isinstance(point_data, collections.Callable):
+            point_data = list(map(point_data, distances))
         elif len(distances) != len(point_data):
             raise ValueError('incompatible number of data points')
         return InterpolatedUnivariateSpline(distances, point_data, k=1)
@@ -968,7 +971,7 @@ class FaceFlooder(object):
     def links_for(self, face_handle):
         """ Return an iterable on edges with adjacent faces
         """
-        for i in xrange(3):
+        for i in range(3):
             edge = (face_handle, i)
             yield edge
 
@@ -1040,7 +1043,7 @@ def left_and_right_faces(faces_it):
     """Takes an iterable on pair (left_face, right_face) and return the
     pair of the list of all left faces and the list of all right faces
     """
-    return zip(*list(faces_it))
+    return list(zip(*list(faces_it)))
 
 
 class LandtakeFaceFlooder(FaceFlooder):

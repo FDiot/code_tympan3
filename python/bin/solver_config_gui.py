@@ -1,5 +1,5 @@
 import argparse
-import ConfigParser
+import configparser
 import json
 
 from tympan.config_gui import ConfigWidget, _update_config_with_user_values, _update_user_config
@@ -15,7 +15,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     with open(args.data_model_filepath) as stream:
         config_model = json.load(stream)
-    user_config = ConfigParser.ConfigParser()
+    user_config = configparser.ConfigParser()
     user_config.optionxform = str  # keep param names case
     with open(args.input_filepath) as stream:
         user_config.readfp(stream)

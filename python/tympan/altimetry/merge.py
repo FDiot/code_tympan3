@@ -106,7 +106,7 @@ class SiteNodeGeometryCleaner(object):
         """Return the merged site"""
         merged_site = SiteNode(self.sitenode.build_coordinates()[0],
                                id=self.sitenode.id)
-        for feature_id, shape in self.geom.iteritems():
+        for feature_id, shape in self.geom.items():
             feature = copy(self.feature_from_id(feature_id))
             feature.set_shape(shape)
             merged_site.add_child(feature)
@@ -159,7 +159,7 @@ class SiteNodeGeometryCleaner(object):
 
         Info are shared between the self and the other cleaner.
         """
-        for feature_id, shape in othercleaner.geom.iteritems():
+        for feature_id, shape in othercleaner.geom.items():
             self._add_feature_with_new_shape(
                 othercleaner.feature_from_id(feature_id), shape)
 
@@ -214,7 +214,7 @@ class SiteNodeGeometryCleaner(object):
         """ Diagnostic helper: returns violation of the ordering for material area"""
         problems = set([])
         for i, area_i_id in enumerate(self._sorted_material_areas):
-            for j in xrange(i+1, len(self._sorted_material_areas)):
+            for j in range(i+1, len(self._sorted_material_areas)):
                 area_j_id = self._sorted_material_areas[j]
                 area_i_geom = self.geom[area_i_id]
                 area_j_geom = self.geom[area_j_id]

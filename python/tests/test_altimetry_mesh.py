@@ -1,5 +1,5 @@
 from functools import partial
-from itertools import izip_longest
+from itertools import zip_longest
 import unittest
 
 import numpy as np
@@ -27,7 +27,7 @@ def assert_geometry_equal(actual, expected):
 def assert_geometry_items_equal(actual, expected):
     """Assert that two sequences of shapely.geomety objects are equal"""
     marker = object()
-    for idx, (a, e) in enumerate(izip_longest(actual, expected,
+    for idx, (a, e) in enumerate(zip_longest(actual, expected,
                                               fillvalue=marker)):
         if a is marker or e is marker:
             raise TestFailureException(
@@ -49,24 +49,24 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
     def test_insert_3_point(self):
         points = [(1, 1), (1, 2), (3, 4)]
-        self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
+        self.mesher.insert_polyline(list(map(mesh.to_cgal_point, points)),
                                     connected=False)
         self.assert_basic_counts(vertices=3, faces=1, edges=3, constrained=0)
 
     def test_insert_triangle(self):
         points = [(1, 1), (1, 2), (3, 4)]
-        self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
+        self.mesher.insert_polyline(list(map(mesh.to_cgal_point, points)),
                                     close_it=True)
         self.assert_basic_counts(vertices=3, faces=1, edges=3, constrained=3)
 
     def test_insert_vee(self):
         points = [(-1, 2), (0, 0), (1, 2)]
-        self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
+        self.mesher.insert_polyline(list(map(mesh.to_cgal_point, points)),
                                     close_it=False) # the default by the way
         self.assert_basic_counts(vertices=3, faces=1, edges=3, constrained=2)
 
     def test_info_simple_polyline(self):
-        points = map(mesh.to_cgal_point, [(1, 1), (1, 2), (3,4)])
+        points = list(map(mesh.to_cgal_point, [(1, 1), (1, 2), (3,4)]))
         vertices, input_constraints = self.mesher.insert_polyline(
             points, altitude=10)
 
@@ -95,7 +95,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
                                {"color": "blue", "id":"2"}])
 
     def test_explicit_edge_conversion(self):
-        segment = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
+        segment = list(map(mesh.to_cgal_point, [(0, 0), (0, 2)]))
         (vA, vB), (cAB,) = self.mesher.insert_polyline(segment)
         (edge, ) = self.mesher.cdt.finite_edges()
 
@@ -110,7 +110,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         self.assertItemsEqual((v1, v2), (vB, vA))
 
     def test_orientation_in_edge_conversion(self):
-        segment = map(mesh.to_cgal_point, [(0, 0), (2, 0)])
+        segment = list(map(mesh.to_cgal_point, [(0, 0), (2, 0)]))
         (vA, vB), (cAB,) = self.mesher.insert_polyline(segment)
         cV = self.mesher.insert_point((1, 1))
         # NB ABC is CCW
@@ -126,7 +126,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         self.assertTrue(cdt.is_infinite(fh))
 
     def test_ensured_edge_conversion(self):
-        segment = map(mesh.to_cgal_point, [(0, 0), (0, 2)])
+        segment = list(map(mesh.to_cgal_point, [(0, 0), (0, 2)]))
         (vA, vB), (cAB,) = self.mesher.insert_polyline(segment)
         (edge, ) = self.mesher.cdt.finite_edges()
 
@@ -287,7 +287,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
     def test_segment_intersection(self):
         points = [(1, 1), (1, 3), (3, 1)]
-        self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
+        self.mesher.insert_polyline(list(map(mesh.to_cgal_point, points)),
                                     close_it=True)
         # No intersection.
         segment = (0, 0), (0, 3)
@@ -305,10 +305,10 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
     def test_segment_intersection_2elements(self):
         points = [(1, 3), (3, 1), (3, 3)]
-        self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
+        self.mesher.insert_polyline(list(map(mesh.to_cgal_point, points)),
                                     close_it=True)
         points = [(1, 1), (1, 3), (3, 1)]
-        self.mesher.insert_polyline(map(mesh.to_cgal_point, points),
+        self.mesher.insert_polyline(list(map(mesh.to_cgal_point, points)),
                                     close_it=True)
         segment = (0, 2), (4, 2)
         inter = list(self.mesher.segment_intersection_points(segment))
@@ -359,7 +359,7 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         altitudes = self.mesher.merge_info_for_vertices(
             lambda i1, i2: i1.merge_with(i2), vertices=(vA, vO))
 
-        self.assertItemsEqual(altitudes.keys(), (vA, vO))
+        self.assertItemsEqual(list(altitudes.keys()), (vA, vO))
         self.assertEqual(altitudes[vA].altitude, 10)
         self.assertEqual(altitudes[vO].altitude, 10)
         self.assertItemsEqual(altitudes[vO].ids, ["H", "V"])
@@ -472,7 +472,7 @@ class ElevationProfileTC(unittest.TestCase):
         # Three squares inside each others, with an outer zone at altitude 0
         # and an inner zone at altitude 2.
         for points, alt in zip(self.rectangles, self.altitudes):
-            self.mesh.insert_polyline(map(mesh.to_cgal_point, points),
+            self.mesh.insert_polyline(list(map(mesh.to_cgal_point, points)),
                                       altitude=alt, close_it=True)
 
     def test_no_point_inside(self):
@@ -597,7 +597,7 @@ class ElevationProfileTC(unittest.TestCase):
         material_by_face = self._material_by_face()
         # Build an interpolator `sigma` on material resistivity.
         sigma_by_face = dict((fh, mat.resistivity)
-                             for fh, mat in material_by_face.items())
+                             for fh, mat in list(material_by_face.items()))
         sigma = profile.face_data_interpolator(sigma_by_face)
         # Inside first rectangle.
         self.assert_within(sigma(1.2), [0, 1])

@@ -1,4 +1,4 @@
-import ConfigParser
+import configparser
 import io
 import json
 import os
@@ -66,9 +66,9 @@ class TestSolverConfigGUI(unittest.TestCase):
         with open(datamodel_filepath) as stream:
             self.config_model = json.load(stream)
         user_config = io.StringIO(
-            u'[DEFAULTSOLVER]\nNbThreads=True\nUseRealGround=False\n[ANALYTICRAYTRACER]\n'
+            '[DEFAULTSOLVER]\nNbThreads=True\nUseRealGround=False\n[ANALYTICRAYTRACER]\n'
             'CurveRaySampler=2.3\nInitialAngleTheta=1\nblop=whatever')
-        self.conf_parser = ConfigParser.ConfigParser()
+        self.conf_parser = configparser.ConfigParser()
         self.conf_parser.readfp(user_config)
 
     def test_update_config_with_user_values(self):

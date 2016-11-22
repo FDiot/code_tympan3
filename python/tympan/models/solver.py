@@ -1,6 +1,6 @@
-import ConfigParser
+import configparser
 import json
-from StringIO import StringIO
+from io import StringIO
 import os
 
 from tympan.models import filter_output
@@ -19,7 +19,7 @@ _CONFIG_MODEL_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), os
 with open(_CONFIG_MODEL_FILE) as stream:
     _CONFIG_MODEL = json.load(stream)
 _SOLVER_CONFIG_ATTRS = []
-for category, options in _CONFIG_MODEL.iteritems():
+for category, options in _CONFIG_MODEL.items():
     for option in options:
         _SOLVER_CONFIG_ATTRS.append((options[option]['type'], option))
 _CONFIG_MAP = dict((optname, _CONVERTERS[opttype]) for opttype, optname in _SOLVER_CONFIG_ATTRS)
@@ -160,7 +160,7 @@ def fetch_solverdir():
 
 def _set_solver_config(comp):
     """Setup solver configuration"""
-    parser = ConfigParser.RawConfigParser()
+    parser = configparser.RawConfigParser()
     parser.optionxform = str  # keep param names case
     parser.readfp(StringIO(comp.solver_parameters))
     solver_config = cysolver.Configuration.get()
@@ -176,4 +176,4 @@ def _set_solver_config(comp):
                 continue
             setattr(solver_config, optname, value)
     if errors:
-        raise ConfigParser.Error(os.linesep.join(errors))
+        raise configparser.Error(os.linesep.join(errors))

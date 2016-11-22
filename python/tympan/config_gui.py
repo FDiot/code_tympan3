@@ -1,7 +1,7 @@
-import ConfigParser
-from Tkinter import Label, Entry, Frame, Tk, Button, StringVar, IntVar, DoubleVar, BooleanVar
-import ttk
-import tkFont
+import configparser
+from tkinter import Label, Entry, Frame, Tk, Button, StringVar, IntVar, DoubleVar, BooleanVar
+import tkinter.ttk
+import tkinter.font
 
 
 _TKINTER_VARS = {'int': IntVar, 'float': DoubleVar, 'double': DoubleVar, 'bool': BooleanVar}
@@ -29,10 +29,10 @@ class ConfigWidget(Frame):
         per parameter)
         """
         # Tabbed frame with the parameters organized by category
-        notebook = ttk.Notebook(self.master)
-        help_font = tkFont.Font(slant='italic', size=10)
+        notebook = tkinter.ttk.Notebook(self.master)
+        help_font = tkinter.font.Font(slant='italic', size=10)
         self.entry_variables = {}
-        for tab, options in self.config.items():
+        for tab, options in list(self.config.items()):
             self.entry_variables[tab] = {}
             tab_frame = Frame(notebook)
             notebook.add(tab_frame, text=tab)
@@ -65,7 +65,7 @@ class ConfigWidget(Frame):
         """Go through the widget text entries and retrieve their value to update `self.config` dict,
         before exiting HMI
         """
-        for tab, options in self.entry_variables.iteritems():
+        for tab, options in list(self.entry_variables.items()):
             for option in options:
                 self.config[tab][option]['value'] = self.entry_variables[tab][option].get()
         self.quit()
@@ -83,11 +83,11 @@ def _update_config_with_user_values(config, user_config_parser):
         'bool': user_config_parser.getboolean,
         'int': user_config_parser.getint
     }
-    for section, options in config.items():
+    for section, options in list(config.items()):
         for option in options:
             try:
                 value = converters[options[option]['type']](section, option)
-            except (ValueError, ConfigParser.NoSectionError, ConfigParser.NoOptionError):
+            except (ValueError, configparser.NoSectionError, configparser.NoOptionError):
                 options[option]['value'] = options[option]['default']
             else:
                 options[option]['value'] = value
@@ -96,7 +96,7 @@ def _update_config_with_user_values(config, user_config_parser):
 def _update_user_config(config, user_config_parser):
     """Update `user_config_parser` with `config` values
     """
-    for tab, options in config.iteritems():
+    for tab, options in list(config.items()):
         for option in options:
             if options[option]['type'] == 'bool':
                 value = bool(options[option]['value'])

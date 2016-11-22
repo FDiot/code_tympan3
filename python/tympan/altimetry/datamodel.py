@@ -71,7 +71,7 @@ class GeometricFeature(object):
             self._coords = _preproc_point_seq(coords_or_shape)
             self._shape = None # to cache the Shapely shape
         if id:
-            assert isinstance(id, basestring), 'id "%r" is not a string' % id
+            assert isinstance(id, str), 'id "%r" is not a string' % id
         self.id = id
 
     def set_shape(self, shape):
@@ -352,6 +352,6 @@ class InfrastructureLandtake(MaterialArea):
     geometric_type = "MultiPolygon"
 
     def __init__(self, *coords, **kwargs):
-        shape = geometry.MultiPolygon(map(geometry.Polygon, coords))
+        shape = geometry.MultiPolygon(list(map(geometry.Polygon, coords)))
         super(InfrastructureLandtake, self).__init__(
             shape, material=HIDDEN_MATERIAL, **kwargs)

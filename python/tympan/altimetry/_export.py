@@ -16,7 +16,7 @@ def export_to_ply(mesh, material_by_face, fname, color_faces=True):
     materials = []
     faces_materials = mesh.faces_material(material_by_face)
     for idx, mat in enumerate(faces_materials):
-        matid = map(ord, mat.id)
+        matid = list(map(ord, mat.id))
         if matid not in materials:
             materials.append(matid)
         faces_materials[idx] = materials.index(matid)

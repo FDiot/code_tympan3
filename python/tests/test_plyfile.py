@@ -33,7 +33,7 @@ class PLYFileTC(unittest.TestCase):
         with tempfile.NamedTemporaryFile(suffix='.ply', delete=(not DEBUG_TMP_FILES)) as f:
             ply_data.write(f)
             if DEBUG_TMP_FILES:
-                print "Temp. file for test_write_trivial_file: ", f.name
+                print("Temp. file for test_write_trivial_file: ", f.name)
 
 
 if __name__ == '__main__':
