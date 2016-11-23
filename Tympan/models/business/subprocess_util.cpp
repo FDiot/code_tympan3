@@ -96,7 +96,7 @@ QString _get_python_interp()
 #if TY_PLATFORM == TY_PLATFORM_WIN32 || TY_PLATFORM == TY_PLATFORM_WIN64
     QStringList env(QProcess::systemEnvironment());
     // TYMPAN_PYTHON_INTERP environment variable must be set to the path to
-    // python interpreter (ex: "C:\Python27\python.exe")
+    // python 3 interpreter (ex: "C:\Python34\python.exe")
     int python_interp_idx = env.indexOf(QRegExp("^TYMPAN_PYTHON_INTERP=(.*)"));
     if (python_interp_idx < 0)
     {
@@ -111,7 +111,7 @@ QString _get_python_interp()
     }
     return python_interp_path;
 #else
-    return QString("python");
+    return QString("python3");
 #endif
 }
 

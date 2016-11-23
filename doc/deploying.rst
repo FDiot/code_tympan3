@@ -129,7 +129,7 @@ user registry:
 
 * *CGAL_BINDINGS_PATH* (path to CGAL bindings libraries)
 
-* *TYMPAN_PYTHON_INTERP* (path to Python interpreter -- the custom one)
+* *TYMPAN_PYTHON_INTERP* (path to Python 3 interpreter -- the custom one)
 
 They are set by the installer at the end of the installation.
 
