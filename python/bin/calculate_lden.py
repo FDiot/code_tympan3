@@ -1,4 +1,3 @@
-# coding: utf-8
 """How to calculate lden from an xml file containing 3 computations for Day, Evening and Night periods"""
 
 #

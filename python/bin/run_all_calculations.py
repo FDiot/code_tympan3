@@ -1,4 +1,3 @@
-# coding: utf-8
 """How to run all the calculations xml file"""
 
 #
