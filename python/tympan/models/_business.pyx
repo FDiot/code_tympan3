@@ -59,7 +59,7 @@ cdef tysol2ground(SmartPtr[TYSol] grnd):
 
 cdef tyelement_id(TYElement* elem):
     """The id of the element contained in the TYGeometryNode as a string"""
-    return elem.getID().toString().toStdString()
+    return elem.getID().toString().toStdString().decode()
 
 cdef cpp2cypoints(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
     """Build a list of 'Point3D' objects from the c++ 'TYPoint' objects
@@ -133,7 +133,7 @@ cdef class Element:
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getName().toStdString()
+        return self.thisptr.getRealPointer().getName().toStdString().decode()
 
 
 cdef class AcousticSurface:
@@ -229,7 +229,7 @@ cdef class Ground:
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getName().toStdString()
+        return self.thisptr.getRealPointer().getName().toStdString().decode()
 
     @property
     def elem_id(self):
@@ -248,7 +248,7 @@ cdef class Vegetation:
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getName().toStdString()
+        return self.thisptr.getRealPointer().getName().toStdString().decode()
 
     @property
     def foliage(self):
@@ -322,7 +322,7 @@ cdef class Site:
         cpp_contours_iter = cpp_contours.begin()
         contours = {}
         while cpp_contours_iter != cpp_contours.end():  # XXX can't we iterate on items???
-            volume_id = deref(cpp_contours_iter).first.toString().toStdString()
+            volume_id = deref(cpp_contours_iter).first.toString().toStdString().decode()
             contours[volume_id] = [
                 [tycommon.opoint3d2point3d(contour[i])
                  for i in xrange(contour.size())]
@@ -446,7 +446,7 @@ cdef class Site:
             tgles.back()._B = pts[e1]
             tgles.back()._C = pts[e2]
         for mat in altimetry_mesh.faces_material(material_by_face):
-            mat_ids.push_back(mat.id)
+            mat_ids.push_back(mat.id.encode('utf-8'))
         cppmats = cy.declare(deque[SmartPtr[TYSol]])
         self.thisptr.getRealPointer().uuid2tysol(mat_ids, cppmats)
         alti = cy.declare(
@@ -809,7 +809,7 @@ cdef class Computation:
         return self.thisptr.getRealPointer().solverParams.toStdString()
 
     def set_solver_parameters(self, params):
-        self.thisptr.getRealPointer().solverParams = QString(params)
+        self.thisptr.getRealPointer().solverParams = QString(params.encode('utf-8'))
 
     solver_parameters = property(get_solver_parameters, set_solver_parameters)
 
@@ -837,7 +837,7 @@ cdef class Computation:
         assert self.thisptr.getRealPointer() != NULL
         cpp_elem = cy.declare(cy.pointer(TYElement),
                               downcast_Element(self.thisptr.getRealPointer()))
-        return cpp_elem.getName().toStdString()
+        return cpp_elem.getName().toStdString().decode()
 
     def set_name(self, name):
         """ Set the name of the computation """
@@ -849,15 +849,15 @@ cdef class Computation:
     def set_solver(self, solverdir, name):
         """`solver_name` will be used to solve this computation"""
         assert self.thisptr.getRealPointer() != NULL
-        load_solvers(solverdir)
-        solverid = cy.declare(OGenID, solver_id(name))
+        load_solvers(solverdir.encode('utf-8'))
+        solverid = cy.declare(OGenID, solver_id(name.encode('utf-8')))
         self.thisptr.getRealPointer().setSolverId(solverid)
 
     @property
     def solver_id(self):
         """The identifier of the solver that will be used to solve the computation"""
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getSolverId().toString().toStdString()
+        return self.thisptr.getRealPointer().getSolverId().toString().toStdString().decode()
 
 
 cdef class Project:
@@ -956,6 +956,8 @@ cdef class Project:
         # if an exception is raised from the C++ code, it will be converted to
         # RuntimeError python exception. what() message should be preserved.
         # see http://docs.cython.org/src/userguide/wrapping_CPlusPlus.html#exceptions
+        if isinstance(filepath, str):
+            filepath = filepath.encode('utf-8')
         project.thisptr = load_project(filepath)
         return project
 
@@ -967,4 +969,4 @@ cdef class Project:
         """Export an acoustic project to a XML file"""
         assert self.thisptr.getRealPointer() != NULL
         # same thing as for load_project about the exception
-        save_project(filepath, self.thisptr)
+        save_project(filepath.encode('utf-8'), self.thisptr)

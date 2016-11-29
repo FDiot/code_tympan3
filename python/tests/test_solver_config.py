@@ -31,8 +31,9 @@ class TestSolverConfig(TympanTC):
             project.to_xml(f.name)
             configured_project = Project.from_xml(f.name)
             # Check configuration didn't disappear
-            self.assertEqual(configured_project.current_computation.solver_parameters,
-                             config)
+            self.assertEqual(
+                configured_project.current_computation.solver_parameters.decode(),
+                config)
         f.close()
         os.unlink(f.name)
 
