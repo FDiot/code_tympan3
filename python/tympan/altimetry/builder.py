@@ -113,8 +113,8 @@ def build_sitenode(ty_site, mainsite=True):
             id=cylcurve.elem_id)
         altimetry_site.add_child(alcurve)
     # Ground contour (infrastructure landtake)
-    for id_, volume_contours in list(ty_site.ground_contour.items()):
-        contours_coords = list(map(points_to_coords, volume_contours))
+    for id_, volume_contours in ty_site.ground_contour.items():
+        contours_coords = map(points_to_coords, volume_contours)
         altimetry_site.add_child(
             InfrastructureLandtake(*contours_coords, id=id_))
     # Recurse
