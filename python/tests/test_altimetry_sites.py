@@ -133,11 +133,11 @@ class AltimetryDataTC(unittest.TestCase):
         vegarea.parent_site = mainsite
         mainsite.add_child(self.material_area_A)
 
-        self.assertItemsEqual(mainsite.level_curves, [level_curve_A, waterbody])
-        self.assertItemsEqual(mainsite.material_areas,
+        self.assertCountEqual(mainsite.level_curves, [level_curve_A, waterbody])
+        self.assertCountEqual(mainsite.material_areas,
                               [self.material_area_A, waterbody, vegarea])
-        self.assertItemsEqual(mainsite.subsites, [subsite])
-        self.assertItemsEqual(subsite.level_curves, [level_curve_B])
+        self.assertCountEqual(mainsite.subsites, [subsite])
+        self.assertCountEqual(subsite.level_curves, [level_curve_B])
 
     def test_elementary_shapes(self):
         mainsite = SiteNode(self.big_rect_coords, id="{Main site ID}")
@@ -324,7 +324,7 @@ class AltimetryMergerTC(unittest.TestCase, TestFeatures):
         cleaner = recursively_merge_all_subsites(self.mainsite)
         equiv = cleaner.equivalent_site
 
-        self.assertItemsEqual(equiv.subsites, [])
+        self.assertCountEqual(equiv.subsites, [])
         self.assertNotIn("{Out of subsite area}", equiv.features_by_id)
         self.assertIn("{Subsub level curve}", equiv.features_by_id)
 
