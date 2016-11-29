@@ -2,10 +2,7 @@ import sys
 import logging
 import os
 
-# open file in unbuffered mode so it get written asap, in case of later crash
-# due to underlying C code
-stream = open('tympan.log', 'a', 0)
-logging.basicConfig(stream=stream, level=logging.DEBUG,
+logging.basicConfig(filename='tympan.log', level=logging.DEBUG,
                     format='%(levelname)s:%(asctime)s - %(name)s - %(message)s')
 
 multithreading_on = True
@@ -36,8 +33,7 @@ except ImportError:
 if __name__ == '__main__':
     if len(sys.argv) != 5:
         err = "bin/solve_tympan_project.py called with bad arguments"
-        logging.error("%s Couldn't solve acoustic problem.", err)
-        stream.close()
+        logging.error("{0} Couldn't solve acoustic problem.".format(err))
         sys.exit(-1) # XXX to be improved
     # read command-line arguments
     input_proj = sys.argv[1]
@@ -56,7 +52,5 @@ if __name__ == '__main__':
     except Exception as exc:
         sys.stderr.write('Error: ' + exc.message)
         logging.exception("tympan.solve_project.py couldn't solve the acoustic problem:\n%s", exc)
-        stream.close()
         sys.exit(-1)
-    stream.close()
     sys.exit(0)
