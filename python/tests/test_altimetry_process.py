@@ -156,7 +156,7 @@ class TestProcessAltimetry(TympanTC):
         self.assertEqual(vegarea.height, 10)
         self.assertTrue(vegarea.foliage)
         self.assertEqual(vegarea.variety, 'aspen')
-        vegfaces = [fh for fh, feature in list(feature_by_face.items())
+        vegfaces = [fh for fh, feature in feature_by_face.items()
                     if isinstance(feature, VegetationArea)]
         # Just check there are faces in the vegetation area.
         self.assertTrue(vegfaces)

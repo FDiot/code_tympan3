@@ -136,7 +136,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
         equivalent_site, bmesh, feature_by_face = builder.build_altimetry(
             self.mainsite)
         material_by_face = builder.material_by_face(feature_by_face)
-        materials_id = set(mat.id for mat in list(material_by_face.values()))
+        materials_id = set(mat.id for mat in material_by_face.values())
         self.assertItemsEqual(materials_id, ['__default__', '__hidden__',
                                              'grass', 'pine', 'Water'])
 
