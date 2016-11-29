@@ -137,7 +137,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             self.mainsite)
         material_by_face = builder.material_by_face(feature_by_face)
         materials_id = set(mat.id for mat in material_by_face.values())
-        self.assertItemsEqual(materials_id, ['__default__', '__hidden__',
+        self.assertCountEqual(materials_id, ['__default__', '__hidden__',
                                              'grass', 'pine', 'Water'])
 
     @unittest.skipUnless(runVisualTests, "Set RUN_VISUAL_TESTS env. variable to run me")
@@ -248,7 +248,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                 self.assertEqual(vertices.count, 119)
                 self.assertEqual(faces.count, 198)
                 materials_id = [''.join(map(chr, data)) for data, in materials.data]
-                self.assertItemsEqual(materials_id, ['__default__', '__hidden__',
+                self.assertCountEqual(materials_id, ['__default__', '__hidden__',
                                                      'grass', 'pine', 'Water'])
                 self.assertEqual(materials.count, 5)
         finally:

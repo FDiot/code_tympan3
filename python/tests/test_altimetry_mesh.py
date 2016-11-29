@@ -79,7 +79,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
     def assert_constraints_between(self, v1, v2, constraints):
         l_constraint = list(self.mesher.iter_input_constraint_overlapping((v1, v2)))
-        self.assertItemsEqual(l_constraint, constraints)
+        self.assertCountEqual(l_constraint, constraints)
 
     def test_overlapping_constraints(self):
         (vA, vB, vC, vD, cAB, cCD) = self.build_two_overlapping_segments()
@@ -90,7 +90,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
     def test_overlapping_constraints_info(self):
         (vA, vB, vC, vD, cAB, cCD) = self.build_two_overlapping_segments()
 
-        self.assertItemsEqual(list(self.mesher.iter_constraints_info_overlapping((vB, vC))),
+        self.assertCountEqual(list(self.mesher.iter_constraints_info_overlapping((vB, vC))),
                               [{"altitude":10, "id":"1"},
                                {"color": "blue", "id":"2"}])
 
@@ -102,12 +102,12 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         (fh, i) = self.mesher.half_edge_from_vertices_pair(vA, vB)
         self.assertEqual((fh, i), edge)
         (v1, v2) = self.mesher.vertices_pair_from_half_edge(fh, i)
-        self.assertItemsEqual((v1, v2), (vA, vB))
+        self.assertCountEqual((v1, v2), (vA, vB))
 
         (fh, i) = self.mesher.half_edge_from_vertices_pair(vB, vA)
         self.assertEqual((fh, i), edge)
         (v1, v2) = self.mesher.vertices_pair_from_half_edge(fh, i)
-        self.assertItemsEqual((v1, v2), (vB, vA))
+        self.assertCountEqual((v1, v2), (vB, vA))
 
     def test_orientation_in_edge_conversion(self):
         segment = map(mesh.to_cgal_point, [(0, 0), (2, 0)])
@@ -132,7 +132,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
 
         self.assertIs(edge, self.mesher.ensure_half_edge(edge))
         self.assertIs(cAB, self.mesher.ensure_vertices_pair(cAB))
-        self.assertItemsEqual((vA, vB), self.mesher.ensure_vertices_pair(edge))
+        self.assertCountEqual((vA, vB), self.mesher.ensure_vertices_pair(edge))
         self.assertEqual(edge, self.mesher.ensure_half_edge(cAB))
 
     def test_info_on_edges_crossing_polylines(self):
@@ -153,7 +153,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments()
 
         vertex_infos = self.mesher.fetch_constraint_infos_for_vertices([vO])
-        self.assertItemsEqual(vertex_infos[vO],
+        self.assertCountEqual(vertex_infos[vO],
                               [{'id': 'H', 'altitude': 10},
                                {'id': 'V', 'color': 'blue'}])
 
@@ -359,10 +359,10 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         altitudes = self.mesher.merge_info_for_vertices(
             lambda i1, i2: i1.merge_with(i2), vertices=(vA, vO))
 
-        self.assertItemsEqual(list(altitudes.keys()), (vA, vO))
+        self.assertCountEqual(list(altitudes.keys()), (vA, vO))
         self.assertEqual(altitudes[vA].altitude, 10)
         self.assertEqual(altitudes[vO].altitude, 10)
-        self.assertItemsEqual(altitudes[vO].ids, ["H", "V"])
+        self.assertCountEqual(altitudes[vO].ids, ["H", "V"])
 
     def test_crossing_level_lines_same_altitude_update_info(self):
         (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments(V_altitude=10)
@@ -370,7 +370,7 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
 
         self.assertEqual(self.mesher.vertices_info[vA].altitude, 10)
         self.assertEqual(self.mesher.vertices_info[vO].altitude, 10)
-        self.assertItemsEqual(self.mesher.vertices_info[vO].ids, ["H", "V"])
+        self.assertCountEqual(self.mesher.vertices_info[vO].ids, ["H", "V"])
 
     def test_crossing_level_lines_different_altitude(self):
         (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments(V_altitude=20)
@@ -378,7 +378,7 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         with self.assertRaises(InconsistentGeometricModel) as cm:
             self.mesher.update_info_for_vertices((vO,))
         self.assertEqual(cm.exception.witness_point, (0.0, 0.0))
-        self.assertItemsEqual(cm.exception.ids, ["H", "V"])
+        self.assertCountEqual(cm.exception.ids, ["H", "V"])
 
     def test_vertices_info_set_from_input(self):
         (vA, vB, vC, vD, cAB, cCD, vO) = self.build_two_crossing_segments(V_altitude=20)
