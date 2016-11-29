@@ -538,15 +538,7 @@ class MeshedCDTWithInfo(object):
             segment = LineString(segment)
         points = list(self._segment_intersection_points(segment))
         # Sort points by distance to the segment origine.
-        def closer_to_segment_origine(x, y):
-            dist = Point(segment.coords[0]).distance
-            if dist(x) > dist(y):
-                return 1
-            elif dist(x) < dist(y):
-                return -1
-            else:
-                return 0
-        points.sort(cmp=closer_to_segment_origine)
+        points.sort(key=lambda x: Point(segment.coords[0]).distance(x))
         # Eliminate identical adjacent points.
         if len(points) < 2:
             return points

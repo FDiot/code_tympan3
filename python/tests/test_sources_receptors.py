@@ -4,6 +4,7 @@ import unittest
 import re
 import numpy as np
 from numpy.testing import assert_allclose
+from functools import cmp_to_key
 
 from utils import (TEST_DATA_DIR, TEST_SOLVERS_DIR, TEST_RESULT_DIR, TympanTC,
                    compare_floats)
@@ -147,8 +148,8 @@ def make_sources_test_with_file(project_file, sources_file):
                                      for source in model.sources))
         if model.nsources > 1:
             # Order the two lists to be able to compare them two by two
-            expected_sources = sorted(expected_sources, cmp=compare_floats)
-            real_sources = sorted(real_sources, cmp=compare_floats)
+            expected_sources = sorted(expected_sources, key=cmp_to_key(compare_floats))
+            real_sources = sorted(real_sources, key=cmp_to_key(compare_floats))
         else:
             real_sources = real_sources[0]
         # Compare the sources
@@ -180,8 +181,8 @@ def make_receptors_test_with_file(project_file, receptors_file):
                                        for receptor in model.receptors))
         if model.nreceptors > 1:
             # Order the two lists to be able to compare the receptors' positions two by two
-            expected_receptors = sorted(expected_receptors, cmp=compare_floats)
-            real_receptors = sorted(real_receptors, cmp=compare_floats)
+            expected_receptors = sorted(expected_receptors, key=cmp_to_key(compare_floats))
+            real_receptors = sorted(real_receptors, key=cmp_to_key(compare_floats))
         else:
             real_receptors = real_receptors[0]
         # Compare the receptors
