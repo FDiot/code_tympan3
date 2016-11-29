@@ -264,19 +264,19 @@ cdef class SolverSource:
         """identifier of the volume containing the source"""
         def __get__(self):
             assert self.thisptr != NULL
-            return self.thisptr.volume_id
+            return self.thisptr.volume_id.decode()
         def __set__(self, volume_id):
             assert self.thisptr != NULL
-            self.thisptr.volume_id = volume_id
+            self.thisptr.volume_id = volume_id.encode('utf-8')
 
     property face_id:
         """identifier of the face of the volume containing the source"""
         def __get__(self):
             assert self.thisptr != NULL
-            return self.thisptr.face_id
+            return self.thisptr.face_id.decode()
         def __set__(self, face_id):
             assert self.thisptr != NULL
-            self.thisptr.face_id = face_id
+            self.thisptr.face_id = face_id.encode('utf-8')
 
 
 cdef class SolverReceptor:
@@ -303,7 +303,7 @@ cdef class MeshTriangle:
         """Identifier of the volume containing the triangle"""
         assert self.thisptr != NULL
         if not self.thisptr.volume_id.empty():
-            return self.thisptr.volume_id
+            return self.thisptr.volume_id.decode()
         return None
 
     @property

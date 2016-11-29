@@ -24,7 +24,7 @@ cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.
 def select_acoustic_solver(foldername, tybusiness.Computation comp):
     """Load a solver plugin (from `foldername` folder) to compute `comp`
     """
-    load_solvers(foldername)
+    load_solvers(foldername.encode('utf-8'))
     solver = cy.declare(tysolver.Solver, tysolver.Solver())
     solver.thisptr = select_solver(comp.thisptr.getRealPointer().getSolverId());
     return solver
@@ -431,7 +431,7 @@ cdef class Business2SolverConverter:
                 pmat = model.thisptr.get().make_material(mat_name, mat_cspec)
                 actri = cy.address(model.thisptr.get().triangle(tgles_idx[i]))
                 actri.made_of = pmat
-                actri.volume_id = volume_id
+                actri.volume_id = volume_id.encode('utf-8')
         # Recurse on subsites
         for subsite in site.subsites:
             self.process_infrastructure(model, subsite)

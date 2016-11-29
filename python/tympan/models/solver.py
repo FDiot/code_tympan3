@@ -162,7 +162,7 @@ def _set_solver_config(comp):
     """Setup solver configuration"""
     parser = configparser.RawConfigParser()
     parser.optionxform = str  # keep param names case
-    parser.readfp(StringIO(comp.solver_parameters))
+    parser.readfp(StringIO(comp.solver_parameters.decode('utf-8')))
     solver_config = cysolver.Configuration.get()
     errors = []
     for section in parser.sections():
