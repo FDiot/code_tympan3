@@ -53,8 +53,8 @@ except ImportError:
         from CGAL import CGAL_Kernel
     except ImportError as exc:
         raise ImportError("Could not load the CGAL bindings even when looking in the "
-                          "`CGAL_BINDINGS_PATH` environment variable (%s). "
-                          "The errors is : %s" % (CGAL_BINDINGS_PATH, exc.message))
+                          "`CGAL_BINDINGS_PATH` environment variable ({0}). "
+                          "The errors is : {1}".format(CGAL_BINDINGS_PATH, exc))
 
 
 class AltimetryMesh(object):
