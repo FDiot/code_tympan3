@@ -25,10 +25,10 @@ def export_to_ply(mesh, material_by_face, fname, color_faces=True):
     # Set PLY file header.
     header = _ply_headers(color_faces=color_faces)
     # Write PLY file.
-    with open(fname, 'w') as f:
+    with open(fname, 'wb') as f:
         f.write(header.format(nvertices=vertices.shape[0],
                               nfaces=faces.shape[0],
-                              nmaterials=len(materials)))
+                              nmaterials=len(materials)).encode('ascii'))
         np.savetxt(f, vertices, fmt='%.18g', newline='\r\n')
         # Insert a leading column with the number of face vertices and a
         # trailing one with face material.
@@ -42,7 +42,7 @@ def export_to_ply(mesh, material_by_face, fname, color_faces=True):
         # Write materials.
         for matid in materials:
             n = len(matid)
-            f.write(('{}' + (' {}' * n) + '\r\n').format(n, *matid))
+            f.write(('{}' + (' {}' * n) + '\r\n').format(n, *matid).encode('ascii'))
 
 
 def _ply_headers(color_faces=True):
