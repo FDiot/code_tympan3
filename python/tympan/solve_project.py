@@ -1,10 +1,7 @@
 import os
 import logging
 
-# open file in unbuffered mode so it get written asap, in case of later crash
-# due to underlying C code
-stream = open('tympan.log', 'a', 0)
-logging.basicConfig(stream=stream, level=logging.DEBUG,
+logging.basicConfig(filename='tympan.log', level=logging.DEBUG,
                     format='%(levelname)s:%(asctime)s - %(name)s - %(message)s')
 
 from tympan.models.project import Project

@@ -8,10 +8,7 @@ from tympan.models.project import Project
 
 def set_logger(fpath='tympan.log'):
     """Configure logging"""
-    # open file in unbuffered mode so it get written asap, in case of later crash
-    # due to underlying C code
-    stream = open(fpath, 'a', 0)
-    logging.basicConfig(stream=stream, level=logging.DEBUG,
+    logging.basicConfig(filename=fpath, level=logging.DEBUG,
                         format='%(levelname)s:%(asctime)s - %(name)s - %(message)s')
 
 
