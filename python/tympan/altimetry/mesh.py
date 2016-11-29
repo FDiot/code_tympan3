@@ -154,7 +154,7 @@ class MeshedCDTWithInfo(object):
             count_edges += 1
         return count_edges, count_constrained
 
-    def input_constraint_infos(self, xxx_todo_changeme):
+    def input_constraint_infos(self, vertices):
         """Get the constraint informations associated to the given pair of vertices
 
         NB: Input constraints are represented as a pair of vertices,
@@ -163,7 +163,7 @@ class MeshedCDTWithInfo(object):
         performed.
 
         """
-        (va, vb) = xxx_todo_changeme
+        (va, vb) = vertices
         return self._input_constraints_infos[sorted_vertex_pair(va, vb)]
 
     def input_vertex_infos(self, v):
