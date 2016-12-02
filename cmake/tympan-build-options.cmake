@@ -36,7 +36,7 @@ set(TYMPAN_3RDPARTY_NMPB2008_MD5  "45673b866477c7b3c988df668c33fa25"
 # http://medionilaura-cgal-bindings.googlecode.com/archive/issue-50.zip
 set(TYMPAN_3RDPARTY_CGAL_BINDINGS "${CMAKE_SOURCE_DIR}/3rdparty/cgal-bindings.zip"
     CACHE STRING "Where to fetch the external project CGAL_bindings")
-set(TYMPAN_3RDPARTY_CGAL_BINDINGS_MD5  "94dcdf689d93b8bcbc9da2a41fcd8ad2"
+set(TYMPAN_3RDPARTY_CGAL_BINDINGS_MD5  "f60baa8b4919f2da8f6c382eef98d671"
     CACHE STRING "Checksum for the TYMPAN_3RDPARTY_CGAL_BINDINGS archive.")
 
 ## If you are having trouble getting CMake find boost you probably want to set
