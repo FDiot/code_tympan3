@@ -48,7 +48,7 @@ class Model(object):
             model._converter.build_receptors(model._model)
         return model
 
-    def add_source(self, position, spectrum_values, shift):
+    def add_source(self, position, spectrum_values, shift=0):
         """Add an acoustic source to the model
 
         Params:
