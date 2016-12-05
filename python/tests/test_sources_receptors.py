@@ -40,10 +40,10 @@ class SourceAdditionTC(TympanTC):
         self.assertEqual(model.nsources, 1)
         self.assertEqual(model.nreceptors, 6)
         freq = np.array([100.0] * 31, dtype=float)
-        sources = [((1., 1., 0.), freq, 0), ((2., 2., 10.), freq*2, 0)]
+        sources = [((1., 1., 0.), freq), ((2., 2., 10.), freq*2)]
         src_ids = []
-        for (pos, spec, shift) in sources:
-            src_ids.append(model.add_source(pos, spec, shift))
+        for (pos, spec) in sources:
+            src_ids.append(model.add_source(pos, spec))
         self.assertEqual(model.nsources, 3)
         self.assertEqual(model.nreceptors, 6)
         src1 = model.source(src_ids[0])
@@ -75,7 +75,7 @@ class SourceAdditionTC(TympanTC):
         model = Model.from_project(proj)
         assert model.nsources == 0
         assert model.nreceptors == 1
-        model.add_source((3., 3., 2.), power_lvl, 0)
+        model.add_source((3., 3., 2.), power_lvl)
         solver = Solver.from_project(proj, TEST_SOLVERS_DIR)
         result = solver.solve(model).spectrum(0, 0).values
         assert_allclose(ref_result, result)
@@ -85,7 +85,7 @@ class SourceAdditionTC(TympanTC):
         model = Model.from_project(proj)
         power_lvl = np.array([10., 10., 10., 15., 15., 15., 20., 20., 20., 20., 50.],
                              dtype=float)
-        model.add_source((3., 3., 2.),  power_lvl, 0)
+        model.add_source((3., 3., 2.),  power_lvl)
         assert model.nsources == 1
         source = model.source(0)
         self.assertAlmostEqual(source.value(16.0), 1e-11)
