@@ -2,9 +2,10 @@ import os.path as osp
 import unittest
 
 import numpy as np
-from numpy.testing import assert_array_equal
+from numpy.testing import assert_array_equal, assert_allclose
 
 from tympan.models.solver import Model, Solver
+from tympan.models._solver import Directivity
 from tympan.models._common import Point3D
 from utils import TympanTC, TEST_SOLVERS_DIR
 
@@ -25,6 +26,20 @@ class TriangleContainerTC(TympanTC):
         # make sure we checked at least one topography triangle volume id, otherwise the test
         # doesn't stand for anything.
         self.assertTrue(found_a_topography_triangle)
+
+
+def add_source_with_directivity(model, directivity_type):
+    directivity = Directivity(directivity_type=directivity_type, support_normal=(1, 1.5, 3),
+                              size=5.)
+    return model.add_source(position=(0.7, 0.7, 0),
+                            spectrum_values=10. * np.ones(31),
+                            directivity=directivity)
+
+
+def source_directivity(model, source_id):
+    source = model.source(source_id)
+    directivity_vector = source.directivity_vector
+    return directivity_vector.vx, directivity_vector.vy, directivity_vector.vz
 
 
 class SolverModelWithoutProjectTC(TympanTC):
@@ -58,6 +73,35 @@ class SolverModelWithoutProjectTC(TympanTC):
         model.add_receptor(*coords)
         point = model.receptor(0).position
         self.assertEqual((point.x, point.y, point.z), coords)
+
+    def test_add_source_spherical_directivity(self):
+        model = Model()
+        coords = 0.7, 0.7, 0
+        power_lvl = 10. * np.ones(31)
+        source_id = model.add_source(coords, power_lvl, directivity=Directivity())
+        source = model.source(source_id)
+        source_pos = source.position.x, source.position.y, source.position.z
+        self.assertEqual(source_pos, coords)
+        assert_allclose(source.spectrum.to_dB().values, power_lvl, rtol=1e-4)
+        # spherical sources have no directivity
+        with self.assertRaises(ValueError) as cm:
+            source.directivity_vector
+        self.assertEqual(str(cm.exception),
+                         'The directivity of this source has no support normal vector')
+
+    def test_create_unknown_directivity(self):
+        with self.assertRaises(AssertionError) as cm:
+            Directivity(directivity_type='foo', support_normal=(0.7, 0.7, 0), size=5.)
+        self.assertEqual(str(cm.exception),
+                         'Unknown directivity type. Possible values: spherical, '
+                         'surface, baffled, chimney.')
+
+    def test_add_source_with_directivity(self):
+        model = Model()
+        for dtype in ('surface', 'baffled', 'chimney'):
+            directivity = add_source_with_directivity(model, dtype)
+            self.assertEqual(source_directivity(model, directivity),
+                             (1.0, 1.5, 3.0))
 
 
 class FresnelZoneIntersectionTC(TympanTC):

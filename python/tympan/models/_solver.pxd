@@ -35,6 +35,9 @@ cdef class ResultModel:
 cdef class Solver:
     cdef SolverInterface* thisptr
 
+cdef class Directivity:
+    cdef SourceDirectivityInterface* thisptr
+
 cdef extern from "Tympan/models/solver/acoustic_problem_model.hpp" namespace "tympan":
 
     deque[size_t] scene_volume_intersection(deque[AcousticTriangle]& triangles, deque[OPoint3D]& nodes,
