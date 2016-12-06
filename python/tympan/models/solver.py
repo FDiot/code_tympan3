@@ -48,7 +48,7 @@ class Model(object):
             model._converter.build_receptors(model._model)
         return model
 
-    def add_source(self, position, spectrum_values, shift=0):
+    def add_source(self, position, spectrum_values, shift=0, directivity=None):
         """Add an acoustic source to the model
 
         Params:
@@ -63,7 +63,8 @@ class Model(object):
         Add the corresponding acoustic source to the solver model (the acoustic
         source is created with a SphericalFaceDirectivity)
         """
-        return self._model._add_source(position, spectrum_values, shift)
+        directivity = directivity or cysolver.Directivity()
+        return self._model._add_source(position, spectrum_values, shift, directivity)
 
     def add_receptor(self, x, y ,z):
         return self._model.add_receptor(x, y, z)

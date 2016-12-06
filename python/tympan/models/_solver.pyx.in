@@ -86,8 +86,8 @@ cdef class ProblemModel:
              for (p1, p2, p3), m in zip_longest(triangles, materials)])
         return nodes_idx, triangles_idx
 
-    @cy.locals(spectrum_values=np.ndarray)
-    def _add_source(self, position, spectrum_values, shift):
+    @cy.locals(spectrum_values=np.ndarray, directivity=Directivity)
+    def _add_source(self, position, spectrum_values, shift, directivity):
         """Add an acoustic source to the model"""
         # position
         pos = cy.declare(tycommon.OPoint3D,
@@ -98,10 +98,8 @@ cdef class ProblemModel:
                           tycommon.OSpectre(<double *> spectrum_values.data, nb_val, shift))
         spec.setEtat(tycommon.SPECTRE_ETAT_DB)
         spec.setType(tycommon.SPECTRE_TYPE_LW)
-        # directivity
-        pdirectivity = cy.declare(cy.pointer(SourceDirectivityInterface),
-                                  new SphericalSourceDirectivity())
-        source_idx = self.thisptr.get().make_source(pos, spec.toGPhy(), pdirectivity)
+        source_idx = self.thisptr.get().make_source(pos, spec.toGPhy(),
+                                                    directivity.thisptr)
         return source_idx
 
     @property
@@ -269,6 +267,40 @@ cdef class Solver:
     def purge(self):
         """Purge solver from its previous results"""
         self.thisptr.purge()
+
+
+cdef class Directivity:
+
+    def __cinit__(self, directivity_type='spherical', support_normal=None, size=None):
+        """Create a directivity for an acoustic source
+
+            - directivity_type is the kind of emission pattern of the source,
+              among : spherical (default value), surface, baffled, chimney.
+            - support_normal is the emission direction, that is the normal of
+              the support face if there is one (a tuple (vx, vy, vz)).
+            - support_size is the characteristic size of support surface
+            """
+        # 2 types of sources :
+        #  . independant sources that emit homogeneously, they have a spherical
+        #    directivity. This is the most common, and therefore default case
+        #  . sources that are part of a volume, which their directivity depends on
+        assert directivity_type in ('spherical','surface', 'baffled', 'chimney'), (
+            'Unknown directivity type. Possible values: spherical, surface, baffled, chimney.')
+        if directivity_type == 'spherical':
+            assert support_normal is None
+            assert size is None
+            self.thisptr = new SphericalSourceDirectivity()
+        else:
+            assert support_normal is not None
+            assert size is not None
+            vx, vy, vz = support_normal
+            normal = cy.declare(tycommon.OVector3D, tycommon.OVector3D(vx, vy, vz))
+            if directivity_type == 'surface':
+                self.thisptr = new VolumeFaceDirectivity(normal, size)
+            elif directivity_type == 'baffled':
+                self.thisptr = new BaffledFaceDirectivity(normal, size)
+            else:
+                self.thisptr = new ChimneyFaceDirectivity(normal, size)
 
 
 cdef class SolverSource:
