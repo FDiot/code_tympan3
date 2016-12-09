@@ -47,7 +47,7 @@ class SolverModelWithoutProjectTC(TympanTC):
     def test_solver_from_name(self):
         """Check Solver.from_name() / just ensure this does not crash"""
         params_file = self.datapath('solverparams.ini')
-        solver = Solver.from_name('default', params_file, TEST_SOLVERS_DIR)
+        Solver.from_name('default', params_file, TEST_SOLVERS_DIR)
 
     def test_add_mesh(self):
         model = Model()

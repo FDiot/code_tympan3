@@ -234,8 +234,8 @@ cdef class ResultModel:
             return None
         _spectra = np.empty((self.nreceptors, self.nsources, 31))
         for rec in xrange(self.nreceptors):
-            _spectra[rec, :, :]  =  np.vstack(self.spectrum(rec, source).values
-                                              for source in xrange(self.nsources))
+            _spectra[rec, :, :] = np.vstack(self.spectrum(rec, source).values
+                                            for source in xrange(self.nsources))
         return _spectra
 
     def combined_spectra(self):
@@ -395,7 +395,6 @@ cdef class MeshTriangle:
     def material_name(self):
         assert self.thisptr != NULL
         return self.thisptr.made_of.get().name.decode()
-
 
 cdef class Configuration:
     thisptr = cy.declare(SmartPtr[SolverConfiguration])
