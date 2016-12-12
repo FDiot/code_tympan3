@@ -8,6 +8,10 @@ add_definitions(/DUSE_STANDARD_FILE_FUNCTIONS /D_CRT_SECURE_NO_WARNINGS)
 # (standard and C++'11 problems inside) but they are required in custom exception classes
 add_definitions(/wd4290)
 
+IF(NOT DEFINED CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS)
+  SET(CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_NO_WARNINGS ON)
+ENDIF()
+
 # Put here Visual Studio specific stuff
 # Enable some level of build parallelisation
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
