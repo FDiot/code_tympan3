@@ -38,7 +38,8 @@ void handle_xml_parsing_error(std::string cause, std::string msg, int err_line, 
 {
     std::string error_msg = "Error during parsing" + cause +
         + "\nerror message is:\n" + msg + "\nat line:"
-        + std::to_string(err_line) + " at column:" + std::to_string(err_col);
+        + std::to_string(static_cast<long long>(err_line)) + " at column:"
+        + std::to_string(static_cast<long long>(err_col));
     throw tympan::invalid_data(error_msg);
 }
 

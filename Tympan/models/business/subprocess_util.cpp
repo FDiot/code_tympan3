@@ -231,7 +231,7 @@ bool python(QStringList args, std::string& error_msg)
     if (python.exitStatus() != QProcess::NormalExit || exit_code != 0 )
     {
         error_msg = "Le sous-process python s'est terminé avec le code d'erreur ";
-        error_msg.append(std::to_string(exit_code));
+        error_msg.append(std::to_string(static_cast<long long>(exit_code)));
         error_msg.append("\n");
         error_msg.append(std_error.toStdString());
         error_msg.append(_read_environment_variables(env));
