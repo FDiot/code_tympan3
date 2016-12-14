@@ -70,9 +70,11 @@ class TYDirectivity;
 ///Smart pointer sur TYDirectivity.
 typedef SmartPtr<TYDirectivity> LPTYDirectivity;
 
+#if WITH_NMPB
 class TYTrafic;
 ///Smart pointer sur TYTrafic.
 typedef SmartPtr<TYTrafic> LPTYTrafic;
+#endif
 
 class TYAttenuateur;
 ///Smart pointer sur TYAttenuateur.
@@ -226,9 +228,11 @@ class TYReseauTransport;
 ///Smart pointer sur TYReseauTransport.
 typedef SmartPtr<TYReseauTransport> LPTYReseauTransport;
 
+#if WITH_NMPB
 class TYRoute;
 ///Smart pointer sur TYRoute.
 typedef SmartPtr<TYRoute> LPTYRoute;
+#endif
 
 class TYRay;
 // SmartPOinter sur TYRay

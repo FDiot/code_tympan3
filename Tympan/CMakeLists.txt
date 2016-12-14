@@ -77,6 +77,22 @@ file(GLOB TYMPAN_LIB_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     gui/widgets/*.cpp gui/widgets/*.h
     gui/gl/*.cpp gui/gl/*.h
 )
+
+if(NOT TYMPAN_USE_NMPB2008)
+    list(REMOVE_ITEM TYMPAN_LIB_SRCS
+        models/business/infrastructure/TYRoute.h
+        models/business/infrastructure/TYRoute.cpp
+        gui/gl/TYRouteGraphic.h
+        gui/gl/TYRouteGraphic.cpp
+        gui/widgets/TYRouteWidget.cpp
+        gui/widgets/TYRouteWidget.h
+        models/business/acoustic/TYTrafic.h
+        models/business/acoustic/TYTrafic.cpp
+        gui/widgets/TYTraficWidget.h
+        gui/widgets/TYTraficWidget.cpp
+    )
+endif()
+
 # cf. https://qt-project.org/quarterly/view/using_cmake_to_build_qt_projects
 # Headers requiring MOC pre-processing...
 file(GLOB TYMPAN_LIB_MOC_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} gui/widgets/*.h)
@@ -84,6 +100,12 @@ file(GLOB TYMPAN_LIB_MOC_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} gui/widgets/*
 list(REMOVE_ITEM TYMPAN_LIB_MOC_HDRS
     gui/widgets/TYIncludesQT.h
 )
+if(NOT TYMPAN_USE_NMPB2008)
+    list(REMOVE_ITEM TYMPAN_LIB_MOC_HDRS
+        gui/widgets/TYRouteWidget.h
+        gui/widgets/TYTraficWidget.h
+    )
+endif()
 # Call moc on the listed headers, thus generating new sources
 qt4_wrap_cpp(TYMPAN_LIB_MOC_SRCS ${TYMPAN_LIB_MOC_HDRS})
 # Qt Designer UIC files
@@ -99,16 +121,20 @@ set_property(TARGET tympan_lib PROPERTY FOLDER "Tympan/lib")
 set_property(TARGET tympan_lib
   APPEND PROPERTY INCLUDE_DIRECTORIES ${RPLY_INCLUDE_DIRECTORY})
 add_dependencies(tympan_lib
-    NMPB2008
     GTest # XXX pour que les tests aient accès à des membres protégés
 )
+if(TYMPAN_USE_NMPB2008)
+  add_dependencies(tympan_lib NMPB2008)
+endif(TYMPAN_USE_NMPB2008)
 target_link_libraries(tympan_lib
     ${QT_LIBRARIES}
     ${OPENGL_LIBRARIES}
-    RoadEmissionNMPB
     tympan_common
     ${RPLY_LIB}
 )
+if(TYMPAN_USE_NMPB2008)
+    target_link_libraries(tympan_lib RoadEmissionNMPB)
+endif()
 install_tympan_component(tympan_lib)
 
 
@@ -171,6 +197,14 @@ install_tympan_plugin(tympan_solver_anime3d)
 file(GLOB TYMPAN_APP_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     gui/app/*.cpp gui/app/*.h
 )
+
+if(NOT TYMPAN_USE_NMPB2008)
+    list(REMOVE_ITEM TYMPAN_APP_SRCS
+        gui/app/TYRouteEditor.cpp
+        gui/app/TYRouteEditor.h
+    )
+endif()
+
 # Headers requiring MOC pre-processing...
 file(GLOB TYMPAN_APP_MOC_HDRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} gui/app/*.h)
 # ... all in this directory but for the one below
@@ -188,6 +222,11 @@ list(REMOVE_ITEM TYMPAN_APP_MOC_HDRS
     gui/app/TYMessageManager.h
     gui/app/TYOpenGLRenderer.h
 )
+if(NOT TYMPAN_USE_NMPB2008)
+    list(REMOVE_ITEM TYMPAN_APP_MOC_HDRS
+        gui/app/TYRouteEditor.h
+    )
+endif()
 # Needed to import DXF files.
 add_definitions (-DTY_USE_DXF -DDIME_NOT_DLL) # XXX Add DIME_NOT_DLL too?? See
                                               # the define and the comment in

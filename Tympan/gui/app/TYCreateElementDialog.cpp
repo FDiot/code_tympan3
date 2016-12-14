@@ -52,7 +52,11 @@ static char* _listMainElement[] =
     "TYMaillage",              "TYMateriauConstruction", "TYMurElement",          "TYMur",                  "TYParoi",              /*07*/
     "TYPlanEau",               "TYPointCalcul",          "TYPointControl",        "TYPoint",                "TYPolygon",            /*08*/
     "TYProjet",                "TYRectangle",            "TYRectangularMaillage", "TYRepere",               "TYReseauTransport",    /*09*/
-    "TYResultat",              "TYRoute",                "TYSegment",             "TYSiteNode",             "TYSol",                /*10*/
+    "TYResultat",
+#if WITH_NMPB
+    "TYRoute",
+#endif
+    "TYSegment",             "TYSiteNode",             "TYSol",                /*10*/
     "TYSourceLineic",          "TYSourcePonctuelle",     "TYSourceBafflee",       "TYSourceCheminee",       "TYSourceSurfacic",     /*11*/
     "TYSource",                "TYSpectre",              "TYTerrain",             "TYTopographie",          "TYTrafic",             /*12*/
     "TYVegetation"

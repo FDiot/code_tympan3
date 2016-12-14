@@ -22,7 +22,9 @@
 
 #include "Tympan/models/business/infrastructure/TYBatiment.h"
 #include "Tympan/models/business/infrastructure/TYReseauTransport.h"
+#if WITH_NMPB
 #include "Tympan/models/business/infrastructure/TYRoute.h"
+#endif
 #include "Tympan/models/business/acoustic/TYUserSourcePonctuelle.h"
 
 /**
@@ -101,6 +103,7 @@ public:
      */
     void purge();
 
+#if WITH_NMPB
     /**
      * Set/Get de la liste des routes.
      */
@@ -115,12 +118,14 @@ public:
      * Set/Get de la liste des routes.
      */
     void setListRoute(const TYTabRouteGeoNode& list) { _listRoute = list; }
+#endif
 
     /**
      * Concatene 2 infrastructures
      */
     void concatInfra(const TYInfrastructure* infra);
 
+#if WITH_NMPB
     /**
      * Ajoute une entree a la liste des routes.
      */
@@ -165,6 +170,7 @@ public:
      * @return Le GeoNode associe a l'element a chercher si trouve sinon NULL.
      */
     LPTYRouteGeoNode findRoute(const LPTYRoute pRoute);
+#endif
 
     /**
      * Set/Get de la liste des reseaux de transport.
@@ -444,9 +450,10 @@ public:
 
     // Membres
 protected:
+#if WITH_NMPB
     ///Liste des routes.
     TYTabRouteGeoNode _listRoute;
-
+#endif
     ///Liste des reseaux de transport.
     TYTabReseauTransportGeoNode _listResTrans;
 

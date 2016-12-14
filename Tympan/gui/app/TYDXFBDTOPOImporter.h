@@ -54,10 +54,12 @@ public:
                      const DXFLimites& Offset,
                      LPTYTopographie pTYTopographie);
     // Import buildings and other built entities (as roads, etc.).
+#if WITH_NMPB
     void importRoad(int nMaxRoutes, const dimeModel model[],
                     const DXFLimites& Offset,
                     LPTYTopographie pTYTopographie,
                     LPTYSiteNode pSite);
+#endif
     void importTransmissionNetwork(int nMaxReseauTransportNRJ, const dimeModel model[],
                                    const DXFLimites& Offset,
                                    LPTYTopographie pTYTopographie,

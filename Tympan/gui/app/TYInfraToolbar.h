@@ -67,8 +67,10 @@ protected:
     QToolButton* _toolButtonEtage;
     ///Bouton Silo
     QToolButton* _toolButtonSilos;
+#if WITH_NMPB
     ///Bouton route.
     QToolButton* _toolButtonRoute;
+#endif
     ///Bouton reseau de transport.
     QToolButton* _toolButtonReseau;
 };

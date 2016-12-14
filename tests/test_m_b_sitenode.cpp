@@ -23,9 +23,10 @@ TEST(ExternalEntityTest, external_elements)
     EXPECT_EQ(buildings.size(), 2);
     TYTabMachineGeoNode machines = infra_ptr->getListMachine();
     EXPECT_EQ(machines.size(), 2);
+#if WITH_NMPB
     TYTabRouteGeoNode roads = infra_ptr->getListRoute();
     EXPECT_EQ(roads.size(), 0);
-
+#endif
 }
 
 

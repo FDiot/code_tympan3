@@ -42,6 +42,7 @@ void TYInfrastructureGraphic::getChilds(TYListPtrTYElementGraphic& childs, bool 
 {
     TYListPtrTYElementGraphic Localchilds;
     unsigned int i;
+#if WITH_NMPB
     TYTabRouteGeoNode* pTabRoute = &getElement()->getListRoute();
     TYRouteGeoNode* pRouteGeoNode = NULL;
     for (i = 0; i < pTabRoute->size(); i++)
@@ -49,6 +50,7 @@ void TYInfrastructureGraphic::getChilds(TYListPtrTYElementGraphic& childs, bool 
         pRouteGeoNode = pTabRoute->at(i);
         Localchilds.push_back(pRouteGeoNode->getGraphicObject());
     }
+#endif
 
     // Reseaux de transport
     TYTabReseauTransportGeoNode* pTabResTransp = &getElement()->getListResTrans();
@@ -103,7 +105,7 @@ void TYInfrastructureGraphic::getChilds(TYListPtrTYElementGraphic& childs, bool 
 void TYInfrastructureGraphic::display(GLenum mode /*= GL_RENDER*/)
 {
     unsigned int i;
-
+#if WITH_NMPB
     // Routes
     TYTabRouteGeoNode* pTabRoute = &getElement()->getListRoute();
     TYRouteGeoNode* pRouteGeoNode = NULL;
@@ -112,7 +114,7 @@ void TYInfrastructureGraphic::display(GLenum mode /*= GL_RENDER*/)
         pRouteGeoNode = pTabRoute->at(i);
         pRouteGeoNode->getGraphicObject()->display(mode);
     }
-
+#endif
     // Reseaux de transport
     TYTabReseauTransportGeoNode* pTabResTransp = &getElement()->getListResTrans();
     TYReseauTransportGeoNode* pResTranspGeoNode = NULL;

@@ -640,6 +640,7 @@ void TYPositionEditor::initEditBatiment(TYElement* pElt)
     }
 }
 
+#if WITH_NMPB
 void TYPositionEditor::initEditRoute(TYElement* pElt)
 {
     if (!_mouseEventActive)
@@ -684,6 +685,7 @@ void TYPositionEditor::initEditRoute(TYElement* pElt)
         _inUse = true;
     }
 }
+#endif
 
 void TYPositionEditor::initEditResTrans(TYElement* pElt)
 {

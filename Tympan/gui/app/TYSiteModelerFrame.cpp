@@ -44,7 +44,9 @@
 #include "Tympan/gui/app/TYCourbeNiveauEditor.h"
 #include "Tympan/gui/app/TYPlanEauEditor.h"
 #include "Tympan/gui/app/TYTerrainEditor.h"
+#if WITH_NMPB
 #include "Tympan/gui/app/TYRouteEditor.h"
+#endif
 #include "Tympan/gui/app/TYReseauTransportEditor.h"
 #include "Tympan/gui/app/TYEtageEditor.h"
 #include "Tympan/gui/app/TYSilosEditor.h"
@@ -157,7 +159,9 @@ void TYSiteModelerFrame::init()
     _pCourbeNiveauEditor = new TYCourbeNiveauEditor(this);
     _pPlanEauEditor = new TYPlanEauEditor(this);
     _pTerrainEditor = new TYTerrainEditor(this);
+#if WITH_NMPB
     _pRouteEditor = new TYRouteEditor(this);
+#endif
     _pReseauTransportEditor = new TYReseauTransportEditor(this);
     _pEtageEditor = new TYEtageEditor(this);
     _pSilosEditor = new TYSilosEditor(this);
@@ -222,7 +226,9 @@ TYSiteModelerFrame::~TYSiteModelerFrame()
     delete _pCourbeNiveauEditor;
     delete _pPlanEauEditor;
     delete _pTerrainEditor;
+#if WITH_NMPB
     delete _pRouteEditor;
+#endif
     delete _pReseauTransportEditor;
     delete _pEtageEditor;
     delete _pSilosEditor;
@@ -409,9 +415,11 @@ void TYSiteModelerFrame::setEditorMode(int mode)
             case RecepteurMode:
                 _pCurrentEditor = _pPointCalculEditor;
                 break;
+#if WITH_NMPB
             case RouteMode:
                 _pCurrentEditor = _pRouteEditor;
                 break;
+#endif
             case ReseauTransportMode:
                 _pCurrentEditor = _pReseauTransportEditor;
                 break;

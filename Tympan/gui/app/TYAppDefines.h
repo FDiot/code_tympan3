@@ -76,7 +76,9 @@ class TYRenderWindow;
 class TYRenderWindowInteractor;
 class TYReseauTransportEditor;
 class TYRotationDialog;
+#if WITH_NMPB
 class TYRouteEditor;
+#endif
 class TYSemiCylinderEditor;
 class TYSilosEditor;
 class TYSiteFrame;

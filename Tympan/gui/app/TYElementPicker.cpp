@@ -301,10 +301,12 @@ bool TYElementPicker::checkType(TYElement* pElt)
     {
         emit(reseauTransportPicked(pElt));
     }
+#if WITH_NMPB
     else if (pElt->isA("TYRoute"))
     {
         emit(routePicked(pElt));
     }
+#endif
     else if (pElt->isA("TYCoursEau"))
     {
         emit(coursEauPicked(pElt));

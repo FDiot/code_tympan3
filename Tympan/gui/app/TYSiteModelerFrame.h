@@ -225,7 +225,9 @@ protected:
     TYCourbeNiveauEditor* _pCourbeNiveauEditor;
     TYPlanEauEditor* _pPlanEauEditor;
     TYTerrainEditor* _pTerrainEditor;
+#if WITH_NMPB
     TYRouteEditor* _pRouteEditor;
+#endif
     TYReseauTransportEditor* _pReseauTransportEditor;
     TYEtageEditor* _pEtageEditor;
     TYSilosEditor* _pSilosEditor;

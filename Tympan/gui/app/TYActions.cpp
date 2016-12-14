@@ -613,11 +613,13 @@ TYAddElementToInfraAction::TYAddElementToInfraAction(LPTYElement pElement, LPTYI
     _pElementGeoNode = NULL;
     _pSrcPonct = NULL;
 
+#if WITH_NMPB
     if (pElement->isA("TYRoute"))
     {
         _pElementGeoNode =  _pInfra->findRoute((LPTYRoute&) pElement);
     }
-    else if (pElement->isA("TYReseauTransport"))
+#endif
+    if (pElement->isA("TYReseauTransport"))
     {
         _pElementGeoNode =  _pInfra->findResTrans((LPTYReseauTransport&) pElement);
     }
@@ -643,11 +645,13 @@ void TYAddElementToInfraAction::undo()
 {
     if (_pElementGeoNode)
     {
+#if WITH_NMPB
         if (_pElementGeoNode->getElement()->isA("TYRoute"))
         {
             _pInfra->remRoute((LPTYRouteGeoNode&) _pElementGeoNode);
         }
-        else if (_pElementGeoNode->getElement()->isA("TYReseauTransport"))
+#endif
+        if (_pElementGeoNode->getElement()->isA("TYReseauTransport"))
         {
             _pInfra->remResTrans((LPTYReseauTransportGeoNode&) _pElementGeoNode);
         }
@@ -673,11 +677,13 @@ void TYAddElementToInfraAction::redo()
 {
     if (_pElementGeoNode)
     {
+#if WITH_NMPB
         if (_pElementGeoNode->getElement()->isA("TYRoute"))
         {
             _pInfra->addRoute((LPTYRouteGeoNode&) _pElementGeoNode);
         }
-        else if (_pElementGeoNode->getElement()->isA("TYReseauTransport"))
+#endif
+        if (_pElementGeoNode->getElement()->isA("TYReseauTransport"))
         {
             _pInfra->addResTrans((LPTYReseauTransportGeoNode&) _pElementGeoNode);
         }
@@ -718,11 +724,13 @@ TYRemElementToInfraAction::TYRemElementToInfraAction(LPTYElement pElement, LPTYI
     _pElementGeoNode = NULL;
     _pSrcPonct = NULL;
 
+#if WITH_NMPB
     if (pElement->isA("TYRoute"))
     {
         _pElementGeoNode =  _pInfra->findRoute((LPTYRoute&) pElement);
     }
-    else if (pElement->isA("TYReseauTransport"))
+#endif
+    if (pElement->isA("TYReseauTransport"))
     {
         _pElementGeoNode =  _pInfra->findResTrans((LPTYReseauTransport&) pElement);
     }
@@ -748,11 +756,13 @@ void TYRemElementToInfraAction::undo()
 {
     if (_pElementGeoNode)
     {
+#if WITH_NMPB
         if (_pElementGeoNode->getElement()->isA("TYRoute"))
         {
             _pInfra->addRoute((LPTYRouteGeoNode&) _pElementGeoNode);
         }
-        else if (_pElementGeoNode->getElement()->isA("TYReseauTransport"))
+#endif
+        if (_pElementGeoNode->getElement()->isA("TYReseauTransport"))
         {
             _pInfra->addResTrans((LPTYReseauTransportGeoNode&) _pElementGeoNode);
         }
@@ -779,11 +789,13 @@ void TYRemElementToInfraAction::redo()
 {
     if (_pElementGeoNode)
     {
+#if WITH_NMPB
         if (_pElementGeoNode->getElement()->isA("TYRoute"))
         {
             _pInfra->remRoute((LPTYRouteGeoNode&) _pElementGeoNode);
         }
-        else if (_pElementGeoNode->getElement()->isA("TYReseauTransport"))
+#endif
+        if (_pElementGeoNode->getElement()->isA("TYReseauTransport"))
         {
             _pInfra->remResTrans((LPTYReseauTransportGeoNode&) _pElementGeoNode);
         }

@@ -142,7 +142,9 @@ protected slots:
     void initEditMachine(TYElement* pElt);
     //void initEditEtage(TYElement* pElt);
     void initEditBatiment(TYElement* pElt);
+#if WITH_NMPB
     void initEditRoute(TYElement* pElt);
+#endif
     void initEditResTrans(TYElement* pElt);
     void initEditCrbNiv(TYElement* pElt);
     void initEditCrsEau(TYElement* pElt);

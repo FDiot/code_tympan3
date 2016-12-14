@@ -9,7 +9,9 @@
 #include "Tympan/models/business/infrastructure/TYEtage.h"
 #include "Tympan/models/business/infrastructure/TYMachine.h"
 #include "Tympan/models/business/infrastructure/TYMur.h"
+#if WITH_NMPB
 #include "Tympan/models/business/infrastructure/TYRoute.h"
+#endif
 #include "Tympan/models/business/infrastructure/TYMurElement.h"
 #include "Tympan/models/business/infrastructure/TYReseauTransport.h"
 #include "Tympan/models/business/infrastructure/TYParoi.h"
@@ -50,7 +52,9 @@
 #include "Tympan/models/business/acoustic/TYSourceSurfacic.h"
 #include "Tympan/models/business/acoustic/TYSourcePonctuelle.h"
 #include "Tympan/models/business/acoustic/TYSourceBafflee.h"
+#if WITH_NMPB
 #include "Tympan/models/business/acoustic/TYTrafic.h"
+#endif
 #include "Tympan/models/business/acoustic/TYAttenuateur.h"
 #include "Tympan/models/business/geoacoustic/TYBoucheSurface.h"
 #include "Tympan/models/business/geoacoustic/TYChemineeSurface.h"
@@ -87,7 +91,9 @@ void init_registry()
     OPrototype::add_factory("TYEtage", std::move(build_factory<TYEtage>()));
     OPrototype::add_factory("TYMachine", std::move(build_factory<TYMachine>()));
     OPrototype::add_factory("TYMur", std::move(build_factory<TYMur>()));
+#if WITH_NMPB
     OPrototype::add_factory("TYRoute", std::move(build_factory<TYRoute>()));
+#endif
     OPrototype::add_factory("TYMurElement", std::move(build_factory<TYMurElement>()));
     OPrototype::add_factory("TYReseauTransport", std::move(build_factory<TYReseauTransport>()));
     OPrototype::add_factory("TYParoi", std::move(build_factory<TYParoi>()));
@@ -135,7 +141,9 @@ void init_registry()
     OPrototype::add_factory("TYSourceSurfacic", std::move(build_factory<TYSourceSurfacic>()));
     OPrototype::add_factory("TYSourcePonctuelle", std::move(build_factory<TYSourcePonctuelle>()));
     OPrototype::add_factory("TYSourceBafflee", std::move(build_factory<TYSourceBafflee>()));
+#if WITH_NMPB
     OPrototype::add_factory("TYTrafic", std::move(build_factory<TYTrafic>()));
+#endif
     OPrototype::add_factory("TYAttenuateur", std::move(build_factory<TYAttenuateur>()));
     // models/business/geoacoustic
     OPrototype::add_factory("TYBoucheSurface", std::move(build_factory<TYBoucheSurface>()));
