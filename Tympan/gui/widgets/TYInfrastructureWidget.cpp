@@ -169,7 +169,7 @@ void TYInfrastructureWidget::updateContent()
         item->setText(0, QString().setNum(i));
         item->setText(1, getElement()->getListResTrans()[i]->getElement()->getName());
     }
-
+#if WITH_NMPB
     _listViewList_7->clear();
     for (i = 0; i < getElement()->getListRoute().size(); i++)
     {
@@ -177,6 +177,7 @@ void TYInfrastructureWidget::updateContent()
         item->setText(0, QString().setNum(i));
         item->setText(1, getElement()->getListRoute()[i]->getElement()->getName());
     }
+#endif
 
     _listViewList_4->clear();
     for (i = 0; i < getElement()->getSrcs().size(); i++)
@@ -244,6 +245,7 @@ void TYInfrastructureWidget::editResTransp(QTreeWidgetItem* item)
     }
 }
 
+#if WITH_NMPB
 void TYInfrastructureWidget::editRoute(QTreeWidgetItem* item)
 {
     int ret = getElement()->getListRoute()[item->text(0).toInt()]->getElement()->edit(this);
@@ -259,6 +261,7 @@ void TYInfrastructureWidget::editRoute(QTreeWidgetItem* item)
         }
     }
 }
+#endif
 
 void TYInfrastructureWidget::editSource(QTreeWidgetItem* item)
 {
@@ -314,10 +317,12 @@ void TYInfrastructureWidget::contextMenuEvent(QContextMenuEvent* e)
             QAction* ret = pMenu->exec(_listViewList_6->mapToGlobal(point6));
             if ((ret) && (ret == prop)) { editResTransp(item6); }
         }
+#if WITH_NMPB
         else if (item7 != NULL)
         {
             QAction* ret = pMenu->exec(_listViewList_7->mapToGlobal(point7));
             if ((ret) && (ret == prop)) { editRoute(item7); }
         }
+#endif
     }
 }

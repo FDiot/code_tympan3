@@ -14,6 +14,7 @@ endif(${CMAKE_VERSION} VERSION_GREATER 2.8.4)
 option(TYMPAN_BUILD_TEST "Build Tympan tests" ON)
 option(TYMPAN_BUILD_PYTHON "Build Python / Cython related components" ON)
 option(TYMPAN_DEBUG_CMAKE "Verbose information messages from CMake" ON)
+option(TYMPAN_USE_NMPB2008 "Use NMPB 2008 library" OFF)
 
 # Configure where to fetch 3rd party dependencies
 # Please cf. the file "3rdparty/README"
@@ -27,10 +28,13 @@ set(TYMPAN_3RDPARTY_DIME "${CMAKE_SOURCE_DIR}/3rdparty/dime-137851b034f6.zip"
 set(TYMPAN_3RDPARTY_DIME_MD5  "8d144a016b3fb1cb1ac606d39ec7fccb"
     CACHE STRING "Checksum for the TYMPAN_3RDPARTY_DIME archive.")
 
-set(TYMPAN_3RDPARTY_NMPB2008 "${CMAKE_SOURCE_DIR}/3rdparty/NMPB2008.zip"
-  CACHE STRING "Where to fetch the external project NMBP2008")
-set(TYMPAN_3RDPARTY_NMPB2008_MD5  "45673b866477c7b3c988df668c33fa25"
+if (TYMPAN_USE_NMPB2008)
+  set(TYMPAN_3RDPARTY_NMPB2008 "${CMAKE_SOURCE_DIR}/3rdparty/NMPB2008.zip"
+    CACHE STRING "Where to fetch the external project NMBP2008")
+  set(TYMPAN_3RDPARTY_NMPB2008_MD5  "45673b866477c7b3c988df668c33fa25"
     CACHE STRING "Checksum for the TYMPAN_3RDPARTY_NMPB2008 archive.")
+add_definitions(-DWITH_NMPB)
+endif(TYMPAN_USE_NMPB2008)
 
 #NB: Source URL for CGAL bindings with installation patch
 # http://medionilaura-cgal-bindings.googlecode.com/archive/issue-50.zip

@@ -636,8 +636,10 @@ void TYSiteNode::updateAltiInfra()
     register unsigned int i, j;
 
 #if TY_USE_IHM
-    size_t totalSteps = _pInfrastructure->getListRoute().size() +
-                        _pInfrastructure->getListResTrans().size() +
+    size_t totalSteps = _pInfrastructure->getListResTrans().size() +
+#if WITH_NMPB
+                        _pInfrastructure->getListRoute().size() +
+#endif
                         _pInfrastructure->getListBatiment().size() +
                         _pInfrastructure->getListMachine().size() +
                         _pInfrastructure->getSrcs().size() +
@@ -654,6 +656,7 @@ void TYSiteNode::updateAltiInfra()
     // to look for the altitudes at the right place
     OMatrix globalMatrix = getGlobalMatrix();
 
+#if WITH_NMPB
     // Mise a jour de l'altitude pour les points des routes
     for (j = 0; j < _pInfrastructure->getListRoute().size() && !cancel; j++)
     {
@@ -669,7 +672,7 @@ void TYSiteNode::updateAltiInfra()
         bNoPbAlti &= pRoute->updateAltitudes(*pAlti, pGeoNode, globalMatrix);
         modified = true; // As long as there is a road, it will be updated anyways.
     }
-
+#endif
     // Mise a jour de l'altitude pour les points des reseaux transport
     for (j = 0; j < _pInfrastructure->getListResTrans().size() && !cancel; j++)
     {
@@ -1682,12 +1685,13 @@ void TYSiteNode::appendSite(LPTYSiteNode pSiteFrom, const OMatrix& matrix, LPTYS
     LPTYInfrastructure pInfraFrom = pSiteFrom->getInfrastructure();
     LPTYInfrastructure pInfraTo = pSiteTo->getInfrastructure();
 
+#if WITH_NMPB
     for (i = 0; i < pInfraFrom->getListRoute().size(); i++)
     {
         newMatrix = matrix * pInfraFrom->getListRoute()[i]->getMatrix();
         pInfraTo->addRoute(new TYRouteGeoNode(pInfraFrom->getListRoute()[i]->getElement(), newMatrix));
     }
-
+#endif
     for (i = 0; i < pInfraFrom->getListResTrans().size(); i++)
     {
         newMatrix = matrix * pInfraFrom->getListResTrans()[i]->getMatrix();

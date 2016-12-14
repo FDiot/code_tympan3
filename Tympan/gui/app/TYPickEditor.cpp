@@ -1640,12 +1640,13 @@ void TYPickEditor::remInfraElmt(TYElement *pElement)
 
     TYAction* pAction = new TYRemElementToInfraAction(pElement, pInfra, _pModeler, TR("id_action_remeltinfra"));
     _pModeler->getActionManager()->addAction(pAction);
-
+#if WITH_NMPB
     if (pElement->isA("TYRoute"))
     {
         pInfra->remRoute((LPTYRoute&) pElement);
     }
-    else if (pElement->isA("TYReseauTransport"))
+#endif
+    if (pElement->isA("TYReseauTransport"))
     {
         pInfra->remResTrans((LPTYReseauTransport&) pElement);
     }
@@ -1679,7 +1680,7 @@ void TYPickEditor::copyInfraElmt(TYElement *pElement)
     TYBox boundBox;
 
     LPTYGeometryNode pCopy = nullptr;
-
+#if WITH_NMPB
     if (pElement->isA("TYRoute"))
     {
         // Nouvelle element
@@ -1693,7 +1694,8 @@ void TYPickEditor::copyInfraElmt(TYElement *pElement)
         // Ajout
         pInfra->addRoute(pCopy);
     }
-    else if (pElement->isA("TYReseauTransport"))
+#endif
+    if (pElement->isA("TYReseauTransport"))
     {
         // Nouvel element
         pCopy = new TYReseauTransportGeoNode(new TYReseauTransport);

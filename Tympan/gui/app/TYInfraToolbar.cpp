@@ -46,7 +46,7 @@ TYInfraToolbar::TYInfraToolbar(QButtonGroup* pBtnGroup, QMainWindow* parent /*= 
     pBtnGroup->addButton(_toolButtonSrcPonct, TYSiteModelerFrame::SrcPonctMode);
 
     addSeparator();
-
+#if WITH_NMPB
     _toolButtonRoute = new QToolButton(this);
     _toolButtonRoute->setIcon(QPixmap(IMG("id_icon_route")));
     _toolButtonRoute->setText(TR("id_menuitem_route"));
@@ -55,6 +55,7 @@ TYInfraToolbar::TYInfraToolbar(QButtonGroup* pBtnGroup, QMainWindow* parent /*= 
     _toolButtonRoute->setCheckable(true);
     addWidget(_toolButtonRoute);
     pBtnGroup->addButton(_toolButtonRoute, TYSiteModelerFrame::RouteMode);
+#endif
 
     _toolButtonReseau = new QToolButton(this);
     _toolButtonReseau->setIcon(QPixmap(IMG("id_icon_reseau")));
@@ -93,7 +94,9 @@ TYInfraToolbar::~TYInfraToolbar()
 void TYInfraToolbar::activeButtons(bool active)
 {
     _toolButtonSrcPonct->setEnabled(active);
+#if WITH_NMPB
     _toolButtonRoute->setEnabled(active);
+#endif
     _toolButtonReseau->setEnabled(active);
     _toolButtonEtage->setEnabled(active);
     _toolButtonSilos->setEnabled(active);

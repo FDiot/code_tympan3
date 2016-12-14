@@ -88,12 +88,16 @@ public slots:
      * @param item Element de la liste correspondant au reseau de transport selectionne.
      */
     void editResTransp(QTreeWidgetItem* item);
+
+#if WITH_NMPB
     /**
      * Edite la widget de la route selectionnee.
      *
      * @param item Element de la liste correspondant a la route selectionnee.
      */
     void editRoute(QTreeWidgetItem* item);
+#endif
+
     /**
      * Edite la widget de la source selectionnee.
      *

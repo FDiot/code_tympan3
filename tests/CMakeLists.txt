@@ -56,6 +56,12 @@ build_native_path_list(NATIVE_CGAL_BINDINGS_PYTHON_DIR "${CGAL_BINDINGS_PYTHON_D
 
 # Find all CPP test files.
 file(GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_*.cpp)
+if(NOT TYMPAN_USE_NMPB2008)
+    list(REMOVE_ITEM TESTS_SRC
+        ${CMAKE_CURRENT_SOURCE_DIR}/test_3rdparty_nmpb2008.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/test_m_b_road.cpp
+    )
+endif()
 # Need specific handling, see below
 list(REMOVE_ITEM TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_gui_bdtopoimporter.cpp)
 # XXX doesn't compile
@@ -70,7 +76,9 @@ foreach (testfile ${TESTS_SRC})
         LIBS testutils tympan_common tympan_lib)
 endforeach (testfile)
 # More specific tests configuration
-target_link_libraries(test_3rdparty_nmpb2008 RoadEmissionNMPB)
+if(TYMPAN_USE_NMPB2008)
+    target_link_libraries(test_3rdparty_nmpb2008 RoadEmissionNMPB)
+endif()
 target_link_libraries(test_3rdparty_rply ${RPLY_LIB})
 set_property(TARGET test_3rdparty_rply APPEND PROPERTY
     INCLUDE_DIRECTORIES ${RPLY_INCLUDE_DIRECTORY})

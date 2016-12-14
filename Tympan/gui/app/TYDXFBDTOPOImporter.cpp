@@ -155,9 +155,9 @@ bool TYDXFBDTopoImporter::import(const char* FullBDDPath, LPTYSiteNode* pSiteIn)
     //////////////////////////////////////////////////////////////////////////
     //      Routes
     //////////////////////////////////////////////////////////////////////////
-
+#if WITH_NMPB
     importRoad(nMaxRoutes, model, Offset, pTYTopographie, pSite);
-
+#endif
 
     //////////////////////////////////////////////////////////////////////////
     //      Reseau de Transport
@@ -356,6 +356,7 @@ void TYDXFBDTopoImporter::importField(int nMaxTerrain, const dimeModel model[],
     Display("%d Terrains importes",     nNbItem);
 }
 
+#if WITH_NMPB
 void TYDXFBDTopoImporter::importRoad(int nMaxRoutes, const dimeModel model[],
                                      const DXFLimites& Offset,
                                      LPTYTopographie pTYTopographie,
@@ -396,6 +397,7 @@ void TYDXFBDTopoImporter::importRoad(int nMaxRoutes, const dimeModel model[],
     }
     Display("%d Routes importees", nNbItem);
 }
+#endif
 
 void TYDXFBDTopoImporter::importTransmissionNetwork(int nMaxReseauTransportNRJ,
                                                     const dimeModel model[],

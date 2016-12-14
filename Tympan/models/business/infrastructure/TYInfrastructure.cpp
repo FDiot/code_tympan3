@@ -52,7 +52,9 @@ TYInfrastructure& TYInfrastructure::operator=(const TYInfrastructure& other)
         _listBatiment = other._listBatiment;
         _listMachine = other._listMachine;
         _listResTrans = other._listResTrans;
+#if WITH_NMPB
         _listRoute = other._listRoute;
+#endif
         _listSrc = other._listSrc;
     }
     return *this;
@@ -66,7 +68,9 @@ bool TYInfrastructure::operator==(const TYInfrastructure& other) const
         if (!(_listBatiment == other._listBatiment)) { return false; }
         if (!(_listMachine == other._listMachine)) { return false; }
         if (!(_listResTrans == other._listResTrans)) { return false; }
+#if WITH_NMPB
         if (!(_listRoute == other._listRoute)) { return false; }
+#endif
         if (!(_listSrc == other._listSrc)) { return false; }
     }
     return true;
@@ -85,6 +89,7 @@ bool TYInfrastructure::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 
     unsigned int i;
 
+#if WITH_NMPB
     _listRoute.clear();
     for (i = 0; i < pOtherInfra->_listRoute.size(); i++)
     {
@@ -94,7 +99,7 @@ bool TYInfrastructure::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
         pRouteGeoNode->setParent(this);
         addRoute(pRouteGeoNode);
     }
-
+#endif
     _listResTrans.clear();
     for (i = 0; i < pOtherInfra->_listResTrans.size(); i++)
     {
@@ -161,11 +166,13 @@ DOM_Element TYInfrastructure::toXML(DOM_Element& domElement)
     DOM_Element listSrcNode = domDoc.createElement("ListSource");
     domNewElem.appendChild(listSrcNode);
 
+#if WITH_NMPB
     for (i = 0; i < _listRoute.size(); i++)
     {
         // Ajout de la route
         _listRoute[i]->toXML(listRouteNode);
     }
+#endif
 
     for (i = 0; i < _listResTrans.size(); i++)
     {
@@ -204,8 +211,9 @@ int TYInfrastructure::fromXML(DOM_Element domElement)
 
     // Reset
     clean();
-
+#if WITH_NMPB
     LPTYRouteGeoNode pRouteGeoNode = new TYRouteGeoNode(NULL, this);
+#endif
     LPTYReseauTransportGeoNode pResTransGeoNode = new TYReseauTransportGeoNode(NULL, this);
     LPTYBatimentGeoNode pBatGeoNode = new TYBatimentGeoNode(NULL, this);
     LPTYMachineGeoNode pMachineGeoNode = new TYMachineGeoNode(NULL, this);
@@ -221,7 +229,7 @@ int TYInfrastructure::fromXML(DOM_Element domElement)
         elemCur = childs.item(i).toElement();
 
         OMessageManager::get()->info("Charge element d'infrastructure %d/%d.", i + 1, childcount);
-
+#if WITH_NMPB
         if (elemCur.nodeName() == "ListRoute")
         {
             QDomNodeList childs2 = elemCur.childNodes();
@@ -235,7 +243,8 @@ int TYInfrastructure::fromXML(DOM_Element domElement)
                 }
             }
         }
-        else if (elemCur.nodeName() == "ListResTrans")
+#endif
+        if (elemCur.nodeName() == "ListResTrans")
         {
             QDomNodeList childs2 = elemCur.childNodes();
 
@@ -312,13 +321,13 @@ void TYInfrastructure::getChilds(LPTYElementArray& childs, bool recursif /*=true
     unsigned int i;
 
     TYElement::getChilds(childs, recursif);
-
+#if WITH_NMPB
     for (i = 0; i < _listRoute.size(); i++)
     {
         childs.push_back(_listRoute[i]);
         childs.push_back(_listRoute[i]->getElement());
     }
-
+#endif
     for (i = 0; i < _listResTrans.size(); i++)
     {
         childs.push_back(_listResTrans[i]);
@@ -345,10 +354,12 @@ void TYInfrastructure::getChilds(LPTYElementArray& childs, bool recursif /*=true
 
     if (recursif)
     {
+#if WITH_NMPB
         for (i = 0; i < _listRoute.size(); i++)
         {
             _listRoute[i]->getChilds(childs, recursif);
         }
+#endif
 
         for (i = 0; i < _listResTrans.size(); i++)
         {
@@ -393,11 +404,13 @@ void TYInfrastructure::updateCurrentCalcul(TYListID& listID, bool recursif)//=tr
 void TYInfrastructure::reparent()
 {
     unsigned int i;
+#if WITH_NMPB
     for (i = 0; i < _listRoute.size(); i++)
     {
         _listRoute[i]->setParent(this);
         _listRoute[i]->getElement()->setParent(this);
     }
+#endif
 
     for (i = 0; i < _listResTrans.size(); i++)
     {
@@ -439,7 +452,9 @@ void TYInfrastructure::purge()
     remAllBatiment();
     remAllMachine();
     remAllResTrans();
+#if WITH_NMPB
     remAllRoute();
+#endif
     remAllSrc();
 
     setIsGeometryModified(true);
@@ -448,11 +463,12 @@ void TYInfrastructure::purge()
 void TYInfrastructure::concatInfra(const TYInfrastructure* infra)
 {
     unsigned int i;
-
+#if WITH_NMPB
     for (i = 0; i < infra->_listRoute.size(); ++i)
     {
         addRoute(infra->_listRoute[i]);
     }
+#endif
 
     for (i = 0; i < infra->_listResTrans.size(); ++i)
     {
@@ -475,6 +491,7 @@ void TYInfrastructure::concatInfra(const TYInfrastructure* infra)
     }
 }
 
+#if WITH_NMPB
 bool TYInfrastructure::addRoute(LPTYRouteGeoNode pRouteGeoNode)
 {
     assert(pRouteGeoNode);
@@ -586,7 +603,7 @@ LPTYRouteGeoNode TYInfrastructure::findRoute(const LPTYRoute pRoute)
 
     return NULL;
 }
-
+#endif
 bool TYInfrastructure::addResTrans(LPTYReseauTransportGeoNode pResTransGeoNode)
 {
     assert(pResTransGeoNode);
@@ -1071,7 +1088,7 @@ bool TYInfrastructure::addToCalcul()
             getProjet()->getCurrentCalcul()->addToSelection((*ite)->getElement());
         }
     }
-
+#if WITH_NMPB
     if (_listRoute.size())
     {
         TYTabRouteGeoNode::iterator ite;
@@ -1080,7 +1097,7 @@ bool TYInfrastructure::addToCalcul()
             getProjet()->getCurrentCalcul()->addToSelection((*ite)->getElement());
         }
     }
-
+#endif
     return true;
 }
 
@@ -1128,7 +1145,7 @@ bool TYInfrastructure::remFromCalcul()
             pCalcul->remToSelection((*ite)->getElement());
         }
     }
-
+#if WITH_NMPB
     if (_listRoute.size())
     {
         TYTabRouteGeoNode::iterator ite;
@@ -1137,7 +1154,7 @@ bool TYInfrastructure::remFromCalcul()
             pCalcul->remToSelection((*ite)->getElement());
         }
     }
-
+#endif
     return true;
 }
 
@@ -1164,7 +1181,10 @@ bool TYInfrastructure::updateAcoustic(const TYCalcul* pCalcul, const bool& force
 #if TY_USE_IHM
     TYProgressManager::setMessage("Mise a jour de l'acoustique des infrastructures");
     TYProgressManager::set(static_cast<int>(_listMachine.size()) + static_cast<int>(_listBatiment.size())
-                           + static_cast<int>(_listRoute.size()) + static_cast<int>(_listResTrans.size()));
+#if WITH_NMPB
+                           + static_cast<int>(_listRoute.size())
+#endif
+                           + static_cast<int>(_listResTrans.size()));
 #endif // TY_USE_IHM
 
     // On recupere les tableaux associatifs decrivant l'etat des elements pour le calcul
@@ -1327,7 +1347,7 @@ void TYInfrastructure::getAllSrcs(const TYCalcul* pCalcul, TYMapElementTabSource
                 mapElementSrcs[pElement] = tab;
             }
         }
-
+#if WITH_NMPB
         // Insertion de la liste des sources de routes au tableau retourne
         for (i = 0 ; i < _listRoute.size() ; i++)
         {
@@ -1349,12 +1369,15 @@ void TYInfrastructure::getAllSrcs(const TYCalcul* pCalcul, TYMapElementTabSource
                 mapElementSrcs[pElement] = tab;
             }
         }
+#endif
     }
 }
 
 void TYInfrastructure::clean()
 {
+#if WITH_NMPB
     _listRoute.clear();
+#endif
     _listResTrans.clear();
     _listBatiment.clear();
     _listSrc.clear();

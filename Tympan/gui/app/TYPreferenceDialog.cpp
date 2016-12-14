@@ -1207,11 +1207,13 @@ void TYPreferenceDialog::loadPreferences()
 		TYPreferenceManager::getColor("TYReseauTransportGraphicColor", r, g, b);
 		((ColorsTab*)tabWidget->widget(2))->_pResTranspColorToolButton->setColor(QColor(int(r), int(g), int(b)));
 	}
+#if WITH_NMPB
 	if (TYPreferenceManager::exists("TYRouteGraphicColorR"))
 	{
 		TYPreferenceManager::getColor("TYRouteGraphicColor", r, g, b);
 		((ColorsTab*)tabWidget->widget(2))->_pRouteColorToolButton->setColor(QColor(int(r), int(g), int(b)));
 	}
+#endif
 	if (TYPreferenceManager::exists("TYMurGraphicColorR"))
 	{
 		TYPreferenceManager::getColor("TYMurGraphicColor", r, g, b);
@@ -1683,10 +1685,12 @@ void TYPreferenceDialog::savePreferences()
 		((ColorsTab*)tabWidget->widget(2))->_pEcranColorToolButton->getColor().red(),
 		((ColorsTab*)tabWidget->widget(2))->_pEcranColorToolButton->getColor().green(),
 		((ColorsTab*)tabWidget->widget(2))->_pEcranColorToolButton->getColor().blue());
+#if WITH_NMPB
 	TYPreferenceManager::setColor("TYRouteGraphicColor",
 		((ColorsTab*)tabWidget->widget(2))->_pRouteColorToolButton->getColor().red(),
 		((ColorsTab*)tabWidget->widget(2))->_pRouteColorToolButton->getColor().green(),
 		((ColorsTab*)tabWidget->widget(2))->_pRouteColorToolButton->getColor().blue());
+#endif
 	TYPreferenceManager::setColor("TYReseauTransportGraphicColor",
 		((ColorsTab*)tabWidget->widget(2))->_pResTranspColorToolButton->getColor().red(),
 		((ColorsTab*)tabWidget->widget(2))->_pResTranspColorToolButton->getColor().green(),

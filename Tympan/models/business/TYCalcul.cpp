@@ -905,7 +905,7 @@ void TYCalcul::getCalculElements(LPTYSiteNode pSite)
             pSrcPonct->setInCurrentCalcul(true);
         }
     }
-
+#if WITH_NMPB
     for (i = 0; i < pSite->getInfrastructure()->getListRoute().size() ; i++)
     {
         LPTYRoute pRoute = pSite->getInfrastructure()->getRoute(i);
@@ -921,7 +921,7 @@ void TYCalcul::getCalculElements(LPTYSiteNode pSite)
             pRoute->setInCurrentCalcul(true);
         }
     }
-
+#endif
     for (i = 0; i < pSite->getInfrastructure()->getListResTrans().size() ; i++)
     {
         LPTYReseauTransport pResTrans = pSite->getInfrastructure()->getResTrans(i);

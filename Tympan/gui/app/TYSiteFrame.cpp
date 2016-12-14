@@ -243,14 +243,14 @@ TYElementListItem* TYSiteFrame::addToList(LPTYInfrastructure pElement, TYElement
     {
         new TYElementListItem(pListResTranspItem, pElement->getResTrans(i), _pCurrentCalcul, QStringList(), true);
     }
-
+#if WITH_NMPB
     // Liste des routes
     TYElementListItem* pListRouteItem = new TYElementListItem(pRootItem, QStringList(TR("id_list_routes_item")));
     for (i = 0; i < pElement->getListRoute().size(); i++)
     {
         new TYElementListItem(pListRouteItem, pElement->getRoute(i), _pCurrentCalcul, QStringList(), true);
     }
-
+#endif
     return pRootItem;
 }
 
@@ -863,10 +863,12 @@ bool TYSiteFrame::remInInfra(LPTYSiteNode _siteNode, TYElementListItem* item, co
             {
                 res = pInfraChild->remBatiment((TYBatiment*) item->getElement().getRealPointer());
             }
+#if WITH_NMPB
             else if (strcmp(className, "TYRoute") == 0)
             {
                 res = pInfraChild->remRoute((TYRoute*) item->getElement().getRealPointer());
             }
+#endif
             else if (strcmp(className, "TYReseauTransport") == 0)
             {
                 res = pInfraChild->remResTrans((TYReseauTransport*) item->getElement().getRealPointer());
@@ -960,7 +962,9 @@ bool TYSiteFrame::remFromSite(TYElement* pElement)
             {
                 if (strcmp(className, "TYMachine") == 0) { res = pInfra->remMachine((LPTYMachine&) pElement); }
                 else if (strcmp(className, "TYBatiment") == 0) { res = pInfra->remBatiment((LPTYBatiment&) pElement); }
+#if WITH_NMPB
                 else if (strcmp(className, "TYRoute") == 0) { res = pInfra->remRoute((LPTYRoute&) pElement); }
+#endif
                 else if (strcmp(className, "TYReseauTransport") == 0) { res = pInfra->remResTrans((LPTYReseauTransport&) pElement); }
                 else if (strcmp(className, "TYUserSourcePonctuelle") == 0) { res = pInfra->remSrc((LPTYUserSourcePonctuelle&) pElement); }
             }
