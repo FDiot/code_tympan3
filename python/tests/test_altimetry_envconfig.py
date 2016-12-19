@@ -22,7 +22,7 @@ class TestAltimetry(unittest.TestCase):
                 'CGAL_BINDINGS_PATH environment variable must hold '
                 'the path to CGAL_bindings python libraries in case they '
                 'are not already in the PYTHONPATH  (' + CGAL_BINDINGS_PATH + 
-                ') the error was: ' + exc.message)
+                ') the error was: ' + str(exc))
 
 if __name__ == '__main__':
     unittest.main()
