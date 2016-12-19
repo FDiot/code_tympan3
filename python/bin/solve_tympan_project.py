@@ -50,7 +50,7 @@ if __name__ == '__main__':
                       multithreading_on=multithreading_on,
                       interactive=interactive, verbose=True)
     except Exception as exc:
-        sys.stderr.write('Error: ' + exc.message)
+        sys.stderr.write('Error: ' + str(exc))
         logging.exception("tympan.solve_project.py couldn't solve the acoustic problem:\n%s", exc)
         sys.exit(-1)
     sys.exit(0)
