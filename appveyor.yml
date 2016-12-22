@@ -47,6 +47,9 @@ build_script:
 
     echo %PATH%
 
+    set TYMPAN_PYTHON_INTERP=C:\Miniconda3\python.exe
+
+
     conda install -y -q cython numpy scipy
 
     conda install -y -q geos=3.4.2
