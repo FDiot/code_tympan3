@@ -8,31 +8,29 @@ install:
 - ps: >-
     Add-Type -AssemblyName System.IO.Compression.FileSystem
 
+    $cachedir='C:\tympan\cache\'
 
-    $cachedir='c:\tympan\cache\'
-
-    $srcdir='c:\tympan\src\'
+    $srcdir='C:\tympan\src\'
 
     if (-Not (Test-Path $cachedir)) {
       mkdir $cachedir
     }
 
-    $thirdparties="Code_TYMPAN-4.7_third-party-05.zip"
+    $thirdparties='Code_TYMPAN-4.7_third-party-05.zip'
 
     $zipfile=$cachedir + $thirdparties
 
     if (-Not (Test-Path $zipfile)) {
-        (new-object net.webclient).DownloadFile('https://bitbucket.org/TYMPAN/code_tympan/downloads/' + $thirdparties, $zipfile)
+      (new-object net.webclient).DownloadFile('https://bitbucket.org/TYMPAN/code_tympan/downloads/' + $thirdparties, $zipfile)
     }
-
 
     [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $srcdir + '3rdparty')
 cache:
-- c:\tympan\cache
+- C:\tympan\cache
 - C:\Miniconda\pkgs
 build_script:
 - cmd: >-
-    cd c:\tympan\
+    cd C:\tympan\
 
     md build
 
