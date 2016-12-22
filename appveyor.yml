@@ -36,10 +36,13 @@ build_script:
     cd build
 
 
-    set PATH=C:\Miniconda;C:\Miniconda\Scripts;%PATH%
+    echo %PATH%
 
+    set PATH=C:\Miniconda3;C:\Miniconda3\Scripts;C:\Miniconda3\Library\bin;C:\Miniconda3\libs
 
+    set PATH=C:\Program Files (x86)\MSBuild\12.0\Bin;%PATH%
 
+    set PATH=%PATH%;C:\Windows\system32;C:\Windows;C:\Program Files (x86)\CMake\bin;
 
     echo %PATH%
 
