@@ -1,7 +1,7 @@
 version: 1.0.{build}
-configuration: Debug
-clone_folder: c:\tympan\src
+configuration: Release
 platform: x86
+clone_folder: C:\tympan\src
 environment:
   VisualStudioVersion: 10.0
 install:
@@ -66,10 +66,13 @@ build_script:
     conda list
 
 
-    cmake -G"Visual Studio 10" -DCMAKE_PREFIX_PATH=C:\Miniconda\envs\tympan ..\src
+    cmake -G"Visual Studio 10" -DCMAKE_BUILD_TYPE=Release -DPYTHON_LIBRARY=C:\Miniconda3\libs\Python34.lib ..\src
 
 
-    cmake --build . --config Debug
+    cmake --build . --config Release
+
+
+    cd ..
 test_script:
 - cmd: >-
     cd build
