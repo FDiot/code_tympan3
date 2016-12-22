@@ -77,4 +77,4 @@ test_script:
 - cmd: >-
     cd build
 
-    ctest --output-on-failure
+    ctest -C Release --output-on-failure
