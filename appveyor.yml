@@ -1,6 +1,9 @@
 version: 1.0.{build}
 configuration: Debug
 clone_folder: c:\tympan\src
+platform: x86
+environment:
+  VisualStudioVersion: 10.0
 install:
 - ps: >-
     Add-Type -AssemblyName System.IO.Compression.FileSystem
