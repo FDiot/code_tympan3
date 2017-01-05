@@ -19,16 +19,20 @@
 #include "Tympan/solvers/AcousticRaytracer/Engine/DefaultEngine.h"
 #include <stack>
 
+/**
+ * \brief Engine for analytical ray curve tracing
+ */
 #ifdef TEST_ACCELERATION_RECEPTORS
 class DefaultCurvRayEngine : public DefaultEngine
 {
 
 public:
+	/// Default constructor
     DefaultCurvRayEngine() : DefaultEngine() {}
-
+    /// Constructor
     DefaultCurvRayEngine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, Scene *_recepteurs)
         : DefaultEngine(_scene, _sources, _solver, _recepteurs) {  }
-
+    /// Copy constructor
     DefaultCurvRayEngine(const DefaultCurvRayEngine& other)
     {
         scene = other.scene;
@@ -36,12 +40,19 @@ public:
         solver = other.solver;
         recepteurs = other.recepteurs;
     }
-
+    /// Destructor
     virtual ~DefaultCurvRayEngine() { }
 
+    /// Main routine
     virtual bool process();
 
 protected:
+    /**
+     * @brief Ray treatment
+     * @param r Ray
+     * @param result List of valid rays
+     * @return True if succeeds
+     */
     virtual bool traitementRay(Ray* r, std::list<validRay> &result);
 };
 #else

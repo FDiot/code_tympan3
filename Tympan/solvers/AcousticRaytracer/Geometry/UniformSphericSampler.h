@@ -29,10 +29,13 @@
 #define UNIFORM_SPHERIC_SAMPLER
 
 using namespace std;
-
+/**
+ * \brief A Sampler class for uniform spherical sampling
+ */
 class UniformSphericSampler: public Sampler
 {
 public:
+	/// Constructors
     UniformSphericSampler(const unsigned int& nbRays = 0,
                           const decimal& Theta = (decimal) M_PIDIV2,
                           const decimal& Phi = (decimal) M_2PI) : Sampler(nbRays, Theta, Phi),
@@ -73,7 +76,7 @@ public:
         Sampler* sampler = new UniformSphericSampler(this);
         return sampler;
     }
-
+    /// Destructor
     virtual ~UniformSphericSampler() { }
 
     virtual vec3 getSample()
@@ -110,7 +113,7 @@ public:
 
         computeN2();
     }
-
+    /// Return the launched rays real number
     unsigned int getRealNbRays() const { return _real_nb_rays; }
 
     virtual unsigned int computeDiffractionNbr(const decimal& thetaCalcul)
@@ -146,11 +149,11 @@ private :
     }
 
 private :
-    unsigned int _real_nb_rays;  /*!< Real number of rays lauched */
-    unsigned int _n1;           /*!< number of slices  */
-    unsigned int _n2;           /*!< number of rays along a specific slice */
-    decimal _thetaCalcul;       /*!< current angle along a longitude */
-    unsigned int _i, _j;        /*!< current indices */
+    unsigned int _real_nb_rays;  	//!< Real number of rays launched
+    unsigned int _n1;            	//!< Number of slices
+    unsigned int _n2;           	//!< Number of rays along a specific slice
+    decimal _thetaCalcul;       	//!< Current angle along a longitude
+    unsigned int _i, _j;        	//!< Current indices
 };
 
 #endif

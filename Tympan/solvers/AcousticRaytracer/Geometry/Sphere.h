@@ -18,11 +18,16 @@
 
 #include "Shape.h"
 
+/**
+ * \brief Sphere Shape
+ */
 class Sphere : public Shape
 {
 
 public:
+	/// Constructor, the Sphere is located at (0,0,0) with a radius 0
     Sphere() : Shape() { position = vec3(0.0, 0.0, 0.0); radius = 0.;}
+    /// Constructor with the position pos and the radius r of the sphere
     Sphere(vec3 pos, decimal r) : Shape()
     {
         position = vec3(pos);
@@ -30,39 +35,46 @@ public:
 
         box = BBox(vec3(pos.x - r, pos.y - r, pos.z - r), vec3(pos.x + r, pos.y + r, pos.z + r));
     }
-
+    /// Copy constructor from a pointed sphere
     Sphere(Sphere* other) : Shape(other)
     {
         position = vec3(other->position);
         radius = other->radius;
         box = other->box;
     }
-
+    /// Return a pointer to this sphere
     virtual Shape* Clone()
     {
         Sphere* newShape = new Sphere(this);
         return newShape;
     }
-
+    /// Copy constructor
     Sphere(const Sphere& other) : Shape(other)
     {
         position = vec3(other.position);
         radius = other.radius;
         box = other.box;
     }
-
+    /**
+     * @brief Check if a ray intersect this sphere
+     * @param ray The ray
+     * @param inter The intersection
+     * @return True if succeeds, false if not
+     */
     virtual bool getIntersection(Ray& ray, Intersection& inter);
-
+    /// Set the radius of the sphere
     void setRadius(decimal _radius) { radius = _radius; }
+    /// Get the radius of the sphere
     decimal getRadius() { return radius; }
-
+    /// Set the center of the sphere
     void setPosition(vec3& _position) { position = _position; }
+    /// Get the position (center) of the sphere
     vec3 getPosition() { return position; }
     virtual int form() { return SPHERE; }
 
 protected:
-    vec3 position;
-    decimal radius;
+    vec3 position;	//!< Center of the sphere
+    decimal radius;	//!< Radius of the sphere
 
 };
 

@@ -39,7 +39,7 @@ namespace tympan
  * @brief The base of all entity classes.
  *
  * This class is \em required to be \em virtually inherited by all
- * entity classes. It provide some convenient dynamic access and cast method.
+ * entity classes. It provides some convenient dynamic access and cast method.
  */
 class BaseEntity
 {

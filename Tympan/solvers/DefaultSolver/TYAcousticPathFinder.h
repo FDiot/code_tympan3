@@ -20,22 +20,37 @@
 
 class TYSolver;
 
+/**
+ * \class TYAcousticPathFinder
+ * \brief Build the acoustic path for the default solver.
+ */
 class TYAcousticPathFinder
 {
 public:
+	/// Constructor
     TYAcousticPathFinder(TYSolver& solver);
+    /// Destructor
     virtual ~TYAcousticPathFinder();
 
+    /**
+     * \brief Compute a path between a source and a receptor. The receptor is not included in the path.
+     * \param tabIntersect Array of intersections
+     * \param trajet Trajectories
+     * \param ptsTop Path (array of points) in case of face visualization (_bCalcTrajetHorizontaux false)
+     * \param ptsLeft Path (array of points) in case of top visualization (_bCalcTrajetHorizontaux true)
+     * \param ptsRight Path (array of points) in case of top visualization (_bCalcTrajetHorizontaux true)
+     */
     virtual void computePath(const std::deque<TYSIntersection>& tabIntersect, const TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft, TabPoint3D& ptsRight);
+    /// Initialize the class parameters
     virtual void init();
 
 private :
-    // Reference sur le solver
+    /// Reference to the solver
     TYSolver& _solver;
 
     bool computeParcoursLateraux(const std::deque<TYSIntersection>& tabIntersect, const OSegment3D& rayon, const bool& dessus, TabPoint3D& ptsLeft, TabPoint3D& ptsRight) const;
 
-    // Faut il calculer les trajets horizontaux
+    /// Boolean to compute or not the horizontal trajectories
     bool _bCalcTrajetHorizontaux;
 };
 

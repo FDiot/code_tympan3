@@ -47,13 +47,16 @@ private:
 };
 
 
-
+/**
+ * \brief Regular grid Accelerator
+ */
 class GridAccelerator : public Accelerator
 {
 
 public:
+	/// Constructor
     GridAccelerator(std::vector<Shape*>* _initialMesh = NULL, BBox _globalBox = BBox());
-
+    /// Destructor
     virtual ~GridAccelerator()
     {
         for (int i = 0; i < nVoxels[0]*nVoxels[1]*nVoxels[2]; ++i)
@@ -64,34 +67,34 @@ public:
     virtual bool build();
 
     virtual decimal traverse(Ray* r, std::list<Intersection> &result) const;
-
+    /// Set/Get maximal depth
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
     int getMaxProfondeur() { return maxProfondeur; }
-
+    /// Set/Get maximal primitives per leaf
     void setMaxPrimPerLeaf(int _maxPrimPerLeaf) { maxPrimPerLeaf = _maxPrimPerLeaf; }
     int getMaxPrimPerLeaf() { return maxPrimPerLeaf; }
-
+    /// Print (not implemented)
     void print();
-
+/* Uncommented cause not used:
     bool alreadyFail;
     unsigned int nbFail;
     Ray r;
     bool trace;
-
+*/
 protected:
 
     std::vector<Shape*> primitives; //Different de initialMesh, est reordonne par rapport a la structure
-    BBox globalBox;
+    BBox globalBox;			//!< Root bounding box
 
-    int maxProfondeur;
-    int maxPrimPerLeaf;
+    int maxProfondeur;		//!< Maximal depth
+    int maxPrimPerLeaf;		//!< Maximal primitives per leaf
 
-    int realMaxProfondeur;
-
+    int realMaxProfondeur;	//!< Real maximal depth
+/* Uncommented cause unused:
     float isectCost;
     float emptyBonus;
     float traversalCost;
-
+*/
     // GridAccel Private Methods
     int posToVoxel(const vec3& P, int axis) const
     {

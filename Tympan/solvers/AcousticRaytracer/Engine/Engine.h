@@ -25,15 +25,19 @@
 
 typedef struct _validRay
 {
-    Ray* r;     /*!< Pointeur vers le rayon traite. Ne dois pas etre NULL */
-    bool valid; /*!< Vrai si le rayon a pu etre valide, c'est a dire un evenement a ete genere. */
+    Ray* r;     //!< Pointer to a ray. Should not be NULL
+    bool valid; //!< Boolean set to True if the ray is validated, which means an event occurs.
 } validRay;
 
+/**
+ * \brief Base class for engines (DefaultEngine, ParallelDefaultEngine,...)
+ */
 class Engine
 {
 
 public:
 #ifdef TEST_ACCELERATION_RECEPTORS
+	/// Constructors
     Engine() : scene(NULL), sources(NULL), solver(NULL), recepteurs(NULL), rayCounter(0) { }
 
     Engine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, Scene *_recepteurs)
@@ -70,12 +74,12 @@ public:
     virtual void runStructureBenchmark() {}
 
 protected:
-    Scene* scene;
-    Scene *recepteurs;
-    std::vector<Source> *sources;
-    Solver* solver;
+    Scene* scene;					//!< Pointer to the scene
+    Scene *recepteurs;				//!< Pointer to all the sources
+    std::vector<Source> *sources;	//!< Pointer to all the receptors
+    Solver* solver;					//!< Pointer to the solver
 
-    unsigned long long int rayCounter;
+    unsigned long long int rayCounter; //!< Ray counter
 #else
     Engine() : scene(NULL), sources(NULL), solver(NULL), recepteurs(NULL), rayCounter(0) { }
 

@@ -19,6 +19,10 @@
 
 class AcousticProblemModel;
 
+/**
+ * \class TYANIME3DFaceSelector
+ * \brief Building class of the faces list used by the ray tracer and the acoustic solver
+ */
 class TYANIME3DFaceSelector
 {
 public:
@@ -27,17 +31,14 @@ public:
 
     /*!
      * \fn bool exec(TYStructSurfIntersect* tabPolygon, unsigned int& tabPolygonSize);
-     * \brief buil list of faces used by the ray tracer and the acoustic solver
+     * \brief Build list of faces
+     * \param tabPolygon Array containing the polygons
+     * \param tabPolygonSize Size of the tabPolygon array
+     * \return true
      */
     bool exec(TYStructSurfIntersect *&tabPolygon, size_t& tabPolygonSize);
 
 private :
-    /*!
-    * \fn bool buildCalcStruct(TYStructSurfIntersect* _tabPolygon)
-    * \brief Construit un tableau contenant la structure regroupant l'ensemble des informations relatives a une face/triangle du site.
-    * Correspond a la fonction du meme nom dans le SolveurHarmonoise avec l'ajout des normales et des faces triangulees dans la structure.
-    * \param site Reference vers le site de la scene
-    */
     bool buildCalcStruct(TYStructSurfIntersect *&tabPolygon, size_t& tabPolygonSize);
 
 protected :

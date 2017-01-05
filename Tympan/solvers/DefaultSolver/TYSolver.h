@@ -32,12 +32,22 @@ class TYAcousticPathFinder;
 class TYFaceSelector;
 class Scene;
 
+/**
+ * \brief Default solver
+ */
 class TYSolver : public SolverInterface
 {
 public:
-    TYSolver();
-    virtual ~TYSolver();
+	TYSolver(); /// Constructor
+    virtual ~TYSolver(); /// Destructor
 
+    /**
+     * \brief Launch the resolution and get the results
+     * \param aproblem Acoustic problem
+     * \param aresult Results
+     * \param configuration Solver configuration
+     * \return Always true
+     */
     virtual bool solve(const tympan::AcousticProblemModel& aproblem,
                        tympan::AcousticResultModel& aresult,
                        tympan::LPSolverConfiguration configuration);
@@ -46,9 +56,10 @@ public:
 
     TYFaceSelector* getFaceSelector() { return _faceSelector.get();}
     TYAcousticPathFinder* getAcousticPathFinder() { return _acousticPathFinder.get(); }
-    TYAcousticModel* getAcousticModel() { return _acousticModel.get(); }
 
-    const Scene* getScene() const { return _scene.get(); }
+    TYAcousticModel* getAcousticModel() { return _acousticModel.get(); } /// Get acoustic model
+
+    const Scene* getScene() const { return _scene.get(); }     /// Get the Scene
 
 protected:
     std::unique_ptr<TYFaceSelector> make_face_selector();
@@ -70,7 +81,7 @@ private:
     bool appendTriangleToScene();
 
     /**
-     * \fn size_t buildValidTrajects(tympan::AcousticProblemModel& aproblem)
+     * \fn size_t buildTrajects(tympan::AcousticProblemModel& aproblem)
      * \brief construit le tableau des trajets et la matrice resultat en supprimant les points trop proches d'une source
      */
    size_t buildTrajects(tympan::AcousticProblemModel& aproblem);

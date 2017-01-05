@@ -26,6 +26,10 @@
 #define SEUIL_DISTANCE_POINTS_CONFONDUS 0.02//en-dessous de 2 cm, les points sont consideres comme confondus
 #define SEUIL_DETERMNANT_COLINEAIRE     (1E-10)//en-dessous de cette valeur (absolue), le determinant n'est plus un critere valide pour juger de la colinearite de 2 vecteurs
 
+/**
+ * \struct TYPointParcours
+ * \brief Point of a path
+ */
 struct TYPointParcours
 {
     double x;

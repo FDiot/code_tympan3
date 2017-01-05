@@ -26,12 +26,12 @@
 #include <vector>
 #include <ostream>
 
-// Defines pour les calculs d'intersection
-///Les elements sont confondus.
+// Defines for intersection calculations.
+///The elements match.
 #define INTERS_CONFONDU 2
-///L'intersection existe.
+///The intersection exists.
 #define INTERS_OUI      1
-///Pas d'intersection.
+///No intersection.
 #define INTERS_NULLE    0
 
 #define EPSILON_3  0.001            // 10e-3
@@ -61,9 +61,9 @@
 
 /**
  * \fn inline double ABS(double a)
- * \brief Retourne la valeur absolue.
- * \param a Un nombre.
- * \return Le valeur absolue.
+ * \brief Return the absolute value.
+ * \param a A number.
+ * \return The absolute value.
  */
 inline double ABS(double a)
 {
@@ -72,9 +72,9 @@ inline double ABS(double a)
 
 /**
  * \fn inline double SIGNE(double a)
- * \brief Retourne le signe d'un nombre
- * \param a Un nombre.
- * \return Le signe (1 ou -1).
+ * \brief Return the number sign.
+ * \param a A number.
+ * \return The sign (1 or -1).
  */
 inline double SIGNE(double a)
 {
@@ -83,10 +83,10 @@ inline double SIGNE(double a)
 
 /**
  * \fn inline double MAX(double a, double b)
- * \brief Retourne le plus grand nombre parmi 2
- * \param a Le 1er nombre a comparer.
- * \param b Le 2eme nombre a comparer.
- * \return Le plus grand nombre entre a et b.
+ * \brief Return the biggest number of two ones.
+ * \param a The first number.
+ * \param b The second number.
+ * \return The biggest number between a and b.
  */
 inline double MAX(double a, double b)
 {
@@ -95,11 +95,11 @@ inline double MAX(double a, double b)
 
 /**
  * \fn inline double MAX3(double a, double b, double c)
- * \brief Retourne le plus grand nombre.
- * \param a Le 1er nombre a comparer.
- * \param b Le 2eme nombre a comparer.
- * \param c Le 3eme nombre a comparer.
- * \return Le plus grand nombre entre a, b et c.
+ * \brief Return the buggest number of three ones.
+ * \param a First number.
+ * \param b Second number.
+ * \param c Third number.
+ * \return Biggest number between a, b, and c.
  */
 inline double MAX3(double a, double b, double c)
 {
@@ -108,10 +108,10 @@ inline double MAX3(double a, double b, double c)
 
 /**
  * \fn inline double MIN(double a, double b)
- * \brief Retourne le plus petit nombre parmi 2.
- * \param a Le 1er nombre a comparer.
- * \param b Le 2eme nombre a comparer.
- * \return Le plus petit nombre entre a et b.
+ * \brief Return the smallest number of two ones.
+ * \param a First number.
+ * \param b Second number.
+ * \return Smallest number between a and b.
  */
 inline double MIN(double a, double b)
 {
@@ -120,9 +120,9 @@ inline double MIN(double a, double b)
 
 /**
  * \fn inline double DEGTORAD(double a)
- * \brief Convertit un angle en degres en un angle en radians.
- * \param a Un angle en degres.
- * \return Un angle en radians.
+ * \brief Converts an angle in degrees to radians.
+ * \param a Angle in degrees.
+ * \return Angle in radians.
  */
 inline double DEGTORAD(double a)
 {
@@ -131,9 +131,9 @@ inline double DEGTORAD(double a)
 
 /**
  * \fn inline double RADTODEG(double a)
- * \brief Convertit un angle en radians en un angle en degres.
- * \param a Un angle en radians.
- * \return Un angle en degres.
+ * \brief Converts an angle in radians to degrees.
+ * \param a Angle in radians.
+ * \return Angle in degres.
  */
 inline double RADTODEG(double a)
 {
@@ -142,9 +142,9 @@ inline double RADTODEG(double a)
 
 /**
  * \fn inline double GRATORAD(double a)
- * \brief Convertit un angle en gradians en un angle en radians.
- * \param a Un angle en gradians.
- * \return Un angle en radians.
+ * \brief Converts an angle in gradians to radians.
+ * \param a Angle in gradians.
+ * \return Angle in radians.
  */
 inline double GRATORAD(double a)
 {
@@ -153,9 +153,9 @@ inline double GRATORAD(double a)
 
 /**
  * \fn inline double RADTOGRA(double a)
- * \brief Convertit un angle en radians en un angle en gradians.
- * \param a Un angle en radians.
- * \return Un angle en gradians.
+ * \brief Converts an angle in radians to gradians.
+ * \param a Angle in radians.
+ * \return Angle in gradians.
  */
 inline double RADTOGRA(double a)
 {
@@ -164,9 +164,9 @@ inline double RADTOGRA(double a)
 
 /**
  * \fn inline double GRATODEG(double a)
- * \brief Convertit un angle en gradians en un angle en degres.
- * \param a Un angle en gradians.
- * \return Un angle en degres.
+ * \brief Converts an angle in gradians to degrees.
+ * \param a Angle in gradians.
+ * \return Angle in degrees.
  */
 inline double GRATODEG(double a)
 {
@@ -175,9 +175,9 @@ inline double GRATODEG(double a)
 
 /**
  * \fn inline double DEGTOGRA(double a)
- * \brief Convertit un angle en degres en un angle en gradians.
- * \param a Un angle en degres.
- * \return Un angle en gradians.
+ * \brief Converts an angle in degrees to gradians.
+ * \param a Angle in degrees.
+ * \return Angle in gradians.
  */
 inline double DEGTOGRA(double a)
 {
@@ -186,9 +186,9 @@ inline double DEGTOGRA(double a)
 
 /**
  * \fn inline int ROUND(double a)
- * \brief calcul de la valeur arrondie d'un nombre.
- * \param a Un nombre.
- * \return La valeur arrondie.
+ * \brief Compute the rounded value of a number.
+ * \param a A number.
+ * \return Rounded value.
  */
 inline int ROUND(double a)
 {
@@ -197,11 +197,11 @@ inline int ROUND(double a)
 
 /**
  * \fn inline double BORNE(double a, double b, double c)
- * \brief Borne un nombre.
- * \param a Un nombre.
- * \param b La borne inferieur.
- * \param c La borne superieur.
- * \return Le nombre ou une des bornes.
+ * \brief Limit a number.
+ * \param a A number.
+ * \param b Lower limit.
+ * \param c Upper limit.
+ * \return The number or one of the limits.
  */
 inline double BORNE(double a, double b, double c)
 {
@@ -210,9 +210,9 @@ inline double BORNE(double a, double b, double c)
 
 /**
  * \fn inline int BORNE(int a)
- * \brief Borne un nombre entre 0 et 255.
- * \param a Un nombre.
- * \return Le nombre ou une des bornes.
+ * \brief Limit a number between 0 and 255.
+ * \param a A number.
+ * \return A number or one of the limits.
  */
 inline int BORNE(int a)
 {
@@ -330,7 +330,7 @@ public:
     bool operator!=(const OVector3D& vector) const;
     OVector3D operator+(const OVector3D& vector) const;
     OVector3D operator-(const OVector3D& vector) const;
-    // XXX meaningless componentwise multiplication whereas a dot product would have been expected.
+    // XXX meaningless component wise multiplication whereas a dot product would have been expected.
     OVector3D operator*(const OVector3D& vector) const;
     /**
      * \fn OVector3D operator*(const double a) const;
@@ -344,6 +344,7 @@ public:
      * \brief Multiplication with a scalar (commutative).
      *
      * \param a A scalar value.
+     * \param vector Vector to multiply.
      */
     friend OVector3D operator*(const double a, const OVector3D& vector);
 
@@ -450,10 +451,10 @@ public:
     OVector3D getRotationOyBase2(double alpha);
 
     /**
-    * \fn OVector3D getRotationOzOy(double alpha, double theta, OVector3D V)
+    * \fn OVector3D getRotationOzOy(double alpha, double theta)
     * \brief Returns the vector after 2 rotations around z axis and
-    * \y axis. It gives the coordinates of xsecond, ysecond and zsecond in the
-    *\ first basis B.
+    * y axis. It gives the coordinates of xsecond, ysecond and zsecond in the
+    * first basis B.
     */
     OVector3D getRotationOzOy(double alpha, double theta);
 };
@@ -520,7 +521,7 @@ public:
     virtual ~OPoint3D();
 
      /**
-     * Assigne des valeurs a l'objet.
+     * Set coordinates to the object.
      *
      * @param x X coordinate.
      * @param y Y coordinate.
@@ -529,31 +530,40 @@ public:
     virtual void set(double x, double y, double z);
 
     /**
-     * Compatibilite avec OGL.
-     * Effectue le changement de repere OGL vers Tympan.
+     * Compatibility with OGL.
+     * Change OGL frame to Tympan.
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param z Z coordinate.
      */
     virtual void setFromOGL(float x, float y, float z);
     /**
-     * Compatibilite avec OGL.
-     * Effectue le changement de repere OGL vers Tympan.
+     * Compatibility with OGL.
+     * Change OGL frame to Tympan.
+     * @param coords 3D coordinates (float)
      */
     virtual void setFromOGL(float coords[3]);
     /**
-     * Compatibilite avec OGL.
-     * Effectue le changement de repere OGL vers Tympan.
+     * Compatibility with OGL.
+     * Change OGL frame to Tympan.
+     * @param coords 3D coordinates (double)
      */
     virtual void setFromOGL(double coords[3])
     {
         setFromOGL(coords[0], coords[1], coords[2]);
     }
     /**
-     * Compatibilite avec OGL
-     * Effectue le changement de repere Tympan vers OGL.
+     * Compatibility with OGL.
+     * Change from Tympan frame to OGL.
+     * @param x X coordinate.
+     * @param y Y coordinate.
+     * @param z Z coordinate.
      */
     virtual void getToOGL(float& x, float& y, float& z);
     /**
-     * Compatibilite avec OGL.
-     * Effectue le changement de repere Tympan vers OGL.
+     * Compatibility with OGL.
+     * Change from Tympan frame to OGL.
+     * @param coords 3D coordinates (float)
      */
     virtual void getToOGL(float coords[3]);
 
@@ -561,7 +571,7 @@ public:
      * \fn double distFrom(const OPoint3D& pt) const;
      * \brief Computes the distance from this point to another.
      *
-     * \param pt The point to mesure the distance from.
+     * \param pt The point to measure the distance from.
      */
     double distFrom(const OPoint3D& pt) const;
 
@@ -578,15 +588,13 @@ public:
     }
 
     /**
-     * Methode utilitaire qui s'assure que 2 points consecutifs sont
-     * espaces d'une distance maximale en ajoutant de nouveaux points
-     * quand cela est necessaire.
+     * Utility method to check that two consecutive points are
+     * spaced within a maximal length and add new points if necessary
      *
-     * @param points Le tableau de points a tester.
-     * @param distanceMax La distance maximale entre 2 points.
+     * @param points The array of points to check.
+     * @param distanceMax Maximal distance between two points.
      *
-     * @return Un nouveau tableau de points espaces d'au plus
-     *         la distance maximale.
+     * @return A new array containing points spaced less than distanceMax
      */
     static TabPoint3D checkPointsMaxDistance(const TabPoint3D& points,
             const double& distanceMax);
@@ -626,19 +634,19 @@ public:
      * \fn OVector3D multNormal(const OVector3D& normal) const;
      * \brief Multiplication with a normal (the translation is removed).
      *
-     * \param normal The normal vector with which this object is multiplicated.
+     * \param normal The normal vector with which this object is multiplied.
      */
     OVector3D multNormal(const OVector3D& normal) const;
 
     /**
      * \fn void show();
-     * \brief Affichage du contenu d'une matrice (debug).
+     * \brief Print a matrix (debug).
      */
     void show();
 
     /**
      * \fn void reset();
-     * \brief Mise a zero des elements de la matrice.
+     * \brief Set the matrix elements to zero.
      *
      *      0   0   0   0
      *      0   0   0   0
@@ -649,7 +657,7 @@ public:
 
     /**
      * \fn void unite();
-     * \brief Initialisation d'une matrice unite.
+     * \brief Initialize the matrix to the identity matrix.
      *
      *      1   0   0   0
      *      0   1   0   0
@@ -660,7 +668,7 @@ public:
 
     /**
      * \fn int setTranslation(double x, double y, double z);
-     * \brief Mise a jour d'une matrice de translation.
+     * \brief Update a translation matrix.
      *
      * Translation T(x, y, z) :
      *
@@ -673,7 +681,7 @@ public:
 
     /**
      * \fn int setScale(double x, double y, double z);
-     * \brief Mise a jour d'une matrice de zoom.
+     * \brief Update a zoom matrix.
      *
      * Zoom Z(x, y, z) :
      *
@@ -686,7 +694,7 @@ public:
 
     /**
      * \fn int  setRotationOx(double a);
-     * \brief Mise a jour d'une matrice de rotation autour de l'axe Ox.
+     * \brief Update a rotation matrix (Ox axis).
      *
      *      1   0   0    0
      *      0   cos -sin 0
@@ -697,7 +705,7 @@ public:
 
     /**
      * \fn int  setRotationOy(double a);
-     * \brief Mise a jour d'une matrice de rotation autour de l'axe Oy.
+     * \brief Update a rotation matrix (Oy axis).
      *
      *      cos  0  sin 0
      *      0    1  0   0
@@ -708,7 +716,7 @@ public:
 
     /**
      * \fn int  setRotationOz(double a);
-     * \brief Mise a jour d'une matrice de rotation autour de l'axe Oz.
+     * \brief Update a rotation matrix (Oz axis).
      *
      *      cos -sin 0  0
      *      sin cos  0  0
@@ -805,38 +813,38 @@ public:
 
     /**
      * \fn int invert();
-     * \brief Inversion d'une matrice.
+     * \brief Matrix inversion.
      *
-     * Remarque :
-     *  Algo realise par Richard Carling, extrait de Graphic Gems I.
+     * Note :
+     *  Algorithm by Richard Carling, from Graphic Gems I.
      *
-     * Principe :
+     * Principle :
      * <pre>
      *       -1
      *      A  = ___1__ adjoint A
      *            det A
      * </pre>
      *
-     * \return Indique la reussite de la conversion (0 ou 1).
+     * \return Indicate if the inversion succeeds or not (0 or 1).
      */
     int invert();
 
     /**
      * \fn OMatrix getInvert(int * ok = 0) const;
-     * \brief Retourne la matrice inverse de cette matrice.
+     * \brief Return the inverted matrix of this matrix.
      *
      * \see invert()
      *
-     * \param ok Indique si l'inversion a pu se faire.
+     * \param ok Flag to indicate success (1) or not (0).
      */
     OMatrix getInvert(int* ok = 0) const;
 
     /**
      * \fn void adjoint();
-     * \brief Calcul de la matrice adjointe d'une matrice.
+     * \brief Calculate the adjunct matrix from this matrix.
      *
      * Remarque :
-     *  Algo realise par Richard Carling, extrait de Graphic Gems I.
+     *  Algorithm by Richard Carling, from Graphic Gems I.
      *
      * Principe :
      * <pre>
@@ -859,7 +867,7 @@ public:
 
     /**
      * \fn OMatrix getAdjoint();
-     * \brief Retourne la matrice adjointe de cette matrice.
+     * \brief Return the adjoint matrix.
      *
      * \see adjoint()
      */
@@ -867,22 +875,22 @@ public:
 
     /**
      * \fn double determinant();
-     * \brief Calcul du determinant d'une matrice.
+     * \brief Compute the matrix determinant.
      *
-     * Remarque :
-     *  Algo realie par Richard Carling, extrait de Graphic Gems I.
+     * Note :
+     *  Algorithm from Richard Carling, extracted from Graphic Gems I.
      */
     double determinant();
 
     /**
      * \fn static double mat2x2Det (double a, double b, double c, double d);
-     * \brief Calcul du determinant d'une matrice 2 x 2.
+     * \brief Compute a 2 x 2 matrix determinant.
      */
     static double mat2x2Det(double a, double b, double c, double d);
 
     /**
      * \fn static double mat3x3Det(double a1, double a2, double a3, double b1, double b2, double b3, double c1, double c2, double c3);
-     * \brief Calcul du determinant d'une matrice 3 x 3.
+     * \brief Compute a 3 x 3 matrix determinant.
      */
     static double mat3x3Det(double a1, double a2, double a3, double b1, double b2, double b3, double c1, double c2, double c3);
 
@@ -890,7 +898,7 @@ public:
      * \fn OCoord3D dot(const OCoord3D& coord) const;
      * \brief Multiplication with a 3D coordinate
      *
-     * \param coord The reference object with which this matrix is multiplicated.
+     * \param coord The reference object with which this matrix is multiplied.
      */
     OCoord3D dot(const OCoord3D& coord) const;
 
@@ -911,65 +919,65 @@ OPoint3D operator*(const OMatrix& mat, const OPoint3D& pt);
 
 /**
  * \class OGeometrie
- * \brief Class utilitaire de geometrie.
+ * \brief Class Geometry utilities.
  */
 class OGeometrie
 {
 public:
     /**
      * \fn static bool intersDemiSegmentAvecSegment(const OPoint3D& ptS, const OPoint3D& ptA, const OPoint3D& ptB);
-     * \brief Retourne true si l'horizontale a partir du point ptS intersecte le segment definit par ptA et ptB.
+     * \brief Return true if the horizontal from the ptS point intersects the segment defined by ptA and ptB.
      *
-     * \param ptS Le Le point du demi segment.
-     * \param ptA Le 1er point pour le sgment.
-     * \param ptB Le 2eme point pour le sgment.
+     * \param ptS The point of the half segment.
+     * \param ptA The first point of the segment.
+     * \param ptB The second point of the segment.
      *
-     * \return true  si l'intersection existe,
-     *         false sinon.
+     * \return true if intersection exists,
+     *         false if not.
      */
     static bool intersDemiSegmentAvecSegment(const OPoint3D& ptS, const OPoint3D& ptA, const OPoint3D& ptB);
 
     /**
      * \fn static int intersDroitesPoints(const OPoint3D& ptA, const OPoint3D& ptB, const OPoint3D& ptC, const OPoint3D& ptD, OPoint3D& ptI);
-     * \brief Calcul de l'intersection entre deux droites definies chacune par 2 points.
+     * \brief Calculate the intersection between two lines each defined by two points.
      *
-     * \param ptA Le 1er point pour la 1ere droite.
-     * \param ptB Le 2eme point pour la 1ere droite.
-     * \param ptC Le 1er point pour la 2eme droite.
-     * \param ptD Le 2eme point pour la 2eme droite.
-     * \param ptSym Le point resultant de l'intersection.
+     * \param ptA A point of the first line.
+     * \param ptB A second point of the first line.
+     * \param ptC A point of the second line.
+     * \param ptD A second point of the second line.
+     * \param ptI The intersection point.
      *
-     * \return INTERS_OUI (1) si l'intersection existe,
-     *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
+     * \return INTERS_OUI (1) if intersection exists,
+     *         INTERS_NULLE (0) if not.
      */
     static int intersDroitesPoints(const OPoint3D& ptA, const OPoint3D& ptB, const OPoint3D& ptC, const OPoint3D& ptD, OPoint3D& ptI);
 
     /**
      * \fn static int intersDroitesPointVecteur(const OPoint3D& ptA, const OVector3D& vecA, const OPoint3D& ptB, const OVector3D& vecB, OPoint3D& ptI);
-     * \brief Calcul de l'intersection entre deux droites definies chacune par un point et un vecteur.
+     * \brief Calculate the intersection between two lines each defined by a point and a vector.
      *
-     * \param ptA Point pour la 1ere droite.
-     * \param vecA Vecteur pour la 1ere droite.
-     * \param ptB Point pour la 2eme droite.
-     * \param vecB Vecteur pour la 2eme droite.
-     * \param ptSym Le point resultant de l'intersection.
+     * \param ptA Point of the first line.
+     * \param vecA Vector for the first line.
+     * \param ptB Point of the second line.
+     * \param vecB Vector for the second line.
+     * \param ptI The intersection point.
      *
-     * \return INTERS_OUI (1) si l'intersection existe,
-     *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
+     * \return INTERS_OUI (1) if intersection exists,
+     *         INTERS_NULLE (0) if not.
      */
     static int intersDroitesPointVecteur(const OPoint3D& ptA, const OVector3D& vecA, const OPoint3D& ptB, const OVector3D& vecB, OPoint3D& ptI);
 
     /**
      * \fn static double symPointDroite(const OPoint3D& ptA, const OPoint3D& ptB, const OPoint3D& ptP, OPoint3D& ptI);
-     * \brief Calul du point symetrique au point passe par rapport a une droite definie par 2 points.
+     * \brief Calculate the symmetrical of a point with respect to a line (defined by two points).
      *
-     * \param ptA Le 1er point pour la 1ere droite.
-     * \param ptB Le 2eme point pour la 1ere droite.
-     * \param ptP Le point dont on veut le symetrique.
-     * \param ptI Le point resultant de la symetrie.
+     * \param ptA A point of the first line.
+     * \param ptB A second point of the first line.
+     * \param ptP The point we want the symmetrical
+     * \param ptI The symmetrical point.
      *
-     * \return Le coefficient k (compris entre 0 et 1 si le segment
-     *         [Point source / Point image] coupe le segment [ptA ptB]).
+     * \return The k coefficient (between 0 and 1 if the segment
+     *         [ptP ptI] intersects the segment [ptA ptB]).
      */
     static double symPointDroite(const OPoint3D& ptA, const OPoint3D& ptB, const OPoint3D& ptP, OPoint3D& ptI);
 
@@ -977,7 +985,7 @@ public:
      * \fn static bool pointInPolygonAngleSum(const OPoint3D& ptP, const OPoint3D* pts, int nbPts);
      * \brief Tests if a point is inside a polygon using angle sum algorithm.
      *
-     * This solution was motivated by solution wich consists to compute the sum
+     * This solution was motivated by solution which consists to compute the sum
      * of the angles made between the test point and each pair of points making
      * up the polygon and correspondence with Reinier van Vliet and Remco Lam.
      * If this sum is 2pi then the point is an interior point, if 0 then the point
@@ -990,28 +998,25 @@ public:
      * both the point is on the plane of the polygon AND on the interior.
      * The angle sum will tend to 0 the further away from the polygon point ptP becomes.
      *
-     * \param ptP Le point a tester.
-     * \param pts Un tableau de points constituant le polygone.
-     * \param nbPts Le taille du tableau de points (doit etre >= 3).
+     * \param ptP The point.
+     * \param pts An array containing the polygon points.
+     * \param nbPts The size of the previous array (size should be >= 3).
      *
-     * \return <code>true</code> si le point se trouve a l'interieur du polygone,
-     *         <code>false</code> sinon.
+     * \return <code>true</code> if the point is inside the polygon,
+     *         <code>false</code> otherwise.
      */
     static bool pointInPolygonAngleSum(const OPoint3D& ptP, const OPoint3D* pts, int nbPts);
 
     /**
-     * \fn static bool pointInPolygonRayCasting(const OPoint3D& ptP, const OPoint3D* pts, int nbPts, const OVector3D& normal,const OBox & box);
+     * \fn static bool pointInPolygonRayCasting(const OPoint3D& ptP, const OPoint3D* pts, int nbPts);
      * \brief Tests if a point is inside a polygon using ray casting algorithm.
      *
-     * \param ptP Le point a tester.
-     * \param pts Un tableau de points constituant le polygone.
-     * \param nbPts Le taille du tableau de points (doit etre >= 3).
-     * \param normal La normale au polygone.
-     * \param ptMin point min de la bouding box du polygon
-     * \param ptMax point max de la bouding box du polygon
+     * \param ptP The point.
+     * \param pts An array containing the polygon points.
+     * \param nbPts The size of the previous array (size should be >= 3).
      *
-     * \return <code>true</code> si le point se trouve a l'interieur du polygone,
-     *         <code>false</code> sinon.
+     * \return <code>true</code> if the point is inside the polygon,
+     *         <code>false</code> otherwise.
      */
     static bool pointInPolygonRayCasting(const OPoint3D& ptP, const OPoint3D* pts, int nbPts);
 
@@ -1046,10 +1051,10 @@ public:
      * \fn  static void boundingBox(OPoint3D* pts, int nbPts, OPoint3D& ptMin, OPoint3D& ptMax);
      * \brief Computes the simple bounding box for a volume using min-max method.
      *
-     * \param pts Un tableau de points constituant le volume.
-     * \param nbPts Le taille du tableau de points.
-     * \param ptMin Le point contenant les valeurs min en X, Y et Z.
-     * \param ptMax Le point contenant les valeurs max en X, Y et Z.
+     * \param pts An array of points defining the volume.
+     * \param nbPts The size of the previous array.
+     * \param ptMin The point with minimal values in X, Y and Z.
+     * \param ptMax The point with maximal values in X, Y and Z.
      */
     static void boundingBox(OPoint3D* pts, int nbPts, OPoint3D& ptMin, OPoint3D& ptMax);
 
@@ -1057,9 +1062,9 @@ public:
      * \fn static void computeNormal(OPoint3D* pts, int nbPts, OVector3D & normal);
      * \brief Computes the normal of the list of points.
      *
-     * \param pts Un tableau de points constituant le volume.
-     * \param nbPts Le taille du tableau de points.
-     * \param resulting normal.
+     * \param pts An array of the points defining the volume.
+     * \param nbPts The size of the previous array.
+     * \param normal The resulting normal.
      */
     static void computeNormal(OPoint3D* pts, int nbPts, OVector3D& normal);
 };
@@ -1067,7 +1072,7 @@ public:
 
 /**
  * \class OSegment3D
- * \brief Classe de definition d'un segment.
+ * \brief Class to define a segment.
  */
 class OSegment3D
 {
@@ -1084,60 +1089,62 @@ public:
 
     /**
      * \fn OSegment3D operator*(const OMatrix& matrix) const;
-     * \brief Multiplication avec une matrice.
+     * \brief Multiplication with a matrix.
      *
-     * \param matrix La matrice a appliquer aux points de ce segment.
+     * \param matrix The matrix to apply to the segment points.
      *
-     * \return Une copie de ce segment transforme.
+     * \return A copy of this transformed segment.
      */
     virtual OSegment3D operator*(const OMatrix& matrix) const;
 
     /**
      * \fn double longueur() const;
-     * \brief Retourne la longueur du segment.
+     * \brief Return the segment length.
      */
     virtual double longueur() const;
 
     /**
      * \fn int symetrieOf(const OPoint3D& pt, OPoint3D& ptSym) const;
-     * \brief Retourne le symetrique du point passe.
+     * \brief Return the symmetrical of a point.
      *
-     * \param pt Le point dont on veut le symetrique.
-     * \param ptSym Le point resultant de la symetrie.
+     * \param pt The point we want the symmetrical.
+     * \param ptSym The symmetrical point.
      *
-     * \return 1 si le calcul a reussi, 0 sinon.
+     * \return 1 if the calculation succeeds, 0 if not.
      */
     virtual int symetrieOf(const OPoint3D& pt, OPoint3D& ptSym) const;
 
     /**
      * \fn int projection(const OPoint3D& pt, OPoint3D& ptProj,double seuilConfondus) const;
-     * \brief Retourne le projete du point passe.
+     * \brief Return the projection of a point.
      *
-     * \param pt Le point dont on veut le projete.
-     * \param ptProj Le point resultant de la projection.
+     * \param pt The point we want the projection.
+     * \param ptProj The projected point.
+     * \param seuilConfondus Minimal distance between the point and the segment for which
+     * they are considered as overlaid
      *
-     * \return 1 si le calcul a reussi, 0 sinon.
+     * \return 1 if the calculation succeeds, 0 if not.
      */
     virtual int projection(const OPoint3D& pt, OPoint3D& ptProj, double seuilConfondus) const;
 
     /**
      * \fn int intersects(const OSegment3D& seg, OPoint3D & pt,double seuilConfondus) const;
-     * \brief Retourne le point d'intersection avec le segment passe.
+     * \brief Return the intersection point with another segment.
      *
-     * \param seg Segment dont on veut l'intersection.
-     * \param ptSym Le point resultant de l'intersection.
-     * \param seuilConfondus distance mini entre le point et le segment
-     * en dessous de laquelle on considere qu'ils sont confondus
+     * \param seg Another segment.
+     * \param pt The intersection point.
+     * \param seuilConfondus Minimal distance between a point and a segment for which
+     * they are considered as overlaid
      *
-     * \return INTERS_OUI (1) si l'intersection existe,
-     *         INTERS_CONFONDU (2) si les elements sont confondus,
-     *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
+     * \return INTERS_OUI (1) if the intersection exists,
+     *         INTERS_CONFONDU (2) if the elements are overlaid,
+     *         INTERS_NULLE (0) if there is no intersection.
      */
     virtual int intersects(const OSegment3D& seg, OPoint3D& pt, double seuilConfondus) const;
 
     /**
      * \fn OPoint3D centreOf() const;
-     * \brief Retourne la position du milieu du segment
+     * \brief Return the position of the segment middle.
      *
      * \return OPoint3D
      */
@@ -1145,45 +1152,45 @@ public:
 
     /**
      * \fn OPoint3D centerOfCurvedPath(const double &R) const;
-     * \brief Retourne la position du centre de l'arc de cercle de rayon R reliant les deux extremites du segment
+     * \brief Return the position of the circle center of radius R passing by the two points of the segment.
      *
-     * \return OPoint3D Position du centre du cercle
+     * \return OPoint3D Position of the circle center.
      */
     virtual OPoint3D centerOfCurvedPath(const double& R) const;
 
     /**
      * \fn double lengthOfCurvedPath(const double& R);
-     * \brief Calcule la longueur du trajet de rayon R passant par les extremites du segment
-     * \param R rayon du cercle de rayon R
-     * \return un double
+     * \brief Calculate the path length of radius R passing by the two points of the segment.
+     * \param R radius R of the circle
+     * \return length of curved path
      */
     virtual double lengthOfCurvedPath(const double& R);
 
     /**
      * \fn OVector3D toVector3D() const
-     * \brief Construit un OVector3D a partir d'un segment utile pour la directivite des sources
+     * \brief Build a OVector3D from a segment used for the direction of the sources
      *
-     * \return une reference sur un vecteur3D
+     * \return A reference to a OVector3D
      */
     virtual OVector3D toVector3D() const { return OVector3D(_ptA, _ptB); }
 
     /**
      * \fn OSegment3D swap() const;
-     * \brief Retourne le segment
+     * \brief Return the segment
      */
     virtual OSegment3D swap() const;
 
 public:
-    ///Extremite A.
+    /// Point A of the segment
     OPoint3D _ptA;
-    ///Extremite B.
+    /// Point B of the segment
     OPoint3D _ptB;
 };
 
 
 /**
  * \class ORepere3D
- * \brief 3D Repere with a point and 3 vectors.
+ * \brief 3D frame with a point and 3 vectors.
  */
 class ORepere3D
 {
@@ -1201,7 +1208,7 @@ public:
     ORepere3D(const OPoint3D& origin, const OVector3D& vecI, const OVector3D& vecJ, const OVector3D& vecK);
     /**
      * \brief Constructor with a point and 1 vectors.
-     *  build an arbitrary 3D repere from a point and a single vector
+     *  build an arbitrary 3D frame from a point and a single vector
      */
     ORepere3D(const OPoint3D& origin, const OVector3D& vec);
     /**
@@ -1232,13 +1239,13 @@ public:
      * \fn void set(const OMatrix& matrix);
      * \brief Sets from a matrix.
      *
-     * \param matrix A matrix to set this repere with.
+     * \param matrix A matrix to set this frame with.
      */
     void set(const OMatrix& matrix);
 
     /**
      * \fn void normalize();
-     * \brief Normalize each vectors composing this repere.
+     * \brief Normalize each vectors composing this frame.
      */
     void normalize();
 
@@ -1318,9 +1325,9 @@ public:
      * \fn void Enlarge(float x, float y, float z)
      * \brief Enlarge the box with the point (x,y, z) if the point is outside the box.
      *
-     * \param x coordonnee x du point a tester
-     * \param y coordonnee y du point a tester
-     * \param z coordonnee z du point a tester
+     * \param x X coordinate of the point to test
+     * \param y Y coordinate of the point to test
+     * \param z Z coordinate of the point to test
      */
     virtual void Enlarge(float x, float y, float z);
 
@@ -1336,19 +1343,19 @@ public:
      * \fn void Translate(const OPoint3D& vectorTranslate)
      * \brief Translate this box
      *
-     * \param vector translation.
+     * \param vectorTranslate Translation.
      */
     virtual void Translate(const OPoint3D& vectorTranslate);
 
 public:
-    OPoint3D _min;
-    OPoint3D _max;
+    OPoint3D _min; //!< Minimal coordinates of the OBox
+    OPoint3D _max; //!< Maximal coordinates of the OBox
 };
 
 
 /**
  * \class OBox2
- * \brief classe de definition d'une boite (pas forcement parallele aux axes a la difference de la OBox)
+ * \brief Class to define a box (not necessary parallel to the axis as OBox)
  */
 class OBox2 : public OBox
 {
@@ -1357,24 +1364,24 @@ public:
     OBox2();
     OBox2(const OBox2& box);
     /**
-     * \fn OBox2(const OBox & box, ORepere3D & repere)
+     * \fn OBox2(const OBox& box)
      * \brief Constructor from a box and its local coordinate system
      * \param box The box define in the local coordinate system
      */
     OBox2(const OBox& box);
     /**
-     * \fn OBox2(const double& length, const double& width, const double& height);
+     * \fn OBox2(const double& length, const double& width, const double& height)
      * \brief build a box centered on [0, 0, 0] from its length, width and height
      */
     OBox2(const double& length, const double& width, const double& height);
 
 private : // Set private for security seems to an "af hoc" adaptation and is used only by an internal member function
     /**
-     * \fn OBox2(const OBox & box, ORepere3D & repere)
+     * \fn OBox2(const OBox2& box, const ORepere3D& repere, const OPoint3D& centre)
      * \brief Constructor from a box and its local coordinate system
      * \param box The box define in the local coordinate system
      * \param repere The global coordinate system of the box
-     * \param centre Is the box centre, this point is the middle of [S'R]
+     * \param centre Is the box center, this point is the middle of [S'R]
      */
     OBox2(const OBox2& box, const ORepere3D& repere, const OPoint3D& centre);
 
@@ -1408,20 +1415,19 @@ public :
      */
     virtual bool isInside2D(const OPoint3D& pt) const;
     /**
-     * \fn void Translate(const OPoint3D& vectorTranslate)
      * \brief Translate this box
-     * \param vector translation.
+     * \param vect translation.
      */
     virtual void Translate(const OVector3D& vect);
     /**
-     * fn OBox2 boxRotation(const OVector3D& v1, const OVector3D& v2)
      * brief return a box rotated by two vectors
      */
     OBox2 boxRotation(const OPoint3D& O, const OPoint3D& P2);
     /**
-     *\fn void BoxRotationOzOy(const OBox2& box);
-     *\brief Computes the box rotation around Oz and Oy (usual coordinates system).
-     *\param box is an OBox2.
+     * \fn void BoxRotationOzOy(double alpha, double theta);
+     * \brief Computes the box rotation around Oz and Oy (usual coordinates system).
+     * \param alpha Angle around Oz
+     * \param theta Angle around Oy
      */
     void BoxRotationOzOy(double alpha, double theta);
     /**
@@ -1508,38 +1514,38 @@ public:
 
     /**
      * \fn int intersects(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D& ptIntersec, double& t) const;
-     * \brief Calcul de l'intersection avec un segment defini par deux points.
+     * \brief Calculate the intersection with a segment defined by two points.
      *
-     * Remarque :
-     *  Dans le cas ou le segment est compris dans la ligne, le resultat
-     *  est INTERS_CONFONDU, et les coordonnees de l'intersection ne
-     *  sont pas mises a jour.
+     * Note :
+     *  In the case where the segment is overlaid on the line, the result
+     *  is INTERS_CONFONDU, and the coordinates of the intersection point
+     *  are not updated.
      *
-     * \param pt1 Le 1er point du segment.
-     * \param pt2 Le 2eme point du segment.
-     * \param ptIntersec Le point correspondant a l'intersection.
-     * \param t le coefficient barycentrique du pt d'intersection sur (pt1, pt2).
+     * \param pt1 The segment first point.
+     * \param pt2 The segment second point.
+     * \param ptIntersec The intersection point.
+     * \param t The barycentre coefficient of the intersection point on segment (pt1, pt2).
      *
-     * \return INTERS_OUI (1) si l'intersection existe,
-     *         INTERS_CONFONDU (2) si les elements sont confondus,
-     *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
+     * \return INTERS_OUI (1) if the intersection exists,
+     *         INTERS_CONFONDU (2) if the two elements are overlaid,
+     *         INTERS_NULLE (0) if there is no intersection.
      */
     int intersects(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D& ptIntersec, double& t) const;
     /**
      * \fn int intersects(const OSegment3D& seg, OPoint3D& ptIntersec) const;
-     * \brief Calcul de l'intersection avec un segment
+     * \brief Calculate the intersection with a segment
      *
-     * Remarque :
-     *  Dans le cas ou le segment est compris dans la ligne, le resultat
-     *  est INTERS_CONFONDU, et les coordonnees de l'intersection ne
-     *  sont pas mises a jour.
+     * Note :
+     *  In the case where the segment is overlaid on the line, the result
+     *  is INTERS_CONFONDU, and the coordinates of the intersection point
+     *  are not updated.
      *
-     * \param seg Le segment.
-     * \param ptIntersec Le point correspondant a l'intersection.
+     * \param seg The segment.
+     * \param ptIntersec The intersection point.
      *
-     * \return INTERS_OUI (1) si l'intersection existe,
-     *         INTERS_CONFONDU (2) si les elements sont confondus,
-     *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
+     * \return INTERS_OUI (1) if the intersection exists,
+     *         INTERS_CONFONDU (2) if the elements are overlaid,
+     *         INTERS_NULLE (0) if there is no intersection.
      */
     int intersects(const OSegment3D& seg, OPoint3D& ptIntersec) const;
 

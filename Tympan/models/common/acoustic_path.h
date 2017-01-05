@@ -51,18 +51,18 @@ public:
 
     acoustic_event& operator=(const acoustic_event& other);
 
-    OPoint3D pos;           		/*!< Position de l'evenement */
-    double distNextEvent;   		/*!< Distance between this event and the next one in TYRay's list of events */
-    double distEndEvent;    		/*!< Distance between this event and the next event needed for calculating (for ex. reflexion after a diffraction) */
-    double distPrevNext;    		/*!< Distance between event-1 and event +1 */
-    double angle;           		/*!< Angle d'incidence du rayon  (pour l'angle de tir - plan x,z -)*/
-    double angletheta;      		/*!< Angle de tir sur un plan horizontal (x,y) */
-    ACOUSTIC_EVENT_TYPES type;      /*!< Type d'evenement */
-    int idFace1;            		/*!< identifiant de la face sur laquelle a lieu l'evenement (reflexion & diffraction)*/
-    int idFace2;            		/*!< identifiant de la face sur laquelle a lieu l'evenement (diffraction seulement)*/
-    acoustic_event* previous;   	/*!< Pointer to the previous event in TYRay's list of events*/
-    acoustic_event* next;       	/*!< Pointer to the next event in TYRay's list of events*/
-    acoustic_event* endEvent;   	/*!< Pointer to the next event in TYRay's list of events needed for calculating (for ex. reflexion after a diffraction) */
+    OPoint3D pos;           		//!< Event position
+    double distNextEvent;   		//!< Distance between this event and the next one in TYRay's list of events
+    double distEndEvent;    		//!< Distance between this event and the next event needed for calculating (for example, reflection after a diffraction)
+    double distPrevNext;    		//!< Distance between event-1 and event +1
+    double angle;           		//!< Ray incident angle (for a shooting angle - plan x,z -)
+    double angletheta;      		//!< Shooting angle on a horizontal plane (x,y)
+    ACOUSTIC_EVENT_TYPES type;      //!< Event type */
+    int idFace1;            		//!< Face id on which the event happens (reflection & diffraction)
+    int idFace2;            		//!< Face id on which the event happens (diffraction only)
+    acoustic_event* previous;   	//!< Pointer to the previous event in TYRay's list of events
+    acoustic_event* next;       	//!< Pointer to the next event in TYRay's list of events
+    acoustic_event* endEvent;   	//!< Pointer to the next event in TYRay's list of events needed for calculating (for example reflection after a diffraction)
 };
 
 typedef std::vector<acoustic_event*> tab_acoustic_events;
@@ -77,15 +77,15 @@ public:
 	virtual ~acoustic_path();
 
 	/*!
-    * \fn acoustic_path(unsigned int source_idx, unsigned int receptor_idx, std::vector<TYRayEvent*> &_events);
-    * \brief Construction d'un chemin acoustique avec un identifiant de source, un identifiant de récepteur et
-    *        une liste de positions d'événements acoustiques (réflexion,  diffraction, etc...)
+    * \fn acoustic_path(unsigned int source_idx, unsigned int receptor_idx, tab_acoustic_events &_events);
+    * \brief Build the acoustic path with a source id, a receptor id and
+    *        a list of acoustic events positions (reflection,  diffraction, etc...)
     */
     acoustic_path(unsigned int source_idx, unsigned int receptor_idx, tab_acoustic_events &_events);
 
     /*!
     * \fn acoustic_path( const acoustic_path &ray)
-    * \brief Constructeur par copie d'un chemin acoustique
+    * \brief Copy constructor of a acoustic path
     */
     acoustic_path(const acoustic_path& ray);
 
@@ -116,80 +116,78 @@ public:
 
     /*!
     * \fn void setSource(unsigned int source_idx_, OPoint3D& globalPosition);
-    * \brief Place la source du rayon.
+    * \brief Set the ray source.
     */
     virtual void setSource(unsigned int source_idx_, OPoint3D& globalPosition);
 
     /*!
     * \fn void setSource(unsigned int source_idx_)
-    * \brief Place la source du rayon.
+    * \brief Set the ray source.
     */
     virtual void setSource(unsigned int source_idx_) { source_idx = source_idx_; }
 
 
     /*!
-    * \fn TYSourcePonctuelle* getSource()
-    * \brief Recuperation de la source du rayon
+    * \fn virtual unsigned int getSource_idx()
+    * \brief Get the source id
     */
     virtual unsigned int getSource_idx() {return source_idx;}
 
     /*!
     * \fn void setRecepteur(unsigned  int receptor_idx_, OPoint3D& globalPosition)
-    * \brief Place le recepteur du rayon. Le dernier point de la polyligne est mis a jour
+    * \brief Set the ray receptor. The last polyline point is updated
     */
     virtual void setRecepteur(unsigned  int receptor_idx_, OPoint3D& globalPosition);
 
     /*!
     * \fn void setRecepteur(unsigned  int receptor_idx_)
-    * \brief Place le recepteur du rayon.
+    * \brief Set the ray receptor.
     */
     virtual void setRecepteur(unsigned  int receptor_idx_) { receptor_idx = receptor_idx_; }
 
 
     /*!
     * \fn unsigned int getRecepteur_idx()
-    * \brief Recuperation du recepteur du rayon
+    * \brief Get the receptor id.
     */
     virtual unsigned int getRecepteur_idx() {return receptor_idx;}
 
     /*!
     * \fn void setIdentifiant(unsigned int _id)
-    * \brief Set l'identifiant du rayon.
+    * \brief Set the ray id.
     */
     virtual void setIdentifiant(unsigned int id) {_identifiant = id;}
 
     /*!
     * \fn int getIdentifiant()
-    * \brief Renvoie l'indentifiant du rayon.
+    * \brief Get the ray id.
     */
     virtual unsigned int getIdentifiant() const {return _identifiant;}
 
     /*!
     * \fn void addEvent(Event &_event)
-    * \brief Ajoute un evenement a la liste des evenements du rayon
+    * \brief Add an event to the events list of the ray.
     */
     virtual void addEvent(acoustic_event* TYEvent) {_events.push_back(TYEvent);}
 
     /*!
     * \fn std::vector<Event>& getEvents()
-    * \brief Renvoie la liste des i¿½vi¿½nements rencontri¿½s par le rayon
+    * \brief Get the events list of the ray.
     */
     virtual tab_acoustic_events& getEvents() {return _events;}
     virtual const tab_acoustic_events& getEvents() const { return _events; }
 
     /*!
-    * \fn void setTabPoint(TYTabPoint &_tabPoint)
-    * \brief Place le tableau de point correspondant au parcours du rayon.
-    * \warning Le premier acoustic_event doit toujours correspondre a la source
-	* \warning et sa position globale et le dernier point doit toujours correspondre
-	* \warning a un recepteur et sa position globale du
+    * \brief Set the events list of the ray.
+    * \warning The first acoustic event should match the source and
+	* \warning and the last one should match the receptor.
     */
     virtual void setEvents(tab_acoustic_events& tabEvents) { _events = tabEvents; }
 
     /*!
      * \fn vector<unsigned int> getIndexOfEvents(const int& eventType)
      * \brief return a tab of indexes of events of the same type in a ray
-     *        you can merge two types of events (ex. TYREFLEXION | TYRECEPTEUR)
+     *        you can merge two types of events (example TYREFLEXION | TYRECEPTEUR)
               vector returned count all events of the two types
      */
     virtual std::vector<int> getIndexOfEvents(const int& eventType) const;
@@ -228,37 +226,37 @@ public:
 
     /*!
     * \fn int getnbEvents()
-    * \brief Renvoie le nombre d'evenements compris dans le rayon
+    * \brief Return the number of events of the ray.
     */
     virtual int getnbEvents() {return _events.size();}
 
     /*!
     * \fn void setPosSourceGlobal(const OPoint3D& pos)
-    * \brief Set de la position de la source dans le repi¿½re global
+    * \brief Set the source position in the global space
     */
     virtual void setPosSourceGlobal(const OPoint3D& pos) { _posSourceGlobal = pos; }
 
     /*!
     * \fn OPoint3D& getPosSourceGlobal()
-    * \brief Get de la position de la source dans le repere global
+    * \brief Get the source position in the global space
     */
     virtual OPoint3D& getPosSourceGlobal() { return _posSourceGlobal; }
 
     /*!
     * \fn void setPosReceptGlobal(const OPoint3D& pos)
-    * \brief Set de la position du recepteur dans le repere global
+    * \brief Set the receptor position in the global space
     */
     virtual void setPosReceptGlobal(const OPoint3D& pos) { _posReceptGlobal = pos; }
 
     /*!
     * \fn OPoint3D& getPosReceptGlobal()
-    * \brief Get de la position du recepteur dans le repere global
+    * \brief Get the receptor position in the global space
     */
     virtual OPoint3D& getPosReceptGlobal() { return _posReceptGlobal; }
 
     /*!
-    * \fn void overSampleTYRay(TYRay* tyRay);
-    * \brief Rajoute des evenements aux rayons de type TYRay
+    * \fn void overSample(TYRay* tyRay);
+    * \brief Add events to ray
     */
     virtual void overSample(IGeometryModifier* transformer, const double& dMin);
 
@@ -273,7 +271,7 @@ public:
     /*!
      * \fn void endLenghtCompute(TYRay *tyRay)
      * \brief compute the length between an event and the next pertinent event
-     *        (i.e. betwween a diffraction and the next reflection or receptor)
+     *        (i.e. between a diffraction and the next reflection or receptor)
      */
     virtual void endLenghtCompute(IGeometryModifier* transformer);
 
@@ -313,7 +311,7 @@ public:
     * \fn void angleCorrection()
     * \brief Computes angle correction on path
     *        ev1 -> previous event
-    *        ev2 -> event to wich compute anngle
+    *        ev2 -> event to which compute angle
     *        ev3 -> next event
     */
     virtual double angleCorrection(const acoustic_event* ev1, acoustic_event* ev2, const acoustic_event* ev3, IGeometryModifier* transformer);
@@ -323,7 +321,7 @@ public:
     /*!
      * \fn void build_links_between_events();
      * \brief TYRayEvent has to know is direct neighbour (before and after him)
-     * \brief It olso has to know his the next REFLEXION event or (if not exist) the RECEPTOR
+     * \brief It also has to know his the next REFLEXION event or (if not exist) the RECEPTOR
      */
     void build_links_between_events();
 
@@ -334,14 +332,14 @@ public:
     void compute_shot_angle();
 
 protected:
-	static double sampler_step;		/*!< max size of step between events after spatial sampling*/
-	unsigned int _identifiant;		/*!< Identifiant du rayon */
-    unsigned int source_idx;
-    unsigned int receptor_idx;
-    OPoint3D _posSourceGlobal;
-    OPoint3D _posReceptGlobal;
+	static double sampler_step;		//!< max size of step between events after spatial sampling
+	unsigned int _identifiant;		//!< Ray id
+    unsigned int source_idx;        //!< Source id
+    unsigned int receptor_idx;      //!< Receptor id
+    OPoint3D _posSourceGlobal;      //!< Source position in the global space
+    OPoint3D _posReceptGlobal;      //!< Receptor position in the global space
 
-    tab_acoustic_events _events;			/*!< Vecteurs d'evenements contenant la liste des evenements du rayon associe et leurs positions.*/
+    tab_acoustic_events _events;	//!< Events vector containing the events list (and their positions) of the associated ray.
 };
 
 typedef std::vector<acoustic_path*> tab_acoustic_path;

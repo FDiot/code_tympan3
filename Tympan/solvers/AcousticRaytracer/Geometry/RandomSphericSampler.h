@@ -30,10 +30,14 @@
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Sampler.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/UnitConverter.h"
 
+/**
+ * \brief A Sampler class for random spherical sampling
+ */
 class RandomSphericSampler: public Sampler
 {
 
 public:
+	/// Constructors
     RandomSphericSampler(const unsigned int& nbRays = 0,
                          const decimal& Theta = (decimal) M_PIDIV2,
                          const decimal& Phi = (decimal) M_2PI) : Sampler(nbRays, Theta, Phi),
@@ -54,7 +58,7 @@ public:
         Sampler* sampler = new RandomSphericSampler(this);
         return sampler;
     }
-
+    /// Destructor
     virtual ~RandomSphericSampler() { }
 
     virtual vec3 getSample()

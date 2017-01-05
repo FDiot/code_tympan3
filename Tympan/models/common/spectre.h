@@ -22,42 +22,45 @@
 
 #include "Tympan/core/macros.h"
 
-///Type de spectre.
+///Spectrum type.
 enum TYSpectreType { SPECTRE_TYPE_ATT, SPECTRE_TYPE_ABSO, SPECTRE_TYPE_LW, SPECTRE_TYPE_LP, SPECTRE_TYPE_AUTRE };
-///Representation du spectre.
+///Spectrum representation.
 enum TYSpectreForm { SPECTRE_FORM_TIERS, SPECTRE_FORM_OCT, SPECTRE_FORM_CST_DF, SPECTRE_FORM_UNSHAPED };
-///Etat du spectre (dB/grandeur physique).
+///Spectrum state (dB/grandeur physique).
 enum TYSpectreEtat { SPECTRE_ETAT_DB, SPECTRE_ETAT_LIN };
 
 
-//Nombre de frequences.
+///Number of frequencies
 static const unsigned int TY_SPECTRE_DEFAULT_NB_ELMT = 31;
 
-///Valeur par defaut pour les spectres.
+///Default value for the spectrum.
 static const double TY_SPECTRE_DEFAULT_VALUE = -100.0;
 
-///Collection des frequences
+///Frequencies collection
 typedef std::vector<double> OTabFreq;
 
 
 /**
- * Permet de stocker des valeurs de puissance accoustique pour differentes frequences.
+ * \brief Store acoustic power values for different frequencies.
  *
  * @author Projet_Tympan
  *
  */
 class OSpectre
 {
-    // Methodes
+    // Methods
 public:
+	/// Default constructor, the spectrum module is defined by the _defaultValue
     OSpectre();
+    /// Constructor, the spectrum module is defined by the defaultValue given in parameter
     OSpectre(double defaultValue);
+    /// Copy constructor
     OSpectre(const OSpectre& other);
     /**
-     * Constructeur a partir d'un tableau de valeurs (besoin pour harmonoise)
-     * valeur ==> Tableau des valeurs par frequence
-     * nbVal  ==> Nombre de valeurs dans le tableau
-     * decalage ==> decalage en frequence par rapport a la bande standard TYMPAN (16-16000)
+     * \brief Constructor from an array (needed for the Harmonoise model)
+     * \param valeurs Array of values per frequency
+     * \param nbVal  Array size
+     * \param decalage Frequency offset relative to the standard band TYMPAN (16-16000)
      */
     OSpectre(const double* valeurs, unsigned nbVal, unsigned decalage);
 
@@ -66,379 +69,376 @@ public:
     virtual OSpectre& operator= (const OSpectre& other);
     virtual bool operator== (const OSpectre& other) const;
     virtual bool operator != (const OSpectre& other) const;
-    /// multiplication par un Spectre
+    /// Multiplication by a Spectre spectrum
     OSpectre operator * (const OSpectre& spectre) const;
-    /// multiplication par un coeff de type double
+    /// Multiplication by a double coefficient
     OSpectre operator * (const double& coefficient) const;
-    /// ajouter une valeur constante a l'ensemble du spectre
+    /// Add a constant value to all the spectrum
     virtual OSpectre operator + (const double& valeur) const;
-    /// Sommation arithmetique de deux spectres en 1/3 d'octave.
+    /// Arithmetic sum of two spectrums in one-third Octave.
     virtual OSpectre operator + (const OSpectre& spectre) const;
-    /// Soustraction arithmetique de deux spectres en 1/3 d'octave.
+    /// Arithmetic subtraction of two spectrums in one-third Octave.
     virtual OSpectre operator - (const OSpectre& spectre) const;
 
     /**
-     * Verification de la validite d'un spectre.
-     * L'invalidite est causee par : donnees corrompues, calcul impossible.
+     * \brief Check the spectrum validity.
+     * Invalidity is caused by: corrupted data, impossible calculation.
      *
-     * @return Etat du spectre (valide = true / invalide = false).
+     * @return Spectrum state (valid = true / non valid = false).
      */
     virtual bool isValid() const { return _valid; }
 
     /**
-     * Force l'etat de validite du spectre
+     * Force the validity state of the spectrum.
      */
     virtual void setValid(const bool& valid = true) { _valid = valid; }
 
-    /// Set/Get du type de spectre.
+    /// Get/Set the spectrum type.
     virtual TYSpectreType getType() const { return _type; }
-
-    /// Set/Get du type de spectre.
     virtual void setType(TYSpectreType type) { _type = type; }
 
-    /// Get de l'etat du Spectre.
+    /// Get the spectrum state.
     virtual TYSpectreEtat getEtat() const {return _etat; } ;
     virtual const TYSpectreEtat getEtat() {return _etat;};
 
-    /// Force l'etat du spectre (a utiliser avec prudence ...)
+    /// Force the spectrum state (to use carefully ...)
     void setEtat(TYSpectreEtat etat) { _etat = etat; }
 
-    /// XXX These are the modulus to put into the solver model
-    /// Set/Get du tableau des valeurs reelles
+    /// XXX These are the modulus to put into the solver model.
+    /// Get the array of real values
     virtual double* getTabValReel() { return _module; }
     virtual const double* getTabValReel() const {return _module; }
 
-    /// Nombre de valeurs dans le spectre
+    /// Number of values in the spectrum
     virtual unsigned int getNbValues() const ;
 
     /**
-     * Initialisation d'un spectre a une valeur.
-     * @param valeur Valeur par defaut.
+     * Initialize a spectrum to a default value.
+     * @param valeur Value by default.
      */
     virtual void setDefaultValue(const double& valeur = TY_SPECTRE_DEFAULT_VALUE);
 
     /**
-     * Attribution d'une valeur complexe au tableau Frequence/Complexe.
+     * Set a new value to the frequencies array.
      *
-     * @param freq Frequence pour laquelle on attribut une nouvelle valeur.
-     * @param reel partie reelle.
-     * @param imag partie imaginaire
+     * @param freq Frequency to which a new value is given.
+     * @param reel Value.
      */
     virtual void setValue(const float& freq, const double& reel = 0.0);
 
     /**
-     * Recuperation d'une valeur reelle au tableau Frequence/Complexe
-     * a partir d'une frequence.
+     * Get the value for a frequency.
      *
-     * @param freq Frequence pour laquelle on recherche la valeur.
-     * @param pValid Positionner a false si la frequence passee n'est pas valide pour ce spectre.
+     * @param freq Frequency.
      *
-     * @return La valeur reelle du complexe correspondant.
+     * @return The real number.
      */
-    virtual  double getValueReal(double freq);
+    virtual double getValueReal(double freq);
 
     /**
-    * Recuperation d'un intervalle de valeurs reelles au tableau frequence/complexe
+    * Get an interval of real values from the frequencies/complex array
     *
-    * @param[out] valeurs Tableau des valeurs. Le tableau doit avoir ete alloue avant l'appel
-    * @param[in] nbVal Nombre de valeurs a recuperer dans le spectre
-    * @param[in] decalage Indice de la premiere valeur a recuperer
+    * @param[out] valeurs Values array. It should be allocated before.
+    * @param[in] nbVal Number of values to retrieve from the spectrum
+    * @param[in] decalage Index of the first value to retrieve
     */
     virtual void getRangeValueReal(double* valeurs, const short& nbVal, const short& decalage);
 
-    /// Calcule la valeur globale dB[Lin] d'un spectre en tiers d'octave.
+    /// Compute the global value dB[Lin] of a one-third Octave spectrum.
     virtual double valGlobDBLin() const;
 
-    /// Calcule la valeur globale dB[A] d'un spectre en tiers d'octave.
+    /// Compute the global value dB[A] of a one-third Octave spectrum.
     virtual double valGlobDBA() const;
 
-    /// Conversion en dB.
+    /// Converts to dB.
     virtual OSpectre toDB() const;
 
-    /// Conversion en grandeur physique.
-    virtual  OSpectre toGPhy() const;
+    /// Converts to physical quantity.
+    virtual OSpectre toGPhy() const;
 
-    /// Sommation arithmetique de deux spectres en 1/3 d'octave.
+    /// Arithmetic sum of two spectrums in one-third Octave.
     virtual OSpectre sum(const OSpectre& spectre) const;
 
-    /// Ajoute une valeur constante a l'ensemble du spectre
+    /// Add a constant value to this spectrum
     virtual OSpectre sum(const double& valeur) const;
 
-    /// Sommation energetique de deux spectres en 1/3 d'octave.
+    /// Energetic sum of two spectrums in one-third Octave.
     virtual OSpectre sumdB(const OSpectre& spectre) const;
 
-    /// Soustraction arithmetique de deux spectres en 1/3 d'octave.
+    /// Arithmetic subtract of two spectrums in one-third Octave.
     virtual OSpectre subst(const OSpectre& spectre) const;
 
-    /// soustrait une valeur constante a l'ensemble du spectre
+    /// Subtract a constant value to this spectrum
     virtual OSpectre subst(const double& valeur) const;
 
-    /// multiplication de deux spectres terme a terme.
+    /// Multiplication of two spectrums.
     virtual OSpectre mult(const OSpectre& spectre) const;
 
-    /// Multiplication d'un spectre par un scalaire.
+    /// Multiply this spectrum par a double scalar.
     virtual OSpectre mult(const double& coefficient) const;
 
-    /// division de deux spectres terme a terme.
+    /// Division of two spectrums.
     virtual OSpectre div(const OSpectre& spectre) const;
 
-    /// Division d'un spectre par une constante.
+    /// Division of this spectrum by a double scalar.
     virtual OSpectre div(const double& coefficient) const;
 
-    /// Division d'une constante par un spectre.
+    /// Division of a double constant by this spectrum.
     virtual OSpectre invMult(const double& coefficient = 1.0) const;
 
+    /// Division of one by this spectrum.
     virtual OSpectre inv() const;
 
-    /// Eleve un spectre a une puissance.
+    /// Return a spectrum as this spectrum raised to a double power.
     virtual OSpectre power(const double& puissance) const;
 
-    /// Calcule le log base n d'un spectre (n=10 par defaut).
+    /// Compute the log base n of this spectrum (n=10 by default).
     virtual OSpectre log(const double& base = 10.0) const;
 
-    /// calcule la racine carree d'un spectre.
+    /// Compute the root square of this spectrum.
     virtual OSpectre racine() const;
 
-    /// Calcule e^(coef * spectre)
+    /// Compute e^(coef * spectre) of this spectrum.
     virtual OSpectre exp(const double coef = 1.0);
 
-    /// calcul le sin de la partie reelle du spectre
+    /// Compute the sin of this spectrum
     virtual OSpectre sin() const;
 
-    /// calcul le cos de la partie reelle du spectre
+    /// Compute the cos of this spectrum
     virtual OSpectre cos() const;
 
-    /// Retourne le spectre en valeur absolues
+    /// Return the absolute value of this spectrum
     virtual OSpectre abs() const;
 
     /**
      * \fn OSpectre sqrt() const
-     * \brief retourne la racine carree du spectre
+     * \brief Return the root square of a spectrum
      */
     virtual OSpectre sqrt() const;
 
     /**
-     * \fn OSpectre max()
-     * \brief retourne la valeur max du spectre
+     * \fn double valMax();
+     * \brief Return the maximum value of a spectrum
      */
     virtual double valMax();
 
-    /// Borne les valeurs du spectre en min et en max
+    /// Limit the spectrum values (min and max)
     virtual OSpectre seuillage(const double& min = -200.0, const double max = 200.0);
 
-    /// Cumule les valeurs du spectre
+    /// Sum the values of the spectrum
     virtual double sigma();
     virtual const double sigma() const;
 
     /// Existence d'une tonalite marquee
     virtual bool isTonalite()const;
 
-    /// Conversion en tiers d'octave.
+    /// Converts to one-third Octave.
     virtual OSpectre toTOct() const;
 
-    /// Conversion en octave.
+    /// Converts to Octave.
     virtual OSpectre toOct() const;
 
-    // === FONCTIONS MEMBRES STATIQUES
+    // === STATIC FUNCTIONS
 
-    /// Cree un spectre en lin
+    /// Create a physical quantity spectrum
     static OSpectre getEmptyLinSpectre(const double& valInit = 1.0E-20);
 
-    /// Construit un spectre en octave.
+    /// Make a spectrum in Octave.
     static OSpectre makeOctSpect();
 
-    /// retourne l'indice associe a une frequence
+    /// Return the index associated to a frequency.
     static int getIndice(const float& freq) { return _mapFreqIndice[freq]; }
 
-    /// Definition des frequences min et max de travail
+    /// Define minimal frequency
     static void setFMin(const float& fMin) { _fMin = fMin; }
+    /// Define maximal frequency
     static void setFMax(const float& fMax) { _fMax = fMax; }
 
     /**
-     * Retourne le tableau des frequences exactes.
-     * L'appelant est responsable de liberer la memoire allouee pour
-     * creer ce tableau.
+     * \fn OTabFreq getTabFreqExact()
+     * Return the array of exact frequencies.
+     * The calling method should free the allocated memory for this array.
      *
-     * @return Le tableau des frequences exactes.
+     * \return The array of exact frequencies.
      */
     static OTabFreq getTabFreqExact(); // XXX These are the frequencies to use in solver
 
     /**
      * \fn OSpectre getOSpectreFreqExact()
-     * \brief Retourne le tableau des frequences exactes.
-     * \return Le tableau des frequences exactes.
+     * \brief Return the spectrum of the exact frequencies.
+     * \return An OSpectre
      */
     static OSpectre getOSpectreFreqExact();
 
     /// Construction du tableau frequence/indice
     static std::map<double, int>  setMapFreqIndice();
 
-    /// Construit un spectre de ponderation A.
+    /// Build a weighted spectrum A.
     static OSpectre pondA();
 
-    /// Construit un spectre de ponderation B.
+    /// Build a weighted spectrum B.
     static OSpectre pondB();
 
-    /// Construit un spectre de ponderation C
+    /// Build a weighted spectrum C
     static OSpectre pondC();
+    /// Print the spectrum
     virtual void printme() const;
     /**
-     * Retourne un spectre representant la longueur d'onde associee a chaque frequence
-     * @param double Vitesse de propagation de l'onde
-     * @return un TYSpectre
+     * Return a spectrum representating the wavelength associated to each frequency
+     * @param c Wave propagating speed
+     * @return An OSpectre
      */
     static OSpectre getLambda(const double& c);
 
-    // Membres
+    // Members
 public:
 
 protected:
 
-    // ==== MEMBRES STATIQUES
+    // ==== Static members
     // CAUTION Check how those static members behave in shared libraries
 
-    ///Tableau des frequences en Hz centrales normalisees en tiers d'octave.
+    /// Array of center frequencies (Hz) normalized in one-third Octave
     static const double _freqNorm[];
 
-    /// Frequence minimale de travail
+    /// Minimal frequency
     static double _fMin;
 
-    /// Frequence minimale de travail
+    /// Maximal frequency
     static double _fMax;
 
-    /// Valeur par defaut du spectre
+    /// Default value for the spectrum
     static double _defaultValue;
 
-    /// Carte de correspondance entre frequence et indice du tableau
+    /// Mapping between frequency and array index
     static std::map<double, int> _mapFreqIndice;
 
-    // ==== AUTRES MEMBRES
+    // ==== Other members
 
-    ///Validite du spectre.
+    /// Spectrum validity
     bool _valid;
 
-    ///Type de spectre.
+    /// Spectrum type
     TYSpectreType _type;
 
-    ///Etat du spectre (grandeur physique ou dB).
+    /// Spectrum state (physical quantity or dB).
     TYSpectreEtat _etat;
 
-    ///Forme de representation du spectre tiers d'octave, octave, delta f constant, non structure.
+    /// Representation of the spectrum: one-third Octave, Octave, constant delta f, unstructured.
     TYSpectreForm _form;
 
-    /// Tableau des valeurs reelles
+    /// Real values array for module
     double _module[TY_SPECTRE_DEFAULT_NB_ELMT];
 };
 
 ::std::ostream& operator<<(::std::ostream& os, const OSpectre& s);
 
-typedef std::vector<OSpectre> OTabSpectre;
-typedef std::vector<std::vector<OSpectre> > OTab2DSpectre;
+typedef std::vector<OSpectre> OTabSpectre; /// Spectrums vector
+typedef std::vector<std::vector<OSpectre> > OTab2DSpectre; /// Spectrums 2D array
 
 /**
- * Permet de stocker des valeurs de puissance accoustique pour differentes frequences.
- *
+ * Define a module/phase spectrum
+*
  */
 class OSpectreComplex : public OSpectre
 {
-    // Methodes
+    // Methods
 public:
     OSpectreComplex();
     OSpectreComplex(const TYComplex& defaultValue);
     OSpectreComplex(const OSpectreComplex& other);
     /**
-     * Constructeur a partir d'un OSpectre qui represente le module du spectre complexe
+     * Constructor from a OSpectre (which is the module of the complex spectrum)
      */
     OSpectreComplex(const OSpectre& other);
     /**
-     * Constructeur a partir de 2 OSpectre : le module et la phase
+     * Constructor from 2 OSpectre : module and phase
      */
     OSpectreComplex(const OSpectre& spectre1, const OSpectre& spectre2);
 
     virtual ~OSpectreComplex();
-
+    /// operators
     OSpectreComplex& operator= (const OSpectreComplex& other);
     bool operator== (const OSpectreComplex& other) const;
     bool operator != (const OSpectreComplex& other) const;
     OSpectreComplex operator + (const OSpectreComplex& spectre) const;
-    // Produit de deux spectres complexesen module/phase
+    /// Product of two complex spectrums (module/phase)
     OSpectreComplex operator * (const OSpectreComplex& spectre) const;
-    // Computes the operation between a complex spectrum times a spectrum
+    /// Computes the operation between a complex spectrum times a spectrum
     OSpectreComplex operator * (const OSpectre& spectre) const;
-    // Operateur de multiplication d'un spectre complexe par un coeff de type double
+    /// Multiply a  complex spectrum by a double coefficient
     OSpectreComplex operator * (const double& coefficient) const;
-    // Rapport de deux spectres complexes en module/phase
+    /// Divide a complex spectrum by another one
     virtual OSpectreComplex operator / (const OSpectreComplex& spectre) const;
     virtual OSpectreComplex div(const OSpectreComplex& spectre) const;
 
-    /// Set/Get du tableau des valeurs reelles
+    /// Get an array of the real values of the spectrum
     virtual double* getTabValReel() { return _module; }
     virtual const double* getTabValReel() const {return _module; }
-    /// Set/Get du tableau des valeurs imaginaires
+    /// Get an array of the imaginary values of the spectrum
     double* getTabValImag() { return _phase; }
     const double* getTabValImag() const { return _phase; }
 
     /**
-     * Attribution d'une valeur complexe au tableau Frequence/Complexe.
+     * Set a complex value to the array Frequency/Complex.
      *
-     * @param freq Frequence pour laquelle on attribut une nouvelle valeur.
-     * @param reel partie reelle.
-     * @param imag partie imaginaire
+     * @param freq Frequency.
+     * @param reel Real number.
+     * @param imag Imaginary number.
      */
     virtual void setValue(const float& freq, const double& reel, const double& imag = 0.0);
     /**
-     * Attribution d'une valeur complexe au tableau Frequence/Complexe.
+     * Set a complex value to the array Frequency/Complex.
      *
-     * @param freq Frequence pour laquelle on attribut une nouvelle valeur.
-     * @param cplx un TYComplex
+     * @param freq Frequency.
+     * @param cplx A TYComplex complex number
      */
     virtual void setValue(const float& freq, const TYComplex& cplx);
     /**
-     * Recuperation d'une valeur imaginaire au tableau Frequence/Complexe
-     * a partir d'une frequence.
+     * Get for a frequency the imaginary number from the Frequency/Complex array
      *
-     * @param freq Frequence pour laquelle on recherche la valeur.
-     * @param pValid Positionner a false si la frequence passee n'est pas valide pour ce spectre.
+     * @param freq Frequency.
+     * @param pValid False if the frequency is not valid for this spectrum.
      *
-     * @return La valeur imaginaire du complexe correspondant.
+     * @return Imaginary number
      */
     double getValueImag(float freq, bool* pValid = 0);
     /**
-     * Attribution de la phase a un spectre.
-     * @param Un OSpectre.
+     * Set the phase to a spectrum.
+     * @param spectre A OSpectre.
      */
     void setPhase(const OSpectre& spectre);
     /**
-     * Attribution de la phase a un spectre.
-     * @param Un double.
+     * Set the phase to this spectrum.
+     * @param valeur A double.
      */
     void setPhase(const double& valeur = 0.0);
     /**
-     * Lecture de la phase d'un spectre.
-     * @return Un TYSpectre.
+     * Get the phase of this spectrum.
+     * @return A OSpectre.
      */
     OSpectre getPhase() const;
     /**
-    * \fn OSpectre getModule() const
-    * \brief get du module du spectre
+    * Get the module of this spectrum.
     */
     OSpectre getModule() const;
-    // Conversion en module/phase
+
+    /// Conversion to module/phase
     OSpectreComplex toModulePhase() const;
 
-    // === FONCTIONS MEMBRES STATIQUES
+    // === STATIC FUNCTIONS
 
-    // Cree un spectre complexe
+    /// Build a OSpectreComplex complex spectrum
     static OSpectreComplex getCplxSpectre(const double& valInit = 1.0E-20);
-    // Membres
+    // Members
 public:
 
 protected:
-    /// tableau des valeurs imaginaires
+    /// Array of the imaginary numbers (phase)
     double _phase[TY_SPECTRE_DEFAULT_NB_ELMT];
 };
 
-typedef std::vector<OSpectreComplex> OTabSpectreComplex;
-typedef std::vector<std::vector<OSpectreComplex> > OTab2DSpectreComplex;
+typedef std::vector<OSpectreComplex> OTabSpectreComplex; /// OTabSpectreComplex vector
+typedef std::vector<std::vector<OSpectreComplex> > OTab2DSpectreComplex; /// OTabSpectreComplex 2D array
 
 #endif // TY_MC_SPECTRE

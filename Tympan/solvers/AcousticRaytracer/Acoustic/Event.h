@@ -30,9 +30,13 @@ enum typeevent
 
 class Shape;
 
+/**
+ * \brief Class describing an event (reflection, diffraction, ...)
+ */
 class Event : public Base
 {
 public:
+	/// Default constructor
     Event(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL) :
         Base(),
         pos(position),
@@ -44,7 +48,7 @@ public:
     {
         name = "unknown event";
     }
-
+    /// Copy constructor
     Event(const Event& other) : Base(other)
     {
         pos = vec3(other.pos);
@@ -56,52 +60,56 @@ public:
         if (other.sampler) { sampler = new Sampler(*(other.sampler)); }
         else { sampler = NULL; }
     }
-
+    /// Destructor
     virtual ~Event()
     {
         if (sampler) { delete sampler; }
     };
 
-    virtual bool isDiffuse() { return false; }
+    // Unused function:
+    // virtual bool isDiffuse() { return false; }
 
     /*!
      * \fn const vec3& getPosition() const
-     * \brief Renvoie une référence vers le point d'impact de l'evenement.
-     * \return Adresse du vecteur decrivant le point d'impact
+     * \brief Return a reference to the event location point.
+     * \return Vector with coordinates of the point.
     */
     const vec3& getPosition() const { return pos; }
 
     /*!
     * \fn void setPosition(vec3 &_pos)
-    * \brief Place un nouveau point d'impact a l'evenement
-    * \param pos : Nouveau point d'impact. Le pointeur n'est pas modifie
+    * \brief Set a new point to the event.
+    * \param _pos : New point.
     */
     void setPosition(const vec3& _pos) { pos = vec3(_pos); }
 
     /*!
     * \fn vec3* getIncomingDirection()
-    * \brief Renvoie un pointeur vers le vecteur incident sur l'arete.
-    * \return Adresse du vecteur decrivant le vecteur directeur du rayon incident.
+    * \brief Return the direction of the incoming vector.
+    * \return The direction of the incoming vector
     */
     vec3 getIncomingDirection() { return from; }
 
     /*!
     * \fn void setIncomingDirection(const vec3& _from)
-    * \brief Place un nouveau vecteur d'incidence
-    * \param from : Nouveau vecteur d'incidence
+    * \brief Set a new incoming vector
+    * \param _from : New incoming vector
     */
     void setIncomingDirection(const vec3& _from) { from = vec3(_from); }
 
+    /// Return true if it remains rays to launch
     bool isReponseLeft() { return nbResponseLeft > 0; }
+    /// Return the number of rays remaining to launch
     int getNbResponseLeft() { return nbResponseLeft; }
+    /// Set the number of rays remaining to launch
     virtual void setNbResponseLeft(int _nbResponseLeft) { nbResponseLeft = _nbResponseLeft; }
-
+    /// Return the number of rays to launch after event
     virtual int getInitialNbResponseLeft() const { return initialNbResponse; }
 
     /*!
     * \fn Shape* getShape()
-    * \brief renvoi la primitive impactee
-    * \return la primitive impactee
+    * \brief Return the primitive of the impact
+    * \return The impacted primitive of the event
     */
     Shape* getShape() { return shape; }
 
@@ -109,23 +117,22 @@ public:
 
     /*!
     * \fn void setShape(Shape* _shape)
-    * \brief place la primitive impactee
+    * \brief Set the impacted primitive of the event
     */
     void setShape(Shape* _shape) { shape = _shape; }
 
     /*!
-    * \fn virtual vec3 getReponse()
-    * \brief Renvoie un vecteur directeur repondant a l'impact. Correspond au vecteur directeur du rayon en reponse a l'evenement.
-    * \return Nouveau vecteur directeur.
-    * \warning Doit etre redefini par les classes heritant de Event
+    * \brief Return a direction vector for the impact. Ray direction vector in response of the event.
+    * \return New direction vector
+    * \warning Should be overloaded by the inherited classes of Event
     */
     virtual bool getResponse(vec3& r, bool force = false) { return false; }
 
     /*!
-    * \fnvirtual bool isAcceptableResponse(vec3& test)
-    * \brief Renvoie vrai si le vecteur direct repondant a l'impact est correct.
-    * \return True si le reponse est acceptable
-    * \warning Doit etre redefini par les classes heritant de Event
+    * \fn virtual bool isAcceptableResponse(vec3& test)
+    * \brief Return true if the ray direction vector in response of the event is acceptable.
+    * \return True if the response is acceptable
+    * \warning Should be overloaded by the inherited classes of Event
     */
     virtual bool isAcceptableResponse(vec3& test) { return false; }
 
@@ -137,9 +144,9 @@ public:
 
     /*!
     * \fn virtual int getType()
-    * \brief Renvoie le type de l'evenement
-    * \return type de l'evenement
-    * \warning Doit etre redefini par les classes heritant de Event
+    * \brief Return the event type
+    * \return Event type
+    * \warning Should be overloaded by the inherited classes of Event
     */
     virtual int getType() const { return type; }
 
@@ -149,6 +156,7 @@ public:
      */
     virtual void setType(const typeevent& _type) { type = _type; }
 
+    /// Get incident angle
     virtual double getAngle() const { return 0.0; }
 
     /*!
@@ -160,13 +168,13 @@ public:
 
 
 protected:
-    vec3 pos;           /*!< Point d'impact de l'evenement */
-    vec3 from;          /*!< Vecteur directeur du rayon incident */
-    int nbResponseLeft; /*!< Number of rays remaining to launch */
-    int initialNbResponse; /*!< number of rays to lauch after event*/
-    Sampler* sampler;
-    Shape* shape;       /*< La primitive impactee */
-    typeevent type;     /*!< Type de l'evenement */
+    vec3 pos;              //!< Location point of the event
+    vec3 from;             //!< Direction vector of the incoming ray
+    int nbResponseLeft;    //!< Number of rays remaining to launch
+    int initialNbResponse; //!< Number of rays to launch after event
+    Sampler* sampler;      //!< Pointer to a Sampler
+    Shape* shape;          //!< The impact primitive
+    typeevent type;        //!< Event type 
 
 #ifdef _ALLOW_TARGETING_
     std::vector<vec3> targets;

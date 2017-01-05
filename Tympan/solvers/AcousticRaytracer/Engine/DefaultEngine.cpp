@@ -172,16 +172,16 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
 	Intersection *inter = NULL;
 	
 	// ! IMPORTANT
-	// We suppose, here, that accelarating structures use "leafTreatment::treatment::FIRST:"
+	// We suppose, here, that accelerating structures use "leafTreatment::treatment::FIRST:"
 	// In this case, accelerating structure return only the closest primitive.
-	// If it is not the case, you must browse througth the returned list
+	// If it is not the case, you must browse through the returned list
 	if ( foundPrims.size() > 0 )
 	{
 		inter = &( *(foundPrims.begin()) );
         valide = solver->valideIntersection(r, inter);
         if (valide) { compteurValide++; }
 	}
-	// Lines under are let intentionnaly commented only for understanding reason
+	// Lines under are left intentionally commented only for understanding reason
 	//else // no primitive found. The ray goes to infinity (and beyond)
 	//{
 	//	valide = false;

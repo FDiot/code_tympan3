@@ -19,6 +19,9 @@
 
 namespace tympan
 {
+/**
+ * @brief Contains the results of the model solved
+ */
 class AcousticResultModel
 {
 public:
@@ -26,13 +29,13 @@ public:
 
     virtual ~AcousticResultModel();
 
-    SpectrumMatrix& get_data() { return acoustic_data; }
-    tab_acoustic_path& get_path_data() { return path_data; }
+    SpectrumMatrix& get_data() { return acoustic_data; } //!< Return the results matrix
+    tab_acoustic_path& get_path_data() { return path_data; } //!< Return the array of the acoustic paths
 
 protected: // data members
 
-    SpectrumMatrix acoustic_data;
-    tab_acoustic_path path_data;
+    SpectrumMatrix acoustic_data;  //!< Matrix of the spectrum results
+    tab_acoustic_path path_data;   //!< Array of the acoustic paths
 
 };  // class AcousticResultModel
 

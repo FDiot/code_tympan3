@@ -16,6 +16,9 @@
 #ifndef TY_MC_SONIE_ZWICKER_1991
 #define TY_MC_SONIE_ZWICKER_1991
 
+/**
+ * Class to define the loudness (according Zwicker, 1991)
+ */
 class sonie
 {
 public :
@@ -25,15 +28,15 @@ public :
     double getNTot() { return N_Tot; }
     /// Renvoie le niveau d'isosonie en phone
     double getLN() { return LN; }
-    /// Renvoie la sonie spécifique
+    /// Renvoie la sonie spï¿½cifique
     double* getNSpecif() { return N_Specif; }
     /// Renvoie le vecteur des bandes de Barks
     double* getBarks() { return BarkAxis; }
-    /// Indique si le calcul s'est correctement effectué
+    /// Indique si le calcul s'est correctement effectuï¿½
     bool isOk() { return _isOk; }
 
 private  :
-    /// Vérification des données d'entrée
+    /// Vï¿½rification des donnï¿½es d'entrï¿½e
     bool validation();
 
     /// * Fonction de calcul de la sonie
@@ -48,35 +51,35 @@ private :
 
     /**
         Gammes des niveaux des tiers d'octave pour
-        les pondérations en basses fréquences selon les courbes d'isosonie
+        les pondï¿½rations en basses frï¿½quences selon les courbes d'isosonie
     */
     static const double RAP[];
 
     /**
-        Pondération des bandes basses fréquences selon les courbes d'isosonie données pour
-        les 8 gammes de niveauxdéfinies dans RAP
+        Pondï¿½ration des bandes basses frï¿½quences selon les courbes d'isosonie donnï¿½es pour
+        les 8 gammes de niveauxdï¿½finies dans RAP
     */
     static const double DLL[8][11];
 
     /**
         Niveaux dans les bandes critiques au seuil absolu d'audition sans prendre en compte
-        les caractéristiques detransmission de l'oreille
+        les caractï¿½ristiques detransmission de l'oreille
     */
     static const double LTQ[];
 
     /**
-        Corrections de niveaux dues aux caractéristiques de transmissions de l'oreille
+        Corrections de niveaux dues aux caractï¿½ristiques de transmissions de l'oreille
     */
     static const double A0[];
 
     /**
-        Différences de niveaux entre champs libre et champs diffus pour chaque bande
+        Diffï¿½rences de niveaux entre champs libre et champs diffus pour chaque bande
     */
     static const double DDF[];
 
     /**
-        limites supérieures des bandes critiques approximées
-        ( exprimées en numéro de bande critique)
+        limites supï¿½rieures des bandes critiques approximï¿½es
+        ( exprimï¿½es en numï¿½ro de bande critique)
     */
     static const double ZUP[];
 
@@ -86,18 +89,18 @@ private :
     static const double DCB[];
 
     /**
-        gammes des niveaux de sonie spécifique pour déterminer les pentes des courbes
-        de flancs supérieurs dans la courbe de sonie spécifique
+        gammes des niveaux de sonie spï¿½cifique pour dï¿½terminer les pentes des courbes
+        de flancs supï¿½rieurs dans la courbe de sonie spï¿½cifique
     */
     static const double RNS[];
 
     /**
-        pente des courbes de flancs supérieurs dans la courbe de sonie spécifique pour
-        les niveaux RNS en fonction du numéro de la bande critique
+        pente des courbes de flancs supï¿½rieurs dans la courbe de sonie spï¿½cifique pour
+        les niveaux RNS en fonction du numï¿½ro de la bande critique
     */
     static const double USL[18][8];
 
-    /// Tableau de 28 doubles représentant les valeurs par 1/3 d'octave sur la bande 25-10000 Hz
+    /// Tableau de 28 doubles reprï¿½sentant les valeurs par 1/3 d'octave sur la bande 25-10000 Hz
     double* VectNiv3Oct;
     /// Type de champ (0 = champ libre, 1 = champ diffus)
     unsigned short Champ;
@@ -105,11 +108,11 @@ private :
     double N_Tot;
     /// Niveau d'isosonie en phone
     double LN;
-    /// Sonie Spécifique
+    /// Sonie Spï¿½cifique
     double* N_Specif;
-    /// Vecteur des de bark sur lequel est calculé N_specif.
+    /// Vecteur des de bark sur lequel est calculï¿½ N_specif.
     double* BarkAxis;
-    /// Indication de bonne exécution du calcul
+    /// Indication de bonne exï¿½cution du calcul
     bool _isOk;
 };
 #endif // TY_MC_SONIE_ZWICKER_1991

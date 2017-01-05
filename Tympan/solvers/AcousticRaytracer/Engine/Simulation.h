@@ -37,14 +37,16 @@ enum engineChoice
 /*!
 * \file Simulation.h
 * \class Simulation
-* \brief Classe support hebergeant l'ensemble des informations necessaires au lancer de rayons. Cette classe permet entre autre de lancer le traitement
-* des rayons et la boucle principale du programme. Pour lancer le traitement de la Simulation, un appel a launchSimulation() suffit
+* \brief Class hosting all the informations needed for ray tracing. It contains the function to
+* launch the rays treatment and the main loop of the program. To run a simulation, a call to launchSimulation() is enough
 */
 class Simulation : public Base
 {
 
 public:
+	/// Constructor
     Simulation() : solver(NULL), engine(NULL), engineC(DEFAULT), materialManager(NULL) { compteurSource = 0; compteurRecepteur = 0;}
+    /// Copy constructor
     Simulation(const Simulation& other)
     {
         solver = new Solver(other.solver);
@@ -54,69 +56,69 @@ public:
         compteurRecepteur = other.compteurRecepteur;
         materialManager = new MaterialManager(*(other.materialManager));
     }
-
+    /// Destructor
     virtual ~Simulation() { }
 
     /*!
     * \fn Scene* getScene()
-    * \brief Renvoie un pointeur sur la scene
-    * \return Pointeur sur la scene
+    * \brief Get a pointer to the scene
+    * \return Pointer to the scene
     */
     Scene* getScene() { return &scene; }
 
 #ifdef TEST_ACCELERATION_RECEPTORS
     /*!
      * \fn Scene* get_receptors_landscape();
-     * \brief return the geoemtric distribution of receptors
+     * \brief Return the geometric distribution of receptors
      */
     Scene* get_receptors_landscape() { return &receptors_landscape; }
 #endif
 
     /*!
     * \fn void setSolver(Solver *_solver)
-    * \brief Fonction outil pour integrer un solveur acoustique a la simulation
+    * \brief Tool function to set the acoustic solver for the simulation
     */
     void setSolver(Solver* _solver) { solver = _solver; }
 
     /*!
     * \fn Solver* getSolver()
-    * \brief Renvoie un pointeur sur le solveur acoustique
-    * \return Pointeur sur le solveur acoustique
+    * \brief Get the acoustic solver
+    * \return Pointer to the solver
     */
     Solver* getSolver() { return solver; }
 
     /*!
     * \fn void clean()
-    * \brief Nettoie entierement la simulation. La scene, les sources, les recepteurs ainsi que l'ensemble des rayons sont supprimes.
+    * \brief Clean the simulation: the scene, sources, and receptors and all the rays are deleted.
     */
     void clean();
 
     /*!
     * \fn bool launchSimulation()
-    * \brief Boucle principale du programme. Extrait l'ensemble des rayons a partir des sources et traite les rayons. La boucle d'arrete lorsque
-    * la pile de traitement est vide et que plus aucune source ne peut generer de rayons. Une fois le rayon traiter, il est soit place en pile
-    * de traitement pour poursuivre son chemin ou supprimer. La recherche de recepteur se fait apres le traitement du rayon. Cette fonction est monothread.
-    * \return vrai si tout s'est bien passe
+    * \brief Program main loop. Extract all the rays from the sources then treat them. The loop finishes when
+    * the treatment stack is empty and there is no more sources creating rays. Once the ray is treated, either it is added to the stack
+    * to continue its path or is suppressed. The receptor search is launched once the ray is treated. Single-threaded function.
+    * \return True if succeeds
     */
     bool launchSimulation();
 
     /*!
     * \fn void addSource(const Source& s)
-    * \brief Fonction outil pour integrer une source a la simulation.
-    * \param s : source a integrer
+    * \brief Tool function to add a source to the simulation.
+    * \param s : Source
     */
     void addSource(const Source& s) { sources.push_back(s); sources.back().setId(compteurSource); compteurSource++;}
     /*!
     * \fn std::vector<Source>& getSources()
-    * \brief Renvoie la liste des sources de la scene
-    * \return Vecteur contenant les sources de la simulation
+    * \brief Return the sources list of the scene
+    * \return Vector containing the sources
     */
     std::vector<Source>& getSources() { return sources; }
 
     /*!
     * \fn void addRecepteur(const Recepteur& r)
-    * \brief Fonction outil pour placer rapidement un recepteur dans la simulation
-    * \param r : recepteur a placer
+    * \brief Tool function to add quickly a receptor for the simulation
+    * \param r : Receptor
     */
     void addRecepteur(const Recepteur& r) { 
         recepteurs.push_back(r); 
@@ -128,35 +130,37 @@ public:
     }
     /*!
     * \fn std::vector<Recepteur>& getRecepteurs()
-    * \brief Renvoie la liste des recepteurs de la scene
-    * \return Vecteur contenant les recepteurs de la simulation
+    * \brief Return a vector of all receptors of the scene
+    * \return Vector
     */
     std::vector<Recepteur>& getRecepteurs() { return recepteurs; }
 
+    /// Set/Get the pointer to the MaterialManager
     void setMaterialManager(MaterialManager* _materialManager) { materialManager = _materialManager; }
     MaterialManager* getMaterialManager() { return materialManager; }
 
+    /// Set the engine (by default, the DefaultEngine)
     void setEngine(engineChoice engine = DEFAULT) { engineC = engine; }
 
 //    void runBenchmark() { engine = new DefaultEngine(&scene, &sources, solver, &recepteurs); engine->runStructureBenchmark(); }
 
 protected:
-    Scene scene; // Description of the geometry in an accelerated structure
+    Scene scene; 						//!< Description of the geometry in an accelerated structure
 #ifdef TEST_ACCELERATION_RECEPTORS
-    Scene receptors_landscape; // geometric distribution of receptors
+    Scene receptors_landscape; 			//!< Geometric distribution of receptors
 #endif
 
-    Solver* solver;             /*!< Pointeur vers la "methode acoustique" */
-    MaterialManager* materialManager;
+    Solver* solver;             		//!< Pointer to a solver (acoustic method)
+    MaterialManager* materialManager;	//!< Pointer to a MaterialManager object
 
-    std::vector<Source> sources;        /*!< Ensemble des sources acoustiques gerees par la simulation. */
-    std::vector<Recepteur> recepteurs;  /*!< Ensemble des recepteurs acoustiques geres par la simulation. */
+    std::vector<Source> sources;        //!< All the acoustic sources for the Simulation
+    std::vector<Recepteur> recepteurs;  //!< All the acoustic receptors for the Simulation
 
     engineChoice engineC;
-    Engine* engine;
+    Engine* engine;						//!< Pointer to the selected Engine
 
-    unsigned int compteurSource;
-    unsigned int compteurRecepteur;
+    unsigned int compteurSource;		//!< Source counter
+    unsigned int compteurRecepteur;		//!< Receptor counter
 
 };
 #endif

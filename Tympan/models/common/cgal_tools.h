@@ -1,5 +1,5 @@
 /**
- * @file cgal_tool.hpp
+ * @file cgal_tools.h
  *
  * @brief Utilities to ease (and wrap) use of CGAL
  *
@@ -72,8 +72,8 @@ CGAL_Plane to_cgal(const OPlan& oplan);
  *
  * @param w the width of the parallelepiped
  * @param h the height of the parallelepiped
- * @param pointa the center of one of the two faces of dimension w x h
- * @param pointb the center of the other face of dimension w x h
+ * @param pta the center of one of the two faces of dimension w x h
+ * @param ptb the center of the other face of dimension w x h
  *
  * @return a deque containing the 4 vertices defining the 3D parallelepiped
  *
@@ -115,7 +115,7 @@ public:
     struct VertexInfo
     {
         VertexInfo(int i_ = -1) : i(i_) {}
-        int i; // This is the index of the vertice within the intial polygon.
+        int i; // This is the index of the vertice within the initial polygon.
     };
 
     struct FaceInfo {};

@@ -29,14 +29,21 @@
 #include "Tympan/models/solver/entities.hpp"
 #include "Tympan/models/common/3d.h"
 
+/**
+ * \struct TYStructSurfIntersect
+ * \brief Describe surface intersections
+ */
 struct TYStructSurfIntersect
 {
-    string volume_id;
-    TabPoint3D tabPoint; // Tableau de point utilise pour la preselection
-    OVector3D normal; // Normal to the face
-    bool isEcran;   // Est un ecran
-    tympan::AcousticMaterialBase* material; 
+    string volume_id;    //!< Volume id
+    TabPoint3D tabPoint; //!< Array of points used for the preselection
+    OVector3D normal;    //!< Normal vector to a face
+    bool isEcran;        //!< Flag to define if it is a screen
+    tympan::AcousticMaterialBase* material; //!< Reference to a material
 
+    /**
+     * \brief Detect if a face is on a infrastructure (has a material)
+     */
     bool is_infra() const 
     { 
         tympan::AcousticBuildingMaterial* pMat = dynamic_cast<tympan::AcousticBuildingMaterial*>(material);
@@ -45,18 +52,22 @@ struct TYStructSurfIntersect
     }
 };
 
-// Structure de donnees simple pour la gestion des intersections
+/**
+ * \brief Data structure for intersections
+ */
 struct TYSIntersection
 {
-    OSegment3D segInter[2]; // Segment d'intersection face/plan vertical[0] ou horizontal[1]
-    bool noIntersect; // Indique qu'une face ne doit pas etre testee pour l'intersection
-    bool bIntersect[2]; // Booleen qui indique si la face coupe le plan vertical ([0]) ou horizontal([1])
-    bool isEcran;   // Est un ecran
-    bool isInfra; // Face d'infrastructure
-    tympan::AcousticMaterialBase* material;
+    OSegment3D segInter[2]; //!< Intersection segment between face and vertical plane ([0]) and horizontal plane ([1])
+    bool noIntersect;       //!< Flag to indicate that the face should not be tested for intersection
+    bool bIntersect[2];     //!< Flag to indicate the face cuts vertical plane ([0]) or horizontal plane ([1])
+    bool isEcran;           //!< Flag to define if is a screen face
+    bool isInfra;           //!< Flag to define if is a infrastructure face
+    tympan::AcousticMaterialBase* material; //!< Pointer to a material
 };
 
-// Structure de donnees simple pour decrire le plan pour conserver les point qui definissent le plan de travail
+/**
+ * \brief Structure to describe a plan defined with 3 points
+ */
 typedef struct
 {
     OPoint3D pt1;
@@ -64,19 +75,21 @@ typedef struct
     OPoint3D pt3;
 } TYSPlan;
 
-// Structures contenant un segment et un spectre
+/**
+ * \brief Structure containing a segment and a spectrum
+ */
 typedef struct
 {
     OSegment3D _segment;
     OSpectre* _spectreAtt;
 } TYStructSegLPSp;
 
-// Tableau de structures contenant un segment et un spectre.
+//!< Array of struct contening a segment and a spectrum
 typedef std::deque<TYStructSegLPSp> TYTabStructSegLPSp;
 
-///Rayon du cercle utilise dans le calcul de l'attenuation de la vegetation.
+//!< Rayon du cercle utilise dans le calcul de l'attenuation de la vegetation.
 #define TY_EDF_FOREST_RAYON 5000
-///Limite pour la prise en compte de l'effet de diffraction (=0.1dB).
+//!< Limite pour la prise en compte de l'effet de diffraction (=0.1dB).
 #define TY_EDF_DIFFRACTION_LIMIT 1.023293
 
 #endif // __TY_SOLVERDEFINES__

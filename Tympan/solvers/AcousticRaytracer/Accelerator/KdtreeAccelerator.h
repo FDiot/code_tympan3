@@ -21,34 +21,35 @@
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Shape.h"
 #include "Accelerator.h"
 
-
-//Structure ajencee pour tenir sur 2 octets
+/*!
+* \struct kdNode
+* \brief Node structure (optimized to be stored on 2 bytes)
+*/
 typedef struct kdNode
 {
-
-    bool isLeaf() { return ((int)(flag & 3)) == 3; }                                            //Renvoi vrai si le noeud est une feuille
-    bool isNode() { return ((int)(flag & 3)) < 3; }                                             //Renvoi vrai si le noeud est un noeud
-    unsigned int getNbPrimitives() { return nbPrims >> 2; }                                     //Renvoi le nombre de primitives
+    bool isLeaf() { return ((int)(flag & 3)) == 3; }                                            //!< Return true if the node is a leaf
+    bool isNode() { return ((int)(flag & 3)) < 3; }                                             //!< Return true if the node is a node
+    unsigned int getNbPrimitives() { return nbPrims >> 2; }                                     //!< Return primitives number
     unsigned int AboveChild() { return secondChild >> 2; }
     unsigned int* getPrims() { return prims; }
-    int getAxe() { return (flag & 3); }                                                         //Renvoi l'indice de l'axe du plan separateur (node)
-    float getAxeValue() { return split; }                                                       //Renvoi la valeur de l'axe du plan separateur (node)
-    unsigned int getFirstIndex() { return firstIndex; }                                         //Renvoi l'index de la premiere primitive du noeud (all)
-    void createLeaf(unsigned int _nbPrims, unsigned int _firstIndex, unsigned int* _prims);     //Initialisation d'une feuille
-    void createNode(int axis, float _split, unsigned int nextChild);                            //Initialisation d'un noeud
+    int getAxe() { return (flag & 3); }                                                         //!< Return the axis number of the separator plane (node)
+    float getAxeValue() { return split; }                                                       //!< Return the axis value of the separator plane (node)
+    unsigned int getFirstIndex() { return firstIndex; }                                         //!< Return the index of the first node primitive (all)
+    void createLeaf(unsigned int _nbPrims, unsigned int _firstIndex, unsigned int* _prims);     //!< Leaf initialization
+    void createNode(int axis, float _split, unsigned int nextChild);                            //!< Node initialization
 private:
     union
     {
-        int flag;                   //0 : node, axe x, 1 : node, axe y, 2 : node, axe z, 3 : feuille. Utilisation de 2 bits
-        unsigned int secondChild;   //Node : 1er fils est consecutif au noeud courant, le second est plus loins
-        unsigned int nbPrims;       //Feuille : nombre de primitives. Utilisation de 30 bits
+        int flag;                   //!< 0 : node, x axis, 1 : node, y axis, 2 : node, z axis, 3 : leaf. 2 bits used
+        unsigned int secondChild;   //!< Node : the first child is just after current node, second one is further
+        unsigned int nbPrims;       //!< Leaf : number of primitives. Use 30 bits integer
     };
 
     union
     {
-        float split;                //Node : valeur de l'axe separateur
-        unsigned int firstIndex;    //Leaf : index de la premiere primitive dans la liste
-        unsigned int* prims;        //Leaf : tableau contenant les indexs de primitives
+        float split;                //!< Node : separator axis value
+        unsigned int firstIndex;    //!< Leaf : index of the first primitive in the list
+        unsigned int* prims;        //!< Leaf : array containing primitives indexes
     };
 } KDNode;
 
@@ -100,61 +101,70 @@ struct KdToDo
 
 /*!
 * \struct KdStack
-* \brief Structure de pile pour la traversee du kd-tree. Stockage des noeuds optimitimes.
+* \brief Stack structure for the k-d tree. Optimized storage for the nodes
 */
 struct KdStack
 {
-    KDNode node;        /*!< Prochain noeud a parcourir en cas d'echecs. */
-    float tmin;         /*!< Temps d'entree dans le noeud node. */
-    float tmax;         /*!< Temps de sortie du noeud node. */
-    unsigned int pos;   /*!< Position dans la pile. */
+    KDNode node;        //!< Next node to browser if fail happens
+    float tmin;         //!< Entry time inside the node
+    float tmax;         //!< Left time from the node
+    unsigned int pos;   //!< Position in the stack
 };
 
+/*!
+* \class KdtreeAccelerator
+* \brief K-d tree Accelerator (based on space splitting)
+*/
 class KdtreeAccelerator : public Accelerator
 {
 
 public:
+	/// Constructor
     KdtreeAccelerator(std::vector<Shape*>* _initialMesh = NULL, BBox _globalBox = BBox());
-
+    /// Destructor
     virtual ~KdtreeAccelerator();
 
     virtual bool build();
 
     virtual decimal traverse(Ray* r, std::list<Intersection> &result) const;
 
+    /// Set/Get maximal depth
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
     int getMaxProfondeur() { return maxProfondeur; }
 
+    /// Set/Get maximal primitives per leaf
     void setMaxPrimPerLeaf(int _maxPrimPerLeaf) { maxPrimPerLeaf = _maxPrimPerLeaf; }
     int getMaxPrimPerLeaf() { return maxPrimPerLeaf; }
-
+    /// Get the vector of bounding boxes
     std::vector<BBox>& getBBox() { return tableBox; }
-
+    /// Print the tree (not implemented yet)
     void print();
 
-    bool alreadyFail;
-    unsigned int nbFail;
-    Ray r;
-    bool trace;
+    bool alreadyFail;	//!< Unused attribute
+    unsigned int nbFail;//!< Unused attribute
+    Ray r;				//!< Unused attribute
+    bool trace;			//!< Unused attribute
 
 protected:
+    /// Generate the tree by middle subdivision
     void generateMidKdTree(int currentProfondeur, BBox& localBox, unsigned int nbPrims, unsigned int* prims);
+    /// Generate the tree with SAH (Surface Area Heuristic) method
     void generateSAHKdTree(int currentProfondeur, BBox& localBox, TaBRecBoundEdge* edges[3], unsigned int nbPrims, unsigned int* prims);
-    std::vector<Shape*>* initialMesh;
+    std::vector<Shape*>* initialMesh;		//!< Pointer to the mesh
 //    BBox globalBox;
 
-    std::vector<InfoPrim> tablePrimitive;
-    std::vector<BBox> tableBox;
+    std::vector<InfoPrim> tablePrimitive;	//!< List of primitives and their bounding box
+    std::vector<BBox> tableBox;				//!< Bounding boxes list of the tree
     std::vector<KDNode> tableNode;
 
-    int maxProfondeur;
-    int maxPrimPerLeaf;
+    int maxProfondeur;		//!< Maximal depth
+    int maxPrimPerLeaf;		//!< Maximal primitives per leaf
 
-    int realMaxProfondeur;
+    int realMaxProfondeur;	//!< Real max depth
 
-    float isectCost;
-    float emptyBonus;
-    float traversalCost;
+    float isectCost;		//!< Parameter for best splitting
+    float emptyBonus;		//!< Parameter for best splitting
+    float traversalCost;	//!< Parameter for best splitting
 };
 
 

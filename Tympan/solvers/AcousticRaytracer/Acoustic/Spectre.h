@@ -18,11 +18,16 @@
 
 #include <vector>
 
+/**
+ * \brief Spectrum class
+ */
 class Spectre
 {
 
 public:
+	/// Default constructor
     Spectre() { sizeSpectre = 0; }
+    /// Copy constructor
     Spectre(const Spectre& other)
     {
         sizeSpectre = other.sizeSpectre;
@@ -31,11 +36,13 @@ public:
             freqs.push_back(freqs.at(i));
         }
     }
-
+    /// Destructor
     virtual ~Spectre() { }
 
+    /// Get the size of the vector storing the spectrum
     int getSizeSpectre() { return sizeSpectre; }
 
+    /// Return into a vector all the frequency values of the spectrum
     void getFrequencies(std::vector<int> &r)
     {
         for (int i = 0; i < sizeSpectre; i++)
@@ -43,7 +50,7 @@ public:
             r.push_back(freqs.at(i).first);
         }
     }
-
+    /// Return into an array (sized before) all the frequency values of the spectrum
     void getFrequencies(int* r)
     {
         for (int i = 0; i < sizeSpectre; i++)
@@ -51,7 +58,7 @@ public:
             r[i] = freqs.at(i).first;
         }
     }
-
+    /// Get a the ith frequency of the spectrum
     int getFrequencie(int i)
     {
         if (i < 0 || i >= sizeSpectre)
@@ -60,7 +67,7 @@ public:
         }
         return freqs.at(i).first;
     }
-
+    /// Return into a vector all the power values of the spectrum
     void getPowers(std::vector<decimal> &r)
     {
         for (int i = 0; i < sizeSpectre; i++)
@@ -68,7 +75,7 @@ public:
             r.push_back(freqs.at(i).second);
         }
     }
-
+    /// Return into an array (sized before) all the power values of the spectrum
     void getPowers(decimal* r)
     {
         for (int i = 0; i < sizeSpectre; i++)
@@ -76,7 +83,7 @@ public:
             r[i] = freqs.at(i).second;
         }
     }
-
+    /// Get the power for a frequency given by its index
     decimal getPower(int i)
     {
         if (i < 0 || i >= sizeSpectre)
@@ -85,15 +92,15 @@ public:
         }
         return freqs.at(i).second;
     }
-
+    /// Add a new pair (frequency,power)
     void addFrequencie(int freq, decimal power)
     {
         freqs.push_back(std::pair<int, decimal>(freq, power));
     }
 
 protected:
-    int sizeSpectre;
-    std::vector< std::pair<int, decimal> > freqs;
+    int sizeSpectre;								//!< Size of the vector
+    std::vector< std::pair<int, decimal> > freqs;	//!< Vector of pairs (Frequency,Power)
 };
 
 #endif

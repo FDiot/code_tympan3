@@ -35,13 +35,13 @@ public:
 
     /**
      * \fn getSurface()
-     * \brief calcul de la surface du triangle
+     * \brief Compute the triangle surface
      */
     double getSurface();
 
     /**
-     * \fn OPoint3D getCenter()
-     * \brief Gives back the triangle centre
+     * \fn OPoint3D getCentre()
+     * \brief Gives back the triangle center
      */
     OPoint3D getCentre();
 
@@ -53,14 +53,14 @@ public:
     OPoint3D _B;
     OPoint3D _C;
 
-    //! Get the \c OPoint3D from the specific index.
+    //!< Get the \c OPoint3D from the specific index.
     OPoint3D& vertex(unsigned i);
-    //! Get the \c OPoint3D from the specific index.
+    //!< Get the \c OPoint3D from the specific index.
     const OPoint3D& vertex(unsigned i) const;
 
-    //! Get coordinate (int) from index.
+    //!< Get coordinate (int) from index.
     int& index(unsigned i);
-    //! Get coordinate (int) from index.
+    //!< Get coordinate (int) from index.
     int  index(unsigned i) const;
 
     bool checkConsistencyWrtPointsTab(const std::deque<OPoint3D>& points) const;
@@ -69,9 +69,9 @@ public:
     bool operator==(const OTriangle& other) const;
 
 private:
-    //! A static table of \c OPoint3D.
+    //!< A static table of \c OPoint3D.
     static OPoint3D OTriangle::* vertices_m_ptr[3];
-    //! A static table of coordinate.
+    //!< A static table of coordinate.
     static int OTriangle::* indices_m_ptr[3];
 };
 

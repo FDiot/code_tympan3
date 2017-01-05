@@ -30,7 +30,7 @@ class Shape;
 
 /*!
 * \enum FORM
-* \brief Ensemble des primitives supportees par le lancer de rayons
+* \brief Primitives supported by the ray tracing method
 */
 enum FORM
 {
@@ -39,6 +39,10 @@ enum FORM
     SPHERE
 };
 
+/**
+ * \struct _Intersection
+ * \brief Intersection struct
+ */
 typedef struct _Intersection
 {
     vec3 normal;
@@ -47,75 +51,91 @@ typedef struct _Intersection
     FORM forme;
 } Intersection;
 
+/**
+ * \brief base class for shapes (Cylindre, Mesh, Sphere, Triangle,...)
+ */
 class Shape : public Base
 {
 
 public:
+	/// Default constructor
     Shape() : Base(), material(NULL) { name = "unknown shape"; }
+    /// Constructor by giving a name to the Shape
     Shape(const std::string _name) : material(NULL) { name = _name; }
+    /// Copy constructor
     Shape(Shape* other)
     {
         name = std::string(other->name);
     }
-
+    /// Destructor
     virtual ~Shape() { }
-
+    /// Copy constructor
     Shape(const Shape& other) : Base(other)
     {
     }
-
+    /// Clone and return a pointer to a Shape
     virtual Shape* Clone()
     {
         Shape* newShape = new Shape(this);
         return newShape;
     }
-
+    /// Return the pointed material
     Material* getMaterial() { return material; }
+    /// Set the material
     void setMaterial(Material* m) { material = m; }
-
+    /// Get the Intersection between a ray and this shape
     virtual bool getIntersection(Ray& ray, Intersection& inter) { cerr << "ERROR : Intersection with a non-type shape." << std::endl; return false; }
-
+    /// Update the boundary box:
     virtual void updateBBox() { };
+    /// Return the bounding box
     BBox getBBox() { return box; }
 
+    /// Set/Get global vertices
     void setVertices(std::vector<vec3> *_vertices) { vertices = _vertices; }
     vector<vec3>* getVertices() { return vertices; }
 
+    /// Get local vertices
     vector<unsigned int>* getLocalVertices() { return &localVertices; }
 
+    /// Return visibility
     virtual bool isVisible() { return true;}
 
+    /// Get normal
     virtual vec3 getNormal(const vec3 pos = vec3()) { return vec3();}
 
+    /// Set/Get the primitive id
     void setPrimitiveId(int id) { primitiveId = id; }
     int getPrimitiveId() const { return primitiveId; }
 
+    /// Set/Get the face id
     void setFaceId(int id) { faceId = id; }
     int getFaceId() const { return faceId; }
-
+    /// Set/Get the floor id
     void setEtageId(int id) { etageId = id; }
     int getEtageId() { return etageId; }
-
+    /// Set/Get the building id
     void setBuildingId(int id) { buildingId = id; }
     int getBuildingId() { return buildingId; }
-
+    /// Uncommented cause not used:
     virtual bool sample(decimal density, std::vector<vec3>& samples) { return false; }
 
+    /// Get/Set the flag _isSol (ground or not)
     bool isSol() const { return _isSol; }
     void setIsSol(const bool& isSol) { _isSol = isSol; }
 
+    /// Return type of the shape
     virtual int form() { return -1; }
 
 protected:
-    BBox box;                                //Bounding box of the shape
-    Material* material;                      //Material
-    std::vector<vec3> *vertices;             //GlobalVertices of the scene
-    std::vector<unsigned int> localVertices; //Index of the vertices used for this shape.
-    int primitiveId;                         //Index of the primitive (given by the scene)
-    int faceId;                              //Index of the face supporting the primitive
-    int buildingId;                          //Index of the building supporting the primitive (-1 if none)
-    int etageId;                             //Index of the etage supporting the primitive   (-1 if none)
-    bool _isSol;                             // Type de triangle (false = non naturel, true = sol)
+    BBox box;                                //!< Bounding box of the shape
+    Material* material;                      //!< Pointer to material
+    std::vector<vec3> *vertices;             //!< GlobalVertices of the scene
+    std::vector<unsigned int> localVertices; //!< Index of the vertices used for this shape.
+    int primitiveId;                         //!< Index of the primitive (given by the scene)
+    int faceId;                              //!< Index of the face supporting the primitive
+    int buildingId;                          //!< Index of the building supporting the primitive (-1 if none)
+    int etageId;                             //!< Index of the floor (etage) supporting the primitive   (-1 if none)
+    bool _isSol;                             //!< Triangle type (false = non natural, true = ground)
 };
 
 #endif

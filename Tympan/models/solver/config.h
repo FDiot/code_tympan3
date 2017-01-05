@@ -13,7 +13,9 @@ namespace tympan
 class SolverConfiguration;
 typedef SmartPtr<SolverConfiguration> LPSolverConfiguration;
 
-
+/**
+ * @brief Class to define a solver configuration (contains all the data needed by the different Tympan solvers)
+ */
 class SolverConfiguration : public IRefCount
 {
 public:

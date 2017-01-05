@@ -24,10 +24,10 @@
 #include "Tympan/models/common/3d.h"
 
 
-/*! \file Core/Mathlib.h
-    \brief Ce fichier contient la librairie mathematique de l'interface
+/*! \file common/mathlib.h
+    \brief Math library
 
-    Le type vecteur est declare ici, ainsi que les operations sur ces vecteurs.
+    The vector type is declared here, and operations with this type.
     \author Projet_Tympan
 */
 #ifndef __HMATHLIB__
@@ -35,12 +35,12 @@
 
 
 /**
- * @brief Fonctions mathematiques
+ * @brief Math functions
  */
 namespace core_mathlib
 {
 // Activation or not (if commented) of targeting operations
-//#define _ALLOW_TARGETING_
+//#define _ALLOW_TARGETING_ XXX
 
 
 typedef float decimal;
@@ -52,7 +52,11 @@ typedef unsigned int bitSet; /*!< used to manage set of elements*/
 #endif
 
 #ifndef EPSILON_6
-#define EPSILON_6           (decimal)0.000001 // 10e-6                      /*!< Approximation lors de la comparaison de 2 decimal */
+#define EPSILON_6           (decimal)0.000001 // 10e-6                      /*!< Approximation when comparing 2 decimal */
+#endif
+
+#ifndef EPSILON_15
+#define EPSILON_15           (decimal)0.000000000000001 // 10e-15                      /*!< Approximation when comparing 2 decimal */
 #endif
 
 #ifndef M_PI
@@ -69,7 +73,7 @@ typedef unsigned int bitSet; /*!< used to manage set of elements*/
 #define M_4PI               (decimal)12.566370614359172953850573533118      /*!< 4 * PI */
 #endif
 
-#define M_PI2               (decimal)9.869604401089358618834490999876       /*!< PI au carre */
+#define M_PI2               (decimal)9.869604401089358618834490999876       /*!< PI * PI */
 #define M_PIDIV180          (decimal)0.01745329251994329576923690768488     /*!< PI / 180 */
 #define M_180DIVPI          (decimal)57.295779513082320876798154814105      /*!< 180 / PI */
 
@@ -96,8 +100,8 @@ class ivec4;
 /*****************************************************************************/
 
 /**
- * @brief Vecteur 3D
- * Vecteur comprenant 3 flottants
+ * @brief 3D vector
+ * Vector defined with 3 floats
  */
 template<typename base_t>
 class base_vec3
@@ -109,7 +113,7 @@ public:
     base_vec3(const vec2& _v, base_t _z);
     base_vec3(const base_vec3& _v) : x(_v.x), y(_v.y), z(_v.z) { }
     base_vec3(const base_vec3* _v) : x(_v->x), y(_v->y), z(_v->z) { }
-    base_vec3(const base_vec3& _v, const base_vec3& _w): x(_w.x - _v.x), y(_w.y - _v.y), z(_w.z - _v.z) {}                          // coordonnees du vecteur ab
+    base_vec3(const base_vec3& _v, const base_vec3& _w): x(_w.x - _v.x), y(_w.y - _v.y), z(_w.z - _v.z) {}                          //!< ab vector coordinates
 
     base_vec3(const vec4& _v);
 
@@ -143,7 +147,7 @@ public:
         return base_vec3(this->y * _v.z - this->z * _v.y,
                          this->z * _v.x - this->x * _v.z,
                          this->x * _v.y - this->y * _v.x) ;
-    }   // produit vectoriel
+    }   //!< vector product
 
     base_t operator*(const vec4& _v) const;
 
@@ -186,18 +190,19 @@ public:
     {
         return (this->x * ac.x + this->y * ac.y + this->z * ac.z) / (length() * ac.length());
     }
-    base_t dot(const base_vec3& v) const { return ((this->x * v.x) + (this->y * v.y) + (this->z * v.z)); } // Produit scalaire
+    base_t dot(const base_vec3& v) const { return ((this->x * v.x) + (this->y * v.y) + (this->z * v.z)); } //!< Scalar product
     // this < _v
     bool compare(const base_vec3& _v, base_t epsi = EPSILON_6) { return (fabs(this->x - _v.x) < epsi && fabs(this->y - _v.y) < epsi && fabs(this->z - _v.z) < epsi); }
-    base_t angle(const base_vec3& v)  const   // retourne l'angle en radians entre *this et v
+    /** @brief Return the angle in radians between *this and v */
+    base_t angle(const base_vec3& v)  const
     {
         base_t angle = acos(this->dot(v) / (this->length() * v.length()));
         if (angle < EPSILON_6) { return 0; }
         return angle;
     }
-    /** @brief  retourne les coordonnee du point le plus proche de *this sur la droite passant par vA et vB */
+    /** @brief  Return the coordinates of the nearest point of *this on the line passing by vA and vB */
     base_vec3 closestPointOnLine(const base_vec3& vA, const base_vec3& vB) const { return (((vB - vA) * this->projectionOnLine(vA, vB)) + vA); }
-    /** @brief  retourne les coordonnees du point le plus proche de *this sur le segment vA,vB */
+    /** @brief  Return the coordinates of the nearest point of *this on the segment [vA,vB] */
     base_vec3 closestPointOnSegment(const base_vec3& vA, const base_vec3& vB) const
     {
         base_t factor = this->projectionOnLine(vA, vB);
@@ -205,17 +210,19 @@ public:
         if (factor >= 1.0f) { return vB; }
         return (((vB - vA) * factor) + vA);
     }
-    /** @brief  retourne le facteur de la projection de *this sur la droite passant par vA et vB */
+    /** @brief  Return the projection factor of *this on the line passing by vA and vB */
     base_t projectionOnLine(const base_vec3& vA, const base_vec3& vB) const
     {
         base_vec3 v(vB - vA);
         return v.dot(*this - vA) / v.dot(v);
     }
-    /** @brief  Fonction d'interpolation lineaire entre 2 vecteurs */
+    /** @brief Linear interpolation function between 2 vectors */
     base_vec3 lerp(base_vec3& u, base_vec3& v, base_t factor) { return ((u * (1 - factor)) + (v * factor)); }
 
-    /** @brief Calcul la distance entre deux points
-     * @return Resultat du calcul
+    /**
+     * @brief Compute the distance between two points pointed by *this and a_vector
+     * @param a_vector A vector defining the second point
+     * @return Distance
      */
     decimal distance(const base_vec3& a_vector) const
     {
@@ -227,14 +234,14 @@ public:
         // return result
         return(sqrt(dx * dx + dy * dy + dz * dz));
     }
-    /** @brief Rotation d'un vecteur selon deux angles
+    /** @brief Vector rotation
      *
-     * Fonction pour le calcul du changement de coordonnees du vecteur
-     * this par rotation suivant le vecteur n
-     * d'un angle (radians)
+     * Function to change the coordinates of the vector *this
+     * by rotation around the vector n
+     * with an angle (radians)
      *
-     * @param[in] angle Angle en radians
-     * @param[in] n Vecteur de rotation
+     * @param[in] angle Angle in radians
+     * @param[in] n Rotation vector
      */
     base_vec3 Rotation(const base_vec3& n, const base_t& angle) const
     {
@@ -291,26 +298,26 @@ inline std::vector<dvec3> operator + (const std::vector<dvec3>& _u, const std::v
 }
 
 /*!
- * \fn OPoint3D vec3ToOPoint3D(const vec3& p)
- * \brief convertit un vec3 en OPoint3D
+ * \fn OPoint3D vec3toOPoint3D(const vec3& _v)
+ * \brief Converts a vec3 to OPoint3D
  */
 inline OPoint3D vec3toOPoint3D(const vec3& _v) { return OPoint3D(static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z)); }
 
 /*!
- * \fn vec3 OPoint3DTovec3(const OPoint3D& _p)
- * \brief convertit un OPoint3D en vec3
+ * \fn vec3 OPoint3Dtovec3(const OPoint3D& _p)
+ * \brief Converts a OPoint3D to vec3
  */
 inline vec3 OPoint3Dtovec3(const OPoint3D& _p) { return vec3(static_cast<float>(_p._x), static_cast<float>(_p._y), static_cast<float>(_p._z)); }
 
 /*!
- * \fn OVector3D vec3ToOVector3D(const vec3& p)
- * \brief convertit un vec3 en OVector3D
+ * \fn OVector3D vec3toOVector3D(const vec3& p)
+ * \brief Converts a vec3 to OVector3D
  */
 inline OVector3D vec3toOVector3D(const vec3& _v) { return OVector3D(static_cast<double>(_v.x), static_cast<double>(_v.y), static_cast<double>(_v.z)); }
 
 /*!
- * \fn vec3 OVector3DTovec3(const OVector3D& _p)
- * \brief convertit un OVector3D en vec3
+ * \fn vec3 OVector3Dtovec3(const OVector3D& _p)
+ * \brief Converts a OVector3D to vec3
  */
 inline vec3 OVector3Dtovec3(const OVector3D& _v) { return vec3(static_cast<float>(_v._x), static_cast<float>(_v._y), static_cast<float>(_v._z)); }
 
@@ -320,8 +327,8 @@ inline vec3 OVector3Dtovec3(const OVector3D& _v) { return vec3(static_cast<float
 /*                                                                           */
 /*****************************************************************************/
 /**
- * @brief Vecteur 2D
- * Vecteur comprenant 2 flottants
+ * @brief 2D Vector
+ * Vector defined with 2 floats
  */
 class vec2
 {
@@ -377,12 +384,12 @@ public:
         this->y *= inv;
         return l;
     }
-    decimal det(vec2& v) { return (this->x * v.y - this->y * v.x); }  //Determinant 2D
-    decimal dot(const vec2& v) { return ((this->x * v.x) + (this->y * v.y)); } // Produit scalaire
+    decimal det(vec2& v) { return (this->x * v.y - this->y * v.x); }  //!< 2D determinant
+    decimal dot(const vec2& v) { return ((this->x * v.x) + (this->y * v.y)); } //!< Scalar product
     bool compare(const vec2& _v, decimal epsi = EPSILON_6) { return (fabs(this->x - _v.x) < epsi && fabs(this->y - _v.y) < epsi); }
-    /** @brief retourne les coordonnee du point le plus proche de *this sur la droite passant par vA et vB */
+    /** @brief Return the coordinates of the nearest point of *this on the line passing by vA and vB */
     vec2 closestPointOnLine(const vec2& vA, const vec2& vB) { return (((vB - vA) * this->projectionOnLine(vA, vB)) + vA); }
-    /** @brief retourne les coordonnee du point le plus proche de *this sur le segment vA,vB */
+    /** @brief Return the coordinates of the nearest point of *this on the segment vA,vB */
     vec2 closestPointOnSegment(const vec2& vA, const vec2& vB)
     {
         decimal factor = this->projectionOnLine(vA, vB);
@@ -390,13 +397,13 @@ public:
         if (factor >= 1.0f) { return vB; }
         return (((vB - vA) * factor) + vA);
     }
-    /** @brief retourne le facteur de la projection de *this sur la droite passant par vA et vB */
+    /** @brief Return the projection factor of *this on the line passing by vA and vB */
     decimal projectionOnLine(const vec2& vA, const vec2& vB)
     {
         vec2 v(vB - vA);
         return v.dot(*this - vA) / v.dot(v);
     }
-    /** @brief  Fonction d'interpolation lineaire entre 2 vecteurs */
+    /** @brief  Linear interpolation function between 2 vectors */
     vec2 lerp(vec2& u, vec2& v, decimal factor) { return ((u * (1 - factor)) + (v * factor)); }
     decimal angle(void) { return (decimal)atan2(this->y, this->x); }
     decimal angle(const vec2& v) { return (decimal)atan2(v.y - this->y, v.x - this->x); }
@@ -472,8 +479,8 @@ inline vec3 FaceNormal(const vec3& vp1, const vec3& vp2, const vec3& vp3)
     return vret;
 }
 /**
- * @brief Vecteur 4D
- * Vecteur comprenant 4 flottants
+ * @brief 4D Vector
+ * Vector defined with 4 floats
  */
 class vec4
 {
@@ -527,7 +534,7 @@ public:
     };
 };
 /**
- * Calcul du determinant
+ * Calculate the determinant
  *
  * |x1 y1 z1 w1|
  * |x2 y2 z2 w2|
@@ -539,7 +546,7 @@ inline decimal Determinant(const vec4& vp1, const vec4& vp2, const vec4& vp3, co
     return -(vp1.w * (vp2.x * (vp3.y * vp4.z - vp4.y * vp3.z) - vp3.x * (vp2.y * vp4.z - vp4.y * vp2.z) + vp4.x * (vp2.y * vp3.z - vp3.y * vp2.z)) - vp2.w * (vp1.x * (vp3.y * vp4.z - vp4.y * vp3.z) - vp3.x * (vp1.y * vp4.z - vp4.y * vp1.z) + vp4.x * (vp1.y * vp3.z - vp3.y * vp1.z)) + vp3.w * (vp1.x * (vp2.y * vp4.z - vp4.y * vp2.z) - vp2.x * (vp1.y * vp4.z - vp4.y * vp1.z) + vp4.x * (vp1.y * vp2.z - vp2.y * vp1.z)) - vp4.w * (vp1.x * (vp2.y * vp3.z - vp3.y * vp2.z) - vp2.x * (vp1.y * vp3.z - vp3.y * vp1.z) + vp3.x * (vp1.y * vp2.z - vp2.y * vp1.z)));
 }
 /**
- * Calcul du determinant
+ * Calculate the determinant
  *
  * |x1 y1 z1 1|
  * |x2 y2 z2 1|
@@ -584,8 +591,8 @@ inline bool colinear(const vec3& A, const vec3& B, const vec3& C, const decimal&
 /*****************************************************************************/
 
 /**
- * @brief Vecteur 2D
- * Vecteur comprenant 2 entiers
+ * @brief 2D Vector
+ * Vector defined by 2 integers
  */
 class ivec2
 {
@@ -637,8 +644,8 @@ public:
 /*****************************************************************************/
 
 /**
- * @brief Vecteur 3D
- * Vecteur comprenant 3 entiers
+ * @brief 3D Vector
+ * Vector defined with 3 integers
  */
 class ivec3
 {
@@ -695,8 +702,8 @@ public:
 /*****************************************************************************/
 
 /**
- * @brief Vecteur 4D
- * Vecteur comprenant 4 entiers
+ * @brief 4D Vector
+ * Vector defined with 4 integers
  */
 class ivec4
 {
@@ -766,7 +773,7 @@ inline decimal CalcTetraVolume(vec3 A, vec3 B, vec3 C, vec3 D)
     return fabs((A.dot(Cross_r(B, C))) / 6.f);
 }
 /**
- * @return La position du point central d'un triangle
+ * @return Return the central point of a triangle
  */
 inline vec3 GetGTriangle(const vec3& A, const vec3& B, const vec3& C)
 {
@@ -852,8 +859,8 @@ inline int Round2Int(float val)
     return true;
 }*/
 /**
- * Calcul du segment entre les lignes (p1,p2) et (p3,p4)
- * @return Faux si aucune solution n'existe
+ * Calculate the segment between the lines (p1,p2) and (p3,p4)
+ * @return False if no solution is found
  */
 inline int LineLineIntersect(
     const vec3& p1, const vec3& p2, const vec3& p3, const vec3& p4, vec3* pa, vec3* pb,
@@ -925,11 +932,11 @@ inline bool pointInPolygone(const vec2& p, const std::vector<vec2>& points)
 
 //const Vector& P, decimal* pfSParam, decimal* pfTParam
 /**
- * Distance la plus courte entre un triangle et un point.
- * @param va Sommet A du triangle
- * @param vb Sommet B du triangle
- * @param vc Sommet C du triangle
- * @param P Point a comparer
+ * Closest distance between a point and a triangle.
+ * @param va Vertex A of the triangle
+ * @param vb Vertex B of the triangle
+ * @param vc Vertex C of the triangle
+ * @param P Point
  * @param pfSParam  Barycentric coordinate of triangle at point closest to p (u)
  * @param pfTParam  Barycentric coordinate of triangle at point closest to p (v)
  * @return Shortest distance squared.
@@ -1207,7 +1214,7 @@ inline unsigned int buildBitSet(const unsigned short& length)
 
 /*
  * \fn sequence buildComplementaryBitSet(const unsigned& int length, const unsigned int& bitSet )
- * \brief build the bit sequence repesenting complementary of bitset, taking account of is real useful length
+ * \brief build the bit sequence representing complementary of bitset, taking account of is real useful length
  */
 inline unsigned int buildComplementaryBitSet(const unsigned int& length, const unsigned int& bitSet)
 {

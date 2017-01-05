@@ -1,5 +1,5 @@
 /**
- * @file cgal_tool.cpp
+ * @file cgal_tools.cpp
  *
  * @brief Utilities to ease (and wrap) use of CGAL
  *

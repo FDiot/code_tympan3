@@ -20,12 +20,12 @@
 #include "Tympan/solvers/AnalyticRayTracer/geometry_modifier.h"
 #include "Tympan/solvers/AcousticRaytracer/Engine/Simulation.h"
 
-/**
- * \class TYANIME3DAcousticPathFinder
- * \brief La recherche de chemins acoustiques associee a la methode ANIME3D
- */
 class AtmosphericConditions;
 
+/**
+ * \class TYANIME3DAcousticPathFinder
+ * \brief Research of acoustic paths for the ANIME3D method
+ */
 class TYANIME3DAcousticPathFinder
 {
 public:
@@ -35,20 +35,30 @@ public:
     //                                TYTabPointCalculGeoNode& tabRecepteurs,
     //                                const tympan::AcousticProblemModel& aproblem_,
     //                                tab_acoustic_path& tabTYRays);
-
+    /**
+     * \brief Constructor
+     * \param tabPolygon Array containing all the informations relative to a site geometry and associated material to each face
+     * \param tabPolygonSize Size of the previous array
+     * \param aproblem_ Acoustic problem
+     * \param tabTYRays Array containing the acoustic paths for the rays
+     * \param atmos Atmospheric conditions object
+     */
     TYANIME3DAcousticPathFinder(    TYStructSurfIntersect* tabPolygon, 
                                     const size_t& tabPolygonSize, 
                                     const tympan::AcousticProblemModel& aproblem_,
                                     tab_acoustic_path& tabTYRays,
                                     AtmosphericConditions& atmos);
 
-
+    /// Destructor
     virtual ~TYANIME3DAcousticPathFinder();
 
+    /// Launch the research of acoustic paths
     bool exec();
 
+    /// Get ray tracing object
     Simulation& getRayTracer() { return _rayTracing; }
 
+    /// Get the geometry modifier
     IGeometryModifier* get_geometry_modifier() { return transformer.get(); }
 
 private :
@@ -79,7 +89,7 @@ private :
     void appendSourceToSimulation(vector<vec3>& sources);
 
     /*!
-    * \fn  void convertRaytoTYRay(const TYSiteNode& site, TYCalcul& calcul, const unsigned int& sens)
+    * \fn  void convert_Rays_to_acoustic_path(const unsigned int& sens)
     * \brief convertion des rayons en rayons TYMPAN
     */
     void convert_Rays_to_acoustic_path(const unsigned int& sens);
@@ -93,7 +103,7 @@ private :
     void sampleAndCorrection();
 
     /*!
-     * \fn void set_metier_source_and_receptor();
+     * \fn void set_source_idx_and_receptor_idx_to_acoustic_path();
      */
     void set_source_idx_and_receptor_idx_to_acoustic_path(int sens, Ray *ray, acoustic_path *tyRay);
 
@@ -112,7 +122,7 @@ private:
     /// Nombre de polygones presents dans _tabPolygon
     const size_t& _tabPolygonSize;
 
-    /// tableau de l'ensemble des rayons métier Code_TYMPAN
+    /// tableau de l'ensemble des rayons metier Code_TYMPAN
     tab_acoustic_path& _tabTYRays;
 
     /// Conditions meteo

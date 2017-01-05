@@ -18,6 +18,9 @@
 
 #include "DefaultEngine.h"
 
+/**
+ * \brief Parallel default engine class
+ */
 #ifdef TEST_ACCELERATION_RECEPTORS
 class ParallelDefaultEngine : public Engine
 {

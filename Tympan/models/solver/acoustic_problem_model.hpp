@@ -22,14 +22,21 @@ namespace tympan
  * @brief Find the intersection between some triangles (`triangles`, `nodes`) and a volume given
  * by a width, a height and 2 points delimiting the length. The volume is centered on the midpoint
  * between the source and the receptor
- *
+ * @param triangles List of triangles
+ * @param nodes List of nodes
+ * @param l Volume length
+ * @param h Volume height
+ * @param source Acoustic source
+ * @param receptor Acoustic receptor
  * @return the indices of the triangles from `triangles` that are intersected by the volume
  **/
 std::deque<triangle_idx> scene_volume_intersection(const triangle_pool_t& triangles,
                                                    const nodes_pool_t& nodes,
                                                    float l, float h,
                                                    OPoint3D source, OPoint3D receptor); // L
-
+/**
+ * @brief Class to describe the acoustic problem
+ */
 class AcousticProblemModel
 {
 public:
@@ -38,11 +45,11 @@ public:
     virtual ~AcousticProblemModel() {};
 
     /**
-     * @brief Maps a \c TYPoint or \c OPoint3D as a \c node_ref
+     * @brief Maps a \c Point or \c OPoint3D as a \c node_ref
      * @param point the \c TYPoint  or \c OPoint3D to be mapped
      * @return a smart pointer to the corresponding Node (created on the fly if needed)
      */
-    node_idx make_node(const Point&);
+    node_idx make_node(const Point& point);
     node_idx make_node(double x, double y, double z)
     {return make_node(Point(x, y, z)); }
 
@@ -98,6 +105,8 @@ public:
      * @brief Push a representation of a ground material into the model
      * @param name the name of the material
      * @param resistivity the resistivity of the ground, expressed in kRayls (TO BE CONFIRMED)
+     * @param deviation the deviation of the ground
+     * @param length medium length
      * @return a shared_ptr to the corresponding AcousticGroundMaterial instance
      */
     material_ptr_t make_material(const string& name, double resistivity, double deviation, double length);
@@ -105,14 +114,17 @@ public:
     /**
      * @brief Push a representation of a building material into the model
      * @param name the name of the material
-     * @param the absorption spectrum (TO BE PRECISED)
+     * @param spectrum the absorption spectrum (TO BE PRECISED)
      * @return a shared_ptr to the corresponding AcousticBuildingMaterial instance
      */
     material_ptr_t make_material(const string& name, const ComplexSpectrum& spectrum);
 
     /**
      * @brief Push a new acoustic source into the model
-     * TODO
+     * @param point_ Source position
+     * @param spectrum_ Spectrum associated to the source
+     * @param directivity Pointer to a source directivity
+     * @return the source id
      */
     source_idx make_source(
         const Point& point_,
@@ -126,11 +138,11 @@ public:
         const Point& position_);
 
 
-    const nodes_pool_t& nodes() const { return all_nodes; }
-    const triangle_pool_t& triangles() const  { return all_triangles; }
-    const material_pool_t& materials() const { return all_materials; }
-    const source_pool_t& sources() const { return all_sources; }
-    const receptor_pool_t& receptors() const { return all_receptors; }
+    const nodes_pool_t& nodes() const { return all_nodes; }             //!< Return array of nodes
+    const triangle_pool_t& triangles() const  { return all_triangles; } //!< Return array of triangles
+    const material_pool_t& materials() const { return all_materials; }  //!< Return array of materials
+    const source_pool_t& sources() const { return all_sources; }        //!< Return array of sources
+    const receptor_pool_t& receptors() const { return all_receptors; }  //!< Return array of receptors
 
 public: // XXX Could / should be protected but this complicates testing
 
@@ -149,11 +161,11 @@ public: // XXX Could / should be protected but this complicates testing
 
 protected: // data members
 
-    nodes_pool_t all_nodes;
-    triangle_pool_t all_triangles;
-    material_pool_t all_materials;
-    source_pool_t all_sources;
-    receptor_pool_t all_receptors;
+    nodes_pool_t all_nodes;         //!< Array of all nodes
+    triangle_pool_t all_triangles;  //!< Array of all triangles
+    material_pool_t all_materials;  //!< Array of all materials
+    source_pool_t all_sources;      //!< Array of all sources
+    receptor_pool_t all_receptors;  //!< Array of all receptors
 };  // class AcousticProblemModel
 
     std::unique_ptr<AcousticProblemModel> make_AcousticProblemModel();

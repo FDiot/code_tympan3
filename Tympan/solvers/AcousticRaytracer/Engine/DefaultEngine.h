@@ -19,15 +19,19 @@
 #include "Engine.h"
 #include <stack>
 
+/**
+ * \brief Default Engine class
+ */
 class DefaultEngine : public Engine
 {
 #ifdef TEST_ACCELERATION_RECEPTORS
 public:
+	/// Constructors
     DefaultEngine() : Engine() { nbRayonsTraites = 0;}
 
     DefaultEngine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, Scene *_recepteurs)
         : Engine(_scene, _sources, _solver, _recepteurs) {  }    
-    
+    /// Copy constructor
     DefaultEngine(const DefaultEngine& other)
     {
         scene = other.scene;
@@ -35,7 +39,7 @@ public:
         solver = other.solver;
         recepteurs = other.recepteurs;
     }
-
+    /// Destructor
     virtual ~DefaultEngine() { }
 
     virtual bool process();
@@ -43,6 +47,11 @@ public:
     virtual void runStructureBenchmark();
 
 protected:
+    /**
+     * \brief Search if a ray intersects a receptor
+     * @param tmin tmin
+     * @param r The ray
+     */
 	void searchForReceptor(const decimal &tmin, Ray *r)
 	{
         //Recuperation des structures acceleratrices pour le Solver
@@ -70,7 +79,9 @@ protected:
             }            
         }
     }
-
+    /**
+     * \brief Initialize the rays treatment stack by a loop on the receptors
+     */
 	void initialReceptorTargeting()
 	{
 		for (vector<Source>::iterator itsource = sources->begin(); itsource != sources->end(); itsource++)
@@ -157,6 +168,10 @@ protected :
 	}
 #endif
 protected :
+	/**
+	 * \brief Add a ray to the treatment stack
+	 * @param r Return modified ray
+	 */
 	void copyRayAndAddToStack(Ray *r)
 	{
         //Copie d'un rayon ayant rencontre une diffraction...
@@ -168,12 +183,18 @@ protected :
         //Copie achevee
 	}
 
-    Ray* genRay();
+    Ray* genRay();													//!< Create rays from the sources
+     /**
+      * \brief Ray treatment method
+      * @param r Ray to treat
+      * @param result Updated valid rays list
+      * @return
+      */
     virtual bool traitementRay(Ray* r, std::list<validRay> &result);
 
-    std::stack< Ray*, std::deque <Ray*> > pile_traitement;
+    std::stack< Ray*, std::deque <Ray*> > pile_traitement;			//!< Treatment stack containing the rays to treat
 
-    unsigned long long int nbRayonsTraites;
+    unsigned long long int nbRayonsTraites;							//!< Treated rays number
 };
 
 #endif

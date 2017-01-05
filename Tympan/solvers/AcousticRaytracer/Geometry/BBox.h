@@ -22,7 +22,7 @@
 /*!
  * \file BBox.h
  * \class BBox
- * \brief Definition d'une boîte englobante alignee sur les axes (BBox AABB) ainsi que quelques operations usuelles.
+ * \brief Definition of a bounding box which is aligned along the axis (BBox AABB).
  */
 
 using namespace std;
@@ -32,90 +32,42 @@ class BBox
 public:
 
     //public data
-    vec3 pMin;          /*!< Coin inferieur de la boîte englobante*/
-    vec3 pMax;          /*!< Coin superieur de la boîte englobante*/
-    vec3 centroid;      /*!< Centre de la boîte englobante*/
-    bool isNull;        /*!< Determine si une BBox est initialisee ou non*/
+    vec3 pMin;          //!< Lower point of the BBox
+    vec3 pMax;          //!< Upper point of the BBox
+    vec3 centroid;      //!< Center point of the BBox
+    bool isNull;        //!< True if the BBox is initialized, false if not
 
 
     //public methods
-    /*!
-    *  \fn BBox()
-    *  \brief Constructeur
-    *
-    *  Constructeur de base de la classe BBox. Les valeurs initiales sont au point d'origine
-    */
+    /// Default constructor
     BBox() : isNull(true) {}
 
     /*!
-    *  \fn BBox(vec3 &_pMin, vec3 &_pMax)
-    *  \brief Constructeur
-    *
-    *  Constructeur de la classe BBox avec initialisation des coins de la boîte englobante et calcul du centroid.
-    *  \param _pMin : Definition du coin inferieur de la boîte englobante
-    *  \param _pMax : Definition du coin superieur de la boîte englobante
+    *  \brief Constructor with initialization of the 3 points of the BBox
+    *  \param _pMin : Definition of the lower point
+    *  \param _pMax : Definition of the upper point
     */
     BBox(const vec3& _pMin, const vec3& _pMax) : isNull(false) {pMin = _pMin; pMax = _pMax; centroid = (pMin + pMax) / 2.0f;}
 
-    /*
-    * \fn BBox(const BBox &other)
-    * \brief Constructeur par copie)
-    * \param other : BBox a copier
-    */
+    /// Copy constructor
     BBox(const BBox& other) { pMin = vec3(other.pMin); pMax = vec3(other.pMax); centroid = (pMin + pMax) / 2.0f; isNull = other.isNull;}
 
-    /*!
-    *  \fn vec3 getBBMin()
-    *  \brief Getter
-    *
-    *  Recupere le coin inferieur de la boîte englobante
-    *  \return : Renvoi la valeur du coin inferieur (type vec3)
-    */
+    /// Return the lower point
     vec3 getBBMin() {return pMin;}
 
-    /*!
-    *  \fn vec3 getBBMax()
-    *  \brief Getter
-    *
-    *  Recupere le coin superieur de la boîte englobante
-    *  \return : Renvoi la valeur du coin superieur (type vec3)
-    */
+    /// Return the upper point
     vec3 getBBMax() {return pMax;}
 
-    /*!
-    *  \fn vec3 getCentroid()
-    *  \brief Getter
-    *
-    *  Recupere le centre de la boîte englobante
-    *  \return : Renvoi la valeur du centre (type vec3)
-    */
+    /// Return the center point
     vec3 getCentroid() {return centroid;}
 
-    /*!
-    *  \fn void setBBMin(vec3 &_pMin)
-    *  \brief Setter
-    *
-    *  Modifie le coin inferieur de la boîte et recalcul le nouveau centre de la boîte.
-    *  \param _pMin : Nouveau coin inferieur de la boîte englobante
-    */
+    /// Set the lower point (center point is recomputed)
     void setBBMin(vec3& _pMin) {pMin = _pMin; centroid = (pMin + pMax) / 2.0f;}
 
-    /*!
-    *  \fn void setBBMax(vec3 &_pMax)
-    *  \brief Setter
-    *
-    *  Modifie le coin inferieur de la boîte et recalcul le nouveau centre de la boîte.
-    *  \param _pMax : Nouveau coin superieur de la boîte englobante
-    */
+    /// Set the upper point (center point is recomputed)
     void setBBMax(vec3& _pMax) {pMax = _pMax; centroid = (pMin + pMax) / 2.0f;}
 
-
-    /*!
-    *  \fn double SurfaceArea() const
-    *  \brief Renvoie l'aire de  la boîte englobante
-    *
-    *  Renvoie la somme des aires des surfaces de la boîte englobante. Utilisee pour le calcul du SAH pour les structures acceleratrices
-    */
+    /// Return the BBox area (sum of the lateral areas). Used for the SAH calculation of the accelerators
     double SurfaceArea() const
     {
         vec3 d = pMax - pMin;
@@ -123,13 +75,10 @@ public:
     }
 
     /*!
-    *  \fn BBox Union(const BBox &b, const vec3 &p)
-    *  \brief Union d'une boîte englobante et d'un point
-    *
-    *  Fait la fusion d'une boîte englobante et d'un point et renvoie une nouvelle boîte englobante.
-    *  \param b : Boîte englobante d'origine (ne sera pas modifiee)
-    *  \param p : Point a inserer dans la boîte englobante resultat
-    *  \return Renvoie une nouvelle boîte englobant issue de la fusion du point et de la boîte englobante
+    *  \brief Union of a point and a BBox. A new BBox is created.
+    *  \param b : Initial BBox (will be not modified)
+    *  \param p : Point to insert on the initial BBox
+    *  \return Return a new BBox
     */
     BBox Union(const BBox& b, const vec3& p)
     {
@@ -145,13 +94,9 @@ public:
     }
 
     /*!
-    *  \fn BBox Union(const vec3 &p)
-    *  \brief Union d'une boîte englobante et d'un point
-    *
-    *  Fait la fusion d'une boîte englobante et d'un point et renvoie une nouvelle boîte englobante.
-    *  \param b : Boîte englobante d'origine (ne sera pas modifiee)
-    *  \param p : Point a inserer dans la boîte englobante resultat
-    *  \return Renvoie une nouvelle boîte englobant issue de la fusion du point et de la boîte englobante
+    *  \brief Union of a point and the current (this) BBox. A new BBox is created.
+    *  \param p : Point to insert on the initial BBox
+    *  \return Return a new BBox
     */
     BBox Union(const vec3& p)
     {
@@ -168,13 +113,9 @@ public:
     }
 
     /*!
-    * \fn BBox Union(const BBox &b2)
-    *  \brief Union dde deux boîtes englobantes
-    *
-    *  Fait la fusion de deux boîtes englobantes et renvoie une nouvelle boîte englobante.
-    *  \param b1 : Premiere boîte englobante(ne sera pas modifiee)
-    *  \param b2 : Deuxieme boîte englobante(ne sera pas modifiee)
-    *  \return Renvoie une nouvelle boîte englobant issue de la fusion des deux boîtes englobantes
+    *  \brief Union of a BBox and the current one. A new BBox is created.
+    *  \param b2 : A BBox (will be not modified)
+    *  \return Return a new BBox
     */
     BBox Union(const BBox& b2)
     {
@@ -202,13 +143,10 @@ public:
     }
 
     /*!
-    * \fn BBox Union(const BBox &b1, const BBox &b2)
-    *  \brief Union dde deux boîtes englobantes
-    *
-    *  Fait la fusion de deux boîtes englobantes et renvoie une nouvelle boîte englobante.
-    *  \param b1 : Premiere boîte englobante(ne sera pas modifiee)
-    *  \param b2 : Deuxieme boîte englobante(ne sera pas modifiee)
-    *  \return Renvoie une nouvelle boîte englobant issue de la fusion des deux boîtes englobantes
+    *  \brief Union of two BBox. A new BBox is created.
+    *  \param b1 : First BBox (will be not modified)
+    *  \param b2 : Second BBox (will be not modified)
+    *  \return Return a new BBox
     */
     BBox Union(const BBox& b1, const BBox& b2)
     {
@@ -224,9 +162,8 @@ public:
     }
 
     /*!
-    * \fn bool isInBox(const vec3 &p) const
-    * \brief Test si un point est dans la boîte englobante
-    * \return Renvoie vrai si le point est dans la boîte englobante
+    * \brief Check if a point is inside the BBox
+    * \return Return true if the point is inside
     */
     inline bool isInBox(const vec3& p) const
     {
@@ -234,9 +171,8 @@ public:
     }
 
     /*!
-    * \fn bool intersectBox(const BBox &box)
-    * \brief Test si il y a une intersection entre les boîtes englobantes.
-    * \return Renvoie vrai si il y a contact entre les bbox. Renvoie vrai egalement si un boîte est incluse dans l'autre.
+    * \brief Test the intersection of a BBox with this one.
+    * \return Return true if they intersect. Also true if the BBox is included into the other.
     */
     inline bool intersectBox(const BBox& box)
     {
@@ -247,13 +183,7 @@ public:
         return (x && y && z);
     }
 
-    /*!
-    *  \fn int MaximumExtend() const
-    *  \brief Renvoie la dimension dominante de la boîte englobante
-    *
-    *  Renvoie la dimension maximale de la boîte englobante. On utilise le meme indice que ceux utilises par les vecteurs. 0 pour x, 1 pour y et 2 pour z
-    *  \return Renvoie l'indice de la dimension dominante
-    */
+    /// Return the index of the dominant direction (maximal dimension). Index is 0 for x, 1 for y, 2 for z
     int MaximumExtend() const
     {
         vec3 diag = pMax - pMin;
@@ -272,14 +202,12 @@ public:
     }
 
     /*!
-    *  \fn bool IntersectP( Ray *ray, float *hitt0, float *hitt1) const
-    *  \brief Calcul l'intersection entre un rayon et une boîte englobante
-    *
-    *  Calcul l'intersection entre un rayon et une boîte englobante et renvoie si on touche la boîte englobante
-    *  \param ray : pointeur vers un rayon avec une origine et une direction
-    *  \param hitt0 : pointeur vers un float qui sert a stocker le t du point d'entree du rayon avec la boîte englobante
-    *  \param hitt1 : pointeur vers un float qui sert a stocker le t du point de sortie du rayon avec la boîte englobante
-    *  \return Renvoie vrai si le rayon touche la boîte englobante, faux dans le cas contraire
+    *  \brief Compute the intersection between a Ray and this BBox
+    *  \param pos [in] Ray position
+    *  \param dir [in] Ray direction
+    *  \param hitt0 [out] Pointer to a float storing the t entering point of the ray from this BBox
+    *  \param hitt1 [out] Pointer to a float storing the t leaving point of the ray from this BBox
+    *  \return Return true if the ray is in contact with this BBox
     */
     bool IntersectP(vec3 pos, vec3 dir, decimal* hitt0 = NULL, decimal* hitt1 = NULL) const
     {
@@ -325,12 +253,7 @@ public:
         return true;
     }
 
-    /*!
-    *  \fn void print()
-    *  \brief Fonction d'affichage d'une boîte englobante
-    *
-    *  Affiche le coin inferieur et superieur de la boîte englobante.
-    */
+    /* Not used (and seems not coded)
     void print()
     {
         if (isNull)   //std::cout << "Non initialisee." << std::endl;
@@ -339,21 +262,25 @@ public:
         else   //std::cout << "Initialisee." << std::endl;
         {
         }
-    }
+    } */
 
+    /// Return the lower (0) or upper (1) point
     vec3& operator[](int i)
     {
         if (i == 0) { return pMin; }
         else { return pMax; }
     }
+    /// Return the lower (0) or upper (1) point
     const vec3& operator[](int i) const
     {
         if (i == 0) { return pMin; }
         else { return pMax; }
     }
 
+    /// Diagonal length of the BBox
     decimal diag() { return sqrt((pMax.x - pMin.x) * (pMax.x - pMin.x) + (pMax.y - pMin.y) * (pMax.y - pMin.y) + (pMax.z - pMin.z) * (pMax.z - pMin.z)); }
 
+    /// Return true if the point pt is inside the BBox
     bool Inside(vec3& pt) const
     {
         return (pt.x >= pMin.x && pt.x <= pMax.x &&

@@ -29,10 +29,13 @@
 #define UNIFORM_SPHERIC_SAMPLER_2
 
 using namespace std;
-
+/**
+ * \brief Another sampler class for uniform spherical sampling
+ */
 class UniformSphericSampler2: public Sampler
 {
 public:
+	/// Constructors
     UniformSphericSampler2(const unsigned int& nbRays = 0,
                            const decimal& Theta = (decimal) M_PIDIV2,
                            const decimal& Phi = (decimal) M_2PI) : Sampler(nbRays, Theta, Phi),
@@ -85,7 +88,7 @@ public:
         Sampler* sampler = new UniformSphericSampler2(this);
         return sampler;
     }
-
+    /// Destructor
     virtual ~UniformSphericSampler2() { }
 
     virtual vec3 getSample()
@@ -125,7 +128,7 @@ public:
 
         computeN2();
     }
-
+    /// Return the launched rays real number
     unsigned int getRealNbRays() const { return _real_nb_rays; }
 
     virtual unsigned int computeDiffractionNbr(const decimal& thetaCalcul)
@@ -165,15 +168,15 @@ private :
     }
 
 private :
-    unsigned int _real_nb_rays;  /*!< Real number of rays lauched */
-    unsigned int _n1;           /*!< number of slices  */
-    unsigned int _n2;           /*!< number of rays along a specific slice */
-    decimal _dr;                /*!< radius of elementary element of sphere*/
-    decimal _phi0;              /*!< angle offset between a slice and the previous on */
-    decimal _d_theta;           /*!< angle step along longitude */
-    decimal _d_phi;             /*!< angle step along given slice */
-    decimal _thetaCalcul;       /*!< current angle along a longitude */
-    unsigned int _i, _j;        /*!< current indices */
+    unsigned int _real_nb_rays;  //!< Real number of rays launched
+    unsigned int _n1;           //!< Number of slices
+    unsigned int _n2;           //!< Number of rays along a specific slice
+    decimal _dr;                //!< Radius of elementary element of sphere
+    decimal _phi0;              //!< Angle offset between a slice and the previous on
+    decimal _d_theta;           //!< Angle step along longitude
+    decimal _d_phi;             //!< Angle step along given slice
+    decimal _thetaCalcul;       //!< Current angle along a longitude
+    unsigned int _i, _j;        //!< Current indices
 };
 
 #endif

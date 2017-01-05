@@ -19,46 +19,58 @@
 #include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Base.h"
 
+/**
+ * \brief Frame class
+ */
 class Repere : public Base
 {
 
 public:
 
+	/// Constructors
     Repere() : Base() { name = "unknown repere";};
     Repere(vec3 _U, vec3 _V, vec3 _W, vec3 _O);
     Repere(const Repere& repere);
 
+    /// Destructor
     virtual ~Repere() { };
 
+    /// Set global coordinates of local axis U,V,W and origin O
     void set(vec3 _U, vec3 _V, vec3 _W, vec3 _O) { U = vec3(_U); V = vec3(_V); W = vec3(_W); O = vec3(_O); updateMatrices(); }
     void setU(vec3 _U) { U = vec3(_U); updateMatrices(); }
     void setV(vec3 _V) { V = vec3(_V); updateMatrices(); }
     void setW(vec3 _W) { W = vec3(_W); updateMatrices(); }
     void setO(vec3 _O) { O = vec3(_O); updateMatrices(); }
 
+    /// Get global coordinates of local axis U,V,W and origin O
     vec3 getU() const { return U; }
     vec3 getV() const { return V; }
     vec3 getW() const { return W; }
     vec3 getO() const { return O; }
 
+    /// Get global coordinates of vector expressed in local coordinates
     vec3 vectorFromLocalToGlobal(vec3& local);
+    /// Get local coordinates of vector expressed in global coordinates
     vec3 vectorFromGlobalToLocal(vec3& global);
 
+    /// Get global coordinates of a point expressed in local coordinates
     vec3 positionFromLocalToGlobal(vec3& local);
+    /// Get local coordinates of a point expressed in global coordinates
     vec3 positionFromGlobalToLocal(vec3& global);
 
 
 protected:
 
+    /// Update the global and local frame matrixes
     void updateMatrices();
 
-    vec3 U;
-    vec3 V;
-    vec3 W;
-    vec3 O;
+    vec3 U;					//!< Coordinates of local axis U in global frame
+    vec3 V;					//!< Coordinates of local axis V in global frame
+    vec3 W;					//!< Coordinates of local axis W in global frame
+    vec3 O;					//!< Origin of the local frame in the global frame
 
-    decimal LtoG[4][4];
-    decimal GtoL[4][4];
+    decimal LtoG[4][4];		//!< Local to global frame matrix
+    decimal GtoL[4][4];		//!< Global to local frame matrix
 
 };
 

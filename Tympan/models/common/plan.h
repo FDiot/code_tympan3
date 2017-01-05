@@ -56,30 +56,30 @@ public:
     /**
      * \brief Constructs a new plan from 3 points.
      *
-     *  1. On calcul le vecteur N normal au plan.
-     *  2. Tous les vecteurs du plan sont orthogonaux a N !
-     *     => Produit scalaire P1P.N = 0
+     *  1. We calculate normal vector N to the plane.
+     *  2. All plan vectors are normal to N !
+     *     => Scalar product P1P.N = 0
      *      Nx*(Px-P1x) + Ny*(Py-P1y) + Nz*(Pz-P1z) = 0
-     *      A mettre sous la forme :
-     *      a*Px + b*Py + c*Pz + d = 0 == Equation du plan
+     *      Can be written as :
+     *      a*Px + b*Py + c*Pz + d = 0 == Plane equation
      *
-     * \param pt1 Le point 1.
-     * \param pt2 Le point 2.
-     * \param pt3 Le point 3.
+     * \param pt1 Point 1.
+     * \param pt2 Point 2.
+     * \param pt3 Point 3.
      */
     OPlan(const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3);
 
     /**
-     * \brief Constructs a new plan from 1 point and a normale.
+     * \brief Constructs a new plan from 1 point and a normal.
      *
-     *  Tous les vecteurs du plan sont orthogonaux a N !
-     *  => Produit scalaire P1P.N = 0
+     *  All plan vectors are normal to N !
+     *  => Scalar product P1P.N = 0
      *      Nx*(Px-P1x) + Ny*(Py-P1y) + Nz*(Pz-P1z) = 0
-     *      A mettre sous la forme :
+     *      Can be written as :
      *      a*Px + b*Py + c*Pz + d = 0 == Equation du plan
      *
-     * \param pt Le point.
-     * \param normale La normale.
+     * \param pt The point.
+     * \param normale The normal.
      */
     OPlan(const OPoint3D& pt, const OVector3D& normale);
 
@@ -124,106 +124,107 @@ public:
      * \fn void set(const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3);
      * \brief Sets with 3 points.
      *
-     *  1. On calcul le vecteur N normal au plan.
-     *  2. Tous les vecteurs du plan sont orthogonaux a N !
-     *     => Produit scalaire P1P.N = 0
+     *  1. We calculate normal vector N to the plane.
+     *  2. All plan vectors are normal to N !
+     *     => Scalar product P1P.N = 0
      *      Nx*(Px-P1x) + Ny*(Py-P1y) + Nz*(Pz-P1z) = 0
-     *      A mettre sous la forme :
-     *      a*Px + b*Py + c*Pz + d = 0 == Equation du plan
+     *      Can be written as :
+     *      a*Px + b*Py + c*Pz + d = 0 == Plane equation
      *
-     * \param pt1 Le point 1.
-     * \param pt2 Le point 2.
-     * \param pt3 Le point 3.
+     * \param pt1 Point 1.
+     * \param pt2 Point 2.
+     * \param pt3 Point 3.
      */
     void set(const OPoint3D& pt1, const OPoint3D& pt2, const OPoint3D& pt3);
 
     /**
      * \fn void set(const OPoint3D& pt, const OVector3D& normale);
-     * \brief Sets with 1 point and a normale.
+     * \brief Sets with 1 point and a normal.
      *
-     *  Tous les vecteurs du plan sont orthogonaux a N !
-     *  => Produit scalaire P1P.N = 0
+     *  1. We calculate normal vector N to the plane.
+     *  2. All plan vectors are normal to N !
+     *     => Scalar product P1P.N = 0
      *      Nx*(Px-P1x) + Ny*(Py-P1y) + Nz*(Pz-P1z) = 0
-     *      A mettre sous la forme :
-     *      a*Px + b*Py + c*Pz + d = 0 == Equation du plan
+     *      Can be written as :
+     *      a*Px + b*Py + c*Pz + d = 0 == Plane equation
      *
-     * \param pt Le point.
-     * \param normale La normale.
+     * \param pt The point.
+     * \param normale The normal.
      */
     void set(const OPoint3D& pt, const OVector3D& normale);
 
     /**
      * \fn int intersectsSegment(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D& ptIntersec) const;
-     * \brief Calcul de l'intersection  avec un plan avec un segment defini par deux points.
+     * \brief Calculate the intersection of this plane with segment defined by two points.
      *
-     * Remarque :
-     *  Dans le cas ou le segment est compris dans le plan, le resultat
-     *  est INTERS_CONFONDU, et les coordonnees de l'intersection ne
-     *  sont pas mises a jour.
+     * Note :
+     *  In the case the segment belongs to the plane, the result
+     *  is INTERS_CONFONDU, and the coordinates of the intersection
+     *  are not updated.
      *
-     * Principe :
-     *  - Plan defini par :
+     * Algorithm :
+     *  - The plane is defined by :
      *  .   a*x+b*y+c*z+d=0
-     *  - Segment defini par :
+     *  - The segment is defined by :
      *  .   x=x1+t*(x2-x1)
      *  .   y=y1+t*(y2-y1)
      *  .   z=z1+t*(z2-z1)
-     *  .   avec 0 <= t <= 1
-     *  - On resoud le systeme :
+     *  .   with 0 <= t <= 1
+     *  - We solve the system :
      *  .   t = -(a*x1+b*y1+c*z1+d)/D
-     *  .   avec D = a*(x2-x1)+b*(y2-y1)+c*(z2-z1)
-     *  .   et D = produit scalaire entre la normale au plan et le
-     *  .   vecteur directeur du segment, donc si D est nul, alors
-     *  .   le segment est parallele au plan et il suffit de tester
-     *  .   si un point du segment est dans le plan pour savoir si
-     *  .   le segment est dans le plan ou non...
+     *  .   with D = a*(x2-x1)+b*(y2-y1)+c*(z2-z1)
+     *  .   and D = scalar product between the plane normal and
+     *  .   the segment vector, so if D is zero, then
+     *  .   the segment is parallel to the plane and we test
+     *  .   if a point of the segment belongs to the plane to
+     *  .   confirm that the segment belongs to the plane or not...
      *
-     * \param pt1 Le 1er point du segment.
-     * \param pt2 Le 2eme point du segment.
-     * \param ptIntersec Le point correspondant a l'intersection.
+     * \param pt1 The segment first point.
+     * \param pt2 The segment second point.
+     * \param ptIntersec The intersection point.
      *
-     * \return INTERS_OUI (1) si l'intersection existe,
-     *         INTERS_CONFONDU (2) si les elements sont confondus,
-     *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
+     * \return INTERS_OUI (1) if the intersection happens,
+     *         INTERS_CONFONDU (2) if the elements are overlaid,
+     *         INTERS_NULLE (0) if no intersection happens.
      */
     int intersectsSegment(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D& ptIntersec) const;
 
     /**
      * \fn int intersectsDroite(const OPoint3D& pt, const OVector3D& vector, OPoint3D& ptIntersec);
-     * \brief Calcul de l'intersection de ce plan avec une droite definie par un point et un vecteur.
+     * \brief Calculate the intersection of this plane with a line defined by a point and a vector.
      *
-     * \param pt Un point appartenant a la droite.
-     * \param vector Un vecteur definissant la droite.
-     * \param ptIntersec Le point correspondant a l'intersection.
+     * \param pt A point belonging to the line.
+     * \param vector A vector defining the line.
+     * \param ptIntersec The intersection point.
      *
-     * \return INTERS_OUI (1) si l'intersection existe,
-     *         INTERS_CONFONDU (2) si les elements sont confondus,
-     *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
+     * \return INTERS_OUI (1) if the intersection happens,
+     *         INTERS_CONFONDU (2) if the elements are overlaid,
+     *         INTERS_NULLE (0) if no intersection happens.
      */
     int intersectsDroite(const OPoint3D& pt, const OVector3D& vector, OPoint3D& ptIntersec);
 
     /**
      * \fn int intersectsPlan(const OPlan& plan, OVector3D& vectorIntersec);
-     * \brief Calcul de l'intersection de ce plan avec un autre plan.
+     * \brief Calculate the intersection of this plane with another plane.
      *
-     * \param plan Un autre plan.
-     * \param vectorIntersec Le vecteur correspondant a l'intersection.
+     * \param plan An another plane.
+     * \param vectorIntersec The vector defining the intersection.
      *
-     * \return INTERS_OUI (1) si l'intersection existe,
-     *         INTERS_CONFONDU (2) si les elements sont confondus,
-     *         INTERS_NULLE (0) s'il n'y a pas d'intersection.
+     * \return INTERS_OUI (1) if the intersection happens,
+     *         INTERS_CONFONDU (2) if the elements are overlaid,
+     *         INTERS_NULLE (0) if no intersection happens.
      */
     int intersectsPlan(const OPlan& plan, OVector3D& vectorIntersec);
 
     /**
-     * \fn int intersectsSurface(const std::deque<OPoint3D>& tabPoints, OSegment3D& segment);
-     * \brief compute intersection between a plan and a surface defined by his bounds
+     * \fn int intersectsSurface(const TabPoint3D& contour, OSegment3D& segment);
+     * \brief Compute intersection between a plan and a surface defined by his bounds
      */
     int intersectsSurface(const TabPoint3D& contour, OSegment3D& segment) const;
 
     /**
      * \fn bool isInPlan(const OPoint3D& pt);
-     * \brief Verifie si un point appartient au plan
+     * \brief Check if a point belongs to a plane.
      */
     bool isInPlan(const OPoint3D& pt);
 
@@ -235,7 +236,7 @@ public:
      *  - the normal vector (\c _a, \c _b, \c _c) is null.
      *    This is the case when a OPlan is default constructed.
      *  - the normal vector, the origin, ... has not component which is NaN
-     *    This can happend when points with NaN component are used.
+     *    This can happen when points with NaN component are used.
      */
     bool is_valid();
     bool is_null();
@@ -244,68 +245,68 @@ public:
 
     /**
      * \fn double angle(const OPlan& plan);
-     * \brief Calcul de l'angle entre ce plan et un autre plan.
+     * \brief Calculation of the angle between this plane and another plane.
      *
-     * \param plan Un autre plan.
+     * \param plan Another plane.
      *
-     * \return L'angle entre les 2 plans.
+     * \return The angle between the 2 planes.
      */
     double angle(const OPlan& plan);
 
     /**
      * \fn double distance(const OPoint3D& pt);
-     * \brief Calcul de la distance minimale entre un point et ce plan.
+     * \brief Calculation of the minimal distance between a point and this plane.
      *
-     * \param pt Un point.
+     * \param pt A point.
      *
-     * \return La distance minimale entre le point et ce plan.
+     * \return The minimal distance between a point and this plane.
      */
     double distance(const OPoint3D& pt);
 
 
     /*!
      * \fn OPoint3D symPtPlan(const OPoint3D& pt)
-     * \brief Calcule le symétrique d'un point par rapport au plan
+     * \brief Calculate the symmetrical of a point relative to the plane
      */
     OPoint3D symPtPlan(const OPoint3D& pt);
 
     /*!
      * \fn OPoint3D projPtPlan(const OPoint3D& pt)
-     * \brief Calcule le projeté d'un point sur le plan
+     * \brief Calculate the projection of a point on the plane
      */
     OPoint3D projPtPlan(const OPoint3D& pt);
 
     /**
      * \fn bool distancePlanParallel(const OPlan& plan, double& distance);
-     * \brief Calcul de la distance entre ce plan et un autre plan parallele a ce plan.
+     * \brief Calculate the distance between this plan and another parallel plane.
      *
-     * \param plan Un autre plan.
-     * \param distance La distance entre les 2 plans si ceux-la sont paralleles.
+     * \param plan Another plane.
+     * \param distance The distance between 2 planes if they are parallel.
      *
-     * \return <code>true</code> si les 2 plans sont bien paralleles;
-     *         <code>false</code> sinon.
+     * \return <code>true</code> if the two planes are parallel;
+     *         <code>false</code> else.
      */
     bool distancePlanParallel(const OPlan& plan, double& distance);
 
     /**
      * \fn bool isParallel(const OPlan& plan);
-     * \brief Determine si ce plan est parallele avec un autre plan.
+     * \brief Check if this plane is parallel with another plane.
      *
-     * \param plan Un autre plan.
+     * \param plan Another plane.
      *
-     * \return <code>true</code> si les 2 plans sont paralleles;
-     *         <code>false</code> sinon.
+     * \return <code>true</code> if two planes are parallel;
+     *         <code>false</code> else.
      */
     bool isParallel(const OPlan& plan);
 
     /**
      * \fn bool isOrthogonal(const OPlan& plan);
-     * \brief Determine si ce plan est perpendiculaire avec un autre plan.
+     * \brief Check if this plan is perpendicular to another plan.
      *
-     * \param plan Un autre plan.
+     * \param plan Another plane.
      *
-     * \return <code>true</code> si les 2 plans sont perpendiculaires;
-     *         <code>false</code> sinon.
+     * \return <code>true</code> if the 2 planes are perpendicular;
+     *         <code>false</code> else.
      */
     bool isOrthogonal(const OPlan& plan);
 
@@ -314,7 +315,7 @@ protected:
      * \brief updates the implicit representation of the plane
      *
      * We derive a reference frame for the plane (vector u and v) from
-     * the implicit equation which is the primnary representation of
+     * the implicit equation which is the primary representation of
      * the plane.
      *
      */

@@ -50,7 +50,7 @@ void Repere::updateMatrices()
 
 
     //Matrice du repere global vers local
-    //On suppose qu'on travail avec des reperes orthonorme. Donc le passage d'un repere a l'autre est une translation et une rotation.
+    //On suppose qu'on travaille avec des reperes orthonorme. Donc le passage d'un repere a l'autre est une translation et une rotation.
     //L'inverse de la matrice de rotation est sa transposee
     //L'inverse de la translation est la negation de la matrice de translation
     GtoL[0][0] = U.x; GtoL[0][1] = U.y; GtoL[0][2] = U.z; GtoL[0][3] = -U.x * O.x - U.y * O.y - U.z * O.z;

@@ -26,10 +26,14 @@
 #ifndef LATITUDE_2D_SAMPLER
 #define LATITUDE_2D_SAMPLER
 
+/**
+ * \brief A Sampler class for latitude sampling
+ */
 class Latitude2DSampler: public Sampler
 {
 
 public:
+	/// Constructors
     Latitude2DSampler(const unsigned int& nbRays = 0,
                       const decimal& Theta = (decimal) M_PIDIV2,
                       const decimal& Phi = (decimal) M_2PI) : Sampler(nbRays, Theta, Phi),
@@ -66,7 +70,7 @@ public:
         Sampler* sampler = new Latitude2DSampler(this);
         return sampler;
     }
-
+    /// Destructor
     virtual ~Latitude2DSampler() { }
 
     virtual vec3 getSample()
@@ -84,7 +88,7 @@ public:
     virtual void init() 
     { 
         int decalage = 1;
-        if (_endPhi - M_2PI - _startPhi < EPSILON_6) // Diffusion a 360°
+        if (_endPhi - M_2PI - _startPhi < EPSILON_6) // Diffusion a 360ï¿½
         {
             decalage = 0;
         }
@@ -93,16 +97,16 @@ public:
         
         _i = 0; 
     }
-
+    /// Set/Get starting angle theta
     void setStartTheta(const decimal& startTheta) { _startTheta = startTheta * M_PIDIV180; }
     decimal getStartTheta() const { return _startTheta * M_180DIVPI; }
-
+    /// Set/Get ending angle theta
     void setEndTheta(const decimal& endTheta) { _endTheta = endTheta * M_PIDIV180; }
     decimal getEndTheta() const { return _endTheta * M_180DIVPI; }
-
+    /// Set/Get starting angle phi
     void setStartPhi(const decimal& startPhi) { _startPhi = startPhi * M_PIDIV180; }
     decimal getStartPhi() const { return _startPhi * M_180DIVPI; }
-
+    /// Set/Get ending angle phi
     void setEndPhi(const decimal& endPhi) { _endPhi = endPhi * M_PIDIV180; }
     decimal getEndPhi() const { return _endPhi * M_180DIVPI; }
 

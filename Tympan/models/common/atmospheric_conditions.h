@@ -6,6 +6,9 @@
 
 /// XXX \todo Add the entity 'Atmosphere' with attr: pression, temperature,
 /// hygrometry (\note can find these values in the TYCalcul instead of TYSite).
+/**
+ * \brief Class for the definition of atmospheric conditions
+ */
 class AtmosphericConditions
 {
 public:
@@ -30,7 +33,7 @@ public:
     OSpectre compute_length_absorption(double length) const;
 
     /*!
-     * Get / Set
+     * \brief Get the wave number
      */
     const OSpectre& get_k() const { return wave_number; }
 
@@ -42,7 +45,7 @@ public:
 
 
 private :
-    double compute_hm() const; //!< compute molar hygrometry coefficient
+    double compute_hm() const; //!< compute molar hygronometry coefficient
 
 protected:
     double static_pressure;

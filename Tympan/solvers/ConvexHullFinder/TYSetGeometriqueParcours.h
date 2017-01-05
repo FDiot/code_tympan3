@@ -38,54 +38,116 @@
 #define  INDENTIFIANT_SOURCE    MAX_POINTS
 #define  INDENTIFIANT_RECEPTEUR (MAX_POINTS-1)
 
+/**
+ * \struct Connexite
+ * \brief Connectivity between point and segments
+ */
 struct Connexite
 {
     int IndexesSegment[2];
     int NbSegmentsConnexes;
 };
 
+/**
+ * \brief Class to build a geometric path used by the TYCalculParcours class
+ */
 class TYSetGeometriqueParcours
 {
 public:
-    TYPolyligneParcours* _ListePolylines;
-    TYPointParcours* _ListePoint;
-    int _nNbPolylines;
-    int _nNbPolylineAllouee;
-    int _nNbPointTotal;
+    TYPolyligneParcours* _ListePolylines;  	//!< Geometric path as a polylines
+    TYPointParcours* _ListePoint;			//!< List of points on the path
+    int _nNbPolylines;						//!< Polylines number
+    int _nNbPolylineAllouee;				//!< Allocated polylines
+    int _nNbPointTotal;						//!< Total number of points
 
-    static TYPointParcours* _ListePointQSort;//static pour acces d'une fonction C de quicksort
-    static TYPointParcours* _SrceQSort;//static pour acces d'une fonction C de quicksort
-    static TYPointParcours* _DestQSort;//static pour acces d'une fonction C de quicksort
+    static TYPointParcours* _ListePointQSort; 	//!< static access to the C function of quicksort
+    static TYPointParcours* _SrceQSort;			//!< static access to the C function of quicksort
+    static TYPointParcours* _DestQSort;			//!< static access to the C function of quicksort
     static QMutex _mutex;
-
+    /// Constructor
     TYSetGeometriqueParcours() { Init();}
+    /// Destructor
     ~TYSetGeometriqueParcours() { Clean();}
-    //NB: PolyligneP0 & PolyligneP1 ne sont pas copies:
+    // NB: PolyligneP0 & PolyligneP1 ne sont pas copies:
+    /// Copy operator
     void Copy(TYSetGeometriqueParcours& geoIn);
-
+    /// Allocation of the polylines list
     void AllouerPolylignes(int nNbPolylineAllouee)
     {
 		_nNbPolylineAllouee = nNbPolylineAllouee; 
 		_ListePolylines = new TYPolyligneParcours[nNbPolylineAllouee];
 	};
+    /// Return true if all polylines from infrastructure are closed
     bool PolylignesInfraFermees();
+    /// Detect and fix double points
     int MergePointsDoubles();
-    int SupprimeLesPointsDoubles();
+    // Undefined method:
+    // int SupprimeLesPointsDoubles();
+    /// Suppress useless polylines
     int SupressionPolylignesRedondantes();
+    /**
+     * @brief Separate left and right polylines with two geometric paths
+     * @param [in] PointsAGauche Boolean array marking the points on the left
+     * @param [in] PointsADroite Boolean array marking the points on the right
+     * @param [out] geoGauche Geometric path on the left
+     * @param [out] geoDroite Geometric path on the right
+     */
     void SeparationDroiteGauche(bool* PointsAGauche, bool* PointsADroite, TYSetGeometriqueParcours& geoGauche, TYSetGeometriqueParcours& geoDroite);
+    /**
+     * @brief Mark points on the left and on the right of the current geometric path
+     * @param [in] Srce Source point
+     * @param [in] Dest Receptor point
+     * @param [out] PointsAGauche Boolean array marking the points on the left
+     * @param [out] PointsADroite Boolean array marking the points on the right
+     */
     void MarquePointsADroiteEtAGauche(TYPointParcours& Srce, TYPointParcours& Dest, bool*& PointsAGauche, bool*& PointsADroite);
+    /// To be commented
     void RamenerPointsTraversantLaFrontiere(TYPointParcours& Srce, TYPointParcours& Dest, int* IndexePointsFrontiere, int& NbPointsFrontiere, bool* EstUnPointIntersectant, bool bCoteGauche, bool* PointsAGauche, bool* PointsADroite);
+    /**
+     * \brief Fill for each point the connectivity with segments
+     * \param Connexes Array of connectivity
+     */
     bool ListerPointsConnexes(Connexite* Connexes);
 
+    /**
+     * @brief First pass to build a path along all the intersecting polylines
+     * @param Srce Source
+     * @param Dest Receptor
+     * @param IndexePointsFrontiere Array of boundary point indices
+     * @param NbPointsFrontiere Boundary points number
+     * @param EstUnPointIntersectant True if it is a intersecting point
+     * @param Connexes Connectivity points array
+     * @param geoPremierePasse First geometric path
+     * @return True if succeeds
+     */
     bool PremierePasse(TYPointParcours& Srce, TYPointParcours& Dest, int* IndexePointsFrontiere, int NbPointsFrontiere, bool* EstUnPointIntersectant, Connexite* Connexes, TYSetGeometriqueParcours& geoPremierePasse);
+    /**
+     * @brief Second pass
+     * @param geoPremierePasse First geometric path
+     * @param geoSecondePasse Second geometric path
+     * @param bTrajetsAGaucheDeSR Flag to define paths at the left of source-receptor direction
+     * @param pTableauEC Array of points for the convex hull
+     * @param nbPtsEC Points number of the convex hull
+     * @return True if succeeds
+     */
     bool SecondePasse(TYSetGeometriqueParcours& geoPremierePasse, TYSetGeometriqueParcours& geoSecondePasse, bool bTrajetsAGaucheDeSR, TYPointParcours** & pTableauEC, int& nbPtsEC);
-
+    /// To be commented
     void TriePointsIntersectionSuivantSR(TYPointParcours& Srce, TYPointParcours& Dest, int* IndexePointsFrontiere, int NbPointsFrontiere);
+    /// Add a point P to the polyline indexPolyligne
     bool AjoutePointALaPolyLigne(int indexPolyligne, TYPointParcours& P);
+    /// Add some points of the nIndexePoly polyline from the geoPolySource geometric path
     int AjouteLesPointsComprisEntre(TYSetGeometriqueParcours& geoPolySource, int nIndexePoly, int nIndexeNbPremierPointAAjouter, int nIndexeDernierPointAAjouter);
+    /// To be commented
     int ParcourtPolyligneAPartirDe(int IndexPointRacine, TYPolyligneParcours*& PolyligneRacine, bool* EstUnPointIntersectant, TYSetGeometriqueParcours& geoPremierePasse);
+    /**
+     * @brief Check if [P1P2] segment can intersect the geometric path
+     * @param P1 First point
+     * @param P2 Second point
+     * @return True if [P1P2] intersects
+     */
     bool intersects(TYPointParcours& P1, TYPointParcours& P2);
 
+    /* Unused method:
     int NbreRefPoint()
     {
         int nNbRefPoint = 0;
@@ -95,21 +157,35 @@ public:
             nNbRefPoint += _ListePolylines[i].nombreDePoint();
         }
         return nNbRefPoint;
-    }
-    //Calcul l'enveloppe convexe d'un tableau de point ["TableauDePoints"/nNbPoints], sachant que les premiers de ce tableaux sont les plus bas;
-    //le resultat figure dans TableauDePointsECOut; ne nombre renvoye est celui de l'enveloppe convexe.
-    //Attention ! Les tableaux doivent etre alloues !
-    static int  EnveloppeConvexeLes2PremiersPointsEtant(TYPointParcours** TableauDePoints, int nNbPoints, TYPointParcours** TableauDePointsECOut, bool bPremiersPointsLesPlusHauts);
-    //La selection comprend SR:
-    int     SelectionnePointsEntreSetRetDuCoteDeSR(TYSetGeometriqueParcours* geoSR, TYPointParcours** TableauDePoints, int nNbPoints);
-    //N'est utilise que pour les trajets verticaux
-    void    CreerTrajetAPartirDuneListeDePointsTriee(TYPointParcours** TableauDePoints, int nNbPoints, bool bSens, bool bGardeIdentifiant);
+    }*/
 
+    /**
+     * @brief Compute the convex hull (arrays should allocated before the call)
+     * @param TableauDePoints [in] Points array (first points are the lower ones)
+     * @param nNbPoints [in] Size of previous array
+     * @param TableauDePointsECOut [out] Points array of the convex hull
+     * @param bPremiersPointsLesPlusHauts [in] True if the first points are the higher ones
+     * @return Size array of TableauDePointsECOut
+     */
+    static int EnveloppeConvexeLes2PremiersPointsEtant(TYPointParcours** TableauDePoints, int nNbPoints, TYPointParcours** TableauDePointsECOut, bool bPremiersPointsLesPlusHauts);
+    /**
+     * @brief Select points from the current geometric path which are between source and receptor of the geoSR geometric path
+     * @param geoSR Geometric path from which the selection happens
+     * @param TableauDePoints Array of selected points (will contain the source and receptor points of geoSR)
+     * @param nNbPoints Points number
+     * @return Number of selected points
+     */
+    int SelectionnePointsEntreSetRetDuCoteDeSR(TYSetGeometriqueParcours* geoSR, TYPointParcours** TableauDePoints, int nNbPoints);
+    /// Create paths from a sorted points list (Used only for vertical paths)
+    void CreerTrajetAPartirDuneListeDePointsTriee(TYPointParcours** TableauDePoints, int nNbPoints, bool bSens, bool bGardeIdentifiant);
+    /// Check if the points a, b, c belong to the same polyline
     bool AppartienneMemePolyligne(TYPointParcours* a, TYPointParcours* b, TYPointParcours* c);
 
 private:
     //int MergePointsDoubles(bool bLexico);
+    /// Swap polylines i and j
     void SwapPolyligne(int i, int j);
+    /// Delete polylines list and points list
     void Clean()
     {
         if (_ListePolylines)
@@ -121,6 +197,7 @@ private:
             SAFE_DELETE_LIST(_ListePoint);
         }
     }
+    /// Initialize data
     void Init()
     {
         _ListePolylines = NULL;
@@ -129,6 +206,11 @@ private:
         _nNbPointTotal = 0;
         _nNbPolylineAllouee = 0;
     }
+    /**
+     * @brief Invert a list of points
+     * @param ListeDePointsAInverser [In] The list of points to be inverted [out] The inverted list
+     * @param nNbPointsDeLaListe Points number in the list
+     */
     static void InverseOrdreDesPoints(TYPointParcours** ListeDePointsAInverser, int nNbPointsDeLaListe);
 
 };

@@ -19,24 +19,24 @@
 #include "Tympan/core/interfaces.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DSolver.h"
 
-// Pour l'utilisation de la librairie standard STL.
+// For the use of standard library STL.
 
-///Type pour les valeurs complexes
+///Type for complex value
 typedef std::complex<double> OComplex;
 
-///Type pour les tableaux de doubles
+///Type for array of double
 typedef std::vector<double> OTabDouble;
 
-///Type pour les tableaux de complexes
+///Type for array of complex
 typedef std::vector<OComplex> OTabComplex;
 
-///Type pour les tableaux de spectres complexes
+///Type for array of complex spectrum
 typedef std::vector<OSpectreComplex> OTabSpectreComplex;
 
-///Type pour les tableaux de points
+///Type for array of points
 typedef std::vector<OPoint3D> OTabPoints;
 
-///Type pour les tableaux de rays
+///Type for array of ray
 typedef std::vector<Ray*> TabRays;
 
 class OBox2;
@@ -45,35 +45,41 @@ class AtmosphericConditions;
 
 /**
  * \class TYANIME3DAcousticModel
- * \brief Le modle acoustique de la mthode ANIME3D
+ * \brief Acoustic model of ANIME3D method
  */
 class TYANIME3DAcousticModel : public AcousticModelInterface
 {
 public:
-    /// constructeurs
+    /**
+     * \brief Constructor
+     * \param tabRayons Array of acoustic paths
+     * \param tabStruct Array containing all the informations relative to a site geometry and associated material to each face
+     * \param aproblem Acoustic problem
+     * \param atmos Atmospheric conditions object
+     */
     TYANIME3DAcousticModel( tab_acoustic_path& tabRayons, 
                             TYStructSurfIntersect* tabStruct,
                             const tympan::AcousticProblemModel& aproblem,
                             AtmosphericConditions& atmos);
 
-    /// destructeur
+    /// Destructor
     virtual ~TYANIME3DAcousticModel();
 
     /**
-     * \fn computeAcousticModel(TYCalcul & calcul, TYSiteNode & site)
-     * \brief calcul complet lie au modele acoustique ANIME3D
+     * \fn ComputeAcousticModel()
+     * \brief Complete calculation of the acoustic model ANIME3D
      */
     OTab2DSpectreComplex ComputeAcousticModel();
 
     /**
-     * \fn void ComputePressionAcoustEff(TYCalcul & calcul, const TYSiteNode & site)
-     * \brief calcul de la pression acoustique efficace par rayon et par frequence
+     * \fn void ComputePressionAcoustEff()
+     * \brief Calculation of the effective acoustic pressure per ray and per frequency
      */
     void ComputePressionAcoustEff();
 
     /**
-     *\fn  void ComputePressionAcoustTotalLevel(TYCalcul & calcul, const TYSiteNode & site)
-     *\brief calcul de la pression quadratique totale pour un couple source/recepteur - calcul avec coherence partielle
+     *\fn  void ComputePressionAcoustTotalLevel()
+     *\brief Calculation of the total quadratic pressure for a source/receptor - calculation with partial coherence form
      */
     OTab2DSpectreComplex ComputePressionAcoustTotalLevel();
 
@@ -82,38 +88,35 @@ protected:
 
     /**
      * \fn void ComputeAbsAtm();
-     * \brief calcul de l'absorption atmospherique
+     * \brief Calculation of the atmospheric absorption
      */
     void ComputeAbsAtm();
 
     /**
      * \fn void ComputeAbsRefl(TYCalcul & calcul, TYSiteNode & site)
-     * \brief calcul de l'absorption par reflexion
+     * \brief Calculation of the absorption by reflection
      */
     void ComputeAbsRefl();
 
-    /**
-     * \fn OBox ComputeFresnelArea(TYCalcul & calcul,TYSiteNode & site, TYRay & ray)
-     * \brief calcul des triangles de la zone de Fresnel
-     */
+    // * \fn OBox2 ComputeFresnelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice)
+    // * \brief Calculation of triangles in the Fresnel area
+    // */
     //OBox2 ComputeFresnelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice);
 
-    /**
-     * \fn  OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre );
-     * \brief calcul des ponderations de Fresnel associees a la zone de Fresnel
-     */
+    // * \fn OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre);
+    // * \brief Calculation Fresnel weighting associated to the Fresnel area
+    // */
     //OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre);
 
-    /**
-     * \fn  std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
-     * \brief Computes triangulation inside the bounding box
-     * \brief Needs 4 points which are the box corners' projection on the ground
-     */
+    // * \fn std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
+    // * \brief Computes triangulation inside the bounding box
+    // * \brief Needs 4 points which are the box corners' projection on the ground
+    // */
     //std::vector<OTriangle> ComputeTriangulation(const TYTabPoint& points, const double& delaunay);
 
     /**
-    * \fn void ComputeAbsDiff(TYCalcul & calcul, const TYSiteNode & site)
-    * \brief calcul de l'absorption par diffraction
+    * \fn void ComputeAbsDiff()
+    * \brief Calculation of absorption by diffraction
     */
     void ComputeAbsDiff();
 
@@ -133,45 +136,45 @@ protected :
     //std::vector<OPoint3D>& _oVertex;
 //    QList<OTriangle> triangles;
 
-    /// tableau des pressions acoustiques efficaces par rayon
+    /// Array of effective acoustic pressure per ray
     OTabSpectreComplex _pressAcoustEff;
 
-    ///tableau des absorptions atmospherique par rayon
+    /// Array of atmospheric absorptions per ray
     OTabSpectreComplex _absAtm;
 
-    ///tableau des absorptions par reflexion par rayon
+    /// Array of absorptions by reflection per rayon
     OTabSpectreComplex _absRefl;
 
-    ///tableau des absorptions par diffraction par rayon
+    /// Array of absorptions by diffraction per rayon
     OTabSpectreComplex _absDiff;
 
-    /// nbr de rayons
+    /// Rays number
     int _nbRays;
 
-    /// tableau de l'ensemble des rayons TYMPAN
+    /// Array of all TYMPAN rays
     tab_acoustic_path& _tabTYRays;
 
-    TYStructSurfIntersect* _tabSurfIntersect; /*!< Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face */
+    TYStructSurfIntersect* _tabSurfIntersect; //!< Array containing all the informations relative to a site geometry and associated material to each face
 
-    /// la liste des triangles de la topo
-//    TYTabLPPolygon _listeTrianglesBox;
+    // la liste des triangles de la topo
+    // TYTabLPPolygon _listeTrianglesBox;
 
-    /// vitesse du son
+    /// Sound speed
     double _c;
 
-    /// nombre d'onde
+    /// Wave number
     OSpectre _K;
 
-    /// longueur d'onde
+    /// Wavelength
     OSpectre _lambda;
 
-    /// take into account the fresnel area
+    /// Flag to take into account or not the Fresnel area
     bool _useFresnelArea;
 
 private:
-    // Problem data
+    /// Problem data
     const tympan::AcousticProblemModel& _aproblem;
-
+    /// Atmospheric conditions
     AtmosphericConditions& _atmos;
 };
 

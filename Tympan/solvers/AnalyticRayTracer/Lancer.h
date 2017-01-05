@@ -32,205 +32,148 @@ class Sampler;
 class meteo;
 
 /*! \class Lancer
-* \brief classe representant un lancer de rayons courbes
+* \brief Describes analytical ray curve tracing
 */
-
 class Lancer
 {
 public:
+	/// Constructor
     Lancer();
+    /// Copy constructor
     Lancer(Lancer& L);
-
+    /// Destructor
     ~Lancer();
 
     //--------------------------------------------------------------------------------------------------------//
-    // Fonctions membres :
+    // Member functions :
     //--------------------------------------------------------------------------------------------------------//
 
+    /// Set the pointer to the weather object
     void setMeteo(const meteo* Meteo) { _weather = const_cast<meteo*>(Meteo); }
 
-    /*!
-    * \fn void purgeMatRes()
-    * \brief Libere la memoire occupee par MatRes
-    */
+    /// Clear the memory of MatRes object
     void purgeMatRes();
 
-    /*!
-    * \fn void clear()
-    * \brief Efface tous les tableaux
-    */
+    /// Clear all the arrays
     void clear() { sources.clear(); recepteurs.clear(); _plan.clear(); temps.clear(); purgeMatRes(); }
 
-    /*!
-    * \fn void setNbRay(const unsigned int& nb)
-    * \brief Modifie le nombre de rayons
-    * \param nb nombre de rayons que l'on souhaite lancer
-    */
+    /// Set the rays number to launch
     void setNbRay(const unsigned int& nb) {nbRay = nb;}
 
-    /*!
-    * \fn void setTMax(const double& TmpMax)
-    * \brief Modifie le temps de propagation
-    * \param TmpMax nouvelle valeur que l'on souhaite attribuer a TMax
-    */
+    /// Change the maximal propagation time
     void setTMax(const double& TmpMax) { TMax = TmpMax; }
 
-    /*!
-    * \fn void setDMax(const double& DistMax)
-    * \brief Modifie de la distance de propagation
-    * \param DistMax nouvelle valeur de la distance maximale
-    */
+    /// Set the maximal distance
     void setDMax(const double& DistMax) { dmax = DistMax; }
 
-    /*!
-    * \fn void setTimeStep(const decimal& tt)
-    * \brief Modification du pas de temps
-    * \param tt nouveau pas de discretisation du temps
-    */
+    /// Set the discretization step
     void setTimeStep(const decimal& tt) { h = tt; }
 
-    /*!
-    * \fn void setTriangle(vec3* triangle)
-    * \brief Ajoute des triangles (objets) a la geometrie
-    * \param triangle tableau de vec3, represente l'objet que l'on desire ajouter a la geometrie
-    */
+    /// Add a triangle to the geometry
     void setTriangle(vec3* triangle) { _plan.push_back(triangle); }
 
-    /*!
-    * \fn decimal distance_max()
-    * \brief Calcul de la distance maximale entre les sources et les recepteurs
-    * \return rend la distance maximale
-    */
+    /// Compute and return the maximal distance between sources and receptors
     decimal distance_max();
 
-    /*!
-    * \fn void createTemps()
-    * \brief Creation du vecteur temps
-    */
+    /// Build the time vector (different times solved)
     void createTemps();
 
     /*!
-    * \fn vector<vec3> EqRay(vector<vec3> y0, meteo Meteo)
-    * \brief Fonction definissant l'equation eikonale
-    * \param y0 vecteur initial
-    * \return rend un point du rayon sous la forme (position, normale)
+    * \brief Function to define the eikonal equation
+    * \param y0 Initial vector
+    * \return A point of the ray under the form of a Step (position, normal)
     */
     Step EqRay(const Step& y0);
 
     /*!
-    * \fn vec3 intersection(vec3 S, vec3 R, vec3*A, int &reflexion, vec3 nExt_plan, vec3 SR)
-    * \brief Calcule le point d'intersection entre un plan et une droite
-    * \param S source
-    * \param R recepteur
-    * \param A Tableau contenant les 3 sommets de la face (tous les sommets doivent etre coplanaires)
-    * \param reflexion variable test pour savoir si on a ou non trouve une intersection entre la droite SR et le plan A
-    * \param nExt_plan normale exterieure au plan considere
-    * \param SR vecteur source-recepteur
-    * \return rend le point d'intersection entre le plan A et la droite SR.
+    * \brief Compute the intersection point between a plane and a line
+    * \param [in] S Source
+    * \param [in] R Receptor
+    * \param [in] A Plane: array containing the 3 vertices of the face (all the vertices should be coplanar)
+    * \param [out] reflexion True if intersection has been founded, False if not
+    * \param [in] nExt_plan Exterior normal relative to the plane
+    * \param [in] SR Vector between source and receptor
+    * \return Return the intersection point between the plane A and the SR line.
     */
     vec3 valideIntersection(const vec3& S, const vec3& R, const vec3* A, int& reflexion, const vec3& nExt_plan, const vec3& SR);
 
     void intersection(const unsigned int& timer, RayCourb& current, Step& Y_t0, Step& Y_t1);
 
     /*!
-    * \fn RayCourb RK4(vector<vec3> y0, vector<vec3*> plan, vec3 source)
-    * \brief Algorithme de Runge-Kutta d'ordre 4
-    * \param y0 vecteur initial
-    * \param plan geometrie
-    * \param S source
-    * \return rend un rayon (liste de points de l'espace)
+    * \brief Fourth order Runge-Kutta algorithm
+    * \param y0 Initial vector
+    * \return Return a ray (list of points)
     */
     RayCourb RK4(const Step& y0);
 
-    /*!
-    * \fn void RemplirMat()
-    * \brief Remplit la matrice MatRes contenant les rayons courbes
-    */
+    /// Fill the MatRes matrix containing the ray curves
     void RemplirMat();
 
-    /*!
-    * \fn void run()
-    * \brief Effectue le calcul.
-    */
+    /// Run the calculation
     void run() { createTemps(); RemplirMat(); }
 
     /*!
-     * \fn loadRayFile(vector<vec3>& tableau_norm)
-     * \brief Chargement d'un fichier definissant les angles de depart des rayons
+     * \brief Read the file containing the starting angles of the rays
+     * \param tableau_norm Vector of the normals
      */
     void loadRayFile(vector<vec3>& tableau_norm);
 
-    /*!
-     * \fn void setSampler(Sampler* generator);
-     * \brief set ray generator
-     */
+    /// Set a pointer to the ray generator
     void setSampler(Sampler* generator) { _sampler = generator; }
 
-    /*!
-     * \fn Sampler* getSampler(Sampler* generator);
-     * \brief get ray generator for modification
-     */
+    /// Get ray generator for modification
     Sampler* getSampler() { return _sampler; }
 
-    /*!
-     * \fn void setLauchType(const unsigned int &launchType)
-     * \brief define how rays will be created;
-     */
+    /// Set how rays will be created (launch type)
     void setLaunchType(const unsigned int& launchType) { _launchType = launchType; init_sampler(); }
 
-    /*!
-     * \fn void addSource(const vec3& source)
-     * \brief add a source in sources list
-     */
+    /// Add a source into the sources list
     void addSource(const vec3& source) { sources.push_back(source); }
 
 
 private :
+    /// Initialize ray generator
     void init_sampler();
 
-    void save(); /*!< save rays to a file */
+    /// Save rays to a file
+    void save();
 
-    /*!
-     * \brief compute next step taking account of meteo 
-     */
+    /// Compute next step taking account of the weather
     Step compute_next_step(const Step& current_step);
 
 
 public :
-    // Donnees membres :
+    vector<vec3> sources;           //!< Sources vector
+    vector<vec3> recepteurs;        //!< Receptors vector
+    vector<vec3*> _plan;            //!< List of objects defined by 3 points
+    meteo* _weather;                //!< Pointer to weather
+    Sampler* _sampler;              //!< Pointer to a ray generator
 
-    vector<vec3> sources;           /*!< vector contenant les sources */
-    vector<vec3> recepteurs;        /*!<  vector contenant les recepteurs */
-    vector<vec3*> _plan;            /*!<  "liste" des objets definis par 3 points */
-    meteo* _weather;                /*!<  meteo */
-    Sampler* _sampler;              /*!< ray generator */
+    decimal h;                      //!< Discretization step
+    decimal TMax;                   //!< Maximal propagation time
+    vector<decimal> temps;          //!< [0:h:TMax] Vector containing the different times solved
+    decimal dmax;                   //!< Maximal distance traveled by the rays
+    decimal initialAngleTheta;      //!< Initial shot angle according theta
+    decimal finalAngleTheta;        //!< Final shot angle according theta
+    decimal initialAnglePhi;        //!< Initial shot angle according phi
+    decimal finalAnglePhi;          //!< Final shot angle according phi
 
-    decimal h;                      /*!<  pas de discretisation */
-    decimal TMax;                   /*!<  temps de propagation maximal */
-    vector<decimal> temps;          /*!<  [0:h:temps_max] vecteur des temps ou l'on resouds */
-    decimal dmax;                   /*!<  distance maximale parcourue par les rayons */
-    decimal initialAngleTheta;      /*!<  angle de tir initial selon theta */
-    decimal finalAngleTheta;        /*!<  angle de tir final selon theta */
-    decimal initialAnglePhi;        /*!<  angle de tir initial selon phi */
-    decimal finalAnglePhi;          /*!<  angle de tir final selon phi */
+    unsigned int nbRay;             //!< Launched rays number
+    unsigned int _launchType;       //!< Launch type with 1:horizontal / 2:vertical / 3:spherical / 4:file
+    bool wantOutFile;               //!< True if an output file is wanted
+    string ray_fileName;            //!< Filename of file containing angles of rays
+    string out_fileName;            //!< Filename of the output file
 
-    unsigned int nbRay;             /*!<  nombre de rayons que l'on lance */
-    unsigned int _launchType;       /*!<  mode de lancer des rayons 1:horizontal / 2:vertical / 3:spheric / 4:file */
-    bool wantOutFile;               /*!<  true if outputfile wanted */
-    string ray_fileName;            /*!<  filename of file containing angles of rays */
-    string out_fileName;            /*!<  filename of the output file */
-
-    vector<RayCourb*> MatRes;       /*!<  tableau contenant les rayons obtenus pour chaque source */
+    vector<RayCourb*> MatRes;       //!< Array containing the resulting rays for each source
 };
 
 /*!
-* \fn decimal angle_depart(decimal a, decimal c, decimal d, decimal h)
-* \brief Calcul l'angle avec lequel le rayon doit etre lance afin de parcourir au minimum la distance d
-* \param a gradient de celerite
-* \param c celerite au sol
-* \param d distance minimale a parcourir
-* \param h hauteur de la source
-* \return rend l'angle du lancer de rayon.
+* \brief Compute the shooting angle ray in order to travel the given minimal distance
+* \param a Sound speed gradient
+* \param c Ground sound speed
+* \param d Minimal distance to travel
+* \param h Source height
+* \return Shot angle of the ray.
 */
 decimal angle_depart(const decimal& a, const decimal& c, const decimal& d, const decimal& h);
 

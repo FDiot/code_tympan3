@@ -22,40 +22,34 @@
 #include "Step.h"
 
 using namespace std;
-
+/**
+ * \brief Class to describe a ray curve
+ */
 class RayCourb
 {
 public:
+	/// Constructor
     RayCourb();
+    /// Copy constructor
     RayCourb(const vec3& a);
     RayCourb(const RayCourb& r);
-
+    /// Destructor
     ~RayCourb() {}
 
-    /*!
-     * \fn void purge()
-     * \brief Nettoie les tableaux en desallouant proprement les pointeurs
-     */
+    /// Clear all the arrays
     void purge();
 
-    /*!
-    * \fn void setSize(const unsigned int taille)
-    * \brief Reservation de la taille des vecteurs
-    */
+    /// Set the steps vector size
     void setSize(const unsigned int taille) { etapes.reserve(taille); }
 
-    /*!
-    * \fn RayCourb& operator = (RayCourb & P)
-    * \brief Operateur d'affectation
-    */
+    /// Operator=
     RayCourb& operator= (const RayCourb& P);
 
 public:
-    // donnees membres
-    vector<Step> etapes;                         /*!< vecteur des pas de temps calculés */
-    int nbReflex;                                /*!< nombre de reflexions */
-    vector<int> position;                        /*!< liste des indices des points ou il y a une reflexion (le numero du pas de temps) */
-    map<int, int> rencontre;                     /*!< couple (pas de temps, numero de la face rencontree) */
+    vector<Step> etapes;                         //!< Time steps vector
+    int nbReflex;                                //!< Reflections number
+    vector<int> position;                        //!< List of the indices of points where reflection happens (time step number)
+    map<int, int> rencontre;                     //!< Tuple (time step, encountered face)
 };
 #endif //__RAYCOURB_H
 
