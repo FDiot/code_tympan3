@@ -18,14 +18,15 @@
 
 #include "Selector.h"
 
-template<typename T>
-class FermatSelector : public Selector<T>
-{
 /*!
  * \brief : Select rays passing at a distance less than the radius of the cone of associated with the 
             (depending on the number of rays launched by the source and the distance covered by the ray).
  */
+template<typename T>
+class FermatSelector : public Selector<T>
+{
 public :
+	/// Constructor
     FermatSelector() : Selector<T>() {}
     virtual Selector<T>* Copy()
     {
@@ -51,7 +52,7 @@ public :
 
 		return SELECTOR_ACCEPT;
 	}
-
+    /// Keep the ray
     virtual void insert(T* r, unsigned long long& replace) { return; }
 
     virtual bool insertWithTest(T* r)

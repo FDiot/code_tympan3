@@ -24,23 +24,25 @@ typedef std::map< signature, std::deque<Ray*> > families;
 typedef std::list<Event*> sequence;
 typedef std::map< sequence, std::deque<Ray*> > sequenceMap;
 
-
+/**
+ * \brief Class to apply a filter to the group of valid rays found by ray tracing
+ */
 class PostFilter : public Base
 {
 public:
+	/// Constructor
 	PostFilter(std::deque<Ray*> *tabRay) : _tabRays(tabRay){}
+	/// Destructor
     ~PostFilter() { _tabRays = NULL; }
 
     /*!
-     * \fn unsigned int Process();
-     * \brief apply a filter to the group of valid rays found by ray tracing
+     * \brief Apply a filter to the group of valid rays found by ray tracing
      * \return number of rays suppressed
      */
     virtual unsigned int Process() { return 0; }
 
     /*!
-     * \fn unsigned int buildFamilies(families& mapFamilies)
-     * \brief Group rays with the same signature (same source and receptor events of same kind in the same order
+     * \brief Group rays with the same signature (same source and receptor events of same kind in the same order)
      * \return Number of families created
      */
     inline virtual unsigned int buildFamilies(families& mapFamilies, typeevent typeEv)
@@ -54,8 +56,7 @@ public:
     }
 
     /*!
-     * \fn void rebuildTabRays(families& mapFamilies)
-     * \brief rebuild rays tab after treatment
+     * \brief Rebuild rays tab after treatment
      */
     inline virtual void rebuildTabRays(families& mapFamilies)
     {
@@ -74,7 +75,6 @@ public:
     }
 
     /*!
-     * \fn sequenceCount buildSequenceCount(const signature &sig, std::vector<Ray*>, const typeevent& evType)
      * \brief Sort rays by events of type evType encountered along is path
      */
     inline virtual sequenceMap buildSequenceMap(const signature& sig, std::vector<Ray*> tabRay, const typeevent& evType)
@@ -91,7 +91,6 @@ public:
     }
 
     /*!
-     * \fn decimal minimum_distance(decimal thickness, decimal d_R);
      * \brief compute minimum acceptable distance between two rays
      *        thickness is the thickness of a ray after a given distance
      *        d_R is the difference length between two rays
@@ -103,8 +102,7 @@ public:
 
 protected:
     /*!
-     * \fn sequence buildSequence(const signature &sig, Ray* ray, const typeevent& evType)
-     * \brief build the sequence of physical shape encountred by the ray
+     * \brief Build the sequence of physical shape encountered by the ray
      */
     inline virtual sequence buildSequence(const signature& sig, Ray* ray, const typeevent& evType)
     {
@@ -117,7 +115,7 @@ protected:
 
         return res;
     }
-
+    /// Delete an element in the rays array
     inline virtual std::deque<Ray*>::iterator erase_element(std::deque<Ray*>& tabRays, std::deque<Ray*>::iterator& iter)
     {
         delete(*iter);
@@ -128,7 +126,7 @@ protected:
 
 protected:
 
-	std::deque<Ray*> *_tabRays;
+	std::deque<Ray*> *_tabRays;	//!< Rays tab: pointers list of rays
 };
 
 #endif //POST_FILTER_H
