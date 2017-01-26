@@ -22,15 +22,20 @@
 
 extern std::stringstream ss;
 
+/**
+ * \brief A logger class
+ */
 class Logger
 {
 
 public:
+	/// Constructor
     Logger() { };
+    /// Destructor
     ~Logger() { };
 
     //static stringstream& getStream(){ return ss; }
-
+    /// Write into a file a String
     void write(const char* filename)
     {
         std::ofstream fichier(filename, std::ios::out | std::ios::trunc);  //declaration du flux et ouverture du fichier
