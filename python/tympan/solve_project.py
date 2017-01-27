@@ -18,7 +18,7 @@ def solve(input_project, output_project, output_mesh, solverdir,
         output_project -- XML file where to put the project updated with the
             results of the computation
         output_mesh -- a file in which to put the altimetry mesh once computed (ply format)
-        solvedir -- directory containing the solver plugin
+        solverdir -- directory containing the solver plugin
         -------
         optional (debug):
         multithreading_on -- set it to False to solve the acoustic problem with only
