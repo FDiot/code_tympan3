@@ -1,4 +1,4 @@
-﻿.. Code_TYMPAN documentation master file, created by
+.. Code_TYMPAN documentation master file, created by
    sphinx-quickstart on Mon Jun 18 14:49:32 2012.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
@@ -20,6 +20,7 @@ Description of the environment and conventions
    :maxdepth: 1
 
    architecture
+   code_structure
    convention
    tools
 
@@ -44,12 +45,13 @@ Computations and algorithms
 
    meshing
 
-Python API
-----------
+Documentation
+-------------
 
 .. toctree::
    :maxdepth: 1
 
+   api
    python_api
 
 Appendices
@@ -59,4 +61,3 @@ Appendices
    :maxdepth: 1
 
    ongoingwork
-   api

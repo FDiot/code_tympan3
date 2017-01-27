@@ -1,7 +1,7 @@
 .. _code-structure:
 
-Structure of the code base
-==========================
+Structure of the code base (ToDo update)
+========================================
 
 First level hierarchy
 ---------------------
@@ -96,8 +96,8 @@ Mirror the code hiearchy - functional tests at the root.
 Prefer writing tests in Python even for C++ code !
 
 
-Executables
-===========
+Executables (ToDo update)
+=========================
 
 XXX to be completed
 

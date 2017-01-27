@@ -1,60 +1,149 @@
 .. _dev-architecture:
 
-Architecture
-============
+Architecture (4.x version)
+==========================
+
+Introduction
+------------
 
 This part deals with the description of the Code_TYMPAN architecture. Each
-section represents a part of the code: GUI, tools, etc. and describes how the
-code is organized:
+section represents a part of the code and describes how it is organized:
 
-  - main organization of the code and the different part ;
-  - some dependencies between these different parts ;
-  - what kind of objects you will find in the different part ;
-  - the present and the future of the Code_TYMPAN architecture.
+  - main organization of the code and the different parts
+  - some dependencies between these different parts
+  - what kind of objects you will find in the different part
 
-Code_TYMPAN is made of different parts: core & tools, business logic, graphical
-user interface and solvers.
+Description
+-----------
 
-.. note::
+Code_TYMPAN is made of different parts: 
 
-   A refactoring is planned. Read the section `Future Architecture`_ about this
-   issue.
+  - core&tools
+  - graphical user interface
+  - business logic
+  - solvers 
 
-The schema of the current architecture:
+An API in Python is used to communicate between the Graphical User Interface (GUI) and the solvers.
 
-.. figure:: _static/built_resources/SourcesCurrentArch.png
+Three classes of users may interact differently with Code_TYMPAN:
+
+  - The basic user will use the GUI which builds the data models and run a calculation through the API
+  - The advanced user may drop the GUI and runs a build the model/run the calculation with the API
+  - At least, the programer will add new solvers/features on the C++ solver part and the API part
+
+.. figure:: _static/built_resources/4xSplitting.png
    :align: center
-   :alt: Current architecture schema
+   :scale: 50 % 
 
-   Current architecture schema
-
-.. todo:: write a legend for the previous schema
-
-.. todo:: update this diagram: no more TympanConsole, make python qprocess appear
-   (on the diagram of the future archi too)
-
-.. todo:: is it still necessary to keep these two parts: current and future architecture,
-   since now we are in a state somewhere between the two?
-
-.. note::
-
-   The main Code_TYMPAN executable to launch the application is in the
-   ``gui/app`` directory. Other directories are dedicated to build
-   libraries or plugins (for the solvers).
+   **Parts separation in the 4.x architecture and how different users interact with Code_TYMPAN**
 
 
+.. UML graph
+   @startuml
+   actor BasicUser as U #green
+   participant "GUI" as G
+   participant "Python API" as P
+   participant "Solver" as S
+   U->G : Build the business model
+   G->P : Send the data model (solver)
+   P->S : Solve the data model
+   S->P : Get the results
+   P->G : Get the results (update the business model)
+   U->G : Analyze the results
+   @enduml
+.. figure:: _static/built_resources/BasicUser.png
+   :align: center
+   :scale: 100 % 
+   
+   **Sequence example for a basic user**
+
+.. UML graph2
+   @startuml
+   actor AdvancedUser as U #orange
+   participant "Python API" as P
+   participant "Solver" as S
+   U->P : Build the data model (solver)
+   P->S : Solve the data model
+   S->P : Get the results
+   @enduml
+
+.. .. figure:: _static/built_resources/AdvancedUser.png
+   :align: center
+   :scale: 100 % 
+   
+   **Advanced user**
+
+.. UML graph3
+   @startuml
+   actor Programmer as U #red
+   participant "Python API" as P
+   participant "Solver" as S
+   U->S : Add a new feature (solver for instance)
+   U->P : Update the API to access the new feature
+   @enduml
+   
+.. .. figure:: _static/built_resources/Programmer.png
+   :align: center
+   :scale: 100 % 
+   
+   **Programmer**
+
+If we have a look on the source directories (folders) of the differents parts, the main relations in the current architecture are: 
+
+.. figure:: _static/built_resources/Architecture_Tympan.png
+   :align: center
+   
+   **Current architecture schema (ToDo: update)**
+
+Here a second graph about the splitting between site elements (business logic) and the computation (solvers).
+It separates the business logic related to a site with the way to solve the acoustic problem (AcousticProblemModel). 
+This solver data model, which can be used by any solver, is built from the Python subprocess by going through the
+current site and extracting relevant data: a computation needs triangles with materials from a site triangulation,
+acoustic sources/receptors and an altimetry.
+
+.. figure:: _static/built_resources/SiteBDM.png
+   :align: center
+   
+   **Target architecture schema**
+   
+At the Tympan sources root, we find four directories:
+  - ``core``: Several tools classes
+  - ``models``: Data model for solvers and business logic
+  - ``gui``: Graphical User Interface
+  - ``solvers``: Solvers
+
+.. figure:: _build/doxygen/html/dir_0a699452fb3f72206b671d5471a45d39_dep.png
+   :align: center
+   :scale: 100 % 
+   
+   **Main directories and dependencies**
+   
+As several dependency graphs will be used below, we explain how it should be read:
+
+.. figure:: _static/built_resources/DoxygenRules.png
+   :align: center
+   :scale: 100 % 
+   
+   **Doxygen rules for dependency graph**   
+   
 Core and Tools
 --------------
 
-See the ``Tools`` directory and some sub-directories in ``MetierSolver``:
+See the ``core`` and ``gui/tools`` directories and some sub-directories in ``models`` directories:
 
-  - ``DataManagerCore``: the main base class ``TYElement`` used for every
+  - ``models/business``: the main base class ``TYElement`` used for every
     business logic objects. Also implements an interface for the solvers and some
     XML tools in order to export/import a Code_TYMPAN study ;
-  - ``CommonTools`` common objects used by the `Business Logic`_ objects: point,
+  - ``models/common``: common objects used by the `Business Logic`_ objects: point,
     vector, matrix, etc.
 
-The rationale behind the creation of ``CommonTools`` is to provide
+.. figure:: _build/doxygen/html/dir_5dbfaf92f958cca7bf9f388ebf56af42_dep.png
+   :align: center
+   :scale: 100 % 
+   
+   **models directories and dependencies**
+
+The rationale behind the creation of ``models/common`` is to provide
 basic representations and utilities which *do not depend* upon
 ``TYElement`` nor ``OPrototype``. Typically such representations and
 utilities are likely to be shared between the main application and the
@@ -69,12 +158,12 @@ In order to mitigate those drawbacks while benefiting from the CGAL
 features a variant of the classical Bridge* design pattern is used
 (For design pattern the key reference is [DPGoF]_ ).
 
-Namely the ``cgal_tools`` module in ``CommonTools`` builds some
+Namely the ``cgal_tools`` module in ``models/common`` builds some
 high-level functionality (constrained triangulations and domain
 meshing) upon CGAL features ; its API relies on CGAL types and does
 not depend on other Tympan types.
 
-The ``cgal_bridge`` module in ``business`` exposes interfaces
+The ``cgal_bridge`` module in ``models/business`` exposes interfaces
 to those features expressed with the main Tympan datatypes and ensures
 the conversions.
 
@@ -86,47 +175,79 @@ implementation.
 .. [DPGoF] *Design Patterns*
            E. Gamma, R. Helm, R. Johnson, J. Vlissides - Adisson-Wesley
 
-Business Logic
---------------
+Models data
+-----------
 
-.. note::
-
-   *Business Logic* is the part of the code which is not technical. Deal with
-   "real life" models: buildings, machine, fields, etc.
-
-See the different sub-directories in ``Tympan/models``:
+See the different sub-directories in ``models``:
 
   - ``business``: objects which describe a site, acoustic objects
     (sources, receptor, paths), materials, machines, etc.
   - ``solver``: the current work which describes a data model for the
     solvers.
 
+Business Logic
+``````````````
+
+.. note::
+
+   *Business Logic* is the part of the code which is not technical. Deal with
+   "real life" models: buildings, machine, fields, etc.
+
 Code_TYMPAN offers a way to build the ``business`` objects from
 a string representing their class name. This feature (mostly used during XML
 deserialization) is implemented in the ``OPrototype`` class through a factory
 pattern. To use this facility, it is first necessary to register all the objects
 that will need it. This is handled by the ``init_registry()`` method
-(from ``Tympan/models/business/init_registry.h``), that must be
+(from ``models/business/init_registry.h``), that must be
 ran before any call to the methods specified by ``OPrototype`` interface.
 
 For now, the splitting between the business logic objects and the `Graphical User
 Interface`_ is not clear. In other words, you can have a strong dependency
 between ``models/business`` and graphical widgets described in
-``gui/widgets``. One of the objectives described in the section
-`Future Architecture`_ is to split these parts.
+``gui/widgets``. One of the objectives described in the section is to split these parts.
 
+Solvers
+```````
+It makes a dedicated data model for the solver part (see class AcousticProblemModel), i.e. create elementary objects 
+(as opposed to business objects) such as acoustic sources and receptors, triangles related to a material, spectrums, etc. 
+in order to define a model that can be used by any solver.
 
 Graphical User Interface
 ------------------------
 
-See in ``gui`` and its three sub-directories:
+See in ``Tympan/gui`` and its four sub-directories:
 
- - ``ToolsGraphic`` common tools and objects used for the GUI ;
- - ``DataManagerIHM`` widgets such as buttons, boxes and some widgets dedicated
-   to a specific business logic objets such as a building, a field, a spectrum,
-   etc. ;
- - ``DataManagerGraphic`` 3D representation of business logic objecst such as a
-   building, a machine, etc.
+ - ``tools``: common tools and objects used for the GUI ;
+ - ``widgets``: widgets such as buttons, boxes and some widgets dedicated
+   to a specific business logic objets such as a building, a field, a spectrum, etc. ;
+ - ``gl``: 3D representation of business logic objects such as a
+   building, a machine, etc ;
+ - ``app``: GUI main classes. 
+
+.. figure:: _build/doxygen/html/dir_96acfafdf97aa4a7b901cb1116c77380_dep.png
+   :align: center
+   :scale: 100 % 
+   
+   **GUI directories and dependencies**
+
+App
+```
+
+The ``app`` package is the place where the simulation workflow is split in
+order to delegate some of the processing to a Python subprocess (see ``launch()`` method 
+from ``TYCalculManager`` class).
+When asked to perform a simulation, the computation manager:
+
+* Serializes the current project to a XML file
+* Calls a subprocess running ``solve_project.py`` python script that uses Tympan libraries to:
+
+  * Read the serialized file
+  * Build a data model representing the acoustic problem
+  * Run the simulation
+  * Serialize the computed project (with the results)
+* Reads the simulation results from the file serialized by the Python subprocess
+* Updates the current project with these results
+
 
 Rendering
 `````````
@@ -192,87 +313,462 @@ point between our ray and the picked object.
 
 .. note::
 
-   It might be possible to re-use the acceleration structures from ``MetierSolver/AcousticRaytracer/Accelerator`` for the ray-intersection method.
+   It might be possible to re-use the acceleration structures from ``models/solvers/AcousticRaytracer/Accelerator`` for the ray-intersection method.
 
 Solvers
 -------
 
-All directories in ``MetierSolver/Solvers`` and
-``MetierSolver/AcousticRaytracer``. The sub-directories in ``AcousticRaytracer``
-is dedicated to the solver named *Simple Ray Solver* but does not occur in the
-``Solvers`` directory.
+All directories in ``models/solver/Solvers`` :
 
+ - ``DefaultSolver`` Default solver using convex hull method
+ - ``ANIME3DSolver`` Solver using 3D ray tracing
+ - ``AnalyticRayTracer`` Should be used by ANIME3DSolver only
+ - ``ConvexHullFinder`` Used by the default solver only
+ - ``AcousticRaytracer`` Geometric ray tracing (used by the 3D solver. The default solver use it for altimetry computation)
 
-Appli
------
-
-The ``Appli`` package is the place where the simulation workflow is split in
-order to delegate some of the processing to a Python subprocess (see ``launch()``
-method from ``TYCalculManager`` class).
-When asked to perform a simulation, the computation manager:
-
-* Serializes the current project to a XML file
-* Calls a subprocess running ``solve_project.py`` python script that uses tympan libraries to:
-
-  * Read the serialized file
-  * Build a data model representing the acoustic problem (see details below, section **Future Architecture**)
-  * Run the simulation
-  * Serialize the computed project (with the results)
-* Reads the simulation results from the file serialized by the Python subprocess
-* Updates the current project with these results
-
-
-Future Architecture
--------------------
-
-One proposes to improve the current architecture in order to clearly split
-independent features. For instance, the business logic should not have a
-dependency on the graphical user interface (as previously described). Moreover,
-the separation between core/tools and the business logic is not clear. The main
-idea is to split:
-
-  - the graphical user interface ;
-  - business logic ;
-  - several solvers: Default, ANIME3D, Simple Ray Solver, etc.
-
-Some tasks have already been started:
-
- #. Make a dedicated data model for the solver part (see class ``AcousticProblemModel``),
-    i.e. create elementary
-    objects (as opposed to business objects) such as acoustic sources and receptors,
-    triangles related to a material, spectrums, etc. in order to
-    define a model that can be used by any solver.
- #. Change the core simulation workflow in order to have a clear separation
-    between the business logic and the solvers.
-    In other word, rewrite the solvers (starting from the default solver) to
-    make them use the new data model aforementioned, which is built from the
-    business representation of the site just before the computation.
- #. Build the solver data model from the Python subprocess by going through the
-    current site and computation and extracting relevant data.
-
-Here a schema about the splitting between site elements and the computation ---
-separate the business logic related to a site with the way to solve the acoustic
-problem. A computation needs triangles with materials from a site triangulation,
-acoustic sources/receptors and an altimetry.
-
-.. figure:: _static/built_resources/SiteBDM.png
+.. figure:: _build/doxygen/html/dir_635e4428492daafdf6f24946a20daf56_dep.png
+   :target:     ../doxygen/html/dir_635e4428492daafdf6f24946a20daf56.html
    :align: center
-   :alt: Target architecture schema
-
-   Proposal of the futur architecture
-
-
-About the future architecture, take a look at the following schema.
-
-.. figure:: _static/built_resources/SourcesTargetArch.png
+   :scale: 100 % 
+   
+   **Solvers directories and dependencies**
+   
+DefaultSolver
+`````````````   
+.. figure:: _build/doxygen/html/dir_10590c5f2acff4ddadc30b2c4b19f30a_dep.png
+   :target:     ../doxygen/html/dir_10590c5f2acff4ddadc30b2c4b19f30a.html
    :align: center
-   :alt: Target architecture schema
+   :scale: 100 % 
+   
+   **Dependencies**
 
-   Proposal of the futur architecture
+The collaboration graph of the DefaultSolver classes are:
 
-.. note::
+.. raw:: html
 
-   This is just a proposal for the future architecture. It may be modified
-   later.
+    <embed><HR></HR></embed> 
+    
+.. figure:: _build/doxygen/html/classTYSolver__coll__graph.png
+   :target:     ../doxygen/html/classTYSolver.html
+   :align: center
+   :scale: 100 % 
+   
+   **TYSolver class**
+   
+.. raw:: html
 
-.. todo:: write a legend for the two previous schemas
+    <embed><HR></HR></embed> 
+
+.. figure:: _build/doxygen/html/classTYAcousticModel__coll__graph.png
+   :target:     ../doxygen/html/classTYAcousticModel.html
+   :align: center
+   :scale: 100 % 
+   
+   **TYAcousticModel class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+
+.. figure:: _build/doxygen/html/classTYAcousticPathFinder__coll__graph.png
+   :target:     ../doxygen/html/classTYAcousticPathFinder.html
+   :align: center
+   :scale: 100 % 
+   
+   **TYAcousticPathFinder class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+    
+.. figure:: _build/doxygen/html/classTYFaceSelector__coll__graph.png
+   :target:     ../doxygen/html/classTYFaceSelector.html
+   :align: center
+   :scale: 100 % 
+   
+   **TYFaceSelector class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+.. figure:: _build/doxygen/html/classTYTask__coll__graph.png
+   :target:     ../doxygen/html/classTYTask.html
+   :align: center
+   :scale: 100 % 
+   
+   **TYTask class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+
+.. figure:: _build/doxygen/html/classTYChemin__coll__graph.png
+   :target:     ../doxygen/html/classTYChemin.html
+   :align: center
+   :scale: 100 % 
+   
+   **TYChemin class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+    
+.. figure:: _build/doxygen/html/classTYEtape__coll__graph.png
+   :target:     ../doxygen/html/classTYEtape.html
+   :align: center
+   :scale: 100 % 
+   
+   **TYEtape class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+
+.. figure:: _build/doxygen/html/classTYTrajet__coll__graph.png
+   :target:     ../doxygen/html/classTYTrajet.html
+   :align: center
+   :scale: 100 % 
+   
+   **TYTrajet class**
+                                          
+ANIME3DSolver
+`````````````   
+.. figure:: _build/doxygen/html/dir_4f2d479a47b44efcc67dc699ba3f6fb7_dep.png
+   :target:     ../doxygen/html/dir_4f2d479a47b44efcc67dc699ba3f6fb7.html
+   :align: center
+   :scale: 100 % 
+   
+   **Dependencies**
+
+The collaboration graph of the ANIME3DSolver classes are:
+
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+    
+.. figure:: _build/doxygen/html/classTYANIME3DSolver__coll__graph.png
+   :target:     ../doxygen/html/classTYANIME3DSolver.html
+   :align: center
+   :scale: 100 % 
+   
+   **TYANIME3DSolver class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+
+.. figure:: _build/doxygen/html/classTYANIME3DFaceSelector__coll__graph.png
+   :target:     ../doxygen/html/classTYANIME3DFaceSelector.html
+   :align: center
+   :scale: 100 % 
+
+   **TYANIME3DFaceSelector class**
+    
+.. figure:: _build/doxygen/html/classTYANIME3DAcousticPathFinder__coll__graph.png
+   :target:     ../doxygen/html/classTYANIME3DAcousticPathFinder.html
+   :align: center
+   :scale: 100 % 
+
+   **TYANIME3DAcousticPathFinder class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+
+.. figure:: _build/doxygen/html/classTYANIME3DAcousticModel__coll__graph.png
+   :target:     ../doxygen/html/classTYANIME3DAcousticModel.html
+   :align: center
+   :scale: 100 % 
+
+   **TYANIME3DAcousticModel class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+       
+.. figure:: _build/doxygen/html/classTYANIME3DRayTracerSolverAdapter__coll__graph.png
+   :target:     ../doxygen/html/classTYANIME3DRayTracerSolverAdapter.html
+   :align: center
+   :scale: 100 % 
+
+   **TYANIME3DRayTracerSolverAdapter class**
+
+AnalyticRayTracer
+`````````````````   
+.. figure:: _build/doxygen/html/dir_378d6a5b5969e03e0c43688920e7613c_dep.png
+   :target:     ../doxygen/html/dir_378d6a5b5969e03e0c43688920e7613c.html
+   :align: center
+   :scale: 100 % 
+   
+   **Dependencies**
+
+The collaboration graph of the AnalyticRayTracer classes are:
+
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+   
+.. figure:: _build/doxygen/html/classDefaultCurvRayEngine__coll__graph.png
+   :target:     ../doxygen/html/classDefaultCurvRayEngine.html
+   :align: center
+   :scale: 100 % 
+
+   **DefaultCurvRayEngine class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+   
+.. figure:: _build/doxygen/html/classIGeometryModifier__coll__graph.png
+   :target:     ../doxygen/html/classIGeometryModifier.html
+   :align: center
+   :scale: 100 % 
+
+   **IGeometryModifier class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed>  
+   
+.. figure:: _build/doxygen/html/classmeteo__coll__graph.png
+   :target:     ../doxygen/html/classmeteo.html
+   :align: center
+   :scale: 100 % 
+
+   **meteo class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+   
+.. figure:: _build/doxygen/html/classmeteoLin__coll__graph.png
+   :target:     ../doxygen/html/classmeteoLin.html
+   :align: center
+   :scale: 100 % 
+
+   **meteoLin class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+   
+.. figure:: _build/doxygen/html/classLancer__coll__graph.png
+   :target:     ../doxygen/html/classLancer.html
+   :align: center
+   :scale: 100 % 
+
+   **Lancer class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+   
+.. figure:: _build/doxygen/html/classRayCourb__coll__graph.png
+   :target:     ../doxygen/html/classRayCourb.html
+   :align: center
+   :scale: 100 % 
+
+   ** class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed>
+   
+.. figure:: _build/doxygen/html/classStep__coll__graph.png
+   :target:     ../doxygen/html/classStep.html
+   :align: center
+   :scale: 100 % 
+
+   **Step class**
+                              
+ConvexHullFinder
+`````````````````   
+.. figure:: _build/doxygen/html/dir_7fbd2483b1241a8d1582b5d60506e18c_dep.png
+   :target:     ../doxygen/html/dir_7fbd2483b1241a8d1582b5d60506e18c.html
+   :align: center
+   :scale: 100 % 
+   
+   **Dependencies**
+
+AcousticRaytracer
+`````````````````   
+.. figure:: _build/doxygen/html/dir_b2cd7e7be8532705e57c372016f5e972_dep.png
+   :target:     ../doxygen/html/dir_b2cd7e7be8532705e57c372016f5e972.html
+   :align: center
+   :scale: 100 % 
+   
+   **Dependencies**
+
+As AcousticRaytracer would be a independant geometric library for ray tracing soon, it is interesting to detail some of its classes. 
+Here is the hierarchy of some of the mains classes of the library:
+
+.. raw:: html
+
+    <embed>
+        <HR></HR>
+    </embed>
+    
+First, the `Base <../doxygen/html/classBase.html>`_ classes which gather a lot of objects which constitutes the scene:
+
+.. figure:: _build/doxygen/html/classBase__inherit__graph.png
+   :target: ../doxygen/html/classBase.html
+   :align: center
+   :scale: 100 % 
+   
+   **Base classes**
+
+.. raw:: html
+
+    <embed>
+        <HR></HR>
+    </embed>
+    
+The `Sampler <../doxygen/html/classSampler.html>`_ classes deal with the ray generators:  
+
+.. figure:: _build/doxygen/html/classSampler__inherit__graph.png
+   :target: ../doxygen/html/classSampler.html
+   :align: center
+   :scale: 100 % 
+   
+   **Samplers**
+
+.. raw:: html
+
+    <embed>
+        <HR></HR>
+    </embed> 
+    
+The `Engine <../doxygen/html/classEngine.html>`_ classes is for the different ways to run the ray tracing method (sequential, parallel, ...):
+   
+.. figure:: _build/doxygen/html/classEngine__inherit__graph.png
+   :target: ../doxygen/html/classEngine.html
+   :align: center
+   :scale: 100 % 
+   
+   **Engines**
+
+.. raw:: html
+
+    <embed>
+        <HR></HR>
+    </embed>
+    
+The `Accelerator <../doxygen/html/classAccelerator.html>`_ classes are used to select an efficient method for primitives classification:   
+
+.. figure:: _build/doxygen/html/classAccelerator__inherit__graph.png
+   :target: ../doxygen/html/classAccelerator.html
+   :align: center
+   :scale: 100 % 
+   
+   **Accelerators**
+
+.. raw:: html
+
+    <embed>
+        <HR></HR>
+    </embed>
+    
+The `Selector <../doxygen/html/classSelector.html>`_ classes offers different criterias to keep or disable rays during tracing:  
+
+.. figure:: _build/doxygen/html/classSelector__inherit__graph.png
+   :target: ../doxygen/html/classSelector.html
+   :align: center
+   :scale: 100 % 
+   
+   **Selectors**
+   
+   
+Example
+-------
+
+First, it should be noticed than in the following Doxygen the order of calls graphs is NOT always from the top to the bottom.
+
+The complete call graph for the default solver can be find `here <../doxygen/html/classTYSolver_ac19b10b4e1bda0706371ce328d5958e6_cgraph.png>`_ .
+
+    
+A simplified call graph is:  
+
+.. figure:: _static/built_resources/TYSolverCallGraph.png
+   :align: center
+   :scale: 80 % 
+   
+   **Default solver call graph**
+
+.. UML TYSolver
+   @startuml
+   participant "TYSolver::solve(problem,result,configuration)" as S
+   participant "TYTask::main" as Ta
+   participant TYTrajet as Tr
+   participant TYFaceSelector as FS
+   participant TYAcousticPathFinder as APF
+   participant TYAcousticModel as AM
+   participant "AcousticResultModel" as ARM
+   S->FS : make_face_selector()
+   S->APF : make_path_finder() && init()
+   S->AM : make_acoustic_model() && init()
+   S->S : appendTriangleToScene
+   S->Ta : Begin loop
+   activate Ta
+   Ta->Tr : getPtSetPtRfromOSeg3D() // Build S->R ray
+   Ta->FS : selectFaces()
+   Ta->APF : computePath()
+   APF->APF : computeParcoursLateraux
+   Ta->AM : compute()
+   Ta->S : End loop
+   deactivate Ta
+   S->ARM : get_data()
+   @enduml
+
+For the ANIME3D solver, the complete call graph is `here <../doxygen/html/classTYANIME3DSolver_a6a334771eddce5341642add8f8597639_cgraph.png>`_ .
+A simplified call graph is:
+
+.. figure:: _static/built_resources/TYANIME3DSolverCallGraph.png
+   :align: center
+   :scale: 80 % 
+   
+   **ANIME3D solver call graph**
+   
+.. UML TYANIME3DSolver
+   @startuml
+   participant "TYANIME3DSolver::solve(problem,result,config)" as S
+   participant TYANIME3DFaceSelector as FS
+   participant TYANIME3DAcousticPathFinder as APF
+   participant TYANIME3DAcousticModel as AM
+   participant AcousticResultModel as ARM
+  
+   S->S : init()
+   S->FS : exec()
+   S->APF : exec()
+   S->AM : ComputeAcousticModel()
+   S->ARM : get_data()
+   S->APF : get_geometry_modifier() // Si meteo
+   S->APF : save_to_file()
+   S->APF : export_to_ply()
+  
+   @enduml
+
+Python call graph to C++ solver TYANIME3DSolver:
+
+.. figure:: _static/built_resources/PythonCallGraph.png
+   :align: center
+   :scale: 80 % 
+   
+   **Python call graph**
+      
+.. UML Python
+   @startuml
+   participant "tympan.solve_project::solve(input_xml,output_xml,...)" as sppy
+   participant "tympan.models.project" as mppy
+   participant "tympan.models.solver" as spy
+   participant "_solver.pyx" as spyx
+   participant "TYANIME3DSolver" as S
+   sppy->mppy : project = Project.from_xml(input_xml)
+   sppy->spy : model = Model.from_project(project)
+   sppy->spy : solver = Solver.from_project(project)
+   sppy->spy : solver_result = solver.solve(model)
+   spy->spyx : Solver::solve_problem(model)
+   spyx->S : solve(ProblemModel(),ResultModel(),Configuration())
+   spyx->sppy : solver_result
+   sppy->mppy : project.import_result(model, solver_result)
+   @enduml
+ 
