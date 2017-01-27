@@ -29,8 +29,8 @@
 class TYFaceSelectorInterface
 {
 public:
-    TYFaceSelectorInterface() { }
-    virtual ~TYFaceSelectorInterface() { }
+    TYFaceSelectorInterface() { }            //!< Constructor
+    virtual ~TYFaceSelectorInterface() { }   //!< Destructor
 };
 
 #endif // __TYFACESELECTORINTERFACE__

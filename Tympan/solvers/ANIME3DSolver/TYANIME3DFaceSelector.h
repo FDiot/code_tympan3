@@ -26,7 +26,9 @@ class AcousticProblemModel;
 class TYANIME3DFaceSelector
 {
 public:
+	/// Constructor
     TYANIME3DFaceSelector( const tympan::AcousticProblemModel& aproblem_ );
+    /// Destructor
     virtual ~TYANIME3DFaceSelector();
 
     /*!
@@ -42,7 +44,7 @@ private :
     bool buildCalcStruct(TYStructSurfIntersect *&tabPolygon, size_t& tabPolygonSize);
 
 protected :
-    const tympan::AcousticProblemModel& aproblem;
+    const tympan::AcousticProblemModel& aproblem; //!< Reference to the acoustic problem
 };
 
 #endif // __TYANIME3DFACESELECTOR__

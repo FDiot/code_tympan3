@@ -227,15 +227,18 @@ inline int BORNE(int a)
 class OCoord3D
 {
 public:
+    /// Default constructor
     OCoord3D();
+    /// Copy constructor
     OCoord3D(const OCoord3D& coord);
+    /// Constructor with 3D point coordinates
     OCoord3D(double x, double y, double z);
-
+    /// Destructor
     virtual ~OCoord3D();
 
-    OCoord3D& operator=(const OCoord3D& coord);
-    bool operator==(const OCoord3D& coord) const;
-    bool operator!=(const OCoord3D& coord) const;
+    OCoord3D& operator=(const OCoord3D& coord);    //!< operator=
+    bool operator==(const OCoord3D& coord) const;  //!< operator==
+    bool operator!=(const OCoord3D& coord) const;  //!< operator!=
 
     /**
      * \fn  void setCoords(double, double, double)
@@ -272,9 +275,9 @@ public:
     {
         struct
         {
-            double _x;
-            double _y;
-            double _z;
+            double _x;	//!< x coordinate of OCoord3D
+            double _y;	//!< y coordinate of OCoord3D
+            double _z;  //!< z coordinate of OCoord3D
         };
         double _value[3];
     };
@@ -291,7 +294,9 @@ public:
 class OVector3D: public OCoord3D
 {
 public:
+	/// Default constructor
     OVector3D();
+    /// Copy constructor
     OVector3D(const OVector3D& vector);
     /**
      * \fn OVector3D(const OCoord3D& coord);
@@ -316,7 +321,7 @@ public:
      * \param z Z coordinate.
      */
     OVector3D(double x, double y, double z);
-
+    /// Destructor
     virtual ~OVector3D();
 
     /**
@@ -324,7 +329,7 @@ public:
      * \brief Reset this vector.
      */
     void reset();
-
+    /// operators
     OVector3D& operator=(const OVector3D& vector);
     bool operator==(const OVector3D& vector) const;
     bool operator!=(const OVector3D& vector) const;
@@ -458,7 +463,7 @@ public:
     */
     OVector3D getRotationOzOy(double alpha, double theta);
 };
-
+/// Return a OCoord3D from an operator+ between a OCoord3D and a OVector3D
 inline OCoord3D operator + (const OCoord3D& coord, const OVector3D& vect)
 {
     return OCoord3D(coord._x + vect._x, coord._y + vect._y, coord._z + vect._z);
@@ -617,12 +622,14 @@ public:
 class OMatrix
 {
 public:
+	/// Default constructor
     OMatrix();
+    /// Copy constructor
     OMatrix(const OMatrix& matrix);
     OMatrix(double matrix[4][4]);
-
+    /// Destructor
     virtual ~OMatrix();
-
+    /// operators
     OMatrix& operator=(const OMatrix& matrix);
     bool operator==(const OMatrix& matrix) const;
     bool operator!=(const OMatrix& matrix) const;
@@ -1077,15 +1084,17 @@ public:
 class OSegment3D
 {
 public:
+	/// Default constructor
     OSegment3D();
+    /// Copy constructor
     OSegment3D(const OSegment3D& other);
     OSegment3D(const OPoint3D& ptA, const OPoint3D& ptB);
-
+    /// Destructor
     virtual ~OSegment3D();
 
-    virtual OSegment3D& operator=(const OSegment3D& other);
-    virtual bool operator==(const OSegment3D& other) const;
-    virtual bool operator!=(const OSegment3D& other) const;
+    virtual OSegment3D& operator=(const OSegment3D& other); //!< operator=
+    virtual bool operator==(const OSegment3D& other) const; //!< operator==
+    virtual bool operator!=(const OSegment3D& other) const; //!< operator!=
 
     /**
      * \fn OSegment3D operator*(const OMatrix& matrix) const;
@@ -1195,7 +1204,9 @@ public:
 class ORepere3D
 {
 public:
+	/// Default constructor
     ORepere3D();
+    /// Copy constructor
     ORepere3D(const ORepere3D& repere);
     /**
      * \brief Constructor with a point and 3 vectors.
@@ -1217,12 +1228,12 @@ public:
      * \param matrix
      */
     ORepere3D(const OMatrix& matrix);
-
+    /// Destructor
     virtual ~ORepere3D();
 
-    ORepere3D& operator=(const ORepere3D& repere);
-    bool operator==(const ORepere3D& repere) const;
-    bool operator!=(const ORepere3D& repere) const;
+    ORepere3D& operator=(const ORepere3D& repere);  //!< operator=
+    bool operator==(const ORepere3D& repere) const; //!< operator==
+    bool operator!=(const ORepere3D& repere) const; //!< operator!=
 
     /**
      * \fn void set(const OPoint3D& origin, const OVector3D& vecI, const OVector3D& vecJ, const OVector3D& vecK);
@@ -1278,11 +1289,13 @@ public:
 class OBox
 {
 public:
+	/// Default constructor
     OBox();
+    /// Copy constructor
     OBox(const OBox& box);
     OBox(const OCoord3D& min, const OCoord3D& max);
     OBox(double x1, double y1, double z1, double x2, double y2, double z2);
-
+    /// Destructor
     virtual ~OBox() {}
 
     virtual OBox& operator=(const OBox& box);
@@ -1361,7 +1374,9 @@ class OBox2 : public OBox
 {
     // Methods
 public:
+	/// Default constructor
     OBox2();
+    /// Copy constructor
     OBox2(const OBox2& box);
     /**
      * \fn OBox2(const OBox& box)
@@ -1386,6 +1401,7 @@ private : // Set private for security seems to an "af hoc" adaptation and is use
     OBox2(const OBox2& box, const ORepere3D& repere, const OPoint3D& centre);
 
 public :
+    /// Destructor
     virtual ~OBox2() {}
 
     virtual OBox2& operator=(const OBox2& box);
@@ -1488,7 +1504,9 @@ public:
 class OHPlane3D
 {
 public:
+	/// Default constructor
     OHPlane3D();
+    /// Copy constructor
     OHPlane3D(const OHPlane3D& Plane);
     /**
      * \brief Constructs a new Plane.
@@ -1497,7 +1515,7 @@ public:
      * \param origin A point of the plane
      */
     OHPlane3D(const OVector3D& normal, const OPoint3D& origin);
-
+    /// Destructor
     virtual ~OHPlane3D();
 
     /**

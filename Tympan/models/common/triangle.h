@@ -22,15 +22,16 @@
 #include "Tympan/models/common/3d.h"
 
 /**
- * \file triangle.h
- * \class OTriangle
- * \brief Classe de definition d'un triangle
+ * \brief Triangle class
  */
 class OTriangle
 {
 public:
+	/// Constructor b
     OTriangle(int p1, int p2, int p3);
+    /// Constructor by 3 OPoint3D
     OTriangle(OPoint3D A, OPoint3D B, OPoint3D C);
+    /// Destructor
     ~OTriangle();
 
     /**
@@ -45,13 +46,13 @@ public:
      */
     OPoint3D getCentre();
 
-    int _p1;
-    int _p2;
-    int _p3;
+    int _p1;	//!< Index of the first OPoint3D _A
+    int _p2;	//!< Index of the second OPoint3D _B
+    int _p3;	//!< Index of the third OPoint3D _C
 
-    OPoint3D _A;
-    OPoint3D _B;
-    OPoint3D _C;
+    OPoint3D _A;	//!< First OPoint3D
+    OPoint3D _B;	//!< Second OPoint3D
+    OPoint3D _C;	//!< Third OPoint3D
 
     //!< Get the \c OPoint3D from the specific index.
     OPoint3D& vertex(unsigned i);
@@ -60,10 +61,12 @@ public:
 
     //!< Get coordinate (int) from index.
     int& index(unsigned i);
-    //!< Get coordinate (int) from index.
+    /// Get coordinate (int) from index.
     int  index(unsigned i) const;
 
+    /// Check the consistency between indexes of points and the points of this OTriangle
     bool checkConsistencyWrtPointsTab(const std::deque<OPoint3D>& points) const;
+    /// If inconsistency found between indexes and OPoint3D points, prints it
     std::string reportInconsistencyWrtPointsTab(const std::deque<OPoint3D>& points);
 
     bool operator==(const OTriangle& other) const;

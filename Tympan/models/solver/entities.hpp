@@ -44,8 +44,9 @@ class AcousticBuildingMaterial:
     public AcousticMaterialBase
 {
 public:
+	/// Constructor
     AcousticBuildingMaterial(const string& name_, const ComplexSpectrum& spectrum);
-    virtual ~AcousticBuildingMaterial() {};
+    virtual ~AcousticBuildingMaterial() {}; //!< Destructor
 
     /*!
      * \brief : Get material absorption at reflection point
@@ -70,7 +71,7 @@ class AcousticGroundMaterial:
 public:
 	/// Constructor
     AcousticGroundMaterial(const string& name_, double resistivity_, double deviation_, double length_);
-    virtual ~AcousticGroundMaterial() {};
+    virtual ~AcousticGroundMaterial() {}; //!< Destructor
 
     /*!
      * \fn ComplexSpectrum get_absorption (double incidence_angle, double length)
@@ -198,7 +199,7 @@ public:
                       support_normal(support_normal_),
                       support_size(support_size_) {}
 
-    ~CommonFaceDirectivity() {}
+    ~CommonFaceDirectivity() {} //!< Destructor
 
     Vector get_normal(){ return support_normal; }
 
@@ -219,9 +220,9 @@ class VolumeFaceDirectivity :
 {
 public:
     VolumeFaceDirectivity(const Vector& support_normal_, double support_size_) : 
-                            CommonFaceDirectivity(support_normal_, support_size_) {}
+                            CommonFaceDirectivity(support_normal_, support_size_) {} //!< Constructor
     
-     ~VolumeFaceDirectivity() {}
+     ~VolumeFaceDirectivity() {} //!< Destructor
 
      virtual Spectrum lwAdjustment(Vector direction, double distance); //!< Directivity of a volume face
 
@@ -255,9 +256,9 @@ class ChimneyFaceDirectivity :
 {
 public :
     ChimneyFaceDirectivity(const Vector& support_normal_, double support_size_) : 
-                            CommonFaceDirectivity(support_normal_, support_size_) {}
+                            CommonFaceDirectivity(support_normal_, support_size_) {} //!< Constructor
 
-    ~ChimneyFaceDirectivity() {}
+    ~ChimneyFaceDirectivity() {}  //!< Destructor
     virtual Spectrum lwAdjustment(Vector direction, double distance); //!< Directivity of a chimney face source
 
 
@@ -294,9 +295,9 @@ class BaffledFaceDirectivity :
 public :
 
     BaffledFaceDirectivity(const Vector& support_normal_, double support_size_) : 
-                            CommonFaceDirectivity(support_normal_, support_size_) {}
+                            CommonFaceDirectivity(support_normal_, support_size_) {} //!< Constructor
 
-    ~BaffledFaceDirectivity() {}
+    ~BaffledFaceDirectivity() {}  //!< Destructor
     virtual Spectrum lwAdjustment(Vector direction, double distance); //!< Directivity of a baffled face source
 
 private:
@@ -321,7 +322,7 @@ public:
             const Spectrum& spectrum_,
             SourceDirectivityInterface* directivity);
 
-    virtual ~AcousticSource() {};
+    virtual ~AcousticSource() {};  //!< Destructor
 
     Point position;      //!< Position of the source
     Spectrum spectrum;   //!< Associated spectrum
@@ -343,7 +344,7 @@ class AcousticReceptor:
 public:
 	/// Constructor to build a receptor defined by the its position
     AcousticReceptor(const Point& position_);
-    virtual ~AcousticReceptor() {};
+    virtual ~AcousticReceptor() {};  //!< Destructor
 
     Point position; //!< Position of the receptor
 };
@@ -375,8 +376,8 @@ class DirectivityCoefficient
 {
 public:
     DirectivityCoefficient(double value_, double theta_, double phi_,
-                           bool solid_angle_);
-    virtual ~DirectivityCoefficient() {};
+                           bool solid_angle_); //!< Constructor
+    virtual ~DirectivityCoefficient() {};  //!< Destructor
 
     double value;
     double theta;

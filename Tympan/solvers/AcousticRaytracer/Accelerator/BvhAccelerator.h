@@ -43,15 +43,18 @@ public:
 
     virtual decimal traverse(Ray* r, std::list<Intersection> &result) const;
 
-    /// Set/Get maximal depth
+    /// Set maximal depth
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
+    /// Get maximal depth
     int getMaxProfondeur() { return maxProfondeur; }
-    /// Set/Get maximal primitives per leaf
+    /// Set maximal primitives per leaf
     void setMaxPrimPerLeaf(int _maxPrimPerLeaf) { maxPrimPerLeaf = _maxPrimPerLeaf; }
+    /// Get maximal primitives per leaf
     int getMaxPrimPerLeaf() { return maxPrimPerLeaf; }
     /// Get the vector of bounding boxes
     std::vector<BBox>& getBBox() { return tableBox; }
 
+    /// Print not implemented:
     void print();
 /* Uncommented cause not used:
     bool alreadyFail;

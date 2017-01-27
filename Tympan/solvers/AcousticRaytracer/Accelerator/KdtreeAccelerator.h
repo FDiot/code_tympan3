@@ -30,8 +30,8 @@ typedef struct kdNode
     bool isLeaf() { return ((int)(flag & 3)) == 3; }                                            //!< Return true if the node is a leaf
     bool isNode() { return ((int)(flag & 3)) < 3; }                                             //!< Return true if the node is a node
     unsigned int getNbPrimitives() { return nbPrims >> 2; }                                     //!< Return primitives number
-    unsigned int AboveChild() { return secondChild >> 2; }
-    unsigned int* getPrims() { return prims; }
+    unsigned int AboveChild() { return secondChild >> 2; }										//!< Return second child
+    unsigned int* getPrims() { return prims; }													//!< Get the primitives
     int getAxe() { return (flag & 3); }                                                         //!< Return the axis number of the separator plane (node)
     float getAxeValue() { return split; }                                                       //!< Return the axis value of the separator plane (node)
     unsigned int getFirstIndex() { return firstIndex; }                                         //!< Return the index of the first node primitive (all)
@@ -59,6 +59,7 @@ typedef struct infoPrim
     BBox box;
 } InfoPrim;
 
+/* Uncommented cause not used
 struct CompareToMid
 {
     CompareToMid(int d, float m) { dim = d; mid = m; }
@@ -68,12 +69,13 @@ struct CompareToMid
     {
         return a.box.centroid[dim] < mid;
     }
-};
+}; */
 
 struct TaBRecBoundEdge
 {
-    // TaBRecBoundEdge Public Methods
+    /// Default constructor
     TaBRecBoundEdge() { }
+    /// Constructor
     TaBRecBoundEdge(float tt, int pn, bool starting)
     {
         t = tt;
@@ -92,7 +94,7 @@ struct TaBRecBoundEdge
     int primNum;
     enum { START, END } type;
 };
-
+/// KdToDo struct
 struct KdToDo
 {
     KDNode* node;
@@ -128,12 +130,14 @@ public:
 
     virtual decimal traverse(Ray* r, std::list<Intersection> &result) const;
 
-    /// Set/Get maximal depth
+    /// Set maximal depth
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
+    /// Get maximal depth
     int getMaxProfondeur() { return maxProfondeur; }
 
-    /// Set/Get maximal primitives per leaf
+    /// Set maximal primitives per leaf
     void setMaxPrimPerLeaf(int _maxPrimPerLeaf) { maxPrimPerLeaf = _maxPrimPerLeaf; }
+    /// Get maximal primitives per leaf
     int getMaxPrimPerLeaf() { return maxPrimPerLeaf; }
     /// Get the vector of bounding boxes
     std::vector<BBox>& getBBox() { return tableBox; }

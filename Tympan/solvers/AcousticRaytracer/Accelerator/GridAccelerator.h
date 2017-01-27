@@ -28,9 +28,11 @@ struct Voxel;
 // Voxel Declarations
 struct Voxel
 {
-    // Voxel Public Methods
+    /// Get size
     uint32_t size() const { return primitives.size(); }
+    /// Default constructor
     Voxel() { allCanIntersect = true; }
+    /// Constructor
     Voxel(Shape* op)
     {
         allCanIntersect = true;
@@ -42,8 +44,8 @@ struct Voxel
     }
     bool Intersect(Ray* ray, std::list<Intersection> &result, decimal& intermin, leafTreatment::treatment choice);
 private:
-    std::vector< Shape* > primitives;
-    bool allCanIntersect;
+    std::vector< Shape* > primitives; //!< Vector containing the primitives
+    bool allCanIntersect;	//!< Flag not used
 };
 
 
@@ -67,11 +69,13 @@ public:
     virtual bool build();
 
     virtual decimal traverse(Ray* r, std::list<Intersection> &result) const;
-    /// Set/Get maximal depth
+    /// Set maximal depth
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
+    /// Get maximal depth
     int getMaxProfondeur() { return maxProfondeur; }
-    /// Set/Get maximal primitives per leaf
+    /// Set maximal primitives per leaf
     void setMaxPrimPerLeaf(int _maxPrimPerLeaf) { maxPrimPerLeaf = _maxPrimPerLeaf; }
+    /// Get maximal primitives per leaf
     int getMaxPrimPerLeaf() { return maxPrimPerLeaf; }
     /// Print (not implemented)
     void print();
@@ -83,7 +87,7 @@ public:
 */
 protected:
 
-    std::vector<Shape*> primitives; //Different de initialMesh, est reordonne par rapport a la structure
+    std::vector<Shape*> primitives; //!< Pointer to all the shapes (different from initialMesh) as it is reordered
     BBox globalBox;			//!< Root bounding box
 
     int maxProfondeur;		//!< Maximal depth
@@ -95,6 +99,7 @@ protected:
     float emptyBonus;
     float traversalCost;
 */
+private:
     // GridAccel Private Methods
     int posToVoxel(const vec3& P, int axis) const
     {

@@ -44,10 +44,10 @@ namespace tympan
 class BaseEntity
 {
 protected:
-    BaseEntity() {};
+    BaseEntity() {}; //!< Constructor
 
 public:
-    virtual ~BaseEntity() {};
+    virtual ~BaseEntity() {}; //!< Destructor
 
     //    virtual tympan::shared_ptr<BaseEntity> ptr_any() = 0;
     //    virtual tympan::shared_ptr<BaseEntity const> ptr_any() const = 0;

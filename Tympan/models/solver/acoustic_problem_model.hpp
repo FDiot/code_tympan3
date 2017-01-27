@@ -41,8 +41,8 @@ class AcousticProblemModel
 {
 public:
 
-    AcousticProblemModel() {};
-    virtual ~AcousticProblemModel() {};
+    AcousticProblemModel() {};          //!< Constructor
+    virtual ~AcousticProblemModel() {}; //!< Destructor
 
     /**
      * @brief Maps a \c Point or \c OPoint3D as a \c node_ref
@@ -50,56 +50,57 @@ public:
      * @return a smart pointer to the corresponding Node (created on the fly if needed)
      */
     node_idx make_node(const Point& point);
+    /// Call make_node(Point) with a point given by its coordinates
     node_idx make_node(double x, double y, double z)
     {return make_node(Point(x, y, z)); }
 
     triangle_idx make_triangle(node_idx n1, node_idx n2, node_idx n3);
 
     size_t npoints() const //TODO move to implementation file
-    { return  all_nodes.size(); }
+    { return  all_nodes.size(); } //!< Return the total number of nodes
 
     size_t ntriangles() const //TODO move to implementation file
-    { return  all_triangles.size(); }
+    { return  all_triangles.size(); } //!< Return the total number of triangles
 
     size_t nsources() const //TODO move to implementation file
-    { return  all_sources.size(); }
+    { return  all_sources.size(); } //!< Return the total number of sources
 
     size_t nreceptors() const //TODO move to implementation file
-    { return  all_receptors.size(); }
+    { return  all_receptors.size(); } //!< Return the total number of receptors
 
     AcousticTriangle& triangle(triangle_idx tri_idx)
-    { return all_triangles.at(tri_idx); }
+    { return all_triangles.at(tri_idx); } //!< Return a triangle by its id
 
     const AcousticTriangle& triangle(triangle_idx tri_idx) const
-    { return all_triangles.at(tri_idx); }
+    { return all_triangles.at(tri_idx); } //!< Return a triangle by its id
 
     Point& node(node_idx idx)
-    { return all_nodes.at(idx); }
+    { return all_nodes.at(idx); } //!< Return a node by its id
 
     const Point& node(node_idx idx) const
-    { return all_nodes.at(idx); }
+    { return all_nodes.at(idx); } //!< Return a node by its id
 
     AcousticSource& source(source_idx idx)
-    { return all_sources.at(idx); }
+    { return all_sources.at(idx); } //!< Return a source by its id
 
     const AcousticSource& source(source_idx idx) const
-    { return all_sources.at(idx); }
+    { return all_sources.at(idx); } //!< Return a source by its id
 
     AcousticReceptor& receptor(receptor_idx idx)
-    { return all_receptors.at(idx); }
+    { return all_receptors.at(idx); } //!< Return a receptor by its id
 
     const AcousticReceptor& receptor(receptor_idx idx) const
-    { return all_receptors.at(idx); }
+    { return all_receptors.at(idx); } //!< Return a receptor by its id
 
 
     size_t nmaterials() const //TODO move to implementation file
-    { return  all_materials.size(); }
+    { return  all_materials.size(); } //!< Return the total number of materials
 
     const AcousticMaterialBase& material(size_t mat_idx) const
-    { return *all_materials.at(mat_idx); }
+    { return *all_materials.at(mat_idx); } //!< Return a material by its id
 
     AcousticMaterialBase& material(size_t mat_idx)
-    { return *all_materials.at(mat_idx); }
+    { return *all_materials.at(mat_idx); } //!< Return a material by its id
 
     /**
      * @brief Push a representation of a ground material into the model

@@ -25,9 +25,9 @@ namespace tympan
 class AcousticResultModel
 {
 public:
-    AcousticResultModel() {};
+    AcousticResultModel() {}; //!< Constructor
 
-    virtual ~AcousticResultModel();
+    virtual ~AcousticResultModel(); //!< Destructor
 
     SpectrumMatrix& get_data() { return acoustic_data; } //!< Return the results matrix
     tab_acoustic_path& get_path_data() { return path_data; } //!< Return the array of the acoustic paths

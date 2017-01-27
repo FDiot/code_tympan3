@@ -32,21 +32,20 @@ enum ACOUSTIC_EVENT_TYPES
 
 class Event;
 
+/*!
+* \class acoustic_event
+* \brief This class store data and provide functions to manipulate event in the acoustic context
+*/
 class acoustic_event
 {
-    /*!
-    * \class acoustic_event
-    * \brief This class store data and provide functions to manipulate event in the acoustic context
-    * \author Projet_Tympan
-    */
-
 public:
+	/// Default constructor
     acoustic_event();
-
+    /// Constructor from the event position
     acoustic_event(const OPoint3D& pt);
-
+    /// Copy constructor
     acoustic_event(const acoustic_event& ev);
-
+    /// Destructor
     ~acoustic_event();
 
     acoustic_event& operator=(const acoustic_event& other);
@@ -70,10 +69,15 @@ typedef std::vector<acoustic_event*> tab_acoustic_events;
 class Ray;
 class IGeometryModifier;
 
+/*!
+* \brief Acoustic path
+*/
 class acoustic_path
 {
 public:
+	/// Default constructor
 	acoustic_path();
+	/// Destructor
 	virtual ~acoustic_path();
 
 	/*!
@@ -294,7 +298,6 @@ public:
     virtual void prevNextLengthCompute(IGeometryModifier* transformer);
 
     /*!
-     * \fn void nextLenghtCompute(TYRay *tyRay)
      * \brief compute the length between an event and the next event
      */
     virtual void eventPosCompute(IGeometryModifier* transformer);
@@ -316,11 +319,12 @@ public:
     */
     virtual double angleCorrection(const acoustic_event* ev1, acoustic_event* ev2, const acoustic_event* ev3, IGeometryModifier* transformer);
 
+    /// Set the sampler step
 	static void set_sampler_step(double sampler_step_) { sampler_step = sampler_step_; }
 
     /*!
      * \fn void build_links_between_events();
-     * \brief TYRayEvent has to know is direct neighbour (before and after him)
+     * \brief TYRayEvent has to know is direct neighbourg (before and after him)
      * \brief It also has to know his the next REFLEXION event or (if not exist) the RECEPTOR
      */
     void build_links_between_events();

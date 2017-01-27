@@ -63,11 +63,13 @@ public:
      * \param decalage Frequency offset relative to the standard band TYMPAN (16-16000)
      */
     OSpectre(const double* valeurs, unsigned nbVal, unsigned decalage);
-
+    /// Destructor
     virtual ~OSpectre();
-
+    /// operator=
     virtual OSpectre& operator= (const OSpectre& other);
+    /// operator==
     virtual bool operator== (const OSpectre& other) const;
+    /// operator !=
     virtual bool operator != (const OSpectre& other) const;
     /// Multiplication by a Spectre spectrum
     OSpectre operator * (const OSpectre& spectre) const;
@@ -93,12 +95,13 @@ public:
      */
     virtual void setValid(const bool& valid = true) { _valid = valid; }
 
-    /// Get/Set the spectrum type.
+    /// Get the spectrum type.
     virtual TYSpectreType getType() const { return _type; }
+    /// Set the spectrum type.
     virtual void setType(TYSpectreType type) { _type = type; }
 
     /// Get the spectrum state.
-    virtual TYSpectreEtat getEtat() const {return _etat; } ;
+    virtual TYSpectreEtat getEtat() const {return _etat; };
     virtual const TYSpectreEtat getEtat() {return _etat;};
 
     /// Force the spectrum state (to use carefully ...)

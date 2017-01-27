@@ -26,7 +26,6 @@ class triangle_pool_t;
 class material_pool_t;
 
 /**
- * \class TYTask
  * \brief Task of a thread collection for Tympan
  */
 class TYTask : public OTask
@@ -45,7 +44,7 @@ public:
 
     ~TYTask(); //!< Destructor
 
-    void main(); //!< Main procedure to run the task (Cf. Tympan/MetierSolver/ToolsMetier/OTask.h)
+    void main(); //!< Main procedure to run the task
 
 private:
 

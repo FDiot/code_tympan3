@@ -44,8 +44,8 @@
  */
 struct Connexite
 {
-    int IndexesSegment[2];
-    int NbSegmentsConnexes;
+    int IndexesSegment[2];  //!< Two indexes of the segment
+    int NbSegmentsConnexes;	//!< Related segments number
 };
 
 /**
@@ -63,7 +63,7 @@ public:
     static TYPointParcours* _ListePointQSort; 	//!< static access to the C function of quicksort
     static TYPointParcours* _SrceQSort;			//!< static access to the C function of quicksort
     static TYPointParcours* _DestQSort;			//!< static access to the C function of quicksort
-    static QMutex _mutex;
+    static QMutex _mutex;						//!< mutex used to serialize TriePointsIntersectionSuivantSR method
     /// Constructor
     TYSetGeometriqueParcours() { Init();}
     /// Destructor

@@ -42,10 +42,7 @@ public :
      */
     void reinitParameters(void);
 
-    /**
-     * \fn void setDecimation(double xdecim, double ydecim, double zdecim);
-     *
-     */
+    /// Set decimation
     void setDecimation(double xdecim, double ydecim, double zdecim);
 
     /**
