@@ -12,16 +12,17 @@
 class AtmosphericConditions
 {
 public:
+	/// Constructor
     AtmosphericConditions(double static_pressure_, double temperature_, double hygrometry_);
+    /// Destructor
     virtual ~AtmosphericConditions() {}
 
     /*!
-     * \fn void compute_absorption_spectrum();
      * \brief Compute absorption spectrum in dB/m
      * \brief This spectrum will be used to compute absorption for a given distance
      */
     void compute_absorption_spectrum();
-
+    /// Get absorption spectrum
     OSpectre get_absorption_spectrum() const { return absorption_spectrum; }
 
     double compute_c() const; //!< compute sound speed
@@ -33,7 +34,7 @@ public:
     OSpectre compute_length_absorption(double length) const;
 
     /*!
-     * \brief Get the wave number
+     * \brief Get the wave number spectrum
      */
     const OSpectre& get_k() const { return wave_number; }
 
@@ -45,21 +46,21 @@ public:
 
 
 private :
-    double compute_hm() const; //!< compute molar hygronometry coefficient
+    double compute_hm() const; //!< compute molar hygrometry coefficient
 
 protected:
-    double static_pressure;
-    double temperature;
-    double hygrometry;
-    OSpectre wave_number;
-    OSpectre absorption_spectrum;
+    double static_pressure;			//!< Static pressure [Pa]
+    double temperature;				//!< Temperature [°C]
+    double hygrometry;				//!< Hygrometry
+    OSpectre wave_number;			//!< Wave number spectrum
+    OSpectre absorption_spectrum;	//!< Absorption spectrum
 
 public:
     static const double Z_ref; //!< reference impedance 
 
-    static const double reference_pressure;
-    static const double reference_temperature;
-    static const double absolute_zero;
+    static const double reference_pressure;		//!< Reference pressure [Pa]
+    static const double reference_temperature;	//!< Reference temperature [K]
+    static const double absolute_zero;			//!< 273.15 K
 
 };
 

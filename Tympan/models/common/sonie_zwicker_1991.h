@@ -17,12 +17,14 @@
 #define TY_MC_SONIE_ZWICKER_1991
 
 /**
- * Class to define the loudness (according Zwicker, 1991)
+ * \brief Class to define the loudness (according Zwicker, 1991)
  */
 class sonie
 {
 public :
+	/// Constructor
     sonie(double* vectToct, const unsigned short& champ = 0);
+    /// Destructor
     ~sonie();
     /// Renvoie la sonie totale
     double getNTot() { return N_Tot; }
