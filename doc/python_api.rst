@@ -39,9 +39,9 @@ Builder
 .. automodule:: tympan.altimetry.builder
     :members: build_altimetry, material_by_face
 
-..Merge
-..~~~~~
-.... automodule:: tympan.altimetry.merge
+.. Merge
+.. ~~~~~
+.. .. automodule:: tympan.altimetry.merge
     ..:members:
 
 Mesh

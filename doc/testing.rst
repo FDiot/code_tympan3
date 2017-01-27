@@ -69,8 +69,8 @@ major interaction should be tested in its own test file. For a complex
 application like Code_TYMPAN there will thus be a whole tree a tests
 to run, that's why a test driver is most useful.
 
-.. _GTest: https://code.google.com/p/googletest/
-.. _GTestPrimer: http://code.google.com/p/googletest/wiki/Primer
+.. _GTest: https://github.com/google/googletest/
+.. _GTestPrimer: https://github.com/google/googletest/blob/master/googletest/docs/Primer.md
 
 
 .. _dev-testing-launch:

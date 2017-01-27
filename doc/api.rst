@@ -1,20 +1,26 @@
-.. api-part:
+.. _api-part:
 
-=====================
-  API documentation
-=====================
+============================
+C++ documentation by Doxygen
+============================
 
-This section contains API documentation extracted from the Doxygen_
-comments embedded in the code thanks to breathe_ (cf. :doc:`tools`).
-
+This section provides the Doxygen_ documentation of `Tympan C++ source files <../doxygen/html/index.html>`_.
 
 .. _Doxygen: http://www.stack.nl/~dimitri/doxygen/
-.. _breathe: http://michaeljones.github.com/breathe/
 
-.. todo:: actually extract documented api,
+===================================
+C++ documentation by Breathe (ToDo)
+===================================
 
-          for example :class:`tympan::AltimetryBuilder`
+This section contains the documentation extracted from the Doxygen
+comments embedded in the code thanks to breathe_ (cf. :doc:`tools`).
 
-.. comment out new block because breathe is broken for now
-    .. doxygenindex::
-       :project: Code_TYMPAN
+.. _breathe: http://breathe.readthedocs.io/en/latest/
+       
+Example with a class:
+
+.. doxygenclass:: BruteForceAccelerator
+   :members:
+   :no-link:
+   
+.. doxygenfunction:: BruteForceAccelerator

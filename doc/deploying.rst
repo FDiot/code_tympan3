@@ -1,8 +1,8 @@
 .. _devel-deploying:
 
-=================
-Windows installer
-=================
+===============================
+Windows installer (ToDo Update)
+===============================
 
 Overview
 ========
