@@ -53,7 +53,8 @@ cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.
 
 def acoustic_solver_by_name(name, foldername):
     """Load an acoustic solver from its name."""
-    load_solvers(foldername.encode('utf-8'))
+    tmp = foldername.encode('utf-8')
+    load_solvers(tmp)
     solver_id = cy.declare(OGenID, tybusiness.solver_id(name.encode('utf-8')))
     solver = cy.declare(tysolver.Solver, tysolver.Solver())
     solver.thisptr = select_solver(solver_id)
@@ -63,7 +64,8 @@ def acoustic_solver_by_name(name, foldername):
 @cy.locals(computation=tybusiness.Computation)
 def acoustic_solver_from_computation(computation, foldername):
     """Load an acoustic solver from a computation."""
-    load_solvers(foldername.encode('utf-8'))
+    tmp = foldername.encode('utf-8')
+    load_solvers(tmp)
     solver = cy.declare(tysolver.Solver, tysolver.Solver())
     solver.thisptr = select_solver(
         computation.thisptr.getRealPointer().getSolverId())

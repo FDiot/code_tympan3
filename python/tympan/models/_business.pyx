@@ -809,7 +809,8 @@ cdef class Computation:
         return self.thisptr.getRealPointer().solverParams.toStdString()
 
     def set_solver_parameters(self, params):
-        self.thisptr.getRealPointer().solverParams = QString(params.encode('utf-8'))
+        tmp = params.encode('utf-8')
+        self.thisptr.getRealPointer().solverParams = QString(tmp)
 
     solver_parameters = property(get_solver_parameters, set_solver_parameters)
 
@@ -849,7 +850,8 @@ cdef class Computation:
     def set_solver(self, solverdir, name):
         """`solver_name` will be used to solve this computation"""
         assert self.thisptr.getRealPointer() != NULL
-        load_solvers(solverdir.encode('utf-8'))
+        tmp = solverdir.encode('utf-8')
+        load_solvers(tmp)
         solverid = cy.declare(OGenID, solver_id(name.encode('utf-8')))
         self.thisptr.getRealPointer().setSolverId(solverid)
 
@@ -969,4 +971,5 @@ cdef class Project:
         """Export an acoustic project to a XML file"""
         assert self.thisptr.getRealPointer() != NULL
         # same thing as for load_project about the exception
-        save_project(filepath.encode('utf-8'), self.thisptr)
+        tmp = filepath.encode('utf-8')
+        save_project(tmp, self.thisptr)
