@@ -1,4 +1,5 @@
 /**
+ * \file config.h
  * \brief This file provides class for solver configuration
  */
 

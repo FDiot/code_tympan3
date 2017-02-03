@@ -24,7 +24,7 @@
 #define __TYFACESELECTORINTERFACE__
 
 /**
- * Interface of TYFaceSelector classes
+ * \brief Interface of TYFaceSelector classes
  */
 class TYFaceSelectorInterface
 {
