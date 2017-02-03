@@ -96,7 +96,7 @@ If we have a look on the source directories (folders) of the differents parts, t
    **Current architecture schema (ToDo: update)**
 
 Here a second graph about the splitting between site elements (business logic) and the computation (solvers).
-It separates the business logic related to a site with the way to solve the acoustic problem (AcousticProblemModel). 
+It separates the business logic related to a site with the way to solve the acoustic problem (`tympan::AcousticProblemModel <../doxygen/html/classtympan_1_1AcousticProblemModel.html>`_). 
 This solver data model, which can be used by any solver, is built from the Python subprocess by going through the
 current site and extracting relevant data: a computation needs triangles with materials from a site triangulation,
 acoustic sources/receptors and an altimetry.
@@ -131,7 +131,7 @@ Core and Tools
 
 See the ``core`` and ``gui/tools`` directories and some sub-directories in ``models`` directories:
 
-  - ``models/business``: the main base class ``TYElement`` used for every
+  - ``models/business``: the main base class `TYElement <../doxygen/html/classTYElement.html>`_ used for every
     business logic objects. Also implements an interface for the solvers and some
     XML tools in order to export/import a Code_TYMPAN study ;
   - ``models/common``: common objects used by the `Business Logic`_ objects: point,
@@ -145,7 +145,7 @@ See the ``core`` and ``gui/tools`` directories and some sub-directories in ``mod
 
 The rationale behind the creation of ``models/common`` is to provide
 basic representations and utilities which *do not depend* upon
-``TYElement`` nor ``OPrototype``. Typically such representations and
+`TYElement <../doxygen/html/classTYElement.html>`_  nor `OPrototype <../doxygen/html/classOPrototype.html>`_. Typically such representations and
 utilities are likely to be shared between the main application and the
 solvers.
 
@@ -195,11 +195,11 @@ Business Logic
 
 Code_TYMPAN offers a way to build the ``business`` objects from
 a string representing their class name. This feature (mostly used during XML
-deserialization) is implemented in the ``OPrototype`` class through a factory
+deserialization) is implemented in the `OPrototype <../doxygen/html/classOPrototype.html>`_ class through a factory
 pattern. To use this facility, it is first necessary to register all the objects
 that will need it. This is handled by the ``init_registry()`` method
-(from ``models/business/init_registry.h``), that must be
-ran before any call to the methods specified by ``OPrototype`` interface.
+(from `models/business/init_registry.h <../doxygen/html/init__registry_8h.html>`_````), that must be
+ran before any call to the methods specified by `OPrototype <../doxygen/html/classOPrototype.html>`_ interface.
 
 For now, the splitting between the business logic objects and the `Graphical User
 Interface`_ is not clear. In other words, you can have a strong dependency
@@ -208,7 +208,7 @@ between ``models/business`` and graphical widgets described in
 
 Solvers
 ```````
-It makes a dedicated data model for the solver part (see class AcousticProblemModel), i.e. create elementary objects 
+It makes a dedicated data model for the solver part (see class `tympan::AcousticProblemModel <../doxygen/html/classtympan_1_1AcousticProblemModel.html>`_), i.e. create elementary objects 
 (as opposed to business objects) such as acoustic sources and receptors, triangles related to a material, spectrums, etc. 
 in order to define a model that can be used by any solver.
 
@@ -225,6 +225,7 @@ See in ``Tympan/gui`` and its four sub-directories:
  - ``app``: GUI main classes. 
 
 .. figure:: _build/doxygen/html/dir_96acfafdf97aa4a7b901cb1116c77380_dep.png
+   :target: ../doxygen/html/dir_96acfafdf97aa4a7b901cb1116c77380.html
    :align: center
    :scale: 100 % 
    
@@ -235,7 +236,7 @@ App
 
 The ``app`` package is the place where the simulation workflow is split in
 order to delegate some of the processing to a Python subprocess (see ``launch()`` method 
-from ``TYCalculManager`` class).
+from `TYCalculManager <../doxygen/html/classTYCalculManager.html>`_ class).
 When asked to perform a simulation, the computation manager:
 
 * Serializes the current project to a XML file
@@ -261,7 +262,7 @@ and simple geometry rendering can be found at ``gui/tools``.
 
 In order to make the rendering faster, the OpenGL commands can be compiled and stored on the GPU.
 That way, the CPU simply has to tell the GPU to render this display list instead of sending the
-geometry on each frame. The use of displayList can be found at ``gui/app/TYOpenGLRenderer.cpp``.
+geometry on each frame. The use of displayList can be found at `gui/app/TYCalculManager <../doxygen/html/TYOpenGLRenderer_8cpp_source.html>`_.
 It simply encapsulates all the rendering function (immediate mode) of the scene.
 
 The modern way to render things in OpenGL relies on the use of VBO's (Vertex Buffer Object). The idea is
@@ -289,7 +290,7 @@ This method relies on OpenGL deprecated functions and the steps are as follows:
  #. The objects are then rendered. If a primitive falls inside the "*picking window*", a "*hit*" occurs.
  #. For each "*hit*", the primitive with the smallest z-value (the closest one) is chosen.
 
-The algorithm is located in the ``gui/app/TYElementPicker.cpp`` file.
+The algorithm is located in the `gui/app/TYElementPicker.cpp <../doxygen/html/TYElementPicker_8cpp_source.html>`_ file.
 
 .. note::
 
@@ -342,7 +343,7 @@ DefaultSolver
    
    **Dependencies**
 
-The collaboration graph of the DefaultSolver classes are:
+The collaboration graph `[legend] <../doxygen/html/graph_legend.html>`_ of the DefaultSolver classes are:
 
 .. raw:: html
 
@@ -440,7 +441,7 @@ ANIME3DSolver
    
    **Dependencies**
 
-The collaboration graph of the ANIME3DSolver classes are:
+The collaboration graph `[legend] <../doxygen/html/graph_legend.html>`_ of the ANIME3DSolver classes are:
 
 .. raw:: html
 
@@ -502,7 +503,7 @@ AnalyticRayTracer
    
    **Dependencies**
 
-The collaboration graph of the AnalyticRayTracer classes are:
+The collaboration graph `[legend] <../doxygen/html/graph_legend.html>`_ of the AnalyticRayTracer classes are:
 
 .. raw:: html
 
@@ -568,7 +569,7 @@ The collaboration graph of the AnalyticRayTracer classes are:
    :align: center
    :scale: 100 % 
 
-   ** class**
+   **RayCourb class**
    
 .. raw:: html
 
@@ -600,7 +601,7 @@ AcousticRaytracer
    **Dependencies**
 
 As AcousticRaytracer would be a independant geometric library for ray tracing soon, it is interesting to detail some of its classes. 
-Here is the hierarchy of some of the mains classes of the library:
+Here is the hierarchy of some of the mains classes of the library `[legend] <../doxygen/html/graph_legend.html>`_:
 
 .. raw:: html
 
@@ -719,7 +720,7 @@ A simplified call graph is:
    S->ARM : get_data()
    @enduml
 
-For the ANIME3D solver, the complete call graph is `here <../doxygen/html/classTYANIME3DSolver_a6a334771eddce5341642add8f8597639_cgraph.png>`_ .
+For the ANIME3D solver, the complete call graph is `there <../doxygen/html/classTYANIME3DSolver_a6a334771eddce5341642add8f8597639_cgraph.png>`_ .
 A simplified call graph is:
 
 .. figure:: _static/built_resources/TYANIME3DSolverCallGraph.png
@@ -733,12 +734,14 @@ A simplified call graph is:
    participant "TYANIME3DSolver::solve(problem,result,config)" as S
    participant TYANIME3DFaceSelector as FS
    participant TYANIME3DAcousticPathFinder as APF
+   participant Simulation as Si
    participant TYANIME3DAcousticModel as AM
    participant AcousticResultModel as ARM
   
    S->S : init()
    S->FS : exec()
    S->APF : exec()
+   APF->Si : launchSimulation()
    S->AM : ComputeAcousticModel()
    S->ARM : get_data()
    S->APF : get_geometry_modifier() // Si meteo
