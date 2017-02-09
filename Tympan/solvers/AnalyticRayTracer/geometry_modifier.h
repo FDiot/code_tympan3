@@ -35,7 +35,7 @@ using namespace std;
 class IGeometryModifier
 {
 public:
-	/// Destructor
+    /// Destructor
     virtual ~IGeometryModifier() {};
 
     /// Clear all the arrays

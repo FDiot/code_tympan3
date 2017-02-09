@@ -104,7 +104,7 @@ protected:
     //OBox2 ComputeFresnelArea(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice);
 
     // * \fn OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre);
-    // * \brief Calculation Fresnel weighting associated to the Fresnel area
+    // * \brief Calculation of Fresnel weighting associated to the Fresnel area
     // */
     //OTabDouble ComputeFresnelWeighting(double angle, OPoint3D Pprec, OPoint3D Prefl, OPoint3D Psuiv, int rayNbr, int reflIndice, TYTabPoint3D& triangleCentre);
 
@@ -142,10 +142,10 @@ protected :
     /// Array of atmospheric absorptions per ray
     OTabSpectreComplex _absAtm;
 
-    /// Array of absorptions by reflection per rayon
+    /// Array of absorptions by reflection per ray
     OTabSpectreComplex _absRefl;
 
-    /// Array of absorptions by diffraction per rayon
+    /// Array of absorptions by diffraction per ray
     OTabSpectreComplex _absDiff;
 
     /// Rays number
@@ -156,7 +156,7 @@ protected :
 
     TYStructSurfIntersect* _tabSurfIntersect; //!< Array containing all the informations relative to a site geometry and associated material to each face
 
-    // la liste des triangles de la topo
+    // Triangles list of the topography
     // TYTabLPPolygon _listeTrianglesBox;
 
     /// Sound speed

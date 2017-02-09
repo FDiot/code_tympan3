@@ -39,7 +39,7 @@ class Event;
 class acoustic_event
 {
 public:
-	/// Default constructor
+    /// Default constructor
     acoustic_event();
     /// Constructor from the event position
     acoustic_event(const OPoint3D& pt);
@@ -56,7 +56,7 @@ public:
     double distPrevNext;    		//!< Distance between event-1 and event +1
     double angle;           		//!< Ray incident angle (for a shooting angle - plan x,z -)
     double angletheta;      		//!< Shooting angle on a horizontal plane (x,y)
-    ACOUSTIC_EVENT_TYPES type;      //!< Event type */
+    ACOUSTIC_EVENT_TYPES type;          //!< Event type
     int idFace1;            		//!< Face id on which the event happens (reflection & diffraction)
     int idFace2;            		//!< Face id on which the event happens (diffraction only)
     acoustic_event* previous;   	//!< Pointer to the previous event in TYRay's list of events
@@ -75,12 +75,12 @@ class IGeometryModifier;
 class acoustic_path
 {
 public:
-	/// Default constructor
-	acoustic_path();
-	/// Destructor
-	virtual ~acoustic_path();
+    /// Default constructor
+    acoustic_path();
+    /// Destructor
+    virtual ~acoustic_path();
 
-	/*!
+    /*!
     * \fn acoustic_path(unsigned int source_idx, unsigned int receptor_idx, tab_acoustic_events &_events);
     * \brief Build the acoustic path with a source id, a receptor id and
     *        a list of acoustic events positions (reflection,  diffraction, etc...)
@@ -183,7 +183,7 @@ public:
 
     /*!
     * \brief Set the events list of the ray.
-    * \warning The first acoustic event should match the source and
+    * \warning The first acoustic event should match the source
 	* \warning and the last one should match the receptor.
     */
     virtual void setEvents(tab_acoustic_events& tabEvents) { _events = tabEvents; }
@@ -236,25 +236,25 @@ public:
 
     /*!
     * \fn void setPosSourceGlobal(const OPoint3D& pos)
-    * \brief Set the source position in the global space
+    * \brief Set the source position in the global frame
     */
     virtual void setPosSourceGlobal(const OPoint3D& pos) { _posSourceGlobal = pos; }
 
     /*!
     * \fn OPoint3D& getPosSourceGlobal()
-    * \brief Get the source position in the global space
+    * \brief Get the source position in the global frame
     */
     virtual OPoint3D& getPosSourceGlobal() { return _posSourceGlobal; }
 
     /*!
     * \fn void setPosReceptGlobal(const OPoint3D& pos)
-    * \brief Set the receptor position in the global space
+    * \brief Set the receptor position in the global frame
     */
     virtual void setPosReceptGlobal(const OPoint3D& pos) { _posReceptGlobal = pos; }
 
     /*!
     * \fn OPoint3D& getPosReceptGlobal()
-    * \brief Get the receptor position in the global space
+    * \brief Get the receptor position in the global frame
     */
     virtual OPoint3D& getPosReceptGlobal() { return _posReceptGlobal; }
 
@@ -320,7 +320,7 @@ public:
     virtual double angleCorrection(const acoustic_event* ev1, acoustic_event* ev2, const acoustic_event* ev3, IGeometryModifier* transformer);
 
     /// Set the sampler step
-	static void set_sampler_step(double sampler_step_) { sampler_step = sampler_step_; }
+    static void set_sampler_step(double sampler_step_) { sampler_step = sampler_step_; }
 
     /*!
      * \fn void build_links_between_events();
@@ -336,14 +336,14 @@ public:
     void compute_shot_angle();
 
 protected:
-	static double sampler_step;		//!< max size of step between events after spatial sampling
-	unsigned int _identifiant;		//!< Ray id
+    static double sampler_step;     //!< max size of step between events after spatial sampling
+    unsigned int _identifiant;      //!< Ray id
     unsigned int source_idx;        //!< Source id
     unsigned int receptor_idx;      //!< Receptor id
-    OPoint3D _posSourceGlobal;      //!< Source position in the global space
-    OPoint3D _posReceptGlobal;      //!< Receptor position in the global space
+    OPoint3D _posSourceGlobal;      //!< Source position in the global frame
+    OPoint3D _posReceptGlobal;      //!< Receptor position in the global frame
 
-    tab_acoustic_events _events;	//!< Events vector containing the events list (and their positions) of the associated ray.
+    tab_acoustic_events _events;    //!< Events vector containing the events list (and their positions) of the associated ray.
 };
 
 typedef std::vector<acoustic_path*> tab_acoustic_path;

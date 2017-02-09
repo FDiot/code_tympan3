@@ -1,6 +1,6 @@
 /**
  * \file entities.hpp
- * \brief This file provides the declaration of the entities of the model
+ * \brief This file provides the declaration of the entities of the model, which inherit from BaseEntity
  *
  * \date nov. 6 2012
  * \author Anthony Truchet <anthony.truchet@logilab.fr>
@@ -186,7 +186,7 @@ public:
 // -------------------
 
 /**
- * @brief Base class for directivity on face
+ * @brief BaseEntity class for directivity on face
  */
 class CommonFaceDirectivity : 
         public virtual BaseEntity,

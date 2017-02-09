@@ -95,7 +95,7 @@ inline double MAX(double a, double b)
 
 /**
  * \fn inline double MAX3(double a, double b, double c)
- * \brief Return the buggest number of three ones.
+ * \brief Return the biggest number of three ones.
  * \param a First number.
  * \param b Second number.
  * \param c Third number.
@@ -120,7 +120,7 @@ inline double MIN(double a, double b)
 
 /**
  * \fn inline double DEGTORAD(double a)
- * \brief Converts an angle in degrees to radians.
+ * \brief Converts an angle from degrees to radians.
  * \param a Angle in degrees.
  * \return Angle in radians.
  */
@@ -131,9 +131,9 @@ inline double DEGTORAD(double a)
 
 /**
  * \fn inline double RADTODEG(double a)
- * \brief Converts an angle in radians to degrees.
+ * \brief Converts an angle from radians to degrees.
  * \param a Angle in radians.
- * \return Angle in degres.
+ * \return Angle in degrees.
  */
 inline double RADTODEG(double a)
 {
@@ -142,7 +142,7 @@ inline double RADTODEG(double a)
 
 /**
  * \fn inline double GRATORAD(double a)
- * \brief Converts an angle in gradians to radians.
+ * \brief Converts an angle from gradians to radians.
  * \param a Angle in gradians.
  * \return Angle in radians.
  */
@@ -153,7 +153,7 @@ inline double GRATORAD(double a)
 
 /**
  * \fn inline double RADTOGRA(double a)
- * \brief Converts an angle in radians to gradians.
+ * \brief Converts an angle from radians to gradians.
  * \param a Angle in radians.
  * \return Angle in gradians.
  */
@@ -164,7 +164,7 @@ inline double RADTOGRA(double a)
 
 /**
  * \fn inline double GRATODEG(double a)
- * \brief Converts an angle in gradians to degrees.
+ * \brief Converts an angle from gradians to degrees.
  * \param a Angle in gradians.
  * \return Angle in degrees.
  */
@@ -175,7 +175,7 @@ inline double GRATODEG(double a)
 
 /**
  * \fn inline double DEGTOGRA(double a)
- * \brief Converts an angle in degrees to gradians.
+ * \brief Converts an angle from degrees to gradians.
  * \param a Angle in degrees.
  * \return Angle in gradians.
  */
@@ -593,8 +593,8 @@ public:
     }
 
     /**
-     * Utility method to check that two consecutive points are
-     * spaced within a maximal length and add new points if necessary
+     * Utility method assuring that two consecutive points are
+     * spaced within a maximal length adding add new points if necessary
      *
      * @param points The array of points to check.
      * @param distanceMax Maximal distance between two points.
@@ -838,17 +838,17 @@ public:
 
     /**
      * \fn OMatrix getInvert(int * ok = 0) const;
-     * \brief Return the inverted matrix of this matrix.
+     * \brief Return the inverse matrix of this matrix.
      *
      * \see invert()
      *
-     * \param ok Flag to indicate success (1) or not (0).
+     * \param ok Flag to indicate if the inversion was a success (1) or not (0).
      */
     OMatrix getInvert(int* ok = 0) const;
 
     /**
      * \fn void adjoint();
-     * \brief Calculate the adjunct matrix from this matrix.
+     * \brief Calculate the adjoint matrix from this matrix.
      *
      * Remarque :
      *  Algorithm by Richard Carling, from Graphic Gems I.
@@ -1161,15 +1161,15 @@ public:
 
     /**
      * \fn OPoint3D centerOfCurvedPath(const double &R) const;
-     * \brief Return the position of the circle center of radius R passing by the two points of the segment.
+     * \brief Return the position of the arc circle center of radius R passing by the segment extremities.
      *
-     * \return OPoint3D Position of the circle center.
+     * \return OPoint3D Position of the arc circle center.
      */
     virtual OPoint3D centerOfCurvedPath(const double& R) const;
 
     /**
      * \fn double lengthOfCurvedPath(const double& R);
-     * \brief Calculate the path length of radius R passing by the two points of the segment.
+     * \brief Calculate the path length of radius R passing by the segment extremities.
      * \param R radius R of the circle
      * \return length of curved path
      */
@@ -1535,7 +1535,7 @@ public:
      * \brief Calculate the intersection with a segment defined by two points.
      *
      * Note :
-     *  In the case where the segment is overlaid on the line, the result
+     *  In case the segment is overlaid on the line, the result
      *  is INTERS_CONFONDU, and the coordinates of the intersection point
      *  are not updated.
      *
@@ -1554,7 +1554,7 @@ public:
      * \brief Calculate the intersection with a segment
      *
      * Note :
-     *  In the case where the segment is overlaid on the line, the result
+     *  In case the segment is overlaid on the line, the result
      *  is INTERS_CONFONDU, and the coordinates of the intersection point
      *  are not updated.
      *

@@ -33,7 +33,7 @@ enum TYSpectreEtat { SPECTRE_ETAT_DB, SPECTRE_ETAT_LIN };
 ///Number of frequencies
 static const unsigned int TY_SPECTRE_DEFAULT_NB_ELMT = 31;
 
-///Default value for the spectrum.
+///Default value for the spectrums.
 static const double TY_SPECTRE_DEFAULT_VALUE = -100.0;
 
 ///Frequencies collection
@@ -168,7 +168,7 @@ public:
     /// Energetic sum of two spectrums in one-third Octave.
     virtual OSpectre sumdB(const OSpectre& spectre) const;
 
-    /// Arithmetic subtract of two spectrums in one-third Octave.
+    /// Arithmetic subtraction of two spectrums in one-third Octave.
     virtual OSpectre subst(const OSpectre& spectre) const;
 
     /// Subtract a constant value to this spectrum
@@ -336,8 +336,8 @@ protected:
 
 ::std::ostream& operator<<(::std::ostream& os, const OSpectre& s);
 
-typedef std::vector<OSpectre> OTabSpectre; /// Spectrums vector
-typedef std::vector<std::vector<OSpectre> > OTab2DSpectre; /// Spectrums 2D array
+typedef std::vector<OSpectre> OTabSpectre; //!< Spectrums vector
+typedef std::vector<std::vector<OSpectre> > OTab2DSpectre; //!< Spectrums 2D array
 
 /**
  * Define a module/phase spectrum
@@ -441,7 +441,7 @@ protected:
     double _phase[TY_SPECTRE_DEFAULT_NB_ELMT];
 };
 
-typedef std::vector<OSpectreComplex> OTabSpectreComplex; /// OTabSpectreComplex vector
-typedef std::vector<std::vector<OSpectreComplex> > OTab2DSpectreComplex; /// OTabSpectreComplex 2D array
+typedef std::vector<OSpectreComplex> OTabSpectreComplex; //!< OTabSpectreComplex vector
+typedef std::vector<std::vector<OSpectreComplex> > OTab2DSpectreComplex; //!< OTabSpectreComplex 2D array
 
 #endif // TY_MC_SPECTRE

@@ -60,7 +60,7 @@ public:
     /// Compute and return area of a contour/polygon
     static float Area(const Vector2dVector& contour);
 
-    /// Decide if the point (Px,Py) is inside triangle defined by threee points (Ax,Ay) (Bx,By) (Cx,Cy)
+    /// Decide if the point (Px,Py) is inside a triangle defined by three points (Ax,Ay) (Bx,By) (Cx,Cy)
     static bool InsideTriangle(float Ax, float Ay,
                                float Bx, float By,
                                float Cx, float Cy,

@@ -60,18 +60,18 @@ public:
     /// Destructor
     virtual ~Engine() { }
 
-    Scene* getScene() { return scene; } /// Get the Scene
-    void setScene(Scene* _scene) { scene = _scene; } /// Set the Scene
+    Scene* getScene() { return scene; } //!< Get the Scene
+    void setScene(Scene* _scene) { scene = _scene; } //!< Set the Scene
 
-    std::vector<Source>* getSources() { return sources; } /// Get the Sources
-    void setSources(std::vector<Source> *_sources) { sources = _sources; } /// Set the Sources
+    std::vector<Source>* getSources() { return sources; } //!< Get the Sources
+    void setSources(std::vector<Source> *_sources) { sources = _sources; } //!< Set the Sources
 
-    Solver* getSolver() { return solver; } /// Get the Solver
-    void setSolver(Solver* _solver) { solver = _solver; } /// Set the Solver
+    Solver* getSolver() { return solver; } //!< Get the Solver
+    void setSolver(Solver* _solver) { solver = _solver; } //!< Set the Solver
 
-    virtual bool process() { return false;} /// If implemented, process and return true if success
+    virtual bool process() { return false;} //!< If implemented, process and return true if success
 
-    virtual void runStructureBenchmark() {} /// If implemented, run a benchmark for the engine
+    virtual void runStructureBenchmark() {} //!< If implemented, run a benchmark for the engine
 
 protected:
     Scene* scene;					//!< Pointer to the scene

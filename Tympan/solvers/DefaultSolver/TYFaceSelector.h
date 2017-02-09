@@ -40,12 +40,12 @@ public:
     virtual void selectFaces(std::deque<TYSIntersection>& tabIntersect, const TYTrajet& rayon);
 
 protected :
-    TYSolver& _solver; /// Reference to the solver
+    TYSolver& _solver; //!< Reference to the solver
 
 private  :
     bool buildPlans(TYSPlan* plan, const OSegment3D& rayon);
     bool CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourante, TYSIntersection& Intersect, OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3, const int& indice) const;
-    void reorder_intersect(std::deque<TYSIntersection>& tabIntersect); // put infrastructure faces on top
+    void reorder_intersect(std::deque<TYSIntersection>& tabIntersect); //!< put infrastructure faces on top
 };
 
 #endif // __TYFACESELECTOR__

@@ -55,8 +55,8 @@ public:
     TYPointParcours     point(int indexe) { return *_PtrPoints[indexe];}	//!< Return a copy the point Pi
     TYPointParcours*    pointPtr(int indexe) { return _PtrPoints[indexe];}  //!< Return a pointer on the point Pi
 
-    bool isInfra(); /// Return true if P0 and P1 are Infra
-    bool isEcran(); /// Return true if P0 and P1 are Ecran
+    bool isInfra(); //!< Return true if P0 and P1 are Infra
+    bool isEcran(); //!< Return true if P0 and P1 are Ecran
 
     /// Add a first polyline with two points p1 and p2
     void ajouteSegment(TYPointParcours* p1, TYPointParcours* p2);

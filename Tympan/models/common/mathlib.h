@@ -101,7 +101,7 @@ class ivec4;
 
 /**
  * @brief 3D vector
- * Vector defined with 3 floats
+ * Vector defined with 3 float numbers
  */
 template<typename base_t>
 class base_vec3
@@ -147,7 +147,7 @@ public:
         return base_vec3(this->y * _v.z - this->z * _v.y,
                          this->z * _v.x - this->x * _v.z,
                          this->x * _v.y - this->y * _v.x) ;
-    }   //!< vector product
+    }   //!< cross product
 
     base_t operator*(const vec4& _v) const;
 
@@ -328,7 +328,7 @@ inline vec3 OVector3Dtovec3(const OVector3D& _v) { return vec3(static_cast<float
 /*****************************************************************************/
 /**
  * @brief 2D Vector
- * Vector defined with 2 floats
+ * Vector defined with 2 float numbers
  */
 class vec2
 {
@@ -480,7 +480,7 @@ inline vec3 FaceNormal(const vec3& vp1, const vec3& vp2, const vec3& vp3)
 }
 /**
  * @brief 4D Vector
- * Vector defined with 4 floats
+ * Vector defined with 4 float numbers
  */
 class vec4
 {
@@ -592,7 +592,7 @@ inline bool colinear(const vec3& A, const vec3& B, const vec3& C, const decimal&
 
 /**
  * @brief 2D Vector
- * Vector defined by 2 integers
+ * Vector defined with 2 integers
  */
 class ivec2
 {
@@ -841,7 +841,7 @@ inline int Round2Int(float val)
     else
         return false;
 }*/
-/**
+/*
  * Retourne vrai si le point dotTest est dans le tetraedre forme par les sommets v1,v2,v3,v4
  * @ref http://steve.hollasch.net/cgindex/geometry/ptintet.html
  */

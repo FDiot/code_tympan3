@@ -155,10 +155,10 @@ public:
 
     /**
      * \fn int intersectsSegment(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D& ptIntersec) const;
-     * \brief Calculate the intersection of this plane with segment defined by two points.
+     * \brief Calculate the intersection of this plane with a segment defined by two points.
      *
      * Note :
-     *  In the case the segment belongs to the plane, the result
+     *  In case the segment belongs to the plane, the result
      *  is INTERS_CONFONDU, and the coordinates of the intersection
      *  are not updated.
      *
@@ -183,9 +183,9 @@ public:
      * \param pt2 The segment second point.
      * \param ptIntersec The intersection point.
      *
-     * \return INTERS_OUI (1) if the intersection happens,
+     * \return INTERS_OUI (1) if the intersection exists,
      *         INTERS_CONFONDU (2) if the elements are overlaid,
-     *         INTERS_NULLE (0) if no intersection happens.
+     *         INTERS_NULLE (0) if no intersection exists.
      */
     int intersectsSegment(const OPoint3D& pt1, const OPoint3D& pt2, OPoint3D& ptIntersec) const;
 
@@ -197,9 +197,9 @@ public:
      * \param vector A vector defining the line.
      * \param ptIntersec The intersection point.
      *
-     * \return INTERS_OUI (1) if the intersection happens,
+     * \return INTERS_OUI (1) if the intersection exists,
      *         INTERS_CONFONDU (2) if the elements are overlaid,
-     *         INTERS_NULLE (0) if no intersection happens.
+     *         INTERS_NULLE (0) if no intersection exists.
      */
     int intersectsDroite(const OPoint3D& pt, const OVector3D& vector, OPoint3D& ptIntersec);
 
@@ -210,9 +210,9 @@ public:
      * \param plan An another plane.
      * \param vectorIntersec The vector defining the intersection.
      *
-     * \return INTERS_OUI (1) if the intersection happens,
+     * \return INTERS_OUI (1) if the intersection exists,
      *         INTERS_CONFONDU (2) if the elements are overlaid,
-     *         INTERS_NULLE (0) if no intersection happens.
+     *         INTERS_NULLE (0) if no intersection exists.
      */
     int intersectsPlan(const OPlan& plan, OVector3D& vectorIntersec);
 
@@ -284,7 +284,7 @@ public:
      * \param distance The distance between 2 planes if they are parallel.
      *
      * \return <code>true</code> if the two planes are parallel;
-     *         <code>false</code> else.
+     *         <code>false</code> if not.
      */
     bool distancePlanParallel(const OPlan& plan, double& distance);
 
@@ -295,7 +295,7 @@ public:
      * \param plan Another plane.
      *
      * \return <code>true</code> if two planes are parallel;
-     *         <code>false</code> else.
+     *         <code>false</code> if not.
      */
     bool isParallel(const OPlan& plan);
 
@@ -306,7 +306,7 @@ public:
      * \param plan Another plane.
      *
      * \return <code>true</code> if the 2 planes are perpendicular;
-     *         <code>false</code> else.
+     *         <code>false</code> if not.
      */
     bool isOrthogonal(const OPlan& plan);
 

@@ -61,7 +61,7 @@ public:
 
 protected:
 
-    /// Update the global and local frame matrixes
+    /// Update the global and local frame matrices
     void updateMatrices();
 
     vec3 U;					//!< Coordinates of local axis U in global frame

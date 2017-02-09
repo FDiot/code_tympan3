@@ -85,7 +85,7 @@ public:
     void setMaterial(Material* m) { material = m; }
     /// Get the Intersection between a ray and this shape
     virtual bool getIntersection(Ray& ray, Intersection& inter) { cerr << "ERROR : Intersection with a non-type shape." << std::endl; return false; }
-    /// Update the boundary box:
+    /// Update the bounding box:
     virtual void updateBBox() { };
     /// Return the bounding box
     BBox getBBox() { return box; }
