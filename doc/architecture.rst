@@ -113,6 +113,7 @@ At the Tympan sources root, we find four directories:
   - ``solvers``: Solvers
 
 .. figure:: _build/doxygen/html/dir_0a699452fb3f72206b671d5471a45d39_dep.png
+   :target: ../doxygen/html/dir_0a699452fb3f72206b671d5471a45d39.html
    :align: center
    :scale: 100 % 
    
@@ -138,6 +139,7 @@ See the ``core`` and ``gui/tools`` directories and some sub-directories in ``mod
     vector, matrix, etc.
 
 .. figure:: _build/doxygen/html/dir_5dbfaf92f958cca7bf9f388ebf56af42_dep.png
+   :target: ../doxygen/html/dir_5dbfaf92f958cca7bf9f388ebf56af42.html
    :align: center
    :scale: 100 % 
    
@@ -529,17 +531,6 @@ The collaboration graph `[legend] <../doxygen/html/graph_legend.html>`_ of the A
    
 .. raw:: html
 
-    <embed><HR></HR></embed>  
-   
-.. figure:: _build/doxygen/html/classmeteo__coll__graph.png
-   :target:     ../doxygen/html/classmeteo.html
-   :align: center
-   :scale: 100 % 
-
-   **meteo class**
-   
-.. raw:: html
-
     <embed><HR></HR></embed> 
    
 .. figure:: _build/doxygen/html/classmeteoLin__coll__graph.png
@@ -679,15 +670,14 @@ The `Selector <../doxygen/html/classSelector.html>`_ classes offers different cr
    **Selectors**
    
    
-Example
--------
+Call graphs for Tympan solvers
+------------------------------
 
 First, it should be noticed than in the following Doxygen the order of calls graphs is NOT always from the top to the bottom.
 
 The complete call graph for the default solver can be find `here <../doxygen/html/classTYSolver_ac19b10b4e1bda0706371ce328d5958e6_cgraph.png>`_ .
-
     
-A simplified call graph is:  
+A simplified call graph is (click to enlarge):  
 
 .. figure:: _static/built_resources/TYSolverCallGraph.png
    :align: center
@@ -721,7 +711,7 @@ A simplified call graph is:
    @enduml
 
 For the ANIME3D solver, the complete call graph is `there <../doxygen/html/classTYANIME3DSolver_a6a334771eddce5341642add8f8597639_cgraph.png>`_ .
-A simplified call graph is:
+A simplified call graph is (click to enlarge):
 
 .. figure:: _static/built_resources/TYANIME3DSolverCallGraph.png
    :align: center
@@ -750,7 +740,7 @@ A simplified call graph is:
   
    @enduml
 
-Python call graph to C++ solver TYANIME3DSolver:
+Python call graph to C++ solver TYANIME3DSolver (click to enlarge):
 
 .. figure:: _static/built_resources/PythonCallGraph.png
    :align: center
