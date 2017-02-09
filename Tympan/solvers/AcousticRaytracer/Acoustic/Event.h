@@ -99,9 +99,9 @@ public:
 
     /// Return true if it remains rays to launch
     bool isReponseLeft() { return nbResponseLeft > 0; }
-    /// Return the number of rays remaining to launch
+    /// Return the number of remaining rays to launch
     int getNbResponseLeft() { return nbResponseLeft; }
-    /// Set the number of rays remaining to launch
+    /// Set the number of remaining rays to launch
     virtual void setNbResponseLeft(int _nbResponseLeft) { nbResponseLeft = _nbResponseLeft; }
     /// Return the number of rays to launch after event
     virtual int getInitialNbResponseLeft() const { return initialNbResponse; }
@@ -170,7 +170,7 @@ public:
 protected:
     vec3 pos;              //!< Location point of the event
     vec3 from;             //!< Direction vector of the incoming ray
-    int nbResponseLeft;    //!< Number of rays remaining to launch
+    int nbResponseLeft;    //!< Number of remaining rays to launch
     int initialNbResponse; //!< Number of rays to launch after event
     Sampler* sampler;      //!< Pointer to a Sampler
     Shape* shape;          //!< The impact primitive

@@ -30,8 +30,8 @@ class TYSolver;
 class TYAcousticModel : public AcousticModelInterface
 {
 public:
-    TYAcousticModel(TYSolver& solver); /// Constructor
-    virtual ~TYAcousticModel();	/// Destructor
+    TYAcousticModel(TYSolver& solver); //<! Constructor
+    virtual ~TYAcousticModel();	//<! Destructor
 
     virtual void compute(const std::deque<TYSIntersection>& tabIntersect,
                          TYTrajet& trajet, TabPoint3D& ptsTop, TabPoint3D& ptsLeft,
@@ -123,7 +123,7 @@ public:
      * @param [in] rayon A segment describing the direct path between source and receptor.
      * @param [in] penteMoyenne Mean slope between source and receptor
      * @param [in] miroir Boolean to indicate if we should use the source (false) or the image source (true) during the walking difference computation
-     * @param [in] re Path length to take in account for the walking difference computation
+     * @param [in] re Path length to take into account for the walking difference computation
      * @param [in] epaisseur Total thickness of the obstacle.
      * @param [in] vertical Boolean to indicate we deal with the vertical plane (maximal attenuation is limited)
      * @param [in] avantApres Boolean to indicate if we are before (false) or after (true) the obstacle
@@ -185,7 +185,7 @@ private :
         TYEtape etape;
         etape._pt = pt;
         etape._type = TYRECEPTEUR;
-        tabEtapes.push_back(etape); /// Add the TYEtape step after reflection
+        tabEtapes.push_back(etape); //!< Add the TYEtape step after reflection
     }
 
 private:

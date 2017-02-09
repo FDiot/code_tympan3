@@ -155,7 +155,7 @@ protected:
  * which defines the task to run.
  * A task is pushed into the threads collection with the OThreadPool::push method,
  * which starts as soon as a thread is available.
- * A task can't be cancelled after after its run.
+ * A task can't be cancelled after its run.
  *
  * \author Projet_Tympan
  */

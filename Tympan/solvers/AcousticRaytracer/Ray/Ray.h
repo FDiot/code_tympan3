@@ -27,14 +27,13 @@
 using namespace std;
 
 
+typedef std::pair<bitSet, bitSet> signature;
 /**
  * \brief : Describes a ray by a pair of unsigned int. The first one gives the source number (in the range 0-4095)
  *         and the receptor number (in the range 0-1048576) as a bit field.
  *         The second one describes the sequences of events by their types (user could decide what 1 represent, may be REFLEXION
  *         or DIFFRACTION)
  */
-typedef std::pair<bitSet, bitSet> signature;
-
 class Ray : public Base
 {
 
@@ -107,11 +106,11 @@ public:
 
     /*!
      * \fn decimal computeTrueLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
-	 * \brief	Compute ray length from source to the nearest point
-	 *			of the "event" located at ref position
-	 * \param ref
-	 * \param lastPos
-	 * \param closestPoint
+     * \brief	Compute ray length from source to the nearest point
+     *			of the "event" located at ref position
+     * \param ref
+     * \param lastPos
+     * \param closestPoint
      */
 	decimal computeTrueLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
 
@@ -218,13 +217,13 @@ public:
     signature getSignature(const typeevent& typeEv = SPECULARREFLEXION);
 
     /*!
-	 * \fn decimal getThickness( const decimal& distance, bool diffraction);
-     * \brief Compute thickness of the ray after covering a distance distance for spherical or diffraction source
+     * \fn decimal getThickness( const decimal& distance, bool diffraction);
+     * \brief Compute thickness of the ray after covering a distance for spherical or diffraction source
      */
 	decimal getThickness( const decimal& distance, bool diffraction);
 
     /*!
-	 * \fn decimal getSolidAngle( bool &diffraction)
+     * \fn decimal getSolidAngle( bool &diffraction)
      * \brief   Compute solid angle associated with the ray
      * \param diffraction Set diffraction true if last pertinent event is a diffraction
      */
@@ -262,8 +261,8 @@ public:
     unsigned long long int constructId;         //!< Ray id
     unsigned int nbReflexion;                   //!< Reflections number for the ray
     unsigned int nbDiffraction;                 //!< Diffractions number for the ray
-	decimal cumulDistance;						//!< Cumulative distance by the ray computed at each step
-	decimal cumulDelta;							//!< Cumulative walking step difference by the ray computed at each step
+    decimal cumulDistance;                      //!< Cumulative distance by the ray computed at each step
+    decimal cumulDelta;                         //!< Cumulative walking step difference by the ray computed at each step
 };
 
 

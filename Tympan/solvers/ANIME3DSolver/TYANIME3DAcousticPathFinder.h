@@ -108,24 +108,25 @@ private :
     void set_source_idx_and_receptor_idx_to_acoustic_path(int sens, Ray *ray, acoustic_path *tyRay);
 
 private:
+    /// Method to build the transformer of the scene geometry according to different parameters 
     void build_geometry_transformer( const vector<vec3>& sources );
 
-    /// Objet _rayTracing pour le lancer de rayons droits
+    /// Object _rayTracing for the straigth-line ray tracer
     Simulation _rayTracing;
 
-    /// Objet _curveRayTracing pour le lancer de rayons courbes
+    /// Object _curveRayTracing for the curved ray tracer
     std::unique_ptr<IGeometryModifier> transformer;
 
-    /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face
+    /// Array containing all the informations relative to a site geometry and associated material to each face
     TYStructSurfIntersect* _tabPolygon;
 
-    /// Nombre de polygones presents dans _tabPolygon
+    /// Polygons number in _tabPolygon
     const size_t& _tabPolygonSize;
 
-    /// tableau de l'ensemble des rayons metier Code_TYMPAN
+    /// Array containing all the Code_Tympan rays
     tab_acoustic_path& _tabTYRays;
 
-    /// Conditions meteo
+    /// Atmospheric conditions
     AtmosphericConditions& _atmos;
 
     const tympan::AcousticProblemModel& _aproblem;

@@ -27,7 +27,7 @@
 * \file Solver.h
 * \class Solver
 * \brief The Solver class gives an interface to the developer to add easily a new acoustic method using ray tracing.
-* This class provides a way to the programmer to interact at each point of the ray tracing algorithm. It is possible
+* This class provides a way for the programmer to interact at each point of the ray tracing algorithm. It is possible
 * to add several acoustic objects to model phenomena like diffraction. The features of this class are:
 * + post-treatment of the scene
 * + leaf treatment in accelerators

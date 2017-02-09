@@ -40,7 +40,7 @@
 
 /**
  * \struct Connexite
- * \brief Connectivity between point and segments
+ * \brief Connectivity between points and segments
  */
 struct Connexite
 {
@@ -160,7 +160,7 @@ public:
     }*/
 
     /**
-     * @brief Compute the convex hull (arrays should allocated before the call)
+     * @brief Compute the convex hull (arrays should be allocated before the call)
      * @param TableauDePoints [in] Points array (first points are the lower ones)
      * @param nNbPoints [in] Size of previous array
      * @param TableauDePointsECOut [out] Points array of the convex hull

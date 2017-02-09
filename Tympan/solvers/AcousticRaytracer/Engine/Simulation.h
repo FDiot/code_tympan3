@@ -156,7 +156,7 @@ protected:
     std::vector<Source> sources;        //!< All the acoustic sources for the Simulation
     std::vector<Recepteur> recepteurs;  //!< All the acoustic receptors for the Simulation
 
-    engineChoice engineC;
+    engineChoice engineC;				//!< Enum giving the Engine choice
     Engine* engine;						//!< Pointer to the selected Engine
 
     unsigned int compteurSource;		//!< Source counter
