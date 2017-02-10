@@ -25,11 +25,13 @@ void Ray::computeLongueur()
 {
     if (source == NULL)
     {
-        std::cerr << "Erreur : rayon sans source dans computeLongueur" << endl;
+        std::cerr << "Error : ray without source or receptor computeLongueur" << endl;
         return;
     }
 
     longueur = 0;
+    // Sum distance between each events (starting from the source). Add the distance between
+    // last event and the receptor if any.
     switch (events.size())
     {
         case 0:
@@ -91,11 +93,11 @@ void Ray::computeLongueur()
 
 decimal Ray::computeEventsSequenceLength()
 {
+    // Sum distance between each event
 	decimal length = 0;
 
 	if ( events.size() == 0 ) { return 0; }
 
-	// Compute distance from source to the last event
 	std::vector< QSharedPointer<Event> > :: iterator iter = events.begin();
 
 	vec3 previous = (*iter)->getPosition();
@@ -117,7 +119,7 @@ decimal Ray::computeTrueLength( const vec3& ref, const vec3& lastPos, vec3& clos
 {
     if (source == NULL)
     {
-        std::cerr << "Erreur : rayon without source or receptor computeTrueLength" << endl;
+        std::cerr << "Error : ray without source or receptor computeTrueLength" << endl;
         return 0.;
     }
 
@@ -153,7 +155,7 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
 {
     if (source == NULL)
     {
-        std::cerr << "Erreur : rayon without source or receptor computeTrueLength" << endl;
+        std::cerr << "Error : ray without source or receptor computePertinentLength" << endl;
         return 0.;
     }
 
@@ -187,7 +189,7 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
                 e = dynamic_cast<Event*>(beginEvent);
                 if (e)
                 {
-                    // compute legth from end of vector
+                    // compute length from end of vector
                     std::vector< QSharedPointer<Event> >::reverse_iterator rit = events.rbegin();
                     previous = (*rit)->getPosition();
                     while ((rit != events.rend()) && ((*rit).data() != e))
