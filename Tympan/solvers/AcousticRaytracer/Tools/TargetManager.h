@@ -16,7 +16,7 @@
 #ifndef TARGETMANAGER_H
 #define TARGETMANAGER_H
 
-#include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
+#include "Tympan/models/common/mathlib.h"
 #include <vector>
 #include <set>
 
