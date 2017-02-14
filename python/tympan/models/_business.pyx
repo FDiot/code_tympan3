@@ -977,5 +977,8 @@ cdef class Project:
         """Export an acoustic project to a XML file"""
         assert self.thisptr.getRealPointer() != NULL
         # same thing as for load_project about the exception
-        tmp = filepath.encode('utf-8')
-        save_project(tmp, self.thisptr)
+        # save_project(filepath.encode('utf-8'), self.thisptr)
+        # To avoid Cython error message "Obtaining 'char const *' from temporary Python value"
+        # See http://cython.readthedocs.io/en/latest/src/userguide/language_basics.html#caveats-when-using-a-python-string-in-a-c-context
+        pystring = filepath.encode('utf-8')
+        save_project(pystring, self.thisptr)
