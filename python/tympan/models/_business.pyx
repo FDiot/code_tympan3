@@ -809,8 +809,11 @@ cdef class Computation:
         return self.thisptr.getRealPointer().solverParams.toStdString()
 
     def set_solver_parameters(self, params):
-        tmp = params.encode('utf-8')
-        self.thisptr.getRealPointer().solverParams = QString(tmp)
+        # self.thisptr.getRealPointer().solverParams = QString(params.encode('utf-8'))
+        # To avoid Cython error message "Obtaining 'char const *' from temporary Python value"
+        # See http://cython.readthedocs.io/en/latest/src/userguide/language_basics.html#caveats-when-using-a-python-string-in-a-c-context
+        pystring = params.encode('utf-8')
+        self.thisptr.getRealPointer().solverParams = QString(pystring)
 
     solver_parameters = property(get_solver_parameters, set_solver_parameters)
 
@@ -850,8 +853,11 @@ cdef class Computation:
     def set_solver(self, solverdir, name):
         """`solver_name` will be used to solve this computation"""
         assert self.thisptr.getRealPointer() != NULL
-        tmp = solverdir.encode('utf-8')
-        load_solvers(tmp)
+        # load_solvers(solverdir.encode('utf-8'))
+        # To avoid Cython error message "Obtaining 'char const *' from temporary Python value"
+        # See http://cython.readthedocs.io/en/latest/src/userguide/language_basics.html#caveats-when-using-a-python-string-in-a-c-context
+        pystring = solverdir.encode('utf-8')
+        load_solvers(pystring)
         solverid = cy.declare(OGenID, solver_id(name.encode('utf-8')))
         self.thisptr.getRealPointer().setSolverId(solverid)
 

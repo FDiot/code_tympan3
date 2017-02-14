@@ -53,8 +53,11 @@ cdef business2microsource(map[tybusiness.TYElem_ptr, vector[SmartPtr[tybusiness.
 
 def acoustic_solver_by_name(name, foldername):
     """Load an acoustic solver from its name."""
-    tmp = foldername.encode('utf-8')
-    load_solvers(tmp)
+    # load_solvers(foldername.encode('utf-8'))
+    # To avoid Cython error message "Obtaining 'char const *' from temporary Python value"
+    # See http://cython.readthedocs.io/en/latest/src/userguide/language_basics.html#caveats-when-using-a-python-string-in-a-c-context
+    pystring = foldername.encode('utf-8')
+    load_solvers(pystring)
     solver_id = cy.declare(OGenID, tybusiness.solver_id(name.encode('utf-8')))
     solver = cy.declare(tysolver.Solver, tysolver.Solver())
     solver.thisptr = select_solver(solver_id)
@@ -64,8 +67,11 @@ def acoustic_solver_by_name(name, foldername):
 @cy.locals(computation=tybusiness.Computation)
 def acoustic_solver_from_computation(computation, foldername):
     """Load an acoustic solver from a computation."""
-    tmp = foldername.encode('utf-8')
-    load_solvers(tmp)
+    # load_solvers(foldername.encode('utf-8'))
+    # To avoid Cython error message "Obtaining 'char const *' from temporary Python value"
+    # See http://cython.readthedocs.io/en/latest/src/userguide/language_basics.html#caveats-when-using-a-python-string-in-a-c-context
+    pystring = foldername.encode('utf-8')
+    load_solvers(pystring)
     solver = cy.declare(tysolver.Solver, tysolver.Solver())
     solver.thisptr = select_solver(
         computation.thisptr.getRealPointer().getSolverId())
