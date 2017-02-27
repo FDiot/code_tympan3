@@ -165,7 +165,7 @@ target_link_libraries(tympan_solver_default
     ${QT_QTCORE_LIBRARY} # threading QMutex, QThread, QWaitCondition
     tympan_common
     tympan_solver_model
-    tympan_raytracer
+    tympan_acousticraytracer
 )
 configure_tympan_plugin(tympan_solver_default)
 install_tympan_plugin(tympan_solver_default)
@@ -174,8 +174,6 @@ install_tympan_plugin(tympan_solver_default)
 file(GLOB TYMPAN_SOLVER_ANIME3D_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/ANIME3DSolver/*.cpp solvers/ANIME3DSolver/*.h
     solvers/ANIME3DSolver/*/*.cpp solvers/ANIME3DSolver/*/*.h
-    solvers/AnalyticRayTracer/*.cpp solvers/AnalyticRayTracer/*.h
-    solvers/AnalyticRayTracer/*/*.cpp solvers/AnalyticRayTracer/*/*.h
 )
 set_property(SOURCE ${TYMPAN_SOLVER_ANIME3D_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
 link_directories(${CGAL_LIBRARIES_DIR})
@@ -185,23 +183,30 @@ target_link_libraries(tympan_solver_anime3d
     ${QT_QTCORE_LIBRARY} # qlist, QTime, QMutex QSharedPointer QTime
     tympan_common
     tympan_solver_model
-    tympan_raytracer
+    tympan_analyticraytracer
+    tympan_acousticraytracer
 )
 configure_tympan_plugin(tympan_solver_anime3d)
 install_tympan_plugin(tympan_solver_anime3d)
 
-######### RayTracer plugin #######################################################
-file(GLOB TYMPAN_RAYTRACER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+######### AcousticRayTracer #######################################################
+file(GLOB TYMPAN_ACOUSTICRAYTRACER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/AcousticRaytracer/*.cpp solvers/AcousticRaytracer/*.h
     solvers/AcousticRaytracer/*/*.cpp solvers/AcousticRaytracer/*/*.h
+)
+add_library(tympan_acousticraytracer ${TYMPAN_COMPONENT_TYPE} MODULE ${TYMPAN_ACOUSTICRAYTRACER_SRCS})
+set_property(TARGET tympan_acousticraytracer PROPERTY FOLDER "Tympan/solvers/AcousticRaytracer")
+install_tympan_component(tympan_acousticraytracer)
+
+######### AnalyticRayTracer #######################################################
+file(GLOB TYMPAN_ANALYTICRAYTRACER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    solvers/AnalyticRayTracer/*.cpp solvers/AnalyticRayTracer/*.h
+    solvers/AnalyticRayTracer/*/*.cpp solvers/AnalyticRayTracer/*/*.h
     models/common/mathlib.h models/common/3d.h
 )
-set_property(SOURCE ${TYMPAN_RAYTRACER_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
-add_library(tympan_raytracer ${TYMPAN_COMPONENT_TYPE} MODULE ${TYMPAN_RAYTRACER_SRCS})
-set_property(TARGET tympan_raytracer PROPERTY FOLDER "Tympan/solvers/AcousticRaytracer")
-target_link_libraries(tympan_raytracer)
-install_tympan_component(tympan_raytracer)
-
+add_library(tympan_analyticraytracer ${TYMPAN_COMPONENT_TYPE} MODULE ${TYMPAN_ANALYTICRAYTRACER_SRCS})
+set_property(TARGET tympan_analyticraytracer PROPERTY FOLDER "Tympan/solvers/AnalyticRayTracer")
+install_tympan_component(tympan_analyticraytracer)
 
 # main app #####################################################################
 
