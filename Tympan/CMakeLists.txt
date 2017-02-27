@@ -154,8 +154,7 @@ install_tympan_component(tympan_solver_model)
 file(GLOB TYMPAN_SOLVER_DEFAULT_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/DefaultSolver/*.cpp solvers/DefaultSolver/*.h
     solvers/DefaultSolver/*/*.cpp solvers/DefaultSolver/*/*.h
-    solvers/ConvexHullFinder/*.cpp solvers/ConvexHullFinder/*.h
-    solvers/ConvexHullFinder/*/*.cpp solvers/ConvexHullFinder/*/*.h
+    solvers/DefaultSolver/ConvexHullFinder/*.cpp solvers/DefaultSolver/ConvexHullFinder/*.h
 )
 set_property(SOURCE ${TYMPAN_SOLVER_DEFAULT_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
 link_directories(${CGAL_LIBRARIES_DIR})

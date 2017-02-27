@@ -14,7 +14,7 @@
 */
 
 #include "Tympan/models/solver/config.h"
-#include "Tympan/solvers/ConvexHullFinder/TYCalculParcours.h"
+#include "Tympan/solvers/DefaultSolver/ConvexHullFinder/TYCalculParcours.h"
 #include "TYSolver.h"
 #include "TYAcousticPathFinder.h"
 
