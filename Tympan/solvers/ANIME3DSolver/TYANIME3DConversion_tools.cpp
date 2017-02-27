@@ -1,10 +1,7 @@
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Shape.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Recepteur.h"
-#include "Tympan/solvers/AnalyticRayTracer/geometry_modifier.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/Conversion_tools.h"
-
-#include "Conversion_tools.h"
+#include "TYANIME3DConversion_tools.h"
 
 namespace Tools
 {
