@@ -27,7 +27,6 @@ using std::vector;
 #include "Tympan/solvers/AcousticRaytracer/Tools/DiffractionSelector.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/ReflectionSelector.h"
 #include "Tympan/solvers/AcousticRaytracer/Tools/SelectorManager.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/Conversion_tools.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Sampler.h"
@@ -39,6 +38,7 @@ using std::vector;
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSolverAdapter.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DSolver.h"
+#include "TYANIME3DConversion_tools.h"
 
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(   TYStructSurfIntersect* tabPolygon, 
                                                             const size_t& tabPolygonSize,
