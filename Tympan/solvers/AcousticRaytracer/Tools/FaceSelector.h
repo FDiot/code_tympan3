@@ -16,8 +16,6 @@
 #ifndef FACE_SELECTOR
 #define FACE_SELECTOR
 
-#include <QMutex>
-#include <QMutexLocker>
 #include "Selector.h"
 #include <map>
 #include <vector>

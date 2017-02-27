@@ -18,8 +18,7 @@
 
 #include "Selector.h"
 #include <vector>
-#include <QMutex>
-#include <QMutexLocker>
+
 
 
 /**
@@ -31,12 +30,11 @@ class SelectorManager
 
 public:
 	/// Constructor
-    SelectorManager() : deletable(true) { mutex = new QMutex;}
+    SelectorManager() : deletable(true) { }
     /// Copy constructor
     SelectorManager(const SelectorManager<T>& manager)
     {
         deletable = manager.deletable;
-        mutex = new QMutex;
         for (unsigned int i = 0; i < manager.selectors.size(); i++)
         {
             selectors.push_back(manager.selectors.at(i)->Copy());
@@ -44,7 +42,7 @@ public:
 
     }
     /// Destructor
-    virtual ~SelectorManager() { delete mutex; }
+    virtual ~SelectorManager() { }
 
     /// Set deletable flag
     void setDeletable(bool _isDeletable) { deletable = _isDeletable; }
@@ -151,8 +149,6 @@ protected:
 
     std::map<unsigned long long, T*> selectedData;		//!< Contains accepted data (rays)
     std::map<unsigned long long, T*> rejectedData;		//!< Contains rejected data (rays) if deletable set to false
-
-    QMutex* mutex;	//!< To provide a serialization between threads
 
 };
 

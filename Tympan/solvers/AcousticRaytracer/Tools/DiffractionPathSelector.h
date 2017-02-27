@@ -36,7 +36,7 @@ public :
 
     virtual SELECTOR_RESPOND canBeInserted(T* r, unsigned long long& replace)
     {
-        vector< QSharedPointer<Event> > *events = r->getEvents();
+        vector< std::shared_ptr<Event> > *events = r->getEvents();
 		if (events->size() == 0) { return SELECTOR_ACCEPT; }
 
 
@@ -49,7 +49,7 @@ public :
 		vec3 origin = pRecep->getPosition();
 		vec3 current_pos = origin;
 
-		vector< QSharedPointer<Event> >::reverse_iterator rit = events->rbegin();
+		vector< std::shared_ptr<Event> >::reverse_iterator rit = events->rbegin();
 		while(rit != events->rend())
 		{
 			cumul_distance += (*rit)->getPosition().distance(current_pos);
@@ -87,7 +87,7 @@ public :
 
     virtual bool insertWithTest(T* r)
     {
-        vector< QSharedPointer<Event> > *events = r->getEvents();
+        vector< std::shared_ptr<Event> > *events = r->getEvents();
 		
 		if (events->size() == 0) { return true; }
 
@@ -101,7 +101,7 @@ public :
 		vec3 origin = pRecep->getPosition();
 		vec3 current_pos = origin;
 
-		vector< QSharedPointer<Event> >::reverse_iterator rit = events->rbegin();
+		vector< std::shared_ptr<Event> >::reverse_iterator rit = events->rbegin();
 		while(rit != events->rend())
 		{
 			cumul_distance += (*rit)->getPosition().distance(current_pos);

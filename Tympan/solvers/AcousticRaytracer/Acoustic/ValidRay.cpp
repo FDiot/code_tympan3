@@ -25,7 +25,7 @@ bool ValidRay::validRayWithDoNothingEvent(Ray *r, Intersection* inter)
 {
 	vec3 impact = r->position + r->direction * inter->t;
 	DoNothing *newEvent = new DoNothing(impact, r->direction, inter->p);
-	QSharedPointer<Event> SPEv(newEvent);
+	std::shared_ptr<Event> SPEv(newEvent);
 
     vec3 newDir;
     if (newEvent->getResponse(newDir))
@@ -52,7 +52,7 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 	}
 
 	SpecularReflexion* newEvent = new SpecularReflexion(impact, r->direction, inter->p);
-	QSharedPointer<Event> SPEv(newEvent);
+	std::shared_ptr<Event> SPEv(newEvent);
 
     vec3 newDir;
     if (newEvent->getResponse(newDir))
@@ -164,7 +164,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
     vec3 from = realImpact - r->position;
     from.normalize();
 	Diffraction* newEvent = new Diffraction(realImpact, from, (Cylindre*)(inter->p));
-	QSharedPointer<Event> SPEv(newEvent);
+	std::shared_ptr<Event> SPEv(newEvent);
 
 // define the number of rays to throw
 	unsigned int diff_nb_rays = 0;
@@ -201,7 +201,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
     return true;
 }
 #ifdef _ALLOW_TARGETING_
-void ValidRay::appendDirectionToEvent(QSharedPointer<Event> e, TargetManager& targets)
+void ValidRay::appendDirectionToEvent(std::shared_ptr<Event> e, TargetManager& targets)
 {
     std::vector<vec3> &ponctualTargets = targets.getTargets();
 

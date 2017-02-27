@@ -16,8 +16,7 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include <QSharedPointer>
-
+#include <memory>
 #include "Tympan/solvers/AcousticRaytracer/Base.h"
 #include "Tympan/models/common/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/Source.h"
@@ -171,18 +170,18 @@ public:
     unsigned int getNbEvents() { return nbDiffraction + nbDiffraction; }
 
     /*!
-    * \fn std::vector<QSharedPointer<Event> >* getEvents()
-    * \brief Return the events array encountered by the ray
-    * \return Events array encountered by the ray.
+    * \fn std::vector<std::shared_ptr<Event> >* getEvents()
+    * \brief Renvoie le tableau des evenements rencontres par le rayon
+    * \return Tableau des evenements rencontres par le rayon.
     */
-    std::vector<QSharedPointer<Event> >* getEvents() { return &events; }
+    std::vector<std::shared_ptr<Event> >* getEvents() { return &events; }
 
     /*!
-    * \fn const std::vector<QSharedPointer<Event> >* getEvents() const
-    * \brief Return the events array encountered by the ray
-    * \return Events array encountered by the ray.
+    * \fn const std::vector<std::shared_ptr<Event> >* getEvents() const
+    * \brief Renvoie le tableau des evenements rencontres par le rayon
+    * \return Tableau des evenements rencontres par le rayon.
     */
-    const std::vector<QSharedPointer<Event> >* getEvents() const { return &events; }
+    const std::vector<std::shared_ptr<Event> >* getEvents() const { return &events; }
 
     /**
      * \fn getFaceHistory()
