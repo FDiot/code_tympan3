@@ -39,14 +39,14 @@ public :
 
     virtual SELECTOR_RESPOND canBeInserted(T* r, unsigned long long& replace)
     {
-        vector<QSharedPointer<Event> >* events = r->getEvents();
+        vector<std::shared_ptr<Event> >* events = r->getEvents();
 
         if (events->size() < 2) { return SELECTOR_ACCEPT; }
 
         for (unsigned int i = 0 ; i < events->size() - 1 ; i++)
         {
-            QSharedPointer<Event> ev1 = events->at(i);
-            QSharedPointer<Event> ev2 = events->at(i + 1);
+            std::shared_ptr<Event> ev1 = events->at(i);
+            std::shared_ptr<Event> ev2 = events->at(i + 1);
             int type1 = events->at(i)->getType();
             int type2 = events->at(i + 1)->getType();
             Shape* sh1 = NULL, *sh2 = NULL, *sh3 = NULL;
@@ -77,14 +77,14 @@ public :
 	
     virtual bool insertWithTest(T* r)
     {
-        vector<QSharedPointer<Event> >* events = r->getEvents();
+        vector<std::shared_ptr<Event> >* events = r->getEvents();
 
         if (events->size() < 2) { return true; }
 
         for (unsigned int i = 0 ; i < events->size() - 1 ; i++)
         {
-            QSharedPointer<Event> ev1 = events->at(i);
-            QSharedPointer<Event> ev2 = events->at(i + 1);
+            std::shared_ptr<Event> ev1 = events->at(i);
+            std::shared_ptr<Event> ev2 = events->at(i + 1);
             int type1 = events->at(i)->getType();
             int type2 = events->at(i + 1)->getType();
             Shape* sh1 = NULL, *sh2 = NULL, *sh3 = NULL;

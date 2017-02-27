@@ -16,7 +16,8 @@
 #include <stack>
 #include <list>
 #include <algorithm>
-#include <QTime>
+//Suppress reference to Qt (a Qtime object was created but results from Qtime::elapsed() was not printed) 
+//#include <QTime>
 #include <vector>
 
 #include "Tympan/models/common/mathlib.h"
@@ -63,8 +64,8 @@ bool DefaultEngine::process()
 {
     std::size_t max_size(0);
 
-    QTime time;
-    time.start();
+    //QTime time;
+    //time.start();
     nbRayonsTraites = 0;
 
     //We begin to throw a rays directly from each source to each receptor
@@ -215,8 +216,8 @@ void DefaultEngine::runStructureBenchmark()
         buffer.push_back(newPos);
     }*/
 
-    QTime time;
-    time.start();
+    //QTime time;
+    //time.start();
 
     for (unsigned int i = 0; i < nbVec; i++)
     {

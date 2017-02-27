@@ -91,9 +91,9 @@ public :
         // ====================
         // DTn++ 20120511
         // ====================
-        std::vector<QSharedPointer<Event> >* tabEvent = r->getEvents();
-        QSharedPointer<Event> pEvent = tabEvent->back();
-        SpecularReflexion* reflex = dynamic_cast<SpecularReflexion*>(pEvent.data());
+        std::vector<std::shared_ptr<Event> >* tabEvent = r->getEvents();
+        std::shared_ptr<Event> pEvent = tabEvent->back();
+        SpecularReflexion* reflex = dynamic_cast<SpecularReflexion*>(pEvent.get());
         // ====================
 
         //      SpecularReflexion *reflex = dynamic_cast<Event*> (r->getEvents()->back());
@@ -155,9 +155,9 @@ public :
         // ====================
         // DTn++ 20120511
         // ====================
-        std::vector<QSharedPointer<Event> >* tabEvent = r->getEvents();
-        QSharedPointer<Event> pEvent = tabEvent->back();
-        SpecularReflexion* reflex = dynamic_cast<SpecularReflexion*>(pEvent.data());
+        std::vector<std::shared_ptr<Event> >* tabEvent = r->getEvents();
+        std::shared_ptr<Event> pEvent = tabEvent->back();
+        SpecularReflexion* reflex = dynamic_cast<SpecularReflexion*>(pEvent.get());
         // ====================
 
         //      Reflexion *reflex = dynamic_cast<Reflexion*>(r->getEvents()->back());

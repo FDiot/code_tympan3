@@ -110,7 +110,7 @@ protected:
 
         for (unsigned int i = 0; i < ray->getNbEvents(); i++)
         {
-            if (ray->getEvents()->at(i).data()->getType() == evType) { res.push_back(ray->getEvents()->at(i).data()); }
+            if (ray->getEvents()->at(i).get()->getType() == evType) { res.push_back(ray->getEvents()->at(i).get()); }
         }
 
         return res;

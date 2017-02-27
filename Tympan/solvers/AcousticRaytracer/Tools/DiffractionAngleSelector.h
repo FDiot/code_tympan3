@@ -38,7 +38,7 @@ public :
 
     virtual SELECTOR_RESPOND canBeInserted(T* r, unsigned long long& replace)
     {
-        vector<QSharedPointer<Event> >* events = r->getEvents();
+        vector<std::shared_ptr<Event> >* events = r->getEvents();
 
         if ( (events->size() == 0) || (r->getDiff() == 0) ) { return SELECTOR_ACCEPT; }
 		
@@ -50,7 +50,7 @@ public :
 
 		decimal F1 = 0., F2 = 0., T1 = 0., T2 = 0., FT = 0.;
 
-		vector<QSharedPointer<Event> >::iterator iter = events->begin();
+		vector<std::shared_ptr<Event> >::iterator iter = events->begin();
 		do
 		{
 			if ( (*iter)->getType() != DIFFRACTION ) 
@@ -62,7 +62,7 @@ public :
 
 			currentPos = (*iter)->getPosition();
 
-			pDiff = dynamic_cast<Diffraction*>( (*iter).data() );
+			pDiff = dynamic_cast<Diffraction*>( (*iter).get() );
 
 			N1 = dynamic_cast<Cylindre*>(pDiff->getShape())->getFirstShape()->getNormal();
 			N2 = dynamic_cast<Cylindre*>(pDiff->getShape())->getSecondShape()->getNormal();
@@ -72,7 +72,7 @@ public :
 			
 			if ( (iter+1) != events->end() )
 			{
-				nextPos = (*(iter+1)).data()->getPosition();
+				nextPos = (*(iter+1)).get()->getPosition();
 			}
 			else
 			{
@@ -119,7 +119,7 @@ public :
 
     virtual bool insertWithTest(T* r)
     {
-        vector<QSharedPointer<Event> >* events = r->getEvents();
+        vector<std::shared_ptr<Event> >* events = r->getEvents();
 
         if ( (events->size() == 0) || (r->getDiff() == 0) ) { return true; }
 		
@@ -131,7 +131,7 @@ public :
 
 		decimal F1 = 0., F2 = 0., T1 = 0., T2 = 0., FT = 0.;
 
-		vector<QSharedPointer<Event> >::iterator iter = events->begin();
+		vector<std::shared_ptr<Event> >::iterator iter = events->begin();
 		do
 		{
 			if ( (*iter)->getType() != DIFFRACTION ) 
@@ -143,7 +143,7 @@ public :
 
 			currentPos = (*iter)->getPosition();
 
-			pDiff = dynamic_cast<Diffraction*>( (*iter).data() );
+			pDiff = dynamic_cast<Diffraction*>( (*iter).get() );
 
 			N1 = dynamic_cast<Cylindre*>(pDiff->getShape())->getFirstShape()->getNormal();
 			N2 = dynamic_cast<Cylindre*>(pDiff->getShape())->getSecondShape()->getNormal();
@@ -153,7 +153,7 @@ public :
 			
 			if ( (iter+1) != events->end() )
 			{
-				nextPos = (*(iter+1)).data()->getPosition();
+				nextPos = (*(iter+1)).get()->getPosition();
 			}
 			else
 			{

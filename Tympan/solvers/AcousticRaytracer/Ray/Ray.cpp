@@ -98,7 +98,7 @@ decimal Ray::computeEventsSequenceLength()
 
 	if ( events.size() == 0 ) { return 0; }
 
-	std::vector< QSharedPointer<Event> > :: iterator iter = events.begin();
+	std::vector< std::shared_ptr<Event> > :: iterator iter = events.begin();
 
 	vec3 previous = (*iter)->getPosition();
 	vec3 current(0., 0., 0.);
@@ -190,9 +190,9 @@ decimal Ray::computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& 
                 if (e)
                 {
                     // compute length from end of vector
-                    std::vector< QSharedPointer<Event> >::reverse_iterator rit = events.rbegin();
+                    std::vector< std::shared_ptr<Event> >::reverse_iterator rit = events.rbegin();
                     previous = (*rit)->getPosition();
-                    while ((rit != events.rend()) && ((*rit).data() != e))
+                    while ((rit != events.rend()) && ((*rit).get() != e))
                     {
                         rit++;
                         current = (*rit)->getPosition();
@@ -217,9 +217,9 @@ Base* Ray::getLastPertinentEventOrSource(typeevent evType)
 {
     Base* res = (Base*) source;
 
-    for (std::vector< QSharedPointer<Event> > :: iterator iter = events.begin(); iter != events.end(); ++iter)
+    for (std::vector< std::shared_ptr<Event> > :: iterator iter = events.begin(); iter != events.end(); ++iter)
     {
-		if ( (*iter)->getType() == evType ) { res = (Base*) ( (*iter).data() ); }
+		if ( (*iter)->getType() == evType ) { res = (Base*) ( (*iter).get() ); }
     }
 
     return res;
