@@ -20,18 +20,21 @@
 
 #include <list>
 
+/**
+ * \brief Leaf treatment
+ */
 namespace leafTreatment
 {
 
 enum treatment
 {
-    FIRST = 0,
-    ALL_BEFORE_TRIANGLE,
-    ALL_BEFORE_VISIBLE,
-    ALL
+    FIRST = 0,          //!< FIRST
+    ALL_BEFORE_TRIANGLE,//!< ALL_BEFORE_TRIANGLE
+    ALL_BEFORE_VISIBLE, //!< ALL_BEFORE_VISIBLE
+    ALL                 //!< ALL
 };
 
-// This fuction is only used by grid accelerator
+// This function is only used by grid accelerator
 decimal keepFunction(treatment choice, std::list<Intersection> &currentIntersections, decimal currentTmin);
 
 decimal keepFirst(std::list<Intersection> &currentIntersections, decimal currentTmin);

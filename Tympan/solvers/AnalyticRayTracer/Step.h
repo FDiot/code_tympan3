@@ -14,7 +14,7 @@
 */
 
 /*!
-* \file Lancer.h
+* \file Step.h
 * \author Projet_Tympan
 */
 
@@ -26,23 +26,26 @@
 
 /*!
  * \class Step
- * \brief describe a step in the ray path
+ * \brief Describe a step in the ray path
  */
 class Step
 {
 public :
+	/// Default constructor
     Step(const vec3& Pos = vec3(0., 0., 0.), const vec3& Norme = vec3(0., 0., 0.)) : pos(Pos), norm(Norme) {}
+    /// Copy constructor
     Step(const Step& other) { pos = other.pos; norm = other.norm; }
+    /// Destructor
     ~Step() {}
-
+    /// Return a step build from ray position and direction
     static Step Ray_adapter(Ray& ray)
     {
         return Step( ray.position, ray.direction );
     }
 
 public :
-    vec3 pos;
-    vec3 norm;
+    vec3 pos;	//!< Step position
+    vec3 norm;	//!< Step normal
 };
 
 inline Step operator * (const Step& s, const decimal& a)

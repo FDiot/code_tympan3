@@ -70,27 +70,35 @@ struct CompareToKey
     }
 };
 
+/**
+ * \brief Base class for Selector (used to keep or disable rays according different criterias)
+ */
 template<typename T>
 class Selector
 {
 
 public:
+	/// Base constructor
     Selector() : deletable(true) { }
+    /// Destructor
     virtual ~Selector() { }
-
+    /// Reset (clear the data) of this Selector
     virtual void reset() { return; }
-
+    /// Copy Selector
     virtual Selector* Copy() { Selector* newSelector = new Selector(); newSelector->setIsDeletable(deletable); return newSelector; }
-
+    /// Return true if the Selector may be deleted
     bool isDeletable() { return deletable; }
+    /// Set deletable flag
     void setIsDeletable(bool _isDeletable) { deletable = _isDeletable; }
-
+    /// Check if the ray respects the criteria of this Selector and return a SELECTOR_RESPOND
     virtual SELECTOR_RESPOND canBeInserted(T* r, unsigned long long& replace) { std::cout << "Appel du mauvais selector." << std::endl; return SELECTOR_REJECT; }
+    /// Select the ray
     virtual void insert(T* r) { return; }
+    /// Select the ray if it respects the criteria of this Selector
     virtual bool insertWithTest(T* r) { return true; }
 
 protected:
-    bool deletable;
+    bool deletable; //!< Flag to know if the selector may be deleted or not
 };
 
 #endif

@@ -25,19 +25,14 @@
 #include "Tympan/models/common/mathlib.h"
 
 /*! \class meteo
-* \brief classe representant les donnees meteo relatives au calcul.
+* \brief Weather data class for the simulation.
 */
 class meteo
 {
 public:
-    /*!
-     *  \brief Constructeur
-     *
-     *  Constructeurs de la classe meteo par defaut et par passage d'arguments
-     *
-     */
+    /// Default constructor
     meteo() : c0(340.), wind_angle(0.) {}
-
+    /// Constructor
     meteo(const double& windAngle, const double& sound_speed) : c0(sound_speed),
         wind_angle(RADIANS(windAngle)) {}
 
@@ -45,28 +40,30 @@ public:
 
     /*!
     * \fn bool setC0(const double& c)
-    * \brief Modifie la valeur de c0
-    * \param c nouvelle valeur que l'on souhaite attribuer a c0
+    * \brief Set sound speed
+    * \param c New sound speed
     */
     virtual void setC0(const double& c) { c0 = c; }
+    /// Get sound speed
     virtual double getC0() const { return c0; }
 
     /*!
      * \fn void setWindAngle(const double& windAngle)
-     * \brief define wind angle 0 means wind from north to south
+     * \brief Define wind: angle 0 means wind from north to south
      */
     virtual void setWindAngle(const double& windAngle) { wind_angle = RADIANS(windAngle); init(); }
+    /// Get wind angle in radian (0 means wind from north to south)
     virtual double getWindAngle() const { return DEGRES(wind_angle); }
 
     /*!
      * \fn void init()
-     * \brief init parameters as needed
+     * \brief Init parameters as needed
      */
     virtual void init() {}
 
 protected:
-    double c0;              /*!< sound speed for z = 0 */
-    double wind_angle;      /*!< wind angle in radian 0 for a wind from north to south */
+    double c0;              //!< Ground sound speed (z = 0)
+    double wind_angle;      //!< Wind angle in radian: 0 for a wind from north to south
 };
 
 #endif //__METEO_H

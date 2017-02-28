@@ -41,21 +41,26 @@
 // a polygon/contour and a series of triangles.
 typedef std::vector< vec2 > Vector2dVector;
 
-
+/**
+ * \brief Triangulate a contour/polygon
+ */
 class Triangulate
 {
 public:
 
-    // triangulate a contour/polygon, places results in STL vector
-    // as series of triangles.
+    /**
+     * @brief Triangulate a contour/polygon, places results in STL vector as series of triangles.
+     * @param contour Countour or polygon
+     * @param result Result as series of triangles
+     * @return
+     */
     static bool Process(const Vector2dVector& contour,
                         Vector2dVector& result);
 
-    // compute area of a contour/polygon
+    /// Compute and return area of a contour/polygon
     static float Area(const Vector2dVector& contour);
 
-    // decide if point Px/Py is inside triangle defined by
-    // (Ax,Ay) (Bx,By) (Cx,Cy)
+    /// Decide if the point (Px,Py) is inside a triangle defined by three points (Ax,Ay) (Bx,By) (Cx,Cy)
     static bool InsideTriangle(float Ax, float Ay,
                                float Bx, float By,
                                float Cx, float Cy,

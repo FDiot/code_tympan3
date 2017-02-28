@@ -24,57 +24,54 @@
 /**
  * \file delaunay_maker.h
  * \class ODelaunayMaker
- * \brief Triangulation de Delaunay
+ * \brief Delaunay triangulation
  */
 
 class ODelaunayMaker
 {
 public :
-    /// constructeur
+    /// Constructor
     ODelaunayMaker(double triangulatePrecision);
-    /// destructeur
+    /// Destructor
     virtual ~ODelaunayMaker();
 
 public :
     /**
      * \fn void reinitParameters(void)
-     * \brief reinitialisation de l'ensemble des parametres a zero
+     * \brief Re-initialization all parameters to zero
      */
     void reinitParameters(void);
 
-    /**
-     * \fn void setDecimation(double xdecim, double ydecim, double zdecim);
-     *
-     */
+    /// Set decimation
     void setDecimation(double xdecim, double ydecim, double zdecim);
 
     /**
      * \fn void addVertex(OPoint3D vertex)
-     * \brief ajoute un sommet
+     * \brief Add a vertex
      */
     void addVertex(OPoint3D vertex);
 
     /**
      * \fn bool compute(void);
-     * \brief calcul de la triangulation
+     * \brief Compute the triangulation
      */
     bool compute(void);
 
     /**
      * \fn void getBoundaries(double & xmin, double & ymin, double & zmin, double & xmax, double & ymax, double & zmax)
-     * \brief definit les bornes
+     * \brief Define boundaries
      */
     void getBoundaries(double& xmin, double& ymin, double& zmin, double& xmax, double& ymax, double& zmax);
 
     /**
      * \fn QList<OTriangle> getFaces(void)
-     * \brief retourne la liste des faces
+     * \brief Return faces list
      */
     QList<OTriangle> getFaces(void);
 
     /**
      * \fn QList<OPoint3D> getVertex(void)
-     * \brief retourne la liste des sommets
+     * \brief Return the vertexes list
      */
     QList<OPoint3D> getVertex(void);
 
@@ -85,9 +82,9 @@ private :
     void invertCoordinates(void);
 
 private :
-    /// Liste des triangles
+    /// Triangles list
     QList<OTriangle>    _triangleOut;
-    /// Liste des sommets
+    /// Vertexes list
     QList<OPoint3D>      _vertexInOut;
 
     double _dx, _dy, _dz, _xMax, _xMin, _yMax, _yMin, _zMin, _zMax;

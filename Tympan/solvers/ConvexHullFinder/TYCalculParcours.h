@@ -25,42 +25,51 @@
 
 #include "TYPointParcours.h"
 #include "TYSetGeometriqueParcours.h"
-
+/**
+ * @brief Class for computing path used by TYAcousticPathFinder
+ */
 class TYCalculParcours
 {
-    int  _nNbSegMax;
-    bool _bVertical;
-    int _indexXInOut;
-    int _indexYInOut;
-    int _indexZInOut;
-    TYSetGeometriqueParcours* _geoImporterDXF;
-    TYSetGeometriqueParcours* _geoSR;
-    TYSetGeometriqueParcours _geoSecondePasseGauche;
-    TYSetGeometriqueParcours _geoSecondePasseDroite;
-    TYSetGeometriqueParcours* _geoTrajetGauche;
-    TYSetGeometriqueParcours* _geoTrajetDroite;
 public:
+    /**
+     * @brief Constructor
+     * @param nNbSegMax Max number of segments for the path
+     * @param _bVertical True if vertical paths are computed, false if horizontal paths are computed
+     */
     TYCalculParcours(int nNbSegMax, bool _bVertical);
+    /// Other constructor
     TYCalculParcours(TYSetGeometriqueParcours* geoImporterDXF, TYSetGeometriqueParcours* geoSR, bool _bVertical);
+    /// Destructor
     ~TYCalculParcours();
+    /**
+     * \brief Select the 2D plane and set _indexXInOut, _indexYInOut, _indexZInOut
+     * \param bAxeXMoinsSignifiant True for horizontal view if Source-Receptor is more Y oriented than X oriented
+     */
     void InitChangementVariable2D3D(bool bAxeXMoinsSignifiant);
 
-    int NumPlanCoupe;
+    // Unused attribute:
+    // int NumPlanCoupe;
 
+    /**
+     * @brief Add a segment defined by 2 points
+     * @param ptA Point A
+     * @param ptB Point B
+     * @param isInfra Boolean true if infra
+     * @param isEcran Boolean trie if screen
+     */
     void AjouterSegmentCoupe(double* ptA, double* ptB, bool isInfra, bool isEcran);
+    /// Add points A (source) and B (receptor)
     void AjouterSegmentSR(double* ptA, double* ptB);
+    /// Return the ith point of the left geometric path
     void PointTrajetGauche(int i, double* pt);
+    /// Return the ith point of the right geometric path
     void PointTrajetDroite(int i, double* pt);
+    /// Return the points number of the left geometric path
     int  NombrePointsTrajetDroite();
+    /// Return the points number of the right geometric path
     int  NombrePointsTrajetGauche();
-
+    /// Build the left and right geometric paths
     bool Traitement();
-
-	int Traite(
-        TYSetGeometriqueParcours& geoSecondePasseGauche,
-        TYSetGeometriqueParcours& geoSecondePasseDroite,
-        TYSetGeometriqueParcours*& geoTrajetGauche,
-        TYSetGeometriqueParcours*& geoTrajetDroite );
 
 private:
     void PointTrajet(int i, double* pt, TYSetGeometriqueParcours* geo);
@@ -71,6 +80,23 @@ private:
                       bool* PointsADroite,
                       TYSetGeometriqueParcours& geoPremierePasse,
                       TYSetGeometriqueParcours*& geoTrajet);
+	int Traite(
+        TYSetGeometriqueParcours& geoSecondePasseGauche,
+        TYSetGeometriqueParcours& geoSecondePasseDroite,
+        TYSetGeometriqueParcours*& geoTrajetGauche,
+        TYSetGeometriqueParcours*& geoTrajetDroite );
+
+    int  _nNbSegMax;		//!< Number of segments (encountered faces)
+    bool _bVertical;		//!< True if horizontal view
+    int _indexXInOut;
+    int _indexYInOut;
+    int _indexZInOut;
+    TYSetGeometriqueParcours* _geoImporterDXF;
+    TYSetGeometriqueParcours* _geoSR;
+    TYSetGeometriqueParcours _geoSecondePasseGauche;
+    TYSetGeometriqueParcours _geoSecondePasseDroite;
+    TYSetGeometriqueParcours* _geoTrajetGauche;		//!< Paths list on the left
+    TYSetGeometriqueParcours* _geoTrajetDroite;		//!< Paths list on the right
 
 };
 

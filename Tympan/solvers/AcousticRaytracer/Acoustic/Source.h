@@ -26,9 +26,9 @@
 #endif //_ALLOW_TARGETING_
 #include "Spectre.h"
 
-
-
-
+/**
+ * \brief Acoustic source class
+ */
 class Source : public Base
 {
 public:
@@ -51,7 +51,9 @@ public:
 
     }
 #else
+    /// Base constructor
     Source(std::string _name = "unknow source") :  sampler(NULL), Base() { name = _name;}
+    /// Copy constructor
     Source(const Source& other) : Base(other)
     {
         name = std::string(other.name);
@@ -65,31 +67,39 @@ public:
         indice =other.indice;
     }
 #endif
-
+    /// Destructor
     virtual ~Source() { }
 
+    /// Get the name of the Source
     std::string getName() { return name; }
+    /// Set the name of the Source
     void setName(const std::string& _name) { name = std::string(_name); }
-
+    /// Get the position of the Source
     vec3 getPosition() { return vec3(pos); }
+    /// Set the position of the Source
     void setPosition(const vec3 _pos) { pos = vec3(_pos); }
-
+    /// Get the spectrum
     Spectre getSpectre() { return spectrePuissance; }
+    /// Set the spectrum
     void setSpectre(const Spectre& spectre) { spectrePuissance = Spectre(spectre); }
 
-
+    /// Get the number of remaining rays to generate
     int getNbRayLeft() { return nbRayLeft; }
+    /// Set the number of remaining rays to generate
     void setNbRayLeft(int nb) { nbRayLeft = nb; if (nbRayLeft > initialRayCount) { initialRayCount = nbRayLeft; } }
-
+    /// Get the initial rays counter
     int getInitialRayCount() { return initialRayCount; }
+    /// Set the initial rays counter
     void setInitialRayCount(int nb) { initialRayCount = nb; nbRayLeft = nb;}
-
+    /// Get the Sampler of this Source
     Sampler* getSampler() { return sampler; }
+    /// Set the Sampler for this Source
     void setSampler(Sampler* _sampler) { sampler = _sampler; }
-
+    /// Get the Source id
 	unsigned int getId() { return id; }
+	/// Set the Source id
     void setId(unsigned int _id) { id = _id; }
-
+    /// Get a direction (return false if all rays has been launched)
     bool getDirection(vec3& r)
     {
 #ifdef _ALLOW_TARGETING_
@@ -130,14 +140,14 @@ public:
     }
 
 protected:
-    std::string name;
-    vec3 pos;
-    Spectre spectrePuissance;
-    Sampler* sampler;
-    int nbRayLeft;
-    int initialRayCount;
-    unsigned int id;
-    int indice; // Knows which ray we are working on.
+    std::string name;	//!< Name
+    vec3 pos;			//!< Position
+    Spectre spectrePuissance;	//!< Spectrum
+    Sampler* sampler;	//!< A pointer to a Sampler
+    int nbRayLeft;		//!< Number of remaining rays to generate
+    int initialRayCount;	//!< Initial rays counter
+    unsigned int id;	//!< Source identification
+    int indice; 		//!< Index to know which ray we are working on.
 
 #ifdef _ALLOW_TARGETING_
 public:

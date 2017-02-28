@@ -30,15 +30,16 @@ enum TYPEHISTORY
     HISTORY_BUILDING
 };
 
+/*!
+ * \brief : To keep only one from two or more rays which have the same history (events on the same primitive)
+ */
 template<typename T>
 class FaceSelector : public Selector<T>
 {
-/*!
- * \brief : if two or more rays have the same history (events on the same primitive)
- *          Only one of them is kept
- */
 public:
+	/// Constructor
     FaceSelector(TYPEHISTORY _modeHistory = HISTORY_FACE) : Selector<T>() { modeHistory = _modeHistory; }
+    /// Destructor
     virtual ~FaceSelector() {}
 
     virtual Selector<T>* Copy()
@@ -48,8 +49,9 @@ public:
         return newSelector;
     }
     virtual void reset() { selectedPath.clear(); return; }
-
+    /// Get the TYPEHISTORY of this Selector
     TYPEHISTORY getModeHistory() { return modeHistory; }
+    /// Set the TYPEHISTORY of this Selector
     void setModeHistory(TYPEHISTORY _modeHistory)
     {
         if (modeHistory != _modeHistory)
@@ -171,8 +173,8 @@ public:
     }
 
 protected:
-    std::map<std::vector<unsigned int>, T*, CompareToKey> selectedPath;
-    TYPEHISTORY modeHistory;
+    std::map<std::vector<unsigned int>, T*, CompareToKey> selectedPath; //!< Selected path
+    TYPEHISTORY modeHistory;	//!< TYPEHISTORY used by this Selector (by default, HISTORY_FACE)
 };
 
 #endif

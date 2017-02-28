@@ -32,32 +32,43 @@ class TYAcousticPathFinder;
 class TYFaceSelector;
 class Scene;
 
+/**
+ * \brief Default solver
+ */
 class TYSolver : public SolverInterface
 {
 public:
-    TYSolver();
-    virtual ~TYSolver();
+	TYSolver(); //!< Constructor
+    virtual ~TYSolver(); //!< Destructor
 
+    /**
+     * \brief Launch the resolution and get the results
+     * \param aproblem Acoustic problem
+     * \param aresult Results
+     * \param configuration Solver configuration
+     * \return Always true
+     */
     virtual bool solve(const tympan::AcousticProblemModel& aproblem,
                        tympan::AcousticResultModel& aresult,
                        tympan::LPSolverConfiguration configuration);
 
-    const std::vector<TYStructSurfIntersect>& getTabPolygon() const { return _tabPolygon; }
+    const std::vector<TYStructSurfIntersect>& getTabPolygon() const { return _tabPolygon; }	//!< Get the array of polygons
 
-    TYFaceSelector* getFaceSelector() { return _faceSelector.get();}
-    TYAcousticPathFinder* getAcousticPathFinder() { return _acousticPathFinder.get(); }
-    TYAcousticModel* getAcousticModel() { return _acousticModel.get(); }
+    TYFaceSelector* getFaceSelector() { return _faceSelector.get();}	//!< Get the face selector
+    TYAcousticPathFinder* getAcousticPathFinder() { return _acousticPathFinder.get(); } //!< Get the acoustic path finder
 
-    const Scene* getScene() const { return _scene.get(); }
+    TYAcousticModel* getAcousticModel() { return _acousticModel.get(); } //!< Get acoustic model
+
+    const Scene* getScene() const { return _scene.get(); }     //!< Get the Scene
 
 protected:
-    std::unique_ptr<TYFaceSelector> make_face_selector();
-    std::unique_ptr<TYAcousticPathFinder> make_path_finder();
-    std::unique_ptr<TYAcousticModel> make_acoustic_model();
+    std::unique_ptr<TYFaceSelector> make_face_selector();		//!< TYFaceSelector builder
+    std::unique_ptr<TYAcousticPathFinder> make_path_finder();	//!< TYAcousticPathFinder builder
+    std::unique_ptr<TYAcousticModel> make_acoustic_model();		//!< TYAcousticModel builder
 
-    std::unique_ptr<TYFaceSelector> _faceSelector;
-    std::unique_ptr<TYAcousticPathFinder> _acousticPathFinder;
-    std::unique_ptr<TYAcousticModel> _acousticModel;
+    std::unique_ptr<TYFaceSelector> _faceSelector;				//!< Pointer to the TYFaceSelector
+    std::unique_ptr<TYAcousticPathFinder> _acousticPathFinder;	//!< Pointer to the TYAcousticPathFinder
+    std::unique_ptr<TYAcousticModel> _acousticModel;			//!< Pointer to the TYAcousticModel
 
 private:
     bool buildCalcStruct(const tympan::AcousticProblemModel& aproblem);
@@ -70,21 +81,21 @@ private:
     bool appendTriangleToScene();
 
     /**
-     * \fn size_t buildValidTrajects(tympan::AcousticProblemModel& aproblem)
+     * \fn size_t buildTrajects(tympan::AcousticProblemModel& aproblem)
      * \brief construit le tableau des trajets et la matrice resultat en supprimant les points trop proches d'une source
      */
    size_t buildTrajects(tympan::AcousticProblemModel& aproblem);
 
     // XXX This pointer is actually used like a C array :
     // TODO replace with a std::deque or similar container.
-    std::vector<TYStructSurfIntersect> _tabPolygon;
+    std::vector<TYStructSurfIntersect> _tabPolygon; //!< Vector of TYStructSurfIntersect
 
-	std::vector<TYTrajet> _tabTrajets; 
+	std::vector<TYTrajet> _tabTrajets; //!< Vector of TYTrajet
 
     OThreadPool* _pool;
 
 private:
-    std::unique_ptr<Scene> _scene;
+    std::unique_ptr<Scene> _scene; //!< Pointer to the Scene
 };
 
 #endif // __TY_SOLVER__

@@ -26,9 +26,11 @@
 class Material : public Base
 {
 public:
+	/// Default constructor
     Material() : Base() { name = "unknown material"; isNatural = true;};
+    /// Constructor by giving a name to the material
     Material(std::string _name) : Base() { name = _name; isNatural = true;}
-
+    /// Copy constructor
     Material(const Material& other)
     {
         name = std::string(other.name);
@@ -43,8 +45,8 @@ public:
 
 
 public:
-    unsigned int id; //Set by the manager
-    bool isNatural;
+    unsigned int id; 	//!< Identification set by the MaterialManager
+    bool isNatural;		//!< Flag to define a natural material
 
     //#ifdef USE_QT
     //  unsigned int r;
@@ -53,22 +55,27 @@ public:
     //#endif
 };
 
+/**
+ * \brief A manager class for Material
+ */
 class MaterialManager
 {
 
 public:
+	/// Constructor
     MaterialManager() : counterKey(0) { };
-
+    /// Destructor
     ~MaterialManager();
-
+    /// Register a new material into the list
     unsigned int registerNewMaterial(Material* m);
+    /// Return a material from the list by its index
     Material* requestMaterial(unsigned int key);
-
+    /// Print the materials list
     void print();
 
 protected:
-    std::map<unsigned int, Material*> materials;
-    unsigned int counterKey;
+    std::map<unsigned int, Material*> materials;	//!< Pointer list to materials
+    unsigned int counterKey;						//!< Counter of materials into the list
 };
 
 #endif

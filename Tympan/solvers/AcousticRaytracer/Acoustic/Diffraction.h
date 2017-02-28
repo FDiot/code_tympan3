@@ -24,32 +24,38 @@
 
 class Cylindre;
 
+/**
+ * \brief Diffraction class Event
+ */
 class Diffraction : public Event
 {
 public:
-
+	/// Constructor
     Diffraction(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Cylindre* c = NULL);
-
+    /// Copy constructor
     Diffraction(const Diffraction& other);
-
+    /// Destructor
 	virtual ~Diffraction() {}
 
     virtual void setNbResponseLeft(int _nbResponseLeft) 
 	{ 
 		nbResponseLeft = static_cast<unsigned int>( std::floor( static_cast<decimal>(_nbResponseLeft-1) / M_2PI * angleOuverture + 0.5 ) );
-		nbResponseLeft = nbResponseLeft >= 4 ? nbResponseLeft : 4; // Limite le nombre à 4
+		nbResponseLeft = nbResponseLeft >= 4 ? nbResponseLeft : 4; // Limite le nombre ï¿½ 4
 		initialNbResponse = nbResponseLeft;
 		computeDTheta(); 
 	}
 
 	virtual bool getResponse(vec3& r, bool force = false);
 
-
+	/// Set/Get aperture angle
     void setAngleOuverture(decimal angle) { angleOuverture = angle; computeDTheta(); }
     decimal getAngleOuverture() { return angleOuverture; }
+    /// Get the angle between 2 rays to send
 	decimal getDeltaTheta() const { return delta_theta; }
+	/// Get the incident angle
     virtual double getAngle() { return angleArrive; }
     virtual bool generateTest(std::vector<vec3>& succededTest, std::vector<vec3>& failTest, unsigned int nbResponses);
+    /// Get the local frame
 	virtual const Repere& getRepere() const { return localRepere; }
 
 #ifdef _ALLOW_TARGETING_
@@ -59,25 +65,29 @@ public:
 #endif //_ALLOW_TARGETING_
 
 protected:
-	bool (*responseValidator) (const vec3&, const vec3&, const vec3&, vec3 &); /*!< filter generated response (or not)*/
-	void (*getTheta) (const decimal&, const decimal&, const decimal&, decimal&); /*!< get theta*/
-
+    /// Filter generated response (or not)
+	bool (*responseValidator) (const vec3&, const vec3&, const vec3&, vec3 &);
+	/// Get theta
+	void (*getTheta) (const decimal&, const decimal&, const decimal&, decimal&);
+	/// Build local frame
     void buildRepere();
+    /// Compute incident ray angle
     void computeAngle();
+    /// Compute the angle step between two rays to send
 	void computeDTheta() 
 	{
 		delta_theta = angleOuverture / static_cast<decimal>(nbResponseLeft); 
 	}
 
-    Repere localRepere;
+    Repere localRepere;				//!< Local frame
 
-    decimal angleOuverture;			/*!< Aperture angle of the cone*/
-    decimal angleArrive;			/*!< incident ray angle*/
+    decimal angleOuverture;			//!< Aperture angle of the cone
+    decimal angleArrive;			//!< Incident ray angle
 
-	decimal delta_theta;			/*!< angle step betwwen two rays to send */
+	decimal delta_theta;			//!< Angle step between two rays to send
 
-	vec3 N1;						/*!< face 1 normal */
-	vec3 N2;						/*!< face 2 normal */
+	vec3 N1;						//!< Face 1 normal
+	vec3 N2;						//!< Face 2 normal
 
 };
 
