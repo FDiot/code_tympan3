@@ -1,3 +1,5 @@
+/* WARNING: I am an auto-generated header file, don't modify me !! */
+/* Modify Tympan/models/common/mathlib.h instead */
 /*
  * Copyright (C) <2012> <EDF-R&D> <FRANCE>
  * This program is free software; you can redistribute it and/or modify

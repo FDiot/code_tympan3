@@ -32,6 +32,18 @@ add_custom_command(OUTPUT ${SOLVER_PARAMS_HEADER}
                   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                   DEPENDS "${CMAKE_SOURCE_DIR}/${SOLVER_PARAMS_JSON}")
 
+# Update some files into AcousticRaytracer/Geometry from models/common to create an external AcousticRayTracer library:
+set(SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/models/common")
+set(TARGET_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/solvers/AcousticRaytracer/Geometry")
+foreach(file 3d.cpp;3d.h;mathlib.h;config.h)
+add_custom_command(OUTPUT ${TARGET_DIRECTORY}/${file}
+                   COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/copy_add_header.py -r "${CMAKE_SOURCE_DIR}" -i "${SOURCE_DIRECTORY}/${file}" -o "${TARGET_DIRECTORY}/${file}"
+                   COMMENT "Updating ${TARGET_DIRECTORY}/${file} ..."
+                   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                   DEPENDS "${CMAKE_SOURCE_DIR}/tools/copy_add_header.py" "${SOURCE_DIRECTORY}/${file}"
+)
+endforeach()
+
 set(SOLVE_PYSCRIPT "bin/solve_tympan_project.py")
 set(ALTIMETRY_PYSCRIPT "bin/process_site_altimetry.py")
 set(SOLVER_PARAMS_GUI_PYSCRIPT "bin/solver_config_gui.py")
@@ -201,7 +213,6 @@ install_tympan_component(tympan_acousticraytracer)
 file(GLOB TYMPAN_ANALYTICRAYTRACER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/AnalyticRayTracer/*.cpp solvers/AnalyticRayTracer/*.h
     solvers/AnalyticRayTracer/*/*.cpp solvers/AnalyticRayTracer/*/*.h
-    models/common/mathlib.h models/common/3d.h
 )
 add_library(tympan_analyticraytracer ${TYMPAN_COMPONENT_TYPE} MODULE ${TYMPAN_ANALYTICRAYTRACER_SRCS})
 set_property(TARGET tympan_analyticraytracer PROPERTY FOLDER "Tympan/solvers/AnalyticRayTracer")
