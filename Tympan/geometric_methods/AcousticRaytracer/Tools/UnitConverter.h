@@ -13,7 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/models/common/mathlib.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
 
 /**
  * \brief Tools to convert spherical to cartesian coordinates

@@ -17,7 +17,7 @@
 #define BBOX_H
 
 #include <iostream>
-#include "Tympan/models/common/mathlib.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
 
 /*!
  * \file BBox.h

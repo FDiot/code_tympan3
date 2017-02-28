@@ -16,7 +16,7 @@
 #ifndef REPERE_H
 #define REPERE_H
 
-#include "Tympan/models/common/mathlib.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
 
 /**

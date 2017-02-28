@@ -17,7 +17,7 @@
 #define DIFFRACTION_ANGLE_SELECTOR
 
 #include "Selector.h"
-#include "Tympan/models/common/3d.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/3d.h"
 
 /*!
  * \brief : Select diffracted rays that are launched in the shadow zone of the obstacle (closed angle)

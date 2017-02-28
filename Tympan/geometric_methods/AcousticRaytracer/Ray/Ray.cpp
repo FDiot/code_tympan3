@@ -15,7 +15,7 @@
 
 #include <cassert>
 #include <vector>
-#include "Tympan/models/common/mathlib.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Event.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Recepteur.h"
