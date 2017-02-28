@@ -18,7 +18,7 @@
 
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Shape.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Sphere.h"
-#include "Tympan/models/common/mathlib.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
 
 /**

@@ -21,7 +21,7 @@
 #include <vector>
 #include <boost/foreach.hpp>
 
-#include "Tympan/models/common/3d.h"
+#include "3d.h"
 
 
 /*! \file common/mathlib.h

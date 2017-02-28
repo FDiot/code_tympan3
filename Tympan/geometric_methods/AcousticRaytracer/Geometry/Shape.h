@@ -19,7 +19,7 @@
 #include <string>
 #include <vector>
 
-#include "Tympan/models/common/mathlib.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Ray/Ray.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Material.h"
