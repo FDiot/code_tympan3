@@ -26,21 +26,16 @@
 #define __METEO_LIN_H
 
 /*! \class meteoLin
-*   \brief class to define linear gradiant for wind and temperature.
+*   \brief Class to define linear gradient for wind and sound speed.
 */
-
 using namespace std;
 
 class meteoLin : public meteo
 {
 public:
-    /*!
-     *  \brief Constructeur
-     *
-     *  Constructeurs de la classe meteo par defaut et par passage d'arguments
-     *
-     */
+	/// Default constructor
     meteoLin() : meteo() {}
+    /// Constructor
     meteoLin(const double& windAngle, const double& sound_speed, const double& gradC = 0., const double& gradV = 0.) : meteo(windAngle, sound_speed),
         grad_C(gradC),
         grad_V(gradV)
@@ -48,43 +43,33 @@ public:
         init();
     }
 
-    /*!
-     *  \brief Destructeur
-     *
-     *  Destructeur de la classe Lancer
-     */
+    /// Destructor
     ~meteoLin() {};
 
-
-    /*!
-    * \fn bool setGradC(const double& g)
-    * \brief Modifie la valeur du gradient de celerite
-    * \param g nouvelle valeur que l'on souhaite attribuer a notre gradient
-    */
+    /// Set speed gradient
     void setGradC(const double& g) { grad_C = g; }
+    /// Get speed gradient
     double getGradC() const { return grad_C; }
 
-    /*!
-    * \fn bool setGradV(const double& g)
-    * \brief Modifie la valeur de la vitesse du vent
-    * \param g nouvelle valeur que l'on souhaite attribuer a notre vent
-    */
+    /// Set wind gradient
     void setGradV(const double& g) { grad_V = g; init(); }
+    /// Get wind gradient
     double getGradV() const { return grad_V; }
 
     /*!
-    * \fn decimal cTemp(const vec3& P, const meteo& Meteo, vec3& grad)
-    * \brief Prend en compte la temperature pour le point P
-    * \param P Position du rayon
-    * \param grad gradient de température selon z (valeur modifiee)
+    * \fn double cTemp(const vec3& P, vec3& grad) const;
+    * \brief Compute speed gradient and sound speed on a position
+    * \param [in] P Position
+    * \param [out] grad Speed gradient according to z
+    * \return Sound speed at position z
     */
     double cTemp(const vec3& P, vec3& grad) const;
 
     /*!
-    * \fn vec3 vent(const vec3& P, map<pair<int, int>, decimal> &jacob)
-    * \brief Prend en compte le vent pour le point P
-    * \param P Position du rayon
-    * \param jacob : jacobien (veleur modifiee)
+    * \fn vec3 cWind(const vec3& P) const;
+    * \brief Compute wind on a given position
+    * \param P Position
+    * \return Wind
     */
     vec3 cWind(const vec3& P) const;
 
@@ -94,13 +79,14 @@ public:
      */
     virtual const array< array<double, 3>, 3 >&  getJacobMatrix() { return jacob_matrix; }
 
+    /// Initialize the Jacobian matrix
     virtual void init();
 
 private:
-    double grad_C;      /*!< gradient de la celerite */
-    double grad_V;      /*!< gradient du vent */
+    double grad_C;      //!< Sound speed gradient
+    double grad_V;      //!< Wind gradient
 
-    array< array<double, 3>, 3 > jacob_matrix;
+    array< array<double, 3>, 3 > jacob_matrix; //!< Jacobian matrix
 };
 
 #endif //__METEO_LIN_H

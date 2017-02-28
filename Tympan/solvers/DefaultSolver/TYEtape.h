@@ -34,104 +34,90 @@
 /**
  * \file TYEtape.h
  * \class TYEtape
- * \brief La classe Etape represente une portion d'un Chemin pour le calcul des Trajets entre Source et Recepteur
+ * \brief The TYEtape class is used to describe a part (a step) of a path (TYChemin) for the computation of trajectories (TYTrajet) between Source and receptor (Recepteur)
  * \date 2008/01/21
  * \version v 1.1
  * \author Projet_Tympan
- * A un point de depart est associe une absorption (significative pour
- * le 1er point d'un Chemin, associe a une source ponctuelle et sa
- * directivite et a un point de reflexion sur le sol).
- * Une attenuation est aussi associee a la distance effectuee par
- * l'Etape. Celle-ci est influence par le milieu parcouru (atmosphere,
- * foret...).
+ * To a first point of the step is associated an absorption (this
+ * one is significant for the first point of the path, which is associated
+ * to a source, a directivity and a ground reflection point).
+ * A attenuation is also associated, depending of the step length. It is related
+ * to the encountered medium (atmosphere, forest, ...).
  */
 class TYEtape
 {
-    // Methodes
+    // Methods
 public:
     /**
      *\fn TYEtape()
-     *\brief Constructeur.
-     * Constructeur de la classe TYEtape
+     *\brief Constructor
      */
     TYEtape() : _spectrum(OSpectreComplex(TYComplex(1.,0.))) {}
     /**
      * \fn TYEtape(const TYEtape& other)
-     * \brief Constructeur par copie
-     * Constructeur par copie de la classe TYEtape.
+     * \brief Copy constructor
      */
     TYEtape(const TYEtape& other);
     /**
      *
      * \fn virtual ~TYEtape()
-     * \brief Destructeur
-     * Destructeur de la classe TYEtape.
+     * \brief Destructor
      */
     virtual ~TYEtape();
 
 
-    ///Operateur =.
+    ///Operator =.
     TYEtape& operator=(const TYEtape& other);
-    ///Operateur ==.
+    ///Operator ==.
     bool operator==(const TYEtape& other) const;
-    ///Operateur !=.
+    ///Operator !=.
     bool operator!=(const TYEtape& other) const;
 
     /**
      * \fn  OPoint3D getPoint()
      *      void setPoint(const OPoint3D & pt)
-     * \brief Set/Get du point de depart associe a cette etape.
-     * \return _pt: point de depart associe a l'etape
+     * \brief Get/Set of the first point of the step.
+     * \return _pt
      */
     OPoint3D getPoint() const { return _pt; }
-    /**
-     * Set/Get du point de depart associe a cette etape.
-     */
     void setPoint(const OPoint3D& pt) { _pt = pt; }
 
     /**
      * \fn  OSpectreComplex getAbsorption()
      *      const OSpectreComplex getAbsorption()
      *      void setAbsorption(const OSpectreComplex & Abso)
-     * \brief Set/Get du spectre d'absorption associe au point de depart.
-     * \return _Absorption: spectre d'absorption
+     * \brief Get/Set the absorption spectrum associated to the first point of the step.
+     * \return _Absorption
      */
     OSpectreComplex& getAbsorption() { return _spectrum; }
     const OSpectreComplex& getAbsorption() const { return _spectrum; }
-   
-    /**
-     * Set/Get du spectre d'absorption associe au point de depart.
-     */
+
     void setAbsorption(const OSpectreComplex& Abso) { _spectrum = Abso; }
 
     /**
      * \fn OSpectre getAttenuation()
      *     const OSpectre getAttenuation()
      *     void setAttenuation(const OSpectre & Att)
-     * \brief Set/Get du spectre d'attenuation associe a cette etape.
-     * \return _Attenuation: spectre d'attenuation
+     * \brief Get/Set the attenuation spectrum associated to this step.
+     * \return _Attenuation
      */
     OSpectreComplex& getAttenuation() { return _spectrum; }
     const OSpectreComplex& getAttenuation() const { return _spectrum; }
 
-    /**
-     * Set/Get du spectre d'attenuation associe a cette etape.
-     */
     void setAttenuation(const OSpectre& Att) { _spectrum = Att; }
 
-    // return as acoustic_event (allowing to watch path from source to receptor
+    /// return as acoustic_event (allowing to watch path from source to receptor)
     acoustic_event* asEvent() const;
 
     // Membres
 public:
-    ///Le point de depart associe a cette etape.
-    OPoint3D _pt;
-    ACOUSTIC_EVENT_TYPES _type;      /*!< Type d'evenement */
-    OSpectreComplex _spectrum;
+    OPoint3D _pt;                    //!< The first point of this step
+    ACOUSTIC_EVENT_TYPES _type;      //!< Acoustic event type
+    OSpectreComplex _spectrum;       //!< Spectrum
 };
 
 
-///Collection de TYEtape.
+///TYEtape collection.
 typedef std::deque<TYEtape> TYTabEtape;
 
 

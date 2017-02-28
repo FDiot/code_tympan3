@@ -26,39 +26,44 @@ class triangle_pool_t;
 class material_pool_t;
 
 /**
- * Tâche d'une collection de thread pour le solveur Tympan
+ * \brief Task of a thread collection for Tympan
  */
 class TYTask : public OTask
 {
 public:
-    // Constructeur
+    /**
+     * \brief Constructor
+     * \param solver Default solver object
+     * \param nodes  Nodes
+     * \param triangles Triangles
+     * \param materials Materials
+     * \param trajet Path
+     * \param nNbTrajets Path number
+     */
     TYTask(TYSolver& solver, const tympan::nodes_pool_t& nodes, const tympan::triangle_pool_t& triangles, const tympan::material_pool_t& materials, TYTrajet& trajet, int nNbTrajets);
 
-    // Destructeur
-    ~TYTask();
+    ~TYTask(); //!< Destructor
 
-    // Procedure principale de la tâche (Cf. Tympan/MetierSolver/ToolsMetier/OTask.h)
-    void main();
+    void main(); //!< Main procedure to run the task
 
 private:
-    // Reference sur le solver
-    TYSolver& _solver;
 
-    // Reference sur le trajet
-    TYTrajet& _trajet;
+    TYSolver& _solver; //!< Reference to the solver
 
-    // Numero de trajet
-    unsigned int _nNbTrajets;
 
-    // Tableau des intersections
-    std::deque<TYSIntersection> _tabIntersect;
+    TYTrajet& _trajet; //!< Reference to the path
+
+
+    unsigned int _nNbTrajets;  //!< Path number
+
+
+    std::deque<TYSIntersection> _tabIntersect; //!< Array of intersections
 
     const tympan::nodes_pool_t& _nodes;
     const tympan::triangle_pool_t& _triangles;
     const tympan::material_pool_t& _materials;
 };
 
-///Smart Pointer sur TYTask.
-typedef SmartPtr<TYTask> LPTYTask;
+typedef SmartPtr<TYTask> LPTYTask; //!< Smart Pointer on TYTask.
 
 #endif // __TY_TASK__

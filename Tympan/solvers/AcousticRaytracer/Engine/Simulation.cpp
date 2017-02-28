@@ -33,6 +33,7 @@ bool Simulation::launchSimulation()
     ss << "Lancement de la simulation." << std::endl;
     if (solver) { solver->clean(); }
     if (engine) { delete engine; }
+    // Create the engine from engineC enum
     switch (engineC)
     {
         case DEFAULT:

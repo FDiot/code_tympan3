@@ -1,5 +1,5 @@
 /**
- * @file cgal_tool.hpp
+ * @file cgal_tools.h
  *
  * @brief Utilities to ease (and wrap) use of CGAL
  *
@@ -53,18 +53,19 @@ typedef std::deque<CGAL_Triangle>                                  CGAL_Triangle
 typedef CGAL::Box_intersection_d::Box_with_handle_d<double,3,CGAL_Triangles::iterator> CGAL_TBox;
 typedef CGAL::Aff_transformation_3<CGAL_Gt>                        CGAL_Transform3;
 
+/// Convert a CGAL_Point3 to OPoint3D
 inline OPoint3D from_cgal(const CGAL_Point3& cp)
 { return OPoint3D(cp.x(), cp.y(), cp.z()); }
-
+/// Convert a OPoint3D to a CGAL_Point3
 inline CGAL_Point3 to_cgal(const OPoint3D& op)
 { return CGAL_Point3(op._x, op._y, op._z); }
-
+/// Convert a CGAL_Vector3 to OVector3D
 inline OVector3D from_cgal(const CGAL_Vector3& cp)
 { return OVector3D(cp.x(), cp.y(), cp.z()); }
-
+/// Convert a OVector3D to CGAL_Vector3
 inline CGAL_Vector3 to_cgal(const OVector3D& op)
 { return CGAL_Vector3(op._x, op._y, op._z); }
-
+/// Convert a OPlan to CGAL_Plane
 CGAL_Plane to_cgal(const OPlan& oplan);
 
 /**
@@ -72,8 +73,8 @@ CGAL_Plane to_cgal(const OPlan& oplan);
  *
  * @param w the width of the parallelepiped
  * @param h the height of the parallelepiped
- * @param pointa the center of one of the two faces of dimension w x h
- * @param pointb the center of the other face of dimension w x h
+ * @param pta the center of one of the two faces of dimension w x h
+ * @param ptb the center of the other face of dimension w x h
  *
  * @return a deque containing the 4 vertices defining the 3D parallelepiped
  *
@@ -114,8 +115,9 @@ public:
 
     struct VertexInfo
     {
+    	/// Constructor
         VertexInfo(int i_ = -1) : i(i_) {}
-        int i; // This is the index of the vertice within the intial polygon.
+        int i; //!< This is the index of the vertice within the initial polygon.
     };
 
     struct FaceInfo {};
@@ -128,7 +130,6 @@ public:
     typedef CGAL::Constrained_triangulation_face_base_2<CGAL_Gt, Fbb>               Fb;
     typedef CGAL::Triangulation_data_structure_2<Vbb, Fb>                           TDS;
     typedef CGAL::Exact_predicates_tag                                              Itag;
-    /// \c CDT is the type of the main CGAL object to build the triangulation.
     typedef CGAL::Constrained_Delaunay_triangulation_2<CGAL_Gt, TDS, Itag>          CDT;
     // typedef CGAL::Constrained_triangulation_plus_2<CDT>                          CDTplus;
     typedef CDT::Vertex_handle                                                      Vertex_handle;
@@ -138,12 +139,15 @@ public:
 
 public:
     typedef boost::array<unsigned, 3>                                               Tri_indices;
-
+    /// Constructor from a CGAL_Polygon
     PolygonTriangulator(const CGAL_Polygon& poly_);
+    /// Destructor
     virtual ~PolygonTriangulator();
-
+    /// Return CDT object
     const CDT& triangulation() const {return cdt;}
+    /// Return the ith vertex handle
     const Vertex_handle& vertex_handle(unsigned i) const;
+    /// Return the polygon vertex handles
     const Vertex_handles_container& vertex_handles() const {return poly_vh;}
 
 
@@ -171,9 +175,9 @@ public:
 
 protected:
 
-    Vertex_handles_container poly_vh;
-    const CGAL_Polygon& poly;
-    CDT cdt;
+    Vertex_handles_container poly_vh;  //!< Polygon vertex handles
+    const CGAL_Polygon& poly;	//!< Reference to the CGAL_Polygon to triangulate
+    CDT cdt; //!< CDT (Constrained Delaunay Triangulation) is the type of the main CGAL object to build the triangulation.
 
 }; //  PolygonTriangulator
 

@@ -20,23 +20,29 @@
 #include <vector>
 #include <set>
 
+/**
+ * \brief Class to manage targets
+ */
 class TargetManager
 {
 
 public:
+	/// Constructor
     TargetManager() { }
-
+    /// Register a new target
     bool registerTarget(const vec3 newTarget);
+    /// Register a vector of targets
     bool registerTargets(std::vector<vec3>& newTargets);
+    /// Delete the uniqueTargets array
     void finish();
-
+    /// Get the targets in a distance range from a center
     unsigned int getTargetsAround(const vec3 center, unsigned int nbTargets, decimal distance, std::vector<vec3>& result);
-
+    /// Return the targets
     std::vector<vec3>& getTargets() { return targets; }
 
 protected:
-    std::vector<vec3> targets;
-    std::set<vec3> uniqueTargets;
+    std::vector<vec3> targets;		//!< Vector of targets
+    std::set<vec3> uniqueTargets;	//!< Set of single targets
 };
 
 #endif

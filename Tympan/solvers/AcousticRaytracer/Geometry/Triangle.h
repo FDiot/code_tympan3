@@ -18,37 +18,46 @@
 
 #include "Shape.h"
 
+/**
+ * \brief Triangle class
+ */
 class Triangle : public Shape
 {
 
 public:
+	/// Default constructor
     Triangle() { name = "unknown triangle"; };
+    /// Constructor with 3 index points of the array _vertices
     Triangle(unsigned int p1, unsigned int p2, unsigned int p3, std::vector<vec3>* _vertices, Material* _m, const bool& isSol = false);
+    /// Constructor with 3 points
     Triangle(vec3& p1, vec3& p2, vec3& p3, Material* m, const bool& isSol = false);
+    /// Copy constructor
     Triangle(const Triangle& other) : Shape(other)
     {
         box = other.box;
     };
-
+    /// Destructor
     virtual ~Triangle() { }
 
     virtual void updateBBox();
 
     virtual bool getIntersection(Ray& ray, Intersection& inter);
 
+    /// Set/Get the normal
     void setNormal(const vec3& _normal) { normal = _normal; }
     virtual vec3 getNormal(const vec3 pos = vec3()) { return normal;}
 
+    /// Uncommented method cause not used
     virtual bool sample(decimal density, std::vector<vec3>& samples);
 
     virtual int form() { return TRIANGLE; }
 
 protected:
-    vec3 p;
-    vec3 u;
-    vec3 v;
+    vec3 p;			//!< First vertex (vertex1=p)
+    vec3 u;			//!< Vector to reach the second vertex (vertex2=p+u)
+    vec3 v;			//!< Vector to reach the third vertex (vertex3=p+v)
 
-    vec3 normal;
+    vec3 normal;	//!< Normal to triangle
 };
 
 #endif

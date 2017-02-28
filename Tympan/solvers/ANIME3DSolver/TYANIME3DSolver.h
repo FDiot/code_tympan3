@@ -33,51 +33,52 @@ class TYANIME3DAcousticPathFinder;
 class TYANIME3DFaceSelector;
 class Lancer;
 
-//Structure permettant de stocker les informations de Tympan dans un format aisement convertible
-//Les infos idFace, idBuilding, idEtage, spectreAbsoMat, G ne sont pas obligatoires.
-//De meme, il est possible de rajouter des informations lors de la collecte pour repondre a un besoin d'une methode acoustique
-//Exemple : le dev peut choisir de conserver la resistivite plutot que le G.
+/**
+* \struct TYStructSurfIntersect
+* Structure storing all the informations in Tympan in a format easily convertible.
+* Informations idFace, idBuilding, idEtage, spectreAbsoMat, G are not mandatory.
+* It is also possible to add informations to answer to a specific need for a new acoustic method
+* For instance : the developer might choose to keep resistivity instead of G coefficient.
+*/
 struct TYStructSurfIntersect
 {
-    OMatrix matInv;                         // Matrice inverse pour les faces d'infrastructure
-    TabPoint3D tabPoint;                    // Tableau de point utilise pour la preselection
-    bool isEcran;                           // Est un ecran
-    bool isInfra;                           // Face d'infrastructure
-    OVector3D normal;                       //Normale de la surface
-    QList<OTriangle> triangles;             //Ensemble des triangles contenus dans la surface apres triangulation
-    QList<OPoint3D> realVertex;              //Ensemble des vertex de la surface en coordonn�es globales.
-    int idFace;                             //Indice de la face
-    int idBuilding;                         //Indice du building dans TYSite
-    int idEtage;                            //Indice de l'etage
-    OSpectreComplex spectreAbso;            //Spectre d'absorption
-    double G;                               //Coefficient d'impedance
-    tympan::AcousticMaterialBase *material;  //triangle material
+    OMatrix matInv;                         //!< Inverse matrix used for the infrastructure faces
+    TabPoint3D tabPoint;                    //!< Points array used during the pre-selection
+    bool isEcran;                           //!< Flag to detect screen face
+    bool isInfra;                           //!< Flag to detect infrastructure face
+    OVector3D normal;                       //!< Surface normal vector
+    QList<OTriangle> triangles;             //!< Triangles list included into the surface after triangulation
+    QList<OPoint3D> realVertex;             //!< Vertex list of the surface (global coordinates)
+    int idFace;                             //!< Face index
+    int idBuilding;                         //!< Building index in TYSite
+    int idEtage;                            //!< Floor index
+    OSpectreComplex spectreAbso;            //!< Absorption spectrum
+    double G;                               //!< Impedance coefficient
+    tympan::AcousticMaterialBase *material; //!< Triangle material
 };
 
-
-/*
+/**
  * \class TYANIME3DSolver
- * \brief Le solver associe a la methode ANIME3D
+ * \brief Associated solver to the ANIME3D method
  */
-
 class TYANIME3DSolver : public SolverInterface
 {
 public:
     /**
     * \fn TYANIME3DSolver()
-    * \brief Constructeur de l'objet ANIME3DSolver
+    * \brief Constructor of ANIME3DSolver
     */
     TYANIME3DSolver();
 
     /*!
     * \fn ~TYANIME3DSolver()
-    * \brief Destructeur de l'objet ANIME3DSolver
+    * \brief Destructor of ANIME3DSolver
     */
     ~TYANIME3DSolver();
 
     /*!
     * \fn bool solve(const AcousticProblemModel&, AcousticResultModel&)
-    * \brief Methode principale de resolution avec la methode ANIME3D
+    * \brief Resolution with the ANIME3D method
     */
     virtual bool solve(const tympan::AcousticProblemModel& aproblem,
                        tympan::AcousticResultModel& aresult,
@@ -92,24 +93,23 @@ public:
 
     /*!
      * \fn virtual void purge();
-     * \brief Clean memory after being used in a calcul
+     * \brief Clean memory after being used in a calculation
      */
     virtual void purge();
 
 protected:
-    /// Tableau contenant l'ensemble des infos relatives a la geometrie d'un site et les materiaux associes a chaque face
-    TYStructSurfIntersect* _tabPolygon;
 
-    /// Nombre de polygones presents dans _tabPolygon
-    size_t _tabPolygonSize;
+    TYStructSurfIntersect* _tabPolygon; //!< Array containing all the informations relative to a site geometry and associated material to each face
+
+    size_t _tabPolygonSize; //!< Array size of _tabPolygon
 
     //Logger logger;
     //FILE logs;
 
-    /*!< List of sources used by the solver */
+    // List of sources used by the solver
     //TYTabSourcePonctuelleGeoNode _tabSources;
 
-    /*!< List of receptors used by the solver */
+    // List of receptors used by the solver
     //TYTabPointCalculGeoNode _tabRecepteurs;
 
     tympan::source_pool_t all_sources;

@@ -93,11 +93,11 @@ bool DefaultEngine::process()
         }
         else
         {
+        	// The current ray of the stack is treated:
             Ray* current_ray = pile_traitement.top();
             pile_traitement.pop();
             std::list<validRay> result;
             traitementRay(current_ray, result);
-
             for (std::list<validRay>::iterator it = result.begin(); it != result.end(); it++)
             {
                 bool currentValid = it->valid;
@@ -108,6 +108,7 @@ bool DefaultEngine::process()
                 }
                 else
                 {
+                	// New valid ray to treat:
                     pile_traitement.push(currentValidRay);
                     if (pile_traitement.size() > max_size)
                     {
@@ -125,6 +126,7 @@ Ray* DefaultEngine::genRay()
     {
         if (sources->at(i).getNbRayLeft() > 0)
         {
+        	// Generate a ray from the current source(i)
             Ray* new_ray = new Ray();
             new_ray->constructId = rayCounter;
             rayCounter++;
@@ -158,7 +160,7 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
     Accelerator* accelerator = scene->getAccelerator();
     std::list<Intersection> foundPrims;
 
-    //Appel du Solver pour le choix de la methode de traverser de la structure
+    //Appel du Solver pour le choix de la methode de traversee de la structure
     tmin =  accelerator->traverse(r, foundPrims);
 
     // Recherche pour des recepteurs;
@@ -172,16 +174,16 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
 	Intersection *inter = NULL;
 	
 	// ! IMPORTANT
-	// We suppose, here, that accelarating structures use "leafTreatment::treatment::FIRST:"
+	// We suppose, here, that accelerating structures use "leafTreatment::treatment::FIRST:"
 	// In this case, accelerating structure return only the closest primitive.
-	// If it is not the case, you must browse througth the returned list
+	// If it is not the case, you must browse through the returned list
 	if ( foundPrims.size() > 0 )
 	{
 		inter = &( *(foundPrims.begin()) );
         valide = solver->valideIntersection(r, inter);
         if (valide) { compteurValide++; }
 	}
-	// Lines under are let intentionnaly commented only for understanding reason
+	// Lines under are left intentionally commented only for understanding reason
 	//else // no primitive found. The ray goes to infinity (and beyond)
 	//{
 	//	valide = false;

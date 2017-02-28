@@ -18,20 +18,25 @@
 
 #include "Accelerator.h"
 
+/**
+ * \brief Brute-force algorithm
+ */
 class BruteForceAccelerator : public Accelerator
 {
 
 public:
+	/// Default constructor
     BruteForceAccelerator() : Accelerator() { }
+    /// Constructor
     BruteForceAccelerator(std::vector<Shape*> *_shapes, BBox& _globalBox) : Accelerator(_shapes, _globalBox) {  }
-
+    /// Copy constructor
     BruteForceAccelerator(const BruteForceAccelerator& other)
     {
         shapes = other.shapes;
         globalBox = other.globalBox;
         intersectionChoice = other.intersectionChoice;
     }
-
+    /// Destructor
     virtual ~BruteForceAccelerator() { }
 
     virtual bool build() { return true; }

@@ -15,25 +15,26 @@
 
 #include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
 
+/**
+ * \brief Tools to convert spherical to cartesian coordinates
+ */
 namespace Tools
 {
 /*!
- * \fn fromRadianToCarthesien(decimal tetha, decimal phi, vec3& result);
- * \brief   Convert spheric coordinates to cartesian coordinates
+ * \brief   Convert spherical coordinates to cartesian coordinates
  *          In this function :
- *                  + theta is the polar angle where 0 is on equatorius
+ *                  + theta is the polar angle where 0 is on equatorial
  *                  + phi is the equatorial angle
- *          This function is used by samplers that genarates rays
+ *          This function is used by samplers that generates rays
  */
 void fromRadianToCarthesien(decimal tetha, decimal phi, vec3& result);
 
 /*!
- * \fn fromRadianToCarthesien2(decimal tetha, decimal phi, vec3& result);
- * \brief   Convert spheric coordinates to cartesian coordinates
+ * \brief   Convert spherical coordinates to cartesian coordinates
  *          In this function :
- *                  + theta is the polar angle where 0 is on north pole
+ *                  + tetha is the polar angle where 0 is on north pole
  *                  + phi is the equatorial angle
- *          This function is used by diffraction events to gernarate secondary rays
+ *          This function is used by diffraction events to generate secondary rays
  */
 void fromRadianToCarthesien2(decimal tetha, decimal phi, vec3& result);
 };

@@ -21,33 +21,41 @@
 #include "Tympan/solvers/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/solvers/AcousticRaytracer/Base.h"
 
+/**
+ * \brief Receptor inherits from a Sphere Shape
+ */
 class Recepteur : public Sphere
 {
 public:
+	/// Default constructor
     Recepteur() {};
-
+    /// Constructor
 	Recepteur(const vec3& pos, const decimal& r) : Sphere(pos, r) 
 	{
 		name = "unknow receptor";
 	}
-
+	/// Copy constructor
     Recepteur(const Recepteur& other) : Sphere(other)
     {
         id = other.id;
     }
-
+    /// Destructor
     virtual ~Recepteur() { }
-
+    /// Return the Shape
     Shape* getShape() { return dynamic_cast<Shape*>(this); }
 
+    /// Get the center of the bounding box
     vec3 getPosition() { return this->getBBox().centroid; }
+
+    /// Get the Intersection between a ray and this shape
     bool intersectionRecepteur(vec3& origine, vec3& directeur, float tmax, Intersection& result);
 
+    /// Get/Set identification
     unsigned int getId() { return id;}
     void setId(unsigned int _id) { id = _id; }
 
 protected:
-    unsigned int id;
+    unsigned int id;	//!< Shape identification
 };
 
 #endif

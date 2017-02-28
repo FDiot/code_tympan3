@@ -66,7 +66,7 @@ void TYCalculParcours::InitChangementVariable2D3D(bool bAxeXMoinsSignifiant)
         //(on n'en calcule pas de nouveaux -du moins pour le calcul vertical-)
         //* pour les calculs horizontaux, seuls les points sur le trajet Source-Recepteur sont susceptibles
         //d'etre issus de calculs au lieu de selection. La coordonnee Z de ces points resulte alors d'une interpollation (cf methode IntersectionDroites)
-        //Exemple: le rayon Source-Recepteur est paralleme a l'axe Y; dans ce cas, le plan 2D est (0y, 0z)
+        //Exemple: le rayon Source-Recepteur est parallele a l'axe Y; dans ce cas, le plan 2D est (0y, 0z)
         if (bAxeXMoinsSignifiant)
         {
             _indexXInOut = 1;//Y->X
@@ -290,7 +290,7 @@ int TYCalculParcours::Traite(
         bool* PointsADroite = NULL;
         _geoImporterDXF->MarquePointsADroiteEtAGauche(_geoSR->_ListePoint[0], _geoSR->_ListePoint[1], PointsAGauche, PointsADroite);
 
-        //3.3 Separation des points suivants le ci¿½te droit au gauche
+        //3.3 Separation des points suivants le ciï¿½ï¿½te droit au gauche
         //Cette separation donne deja les segments intersectant [SR]
 
         bool bPolylignesInfraFermees = _geoImporterDXF->PolylignesInfraFermees();
@@ -369,7 +369,7 @@ int TYCalculParcours::Traite(
                     }
                     else if (ABS(TYPointParcours::Scalaire(A, B)) < EPSILON_13)
                     {
-                        // on autorise les angles a 90i¿½ que lors du suivis du contour d'un obstacle
+                        // on autorise les angles a 90iï¿½ï¿½ que lors du suivis du contour d'un obstacle
                         if (!_geoImporterDXF->AppartienneMemePolyligne(TableauDePointsEC[i - 2], TableauDePointsEC[i - 1], TableauDePointsEC[i]))
                         {
                             bWrong = true;

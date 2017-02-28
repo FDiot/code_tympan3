@@ -20,14 +20,15 @@
 
 #include "Selector.h"
 
+/*!
+ * \brief To reject a ray if two different events of this one occur on the same shape
+ *        (for example a diffraction close to a reflection)
+ */
 template<typename T>
 class CloseEventSelector : public Selector<T>
 {
-/*!
- * \brief If two differents events of the same ray accurs on the same shape 
- *        (for example a diffraction close to a reflection) the ray is rejected
- */
 public :
+	/// Constructor
     CloseEventSelector() : Selector<T>() {}
     virtual Selector<T>* Copy()
     {

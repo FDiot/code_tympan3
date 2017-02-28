@@ -19,14 +19,15 @@
 #include "Selector.h"
 #include "Tympan/models/common/3d.h"
 
+/*!
+ * \brief : Select diffracted rays that are launched in the shadow zone of the obstacle (closed angle)
+ *          Other are suppressed
+ */
 template<typename T>
 class DiffractionAngleSelector : public Selector<T>
 {
-/*!
- * \brief : Select diffracted rays that are lauched in the shadow zone of the obstacle (closed angle)
- *          Other are suppressed
- */
 public :
+	/// Constructor
     DiffractionAngleSelector() : Selector<T>() {}
     virtual Selector<T>* Copy()
     {
@@ -113,7 +114,7 @@ public :
 
 		return SELECTOR_ACCEPT;
     }
-
+    /// Select the ray
 	virtual void insert(T* r, unsigned long long& replace) { return; }
 
     virtual bool insertWithTest(T* r)

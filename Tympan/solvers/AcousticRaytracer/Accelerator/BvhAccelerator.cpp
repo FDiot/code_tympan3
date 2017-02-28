@@ -105,13 +105,13 @@ struct LinearBVHNode
     BBox bounds;
     union
     {
-        uint32_t primitivesOffset;    // leaf
-        uint32_t secondChildOffset;   // interior
+        uint32_t primitivesOffset;    //!< leaf
+        uint32_t secondChildOffset;   //!< interior
     };
 
-    uint8_t nPrimitives;  // 0 -> interior node
-    uint8_t axis;         // interior node: xyz
-    uint8_t pad[2];       // ensure 32 byte total size
+    uint8_t nPrimitives;  //!< 0 -> interior node
+    uint8_t axis;         //!< interior node: xyz
+    uint8_t pad[2];       //!< ensure 32 byte total size
 };
 
 static inline bool IntersectP(const BBox& bounds, const Ray& ray,
