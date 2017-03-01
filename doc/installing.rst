@@ -243,7 +243,7 @@ And you will have to manually download the CGAL sources then build
 them according to `Compiling CGAL`_, **without forgetting** to manually
 install GMP and MPFR.
 
-The Tel Aviv University	provides some help for installing CGAL on Windows :
+The Tel Aviv University provides some help for installing CGAL on Windows :
 http://acg.cs.tau.ac.il/cgal-at-tau/installing-cgal-and-related-programs-on-windows
 
 http://xinyustudio.wordpress.com/2012/07/18/setup-cgal-in-windows-7-step-by-step-tutorial/
@@ -365,6 +365,7 @@ directory) and run CMake in it, telling it where you have **built**
 
 If Python 3 interpreter can't be found by CMake, you can run CMake with the
 following option ::
+
   ~/projets/build-Code_TYMPAN$ ccmake ../Code_TYMPAN -DPYTHON_EXECUTABLE=path_to_python3_interp
 
 CMake is likely not to find CGAL 4, and possibly Boost. You have to
