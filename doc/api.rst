@@ -17,10 +17,10 @@ comments embedded in the code thanks to breathe_ (cf. :doc:`tools`).
 
 .. _breathe: http://breathe.readthedocs.io/en/latest/
        
-Example with a class:
+Example with a class (commented cause Breathe 1.2.0 doesn't support Python3):
 
-.. doxygenclass:: BruteForceAccelerator
-   :members:
-   :no-link:
+... doxygenclass:: BruteForceAccelerator
+...   :members:
+...   :no-link:
    
-.. doxygenfunction:: BruteForceAccelerator
+... doxygenfunction:: BruteForceAccelerator
