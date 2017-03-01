@@ -47,8 +47,7 @@ clean:
 	-rm -rf $(DOXY_OUTPUT)
 
 
-html:
-	make doxygen
+html:	doxygen check-env
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
@@ -162,4 +161,11 @@ doctest:
 doxygen: $(DOXY_OUTPUT)
 
 $(DOXY_OUTPUT):
+	-mkdir $(BUILDDIR)
+	-cd $(BUILDDIR) && mkdir doxygen
 	cd doxygen && $(DOXYGEN) && cd ..
+
+check-env:
+ifndef PYTHONPATH
+    $(error PYTHONPATH is undefined. Try sourcing before the SetEnvTympanTests.sh in the build directory)
+endif
