@@ -45,6 +45,16 @@ if "%1" == "clean" (
 )
 
 if "%1" == "html" (
+     IF "%PYTHONPATH%"=="" (
+        echo.PYTHONPATH is empty. Sphinx doc can not be generated. Try running before SetEnvTympanTests in the Tympan build directory.
+        goto end
+     )
+     mkdir _build
+     cd _build
+     mkdir doxygen
+     cd ../doxygen
+     doxygen
+     cd ..
 	%SPHINXBUILD% -b html %ALLSPHINXOPTS% %BUILDDIR%/html
 	if errorlevel 1 exit /b 1
 	echo.
