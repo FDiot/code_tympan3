@@ -17,6 +17,7 @@
 #define RAY_H
 
 #include <memory>
+
 #include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Source.h"
@@ -171,15 +172,15 @@ public:
 
     /*!
     * \fn std::vector<std::shared_ptr<Event> >* getEvents()
-    * \brief Renvoie le tableau des evenements rencontres par le rayon
-    * \return Tableau des evenements rencontres par le rayon.
+    * \brief Return the events array encountered by the ray
+    * \return Events array encountered by the ray.
     */
     std::vector<std::shared_ptr<Event> >* getEvents() { return &events; }
 
     /*!
     * \fn const std::vector<std::shared_ptr<Event> >* getEvents() const
-    * \brief Renvoie le tableau des evenements rencontres par le rayon
-    * \return Tableau des evenements rencontres par le rayon.
+    * \brief Return the events array encountered by the ray
+    * \return Events array encountered by the ray.
     */
     const std::vector<std::shared_ptr<Event> >* getEvents() const { return &events; }
 
@@ -255,7 +256,7 @@ public:
     decimal maxt;
     Source* source;                             //!< Pointer to the source of the ray
     void* recepteur;                            //!< Pointer to the receptor of the ray
-    std::vector<QSharedPointer<Event> > events; //!< Events list for the ray
+    std::vector<std::shared_ptr<Event> > events; //!< Events list for the ray
     decimal longueur;                           //!< Distance traveled by the ray
     unsigned long long int constructId;         //!< Ray id
     unsigned int nbReflexion;                   //!< Reflections number for the ray

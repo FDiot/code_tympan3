@@ -13,7 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/models/solver/config.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Engine/AcousticRaytracerConfiguration.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Sphere.h"
 #include "ValidRay.h"
@@ -46,7 +46,7 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
     vec3 normale = inter->p->getNormal(impact);
     if (normale.dot(r->direction) > 0.) { return false; }
 
-	if (tympan::SolverConfiguration::get()->UsePathDifValidation && !pathDiffValidationForReflection(r, impact)) // Validation sur la différence de marche due aux diffractions
+	if (AcousticRaytracerConfiguration::get()->UsePathDifValidation && !pathDiffValidationForReflection(r, impact)) // Validation sur la différence de marche due aux diffractions
 	{
 		return false;
 	}
@@ -92,7 +92,7 @@ bool ValidRay::pathDiffValidationForReflection(Ray * r, const vec3& impact)
 	r->cumulDelta += ( r->cumulDistance - impact.distance(origin) );
 	r->cumulDistance = 0.;
 
-	return ( r->cumulDelta <= tympan::SolverConfiguration::get()->MaxPathDifference );
+	return ( r->cumulDelta <= AcousticRaytracerConfiguration::get()->MaxPathDifference );
 }
 
 bool ValidRay::pathDiffValidationForDiffraction(Ray *r, const vec3& impact)
@@ -103,7 +103,7 @@ bool ValidRay::pathDiffValidationForDiffraction(Ray *r, const vec3& impact)
 	// We compute the true path length difference between actual position and the last reflection or source
 	decimal currentCumulDelta = r->cumulDelta + ( r->cumulDistance - impact.distance(origin) );
 
-	return ( currentCumulDelta <= tympan::SolverConfiguration::get()->MaxPathDifference );
+	return ( currentCumulDelta <= AcousticRaytracerConfiguration::get()->MaxPathDifference );
 }
 
 bool ValidRay::computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre, vec3& impact)
@@ -142,7 +142,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 
 	vec3 impact = r->position + r->direction * inter->t;
 
-    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
+        AcousticRaytracerConfiguration* config = AcousticRaytracerConfiguration::get();
 // Test if creating a new diffraction is allowed (depends on path length difference)
 	if ( config->UsePathDifValidation && !pathDiffValidationForDiffraction(r, impact) )
 	{

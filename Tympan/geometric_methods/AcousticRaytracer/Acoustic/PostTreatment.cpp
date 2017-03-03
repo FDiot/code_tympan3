@@ -17,7 +17,7 @@
 #include <vector>
 #include <map>
 
-#include "Tympan/models/solver/config.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Engine/AcousticRaytracerConfiguration.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Tools/Logger.h"
@@ -83,7 +83,7 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
     */
 
     // Minimal angle (other PI) between two face to allow building of a diffraction cylinder
-    float angleMax = tympan::SolverConfiguration::get()->AngleDiffMin * M_PI / 180;
+    float angleMax = AcousticRaytracerConfiguration::get()->AngleDiffMin * M_PI / 180;
 
     // Compute "mean" normal between the two faces
     vec3 normal = p1->getNormal() + p2->getNormal();
@@ -122,7 +122,7 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
 bool PostTreatment::constructEdge(Scene* scene)
 {
     // define diffraction cylinder diameter
-    float cylinderThick = tympan::SolverConfiguration::get()->CylindreThick;
+    float cylinderThick = AcousticRaytracerConfiguration::get()->CylindreThick;
 
     // Create a list of segments common to two faces
     mapSegmentShapes segmentList;
