@@ -18,7 +18,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "Tympan/models/solver/config.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Engine/AcousticRaytracerConfiguration.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Accelerator/BruteForceAccelerator.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Accelerator/KdtreeAccelerator.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Accelerator/BvhAccelerator.h"
@@ -60,7 +60,7 @@ bool Scene::finish(int accelerator_id/* = 3*/, leafTreatment::treatment _interse
             break;
         case 2 :
             accelerator = new BvhAccelerator(&shapes, globalBox,
-                                             tympan::SolverConfiguration::get()->MaxTreeDepth,
+                                             AcousticRaytracerConfiguration::get()->MaxTreeDepth,
                                              "middle");
             break;
         case 3 :

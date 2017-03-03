@@ -1,4 +1,4 @@
-"""Copy a file and add a header
+"""Create an auto-generated header file
 """
 import sys
 import argparse

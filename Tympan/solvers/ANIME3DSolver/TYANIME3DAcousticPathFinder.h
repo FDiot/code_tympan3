@@ -111,6 +111,8 @@ private:
     /// Method to build the transformer of the scene geometry according to different parameters 
     void build_geometry_transformer( const vector<vec3>& sources );
 
+    /// Configure parameters of the AcousticRayTracer
+    void configure_raytracer();
     /// Object _rayTracing for the straigth-line ray tracer
     Simulation _rayTracing;
 

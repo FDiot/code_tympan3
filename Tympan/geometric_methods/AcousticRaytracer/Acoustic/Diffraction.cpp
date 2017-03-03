@@ -13,7 +13,7 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/models/solver/config.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Engine/AcousticRaytracerConfiguration.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Tools/UnitConverter.h"
 #include "Diffraction.h"
@@ -81,8 +81,7 @@ Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cy
 	N1 = dynamic_cast<Cylindre*>(shape)->getFirstShape()->getNormal();
 	N2 = dynamic_cast<Cylindre*>(shape)->getSecondShape()->getNormal();
 
-    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
-	if (config->DiffractionFilterRayAtCreation)
+	if (AcousticRaytracerConfiguration::get()->DiffractionFilterRayAtCreation)
 	{
 		responseValidator = responseAngleLimiter;
 	}
@@ -91,7 +90,7 @@ Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cy
 		responseValidator = responseAlwaysYes;
 	}
 
-	if (config->DiffractionUseRandomSampler) // Tir des rayons aléatoires sur le cone de Keller
+	if (AcousticRaytracerConfiguration::get()->DiffractionUseRandomSampler) // Tir des rayons aléatoires sur le cone de Keller
 	{
 		getTheta = getThetaRandom;
 	}
