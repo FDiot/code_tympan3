@@ -91,7 +91,7 @@ void TYSetGeometriqueParcours::SwapPolyligne(int i, int j)
 int TYSetGeometriqueParcours::SupressionPolylignesRedondantes()
 {
     int nNbDoublons = 0;
-    //Cette methode ellimine 2 sortes de segments:
+    //Cette methode elimine 2 sortes de segments:
     //1. segments bouclant sur le meme point
     //2. segments doubles (Ex: [P1,P2] & [P2,P1])
     //Pour ce traitement, on trie la liste de polyligne de 2 facons:
@@ -252,7 +252,7 @@ void TYSetGeometriqueParcours::RamenerPointsTraversantLaFrontiere(TYPointParcour
         indexeAutrePoint = (indexePoint == indexePoint1) ? indexePoint2 : indexePoint1;
         //2. Modification du point donnant lieu a un point frontiere
         //Ce passage de frontiere peut donner lieu a 2 points d'intersections sur SR,
-        //si une autre polyligne rejoint ce point (indexePoint) de l'autre ci¿½te
+        //si une autre polyligne rejoint ce point (indexePoint) de l'autre ciï¿½ï¿½te
         //=> on cree un nouveau point ayant les memes coordonnees:
         _ListePoint[nAncienNbPointTotal] = _ListePoint[indexePoint];
         _ListePoint[nAncienNbPointTotal].Identifiant = nAncienNbPointTotal;
@@ -300,7 +300,7 @@ void TYSetGeometriqueParcours::MarquePointsADroiteEtAGauche(TYPointParcours& Src
 void TYSetGeometriqueParcours::SeparationDroiteGauche(bool* PointsAGauche, bool* PointsADroite, TYSetGeometriqueParcours& geoGauche, TYSetGeometriqueParcours& geoDroite)
 {
     int i, j, indexePoint;
-    //2.  Marquer les polylignes oi¿½ au moins un point est a gauche (idem pour la droite)
+    //2.  Marquer les polylignes oiï¿½ï¿½ au moins un point est a gauche (idem pour la droite)
     bool* bAuMoinsUnPointAGauche = new bool[_nNbPolylines];
     bool* bAuMoinsUnPointADroite = new bool[_nNbPolylines];
     for (i = 0; i < _nNbPolylines; i++)
@@ -620,7 +620,7 @@ bool TYSetGeometriqueParcours::PremierePasse(TYPointParcours& Srce, TYPointParco
                 return false;
             }
             //On a peut etre passe d'autres points d'intersection: tant mieux !
-            //Mais il faut savoir oi¿½ on en est dans les points d'intersection:
+            //Mais il faut savoir oiï¿½ï¿½ on en est dans les points d'intersection:
             while (i < NbPointsFrontiere && IndexPoint != IndexePointsFrontiere[i]) { i++; }
         }
         else
@@ -867,7 +867,7 @@ int  TYSetGeometriqueParcours::EnveloppeConvexeLes2PremiersPointsEtant(TYPointPa
                 bool bBonCandidatPourRemplacement;
                 if (bColineraires)
                 {
-                    //Verifions que P2 est du meme ci¿½te que P1
+                    //Verifions que P2 est du meme ciï¿½ï¿½te que P1
                     if (TYPointParcours::Scalaire(PP1, PP2) < 0) // xbh: A koi sert ce test si les vecteurs sont colineaires ???
                     {
                         bBonCandidatPourRemplacement = false;

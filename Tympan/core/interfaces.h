@@ -25,6 +25,9 @@ namespace tympan {
     typedef SmartPtr<SolverConfiguration> LPSolverConfiguration;
 } // namespace tympan
 
+/**
+ * \brief Interface class for solvers
+ */
 class SolverInterface
 {
 public:
@@ -38,7 +41,9 @@ public:
     virtual void purge() { }
 };
 
-
+/**
+ * \brief Interface class for acoustic models
+ */
 class AcousticModelInterface
 {
 public:

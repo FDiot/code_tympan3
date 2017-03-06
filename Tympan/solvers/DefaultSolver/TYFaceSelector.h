@@ -23,22 +23,29 @@
 class TYSolver;
 class TYTrajet;
 
+/**
+ * \brief Building class of the faces list
+ */
 class TYFaceSelector : public TYFaceSelectorInterface
 {
 public:
     TYFaceSelector(TYSolver& solver);
     virtual ~TYFaceSelector();
 
+    /**
+     * \brief Build the array of intersections
+     * \param tabIntersect Array of intersections
+     * \param rayon Ray path
+     */
     virtual void selectFaces(std::deque<TYSIntersection>& tabIntersect, const TYTrajet& rayon);
 
 protected :
-    // Reference sur le solver
-    TYSolver& _solver;
+    TYSolver& _solver; //!< Reference to the solver
 
 private  :
     bool buildPlans(TYSPlan* plan, const OSegment3D& rayon);
     bool CalculSegmentCoupe(const TYStructSurfIntersect& FaceCourante, TYSIntersection& Intersect, OPoint3D& pt1, OPoint3D& pt2, OPoint3D& pt3, const int& indice) const;
-    void reorder_intersect(std::deque<TYSIntersection>& tabIntersect); // put infrastructure faces on top
+    void reorder_intersect(std::deque<TYSIntersection>& tabIntersect); //!< put infrastructure faces on top
 };
 
 #endif // __TYFACESELECTOR__

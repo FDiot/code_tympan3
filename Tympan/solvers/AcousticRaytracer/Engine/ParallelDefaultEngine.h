@@ -18,17 +18,20 @@
 
 #include "DefaultEngine.h"
 
+/**
+ * \brief Parallel default engine class
+ */
 #ifdef TEST_ACCELERATION_RECEPTORS
 class ParallelDefaultEngine : public Engine
 {
 
 public:
-
+    /// Default constructor
     ParallelDefaultEngine() : Engine() { }
-
+    /// Constructor
     ParallelDefaultEngine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, Scene *_recepteurs)
         : Engine(_scene, _sources, _solver, _recepteurs) {  }
-
+    /// Copy constructor
     ParallelDefaultEngine(const ParallelDefaultEngine& other)
     {
         scene = other.scene;
@@ -36,7 +39,7 @@ public:
         solver = other.solver;
         recepteurs = other.recepteurs;
     }
-
+    /// Destructor
     virtual ~ParallelDefaultEngine() { }
 
     virtual bool process();

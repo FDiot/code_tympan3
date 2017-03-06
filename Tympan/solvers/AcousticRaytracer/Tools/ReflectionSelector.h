@@ -20,14 +20,15 @@
 #include "Tympan/solvers/AcousticRaytracer/Acoustic/SpecularReflexion.h"
 #include "Tympan/solvers/AcousticRaytracer/Geometry/Shape.h"
 
+/*!
+ * \brief : To disable the rays which have a number of reflection events greater than a given threshold
+            or reflecting on the ground if it is disabled.
+ */
 template<typename T>
 class ReflectionSelector : public Selector<T>
 {
-/*!
- * \brief : disables the rays which have a number of reflection events greater than a given threshold 
-            or reflecting on the ground if it is disabled.
- */
 public :
+	/// Constructor
     ReflectionSelector(int _maxReflectionOrder = 1, bool _acceptGround = false, OPERATOR _op = LESS_OR_EQUAL) : Selector<T>()
     {
         maxReflectionOrder = _maxReflectionOrder;
@@ -167,20 +168,25 @@ public :
             }
         return false;
     }
-
+    /// Get the reflection maximal number
     int getMaximumReflectionOrder() { return maxReflectionOrder; }
+    /// Set the reflection maximal number
     void setMaximumReflectionOrder(int _maxReflectionOrder) { maxReflectionOrder = _maxReflectionOrder; }
 
+    /// Return true if ground reflection is accepted
     bool isGroundAccepted() { return acceptGround; }
+    /// Set flag acceptGround
     void setGroundAccepted(bool _acceptGround) { acceptGround = _acceptGround; }
 
+    /// Get the OPERATOR of this Selector
     OPERATOR getOperator() { return op; }
+    /// Set the OPERATOR of this Selector
     void setOperator(OPERATOR _op) { op = _op; }
 
 protected:
-    int maxReflectionOrder;
-    bool acceptGround;
-    OPERATOR op;
+    int maxReflectionOrder;		//!< Reflection maximal number for this Selector criteria
+    bool acceptGround;			//!< Flag to accept or not the reflection on the ground
+    OPERATOR op;				//!< OPERATOR being used for the criteria (by default, LESS_OR_EQUAL)
 
 };
 

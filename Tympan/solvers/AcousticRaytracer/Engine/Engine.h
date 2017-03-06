@@ -25,17 +25,21 @@
 
 typedef struct _validRay
 {
-    Ray* r;     /*!< Pointeur vers le rayon traite. Ne dois pas etre NULL */
-    bool valid; /*!< Vrai si le rayon a pu etre valide, c'est a dire un evenement a ete genere. */
+    Ray* r;     //!< Pointer to a ray. Should not be NULL
+    bool valid; //!< Boolean set to True if the ray is validated, which means an event occurs.
 } validRay;
 
+/**
+ * \brief Base class for engines (DefaultEngine, ParallelDefaultEngine,...)
+ */
 class Engine
 {
 
 public:
 #ifdef TEST_ACCELERATION_RECEPTORS
+	/// Default constructor
     Engine() : scene(NULL), sources(NULL), solver(NULL), recepteurs(NULL), rayCounter(0) { }
-
+    /// Constructor
     Engine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, Scene *_recepteurs)
     {
         scene = _scene;
@@ -44,7 +48,7 @@ public:
         solver = _solver;
         rayCounter = 0;
     }
-
+    /// Copy constructor
     Engine(const Engine& other)
     {
         scene = other.scene;
@@ -53,29 +57,29 @@ public:
         solver = other.solver;
         rayCounter = other.rayCounter;
     }
-
+    /// Destructor
     virtual ~Engine() { }
 
-    Scene* getScene() { return scene; }
-    void setScene(Scene* _scene) { scene = _scene; }
+    Scene* getScene() { return scene; } //!< Get the Scene
+    void setScene(Scene* _scene) { scene = _scene; } //!< Set the Scene
 
-    std::vector<Source>* getSources() { return sources; }
-    void setSources(std::vector<Source> *_sources) { sources = _sources; }
+    std::vector<Source>* getSources() { return sources; } //!< Get the Sources
+    void setSources(std::vector<Source> *_sources) { sources = _sources; } //!< Set the Sources
 
-    Solver* getSolver() { return solver; }
-    void setSolver(Solver* _solver) { solver = _solver; }
+    Solver* getSolver() { return solver; } //!< Get the Solver
+    void setSolver(Solver* _solver) { solver = _solver; } //!< Set the Solver
 
-    virtual bool process() { return false;}
+    virtual bool process() { return false;} //!< If implemented, process and return true if success
 
-    virtual void runStructureBenchmark() {}
+    virtual void runStructureBenchmark() {} //!< If implemented, run a benchmark for the engine
 
 protected:
-    Scene* scene;
-    Scene *recepteurs;
-    std::vector<Source> *sources;
-    Solver* solver;
+    Scene* scene;					//!< Pointer to the scene
+    Scene *recepteurs;				//!< Pointer to all the sources
+    std::vector<Source> *sources;	//!< Pointer to all the receptors
+    Solver* solver;					//!< Pointer to the solver
 
-    unsigned long long int rayCounter;
+    unsigned long long int rayCounter; //!< Ray counter
 #else
     Engine() : scene(NULL), sources(NULL), solver(NULL), recepteurs(NULL), rayCounter(0) { }
 

@@ -26,115 +26,100 @@
 /*!
 * \file Solver.h
 * \class Solver
-* \brief La classe Solver donne une interface au developpeur pour introduire facilement une nouvelle methode acoustique utilisant le lancer de rayons.
-* Cette classe donne la main a chaque point du lancer de rayons ou la methode acoustique intervient dans le comportement de la simulation. Elle permet
-* d'ajouter un eventail d'objets acoustiques pour modeliser certains phenomenes comme les diffractions. Les fonctionnalites assurees par cette classe
-* sont les suivante : post-traitement de la scene, traitement des feuilles dans les structures acceleratrices, validation d'une intersection (generation de
-* l'evenement approprie), validation d'un rayon et exportation. Voir la documentation des prototypes pour plus d'informations.
-* \warning Le developpeur doit bien faire attention a ce que les fonctions utilisees dans la bibliotheques soient coherentes entre elles. Si par
-* exemple le developpeur a choisi de post-traiter la scene en ajoutant des aretes de diffraction mais qu'il n'a pas definit de fonction de validation
-* pour les aretes, alors chaque intersection avec une arete sera ignoree.
+* \brief The Solver class gives an interface to the developer to add easily a new acoustic method using ray tracing.
+* This class provides a way for the programmer to interact at each point of the ray tracing algorithm. It is possible
+* to add several acoustic objects to model phenomena like diffraction. The features of this class are:
+* + post-treatment of the scene
+* + leaf treatment in accelerators
+* + intersection validation (generation of the proper event)
+* + ray validation and export
+* \warning The developer should check the consistency of the functions used in the library. For instance, if he chooses to post-process the scene
+* by adding diffraction edges without defining the validation function for these edges, then each intersection with an edge will be ignored.
 */
 
 class Solver
 {
 public:
-    /*!
-    * \fn Solver()
-    * \brief Constructeur de base du Solver.
-    */
+    /// Default constructor
     Solver()
     {
     }
 
-    /*!
-    * \fn Solver(Solver *_solver)
-    * \brief Constructeur par copie. L'ensemble des rayons contenus dans le solver de base sont transmis a la copie.
-    * \param _solver : Pointeur vers le solver a copier.
-    */
+    /// Copy constructor
     Solver(Solver* _solver)
     {
     }
 
-
     /*!
-    * \fn virtual bool postTreatmentScene(Scene *scene)
-    * \brief Fonction virtuelle post traitant la scene. Cette phase a 2 objectifs : transformer les meta-objets et augmenter la scene. La phase
-    * de transformation des meta-objets est assez directe : on parcourt les differentes listes de meta-objets et on en extrait des elements utilisables
-    * par le lancer de rayon. Typiquement, cela va consister a transformer un objet Mur en un ensemble de Primitives, extraire des Sources poncutelles
-    * des polylignes de sources etc. L'augmentation de la scene consiste en l'ajout d'objets plus propres au calcul acoustique qu'on ne retrouvent pas dans
-    * la description physique de la scene. Un exemple est les aretes de diffractions qui sont modelisees par un cylindre et doivent etre generes.
-    * \param scene : Scene a post-traiter.
-    * \param sources : Ensemble des sources pouvant etre modifiees
-    * \param recepteurs : Ensemble des recepteurs pouvant etre modifiees
-    * \return Renvoie vrai si l'ensemble des operations se sont bien deroulees.
+    * \brief Virtual function to post-process the Scene. It has two phases: transform the meta-objects and load the Scene.
+    * During the first phase, we iterate on the different meta-objects lists and are extracted elements for the ray tracer.
+    * Typically, a wall object would be transformed in a set of Primitives, extract polylines from punctual Sources,...
+    * The Scene will be loaded with objects related to acoustic calculation which are not present into the physical description of the Scene.
+    * For instance, diffraction edges are modeled by a cylinder and should be generated.
+    * \param scene Scene to post-process
+    * \param sources Sources
+    * \param recepteurs Receptors
+    * \return Return true if success
     */
     virtual bool postTreatmentScene(Scene* scene, std::vector<Source>& sources, std::vector<Recepteur>& recepteurs);
 
     /*!
-    * \fn virtual double leafTreatment(vector<struct Isect> &primitives)
-    * \brief Fonction de traitement des feuilles des structures acceleratrice. Le comportement par defaut est de garder uniquement la premiere intersection.
-    * On peut cependant choisir de garder toutes les intersections s'etant produit avant un type d'intersection. Par exemple, on peut choisir de garder
-    * l'ensemble des intersections se produisant avant une intersection avec un triangle qui est considere comme bloquant.
-    * \param Ensemble des primitives rencontrees dans la feuille courante.
-    * \return Temps maximal autorise par le rayon. Correspond au temps d'intersection avant la premiere primitive bloquante.
-    */
+     * @brief Leaf treatment function for accelerators. The default is to keep only the first intersection.
+     * It is possible to keep all the intersections which happens before a type specific intersection. For instance, we can
+     * keep all the intersections before an intersection with a triangle considered as blocking.
+     * @param primitives All the primitives encountered by the current leaf.
+     * @return Maximal time authorized by the ray. It is the intersection time before the first blocking primitive.
+     */
     virtual double leafTreatment(vector<Intersection> &primitives);
 
     /*!
-    * \fn virtual double leafTreatment(vector<struct Isect> &primitives)
-    * \brief Fonction de validation d'une intersection. Si l'intersection est valide, une evenement est genere et ajouter sur le rayon.
-    * \param r : Rayon a traiter.
-    * \param p : Primitive a valider pour le rayon.
-    * \return Renvoie vrai si la validation a bien pu s'effectuer.
-    * \warning Les fonctions de validations doivent etre coherent par rapport au type de primitives contenues dans la scene. Les types de primitives
-    * non supportees doivent remonter une erreur si elles ne sont pas gerer dans la simulation.
+    * \brief Validation function for an intersection. If the intersection is validated, an event is created and added on the ray.
+    * \param r : Ray
+    * \param inter : Intersection to validate
+    * \return Return true if the validation is done
+    * \warning The validation functions should agree with the primitives types in the Scene. The unsupported primitives types should throw an
+    * exception if not handled by the simulation.
     */
     virtual bool valideIntersection(Ray* r, Intersection* inter);
 
     /*!
-    * \fn virtual bool valideRayon(Ray *r)
-    * \brief Validation d'un rayon. Le developpeur peut, par exemple, choisir de faire un filtrage sur les rayons et de ne valider que les chemins uniques.
-    * Si le rayon est valide, il est place dans la liste de rayons valides et sera utilisable pour l'exportation.
-    * \param r : Rayon a valider. Le rayon a comme hypothese d'avoir une source et un recepteur.
-    * \return Renvoie vrai si le rayon a ete valide.
+    * \brief Ray validation. The developer may, for instance, choose a filtering on the rays and only validate single paths.
+    * If the ray is valid, it is added to the valid rays list and will be used for the export.
+    * \param r : Ray to validate. The ray should have a source and a receiver.
+    * \return Return true if the ray has been validated.
     */
     virtual bool valideRayon(Ray* r);
 
+    /*!
+    * \brief Method to arrange the invalid rays.
+    * The invalid rays are put away into a debug_ray array in order to visualize all of the rays
+    * \param r : Ray to invalid.
+    * \return Return true if the ray has been invalidated.
+    */
     virtual bool invalidRayon(Ray* r);
 
-
-
-    /*!
-    * \fn vector<Ray*>* getValidRays()
-    * \brief Renvoie la liste des rayons valides.
-    * \return Pointeur vers le vecteur contenant les rayons valides par le solveur.
-    */
+    /// Return a pointer to the validated rays list
     virtual deque<Ray*>* getValidRays() { return &valid_rays;}
     //virtual vector<Ray*>* getValidRays() { return &valid_rays;}
 
-    /*!
-    * \fn vector<Ray*>* getDebugRays()
-    * \brief Renvoie la liste des rayons invalides.
-    * \return Pointeur vers le vecteur contenant les rayons invalides par le solveur.
-    */
+    /// Return a pointer to the invalidated rays list
     deque<Ray*>* getDebugRays() { return &debug_rays;}
     //vector<Ray*>* getDebugRays() { return &debug_rays;}
 
+    /// End the operations
     virtual void finish();
-
+    /// Delete the valid rays array
     virtual void clean();
 
     /*!
-    * \fn bool loadParameters()
-    * \brief Charge les parametres du calcul
-    * \return booleen indiquant le bon deroulement de l'operation.
+    * \brief Load the computation parameters.
+    * \return True if operation succeeds.
     */
     virtual bool loadParameters();
 
 protected:
-    deque<Ray*> valid_rays;    /*!< Liste des rayons valides par le solveur */
-    deque<Ray*> debug_rays;    /*!< List des rayons invalides par le solveur */
+    deque<Ray*> valid_rays;    //!< Rays list which are validated by the solver
+    deque<Ray*> debug_rays;    //!< Rays list which are invalidated by the solver
 };
 
 #endif // SOLVER_H

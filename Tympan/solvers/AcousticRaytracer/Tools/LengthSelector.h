@@ -18,13 +18,14 @@
 
 #include "Selector.h"
 
+/*!
+ * \brief : To disable rays which have traveled a distance greater than a given length
+ */
 template<typename T>
 class LengthSelector : public Selector<T>
 {
-/*!
- * \brief : disable rays which have traveled a distance greater than a given length
- */
 public :
+	/// Default constructor
     LengthSelector(double _maxLength = 2000, OPERATOR _op = LESS_OR_EQUAL) : Selector<T>() { maxLength = _maxLength; op = _op;}
     virtual Selector<T>* Copy()
     {
@@ -72,6 +73,7 @@ public :
         }
         return SELECTOR_ACCEPT;
     }
+    /// Keep the ray
     virtual void insert(T* r, unsigned long long& replace) { return; }
 
     virtual bool insertWithTest(T* r)
@@ -112,16 +114,18 @@ public :
         }
         return true;
     }
-
+    /// Get the maximal length
     double getMaximumLength() { return maxLength; }
+    /// Set the maximal length
     void setMaximumLength(double _maximumLength) { this->maximumLength = _maximumLength; }
-
+    /// Get the OPERATOR of this Selector
     OPERATOR getOperator() { return op; }
+    /// Set the OPERATOR of this Selector
     void setOperator(OPERATOR _op) { op = _op; }
 
 protected:
-    double maxLength;
-    OPERATOR op;
+    double maxLength;	//!< Maximal length criteria
+    OPERATOR op;		//!< OPERATOR used (by default LESS_OR_EQUAL, which means this Selector keeps only ray with travelled distance<=maximalLength)
 
 };
 

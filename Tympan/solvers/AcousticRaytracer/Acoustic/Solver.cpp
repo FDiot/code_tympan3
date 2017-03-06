@@ -40,6 +40,7 @@ bool Solver::valideRayon(Ray* r)
 
 void Solver::clean()
 {
+	// Clear valid_rays completely and delete the corresponding rays
     while (!valid_rays.empty())
     {
         Ray* r = valid_rays.back();
@@ -55,6 +56,7 @@ void Solver::finish()
 
 bool Solver::invalidRayon(Ray* r)
 {
+	// Each invalidated ray is deleted
     delete r;
     return true;
 }

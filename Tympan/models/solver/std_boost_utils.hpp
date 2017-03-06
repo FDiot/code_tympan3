@@ -1,5 +1,5 @@
 /**
- * @file   std_boost_utils.hh
+ * @file   std_boost_utils.hpp
  * @author Anthony Truchet <anthony.truchet@logilab.fr>
  * @date   Tue Oct 30 11:23:41 2012
  *
@@ -50,7 +50,7 @@ using boost::make_shared;
 } // namespace tympan
 
 
-// Boost BiMaps are use for some relations between entities
+// Boost BiMaps are used for some relations between entities
 #include <boost/bimap/bimap.hpp>
 //#include <boost/bimap/list_of.hpp>
 #include <boost/bimap/unordered_set_of.hpp>

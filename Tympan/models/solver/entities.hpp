@@ -1,6 +1,6 @@
 /**
  * \file entities.hpp
- * \brief This file provides the declaration of the entities of the model
+ * \brief This file provides the declaration of the entities of the model, which inherit from BaseEntity
  *
  * \date nov. 6 2012
  * \author Anthony Truchet <anthony.truchet@logilab.fr>
@@ -16,13 +16,18 @@
 
 namespace tympan
 {
+/**
+ * @brief Base class for material
+ */
 class AcousticMaterialBase:
     public virtual BaseEntity
 {
 public:
+	/// Constructor
     AcousticMaterialBase(const string& name_);
+    /// Virtual method to return material absorption at reflection point
     virtual ComplexSpectrum get_absorption (double incidence_angle, double length) { return ComplexSpectrum(); }
-    string name;
+    string name; //!< Material name
 
 }; // class AcousticMaterialBase
 
@@ -32,61 +37,72 @@ typedef std::deque<material_ptr_t> material_pool_t;
 
 // -------------------
 
+/**
+ * @brief Describes building material
+ */
 class AcousticBuildingMaterial:
     public AcousticMaterialBase
 {
 public:
+	/// Constructor
     AcousticBuildingMaterial(const string& name_, const ComplexSpectrum& spectrum);
-    virtual ~AcousticBuildingMaterial() {};
+    virtual ~AcousticBuildingMaterial() {}; //!< Destructor
 
     /*!
-     * \brief : get material absorption at reflexion point
+     * \brief : Get material absorption at reflection point
      * \fn ComplexSpectrum get_absorption (const double& incidence_angle)
      */    
     virtual ComplexSpectrum get_absorption (double incidence_angle, double length) { return spectrum; }
 
-    ComplexSpectrum asEyring() const;
+    ComplexSpectrum asEyring() const; //!< Returns a spectrum with Eyring formulae
 
 
-    ComplexSpectrum spectrum;
+    ComplexSpectrum spectrum; //!< Spectrum to store acoustic values at different frequencies
 };
 
 // -------------------
 
+/**
+ * @brief  Describes the ground material, a specific AcousticBuildingMaterial
+ */
 class AcousticGroundMaterial:
     public AcousticMaterialBase
 {
 public:
+	/// Constructor
     AcousticGroundMaterial(const string& name_, double resistivity_, double deviation_, double length_);
-    virtual ~AcousticGroundMaterial() {};
+    virtual ~AcousticGroundMaterial() {}; //!< Destructor
 
     /*!
-     * \brief : get material absorption at reflexion point
-     * \fn ComplexSpectrum get_absorption (const double& incidence_angle)
+     * \fn ComplexSpectrum get_absorption (double incidence_angle, double length)
+     * \brief : Get material absorption at reflection point
+     * \param incidence_angle Angle incidence
+     * \param length Wave length
+     * \return A ComplexSpectrum
      */    
     virtual ComplexSpectrum get_absorption (double incidence_angle, double length);
 
-    const ComplexSpectrum& get_Zc() const { return Zc; }
-    const ComplexSpectrum& get_K() const  { return K; }
+    const ComplexSpectrum& get_Zc() const { return Zc; } //!< Get characteristic impedance
+    const ComplexSpectrum& get_K() const  { return K; }  //!< Get wave number
 
-    void set_thickness( double thickness_ ) { thickness = thickness_; }
-	void set_deviation( double deviation_) { deviation = deviation_;}
-	void set_length( double length_) { length = length_;}
-    double get_ISO9613_G();
+    void set_thickness( double thickness_ ) { thickness = thickness_; }  //!< Set thickness
+	void set_deviation( double deviation_) { deviation = deviation_;}    //!< Set deviation
+	void set_length( double length_) { length = length_;}                //!< Set wave length
+    double get_ISO9613_G();                                              //!< Absorption given by ISO9613
 
-    static void set_atmosphere( AtmosphericConditions *atmosphere_ ) { atmosphere = atmosphere_; }
+    static void set_atmosphere( AtmosphericConditions *atmosphere_ ) { atmosphere = atmosphere_; } //!< Set pointer to current atmosphere
 
 protected:
-    void computeZc(); //!< compute characteristic impedance
-    void computeK();  //!< compute wave nuber 
-    void computeZs(double angle, ComplexSpectrum Z, ComplexSpectrum& spectrum); //!< compute specific impedance
-	void computeZf(double angle, ComplexSpectrum Zs); //!< compute effective impedance in rough ground
-    void computeRp(double angle, const ComplexSpectrum& Zs, ComplexSpectrum& Rp);  //!<compute reflexion coefficient for plane waves
-    void computeW(double angle, double length, const ComplexSpectrum& Zs, ComplexSpectrum &W); //compute numeric distance
-    void computeFw(ComplexSpectrum localW, ComplexSpectrum& Fw); // Compute function of numeric distance
-    void computeQ(double angle, ComplexSpectrum &Rp, ComplexSpectrum &Fw, ComplexSpectrum &Q); // compute reflexion coefficient
+    void computeZc(); //!< Compute characteristic impedance
+    void computeK();  //!< Compute wave number
+    void computeZs(double angle, ComplexSpectrum Z, ComplexSpectrum& spectrum); //!< Compute specific impedance
+	void computeZf(double angle, ComplexSpectrum Zs); //!< Compute effective impedance in rough ground
+    void computeRp(double angle, const ComplexSpectrum& Zs, ComplexSpectrum& Rp);  //!< Compute reflection coefficient for plane waves
+    void computeW(double angle, double length, const ComplexSpectrum& Zs, ComplexSpectrum &W); //!< Compute numeric distance
+    void computeFw(ComplexSpectrum localW, ComplexSpectrum& Fw); //!< Compute function of numeric distance
+    void computeQ(double angle, ComplexSpectrum &Rp, ComplexSpectrum &Fw, ComplexSpectrum &Q); //!< Compute reflection coefficient
 
-    static AtmosphericConditions *atmosphere;
+    static AtmosphericConditions *atmosphere; //!< Pointer to current atmosphere
 
 private:
     void init();
@@ -115,88 +131,106 @@ protected :
 	double deviation;
 	double length;
 
-    ComplexSpectrum Zc; //!< Characteriestic impedance
+    ComplexSpectrum Zc; //!< Characteristic impedance
     ComplexSpectrum K;  //!< Wave number
 	ComplexSpectrum Zf; //!< Effective impedance
 };
 
 // -------------------
 
+/**
+ * @brief Describing a triangle
+ */
 class AcousticTriangle :
     public virtual BaseEntity
 {
 public:
+	/// Constructor with the 3 vertexes of the triangle
     AcousticTriangle(node_idx n1, node_idx n2, node_idx n3);
 
-    node_idx n[3];
-    string volume_id;
-    shared_ptr<AcousticMaterialBase> made_of;
+    node_idx n[3];    //!< Triangle vertexes
+    string volume_id; //!< Volume id
+    shared_ptr<AcousticMaterialBase> made_of; //!< Pointer to the material
 };
 
-typedef std::deque<AcousticTriangle> triangle_pool_t;
+typedef std::deque<AcousticTriangle> triangle_pool_t; //!< Array of AcousticTriangle
 typedef size_t triangle_idx;
 
 // -------------------
 
+/**
+ * @brief Interface for source directivity classes (SphericalSourceDirectivity, CommonFaceDirectivity, ...)
+ */
 class SourceDirectivityInterface
 {
 public:
+	//!< Pure virtual method to return directivity of the Source
     virtual Spectrum lwAdjustment(Vector direction, double distance) = 0;
 };
 
 // -------------------
-
+/**
+ * @brief Directivity for a spherical source
+ */
 class SphericalSourceDirectivity :
       public virtual BaseEntity,
       public SourceDirectivityInterface
 {
 public:
     SphericalSourceDirectivity(){};
+
     virtual Spectrum lwAdjustment(Vector direction, double distance)
-     { return Spectrum(1.0); }
+     { return Spectrum(1.0); } //!< Directivity of a spherical source
 };
 
 // -------------------
 
+/**
+ * @brief BaseEntity class for directivity on face
+ */
 class CommonFaceDirectivity : 
         public virtual BaseEntity,
         public SourceDirectivityInterface
 {
 public:
+	/// Constructor
     CommonFaceDirectivity(const Vector& support_normal_, double support_size_) : 
                       BaseEntity(), 
                       support_normal(support_normal_),
                       support_size(support_size_) {}
 
-    ~CommonFaceDirectivity() {}
+    ~CommonFaceDirectivity() {} //!< Destructor
 
     Vector get_normal(){ return support_normal; }
 
     static void set_atmosphere( AtmosphericConditions *atmosphere_ ) { atmosphere = atmosphere_; }
 
 protected :
-    Vector support_normal;              /*! Normal of support face */
-    double support_size;                /*! Characteristic size of support face */
+    Vector support_normal;              //! Normal of support face
+    double support_size;                //! Characteristic size of support face
     
-    static AtmosphericConditions *atmosphere;
+    static AtmosphericConditions *atmosphere; //!< Pointer to current atmosphere
 };
 
+/**
+ * @brief Directivity for a volume face
+ */
 class VolumeFaceDirectivity :
     public CommonFaceDirectivity
 {
 public:
     VolumeFaceDirectivity(const Vector& support_normal_, double support_size_) : 
-                            CommonFaceDirectivity(support_normal_, support_size_) {}
+                            CommonFaceDirectivity(support_normal_, support_size_) {} //!< Constructor
     
-     ~VolumeFaceDirectivity() {}
+     ~VolumeFaceDirectivity() {} //!< Destructor
 
-     virtual Spectrum lwAdjustment(Vector direction, double distance);
+     virtual Spectrum lwAdjustment(Vector direction, double distance); //!< Directivity of a volume face
 
 private:
-    static const double _tabRA[];       /*<! RA form factor */
-    static const double _tabCor[];      /*<! Correction factors */
+    static const double _tabRA[];       //!< RA form factor
+    static const double _tabCor[];      //!< Correction factors
 
-    double calculC(double distance);    /*! Compute directivity factor */
+    double calculC(double distance);    //!< Compute directivity factor
 };
 //
 // ------------------
@@ -214,15 +248,18 @@ private:
 #else
 #   define NB_THETA 21
 #endif
+/**
+ * @brief Directivity for a chimney face
+ */
 class ChimneyFaceDirectivity :
     public CommonFaceDirectivity
 {
 public :
     ChimneyFaceDirectivity(const Vector& support_normal_, double support_size_) : 
-                            CommonFaceDirectivity(support_normal_, support_size_) {}
+                            CommonFaceDirectivity(support_normal_, support_size_) {} //!< Constructor
 
-    ~ChimneyFaceDirectivity() {}
-    virtual Spectrum lwAdjustment(Vector direction, double distance);
+    ~ChimneyFaceDirectivity() {}  //!< Destructor
+    virtual Spectrum lwAdjustment(Vector direction, double distance); //!< Directivity of a chimney face source
 
 
 private :
@@ -233,6 +270,7 @@ private :
 //
 // -------------------------
 //
+/// Number of KA values in the array
 #ifdef NB_KA
 #   undef NB_KA
 #   define NB_KA 9
@@ -240,7 +278,7 @@ private :
 #   define NB_KA 9
 #endif
 
-// nombre de valeurs de theta dans le tableau
+/// Number of theta values in the array
 #ifdef NB_THETA
 #   undef NB_THETA
 #   define NB_THETA 41
@@ -248,15 +286,19 @@ private :
 #   define NB_THETA 41
 #endif
 
+/**
+ * @brief Directivity for a baffled face
+ */
 class BaffledFaceDirectivity :
     public CommonFaceDirectivity
 {
 public :
-    BaffledFaceDirectivity(const Vector& support_normal_, double support_size_) : 
-                            CommonFaceDirectivity(support_normal_, support_size_) {}
 
-    ~BaffledFaceDirectivity() {}
-    virtual Spectrum lwAdjustment(Vector direction, double distance);
+    BaffledFaceDirectivity(const Vector& support_normal_, double support_size_) : 
+                            CommonFaceDirectivity(support_normal_, support_size_) {} //!< Constructor
+
+    ~BaffledFaceDirectivity() {}  //!< Destructor
+    virtual Spectrum lwAdjustment(Vector direction, double distance); //!< Directivity of a baffled face source
 
 private:
     static const double _tabQ[NB_KA][NB_THETA];
@@ -267,45 +309,54 @@ private:
     int find_Ka_idx(double ka);
 };
 
-
+/**
+ * @brief Describes an acoustic source
+ */
 class AcousticSource:
     public virtual BaseEntity
 {
 public:
+	/// Constructor to build a source defined by a point, spectrum, directivity
     AcousticSource(
             const Point& point_,
             const Spectrum& spectrum_,
             SourceDirectivityInterface* directivity);
 
-    virtual ~AcousticSource() {};
+    virtual ~AcousticSource() {};  //!< Destructor
 
-    Point position;
-    Spectrum spectrum;
-    SourceDirectivityInterface* directivity;
-    string volume_id;
-    string face_id;
+    Point position;      //!< Position of the source
+    Spectrum spectrum;   //!< Associated spectrum
+    SourceDirectivityInterface* directivity; //!< Pointer to the source directivity
+    string volume_id;    //!< Volume id
+    string face_id;      //!< Face id
 };
 
-typedef std::deque<AcousticSource> source_pool_t;
+typedef std::deque<AcousticSource> source_pool_t; //!< Array of sources
 typedef size_t source_idx;
 
 // -------------------
-
+/**
+ * @brief Describes an acoustic receptor
+ */
 class AcousticReceptor:
     public virtual BaseEntity
 {
 public:
+	/// Constructor to build a receptor defined by the its position
     AcousticReceptor(const Point& position_);
-    virtual ~AcousticReceptor() {};
+    virtual ~AcousticReceptor() {};  //!< Destructor
 
-    Point position;
+    Point position; //!< Position of the receptor
 };
 
-typedef std::deque<AcousticReceptor> receptor_pool_t;
+typedef std::deque<AcousticReceptor> receptor_pool_t; //!< Array of receptors
 typedef size_t receptor_idx;
 
 // -------------------
 
+/**
+ * @brief Global contribution
+ */
 class GlobalContribution:
     public virtual BaseEntity
 {
@@ -318,12 +369,15 @@ public:
 
 // -------------------
 
+/**
+ * @brief Directivity coefficient
+ */
 class DirectivityCoefficient
 {
 public:
     DirectivityCoefficient(double value_, double theta_, double phi_,
-                           bool solid_angle_);
-    virtual ~DirectivityCoefficient() {};
+                           bool solid_angle_); //!< Constructor
+    virtual ~DirectivityCoefficient() {};  //!< Destructor
 
     double value;
     double theta;

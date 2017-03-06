@@ -27,34 +27,41 @@ struct BVHBuildNode;
 struct BVHPrimitiveInfo;
 struct LinearBVHNode;
 
-
+/**
+ * \brief A Bounding Volume Hierarchy (BVH) Accelerator
+ */
 class BvhAccelerator : public Accelerator
 {
 
 public:
+	/// Default constructor
     BvhAccelerator(std::vector<Shape*>* _initialMesh = NULL, BBox _globalBox = BBox(), unsigned int maxProf = 8, const string& sm = "sah");
-
+    /// Destructor
     virtual ~BvhAccelerator() { free(nodes); }
 
     virtual bool build();
 
     virtual decimal traverse(Ray* r, std::list<Intersection> &result) const;
 
+    /// Set maximal depth
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
+    /// Get maximal depth
     int getMaxProfondeur() { return maxProfondeur; }
-
+    /// Set maximal primitives per leaf
     void setMaxPrimPerLeaf(int _maxPrimPerLeaf) { maxPrimPerLeaf = _maxPrimPerLeaf; }
+    /// Get maximal primitives per leaf
     int getMaxPrimPerLeaf() { return maxPrimPerLeaf; }
-
+    /// Get the vector of bounding boxes
     std::vector<BBox>& getBBox() { return tableBox; }
 
+    /// Print not implemented:
     void print();
-
+/* Uncommented cause not used:
     bool alreadyFail;
     unsigned int nbFail;
     Ray r;
     bool trace;
-
+*/
 protected:
     // BVHAccel Private Methods
     BVHBuildNode* recursiveBuild(std::vector<BVHPrimitiveInfo> &buildData, unsigned int start, unsigned int end,
@@ -62,24 +69,24 @@ protected:
     unsigned int flattenBVHTree(BVHBuildNode* node, unsigned int* offset);
 
     // BVHAccel Private Data
-    unsigned int maxPrimsInNode;
+    unsigned int maxPrimsInNode;	//!< Maximal primitives in node
     enum SplitMethod { SPLIT_MIDDLE, SPLIT_EQUAL_COUNTS, SPLIT_SAH };
-    SplitMethod splitMethod;
-    LinearBVHNode* nodes;
+    SplitMethod splitMethod;	//!< Split method
+    LinearBVHNode* nodes;		//!< Nodes list
 
-    std::vector<Shape*> primitives; //Different de initialMesh, est reordonne par rapport a la structure
-    BBox globalBox;
+    std::vector<Shape*> primitives; //!< Pointer to all the shapes (different from initialMesh) as it is reordered
+    BBox globalBox;			//!< Global bounding box
 
-    std::vector<BBox> tableBox;
+    std::vector<BBox> tableBox; //!< Bounding boxes vector
 
-    int maxProfondeur;
-    int maxPrimPerLeaf;
+    int maxProfondeur;		//!< Maximal depth
+    int maxPrimPerLeaf;		//!< Maximal primitives per leaf
 
-    int realMaxProfondeur;
-
+    int realMaxProfondeur;	//!< Real maximal depth
+/* Uncommented cause not used:
     float isectCost;
     float emptyBonus;
-    float traversalCost;
+    float traversalCost; */
 };
 
 

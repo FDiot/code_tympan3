@@ -26,7 +26,7 @@
 /**
  * \file TYTrajet.h
  * \class TYTrajet
- * \brief  La classe Trajet permet de faire correspondre a un couple Source-Recepteur une collection de Chemins, en plus d'un Chemin direct.
+ * \brief  This class TYTrajet (journey) links a couple Source-Receptor and a collection of paths, in addition to the direct path.
  * \version v 1.1
  * \date 2008/01/21
  * \author Projet_Tympan
@@ -34,45 +34,44 @@
 class TYTrajet
 {
 
-    // Methodes
+    // Methods
 public:
     /**
-     * \fn TYTrajet(TYSourcePonctuelleGeoNode* pSrc = NULL, TYPointCalculGeoNode* pPtCalcul = NULL)
-     * \brief Constructeur par defaut.
-     * Le constructeur par defaut de la classe TYTrajet
+     * \fn TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_)
+     * \brief Constructor
+     * \param asrc_ Source
+     * \param arcpt_ Receptor
      */
     TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcpt_);
     
     /**
      * \fn TYTrajet(const TYTrajet& other)
-     * \brief Constructeur par copie.
-     * Le constructeur par copie de la classe TYTrajet
+     * \brief Copy constructor
      */
     TYTrajet(const TYTrajet& other);
     /**
      * \fn virtual ~TYTrajet()
-     * \brief Destructeur.
-     * Le Destructeur de la classe TYTrajet
+     * \brief Destructor
      */
     virtual ~TYTrajet();
 
-    ///Operateur =.
+    ///Operator =.
     TYTrajet& operator=(const TYTrajet& other);
-    ///Operateur ==.
+    ///Operator ==.
     bool operator==(const TYTrajet& other) const;
-    ///Operateur !=.
+    ///Operator !=.
     bool operator!=(const TYTrajet& other) const;
 
     /**
      * \fn void reset()
-     * \brief Reset ce trajet.
+     * \brief Reset method.
      */
     void reset();
 
     /**
      * \fn double getDistance()
      *     const double getDistance()
-     * \brief Get/Set de la distance entre la source et le recepteur
+     * \brief Get/Set the distance between source and receptor
      * \return _distance
      */
     double getDistance() { return _distance; }
@@ -82,54 +81,54 @@ public:
 
     /**
      * \fn size_t getNbChemins()
-     * \brief Retourne le nombre de Chemins contenu par ce Trajet (en plus du Chemin direct).
+     * \brief Return the number of path in *this (in addition to the direct path).
      * \return _chemins.size()
      */
     size_t getNbChemins() { return _chemins.size(); }
 
     /**
      * \fn TYTabChemin& getChemins()
-     * \brief Retourne la collection de Chemins de ce Trajet.
+     * \brief Return the collection of paths of *this
      * \return _chemins
      */
     TYTabChemin& getChemins() { return _chemins; }
 
     /**
      * \fn TYTabChemin& getCheminsDirect()
-     * \brief Retourne le tableau des chemins direct
+     * \brief Return an array of the direct paths
      * \return _cheminsDirect
      */
     TYTabChemin& getCheminsDirect() {return  _cheminsDirect; }
 
     /**
      * \fn void addChemin(const TYChemin & chemin)
-     * \brief Ajoute un nouveau Chemin.
+     * \brief Add a new path
      */
     void addChemin(const TYChemin& chemin);
 
     /**
      * \fn void addCheminDirect(const TYChemin & chemin)
-     * \brief Ajoute un chemin au tableau des chemins directs
+     * \brief Add a new path to the array of direct paths
      */
     void addCheminDirect(const TYChemin& chemin);
 
     /**
      * \fn TYChemin getChemin(int index)
-     * \brief Retourn un chemin en fonction de son indice.
+     * \brief Return a path thanks to its index.
      * \return _chemins.at(index)
      */
     TYChemin getChemin(int index) { return _chemins.at(index); }
 
     /**
      * \fn OSpectre getPNoOp()
-     * \brief Renvoie l'attenuation du trajet sans calcul (calcul par une fonction externe)
+     * \brief Return the attenuation without computation (computed by an external function)
      */
     OSpectre getPNoOp();
 
     /**
      * \fn void setPtSetPtR(const OPoint3D& pt1, const OPoint3D& pt2)
      *     void getPtSetPtR(OPoint3D& pt1, OPoint3D& pt2)
-     * \brief Get/Set des points sources et recepteur
+     * \brief Get/Set points for source and receptor
      */
     void setPtSetPtR(const OPoint3D& pt1, const OPoint3D& pt2) { _ptS = pt1; _ptR = pt2; }
     void getPtSetPtR(OPoint3D& pt1, OPoint3D& pt2) { pt1 = _ptS; pt2 = _ptR; }
@@ -137,7 +136,7 @@ public:
     /**
      * \fn void setPtSetPtRfromOSeg3D(const OSegment3D& seg)
      *     void getPtSetPtRfromOSeg3D(OSegment3D& seg)
-     * \brief Get/Set des points sources et recepteurs a partir d'un OSegment3D
+     * \brief Get/Set points for source and receptor with an OSegment3D
      */
     void setPtSetPtRfromOSeg3D(const OSegment3D& seg) { _ptS = seg._ptA; _ptR = seg._ptB; }
     void getPtSetPtRfromOSeg3D(OSegment3D& seg) const { seg._ptA = _ptS, seg._ptB = _ptR; }
@@ -146,7 +145,7 @@ public:
      * \fn TYSpectre& getSpectre()
      *     const TYSpectre getSpectre()
      *     void setSpectre(const TYSpectre& spectre)
-     * \brief Get/Set du spectre au point de reception
+     * \brief Get/Set the spectrum at the receptor point
      * \return _sLP
      */
     //TYSpectre& getSpectre() { return _sLP; }
@@ -159,17 +158,17 @@ public:
 
     /**
      * \fn OSpectre getPEnergetique(const AtmosphericConditions& atmos)
-     * \brief Calcule la pression acoustique en module phase sur le trajet
+     * \brief Compute the acoustic pressure (phase modulation) on the journey
      */
     OSpectre getPEnergetique(const AtmosphericConditions& atmos);
 
     /**
      * \fn OSpectre getPInterference(const AtmosphericConditions& atmos)
-     * \brief Calcule la pression quadratique sur le trajet
+     * \brief Compute the quadratic pressure on the journey
      */
     OSpectre getPInterference(const AtmosphericConditions& atmos);
 
-    // Get the tab of rays
+    /// Get the tab of rays
     std::vector<acoustic_path*>& get_tab_rays() { return _tabRays;}
 
 private:
@@ -177,37 +176,37 @@ private:
     void build_tab_rays();
 
 public :
-    // Business source
+    /// Business source
     tympan::AcousticSource& asrc;
     tympan::source_idx asrc_idx;
 
-    // Business receptor
+    /// Business receptor
     tympan::AcousticReceptor& arcpt;
     tympan::receptor_idx arcpt_idx;
 
 
-    // Membres
+    // Members
 protected:
-    /// Definition du point source dans le repere du site
+    /// Source point definition in the site frame
     OPoint3D _ptS;
 
-    /// Definition du point recepteur dans le repere du site
+    /// Receptor point definition in the site frame
     OPoint3D _ptR;
 
-    ///La collection de Chemins. 
+    /// Paths collection
     TYTabChemin _chemins;
 
-    ///Collection des chemins "direct" sans obstacles
+    /// Direct paths collection (without obstacles)
     TYTabChemin _cheminsDirect;
 
-    ///Distance de la source au recepteur
+    ///Distance between source and receptor
     double _distance;
 
-    /// Spectre au point de reception du trajet integrant la divergence geometrique et la puissance de la source
+    /// Spectrum at the receptor point of the journey which integrates geometrical divergence and the source power
     //TYSpectre _sLP;
     OSpectre _sLP;
 
-    /// Vector of rays equivalent to chemin
+    /// Vector of rays (same than _chemins)
     std::vector<acoustic_path*> _tabRays;
 };
 #endif // __TY_TRAJET__

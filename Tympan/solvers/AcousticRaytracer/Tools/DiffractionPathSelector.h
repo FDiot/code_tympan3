@@ -18,13 +18,14 @@
 
 #include "Selector.h"
 
+/*!
+ * \brief : To invalid rays with path length difference (produced by diffraction effect) greater than a value
+ */
 template<typename T>
 class DiffractionPathSelector : public Selector<T>
 {
-/*!
- * \brief : Invalid rays with path length difference (produced by diffraction effect) greater than a value
- */
 public :
+	/// Constructor
     DiffractionPathSelector(double _maximumDelta = 8) : Selector<T>() { maximumDelta = _maximumDelta; }
     virtual Selector<T>* Copy()
     {
@@ -81,6 +82,7 @@ public :
 
         return SELECTOR_ACCEPT;
     }
+    /// Select the ray
     virtual void insert(T* r, unsigned long long& replace) { return; }
 
     virtual bool insertWithTest(T* r)
@@ -132,13 +134,14 @@ public :
 
         return true;
     }
-
+    /// Get maximumDelta
     double getMaximumDelta() { return maximumDelta; }
+    /// Set maximumDelta
     void setMaximumDelta(double _maximumDelta) { this->maximumDelta = _maximumDelta; }
 
 
 protected:
-    double maximumDelta;
+    double maximumDelta; //!< Maximal path length difference between rays produced by diffraction
 };
 
 #endif // DIFFRACTION_PATH_SELECTOR

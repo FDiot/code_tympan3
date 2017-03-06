@@ -17,20 +17,22 @@
 #define SPECULARREFLEXION_H
 
 #include "Event.h"
-
+/**
+ * \brief Specular reflection class Event
+ */
 class SpecularReflexion : public Event
 {
 
 public:
-
+	/// Default constructor
     SpecularReflexion(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL):
         Event(position, incomingDirection, _shape) { nbResponseLeft = initialNbResponse = 1; type = SPECULARREFLEXION;}
-
+    /// Copy constructor
     SpecularReflexion(const SpecularReflexion& other) : Event(other)
     {
         type = SPECULARREFLEXION;
     }
-
+    /// Destructor
     virtual ~SpecularReflexion()
     {
 
@@ -42,7 +44,7 @@ public:
     {
         return false;
     }
-
+    /// Get incident angle
     virtual double getAngle();
 };
 

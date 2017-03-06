@@ -22,7 +22,7 @@
 
 #include "Tympan/core/smartptr.h"
 
-//Useful threading defines
+// Useful threading defines
 #define TY_AUTO_MUTEX_NAME _mutex
 
 // Activate QT threading support
@@ -34,7 +34,10 @@
 #include <QWaitCondition>
 #include <QThread>
 
-// Classe pour l'acces aux methodes sleep protegees de la classe QThread
+/**
+ * \class OSleeper
+ * \brief Access to sleep protected methods of the QThread class
+ */
 class OSleeper : public QThread
 {
 public:
@@ -75,18 +78,18 @@ public:
 /**
  * \file threading.h
  * \class OMutexLocker
- * \brief Class utilisee comme objet RAII (Resource Acquisition Is Initialization)
+ * \brief Class used as RAII object (Resource Acquisition Is Initialization)
  * \author Projet_Tympan
  */
 
 class OMutexLocker
 {
 public:
-    // Constructeurs
+    /// Constructors
     OMutexLocker(QMutex& mutex);
     OMutexLocker(const QMutex& mutex);
 
-    // Destructeur
+    /// Destructor
     ~OMutexLocker();
 
 private:
@@ -116,27 +119,27 @@ class OThreadPool;
 /**
  * \file threading.h
  * \class OSlaveThread
- * \brief Cette classe definie un thread specialise pour l'execution de tâche dans une collection de thread. Thread esclave pour les collections de threads
+ * \brief This class defines a thread for running tasks in a threads collection. Slave thread for the threads collection.
  * \author Projet_Tympan
  */
 class OSlaveThread : public QThread
 {
 public:
-    // Construit un thread esclave pour une collection de thread
+    /// Build a slave thread for a threads collection
     OSlaveThread(OThreadPool* pool);
 
-    // Detruit le thread esclave; attent la fin du thread.
+    /// Destroy the slave thread; wait for the end of the thread.
     ~OSlaveThread();
 
     bool _bToEnd;
 
 protected:
-    /// Pointeur sur la collection de thread parente
+    /// Pointer on the parent threads collection
     OThreadPool* _pool;
 
     /**
      * \fn void run();
-     * \brief Execute une tâche en attente.
+     * \brief Run a waiting task.
      */
     void run();
 };
@@ -145,54 +148,54 @@ protected:
 /**
  * \file threading.h
  * \class OTask
- * \brief Tâche d'une collection de thread
+ * \brief Task of a threads collection
  *
- * Cette classe abstraite encapsule une tâche primitive pouvant etre executee dans une collection de thread.
- * Il est necessaire de la surcharger en implementant la methode virtuelle pure OTask::main qui
- * definie la tâche a effectuer.
- * Une tâche est poussee dans la collection de thread avec la methode OThreadPool::push,
- * elle commence a s'effectuer des lors qu'un thread est disponible.
- * Une tâche ne peut pas etre annulee apres son execution.
+ * This abstract class encapsulates a primitive task which can be run in a threads collections.
+ * It is necessary to overload it by the implementation of a pure virtual methode OTask::main
+ * which defines the task to run.
+ * A task is pushed into the threads collection with the OThreadPool::push method,
+ * which starts as soon as a thread is available.
+ * A task can't be cancelled after its run.
  *
  * \author Projet_Tympan
  */
 class OTask : public IRefCount, public QWaitCondition, public QMutex
 {
 public:
-    // Constructeur par default
+    /// Default constructor
     OTask();
 
-    // Destructeur : attend la fin de la tâche pour detruire
+    /// Destructor : waits for the end of the task to destroy it
     virtual ~OTask();
 
     /**
      * \fn bool isRunning() const;
-     * \brief Retourne true si la tâche est en cours d'execution, faux sinon
+     * \brief Return true if the task is running, false otherwise
      */
     bool isRunning() const;
 
     /**
      * \fn bool isCompleted() const;
-     * \brief Retourne true si la tâche est terminee, faux sinon
+     * \brief Return true if the task is completed, false otherwise
      */
     bool isCompleted() const;
 
     /**
      * \fn bool isCanceled() const;
-     * \brief Retourne true si la tâche a ete annulee, faux sinon
+     * \brief Return true if the task has been cancelled, false otherwise
      */
     bool isCanceled() const;
 
     /**
      * \fn virtual void main() = 0;
-     * \brief Procedure principale de la tâche.
-     * Cette methode virtuelle pure doit etre surchargee dans une classe derivee pour decrire la tâche a effectuer
+     * \brief Main routine of the task.
+     * This pure virtual method should be overloaded into an inherited class to describe the task to do.
      */
     virtual void main() = 0;
 
     /**
      * \fn void reset();
-     * \brief Reset le statut de la tâche (_running=false et _completed=false)
+     * \brief Reset the task status (_running=false and _completed=false)
      */
     void reset();
 
@@ -217,13 +220,13 @@ typedef SmartPtr<OTask> LPOTask;
 /**
  * \file threading.h
  * \class OThreadPool
- * \brief Collection de threads esclaves.
+ * \brief Slave threads collection.
  *
- * Cette classe definie une collection de threads esclaves qui execute les tâches presentent dans une file.
- * Une tâche est un simple objet qui contient la methode Task::main.
+ * This class define a slave threads collection which run tasks pending in a queue.
+ * A task is a simple object which contains the Task::main method.
  * Simple example :
  *
- *  #include "threading.h"
+ *  \#include "threading.h"
  *
  *  class MyTask : public OTask
  *  {
@@ -251,53 +254,53 @@ typedef SmartPtr<OTask> LPOTask;
 class OThreadPool : public std::vector<OSlaveThread*>, public QWaitCondition, public QMutex
 {
 public:
-    // Construit une collection de thread et alloue "slaves" thread esclaves
+    /// Build a threads collection and allocate "slaves" thread
     OThreadPool(unsigned int slaves);
 
-    // Destructeur
+    /// Destructor
     virtual ~OThreadPool();
 
     /**
      * \fn virtual void push(OTask* task);
-     * \brief Ajoute une tâche dans la queue
+     * \brief Add a task to the queue
      */
     virtual void push(OTask* task);
 
     /**
      * \fn unsigned int getTotalCount() const;
-     * \brief Retourne le nombre total de tâche
+     * \brief Return the total number of tasks
      */
     unsigned int getTotalCount() const;
 
     /**
      * \fn unsigned int getCount() const;
-     * \brief Retourne le compteur
+     * \brief Return the counter
      */
     unsigned int getCount() const;
 
     /**
      * \fn void begin(unsigned int count);
-     * \brief Debut du solveur
+     * \brief Begin solver
      */
     void begin(unsigned int count);
 
     /**
      * \fn bool end();
-     * \brief Fin du solveur
+     * \brief End solver
      */
     bool end();
 
 protected:
-    // Annule les tâches restantes
+    /// Cancel the pending tasks
     void stop();
 
-    /// Queue de tâches
+    /// Tasks queue
     std::queue<LPOTask> _tasks;
 
-    /// Total de tâches a effectuer
+    /// Total number of tasks to run
     unsigned int _totalCount;
 
-    /// Compteur des tâches terminees
+    /// Total number of ended tasks
     unsigned int _counter;
 
     friend class OSlaveThread;

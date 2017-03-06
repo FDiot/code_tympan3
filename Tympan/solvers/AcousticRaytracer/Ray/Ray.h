@@ -27,18 +27,18 @@
 using namespace std;
 
 
-/*!
- * brief : signature describes a ray by a pair of unsigend int. The first one gives the source number (in the range 0-4095)
- *         and the receptor the receptor number (in the range 0-1048576) as a bit field.
- *         The second one decribe the sequences of events by their types (user could decide what 1 represent, may be REFLEXION
+typedef std::pair<bitSet, bitSet> signature;
+/**
+ * \brief : Describes a ray by a pair of unsigned int. The first one gives the source number (in the range 0-4095)
+ *         and the receptor number (in the range 0-1048576) as a bit field.
+ *         The second one describes the sequences of events by their types (user could decide what 1 represent, may be REFLEXION
  *         or DIFFRACTION)
  */
-typedef std::pair<bitSet, bitSet> signature;
-
 class Ray : public Base
 {
 
 public:
+	/// Constructors
     Ray() : Base(), position(), direction(), mint(0), maxt(100000), source(NULL), recepteur(NULL), nbReflexion(0), nbDiffraction(0), cumulDistance(0.), cumulDelta(0.)
 	{ 
 		name = "unknow ray"; 
@@ -48,7 +48,7 @@ public:
     { 
 		name = "unknow ray";
 	}
-
+    /// Copy constructors
     Ray(const Ray& other) : Base(other)
     {
         position = vec3(other.position);
@@ -89,31 +89,34 @@ public:
 		cumulDelta = other->cumulDelta;
 
     }
-
+    /// Destructor
     virtual ~Ray() { }
 
 	/*!
 	 * \fn decimal computeEventsSequenceLength()
-	 * \brief compute the length of the sequence of events 
+	 * \brief Compute the length of the sequence of events
 	 */
 	decimal computeEventsSequenceLength();
 
 	/*!
     * \fn void computeLongueur()
-    * \brief Calcul la distance parcourue par le rayon et place le resultat dans longueur
+    * \brief Compute the distance traveled (length) by the ray and the result is set into the longueur attribute
     */
     void computeLongueur();
 
     /*!
-     * \fn decimal computeTrueLength(vec3& nearestPoint);
-	 * \brief	Compute ray lenfth from source to the nearest point 
-	 *			of the "event" located at ref position
+     * \fn decimal computeTrueLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
+     * \brief	Compute ray length from source to the nearest point
+     *			of the "event" located at ref position
+     * \param ref
+     * \param lastPos
+     * \param closestPoint
      */
 	decimal computeTrueLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
 
     /*!
-     * \fn decimal computePertinentLength(vec3& nearestPoint);
-     * \brief Compute ray lenfth from last pertinent event (i.e. source or last diffraction
+     * \fn decimal computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
+     * \brief Compute ray length from last pertinent event (i.e. source or last diffraction
 	 *        to the nearest point of the "event" located at ref position
      */
 	decimal computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
@@ -142,22 +145,22 @@ public:
 
     /*!
     * \fn double getLongueur()
-    * \brief Renvoie la distance parcourue par le rayon
-    * \return Distance parcourue par le rayon.
+    * \brief Return the traveled distance by the ray
+    * \return Traveled distance by the ray.
     */
     double getLongueur() const {return longueur;}
 
     /*!
     * \fn unsigned int getDiff()
-    * \brief Renvoie le nombre de diffractions realisees par le rayon parcourue par le rayon
-    * \return Nombre de diffractions realisees par le rayon.
+    * \brief Return the diffractions number encountered by the ray.
+    * \return Reflections diffractions encountered by the ray.
     */
     unsigned int getDiff() { return nbDiffraction; }
 
     /*!
     * \fn unsigned int getReflex()
-    * \brief Renvoie le nombre de reflexions realisees par le rayon parcourue par le rayon
-    * \return Nombre de reflexions realisees par le rayon.
+    * \brief Return the reflections number encountered by the ray.
+    * \return Reflections number encountered by the ray.
     */
     unsigned int getReflex() { return nbReflexion; }
 
@@ -169,33 +172,41 @@ public:
 
     /*!
     * \fn std::vector<QSharedPointer<Event> >* getEvents()
-    * \brief Renvoie le tableau des evenements rencontres par le rayon
-    * \return Tableau des evenements rencontres par le rayon.
+    * \brief Return the events array encountered by the ray
+    * \return Events array encountered by the ray.
     */
     std::vector<QSharedPointer<Event> >* getEvents() { return &events; }
 
     /*!
     * \fn const std::vector<QSharedPointer<Event> >* getEvents() const
-    * \brief Renvoie le tableau des evenements rencontres par le rayon
-    * \return Tableau des evenements rencontres par le rayon.
+    * \brief Return the events array encountered by the ray
+    * \return Events array encountered by the ray.
     */
     const std::vector<QSharedPointer<Event> >* getEvents() const { return &events; }
 
+    /**
+     * \fn getFaceHistory()
+     * \brief Return the array of faces id encountered by the ray
+     */
     vector<unsigned int>getFaceHistory();
 
+    /**
+     * \fn getPrimitiveHistory()
+     * \brief Return the array of primitives id encountered by the ray
+     */
     vector<unsigned int> getPrimitiveHistory();
 
     /*!
     * \fn Source* getSource()
-    * \brief Renvoie la source d'un rayon
-    * \return Pointeur vers la source du rayon
+    * \brief Return the ray source
+    * \return Pointer to the source
     */
     Source* getSource() { return source; }
 
     /*!
     * \fn Recepteur* getRecepteur()
-    * \brief Renvoie le recepteur d'un rayon.
-    * \return Pointeur vers le recepteur rayon. Renvoie NULL si le rayon n'a pas de recepteur associe
+    * \brief Return the ray receptor.
+    * \return Pointer to the ray receptor. NULL if the ray has no associated receptor
     */
     void* getRecepteur() { return recepteur; }
 
@@ -206,22 +217,21 @@ public:
     signature getSignature(const typeevent& typeEv = SPECULARREFLEXION);
 
     /*!
-	 * \fn decimal getThick( const decimal& distance, bool diffraction) const;
-     * \brief Compute thickness of the ray after covering a distance distance for spherical or diffraction source
+     * \fn decimal getThickness( const decimal& distance, bool diffraction);
+     * \brief Compute thickness of the ray after covering a distance for spherical or diffraction source
      */
 	decimal getThickness( const decimal& distance, bool diffraction);
 
     /*!
-	 * \fn decimal getSolidAngle( bool &diffraction)
+     * \fn decimal getSolidAngle( bool &diffraction)
      * \brief   Compute solid angle associated with the ray
-     *          Set diffraction true if last pertinent event
-     *          is a diffraction
+     * \param diffraction Set diffraction true if last pertinent event is a diffraction
      */
 	decimal getSolidAngle( bool &diffraction );
 
     /*!
      * \fn bitSet getSRBitSet(const unsigned& int source_id, const unsigned int & receptor_id);
-     * \brief compute the bitSet associated with a source and a receptor
+     * \brief Compute the bitSet associated with a source and a receptor
      */
     inline bitSet getSRBitSet(const unsigned int& source_id, const unsigned int& receptor_id)
     {
@@ -234,25 +244,25 @@ public:
 
     /*!
      * \fn bitSet getEventsBitSet(const typeevent& typeEv);
-     * \brief compute the bitSet associated with a list of events of type evType
+     * \brief Compute the bitSet associated with a list of events of type evType
      */
     bitSet getEventsBitSet(const typeevent& typeEv);
 
 public:
-    vec3 position;                              /*!< Point de depart du rayon */
-    vec3 direction;                             /*!< vecteur directeur du rayon a la source */
-    vec3 finalPosition;                         /*!< Point d'arrivee du rayon */
+    vec3 position;                              //!< Starting point ray
+    vec3 direction;                             //!< Direction vector for the ray at the source
+    vec3 finalPosition;                         //!< Ending point of the ray
     decimal mint;
     decimal maxt;
-    Source* source;                             /*!< Pointeur vers la source du rayon */
-    void* recepteur;                            /*!< Pointeur vers le recepteur du rayon */
-    std::vector<QSharedPointer<Event> > events; /*!< Liste d'evenements subis par le rayon */
-    decimal longueur;                           /*!< Distance parcourue par le rayon */
-    unsigned long long int constructId;         /*!< Identifiant du rayon */
-    unsigned int nbReflexion;                   /*!< Nombre de reflexions subis par le rayon */
-    unsigned int nbDiffraction;                 /*!< Nombre de diffractions subis par le rayon */
-	decimal cumulDistance;						/*!< Distance cumulee parcourue par le rayon calculee à chaque étape */
-	decimal cumulDelta;							/*!< Difference de marche cumulé par le rayon calculee à chaque etape */
+    Source* source;                             //!< Pointer to the source of the ray
+    void* recepteur;                            //!< Pointer to the receptor of the ray
+    std::vector<QSharedPointer<Event> > events; //!< Events list for the ray
+    decimal longueur;                           //!< Distance traveled by the ray
+    unsigned long long int constructId;         //!< Ray id
+    unsigned int nbReflexion;                   //!< Reflections number for the ray
+    unsigned int nbDiffraction;                 //!< Diffractions number for the ray
+    decimal cumulDistance;                      //!< Cumulative distance by the ray computed at each step
+    decimal cumulDelta;                         //!< Cumulative walking step difference by the ray computed at each step
 };
 
 
