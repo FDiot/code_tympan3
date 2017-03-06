@@ -23,11 +23,14 @@
 #ifndef __TYFACESELECTORINTERFACE__
 #define __TYFACESELECTORINTERFACE__
 
+/**
+ * \brief Interface of TYFaceSelector classes
+ */
 class TYFaceSelectorInterface
 {
 public:
-    TYFaceSelectorInterface() { }
-    virtual ~TYFaceSelectorInterface() { }
+    TYFaceSelectorInterface() { }            //!< Constructor
+    virtual ~TYFaceSelectorInterface() { }   //!< Destructor
 };
 
 #endif // __TYFACESELECTORINTERFACE__

@@ -18,6 +18,12 @@
 #include <sstream>
 #include <limits>
 
+/**
+ * Leaf initialization
+ * @param _nbPrims    Number of primitives
+ * @param _firstIndex First index of the primitive
+ * @param _prims      Array containing the primitives indexes
+ */
 void KDNode::createLeaf(unsigned int _nbPrims, unsigned int _firstIndex, unsigned int* _prims)
 {
     flag = 3;

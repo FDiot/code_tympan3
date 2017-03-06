@@ -18,13 +18,14 @@
 
 #include "Selector.h"
 
+/*!
+ * \brief : To disable ray with a number of diffraction events greater than a threshold value
+*/
 template<typename T>
 class DiffractionSelector : public Selector<T>
 {
-/*
- * \brief : disable ray with a number of diffraction events greater than a threshold value
-*/
 public :
+	/// Constructor
     DiffractionSelector(int _maxDiffractionOrder = 1, OPERATOR _op = LESS_OR_EQUAL) : Selector<T>()
     {
         maxDiffractionOrder = _maxDiffractionOrder;
@@ -116,16 +117,18 @@ public :
         }
         return true;
     }
-
+    /// Get maxDiffractionOrder
     int getMaximumDiffractionOrder() { return maxDiffractionOrder; }
+    /// Set maxDiffractionOrder
     void setMaximumDiffractionOrder(int _maxDiffractionOrder) { maxDiffractionOrder = _maxDiffractionOrder; }
-
+    /// Get the Operator used by this Selector
     OPERATOR getOperator() { return op; }
+    /// Set the Operator used by this Selector
     void setOperator(OPERATOR _op) { op = _op; }
 
 protected:
-    int maxDiffractionOrder;
-    OPERATOR op;
+    int maxDiffractionOrder; //!< Maximal number of possible diffractions
+    OPERATOR op;			//!< Operator selected (by default LESS_OR_EQUAL, so it keep rays with a number of diffractions less or equal to maxDiffractionOrder)
 };
 
 #endif

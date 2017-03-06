@@ -101,7 +101,7 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
         }
     }
 
-    // Create "comp", a vector colinear with segment found ahead
+    // Create "comp", a vector colinear with a segment found ahead
     vec3 proj = otherVertex.closestPointOnLine(p1->getVertices()->at(seg.first), p1->getVertices()->at(seg.second));
 
     vec3 comp = otherVertex - proj;

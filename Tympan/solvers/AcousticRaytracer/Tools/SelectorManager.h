@@ -22,14 +22,17 @@
 #include <QMutexLocker>
 
 
-
+/**
+ * \brief Selector manager
+ */
 template<typename T>
 class SelectorManager
 {
 
 public:
+	/// Constructor
     SelectorManager() : deletable(true) { mutex = new QMutex;}
-
+    /// Copy constructor
     SelectorManager(const SelectorManager<T>& manager)
     {
         deletable = manager.deletable;
@@ -40,16 +43,18 @@ public:
         }
 
     }
-
+    /// Destructor
     virtual ~SelectorManager() { delete mutex; }
 
-
+    /// Set deletable flag
     void setDeletable(bool _isDeletable) { deletable = _isDeletable; }
+    /// Return true if this may be deleted
     bool isDeletable() { return deletable; }
-
+    /// Add a Selector to the list
     void addSelector(Selector<T> *selector) { selectors.push_back(selector); }
+    /// Return the Selector's list
     std::vector<Selector<T>*>& getSelectors() const { return selectors; }
-
+    /// Reset all the Selector and clear the local data
     void reset()
     {
         for (unsigned int i = 0; i < selectors.size(); i++)
@@ -75,7 +80,7 @@ public:
             selectedData.clear();
         }
     }
-
+    /// Append data (typically a ray) and loop on Selectors to filter
     bool appendData(T* data)
     {
         vector<unsigned long long> dataToReplace;
@@ -137,17 +142,17 @@ public:
         //cout << "Insertion du rayon dans chaque solver passe avec succes." << endl;
         return true;
     }
-
+    /// Get the selected data
     std::map<unsigned long long, T*>& getSelectedData() { return selectedData; }
 
 protected:
-    bool deletable;
-    std::vector<Selector<T>*> selectors;
+    bool deletable;										//!< Flag to know if a data may be deleted if rejected (by default, yes)
+    std::vector<Selector<T>*> selectors;				//!< Pointers list of Selector
 
-    std::map<unsigned long long, T*> selectedData;
-    std::map<unsigned long long, T*> rejectedData;
+    std::map<unsigned long long, T*> selectedData;		//!< Contains accepted data (rays)
+    std::map<unsigned long long, T*> rejectedData;		//!< Contains rejected data (rays) if deletable set to false
 
-    QMutex* mutex;
+    QMutex* mutex;	//!< To provide a serialization between threads
 
 };
 

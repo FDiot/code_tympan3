@@ -23,8 +23,12 @@
 #include "Tympan/solvers/AcousticRaytracer/Tools/TargetManager.h"
 #endif _ALLOW_TARGETING_
 
+/**
+ * \brief Namespace for post-treatment
+ */
 namespace PostTreatment
 {
+/// Build the edges list of a scene
 bool constructEdge(Scene* scene);
 
 #ifdef _ALLOW_TARGETING_

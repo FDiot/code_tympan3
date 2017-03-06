@@ -24,7 +24,7 @@
 
 /**
  * \file TYChemin.h
- * \brief representation un des parcours le plus optimal de S--->R
+ * \brief Representation of one of the most optimal path between source and receptor: S--->R
  * \author Projet_Tympan
  * \version v1.1
  */
@@ -32,49 +32,46 @@
 typedef enum {CHEMIN_DIRECT, CHEMIN_SOL, CHEMIN_ECRAN, CHEMIN_REFLEX} TYTypeChemin;
 /**
  * \class TYChemin
- *  \brief representation un des parcours le plus optimal de S--->R
- *  La classe Chemin permet de representer un des parcours entre une Source et un Recepteur. Elle est principalement composee d'une collection d'Etapes.
+ *  \brief Representation of one of the most optimal path between source and receptor: S--->R.
+ *  The class TYChemin represents a path between a Source and a receptor (Recepteur class). It's constituted of a collection of steps (TYEtape class).
  */
 class TYChemin
 {
-    // Methodes
+    // Methods
 public:
     /**
      * \fn TYChemin()
-     *\brief Constructeur.
-     *\ constucteur de la classe TYChemin
+     *\brief Constructor
      */
     TYChemin();
     /**
      * \fn TYChemin(const TYChemin& other)
-     *\brief Constructeur par copie.
-     *\ constucteur de la classe TYChemin
+     *\brief Copy contructor
      */
     TYChemin(const TYChemin& other);
     /**
      * \fn virtual ~TYChemin()
-     * \brief Destructeur.
-     * Deconstructeur de la classe TYChemin
+     * \brief Destructor
      */
     virtual ~TYChemin();
 
-    ///Operateur =.
+    ///Operator =.
     TYChemin& operator=(const TYChemin& other);
-    ///Operateur ==.
+    ///Operator ==.
     bool operator==(const TYChemin& other) const;
-    ///Operateur !=.
+    ///Operator !=.
     bool operator!=(const TYChemin& other) const;
 
     /**
      * \fn void calcAttenuation(const TYTabEtape& tabEtapes, const AtmosphericConditions & atmos)
-     * \brief Calcule l'attenuation globale du chemin
+     * \brief Compute the global attenuation on the path
      */
     void calcAttenuation(const TYTabEtape& tabEtapes, const AtmosphericConditions& atmos);
 
     /**
      * \fn OSpectreComplex& getAttenuation()
      *     const OSpectreComplex& getAttenuation()
-     * \brief Retourne l'attenuation du chemin
+     * \brief Return the path attenuation
      * \return _attenuation
      */
     OSpectreComplex& getAttenuation() { return _attenuation; }
@@ -82,14 +79,14 @@ public:
 
     /**
      * \fn void setAttenuation (const OSpectreComplex& att)
-     * \brief Set de l'attenuation
+     * \brief Set the attenuation
      */
     void setAttenuation(const OSpectreComplex& att) { _attenuation = att; }
     /**
     * \fn double getLongueur()
     *     const double getLongueur()
     *     void setLongueur(const double & longueur)
-    *\brief Get/Set de la longueur du chemin
+    *\brief Get/Set the path length
     *\return _longueur
     */
     double getLongueur() { return _longueur; }
@@ -101,7 +98,7 @@ public:
     * \fn   double getDistance()
     *       const double getDistance()
     *       void setDistance(const double & distance)
-    * \brief Get/Set de la distance de la source au recepteur
+    * \brief Get/Set the distance between source and receptor
     *\return _distance
     *
     */
@@ -112,37 +109,37 @@ public:
 
     /**
      *\fn void setType(const int& type)
-     *\brief Change le type du chemin
+     *\brief Change the path type
      */
     void setType(const int& type) { _typeChemin = (TYTypeChemin)type; } const
 
     /**
      * \fn int getType()
-     * \brief Retourne le type du chemin
+     * \brief Return the path type
      * \return _typeChemin
      */
     int getType() const { return _typeChemin; }
 
     /*!
      * \fn void build_eq_path();
-     * \brief build an acoustic_path from the tab of etapes
+     * \brief Build an acoustic_path from the an array tab of steps
      */
     void build_eq_path(const TYTabEtape& tabEtapes);
 
     acoustic_path* get_ray() { return _eq_path; }
 
-    // Membres
+    // Members
 protected:
-    ///Le type de chemin (influe sur le traitement)
+    /// Path type (has an influence on the algorithm)
     TYTypeChemin _typeChemin;
 
-    /// Longueur totale du chemin
+    /// Total path length
     double _longueur;
 
-    /// Distance (a vol d'oiseau) de la source au recepteur
+    /// Direct distance between source and receptor
     double _distance;
 
-    /// Spectre d'attenuation du chemin
+    /// Attenuation spectrum of the path
     OSpectreComplex _attenuation;
 
     /// Equivalent acoustic_path
@@ -150,7 +147,7 @@ protected:
 };
 
 
-///Collection de TYChemin.
+///TYChemin collection
 typedef std::deque<TYChemin> TYTabChemin;
 
 

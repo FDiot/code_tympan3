@@ -18,29 +18,34 @@
 
 #include <string>
 
+/**
+ * \brief Base class of Event, Material, PostFilter, Ray, Repere, Scene, Shape, Simulation, Source
+ */
 class Base
 {
 
 public:
+	/// Default constructor
     Base()
     {
         name = "unkown element";
     }
+    /// Copy constructor
     Base(const Base& other)
     {
         name = other.name;
     }
-
+    /// Destructor
     virtual ~Base()
     {
     }
-
+    /// Get the name of the object
     std::string getName() { return name; }
-
+    /// Set the name of the object
     void setName(const std::string& _name) { name = _name; }
 
 protected:
-    std::string name;
+    std::string name; //!< Each instantiated object may be named
 };
 
 #endif

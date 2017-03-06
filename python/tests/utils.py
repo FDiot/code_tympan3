@@ -35,7 +35,7 @@ TEST_SOLVERS_DIR = os.environ.get('TYMPAN_SOLVERDIR')
 if not TEST_SOLVERS_DIR:
     for d in ('pluginsd', 'plugins'):
         TEST_SOLVERS_DIR = osp.join(PROJECT_BASE, d)
-        if osp.isdir(TEST_SOLVERS_DIR):
+        if osp.isdir(TEST_SOLVERS_DIR) and os.listdir(TEST_SOLVERS_DIR):
             break
     else:
         raise RuntimeError("The test solver plugins dir wasn't found")

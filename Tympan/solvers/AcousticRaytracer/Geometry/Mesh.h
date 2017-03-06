@@ -18,17 +18,22 @@
 
 #include "Shape.h"
 
+/**
+ * \brief Mesh class
+ */
 class Mesh : public Shape
 {
 
 public:
+	/// Constructors
     Mesh() { };
     Mesh(const Mesh& other) { };
-
+    /// Destructor
     virtual ~Mesh() { clear(); };
-
+    /// Clear arrays
     void clear();
 
+    /// Get/Set the vertices of the mesh
     std::vector<vec3>& getVertices() { return vertices; }
     void setVertices(const std::vector<vec3> &_vertices)
     {
@@ -38,6 +43,7 @@ public:
         }
     }
 
+    /// Get/Set triangles of the mesh
     std::vector<ivec3>& getTriangles() { return triangles; }
     void setTriangles(const std::vector<ivec3> &_triangles)
     {
@@ -46,15 +52,15 @@ public:
             triangles.push_back(ivec3(_triangles.at(i)));
         }
     }
-
+    /// Add a triangle to the mesh with the material m
     bool addTriangle(const ivec3 newTriangle, Material* m);
 
     virtual bool getIntersection(Ray& ray, Intersection& inter) { return false; }
 
 
 protected:
-    std::vector<vec3> vertices;
-    std::vector<ivec3> triangles;
+    std::vector<vec3> vertices;		//!< Vertices of the mesh
+    std::vector<ivec3> triangles;	//!< Triangles of the mesh
 
 };
 #endif

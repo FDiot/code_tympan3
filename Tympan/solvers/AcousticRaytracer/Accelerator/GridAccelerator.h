@@ -28,9 +28,11 @@ struct Voxel;
 // Voxel Declarations
 struct Voxel
 {
-    // Voxel Public Methods
+    /// Get size
     uint32_t size() const { return primitives.size(); }
+    /// Default constructor
     Voxel() { allCanIntersect = true; }
+    /// Constructor
     Voxel(Shape* op)
     {
         allCanIntersect = true;
@@ -42,18 +44,21 @@ struct Voxel
     }
     bool Intersect(Ray* ray, std::list<Intersection> &result, decimal& intermin, leafTreatment::treatment choice);
 private:
-    std::vector< Shape* > primitives;
-    bool allCanIntersect;
+    std::vector< Shape* > primitives; //!< Vector containing the primitives
+    bool allCanIntersect;	//!< Flag not used
 };
 
 
-
+/**
+ * \brief Regular grid Accelerator
+ */
 class GridAccelerator : public Accelerator
 {
 
 public:
+	/// Constructor
     GridAccelerator(std::vector<Shape*>* _initialMesh = NULL, BBox _globalBox = BBox());
-
+    /// Destructor
     virtual ~GridAccelerator()
     {
         for (int i = 0; i < nVoxels[0]*nVoxels[1]*nVoxels[2]; ++i)
@@ -64,34 +69,37 @@ public:
     virtual bool build();
 
     virtual decimal traverse(Ray* r, std::list<Intersection> &result) const;
-
+    /// Set maximal depth
     void setMaxProfondeur(int _maxProfondeur) { maxProfondeur = _maxProfondeur; }
+    /// Get maximal depth
     int getMaxProfondeur() { return maxProfondeur; }
-
+    /// Set maximal primitives per leaf
     void setMaxPrimPerLeaf(int _maxPrimPerLeaf) { maxPrimPerLeaf = _maxPrimPerLeaf; }
+    /// Get maximal primitives per leaf
     int getMaxPrimPerLeaf() { return maxPrimPerLeaf; }
-
+    /// Print (not implemented)
     void print();
-
+/* Uncommented cause not used:
     bool alreadyFail;
     unsigned int nbFail;
     Ray r;
     bool trace;
-
+*/
 protected:
 
-    std::vector<Shape*> primitives; //Different de initialMesh, est reordonne par rapport a la structure
-    BBox globalBox;
+    std::vector<Shape*> primitives; //!< Pointer to all the shapes (different from initialMesh) as it is reordered
+    BBox globalBox;			//!< Root bounding box
 
-    int maxProfondeur;
-    int maxPrimPerLeaf;
+    int maxProfondeur;		//!< Maximal depth
+    int maxPrimPerLeaf;		//!< Maximal primitives per leaf
 
-    int realMaxProfondeur;
-
+    int realMaxProfondeur;	//!< Real maximal depth
+/* Uncommented cause unused:
     float isectCost;
     float emptyBonus;
     float traversalCost;
-
+*/
+private:
     // GridAccel Private Methods
     int posToVoxel(const vec3& P, int axis) const
     {

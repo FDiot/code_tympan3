@@ -18,13 +18,13 @@
 
 #include "Event.h"
 
+/**
+ * \brief Event that is only a point in a ray path with no direction change
+ */
 class DoNothing : public Event
 {
-/*
- * Event that is only a point in a ray path with no direction change
- */
 public:
-
+	/// Constructors
     DoNothing(const vec3& position = vec3(0.0, 0.0, 0.0), const vec3& incomingDirection = vec3(0.0, 0.0, 0.0), Shape* _shape = NULL):
         Event(position, incomingDirection, _shape) { nbResponseLeft = initialNbResponse = 1; type = NOTHING;}
 
@@ -32,7 +32,7 @@ public:
     {
         type = NOTHING;
     }
-
+    /// Destructor
     virtual ~DoNothing()
     {
 

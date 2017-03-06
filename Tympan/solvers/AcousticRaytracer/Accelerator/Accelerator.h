@@ -20,10 +20,14 @@
 #include "LeafTreatment.h"
 #include <list>
 
+/**
+ * @brief Base class for accelerators
+ */
 class Accelerator
 {
 
 public:
+	/// Constructors
     Accelerator() { intersectionChoice = leafTreatment::FIRST; defineLeafFunction(); }
     Accelerator(std::vector<Shape*> *_shapes, BBox& _globalBox) : shapes(_shapes),
 																  globalBox(_globalBox)
@@ -31,7 +35,7 @@ public:
         intersectionChoice = leafTreatment::FIRST;
 		defineLeafFunction();
     }
-
+    /// Copy constructor
     Accelerator(const Accelerator& other)
     {
         shapes = other.shapes;
@@ -39,17 +43,19 @@ public:
         intersectionChoice = other.intersectionChoice;
 		pLeafTreatmentFunction = other.pLeafTreatmentFunction;
     }
-
+    /// Destructor
     virtual ~Accelerator() { }
 
+    /// Get/Set the Intersection choice
     leafTreatment::treatment getIntersectionChoice() { return intersectionChoice; }
     void setIntersectionChoice(leafTreatment::treatment _intersectionChoice = leafTreatment::FIRST) { intersectionChoice = _intersectionChoice; }
-
+    /// Build this accelerator
     virtual bool build() { return false; }
-
+    /// Run this accelerator
     virtual decimal traverse(Ray* r, std::list<Intersection> &result) const { return -1.; }
 
 protected:
+    /// To define leaf function
 	void defineLeafFunction()
 	{
 		switch (intersectionChoice)
@@ -72,13 +78,12 @@ protected:
 		}
 	}
 
-	// Pointeur sur la fonction de traitement de "feuilles"
-	decimal (*pLeafTreatmentFunction) (std::list<Intersection> &, decimal);
+	decimal (*pLeafTreatmentFunction) (std::list<Intersection> &, decimal); //!< Pointer to the treatment function of leaf
 
-    leafTreatment::treatment intersectionChoice;
+    leafTreatment::treatment intersectionChoice;	//!< Intersection choice
 
-    std::vector<Shape*> *shapes;
-    BBox globalBox;
+    std::vector<Shape*> *shapes;					//!< Vector of pointers to shapes
+    BBox globalBox;									//!< Global bounding box
 };
 
 #endif
