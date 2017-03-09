@@ -34,7 +34,7 @@ add_custom_command(OUTPUT ${SOLVER_PARAMS_HEADER}
 
 # Update some files into AcousticRaytracer/Geometry from models/common to create an external AcousticRayTracer library:
 set(SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/models/common")
-set(TARGET_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/solvers/AcousticRaytracer/Geometry")
+set(TARGET_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/geometric_methods/AcousticRaytracer/Geometry")
 foreach(file 3d.cpp;3d.h;mathlib.h;config.h)
 add_custom_command(OUTPUT ${TARGET_DIRECTORY}/${file}
                    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/copy_add_header.py -r "${CMAKE_SOURCE_DIR}" -i "${SOURCE_DIRECTORY}/${file}" -o "${TARGET_DIRECTORY}/${file}"
@@ -166,7 +166,6 @@ install_tympan_component(tympan_solver_model)
 file(GLOB TYMPAN_SOLVER_DEFAULT_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/DefaultSolver/*.cpp solvers/DefaultSolver/*.h
     solvers/DefaultSolver/*/*.cpp solvers/DefaultSolver/*/*.h
-    solvers/DefaultSolver/ConvexHullFinder/*.cpp solvers/DefaultSolver/ConvexHullFinder/*.h
 )
 set_property(SOURCE ${TYMPAN_SOLVER_DEFAULT_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
 link_directories(${CGAL_LIBRARIES_DIR})
@@ -177,6 +176,7 @@ target_link_libraries(tympan_solver_default
     tympan_common
     tympan_solver_model
     tympan_acousticraytracer
+    tympan_convexhullfinder
 )
 configure_tympan_plugin(tympan_solver_default)
 install_tympan_plugin(tympan_solver_default)
@@ -200,23 +200,41 @@ target_link_libraries(tympan_solver_anime3d
 configure_tympan_plugin(tympan_solver_anime3d)
 install_tympan_plugin(tympan_solver_anime3d)
 
+######### Geometric libraries #######################################################
 ######### AcousticRayTracer #######################################################
 file(GLOB TYMPAN_ACOUSTICRAYTRACER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-    solvers/AcousticRaytracer/*.cpp solvers/AcousticRaytracer/*.h
-    solvers/AcousticRaytracer/*/*.cpp solvers/AcousticRaytracer/*/*.h
+    geometric_methods/AcousticRaytracer/*.cpp geometric_methods/AcousticRaytracer/*.h
+    geometric_methods/AcousticRaytracer/*/*.cpp geometric_methods/AcousticRaytracer/*/*.h
 )
-add_library(tympan_acousticraytracer ${TYMPAN_COMPONENT_TYPE} MODULE ${TYMPAN_ACOUSTICRAYTRACER_SRCS})
-set_property(TARGET tympan_acousticraytracer PROPERTY FOLDER "Tympan/solvers/AcousticRaytracer")
+add_library(tympan_acousticraytracer ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_ACOUSTICRAYTRACER_SRCS})
+set_property(TARGET tympan_acousticraytracer PROPERTY FOLDER "Tympan/geometric_methods/AcousticRaytracer")
 install_tympan_component(tympan_acousticraytracer)
 
 ######### AnalyticRayTracer #######################################################
 file(GLOB TYMPAN_ANALYTICRAYTRACER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-    solvers/AnalyticRayTracer/*.cpp solvers/AnalyticRayTracer/*.h
-    solvers/AnalyticRayTracer/*/*.cpp solvers/AnalyticRayTracer/*/*.h
+    geometric_methods/AnalyticRayTracer/*.cpp geometric_methods/AnalyticRayTracer/*.h
+    geometric_methods/AnalyticRayTracer/*/*.cpp geometric_methods/AnalyticRayTracer/*/*.h
 )
-add_library(tympan_analyticraytracer ${TYMPAN_COMPONENT_TYPE} MODULE ${TYMPAN_ANALYTICRAYTRACER_SRCS})
-set_property(TARGET tympan_analyticraytracer PROPERTY FOLDER "Tympan/solvers/AnalyticRayTracer")
+add_library(tympan_analyticraytracer ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_ANALYTICRAYTRACER_SRCS})
+set_property(TARGET tympan_analyticraytracer PROPERTY FOLDER "Tympan/geometric_methods/AnalyticRayTracer")
+target_link_libraries(tympan_analyticraytracer
+    ${QT_QTCORE_LIBRARY} # threading QMutex, QThread, QWaitCondition
+    tympan_common
+    tympan_acousticraytracer
+)
 install_tympan_component(tympan_analyticraytracer)
+
+######### ConvexHullFinder #######################################################
+file(GLOB TYMPAN_CONVEXHULLFINDER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    geometric_methods/ConvexHullFinder/*.cpp geometric_methods/ConvexHullFinder/*.h
+)
+add_library(tympan_convexhullfinder ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_CONVEXHULLFINDER_SRCS})
+set_property(TARGET tympan_convexhullfinder PROPERTY FOLDER "Tympan/geometric_methods/ConvexHullFinder")
+target_link_libraries(tympan_convexhullfinder
+    ${QT_QTCORE_LIBRARY} # threading QMutex, QThread, QWaitCondition
+    tympan_common
+)
+install_tympan_component(tympan_convexhullfinder)
 
 # main app #####################################################################
 

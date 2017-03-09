@@ -21,7 +21,7 @@
 #include "Tympan/solvers/DefaultSolver/TYTrajet.h"
 #include "Tympan/solvers/DefaultSolver/TYSolver.h"
 #include "Tympan/models/common/mathlib.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Scene.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Scene.h"
 #include "TYAcousticModel.h"
 #include "TYSolver.h"
 

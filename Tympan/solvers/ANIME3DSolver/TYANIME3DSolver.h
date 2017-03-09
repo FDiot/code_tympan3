@@ -26,7 +26,7 @@
 #include "Tympan/models/common/acoustic_path.h"
 #include "Tympan/models/solver/entities.hpp"
 #include "Tympan/models/solver/config.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/Logger.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/Logger.h"
 
 class TYANIME3DAcousticModel;
 class TYANIME3DAcousticPathFinder;

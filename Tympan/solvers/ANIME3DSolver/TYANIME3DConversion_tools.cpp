@@ -1,6 +1,6 @@
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Shape.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Cylindre.h"
-#include "Tympan/solvers/AcousticRaytracer/Acoustic/Recepteur.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Shape.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "TYANIME3DConversion_tools.h"
 
 namespace Tools
