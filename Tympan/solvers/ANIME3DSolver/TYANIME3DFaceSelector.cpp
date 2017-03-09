@@ -14,7 +14,7 @@
 */
 
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Triangulate.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangulate.h"
 #include "TYANIME3DSolver.h"
 #include "TYANIME3DFaceSelector.h"
 

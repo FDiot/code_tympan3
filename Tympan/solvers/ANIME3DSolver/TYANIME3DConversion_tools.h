@@ -1,6 +1,6 @@
 #include "Tympan/models/common/acoustic_path.h"
-#include "Tympan/solvers/AcousticRaytracer/Acoustic/Event.h"
-#include "Tympan/solvers/AcousticRaytracer/Ray/Ray.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Event.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Ray/Ray.h"
 
 
 namespace Tools
