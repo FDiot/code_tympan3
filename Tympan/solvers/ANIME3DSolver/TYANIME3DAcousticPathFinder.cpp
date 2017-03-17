@@ -39,7 +39,7 @@ using std::vector;
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSolverAdapter.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DSolver.h"
-#include "TYANIME3DConversion_tools.h"
+#include "TYANIME3DConversionTools.h"
 
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(   TYStructSurfIntersect* tabPolygon, 
                                                             const size_t& tabPolygonSize,
