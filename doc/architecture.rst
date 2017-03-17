@@ -21,6 +21,7 @@ Code_TYMPAN is made of different parts:
   - core&tools
   - graphical user interface
   - business logic
+  - geometric libraries
   - solvers 
 
 An API in Python is used to communicate between the Graphical User Interface (GUI) and the solvers.
@@ -93,7 +94,7 @@ If we have a look on the source directories (folders) of the differents parts, t
 .. figure:: _static/built_resources/Architecture_Tympan.png
    :align: center
    
-   **Current architecture schema (ToDo: update)**
+   **Current architecture schema**
 
 Here a second graph about the splitting between site elements (business logic) and the computation (solvers).
 It separates the business logic related to a site with the way to solve the acoustic problem (`tympan::AcousticProblemModel <../doxygen/html/classtympan_1_1AcousticProblemModel.html>`_). 
@@ -106,14 +107,15 @@ acoustic sources/receptors and an altimetry.
    
    **Target architecture schema**
    
-At the Tympan sources root, we find four directories:
+At the Tympan sources root, we find five directories:
   - ``core``: Several tools classes
   - ``models``: Data model for solvers and business logic
   - ``gui``: Graphical User Interface
+  - ``geometric_methods``: Geometric methods
   - ``solvers``: Solvers
 
-.. figure:: _build/doxygen/html/dir_0a699452fb3f72206b671d5471a45d39_dep.png
-   :target: ../doxygen/html/dir_0a699452fb3f72206b671d5471a45d39.html
+.. figure:: _build/doxygen/html/dir_6ae37fb8fc89708ffaa367fb3bcc416d_dep.png
+   :target: ../doxygen/html/dir_6ae37fb8fc89708ffaa367fb3bcc416d.html
    :align: center
    :scale: 100 % 
    
@@ -138,8 +140,8 @@ See the ``core`` and ``gui/tools`` directories and some sub-directories in ``mod
   - ``models/common``: common objects used by the `Business Logic`_ objects: point,
     vector, matrix, etc.
 
-.. figure:: _build/doxygen/html/dir_5dbfaf92f958cca7bf9f388ebf56af42_dep.png
-   :target: ../doxygen/html/dir_5dbfaf92f958cca7bf9f388ebf56af42.html
+.. figure:: _build/doxygen/html/dir_baed282738236c1a2606a36e22b5117c_dep.png
+   :target: ../doxygen/html/dir_baed282738236c1a2606a36e22b5117c.html
    :align: center
    :scale: 100 % 
    
@@ -226,8 +228,8 @@ See in ``Tympan/gui`` and its four sub-directories:
    building, a machine, etc ;
  - ``app``: GUI main classes. 
 
-.. figure:: _build/doxygen/html/dir_96acfafdf97aa4a7b901cb1116c77380_dep.png
-   :target: ../doxygen/html/dir_96acfafdf97aa4a7b901cb1116c77380.html
+.. figure:: _build/doxygen/html/dir_9794fde14911d539235f1f2fc7241aee_dep.png
+   :target: ../doxygen/html/dir_9794fde14911d539235f1f2fc7241aee.html
    :align: center
    :scale: 100 % 
    
@@ -316,21 +318,208 @@ point between our ray and the picked object.
 
 .. note::
 
-   It might be possible to re-use the acceleration structures from ``models/solvers/AcousticRaytracer/Accelerator`` for the ray-intersection method.
+   It might be possible to re-use the acceleration structures from ``models/geometric_methods/AcousticRaytracer/Accelerator`` for the ray-intersection method.
+
+Geometric libraries
+-------------------
+
+Three librairies are located inside the directory ``geometric_methods`` :
+
+ - ``AnalyticRayTracer`` Library used by ANIME3DSolver only
+ - ``ConvexHullFinder``  Library used by the default solver only
+ - ``AcousticRaytracer`` Library used mainly by ANIME3DSolver (Only few methods used by the default solver for altimetry computation)
+
+The last library is now completely independant from Code Tympan.
+
+.. figure:: _build/doxygen/html/dir_88cb734f00366541e3d809f27487378d_dep.png
+   :target:     ../doxygen/html/dir_88cb734f00366541e3d809f27487378d.html
+   :align: center
+   :scale: 100 % 
+   
+   **Geometric methods directories and dependencies**
+
+AnalyticRayTracer
+`````````````````   
+.. figure:: _build/doxygen/html/dir_a5a5fb217cee7f5f14cc25847f1572fb_dep.png
+   :target:     ../doxygen/html/dir_a5a5fb217cee7f5f14cc25847f1572fb.html
+   :align: center
+   :scale: 100 % 
+   
+   **Dependencies**
+
+The collaboration graph `[legend] <../doxygen/html/graph_legend.html>`_ of the AnalyticRayTracer classes are:
+
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+   
+.. figure:: _build/doxygen/html/classDefaultCurvRayEngine__coll__graph.png
+   :target:     ../doxygen/html/classDefaultCurvRayEngine.html
+   :align: center
+   :scale: 100 % 
+
+   **DefaultCurvRayEngine class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+   
+.. figure:: _build/doxygen/html/classIGeometryModifier__coll__graph.png
+   :target:     ../doxygen/html/classIGeometryModifier.html
+   :align: center
+   :scale: 100 % 
+
+   **IGeometryModifier class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+   
+.. figure:: _build/doxygen/html/classmeteoLin__coll__graph.png
+   :target:     ../doxygen/html/classmeteoLin.html
+   :align: center
+   :scale: 100 % 
+
+   **meteoLin class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+   
+.. figure:: _build/doxygen/html/classLancer__coll__graph.png
+   :target:     ../doxygen/html/classLancer.html
+   :align: center
+   :scale: 100 % 
+
+   **Lancer class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed> 
+   
+.. figure:: _build/doxygen/html/classRayCourb__coll__graph.png
+   :target:     ../doxygen/html/classRayCourb.html
+   :align: center
+   :scale: 100 % 
+
+   **RayCourb class**
+   
+.. raw:: html
+
+    <embed><HR></HR></embed>
+   
+.. figure:: _build/doxygen/html/classStep__coll__graph.png
+   :target:     ../doxygen/html/classStep.html
+   :align: center
+   :scale: 100 % 
+
+   **Step class**
+                              
+ConvexHullFinder
+`````````````````   
+.. figure:: _build/doxygen/html/dir_b43da75ed048359b09395a3058214be4_dep.png
+   :target:     ../doxygen/html/dir_b43da75ed048359b09395a3058214be4.html
+   :align: center
+   :scale: 100 % 
+   
+   **Dependencies**
+
+AcousticRaytracer
+`````````````````   
+.. figure:: _build/doxygen/html/dir_59b6aa82518e4f3027530cc8f0dba56b_dep.png
+   :target:     ../doxygen/html/dir_59b6aa82518e4f3027530cc8f0dba56b.html
+   :align: center
+   :scale: 100 % 
+   
+   **Dependencies**
+
+As AcousticRaytracer is now an independant geometric library for ray tracing, it is interesting to detail some of its classes. 
+Here is the hierarchy of some of the mains classes of the library `[legend] <../doxygen/html/graph_legend.html>`_:
+
+.. raw:: html
+
+    <embed>
+        <HR></HR>
+    </embed>
+    
+First, the `Base <../doxygen/html/classBase.html>`_ classes which gather a lot of objects which constitutes the scene:
+
+.. figure:: _build/doxygen/html/classBase__inherit__graph.png
+   :target: ../doxygen/html/classBase.html
+   :align: center
+   :scale: 100 % 
+   
+   **Base classes**
+
+.. raw:: html
+
+    <embed>
+        <HR></HR>
+    </embed>
+    
+The `Sampler <../doxygen/html/classSampler.html>`_ classes deal with the ray generators:  
+
+.. figure:: _build/doxygen/html/classSampler__inherit__graph.png
+   :target: ../doxygen/html/classSampler.html
+   :align: center
+   :scale: 100 % 
+   
+   **Samplers**
+
+.. raw:: html
+
+    <embed>
+        <HR></HR>
+    </embed> 
+    
+The `Engine <../doxygen/html/classEngine.html>`_ classes is for the different ways to run the ray tracing method (sequential, parallel, ...):
+   
+.. figure:: _build/doxygen/html/classEngine__inherit__graph.png
+   :target: ../doxygen/html/classEngine.html
+   :align: center
+   :scale: 100 % 
+   
+   **Engines**
+
+.. raw:: html
+
+    <embed>
+        <HR></HR>
+    </embed>
+    
+The `Accelerator <../doxygen/html/classAccelerator.html>`_ classes are used to select an efficient method for primitives classification:   
+
+.. figure:: _build/doxygen/html/classAccelerator__inherit__graph.png
+   :target: ../doxygen/html/classAccelerator.html
+   :align: center
+   :scale: 100 % 
+   
+   **Accelerators**
+
+.. raw:: html
+
+    <embed>
+        <HR></HR>
+    </embed>
+    
+The `Selector <../doxygen/html/classSelector.html>`_ classes offers different criterias to keep or disable rays during tracing:  
+
+.. figure:: _build/doxygen/html/classSelector__inherit__graph.png
+   :target: ../doxygen/html/classSelector.html
+   :align: center
+   :scale: 100 % 
+   
+   **Selectors**
 
 Solvers
 -------
 
 All directories in ``models/solver/Solvers`` :
-
  - ``DefaultSolver`` Default solver using convex hull method
  - ``ANIME3DSolver`` Solver using 3D ray tracing
- - ``AnalyticRayTracer`` Should be used by ANIME3DSolver only
- - ``ConvexHullFinder`` Used by the default solver only
- - ``AcousticRaytracer`` Geometric ray tracing (used by the 3D solver. The default solver use it for altimetry computation)
 
-.. figure:: _build/doxygen/html/dir_635e4428492daafdf6f24946a20daf56_dep.png
-   :target:     ../doxygen/html/dir_635e4428492daafdf6f24946a20daf56.html
+.. figure:: _build/doxygen/html/dir_b1afebf63c84909aae350b93d048daa3_dep.png
+   :target:     ../doxygen/html/dir_b1afebf63c84909aae350b93d048daa3.html
    :align: center
    :scale: 100 % 
    
@@ -338,8 +527,8 @@ All directories in ``models/solver/Solvers`` :
    
 DefaultSolver
 `````````````   
-.. figure:: _build/doxygen/html/dir_10590c5f2acff4ddadc30b2c4b19f30a_dep.png
-   :target:     ../doxygen/html/dir_10590c5f2acff4ddadc30b2c4b19f30a.html
+.. figure:: _build/doxygen/html/dir_431cd850b8f35bd69babb4eea890165f_dep.png
+   :target:     ../doxygen/html/dir_431cd850b8f35bd69babb4eea890165f.html
    :align: center
    :scale: 100 % 
    
@@ -436,8 +625,8 @@ The collaboration graph `[legend] <../doxygen/html/graph_legend.html>`_ of the D
                                           
 ANIME3DSolver
 `````````````   
-.. figure:: _build/doxygen/html/dir_4f2d479a47b44efcc67dc699ba3f6fb7_dep.png
-   :target:     ../doxygen/html/dir_4f2d479a47b44efcc67dc699ba3f6fb7.html
+.. figure:: _build/doxygen/html/dir_f81d3e3f04278fc57cda2d942a1796ea_dep.png
+   :target:     ../doxygen/html/dir_f81d3e3f04278fc57cda2d942a1796ea.html
    :align: center
    :scale: 100 % 
    
@@ -495,179 +684,6 @@ The collaboration graph `[legend] <../doxygen/html/graph_legend.html>`_ of the A
    :scale: 100 % 
 
    **TYANIME3DRayTracerSolverAdapter class**
-
-AnalyticRayTracer
-`````````````````   
-.. figure:: _build/doxygen/html/dir_378d6a5b5969e03e0c43688920e7613c_dep.png
-   :target:     ../doxygen/html/dir_378d6a5b5969e03e0c43688920e7613c.html
-   :align: center
-   :scale: 100 % 
-   
-   **Dependencies**
-
-The collaboration graph `[legend] <../doxygen/html/graph_legend.html>`_ of the AnalyticRayTracer classes are:
-
-.. raw:: html
-
-    <embed><HR></HR></embed> 
-   
-.. figure:: _build/doxygen/html/classDefaultCurvRayEngine__coll__graph.png
-   :target:     ../doxygen/html/classDefaultCurvRayEngine.html
-   :align: center
-   :scale: 100 % 
-
-   **DefaultCurvRayEngine class**
-   
-.. raw:: html
-
-    <embed><HR></HR></embed> 
-   
-.. figure:: _build/doxygen/html/classIGeometryModifier__coll__graph.png
-   :target:     ../doxygen/html/classIGeometryModifier.html
-   :align: center
-   :scale: 100 % 
-
-   **IGeometryModifier class**
-   
-.. raw:: html
-
-    <embed><HR></HR></embed> 
-   
-.. figure:: _build/doxygen/html/classmeteoLin__coll__graph.png
-   :target:     ../doxygen/html/classmeteoLin.html
-   :align: center
-   :scale: 100 % 
-
-   **meteoLin class**
-   
-.. raw:: html
-
-    <embed><HR></HR></embed> 
-   
-.. figure:: _build/doxygen/html/classLancer__coll__graph.png
-   :target:     ../doxygen/html/classLancer.html
-   :align: center
-   :scale: 100 % 
-
-   **Lancer class**
-   
-.. raw:: html
-
-    <embed><HR></HR></embed> 
-   
-.. figure:: _build/doxygen/html/classRayCourb__coll__graph.png
-   :target:     ../doxygen/html/classRayCourb.html
-   :align: center
-   :scale: 100 % 
-
-   **RayCourb class**
-   
-.. raw:: html
-
-    <embed><HR></HR></embed>
-   
-.. figure:: _build/doxygen/html/classStep__coll__graph.png
-   :target:     ../doxygen/html/classStep.html
-   :align: center
-   :scale: 100 % 
-
-   **Step class**
-                              
-ConvexHullFinder
-`````````````````   
-.. figure:: _build/doxygen/html/dir_7fbd2483b1241a8d1582b5d60506e18c_dep.png
-   :target:     ../doxygen/html/dir_7fbd2483b1241a8d1582b5d60506e18c.html
-   :align: center
-   :scale: 100 % 
-   
-   **Dependencies**
-
-AcousticRaytracer
-`````````````````   
-.. figure:: _build/doxygen/html/dir_b2cd7e7be8532705e57c372016f5e972_dep.png
-   :target:     ../doxygen/html/dir_b2cd7e7be8532705e57c372016f5e972.html
-   :align: center
-   :scale: 100 % 
-   
-   **Dependencies**
-
-As AcousticRaytracer would be a independant geometric library for ray tracing soon, it is interesting to detail some of its classes. 
-Here is the hierarchy of some of the mains classes of the library `[legend] <../doxygen/html/graph_legend.html>`_:
-
-.. raw:: html
-
-    <embed>
-        <HR></HR>
-    </embed>
-    
-First, the `Base <../doxygen/html/classBase.html>`_ classes which gather a lot of objects which constitutes the scene:
-
-.. figure:: _build/doxygen/html/classBase__inherit__graph.png
-   :target: ../doxygen/html/classBase.html
-   :align: center
-   :scale: 100 % 
-   
-   **Base classes**
-
-.. raw:: html
-
-    <embed>
-        <HR></HR>
-    </embed>
-    
-The `Sampler <../doxygen/html/classSampler.html>`_ classes deal with the ray generators:  
-
-.. figure:: _build/doxygen/html/classSampler__inherit__graph.png
-   :target: ../doxygen/html/classSampler.html
-   :align: center
-   :scale: 100 % 
-   
-   **Samplers**
-
-.. raw:: html
-
-    <embed>
-        <HR></HR>
-    </embed> 
-    
-The `Engine <../doxygen/html/classEngine.html>`_ classes is for the different ways to run the ray tracing method (sequential, parallel, ...):
-   
-.. figure:: _build/doxygen/html/classEngine__inherit__graph.png
-   :target: ../doxygen/html/classEngine.html
-   :align: center
-   :scale: 100 % 
-   
-   **Engines**
-
-.. raw:: html
-
-    <embed>
-        <HR></HR>
-    </embed>
-    
-The `Accelerator <../doxygen/html/classAccelerator.html>`_ classes are used to select an efficient method for primitives classification:   
-
-.. figure:: _build/doxygen/html/classAccelerator__inherit__graph.png
-   :target: ../doxygen/html/classAccelerator.html
-   :align: center
-   :scale: 100 % 
-   
-   **Accelerators**
-
-.. raw:: html
-
-    <embed>
-        <HR></HR>
-    </embed>
-    
-The `Selector <../doxygen/html/classSelector.html>`_ classes offers different criterias to keep or disable rays during tracing:  
-
-.. figure:: _build/doxygen/html/classSelector__inherit__graph.png
-   :target: ../doxygen/html/classSelector.html
-   :align: center
-   :scale: 100 % 
-   
-   **Selectors**
    
    
 Call graphs for Tympan solvers
