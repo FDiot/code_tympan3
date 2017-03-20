@@ -191,6 +191,26 @@ target_link_libraries(tympan_solver_anime3d
 configure_tympan_plugin(tympan_solver_anime3d)
 install_tympan_plugin(tympan_solver_anime3d)
 
+# anime3d lib for tests  #####################################################################
+file(GLOB TYMPAN_SOLVER_ANIME3D_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    solvers/ANIME3DSolver/*.cpp solvers/ANIME3DSolver/*.h
+    solvers/ANIME3DSolver/*/*.cpp solvers/ANIME3DSolver/*/*.h
+    solvers/AcousticRaytracer/*.cpp solvers/AcousticRaytracer/*.h
+    solvers/AcousticRaytracer/*/*.cpp solvers/AcousticRaytracer/*/*.h
+    solvers/AnalyticRayTracer/*.cpp solvers/AnalyticRayTracer/*.h
+    solvers/AnalyticRayTracer/*/*.cpp solvers/AnalyticRayTracer/*/*.h
+)
+
+link_directories(${CGAL_LIBRARIES_DIR})
+add_library(tympan_solver_anime3d_lib ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_SOLVER_ANIME3D_SRCS})
+set_property(TARGET tympan_solver_anime3d_lib PROPERTY FOLDER "Tympan/solvers/ANIME3DSolver")
+target_link_libraries(tympan_solver_anime3d_lib
+    ${QT_QTCORE_LIBRARY} # qlist, QTime, QMutex QSharedPointer QTime
+    tympan_common
+    tympan_solver_model
+)
+
+install_tympan_component(tympan_solver_anime3d_lib)
 
 # main app #####################################################################
 

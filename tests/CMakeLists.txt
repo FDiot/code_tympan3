@@ -37,7 +37,7 @@ file(COPY data DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 file(GLOB TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/testutils.cpp )
 add_library(testutils STATIC ${TESTS_SRC} )
 set_property(TARGET testutils PROPERTY FOLDER "Tests")
-add_dependencies(testutils GTest tympan_common tympan_lib tympan_solver_model)
+add_dependencies(testutils GTest tympan_common tympan_lib tympan_solver_model )
 target_link_libraries(testutils gtest tympan_common tympan_lib tympan_solver_model)
 
 # Specific tests configuration
@@ -73,7 +73,7 @@ foreach (testfile ${TESTS_SRC})
     configure_gtest_target(TARGET ${basename}
         FOLDER "Tests"
         RUNTIME_PATH "${TYMPAN_3RDPARTY_DLL_NATIVE_DIRS}"
-        LIBS testutils tympan_common tympan_lib)
+        LIBS testutils tympan_common tympan_lib tympan_solver_anime3d_lib)
 endforeach (testfile)
 # More specific tests configuration
 if(TYMPAN_USE_NMPB2008)
