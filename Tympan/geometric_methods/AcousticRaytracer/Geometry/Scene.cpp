@@ -226,3 +226,59 @@ void Scene::export_to_ply(std::string fileName)
 
     out.close();
 }
+
+void Scene::import_from_ply(std::string fileName)
+{
+    ifstream in(fileName.c_str());
+    std::string keyword;
+    int nb_vertex, nb_faces;
+    in >> keyword; // ply
+    if (keyword!="ply") {std::cerr<<"Read: "+keyword+"\n"+fileName+" is not a ply file !" << std::endl;exit(-1);}
+    in >> keyword >> keyword >> keyword; // format ascii 1.0
+    in >> keyword >> keyword >> nb_vertex; // element vertex 119
+    in >> keyword >> keyword >> keyword; // property float x
+    in >> keyword >> keyword >> keyword; // property float y
+    in >> keyword >> keyword >> keyword; // property float z
+    in >> keyword >> keyword >> nb_faces; // element face 198
+    in >> keyword >> keyword >> keyword >> keyword >> keyword; // property list uchar int vertex_indices
+    in >> keyword >> keyword >> keyword; // property int material_index ?
+    bool material=false;
+    if (keyword=="material_index")
+    {
+       material=true;
+       in >> keyword >> keyword >> keyword; // property uchar red
+    }
+    in >> keyword >> keyword >> keyword; // property uchar green
+    in >> keyword >> keyword >> keyword; // property uchar blue
+    if (material)
+    {
+       in >> keyword >> keyword >> keyword; // element material 5
+       in >> keyword >> keyword >> keyword>> keyword >> keyword; // property list uchar uchar id
+    }
+    in >> keyword; // end_header
+    float x,y,z;
+    // Read vertex:
+    for (int i=0;i<nb_vertex;i++)
+    {
+        unsigned int p;
+        in >> x >> y >> z; // x y z
+        //std::cerr << x << " " << y << " " << z << std::endl;
+        addVertex(vec3(x,y,z),p);
+    }
+    ss << "La scene lue comporte " << nb_vertex << " vertex." << std::endl;
+    int i1,i2,i3;
+    Material *m = new Material();
+    // Read faces:
+    int n;
+    for (int i=0;i<nb_faces;i++)
+    {
+        in >> n >> i1 >> i2 >> i3; // vertices
+        if (material) in >> keyword; // material 
+        in >> keyword >> keyword >> keyword; // color
+        //std::cerr << i1 << " " << i2 << " " << i3 << std::endl;
+        if (n!=3) { std::cerr << "The shape " << i << " is not a Triangle !" << std::endl;exit(-1); }
+        addTriangle(i1,i2,i3, m, false);
+    }
+    ss << "La scene lue comporte " << nb_faces << " shapes." << std::endl;
+    in.close();
+}

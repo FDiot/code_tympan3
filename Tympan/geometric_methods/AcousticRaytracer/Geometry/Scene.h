@@ -132,6 +132,8 @@ public:
     void addBuilding(vec3 origine, vec3 dimension, Material* m);
     /// Export the Scene to a PLY format file named fileName
     void export_to_ply(std::string fileName);
+    /// Import a Scene from a PLY format file named fileName
+    void import_from_ply(std::string fileName);
 
 protected:
     std::vector<Shape*> shapes;									//!< Array of pointers to the shapes
