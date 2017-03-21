@@ -19,3 +19,8 @@ cython_add_module(_solver _solver.pyx)
 configure_cython_module(_solver ${destination})
 target_link_libraries(_solver tympan_common tympan_solver_model)
 install_cython_module(_solver ${destination})
+
+cython_add_module(_acousticraytracer _acousticraytracer.pyx)
+configure_cython_module(_acousticraytracer ${destination})
+target_link_libraries(_acousticraytracer tympan_acousticraytracer)
+install_cython_module(_acousticraytracer ${destination})

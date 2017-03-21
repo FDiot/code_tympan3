@@ -23,6 +23,7 @@
 #include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Recepteur.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Material.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Tools/Logger.h"
+#include "AcousticRaytracerConfiguration.h"
 #include "DefaultEngine.h"
 #include "ParallelDefaultEngine.h"
 
@@ -45,7 +46,12 @@ class Simulation : public Base
 
 public:
 	/// Constructor
-    Simulation() : solver(NULL), engine(NULL), engineC(DEFAULT), materialManager(NULL) { compteurSource = 0; compteurRecepteur = 0;}
+    Simulation() : solver(NULL), engine(NULL), engineC(DEFAULT), materialManager(NULL) 
+    { 
+       compteurSource = 0;
+       compteurRecepteur = 0;
+       configuration = AcousticRaytracerConfiguration::get();
+    }
     /// Copy constructor
     Simulation(const Simulation& other)
     {
@@ -55,6 +61,7 @@ public:
         compteurSource = other.compteurSource;
         compteurRecepteur = other.compteurRecepteur;
         materialManager = new MaterialManager(*(other.materialManager));
+        *configuration = *other.configuration;
     }
     /// Destructor
     virtual ~Simulation() { }
@@ -141,6 +148,9 @@ public:
 
     /// Set the engine (by default, the DefaultEngine)
     void setEngine(engineChoice engine = DEFAULT) { engineC = engine; }
+    
+    /// Get the configuration
+    AcousticRaytracerConfiguration* getConfiguration() { return configuration; }
 
 //    void runBenchmark() { engine = new DefaultEngine(&scene, &sources, solver, &recepteurs); engine->runStructureBenchmark(); }
 
@@ -161,6 +171,7 @@ protected:
 
     unsigned int compteurSource;		//!< Source counter
     unsigned int compteurRecepteur;		//!< Receptor counter
-
+    
+    AcousticRaytracerConfiguration* configuration;  //!< Pointer to the Acoustic RayTracer configuration
 };
 #endif
