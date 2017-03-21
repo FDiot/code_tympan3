@@ -125,6 +125,7 @@ Ray* DefaultEngine::genRay()
 {
     for (unsigned int i = 0; i < sources->size(); i++)
     {
+        //std::cerr << "Provisoire La source " << i << " positionnee en " << sources->at(i).getPosition()[0] << " " << sources->at(i).getPosition()[1] << " " << sources->at(i).getPosition()[2] << " possede " << sources->at(i).getNbRayLeft() << " rayons à lancer." << std::endl;
         if (sources->at(i).getNbRayLeft() > 0)
         {
         	// Generate a ray from the current source(i)
