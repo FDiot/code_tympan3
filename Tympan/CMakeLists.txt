@@ -32,6 +32,18 @@ add_custom_command(OUTPUT ${SOLVER_PARAMS_HEADER}
                   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
                   DEPENDS "${CMAKE_SOURCE_DIR}/${SOLVER_PARAMS_JSON}")
 
+# Update some files into AcousticRaytracer/Geometry from models/common to create an external AcousticRayTracer library:
+set(SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/models/common")
+set(TARGET_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/geometric_methods/AcousticRaytracer/Geometry")
+foreach(file 3d.cpp;3d.h;mathlib.h;config.h)
+add_custom_command(OUTPUT ${TARGET_DIRECTORY}/${file}
+                   COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/copy_add_header.py -r "${CMAKE_SOURCE_DIR}" -i "${SOURCE_DIRECTORY}/${file}" -o "${TARGET_DIRECTORY}/${file}"
+                   COMMENT "Updating ${TARGET_DIRECTORY}/${file} ..."
+                   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+                   DEPENDS "${CMAKE_SOURCE_DIR}/tools/copy_add_header.py" "${SOURCE_DIRECTORY}/${file}"
+)
+endforeach()
+
 set(SOLVE_PYSCRIPT "bin/solve_tympan_project.py")
 set(ALTIMETRY_PYSCRIPT "bin/process_site_altimetry.py")
 set(SOLVER_PARAMS_GUI_PYSCRIPT "bin/solver_config_gui.py")
@@ -150,13 +162,10 @@ install_tympan_component(tympan_solver_model)
 
 
 ######### Solver plugins #######################################################
+######### DefaultSolver #######################################################
 file(GLOB TYMPAN_SOLVER_DEFAULT_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/DefaultSolver/*.cpp solvers/DefaultSolver/*.h
     solvers/DefaultSolver/*/*.cpp solvers/DefaultSolver/*/*.h
-    solvers/ConvexHullFinder/*.cpp solvers/ConvexHullFinder/*.h
-    solvers/ConvexHullFinder/*/*.cpp solvers/ConvexHullFinder/*/*.h
-    solvers/AcousticRaytracer/*.cpp solvers/AcousticRaytracer/*.h
-    solvers/AcousticRaytracer/*/*.cpp solvers/AcousticRaytracer/*/*.h
 )
 set_property(SOURCE ${TYMPAN_SOLVER_DEFAULT_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
 link_directories(${CGAL_LIBRARIES_DIR})
@@ -166,18 +175,16 @@ target_link_libraries(tympan_solver_default
     ${QT_QTCORE_LIBRARY} # threading QMutex, QThread, QWaitCondition
     tympan_common
     tympan_solver_model
+    tympan_acousticraytracer
+    tympan_convexhullfinder
 )
 configure_tympan_plugin(tympan_solver_default)
 install_tympan_plugin(tympan_solver_default)
 
-
+######### ANIME3DSolver plugin #######################################################
 file(GLOB TYMPAN_SOLVER_ANIME3D_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/ANIME3DSolver/*.cpp solvers/ANIME3DSolver/*.h
     solvers/ANIME3DSolver/*/*.cpp solvers/ANIME3DSolver/*/*.h
-    solvers/AcousticRaytracer/*.cpp solvers/AcousticRaytracer/*.h
-    solvers/AcousticRaytracer/*/*.cpp solvers/AcousticRaytracer/*/*.h
-    solvers/AnalyticRayTracer/*.cpp solvers/AnalyticRayTracer/*.h
-    solvers/AnalyticRayTracer/*/*.cpp solvers/AnalyticRayTracer/*/*.h
 )
 set_property(SOURCE ${TYMPAN_SOLVER_ANIME3D_SRCS} APPEND PROPERTY COMPILE_DEFINITIONS _PLUGIN_DLL)
 link_directories(${CGAL_LIBRARIES_DIR})
@@ -187,18 +194,52 @@ target_link_libraries(tympan_solver_anime3d
     ${QT_QTCORE_LIBRARY} # qlist, QTime, QMutex QSharedPointer QTime
     tympan_common
     tympan_solver_model
+    tympan_analyticraytracer
+    tympan_acousticraytracer
 )
 configure_tympan_plugin(tympan_solver_anime3d)
 install_tympan_plugin(tympan_solver_anime3d)
+
+######### Geometric libraries #######################################################
+######### AcousticRayTracer #######################################################
+file(GLOB TYMPAN_ACOUSTICRAYTRACER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    geometric_methods/AcousticRaytracer/*.cpp geometric_methods/AcousticRaytracer/*.h
+    geometric_methods/AcousticRaytracer/*/*.cpp geometric_methods/AcousticRaytracer/*/*.h
+)
+add_library(tympan_acousticraytracer ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_ACOUSTICRAYTRACER_SRCS})
+set_property(TARGET tympan_acousticraytracer PROPERTY FOLDER "Tympan/geometric_methods/AcousticRaytracer")
+install_tympan_component(tympan_acousticraytracer)
+
+######### AnalyticRayTracer #######################################################
+file(GLOB TYMPAN_ANALYTICRAYTRACER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    geometric_methods/AnalyticRayTracer/*.cpp geometric_methods/AnalyticRayTracer/*.h
+    geometric_methods/AnalyticRayTracer/*/*.cpp geometric_methods/AnalyticRayTracer/*/*.h
+)
+add_library(tympan_analyticraytracer ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_ANALYTICRAYTRACER_SRCS})
+set_property(TARGET tympan_analyticraytracer PROPERTY FOLDER "Tympan/geometric_methods/AnalyticRayTracer")
+target_link_libraries(tympan_analyticraytracer
+    ${QT_QTCORE_LIBRARY} # threading QMutex, QThread, QWaitCondition
+    tympan_common
+    tympan_acousticraytracer
+)
+install_tympan_component(tympan_analyticraytracer)
+
+######### ConvexHullFinder #######################################################
+file(GLOB TYMPAN_CONVEXHULLFINDER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
+    geometric_methods/ConvexHullFinder/*.cpp geometric_methods/ConvexHullFinder/*.h
+)
+add_library(tympan_convexhullfinder ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_CONVEXHULLFINDER_SRCS})
+set_property(TARGET tympan_convexhullfinder PROPERTY FOLDER "Tympan/geometric_methods/ConvexHullFinder")
+target_link_libraries(tympan_convexhullfinder
+    ${QT_QTCORE_LIBRARY} # threading QMutex, QThread, QWaitCondition
+    tympan_common
+)
+install_tympan_component(tympan_convexhullfinder)
 
 # anime3d lib for tests  #####################################################################
 file(GLOB TYMPAN_SOLVER_ANIME3D_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     solvers/ANIME3DSolver/*.cpp solvers/ANIME3DSolver/*.h
     solvers/ANIME3DSolver/*/*.cpp solvers/ANIME3DSolver/*/*.h
-    solvers/AcousticRaytracer/*.cpp solvers/AcousticRaytracer/*.h
-    solvers/AcousticRaytracer/*/*.cpp solvers/AcousticRaytracer/*/*.h
-    solvers/AnalyticRayTracer/*.cpp solvers/AnalyticRayTracer/*.h
-    solvers/AnalyticRayTracer/*/*.cpp solvers/AnalyticRayTracer/*/*.h
 )
 
 link_directories(${CGAL_LIBRARIES_DIR})
@@ -208,6 +249,8 @@ target_link_libraries(tympan_solver_anime3d_lib
     ${QT_QTCORE_LIBRARY} # qlist, QTime, QMutex QSharedPointer QTime
     tympan_common
     tympan_solver_model
+    tympan_analyticraytracer
+    tympan_acousticraytracer
 )
 
 install_tympan_component(tympan_solver_anime3d_lib)

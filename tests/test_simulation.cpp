@@ -13,9 +13,9 @@
 
 #include "gtest/gtest.h"
 #include "Tympan/models/solver/config.h"
-#include "Tympan/solvers/AcousticRaytracer/Engine/Simulation.h"
-#include "Tympan/solvers/AcousticRaytracer/Acoustic/Source.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Latitude2DSampler.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Engine/Simulation.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Source.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Latitude2DSampler.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSolverAdapter.h"
 
 using std::cout;
@@ -274,6 +274,7 @@ TEST(test_simulation_1source_1recepteur, test_valid_ray)
 
 	// Clean simulation
 	simu.clean();
+
 }
 
 // Test with one obstacle between the source and the receptor
@@ -287,7 +288,8 @@ TEST(test_simulation_1source_1recepteur, test_obstacle)
 	simu.getScene()->addVertex(vec3(10,0,5), p1);
 	simu.getScene()->addVertex(vec3(10,5,-5), p2);
 	simu.getScene()->addVertex(vec3(10,-5,-5), p3);
-	simu.getScene()->addTriangle(p1,p2,p3,&Material());
+	Material m;
+	simu.getScene()->addTriangle(p1,p2,p3,&m);
 
 	// Setup
 	setup_1source_1recepteur(&simu);
@@ -316,7 +318,8 @@ TEST(test_simulation_1source_1recepteur, test_reflexion)
 	simu.getScene()->addVertex(vec3(10,0,5), p1);
 	simu.getScene()->addVertex(vec3(10,5,0), p2);
 	simu.getScene()->addVertex(vec3(10,-5,0), p3);
-	simu.getScene()->addTriangle(p1,p2,p3,&Material());
+	Material m;
+	simu.getScene()->addTriangle(p1,p2,p3,&m);
 
 	// Setup
 	setup_1source_1recepteur(&simu);
@@ -332,7 +335,7 @@ TEST(test_simulation_1source_1recepteur, test_reflexion)
 	EXPECT_EQ(1,debug_rays->size());	 // Test number of debug rays
 
 	Ray* ray=debug_rays->at(0);
-	std::vector<QSharedPointer<Event> >* events=ray->getEvents();
+	std::vector<std::shared_ptr<Event> >* events=ray->getEvents();
 
 	EXPECT_EQ(1,events->size());		 //Test number of events
 
@@ -341,7 +344,7 @@ TEST(test_simulation_1source_1recepteur, test_reflexion)
 	EXPECT_EQ(0,ray->getDiff());		//Test number of diffractions
 	EXPECT_EQ(1,ray->getReflex());		//Test number of reflexions
 
-	QSharedPointer<Event> e=events->at(0);
+	std::shared_ptr<Event> e=events->at(0);
 	std::vector<Source> sources=simu.getSources();
 	std::vector<Recepteur> recepteurs=simu.getRecepteurs();
 
@@ -354,9 +357,9 @@ TEST(test_simulation_1source_1recepteur, test_reflexion)
 	direction.normalize();
 
 	//Test event
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());			//Test type
-	EXPECT_TRUE(vec3(10,0,0)==e.value->getPosition());			//Test position
-	EXPECT_TRUE(direction==e.value->getIncomingDirection());	//Test direction
+	EXPECT_EQ(SPECULARREFLEXION,e->getType());			//Test type
+	EXPECT_TRUE(vec3(10,0,0)==e->getPosition());			//Test position
+	EXPECT_TRUE(direction==e->getIncomingDirection());	//Test direction
 
 	// Clean simulation
 	simu.clean();
