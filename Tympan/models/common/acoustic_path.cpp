@@ -17,7 +17,7 @@
 #include <cassert>
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/mathlib.h"
-#include "Tympan/solvers/AnalyticRayTracer/geometry_modifier.h"
+#include "Tympan/geometric_methods/AnalyticRayTracer/geometry_modifier.h"
 #include "acoustic_path.h"
 
 acoustic_event::acoustic_event():   distNextEvent(0.0),

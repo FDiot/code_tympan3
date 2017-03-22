@@ -16,8 +16,8 @@
 #ifndef TYANIME3D_RAYTRACER_SOLVER_ADAPTER_H
 #define TYANIME3D_RAYTRACER_SOLVER_ADAPTER_H
 
-#include "Tympan/solvers/AcousticRaytracer/Tools/SelectorManager.h"
-#include "Tympan/solvers/AcousticRaytracer/Acoustic/Solver.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/SelectorManager.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Solver.h"
 
 /**
 * \brief API class to run the ray tracer for the ANIME3D solver

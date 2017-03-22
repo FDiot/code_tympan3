@@ -20,25 +20,26 @@ using std::vector;
 #include "Tympan/models/common/atmospheric_conditions.h"
 #include "Tympan/models/solver/config.h"
 #include "Tympan/models/solver/acoustic_problem_model.hpp"
-#include "Tympan/solvers/AnalyticRayTracer/meteoLin.h"
-#include "Tympan/solvers/AnalyticRayTracer/Lancer.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/FaceSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/LengthSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/DiffractionSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/ReflectionSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/SelectorManager.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/Conversion_tools.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Cylindre.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Triangle.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Sampler.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/UniformSphericSampler.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Latitude2DSampler.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/RandomSphericSampler.h"
-#include "Tympan/solvers/AcousticRaytracer/Engine/Simulation.h"
+#include "Tympan/geometric_methods/AnalyticRayTracer/meteoLin.h"
+#include "Tympan/geometric_methods/AnalyticRayTracer/Lancer.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/FaceSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/LengthSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/DiffractionSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/ReflectionSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/SelectorManager.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangle.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Sampler.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/UniformSphericSampler.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Latitude2DSampler.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/RandomSphericSampler.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Engine/Simulation.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Engine/AcousticRaytracerConfiguration.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSolverAdapter.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DAcousticPathFinder.h"
 #include "TYANIME3DSolver.h"
+#include "TYANIME3DConversionTools.h"
 
 TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(   TYStructSurfIntersect* tabPolygon, 
                                                             const size_t& tabPolygonSize,
@@ -405,4 +406,41 @@ void TYANIME3DAcousticPathFinder::build_geometry_transformer( const vector<vec3>
 
         transformer->buildNappe(CurveRayShot);
     }
+}
+
+void TYANIME3DAcousticPathFinder::configure_raytracer()
+{
+    tympan::LPSolverConfiguration solver_config = tympan::SolverConfiguration::get();
+    AcousticRaytracerConfiguration *raytracer_config = AcousticRaytracerConfiguration::get();
+
+    raytracer_config->NbRaysPerSource = solver_config->NbRaysPerSource;
+    raytracer_config->Discretization = solver_config->Discretization;
+    raytracer_config->Accelerator = solver_config->Accelerator;
+    raytracer_config->MaxTreeDepth = solver_config->MaxTreeDepth;
+    raytracer_config->MaxProfondeur = solver_config->MaxProfondeur;
+    raytracer_config->MaxReflexion = solver_config->MaxReflexion;
+    raytracer_config->UseSol = solver_config->UseSol;
+    raytracer_config->MaxDiffraction = solver_config->MaxDiffraction;
+    raytracer_config->NbRayWithDiffraction = solver_config->NbRayWithDiffraction;
+    raytracer_config->MaxLength = solver_config->MaxLength;
+    raytracer_config->SizeReceiver = solver_config->SizeReceiver;
+    raytracer_config->AngleDiffMin = solver_config->AngleDiffMin;
+    raytracer_config->CylindreThick = solver_config->CylindreThick;
+    raytracer_config->MaxPathDifference = solver_config->MaxPathDifference;
+    raytracer_config->InitialAnglePhi = solver_config->InitialAnglePhi;
+    raytracer_config->FinalAnglePhi = solver_config->FinalAnglePhi;
+    raytracer_config->InitialAngleTheta = solver_config->InitialAngleTheta;
+    raytracer_config->FinalAngleTheta = solver_config->FinalAngleTheta;
+    raytracer_config->UsePathDifValidation = solver_config->UsePathDifValidation;
+    raytracer_config->DiffractionFilterRayAtCreation = solver_config->DiffractionFilterRayAtCreation;
+    raytracer_config->DiffractionUseDistanceAsFilter = solver_config->DiffractionUseDistanceAsFilter;
+    raytracer_config->DiffractionUseRandomSampler = solver_config->DiffractionUseRandomSampler;
+    raytracer_config->DiffractionDropDownNbRays = solver_config->DiffractionDropDownNbRays;
+    raytracer_config->UsePostFilter = solver_config->UsePostFilters;
+    raytracer_config->DebugUseCloseEventPostFilter = solver_config->DebugUseCloseEventSelector;
+    raytracer_config->DebugUseDiffractionAngleSelector = solver_config->DebugUseDiffractionAngleSelector;
+    raytracer_config->DebugUseDiffractionPathSelector = solver_config->DebugUseDiffractionPathSelector;
+    raytracer_config->DebugUseFermatSelector = solver_config->DebugUseFermatSelector;
+    raytracer_config->DebugUseFaceSelector = solver_config->DebugUseFaceSelector;
+    raytracer_config->KeepDebugRay = solver_config->KeepDebugRay;
 }
