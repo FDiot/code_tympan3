@@ -16,8 +16,8 @@
 #ifndef VALIDRAY_H
 #define VALIDRAY_H
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Ray/Ray.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Shape.h"
+#include "Ray/Ray.h"
+#include "Geometry/Shape.h"
 
 /*!
 * \namespace ValidRay

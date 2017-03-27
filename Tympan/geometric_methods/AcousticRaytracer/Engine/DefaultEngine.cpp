@@ -20,9 +20,9 @@
 //#include <QTime>
 #include <vector>
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Event.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Ray/Ray.h"
+#include "Geometry/mathlib.h"
+#include "Acoustic/Event.h"
+#include "Ray/Ray.h"
 #include "DefaultEngine.h"
 
 struct CompareVec

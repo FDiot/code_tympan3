@@ -21,7 +21,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
+#include "Base.h"
 
 class Material : public Base
 {

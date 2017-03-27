@@ -34,7 +34,7 @@
 
 
 #include <vector>  // Include STL vector class.
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
+#include "Geometry/mathlib.h"
 
 
 // Typedef an STL vector of vertices which are used to represent

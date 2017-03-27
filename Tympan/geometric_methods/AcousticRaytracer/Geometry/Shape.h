@@ -19,11 +19,11 @@
 #include <string>
 #include <vector>
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Ray/Ray.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Material.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/BBox.h"
+#include "Geometry/mathlib.h"
+#include "Base.h"
+#include "Ray/Ray.h"
+#include "Acoustic/Material.h"
+#include "Geometry/BBox.h"
 
 
 class Shape;

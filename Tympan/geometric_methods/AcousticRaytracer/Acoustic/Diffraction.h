@@ -19,8 +19,8 @@
 #include <cmath>
 
 #include "Event.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Repere.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
+#include "Geometry/Repere.h"
+#include "Base.h"
 
 class Cylindre;
 

@@ -23,7 +23,7 @@
 #include <string>
 #include <math.h>
 #include "Sampler.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Tools/UnitConverter.h"
+#include "Tools/UnitConverter.h"
 
 #ifndef UNIFORM_SPHERIC_SAMPLER_2
 #define UNIFORM_SPHERIC_SAMPLER_2

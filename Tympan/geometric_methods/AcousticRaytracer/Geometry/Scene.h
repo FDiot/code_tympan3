@@ -17,7 +17,7 @@
 #define SCENE_H
 
 #include <vector>
-#include "Tympan/geometric_methods/AcousticRaytracer/Accelerator/Accelerator.h"
+#include "Accelerator/Accelerator.h"
 #include "Shape.h"
 
 /**

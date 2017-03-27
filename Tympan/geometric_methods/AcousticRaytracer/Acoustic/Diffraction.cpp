@@ -13,9 +13,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 */
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Engine/AcousticRaytracerConfiguration.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Tools/UnitConverter.h"
+#include "Engine/AcousticRaytracerConfiguration.h"
+#include "Geometry/Cylindre.h"
+#include "Tools/UnitConverter.h"
 #include "Diffraction.h"
 
 

@@ -14,7 +14,7 @@
 */
 
 #include "LeafTreatment.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangle.h"
+#include "Geometry/Triangle.h"
 
 namespace leafTreatment
 {

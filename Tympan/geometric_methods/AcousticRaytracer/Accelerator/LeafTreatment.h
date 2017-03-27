@@ -16,7 +16,7 @@
 #ifndef LEAF_TREATMENT_H
 #define LEAF_TREATMENT_H
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Shape.h"
+#include "Geometry/Shape.h"
 
 #include <list>
 

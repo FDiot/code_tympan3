@@ -16,7 +16,7 @@
 #ifndef ACCELERATOR_H
 #define ACCELERATOR_H
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Shape.h"
+#include "Geometry/Shape.h"
 #include "LeafTreatment.h"
 #include <list>
 
