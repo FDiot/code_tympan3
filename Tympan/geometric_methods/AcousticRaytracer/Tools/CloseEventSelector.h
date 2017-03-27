@@ -16,7 +16,7 @@
 #ifndef CLOSE_EVENT_SELECTOR
 #define CLOSE_EVENT_SELECTOR
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
+#include "Geometry/Cylindre.h"
 
 #include "Selector.h"
 

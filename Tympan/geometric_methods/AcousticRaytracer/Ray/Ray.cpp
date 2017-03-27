@@ -15,10 +15,10 @@
 
 #include <cassert>
 #include <vector>
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Event.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Recepteur.h"
+#include "Geometry/mathlib.h"
+#include "Geometry/Cylindre.h"
+#include "Acoustic/Event.h"
+#include "Acoustic/Recepteur.h"
 #include "Ray.h"
 
 void Ray::computeLongueur()

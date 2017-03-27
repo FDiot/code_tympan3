@@ -9,7 +9,7 @@ endif()
 
 # Adding GTest include in the non-test tree is required to enable gtest_prod.h
 include_directories (${GTEST_INCLUDE_DIR})
-
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/${TYMPAN_ACOUSTICRAYTRACER})
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   APPEND PROPERTY COMPILE_DEFINITIONS_DEBUG _DEBUG)
 
@@ -34,7 +34,7 @@ add_custom_command(OUTPUT ${SOLVER_PARAMS_HEADER}
 
 # Update some files into AcousticRaytracer/Geometry from models/common to create an external AcousticRayTracer library:
 set(SOURCE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/models/common")
-set(TARGET_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/geometric_methods/AcousticRaytracer/Geometry")
+set(TARGET_DIRECTORY "${CMAKE_SOURCE_DIR}/${TYMPAN_ACOUSTICRAYTRACER}/Geometry")
 foreach(file 3d.cpp;3d.h;mathlib.h;config.h)
 add_custom_command(OUTPUT ${TARGET_DIRECTORY}/${file}
                    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_SOURCE_DIR}/tools/copy_add_header.py -r "${CMAKE_SOURCE_DIR}" -i "${SOURCE_DIRECTORY}/${file}" -o "${TARGET_DIRECTORY}/${file}"
@@ -201,15 +201,6 @@ configure_tympan_plugin(tympan_solver_anime3d)
 install_tympan_plugin(tympan_solver_anime3d)
 
 ######### Geometric libraries #######################################################
-######### AcousticRayTracer #######################################################
-file(GLOB TYMPAN_ACOUSTICRAYTRACER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
-    geometric_methods/AcousticRaytracer/*.cpp geometric_methods/AcousticRaytracer/*.h
-    geometric_methods/AcousticRaytracer/*/*.cpp geometric_methods/AcousticRaytracer/*/*.h
-)
-add_library(tympan_acousticraytracer ${TYMPAN_COMPONENT_TYPE} ${TYMPAN_ACOUSTICRAYTRACER_SRCS})
-set_property(TARGET tympan_acousticraytracer PROPERTY FOLDER "Tympan/geometric_methods/AcousticRaytracer")
-install_tympan_component(tympan_acousticraytracer)
-
 ######### AnalyticRayTracer #######################################################
 file(GLOB TYMPAN_ANALYTICRAYTRACER_SRCS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}
     geometric_methods/AnalyticRayTracer/*.cpp geometric_methods/AnalyticRayTracer/*.h

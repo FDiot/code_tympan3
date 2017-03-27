@@ -21,7 +21,7 @@
 #include <string>
 #include <math.h>
 #include "Sampler.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Tools/UnitConverter.h"
+#include "Tools/UnitConverter.h"
 
 #ifndef LATITUDE_2D_SAMPLER
 #define LATITUDE_2D_SAMPLER

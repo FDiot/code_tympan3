@@ -16,7 +16,7 @@
 #ifndef SAMPLER_H
 #define SAMPLER_H
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
+#include "Geometry/mathlib.h"
 
 /*!
  * \brief   Sampler class and its sub-classes describe ray generators used in AcousticRayTracer.

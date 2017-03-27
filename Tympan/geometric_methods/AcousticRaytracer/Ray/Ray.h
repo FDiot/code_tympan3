@@ -18,11 +18,11 @@
 
 #include <memory>
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Source.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Event.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Diffraction.h"
+#include "Base.h"
+#include "Geometry/mathlib.h"
+#include "Acoustic/Source.h"
+#include "Acoustic/Event.h"
+#include "Acoustic/Diffraction.h"
 
 using namespace std;
 

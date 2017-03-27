@@ -14,7 +14,7 @@
 */
 
 #include "SpecularReflexion.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Shape.h"
+#include "Geometry/Shape.h"
 
 bool SpecularReflexion::getResponse(vec3& r, bool force)
 {
