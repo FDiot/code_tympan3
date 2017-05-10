@@ -73,13 +73,17 @@ Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cy
 	name = "unknown diffraction";
 	nbResponseLeft = initialNbResponse = 200;
 	type = DIFFRACTION;
-	buildRepere();
-	computeAngle();
 
-	computeDTheta();
+	//Skip instructions dependant on the Cylindre if c==NULL
+	if(c){
+		buildRepere();
+		computeAngle();
 
-	N1 = dynamic_cast<Cylindre*>(shape)->getFirstShape()->getNormal();
-	N2 = dynamic_cast<Cylindre*>(shape)->getSecondShape()->getNormal();
+		computeDTheta();
+
+		N1 = dynamic_cast<Cylindre*>(shape)->getFirstShape()->getNormal();
+		N2 = dynamic_cast<Cylindre*>(shape)->getSecondShape()->getNormal();
+	}
 
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
 	if (config->DiffractionFilterRayAtCreation)

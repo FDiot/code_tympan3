@@ -26,21 +26,25 @@ Cylindre::Cylindre(Shape* _p1, Shape* _p2 , std::vector<vec3>* _vertices, unsign
     localVertices.push_back(v1);
     localVertices.push_back(v2);
 
-    vec3 X = vertices->at(localVertices.at(1)) - vertices->at(localVertices.at(0));
-    X.normalize();
-    vec3 Y = p1->getNormal() + p2->getNormal();
-    Y.normalize();
-    vec3 Z; Z.cross(X, Y);
+	//Skip instructions dependant on v1 and v2 if at least one of them does not exist
+	if(vertices && vertices->size()>max(v1,v2)){
 
-    vec3 segment = vertices->at(localVertices.at(1)) - vertices->at(localVertices.at(0));
-    hauteur = segment.length();
+		vec3 X = vertices->at(localVertices.at(1)) - vertices->at(localVertices.at(0));
+		X.normalize();
+		vec3 Y = p1->getNormal() + p2->getNormal();
+		Y.normalize();
+		vec3 Z; Z.cross(X, Y);
 
-    localRepere = Repere(X, Y, Z, vertices->at(localVertices.at(0)));
-    angleOuverture = static_cast<decimal>(2 * M_PI);
+		vec3 segment = vertices->at(localVertices.at(1)) - vertices->at(localVertices.at(0));
+		hauteur = segment.length();
 
-    material = p1->getMaterial();
+		localRepere = Repere(X, Y, Z, vertices->at(localVertices.at(0)));
+		angleOuverture = static_cast<decimal>(2 * M_PI);
 
-    computeMesh();
+		material = p1->getMaterial();
+
+		computeMesh();
+	}
 }
 
 
