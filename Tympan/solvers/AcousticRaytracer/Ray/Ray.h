@@ -168,7 +168,7 @@ public:
      * \fn unsigned int getNbEvents();
      * \brief Return the total number of events
      */
-    unsigned int getNbEvents() { return nbDiffraction + nbDiffraction; }
+    unsigned int getNbEvents() { return nbDiffraction + nbReflexion; }
 
     /*!
     * \fn std::vector<QSharedPointer<Event> >* getEvents()
