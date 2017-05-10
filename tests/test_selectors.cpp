@@ -12,18 +12,18 @@
 #include <time.h> 
 
 #include "gtest/gtest.h"
-#include "Tympan/solvers/AcousticRaytracer/Base.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Triangle.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/FaceSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/LengthSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/DiffractionSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/ReflectionSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/CloseEventSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/FermatSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/DiffractionPathSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/DiffractionAngleSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/CleanerSelector.h"
-#include "Tympan/solvers/AcousticRaytracer/Tools/SelectorManager.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangle.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/FaceSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/LengthSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/DiffractionSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/ReflectionSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/CloseEventSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/FermatSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/DiffractionPathSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/DiffractionAngleSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/CleanerSelector.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Tools/SelectorManager.h"
 
 #include <iostream>
 #include <fstream>

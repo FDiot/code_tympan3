@@ -12,12 +12,12 @@
 #include <time.h> 
 
 #include "gtest/gtest.h"
-#include "Tympan/solvers/AcousticRaytracer/Engine/Simulation.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Engine/Simulation.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSolverAdapter.h"
-#include "Tympan/solvers/AcousticRaytracer/Acoustic/PostTreatment.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/PostTreatment.h"
 #include "Tympan/models/solver/config.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Triangle.h"
-#include "Tympan/solvers/AcousticRaytracer/Geometry/Cylindre.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangle.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
 
 #include <iostream>
 #include <fstream>
