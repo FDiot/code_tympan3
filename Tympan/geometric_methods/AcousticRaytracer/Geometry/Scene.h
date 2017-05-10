@@ -45,7 +45,7 @@ struct compVec
 };
 
 /**
- * \brief Scene
+ * \brief This class mainly define a mesh (list of Shape) used by the Simulation object
  */
 class Scene : public Base
 {
