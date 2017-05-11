@@ -104,18 +104,21 @@ Documentation dependencies
 --------------------------
 
 The C++ source code is annotated and API documentation can be
-extracted with Doxygen_ whereas this documentation  is generated from
+extracted with Doxygen_ and Graphviz_ whereas this documentation is generated from
 reStructuredText_ sources thanks to Sphinx_. The breathe_ extension
 (shipped within the 3rd party archive) provides a bridge between the
 two and MathJax_ is used to nicely display equations.
 
- Doxygen_ and Sphinx_ need to be installed either from your package
+ Doxygen_, Graphviz_ and Sphinx_ need to be installed either from your package
  manager or from the official Windows installer. As there are no specific
- difficulties, please refer to their official documentations.
+ difficulties, please refer to their official documentations (note that
+ on Windows 7, specific version (1.8.6) for Doxygen is required as above versions crashe when
+ building the Tympan documentation).
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 .. _Sphinx: http://sphinx-doc.org/
 .. _Doxygen: http://www.stack.nl/~dimitri/doxygen/
+.. _Graphviz: http://www.graphviz.org
 .. _breathe: http://michaeljones.github.com/breathe/
 .. _MathJax: http://www.mathjax.org/
 
