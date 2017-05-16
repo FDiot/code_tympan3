@@ -84,7 +84,7 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
 
     // Minimal angle (other PI) between two face to allow building of a diffraction cylinder
     float angleMax = AcousticRaytracerConfiguration::get()->AngleDiffMin * M_PI / 180;
-
+	float anglemin=AcousticRaytracerConfiguration::get()->AngleDiffMin;
     // Compute "mean" normal between the two faces
     vec3 normal = p1->getNormal() + p2->getNormal();
     normal.normalize();

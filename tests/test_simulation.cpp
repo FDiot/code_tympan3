@@ -12,13 +12,13 @@
 #include <time.h> 
 
 #include "gtest/gtest.h"
-#include "Tympan/models/solver/config.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Engine/Simulation.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Source.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Latitude2DSampler.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/PostTreatment.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/UniformSphericSampler2.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSolverAdapter.h"
+#include "Tympan/models/solver/config.h"
 
 using std::cout;
 using std::cerr;
@@ -43,7 +43,7 @@ void setup_1source_1recepteur(Simulation* simu,
 	config->NbRaysPerSource = nbRaysPerSource;
 	config->Accelerator = accelerator;
 	config->KeepDebugRay=true;
-
+	
 	// Add a source:
 	Source source;
 	source.setPosition(source_pos);
@@ -86,7 +86,7 @@ void setup_random(Simulation* simu,
 	unsigned int nbRecepteurs=-1,
 	int accelerator=2){
 
-	unsigned int seed=time(NULL);
+	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
 	cout<<"Random number generator initialized with seed "<<seed<<endl;
 
@@ -97,7 +97,7 @@ void setup_random(Simulation* simu,
 	config->NbRaysPerSource = nbRaysPerSource ==-1 ? rand() % maxRays + 1 : nbRaysPerSource;
 	config->Accelerator = accelerator ==-1 ? rand() % 3 + 1 : accelerator;
 	config->KeepDebugRay=true;
-	
+
 	// random number of sources and receptors
 	nbSources = nbSources == -1 ? rand() % maxSources + 1 : nbSources;
 	nbRecepteurs = nbRecepteurs == -1 ? rand() % maxReceptors + 1 : nbRecepteurs;
@@ -106,7 +106,7 @@ void setup_random(Simulation* simu,
 	while(sources.size()<nbSources){
 
 		Source source;
-		vec3 pos=vec3(rand() % 1000 + 1,rand() % maxPos + 1,rand() % maxPos + 1);
+		vec3 pos=vec3((decimal)(rand() % 1000 + 1),(decimal)(rand() % maxPos + 1),(decimal)(rand() % maxPos + 1));
 		source.setPosition(pos);
 		source.setId(sources.size());
 		source.setSampler(new UniformSphericSampler2(nbRaysPerSource)); 
@@ -132,7 +132,7 @@ void setup_random(Simulation* simu,
 	// Create receptors
 	while(recepteurs.size()<nbRecepteurs){
 
-		vec3 pos=vec3(rand() % 1000 + 1,rand() % 1000 + 1,rand() % 1000 + 1);
+		vec3 pos=vec3((decimal)(rand() % 1000 + 1),(decimal)(rand() % maxPos + 1),(decimal)(rand() % maxPos + 1));
 
 		Recepteur recepteur(pos,3);
 		recepteur.setName("rcpt"+recepteurs.size());
@@ -194,11 +194,11 @@ TEST(test_simulation_1source_1recepteur, test_source)
 	Source source=sources.at(0);
 
 	
-	EXPECT_EQ("src1",source.getName());				//Test name
-	EXPECT_EQ(0,source.getId());					//Test id
-	EXPECT_TRUE(vec3(5,0,0)==source.getPosition()); //Test position
-	EXPECT_EQ(10,source.getInitialRayCount());		//Test initial number of rays
-	EXPECT_EQ(0,source.getNbRayLeft());				//Test nb rays left
+	EXPECT_EQ("src1",source.getName());						//Test name
+	EXPECT_EQ(0,source.getId());							//Test id
+	EXPECT_TRUE(source.getPosition().compare(vec3(5,0,0))); //Test position
+	EXPECT_EQ(10,source.getInitialRayCount());				//Test initial number of rays
+	EXPECT_EQ(0,source.getNbRayLeft());						//Test nb rays left
 
 	// Clean simulation
 	simu.clean();
@@ -225,9 +225,9 @@ TEST(test_simulation_1source_1recepteur, test_recepteur)
 	Recepteur recepteur=recepteurs.at(0);
 
 	//Test name, id and pos
-	EXPECT_EQ("rcpt1",recepteur.getName());				//Test name
-	EXPECT_EQ(recepteur.getId(),0);						//Test id
-	EXPECT_TRUE(vec3(15,0,0)==recepteur.getPosition());	//Test position
+	EXPECT_EQ("rcpt1",recepteur.getName());						//Test name
+	EXPECT_EQ(recepteur.getId(),0);								//Test id
+	EXPECT_TRUE(recepteur.getPosition().compare(vec3(15,0,0)));	//Test position
 
 	// Clean simulation
 	simu.clean();
@@ -262,14 +262,14 @@ TEST(test_simulation_1source_1recepteur, test_valid_ray)
 	Recepteur* ray_recepteur=(static_cast<Recepteur*>(valid_ray->getRecepteur()));
 
 	// Test original source versus valid_ray source 
-	EXPECT_EQ(source.getName(),ray_source->getName());					//Test name
-	EXPECT_TRUE(source.getPosition()==ray_source->getPosition());		//Test position
-	EXPECT_EQ(source.getId(),ray_source->getId());						//Test id
+	EXPECT_EQ(source.getName(),ray_source->getName());							//Test name
+	EXPECT_TRUE(source.getPosition().compare(ray_source->getPosition()));		//Test position
+	EXPECT_EQ(source.getId(),ray_source->getId());								//Test id
 
 	// Test original receptor versus valid_ray receptor
-	EXPECT_EQ(recepteur.getName(),ray_recepteur->getName());			//Test name
-	EXPECT_TRUE(recepteur.getPosition()==ray_recepteur->getPosition());	//Test position
-	//EXPECT_EQ(recepteur.getId(),ray_recepteur->getId());				//ray_recepteur id is invalid
+	EXPECT_EQ(recepteur.getName(),ray_recepteur->getName());					//Test name
+	EXPECT_TRUE(recepteur.getPosition().compare(ray_recepteur->getPosition()));	//Test position
+	//EXPECT_EQ(recepteur.getId(),ray_recepteur->getId());						//ray_recepteur id is invalid
 
 	// Test ray 
 	EXPECT_EQ(0,valid_ray->getNbEvents());	//Test number of events
@@ -364,10 +364,10 @@ TEST(test_simulation_1source_1recepteur, test_reflexion1)
 	vec3 dir_left=vec3(-1,0,0);
 
 	// Test ray 
-	EXPECT_EQ(0,ray->getDiff());							//Test number of diffractions
-	EXPECT_EQ(config->MaxReflexion,ray->getReflex());		//Test number of reflexions
-	EXPECT_TRUE(ray->direction==dir_right);					//Test ray final direction									
-	EXPECT_EQ(35,ray->getLongueur());						//Test ray length
+	EXPECT_EQ(0,ray->getDiff());									//Test number of diffractions
+	EXPECT_EQ(config->MaxReflexion,ray->getReflex());				//Test number of reflexions
+	EXPECT_TRUE(ray->direction.compare(dir_right));					//Test ray final direction									
+	EXPECT_EQ(35,ray->getLongueur());								//Test ray length
 
 	std::vector<std::shared_ptr<Event> >* events=ray->getEvents();
 
@@ -376,24 +376,25 @@ TEST(test_simulation_1source_1recepteur, test_reflexion1)
 	EXPECT_EQ(config->MaxReflexion,events->size());		 
 
 	//Test events
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());			//Test type
-	EXPECT_TRUE(vec3(10,0,0)==e.value->getPosition());			//Test position
-	EXPECT_TRUE(e.value->getIncomingDirection()==dir_right);	//Test incoming direction
+	std::shared_ptr<Event> e=events->at(0);
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
+	EXPECT_TRUE(vec3(10,0,0).compare(e.get()->getPosition()));			//Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));	//Test incoming direction
 
 	e=events->at(1);
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());			//Test type
-	EXPECT_TRUE(vec3(0,0,0)==e.value->getPosition());			//Test position
-	EXPECT_TRUE(e.value->getIncomingDirection()==dir_left);		//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
+	EXPECT_TRUE(vec3(0,0,0).compare(e.get()->getPosition()));			//Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_left));		//Test incoming direction
 	
 	e=events->at(2);
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());			//Test type
-	EXPECT_TRUE(vec3(10,0,0)==e.value->getPosition());			//Test position
-	EXPECT_TRUE(e.value->getIncomingDirection()==dir_right);	//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
+	EXPECT_TRUE(vec3(10,0,0).compare(e.get()->getPosition()));			//Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));	//Test incoming direction
 
 	e=events->at(3);
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());			//Test type
-	EXPECT_TRUE(vec3(0,0,0)==e.value->getPosition());			//Test position
-	EXPECT_TRUE(e.value->getIncomingDirection()==dir_left);		//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
+	EXPECT_TRUE(vec3(0,0,0).compare(e.get()->getPosition()));			//Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_left));		//Test incoming direction
 	
 	
 	// Clean simulation
@@ -460,31 +461,31 @@ TEST(test_simulation_1source_1recepteur, test_reflexion2)
 	// Test ray 
 	EXPECT_EQ(0,ray->getDiff());					//Test number of diffractions
 	EXPECT_EQ(3,ray->getReflex());					//Test number of reflexions
-	EXPECT_TRUE(ray->direction==dir_down);			//Test ray final direction									
+	EXPECT_TRUE(ray->direction.compare(dir_down));	//Test ray final direction									
 	EXPECT_EQ(40,ray->getLongueur());				//Test ray length
 
-	std::vector<QSharedPointer<Event> >* events=ray->getEvents();
+	std::vector<std::shared_ptr<Event> >* events=ray->getEvents();
 
 	//Test number of events
 	EXPECT_EQ(3,ray->getNbEvents());						
 	EXPECT_EQ(3,events->size());		 
 
 	//Test events
-	QSharedPointer<Event> e=events->at(0);
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());			//Test type
-	EXPECT_TRUE(vec3(0,0,0)==e.value->getPosition());			//Test position
-	EXPECT_TRUE(e.value->getIncomingDirection()==dir_right);	//Test incoming direction
+	std::shared_ptr<Event> e=events->at(0);
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
+	EXPECT_TRUE(vec3(0,0,0).compare(e.get()->getPosition()));			//Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));	//Test incoming direction
 
 	e=events->at(1);
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());			//Test type
-	EXPECT_TRUE(vec3(0,10,0)==e.value->getPosition());			//Test position
-	EXPECT_TRUE(e.value->getIncomingDirection()==dir_top);		//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());					//Test type
+	EXPECT_TRUE(vec3(0,10,0).compare(e.get()->getPosition()));			//Test position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_top));		//Test incoming direction
 
 	e=events->at(2);
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());						//Test type
-	//EXPECT_TRUE(vec3(10,10,0)==e.value->getPosition());					//Test position  - Does not pass because of an accumulation of small errors in the directions of reflected rays
-	EXPECT_TRUE(e.value->getPosition().distance(vec3(10,10,0))<0.00001);	//Test distance with expected position
-	EXPECT_TRUE(e.value->getIncomingDirection()==dir_right);				//Test incoming direction
+	EXPECT_EQ(SPECULARREFLEXION,e.get()->getType());								//Test type
+	//EXPECT_TRUE(vec3(10,10,0).compare(e.value->getPosition()));					//Test position  - Does not pass because of an accumulation of small errors in the directions of reflected rays
+	EXPECT_TRUE(vec3(10,10,0).compare(e.get()->getPosition(),(decimal).00001));		//Test distance with expected position
+	EXPECT_TRUE(e.get()->getIncomingDirection().compare(dir_right));				//Test incoming direction
 	
 	// Clean simulation
 	simu.clean();
@@ -581,14 +582,14 @@ TEST(test_simulation_1source_1recepteur, test_diffraction)
 	EXPECT_TRUE(ray->direction==dir_down);			//Test ray final direction									
 	EXPECT_EQ(40,ray->getLongueur());				//Test ray length
 
-	std::vector<QSharedPointer<Event> >* events=ray->getEvents();
+	std::vector<std::shared_ptr<Event> >* events=ray->getEvents();
 
 	//Test number of events
 	EXPECT_EQ(3,ray->getNbEvents());						
 	EXPECT_EQ(3,events->size());		 
 
 	//Test events
-	QSharedPointer<Event> e=events->at(0);
+	std::shared_ptr<Event> e=events->at(0);
 	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());			//Test type
 	EXPECT_TRUE(vec3(0,0,0)==e.value->getPosition());			//Test position
 	EXPECT_TRUE(e.value->getIncomingDirection()==dir_right);	//Test incoming direction
@@ -707,7 +708,7 @@ TEST(test_simulation_1source_0receptor, test_1source_0receptor)
 	std::vector<Recepteur> recepteurs_after_simulation=simu.getRecepteurs();
 
 	int nbRaysPerSource=tympan::SolverConfiguration::get()->NbRaysPerSource;
-
+	
 	// Check that there is no source or receptor
 	EXPECT_EQ(1,sources_after_simulation.size());
 	EXPECT_EQ(0,recepteurs_after_simulation.size());
@@ -754,11 +755,11 @@ TEST(test_simulation_random_init, test_sources)
 		Source src_after_simulation=sources_after_simulation.at(i);
 
 		//  Test source
-		EXPECT_EQ(src_original.getName(),src_after_simulation.getName());				// Test name
-		EXPECT_EQ(src_original.getId(),src_after_simulation.getId());					// Test id
-		EXPECT_TRUE(src_original.getPosition()==src_after_simulation.getPosition());	// Test position
-		EXPECT_EQ(nbRaysPerSource,src_after_simulation.getInitialRayCount());			// Test number of rays per source
-		EXPECT_EQ(0,src_after_simulation.getNbRayLeft());								// Test number of rays left
+		EXPECT_EQ(src_original.getName(),src_after_simulation.getName());					// Test name
+		EXPECT_EQ(src_original.getId(),src_after_simulation.getId());						// Test id
+		EXPECT_TRUE(src_original.getPosition().compare(src_after_simulation.getPosition()));	// Test position
+		EXPECT_EQ(nbRaysPerSource,src_after_simulation.getInitialRayCount());				// Test number of rays per source
+		EXPECT_EQ(0,src_after_simulation.getNbRayLeft());									// Test number of rays left
 
 	}
 
@@ -794,9 +795,9 @@ TEST(test_simulation_random_init, test_recepteurs)
 		Recepteur rcpt_after_simulation=recepteurs_after_simulation.at(i);
 
 		//  Test recepteur
-		EXPECT_EQ(rcpt_original.getName(),rcpt_after_simulation.getName());				// Test name
-		EXPECT_EQ(rcpt_original.getId(),rcpt_after_simulation.getId());					// Test id
-		EXPECT_TRUE(rcpt_original.getPosition()==rcpt_after_simulation.getPosition());	// Test position
+		EXPECT_EQ(rcpt_original.getName(),rcpt_after_simulation.getName());						// Test name
+		EXPECT_EQ(rcpt_original.getId(),rcpt_after_simulation.getId());							// Test id
+		EXPECT_TRUE(rcpt_original.getPosition().compare(rcpt_after_simulation.getPosition()));	// Test position
 
 	}
 	
@@ -844,11 +845,11 @@ TEST(test_simulation_random_init, test_valid_rays_nbRaysPerSource_equals_0)
 
 		// Test original source versus valid_ray source 
 		EXPECT_EQ(sources.at(ray_source->getId()).getName(),ray_source->getName());		// Test name
-		EXPECT_TRUE(src_pos==ray_source->getPosition());								// Test position
+		EXPECT_TRUE(src_pos.compare(ray_source->getPosition()));						// Test position
 
 		// Test original receptor versus valid_ray receptor
 		EXPECT_EQ(recepteurs.at(ray_recepteur->getId()).getName(),ray_recepteur->getName());	// Test name
-		EXPECT_TRUE(rcpt_pos==ray_recepteur->getPosition());									// Test position
+		EXPECT_TRUE(rcpt_pos.compare(ray_recepteur->getPosition()));							// Test position
 
 		// Test ray 
 		EXPECT_EQ(0,valid_ray->getNbEvents());								// Test number of events
@@ -901,11 +902,11 @@ TEST(test_simulation_random_init, test_valid_rays_nbRaysPerSource_random)
 
 		// Test original source versus valid_ray source 
 		EXPECT_EQ(sources.at(ray_source->getId()).getName(),ray_source->getName());		// Test name
-		EXPECT_TRUE(src_pos==ray_source->getPosition());								// Test position
+		EXPECT_TRUE(src_pos.compare(ray_source->getPosition()));						// Test position
 
 		// Test original receptor versus valid_ray receptor
 		EXPECT_EQ(recepteurs.at(ray_recepteur->getId()).getName(),ray_recepteur->getName());	// Test name
-		EXPECT_TRUE(rcpt_pos==ray_recepteur->getPosition());									// Test position
+		EXPECT_TRUE(rcpt_pos.compare(ray_recepteur->getPosition()));							// Test position
 
 		// Test ray 
 		EXPECT_EQ(0,valid_ray->getNbEvents());								// Test number of events
@@ -959,7 +960,7 @@ TEST(test_simulation_random_init, test_debug_rays_nbRaysPerSource_random)
 
 		// Test original source versus valid_ray source 
 		EXPECT_EQ(sources.at(ray_source->getId()).getName(),ray_source->getName());		// Test name
-		EXPECT_TRUE(src_pos==ray_source->getPosition());								// Test position
+		EXPECT_TRUE(src_pos.compare(ray_source->getPosition()));						// Test position
 
 		// Test ray 
 		EXPECT_EQ(0,debug_ray->getNbEvents());									// Test number of events
