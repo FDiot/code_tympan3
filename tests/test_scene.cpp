@@ -15,9 +15,9 @@
 #include "Tympan/geometric_methods/AcousticRaytracer/Engine/Simulation.h"
 #include "Tympan/solvers/ANIME3DSolver/TYANIME3DRayTracerSolverAdapter.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/PostTreatment.h"
-#include "Tympan/models/solver/config.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
+#include "Engine/AcousticRaytracerConfiguration.h"
 
 #include <iostream>
 #include <fstream>
@@ -36,7 +36,6 @@ TEST(test_scene, test_single_point)
 	unsigned int p1;
 	simu.getScene()->addVertex(vec3(10,0,5), p1); //Add vertex to scene
 
-
 	std::vector<vec3>* vertices=simu.getScene()->getVertices(); //Recover vertices from scene
 
 	EXPECT_EQ(1,vertices->size());	//Test number of vertices
@@ -44,7 +43,7 @@ TEST(test_scene, test_single_point)
 
 	vec3 vertex=vertices->at(0);
 
-	EXPECT_TRUE(vec3(10,0,5)==vertex); //Test vertex coordinates
+	EXPECT_TRUE(vertex.compare(vec3(10,0,5))); //Test vertex coordinates
 	
 }
 
@@ -56,8 +55,7 @@ TEST(test_scene, test_random_points)
 	// Create a ray tracer
 	Simulation simu;
 
-
-	unsigned int seed=time(NULL); //Generate seed from time
+	unsigned int seed=(unsigned int)time(NULL); //Generate seed from time
 	srand(seed);				  //Init random number generator with seed
 	cout<<"Random number generator initialized with seed "<<seed<<endl;
 
@@ -66,12 +64,12 @@ TEST(test_scene, test_random_points)
 	std::vector<unsigned int> vertex_ids(nb_vertices,0); //vector of vertex ids
 	std::vector<vec3> vertices_init;					 //vector recording the vertices added to the scene
 	
-	for(int i=0;i<vertex_ids.size();i++){
+	for(unsigned int i=0;i<vertex_ids.size();i++){
 
 		//Random coordinates
-		int x=rand()%1000;
-		int y=rand()%1000;
-		int z=rand()%1000;
+		decimal x=(decimal)(rand()%1000);
+		decimal y=(decimal)(rand()%1000);
+		decimal z=(decimal)(rand()%1000);
 
 		vec3 vertex=vec3(x,y,z);
 
@@ -85,11 +83,11 @@ TEST(test_scene, test_random_points)
 	EXPECT_EQ(nb_vertices,vertices->size());  //Test number of vertices ins cene
 	
 
-	for(int i=0;i<vertices->size();i++){
+	for(unsigned int i=0;i<vertices->size();i++){
 
 		unsigned int id=vertex_ids.at(i);	
-		EXPECT_EQ(i,id);										//Test vertex id
-		EXPECT_TRUE(vertices->at(id)==vertices_init.at(i));		//Test if the vertices in the scene correspond to the recorded ones 
+		EXPECT_EQ(i,id);										    //Test vertex id
+		EXPECT_TRUE(vertices->at(id).compare(vertices_init.at(i)));	//Test if the vertices in the scene correspond to the recorded ones 
 	}
 }
 
@@ -123,9 +121,9 @@ TEST(test_scene, test_triangles)
 	
 
 	//Test the class of each shape
-	for(uint i=0;i<shapes->size();i++){
+	for(unsigned int i=0;i<shapes->size();i++){
 		Triangle* shape=dynamic_cast<Triangle*>(shapes->at(i));
-		EXPECT_TRUE(shape);
+		EXPECT_TRUE(shape>0);
 	}
 
 
@@ -137,11 +135,10 @@ TEST(test_scene, test_triangles)
 	n3.normalize();
 	vec3 n4=n3*-1;
 
-	EXPECT_TRUE(shapes->at(0)->getNormal()==n1); 
-	EXPECT_TRUE(shapes->at(1)->getNormal()==n2); 
-	EXPECT_TRUE(shapes->at(2)->getNormal()==n3); 
-	EXPECT_TRUE(shapes->at(3)->getNormal()==n4); 
-
+	EXPECT_TRUE(shapes->at(0)->getNormal().compare(n1)); 
+	EXPECT_TRUE(shapes->at(1)->getNormal().compare(n2)); 
+	EXPECT_TRUE(shapes->at(2)->getNormal().compare(n3)); 
+	EXPECT_TRUE(shapes->at(3)->getNormal().compare(n4)); 
 
 
 	//Test BBoxes
@@ -150,32 +147,32 @@ TEST(test_scene, test_triangles)
 	BBox bbox3=shapes->at(2)->getBBox();
 	BBox bbox4=shapes->at(3)->getBBox();
 
-	vec3 one_hundredth(0.01,0.01,0.01);
+	vec3 one_hundredth((decimal)0.01,(decimal)0.01,(decimal)0.01);
 
-	EXPECT_TRUE(bbox1.getBBMin()==(vec3(5,-5,-5)-one_hundredth)); 
-	EXPECT_TRUE(bbox1.getBBMax()==(vec3(5,5,5)+one_hundredth)); 
-	EXPECT_TRUE(bbox1.getCentroid()==vec3(5,0,0)); 
+	EXPECT_TRUE(bbox1.getBBMin().compare(vec3(5,-5,-5)-one_hundredth)); 
+	EXPECT_TRUE(bbox1.getBBMax().compare(vec3(5,5,5)+one_hundredth)); 
+	EXPECT_TRUE(bbox1.getCentroid().compare(vec3(5,0,0))); 
 	
-	EXPECT_TRUE(bbox2.getBBMin()==(vec3(5,-5,-5)-one_hundredth));
-	EXPECT_TRUE(bbox2.getBBMax()==(vec3(5,5,5)+one_hundredth)); 
-	EXPECT_TRUE(bbox2.getCentroid()==vec3(5,0,0)); 
+	EXPECT_TRUE(bbox2.getBBMin().compare(vec3(5,-5,-5)-one_hundredth));
+	EXPECT_TRUE(bbox2.getBBMax().compare(vec3(5,5,5)+one_hundredth)); 
+	EXPECT_TRUE(bbox2.getCentroid().compare(vec3(5,0,0))); 
 
-	EXPECT_TRUE(bbox3.getBBMin()==(vec3(-6,-3,-3)-one_hundredth)); 
-	EXPECT_TRUE(bbox3.getBBMax()==(vec3(0,3,0)+one_hundredth)); 
-	EXPECT_TRUE(bbox3.getCentroid()==vec3(-3,0,-1.5)); 
+	EXPECT_TRUE(bbox3.getBBMin().compare(vec3(-6,-3,-3)-one_hundredth)); 
+	EXPECT_TRUE(bbox3.getBBMax().compare(vec3(0,3,0)+one_hundredth)); 
+	EXPECT_TRUE(bbox3.getCentroid().compare(vec3(-3,0,-1.5))); 
 
-	EXPECT_TRUE(bbox4.getBBMin()==(vec3(-6,-3,-3)-one_hundredth));
-	EXPECT_TRUE(bbox4.getBBMax()==(vec3(0,3,0)+one_hundredth)); 
-	EXPECT_TRUE(bbox4.getCentroid()==vec3(-3,0,-1.5)); 
+	EXPECT_TRUE(bbox4.getBBMin().compare(vec3(-6,-3,-3)-one_hundredth));
+	EXPECT_TRUE(bbox4.getBBMax().compare(vec3(0,3,0)+one_hundredth)); 
+	EXPECT_TRUE(bbox4.getCentroid().compare(vec3(-3,0,-1.5))); 
 
 
 
 	//Test scene boundaries
 	BBox global_bbox=simu.getScene()->getGlobalBox();
 
-	EXPECT_TRUE(global_bbox.getBBMin()==(vec3(-6,-5,-5)-one_hundredth)); 
-	EXPECT_TRUE(global_bbox.getBBMax()==(vec3(5,5,5)+one_hundredth)); 
-	EXPECT_TRUE(global_bbox.getCentroid()==vec3(-0.5,0,0)); 
+	EXPECT_TRUE(global_bbox.getBBMin().compare(vec3(-6,-5,-5)-one_hundredth)); 
+	EXPECT_TRUE(global_bbox.getBBMax().compare(vec3(5,5,5)+one_hundredth)); 
+	EXPECT_TRUE(global_bbox.getCentroid().compare(vec3(-0.5,0,0))); 
 	
 
 }
@@ -226,18 +223,18 @@ TEST(test_scene, test_building)
 	EXPECT_NE(vertices->end(),it);
 
 	//Test the class of each shape
-	for(uint i=0;i<shapes->size();i++){
+	for(unsigned int i=0;i<shapes->size();i++){
 		Triangle* shape=dynamic_cast<Triangle*>(shapes->at(i));
-		EXPECT_TRUE(shape);
+		EXPECT_TRUE(shape>0);
 	}
 
 	//Test scene boundaries
 	BBox bbox=simu.getScene()->getGlobalBox();
-	vec3 one_hundredth(0.01,0.01,0.01);
+	vec3 one_hundredth((decimal)0.01,(decimal)0.01,(decimal)0.01);
 
-	EXPECT_TRUE(bbox.getBBMin()==(origin-one_hundredth)); 
-	EXPECT_TRUE(bbox.getBBMax()==(origin+dimensions+one_hundredth)); 
-	EXPECT_TRUE(bbox.getCentroid()==origin+dimensions/2); 
+	EXPECT_TRUE(bbox.getBBMin().compare(origin-one_hundredth)); 
+	EXPECT_TRUE(bbox.getBBMax().compare(origin+dimensions+one_hundredth)); 
+	EXPECT_TRUE(bbox.getCentroid().compare(origin+dimensions/2)); 
 }
 
 // Test the presence of a diffraction edge when the angle between two faces is low enough
@@ -250,8 +247,8 @@ TEST(test_scene, test_diffraction_edge1)
 	double angle=175;
 	simu.getScene()->addVertex(vec3(0,0,0), p1);
 	simu.getScene()->addVertex(vec3(0,1,0), p2);
-	simu.getScene()->addVertex(vec3(1,1,-tan(angle/2*M_PI/180)), p3);
-	simu.getScene()->addVertex(vec3(1,1,tan(angle/2*M_PI/180)), p4);
+	simu.getScene()->addVertex(vec3(1,1,(decimal)(-tan(angle/2*M_PI/180))), p3);
+	simu.getScene()->addVertex(vec3(1,1,(decimal)tan(angle/2*M_PI/180)), p4);
 
 	simu.getScene()->addTriangle(p1,p2,p3,&Material());
 	simu.getScene()->addTriangle(p1,p4,p2,&Material());
@@ -273,9 +270,9 @@ TEST(test_scene, test_diffraction_edge1)
 	Triangle* shape2=dynamic_cast<Triangle*>(shapes->at(1));
 	Cylindre* shape3=dynamic_cast<Cylindre*>(shapes->at(2));
 
-	EXPECT_TRUE(shape1);
-	EXPECT_TRUE(shape2);
-	EXPECT_TRUE(shape3);
+	EXPECT_TRUE(shape1>0);
+	EXPECT_TRUE(shape2>0);
+	EXPECT_TRUE(shape3>0);
 	
 }
 // Test the presence of a diffraction edge when the angle between two faces is low enough
@@ -284,15 +281,15 @@ TEST(test_scene, test_diffraction_edge2)
 
 	Simulation simu;
 	 
-	tympan::LPSolverConfiguration config =tympan::SolverConfiguration::get();
+	AcousticRaytracerConfiguration* config =AcousticRaytracerConfiguration::get();
 	config->AngleDiffMin=20;
 
 	unsigned int p1,p2,p3,p4;
 	double angle=160;
 	simu.getScene()->addVertex(vec3(0,0,0), p1);
 	simu.getScene()->addVertex(vec3(0,1,0), p2);
-	simu.getScene()->addVertex(vec3(1,1,-tan(angle/2*M_PI/180)), p3);
-	simu.getScene()->addVertex(vec3(1,1,tan(angle/2*M_PI/180)), p4);
+	simu.getScene()->addVertex(vec3(1,1,(decimal)-tan(angle/2*M_PI/180)), p3);
+	simu.getScene()->addVertex(vec3(1,1,(decimal)tan(angle/2*M_PI/180)), p4);
 
 	simu.getScene()->addTriangle(p1,p2,p3,&Material());
 	simu.getScene()->addTriangle(p1,p4,p2,&Material());
@@ -314,9 +311,9 @@ TEST(test_scene, test_diffraction_edge2)
 	Triangle* shape2=dynamic_cast<Triangle*>(shapes->at(1));
 	Cylindre* shape3=dynamic_cast<Cylindre*>(shapes->at(2));
 
-	EXPECT_TRUE(shape1);
-	EXPECT_TRUE(shape2);
-	EXPECT_TRUE(shape3);
+	EXPECT_TRUE(shape1>0);
+	EXPECT_TRUE(shape2>0);
+	EXPECT_TRUE(shape3>0);
 	
 }
 
@@ -331,8 +328,8 @@ TEST(test_scene, test_diffraction_edge3)
 	double angle=175.1;
 	simu.getScene()->addVertex(vec3(0,0,0), p1);
 	simu.getScene()->addVertex(vec3(0,1,0), p2);
-	simu.getScene()->addVertex(vec3(1,1,-tan(angle/2*M_PI/180)), p3);
-	simu.getScene()->addVertex(vec3(1,1,tan(angle/2*M_PI/180)), p4);
+	simu.getScene()->addVertex(vec3(1,1,(decimal)-tan(angle/2*M_PI/180)), p3);
+	simu.getScene()->addVertex(vec3(1,1,(decimal)tan(angle/2*M_PI/180)), p4);
 
 	simu.getScene()->addTriangle(p1,p2,p3,&Material());
 	simu.getScene()->addTriangle(p1,p4,p2,&Material());
@@ -353,8 +350,8 @@ TEST(test_scene, test_diffraction_edge3)
 	Triangle* shape1=dynamic_cast<Triangle*>(shapes->at(0));
 	Triangle* shape2=dynamic_cast<Triangle*>(shapes->at(1));
 
-	EXPECT_TRUE(shape1);
-	EXPECT_TRUE(shape2);
+	EXPECT_TRUE(shape1>0);
+	EXPECT_TRUE(shape2>0);
 }
 
 // Test the absence of diffraction edge when the angle between two faces is too high
@@ -363,15 +360,15 @@ TEST(test_scene, test_diffraction_edge4)
 
 	Simulation simu;
 	 
-	tympan::LPSolverConfiguration config =tympan::SolverConfiguration::get();
+	AcousticRaytracerConfiguration* config =AcousticRaytracerConfiguration::get();
 	config->AngleDiffMin=20;
 
 	unsigned int p1,p2,p3,p4;
 	double angle=160.1;
 	simu.getScene()->addVertex(vec3(0,0,0), p1);
 	simu.getScene()->addVertex(vec3(0,1,0), p2);
-	simu.getScene()->addVertex(vec3(1,1,-tan(angle/2*M_PI/180)), p3);
-	simu.getScene()->addVertex(vec3(1,1,tan(angle/2*M_PI/180)), p4);
+	simu.getScene()->addVertex(vec3(1,1,(decimal)-tan(angle/2*M_PI/180)), p3);
+	simu.getScene()->addVertex(vec3(1,1,(decimal)tan(angle/2*M_PI/180)), p4);
 
 	simu.getScene()->addTriangle(p1,p2,p3,&Material());
 	simu.getScene()->addTriangle(p1,p4,p2,&Material());
@@ -392,6 +389,6 @@ TEST(test_scene, test_diffraction_edge4)
 	Triangle* shape1=dynamic_cast<Triangle*>(shapes->at(0));
 	Triangle* shape2=dynamic_cast<Triangle*>(shapes->at(1));
 
-	EXPECT_TRUE(shape1);
-	EXPECT_TRUE(shape2);
+	EXPECT_TRUE(shape1>0);
+	EXPECT_TRUE(shape2>0);
 }

@@ -12,6 +12,7 @@
 #include <time.h> 
 
 #include "gtest/gtest.h"
+#include "Acoustic/Recepteur.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Tools/FaceSelector.h"
@@ -65,30 +66,30 @@ TEST(test_CleanerSelector_canBeInserted, nothing_events)
 
 	//Create several events, some with the type NOTHING
 	Event* e1=new Event();
-	QSharedPointer<Event> SPE1(e1);
+	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
 	Event* e2=new Event();
 	e2->setType(NOTHING);
-	QSharedPointer<Event> SPE2(e2);
+	std::shared_ptr<Event> SPE2(e2);
 	r->getEvents()->push_back(SPE2);
 
 	SpecularReflexion* e3=new SpecularReflexion();
 	e3->setType(NOTHING);
-	QSharedPointer<Event> SPE3(e3);
+	std::shared_ptr<Event> SPE3(e3);
 	r->getEvents()->push_back(SPE3);
 
 	SpecularReflexion* e4=new SpecularReflexion();
-	QSharedPointer<Event> SPE4(e4);
+	std::shared_ptr<Event> SPE4(e4);
 	r->getEvents()->push_back(SPE4);
 
 	Diffraction* e5=new Diffraction();
-	QSharedPointer<Event> SPE5(e5);
+	std::shared_ptr<Event> SPE5(e5);
 	r->getEvents()->push_back(SPE5);
 
 	Diffraction* e6=new Diffraction();
 	e6->setType(NOTHING);
-	QSharedPointer<Event> SPE6(e6);
+	std::shared_ptr<Event> SPE6(e6);
 	r->getEvents()->push_back(SPE6);
 
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
@@ -118,28 +119,28 @@ TEST(test_CleanerSelector_insertWithTest, nothing_events)
 	//Create several events, some with the type NOTHING
 	Event* e1=new Event();
 	e1->setType(NOTHING);
-	QSharedPointer<Event> SPE1(e1);
+	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
 	Event* e2=new Event();
-	QSharedPointer<Event> SPE2(e2);
+	std::shared_ptr<Event> SPE2(e2);
 	r->getEvents()->push_back(SPE2);
 
 	SpecularReflexion* e3=new SpecularReflexion();
-	QSharedPointer<Event> SPE3(e3);
+	std::shared_ptr<Event> SPE3(e3);
 	r->getEvents()->push_back(SPE3);
 
 	SpecularReflexion* e4=new SpecularReflexion();
-	QSharedPointer<Event> SPE4(e4);
+	std::shared_ptr<Event> SPE4(e4);
 	r->getEvents()->push_back(SPE4);
 
 	Diffraction* e5=new Diffraction();
 	e5->setType(NOTHING);
-	QSharedPointer<Event> SPE5(e5);
+	std::shared_ptr<Event> SPE5(e5);
 	r->getEvents()->push_back(SPE5);
 
 	Diffraction* e6=new Diffraction();
-	QSharedPointer<Event> SPE6(e6);
+	std::shared_ptr<Event> SPE6(e6);
 	r->getEvents()->push_back(SPE6);
 
 	EXPECT_TRUE(selector.insertWithTest(r)); //Test return value of insertWithTest
@@ -163,7 +164,7 @@ TEST(test_CloseEventSelector_canBeInserted, less_than_2_events)
 
 	//Add one event
 	Event* e1=new Event();
-	QSharedPointer<Event> SPE1(e1);
+	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
 	//nb events = 1 < 2   =>   response should be SELECTOR_ACCEPT
@@ -181,13 +182,13 @@ TEST(test_CloseEventSelector_canBeInserted, same_type_events)
 	//Add one event
 	SpecularReflexion* e1=new SpecularReflexion();
 	e1->setType(SPECULARREFLEXION);
-	QSharedPointer<Event> SPE1(e1);
+	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
 	//Add one event
 	SpecularReflexion* e2=new SpecularReflexion();
 	e2->setType(SPECULARREFLEXION);
-	QSharedPointer<Event> SPE2(e2);
+	std::shared_ptr<Event> SPE2(e2);
 	r->getEvents()->push_back(SPE2);
 
 	//two events of same type   =>   response should be SELECTOR_ACCEPT
@@ -206,13 +207,13 @@ TEST(test_CloseEventSelector_canBeInserted, different_type_events_occuring_on_di
 	//Add one event
 	SpecularReflexion* e1=new SpecularReflexion();
 	e1->setType(SPECULARREFLEXION);
-	QSharedPointer<Event> SPE1(e1);
+	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
 	//Add second event
 	Diffraction* e2=new Diffraction();
 	e2->setType(DIFFRACTION);
-	QSharedPointer<Event> SPE2(e2);
+	std::shared_ptr<Event> SPE2(e2);
 	r->getEvents()->push_back(SPE2);
 
 	//Add a shape to the first event
@@ -221,7 +222,7 @@ TEST(test_CloseEventSelector_canBeInserted, different_type_events_occuring_on_di
 
 	//Add a different shape to the second event
 	Shape* s2=new Shape();
-	Cylindre* s3=new Cylindre(s2,s2,0,1,0.2);
+	Cylindre* s3=new Cylindre(s2,s2,new std::vector<vec3>(),0,1,(decimal)0.2);
 	e2->setShape(s3);
 
 	//two events of different type occuring on different shapes  =>   response should be SELECTOR_ACCEPT
@@ -241,13 +242,13 @@ TEST(test_CloseEventSelector_canBeInserted, different_type_events_occuring_on_sa
 	//Add one event
 	SpecularReflexion* e1=new SpecularReflexion();
 	e1->setType(SPECULARREFLEXION);
-	QSharedPointer<Event> SPE1(e1);
+	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
 	//Add second event
 	Diffraction* e2=new Diffraction();
 	e2->setType(DIFFRACTION);
-	QSharedPointer<Event> SPE2(e2);
+	std::shared_ptr<Event> SPE2(e2);
 	r->getEvents()->push_back(SPE2);
 
 	//Add a shape to the first event
@@ -255,7 +256,7 @@ TEST(test_CloseEventSelector_canBeInserted, different_type_events_occuring_on_sa
 	e1->setShape(s1);
 
 	//Add the same shape to the second event
-	Cylindre* s2=new Cylindre(s1,s1,0,1,0.2);
+	Cylindre* s2=new Cylindre(s1,s1,new std::vector<vec3>(),0,1,(decimal)0.2);
 	e2->setShape(s2);
 
 	//Consecutive events of different type occuring on same shape =>  response should be SELECTOR_REJECT
@@ -275,7 +276,7 @@ TEST(test_CloseEventSelector_insertWithTest, less_than_2_events)
 
 	//Add one event
 	Event* e1=new Event();
-	QSharedPointer<Event> SPE1(e1);
+	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
 	//nb events = 1 < 2   =>  return value should be TRUE
@@ -293,13 +294,13 @@ TEST(test_CloseEventSelector_insertWithTest, same_type_events)
 	//Add second event
 	Diffraction* e1=new Diffraction();
 	e1->setType(DIFFRACTION);
-	QSharedPointer<Event> SPE1(e1);
+	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
 	//Add second event
 	Diffraction* e2=new Diffraction();
 	e2->setType(DIFFRACTION);
-	QSharedPointer<Event> SPE2(e2);
+	std::shared_ptr<Event> SPE2(e2);
 	r->getEvents()->push_back(SPE2);
 
 	//two events of same type   =>   return value should be TRUE
@@ -317,18 +318,18 @@ TEST(test_CloseEventSelector_insertWithTest, different_type_events_occuring_on_d
 	//Add one event
 	Diffraction* e1=new Diffraction();
 	e1->setType(DIFFRACTION);
-	QSharedPointer<Event> SPE1(e1);
+	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
 	//Add one event
 	SpecularReflexion* e2=new SpecularReflexion();
 	e2->setType(SPECULARREFLEXION);
-	QSharedPointer<Event> SPE2(e2);
+	std::shared_ptr<Event> SPE2(e2);
 	r->getEvents()->push_back(SPE2);
 
 	//Add a shape to the first event
 	Shape* s1=new Shape();
-	Cylindre* s2=new Cylindre(s1,s1,0,1,0.2);
+	Cylindre* s2=new Cylindre(s1,s1,new std::vector<vec3>(),0,1,(decimal)0.2);
 	e1->setShape(s2);
 
 	//Add a different shape to each event
@@ -349,18 +350,18 @@ TEST(test_CloseEventSelector_insertWithTest, different_type_events_occuring_on_s
 	//Add one event
 	Diffraction* e1=new Diffraction();
 	e1->setType(DIFFRACTION);
-	QSharedPointer<Event> SPE1(e1);
+	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
 	//Add second event
 	SpecularReflexion* e2=new SpecularReflexion();
 	e2->setType(SPECULARREFLEXION);
-	QSharedPointer<Event> SPE2(e2);
+	std::shared_ptr<Event> SPE2(e2);
 	r->getEvents()->push_back(SPE2);
 
 	//Add a shape to the first event
 	Shape* s1=new Shape();
-	Cylindre* s2=new Cylindre(s1,s1,0,1,0.2);
+	Cylindre* s2=new Cylindre(s1,s1,new std::vector<vec3>(),0,1,(decimal)0.2);
 	e1->setShape(s2);
 
 	//Add the same shape to the second event
@@ -398,7 +399,7 @@ TEST(test_DiffractionAngleSelector_canBeInserted, only_reflexions)
 	for(int i=0;i<5;i++){
 		SpecularReflexion* e=new SpecularReflexion();
 		e->setType(SPECULARREFLEXION);
-		QSharedPointer<Event> SPE(e);
+		std::shared_ptr<Event> SPE(e);
 		r->getEvents()->push_back(SPE);
 		r->nbReflexion++;
 	}
@@ -426,22 +427,22 @@ TEST(test_DiffractionAngleSelector_canBeInserted, no_direction_change)
 	r->source=src;
 
 	//Set a receptor
-	vec3 rcpt_pos=initial_position+direction*3.7; //Set the receptor's position to be a linear combination of initial_position and direction
+	vec3 rcpt_pos=initial_position+direction*(decimal)3.7; //Set the receptor's position to be a linear combination of initial_position and direction
 	Recepteur* rcpt=new Recepteur(rcpt_pos,3);
 	rcpt->setName("rcpt");
 	r->recepteur=rcpt;
 
 	//Define the shape used by the diffraction
 	Shape* s1=new Shape();
-	Cylindre* s3=new Cylindre(s1,s1,0,1,0.2);
+	Cylindre* s3=new Cylindre(s1,s1,new std::vector<vec3>(),0,1,(decimal)0.2);
 
 	//Define a DIFFRACTION event with its position between the source and the receptor and aligned with them
 	Diffraction* e=new Diffraction();
 	e->setType(DIFFRACTION);
 	e->setShape(s3);
-	vec3 diff_pos=initial_position+direction*1.2; //Set the diffraction event's position to be a linear combination of initial_position and direction
+	vec3 diff_pos=initial_position+direction*(decimal)1.2; //Set the diffraction event's position to be a linear combination of initial_position and direction
 	e->setPosition(diff_pos); 
-	QSharedPointer<Event> SPE(e);
+	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
 	r->nbDiffraction++;
@@ -472,14 +473,14 @@ TEST(test_DiffractionAngleSelector_canBeInserted, ray_launched_in_shadow_zone)
 	//Define the shape used by the diffraction
 	Triangle* s1=new Triangle(vec3(0,0,-1),vec3(0,0,1),vec3(-1,1,0),new Material());
 	Triangle* s2=new Triangle(vec3(0,0,1),vec3(0,0,-1),vec3(1,1,0),new Material());
-	Cylindre* s3=new Cylindre(s1,s2,0,1,0.2);
+	Cylindre* s3=new Cylindre(s1,s2,new std::vector<vec3>(),0,1,(decimal)0.2);
 
 	//Define a DIFFRACTION event with its position between the source and the receptor and aligned with them
 	Diffraction* e=new Diffraction();
 	e->setType(DIFFRACTION);
 	e->setShape(s3);
 	e->setPosition(vec3(0,0,0)); 
-	QSharedPointer<Event> SPE(e);
+	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
 	r->nbDiffraction++;
@@ -510,14 +511,14 @@ TEST(test_DiffractionAngleSelector_canBeInserted, ray_launched_outside_shadow_zo
 	//Define the shape used by the diffraction
 	Triangle* s1=new Triangle(vec3(0,0,-1),vec3(0,0,1),vec3(-1,1,0),new Material());
 	Triangle* s2=new Triangle(vec3(0,0,1),vec3(0,0,-1),vec3(1,1,0),new Material());
-	Cylindre* s3=new Cylindre(s1,s2,0,1,0.2);
+	Cylindre* s3=new Cylindre(s1,s2,new std::vector<vec3>(),0,1,(decimal)0.2);
 
 	//Define a DIFFRACTION event with its position between the source and the receptor and aligned with them
 	Diffraction* e=new Diffraction();
 	e->setType(DIFFRACTION);
 	e->setShape(s3);
 	e->setPosition(vec3(0,0,0)); 
-	QSharedPointer<Event> SPE(e);
+	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
 	r->nbDiffraction++;
@@ -548,7 +549,7 @@ TEST(test_DiffractionAngleSelector_insertWithTest, only_reflexions)
 	for(int i=0;i<5;i++){
 		SpecularReflexion* e=new SpecularReflexion();
 		e->setType(SPECULARREFLEXION);
-		QSharedPointer<Event> SPE(e);
+		std::shared_ptr<Event> SPE(e);
 		r->getEvents()->push_back(SPE);
 		r->nbReflexion++;
 	}
@@ -574,22 +575,22 @@ TEST(test_DiffractionAngleSelector_insertWithTest, no_direction_change)
 	r->source=src;
 
 	//Set a receptor
-	vec3 rcpt_pos=initial_position+direction*3.7; //Set the receptor's position to be a linear combination of initial_position and direction
+	vec3 rcpt_pos=initial_position+direction*(decimal)3.7; //Set the receptor's position to be a linear combination of initial_position and direction
 	Recepteur* rcpt=new Recepteur(rcpt_pos,3);
 	rcpt->setName("rcpt");
 	r->recepteur=rcpt;
 
 	//Define the shape used by the diffraction
 	Shape* s1=new Shape();
-	Cylindre* s3=new Cylindre(s1,s1,0,1,0.2);
+	Cylindre* s3=new Cylindre(s1,s1,new std::vector<vec3>(),0,1,(decimal)0.2);
 
 	//Define a DIFFRACTION event with its position between the source and the receptor and aligned with them
 	Diffraction* e=new Diffraction();
 	e->setType(DIFFRACTION);
 	e->setShape(s3);
-	vec3 diff_pos=initial_position+direction*1.2; //Set the diffraction event's position to be a linear combination of initial_position and direction
+	vec3 diff_pos=initial_position+direction*(decimal)1.2; //Set the diffraction event's position to be a linear combination of initial_position and direction
 	e->setPosition(diff_pos); 
-	QSharedPointer<Event> SPE(e);
+	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
 	r->nbDiffraction++;
@@ -618,14 +619,14 @@ TEST(test_DiffractionAngleSelector_insertWithTest, ray_launched_in_shadow_zone)
 	//Define the shape used by the diffraction
 	Triangle* s1=new Triangle(vec3(0,0,-1),vec3(0,0,1),vec3(-1,1,0),new Material());
 	Triangle* s2=new Triangle(vec3(0,0,1),vec3(0,0,-1),vec3(1,1,0),new Material());
-	Cylindre* s3=new Cylindre(s1,s2,0,1,0.2);
+	Cylindre* s3=new Cylindre(s1,s2,new std::vector<vec3>(),0,1,(decimal)0.2);
 
 	//Define a DIFFRACTION event with its position between the source and the receptor and aligned with them
 	Diffraction* e=new Diffraction();
 	e->setType(DIFFRACTION);
 	e->setShape(s3);
 	e->setPosition(vec3(0,0,0)); 
-	QSharedPointer<Event> SPE(e);
+	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
 	r->nbDiffraction++;
@@ -654,14 +655,14 @@ TEST(test_DiffractionAngleSelector_insertWithTest, ray_launched_outside_shadow_z
 	//Define the shape used by the diffraction
 	Triangle* s1=new Triangle(vec3(0,0,-1),vec3(0,0,1),vec3(-1,1,0),new Material());
 	Triangle* s2=new Triangle(vec3(0,0,1),vec3(0,0,-1),vec3(1,1,0),new Material());
-	Cylindre* s3=new Cylindre(s1,s2,0,1,0.2);
+	Cylindre* s3=new Cylindre(s1,s2,new std::vector<vec3>(),0,1,(decimal)0.2);
 
 	//Define a DIFFRACTION event with its position between the source and the receptor and aligned with them
 	Diffraction* e=new Diffraction();
 	e->setType(DIFFRACTION);
 	e->setShape(s3);
 	e->setPosition(vec3(0,0,0)); 
-	QSharedPointer<Event> SPE(e);
+	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
 	r->nbDiffraction++;

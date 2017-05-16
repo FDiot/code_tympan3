@@ -18,7 +18,6 @@
 
 #include "Selector.h"
 #include "Geometry/3d.h"
-#include "Tympan/solvers/AcousticRaytracer/Acoustic/Recepteur.h"
 
 /*!
  * \brief : Select diffracted rays that are launched in the shadow zone of the obstacle (closed angle)
