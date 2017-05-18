@@ -32,8 +32,6 @@ bool Simulation::launchSimulation()
     ss << "Lancement de la simulation." << std::endl;
     if (solver) { solver->clean(); }
     if (engine) { delete engine; }
-    // Provisoire
-    //std::cerr << "AcousticRaytracerConfiguration::get()->NbRaysPerSource=" << AcousticRaytracerConfiguration::get()->NbRaysPerSource << std::endl;
     // Create the engine from engineC enum
     switch (engineC)
     {
@@ -52,7 +50,6 @@ bool Simulation::launchSimulation()
 #else
 bool Simulation::launchSimulation()
 {
-    ss << "Lancement de la simulation." << std::endl;
     if (solver) { solver->clean(); }
     if (engine) { delete engine; }
     switch (engineC)

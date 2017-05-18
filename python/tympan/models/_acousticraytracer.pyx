@@ -62,7 +62,14 @@ cdef class cySimulation:
         self.thisptr.get().clean()
     def getConfiguration(self):
         """Get the ray tracer configuration"""
-        return self.configuration 
+        return self.configuration
+    def getSourcesNumber(self):
+        """Get the sources number"""
+        return self.thisptr.get().getSources().size()
+    def getSceneVerticesNumber(self):
+        """Get the number of Scene vertices"""
+        scene=self.thisptr.get().getScene()
+        return scene.getVertices().size()
 
 cdef class cyRecepteur:
     """Cython class for Receptor"""
