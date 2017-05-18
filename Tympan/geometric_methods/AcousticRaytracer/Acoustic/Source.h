@@ -19,10 +19,10 @@
 #include <string>
 #include <iostream>
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Sampler.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
+#include "Geometry/Sampler.h"
+#include "Base.h"
 #ifdef _ALLOW_TARGETING_
-  #include "Tympan/geometric_methods/AcousticRaytracer/Tools/TargetManager.h"
+  #include "Tools/TargetManager.h"
 #endif //_ALLOW_TARGETING_
 #include "Spectre.h"
 

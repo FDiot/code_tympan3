@@ -16,9 +16,9 @@
 #ifndef BVHACCELERATOR_H
 #define BVHACCELERATOR_H
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/BBox.h"
+#include "Geometry/BBox.h"
 #include <vector>
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Shape.h"
+#include "Geometry/Shape.h"
 #include "Accelerator.h"
 
 struct BVHBuildNode;

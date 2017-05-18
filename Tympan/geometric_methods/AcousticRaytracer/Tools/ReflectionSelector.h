@@ -17,8 +17,8 @@
 #define REFLECTION_SELECTOR
 
 #include "Selector.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/SpecularReflexion.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Shape.h"
+#include "Acoustic/SpecularReflexion.h"
+#include "Geometry/Shape.h"
 
 /*!
  * \brief : To disable the rays which have a number of reflection events greater than a given threshold

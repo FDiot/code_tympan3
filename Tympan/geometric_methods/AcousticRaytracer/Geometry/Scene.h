@@ -17,7 +17,7 @@
 #define SCENE_H
 
 #include <vector>
-#include "Tympan/geometric_methods/AcousticRaytracer/Accelerator/Accelerator.h"
+#include "Accelerator/Accelerator.h"
 #include "Shape.h"
 
 /**
@@ -45,7 +45,7 @@ struct compVec
 };
 
 /**
- * \brief Scene
+ * \brief This class mainly define a mesh (list of Shape) used by the Simulation object
  */
 class Scene : public Base
 {

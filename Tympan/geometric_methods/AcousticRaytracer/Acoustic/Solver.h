@@ -19,8 +19,8 @@
 #include <vector>
 #include <deque>
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Scene.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Ray/Ray.h"
+#include "Geometry/Scene.h"
+#include "Ray/Ray.h"
 #include "Recepteur.h"
 
 /*!

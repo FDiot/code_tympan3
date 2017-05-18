@@ -16,13 +16,13 @@
 #ifndef SIMULATION_H
 #define SIMULATION_H
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Scene.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Solver.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Source.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Recepteur.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Material.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Tools/Logger.h"
+#include "Base.h"
+#include "Geometry/Scene.h"
+#include "Acoustic/Solver.h"
+#include "Acoustic/Source.h"
+#include "Acoustic/Recepteur.h"
+#include "Acoustic/Material.h"
+#include "Tools/Logger.h"
 #include "AcousticRaytracerConfiguration.h"
 #include "DefaultEngine.h"
 #include "ParallelDefaultEngine.h"

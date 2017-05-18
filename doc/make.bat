@@ -53,6 +53,7 @@ if "%1" == "html" (
      cd _build
      mkdir doxygen
      cd ../doxygen
+     echo.Doxygen 1.8.6 (above version crashes) and Graphviz 2.38 should be installed to create Doxygen documentation.
      doxygen
      cd ..
 	%SPHINXBUILD% -b html %ALLSPHINXOPTS% %BUILDDIR%/html

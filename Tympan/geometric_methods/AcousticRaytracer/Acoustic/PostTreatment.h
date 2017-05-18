@@ -16,11 +16,11 @@
 #ifndef POSTTREATMENT_H
 #define POSTTREATMENT_H
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Scene.h"
+#include "Geometry/Scene.h"
 #include "Recepteur.h"
 
 #ifdef _ALLOW_TARGETING_
-#include "Tympan/geometric_methods/AcousticRaytracer/Tools/TargetManager.h"
+#include "Tools/TargetManager.h"
 #endif _ALLOW_TARGETING_
 
 /**

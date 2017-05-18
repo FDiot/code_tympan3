@@ -16,10 +16,10 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Scene.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Source.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Solver.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Acoustic/Recepteur.h"
+#include "Geometry/Scene.h"
+#include "Acoustic/Source.h"
+#include "Acoustic/Solver.h"
+#include "Acoustic/Recepteur.h"
 
 #define TEST_ACCELERATION_RECEPTORS
 
