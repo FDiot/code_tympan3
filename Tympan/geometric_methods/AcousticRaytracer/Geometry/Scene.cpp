@@ -262,7 +262,6 @@ void Scene::import_from_ply(std::string fileName)
     {
         unsigned int p;
         in >> x >> y >> z; // x y z
-        //std::cerr << x << " " << y << " " << z << std::endl;
         addVertex(vec3(x,y,z),p);
     }
     ss << "La scene lue comporte " << nb_vertex << " vertex." << std::endl;
@@ -275,7 +274,6 @@ void Scene::import_from_ply(std::string fileName)
         in >> n >> i1 >> i2 >> i3; // vertices
         if (material) in >> keyword; // material 
         in >> keyword >> keyword >> keyword; // color
-        //std::cerr << i1 << " " << i2 << " " << i3 << std::endl;
         if (n!=3) { std::cerr << "The shape " << i << " is not a Triangle !" << std::endl;exit(-1); }
         addTriangle(i1,i2,i3, m, false);
     }

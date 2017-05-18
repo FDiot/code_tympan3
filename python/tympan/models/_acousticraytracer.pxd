@@ -203,6 +203,7 @@ cdef extern from "Tympan/geometric_methods/AcousticRaytracer/Geometry/Scene.h":
         void addShape(Shape*)
         BBox getGlobalBox()
         Accelerator* getAccelerator()
+        vector[base_vec3]* getVertices()
         bool addVertex(base_vec3[float]&, int)
         Shape* addTriangle(int, int, int, Material*, bool)
         void addBuilding (base_vec3[float], base_vec3[float], Material*)

@@ -24,19 +24,21 @@ class TestAcousticRayTracer(TympanTC):
         simulation.configuration().Discretization = 2
         source = Source()
         simulation.add_source(source)
+        # Check the number of sources
+        self.assertEqual(simulation._simulation.getSourcesNumber(), 1)
 
     def test_basic_read_write_ply_files(self):
         """Test: import/export a Scene"""
         simulation = Simulation()
         ply_file = self.datapath('Scene.ply')
         simulation.import_scene(ply_file)
+        # Check the number of vertices
+        self.assertEqual(simulation._simulation.getSceneVerticesNumber(), 119)
         with tempfile.NamedTemporaryFile(delete=False) as file:
             simulation.export_scene(file.name)
-            # print(f.name)
 
     def test_complete_running_simulation(self):
         """Test: complete running of a simulation"""
-        print("\nTrying to create a simulation ...")
         # Create the RayTracer
         simulation = Simulation()
         # Read a Scene from a PLY file
@@ -61,8 +63,10 @@ class TestAcousticRayTracer(TympanTC):
         simulation.set_accelerator()
         # Set the engine
         simulation.set_engine()
-        print("\nTrying to launch a simulation ...")
-        simulation.launch_simulation()
+        # Launch the simulation
+        success = simulation.launch_simulation()
+        # Check success
+        self.assertEqual(success, True)
         # Clean the process
         simulation.clean()
 
