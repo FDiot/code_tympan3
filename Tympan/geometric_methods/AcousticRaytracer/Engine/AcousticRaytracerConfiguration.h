@@ -16,54 +16,57 @@
 #ifndef ACOUSTICRAYTRACERCONFIGURATION_H
 #define ACOUSTICRAYTRACERCONFIGURATION_H
 
+/**
+ * @brief Class defining the configuration of the acoustic ray tracer.
+ */
 class AcousticRaytracerConfiguration
 {
 public:
-    // Constructor
+    /// Constructor
     AcousticRaytracerConfiguration();
-    // Get access to the configuration
+    /// Get access to the configuration
     static AcousticRaytracerConfiguration* get();
 
-    /// Attributes
+    // Attributes
     // Ray tracing
-    unsigned int NbRaysPerSource;
-    unsigned int Discretization;
-    unsigned int Accelerator;
-    unsigned int MaxTreeDepth;
-    unsigned int NbRayWithDiffraction;
-    unsigned int MaxProfondeur;
-    unsigned int MaxReflexion;
-    unsigned int MaxDiffraction;
-    double MaxLength;
+    unsigned int NbRaysPerSource; //!< Number of rays per source for the Sampler
+    unsigned int Discretization; //!< Sampler choice with 0: RandomSphericSampler, 1: UniformSphericSampler, 2: UniformSphericSampler2, 3: Latitude2DSampler
+    unsigned int Accelerator; //!< Accelerator choice with 0: BruteForceAccelerator, 1: GridAccelerator, 2: BvhAccelerator, 3: KdtreeAccelerator
+    unsigned int MaxTreeDepth; //!< BvhAccelerator Accelerator option (Maximal tree depth)
+    unsigned int NbRayWithDiffraction; //!< Number of rays to throw during diffraction
+    unsigned int MaxProfondeur; //!< Maximal number of events for ray validation in ANIME3D solver
+    unsigned int MaxReflexion; //!< Maximal reflection events
+    unsigned int MaxDiffraction; //!< Maximal diffraction events
+    double MaxLength; //!< LengthSelector Selector option (maximal length)
     double SizeReceiver;
-    double AngleDiffMin;
-    double CylindreThick;
-    double MaxPathDifference;
+    double AngleDiffMin; //!< Minimal angle (other PI) between two face to allow building of a diffraction cylinder
+    double CylindreThick; //!< Diffraction cylinder diameter
+    double MaxPathDifference; //!< Parameter (by default 24) for path validations during diffraction
 
     // Sampler
-    double InitialAnglePhi;
-    double FinalAnglePhi;
-    double InitialAngleTheta;
-    double FinalAngleTheta;
+    double InitialAnglePhi; //!< Starting angle phi for the curve ray sampler
+    double FinalAnglePhi; //!< Ending angle phi for the curve ray sampler
+    double InitialAngleTheta; //!< Starting angle theta for the curve ray sampler
+    double FinalAngleTheta; //!< Ending angle theta for the curve ray sampler
 
     // Filters
     bool UseSol;
-    bool UsePathDifValidation;
-    bool DiffractionFilterRayAtCreation;
-    bool DiffractionUseDistanceAsFilter;
-    bool DiffractionUseRandomSampler;
-    bool DiffractionDropDownNbRays;
+    bool UsePathDifValidation; //!< Flag to activate path validations during diffraction
+    bool DiffractionFilterRayAtCreation; //!< Flag to filter the created rays during diffraction
+    bool DiffractionUseDistanceAsFilter; //!< Flag to use distance based filter during diffraction (distance from the ridge)
+    bool DiffractionUseRandomSampler; //!< Flag to enable random (and not regular) sampling for diffraction
+    bool DiffractionDropDownNbRays; //!< Flag to reduce the number of rays thrown depending on the diffraction order
 
     // Post Filters
-    bool UsePostFilter;
-    bool DebugUseCloseEventPostFilter;
-    bool DebugUseDiffractionAngleSelector;
-    bool DebugUseDiffractionPathSelector;
-    bool DebugUseFermatSelector;
-    bool DebugUseFaceSelector;
+    bool UsePostFilter; //!< Flag to use some specifics Selector
+    bool DebugUseCloseEventPostFilter; //!< Flag to add the the CloseEventSelector filter
+    bool DebugUseDiffractionAngleSelector; //!< Flag to add the DiffractionAngleSelector filter
+    bool DebugUseDiffractionPathSelector; //!< Flag to add the DiffractionPathSelector filter
+    bool DebugUseFermatSelector; //!< Flag to add the FermatSelector filter
+    bool DebugUseFaceSelector; //!< Flag to add the FaceSelector filter
 
     // Miscellaneous
-    bool KeepDebugRay;
+    bool KeepDebugRay; //!< Flag to store rays into a debug_rays array after being invalidated
 private:
     // singleton
     static AcousticRaytracerConfiguration* _pInstance;

@@ -18,12 +18,12 @@
 #include <iostream>
 #include <fstream>
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Engine/AcousticRaytracerConfiguration.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Accelerator/BruteForceAccelerator.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Accelerator/KdtreeAccelerator.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Accelerator/BvhAccelerator.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Accelerator/GridAccelerator.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Tools/Logger.h"
+#include "Engine/AcousticRaytracerConfiguration.h"
+#include "Accelerator/BruteForceAccelerator.h"
+#include "Accelerator/KdtreeAccelerator.h"
+#include "Accelerator/BvhAccelerator.h"
+#include "Accelerator/GridAccelerator.h"
+#include "Tools/Logger.h"
 
 #include "Triangle.h"
 #include "Scene.h"

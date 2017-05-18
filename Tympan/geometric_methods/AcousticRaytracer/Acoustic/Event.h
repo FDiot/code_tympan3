@@ -18,8 +18,8 @@
 
 
 #include <vector>
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Sampler.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
+#include "Geometry/Sampler.h"
+#include "Base.h"
 
 enum typeevent
 {

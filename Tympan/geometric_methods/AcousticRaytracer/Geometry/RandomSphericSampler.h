@@ -27,8 +27,8 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/uniform_real.hpp>
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Sampler.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Tools/UnitConverter.h"
+#include "Geometry/Sampler.h"
+#include "Tools/UnitConverter.h"
 
 /**
  * \brief A Sampler class for random spherical sampling

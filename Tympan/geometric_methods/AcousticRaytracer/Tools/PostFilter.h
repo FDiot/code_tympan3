@@ -15,7 +15,7 @@
 
 #include <map>
 #include <deque>
-#include "Tympan/geometric_methods/AcousticRaytracer/Ray/Ray.h"
+#include "Ray/Ray.h"
 
 #ifndef POST_FILTER_H
 #define POST_FILTER_H

@@ -14,7 +14,7 @@
 */
 
 #include "Recepteur.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Ray/Ray.h"
+#include "Ray/Ray.h"
 
 bool Recepteur::intersectionRecepteur(vec3& origine, vec3& directeur, float tmax, Intersection& result)
 {

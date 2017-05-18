@@ -16,6 +16,7 @@ link_directories(${GTEST_BINARY_DIR})
 include_directories(.)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/${TYMPAN_ACOUSTICRAYTRACER})
 
 # Configure the headers for the tests
 set(TYMPAN_TESTS_DATA_DIR "${CMAKE_CURRENT_BINARY_DIR}/data")

@@ -15,6 +15,7 @@ set_source_files_properties(${CYTHON_SOURCES}
 
 cython_add_module(_business2solver _business2solver.pyx)
 configure_cython_module(_business2solver ${destination})
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/${TYMPAN_ACOUSTICRAYTRACER})
 target_link_libraries(_business2solver tympan_lib tympan_common tympan_solver_model)
 install_cython_module(_business2solver ${destination})
 

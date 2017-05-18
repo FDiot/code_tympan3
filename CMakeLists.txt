@@ -17,15 +17,17 @@ include(tympan-utils)
 set(TYMPAN_PythonModules         "python")
 set(TYMPAN_CythonModules_Debug   "cython_d")
 set(TYMPAN_CythonModules_Release "cython")
+set(TYMPAN_ACOUSTICRAYTRACER     "Tympan/geometric_methods/AcousticRaytracer")
 
 # This file configures the dependencies of Code_TYMPAN 
 include(tympan-deps)
 
-include_directories(${CMAKE_SOURCE_DIR})
 include_directories(${CMAKE_BINARY_DIR})
-
 # Copy resources
 file(COPY ${CMAKE_SOURCE_DIR}/resources DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+# Recurse into the AcousticRaytracer independant library
+add_subdirectory(${TYMPAN_ACOUSTICRAYTRACER})
 
 # Recurse into main sources directory...
 add_subdirectory(Tympan)

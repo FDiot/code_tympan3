@@ -16,8 +16,8 @@
 #ifndef CYLINDRE_H
 #define CYLINDRE_H
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Shape.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Repere.h"
+#include "Geometry/Shape.h"
+#include "Geometry/Repere.h"
 
 class Ray;
 /**

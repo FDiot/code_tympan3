@@ -21,7 +21,7 @@
 #include <string>
 #include <cmath>
 #include "Sampler.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Tools/UnitConverter.h"
+#include "Tools/UnitConverter.h"
 
 #ifndef LONGITUDE_2D_SAMPLER
 #define LONGITUDE_2D_SAMPLER

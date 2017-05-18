@@ -16,10 +16,10 @@
 #ifndef RECEPTEUR_H
 #define RECEPTEUR_H
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Shape.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Sphere.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/mathlib.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Base.h"
+#include "Geometry/Shape.h"
+#include "Geometry/Sphere.h"
+#include "Geometry/mathlib.h"
+#include "Base.h"
 
 /**
  * \brief Receptor inherits from a Sphere Shape

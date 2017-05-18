@@ -17,10 +17,10 @@
 #include <vector>
 #include <map>
 
-#include "Tympan/geometric_methods/AcousticRaytracer/Engine/AcousticRaytracerConfiguration.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangle.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
-#include "Tympan/geometric_methods/AcousticRaytracer/Tools/Logger.h"
+#include "Engine/AcousticRaytracerConfiguration.h"
+#include "Geometry/Triangle.h"
+#include "Geometry/Cylindre.h"
+#include "Tools/Logger.h"
 #include "PostTreatment.h"
 
 typedef std::pair<unsigned int, unsigned int> segment;
