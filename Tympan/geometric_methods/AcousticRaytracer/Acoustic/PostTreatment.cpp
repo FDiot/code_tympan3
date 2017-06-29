@@ -84,12 +84,12 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
 
     // Minimal angle (other PI) between two face to allow building of a diffraction cylinder
     float angleMax = AcousticRaytracerConfiguration::get()->AngleDiffMin * M_PI / 180;
-	float anglemin=AcousticRaytracerConfiguration::get()->AngleDiffMin;
+
     // Compute "mean" normal between the two faces
     vec3 normal = p1->getNormal() + p2->getNormal();
     normal.normalize();
 
-    // Search for a segment of the shape different from seg
+    // Search for a vertex of the first shape not belonging to seg
     std::vector<unsigned int>* vertices = p1->getLocalVertices();
     vec3 otherVertex;
     for (unsigned int i = 0; i < vertices->size(); i++)
@@ -101,17 +101,16 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
         }
     }
 
-    // Create "comp", a vector colinear with a segment found ahead
+    // Find a vector othogonal to seg and lying in the first shape
     vec3 proj = otherVertex.closestPointOnLine(p1->getVertices()->at(seg.first), p1->getVertices()->at(seg.second));
-
     vec3 comp = otherVertex - proj;
     comp.normalize();
 
-    // Compute angle betwwen comp and tne "mean" normal
-    decimal angle = comp.dot(normal);
-    angleOuverture = 2. * acos(angle);
+    // Compute the angle betwwen comp and the "mean" normal
+    decimal cos_angle = comp.dot(normal);
+    angleOuverture = 2. * acos(cos_angle);
 
-    if (angle < cos(M_PI / 2. + angleMax / 2.))
+    if (cos_angle < cos(M_PI / 2. + angleMax / 2.))
     {
         return true;
     }
