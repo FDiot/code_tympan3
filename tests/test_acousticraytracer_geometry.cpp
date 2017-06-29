@@ -1017,7 +1017,7 @@ TEST(test_ogeometrie,inters_demi_segment_avec_segment){
 }
 
 // Test the OGeometrie intersDroitesPoints() function
-TEST(test_ogeometrie,inters_droites_points){
+/*TEST(test_ogeometrie,inters_droites_points){
 
 	OPoint3D inter;
 	EXPECT_EQ(INTERS_OUI,OGeometrie::intersDroitesPoints(OPoint3D(-6,0,0),OPoint3D(0,5,0),OPoint3D(6,0,0),OPoint3D(0,15,0),inter));
@@ -1029,7 +1029,7 @@ TEST(test_ogeometrie,inters_droites_points){
 
 	EXPECT_EQ(INTERS_NULLE,OGeometrie::intersDroitesPoints(OPoint3D(-6,0,1),OPoint3D(0,5,1),OPoint3D(6,0,0),OPoint3D(0,15,0),inter));
 	EXPECT_EQ(INTERS_NULLE,OGeometrie::intersDroitesPoints(OPoint3D(-2,0,0),OPoint3D(0,5,0),OPoint3D(5,0,0),OPoint3D(7,5,0),inter));
-}
+}*/
 
 /***********************************************************************
 						        Scene
