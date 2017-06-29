@@ -81,29 +81,21 @@ public :
 
         }
 
-        // Si on accepte les reflexions sur le sol, toutes les reflexions sont bonnes
-        if (acceptGround)
-        {
-            return SELECTOR_ACCEPT;
-        }
+        // Check if the ray is reflected on the ground if necessary
+        if (!acceptGround){
+			
+			//loop on evets
+			std::vector<std::shared_ptr<Event> >* tabEvent = r->getEvents();
+			for(unsigned int i=0;i<tabEvent->size();i++){
 
-        // sinon, on s'assure que la reflexion ne se fait pas sur le sol
-        // ====================
-        // DTn++ 20120511
-        // ====================
-        std::vector<std::shared_ptr<Event> >* tabEvent = r->getEvents();
-        std::shared_ptr<Event> pEvent = tabEvent->back();
-        SpecularReflexion* reflex = dynamic_cast<SpecularReflexion*>(pEvent.get());
-        // ====================
-
-        //      SpecularReflexion *reflex = dynamic_cast<Event*> (r->getEvents()->back());
-        //      if(!reflex || (reflex && !reflex->getShape()->getMaterial()->isNatural))
-        if (!reflex || (reflex && !reflex->getShape()->isSol()))
-        {
-            return SELECTOR_ACCEPT;
-        }
-
-        return SELECTOR_REJECT;
+				//check if the ith event is a reflexion on the ground
+				SpecularReflexion* reflex = dynamic_cast<SpecularReflexion*>(tabEvent->at(i).get());
+				if (reflex && reflex->getShape()->isSol()){
+					return SELECTOR_REJECT;
+				}
+			}
+		}
+        return SELECTOR_ACCEPT;
     }
 
     virtual void insert(T* r) { return; }
@@ -145,28 +137,21 @@ public :
 
         }
 
-        // Si on accepte les reflexions sur le sol, toutes les reflexions sont bonnes
-        if (acceptGround)
-        {
-            return true;
-        }
+        // Check if the ray is reflected on the ground if necessary
+        if (!acceptGround){
+			
+			//loop on evets
+			std::vector<std::shared_ptr<Event> >* tabEvent = r->getEvents();
+			for(unsigned int i=0;i<tabEvent->size();i++){
 
-        // sinon, on s'assure que la reflexion ne se fait pas sur le sol
-        // ====================
-        // DTn++ 20120511
-        // ====================
-        std::vector<std::shared_ptr<Event> >* tabEvent = r->getEvents();
-        std::shared_ptr<Event> pEvent = tabEvent->back();
-        SpecularReflexion* reflex = dynamic_cast<SpecularReflexion*>(pEvent.get());
-        // ====================
-
-        //      Reflexion *reflex = dynamic_cast<Reflexion*>(r->getEvents()->back());
-        if (!reflex || (reflex && !reflex->getShape()->getMaterial()->isNatural))
-            if (!reflex || (reflex && !reflex->getShape()->isSol()))
-            {
-                return true;
-            }
-        return false;
+				//check if the ith event is a reflexion on the ground
+				SpecularReflexion* reflex = dynamic_cast<SpecularReflexion*>(tabEvent->at(i).get());
+				if (reflex && reflex->getShape()->isSol()){
+					return false;
+				}
+			}
+		}
+        return true;
     }
     /// Get the reflection maximal number
     int getMaximumReflectionOrder() { return maxReflectionOrder; }

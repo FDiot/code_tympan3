@@ -23,7 +23,9 @@
  * \brief : Select diffracted rays that are launched in the shadow zone of the obstacle (closed angle)
  *          Other are suppressed
  */
+
 template<typename T>
+
 class DiffractionAngleSelector : public Selector<T>
 {
 public :
