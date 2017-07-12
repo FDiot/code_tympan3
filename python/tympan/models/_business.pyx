@@ -623,11 +623,20 @@ cdef class Lake:
         return tyelement_id(self.thisptr)
 
     @property
-    def level_curve(self):
+    def altitude(self):
         """The lake's level curve as a 'LevelCurve' cython object"""
         lev_curve = LevelCurve()
         lev_curve.thisptr = self.thisptr.getCrbNiv().getRealPointer()
-        return lev_curve
+        return lev_curve.altitude
+
+    @property
+    def points(self):
+        """The sequence of points forming the level curve of the lake"""
+        lev_curve = LevelCurve()
+        lev_curve.thisptr = self.thisptr.getCrbNiv().getRealPointer()
+        cpp_points = cy.declare(
+            vector[TYPoint], lev_curve.thisptr.getListPoints())
+        return cpp2cypoints(cpp_points, self.matrix)
 
 
 cdef class Result:
