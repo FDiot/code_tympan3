@@ -88,8 +88,8 @@ def build_sitenode(ty_site, mainsite=True):
             water_material = cywater.elem_id
             datamodel.MATERIAL_WATER = alwater
         allake = WaterBody(
-            coords=points_to_coords(cylake.level_curve.points),
-            altitude=cylake.level_curve.altitude,
+            coords=points_to_coords(cylake.points),
+            altitude=cylake.altitude,
             id=cylake.elem_id)
         altimetry_site.add_child(allake)
     # Other material areas
