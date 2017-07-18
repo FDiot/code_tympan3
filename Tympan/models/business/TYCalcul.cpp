@@ -1207,6 +1207,7 @@ bool TYCalcul::updateMaillage(TYMaillage* pMaillage)
     }
 
     _noiseMapsSpectrums[id] = tabSpectres;
+    return true;
 }
 
 bool TYCalcul::remMaillage(TYMaillage* pMaillage)
