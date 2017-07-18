@@ -38,6 +38,7 @@ static void QTMessageHandler(QtMsgType type, const char* message)
             break;
         case QtWarningMsg:
             break;
+        case QtCriticalMsg:
         case QtFatalMsg:
             int selected;
 
