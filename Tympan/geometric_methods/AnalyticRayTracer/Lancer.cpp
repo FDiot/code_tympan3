@@ -25,7 +25,7 @@
 #include "RayCourb.h"
 #include "Lancer.h"
 
-Lancer::Lancer() : sources(NULL), recepteurs(NULL), _weather(NULL), h(0.001f), TMax(3.0f), temps(NULL), dmax(1000.f), nbRay(20)
+Lancer::Lancer() : sources(std::vector<vec3>()), recepteurs(std::vector<vec3>()), _weather(NULL), h(0.001f), TMax(3.0f), temps(std::vector<decimal>()), dmax(1000.f), nbRay(20)
 {
     _weather = new meteoLin();
     initialAngleTheta = 0.0;                /*!<  angle de tir initial selon theta */
