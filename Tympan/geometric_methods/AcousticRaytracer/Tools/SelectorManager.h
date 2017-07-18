@@ -102,6 +102,8 @@ public:
                 case SELECTOR_REPLACE:
                     dataToReplace.push_back(oldData);
                     break;
+                case SELECTOR_ACCEPT:
+                    break;                    
             }
         }
 
