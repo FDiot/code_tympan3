@@ -254,7 +254,7 @@ BDTOPO_ReseauTransportNRJ ReseauTransportNRJ[] =
 //////////////////////////////////////////////////////////////////////////
 //      Constructions
 //////////////////////////////////////////////////////////////////////////
-typedef enum BDTOPO_BatimentType { ECRAN_OUVERT, ECRAN_FERME, ETAGE};
+enum BDTOPO_BatimentType { ECRAN_OUVERT, ECRAN_FERME, ETAGE };
 typedef struct BDTOPO_Batiment
 {
     int nFile;

@@ -21,7 +21,7 @@
 
 #ifdef _ALLOW_TARGETING_
 #include "Tools/TargetManager.h"
-#endif _ALLOW_TARGETING_
+#endif
 
 /**
  * \brief Namespace for post-treatment
@@ -34,7 +34,7 @@ bool constructEdge(Scene* scene);
 #ifdef _ALLOW_TARGETING_
 bool findTargetsForNMPB(Scene* scene, std::vector<Recepteur>& recepteurs, TargetManager& targetManager, decimal density);
 void appendDirectionToSources(TargetManager* targets, std::vector<Source>& sources);
-#endif _ALLOW_TARGETING_
+#endif
 };
 
 #endif
