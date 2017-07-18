@@ -97,7 +97,7 @@ bool TYPolyligneParcours::verifieNaturePolylignes()
 bool TYPolyligneParcours::estSurUnParcourFermee()
 {
     assert(_nNbPoint == 2);
-    if (_PolyligneP1 == _PolyligneP0 == NULL)
+    if (_PolyligneP1 == NULL && _PolyligneP0 == NULL)
     {
         return estFermee();
     }
