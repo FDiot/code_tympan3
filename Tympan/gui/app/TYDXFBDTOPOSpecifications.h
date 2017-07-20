@@ -87,7 +87,7 @@ BDTOPO_CoursEau CoursEau[] =
 typedef struct BDTOPO_PlansEau
 {
     int nFile;
-    char* sCalque;
+    char const* sCalque;
 } BDTOPO_PlansEau;
 
 BDTOPO_PlansEau PlansEau[] =
@@ -117,7 +117,7 @@ BDTOPO_PlansEau PlansEau[] =
 typedef struct BDTOPO_Terrains
 {
     int nFile;
-    char* sCalque;
+    char const* sCalque;
     double Resistivite;//TYSol
     double Epaisseur;//TYSol
     double HauteurVegetation;
@@ -191,7 +191,7 @@ BDTOPO_Terrains Terrains[] =
 typedef struct BDTOPO_Routes
 {
     int nFile;
-    char* sCalque;
+    char const* sCalque;
     double dLargeur;
 } BDTOPO_Routes;
 
@@ -236,7 +236,7 @@ BDTOPO_Routes Routes[] =
 typedef struct BDTOPO_ReseauTransportNRJ
 {
     int nFile;
-    char* sCalque;
+    char const* sCalque;
     double dLargeur;
     double dTension;
     double dHauteurMoyenneSiIncalculable;//a cause d'un mauvais reglage de l'emprise (entrainant l'incapacite d'obtenir l'altitude d'un point)
