@@ -184,10 +184,12 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
     for (unsigned int i = 0; i < _tabPolygonSize; i++)
     {
         //Recuperation et convertion de la normale de la surface
+        /*
         double coordNormal[3];
         _tabPolygon[i].normal.getCoords(coordNormal);
         vec3 normalFace = vec3(coordNormal[0], coordNormal[1], coordNormal[2]);
-
+        */
+        
         unsigned int a, b, c;
         double coord[3];
 
@@ -203,15 +205,17 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
         pos = transformer->fonction_h( OPoint3Dtovec3(coord) );
         scene->addVertex(pos, c);
 
-        Triangle* face;
+        //Triangle* face;
         if ( dynamic_cast<tympan::AcousticGroundMaterial*>(_tabPolygon[i].material) )
         {
             // Set last parameter true means triangle is part of the ground
-            face = (Triangle*)scene->addTriangle(a, b, c, m, true);
+            //face = (Triangle*)scene->addTriangle(a, b, c, m, true);
+            (Triangle*)scene->addTriangle(a, b, c, m, true);
         }
         else
         {
-            face = (Triangle*)scene->addTriangle(a, b, c, m);
+            //face = (Triangle*)scene->addTriangle(a, b, c, m);
+            (Triangle*)scene->addTriangle(a, b, c, m);
             ss << "Ajout d'un triangle non naturel." << std::endl;
         }
     }

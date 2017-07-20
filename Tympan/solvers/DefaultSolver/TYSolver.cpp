@@ -197,10 +197,12 @@ bool TYSolver::appendTriangleToScene()
     for (unsigned int i = 0; i < _tabPolygon.size(); i++)
     {
         //Recuperation et convertion de la normale de la surface
+        /* Mis en commentaire, non utilise:
         double coordNormal[3];
         _tabPolygon[i].normal.getCoords(coordNormal);
         vec3 normalFace = vec3(coordNormal[0], coordNormal[1], coordNormal[2]);
-
+        */
+        
         unsigned int a, b, c;
 
         pos = OPoint3Dtovec3(_tabPolygon[i].tabPoint[0]);
@@ -212,15 +214,14 @@ bool TYSolver::appendTriangleToScene()
         pos = OPoint3Dtovec3(_tabPolygon[i].tabPoint[2]);
         _scene->addVertex(pos, c);
 
-        Triangle* face;
         if ( dynamic_cast<tympan::AcousticGroundMaterial*>(_tabPolygon[i].material) )
         {
             // Set last parameter true means triangle is part of the ground
-            face = (Triangle*)_scene->addTriangle(a, b, c, m, true);
+            (Triangle*)_scene->addTriangle(a, b, c, m, true);
         }
         else
         {
-            face = (Triangle*)_scene->addTriangle(a, b, c, m);
+            (Triangle*)_scene->addTriangle(a, b, c, m);
         }
     }
 

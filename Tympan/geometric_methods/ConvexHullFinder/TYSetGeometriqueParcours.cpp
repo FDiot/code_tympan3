@@ -198,7 +198,7 @@ int TYSetGeometriqueParcours::MergePointsDoubles()
 
 void TYSetGeometriqueParcours::RamenerPointsTraversantLaFrontiere(TYPointParcours& Srce, TYPointParcours& Dest, int* IndexePointsFrontiere, int& NbPointsFrontiere, bool* EstUnPointIntersectant, bool bCoteGauche, bool* PointsAGauche, bool* PointsADroite)
 {
-    int i, indexePoint, indexeAutrePoint, indexePoint1, indexePoint2;
+    int i, indexePoint, indexePoint1, indexePoint2;
     int nAncienNbPointTotal = _nNbPointTotal / 2; //cf SeparationDroiteGauche
     //Initialisation
     NbPointsFrontiere = 0;
@@ -249,7 +249,7 @@ void TYSetGeometriqueParcours::RamenerPointsTraversantLaFrontiere(TYPointParcour
         }
         indexePoint = _ListePolylines[i].indexePoint(nIndexePointFrontiereDansSegment);
         //Retenir l'autre point
-        indexeAutrePoint = (indexePoint == indexePoint1) ? indexePoint2 : indexePoint1;
+        // int indexeAutrePoint = (indexePoint == indexePoint1) ? indexePoint2 : indexePoint1; // Mis en commentaire, pas utilise
         //2. Modification du point donnant lieu a un point frontiere
         //Ce passage de frontiere peut donner lieu a 2 points d'intersections sur SR,
         //si une autre polyligne rejoint ce point (indexePoint) de l'autre ci��te
@@ -1008,7 +1008,7 @@ int TYSetGeometriqueParcours::SelectionnePointsEntreSetRetDuCoteDeSR(TYSetGeomet
     double MinX = G.x;
 
     //Comme le merge des points doubles a consistes a marquer en negatifs les points inutiles, on les ecartes
-    bool bIndentifiantNulAjoute = false;
+    // bool bIndentifiantNulAjoute = false;
     int racine = 0;
     //  int nNbPointRacine = 0;
     bool bEntreSetR;
@@ -1032,10 +1032,11 @@ int TYSetGeometriqueParcours::SelectionnePointsEntreSetRetDuCoteDeSR(TYSetGeomet
         if (bEntreSetR && (TYPointParcours::ZCross(GD, GP) >= 0))
         {
             TableauDePoints[nNbPointsSelectiones] = &(_ListePoint[i]);
+            /* Mis en commentaire, bIndentifiantNulAjoute non utilise
             if (_ListePoint[i].Identifiant == 0)
             {
                 bIndentifiantNulAjoute = true;
-            }
+            }*/
 
             nNbPointsSelectiones++;
         }

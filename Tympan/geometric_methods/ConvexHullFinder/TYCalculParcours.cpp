@@ -270,8 +270,8 @@ int TYCalculParcours::Traite(
 
     //3.1 Filtrage
     //3.1.1 Filtrage sur les points
-    int nNbDoublons = _geoImporterDXF->MergePointsDoubles();
-
+    _geoImporterDXF->MergePointsDoubles();
+    
     //3.1.1 Filtrage sur les polylignes
     if (!_bVertical)
     {
@@ -283,7 +283,7 @@ int TYCalculParcours::Traite(
         TYSetGeometriqueParcours geoDroite;
 
         int nNbPolylignes = _geoImporterDXF->_nNbPolylines;
-        nNbDoublons = _geoImporterDXF->SupressionPolylignesRedondantes();
+        _geoImporterDXF->SupressionPolylignesRedondantes();
 
         //3.2 Marquage des points a gauche ou a droite
         bool* PointsAGauche = NULL;

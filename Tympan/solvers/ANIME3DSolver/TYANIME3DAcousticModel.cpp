@@ -64,8 +64,9 @@ void TYANIME3DAcousticModel::ComputeAbsAtm()
 void TYANIME3DAcousticModel::ComputeAbsRefl()
 {
     double angle = 0.0, rd = 0.0, rr = 0.0; // incidence angle of acoustic wave, lenght for events computation
-    int idFace = 0, rayNbr = 0, reflIndice = 0, nbFacesFresnel = 0;
-
+    //int idFace = 0, rayNbr = 0, reflIndice = 0, nbFacesFresnel = 0;
+    int reflIndice = 0, nbFacesFresnel = 0;
+    
     acoustic_path* ray = NULL;
 
     OPoint3D Prefl, Pprec, Psuiv;    //pt de reflexion, pt precedent et suivant
@@ -87,7 +88,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
         ray = _tabTYRays[i];
         std::vector<int> tabRefl = ray->getIndexOfEvents(TYREFLEXION | TYREFLEXIONSOL);
 
-        rayNbr = i;
+        //rayNbr = i;
 
         // Initialisation des spectres
         prod = one;
@@ -102,7 +103,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
             Prefl = ray->getEvents().at(reflIndice)->pos;
             Pprec = ray->getEvents().at(reflIndice)->previous->pos;
             Psuiv = ray->getEvents().at(reflIndice)->next->pos;
-            idFace = ray->getEvents().at(reflIndice)->idFace1;
+            //idFace = ray->getEvents().at(reflIndice)->idFace1;
             angle = ray->getEvents().at(reflIndice)->angle;
 
             // Longueur du trajet reflechi
