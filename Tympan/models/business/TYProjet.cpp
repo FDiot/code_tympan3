@@ -653,7 +653,7 @@ void TYProjet::verifGeometricParam()
 {
 
     _delaunayTolerance = _delaunayTolerance <= 0.0 ? 0.0001 : _delaunayTolerance;
-    _delaunayTolerance > 0.05 ? 0.05 : _delaunayTolerance;
+    _delaunayTolerance = _delaunayTolerance > 0.05 ? 0.05 : _delaunayTolerance;
     _maxDistBetweenPoints = _maxDistBetweenPoints < 1.0 ? 1.0 : _maxDistBetweenPoints;
 
     TYCourbeNiveau::setDefaultDistMax(_maxDistBetweenPoints); // MaJ Courbes de niveau

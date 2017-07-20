@@ -198,8 +198,8 @@ void TYDXFBDTopoImporter::importIsoline(int nMaxCourbeNiveau, const dimeModel mo
             {
                 LPTYCourbeNiveau pCrbNiv = new TYCourbeNiveau();
                 nNbItem++;
-                int l = 0;
-                for (l; l < (int)ptsOut.size(); ++l)
+                int l;
+                for (l=0; l < (int)ptsOut.size(); ++l)
                 {
                     pCrbNiv->addPoint(ptsOut.at(l));
                 }
