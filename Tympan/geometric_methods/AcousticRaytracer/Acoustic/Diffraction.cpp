@@ -193,7 +193,7 @@ void Diffraction::computeAngle()
     Cylindre* c = (Cylindre*)(shape);
     angleOuverture = c->getAngleOuverture();
 
-    vec3 localFrom = localRepere.vectorFromGlobalToLocal(from);
+    localRepere.vectorFromGlobalToLocal(from);
 
 	decimal cosAngleArrive = localRepere.getW().dot(from);
 

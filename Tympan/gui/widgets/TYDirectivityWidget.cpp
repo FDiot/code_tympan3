@@ -102,12 +102,13 @@ void TYDirectivityWidget::showContextMenu(const QPoint& pos)
         QMenu* pMenu = new QMenu(this);
         QAction* pAddAction = pMenu->addAction(TR("id_add"));
 
-        QAction* pDelAction = NULL;
+        //QAction* pDelAction = NULL;
 
         if (row >= 0)
         {
             pMenu->addSeparator();
-            pDelAction = pMenu->addAction(TR("id_del"));
+            //pDelAction = pMenu->addAction(TR("id_del"));
+            pMenu->addAction(TR("id_del"));
         }
 
         QAction* pRet = pMenu->exec(pos);

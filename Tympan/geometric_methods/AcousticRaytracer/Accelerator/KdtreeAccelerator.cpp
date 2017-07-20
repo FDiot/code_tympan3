@@ -192,7 +192,7 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result) con
     int todoPos = 0;
 
     // Traverse kd-tree nodes in order for ray
-    bool hit = false;
+    //bool hit = false; // Commented cause not used
     KDNode* node = const_cast<KDNode*>( &tableNode[0] );
     while (node != NULL)
     {
@@ -252,7 +252,7 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result) con
                 Intersection currentIntersection;
                 if (prim->getIntersection(*r, currentIntersection) && currentIntersection.t > 0.0001)
                 {
-                    hit = true;
+                    //hit = true;
                     result.push_back(currentIntersection);
 //                    intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
                     intermin = (*pLeafTreatmentFunction) (result, intermin);
@@ -270,7 +270,7 @@ decimal KdtreeAccelerator::traverse(Ray* r, std::list<Intersection> &result) con
                     Intersection currentIntersection;
                     if (prim->getIntersection(*r, currentIntersection) && currentIntersection.t > 0.0001)
                     {
-                        hit = true;
+                        //hit = true;
                         result.push_back(currentIntersection);
                         //intermin = leafTreatment::keepFunction(intersectionChoice, result, intermin);
                         intermin = (*pLeafTreatmentFunction) (result, intermin);

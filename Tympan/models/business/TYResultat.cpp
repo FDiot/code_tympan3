@@ -169,14 +169,15 @@ int TYResultat::fromXML(DOM_Element domElement)
 	_hideLW = false;
 
     unsigned int i;
-    bool bHideLwOk(false);
+    //bool bHideLwOk(false);
 
     DOM_Element elemCur;
     QDomNodeList childs = domElement.childNodes();
     for (i = 0; i < childs.length(); i++)
     {
         elemCur = childs.item(i).toElement();
-        bHideLwOk = TYXMLTools::getElementBoolValue(elemCur, "hide_lw", _hideLW);
+        //bHideLwOk = TYXMLTools::getElementBoolValue(elemCur, "hide_lw", _hideLW);
+        TYXMLTools::getElementBoolValue(elemCur, "hide_lw", _hideLW);
         if (elemCur.nodeName() == "ListSources")
         {
             // Source

@@ -669,7 +669,8 @@ void OGLCamera::calculateStepVectors()
         flyFrom = from + m_translate;
         flyFromTo = flyTo - flyFrom;
         flyUp = up;// + m_translate;
-        NxVec3 elevationVector = flyUp.cross(flyFromTo);
+        //NxVec3 elevationVector = flyUp.cross(flyFromTo);
+        flyUp.cross(flyFromTo);
         flyFront = NxVec3(flyTo - flyFrom, true);
 
         flyLeft.cross(flyUp, flyFront, true);

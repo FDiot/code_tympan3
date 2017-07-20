@@ -373,7 +373,7 @@ decimal BvhAccelerator::traverse(Ray* ray, std::list<Intersection> &result) cons
     if (!nodes) { return -1.; }
 
     decimal intermin = -1.;
-    vec3 origin = ray->position + ray->direction * ray->mint;
+    //vec3 origin = ray->position + ray->direction * ray->mint;
     vec3 invDir(1.f / ray->direction.x, 1.f / ray->direction.y, 1.f / ray->direction.z);
     uint32_t dirIsNeg[3] = { invDir.x < 0, invDir.y < 0, invDir.z < 0 };
     // Follow ray through BVH nodes to find primitive intersections
