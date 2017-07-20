@@ -28,7 +28,7 @@ TEST(TestEnvironment, Path)
 
 TEST(TestEnvironment, LdPath)
 {
-    char* path = std::getenv("LD_LIBRARY_PATH");
+    char const* path = std::getenv("LD_LIBRARY_PATH");
     if(path == NULL)
         path = "";
     cout << "LD_LIBRARY_PATH = " << path << endl;

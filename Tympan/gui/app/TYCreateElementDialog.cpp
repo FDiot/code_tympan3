@@ -41,7 +41,7 @@
 static const int nbMainElts = 60;
 
 ///Le type des elements selectionnables.
-static char* _listMainElement[] =
+static char const* _listMainElement[] =
 {
     "TYAcousticBox",           "TYAcousticCircle",       "TYAcousticCylinder",    "TYAcousticLine",         "TYAcousticPolygon",    /*01*/
     "TYAcousticRectangleNode", "TYAcousticRectangle",    "TYAcousticSemiCircle",  "TYAcousticSemiCylinder", "TYAcousticSurfaceNode",/*02*/
