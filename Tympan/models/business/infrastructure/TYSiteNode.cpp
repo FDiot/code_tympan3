@@ -73,18 +73,18 @@ std::string* TYSiteNode::_topoFilePath = NULL;
 
 TYSiteNode::TYSiteNode() :  _pProjet(NULL),
     _bEmpriseAsCrbNiv(false),
-    _isTopoFileModified(false),
-    _echelle(1.0f),
+    _altiEmprise(0.0),
     _useTopoFile(0),
     _topoFileName(""),
-    _topoFileExtension(""),
+    _topoFileExtension(""),    
+    _echelle(1.0f),
     _nbFaceInfra(0),
-    _altiEmprise(0.0),
     _root(false),
     _SIGType(TYMPAN),
     _SIG_X(0.0),
     _SIG_Y(0.0),
-    _SIG_OFFSET(0.0)
+    _SIG_OFFSET(0.0),
+    _isTopoFileModified(false)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 

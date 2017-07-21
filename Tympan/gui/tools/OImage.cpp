@@ -21,7 +21,7 @@
 
 #include "OImage.h"
 
-OImage::OImage() : _data(0), _sizeX(0), _sizeY(0), _depth(0)
+OImage::OImage() : _data(0), _depth(0), _sizeX(0), _sizeY(0)
 {
 
 }

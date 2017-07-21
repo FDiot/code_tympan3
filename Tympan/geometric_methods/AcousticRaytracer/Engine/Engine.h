@@ -38,7 +38,7 @@ class Engine
 public:
 #ifdef TEST_ACCELERATION_RECEPTORS
 	/// Default constructor
-    Engine() : scene(NULL), sources(NULL), solver(NULL), recepteurs(NULL), rayCounter(0) { }
+    Engine() : scene(NULL), sources(NULL), recepteurs(NULL), solver(NULL), rayCounter(0) { }
     /// Constructor
     Engine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, Scene *_recepteurs)
     {
@@ -75,13 +75,13 @@ public:
 
 protected:
     Scene* scene;					//!< Pointer to the scene
-    Scene *recepteurs;				//!< Pointer to all the sources
     std::vector<Source> *sources;	//!< Pointer to all the receptors
+    Scene *recepteurs;				//!< Pointer to all the sources
     Solver* solver;					//!< Pointer to the solver
 
     unsigned long long int rayCounter; //!< Ray counter
 #else
-    Engine() : scene(NULL), sources(NULL), solver(NULL), recepteurs(NULL), rayCounter(0) { }
+    Engine() : scene(NULL), sources(NULL), recepteurs(NULL), solver(NULL), rayCounter(0) { }
 
     Engine(Scene* _scene, std::vector<Source> *_sources, Solver* _solver, std::vector<Recepteur> *_recepteurs)
     {

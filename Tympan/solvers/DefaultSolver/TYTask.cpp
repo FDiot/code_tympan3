@@ -23,10 +23,10 @@
 TYTask::TYTask(TYSolver& solver, const tympan::nodes_pool_t& nodes, const tympan::triangle_pool_t& triangles, const tympan::material_pool_t& materials, TYTrajet& trajet, int nNbTrajets)
     : _solver(solver), 
     _trajet(trajet), 
+    _nNbTrajets(nNbTrajets), 
     _nodes(nodes),
     _triangles(triangles),
-    _materials(materials), 
-    _nNbTrajets(nNbTrajets) 
+    _materials(materials)
 {
 
 }

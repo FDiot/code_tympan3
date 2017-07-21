@@ -47,10 +47,10 @@ TYANIME3DAcousticPathFinder::TYANIME3DAcousticPathFinder(   TYStructSurfIntersec
                                                             tab_acoustic_path& tabTYRays,
                                                             AtmosphericConditions& atmos) :
     _tabPolygon(tabPolygon),
-    _tabPolygonSize(tabPolygonSize),
-    _aproblem(aproblem_),
+    _tabPolygonSize(tabPolygonSize),  
     _tabTYRays(tabTYRays),
-    _atmos(atmos)
+    _atmos(atmos),
+    _aproblem(aproblem_)
 {
 }
 

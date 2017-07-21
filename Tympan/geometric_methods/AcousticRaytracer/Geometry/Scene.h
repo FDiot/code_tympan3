@@ -52,7 +52,7 @@ class Scene : public Base
 
 public:
 	/// Constructor
-    Scene() : accelerator(NULL), Base() { name = "unknown scene"; compteurPrimitive = 0; compteurFace = 0;}
+    Scene() : Base(), accelerator(NULL) { name = "unknown scene"; compteurPrimitive = 0; compteurFace = 0;}
     /// Copy constructor
     Scene(const Scene& other) : Base(other) { }
     /// Destructor
