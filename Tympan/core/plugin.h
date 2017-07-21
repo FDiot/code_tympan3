@@ -22,7 +22,9 @@
 #include "Tympan/core/idgen.h"
 #include "Tympan/core/interfaces.h"
 
+#ifdef _WIN32
 #pragma warning(disable: 4251)
+#endif
 
 #if TY_COMPILER == TY_COMPILER_MSVC
 #   ifdef _PLUGIN_DLL
