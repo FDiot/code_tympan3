@@ -28,7 +28,7 @@
 #include "TYActionManager.h"
 
 TYActionManager::TYActionManager(int size)
-    : _current(-1), _size(size),  _savedAt(-1), _modified(false)
+    : _current(-1), _savedAt(-1), _size(size), _modified(false)
 {
 }
 

@@ -25,7 +25,7 @@ TY_EXTENSION_INST(TYVegetation);
 
 QString TYVegetation::_vegeName[] = { "pine", "spruce", "birch", "aspen", "oak" };
 
-TYVegetation::TYVegetation() : _hauteur(10.), _bFoliage(false)
+TYVegetation::TYVegetation() : _bFoliage(false), _hauteur(10.)
 {
     //_name = TYNameManager::get()->generateName(getClassName());
     _name = _vegeName[0];

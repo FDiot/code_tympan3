@@ -249,8 +249,7 @@ void TYPaletteWidget::savePalette()
 /* --------------- class PaletteModel --------------- */
 
 PaletteModel::PaletteModel(TYPalette* p_palette_, QObject* parent):
-    p_palette(p_palette_),
-    QAbstractTableModel(parent) {}
+    QAbstractTableModel(parent), p_palette(p_palette_) {}
 
 PaletteModel::~PaletteModel() {}
 
@@ -577,14 +576,14 @@ void PaletteValueDelegate::setModelData(QWidget* editor, QAbstractItemModel* mod
 
 PaletteEditor::PaletteEditor(TYPalette* palette_, QWidget* parent) :
     QFrame(parent),
-    p_palette(palette_),
-    p_model(new PaletteModel(p_palette, this)),
     newNoiseLevelSpin(NULL),
     newNoiseLevelButton(NULL),
     deleteNoiseLevelButton(NULL),
+    p_palette(palette_),
     p_table(NULL),
     color_delegate(this),
-    value_delegate(this)
+    value_delegate(this),
+    p_model(new PaletteModel(p_palette, this))
 {
     bool ok;
 

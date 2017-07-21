@@ -33,7 +33,7 @@ class Source : public Base
 {
 public:
 #ifdef _ALLOW_TARGETING_
-    Source(std::string _name = "unknow source") :  sampler(NULL), Base(), targetManager(NULL) { name = _name;}
+    Source(std::string _name = "unknow source") : Base(), sampler(NULL), targetManager(NULL) { name = _name;}
     Source(const Source& other) : Base(other)
     {
         name = std::string(other.name);
@@ -52,7 +52,7 @@ public:
     }
 #else
     /// Base constructor
-    Source(std::string _name = "unknow source") :  sampler(NULL), Base() { name = _name;}
+    Source(std::string _name = "unknow source") : Base(), sampler(NULL) { name = _name;}
     /// Copy constructor
     Source(const Source& other) : Base(other)
     {

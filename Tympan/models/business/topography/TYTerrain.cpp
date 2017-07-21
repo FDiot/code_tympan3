@@ -28,7 +28,7 @@
 TY_EXTENSION_INST(TYTerrain);
 TY_EXT_GRAPHIC_INST(TYTerrain);
 
-TYTerrain::TYTerrain() : _vegetActive(false), _pVegetation(nullptr)
+TYTerrain::TYTerrain() : _pVegetation(nullptr), _vegetActive(false)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
