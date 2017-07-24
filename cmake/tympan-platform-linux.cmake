@@ -4,8 +4,10 @@
 # TODO check behaviour for clang
 
 # The objective is to get rid of all the -Wno-xxx
-set(IGNORED_WARNINGS "-Wno-sign-compare -Wno-unknown-pragmas -Wno-comment -Wno-unused-variable")
-set(WARNINGS_SETTINGS "-Wall ${IGNORED_WARNINGS} -Winvalid-pch")
+set(IGNORED_WARNINGS "-Wno-sign-compare -Wno-cpp -Wno-unused-function")
+# -Wno-sign-compare : Not easy to remove warning
+# -Wno-cpp -Wno-unused-function : Not easy to remove warnings from cythonised files 
+set(WARNINGS_SETTINGS "-Werror -Wall ${IGNORED_WARNINGS} -Winvalid-pch")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --std=c++11 -frounding-math ${WARNINGS_SETTINGS}")
 
 ## Building as static libs on Linux mess-up the GUI, maybe because
