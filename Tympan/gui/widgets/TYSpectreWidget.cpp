@@ -210,7 +210,8 @@ void TYSpectreWidget::updateContent()
     if ( _pTmpSpectre->getType() == SPECTRE_TYPE_ABSO ||
          _pTmpSpectre->getType() == SPECTRE_TYPE_AUTRE ) { unite = ""; }
 
-    TYElement* pParent = _pTmpSpectre->getParent();
+    //TYElement* pParent = _pTmpSpectre->getParent();
+    _pTmpSpectre->getParent();
 
     QStringList stringList;
     stringList.append(TR("id_freq"));

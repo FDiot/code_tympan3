@@ -113,7 +113,7 @@ int TYLinearMaillage::fromXML(DOM_Element domElement)
 {
     TYMaillage::fromXML(domElement);
 
-    bool spectreIsOk = false;
+    //bool spectreIsOk = false;
     bool densiteOk = false;
     bool bOldDatas = false;
 

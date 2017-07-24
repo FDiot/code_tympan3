@@ -48,7 +48,7 @@ public :
 		vec3 currentPos, nextPos, N, N1, N2, W, From, To;
 
 		Diffraction *pDiff = NULL;
-		int sgn = 0;
+		//int sgn = 0;
 
 		decimal F1 = 0., F2 = 0., T1 = 0., T2 = 0., FT = 0.;
 
@@ -129,7 +129,7 @@ public :
 		vec3 currentPos, nextPos, N, N1, N2, W, From, To;
 
 		Diffraction *pDiff = NULL;
-		int sgn = 0;
+		//int sgn = 0;
 
 		decimal F1 = 0., F2 = 0., T1 = 0., T2 = 0., FT = 0.;
 

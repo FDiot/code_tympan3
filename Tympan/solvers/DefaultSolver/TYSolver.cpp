@@ -154,7 +154,7 @@ std::unique_ptr<TYAcousticModel> TYSolver::make_acoustic_model()
 
 bool TYSolver::buildCalcStruct(const tympan::AcousticProblemModel& aproblem)
 {
-    bool cancel = false;
+    //bool cancel = false;
 
     const tympan::nodes_pool_t& nodes = aproblem.nodes(); 
     const tympan::triangle_pool_t& triangles = aproblem.triangles();

@@ -37,7 +37,7 @@ TYFaceSelector::~TYFaceSelector()
 
 void TYFaceSelector::selectFaces(std::deque<TYSIntersection>& tabIntersect, const TYTrajet& rayon)
 {
-    short XY = 0, XZ = 1;
+    //short XY = 0, XZ = 1;
 
     // Construction des plans de coupe
     TYSPlan plan[2];

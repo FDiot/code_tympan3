@@ -100,8 +100,8 @@ void TYDirectivityWidget::showContextMenu(const QPoint& pos)
     {
         int row = _table->row(item);
         QMenu* pMenu = new QMenu(this);
-        QAction* pAddAction = pMenu->addAction(TR("id_add"));
-
+        //QAction* pAddAction = pMenu->addAction(TR("id_add"));
+        pMenu->addAction(TR("id_add"));
         //QAction* pDelAction = NULL;
 
         if (row >= 0)
@@ -111,7 +111,8 @@ void TYDirectivityWidget::showContextMenu(const QPoint& pos)
             pMenu->addAction(TR("id_del"));
         }
 
-        QAction* pRet = pMenu->exec(pos);
+        //QAction* pRet = pMenu->exec(pos);
+        pMenu->exec(pos);
     }
 }
 

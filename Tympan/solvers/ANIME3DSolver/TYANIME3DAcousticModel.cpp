@@ -65,7 +65,7 @@ void TYANIME3DAcousticModel::ComputeAbsRefl()
 {
     double angle = 0.0, rd = 0.0, rr = 0.0; // incidence angle of acoustic wave, lenght for events computation
     //int idFace = 0, rayNbr = 0, reflIndice = 0, nbFacesFresnel = 0;
-    int reflIndice = 0, nbFacesFresnel = 0;
+    int reflIndice = 0;
     
     acoustic_path* ray = NULL;
 
