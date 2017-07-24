@@ -31,11 +31,10 @@ cache:
 build_script:
 - cmd: >-
     cd C:\tympan\
-
+          
     md build
 
     cd build
-
 
     echo %PATH%
 
@@ -48,7 +47,6 @@ build_script:
     echo %PATH%
 
     set TYMPAN_PYTHON_INTERP=C:\Miniconda3\python.exe
-
 
     conda install -y -q cython numpy scipy
 
@@ -63,19 +61,31 @@ build_script:
     conda install -y -q gmp mpfr -c salilab
 
     conda install -y -q cgal=4.3 -c logilab
+    
+    conda install -y -q sphinx=1.2.2=py34_2 graphviz 
+    
+    conda install -y -q doxygen -c omnia
 
     conda list
 
-
     cmake -G"Visual Studio 10" -DCMAKE_BUILD_TYPE=Release -DPYTHON_LIBRARY=C:\Miniconda3\libs\Python34.lib ..\src
-
 
     cmake --build . --config Release
 
-
-    cd ..
+    cd ..\src\doc
+    
+    set PYTHONPATH=C:\Miniconda3        
+    
+    make html 
+    
+    dir
+    
+    cd ..\.. 
 test_script:
 - cmd: >-
+    dir
+    
     cd build
 
     ctest -C Release --output-on-failure
+    
