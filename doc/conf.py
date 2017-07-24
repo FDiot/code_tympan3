@@ -35,13 +35,14 @@ todo_include_todos = True
 mathjax_path = 'http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML'
 
 # Would like to use Breathe (http://michaeljones.github.com/breathe)
-try:
-    import breathe
-except ImportError:
-    sys.path.append(os.path.abspath('../3rdparty/breathe-1.2.0'))
-extensions.append('breathe')
-breathe_projects = { "Code_TYMPAN" : "./_build/doxygen/xml" }
-breathe_default_project = "Code_TYMPAN"
+# Breathe 1.2.0 doesn't support Python 3: we dsable it (07/07/2017, Pierre LEDAC)
+#try:
+#    import breathe
+#except ImportError:
+#    sys.path.append(os.path.abspath('../3rdparty/breathe-1.2.0'))
+#extensions.append('breathe')
+#breathe_projects = { "Code_TYMPAN" : "./_build/doxygen/xml" }
+#breathe_default_project = "Code_TYMPAN"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
