@@ -74,7 +74,7 @@ void TYPointControlGraphic::computeBoundingBox()
 
 void TYPointControlGraphic::display(GLenum mode /*= GL_RENDER*/)
 {
-    TYCalcul* pCalcul = static_cast<TYProjet*>(getElement()->getParent())->getCurrentCalcul();
+    //TYCalcul* pCalcul = static_cast<TYProjet*>(getElement()->getParent())->getCurrentCalcul();
     // Pas affiche si inactif
     if (getElement()->etat() == false)
     {

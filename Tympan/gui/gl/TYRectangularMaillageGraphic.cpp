@@ -331,7 +331,7 @@ void TYRectangularMaillageGraphic::displayMixed(GLenum mode)
 
 int TYRectangularMaillageGraphic::nextPoint(const TYTabLPPointCalcul* pPtsCalcul, const int& index1, const int& index2)
 {
-    TYCalcul* pCalcul = static_cast<TYCalcul*>(getElement()->getParent());
+    //TYCalcul* pCalcul = static_cast<TYCalcul*>(getElement()->getParent());
 
     int indice = index2;
 

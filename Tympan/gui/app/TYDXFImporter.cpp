@@ -113,7 +113,8 @@ int TYDXFImporter::Get3DPolylinesInLayer(const dimeModel* model, const char* Lay
                 dimeArray< int > indices;
                 dimeVec3f extrusionDir;
                 dxfdouble thickness;
-                dimeEntity::GeometryType TheGeometryType = pdimeEntity->extractGeometry(verts, indices, extrusionDir, thickness);
+                //dimeEntity::GeometryType TheGeometryType = pdimeEntity->extractGeometry(verts, indices, extrusionDir, thickness);
+                pdimeEntity->extractGeometry(verts, indices, extrusionDir, thickness);
 
                 TYTabPoint CurrentPolyline;
                 for (int j = 0; j < verts.count(); j++)
@@ -151,7 +152,8 @@ int TYDXFImporter::Get3DPointsInLayer(const dimeModel* model, const char* LayerN
                 dimeArray< int > indices;
                 dimeVec3f extrusionDir;
                 dxfdouble thickness;
-                dimeEntity::GeometryType TheGeometryType = pdimeEntity->extractGeometry(verts, indices, extrusionDir, thickness);
+                //dimeEntity::GeometryType TheGeometryType = pdimeEntity->extractGeometry(verts, indices, extrusionDir, thickness);
+                pdimeEntity->extractGeometry(verts, indices, extrusionDir, thickness);
 
                 int j = 0;
                 verts[j].x -= 0;//test Offset.x;

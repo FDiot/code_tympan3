@@ -472,7 +472,7 @@ void TYProjet::setCurrentCalcul(LPTYCalcul pCurCalcul)
     assert(pCurCalcul);
 
     // On test si le calcul est present dans la liste
-    bool present = false;
+    //bool present = false;
 
     // Statut solveur ok par defaut
     _bStatusSolver = true;

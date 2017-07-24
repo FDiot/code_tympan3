@@ -67,7 +67,8 @@ TEST(SonieTest, DISABLED_SonieTest)
         ASSERT_TRUE(LN == 49.4111); // Value to be set by Stephanie
 
         // Export de la sonie spécifique pour comparaison avec le résultat MATLAB (OCTAVE)
-        double* n_specif = testSonie.getNSpecif();
+        //double* n_specif = testSonie.getNSpecif();
+        testSonie.getNSpecif();
     }
 
     delete [] LT;
