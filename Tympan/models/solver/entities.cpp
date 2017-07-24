@@ -979,7 +979,7 @@ namespace tympan
 
 		while ((_tabKa[indice] < ka) && (indice < (NB_KA - 1))) { indice++; }
 
-		return indice > (NB_KA - 2) ? NB_KA - 2 : indice; // Eviter les depassement de tableau
+		return indice > (NB_KA - 2) ? NB_KA - 2 : indice - 1; // Eviter les depassement de tableau
 		//    return indice > 0 ? indice - 1 : 0;
 	}
 	//
