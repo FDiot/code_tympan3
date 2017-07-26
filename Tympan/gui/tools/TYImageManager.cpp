@@ -145,7 +145,7 @@ OImage* TYImageManager::getImage(const char* filename)
     size_t pos = str.rfind('.');
     if (pos == std::string::npos)
     {
-        return false;
+        return NULL;
     }
     std::string ext(str, pos + 1, str.size() - pos);
 
