@@ -71,11 +71,7 @@ def _color_faces(faces_materials):
     """Return an array of shape (nfaces, 3) with colors for mesh faces
     according to their material.
     """
-    faces_colors = np.zeros((faces_materials.shape[0], 3))
-    try:
-        from matplotlib import cm
-    except ImportError:
-        return faces_colors
+    from matplotlib import cm
     cmap = cm.get_cmap('jet')
     materials, indices = np.unique(faces_materials, return_inverse=True)
     nmats = len(materials)
