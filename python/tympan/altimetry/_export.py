@@ -72,8 +72,10 @@ def _color_faces(faces_materials):
     according to their material.
     """
     from matplotlib import cm
-    cmap = cm.get_cmap('jet')
     materials, indices = np.unique(faces_materials, return_inverse=True)
     nmats = len(materials)
+    if nmats == 1:
+        return np.zeros((faces_materials.shape[0], 3))
+    cmap = cm.get_cmap('jet')
     colors = cmap(np.arange(nmats) / float(nmats - 1), bytes=True)[:, :-1]
     return colors[indices, :]
