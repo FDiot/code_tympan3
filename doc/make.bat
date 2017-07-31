@@ -45,19 +45,27 @@ if "%1" == "clean" (
 )
 
 if "%1" == "html" (
-     IF "%PYTHONPATH%"=="" (
-        echo.PYTHONPATH is empty. Sphinx doc can not be generated. Try running before SetEnvTympanTests in the Tympan build directory.
-        goto end
-     )
-     mkdir _build
-     cd _build
-     mkdir doxygen
-     cd ../doxygen
-     echo.Doxygen 1.8.6 (above version crashes) and Graphviz 2.38 should be installed to create Doxygen documentation.
-     doxygen
-     cd ..
+	IF "%PYTHONPATH%"=="" (
+		echo.PYTHONPATH is empty. Sphinx doc can not be generated. Try running before SetEnvTympanTests in the Tympan build directory.
+		goto end
+	)
+	mkdir _build
+	cd _build
+	mkdir doxygen
+	cd ../doxygen
+	echo. Graphviz 2.38 should be installed to create Doxygen documentation.
+	doxygen
+	IF NOT EXIST ../_build/doxygen/html/index.html (
+	   echo.Doxygen doc build failed!
+	   exit /b 1
+	)
+	cd ..
 	%SPHINXBUILD% -b html %ALLSPHINXOPTS% %BUILDDIR%/html
 	if errorlevel 1 exit /b 1
+	IF NOT EXIST _build/html/index.html (
+	   echo.Sphinx doc build failed!
+	   exit /b 1
+	)
 	echo.
 	echo.Build finished. The HTML pages are in %BUILDDIR%/html.
 	goto end
