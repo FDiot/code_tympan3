@@ -62,7 +62,7 @@ OpenGL
 CMake
         CMake_ is a multi platform built tool used to build Code_TYMPAN
         (and CGAL and many other OpenSource projects by the way). A
-        version 2.8 or newer is required.
+        version 3.3 or newer is required.
 
 CGAL
         CGAL_ is a Computational Geometry library and itself depends
@@ -71,13 +71,15 @@ CGAL
         CGAL is used in the Python code for altimetry mesh triangulation and refinement. It is also used
         in the C++ code (business part) for infrastructure polygons triangulation.
 
-        .. todo:: Specify version **required** ( 4.3.1 suggested)
+        CGAL history version (4.3.1 suggested) is:
 
                   - 4.0.5 is the version packaged on debian wheezy but
                     has broken CMake configuration scripts on Windows
                   - 4.1 has broken tuple support on Windows
                   - 4.2 and 4.3 bring improvement regarding triangulation
                   - 4.4 is quite young at the time of this writing (may 2014)
+                  
+        Also, notice that version 4.3 on Windows and 4.2-5 on Linux Debian works fine.          
 
 Python
         A Python_ interpreter is required, version 3.3 or above
@@ -91,7 +93,8 @@ Cython
 
 Shapely
         Shapely_ is a Python package for manipulation and analysis of planar
-        geometric objects. Version 1.3 is suggested.
+        geometric objects. Version 1.3 is suggested. Warning: it seems that
+        version above 1.5.13 produces differences in Code_Tympan tests results.
 
 SWIG
         Swig_ is a software development tool that connects programs written in
@@ -109,11 +112,9 @@ reStructuredText_ sources thanks to Sphinx_. The breathe_ extension
 (shipped within the 3rd party archive) provides a bridge between the
 two and MathJax_ is used to nicely display equations.
 
- Doxygen_, Graphviz_ and Sphinx_ need to be installed either from your package
- manager or from the official Windows installer. As there are no specific
- difficulties, please refer to their official documentations (note that
- on Windows 7, specific version (1.8.6) for Doxygen is required as above versions crashe when
- building the Tympan documentation).
+Doxygen_, Graphviz_ and Sphinx_ need to be installed either from your package
+manager or from the official Windows installer. As there are no specific
+difficulties, please refer to their official documentations.
 
 .. _reStructuredText: http://docutils.sourceforge.net/rst.html
 .. _Sphinx: http://sphinx-doc.org/
@@ -127,64 +128,21 @@ Ubuntu / Debian standard install
 ================================
 
 This section introduces the installation from the package manager of a
-Debian based distribution. It assumes a pretty recent version of the
+Linux based distribution. It assumes a pretty recent version of the
 system on the date of writing, so that most packages are available
 from standard package repositories in a compatible version. Here we
-use an *Ubuntu 12.04.1 LTS*.
+use an *Ubuntu 14.04*. 
 
-**Installation of Boost** ::
+All the operations are written in the `̀ bitbucket-pipelines.yml`̀  file 
+below, which is used by the Bitbucket continous integration system (pipelines). 
 
-  $ sudo aptitude install libboost1.48-all-dev libboost1.48-doc
+You will need to install packages first, then the Code_Tympan third party package. 
+Build, install, running tests and documentation creation are described.
 
-In case an older version of boost is already installed you might have
-to either complete [#]_ its installation or completely remove it to install
-the most recent packaged version. If really none of these options is
-practicable, a custom install of Boost from source is the solution
-(see `Compiling Boost`_).
+You will need to add sudo command before apt-get cause packages should be installed as administrator:
 
-**Installation of Qt 4** ::
-
-  $ sudo aptitude install libqt4-dev libqt4-opengl
-
-**Installation of CMake** ::
-
-  $ sudo aptitude install cmake cmake-curses-gui
-
-**Installation of CGAL 4 :**
-
-In *Ubuntu 12.04.1 LTS* as well as in *Debian squeeze* the version of
-CGAL available in the package system is too old (it is a 3.x and a 4.x
-is required).  It will thus be required for now to install CGAL 4 from the
-sources (see `Compiling CGAL`_) but CGAL 4 should be available
-soon in main distributions (beware then to install the nominal boost
-version, against which CGAL would have been built, i.e.
-libboost-all-dev, without any more recent version number).
-
-Please note that CGAL depends upon some packages which can (and
-should) be easily installed through the package manager, such as boost
-and Qt which are already installed, but also the following one::
-
-  $ sudo aptitude install libgmp-dev libmpfr-dev zlib1g-dev
-
-*NB* : if the `aptitude` utility is not installed `apt-get` can be
-used instead. And you will need to be a privileged user to execute
-this command.
-
-.. [#] A *complete* installation of Boost is not strictly required but
-       is much easier than picking all the required components by hand.
-
-**Installation of python and cython** ::
-
-    $ sudo aptitude install python3 cython
-
-**Installation of shapely** ::
-
-    $ sudo aptitude install python3-shapely
-
-**Installation of swig** ::
-
-    $ sudo aptitude install swig
-
+.. include:: ../bitbucket-pipelines.yml
+   :literal:
 
 Windows Seven
 =============
