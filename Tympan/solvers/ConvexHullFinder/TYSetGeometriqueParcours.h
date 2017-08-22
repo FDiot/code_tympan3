@@ -107,7 +107,7 @@ public:
      * \brief Fill for each point the connectivity with segments
      * \param Connexes Array of connectivity
      */
-    bool ListerPointsConnexes(Connexite* Connexes);
+    bool ListerPointsConnexes(Connexite *& Connexes);
 
     /**
      * @brief First pass to build a path along all the intersecting polylines
