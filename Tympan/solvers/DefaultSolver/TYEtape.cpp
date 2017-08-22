@@ -19,7 +19,6 @@
 
 TYEtape::TYEtape()
 {
-    _type = -1;
 }
 
 TYEtape::TYEtape(const TYEtape& other)
@@ -60,3 +59,10 @@ bool TYEtape::operator!=(const TYEtape& other) const
     return !operator==(other);
 }
 
+acoustic_event* TYEtape::asEvent() const
+{
+    acoustic_event *returned_event = new acoustic_event();
+    returned_event->pos = _pt;
+    returned_event->type = _type;
+    return returned_event;
+}

@@ -132,6 +132,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
     TYChemin chemin1;
 
     etape1._pt = rayon._ptA;
+	etape1._type = TYSOURCE;
     etape1._Absorption = (source.directivity->lwAdjustment(OVector3D(rayon._ptA, rayon._ptB), rayon.longueur())).racine();
 
     chemin1.setType(CHEMIN_DIRECT);
@@ -153,6 +154,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
     chemin2.setType(CHEMIN_SOL);
 
     etape2.setPoint(rayon._ptA);
+	etape2._type = TYSOURCE;
 
     OPoint3D ptSym;
     int symOK = 0;
@@ -184,6 +186,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
 
     TYEtape etape3;
     etape3._pt = ptReflex;
+	etape3._type = TYREFLEXIONSOL;
 
     OSegment3D seg2 = OSegment3D(ptReflex, rayon._ptB);// Segment Point de reflexion->Point de reception
     rr += seg2.longueur(); // Longueur parcourue sur le trajet reflechi
@@ -291,6 +294,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             // Premiere etape
             TYEtape etape; // Etape 1.1
             etape._pt = rayon._ptA;
+			etape._type = TYSOURCE;
 
             // Calcul du point de reflexion
             OPoint3D projA, projB;
@@ -321,6 +325,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
 
             // Deuxieme etape
             etape._pt = ptReflex;
+			etape._type = TYREFLEXIONSOL;
 
             seg2 = OSegment3D(ptReflex, rayon._ptB);
             rr = rr + seg2.longueur(); // Longueur totale du chemin reflechi
@@ -351,6 +356,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
 
             // Premiere etape
             etape._pt = rayon._ptA;
+			etape._type = TYSOURCE;
 
             // Calcul du point de reflexion
             if (penteMoyenne.longueur() > 0)
@@ -375,6 +381,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
 
             // Deuxieme etape
             etape._pt = ptReflex;
+			etape._type = TYREFLEXIONSOL;
 
             seg2 = OSegment3D(ptReflex, rayon._ptB);
             rr = rr + seg2.longueur(); // Longueur totale du chemin reflechi
@@ -471,6 +478,7 @@ bool TYAcousticModel::computeCheminsAvecEcran(const OSegment3D& rayon, const tym
         epaisseur += (OSegment3D(pts[i], pts[i + 1])).longueur();
 
         Etape._pt = pts[i];
+		Etape._type = TYDIFFRACTION;
         Etape._Absorption = _absoNulle;
 
         tabTwoReflex.push_back(Etape);
@@ -580,10 +588,12 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
 
     if (fromSource)   // Si on part d'une source, on tient compte de la directivite de celle-ci
     {
+	    EtapeCourante._type = TYSOURCE;
         EtapeCourante._Absorption = (source.directivity->lwAdjustment(OVector3D(ptDebut, ptFin), ptDebut.distFrom(ptFin))).racine();
     }
     else
     {
+	    EtapeCourante._type = TYDIFFRACTION;
         EtapeCourante._Absorption = _absoNulle;
     }
 
@@ -690,10 +700,12 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
 
         if (fromSource)   // Si on part d'une source, on tient compte de la directivite de celle-ci
         {
+		    EtapeCourante._type = TYSOURCE;
             EtapeCourante._Absorption = (source.directivity->lwAdjustment(OVector3D(ptDebut, ptReflex), ptDebut.distFrom(ptReflex))).racine();
         }
         else
         {
+		    EtapeCourante._type = TYDIFFRACTION;
             EtapeCourante._Absorption = _absoNulle;
         }
 
@@ -701,6 +713,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
 
         //              Etape Apres reflexion
         EtapeCourante._pt = ptReflex;
+		EtapeCourante._type = TYREFLEXIONSOL;
 
         OSegment3D seg2 = OSegment3D(ptReflex, ptFin);// Segment Point de reflexion->Point de reception
         rr = rr + seg2.longueur(); // Longueur parcourue sur le trajet reflechi
@@ -729,6 +742,7 @@ bool TYAcousticModel::addEtapesSol(const OPoint3D& ptDebut, const OPoint3D& ptFi
 
         //              Etape Apres reflexion
         EtapeCourante._pt = ptReflex;
+		EtapeCourante._type = TYREFLEXIONSOL;
 
         OSegment3D seg2 = OSegment3D(ptReflex, ptFin);// Segment Point de reflexion->Point de reception
         rr = rr + seg2.longueur(); // Longueur parcourue sur le trajet reflechi
@@ -856,12 +870,14 @@ void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection
 
                 TYEtape Etape;
                 Etape._pt = rayon._ptA;
+				Etape._type = TYSOURCE;
                 Etape._Absorption = (source.directivity->lwAdjustment(OVector3D(segMontant._ptA, segMontant._ptB), segMontant.longueur())).racine();
 
                 tabEtapes.push_back(Etape);
 
                 // Deuxieme etape : du point de reflexion a la fin du rayon
                 Etape._pt = segDescendant._ptA;
+				Etape._type = TYREFLEXION;
                 Etape._Absorption = SpectreAbso;
 
                 tabEtapes.push_back(Etape);
