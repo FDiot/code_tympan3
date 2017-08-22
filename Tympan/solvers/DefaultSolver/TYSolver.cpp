@@ -108,6 +108,21 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
     {
         return false;
     }
+    // Recuperation du tableau de rayon de la structure resultat
+    tab_acoustic_path& tabRays = aresult.get_path_data();
+    tabRays.clear();
+    // Displaying rays in the GUI
+    bool keepRays = tympan::SolverConfiguration::get()->Anime3DKeepRays;
+    if (keepRays == true)
+    {
+        for (unsigned int i=0; i<_tabTrajets.size(); i++)
+        {
+            for (size_t j=0; j<_tabTrajets[i].get_tab_rays().size(); j++)
+            {
+                tabRays.push_back(_tabTrajets[i].get_tab_rays()[j]);
+            }
+        }
+    }
 
     tympan::SpectrumMatrix& matrix = aresult.get_data();
     matrix.resize(aproblem.nreceptors(), aproblem.nsources());

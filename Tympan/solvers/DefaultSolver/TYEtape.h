@@ -25,6 +25,7 @@
 
 #include "Tympan/models/common/3d.h"
 #include "Tympan/models/common/spectre.h"
+#include "Tympan/models/common/acoustic_path.h"
 
 #include <vector>
 #include <deque>
@@ -91,11 +92,11 @@ public:
      * \brief Set/Get du type de cette etape.
      * \return _type: type de l'etape
      */
-    int getType() const { return _type; }
+    ACOUSTIC_EVENT_TYPES getType() const { return _type; }
     /**
      * Set/Get du type de cette etape.
      */
-    void setType(int etapeType) { _type = etapeType; }
+    void setType(ACOUSTIC_EVENT_TYPES etapeType) { _type = etapeType; }
 
     /**
      * \fn  OPoint3D getPoint()
@@ -133,13 +134,13 @@ public:
      * Set/Get du spectre d'attenuation associe a cette etape.
      */
     void setAttenuation(const OSpectre& Att) { _Attenuation = Att; }
-
+	acoustic_event* asEvent() const;
 
     // Membres
 public: 
-    int _type;                       //!< Acoustic event type
+    ACOUSTIC_EVENT_TYPES _type;                       //!< Acoustic event type
     OPoint3D _pt;                    //!< The starting point of this step
-    OSpectreComplex _Absorption;     //!< absorption Spectrum 
+	OSpectreComplex _Absorption;     //!< absorption Spectrum 
     OSpectre _Attenuation;           //!< attenuation Spectrum 
 };
 
