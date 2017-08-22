@@ -259,12 +259,15 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
     if (_conditionFav)
     {
         OPoint3D ptProj;
+		int res;
         double hauteurA = 0.0, hauteurB = 0.0;
         if (penteMoyenne.longueur() > 0)
         {
-            penteMoyenne.projection(rayon._ptA, ptProj, TYSEUILCONFONDUS);
+            res = penteMoyenne.projection(rayon._ptA, ptProj, TYSEUILCONFONDUS);
+			if (res == 0) {ptProj = penteMoyenne._ptA;}
             hauteurA = rayon._ptA._z - ptProj._z;
-            penteMoyenne.projection(rayon._ptB, ptProj, TYSEUILCONFONDUS);
+            res = penteMoyenne.projection(rayon._ptB, ptProj, TYSEUILCONFONDUS);
+			if (res == 0) {ptProj = penteMoyenne._ptB;}
             hauteurB = rayon._ptB._z - ptProj._z;
         }
         else
@@ -303,7 +306,8 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
 
             if (penteMoyenne.longueur() > 0)
             {
-                penteMoyenne.projection(rayon._ptA, projA, TYSEUILCONFONDUS);
+                res = penteMoyenne.projection(rayon._ptA, projA, TYSEUILCONFONDUS);
+				if (res == 0) {projA = penteMoyenne._ptA;}
             }
             else
             {
@@ -361,7 +365,8 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             // Calcul du point de reflexion
             if (penteMoyenne.longueur() > 0)
             {
-                penteMoyenne.projection(rayon._ptB, projB, TYSEUILCONFONDUS);
+                res = penteMoyenne.projection(rayon._ptB, projB, TYSEUILCONFONDUS);
+				if (res == 0) {projB = penteMoyenne._ptB;}
             }
             else
             {
