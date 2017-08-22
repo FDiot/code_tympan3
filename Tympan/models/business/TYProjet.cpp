@@ -559,7 +559,7 @@ bool TYProjet::updateAltiRecepteurs(const TYAltimetrie* pAlti)
         // XXX See ticket https://extranet.logilab.fr/ticket/1484180
         // The coordinates of the problematic point need to be properly reported
         // or idealy an exception should be thrown.
-        modified &= updateAltiPointControle(getPointControl(i), pAlti);
+        modified = updateAltiPointControle(getPointControl(i), pAlti);
     }
 
     // XXX See ticket https://extranet.logilab.fr/ticket/1484180:
