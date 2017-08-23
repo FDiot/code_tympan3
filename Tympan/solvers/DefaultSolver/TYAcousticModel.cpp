@@ -15,6 +15,7 @@
 
 #include <deque>
 #include <list>
+#include <cmath>
 #include "Tympan/core/defines.h"
 #include "Tympan/models/solver/config.h"
 #include "Tympan/models/common/plan.h"
@@ -131,7 +132,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
     TYChemin chemin1;
 
     etape1._pt = rayon._ptA;
-    etape1._Absorption = source.directivity->lwAdjustment(OVector3D(rayon._ptA, rayon._ptB), rayon.longueur());
+    etape1._Absorption = (source.directivity->lwAdjustment(OVector3D(rayon._ptA, rayon._ptB), rayon.longueur())).racine();
 
     chemin1.setType(CHEMIN_DIRECT);
 
@@ -175,7 +176,7 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
     double rr = seg1.longueur();
 
     // Directivite de la source
-    etape2._Absorption = source.directivity->lwAdjustment(OVector3D(seg1._ptA, seg1._ptB), seg1.longueur());
+    etape2._Absorption = (source.directivity->lwAdjustment(OVector3D(seg1._ptA, seg1._ptB), seg1.longueur())).racine();
 
     tabEtapes.push_back(etape2); // Ajout de l'etape avant reflexion
 
@@ -314,7 +315,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
 
             rr = seg.longueur();  // Longueur du chemin reflechi
 
-            etape._Absorption = source.directivity->lwAdjustment(OVector3D(rayon._ptA, rayon._ptB), rayon.longueur() );
+            etape._Absorption = (source.directivity->lwAdjustment(OVector3D(rayon._ptA, rayon._ptB), rayon.longueur())).racine();
 
             tabEtapes.push_back(etape);
 
@@ -367,7 +368,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             seg = OSegment3D(rayon._ptA, ptReflex);
             rr = seg.longueur(); // Longueur du chemin reflechi
 
-            etape._Absorption = source.directivity->lwAdjustment(OVector3D(rayon._ptA, rayon._ptB), rayon.longueur());
+            etape._Absorption = (source.directivity->lwAdjustment(OVector3D(rayon._ptA, rayon._ptB), rayon.longueur())).racine();
 
             tabEtapes.push_back(etape);
 
@@ -854,7 +855,7 @@ void TYAcousticModel::computeCheminReflexion(   const std::deque<TYSIntersection
 
                 TYEtape Etape;
                 Etape._pt = rayon._ptA;
-                Etape._Absorption = source.directivity->lwAdjustment(OVector3D(segMontant._ptA, segMontant._ptB), segMontant.longueur());
+                Etape._Absorption = (source.directivity->lwAdjustment(OVector3D(segMontant._ptA, segMontant._ptB), segMontant.longueur())).racine();
 
                 tabEtapes.push_back(Etape);
 
