@@ -373,7 +373,6 @@ public:
     OSpectreComplex operator * (const double& coefficient) const;
     /// Divide a complex spectrum by another one
     virtual OSpectreComplex operator / (const OSpectreComplex& spectre) const;
-    virtual OSpectreComplex div(const OSpectreComplex& spectre) const;
 
     /// Get an array of the real values of the spectrum
     virtual double* getTabValReel() { return _module; }
