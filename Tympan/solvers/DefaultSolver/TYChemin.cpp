@@ -69,7 +69,7 @@ bool TYChemin::operator!=(const TYChemin& other) const
 void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const AtmosphericConditions& atmos)
 {
     unsigned int i;
-    unsigned int index_diffraction = tabEtapes.size() - 1; // Absorption nulle en cas d'echec (recepteur)
+
     OSpectre phase = OSpectre::getEmptyLinSpectre(); //Reference de phase
 
     switch (_typeChemin)
@@ -103,20 +103,15 @@ void TYChemin::calcAttenuation(const TYTabEtape& tabEtapes, const AtmosphericCon
 
             phase = atmos.get_k().mult(_longueur); // = kRr
 
-            // On fait le produit des absorptions des etapes a partir de la seconde (source = etape[0] jusqu'a l'avant avant derniere
-            // On stocke l'indice de l'étape de diffraction
-            for (i = 1; i < tabEtapes.size() - 1; i++)
+            // On fait le produit des absorptions des etapes a partir de la seconde jusqu'a l'avant avant derniere
+            // l'avant derniere portant l'effet de diffraction et la dernière le recepteur
+            for (i = 1; i < tabEtapes.size() - 2; i++)
             {
-                if (tabEtapes[i]._type==TYDIFFRACTION)
-                {
-                    index_diffraction = i;
-                    continue;
-                }
                 _attenuation = _attenuation.mult(tabEtapes[i].getAbsorption()); // S.A.Q
                 phase = phase.sum(tabEtapes[i].getAbsorption().getPhase()); // kRr + Somme des epsilon i
             }
 
-            _attenuation = _attenuation.div(tabEtapes[index_diffraction].getAttenuation()); // S.A.Q/D
+            _attenuation = _attenuation.div(tabEtapes[tabEtapes.size() - 1].getAttenuation()); // S.A.Q/D
 
             _attenuation.setPhase(phase);
             break;
