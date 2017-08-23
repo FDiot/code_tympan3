@@ -113,6 +113,12 @@ int TYAcousticVolume::fromXML(DOM_Element domElement)
     TYColorInterface::fromXML(domElement);
     TYAcousticInterface::fromXML(domElement);
 
+    TYUUID currentId = this->getID();
+    if (TYElement::testId(currentId, this))
+    {
+        this->regenerateID();
+    }
+
     if (_pMateriau == NULL)
     {
         _pMateriau = new TYMateriauConstruction();

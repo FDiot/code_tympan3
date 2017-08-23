@@ -175,6 +175,12 @@ int TYTerrain::fromXML(DOM_Element domElement)
     TYPoint pt;
     DOM_Element elemCur;
 
+    TYUUID currentId = this->getID();
+    if (TYElement::testId(currentId, this))
+    {
+        this->regenerateID();
+    }
+
     QDomNodeList childs = domElement.childNodes();
     for (unsigned int i = 0; i < childs.length(); i++)
     {
