@@ -742,8 +742,6 @@ void TYCalcul::clearResult()
     clearNoiseMapsSpectrums();
 
     _pResultat->purge();
-
-    // Cleaning _tabrays
 	_tabRays.clear();
 
     setIsGeometryModified(true);
