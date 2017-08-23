@@ -52,7 +52,7 @@ public:
      *\fn TYEtape()
      *\brief Constructor
      */
-    TYEtape() : _spectrum(OSpectreComplex(TYComplex(1.,0.))) {}
+    TYEtape() {}
     /**
      * \fn TYEtape(const TYEtape& other)
      * \brief Copy constructor

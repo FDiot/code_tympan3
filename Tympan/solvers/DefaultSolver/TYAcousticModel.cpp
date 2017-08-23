@@ -509,47 +509,51 @@ bool TYAcousticModel::computeCheminsAvecEcran(const OSegment3D& rayon, const tym
 
     addEtapesSol(lastPt, rayon._ptB, penteMoyenneTotale, source, false, true, Etapes, rr);
 
+    tabNoReflex.push_back(Etapes[0]);
+    longNoReflex += tempLong;
+
+    tabOneReflexBefore.push_back(Etapes[0]);
+    longOneReflexBefore += tempLong;
+
+    tabOneReflexAfter.push_back(Etapes[1]);
+    tabOneReflexAfter.push_back(Etapes[2]);
+    longOneReflexAfter += rr;
+
+    tabTwoReflex.push_back(Etapes[1]);
+    tabTwoReflex.push_back(Etapes[2]);
+    longTwoReflex += rr;
+
+    Etapes.clear();
+
     /*--- PRISE EN COMPTE DE L'EFFET DE DIFFRACTION APPORTE PAR L'ECRAN SUR CHAQUE CHEMIN ---*/
 
     OSpectre Diff;
     bool bDiffOk = true; // Sera mis a false si la difference de marche devient <=0
 
     //      4.1. Chemin sans reflexion
-    longNoReflex += tempLong;
     Diff = calculAttDiffraction(rayon, penteMoyenneTotale, false, longNoReflex, epaisseur, vertical, false, bDiffOk);
     Etape.setAttenuation(Diff);
     tabNoReflex.push_back(Etape);
-    tabNoReflex.push_back(Etapes[0]);
     finishRay(tabNoReflex, rayon._ptB); // Add receptor at the end to allow viewing rays in modeles
 
 
     //      4.2. Chemin 2 reflexions
-    longTwoReflex += rr;
     Diff = calculAttDiffraction(rayon, penteMoyenneTotale, false, longTwoReflex, epaisseur, vertical, false, bDiffOk);
     Etape.setAttenuation(Diff);
     tabTwoReflex.push_back(Etape);
-    tabTwoReflex.push_back(Etapes[1]);
-    tabTwoReflex.push_back(Etapes[2]);
     finishRay(tabTwoReflex, rayon._ptB); // Add receptor at the end to allow viewing rays in modeles
 
     //      4.3. Chemin une reflexion avant
-    longOneReflexBefore += tempLong;
     Diff = calculAttDiffraction(rayon, penteMoyenneTotale, true, longOneReflexBefore, epaisseur, vertical, false, bDiffOk);
     Etape.setAttenuation(Diff);
     tabOneReflexBefore.push_back(Etape);
-    tabOneReflexBefore.push_back(Etapes[0]);
     finishRay(tabOneReflexBefore, rayon._ptB); // Add receptor at the end to allow viewing rays in modeles
 
     //      4.4. Chemin une reflexion apres
-    longOneReflexAfter += rr;
     Diff = calculAttDiffraction(rayon, penteMoyenneTotale, true, longOneReflexAfter, epaisseur, vertical, true, bDiffOk);
     Etape.setAttenuation(Diff);
     tabOneReflexAfter.push_back(Etape);
-    tabOneReflexAfter.push_back(Etapes[1]);
-    tabOneReflexAfter.push_back(Etapes[2]);
     finishRay(tabOneReflexAfter, rayon._ptB); // Add receptor at the end to allow viewing rays in modeles
-
-    Etapes.clear();
 
     /*--- AJOUT DES CHEMINS AU au tableau des chemins ---*/
 
