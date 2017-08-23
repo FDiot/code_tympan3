@@ -163,7 +163,7 @@ OSpectre TYTrajet::getPEnergetique(const AtmosphericConditions& atmos)
         }
 
     }
-    build_tab_rays();
+
     _chemins.clear();  // On efface le tableau des chemins pour (essayer de) gagner de la place en memoire
     _cheminsDirect.clear();
     return s;
@@ -319,7 +319,7 @@ OSpectre TYTrajet::getPInterference(const AtmosphericConditions& atmos)
             s.getTabValReel()[i] = attDirect.getTabValReel()[i];
         }
     }
-    build_tab_rays();
+
     _chemins.clear();  // On efface le tableau des chemins pour (essayer de) gagner de la place en memoire
     _cheminsDirect.clear();
 
@@ -359,15 +359,6 @@ OSpectre TYTrajet::correctTiers(const OSpectreComplex& si, const OSpectreComplex
     }
 
     return s;
-}
-
-void TYTrajet::build_tab_rays()
-{
-    _tabRays.clear();
-    for (size_t i=0; i<_chemins.size(); i++)
-    {
-        _tabRays.push_back(_chemins[i].get_ray());
-    }
 }
 
 

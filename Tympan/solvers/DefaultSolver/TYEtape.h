@@ -107,7 +107,7 @@ public:
     void setAttenuation(const OSpectre& Att) { _spectrum = Att; }
 
     /// return as acoustic_event (allowing to watch path from source to receptor)
-    acoustic_event* asEvent() const;
+    acoustic_event* asEvent();
 
     // Membres
 public:

@@ -20,7 +20,6 @@
 #include <deque>
 #include "TYEtape.h"
 #include "Tympan/models/common/atmospheric_conditions.h"
-#include "Tympan/models/common/acoustic_path.h"
 
 /**
  * \file TYChemin.h
@@ -119,15 +118,6 @@ public:
      * \return _typeChemin
      */
     int getType() const { return _typeChemin; }
-
-    /*!
-     * \fn void build_eq_path();
-     * \brief Build an acoustic_path from the an array tab of steps
-     */
-    void build_eq_path(const TYTabEtape& tabEtapes);
-
-    acoustic_path* get_ray() { return _eq_path; }
-
     // Members
 protected:
     /// Path type (has an influence on the algorithm)
@@ -141,9 +131,6 @@ protected:
 
     /// Attenuation spectrum of the path
     OSpectreComplex _attenuation;
-
-    /// Equivalent acoustic_path
-    acoustic_path *_eq_path;
 };
 
 
