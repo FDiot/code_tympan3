@@ -1057,7 +1057,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
     // Set position of ray begin 1000 meters over the original point to avoid underground point (seen from mean slope computation)
     vec3 start = OPoint3Dtovec3(incident._ptB);
     start.z += 1000.;
-    Ray ray1( start, vec3(0.001, 0.001, -1.) );
+    Ray ray1( start, vec3(0., 0., -1.) );
     ray1.maxt = 20000;
 
     std::list<Intersection> LI;
@@ -1104,7 +1104,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
     // first one
     OPoint3D pt = director._ptA;
     pt._z += 1000.;
-    Ray ray1( OPoint3Dtovec3(pt), vec3(0.0001, 0.0001, -1.) );
+    Ray ray1( OPoint3Dtovec3(pt), vec3(0., 0., -1.) );
 
     std::list<Intersection> LI;
 
@@ -1115,7 +1115,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
     LI.clear();
     pt = director._ptB;
     pt._z += 1000.;
-    Ray ray2( OPoint3Dtovec3(pt), vec3(0.0001, 0.0001, -1.) );
+    Ray ray2( OPoint3Dtovec3(pt), vec3(0., 0., -1.) );
 
     double distance2 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray2, LI ) );
 	// An error can occur if some elements are outside of the grip (emprise)
