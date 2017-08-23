@@ -180,14 +180,6 @@ private :
      */
     void meanSlope(const OSegment3D& director, OSegment3D& slope) const;
 
-    void finishRay(TYTabEtape& tabEtapes, const OPoint3D& pt) const
-    {
-        TYEtape etape;
-        etape._pt = pt;
-        etape._type = TYRECEPTEUR;
-        tabEtapes.push_back(etape); //!< Add the TYEtape step after reflection
-    }
-
 private:
     bool _useSol;
     bool _useReflex;
