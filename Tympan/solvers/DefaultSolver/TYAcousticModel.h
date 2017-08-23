@@ -173,7 +173,7 @@ private :
     /*!
      * \brief Find Reflexion spectrum at point defined by the end of an incident segment.
      */
-    OSpectreComplex getReflexionSpectrumAt(const OSegment3D& incident, double length) const;
+    OSpectreComplex getReflexionSpectrumAt(const OSegment3D& incident, double length, const OSegment3D& segPente) const;
 
     /*!
      * \brief Create a segment corresponding to the projection of "director" segment on the ground
