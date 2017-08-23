@@ -295,7 +295,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
             // Calcul du point de reflexion
             OPoint3D projA, projB;
 
-            double distRef = _paramH * rayon._ptA._z;  //distance =H1*hauteur de la source
+            double distRef = _paramH * hauteurA;  //distance =H1*hauteur de la source
 
             if (penteMoyenne.longueur() > 0)
             {
@@ -363,6 +363,7 @@ void TYAcousticModel::computeCheminSansEcran(const OSegment3D& rayon, const tymp
                 projB._z = penteMoyenne._ptB._z;
             }
 
+            distRef = _paramH * hauteurB;
             ptReflex = OPoint3D(OVector3D(projB) - vect * distRef);
 
             seg1 = OSegment3D(rayon._ptA, ptReflex);
