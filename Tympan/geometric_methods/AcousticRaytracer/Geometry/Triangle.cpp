@@ -15,7 +15,7 @@
 
 #include "Triangle.h"
 
-Triangle::Triangle(vec3& p1, vec3& p2, vec3& p3, Material* m, const bool& isSol)
+Triangle::Triangle(const vec3& p1,const vec3& p2,const vec3& p3, Material* m, const bool& isSol)
 {
     name = "unknown triangle";
     Shape::setIsSol(isSol);
