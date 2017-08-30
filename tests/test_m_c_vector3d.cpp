@@ -152,8 +152,8 @@ TEST(normalize, dumpenv)
     // Calcul de la soustraction
     v1.normalize();
 
-    ASSERT_TRUE(v1._x == (3.0 / 5.0));
-    ASSERT_TRUE(v1._y == (4.0 / 5.0));
+    ASSERT_TRUE(v1._x == 0.6);
+    ASSERT_TRUE(v1._y == 0.8);
     ASSERT_TRUE(v1._z == 0.0);
 }
 

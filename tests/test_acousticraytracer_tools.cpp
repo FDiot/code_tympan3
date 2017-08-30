@@ -1,13 +1,3 @@
-/**
-*
-* @brief Ray tracing tests ensuring the process is not broken
-
-*  Created on: march 14, 2017
-*  Author: Fabien Diot <fabien-externe.diot@edf.fr>
-*
-*/
-
-
 #include <cstdlib>
 #include <time.h> 
 
@@ -71,6 +61,7 @@ TEST(test_CleanerSelector_canBeInserted, nothing_events)
 
 	//Create several events, some with the type NOTHING
 	Event* e1=new Event();
+	e1->setType(SPECULARREFLEXION);
 	std::shared_ptr<Event> SPE1(e1);
 	r->getEvents()->push_back(SPE1);
 
@@ -85,10 +76,12 @@ TEST(test_CleanerSelector_canBeInserted, nothing_events)
 	r->getEvents()->push_back(SPE3);
 
 	SpecularReflexion* e4=new SpecularReflexion();
+	e4->setType(SPECULARREFLEXION);
 	std::shared_ptr<Event> SPE4(e4);
 	r->getEvents()->push_back(SPE4);
 
 	Diffraction* e5=new Diffraction();
+	e5->setType(DIFFRACTION);
 	std::shared_ptr<Event> SPE5(e5);
 	r->getEvents()->push_back(SPE5);
 
@@ -128,14 +121,17 @@ TEST(test_CleanerSelector_insertWithTest, nothing_events)
 	r->getEvents()->push_back(SPE1);
 
 	Event* e2=new Event();
+	e2->setType(DIFFRACTION);
 	std::shared_ptr<Event> SPE2(e2);
 	r->getEvents()->push_back(SPE2);
 
 	SpecularReflexion* e3=new SpecularReflexion();
+	e3->setType(SPECULARREFLEXION);
 	std::shared_ptr<Event> SPE3(e3);
 	r->getEvents()->push_back(SPE3);
 
 	SpecularReflexion* e4=new SpecularReflexion();
+	e4->setType(SPECULARREFLEXION);
 	std::shared_ptr<Event> SPE4(e4);
 	r->getEvents()->push_back(SPE4);
 
@@ -145,6 +141,7 @@ TEST(test_CleanerSelector_insertWithTest, nothing_events)
 	r->getEvents()->push_back(SPE5);
 
 	Diffraction* e6=new Diffraction();
+	e6->setType(DIFFRACTION);
 	std::shared_ptr<Event> SPE6(e6);
 	r->getEvents()->push_back(SPE6);
 
@@ -1194,6 +1191,7 @@ TEST(test_FaceSelector_canBeInserted, history_primitive_mode)
 	Ray* r4=new Ray();
 
 	unsigned long long replace;
+	Material* mat=new Material();
 
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
@@ -1233,7 +1231,7 @@ TEST(test_FaceSelector_canBeInserted, history_primitive_mode)
 		scene->addVertex(vertex, p1);
 		scene->addVertex(vertex+u, p2);
 		scene->addVertex(vertex+v, p3);
-		shapes.push_back(scene->addTriangle(p1,p2,p3,&Material()));
+		shapes.push_back(scene->addTriangle(p1,p2,p3,mat));
 	}
 
 	//Define some events and associate a shape and a position to each one of them
@@ -1317,7 +1315,8 @@ TEST(test_FaceSelector_canBeInserted, history_face_mode)
 	Ray* r4=new Ray();
 
 	unsigned long long replace;
-
+	Material* mat=new Material();
+	
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
@@ -1357,7 +1356,7 @@ TEST(test_FaceSelector_canBeInserted, history_face_mode)
 		scene->addVertex(vertex, p1);
 		scene->addVertex(vertex+u, p2);
 		scene->addVertex(vertex+v, p3);
-		Shape* shape=scene->addTriangle(p1,p2,p3,&Material());
+		Shape* shape=scene->addTriangle(p1,p2,p3,mat);
 		shape->setFaceId(i);
 		shapes.push_back(shape);
 	}
@@ -1442,6 +1441,8 @@ TEST(test_FaceSelector_insertWithTest, history_primitive_mode)
 	Ray* r3=new Ray();
 	Ray* r4=new Ray();
 
+	Material* mat=new Material();
+	
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
@@ -1480,7 +1481,7 @@ TEST(test_FaceSelector_insertWithTest, history_primitive_mode)
 		scene->addVertex(vertex, p1);
 		scene->addVertex(vertex+u, p2);
 		scene->addVertex(vertex+v, p3);
-		shapes.push_back(scene->addTriangle(p1,p2,p3,&Material()));
+		shapes.push_back(scene->addTriangle(p1,p2,p3,mat));
 	}
 
 	//Define some events and associate a shape and a position to each one of them
@@ -1557,6 +1558,8 @@ TEST(test_FaceSelector_insertWithTest, history_face_mode)
 	Ray* r3=new Ray();
 	Ray* r4=new Ray();
 
+	Material* mat=new Material();
+
 	//init random number generator
 	unsigned int seed=(unsigned int)time(NULL);
 	srand(seed);
@@ -1596,7 +1599,7 @@ TEST(test_FaceSelector_insertWithTest, history_face_mode)
 		scene->addVertex(vertex, p1);
 		scene->addVertex(vertex+u, p2);
 		scene->addVertex(vertex+v, p3);
-		Shape* shape=scene->addTriangle(p1,p2,p3,&Material());
+		Shape* shape=scene->addTriangle(p1,p2,p3,mat);
 		shape->setFaceId(i);
 		shapes.push_back(shape);
 	}
@@ -1673,7 +1676,7 @@ TEST(test_FaceSelector_insertWithTest, history_face_mode)
 							 FermatSelector
 ************************************************************************/
 
-//Test FaceSelector.canBeInserted REJECTS rays that hit receptors that do not lie in the ray's thickness
+//Test FermatSelector.canBeInserted REJECTS rays that hit receptors that do not lie in the ray's thickness
 TEST(test_FermatSelector_canBeInserted, receptor_outside_thickness_1)
 {
 
@@ -1684,15 +1687,16 @@ TEST(test_FermatSelector_canBeInserted, receptor_outside_thickness_1)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
+	src.setInitialRayCount(1000);
 	r->source=&src;
 	
 	//Set a receptor
-	Recepteur rcpt(vec3(1000,1,0),3);
+	Recepteur rcpt(vec3(10,1,0),3);
 	r->recepteur=&rcpt;
 
 	Intersection result;
 	float tmax=2000;
-	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(0,1,0); // direction from source to receptor + some small deviation
+	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(0,1,0); // direction from source to receptor + some deviation
 	dir.normalize();
 	r->direction=dir;
 	r->position=src.getPosition();
@@ -1717,15 +1721,16 @@ TEST(test_FermatSelector_canBeInserted, receptor_outside_thickness_2)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(50,-200,150));
+	src.setInitialRayCount(1000);
 	r->source=&src;
 	
 	//Set a receptor
-	Recepteur rcpt(vec3(-800,450,300),3);
+	Recepteur rcpt(vec3(60,-210,140),3);
 	r->recepteur=&rcpt;
 
 	Intersection result;
 	float tmax=2000;
-	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(1,0,0); // direction from source to receptor + some small deviation
+	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(2,0,0); // direction from source to receptor + some deviation
 	dir.normalize();
 	r->direction=dir;
 	r->position=src.getPosition();
@@ -1749,6 +1754,7 @@ TEST(test_FermatSelector_canBeInserted, receptor_inside_thickness_1)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
+	src.setInitialRayCount(1000);
 	r->source=&src;
 	
 	//Set a receptor
@@ -1781,6 +1787,7 @@ TEST(test_FermatSelector_canBeInserted, receptor_inside_thickness_2)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(50,-200,150));
+	src.setInitialRayCount(1000);
 	r->source=&src;
 	
 	//Set a receptor
@@ -1812,15 +1819,16 @@ TEST(test_FermatSelector_insertWithTest, receptor_outside_thickness_1)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
+	src.setInitialRayCount(1000);
 	r->source=&src;
 	
 	//Set a receptor
-	Recepteur rcpt(vec3(1000,1,0),3);
+	Recepteur rcpt(vec3(10,1,0),3);
 	r->recepteur=&rcpt;
 
 	Intersection result;
 	float tmax=2000;
-	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(0,1,0); // direction from source to receptor + some small deviation
+	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(0,1,0); // direction from source to receptor + some deviation
 	dir.normalize();
 	r->direction=dir;
 	r->position=src.getPosition();
@@ -1843,15 +1851,16 @@ TEST(test_FermatSelector_insertWithTest, receptor_outside_thickness_2)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(50,-200,150));
+	src.setInitialRayCount(1000);
 	r->source=&src;
 	
 	//Set a receptor
-	Recepteur rcpt(vec3(-800,450,300),3);
+	Recepteur rcpt(vec3(60,-210,140),3);
 	r->recepteur=&rcpt;
 
 	Intersection result;
 	float tmax=2000;
-	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(1,0,0); // direction from source to receptor + some small deviation
+	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(2,0,0); // direction from source to receptor + some deviation
 	dir.normalize();
 	r->direction=dir;
 	r->position=src.getPosition();
@@ -1873,6 +1882,7 @@ TEST(test_FermatSelector_insertWithTest, receptor_inside_thickness_1)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
+	src.setInitialRayCount(1000);
 	r->source=&src;
 	
 	//Set a receptor
@@ -1903,6 +1913,7 @@ TEST(test_FermatSelector_insertWithTest, receptor_inside_thickness_2)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(50,-200,150));
+	src.setInitialRayCount(1000);
 	r->source=&src;
 	
 	//Set a receptor
@@ -2330,7 +2341,8 @@ TEST(test_ReflectionSelector_canBeInserted, ground_reflection)
 	ReflectionSelector<Ray> selector;
 	Ray* r=new Ray();
 	unsigned long long replace;
-
+	Material* mat=new Material();
+	
 	Simulation simu;
 	Scene* scene=simu.getScene();
 	unsigned int p1,p2,p3,p4,p5,p6;
@@ -2344,8 +2356,8 @@ TEST(test_ReflectionSelector_canBeInserted, ground_reflection)
 	scene->addVertex(vec3(0,-1,0), p5);
 	scene->addVertex(vec3(0,0,-1), p6);
 
-	Shape* shape1=scene->addTriangle(p1,p2,p3,&Material());
-	Shape* shape2=scene->addTriangle(p4,p5,p6,&Material());
+	Shape* shape1=scene->addTriangle(p1,p2,p3,mat);
+	Shape* shape2=scene->addTriangle(p4,p5,p6,mat);
 
 
 	//Set events
@@ -2478,7 +2490,8 @@ TEST(test_ReflectionSelector_insertWithTest, ground_reflection)
 	Simulation simu;
 	Scene* scene=simu.getScene();
 	unsigned int p1,p2,p3,p4,p5,p6;
-
+	Material* mat=new Material();
+	
 	//Set two shapes for the events
 	scene->addVertex(vec3(1,0,0), p1);
 	scene->addVertex(vec3(0,1,0), p2);
@@ -2488,8 +2501,8 @@ TEST(test_ReflectionSelector_insertWithTest, ground_reflection)
 	scene->addVertex(vec3(0,-1,0), p5);
 	scene->addVertex(vec3(0,0,-1), p6);
 
-	Shape* shape1=scene->addTriangle(p1,p2,p3,&Material());
-	Shape* shape2=scene->addTriangle(p4,p5,p6,&Material());
+	Shape* shape1=scene->addTriangle(p1,p2,p3,mat);
+	Shape* shape2=scene->addTriangle(p4,p5,p6,mat);
 
 
 	//Set events
@@ -2520,3 +2533,211 @@ TEST(test_ReflectionSelector_insertWithTest, ground_reflection)
 	selector.setGroundAccepted(false); //refuse ground reflexion
 	EXPECT_TRUE(selector.insertWithTest(r)); //the event interacting with the ground is a diffraction => should return TRUE
 }
+
+
+
+/***********************************************************************
+							 Selector
+************************************************************************/
+
+//Test the compareToKey structure of Selector
+TEST(test_Selector, compareToKey)
+{
+	CompareToKey comparator;
+
+	std::vector<unsigned int> list1;
+	std::vector<unsigned int> list2;
+
+	list1.push_back(5);
+	list1.push_back(12);
+	list1.push_back(1);
+	list1.push_back(8);
+	list1.push_back(45);
+
+	list2.push_back(5);
+	list2.push_back(12);
+	list2.push_back(1);
+	list2.push_back(8);
+	list2.push_back(45);
+
+	EXPECT_FALSE(comparator(list1,list2));
+
+	list1.pop_back();
+	EXPECT_TRUE(comparator(list1,list2));
+
+	list1.push_back(42);
+	EXPECT_TRUE(comparator(list1,list2));
+
+	list1.at(0)=6;
+	EXPECT_TRUE(comparator(list2,list1));
+}
+
+
+/***********************************************************************
+							 SelectorManager
+************************************************************************/
+
+
+//Test the method appendData of SelectorManager
+TEST(test_SelectorManager, appendData)
+{
+
+	SelectorManager<Ray> manager;
+
+	
+
+	FaceSelector<Ray>* faceSelector=new FaceSelector<Ray>();
+	faceSelector->setModeHistory(HISTORY_FACE);
+
+	manager.addSelector(faceSelector);
+
+	Ray* r1=new Ray();
+	Ray* r2=new Ray();
+	Ray* r3=new Ray();
+	Ray* r4=new Ray();
+
+	Material* mat=new Material();
+	
+	//init random number generator
+	unsigned int seed=(unsigned int)time(NULL);
+	srand(seed);
+	cout<<"Random number generator initialized with seed "<<seed<<endl;
+
+	Simulation simu;
+	Scene* scene=simu.getScene();
+
+	//Set a source
+	Source src;
+	src.setPosition(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)));
+	r1->source=&src;
+	r2->source=&src;
+	r3->source=&src;
+	r4->source=&src;
+
+	//Set a receptor
+	Recepteur rcpt(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)),3);
+	r1->recepteur=&rcpt;
+	r2->recepteur=&rcpt;
+	r3->recepteur=&rcpt;
+	r4->recepteur=&rcpt;
+
+	simu.addSource(src);
+	simu.addRecepteur(rcpt);
+	
+	//set names of rays
+	r1->setName("R1");
+	r2->setName("R2");
+	r3->setName("R3");
+	r4->setName("R4");
+
+	//set id of rays
+	r1->constructId=1;
+	r2->constructId=2;
+	r3->constructId=3;
+	r4->constructId=4;
+
+	//Randomly generate four triangles with a different shapeId and add theme to the scene
+	std::vector<Shape*> shapes;
+	for(int i=0;i<4;i++){
+		unsigned int p1,p2,p3;
+
+		vec3 vertex=vec3((decimal)(rand()%100+1),(decimal)(rand()%100+1),(decimal)(rand()%100+1));
+		vec3 u=vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5));
+		vec3 v=vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5));
+		
+		scene->addVertex(vertex, p1);
+		scene->addVertex(vertex+u, p2);
+		scene->addVertex(vertex+v, p3);
+		Shape* shape=scene->addTriangle(p1,p2,p3,mat);
+		shape->setFaceId(i);
+		shapes.push_back(shape);
+	}
+
+	//Define some events and associate a shape and a position to each one of them
+	Event* e1=new Event();
+	e1->setShape(shapes[0]);
+	e1->setPosition(vec3(48,-25,74));
+	std::shared_ptr<Event> SPE1(e1);
+
+	Event* e2=new Event();
+	e2->setShape(shapes[1]);
+	e2->setPosition(vec3(24,11,-62));
+	std::shared_ptr<Event> SPE2(e2);
+
+	Event* e3=new Event();
+	e3->setShape(shapes[1]);
+	e3->setPosition(vec3(37,-7,26)); 
+	std::shared_ptr<Event> SPE3(e3);
+
+	Event* e4=new Event();
+	e4->setShape(shapes[2]);
+	e4->setPosition(vec3(-12,88,-42));
+	std::shared_ptr<Event> SPE4(e4);
+
+	Event* e5=new Event();
+	e5->setShape(shapes[2]);
+	e5->setPosition(vec3(57,-18,33));
+	std::shared_ptr<Event> SPE5(e5);
+
+	Event* e6=new Event();
+	e6->setShape(shapes[3]);
+	e4->setPosition(vec3(78,-51,36));
+	std::shared_ptr<Event> SPE6(e6);
+
+	//Assign events to the rays
+	r1->getEvents()->push_back(SPE1);
+	r1->getEvents()->push_back(SPE2);
+	r1->getEvents()->push_back(SPE6);
+	r1->getEvents()->push_back(SPE5);
+
+	r2->getEvents()->push_back(SPE1);
+	r2->getEvents()->push_back(SPE3);
+	r2->getEvents()->push_back(SPE6);
+	r2->getEvents()->push_back(SPE4);
+
+	r3->getEvents()->push_back(SPE3);
+	r3->getEvents()->push_back(SPE1);
+	r3->getEvents()->push_back(SPE6);
+	r3->getEvents()->push_back(SPE4);
+	
+	r4->getEvents()->push_back(SPE2);
+	r4->getEvents()->push_back(SPE1);
+	r4->getEvents()->push_back(SPE6);
+	r4->getEvents()->push_back(SPE5);
+
+
+	manager.appendData(r1); 
+	std::map<unsigned long long, Ray*> selectedData=manager.getSelectedData();
+
+	EXPECT_EQ(1,selectedData.size()); // no ray selected yet => ray should be added to selected data which should have size 1
+	EXPECT_EQ("R1",selectedData.begin()->second->getName()); // the only selected ray should be R1
+
+	manager.appendData(r2); 
+	selectedData=manager.getSelectedData();
+
+	EXPECT_EQ(1,selectedData.size()); // same faceId sequence as r1. r2 should replace r1. The number of selected rays should remain 1
+	EXPECT_EQ("R2",selectedData.begin()->second->getName()); // the only selected ray should be R2
+
+	manager.appendData(r3); 
+	selectedData=manager.getSelectedData();
+
+	EXPECT_EQ(2,selectedData.size()); // different faceId sequence from r1 and r2 -> rays should be selected
+	std::map<unsigned long long, Ray*>::iterator it = selectedData.begin();
+	EXPECT_EQ("R2",it->second->getName()); // first selected ray should be R2
+	it++;
+	EXPECT_EQ("R3",it->second->getName()); // second selected ray shopuld be R3
+	
+	manager.appendData(r4); 
+	selectedData=manager.getSelectedData();
+
+	EXPECT_EQ(2,selectedData.size()); // same faceId sequence as r3 but with longer length => rays should be rejected
+	it = selectedData.begin();
+	EXPECT_EQ("R2",it->second->getName()); // first selected ray should be R2
+	it++;
+	EXPECT_EQ("R3",it->second->getName()); // second selected ray shopuld be R3
+
+}
+
+
+
+
