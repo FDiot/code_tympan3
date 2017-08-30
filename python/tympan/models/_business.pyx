@@ -321,14 +321,13 @@ cdef class Site:
         self.thisptr.getRealPointer().getFacesOnGround(cpp_contours)
         cpp_contours_iter = cpp_contours.begin()
         contours = {}
-        while cpp_contours_iter != cpp_contours.end():  # XXX can't we iterate on items???
-            volume_id = deref(cpp_contours_iter).first.toString().toStdString().decode()
+        for it in cpp_contours:
+            volume_id = it.first.toString().toStdString().decode()
             contours[volume_id] = [
                 [tycommon.opoint3d2point3d(contour[i])
                  for i in xrange(contour.size())]
-                for contour in deref(cpp_contours_iter).second
+                for contour in it.second
             ]
-            inc(cpp_contours_iter)
         return contours
 
     @property
