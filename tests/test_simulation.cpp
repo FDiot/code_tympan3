@@ -288,12 +288,15 @@ TEST(test_simulation_1source_1recepteur, test_obstacle)
 	// Create a ray tracer
 	Simulation simu;
 
+	//Create dummy material
+	Material* mat=new Material();
+
 	// Add an obstacle between the source and the receptor
 	unsigned int p1,p2,p3;
 	simu.getScene()->addVertex(vec3(10,0,5), p1);
 	simu.getScene()->addVertex(vec3(10,5,-5), p2);
 	simu.getScene()->addVertex(vec3(10,-5,-5), p3);
-	simu.getScene()->addTriangle(p1,p2,p3,&Material());
+	simu.getScene()->addTriangle(p1,p2,p3,mat);
 
 	// Setup
 	setup_1source_1recepteur(&simu);
@@ -321,6 +324,9 @@ TEST(test_simulation_1source_1recepteur, test_reflexion1)
 	// Create a ray tracer
 	Simulation simu;
 
+	//Create dummy material
+	Material* mat=new Material();
+
 	// Add triangle obstacles 5 units to right and 5 units to the left of the source (wich is at x=5)
 	unsigned int p1,p2,p3;
 	simu.getScene()->addVertex(vec3(10,0,5), p1);
@@ -333,7 +339,7 @@ TEST(test_simulation_1source_1recepteur, test_reflexion1)
 	simu.getScene()->addVertex(vec3(0,0,5), p4);
 	simu.getScene()->addVertex(vec3(0,5,0), p6);
 	simu.getScene()->addVertex(vec3(0,-5,0), p5);
-	simu.getScene()->addTriangle(p4,p5,p6,&Material());
+	simu.getScene()->addTriangle(p4,p5,p6,mat);
 
 	// Setup
 	setup_1source_1recepteur(&simu);
@@ -410,24 +416,27 @@ TEST(test_simulation_1source_1recepteur, test_reflexion2)
 	// Create a ray tracer
 	Simulation simu;
 
+	//Create dummy material
+	Material* mat=new Material();
+
 	// Add 3 triangles, one reflecting the ray upward, one reflecting rightward and one downward to the receptor
 	unsigned int p1,p2,p3;
 	simu.getScene()->addVertex(vec3(-1,-1,0), p1);
 	simu.getScene()->addVertex(vec3(1,1,1), p2);
 	simu.getScene()->addVertex(vec3(1,1,-1), p3);
-	simu.getScene()->addTriangle(p1,p2,p3,&Material());
+	simu.getScene()->addTriangle(p1,p2,p3,mat);
 
 	unsigned int p4,p5,p6;
 	simu.getScene()->addVertex(vec3(-1,9,0), p4);
 	simu.getScene()->addVertex(vec3(1,11,-1), p5);
 	simu.getScene()->addVertex(vec3(1,11,1), p6);
-	simu.getScene()->addTriangle(p4,p5,p6,&Material());
+	simu.getScene()->addTriangle(p4,p5,p6,mat);
 
 	unsigned int p7,p8,p9;
 	simu.getScene()->addVertex(vec3(9,11,0), p7);
 	simu.getScene()->addVertex(vec3(11,9,-1), p8);
 	simu.getScene()->addVertex(vec3(11,9,1), p9);
-	simu.getScene()->addTriangle(p7,p8,p9,&Material());
+	simu.getScene()->addTriangle(p7,p8,p9,mat);
 
 	// Setup
 	setup_1source_1recepteur(&simu,0,2,vec3(-10,0,0),vec3(10,0,0));
@@ -503,7 +512,7 @@ TEST(test_simulation_1source_1recepteur, test_diffraction)
 
 	// Add 3 triangles, one reflecting the ray upward, one reflecting rightward and one downward to the receptor
 	unsigned int p1,p2,p3,p4,p5,p6,p7,p8;
-
+	
 	simu.getScene()->addVertex(vec3(0,0,0), p1);
 	simu.getScene()->addVertex(vec3(50,0,0), p2);
 	simu.getScene()->addVertex(vec3(0,0,50), p3);

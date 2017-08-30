@@ -30,21 +30,7 @@ using std::endl;
 /***********************************************************************
 								 3d
 ************************************************************************/
-// Test the SIGN() function
-TEST(test_3d, sign)
-{
 
-	double A=84.52;
-	double B=123.58;
-	double C=-19.8;
-	double D=-1.4;
-
-	EXPECT_DOUBLE_EQ(1,SIGN(A)); 
-	EXPECT_DOUBLE_EQ(1,SIGN(B));
-	EXPECT_DOUBLE_EQ(-1,SIGN(C)); 
-	EXPECT_DOUBLE_EQ(-1,SIGN(D)); 
-	
-}
 
 // Test the ABS() function
 TEST(test_3d, abs)
@@ -325,6 +311,7 @@ TEST(test_ovector3d,multiplication_operator){
 	EXPECT_TRUE(OVector3D(4,5,8)*OVector3D(-7,5,-8)==OVector3D(-28,25,-64));
 	EXPECT_TRUE(OVector3D(-8,-6,2)*OVector3D(1,-3,-9)==OVector3D(-8,18,-18));
 	EXPECT_TRUE(OVector3D(-3,6,8)*OVector3D(-4,-5,-1)==OVector3D(12,-30,-8));
+	EXPECT_TRUE(3*OVector3D(5,-4,12)==OVector3D(15,-12,36));
 }
 
 // Test the OVector3D cross() product
@@ -496,7 +483,6 @@ TEST(test_ovector3d,get_rotation_oz_oy){
 
 
 
-
 /***********************************************************************
 						        OPoint3D
 ************************************************************************/
@@ -562,7 +548,7 @@ TEST(test_point3d,check_points_max_distance){
 	  EXPECT_EQ(OPoint3D(6.5,2.5,3.5),result.at(5));
 	  EXPECT_EQ(OPoint3D(6,3,2),result.at(6));
 
-
+	  
 	  result=OPoint3D::checkPointsMaxDistance(tab,3.);
 	  EXPECT_EQ(5,result.size());
 	  EXPECT_EQ(OPoint3D(4,-1,8),result.at(0));
@@ -576,15 +562,12 @@ TEST(test_point3d,check_points_max_distance){
 
 
 
-
-
-
 /***********************************************************************
 						        OMatrix
 ************************************************************************/
 
 // Test the OMatrix + operator
-TEST(test_omatrix3d,addition_operator){
+TEST(test_3d_omatrix,addition_operator){
 	double a[4][4]={{7,-5,9,6},{-1,6,-3,9},{0,-4,-2,-3},{6,8,-8,-1}};
 	double b[4][4]={{-6,5,-4,3},{-9,-8,7,1},{3,6,-6,-4},{1,-6,-4,7}};
 
@@ -600,7 +583,7 @@ TEST(test_omatrix3d,addition_operator){
 
 
 // Test the OMatrix - operator
-TEST(test_omatrix3d,subtraction_operator){
+TEST(test_3d_omatrix,subtraction_operator){
 	double a[4][4]={{7,-5,9,6},{-1,6,-3,9},{0,-4,-2,-3},{6,8,-8,-1}};
 	double b[4][4]={{-6,5,-4,3},{-9,-8,7,1},{3,6,-6,-4},{1,-6,-4,7}};
 
@@ -616,7 +599,7 @@ TEST(test_omatrix3d,subtraction_operator){
 
 
 // Test the OMatrix * operator
-TEST(test_omatrix3d,product_operator){
+TEST(test_3d_omatrix,product_operator){
 	double a[4][4]={{7,-5,9,6},{-1,6,-3,9},{0,-4,-2,-3},{6,8,-8,-1}};
 	double b[4][4]={{-6,5,-4,3},{-9,-8,7,1},{3,6,-6,-4},{1,-6,-4,7}};
 
@@ -631,7 +614,7 @@ TEST(test_omatrix3d,product_operator){
 
 
 // Test the OMatrix dot() function
-TEST(test_omatrix3d,dot){
+TEST(test_3d_omatrix,dot){
 	
 	double a[4][4]={{7,-5,9,6},{-1,6,-3,9},{0,-4,-2,-3},{6,8,-8,-1}};
 	double b[4][4]={{-6,5,-4,3},{-9,-8,7,1},{3,6,-6,-4},{1,-6,-4,7}};
@@ -645,7 +628,7 @@ TEST(test_omatrix3d,dot){
 
 
 // Test the OMatrix scale() function
-TEST(test_omatrix3d,scale){
+TEST(test_3d_omatrix,scale){
 	
 	double a[4][4]={{7,-5,9,6},{-1,6,-3,9},{0,-4,-2,-3},{6,8,-8,-1}};
 	double b[4][4]={{-6,5,-4,3},{-9,-8,7,1},{3,6,-6,-4},{1,-6,-4,7}};
@@ -660,7 +643,7 @@ TEST(test_omatrix3d,scale){
 
 
 // Test the OMatrix * OVector3D operator
-TEST(test_omatrix3d,product_with_vector3d){
+TEST(test_3d_omatrix,product_with_vector3d){
 
 	double a[4][4]={{7,-5,9,6},{-1,6,-3,9},{0,-4,-2,-3},{6,8,-8,-1}};
 	double b[4][4]={{-6,5,-4,3},{-9,-8,7,1},{3,6,-6,-4},{1,-6,-4,7}};
@@ -674,7 +657,7 @@ TEST(test_omatrix3d,product_with_vector3d){
 
 
 // Test the OMatrix * OPoint3D operator
-TEST(test_omatrix3d,product_with_point3d){
+TEST(test_3d_omatrix,product_with_point3d){
 
 	double a[4][4]={{7,-5,9,6},{-1,6,-3,9},{0,-4,-2,-3},{6,8,-8,-1}};
 	double b[4][4]={{-6,5,-4,3},{-9,-8,7,1},{3,6,-6,-4},{1,-6,-4,7}};
@@ -689,7 +672,7 @@ TEST(test_omatrix3d,product_with_point3d){
 
 
 // Test the OMatrix multNormal() function
-TEST(test_omatrix3d,multNormal){
+TEST(test_3d_omatrix,multNormal){
 
 	double a[4][4]={{7,-5,9,6},{-1,6,-3,9},{0,-4,-2,-3},{6,8,-8,-1}};
 	double b[4][4]={{-6,5,-4,3},{-9,-8,7,1},{3,6,-6,-4},{1,-6,-4,7}};
@@ -703,7 +686,7 @@ TEST(test_omatrix3d,multNormal){
 
 
 // Test the OMatrix setTranslation() function
-TEST(test_omatrix3d,set_translation){
+TEST(test_3d_omatrix,set_translation){
 
 	OMatrix A,B;
 
@@ -721,7 +704,7 @@ TEST(test_omatrix3d,set_translation){
 }
 
 // Test the OMatrix setScale() function
-TEST(test_omatrix3d,set_scale){
+TEST(test_3d_omatrix,set_scale){
 
 	OMatrix A,B;
 
@@ -741,7 +724,7 @@ TEST(test_omatrix3d,set_scale){
 
 
 // Test the OMatrix setRotationOx() function
-TEST(test_omatrix3d,set_rotationox){
+TEST(test_3d_omatrix,set_rotationox){
 
 	OMatrix A,R1,R2;
 
@@ -764,7 +747,7 @@ TEST(test_omatrix3d,set_rotationox){
 }
 
 // Test the OMatrix setRotationOy() function
-TEST(test_omatrix3d,set_rotationoy){
+TEST(test_3d_omatrix,set_rotationoy){
 
 	OMatrix A,R1,R2;
 
@@ -788,7 +771,7 @@ TEST(test_omatrix3d,set_rotationoy){
 
 
 // Test the OMatrix setRotationOz() function
-TEST(test_omatrix3d,set_rotationoz){
+TEST(test_3d_omatrix,set_rotationoz){
 
 	OMatrix A,R1,R2;
 
@@ -812,7 +795,7 @@ TEST(test_omatrix3d,set_rotationoz){
 
 
 // Test the OMatrix aligneVecteurSurOx() function
-TEST(test_omatrix3d,align_vector_Ox){
+TEST(test_3d_omatrix,align_vector_Ox){
 
 	OMatrix M;
 
@@ -852,7 +835,7 @@ TEST(test_omatrix3d,align_vector_Ox){
 
 
 // Test the OMatrix aligneVecteurSurOy() function
-TEST(test_omatrix3d,align_vector_Oy){
+TEST(test_3d_omatrix,align_vector_Oy){
 
 	OMatrix M;
 
@@ -892,7 +875,7 @@ TEST(test_omatrix3d,align_vector_Oy){
 
 
 // Test the OMatrix invert() function
-TEST(test_omatrix3d,invert){
+TEST(test_3d_omatrix,invert){
 	int res;
 	OMatrix unite;
 	unite.unite();
@@ -938,7 +921,7 @@ TEST(test_omatrix3d,invert){
 }
 
 // Test the OMatrix mat2x2Det() function
-TEST(test_omatrix3d,mat2x2det){
+TEST(test_3d_omatrix,mat2x2det){
 
 	EXPECT_DOUBLE_EQ(35.,OMatrix::mat2x2Det(-1,8,-4,-3));
 	EXPECT_DOUBLE_EQ(-33.,OMatrix::mat2x2Det(5,2,-1,-7));
@@ -947,7 +930,7 @@ TEST(test_omatrix3d,mat2x2det){
 
 
 // Test the OMatrix mat2x2Det() function
-TEST(test_omatrix3d,mat3x3det){
+TEST(test_3d_omatrix,mat3x3det){
 
 	EXPECT_DOUBLE_EQ(171.,OMatrix::mat3x3Det(7,-5,9,6,-1,6,-3,9,0));
 	EXPECT_DOUBLE_EQ(20.,OMatrix::mat3x3Det(-4,-2,-3,6,8,-8,-1,-4,7));
@@ -956,7 +939,7 @@ TEST(test_omatrix3d,mat3x3det){
 
 
 // Test the OMatrix determinant() function
-TEST(test_omatrix3d,determinant){
+TEST(test_3d_omatrix,determinant){
 	double m1[4][4]={{-6,5,-4,3},{-9,-8,7,1},{-12,10,-8,6},{1,-6,-4,7}};
 	OMatrix M(m1);
 	EXPECT_DOUBLE_EQ(0.,M.determinant());
@@ -968,7 +951,7 @@ TEST(test_omatrix3d,determinant){
 
 
 // Test the OMatrix adjoint() function
-TEST(test_omatrix3d,adjoint){
+TEST(test_3d_omatrix,adjoint){
 
 	double m1[4][4]={{-7,5,2,-1},{-3,8,-4,1},{-2,0,8,-4},{5,-8,7,-9}};
 	OMatrix M(m1);
@@ -978,7 +961,7 @@ TEST(test_omatrix3d,adjoint){
 
 	EXPECT_TRUE(R==A);
 
-
+	
 
 	//General cases
 	double m2[4][4]={{-6,4,6,-5},{7,-5,-6,2},{2,8,-9,7},{-9,-5,4,7}};
@@ -1002,7 +985,7 @@ TEST(test_omatrix3d,adjoint){
 ************************************************************************/
 
 // Test the OGeometrie intersDemiSegmentAvecSegment() function
-TEST(test_ogeometrie,inters_demi_segment_avec_segment){
+TEST(test_3d_ogeometrie,inters_demi_segment_avec_segment){
 
 	EXPECT_TRUE(OGeometrie::intersDemiSegmentAvecSegment(OPoint3D(0,0,0),OPoint3D(10,10,0),OPoint3D(10,-10,0)));
 	EXPECT_FALSE(OGeometrie::intersDemiSegmentAvecSegment(OPoint3D(0,11,0),OPoint3D(10,10,0),OPoint3D(10,-10,0)));
@@ -1017,24 +1000,228 @@ TEST(test_ogeometrie,inters_demi_segment_avec_segment){
 }
 
 // Test the OGeometrie intersDroitesPoints() function
-/*TEST(test_ogeometrie,inters_droites_points){
+TEST(test_3d_ogeometrie,inters_droites_points){
 
-	OPoint3D inter;
-	EXPECT_EQ(INTERS_OUI,OGeometrie::intersDroitesPoints(OPoint3D(-6,0,0),OPoint3D(0,5,0),OPoint3D(6,0,0),OPoint3D(0,15,0),inter));
-	EXPECT_EQ(OPoint3D(3,7.5,0),inter);
+	// Points of the two segments
+    OPoint3D ptA(-10.0, 23.0, 0.0), ptB(10.0, -17.0, 0.0), ptC(-10.0, -32.0, 0.0), ptD(10.0, 28.0, 0.0), ptI;
 
-	EXPECT_EQ(INTERS_OUI,OGeometrie::intersDroitesPoints(OPoint3D(6,8,4),OPoint3D(6,7,0),OPoint3D(6,8,5),OPoint3D(6,7,4),inter));
-	EXPECT_EQ(OPoint3D(9,11.5,4),inter);
+    // Both lines cross -> TRUE
+    int resu = OGeometrie::intersDroitesPoints(ptA, ptB, ptC, ptD, ptI);
+    ASSERT_TRUE(resu == 1);
+    ASSERT_TRUE(ptI == OPoint3D(1.0, 1.0, 0.0));
+
+    // Lines do not cross -> FALSE
+    ptA._y = -1030, ptB._y = -970;
+    resu = OGeometrie::intersDroitesPoints(ptA, ptB, ptC, ptD, ptI);
+    ASSERT_TRUE(resu == 0);
+}
+
+// Test the OGeometrie intersDroitesPointVecteur() function
+TEST(test_3d_ogeometrie, inters_droites_point_vecteur)
+{
+    //  Define points and vectors
+    OPoint3D ptA0(-10.0, 23.0, 0.0), ptA1(10.0, -17.0, 0.0), ptB0(-10.0, -32.0, 0.0), ptB1(10.0, 28.0, 0.0), ptI;
+    OVector3D vecA(ptA0, ptA1), vecB(ptB0, ptB1);
+
+    // Both lines cross at (1,1,0) -> TRUE
+    int resu = OGeometrie::intersDroitesPointVecteur(ptA0, vecA, ptB0, vecB, ptI);
+    ASSERT_TRUE(resu == 1);
+    ASSERT_TRUE(ptI == OPoint3D(1.0, 1.0, 0.0));
+
+    // LInes are parallel -> FALSE
+    ptA0._y = -1030, ptA1._y = -970;
+    vecA = vecB;
+    resu = OGeometrie::intersDroitesPointVecteur(ptA0, vecA, ptB0, vecB, ptI);
+    ASSERT_TRUE(resu == 0);
+}
+
+// Test the OGeometrie symPointDroite() function
+TEST(test_3d_ogeometrie, sym_point_droite)
+{
+    // Defines points
+    OPoint3D ptA(-20.0, 0.0, 0.0), ptB(20.0, 0.0, 0.0), ptP(-20.0, 0.0, 2.0), ptI;
+
+    // Compute the point suymetrical to ptP with respect to the axis pTA-pTB
+    double k = OGeometrie::symPointDroite(ptA, ptB, ptP, ptI);
+
+    ASSERT_TRUE(ptI == OPoint3D(-20.0, 0.0, -2.0));
+    ASSERT_TRUE(k == 0.0);// Projection of P onto the axis AB
+
+}
+
+// Test the OGeometrie pointInPolygonAngleSum() function
+TEST(test_3d_ogeometrie, point_in_polygon_angle_sum)
+{
+    // Array of points
+    OPoint3D pts[6];
+    pts[0] = OPoint3D(1.0, 1.0, 0.0);
+    pts[1] = OPoint3D(5.0, 6.0, 0.0);
+    pts[2] = OPoint3D(-1.0, 10.0, 0.0);
+    pts[3] = OPoint3D(-10.0, -2.0, 0.0);
+    pts[4] = OPoint3D(1.0, -8.0, 0.0);
+    pts[5] = OPoint3D(6.0, -3.0, 0.0);
+
+    // Point to test
+    OPoint3D ptP(-3.0, 3.0, 0.0);
+    bool resu = OGeometrie::pointInPolygonAngleSum(ptP, pts, 6);
+
+    // Poiunt is in the polygon -> TRUE
+    ASSERT_TRUE(resu == true);
+
+    // Point is not in the polygon -> FALSE
+    ptP._x = 4.0;
+    resu = OGeometrie::pointInPolygonAngleSum(ptP, pts, 6);
+    ASSERT_FALSE(resu == true);
+}
+
+// Test the OGeometrie pointInPolygonAngleSum() function
+TEST(test_3d_ogeometrie, pointInPolygonRayCasting)
+{
+    // Array of points
+    OPoint3D pts[6];
+    pts[0] = OPoint3D(1.0, 1.0, 0.0);
+    pts[1] = OPoint3D(5.0, 6.0, 0.0);
+    pts[2] = OPoint3D(-1.0, 10.0, 0.0);
+    pts[3] = OPoint3D(-10.0, -2.0, 0.0);
+    pts[4] = OPoint3D(1.0, -8.0, 0.0);
+    pts[5] = OPoint3D(6.0, -3.0, 0.0);
+
+    // Compute the normal of the face
+    OVector3D normale;
+    OGeometrie::computeNormal(pts, 6, normale);
+
+    // Bounding box
+    OBox box(OCoord3D(-10.0, -8.0, 0.0), OCoord3D(6.0, 10.0, 0.0));
+
+    // Point to be tested
+    OPoint3D ptP(-3.0, 3.0, 0.0);
+    bool resu = OGeometrie::pointInPolygonRayCasting(ptP, pts, 6);
+
+    // Point in polygon -> TRUE
+    ASSERT_TRUE(resu == true);
+
+    // Point not in polygon -> FALSE
+    ptP._x = 4.0;
+    resu = OGeometrie::pointInPolygonRayCasting(ptP, pts, 6);
+    ASSERT_FALSE(resu == true);
+}
+
+// Test the OGeometrie shortestSegBetween2Lines() function
+TEST(test_3d_ogeometrie, shortest_seg_between_2_lines)
+{
+    // Points
+    OPoint3D pt1(-10.0, 23.0, 0.0), pt2(10.0, -17.0, 0.0), pt3(-10.0, -32.0, 3.0), pt4(10.0, 28.0, 3.0), ptA, ptB;
+
+    // Declare mua et mub
+    double* mua = new double;
+    double* mub = new double;
+
+    // Segments do not cross
+    bool resu = OGeometrie::shortestSegBetween2Lines(pt1, pt2, pt3, pt4, ptA, ptB, mua, mub);
+    ASSERT_TRUE(resu == true);
+    ASSERT_TRUE(ptA == OPoint3D(1.0, 1.0, 0.0));
+    ASSERT_TRUE(ptB == OPoint3D(1.0, 1.0, 3.0));
+
+    // Segments cross
+    pt3._z = pt4._z = 0.0;
+    resu = OGeometrie::shortestSegBetween2Lines(pt1, pt2, pt3, pt4, ptA, ptB, mua, mub);
+    ASSERT_TRUE(resu == true);
+    ASSERT_TRUE(ptA == OPoint3D(1.0, 1.0, 0.0));
+    ASSERT_TRUE(ptB == OPoint3D(1.0, 1.0, 0.0));
+}
 
 
-	EXPECT_EQ(INTERS_NULLE,OGeometrie::intersDroitesPoints(OPoint3D(-6,0,1),OPoint3D(0,5,1),OPoint3D(6,0,0),OPoint3D(0,15,0),inter));
-	EXPECT_EQ(INTERS_NULLE,OGeometrie::intersDroitesPoints(OPoint3D(-2,0,0),OPoint3D(0,5,0),OPoint3D(5,0,0),OPoint3D(7,5,0),inter));
-}*/
+// Test the OGeometrie boundingBox() function
+TEST(test_3d_ogeometrie, bounding_box)
+{
+    // Array of points
+    OPoint3D pts[6];
+    pts[0] = OPoint3D(1.0, 1.0, 5.0);
+    pts[1] = OPoint3D(5.0, 6.0, 0.0);
+    pts[2] = OPoint3D(-1.0, 10.0, 0.0);
+    pts[3] = OPoint3D(-10.0, -2.0, 0.0);
+    pts[4] = OPoint3D(1.0, -8.0, 0.0);
+    pts[5] = OPoint3D(6.0, -3.0, 0.0);
+
+    // Declaration of ptMin and ptMax (used to return the bounds of the bounding box)
+    OPoint3D ptMin, ptMax;
+
+    // Compute bounds
+    OGeometrie::boundingBox(pts, 6, ptMin, ptMax);
+
+    ASSERT_TRUE(ptMin == OPoint3D(-10.0, -8.0, 0.0));
+    ASSERT_TRUE(ptMax == OPoint3D(6.0, 10.0, 5.0));
+}
+
+// Test the OGeometrie computeNormal() function
+TEST(test_3d_ogeometrie, compute_normal)
+{
+    // Array of points
+    OPoint3D pts[3];
+    pts[0] = OPoint3D(0.0, 0.0, 0.0);
+    pts[1] = OPoint3D(1.0, 0.0, 0.0);
+    pts[2] = OPoint3D(0.0, 1.0, 0.0);
+
+    // Result vector
+    OVector3D normale;
+
+    // Compute normal
+    OGeometrie::computeNormal(pts, 3, normale);
+
+	ASSERT_TRUE(normale == OVector3D(0,0,1));
+}
+
+/***********************************************************************
+						        OSegment3D
+************************************************************************/
+
+
+// Test the equal operator
+TEST(test_3d_osegment3d,equal_operator){
+	
+	ASSERT_TRUE(OSegment3D(OPoint3D(1,-5,7),OPoint3D(4,1,-6))==OSegment3D(OPoint3D(1,-5,7),OPoint3D(4,1,-6)));
+	ASSERT_FALSE(OSegment3D(OPoint3D(1,-5,7),OPoint3D(4,1,-6))==OSegment3D(OPoint3D(2,-5,7),OPoint3D(4,1,-6)));
+}
+
+// Test the not equal operator
+TEST(test_3d_osegment3d,not_equal_operator){
+	
+	ASSERT_FALSE(OSegment3D(OPoint3D(4,8,-3),OPoint3D(-12,5,7))!=OSegment3D(OPoint3D(4,8,-3),OPoint3D(-12,5,7)));
+	ASSERT_TRUE(OSegment3D(OPoint3D(4,8,-3),OPoint3D(-12,5,7))!=OSegment3D(OPoint3D(7,8,1),OPoint3D(-8,-5,3)));
+}
+
+
+// Test the product operator
+TEST(test_3d_osegment3d,product_operator){
+
+	double m[4][4]={{7,-5,9,6},{-1,6,-3,9},{0,-4,-2,-3},{6,8,-8,-1}};
+	OMatrix mat=OMatrix(m);
+
+	OPoint3D A=OPoint3D(5,-9,-1);
+	OPoint3D B=OPoint3D(-7,2,-3);
+	OSegment3D segment=OSegment3D(A,B);
+
+	OSegment3D res=segment*mat;
+
+	ASSERT_TRUE(OSegment3D(OPoint3D(77,-47,35),OPoint3D(-80,37,-5))==res);
+}
+
+// Test the swap function
+TEST(test_3d_osegment3d,swap){
+	
+	OPoint3D A=OPoint3D(4,-5,7);
+	OPoint3D B=OPoint3D(-5,12,-2);
+
+	OSegment3D segment=OSegment3D(A,B);
+
+	ASSERT_TRUE(OSegment3D(B,A)==segment.swap());
+	ASSERT_TRUE(segment==segment.swap().swap());
+}
 
 /***********************************************************************
 						        Scene
 ************************************************************************/
-/*
+
 
 // Test the addition of a single point to a scene
 TEST(test_scene, test_single_point)
@@ -1108,6 +1295,8 @@ TEST(test_scene, test_triangles)
 	Simulation simu;
 
 	unsigned int p1,p2,p3,p4,p5,p6;
+	Material* mat=new Material();
+
 	simu.getScene()->addVertex(vec3(5,0,5), p1);
 	simu.getScene()->addVertex(vec3(5,5,-5), p2);
 	simu.getScene()->addVertex(vec3(5,-5,-5), p3);
@@ -1116,11 +1305,11 @@ TEST(test_scene, test_triangles)
 	simu.getScene()->addVertex(vec3(-3,3,-3), p5);
 	simu.getScene()->addVertex(vec3(-6,-3,-3), p6);
 
-	simu.getScene()->addTriangle(p1,p2,p3,&Material()); 
-	simu.getScene()->addTriangle(p1,p3,p2,&Material()); 
+	simu.getScene()->addTriangle(p1,p2,p3,mat); 
+	simu.getScene()->addTriangle(p1,p3,p2,mat); 
 
-	simu.getScene()->addTriangle(p4,p5,p6,&Material()); 
-	simu.getScene()->addTriangle(p4,p6,p5,&Material()); 
+	simu.getScene()->addTriangle(p4,p5,p6,mat); 
+	simu.getScene()->addTriangle(p4,p6,p5,mat); 
 
 	std::vector<vec3>* vertices=simu.getScene()->getVertices(); //Recover vertices from scene
 	std::vector<Shape*>* shapes=simu.getScene()->getShapes();   //Recover shapes from scene
@@ -1194,10 +1383,11 @@ TEST(test_scene, test_building)
 	Simulation simu;
 
 	std::vector<unsigned int> vertex_ids(4,0);
+	Material* mat=new Material();
 
 	vec3 origin(7,-15,3);
 	vec3 dimensions(12,5,8);
-	simu.getScene()->addBuilding(origin,dimensions,&Material());
+	simu.getScene()->addBuilding(origin,dimensions,mat);
 
 	std::vector<vec3>* vertices=simu.getScene()->getVertices(); //Recover vertices from scene
 	std::vector<Shape*>* shapes=simu.getScene()->getShapes();   //Recover shapes from scene
@@ -1253,14 +1443,15 @@ TEST(test_scene, test_diffraction_edge1)
 	Simulation simu;
 
 	unsigned int p1,p2,p3,p4;
+	Material* mat=new Material();
 	double angle=175;
 	simu.getScene()->addVertex(vec3(0,0,0), p1);
 	simu.getScene()->addVertex(vec3(0,1,0), p2);
 	simu.getScene()->addVertex(vec3(1,1,(decimal)(-tan(angle/2*M_PI/180))), p3);
 	simu.getScene()->addVertex(vec3(1,1,(decimal)tan(angle/2*M_PI/180)), p4);
 
-	simu.getScene()->addTriangle(p1,p2,p3,&Material());
-	simu.getScene()->addTriangle(p1,p4,p2,&Material());
+	simu.getScene()->addTriangle(p1,p2,p3,mat);
+	simu.getScene()->addTriangle(p1,p4,p2,mat);
 
 	// Create a solver
 	TYANIME3DRayTracerSolverAdapter* solver=new TYANIME3DRayTracerSolverAdapter();
@@ -1294,14 +1485,15 @@ TEST(test_scene, test_diffraction_edge2)
 	config->AngleDiffMin=20;
 
 	unsigned int p1,p2,p3,p4;
+	Material* mat=new Material();
 	double angle=160;
 	simu.getScene()->addVertex(vec3(0,0,0), p1);
 	simu.getScene()->addVertex(vec3(0,1,0), p2);
 	simu.getScene()->addVertex(vec3(1,1,(decimal)-tan(angle/2*M_PI/180)), p3);
 	simu.getScene()->addVertex(vec3(1,1,(decimal)tan(angle/2*M_PI/180)), p4);
 
-	simu.getScene()->addTriangle(p1,p2,p3,&Material());
-	simu.getScene()->addTriangle(p1,p4,p2,&Material());
+	simu.getScene()->addTriangle(p1,p2,p3,mat);
+	simu.getScene()->addTriangle(p1,p4,p2,mat);
 
 	// Create a solver
 	TYANIME3DRayTracerSolverAdapter* solver=new TYANIME3DRayTracerSolverAdapter();
@@ -1334,14 +1526,15 @@ TEST(test_scene, test_diffraction_edge3)
 	Simulation simu;
 
 	unsigned int p1,p2,p3,p4;
+	Material* mat=new Material();
 	double angle=175.1;
 	simu.getScene()->addVertex(vec3(0,0,0), p1);
 	simu.getScene()->addVertex(vec3(0,1,0), p2);
 	simu.getScene()->addVertex(vec3(1,1,(decimal)-tan(angle/2*M_PI/180)), p3);
 	simu.getScene()->addVertex(vec3(1,1,(decimal)tan(angle/2*M_PI/180)), p4);
 
-	simu.getScene()->addTriangle(p1,p2,p3,&Material());
-	simu.getScene()->addTriangle(p1,p4,p2,&Material());
+	simu.getScene()->addTriangle(p1,p2,p3,mat);
+	simu.getScene()->addTriangle(p1,p4,p2,mat);
 
 	// Create a solver
 	TYANIME3DRayTracerSolverAdapter* solver=new TYANIME3DRayTracerSolverAdapter();
@@ -1373,14 +1566,15 @@ TEST(test_scene, test_diffraction_edge4)
 	config->AngleDiffMin=20;
 
 	unsigned int p1,p2,p3,p4;
+	Material* mat=new Material();
 	double angle=160.1;
 	simu.getScene()->addVertex(vec3(0,0,0), p1);
 	simu.getScene()->addVertex(vec3(0,1,0), p2);
 	simu.getScene()->addVertex(vec3(1,1,(decimal)-tan(angle/2*M_PI/180)), p3);
 	simu.getScene()->addVertex(vec3(1,1,(decimal)tan(angle/2*M_PI/180)), p4);
 
-	simu.getScene()->addTriangle(p1,p2,p3,&Material());
-	simu.getScene()->addTriangle(p1,p4,p2,&Material());
+	simu.getScene()->addTriangle(p1,p2,p3,mat);
+	simu.getScene()->addTriangle(p1,p4,p2,mat);
 
 	// Create a solver
 	TYANIME3DRayTracerSolverAdapter* solver=new TYANIME3DRayTracerSolverAdapter();
@@ -1404,4 +1598,3 @@ TEST(test_scene, test_diffraction_edge4)
 
 
 
-*/

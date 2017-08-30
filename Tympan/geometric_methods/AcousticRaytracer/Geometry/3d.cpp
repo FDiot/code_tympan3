@@ -247,6 +247,7 @@ OVector3D OVector3D::normal(const OVector3D& vector2, const OVector3D& vector3) 
 void OVector3D::normalize()
 {
     double n = norme();
+
     if (n > 0.0)
     {
         _x /= n;
