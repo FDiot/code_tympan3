@@ -122,7 +122,11 @@ int TYAcousticSurface::fromXML(DOM_Element domElement)
     TYElement::fromXML(domElement);
     TYColorInterface::fromXML(domElement);
     TYAcousticInterface::fromXML(domElement);
-
+    TYUUID currentId = this->getID();
+    if(TYElement::testId(currentId, this))
+    {
+        this->regenerateID();
+    }
     bool isSubOk = false;
     DOM_Element elemCur;
     QDomNodeList childs = domElement.childNodes();

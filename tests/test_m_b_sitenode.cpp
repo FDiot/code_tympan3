@@ -230,3 +230,4 @@ TEST(GroundContourTest, single_traversing_cylinder)
     EXPECT_EQ(groundbased_faces.size(), 1);
     EXPECT_EQ((*faces_it).second[0][0]._z, -9);
 }
+

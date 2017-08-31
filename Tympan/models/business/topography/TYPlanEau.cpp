@@ -15,6 +15,7 @@
 
 #include "Tympan/core/logging.h"
 #include "TYPlanEau.h"
+#include <limits>
 
 #if TY_USE_IHM
   #include "Tympan/models/business/TYPreferenceManager.h"
@@ -51,7 +52,7 @@ TYPlanEau::TYPlanEau()
     _pCrbNiv->setParent(this);
 
     _pSol->setEpaisseur(1);
-    _pSol->setResistivite(100000.);
+    _pSol->setResistivite(std::numeric_limits<double>::max());
 }
 
 TYPlanEau::TYPlanEau(const TYPlanEau& other)
@@ -131,6 +132,8 @@ int TYPlanEau::fromXML(DOM_Element domElement)
     {
         elemCur = childs.item(i).toElement();
         _pCrbNiv->callFromXMLIfEqual(elemCur);
+        // We set the resistivity effect to the maximum for loaded models (to simulate the total reflection effect) 
+        _pSol->setResistivite(std::numeric_limits<double>::max());
     }
 
     return 1;

@@ -123,8 +123,8 @@ protected:
     QComboBox* _comboBoxSelectObject;
 
     /// Bouton radio pour choisir le type de rayonnement
-    QRadioButton* _pRadioButtonSpheric;
-    QRadioButton* _pRadioButtonHemi;
+    //QRadioButton* _pRadioButtonSpheric;
+    //QRadioButton* _pRadioButtonHemi;
     //    QRadioButton* _pRadioButtonForce;
     QButtonGroup* _buttonGroupTypeRaynt;
 
