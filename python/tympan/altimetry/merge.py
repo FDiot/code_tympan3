@@ -168,7 +168,7 @@ class SiteNodeGeometryCleaner(object):
         subcleaner = SiteNodeGeometryCleaner(subsite)
         subcleaner.process_all_features()
         if subcleaner.erroneous_overlap:
-            msg = ("Can not merge subsite {subsite} because of features "
+            msg = ("Can not merge subsite {subsite} because of features {ids} "
                    "overlapping its boundaries.")
             raise InconsistentGeometricModel(msg, subsite=subsite.id,
                                              ids=subcleaner.erroneous_overlap)
