@@ -109,7 +109,7 @@ class TestSolveProject(TympanTC):
         # Test reading an old noise map project
         input_proj = osp.join(
             TEST_DATA_DIR, 'projects-panel',
-            'TEST_CARTO_ANCIEN_MODELE.xml')
+            'CARTO_ANCIEN_MODELE.xml')
         self.run_solve(input_proj)
 
 class ProjectResultsTC(TympanTC):

@@ -332,6 +332,12 @@ int TYProjet::fromXML(DOM_Element domElement)
     if (!bCurrentCalculFound && (_listCalcul.size() > 0)) { setCurrentCalcul(_listCalcul[0]); }
 
     if (readOk == -1) { return readOk; }
+
+	// A REVOIR _pElement ne devrait pas renvoyer le projet dans showsources/TYModelerFrame...
+	if (_pSite)
+    {
+		_pSite->update(_pSite);
+    }
     return 1;
 }
 
@@ -553,7 +559,7 @@ bool TYProjet::updateAltiRecepteurs(const TYAltimetrie* pAlti)
         // XXX See ticket https://extranet.logilab.fr/ticket/1484180
         // The coordinates of the problematic point need to be properly reported
         // or idealy an exception should be thrown.
-        modified &= updateAltiPointControle(getPointControl(i), pAlti);
+        modified = updateAltiPointControle(getPointControl(i), pAlti);
     }
 
     // XXX See ticket https://extranet.logilab.fr/ticket/1484180:

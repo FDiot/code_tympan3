@@ -837,8 +837,8 @@ void TYResultat::buildMapSourceSpectre()
 {
     LPTYSpectre puissance = new TYSpectre();
 
-    std::map<TYElement*, TYTabSourcePonctuelleGeoNode>::iterator it;
-    for (it = _mapEmetteurSources.begin(); it != _mapEmetteurSources.end(); it++)
+	std::map<TYElement*,int>::iterator it;
+    for (it = _sources.begin(); it != _sources.end(); it++)
     {
         TYElement* pElement = (*it).first;
         TYUserSourcePonctuelle* pSource = dynamic_cast<TYUserSourcePonctuelle*>(pElement);

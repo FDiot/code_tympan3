@@ -95,7 +95,7 @@ void TYPickEditor::slotMousePressed(int x, int y, Qt::MouseButton button, Qt::Ke
     {
         if(dynamic_cast<TYMaillage*>(_pLastRolloverElt) != nullptr)
         {
-            hidePanel(_pLastRolloverElt);
+            hidePanel();
             _pModeler->getView()->updateGL();
         }
     }
@@ -189,7 +189,7 @@ void TYPickEditor::slotMouseMoved(int x, int y, Qt::MouseButtons button, Qt::Key
                     // Picking
                     if (!_pPicker->pick(x, _pInteractor->height() - y))
                     {
-                        hidePanel(_pLastRolloverElt);
+                        hidePanel();
                     }
 
                     // Deconnection
@@ -209,7 +209,7 @@ void TYPickEditor::slotWheeled(int x, int y, int delta, Qt::KeyboardModifiers st
     {
         if(dynamic_cast<TYMaillage*>(_pLastRolloverElt) != nullptr)
         {
-            hidePanel(_pLastRolloverElt);
+            hidePanel();
             _pModeler->getView()->updateGL();
         }
     }
@@ -230,7 +230,7 @@ void TYPickEditor::slotMouseLeave()
     {
         if(dynamic_cast<TYMaillage*>(_pLastRolloverElt) != nullptr)
         {
-            hidePanel(_pLastRolloverElt);
+            hidePanel();
             _pModeler->getView()->updateGL();
         }
     }
@@ -408,10 +408,6 @@ void TYPickEditor::siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
             // Projet parent
             if ( dynamic_cast<TYProjet*>(elem_1) != nullptr )
             {
-                // Duplication
-                code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_popup_duplicate"));
-                copyPtControlRetCodes[code] = pPointCtrl;
-
                 // Suppression
                 code = pPopup->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_popup_remove"));
                 remPtControlRetCodes[code] = pPointCtrl;
@@ -906,14 +902,17 @@ void TYPickEditor::showPositionDialog(TYGeometryNode* pGeoNode, bool activeHeigh
             }
 
             //exprimons newZero dans le repere du GeoNode:
-            newZero = pGeoNode->globalToLocal() * newZero;
+//            newZero = pGeoNode->globalToLocal() * newZero;
 
             //on modifie l'origine du GeoNode de newZero:
             ORepere3D repere = pGeoNode->getORepere3D();
             TYPoint oldOrg = repere._origin;
-            repere._origin._x = repere._origin._x + newZero._x;
-            repere._origin._y = repere._origin._y + newZero._y;
-            repere._origin._z = repere._origin._z + newZero._z;
+            //repere._origin._x = repere._origin._x + newZero._x;
+            //repere._origin._y = repere._origin._y + newZero._y;
+            //repere._origin._z = repere._origin._z + newZero._z;
+            repere._origin._x = newZero._x;
+            repere._origin._y = newZero._y;
+            repere._origin._z = newZero._z;
             pGeoNode->setRepere(repere);
 
             pGeoNode->setHauteur(pTempGeoNode->getHauteur());
@@ -1082,7 +1081,7 @@ void TYPickEditor::showDimensionsDialog(TYAcousticVolume* pAccVol)
 
 void TYPickEditor::showPanel(TYElement* pElt)
 {
-    hidePanel(_pLastRolloverElt);
+    hidePanel();
 
     if (!pElt)
     {
@@ -1202,26 +1201,27 @@ void TYPickEditor::showPanel(TYElement* pElt)
     }
     else
     {
-        hidePanel(_pLastRolloverElt);
+        hidePanel();
     }
 
     _pLastRolloverElt = pElt;
 }
 
-void TYPickEditor::hidePanel(TYElement* pElt)
+void TYPickEditor::hidePanel()
 {
-    if (!pElt)
+    if (!_pLastRolloverElt)
     {
         return;
     }
 
-    LPTYMaillage pMaillage = dynamic_cast<TYMaillage*>(pElt);
+    LPTYMaillage pMaillage = dynamic_cast<TYMaillage*>(_pLastRolloverElt);
     if (pMaillage != nullptr)
     {
         pMaillage->getPanel()->getGraphicObject()->setVisible(false);
 
         // On met a jour uniquement le maillage
         _pModeler->getView()->getRenderer()->updateDisplayList();
+		_pLastRolloverElt = 0;
     }
 }
 
@@ -1230,7 +1230,7 @@ bool TYPickEditor::realWorldPosition(OPoint3D& pt)
     dynamic_cast<TYModelerFrame*>(_pModeler)->updateView();
 
     // Position dans la scene 3D
-    QPoint curPos = _lastPressedCurPos;
+    QPoint curPos = _lastMovedCurPos;
 
     // Calcul des coords
     float* pos = new float[3];
@@ -1262,12 +1262,11 @@ void TYPickEditor::manageProperties(TYElement *pElement)
             if (pSite)
             {
                 pSite->update(pElement);
-                getTYMainWnd()->getSiteFrame()->updateList();
+				getTYMainWnd()->getSiteFrame()->updateList();
             }
         }
 
         pElement->updateGraphicTree();
-        pElement->updateGraphic();
     }
 }
 

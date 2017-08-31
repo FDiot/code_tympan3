@@ -63,9 +63,7 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
     // Use grid accelerating structure instead of KDTree (default value)
     OMessageManager::get()->warning(
             "Overwriting Acccelerator solver parameter to 1 (grid accelerating structure)");
-    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
-    config->Accelerator = 1;
-
+    tympan::SolverConfiguration::get()->Accelerator = 1;
     // Creation de la collection de thread
     _pool = new OThreadPool(tympan::SolverConfiguration::get()->NbThreads);
 
@@ -110,10 +108,12 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
     {
         return false;
     }
-
     // Recuperation du tableau de rayon de la structure resultat
     tab_acoustic_path& tabRays = aresult.get_path_data();
-    if (config->Anime3DKeepRays == true)
+    tabRays.clear();
+    // Displaying rays in the GUI
+    bool keepRays = tympan::SolverConfiguration::get()->Anime3DKeepRays;
+    if (keepRays == true)
     {
         for (unsigned int i=0; i<_tabTrajets.size(); i++)
         {
@@ -123,7 +123,6 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
             }
         }
     }
-
 
     tympan::SpectrumMatrix& matrix = aresult.get_data();
     matrix.resize(aproblem.nreceptors(), aproblem.nsources());

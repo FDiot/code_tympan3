@@ -173,20 +173,12 @@ private :
     /*!
      * \brief Find Reflexion spectrum at point defined by the end of an incident segment.
      */
-    OSpectreComplex getReflexionSpectrumAt(const OSegment3D& incident, double length) const;
+    OSpectreComplex getReflexionSpectrumAt(const OSegment3D& incident, double length, const OSegment3D& segPente, const tympan::AcousticSource& source) const;
 
     /*!
      * \brief Create a segment corresponding to the projection of "director" segment on the ground
      */
     void meanSlope(const OSegment3D& director, OSegment3D& slope) const;
-
-    void finishRay(TYTabEtape& tabEtapes, const OPoint3D& pt) const
-    {
-        TYEtape etape;
-        etape._pt = pt;
-        etape._type = TYRECEPTEUR;
-        tabEtapes.push_back(etape); //!< Add the TYEtape step after reflection
-    }
 
 private:
     bool _useSol;
