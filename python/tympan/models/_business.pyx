@@ -324,7 +324,7 @@ cdef class Site:
         for it in cpp_contours:
             volume_id = it.first.toString().toStdString().decode()
             contours[volume_id] = [
-                [tycommon.opoint3d2point3d(contour[i])
+                [tycommon.opoint3d2point3d(tycommon.dot(self.matrix, contour[i]))
                  for i in xrange(contour.size())]
                 for contour in it.second
             ]
