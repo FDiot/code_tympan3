@@ -26,7 +26,7 @@
 #include "TYSetGeometriqueParcours.h"
 #include "TYPointParcours.h"
 #include <assert.h>
-
+#include <algorithm>
 
 TYPointParcours* TYSetGeometriqueParcours::_ListePointQSort = NULL;
 TYPointParcours* TYSetGeometriqueParcours::_SrceQSort = NULL;
@@ -476,7 +476,7 @@ bool TYSetGeometriqueParcours::PolylignesInfraFermees()
     return true;
 }
 
-bool TYSetGeometriqueParcours::ListerPointsConnexes(Connexite* Connexes)
+bool TYSetGeometriqueParcours::ListerPointsConnexes(Connexite *& Connexes)
 {
     //Cette methode rempli la structure Connexes, attribut de chaque point:
     int i, j;
@@ -500,12 +500,44 @@ bool TYSetGeometriqueParcours::ListerPointsConnexes(Connexite* Connexes)
             //A-t-on deja 2 segments connexes pour ce point ?
             if (NbSegmentsConnexes >= 2)
             {
-                //Oui=>il faudrait dedoubler ce point, mais c'est sans doute trop long
-                return false;
+                //Oui=>il faudrait dedoubler ce point
+                TYPointParcours* _newListePoint = new TYPointParcours[_nNbPointTotal+1];
+                std::copy(_ListePoint, _ListePoint + _nNbPointTotal, _newListePoint);
+                for (int a = 0; a < _nNbPolylines; a++)
+                {
+                    for (int b = 0; b < _ListePolylines[a].nombreDePoint(); b++)
+                    {
+                    int index = _ListePolylines[a].indexePoint(b);
+                    _ListePolylines[a].setPoint(b, &(_newListePoint[index]));
+                    }
+                }
+                delete[] _ListePoint;
+                _ListePoint = _newListePoint;
+                Connexite* newConnexes = new Connexite[_nNbPointTotal+1];
+                std::copy(Connexes, Connexes + _nNbPointTotal, newConnexes);
+                delete[] Connexes;
+                Connexes = newConnexes;
+
+                TYPointParcours* p = &(_ListePoint[_nNbPointTotal]);
+                p->isInfra = _ListePoint[indexePoint].isInfra;
+                p->isEcran = _ListePoint[indexePoint].isEcran;
+                p->x = _ListePoint[indexePoint].x;
+                p->y = _ListePoint[indexePoint].y;
+                p->z = _ListePoint[indexePoint].z;
+                p->Identifiant = _nNbPointTotal;
+                _ListePolylines[i].setPoint(j, p);
+
+                newConnexes[_nNbPointTotal].IndexesSegment[0] = -1;//Premier segment incluant ce point
+                newConnexes[_nNbPointTotal].IndexesSegment[1] = -1;//Second segment incluant ce point
+                newConnexes[_nNbPointTotal].NbSegmentsConnexes = 0;//Nb de segment incluant ce point
+                NbSegmentsConnexes = 0;
+
+                indexePoint = _nNbPointTotal;
+                _nNbPointTotal++;
+                int newPoint = _ListePolylines[i].indexePoint(j);
+                assert(NbSegmentsConnexes < 2);
             }
-
             Connexes[indexePoint].IndexesSegment[NbSegmentsConnexes] = i;
-
             Connexes[indexePoint].NbSegmentsConnexes++;
         }
     }
