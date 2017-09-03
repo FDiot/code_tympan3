@@ -104,7 +104,7 @@ class TestSolveProject(TympanTC):
             self.run_solve(input_proj)
         self.assertEqual(str(cm.exception),
                          "You must have at least one receptor to run a simulation.")
-   
+
     def test_read_solve_older_noisemap_project(self):
         # Test reading an old noise map project
         input_proj = osp.join(
@@ -130,7 +130,8 @@ class ProjectResultsTC(TympanTC):
                                      1.6487e-22, 1.3216e-23, 1.3216e-23, 1.3216e-23, 1.3216e-23,
                                      1.3216e-23])
         for rec in range(result.nreceptors):
-            np.testing.assert_almost_equal(combined_spectra[rec, :], expected_spectra, decimal=6)
+            np.testing.assert_almost_equal(
+                combined_spectra[rec, :], expected_spectra, decimal=4)
 
 
 if __name__ == '__main__':
