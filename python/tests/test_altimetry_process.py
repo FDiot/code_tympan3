@@ -1,5 +1,7 @@
-import os, os.path as osp
+import os
+import os.path as osp
 import unittest
+import sys
 
 import numpy as np
 from numpy.testing import assert_allclose
@@ -49,7 +51,7 @@ class TestProcessAltimetry(TympanTC):
         # Main site:
         self.assertEqual(asite.id, "{5634c66e-2ad9-4d6f-a569-e0449337cea2}")
         landtake = asite.build_coordinates()[0]
-        self.assertEqual(landtake, [(-94.0,117.0), (41.0, 114.0),
+        self.assertEqual(landtake, [(-94.0, 117.0), (41.0, 114.0),
                                     (37.0, -16.0), (-153.0, -27.0)])
         # No level curves are explicitely defined in the XML project, and
         # useEmpriseAsCrbNiv option is set to 0, but as no level curves are
@@ -60,15 +62,15 @@ class TestProcessAltimetry(TympanTC):
         lcurve = next(asite.level_curves)
         self.assertEqual(lcurve.altitude, 0)
         self.assertEqual(lcurve.build_coordinates()[0],
-                        [(-94.0,117.0), (41.0, 114.0), (37.0, -16.0),
-                         (-153.0, -27.0), (-94.0,117.0)])
+                         [(-94.0, 117.0), (41.0, 114.0), (37.0, -16.0),
+                          (-153.0, -27.0), (-94.0, 117.0)])
         # Subsite
         subsites = asite.subsites
-        self.assertEqual(len(subsites), 1) # Check there is just 1 subsite
+        self.assertEqual(len(subsites), 1)  # Check there is just 1 subsite
         subsite = subsites[0]
         self.assertEqual(subsite.id, "{f69851a7-fa13-4cff-b024-3ef44f4e7a40}")
         sbsite_landtake = subsite.build_coordinates()[0]
-        self.assertEqual(sbsite_landtake, [(-83.0,98.0), (-40.0, 73.0),
+        self.assertEqual(sbsite_landtake, [(-83.0, 98.0), (-40.0, 73.0),
                                            (-98.0, 28.0), (-105.0, 82.0)])
         sbsite_level_curves = list(subsite.level_curves)
         # same as above
@@ -76,8 +78,8 @@ class TestProcessAltimetry(TympanTC):
         sbsite_lcurve = sbsite_level_curves[0]
         self.assertEqual(sbsite_lcurve.altitude, 0)
         self.assertEqual(sbsite_lcurve.build_coordinates()[0],
-                        [(-83.0,98.0), (-40.0, 73.0), (-98.0, 28.0),
-                        (-105.0, 82.0), (-83.0,98.0)])
+                         [(-83.0, 98.0), (-40.0, 73.0), (-98.0, 28.0),
+                          (-105.0, 82.0), (-83.0, 98.0)])
 
     def test_process_level_curve(self):
         asite = self.altimetry_site('2_PROJET_Site_une_courbe_seule.xml')
@@ -91,9 +93,12 @@ class TestProcessAltimetry(TympanTC):
                           (-196.0, -197.0), (-197.0, 197.0)])
 
     def test_process_water_body(self):
-        asite = self.altimetry_site('7_PROJET_Site_emprise_seule_avec_plan_eau.xml')
-        mat_areas = list(asite.material_areas) # water bodies are treated as material areas
-        # There is 1 water body (default material area isn't taken into account)
+        asite = self.altimetry_site(
+            '7_PROJET_Site_emprise_seule_avec_plan_eau.xml')
+        # water bodies are treated as material areas
+        mat_areas = list(asite.material_areas)
+        # There is 1 water body (default material area isn't taken into
+        # account)
         self.assertEqual(len(mat_areas), 1)
         lake = mat_areas[0]
         self.assertEqual(lake.build_coordinates()[0],
@@ -106,7 +111,8 @@ class TestProcessAltimetry(TympanTC):
         self.assertEqual(lake.id, "{1d99f26d-83df-4404-94a4-7e3c5eccce13}")
 
     def test_process_material_area(self):
-        asite = self.altimetry_site('10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml')
+        asite = self.altimetry_site(
+            '10_PROJET_SITE_emprise_non_convexe_avec_butte_et_terrains.xml')
         areas = list(asite.material_areas)
         # There is 1 material area + 1 water body
         self.assertEqual(len(areas), 2)
@@ -118,10 +124,11 @@ class TestProcessAltimetry(TympanTC):
                           (-91.0, 103.0), (-75.0, 83.0), (-44.0, 76.0),
                           (29.0, 93.0), (112.0, 123.0), (125.0, 173.0),
                           (77.0, 185.0), (17.0, 185.0), (-4.0, 178.0)])
-        self.assertEqual(areas[0].material_id, "{6fb2a2c5-e329-4c8a-9ec9-311072bddc73}")
+        self.assertEqual(areas[0].material_id,
+                         "{6fb2a2c5-e329-4c8a-9ec9-311072bddc73}")
         # Check water body
         self.assertEqual(areas[1].id, "{1d99f26d-83df-4404-94a4-7e3c5eccce13}")
-        self.assertEqual(areas[1].material.resistivity, 20000)
+        self.assertEqual(areas[1].material.resistivity, sys.float_info.max)
         self.assertEqual(areas[1].build_coordinates()[0],
                          [(-83.0, -104.0), (-137.0, -80.0), (-141.0, -45.0),
                           (-117.0, 7.0), (-90.0, 22.0), (-49.0, 21.0),
@@ -139,8 +146,8 @@ class TestProcessAltimetry(TympanTC):
         infra_landtake_coords = [infra_landtake.build_coordinates()[0][0][:-1]
                                  for infra_landtake in infra_landtakes]
         self.assertCountEqual(infra_landtake_coords,
-                              [[(20.0,10.0),(30.0,10.0),(30.0,0.0),(20.0,0.0)],
-                               [(0.0,10.0),(20.0,10.0),(20.0,0.0),(0.0,0.0)]])
+                              [[(20.0, 10.0), (30.0, 10.0), (30.0, 0.0), (20.0, 0.0)],
+                               [(0.0, 10.0), (20.0, 10.0), (20.0, 0.0), (0.0, 0.0)]])
 
     def test_process_vegetation_area(self):
         fpath = osp.join(TEST_PROBLEM_DIR,
@@ -151,7 +158,8 @@ class TestProcessAltimetry(TympanTC):
         matarea = list(asite.material_areas)
         self.assertEqual(len(matarea), 2)
         try:
-            vegarea = asite.features_by_id['{60260543-0297-4cec-aacc-cb63492d1171}']
+            vegarea = asite.features_by_id[
+                '{60260543-0297-4cec-aacc-cb63492d1171}']
         except KeyError:
             self.fail('vegetation area not found in altimetry site')
         self.assertEqual(vegarea.height, 10)
@@ -171,7 +179,8 @@ class TestProcessAltimetry(TympanTC):
         model = Model.from_project(project, set_receptors=False)
         # 1 source
         self.assertEqual(model.nsources, 1)
-        # source is on the hillock, which is 25 m high. It is at 2m high above the ground
+        # source is on the hillock, which is 25 m high. It is at 2m high above
+        # the ground
         self.assertAlmostEqual(model.source(0).position.z, 27)
 
 
