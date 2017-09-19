@@ -66,7 +66,7 @@ static char const* _listMainElement[] =
 static const int nbMainElts = 14;
 
 ///Le type des elements selectionnables.
-static char* _listMainElement[] =
+static char const* _listMainElement[] =
 {
     "TYProjet",      "TYSiteNode",             "TYBatiment",      "TYMachine",       "TYSpectre",   /*1*/
     "TYAttenuateur", "TYMateriauConstruction", "TYSol",           "TYParoi",         /*2*/
