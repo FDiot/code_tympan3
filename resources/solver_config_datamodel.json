@@ -1,4 +1,73 @@
 {
+    "DEFAULTSOLVER": {
+    "NbThreads": {
+      "default": 4, 
+      "type": "int", 
+      "help": "Number of threads used to run the computation"
+    }, 
+    "ModSummation": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Energetic (p\u00b2 summation) or interference (p summation)"
+    }, 
+    "PropaConditions": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Propagation conditions (non refracting / downward conditions (ISO 9613))"
+    }, 
+    "UseLateralDiffraction": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Lateral diffractions computing (if screens on)"
+    }, 
+    "H1parameter": {
+      "default": 10.0, 
+      "type": "float", 
+      "help": "H1 parameter (ISO 9613 downward conditions)"
+    }, 
+    "UseScreen": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Takes screens into account"
+    }, 
+    "UseRealGround": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Use of real ground (0) or totally reflective ground (1)"
+    }, 
+    "UseReflection": {
+      "default": true, 
+      "type": "bool", 
+      "help": "Takes reflections in account (first order only)"
+    }
+  }, 
+    "ANIME3DSOLVER": {
+    "Anime3DSigma": {
+      "default": 0.0, 
+      "type": "float", 
+      "help": "Value of relative uncertainty"
+    }, 
+    "UseFresnelArea": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Use Fresnel area"
+    }, 
+    "Anime3DForceC": {
+      "default": 1, 
+      "type": "int", 
+      "help": "Force \"C\" parameter to 0 or 1 (will be computed from totalRayLength for any other value)"
+    }, 
+    "UseMeteo": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Takes meteo into account"
+    }, 
+    "Anime3DKeepRays": {
+      "default": false, 
+      "type": "bool", 
+      "help": "Keep rays after computation"
+    }
+  },
   "METEO": {
     "AnalyticGradV": {
       "default": 0.0, 
@@ -160,48 +229,6 @@
       "help": "Transformation method (1 is the only [good] response)"
     }
   }, 
-  "DEFAULTSOLVER": {
-    "NbThreads": {
-      "default": 4, 
-      "type": "int", 
-      "help": "Number of threads used to run the computation"
-    }, 
-    "ModSummation": {
-      "default": false, 
-      "type": "bool", 
-      "help": "Energetic (p\u00b2 summation) or interference (p summation)"
-    }, 
-    "PropaConditions": {
-      "default": false, 
-      "type": "bool", 
-      "help": "Propagation conditions (non refracting / downward conditions (ISO 9613))"
-    }, 
-    "UseLateralDiffraction": {
-      "default": true, 
-      "type": "bool", 
-      "help": "Lateral diffractions computing (if screens on)"
-    }, 
-    "H1parameter": {
-      "default": 10.0, 
-      "type": "float", 
-      "help": "H1 parameter (ISO 9613 downward conditions)"
-    }, 
-    "UseScreen": {
-      "default": true, 
-      "type": "bool", 
-      "help": "Takes screens into account"
-    }, 
-    "UseRealGround": {
-      "default": true, 
-      "type": "bool", 
-      "help": "Use of real ground (0) or totally reflective ground (1)"
-    }, 
-    "UseReflection": {
-      "default": true, 
-      "type": "bool", 
-      "help": "Takes reflections in account (first order only)"
-    }
-  }, 
   "DEBUG": {
     "DebugUseDiffractionPathSelector": {
       "default": true, 
@@ -281,33 +308,6 @@
       "default": 360.0, 
       "type": "float", 
       "help": "Final horizontal angle (phi)"
-    }
-  }, 
-  "ANIME3DSOLVER": {
-    "Anime3DSigma": {
-      "default": 0.0, 
-      "type": "float", 
-      "help": "Value of relative uncertainty"
-    }, 
-    "UseFresnelArea": {
-      "default": false, 
-      "type": "bool", 
-      "help": "Use Fresnel area"
-    }, 
-    "Anime3DForceC": {
-      "default": 1, 
-      "type": "int", 
-      "help": "Force \"C\" parameter to 0 or 1 (will be computed from totalRayLength for any other value)"
-    }, 
-    "UseMeteo": {
-      "default": false, 
-      "type": "bool", 
-      "help": "Takes meteo into account"
-    }, 
-    "Anime3DKeepRays": {
-      "default": false, 
-      "type": "bool", 
-      "help": "Keep rays after computation"
     }
   }
 }
