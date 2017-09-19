@@ -52,7 +52,7 @@ build_script:
 
     conda install -y -q geos=3.4.2
 
-    python -m pip install shapely
+    conda install -y -q shapely=1.5.13 -c scitools
 
     conda install -y -q qt=4.8.7=vc10_9
 

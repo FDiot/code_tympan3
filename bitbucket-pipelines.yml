@@ -28,7 +28,7 @@ pipelines:
           - wget https://bitbucket.org/TYMPAN/code_tympan/downloads/Code_TYMPAN-4.7_third-party-05.zip && unzip Code_TYMPAN-4.7_third-party-05.zip
           - cd ..
           # Build and install: 
-          - cmake -DCMAKE_BUILD_TYPE=Debug .
+          - cmake -DCMAKE_BUILD_TYPE=Release .
           - make -j4
           - make install
           # Run tests:

@@ -208,10 +208,11 @@ TEST(test_3d,round){
 // Test the BORNE() function
 TEST(test_3d,borne){
 
+   /* unused values:
 	double A=0;
 	double B=50;
 	double C=-10;
-	double D=-50;
+	double D=-50;*/
 
 	EXPECT_EQ(10,BORNE(10,0,50)); 
 	EXPECT_EQ(50,BORNE(50,0,50)); 
