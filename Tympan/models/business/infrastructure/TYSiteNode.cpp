@@ -464,11 +464,14 @@ void TYSiteNode::loadTopoFile()
         return;
     }
 
+    OMessageManager& logger =  *OMessageManager::get();
     // Lecture et copie
     while (!feof(streamSrc))
     {
-        fread(&c, sizeof(unsigned char), 1, streamSrc);
-        fwrite(&c, sizeof(unsigned char), 1, streamDest);
+        if (!fread(&c, sizeof(unsigned char), 1, streamSrc))
+           logger.error("An error occured during the read of ",_topoFileName.c_str());       
+        if (!fwrite(&c, sizeof(unsigned char), 1, streamDest))
+           logger.error("An error occured during the read of ",_topoFile.c_str());  
     }
 
     // Fermeture des fichiers

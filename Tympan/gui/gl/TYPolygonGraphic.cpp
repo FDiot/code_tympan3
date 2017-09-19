@@ -116,7 +116,7 @@ void TYPolygonGraphic::display(GLenum mode /*= GL_RENDER*/)
         normal.normalize();
 
         OPoint3D topLeftTexture;
-        double xSize, ySize;
+        double xSize=0, ySize=0;
         if (_textureBg)
         {
             topLeftTexture._x = _bgImagePosition._x - _semiXBg;
