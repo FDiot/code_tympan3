@@ -3,8 +3,7 @@ set(CURRENT_FOLDER "Tests for Python")
 enable_testing()
 
 # Configure and optionnaly report the PYTHONPATH for the tests
-set(PYTHONPATH 
-  "${CMAKE_BINARY_DIR}/${TYMPAN_CythonModules_${CMAKE_BUILD_TYPE}}")
+set(PYTHONPATH "${CMAKE_BINARY_DIR}/${TYMPAN_CythonModules_${CMAKE_BUILD_TYPE}}:${CMAKE_BINARY_DIR}/bin")
 build_native_path_list(NATIVE_CGAL_BINDINGS_PYTHON_DIR "${CGAL_BINDINGS_PYTHON_DIR}")
 if(TYMPAN_DEBUG_CMAKE)
   build_native_path_list(NATIVE_PYTHONPATH "${PYTHONPATH}")  
@@ -40,7 +39,6 @@ foreach(testfile ${TESTS_SCRIPTS})
   set_property(TEST ${basename} APPEND PROPERTY ENVIRONMENT 
     "CGAL_BINDINGS_PATH=${NATIVE_CGAL_BINDINGS_PYTHON_DIR}")
 endforeach (testfile)
-
 # Configure the script enabling to launch test manually from the command line
 if(SYS_NATIVE_WIN)
   configure_file(${PROJECT_SOURCE_DIR}/cmake/SetEnvTympanTests.bat.in
