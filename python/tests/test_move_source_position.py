@@ -14,8 +14,8 @@ class Test(TympanTC):
 
     def test_moyenne_mesh(self):
         """ Test the average (E/Lot1-010) """
-        ndArray = np.array([-0.2, 1.1, 2.1])
-        np.testing.assert_equal(moyenne_mesh(ndArray), 1.0)
+        ndarray = np.array([-0.2, 1.1, 2.1])
+        np.testing.assert_equal(moyenne_mesh(ndarray), 1.0)
 
     def test_import_infra(self):
         """ Test loading an infrastructure (E/Lot1-021) """

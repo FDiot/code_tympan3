@@ -11,7 +11,7 @@ except ImportError:
     from io import StringIO
 from math import log10
 from utils import TympanTC
-from _util import operation_array, meshSpect_to_ndArray, ndArray_to_meshSpect
+from _util import operation_array, mesh_spect_to_ndarray, ndarray_to_mesh_spect
 from _util import (TYMPAN_DATA_DIR)
 from tympan.models._common import Spectrum
 from ope_rec_surf import main, load_tympan_xml
@@ -38,34 +38,34 @@ class Test(TympanTC):
        
     def test_difference_operation(self):
         """ Test array operations (E/Lot1-008) """
-        ndArray_ref  = np.array([0, 1, 2])
-        ndArray_calc = np.array([2, 3, 4])
+        ndarray_ref  = np.array([0, 1, 2])
+        ndarray_calc = np.array([2, 3, 4])
         # Difference
-        np.testing.assert_array_equal(operation_array(ndArray_ref, ndArray_calc, 0), list(map(difference, ndArray_ref, ndArray_calc)))
+        np.testing.assert_array_equal(operation_array(ndarray_ref, ndarray_calc, 0), list(map(difference, ndarray_ref, ndarray_calc)))
 
     def test_emergence_operation(self):
         """ Test array operations (E/Lot1-008) """
-        ndArray_ref  = np.array([0, 1, 2])
-        ndArray_calc = np.array([2, 3, 4])
+        ndarray_ref  = np.array([0, 1, 2])
+        ndarray_calc = np.array([2, 3, 4])
         # Emergence
-        np.testing.assert_array_equal(operation_array(ndArray_ref, ndArray_calc, 1), list(map(emergence, ndArray_ref, ndArray_calc)))
+        np.testing.assert_array_equal(operation_array(ndarray_ref, ndarray_calc, 1), list(map(emergence, ndarray_ref, ndarray_calc)))
 
     def test_ambiant_noise_operation(self):
         """ Test array operations (E/Lot1-008) """
-        ndArray_ref  = np.array([0, 1, 2])
-        ndArray_calc = np.array([2, 3, 4])
+        ndarray_ref  = np.array([0, 1, 2])
+        ndarray_calc = np.array([2, 3, 4])
         # Ambiant noise
-        np.testing.assert_array_equal(operation_array(ndArray_ref, ndArray_calc, 2), list(map(bruit_ambiant, ndArray_ref, ndArray_calc)))
+        np.testing.assert_array_equal(operation_array(ndarray_ref, ndarray_calc, 2), list(map(bruit_ambiant, ndarray_ref, ndarray_calc)))
 
-    def test_meshSpect_to_ndArray_ndArray_to_meshSpect(self):
+    def test_mesh_spect_to_ndarray_ndarray_to_mesh_spect(self):
         """ Test conversion between array and spectrum (E/Lot1-009) """
         mesh_spectrums = list()
         mesh_spectrums.append(Spectrum(np.array([100.0] * 31)))
         mesh_spectrums.append(Spectrum(np.array([200.0] * 31)))
         mesh_spectrums.append(Spectrum(np.array([300.0] * 31)))
-        ndArray = meshSpect_to_ndArray(mesh_spectrums)
-        returned_mesh_spectrums = ndArray_to_meshSpect(ndArray)
-        # Check the conversion to ndArray then back to meshSpect
+        ndarray = mesh_spect_to_ndarray(mesh_spectrums)
+        returned_mesh_spectrums = ndarray_to_mesh_spect(ndarray)
+        # Check the conversion to ndarray then back to mesh_spect
         for i in range(len(mesh_spectrums)):
             np.testing.assert_array_equal(mesh_spectrums[i].values, returned_mesh_spectrums[i].values)
 

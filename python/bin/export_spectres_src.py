@@ -11,7 +11,7 @@ from _util import input_string, run_calculations, ask_xml_file
 import numpy as np
 
 
-def write_results(valeurs, src_ids, DICT_ID_NAME, fichier_txt):
+def write_results(valeurs, src_ids, dict_id_name, fichier_txt):
     """
     Write third octave spectrum values to a txt file.
     Objects used to handle the values are numpy arrays.
@@ -30,7 +30,7 @@ def write_results(valeurs, src_ids, DICT_ID_NAME, fichier_txt):
     # Convert IDs to Names:
     names = []
     for i in range(len(src_ids)):
-        names.append(DICT_ID_NAME[src_ids[i]])
+        names.append(dict_id_name[src_ids[i]])
 
     # Create final array to be written in the txt file
     noms = np.array(names)[:, np.newaxis]
@@ -82,7 +82,7 @@ def calc_surf_spectrum(list_src):
 
     # Creation of n-dimensional array for each real "surface" source, not each point source
     # There is a different calculus if the "surface" source is a point source or a surface
-    sValues_final = np.empty([len(indices_debut), 31])
+    values_final = np.empty([len(indices_debut), 31])
 
     for i in range(len(indices_debut)):
         if indices_fin[i]-indices_debut[i] == 0:
@@ -90,9 +90,9 @@ def calc_surf_spectrum(list_src):
         else:
             resultat = spectrum_values[indices_debut[i]]*((indices_fin[i]-indices_debut[i])+1)
             
-        sValues_final[i,:] = resultat
+        values_final[i,:] = resultat
 
-    return (sValues_final, src_ids)
+    return (values_final, src_ids)
 
 
 def calc_vol_spectrum(list_src):
@@ -131,7 +131,7 @@ def calc_vol_spectrum(list_src):
 
     # Creation of n-dimensional array for each real "volume" source, not each point source
     # There is a different calculus if the "volume" source is a point source or a surface
-    sValues_final = np.empty([len(indices_debut), 31])
+    values_final = np.empty([len(indices_debut), 31])
     
     for i in range(len(indices_debut)):
         if indices_fin[i]-indices_debut[i] == 0:
@@ -139,9 +139,9 @@ def calc_vol_spectrum(list_src):
         else:
             resultat = spectrum_values[indices_debut[i]]*(indices_fin[i]-indices_debut[i])
             
-        sValues_final[i,:] = resultat
+        values_final[i,:] = resultat
     
-    return (sValues_final, src_ids)
+    return (values_final, src_ids)
 
 
 def main(fichier_xml, fichier_txt):
@@ -152,16 +152,12 @@ def main(fichier_xml, fichier_txt):
     # Get sources list
     list_src = model.sources
 
-    #print("Site Sources=",len(project.site.user_sources)+len(project.site.engines)+len(project.site.buildings))
-    #print("Model Sources=",len(model.sources))
-    #print("Result Sources=",len(project.computations[-1].result.sources))
-
     # Loop on engines
 #    for item in project.site.engines:
 #        print("Engine:", item.name," ID=",item.getID)
 
     # Build a dictionnary to convert ID to name
-    DICT_ID_NAME = {}
+    dict_id_name = {}
 
     # Loop on acoustic surfaces to print infos
     print("----------------:")
@@ -170,7 +166,7 @@ def main(fichier_xml, fichier_txt):
     for src in project.site.user_sources:
         print(src.name+" ID="+src.getID)
         # Update dictionnary for punctual sources
-        DICT_ID_NAME[src.getID] = src.name
+        dict_id_name[src.getID] = src.name
 
 #    print("----------------:")
 #    print("Solver sources:")
@@ -187,26 +183,26 @@ def main(fichier_xml, fichier_txt):
         volume_name = ac.volume_name()
         print("Face \""+face_name+"\" from volume \""+volume_name+"\" is","radiant." if ac.getIsRayonnant else "non radiant.")
         # Update dictionnary for acoustic surfaces:
-        DICT_ID_NAME[ac.volume_id()] = volume_name
-        DICT_ID_NAME[ac.surface_node_id()] = volume_name+" ("+face_name+")"
+        dict_id_name[ac.volume_id()] = volume_name
+        dict_id_name[ac.surface_node_id()] = volume_name+" ("+face_name+")"
 
     # Get spectrums from the different sources PER SURFACE
-    (sValues_final, src_ids) = calc_surf_spectrum(list_src)
+    (values_final, src_ids) = calc_surf_spectrum(list_src)
     # Transform the power value into a dB value
     P0 = 1e-12
-    sValues_final_dB = 10*np.log10(sValues_final/P0)
+    values_final_db = 10*np.log10(values_final/P0)
 
     # Write the values into a file using write_results
-    write_results(sValues_final_dB, src_ids, DICT_ID_NAME, fichier_txt+'_parSurface.txt')
+    write_results(values_final_db, src_ids, dict_id_name, fichier_txt+'_parSurface.txt')
 
     # Get spectrums from the different sources PER VOLUME
-    (sValues_final, src_ids) = calc_vol_spectrum(list_src)
+    (values_final, src_ids) = calc_vol_spectrum(list_src)
     # Transform the power value into a dB value
     P0 = 1e-12
-    sValues_final_dB = 10*np.log10(sValues_final/P0)
+    values_final_db = 10*np.log10(values_final/P0)
 
     # Write the values into a file using write_results
-    write_results(sValues_final_dB, src_ids, DICT_ID_NAME, fichier_txt+'_parVolume.txt')
+    write_results(values_final_db, src_ids, dict_id_name, fichier_txt+'_parVolume.txt')
 
     # IMPORTANT COMMENT : The result values present some round problems or precision problems
     # moreover, in the "surface" case it seems better to multiply the spectrum value by :
