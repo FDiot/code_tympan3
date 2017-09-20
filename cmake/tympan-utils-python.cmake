@@ -57,8 +57,9 @@ function(add_python_test)
   _common_test_config()
 
   build_native_path_list(native_pythonpath "${_PYTHONPATH}")  
-  set_property(TEST ${_TARGET} APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${native_pythonpath}")
-
+  #set_property(TEST ${_TARGET} APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${native_pythonpath}")
+  set_property(TEST ${_TARGET} APPEND PROPERTY ENVIRONMENT "PYTHONPATH=${PYTHONPATH}")
+  
   if(_UNPARSED_ARGUMENTS)
     message(WARNING "add_python_test: unknown arguments remaining unparsed "
       "for target ${_TARGET}: " ${_UNPARSED_ARGUMENTS})
