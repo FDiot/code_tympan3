@@ -29,6 +29,13 @@ namespace tympan
      */
     void save_project(const char * filename, const LPTYProjet& project);
 
+    /**
+     * @brief load one or several objects from an xml file
+     * @param filename the file where to save the project
+     * @return std::vector<SmartPtr<TYElement>> an array of element that shoud be converted to business elements
+     */
+    std::vector<LPTYElement> load_elements(const char* filename);
+
 } /* namespace tympan */
 
 

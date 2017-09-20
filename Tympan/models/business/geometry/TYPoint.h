@@ -74,6 +74,12 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
+    /*
+     * \fn : OPoint* downcast_opoint()
+     * \brief : return TYPoint casted as OPoint3D
+     */
+    OPoint3D* downcast_opoint() { return dynamic_cast<OPoint3D*>(this); }
+
 };
 
 
