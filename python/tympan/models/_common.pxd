@@ -7,7 +7,7 @@ from libcpp.deque cimport deque
 from libcpp.vector cimport vector
 
 from tympan cimport _core as tycore
-
+from tympan._core cimport QString
 
 cdef extern from "Tympan/models/common/spectrum_matrix.h" namespace "tympan":
     cdef cppclass SpectrumMatrix:
@@ -124,6 +124,7 @@ cdef ospectre2spectrum(OSpectre os)
 cdef opoint3d2point3d(OPoint3D pt)
 cdef ovector3d2vector3d(OVector3D pt)
 cdef otriangle2triangle(OTriangle* tri)
+cdef OPoint3D cypoint2cpp(cy_point)
 
 cdef class SolverInterface:
     cdef tycore.SolverInterface* thisptr

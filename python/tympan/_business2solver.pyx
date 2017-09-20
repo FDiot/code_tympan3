@@ -351,6 +351,12 @@ cdef class Business2SolverConverter:
                     volume_id = tybusiness.find_volume_id(subsource)
                     assert volume_id != None, 'no acoustic volume linked to the source'
                     source.volume_id = volume_id
+                else:
+                    # For punctual sources, set id to the source id
+                    source = model.source(source_idx)
+                    source.volume_id = id_str(subsource_elt).decode()
+                    source.face_id = id_str(subsource_elt).decode()
+
                 # Record where it has been stored
                 self.bus2solv_sources[id_str(subsource_elt)] = source_idx
                 # Copy source mapping to macro2micro_sources
