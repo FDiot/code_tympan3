@@ -1,0 +1,116 @@
+"""
+Automatic creation of sources or receptors with TYMPAN coordinates
+
+"""
+from __future__ import print_function
+import numpy as np
+import sys
+
+from tympan.models.project import Project
+from tympan.models._common import Point3D
+from tympan.models._business import User_source, UserReceptor, Element_array
+from _util import ask_input_file, ask_xml_file, input_int, input_string, ask_result_file, import_infra
+
+
+def main(object_file, object_positions_file, object_type, object_name, input_xml, output_xml):
+    """
+    Import csv file with TYMPAN coordinates and create new project with objects
+    Or add objects to an existing project
+    """
+    # Create new project if no project entered by user
+    if input_xml == '':
+        project = Project.create()
+    else:
+        project = Project.from_xml(input_xml)
+
+    # Import the object read in the xml file:
+    if object_file != "":
+        # Import the elements from XML file:
+        elements = import_infra(object_file, object_type)
+
+    # Create numpy array with csv file containing TYMPAN coordinates of the objects
+    # ToDo factoriser et gerer delimiter ";"
+    my_data = np.genfromtxt(object_positions_file, dtype='float', delimiter=';', skip_header=1)
+    if my_data.shape[1] < 3:
+        print("Error! Should read x,y,z or x,y,z,angle in "+object_positions_file)
+        sys.exit(-1)
+    # Add object to project site for each position
+    site = project.site
+    Rotation = Point3D(0, 0, 0)
+    for i in range(len(my_data[:,0])):
+        position = Point3D()
+        height = my_data[i,2]
+        position.set_x(my_data[i,0])
+        position.set_y(my_data[i,1])
+        position.set_z(height)
+        # Add rotation if found
+        if my_data.shape[1]==4:
+            Rotation.set_z(my_data[i,3])
+        name = object_name+str(i)
+        # Add object:
+        if object_type == "source":
+            # Source
+            src = User_source(height, name, position)
+            site.add_user_source(src, position, height)
+        elif object_type == "receptor":
+            # Receptor
+            project.add_user_receptor(position, height, name)
+        elif object_type == "engine":
+            # Engine
+            site.add_engine(elements.engines[0], position, Rotation, height)
+        elif object_type == "building":
+            # Building
+            site.add_building(elements.buildings[0], position, Rotation, height)
+        else:
+            print("Error: Unknown object type: ",object_type)
+            sys.exit(-1)
+
+    # Add project user_receptors to the last computation
+    if object_type == "receptor":
+        calcul = project.computations[-1]
+        for rec in project.user_receptors:
+            calcul.addReceptor(rec)
+
+    # Write the project
+    project.to_xml(output_xml)
+    print('Project saved to ', output_xml)
+
+if __name__ == '__main__':
+
+    # Select object type
+    print('Select object type creation in the list below :')
+    print('0. Source')
+    print('1. Receptor')
+    print('2. Engine defined in a XML file')
+    print('3. Building defined in a XML file')
+    choice = input_int("Enter object type (0,1,2,3) : ")
+    if choice <= 1:
+        object_type = "source" if choice == 0 else "receptor"
+        object_file = ""
+        object_positions_file = ask_input_file("Enter CSV file containing TYMPAN coordinates of the "+object_type+" (with csv extension) : ")
+    elif choice <= 3:
+        object_type = "engine" if choice == 2 else "building"
+        object_file = ask_xml_file("Enter XML file containing the "+object_type+" (with xml extension) : ", object_type)
+        object_positions_file = ask_input_file("Enter CSV file containing positions of the "+object_type+" (with csv extension) : ")
+    else:
+        print("Unknown choice.")
+        sys.exit(-1)
+
+    # Name the object
+    object_name = input_string("Enter "+object_type+" name : ")
+
+    # Add or not to an existing project ?
+    ask_projet = input_string("Do you want to add "+object_name+" to an existing project ? (y or n) : ")
+    if ask_projet == 'y':
+        input_xml = ask_xml_file("Enter XML file name containing project (with .xml extension) : ")
+        # Name result xml file
+        output_xml = ask_result_file(input_xml)
+    else:
+        input_xml = ''
+        # Name result xml file
+        output_xml = ask_result_file()
+
+    # Call to main
+    main(object_file, object_positions_file, object_type, object_name, input_xml, output_xml)
+    
+    
