@@ -379,6 +379,12 @@ public:
     std::vector<LPTYSpectre> *getSpectrumDatas( const TYUUID& id);
 
     /*!
+     * \fn getSpectrumDatas(TYMaillage *pMaillage)
+     * \brief Return spectrums for a given noise map
+     */
+    std::vector<LPTYSpectre> *getSpectrumDatas(TYMaillage *pMaillage);
+
+    /*!
      * \brief Add this maillage to calcul
      * \fn bool addMaillage(TYMaillage* pMaillage);
      */
