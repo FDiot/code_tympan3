@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 """
 Created on 20 dec. 2016
 
@@ -14,7 +12,7 @@ import os
 import sys
 from tympan.models.project import Project
 from _util import ask_xml_file, input_int, ask_result_file, input_string
-from _util import meshSpect_to_ndArray, ndArray_to_meshSpect, operation_array
+from _util import mesh_spect_to_ndarray, ndarray_to_mesh_spect, operation_array
 
 def load_tympan_xml(tympan_xml):
     """
@@ -38,14 +36,14 @@ def select_calc(project):
         print('{}.'.format(index) + c.name)
     
     # Verify user input
-    verifChoix = False
-    while not verifChoix:
+    verif_choix = False
+    while not verif_choix:
         numero_calcul = input_int('Enter chosen computation number : ')
         if numero_calcul <= 0 or numero_calcul > len(calcs):
-            verifChoix = False
+            verif_choix = False
             print('You did not enter the right number, choose again.')
         else:
-            verifChoix = True
+            verif_choix = True
     
     
     # Get current computation
@@ -65,14 +63,14 @@ def select_maillage(project):
         print('{}. maillage {}'.format(index, index))
     
     # Verify user input
-    verifChoix = False
-    while not verifChoix:
+    verif_choix = False
+    while not verif_choix:
         numero_maillage = input_int('Enter chosen mesh number : ')
         if numero_maillage < 0 or numero_maillage > len(mhs)-1:
-            verifChoix = False
+            verif_choix = False
             print('You did not enter the right number, choose again.')
         else:
-            verifChoix = True
+            verif_choix = True
     
     # Get chosen mesh
     maillage = mhs[numero_maillage-1]
@@ -93,7 +91,7 @@ def main(fichier_xml, output_xml):
     projet.select_computation(calc)
     name_calc = calc.name
     mesh_spectrums_ref = calc.get_noise_map_spectrums(mh)
-    ndArray_ref = meshSpect_to_ndArray(mesh_spectrums_ref)
+    ndarray_ref = mesh_spect_to_ndarray(mesh_spectrums_ref)
 
     # Select calculation number 2
     print('\nSelect computation n°2 : ')
@@ -101,33 +99,33 @@ def main(fichier_xml, output_xml):
     name_ref = calc.name
     projet.select_computation(calc)
     mesh_spectrums_calc = calc.get_noise_map_spectrums(mh)
-    ndArray_calc = meshSpect_to_ndArray(mesh_spectrums_calc)
+    ndarray_calc = mesh_spect_to_ndarray(mesh_spectrums_calc)
 
     # Loop until the user save and exit
+    operations_name = ['difference', 'emergence', 'ambient noise']
+    operations = [u'0.Différence : L2-L1'.encode('utf-8'), u'1.Emergence L1 \u2295 L2 - L2'.encode('utf-8'),
+                  u'2.Bruit ambiant : L1 \u2295 L2'.encode('utf-8'), u'3.Exit'.encode('utf-8')]
     while True:
         # Select operation, verify input and create mesh spectrum result
         print('\nSelect operation : ')
-        operations_name = ['difference','emergence','ambient noise']
-        operations = [u'0.Différence : L2-L1'.encode('utf-8'), u'1.Emergence L1 \u2295 L2 - L2'.encode('utf-8'), u'2.Bruit ambiant : L1 \u2295 L2'.encode('utf-8'), u'3.Exit'.encode('utf-8')]
         for op in operations:
             print(op.decode('utf-8'))
-        verifChoix = False
-        while not verifChoix:
+        verif_choix = False
+        while not verif_choix:
             num_ope = input_int('Enter chosen operation : ')
-            if num_ope < 0 or num_ope >= len(operations):
-                verifChoix = False
-                print('You did not enter the right number, choose again.')
-            elif num_ope == len(operations)-1:
+            verif_choix = True
+            if num_ope == len(operations)-1:
                 print('OK, exiting.')
                 return
-            else:
-                verifChoix = True
+            if num_ope < 0 or num_ope >= len(operations):
+                verif_choix = False
+                print('You did not enter the right number, choose again.')
 
         # Compute operation
-        ndArray_result = operation_array(ndArray_ref,ndArray_calc,num_ope)
+        ndarray_result = operation_array(ndarray_ref,ndarray_calc,num_ope)
 
         # The result is converted to a mesh_spectrum
-        mesh_spectrums_result = ndArray_to_meshSpect(ndArray_result)
+        mesh_spectrums_result = ndarray_to_mesh_spect(ndarray_result)
 
         # Name the result
         calc_name = 'Result of '+operations_name[num_ope]+" on "+name_calc+" and "+name_ref

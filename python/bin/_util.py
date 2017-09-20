@@ -75,7 +75,7 @@ def load_elements(elements_xml):
     return elements
 
 
-def meshSpect_to_ndArray(mesh_spectrums):
+def mesh_spect_to_ndarray(mesh_spectrums):
     """
         Get values (third octave band values) of
         each Spectrum of a noise_map and put them into
@@ -83,18 +83,18 @@ def meshSpect_to_ndArray(mesh_spectrums):
         Method used to facilitate operations between
         spectrums.
     """
-    # Create ndArray with first spectrum
-    ndArray_spec = mesh_spectrums[0].values
-    ndArray_spec = [ndArray_spec]
+    # Create ndarray with first spectrum
+    ndarray_spec = mesh_spectrums[0].values
+    ndarray_spec = [ndarray_spec]
 
-    # Each iteration, append new spectrum to ndArray
+    # Each iteration, append new spectrum to ndarray
     for i in range(len(mesh_spectrums) - 1):
-        ndArray_spec = np.append(ndArray_spec, [mesh_spectrums[i + 1].values], axis=0)
+        ndarray_spec = np.append(ndarray_spec, [mesh_spectrums[i + 1].values], axis=0)
 
-    return ndArray_spec
+    return ndarray_spec
 
 
-def ndArray_to_meshSpect(ndArray_spec):
+def ndarray_to_mesh_spect(ndarray_spec):
     """
         Get the values of a ndarray (result of a calculation for
         example) and put them into a new noise_map.
@@ -102,44 +102,43 @@ def ndArray_to_meshSpect(ndArray_spec):
     # Create list of mesh_spectrums
     mesh_spectrums = list()
 
-    # Transform ndArray to mesh_spectrum and append the list
-    for i in range(len(ndArray_spec)):
-        sp = Spectrum(ndArray_spec[i])
+    # Transform ndarray to mesh_spectrum and append the list
+    for i in range(len(ndarray_spec)):
+        sp = Spectrum(ndarray_spec[i])
         mesh_spectrums.append(sp)
         del (sp)
 
     return mesh_spectrums
 
 
-def moyenne_mesh(list_ndArray_spec):
+def moyenne_mesh(list_ndarray_spec):
     """
         Calculation of mean value of different noise_maps.
-        Return ndArray of mean values.
+        Return ndarray of mean values.
     """
-    ndArray_moy = list_ndArray_spec[0] / len(list_ndArray_spec)
-    for i in range(len(list_ndArray_spec) - 1):
-        ndArray_moy += list_ndArray_spec[i + 1] / len(list_ndArray_spec)
+    ndarray_moy = list_ndarray_spec[0] / len(list_ndarray_spec)
+    for i in range(len(list_ndarray_spec) - 1):
+        ndarray_moy += list_ndarray_spec[i + 1] / len(list_ndarray_spec)
 
-    return ndArray_moy
+    return ndarray_moy
 
 
-def operation_array(ndArray_ref, ndArray_calc, num_ope):
+def operation_array(ndarray_ref, ndarray_calc, num_ope):
     """
         Calculate result of different operations :
         0- Difference
         1- Emergence
         2- Bruit ambiant
     """
+    ndarray_result = None
     if num_ope == 0:
-        ndArray_result = ndArray_calc - ndArray_ref
+        ndarray_result = ndarray_calc - ndarray_ref
     elif num_ope == 1:
-        ndArray_result = 10 * np.log10(10 ** (ndArray_calc / 10) + 10 ** (ndArray_ref / 10)) - ndArray_ref
+        ndarray_result = 10 * np.log10(10 ** (ndarray_calc / 10) + 10 ** (ndarray_ref / 10)) - ndarray_ref
     elif num_ope == 2:
-        ndArray_result = 10 * np.log10(10 ** (ndArray_calc / 10) + 10 ** (ndArray_ref / 10))
-    else:
-        pass
+        ndarray_result = 10 * np.log10(10 ** (ndarray_calc / 10) + 10 ** (ndarray_ref / 10))
 
-    return ndArray_result
+    return ndarray_result
 
 
 def input_string(message):
@@ -193,29 +192,30 @@ def ask_result_file(result_xml = "Resultat.xml"):
 
 def ask_xml_file(message, object_type=""):
     """ Ask for an XML file and do some checks """
-    verifChoix = False
-    while not verifChoix:
+    verif_choix = False
+    while not verif_choix:
         filename = ask_input_file(message)
-        verifChoix = filename.endswith(".xml")
-        if not verifChoix:
+        verif_choix = filename.endswith(".xml")
+        if not verif_choix:
             print(filename+" is not a XML file !")
     # Some checks
     if object_type == "engine" or object_type == "building":
         # Build an empty project
-        project = Project.create()
+        #project = Project.create()  # SonarQube complains
+        Project.create()
         import_infra(filename, object_type)
     return filename
 
 def ask_input_file(message):
     """ Ask for an input file """
     # Check path
-    verifChoix = False
-    while not verifChoix:
+    verif_choix = False
+    while not verif_choix:
         filename = input_string(message)
-        absPath = os.path.abspath(filename)
-        verifChoix = os.path.isfile(absPath)
-        if not verifChoix:
-            print("File "+absPath+" does not exist. Choose again.")
+        abs_path = os.path.abspath(filename)
+        verif_choix = os.path.isfile(abs_path)
+        if not verif_choix:
+            print("File "+abs_path+" does not exist. Choose again.")
     return filename
 
 
@@ -315,10 +315,10 @@ class MyDialog:
         label = Label(top,text=mess,anchor="w",fg="red")
         label.pack()
 
-        b = Button(top, text="OK", command=self.ok)
+        b = Button(top, text="OK", command=self.ok_close)
         b.pack(pady=5)
 
-    def ok(self):
+    def ok_close(self):
 
         self.top.destroy()
 

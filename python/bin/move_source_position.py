@@ -1,5 +1,3 @@
-# coding: utf-8
-
 """How to simulate a moving source"""
 from __future__ import print_function
 
@@ -13,7 +11,7 @@ from tympan.models.project import Project
 from tympan.models.solver import Model, Solver
 from tympan.models._common import Point3D
 from tympan.altimetry import AltimetryMesh
-from _util import input_int, import_xyz_angle_csv, import_infra, line_count, ask_xml_file, ask_input_file, moyenne_mesh, meshSpect_to_ndArray, ndArray_to_meshSpect, load_elements, run_calculations, ask_result_file
+from _util import input_int, import_xyz_angle_csv, import_infra, line_count, ask_xml_file, ask_input_file, moyenne_mesh, mesh_spect_to_ndarray, ndarray_to_mesh_spect, load_elements, run_calculations, ask_result_file
 
 ty_solverdir = os.environ.get('TYMPAN_SOLVERDIR')
 
@@ -32,8 +30,8 @@ def create_calculations(fichier_xml, objects, output_xml):
     project.update_site_altimetry(altim)
     
     # Get the calculation
-    model = Model.from_project(project, set_sources=True,
-                               set_receptors=True)
+    #model = Model.from_project(project, set_sources=True, set_receptors=True)
+    Model.from_project(project, set_sources=True, set_receptors=True)
 
     # Get the initial number of computations in the project:
     nb_computations = len(project.computations)
@@ -74,20 +72,18 @@ def create_calculations(fichier_xml, objects, output_xml):
 #                    vect = vect/np.linalg.norm(vect)
 
             # Create the position for the element on the current position:
-            posElement = Point3D()
-            posElement.set_x(x)
-            posElement.set_y(y)
-            posElement.set_z(z)
+            pos_element = Point3D()
+            pos_element.set_x(x)
+            pos_element.set_y(y)
+            pos_element.set_z(z)
 
             # Rotation:
 #            if np.abs(vect[0]) > 1e-10:
 #                angle = np.arctan(vect[1]/vect[0])/np.pi*180 - 90
 #            else:
 #                angle = 0
-            rotElement = Point3D()
-            rotElement.set_z(angle) # rotation sur l'axe z
-
-            # print point, np.linalg.norm(vect)
+            rot_element = Point3D()
+            rot_element.set_z(angle) # rotation sur l'axe z
 
             # Add a computation if necessary
             num_computation = nb_computations + point
@@ -108,16 +104,16 @@ def create_calculations(fichier_xml, objects, output_xml):
             for rec in project.user_receptors:
                 last_calc.addReceptor(rec)
 
-            # Add a element at the current position posElement
+            # Add a element at the current position pos_element
             site = project.site
             # Change name
             element.setName(element_name+" at position "+str(point))
             if object_type == "engine":
                 print("Adding an engine...")
-                site.add_engine(element, posElement, rotElement, 0.)
+                site.add_engine(element, pos_element, rot_element, 0.)
             elif object_type == "building":
                 print("Adding a building...")
-                site.add_building(element, posElement, rotElement, 0.)
+                site.add_building(element, pos_element, rot_element, 0.)
             else:
                 print("Error: Unknown object type: ", object_type)
                 sys.exit(-1)
@@ -154,11 +150,11 @@ def main(fichier_xml, objects, output_xml, gui=True):
     list_mesh_spec = get_list_mesh_spectrums(project)
     list_array_spec = list()
     for m in list_mesh_spec:
-        list_array_spec.append(meshSpect_to_ndArray(m))
+        list_array_spec.append(mesh_spect_to_ndarray(m))
     
     # Calculation of mean value and transform it into a spectrum noise map
     array_moy = moyenne_mesh(list_array_spec)
-    list_spec_finale = ndArray_to_meshSpect(array_moy)
+    list_spec_finale = ndarray_to_mesh_spect(array_moy)
     
     # Retrieve the meshes
     meshes = project.meshes

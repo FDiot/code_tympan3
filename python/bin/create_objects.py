@@ -1,6 +1,5 @@
 """
 Automatic creation of sources or receptors with TYMPAN coordinates
-
 """
 from __future__ import print_function
 import numpy as np
@@ -18,10 +17,7 @@ def main(object_file, object_positions_file, object_type, object_name, input_xml
     Or add objects to an existing project
     """
     # Create new project if no project entered by user
-    if input_xml == '':
-        project = Project.create()
-    else:
-        project = Project.from_xml(input_xml)
+    project = Project.create() if input_xml == '' else Project.from_xml(input_xml)
 
     # Import the object read in the xml file:
     if object_file != "":
@@ -36,7 +32,7 @@ def main(object_file, object_positions_file, object_type, object_name, input_xml
         sys.exit(-1)
     # Add object to project site for each position
     site = project.site
-    Rotation = Point3D(0, 0, 0)
+    rotation = Point3D(0, 0, 0)
     for i in range(len(my_data[:,0])):
         position = Point3D()
         height = my_data[i,2]
@@ -45,7 +41,7 @@ def main(object_file, object_positions_file, object_type, object_name, input_xml
         position.set_z(height)
         # Add rotation if found
         if my_data.shape[1]==4:
-            Rotation.set_z(my_data[i,3])
+            rotation.set_z(my_data[i,3])
         name = object_name+str(i)
         # Add object:
         if object_type == "source":
@@ -57,10 +53,10 @@ def main(object_file, object_positions_file, object_type, object_name, input_xml
             project.add_user_receptor(position, height, name)
         elif object_type == "engine":
             # Engine
-            site.add_engine(elements.engines[0], position, Rotation, height)
+            site.add_engine(elements.engines[0], position, rotation, height)
         elif object_type == "building":
             # Building
-            site.add_building(elements.buildings[0], position, Rotation, height)
+            site.add_building(elements.buildings[0], position, rotation, height)
         else:
             print("Error: Unknown object type: ",object_type)
             sys.exit(-1)

@@ -14,35 +14,35 @@ def get_receptors_list(project, calculations_namelist):
     """
     Build a list of receivers for the calculations in the calculations_list
     """
-    Receptors_namelist = []
-    Receptors = []
+    receptors_namelist = []
+    receptors = []
     for calc in project.computations:
         if calc.name in calculations_namelist:
             result = calc.result
             for rec in result.receptors:
-                if rec.name not in Receptors_namelist:
-                    Receptors_namelist.append(rec.name)
-                    Receptors.append(rec)
+                if rec.name not in receptors_namelist:
+                    receptors_namelist.append(rec.name)
+                    receptors.append(rec)
     
-    return Receptors
+    return receptors
 
 
 def get_sources_list(project, calculations_namelist):
     """
     Build a list of sources for the calculations in the calculations_list
     """
-    Sources_namelist =[]
-    Sources = []
+    sources_namelist =[]
+    sources = []
     for calc in project.computations:
         if calc.name in calculations_namelist:
             result =  calc.result
             for src in result.sources:
                 # print('Calcul:',calc.name,'Source:',src.name)
-                if src.name not in Sources_namelist :
-                    Sources_namelist.append(src.name)
-                    Sources.append(src)
+                if src.name not in sources_namelist :
+                    sources_namelist.append(src.name)
+                    sources.append(src)
     
-    return Sources
+    return sources
 
 
 def get_rec_spec(project, sources, receptors):
@@ -54,15 +54,15 @@ def get_rec_spec(project, sources, receptors):
     for calc in project.computations:
         result = calc.result
         for rec in receptors:
-            valSum = np.zeros(31)
+            val_sum = np.zeros(31)
             for src in sources:
                 spectre = result.spectrum(rec, src)
-                spVal = spectre.values
-                valSum = 10*np.log10(10**(valSum/10)+10**(spVal/10))
-                del spVal
-                # valSum = np.append(valSum, [spectre.values], axis=0)
-            # valSum = np.sum(valSum, axis=0)
-            valeurs = np.append(valeurs, [valSum], axis=0)
+                sp_val = spectre.values
+                val_sum = 10*np.log10(10**(val_sum/10)+10**(sp_val/10))
+                del sp_val
+#               val_sum = np.append(val_sum, [spectre.values], axis=0)
+#           val_sum = np.sum(val_sum, axis=0)
+            valeurs = np.append(valeurs, [val_sum], axis=0)
             nom_spectre = rec.name
             noms_spectres.append(nom_spectre)
     
@@ -149,15 +149,15 @@ if __name__ == '__main__':
 
     # Possible to read CSV file for receptors positions
     receptors_csv = ""
-    verifChoix = False
-    while not verifChoix:
+    verif_choix = False
+    while not verif_choix:
         receptors_csv = input_string("Enter CSV file name (with .csv extension) to add receptor positions or press enter to continue: ")
         if receptors_csv == "":
-            verifChoix = True
+            verif_choix = True
         else:
-            absPath = os.path.abspath(receptors_csv)
-            verifChoix = os.path.isfile(absPath)
-            if not verifChoix:
+            abs_path = os.path.abspath(receptors_csv)
+            verif_choix = os.path.isfile(abs_path)
+            if not verif_choix:
                 print("File does not exist. Choose again.")
 
     # Output file
