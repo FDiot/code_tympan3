@@ -45,7 +45,8 @@ class Project(object):
         """
         comp = self._project.add_computation()
         if current:
-            self._project.set_current_computation(comp)
+            self._project.select_computation(comp)
+            #self._project.set_current_computation(comp)
         return comp
 
     def select_computation(self, computation):
@@ -84,6 +85,37 @@ class Project(object):
         """Export the project to a `filepath` XML file"""
         self._project.to_xml(filepath)
 
+    def add_user_receptor(self, position, height, name):
+        self._project.add_user_receptor(position, height, name)
+
+    def set_sig_type(self, type_sig):
+        self._project.set_sig_type(type_sig)
+
+    def set_sig_x(self, x):
+        self._project.set_sig_x(x)
+
+    def set_sig_y(self, y):
+        self._project.set_sig_y(y)
+
+    def set_sig_offset(self, offset):
+        self._project.set_sig_offset(offset)
+
+    @property
+    def sig_type(self):
+        return self._project.sig_type()
+
+    @property
+    def sig_x(self):
+        return self._project.sig_x()
+
+    @property
+    def sig_y(self):
+        return self._project.sig_y()
+
+    @property
+    def sig_offset(self):
+        return self._project.sig_offset()
+
     @classmethod
     def from_xml(cls, fpath, verbose=False, update_altimetry=True):
         """Create a project from `fpath` XML file path, on the way update project site
@@ -102,3 +134,4 @@ class Project(object):
     def import_result(self, model, solver_result):
         """Update project's site acoustic according to solver result"""
         model._converter.postprocessing(model._model, solver_result)
+

@@ -189,7 +189,8 @@ def _set_solver_config(parameters_fp):
     """Setup solver configuration"""
     parser = configparser.RawConfigParser()
     parser.optionxform = str  # keep param names case
-    parser.readfp(parameters_fp)
+    # Deprecated soon: parser.readfp(parameters_fp)
+    parser.read_file(parameters_fp)
     solver_config = cysolver.Configuration.get()
     errors = []
     for section in parser.sections():

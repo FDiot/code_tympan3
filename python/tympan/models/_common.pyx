@@ -32,6 +32,13 @@ cdef otriangle2triangle(OTriangle* tri):
     triangle.thisptr = tri
     return triangle
 
+cdef OPoint3D cypoint2cpp(cy_point):
+    """ Build a TYPoint from a Point3D object """
+    cpp_point = cy.declare(OPoint3D)
+    cpp_point._x = cy_point.x
+    cpp_point._y = cy_point.y
+    cpp_point._z = cy_point.z
+    return cpp_point
 
 cdef class Spectrum:
 
@@ -90,6 +97,15 @@ cdef class Point3D:
         self.thisobj._y = y
         self.thisobj._z = z
 
+    def set_x(self, x):
+        self.thisobj._x = x
+
+    def set_y(self, y):
+        self.thisobj._y = y
+
+    def set_z(self, z):
+        self.thisobj._z = z
+
     @property
     def x(self):
         return self.thisobj._x
@@ -116,3 +132,13 @@ cdef class Vector3D:
     @property
     def vz(self):
         return self.thisobj._z
+
+#
+#cdef class Box:
+#
+#    def __init__(self, length, width, height):
+#        """Build a 3D non iso-oriented box of dimensions (length, width, height)
+#        expressed in meters. The box will be centered in (0, 0, 0)
+#        """
+#        self.thisobj = OBox2(length, width, height)
+
