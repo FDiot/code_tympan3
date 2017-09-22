@@ -6,7 +6,7 @@ import numpy as np
 
 from utils import TympanTC
 from tympan.models.project import Project
-from _util import import_infra, moyenne_mesh, compare_xml_results, line_count, TYMPAN_DATA_DIR
+from _util import import_infra, moyenne_mesh, compare_xml_results, line_count, TOOLBOX_DATA_DIR
 from move_source_position import main
 
 
@@ -82,5 +82,5 @@ class Test(TympanTC):
             np.testing.assert_array_equal(reference, contribution)
 
 if __name__ == '__main__':
-    os.chdir(os.path.join(TYMPAN_DATA_DIR, 'Source_Mobile'))
+    os.chdir(os.path.join(TOOLBOX_DATA_DIR, 'Source_Mobile'))
     unittest.main()

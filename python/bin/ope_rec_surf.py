@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Created on 20 dec. 2016
 
@@ -6,10 +7,10 @@ Created on 20 dec. 2016
 Do calculations between on a surface receptor
 and between two computations
 """
-
-from __future__ import print_function
-import os
 import sys
+if sys.version_info[:2] <= (2, 7):
+    print("Error! Python 3 only can be used.")
+    sys.exit(-1)
 from tympan.models.project import Project
 from _util import ask_xml_file, input_int, ask_result_file, input_string
 from _util import mesh_spect_to_ndarray, ndarray_to_mesh_spect, operation_array
@@ -58,8 +59,10 @@ def select_maillage(project):
     """
     # Get and print meshes list
     mhs = project.meshes
+
+    size = len(mhs)
     print('Choose mesh in the list below :')
-    for index in range(len(mhs)):
+    for index in range(size):
         print('{}. maillage {}'.format(index, index))
     
     # Verify user input

@@ -6,7 +6,7 @@ from utils import TympanTC
 from tympan.models.project import Project
 from tympan.models._common import Point3D
 from tympan.models._business import User_source
-from _util import run_calculations, compare_project_results, compare_txt_results, TYMPAN_DATA_DIR
+from _util import run_calculations, compare_project_results, compare_txt_results, TOOLBOX_DATA_DIR
 from move_receptor_position import main, get_rec_spec, import_xyz_csv
 
 
@@ -121,5 +121,5 @@ class Test(TympanTC):
             np.testing.assert_array_almost_equal(average_result, rec_result[0][0], 6)
 
 if __name__ == '__main__':
-    os.chdir(os.path.join(TYMPAN_DATA_DIR, 'Recepteur_Mobile'))
+    os.chdir(os.path.join(TOOLBOX_DATA_DIR, 'Recepteur_Mobile'))
     unittest.main()

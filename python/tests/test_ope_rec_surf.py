@@ -12,7 +12,7 @@ except ImportError:
 from math import log10
 from utils import TympanTC
 from _util import operation_array, mesh_spect_to_ndarray, ndarray_to_mesh_spect
-from _util import (TYMPAN_DATA_DIR)
+from _util import (TOOLBOX_DATA_DIR)
 from tympan.models._common import Spectrum
 from ope_rec_surf import main, load_tympan_xml
 
@@ -71,7 +71,7 @@ class Test(TympanTC):
 
     def test_import(self):
         """ Global test (E/Lot1-011) """
-        project = load_tympan_xml(os.path.join(TYMPAN_DATA_DIR,"Calculs_Recepteurs_Surfaciques","Recepteur_surfacique.xml"))
+        project = load_tympan_xml(os.path.join(TOOLBOX_DATA_DIR,"Calculs_Recepteurs_Surfaciques","Recepteur_surfacique.xml"))
         # Mesh
         mesh = project.meshes[0]
         assert(mesh.is_active)
@@ -84,7 +84,7 @@ class Test(TympanTC):
 
     def test_global(self):
         """ Global test (E/Lot1-012) """
-        fichier_xml = os.path.join(TYMPAN_DATA_DIR, "Calculs_Recepteurs_Surfaciques", "Recepteur_surfacique.xml")
+        fichier_xml = os.path.join(TOOLBOX_DATA_DIR, "Calculs_Recepteurs_Surfaciques", "Recepteur_surfacique.xml")
         output_xml = "Result_all_operations.xml"
         # Tip to provide anwser to raw_input
         stdin_saved = sys.stdin
@@ -121,5 +121,5 @@ class Test(TympanTC):
 
 
 if __name__ == '__main__':
-    os.chdir(os.path.join(TYMPAN_DATA_DIR, 'Calculs_Recepteurs_Surfaciques'))
+    os.chdir(os.path.join(TOOLBOX_DATA_DIR, 'Calculs_Recepteurs_Surfaciques'))
     unittest.main()

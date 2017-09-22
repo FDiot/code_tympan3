@@ -3,7 +3,7 @@ import unittest
 import os
 from utils import TympanTC
 from tympan.models.project import Project
-from _util import import_infra, line_count, TYMPAN_DATA_DIR
+from _util import import_infra, line_count, TOOLBOX_DATA_DIR
 from create_objects import main
 
 class Test(TympanTC):
@@ -38,5 +38,5 @@ class Test(TympanTC):
         self.assertEqual(len(project.user_receptors), nreceptors)
 
 if __name__ == '__main__':
-    os.chdir(os.path.join(TYMPAN_DATA_DIR, 'Crea_Objets'))
+    os.chdir(os.path.join(TOOLBOX_DATA_DIR, 'Crea_Objets'))
     unittest.main()

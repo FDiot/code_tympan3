@@ -1,7 +1,9 @@
+# -*- coding: utf-8 -*-
 """How to simulate a moving source"""
-from __future__ import print_function
-
 import os, sys
+if sys.version_info[:2] <= (2, 7):
+    print("Error! Python 3 only can be used.")
+    sys.exit(-1)
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -12,8 +14,6 @@ from tympan.models.solver import Model, Solver
 from tympan.models._common import Point3D
 from tympan.altimetry import AltimetryMesh
 from _util import input_int, import_xyz_angle_csv, import_infra, line_count, ask_xml_file, ask_input_file, moyenne_mesh, mesh_spect_to_ndarray, ndarray_to_mesh_spect, load_elements, run_calculations, ask_result_file
-
-ty_solverdir = os.environ.get('TYMPAN_SOLVERDIR')
 
 
 def create_calculations(fichier_xml, objects, output_xml):

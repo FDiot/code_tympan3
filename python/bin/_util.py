@@ -12,7 +12,6 @@ from tympan.altimetry import AltimetryMesh
 from tympan.models.solver import Model, Solver
 from tympan.models._common import Spectrum
 from tympan.models._business import Element_array, Engine, Building
-from utils import TEST_DATA_DIR
 try:
     # Python 2
     from Tkinter import Toplevel, Label, Button
@@ -20,19 +19,28 @@ except ImportError:
     # Python 3
     from tkinter import Toplevel, Label, Button
 
-# Environment variable
-TYMPAN_DATA_DIR = os.path.join(TEST_DATA_DIR,"toolbox")
-assert os.path.isdir(TYMPAN_DATA_DIR), "The Toolbox data dir does not exists '%s'" % TYMPAN_DATA_DIR
-
+# Environment variables
+_HERE = os.path.realpath(os.path.dirname(__file__))
+PROJECT_BASE = os.path.abspath(os.path.join(_HERE, '..'))
+# Tests directory:
+TEST_DATA_DIR = os.path.join(PROJECT_BASE, 'tests', 'data')
+# Toolbox tests data:
+TOOLBOX_DATA_DIR = os.path.join(TEST_DATA_DIR,"toolbox")
+assert os.path.isdir(TOOLBOX_DATA_DIR), "The Toolbox data dir does not exists '%s'" % TOOLBOX_DATA_DIR
+# Solver directory:
+ty_solverdir = os.environ.get('TYMPAN_SOLVERDIR')
+if not ty_solverdir:
+    for d in ('pluginsd', 'plugins'):
+        ty_solverdir = os.path.join(PROJECT_BASE, d)
+        if os.path.isdir(ty_solverdir) and os.listdir(ty_solverdir):
+            break
+    else:
+        raise RuntimeError("The test solver plugins dir wasn't found")
 
 def run_calculations(input_xml):
     """
     Run all calculations
     """
-    ty_solverdir = os.environ.get('TYMPAN_SOLVERDIR')
-    if not ty_solverdir:
-        raise RuntimeError(
-            'Please set the TYMPAN_SOLVERDIR environment variable')
 
     # load project
     project = Project.from_xml(input_xml)
