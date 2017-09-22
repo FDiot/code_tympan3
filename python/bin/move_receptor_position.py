@@ -1,14 +1,16 @@
+# -*- coding: utf-8 -*-
 """How to simulate a moving receptor"""
 
-from __future__ import print_function
+import os, sys
+if sys.version_info[:2] <= (2, 7):
+    print("Error! Python 3 only can be used.")
+    sys.exit(-1)
+import numpy as np
 from tympan.models.project import Project
 from tympan.models._common import Point3D
 from run_all_calculations import run_calculations
 from _util import ask_input_file, ask_xml_file, input_string, import_xyz_csv, ask_result_file
-from tympan.models.solver import Model, Solver
 
-import os, sys
-import numpy as np
 
 def get_receptors_list(project, calculations_namelist):
     """

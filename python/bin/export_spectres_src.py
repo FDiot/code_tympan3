@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Created on 15 nov. 2016
 
@@ -5,7 +6,10 @@ Created on 15 nov. 2016
 
 Export spectrums from all sources in the tympan project, included machines and buildings.
 """
-from __future__ import print_function
+import sys
+if sys.version_info[:2] <= (2, 7):
+    print("Error! Python 3 only can be used.")
+    sys.exit(-1)
 from tympan.models.solver import Model
 from _util import input_string, run_calculations, ask_xml_file
 import numpy as np

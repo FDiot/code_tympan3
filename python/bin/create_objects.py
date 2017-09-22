@@ -1,10 +1,12 @@
+# -*- coding: utf-8 -*-
 """
 Automatic creation of sources or receptors with TYMPAN coordinates
 """
-from __future__ import print_function
-import numpy as np
 import sys
-
+if sys.version_info[:2] <= (2, 7):
+    print("Error! Python 3 only can be used.")
+    sys.exit(-1)
+import numpy as np
 from tympan.models.project import Project
 from tympan.models._common import Point3D
 from tympan.models._business import User_source, UserReceptor, Element_array
@@ -103,8 +105,8 @@ if __name__ == '__main__':
         output_xml = ask_result_file(input_xml)
     else:
         input_xml = ''
-        # Name result xml file
-        output_xml = ask_result_file()
+        # Name project xml file
+        output_xml = ask_result_file("Project.xml")
 
     # Call to main
     main(object_file, object_positions_file, object_type, object_name, input_xml, output_xml)

@@ -4,7 +4,7 @@ import os
 from utils import TympanTC
 
 from tympan.models.solver import Model
-from _util import compare_txt_results, run_calculations, TYMPAN_DATA_DIR
+from _util import compare_txt_results, run_calculations, TOOLBOX_DATA_DIR
 from export_spectres_src import main, calc_surf_spectrum, calc_vol_spectrum
 
 class Test(TympanTC):
@@ -29,6 +29,6 @@ class Test(TympanTC):
             i += 1
 
 if __name__ == '__main__':
-     os.chdir(os.path.join(TYMPAN_DATA_DIR, 'Export_Spectres_Sources'))
+     os.chdir(os.path.join(TOOLBOX_DATA_DIR, 'Export_Spectres_Sources'))
      unittest.main()
 
