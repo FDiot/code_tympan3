@@ -62,13 +62,6 @@ class Test(TympanTC):
         else:
             sys.exit(-1)
 
-        # Change delimiter ToDo
-        #positions = np.asarray([[2,0, 0,0], [0,0, 2,0], [-2,0, 0,0], [0,0, -2,0]])
-        #np.savetxt('semicolon.csv', positions, delimiter=";", fmt="%s")
-        #x2, y2 = import_xyz_csv("semicolon.csv")
-        #np.testing.assert_array_equal(x1, x2)
-        #np.testing.assert_array_equal(y1, y2)
-
     def test_add_receptor_from_csv_file(self):
         """ Test adding receptor from CSV file (E/Lot1-025) """
         # Recepteurs.csv contains the same 5 receptors than Recepteur_mobile.xml
@@ -80,31 +73,16 @@ class Test(TympanTC):
 
     def test_global(self):
         """ Global test of move_receptor_position.py (E/Lot1-026) """
-        # Create a project
-        project = Project.create()
-        # Source in (0,0)
-#        model = Model.from_project(project, set_sources=False)
-#        model.add_source((0.0, 0.0, 2.0), np.array([150.0] * 31, dtype=float), 0)
-        position = Point3D()
-        position.set_x(0.0)
-        position.set_y(0.0)
-        position.set_z(2.0)
-        src = User_source(2.0, "Source", position)
-        site = project.site
-        site.add_user_source(src, position, 2.0)
-
-        # Save the project
-        project.to_xml("test_global.xml")
-
         # Four receptors around the source in a test_global.csv file
-        positions = np.asarray([[2.0, 0.0, 2.0], [0.0, 2.0, 2.0], [-2.0, 0.0, 2.0], [0.0, -2.0, 2.0]])
+        distance = 50
+        positions = np.asarray([[distance, 0.0, 2.0], [0.0, distance, 2.0], [-distance, 0.0, 2.0], [0.0, -distance, 2.0]])
         np.savetxt("test_global.csv", positions, delimiter=',')
 
         # Run the main fonction of the module
         # It reads the project test_global.xml,
         # import the receptors from CSV file
         # export the results into TXT file
-        project = main("test_global.xml", "test_global.csv", "", "test_global.txt")
+        project = main("test_global.xml", "test_global.csv", "receptor_in_circle.xml", "test_global.txt")
 
         # We want to check the average is the same than on each receptor
         # Read the result:

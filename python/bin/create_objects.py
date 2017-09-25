@@ -27,7 +27,6 @@ def main(object_file, object_positions_file, object_type, object_name, input_xml
         elements = import_infra(object_file, object_type)
 
     # Create numpy array with csv file containing TYMPAN coordinates of the objects
-    # ToDo factoriser et gerer delimiter ";"
     my_data = np.genfromtxt(object_positions_file, dtype='float', delimiter=';', skip_header=1)
     if my_data.shape[1] < 3:
         print("Error! Should read x,y,z or x,y,z,angle in "+object_positions_file)

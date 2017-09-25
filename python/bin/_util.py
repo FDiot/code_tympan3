@@ -302,7 +302,7 @@ def import_xyz_angle_csv(csv_file, project):
     """
     print("Reading "+csv_file+" ...")
     csv = np.genfromtxt(csv_file, delimiter=",")
-    if csv.shape[1]!=4:
+    if csv.shape[1] != 4:
         print("Error! Should read 4 columns with x,y,z,angle in "+csv_file)
         sys.exit(-1)
 
@@ -408,7 +408,6 @@ def compare_project_results(project, expected_project, testobj):
         np.testing.assert_almost_equal(current_spectra[i],
                                        expected_spectra[i], decimal=1)
 
-# ToDo merge with utils.py later during merge
 def compare_floats(x, y):
     """ Compare x and y which are float arrays:
         Go through them, considering x[i] and y[i] equal up to a 3 decimal

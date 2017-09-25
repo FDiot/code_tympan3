@@ -1008,7 +1008,6 @@ cdef class Site:
     def sig_offset(self):
         return self.thisptr.getRealPointer().getSIG_OFFSET()
 
-    # ToDo getEmprise
     def getEmprise(self):
         topo = cy.declare(cy.pointer(TYTopographie),
                           self.thisptr.getRealPointer().getTopographie().getRealPointer())

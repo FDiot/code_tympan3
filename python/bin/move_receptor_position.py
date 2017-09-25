@@ -100,7 +100,6 @@ def main(tympan_xml, receptors_csv, output_xml, output_txt='Niveau_sonore_moyen.
     project = Project.from_xml(tympan_xml)
 
     # Case receptors are read in a CSV file
-    # ToDo create a _util/add_receptor_from_csv instead ?
     if receptors_csv != "":
         # Import and add receptor positions
         x, y, z = import_xyz_csv(receptors_csv, project)
