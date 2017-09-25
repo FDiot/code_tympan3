@@ -6,11 +6,10 @@ if sys.version_info[:2] <= (2, 7):
     sys.exit(-1)
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
 import matplotlib.animation as animation
 from matplotlib.colors import LinearSegmentedColormap
 from tympan.models.project import Project
-from tympan.models.solver import Model, Solver
+from tympan.models.solver import Model
 from tympan.models._common import Point3D
 from tympan.altimetry import AltimetryMesh
 from _util import input_int, import_xyz_angle_csv, import_infra, line_count, ask_xml_file, ask_input_file, moyenne_mesh, mesh_spect_to_ndarray, ndarray_to_mesh_spect, load_elements, run_calculations, ask_result_file
