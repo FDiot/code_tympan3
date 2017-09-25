@@ -106,13 +106,14 @@ def main(fichier_xml, output_xml):
 
     # Loop until the user save and exit
     operations_name = ['difference', 'emergence', 'ambient noise']
-    operations = [u'0.Différence : L2-L1'.encode('utf-8'), u'1.Emergence L1 \u2295 L2 - L2'.encode('utf-8'),
-                  u'2.Bruit ambiant : L1 \u2295 L2'.encode('utf-8'), u'3.Exit'.encode('utf-8')]
+    # circed_plus="\u2295" # Big trouble on windows console to print this caracter so:
+    circed_plus = "+"
+    operations = ['0.Différence : L2 - L1', '1.Emergence L1'+circed_plus+'L2 - L2', '2.Bruit ambiant : L1'+circed_plus+'L2', '3.Exit']
     while True:
         # Select operation, verify input and create mesh spectrum result
         print('\nSelect operation : ')
         for op in operations:
-            print(op.decode('utf-8'))
+            print(op)
         verif_choix = False
         while not verif_choix:
             num_ope = input_int('Enter chosen operation : ')
