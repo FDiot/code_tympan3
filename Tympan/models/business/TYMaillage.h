@@ -92,8 +92,8 @@ public:
     virtual DOM_Element toXML(DOM_Element& domElement);
     virtual int fromXML(DOM_Element domElement);
 
-    /*!
-     * \brief export mesh to csv file
+    /**
+     * @brief export mesh to csv file
      */
      void exportCSV(const std::string& fileName); 
 

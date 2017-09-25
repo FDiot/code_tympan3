@@ -365,22 +365,19 @@ public:
     // Solver parameters for this computation
     QString solverParams;
 
-    /*!
-    * \fn TYTabRay getAllRays()
-    * \brief Renvoie un tableau contenant tous les rayons trouvés par le lancer de rayons.
+    /**
+    * @brief Renvoie un tableau contenant tous les rayons trouvés par le lancer de rayons.
     * \return Renvoie le tableau de rayons Tympan
     */
     TYTabRay& getTabRays() { return _tabRays; }
 
-    /*!
-     * \fn getSpectrumDatas(TYUUID& id)
-     * \brief Return spectrums for a given noise map
+    /**
+     * @brief Return spectrums for a given noise map
      */
     std::vector<LPTYSpectre> *getSpectrumDatas( const TYUUID& id);
 
-    /*!
-     * \fn getSpectrumDatas(TYMaillage *pMaillage)
-     * \brief Return spectrums for a given noise map
+    /**
+     * @brief Return spectrums for a given noise map
      */
     std::vector<LPTYSpectre> *getSpectrumDatas(TYMaillage *pMaillage);
 
