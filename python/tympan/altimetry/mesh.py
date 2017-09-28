@@ -721,10 +721,10 @@ class ElevationMesh(MeshedCDTWithInfo):
                 and vh_or_i in self._input_vertices_infos):
             # Point is on a vertex, which is part of an input constraint.
             return self.altitude_for_input_vertex(vh_or_i)
-        if isinstance(vh_or_i, int): # point is on an edge
-            if self.cdt.is_infinite(fh): # get a finite face if needed
-                fh, _ = self.mirror_half_edge(fh, vh_or_i)
-                assert not self.cdt.is_infinite(fh)
+        # point is on an edge and get a finite face if needed
+        if isinstance(vh_or_i, int) and self.cdt.is_infinite(fh):
+            fh, _ = self.mirror_half_edge(fh, vh_or_i)
+            assert not self.cdt.is_infinite(fh)
         triangle = self.triangle3d_for_face(fh)
         p2 = Point_3(p.x(), p.y(), 0)
         vline = Line_3(p2, Z_VECTOR)
@@ -922,11 +922,10 @@ class ElevationProfile(object):
                     break
             else:
                 return default
-        if isinstance(vh_or_i, int):
-            # Point is on an edge.
-            if self._mesh.cdt.is_infinite(fh): # get a finite face if needed
-                fh, _ = self._mesh.mirror_half_edge(fh, vh_or_i)
-                assert not self._mesh.cdt.is_infinite(fh)
+        # Point is on an edge and get a finite face if needed:
+        if isinstance(vh_or_i, int) and self._mesh.cdt.is_infinite(fh):
+            fh, _ = self._mesh.mirror_half_edge(fh, vh_or_i)
+            assert not self._mesh.cdt.is_infinite(fh)
         return face_data.get(fh, default)
 
     def __call__(self, dist):
