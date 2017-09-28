@@ -239,7 +239,7 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     # print(L_DEN)
 
     # Add new computation
-    computation = project.add_computation()
+    project.add_computation()
     project.current_computation.set_name('LDEN')
     for src in S:
         project.current_computation.result.add_source(src)
