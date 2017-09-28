@@ -88,8 +88,8 @@ class MeshedCDTWithInfo(object):
     """ This class provides the meshing of a geometry with arbitrary
     information attached.
     """
-    EdgeInfo = dict
-    VertexInfo = dict
+    edge_info = dict
+    vertex_info = dict
 
     def __init__(self):
         self.cdt = CDT()
@@ -171,13 +171,13 @@ class MeshedCDTWithInfo(object):
 
     def insert_constraint(self, va, vb, **kwargs):
         self.cdt.insert_constraint(va, vb)
-        self._input_constraints_infos[sorted_vertex_pair(va, vb)] = self.EdgeInfo(**kwargs)
+        self._input_constraints_infos[sorted_vertex_pair(va, vb)] = self.edge_info(**kwargs)
         return (va, vb) # Important to return the contrain in the input order
 
     def insert_point(self, point, **kwargs):
         point = to_cgal_point(point)
         vertex = self.cdt.insert(point)
-        self._input_vertices_infos[vertex] = self.VertexInfo(**kwargs)
+        self._input_vertices_infos[vertex] = self.vertex_info(**kwargs)
         return vertex
 
     def insert_polyline(self, polyline, close_it=False, connected=True, **kwargs):
@@ -190,8 +190,8 @@ class MeshedCDTWithInfo(object):
         If ``connected=False`` is specified only the points are added,
         but not the segments connecting them.
 
-        The key-word arguments are used to buildthe self.VertexInfo
-        and self.EdgeInfo instances associated with new vertices and
+        The key-word arguments are used to buildthe self.vertex_info
+        and self.edge_info instances associated with new vertices and
         constraints.
 
         Returns the list of vertices handles and of constraints added.
@@ -326,7 +326,7 @@ class MeshedCDTWithInfo(object):
         init_map = init_map or {}
         d = {}
         for v, info_list in self.fetch_constraint_infos_for_vertices(vertices=vertices).items():
-            info = self._input_vertices_infos.get(v, init_map.get(v, self.VertexInfo()))
+            info = self._input_vertices_infos.get(v, init_map.get(v, self.vertex_info()))
             try:
                 d[v] = reduce(merge_function, info_list, info)
             except InconsistentGeometricModel as exc:
@@ -348,7 +348,7 @@ class MeshedCDTWithInfo(object):
         d = {}
         for v_pair, info_list in self.fetch_constraint_infos_for_edges(edges=edges).items():
             v_pair = sorted_vertex_pair(*v_pair)
-            info = init_map.get(v_pair, self.EdgeInfo())
+            info = init_map.get(v_pair, self.edge_info())
             try:
                 d[v_pair] = reduce(merge_function, info_list, info)
             except InconsistentGeometricModel as exc:
@@ -547,7 +547,7 @@ class MeshedCDTWithInfo(object):
         return points
 
     def _segment_intersection_points(self, segment):
-        """Yield interection points between the mesh CDT and a segment."""
+        """Yield intersection points between the mesh CDT and a segment."""
         for fh in self.cdt.finite_faces():
             triangle = self._face_triangle(fh)
             inter = triangle.intersection(segment)
@@ -650,14 +650,14 @@ class ElevationMesh(MeshedCDTWithInfo):
     This altitude can be unspecified (yet) and represented as UNSPECIFIED_ALTITUDE
     """
 
-    VertexInfo = InfoWithIDsAndAltitude
+    vertex_info = InfoWithIDsAndAltitude
 
-    EdgeInfo = EdgeInfoWithMaterial
+    edge_info = EdgeInfoWithMaterial
 
     def __init__(self):
         super(ElevationMesh, self).__init__()
-        self.vertices_info = defaultdict(self.VertexInfo)
-        self.edges_info = defaultdict(self.EdgeInfo)
+        self.vertices_info = defaultdict(self.vertex_info)
+        self.edges_info = defaultdict(self.edge_info)
 
     def copy(self, class_=None, deep=False, vmap=None):
         vmap = {} if vmap is None else vmap
