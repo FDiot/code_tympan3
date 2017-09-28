@@ -422,7 +422,7 @@ class MeshedCDTWithInfo(object):
     def py_vertex(self, vh):
         """ Return a pure python representation of the vertex, intended for debugging"""
         p = vh.point()
-        return ((p.x(), p.y()))
+        return (p.x(), p.y())
 
     def py_face(self, face):
         """ Return a pure python representation of the face, intended for debugging"""
