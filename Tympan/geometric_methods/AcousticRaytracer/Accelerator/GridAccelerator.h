@@ -63,7 +63,7 @@ public:
     {
         for (int i = 0; i < nVoxels[0]*nVoxels[1]*nVoxels[2]; ++i)
             if (voxels[i]) { voxels[i]->~Voxel(); }
-        free(voxels);
+        delete[] voxels;
     }
 
     virtual bool build();
