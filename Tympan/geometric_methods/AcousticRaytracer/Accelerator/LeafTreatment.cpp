@@ -85,14 +85,15 @@ decimal keepAllBeforeTriangle(std::list<Intersection> &currentIntersections, dec
             tmin = it->t;
         }
     }
-
-    for (std::list<Intersection>::iterator it = currentIntersections.begin(); it != currentIntersections.end(); it++)
+    
+    std::list<Intersection>::iterator it = currentIntersections.begin();
+    while(it != currentIntersections.end())
     {
         if (it->t > tmin)
-        {
-            currentIntersections.erase(it);
-            --it;
-        }
+           currentIntersections.erase(it++);
+        else
+           it++;
+    
     }
 
     return tmin;
@@ -111,13 +112,13 @@ decimal keepAllBeforeVisible(std::list<Intersection> &currentIntersections, deci
         }
     }
 
-    for (std::list<Intersection>::iterator it = currentIntersections.begin(); it != currentIntersections.end(); it++)
+    std::list<Intersection>::iterator it = currentIntersections.begin();
+    while(it != currentIntersections.end())
     {
         if (tmin < 0. || it->t > tmin)
-        {
-            currentIntersections.erase(it);
-            --it;
-        }
+            currentIntersections.erase(it++);
+        else
+           it++;
     }
 
     return tmin;
