@@ -311,6 +311,11 @@ class MeshFiller(object):
     def fill_material_and_landtakes(self, mainsite, cleaner):
         """Build the face to geometrical feature mapping."""
         feature_by_face = {}
+        self.fill_lantakes(mainsite, feature_by_face)
+        self.fill_material(mainsite, feature_by_face, cleaner)
+        return feature_by_face
+
+    def fill_lantakes(self, mainsite, feature_by_face):
         # Fill landtakes using the flooding algorithm.
         for feature in mainsite.landtakes:
             _check_feature_inserted(feature, mainsite)
@@ -319,6 +324,8 @@ class MeshFiller(object):
                 for fh in faces:
                     if fh not in feature_by_face:
                         feature_by_face[fh] = feature
+
+    def fill_material(self, mainsite, feature_by_face, cleaner):
         # Fill material areas by finding the underlying feature based on the
         # position of face "middle point".
         features = _material_area_features(mainsite, cleaner)
@@ -336,7 +343,6 @@ class MeshFiller(object):
                     break
             else:
                 feature_by_face[fh] = None
-        return feature_by_face
 
     def _faces_for_polygonal_feature(self, feature, flooder_class):
         """Return the list of faces within a polygonal feature"""
