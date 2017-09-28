@@ -554,22 +554,22 @@ class MeshedCDTWithInfo(object):
             if not inter:
                 # No intersection.
                 continue
-            try:
-                inter = iter(inter)
-            except TypeError:
-                # Got a single Point or a LineString.
-                if isinstance(inter, Point):
-                    yield inter
-                elif isinstance(inter, LineString):
-                    for coord in inter.coords:
-                        yield Point(coord)
-                else:
-                    raise Exception('unhandled interection object %r' % inter)
+            elif isinstance(inter, Point):
+                # Got a single Point
+                yield inter
+            elif isinstance(inter, LineString):
+                # Got a LineString
+                for coord in inter.coords:
+                    yield Point(coord)
             else:
-                # Got a collection of points.
-                for i in inter:
-                    assert isinstance(i, Point), i
-                    yield i
+                try:
+                    inter = iter(inter)
+                    # Got a collection of points.
+                    for i in inter:
+                        assert isinstance(i, Point), i
+                        yield i
+                except TypeError:
+                    raise Exception('unhandled intersection object %r' % inter)
 
     def _face_triangle(self, fh):
         """Return a shapely geometry LineString for given face."""
