@@ -43,25 +43,6 @@ def get_op_data(fpath, sources):
             OP.append([float(row['Day']),float(row['Evening']),float(row['Night'])])
     return np.array(OP)
 
-#          irow+=1
-
-#        ifield = 0
-#        DataNames = []
-#        DataValues = []
-#        for field in reader.fieldnames:
-#            DataNames.append(field)
-#            ifield = ifield + 1
-#            csvfile.seek(0)
-#            csvfile.readline()
-#            irow = 0
-#            Data = []
-#            for row in reader:
-#                Data.append(np.float(row[field]))
-#                irow = irow + 1
-#            DataValues.append(Data)
-#    return DataNames, DataValues
-
-
 def test_imputs(project, calculations_namelist):
     '''
          Testing coherence between:
@@ -228,8 +209,6 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     # Operating conditions
     set_op_data(operating_conditions_file, S) # Check if the csv file exist and create it if not
     OP = get_op_data(operating_conditions_file, S)
-    # OP=np.array([[100., 100., 100.],[80.,70., 50.], [100., 100., 100.]])
-
 
     # Get results for each period
     L1, L2, L3 = get_results(project, S, R, calculations_namelist)
