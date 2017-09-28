@@ -73,15 +73,15 @@ def get_shape_update_opt(this, alt_geom_map, opts):
         shape = this.shape
     return shape
 
-def plot_LevelCurve(this, ax,  alt_geom_map=None, **kwargs):
+def plot_level_curve(this, ax,  alt_geom_map=None, **kwargs):
     opts = {'color':'red',
             'linewidth':3 }
     shape = get_shape_update_opt(this, alt_geom_map, opts)
     opts.update(kwargs)
     plot_linear_shape(ax, shape, **opts)
-LevelCurve.plot = plot_LevelCurve
+LevelCurve.plot = plot_level_curve
 
-def plot_PolygonalFeature(this, ax, alt_geom_map=None, **kwargs):
+def plot_polygonal_feature(this, ax, alt_geom_map=None, **kwargs):
     opts = {'linewidth': 3,
             'alpha': 0.4,
             'facecolor':'none'}
@@ -89,9 +89,9 @@ def plot_PolygonalFeature(this, ax, alt_geom_map=None, **kwargs):
     opts.update(kwargs)
     plot_polygonal_shape(ax, shape, **opts)
     return ax
-PolygonalTympanFeature.plot = plot_PolygonalFeature
+PolygonalTympanFeature.plot = plot_polygonal_feature
 
-def plot_MaterialArea(this, ax, **kwargs):
+def plot_material_area(this, ax, **kwargs):
     color = MATERIAL_COLORS.get(this.material_id, 'gray')
     opts = {'edgecolor' : color,
             'hatch':'/',
@@ -99,25 +99,25 @@ def plot_MaterialArea(this, ax, **kwargs):
     opts.update(kwargs)
     super(MaterialArea, this).plot(ax, **opts)
     return ax
-MaterialArea.plot = plot_MaterialArea
+MaterialArea.plot = plot_material_area
 
-def plot_InfrastructureLandtake(this, ax, **kwargs):
+def plot_infrastructure_landtake(this, ax, **kwargs):
     opts = {'edgecolor' : 'black',
             'hatch':'\\\\',
             'alpha':1.0}
     opts.update(kwargs)
     super(InfrastructureLandtake, this).plot(ax, **opts)
     return ax
-InfrastructureLandtake.plot = plot_InfrastructureLandtake
+InfrastructureLandtake.plot = plot_infrastructure_landtake
 
-def plot_SiteNode(this, ax, recursive=False, **kwargs):
+def plot_site_node(this, ax, recursive=False, **kwargs):
     super(SiteNode, this).plot(ax, alpha=1, edgecolor='black')
     for f in this.all_features:
         f.plot(ax, **kwargs)
     if recursive:
         for f in this.subsites:
             f.plot(ax, recursive=True, **kwargs)
-SiteNode.plot=plot_SiteNode
+SiteNode.plot=plot_site_node
 
 
 

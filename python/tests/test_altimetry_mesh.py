@@ -256,7 +256,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         edgeAB2 = ((vmap[vA], vmap[vB]))
 
         self.assertEqual(mesher2.input_constraint_infos(edgeAB2),
-                         mesher2.VertexInfo(id='concrete', altitude=0.0))
+                         mesher2.vertex_info(id='concrete', altitude=0.0))
         self.assertIsNot(mesher2.input_constraint_infos(edgeAB2),
                          self.mesher.input_constraint_infos((vA, vB)))
 

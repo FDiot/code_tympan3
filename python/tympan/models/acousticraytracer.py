@@ -48,7 +48,7 @@ class Simulation(object):
         """Import a Scene from a ply file"""
         self._simulation.import_from_ply(filename)
 
-    def getScene(self):
+    def get_scene(self):
         """Get the Scene"""
         self._simulation.getScene()
 
