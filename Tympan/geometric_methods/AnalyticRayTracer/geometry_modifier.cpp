@@ -92,8 +92,6 @@ void geometry_modifier_z_correction::append_triangles_to_scene(QList<OPoint3D>& 
         pos = OPoint3Dtovec3( Liste_vertex.at( Liste_triangles.at(i)._p3 ) );
         _scene->addVertex(pos, c);
 
-        //Triangle* face;
-        //face = (Triangle*)_scene->addTriangle(a, b, c, nullptr);
         (Triangle*)_scene->addTriangle(a, b, c, nullptr);
     }
 

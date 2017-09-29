@@ -59,7 +59,6 @@ protected:
         std::list<Intersection> foundPrims;
 
         //Appel du Solver pour le choix de la methode de traverser de la structure
-        //decimal tmin_r =  accelerator->traverse(r, foundPrims);
         accelerator->traverse(r, foundPrims);
         std::list<Intersection>::iterator iter;
         for (iter=foundPrims.begin(); iter != foundPrims.end(); iter++)

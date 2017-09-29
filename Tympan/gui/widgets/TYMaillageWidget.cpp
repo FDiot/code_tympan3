@@ -213,7 +213,6 @@ void TYMaillageWidget::updateValMinMax()
     double valMin = +10000.0;
     double valMax = -10000.0;
     TYPointCalcul* pPoint = NULL;
-    //TYCalcul* pCalcul = static_cast<TYCalcul*>(getElement()->getParent());
 
     int dataType = _buttonGroupDataType->checkedId();
 

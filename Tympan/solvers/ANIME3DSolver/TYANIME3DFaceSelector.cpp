@@ -37,8 +37,6 @@ bool TYANIME3DFaceSelector::exec(TYStructSurfIntersect *&tabPolygon, size_t& tab
 
 bool TYANIME3DFaceSelector::buildCalcStruct(TYStructSurfIntersect *&tabPolygon, size_t& tabPolygonSize)
 {
-     //bool cancel = false;
-
     const tympan::nodes_pool_t& nodes = aproblem.nodes(); 
     const tympan::triangle_pool_t& triangles = aproblem.triangles();
 

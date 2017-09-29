@@ -78,7 +78,6 @@ bool TYElementPicker::pick(int x, int y)
 
     _pLastPickedElt = NULL;
     int i, j;
-    //float z1, z2;
 
     ptr = (GLuint*) selectBuf;
 
@@ -93,7 +92,6 @@ bool TYElementPicker::pick(int x, int y)
         // z1 : distance minimale, toujours positive
         float z1 = *ptr; ptr++;
         // z2 : distance maximale, toujours positive
-        // float z2 = *ptr; // Commente car z2 pas utilise
         ptr++;
 
         TYElement* pElementCourant = NULL;//az++

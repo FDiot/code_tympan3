@@ -106,8 +106,6 @@ void TYEtageEditor::endEtage()
     // Affiche la boite de dialogue
     int ret = pDlg->exec();
 
-    //size_t nbPts = tabPts.size();
-
     if (ret == QDialog::Accepted)
     {
         double hauteur = pDlg->getHauteur();

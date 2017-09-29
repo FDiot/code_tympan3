@@ -80,8 +80,6 @@ bool TYDirectivity::deepCopy(const TYElement* pOther, bool copyId /*=true*/)
 {
     if (!TYElement::deepCopy(pOther, copyId)) { return false; }
 
-    //TYDirectivity* pOtherDir = (TYDirectivity*) pOther;
-
     return true;
 }
 

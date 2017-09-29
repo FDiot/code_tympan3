@@ -375,7 +375,6 @@ bool TYMaillage::checkSimilar(const TYMaillage* const pMaillage1, const TYMailla
 void TYMaillage::computeMesh(std::vector<MTriangle> &mesh) const
 {
     mesh.clear();
-    //TYCalcul* pCalcul = static_cast<TYCalcul*>(getParent());
     const TYTabLPPointCalcul& ptsCalcul = getPtsCalcul();
     int nbPointsX = 0;
     int nbPointsY = 0;

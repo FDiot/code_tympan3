@@ -79,7 +79,6 @@ void TYAcousticModel::compute(  const std::deque<TYSIntersection>& tabIntersect,
 
     // Recuperation de la source
     tympan::AcousticSource& source = trajet.asrc;
-    //tympan::AcousticReceptor& receptor = trajet.arcpt;
 
     // Distance de la source au recepteur
     double distance = trajet.getDistance();
@@ -169,7 +168,6 @@ void TYAcousticModel::computeCheminAPlat(const OSegment3D& rayon, const tympan::
 
     // Calcul du point de reflexion
     OPoint3D ptReflex;
-    //int result = penteMoyenne.intersects(OSegment3D(ptSym, rayon._ptB), ptReflex, TYSEUILCONFONDUS);
     penteMoyenne.intersects(OSegment3D(ptSym, rayon._ptB), ptReflex, TYSEUILCONFONDUS);
 
     //              2. Etape avant la reflexion
@@ -1083,7 +1081,6 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
 
     std::list<Intersection> LI;
 
-    //double distance1 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray1, LI ) );
     static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray1, LI ) );
 
     if(LI.empty())
