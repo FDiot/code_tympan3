@@ -45,16 +45,16 @@ TY_EXT_GRAPHIC_INST(TYCalcul);
 #define MAX_RECEPTEURS 131072
 
 TYCalcul::TYCalcul() : 
+            solverParams(DEFAULT_SOLVER_CONFIG),
+            _solverId( OGenID("{A98B320C-44C4-47a9-B689-1DD352DAA8B2}") ),
+            _numero(1),
             _auteur("Auteur"),
-            _comment("Commentaire"),
             _dateCreation("2001-10-01"),
             _dateModif("2001-10-01"),
-            _numero(1),
-            _pResultat(new TYResultat()),
+            _comment("Commentaire"),
             _upTodate(true),
             _state(TYCalcul::Actif),
-            _solverId( OGenID("{A98B320C-44C4-47a9-B689-1DD352DAA8B2}") ),
-            solverParams(DEFAULT_SOLVER_CONFIG)
+            _pResultat(new TYResultat())
 {
     _name = TYNameManager::get()->generateName(getClassName());
     _pResultat->setParent(this);
@@ -314,8 +314,8 @@ int TYCalcul::fromXML(DOM_Element domElement)
     TYProjet* pProjet = getProjet();
 
     int etat = -1; // Etat du calcul
-    bool useSol, useVegetation, useAtmosphere, useEcran, useReflexion;
-    bool expansGeo, typeCaclulSol, condFav, calculTrajetHorizontaux, interference;    
+    bool useSol, useEcran, useReflexion;
+    bool condFav, calculTrajetHorizontaux, interference;    
     float h1, distanceSRMin; 
 
     TYListID tempElementSelection;
