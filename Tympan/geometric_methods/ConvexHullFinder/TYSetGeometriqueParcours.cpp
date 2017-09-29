@@ -533,7 +533,7 @@ bool TYSetGeometriqueParcours::ListerPointsConnexes(Connexite *& Connexes)
 
                 indexePoint = _nNbPointTotal;
                 _nNbPointTotal++;
-                int newPoint = _ListePolylines[i].indexePoint(j);
+                _ListePolylines[i].indexePoint(j);
                 assert(NbSegmentsConnexes < 2);
             }
             Connexes[indexePoint].IndexesSegment[NbSegmentsConnexes] = i;
