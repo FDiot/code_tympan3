@@ -1088,7 +1088,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
         start.z = incident._ptB._z + 1000;
         Ray ray1( start, vec3(0., 0., -1.) );
         ray1.maxt = 20000;
-        distance1 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse(&ray1, LI));
+        static_cast<double>( _solver.getScene()->getAccelerator()->traverse(&ray1, LI));
     }
 
     assert(!LI.empty());
@@ -1102,7 +1102,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
         Ray ray(start, vec3(0,0,-1));
         ray.maxt = 20000;
         std::list<Intersection> LI2;
-        distance1 = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray, LI2 ) );
+        static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray, LI2 ) );
         assert( !LI2.empty() );
         indexFace = LI2.begin()->p->getPrimitiveId();
         mat = _solver.getTabPolygon()[indexFace].material;
