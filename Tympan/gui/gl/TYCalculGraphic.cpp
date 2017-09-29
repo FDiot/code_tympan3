@@ -36,7 +36,6 @@ void TYCalculGraphic::update(bool force /*=false*/)
 
 void TYCalculGraphic::getChilds(TYListPtrTYElementGraphic& childs, bool recursif /*=true*/)
 {
-    //TYElementGraphic* pTYElementGraphic = NULL;
 }
 
 void TYCalculGraphic::display(GLenum mode /*= GL_RENDER*/)

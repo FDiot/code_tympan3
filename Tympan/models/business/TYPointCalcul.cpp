@@ -155,7 +155,6 @@ int TYPointCalcul::fromXML(DOM_Element domElement)
 
     DOM_Element elemCur;
 
-    //bool bOldEtat = false;
     //QString idCalcul = "";
     int state;
 
@@ -166,7 +165,6 @@ int TYPointCalcul::fromXML(DOM_Element domElement)
 
         if (elemCur.nodeName() == "state")
         {
-            //bOldEtat = TYXMLTools::getElementIntValue(elemCur, "state", state);
             TYXMLTools::getElementIntValue(elemCur, "state", state);
         }
         //else if (elemCur.nodeName() == "etatCalcul")

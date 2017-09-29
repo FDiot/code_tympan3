@@ -97,7 +97,6 @@ bool DefaultCurvRayEngine::traitementRay(Ray* r, std::list<validRay> &result)
 		copyRayAndAddToStack(r);
     }
 
-    //decimal tmin = -1.0f;
 
 	//Recuperation des structures acceleratrices pour le Solver
     Accelerator* accelerator = scene->getAccelerator();
@@ -107,7 +106,6 @@ bool DefaultCurvRayEngine::traitementRay(Ray* r, std::list<validRay> &result)
 	{
 		foundPrims.clear(); 
 		//Appel du Solver pour le choix de la methode de traverser de la structure
-		//tmin =  accelerator->traverse(r, foundPrims);
       accelerator->traverse(r, foundPrims);
 		// Recherche pour des recepteurs situé à moins de 1 pas de temps;
 //		searchForReceptor(delta_x, r);

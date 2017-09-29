@@ -115,8 +115,6 @@ int TYRectangularMaillage::fromXML(DOM_Element domElement)
 {
     TYMaillage::fromXML(domElement);
 
-    //bool spectreIsOk = false;
-
     bool densiteXOk = false;
     bool densiteYOk = false;
     bool bOldDatas = false;

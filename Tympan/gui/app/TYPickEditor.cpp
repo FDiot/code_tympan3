@@ -479,7 +479,6 @@ void TYPickEditor::siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts)
 
     // Gestion du choix de l'utilisateur
     pPopup->setMouseTracking(true);
-    //bool bUpdateDisplayList = false;
     QAction* popupRet = pPopup->exec(QCursor::pos());
     if (popupRet == NULL) { return; }
     qApp->processEvents();
@@ -636,7 +635,6 @@ void TYPickEditor::machineModelerPopupMenu(std::shared_ptr<LPTYElementArray> pEl
 
     // Gestion du choix de l'utilisateur
     pPopup->setMouseTracking(true);
-    //bool bUpdateDisplayList = false;
     QAction* popupRet = pPopup->exec(QCursor::pos());
     if (popupRet == NULL) { return; }
     qApp->processEvents();
@@ -775,7 +773,6 @@ void TYPickEditor::batimentModelerPopupMenu(std::shared_ptr<LPTYElementArray> pE
 
     // Gestion du choix de l'utilisateur
     pPopup->setMouseTracking(true);
-    //bool bUpdateDisplayList = false;
     QAction* popupRet = pPopup->exec(QCursor::pos());
     if (popupRet == NULL) { return; }
     qApp->processEvents();
@@ -1522,8 +1519,6 @@ void TYPickEditor::remTopoElmt(TYElement *pElement)
     if (pTopo == nullptr) { return; }
 
     // On recupere le site parent
-    //TYSiteNode* pSiteParent = TYSiteNode::safeDownCast(pTopo->getParent());
-
     TYAction* pAction = new TYRemElementToTopoAction(pElement, pTopo, _pModeler, TR("id_action_remelttopo"));
     _pModeler->getActionManager()->addAction(pAction);
 

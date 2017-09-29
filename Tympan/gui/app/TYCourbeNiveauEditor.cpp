@@ -75,7 +75,6 @@ void TYCourbeNiveauEditor::slotKeyPressed(int key)
 
 void TYCourbeNiveauEditor::endCourbeNiveau()
 {
-    //bool ok = false;
 
     if ( !(getSavedPoints().size() > 1) || (!_pModeler->askForResetResultat()) )
     {

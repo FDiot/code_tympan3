@@ -154,7 +154,6 @@ std::unique_ptr<TYAcousticModel> TYSolver::make_acoustic_model()
 
 bool TYSolver::buildCalcStruct(const tympan::AcousticProblemModel& aproblem)
 {
-    //bool cancel = false;
 
     const tympan::nodes_pool_t& nodes = aproblem.nodes(); 
     const tympan::triangle_pool_t& triangles = aproblem.triangles();
@@ -197,11 +196,6 @@ bool TYSolver::appendTriangleToScene()
     for (unsigned int i = 0; i < _tabPolygon.size(); i++)
     {
         //Recuperation et convertion de la normale de la surface
-        /* Mis en commentaire, non utilise:
-        double coordNormal[3];
-        _tabPolygon[i].normal.getCoords(coordNormal);
-        vec3 normalFace = vec3(coordNormal[0], coordNormal[1], coordNormal[2]);
-        */
         
         unsigned int a, b, c;
 

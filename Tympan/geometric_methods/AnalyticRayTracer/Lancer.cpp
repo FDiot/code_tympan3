@@ -170,7 +170,6 @@ RayCourb Lancer::RK4(const Step& y0)
     y.etapes.push_back(yAct);
 
     // on remplit le reste avec notre fonction EqRay qui definit notre probleme
-    //decimal d2Max = dmax * dmax;
 
     while ((static_cast<unsigned int>(cpt_tps) < temps.size()) && (travel_length < dmax))
     {

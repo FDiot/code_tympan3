@@ -282,7 +282,6 @@ int TYCalculParcours::Traite(
         TYSetGeometriqueParcours geoGauche;
         TYSetGeometriqueParcours geoDroite;
 
-        //int nNbPolylignes = _geoImporterDXF->_nNbPolylines;
         _geoImporterDXF->SupressionPolylignesRedondantes();
 
         //3.2 Marquage des points a gauche ou a droite
@@ -293,9 +292,6 @@ int TYCalculParcours::Traite(
         //3.3 Separation des points suivants le ci��te droit au gauche
         //Cette separation donne deja les segments intersectant [SR]
 
-        //bool bPolylignesInfraFermees = _geoImporterDXF->PolylignesInfraFermees();
-        //assert(bPolylignesInfraFermees);
-
         _geoImporterDXF->SeparationDroiteGauche(PointsAGauche, PointsADroite, geoGauche, geoDroite);
 
         //3.4 Calcul des trajets
@@ -303,7 +299,6 @@ int TYCalculParcours::Traite(
         bool bPasEnfermeAGauche = CalculTrajet(geoGauche, true, PointsAGauche, PointsADroite, geoPremierePasseGauche, geoTrajetGauche);
         if (bPasEnfermeAGauche)
         {
-            //bool bSecondePasse = geoGauche.SecondePasse(geoPremierePasseGauche, geoSecondePasseGauche, true, pTableauECG, nbPtsECG);
             geoGauche.SecondePasse(geoPremierePasseGauche, geoSecondePasseGauche, true, pTableauECG, nbPtsECG);
             geoTrajetGauche = &geoSecondePasseGauche;
         }
@@ -312,7 +307,6 @@ int TYCalculParcours::Traite(
         bool bPasEnfermeADroite = CalculTrajet(geoDroite, false, PointsAGauche, PointsADroite, geoPremierePasseDroite, geoTrajetDroite);
         if (bPasEnfermeADroite)
         {
-            //bool bSecondePasse = geoDroite.SecondePasse(geoPremierePasseDroite, geoSecondePasseDroite, false, pTableauECD, nbPtsECD);
             geoDroite.SecondePasse(geoPremierePasseDroite, geoSecondePasseDroite, false, pTableauECD, nbPtsECD);
             geoTrajetDroite = &geoSecondePasseDroite;
         }

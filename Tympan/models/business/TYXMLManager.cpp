@@ -52,7 +52,6 @@ QDomDocument parse_xml_file(const QString & filepath)
     QDomDocument doc;
     QString msg;
     int err_line, err_col;
-    //bool success;
     QFile file(filepath);
     if (!file.open(QIODevice::ReadOnly))
     {
@@ -77,7 +76,6 @@ QDomDocument parse_xml_content(const QString & xml_content)
     QDomDocument doc;
     QString msg;
     int err_line, err_col;
-    //bool success;
     if (!doc.setContent(xml_content, &msg, &err_line, &err_col))
     {
         handle_xml_parsing_error(std::string("QString content"), msg.toStdString(), err_line, err_col);

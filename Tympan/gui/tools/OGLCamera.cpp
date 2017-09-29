@@ -669,7 +669,6 @@ void OGLCamera::calculateStepVectors()
         flyFrom = from + m_translate;
         flyFromTo = flyTo - flyFrom;
         flyUp = up;// + m_translate;
-        //NxVec3 elevationVector = flyUp.cross(flyFromTo);
         flyUp.cross(flyFromTo);
         flyFront = NxVec3(flyTo - flyFrom, true);
 
@@ -702,7 +701,6 @@ NxVec3 OGLCamera::displayToWorld(NxVec3 display)
     winX = (float)display.x;
     winY = (float)display.y;
     winZ = (float)display.z;
-    //GLint result = gluUnProject(winX, winY, winZ, mvmatrix, projmatrix, viewport, &retValue.x, &retValue.y, &retValue.z);
     gluUnProject(winX, winY, winZ, mvmatrix, projmatrix, viewport, &retValue.x, &retValue.y, &retValue.z);
 
     return retValue;
@@ -719,7 +717,6 @@ NxVec3 OGLCamera::worldToDisplay(NxVec3 world)
     glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
     glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
     glGetIntegerv(GL_VIEWPORT, viewport);
-    //GLint result = gluProject(world.x, world.y, world.z, mvmatrix, projmatrix, viewport, &retValue.x, &retValue.y, &retValue.z);
     gluProject(world.x, world.y, world.z, mvmatrix, projmatrix, viewport, &retValue.x, &retValue.y, &retValue.z);
 
     return retValue;

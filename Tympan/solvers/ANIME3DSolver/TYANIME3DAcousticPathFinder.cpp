@@ -184,11 +184,6 @@ bool TYANIME3DAcousticPathFinder::appendTriangleToScene()
     for (unsigned int i = 0; i < _tabPolygonSize; i++)
     {
         //Recuperation et convertion de la normale de la surface
-        /*
-        double coordNormal[3];
-        _tabPolygon[i].normal.getCoords(coordNormal);
-        vec3 normalFace = vec3(coordNormal[0], coordNormal[1], coordNormal[2]);
-        */
         
         unsigned int a, b, c;
         double coord[3];

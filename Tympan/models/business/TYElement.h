@@ -863,7 +863,6 @@ public:
     void* getAllUses() { return _allUses; }
     void setAllUses( void* allUses ) { _allUses = allUses; }
     void cleanAllUses() { free(_allUses); _allUses = nullptr; }
-    //void cleanAllUses() { delete _allUses; _allUses = nullptr; }
 
 private:
     /**
