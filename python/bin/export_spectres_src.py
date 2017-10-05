@@ -50,6 +50,38 @@ def write_results(valeurs, src_ids, dict_id_name, fichier_txt):
     with open(fichier_txt, 'wb') as f:
         np.savetxt(f, final_array, delimiter=', ', fmt='%s')
 
+
+def convert(indices_fin, list_src):
+    """ Convert indices_fin to a numpy array """
+    temp_array = np.asarray(indices_fin)
+    del (indices_fin)
+    indices_fin = temp_array
+    del (temp_array)
+
+    # Define indices_debut and finalize the lists
+    indices_debut = np.append([0], indices_fin + 1)
+    indices_fin = np.append(indices_fin, len(list_src) - 1)
+
+    spectrum_values = None
+    for i in range(len(list_src)):
+        values = [list_src[i].spectrum.values]
+        spectrum_values = values if i == 0 else np.append(spectrum_values, values, axis=0)
+
+    # Creation of n-dimensional array for each real "surface" source, not each point source
+    # There is a different calculus if the "surface" source is a point source or a surface
+    values_final = np.empty([len(indices_debut), 31])
+
+    for i in range(len(indices_debut)):
+        if indices_fin[i] - indices_debut[i] == 0:
+            resultat = spectrum_values[indices_debut[i], :]
+        else:
+            resultat = spectrum_values[indices_debut[i]] * ((indices_fin[i] - indices_debut[i]) + 1)
+
+        values_final[i, :] = resultat
+
+    return values_final
+
+
 def calc_surf_spectrum(list_src):
     """
     Get sources list contained in the model (list_src = model.sources) and return surface
@@ -69,34 +101,8 @@ def calc_surf_spectrum(list_src):
             src_ids.append(list_src[i+1].face_id)
             indices_fin.append(i)
 
-    # convert indices_fin to a numpy array
-    temp_array = np.asarray(indices_fin)
-    del(indices_fin)
-    indices_fin = temp_array
-    del(temp_array)
-    
-    # Define indices_debut and finalize the lists
-    indices_debut = np.append([0], indices_fin+1)
-    indices_fin = np.append(indices_fin, len(list_src)-1)
-
-    spectrum_values = None
-    for i in range(len(list_src)):
-        values = [list_src[i].spectrum.values]
-        spectrum_values = values if i == 0 else np.append(spectrum_values, values, axis=0)
-
-    # Creation of n-dimensional array for each real "surface" source, not each point source
-    # There is a different calculus if the "surface" source is a point source or a surface
-    values_final = np.empty([len(indices_debut), 31])
-
-    for i in range(len(indices_debut)):
-        if indices_fin[i]-indices_debut[i] == 0:
-            resultat = spectrum_values[indices_debut[i],:]
-        else:
-            resultat = spectrum_values[indices_debut[i]]*((indices_fin[i]-indices_debut[i])+1)
-            
-        values_final[i,:] = resultat
-
-    return (values_final, src_ids)
+    values_final = convert(indices_fin, list_src)
+    return values_final, src_ids
 
 
 def calc_vol_spectrum(list_src):
@@ -117,35 +123,9 @@ def calc_vol_spectrum(list_src):
         if list_src[i+1].volume_id != list_src[i].volume_id:
             src_ids.append(list_src[i+1].volume_id)
             indices_fin.append(i)
-            
-    # convert indices_fin into a numpy array
-    temp_array = np.asarray(indices_fin)
-    del(indices_fin)
-    indices_fin = temp_array
-    del(temp_array)
-    
-    # Define indices_debut and finalize the lists
-    indices_debut = np.append([0], indices_fin+1)
-    indices_fin = np.append(indices_fin, len(list_src)-1)
 
-    spectrum_values = None
-    for i in range(len(list_src)):
-        values = [list_src[i].spectrum.values]
-        spectrum_values = values if i == 0 else np.append(spectrum_values, values, axis=0)
-
-    # Creation of n-dimensional array for each real "volume" source, not each point source
-    # There is a different calculus if the "volume" source is a point source or a surface
-    values_final = np.empty([len(indices_debut), 31])
-    
-    for i in range(len(indices_debut)):
-        if indices_fin[i]-indices_debut[i] == 0:
-            resultat = spectrum_values[indices_debut[i],:]
-        else:
-            resultat = spectrum_values[indices_debut[i]]*(indices_fin[i]-indices_debut[i])
-            
-        values_final[i,:] = resultat
-    
-    return (values_final, src_ids)
+    values_final = convert(indices_fin, list_src)
+    return values_final, src_ids
 
 
 def main(fichier_xml, fichier_txt):
