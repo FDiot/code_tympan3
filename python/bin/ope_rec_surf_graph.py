@@ -17,7 +17,7 @@ from tympan.models.project import Project
 from _util import mesh_spect_to_ndarray, ndarray_to_mesh_spect, operation_array, MyDialog
 
 
-class App_rec_surf(tk.Tk):
+class AppRecSurf(tk.Tk):
     """
     Class creating main graphic window
     """
@@ -33,89 +33,89 @@ class App_rec_surf(tk.Tk):
         # ============================================================================================================
         
         # LabelFrame for section "choose XML file"
-        LF_xml = tk.LabelFrame(self, text=u"Choix du fichier XML", padx=0, pady=0)
-        LF_xml.grid(column=0,row=0,columnspan=3,sticky='EW')
-        LF_xml.grid_columnconfigure(0,weight=1)
+        lf_xml = tk.LabelFrame(self, text=u"Choix du fichier XML", padx=0, pady=0)
+        lf_xml.grid(column=0,row=0,columnspan=3,sticky='EW')
+        lf_xml.grid_columnconfigure(0,weight=1)
         
         # Label used to show the xml file path
         self.labelVariable = tk.StringVar()
-        label_file = tk.Label(LF_xml,textvariable=self.labelVariable,anchor="w",fg="blue",bg="white")
-        label_file.grid(column=0,row=1,columnspan=1,in_=LF_xml,sticky='EW')
+        label_file = tk.Label(lf_xml,textvariable=self.labelVariable,anchor="w",fg="blue",bg="white")
+        label_file.grid(column=0,row=1,columnspan=1,in_=lf_xml,sticky='EW')
         self.labelVariable.set(u"Salut ! Charge donc un fichier !")
         
         # button used to charge xml file
-        button_charge_xml = tk.Button(LF_xml,text=u"Charger fichier XML", anchor="e", command=self.loadXmlFile)
-        button_charge_xml.grid(column=1,row=1,in_=LF_xml,sticky='E')
+        button_charge_xml = tk.Button(lf_xml,text=u"Charger fichier XML", anchor="e", command=self.load_xml_file)
+        button_charge_xml.grid(column=1,row=1,in_=lf_xml,sticky='E')
         
         # ============================================================================================================
         
         # LabelFrame for section "choose surface receptor"
-        LF_surf_rec = tk.LabelFrame(self, text=u"Récepteur surfacique", padx=0, pady=0)
-        LF_surf_rec.grid(column=0,row=1,columnspan=1,sticky='EW')
-        LF_surf_rec.grid_columnconfigure(0,weight=1)
+        lf_surf_rec = tk.LabelFrame(self, text=u"Récepteur surfacique", padx=0, pady=0)
+        lf_surf_rec.grid(column=0,row=1,columnspan=1,sticky='EW')
+        lf_surf_rec.grid_columnconfigure(0,weight=1)
         
         # Label surface receptor chosen
         self.labelRecSurf = tk.StringVar()
-        rec_surf_chosen = tk.Label(LF_surf_rec,textvariable=self.labelRecSurf,anchor="w",fg="blue",bg="grey")
-        rec_surf_chosen.grid(column=0,row=0,columnspan=2,in_=LF_surf_rec,sticky='EW')
+        rec_surf_chosen = tk.Label(lf_surf_rec,textvariable=self.labelRecSurf,anchor="w",fg="blue",bg="grey")
+        rec_surf_chosen.grid(column=0,row=0,columnspan=2,in_=lf_surf_rec,sticky='EW')
         
         # Listbox with surface receptor names
-        self.list_rec_surf = tk.Listbox(LF_surf_rec,fg="blue")
+        self.list_rec_surf = tk.Listbox(lf_surf_rec,fg="blue")
 #        self.list_rec_surf.pack(fill=tk.X, expand=1)
-        self.list_rec_surf.grid(column=0,row=1,in_=LF_surf_rec,sticky='EW')
+        self.list_rec_surf.grid(column=0,row=1,in_=lf_surf_rec,sticky='EW')
         
         # OK button pressed when surface receptor is chosen
-        button_rec_surf = tk.Button(LF_surf_rec,text=u"OK",command=self.clickButtonRecSurf)
-        button_rec_surf.grid(column=1,row=1,in_=LF_surf_rec)
+        button_rec_surf = tk.Button(lf_surf_rec,text=u"OK",command=self.click_button_rec_surf)
+        button_rec_surf.grid(column=1,row=1,in_=lf_surf_rec)
         
         # ============================================================================================================
         
         # LabelFrame for section "choose computation n°1"
-        LF_ref_comp = tk.LabelFrame(self, text=u"Calcul n°1 (L1)", padx=0, pady=0)
-        LF_ref_comp.grid(column=1,row=1,columnspan=1,sticky='EW')
-        LF_ref_comp.grid_columnconfigure(0,weight=1)
+        lf_ref_comp = tk.LabelFrame(self, text=u"Calcul n°1 (L1)", padx=0, pady=0)
+        lf_ref_comp.grid(column=1,row=1,columnspan=1,sticky='EW')
+        lf_ref_comp.grid_columnconfigure(0,weight=1)
         
         # Label reference computation chosen
         self.labelRefComp01 = tk.StringVar()
-        ref_comp_01_chosen = tk.Label(LF_ref_comp,textvariable=self.labelRefComp01,anchor="w",fg="blue",bg="grey")
+        ref_comp_01_chosen = tk.Label(lf_ref_comp,textvariable=self.labelRefComp01,anchor="w",fg="blue",bg="grey")
         ref_comp_01_chosen.grid(column=0,row=0,columnspan=2,sticky='EW')
         
         # First Listbox with computation names
-        self.list_comp_01 = tk.Listbox(LF_ref_comp,fg="blue")
+        self.list_comp_01 = tk.Listbox(lf_ref_comp,fg="blue")
 #        self.list_comp_01.pack(fill=tk.X, expand=1)
         self.list_comp_01.grid(column=0,row=1,sticky='EW')
         
         # OK button pressed when reference computation is chosen
-        button_comp_01 = tk.Button(LF_ref_comp,text=u"OK",command=self.clickButtonComp01)
+        button_comp_01 = tk.Button(lf_ref_comp,text=u"OK",command=self.click_button_comp01)
         button_comp_01.grid(column=1,row=1)
         
         # ============================================================================================================
         
         # LabelFrame for section "choose computation n°2"
-        LF_comp = tk.LabelFrame(self, text=u"Calcul n°2 (L2)", padx=0, pady=0)
-        LF_comp.grid(column=2,row=1,columnspan=1,sticky='EW')
-        LF_comp.grid_columnconfigure(0,weight=1)
+        lf_comp = tk.LabelFrame(self, text=u"Calcul n°2 (L2)", padx=0, pady=0)
+        lf_comp.grid(column=2,row=1,columnspan=1,sticky='EW')
+        lf_comp.grid_columnconfigure(0,weight=1)
         
         # Label other computation chosen
         self.labelRefComp02 = tk.StringVar()
-        ref_comp_02_chosen = tk.Label(LF_comp,textvariable=self.labelRefComp02,anchor="w",fg="blue",bg="grey")
+        ref_comp_02_chosen = tk.Label(lf_comp,textvariable=self.labelRefComp02,anchor="w",fg="blue",bg="grey")
         ref_comp_02_chosen.grid(column=0,row=0,columnspan=2,sticky='EW')
         
         # Second Listbox with computation names
-        self.list_comp_02 = tk.Listbox(LF_comp,fg="blue")
+        self.list_comp_02 = tk.Listbox(lf_comp,fg="blue")
 #        self.list_comp_02.pack(fill=tk.X, expand=1)
         self.list_comp_02.grid(column=0,row=1,sticky='EW')
         
         # OK button pressed when other computation is chosen
-        button_comp_02 = tk.Button(LF_comp,text=u"OK",command=self.clickButtonComp02)
+        button_comp_02 = tk.Button(lf_comp,text=u"OK",command=self.click_button_comp02)
         button_comp_02.grid(column=1,row=1)
         
         # ============================================================================================================
         
         # LabelFrame for section "choose operation"
-        LF_ope = tk.LabelFrame(self, text=u"Choix opération", padx=0, pady=0)
-        LF_ope.grid(column=0,row=4,columnspan=1,sticky='EW')
-        LF_ope.grid_columnconfigure(0,weight=1)
+        lf_ope = tk.LabelFrame(self, text=u"Choix opération", padx=0, pady=0)
+        lf_ope.grid(column=0,row=4,columnspan=1,sticky='EW')
+        lf_ope.grid_columnconfigure(0,weight=1)
         
         # RadioButtons corresponding to the proposed operations
         # initializing choice
@@ -130,7 +130,7 @@ class App_rec_surf(tk.Tk):
         ]
         
         for txt, val in operations:
-            tk.Radiobutton(LF_ope, 
+            tk.Radiobutton(lf_ope,
                 text=txt,
                 padx = 20, 
                 variable=self.v,
@@ -140,17 +140,17 @@ class App_rec_surf(tk.Tk):
         # ============================================================================================================
         
         # LabelFrame for section "launch calculation"
-        LF_calc = tk.LabelFrame(self, text=u"Lancer calcul", padx=0, pady=0)
-        LF_calc.grid(column=1,row=4,columnspan=3,sticky='EW')
-        LF_calc.grid_columnconfigure(0,weight=1)
+        lf_calc = tk.LabelFrame(self, text=u"Lancer calcul", padx=0, pady=0)
+        lf_calc.grid(column=1,row=4,columnspan=3,sticky='EW')
+        lf_calc.grid_columnconfigure(0,weight=1)
         
         # Button pressed to launch calculation between the 2 computation results
-        button_launch_calc = tk.Button(LF_calc,text=u"LANCER CALCUL !",command=self.clickLaunchCalc)
+        button_launch_calc = tk.Button(lf_calc,text=u"LANCER CALCUL !",command=self.click_launch_calc)
         button_launch_calc.grid(column=1,row=0,sticky='W')
         
         # Label progress
         self.labelProg = tk.StringVar()
-        prog = tk.Label(LF_calc,textvariable=self.labelProg,anchor="w",fg="red",bg="grey")
+        prog = tk.Label(lf_calc,textvariable=self.labelProg,anchor="w",fg="red",bg="grey")
         prog.grid(column=0,row=0,sticky='EW')
         
         # ============================================================================================================
@@ -159,7 +159,7 @@ class App_rec_surf(tk.Tk):
         self.grid_columnconfigure(0,weight=1)
         self.resizable(False,False)
 
-    def loadXmlFile(self):
+    def load_xml_file(self):
         """
         Load TYMPAN xml file, set the meshes (récepteurs
         surfaciques)list and the computations list
@@ -188,7 +188,7 @@ class App_rec_surf(tk.Tk):
         self.labelRefComp01.set(u"Choisis le calcul n°1...")
         self.labelRefComp02.set(u"Choisis le calcul n°2...")
 
-    def clickButtonRecSurf(self):
+    def click_button_rec_surf(self):
         """
         OK button callback function to set chosen mesh
         """
@@ -198,7 +198,7 @@ class App_rec_surf(tk.Tk):
         nom_mesh = self.list_rec_surf.get(tk.ACTIVE)
         self.labelRecSurf.set(u"RECEPTEUR CHOISI : "+nom_mesh)
 
-    def clickButtonComp01(self):
+    def click_button_comp01(self):
         """
         OK button callback function to set chosen first computation
         """
@@ -211,7 +211,7 @@ class App_rec_surf(tk.Tk):
         nom_comp = self.list_comp_01.get(tk.ACTIVE)
         self.labelRefComp01.set(u"CALCUL N°1 : "+nom_comp)
 
-    def clickButtonComp02(self):
+    def click_button_comp02(self):
         """
         OK button callback function to set chosen second computation
         """
@@ -225,7 +225,7 @@ class App_rec_surf(tk.Tk):
         self.labelRefComp02.set(u"CALCUL N°2 : "+nom_comp)
 
 
-    def clickLaunchCalc(self):
+    def click_launch_calc(self):
         """
         Launch calculation Once every parameters are set 
         """
@@ -294,6 +294,6 @@ class App_rec_surf(tk.Tk):
             self.labelProg.set(u" "+result_name + " sauve dans " + output_xml)
 
 if __name__ == "__main__":
-    app = App_rec_surf(None)
+    app = AppRecSurf(None)
     app.title(u'Code_TYMPAN : Calculs sur les récepteurs surfaciques')
     app.mainloop()
