@@ -106,7 +106,7 @@ def main(fichier_xml, output_xml):
 
     # Loop until the user save and exit
     operations_name = ['difference', 'emergence', 'ambient noise']
-    # circed_plus="\u2295" # Big trouble on windows console to print this caracter so:
+    # Big trouble on windows console to print "\u2295" so:
     circed_plus = "+"
     operations = ['0.Différence : L2 - L1', '1.Emergence L1'+circed_plus+'L2 - L2', '2.Bruit ambiant : L1'+circed_plus+'L2', '3.Exit']
     while True:

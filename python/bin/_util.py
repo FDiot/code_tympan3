@@ -233,7 +233,6 @@ def line_count(filename):
         lines = sum(1 for _ in f)
     f.close()
     return lines
-    #return sum(1 for line in open(filename))
 
 
 def import_infra(object_file, object_type):
