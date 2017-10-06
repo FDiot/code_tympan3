@@ -38,6 +38,8 @@ endforeach (testfile)
 foreach(testfile ${TESTS_SCRIPTS})
   get_filename_component (basename ${testfile} NAME_WE)
   set_property(TEST ${basename} APPEND PROPERTY ENVIRONMENT 
+    "PYTHONIOENCODING=UTF8")
+  set_property(TEST ${basename} APPEND PROPERTY ENVIRONMENT 
     "CGAL_BINDINGS_PATH=${NATIVE_CGAL_BINDINGS_PYTHON_DIR}")
 endforeach (testfile)
 # Configure the script enabling to launch test manually from the command line
