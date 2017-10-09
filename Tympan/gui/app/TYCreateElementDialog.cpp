@@ -38,7 +38,11 @@
 
 #ifdef _DEBUG
 ///Le nombre d'elements selectionnables.
+#if WITH_NMPB
 static const int nbMainElts = 60;
+#else
+static const int nbMainElts = 59;
+#endif
 
 ///Le type des elements selectionnables.
 static char const* _listMainElement[] =
@@ -63,7 +67,7 @@ static char const* _listMainElement[] =
 };
 #else // _DEBUG
 ///Le nombre d'elements selectionnables.
-static const int nbMainElts = 14;
+static const int nbMainElts = 13;
 
 ///Le type des elements selectionnables.
 static char const* _listMainElement[] =
