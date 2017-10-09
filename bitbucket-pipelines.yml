@@ -9,11 +9,11 @@ pipelines:
   default:
     - step:
         script:
-          # Check quality code with cppcheck (activated once all the errors are fixed):
-          - #apt-get install -y cppcheck
-          - #cd Tympan
-          - #cppcheck --quiet --std=posix --error-exitcode=1 .
-          - #cd ..
+          # Check quality code with cppcheck:
+          - apt-get install -y cppcheck
+          - cd Tympan
+          - cppcheck --quiet --std=posix --error-exitcode=1 .
+          - cd ..
           # Install needed packages:
           - apt-get install -y software-properties-common
           - add-apt-repository ppa:george-edison55/cmake-3.x

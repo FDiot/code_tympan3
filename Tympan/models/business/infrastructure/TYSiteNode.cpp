@@ -461,6 +461,7 @@ void TYSiteNode::loadTopoFile()
     // Creation d'un copie
     if ((streamDest = fopen(_topoFile.c_str(), "w+b")) == NULL)
     {
+        fclose(streamSrc);
         return;
     }
 
