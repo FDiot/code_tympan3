@@ -38,7 +38,7 @@
 
 
 TYLookupTableWidget::TYLookupTableWidget(const TYPalette* palette, QWidget* parent, const char* name)
-    : _palette(palette), QWidget(parent), _rectPal(0)
+    : QWidget(parent), _palette(palette), _rectPal(0)
 {
     setObjectName(name);
 

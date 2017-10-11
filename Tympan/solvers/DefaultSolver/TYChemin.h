@@ -119,16 +119,14 @@ public:
      * \return _typeChemin
      */
     int getType() const { return _typeChemin; }
-
+    // Members
     /*!
      * \fn void build_eq_path();
-     * \brief Build an acoustic_path from the an array tab of steps
+     * \brief build an acoustic_path from the tab of etapes
      */
     void build_eq_path(const TYTabEtape& tabEtapes);
+    acoustic_path* get_ray(OPoint3D ptR);
 
-    acoustic_path* get_ray() { return _eq_path; }
-
-    // Members
 protected:
     /// Path type (has an influence on the algorithm)
     TYTypeChemin _typeChemin;
@@ -143,7 +141,7 @@ protected:
     OSpectreComplex _attenuation;
 
     /// Equivalent acoustic_path
-    acoustic_path *_eq_path;
+    acoustic_path* _eq_path;
 };
 
 

@@ -16,7 +16,8 @@ using std::cerr;
 using std::endl;
 
 
-TEST(buildBitSet, dumpenv)
+// Test the buildBitSet() function
+TEST(test_mathlib, build_bit_set)
 {
     // Create a bitSet of length 17
     unsigned int bs = core_mathlib::buildBitSet(17);
@@ -27,7 +28,8 @@ TEST(buildBitSet, dumpenv)
     ASSERT_TRUE(bs == 131071);
 }
 
-TEST(builComplmentarydBitSet, dumpenv)
+// Test the buildComplementaryBitSet() function
+TEST(test_mathlib, buil_complmentaryd_bit_set)
 {
     // Build complementary bitset for number number 235 (11101011)
     // with length of 17 (11111111100010100 = 130836)
@@ -37,4 +39,21 @@ TEST(builComplmentarydBitSet, dumpenv)
 
     // TEST 1 : Check value build (130836)
     ASSERT_TRUE(cbs == 130836);
+}
+
+
+// Test the SIGN() function
+TEST(test_mathlib, sign)
+{
+
+	double A=84.52;
+	double B=123.58;
+	double C=-19.8;
+	double D=-1.4;
+
+	EXPECT_DOUBLE_EQ(1,SIGN(A)); 
+	EXPECT_DOUBLE_EQ(1,SIGN(B));
+	EXPECT_DOUBLE_EQ(-1,SIGN(C)); 
+	EXPECT_DOUBLE_EQ(-1,SIGN(D)); 
+	
 }

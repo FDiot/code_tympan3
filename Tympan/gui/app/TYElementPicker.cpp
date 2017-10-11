@@ -78,7 +78,6 @@ bool TYElementPicker::pick(int x, int y)
 
     _pLastPickedElt = NULL;
     int i, j;
-    float z1, z2;
 
     ptr = (GLuint*) selectBuf;
 
@@ -91,9 +90,9 @@ bool TYElementPicker::pick(int x, int y)
         // nombre de noms
         names = *ptr; ptr++;//Recuperer la liste de nom correspondant a ce hit
         // z1 : distance minimale, toujours positive
-        z1 = *ptr; ptr++;
+        float z1 = *ptr; ptr++;
         // z2 : distance maximale, toujours positive
-        z2 = *ptr; ptr++;
+        ptr++;
 
         TYElement* pElementCourant = NULL;//az++
         QString sCurrentClassName;

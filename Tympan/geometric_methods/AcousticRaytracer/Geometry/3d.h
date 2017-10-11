@@ -194,7 +194,7 @@ inline double DEGTOGRA(double a)
  */
 inline int ROUND(double a)
 {
-    return (a >= 0.0 ? (int)(a + 0.49999) : (int)(a - 0.49999));
+    return (a >= 0.0 ? (int)(a + 0.5) : (int)(a - 0.5));
 }
 
 /**

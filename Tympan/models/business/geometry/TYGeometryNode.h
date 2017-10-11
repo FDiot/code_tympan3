@@ -193,6 +193,20 @@ public:
      */
     OMatrix globalToLocal() const;
 
+    /*!
+     * \brief Get/Set the position of the element
+     */
+    void setPosition(const OPoint3D& pos);
+
+    OPoint3D position() { return _repere._origin; }
+
+    /*!
+     * \brief Get/Set the rotation angle along axis x, y & z represented as an OPoint3D
+     */
+    void setRotation(const OPoint3D& rot);
+
+    OPoint3D rotation(); 
+
     /**
      * get/set de la hauteur par rapport au sol
      */

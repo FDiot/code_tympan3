@@ -56,8 +56,11 @@ void TYPolyligneParcours::ajouteSegment(TYPointParcours* p1, TYPointParcours* p2
     allouer(2);
     ajoutePoint(0, p1);
     ajoutePoint(1, p2);
-    bool bverifieNaturePolylignes = verifieNaturePolylignes();
-    assert(bverifieNaturePolylignes);
+#ifndef NDEBUG    
+    bool bverifieNaturePolylignes = 
+#endif    
+    verifieNaturePolylignes();
+    assert(bverifieNaturePolylignes);    
 }
 
 bool TYPolyligneParcours::isInfra()
@@ -97,7 +100,7 @@ bool TYPolyligneParcours::verifieNaturePolylignes()
 bool TYPolyligneParcours::estSurUnParcourFermee()
 {
     assert(_nNbPoint == 2);
-    if (_PolyligneP1 == _PolyligneP0 == NULL)
+    if (_PolyligneP1 == NULL && _PolyligneP0 == NULL)
     {
         return estFermee();
     }

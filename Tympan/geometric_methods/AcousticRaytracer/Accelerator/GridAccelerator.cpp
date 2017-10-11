@@ -50,9 +50,7 @@ bool GridAccelerator::build()
         invWidth[axis] = (width[axis] == 0.f) ? 0.f : 1.f / width[axis];
     }
     int nv = nVoxels[0] * nVoxels[1] * nVoxels[2];
-    voxels = (Voxel**)malloc(nv * sizeof(Voxel*));
-    memset(voxels, 0, nv * sizeof(Voxel*));
-
+    voxels = new Voxel*[nv]();
     // Add primitives to grid voxels
     for (uint32_t i = 0; i < primitives.size(); ++i)
     {

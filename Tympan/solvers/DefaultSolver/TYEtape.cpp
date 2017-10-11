@@ -17,6 +17,10 @@
 #include "TYEtape.h"
 
 
+TYEtape::TYEtape()
+{
+}
+
 TYEtape::TYEtape(const TYEtape& other)
 {
     *this = other;
@@ -30,9 +34,10 @@ TYEtape& TYEtape::operator=(const TYEtape& other)
 {
     if (this != &other)
     {
-        _pt = other._pt;
         _type = other._type;
-        _spectrum = other._spectrum;
+        _pt = other._pt;
+        _Absorption = other._Absorption;
+        _Attenuation = other._Attenuation;
     }
     return *this;
 }
@@ -41,9 +46,10 @@ bool TYEtape::operator==(const TYEtape& other) const
 {
     if (this != &other)
     {
-        if (_pt != other._pt) { return false; }
         if (_type != other._type) { return false; }
-        if (_spectrum != other._spectrum) { return false; }
+        if (_pt != other._pt) { return false; }
+        if (_Absorption != other._Absorption) { return false; }
+        if (_Attenuation != other._Attenuation) { return false; }
     }
     return true;
 }

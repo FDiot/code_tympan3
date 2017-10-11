@@ -29,11 +29,11 @@ def ground_material_from_business(material):
     return GroundMaterial(material.elem_id, material.resistivity)
 
 
-def build_material_area(ty_materialarea, altimetry_groundmaterial):
+def build_material_area(ty_materialarea, altimetry_groundmaterial, landtake_points_for_subsites=[]):
     """Build a MaterialArea in altimetry data model from a Tympan material
-    area and an altimetry GroundMaterial.
+    area, an altimetry GroundMaterial and a set of points representing the landtake if it is a subsite.
 
-    This may be a plain MaterialArea or a VegetationArea.
+    This may be a plain MaterialArea, a VegetationArea or a subsite.
     """
     kwargs = {}
     if ty_materialarea.has_vegetation():
@@ -43,9 +43,14 @@ def build_material_area(ty_materialarea, altimetry_groundmaterial):
         cls = VegetationArea
     else:
         cls = MaterialArea
-    return cls(coords=points_to_coords(ty_materialarea.points),
-               material=altimetry_groundmaterial,
-               id=ty_materialarea.elem_id, **kwargs)
+    if ty_materialarea.points:
+        return cls(coords=points_to_coords(ty_materialarea.points),
+                   material=altimetry_groundmaterial,
+                   id=ty_materialarea.elem_id, **kwargs)
+    else:
+        return cls(coords=points_to_coords(landtake_points_for_subsites),
+                   material=altimetry_groundmaterial,
+                   id=ty_materialarea.elem_id, **kwargs)
 
 
 def build_sitenode(ty_site, mainsite=True):
@@ -77,7 +82,7 @@ def build_sitenode(ty_site, mainsite=True):
     add_lake(ty_site, altimetry_site)
 
     # Other material areas
-    add_material(ty_site, altimetry_site)
+    add_material(ty_site, altimetry_site, points, mainsite)
 
     # Level curves
     for cylcurve in ty_site.level_curves:
@@ -114,13 +119,13 @@ def add_lake(ty_site, altimetry_site):
             water_material = cywater.elem_id
             datamodel.MATERIAL_WATER = alwater
         allake = WaterBody(
-            coords=points_to_coords(cylake.level_curve.points),
-            altitude=cylake.level_curve.altitude,
+            coords=points_to_coords(cylake.points),
+            altitude=cylake.altitude,
             id=cylake.elem_id)
         altimetry_site.add_child(allake)
 
 
-def add_material(ty_site, altimetry_site):
+def add_material(ty_site, altimetry_site, material_border_points, is_mainsite):
     # Material
     default_material = None
     for cymarea in ty_site.material_areas:
@@ -129,11 +134,15 @@ def add_material(ty_site, altimetry_site):
         almaterial = ground_material_from_business(cymaterial)
         # Build a material area made of the above defined ground material
         if not cymarea.points:
-            assert not default_material, "Found several default materials"
-            default_material = cymaterial.elem_id
-            datamodel.DEFAULT_MATERIAL = almaterial
-            continue
-        almatarea = build_material_area(cymarea, almaterial)
+            if is_mainsite:
+                assert not default_material, "Found several default materials"
+                default_material = cymaterial.elem_id
+                datamodel.DEFAULT_MATERIAL = almaterial
+                continue
+            else:
+                almatarea = build_material_area(cymarea, almaterial, material_border_points)
+        else:
+            almatarea = build_material_area(cymarea, almaterial)
         altimetry_site.add_child(almatarea)
 
 

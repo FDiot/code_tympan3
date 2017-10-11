@@ -31,7 +31,7 @@
 TY_EXTENSION_INST(TYEtage);
 TY_EXT_GRAPHIC_INST(TYEtage);
 
-TYEtage::TYEtage(): _closed(false), _surfAbsorbante(0.0), _typeReverb(0), _volumeLibre(0.0)
+TYEtage::TYEtage(): _closed(false), _typeReverb(0), _surfAbsorbante(0.0), _volumeLibre(0.0)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
