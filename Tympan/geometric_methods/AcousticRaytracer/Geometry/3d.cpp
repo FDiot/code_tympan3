@@ -247,6 +247,7 @@ OVector3D OVector3D::normal(const OVector3D& vector2, const OVector3D& vector3) 
 void OVector3D::normalize()
 {
     double n = norme();
+
     if (n > 0.0)
     {
         _x /= n;
@@ -1639,10 +1640,10 @@ OBox2::OBox2(const OBox2& box, const ORepere3D& repere, const OPoint3D& centre)
 }
 
 OBox2::OBox2(const double& length, const double& width, const double& height) :
+    _center(OPoint3D(0.0, 0.0, 0.0)),
     _length(length),
-    _height(width),
-    _width(height),
-    _center(OPoint3D(0.0, 0.0, 0.0))
+    _height(height),
+    _width(width)
 {
     double  minX = -_length / 2.0,
             minY = -_width / 2.0,

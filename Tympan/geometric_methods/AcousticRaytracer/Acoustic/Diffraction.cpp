@@ -73,13 +73,17 @@ Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cy
 	name = "unknown diffraction";
 	nbResponseLeft = initialNbResponse = 200;
 	type = DIFFRACTION;
-	buildRepere();
-	computeAngle();
 
-	computeDTheta();
+	//Skip instructions dependant on the Cylindre if c==NULL
+	if(c){
+		buildRepere();
+		computeAngle();
 
-	N1 = dynamic_cast<Cylindre*>(shape)->getFirstShape()->getNormal();
-	N2 = dynamic_cast<Cylindre*>(shape)->getSecondShape()->getNormal();
+		computeDTheta();
+
+		N1 = dynamic_cast<Cylindre*>(shape)->getFirstShape()->getNormal();
+		N2 = dynamic_cast<Cylindre*>(shape)->getSecondShape()->getNormal();
+	}
 
 	if (AcousticRaytracerConfiguration::get()->DiffractionFilterRayAtCreation)
 	{
@@ -189,7 +193,7 @@ void Diffraction::computeAngle()
     Cylindre* c = (Cylindre*)(shape);
     angleOuverture = c->getAngleOuverture();
 
-    vec3 localFrom = localRepere.vectorFromGlobalToLocal(from);
+    localRepere.vectorFromGlobalToLocal(from);
 
 	decimal cosAngleArrive = localRepere.getW().dot(from);
 

@@ -72,11 +72,14 @@ void TYCourbeNiveauGraphic::display(GLenum mode /*= GL_RENDER*/)
     }
     GLenum Error;
     Error = glGetError();
+    if (Error!=GL_NO_ERROR) printf("Erreur OpenGL %d\n", Error);
     glColor4fv(getElement()->getColor());
     Error = glGetError();//GL_INVALID_ENUM
+    if (Error!=GL_NO_ERROR) printf("Erreur OpenGL %d\n", Error);
     float color[4];//az++ test
     glGetFloatv(GL_CURRENT_COLOR, color);//az++ test
     Error = glGetError();
+    if (Error!=GL_NO_ERROR) printf("Erreur OpenGL %d\n", Error);
     //delete [] color;//az++ test
     _pPolyLineGraphic->highlight(getHighlightState());//az++
     _pPolyLineGraphic->display(mode);

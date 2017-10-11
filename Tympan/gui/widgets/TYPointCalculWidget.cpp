@@ -137,7 +137,7 @@ void TYPointCalculWidget::editSpectre()
 
     sp->setIsReadOnly(true);
 
-    int ret = sp->edit(this);
+    sp->edit(this);
 
     sp->setIsReadOnly(bSave);
 }

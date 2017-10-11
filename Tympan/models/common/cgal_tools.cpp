@@ -82,10 +82,12 @@ std::deque<size_t> intersected_triangles(CGAL_Triangles & triangle_soup,
     std::deque<CGAL_TBox> query_tboxes;
     CGAL::Bbox_3 box = query_triangle.begin()->bbox();
     // Make sure the new query box has the same dimensions as "query" OBox2
+#ifndef NDEBUG
     double epsilon = 0.0001;
     double x_dim = abs(box.xmax() - box.xmin());
     double y_dim = abs(box.ymax() - box.ymin());
     double z_dim = abs(box.zmax() - box.zmin());
+#endif
     assert(abs(x_dim - length) < epsilon
             && "The dimension X of CGAL query box doesn't match query parameter.");
     assert(abs(y_dim - width) < epsilon

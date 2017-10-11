@@ -331,7 +331,8 @@ class MeshedCDTWithInfo(object):
                 d[v] = reduce(merge_function, info_list, info)
             except InconsistentGeometricModel as exc:
                 exc.witness_point = self.py_vertex(v)
-                raise
+                raise InconsistentGeometricModel(
+                    exc.message + " at " + str(exc.witness_point), ids=exc.ids)
         return d
 
     def merge_info_for_edges(self, merge_function, edges=None, init_map=None):

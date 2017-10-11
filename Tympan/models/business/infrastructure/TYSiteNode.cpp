@@ -73,18 +73,18 @@ std::string* TYSiteNode::_topoFilePath = NULL;
 
 TYSiteNode::TYSiteNode() :  _pProjet(NULL),
     _bEmpriseAsCrbNiv(false),
-    _isTopoFileModified(false),
-    _echelle(1.0f),
+    _altiEmprise(0.0),
     _useTopoFile(0),
     _topoFileName(""),
-    _topoFileExtension(""),
+    _topoFileExtension(""),    
+    _echelle(1.0f),
     _nbFaceInfra(0),
-    _altiEmprise(0.0),
     _root(false),
     _SIGType(TYMPAN),
     _SIG_X(0.0),
     _SIG_Y(0.0),
-    _SIG_OFFSET(0.0)
+    _SIG_OFFSET(0.0),
+    _isTopoFileModified(false)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -461,14 +461,18 @@ void TYSiteNode::loadTopoFile()
     // Creation d'un copie
     if ((streamDest = fopen(_topoFile.c_str(), "w+b")) == NULL)
     {
+        fclose(streamSrc);
         return;
     }
 
+    OMessageManager& logger =  *OMessageManager::get();
     // Lecture et copie
     while (!feof(streamSrc))
     {
-        fread(&c, sizeof(unsigned char), 1, streamSrc);
-        fwrite(&c, sizeof(unsigned char), 1, streamDest);
+        if (!fread(&c, sizeof(unsigned char), 1, streamSrc))
+           logger.error("An error occured during the read of ",_topoFileName.c_str());       
+        if (!fwrite(&c, sizeof(unsigned char), 1, streamDest))
+           logger.error("An error occured during the read of ",_topoFile.c_str());  
     }
 
     // Fermeture des fichiers

@@ -168,7 +168,7 @@ class SiteNodeGeometryCleaner(object):
         subcleaner = SiteNodeGeometryCleaner(subsite)
         subcleaner.process_all_features()
         if subcleaner.erroneous_overlap:
-            msg = ("Can not merge subsite {subsite} because of features "
+            msg = ("Can not merge subsite {subsite} because of features {ids} "
                    "overlapping its boundaries.")
             raise InconsistentGeometricModel(msg, subsite=subsite.id,
                                              ids=subcleaner.erroneous_overlap)
@@ -189,9 +189,10 @@ class SiteNodeGeometryCleaner(object):
         for i, area_id in enumerate(self._sorted_material_areas):
             area_geom, area_info = self[area_id]
             if inserted_area.shape.overlaps(area_geom):
-                msg = ("Partially overlapping material area in {subsite}")
+                msg = (
+                    "Partially overlapping material area in {subsite} between {ids} at positions {positions}")
                 raise InconsistentGeometricModel(msg, subsite=self.sitenode.id,
-                                                 ids=[area_id, inserted_area.id])
+                                                 ids=[area_id, inserted_area.id], positions=list(inserted_area.shape.intersection(area_geom).exterior.coords))
             if inserted_area.shape.within(area_geom):
                 return i
         else:

@@ -321,14 +321,13 @@ cdef class Site:
         self.thisptr.getRealPointer().getFacesOnGround(cpp_contours)
         cpp_contours_iter = cpp_contours.begin()
         contours = {}
-        while cpp_contours_iter != cpp_contours.end():  # XXX can't we iterate on items???
-            volume_id = deref(cpp_contours_iter).first.toString().toStdString().decode()
+        for it in cpp_contours:
+            volume_id = it.first.toString().toStdString().decode()
             contours[volume_id] = [
-                [tycommon.opoint3d2point3d(contour[i])
+                [tycommon.opoint3d2point3d(tycommon.dot(self.matrix, contour[i]))
                  for i in xrange(contour.size())]
-                for contour in deref(cpp_contours_iter).second
+                for contour in it.second
             ]
-            inc(cpp_contours_iter)
         return contours
 
     @property
@@ -623,11 +622,20 @@ cdef class Lake:
         return tyelement_id(self.thisptr)
 
     @property
-    def level_curve(self):
+    def altitude(self):
         """The lake's level curve as a 'LevelCurve' cython object"""
         lev_curve = LevelCurve()
         lev_curve.thisptr = self.thisptr.getCrbNiv().getRealPointer()
-        return lev_curve
+        return lev_curve.altitude
+
+    @property
+    def points(self):
+        """The sequence of points forming the level curve of the lake"""
+        lev_curve = LevelCurve()
+        lev_curve.thisptr = self.thisptr.getCrbNiv().getRealPointer()
+        cpp_points = cy.declare(
+            vector[TYPoint], lev_curve.thisptr.getListPoints())
+        return cpp2cypoints(cpp_points, self.matrix)
 
 
 cdef class Result:

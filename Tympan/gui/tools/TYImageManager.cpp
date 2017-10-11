@@ -145,12 +145,12 @@ OImage* TYImageManager::getImage(const char* filename)
     size_t pos = str.rfind('.');
     if (pos == std::string::npos)
     {
-        return false;
+        return NULL;
     }
     std::string ext(str, pos + 1, str.size() - pos);
 
     // On cree une nouvelle image
-    OImage* im;
+    OImage* im = NULL;
     if (ext == "bmp")
     {
         im = new OImageBmp();
@@ -159,9 +159,8 @@ OImage* TYImageManager::getImage(const char* filename)
     {
         im = new OImageGlf();
     }
-
     // On charge l'image
-    if (!im->load(filename))
+    if (im != NULL && !im->load(filename))
     {
         delete im;
         return 0;

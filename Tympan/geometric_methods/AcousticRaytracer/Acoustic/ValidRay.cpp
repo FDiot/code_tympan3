@@ -118,9 +118,10 @@ bool ValidRay::computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre
 	vec3 *pa = new vec3(), *pb = new vec3();
 	decimal *mua = new decimal(), *mub = new decimal();
 	int res = LineLineIntersect(p1, p2, p3, p4, pa, pb, mua, mub);
-
-	delete pa, pb, mua, mub; // Cleaning
-
+   delete pa;
+   delete pb;
+   delete mua;
+   delete mub;
 	impact = *pb;
 
 	return res;

@@ -71,8 +71,8 @@ QFileInfoList TYPluginManager::getPluginFileList(const QDir& directory) const
 
 void TYPluginManager::createPlugins(const QFileInfoList& file_list)
 {
-    QFileInfoList::const_iterator itfile = file_list.begin();
-    for (itfile; itfile != file_list.end(); ++itfile)
+    QFileInfoList::const_iterator itfile;
+    for (itfile=file_list.begin(); itfile != file_list.end(); ++itfile)
     {
         TYPluginData* plugin_data = new TYPluginData();
         plugin_data->filename = itfile->absoluteFilePath();

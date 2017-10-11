@@ -23,7 +23,9 @@
  * \brief : Select diffracted rays that are launched in the shadow zone of the obstacle (closed angle)
  *          Other are suppressed
  */
+
 template<typename T>
+
 class DiffractionAngleSelector : public Selector<T>
 {
 public :
@@ -46,7 +48,6 @@ public :
 		vec3 currentPos, nextPos, N, N1, N2, W, From, To;
 
 		Diffraction *pDiff = NULL;
-		int sgn = 0;
 
 		decimal F1 = 0., F2 = 0., T1 = 0., T2 = 0., FT = 0.;
 
@@ -127,7 +128,6 @@ public :
 		vec3 currentPos, nextPos, N, N1, N2, W, From, To;
 
 		Diffraction *pDiff = NULL;
-		int sgn = 0;
 
 		decimal F1 = 0., F2 = 0., T1 = 0., T2 = 0., FT = 0.;
 

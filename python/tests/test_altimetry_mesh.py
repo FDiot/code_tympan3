@@ -377,7 +377,7 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         self.assertIsInstance(vO, mesh.Vertex_handle)
         with self.assertRaises(InconsistentGeometricModel) as cm:
             self.mesher.update_info_for_vertices((vO,))
-        self.assertEqual(cm.exception.witness_point, (0.0, 0.0))
+        self.assertEqual(cm.exception.message, 'Intersecting constraints with different altitudes: {ids} at (0.0, -0.0)')
         self.assertCountEqual(cm.exception.ids, ["H", "V"])
 
     def test_vertices_info_set_from_input(self):

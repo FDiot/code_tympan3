@@ -30,7 +30,7 @@ public:
     /// Constructor with 3 index points of the array _vertices
     Triangle(unsigned int p1, unsigned int p2, unsigned int p3, std::vector<vec3>* _vertices, Material* _m, const bool& isSol = false);
     /// Constructor with 3 points
-    Triangle(vec3& p1, vec3& p2, vec3& p3, Material* m, const bool& isSol = false);
+    Triangle(const vec3& p1,const vec3& p2,const vec3& p3, Material* m, const bool& isSol = false);
     /// Copy constructor
     Triangle(const Triangle& other) : Shape(other)
     {

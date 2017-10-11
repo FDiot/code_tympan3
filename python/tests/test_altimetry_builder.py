@@ -211,7 +211,7 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             bmesh = mbuilder.build_mesh(refine=False)
         self.assertEqual(str(cm.exception),
                          "Intersecting constraints with different altitudes: "
-                         "['{Mainsite ref altitude}', '{Other level curve}']")
+                         "['{Mainsite ref altitude}', '{Other level curve}'] at (0.0, 0.33333333333333337)")
 
     def test_subsite_intersects_with_site(self):
         self.mainsite.drop_child(self.subsite)

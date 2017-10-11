@@ -457,3 +457,64 @@ void TYGeometryNode::setMatrix(const OMatrix& matrix)
     _repere.set(matrix);
     setIsGeometryModified(true);
 }
+
+void TYGeometryNode::setPosition(const OPoint3D& pos)
+{
+    ORepere3D repere = getORepere3D();
+    repere._origin._x = pos._x;
+    repere._origin._y = pos._y;
+    repere._origin._z = pos._z;
+    setRepere(repere);
+}
+
+void TYGeometryNode::setRotation(const OPoint3D& rot)
+{
+    OMatrix tyMat;
+    OMatrix tyMatTmpX;
+    OMatrix tyMatTmpY;
+    OMatrix tyMatTmpZ;
+    OMatrix tyMatTmpConcat;
+
+    // On applique la rotation
+    double dRotateX = rot._x;
+    double dRotateY = rot._y;
+    double dRotateZ = rot._z;
+
+    tyMatTmpX.setRotationOx(-DEGTORAD(dRotateX));
+    tyMatTmpY.setRotationOy(-DEGTORAD(dRotateY));
+    tyMatTmpZ.setRotationOz(DEGTORAD(dRotateZ));
+
+    tyMat = tyMat * tyMatTmpZ * tyMatTmpY * tyMatTmpX * tyMatTmpConcat;
+
+    OPoint3D org = _repere._origin; // On conserve l'origine de depart
+    _repere.set(tyMat);
+    _repere._origin = org;
+}
+
+OPoint3D TYGeometryNode::rotation()
+{
+    OMatrix mat = getMatrix();
+    // Get rotations from transform matrix
+    OPoint3D vec;
+    vec._x = mat._m[0][1];
+    vec._y = mat._m[1][1];
+    vec._z = mat._m[2][1];
+
+    // Get X-vector for roll calculation
+    OPoint3D xv;
+    xv._x = mat._m[0][0];
+    xv._y = mat._m[1][0];
+    xv._z = mat._m[2][0];
+
+    // Calculate PRH (x = pitch, y = roll, z = heading)
+    OPoint3D rotTmp(-atan2(vec._z, sqrt(vec._x * vec._x + vec._y * vec._y)), xv._z, -atan2(-vec._x, vec._y));
+
+    // Set up vars
+    double pitch = RADTODEG(rotTmp._x);     // Pitch
+    double yaw = -RADTODEG(rotTmp._z);       // Heading
+    double roll = RADTODEG(rotTmp._y);      // Roll
+
+    // Affiche la boite de dialogue
+    return OPoint3D(pitch, roll, yaw);
+}
+

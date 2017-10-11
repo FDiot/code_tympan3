@@ -521,7 +521,7 @@ bool TYMainWindow::loadSettings(const QString& fileName)
         if ((pObject->objectName() == "ProjetDockWnd")
             || (pObject->objectName() == "SiteDockWnd")
             || (pObject->objectName() == "OutputDockWnd")
-            || (pObject->metaObject()->className() == "QToolBar")
+            || (strcmp(pObject->metaObject()->className(),"QToolBar")==0)
             || (dynamic_cast<QToolBar*>(pObject) != nullptr))
         {
             pDockWnd = (QWidget*)pObject;
@@ -1812,7 +1812,7 @@ void TYMainWindow::closeEvent(QCloseEvent* pEvent)
         if ((pObject->objectName() == "ProjetDockWnd")
             || (pObject->objectName() == "SiteDockWnd")
             || (pObject->objectName() == "OutputDockWnd")
-            || (pObject->metaObject()->className() == "QToolBar")
+            || (strcmp(pObject->metaObject()->className(),"QToolBar")==0)
             || (dynamic_cast<QToolBar*>(pObject) != nullptr))
         {
 
