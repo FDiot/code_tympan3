@@ -597,6 +597,11 @@ cdef class Site:
         return tyelement_id(self.thisptr.getRealPointer())
 
     @property
+    def name(self):
+        """SiteNode name"""
+        return tyelement_name(self.thisptr.getRealPointer())
+
+    @property
     def subsites(self):
         """List of the site subsites as 'Site' cython objects"""
         subsite_geonodes = cy.declare(vector[SmartPtr[TYGeometryNode]],
@@ -1102,6 +1107,11 @@ cdef class MaterialArea:
         """The MaterialArea id"""
         return tyelement_id(self.thisptr)
 
+    @property
+    def name(self):
+        """The MaterialArea name"""
+        return tyelement_name(self.thisptr)
+
     def has_vegetation(self):
         """True if the material area has vegetation"""
         return self.thisptr.isVegetActive()
@@ -1144,6 +1154,11 @@ cdef class LevelCurve:
         """The LevelCurve id"""
         return tyelement_id(self.thisptr)
 
+    @property
+    def name(self):
+        """The LevelCurve name"""
+        return tyelement_name(self.thisptr)
+
 
 cdef class Lake:
     thisgeonodeptr = cy.declare(SmartPtr[TYGeometryNode])
@@ -1178,6 +1193,18 @@ cdef class Lake:
         cpp_points = cy.declare(
             vector[TYPoint], lev_curve.thisptr.getListPoints())
         return cpp2cypoints(cpp_points, self.matrix)
+
+	@property
+    def name(self):
+        """The Lake name"""
+        return tyelement_name(self.thisptr)
+
+    @property
+    def level_curve(self):
+        """The lake's level curve as a 'LevelCurve' cython object"""
+        lev_curve = LevelCurve()
+        lev_curve.thisptr = self.thisptr.getCrbNiv().getRealPointer()
+        return lev_curve
 
 
 cdef class Result:
