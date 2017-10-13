@@ -11,7 +11,7 @@ from tympan.models.project import Project
 from tympan.altimetry import AltimetryMesh
 from tympan.models.solver import Model, Solver
 from tympan.models._common import Spectrum
-from tympan.models._business import Element_array, Engine, Building
+from tympan.models._business import Element_array, Engine, Building, Site
 from tkinter import Toplevel, Label, Button
 
 # Environment variables
@@ -204,6 +204,7 @@ def ask_xml_file(message, object_type=""):
         Project.create()
         import_infra(filename, object_type)
     return filename
+
 
 def ask_input_file(message):
     """ Ask for an input file """
@@ -405,3 +406,38 @@ def compare_floats(x, y):
             else:
                 return 1
     return 0  # arrays are equal
+
+
+def list_sites(item):
+    """ Build recursively the list of sites """
+    sites = []
+    if isinstance(item, Project):
+        site = item.site
+    elif isinstance(item, Site):
+        site = item
+    else:
+        print("Error.")
+        sys.exit(-1)
+    sites.append(site)
+    for subsite in site.subsites:
+        sites.extend(list_sites(subsite))
+    return sites
+
+
+def build_dict(project):
+    """ Build dict to convert Id to name for acoustic sources """
+    dict_id_name = {}
+    # Loop on sites
+    for site in list_sites(project):
+        # Update dictionnary for punctual sources
+        for src in site.user_sources:
+            dict_id_name[src.getID] = src.name
+        # Update dictionnary for acoustic surfaces
+        for ac in site.acoustic_surfaces:
+            volume_name = ac.volume_name()
+            element_name = ac.element_name()
+            face_name = ac.surface_node_name()
+            if face_name is not None:
+                dict_id_name[ac.surface_node_id()] = element_name + "-" + volume_name + "-" + face_name
+            dict_id_name[ac.volume_id()] = element_name + "-" + volume_name
+    return dict_id_name

@@ -63,7 +63,11 @@ cdef tyelement_id(TYElement* elem):
 
 cdef tyelement_name(TYElement* elem):
     """The name of the element contained in the TYGeometryNode as a string"""
-    return elem.getName().toStdString().decode()
+    str = elem.getName().toStdString()
+    try:
+        return str.decode()
+    except UnicodeDecodeError:
+        return str.decode('cp1252')
 
 cdef cpp2cypoints(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
     """Build a list of 'Point3D' objects from the c++ 'TYPoint' objects
@@ -182,12 +186,24 @@ cdef class Element:
     def name(self):
         """The name of the element"""
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getName().toStdString().decode()
+        str = self.thisptr.getRealPointer().getName().toStdString()
+        try:
+            return str.decode()
+        except UnicodeDecodeError:
+            return str.decode('cp1252')
 
     def setName(self, name):
         """Set the name of the element"""
         assert self.thisptr.getRealPointer() != NULL
         self.thisptr.getRealPointer().setName(name.encode('utf-8'))
+
+    def getParent(self):
+        """Return element parent if any """
+        assert self.thisptr.getRealPointer() != NULL
+        cpp_elem = self.thisptr.getRealPointer().getParent()
+        elem = Element()
+        elem.thisptr = SmartPtr[TYElement](cpp_elem)
+        return elem
 
 cdef class Element_array:
     thisptr = cy.declare(vector[SmartPtr[TYElement]])
@@ -317,10 +333,25 @@ cdef class AcousticSurface:
         """
         return find_surface_node_name(self.thisptr)
 
+    def element_name(self):
+        """Return the infrastructure element name"""
+        elem = Element()
+        elem = self.getParent().getParent()
+        if self.surface_node_name() == None:
+            return elem.name
+        else:
+            return elem.getParent().name
+
     @property
     def getIsRayonnant(self):
         return self.thisptr.getIsRayonnant()
 
+    def getParent(self):
+        """Return element parent if any """
+        cpp_elem = self.thisptr.getParent()
+        elem = Element()
+        elem.thisptr = SmartPtr[TYElement](cpp_elem)
+        return elem
 
 cdef class Material:
 

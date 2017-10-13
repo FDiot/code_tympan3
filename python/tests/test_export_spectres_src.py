@@ -5,7 +5,8 @@ from utils import TympanTC
 
 from tympan.models.solver import Model
 from _util import compare_txt_results, run_calculations, TOOLBOX_DATA_DIR
-from export_spectres_src import main, calc_surf_spectrum, calc_vol_spectrum
+from export_spectres_src import main, calc_surf_spectrum
+
 
 class Test(TympanTC):
 
@@ -14,6 +15,10 @@ class Test(TympanTC):
         main("Projet_Machine_multiBoites.xml", "Spectres_sources")
         compare_txt_results("Spectres_sources_parSurface.txt", "ref_Spectres_sources_parSurface.txt")
         compare_txt_results("Spectres_sources_parVolume.txt", "ref_Spectres_sources_parVolume.txt")
+
+    def test_sub_site(self):
+        """ Check with a complex case, with sub-sites """
+        main("example_sous_site.xml", "example_sous_site")
 
     def test_global(self):
         """ Global test """
@@ -24,11 +29,11 @@ class Test(TympanTC):
         (src_spectrums, src_ids) = calc_surf_spectrum(list_src)
         # Check the spectrum are the sames:
         i = 0
-        for (val, id) in zip(src_spectrums, src_ids):
+        for val, _ in zip(src_spectrums, src_ids):
             np.testing.assert_array_equal(val, list_src[i].spectrum.values)
             i += 1
 
-if __name__ == '__main__':
-     os.chdir(os.path.join(TOOLBOX_DATA_DIR, 'Export_Spectres_Sources'))
-     unittest.main()
 
+if __name__ == '__main__':
+    os.chdir(os.path.join(TOOLBOX_DATA_DIR, 'Export_Spectres_Sources'))
+    unittest.main()
