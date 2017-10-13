@@ -378,6 +378,12 @@ cdef class Ground:
         return self.thisptr.getRealPointer().getResistivite()
 
     @property
+    def width(self):
+        """Ground width (floating point value)"""
+        assert self.thisptr.getRealPointer() != NULL
+        return self.thisptr.getRealPointer().getEpaisseur()
+
+    @property
     def deviation(self):
         """Ground deviation (floating point value)"""
         assert self.thisptr.getRealPointer() != NULL
@@ -517,6 +523,13 @@ cdef class Engine:
         assert self.thisgeonodeptr.getRealPointer() != NULL
         return self.thisgeonodeptr.getRealPointer().getHauteur()
 
+    @property
+    def sommets(self):
+        """The sequence of vertexes forming the engine ('Point3D' objects)
+        """
+        cpp_points = cy.declare(vector[TYPoint], self.thisptr.getRealPointer().sommets())
+        return cpp2cypoints(cpp_points)
+
 
 cdef class Building:
 
@@ -568,6 +581,13 @@ cdef class Building:
     @property
     def getIsRayonnant(self):
         return self.thisptr.getRealPointer().getIsRayonnant()
+
+    @property
+    def sommets(self):
+        """The sequence of vertexes forming the building ('Point3D' objects)
+        """
+        cpp_points = cy.declare(vector[TYPoint], self.thisptr.getRealPointer().sommets())
+        return cpp2cypoints(cpp_points)
 
 cdef class Site:
 
