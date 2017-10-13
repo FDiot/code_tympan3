@@ -1183,6 +1183,11 @@ cdef class Lake:
         return ground
 
     @property
+    def altitude(self):
+        """The altitude of the lake (float value)"""
+        return self.level_curve.altitude
+
+    @property
     def elem_id(self):
         """The Lake id"""
         return tyelement_id(self.thisptr)
