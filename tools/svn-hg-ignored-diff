@@ -1,0 +1,14 @@
+.hg
+.svn
+
+**.vcxproj*
+**.sln
+**.vcproj
+**Makefile.am
+
+**ANIME3DSolver**
+**SequentialDefaultSolver**
+**TestMeteo**
+**HarmonoiseSolver**
+**NMPBSolver**
+Tympan/MetierSolver/Raytracer**

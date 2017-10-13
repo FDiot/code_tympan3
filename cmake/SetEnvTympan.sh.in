@@ -1,0 +1,5 @@
+echo "Configuring environment to run Code_TYMPAN GUI and Python scripts"
+export LD_LIBRARY_PATH=@CMAKE_INSTALL_PREFIX@/lib:$LD_LIBRARY_PATH
+export PYTHONPATH=@CMAKE_INSTALL_PREFIX@/cython:$PYTHONPATH
+export CGAL_BINDINGS_PATH=@CMAKE_INSTALL_PREFIX@/cython/CGAL
+

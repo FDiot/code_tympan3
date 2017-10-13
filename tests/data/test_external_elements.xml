@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!DOCTYPE Tympan SYSTEM 'Tympan.dtd'>
+<Tympan>
+ <Version>3.9.0 - GNU GPL version 3 - http://www.gnu.org/licenses/gpl.html</Version>
+ <Projet id="{c5c9a71f-54b1-4823-a860-81270eedda99}" name="Projet 0">
+  <auteur></auteur>
+  <dateCreation>2001-10-01</dateCreation>
+  <dateModif>2001-10-01</dateModif>
+  <delaunayTolerence>0.0001</delaunayTolerence>
+  <distMaxBetweenPoints>100</distMaxBetweenPoints>
+  <useDefGeomVal>1</useDefGeomVal>
+  <currentCalculID>{bae7c770-872f-42de-b465-2d91bae879f2}</currentCalculID>
+  <SiteNode id="{e60771cf-1565-4ea7-9dda-c1e5f9268376}" name="Site 0">
+   <echelle>1</echelle>
+   <useEmpriseAsCrbNiv>0</useEmpriseAsCrbNiv>
+   <useTopoFile>0</useTopoFile>
+   <topoFile></topoFile>
+   <altiEmprise>0</altiEmprise>
+   <Segment id="{06f8da25-247b-40c7-866e-097893bda05b}" name="Segment 0">
+    <Color g="1" r="1" b="1"/>
+    <Point x="0.000" y="0.000" z="0.000"/>
+    <Point x="0.000" y="1.000" z="0.000"/>
+   </Segment>
+   <Point x="0.000" y="0.000" z="0.000"/>
+   <Topographie id="{e9c4f0d4-a0e6-40cf-b430-e978931d8560}" name="Topographie 0">
+    <Emprise>
+     <Point x="-200.000" y="200.000" z="0.000"/>
+     <Point x="200.000" y="200.000" z="0.000"/>
+     <Point x="200.000" y="-200.000" z="0.000"/>
+     <Point x="-200.000" y="-200.000" z="0.000"/>
+    </Emprise>
+    <ListCrbNiv/>
+    <ListTerrain>
+     <GeometryNode id="{41ffefa7-c43a-461b-9f0d-9efac36f3c37}" name="">
+      <hauteur>0.000</hauteur>
+      <Repere id="{7c187513-8adb-413d-b3de-e1cedd20e5bd}" name="Repère 0">
+       <Point x="0.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="1.000000000000" y="0.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="1.000000000000" z="0.000000000000"/>
+       <Vector x="0.000000000000" y="0.000000000000" z="1.000000000000"/>
+      </Repere>
+      <Terrain id="{e773424c-2206-489d-a594-1b26a7bbb15e}" name="Terrain par defaut">
+       <Color g="0.333333" r="0" b="0"/>
+       <Sol id="{4defe8fe-d538-482a-b952-cb2f85d000ff}" name="Sol 0">
+        <resistivite>20000</resistivite>
+        <epaisseur>1</epaisseur>
+        <active>0</active>
+        <miroir>0</miroir>
+       </Sol>
+       <nbPoints>0</nbPoints>
+      </Terrain>
+     </GeometryNode>
+    </ListTerrain>
+    <ListCrsEau/>
+    <ListPlanEau/>
+    <Altimetrie id="{89786120-c074-4597-bf83-bd2246ba4383}" name="Altimétrie 0"/>
+    <DefaultTerrain>0</DefaultTerrain>
+   </Topographie>
+   <Infrastructure id="{7080b6ad-ae85-41d3-9a39-f78a42edfd45}" name="Infrastructure 0">
+    <ListRoute>
+        <ExternalElement filename="external_road.xml"/>
+        <ExternalElement file="external_road.xml"/>
+    </ListRoute>
+    <ListResTrans/>
+    <ListBatiment>
+        <ExternalElement filename="external_buildings.xml"/>
+    </ListBatiment>
+    <ListMachine>
+        <ExternalElement filename="external_machine1.xml"/>
+        <ExternalElement filename="external_machine0.xml"/>
+        <ExternalElement filename="external_machine2.xml"/>
+    </ListMachine>
+    <ListSource/>
+   </Infrastructure>
+   <root>1</root>
+   <repere>0</repere>
+   <SIG_X>0</SIG_X>
+   <SIG_Y>0</SIG_Y>
+  </SiteNode>
+  <PointsControl>
+   <PointControl x="0.000" y="30.000" z="2.000" id="{758f17a1-4d8c-4531-8a4f-0ed879995c8e}" name="R1">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{d7a5598d-652e-4241-9ba5-6195c4724364}" name="Spectre 130915">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="0.000" y="40.000" z="2.000" id="{b28f5537-f7ce-45b7-94ee-6e1ac59b2876}" name="R2">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{e57b68f7-3b9d-4a33-abc8-ff772ff6cfa3}" name="Spectre 130916">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="0.000" y="60.000" z="2.000" id="{04579f5e-1cb9-48ad-a376-a16e3b56843b}" name="R3">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{721e4326-1685-4b9d-8152-1a7a37b740e0}" name="Spectre 130917">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="0.000" y="120.000" z="2.000" id="{716cc1a7-3d34-4234-8682-b3be674e8288}" name="R4">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{ab05e1c7-9da4-4649-97c4-26d8adaa086b}" name="Spectre 130918">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="30.000" y="0.000" z="2.000" id="{777dc834-db6b-4ab0-bc97-2f5954fcc1da}" name="R5">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{df900795-fb13-4503-8b7d-d822a103927b}" name="Spectre 130919">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="60.000" y="0.000" z="2.000" id="{eb2649d4-d0c0-4ae4-bfa5-6a6a3d17b9d4}" name="R6">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{da7c7b80-b1e1-4389-ad44-0c021065750d}" name="Spectre 130920">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="120.000" y="0.000" z="2.000" id="{4e0ba177-cd5e-4e82-8ca9-ba61a4b4cb76}" name="R7">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{dd0edf34-20ef-4204-ab7b-8a00a073df27}" name="Spectre 130921">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="-30.000" y="0.000" z="2.000" id="{d240802e-770b-4deb-a663-81f7291b2f49}" name="R8">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{c69ec46e-de84-43d2-b79d-63ebc960e6ee}" name="Spectre 130922">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="-60.000" y="0.000" z="2.000" id="{1964221f-6539-46fe-92d3-c55612fed5f3}" name="R9">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{60e35fe1-cec2-467f-a1ca-32324c55d49d}" name="Spectre 130923">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="-120.000" y="0.000" z="2.000" id="{40d23795-065b-4a3f-8bfb-29af33b73604}" name="R10">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{9c98af3c-9773-43c6-85b2-05ca116c9688}" name="Spectre 130924">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="0.000" y="-30.000" z="2.000" id="{3aa6b4f4-d398-44e6-91bc-89c668ab6502}" name="R11">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{c93de6dc-75bb-49c8-a960-f4ac0aaa79e4}" name="Spectre 130925">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="0.000" y="-40.000" z="2.000" id="{b061cf15-faa9-4104-bb4f-b962708bf10d}" name="R12">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{89bdf6ec-4c4a-4d40-be77-abe2dada32a1}" name="Spectre 130926">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="0.000" y="-60.000" z="2.000" id="{45fe3b96-31be-418a-8408-d53b8dce6f37}" name="R13">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{c58c15e2-11f4-4e94-8894-dea795874656}" name="Spectre 130927">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+   <PointControl x="0.000" y="-120.000" z="2.000" id="{f10b8905-4830-4e01-b9c4-bf8078fd0d7f}" name="R14">
+    <etatCalcul idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" Etat="1"/>
+    <Spectre idCalcul="{bae7c770-872f-42de-b465-2d91bae879f2}" id="{8ad9330f-21dc-4ba5-8a2e-cf00fbdf52bb}" name="Spectre 130928">
+     <type>3</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">-200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0 -200.0</freqTab>
+    </Spectre>
+    <Color g="0" r="0.333333" b="1"/>
+    <hauteur>2.000</hauteur>
+    <formeObjet>0</formeObjet>
+   </PointControl>
+  </PointsControl>
+  <Calcul isUpTodate="1" id="{bae7c770-872f-42de-b465-2d91bae879f2}" name="Calcul 0">
+   <numero>1</numero>
+   <auteur>Auteur</auteur>
+   <dateCreation>2001-10-01</dateCreation>
+   <dateModif>2001-10-01</dateModif>
+   <comment>Commentaire</comment>
+   <solverId>{a98b320c-44c4-47a9-b689-1dd352daa8b2}</solverId>
+   <etat>1</etat>
+   <expansGeo>0</expansGeo>
+   <useSol>1</useSol>
+   <typeCalculSol>0</typeCalculSol>
+   <condFav>0</condFav>
+   <useVegetation>0</useVegetation>
+   <useAtmosphere>1</useAtmosphere>
+   <useEcran>1</useEcran>
+   <calculTrajetHorizontaux>1</calculTrajetHorizontaux>
+   <useReflexion>0</useReflexion>
+   <interference>0</interference>
+   <h1>10</h1>
+   <distanceSRMin>0.3</distanceSRMin>
+   <freqMinSpectre>16</freqMinSpectre>
+   <freqMaxSpectre>16000</freqMaxSpectre>
+   <ListID>
+    <Element id="{e60771cf-1565-4ea7-9dda-c1e5f9268376}"/>
+    <Element id="{c5c9a71f-54b1-4823-a860-81270eedda99}"/>
+    <Element id="{7080b6ad-ae85-41d3-9a39-f78a42edfd45}"/>
+    <Element id="{ef1d46af-067a-4877-a0cf-d99672cf3986}"/>
+   </ListID>
+   <EmissionAccVolNodes/>
+   <RegimeAccNode/>
+   <Atmosphere id="{33876398-7d77-4e36-8897-c4137a751a2c}" name="Atmosphère 0">
+    <pression>101325</pression>
+    <temperature>20</temperature>
+    <hygrometrie>70</hygrometrie>
+    <vitVent>0</vitVent>
+    <dirVent>0</dirVent>
+    <A>0</A>
+    <B>0</B>
+    <C>5e-006</C>
+    <D>0</D>
+    <stability_class>0</stability_class>
+    <Spectre id="{adb815da-7b58-44cf-8bf2-10389dea729e}" name="Spectre 0">
+     <type>0</type>
+     <fMin>16</fMin>
+     <fMax>16000</fMax>
+     <freqTab form="0">0.00001 0.00001 0.00001 0.00002 0.00004 0.00006 0.00009 0.00014 0.00022 0.00034 0.00052 0.00078 0.00113 0.00160 0.00216 0.00280 0.00348 0.00419 0.00498 0.00592 0.00718 0.00902 0.01180 0.01613 0.02291 0.03358 0.05035 0.07662 0.11751 0.18053 0.27624</freqTab>
+    </Spectre>
+   </Atmosphere>
+   <Resultat id="{31c3c327-9c7b-407a-b8d4-40e2b56c2a7d}" name="Résultat 0">
+    <ListSources/>
+    <ListRecepteurs>
+     <Recepteur recId="{04579f5e-1cb9-48ad-a376-a16e3b56843b}" index="2"/>
+     <Recepteur recId="{758f17a1-4d8c-4531-8a4f-0ed879995c8e}" index="0"/>
+     <Recepteur recId="{b28f5537-f7ce-45b7-94ee-6e1ac59b2876}" index="1"/>
+     <Recepteur recId="{716cc1a7-3d34-4234-8682-b3be674e8288}" index="3"/>
+     <Recepteur recId="{777dc834-db6b-4ab0-bc97-2f5954fcc1da}" index="4"/>
+     <Recepteur recId="{eb2649d4-d0c0-4ae4-bfa5-6a6a3d17b9d4}" index="5"/>
+     <Recepteur recId="{4e0ba177-cd5e-4e82-8ca9-ba61a4b4cb76}" index="6"/>
+     <Recepteur recId="{d240802e-770b-4deb-a663-81f7291b2f49}" index="7"/>
+     <Recepteur recId="{1964221f-6539-46fe-92d3-c55612fed5f3}" index="8"/>
+     <Recepteur recId="{40d23795-065b-4a3f-8bfb-29af33b73604}" index="9"/>
+     <Recepteur recId="{3aa6b4f4-d398-44e6-91bc-89c668ab6502}" index="10"/>
+     <Recepteur recId="{b061cf15-faa9-4104-bb4f-b962708bf10d}" index="11"/>
+     <Recepteur recId="{45fe3b96-31be-418a-8408-d53b8dce6f37}" index="12"/>
+     <Recepteur recId="{f10b8905-4830-4e01-b9c4-bf8078fd0d7f}" index="13"/>
+    </ListRecepteurs>
+    <ListSpectres/>
+    <ListLw>
+     <SourceLw srcId="{ef1d46af-067a-4877-a0cf-d99672cf3986}">
+      <Spectre id="{bb84b899-ea1c-4ae5-aabf-5c2587607402}" name="Spectre 1704">
+       <type>2</type>
+       <fMin>16</fMin>
+       <fMax>16000</fMax>
+       <freqTab form="0">32.9 34.2 105.3 104.5 97.0 96.3 102.8 108.7 109.2 106.9 102.0 98.0 92.5 91.4 92.1 91.3 94.3 92.3 87.8 87.4 86.1 82.7 80.2 81.2 78.4 75.0 70.4 74.4 65.2 65.6 71.9</freqTab>
+      </Spectre>
+     </SourceLw>
+    </ListLw>
+   </Resultat>
+  </Calcul>
+ </Projet>
+</Tympan>
