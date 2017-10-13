@@ -69,7 +69,16 @@ cdef tyelement_name(TYElement* elem):
     except UnicodeDecodeError:
         return str.decode('cp1252')
 
-cdef cpp2cypoints(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
+cdef cpp2cypoints(vector[TYPoint] cpp_points):
+    """Build a list of 'Point3D' objects from the c++ 'TYPoint' objects
+    """
+    points = []
+    for i in xrange(cpp_points.size()):
+            cy_point = cy.declare(tycommon.Point3D, tycommon.opoint3d2point3d(cpp_points[i]))
+            points.append(cy_point)
+    return points
+
+cdef cpp2cypoints_global(vector[TYPoint] cpp_points, tycommon.OMatrix matrix):
     """Build a list of 'Point3D' objects from the c++ 'TYPoint' objects
 
     Convert them to a global scale with the transform matrix 'matrix'
@@ -798,7 +807,7 @@ cdef class Site:
         topo = cy.declare(cy.pointer(TYTopographie),
                           self.thisptr.getRealPointer().getTopographie().getRealPointer())
         cpp_points = cy.declare(vector[TYPoint], topo.getEmprise())
-        points = cpp2cypoints(cpp_points, self.matrix)
+        points = cpp2cypoints_global(cpp_points, self.matrix)
         cpp_lcurves = cy.declare(vector[SmartPtr[TYGeometryNode]], topo.getListCrbNiv())
         make_level_curve = self.thisptr.getRealPointer().getUseEmpriseAsCrbNiv()
         if make_level_curve or cpp_lcurves.empty():
@@ -1100,7 +1109,7 @@ cdef class MaterialArea:
         """The list of points delimiting the material area in a global scale"""
         # retrieve material area points
         cpp_points = cy.declare(vector[TYPoint], self.thisptr.getListPoints())
-        return cpp2cypoints(cpp_points, self.matrix)
+        return cpp2cypoints_global(cpp_points, self.matrix)
 
     @property
     def elem_id(self):
@@ -1140,7 +1149,7 @@ cdef class LevelCurve:
         """
         # retrieve level curve points
         cpp_points = cy.declare(vector[TYPoint], self.thisptr.getListPoints())
-        return cpp2cypoints(cpp_points, self.matrix)
+        return cpp2cypoints_global(cpp_points, self.matrix)
 
     @property
     def altitude(self):
