@@ -13,6 +13,7 @@ if sys.version_info[:2] <= (2, 7):
     sys.exit(-1)
 from tympan.models.solver import Model
 from _util import input_string, run_calculations, ask_xml_file
+from _util import list_sites, build_dict
 
 
 def write_results(valeurs, src_ids, dict_id_name, fichier_txt):
@@ -34,7 +35,7 @@ def write_results(valeurs, src_ids, dict_id_name, fichier_txt):
     # Convert IDs to Names:
     names = []
     for i in range(len(src_ids)):
-        names.append(dict_id_name[src_ids[i]])
+        names.append(dict_id_name[src_ids[i]] if src_ids[i] != "" else src_ids[i])
 
     # Create final array to be written in the txt file
     noms = np.array(names)[:, np.newaxis]
@@ -137,28 +138,30 @@ def main(fichier_xml, fichier_txt):
     list_src = model.sources
 
     # Build a dictionnary to convert ID to name
-    dict_id_name = {}
+    dict_id_name = build_dict(project)
 
     # Loop on acoustic surfaces to print infos
     print("----------------:")
     print("Punctual sources:")
     print("----------------:")
-    for src in project.site.user_sources:
-        print(src.name+" ID="+src.getID)
-        # Update dictionnary for punctual sources
-        dict_id_name[src.getID] = src.name
+    sites = list_sites(project)
+    for site in sites:
+        for src in site.user_sources:
+            print(src.name)
 
     print("")
     print("-----------------:")
     print("Acoustic surfaces:")
     print("-----------------:")
-    for ac in project.site.acoustic_surfaces:
-        face_name = ac.surface_node_name()
-        volume_name = ac.volume_name()
-        print("Face \""+face_name+"\" from volume \""+volume_name+"\" is", "radiant." if ac.getIsRayonnant else "non radiant.")
-        # Update dictionnary for acoustic surfaces:
-        dict_id_name[ac.volume_id()] = volume_name
-        dict_id_name[ac.surface_node_id()] = volume_name+" ("+face_name+")"
+    for site in sites:
+        for ac in site.acoustic_surfaces:
+            face_name = ac.surface_node_name()
+            ac_name = "Face \""+face_name+"\" of volume " if face_name is not None else "Volume "
+            volume_name = ac.volume_name()
+            ac_name += "\""+volume_name+"\""
+            element_name = ac.element_name()
+            ac_name += " from element \""+element_name+"\""
+            print(ac_name+" is","radiant." if ac.getIsRayonnant else "non radiant.")
 
     # Get spectrums from the different sources PER SURFACE
     (values_final, src_ids) = calc_surf_spectrum(list_src)
