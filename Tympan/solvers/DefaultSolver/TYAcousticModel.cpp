@@ -1178,10 +1178,10 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
         ray.maxt = 20000;
         std::list<Intersection> LI2;
         double distance = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray, LI2 ) );
-        assert(distance1 > 0.);
+        assert(distance > 0.);
         if (LI2.empty())
             break;
-        distance1 += distance;
+        distance2 += distance;
         indexFace = LI2.begin()->p->getPrimitiveId();
         }
 
