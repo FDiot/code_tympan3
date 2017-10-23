@@ -288,6 +288,7 @@ class AppRecSurf(tk.Tk):
 
             # Create xml file and save result
             output_xml = 'Resultat.xml'
+            self.project.to_xml(output_xml)
 
             # Set progress label to done (Terminé !)
             #self.labelProg.set(u"Terminé !")
