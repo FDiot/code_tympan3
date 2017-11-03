@@ -51,6 +51,20 @@ class Source(object):
         self.directivity = directivity
 
 
+class Receptor(object):
+    """An acoustic receptor.
+
+    Parameters
+    ----------
+
+    position : tuple
+        (x, y, z) coordinates
+    """
+
+    def __init__(self, position):
+        self.position = position
+
+
 class Model(object):
     """Model describing a site made of a mesh, sources, and receptors
 
@@ -80,8 +94,8 @@ class Model(object):
             source.position, source.spectrum_values, source.shift,
             source.directivity)
 
-    def add_receptor(self, x, y ,z):
-        return self._model.add_receptor(x, y, z)
+    def add_receptor(self, receptor):
+        return self._model.add_receptor(*receptor.position)
 
     def export_triangular_mesh(self):
         """Build a triangular mesh from the acoustic problem model

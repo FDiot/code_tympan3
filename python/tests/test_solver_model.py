@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_array_equal, assert_allclose
 
-from tympan.models.solver import Model, Solver, Source
+from tympan.models.solver import Model, Solver, Source, Receptor
 from tympan.models._solver import Directivity
 from tympan.models._common import Point3D
 from utils import TympanTC, TEST_SOLVERS_DIR
@@ -69,10 +69,10 @@ class SolverModelWithoutProjectTC(TympanTC):
 
     def test_add_receptor(self):
         model = Model()
-        coords = 0.7, 0.7, 0
-        model.add_receptor(*coords)
+        receptor = Receptor((0.7, 0.7, 0))
+        model.add_receptor(receptor)
         point = model.receptor(0).position
-        self.assertEqual((point.x, point.y, point.z), coords)
+        self.assertEqual((point.x, point.y, point.z), receptor.position)
 
     def test_add_source_spherical_directivity(self):
         model = Model()
