@@ -4,10 +4,13 @@ generated code to handle SolverConfiguration class
 
 import json
 import os
+from os import path
 
 
-_CONFIG_MODEL_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.pardir,
-                                  'resources', 'solver_config_datamodel.json')
+ROOT_DIR = path.join(path.dirname(path.abspath(__file__)), os.pardir)
+
+_CONFIG_MODEL_FILE = path.join(ROOT_DIR,
+                               'resources', 'solver_config_datamodel.json')
 with open(_CONFIG_MODEL_FILE) as stream:
     _CONFIG_MODEL = json.load(stream)
 _SOLVER_CONFIG_ATTRIBUTES = []
