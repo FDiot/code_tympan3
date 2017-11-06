@@ -14,7 +14,7 @@ _CONFIG_MODEL_FILE = path.join(ROOT_DIR,
 with open(_CONFIG_MODEL_FILE) as stream:
     _CONFIG_MODEL = json.load(stream)
 _SOLVER_CONFIG_ATTRIBUTES = []
-for options in _CONFIG_MODEL.itervalues():
+for options in _CONFIG_MODEL.values():
     for option in options:
         _SOLVER_CONFIG_ATTRIBUTES.append((options[option]['type'], option))
 
