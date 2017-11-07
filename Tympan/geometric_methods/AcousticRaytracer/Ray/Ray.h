@@ -106,8 +106,8 @@ public:
 
     /*!
      * \fn decimal computeTrueLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
-     * \brief	Compute ray length from source to the nearest point
-     *			of the "event" located at ref position
+     * \brief	Compute ray length from source to closestPoint
+	 *			ClosestPoint is the closest point from ref on the line between the position of the last event and lastPos
      * \param ref
      * \param lastPos
      * \param closestPoint
@@ -261,7 +261,7 @@ public:
     unsigned long long int constructId;         //!< Ray id
     unsigned int nbReflexion;                   //!< Reflections number for the ray
     unsigned int nbDiffraction;                 //!< Diffractions number for the ray
-    decimal cumulDistance;                      //!< Cumulative distance by the ray computed at each step
+    decimal cumulDistance;                      //!< Cumulative length (set to 0 after each reflexion event validation)
     decimal cumulDelta;                         //!< Cumulative walking step difference by the ray computed at each step
 };
 
