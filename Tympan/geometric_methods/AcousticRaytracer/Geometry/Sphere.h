@@ -33,7 +33,7 @@ public:
         position = vec3(pos);
         radius = r;
 
-        box = BBox(vec3(pos.x - r, pos.y - r, pos.z - r), vec3(pos.x + r, pos.y + r, pos.z + r));
+        setBBox();
     }
     /// Copy constructor from a pointed sphere
     Sphere(Sphere* other) : Shape(other)
@@ -63,11 +63,11 @@ public:
      */
     virtual bool getIntersection(Ray& ray, Intersection& inter);
     /// Set the radius of the sphere
-    void setRadius(decimal _radius) { radius = _radius; }
+    void setRadius(decimal _radius) { radius = _radius; setBBox();  }
     /// Get the radius of the sphere
     decimal getRadius() { return radius; }
     /// Set the center of the sphere
-    void setPosition(vec3& _position) { position = _position; }
+    void setPosition(const vec3& _position) { position = _position; setBBox(); }
     /// Get the position (center) of the sphere
     vec3 getPosition() { return position; }
     virtual int form() { return SPHERE; }
@@ -75,6 +75,10 @@ public:
 protected:
     vec3 position;	//!< Center of the sphere
     decimal radius;	//!< Radius of the sphere
+
+	void setBBox(){
+		box = BBox(vec3(position.x - radius, position.y - radius, position.z - radius), vec3(position.x + radius, position.y + radius, position.z + radius));
+	}
 
 };
 

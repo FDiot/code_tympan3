@@ -26,12 +26,11 @@ class Spectre
 
 public:
 	/// Default constructor
-    Spectre() { sizeSpectre = 0; }
+    Spectre() {freqs = std::vector< std::pair<int, decimal> >();}
     /// Copy constructor
     Spectre(const Spectre& other)
     {
-        sizeSpectre = other.sizeSpectre;
-        for (int i = 0; i < sizeSpectre; i++)
+		for (unsigned int i = 0; i < other.freqs.size() ; i++)
         {
             freqs.push_back(freqs.at(i));
         }
@@ -40,12 +39,12 @@ public:
     virtual ~Spectre() { }
 
     /// Get the size of the vector storing the spectrum
-    int getSizeSpectre() { return sizeSpectre; }
+	unsigned int getSizeSpectre() { return freqs.size(); }
 
     /// Return into a vector all the frequency values of the spectrum
     void getFrequencies(std::vector<int> &r)
     {
-        for (int i = 0; i < sizeSpectre; i++)
+        for (unsigned int i = 0; i < freqs.size(); i++)
         {
             r.push_back(freqs.at(i).first);
         }
@@ -53,15 +52,15 @@ public:
     /// Return into an array (sized before) all the frequency values of the spectrum
     void getFrequencies(int* r)
     {
-        for (int i = 0; i < sizeSpectre; i++)
+        for (unsigned int i = 0; i < freqs.size(); i++)
         {
             r[i] = freqs.at(i).first;
         }
     }
     /// Get a the ith frequency of the spectrum
-    int getFrequencie(int i)
+    int getFrequencie(unsigned int i)
     {
-        if (i < 0 || i >= sizeSpectre)
+        if (i < 0 || i >= freqs.size())
         {
             return -1;
         }
@@ -70,7 +69,7 @@ public:
     /// Return into a vector all the power values of the spectrum
     void getPowers(std::vector<decimal> &r)
     {
-        for (int i = 0; i < sizeSpectre; i++)
+        for (unsigned int i = 0; i < freqs.size(); i++)
         {
             r.push_back(freqs.at(i).second);
         }
@@ -78,15 +77,15 @@ public:
     /// Return into an array (sized before) all the power values of the spectrum
     void getPowers(decimal* r)
     {
-        for (int i = 0; i < sizeSpectre; i++)
+        for (unsigned int i = 0; i < freqs.size(); i++)
         {
             r[i] = freqs.at(i).second;
         }
     }
     /// Get the power for a frequency given by its index
-    decimal getPower(int i)
+    decimal getPower(unsigned int i)
     {
-        if (i < 0 || i >= sizeSpectre)
+        if (i < 0 || i >= freqs.size())
         {
             return -200.;
         }
@@ -98,8 +97,7 @@ public:
         freqs.push_back(std::pair<int, decimal>(freq, power));
     }
 
-protected:
-    int sizeSpectre;								//!< Size of the vector
+protected:							
     std::vector< std::pair<int, decimal> > freqs;	//!< Vector of pairs (Frequency,Power)
 };
 

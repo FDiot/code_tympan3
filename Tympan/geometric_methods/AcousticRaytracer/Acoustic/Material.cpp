@@ -31,7 +31,7 @@ unsigned int MaterialManager::registerNewMaterial(Material* m)
     {
         std::ostringstream num;
         num << counterKey;
-        m->getName() = "Material " + num.str();
+		m->setName("Material " + num.str());
     }
 
     m->id = counterKey;
