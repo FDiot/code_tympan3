@@ -89,7 +89,9 @@ cdef extern from "Tympan/models/common/spectre.h":
         bool operator!=(const OSpectre& other) const
         OSpectre toDB()
         OSpectre toGPhy()
+        TYSpectreType getType()
         void setType(TYSpectreType type)
+        TYSpectreEtat getEtat()
         void setEtat(TYSpectreEtat etat)
         double * getTabValReel()
         unsigned int getNbValues() const
