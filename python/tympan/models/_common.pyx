@@ -48,6 +48,9 @@ cdef class Spectrum:
         """Build a Spectrum instance from a constant `value`."""
         return cls(np.ones(31) * value)
 
+    def __len__(self):
+        return len(self.values)
+
     def __mul__(self, other):
         newvalues = self.values * other
         if newvalues is NotImplemented:
