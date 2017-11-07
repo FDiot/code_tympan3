@@ -43,6 +43,11 @@ cdef class Spectrum:
         #self.thisobj = OSpectre(&values[0], 31, 0)
         self.thisobj = OSpectre(<double *> values.data, 31, 0)
 
+    @classmethod
+    def constant(cls, value):
+        """Build a Spectrum instance from a constant `value`."""
+        return cls(np.ones(31) * value)
+
     @property
     def nvalues(self):
         """Number of values contained in the spectrum"""
