@@ -40,6 +40,8 @@ cdef class Spectrum:
         if values is None:
             return
         self.thisobj = OSpectre(<double *> values.data, len(values), 0)
+        self.thisobj.setEtat(SPECTRE_ETAT_DB)
+        self.thisobj.setType(SPECTRE_TYPE_LW)
 
     @classmethod
     def constant(cls, value):
