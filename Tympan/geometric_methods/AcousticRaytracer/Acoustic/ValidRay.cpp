@@ -68,6 +68,7 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
     return false;
 }
 
+//Computes distance between impact and last event/source and adds it tout the cumulDistance
 void ValidRay::computeCumulDistance(Ray *r, const vec3& impact)
 {
 	vec3 previousPos;
@@ -79,17 +80,25 @@ void ValidRay::computeCumulDistance(Ray *r, const vec3& impact)
 	{
 		previousPos = r->getSource()->getPosition();
 	}
-
 	r->cumulDistance += previousPos.distance(impact);
 }
 
+//Compute the length between last reflexion/source and 
 bool ValidRay::pathDiffValidationForReflection(Ray * r, const vec3& impact)
 {
-	vec3 origin = r->computeLocalOrigin( r->getLastPertinentEventOrSource(SPECULARREFLEXION) );
+	vec3 lastReflexionPos = r->computeLocalOrigin( r->getLastPertinentEventOrSource(SPECULARREFLEXION));
 	computeCumulDistance(r, impact);
 
-	// We compute the true path length difference between actual position and the last reflection or source
-	r->cumulDelta += ( r->cumulDistance - impact.distance(origin) );
+	// Compute difference between :
+	//    -  the distance between impact and the last event 
+	//		and
+	//    -  the distance between impact and the last reflexion
+	decimal delta= r->cumulDistance - impact.distance(lastReflexionPos);
+
+	//Add the difference to the cumulative delta
+	r->cumulDelta += delta ;
+
+	//Reset cumulDistance
 	r->cumulDistance = 0.;
 
 	return ( r->cumulDelta <= AcousticRaytracerConfiguration::get()->MaxPathDifference );
@@ -97,11 +106,17 @@ bool ValidRay::pathDiffValidationForReflection(Ray * r, const vec3& impact)
 
 bool ValidRay::pathDiffValidationForDiffraction(Ray *r, const vec3& impact)
 {
-	vec3 origin = r->computeLocalOrigin( r->getLastPertinentEventOrSource(SPECULARREFLEXION) );
+	vec3 lastReflexionPos = r->computeLocalOrigin( r->getLastPertinentEventOrSource(SPECULARREFLEXION) );
 	computeCumulDistance(r, impact);
 
-	// We compute the true path length difference between actual position and the last reflection or source
-	decimal currentCumulDelta = r->cumulDelta + ( r->cumulDistance - impact.distance(origin) );
+	// Compute difference between :
+	//    -  the distance between impact and the last event 
+	//		and
+	//    -  the distance between impact and the last reflexion
+	decimal delta= r->cumulDistance - impact.distance(lastReflexionPos);
+
+	//Sum of cumulDelta and delta (Note: cumulDelta is not modified)
+	decimal currentCumulDelta = r->cumulDelta + delta;
 
 	return ( currentCumulDelta <= AcousticRaytracerConfiguration::get()->MaxPathDifference );
 }

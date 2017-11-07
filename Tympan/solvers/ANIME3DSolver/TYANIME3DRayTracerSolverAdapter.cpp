@@ -62,7 +62,7 @@ bool TYANIME3DRayTracerSolverAdapter::valideIntersection(Ray* r, Intersection* i
 
     bool isValid = false;
 
-    // cas d'un triangle (sol)
+    // cas d'un triangle
     if ( ( inter->forme == TRIANGLE ) &&
 		 ( r->nbReflexion < static_cast<unsigned int>(config->MaxReflexion) ) &&
 		 !( !config->UseSol && inter->p->isSol() ) )
