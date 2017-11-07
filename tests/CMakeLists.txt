@@ -65,8 +65,7 @@ if(NOT TYMPAN_USE_NMPB2008)
 endif()
 # Need specific handling, see below
 list(REMOVE_ITEM TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_gui_bdtopoimporter.cpp)
-# XXX doesn't compile
-list(REMOVE_ITEM TESTS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/test_acousticraytracer_ray.cpp)
+
 # Main loop for all CPP test files.
 foreach (testfile ${TESTS_SRC})
     get_filename_component (basename ${testfile} NAME_WE)
