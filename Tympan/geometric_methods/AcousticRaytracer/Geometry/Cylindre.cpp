@@ -16,23 +16,6 @@
 #include "Cylindre.h"
 #include "Triangle.h"
 
-//	   	     /|
-//	    X   / |
-//	    |  /p1|	
-//	    | /   |
-//    .-|/.   |
-//   '._|\.'  |
-//   |  | \| /
-//   |  |  \/
-//   |  |  /\
-//   |  | /| \
-//   |.-|/_|__\__________Y   
-//   './_\.'   |
-//	  /	  \    |
-// 	 /	   \   |
-//  /	    \p2|
-// Z	     \ |
-// 			  \|
 
 Cylindre::Cylindre(Shape* _p1, Shape* _p2 , std::vector<vec3>* _vertices, unsigned int v1, unsigned int v2, decimal _epaisseur) :
     Shape(std::string("unknown cylindre"))
