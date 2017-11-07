@@ -100,17 +100,15 @@ void TYDirectivityWidget::showContextMenu(const QPoint& pos)
     {
         int row = _table->row(item);
         QMenu* pMenu = new QMenu(this);
-        QAction* pAddAction = pMenu->addAction(TR("id_add"));
-
-        QAction* pDelAction = NULL;
+        pMenu->addAction(TR("id_add"));
 
         if (row >= 0)
         {
             pMenu->addSeparator();
-            pDelAction = pMenu->addAction(TR("id_del"));
+            pMenu->addAction(TR("id_del"));
         }
 
-        QAction* pRet = pMenu->exec(pos);
+        pMenu->exec(pos);
     }
 }
 

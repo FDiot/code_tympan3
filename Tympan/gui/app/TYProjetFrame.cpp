@@ -265,7 +265,6 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
             QAction* delCalcul = NULL;
             QAction* addCalcul = NULL;
             QAction* remPtControl = NULL;
-            QAction* duplicatePtControl = NULL;
             QAction* highlight = NULL;  // DTn 20110215
             QAction* remMaillage = NULL;
             QAction* changeSiteRoot = NULL;
@@ -358,8 +357,6 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                     pMenu->addSeparator();
                 }
 
-                duplicatePtControl = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_duplicate"))), TR("id_contextmenu_dupptcontrol"));
-                pMenu->addSeparator();
                 remPtControl = pMenu->addAction(QIcon(QPixmap(IMG("id_icon_del"))), TR("id_contextmenu_remptcontrol"));
                 pMenu->addSeparator();
             }
@@ -418,22 +415,6 @@ void TYProjetFrame::contextMenuEvent(QContextMenuEvent* e)
                             updateList();
                             TYElement::setIsSavedOk(true);
                         }
-                    }
-                }
-                else if (ret == duplicatePtControl)
-                {
-                    TYPointControl* pPointCtrl = dynamic_cast<TYPointControl*>(
-                            eltItem->getElement()._pObj);
-                    if (pPointCtrl != nullptr)
-                    {
-                        TYPointControl* pPoint = _pProjet->duplicatePointControl(pPointCtrl);
-                        if (pPoint)
-                        {
-                            pPoint->edit();
-                            getTYApp()->getCalculManager()->askForResetResultat();
-                        }
-
-                        updateList();
                     }
                 }
                 else if (ret == highlight)

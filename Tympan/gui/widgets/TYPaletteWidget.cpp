@@ -55,9 +55,9 @@
 TYPaletteWidget::TYPaletteWidget(TYPalette* pElement, QWidget* _pParent /*=NULL*/)
     : TYWidget(pElement, _pParent, NULL, Qt::Dialog)
 {
-
+#ifndef NDEBUG
     bool ok;
-
+#endif
     resize(500, 800);
     setWindowTitle(TR("id_caption"));
     _paletteLayout = new QVBoxLayout();
@@ -82,8 +82,10 @@ TYPaletteWidget::TYPaletteWidget(TYPalette* pElement, QWidget* _pParent /*=NULL*
     // NB The internal layout of the pGroupBoxPreview is set by TYLabeledLookupTableWidget()
     p_previewWidget =  new TYLabeledLookupTableWidget(getElement(), pGroupBoxPreview);
     _paletteLayout->addWidget(pGroupBoxPreview);
-
-    ok = QObject::connect(_editor, SIGNAL(paletteChanged(const TYPalette*)), p_previewWidget, SLOT(update(const TYPalette*)));
+#ifndef NDEBUG
+    ok =
+#endif
+    QObject::connect(_editor, SIGNAL(paletteChanged(const TYPalette*)), p_previewWidget, SLOT(update(const TYPalette*)));
     assert(ok);
 
     // SAVE/LOAD/RESET
@@ -249,8 +251,7 @@ void TYPaletteWidget::savePalette()
 /* --------------- class PaletteModel --------------- */
 
 PaletteModel::PaletteModel(TYPalette* p_palette_, QObject* parent):
-    p_palette(p_palette_),
-    QAbstractTableModel(parent) {}
+    QAbstractTableModel(parent), p_palette(p_palette_) {}
 
 PaletteModel::~PaletteModel() {}
 
@@ -453,8 +454,12 @@ void PaletteModel::deleteSelectedRows()
     {
         beginRemoveRows(QModelIndex(), r, r);
         TYPalette::values_type value = p_palette->getValueFromIndex(r);
+#ifndef NDEBUG
         bool ok = p_palette->removeValue(value);
         assert(ok && "This value must be valid");
+#else
+        p_palette->removeValue(value);
+#endif  
         endRemoveRows();
     }
     checked_rows.clear();
@@ -497,14 +502,20 @@ QWidget* PaletteColorDelegate::createEditor(QWidget* parent, const QStyleOptionV
 
 void PaletteColorDelegate::setEditorData(QWidget* editor, const QModelIndex& index) const
 {
+#ifndef NDEBUG
     bool ok;
+#endif
+    
     QColor qcolor = index.model()->data(index, Qt::BackgroundColorRole).value<QColor>();
     QPalette p = editor->palette();
     p.setColor(QPalette::Window, qcolor);
     p.setColor(QPalette::Base, qcolor);
     QColorDialog* dialog = new QColorDialog(editor);
     dialog->setCurrentColor(qcolor);
-    ok = QObject::connect(dialog, SIGNAL(finished(int)), this, SLOT(validateColor()));
+#ifndef NDEBUG
+    ok =
+#endif
+    QObject::connect(dialog, SIGNAL(finished(int)), this, SLOT(validateColor()));
     assert(ok && "Connection failed for validateColor()");
     dialog->show();
 }
@@ -577,16 +588,18 @@ void PaletteValueDelegate::setModelData(QWidget* editor, QAbstractItemModel* mod
 
 PaletteEditor::PaletteEditor(TYPalette* palette_, QWidget* parent) :
     QFrame(parent),
-    p_palette(palette_),
-    p_model(new PaletteModel(p_palette, this)),
     newNoiseLevelSpin(NULL),
     newNoiseLevelButton(NULL),
     deleteNoiseLevelButton(NULL),
+    p_palette(palette_),
     p_table(NULL),
     color_delegate(this),
-    value_delegate(this)
+    value_delegate(this),
+    p_model(new PaletteModel(p_palette, this))
 {
+#ifndef NDEBUG
     bool ok;
+#endif
 
     QVBoxLayout* main_layout = new QVBoxLayout(this);
     QFrame* hframe = new QFrame();
@@ -603,14 +616,20 @@ PaletteEditor::PaletteEditor(TYPalette* palette_, QWidget* parent) :
 
     newNoiseLevelButton = new QPushButton();
     newNoiseLevelButton->setText(TR("id_newentry"));
-    ok = QObject::connect(newNoiseLevelButton, SIGNAL(pressed()), this, SLOT(addNoiseLevel()));
+#ifndef NDEBUG
+    ok =
+#endif
+    QObject::connect(newNoiseLevelButton, SIGNAL(pressed()), this, SLOT(addNoiseLevel()));
     assert(ok && "Connection failed for addNoiseLevel");
     addEntryLayout->addWidget(newNoiseLevelButton, 1);
 
 
     deleteNoiseLevelButton = new QPushButton();
     deleteNoiseLevelButton->setText(TR("id_delete_sel"));
-    ok = QObject::connect(deleteNoiseLevelButton, SIGNAL(pressed()), this, SLOT(deleteNoiseLevels()));
+#ifndef NDEBUG
+    ok =
+#endif
+    QObject::connect(deleteNoiseLevelButton, SIGNAL(pressed()), this, SLOT(deleteNoiseLevels()));
     assert(ok && "Connection failed for addNoiseLevel");
     addEntryLayout->addWidget(deleteNoiseLevelButton, 1);
 
@@ -620,7 +639,10 @@ PaletteEditor::PaletteEditor(TYPalette* palette_, QWidget* parent) :
     p_table->setItemDelegateForColumn(0, &value_delegate);
     p_table->setItemDelegateForColumn(1, &color_delegate);
 
-    ok = connect(p_model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(propagateModelChanges(const QModelIndex&, const QModelIndex&)));
+#ifndef NDEBUG
+    ok =
+#endif
+    connect(p_model, SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)), this, SLOT(propagateModelChanges(const QModelIndex&, const QModelIndex&)));
     assert(ok && "Connection failed for slot propagateModelChanges");
 }
 

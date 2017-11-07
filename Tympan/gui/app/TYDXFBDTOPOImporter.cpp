@@ -59,7 +59,9 @@ bool TYDXFBDTopoImporter::import(const char* FullBDDPath, LPTYSiteNode* pSiteIn)
     //const bool bTestAltimetrieBDTOPO = false;
 
     const int nMaxCourbeNiveau = 2000000;
+#if WITH_NMPB
     const int nMaxRoutes = 2000000;
+#endif
     const int nMaxCoursEau = 2000000;
     const int nMaxReseauTransportNRJ = 2000000;
     const int nMaxPlanEau = 2000000;
@@ -198,8 +200,8 @@ void TYDXFBDTopoImporter::importIsoline(int nMaxCourbeNiveau, const dimeModel mo
             {
                 LPTYCourbeNiveau pCrbNiv = new TYCourbeNiveau();
                 nNbItem++;
-                int l = 0;
-                for (l; l < (int)ptsOut.size(); ++l)
+                int l;
+                for (l=0; l < (int)ptsOut.size(); ++l)
                 {
                     pCrbNiv->addPoint(ptsOut.at(l));
                 }

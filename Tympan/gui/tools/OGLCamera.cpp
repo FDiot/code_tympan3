@@ -225,7 +225,7 @@ void OGLCamera::moveRight()
 
 void OGLCamera::rotateUpLockSrc()
 {
-    if (!modeLockUpDown || currentUpDown + stepAngleUpDown <= maxUpDown && (currentUpDown += stepAngleUpDown))
+    if (!modeLockUpDown || (currentUpDown + stepAngleUpDown <= maxUpDown && (currentUpDown += stepAngleUpDown)))
     {
         up.rotate(-sinUpDown, cosUpDown, left);
         front.rotate(left);
@@ -236,7 +236,7 @@ void OGLCamera::rotateUpLockSrc()
 }
 void OGLCamera::rotateDownLockSrc()
 {
-    if (!modeLockUpDown || currentUpDown - stepAngleUpDown >= minUpDown && (currentUpDown -= stepAngleUpDown))
+    if (!modeLockUpDown || (currentUpDown - stepAngleUpDown >= minUpDown && (currentUpDown -= stepAngleUpDown)))
     {
         up.rotate(sinUpDown, cosUpDown, left);
         front.rotate(left);
@@ -247,7 +247,7 @@ void OGLCamera::rotateDownLockSrc()
 }
 void OGLCamera::rotateUpLockSrcKeepUpAndFront()
 {
-    if (!modeLockUpDown || currentUpDown + stepAngleUpDown <= maxUpDown && (currentUpDown += stepAngleUpDown))
+    if (!modeLockUpDown || (currentUpDown + stepAngleUpDown <= maxUpDown && (currentUpDown += stepAngleUpDown)))
     {
         fromTo.rotate(-sinUpDown, cosUpDown, left);
         to = from + fromTo;
@@ -255,7 +255,7 @@ void OGLCamera::rotateUpLockSrcKeepUpAndFront()
 }
 void OGLCamera::rotateDownLockSrcKeepUpAndFront()
 {
-    if (!modeLockUpDown || currentUpDown - stepAngleUpDown >= minUpDown && (currentUpDown -= stepAngleUpDown))
+    if (!modeLockUpDown || (currentUpDown - stepAngleUpDown >= minUpDown && (currentUpDown -= stepAngleUpDown)))
     {
         fromTo.rotate(sinUpDown, cosUpDown, left);
         to = from + fromTo;
@@ -264,7 +264,7 @@ void OGLCamera::rotateDownLockSrcKeepUpAndFront()
 
 void OGLCamera::rotateLeftLockSrc()
 {
-    if (!modeLockLeftRight || currentLeftRight + stepAngleLeftRight <= maxLeftRight && (currentLeftRight += stepAngleLeftRight))
+    if (!modeLockLeftRight || (currentLeftRight + stepAngleLeftRight <= maxLeftRight && (currentLeftRight += stepAngleLeftRight)))
     {
         left.rotate(sinLeftRight, cosLeftRight, up);
         front.rotate(up);
@@ -276,7 +276,7 @@ void OGLCamera::rotateLeftLockSrc()
 
 void OGLCamera::rotateRightLockSrc()
 {
-    if (!modeLockLeftRight || currentLeftRight - stepAngleLeftRight >= minLeftRight && (currentLeftRight -= stepAngleLeftRight))
+    if (!modeLockLeftRight || (currentLeftRight - stepAngleLeftRight >= minLeftRight && (currentLeftRight -= stepAngleLeftRight)))
     {
         left.rotate(-sinLeftRight, cosLeftRight, up);
         front.rotate(up);
@@ -288,7 +288,7 @@ void OGLCamera::rotateRightLockSrc()
 
 void OGLCamera::rotateUpLockDst()
 {
-    if (!modeLockUpDown || currentUpDown + stepAngleUpDown <= maxUpDown && (currentUpDown += stepAngleUpDown))
+    if (!modeLockUpDown || (currentUpDown + stepAngleUpDown <= maxUpDown && (currentUpDown += stepAngleUpDown)))
     {
         up.rotate(-sinUpDown, cosUpDown, left);
         front.rotate(left);
@@ -299,7 +299,7 @@ void OGLCamera::rotateUpLockDst()
 }
 void OGLCamera::rotateDownLockDst()
 {
-    if (!modeLockUpDown || currentUpDown - stepAngleUpDown >= minUpDown && (currentUpDown -= stepAngleUpDown))
+    if (!modeLockUpDown || (currentUpDown - stepAngleUpDown >= minUpDown && (currentUpDown -= stepAngleUpDown)))
     {
         up.rotate(sinUpDown, cosUpDown, left);
         front.rotate(left);
@@ -311,7 +311,7 @@ void OGLCamera::rotateDownLockDst()
 
 void OGLCamera::rotateLeftLockDst()
 {
-    if (!modeLockLeftRight || currentLeftRight + stepAngleLeftRight <= maxLeftRight && (currentLeftRight += stepAngleLeftRight))
+    if (!modeLockLeftRight || (currentLeftRight + stepAngleLeftRight <= maxLeftRight && (currentLeftRight += stepAngleLeftRight)))
     {
         left.rotate(sinLeftRight, cosLeftRight, up);
         front.rotate(up);
@@ -323,7 +323,7 @@ void OGLCamera::rotateLeftLockDst()
 
 void OGLCamera::rotateRightLockDst()
 {
-    if (!modeLockLeftRight || currentLeftRight - stepAngleLeftRight >= minLeftRight && (currentLeftRight -= stepAngleLeftRight))
+    if (!modeLockLeftRight || (currentLeftRight - stepAngleLeftRight >= minLeftRight && (currentLeftRight -= stepAngleLeftRight)))
     {
         left.rotate(-sinLeftRight, cosLeftRight, up);
         front.rotate(up);
@@ -335,7 +335,7 @@ void OGLCamera::rotateRightLockDst()
 
 void OGLCamera::rotateSideLeft()
 {
-    if (!modeLockSide || currentSide + stepAngleSide <= maxSide && (currentSide += stepAngleSide))
+    if (!modeLockSide || (currentSide + stepAngleSide <= maxSide && (currentSide += stepAngleSide)))
     {
         up.rotate(sinSide, cosSide, front);
         left.rotate(front);
@@ -345,7 +345,7 @@ void OGLCamera::rotateSideLeft()
 
 void OGLCamera::rotateSideRight()
 {
-    if (!modeLockSide || currentSide - stepAngleSide >= minSide && (currentSide -= stepAngleSide))
+    if (!modeLockSide || (currentSide - stepAngleSide >= minSide && (currentSide -= stepAngleSide)))
     {
         up.rotate(-sinSide, cosSide, front);
         left.rotate(front);
@@ -391,7 +391,7 @@ void OGLCamera::moveRight(NxReal _distance)
 
 void OGLCamera::rotateUpLockSrc(NxReal _angle)
 {
-    if (!modeLockUpDown || currentUpDown + _angle <= maxUpDown && (currentUpDown += _angle))
+    if (!modeLockUpDown || (currentUpDown + _angle <= maxUpDown && (currentUpDown += _angle)))
     {
         up.rotate(-_angle, left);
         front.rotate(left);
@@ -402,7 +402,7 @@ void OGLCamera::rotateUpLockSrc(NxReal _angle)
 }
 void OGLCamera::rotateUpLockDst(NxReal _angle)
 {
-    if (!modeLockUpDown || currentUpDown + _angle <= maxUpDown && (currentUpDown += _angle))
+    if (!modeLockUpDown || (currentUpDown + _angle <= maxUpDown && (currentUpDown += _angle)))
     {
         up.rotate(-_angle, left);
         front.rotate(left);
@@ -413,7 +413,7 @@ void OGLCamera::rotateUpLockDst(NxReal _angle)
 }
 void OGLCamera::rotateDownLockSrc(NxReal _angle)
 {
-    if (!modeLockUpDown || currentUpDown - _angle >= minUpDown && (currentUpDown -= _angle))
+    if (!modeLockUpDown || (currentUpDown - _angle >= minUpDown && (currentUpDown -= _angle)))
     {
         up.rotate(_angle, left);
         front.rotate(left);
@@ -425,7 +425,7 @@ void OGLCamera::rotateDownLockSrc(NxReal _angle)
 
 void OGLCamera::rotateUpLockSrcKeepUpAndFront(NxReal _angle)
 {
-    if (!modeLockUpDown || currentUpDown + _angle <= maxUpDown && (currentUpDown += _angle))
+    if (!modeLockUpDown || (currentUpDown + _angle <= maxUpDown && (currentUpDown += _angle)))
     {
         fromTo.rotate(-_angle, left);
         to = from + fromTo;
@@ -434,7 +434,7 @@ void OGLCamera::rotateUpLockSrcKeepUpAndFront(NxReal _angle)
 
 void OGLCamera::rotateDownLockSrcKeepUpAndFront(NxReal _angle)
 {
-    if (!modeLockUpDown || currentUpDown - _angle >= minUpDown && (currentUpDown -= _angle))
+    if (!modeLockUpDown || (currentUpDown - _angle >= minUpDown && (currentUpDown -= _angle)))
     {
         fromTo.rotate(_angle, left);
         to = from + fromTo;
@@ -443,7 +443,7 @@ void OGLCamera::rotateDownLockSrcKeepUpAndFront(NxReal _angle)
 
 void OGLCamera::rotateLeftLockSrc(NxReal _angle)
 {
-    if (!modeLockLeftRight || currentLeftRight + _angle <= maxLeftRight && (currentLeftRight += _angle))
+    if (!modeLockLeftRight || (currentLeftRight + _angle <= maxLeftRight && (currentLeftRight += _angle)))
     {
         left.rotate(_angle, up);
         front.rotate(up);
@@ -455,7 +455,7 @@ void OGLCamera::rotateLeftLockSrc(NxReal _angle)
 
 void OGLCamera::rotateRightLockSrc(NxReal _angle)
 {
-    if (!modeLockLeftRight || currentLeftRight - _angle >= minLeftRight && (currentLeftRight -= _angle))
+    if (!modeLockLeftRight || (currentLeftRight - _angle >= minLeftRight && (currentLeftRight -= _angle)))
     {
         left.rotate(-_angle, up);
         front.rotate(up);
@@ -469,7 +469,7 @@ void OGLCamera::rotateRightLockSrc(NxReal _angle)
 
 void OGLCamera::rotateDownLockDst(NxReal _angle)
 {
-    if (!modeLockUpDown || currentUpDown - _angle >= minUpDown && (currentUpDown -= _angle))
+    if (!modeLockUpDown || (currentUpDown - _angle >= minUpDown && (currentUpDown -= _angle)))
     {
         up.rotate(_angle, left);
         front.rotate(left);
@@ -481,7 +481,7 @@ void OGLCamera::rotateDownLockDst(NxReal _angle)
 
 void OGLCamera::rotateLeftLockDst(NxReal _angle)
 {
-    if (!modeLockLeftRight || currentLeftRight + _angle <= maxLeftRight && (currentLeftRight += _angle))
+    if (!modeLockLeftRight || (currentLeftRight + _angle <= maxLeftRight && (currentLeftRight += _angle)))
     {
         left.rotate(_angle, up);
         front.rotate(up);
@@ -493,7 +493,7 @@ void OGLCamera::rotateLeftLockDst(NxReal _angle)
 
 void OGLCamera::rotateRightLockDst(NxReal _angle)
 {
-    if (!modeLockLeftRight || currentLeftRight - _angle >= minLeftRight && (currentLeftRight -= _angle))
+    if (!modeLockLeftRight || (currentLeftRight - _angle >= minLeftRight && (currentLeftRight -= _angle)))
     {
         left.rotate(-_angle, up);
         front.rotate(up);
@@ -505,7 +505,7 @@ void OGLCamera::rotateRightLockDst(NxReal _angle)
 
 void OGLCamera::rotateSideLeft(NxReal _angle)
 {
-    if (!modeLockSide || currentSide + _angle <= maxSide && (currentSide += _angle))
+    if (!modeLockSide || (currentSide + _angle <= maxSide && (currentSide += _angle)))
     {
         up.rotate(_angle, front);
         left.rotate(front);
@@ -515,7 +515,7 @@ void OGLCamera::rotateSideLeft(NxReal _angle)
 
 void OGLCamera::rotateSideRight(NxReal _angle)
 {
-    if (!modeLockSide || currentSide - _angle >= minSide && (currentSide -= _angle))
+    if (!modeLockSide || (currentSide - _angle >= minSide && (currentSide -= _angle)))
     {
         up.rotate(-_angle, front);
         left.rotate(front);
@@ -669,7 +669,7 @@ void OGLCamera::calculateStepVectors()
         flyFrom = from + m_translate;
         flyFromTo = flyTo - flyFrom;
         flyUp = up;// + m_translate;
-        NxVec3 elevationVector = flyUp.cross(flyFromTo);
+        flyUp.cross(flyFromTo);
         flyFront = NxVec3(flyTo - flyFrom, true);
 
         flyLeft.cross(flyUp, flyFront, true);
@@ -701,7 +701,7 @@ NxVec3 OGLCamera::displayToWorld(NxVec3 display)
     winX = (float)display.x;
     winY = (float)display.y;
     winZ = (float)display.z;
-    GLint result = gluUnProject(winX, winY, winZ, mvmatrix, projmatrix, viewport, &retValue.x, &retValue.y, &retValue.z);
+    gluUnProject(winX, winY, winZ, mvmatrix, projmatrix, viewport, &retValue.x, &retValue.y, &retValue.z);
 
     return retValue;
 }
@@ -717,7 +717,7 @@ NxVec3 OGLCamera::worldToDisplay(NxVec3 world)
     glGetDoublev(GL_MODELVIEW_MATRIX, mvmatrix);
     glGetDoublev(GL_PROJECTION_MATRIX, projmatrix);
     glGetIntegerv(GL_VIEWPORT, viewport);
-    GLint result = gluProject(world.x, world.y, world.z, mvmatrix, projmatrix, viewport, &retValue.x, &retValue.y, &retValue.z);
+    gluProject(world.x, world.y, world.z, mvmatrix, projmatrix, viewport, &retValue.x, &retValue.y, &retValue.z);
 
     return retValue;
 }

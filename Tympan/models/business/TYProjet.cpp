@@ -332,6 +332,12 @@ int TYProjet::fromXML(DOM_Element domElement)
     if (!bCurrentCalculFound && (_listCalcul.size() > 0)) { setCurrentCalcul(_listCalcul[0]); }
 
     if (readOk == -1) { return readOk; }
+
+	// A REVOIR _pElement ne devrait pas renvoyer le projet dans showsources/TYModelerFrame...
+	if (_pSite)
+    {
+		_pSite->update(_pSite);
+    }
     return 1;
 }
 
@@ -466,7 +472,6 @@ void TYProjet::setCurrentCalcul(LPTYCalcul pCurCalcul)
     assert(pCurCalcul);
 
     // On test si le calcul est present dans la liste
-    bool present = false;
 
     // Statut solveur ok par defaut
     _bStatusSolver = true;
@@ -553,7 +558,7 @@ bool TYProjet::updateAltiRecepteurs(const TYAltimetrie* pAlti)
         // XXX See ticket https://extranet.logilab.fr/ticket/1484180
         // The coordinates of the problematic point need to be properly reported
         // or idealy an exception should be thrown.
-        modified &= updateAltiPointControle(getPointControl(i), pAlti);
+        modified = updateAltiPointControle(getPointControl(i), pAlti);
     }
 
     // XXX See ticket https://extranet.logilab.fr/ticket/1484180:
@@ -647,7 +652,7 @@ void TYProjet::verifGeometricParam()
 {
 
     _delaunayTolerance = _delaunayTolerance <= 0.0 ? 0.0001 : _delaunayTolerance;
-    _delaunayTolerance > 0.05 ? 0.05 : _delaunayTolerance;
+    _delaunayTolerance = _delaunayTolerance > 0.05 ? 0.05 : _delaunayTolerance;
     _maxDistBetweenPoints = _maxDistBetweenPoints < 1.0 ? 1.0 : _maxDistBetweenPoints;
 
     TYCourbeNiveau::setDefaultDistMax(_maxDistBetweenPoints); // MaJ Courbes de niveau

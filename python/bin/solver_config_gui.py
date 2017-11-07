@@ -1,6 +1,7 @@
 import argparse
 import configparser
 import json
+from collections import OrderedDict
 
 from tympan.config_gui import ConfigWidget, _update_config_with_user_values, _update_user_config
 
@@ -14,7 +15,7 @@ if __name__ == '__main__':
                         help='path to the output file where to write the updated parameters')
     args = parser.parse_args()
     with open(args.data_model_filepath) as stream:
-        config_model = json.load(stream)
+        config_model = json.load(stream, object_pairs_hook=OrderedDict)
     user_config = configparser.ConfigParser()
     user_config.optionxform = str  # keep param names case
     with open(args.input_filepath) as stream:

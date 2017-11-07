@@ -73,6 +73,14 @@ void TYRayGraphic::getRayEventColor(acoustic_event& e)
         case TYRECEPTEUR:
             _r = 1.0f; _g = 0.43f; _b = 0.71f; //rose
             break;
+            
+        case TY_NO_TYPE:
+            // Do nothing ?
+            break;    
+        
+        case TY_ALL_TYPE:
+            // Do nothing ?
+            break;   
     }
 }
 

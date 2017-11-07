@@ -37,8 +37,8 @@ TY_EXT_GRAPHIC_INST(TYSourcePonctuelle);
 
 TYSourcePonctuelle::TYSourcePonctuelle():
     _type(TypeSurface),
-    _object(0),
     _typeRaynt(SPHERIC),
+    _object(0),
     _hauteur(0.0),
     Directivity(NULL)
 {

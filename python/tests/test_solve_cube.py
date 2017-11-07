@@ -4,7 +4,7 @@ from utils import TympanTC, _test_solve_with_file
 
 
 class TestSolveCube(TympanTC):
-    @unittest.expectedFailure
+
     def test_cube(self):
         _test_solve_with_file('TEST_CUBE_NO_RESU.xml', self)
 

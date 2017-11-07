@@ -88,8 +88,8 @@ class MeshedCDTWithInfo(object):
     """ This class provides the meshing of a geometry with arbitrary
     information attached.
     """
-    EdgeInfo = dict
-    VertexInfo = dict
+    edge_info = dict
+    vertex_info = dict
 
     def __init__(self):
         self.cdt = CDT()
@@ -171,13 +171,13 @@ class MeshedCDTWithInfo(object):
 
     def insert_constraint(self, va, vb, **kwargs):
         self.cdt.insert_constraint(va, vb)
-        self._input_constraints_infos[sorted_vertex_pair(va, vb)] = self.EdgeInfo(**kwargs)
+        self._input_constraints_infos[sorted_vertex_pair(va, vb)] = self.edge_info(**kwargs)
         return (va, vb) # Important to return the contrain in the input order
 
     def insert_point(self, point, **kwargs):
         point = to_cgal_point(point)
         vertex = self.cdt.insert(point)
-        self._input_vertices_infos[vertex] = self.VertexInfo(**kwargs)
+        self._input_vertices_infos[vertex] = self.vertex_info(**kwargs)
         return vertex
 
     def insert_polyline(self, polyline, close_it=False, connected=True, **kwargs):
@@ -190,8 +190,8 @@ class MeshedCDTWithInfo(object):
         If ``connected=False`` is specified only the points are added,
         but not the segments connecting them.
 
-        The key-word arguments are used to buildthe self.VertexInfo
-        and self.EdgeInfo instances associated with new vertices and
+        The key-word arguments are used to buildthe self.vertex_info
+        and self.edge_info instances associated with new vertices and
         constraints.
 
         Returns the list of vertices handles and of constraints added.
@@ -326,12 +326,13 @@ class MeshedCDTWithInfo(object):
         init_map = init_map or {}
         d = {}
         for v, info_list in self.fetch_constraint_infos_for_vertices(vertices=vertices).items():
-            info = self._input_vertices_infos.get(v, init_map.get(v, self.VertexInfo()))
+            info = self._input_vertices_infos.get(v, init_map.get(v, self.vertex_info()))
             try:
                 d[v] = reduce(merge_function, info_list, info)
             except InconsistentGeometricModel as exc:
                 exc.witness_point = self.py_vertex(v)
-                raise
+                raise InconsistentGeometricModel(
+                    exc.message + " at " + str(exc.witness_point), ids=exc.ids)
         return d
 
     def merge_info_for_edges(self, merge_function, edges=None, init_map=None):
@@ -348,7 +349,7 @@ class MeshedCDTWithInfo(object):
         d = {}
         for v_pair, info_list in self.fetch_constraint_infos_for_edges(edges=edges).items():
             v_pair = sorted_vertex_pair(*v_pair)
-            info = init_map.get(v_pair, self.EdgeInfo())
+            info = init_map.get(v_pair, self.edge_info())
             try:
                 d[v_pair] = reduce(merge_function, info_list, info)
             except InconsistentGeometricModel as exc:
@@ -422,7 +423,7 @@ class MeshedCDTWithInfo(object):
     def py_vertex(self, vh):
         """ Return a pure python representation of the vertex, intended for debugging"""
         p = vh.point()
-        return ((p.x(), p.y()))
+        return (p.x(), p.y())
 
     def py_face(self, face):
         """ Return a pure python representation of the face, intended for debugging"""
@@ -547,29 +548,29 @@ class MeshedCDTWithInfo(object):
         return points
 
     def _segment_intersection_points(self, segment):
-        """Yield interection points between the mesh CDT and a segment."""
+        """Yield intersection points between the mesh CDT and a segment."""
         for fh in self.cdt.finite_faces():
             triangle = self._face_triangle(fh)
             inter = triangle.intersection(segment)
             if not inter:
                 # No intersection.
                 continue
-            try:
-                inter = iter(inter)
-            except TypeError:
-                # Got a single Point or a LineString.
-                if isinstance(inter, Point):
-                    yield inter
-                elif isinstance(inter, LineString):
-                    for coord in inter.coords:
-                        yield Point(coord)
-                else:
-                    raise Exception('unhandled interection object %r' % inter)
+            elif isinstance(inter, Point):
+                # Got a single Point
+                yield inter
+            elif isinstance(inter, LineString):
+                # Got a LineString
+                for coord in inter.coords:
+                    yield Point(coord)
             else:
-                # Got a collection of points.
-                for i in inter:
-                    assert isinstance(i, Point), i
-                    yield i
+                try:
+                    inter = iter(inter)
+                    # Got a collection of points.
+                    for i in inter:
+                        assert isinstance(i, Point), i
+                        yield i
+                except TypeError:
+                    raise Exception('unhandled intersection object %r' % inter)
 
     def _face_triangle(self, fh):
         """Return a shapely geometry LineString for given face."""
@@ -650,14 +651,14 @@ class ElevationMesh(MeshedCDTWithInfo):
     This altitude can be unspecified (yet) and represented as UNSPECIFIED_ALTITUDE
     """
 
-    VertexInfo = InfoWithIDsAndAltitude
+    vertex_info = InfoWithIDsAndAltitude
 
-    EdgeInfo = EdgeInfoWithMaterial
+    edge_info = EdgeInfoWithMaterial
 
     def __init__(self):
         super(ElevationMesh, self).__init__()
-        self.vertices_info = defaultdict(self.VertexInfo)
-        self.edges_info = defaultdict(self.EdgeInfo)
+        self.vertices_info = defaultdict(self.vertex_info)
+        self.edges_info = defaultdict(self.edge_info)
 
     def copy(self, class_=None, deep=False, vmap=None):
         vmap = {} if vmap is None else vmap
@@ -721,10 +722,10 @@ class ElevationMesh(MeshedCDTWithInfo):
                 and vh_or_i in self._input_vertices_infos):
             # Point is on a vertex, which is part of an input constraint.
             return self.altitude_for_input_vertex(vh_or_i)
-        if isinstance(vh_or_i, int): # point is on an edge
-            if self.cdt.is_infinite(fh): # get a finite face if needed
-                fh, _ = self.mirror_half_edge(fh, vh_or_i)
-                assert not self.cdt.is_infinite(fh)
+        # point is on an edge and get a finite face if needed
+        if isinstance(vh_or_i, int) and self.cdt.is_infinite(fh):
+            fh, _ = self.mirror_half_edge(fh, vh_or_i)
+            assert not self.cdt.is_infinite(fh)
         triangle = self.triangle3d_for_face(fh)
         p2 = Point_3(p.x(), p.y(), 0)
         vline = Line_3(p2, Z_VECTOR)
@@ -922,11 +923,10 @@ class ElevationProfile(object):
                     break
             else:
                 return default
-        if isinstance(vh_or_i, int):
-            # Point is on an edge.
-            if self._mesh.cdt.is_infinite(fh): # get a finite face if needed
-                fh, _ = self._mesh.mirror_half_edge(fh, vh_or_i)
-                assert not self._mesh.cdt.is_infinite(fh)
+        # Point is on an edge and get a finite face if needed:
+        if isinstance(vh_or_i, int) and self._mesh.cdt.is_infinite(fh):
+            fh, _ = self._mesh.mirror_half_edge(fh, vh_or_i)
+            assert not self._mesh.cdt.is_infinite(fh)
         return face_data.get(fh, default)
 
     def __call__(self, dist):
