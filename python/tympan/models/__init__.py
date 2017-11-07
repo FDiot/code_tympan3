@@ -2,6 +2,10 @@ import sys
 import os
 from contextlib import contextmanager
 
+from ._common import (
+    Spectrum,
+)
+
 @contextmanager
 def filter_output(verbose=False, to=os.devnull, err_to=None):
     if verbose:
