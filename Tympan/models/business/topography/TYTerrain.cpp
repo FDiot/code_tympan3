@@ -28,7 +28,7 @@
 TY_EXTENSION_INST(TYTerrain);
 TY_EXT_GRAPHIC_INST(TYTerrain);
 
-TYTerrain::TYTerrain() : _vegetActive(false), _pVegetation(nullptr)
+TYTerrain::TYTerrain() : _pVegetation(nullptr), _vegetActive(false)
 {
     _name = TYNameManager::get()->generateName(getClassName());
 
@@ -174,6 +174,12 @@ int TYTerrain::fromXML(DOM_Element domElement)
     int nbPoints = 0;
     TYPoint pt;
     DOM_Element elemCur;
+
+    TYUUID currentId = this->getID();
+    if (TYElement::testId(currentId, this))
+    {
+        this->regenerateID();
+    }
 
     QDomNodeList childs = domElement.childNodes();
     for (unsigned int i = 0; i < childs.length(); i++)

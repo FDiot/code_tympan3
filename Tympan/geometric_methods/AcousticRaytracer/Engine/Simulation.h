@@ -46,7 +46,7 @@ class Simulation : public Base
 
 public:
 	/// Constructor
-    Simulation() : solver(NULL), engine(NULL), engineC(DEFAULT), materialManager(NULL) 
+    Simulation() : solver(NULL), materialManager(NULL), engine(NULL), engineC(DEFAULT)
     { 
        compteurSource = 0;
        compteurRecepteur = 0;
@@ -166,8 +166,8 @@ protected:
     std::vector<Source> sources;        //!< All the acoustic sources for the Simulation
     std::vector<Recepteur> recepteurs;  //!< All the acoustic receptors for the Simulation
 
-    engineChoice engineC;				//!< Enum giving the Engine choice
     Engine* engine;						//!< Pointer to the selected Engine
+    engineChoice engineC;				//!< Enum giving the Engine choice
 
     unsigned int compteurSource;		//!< Source counter
     unsigned int compteurRecepteur;		//!< Receptor counter

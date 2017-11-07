@@ -98,7 +98,7 @@ namespace tympan
 			k_value = atmosphere->get_k().getTabValReel()[i];
 
 			K.getTabValReel()[i] = k_value * (1 + 10.8 * pow(FSurSigma, -0.7));
-			K.getTabValImag()[i] = k_value * (10.3 * pow(FSurSigma,  0.59));
+			K.getTabValImag()[i] = k_value * (10.3 * pow(FSurSigma, -0.59));
 		}
 
 		K.setType(SPECTRE_TYPE_AUTRE);
@@ -979,7 +979,7 @@ namespace tympan
 
 		while ((_tabKa[indice] < ka) && (indice < (NB_KA - 1))) { indice++; }
 
-		return indice > (NB_KA - 2) ? NB_KA - 2 : indice; // Eviter les depassement de tableau
+		return indice > (NB_KA - 2) ? NB_KA - 2 : indice - 1; // Eviter les depassement de tableau
 		//    return indice > 0 ? indice - 1 : 0;
 	}
 	//

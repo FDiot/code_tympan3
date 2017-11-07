@@ -95,33 +95,35 @@ TYSourcePonctuelleWidget::TYSourcePonctuelleWidget(TYSourcePonctuelle* pElement,
     _sourcePonctuelleLayout->addWidget(groupBoxObject, wln++, 0);
 
     // Gestion du type de rayonnement
-    _buttonGroupTypeRaynt = new QButtonGroup(this);
-    _buttonGroupTypeRaynt->setExclusive(true);
-    _pRadioButtonSpheric = new QRadioButton(TR("id_spherique"));
-    _buttonGroupTypeRaynt->addButton(_pRadioButtonSpheric, 0);
-    _pRadioButtonHemi = new QRadioButton(TR("id_hemispherique"));
-    _buttonGroupTypeRaynt->addButton(_pRadioButtonHemi, 1);
+    // Retrait de la possibilité de mettre des sources hémispheriques. Cette option pourra être réintroduite avec une meilleure modélisation.
+	// Puisque toutes les sources sont sphérique, le choix du type de rayonnement est enlevé
+	//     _buttonGroupTypeRaynt = new QButtonGroup(this);
+    //     _buttonGroupTypeRaynt->setExclusive(true);
+    //     _pRadioButtonSpheric = new QRadioButton(TR("id_spherique"));
+    //     _buttonGroupTypeRaynt->addButton(_pRadioButtonSpheric, 0);
+	//     _pRadioButtonHemi = new QRadioButton(TR("id_hemispherique"));
+    //     _buttonGroupTypeRaynt->addButton(_pRadioButtonHemi, 1);
     //    _pRadioButtonForce = new QRadioButton(TR("id_forcee"));
     //    _buttonGroupTypeRaynt->addButton(_pRadioButtonForce, 3);
 
-    QGridLayout* groupBoxTypeRayntLayout = new QGridLayout();
-    groupBoxTypeRayntLayout->addWidget(_pRadioButtonSpheric, 0, 0);
-    groupBoxTypeRayntLayout->addWidget(_pRadioButtonHemi, 0, 1);
+    /*QGridLayout* groupBoxTypeRayntLayout = new QGridLayout();
+    groupBoxTypeRayntLayout->addWidget(_pRadioButtonSpheric, 0, 0);*/
+    //    groupBoxTypeRayntLayout->addWidget(_pRadioButtonHemi, 0, 1);
     //    groupBoxTypeRayntLayout->addWidget(_pRadioButtonForce, 0, 3);
 
-    QGroupBox* groupBoxTypeRaynt = new QGroupBox();
-    groupBoxTypeRaynt->setTitle(TR("id_type_raynt_label"));
-    groupBoxTypeRaynt->setLayout(groupBoxTypeRayntLayout);
+    //QGroupBox* groupBoxTypeRaynt = new QGroupBox();
+    //groupBoxTypeRaynt->setTitle(TR("id_type_raynt_label"));
+    //groupBoxTypeRaynt->setLayout(groupBoxTypeRayntLayout);
 
-    _sourcePonctuelleLayout->addWidget(groupBoxTypeRaynt, wln++, 0);
+    //_sourcePonctuelleLayout->addWidget(groupBoxTypeRaynt, wln++, 0);
 
 
-    _sourcePonctuelleLayout->setMargin(0);
+    //_sourcePonctuelleLayout->setMargin(0);
     setLayout(_sourcePonctuelleLayout);
 
     updateContent();
 
-    connect(_buttonGroupTypeRaynt, SIGNAL(buttonClicked(int)), this, SLOT(changeTypeRaynt(int)));
+    //connect(_buttonGroupTypeRaynt, SIGNAL(buttonClicked(int)), this, SLOT(changeTypeRaynt(int)));
     connect(_comboBoxSelectObject, SIGNAL(activated(int)), this, SLOT(changeObject(int)));
 }
 
@@ -151,35 +153,35 @@ void TYSourcePonctuelleWidget::updateContent()
     // Mise a jour des boutons radio de type de rayonnement (uniquement si source utilisateur)
     if (getElement()->getType() == TYSourcePonctuelle::TypeUser)
     {
-        _pRadioButtonSpheric->setEnabled(true);
-        _pRadioButtonHemi->setEnabled(true);
-        //        _pRadioButtonForce->setEnabled(false);
-        switch (getElement()->getTypeRaynt())
-        {
-            case(0):
-            {
-                _pRadioButtonSpheric->setChecked(true);
-            }
-            break;
-            case(1):
-            {
-                _pRadioButtonHemi->setChecked(true);
-            }
-            break;
-            //case(2):
-            //{
-            //    _pRadioButtonForce->setChecked(true);
-            //}
-            //            break;
-        }
+        //_pRadioButtonSpheric->setEnabled(true);
+        ////       _pRadioButtonHemi->setEnabled(true);
+        ////        _pRadioButtonForce->setEnabled(false);
+        //switch (getElement()->getTypeRaynt())
+        //{
+        //    case(0):
+        //    {
+        //        _pRadioButtonSpheric->setChecked(true);
+        //    }
+        //    break;
+        //    //case(1):
+        //    //{
+        //    //    _pRadioButtonHemi->setChecked(true);
+        //    //}
+        //    //break;
+        //    //case(2):
+        //    //{
+        //    //    _pRadioButtonForce->setChecked(true);
+        //    //}
+        //    //            break;
+        //}
         _pLineEditHauteur->setEnabled(true);
         _pLineEditHauteur->setText(QString().setNum(getElement()->getHauteur()));
     }
     else
     {
-        _pRadioButtonSpheric->setEnabled(false);
-        _pRadioButtonHemi->setEnabled(false);
-        //        _pRadioButtonForce->setEnabled(false);
+        //_pRadioButtonSpheric->setEnabled(false);
+        ////        _pRadioButtonHemi->setEnabled(false);
+        ////        _pRadioButtonForce->setEnabled(false);
         _pLineEditHauteur->setEnabled(false);
     }
 

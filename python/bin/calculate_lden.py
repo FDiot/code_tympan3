@@ -43,25 +43,6 @@ def get_op_data(fpath, sources):
             OP.append([float(row['Day']),float(row['Evening']),float(row['Night'])])
     return np.array(OP)
 
-#          irow+=1
-
-#        ifield = 0
-#        DataNames = []
-#        DataValues = []
-#        for field in reader.fieldnames:
-#            DataNames.append(field)
-#            ifield = ifield + 1
-#            csvfile.seek(0)
-#            csvfile.readline()
-#            irow = 0
-#            Data = []
-#            for row in reader:
-#                Data.append(np.float(row[field]))
-#                irow = irow + 1
-#            DataValues.append(Data)
-#    return DataNames, DataValues
-
-
 def test_imputs(project, calculations_namelist):
     '''
          Testing coherence between:
@@ -93,36 +74,36 @@ def get_sources_list(project, calculations_namelist):
       Build a list of sources for the calculations in the calculations_list
 
     '''
-    Sources_namelist =[]
-    Sources = []
+    sources_namelist =[]
+    sources = []
     for calc in project.computations:
         if calc.name in calculations_namelist:
             project.select_computation(calc, current=False)
-            result =  calc.result
+            result = calc.result
             for src in result.sources:
                    # print('Calcul:',calc.name,'Source:',src.name)
-                   if src.name not in Sources_namelist :
-                    Sources_namelist.append(src.name)
-                    Sources.append(src)
+                   if src.name not in sources_namelist :
+                    sources_namelist.append(src.name)
+                    sources.append(src)
 
-    return Sources
+    return sources
 
 def get_receptors_list(project, calculations_namelist):
     '''
       Build a list of receivers for the calculations in the calculations_list
 
     '''
-    Receptors_namelist =[]
-    Receptors = []
+    receptors_namelist =[]
+    receptors = []
     for calc in project.computations:
         if calc.name in calculations_namelist:
             project.select_computation(calc, current=False)
             result =  calc.result
             for rec in result.receptors:
-                   if rec.name not in Receptors_namelist:
-                    Receptors_namelist.append(rec.name)
-                    Receptors.append(rec)
-    return Receptors
+                   if rec.name not in receptors_namelist:
+                    receptors_namelist.append(rec.name)
+                    receptors.append(rec)
+    return receptors
 
 def get_results(project, sources, receptors, calculations_namelist):
     '''
@@ -136,55 +117,56 @@ def get_results(project, sources, receptors, calculations_namelist):
 
     for calc in project.computations:
         if calc.name in calculations_namelist:
-            result =  calc.result
+            result = calc.result
             # Initialize contribution table to -200 for
-            Lp=np.ones([nsources,nreceptors,31])*-200
+            lp = np.ones([nsources, nreceptors, 31]) * -200
             for src in result.sources:
-                 ind_src = (sources_namelist).index(src.name)
-                 for rec in result.receptors:
-                     ind_rec =  (receptors_namelist).index(rec.name)
-                     # print('Calculation', calc.name, ' - Source index:', ind_src, '- Recepteur index:',ind_rec)
-                     Lp[ind_src,ind_rec,:]=result.spectrum(rec,src).values
-            if calc.name==calculations_namelist[0]:
+                ind_src = (sources_namelist).index(src.name)
+                for rec in result.receptors:
+                    ind_rec = (receptors_namelist).index(rec.name)
+                    # print('Calculation', calc.name, ' - Source index:', ind_src, '- Recepteur index:',ind_rec)
+                    lp[ind_src, ind_rec, :] = result.spectrum(rec, src).values
+
+            if calc.name == calculations_namelist[0]:
                 print('Calculation named ', calc.name, ' is taken for the Day period')
-                L1 =  Lp.copy()
-            if  calc.name==calculations_namelist[1]:
+                L1 = lp.copy()
+            elif calc.name == calculations_namelist[1]:
                 print('Calculation named ', calc.name, ' is taken for the Evening period')
-                L2 =  Lp.copy()
-            if calc.name==calculations_namelist[2]:
+                L2 = lp.copy()
+            elif calc.name == calculations_namelist[2]:
                 print('Calculation named ', calc.name, ' is taken for the Night period')
-                L3 =  Lp.copy()
-    del Lp
+                L3 = lp.copy()
+    del lp
     return L1, L2, L3
 
-def calc_Lden(L1, L2, L3, OP):
+def calc_lden(l1, l2, l3, op):
      '''
      '''
-     [nsources, nreceptors, nfreq] =np.shape(L1)
+     [nsources, nreceptors, nfreq] =np.shape(l1)
 
      # Day
-     P = np.matrix(OP)[:,0]
+     P = np.matrix(op)[:,0]
      P[np.where(P<=0.)]=1e-20 # to allow the log10 following operation
      MP = np.tile(P,(1,nfreq))
      LD=np.ones([nsources,nreceptors,31])*-200
      for irec in range(nreceptors):
-         LD[:,irec,:] =10.*np.log10(np.multiply(np.power(10.,L1[:,irec,:]/10.),MP/100.))
+         LD[:,irec,:] =10.*np.log10(np.multiply(np.power(10.,l1[:,irec,:]/10.),MP/100.))
 
     # Evening
-     P = np.matrix(OP)[:,1]
+     P = np.matrix(op)[:,1]
      P[np.where(P<=0.)]=1e-20 # to allow the log10 following operation
      MP = np.tile(P,(1,nfreq))
      LE=np.ones([nsources,nreceptors,31])*-200
      for irec in range(nreceptors):
-         LE[:,irec,:] =10.*np.log10(np.multiply(np.power(10.,L2[:,irec,:]/10.),MP/100.))
+         LE[:,irec,:] =10.*np.log10(np.multiply(np.power(10.,l2[:,irec,:]/10.),MP/100.))
 
     # Night
-     P = np.matrix(OP)[:,2]
+     P = np.matrix(op)[:,2]
      P[np.where(P<=0.)]=1e-20 # to allow the log10 following operation
      MP = np.tile(P,(1,nfreq))
      LN=np.ones([nsources,nreceptors,31])*-200
      for irec in range(nreceptors):
-         LN[:,irec,:] =10.*np.log10(np.multiply(np.power(10.,L3[:,irec,:]/10.),MP/100.))
+         LN[:,irec,:] =10.*np.log10(np.multiply(np.power(10.,l3[:,irec,:]/10.),MP/100.))
 
 
      LDEN = 10.*np.log10(12./24.*np.power(10.,LD/10.)
@@ -227,18 +209,16 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
     # Operating conditions
     set_op_data(operating_conditions_file, S) # Check if the csv file exist and create it if not
     OP = get_op_data(operating_conditions_file, S)
-    # OP=np.array([[100., 100., 100.],[80.,70., 50.], [100., 100., 100.]])
-
 
     # Get results for each period
     L1, L2, L3 = get_results(project, S, R, calculations_namelist)
 
     # LDEN
-    _,_,_,L_DEN = calc_Lden(L1, L2, L3, OP)
+    _,_,_,L_DEN = calc_lden(L1, L2, L3, OP)
     # print(L_DEN)
 
     # Add new computation
-    computation = project.add_computation()
+    project.add_computation()
     project.current_computation.set_name('LDEN')
     for src in S:
         project.current_computation.result.add_source(src)
@@ -269,8 +249,8 @@ def main(tympan_xml, calculations_namelist, operating_conditions_file, debug):
             lt = lt + np.power(10.,L_DEN[isrc,irec,:]/10.)
             isrc = isrc + 1
         LT = 10.*np.log10(lt)
-        Spectrum_LT = Spectrum(LT)
-        project.current_computation.set_spectrum(bus.elemen2receptor(rec), Spectrum_LT)
+        spectrum_lt = Spectrum(LT)
+        project.current_computation.set_spectrum(bus.elemen2receptor(rec), spectrum_lt)
         irec = irec + 1
 
     #   Mask Lw column in the result table

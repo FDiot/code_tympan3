@@ -256,7 +256,7 @@ class MeshedCDTTC(unittest.TestCase, MesherTestUtilsMixin):
         edgeAB2 = ((vmap[vA], vmap[vB]))
 
         self.assertEqual(mesher2.input_constraint_infos(edgeAB2),
-                         mesher2.VertexInfo(id='concrete', altitude=0.0))
+                         mesher2.vertex_info(id='concrete', altitude=0.0))
         self.assertIsNot(mesher2.input_constraint_infos(edgeAB2),
                          self.mesher.input_constraint_infos((vA, vB)))
 
@@ -377,7 +377,7 @@ class ElevationMeshTC(unittest.TestCase, MesherTestUtilsMixin):
         self.assertIsInstance(vO, mesh.Vertex_handle)
         with self.assertRaises(InconsistentGeometricModel) as cm:
             self.mesher.update_info_for_vertices((vO,))
-        self.assertEqual(cm.exception.witness_point, (0.0, 0.0))
+        self.assertEqual(cm.exception.message, 'Intersecting constraints with different altitudes: {ids} at (0.0, -0.0)')
         self.assertCountEqual(cm.exception.ids, ["H", "V"])
 
     def test_vertices_info_set_from_input(self):

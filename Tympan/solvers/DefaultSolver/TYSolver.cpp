@@ -63,9 +63,7 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
     // Use grid accelerating structure instead of KDTree (default value)
     OMessageManager::get()->warning(
             "Overwriting Acccelerator solver parameter to 1 (grid accelerating structure)");
-    tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
-    config->Accelerator = 1;
-
+    tympan::SolverConfiguration::get()->Accelerator = 1;
     // Creation de la collection de thread
     _pool = new OThreadPool(tympan::SolverConfiguration::get()->NbThreads);
 
@@ -110,10 +108,12 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
     {
         return false;
     }
-
     // Recuperation du tableau de rayon de la structure resultat
     tab_acoustic_path& tabRays = aresult.get_path_data();
-    if (config->Anime3DKeepRays == true)
+    tabRays.clear();
+    // Displaying rays in the GUI
+    bool keepRays = tympan::SolverConfiguration::get()->Anime3DKeepRays;
+    if (keepRays == true)
     {
         for (unsigned int i=0; i<_tabTrajets.size(); i++)
         {
@@ -123,7 +123,6 @@ bool TYSolver::solve(const tympan::AcousticProblemModel& aproblem,
             }
         }
     }
-
 
     tympan::SpectrumMatrix& matrix = aresult.get_data();
     matrix.resize(aproblem.nreceptors(), aproblem.nsources());
@@ -155,7 +154,6 @@ std::unique_ptr<TYAcousticModel> TYSolver::make_acoustic_model()
 
 bool TYSolver::buildCalcStruct(const tympan::AcousticProblemModel& aproblem)
 {
-    bool cancel = false;
 
     const tympan::nodes_pool_t& nodes = aproblem.nodes(); 
     const tympan::triangle_pool_t& triangles = aproblem.triangles();
@@ -198,10 +196,7 @@ bool TYSolver::appendTriangleToScene()
     for (unsigned int i = 0; i < _tabPolygon.size(); i++)
     {
         //Recuperation et convertion de la normale de la surface
-        double coordNormal[3];
-        _tabPolygon[i].normal.getCoords(coordNormal);
-        vec3 normalFace = vec3(coordNormal[0], coordNormal[1], coordNormal[2]);
-
+        
         unsigned int a, b, c;
 
         pos = OPoint3Dtovec3(_tabPolygon[i].tabPoint[0]);
@@ -213,15 +208,14 @@ bool TYSolver::appendTriangleToScene()
         pos = OPoint3Dtovec3(_tabPolygon[i].tabPoint[2]);
         _scene->addVertex(pos, c);
 
-        Triangle* face;
         if ( dynamic_cast<tympan::AcousticGroundMaterial*>(_tabPolygon[i].material) )
         {
             // Set last parameter true means triangle is part of the ground
-            face = (Triangle*)_scene->addTriangle(a, b, c, m, true);
+            (Triangle*)_scene->addTriangle(a, b, c, m, true);
         }
         else
         {
-            face = (Triangle*)_scene->addTriangle(a, b, c, m);
+            (Triangle*)_scene->addTriangle(a, b, c, m);
         }
     }
 

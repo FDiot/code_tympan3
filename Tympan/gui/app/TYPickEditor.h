@@ -100,7 +100,7 @@ protected slots:
     void showRotationDialog(TYGeometryNode* pGeoNode);
     void showDimensionsDialog(TYAcousticVolume* pAccVol);
     void showPanel(TYElement* pElt);
-    void hidePanel(TYElement* pElt);
+    void hidePanel();
 
 private : 
     void siteModelerPopupMenu(std::shared_ptr<LPTYElementArray> pElts);

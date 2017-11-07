@@ -38,10 +38,14 @@
 
 #ifdef _DEBUG
 ///Le nombre d'elements selectionnables.
+#if WITH_NMPB
 static const int nbMainElts = 60;
+#else
+static const int nbMainElts = 59;
+#endif
 
 ///Le type des elements selectionnables.
-static char* _listMainElement[] =
+static char const* _listMainElement[] =
 {
     "TYAcousticBox",           "TYAcousticCircle",       "TYAcousticCylinder",    "TYAcousticLine",         "TYAcousticPolygon",    /*01*/
     "TYAcousticRectangleNode", "TYAcousticRectangle",    "TYAcousticSemiCircle",  "TYAcousticSemiCylinder", "TYAcousticSurfaceNode",/*02*/
@@ -63,10 +67,10 @@ static char* _listMainElement[] =
 };
 #else // _DEBUG
 ///Le nombre d'elements selectionnables.
-static const int nbMainElts = 14;
+static const int nbMainElts = 13;
 
 ///Le type des elements selectionnables.
-static char* _listMainElement[] =
+static char const* _listMainElement[] =
 {
     "TYProjet",      "TYSiteNode",             "TYBatiment",      "TYMachine",       "TYSpectre",   /*1*/
     "TYAttenuateur", "TYMateriauConstruction", "TYSol",           "TYParoi",         /*2*/

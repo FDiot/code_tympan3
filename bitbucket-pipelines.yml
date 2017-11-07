@@ -9,11 +9,11 @@ pipelines:
   default:
     - step:
         script:
-          # Check quality code with cppcheck (activated once all the errors are fixed):
-          - #apt-get install -y cppcheck
-          - #cd Tympan
-          - #cppcheck --quiet --std=posix --error-exitcode=1 .
-          - #cd ..
+          # Check quality code with cppcheck:
+          - apt-get install -y cppcheck
+          - cd Tympan
+          - cppcheck --quiet --std=posix --error-exitcode=1 .
+          - cd ..
           # Install needed packages:
           - apt-get install -y software-properties-common
           - add-apt-repository ppa:george-edison55/cmake-3.x
@@ -28,7 +28,7 @@ pipelines:
           - wget https://bitbucket.org/TYMPAN/code_tympan/downloads/Code_TYMPAN-4.7_third-party-05.zip && unzip Code_TYMPAN-4.7_third-party-05.zip
           - cd ..
           # Build and install: 
-          - cmake -DCMAKE_BUILD_TYPE=Debug .
+          - cmake -DCMAKE_BUILD_TYPE=Release .
           - make -j4
           - make install
           # Run tests:

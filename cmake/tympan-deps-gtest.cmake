@@ -11,7 +11,9 @@ ExternalProject_Add(GTest
 ExternalProject_Get_Property(GTest SOURCE_DIR BINARY_DIR)
 set(GTEST_SOURCE_DIR ${SOURCE_DIR})
 set(GTEST_BINARY_DIR ${BINARY_DIR})
-set(GTEST_INCLUDE_DIR ${GTEST_SOURCE_DIR}/include)
+# Force to be an include directory to avoid warnings on a project you have no control over
+#set(GTEST_INCLUDE_DIR ${GTEST_SOURCE_DIR}/include)
+include_directories(SYSTEM ${GTEST_SOURCE_DIR}/include)
 
 if(TYMPAN_DEBUG_CMAKE)
 message(STATUS "INFO GTEST_INCLUDE_DIR: " "${GTEST_INCLUDE_DIR}" )

@@ -24,6 +24,7 @@ TYTrajet::TYTrajet(tympan::AcousticSource& asrc_, tympan::AcousticReceptor& arcp
     _ptS = asrc.position;
     _ptR = arcpt.position;
     _distance = _ptS.distFrom(_ptR);
+	//build_tab_rays();
 }
 
 
@@ -366,8 +367,11 @@ void TYTrajet::build_tab_rays()
     _tabRays.clear();
     for (size_t i=0; i<_chemins.size(); i++)
     {
-        _tabRays.push_back(_chemins[i].get_ray());
+        _tabRays.push_back(_chemins[i].get_ray(_ptR));
     }
 }
 
-
+std::vector<acoustic_path*>& TYTrajet::get_tab_rays()
+{
+	return _tabRays;
+}
