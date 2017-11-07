@@ -4,6 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_array_equal, assert_allclose
 
+from tympan.models import Spectrum
 from tympan.models.solver import Model, Solver, Source, Receptor
 from tympan.models._solver import Directivity
 from tympan.models._common import Point3D
@@ -31,8 +32,8 @@ class TriangleContainerTC(TympanTC):
 def add_source_with_directivity(model, directivity_type):
     directivity = Directivity(directivity_type=directivity_type, support_normal=(1, 1.5, 3),
                               size=5.)
-    return model.add_source(Source(position=(0.7, 0.7, 0),
-                                   spectrum_values=10. * np.ones(31),
+    return model.add_source(Source((0.7, 0.7, 0),
+                                   Spectrum.constant(10.),
                                    directivity=directivity))
 
 
@@ -77,14 +78,15 @@ class SolverModelWithoutProjectTC(TympanTC):
     def test_add_source_spherical_directivity(self):
         model = Model()
         coords = 0.7, 0.7, 0
-        power_lvl = 10. * np.ones(31)
+        power_lvl = Spectrum.constant(10.)
         source_id = model.add_source(
             Source(coords, power_lvl, directivity=Directivity())
         )
         source = model.source(source_id)
         source_pos = source.position.x, source.position.y, source.position.z
         self.assertEqual(source_pos, coords)
-        assert_allclose(source.spectrum.to_dB().values, power_lvl, rtol=1e-4)
+        assert_allclose(source.spectrum.to_dB().values, power_lvl.values,
+                        rtol=1e-4)
         # spherical sources have no directivity
         with self.assertRaises(ValueError) as cm:
             source.directivity_vector

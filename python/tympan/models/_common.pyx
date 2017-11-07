@@ -39,9 +39,7 @@ cdef class Spectrum:
         """Build a Spectrum, possibly out of ndarray `values`"""
         if values is None:
             return
-        assert len(values) == 31
-        #self.thisobj = OSpectre(&values[0], 31, 0)
-        self.thisobj = OSpectre(<double *> values.data, 31, 0)
+        self.thisobj = OSpectre(<double *> values.data, len(values), 0)
 
     @classmethod
     def constant(cls, value):

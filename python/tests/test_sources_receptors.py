@@ -8,6 +8,7 @@ from functools import cmp_to_key
 
 from utils import (TEST_DATA_DIR, TEST_SOLVERS_DIR, TEST_RESULT_DIR, TympanTC,
                    compare_floats)
+from tympan.models import Spectrum
 from tympan.models.solver import Model, Solver, Source
 
 _TEST_PROBLEM_DIR = osp.join(TEST_DATA_DIR, 'computed-projects-panel')
@@ -39,10 +40,10 @@ class SourceAdditionTC(TympanTC):
         model = Model.from_project(project)
         self.assertEqual(model.nsources, 1)
         self.assertEqual(model.nreceptors, 6)
-        freq = np.array([100.0] * 31, dtype=float)
+        spectrum = Spectrum.constant(100.0)
         sources = [
-            Source((1., 1., 0.), freq),
-            Source((2., 2., 10.), freq*2),
+            Source((1., 1., 0.), spectrum),
+            Source((2., 2., 10.), spectrum * 2),
         ]
         src_ids = [model.add_source(s) for s in sources]
         self.assertEqual(model.nsources, 3)
@@ -51,22 +52,22 @@ class SourceAdditionTC(TympanTC):
         self.assertEqual(src1.position.x, 1.)
         self.assertEqual(src1.position.y, 1.)
         self.assertEqual(src1.position.z, 0.)
-        assert_allclose(src1.spectrum.to_dB().values, freq)
+        assert_allclose(src1.spectrum.to_dB().values, spectrum.values)
         src2 = model.source(src_ids[1])
         self.assertEqual(src2.position.x, 2.)
         self.assertEqual(src2.position.y, 2.)
         self.assertEqual(src2.position.z, 10.)
-        assert_allclose(src2.spectrum.to_dB().values, freq*2)
+        assert_allclose(src2.spectrum.to_dB().values, spectrum.values * 2)
 
     def test_computation_with_manually_added_source(self):
-        power_lvl = 10. * np.ones(31)
+        power_lvl = Spectrum.constant(10.)
         ref_proj = self.load_project('site_receptor_source.xml')
         ref_model = Model.from_project(ref_proj)
         assert ref_model.nsources == 1
         assert ref_model.nreceptors == 1
         ref_src = ref_model.source(0)
         assert (ref_src.position.x, ref_src.position.y, ref_src.position.z) == (3., 3., 2.)
-        assert_allclose(ref_src.spectrum.to_dB().values, power_lvl,
+        assert_allclose(ref_src.spectrum.to_dB().values, power_lvl.values,
                         rtol=1e-4)
         solver = Solver.from_project(ref_proj, TEST_SOLVERS_DIR)
         ref_result = solver.solve(ref_model).spectrum(0, 0).values
@@ -84,8 +85,9 @@ class SourceAdditionTC(TympanTC):
     def test_value(self):
         proj = self.load_project('site_receptor.xml')
         model = Model.from_project(proj)
-        power_lvl = np.array([10., 10., 10., 15., 15., 15., 20., 20., 20., 20., 50.],
-                             dtype=float)
+        power_lvl = Spectrum(np.array([
+            10., 10., 10., 15., 15., 15., 20., 20., 20., 20., 50.,
+        ]))
         model.add_source(Source((3., 3., 2.),  power_lvl))
         assert model.nsources == 1
         source = model.source(0)

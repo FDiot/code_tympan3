@@ -33,8 +33,8 @@ class Source(object):
 
     position : tuple
         (x, y, z) coordinates
-    spectrum_values : array-like
-        dB values of a power spectrum
+    spectrum : Spectrum
+        acoustic power spectrum
     shift : int, optional
         the number of the first frequence for which a DB value is given
         (frequences start at 16 Hz and end at 16000Hz, 31 values in total)
@@ -42,10 +42,9 @@ class Source(object):
         source directivity
     """
 
-    def __init__(self, position, spectrum_values, shift=0, directivity=None):
+    def __init__(self, position, spectrum, directivity=None):
         self.position = position
-        self.spectrum_values = spectrum_values
-        self.shift = shift
+        self.spectrum= spectrum
         if directivity is None:
             directivity = cysolver.Directivity()
         self.directivity = directivity
@@ -91,8 +90,7 @@ class Model(object):
     def add_source(self, source):
         """Add an acoustic source to the model."""
         return self._model._add_source(
-            source.position, source.spectrum_values, source.shift,
-            source.directivity)
+            source.position, source.spectrum.values, 0, source.directivity)
 
     def add_receptor(self, receptor):
         return self._model.add_receptor(*receptor.position)
