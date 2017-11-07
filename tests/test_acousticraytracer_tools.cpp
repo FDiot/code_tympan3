@@ -418,8 +418,8 @@ TEST(test_DiffractionAngleSelector_canBeInserted, only_reflexions)
 		e->setType(SPECULARREFLEXION);
 		std::shared_ptr<Event> SPE(e);
 		r->getEvents()->push_back(SPE);
-		r->nbReflexion++;
-	}
+		r->setNbReflexion(r->getReflex()+1);	
+		}
 
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); //Only reflexions => response should be SELECTOR_ACCEPT
@@ -440,11 +440,11 @@ TEST(test_DiffractionAngleSelector_canBeInserted, no_direction_change)
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(initial_position);
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(final_position,3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	//Define the shape used by the diffraction
 	Shape* s1=new Shape();
@@ -458,7 +458,7 @@ TEST(test_DiffractionAngleSelector_canBeInserted, no_direction_change)
 	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
-	r->nbDiffraction++;
+	r->setNbDiffraction(r->getDiff()+1);
 
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); //incoming direction == outgoing direction => response should be SELECTOR_ACCEPT
@@ -475,11 +475,11 @@ TEST(test_DiffractionAngleSelector_canBeInserted, ray_launched_in_shadow_zone)
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(vec3(-5,0,0));
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(vec3(5,1,0),3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	//Define the shape used by the diffraction
 	Triangle* s1=new Triangle(vec3(0,0,-1),vec3(0,0,1),vec3(-1,1,0),new Material());
@@ -494,8 +494,8 @@ TEST(test_DiffractionAngleSelector_canBeInserted, ray_launched_in_shadow_zone)
 	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
-	r->nbDiffraction++;
-
+	r->setNbDiffraction(r->getDiff()+1);
+	
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); //ray launched is the shadow zone => response should be SELECTOR_ACCEPT
 
@@ -511,11 +511,11 @@ TEST(test_DiffractionAngleSelector_canBeInserted, ray_launched_outside_shadow_zo
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(vec3(-5,0,0));
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(vec3(5,-1,0),3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	//Define the shape used by the diffraction
 	Triangle* s1=new Triangle(vec3(0,0,-1),vec3(0,0,1),vec3(-1,1,0),new Material());
@@ -530,8 +530,8 @@ TEST(test_DiffractionAngleSelector_canBeInserted, ray_launched_outside_shadow_zo
 	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
-	r->nbDiffraction++;
-
+	
+	r->setNbDiffraction(r->getDiff()+1);
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); //ray launched outside the shadow zone => response should be SELECTOR_REJECT
 
@@ -560,7 +560,7 @@ TEST(test_DiffractionAngleSelector_insertWithTest, only_reflexions)
 		e->setType(SPECULARREFLEXION);
 		std::shared_ptr<Event> SPE(e);
 		r->getEvents()->push_back(SPE);
-		r->nbReflexion++;
+		r->setNbReflexion(r->getReflex()+1);
 	}
 
 	EXPECT_TRUE(selector.insertWithTest(r)); //Only reflexions => return value should be TRUE
@@ -580,11 +580,11 @@ TEST(test_DiffractionAngleSelector_insertWithTest, no_direction_change)
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(initial_position);
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(final_position,3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	//Define the shape used by the diffraction
 	Shape* s1=new Shape();
@@ -598,7 +598,7 @@ TEST(test_DiffractionAngleSelector_insertWithTest, no_direction_change)
 	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
-	r->nbDiffraction++;
+	r->setNbDiffraction(r->getDiff()+1);
 
 	EXPECT_TRUE(selector.insertWithTest(r)); //incoming direction == outgoing direction => return value should be TRUE
 
@@ -613,11 +613,11 @@ TEST(test_DiffractionAngleSelector_insertWithTest, ray_launched_in_shadow_zone)
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(vec3(-5,0,0));
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(vec3(5,1,0),3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	//Define the shape used by the diffraction
 	Triangle* s1=new Triangle(vec3(0,0,-1),vec3(0,0,1),vec3(-1,1,0),new Material());
@@ -632,8 +632,7 @@ TEST(test_DiffractionAngleSelector_insertWithTest, ray_launched_in_shadow_zone)
 	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
-	r->nbDiffraction++;
-
+	r->setNbDiffraction(r->getDiff()+1);
 	EXPECT_TRUE(selector.insertWithTest(r)); //ray launched is the shadow zone => return value should be TRUE
 
 }
@@ -647,11 +646,11 @@ TEST(test_DiffractionAngleSelector_insertWithTest, ray_launched_outside_shadow_z
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(vec3(-5,0,0));
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(vec3(5,-1,0),3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	//Define the shape used by the diffraction
 	Triangle* s1=new Triangle(vec3(0,0,-1),vec3(0,0,1),vec3(-1,1,0),new Material());
@@ -666,8 +665,8 @@ TEST(test_DiffractionAngleSelector_insertWithTest, ray_launched_outside_shadow_z
 	std::shared_ptr<Event> SPE(e);
 
 	r->getEvents()->push_back(SPE);
-	r->nbDiffraction++;
-
+	
+	r->setNbDiffraction(r->getDiff()+1);
 	EXPECT_FALSE(selector.insertWithTest(r)); //ray launched outside the shadow zone => return value should be FALSE
 
 }
@@ -710,11 +709,11 @@ TEST(test_DiffractionPathSelector_canBeInserted, only_reflexions)
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(vec3((decimal)(rand()%1000+1),(decimal)(rand()%1000+1),(decimal)(rand()%1000+1)));
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(vec3((decimal)(rand()%1000+1),(decimal)(rand()%1000+1),(decimal)(rand()%1000+1)),3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	//Add SpecularReflexion events
 	for(int i=0;i<rand()%100;i++){
@@ -723,7 +722,7 @@ TEST(test_DiffractionPathSelector_canBeInserted, only_reflexions)
 		e->setPosition(vec3((decimal)(rand()%1000+1),(decimal)(rand()%1000+1),(decimal)(rand()%1000+1)));
 		std::shared_ptr<Event> SPE(e);
 		r->getEvents()->push_back(SPE);
-		r->nbReflexion++;
+		r->setNbReflexion(r->getReflex()+1);
 	}
 
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
@@ -745,11 +744,11 @@ TEST(test_DiffractionPathSelector_canBeInserted, cumul_delta_low_enough)
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(vec3(3,7,5));
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(vec3(30,11,-1),3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	Diffraction* e1=new Diffraction();
 	e1->setType(DIFFRACTION);
@@ -794,11 +793,11 @@ TEST(test_DiffractionPathSelector_canBeInserted, cumul_delta_too_high)
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(vec3(-5,8,1));
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(vec3(22,-4,6),3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	Diffraction* e1=new Diffraction();
 	e1->setType(DIFFRACTION);
@@ -855,11 +854,11 @@ TEST(test_DiffractionPathSelector_insertWithTest, only_reflexions)
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(vec3((decimal)(rand()%1000+1),(decimal)(rand()%1000+1),(decimal)(rand()%1000+1)));
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(vec3((decimal)(rand()%1000+1),(decimal)(rand()%1000+1),(decimal)(rand()%1000+1)),3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	//Add SpecularReflexion events
 	for(int i=0;i<rand()%100;i++){
@@ -868,7 +867,7 @@ TEST(test_DiffractionPathSelector_insertWithTest, only_reflexions)
 		e->setPosition(vec3((decimal)(rand()%1000+1),(decimal)(rand()%1000+1),(decimal)(rand()%1000+1)));
 		std::shared_ptr<Event> SPE(e);
 		r->getEvents()->push_back(SPE);
-		r->nbReflexion++;
+		r->setNbReflexion(r->getReflex()+1);
 	}
 
 	EXPECT_TRUE(selector.insertWithTest(r)); //Only reflexions => should return TRUE
@@ -888,11 +887,11 @@ TEST(test_DiffractionPathSelector_insertWithTest, cumul_delta_low_enough)
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(vec3(3,7,5));
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(vec3(30,11,-1),3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	Diffraction* e1=new Diffraction();
 	e1->setType(DIFFRACTION);
@@ -935,11 +934,11 @@ TEST(test_DiffractionPathSelector_insertWithTest, cumul_delta_too_high)
 	//Set a source
 	Source* src=new Source();
 	src->setPosition(vec3(-5,8,1));
-	r->source=src;
+	r->setSource(src);
 
 	//Set a receptor
 	Recepteur* rcpt=new Recepteur(vec3(22,-4,6),3);
-	r->recepteur=rcpt;
+	r->setRecepteur(rcpt);
 
 	Diffraction* e1=new Diffraction();
 	e1->setType(DIFFRACTION);
@@ -988,11 +987,11 @@ TEST(test_DiffractionSelector_canBeInserted, less)
 	Ray* r=new Ray();
 	unsigned long long replace;
 
-	r->nbDiffraction=4; 
+	r->setNbDiffraction(4); 
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 4 < 5 => response should be SELECTOR_ACCEPT
 
-	r->nbDiffraction=5; 
+	r->setNbDiffraction(5); 
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 5 !< 5 => response should be SELECTOR_REJECT
 }
@@ -1006,15 +1005,15 @@ TEST(test_DiffractionSelector_canBeInserted, less_or_equal)
 	Ray* r=new Ray();
 	unsigned long long replace;
 
-	r->nbDiffraction=6; 
+	r->setNbDiffraction(6);
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 6 <= 10 => response should be SELECTOR_ACCEPT
 
-	r->nbDiffraction=10; 
+	r->setNbDiffraction(10);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 10 <= 10 => response should be SELECTOR_ACCEPT
 
-	r->nbDiffraction=15; 
+	r->setNbDiffraction(15);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 15 !<= 10 => response should be SELECTOR_REJECT
 }
@@ -1030,11 +1029,11 @@ TEST(test_DiffractionSelector_canBeInserted, equal)
 	Ray* r=new Ray();
 	unsigned long long replace;
 
-	r->nbDiffraction=7; 
+	r->setNbDiffraction(7);
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 7 == 7 => response should be SELECTOR_ACCEPT
 
-	r->nbDiffraction=3; 
+	r->setNbDiffraction(3);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 3 != 7 => response should be SELECTOR_REJECT
 }
@@ -1052,11 +1051,11 @@ TEST(test_DiffractionSelector_canBeInserted, greater_or_equal)
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 0 !>= 1 => response should be SELECTOR_REJECT
 
-	r->nbDiffraction=1; 
+	r->setNbDiffraction(1);
     response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 1 >= 1 => response should be SELECTOR_ACCEPT
 
-	r->nbDiffraction=2; 
+	r->setNbDiffraction(2);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 2 >= 1 => response should be SELECTOR_ACCEPT
 }
@@ -1072,11 +1071,11 @@ TEST(test_DiffractionSelector_canBeInserted, greater)
 	Ray* r=new Ray();
 	unsigned long long replace;
 
-	r->nbDiffraction=9; 
+	r->setNbDiffraction(9);
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); //9 > 8 => response should be SELECTOR_ACCEPT
 
-	r->nbDiffraction=8; 
+	r->setNbDiffraction(8);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 8 !> 8 => response should be SELECTOR_REJECT
 }
@@ -1091,10 +1090,10 @@ TEST(test_DiffractionSelector_insertWithTest, less)
 	selector.setMaximumDiffractionOrder(9);
 	Ray* r=new Ray();
 
-	r->nbDiffraction=5; 
+	r->setNbDiffraction(5);
 	EXPECT_TRUE(selector.insertWithTest(r));  // 5 < 9 =>  should return TRUE
 
-	r->nbDiffraction=9; 
+	r->setNbDiffraction(9);
 	EXPECT_FALSE(selector.insertWithTest(r)); // 9 !< 9 =>  should return FALSE
 }
 
@@ -1107,10 +1106,10 @@ TEST(test_DiffractionSelector_insertWithTest, less_or_equal)
 
 	EXPECT_TRUE(selector.insertWithTest(r));  // 0 <= 1 =>  should return TRUE
 
-	r->nbDiffraction=1; 
+	r->setNbDiffraction(1);
 	EXPECT_TRUE(selector.insertWithTest(r));  // 1 <= 1 => should return TRUE
 
-	r->nbDiffraction=2; 
+	r->setNbDiffraction(2);
 	EXPECT_FALSE(selector.insertWithTest(r)); // 2 !<= 2 => should return FALSE
 }
 
@@ -1124,10 +1123,10 @@ TEST(test_DiffractionSelector_insertWithTest, equal)
 	selector.setMaximumDiffractionOrder(15);
 	Ray* r=new Ray();
 
-	r->nbDiffraction=15; 
+	r->setNbDiffraction(15);
 	EXPECT_TRUE(selector.insertWithTest(r));  // 15==15 =>  should return TRUE
 
-	r->nbDiffraction=8; 
+	r->setNbDiffraction(8);
 	EXPECT_FALSE(selector.insertWithTest(r)); // 8 != 15 => should return FALSE
 }
 
@@ -1141,13 +1140,13 @@ TEST(test_DiffractionSelector_insertWithTest, greater_or_equal)
 	selector.setMaximumDiffractionOrder(6);
 	Ray* r=new Ray();
 
-	r->nbDiffraction=7; 
+	r->setNbDiffraction(7);
 	EXPECT_TRUE(selector.insertWithTest(r));  //7 >= 6 => should return TRUE
 
-	r->nbDiffraction=6; 
+	r->setNbDiffraction(6);
 	EXPECT_TRUE(selector.insertWithTest(r));  // 6 >= 6 => should return TRUE
 
-	r->nbDiffraction=2; 
+	r->setNbDiffraction(2);
 	EXPECT_FALSE(selector.insertWithTest(r)); // 2 !>= 6 => should return FALSE
 }
 
@@ -1161,10 +1160,10 @@ TEST(test_DiffractionSelector_insertWithTest, greater)
 	selector.setMaximumDiffractionOrder(12);
 	Ray* r=new Ray();
 
-	r->nbDiffraction=13; 
+	r->setNbDiffraction(13);
 	EXPECT_TRUE(selector.insertWithTest(r));  // 13 > 12 => should return TRUE
 
-	r->nbDiffraction=12; 
+	r->setNbDiffraction(12);
 	EXPECT_FALSE(selector.insertWithTest(r)); // 12 !> 12 => should return FALSE
 }
 
@@ -1204,17 +1203,17 @@ TEST(test_FaceSelector_canBeInserted, history_primitive_mode)
 	//Set a source
 	Source src;
 	src.setPosition(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)));
-	r1->source=&src;
-	r2->source=&src;
-	r3->source=&src;
-	r4->source=&src;
+	r1->setSource(&src);
+	r2->setSource(&src);
+	r3->setSource(&src);
+	r4->setSource(&src);
 
 	//Set a receptor
 	Recepteur rcpt(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)),3);
-	r1->recepteur=&rcpt;
-	r2->recepteur=&rcpt;
-	r3->recepteur=&rcpt;
-	r4->recepteur=&rcpt;
+	r1->setRecepteur(&rcpt);
+	r2->setRecepteur(&rcpt);
+	r3->setRecepteur(&rcpt);
+	r4->setRecepteur(&rcpt);
 
 	simu.addSource(src);
 	simu.addRecepteur(rcpt);
@@ -1328,17 +1327,17 @@ TEST(test_FaceSelector_canBeInserted, history_face_mode)
 	//Set a source
 	Source src;
 	src.setPosition(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)));
-	r1->source=&src;
-	r2->source=&src;
-	r3->source=&src;
-	r4->source=&src;
+	r1->setSource(&src);
+	r2->setSource(&src);
+	r3->setSource(&src);
+	r4->setSource(&src);
 
 	//Set a receptor
 	Recepteur rcpt(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)),3);
-	r1->recepteur=&rcpt;
-	r2->recepteur=&rcpt;
-	r3->recepteur=&rcpt;
-	r4->recepteur=&rcpt;
+	r1->setRecepteur(&rcpt);
+	r2->setRecepteur(&rcpt);
+	r3->setRecepteur(&rcpt);
+	r4->setRecepteur(&rcpt);
 
 	simu.addSource(src);
 	simu.addRecepteur(rcpt);
@@ -1454,17 +1453,17 @@ TEST(test_FaceSelector_insertWithTest, history_primitive_mode)
 	//Set a source
 	Source src;
 	src.setPosition(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)));
-	r1->source=&src;
-	r2->source=&src;
-	r3->source=&src;
-	r4->source=&src;
+	r1->setSource(&src);
+	r2->setSource(&src);
+	r3->setSource(&src);
+	r4->setSource(&src);
 
 	//Set a receptor
 	Recepteur rcpt(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)),3);
-	r1->recepteur=&rcpt;
-	r2->recepteur=&rcpt;
-	r3->recepteur=&rcpt;
-	r4->recepteur=&rcpt;
+	r1->setRecepteur(&rcpt);
+	r2->setRecepteur(&rcpt);
+	r3->setRecepteur(&rcpt);
+	r4->setRecepteur(&rcpt);
 
 	simu.addSource(src);
 	simu.addRecepteur(rcpt);
@@ -1571,17 +1570,17 @@ TEST(test_FaceSelector_insertWithTest, history_face_mode)
 	//Set a source
 	Source src;
 	src.setPosition(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)));
-	r1->source=&src;
-	r2->source=&src;
-	r3->source=&src;
-	r4->source=&src;
+	r1->setSource(&src);
+	r2->setSource(&src);
+	r3->setSource(&src);
+	r4->setSource(&src);
 
 	//Set a receptor
 	Recepteur rcpt(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)),3);
-	r1->recepteur=&rcpt;
-	r2->recepteur=&rcpt;
-	r3->recepteur=&rcpt;
-	r4->recepteur=&rcpt;
+	r1->setRecepteur(&rcpt);
+	r2->setRecepteur(&rcpt);
+	r3->setRecepteur(&rcpt);
+	r4->setRecepteur(&rcpt);
 
 	simu.addSource(src);
 	simu.addRecepteur(rcpt);
@@ -1688,20 +1687,20 @@ TEST(test_FermatSelector_canBeInserted, receptor_outside_thickness_1)
 	Source src;
 	src.setPosition(vec3(0,0,0));
 	src.setInitialRayCount(1000);
-	r->source=&src;
+	r->setSource(&src);
 	
 	//Set a receptor
 	Recepteur rcpt(vec3(10,1,0),3);
-	r->recepteur=&rcpt;
+	r->setRecepteur(&rcpt);
 
 	Intersection result;
 	float tmax=2000;
 	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(0,1,0); // direction from source to receptor + some deviation
 	dir.normalize();
-	r->direction=dir;
-	r->position=src.getPosition();
-	rcpt.intersectionRecepteur(r->position, r->direction, tmax, result);
-	r->finalPosition = r->position + r->direction * result.t;
+	r->setDirection(dir);
+	r->setPosition(src.getPosition());
+	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace); //the receptor does not lie in the ray's thickness => response should be SELECTOR_REJECT
@@ -1722,20 +1721,20 @@ TEST(test_FermatSelector_canBeInserted, receptor_outside_thickness_2)
 	Source src;
 	src.setPosition(vec3(50,-200,150));
 	src.setInitialRayCount(1000);
-	r->source=&src;
+	r->setSource(&src);
 	
 	//Set a receptor
 	Recepteur rcpt(vec3(60,-210,140),3);
-	r->recepteur=&rcpt;
+	r->setRecepteur(&rcpt);
 
 	Intersection result;
 	float tmax=2000;
 	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(2,0,0); // direction from source to receptor + some deviation
 	dir.normalize();
-	r->direction=dir;
-	r->position=src.getPosition();
-	rcpt.intersectionRecepteur(r->position, r->direction, tmax, result);
-	r->finalPosition = r->position + r->direction * result.t;
+	r->setDirection(dir);
+	r->setPosition(src.getPosition());
+	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace); //the receptor does not lie in the ray's thickness => response should be SELECTOR_REJECT
@@ -1755,20 +1754,20 @@ TEST(test_FermatSelector_canBeInserted, receptor_inside_thickness_1)
 	Source src;
 	src.setPosition(vec3(0,0,0));
 	src.setInitialRayCount(1000);
-	r->source=&src;
+	r->setSource(&src);
 	
 	//Set a receptor
 	Recepteur rcpt(vec3(1000,0,0),3);
-	r->recepteur=&rcpt;
+	r->setRecepteur(&rcpt);
 
 	Intersection result;
 	float tmax=2000;
 	vec3 dir=rcpt.getPosition()-src.getPosition(); // direction from source to receptor
 	dir.normalize();
-	r->direction=dir;
-	r->position=src.getPosition();
-	rcpt.intersectionRecepteur(r->position, r->direction, tmax, result);
-	r->finalPosition = r->position + r->direction * result.t;
+	r->setDirection(dir);
+	r->setPosition(src.getPosition());
+	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace); //the receptor lies in the ray's thickness => response should be SELECTOR_ACCEPT
@@ -1788,20 +1787,20 @@ TEST(test_FermatSelector_canBeInserted, receptor_inside_thickness_2)
 	Source src;
 	src.setPosition(vec3(50,-200,150));
 	src.setInitialRayCount(1000);
-	r->source=&src;
+	r->setSource(&src);
 	
 	//Set a receptor
 	Recepteur rcpt(vec3(-800,450,300),3);
-	r->recepteur=&rcpt;
+	r->setRecepteur(&rcpt);
 
 	Intersection result;
 	float tmax=2000;
 	vec3 dir=rcpt.getPosition()-src.getPosition(); // direction from source to receptor 
 	dir.normalize();
-	r->direction=dir;
-	r->position=src.getPosition();
-	rcpt.intersectionRecepteur(r->position, r->direction, tmax, result);
-	r->finalPosition = r->position + r->direction * result.t;
+	r->setDirection(dir);
+	r->setPosition(src.getPosition());
+	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace); //the receptor lies in the ray's thickness => response should be SELECTOR_ACCEPT
@@ -1820,20 +1819,20 @@ TEST(test_FermatSelector_insertWithTest, receptor_outside_thickness_1)
 	Source src;
 	src.setPosition(vec3(0,0,0));
 	src.setInitialRayCount(1000);
-	r->source=&src;
+	r->setSource(&src);
 	
 	//Set a receptor
 	Recepteur rcpt(vec3(10,1,0),3);
-	r->recepteur=&rcpt;
+	r->setRecepteur(&rcpt);
 
 	Intersection result;
 	float tmax=2000;
 	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(0,1,0); // direction from source to receptor + some deviation
 	dir.normalize();
-	r->direction=dir;
-	r->position=src.getPosition();
-	rcpt.intersectionRecepteur(r->position, r->direction, tmax, result);
-	r->finalPosition = r->position + r->direction * result.t;
+	r->setDirection(dir);
+	r->setPosition(src.getPosition());
+	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
 	EXPECT_FALSE(selector.insertWithTest(r)); //the receptor does not lie in the ray's thickness => should return FALSE
@@ -1852,20 +1851,20 @@ TEST(test_FermatSelector_insertWithTest, receptor_outside_thickness_2)
 	Source src;
 	src.setPosition(vec3(50,-200,150));
 	src.setInitialRayCount(1000);
-	r->source=&src;
+	r->setSource(&src);
 	
 	//Set a receptor
 	Recepteur rcpt(vec3(60,-210,140),3);
-	r->recepteur=&rcpt;
+	r->setRecepteur(&rcpt);
 
 	Intersection result;
 	float tmax=2000;
 	vec3 dir=rcpt.getPosition()-src.getPosition()+vec3(2,0,0); // direction from source to receptor + some deviation
 	dir.normalize();
-	r->direction=dir;
-	r->position=src.getPosition();
-	rcpt.intersectionRecepteur(r->position, r->direction, tmax, result);
-	r->finalPosition = r->position + r->direction * result.t;
+	r->setDirection(dir);
+	r->setPosition(src.getPosition());
+	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
 	EXPECT_FALSE(selector.insertWithTest(r)); //the receptor does not lie in the ray's thickness => should return FALSE
@@ -1883,20 +1882,20 @@ TEST(test_FermatSelector_insertWithTest, receptor_inside_thickness_1)
 	Source src;
 	src.setPosition(vec3(0,0,0));
 	src.setInitialRayCount(1000);
-	r->source=&src;
+	r->setSource(&src);
 	
 	//Set a receptor
 	Recepteur rcpt(vec3(1000,0,0),3);
-	r->recepteur=&rcpt;
+	r->setRecepteur(&rcpt);
 
 	Intersection result;
 	float tmax=2000;
 	vec3 dir=rcpt.getPosition()-src.getPosition(); // direction from source to receptor
 	dir.normalize();
-	r->direction=dir;
-	r->position=src.getPosition();
-	rcpt.intersectionRecepteur(r->position, r->direction, tmax, result);
-	r->finalPosition = r->position + r->direction * result.t;
+	r->setDirection(dir);
+	r->setPosition(src.getPosition());
+	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 	
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
 	EXPECT_TRUE(selector.insertWithTest(r)); //the receptor does not lie in the ray's thickness => should return TRUE
@@ -1914,20 +1913,20 @@ TEST(test_FermatSelector_insertWithTest, receptor_inside_thickness_2)
 	Source src;
 	src.setPosition(vec3(50,-200,150));
 	src.setInitialRayCount(1000);
-	r->source=&src;
+	r->setSource(&src);
 	
 	//Set a receptor
 	Recepteur rcpt(vec3(-800,450,300),3);
-	r->recepteur=&rcpt;
+	r->setRecepteur(&rcpt);
 
 	Intersection result;
 	float tmax=2000;
 	vec3 dir=rcpt.getPosition()-src.getPosition(); // direction from source to receptor 
 	dir.normalize();
-	r->direction=dir;
-	r->position=src.getPosition();
-	rcpt.intersectionRecepteur(r->position, r->direction, tmax, result);
-	r->finalPosition = r->position + r->direction * result.t;
+	r->setDirection(dir);
+	r->setPosition(src.getPosition());
+	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
 	EXPECT_TRUE(selector.insertWithTest(r)); //the receptor does not lie in the ray's thickness => should return TRUE
@@ -1949,17 +1948,17 @@ TEST(test_LengthSelector_canBeInserted, less)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
-	r->source=&src;
+	r->setSource(&src);
 
 	//Set receptors
 	Recepteur rcpt1(vec3(800,0,0),3);
 	Recepteur rcpt2(vec3(0,1000,0),3);
 	
-	r->recepteur=&rcpt1;
+	r->setRecepteur(&rcpt1);
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 800 < 1000 => response should be SELECTOR_ACCEPT
 	
-	r->recepteur=&rcpt2;
+	r->setRecepteur(&rcpt2);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 1000 !< 1000 => response should be SELECTOR_REJECT
 }
@@ -1975,22 +1974,22 @@ TEST(test_LengthSelector_canBeInserted, less_or_equal)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
-	r->source=&src;
+	r->setSource(&src);
 
 	//Set receptors
 	Recepteur rcpt1(vec3(1999,0,0),3);
 	Recepteur rcpt2(vec3(0,2000,0),3);
 	Recepteur rcpt3(vec3(0,0,2001),3);
 
-	r->recepteur=&rcpt1;
+	r->setRecepteur(&rcpt1);
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 1999 <= 2000 => response should be SELECTOR_ACCEPT
 	
-	r->recepteur=&rcpt2;
+	r->setRecepteur(&rcpt2);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 2000 <= 2000 => response should be SELECTOR_ACCEPT
 
-	r->recepteur=&rcpt3;
+	r->setRecepteur(&rcpt3);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 2001 !<= 2000 => response should be SELECTOR_REJECT
 }
@@ -2007,22 +2006,22 @@ TEST(test_LengthSelector_canBeInserted, equal)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
-	r->source=&src;
+	r->setSource(&src);
 
 	//Set receptors
 	Recepteur rcpt1(vec3(699,0,0),3);
 	Recepteur rcpt2(vec3(0,700,0),3);
 	Recepteur rcpt3(vec3(0,0,701),3);
 
-	r->recepteur=&rcpt1;
+	r->setRecepteur(&rcpt1);
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 699 != 700 => response should be SELECTOR_REJECT
 	
-	r->recepteur=&rcpt2;
+	r->setRecepteur(&rcpt2);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 700 == 700 => response should be SELECTOR_ACCEPT
 
-	r->recepteur=&rcpt3;
+	r->setRecepteur(&rcpt3);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 701 != 700 => response should be SELECTOR_REJECT
 }
@@ -2038,22 +2037,22 @@ TEST(test_LengthSelector_canBeInserted, greater_or_equal)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
-	r->source=&src;
+	r->setSource(&src);
 
 	//Set receptors
 	Recepteur rcpt1(vec3(950,0,0),3);
 	Recepteur rcpt2(vec3(0,850,0),3);
 	Recepteur rcpt3(vec3(0,0,900),3);
 
-	r->recepteur=&rcpt1;
+	r->setRecepteur(&rcpt1);
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 950 >= 900 => response should be SELECTOR_ACCEPT
 	
-	r->recepteur=&rcpt2;
+	r->setRecepteur(&rcpt2);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 850 !>= 900 => response should be SELECTOR_REJECT
 
-	r->recepteur=&rcpt3;
+	r->setRecepteur(&rcpt3);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 900 >= 900 => response should be SELECTOR_ACCEPT
 }
@@ -2070,17 +2069,17 @@ TEST(test_LengthSelector_canBeInserted, greater)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
-	r->source=&src;
+	r->setSource(&src);
 
 	//Set receptors
 	Recepteur rcpt1(vec3(300,0,0),3);
 	Recepteur rcpt2(vec3(301,0,0),3);
 
-	r->recepteur=&rcpt1;
+	r->setRecepteur(&rcpt1);
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 300 !> 300 => response should be SELECTOR_REJECT
 	
-	r->recepteur=&rcpt2;
+	r->setRecepteur(&rcpt2);
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 301 > 300 => response should be SELECTOR_ACCEPT
 
@@ -2097,16 +2096,16 @@ TEST(test_LengthSelector_insertWithTest, less)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
-	r->source=&src;
+	r->setSource(&src);
 
 	//Set receptors
 	Recepteur rcpt1(vec3(700,0,0),3);
 	Recepteur rcpt2(vec3(0,850,0),3);
 	
-	r->recepteur=&rcpt1;
+	r->setRecepteur(&rcpt1);
 	EXPECT_TRUE(selector.insertWithTest(r));	// 700 < 850 => should return TRUE
 	
-	r->recepteur=&rcpt2;
+	r->setRecepteur(&rcpt2);
 	EXPECT_FALSE(selector.insertWithTest(r));   // 850 !< 850 => should return FALSE
 }
 
@@ -2120,20 +2119,20 @@ TEST(test_LengthSelector_insertWithTest, less_or_equal)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
-	r->source=&src;
+	r->setSource(&src);
 
 	//Set receptors
 	Recepteur rcpt1(vec3(400,0,0),3);
 	Recepteur rcpt2(vec3(0,500,0),3);
 	Recepteur rcpt3(vec3(0,0,450),3);
 
-	r->recepteur=&rcpt1;
+	r->setRecepteur(&rcpt1);
 	EXPECT_TRUE(selector.insertWithTest(r));   // 400 <= 450 => should return TRUE
 	
-	r->recepteur=&rcpt2;
+	r->setRecepteur(&rcpt2);
 	EXPECT_FALSE(selector.insertWithTest(r));  // 500 !<= 450 => should return FALSE
 
-	r->recepteur=&rcpt3;
+	r->setRecepteur(&rcpt3);
 	EXPECT_TRUE(selector.insertWithTest(r));   // 450 <= 450 => should return TRUE
 	
 }
@@ -2149,20 +2148,20 @@ TEST(test_LengthSelector_insertWithTest, equal)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
-	r->source=&src;
+	r->setSource(&src);
 
 	//Set receptors
 	Recepteur rcpt1(vec3(326,0,0),3);
 	Recepteur rcpt2(vec3(0,324,0),3);
 	Recepteur rcpt3(vec3(0,0,325),3);
 
-	r->recepteur=&rcpt1;
+	r->setRecepteur(&rcpt1);
 	EXPECT_FALSE(selector.insertWithTest(r));   // 326 != 325 => should return FALSE
 
-	r->recepteur=&rcpt2;
+	r->setRecepteur(&rcpt2);
 	EXPECT_FALSE(selector.insertWithTest(r));   // 324 != 325 => should return FALSE
 
-	r->recepteur=&rcpt3;
+	r->setRecepteur(&rcpt3);
 	EXPECT_TRUE(selector.insertWithTest(r));	// 325 == 325 => should return TRUE
 }
 
@@ -2176,20 +2175,20 @@ TEST(test_LengthSelector_insertWithTest, greater_or_equal)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
-	r->source=&src;
+	r->setSource(&src);
 
 	//Set receptors
 	Recepteur rcpt1(vec3(261,0,0),3);
 	Recepteur rcpt2(vec3(0,259,0),3);
 	Recepteur rcpt3(vec3(0,0,260),3);
 
-	r->recepteur=&rcpt1;
+	r->setRecepteur(&rcpt1);
 	EXPECT_TRUE(selector.insertWithTest(r));   // 261 >= 260 => should return TRUE
 	
-	r->recepteur=&rcpt2;
+	r->setRecepteur(&rcpt2);
 	EXPECT_FALSE(selector.insertWithTest(r));  // 259 !>= 260 => should return FALSE
 
-	r->recepteur=&rcpt3;
+	r->setRecepteur(&rcpt3);
 	EXPECT_TRUE(selector.insertWithTest(r));   // 260 >= 260 => should return TRUE
 }
 
@@ -2204,16 +2203,16 @@ TEST(test_LengthSelector_insertWithTest, greater)
 	//Set a source
 	Source src;
 	src.setPosition(vec3(0,0,0));
-	r->source=&src;
+	r->setSource(&src);
 
 	//Set receptors
 	Recepteur rcpt1(vec3(630,0,0),3);
 	Recepteur rcpt2(vec3(631,0,0),3);
 
-	r->recepteur=&rcpt1;
+	r->setRecepteur(&rcpt1);
 	EXPECT_FALSE(selector.insertWithTest(r));   // 630 !> 630 => should return FALSE
 	
-	r->recepteur=&rcpt2;
+	r->setRecepteur(&rcpt2);
 	EXPECT_TRUE(selector.insertWithTest(r));	// 631 > 630 => should return TRUE
 
 }
@@ -2240,11 +2239,11 @@ TEST(test_ReflectionSelector_canBeInserted, less)
 	Ray* r=new Ray();
 	unsigned long long replace;
 
-	r->nbReflexion=4; 
+	r->setNbReflexion(4); 
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 4 < 5 => response should be SELECTOR_ACCEPT
 
-	r->nbReflexion=5; 
+	r->setNbReflexion(5); 
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 5 !< 5 => response should be SELECTOR_REJECT
 }
@@ -2258,15 +2257,15 @@ TEST(test_ReflectionSelector_canBeInserted, less_or_equal)
 	Ray* r=new Ray();
 	unsigned long long replace;
 
-	r->nbReflexion=6; 
+	r->setNbReflexion(6); 
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 6 <= 10 => response should be SELECTOR_ACCEPT
 
-	r->nbReflexion=10; 
+	r->setNbReflexion(10); 
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 10 <= 10 => response should be SELECTOR_ACCEPT
 
-	r->nbReflexion=15; 
+	r->setNbReflexion(15); 
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 15 !<= 10 => response should be SELECTOR_REJECT
 }
@@ -2282,11 +2281,11 @@ TEST(test_ReflectionSelector_canBeInserted, equal)
 	Ray* r=new Ray();
 	unsigned long long replace;
 
-	r->nbReflexion=7; 
+	r->setNbReflexion(7); 
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 7 == 7 => response should be SELECTOR_ACCEPT
 
-	r->nbReflexion=3; 
+	r->setNbReflexion(3); 
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 3 != 7 => response should be SELECTOR_REJECT
 }
@@ -2304,11 +2303,11 @@ TEST(test_ReflectionSelector_canBeInserted, greater_or_equal)
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 0 !>= 1 => response should be SELECTOR_REJECT
 
-	r->nbReflexion=1; 
+	r->setNbReflexion(1); 
     response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 1 >= 1 => response should be SELECTOR_ACCEPT
 
-	r->nbReflexion=2; 
+	r->setNbReflexion(2); 
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); // 2 >= 1 => response should be SELECTOR_ACCEPT
 }
@@ -2324,11 +2323,11 @@ TEST(test_ReflectionSelector_canBeInserted, greater)
 	Ray* r=new Ray();
 	unsigned long long replace;
 
-	r->nbReflexion=9; 
+	r->setNbReflexion(9); 
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); //9 > 8 => response should be SELECTOR_ACCEPT
 
-	r->nbReflexion=8; 
+	r->setNbReflexion(8); 
 	response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_REJECT,response); // 8 !> 8 => response should be SELECTOR_REJECT
 }
@@ -2375,7 +2374,7 @@ TEST(test_ReflectionSelector_canBeInserted, ground_reflection)
 	e3->setShape(shape1);
 	std::shared_ptr<Event> SPE3(e3);
 
-	r->nbReflexion=1; 
+	r->setNbReflexion(1); 
 	SELECTOR_RESPOND response=selector.canBeInserted(r,replace);
 	EXPECT_EQ(SELECTOR_ACCEPT,response); //1 <= 1 => response should be SELECTOR_ACCEPT
 
@@ -2402,10 +2401,10 @@ TEST(test_ReflectionSelector_insertWithTest, less)
 	selector.setMaximumReflectionOrder(9);
 	Ray* r=new Ray();
 
-	r->nbReflexion=5; 
+	r->setNbReflexion(5); 
 	EXPECT_TRUE(selector.insertWithTest(r));  // 5 < 9 =>  should return TRUE
 
-	r->nbReflexion=9; 
+	r->setNbReflexion(9); 
 	EXPECT_FALSE(selector.insertWithTest(r)); // 9 !< 9 =>  should return FALSE
 }
 
@@ -2418,10 +2417,10 @@ TEST(test_ReflectionSelector_insertWithTest, less_or_equal)
 
 	EXPECT_TRUE(selector.insertWithTest(r));  // 0 <= 1 =>  should return TRUE
 
-	r->nbReflexion=1; 
+	r->setNbReflexion(1); 
 	EXPECT_TRUE(selector.insertWithTest(r));  // 1 <= 1 => should return TRUE
 
-	r->nbReflexion=2; 
+	r->setNbReflexion(2); 
 	EXPECT_FALSE(selector.insertWithTest(r)); // 2 !<= 2 => should return FALSE
 }
 
@@ -2435,10 +2434,10 @@ TEST(test_ReflectionSelector_insertWithTest, equal)
 	selector.setMaximumReflectionOrder(15);
 	Ray* r=new Ray();
 
-	r->nbReflexion=15; 
+	r->setNbReflexion(15); 
 	EXPECT_TRUE(selector.insertWithTest(r));  // 15==15 =>  should return TRUE
 
-	r->nbReflexion=8; 
+	r->setNbReflexion(8); 
 	EXPECT_FALSE(selector.insertWithTest(r)); // 8 != 15 => should return FALSE
 }
 
@@ -2452,13 +2451,13 @@ TEST(test_ReflectionSelector_insertWithTest, greater_or_equal)
 	selector.setMaximumReflectionOrder(6);
 	Ray* r=new Ray();
 
-	r->nbReflexion=7; 
+	r->setNbReflexion(7); 
 	EXPECT_TRUE(selector.insertWithTest(r));  //7 >= 6 => should return TRUE
 
-	r->nbReflexion=6; 
+	r->setNbReflexion(6); 
 	EXPECT_TRUE(selector.insertWithTest(r));  // 6 >= 6 => should return TRUE
 
-	r->nbReflexion=2; 
+	r->setNbReflexion(2); 
 	EXPECT_FALSE(selector.insertWithTest(r)); // 2 !>= 6 => should return FALSE
 }
 
@@ -2472,10 +2471,10 @@ TEST(test_ReflectionSelector_insertWithTest, greater)
 	selector.setMaximumReflectionOrder(12);
 	Ray* r=new Ray();
 
-	r->nbReflexion=13; 
+	r->setNbReflexion(13); 
 	EXPECT_TRUE(selector.insertWithTest(r));  // 13 > 12 => should return TRUE
 
-	r->nbReflexion=12; 
+	r->setNbReflexion(12); 
 	EXPECT_FALSE(selector.insertWithTest(r)); // 12 !> 12 => should return FALSE
 }
 
@@ -2520,7 +2519,7 @@ TEST(test_ReflectionSelector_insertWithTest, ground_reflection)
 	e3->setShape(shape1);
 	std::shared_ptr<Event> SPE3(e3);
 
-	r->nbReflexion=1; 
+	r->setNbReflexion(1); 
 	EXPECT_TRUE(selector.insertWithTest(r)); //1 <= 1 => should return TRUE
 
 	shape1->setIsSol(true); //flag first event's shape as ground
@@ -2609,17 +2608,17 @@ TEST(test_SelectorManager, appendData)
 	//Set a source
 	Source src;
 	src.setPosition(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)));
-	r1->source=&src;
-	r2->source=&src;
-	r3->source=&src;
-	r4->source=&src;
+	r1->setSource(&src);
+	r2->setSource(&src);
+	r3->setSource(&src);
+	r4->setSource(&src);
 
 	//Set a receptor
 	Recepteur rcpt(vec3((decimal)(rand()%10+5),(decimal)(rand()%10+5),(decimal)(rand()%10+5)),3);
-	r1->recepteur=&rcpt;
-	r2->recepteur=&rcpt;
-	r3->recepteur=&rcpt;
-	r4->recepteur=&rcpt;
+	r1->setRecepteur(&rcpt);
+	r2->setRecepteur(&rcpt);
+	r3->setRecepteur(&rcpt);
+	r4->setRecepteur(&rcpt);
 
 	simu.addSource(src);
 	simu.addRecepteur(rcpt);
@@ -2631,10 +2630,10 @@ TEST(test_SelectorManager, appendData)
 	r4->setName("R4");
 
 	//set id of rays
-	r1->constructId=1;
-	r2->constructId=2;
-	r3->constructId=3;
-	r4->constructId=4;
+	r1->setConstructId(1);
+	r2->setConstructId(2);
+	r3->setConstructId(3);
+	r4->setConstructId(4);
 
 	//Randomly generate four triangles with a different shapeId and add theme to the scene
 	std::vector<Shape*> shapes;
