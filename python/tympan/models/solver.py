@@ -90,7 +90,7 @@ class Model(object):
     def add_source(self, source):
         """Add an acoustic source to the model."""
         return self._model._add_source(
-            source.position, source.spectrum.values, 0, source.directivity)
+            source.position, source.spectrum, source.directivity)
 
     def add_receptor(self, receptor):
         return self._model.add_receptor(*receptor.position)
