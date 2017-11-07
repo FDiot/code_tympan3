@@ -89,17 +89,17 @@ decimal GridAccelerator::traverse(Ray* r, std::list<Intersection> &result) const
 {
     decimal rayT;
     decimal intermin = -1.;
-    vec3 grid = r->position + r->direction * r->mint;
+    vec3 grid = r->getPosition() + r->getDirection() * r->getMint();
     if (bounds.Inside(grid))
     {
-        rayT = r->mint;
+        rayT = r->getMint();
     }
-    else if (!bounds.IntersectP(r->position, r->direction, &rayT))
+    else if (!bounds.IntersectP(r->getPosition(), r->getDirection(), &rayT))
     {
         //PBRT_GRID_RAY_MISSED_BOUNDS();
         return false;
     }
-    vec3 gridIntersect = r->position + r->direction * rayT;
+    vec3 gridIntersect = r->getPosition() + r->getDirection() * rayT;
 
     // Set up 3D DDA for ray
     float NextCrossingT[3], DeltaT[3];
@@ -108,12 +108,12 @@ decimal GridAccelerator::traverse(Ray* r, std::list<Intersection> &result) const
     {
         // Compute current voxel for axis
         Pos[axis] = posToVoxel(gridIntersect, axis);
-        if (r->direction[axis] >= 0)
+        if (r->getDirection()[axis] >= 0)
         {
             // Handle ray with positive direction for voxel stepping
             NextCrossingT[axis] = rayT +
-                                  (voxelToPos(Pos[axis] + 1, axis) - gridIntersect[axis]) / r->direction[axis];
-            DeltaT[axis] = width[axis] / r->direction[axis];
+                                  (voxelToPos(Pos[axis] + 1, axis) - gridIntersect[axis]) / r->getDirection()[axis];
+            DeltaT[axis] = width[axis] / r->getDirection()[axis];
             Step[axis] = 1;
             Out[axis] = nVoxels[axis];
         }
@@ -121,8 +121,8 @@ decimal GridAccelerator::traverse(Ray* r, std::list<Intersection> &result) const
         {
             // Handle ray with negative direction for voxel stepping
             NextCrossingT[axis] = rayT +
-                                  (voxelToPos(Pos[axis], axis) - gridIntersect[axis]) / r->direction[axis];
-            DeltaT[axis] = -width[axis] / r->direction[axis];
+                                  (voxelToPos(Pos[axis], axis) - gridIntersect[axis]) / r->getDirection()[axis];
+            DeltaT[axis] = -width[axis] / r->getDirection()[axis];
             Step[axis] = -1;
             Out[axis] = -1;
         }
@@ -146,7 +146,7 @@ decimal GridAccelerator::traverse(Ray* r, std::list<Intersection> &result) const
                    ((NextCrossingT[1] < NextCrossingT[2]));
         const int cmpToAxis[8] = { 2, 1, 2, 1, 2, 2, 0, 0 };
         int stepAxis = cmpToAxis[bits];
-        if (r->maxt < NextCrossingT[stepAxis])
+        if (r->getMaxt() < NextCrossingT[stepAxis])
         {
             break;
         }

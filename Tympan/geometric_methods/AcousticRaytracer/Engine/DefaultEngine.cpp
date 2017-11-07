@@ -129,13 +129,13 @@ Ray* DefaultEngine::genRay()
         {
         	// Generate a ray from the current source(i)
             Ray* new_ray = new Ray();
-            new_ray->constructId = rayCounter;
+            new_ray->setConstructId ( rayCounter );
             rayCounter++;
-            new_ray->source = (&(sources->at(i)));
-            new_ray->position = sources->at(i).getPosition();
-            sources->at(i).getDirection(new_ray->direction);
-            new_ray->mint = 0.;
-            new_ray->maxt = 10000.;
+            new_ray->setSource ( (&(sources->at(i))) );
+            new_ray->setPosition ( sources->at(i).getPosition());
+            sources->at(i).getDirection(new_ray->getDirection());
+            new_ray->setMint ( 0.);
+            new_ray->setMaxt ( 10000.);
             return new_ray;
         }
     }
@@ -150,7 +150,7 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
     //Si le dernier evenement du rayon peut generer plusieurs rayons secondaires, on genere
     //un rayon secondaire, puis on copie le rayon restant et on le met dans la pile de traitement.
     //Si le dernier evenement n'a plus de rayon a generer, le rayon n'est pas traite
-    if ( !(r->events.empty()) && (r->events.back()->isReponseLeft()) )
+    if ( !(r->getEvents()->empty()) && (r->getEvents()->back()->isReponseLeft()) )
     {
 		copyRayAndAddToStack(r);
     }
@@ -222,13 +222,13 @@ void DefaultEngine::runStructureBenchmark()
     for (unsigned int i = 0; i < nbVec; i++)
     {
         Ray r;
-        r.mint = 0.00001f;
-        r.maxt = 10000.;
-        r.direction = vec3((double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX);
-        r.direction.normalize();
-        r.position = vec3(((double)rand() / (double)RAND_MAX) * (sceneBox.pMax.x - sceneBox.pMin.x) + sceneBox.pMin.x,
+        r.setMint ( 0.00001f);
+        r.setMaxt ( 10000.);
+        r.setDirection ( vec3((double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX, (double)rand() / (double)RAND_MAX) );
+        r.getDirection().normalize();
+        r.setPosition ( vec3(((double)rand() / (double)RAND_MAX) * (sceneBox.pMax.x - sceneBox.pMin.x) + sceneBox.pMin.x,
                           ((double)rand() / (double)RAND_MAX) * (sceneBox.pMax.y - sceneBox.pMin.y) + sceneBox.pMin.y,
-                          ((double)rand() / (double)RAND_MAX) * (sceneBox.pMax.z - sceneBox.pMin.z) + sceneBox.pMin.z);
+                          ((double)rand() / (double)RAND_MAX) * (sceneBox.pMax.z - sceneBox.pMin.z) + sceneBox.pMin.z) );
         Accelerator* accel = scene->getAccelerator();
         std::list<Intersection> foundPrims;
         accel->traverse(&r, foundPrims);

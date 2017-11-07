@@ -75,7 +75,7 @@ void build_event_list_from_Ray(int sens, Ray* ray, acoustic_path& ap)
         // Add receptor as an event (the source is the reeptor)
         e = new acoustic_event();
         e->type = TYRECEPTEUR;
-        e->pos = OPoint3D(ray->source->getPosition().x, ray->source->getPosition().y, ray->source->getPosition().z);
+        e->pos = OPoint3D(ray->getSource()->getPosition().x, ray->getSource()->getPosition().y, ray->getSource()->getPosition().z);
         e->angle = 0.0;
         ap.getEvents().push_back(e);
     }
@@ -84,7 +84,7 @@ void build_event_list_from_Ray(int sens, Ray* ray, acoustic_path& ap)
         //Add source as an event
         e = new acoustic_event();
         e->type = TYSOURCE;
-        e->pos = OPoint3D(ray->source->getPosition().x, ray->source->getPosition().y, ray->source->getPosition().z);
+        e->pos = OPoint3D(ray->getSource()->getPosition().x, ray->getSource()->getPosition().y, ray->getSource()->getPosition().z);
         e->angle = 0.0;
         ap.getEvents().push_back(e);
 

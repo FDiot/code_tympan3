@@ -70,7 +70,7 @@ void Triangle::updateBBox()
 
 bool Triangle::getIntersection(Ray& ray, Intersection& inter)
 {
-    vec3 directeur = ray.direction;
+    vec3 directeur = ray.getDirection();
     directeur.normalize();
     if (directeur.dot(this->normal) > 0.)
     {
@@ -80,7 +80,7 @@ bool Triangle::getIntersection(Ray& ray, Intersection& inter)
     vec3 u = Vector_r(vertices->at(localVertices.at(2)), vertices->at(localVertices.at(0)));
     vec3 n;
     n.cross(u, v);
-    vec3 otr = Vector_r(ray.position,
+    vec3 otr = Vector_r(ray.getPosition(),
                         vertices->at(localVertices.at(0)));
     double ir, iu, iv;
     vec3 temp;

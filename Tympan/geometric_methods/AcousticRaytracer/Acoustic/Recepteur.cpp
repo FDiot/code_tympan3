@@ -19,14 +19,14 @@
 bool Recepteur::intersectionRecepteur(vec3& origine, vec3& directeur, float tmax, Intersection& result)
 {
     Ray r = Ray(origine, directeur);
-    r.mint = 0.;
+    r.setMint ( 0.);
     if (tmax < 0.)
     {
-        r.maxt = 100000.;
+        r.setMaxt ( 100000.);
     }
     else
     {
-        r.maxt = tmax;
+        r.setMaxt(tmax);
     }
 
     return getIntersection(r, result);

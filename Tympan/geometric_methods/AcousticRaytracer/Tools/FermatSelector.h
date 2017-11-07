@@ -37,8 +37,8 @@ public :
 
     virtual SELECTOR_RESPOND canBeInserted(T* r, unsigned long long& replace)
     {
-		vec3 receptorPos( static_cast<Recepteur*> (r->recepteur)->getPosition() );
-		vec3 finalPos( r->finalPosition );
+		vec3 receptorPos( static_cast<Recepteur*> (r->getRecepteur())->getPosition() );
+		vec3 finalPos( r->getFinalPosition() );
 
 		vec3 closestPoint;
 		decimal trueLength = r->computeTrueLength(receptorPos, finalPos, closestPoint);
@@ -57,8 +57,8 @@ public :
 
     virtual bool insertWithTest(T* r)
     {
-		vec3 receptorPos( static_cast<Recepteur*> (r->recepteur)->getPosition() );
-		vec3 finalPos( r->finalPosition );
+		vec3 receptorPos( static_cast<Recepteur*> (r->getRecepteur())->getPosition() );
+		vec3 finalPos( r->getFinalPosition() );
 
 		vec3 closestPoint;
 		decimal trueLength = r->computeTrueLength(receptorPos, finalPos, closestPoint);

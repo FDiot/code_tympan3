@@ -43,8 +43,8 @@ public :
 		decimal cumul_delta = 0.;
 		decimal cumul_distance = 0.;
 		bool notLast = true;
-		Recepteur *pRecep = static_cast<Recepteur*>( r->recepteur );
-		Source *pSource = r->source;
+		Recepteur *pRecep = static_cast<Recepteur*>( r->getRecepteur() );
+		Source *pSource = r->getSource();
 
 		vec3 origin = pRecep->getPosition();
 		vec3 current_pos = origin;
@@ -95,8 +95,8 @@ public :
 		decimal cumul_distance = 0.;
 		bool notLast = true;
 		
-		Recepteur *pRecep = static_cast<Recepteur*>( r->recepteur );
-		Source *pSource = r->source;
+		Recepteur *pRecep = static_cast<Recepteur*>( r->getRecepteur() );
+		Source *pSource = r->getSource();
 
 		vec3 origin = pRecep->getPosition();
 		vec3 current_pos = origin;

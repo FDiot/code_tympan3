@@ -372,7 +372,7 @@ TEST(test_simulation_1source_1recepteur, test_reflexion1)
 	// Test ray 
 	EXPECT_EQ(0,ray->getDiff());									//Test number of diffractions
 	EXPECT_EQ(config->MaxReflexion,ray->getReflex());				//Test number of reflexions
-	EXPECT_TRUE(ray->direction.compare(dir_right));					//Test ray final direction									
+	EXPECT_TRUE(ray->getDirection().compare(dir_right));					//Test ray final direction									
 	EXPECT_EQ(35,ray->getLongueur());								//Test ray length
 
 	std::vector<std::shared_ptr<Event> >* events=ray->getEvents();
@@ -470,7 +470,7 @@ TEST(test_simulation_1source_1recepteur, test_reflexion2)
 	// Test ray 
 	EXPECT_EQ(0,ray->getDiff());					//Test number of diffractions
 	EXPECT_EQ(3,ray->getReflex());					//Test number of reflexions
-	EXPECT_TRUE(ray->direction.compare(dir_down));	//Test ray final direction									
+	EXPECT_TRUE(ray->getDirection().compare(dir_down));	//Test ray final direction									
 	EXPECT_EQ(40,ray->getLongueur());				//Test ray length
 
 	std::vector<std::shared_ptr<Event> >* events=ray->getEvents();
