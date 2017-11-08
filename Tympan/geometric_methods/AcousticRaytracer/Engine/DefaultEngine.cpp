@@ -25,7 +25,7 @@
 #include "Ray/Ray.h"
 #include "DefaultEngine.h"
 
-struct CompareVec
+/*struct CompareVec
 {
     bool operator()(std::vector<unsigned int> list1, std::vector<unsigned int> list2) const
     {
@@ -58,7 +58,7 @@ struct CompareVec
         }
         return false;
     }
-} myCompare ;
+} myCompare ;*/
 
 bool DefaultEngine::process()
 {
