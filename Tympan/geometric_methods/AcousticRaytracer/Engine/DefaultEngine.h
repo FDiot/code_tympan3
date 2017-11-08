@@ -46,6 +46,9 @@ public:
 
     virtual void runStructureBenchmark();
 
+    Ray* genRay();                                                  //!< Create rays from the sources
+
+
 protected:
     /**
      * \brief Search if a ray intersects a receptor
@@ -125,6 +128,9 @@ public:
     virtual bool process();
 
     virtual void runStructureBenchmark();
+    
+    Ray* genRay();                                                  //!< Create rays from the sources
+
 
 protected :
     void searchForReceptor(const decimal &tmin, Ray *r)
@@ -184,7 +190,6 @@ protected :
         //Copie achevee
 	}
 
-    Ray* genRay();													//!< Create rays from the sources
      /**
       * \brief Ray treatment method
       * @param r Ray to treat
