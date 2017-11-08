@@ -55,7 +55,7 @@ bool pathDiffValidationForDiffraction(Ray *r, const vec3& impact);
 bool pathDiffValidationForReflection(Ray * r, const vec3& impact);
 
 /*!
- * \brief Search the nearest event of type REFLECTION otherwise the source
+ * \brief Search the nearest event of type REFLECTION otherwise the source and add its distance to impact to the ray's cumulative distance
  */
 void computeCumulDistance(Ray *r, const vec3& impact);
 

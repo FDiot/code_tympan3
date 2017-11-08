@@ -119,8 +119,8 @@ public:
 
     base_vec3(const vec4& _v);
 
-    int operator==(const base_vec3& _v) { return (fabs(this->x - _v.x) < EPSILON_6 && fabs(this->y - _v.y) < EPSILON_6 && fabs(this->z - _v.z) < EPSILON_6); }
-    int operator!=(const base_vec3& _v) { return !(*this == _v); }
+    bool operator==(const base_vec3& _v) { return (fabs(this->x - _v.x) < EPSILON_6 && fabs(this->y - _v.y) < EPSILON_6 && fabs(this->z - _v.z) < EPSILON_6); }
+    bool operator!=(const base_vec3& _v) { return !(*this == _v); }
 
     base_vec3& operator=(base_t _f) { this->x = _f; this->y = _f; this->z = _f; return (*this); }
     const base_vec3 operator*(base_t _f) const { return base_vec3(this->x * _f, this->y * _f, this->z * _f); }
