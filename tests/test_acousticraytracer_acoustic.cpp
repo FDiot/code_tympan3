@@ -414,6 +414,64 @@ TEST(test_valid_ray,compute_cumul_distance){
 	EXPECT_EQ(impact.distance(src->getPosition())+impact.distance(e->getPosition()),ray->cumulDistance);
 }
 
+// Test the computeRealImpact method
+TEST(test_valid_ray,compute_real_impact){
+
+	//Create the cylinder used for the diffraction
+
+	//Create the two shapes of the cylinder
+	Triangle* s1=new Triangle();
+	Triangle* s2=new Triangle();
+
+	s1->setNormal(vec3(-1,0,0));
+	s2->setNormal(vec3(0,1,0));
+
+	vector<vec3> vertices;
+	vertices.push_back(vec3(0,0,-5));
+	vertices.push_back(vec3(0,0,5));
+
+	//Create Cylinder
+	Cylindre cylindre(s1,s2,&vertices,0,1,(decimal)0.2);
+
+	//Create Ray
+	vec3 pos(-1,1,0);
+	vec3 from((decimal)1,(decimal)-1,0);
+	from.normalize();
+	Ray ray(pos,from);
+
+	//Create intersection
+	Intersection inter;
+	
+	vec3 impact;
+
+	inter.t=1.0;
+	EXPECT_TRUE(ValidRay::computeRealImpact(&ray,&inter,&cylindre,impact));
+	EXPECT_TRUE(vec3(0,0,0)==impact); //ray should impact the middle of the cylinder's axis which is (0,0,0)
+
+
+	vec3 from2((decimal)1,(decimal)-0.8,0.5);
+	from2.normalize();
+	ray.direction=from2;
+	EXPECT_TRUE(ValidRay::computeRealImpact(&ray,&inter,&cylindre,impact));
+	EXPECT_TRUE(vec3(0,0,0.54878056)==impact); //ray should impact the middle of the cylinder's axis which is (0,0,0)
+		
+
+	//cases that should return false
+	inter.t=0; 
+	EXPECT_FALSE(ValidRay::computeRealImpact(&ray,&inter,&cylindre,impact)); 
+
+	//cylinder with 0 height
+	vertices.clear();
+	vertices.push_back(vec3(0,0,5));
+	vertices.push_back(vec3(0,0,5));
+	cylindre.setVertices(&vertices); 
+	
+	inter.t=1.0; 
+	EXPECT_FALSE(ValidRay::computeRealImpact(&ray,&inter,&cylindre,impact));  
+
+}
+
+
 // Test the pathDiffValidationForReflection method 
 TEST(test_valid_ray,path_diff_validation_for_reflection){
 
