@@ -28,6 +28,20 @@ using std::endl;
 						        Diffraction
 ************************************************************************/
 
+// Test the default constructor
+TEST(test_diffraction,default_constructor){
+
+	Diffraction diffraction;
+
+	EXPECT_TRUE(vec3(0.,0.,0.)==diffraction.getPosition()); 
+	EXPECT_TRUE(vec3(0.,0.,0.)==diffraction.getIncomingDirection()); 
+	EXPECT_EQ(NULL,diffraction.getShape()); 
+	EXPECT_EQ(200,diffraction.getInitialNbResponseLeft()); 
+	EXPECT_EQ(200,diffraction.getNbResponseLeft()); 
+	EXPECT_EQ(DIFFRACTION,diffraction.getType()); 
+
+}
+
 // Test the responseAngleLimiter() method
 TEST(test_diffraction, response_angle_limiter)
 {
@@ -165,6 +179,21 @@ TEST(test_diffraction,get_response){
 						        SpecularReflexion
 ************************************************************************/
 
+// Test the default constructor
+TEST(test_specular_reflexion,default_constructor){
+
+	SpecularReflexion reflexion;
+
+	EXPECT_TRUE(vec3(0.,0.,0.)==reflexion.getPosition()); 
+	EXPECT_TRUE(vec3(0.,0.,0.)==reflexion.getIncomingDirection()); 
+	EXPECT_EQ(NULL,reflexion.getShape()); 
+	EXPECT_EQ(1,reflexion.getInitialNbResponseLeft()); 
+	EXPECT_EQ(1,reflexion.getNbResponseLeft()); 
+	EXPECT_EQ(SPECULARREFLEXION,reflexion.getType()); 
+
+
+}
+
 // Test the getAngle() method
 TEST(test_specular_reflexion,get_angle){
 
@@ -209,6 +238,28 @@ TEST(test_specular_reflexion,get_response){
 /***********************************************************************
 						        DoNothing
 ************************************************************************/
+
+// Test the default constructor
+TEST(test_do_nothing,default_constructor){
+
+	DoNothing doNothing;
+
+	EXPECT_TRUE(vec3(0.,0.,0.)==doNothing.getPosition()); 
+	EXPECT_TRUE(vec3(0.,0.,0.)==doNothing.getIncomingDirection()); 
+	EXPECT_EQ(NULL,doNothing.getShape()); 
+	EXPECT_EQ(1,doNothing.getInitialNbResponseLeft()); 
+	EXPECT_EQ(1,doNothing.getNbResponseLeft()); 
+	EXPECT_EQ(NOTHING,doNothing.getType()); 
+
+	vec3 response;
+
+	EXPECT_TRUE(doNothing.getResponse(response)); 
+	EXPECT_TRUE(vec3(0.,0.,0.)==response); 
+
+	//get an 2nd response when only 1 responses is expectd => false
+	EXPECT_FALSE(doNothing.getResponse(response)); 
+
+}
 
 // Test the getResponse() method
 TEST(test_do_nothing,get_response){
