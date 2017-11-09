@@ -256,7 +256,7 @@ public:
     decimal maxt;
     Source* source;                             //!< Pointer to the source of the ray
     void* recepteur;                            //!< Pointer to the receptor of the ray
-    std::vector<std::shared_ptr<Event> > events; //!< Events list for the ray
+    std::vector<std::shared_ptr<Event>> events; //!< Events list for the ray
     decimal longueur;                           //!< Distance traveled by the ray
     unsigned long long int constructId;         //!< Ray id
     unsigned int nbReflexion;                   //!< Reflections number for the ray
