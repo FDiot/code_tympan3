@@ -275,6 +275,7 @@ TEST(test_do_nothing,get_response){
 	int i=0;
 	while(i<10){
 		EXPECT_TRUE(doNothing.getResponse(response)); 
+		EXPECT_TRUE(from==response); 
 		i++;
 	}
 
@@ -344,7 +345,7 @@ TEST(test_source,source){
 	EXPECT_EQ(150,s1.getNbRayLeft());
 
 	s1.setNbRayLeft(50);
-	EXPECT_EQ(150,s1.getInitialRayCount());// initialRayCount > 50 => initialRayCount does not change
+	EXPECT_EQ(150,s1.getInitialRayCount()); // initialRayCount > 50 => initialRayCount does not change
 	EXPECT_EQ(50,s1.getNbRayLeft());
 }
 
