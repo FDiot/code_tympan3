@@ -18,7 +18,7 @@
 
 #include <vector>
 #include <cmath>
-
+#include <algorithm>
 #include "Tympan/core/smartptr.h"
 
 #undef min

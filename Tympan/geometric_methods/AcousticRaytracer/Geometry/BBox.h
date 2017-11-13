@@ -18,6 +18,7 @@
 
 #include <iostream>
 #include "Geometry/mathlib.h"
+#include <algorithm>
 
 /*!
  * \file BBox.h
