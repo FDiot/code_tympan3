@@ -195,11 +195,12 @@ void OMessageManager::warning(const QString& message, ...)
     // CLM-NT35: Pb en debug avec string cast
     std::string mess_tmp = message.toAscii();
     char* mymessage = (char*)mess_tmp.data();
+    args = (va_list) (&message+1);
 #else
     char* mymessage =  message.toAscii().data();
+    va_start(args, message);
 #endif
 
-    va_start(args, message);
     vformat(MSG_WARNING, mymessage, args);
     va_end(args);
 }
@@ -212,11 +213,12 @@ void OMessageManager::error(const QString& message, ...)
     // CLM-NT35: Pb en debug avec string cast
     std::string mess_tmp = message.toAscii();
     char* mymessage = (char*)mess_tmp.data();
+    args = (va_list) (&message+1);
 #else
     char* mymessage =  message.toAscii().data();
+    va_start(args, message);
 #endif
 
-    va_start(args, message);
     vformat(MSG_ERROR, mymessage, args);
     va_end(args);
 }
@@ -229,11 +231,12 @@ void OMessageManager::fatal(const QString& message, ...)
     // CLM-NT35: Pb en debug avec string cast
     std::string mess_tmp = message.toAscii();
     char* mymessage = (char*)mess_tmp.data();
+    args = (va_list) (&message+1);
 #else
     char* mymessage =  message.toAscii().data();
+    va_start(args, message);
 #endif
 
-    va_start(args, message);
     vformat(MSG_FATAL, mymessage, args);
     va_end(args);
 }
@@ -246,11 +249,12 @@ void OMessageManager::info(const QString& message, ...)
     // CLM-NT35: Pb en debug avec string cast
     std::string mess_tmp = message.toAscii();
     char* mymessage = (char*)mess_tmp.data();
+    args = (va_list) (&message+1);
 #else
     char* mymessage =  message.toAscii().data();
+    va_start(args, message);
 #endif
 
-    va_start(args, message);
     vformat(MSG_INFO, mymessage, args);
     va_end(args);
 }
@@ -263,10 +267,11 @@ void OMessageManager::debug(const QString& message, ...)
     // CLM-NT35: Pb en debug avec string cast
     std::string mess_tmp = message.toAscii();
     char* mymessage = (char*)mess_tmp.data();
+    args = (va_list) (&message+1);
 #else
     char* mymessage =  message.toAscii().data();
-#endif
     va_start(args, message);
+#endif
     vformat(MSG_DEBUG, mymessage, args);
     va_end(args);
 }
@@ -289,11 +294,12 @@ void OMessageManager::trace(const QString& message, ...)
     // CLM-NT35: Pb en debug avec string cast
     std::string mess_tmp = message.toAscii();
     char* mymessage = (char*)mess_tmp.data();
+    args = (va_list) (&message+1);
 #else
     char* mymessage =  message.toAscii().data();
+    va_start(args, message);
 #endif
 
-    va_start(args, message);
     trace(mymessage, args);
     va_end(args);
 }
