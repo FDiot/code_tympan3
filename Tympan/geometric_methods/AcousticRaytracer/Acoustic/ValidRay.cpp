@@ -138,7 +138,7 @@ bool ValidRay::computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre
 	// shortest segment definition
 	vec3 *pa = new vec3(), *pb = new vec3();
 	decimal *mua = new decimal(), *mub = new decimal();
-	int res = LineLineIntersect(p1, p2, p3, p4, pa, pb, mua, mub);
+	bool res = LineLineIntersect(p1, p2, p3, p4, pa, pb, mua, mub);
 	impact = *pb;
 
     delete pa;
@@ -149,7 +149,7 @@ bool ValidRay::computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre
 	return res;
 }
 
-bool ValidRay::isRayClosestFromRidge(Ray *r, const vec3& impact, const vec3& realImpact)
+bool ValidRay::isRayPassesNearRidge(Ray *r, const vec3& impact, const vec3& realImpact)
 {
 	vec3 closestPoint;
 	decimal length = r->computePertinentLength(realImpact, impact, closestPoint);
