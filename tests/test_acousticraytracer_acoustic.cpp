@@ -698,6 +698,46 @@ TEST(test_valid_ray,path_diff_validation){
 }
 
 
+// Test the validTriangleWithSpecularReflexion method 
+TEST(test_valid_ray,valid_triangle_with_specular_reflexion){
+
+	//Create Source
+	Source* src=new Source();
+	src->setPosition(vec3(-3,12,-4));
+
+	//Create Ray
+	Ray* ray=new Ray();
+	ray->source=src;
+	ray->position=src->getPosition();
+	vec3 direction=vec3(-5,-10,0);
+	direction.normalize();
+	ray->direction=direction;
+
+	//Create a shape for the intersection
+	Triangle* shape=new Triangle();
+	shape->setNormal(direction);
+
+	//Create Intersection
+	Intersection* inter=new Intersection();
+	inter->t=1.;
+	inter->p=shape;
+  
+	//Set maxPathDiffrence 
+	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)5.;
+	
+	EXPECT_FALSE(ValidRay::validTriangleWithSpecularReflexion(ray,inter)); //ray goes in same direction as the normal of the shape => return false
+	EXPECT_TRUE(ray->getEvents()->empty()); //ray's event list should remain empty
+
+	//change shape's normal
+	shape->setNormal(vec3(5,10,0));
+
+	EXPECT_TRUE(ValidRay::validTriangleWithSpecularReflexion(ray,inter)); //ray goes in same direction as the normal of the shape => return false
+	EXPECT_EQ(1,ray->getEvents()->size()); //ray's event list should contain one event
+	EXPECT_EQ(SPECULARREFLEXION,ray->getEvents()->at(0)->getType()); //the event should be a SPECULARREFLEXION
+	EXPECT_EQ(1,ray->nbReflexion); //nbReflexion should have been incremented
+	EXPECT_EQ(0,ray->nbDiffraction); //nbDiffraction should remain the same
+}
+
 
 
 // Test the validRayWithDoNothingEvent method 
