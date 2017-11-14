@@ -505,6 +505,54 @@ TEST(test_valid_ray,compute_real_impact_general){
 
 }
 
+// Test the isRayPassesNearRidge method 
+TEST(test_valid_ray,is_ray_passes_near_ridge){
+
+	//Create the two shapes of the cylinder
+	Triangle* s1=new Triangle();
+	Triangle* s2=new Triangle();
+
+	s1->setNormal(vec3(-1,0,0));
+	s2->setNormal(vec3(0,1,0));
+
+	vector<vec3> vertices;
+	vertices.push_back(vec3(0,0,-5));
+	vertices.push_back(vec3(0,0,5));
+
+	//Create Cylinder
+	Cylindre cylindre(s1,s2,&vertices,0,1,(decimal)0.2);
+
+	//Create Source
+	Source src;
+	src.setPosition(vec3(0,0,0));
+
+	//Create Ray
+	vec3 pos(-1,1,0);
+	vec3 direction((decimal)1,(decimal)-1,0);
+	direction.normalize();
+	Ray ray(pos,direction);
+	ray.source=&src;
+	
+	// Create and add a diffraction 
+	vec3 from=vec3(10,-5,7);
+	from.normalize();
+	Diffraction* diff=new Diffraction(vec3(10,-5,7),&from,&cylindre);
+	std::shared_ptr<Event> SPE(diff);
+	ray.getEvents()->push_back(SPE);
+
+	vec3 impact(vec3(20,-10,14));
+
+	//real impact within the thickness of the ray
+	EXPECT_TRUE(ValidRay::isRayPassesNearRidge(&ray,&impact,vec3(20,-9.5,14)));
+	EXPECT_TRUE(ValidRay::isRayPassesNearRidge(&ray,&impact,vec3(19.5,-10,14)));
+	EXPECT_TRUE(ValidRay::isRayPassesNearRidge(&ray,&impact,vec3(20,-10,14.5)));
+
+	//real impact outside the thickness of the ray
+	EXPECT_FALSE(ValidRay::isRayPassesNearRidge(&ray,&impact,vec3(20,-9,14)));
+	EXPECT_FALSE(ValidRay::isRayPassesNearRidge(&ray,&impact,vec3(18,-10,14)));
+	EXPECT_FALSE(ValidRay::isRayPassesNearRidge(&ray,&impact,vec3(20,-10,13)));
+}
+
 
 // Test the pathDiffValidationForReflection method 
 TEST(test_valid_ray,path_diff_validation_for_reflection){
