@@ -45,7 +45,7 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 	vec3 impact = r->position + r->direction * inter->t;
     vec3 normal = inter->p->getNormal(impact);
 
-	//intersection is not valid if the ray goes in opposite direction of the normal
+	//intersection is not valid if the ray goes in the same direction as the normal
     if (normal.dot(r->direction) > 0.) { return false; }
 
 	//test validity of the path if UsePathDifValidation is set to true
@@ -96,13 +96,13 @@ bool ValidRay::pathDiffValidationForReflection(Ray * r, const vec3& impact)
 	computeCumulDistance(r, impact);
 
 	// Compute difference between :
-	//    -  the distance between impact and the last event 
+	//    -  the cumulative length since last valid reflection
 	//		and
-	//    -  the distance between impact and the last reflexion
+	//    -  the euclidian distance between impact and the last reflection
 	decimal delta= r->cumulDistance - impact.distance(lastReflexionPos);
 
 	//Add the difference to the cumulative delta
-	r->cumulDelta += delta ;
+	r->cumulDelta += delta;
 
 	//Reset cumulDistance
 	r->cumulDistance = 0.;
@@ -116,10 +116,10 @@ bool ValidRay::pathDiffValidationForDiffraction(Ray *r, const vec3& impact)
 	computeCumulDistance(r, impact);
 
 	// Compute difference between :
-	//    -  the distance between impact and the last event 
+	//    -  the cumulative length since last valid reflection
 	//		and
-	//    -  the distance between impact and the last reflexion
-	decimal delta= r->cumulDistance - impact.distance(lastReflexionPos);
+	//    -  the euclidian distance between impact and the last reflection
+	decimal delta = r->cumulDistance - impact.distance(lastReflexionPos);
 
 	//Sum of cumulDelta and delta (Note: cumulDelta is not modified)
 	decimal currentCumulDelta = r->cumulDelta + delta;
@@ -152,10 +152,16 @@ bool ValidRay::computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre
 bool ValidRay::isRayPassesNearRidge(Ray *r, const vec3& impact, const vec3& realImpact)
 {
 	vec3 closestPoint;
+	//compute length from last reflection to the closest point on the ray from realImpact
 	decimal length = r->computePertinentLength(realImpact, impact, closestPoint);
+
+	//compute the thickness of the diffracted ray 
 	decimal thick = r->getThickness(length, true);
+
+	//compute the distance between the realImpact and the closestPoint 
 	decimal closestDistance = realImpact.distance(closestPoint);
 
+    //return true if the closest point on the ray from realImpact is within the thickness of the ray 
 	return ( closestDistance <= ( thick / 2. ) );
 }
 
@@ -178,7 +184,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 	if ( !computeRealImpact(r, inter, cylindre, realImpact) ) { return false; }
 
 // Valid creation of event using distance from the ridge (if needed)
-	if ( config->DiffractionUseDistanceAsFilter && !isRayClosestFromRidge(r, impact, realImpact) )
+	if ( config->DiffractionUseDistanceAsFilter && !isRayPassesNearRidge(r, impact, realImpact) )
 	{
 		return ValidRay::validRayWithDoNothingEvent(r, inter);
 	}
