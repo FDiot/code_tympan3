@@ -739,35 +739,77 @@ TEST(test_valid_ray,valid_triangle_with_specular_reflexion){
 }
 
 
+// Test the validCylindreWithDiffraction method 
+TEST(test_valid_ray,valid_cylindre_with_diffraction){
+
+	//Create Source
+	Source* src=new Source();
+	src->setPosition(vec3(-2,1,0));
+	Sampler sampler;
+	src->setSampler(&sampler);
+
+	//Create Ray
+	Ray* ray=new Ray();
+	ray->source=src;
+	ray->position=src->getPosition();
+	vec3 direction=vec3(0,0,0);
+	direction.normalize();
+	ray->direction=direction;
+
+	//Create the two shapes of the cylinder
+	Triangle* s1=new Triangle();
+	Triangle* s2=new Triangle();
+	s1->setNormal(vec3(-1,0,0));
+	s2->setNormal(vec3(0,1,0));
+
+	//Create Cylinder
+	vector<vec3> vertices;
+	vertices.push_back(vec3(0,0,-5));
+	vertices.push_back(vec3(0,0,5));
+	Cylindre cylindre(s1,s2,&vertices,0,1,(decimal)0.2);
+
+	//Create Intersection
+	Intersection* inter=new Intersection();
+	inter->t=(decimal)1;
+	inter->p=&cylindre;
+ 
+
+
+	EXPECT_FALSE(ValidRay::validCylindreWithDiffraction(ray,inter)); //ray's direction has norm 0, hence no possible line intersection with the cylinder's axis => return false
+	EXPECT_TRUE(ray->getEvents()->empty()); //ray's event list should remain empty
+	EXPECT_TRUE(vec3(-2,1,0)==ray->position); //ray's position should not change
+    
+	
+	//change ray's direction 
+	direction=vec3(1,0,0);
+	direction.normalize();
+	ray->direction=direction;
+	
+	EXPECT_TRUE(ValidRay::validCylindreWithDiffraction(ray,inter)); //ray does not pass near enough the diffraction edge => call validRayWithDoNothingEvent
+	EXPECT_EQ(1,ray->getEvents()->size()); //ray's event list should contain one event
+	EXPECT_EQ(NOTHING,ray->getEvents()->at(0)->getType()); //the last event should be a NOTHING
+	EXPECT_EQ(0,ray->nbReflexion); //nbReflexion should remain the same
+	EXPECT_EQ(0,ray->nbDiffraction); //nbDiffraction should remain the same
+	EXPECT_TRUE(vec3(-1,1,0)==ray->position); //expected position of the ray after validCylindreWithDiffraction
+
+
+	//change ray's direction and intersection distance
+	direction=vec3(1,-1,0);
+	direction.normalize();
+	ray->direction=direction;
+	inter->t=(decimal)1.4142135624;
+
+	EXPECT_TRUE(ValidRay::validCylindreWithDiffraction(ray,inter)); 
+	EXPECT_EQ(2,ray->getEvents()->size()); //ray's event list should contain two events
+	EXPECT_EQ(DIFFRACTION,ray->getEvents()->at(1)->getType()); //the last event should be a DIFFRACTION
+	EXPECT_EQ(0,ray->nbReflexion); //nbReflexion should remain the same
+	EXPECT_EQ(1,ray->nbDiffraction); //nbDiffraction should have been incremented
+	EXPECT_TRUE(vec3(0,0,0)==ray->position); //expected position of the ray after validCylindreWithDiffraction
+	
+}
 
 // Test the validRayWithDoNothingEvent method 
 TEST(test_valid_ray,valid_ray_with_do_nothing_event){
-
-	vec3 pos(-1,1,0);
-	vec3 from((decimal)1,(decimal)-1,0);
-	from.normalize();
-
-	//Create ray
-	Ray* ray=new Ray(pos,from);
-
-	Intersection* inter=new Intersection();
-
-	//Create the shape of the event
-	Triangle* shape=new Triangle();
-	shape->setNormal(vec3(0,1,0));
-
-	inter->t=(decimal)1.4142135624;
-	inter->p=shape;
-
-	vec3 expected_impact=(ray->position+ray->direction*inter->t);
-	EXPECT_TRUE(ValidRay::validRayWithDoNothingEvent(ray,inter));
-	EXPECT_TRUE(expected_impact==vec3(0,0,0));
-	EXPECT_TRUE(ray->direction==from);
-}
-
-
-// Test the validTriangleWithSpecularReflexion method 
-TEST(test_valid_ray,valid_ray_with_specular_reflexion){
 
 	vec3 pos(-1,1,0);
 	vec3 from((decimal)1,(decimal)-1,0);
