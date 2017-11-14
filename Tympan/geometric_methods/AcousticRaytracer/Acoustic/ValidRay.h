@@ -39,7 +39,7 @@ bool computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre, vec3& im
 /*!
  * \brief Return True if ray passes near from the ridge
  */
-bool isRayClosestFromRidge(Ray *r, const vec3& impact, const vec3& realImpact);
+bool isRayPassesNearRidge(Ray *r, const vec3& impact, const vec3& realImpact);
 
 
 /*!
