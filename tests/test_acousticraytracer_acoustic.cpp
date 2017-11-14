@@ -19,6 +19,7 @@
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Cylindre.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Triangle.h"
 #include "Tympan/geometric_methods/AcousticRaytracer/Geometry/Scene.h"
+#include "Tympan/geometric_methods/AcousticRaytracer/Engine/AcousticRaytracerConfiguration.h"
 
 using std::cout;
 using std::cerr;
@@ -182,14 +183,14 @@ TEST(test_diffraction,get_response){
 // Test the default constructor
 TEST(test_specular_reflexion,default_constructor){
 
-	SpecularReflexion reflexion;
+	SpecularReflexion reflection;
 
-	EXPECT_TRUE(vec3(0.,0.,0.)==reflexion.getPosition()); 
-	EXPECT_TRUE(vec3(0.,0.,0.)==reflexion.getIncomingDirection()); 
-	EXPECT_EQ(NULL,reflexion.getShape()); 
-	EXPECT_EQ(1,reflexion.getInitialNbResponseLeft()); 
-	EXPECT_EQ(1,reflexion.getNbResponseLeft()); 
-	EXPECT_EQ(SPECULARREFLEXION,reflexion.getType()); 
+	EXPECT_TRUE(vec3(0.,0.,0.)==reflection.getPosition()); 
+	EXPECT_TRUE(vec3(0.,0.,0.)==reflection.getIncomingDirection()); 
+	EXPECT_EQ(NULL,reflection.getShape()); 
+	EXPECT_EQ(1,reflection.getInitialNbResponseLeft()); 
+	EXPECT_EQ(1,reflection.getNbResponseLeft()); 
+	EXPECT_EQ(SPECULARREFLEXION,reflection.getType()); 
 
 
 }
@@ -197,7 +198,7 @@ TEST(test_specular_reflexion,default_constructor){
 // Test the getAngle() method
 TEST(test_specular_reflexion,get_angle){
 
-	//Create the shape of the reflexion even
+	//Create the shape of the reflection even
 	Triangle* shape=new Triangle();
 
 	//Set normal
@@ -207,9 +208,9 @@ TEST(test_specular_reflexion,get_angle){
 	vec3 from((decimal)1,(decimal)-1,0);
 	from.normalize();
 
-	SpecularReflexion reflexion(pos,from,shape);
+	SpecularReflexion reflection(pos,from,shape);
 
-	EXPECT_TRUE(abs((M_PI/4)-reflexion.getAngle())<EPSILON_6);
+	EXPECT_TRUE(abs((M_PI/4)-reflection.getAngle())<EPSILON_6);
 
 }
 
@@ -225,10 +226,10 @@ TEST(test_specular_reflexion,get_response){
 	vec3 from((decimal)1,(decimal)-1,0);
 	from.normalize();
 
-	SpecularReflexion reflexion(pos,from,shape);
+	SpecularReflexion reflection(pos,from,shape);
 
 	vec3 response;
-	reflexion.getResponse(response);
+	reflection.getResponse(response);
 	vec3 expected_response((decimal)1,(decimal)1,0);
 	expected_response.normalize();
 
@@ -401,17 +402,17 @@ TEST(test_valid_ray,compute_cumul_distance){
 
 	vec3 impact((decimal)12.3,(decimal)-2.4,(decimal)-4.65);
 	ValidRay::computeCumulDistance(ray,impact);
-	EXPECT_EQ(impact.distance(src->getPosition()),ray->cumulDistance);
+	EXPECT_EQ((decimal)13.570063,ray->cumulDistance);
 
-	//Create several events, some with the type NOTHING
+	
 	Event* e=new Event();
 	e->setType(SPECULARREFLEXION);
-	e->setPosition(vec3(-7.5,8.6,-12.41));
+	e->setPosition(vec3((decimal)-7.5,(decimal)8.6,(decimal)-12.41));
 	std::shared_ptr<Event> SPE(e);
 	ray->getEvents()->push_back(SPE);
 
 	ValidRay::computeCumulDistance(ray,impact);
-	EXPECT_EQ(impact.distance(src->getPosition())+impact.distance(e->getPosition()),ray->cumulDistance);
+	EXPECT_EQ((decimal)37.512863,ray->cumulDistance);
 }
 
 // Test the computeRealImpact method (trivial case)
@@ -721,17 +722,15 @@ TEST(test_valid_ray,valid_triangle_with_specular_reflexion){
 	Intersection* inter=new Intersection();
 	inter->t=1.;
 	inter->p=shape;
+
   
-	//Set maxPathDiffrence 
-	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)5.;
-	
 	EXPECT_FALSE(ValidRay::validTriangleWithSpecularReflexion(ray,inter)); //ray goes in same direction as the normal of the shape => return false
 	EXPECT_TRUE(ray->getEvents()->empty()); //ray's event list should remain empty
 
 	//change shape's normal
 	shape->setNormal(vec3(5,10,0));
 
-	EXPECT_TRUE(ValidRay::validTriangleWithSpecularReflexion(ray,inter)); //ray goes in same direction as the normal of the shape => return false
+	EXPECT_TRUE(ValidRay::validTriangleWithSpecularReflexion(ray,inter)); 
 	EXPECT_EQ(1,ray->getEvents()->size()); //ray's event list should contain one event
 	EXPECT_EQ(SPECULARREFLEXION,ray->getEvents()->at(0)->getType()); //the event should be a SPECULARREFLEXION
 	EXPECT_EQ(1,ray->nbReflexion); //nbReflexion should have been incremented

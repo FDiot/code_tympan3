@@ -274,7 +274,7 @@ TEST(test_simulation_1source_1recepteur, test_valid_ray)
 	// Test ray 
 	EXPECT_EQ(0,valid_ray->getNbEvents());	//Test number of events
 	EXPECT_EQ(0,valid_ray->getDiff());		//Test number of diffractions
-	EXPECT_EQ(0,valid_ray->getReflex());	//Test number of reflexions
+	EXPECT_EQ(0,valid_ray->getReflex());	//Test number of reflections
 	EXPECT_EQ(10,valid_ray->getLongueur());	//Test length
 
 	// Clean simulation
@@ -314,8 +314,8 @@ TEST(test_simulation_1source_1recepteur, test_obstacle)
 }
 
 
-// Test the reflexion of rays with a source traped between two triangles and a maximum of 4 reflexions
-TEST(test_simulation_1source_1recepteur, test_reflexion1)
+// Test the reflection of rays with a source traped between two triangles and a maximum of 4 reflections
+TEST(test_simulation_1source_1recepteur, test_reflection1)
 {
 	// The configuration of the ray tracer:
 	tympan::LPSolverConfiguration config =tympan::SolverConfiguration::get();
@@ -371,7 +371,7 @@ TEST(test_simulation_1source_1recepteur, test_reflexion1)
 
 	// Test ray 
 	EXPECT_EQ(0,ray->getDiff());									//Test number of diffractions
-	EXPECT_EQ(config->MaxReflexion,ray->getReflex());				//Test number of reflexions
+	EXPECT_EQ(config->MaxReflexion,ray->getReflex());				//Test number of reflections
 	EXPECT_TRUE(ray->direction.compare(dir_right));					//Test ray final direction									
 	EXPECT_EQ(35,ray->getLongueur());								//Test ray length
 
@@ -407,8 +407,8 @@ TEST(test_simulation_1source_1recepteur, test_reflexion1)
 	simu.clean();
 }
 
-// Test the reflexion of a ray reflected multiple times before hiting the receptor
-TEST(test_simulation_1source_1recepteur, test_reflexion2)
+// Test the reflection of a ray reflected multiple times before hiting the receptor
+TEST(test_simulation_1source_1recepteur, test_reflection2)
 {
 	// The configuration of the ray tracer:
 	tympan::LPSolverConfiguration config =tympan::SolverConfiguration::get();
@@ -469,7 +469,7 @@ TEST(test_simulation_1source_1recepteur, test_reflexion2)
 
 	// Test ray 
 	EXPECT_EQ(0,ray->getDiff());					//Test number of diffractions
-	EXPECT_EQ(3,ray->getReflex());					//Test number of reflexions
+	EXPECT_EQ(3,ray->getReflex());					//Test number of reflections
 	EXPECT_TRUE(ray->direction.compare(dir_down));	//Test ray final direction									
 	EXPECT_EQ(40,ray->getLongueur());				//Test ray length
 
@@ -587,7 +587,7 @@ TEST(test_simulation_1source_1recepteur, test_diffraction)
 
 	// Test ray 
 	EXPECT_EQ(0,ray->getDiff());					//Test number of diffractions
-	EXPECT_EQ(0,ray->getReflex());					//Test number of reflexions
+	EXPECT_EQ(0,ray->getReflex());					//Test number of reflections
 	EXPECT_TRUE(ray->direction==dir_down);			//Test ray final direction									
 	EXPECT_EQ(40,ray->getLongueur());				//Test ray length
 
@@ -863,7 +863,7 @@ TEST(test_simulation_random_init, test_valid_rays_nbRaysPerSource_equals_0)
 		// Test ray 
 		EXPECT_EQ(0,valid_ray->getNbEvents());								// Test number of events
 		EXPECT_EQ(0,valid_ray->getDiff());									// Test number of diffractions
-		EXPECT_EQ(0,valid_ray->getReflex());								// Test number of reflexions
+		EXPECT_EQ(0,valid_ray->getReflex());								// Test number of reflections
 		EXPECT_EQ(src_pos.distance(rcpt_pos),valid_ray->getLongueur());		// Test length
 	}
 
@@ -920,7 +920,7 @@ TEST(test_simulation_random_init, test_valid_rays_nbRaysPerSource_random)
 		// Test ray 
 		EXPECT_EQ(0,valid_ray->getNbEvents());								// Test number of events
 		EXPECT_EQ(0,valid_ray->getDiff());									// Test number of diffractions
-		EXPECT_EQ(0,valid_ray->getReflex());								// Test number of reflexions
+		EXPECT_EQ(0,valid_ray->getReflex());								// Test number of reflections
 		EXPECT_EQ(src_pos.distance(rcpt_pos),valid_ray->getLongueur());		// Test length
 	}
 
@@ -974,7 +974,7 @@ TEST(test_simulation_random_init, test_debug_rays_nbRaysPerSource_random)
 		// Test ray 
 		EXPECT_EQ(0,debug_ray->getNbEvents());									// Test number of events
 		EXPECT_EQ(0,debug_ray->getDiff());										// Test number of diffractions
-		EXPECT_EQ(0,debug_ray->getReflex());									// Test number of reflexions
+		EXPECT_EQ(0,debug_ray->getReflex());									// Test number of reflections
 	}
 
 	// Test if the number of rays thrown from each source equals the number of rays per source + the number of receptors
