@@ -557,7 +557,148 @@ TEST(test_valid_ray,is_ray_passes_near_ridge){
 // Test the pathDiffValidationForReflection method 
 TEST(test_valid_ray,path_diff_validation_for_reflection){
 
+	//Create Ray
+	Ray* ray=new Ray();
+
+	 // Add several events with different types
+	SpecularReflexion* reflection = new SpecularReflexion();
+	reflection->setPosition(vec3(-8,12,-4));
+    std::shared_ptr<Event> SPE(reflection);
+    ray->getEvents()->push_back(SPE);
+
+	//init cumulDistance
+	ray->cumulDistance=(decimal)20.;
+	
+	// set maxPathDiffrence 
+	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)20.;
+
+	//distance between impact and last reflection D=0
+	EXPECT_TRUE(ValidRay::pathDiffValidationForReflection(ray,vec3(-8,12,-4)));
+	EXPECT_FLOAT_EQ(20.,ray->cumulDelta); // D=0 => cumulDelta should not change
+	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reseted to 0
+
+
+	// set maxPathDiffrence lower than the current cumulDelta
+	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)19.;
+
+	//distance between impact and last reflection D=0
+	EXPECT_FALSE(ValidRay::pathDiffValidationForReflection(ray,vec3(-8,12,-4)));
+	EXPECT_FLOAT_EQ(20.,ray->cumulDelta); //D=0 => cumulDelta should not change.
+	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reseted to 0
+	
+
+	//increase maxPathDiffrence
+	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)25.;
+
+	
+	ray->cumulDistance=(decimal)5.;
+
+	//distance between impact and last reflection D=5
+	EXPECT_TRUE(ValidRay::pathDiffValidationForReflection(ray,vec3(-3,12,-4)));
+	EXPECT_FLOAT_EQ(25.,ray->cumulDelta); //cumulDelta should increase by value of cumulDistance before the call to cumulDistance (5.0).
+	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reseted to 0
+
+
+	ray->cumulDistance=(decimal)5.;
+
+	//distance between impact and last reflection D=5
+	EXPECT_FALSE(ValidRay::pathDiffValidationForReflection(ray,vec3(-3,12,-4)));
+	EXPECT_FLOAT_EQ(30.,ray->cumulDelta);  //cumulDelta should increase by value of cumulDistance before the call to cumulDistance (5.0).
+	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reseted to 0
+
 }
+
+
+// Test the pathDiffValidationForDiffraction method 
+TEST(test_valid_ray,path_diff_validation_for_diffraction){
+
+	//Create Ray
+	Ray* ray=new Ray();
+
+	//Add several events with different types
+	SpecularReflexion* reflection = new SpecularReflexion();
+	reflection->setPosition(vec3(-8,12,-4));
+    std::shared_ptr<Event> SPE(reflection);
+    ray->getEvents()->push_back(SPE);
+
+	//Set maxPathDiffrence 
+	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)20.;
+
+
+	ray->cumulDelta=10.;
+	ray->cumulDistance=10;
+
+	//distance between impact and last reflection D=10.0
+	EXPECT_TRUE(ValidRay::pathDiffValidationForDiffraction(ray,vec3(-8,2,-4))); //cumulDistance-D+cumulDelta = 20-10+10
+	EXPECT_FLOAT_EQ(10.,ray->cumulDelta); //cumulDelta should no be modified
+	EXPECT_FLOAT_EQ(20,ray->cumulDistance); //cumulDistance should increase by D
+
+	//distance between impact and last reflection D=5.0
+	EXPECT_FALSE(ValidRay::pathDiffValidationForDiffraction(ray,vec3(-3,12,-4))); //cumulDistance-D+cumulDelta = 25-5+10 > 20
+	EXPECT_FLOAT_EQ(10.,ray->cumulDelta); //cumulDelta should no be modified
+	EXPECT_FLOAT_EQ(25.,ray->cumulDistance); //cumulDistance should increase by D
+
+	//distance between impact and last reflection D=10.0
+	EXPECT_FALSE(ValidRay::pathDiffValidationForDiffraction(ray,vec3(-8,2,-4))); //cumulDistance-D+cumulDelta = 35-10+10 > 20 
+	EXPECT_FLOAT_EQ(10.,ray->cumulDelta); //cumulDelta should no be modified
+	EXPECT_FLOAT_EQ(35.,ray->cumulDistance); //cumulDistance should increase by D
+
+}
+
+// Test the pathDiffValidationForReflection and pathDiffValidationForDiffraction together 
+TEST(test_valid_ray,path_diff_validation){
+
+	//Create Source
+	Source* src=new Source();
+	src->setPosition(vec3(-3,12,-4));
+
+	//Create Ray
+	Ray* ray=new Ray();
+	ray->source=src;
+
+	//Create two events
+	SpecularReflexion* reflection1 = new SpecularReflexion();
+	reflection1->setPosition(vec3(-8,12,-4));
+    std::shared_ptr<Event> SPE1(reflection1);
+  
+	Diffraction* diffraction= new Diffraction();
+	diffraction->setPosition(vec3(-8,2,-4));
+    std::shared_ptr<Event> SPE2(diffraction);
+ 
+  
+	//Set maxPathDiffrence 
+	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)5.;
+
+	//Initially cumulDelta and cumulDistance should equal 0
+	EXPECT_FLOAT_EQ(0.,ray->cumulDelta); 
+	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); 
+
+	//Test if a reflection event with position (-8,12,-4) can be added. distance between impact and source D=5.0
+	EXPECT_TRUE(ValidRay::pathDiffValidationForReflection(ray,vec3(-8,12,-4)));
+	EXPECT_FLOAT_EQ(0.,ray->cumulDelta); //cumulDelta should not change because cumulDistance == 0.
+	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reseted to 0
+
+	//add first event
+	ray->getEvents()->push_back(SPE1);
+
+	//Test if a diffraction event with position (-8,2,-4) can be added. distance between impact and last reflection D=10.0
+	EXPECT_TRUE(ValidRay::pathDiffValidationForDiffraction(ray,vec3(-8,2,-4)));
+	EXPECT_FLOAT_EQ(0.,ray->cumulDelta); //cumulDelta should not change for diffraction validation.
+	EXPECT_FLOAT_EQ(10.,ray->cumulDistance); //cumulDistance should increase by D
+	
+	//add second event
+	ray->getEvents()->push_back(SPE2);
+
+	//Test if a reflection event with position (-8,7,-4) can be added. distance between impact and last reflection D=5.0
+	EXPECT_FALSE(ValidRay::pathDiffValidationForReflection(ray,vec3(-8,7,-4))); //cumulDelta = cumulDistance -D = 10 > MaxPathDifference => return false
+	EXPECT_FLOAT_EQ(10.,ray->cumulDelta); //cumulDelta increase by D => 10..
+	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reset to 0
+
+
+}
+
+
+
 
 // Test the validRayWithDoNothingEvent method 
 TEST(test_valid_ray,valid_ray_with_do_nothing_event){
