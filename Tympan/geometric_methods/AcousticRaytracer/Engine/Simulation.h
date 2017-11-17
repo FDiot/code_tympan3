@@ -95,6 +95,13 @@ public:
     Solver* getSolver() { return solver; }
 
     /*!
+    * \fn Engine* getEngine()
+    * \brief Get the engine
+    * \return Pointer to the engine
+    */
+    Engine* getEngine() { return engine; }
+
+    /*!
     * \fn void clean()
     * \brief Clean the simulation: the scene, sources, and receptors and all the rays are deleted.
     */
@@ -153,6 +160,9 @@ public:
     AcousticRaytracerConfiguration* getConfiguration() { return configuration; }
 
 //    void runBenchmark() { engine = new DefaultEngine(&scene, &sources, solver, &recepteurs); engine->runStructureBenchmark(); }
+
+
+
 
 protected:
     Scene scene; 						//!< Description of the geometry in an accelerated structure

@@ -48,3 +48,5 @@ python/.spyderworkspace
 python/bin/.spyderproject
 python/tests/.spyderproject
 *.pyc
+Sublime_TY.sublime-workspace
+Sublime_TY.sublime-project

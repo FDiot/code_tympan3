@@ -118,10 +118,11 @@ static inline bool IntersectP(const BBox& bounds, const Ray& ray,
                               const vec3& invDir, const uint32_t dirIsNeg[3])
 {
     // Check for ray intersection against $x$ and $y$ slabs
-    float tmin = (bounds[  dirIsNeg[0]].x - ray.position.x) * invDir.x;
-    float tmax = (bounds[1 - dirIsNeg[0]].x - ray.position.x) * invDir.x;
-    float tymin = (bounds[  dirIsNeg[1]].y - ray.position.y) * invDir.y;
-    float tymax = (bounds[1 - dirIsNeg[1]].y - ray.position.y) * invDir.y;
+
+    float tmin = (bounds[  dirIsNeg[0]].x - ray.getPosition().x) * invDir.x;
+    float tmax = (bounds[1 - dirIsNeg[0]].x - ray.getPosition().x) * invDir.x;
+    float tymin = (bounds[  dirIsNeg[1]].y - ray.getPosition().y) * invDir.y;
+    float tymax = (bounds[1 - dirIsNeg[1]].y - ray.getPosition().y) * invDir.y;
     if ((tmin > tymax) || (tymin > tmax))
     {
         return false;
@@ -130,8 +131,8 @@ static inline bool IntersectP(const BBox& bounds, const Ray& ray,
     if (tymax < tmax) { tmax = tymax; }
 
     // Check for ray intersection against $z$ slab
-    float tzmin = (bounds[  dirIsNeg[2]].z - ray.position.z) * invDir.z;
-    float tzmax = (bounds[1 - dirIsNeg[2]].z - ray.position.z) * invDir.z;
+    float tzmin = (bounds[  dirIsNeg[2]].z - ray.getPosition().z) * invDir.z;
+    float tzmax = (bounds[1 - dirIsNeg[2]].z - ray.getPosition().z) * invDir.z;
     if ((tmin > tzmax) || (tzmin > tmax))
     {
         return false;
@@ -144,7 +145,7 @@ static inline bool IntersectP(const BBox& bounds, const Ray& ray,
     {
         tmax = tzmax;
     }
-    return (tmin < ray.maxt) && (tmax > ray.mint);
+    return (tmin < ray.getMaxt()) && (tmax > ray.getMint());
 }
 
 // BVHAccel Method Definitions
@@ -373,7 +374,7 @@ decimal BvhAccelerator::traverse(Ray* ray, std::list<Intersection> &result) cons
     if (!nodes) { return -1.; }
 
     decimal intermin = -1.;
-    vec3 invDir(1.f / ray->direction.x, 1.f / ray->direction.y, 1.f / ray->direction.z);
+    vec3 invDir(1.f / ray->getDirection().x, 1.f / ray->getDirection().y, 1.f / ray->getDirection().z);
     uint32_t dirIsNeg[3] = { invDir.x < 0, invDir.y < 0, invDir.z < 0 };
     // Follow ray through BVH nodes to find primitive intersections
     uint32_t todoOffset = 0, nodeNum = 0;

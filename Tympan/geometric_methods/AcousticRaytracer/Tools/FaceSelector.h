@@ -84,7 +84,7 @@ public:
             double currentDistance = r->getLongueur();
             if (currentDistance < it->second->getLongueur())
             {
-                replace = it->second->constructId;
+                replace = it->second->getConstructId();
                 return SELECTOR_REPLACE;
             }
             else

@@ -73,6 +73,8 @@ public:
 
     virtual void runStructureBenchmark() {} //!< If implemented, run a benchmark for the engine
 
+    virtual unsigned long long int getRayCounter(){ return rayCounter;} 
+
 protected:
     Scene* scene;					//!< Pointer to the scene
     std::vector<Source> *sources;	//!< Pointer to all the receptors

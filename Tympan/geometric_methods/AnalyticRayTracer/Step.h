@@ -40,7 +40,7 @@ public :
     /// Return a step build from ray position and direction
     static Step Ray_adapter(Ray& ray)
     {
-        return Step( ray.position, ray.direction );
+        return Step( ray.getPosition(), ray.getDirection() );
     }
 
 public :

@@ -170,8 +170,8 @@ void Cylindre::computeMesh()
         box = box.Union(mesh.at(i)->getBBox());
     }
 
-    box.pMin = vec3(box.pMin.x - 0.01, box.pMin.y - 0.01, box.pMin.z - 0.01);
-    box.pMax = vec3(box.pMax.x + 0.01, box.pMax.y + 0.01, box.pMax.z + 0.01);
+    box.pMin = vec3(box.pMin.x - (decimal)0.01, box.pMin.y - (decimal)0.01, box.pMin.z - (decimal)0.01);
+    box.pMax = vec3(box.pMax.x + (decimal)0.01, box.pMax.y + (decimal)0.01, box.pMax.z + (decimal)0.01);
 }
 
 bool Cylindre::sample(decimal density, std::vector<vec3>& samples)
@@ -190,7 +190,7 @@ bool Cylindre::sample(decimal density, std::vector<vec3>& samples)
     for (unsigned int i = 0; i < nbSamples; i++)
     {
         decimal choice = (decimal)rand() / (decimal)RAND_MAX;
-        vec3 newSample = v1 + v1v2 * choice + normale * 0.001f; //On releve legerement le point pour etre sur que le point soit visible de l'exterieur du batiment
+        vec3 newSample = v1 + v1v2 * choice + normale * decimal(0.001); //On releve legerement le point pour etre sur que le point soit visible de l'exterieur du batiment
         samples.push_back(newSample);
     }
 
