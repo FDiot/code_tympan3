@@ -35,21 +35,11 @@ build_script:
 
     cd build
 
-    echo %PATH%
-    
-    set MINICONDA=C:\Miniconda35
+    set PATH=C:\Miniconda36\Scripts;%PATH%
 
-    set PATH=%MINICONDA%;%MINICONDA%\Scripts;%MINICONDA%\Library\bin;%MINICONDA%\libs
+    conda create -y -n tympan python=3.5
 
-    set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
-
-    set PATH=%PATH%;C:\Windows\system32;C:\Windows;C:\Program Files (x86)\CMake\bin;
-
-    set PATH=%PATH%;C:\Windows\System32\WindowsPowerShell\v1.0\
-
-    echo %PATH%
-
-    set TYMPAN_PYTHON_INTERP=%MINICONDA%\python.exe
+    activate tympan
 
     conda install -y -q boost=1.61.0
 
@@ -73,23 +63,23 @@ build_script:
 
     conda list
 
-    cmake -G"Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DPYTHON_LIBRARY=%MINICONDA%\libs\Python35.lib ..\src
+    cmake -G"Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release ..\src
 
     cmake --build . --config Release
 
     cd ..\src\doc
-    
-    set PYTHONPATH=%MINICONDA%      
-    
-    make html 
-    
+
+    make html
+
     dir
 
     cd ..\..
 test_script:
 - cmd: >-
-    dir
+    activate tympan
 
-    cd build
+    cd C:\tympan\build
+
+    set PYTHONPATH=C:\tympan\build\cython
 
     ctest -C Release --output-on-failure
