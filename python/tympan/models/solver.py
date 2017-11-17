@@ -3,7 +3,7 @@ import json
 from io import StringIO
 import os
 
-from tympan.models import filter_output
+from tympan.models import filter_output, Spectrum
 from tympan.models import _solver as cysolver
 from tympan import _business2solver
 
@@ -62,6 +62,12 @@ class Receptor(object):
 
     def __init__(self, position):
         self.position = position
+        self._spectrum = Spectrum()
+
+    @property
+    def spectrum(self):
+        """Acoustic power spectrum of this Receptor."""
+        return self._spectrum
 
 
 class Model(object):
