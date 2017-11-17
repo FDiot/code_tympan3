@@ -2,8 +2,7 @@ version: 1.0.{build}
 configuration: Release
 platform: x86
 clone_folder: C:\tympan\src
-environment:
-  VisualStudioVersion: 10.0
+image: Visual Studio 2015
 install:
 - ps: >-
     Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -38,37 +37,43 @@ build_script:
 
     echo %PATH%
     
-    set MINICONDA=C:\Miniconda34
+    set MINICONDA=C:\Miniconda35
 
     set PATH=%MINICONDA%;%MINICONDA%\Scripts;%MINICONDA%\Library\bin;%MINICONDA%\libs
 
+    set PATH=C:\Program Files (x86)\MSBuild\14.0\Bin;%PATH%
+
     set PATH=%PATH%;C:\Windows\system32;C:\Windows;C:\Program Files (x86)\CMake\bin;
+
+    set PATH=%PATH%;C:\Windows\System32\WindowsPowerShell\v1.0\
 
     echo %PATH%
 
     set TYMPAN_PYTHON_INTERP=%MINICONDA%\python.exe
 
-    conda install -y -q cython numpy scipy matplotlib pandas xlsxwriter
+    conda install -y -q boost=1.61.0
 
-    conda install -y -q geos=3.4.2
+    conda install -y -q cython=0.26.0 numpy scipy matplotlib pandas xlsxwriter
 
-    conda install -y -q shapely=1.5.13 -c scitools
+    conda install -y -q geos
 
-    conda install -y -q qt=4.8.7=vc10_9
+    conda install -y -q shapely -c scitools
+
+    conda install -y -q qt=4.8.7
 
     conda install -y -q swig=3.0.10
 
-    conda install -y -q gmp mpfr -c salilab
+    conda install -y -q gmp=5.0.1 mpfr=3.0.0 -c salilab
 
-    conda install -y -q cgal=4.3 -c logilab
+    conda install -y -q cgal=4.9 -c salilab
 
-    conda install -y -q sphinx=1.2.2=py34_2 graphviz
+    conda install -y -q sphinx=1.6.3 graphviz
 
     conda install -y -q doxygen -c omnia
 
     conda list
 
-    cmake -G"Visual Studio 10" -DCMAKE_BUILD_TYPE=Release -DPYTHON_LIBRARY=%MINICONDA%\libs\Python34.lib ..\src
+    cmake -G"Visual Studio 14 2015" -DCMAKE_BUILD_TYPE=Release -DPYTHON_LIBRARY=%MINICONDA%\libs\Python35.lib ..\src
 
     cmake --build . --config Release
 
