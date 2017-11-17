@@ -67,6 +67,8 @@ build_script:
 
     cmake --build . --config Release
 
+    call SetEnvTympanTests.bat
+
     cd ..\src\doc
 
     make html
