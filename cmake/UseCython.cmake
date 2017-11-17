@@ -72,7 +72,7 @@ set( CYTHON_FLAGS "" CACHE STRING
 mark_as_advanced( CYTHON_ANNOTATE CYTHON_NO_DOCSTRINGS CYTHON_FLAGS )
 
 find_package( Cython REQUIRED )
-find_package( PythonLibs 3 REQUIRED )
+find_package( PythonLibs 3.5 REQUIRED )
 
 set( CYTHON_CXX_EXTENSION "cxx" )
 set( CYTHON_C_EXTENSION "c" )
