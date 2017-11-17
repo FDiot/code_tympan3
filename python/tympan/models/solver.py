@@ -25,6 +25,32 @@ for category, options in _CONFIG_MODEL.items():
 _CONFIG_MAP = dict((optname, _CONVERTERS[opttype]) for opttype, optname in _SOLVER_CONFIG_ATTRS)
 
 
+class Source(object):
+    """An acoustic source.
+
+    Parameters
+    ----------
+
+    position : tuple
+        (x, y, z) coordinates
+    spectrum_values : array-like
+        dB values of a power spectrum
+    shift : int, optional
+        the number of the first frequence for which a DB value is given
+        (frequences start at 16 Hz and end at 16000Hz, 31 values in total)
+    directivity: Directivity, optional
+        source directivity
+    """
+
+    def __init__(self, position, spectrum_values, shift=0, directivity=None):
+        self.position = position
+        self.spectrum_values = spectrum_values
+        self.shift = shift
+        if directivity is None:
+            directivity = cysolver.Directivity()
+        self.directivity = directivity
+
+
 class Model(object):
     """Model describing a site made of a mesh, sources, and receptors
 
@@ -48,23 +74,11 @@ class Model(object):
             model._converter.build_receptors(model._model)
         return model
 
-    def add_source(self, position, spectrum_values, shift=0, directivity=None):
-        """Add an acoustic source to the model
-
-        Params:
-
-            - position is a (x, y, z) tuple
-            - spectrum_values is a np array containing the DB values of a power
-              spectrum
-            - shift is the number of the first frequence for which a DB value
-              is given (frequences start at 16 Hz and end at 16000Hz,
-              31 values in total).
-
-        Add the corresponding acoustic source to the solver model (the acoustic
-        source is created with a SphericalFaceDirectivity)
-        """
-        directivity = directivity or cysolver.Directivity()
-        return self._model._add_source(position, spectrum_values, shift, directivity)
+    def add_source(self, source):
+        """Add an acoustic source to the model."""
+        return self._model._add_source(
+            source.position, source.spectrum_values, source.shift,
+            source.directivity)
 
     def add_receptor(self, x, y ,z):
         return self._model.add_receptor(x, y, z)
