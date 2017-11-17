@@ -18,8 +18,8 @@
 bool Sphere::getIntersection(Ray& ray, Intersection& inter)
 {
     // intersection rayon/sphere
-    vec3 dist = position - ray.position;
-    decimal B = ray.direction * dist;
+    vec3 dist = position - ray.getPosition();
+    decimal B = ray.getDirection() * dist;
     decimal D = B * B - dist * dist + radius * radius;
     if (D < 0.0f)
     {
@@ -27,14 +27,14 @@ bool Sphere::getIntersection(Ray& ray, Intersection& inter)
     }
     float t0 = B - sqrtf(D);
     float t1 = B + sqrtf(D);
-    if ((t0 > 0.1f) && (t0 < ray.maxt))
+    if ((t0 > 0.1f) && (t0 < ray.getMaxt()))
     {
         inter.t = t0;
         inter.p = this;
         inter.forme = SPHERE;
         return true;
     }
-    if ((t1 > 0.1f) && (t1 < ray.maxt))
+    if ((t1 > 0.1f) && (t1 < ray.getMaxt()))
     {
         inter.t = t1;
         inter.p = this;

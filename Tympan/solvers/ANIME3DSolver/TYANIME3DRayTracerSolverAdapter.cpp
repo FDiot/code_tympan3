@@ -58,20 +58,20 @@ bool TYANIME3DRayTracerSolverAdapter::postTreatmentScene(Scene* scene, std::vect
 bool TYANIME3DRayTracerSolverAdapter::valideIntersection(Ray* r, Intersection* inter)
 {
     tympan::LPSolverConfiguration config = tympan::SolverConfiguration::get();
-    if (r->events.size() > static_cast<unsigned int>(config->MaxProfondeur)) { return false; }
+    if (r->getEvents()->size() > static_cast<unsigned int>(config->MaxProfondeur)) { return false; }
 
     bool isValid = false;
 
     // cas d'un triangle
     if ( ( inter->forme == TRIANGLE ) &&
-		 ( r->nbReflexion < static_cast<unsigned int>(config->MaxReflexion) ) &&
+		 ( r->getReflex() < static_cast<unsigned int>(config->MaxReflexion) ) &&
 		 !( !config->UseSol && inter->p->isSol() ) )
     {
         isValid = ValidRay::validTriangleWithSpecularReflexion(r, inter);
     }
 
     // cas du cylindre (arrete de diffraction)
-    else if (inter->forme == CYLINDRE && r->nbDiffraction < static_cast<unsigned int>(config->MaxDiffraction))
+    else if (inter->forme == CYLINDRE && r->getDiff() < static_cast<unsigned int>(config->MaxDiffraction))
     {
         isValid = ValidRay::validCylindreWithDiffraction(r, inter);
     }

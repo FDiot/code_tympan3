@@ -1078,7 +1078,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
     vec3 start = OPoint3Dtovec3(incident._ptB);
     start.z = incident._ptA._z;
     Ray ray1( start, vec3(0., 0., -1.) );
-    ray1.maxt = 20000;
+    ray1.setMaxt ( 20000 );
 
     std::list<Intersection> LI;
 
@@ -1088,7 +1088,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
     {
         start.z = incident._ptB._z + 1000;
         Ray ray1( start, vec3(0., 0., -1.) );
-        ray1.maxt = 20000;
+        ray1.setMaxt ( 20000 );
         static_cast<double>( _solver.getScene()->getAccelerator()->traverse(&ray1, LI));
     }
 
@@ -1102,7 +1102,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
         start.z = min(min(_solver.getTabPolygon()[indexFace].tabPoint[0]._z, _solver.getTabPolygon()[indexFace].tabPoint[1]._z),
             _solver.getTabPolygon()[indexFace].tabPoint[2]._z) ;
         Ray ray(start, vec3(0,0,-1));
-        ray.maxt = 20000;
+        ray.setMaxt ( 20000 );
         std::list<Intersection> LI2;
         static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray, LI2 ) );
         assert( !LI2.empty() );
@@ -1150,7 +1150,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
         start.z = min(min(_solver.getTabPolygon()[indexFace].tabPoint[0]._z, _solver.getTabPolygon()[indexFace].tabPoint[1]._z),
             _solver.getTabPolygon()[indexFace].tabPoint[2]._z) ;
         Ray ray(start, vec3(0,0,-1));
-        ray.maxt = 20000;
+        ray.setMaxt ( 20000 );
         std::list<Intersection> LI2;
         double distance = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray, LI2 ) );
         assert(distance > 0.);
@@ -1179,7 +1179,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
         start.z = min(min(_solver.getTabPolygon()[indexFace].tabPoint[0]._z, _solver.getTabPolygon()[indexFace].tabPoint[1]._z),
             _solver.getTabPolygon()[indexFace].tabPoint[2]._z) ;
         Ray ray(start, vec3(0,0,-1));
-        ray.maxt = 20000;
+        ray.setMaxt ( 20000 );
         std::list<Intersection> LI2;
         double distance = static_cast<double>( _solver.getScene()->getAccelerator()->traverse( &ray, LI2 ) );
         assert(distance > 0.);
