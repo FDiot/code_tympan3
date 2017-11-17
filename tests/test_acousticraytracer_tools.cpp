@@ -2772,26 +2772,26 @@ TEST(test_SelectorManager, appendData)
 TEST(test_UnitConverter, fromRadianToCarthesien){
 
 	vec3 res;
-	Tools::fromRadianToCarthesien(0,M_PI/4,res);
-	ASSERT_TRUE(res.barelyEqual(vec3(0.707107,0.707107,0)));
+	Tools::fromRadianToCarthesien(0,(decimal)M_PI/4,res);
+	ASSERT_TRUE(res.barelyEqual(vec3((decimal)0.707107,(decimal)0.707107,0)));
 
-	Tools::fromRadianToCarthesien(M_PI/2,M_PI/4,res);
+	Tools::fromRadianToCarthesien((decimal)M_PI/2,(decimal)M_PI/4,res);
 	ASSERT_TRUE(res.barelyEqual(vec3(0,0,1)));
 
-	Tools::fromRadianToCarthesien(2*M_PI/3,5*M_PI/6,res);
-	ASSERT_TRUE(res.barelyEqual(vec3(0.433,-0.25,0.866)));
+	Tools::fromRadianToCarthesien((decimal)2*M_PI/3,(decimal)5*M_PI/6,res);
+	ASSERT_TRUE(res.barelyEqual(vec3((decimal)0.433,(decimal)-0.25,(decimal)0.866)));
 }
 
 //Test the method appendData of SelectorManager
 TEST(test_UnitConverter, fromRadianToCarthesien2){
 
 	vec3 res;
-	Tools::fromRadianToCarthesien2(0,M_PI/4,res);
+	Tools::fromRadianToCarthesien2(0,(decimal)M_PI/4,res);
 	ASSERT_TRUE(res.barelyEqual(vec3(0,0,1)));
 
-	Tools::fromRadianToCarthesien2(M_PI/2,M_PI/4,res);
-	ASSERT_TRUE(res.barelyEqual(vec3(0.707107,0.707107,0)));
+	Tools::fromRadianToCarthesien2((decimal)M_PI/2,(decimal)M_PI/4,res);
+	ASSERT_TRUE(res.barelyEqual(vec3((decimal)0.707107,(decimal)0.707107,0)));
 
-	Tools::fromRadianToCarthesien2(3*M_PI/4,2*M_PI/3,res);
-	ASSERT_TRUE(res.barelyEqual(vec3(-0.354,0.612,-0.707)));
+	Tools::fromRadianToCarthesien2((decimal)3*M_PI/4,(decimal)2*M_PI/3,res);
+	ASSERT_TRUE(res.barelyEqual(vec3((decimal)-0.354,(decimal)0.612,(decimal)-0.707)));
 }

@@ -458,7 +458,7 @@ TEST(test_cylindre, get_intersection1){
 	bool res=cylindre.getIntersection(ray,inter);
 
 	EXPECT_TRUE(res); //Intersection found
-	EXPECT_FLOAT_EQ(decimal(9.8),inter.t); // the intersection is 10 units minus the cylinder's thickness (0.2) away from position of the ray.
+	EXPECT_FLOAT_EQ((decimal)9.8,inter.t); // the intersection is 10 units minus the cylinder's thickness (0.2) away from position of the ray.
 	
 	ray=new Ray(ray_pos,vec3(-1,0,0)); //points away from the cylinder
 	
@@ -499,16 +499,13 @@ TEST(test_cylindre, get_intersection2){
 	vec3 axis_middle=p1+axis/2;
 	vec3 dir=axis_middle-ray_pos;
 	dir.normalize();
-
 	Ray ray=new Ray(ray_pos,dir); //points in direction of the cylinder
-
 
 	Intersection inter;
 
 	bool res=cylindre.getIntersection(ray,inter);
-
 	EXPECT_TRUE(res); //Intersection found
-	EXPECT_FLOAT_EQ(decimal(15.617231),inter.t); 
+	EXPECT_FLOAT_EQ((decimal)15.617231,inter.t); 
 	
 	ray=new Ray(ray_pos,dir+vec3(-1,7,5)); //points away from the cylinder
 	
@@ -625,7 +622,7 @@ TEST(test_triangle, get_intersection2){
 	bool res=t1.getIntersection(r,inter);
 
 	EXPECT_TRUE(res); //should find an intersection
-	EXPECT_FLOAT_EQ(11.130539,inter.t); //the distance between the ray position and the intersection should be 10
+	EXPECT_FLOAT_EQ((decimal)11.130539,inter.t);
 
 	res=t2.getIntersection(r,inter);
 	EXPECT_FALSE(res); //normal points in the same direction has the ray -> no intersection

@@ -498,9 +498,6 @@ TEST(test_ray, get_thickness)
     thickness=(decimal)(2*distance*sqrt(solidAngle/M_PI));
     EXPECT_FLOAT_EQ(thickness,ray->getThickness(distance,diffraction)); // diffraction == true but no diffraction event => thickness = 2* distance * sqrt(solidAngle/M_PI)
 
-
-    //Create the cylinder used for the diffraction
-
     //Create the two shapes of the cylinder
     Triangle* s1=new Triangle();
     Triangle* s2=new Triangle();
@@ -512,7 +509,9 @@ TEST(test_ray, get_thickness)
     vertices.push_back(vec3(0,0,-5));
     vertices.push_back(vec3(0,0,5));
 
-    Cylindre* cylindre=new Cylindre(s1,s2,&vertices,0,1,(decimal)0.2);
+	//Create the cylinder used for the diffraction
+	Cylindre* cylindre=new Cylindre(s1,s2,&vertices,0,1,(decimal)0.2);
+
     // add a diffraction event
     Diffraction* ev0 = new Diffraction(vec3(0,0,0),vec3(0,1,0),cylindre);
 
