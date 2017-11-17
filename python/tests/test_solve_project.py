@@ -10,7 +10,7 @@ import numpy as np
 
 from utils import TympanTC, TEST_DATA_DIR, TEST_SOLVERS_DIR, PROJECT_BASE
 import tympan.solve_project as tysolve
-from tympan.models.solver import Solver, Model
+from tympan.models.solver import Solver, Model, Source
 
 
 class TestSolveProject(TympanTC):
@@ -117,8 +117,8 @@ class ProjectResultsTC(TympanTC):
     def test_combined_spectra(self):
         project = self.load_project(osp.join('projects-panel', 'TEST_CUBE_NO_RESU.xml'))
         model = Model.from_project(project, set_sources=False)
-        model.add_source((-20, -30, 2), np.array([100.0] * 31, dtype=float))
-        model.add_source((10, 50, 2), np.array([150.0] * 31, dtype=float))
+        model.add_source(Source((-20, -30, 2), np.array([100.0] * 31, dtype=float)))
+        model.add_source(Source((10, 50, 2), np.array([150.0] * 31, dtype=float)))
         solver = Solver.from_project(project, solverdir=TEST_SOLVERS_DIR)
         result = solver.solve(model)
         combined_spectra = result.combined_spectra()

@@ -4,7 +4,7 @@ import unittest
 import numpy as np
 from numpy.testing import assert_array_equal, assert_allclose
 
-from tympan.models.solver import Model, Solver
+from tympan.models.solver import Model, Solver, Source
 from tympan.models._solver import Directivity
 from tympan.models._common import Point3D
 from utils import TympanTC, TEST_SOLVERS_DIR
@@ -31,9 +31,9 @@ class TriangleContainerTC(TympanTC):
 def add_source_with_directivity(model, directivity_type):
     directivity = Directivity(directivity_type=directivity_type, support_normal=(1, 1.5, 3),
                               size=5.)
-    return model.add_source(position=(0.7, 0.7, 0),
-                            spectrum_values=10. * np.ones(31),
-                            directivity=directivity)
+    return model.add_source(Source(position=(0.7, 0.7, 0),
+                                   spectrum_values=10. * np.ones(31),
+                                   directivity=directivity))
 
 
 def source_directivity(model, source_id):
@@ -78,7 +78,9 @@ class SolverModelWithoutProjectTC(TympanTC):
         model = Model()
         coords = 0.7, 0.7, 0
         power_lvl = 10. * np.ones(31)
-        source_id = model.add_source(coords, power_lvl, directivity=Directivity())
+        source_id = model.add_source(
+            Source(coords, power_lvl, directivity=Directivity())
+        )
         source = model.source(source_id)
         source_pos = source.position.x, source.position.y, source.position.z
         self.assertEqual(source_pos, coords)
