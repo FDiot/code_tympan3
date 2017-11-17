@@ -1700,7 +1700,10 @@ TEST(test_FermatSelector_canBeInserted, receptor_outside_thickness_1)
 	dir.normalize();
 	r->setDirection(dir);
 	r->setPosition(src.getPosition());
-	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+
+	vec3 position=r->getPosition();
+   	vec3 direction=r->getDirection();
+	rcpt.intersectionRecepteur(position, direction, tmax, result);
 	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
@@ -1734,7 +1737,10 @@ TEST(test_FermatSelector_canBeInserted, receptor_outside_thickness_2)
 	dir.normalize();
 	r->setDirection(dir);
 	r->setPosition(src.getPosition());
-	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+
+	vec3 position=r->getPosition();
+   	vec3 direction=r->getDirection();
+	rcpt.intersectionRecepteur(position, direction, tmax, result);
 	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
@@ -1767,7 +1773,10 @@ TEST(test_FermatSelector_canBeInserted, receptor_inside_thickness_1)
 	dir.normalize();
 	r->setDirection(dir);
 	r->setPosition(src.getPosition());
-	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+
+	vec3 position=r->getPosition();
+   	vec3 direction=r->getDirection();
+	rcpt.intersectionRecepteur(position, direction, tmax, result);
 	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
@@ -1800,7 +1809,10 @@ TEST(test_FermatSelector_canBeInserted, receptor_inside_thickness_2)
 	dir.normalize();
 	r->setDirection(dir);
 	r->setPosition(src.getPosition());
-	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+
+	vec3 position=r->getPosition();
+   	vec3 direction=r->getDirection();
+	rcpt.intersectionRecepteur(position, direction, tmax, result);
 	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
@@ -1832,7 +1844,10 @@ TEST(test_FermatSelector_insertWithTest, receptor_outside_thickness_1)
 	dir.normalize();
 	r->setDirection(dir);
 	r->setPosition(src.getPosition());
-	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+
+	vec3 position=r->getPosition();
+   	vec3 direction=r->getDirection();
+	rcpt.intersectionRecepteur(position, direction, tmax, result);
 	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
@@ -1864,7 +1879,10 @@ TEST(test_FermatSelector_insertWithTest, receptor_outside_thickness_2)
 	dir.normalize();
 	r->setDirection(dir);
 	r->setPosition(src.getPosition());
-	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+
+	vec3 position=r->getPosition();
+   	vec3 direction=r->getDirection();
+	rcpt.intersectionRecepteur(position, direction, tmax, result);
 	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
@@ -1895,7 +1913,10 @@ TEST(test_FermatSelector_insertWithTest, receptor_inside_thickness_1)
 	dir.normalize();
 	r->setDirection(dir);
 	r->setPosition(src.getPosition());
-	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+
+	vec3 position=r->getPosition();
+   	vec3 direction=r->getDirection();
+	rcpt.intersectionRecepteur(position, direction, tmax, result);
 	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 	
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
@@ -1926,7 +1947,10 @@ TEST(test_FermatSelector_insertWithTest, receptor_inside_thickness_2)
 	dir.normalize();
 	r->setDirection(dir);
 	r->setPosition(src.getPosition());
-	rcpt.intersectionRecepteur(r->getPosition(), r->getDirection(), tmax, result);
+
+	vec3 position=r->getPosition();
+   	vec3 direction=r->getDirection();
+	rcpt.intersectionRecepteur(position, direction, tmax, result);
 	r->setFinalPosition ( r->getPosition() + r->getDirection() * result.t);
 
 	EXPECT_TRUE(result.t<tmax);  //the ray should hit the receptor
