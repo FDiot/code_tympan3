@@ -48,7 +48,7 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
     vec3 normal = inter->p->getNormal(impact);
     
     //intersection is not valid if the ray goes in the same direction as the normal
-    if (normale.dot(r->getDirection()) > 0.) { return false; }
+    if (normal.dot(r->getDirection()) > 0.) { return false; }
 
 	if (AcousticRaytracerConfiguration::get()->UsePathDifValidation && !pathDiffValidationForReflection(r, impact)) // Validation sur la différence de marche due aux diffractions
 	{

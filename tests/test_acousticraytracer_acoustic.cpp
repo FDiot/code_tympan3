@@ -451,7 +451,7 @@ TEST(test_valid_ray,compute_real_impact_trivial){
 
 	direction=vec3(1,-1,(decimal)0.8);
 	direction.normalize();
-	ray.direction=direction;
+	ray.setDirection(direction);
 	EXPECT_TRUE(ValidRay::computeRealImpact(&ray,&inter,&cylindre,impact));
 	EXPECT_TRUE(vec3(0,0,(decimal)0.79999983)==impact); //ray hits the the cylinder 
 
@@ -532,7 +532,7 @@ TEST(test_valid_ray,is_ray_passes_near_ridge){
 	vec3 direction((decimal)1,(decimal)-1,0);
 	direction.normalize();
 	Ray ray(pos,direction);
-	ray.source=&src;
+	ray.setSource(&src);
 	
 	// Create and add a diffraction 
 	vec3 from=vec3(10,-5,7);
@@ -568,15 +568,15 @@ TEST(test_valid_ray,path_diff_validation_for_reflection){
     ray->getEvents()->push_back(SPE);
 
 	//init cumulDistance
-	ray->cumulDistance=(decimal)20.;
+	ray->setCumulDistance((decimal)20.);
 	
 	// set maxPathDiffrence 
 	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)20.;
 
 	//distance between impact and last reflection D=0
 	EXPECT_TRUE(ValidRay::pathDiffValidationForReflection(ray,vec3(-8,12,-4)));
-	EXPECT_FLOAT_EQ(20.,ray->cumulDelta); // D=0 => cumulDelta should not change
-	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reseted to 0
+	EXPECT_FLOAT_EQ(20.,ray->getCumulDelta()); // D=0 => cumulDelta should not change
+	EXPECT_FLOAT_EQ(0.,ray->getCumulDistance()); //cumulDistance should be reseted to 0
 
 
 	// set maxPathDiffrence lower than the current cumulDelta
@@ -584,28 +584,28 @@ TEST(test_valid_ray,path_diff_validation_for_reflection){
 
 	//distance between impact and last reflection D=0
 	EXPECT_FALSE(ValidRay::pathDiffValidationForReflection(ray,vec3(-8,12,-4)));
-	EXPECT_FLOAT_EQ(20.,ray->cumulDelta); //D=0 => cumulDelta should not change.
-	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reseted to 0
+	EXPECT_FLOAT_EQ(20.,ray->getCumulDelta()); // D=0 => cumulDelta should not change
+	EXPECT_FLOAT_EQ(0.,ray->getCumulDistance()); //cumulDistance should be reseted to 0
 	
 
 	//increase maxPathDiffrence
 	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)25.;
 
 	
-	ray->cumulDistance=(decimal)5.;
+	ray->setCumulDistance((decimal)5.);
 
 	//distance between impact and last reflection D=5
 	EXPECT_TRUE(ValidRay::pathDiffValidationForReflection(ray,vec3(-3,12,-4)));
-	EXPECT_FLOAT_EQ(25.,ray->cumulDelta); //cumulDelta should increase by value of cumulDistance before the call to cumulDistance (5.0).
-	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reseted to 0
+	EXPECT_FLOAT_EQ(25.,ray->getCumulDelta()); //cumulDelta should increase by value of cumulDistance before the call to cumulDistance (5.0).
+	EXPECT_FLOAT_EQ(0.,ray->getCumulDistance()); //cumulDistance should be reseted to 0
 
 
-	ray->cumulDistance=(decimal)5.;
+	ray->setCumulDistance((decimal)5.);
 
 	//distance between impact and last reflection D=5
 	EXPECT_FALSE(ValidRay::pathDiffValidationForReflection(ray,vec3(-3,12,-4)));
-	EXPECT_FLOAT_EQ(30.,ray->cumulDelta);  //cumulDelta should increase by value of cumulDistance before the call to cumulDistance (5.0).
-	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reseted to 0
+	EXPECT_FLOAT_EQ(30.,ray->getCumulDelta());  //cumulDelta should increase by value of cumulDistance before the call to cumulDistance (5.0).
+	EXPECT_FLOAT_EQ(0.,ray->getCumulDistance()); //cumulDistance should be reseted to 0
 
 }
 
@@ -626,23 +626,23 @@ TEST(test_valid_ray,path_diff_validation_for_diffraction){
 	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)20.;
 
 
-	ray->cumulDelta=10.;
-	ray->cumulDistance=10;
+	ray->setCumulDelta(10.);
+	ray->setCumulDistance(10);
 
 	//distance between impact and last reflection D=10.0
 	EXPECT_TRUE(ValidRay::pathDiffValidationForDiffraction(ray,vec3(-8,2,-4))); //cumulDistance-D+cumulDelta = 20-10+10
-	EXPECT_FLOAT_EQ(10.,ray->cumulDelta); //cumulDelta should no be modified
-	EXPECT_FLOAT_EQ(20,ray->cumulDistance); //cumulDistance should increase by D
+	EXPECT_FLOAT_EQ(10.,ray->getCumulDelta()); //cumulDelta should no be modified
+	EXPECT_FLOAT_EQ(20,ray->getCumulDistance()); //cumulDistance should increase by D
 
 	//distance between impact and last reflection D=5.0
 	EXPECT_FALSE(ValidRay::pathDiffValidationForDiffraction(ray,vec3(-3,12,-4))); //cumulDistance-D+cumulDelta = 25-5+10 > 20
-	EXPECT_FLOAT_EQ(10.,ray->cumulDelta); //cumulDelta should no be modified
-	EXPECT_FLOAT_EQ(25.,ray->cumulDistance); //cumulDistance should increase by D
+	EXPECT_FLOAT_EQ(10.,ray->getCumulDelta()); //cumulDelta should no be modified
+	EXPECT_FLOAT_EQ(25.,ray->getCumulDistance()); //cumulDistance should increase by D
 
 	//distance between impact and last reflection D=10.0
 	EXPECT_FALSE(ValidRay::pathDiffValidationForDiffraction(ray,vec3(-8,2,-4))); //cumulDistance-D+cumulDelta = 35-10+10 > 20 
-	EXPECT_FLOAT_EQ(10.,ray->cumulDelta); //cumulDelta should no be modified
-	EXPECT_FLOAT_EQ(35.,ray->cumulDistance); //cumulDistance should increase by D
+	EXPECT_FLOAT_EQ(10.,ray->getCumulDelta()); //cumulDelta should no be modified
+	EXPECT_FLOAT_EQ(35.,ray->getCumulDistance()); //cumulDistance should increase by D
 
 }
 
@@ -655,7 +655,7 @@ TEST(test_valid_ray,path_diff_validation){
 
 	//Create Ray
 	Ray* ray=new Ray();
-	ray->source=src;
+	ray->setSource(src);
 
 	//Create two events
 	SpecularReflexion* reflection1 = new SpecularReflexion();
@@ -671,29 +671,29 @@ TEST(test_valid_ray,path_diff_validation){
 	AcousticRaytracerConfiguration::get()->MaxPathDifference=(decimal)5.;
 
 	//Initially cumulDelta and cumulDistance should equal 0
-	EXPECT_FLOAT_EQ(0.,ray->cumulDelta); 
-	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); 
+	EXPECT_FLOAT_EQ(0.,ray->getCumulDelta()); 
+	EXPECT_FLOAT_EQ(0.,ray->getCumulDistance()); 
 
 	//Test if a reflection event with position (-8,12,-4) can be added. distance between impact and source D=5.0
 	EXPECT_TRUE(ValidRay::pathDiffValidationForReflection(ray,vec3(-8,12,-4)));
-	EXPECT_FLOAT_EQ(0.,ray->cumulDelta); //cumulDelta should not change because cumulDistance == 0.
-	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reseted to 0
+	EXPECT_FLOAT_EQ(0.,ray->getCumulDelta()); //cumulDelta should not change because cumulDistance == 0.
+	EXPECT_FLOAT_EQ(0.,ray->getCumulDistance()); //cumulDistance should be reseted to 0
 
 	//add first event
 	ray->getEvents()->push_back(SPE1);
 
 	//Test if a diffraction event with position (-8,2,-4) can be added. distance between impact and last reflection D=10.0
 	EXPECT_TRUE(ValidRay::pathDiffValidationForDiffraction(ray,vec3(-8,2,-4)));
-	EXPECT_FLOAT_EQ(0.,ray->cumulDelta); //cumulDelta should not change for diffraction validation.
-	EXPECT_FLOAT_EQ(10.,ray->cumulDistance); //cumulDistance should increase by D
+	EXPECT_FLOAT_EQ(0.,ray->getCumulDelta()); //cumulDelta should not change for diffraction validation.
+	EXPECT_FLOAT_EQ(10.,ray->getCumulDistance()); //cumulDistance should increase by D
 	
 	//add second event
 	ray->getEvents()->push_back(SPE2);
 
 	//Test if a reflection event with position (-8,7,-4) can be added. distance between impact and last reflection D=5.0
 	EXPECT_FALSE(ValidRay::pathDiffValidationForReflection(ray,vec3(-8,7,-4))); //cumulDelta = cumulDistance -D = 10 > MaxPathDifference => return false
-	EXPECT_FLOAT_EQ(10.,ray->cumulDelta); //cumulDelta increase by D => 10..
-	EXPECT_FLOAT_EQ(0.,ray->cumulDistance); //cumulDistance should be reset to 0
+	EXPECT_FLOAT_EQ(10.,ray->getCumulDelta()); //cumulDelta increase by D => 10..
+	EXPECT_FLOAT_EQ(0.,ray->getCumulDistance()); //cumulDistance should be reset to 0
 
 
 }
@@ -708,11 +708,11 @@ TEST(test_valid_ray,valid_triangle_with_specular_reflexion){
 
 	//Create Ray
 	Ray* ray=new Ray();
-	ray->source=src;
-	ray->position=src->getPosition();
+	ray->setSource(src);
+	ray->setPosition(src->getPosition());
 	vec3 direction=vec3(-5,-10,0);
 	direction.normalize();
-	ray->direction=direction;
+	ray->setDirection(direction);
 
 	//Create a shape for the intersection
     Triangle* shape=new Triangle();
@@ -733,8 +733,8 @@ TEST(test_valid_ray,valid_triangle_with_specular_reflexion){
 	EXPECT_TRUE(ValidRay::validTriangleWithSpecularReflexion(ray,inter)); 
 	EXPECT_EQ(1,ray->getEvents()->size()); //ray's event list should contain one event
 	EXPECT_EQ(SPECULARREFLEXION,ray->getEvents()->at(0)->getType()); //the event should be a SPECULARREFLEXION
-	EXPECT_EQ(1,ray->nbReflexion); //nbReflexion should have been incremented
-	EXPECT_EQ(0,ray->nbDiffraction); //nbDiffraction should remain the same
+	EXPECT_EQ(1,ray->getReflex()); //nbReflexion should have been incremented
+	EXPECT_EQ(0,ray->getDiff()); //nbDiffraction should remain the same
 }
 
 
@@ -743,17 +743,18 @@ TEST(test_valid_ray,valid_cylindre_with_diffraction){
 
 	//Create Source
 	Source* src=new Source();
+	src->setInitialRayCount(100);
 	src->setPosition(vec3(-2,1,0));
 	Sampler sampler;
 	src->setSampler(&sampler);
 
 	//Create Ray
 	Ray* ray=new Ray();
-	ray->source=src;
-	ray->position=src->getPosition();
+	ray->setSource(src);
+	ray->setPosition(src->getPosition());
 	vec3 direction=vec3(0,0,0);
 	direction.normalize();
-	ray->direction=direction;
+	ray->setDirection(direction);
 
 	//Create the two shapes of the cylinder
 	Triangle* s1=new Triangle();
@@ -776,34 +777,34 @@ TEST(test_valid_ray,valid_cylindre_with_diffraction){
 
 	EXPECT_FALSE(ValidRay::validCylindreWithDiffraction(ray,inter)); //ray's direction has norm 0, hence no possible line intersection with the cylinder's axis => return false
 	EXPECT_TRUE(ray->getEvents()->empty()); //ray's event list should remain empty
-	EXPECT_TRUE(vec3(-2,1,0)==ray->position); //ray's position should not change
+	EXPECT_TRUE(vec3(-2,1,0)==ray->getPosition()); //ray's position should not change
     
 	
 	//change ray's direction 
 	direction=vec3(1,0,0);
 	direction.normalize();
-	ray->direction=direction;
+	ray->setDirection(direction);
 	
 	EXPECT_TRUE(ValidRay::validCylindreWithDiffraction(ray,inter)); //ray does not pass near enough the diffraction edge => call validRayWithDoNothingEvent
 	EXPECT_EQ(1,ray->getEvents()->size()); //ray's event list should contain one event
 	EXPECT_EQ(NOTHING,ray->getEvents()->at(0)->getType()); //the last event should be a NOTHING
-	EXPECT_EQ(0,ray->nbReflexion); //nbReflexion should remain the same
-	EXPECT_EQ(0,ray->nbDiffraction); //nbDiffraction should remain the same
-	EXPECT_TRUE(vec3(-1,1,0)==ray->position); //expected position of the ray after validCylindreWithDiffraction
+	EXPECT_EQ(0,ray->getReflex()); //nbReflexion should remain the same
+	EXPECT_EQ(0,ray->getDiff()); //nbDiffraction should remain the same
+	EXPECT_TRUE(vec3(-1,1,0)==ray->getPosition()); //expected position of the ray after validCylindreWithDiffraction
 
 
 	//change ray's direction and intersection distance
 	direction=vec3(1,-1,0);
 	direction.normalize();
-	ray->direction=direction;
+	ray->setDirection(direction);
 	inter->t=(decimal)1.4142135624;
 
 	EXPECT_TRUE(ValidRay::validCylindreWithDiffraction(ray,inter)); 
 	EXPECT_EQ(2,ray->getEvents()->size()); //ray's event list should contain two events
 	EXPECT_EQ(DIFFRACTION,ray->getEvents()->at(1)->getType()); //the last event should be a DIFFRACTION
-	EXPECT_EQ(0,ray->nbReflexion); //nbReflexion should remain the same
-	EXPECT_EQ(1,ray->nbDiffraction); //nbDiffraction should have been incremented
-	EXPECT_TRUE(vec3(0,0,0)==ray->position); //expected position of the ray after validCylindreWithDiffraction
+	EXPECT_EQ(0,ray->getReflex()); //nbReflexion should remain the same
+	EXPECT_EQ(1,ray->getDiff()); //nbDiffraction should have been incremented
+	EXPECT_TRUE(vec3(0,0,0)==ray->getPosition()); //expected position of the ray after validCylindreWithDiffraction
 	
 }
 

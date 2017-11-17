@@ -499,7 +499,7 @@ TEST(test_cylindre, get_intersection2){
 	vec3 axis_middle=p1+axis/2;
 	vec3 dir=axis_middle-ray_pos;
 	dir.normalize();
-
+	Ray ray=new Ray(ray_pos,dir); //points in direction of the cylinder
 
 	Intersection inter;
 
