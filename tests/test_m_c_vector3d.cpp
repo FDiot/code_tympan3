@@ -182,7 +182,7 @@ TEST(angle, dumpenv)
     // Calcul de l'angle
     double res = v1.angle(v2);
 
-    ASSERT_TRUE(res == (M_PI / 2.0));
+	EXPECT_DOUBLE_EQ(M_PI / 2.0, res);
 }
 
 TEST(rotOz, dumpenv)
