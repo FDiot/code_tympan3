@@ -354,7 +354,7 @@ TEST(test_valid_ray,compute_cumul_distance){
     //Create several events, some with the type NOTHING
     Event* e=new Event();
     e->setType(SPECULARREFLEXION);
-    e->setPosition(vec3(-7.5,8.6,-12.41));
+    e->setPosition(vec3((decimal)-7.5,(decimal)8.6,(decimal)-12.41));
     std::shared_ptr<Event> SPE(e);
     ray->getEvents()->push_back(SPE);
 
