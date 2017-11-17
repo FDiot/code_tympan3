@@ -133,7 +133,9 @@ Ray* DefaultEngine::genRay()
             rayCounter++;
             new_ray->setSource ( (&(sources->at(i))) );
             new_ray->setPosition ( sources->at(i).getPosition());
-            sources->at(i).getDirection(new_ray->getDirection());
+			vec3 direction;
+            sources->at(i).getDirection(direction);
+			new_ray->setDirection(direction);
             new_ray->setMint ( 0.);
             new_ray->setMaxt ( 10000.);
             return new_ray;

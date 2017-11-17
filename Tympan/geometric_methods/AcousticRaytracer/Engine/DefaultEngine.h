@@ -68,8 +68,10 @@ protected:
         {
             Intersection its = (*iter);
    			Intersection result;
-
-            if ( dynamic_cast<Recepteur*>(its.p)->intersectionRecepteur(r->getPosition(), r->getDirection(), tmin, result) )
+	
+            vec3 position=r->getPosition();
+   			vec3 direction=r->getDirection();
+            if ( dynamic_cast<Recepteur*>(its.p)->intersectionRecepteur(position, direction, tmin, result) )
             {
 				//Cas ou le rayon touche un recepteur
 				Ray* valide_ray = new Ray(r);
@@ -185,7 +187,9 @@ protected :
         Ray* copie = new Ray(r);
         copie->setConstructId ( rayCounter );
         rayCounter++;
-        r->getEvents()->back()->getResponse(copie->getDirection());
+        vec3 response;
+        r->getEvents()->back()->getResponse(response);
+        copie->setDirection(response);
         pile_traitement.push(copie);
         //Copie achevee
 	}
