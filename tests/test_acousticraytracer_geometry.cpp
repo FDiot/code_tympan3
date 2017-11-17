@@ -556,7 +556,7 @@ TEST(test_sphere, get_intersection2){
 	bool res=s.getIntersection(r,inter);
 
 	EXPECT_TRUE(res); //should find an intersection
-	EXPECT_FLOAT_EQ((decimal)15.916492,inter.t); 
+	EXPECT_NEAR((decimal)15.91649,inter.t,0.00001); //Windows and Linux do not agree on the exact value of this, hence the EXPECT_NEAR
 
 	ray_dir=vec3(-8,9,14);
 	ray_dir.normalize();
