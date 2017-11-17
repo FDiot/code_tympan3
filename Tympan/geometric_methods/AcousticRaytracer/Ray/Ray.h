@@ -443,8 +443,8 @@ protected:
     unsigned long long int constructId;         //!< Ray id
     unsigned int nbReflexion;                   //!< Reflections number for the ray
     unsigned int nbDiffraction;                 //!< Diffractions number for the ray
-    decimal cumulDistance;                      //!< Cumulative length (set to 0 after each reflexion event validation)
-    decimal cumulDelta;                         //!< Cumulative walking step difference by the ray computed at each step
+    decimal cumulDistance;                      //!< Cumulative length since last valid reflexion
+    decimal cumulDelta;                         //!< Cumulative difference by the ray computed at each step
     std::vector<std::shared_ptr<Event>> events; //!< Events list for the ray
 
 };

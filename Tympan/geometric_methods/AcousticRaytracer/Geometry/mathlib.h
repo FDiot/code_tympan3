@@ -864,7 +864,7 @@ inline int Round2Int(float val)
  * Calculate the segment between the lines (p1,p2) and (p3,p4)
  * @return False if no solution is found
  */
-inline int LineLineIntersect(
+inline bool LineLineIntersect(
     const vec3& p1, const vec3& p2, const vec3& p3, const vec3& p4, vec3* pa, vec3* pb,
     decimal* mua, decimal* mub)
 {
@@ -880,14 +880,14 @@ inline int LineLineIntersect(
     p43.z = p4.z - p3.z;
     if (fabs(p43.x)  < EPSILON_6 && fabs(p43.y)  < EPSILON_6 && fabs(p43.z)  < EPSILON_6)
     {
-        return(false);
+        return false;
     }
     p21.x = p2.x - p1.x;
     p21.y = p2.y - p1.y;
     p21.z = p2.z - p1.z;
     if (fabs(p21.x)  < EPSILON_6 && fabs(p21.y)  < EPSILON_6 && fabs(p21.z)  < EPSILON_6)
     {
-        return(false);
+        return false;
     }
 
     d1343 = p13.x * p43.x + p13.y * p43.y + p13.z * p43.z;
@@ -899,7 +899,7 @@ inline int LineLineIntersect(
     denom = d2121 * d4343 - d4321 * d4321;
     if (fabs(denom) < EPSILON_6)
     {
-        return(false);
+        return false;
     }
     numer = d1343 * d4321 - d1321 * d4343;
 
@@ -913,7 +913,7 @@ inline int LineLineIntersect(
     pb->y = p3.y + *mub * p43.y;
     pb->z = p3.z + *mub * p43.z;
 
-    return(true);
+    return true;
 }
 
 inline bool pointInPolygone(const vec2& p, const std::vector<vec2>& points)
