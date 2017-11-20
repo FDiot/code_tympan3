@@ -2,7 +2,7 @@
 ExternalProject_Add(CGAL_bindings
   URL "${TYMPAN_3RDPARTY_CGAL_BINDINGS}"
   URL_MD5 "${TYMPAN_3RDPARTY_CGAL_BINDINGS_MD5}"
-  CMAKE_ARGS -DBUILD_JAVA=OFF -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DPython_ADDITIONAL_VERSIONS=3.4
+  CMAKE_ARGS -DBUILD_JAVA=OFF -DCMAKE_BUILD_TYPE:STRING=Release -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DPython_ADDITIONAL_VERSIONS=3.5 -DPYTHON_OUTDIR_PREFIX=<INSTALL_DIR>/cgal-bindings/ -DCMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE=<INSTALL_DIR>/cgal-bindings/CGAL -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE=<INSTALL_DIR>/cgal-bindings/CGAL
   BUILD_COMMAND ${CMAKE_COMMAND} --build . --config Release
   INSTALL_COMMAND ${CMAKE_COMMAND} --build . --config Release --target install
   BUILD_IN_SOURCE 0
@@ -25,10 +25,6 @@ else()
     FILES_MATCHING PATTERN "*.so")
 endif(SYS_NATIVE_WIN)
 list(APPEND TYMPAN_3RDPARTY_DLL_DIRS ${CGAL_BINDINGS_LIB_DIR})
-
-# Creating the __init__.py in the install directory of the CGAL bindings
-#  => Actually the CMakeLists of CGAL-bindings should be fixed
-file(WRITE ${CGAL_BINDINGS_PYTHON_DIR}/CGAL/__init__.py "#created by CMake from Code_TYMPAN")
 
 # Install Python modules 
 install(DIRECTORY ${CGAL_BINDINGS_PYTHON_DIR}/CGAL #Significant NO trailing slash!
