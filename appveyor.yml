@@ -15,7 +15,7 @@ install:
       mkdir $cachedir
     }
 
-    $thirdparties='Code_TYMPAN-4.7_third-party-05.zip'
+    $thirdparties='Code_TYMPAN-4.7_third-party-06.zip'
 
     $zipfile=$cachedir + $thirdparties
 
