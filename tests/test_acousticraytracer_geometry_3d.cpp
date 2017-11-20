@@ -1401,11 +1401,35 @@ TEST(test_3d_ohplane3d,intersects){
 }
 
 /***********************************************************************
-						        BBox
+						        OBox
 ************************************************************************/
 
+TEST(test_3d_obox,test_constructors){
 
-TEST(test_3d_bbox,test_is_inside)
+	//default constructor
+	OBox box;
+	EXPECT_EQ(OPoint3D(0,0,0),box._min);
+	EXPECT_EQ(OPoint3D(0,0,0),box._max);
+
+	//min-max constructor
+	box=OBox(OCoord3D(-1,-2,-3),OCoord3D(1,2,3));
+	EXPECT_EQ(OPoint3D(-1,-2,-3),box._min);
+	EXPECT_EQ(OPoint3D(1,2,3),box._max);
+
+	//double constructor
+	OBox box2=OBox(-1,-2,-3,1,2,3);
+	EXPECT_EQ(OPoint3D(-1,-2,-3),box2._min);
+	EXPECT_EQ(OPoint3D(1,2,3),box2._max);
+	EXPECT_EQ(box,box2);
+
+	//copy constructor
+	box2=OBox(box);
+	EXPECT_EQ(OPoint3D(-1,-2,-3),box2._min);
+	EXPECT_EQ(OPoint3D(1,2,3),box2._max);
+	EXPECT_EQ(box,box2);
+}
+
+TEST(test_3d_obox,test_is_inside)
 {
     // Création des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1428,7 +1452,7 @@ TEST(test_3d_bbox,test_is_inside)
 }
 
 
-TEST(test_3d_bbox,test_is_inside_2d)
+TEST(test_3d_obox,test_is_inside_2d)
 {
     // Création des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1456,7 +1480,7 @@ TEST(test_3d_bbox,test_is_inside_2d)
 }
 
 
-TEST(test_3d_bbox,test_is_in_contact)
+TEST(test_3d_obox,test_is_in_contact)
 {
     // 1st box creation
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1485,7 +1509,7 @@ TEST(test_3d_bbox,test_is_in_contact)
 }
 
 
-TEST(test_3d_bbox, test_enlarge)
+TEST(test_3d_obox, test_enlarge)
 {
     // Création d'une boite vide
     OBox box;
@@ -1508,7 +1532,7 @@ TEST(test_3d_bbox, test_enlarge)
 }
 
 
-TEST(test_3d_bbox, test_enlarge_box)
+TEST(test_3d_obox, test_enlarge_box)
 {
     // 1st box creation
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1529,7 +1553,7 @@ TEST(test_3d_bbox, test_enlarge_box)
 }
 
 
-TEST(test_3d_bbox,test_translate)
+TEST(test_3d_obox,test_translate)
 {
     // Création de la box initiale
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1549,11 +1573,81 @@ TEST(test_3d_bbox,test_translate)
 
 
 /***********************************************************************
-						        BBox2
+						        OBox2
 ************************************************************************/
+TEST(test_3d_obox2,test_constructors){
 
+	//default constructor
+	OBox2 box;
+	EXPECT_EQ(OPoint3D(0,0,0),box._min);
+	EXPECT_EQ(OPoint3D(0,0,0),box._max);
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(0));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(1));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(2));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(3));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(4));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(5));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(6));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(7));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(8));
+	EXPECT_EQ(OPoint3D(0,0,0),box._center);
+	EXPECT_DOUBLE_EQ(0.,box._length);
+	EXPECT_DOUBLE_EQ(0.,box._width);
+	EXPECT_DOUBLE_EQ(0.,box._height);
 
-TEST(test_3d_bbox2, test_is_inside)
+	//length-width-height constructor
+	box=OBox2(4,8,12);
+	EXPECT_EQ(OPoint3D(-2,-4,-6),box._min);
+	EXPECT_EQ(OPoint3D(2,4,6),box._max);
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(0));
+	EXPECT_EQ(OPoint3D(-2,-4,-6),box.BoxCoord(1));
+	EXPECT_EQ(OPoint3D(-2,4,-6),box.BoxCoord(2));
+	EXPECT_EQ(OPoint3D(2,4,-6),box.BoxCoord(3));
+	EXPECT_EQ(OPoint3D(2,-4,-6),box.BoxCoord(4));
+	EXPECT_EQ(OPoint3D(2,-4,6),box.BoxCoord(5));
+	EXPECT_EQ(OPoint3D(-2,-4,6),box.BoxCoord(6));
+	EXPECT_EQ(OPoint3D(-2,4,6),box.BoxCoord(7));
+	EXPECT_EQ(OPoint3D(2,4,6),box.BoxCoord(8));
+	EXPECT_EQ(OPoint3D(0,0,0),box._center);
+	EXPECT_DOUBLE_EQ(4.,box._length);
+	EXPECT_DOUBLE_EQ(8.,box._width);
+	EXPECT_DOUBLE_EQ(12.,box._height);
+
+	//from OBox constructor
+	box=OBox2(OBox(OCoord3D(-1,-2,-3),OCoord3D(1,2,3)));
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(0));
+	EXPECT_EQ(OPoint3D(-1,-2,-3),box.BoxCoord(1));
+	EXPECT_EQ(OPoint3D(-1,2,-3),box.BoxCoord(2));
+	EXPECT_EQ(OPoint3D(1,2,-3),box.BoxCoord(3));
+	EXPECT_EQ(OPoint3D(1,-2,-3),box.BoxCoord(4));
+	EXPECT_EQ(OPoint3D(1,-2,3),box.BoxCoord(5));
+	EXPECT_EQ(OPoint3D(-1,-2,3),box.BoxCoord(6));
+	EXPECT_EQ(OPoint3D(-1,2,3),box.BoxCoord(7));
+	EXPECT_EQ(OPoint3D(1,2,3),box.BoxCoord(8));
+	EXPECT_EQ(OPoint3D(0,0,0),box._center);
+	EXPECT_DOUBLE_EQ(2.,box._length);
+	EXPECT_DOUBLE_EQ(4.,box._width);
+	EXPECT_DOUBLE_EQ(6.,box._height);
+
+	//copy constructor
+	OBox box2=OBox2(box);
+	EXPECT_EQ(OPoint3D(0,0,0),box.BoxCoord(0));
+	EXPECT_EQ(OPoint3D(-1,-2,-3),box.BoxCoord(1));
+	EXPECT_EQ(OPoint3D(-1,2,-3),box.BoxCoord(2));
+	EXPECT_EQ(OPoint3D(1,2,-3),box.BoxCoord(3));
+	EXPECT_EQ(OPoint3D(1,-2,-3),box.BoxCoord(4));
+	EXPECT_EQ(OPoint3D(1,-2,3),box.BoxCoord(5));
+	EXPECT_EQ(OPoint3D(-1,-2,3),box.BoxCoord(6));
+	EXPECT_EQ(OPoint3D(-1,2,3),box.BoxCoord(7));
+	EXPECT_EQ(OPoint3D(1,2,3),box.BoxCoord(8));
+	EXPECT_EQ(OPoint3D(0,0,0),box._center);
+	EXPECT_DOUBLE_EQ(2.,box._length);
+	EXPECT_DOUBLE_EQ(4.,box._width);
+	EXPECT_DOUBLE_EQ(6.,box._height);
+	EXPECT_EQ(box,box2);
+}
+
+TEST(test_3d_obox2, test_is_inside)
 {
     // Cration des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1577,7 +1671,7 @@ TEST(test_3d_bbox2, test_is_inside)
     EXPECT_FALSE(resu);
 }
 
-TEST(test_3d_bbox2, test_is_inside_2d)
+TEST(test_3d_obox2, test_is_inside_2d)
 {
     // Cration des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1606,7 +1700,7 @@ TEST(test_3d_bbox2, test_is_inside_2d)
     EXPECT_FALSE(resu);
 }
 
-TEST(test_3d_bbox2,test_translate)
+TEST(test_3d_obox2,test_translate)
 {
     // Cration des points min et max
     OCoord3D pt1(-2.0, -4.0, -3.0);
@@ -1628,7 +1722,7 @@ TEST(test_3d_bbox2,test_translate)
     EXPECT_EQ( box2._H, OPoint3D( 4.0, -1.0, -1.0 ) );
 }
 
-TEST(test_3d_bbox2, test_box_rotation_oz_oy)
+TEST(test_3d_obox2, test_box_rotation_oz_oy)
 {
     //box centered on the origin
     OCoord3D pt1(-1.0, -1.0, -1.0);
@@ -1660,4 +1754,3 @@ TEST(test_3d_bbox2, test_box_rotation_oz_oy)
     EXPECT_EQ( box2._H, OPoint3D( -.4142135624, 1, 2) );
 
 }
-
