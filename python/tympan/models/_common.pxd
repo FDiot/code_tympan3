@@ -7,7 +7,6 @@ from libcpp.deque cimport deque
 from libcpp.vector cimport vector
 
 from tympan cimport _core as tycore
-from tympan._core cimport QString
 
 cdef extern from "Tympan/models/common/spectrum_matrix.h" namespace "tympan":
     cdef cppclass SpectrumMatrix:
