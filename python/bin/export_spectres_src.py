@@ -136,10 +136,6 @@ def main(fichier_xml, fichier_txt):
     # Get sources list
     list_src = model.sources
 
-    # Loop on engines
-#    for item in project.site.engines:
-#        print("Engine:", item.name," ID=",item.getID)
-
     # Build a dictionnary to convert ID to name
     dict_id_name = {}
 
@@ -151,12 +147,6 @@ def main(fichier_xml, fichier_txt):
         print(src.name+" ID="+src.getID)
         # Update dictionnary for punctual sources
         dict_id_name[src.getID] = src.name
-
-#    print("----------------:")
-#    print("Solver sources:")
-#    print("----------------:")
-#    for src in model.sources:
-#        print(" ID="+src.volume_id)
 
     print("")
     print("-----------------:")
