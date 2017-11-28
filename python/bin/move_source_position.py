@@ -117,7 +117,7 @@ def get_list_mesh_spectrums(project):
     list_of_mesh_spectrums = list()
     meshes = project.meshes
     # Check the number of meshes
-    if len(meshes) > 0:
+    if len(meshes) > 1:
         print('Error, more than one mesh detected!')
         sys.exit(-1)
 
