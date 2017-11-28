@@ -12,12 +12,7 @@ from tympan.altimetry import AltimetryMesh
 from tympan.models.solver import Model, Solver
 from tympan.models._common import Spectrum
 from tympan.models._business import Element_array, Engine, Building
-try:
-    # Python 2
-    from Tkinter import Toplevel, Label, Button
-except ImportError:
-    # Python 3
-    from tkinter import Toplevel, Label, Button
+from tkinter import Toplevel, Label, Button
 
 # Environment variables
 _HERE = os.path.realpath(os.path.dirname(__file__))
@@ -151,17 +146,14 @@ def operation_array(ndarray_ref, ndarray_calc, num_ope):
 
 def input_string(message):
     """
-        String input for Python2 & 3
+        String input
     """
-    if sys.version_info[:2] <= (2, 7):
-        return raw_input(message)
-    else:
-        return input(message)
+    return input(message)
 
 
 def input_int(message):
     """
-        Integer input for Python2 & 3
+        Integer input
     """
     waiting = True
     while waiting:
