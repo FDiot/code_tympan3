@@ -201,7 +201,6 @@ def ask_xml_file(message, object_type=""):
     # Some checks
     if object_type == "engine" or object_type == "building":
         # Build an empty project
-        #project = Project.create()  # SonarQube complains
         Project.create()
         import_infra(filename, object_type)
     return filename
@@ -376,12 +375,6 @@ def compare_project_results(project, expected_project, testobj):
     if check_nsources:
         testobj.assertEqual(current_result.nsources, expected_result.nsources)
 
-#    current_spectra = np.array(list(current_result.spectrum(i, j).values
-#                                    for i in range(current_result.nreceptors)
-#                                    for j in range(current_result.nsources)))
-#    expected_spectra = np.array(list(expected_result.spectrum(i, j).values
-#                                    for i in range(current_result.nreceptors)
-#                                    for j in range(current_result.nsources)))
     current_spectra = np.array(list(current_result.spectrum(current_result.receptors[i], current_result.sources[j]).values
                                     for i in range(current_result.nreceptors)
                                     for j in range(current_result.nsources)))

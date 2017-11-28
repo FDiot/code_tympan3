@@ -62,8 +62,6 @@ def get_rec_spec(project, sources, receptors):
                 sp_val = spectre.values
                 val_sum = 10*np.log10(10**(val_sum/10)+10**(sp_val/10))
                 del sp_val
-#               val_sum = np.append(val_sum, [spectre.values], axis=0)
-#           val_sum = np.sum(val_sum, axis=0)
             valeurs = np.append(valeurs, [val_sum], axis=0)
             nom_spectre = rec.name
             noms_spectres.append(nom_spectre)
