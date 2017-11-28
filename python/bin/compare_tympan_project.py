@@ -361,12 +361,14 @@ class App(tk.Tk):
         # One digit for value
         data.append(["Frequence", "Db"])
         data.extend([freq_tiers_oct[i], values[i]] for i in range(len(values)))
+        data.append(["[+]Spectre...", " "])
 
     def append_points(self, data, points):
         """ Function to format print of vertices """
         data.append(["Nombre de points", len(points)])
         for idx, point in enumerate(points):
             self.append_xyz(data, "Point " + str(idx), point)
+        data.append(["[+]Liste de points...", " "])
 
     def append_vegetation(self, data, material_area):
         """ Function to format the print of vegetation if needed """
@@ -375,21 +377,33 @@ class App(tk.Tk):
             data.append(["Nom", vegetation.name()])
             data.append(["Hauteur", vegetation.height])
             data.append(["Foliage:", "" if vegetation.foliage else "Non"])
-            
+
+    def append_blank_line(self, data):
+        """ Append blank line """
+        data.append(["", ""])  # Blank line
+
     def extract_from_infrastructure(self, project):
         """ Extract from infrastructure """
         data = ([])
+        data.append(["Nombre de sites", len(list_sites(project))])
+        self.append_blank_line(data)
         # Loop on sites:
         for site in list_sites(project):
             # Site name:
-            data.append(["Site:", site.name])
+            data.append(["Site:", ""])
+            data.append(["Nom", site.name])
+            data.append(["Nombre de sources ponctuelles", len(site.user_sources)])
+            data.append(["Nombre de machines", len(site.engines)])
+            data.append(["Nombre de bâtiments", len(site.buildings)])
+            self.append_blank_line(data)
+
             # UserSources ranked by name
             names = list(item.name for item in site.user_sources)
             for _,user_source in sorted(zip(names, site.user_sources), key=itemgetter(0)):
                 data.append(["Source ponctuelle:", ""])
                 data.append(["Nom", user_source.name])
                 self.append_xyz(data, "Position", user_source.position)
-                data.append(["", ""])  # Blank line
+                self.append_blank_line(data)
 
             # Engines ranked by name
             names = list(item.name for item in site.engines)
@@ -400,7 +414,7 @@ class App(tk.Tk):
                 self.append_xyz(data, "Position", engine.position)
                 self.append_xyz(data, "Rotation", engine.rotation)
                 self.append_points(data, engine.sommets)
-                data.append(["", ""])  # Blank line
+                self.append_blank_line(data)
 
             # Buildings ranked by name
             names = list(item.name for item in site.buildings)
@@ -412,17 +426,24 @@ class App(tk.Tk):
                 self.append_xyz(data, "Position", building.position)
                 self.append_xyz(data, "Rotation", building.rotation)
                 self.append_points(data, building.sommets)
-                data.append(["", ""])  # Blank line
+                self.append_blank_line(data)
 
         return data
 
     def extract_from_topography(self, project):
         """ Extract from topography """
         data = ([])
+        data.append(["Nombre de sites", len(list_sites(project))])
+        self.append_blank_line(data)
         # Loop on sites:
         for site in list_sites(project):
             # Site name:
-            data.append(["Site:", site.name])
+            data.append(["Site:", ""])
+            data.append(["Nom", site.name])
+            data.append(["Nombre de lacs", len(site.lakes)])
+            data.append(["Nombre de terrains", len(site.material_areas)])
+            data.append(["Nombre de courbes de niveau", len(site.level_curves)])
+            self.append_blank_line(data)
             # Lakes ranked by name:
             names = list(item.name for item in site.lakes)
             for _,lake in sorted(zip(names, site.lakes), key=itemgetter(0)):
@@ -430,13 +451,13 @@ class App(tk.Tk):
                 data.append(["Nom", lake.name])
                 data.append(["Altitude", lake.altitude])
                 data.append(["Courbe de niveau", lake.level_curve.name])
-                data.append(["", ""])  # Blank line
+                self.append_blank_line(data)
             # Grounds ranked by name
             names = list(item.name for item in site.material_areas)
             for _,material_area in sorted(zip(names, site.material_areas), key=itemgetter(0)):
                 data.append(["Terrain:", ""])
                 data.append(["Nom", material_area.name])
-                data.append(["Végétation:", "" if material_area.has_vegetation() else "Non"])
+                data.append(["Végétation?", "Oui" if material_area.has_vegetation() else "Non"])
                 self.append_vegetation(data, material_area)
                 ground = material_area.ground_material
                 data.append(["Sol:", ""])
@@ -445,7 +466,7 @@ class App(tk.Tk):
                 data.append(["Epaisseur", ground.width])
                 data.append(["Ecart type", ground.deviation])
                 data.append(["Longueur", ground.length])
-                data.append(["", ""])  # Blank line
+                self.append_blank_line(data)
             # LevelCurves ranked by name
             names = list(item.name for item in site.level_curves)
             for _,level_curve in sorted(zip(names, site.level_curves), key=itemgetter(0)):
@@ -453,7 +474,7 @@ class App(tk.Tk):
                 data.append(["Nom", level_curve.name])
                 data.append(["Altitude", level_curve.altitude])
                 self.append_points(data, level_curve.points)
-                data.append(["", ""])  # Blank line
+                self.append_blank_line(data)
         return data
 
     def extract_from_model(self, project):
@@ -463,6 +484,8 @@ class App(tk.Tk):
         # Build dict
         dict_id_name = build_dict(project)
 
+        data.append(["Nombre de sources acoustiques", len(model.sources)])
+        self.append_blank_line(data)
         # SourceSolvers ranked by position:
         source_positions = list(
             [str(src.position.x) + "," + str(src.position.y) + "," + str(src.position.z)] for src in model.sources)
@@ -473,7 +496,7 @@ class App(tk.Tk):
             data.append(["Nom", item_name])
             self.append_xyz(data, "Position", source.position)
             self.append_spectrum(data, source.spectrum.values)
-            data.append(["", ""])  # Blank line
+            self.append_blank_line(data)
 
         return data
 
@@ -484,7 +507,7 @@ class App(tk.Tk):
         # Solver:
         data.append(["Solver:" , ""])
         data.append(["Id", calc.solver_id])
-        data.append(["", ""])  # Blank line
+        self.append_blank_line(data)
         # Parameters:
         data.append(["Solver parameters:", ""])
         solver_parameters = calc.get_solver_parameters()
@@ -495,8 +518,9 @@ class App(tk.Tk):
     def extract_from_result(self, project):
         """ Extract from the results """
         data = ([])  # List
-
         result = project.computations[-1].result
+        data.append(["Nombre de récepteurs", len(result.receptors)])
+        self.append_blank_line(data)
         # Rank receptors by name:
         names = list(item.name for item in result.receptors)
         for _,rec in sorted(zip(names, result.receptors), key=itemgetter(0)):
@@ -524,7 +548,7 @@ class App(tk.Tk):
             # Print global
             data.append(["Global:", ""])
             self.append_spectrum(data, val_sum)
-            data.append(["", ""])  # Blank line
+            self.append_blank_line(data)
         return data
 
     def export_to_excel(self, sheet_name, data_reference, data_compared, compute_difference=False):
@@ -536,8 +560,8 @@ class App(tk.Tk):
         # Filter, we suppress coordinates and spectrums if there are the same
         row = 0
         tolerance = float(self.tolerance.get()) if self.gui else self.tolerance
-        red_rows = []
-        green_rows = []
+        red_rows = ([])
+        green_rows = ([])
         hidden_rows = ([])
         for (r, c) in zip(data_reference, data_compared):
             row += 1
@@ -545,18 +569,26 @@ class App(tk.Tk):
             label = str(r[0])
             if ":" in label:
                 object_row = row
+                object_label = label
+                green_rows.append([object_row, object_label])
+                same_list = True
             # Detect differences:
             same_label = (r[0] == c[0])
             same_value = (abs(float(r[1])-float(c[1]))<tolerance) if compute_difference and isinstance(r[1], float) else (r[1] == c[1])
             same = same_label and same_value
-            if not same:
-                red_rows.append(object_row)
+            if not same and object_row not in red_rows:
+                red_rows.append([object_row, object_label])
             value_is_coordinate = True if "Sommet" in label or "Point" in label else False
-            value_is_frequency = True if isinstance(r[0], float) else False
+            value_is_frequency = True if isinstance(r[0], float) or "Frequence" in label else False
             # Hide list of coordinate or frequency
             hide = value_is_coordinate or value_is_frequency
             if hide:
                 hidden_rows.append([row, same_value])
+                if not same_value:
+                    same_list = False
+            # Color list of point or frequencies ...
+            if "..." in label and not same_list:
+                red_rows.append([row, label])
 
         # Reference project
         reference_col = "Projet de référence"
@@ -568,68 +600,94 @@ class App(tk.Tk):
         compared = pd.DataFrame(data_compared, None, columns=["", compared_col])
         compared.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=2)
 
-        is_same = True
+        # Number of columns
         nb_col = 4
+
+        is_same = True
         # Add difference column
         if compute_difference:
+            delta_col = nb_col
             nb_col += 1
-            delta_col = 4
-            data_delta = ["" if isinstance(x1, str) else x1 - x2 for (x1, x2) in
+            data_delta = ["" if isinstance(x1, str) else x1 - x2 if x1 != x2 else "" for (x1, x2) in
                           zip(reference.get(reference_col).tolist(), compared.get(compared_col).tolist())]
             delta = pd.DataFrame(data_delta, index=None, columns=["Différences (tol=" + str(tolerance) + ")"])
             delta.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=delta_col)
             # Check if results are different:
             for value in data_delta:
-                if value != "" and abs(value) > tolerance:
+                if isinstance(value, float) and abs(value) > tolerance:
                     is_same = False
         else:
             # Check if the data matches:
             is_same = (data_reference == data_compared)
 
-        # Change Excel default format:
+        # Change Excel default format (align to left):
         workbook = self.ExcelWriter.book
         worksheet = self.ExcelWriter.sheets[sheet_name]
-        cell_format = workbook.add_format()
-        cell_format.set_align('left')
-        width = 30  # Different width for first columns
-        worksheet.set_column(0, nb_col, width, cell_format)
-        format_red = workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006'})
-        format_green = workbook.add_format({'bg_color': 'green'})
+        format_align = workbook.add_format({'align': 'left'})
+        # Defines 3 color formats:
+        format_blank = workbook.add_format({'right': 1})
+        format_red = workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006', 'right': 1})
+        format_green = workbook.add_format({'bg_color': 'green', 'right': 1})
         # If differences found in a worksheet:
         if not is_same:
             # Change colortab:
             worksheet.set_tab_color('red')
 
+        # Green row
+        for row, label in green_rows:
+            worksheet.write(row, 0, label, format_green)
+
         # Color cell for different object
-        for row in red_rows:
-            worksheet.set_row(row, None, format_red)
+        for row, label in red_rows:
+            worksheet.write(row, 0, label, format_red)
+
+        # Hide column
+        width = 30  # Different width for first columns
+        for i in range(nb_col):
+            if i == 2:
+                worksheet.set_column(i, i, width, format_align,
+                                     {'level': 1, 'hidden': 1, 'collapsed': False})
+            else:
+                worksheet.set_column(i, i, width, format_align)
+
         # Hide row
         for item in hidden_rows:
             row = item[0]
-            hidden = item[1]
-            worksheet.set_row(row, None, None, {'level': 1, 'hidden': hidden, 'collapsed': False})
-        # Green row
-        for row in green_rows:
-            worksheet.set_row(row, None, format_green)
+            worksheet.set_row(row, None, None, {'level': 1, 'hidden': 1, 'collapsed': False})
 
-        # Difference column:
-        lines = len(reference.index)
+        # Conditional format:
+        nb_row = len(reference.index)
+        worksheet.conditional_format('A2:C' + str(nb_row), {'type': 'no_errors', 'format': format_blank})
         if compute_difference:
-            worksheet.conditional_format(0, delta_col, lines - 1, delta_col, {'type': 'cell',
+            worksheet.conditional_format(0, delta_col, nb_row - 1, delta_col, {'type': 'cell',
                                                                               'criteria': '>',
                                                                               'value': tolerance,
                                                                               'format': format_red})
-            worksheet.conditional_format(0, delta_col, lines - 1, delta_col, {'type': 'cell',
+            worksheet.conditional_format(0, delta_col, nb_row - 1, delta_col, {'type': 'cell',
                                                                               'criteria': '<',
                                                                               'value': -tolerance,
                                                                               'format': format_red})
-        else:
-            # Red color on cells where values are different
-            for line in range(1, lines):
-                worksheet.conditional_format('D' + str(line + 1), {'type': 'cell',
-                                                                   'criteria': '!=',
-                                                                   'value': 'B' + str(line + 1),
-                                                                   'format': format_red})
+            worksheet.conditional_format(0, delta_col, nb_row - 1, delta_col, {'type': 'cell',
+                                                                               'criteria': '=',
+                                                                               'value': 0,
+                                                                               'format': format_blank})
+
+        # Red color on cells where values are different
+        for row in range(1, nb_row):
+            str_row = str(row + 1)
+            worksheet.conditional_format('D' + str_row, {'type': 'cell',
+                                                         'criteria': '!=',
+                                                         'value': 'B' + str_row,
+                                                         'format': format_red})
+            worksheet.conditional_format('D' + str_row, {'type': 'cell',
+                                                         'criteria': '=',
+                                                         'value': 'B' + str_row,
+                                                         'format': format_blank})
+
+        # Top border to finish
+        format_border_top = workbook.add_format({'top': 1})
+        for col in range(nb_col):
+            worksheet.write(nb_row, col, "", format_border_top)
 
         print(self.get_output_filename() + ":" + sheet_name + " " + ("identiques" if is_same else "différents!"))
         return is_same
