@@ -3,12 +3,7 @@ import numpy as np
 import os
 import sys
 
-try:
-    # Python 2
-    from StringIO import StringIO
-except ImportError:
-    # Python 3
-    from io import StringIO
+from io import StringIO
 from math import log10
 from utils import TympanTC
 from _util import operation_array, mesh_spect_to_ndarray, ndarray_to_mesh_spect
@@ -30,8 +25,7 @@ def emergence(Lres, Lbrut):
 
 
 def bruit_ambiant(Lres, Lbrut):
-    return 10*log10(10**(Lres/10)+10**(Lbrut/10))  # Division entiere en Python2, division reelle en Python3 !
-    # return 10*log10(10**(0.1*Lres)+10**(0.1*Lbrut))
+    return 10*log10(10**(Lres/10)+10**(Lbrut/10))
 
 
 class Test(TympanTC):
