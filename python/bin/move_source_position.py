@@ -29,7 +29,6 @@ def create_calculations(fichier_xml, objects, output_xml):
     project.update_site_altimetry(altim)
     
     # Get the calculation
-    #model = Model.from_project(project, set_sources=True, set_receptors=True)
     Model.from_project(project, set_sources=True, set_receptors=True)
 
     # Get the initial number of computations in the project:
@@ -62,13 +61,6 @@ def create_calculations(fichier_xml, objects, output_xml):
             y = position_y[point]
             z = position_z[point]
             angle = position_angle[point]
-            # vect is the vector between current position and the next one:
-#            if point < nb_points - 1:
-#                xp = position_x[point+1]
-#                yp = position_y[point+1]
-#                vect = (xp - x, yp - y, 0.)
-#                if np.linalg.norm(vect)>0:
-#                    vect = vect/np.linalg.norm(vect)
 
             # Create the position for the element on the current position:
             pos_element = Point3D()
@@ -76,11 +68,6 @@ def create_calculations(fichier_xml, objects, output_xml):
             pos_element.set_y(y)
             pos_element.set_z(z)
 
-            # Rotation:
-#            if np.abs(vect[0]) > 1e-10:
-#                angle = np.arctan(vect[1]/vect[0])/np.pi*180 - 90
-#            else:
-#                angle = 0
             rot_element = Point3D()
             rot_element.set_z(angle) # rotation sur l'axe z
 
@@ -129,7 +116,11 @@ def get_list_mesh_spectrums(project):
     """
     list_of_mesh_spectrums = list()
     meshes = project.meshes
-    # ! penser à vérifier qu'il n'y aura qu'un mesh !
+    # Check the number of meshes
+    if len(meshes) > 0:
+        print('Error, more than one mesh detected!')
+        sys.exit(-1)
+
     for calc in project.computations:
         list_of_mesh_spectrums.append(calc.get_noise_map_spectrums(meshes[0]))
     
@@ -261,8 +252,6 @@ def plot(output_xml):
     # Mpeg (optional)
     mpeg = False
     if mpeg == True:
-        #   Writer = animation.writers['avconv']
-        #   writer = Writer(fps=15, metadata=dict(artist='Me'), bitrate=1800)
         ani.save('Tympan.mpeg', writer='avconv')
 
     # Show the plot
@@ -270,10 +259,6 @@ def plot(output_xml):
 
 
 if __name__ == '__main__':
-
-    # For debug:
-    #plot("Resultat.xml")
-    #quit()
 
     # Get project file name and verify user input
     fichier_xml = ask_xml_file("Enter project file name (with .xml extension) : ")
