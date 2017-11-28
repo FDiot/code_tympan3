@@ -10,13 +10,13 @@ from export_spectres_src import main, calc_surf_spectrum, calc_vol_spectrum
 class Test(TympanTC):
 
     def test_non_regression(self):
-        """ Check the results compared to expected ones (E/Lot1-037) """
+        """ Check the results compared to expected ones """
         main("Projet_Machine_multiBoites.xml", "Spectres_sources")
         compare_txt_results("Spectres_sources_parSurface.txt", "ref_Spectres_sources_parSurface.txt")
         compare_txt_results("Spectres_sources_parVolume.txt", "ref_Spectres_sources_parVolume.txt")
 
     def test_global(self):
-        """ Global test (E/Lot1-038) """
+        """ Global test """
         project = run_calculations("Projet_Machine_multiBoites.xml")
         model = Model.from_project(project)
         list_src = model.sources

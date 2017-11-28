@@ -41,7 +41,7 @@ class Test(TympanTC):
         self.assertEqual(len(project.user_receptors), 5)
 
     def test_import_xyz_csv(self):
-        """ Test CSV import (E/Lot1-025) """
+        """ Test CSV import """
         positions = np.asarray([[2.0, 0.0, 2.0], [0.0, 2.0, 2.1], [-2.0, 0.0, 2.2], [0.0, -2.0, 2.3]])
         # Write
         np.savetxt("comma.csv", positions, delimiter=',')
@@ -63,7 +63,7 @@ class Test(TympanTC):
             sys.exit(-1)
 
     def test_add_receptor_from_csv_file(self):
-        """ Test adding receptor from CSV file (E/Lot1-025) """
+        """ Test adding receptor from CSV file """
         # Recepteurs.csv contains the same 5 receptors than Recepteur_mobile.xml
         # so the result (average) should be the same than before with 10 receptors
         project = main("Recepteur_mobile.xml", "Recepteurs.csv", "")
@@ -72,7 +72,7 @@ class Test(TympanTC):
         self.assertEqual(len(project.user_receptors), 10)
 
     def test_global(self):
-        """ Global test of move_receptor_position.py (E/Lot1-026) """
+        """ Global test of move_receptor_position.py """
         # Four receptors around the source in a test_global.csv file
         distance = 50
         positions = np.asarray([[distance, 0.0, 2.0], [0.0, distance, 2.0], [-distance, 0.0, 2.0], [0.0, -distance, 2.0]])

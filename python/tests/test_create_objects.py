@@ -9,7 +9,7 @@ from create_objects import main
 class Test(TympanTC):
 
     def test_global(self):
-        """ Global test (E/Lot1-032) """
+        """ Global test """
         # Building a project by adding sources, receptors, engines, buildings
         project_xml = "Final_project.xml"
 

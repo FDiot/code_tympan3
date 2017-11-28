@@ -13,12 +13,12 @@ from move_source_position import main
 class Test(TympanTC):
 
     def test_moyenne_mesh(self):
-        """ Test the average (E/Lot1-010) """
+        """ Test the average """
         ndarray = np.array([-0.2, 1.1, 2.1])
         np.testing.assert_equal(moyenne_mesh(ndarray), 1.0)
 
     def test_import_infra(self):
-        """ Test loading an infrastructure (E/Lot1-021) """
+        """ Test loading an infrastructure """
         project = Project.create()
         # Read an engine and check
         infra = import_infra("A320.xml", "engine")
@@ -58,7 +58,7 @@ class Test(TympanTC):
         compare_xml_results("Resultat.xml", "Reference.xml", self)
 
     def test_global(self):
-        """  Global test (E/Lot1-022) """
+        """  Global test """
         return # ToDo remove return when https://bitbucket.org/TYMPAN/code_tympan/issues/63/performance-regression-and-memory-leak fixed
         objects = []
         # Engine moving plane in circle:
