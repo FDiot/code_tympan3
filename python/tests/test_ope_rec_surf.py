@@ -37,28 +37,28 @@ def bruit_ambiant(Lres, Lbrut):
 class Test(TympanTC):
        
     def test_difference_operation(self):
-        """ Test array operations (E/Lot1-008) """
+        """ Test array operations """
         ndarray_ref  = np.array([0, 1, 2])
         ndarray_calc = np.array([2, 3, 4])
         # Difference
         np.testing.assert_array_equal(operation_array(ndarray_ref, ndarray_calc, 0), list(map(difference, ndarray_ref, ndarray_calc)))
 
     def test_emergence_operation(self):
-        """ Test array operations (E/Lot1-008) """
+        """ Test array operations """
         ndarray_ref  = np.array([0, 1, 2])
         ndarray_calc = np.array([2, 3, 4])
         # Emergence
         np.testing.assert_array_equal(operation_array(ndarray_ref, ndarray_calc, 1), list(map(emergence, ndarray_ref, ndarray_calc)))
 
     def test_ambiant_noise_operation(self):
-        """ Test array operations (E/Lot1-008) """
+        """ Test array operations """
         ndarray_ref  = np.array([0, 1, 2])
         ndarray_calc = np.array([2, 3, 4])
         # Ambiant noise
         np.testing.assert_array_equal(operation_array(ndarray_ref, ndarray_calc, 2), list(map(bruit_ambiant, ndarray_ref, ndarray_calc)))
 
     def test_mesh_spect_to_ndarray_ndarray_to_mesh_spect(self):
-        """ Test conversion between array and spectrum (E/Lot1-009) """
+        """ Test conversion between array and spectrum """
         mesh_spectrums = list()
         mesh_spectrums.append(Spectrum(np.array([100.0] * 31)))
         mesh_spectrums.append(Spectrum(np.array([200.0] * 31)))
@@ -70,7 +70,7 @@ class Test(TympanTC):
             np.testing.assert_array_equal(mesh_spectrums[i].values, returned_mesh_spectrums[i].values)
 
     def test_import(self):
-        """ Global test (E/Lot1-011) """
+        """ Global test """
         project = load_tympan_xml(os.path.join(TOOLBOX_DATA_DIR,"Calculs_Recepteurs_Surfaciques","Recepteur_surfacique.xml"))
         # Mesh
         mesh = project.meshes[0]
@@ -83,7 +83,7 @@ class Test(TympanTC):
         assert(receptor.is_active(calc))
 
     def test_global(self):
-        """ Global test (E/Lot1-012) """
+        """ Global test """
         fichier_xml = os.path.join(TOOLBOX_DATA_DIR, "Calculs_Recepteurs_Surfaciques", "Recepteur_surfacique.xml")
         output_xml = "Result_all_operations.xml"
         # Tip to provide anwser to raw_input
