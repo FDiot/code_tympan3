@@ -53,13 +53,11 @@ class Test(TympanTC):
 
     def test_non_regression(self):
         """ Check the results compared to expected ones """
-        return # ToDo remove return when https://bitbucket.org/TYMPAN/code_tympan/issues/63/performance-regression-and-memory-leak fixed
         main("Source_mobile.xml", [["engine", "A320.xml", "A320.csv"]], "Resultat.xml", gui=False)
         compare_xml_results("Resultat.xml", "Reference.xml", self)
 
     def test_global(self):
         """  Global test """
-        return # ToDo remove return when https://bitbucket.org/TYMPAN/code_tympan/issues/63/performance-regression-and-memory-leak fixed
         objects = []
         # Engine moving plane in circle:
         objects.append(["engine", "A320.xml", "Cercle.csv"])
