@@ -1206,9 +1206,9 @@ cdef class Lake:
         lev_curve.thisptr = self.thisptr.getCrbNiv().getRealPointer()
         cpp_points = cy.declare(
             vector[TYPoint], lev_curve.thisptr.getListPoints())
-        return cpp2cypoints(cpp_points, self.matrix)
+        return cpp2cypoints_global(cpp_points, self.matrix)
 
-	@property
+    @property
     def name(self):
         """The Lake name"""
         return tyelement_name(self.thisptr)
