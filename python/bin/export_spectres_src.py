@@ -7,12 +7,12 @@ Created on 15 nov. 2016
 Export spectrums from all sources in the tympan project, included machines and buildings.
 """
 import sys
+import numpy as np
 if sys.version_info[:2] <= (2, 7):
     print("Error! Python 3 only can be used.")
     sys.exit(-1)
 from tympan.models.solver import Model
 from _util import input_string, run_calculations, ask_xml_file
-import numpy as np
 
 
 def write_results(valeurs, src_ids, dict_id_name, fichier_txt):
@@ -155,7 +155,7 @@ def main(fichier_xml, fichier_txt):
     for ac in project.site.acoustic_surfaces:
         face_name = ac.surface_node_name()
         volume_name = ac.volume_name()
-        print("Face \""+face_name+"\" from volume \""+volume_name+"\" is","radiant." if ac.getIsRayonnant else "non radiant.")
+        print("Face \""+face_name+"\" from volume \""+volume_name+"\" is", "radiant." if ac.getIsRayonnant else "non radiant.")
         # Update dictionnary for acoustic surfaces:
         dict_id_name[ac.volume_id()] = volume_name
         dict_id_name[ac.surface_node_id()] = volume_name+" ("+face_name+")"
@@ -183,7 +183,8 @@ def main(fichier_xml, fichier_txt):
     # ((indices_fin[i]-indices_debut[i])+1)
     # Whereas in the "volume" case the results seem better when multiplied by :
     # (indices_fin[i]-indices_debut[i])
-    
+
+
 if __name__ == '__main__':
     # Get xml file name and verify user input
     fichier_xml = ask_xml_file("Enter xml file name (with xml extension) : ")
@@ -193,11 +194,3 @@ if __name__ == '__main__':
      
     # launch main 
     main(fichier_xml, fichier_txt)
-    
-    
-    
-    
-    
-    
-    
-    
