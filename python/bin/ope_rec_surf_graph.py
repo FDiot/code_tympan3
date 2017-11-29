@@ -150,7 +150,7 @@ class AppRecSurf(tk.Tk):
         
         # Label progress
         self.labelProg = tk.StringVar()
-        prog = tk.Label(lf_calc,textvariable=self.labelProg,anchor="w",fg="red",bg="grey")
+        prog = tk.Label(lf_calc,textvariable=self.labelProg,anchor="w",fg="blue",bg="white")
         prog.grid(column=0,row=0,sticky='EW')
         
         # ============================================================================================================
