@@ -61,6 +61,10 @@ def select_maillage(project):
     mhs = project.meshes
 
     size = len(mhs)
+    if size == 0:
+        print('No mesh found in the project !')
+        sys.exit(-1)
+
     print('Choose mesh in the list below :')
     for index in range(size):
         print('{}. maillage {}'.format(index, index))

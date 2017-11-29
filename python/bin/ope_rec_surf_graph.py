@@ -176,13 +176,23 @@ class AppRecSurf(tk.Tk):
         """
         # Open dialog window to choose XML file
         self.xml_file = askopenfile(title=u"Ouvrir XML",filetypes=[('xml files','.xml'),('all files','.*')])
-        # Set label variable in principal window
-        self.labelVariable.set(self.xml_file.name)
         # Set project
         self.project = Project.from_xml(self.xml_file.name)
         
         # Get meshes
         rec_surf = self.project.meshes
+        size = len(rec_surf)
+        if size == 0:
+            d = MyDialog(self, u"Pas de mesh trouvé dans le fichier XML !")
+            self.wait_window(d.top)
+            del self.xml_file
+            del self.project
+            del rec_surf
+            return
+
+        # Set label variable in principal window
+        self.labelVariable.set(self.xml_file.name)
+
         self.list_rec_surf.delete(0, tk.END)
         for i in range(len(rec_surf)):
             self.list_rec_surf.insert(i, u"Récepteur surfacique n°"+str(i+1))
@@ -212,7 +222,12 @@ class AppRecSurf(tk.Tk):
         """
         OK button callback function to set chosen mesh
         """
-        mhs = self.project.meshes
+        try:
+            mhs = self.project.meshes
+        except:
+            d = MyDialog(self, u"Fichier non charge !")
+            self.wait_window(d.top)
+            return
         num_mesh = self.list_rec_surf.index(tk.ACTIVE)
         self.mesh = mhs[num_mesh]
         nom_mesh = self.list_rec_surf.get(tk.ACTIVE)
@@ -224,7 +239,12 @@ class AppRecSurf(tk.Tk):
         """
         # Get chosen computation
         num_c_01 = self.list_comp_01.index(tk.ACTIVE)
-        comps = self.project.computations
+        try:
+            comps = self.project.computations
+        except:
+            d = MyDialog(self, u"Fichier non charge !")
+            self.wait_window(d.top)
+            return
         self.comp_01 = comps[num_c_01]
         
         # Set chosen computation name
@@ -237,7 +257,12 @@ class AppRecSurf(tk.Tk):
         """
         # Get chosen computation
         num_c_02 = self.list_comp_02.index(tk.ACTIVE)
-        comps = self.project.computations
+        try:
+            comps = self.project.computations
+        except:
+            d = MyDialog(self, u"Fichier non charge !")
+            self.wait_window(d.top)
+            return
         self.comp_02 = comps[num_c_02]
         
         # Set chosen computation name
