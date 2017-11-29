@@ -183,13 +183,16 @@ class AppRecSurf(tk.Tk):
         
         # Get meshes
         rec_surf = self.project.meshes
+        self.list_rec_surf.delete(0, tk.END)
         for i in range(len(rec_surf)):
             self.list_rec_surf.insert(i, u"Récepteur surfacique n°"+str(i+1))
         
         # Get computations   
         comps = self.project.computations
+        self.list_comp_01.delete(0, tk.END)
         for i in range(len(comps)):
             self.list_comp_01.insert(i, comps[i].name)
+        self.list_comp_02.delete(0, tk.END)
         for i in range(len(comps)):
             self.list_comp_02.insert(i, comps[i].name)
         
@@ -310,6 +313,7 @@ class AppRecSurf(tk.Tk):
             # Set progress label to done (Terminé !)
             #self.labelProg.set(u"Terminé !")
             self.labelProg.set(u" "+result_name + " sauve dans " + output_xml)
+
 
 if __name__ == "__main__":
     app = AppRecSurf(None)
