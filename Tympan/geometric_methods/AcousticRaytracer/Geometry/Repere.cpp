@@ -60,7 +60,7 @@ void Repere::updateMatrices()
 }
 
 
-vec3 Repere::vectorFromLocalToGlobal(vec3& local)
+vec3 Repere::vectorFromLocalToGlobal(const vec3& local)
 {
     vec3 result;
     result.x = local.x * LtoG[0][0] + local.y * LtoG[0][1] + local.z * LtoG[0][2];
@@ -70,7 +70,7 @@ vec3 Repere::vectorFromLocalToGlobal(vec3& local)
     return result;
 }
 
-vec3 Repere::vectorFromGlobalToLocal(vec3& global)
+vec3 Repere::vectorFromGlobalToLocal(const vec3& global)
 {
     vec3 result;
     result.x = global.x * GtoL[0][0] + global.y * GtoL[0][1] + global.z * GtoL[0][2];
@@ -80,7 +80,7 @@ vec3 Repere::vectorFromGlobalToLocal(vec3& global)
     return result;
 }
 
-vec3 Repere::positionFromLocalToGlobal(vec3& local)
+vec3 Repere::positionFromLocalToGlobal(const vec3& local)
 {
     vec4 local4 = vec4(local);
     vec4 result4;
@@ -95,7 +95,7 @@ vec3 Repere::positionFromLocalToGlobal(vec3& local)
     return result;
 }
 
-vec3 Repere::positionFromGlobalToLocal(vec3& global)
+vec3 Repere::positionFromGlobalToLocal(const vec3& global)
 {
     vec4 global4 = vec4(global);
     vec4 result4;

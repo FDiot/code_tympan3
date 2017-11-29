@@ -1771,6 +1771,7 @@ void OBox2::Translate(const OVector3D& vect)
     _E = _E + vect;
     _F = _F + vect;
     _G = _G + vect;
+	_H = _H + vect;
 }
 
 OBox2 OBox2::boxRotation(const OPoint3D& O, const OPoint3D& P2)
