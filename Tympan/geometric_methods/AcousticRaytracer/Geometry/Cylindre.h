@@ -54,8 +54,24 @@ protected:
 
     void computeMesh();
 
-    Shape* p1;	//!< First shape of the cylinder
-    Shape* p2;	//!< Second shape of the cylinder
+		//|\             /|
+		//| \           / |
+		//|  \         /  |
+		//|   \       /   |
+	    //|    \     /	  |
+		//| p1  \.-./  p2 |  
+        //|    ( \ / )    |
+		// \   |'-|-'|   /
+		//  \  |  |  |  /
+		//   \ |  |  | /
+		//    \|  |  |/
+		//     \  |  /
+		//     |\.|./|
+	    //	   ( \|/ )	
+	    //		' - '
+
+	Shape* p1;	//!< First shape of the diffraction edge represented by the Cylinder
+	Shape* p2;	//!< Second shape of the diffraction edge represented by the Cylinder
 
     decimal epaisseur;			//!< Width
     decimal hauteur;			//!< Height

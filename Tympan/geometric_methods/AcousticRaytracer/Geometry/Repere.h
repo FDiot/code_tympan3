@@ -49,14 +49,14 @@ public:
     vec3 getO() const { return O; }
 
     /// Get global coordinates of vector expressed in local coordinates
-    vec3 vectorFromLocalToGlobal(vec3& local);
+    vec3 vectorFromLocalToGlobal(const vec3& local);
     /// Get local coordinates of vector expressed in global coordinates
-    vec3 vectorFromGlobalToLocal(vec3& global);
+    vec3 vectorFromGlobalToLocal(const vec3& global);
 
     /// Get global coordinates of a point expressed in local coordinates
-    vec3 positionFromLocalToGlobal(vec3& local);
+    vec3 positionFromLocalToGlobal(const vec3& local);
     /// Get local coordinates of a point expressed in global coordinates
-    vec3 positionFromGlobalToLocal(vec3& global);
+    vec3 positionFromGlobalToLocal(const vec3& global);
 
 
 protected:

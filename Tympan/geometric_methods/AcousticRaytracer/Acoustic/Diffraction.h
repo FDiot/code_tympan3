@@ -40,12 +40,17 @@ public:
     virtual void setNbResponseLeft(int _nbResponseLeft) 
 	{ 
 		nbResponseLeft = static_cast<unsigned int>( std::floor( static_cast<decimal>(_nbResponseLeft-1) / M_2PI * angleOuverture + 0.5 ) );
-		nbResponseLeft = nbResponseLeft >= 4 ? nbResponseLeft : 4; // Limite le nombre � 4
+		nbResponseLeft = nbResponseLeft >= 4 ? nbResponseLeft : 4; // Limite le nombre a 4 reponses minimum
 		initialNbResponse = nbResponseLeft;
 		computeDTheta(); 
 	}
 
 	virtual bool getResponse(vec3& r, bool force = false);
+
+    /// Filter generated response (or not)
+	bool (*responseValidator) (const vec3&, const vec3&, const vec3&, vec3 &);
+	/// Get theta
+	void (*getTheta) (const decimal&, const decimal&, const decimal&, decimal&);
 
 	/// Set/Get aperture angle
     void setAngleOuverture(decimal angle) { angleOuverture = angle; computeDTheta(); }
@@ -65,10 +70,6 @@ public:
 #endif //_ALLOW_TARGETING_
 
 protected:
-    /// Filter generated response (or not)
-	bool (*responseValidator) (const vec3&, const vec3&, const vec3&, vec3 &);
-	/// Get theta
-	void (*getTheta) (const decimal&, const decimal&, const decimal&, decimal&);
 	/// Build local frame
     void buildRepere();
     /// Compute incident ray angle
