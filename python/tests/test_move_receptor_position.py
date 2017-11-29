@@ -1,12 +1,11 @@
 import unittest
 import numpy as np
-import sys, os
+import sys
+import os
 
 from utils import TympanTC
 from tympan.models.project import Project
-from tympan.models._common import Point3D
-from tympan.models._business import User_source
-from _util import run_calculations, compare_project_results, compare_txt_results, TOOLBOX_DATA_DIR
+from _util import compare_project_results, compare_txt_results, TOOLBOX_DATA_DIR
 from move_receptor_position import main, get_rec_spec, import_xyz_csv
 
 
@@ -23,7 +22,7 @@ class Test(TympanTC):
         positions = np.asarray([[2.0, 0.0], [0.0, 2.0], [-2.0, 0.0], [0.0, -2.0]])
         np.savetxt("actual.csv", positions, delimiter=',')
         # Should be ok:
-        compare_txt_results("actual.csv","actual.csv")
+        compare_txt_results("actual.csv", "actual.csv")
         # Should be ko:
         positions = np.asarray([[2.0, 0.001], [0.0, 2.0], [-2.0, 0.0], [0.0, -2.0]])
         np.savetxt("different.csv", positions, delimiter=',')
@@ -49,14 +48,14 @@ class Test(TympanTC):
         project = Project.from_xml("Recepteur_mobile.xml")
         x1, y1, z1 = import_xyz_csv("comma.csv", project)
         # Compare
-        np.testing.assert_array_equal(x1, positions[:,0])
-        np.testing.assert_array_equal(y1, positions[:,1])
-        np.testing.assert_array_equal(z1, positions[:,2])
+        np.testing.assert_array_equal(x1, positions[:, 0])
+        np.testing.assert_array_equal(y1, positions[:, 1])
+        np.testing.assert_array_equal(z1, positions[:, 2])
         # Check if error if the point is well detected outside the domain:
         positions = np.asarray([[2.0, 10000.0, 2.0]])
         np.savetxt("comma.csv", positions, delimiter=',')
         try:
-            x1, y1, z1 = import_xyz_csv("comma.csv", project)
+            import_xyz_csv("comma.csv", project)
         except:
             print("OK, it detects expected error.")
         else:
@@ -75,7 +74,10 @@ class Test(TympanTC):
         """ Global test of move_receptor_position.py """
         # Four receptors around the source in a test_global.csv file
         distance = 50
-        positions = np.asarray([[distance, 0.0, 2.0], [0.0, distance, 2.0], [-distance, 0.0, 2.0], [0.0, -distance, 2.0]])
+        positions = np.asarray([[distance, 0.0, 2.0],
+                                [0.0, distance, 2.0],
+                                [-distance, 0.0, 2.0],
+                                [0.0, -distance, 2.0]])
         np.savetxt("test_global.csv", positions, delimiter=',')
 
         # Run the main fonction of the module
@@ -97,6 +99,7 @@ class Test(TympanTC):
         for rec in calc.result.receptors:
             rec_result = get_rec_spec(project, [src], [rec])
             np.testing.assert_array_almost_equal(average_result, rec_result[0][0], 6)
+
 
 if __name__ == '__main__':
     os.chdir(os.path.join(TOOLBOX_DATA_DIR, 'Recepteur_Mobile'))
