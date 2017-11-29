@@ -21,7 +21,6 @@ PROJECT_BASE = os.path.abspath(os.path.join(_HERE, '..'))
 TEST_DATA_DIR = os.path.join(PROJECT_BASE, 'tests', 'data')
 # Toolbox tests data:
 TOOLBOX_DATA_DIR = os.path.join(TEST_DATA_DIR,"toolbox")
-assert os.path.isdir(TOOLBOX_DATA_DIR), "The Toolbox data dir does not exists '%s'" % TOOLBOX_DATA_DIR
 # Solver directory:
 ty_solverdir = os.environ.get('TYMPAN_SOLVERDIR')
 if not ty_solverdir:
@@ -31,6 +30,7 @@ if not ty_solverdir:
             break
     else:
         raise RuntimeError("The test solver plugins dir wasn't found")
+
 
 def run_calculations(input_xml):
     """
