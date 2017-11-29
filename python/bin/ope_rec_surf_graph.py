@@ -291,19 +291,29 @@ class AppRecSurf(tk.Tk):
             
             # Create new mesh spectrum with the result array
             mesh_spectrums_result = ndarray_to_mesh_spect(ndarray_result)
-        
-            # Add a new computation
-            self.project.add_computation()
-            calc_list =  [calc for calc in self.project.computations]
-            last_calc = calc_list[-1]
-        
+
+            # Set the current computation to the last one and set the noise map spectrums
+            calc_name = 'Resultat de ' + self.operations_name[val_ope.get()] + " on " + self.comp_01.name + " and " + self.comp_02.name
+
+            # Check if a computation exist with this name
+            calc_exist = False
+            for calc in self.project.computations:
+                if calc.name == calc_name:
+                    calc_exist = True
+                    break
+
             # Add a new noise map to the new computation
-            last_calc.add_noise_map(self.mesh)
-        
+            if calc_exist:
+                last_calc = calc
+            else:
+                # Add a new computation
+                self.project.add_computation()
+                last_calc = self.project.computations[-1]
+                last_calc.add_noise_map(self.mesh)
+
             # Set the current computation to the last one and set the noise map spectrums
             self.project.select_computation(last_calc)
-            result_name = 'Resultat de ' + self.operations_name[val_ope.get()] + " on " + self.comp_01.name + " and " + self.comp_02.name
-            self.project.current_computation.set_name(result_name)
+            self.project.current_computation.set_name(calc_name)
             self.project.current_computation.set_noise_map_spectrums(self.mesh, mesh_spectrums_result)
 
             # Create xml file and save result
@@ -311,8 +321,7 @@ class AppRecSurf(tk.Tk):
             self.project.to_xml(output_xml)
 
             # Set progress label to done (Terminé !)
-            #self.labelProg.set(u"Terminé !")
-            self.labelProg.set(u" "+result_name + " sauve dans " + output_xml)
+            self.labelProg.set(u" "+calc_name + " sauve dans " + output_xml)
 
 
 if __name__ == "__main__":
