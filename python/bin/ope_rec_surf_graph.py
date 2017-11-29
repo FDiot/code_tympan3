@@ -13,6 +13,7 @@ if sys.version_info[:2] <= (2, 7):
     sys.exit(-1)
 import tkinter as tk
 from tkinter.filedialog import askopenfile
+from tkinter.filedialog import asksaveasfile
 from tympan.models.project import Project
 from _util import mesh_spect_to_ndarray, ndarray_to_mesh_spect, operation_array, MyDialog
 
@@ -25,6 +26,7 @@ class AppRecSurf(tk.Tk):
         tk.Tk.__init__(self,parent)
         self.parent = parent
         self.initialize()
+        self.output_xml.set("Resultat.xml")  # Output file by default
         
     def initialize(self):
         # We use a grid to position the widgets
@@ -36,16 +38,24 @@ class AppRecSurf(tk.Tk):
         lf_xml = tk.LabelFrame(self, text=u"Choix du fichier XML", padx=0, pady=0)
         lf_xml.grid(column=0,row=0,columnspan=3,sticky='EW')
         lf_xml.grid_columnconfigure(0,weight=1)
-        
+
         # Label used to show the xml file path
         self.labelVariable = tk.StringVar()
         label_file = tk.Label(lf_xml,textvariable=self.labelVariable,anchor="w",fg="blue",bg="white")
         label_file.grid(column=0,row=1,columnspan=1,in_=lf_xml,sticky='EW')
         self.labelVariable.set(u"Salut ! Charge donc un fichier !")
+
+        self.output_xml = tk.StringVar()
+        label2_file = tk.Label(lf_xml, textvariable=self.output_xml, anchor="w", fg="blue", bg="white")
+        label2_file.grid(column=0, row=2, columnspan=1, in_=lf_xml, sticky='EW')
         
         # button used to charge xml file
         button_charge_xml = tk.Button(lf_xml,text=u"Charger fichier XML", anchor="e", command=self.load_xml_file)
         button_charge_xml.grid(column=1,row=1,in_=lf_xml,sticky='E')
+
+        button2_charge_xml = tk.Button(lf_xml, text=u"Nommer le fichier de résultat", anchor="e",
+                                       command=self.select_output_xml)
+        button2_charge_xml.grid(column=1, row=2, in_=lf_xml, sticky='E')
         
         # ============================================================================================================
         
@@ -188,6 +198,13 @@ class AppRecSurf(tk.Tk):
         self.labelRefComp01.set(u"Choisis le calcul n°1...")
         self.labelRefComp02.set(u"Choisis le calcul n°2...")
 
+    def select_output_xml(self):
+        # Open dialog window to choose output file
+        output_xml = asksaveasfile(mode='w', defaultextension='.xml',
+                                         title=u"Donner le nom du fichier XML (nouveau ou existant)",
+                                         filetypes=[('fichiers xml', '.xml'), ('tous les fichiers', '.*')])
+        self.output_xml.set(output_xml.name)
+
     def click_button_rec_surf(self):
         """
         OK button callback function to set chosen mesh
@@ -287,7 +304,7 @@ class AppRecSurf(tk.Tk):
             self.project.current_computation.set_noise_map_spectrums(self.mesh, mesh_spectrums_result)
 
             # Create xml file and save result
-            output_xml = 'Resultat.xml'
+            output_xml = str(self.output_xml.get())
             self.project.to_xml(output_xml)
 
             # Set progress label to done (Terminé !)
