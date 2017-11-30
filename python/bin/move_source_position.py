@@ -43,6 +43,9 @@ def create_calculations(fichier_xml, objects, output_xml):
 
         # Get the mesh
         meshes = project.meshes
+        if len(meshes) == 0:
+            print("Error, no mesh found in the XML file !")
+            sys.exit(-1)
 
         # Retrieve positions from CSV file and direction vect and
         # add the element and do the calculation at each step
@@ -133,8 +136,8 @@ def main(fichier_xml, objects, output_xml, gui=True):
     # and save the new project to output_xml
     create_calculations(fichier_xml, objects, output_xml)
         
-    # Run all calculations
-    project = run_calculations(output_xml)
+    # Run all calculations (except the initial one, useless)
+    project = run_calculations(output_xml, run_first=False)
     
     # Retrieve the noise maps of the project and put the spectrum value into a ndarray
     list_mesh_spec = get_list_mesh_spectrums(project)
