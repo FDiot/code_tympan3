@@ -79,6 +79,7 @@ class Test(TympanTC):
             # Check each calculation is the same:
             np.testing.assert_array_equal(reference, contribution)
 
+
 if __name__ == '__main__':
     os.chdir(os.path.join(TOOLBOX_DATA_DIR, 'Source_Mobile'))
     unittest.main()
