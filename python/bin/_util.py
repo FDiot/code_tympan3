@@ -32,7 +32,7 @@ if not ty_solverdir:
         raise RuntimeError("The test solver plugins dir wasn't found")
 
 
-def run_calculations(input_xml):
+def run_calculations(input_xml, run_first=True):
     """
     Run all calculations
     """
@@ -40,29 +40,30 @@ def run_calculations(input_xml):
     # load project
     project = Project.from_xml(input_xml)
 
-    for calc in project.computations:
-        print('Select calculation:', calc.name)
-        project.select_computation(calc)
+    for i, calc in enumerate(project.computations):
+        if run_first or i > 0:
+            print('Select calculation '+str(i)+' :', calc.name)
+            project.select_computation(calc)
 
-        print('Update altimetry')
-        altim = AltimetryMesh.from_site(project.site)
-        project.update_site_altimetry(altim)
+            print('Update altimetry')
+            altim = AltimetryMesh.from_site(project.site)
+            project.update_site_altimetry(altim)
 
-        print('Get Solver object from Tympan project located at %s' % ty_solverdir)
-        solver = Solver.from_project(project, ty_solverdir)
+            print('Get Solver object from Tympan project located at %s' % ty_solverdir)
+            solver = Solver.from_project(project, ty_solverdir)
 
-        print('Build model')
-        model = Model.from_project(project, set_sources=True,
-                                   set_receptors=True)
-        print('Launch solver')
-        result = solver.solve(model)
+            print('Build model')
+            model = Model.from_project(project, set_sources=True,
+                                       set_receptors=True)
+            print('Launch solver')
+            result = solver.solve(model)
 
-        # Import results to project
-        print('Import results')
-        project.import_result(model, result)
+            # Import results to project
+            print('Import results')
+            project.import_result(model, result)
 
-        # result must be destroyed otherwise it crashes
-        del result
+            # result must be destroyed otherwise it crashes
+            del result
 
     return project
 
