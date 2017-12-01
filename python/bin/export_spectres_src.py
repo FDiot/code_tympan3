@@ -41,8 +41,6 @@ def write_results(valeurs, src_ids, dict_id_name, fichier_txt):
     noms = np.array(names)[:, np.newaxis]
     freq = np.array(['Frequence'])[:, np.newaxis]
     result_array = np.hstack((noms, valeurs))
-    # Sort alphabetically by name to have stable comparisons:
-    result_array = np.sort(result_array, axis = 0)
     freq_array = np.hstack((freq, freq_tiers_oct))
     final_array = np.append(freq_array, result_array, axis=0)
     final_array = final_array.transpose()
