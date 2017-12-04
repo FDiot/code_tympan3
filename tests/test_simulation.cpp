@@ -34,7 +34,8 @@ void setup_1source_1recepteur(Simulation* simu,
 							  int nbRaysPerSource=0, 
 							  int accelerator=2,
 							  vec3 source_pos=vec3(5,0,0),
-							  vec3 recepteur_pos=vec3(15,0,0)){
+							  vec3 recepteur_pos=vec3(15,0,0),
+							  leafTreatment::treatment leaf_treatment = leafTreatment::FIRST){
 
 	// The configuration of the ray tracer:
 	tympan::LPSolverConfiguration config =tympan::SolverConfiguration::get();
@@ -53,7 +54,7 @@ void setup_1source_1recepteur(Simulation* simu,
 	simu->addSource(source);
 
 	// Add a receptor:
-	Recepteur r(recepteur_pos,3);
+	Recepteur r(recepteur_pos,(decimal)0.3);
 	r.setName("rcpt1");
 	simu->addRecepteur(r);
 
@@ -62,13 +63,12 @@ void setup_1source_1recepteur(Simulation* simu,
 
 	// Add diffraction edges and selectors filtering rays  
 	solver->postTreatmentScene(simu->getScene(),simu->getSources(),simu->getRecepteurs());
-	//PostTreatment::constructEdge(simu->getScene());
 	// Add the solver to drive the ray tracing:
 	simu->setSolver(solver);
 
 	// Accelerator configuration
-	simu->getScene()->finish(config->Accelerator);   // use the configuration's accelerator
-	simu->get_receptors_landscape()->finish(1);      // use grid accelerator for receptors
+	simu->getScene()->finish(config->Accelerator,leaf_treatment);   // use the configuration's accelerator
+	simu->get_receptors_landscape()->finish(config->Accelerator,leaf_treatment);      // use grid accelerator for receptors
 
 	// Engine setup (DefaultEngine):
 	simu->setEngine();
@@ -160,7 +160,7 @@ void setup_random(Simulation* simu,
 
 	// Add diffraction edges and selectors filtering rays  
 	solver->postTreatmentScene(simu->getScene(),simu->getSources(),simu->getRecepteurs());
-	//PostTreatment::constructEdge(simu->getScene());
+	
 	// Add the solver to drive the ray tracing:
 	simu->setSolver(solver);
 
@@ -468,10 +468,10 @@ TEST(test_simulation_1source_1recepteur, test_reflection2)
 	vec3 dir_down=vec3(0,-1,0);
 
 	// Test ray 
-	EXPECT_EQ(0,ray->getDiff());					//Test number of diffractions
-	EXPECT_EQ(3,ray->getReflex());					//Test number of reflections
+	EXPECT_EQ(0,ray->getDiff());						//Test number of diffractions
+	EXPECT_EQ(3,ray->getReflex());						//Test number of reflections
 	EXPECT_TRUE(ray->getDirection().compare(dir_down));	//Test ray final direction									
-	EXPECT_EQ(40,ray->getLongueur());				//Test ray length
+	EXPECT_EQ(40,ray->getLongueur());					//Test ray length
 
 	std::vector<std::shared_ptr<Event> >* events=ray->getEvents();
 
@@ -499,16 +499,27 @@ TEST(test_simulation_1source_1recepteur, test_reflection2)
 	// Clean simulation
 	simu.clean();
 }
-/*
+
 // Test the diffraction of a ray reflected multiple times before hiting the receptor
 TEST(test_simulation_1source_1recepteur, test_diffraction)
 {
-	// The configuration of the ray tracer:
-	tympan::LPSolverConfiguration config =tympan::SolverConfiguration::get();
-	//config->NbRayWithDiffraction=500;
-	config->UsePostFilters=false;
+	tympan::LPSolverConfiguration solver_config =tympan::SolverConfiguration::get();
+	solver_config->NbRayWithDiffraction=50;
+	solver_config->UsePostFilters=false;
+	solver_config->UsePathDifValidation=false;
+	solver_config->DiffractionFilterRayAtCreation=false;
+
 	// Create a ray tracer
 	Simulation simu;
+
+	AcousticRaytracerConfiguration* ray_tracer_config = simu.getConfiguration();
+	ray_tracer_config->NbRayWithDiffraction=50;
+	ray_tracer_config->UsePostFilter=false;
+	ray_tracer_config->UsePathDifValidation=false;
+	ray_tracer_config->DiffractionFilterRayAtCreation=false;
+
+	// Create dummy material
+	Material material;
 
 	// Add 3 triangles, one reflecting the ray upward, one reflecting rightward and one downward to the receptor
 	unsigned int p1,p2,p3,p4,p5,p6,p7,p8;
@@ -523,19 +534,20 @@ TEST(test_simulation_1source_1recepteur, test_diffraction)
 	simu.getScene()->addVertex(vec3(0,50,50), p7);
 	simu.getScene()->addVertex(vec3(50,50,50), p8);
 
-	simu.getScene()->addTriangle(p2,p1,p5,&Material());
-	simu.getScene()->addTriangle(p2,p5,p6,&Material());
-	simu.getScene()->addTriangle(p4,p6,p8,&Material());
-	simu.getScene()->addTriangle(p4,p2,p6,&Material());
-	simu.getScene()->addTriangle(p3,p4,p8,&Material());
-	simu.getScene()->addTriangle(p3,p8,p7,&Material());
-	simu.getScene()->addTriangle(p1,p7,p5,&Material());
-	simu.getScene()->addTriangle(p1,p3,p7,&Material());
-	simu.getScene()->addTriangle(p7,p8,p5,&Material());
-	simu.getScene()->addTriangle(p5,p8,p6,&Material());
+	simu.getScene()->addTriangle(p2,p1,p5,&material);
+	simu.getScene()->addTriangle(p2,p5,p6,&material);
+	simu.getScene()->addTriangle(p4,p6,p8,&material);
+	simu.getScene()->addTriangle(p4,p2,p6,&material);
+	simu.getScene()->addTriangle(p3,p4,p8,&material);
+	simu.getScene()->addTriangle(p3,p8,p7,&material);
+	simu.getScene()->addTriangle(p1,p7,p5,&material);
+	simu.getScene()->addTriangle(p1,p3,p7,&material);
+	simu.getScene()->addTriangle(p7,p8,p5,&material);
+	simu.getScene()->addTriangle(p5,p8,p6,&material);
 	
 	// Setup
-	setup_1source_1recepteur(&simu,0,2,vec3(-25,50.1,25),vec3(75,50.1,25));
+	setup_1source_1recepteur(&simu,0,0,vec3(-10,(decimal)50.2,(decimal)25),vec3(60,(decimal)50.2,(decimal)25),leafTreatment::ALL_BEFORE_VISIBLE);
+	simu.getRecepteurs().at(0).setRadius((decimal)0.2);
 	
 	// Throw rays
 	simu.launchSimulation();
@@ -543,81 +555,33 @@ TEST(test_simulation_1source_1recepteur, test_diffraction)
 	std::deque<Ray*>* valid_rays=simu.getSolver()->getValidRays();
 	std::deque<Ray*>* debug_rays=simu.getSolver()->getDebugRays();
 
-	EXPECT_EQ(1,valid_rays->size());	 // Test number of valid rays
-	EXPECT_EQ(1,debug_rays->size());	 // Test number of debug rays
+	EXPECT_EQ(4,valid_rays->size()); // Test the number of valid rays
 
 	Ray* ray=debug_rays->at(0);
 	ray->computeLongueur();
 
-	std::vector<Source> sources=simu.getSources();
-	std::vector<Recepteur> recepteurs=simu.getRecepteurs();
+	// array used to count the number of diffracted or reflected rays 
+	int rays[]={0,0,0,0}; 
 
-	EXPECT_EQ(1,sources.size());		 //Test number of sources
-	EXPECT_EQ(1,recepteurs.size());		 //Test number of receptors
-
-	Source source=sources.at(0);
-	Recepteur recepteur=recepteurs.at(0);
-
-	int rays[]={0,0,0};
-
-
-	ofstream out;
-	out.open ("C:/Users/FD3C591N/Desktop/output.txt");
-	
-
-	std::deque<Ray*>* output_rays=debug_rays;
-	for(int i=0;i<output_rays->size();i++){
+	for(unsigned int i=0;i<valid_rays->size();i++){
 		
-		out<<output_rays->at(i)->position[0]<<","<<output_rays->at(i)->position[1]<<","<<output_rays->at(i)->position[2]<<","<<output_rays->at(i)->direction[0]<<","<<output_rays->at(i)->direction[1]<<","<<output_rays->at(i)->direction[2]<<endl;
-		if(output_rays->at(i)->getDiff()>1){
+		if(valid_rays->at(i)->getReflex()!=0){
+			rays[3]++;
+		}else if(valid_rays->at(i)->getDiff()==2){
 			rays[2]++;
-		}else if(output_rays->at(i)->getDiff()>0){
+		}else if(valid_rays->at(i)->getDiff()==1){
 			rays[1]++;
 		}else rays[0]++;
 
 	}
-	out.close();
-	cout<<"no diffract: "<<rays[0]<<endl;
-	cout<<"1 diffract: "<<rays[1]<<endl;
-	cout<<"2 diffract: "<<rays[2]<<endl;
-	//Possible directions of the ray
-	vec3 dir_right=vec3(1,0,0);
-	vec3 dir_top=vec3(0,1,0);
-	vec3 dir_down=vec3(0,-1,0);
-
-	// Test ray 
-	EXPECT_EQ(0,ray->getDiff());					//Test number of diffractions
-	EXPECT_EQ(0,ray->getReflex());					//Test number of reflections
-	EXPECT_TRUE(ray->direction==dir_down);			//Test ray final direction									
-	EXPECT_EQ(40,ray->getLongueur());				//Test ray length
-
-	std::vector<std::shared_ptr<Event> >* events=ray->getEvents();
-
-	//Test number of events
-	EXPECT_EQ(3,ray->getNbEvents());						
-	EXPECT_EQ(3,events->size());		 
-
-	//Test events
-	std::shared_ptr<Event> e=events->at(0);
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());			//Test type
-	EXPECT_TRUE(vec3(0,0,0)==e.value->getPosition());			//Test position
-	EXPECT_TRUE(e.value->getIncomingDirection()==dir_right);	//Test incoming direction
-
-	e=events->at(1);
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());			//Test type
-	EXPECT_TRUE(vec3(0,10,0)==e.value->getPosition());			//Test position
-	EXPECT_TRUE(e.value->getIncomingDirection()==dir_top);		//Test incoming direction
-
-	e=events->at(2);
-	EXPECT_EQ(SPECULARREFLEXION,e.value->getType());						//Test type
-	//EXPECT_TRUE(vec3(10,10,0)==e.value->getPosition());					//Test position  - Does not pass because of an accumulation of small errors in the directions of reflected rays
-	EXPECT_TRUE(e.value->getPosition().distance(vec3(10,10,0))<0.00001);	//Test distance with expected position
-	EXPECT_TRUE(e.value->getIncomingDirection()==dir_right);				//Test incoming direction
 	
-	// Clean simulation
-	simu.clean();
+	EXPECT_EQ(1,rays[0]); // 1 direct ray
+	EXPECT_EQ(2,rays[1]); // 2 rays diffracted once (one per diffraction edge)
+	EXPECT_EQ(1,rays[2]); // 1 ray diffracted twice
+	EXPECT_EQ(0,rays[3]); // 0 reflected rays expected
+	
 }
-*/
+
 // Test simulation with 0 source and 0 receptor
 TEST(test_simulation_0source_0receptor, test_0source_0receptor)
 {
