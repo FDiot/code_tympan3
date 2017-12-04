@@ -172,30 +172,46 @@ bool DefaultEngine::traitementRay(Ray* r, std::list<validRay> &result)
     //Validation des rayons en generant un evenement. Les premiers rayons valides sont des copies de l'original, le dernier est valide sans copie.
     //De cette maniere on peut valider separement des diffractions et une reflexion a partir d'un seul rayon initial.
     //La copie est necessaire pour ne pas valider 2 fois le meme evenement. Si le rayon ne peut pas etre valide, il sera delete dans la fonction traitement()
-    bool valide(false);
-	unsigned int compteurValide(0);
-	Intersection *inter = NULL;
-	
-	// ! IMPORTANT
-	// We suppose, here, that accelerating structures use "leafTreatment::treatment::FIRST:"
-	// In this case, accelerating structure return only the closest primitive.
-	// If it is not the case, you must browse through the returned list
-	if ( foundPrims.size() > 0 )
-	{
-		inter = &( *(foundPrims.begin()) );
-        valide = solver->valideIntersection(r, inter);
-        if (valide) { compteurValide++; }
-	}
-	// Lines under are left intentionally commented only for understanding reason
-	//else // no primitive found. The ray goes to infinity (and beyond)
-	//{
-	//	valide = false;
-	//}
+  
+	if ( foundPrims.size() == 0 ){
+	//if no intersection found => return the current ray 'r' as an invalid validRay;
+		validRay resultRay;
+		resultRay.r = r;
+		resultRay.valid = false;
+		result.push_back(resultRay);
+    
+	}else{
+	//if some intersections have been found, browse through them
+		for (std::list<Intersection,std::allocator<Intersection>>::iterator it=foundPrims.begin();it != foundPrims.end();it++){
 
-    validRay resultRay;
-    resultRay.r = r;
-    resultRay.valid = valide;
-    result.push_back(resultRay);
+			bool valide=false;
+			Intersection *inter = NULL;
+			Ray* current_ray = NULL;
+
+			if(next(it)!=foundPrims.end()){
+			//if the current intersection is not the last one, copy the current ray
+				current_ray = new Ray(r);
+				current_ray->setConstructId ( rayCounter );
+				rayCounter++;
+
+			}else{
+			//else validate the current ray 'r' directly without copying it.
+				current_ray=r;
+			}
+
+			//retrieve the intersection and validate it
+			inter = &(*(it));
+			valide = solver->valideIntersection(current_ray, inter);
+
+			//create a validRay to return the result of the intersection validation
+			validRay resultRay;
+			resultRay.r = current_ray;
+			resultRay.valid = valide;
+			result.push_back(resultRay);
+
+		}
+	}
+
 
     return true;
 }
