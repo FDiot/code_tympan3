@@ -1,3 +1,4 @@
+@echo off
 echo "Configuring environment to run Code_TYMPAN GUI and Python scripts"
 set PYTHONPATH=@CMAKE_INSTALL_PREFIX@/cython;%PYTHONPATH%
 set CGAL_BINDINGS_PATH=@CMAKE_INSTALL_PREFIX@/cython/CGAL
