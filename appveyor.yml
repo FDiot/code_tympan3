@@ -26,8 +26,8 @@ install:
 
     [System.IO.Compression.ZipFile]::ExtractToDirectory($zipfile, $srcdir + '3rdparty')
 cache:
-- C:\tympan\cache
-- C:\Miniconda\pkgs
+- C:\tympan\cache -> appveyor.yml
+- C:\Miniconda\pkgs -> appveyor.yml
 build_script:
 - cmd: >-
     cd C:\tympan\
@@ -37,16 +37,16 @@ build_script:
     cd build
 
     echo %PATH%
+    
+    set MINICONDA=C:\Miniconda34
 
-    set PATH=C:\Miniconda3;C:\Miniconda3\Scripts;C:\Miniconda3\Library\bin;C:\Miniconda3\libs
-
-    set PATH=C:\Program Files (x86)\MSBuild\12.0\Bin;%PATH%
+    set PATH=%MINICONDA%;%MINICONDA%\Scripts;%MINICONDA%\Library\bin;%MINICONDA%\libs
 
     set PATH=%PATH%;C:\Windows\system32;C:\Windows;C:\Program Files (x86)\CMake\bin;
 
     echo %PATH%
 
-    set TYMPAN_PYTHON_INTERP=C:\Miniconda3\python.exe
+    set TYMPAN_PYTHON_INTERP=%MINICONDA%\python.exe
 
     conda install -y -q cython numpy scipy matplotlib
 
@@ -68,13 +68,13 @@ build_script:
 
     conda list
 
-    cmake -G"Visual Studio 10" -DCMAKE_BUILD_TYPE=Release -DPYTHON_LIBRARY=C:\Miniconda3\libs\Python34.lib ..\src
+    cmake -G"Visual Studio 10" -DCMAKE_BUILD_TYPE=Release -DPYTHON_LIBRARY=%MINICONDA%\libs\Python34.lib ..\src
 
     cmake --build . --config Release
 
     cd ..\src\doc
     
-    set PYTHONPATH=C:\Miniconda3        
+    set PYTHONPATH=%MINICONDA%      
     
     make html 
     
