@@ -23,6 +23,7 @@ from tympan.models.solver import Model
 from tympan.models._common import Vector3D
 from tympan.models._business import Site, elemen2receptor
 from _util import MyDialog, list_sites, build_dict
+from xlsxwriter.utility import xl_range, xl_rowcol_to_cell
 
 
 class App(tk.Tk):
@@ -546,11 +547,11 @@ class App(tk.Tk):
                 sp_val = rounder(spectre.values)
                 # Contribution globale
                 val_sum = 10 * np.log10(10 ** (val_sum / 10) + 10 ** (sp_val / 10))
-                data.append(["Contribution de:", source.name])
+                data.append(["Contribution de", source.name])
                 self.append_spectrum(data, sp_val)
                 del sp_val
             # Print global
-            data.append(["Global:", ""])
+            data.append(["Spectre global", ""])
             self.append_spectrum(data, val_sum)
             self.append_blank_line(data)
         return data
@@ -558,19 +559,26 @@ class App(tk.Tk):
     def export_to_excel(self, sheet_name, data_reference, data_compared, compute_difference=False):
         """
         Export into a sheet of the Excel file.
-        Data is written on 4 or 5 columns.
+        Data is written on several columns.
         Return if data are different or not (is_same)
         """
-        # Filter, we suppress coordinates and spectrums if there are the same
+        # Number of columns and rows:
+        nb_col = 0
+        nb_row = len(data_reference)
+        # Initialize data:
         row = 0
         tolerance = float(self.tolerance.get()) if self.gui else self.tolerance
         red_rows = ([])
         green_rows = ([])
         hidden_rows = ([])
+        data_status = (['OK' for i in range(nb_row)])
+        same_object = True
+        object_row = 1
+        object_label = ""
         for (r, c) in zip(data_reference, data_compared):
             row += 1
-            # Detect object:
             label = str(r[0])
+            # Detect object:
             if ":" in label:
                 object_row = row
                 object_label = label
@@ -579,8 +587,10 @@ class App(tk.Tk):
             # Detect differences:
             same_label = (r[0] == c[0])
             same_value = (abs(float(r[1])-float(c[1]))<tolerance) if compute_difference and isinstance(r[1], float) else (r[1] == c[1])
-            same = same_label and same_value
-            if not same and object_row not in red_rows:
+            same_line = same_label and same_value
+
+            if not same_line and object_row not in red_rows:
+                same_object = False
                 red_rows.append([object_row, object_label])
             value_is_coordinate = True if "Sommet" in label or "Point" in label else False
             value_is_frequency = True if isinstance(r[0], float) or "Frequence" in label else False
@@ -592,7 +602,15 @@ class App(tk.Tk):
                     same_list = False
             # Color list of point or frequencies ...
             if "..." in label and not same_list:
+                same_object = False
                 red_rows.append([row, label])
+
+            # Detect end of object, we fill data_status
+            if label == "" or row == len(data_reference):
+                if not same_object:
+                    for r in range(object_row-1, row):
+                        data_status[r] = "KO"
+                same_object = True
 
         # Change Excel default format (align to left):
         workbook = self.ExcelWriter.book
@@ -602,34 +620,41 @@ class App(tk.Tk):
         format_red = workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006', 'right': 1})
         format_green = workbook.add_format({'bg_color': 'green', 'right': 1})
 
-        # Number of columns and rows:
-        nb_col = 0
-        nb_row = len(data_reference)
+        # Status column
+        status_name = ""
+        status_col = 0
+        status = pd.DataFrame(data_status, None, columns=[status_name])
+        status.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=nb_col)
+        nb_col += 1
 
         # Reference project
-        reference_col = "Projet de référence"
-        reference = pd.DataFrame(data_reference, None, columns=["", reference_col])
+        reference_name = "Projet de référence"
+        reference_col = nb_col
+        reference = pd.DataFrame(data_reference, None, columns=["", reference_name])
         reference.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=nb_col)
         nb_col += 2
 
         # Compared project
-        compared_col = "Projet comparé"
-        compared = pd.DataFrame(data_compared, None, columns=["", compared_col])
+        compared_name = "Projet comparé"
+        compared_col = nb_col
+        compared = pd.DataFrame(data_compared, None, columns=["", compared_name])
         compared.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=nb_col)
         nb_col += 2
 
         # Conditional format:
         worksheet = self.ExcelWriter.sheets[sheet_name]
-        worksheet.conditional_format('A2:C' + str(nb_row), {'type': 'no_errors', 'format': format_blank})
+        cell_range = xl_range(1, 0, nb_row-1, compared_col)
+        worksheet.conditional_format(cell_range, {'type': 'no_errors', 'format': format_blank})
 
         is_same = True
         # Add difference column
         if compute_difference:
+            delta_name = "Différences (tol=" + str(tolerance) + ")"
+            delta_col = nb_col
             data_delta = ["" if isinstance(x1, str) else x1 - x2 if x1 != x2 else "" for (x1, x2) in
-                          zip(reference.get(reference_col).tolist(), compared.get(compared_col).tolist())]
-            delta = pd.DataFrame(data_delta, index=None, columns=["Différences (tol=" + str(tolerance) + ")"])
+                          zip(reference.get(reference_name).tolist(), compared.get(compared_name).tolist())]
+            delta = pd.DataFrame(data_delta, index=None, columns=[delta_name])
             delta.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=nb_col)
-            nb_col += 1
             # Check if results are different:
             for value in data_delta:
                 if isinstance(value, float) and abs(value) > tolerance:
@@ -646,6 +671,7 @@ class App(tk.Tk):
                                                                          'criteria': '=',
                                                                          'value': 0,
                                                                          'format': format_blank})
+            nb_col += 1
         else:
             # Check if the data matches:
             is_same = (data_reference == data_compared)
@@ -657,16 +683,16 @@ class App(tk.Tk):
 
         # Green row
         for row, label in green_rows:
-            worksheet.write(row, 0, label, format_green)
+            worksheet.write(row, reference_col, label, format_green)
 
         # Color cell for different object
         for row, label in red_rows:
-            worksheet.write(row, 0, label, format_red)
+            worksheet.write(row, reference_col, label, format_red)
 
-        # Hide column
-        width = 30  # Different width for first columns
-        for col in range(nb_col):
-            if col == 2:
+        width = 30  # Different width for some columns
+        for col in range(reference_col, nb_col):
+            if col == compared_col:
+                # Hide label compared column:
                 worksheet.set_column(col, col, width, format_align,
                                      {'level': 1, 'hidden': 1, 'collapsed': False})
             else:
@@ -679,15 +705,16 @@ class App(tk.Tk):
 
         # Red color on cells where values are different
         for row in range(1, nb_row):
-            str_row = str(row + 1)
-            worksheet.conditional_format('D' + str_row, {'type': 'cell',
-                                                         'criteria': '!=',
-                                                         'value': 'B' + str_row,
-                                                         'format': format_red})
-            worksheet.conditional_format('D' + str_row, {'type': 'cell',
-                                                         'criteria': '=',
-                                                         'value': 'B' + str_row,
-                                                         'format': format_blank})
+            cell1 = xl_rowcol_to_cell(row, reference_col+1)
+            cell2 = xl_rowcol_to_cell(row, compared_col+1)
+            worksheet.conditional_format(cell2, {'type': 'cell',
+                                                 'criteria': '!=',
+                                                 'value': cell1,
+                                                 'format': format_red})
+            worksheet.conditional_format(cell2, {'type': 'cell',
+                                                 'criteria': '=',
+                                                 'value': cell1,
+                                                 'format': format_blank})
 
         # Top border to finish
         format_border_top = workbook.add_format({'top': 1})
