@@ -590,44 +590,62 @@ class App(tk.Tk):
             if "..." in label and not same_list:
                 red_rows.append([row, label])
 
-        # Reference project
-        reference_col = "Projet de référence"
-        reference = pd.DataFrame(data_reference, None, columns=["", reference_col])
-        reference.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=0)
-
-        # Compared project
-        compared_col = "Projet comparé"
-        compared = pd.DataFrame(data_compared, None, columns=["", compared_col])
-        compared.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=2)
-
-        # Number of columns
-        nb_col = 4
-
-        is_same = True
-        # Add difference column
-        if compute_difference:
-            delta_col = nb_col
-            nb_col += 1
-            data_delta = ["" if isinstance(x1, str) else x1 - x2 if x1 != x2 else "" for (x1, x2) in
-                          zip(reference.get(reference_col).tolist(), compared.get(compared_col).tolist())]
-            delta = pd.DataFrame(data_delta, index=None, columns=["Différences (tol=" + str(tolerance) + ")"])
-            delta.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=delta_col)
-            # Check if results are different:
-            for value in data_delta:
-                if isinstance(value, float) and abs(value) > tolerance:
-                    is_same = False
-        else:
-            # Check if the data matches:
-            is_same = (data_reference == data_compared)
-
         # Change Excel default format (align to left):
         workbook = self.ExcelWriter.book
-        worksheet = self.ExcelWriter.sheets[sheet_name]
         format_align = workbook.add_format({'align': 'left'})
         # Defines 3 color formats:
         format_blank = workbook.add_format({'right': 1})
         format_red = workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006', 'right': 1})
         format_green = workbook.add_format({'bg_color': 'green', 'right': 1})
+
+        # Number of columns and rows:
+        nb_col = 0
+        nb_row = len(data_reference)
+
+        # Reference project
+        reference_col = "Projet de référence"
+        reference = pd.DataFrame(data_reference, None, columns=["", reference_col])
+        reference.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=nb_col)
+        nb_col += 2
+
+        # Compared project
+        compared_col = "Projet comparé"
+        compared = pd.DataFrame(data_compared, None, columns=["", compared_col])
+        compared.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=nb_col)
+        nb_col += 2
+
+        # Conditional format:
+        worksheet = self.ExcelWriter.sheets[sheet_name]
+        worksheet.conditional_format('A2:C' + str(nb_row), {'type': 'no_errors', 'format': format_blank})
+
+        is_same = True
+        # Add difference column
+        if compute_difference:
+            data_delta = ["" if isinstance(x1, str) else x1 - x2 if x1 != x2 else "" for (x1, x2) in
+                          zip(reference.get(reference_col).tolist(), compared.get(compared_col).tolist())]
+            delta = pd.DataFrame(data_delta, index=None, columns=["Différences (tol=" + str(tolerance) + ")"])
+            delta.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=nb_col)
+            nb_col += 1
+            # Check if results are different:
+            for value in data_delta:
+                if isinstance(value, float) and abs(value) > tolerance:
+                    is_same = False
+            worksheet.conditional_format(0, nb_col, nb_row - 1, nb_col, {'type': 'cell',
+                                                                                   'criteria': '>',
+                                                                                   'value': tolerance,
+                                                                                   'format': format_red})
+            worksheet.conditional_format(0, nb_col, nb_row - 1, nb_col, {'type': 'cell',
+                                                                                   'criteria': '<',
+                                                                                   'value': -tolerance,
+                                                                                   'format': format_red})
+            worksheet.conditional_format(0, nb_col, nb_row - 1, nb_col, {'type': 'cell',
+                                                                                   'criteria': '=',
+                                                                                   'value': 0,
+                                                                                   'format': format_blank})
+        else:
+            # Check if the data matches:
+            is_same = (data_reference == data_compared)
+
         # If differences found in a worksheet:
         if not is_same:
             # Change colortab:
@@ -643,34 +661,17 @@ class App(tk.Tk):
 
         # Hide column
         width = 30  # Different width for first columns
-        for i in range(nb_col):
-            if i == 2:
-                worksheet.set_column(i, i, width, format_align,
+        for col in range(nb_col):
+            if col == 2:
+                worksheet.set_column(col, col, width, format_align,
                                      {'level': 1, 'hidden': 1, 'collapsed': False})
             else:
-                worksheet.set_column(i, i, width, format_align)
+                worksheet.set_column(col, col, width, format_align)
 
         # Hide row
         for item in hidden_rows:
             row = item[0]
             worksheet.set_row(row, None, None, {'level': 1, 'hidden': 1, 'collapsed': False})
-
-        # Conditional format:
-        nb_row = len(reference.index)
-        worksheet.conditional_format('A2:C' + str(nb_row), {'type': 'no_errors', 'format': format_blank})
-        if compute_difference:
-            worksheet.conditional_format(0, delta_col, nb_row - 1, delta_col, {'type': 'cell',
-                                                                              'criteria': '>',
-                                                                              'value': tolerance,
-                                                                              'format': format_red})
-            worksheet.conditional_format(0, delta_col, nb_row - 1, delta_col, {'type': 'cell',
-                                                                              'criteria': '<',
-                                                                              'value': -tolerance,
-                                                                              'format': format_red})
-            worksheet.conditional_format(0, delta_col, nb_row - 1, delta_col, {'type': 'cell',
-                                                                               'criteria': '=',
-                                                                               'value': 0,
-                                                                               'format': format_blank})
 
         # Red color on cells where values are different
         for row in range(1, nb_row):
