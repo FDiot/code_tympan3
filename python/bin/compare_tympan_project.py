@@ -512,7 +512,11 @@ class App(tk.Tk):
         data.append(["Solver parameters:", ""])
         solver_parameters = calc.get_solver_parameters()
         for line in solver_parameters.decode().split("\n"):
-            data.append(line.split("=") if '=' in line else [line, ""])
+            if '=' not in line:
+                data.append([line, ""])
+            else:
+                param, value = line.split("=")
+                data.append([param, value.replace('.', ',')])
         return data
 
     def extract_from_result(self, project):
