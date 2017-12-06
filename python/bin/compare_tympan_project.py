@@ -659,15 +659,15 @@ class App(tk.Tk):
             for value in data_delta:
                 if isinstance(value, float) and abs(value) > tolerance:
                     is_same = False
-            worksheet.conditional_format(0, nb_col, nb_row - 1, nb_col, {'type': 'cell',
+            worksheet.conditional_format(1, nb_col, nb_row - 1, nb_col, {'type': 'cell',
                                                                          'criteria': '>',
                                                                          'value': tolerance,
                                                                          'format': format_red})
-            worksheet.conditional_format(0, nb_col, nb_row - 1, nb_col, {'type': 'cell',
+            worksheet.conditional_format(1, nb_col, nb_row - 1, nb_col, {'type': 'cell',
                                                                          'criteria': '<',
                                                                          'value': -tolerance,
                                                                          'format': format_red})
-            worksheet.conditional_format(0, nb_col, nb_row - 1, nb_col, {'type': 'cell',
+            worksheet.conditional_format(1, nb_col, nb_row - 1, nb_col, {'type': 'cell',
                                                                          'criteria': '=',
                                                                          'value': 0,
                                                                          'format': format_blank})
