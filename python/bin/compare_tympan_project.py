@@ -617,7 +617,7 @@ class App(tk.Tk):
         format_align = workbook.add_format({'align': 'left'})
         # Defines 3 color formats:
         format_blank = workbook.add_format({'right': 1})
-        format_red = workbook.add_format({'bg_color': '#FFC7CE', 'font_color': '#9C0006', 'right': 1})
+        format_red = workbook.add_format({'bg_color': 'red', 'right': 1})
         format_green = workbook.add_format({'bg_color': 'green', 'right': 1})
 
         # Status column
