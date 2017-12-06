@@ -222,11 +222,11 @@ class App(tk.Tk):
         Launch comparison once every parameters are set
         """
         # Checks
-        if self.project_reference == None:
+        if self.project_reference is None:
             d = MyDialog(self, u"Projet de référence non spécifié!")
             self.wait_window(d.top)
             return
-        if self.project_compared == None:
+        if self.project_compared is None:
             d = MyDialog(self, u"Projet à comparer non spécifié!")
             self.wait_window(d.top)
             return
@@ -274,12 +274,12 @@ class App(tk.Tk):
         # Comparisons
         is_same = True
         if compare != 1:
-            is_same = self.compare_elements() and is_same   # Infrastructure elements
-            is_same = self.compare_topography() and is_same # Topography
-            is_same = self.compare_model() and is_same      # Model
+            is_same = self.compare_elements() and is_same    # Infrastructure elements
+            is_same = self.compare_topography() and is_same  # Topography
+            is_same = self.compare_model() and is_same       # Model
         if compare != 0:
-            is_same = self.compare_solvers() and is_same    # Solver parameters
-            is_same = self.compare_results() and is_same    # Results
+            is_same = self.compare_solvers() and is_same     # Solver parameters
+            is_same = self.compare_results() and is_same     # Results
 
         # Save and close the ouput
         self.ExcelWriter.save()
@@ -399,7 +399,7 @@ class App(tk.Tk):
 
             # UserSources ranked by name
             names = list(item.name for item in site.user_sources)
-            for _,user_source in sorted(zip(names, site.user_sources), key=itemgetter(0)):
+            for _, user_source in sorted(zip(names, site.user_sources), key=itemgetter(0)):
                 data.append(["Source ponctuelle:", ""])
                 data.append(["Nom", user_source.name])
                 self.append_xyz(data, "Position", user_source.position)
@@ -407,7 +407,7 @@ class App(tk.Tk):
 
             # Engines ranked by name
             names = list(item.name for item in site.engines)
-            for _,engine in sorted(zip(names, site.engines), key=itemgetter(0)):
+            for _, engine in sorted(zip(names, site.engines), key=itemgetter(0)):
                 data.append(["Machine:", ""])
                 data.append(["Nom", engine.name])
                 data.append(["Altitude", engine.hauteur])
@@ -418,7 +418,7 @@ class App(tk.Tk):
 
             # Buildings ranked by name
             names = list(item.name for item in site.buildings)
-            for _,building in sorted(zip(names, site.buildings), key=itemgetter(0)):
+            for _, building in sorted(zip(names, site.buildings), key=itemgetter(0)):
                 data.append(["Bâtiment:", ""])
                 data.append(["Nom", building.name])
                 data.append(["estRayonnant?", "Oui" if building.getIsRayonnant == 1 else "Non"])
@@ -446,7 +446,7 @@ class App(tk.Tk):
             self.append_blank_line(data)
             # Lakes ranked by name:
             names = list(item.name for item in site.lakes)
-            for _,lake in sorted(zip(names, site.lakes), key=itemgetter(0)):
+            for _, lake in sorted(zip(names, site.lakes), key=itemgetter(0)):
                 data.append(["Plan d'eau:", ""])
                 data.append(["Nom", lake.name])
                 data.append(["Altitude", lake.altitude])
@@ -454,7 +454,7 @@ class App(tk.Tk):
                 self.append_blank_line(data)
             # Grounds ranked by name
             names = list(item.name for item in site.material_areas)
-            for _,material_area in sorted(zip(names, site.material_areas), key=itemgetter(0)):
+            for _, material_area in sorted(zip(names, site.material_areas), key=itemgetter(0)):
                 data.append(["Terrain:", ""])
                 data.append(["Nom", material_area.name])
                 data.append(["Végétation?", "Oui" if material_area.has_vegetation() else "Non"])
@@ -469,7 +469,7 @@ class App(tk.Tk):
                 self.append_blank_line(data)
             # LevelCurves ranked by name
             names = list(item.name for item in site.level_curves)
-            for _,level_curve in sorted(zip(names, site.level_curves), key=itemgetter(0)):
+            for _, level_curve in sorted(zip(names, site.level_curves), key=itemgetter(0)):
                 data.append(["Courbe de niveau:", ""])
                 data.append(["Nom", level_curve.name])
                 data.append(["Altitude", level_curve.altitude])
@@ -489,7 +489,7 @@ class App(tk.Tk):
         # SourceSolvers ranked by position:
         source_positions = list(
             [str(src.position.x) + "," + str(src.position.y) + "," + str(src.position.z)] for src in model.sources)
-        for _,source in sorted(zip(source_positions, model.sources), key=itemgetter(0)):
+        for _, source in sorted(zip(source_positions, model.sources), key=itemgetter(0)):
             data.append(["Source accoustique:", ""])
             item_id = source.face_id if source.face_id != "" else source.volume_id
             item_name = dict_id_name[item_id]
@@ -505,7 +505,7 @@ class App(tk.Tk):
         data = ([])
         calc = project.computations[-1]
         # Solver:
-        data.append(["Solver:" , ""])
+        data.append(["Solver:", ""])
         data.append(["Id", calc.solver_id])
         self.append_blank_line(data)
         # Parameters:
@@ -527,7 +527,7 @@ class App(tk.Tk):
         self.append_blank_line(data)
         # Rank receptors by name:
         names = list(item.name for item in result.receptors)
-        for _,rec in sorted(zip(names, result.receptors), key=itemgetter(0)):
+        for _, rec in sorted(zip(names, result.receptors), key=itemgetter(0)):
             data.append(["Récepteur:", ""])
             data.append(["Nom", rec.name])
             # result.receptors is a list of Element
@@ -538,11 +538,11 @@ class App(tk.Tk):
             val_sum = np.zeros(31)
             # Rank src by name:
             names = list(src.name for src in result.sources)
-            for _,source in sorted(zip(names, result.sources), key=itemgetter(0)):
+            for _, source in sorted(zip(names, result.sources), key=itemgetter(0)):
                 spectre = result.spectrum(rec, source)
                 # As the precision of value in xml file is one 1 digit,
                 # we should round to 1 digit the computed values:
-                rounder = np.vectorize(lambda x : 0.1 * round(10. * x))
+                rounder = np.vectorize(lambda x: 0.1 * round(10. * x))
                 sp_val = rounder(spectre.values)
                 # Contribution globale
                 val_sum = 10 * np.log10(10 ** (val_sum / 10) + 10 ** (sp_val / 10))
@@ -635,17 +635,17 @@ class App(tk.Tk):
                 if isinstance(value, float) and abs(value) > tolerance:
                     is_same = False
             worksheet.conditional_format(0, nb_col, nb_row - 1, nb_col, {'type': 'cell',
-                                                                                   'criteria': '>',
-                                                                                   'value': tolerance,
-                                                                                   'format': format_red})
+                                                                         'criteria': '>',
+                                                                         'value': tolerance,
+                                                                         'format': format_red})
             worksheet.conditional_format(0, nb_col, nb_row - 1, nb_col, {'type': 'cell',
-                                                                                   'criteria': '<',
-                                                                                   'value': -tolerance,
-                                                                                   'format': format_red})
+                                                                         'criteria': '<',
+                                                                         'value': -tolerance,
+                                                                         'format': format_red})
             worksheet.conditional_format(0, nb_col, nb_row - 1, nb_col, {'type': 'cell',
-                                                                                   'criteria': '=',
-                                                                                   'value': 0,
-                                                                                   'format': format_blank})
+                                                                         'criteria': '=',
+                                                                         'value': 0,
+                                                                         'format': format_blank})
         else:
             # Check if the data matches:
             is_same = (data_reference == data_compared)
