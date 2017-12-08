@@ -36,11 +36,17 @@ def write_results(valeurs, src_ids, dict_id_name, fichier_txt):
     names = []
     for i in range(len(src_ids)):
         names.append(dict_id_name[src_ids[i]] if src_ids[i] != "" else src_ids[i])
-
+    # Sort the arrays by names:
+    sorted_names = []
+    sorted_valeurs = np.empty([len(names), 31])
+    ranks = [i for i in range(len(names))]
+    for i, (name, rank) in enumerate(sorted(zip(names, ranks))):
+        sorted_names.append(name)
+        sorted_valeurs[i, :] = valeurs[rank]
     # Create final array to be written in the txt file
-    noms = np.array(names)[:, np.newaxis]
+    noms = np.array(sorted_names)[:, np.newaxis]
+    result_array = np.hstack((noms, sorted_valeurs))
     freq = np.array(['Frequence'])[:, np.newaxis]
-    result_array = np.hstack((noms, valeurs))
     freq_array = np.hstack((freq, freq_tiers_oct))
     final_array = np.append(freq_array, result_array, axis=0)
     final_array = final_array.transpose()
