@@ -200,7 +200,11 @@ def tympan(output_xml):
 
     # Read the map:
     x,y,z,values = np.loadtxt(csv_file, skiprows=1, delimiter=";").T # Transposed for easier unpacking
-    nrows, ncols = 38, 37
+    # Look for number of rows and cols
+    for nrows in range(1, len(x)):
+        if x[nrows] < x[nrows-1]:
+            break
+    ncols = int(len(values) / nrows)
     data = values.reshape((nrows, ncols))
     # Show sources:
     src_x = []
