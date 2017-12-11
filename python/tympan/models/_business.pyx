@@ -1249,7 +1249,7 @@ cdef class Mesh:
     matrix = cy.declare(tycommon.OMatrix) # local to global transformation
 
     def export_csv(self, file_name):
-        self.thisptr.exportCSV(file_name)
+        self.thisptr.exportCSV(file_name.encode())
 
     @property
     def is_active(self):
