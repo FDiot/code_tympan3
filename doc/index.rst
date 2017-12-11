@@ -20,6 +20,7 @@ Description of the environment and conventions
    :maxdepth: 1
 
    architecture
+   data_model
    code_structure
    convention
    tools
