@@ -39,7 +39,6 @@ def get_sources_list(project, calculations_namelist):
         if calc.name in calculations_namelist:
             result =  calc.result
             for src in result.sources:
-                # print('Calcul:',calc.name,'Source:',src.name)
                 if src.name not in sources_namelist :
                     sources_namelist.append(src.name)
                     sources.append(src)

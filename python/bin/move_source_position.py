@@ -214,11 +214,10 @@ def tympan(output_xml):
         src_x.append(src.position.x)
         src_y.append(src.position.y)
     # Select unit:
-    unit = 'dBA' if mesh.getDataType==0 else 'dBZ'
+    unit = 'dBA' if mesh.getDataType == 0 else 'dBZ'
     print("calc_number ",calc_number)
     print(calc.name)
     print("Spectre min=", values.min(), " max=", values.max())
-    #print(data)
     return x,y,z,data,src_x,src_y,"Calculation: "+calc.name,unit
 
 
