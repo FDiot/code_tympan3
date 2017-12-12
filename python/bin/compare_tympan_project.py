@@ -487,14 +487,11 @@ class App(tk.Tk):
 
         data.append(["Nombre de sources acoustiques", len(model.sources)])
         self.append_blank_line(data)
-        # SourceSolvers ranked by position:
-        source_positions = list(
-            [str(src.position.x) + "," + str(src.position.y) + "," + str(src.position.z)] for src in model.sources)
-        for _, source in sorted(zip(source_positions, model.sources), key=itemgetter(0)):
+        # SourceSolvers ranked by names:
+        source_names = list([dict_id_name[src.face_id if src.face_id != "" else src.volume_id]] for src in model.sources)
+        for name, source in sorted(zip(source_names, model.sources), key=itemgetter(0)):
             data.append(["Source accoustique:", ""])
-            item_id = source.face_id if source.face_id != "" else source.volume_id
-            item_name = dict_id_name[item_id]
-            data.append(["Nom", item_name])
+            data.append(["Nom", name])
             self.append_xyz(data, "Position", source.position)
             self.append_spectrum(data, source.spectrum.values)
             self.append_blank_line(data)
