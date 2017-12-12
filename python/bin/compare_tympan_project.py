@@ -22,7 +22,7 @@ from tympan.models.project import Project
 from tympan.models.solver import Model
 from tympan.models._common import Vector3D
 from tympan.models._business import Site, elemen2receptor
-from _util import MyDialog, list_sites, build_dict
+from _util import MyDialog, list_sites, build_dict, power2db
 from xlsxwriter.utility import xl_range, xl_rowcol_to_cell
 
 
@@ -361,7 +361,7 @@ class App(tk.Tk):
                                    6300.0, 8000.0, 10000.0, 12500.0, 16000.0])
         # One digit for value
         data.append(["Frequence", "Db"])
-        data.extend([freq_tiers_oct[i], values[i]] for i in range(len(values)))
+        data.extend([freq_tiers_oct[i], round(values[i], 1)] for i in range(len(values)))
         data.append(["[+]Spectre...", " "])
 
     def append_points(self, data, points):
@@ -491,10 +491,10 @@ class App(tk.Tk):
         source_names = list([dict_id_name[src.face_id if src.face_id != "" else src.volume_id]] for src in model.sources)
         source_positions = list([str(src.position.x) + "," + str(src.position.y) + "," + str(src.position.z)] for src in model.sources)
         for name, _, source in sorted(zip(source_names, source_positions, model.sources), key=itemgetter(0, 1)):
-            data.append(["Source accoustique:", ""])
+            data.append(["Source acoustique:", ""])
             data.append(["Nom", name])
             self.append_xyz(data, "Position", source.position)
-            self.append_spectrum(data, source.spectrum.values)
+            self.append_spectrum(data, power2db(source.spectrum.values))
             self.append_blank_line(data)
 
         return data
@@ -537,7 +537,7 @@ class App(tk.Tk):
             val_sum = np.zeros(31)
             # As the precision of value in xml file is one 1 digit,
             # we should round to 1 digit the computed values:
-            rounder = np.vectorize(lambda x: 0.1 * round(10. * x))
+            rounder = np.vectorize(lambda x: round(x, 1))
             # Rank src by name:
             names = list(src.name for src in result.sources)
             for _, source in sorted(zip(names, result.sources), key=itemgetter(0)):
@@ -550,7 +550,7 @@ class App(tk.Tk):
                 del sp_val
             # Print global
             data.append(["Spectre global", ""])
-            self.append_spectrum(data, rounder(val_sum))
+            self.append_spectrum(data, val_sum)
             self.append_blank_line(data)
         return data
 

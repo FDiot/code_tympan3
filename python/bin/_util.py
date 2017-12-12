@@ -442,3 +442,10 @@ def build_dict(project):
                 dict_id_name[ac.surface_node_id()] = element_name + "-" + volume_name + "-" + face_name
             dict_id_name[ac.volume_id()] = element_name + "-" + volume_name
     return dict_id_name
+
+
+def power2db(power_values):
+    """ Convert Power to dB value """
+    P0 = 1e-12
+    db_values = 10 * np.log10(power_values / P0)
+    return db_values
