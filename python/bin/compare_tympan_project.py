@@ -601,13 +601,13 @@ class App(tk.Tk):
             if "..." in label and not same_list:
                 same_object = False
                 red_rows.append([row, label])
+                same_list = True
 
             # Detect end of object, we fill data_status
             if label == "" or row == len(data_reference):
                 if not same_object:
                     for r in range(object_row-1, row):
                         data_status[r] = "KO"
-                same_object = True
 
         # Change Excel default format (align to left):
         workbook = self.ExcelWriter.book
