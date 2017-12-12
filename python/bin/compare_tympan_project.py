@@ -487,9 +487,10 @@ class App(tk.Tk):
 
         data.append(["Nombre de sources acoustiques", len(model.sources)])
         self.append_blank_line(data)
-        # SourceSolvers ranked by names:
+        # SourceSolvers ranked by names/then positions:
         source_names = list([dict_id_name[src.face_id if src.face_id != "" else src.volume_id]] for src in model.sources)
-        for name, source in sorted(zip(source_names, model.sources), key=itemgetter(0)):
+        source_positions = list([str(src.position.x) + "," + str(src.position.y) + "," + str(src.position.z)] for src in model.sources)
+        for name, _, source in sorted(zip(source_names, source_positions, model.sources), key=itemgetter(0, 1)):
             data.append(["Source accoustique:", ""])
             data.append(["Nom", name])
             self.append_xyz(data, "Position", source.position)
@@ -534,13 +535,13 @@ class App(tk.Tk):
             self.append_xyz(data, "Position", receptor.position)
             # Loop on each source for contribution
             val_sum = np.zeros(31)
+            # As the precision of value in xml file is one 1 digit,
+            # we should round to 1 digit the computed values:
+            rounder = np.vectorize(lambda x: 0.1 * round(10. * x))
             # Rank src by name:
             names = list(src.name for src in result.sources)
             for _, source in sorted(zip(names, result.sources), key=itemgetter(0)):
                 spectre = result.spectrum(rec, source)
-                # As the precision of value in xml file is one 1 digit,
-                # we should round to 1 digit the computed values:
-                rounder = np.vectorize(lambda x: 0.1 * round(10. * x))
                 sp_val = rounder(spectre.values)
                 # Contribution globale
                 val_sum = 10 * np.log10(10 ** (val_sum / 10) + 10 ** (sp_val / 10))
@@ -549,7 +550,7 @@ class App(tk.Tk):
                 del sp_val
             # Print global
             data.append(["Spectre global", ""])
-            self.append_spectrum(data, val_sum)
+            self.append_spectrum(data, rounder(val_sum))
             self.append_blank_line(data)
         return data
 
