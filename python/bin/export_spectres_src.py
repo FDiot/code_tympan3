@@ -13,7 +13,7 @@ if sys.version_info[:2] <= (2, 7):
     sys.exit(-1)
 from tympan.models.solver import Model
 from _util import input_string, run_calculations, ask_xml_file
-from _util import list_sites, build_dict
+from _util import list_sites, build_dict, power2db
 
 
 def write_results(valeurs, src_ids, dict_id_name, fichier_txt):
@@ -164,8 +164,7 @@ def main(fichier_xml, fichier_txt):
     # Get spectrums from the different sources PER SURFACE
     (values_final, src_ids) = calc_surf_spectrum(list_src)
     # Transform the power value into a dB value
-    P0 = 1e-12
-    values_final_db = 10*np.log10(values_final/P0)
+    values_final_db = power2db(values_final)
 
     # Write the values into a file using write_results
     write_results(values_final_db, src_ids, dict_id_name, fichier_txt+'_parSurface.txt')
@@ -173,8 +172,7 @@ def main(fichier_xml, fichier_txt):
     # Get spectrums from the different sources PER VOLUME
     (values_final, src_ids) = calc_vol_spectrum(list_src)
     # Transform the power value into a dB value
-    P0 = 1e-12
-    values_final_db = 10*np.log10(values_final/P0)
+    values_final_db = power2db(values_final)
 
     # Write the values into a file using write_results
     write_results(values_final_db, src_ids, dict_id_name, fichier_txt+'_parVolume.txt')
