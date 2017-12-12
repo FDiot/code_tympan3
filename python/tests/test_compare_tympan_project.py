@@ -52,7 +52,7 @@ class Test(TympanTC):
         self.assertEqual(app.launch_compare(), True)
 
     def test_global(self):
-        """ Global test (E/Lot2-004) """
+        """ Global test """
         reference_project = "modele_test.xml"  # Complex model
         app = App(None, False)
         app.load_reference_xml_file(reference_project)
