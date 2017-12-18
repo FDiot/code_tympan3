@@ -386,7 +386,7 @@ class App(tk.Tk):
     def extract_from_infrastructure(self, project):
         """ Extract from infrastructure """
         data = ([])
-        data.append(["Nombre de sites", len(list_sites(project))])
+        data.append(["Nombre de sites:", len(list_sites(project))])
         self.append_blank_line(data)
         # Loop on sites:
         for site in list_sites(project):
@@ -434,7 +434,7 @@ class App(tk.Tk):
     def extract_from_topography(self, project):
         """ Extract from topography """
         data = ([])
-        data.append(["Nombre de sites", len(list_sites(project))])
+        data.append(["Nombre de sites:", len(list_sites(project))])
         self.append_blank_line(data)
         # Loop on sites:
         for site in list_sites(project):
@@ -485,7 +485,7 @@ class App(tk.Tk):
         # Build dict
         dict_id_name = build_dict(project)
 
-        data.append(["Nombre de sources acoustiques", len(model.sources)])
+        data.append(["Nombre de sources acoustiques:", len(model.sources)])
         self.append_blank_line(data)
         # SourceSolvers ranked by names/then positions:
         source_names = list([dict_id_name[src.face_id if src.face_id != "" else src.volume_id]] for src in model.sources)
@@ -522,7 +522,7 @@ class App(tk.Tk):
         """ Extract from the results """
         data = ([])  # List
         result = project.computations[-1].result
-        data.append(["Nombre de récepteurs", len(result.receptors)])
+        data.append(["Nombre de récepteurs:", len(result.receptors)])
         self.append_blank_line(data)
         # Rank receptors by name:
         names = list(item.name for item in result.receptors)
