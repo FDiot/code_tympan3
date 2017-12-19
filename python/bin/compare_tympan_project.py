@@ -562,7 +562,30 @@ class App(tk.Tk):
         """
         # Number of columns and rows:
         nb_col = 0
-        nb_row = len(data_reference)
+        nb_row1 = len(data_reference)
+        nb_row2 = len(data_compared)
+        nb_row = max(nb_row1, nb_row2)
+        if nb_row1 != nb_row2:
+            # We loop on the longest list:
+            long_list = data_reference if nb_row1 > nb_row2 else data_compared
+            short_list = data_reference if nb_row1 < nb_row2 else data_compared
+            # We insert blank lines in the shortest lines:
+            row = 0
+            while row < nb_row:
+                label = str(long_list[row][0])
+                # Get an object, compare names:
+                if ":" in label:
+                    name = str(long_list[row+1][1])
+                    print(sheet_name + " " + str(row) + " " + name + " ...")
+                    other_name = str(short_list[row+1][1]) if row < len(short_list) else "empty"
+                    if name != other_name:
+                        print(sheet_name+" "+str(row)+" "+other_name+" does not match "+name+" !!!")
+                        while row+1 < nb_row and other_name != str(long_list[row+1][1]):
+                            short_list.insert(row, [long_list[row][0], ""])
+                            row += 1
+                        if row+1 < nb_row:
+                            print(sheet_name + " " + str(row) + " OK find "+ str(long_list[row+1][1]) +" !!!")
+                row += 1
         # Initialize data:
         row = 0
         tolerance = float(self.tolerance.get()) if self.gui else self.tolerance
@@ -590,8 +613,11 @@ class App(tk.Tk):
             if not same_line and object_row not in red_rows:
                 same_object = False
                 red_rows.append([object_row, object_label])
-            value_is_coordinate = True if "Sommet" in label or "Point" in label else False
-            value_is_frequency = True if isinstance(r[0], float) or "Frequence" in label else False
+
+            tmp_label = label #if label != "" else str(c[0])
+            tmp_value = r[0] #if label != "" else c[0]
+            value_is_coordinate = True if "Sommet" in tmp_label or "Point" in tmp_label else False
+            value_is_frequency = True if isinstance(tmp_value, float) or "Frequence" in tmp_label else False
             # Hide list of coordinate or frequency
             hide = value_is_coordinate or value_is_frequency
             if hide:
