@@ -576,15 +576,11 @@ class App(tk.Tk):
                 # Get an object, compare names:
                 if ":" in label:
                     name = str(long_list[row+1][1])
-                    print(sheet_name + " " + str(row) + " " + name + " ...")
                     other_name = str(short_list[row+1][1]) if row < len(short_list) else "empty"
                     if name != other_name:
-                        print(sheet_name+" "+str(row)+" "+other_name+" does not match "+name+" !!!")
                         while row+1 < nb_row and other_name != str(long_list[row+1][1]):
                             short_list.insert(row, [long_list[row][0], ""])
                             row += 1
-                        if row+1 < nb_row:
-                            print(sheet_name + " " + str(row) + " OK find "+ str(long_list[row+1][1]) +" !!!")
                 row += 1
         # Initialize data:
         row = 0
