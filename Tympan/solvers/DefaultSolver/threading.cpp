@@ -193,11 +193,11 @@ bool OThreadPool::end()
 {
     unsigned int totalCount = getTotalCount();
 
-    int last = 0;
+    unsigned int last = 0;
     bool cancel = false;
     while (last < totalCount)
     {
-        int current = getCount();
+        unsigned int current = getCount();
         for (size_t i = 0; i < current - last; ++i)
         {
             if (cancel)

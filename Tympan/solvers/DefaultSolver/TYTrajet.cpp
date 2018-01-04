@@ -105,7 +105,7 @@ OSpectre TYTrajet::getPEnergetique(const AtmosphericConditions& atmos)
     OSpectre s = OSpectre::getEmptyLinSpectre();
     OSpectreComplex sTemp;
     int firstReflex = -1;
-    int indiceDebutEffetEcran = 0;
+    unsigned int indiceDebutEffetEcran = 0;
     unsigned int i;
 
     // On calcule l'attenuation sur le trajet direct (sauf chemins reflechis).
@@ -174,7 +174,7 @@ OSpectre TYTrajet::getPInterference(const AtmosphericConditions& atmos)
 {
     unsigned int i, j;
     int firstReflex = -1;
-    int indiceDebutEffetEcran = 0;
+    unsigned int indiceDebutEffetEcran = 0;
     bool ecranFound = false;
 
     if (_chemins.size()) { ecranFound = (_chemins[0].getType() == CHEMIN_ECRAN); }

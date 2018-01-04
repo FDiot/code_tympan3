@@ -170,8 +170,8 @@ void Cylindre::computeMesh()
         box = box.Union(mesh.at(i)->getBBox());
     }
 
-    box.pMin = vec3(box.pMin.x - 0.01, box.pMin.y - 0.01, box.pMin.z - 0.01);
-    box.pMax = vec3(box.pMax.x + 0.01, box.pMax.y + 0.01, box.pMax.z + 0.01);
+    box.pMin = vec3(box.pMin.x - 0.01f, box.pMin.y - 0.01f, box.pMin.z - 0.01f);
+    box.pMax = vec3(box.pMax.x + 0.01f, box.pMax.y + 0.01f, box.pMax.z + 0.01f);
 }
 
 bool Cylindre::sample(decimal density, std::vector<vec3>& samples)
@@ -185,7 +185,7 @@ bool Cylindre::sample(decimal density, std::vector<vec3>& samples)
 
     decimal lenght = v1.distance(v2);
 
-    unsigned int nbSamples = lenght * density + 1;
+    unsigned int nbSamples = (unsigned int)(lenght * density) + 1;
 
     for (unsigned int i = 0; i < nbSamples; i++)
     {
