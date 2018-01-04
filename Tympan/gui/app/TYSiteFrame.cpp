@@ -1526,7 +1526,7 @@ void TYSiteFrame::newElt(const char* className, TYElement* pElement)
     {
         pElt = dynamic_cast<TYElement*>(TYElement::findAndClone(className));
     }
-    catch(tympan::invalid_data& exc) {}
+    catch(tympan::invalid_data&) {}
 
     assert (pElt);
 	

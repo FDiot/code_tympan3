@@ -195,7 +195,7 @@ void TYRectangleEditor::slotMouseReleased(int x, int y, Qt::MouseButton button, 
             {
                 _pRectangle = dynamic_cast<TYAcousticRectangle*>(TYElement::findAndClone(childType));
             }
-            catch(tympan::invalid_data& exc) {};
+            catch(tympan::invalid_data&) {};
 
             if (_pRectangle != nullptr)
             {
