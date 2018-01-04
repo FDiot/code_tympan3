@@ -80,7 +80,7 @@ TEST(TestAltimetryReader, face_cb)
     ASSERT_EQ(3, reader.points().size());
 
     ok = true;
-    ok &= reader.face_cb(AltimetryPLYReader::VertexIndices, 0, 3, -1, 3.0);
+    ok &= reader.face_cb(AltimetryPLYReader::VertexIndices, 0, 3, -1, 3);
     ASSERT_TRUE(ok);
     ASSERT_EQ(1, reader.faces().size());
     for(unsigned i=0; i<3; ++i)

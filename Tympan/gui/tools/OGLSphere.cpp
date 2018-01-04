@@ -53,6 +53,6 @@ void OGLSphere::drawSphere(const OPoint3D& center, float radius, const OColor& o
     glPointSize(radius);
 
     glBegin(GL_POINTS);
-    glVertex3f(center._x, center._y, center._z);
+    glVertex3d(center._x, center._y, center._z);
     glEnd();
 }

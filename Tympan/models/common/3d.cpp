@@ -373,6 +373,13 @@ OPoint3D::~OPoint3D()
 {
 }
 
+void OPoint3D::setFromOGL(double x, double y, double z)
+{
+    _x =   x;
+    _y = - z;
+    _z =   y;
+}
+
 void OPoint3D::setFromOGL(float x, float y, float z)
 {
     _x =   x;
@@ -385,14 +392,14 @@ void OPoint3D::setFromOGL(float coords[3])
     setFromOGL(coords[0], coords[1], coords[2]);
 }
 
-void OPoint3D::getToOGL(float& x, float& y, float& z)
+void OPoint3D::getToOGL(double& x, double& y, double& z)
 {
     x =   _x;
     y =   _z;
     z = - _y;
 }
 
-void OPoint3D::getToOGL(float coords[3])
+void OPoint3D::getToOGL(double coords[3])
 {
     getToOGL(coords[0], coords[1], coords[2]);
 }
@@ -1117,7 +1124,7 @@ double OMatrix::mat3x3Det(double a1, double a2, double a3, double b1, double b2,
 
 /* static */ void OGeometrie::computeNormal(OPoint3D* pts, int nbPts, OVector3D& normal)
 {
-    float ax, ay, az, bx, by, bz;
+    double ax, ay, az, bx, by, bz;
     //  Because polygon may be concave, need to accumulate cross products to
     //  determine true normal.
     //assert(nbPts>=3);

@@ -118,7 +118,7 @@ void TYAcousticCylinderGraphic::display(GLenum mode /*= GL_RENDER*/)
             glColor3fv(getElement()->getColor());
 
             // Centre
-            float center[3];
+            double center[3];
             getElement()->getCenter().getToOGL(center);
 
             // Resolution

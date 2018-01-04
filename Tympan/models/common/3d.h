@@ -541,6 +541,7 @@ public:
      * @param y Y coordinate.
      * @param z Z coordinate.
      */
+	 virtual void setFromOGL(double x, double y, double z);
     virtual void setFromOGL(float x, float y, float z);
     /**
      * Compatibility with OGL.
@@ -564,13 +565,13 @@ public:
      * @param y Y coordinate.
      * @param z Z coordinate.
      */
-    virtual void getToOGL(float& x, float& y, float& z);
+    virtual void getToOGL(double& x, double& y, double& z);
     /**
      * Compatibility with OGL.
      * Change from Tympan frame to OGL.
-     * @param coords 3D coordinates (float)
+     * @param coords 3D coordinates (double)
      */
-    virtual void getToOGL(float coords[3]);
+    virtual void getToOGL(double coords[3]);
 
    /**
      * \fn double distFrom(const OPoint3D& pt) const;

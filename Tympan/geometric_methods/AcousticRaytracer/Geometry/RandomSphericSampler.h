@@ -66,8 +66,8 @@ public:
         double U = bounded_sampler(random_generator);
         double V = bounded_sampler(random_generator);
 
-        decimal thetaCalcul = acos(2. * U - 1.) - _theta;
-        decimal phiCalcul = _phi * V;
+        decimal thetaCalcul = (decimal)acos(2. * U - 1.) - _theta;
+        decimal phiCalcul = _phi * (decimal)V;
 
         vec3 result;
         Tools::fromRadianToCarthesien(thetaCalcul, phiCalcul, result);

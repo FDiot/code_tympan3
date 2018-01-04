@@ -20,10 +20,10 @@ double meteoLin::cTemp(const vec3& P, vec3& grad) const
 {
 
     // calcul de la celerite
-    decimal c = grad_C * P.z + c0;
+    decimal c = (decimal)(grad_C * P.z + c0);
 
     // calcul du gradient
-    grad.z = grad_C;
+    grad.z = (decimal)grad_C;
 
     return c;
 };
@@ -36,8 +36,8 @@ vec3 meteoLin::cWind(const vec3& P) const
     const double& DVx = jacob_matrix[0][2];
     const double& DVy = jacob_matrix[1][2];
 
-    v.x = DVx * P.z;
-    v.y = DVy * P.z;
+    v.x = (decimal)(DVx * P.z);
+    v.y = (decimal)(DVy * P.z);
     v.z = 0;
 
     return v;

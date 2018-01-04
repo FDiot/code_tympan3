@@ -61,10 +61,10 @@ public:
     void setNbRay(const unsigned int& nb) {nbRay = nb;}
 
     /// Change the maximal propagation time
-    void setTMax(const double& TmpMax) { TMax = TmpMax; }
+    void setTMax(const double& TmpMax) { TMax = (decimal)TmpMax; }
 
     /// Set the maximal distance
-    void setDMax(const double& DistMax) { dmax = DistMax; }
+    void setDMax(const double& DistMax) { dmax = (decimal)DistMax; }
 
     /// Set the discretization step
     void setTimeStep(const decimal& tt) { h = tt; }

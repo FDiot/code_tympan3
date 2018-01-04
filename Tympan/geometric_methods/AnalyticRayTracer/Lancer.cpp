@@ -114,7 +114,7 @@ Step Lancer::EqRay(const Step& y0)                       // Fonction definissant
 
     // calcul des variables de celerite et de son gradient, de la vitesse du vent et de sa derive
     vec3 Dc = vec3();
-    decimal c = dynamic_cast<meteoLin*>(_weather)->cTemp(y0.pos, Dc);
+    decimal c = (decimal)dynamic_cast<meteoLin*>(_weather)->cTemp(y0.pos, Dc);
 
     //map<pair<int, int>, decimal> Jv;
     const array< array<double, 3>, 3 >& Jv = dynamic_cast<meteoLin*>(_weather)->getJacobMatrix();
@@ -128,13 +128,13 @@ Step Lancer::EqRay(const Step& y0)                       // Fonction definissant
     y.pos = ((s * (c * c / omega)) + v);    //(c * c / omega * s + v)
 
     // On calcule les normales
-	n.x = - omega / c * Dc.x - Jv[0][0] * s.x - Jv[0][1] * s.y - Jv[0][2] * s.z;
-    n.y = - omega / c * Dc.y - Jv[1][0] * s.x - Jv[1][1] * s.y - Jv[1][2] * s.z;
-    n.z = - omega / c * Dc.z - Jv[2][0] * s.x - Jv[2][1] * s.y - Jv[2][2] * s.z;
+	n.x = (decimal)(- omega / c * Dc.x - Jv[0][0] * s.x - Jv[0][1] * s.y - Jv[0][2] * s.z);
+    n.y = (decimal)(- omega / c * Dc.y - Jv[1][0] * s.x - Jv[1][1] * s.y - Jv[1][2] * s.z);
+    n.z = (decimal)(- omega / c * Dc.z - Jv[2][0] * s.x - Jv[2][1] * s.y - Jv[2][2] * s.z);
 
-    n.x += (Jv[0][1] - Jv[1][0]) * s.y + (Jv[0][2] - Jv[2][0]) * s.z;
-    n.y += (Jv[1][2] - Jv[2][1]) * s.z + (Jv[1][0] - Jv[0][1]) * s.x;
-    n.z += (Jv[2][0] - Jv[0][2]) * s.x + (Jv[2][1] - Jv[1][2]) * s.y;
+    n.x += (decimal)((Jv[0][1] - Jv[1][0]) * s.y + (Jv[0][2] - Jv[2][0]) * s.z);
+    n.y += (decimal)((Jv[1][2] - Jv[2][1]) * s.z + (Jv[1][0] - Jv[0][1]) * s.x);
+    n.z += (decimal)((Jv[2][0] - Jv[0][2]) * s.x + (Jv[2][1] - Jv[1][2]) * s.y);
 
     y.norm = n;
 
@@ -216,7 +216,7 @@ void Lancer::RemplirMat()
         {
             n0 = _sampler->getSample();
 
-            s0 = n0 / (dynamic_cast<meteoLin*>(_weather)->cTemp(source, grad) + (dynamic_cast<meteoLin*>(_weather)->cWind(source) * n0));
+            s0 = n0 / (decimal)((dynamic_cast<meteoLin*>(_weather)->cTemp(source, grad) + (dynamic_cast<meteoLin*>(_weather)->cWind(source) * n0)));
             y0.norm = s0;
 
             // on resoud l'equation par la methode de runge-kutta d'ordre 4
@@ -346,7 +346,7 @@ vec3 Lancer::valideIntersection(const vec3& S, const vec3& R, const vec3* A, int
         {
             // Le point d'intersection a pour coordonnees S+l*u
             reflexion = 1;
-            I = S + (u * l);
+            I = S + (u * (decimal)l);
         }
     }
 
@@ -437,7 +437,7 @@ decimal Lancer::distance_max()
         }
     }
 
-    return result * 1.2; // multiplie par 1.2 pour esperer que le recepteur est dans la zone de deformation
+    return result * 1.2f; // multiplie par 1.2 pour esperer que le recepteur est dans la zone de deformation
 }
 
 void Lancer::loadRayFile(vector<vec3>& tableau_norm)
@@ -485,7 +485,7 @@ decimal angle_depart(const decimal& a, const decimal& c, const decimal& d, const
     double c2 = c * c;
     double h2 = h * h;
 
-    return (2 * atan((-4 * a * c * d + sqrt(16 * a2 * c2 * d2 + 4 * (a2 * d2 + a2 * h2 - 2 * c * h * a) * (a2 * d2 + a2 * h2 - 2 * c * h * a))) / (2 * (a2 * d2 + a2 * h2 - 2 * c * h * a))));
+    return (decimal)(2 * atan((-4 * a * c * d + sqrt(16 * a2 * c2 * d2 + 4 * (a2 * d2 + a2 * h2 - 2 * c * h * a) * (a2 * d2 + a2 * h2 - 2 * c * h * a))) / (2 * (a2 * d2 + a2 * h2 - 2 * c * h * a))));
 }
 
 

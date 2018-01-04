@@ -83,7 +83,7 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
     */
 
     // Minimal angle (other PI) between two face to allow building of a diffraction cylinder
-    float angleMax = AcousticRaytracerConfiguration::get()->AngleDiffMin * M_PI / 180;
+    float angleMax = (decimal)(AcousticRaytracerConfiguration::get()->AngleDiffMin * M_PI / 180);
 
     // Compute "mean" normal between the two faces
     vec3 normal = p1->getNormal() + p2->getNormal();
@@ -108,7 +108,7 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
 
     // Compute the angle betwwen comp and the "mean" normal
     decimal cos_angle = comp.dot(normal);
-    angleOuverture = 2. * acos(cos_angle);
+    angleOuverture = 2.f * acos(cos_angle);
 
     if (cos_angle < cos(M_PI / 2. + angleMax / 2.))
     {
@@ -121,7 +121,7 @@ bool isAcceptableEdge(const segment& seg, Shape* p1, Shape* p2, decimal& angleOu
 bool PostTreatment::constructEdge(Scene* scene)
 {
     // define diffraction cylinder diameter
-    float cylinderThick = AcousticRaytracerConfiguration::get()->CylindreThick;
+    float cylinderThick = (float)AcousticRaytracerConfiguration::get()->CylindreThick;
 
     // Create a list of segments common to two faces
     mapSegmentShapes segmentList;

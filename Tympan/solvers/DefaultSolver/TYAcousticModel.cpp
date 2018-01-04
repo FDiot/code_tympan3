@@ -1076,7 +1076,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
     // Search for material at reflexion point
     // Set position of ray at the same high as the source
     vec3 start = OPoint3Dtovec3(incident._ptB);
-    start.z = incident._ptA._z;
+    start.z = (decimal)incident._ptA._z;
     Ray ray1( start, vec3(0., 0., -1.) );
     ray1.maxt = 20000;
 
@@ -1086,7 +1086,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
 
     if(LI.empty())
     {
-        start.z = incident._ptB._z + 1000;
+        start.z = (decimal)(incident._ptB._z + 1000);
         Ray ray1( start, vec3(0., 0., -1.) );
         ray1.maxt = 20000;
         static_cast<double>( _solver.getScene()->getAccelerator()->traverse(&ray1, LI));
@@ -1099,7 +1099,7 @@ OSpectreComplex TYAcousticModel::getReflexionSpectrumAt(const OSegment3D& incide
     // Avoid cases where the reflexion point is below a "floating" volumic source
     while(_solver.getTabPolygon()[indexFace].is_infra() && source.volume_id == _solver.getTabPolygon()[indexFace].volume_id )
     {
-        start.z = min(min(_solver.getTabPolygon()[indexFace].tabPoint[0]._z, _solver.getTabPolygon()[indexFace].tabPoint[1]._z),
+        start.z = (decimal)min(min(_solver.getTabPolygon()[indexFace].tabPoint[0]._z, _solver.getTabPolygon()[indexFace].tabPoint[1]._z),
             _solver.getTabPolygon()[indexFace].tabPoint[2]._z) ;
         Ray ray(start, vec3(0,0,-1));
         ray.maxt = 20000;
@@ -1147,7 +1147,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
 
     // Avoid cases where the extremities are above infrastructure elements
     while(_solver.getTabPolygon()[indexFace].is_infra()){
-        start.z = min(min(_solver.getTabPolygon()[indexFace].tabPoint[0]._z, _solver.getTabPolygon()[indexFace].tabPoint[1]._z),
+        start.z = (decimal)min(min(_solver.getTabPolygon()[indexFace].tabPoint[0]._z, _solver.getTabPolygon()[indexFace].tabPoint[1]._z),
             _solver.getTabPolygon()[indexFace].tabPoint[2]._z) ;
         Ray ray(start, vec3(0,0,-1));
         ray.maxt = 20000;
@@ -1176,7 +1176,7 @@ void TYAcousticModel::meanSlope(const OSegment3D& director, OSegment3D& slope) c
 
     // Avoid cases where the extremities are above infrastructure elements
     while(_solver.getTabPolygon()[indexFace].is_infra()){
-        start.z = min(min(_solver.getTabPolygon()[indexFace].tabPoint[0]._z, _solver.getTabPolygon()[indexFace].tabPoint[1]._z),
+        start.z = (decimal)min(min(_solver.getTabPolygon()[indexFace].tabPoint[0]._z, _solver.getTabPolygon()[indexFace].tabPoint[1]._z),
             _solver.getTabPolygon()[indexFace].tabPoint[2]._z) ;
         Ray ray(start, vec3(0,0,-1));
         ray.maxt = 20000;
