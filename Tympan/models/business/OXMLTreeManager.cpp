@@ -348,7 +348,7 @@ bool OXMLTreeManager::setCurrentDirectory(const QString& directory, bool absolut
 
 bool OXMLTreeManager::setCurrentSubDirectory(int index)
 {
-    unsigned int i;
+    int i;
     signed long currentindex = index;
     QDomNode foundnode;
     QDomNodeList childnodes = getCurrentDomNode().childNodes();
@@ -439,7 +439,7 @@ unsigned long OXMLTreeManager::getSubDirectoryCount(const QString& directory)
 
     count = 0;
 
-    for (unsigned int i = 0; i < childnodes.count(); i++)
+    for (int i = 0; i < childnodes.count(); i++)
     {
         QDomNode readnode = childnodes.item(i);
         QDomElement e = readnode.toElement(); // try to convert the node to an element.

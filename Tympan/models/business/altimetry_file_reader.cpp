@@ -109,7 +109,7 @@ namespace tympan {
         assert(_material_by_face.empty());
         assert(_material_indices.size() == _nfaces);
         assert(_faces.size() == _nfaces);
-        BOOST_FOREACH(unsigned material_index, _material_indices)
+        BOOST_FOREACH(int material_index, _material_indices)
         {
             if (material_index == -1) // No material attributed
                 _material_by_face.push_back("");
@@ -165,7 +165,7 @@ namespace tympan {
             else {
                 assert(property_index<3);
                 assert(_faces.size()-1 == face_index); // Index consistency
-                const unsigned vertex_index = value;
+                const unsigned vertex_index = (unsigned)value;
                 OTriangle& triangle = _faces.back();
                 triangle.index(property_index) = vertex_index;
                 // Ensure consistency of the OTriangle redundant representation
@@ -194,7 +194,7 @@ namespace tympan {
                 _materials.push_back(std::string(nproperties, '-'));
             }
             else {
-                assert(property_index<nproperties);
+                assert((unsigned)property_index<nproperties);
                 assert(_materials.size()-1 == material_index); // Index consistency
                 _materials.back()[property_index] = (unsigned char) value;
             }
