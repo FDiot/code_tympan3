@@ -580,7 +580,7 @@ std::string TYElement::getMetierName()
             // Auto construction
             pElt = dynamic_cast<TYElement*>(TYElement::findAndClone((char*)str.toAscii().data()));
         }
-        catch(tympan::invalid_data& exc) {pElt = nullptr;}
+        catch(tympan::invalid_data&) {pElt = nullptr;}
 
         // For now we don't look at the hierarchy. Let's suppose we are
         // looking for the very type we cloned which is the most likely hypothesis

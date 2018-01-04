@@ -220,7 +220,7 @@ void TYXMLManager::create_tyelements(LPTYElementArray& eltCollection)
         {
             pElt = dynamic_cast<TYElement*>(TYElement::findAndClone((char*)str.toAscii().data()));
         }
-        catch(tympan::invalid_data& exc) {pElt = nullptr;}
+        catch(tympan::invalid_data&) {pElt = nullptr;}
         if(pElt != nullptr)
         {
             // Si l element a ete trouve

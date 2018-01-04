@@ -130,7 +130,7 @@ void TYCreateElementDialog::createElement(QString eltType)
     {
         pElt = dynamic_cast<TYElement*>(TYElement::findAndClone(eltType.toLatin1()));
     }
-    catch(tympan::invalid_data& exc)
+    catch(tympan::invalid_data&)
     {
         pElt = nullptr;
     }
