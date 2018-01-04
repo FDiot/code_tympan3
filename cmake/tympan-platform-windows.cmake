@@ -16,6 +16,10 @@ ENDIF()
 # Enable some level of build parallelisation
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 
+# /WX: Set warnings as errors
+# /wd4800: Performance warning qui survient en Cython, difficile à corriger donc pas mis en erreur 
+# set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /WX /wd4800")
+
 # Reserve more memory esp. for precompiled headers
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zm1000")
 
