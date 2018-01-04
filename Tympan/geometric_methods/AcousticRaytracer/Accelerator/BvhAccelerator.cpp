@@ -93,8 +93,8 @@ struct CompareToBucket
 
 bool CompareToBucket::operator()(const BVHPrimitiveInfo& p) const
 {
-    int b = nBuckets * ((p.centroid[dim] - centroidBounds.pMin[dim]) /
-                        (centroidBounds.pMax[dim] - centroidBounds.pMin[dim]));
+    int b = (int)(nBuckets * ((p.centroid[dim] - centroidBounds.pMin[dim]) /
+                        (centroidBounds.pMax[dim] - centroidBounds.pMin[dim])));
     if (b == nBuckets) { b = nBuckets - 1; }
 
 	return b <= splitBucket;
@@ -271,9 +271,9 @@ BVHBuildNode* BvhAccelerator::recursiveBuild(std::vector<BVHPrimitiveInfo> &buil
                     // Initialize _BucketInfo_ for SAH partition buckets
                     for (uint32_t i = start; i < end; ++i)
                     {
-                        int b = nBuckets *
+                        int b = (int)(nBuckets *
                                 ((buildData[i].centroid[dim] - centroidBounds.pMin[dim]) /
-                                 (centroidBounds.pMax[dim] - centroidBounds.pMin[dim]));
+                                 (centroidBounds.pMax[dim] - centroidBounds.pMin[dim])));
                         if (b == nBuckets) { b = nBuckets - 1; }
                         buckets[b].count++;
                         buckets[b].bounds = buckets[b].bounds.Union(buildData[i].bounds);
@@ -295,8 +295,8 @@ BVHBuildNode* BvhAccelerator::recursiveBuild(std::vector<BVHPrimitiveInfo> &buil
                             b1 = b1.Union(buckets[j].bounds);
                             count1 += buckets[j].count;
                         }
-                        cost[i] = .125f + (count0 * b0.SurfaceArea() + count1 * b1.SurfaceArea()) /
-                                  bbox.SurfaceArea();
+                        cost[i] = .125f + (decimal)((count0 * b0.SurfaceArea() + count1 * b1.SurfaceArea()) /
+                                  bbox.SurfaceArea());
                     }
 
                     // Find bucket to split at that minimizes SAH metric

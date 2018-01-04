@@ -33,7 +33,7 @@ const OColor OColor::MAGENTA    = OColor(1.0f, 0.0f, 1.0f);
 const OColor OColor::YELLOW     = OColor(1.0f, 1.0f, 0.0f);
 const OColor OColor::WHITE      = OColor(1.0f, 1.0f, 1.0f);
 
-const float OColor::equality_threshold = 1e3 * std::numeric_limits<float>::epsilon();
+const float OColor::equality_threshold = 1e3f * std::numeric_limits<float>::epsilon();
 
 bool OColor::operator==(const OColor& c) const
 {

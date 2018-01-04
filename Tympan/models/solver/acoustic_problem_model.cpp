@@ -46,7 +46,7 @@ deque<triangle_idx> scene_volume_intersection(const triangle_pool_t & triangle_s
         cgal_triangles.push_back(CGAL_Triangle(cgal_nodes[it->n[0]], cgal_nodes[it->n[1]],
                                                cgal_nodes[it->n[2]]));
     }
-    float l = sqrt(CGAL_Vector3(_source, _receptor).squared_length());
+    float l = (float)sqrt(CGAL_Vector3(_source, _receptor).squared_length());
     // these 3 points delimit the bounds of the fresnel box (in other terms, the bounding
     // box of this triangle should have the dimensions of the fresnel box). This will be checked
     // anyway by intersected_triangles() thanks to the expected dimensions passed: l, w and h

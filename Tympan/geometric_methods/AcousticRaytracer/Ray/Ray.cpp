@@ -260,7 +260,7 @@ decimal Ray::getThickness( const decimal& distance, bool diffraction)
 		return distance * angle;
 	}
 
-	return 2. * distance * sqrt( angle / M_PI );
+	return (decimal)(2. * distance * sqrt( angle / M_PI ));
 }
 
 decimal Ray::getSolidAngle( bool &diffraction)
@@ -274,8 +274,7 @@ decimal Ray::getSolidAngle( bool &diffraction)
 
 		if ( e && ( e->getType() == DIFFRACTION ) )
 		{
-			
-			return dynamic_cast<Diffraction*>(e)->getAngle() * M_2PI / e->getInitialNbResponseLeft();
+			return (decimal)(dynamic_cast<Diffraction*>(e)->getAngle() * M_2PI / e->getInitialNbResponseLeft());
 		}
 		else // else is done to be explicit
 		{
