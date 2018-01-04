@@ -204,7 +204,7 @@ void Scene::export_to_ply(std::string fileName)
     vector<unsigned int>* vertice_index = nullptr;
     for (unsigned int i=0; i<shapes.size(); i++)
     {
-        if (shapes.at(i)->form() != FORM::TRIANGLE) 
+        if (shapes.at(i)->form() != TRIANGLE) 
         {
             continue; 
         }
