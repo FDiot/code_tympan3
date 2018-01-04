@@ -864,7 +864,7 @@ inline int Round2Int(float val)
  * Calculate the segment between the lines (p1,p2) and (p3,p4)
  * @return False if no solution is found
  */
-inline int LineLineIntersect(
+inline bool LineLineIntersect(
     const vec3& p1, const vec3& p2, const vec3& p3, const vec3& p4, vec3* pa, vec3* pb,
     decimal* mua, decimal* mub)
 {
