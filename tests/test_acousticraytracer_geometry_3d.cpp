@@ -477,7 +477,7 @@ TEST(test_ovector3d,get_rotation_oz_oy){
 TEST(test_point3d,set_from_ogl){
 
 	OPoint3D point3d;
-	point3d.setFromOGL(1,2,3);
+	point3d.setFromOGL(1.0,2.0,3.0);
 	EXPECT_TRUE(OPoint3D(1,-3,2)==point3d);
 	
 }
@@ -486,7 +486,7 @@ TEST(test_point3d,set_from_ogl){
 TEST(test_point3d,get_to_ogl){
 
 	OPoint3D point3d(1,2,3);
-	float x,y,z;
+	double x,y,z;
 	point3d.getToOGL(x,y,z);
 	EXPECT_EQ(1,x);
 	EXPECT_EQ(3,y);
@@ -559,6 +559,7 @@ TEST(test_3d_omatrix,addition_operator){
 
 	//The 4th row and column are [0,0,0,1] because 3D geometrical transformations use homogenous coordinates
 	double sum[4][4]={{1,0,5,0},{-10,-2,4,0},{3,2,-8,0},{0,0,0,1}};
+
 	
 	OMatrix A(a);
 	OMatrix B(b);
@@ -1441,6 +1442,7 @@ TEST(test_3d_bbox,test_is_inside_2d)
     OPoint3D pt(-1.0, -3.0, -2.0);
 
     // Test positif (1) : Point is inside 2D and 3D box
+
     bool resu = box.isInside2D(pt);
     EXPECT_TRUE(resu == true);
 
