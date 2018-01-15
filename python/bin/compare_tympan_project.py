@@ -603,7 +603,7 @@ class App(tk.Tk):
                 same_list = True
             # Detect differences:
             same_label = (r[0] == c[0])
-            same_value = (abs(float(r[1])-float(c[1]))<tolerance) if compute_difference and isinstance(r[1], float) else (r[1] == c[1])
+            same_value = (abs(float(r[1])-float(c[1]))<tolerance) if compute_difference and isinstance(r[1], float) and isinstance(c[1], float) else (r[1] == c[1])
             same_line = same_label and same_value
 
             if not same_line and object_row not in red_rows:
@@ -672,7 +672,7 @@ class App(tk.Tk):
         if compute_difference:
             delta_name = "Différences (tol=" + str(tolerance) + ")"
             delta_col = nb_col
-            data_delta = ["" if isinstance(x1, str) else x1 - x2 if x1 != x2 else "" for (x1, x2) in
+            data_delta = ["" if isinstance(x1, str) or isinstance(x2, str) else x1 - x2 if x1 != x2 else "" for (x1, x2) in
                           zip(reference.get(reference_name).tolist(), compared.get(compared_name).tolist())]
             delta = pd.DataFrame(data_delta, index=None, columns=[delta_name])
             delta.to_excel(self.ExcelWriter, index=False, sheet_name=sheet_name, startcol=nb_col)
