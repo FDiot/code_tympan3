@@ -39,3 +39,6 @@ pipelines:
           - cd doc
           - make html
           - ls _build/html/index.html _build/doxygen/html/index.html
+          # Build Debian package (slow). Suppress comments to enable when releasing major version for instance: 
+          #- cd ../debian
+          #- ./build_deb.sh
