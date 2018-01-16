@@ -56,7 +56,7 @@ build_script:
 
     conda install -y -q qt=4.8.7=vc10_9
 
-    conda install -y -q swig
+    conda install -y -q swig=3.0.10
 
     conda install -y -q gmp mpfr -c salilab
 
