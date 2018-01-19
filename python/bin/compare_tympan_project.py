@@ -488,7 +488,7 @@ class App(tk.Tk):
         data.append(["Nombre de sources acoustiques:", len(model.sources)])
         self.append_blank_line(data)
         # SourceSolvers ranked by names/then positions:
-        source_names = list([dict_id_name[src.face_id if src.face_id != "" else src.volume_id]] for src in model.sources)
+        source_names = list(dict_id_name[src.face_id if src.face_id != "" else src.volume_id] for src in model.sources)
         source_positions = list([str(src.position.x) + "," + str(src.position.y) + "," + str(src.position.z)] for src in model.sources)
         for name, _, source in sorted(zip(source_names, source_positions, model.sources), key=itemgetter(0, 1)):
             data.append(["Source acoustique:", ""])
@@ -545,11 +545,14 @@ class App(tk.Tk):
                 sp_val = rounder(spectre.values)
                 # Contribution globale
                 val_sum = 10 * np.log10(10 ** (val_sum / 10) + 10 ** (sp_val / 10))
-                data.append(["Contribution de", source.name])
+                #data.append(["Contribution de", source.name])
+                data.append(["Contribution de:", ""])
+                data.append(["Nom", source.name])
                 self.append_spectrum(data, sp_val)
                 del sp_val
             # Print global
-            data.append(["Spectre global", ""])
+            data.append(["Contribution globale de:", ""])
+            data.append(["Nom", "Toutes les sources"])
             self.append_spectrum(data, val_sum)
             self.append_blank_line(data)
         return data
@@ -565,23 +568,39 @@ class App(tk.Tk):
         nb_row1 = len(data_reference)
         nb_row2 = len(data_compared)
         nb_row = max(nb_row1, nb_row2)
-        if nb_row1 != nb_row2:
-            # We loop on the longest list:
-            long_list = data_reference if nb_row1 > nb_row2 else data_compared
-            short_list = data_reference if nb_row1 < nb_row2 else data_compared
-            # We insert blank lines in the shortest lines:
-            row = 0
-            while row < nb_row:
-                label = str(long_list[row][0])
+        # We loop on the longest list:
+        long_list = data_reference if nb_row1 >= nb_row2 else data_compared
+        short_list = data_reference if nb_row1 < nb_row2 else data_compared
+        row = 0
+        while row < nb_row:
+            label = str(long_list[row][0])
+            if ":" in label:
                 # Get an object, compare names:
-                if ":" in label:
-                    name = str(long_list[row+1][1])
-                    other_name = str(short_list[row+1][1]) if row < len(short_list) else "empty"
-                    if name != other_name:
-                        while row+1 < nb_row and other_name != str(long_list[row+1][1]):
-                            short_list.insert(row, [long_list[row][0], ""])
+                name = str(long_list[row+1][1])
+                other_name = str(short_list[row+1][1]) if row < len(short_list) else "empty"
+                if name != other_name:
+                    list_to_browse = None
+                    # Insert blank line in one of the list not containing one of the 2 names:
+                    if ["Nom", name] in short_list:
+                        list_to_browse = short_list
+                        list_to_insert = long_list
+                        searched_name = name
+                    elif ["Nom", other_name] in long_list or other_name == "empty":
+                        list_to_browse = long_list
+                        list_to_insert = short_list
+                        searched_name = other_name
+                    if list_to_browse is not None:
+                        list_size = len(list_to_browse)
+                        while row + 1 < list_size and searched_name != str(list_to_browse[row+1][1]):
+                            list_to_insert.insert(row, [list_to_browse[row][0], ""])
                             row += 1
-                row += 1
+                        # Update nb_row:
+                        nb_row1 = len(data_reference)
+                        nb_row2 = len(data_compared)
+                        nb_row = max(nb_row1, nb_row2)
+                        long_list = data_reference if nb_row1 >= nb_row2 else data_compared
+                        short_list = data_reference if nb_row1 < nb_row2 else data_compared
+            row += 1
         # Initialize data:
         row = 0
         tolerance = float(self.tolerance.get()) if self.gui else self.tolerance
@@ -596,7 +615,7 @@ class App(tk.Tk):
             row += 1
             label = str(r[0])
             # Detect object:
-            if ":" in label:
+            if ":" in label and not "Contribution" in label:
                 object_row = row
                 object_label = label
                 green_rows.append([object_row, object_label])
@@ -610,8 +629,8 @@ class App(tk.Tk):
                 same_object = False
                 red_rows.append([object_row, object_label])
 
-            tmp_label = label #if label != "" else str(c[0])
-            tmp_value = r[0] #if label != "" else c[0]
+            tmp_label = label
+            tmp_value = r[0]
             value_is_coordinate = True if "Sommet" in tmp_label or "Point" in tmp_label else False
             value_is_frequency = True if isinstance(tmp_value, float) or "Frequence" in tmp_label else False
             # Hide list of coordinate or frequency
