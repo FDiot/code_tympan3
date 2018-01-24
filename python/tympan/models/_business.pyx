@@ -453,7 +453,11 @@ cdef class User_source:
     @property
     def name(self):
         assert self.thisptr.getRealPointer() != NULL
-        return self.thisptr.getRealPointer().getName().toStdString().decode()
+        str = self.thisptr.getRealPointer().getName().toStdString()
+        try:
+            return str.decode()
+        except UnicodeDecodeError:
+            return str.decode('cp1252')
 
     @cy.locals(pos=tycommon.Point3D)
     def set_position(self, pos):
