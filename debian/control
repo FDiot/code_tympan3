@@ -19,6 +19,8 @@ Build-Depends:
   python3-scipy,
   python3-matplotlib,
   python3-tk,
+  python3-pandas,
+  python3-xlsxwriter,
   cython,
   swig,
 Standards-Version: 3.9.3
@@ -37,6 +39,9 @@ Depends:
   python3-scipy,
   python3-shapely,
   python3-matplotlib,
+  python3-tk,
+  python3-pandas,
+  python3-xlsxwriter,
 Description: Noise simulation software
  Code_TYMPAN is an open source software developed by EDF R&D and dedicated to
  the calculation of industrial noise in the environment.
