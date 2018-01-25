@@ -35,7 +35,6 @@ then
    cd -
 fi
 
-# sudo rm -f /var/cache/pbuilder/base.tgz
 if [ ! -f /var/cache/pbuilder/base.tgz ]
 then 
    echo "Creating a jessie chroot..." 
