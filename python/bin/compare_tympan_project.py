@@ -574,18 +574,23 @@ class App(tk.Tk):
         row = 0
         while row < nb_row:
             label = str(long_list[row][0])
-            if ":" in label:
+            other_label = str(short_list[row][0]) if row < len(short_list) else "empty"
+            if ":" in label or other_label == "empty":
                 # Get an object, compare names:
                 name = str(long_list[row+1][1])
                 other_name = str(short_list[row+1][1]) if row < len(short_list) else "empty"
                 if name != other_name:
                     list_to_browse = None
                     # Insert blank line in one of the list not containing one of the 2 names:
-                    if ["Nom", name] in short_list:
+                    if ["Nom", name] in short_list and short_list.index(["Nom", name])>row:
                         list_to_browse = short_list
                         list_to_insert = long_list
                         searched_name = name
-                    elif ["Nom", other_name] in long_list or other_name == "empty":
+                    elif other_name == "empty":
+                        list_to_browse = long_list
+                        list_to_insert = short_list
+                        searched_name = other_name
+                    elif ["Nom", other_name] in long_list and long_list.index(["Nom", other_name])>row:
                         list_to_browse = long_list
                         list_to_insert = short_list
                         searched_name = other_name
