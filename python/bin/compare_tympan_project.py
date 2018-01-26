@@ -578,7 +578,7 @@ class App(tk.Tk):
             if ":" in label or other_label == "empty":
                 # Get an object, compare names:
                 name = str(long_list[row+1][1])
-                other_name = str(short_list[row+1][1]) if row < len(short_list) else "empty"
+                other_name = str(short_list[row+1][1]) if row+1 < len(short_list) else "empty"
                 if name != other_name:
                     list_to_browse = None
                     # Insert blank line in one of the list not containing one of the 2 names:
