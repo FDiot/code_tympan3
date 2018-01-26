@@ -557,6 +557,19 @@ class App(tk.Tk):
             self.append_blank_line(data)
         return data
 
+    def find_after_row(self, a_list, item, pos):
+        """
+            Search if item is in a list after the pos position
+        """
+        if item not in a_list:
+            return False
+        i = 0
+        for x in a_list:
+            i += 1
+            if x == item and i > pos:
+                return True
+        return False
+
     def export_to_excel(self, sheet_name, data_reference, data_compared, compute_difference=False):
         """
         Export into a sheet of the Excel file.
@@ -582,7 +595,7 @@ class App(tk.Tk):
                 if name != other_name:
                     list_to_browse = None
                     # Insert blank line in one of the list not containing one of the 2 names:
-                    if ["Nom", name] in short_list and short_list.index(["Nom", name])>row:
+                    if self.find_after_row(short_list, ["Nom", name], row):
                         list_to_browse = short_list
                         list_to_insert = long_list
                         searched_name = name
@@ -590,7 +603,7 @@ class App(tk.Tk):
                         list_to_browse = long_list
                         list_to_insert = short_list
                         searched_name = other_name
-                    elif ["Nom", other_name] in long_list and long_list.index(["Nom", other_name])>row:
+                    elif self.find_after_row(long_list, ["Nom", other_name], row):
                         list_to_browse = long_list
                         list_to_insert = short_list
                         searched_name = other_name
