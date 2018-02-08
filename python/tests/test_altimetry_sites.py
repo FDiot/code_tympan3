@@ -169,7 +169,7 @@ class AltimetryMergerTC(unittest.TestCase, TestFeatures):
     def test_add_and_clean_level_curves(self):
         cleaner = SiteNodeGeometryCleaner(self.mainsite)
 
-        cleaner.process_level_curves()
+        cleaner._process_feature('level_curves')
 
         self.assertTrue(cleaner.geom['{Level curve A}'].equals(self.cleaned_level_A_shape))
         # Not directly in sitenode
@@ -196,7 +196,7 @@ class AltimetryMergerTC(unittest.TestCase, TestFeatures):
     def test_water_body_info(self):
         cleaner = SiteNodeGeometryCleaner(self.mainsite)
 
-        cleaner.process_level_curves()
+        cleaner._process_feature('level_curves')
         cleaner.process_material_areas()
 
         water_shape, water_info = cleaner['{Water body}']
@@ -205,7 +205,7 @@ class AltimetryMergerTC(unittest.TestCase, TestFeatures):
     def test_export_subsite_feature(self):
         cleaner_mainsite = SiteNodeGeometryCleaner(self.mainsite)
         cleaner_subsite = SiteNodeGeometryCleaner(self.subsite)
-        cleaner_subsite.process_level_curves()
+        cleaner_subsite._process_feature('level_curves')
 
         cleaner_mainsite.import_cleaned_geometries_from(cleaner_subsite)
 
