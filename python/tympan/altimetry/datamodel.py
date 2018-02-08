@@ -213,6 +213,25 @@ class LevelCurve(TympanFeature):
         return d
 
 
+class Road(TympanFeature):
+    geometric_type = "MultiLineString"
+
+    def __init__(self, coords, altitudes, **kwargs):
+        super(Road, self).__init__(coords, **kwargs)
+        if len(coords) != len(altitudes):
+            msg = "coords and altitudes have different lengths for {}"
+            raise ValueError(msg.format(self))
+        self.altitudes = altitudes
+
+    def build_coordinates(self):
+        return [self._coords]
+
+    def build_properties(self):
+        d = super(Road, self).build_properties()
+        d.update(altitudes=self.altitudes)
+        return d
+
+
 class PolygonalTympanFeature(TympanFeature):
     geometric_type = "Polygon"
 
@@ -272,7 +291,7 @@ class WaterBody(MaterialArea, LevelCurve):
 class SiteNode(PolygonalTympanFeature):
 
     CHILDREN_TYPES = ("LevelCurve", "MaterialArea", "VegetationArea", "WaterBody",
-                      "SiteLandtake", "InfrastructureLandtake", "SiteNode")
+                      "SiteLandtake", "InfrastructureLandtake", "SiteNode", "Road")
 
     def __init__(self, coords, **kwargs):
         super(SiteNode, self).__init__(coords, **kwargs)
@@ -306,6 +325,10 @@ class SiteNode(PolygonalTympanFeature):
     @property
     def level_curves(self):
         return self._iter_children("LevelCurve", "SiteLandtake", "WaterBody")
+
+    @property
+    def roads(self):
+        return self._iter_children("Road")
 
     @property
     def material_areas(self):
