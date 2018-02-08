@@ -4,6 +4,7 @@ import numpy as np
 
 from altimetry_testutils import rect
 from tympan.altimetry import (
+    builder,
     datamodel,
 )
 
@@ -33,6 +34,22 @@ class TestAltimetryRoads(unittest.TestCase):
         self.assertEqual(
             str(cm.exception),
             'coords and altitudes have different lengths for Road #road',
+        )
+
+    def test_add_road_constraint(self):
+        asite = datamodel.SiteNode(rect(0, 0, 30, 30), id="Main site")
+        datamodel.Road(
+            road_coords[:, :2],
+            road_coords[:, 2],
+            id="road",
+            parent_site=asite,
+        )
+        _, mesh, _ = builder.build_altimetry(asite)
+        mesh_set = set(map(tuple, mesh.as_arrays()[0]))
+        road_coords_set = set(map(tuple, road_coords))
+        self.assertEqual(
+            set.intersection(road_coords_set, mesh_set),
+            road_coords_set,
         )
 
 

@@ -199,8 +199,16 @@ class MeshedCDTWithInfo(object):
         assert not close_it or connected, \
             "It's meaningless to close an unconnected points sequence"
         # Insert points, thus making CDT vertices and build the list of edges
-        vertices_handles = [self.insert_point(point, **kwargs)
-                            for point in polyline]
+        if 'altitudes' in kwargs:
+            # road doesn't share the same altitude for all points
+            vertices_handles = []
+            for point, altitude in zip(polyline, kwargs['altitudes']):
+                kwargs['altitude'] = altitude
+                vertices_handles.append(self.insert_point(point, **kwargs))
+        else:
+            vertices_handles = [self.insert_point(point, **kwargs)
+                                for point in polyline]
+
         if connected:
             constraints = [self.insert_constraint(va, vb, **kwargs)
                            for va, vb in ilinks(iter(vertices_handles), close_it=close_it)]
@@ -584,6 +592,7 @@ class InfoWithIDsAndAltitude(object):
     def  __init__(self, altitude=UNSPECIFIED_ALTITUDE, id=None, **kwargs):
         self.ids = kwargs.pop('ids', set((id and [id]) or []))
         self.altitude = float(altitude)
+        self.type = kwargs.get('type')
 
     def merge_with(self, other_info):
         """ Merges all information provided by ``other`` into self.
@@ -604,7 +613,7 @@ class InfoWithIDsAndAltitude(object):
         if alti is not UNSPECIFIED_ALTITUDE:
             if self.altitude is UNSPECIFIED_ALTITUDE:
                 self.altitude = alti
-            else:
+            elif "Road" != self.type:
                 delta = abs(alti - self.altitude)
                 if delta > self.ALTITUDE_TOLERANCE:
                     raise InconsistentGeometricModel(
@@ -795,7 +804,7 @@ class ReferenceElevationMesh(ElevationMesh):
         return super(ReferenceElevationMesh, self).insert_point(point, **kwargs)
 
     def insert_polyline(self, polyline, **kwargs):
-        if 'altitude' not in kwargs:
+        if 'altitude' not in kwargs and 'altitudes' not in kwargs:
             raise TypeError('altitude is mandatory for *reference* elevation meshes')
         return super(ReferenceElevationMesh, self).insert_polyline(polyline, **kwargs)
 

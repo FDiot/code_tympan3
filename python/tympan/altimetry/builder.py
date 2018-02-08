@@ -246,14 +246,15 @@ class MeshBuilder(object):
     def _build_altimetric_base(self):
         """Return an elevation mesh along with a feature to vertices mapping.
 
-        The mesh is built by walking the equivalent site for level curves *only*.
+        The mesh is built by walking the equivalent site for level curves and
+        roads *only*.
         """
         alti = ReferenceElevationMesh() # Altimetric base
-        for level_curve in self._site.level_curves:
-            props = level_curve.build_properties()
-            assert 'altitude' in props
-            vertices = self._insert_feature(level_curve, alti, **props)
-            self.vertices_for_feature[level_curve.id] = vertices
+        for polyline in chain(self._site.level_curves, self._site.roads):
+            props = polyline.build_properties()
+            assert 'altitude' in props  or 'altitudes' in props
+            vertices = self._insert_feature(polyline, alti, **props)
+            self.vertices_for_feature[polyline.id] = vertices
         alti.update_info_for_vertices()
         return alti
 

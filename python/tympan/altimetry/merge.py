@@ -115,10 +115,10 @@ class SiteNodeGeometryCleaner(object):
     def __getitem__(self, feature_id):
         return self.geom[feature_id], self.feature_from_id(feature_id).build_properties()
 
-    def process_level_curves(self):
-        for level_curve in self.sitenode.level_curves:
-            shape = level_curve.shape.intersection(self.siteshape)
-            self._add_feature_with_new_shape(level_curve, shape)
+    def _process_feature(self, features):
+        for feature in getattr(self.sitenode, features):
+            shape = feature.shape.intersection(self.siteshape)
+            self._add_feature_with_new_shape(feature, shape)
 
     def _add_or_reject_polygonal_feature(self, feature):
         """
@@ -148,7 +148,8 @@ class SiteNodeGeometryCleaner(object):
             self._add_or_reject_polygonal_feature(landtake)
 
     def process_all_features(self):
-        self.process_level_curves()
+        self._process_feature('level_curves')
+        self._process_feature('roads')
         self.process_material_areas()
         self.process_infrastructure_landtakes()
 
