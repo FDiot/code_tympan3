@@ -44,6 +44,7 @@ public :
         return newSelector;
     }
 
+
     virtual SELECTOR_RESPOND canBeInserted(T* r, unsigned long long& replace)
     {
         switch (op)
@@ -153,19 +154,35 @@ public :
 		}
         return true;
     }
-    /// Get the reflection maximal number
+   
+    /**
+    * \brief Get the reflection maximal number
+    */  
     int getMaximumReflectionOrder() { return maxReflectionOrder; }
-    /// Set the reflection maximal number
+    
+    /**
+    * \brief Set the reflection maximal number
+    */  
     void setMaximumReflectionOrder(int _maxReflectionOrder) { maxReflectionOrder = _maxReflectionOrder; }
-
-    /// Return true if ground reflection is accepted
+    
+     /**
+    * \brief Return true if ground reflection is accepted
+    */  
     bool isGroundAccepted() { return acceptGround; }
-    /// Set flag acceptGround
+
+    /**
+    * \brief  Set flag acceptGround
+    */  
     void setGroundAccepted(bool _acceptGround) { acceptGround = _acceptGround; }
 
-    /// Get the OPERATOR of this Selector
+    /**
+    * \brief Get the OPERATOR of this Selector
+    */   
     OPERATOR getOperator() { return op; }
-    /// Set the OPERATOR of this Selector
+
+    /**
+    * \brief Set the OPERATOR of this Selector 
+    */ 
     void setOperator(OPERATOR _op) { op = _op; }
 
 protected:

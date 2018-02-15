@@ -17,9 +17,11 @@
 
 decimal BruteForceAccelerator::traverse(Ray* r, std::list<Intersection> &result) const
 {
+	//For every shape in the scene
     for (unsigned int i = 0; i < shapes->size(); i++)
     {
         Intersection currentI;
+        //Check if the ray intersects the shape
         if (shapes->at(i)->getIntersection(*r, currentI) && currentI.t > 0.0001)
         {
             result.push_back(currentI);

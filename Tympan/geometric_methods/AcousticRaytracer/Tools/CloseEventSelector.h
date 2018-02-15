@@ -21,7 +21,7 @@
 #include "Selector.h"
 
 /*!
- * \brief To reject a ray if two different events of this one occur on the same shape
+ * \brief Rejects a ray if two of its events occur on the same shape
  *        (for example a diffraction close to a reflection)
  */
 template<typename T>
@@ -51,8 +51,8 @@ public :
             int type2 = events->at(i + 1)->getType();
             Shape* sh1 = NULL, *sh2 = NULL, *sh3 = NULL;
 
-            // if events type are different and occurs on same shape, the ray is suppressed
-            // NB  : Diffraction event take into account two faces
+            // if events type are different and occur on same shape, the ray is suppressed
+            // Note : Diffraction event have two faces
             if ((type1 != type2))
             {
                 if (type1 == DIFFRACTION)
@@ -89,8 +89,8 @@ public :
             int type2 = events->at(i + 1)->getType();
             Shape* sh1 = NULL, *sh2 = NULL, *sh3 = NULL;
 
-            // if events type are different and occurs on same shape, the ray is suppressed
-            // NB  : Diffraction event take into account two faces
+            // if events type are different and occur on same shape, the ray is suppressed
+            // Note : Diffraction event have two faces
             if ((type1 != type2))
             {
                 if (type1 == DIFFRACTION)

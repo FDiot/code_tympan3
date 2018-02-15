@@ -37,9 +37,25 @@ enum treatment
 // This function is only used by grid accelerator
 decimal keepFunction(treatment choice, std::list<Intersection> &currentIntersections, decimal currentTmin);
 
+/*!
+ * \brief Keep only the first intersection encountered before reaching currentTmin and return its corresponding tmin
+ */
 decimal keepFirst(std::list<Intersection> &currentIntersections, decimal currentTmin);
+
+/*!
+ * \brief Keep all intersections encountered before intersecting a visible shape and before reaching currentTmin, and return the tmin of the intersection with the triangle
+ * (only the cylinders used for diffraction edge are considered invisible)
+ */
 decimal keepAllBeforeTriangle(std::list<Intersection> &currentIntersections, decimal currentTmin);
+
+/*!
+ * \brief Keep all intersections encountered before intersecting a triangle and before reaching currentTmin, and return the tmin of the intersection with the triangle
+ */
 decimal keepAllBeforeVisible(std::list<Intersection> &currentIntersections, decimal currentTmin);
+
+/*!
+ * \brief Keep all intersections before reaching currentTmin and return the tmin of the first one encountered
+ */
 decimal keepAll(std::list<Intersection> &currentIntersections, decimal currentTmin);
 
 };

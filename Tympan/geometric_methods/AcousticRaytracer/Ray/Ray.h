@@ -107,7 +107,7 @@ public:
     /*!
      * \fn decimal computeTrueLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
      * \brief	Compute ray length from source to closestPoint
-	 *			ClosestPoint is the closest point from ref on the line between the position of the last event and lastPos
+	 *			closestPoint is the projection of ref on the line passing by lastPos and the position of the last event (or source if the ray has no events)
      * \param ref
      * \param lastPos
      * \param closestPoint
@@ -116,7 +116,7 @@ public:
 
     /*!
      * \fn decimal computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
-     * \brief Compute ray length from last pertinent event (i.e. source or last diffraction
+     * \brief Compute ray length from last pertinent event (i.e. source or last diffraction)
 	 *        to the nearest point of the "event" located at ref position
      */
 	decimal computePertinentLength(const vec3& ref, const vec3& lastPos, vec3& closestPoint);
@@ -129,16 +129,18 @@ public:
 
 	/*!
 	 * \fn vec3 computeLocalOrigin( Base *ev);
-	 * \brief Return position of event found by getLastPertinentEventOrSource()
+	 * \brief Return position of ev which might be a source or an event
 	 */
 	inline vec3 computeLocalOrigin( Base *ev)
 	{
 		if ( dynamic_cast<Source*>(ev) )
 		{
+            // if ev is the source
 			return dynamic_cast<Source*>(ev)->getPosition();
 		}
-		else // that's a standard event
+		else 
 		{
+            // if ev is a standard event
 			return dynamic_cast<Event*>(ev)->getPosition();
 		}
 	}
@@ -218,13 +220,14 @@ public:
 
     /*!
      * \fn decimal getThickness( const decimal& distance, bool diffraction);
-     * \brief Compute thickness of the ray after covering a distance for spherical or diffraction source
+     * \brief Compute the thickness of the ray after having traveled a certain distance 
+     * depending on the type of source which generated the ray (spherical or diffraction source)
      */
 	decimal getThickness( const decimal& distance, bool diffraction);
 
     /*!
      * \fn decimal getSolidAngle( bool &diffraction)
-     * \brief   Compute solid angle associated with the ray
+     * \brief Compute the solid angle associated with the ray (depends on the type of source which generated the ray and the number of rays it generated)
      * \param diffraction Set diffraction true if last pertinent event is a diffraction
      */
 	decimal getSolidAngle( bool &diffraction );
@@ -250,14 +253,14 @@ public:
 
     /*!
      * \fn decimal getcumulDelta();
-     * \brief Return the cumulative walking step difference by the ray computed at each step
+     * \brief Return the cumulative difference between the rays length and its length when ignoring diffractions and taking the direct path between reflections instead
      */
 
      decimal getCumulDelta() const { return cumulDelta; }
 
     /*!
      * \fn decimal getCumulDistance()
-     * \brief Return the cumulative distance by the ray computed at each step
+     * \brief Return the cumulative length since the last reflection event
      */
 
      decimal getCumulDistance() const { return cumulDistance; }
@@ -285,14 +288,14 @@ public:
 
     /*!
      * \fn vec3 getFinalPosition()
-     * \brief Return ending point of the ray
+     * \brief Return ending point of the ray (this ending point is set when a the ray hits a receptor in engine.searchForReceptor)
      */
 
      vec3 getFinalPosition() const { return finalPosition; }
 
     /*!
      * \fn vect3 getDirection()
-     * \brief Return direction vector for the ray at the source
+     * \brief Return direction of the ray 
      */
 
      vec3 getDirection() const { return direction; }
@@ -315,7 +318,7 @@ public:
 
     /*!
      * \fn void setdirection (vec3 _direction)
-     * \brief set the direction vector for the ray at the source
+     * \brief set the direction if the ray
      */
 
      void setDirection (vec3 _direction){

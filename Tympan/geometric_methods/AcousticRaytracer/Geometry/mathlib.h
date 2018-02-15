@@ -860,8 +860,17 @@ inline int Round2Int(float val)
         return false;
     return true;
 }*/
+
 /**
- * Calculate the segment between the lines (p1,p2) and (p3,p4)
+ * \brief Calculate the segment between the lines (p1,p2) and (p3,p4)
+ * @param p1 first point of the first segment
+ * @param p2 second point of the first segment
+ * @param p3 first point of the second segment
+ * @param p4 second point of the second segment
+ * @param pa point of the first line (p1p2) that belongs to the shortest segment between the two lines 
+ * @param pb point of the second line (p3p4) that belongs to the shortest segment between the two lines 
+ * @param mua position of a along the first line (p1p2)
+ * @param mub position of b along the second line (p3p4)
  * @return False if no solution is found
  */
 inline bool LineLineIntersect(

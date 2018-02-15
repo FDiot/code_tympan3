@@ -37,25 +37,30 @@ bool validRayWithDoNothingEvent(Ray *r, Intersection* inter);
 bool computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre, vec3& impact);
 
 /*!
- * \brief Return True if ray passes near from the ridge
+ * \brief Return True if ray passes near enough the ridge for it be in the thickness of the ray
  */
 bool isRayPassesNearRidge(Ray *r, const vec3& impact, const vec3& realImpact);
 
 
 /*!
- * \brief Test if difference between total path length and direct path length is smaller than maxDif
- * in case of diffraction.
+ * \brief Tests if the addition of a diffraction event at position impact does not cause the pathDifference to exceed MaxPathDifference.
+ *  (NB: L = length of the ray from source to impact
+ *       l = length of the ray from source to impact taking a direct path between reflexions while ignoring diffractions
+ *		 pathDifference = L- l
+ *  
  */
 bool pathDiffValidationForDiffraction(Ray *r, const vec3& impact);
 
 /*!
- * \brief Test if difference between total path length and direct path length is smaller than maxDif
- *  in case of reflection
+ * \brief Tests if the addition of a reflection event at position impact does not cause the pathDifference to exceed MaxPathDifference.
+ *  (NB: L = length of the ray from source to impact
+ *       l = length of the ray from source to impact taking a direct path between reflexions while ignoring diffractions
+ *		 pathDifference = L- l
  */
 bool pathDiffValidationForReflection(Ray * r, const vec3& impact);
 
 /*!
- * \brief Search the nearest event of type REFLECTION otherwise the source and add its distance to impact to the ray's cumulative distance
+ * \brief adds the distance between impact and the last REFLECTION/SOURCE of the ray to the cumulDistance of the ray
  */
 void computeCumulDistance(Ray *r, const vec3& impact);
 

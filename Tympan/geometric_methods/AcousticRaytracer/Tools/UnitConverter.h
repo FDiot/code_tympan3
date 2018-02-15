@@ -23,7 +23,7 @@ namespace Tools
 /*!
  * \brief   Convert spherical coordinates to cartesian coordinates
  *          In this function :
- *                  + theta is the polar angle where 0 is on equatorial
+ *                  + theta is the polar angle where 0 is on the equator
  *                  + phi is the equatorial angle
  *          This function is used by samplers that generates rays
  */
@@ -32,7 +32,7 @@ void fromRadianToCarthesien(decimal tetha, decimal phi, vec3& result);
 /*!
  * \brief   Convert spherical coordinates to cartesian coordinates
  *          In this function :
- *                  + tetha is the polar angle where 0 is on north pole
+ *                  + theta is the polar angle where 0 is on north pole
  *                  + phi is the equatorial angle
  *          This function is used by diffraction events to generate secondary rays
  */

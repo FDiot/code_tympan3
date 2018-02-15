@@ -31,10 +31,10 @@ bool ValidRay::validRayWithDoNothingEvent(Ray *r, Intersection* inter)
 	//Check if the event can provide a response (should always be true in the case of a newly created DoNothing event)
     if (newEvent->getResponse(newDir))
     {
-		//update position of the ray and add event to the list of events
+		//update position of the ray and add the event to the list of events
         r->setPosition(impact);
 		newDir.normalize();
-        r->setDirection(newDir);
+        r->setDirection(newDir); //ray's direction = event's response
 		r->addEvent(SPEv);
         return true;
 	}
@@ -47,10 +47,11 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
     vec3 impact = r->getPosition() + r->getDirection() * inter->t;
     vec3 normal = inter->p->getNormal(impact);
     
-    //intersection is not valid if the ray goes in the same direction as the normal
+    //intersection is not valid if the ray goes in the same direction as the normal of the intersected shape
     if (normal.dot(r->getDirection()) > 0.) { return false; }
 
-	if (AcousticRaytracerConfiguration::get()->UsePathDifValidation && !pathDiffValidationForReflection(r, impact)) // Validation sur la différence de marche due aux diffractions
+
+	if (AcousticRaytracerConfiguration::get()->UsePathDifValidation && !pathDiffValidationForReflection(r, impact))
 	{
 		return false;
 	}
@@ -59,13 +60,14 @@ bool ValidRay::validTriangleWithSpecularReflexion(Ray* r, Intersection* inter)
 	std::shared_ptr<Event> SPEv(newEvent);
 
     vec3 newDir;
-	//if the newly created event can provide a response (response = direction of reflected ray)
+
+	//if the newly created event can provide a response
     if (newEvent->getResponse(newDir))
     {
 		//update the ray's position, direction and add the new event to the ray's list of events
         r->setPosition( r->getPosition() + r->getDirection() * inter->t);
 		newDir.normalize();
-        r->setDirection( newDir );
+        r->setDirection( newDir ); //ray's direction = event's response
 		r->addEvent(SPEv);
 		r->setNbReflexion (r->getReflex()+1);
         return true;
@@ -98,8 +100,8 @@ bool ValidRay::pathDiffValidationForReflection(Ray * r, const vec3& impact)
 	vec3 lastReflexionPos = r->computeLocalOrigin( r->getLastPertinentEventOrSource(SPECULARREFLEXION));
 	computeCumulDistance(r, impact);
 
-	// Compute difference between :
-	//    -  the cumulative length since last valid reflection
+	// Compute the difference between :
+	//    -  the cumulative length since the last valid reflection
 	//		and
 	//    -  the euclidian distance between impact and the last reflection
 	decimal delta= r->getCumulDistance() - impact.distance(lastReflexionPos);
@@ -110,6 +112,7 @@ bool ValidRay::pathDiffValidationForReflection(Ray * r, const vec3& impact)
 	//Reset cumulDistance
 	r->setCumulDistance( 0. );
 
+	//If the path difference is below the MaxPathDifference threshold, return true, else return false
 	return ( r->getCumulDelta() <= AcousticRaytracerConfiguration::get()->MaxPathDifference );
 }
 
@@ -118,8 +121,8 @@ bool ValidRay::pathDiffValidationForDiffraction(Ray *r, const vec3& impact)
 	vec3 lastReflexionPos = r->computeLocalOrigin( r->getLastPertinentEventOrSource(SPECULARREFLEXION) );
 	computeCumulDistance(r, impact);
 
-	// Compute difference between :
-	//    -  the cumulative length since last valid reflection
+	// Compute the difference between :
+	//    -  the cumulative length since the last valid reflection
 	//		and
 	//    -  the euclidian distance between impact and the last reflection
 	decimal delta= r->getCumulDistance() - impact.distance(lastReflexionPos);
@@ -127,22 +130,30 @@ bool ValidRay::pathDiffValidationForDiffraction(Ray *r, const vec3& impact)
 	//Sum of cumulDelta and delta (Note: cumulDelta is not modified)
 	decimal currentCumulDelta = r->getCumulDelta() + delta;
 
+	//If the path difference is below the MaxPathDifference threshold, return true, else return false
 	return ( currentCumulDelta <= AcousticRaytracerConfiguration::get()->MaxPathDifference );
 }
 
 bool ValidRay::computeRealImpact(Ray *r, Intersection* inter, Cylindre *cylindre, vec3& impact)
 {
+	//First segment: 2 times the ray's incoming direction
 	vec3 p1 = r->getPosition();
 	vec3 p2 = r->getPosition() + r->getDirection() * inter->t * 2.;
-	// Define second segment
+
+	//Second segment: diffraction edge
 	vec3 p3 = cylindre->getVertices()->at(cylindre->getLocalVertices()->at(0));
 	vec3 p4 = cylindre->getVertices()->at(cylindre->getLocalVertices()->at(1));
 
-	// shortest segment definition
-	vec3 *pa = new vec3(), *pb = new vec3();
-	decimal *mua = new decimal(), *mub = new decimal();
+	//Find the shortest segment S between the ray and the diffraction edge
+	vec3 *pa = new vec3(); //extremity of S on the ray
+	vec3 *pb = new vec3(); //extremity of S on the diffraction edge
+
+	decimal *mua = new decimal(); //position of a along the ray
+	decimal *mub = new decimal(); //position of b along the diffraction edge
+
 	bool res = LineLineIntersect(p1, p2, p3, p4, pa, pb, mua, mub);
-	impact = *pb;
+
+	impact = *pb; // pb corrsponds to the impact of the ray on the diffraction edge
 
     delete pa;
     delete pb;
@@ -181,24 +192,24 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 		return false;
 	}
 
-// Compute real impact of the ray on the ridge
+// Compute the real impact of the ray on the ridge
 	// Define first segment
 	vec3 realImpact;
 	if ( !computeRealImpact(r, inter, cylindre, realImpact) ) { return false; }
 
-// Valid creation of event using distance from the ridge (if needed)
+// Validate the creation of event using distance from the ridge (if needed)
 	if ( config->DiffractionUseDistanceAsFilter && !isRayPassesNearRidge(r, impact, realImpact) )
 	{
 		return ValidRay::validRayWithDoNothingEvent(r, inter);
 	}
 
-// Create diffraction event
+// Create a diffraction event
     vec3 from = realImpact - r->getPosition();
     from.normalize();
 	Diffraction* newEvent = new Diffraction(realImpact, from, (Cylindre*)(inter->p));
 	std::shared_ptr<Event> SPEv(newEvent);
 
-// define the number of rays to throw
+// Define the number of rays to throw
 	unsigned int diff_nb_rays = 0;
 	if ( config->NbRayWithDiffraction > 0 )
 	{
@@ -216,7 +227,7 @@ bool ValidRay::validCylindreWithDiffraction(Ray* r, Intersection* inter)
 	}
 
 	diff_nb_rays += 1; // DO NOT MOVE/CONCATENATE THIS OPERATION ON UPPER LINES !!!
-    newEvent->setNbResponseLeft(diff_nb_rays); // Set the number of ray to throw
+    newEvent->setNbResponseLeft(diff_nb_rays); // Set the number of rays to throw
 
 // Add the event to the list
 	r->addEvent(SPEv);
