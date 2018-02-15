@@ -62,17 +62,19 @@ bool TYANIME3DRayTracerSolverAdapter::valideIntersection(Ray* r, Intersection* i
 
     bool isValid = false;
 
-    // cas d'un triangle
+    // If the intersected primitive is a TRIANGLE
     if ( ( inter->forme == TRIANGLE ) &&
 		 ( r->getReflex() < static_cast<unsigned int>(config->MaxReflexion) ) &&
 		 !( !config->UseSol && inter->p->isSol() ) )
     {
+        //Validate a REFLEXION event
         isValid = ValidRay::validTriangleWithSpecularReflexion(r, inter);
     }
 
-    // cas du cylindre (arrete de diffraction)
+    // If the intersected primitive is a CYLINDER
     else if (inter->forme == CYLINDRE && r->getDiff() < static_cast<unsigned int>(config->MaxDiffraction))
     {
+        //Validate a DIFFRACTION event
         isValid = ValidRay::validCylindreWithDiffraction(r, inter);
     }
 
@@ -80,7 +82,7 @@ bool TYANIME3DRayTracerSolverAdapter::valideIntersection(Ray* r, Intersection* i
     if (isValid && config->EnableFullTargets) { ValidRay::appendDirectionToEvent(r->events.back(), targetManager); }
 #endif //_ALLOW_TARGETING_
 
-    return (isValid); //(isValid && selectorManagerIntersection.appendData(r));
+    return (isValid); 
 }
 
 bool TYANIME3DRayTracerSolverAdapter::valideRayon(Ray* r)

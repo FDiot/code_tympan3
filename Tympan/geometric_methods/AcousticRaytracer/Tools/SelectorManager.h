@@ -107,7 +107,7 @@ public:
             }
         }
 
-        //cout << "Tous les solveurs (" << selectors.size() << ") ont ete passe avec succes." << endl;
+        //cout << "Tous les selecteurs (" << selectors.size() << ") ont ete passe avec succes." << endl;
         //Tous les filtres sont passes, le rayon est valide
         //On commence par deplacer/supprimer les rayons a remplacer
         for (unsigned int i = 0; i < dataToReplace.size(); i++)

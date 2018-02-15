@@ -19,7 +19,8 @@
 #include "Selector.h"
 
 /*!
- * \brief : To invalid rays with path length difference (produced by diffraction effect) greater than a value
+ * \brief : Rejects rays if the cumulative length added by the diffractions events in comparison to 
+ * the length of the direct path between reflections (i.e, ignoring diffractions) exceeds some threshold
  */
 template<typename T>
 class DiffractionPathSelector : public Selector<T>
@@ -40,8 +41,9 @@ public :
 		if (events->size() == 0) { return SELECTOR_ACCEPT; }
 
 
-		decimal cumul_delta = 0.;
-		decimal cumul_distance = 0.;
+		decimal cumul_delta = 0.;	 //Cumulative distance added by the diffractions
+		decimal cumul_distance = 0.; //Cumulative distance since last reflection
+
 		bool notLast = true;
 		Recepteur *pRecep = static_cast<Recepteur*>( r->getRecepteur() );
 		Source *pSource = r->getSource();
@@ -49,19 +51,33 @@ public :
 		vec3 origin = pRecep->getPosition();
 		vec3 current_pos = origin;
 
+		// Iterate other the list of events in REVERSE order
 		vector< std::shared_ptr<Event> >::reverse_iterator rit = events->rbegin();
 		while(rit != events->rend())
 		{
 			cumul_distance += (*rit)->getPosition().distance(current_pos);
+			//if current event is a reflection
 			if ( (*rit)->getType() == SPECULARREFLEXION ) 
 			{
-				cumul_delta += ( cumul_distance - origin.distance( (*rit)->getPosition() ) );
+				//accumulate the difference between :
+				//	- the cumulative distance since last reflection 
+				//	and
+				//	- the direct distance between the current position and the last reflection
+				//(Note: the difference between cumul_distance and the direct distance is zero if no diffraction as been encountered)
+				decimal direct_distance= origin.distance( (*rit)->getPosition());
+				cumul_delta += ( cumul_distance - direct_distance );
+				
+				//Reset cumul_distance
 				cumul_distance = 0;
+
+				//Save the position of the current reflection
 				origin = (*rit)->getPosition();
 				notLast = false;
 			}
+			//if the current event is a diffraction 
 			else
 			{
+				
 				notLast = true;
 			}
 
@@ -69,11 +85,17 @@ public :
 			rit ++;
 		};
 
+		//if the first event is a diffraction finish the computation with the source 
 		if (notLast) 
 		{ 
+			//Accumulate the distance from the current position to the source
 			cumul_distance += current_pos.distance( pSource->getPosition() );
-			cumul_delta += ( cumul_distance - origin.distance( pSource->getPosition() ) );
+			//Computer the direct distance between the source and the first reflection
+			decimal direct_distance= origin.distance( pSource->getPosition());
+			//Compute the difference between the cumulative and the direct distances
+			cumul_delta += ( cumul_distance - direct_distance );
 		}
+ 
  
         if ( cumul_delta > maximumDelta )
         {
@@ -91,8 +113,8 @@ public :
 		
 		if (events->size() == 0) { return true; }
 
-		decimal cumul_delta = 0.;
-		decimal cumul_distance = 0.;
+		decimal cumul_delta = 0.;		//Cumulative distance added by the diffractions
+		decimal cumul_distance = 0.; 	//Cumulative distance since last reflection
 		bool notLast = true;
 		
 		Recepteur *pRecep = static_cast<Recepteur*>( r->getRecepteur() );
@@ -101,19 +123,33 @@ public :
 		vec3 origin = pRecep->getPosition();
 		vec3 current_pos = origin;
 
+		// Iterate other the list of events in REVERSE order
 		vector< std::shared_ptr<Event> >::reverse_iterator rit = events->rbegin();
 		while(rit != events->rend())
 		{
 			cumul_distance += (*rit)->getPosition().distance(current_pos);
+			//if current event is a reflection
 			if ( (*rit)->getType() == SPECULARREFLEXION ) 
 			{
-				cumul_delta += ( cumul_distance - origin.distance( (*rit)->getPosition() ) );
+				//accumulate the difference between :
+				//	- the cumulative distance since last reflection 
+				//	and
+				//	- the direct distance between the current position and the last reflection
+				//(Note: the difference between cumul_distance and the direct distance is zero if no diffraction as been encountered)
+				decimal direct_distance= origin.distance( (*rit)->getPosition());
+				cumul_delta += ( cumul_distance - direct_distance );
+				
+				//Reset cumul_distance
 				cumul_distance = 0;
+
+				//Save the position of the current reflection
 				origin = (*rit)->getPosition();
 				notLast = false;
 			}
+			//if the current event is a diffraction 
 			else
 			{
+				
 				notLast = true;
 			}
 
@@ -121,10 +157,15 @@ public :
 			rit ++;
 		};
 
+		//if the first event is a diffraction finish the computation with the source 
 		if (notLast) 
 		{ 
+			//Accumulate the distance from the current position to the source
 			cumul_distance += current_pos.distance( pSource->getPosition() );
-			cumul_delta += ( cumul_distance - origin.distance( pSource->getPosition() ) );
+			//Computer the direct distance between the source and the first reflection
+			decimal direct_distance= origin.distance( pSource->getPosition());
+			//Compute the difference between the cumulative and the direct distances
+			cumul_delta += ( cumul_distance - direct_distance );
 		}
  
         if ( cumul_delta > maximumDelta )
@@ -134,9 +175,14 @@ public :
 
         return true;
     }
-    /// Get maximumDelta
+    /**
+    * \brief Get maximumDelta
+    */  
     double getMaximumDelta() { return maximumDelta; }
-    /// Set maximumDelta
+
+    /**
+    * \brief Set maximumDelta
+    */  
     void setMaximumDelta(double _maximumDelta) { this->maximumDelta = _maximumDelta; }
 
 

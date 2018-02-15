@@ -30,10 +30,19 @@ public:
 
     //virtual double leafTreatment(KdTree *kdtree, BVH* bvh, Ray *r, vector<struct Isect> &primitives);
 
+    /**
+    * \brief validate intersections in function of the type of the intersected primitive
+    **/
     virtual bool valideIntersection(Ray* r, Intersection* inter);
 
+    /**
+    * \brief validate a ray by filtering it with the selectors for acceptance or rejection
+    **/
     virtual bool valideRayon(Ray* r);
 
+    /**
+    * \brief delete a ray or add it to the list of debug rays
+    **/
     virtual bool invalidRayon(Ray* r);
 
     // * \fn vector<Ray*>* getValidRays()

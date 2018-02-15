@@ -19,7 +19,8 @@
 #include "Selector.h"
 
 /*!
- * \brief : Select rays passing at a distance less than the radius of the cone of associated with the 
+ * \brief : Rays can be seen as long cones that get thicker as their length increases based on their associated solidAngle.
+ 			This selector rejects rays if the receptor they hit does not lie in the thickness of the ray. 
             (depending on the number of rays launched by the source and the distance covered by the ray).
  */
 template<typename T>
@@ -41,11 +42,17 @@ public :
 		vec3 finalPos( r->getFinalPosition() );
 
 		vec3 closestPoint;
+		//find closest position (closestPoint) from the receptor on the segment receptorPos-finalPos and compute the trueLength (ray length from source to closestPoint)
 		decimal trueLength = r->computeTrueLength(receptorPos, finalPos, closestPoint);
 
+		//compute the thickness of the ray for the previsouly computed trueLength
 		decimal epaisseur = r->getThickness( trueLength, false );
+
+		//compute the distance from  the receptor and its closest point on the ray
 		decimal closestDistance = static_cast<Recepteur*> ( r->getRecepteur() )->getPosition().distance(closestPoint);
-		if ( closestDistance >= ( epaisseur/2. /* * 1.05 */ ) ) // Ajout de 5 % de marge supplémentaire 
+
+		//ray should be rejected if the receptor is outside the cone of the ray (i.e thickness/2 <= closestsDistance)
+		if ( closestDistance >= ( epaisseur/2. ) ) 
 		{
 			return SELECTOR_REJECT;
 		}
@@ -61,11 +68,17 @@ public :
 		vec3 finalPos( r->getFinalPosition() );
 
 		vec3 closestPoint;
+		//find closest position (closestPoint) from the receptor on the segment receptorPos-finalPos ray and compute the trueLength (ray length from source to closestPoint)
 		decimal trueLength = r->computeTrueLength(receptorPos, finalPos, closestPoint);
 
+		//compute the thickness of the ray for the previsouly computed trueLength
 		decimal epaisseur = r->getThickness( trueLength, false );
+
+		//compute the distance from  the receptor and its closest point on the ray
 		decimal closestDistance = static_cast<Recepteur*> ( r->getRecepteur() )->getPosition().distance(closestPoint);
-		if ( closestDistance >= ( epaisseur/2. /* * 1.05 */ ) ) // Ajout de 5 % de marge supplémentaire 
+
+		//ray should be rejected if the receptor is outside the cone of the ray (i.e thickness/2 <= closestsDistance)
+		if ( closestDistance >= ( epaisseur/2.) ) 
 		{
 			return false;
 		}

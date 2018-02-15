@@ -23,19 +23,25 @@ bool responseAngleLimiter(const vec3& from, const vec3& N1, const vec3& N2, vec3
 {
 	decimal FT = from * T;
 
-	if ( ( 1. - FT ) < EPSILON_4 ) { return true; } // Vecteur limite tangent au plan de propagation
 
-	if ( FT < 0. ) { return false; }  // Le vecteur sortant est "oppose" au vecteur entrant
+	// Return true if FROM and TO are colinear and point in the same direction
+	if ( ( 1. - FT ) < EPSILON_4 ) { return true; } 
+
+	// Return false if FROM and TO point in opposite directions
+	if ( FT < 0. ) { return false; }  
 
 	decimal F1 = from * N1;
 	decimal F2 = from * N2;
 
+	// Return false if the ray's incoming direction is such that there is no shadow zone
 	if ( (F1 * F2) > 0.) { return false; }
 
 	decimal T1 = T * N1;
 	decimal T2 = T * N2;
 
 
+
+	// Return false if TO is not in the shadow zone of the obstacle		
 	if ( (F1 <= 0.) && ( (T1 > EPSILON_4 ) || ( (ABS(T2) - ABS(F2)) > EPSILON_4 ) ) )
 	{
 		return false;
@@ -63,6 +69,7 @@ void getThetaRandom(const decimal& angleOuverture, const decimal & delta_theta, 
 
 void getThetaRegular(const decimal& angleOuverture, const decimal & delta_theta, const decimal & nbResponseLeft, decimal& theta)
 {
+	//compute next angle around the cone of Keller
 	theta = (nbResponseLeft * delta_theta) - (angleOuverture / 2.);
 }
 
@@ -74,11 +81,10 @@ Diffraction::Diffraction(const vec3& position, const vec3& incomingDirection, Cy
 	nbResponseLeft = initialNbResponse = 200;
 	type = DIFFRACTION;
 
-	//Skip instructions dependant on the Cylindre if c==NULL
+	// Skip instructions dependant on the Cylindre if c==NULL
 	if(c){
 		buildRepere();
 		computeAngle();
-
 		computeDTheta();
 
 		N1 = dynamic_cast<Cylindre*>(shape)->getFirstShape()->getNormal();
@@ -124,6 +130,8 @@ bool Diffraction::getResponse(vec3& r, bool force)
 	do
 	{
 		decimal theta = 0.;
+		// get the angle of the next response around Keller's cone 
+		// (avoids returning an angle that would result in a response pointing inside the obstacle)
 		(*getTheta) (angleOuverture, delta_theta, nbResponseLeft, theta);
 
 #ifdef _ALLOW_TARGETING_
@@ -143,7 +151,7 @@ bool Diffraction::getResponse(vec3& r, bool force)
 			return true;
 		}
 #else
-		// force n'est true que dans une utilisation avec targeting
+		// force is true only when targeting is allowed
 		nbResponseLeft--;
 		if (nbResponseLeft < 0)
 		{
@@ -152,10 +160,13 @@ bool Diffraction::getResponse(vec3& r, bool force)
 #endif
 
 		vec3 localResponse;
+		// convert from polar coordinates to carthesian ones
 		Tools::fromRadianToCarthesien2( angleArrive, theta, localResponse );
 
+		// transpose the local response into global coordinates
 		r = localRepere.vectorFromLocalToGlobal(localResponse);
 
+		// validate response
 		bRep = (*responseValidator)(from, N1, N2, r);
 
 	}
@@ -171,6 +182,7 @@ void Diffraction::buildRepere()
     vec3 v1 = c->getVertices()->at(c->getLocalVertices()->at(0));
     vec3 v2 = c->getVertices()->at(c->getLocalVertices()->at(1));
 
+    // Z axis is along the diffraction edge
     vec3 Z = v1 - O;
     if (Z.dot(from) < 0)
     {
@@ -178,9 +190,11 @@ void Diffraction::buildRepere()
     }
     Z.normalize();
 
+    //X axis is the mean of the two normals
     vec3 X = c->getFirstShape()->getNormal() + c->getSecondShape()->getNormal();
     X.normalize();
 
+    //Y axis is the cross product of Z and X
     vec3 Y;
     Y.cross(Z, X);
     Y.normalize();
@@ -192,10 +206,13 @@ void Diffraction::buildRepere()
 void Diffraction::computeAngle()
 {
     Cylindre* c = (Cylindre*)(shape);
+
+    //The cone's aperture angle
     angleOuverture = c->getAngleOuverture();
 
     localRepere.vectorFromGlobalToLocal(from);
 
+    //Angle between the incoming ray and the Z axis 
 	decimal cosAngleArrive = localRepere.getW().dot(from);
 
     angleArrive = acos(cosAngleArrive);

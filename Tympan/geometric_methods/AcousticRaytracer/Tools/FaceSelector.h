@@ -47,9 +47,15 @@ public:
         return newSelector;
     }
     virtual void reset() { selectedPath.clear(); return; }
-    /// Get the TYPEHISTORY of this Selector
+
+    /**
+    * \brief Get the TYPEHISTORY of this Selector
+    */  
     TYPEHISTORY getModeHistory() { return modeHistory; }
-    /// Set the TYPEHISTORY of this Selector
+
+    /**
+    * \brief Set the TYPEHISTORY of this Selector
+    */  
     void setModeHistory(TYPEHISTORY _modeHistory)
     {
         if (modeHistory != _modeHistory)
@@ -63,6 +69,8 @@ public:
     {
         typename std::map<std::vector<unsigned int>, T*, CompareToKey>::iterator it;
         std::vector<unsigned int> path;
+
+        //Get the history according to the TYPEHISTORY selected
         switch (modeHistory)
         {
             case HISTORY_FACE :
@@ -76,19 +84,22 @@ public:
                 break;
         }
 
-		it = selectedPath.find(path);
+		it = selectedPath.find(path); // search for an equivalent history among the histories of already selected rays
 
+        // if there already is a ray with the same history
 		if (it != selectedPath.end())
         {
             r->computeLongueur();
             double currentDistance = r->getLongueur();
+            // if current ray has a shorter length than the already selected one
             if (currentDistance < it->second->getLongueur())
             {
+                //replace the older ray by the new one
                 replace = it->second->getConstructId();
                 return SELECTOR_REPLACE;
             }
             else
-            {
+            {     
                 return SELECTOR_REJECT;
             }
 
@@ -113,10 +124,12 @@ public:
                 break;
         }
 
-        it = selectedPath.find(path);
+       
+        it = selectedPath.find(path); // search for an equivalent history among the histories of already selected rays
         r->computeLongueur();
 
-        if (it != selectedPath.end()) //Il y avait deja un rayon avec le meme historique
+        // if there already is a ray with the same history
+        if (it != selectedPath.end()) 
         {
             it->second = r;
 
@@ -124,6 +137,7 @@ public:
         }
         else
         {
+            // if none of the already selected rays has the same history than r, then add the ray and its hsitory to selectedPath
             selectedPath.insert(std::pair<std::vector<unsigned int>, T*>(path, r));
         }
 
@@ -147,11 +161,12 @@ public:
                 break;
         }
 
-		it = selectedPath.find(path);
+		it = selectedPath.find(path); // search for an equivalent history among the histories of already selected rays
         r->computeLongueur();
         double currentDistance = r->getLongueur();
 
-        if (it != selectedPath.end()) //Il y avait deja un rayon avec le meme historique
+        // if there already is a ray with the same history
+        if (it != selectedPath.end())
         {
             if (currentDistance < it->second->getLongueur())
             {
@@ -165,13 +180,14 @@ public:
         }
         else
         {
+            // if none of the already selected rays has the same history than r, then add the ray and its hsitory to selectedPath
             selectedPath.insert(std::pair<std::vector<unsigned int>, T*>(path, r));
             return true;
         }
     }
 
 protected:
-    std::map<std::vector<unsigned int>, T*, CompareToKey> selectedPath; //!< Selected path
+    std::map<std::vector<unsigned int>, T*, CompareToKey> selectedPath; //!< Histories of all selected rays so far
     TYPEHISTORY modeHistory;	//!< TYPEHISTORY used by this Selector (by default, HISTORY_FACE)
 };
 
