@@ -877,50 +877,79 @@ inline bool LineLineIntersect(
     const vec3& p1, const vec3& p2, const vec3& p3, const vec3& p4, vec3* pa, vec3* pb,
     decimal* mua, decimal* mub)
 {
-    vec3 p13, p43, p21;
-    decimal d1343, d4321, d1321, d4343, d2121;
+    vec3 w, v, u;
+    decimal vw, uv, uw, vv, uu;
     decimal numer, denom;
 
-    p13.x = p1.x - p3.x;
-    p13.y = p1.y - p3.y;
-    p13.z = p1.z - p3.z;
-    p43.x = p4.x - p3.x;
-    p43.y = p4.y - p3.y;
-    p43.z = p4.z - p3.z;
-    if (fabs(p43.x)  < EPSILON_6 && fabs(p43.y)  < EPSILON_6 && fabs(p43.z)  < EPSILON_6)
+    //compute the vector u defined by the first segment
+    u.x = p2.x - p1.x;
+    u.y = p2.y - p1.y;
+    u.z = p2.z - p1.z;
+
+    //p1 and p2 coincide, the first segment is reduced to a point. 
+    if (fabs(u.x)  < EPSILON_6 && fabs(u.y)  < EPSILON_6 && fabs(u.z)  < EPSILON_6)
     {
         return false;
     }
-    p21.x = p2.x - p1.x;
-    p21.y = p2.y - p1.y;
-    p21.z = p2.z - p1.z;
-    if (fabs(p21.x)  < EPSILON_6 && fabs(p21.y)  < EPSILON_6 && fabs(p21.z)  < EPSILON_6)
+    
+    //compute the vector v defined by the second segment
+    v.x = p4.x - p3.x;
+    v.y = p4.y - p3.y;
+    v.z = p4.z - p3.z;
+
+    //p4 and p3 coincide, the second segment is reduced to a point. 
+    if (fabs(v.x)  < EPSILON_6 && fabs(v.y)  < EPSILON_6 && fabs(v.z)  < EPSILON_6)
     {
         return false;
     }
 
-    d1343 = p13.x * p43.x + p13.y * p43.y + p13.z * p43.z;
-    d4321 = p43.x * p21.x + p43.y * p21.y + p43.z * p21.z;
-    d1321 = p13.x * p21.x + p13.y * p21.y + p13.z * p21.z;
-    d4343 = p43.x * p43.x + p43.y * p43.y + p43.z * p43.z;
-    d2121 = p21.x * p21.x + p21.y * p21.y + p21.z * p21.z;
+    //Idea: Find pa and pb such that (pa-pb)*u=(pa-pb)*v=0 (1) (because the shortest segment between two lines is perpendicular to both of them)
+    //      With pa=p1+mua*u and pb=p3+mub*v               (2) (pa is at mua times u along the line p1p2)
+    //
+    //      Expanding (1) with (2) we get: 
+    //      (w + mua*u - mub*v)*u=0 and (w + mua*u - mub*v)*v=0 
+    //
+    //      which can be further expanded into:
+    //      wu+mua*uu-mub*uv=0 and wv+mua*uv-mub*vv=0
+    //
+    //      Solving for mua : mua = (uv*vw - vv*uw)/(uu*vv - uv*uv)
+    //
+    //      Back-substituting gives mub = (vw + mua*uv)/vv = (uu*vw - uv*uw)/(uu*vv - uv*uv)
 
-    denom = d2121 * d4343 - d4321 * d4321;
+    //Compute the vector w formed by the first vertices of both segments
+    w.x = p1.x - p3.x;
+    w.y = p1.y - p3.y;
+    w.z = p1.z - p3.z;
+
+    // Pre-compute u*u, v*v, u*v, u*w and v*w
+    vw = v*w;
+    uv = u*v;
+    uw = u*w;
+    vv = v*v;
+    uu = u*u;
+
+    //Compute the denominator
+    denom = uu*vv - uv*uv;
+
+    //If the denominator is 0, then the two equations are dependant and therefore the two lines are parallel
     if (fabs(denom) < EPSILON_6)
     {
         return false;
     }
-    numer = d1343 * d4321 - d1321 * d4343;
 
+    //Compute the numerator of mua
+    numer = uv*vw - vv*uw;
+
+    //Compute mua and mub
     *mua = numer / denom;
-    *mub = (d1343 + d4321 * (*mua)) / d4343;
+    *mub = (vw + uv * (*mua)) / vv;
 
-    pa->x = p1.x + *mua * p21.x;
-    pa->y = p1.y + *mua * p21.y;
-    pa->z = p1.z + *mua * p21.z;
-    pb->x = p3.x + *mub * p43.x;
-    pb->y = p3.y + *mub * p43.y;
-    pb->z = p3.z + *mub * p43.z;
+    pa->x = p1.x + *mua * u.x;
+    pa->y = p1.y + *mua * u.y;
+    pa->z = p1.z + *mua * u.z;
+    pb->x = p3.x + *mub * v.x;
+    pb->y = p3.y + *mub * v.y;
+    pb->z = p3.z + *mub * v.z;
 
     return true;
 }
