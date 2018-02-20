@@ -19,6 +19,7 @@ class TestAltimetryRoads(unittest.TestCase):
         road = datamodel.Road(
             road_coords[:, :2],
             road_coords[:, 2],
+            width=(2, 2),
             id='road',
         )
         asite.add_child(road)
@@ -29,6 +30,7 @@ class TestAltimetryRoads(unittest.TestCase):
             datamodel.Road(
                 road_coords[:, :2],
                 road_coords[:, 2][1:],
+                width=(2, 4),
                 id='road',
             )
         self.assertEqual(
@@ -38,19 +40,22 @@ class TestAltimetryRoads(unittest.TestCase):
 
     def test_add_road_constraint(self):
         asite = datamodel.SiteNode(rect(0, 0, 30, 30), id="Main site")
-        datamodel.Road(
+        road = datamodel.Road(
             road_coords[:, :2],
             road_coords[:, 2],
+            width=(4, 2),
             id="road",
             parent_site=asite,
         )
         _, mesh, _ = builder.build_altimetry(asite)
         mesh_set = set(map(tuple, mesh.as_arrays()[0]))
-        road_coords_set = set(map(tuple, road_coords))
-        self.assertEqual(
-            set.intersection(road_coords_set, mesh_set),
-            road_coords_set,
-        )
+        for line_coords in road.build_coordinates()[0]:
+            coords_set = set([(x, y, z) for (x, y), z in
+                              zip(line_coords, road.altitudes)])
+            self.assertEqual(
+                set.intersection(coords_set, mesh_set),
+                coords_set,
+            )
 
 
 if __name__ == '__main__':
