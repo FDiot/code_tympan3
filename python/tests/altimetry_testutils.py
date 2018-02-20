@@ -62,6 +62,7 @@ class TestFeatures(object):
                                                parent_site=self.mainsite, id="{Building}")
         self.road = Road(self.road_coords[:, :2],
                          self.road_coords[:, 2],
+                         width=(2, 2),
                          parent_site=self.mainsite,
                          id="{Road}")
 

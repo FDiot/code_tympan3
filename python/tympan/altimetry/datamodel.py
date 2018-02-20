@@ -13,9 +13,10 @@ to easily load test data from a GeoJSON_ file.
 from itertools import chain
 import json
 
+import numpy as np
 from shapely import geometry
 from shapely.validation import explain_validity
-
+from shapely.ops import nearest_points
 
 GEOMETRY_TYPES = (
     "Point", "MultiPoint",
@@ -216,12 +217,22 @@ class LevelCurve(TympanFeature):
 class Road(TympanFeature):
     geometric_type = "MultiLineString"
 
-    def __init__(self, coords, altitudes, **kwargs):
+    def __init__(self, coords, altitudes, width, **kwargs):
         super(Road, self).__init__(coords, **kwargs)
+        self.main_coords = coords
+        if not isinstance(width, tuple) or len(width) != 2:
+            msg = "width of {} is not a tuple: [left value, rigth value]"
+            raise ValueError(msg.format(self))
+        self.width = width
         if len(coords) != len(altitudes):
             msg = "coords and altitudes have different lengths for {}"
             raise ValueError(msg.format(self))
         self.altitudes = altitudes
+        # replace main road line coords by boundary lines coords
+        left_boundary = self._create_parallel_road_line(width[0], "left")
+        right_boundary = self._create_parallel_road_line(width[1], "right")
+        road_lines = geometry.MultiLineString([left_boundary, right_boundary])
+        self.set_shape(road_lines)
 
     def build_coordinates(self):
         return [self._coords]
@@ -230,6 +241,17 @@ class Road(TympanFeature):
         d = super(Road, self).build_properties()
         d.update(altitudes=self.altitudes)
         return d
+
+    def _create_parallel_road_line(self, delta, side):
+        """Create a parallel LineString of the main road line.
+        This serves to create the boundaries of the road."""
+        main_line = geometry.LineString(self.main_coords)
+        shape = main_line.parallel_offset(delta, side=side)
+        parallel_coords = []
+        for point in self.main_coords:
+            points = nearest_points(shape, geometry.Point(point))[0].coords[0]
+            parallel_coords.append((round(points[0], 2), round(points[1], 2)))
+        return geometry.LineString(parallel_coords)
 
 
 class PolygonalTympanFeature(TympanFeature):
