@@ -4,6 +4,10 @@ import os
 
 import numpy as np
 from numpy.testing.utils import assert_allclose, assert_array_equal
+from shapely.geometry import (
+    LineString,
+    Point,
+)
 
 from tympan.altimetry.datamodel import (InconsistentGeometricModel, HIDDEN_MATERIAL,
                                         LevelCurve, InfrastructureLandtake, SiteNode)
@@ -253,6 +257,18 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
                 self.assertEqual(materials.count, 5)
         finally:
             os.remove(f.name)
+
+    def test_get_sub_level_curve_coords(self):
+        split_lines = [LineString([(0, 0), (1, 1)]),
+                       LineString([(1, 1), (2, 2)])]
+        side = 'right'
+        coords1 = builder.get_sub_level_curve_coords(split_lines, side)
+        side = 'left'
+        coords2 = builder.get_sub_level_curve_coords(split_lines, side)
+        self.assertEqual(
+            round(Point(coords1[-1]).distance(Point(coords2[0])), 1),
+            0.2,
+        )
 
 
 if __name__ == '__main__':
