@@ -6,6 +6,7 @@ from itertools import chain
 from warnings import warn
 import numpy as np
 from shapely import geometry
+from shapely.ops import split
 
 from .datamodel import (InconsistentGeometricModel, elementary_shapes,
                         SiteNode, LevelCurve, WaterBody, GroundMaterial,
@@ -170,6 +171,29 @@ def material_by_face(feature_by_face):
     return m2f
 
 
+def get_sub_level_curve_coords(split_lines, side):
+    """Shorten the level curve by interpolate a new point replacing
+    the intersection point by another a little farther (margin).
+    The intersection point is the last point of the left line or
+    the fisrt point of the right line depends of the cut side."""
+    margin = 0.1
+    if side == 'right':
+        new_lc = split_lines[0]
+        new_point = new_lc.interpolate(new_lc.length - margin)
+        new_lc_coords = [(round(x[0], 2), round(x[1], 2))
+                         for x in new_lc.coords[:-1]]
+        new_lc_coords.append((round(new_point.coords[0][0], 2),
+                              round(new_point.coords[0][1], 2)))
+    else:
+        new_lc = split_lines[-1]
+        new_point = new_lc.interpolate(margin)
+        new_lc_coords = [(round(new_point.coords[0][0], 2),
+                          round(new_point.coords[0][1], 2))]
+        new_lc_coords.extend([(round(x[0], 2), round(x[1], 2))
+                              for x in new_lc.coords[1:]])
+    return new_lc_coords
+
+
 class MeshBuilder(object):
     """Build an elevation mesh from a site cleaner.
 
@@ -243,12 +267,44 @@ class MeshBuilder(object):
             vertices_groups.append(vertices)
         return vertices_groups
 
+    def _carve_roads(self):
+        """When a road boundary intersect a level curve we need to split the
+        level curve and remove the part of the level curve that is on the road"""
+        for road in self._site.roads:
+            sides = ['right', 'left']
+            level_curve_to_drop = []
+            level_curve_to_add = []
+            for level_curve in self._site.level_curves:
+                for boundary_road_line, side in zip(road.shape, sides):
+                    if boundary_road_line.crosses(level_curve.shape):
+                        split_lines = split(level_curve.shape, boundary_road_line)
+                        if isinstance(boundary_road_line.intersection(level_curve.shape),
+                                      geometry.MultiPoint):
+                            msg = 'Too many intersection points ({}) between {} and {}'
+                            raise NotImplementedError(
+                                msg.format(len(split_lines) - 1, road, level_curve)
+                            )
+                        level_curve_to_drop.append(level_curve)
+                        level_curve_to_add.append(
+                            LevelCurve(
+                                get_sub_level_curve_coords(split_lines, side),
+                                level_curve.altitude,
+                                id="{} split {} by {}".format(level_curve, side, road),
+                            )
+                        )
+            # update of the level_curve children for the next roads
+            for level_curve in set(level_curve_to_drop):
+                self._site.drop_child(level_curve)
+            for level_curve in level_curve_to_add:
+                self._site.add_child(level_curve)
+
     def _build_altimetric_base(self):
         """Return an elevation mesh along with a feature to vertices mapping.
 
         The mesh is built by walking the equivalent site for level curves and
         roads *only*.
         """
+        self._carve_roads()
         alti = ReferenceElevationMesh() # Altimetric base
         for polyline in chain(self._site.level_curves, self._site.roads):
             props = polyline.build_properties()
