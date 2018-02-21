@@ -221,13 +221,9 @@ class Road(TympanFeature):
     def __init__(self, coords, altitudes, width, angle, **kwargs):
         super(Road, self).__init__(coords, **kwargs)
         self.main_coords = coords
-        if not isinstance(width, tuple) or len(width) != 2:
-            msg = "width of {} is not a tuple: [left value, rigth value]"
-            raise ValueError(msg.format(self))
+        self._is_2_tuple_param("width", width)
         self.width = width
-        if not isinstance(angle, tuple) or len(angle) != 2:
-            msg = "angle of {} is not a tuple: [left value, rigth value]"
-            raise ValueError(msg.format(self))
+        self._is_2_tuple_param("angle", angle)
         self.angle = angle
         if len(coords) != len(altitudes):
             msg = "coords and altitudes have different lengths for {}"
@@ -250,6 +246,11 @@ class Road(TympanFeature):
         d = super(Road, self).build_properties()
         d.update(altitudes=self.altitudes)
         return d
+
+    def _is_2_tuple_param(self, param, value):
+        if not isinstance(value, tuple) or len(value) != 2:
+            msg = "{} of {} is not a 2-tuple: (left value, rigth value)"
+            raise ValueError(msg.format(param, self))
 
     def _create_parallel_road_line(self, delta, side):
         """Create a parallel LineString of the main road line.
