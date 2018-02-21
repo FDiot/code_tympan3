@@ -50,8 +50,7 @@ class TestAltimetryRoads(unittest.TestCase):
         _, mesh, _ = builder.build_altimetry(asite)
         mesh = set(map(tuple, mesh.as_arrays()[0]))
         for line_coords in road.build_coordinates()[0]:
-            coords = set([(x, y, z) for (x, y), z
-                          in zip(line_coords, road.altitudes)])
+            coords = set([(x, y, z) for x, y, z in line_coords])
             self.assertEqual(
                 set.intersection(coords, mesh),
                 coords,
@@ -77,8 +76,7 @@ class TestAltimetryRoads(unittest.TestCase):
         merged_site, mesh_with_road, _ = builder.build_altimetry(asite)
         mesh = set(map(tuple, mesh_with_road.as_arrays()[0]))
         for line_coords in road.build_coordinates()[0]:
-            coords = set([(x, y, z) for (x, y), z in
-                          zip(line_coords, road.altitudes)])
+            coords = set([(x, y, z) for x, y, z in line_coords])
             self.assertEqual(
                 set.intersection(coords, mesh),
                 coords,
@@ -140,15 +138,13 @@ class TestAltimetryRoads(unittest.TestCase):
         merged_site, mesh_with_road, _ = builder.build_altimetry(asite)
         mesh = set(map(tuple, mesh_with_road.as_arrays()[0]))
         for line_coords in road1.build_coordinates()[0]:
-            coords = set([(x, y, z) for (x, y), z in
-                          zip(line_coords, road1.altitudes)])
+            coords = set([(x, y, z) for x, y, z in line_coords])
             self.assertEqual(
                 set.intersection(coords, mesh),
                 coords,
             )
         for line_coords in road2.build_coordinates()[0]:
-            coords = set([(x, y, z) for (x, y), z in
-                          zip(line_coords, road2.altitudes)])
+            coords = set([(x, y, z) for x, y, z in line_coords])
             self.assertEqual(
                 set.intersection(coords, mesh),
                 coords,

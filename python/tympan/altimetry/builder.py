@@ -251,6 +251,8 @@ class MeshBuilder(object):
         for polyline in elementary_shapes(shape):
             if isinstance(polyline, geometry.LineString):
                 points = polyline.coords[:]
+                if len(points[0]) == 3:
+                    points = [(x, y) for x, y, _ in points]
             elif isinstance(polyline, geometry.Polygon):
                 if list(polyline.interiors):
                     raise ValueError("Polygons with holes are not (yet) supported")
