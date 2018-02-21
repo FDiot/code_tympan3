@@ -20,6 +20,7 @@ class TestAltimetryRoads(unittest.TestCase):
             road_coords[:, :2],
             road_coords[:, 2],
             width=(2, 2),
+            angle=(0, 10),
             id='road',
         )
         asite.add_child(road)
@@ -31,11 +32,26 @@ class TestAltimetryRoads(unittest.TestCase):
                 road_coords[:, :2],
                 road_coords[:, 2][1:],
                 width=(2, 4),
+                angle=(0, -10),
                 id='road',
             )
         self.assertEqual(
             str(cm.exception),
             'coords and altitudes have different lengths for Road #road',
+        )
+
+    def test_create_bad_road_angle(self):
+        with self.assertRaises(ValueError) as cm:
+            datamodel.Road(
+                road_coords[:, :2],
+                road_coords[:, 2][1:],
+                width=(2, 4),
+                angle=0,
+                id='road',
+            )
+        self.assertEqual(
+            str(cm.exception),
+            'angle of Road #road is not a tuple: [left value, rigth value]',
         )
 
     def test_add_road_constraint(self):
@@ -44,6 +60,7 @@ class TestAltimetryRoads(unittest.TestCase):
             road_coords[:, :2],
             road_coords[:, 2],
             width=(4, 2),
+            angle=(10, 10),
             id="road",
             parent_site=asite,
         )
@@ -70,6 +87,7 @@ class TestAltimetryRoads(unittest.TestCase):
             road_coords[:, :2],
             road_coords[:, 2],
             width=(2, 4),
+            angle=(0, 10),
             id="road",
             parent_site=asite,
         )
@@ -100,6 +118,7 @@ class TestAltimetryRoads(unittest.TestCase):
             road_coords[:, :2],
             road_coords[:, 2],
             width=(2, 2),
+            angle=(0, 10),
             id="road",
             parent_site=asite,
         )
@@ -125,6 +144,7 @@ class TestAltimetryRoads(unittest.TestCase):
             [(0, 15), (5, 15), (15, 15), (20, 15), (25, 15), (30, 15)],
             road_coords[:, 2],
             width=(2, 2),
+            angle=(0, 10),
             id="road1",
             parent_site=asite,
         )
@@ -132,6 +152,7 @@ class TestAltimetryRoads(unittest.TestCase):
             [(0, 20), (5, 20), (10, 20), (15, 20), (25, 20), (30, 20)],
             road_coords[:, 2],
             width=(2, 2),
+            angle=(0, 10),
             id="road2",
             parent_site=asite,
         )

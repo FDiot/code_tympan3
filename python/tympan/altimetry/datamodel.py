@@ -13,6 +13,7 @@ to easily load test data from a GeoJSON_ file.
 from itertools import chain
 import json
 
+import math
 import numpy as np
 from shapely import geometry
 from shapely.validation import explain_validity
@@ -217,13 +218,17 @@ class LevelCurve(TympanFeature):
 class Road(TympanFeature):
     geometric_type = "MultiLineString"
 
-    def __init__(self, coords, altitudes, width, **kwargs):
+    def __init__(self, coords, altitudes, width, angle, **kwargs):
         super(Road, self).__init__(coords, **kwargs)
         self.main_coords = coords
         if not isinstance(width, tuple) or len(width) != 2:
             msg = "width of {} is not a tuple: [left value, rigth value]"
             raise ValueError(msg.format(self))
         self.width = width
+        if not isinstance(angle, tuple) or len(angle) != 2:
+            msg = "angle of {} is not a tuple: [left value, rigth value]"
+            raise ValueError(msg.format(self))
+        self.angle = angle
         if len(coords) != len(altitudes):
             msg = "coords and altitudes have different lengths for {}"
             raise ValueError(msg.format(self))
@@ -231,7 +236,11 @@ class Road(TympanFeature):
         # replace main road line coords by boundary lines coords
         left_boundary = self._create_parallel_road_line(width[0], "left")
         right_boundary = self._create_parallel_road_line(width[1], "right")
-        road_lines = geometry.MultiLineString([left_boundary, right_boundary])
+        left_middle = self._create_parallel_road_line(0.1, "left")
+        right_middle = self._create_parallel_road_line(0.1, "right")
+        road_lines = geometry.MultiLineString(
+            [left_boundary, right_boundary, left_middle, right_middle]
+        )
         self.set_shape(road_lines)
 
     def build_coordinates(self):
@@ -246,9 +255,14 @@ class Road(TympanFeature):
         """Create a parallel LineString of the main road line.
         This serves to create the boundaries of the road."""
         main_line = geometry.LineString(self.main_coords)
+        if side == "left":
+            alti_delta = self.width[0] * math.sin(math.radians(self.angle[0]))
+        else:
+            alti_delta = self.width[1] * math.sin(math.radians(self.angle[1]))
+        altitudes = np.array(self.altitudes) + alti_delta
         shape = main_line.parallel_offset(delta, side=side)
         parallel_coords = []
-        for point2d, alti in zip(self.main_coords, self.altitudes):
+        for point2d, alti in zip(self.main_coords, altitudes):
             point = nearest_points(shape, geometry.Point(point2d))[0].coords[0]
             parallel_coords.append((round(point[0], 2), round(point[1], 2), round(alti, 2)))
         return geometry.LineString(parallel_coords)
