@@ -248,9 +248,9 @@ class Road(TympanFeature):
         main_line = geometry.LineString(self.main_coords)
         shape = main_line.parallel_offset(delta, side=side)
         parallel_coords = []
-        for point in self.main_coords:
-            points = nearest_points(shape, geometry.Point(point))[0].coords[0]
-            parallel_coords.append((round(points[0], 2), round(points[1], 2)))
+        for point2d, alti in zip(self.main_coords, self.altitudes):
+            point = nearest_points(shape, geometry.Point(point2d))[0].coords[0]
+            parallel_coords.append((round(point[0], 2), round(point[1], 2), round(alti, 2)))
         return geometry.LineString(parallel_coords)
 
 
