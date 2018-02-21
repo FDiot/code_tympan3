@@ -51,7 +51,7 @@ class TestAltimetryRoads(unittest.TestCase):
             )
         self.assertEqual(
             str(cm.exception),
-            'angle of Road #road is not a tuple: [left value, rigth value]',
+            'angle of Road #road is not a 2-tuple: (left value, rigth value)',
         )
 
     def test_add_road_constraint(self):
