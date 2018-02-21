@@ -218,13 +218,15 @@ class LevelCurve(TympanFeature):
 class Road(TympanFeature):
     geometric_type = "MultiLineString"
 
-    def __init__(self, coords, altitudes, width, angle, **kwargs):
+    def __init__(self, coords, altitudes, width, angle, embankment=(0, 0), **kwargs):
         super(Road, self).__init__(coords, **kwargs)
         self.main_coords = coords
         self._is_2_tuple_param("width", width)
         self.width = width
         self._is_2_tuple_param("angle", angle)
         self.angle = angle
+        self._is_2_tuple_param("embankment", embankment)
+        self.embankment = embankment
         if len(coords) != len(altitudes):
             msg = "coords and altitudes have different lengths for {}"
             raise ValueError(msg.format(self))

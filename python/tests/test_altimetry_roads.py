@@ -21,6 +21,7 @@ class TestAltimetryRoads(unittest.TestCase):
             road_coords[:, 2],
             width=(2, 2),
             angle=(0, 10),
+            embankment=(1, 1),
             id='road',
         )
         asite.add_child(road)
@@ -88,6 +89,7 @@ class TestAltimetryRoads(unittest.TestCase):
             road_coords[:, 2],
             width=(2, 4),
             angle=(0, 10),
+            embankment=(5, 2),
             id="road",
             parent_site=asite,
         )
@@ -119,6 +121,7 @@ class TestAltimetryRoads(unittest.TestCase):
             road_coords[:, 2],
             width=(2, 2),
             angle=(0, 10),
+            embankment=(1, 2),
             id="road",
             parent_site=asite,
         )
@@ -145,6 +148,7 @@ class TestAltimetryRoads(unittest.TestCase):
             road_coords[:, 2],
             width=(2, 2),
             angle=(0, 10),
+            embankment=(0.2, 0.5),
             id="road1",
             parent_site=asite,
         )
@@ -153,6 +157,7 @@ class TestAltimetryRoads(unittest.TestCase):
             road_coords[:, 2],
             width=(2, 2),
             angle=(0, 10),
+            embankment=(0.5, 0.2),
             id="road2",
             parent_site=asite,
         )

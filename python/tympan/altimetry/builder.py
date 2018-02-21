@@ -171,13 +171,13 @@ def material_by_face(feature_by_face):
     return m2f
 
 
-def get_sub_level_curve_coords(split_lines, side):
+def get_sub_level_curve_coords(split_lines, side, embankment):
     """Shorten the level curve by interpolate a new point replacing
     the intersection point by another a little farther (margin).
     The intersection point is the last point of the left line or
     the fisrt point of the right line depends of the cut side."""
-    margin = 0.1
     if side == 'right':
+        margin = embankment[0] or 0.1
         new_lc = split_lines[0]
         new_point = new_lc.interpolate(new_lc.length - margin)
         new_lc_coords = [(round(x[0], 2), round(x[1], 2))
@@ -185,6 +185,7 @@ def get_sub_level_curve_coords(split_lines, side):
         new_lc_coords.append((round(new_point.coords[0][0], 2),
                               round(new_point.coords[0][1], 2)))
     else:
+        margin = embankment[1] or 0.1
         new_lc = split_lines[-1]
         new_point = new_lc.interpolate(margin)
         new_lc_coords = [(round(new_point.coords[0][0], 2),
@@ -291,7 +292,7 @@ class MeshBuilder(object):
                         level_curve_to_drop.append(level_curve)
                         level_curve_to_add.append(
                             LevelCurve(
-                                get_sub_level_curve_coords(split_lines, side),
+                                get_sub_level_curve_coords(split_lines, side, road.embankment),
                                 level_curve.altitude,
                                 id="{} split {} by {}".format(level_curve, side, road),
                             )
