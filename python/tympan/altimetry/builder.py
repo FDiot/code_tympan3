@@ -252,6 +252,7 @@ class MeshBuilder(object):
             if isinstance(polyline, geometry.LineString):
                 points = polyline.coords[:]
                 if len(points[0]) == 3:
+                    properties['altitudes'] = [x[-1] for x in points]
                     points = [(x, y) for x, y, _ in points]
             elif isinstance(polyline, geometry.Polygon):
                 if list(polyline.interiors):
@@ -277,7 +278,8 @@ class MeshBuilder(object):
             level_curve_to_drop = []
             level_curve_to_add = []
             for level_curve in self._site.level_curves:
-                for boundary_road_line, side in zip(road.shape, sides):
+                # Only test intersection with boundary lines
+                for boundary_road_line, side in zip(road.shape[:2], sides):
                     if boundary_road_line.crosses(level_curve.shape):
                         split_lines = split(level_curve.shape, boundary_road_line)
                         if isinstance(boundary_road_line.intersection(level_curve.shape),
