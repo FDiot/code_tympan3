@@ -261,13 +261,14 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
     def test_get_sub_level_curve_coords(self):
         split_lines = [LineString([(0, 0), (1, 1)]),
                        LineString([(1, 1), (2, 2)])]
+        embankment = (0.5, 0.5)
         side = 'right'
-        coords1 = builder.get_sub_level_curve_coords(split_lines, side)
+        coords1 = builder.get_sub_level_curve_coords(split_lines, side, embankment)
         side = 'left'
-        coords2 = builder.get_sub_level_curve_coords(split_lines, side)
+        coords2 = builder.get_sub_level_curve_coords(split_lines, side, embankment)
         self.assertEqual(
             round(Point(coords1[-1]).distance(Point(coords2[0])), 1),
-            0.2,
+            sum(embankment),
         )
 
 
