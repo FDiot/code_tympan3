@@ -238,11 +238,12 @@ class Road(TympanFeature):
         self.main_coords = []
         self.altitudes = []
         self.width = profiles[0].width
-        self.angle = profiles[0].angle
+        self.angles = []
         self.embankment = profiles[0].embankment
         for road_profile in profiles:
             self.main_coords.append(road_profile.coords)
             self.altitudes.append(road_profile.altitude)
+            self.angles.append(road_profile.angle)
             if self.width != road_profile.width:
                 msg = "Road {} have inconsistent width {} != {}"
                 raise NotImplementedError(msg.format(kwargs['id'],
@@ -271,14 +272,14 @@ class Road(TympanFeature):
         """Create a parallel LineString of the main road line.
         This serves to create the boundaries of the road."""
         main_line = geometry.LineString(self.main_coords)
-        if side == "left":
-            alti_delta = self.width[0] * math.sin(math.radians(self.angle[0]))
-        else:
-            alti_delta = self.width[1] * math.sin(math.radians(self.angle[1]))
-        altitudes = np.array(self.altitudes) + alti_delta
         shape = main_line.parallel_offset(delta, side=side)
         parallel_coords = []
-        for point2d, alti in zip(self.main_coords, altitudes):
+        for point2d, altitude, angle in zip(self.main_coords, self.altitudes, self.angles):
+            if side == "left":
+                alti_delta = self.width[0] * math.sin(math.radians(angle[0]))
+            else:
+                alti_delta = self.width[1] * math.sin(math.radians(angle[1]))
+            alti = altitude + alti_delta
             point = nearest_points(shape, geometry.Point(point2d))[0].coords[0]
             parallel_coords.append((round(point[0], 2), round(point[1], 2), round(alti, 2)))
         return geometry.LineString(parallel_coords)

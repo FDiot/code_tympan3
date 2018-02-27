@@ -19,8 +19,8 @@ road1_description = [
 
 road2_description = [
     (0, 15, 1, 2, 2, 0, 10, 0.2, 0.5),
-    (5, 15, 2, 2, 2, 0, 10, 0.2, 0.5),
-    (15, 15, 2.5, 2, 2, 0, 10, 0.2, 0.5),
+    (5, 15, 2, 2, 2, 0, 0, 0.2, 0.5),
+    (15, 15, 2.5, 2, 2, 0, 20, 0.2, 0.5),
     (20, 15, 2, 2, 2, 0, 10, 0.2, 0.5),
     (25, 15, 0.5, 2, 2, 0, 10, 0.2, 0.5),
 ]
@@ -75,6 +75,30 @@ class TestAltimetryRoads(unittest.TestCase):
         self.assertNotIn("level_curve", level_curves)
         self.assertIn('LevelCurve #level_curve split left by Road #road',
                       level_curves)
+
+    def test_road_with_variable_angles(self):
+        asite = datamodel.SiteNode(rect(0, 0, 30, 30), id="Main site")
+        curve_coord = np.array([(2, 4), (28, 8), (25, 14)])
+        datamodel.LevelCurve(
+            curve_coord,
+            altitude=1,
+            id="level_curve",
+            parent_site=asite,
+        )
+        _, mesh, _ = builder.build_altimetry(asite)
+        road_profiles = [datamodel.RoadProfile(*profile) for profile in
+                         road1_description]
+        road1 = datamodel.Road(road_profiles, id='road', parent_site=asite)
+        road_profiles[1].angle = (5, 15)
+        road2 = datamodel.Road(road_profiles, id='road', parent_site=asite)
+        np.testing.assert_array_equal(
+            np.array(road1.build_coordinates()[0][0][:])[:, :2],
+            np.array(road2.build_coordinates()[0][0][:])[:, :2],
+        )
+        self.assertNotEqual(
+            road1.build_coordinates()[0][0][:][1][2],
+            road2.build_coordinates()[0][0][:][1][2],
+        )
 
     def test_road_2_intersections(self):
         """test road that intersect the level curve several times"""
