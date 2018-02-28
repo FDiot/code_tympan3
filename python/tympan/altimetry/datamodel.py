@@ -215,25 +215,43 @@ class LevelCurve(TympanFeature):
         return d
 
 
+class RoadProfile(object):
+
+    def __init__(self, x, y, z, w1, w2, a1, a2, e1, e2):
+        """Describe a road profile at point
+        x, y, z: coordinates
+        w1, w2: left and right width
+        a1, a2: left and right angle (road track altitude)
+        e1, e2: left and right embankment width
+        """
+        self.coords = (x, y)
+        self.altitude = z
+        self.width = (w1, w2)
+        self.angle = (a1, a2)
+        self.embankment = (e1, e2)
+
+
 class Road(TympanFeature):
     geometric_type = "MultiLineString"
 
-    def __init__(self, coords, altitudes, width, angle, embankment=(0, 0), **kwargs):
-        super(Road, self).__init__(coords, **kwargs)
-        self.main_coords = coords
-        self._is_2_tuple_param("width", width)
-        self.width = width
-        self._is_2_tuple_param("angle", angle)
-        self.angle = angle
-        self._is_2_tuple_param("embankment", embankment)
-        self.embankment = embankment
-        if len(coords) != len(altitudes):
-            msg = "coords and altitudes have different lengths for {}"
-            raise ValueError(msg.format(self))
-        self.altitudes = altitudes
+    def __init__(self, profiles, **kwargs):
+        self.main_coords = []
+        self.altitudes = []
+        self.width = profiles[0].width
+        self.angle = profiles[0].angle
+        self.embankment = profiles[0].embankment
+        for road_profile in profiles:
+            self.main_coords.append(road_profile.coords)
+            self.altitudes.append(road_profile.altitude)
+            if self.width != road_profile.width:
+                msg = "Road {} have inconsistent width {} != {}"
+                raise NotImplementedError(msg.format(kwargs['id'],
+                                                     self.width,
+                                                     road_profile.width))
+        super(Road, self).__init__(self.main_coords, **kwargs)
         # replace main road line coords by boundary lines coords
-        left_boundary = self._create_parallel_road_line(width[0], "left")
-        right_boundary = self._create_parallel_road_line(width[1], "right")
+        left_boundary = self._create_parallel_road_line(self.width[0], "left")
+        right_boundary = self._create_parallel_road_line(self.width[1], "right")
         left_middle = self._create_parallel_road_line(0.1, "left")
         right_middle = self._create_parallel_road_line(0.1, "right")
         road_lines = geometry.MultiLineString(
@@ -248,11 +266,6 @@ class Road(TympanFeature):
         d = super(Road, self).build_properties()
         d.update(altitudes=self.altitudes)
         return d
-
-    def _is_2_tuple_param(self, param, value):
-        if not isinstance(value, tuple) or len(value) != 2:
-            msg = "{} of {} is not a 2-tuple: (left value, rigth value)"
-            raise ValueError(msg.format(param, self))
 
     def _create_parallel_road_line(self, delta, side):
         """Create a parallel LineString of the main road line.

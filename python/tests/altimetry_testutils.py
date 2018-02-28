@@ -7,6 +7,7 @@ from shapely.geometry import MultiLineString
 from tympan.altimetry.datamodel import (LevelCurve, MaterialArea,
                                         VegetationArea, GroundMaterial,
                                         WaterBody, SiteNode, Road,
+                                        RoadProfile,
                                         InfrastructureLandtake,
                                         HIDDEN_MATERIAL)
 from tympan.altimetry import mesh
@@ -33,8 +34,12 @@ class TestFeatures(object):
     cleaned_level_B_shape = MultiLineString([[(8.0, 6.0), (8.0, 7.0), (11.0, 7.0)]])
     altitude_B = 20.0
     landtake_coords = rect(2, 7, 4, 8)
-    road_coords = np.array([(1.2, 1.2, 1.0), (2.0, 1.5, 1.5),
-                            (2.0, 2.0, 1.5), (5.0, 4.0, 1.0)])
+    road_description = [
+        (1.2, 1.2, 1.0, 2, 2, 0, 0, 1, 1),
+        (2.0, 1.5, 1.5, 2, 2, 0, 0, 1, 1),
+        (2.0, 2.0, 1.5, 2, 2, 0, 0, 1, 1),
+        (5.0, 4.0, 1.0, 2, 2, 0, 0, 1, 1),
+    ]
 
     def build_features(self):
         self.mainsite = SiteNode(self.big_rect_coords, id="{Main site ID}")
@@ -60,12 +65,8 @@ class TestFeatures(object):
                                        parent_site=self.subsite, id="{Out of subsite area}")
         self.building = InfrastructureLandtake(self.landtake_coords,
                                                parent_site=self.mainsite, id="{Building}")
-        self.road = Road(self.road_coords[:, :2],
-                         self.road_coords[:, 2],
-                         width=(2, 2),
-                         angle=(0, 0),
-                         parent_site=self.mainsite,
-                         id="{Road}")
+        road_profiles = [RoadProfile(*profile) for profile in self.road_description]
+        self.road = Road(road_profiles, parent_site=self.mainsite, id="{Road}")
 
     def build_more_features_in_subsites(self):
         self.subsubsite = SiteNode(rect(6, 6.5, 7, 7.5), id="{SubSubsite ID}",
