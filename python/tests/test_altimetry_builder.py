@@ -271,6 +271,19 @@ class AltimetryBuilderTC(unittest.TestCase, TestFeatures):
             sum(embankment),
         )
 
+    def test_get_embankement(self):
+        level_curve = LevelCurve(
+            [(-2, -3), (1, 2), (2, 3)],
+            altitude=20,
+            id="{level curve}"
+        )
+        road_coords = [(-5, -1), (0, 3), (4, 4)]
+        embankment_list = [(1, 1), (2, 2), (3, 3)]
+        embankment = builder.get_embankment(embankment_list,
+                                            road_coords,
+                                            level_curve)
+        self.assertEqual(embankment, embankment_list[1])
+
 
 if __name__ == '__main__':
     unittest.main()

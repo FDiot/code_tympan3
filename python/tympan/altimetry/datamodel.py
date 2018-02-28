@@ -239,11 +239,12 @@ class Road(TympanFeature):
         self.altitudes = []
         self.width = profiles[0].width
         self.angles = []
-        self.embankment = profiles[0].embankment
+        self.embankments = []
         for road_profile in profiles:
             self.main_coords.append(road_profile.coords)
             self.altitudes.append(road_profile.altitude)
             self.angles.append(road_profile.angle)
+            self.embankments.append(road_profile.embankment)
             if self.width != road_profile.width:
                 msg = "Road {} have inconsistent width {} != {}"
                 raise NotImplementedError(msg.format(kwargs['id'],
