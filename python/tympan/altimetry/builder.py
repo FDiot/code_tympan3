@@ -195,6 +195,13 @@ def get_sub_level_curve_coords(split_lines, side, embankment):
     return new_lc_coords
 
 
+def get_embankment(embankment_widths, road_coords, level_curve):
+    """get the embankment of the road profile closest to the levelcurve"""
+    distances = [geometry.Point(point).distance(level_curve.shape)
+                 for point in road_coords]
+    return embankment_widths[distances.index(min(distances))]
+
+
 class MeshBuilder(object):
     """Build an elevation mesh from a site cleaner.
 
@@ -290,9 +297,12 @@ class MeshBuilder(object):
                                 msg.format(len(split_lines) - 1, road, level_curve)
                             )
                         level_curve_to_drop.append(level_curve)
+                        embankment = get_embankment(road.embankments,
+                                                    road.main_coords,
+                                                    level_curve)
                         level_curve_to_add.append(
                             LevelCurve(
-                                get_sub_level_curve_coords(split_lines, side, road.embankment),
+                                get_sub_level_curve_coords(split_lines, side, embankment),
                                 level_curve.altitude,
                                 id="{} split {} by {}".format(level_curve, side, road),
                             )
