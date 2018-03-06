@@ -7,6 +7,7 @@ from tympan.altimetry import (
     builder,
     datamodel,
 )
+from utils import TympanTC
 
 road1_description = [
     (5, 5, 1.2, 2, 2, 0, 10, 1, 1),
@@ -26,12 +27,21 @@ road2_description = [
 ]
 
 
-class TestAltimetryRoads(unittest.TestCase):
+class TestAltimetryRoads(TympanTC):
 
     def test_add_road(self):
         asite = datamodel.SiteNode(rect(0, 0, 30, 30), id='Main site')
         road_profiles = [datamodel.RoadProfile(*profile) for profile in
                          road1_description]
+        road = datamodel.Road(road_profiles, id='road')
+        asite.add_child(road)
+        self.assertEqual(list(asite.roads)[0], road)
+
+    def test_load_csv_road(self):
+        asite = datamodel.SiteNode(rect(0, 0, 30, 30), id='Main site')
+        road_file = self.datapath('road.csv')
+        road_profiles = datamodel.load_csv_road(road_file)
+        self.assertEqual(len(road_profiles), 6)
         road = datamodel.Road(road_profiles, id='road')
         asite.add_child(road)
         self.assertEqual(list(asite.roads)[0], road)

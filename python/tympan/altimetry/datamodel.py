@@ -13,6 +13,7 @@ to easily load test data from a GeoJSON_ file.
 from itertools import chain
 import json
 
+import csv
 import math
 import numpy as np
 from shapely import geometry
@@ -148,6 +149,16 @@ def elementary_shapes(shape):
         return shape.geoms
     else:
         return (shape,)
+
+
+def load_csv_road(road_file_path):
+    """Return a list of road profiles from a CSV road file"""
+    with open(road_file_path) as road_file:
+        reader = csv.reader(road_file, delimiter=';', quotechar='|')
+        next(reader)  # skip the header
+        profiles = [RoadProfile(*[float(arg) for arg in row])
+                    for row in reader]
+    return profiles
 
 
 class TympanFeature(GeometricFeature):
