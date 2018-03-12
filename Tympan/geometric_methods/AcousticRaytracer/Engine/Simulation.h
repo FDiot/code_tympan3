@@ -134,11 +134,13 @@ public:
     * \brief Tool function to add quickly a receptor for the simulation
     * \param r : Receptor
     */
-    void addRecepteur(const Recepteur& r) { 
+    void addRecepteur(Recepteur& r) { 
         recepteurs.push_back(r); 
         recepteurs.back().setId(compteurRecepteur);
 #ifdef TEST_ACCELERATION_RECEPTORS
-        receptors_landscape.addShape( new Recepteur(r) );
+		Recepteur* rcpt=new Recepteur(r);
+		rcpt->setId(compteurRecepteur);
+        receptors_landscape.addShape(rcpt);
 #endif
         compteurRecepteur++;
     }
@@ -147,7 +149,7 @@ public:
     * \brief Return a vector of all receptors of the scene
     * \return Vector
     */
-    std::vector<Recepteur>& getRecepteurs() { return recepteurs; }
+    std::vector<Recepteur> getRecepteurs() { return recepteurs; }
 
     /// Set/Get the pointer to the MaterialManager
     void setMaterialManager(MaterialManager* _materialManager) { materialManager = _materialManager; }
